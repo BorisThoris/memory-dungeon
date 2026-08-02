@@ -12,6 +12,7 @@ export type GameplayFeedbackAudioCategory =
     | 'match-resolution'
     | 'peek'
     | 'relic-pick'
+    | 'relic-service'
     | 'reward-claim'
     | 'shop-purchase'
     | 'exit-activate'
@@ -70,6 +71,9 @@ const audioCategoryFor = (
     }
     if (feedback.source.kind === 'system' && feedback.source.id === 'route_choice') {
         return 'route-choice';
+    }
+    if (feedback.source.kind === 'system' && feedback.source.id === 'relic_offer') {
+        return 'relic-service';
     }
     if (feedback.source.kind === 'system' && feedback.source.id === 'wild_joker') {
         return 'wild-match';

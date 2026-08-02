@@ -47,6 +47,7 @@ import { resolveHazardBanisherFloorStart } from './hazard-banisher-rules';
 import { applyRouteChoiceOutcome } from './route-rules';
 import { createRelicPickTransitionResult } from './relic-pick-transition-rules';
 import { repairRunProgressionSoftlocks } from './run-progression-repair';
+import { applyRelicOfferService, RELIC_OFFER_SERVICE_CATALOG } from './relics';
 
 export interface GameplayCommandResult {
     run: RunState;
@@ -79,6 +80,7 @@ const DUNGEON_EXIT_SOURCE: GameplaySource = { kind: 'system', id: 'dungeon_exit'
 const SCORE_PARASITE_SOURCE: GameplaySource = { kind: 'system', id: 'score_parasite' };
 const HAZARD_BANISH_SOURCE: GameplaySource = { kind: 'reward_perk', id: 'hazard_banish_per_floor' };
 const ROUTE_CHOICE_SOURCE: GameplaySource = { kind: 'system', id: 'route_choice' };
+const RELIC_OFFER_SOURCE: GameplaySource = { kind: 'system', id: 'relic_offer' };
 const WILD_JOKER_SOURCE: GameplaySource = { kind: 'system', id: 'wild_joker' };
 const gameplayRewardPerkIds = new Set<RewardPerkId>(GAMEPLAY_REWARD_PERK_IDS);
 type GameplayEventPayload<T = GameplayEvent> = T extends GameplayEvent
@@ -1116,6 +1118,61 @@ const applyRelicPickCommand = (
     return { run: transition.run, command, events, accepted: true };
 };
 
+const applyRelicOfferServiceCommand = (
+    run: RunState,
+    command: Extract<GameplayCommand, { type: 'relic.offer_service_use' }>
+): GameplayCommandResult => {
+    const offer = run.relicOffer;
+    if (!offer) {
+        return rejectedResult(run, command.commandId, 'Relic offer service requires an open draft.', command);
+    }
+    const result = applyRelicOfferService(run, command.serviceId, command.targetRelicId);
+    const nextOffer = result.run.relicOffer;
+    if (!result.applied || !nextOffer) {
+        return rejectedResult(
+            run,
+            command.commandId,
+            `Relic offer service is unavailable${result.reason ? ` (${result.reason})` : ''}.`,
+            command
+        );
+    }
+
+    const bannedBefore = Array.isArray(offer.bannedRelicIds) ? offer.bannedRelicIds : [];
+    const bannedAfter = Array.isArray(nextOffer.bannedRelicIds) ? nextOffer.bannedRelicIds : [];
+    const targetRelicId = command.serviceId === 'ban_option'
+        ? bannedAfter.find((relicId) => !bannedBefore.includes(relicId)) ?? command.targetRelicId ?? null
+        : null;
+    const events: GameplayEvent[] = [];
+    const writeEvent = makeEventWriter(command.commandId, RELIC_OFFER_SOURCE, events);
+    writeEvent({
+        type: 'relic.offer_service_used',
+        serviceId: command.serviceId,
+        targetRelicId,
+        cost: RELIC_OFFER_SERVICE_CATALOG[command.serviceId].cost,
+        shopGoldBefore: runNonNegativeInteger(run.shopGold),
+        shopGoldAfter: runNonNegativeInteger(result.run.shopGold),
+        pickRoundBefore: runNonNegativeInteger(offer.pickRound),
+        pickRoundAfter: runNonNegativeInteger(nextOffer.pickRound),
+        optionsBefore: offer.options,
+        optionsAfter: nextOffer.options,
+        bannedRelicIdsBefore: bannedBefore,
+        bannedRelicIdsAfter: bannedAfter,
+        upgradedOfferBefore: offer.upgradedOffer ?? false,
+        upgradedOfferAfter: nextOffer.upgradedOffer ?? false
+    });
+    writeEvent({
+        type: 'feedback.requested',
+        cue: `relic.offer_service.${command.serviceId}`,
+        message: command.serviceId === 'reroll_offer'
+            ? 'Relic offer rerolled with fresh build choices.'
+            : command.serviceId === 'ban_option'
+              ? `${targetRelicId ?? 'Relic'} was banned from this draft visit.`
+              : 'Relic offer upgraded toward uncommon and rare choices.',
+        tone: 'information'
+    });
+    return { run: result.run, command, events, accepted: true };
+};
+
 const applyWildMatchConsumeCommand = (
     run: RunState,
     command: Extract<GameplayCommand, { type: 'wild_match.consume' }>
@@ -1223,6 +1280,9 @@ export const reduceGameplayCommand = (run: RunState, input: unknown): GameplayCo
     }
     if (command.type === 'relic.pick') {
         return applyRelicPickCommand(run, command);
+    }
+    if (command.type === 'relic.offer_service_use') {
+        return applyRelicOfferServiceCommand(run, command);
     }
     if (command.type === 'wild_match.consume') {
         return applyWildMatchConsumeCommand(run, command);

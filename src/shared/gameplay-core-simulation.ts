@@ -13,6 +13,7 @@ import {
     createGameplayRegionShuffleCommand,
     createGameplayRiskWagerAcceptCommand,
     createGameplayRelicPickCommand,
+    createGameplayRelicOfferServiceCommand,
     createGameplayRouteChooseCommand,
     createGameplayShuffleCommand,
     createGameplayShopPurchaseCommand,
@@ -132,6 +133,9 @@ const commandForStep = (
             ? run.relicOffer.options[0]
             : undefined;
         return createGameplayRelicPickCommand(commandId, relicId ?? 'extra_shuffle_charge');
+    }
+    if (step === 5) {
+        return createGameplayRelicOfferServiceCommand(commandId, 'reroll_offer');
     }
     if (actionIndex === definitions.length) {
         const targets = availablePeekTargets(run);

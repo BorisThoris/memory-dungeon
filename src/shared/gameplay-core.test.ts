@@ -24,6 +24,7 @@ import {
     COMBO_SHARD_ENGINE_DEFINITIONS,
     GAMEPLAY_CORE_SCHEMA_VERSION,
     GAMEPLAY_RELIC_IDS,
+    GAMEPLAY_RELIC_OFFER_SERVICE_IDS,
     MEMORY_SCOUT_DEFINITIONS,
     LOCKSMITH_DEFINITIONS,
     SABOTEUR_DEFINITIONS,
@@ -44,6 +45,7 @@ import {
     createGameplayRegionShuffleCommand,
     createGameplayRiskWagerAcceptCommand,
     createGameplayRelicPickCommand,
+    createGameplayRelicOfferServiceCommand,
     createGameplayRouteChooseCommand,
     createGameplayShuffleCommand,
     createGameplayShopPurchaseCommand,
@@ -69,7 +71,7 @@ import { createNewRun } from './game';
 import { EXIT_PAIR_KEY, WILD_PAIR_KEY } from './tile-identity';
 import { createPlayablePathFixture } from './playable-path-fixtures';
 import { normalizeSessionStats } from './session-stats-rules';
-import { RELIC_POOL } from './relics';
+import { applyRelicOfferService, RELIC_OFFER_SERVICE_IDS, RELIC_POOL } from './relics';
 
 const tile = (id: string, pairKey: string, tileTraitKind?: Tile['tileTraitKind']): Tile => ({
     id,
@@ -112,6 +114,7 @@ const run = (overrides: Partial<RunState> = {}): RunState =>
 describe('deterministic gameplay core', () => {
     it('keeps every live relic representable by the typed gameplay schema', () => {
         expect([...GAMEPLAY_RELIC_IDS].sort()).toEqual([...RELIC_POOL].sort());
+        expect(GAMEPLAY_RELIC_OFFER_SERVICE_IDS).toEqual(RELIC_OFFER_SERVICE_IDS);
     });
 
     it('validates commands, effects, conditions, and definitions as strict serializable contracts', () => {
@@ -655,6 +658,42 @@ describe('deterministic gameplay core', () => {
             { ...initial, relicOffer: null },
             createGameplayRelicPickCommand('relic-stale', relicId)
         )).toMatchObject({ accepted: false, run: { relicOffer: null } });
+    });
+
+    it('uses relic draft services through replayable commands with exact option and economy deltas', () => {
+        for (const serviceId of RELIC_OFFER_SERVICE_IDS) {
+            const initial = createPlayablePathFixture('relicDraft').run!;
+            const targetRelicId = serviceId === 'ban_option' ? initial.relicOffer!.options[0] : undefined;
+            const command = createGameplayRelicOfferServiceCommand(
+                `relic-service-${serviceId}`,
+                serviceId,
+                targetRelicId
+            );
+            const legacy = applyRelicOfferService(initial, serviceId, targetRelicId);
+            const result = reduceGameplayCommand(initial, command);
+
+            expect(legacy.applied).toBe(true);
+            expect(result).toMatchObject({ accepted: true, run: legacy.run });
+            expect(result.events).toEqual([
+                expect.objectContaining({
+                    type: 'relic.offer_service_used',
+                    serviceId,
+                    targetRelicId: targetRelicId ?? null,
+                    cost: serviceId === 'upgrade_offer' ? 3 : 2,
+                    shopGoldBefore: initial.shopGold,
+                    shopGoldAfter: legacy.run.shopGold,
+                    optionsBefore: initial.relicOffer!.options,
+                    optionsAfter: legacy.run.relicOffer!.options
+                }),
+                expect.objectContaining({
+                    type: 'feedback.requested',
+                    cue: `relic.offer_service.${serviceId}`,
+                    source: { kind: 'system', id: 'relic_offer' }
+                })
+            ]);
+            expect(replayGameplayCommands(initial, [JSON.parse(JSON.stringify(command))]).run).toEqual(result.run);
+            expect(reduceGameplayCommand(result.run, command)).toMatchObject({ accepted: false, run: result.run });
+        }
     });
 
     it('models Vaultbreaker treasure extraction from chest through opener, Shrine Echo, and Score Glint', () => {

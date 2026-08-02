@@ -62,13 +62,21 @@ describe('gameplayFeedbackAdapter', () => {
                 message: 'Findable matched.',
                 source: { kind: 'findable', id: 'shard_spark' },
                 tone: 'reward'
+            }),
+            event(3, {
+                type: 'feedback.requested',
+                cue: 'relic.offer_service.reroll_offer',
+                message: 'Relic offer rerolled.',
+                source: { kind: 'system', id: 'relic_offer' },
+                tone: 'information'
             })
         ]);
 
         expect(presentations.map((item) => item.audioCategory)).toEqual([
             'relic-pick',
             'reward-claim',
-            'match-resolution'
+            'match-resolution',
+            'relic-service'
         ]);
     });
 

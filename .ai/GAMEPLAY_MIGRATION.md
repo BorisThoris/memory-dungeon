@@ -293,6 +293,18 @@ The run's central build-composition choice now crosses one authoritative command
 
 Graph v18 connects relic draft choice to the command core, relic loadout projection, typed feedback, bounded persistence, deterministic replay, and downstream run flow.
 
+## Twentieth vertical slice: Typed Relic Offer Services
+
+Relic-draft shaping now shares the same deterministic boundary as the final selection:
+
+1. `relic.offer_service_use` validates reroll, ban, and rarity-upgrade intent against the open offer, wallet, one-use visit limits, target eligibility, and option-count guards.
+2. The core delegates option generation to the mature seeded relic rules and emits `relic.offer_service_used` with exact cost, wallet, pick-round, option, ban-list, and upgrade-state deltas.
+3. The live draft surface journals the command and events, while the feedback adapter classifies the typed cue as relic-service audio instead of inferring success from the click.
+4. Contract tests keep the service enum equal to the live catalog, prove parity for all three services, reject duplicate use, and replay JSON-round-tripped service intent exactly.
+5. The seeded simulation forces one service command without perturbing its established random content census.
+
+Graph v19 extends relic draft progression across shop-gold funding, deterministic offer shaping, typed feedback, persistence, and replay.
+
 ## Current slice status
 
 Implemented in the Conduit Cartographer vertical slice:

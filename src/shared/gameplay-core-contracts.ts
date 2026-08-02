@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import type { FindableKind, RelicId, RewardPerkId, RunStatus, TileTraitKind } from './contracts';
+import type { FindableKind, RelicId, RelicOfferServiceId, RewardPerkId, RunStatus, TileTraitKind } from './contracts';
 import { RUN_INVENTORY_ITEM_IDS } from './run-inventory-contracts';
 
 export const GAMEPLAY_CORE_SCHEMA_VERSION = 1 as const;
@@ -30,6 +30,12 @@ export const GAMEPLAY_RELIC_IDS = [
     'stray_charge_plus_one',
     'pin_cap_plus_one'
 ] as const satisfies readonly RelicId[];
+
+export const GAMEPLAY_RELIC_OFFER_SERVICE_IDS = [
+    'reroll_offer',
+    'ban_option',
+    'upgrade_offer'
+] as const satisfies readonly RelicOfferServiceId[];
 
 export const GAMEPLAY_FINDABLE_KINDS = [
     'shard_spark',
@@ -1276,6 +1282,14 @@ export const gameplayCommandSchema = z.discriminatedUnion('type', [
     z
         .object({
             ...commandBase,
+            type: z.literal('relic.offer_service_use'),
+            serviceId: z.enum(GAMEPLAY_RELIC_OFFER_SERVICE_IDS),
+            targetRelicId: z.enum(GAMEPLAY_RELIC_IDS).optional()
+        })
+        .strict(),
+    z
+        .object({
+            ...commandBase,
             type: z.literal('wild_match.consume'),
             wildTileId: z.string().min(1).max(160),
             pairedTileId: z.string().min(1).max(160)
@@ -1635,6 +1649,25 @@ export const gameplayEventSchema = z.discriminatedUnion('type', [
     z
         .object({
             ...eventBase,
+            type: z.literal('relic.offer_service_used'),
+            serviceId: z.enum(GAMEPLAY_RELIC_OFFER_SERVICE_IDS),
+            targetRelicId: z.enum(GAMEPLAY_RELIC_IDS).nullable(),
+            cost: z.number().int().positive(),
+            shopGoldBefore: z.number().int().nonnegative(),
+            shopGoldAfter: z.number().int().nonnegative(),
+            pickRoundBefore: z.number().int().nonnegative(),
+            pickRoundAfter: z.number().int().nonnegative(),
+            optionsBefore: z.array(z.enum(GAMEPLAY_RELIC_IDS)).min(1),
+            optionsAfter: z.array(z.enum(GAMEPLAY_RELIC_IDS)).min(1),
+            bannedRelicIdsBefore: z.array(z.enum(GAMEPLAY_RELIC_IDS)),
+            bannedRelicIdsAfter: z.array(z.enum(GAMEPLAY_RELIC_IDS)),
+            upgradedOfferBefore: z.boolean(),
+            upgradedOfferAfter: z.boolean()
+        })
+        .strict(),
+    z
+        .object({
+            ...eventBase,
             type: z.literal('wild_match.consumed'),
             wildTileId: z.string().min(1).max(160),
             pairedTileId: z.string().min(1).max(160),
@@ -1878,6 +1911,19 @@ export const createGameplayRelicPickCommand = (commandId: string, relicId: Relic
         commandId,
         type: 'relic.pick',
         relicId
+    });
+
+export const createGameplayRelicOfferServiceCommand = (
+    commandId: string,
+    serviceId: RelicOfferServiceId,
+    targetRelicId?: RelicId
+): GameplayCommand =>
+    gameplayCommandSchema.parse({
+        schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
+        commandId,
+        type: 'relic.offer_service_use',
+        serviceId,
+        ...(targetRelicId ? { targetRelicId } : {})
     });
 
 export const createGameplayWildMatchConsumeCommand = (

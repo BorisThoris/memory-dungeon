@@ -1,5 +1,5 @@
 {
-  "version": 18,
+  "version": 19,
   "mechanics": [
     {
       "id": "trait.echo",
@@ -941,13 +941,13 @@
       "id": "progression.relic_draft",
       "label": "Relic Draft Progression",
       "kind": "progression",
-      "role": "typed_replayable_build_selection",
-      "evidence": ["src/shared/relics.ts", "src/shared/relic-pick-transition-rules.ts", "src/shared/gameplay-core.ts", "src/renderer/store/relicOfferSurfaceState.ts"],
-      "reads": ["levelComplete", "bonusRelicPicksNextOffer", "relicOffer", "relicIds"],
-      "writes": ["bonusRelicPicksNextOffer", "relicOffer", "relicIds", "gameplayCommandJournal", "gameplayEventJournal"],
+      "role": "typed_replayable_build_selection_and_offer_shaping",
+      "evidence": ["src/shared/relics.ts", "src/shared/relic-pick-transition-rules.ts", "src/shared/gameplay-core-contracts.ts", "src/shared/gameplay-core.ts", "src/renderer/store/relicOfferSurfaceState.ts", "src/renderer/store/gameplayFeedbackAdapter.ts"],
+      "reads": ["levelComplete", "bonusRelicPicksNextOffer", "relicOffer", "relicIds", "shopGold", "relicOfferServiceUses", "bannedRelicIds", "upgradedOffer"],
+      "writes": ["bonusRelicPicksNextOffer", "relicOffer", "relicIds", "shopGold", "relicOfferServiceUses", "bannedRelicIds", "upgradedOffer", "gameplayCommandJournal", "gameplayEventJournal", "feedbackLines"],
       "enables": ["progression.run_flow"],
       "blocks": [],
-      "softlockGuards": ["strict-relic-pick-command", "offer-pick-budget", "owned-relic-filter", "deterministic-next-round", "journal-before-next-floor"],
+      "softlockGuards": ["strict-relic-pick-command", "strict-relic-service-command", "offer-pick-budget", "owned-relic-filter", "service-affordability", "one-service-use-per-visit", "ban-retains-one-option", "deterministic-next-round", "journal-before-next-floor"],
       "tests": ["src/shared/gameplay-core.test.ts", "src/shared/relic-offer-rules.test.ts", "src/shared/relic-pick-advance-rules.test.ts", "src/renderer/store/relicOfferSurfaceState.test.ts"]
     },
     {
@@ -1953,6 +1953,9 @@
     { "source": "progression.relic_draft", "target": "feedback.gameplay_hud", "kind": "displays", "label": "shows relic pick budget" },
     { "source": "progression.relic_draft", "target": "core.gameplay_commands", "kind": "triggers", "label": "submits the exact offered relic choice" },
     { "source": "core.gameplay_commands", "target": "progression.relic_draft", "kind": "modifies", "label": "owns relic acquisition immediate effect and offer outcome" },
+    { "source": "economy.shop_gold", "target": "progression.relic_draft", "kind": "enables", "label": "funds one-use reroll ban or rarity upgrade services" },
+    { "source": "progression.relic_draft", "target": "economy.shop_gold", "kind": "consumes", "label": "spends exact service cost through the typed command" },
+    { "source": "core.gameplay_commands", "target": "progression.relic_draft", "kind": "modifies", "label": "replays deterministic offer shaping and service-use guards" },
     { "source": "progression.relic_draft", "target": "persistence.run_summary", "kind": "persists", "label": "journals selected relic and deterministic offer continuation" },
     { "source": "progression.relic_draft", "target": "simulation.gameplay_replay", "kind": "tested_by", "label": "replays strict relic selections and immediate effects" },
     { "source": "build.treasure_greed", "target": "lock.iron_key", "kind": "consequence", "label": "converts extraction into locked-route access" },

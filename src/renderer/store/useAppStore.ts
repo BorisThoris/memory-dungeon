@@ -371,6 +371,10 @@ export const useAppStore = create<AppState>((set, get) => ({
         if (result.kind === 'ignored') {
             return;
         }
+        if (result.feedback?.audioCategory === 'relic-service') {
+            void resumeAudioContext();
+            playRelicPickSfx(sfxGainFromStore() * 0.8);
+        }
         set(result.patch);
     },
 

@@ -241,5 +241,13 @@ describe('relicOfferSurfaceState', () => {
         }
         expect(result.patch.run.shopGold).toBe(3);
         expect(result.patch.run.relicOffer?.serviceUses?.reroll_offer).toBe(1);
+        expect(result.patch.run.gameplayCommandJournal).toEqual([
+            expect.objectContaining({ type: 'relic.offer_service_use', serviceId: 'reroll_offer' })
+        ]);
+        expect(result.patch.run.gameplayEventJournal).toEqual(expect.arrayContaining([
+            expect.objectContaining({ type: 'relic.offer_service_used', serviceId: 'reroll_offer' }),
+            expect.objectContaining({ type: 'feedback.requested', cue: 'relic.offer_service.reroll_offer' })
+        ]));
+        expect(result.feedback).toMatchObject({ audioCategory: 'relic-service' });
     });
 });

@@ -1,6 +1,8 @@
 import type { RelicId, RelicOfferServiceId, RunState, SaveData, Settings } from '../../shared/contracts';
-import { applyRelicOfferServiceToRun } from '../../shared/objective-rules';
-import { createGameplayRelicPickCommand } from '../../shared/gameplay-core-contracts';
+import {
+    createGameplayRelicOfferServiceCommand,
+    createGameplayRelicPickCommand
+} from '../../shared/gameplay-core-contracts';
 import { reduceGameplayCommand } from '../../shared/gameplay-core';
 import { appendGameplayJournal } from '../../shared/gameplay-journal';
 import { advanceToNextLevel } from '../../shared/next-floor-transition-rules';
@@ -32,6 +34,7 @@ type RelicOfferServiceSurfaceResult =
     | { kind: 'ignored' }
     | {
           kind: 'applied';
+          feedback: GameplayFeedbackPresentation | null;
           patch: { run: RunState };
       };
 
@@ -92,10 +95,23 @@ export const createRelicOfferServiceSurfaceResult = ({
         return { kind: 'ignored' };
     }
 
+    const offer = run.relicOffer;
+    const command = createGameplayRelicOfferServiceCommand(
+        `relic-service:${run.runSeed}:${offer.tier}:${offer.pickRound}:${serviceId}:${targetRelicId ?? 'auto'}`,
+        serviceId,
+        targetRelicId
+    );
+    const result = reduceGameplayCommand(run, command);
+    if (!result.accepted) {
+        return { kind: 'ignored' };
+    }
+    const journaledRun = appendGameplayJournal(result.run, [command], result.events);
+
     return {
         kind: 'applied',
+        feedback: getNewGameplayFeedback(run, journaledRun).find((item) => item.audioCategory === 'relic-service') ?? null,
         patch: {
-            run: applyRelicOfferServiceToRun(run, serviceId, targetRelicId)
+            run: journaledRun
         }
     };
 };

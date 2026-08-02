@@ -5,18 +5,18 @@
     "name": "memory-dungeon",
     "trackedFileCount": 2379,
     "codeFileCount": 878,
-    "exportedSymbolCount": 3214,
+    "exportedSymbolCount": 3216,
     "contentItemCount": 56,
     "mechanicCount": 128,
-    "stateFieldCount": 137,
-    "relationshipCount": 9446
+    "stateFieldCount": 140,
+    "relationshipCount": 9462
   },
   "inventory": [
     {
       "path": ".ai/GAMEPLAY_MIGRATION.md",
       "category": "other",
-      "bytes": 30988,
-      "sha256": "18643f95032e7328960c857791baa3cc6ac9c562563b1fd0b1ae43190eeabd45"
+      "bytes": 32110,
+      "sha256": "27aa349f66a9dcc7c3032f3658d44a47f0f5148325563a9d864981b7f51c3bed"
     },
     {
       "path": ".ai/README.md",
@@ -831,8 +831,8 @@
     {
       "path": "docs/internal-wiki/APP_ANALYSIS.md",
       "category": "documentation",
-      "bytes": 21754,
-      "sha256": "7da038655ea52fca2a70420c7e63af7776b8bf6d0a78fac9b18b5b64014d12bf"
+      "bytes": 21788,
+      "sha256": "2db48646bebee6d8cba3a70c00e499da4dafbb31e8f3fcafb4b06c645c1bd883"
     },
     {
       "path": "docs/internal-wiki/ARCHITECTURE.md",
@@ -9183,14 +9183,14 @@
     {
       "path": "src/renderer/store/gameplayFeedbackAdapter.test.ts",
       "category": "test",
-      "bytes": 9671,
-      "sha256": "d497745e5e13a3fd10f20c277eec16af973e2412001fc6402d393833a3efca32"
+      "bytes": 9989,
+      "sha256": "86fdf941800b0cca0c21ac23136d1e2a29cf0836243e3986cbc48c71d85bc9b6"
     },
     {
       "path": "src/renderer/store/gameplayFeedbackAdapter.ts",
       "category": "source",
-      "bytes": 5096,
-      "sha256": "d2d3159c926e4ad5ee1b1de45b1d51ee689de6c8114be3c7eb7d92ede9553e18"
+      "bytes": 5241,
+      "sha256": "51c466fc4463061971c51d32bd054aed340f6a4747d1e3d324c1c01d7adff661"
     },
     {
       "path": "src/renderer/store/hydrationController.test.ts",
@@ -9339,14 +9339,14 @@
     {
       "path": "src/renderer/store/relicOfferSurfaceState.test.ts",
       "category": "test",
-      "bytes": 9064,
-      "sha256": "edaa323daa844e629e5384795391f69e5917630b4c727cb99d7edb847b873437"
+      "bytes": 9636,
+      "sha256": "7f7e8732e757c6bb476a30a7a77852492e91401a9870b7e0eb15655c37cc0bdf"
     },
     {
       "path": "src/renderer/store/relicOfferSurfaceState.ts",
       "category": "source",
-      "bytes": 3313,
-      "sha256": "09937dcbd941e8316cb0899d554f2210e12714137d8cad5201951e59a71baca2"
+      "bytes": 3888,
+      "sha256": "55ff390f59ea7a556bebe22374b4f532ed64a1314a911f4395eef9e4e7be669a"
     },
     {
       "path": "src/renderer/store/riskWagerSurfaceState.test.ts",
@@ -9561,8 +9561,8 @@
     {
       "path": "src/renderer/store/useAppStore.ts",
       "category": "source",
-      "bytes": 26960,
-      "sha256": "7eee01716c6f0d7b93e16c1c4d087e6aea3bb08a383615b6aebbcf5662d2430a"
+      "bytes": 27131,
+      "sha256": "352c8d9eeade56d96c82b84c24f66e75bd6044bdf05f339798ab238c3e110cb5"
     },
     {
       "path": "src/renderer/styles/App.module.css",
@@ -10605,44 +10605,44 @@
     {
       "path": "src/shared/gameplay-core-contracts.ts",
       "category": "source",
-      "bytes": 64101,
-      "sha256": "ee5233c2f311325ce1d84f2ecd7afb4e7adf208ccd3cd209d60aa7c1d0fa4cc3"
+      "bytes": 65871,
+      "sha256": "59bcd766f2ef5923bf059a957e9d47e9a9a66bbd4dbdc1f9668bc8b41c10fd41"
     },
     {
       "path": "src/shared/gameplay-core-simulation.test.ts",
       "category": "test",
-      "bytes": 6189,
-      "sha256": "e6e4b710d107c4f7594338f578bb8cbb04fad212a184c185e193306cc367bf0f"
+      "bytes": 6308,
+      "sha256": "9d820ba20229a459815c02909dfc2aa4989db19c0bd48d91be58aa9834388617"
     },
     {
       "path": "src/shared/gameplay-core-simulation.ts",
       "category": "source",
-      "bytes": 13790,
-      "sha256": "15380e491896c3be9af47d6b8b5c4198f39ecc15a1c976ff7e1907b6af529c03"
+      "bytes": 13944,
+      "sha256": "a2dcc5d6ec4bf13d5fadc6a0290dc61340fa1b25ce8a2091eafbf0e98a3319e2"
     },
     {
       "path": "src/shared/gameplay-core.test.ts",
       "category": "test",
-      "bytes": 63277,
-      "sha256": "06a110f35d8fa217676ca3dd74a4686f1366842f88c15a14067662a7846ba027"
+      "bytes": 65363,
+      "sha256": "b40cfe552582c70ac4a0d80256b6f1389ba1a79f46ac49730206e209a55f12c6"
     },
     {
       "path": "src/shared/gameplay-core.ts",
       "category": "source",
-      "bytes": 55306,
-      "sha256": "8229fe55ba91ca6de58ed67207b5bc2d8b4e66ebca35e25621e457f51477a492"
+      "bytes": 58083,
+      "sha256": "e621c402a1f0097bcfee39fc7aae1bb622c195cf029c7b92fc3de0b045ce0fc4"
     },
     {
       "path": "src/shared/gameplay-interaction-graph-data.json",
       "category": "source",
-      "bytes": 171913,
-      "sha256": "d7e97d0ea6b418e6b88e3e295dee0f1510e095260fc21f06fd5c302f7815e9f3"
+      "bytes": 172785,
+      "sha256": "f1b76745d70a6109abc93889213f2ee952fe8011ed7cb08163bab27fcbc7dc13"
     },
     {
       "path": "src/shared/gameplay-interaction-graph.test.ts",
       "category": "test",
-      "bytes": 51849,
-      "sha256": "45c94cba6202792bee12b78c71984da38e902c0434b6a2850566d58bc6ac9eee"
+      "bytes": 52189,
+      "sha256": "d157f653429ab9dfad2001ad8e0f746e77cee46b09c03ad41977f36c7570d1d8"
     },
     {
       "path": "src/shared/gameplay-interaction-graph.ts",
@@ -21409,7 +21409,7 @@
       "path": "src/renderer/store/gameplayFeedbackAdapter.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 264,
+      "lineCount": 272,
       "imports": [
         "file:src/renderer/store/gameplayFeedbackAdapter.ts",
         "file:src/shared/gameplay-core-contracts.ts"
@@ -21422,7 +21422,7 @@
       "path": "src/renderer/store/gameplayFeedbackAdapter.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 139,
+      "lineCount": 143,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/gameplay-core-contracts.ts"
@@ -21906,7 +21906,7 @@
       "path": "src/renderer/store/relicOfferSurfaceState.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 246,
+      "lineCount": 254,
       "imports": [
         "file:src/renderer/store/relicOfferSurfaceState.ts",
         "file:src/shared/contracts.ts",
@@ -21921,7 +21921,7 @@
       "path": "src/renderer/store/relicOfferSurfaceState.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 102,
+      "lineCount": 118,
       "imports": [
         "file:src/renderer/store/gameplayFeedbackAdapter.ts",
         "file:src/renderer/store/runSurfaceState.ts",
@@ -21931,7 +21931,6 @@
         "file:src/shared/gameplay-journal.ts",
         "file:src/shared/honorUnlocks.ts",
         "file:src/shared/next-floor-transition-rules.ts",
-        "file:src/shared/objective-rules.ts",
         "file:src/shared/save-data.ts"
       ],
       "exports": [
@@ -22623,7 +22622,7 @@
       "path": "src/renderer/store/useAppStore.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 852,
+      "lineCount": 856,
       "imports": [
         "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/audio/uiSfx.ts",
@@ -26589,7 +26588,7 @@
       "path": "src/shared/gameplay-core-contracts.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1895,
+      "lineCount": 1941,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/run-inventory-contracts.ts"
@@ -26608,6 +26607,7 @@
         "symbol:src/shared/gameplay-core-contracts.ts#createGameplayPeekCommand",
         "symbol:src/shared/gameplay-core-contracts.ts#createGameplayPinToggleCommand",
         "symbol:src/shared/gameplay-core-contracts.ts#createGameplayRegionShuffleCommand",
+        "symbol:src/shared/gameplay-core-contracts.ts#createGameplayRelicOfferServiceCommand",
         "symbol:src/shared/gameplay-core-contracts.ts#createGameplayRelicPickCommand",
         "symbol:src/shared/gameplay-core-contracts.ts#createGameplayRiskWagerAcceptCommand",
         "symbol:src/shared/gameplay-core-contracts.ts#createGameplayRouteChooseCommand",
@@ -26621,6 +26621,7 @@
         "symbol:src/shared/gameplay-core-contracts.ts#GAMEPLAY_CORE_SCHEMA_VERSION",
         "symbol:src/shared/gameplay-core-contracts.ts#GAMEPLAY_FINDABLE_KINDS",
         "symbol:src/shared/gameplay-core-contracts.ts#GAMEPLAY_RELIC_IDS",
+        "symbol:src/shared/gameplay-core-contracts.ts#GAMEPLAY_RELIC_OFFER_SERVICE_IDS",
         "symbol:src/shared/gameplay-core-contracts.ts#GAMEPLAY_REWARD_PERK_IDS",
         "symbol:src/shared/gameplay-core-contracts.ts#GAMEPLAY_RUN_STATUSES",
         "symbol:src/shared/gameplay-core-contracts.ts#GAMEPLAY_TILE_TRAIT_KINDS",
@@ -26662,7 +26663,7 @@
       "path": "src/shared/gameplay-core-simulation.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 154,
+      "lineCount": 156,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/gameplay-core-simulation.ts",
@@ -26676,7 +26677,7 @@
       "path": "src/shared/gameplay-core-simulation.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 319,
+      "lineCount": 323,
       "imports": [
         "file:src/shared/board-power-targeting.ts",
         "file:src/shared/contracts.ts",
@@ -26701,7 +26702,7 @@
       "path": "src/shared/gameplay-core.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 1410,
+      "lineCount": 1449,
       "imports": [
         "file:src/shared/board-power-actions.ts",
         "file:src/shared/board-power-state.ts",
@@ -26728,7 +26729,7 @@
       "path": "src/shared/gameplay-core.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1259,
+      "lineCount": 1319,
       "imports": [
         "file:src/shared/board-inspection.ts",
         "file:src/shared/board-power-actions.ts",
@@ -26741,6 +26742,7 @@
         "file:src/shared/mutators.ts",
         "file:src/shared/relic-favor-rules.ts",
         "file:src/shared/relic-pick-transition-rules.ts",
+        "file:src/shared/relics.ts",
         "file:src/shared/risk-wager-rules.ts",
         "file:src/shared/route-rules.ts",
         "file:src/shared/run-array-guards.ts",
@@ -26772,7 +26774,7 @@
       "path": "src/shared/gameplay-interaction-graph-data.json",
       "layer": "shared",
       "role": "production",
-      "lineCount": 2159,
+      "lineCount": 2162,
       "imports": [],
       "exports": [],
       "testedBy": []
@@ -26782,7 +26784,7 @@
       "path": "src/shared/gameplay-interaction-graph.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 814,
+      "lineCount": 819,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/gameplay-core-contracts.ts",
@@ -39156,39 +39158,39 @@
       "kind": "type",
       "file": "src/renderer/store/gameplayFeedbackAdapter.ts",
       "line": 7,
-      "endLine": 22
+      "endLine": 23
     },
     {
       "id": "symbol:src/renderer/store/gameplayFeedbackAdapter.ts#GameplayFeedbackPresentation",
       "name": "GameplayFeedbackPresentation",
       "kind": "interface",
       "file": "src/renderer/store/gameplayFeedbackAdapter.ts",
-      "line": 24,
-      "endLine": 33
+      "line": 25,
+      "endLine": 34
     },
     {
       "id": "symbol:src/renderer/store/gameplayFeedbackAdapter.ts#getLatestGameplayFeedback",
       "name": "getLatestGameplayFeedback",
       "kind": "value",
       "file": "src/renderer/store/gameplayFeedbackAdapter.ts",
-      "line": 128,
-      "endLine": 130
+      "line": 132,
+      "endLine": 134
     },
     {
       "id": "symbol:src/renderer/store/gameplayFeedbackAdapter.ts#getNewGameplayFeedback",
       "name": "getNewGameplayFeedback",
       "kind": "value",
       "file": "src/renderer/store/gameplayFeedbackAdapter.ts",
-      "line": 132,
-      "endLine": 138
+      "line": 136,
+      "endLine": 142
     },
     {
       "id": "symbol:src/renderer/store/gameplayFeedbackAdapter.ts#projectGameplayFeedback",
       "name": "projectGameplayFeedback",
       "kind": "value",
       "file": "src/renderer/store/gameplayFeedbackAdapter.ts",
-      "line": 108,
-      "endLine": 126
+      "line": 112,
+      "endLine": 130
     },
     {
       "id": "symbol:src/renderer/store/hydrationController.ts#createHydratedAppStatePatch",
@@ -39803,16 +39805,16 @@
       "name": "createRelicOfferServiceSurfaceResult",
       "kind": "value",
       "file": "src/renderer/store/relicOfferSurfaceState.ts",
-      "line": 82,
-      "endLine": 101
+      "line": 85,
+      "endLine": 117
     },
     {
       "id": "symbol:src/renderer/store/relicOfferSurfaceState.ts#createRelicPickSurfaceResult",
       "name": "createRelicPickSurfaceResult",
       "kind": "value",
       "file": "src/renderer/store/relicOfferSurfaceState.ts",
-      "line": 38,
-      "endLine": 80
+      "line": 41,
+      "endLine": 83
     },
     {
       "id": "symbol:src/renderer/store/riskWagerSurfaceState.ts#createRiskWagerSurfaceResult",
@@ -40436,7 +40438,7 @@
       "kind": "value",
       "file": "src/renderer/store/useAppStore.ts",
       "line": 264,
-      "endLine": 841
+      "endLine": 845
     },
     {
       "id": "symbol:src/renderer/styles/theme.ts#buildRendererThemeStyle",
@@ -48779,184 +48781,192 @@
       "name": "BOARD_TACTICIAN_DEFINITIONS",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 611,
-      "endLine": 718
+      "line": 617,
+      "endLine": 724
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#COMBO_SHARD_ENGINE_DEFINITIONS",
       "name": "COMBO_SHARD_ENGINE_DEFINITIONS",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 442,
-      "endLine": 532
+      "line": 448,
+      "endLine": 538
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#CONDUIT_CARTOGRAPHER_DEFINITIONS",
       "name": "CONDUIT_CARTOGRAPHER_DEFINITIONS",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 305,
-      "endLine": 362
+      "line": 311,
+      "endLine": 368
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayDefinitionCommand",
       "name": "createGameplayDefinitionCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1726,
-      "endLine": 1743
+      "line": 1759,
+      "endLine": 1776
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayDestroyPairCommand",
       "name": "createGameplayDestroyPairCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1769,
-      "endLine": 1775
+      "line": 1802,
+      "endLine": 1808
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayDungeonExitActivateCommand",
       "name": "createGameplayDungeonExitActivateCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1842,
-      "endLine": 1851
+      "line": 1875,
+      "endLine": 1884
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayFlashPairCommand",
       "name": "createGameplayFlashPairCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1820,
-      "endLine": 1825
+      "line": 1853,
+      "endLine": 1858
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayGambitCommitCommand",
       "name": "createGameplayGambitCommitCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1784,
-      "endLine": 1790
+      "line": 1817,
+      "endLine": 1823
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayHazardBanishCommand",
       "name": "createGameplayHazardBanishCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1860,
-      "endLine": 1865
+      "line": 1893,
+      "endLine": 1898
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayParasiteAdvanceCommand",
       "name": "createGameplayParasiteAdvanceCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1853,
-      "endLine": 1858
+      "line": 1886,
+      "endLine": 1891
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayPeekCommand",
       "name": "createGameplayPeekCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1745,
-      "endLine": 1751
+      "line": 1778,
+      "endLine": 1784
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayPinToggleCommand",
       "name": "createGameplayPinToggleCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1753,
-      "endLine": 1759
+      "line": 1786,
+      "endLine": 1792
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayRegionShuffleCommand",
       "name": "createGameplayRegionShuffleCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1799,
-      "endLine": 1805
+      "line": 1832,
+      "endLine": 1838
+    },
+    {
+      "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayRelicOfferServiceCommand",
+      "name": "createGameplayRelicOfferServiceCommand",
+      "kind": "value",
+      "file": "src/shared/gameplay-core-contracts.ts",
+      "line": 1916,
+      "endLine": 1927
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayRelicPickCommand",
       "name": "createGameplayRelicPickCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1875,
-      "endLine": 1881
+      "line": 1908,
+      "endLine": 1914
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayRiskWagerAcceptCommand",
       "name": "createGameplayRiskWagerAcceptCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1777,
-      "endLine": 1782
+      "line": 1810,
+      "endLine": 1815
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayRouteChooseCommand",
       "name": "createGameplayRouteChooseCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1867,
-      "endLine": 1873
+      "line": 1900,
+      "endLine": 1906
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayShopPurchaseCommand",
       "name": "createGameplayShopPurchaseCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1834,
-      "endLine": 1840
+      "line": 1867,
+      "endLine": 1873
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayShuffleCommand",
       "name": "createGameplayShuffleCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1792,
-      "endLine": 1797
+      "line": 1825,
+      "endLine": 1830
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayStrayRemoveCommand",
       "name": "createGameplayStrayRemoveCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1761,
-      "endLine": 1767
+      "line": 1794,
+      "endLine": 1800
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayTileSwapCommand",
       "name": "createGameplayTileSwapCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1807,
-      "endLine": 1818
+      "line": 1840,
+      "endLine": 1851
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayUndoResolveCommand",
       "name": "createGameplayUndoResolveCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1827,
-      "endLine": 1832
+      "line": 1860,
+      "endLine": 1865
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayWildMatchConsumeCommand",
       "name": "createGameplayWildMatchConsumeCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1883,
-      "endLine": 1894
+      "line": 1929,
+      "endLine": 1940
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GAMEPLAY_CONTENT_DEFINITIONS",
       "name": "GAMEPLAY_CONTENT_DEFINITIONS",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1119,
-      "endLine": 1131
+      "line": 1125,
+      "endLine": 1137
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GAMEPLAY_CORE_SCHEMA_VERSION",
@@ -48971,8 +48981,8 @@
       "name": "GAMEPLAY_FINDABLE_KINDS",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 34,
-      "endLine": 39
+      "line": 40,
+      "endLine": 45
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GAMEPLAY_RELIC_IDS",
@@ -48981,6 +48991,14 @@
       "file": "src/shared/gameplay-core-contracts.ts",
       "line": 15,
       "endLine": 32
+    },
+    {
+      "id": "symbol:src/shared/gameplay-core-contracts.ts#GAMEPLAY_RELIC_OFFER_SERVICE_IDS",
+      "name": "GAMEPLAY_RELIC_OFFER_SERVICE_IDS",
+      "kind": "value",
+      "file": "src/shared/gameplay-core-contracts.ts",
+      "line": 34,
+      "endLine": 38
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GAMEPLAY_REWARD_PERK_IDS",
@@ -48995,256 +49013,256 @@
       "name": "GAMEPLAY_RUN_STATUSES",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 53,
-      "endLine": 60
+      "line": 59,
+      "endLine": 66
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GAMEPLAY_TILE_TRAIT_KINDS",
       "name": "GAMEPLAY_TILE_TRAIT_KINDS",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 41,
-      "endLine": 51
+      "line": 47,
+      "endLine": 57
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GameplayCommand",
       "name": "GameplayCommand",
       "kind": "type",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1718,
-      "endLine": 1718
+      "line": 1751,
+      "endLine": 1751
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#gameplayCommandSchema",
       "name": "gameplayCommandSchema",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1144,
-      "endLine": 1284
+      "line": 1150,
+      "endLine": 1298
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GameplayCondition",
       "name": "GameplayCondition",
       "kind": "type",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1135,
-      "endLine": 1135
+      "line": 1141,
+      "endLine": 1141
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#gameplayConditionSchema",
       "name": "gameplayConditionSchema",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 81,
-      "endLine": 163
+      "line": 87,
+      "endLine": 169
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GameplayContentDefinition",
       "name": "GameplayContentDefinition",
       "kind": "type",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1137,
-      "endLine": 1137
+      "line": 1143,
+      "endLine": 1143
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#gameplayContentDefinitionSchema",
       "name": "gameplayContentDefinitionSchema",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 293,
-      "endLine": 303
+      "line": 299,
+      "endLine": 309
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GameplayEffect",
       "name": "GameplayEffect",
       "kind": "type",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1136,
-      "endLine": 1136
+      "line": 1142,
+      "endLine": 1142
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#gameplayEffectSchema",
       "name": "gameplayEffectSchema",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 165,
-      "endLine": 291
+      "line": 171,
+      "endLine": 297
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GameplayEvent",
       "name": "GameplayEvent",
       "kind": "type",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1719,
-      "endLine": 1719
+      "line": 1752,
+      "endLine": 1752
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#gameplayEventSchema",
       "name": "gameplayEventSchema",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1294,
-      "endLine": 1716
+      "line": 1308,
+      "endLine": 1749
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GameplayFacts",
       "name": "GameplayFacts",
       "kind": "type",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1134,
-      "endLine": 1134
+      "line": 1140,
+      "endLine": 1140
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#gameplayFactsSchema",
       "name": "gameplayFactsSchema",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 69,
-      "endLine": 79
+      "line": 75,
+      "endLine": 85
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GameplaySource",
       "name": "GameplaySource",
       "kind": "type",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1133,
-      "endLine": 1133
+      "line": 1139,
+      "endLine": 1139
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#gameplaySourceSchema",
       "name": "gameplaySourceSchema",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 62,
-      "endLine": 67
+      "line": 68,
+      "endLine": 73
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#getGameplayContentDefinition",
       "name": "getGameplayContentDefinition",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1723,
-      "endLine": 1724
+      "line": 1756,
+      "endLine": 1757
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#LOCKSMITH_DEFINITIONS",
       "name": "LOCKSMITH_DEFINITIONS",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 794,
-      "endLine": 814
+      "line": 800,
+      "endLine": 820
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#MEMORY_SCOUT_DEFINITIONS",
       "name": "MEMORY_SCOUT_DEFINITIONS",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 720,
-      "endLine": 792
+      "line": 726,
+      "endLine": 798
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#SABOTEUR_DEFINITIONS",
       "name": "SABOTEUR_DEFINITIONS",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 556,
-      "endLine": 609
+      "line": 562,
+      "endLine": 615
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#SEER_DEFINITIONS",
       "name": "SEER_DEFINITIONS",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1047,
-      "endLine": 1117
+      "line": 1053,
+      "endLine": 1123
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#SLAYER_DEFINITIONS",
       "name": "SLAYER_DEFINITIONS",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 912,
-      "endLine": 1045
+      "line": 918,
+      "endLine": 1051
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#SUPPLY_CACHE_DEFINITIONS",
       "name": "SUPPLY_CACHE_DEFINITIONS",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 534,
-      "endLine": 554
+      "line": 540,
+      "endLine": 560
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#VAULTBREAKER_DEFINITIONS",
       "name": "VAULTBREAKER_DEFINITIONS",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 816,
-      "endLine": 910
+      "line": 822,
+      "endLine": 916
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#WARDEN_DEFINITIONS",
       "name": "WARDEN_DEFINITIONS",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 364,
-      "endLine": 440
+      "line": 370,
+      "endLine": 446
     },
     {
       "id": "symbol:src/shared/gameplay-core-simulation.ts#GameplayCoreSimulationOptions",
       "name": "GameplayCoreSimulationOptions",
       "kind": "interface",
       "file": "src/shared/gameplay-core-simulation.ts",
-      "line": 34,
-      "endLine": 38
+      "line": 35,
+      "endLine": 39
     },
     {
       "id": "symbol:src/shared/gameplay-core-simulation.ts#GameplayCoreSimulationReport",
       "name": "GameplayCoreSimulationReport",
       "kind": "interface",
       "file": "src/shared/gameplay-core-simulation.ts",
-      "line": 40,
-      "endLine": 52
+      "line": 41,
+      "endLine": 53
     },
     {
       "id": "symbol:src/shared/gameplay-core-simulation.ts#runGameplayCoreSimulation",
       "name": "runGameplayCoreSimulation",
       "kind": "value",
       "file": "src/shared/gameplay-core-simulation.ts",
-      "line": 267,
-      "endLine": 318
+      "line": 271,
+      "endLine": 322
     },
     {
       "id": "symbol:src/shared/gameplay-core.ts#GameplayCommandResult",
       "name": "GameplayCommandResult",
       "kind": "interface",
       "file": "src/shared/gameplay-core.ts",
-      "line": 51,
-      "endLine": 56
+      "line": 52,
+      "endLine": 57
     },
     {
       "id": "symbol:src/shared/gameplay-core.ts#GameplayReplayResult",
       "name": "GameplayReplayResult",
       "kind": "interface",
       "file": "src/shared/gameplay-core.ts",
-      "line": 58,
-      "endLine": 63
+      "line": 59,
+      "endLine": 64
     },
     {
       "id": "symbol:src/shared/gameplay-core.ts#reduceGameplayCommand",
       "name": "reduceGameplayCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core.ts",
-      "line": 1170,
-      "endLine": 1243
+      "line": 1227,
+      "endLine": 1303
     },
     {
       "id": "symbol:src/shared/gameplay-core.ts#replayGameplayCommands",
       "name": "replayGameplayCommands",
       "kind": "value",
       "file": "src/shared/gameplay-core.ts",
-      "line": 1245,
-      "endLine": 1258
+      "line": 1305,
+      "endLine": 1318
     },
     {
       "id": "symbol:src/shared/gameplay-interaction-graph.ts#auditGameplayInteractionGraph",
@@ -58382,7 +58400,7 @@
       "evidence": [
         {
           "path": "src/shared/gameplay-core-contracts.ts",
-          "line": 297
+          "line": 303
         },
         {
           "path": "src/shared/gameplay-core-adapters.ts",
@@ -58404,7 +58422,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 31
+          "line": 32
         },
         {
           "path": "src/shared/game.test.ts",
@@ -58566,7 +58584,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 32
+          "line": 33
         },
         {
           "path": "src/shared/board-power-actions.test.ts",
@@ -58602,7 +58620,7 @@
       "evidence": [
         {
           "path": "src/shared/gameplay-core-contracts.ts",
-          "line": 297
+          "line": 303
         },
         {
           "path": "src/shared/relics.ts",
@@ -58616,7 +58634,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 34
+          "line": 35
         },
         {
           "path": "src/shared/tile-trait-rules.test.ts",
@@ -58647,7 +58665,7 @@
       "evidence": [
         {
           "path": "src/shared/gameplay-core-contracts.ts",
-          "line": 297
+          "line": 303
         },
         {
           "path": "src/shared/shop-rules.ts",
@@ -58665,7 +58683,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 28
+          "line": 29
         },
         {
           "path": "src/shared/shop-rules.test.ts",
@@ -58704,7 +58722,7 @@
         },
         {
           "path": "src/shared/gameplay-core-contracts.ts",
-          "line": 38
+          "line": 44
         },
         {
           "path": "src/shared/memory-recall-feedback.ts",
@@ -58714,7 +58732,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 27
+          "line": 28
         },
         {
           "path": "src/shared/tile-trait-rules.test.ts",
@@ -58747,11 +58765,11 @@
       "evidence": [
         {
           "path": "src/shared/gameplay-core-contracts.ts",
-          "line": 288
+          "line": 294
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 419
+          "line": 421
         },
         {
           "path": "src/shared/gameplay-core-adapters.ts",
@@ -58765,7 +58783,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 30
+          "line": 31
         },
         {
           "path": "src/shared/game.test.ts",
@@ -58826,7 +58844,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 47
+          "line": 49
         },
         {
           "path": "src/shared/risk-wager-rules.test.ts",
@@ -58868,11 +58886,11 @@
       "evidence": [
         {
           "path": "src/shared/gameplay-core-contracts.ts",
-          "line": 297
+          "line": 303
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 580
+          "line": 582
         },
         {
           "path": "src/shared/relics.ts",
@@ -58894,7 +58912,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 29
+          "line": 30
         },
         {
           "path": "src/shared/board-power-actions.test.ts",
@@ -58950,7 +58968,7 @@
       "evidence": [
         {
           "path": "src/shared/gameplay-core-contracts.ts",
-          "line": 297
+          "line": 303
         },
         {
           "path": "src/shared/bonus-rewards.ts",
@@ -58968,7 +58986,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 33
+          "line": 34
         },
         {
           "path": "src/shared/bonus-rewards.test.ts",
@@ -59179,7 +59197,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 49
+          "line": 51
         },
         {
           "path": "src/shared/turn-match-economy-rules.test.ts",
@@ -59330,7 +59348,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 61
+          "line": 63
         }
       ],
       "enables": [
@@ -59361,7 +59379,7 @@
         },
         {
           "path": "src/shared/gameplay-core-contracts.ts",
-          "line": 36
+          "line": 42
         },
         {
           "path": "src/shared/game.ts",
@@ -59379,7 +59397,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 27
+          "line": 28
         }
       ],
       "enables": [
@@ -59572,7 +59590,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 41
+          "line": 42
         },
         {
           "path": "src/shared/game.test.ts",
@@ -59782,7 +59800,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 36
+          "line": 37
         }
       ],
       "enables": [
@@ -59921,7 +59939,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 108
+          "line": 110
         }
       ],
       "enables": [
@@ -59969,7 +59987,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 138
+          "line": 141
         }
       ],
       "enables": [
@@ -60022,7 +60040,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 138
+          "line": 141
         }
       ],
       "enables": [
@@ -60402,7 +60420,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 53
+          "line": 55
         },
         {
           "path": "src/shared/game.test.ts",
@@ -60781,7 +60799,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 1061
+          "line": 1063
         },
         {
           "path": "src/shared/tile-trait-rules.ts",
@@ -60791,7 +60809,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 563
+          "line": 566
         },
         {
           "path": "src/shared/tile-trait-rules.test.ts",
@@ -60922,7 +60940,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 40
+          "line": 41
         },
         {
           "path": "src/shared/next-floor-run-state-rules.test.ts",
@@ -61214,7 +61232,7 @@
       "evidence": [
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 71
+          "line": 72
         },
         {
           "path": "src/shared/flip-tile-transition.ts",
@@ -61236,7 +61254,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 39
+          "line": 40
         },
         {
           "path": "src/shared/gambit-match-rules.test.ts",
@@ -61620,7 +61638,7 @@
       "evidence": [
         {
           "path": "src/shared/gameplay-core-contracts.ts",
-          "line": 71
+          "line": 77
         },
         {
           "path": "src/shared/gameplay-core.ts",
@@ -61638,7 +61656,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 53
+          "line": 55
         },
         {
           "path": "src/shared/game.test.ts",
@@ -61667,7 +61685,7 @@
       "mechanicId": "progression.relic_draft",
       "label": "Relic Draft Progression",
       "kind": "progression",
-      "role": "typed_replayable_build_selection",
+      "role": "typed_replayable_build_selection_and_offer_shaping",
       "evidence": [
         {
           "path": "src/shared/relics.ts",
@@ -61678,12 +61696,20 @@
           "line": 1
         },
         {
+          "path": "src/shared/gameplay-core-contracts.ts",
+          "line": 2
+        },
+        {
           "path": "src/shared/gameplay-core.ts",
           "line": 34
         },
         {
           "path": "src/renderer/store/relicOfferSurfaceState.ts",
           "line": 1
+        },
+        {
+          "path": "src/renderer/store/gameplayFeedbackAdapter.ts",
+          "line": 14
         }
       ],
       "tests": [
@@ -61710,8 +61736,12 @@
       "blocks": [],
       "softlockGuards": [
         "strict-relic-pick-command",
+        "strict-relic-service-command",
         "offer-pick-budget",
         "owned-relic-filter",
+        "service-affordability",
+        "one-service-use-per-visit",
+        "ban-retains-one-option",
         "deterministic-next-round",
         "journal-before-next-floor"
       ]
@@ -62176,7 +62206,7 @@
         },
         {
           "path": "src/shared/gameplay-core-contracts.ts",
-          "line": 771
+          "line": 777
         }
       ],
       "tests": [
@@ -62220,7 +62250,7 @@
         },
         {
           "path": "src/shared/gameplay-core-contracts.ts",
-          "line": 787
+          "line": 793
         }
       ],
       "tests": [
@@ -62420,7 +62450,7 @@
         },
         {
           "path": "src/shared/gameplay-core-contracts.ts",
-          "line": 720
+          "line": 726
         }
       ],
       "tests": [
@@ -62430,7 +62460,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 27
+          "line": 28
         }
       ],
       "enables": [
@@ -63000,7 +63030,7 @@
         },
         {
           "path": "src/shared/gameplay-core-contracts.ts",
-          "line": 796
+          "line": 802
         },
         {
           "path": "src/shared/gameplay-core.ts",
@@ -63014,7 +63044,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 1259
+          "line": 1298
         }
       ],
       "enables": [
@@ -63042,7 +63072,7 @@
         },
         {
           "path": "src/shared/gameplay-core-contracts.ts",
-          "line": 235
+          "line": 241
         },
         {
           "path": "src/shared/gameplay-core.ts",
@@ -63310,13 +63340,13 @@
         },
         {
           "path": "src/renderer/store/gameplayFeedbackAdapter.ts",
-          "line": 19
+          "line": 20
         }
       ],
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 47
+          "line": 49
         },
         {
           "path": "src/renderer/store/levelCompleteContinuationExecutor.test.ts",
@@ -63516,7 +63546,7 @@
         },
         {
           "path": "src/renderer/store/gameplayFeedbackAdapter.ts",
-          "line": 15
+          "line": 16
         }
       ],
       "tests": [
@@ -63677,7 +63707,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 49
+          "line": 27
         },
         {
           "path": "src/renderer/store/shopSurfaceState.test.ts",
@@ -63842,7 +63872,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 580
+          "line": 582
         },
         {
           "path": "src/shared/route-choice-outcome-rules.ts",
@@ -64351,7 +64381,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 108
+          "line": 110
         }
       ],
       "enables": [
@@ -64419,6 +64449,16 @@
       "readBy": [],
       "writtenBy": [
         "mechanic:simulation.build_evaluation"
+      ]
+    },
+    {
+      "id": "state:bannedRelicIds",
+      "name": "bannedRelicIds",
+      "readBy": [
+        "mechanic:progression.relic_draft"
+      ],
+      "writtenBy": [
+        "mechanic:progression.relic_draft"
       ]
     },
     {
@@ -64946,6 +64986,7 @@
         "mechanic:power.tile_swap",
         "mechanic:power.undo_resolve",
         "mechanic:power.wild_match",
+        "mechanic:progression.relic_draft",
         "mechanic:progression.shard_to_life",
         "mechanic:relic.chapter_compass",
         "mechanic:relic.combo_shard_plus_step",
@@ -65767,6 +65808,16 @@
       ]
     },
     {
+      "id": "state:relicOfferServiceUses",
+      "name": "relicOfferServiceUses",
+      "readBy": [
+        "mechanic:progression.relic_draft"
+      ],
+      "writtenBy": [
+        "mechanic:progression.relic_draft"
+      ]
+    },
+    {
       "id": "state:removedTiles",
       "name": "removedTiles",
       "readBy": [
@@ -66017,6 +66068,7 @@
         "mechanic:core.gameplay_commands",
         "mechanic:economy.score_and_rewards",
         "mechanic:economy.shop_gold",
+        "mechanic:progression.relic_draft",
         "mechanic:reward.chest_gold",
         "mechanic:reward.cursed_opener_contract",
         "mechanic:reward.key_insurance",
@@ -66031,6 +66083,7 @@
         "mechanic:core.gameplay_commands",
         "mechanic:economy.shop_gold",
         "mechanic:perk.cursed_opener_greed",
+        "mechanic:progression.relic_draft",
         "mechanic:reward.chest_gold",
         "mechanic:reward.cursed_opener_contract",
         "mechanic:reward.key_insurance",
@@ -66297,6 +66350,16 @@
       "writtenBy": [
         "mechanic:inventory.undo_charge",
         "mechanic:power.undo_resolve"
+      ]
+    },
+    {
+      "id": "state:upgradedOffer",
+      "name": "upgradedOffer",
+      "readBy": [
+        "mechanic:progression.relic_draft"
+      ],
+      "writtenBy": [
+        "mechanic:progression.relic_draft"
       ]
     },
     {
@@ -66964,6 +67027,13 @@
       "target": "mechanic:inventory.wild_match_token",
       "kind": "consumes",
       "label": "spends exactly one token after a legal match"
+    },
+    {
+      "id": "consumes:mechanic:progression.relic_draft->mechanic:economy.shop_gold:spends exact service cost through the typed command",
+      "source": "mechanic:progression.relic_draft",
+      "target": "mechanic:economy.shop_gold",
+      "kind": "consumes",
+      "label": "spends exact service cost through the typed command"
     },
     {
       "id": "consumes:mechanic:progression.shard_to_life->mechanic:inventory.combo_shard:spends three shards for life",
@@ -67869,6 +67939,12 @@
       "label": "shows wildcard consumption and remaining balance"
     },
     {
+      "id": "displays:mechanic:progression.relic_draft->file:src/renderer/store/gameplayFeedbackAdapter.ts",
+      "source": "mechanic:progression.relic_draft",
+      "target": "file:src/renderer/store/gameplayFeedbackAdapter.ts",
+      "kind": "displays"
+    },
+    {
       "id": "displays:mechanic:progression.relic_draft->mechanic:feedback.gameplay_hud:shows relic pick budget",
       "source": "mechanic:progression.relic_draft",
       "target": "mechanic:feedback.gameplay_hud",
@@ -68233,6 +68309,13 @@
       "target": "mechanic:feedback.gameplay_hud",
       "kind": "enables",
       "label": "reward copy"
+    },
+    {
+      "id": "enables:mechanic:economy.shop_gold->mechanic:progression.relic_draft:funds one-use reroll ban or rarity upgrade services",
+      "source": "mechanic:economy.shop_gold",
+      "target": "mechanic:progression.relic_draft",
+      "kind": "enables",
+      "label": "funds one-use reroll ban or rarity upgrade services"
     },
     {
       "id": "enables:mechanic:economy.shop_gold->mechanic:shop.master_key:funds Master Key purchase",
@@ -81360,6 +81443,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/gameplay-core-contracts.ts->symbol:src/shared/gameplay-core-contracts.ts#createGameplayRelicOfferServiceCommand",
+      "source": "file:src/shared/gameplay-core-contracts.ts",
+      "target": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayRelicOfferServiceCommand",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/gameplay-core-contracts.ts->symbol:src/shared/gameplay-core-contracts.ts#createGameplayRelicPickCommand",
       "source": "file:src/shared/gameplay-core-contracts.ts",
       "target": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayRelicPickCommand",
@@ -81435,6 +81524,12 @@
       "id": "exports:src/shared/gameplay-core-contracts.ts->symbol:src/shared/gameplay-core-contracts.ts#GAMEPLAY_RELIC_IDS",
       "source": "file:src/shared/gameplay-core-contracts.ts",
       "target": "symbol:src/shared/gameplay-core-contracts.ts#GAMEPLAY_RELIC_IDS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/gameplay-core-contracts.ts->symbol:src/shared/gameplay-core-contracts.ts#GAMEPLAY_RELIC_OFFER_SERVICE_IDS",
+      "source": "file:src/shared/gameplay-core-contracts.ts",
+      "target": "symbol:src/shared/gameplay-core-contracts.ts#GAMEPLAY_RELIC_OFFER_SERVICE_IDS",
       "kind": "exports"
     },
     {
@@ -89964,6 +90059,12 @@
       "id": "implemented_by:mechanic:progression.relic_draft->file:src/renderer/store/relicOfferSurfaceState.ts",
       "source": "mechanic:progression.relic_draft",
       "target": "file:src/renderer/store/relicOfferSurfaceState.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:progression.relic_draft->file:src/shared/gameplay-core-contracts.ts",
+      "source": "mechanic:progression.relic_draft",
+      "target": "file:src/shared/gameplay-core-contracts.ts",
       "kind": "implemented_by"
     },
     {
@@ -98775,12 +98876,6 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/store/relicOfferSurfaceState.ts->src/shared/objective-rules.ts",
-      "source": "file:src/renderer/store/relicOfferSurfaceState.ts",
-      "target": "file:src/shared/objective-rules.ts",
-      "kind": "imports"
-    },
-    {
       "id": "imports:src/renderer/store/relicOfferSurfaceState.ts->src/shared/save-data.ts",
       "source": "file:src/renderer/store/relicOfferSurfaceState.ts",
       "target": "file:src/shared/save-data.ts",
@@ -103560,6 +103655,12 @@
       "id": "imports:src/shared/gameplay-core.ts->src/shared/relic-pick-transition-rules.ts",
       "source": "file:src/shared/gameplay-core.ts",
       "target": "file:src/shared/relic-pick-transition-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/gameplay-core.ts->src/shared/relics.ts",
+      "source": "file:src/shared/gameplay-core.ts",
+      "target": "file:src/shared/relics.ts",
       "kind": "imports"
     },
     {
@@ -108763,6 +108864,13 @@
       "label": "owns relic acquisition immediate effect and offer outcome"
     },
     {
+      "id": "modifies:mechanic:core.gameplay_commands->mechanic:progression.relic_draft:replays deterministic offer shaping and service-use guards",
+      "source": "mechanic:core.gameplay_commands",
+      "target": "mechanic:progression.relic_draft",
+      "kind": "modifies",
+      "label": "replays deterministic offer shaping and service-use guards"
+    },
+    {
       "id": "modifies:mechanic:core.gameplay_commands->mechanic:route.choice:validates and applies exact route consequences",
       "source": "mechanic:core.gameplay_commands",
       "target": "mechanic:route.choice",
@@ -110783,6 +110891,12 @@
       "kind": "reads"
     },
     {
+      "id": "reads:mechanic:progression.relic_draft->state:bannedRelicIds",
+      "source": "mechanic:progression.relic_draft",
+      "target": "state:bannedRelicIds",
+      "kind": "reads"
+    },
+    {
       "id": "reads:mechanic:progression.relic_draft->state:bonusRelicPicksNextOffer",
       "source": "mechanic:progression.relic_draft",
       "target": "state:bonusRelicPicksNextOffer",
@@ -110804,6 +110918,24 @@
       "id": "reads:mechanic:progression.relic_draft->state:relicOffer",
       "source": "mechanic:progression.relic_draft",
       "target": "state:relicOffer",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:progression.relic_draft->state:relicOfferServiceUses",
+      "source": "mechanic:progression.relic_draft",
+      "target": "state:relicOfferServiceUses",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:progression.relic_draft->state:shopGold",
+      "source": "mechanic:progression.relic_draft",
+      "target": "state:shopGold",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:progression.relic_draft->state:upgradedOffer",
+      "source": "mechanic:progression.relic_draft",
+      "target": "state:upgradedOffer",
       "kind": "reads"
     },
     {
@@ -122319,9 +122451,21 @@
       "kind": "writes"
     },
     {
+      "id": "writes:mechanic:progression.relic_draft->state:bannedRelicIds",
+      "source": "mechanic:progression.relic_draft",
+      "target": "state:bannedRelicIds",
+      "kind": "writes"
+    },
+    {
       "id": "writes:mechanic:progression.relic_draft->state:bonusRelicPicksNextOffer",
       "source": "mechanic:progression.relic_draft",
       "target": "state:bonusRelicPicksNextOffer",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:progression.relic_draft->state:feedbackLines",
+      "source": "mechanic:progression.relic_draft",
+      "target": "state:feedbackLines",
       "kind": "writes"
     },
     {
@@ -122346,6 +122490,24 @@
       "id": "writes:mechanic:progression.relic_draft->state:relicOffer",
       "source": "mechanic:progression.relic_draft",
       "target": "state:relicOffer",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:progression.relic_draft->state:relicOfferServiceUses",
+      "source": "mechanic:progression.relic_draft",
+      "target": "state:relicOfferServiceUses",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:progression.relic_draft->state:shopGold",
+      "source": "mechanic:progression.relic_draft",
+      "target": "state:shopGold",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:progression.relic_draft->state:upgradedOffer",
+      "source": "mechanic:progression.relic_draft",
+      "target": "state:upgradedOffer",
       "kind": "writes"
     },
     {
