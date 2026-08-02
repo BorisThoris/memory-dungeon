@@ -42,6 +42,7 @@ import { tilesArePairMatch } from './scoring-rules';
 import { WILD_PAIR_KEY } from './tile-identity';
 import { isBoardComplete } from './board-inspection';
 import { rotateRunShiftingSpotlight } from './shifting-spotlight-rules';
+import { resolveHazardBanisherFloorStart } from './hazard-banisher-rules';
 
 export interface GameplayCommandResult {
     run: RunState;
@@ -72,6 +73,7 @@ const UNDO_RESOLVE_SOURCE: GameplaySource = { kind: 'power', id: 'undo_resolve' 
 const SHOP_SOURCE: GameplaySource = { kind: 'shop', id: 'run_shop' };
 const DUNGEON_EXIT_SOURCE: GameplaySource = { kind: 'system', id: 'dungeon_exit' };
 const SCORE_PARASITE_SOURCE: GameplaySource = { kind: 'system', id: 'score_parasite' };
+const HAZARD_BANISH_SOURCE: GameplaySource = { kind: 'reward_perk', id: 'hazard_banish_per_floor' };
 const WILD_JOKER_SOURCE: GameplaySource = { kind: 'system', id: 'wild_joker' };
 const gameplayRewardPerkIds = new Set<RewardPerkId>(GAMEPLAY_REWARD_PERK_IDS);
 type GameplayEventPayload<T = GameplayEvent> = T extends GameplayEvent
@@ -953,6 +955,60 @@ const applyParasiteAdvanceCommand = (
     return { run: nextRun, command, events, accepted: true };
 };
 
+const applyHazardBanishCommand = (
+    run: RunState,
+    command: Extract<GameplayCommand, { type: 'floor.hazard_banish' }>
+): GameplayCommandResult => {
+    if (run.status !== 'memorize' || !run.board) {
+        return rejectedResult(run, command.commandId, 'Hazard Banish resolves only on a prepared next floor.', command);
+    }
+    const resolved = resolveHazardBanisherFloorStart(run);
+    if (resolved.outcome === 'inactive') {
+        return rejectedResult(run, command.commandId, 'Hazard Banish perk is not active.', command);
+    }
+
+    const destroyChargesBefore = runNonNegativeInteger(run.destroyPairCharges);
+    const destroyChargesAfter = runNonNegativeInteger(resolved.run.destroyPairCharges);
+    const events: GameplayEvent[] = [];
+    const writeEvent = makeEventWriter(command.commandId, HAZARD_BANISH_SOURCE, events);
+    if (resolved.outcome === 'destroy_charge_granted') {
+        writeEvent({
+            type: 'inventory.changed',
+            itemId: 'destroy_charge',
+            operation: 'grant',
+            requested: 1,
+            applied: destroyChargesAfter - destroyChargesBefore,
+            before: destroyChargesBefore,
+            after: destroyChargesAfter
+        });
+    }
+    writeEvent({
+        type: 'hazard_banish.resolved',
+        outcome: resolved.outcome,
+        floor: run.board.level,
+        targetPairKey: resolved.targetPairKey,
+        hazardKind: resolved.hazardKind,
+        affectedTileIds: resolved.affectedTileIds,
+        destroyChargesBefore,
+        destroyChargesAfter
+    });
+    writeEvent({
+        type: 'feedback.requested',
+        cue: resolved.outcome === 'hazard_removed'
+            ? 'perk.hazard_banish.hazard_removed'
+            : resolved.outcome === 'destroy_charge_granted'
+              ? 'perk.hazard_banish.destroy_granted'
+              : 'perk.hazard_banish.contract_blocked',
+        message: resolved.outcome === 'hazard_removed'
+            ? `Hazard Banish cleared ${resolved.hazardKind ?? 'hazard'} pressure from ${resolved.affectedTileIds.length} tiles.`
+            : resolved.outcome === 'destroy_charge_granted'
+              ? `No hazard marker was present; Hazard Banish banked one Destroy charge (${destroyChargesAfter}).`
+              : 'The active no-Destroy contract suppressed Hazard Banish this floor.',
+        tone: resolved.outcome === 'contract_blocked' ? 'warning' : 'reward'
+    });
+    return { run: resolved.run, command, events, accepted: true };
+};
+
 const applyWildMatchConsumeCommand = (
     run: RunState,
     command: Extract<GameplayCommand, { type: 'wild_match.consume' }>
@@ -1051,6 +1107,9 @@ export const reduceGameplayCommand = (run: RunState, input: unknown): GameplayCo
     }
     if (command.type === 'floor.parasite_advance') {
         return applyParasiteAdvanceCommand(run, command);
+    }
+    if (command.type === 'floor.hazard_banish') {
+        return applyHazardBanishCommand(run, command);
     }
     if (command.type === 'wild_match.consume') {
         return applyWildMatchConsumeCommand(run, command);

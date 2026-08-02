@@ -1255,6 +1255,12 @@ export const gameplayCommandSchema = z.discriminatedUnion('type', [
     z
         .object({
             ...commandBase,
+            type: z.literal('floor.hazard_banish')
+        })
+        .strict(),
+    z
+        .object({
+            ...commandBase,
             type: z.literal('wild_match.consume'),
             wildTileId: z.string().min(1).max(160),
             pairedTileId: z.string().min(1).max(160)
@@ -1547,6 +1553,19 @@ export const gameplayEventSchema = z.discriminatedUnion('type', [
     z
         .object({
             ...eventBase,
+            type: z.literal('hazard_banish.resolved'),
+            outcome: z.enum(['contract_blocked', 'hazard_removed', 'destroy_charge_granted']),
+            floor: z.number().int().positive(),
+            targetPairKey: z.string().min(1).max(160).nullable(),
+            hazardKind: z.string().min(1).max(120).nullable(),
+            affectedTileIds: z.array(z.string().min(1).max(160)),
+            destroyChargesBefore: z.number().int().nonnegative(),
+            destroyChargesAfter: z.number().int().nonnegative()
+        })
+        .strict(),
+    z
+        .object({
+            ...eventBase,
             type: z.literal('wild_match.consumed'),
             wildTileId: z.string().min(1).max(160),
             pairedTileId: z.string().min(1).max(160),
@@ -1767,6 +1786,13 @@ export const createGameplayParasiteAdvanceCommand = (commandId: string): Gamepla
         schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
         commandId,
         type: 'floor.parasite_advance'
+    });
+
+export const createGameplayHazardBanishCommand = (commandId: string): GameplayCommand =>
+    gameplayCommandSchema.parse({
+        schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
+        commandId,
+        type: 'floor.hazard_banish'
     });
 
 export const createGameplayWildMatchConsumeCommand = (

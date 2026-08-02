@@ -7,6 +7,7 @@ import {
     createGameplayDungeonExitActivateCommand,
     createGameplayFlashPairCommand,
     createGameplayGambitCommitCommand,
+    createGameplayHazardBanishCommand,
     createGameplayPeekCommand,
     createGameplayPinToggleCommand,
     createGameplayRegionShuffleCommand,
@@ -114,6 +115,9 @@ const commandForStep = (
             : [];
         const target = targets[pickRngIndex(rng, targets.length)] ?? 'missing-destroy-target';
         return createGameplayDestroyPairCommand(commandId, target);
+    }
+    if (step === 2) {
+        return createGameplayHazardBanishCommand(commandId);
     }
     if (actionIndex === definitions.length) {
         const targets = availablePeekTargets(run);

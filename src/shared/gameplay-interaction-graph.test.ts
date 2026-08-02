@@ -700,7 +700,6 @@ describe('gameplay interaction graph', () => {
 
     it('connects typed Destroy Pair from charge and target choice through replayable floor consequence', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
-        expect(gameplayInteractionGraph.version).toBe(14);
         expect(byId.get('power.destroy_pair')).toMatchObject({
             kind: 'power',
             role: 'typed_completion_safe_pair_removal',
@@ -718,6 +717,29 @@ describe('gameplay interaction graph', () => {
             expect.objectContaining({ source: 'power.destroy_pair', target: 'simulation.gameplay_replay', kind: 'tested_by' }),
             expect.objectContaining({ source: 'build.emergency_toolkit', target: 'power.destroy_pair', kind: 'consequence' }),
             expect.objectContaining({ source: 'build.trap_control', target: 'power.destroy_pair', kind: 'consequence' })
+        ]));
+    });
+
+    it('connects Hazard Banish acquisition to its typed floor-start removal or Destroy fallback', () => {
+        const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
+        expect(gameplayInteractionGraph.version).toBe(15);
+        expect(byId.get('perk.hazard_banish_per_floor')).toMatchObject({
+            kind: 'perk',
+            role: 'durable_floor_start_hazard_or_destroy_conversion',
+            tests: expect.arrayContaining([
+                'src/shared/gameplay-core.test.ts',
+                'src/shared/next-floor-run-state-rules.test.ts'
+            ])
+        });
+        expect(gameplayInteractionGraph.edges).toEqual(expect.arrayContaining([
+            expect.objectContaining({ source: 'reward.hazard_banisher', target: 'perk.hazard_banish_per_floor', kind: 'grants' }),
+            expect.objectContaining({ source: 'progression.run_flow', target: 'perk.hazard_banish_per_floor', kind: 'triggers' }),
+            expect.objectContaining({ source: 'perk.hazard_banish_per_floor', target: 'core.gameplay_commands', kind: 'triggers' }),
+            expect.objectContaining({ source: 'perk.hazard_banish_per_floor', target: 'hazard.tile_pressure', kind: 'counterplay' }),
+            expect.objectContaining({ source: 'perk.hazard_banish_per_floor', target: 'inventory.destroy_charge', kind: 'grants' }),
+            expect.objectContaining({ source: 'perk.hazard_banish_per_floor', target: 'feedback.gameplay_hud', kind: 'displays' }),
+            expect.objectContaining({ source: 'inventory.contract_loadout', target: 'perk.hazard_banish_per_floor', kind: 'gates' }),
+            expect.objectContaining({ source: 'build.trap_control', target: 'perk.hazard_banish_per_floor', kind: 'consequence' })
         ]));
     });
 });

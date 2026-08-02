@@ -131,6 +131,20 @@ describe('gameplayFeedbackAdapter', () => {
         expect(presentation).toMatchObject({ audioCategory: 'destroy-pair' });
     });
 
+    it('classifies Hazard Banish floor-start feedback from its durable perk source', () => {
+        const presentation = projectGameplayFeedback([
+            event(0, {
+                type: 'feedback.requested',
+                cue: 'perk.hazard_banish.hazard_removed',
+                message: 'Hazard removed.',
+                source: { kind: 'reward_perk', id: 'hazard_banish_per_floor' },
+                tone: 'reward'
+            })
+        ])[0];
+
+        expect(presentation).toMatchObject({ audioCategory: 'hazard-banish' });
+    });
+
     it('classifies Locksmith shop and exit cues from typed sources', () => {
         const presentations = projectGameplayFeedback([
             event(0, {

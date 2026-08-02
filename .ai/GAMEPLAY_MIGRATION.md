@@ -80,7 +80,7 @@ The Saboteur connects trap-control choices that previously appeared as separate 
 4. The player spends destroy charges on a chosen completion-safe pair, while the banked ward absorbs one remaining Shuffle Snare or Fragile Cache mistake.
 5. On later floors, Hazard Banisher removes one hazard pair automatically, or grants a destroy charge when no hazard exists; `noDestroy` contracts continue to block both lanes.
 
-Destroy Pair execution later moved into the typed core in the sixteenth slice. Floor-start hazard removal remains an established deterministic compatibility consumer: Ward Spark intent is typed, while the existing floor transition retains its tested reset rules.
+Destroy Pair execution moved into the typed core in the sixteenth slice, followed by Hazard Banish floor-start resolution in the seventeenth. Ward Spark intent and the durable banish payoff are both journaled; established hazard-trigger calculations retain their tested priority rules.
 
 ## Fifth vertical slice: The Vaultbreaker
 
@@ -238,6 +238,20 @@ Destroy Pair now completes the Supply Cache and Saboteur action loop through the
 7. Seeded simulation includes the strict command in exact JSON replay, while direct core and live-surface tests prove accepted state parity and contract rejection.
 
 Graph v14 connects Supply Cache and Saboteur sources, Destroy inventory, target legality, typed execution, feedback, completion, persistence, and replay. The compatibility boundary is now only the mature floor finalizer, not pair-removal truth.
+
+## Seventeenth vertical slice: Hazard Banish Floor Payoff
+
+The Saboteur's durable reward now has a typed payoff on every prepared floor instead of silently mutating the new board:
+
+1. Claiming Hazard Banisher still grants one immediate Destroy charge and the durable `hazard_banish_per_floor` perk through its existing content definition.
+2. Each next-floor constructor executes `floor.hazard_banish` only when that perk is active, after the deterministic board and reset state have been prepared.
+3. The pure rule selects the first active hazard marker deterministically and clears that hazard kind from its pair without matching or removing either tile.
+4. If no hazard marker exists, the perk grants exactly one Destroy charge, preserving its authored fallback value.
+5. A `noDestroy` contract produces an explicit `contract_blocked` event and warning feedback without changing the board or inventory.
+6. All outcomes journal floor, target pair, hazard kind, affected tiles, and Destroy balance before play begins.
+7. Seeded replay includes the strict command form; direct core and next-floor parity tests cover hazard removal, fallback grant, and contract suppression.
+
+Graph v15 separates reward acquisition from the durable perk, then connects run flow to hazard counterplay or Destroy fallback, contract gating, typed feedback, persistence, and simulation.
 
 ## Current slice status
 

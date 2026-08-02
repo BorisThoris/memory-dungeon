@@ -3,20 +3,20 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2377,
-    "codeFileCount": 876,
-    "exportedSymbolCount": 3203,
+    "trackedFileCount": 2378,
+    "codeFileCount": 877,
+    "exportedSymbolCount": 3207,
     "contentItemCount": 56,
-    "mechanicCount": 125,
+    "mechanicCount": 126,
     "stateFieldCount": 134,
-    "relationshipCount": 9311
+    "relationshipCount": 9348
   },
   "inventory": [
     {
       "path": ".ai/GAMEPLAY_MIGRATION.md",
       "category": "other",
-      "bytes": 25403,
-      "sha256": "2c7014f8a46465edfd0b4ff948cb742ced653fbfd27da3bfd69d6ac198d809fa"
+      "bytes": 26791,
+      "sha256": "5f1ba64f3d234f291e17f5e1b4386cc3b2eadcfd4a9485d87f3eb286c90ac73d"
     },
     {
       "path": ".ai/README.md",
@@ -831,8 +831,8 @@
     {
       "path": "docs/internal-wiki/APP_ANALYSIS.md",
       "category": "documentation",
-      "bytes": 21631,
-      "sha256": "245b6a9a8957f95842a99c9ced806720cd6179eab70d1f3c7b043674c6389aed"
+      "bytes": 21629,
+      "sha256": "ae54bf96d6b2e9b0025d1b6a288c2bf919c10a001589e819145d1a30f534c533"
     },
     {
       "path": "docs/internal-wiki/ARCHITECTURE.md",
@@ -9183,14 +9183,14 @@
     {
       "path": "src/renderer/store/gameplayFeedbackAdapter.test.ts",
       "category": "test",
-      "bytes": 8602,
-      "sha256": "3f77ef186fa6e74a5fa190d2d565ee73a4ef23f98114079fc05b2b68cdc3b0dd"
+      "bytes": 9150,
+      "sha256": "45e199f00adb648314a9864ee24f4e140ebba85ea2f0abd338e042cbd29b8d9d"
     },
     {
       "path": "src/renderer/store/gameplayFeedbackAdapter.ts",
       "category": "source",
-      "bytes": 4790,
-      "sha256": "d4215d5a503fe49f059e2e3cd8914a9f80b5c41d8490b8f00eed509965ea33b0"
+      "bytes": 4952,
+      "sha256": "d6d8e154eedcbe201dfbd3a032161bbd8d020749b005b82e619284e390f57421"
     },
     {
       "path": "src/renderer/store/hydrationController.test.ts",
@@ -10605,44 +10605,44 @@
     {
       "path": "src/shared/gameplay-core-contracts.ts",
       "category": "source",
-      "bytes": 59692,
-      "sha256": "89990fe219af095cc47ac84a2b6b43564502bc89d68910e5c99338bbb6a5a512"
+      "bytes": 60668,
+      "sha256": "edbe0d1b005cebb2c8a4cd99dcdc83bd8489f46bb85939aeebb9f775dfe0b320"
     },
     {
       "path": "src/shared/gameplay-core-simulation.test.ts",
       "category": "test",
-      "bytes": 5960,
-      "sha256": "40b45a3fddc4e0a543d2d10f18e42e801ef8fc7c13dc983476d3f82351831663"
+      "bytes": 5999,
+      "sha256": "ff66191047e96de3105af2f988971f6113e079f5ec2b9cd077fee83805c234c5"
     },
     {
       "path": "src/shared/gameplay-core-simulation.ts",
       "category": "source",
-      "bytes": 13062,
-      "sha256": "0e355c239c7fb75a1cecae8902f02fae018a914d9303432d06e78d0f3d744803"
+      "bytes": 13190,
+      "sha256": "cea927bc106d5e607efb7ce40719c7bb25576437144de5beeac8644716835260"
     },
     {
       "path": "src/shared/gameplay-core.test.ts",
       "category": "test",
-      "bytes": 55298,
-      "sha256": "2e5d33ca3217f58496984f4e08ae08d88b2cf5e2746a1cde86ae7ac0022477c6"
+      "bytes": 58193,
+      "sha256": "03f6f664656eb14f9efe7fb3f49d7893cd0cdea672bd2021430b2fec6052d0ca"
     },
     {
       "path": "src/shared/gameplay-core.ts",
       "category": "source",
-      "bytes": 47074,
-      "sha256": "2d41e4f1fdccce078a77ca6bce3cf7c36b40427fa39fb3eb03e2a1eda313ffbe"
+      "bytes": 49830,
+      "sha256": "8398b3fe35ac98e14f9e8e7bcaaa9352d2b691e6aebe8f62ef02bbd1b18b7330"
     },
     {
       "path": "src/shared/gameplay-interaction-graph-data.json",
       "category": "source",
-      "bytes": 164166,
-      "sha256": "632b3fab34ba62c05f47b4ea661f2ab892573a9eff0208eea7cf08716263d767"
+      "bytes": 166890,
+      "sha256": "32db3bda478a21bb0b04623ee873fab265ba7894118696a0f800ea8ee2e02550"
     },
     {
       "path": "src/shared/gameplay-interaction-graph.test.ts",
       "category": "test",
-      "bytes": 45253,
-      "sha256": "7bffbf432fa204560059801653579715d7456fdf5ee074bc2571b002153ad062"
+      "bytes": 46985,
+      "sha256": "7076e4932a7e7e266356780cb5b8ff141b89ad895bf7a5eae37f846f1839cc72"
     },
     {
       "path": "src/shared/gameplay-interaction-graph.ts",
@@ -10715,6 +10715,12 @@
       "category": "source",
       "bytes": 311,
       "sha256": "5014693db03565751b18a0299f43a30dcf873f28d2145b47a6a2a44b17db74c5"
+    },
+    {
+      "path": "src/shared/hazard-banisher-rules.ts",
+      "category": "source",
+      "bytes": 2204,
+      "sha256": "450874029346f0b17ae13ec8f803c1acbd2aad354aa876dbaa2991016758e043"
     },
     {
       "path": "src/shared/hazard-tile-effect-rules.test.ts",
@@ -11007,14 +11013,14 @@
     {
       "path": "src/shared/next-floor-run-state-rules.test.ts",
       "category": "test",
-      "bytes": 9133,
-      "sha256": "2b8fba55351df16345b7a1b3ac29f6c8403344d5f59b1b332312ad38f1cd7107"
+      "bytes": 9880,
+      "sha256": "950ee3719d89732fa6bd5b65e04fbef5eac650927ad3d46742f3e75bba1c078a"
     },
     {
       "path": "src/shared/next-floor-run-state-rules.ts",
       "category": "source",
-      "bytes": 5813,
-      "sha256": "137dd7ec731930105419772dfcb235410078f17904f38ebfaa0d9b29373391ea"
+      "bytes": 5491,
+      "sha256": "73ee9d971f8f752f3f33adfde9fb34c9f5bb47c0741a52cc6ad01ee160f5543d"
     },
     {
       "path": "src/shared/next-floor-transition-rules.ts",
@@ -21397,7 +21403,7 @@
       "path": "src/renderer/store/gameplayFeedbackAdapter.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 236,
+      "lineCount": 250,
       "imports": [
         "file:src/renderer/store/gameplayFeedbackAdapter.ts",
         "file:src/shared/gameplay-core-contracts.ts"
@@ -21410,7 +21416,7 @@
       "path": "src/renderer/store/gameplayFeedbackAdapter.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 131,
+      "lineCount": 135,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/gameplay-core-contracts.ts"
@@ -26564,7 +26570,7 @@
       "path": "src/shared/gameplay-core-contracts.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1784,
+      "lineCount": 1810,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/run-inventory-contracts.ts"
@@ -26578,6 +26584,7 @@
         "symbol:src/shared/gameplay-core-contracts.ts#createGameplayDungeonExitActivateCommand",
         "symbol:src/shared/gameplay-core-contracts.ts#createGameplayFlashPairCommand",
         "symbol:src/shared/gameplay-core-contracts.ts#createGameplayGambitCommitCommand",
+        "symbol:src/shared/gameplay-core-contracts.ts#createGameplayHazardBanishCommand",
         "symbol:src/shared/gameplay-core-contracts.ts#createGameplayParasiteAdvanceCommand",
         "symbol:src/shared/gameplay-core-contracts.ts#createGameplayPeekCommand",
         "symbol:src/shared/gameplay-core-contracts.ts#createGameplayPinToggleCommand",
@@ -26634,7 +26641,7 @@
       "path": "src/shared/gameplay-core-simulation.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 149,
+      "lineCount": 150,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/gameplay-core-simulation.ts",
@@ -26648,7 +26655,7 @@
       "path": "src/shared/gameplay-core-simulation.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 301,
+      "lineCount": 305,
       "imports": [
         "file:src/shared/board-power-targeting.ts",
         "file:src/shared/contracts.ts",
@@ -26673,7 +26680,7 @@
       "path": "src/shared/gameplay-core.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 1242,
+      "lineCount": 1301,
       "imports": [
         "file:src/shared/board-power-actions.ts",
         "file:src/shared/board-power-state.ts",
@@ -26697,7 +26704,7 @@
       "path": "src/shared/gameplay-core.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1087,
+      "lineCount": 1146,
       "imports": [
         "file:src/shared/board-inspection.ts",
         "file:src/shared/board-power-actions.ts",
@@ -26706,6 +26713,7 @@
         "file:src/shared/dungeon-board-status.ts",
         "file:src/shared/dungeon-exit-rules.ts",
         "file:src/shared/gameplay-core-contracts.ts",
+        "file:src/shared/hazard-banisher-rules.ts",
         "file:src/shared/mutators.ts",
         "file:src/shared/relic-favor-rules.ts",
         "file:src/shared/risk-wager-rules.ts",
@@ -26737,7 +26745,7 @@
       "path": "src/shared/gameplay-interaction-graph-data.json",
       "layer": "shared",
       "role": "production",
-      "lineCount": 2092,
+      "lineCount": 2115,
       "imports": [],
       "exports": [],
       "testedBy": []
@@ -26747,7 +26755,7 @@
       "path": "src/shared/gameplay-interaction-graph.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 724,
+      "lineCount": 746,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/gameplay-core-contracts.ts",
@@ -26958,6 +26966,24 @@
         "file:src/renderer/cardFace/cardRasterDeck.test.ts",
         "file:src/shared/hashPairKey.test.ts"
       ]
+    },
+    {
+      "id": "file:src/shared/hazard-banisher-rules.ts",
+      "path": "src/shared/hazard-banisher-rules.ts",
+      "layer": "shared",
+      "role": "production",
+      "lineCount": 65,
+      "imports": [
+        "file:src/shared/bonus-rewards.ts",
+        "file:src/shared/contracts.ts",
+        "file:src/shared/run-number-guards.ts"
+      ],
+      "exports": [
+        "symbol:src/shared/hazard-banisher-rules.ts#HazardBanisherFloorStartOutcome",
+        "symbol:src/shared/hazard-banisher-rules.ts#HazardBanisherFloorStartResult",
+        "symbol:src/shared/hazard-banisher-rules.ts#resolveHazardBanisherFloorStart"
+      ],
+      "testedBy": []
     },
     {
       "id": "file:src/shared/hazard-tile-effect-rules.test.ts",
@@ -27958,7 +27984,7 @@
       "path": "src/shared/next-floor-run-state-rules.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 230,
+      "lineCount": 242,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/game.ts",
@@ -27973,12 +27999,15 @@
       "path": "src/shared/next-floor-run-state-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 155,
+      "lineCount": 141,
       "imports": [
         "file:src/shared/board-inspection.ts",
         "file:src/shared/board-tile-generation-rules.ts",
         "file:src/shared/bonus-rewards.ts",
         "file:src/shared/contracts.ts",
+        "file:src/shared/gameplay-core-contracts.ts",
+        "file:src/shared/gameplay-core.ts",
+        "file:src/shared/gameplay-journal.ts",
         "file:src/shared/relics.ts",
         "file:src/shared/run-timer-rules.ts",
         "file:src/shared/scoring-rules.ts",
@@ -39077,39 +39106,39 @@
       "kind": "type",
       "file": "src/renderer/store/gameplayFeedbackAdapter.ts",
       "line": 7,
-      "endLine": 20
+      "endLine": 21
     },
     {
       "id": "symbol:src/renderer/store/gameplayFeedbackAdapter.ts#GameplayFeedbackPresentation",
       "name": "GameplayFeedbackPresentation",
       "kind": "interface",
       "file": "src/renderer/store/gameplayFeedbackAdapter.ts",
-      "line": 22,
-      "endLine": 31
+      "line": 23,
+      "endLine": 32
     },
     {
       "id": "symbol:src/renderer/store/gameplayFeedbackAdapter.ts#getLatestGameplayFeedback",
       "name": "getLatestGameplayFeedback",
       "kind": "value",
       "file": "src/renderer/store/gameplayFeedbackAdapter.ts",
-      "line": 120,
-      "endLine": 122
+      "line": 124,
+      "endLine": 126
     },
     {
       "id": "symbol:src/renderer/store/gameplayFeedbackAdapter.ts#getNewGameplayFeedback",
       "name": "getNewGameplayFeedback",
       "kind": "value",
       "file": "src/renderer/store/gameplayFeedbackAdapter.ts",
-      "line": 124,
-      "endLine": 130
+      "line": 128,
+      "endLine": 134
     },
     {
       "id": "symbol:src/renderer/store/gameplayFeedbackAdapter.ts#projectGameplayFeedback",
       "name": "projectGameplayFeedback",
       "kind": "value",
       "file": "src/renderer/store/gameplayFeedbackAdapter.ts",
-      "line": 100,
-      "endLine": 118
+      "line": 104,
+      "endLine": 122
     },
     {
       "id": "symbol:src/renderer/store/hydrationController.ts#createHydratedAppStatePatch",
@@ -48716,128 +48745,136 @@
       "name": "createGameplayDefinitionCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1638,
-      "endLine": 1655
+      "line": 1657,
+      "endLine": 1674
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayDestroyPairCommand",
       "name": "createGameplayDestroyPairCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1681,
-      "endLine": 1687
+      "line": 1700,
+      "endLine": 1706
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayDungeonExitActivateCommand",
       "name": "createGameplayDungeonExitActivateCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1754,
-      "endLine": 1763
+      "line": 1773,
+      "endLine": 1782
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayFlashPairCommand",
       "name": "createGameplayFlashPairCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1732,
-      "endLine": 1737
+      "line": 1751,
+      "endLine": 1756
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayGambitCommitCommand",
       "name": "createGameplayGambitCommitCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1696,
-      "endLine": 1702
+      "line": 1715,
+      "endLine": 1721
+    },
+    {
+      "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayHazardBanishCommand",
+      "name": "createGameplayHazardBanishCommand",
+      "kind": "value",
+      "file": "src/shared/gameplay-core-contracts.ts",
+      "line": 1791,
+      "endLine": 1796
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayParasiteAdvanceCommand",
       "name": "createGameplayParasiteAdvanceCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1765,
-      "endLine": 1770
+      "line": 1784,
+      "endLine": 1789
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayPeekCommand",
       "name": "createGameplayPeekCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1657,
-      "endLine": 1663
+      "line": 1676,
+      "endLine": 1682
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayPinToggleCommand",
       "name": "createGameplayPinToggleCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1665,
-      "endLine": 1671
+      "line": 1684,
+      "endLine": 1690
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayRegionShuffleCommand",
       "name": "createGameplayRegionShuffleCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1711,
-      "endLine": 1717
+      "line": 1730,
+      "endLine": 1736
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayRiskWagerAcceptCommand",
       "name": "createGameplayRiskWagerAcceptCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1689,
-      "endLine": 1694
+      "line": 1708,
+      "endLine": 1713
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayShopPurchaseCommand",
       "name": "createGameplayShopPurchaseCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1746,
-      "endLine": 1752
+      "line": 1765,
+      "endLine": 1771
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayShuffleCommand",
       "name": "createGameplayShuffleCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1704,
-      "endLine": 1709
+      "line": 1723,
+      "endLine": 1728
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayStrayRemoveCommand",
       "name": "createGameplayStrayRemoveCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1673,
-      "endLine": 1679
+      "line": 1692,
+      "endLine": 1698
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayTileSwapCommand",
       "name": "createGameplayTileSwapCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1719,
-      "endLine": 1730
+      "line": 1738,
+      "endLine": 1749
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayUndoResolveCommand",
       "name": "createGameplayUndoResolveCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1739,
-      "endLine": 1744
+      "line": 1758,
+      "endLine": 1763
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayWildMatchConsumeCommand",
       "name": "createGameplayWildMatchConsumeCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1772,
-      "endLine": 1783
+      "line": 1798,
+      "endLine": 1809
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GAMEPLAY_CONTENT_DEFINITIONS",
@@ -48900,8 +48937,8 @@
       "name": "GameplayCommand",
       "kind": "type",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1630,
-      "endLine": 1630
+      "line": 1649,
+      "endLine": 1649
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#gameplayCommandSchema",
@@ -48909,7 +48946,7 @@
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
       "line": 1143,
-      "endLine": 1263
+      "endLine": 1269
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GameplayCondition",
@@ -48964,16 +49001,16 @@
       "name": "GameplayEvent",
       "kind": "type",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1631,
-      "endLine": 1631
+      "line": 1650,
+      "endLine": 1650
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#gameplayEventSchema",
       "name": "gameplayEventSchema",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1273,
-      "endLine": 1628
+      "line": 1279,
+      "endLine": 1647
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GameplayFacts",
@@ -49012,8 +49049,8 @@
       "name": "getGameplayContentDefinition",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1635,
-      "endLine": 1636
+      "line": 1654,
+      "endLine": 1655
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#LOCKSMITH_DEFINITIONS",
@@ -49084,56 +49121,56 @@
       "name": "GameplayCoreSimulationOptions",
       "kind": "interface",
       "file": "src/shared/gameplay-core-simulation.ts",
-      "line": 31,
-      "endLine": 35
+      "line": 32,
+      "endLine": 36
     },
     {
       "id": "symbol:src/shared/gameplay-core-simulation.ts#GameplayCoreSimulationReport",
       "name": "GameplayCoreSimulationReport",
       "kind": "interface",
       "file": "src/shared/gameplay-core-simulation.ts",
-      "line": 37,
-      "endLine": 49
+      "line": 38,
+      "endLine": 50
     },
     {
       "id": "symbol:src/shared/gameplay-core-simulation.ts#runGameplayCoreSimulation",
       "name": "runGameplayCoreSimulation",
       "kind": "value",
       "file": "src/shared/gameplay-core-simulation.ts",
-      "line": 249,
-      "endLine": 300
+      "line": 253,
+      "endLine": 304
     },
     {
       "id": "symbol:src/shared/gameplay-core.ts#GameplayCommandResult",
       "name": "GameplayCommandResult",
       "kind": "interface",
       "file": "src/shared/gameplay-core.ts",
-      "line": 46,
-      "endLine": 51
+      "line": 47,
+      "endLine": 52
     },
     {
       "id": "symbol:src/shared/gameplay-core.ts#GameplayReplayResult",
       "name": "GameplayReplayResult",
       "kind": "interface",
       "file": "src/shared/gameplay-core.ts",
-      "line": 53,
-      "endLine": 58
+      "line": 54,
+      "endLine": 59
     },
     {
       "id": "symbol:src/shared/gameplay-core.ts#reduceGameplayCommand",
       "name": "reduceGameplayCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core.ts",
-      "line": 1007,
-      "endLine": 1071
+      "line": 1063,
+      "endLine": 1130
     },
     {
       "id": "symbol:src/shared/gameplay-core.ts#replayGameplayCommands",
       "name": "replayGameplayCommands",
       "kind": "value",
       "file": "src/shared/gameplay-core.ts",
-      "line": 1073,
-      "endLine": 1086
+      "line": 1132,
+      "endLine": 1145
     },
     {
       "id": "symbol:src/shared/gameplay-interaction-graph.ts#auditGameplayInteractionGraph",
@@ -49374,6 +49411,30 @@
       "file": "src/shared/hashPairKey.ts",
       "line": 2,
       "endLine": 8
+    },
+    {
+      "id": "symbol:src/shared/hazard-banisher-rules.ts#HazardBanisherFloorStartOutcome",
+      "name": "HazardBanisherFloorStartOutcome",
+      "kind": "type",
+      "file": "src/shared/hazard-banisher-rules.ts",
+      "line": 5,
+      "endLine": 9
+    },
+    {
+      "id": "symbol:src/shared/hazard-banisher-rules.ts#HazardBanisherFloorStartResult",
+      "name": "HazardBanisherFloorStartResult",
+      "kind": "interface",
+      "file": "src/shared/hazard-banisher-rules.ts",
+      "line": 11,
+      "endLine": 17
+    },
+    {
+      "id": "symbol:src/shared/hazard-banisher-rules.ts#resolveHazardBanisherFloorStart",
+      "name": "resolveHazardBanisherFloorStart",
+      "kind": "value",
+      "file": "src/shared/hazard-banisher-rules.ts",
+      "line": 20,
+      "endLine": 64
     },
     {
       "id": "symbol:src/shared/hazard-tile-effect-rules.ts#applyCascadeCacheHazard",
@@ -51124,16 +51185,16 @@
       "name": "createNextFloorRunState",
       "kind": "value",
       "file": "src/shared/next-floor-run-state-rules.ts",
-      "line": 52,
-      "endLine": 154
+      "line": 32,
+      "endLine": 140
     },
     {
       "id": "symbol:src/shared/next-floor-run-state-rules.ts#CreateNextFloorRunStateOptions",
       "name": "CreateNextFloorRunStateOptions",
       "kind": "interface",
       "file": "src/shared/next-floor-run-state-rules.ts",
-      "line": 19,
-      "endLine": 27
+      "line": 22,
+      "endLine": 30
     },
     {
       "id": "symbol:src/shared/next-floor-transition-rules.ts#advanceToNextLevel",
@@ -58584,7 +58645,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 412
+          "line": 414
         },
         {
           "path": "src/shared/gameplay-core-adapters.ts",
@@ -58641,7 +58702,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 505
+          "line": 507
         },
         {
           "path": "src/shared/risk-wager-rules.ts",
@@ -58659,7 +58720,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 157
+          "line": 158
         },
         {
           "path": "src/shared/risk-wager-rules.test.ts",
@@ -58705,7 +58766,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 573
+          "line": 575
         },
         {
           "path": "src/shared/relics.ts",
@@ -59012,7 +59073,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 45
+          "line": 46
         },
         {
           "path": "src/shared/turn-match-economy-rules.test.ts",
@@ -59163,7 +59224,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 57
+          "line": 58
         }
       ],
       "enables": [
@@ -59387,7 +59448,7 @@
         },
         {
           "path": "src/shared/next-floor-run-state-rules.ts",
-          "line": 24
+          "line": 27
         },
         {
           "path": "src/shared/game.ts",
@@ -59405,7 +59466,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 39
+          "line": 40
         },
         {
           "path": "src/shared/game.test.ts",
@@ -59684,7 +59745,7 @@
         },
         {
           "path": "src/shared/next-floor-run-state-rules.ts",
-          "line": 85
+          "line": 60
         },
         {
           "path": "src/shared/flip-tile-transition.ts",
@@ -59754,7 +59815,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 101
+          "line": 102
         }
       ],
       "enables": [
@@ -59802,7 +59863,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 127
+          "line": 128
         }
       ],
       "enables": [
@@ -59855,7 +59916,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 127
+          "line": 128
         }
       ],
       "enables": [
@@ -60178,7 +60239,7 @@
         },
         {
           "path": "src/shared/next-floor-run-state-rules.ts",
-          "line": 84
+          "line": 59
         }
       ],
       "tests": [
@@ -60235,7 +60296,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 49
+          "line": 50
         },
         {
           "path": "src/shared/game.test.ts",
@@ -60624,7 +60685,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 492
+          "line": 551
         },
         {
           "path": "src/shared/tile-trait-rules.test.ts",
@@ -60696,7 +60757,7 @@
         },
         {
           "path": "src/shared/next-floor-run-state-rules.ts",
-          "line": 19
+          "line": 22
         },
         {
           "path": "src/shared/board-power-actions.ts",
@@ -60726,6 +60787,64 @@
         "one-free-use-per-floor",
         "floor-reset",
         "no-shuffle-contract"
+      ]
+    },
+    {
+      "id": "mechanic:perk.hazard_banish_per_floor",
+      "mechanicId": "perk.hazard_banish_per_floor",
+      "label": "Hazard Banish Floor Payoff",
+      "kind": "perk",
+      "role": "durable_floor_start_hazard_or_destroy_conversion",
+      "evidence": [
+        {
+          "path": "src/shared/hazard-banisher-rules.ts",
+          "line": 5
+        },
+        {
+          "path": "src/shared/gameplay-core-contracts.ts",
+          "line": 8
+        },
+        {
+          "path": "src/shared/gameplay-core.ts",
+          "line": 39
+        },
+        {
+          "path": "src/shared/next-floor-run-state-rules.ts",
+          "line": 18
+        }
+      ],
+      "tests": [
+        {
+          "path": "src/shared/gameplay-core.test.ts",
+          "line": 39
+        },
+        {
+          "path": "src/shared/next-floor-run-state-rules.test.ts",
+          "line": 4
+        },
+        {
+          "path": "src/shared/gameplay-core-simulation.test.ts",
+          "line": 33
+        },
+        {
+          "path": "src/renderer/store/gameplayFeedbackAdapter.test.ts",
+          "line": 54
+        }
+      ],
+      "enables": [
+        "inventory.destroy_charge",
+        "power.destroy_pair",
+        "hazard.tile_pressure",
+        "build.trap_control"
+      ],
+      "blocks": [],
+      "softlockGuards": [
+        "active-perk-only",
+        "prepared-next-floor-only",
+        "deterministic-first-hazard",
+        "no-destroy-contract-explicit-outcome",
+        "one-charge-fallback",
+        "journal-before-play"
       ]
     },
     {
@@ -60989,7 +61108,7 @@
       "evidence": [
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 66
+          "line": 67
         },
         {
           "path": "src/shared/flip-tile-transition.ts",
@@ -61413,7 +61532,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 49
+          "line": 50
         },
         {
           "path": "src/shared/game.test.ts",
@@ -61646,7 +61765,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 56
+          "line": 57
         },
         {
           "path": "src/shared/dungeon-boss-clear-rules.test.ts",
@@ -62040,7 +62159,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 39
+          "line": 40
         },
         {
           "path": "src/shared/score-parasite-rules.test.ts",
@@ -62286,7 +62405,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 56
+          "line": 57
         },
         {
           "path": "src/shared/relic-immediate-rules.test.ts",
@@ -62634,7 +62753,7 @@
         },
         {
           "path": "src/shared/next-floor-run-state-rules.ts",
-          "line": 81
+          "line": 56
         }
       ],
       "tests": [
@@ -62680,8 +62799,8 @@
           "line": 2
         },
         {
-          "path": "src/shared/next-floor-run-state-rules.ts",
-          "line": 7
+          "path": "src/shared/gameplay-core.ts",
+          "line": 12
         }
       ],
       "tests": [
@@ -62699,6 +62818,7 @@
         }
       ],
       "enables": [
+        "perk.hazard_banish_per_floor",
         "inventory.destroy_charge",
         "power.destroy_pair",
         "build.trap_control"
@@ -62778,7 +62898,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 1091
+          "line": 1150
         }
       ],
       "enables": [
@@ -63231,7 +63351,7 @@
         },
         {
           "path": "src/renderer/store/gameplayFeedbackAdapter.ts",
-          "line": 14
+          "line": 15
         }
       ],
       "tests": [
@@ -63392,7 +63512,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 45
+          "line": 46
         },
         {
           "path": "src/renderer/store/shopSurfaceState.test.ts",
@@ -64027,7 +64147,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 101
+          "line": 102
         }
       ],
       "enables": [
@@ -64265,13 +64385,16 @@
         "mechanic:core.gameplay_commands",
         "mechanic:feedback.gameplay_hud",
         "mechanic:inventory.destroy_charge",
+        "mechanic:perk.hazard_banish_per_floor",
         "mechanic:power.destroy_pair",
         "mechanic:relic.destroy_bank_plus_one",
+        "mechanic:reward.hazard_banisher",
         "mechanic:reward.supply_cache"
       ],
       "writtenBy": [
         "mechanic:core.gameplay_commands",
         "mechanic:inventory.destroy_charge",
+        "mechanic:perk.hazard_banish_per_floor",
         "mechanic:power.destroy_pair",
         "mechanic:relic.destroy_bank_plus_one",
         "mechanic:reward.hazard_banisher",
@@ -64595,6 +64718,7 @@
         "mechanic:objective.risk_wager",
         "mechanic:perk.cursed_opener_greed",
         "mechanic:perk.echo_conduit_double",
+        "mechanic:perk.hazard_banish_per_floor",
         "mechanic:perk.trait_streak_toolkit",
         "mechanic:power.destroy_pair",
         "mechanic:power.flash_pair",
@@ -64797,6 +64921,7 @@
       "writtenBy": [
         "mechanic:exit.primary",
         "mechanic:inventory.wild_match_token",
+        "mechanic:perk.hazard_banish_per_floor",
         "mechanic:perk.trait_streak_toolkit",
         "mechanic:power.destroy_pair",
         "mechanic:power.flash_pair",
@@ -64830,6 +64955,7 @@
         "mechanic:exit.primary",
         "mechanic:hazard.score_parasite",
         "mechanic:inventory.wild_match_token",
+        "mechanic:perk.hazard_banish_per_floor",
         "mechanic:perk.trait_streak_toolkit",
         "mechanic:power.destroy_pair",
         "mechanic:power.flash_pair",
@@ -65013,6 +65139,7 @@
       "readBy": [
         "mechanic:feedback.gameplay_hud",
         "mechanic:inventory.mutator_loadout",
+        "mechanic:perk.hazard_banish_per_floor",
         "mechanic:progression.run_flow"
       ],
       "writtenBy": [
@@ -65026,9 +65153,9 @@
         "mechanic:build.emergency_toolkit",
         "mechanic:inventory.contract_loadout",
         "mechanic:inventory.destroy_charge",
+        "mechanic:perk.hazard_banish_per_floor",
         "mechanic:power.destroy_pair",
-        "mechanic:relic.destroy_bank_plus_one",
-        "mechanic:reward.hazard_banisher"
+        "mechanic:relic.destroy_bank_plus_one"
       ],
       "writtenBy": []
     },
@@ -65430,6 +65557,7 @@
         "mechanic:perk.cursed_opener_greed",
         "mechanic:perk.echo_conduit_double",
         "mechanic:perk.free_first_swap_per_floor",
+        "mechanic:perk.hazard_banish_per_floor",
         "mechanic:perk.trait_streak_toolkit",
         "mechanic:reward.cursed_opener_contract",
         "mechanic:reward.free_swap_floor",
@@ -65755,12 +65883,12 @@
         "mechanic:build.emergency_toolkit",
         "mechanic:build.trap_control",
         "mechanic:hazard.tile_pressure",
-        "mechanic:reward.hazard_banisher",
+        "mechanic:perk.hazard_banish_per_floor",
         "mechanic:safety.safe_hazard_ward"
       ],
       "writtenBy": [
         "mechanic:hazard.tile_pressure",
-        "mechanic:reward.hazard_banisher",
+        "mechanic:perk.hazard_banish_per_floor",
         "mechanic:safety.safe_hazard_ward"
       ]
     },
@@ -66393,6 +66521,13 @@
       "label": "turns one floor token into a chosen rescue commitment"
     },
     {
+      "id": "consequence:mechanic:build.trap_control->mechanic:perk.hazard_banish_per_floor:converts the durable reward into floor tempo",
+      "source": "mechanic:build.trap_control",
+      "target": "mechanic:perk.hazard_banish_per_floor",
+      "kind": "consequence",
+      "label": "converts the durable reward into floor tempo"
+    },
+    {
       "id": "consequence:mechanic:build.trap_control->mechanic:power.destroy_pair:turns trap pressure into target selection",
       "source": "mechanic:build.trap_control",
       "target": "mechanic:power.destroy_pair",
@@ -66622,6 +66757,13 @@
       "target": "mechanic:lock.typed_key",
       "kind": "counterplay",
       "label": "universal fallback after typed-key preference"
+    },
+    {
+      "id": "counterplay:mechanic:perk.hazard_banish_per_floor->mechanic:hazard.tile_pressure:clears the first deterministic hazard marker pair",
+      "source": "mechanic:perk.hazard_banish_per_floor",
+      "target": "mechanic:hazard.tile_pressure",
+      "kind": "counterplay",
+      "label": "clears the first deterministic hazard marker pair"
     },
     {
       "id": "counterplay:mechanic:power.destroy_pair->mechanic:objective.floor_clear:removes pair safely",
@@ -67367,6 +67509,13 @@
       "label": "shows trigger cause"
     },
     {
+      "id": "displays:mechanic:perk.hazard_banish_per_floor->mechanic:feedback.gameplay_hud:shows removed fallback or contract-blocked outcome",
+      "source": "mechanic:perk.hazard_banish_per_floor",
+      "target": "mechanic:feedback.gameplay_hud",
+      "kind": "displays",
+      "label": "shows removed fallback or contract-blocked outcome"
+    },
+    {
       "id": "displays:mechanic:perk.trait_streak_toolkit->mechanic:feedback.gameplay_hud:shows the earned Flash charge",
       "source": "mechanic:perk.trait_streak_toolkit",
       "target": "mechanic:feedback.gameplay_hud",
@@ -68039,6 +68188,13 @@
       "target": "mechanic:power.tile_swap",
       "kind": "enables",
       "label": "funds a free tile swap"
+    },
+    {
+      "id": "enables:mechanic:perk.hazard_banish_per_floor->mechanic:power.destroy_pair:turns an empty banish into chosen pair control",
+      "source": "mechanic:perk.hazard_banish_per_floor",
+      "target": "mechanic:power.destroy_pair",
+      "kind": "enables",
+      "label": "turns an empty banish into chosen pair control"
     },
     {
       "id": "enables:mechanic:persistence.run_summary->mechanic:simulation.gameplay_replay:retains replay diagnostics",
@@ -80878,6 +81034,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/gameplay-core-contracts.ts->symbol:src/shared/gameplay-core-contracts.ts#createGameplayHazardBanishCommand",
+      "source": "file:src/shared/gameplay-core-contracts.ts",
+      "target": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayHazardBanishCommand",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/gameplay-core-contracts.ts->symbol:src/shared/gameplay-core-contracts.ts#createGameplayParasiteAdvanceCommand",
       "source": "file:src/shared/gameplay-core-contracts.ts",
       "target": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayParasiteAdvanceCommand",
@@ -81343,6 +81505,24 @@
       "id": "exports:src/shared/hashPairKey.ts->symbol:src/shared/hashPairKey.ts#hashPairKey",
       "source": "file:src/shared/hashPairKey.ts",
       "target": "symbol:src/shared/hashPairKey.ts#hashPairKey",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/hazard-banisher-rules.ts->symbol:src/shared/hazard-banisher-rules.ts#HazardBanisherFloorStartOutcome",
+      "source": "file:src/shared/hazard-banisher-rules.ts",
+      "target": "symbol:src/shared/hazard-banisher-rules.ts#HazardBanisherFloorStartOutcome",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/hazard-banisher-rules.ts->symbol:src/shared/hazard-banisher-rules.ts#HazardBanisherFloorStartResult",
+      "source": "file:src/shared/hazard-banisher-rules.ts",
+      "target": "symbol:src/shared/hazard-banisher-rules.ts#HazardBanisherFloorStartResult",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/hazard-banisher-rules.ts->symbol:src/shared/hazard-banisher-rules.ts#resolveHazardBanisherFloorStart",
+      "source": "file:src/shared/hazard-banisher-rules.ts",
+      "target": "symbol:src/shared/hazard-banisher-rules.ts#resolveHazardBanisherFloorStart",
       "kind": "exports"
     },
     {
@@ -87364,6 +87544,13 @@
       "kind": "exports"
     },
     {
+      "id": "gates:mechanic:inventory.contract_loadout->mechanic:perk.hazard_banish_per_floor:noDestroy records explicit perk suppression",
+      "source": "mechanic:inventory.contract_loadout",
+      "target": "mechanic:perk.hazard_banish_per_floor",
+      "kind": "gates",
+      "label": "noDestroy records explicit perk suppression"
+    },
+    {
       "id": "gates:mechanic:inventory.contract_loadout->mechanic:power.destroy_pair:noDestroy disables pair removal",
       "source": "mechanic:inventory.contract_loadout",
       "target": "mechanic:power.destroy_pair",
@@ -87495,6 +87682,13 @@
       "target": "mechanic:inventory.peek_charge",
       "kind": "grants",
       "label": "creates extra charge"
+    },
+    {
+      "id": "grants:mechanic:perk.hazard_banish_per_floor->mechanic:inventory.destroy_charge:banks one Destroy when no marker exists",
+      "source": "mechanic:perk.hazard_banish_per_floor",
+      "target": "mechanic:inventory.destroy_charge",
+      "kind": "grants",
+      "label": "banks one Destroy when no marker exists"
     },
     {
       "id": "grants:mechanic:perk.trait_streak_toolkit->mechanic:inventory.flash_pair_charge:clean x3 trait match banks Flash",
@@ -87691,6 +87885,13 @@
       "target": "mechanic:inventory.destroy_charge",
       "kind": "grants",
       "label": "grants one destroy charge"
+    },
+    {
+      "id": "grants:mechanic:reward.hazard_banisher->mechanic:perk.hazard_banish_per_floor:arms the durable floor-start payoff",
+      "source": "mechanic:reward.hazard_banisher",
+      "target": "mechanic:perk.hazard_banish_per_floor",
+      "kind": "grants",
+      "label": "arms the durable floor-start payoff"
     },
     {
       "id": "grants:mechanic:reward.hazard_ward->mechanic:inventory.guard_token:grants one guard token",
@@ -89091,6 +89292,30 @@
       "kind": "implemented_by"
     },
     {
+      "id": "implemented_by:mechanic:perk.hazard_banish_per_floor->file:src/shared/gameplay-core-contracts.ts",
+      "source": "mechanic:perk.hazard_banish_per_floor",
+      "target": "file:src/shared/gameplay-core-contracts.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:perk.hazard_banish_per_floor->file:src/shared/gameplay-core.ts",
+      "source": "mechanic:perk.hazard_banish_per_floor",
+      "target": "file:src/shared/gameplay-core.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:perk.hazard_banish_per_floor->file:src/shared/hazard-banisher-rules.ts",
+      "source": "mechanic:perk.hazard_banish_per_floor",
+      "target": "file:src/shared/hazard-banisher-rules.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:perk.hazard_banish_per_floor->file:src/shared/next-floor-run-state-rules.ts",
+      "source": "mechanic:perk.hazard_banish_per_floor",
+      "target": "file:src/shared/next-floor-run-state-rules.ts",
+      "kind": "implemented_by"
+    },
+    {
       "id": "implemented_by:mechanic:perk.trait_streak_toolkit->file:src/shared/game.ts",
       "source": "mechanic:perk.trait_streak_toolkit",
       "target": "file:src/shared/game.ts",
@@ -89949,9 +90174,9 @@
       "kind": "implemented_by"
     },
     {
-      "id": "implemented_by:mechanic:reward.hazard_banisher->file:src/shared/next-floor-run-state-rules.ts",
+      "id": "implemented_by:mechanic:reward.hazard_banisher->file:src/shared/gameplay-core.ts",
       "source": "mechanic:reward.hazard_banisher",
-      "target": "file:src/shared/next-floor-run-state-rules.ts",
+      "target": "file:src/shared/gameplay-core.ts",
       "kind": "implemented_by"
     },
     {
@@ -102843,6 +103068,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/gameplay-core.ts->src/shared/hazard-banisher-rules.ts",
+      "source": "file:src/shared/gameplay-core.ts",
+      "target": "file:src/shared/hazard-banisher-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/gameplay-core.ts->src/shared/mutators.ts",
       "source": "file:src/shared/gameplay-core.ts",
       "target": "file:src/shared/mutators.ts",
@@ -103104,6 +103335,24 @@
       "id": "imports:src/shared/hashPairKey.test.ts->src/shared/hashPairKey.ts",
       "source": "file:src/shared/hashPairKey.test.ts",
       "target": "file:src/shared/hashPairKey.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/hazard-banisher-rules.ts->src/shared/bonus-rewards.ts",
+      "source": "file:src/shared/hazard-banisher-rules.ts",
+      "target": "file:src/shared/bonus-rewards.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/hazard-banisher-rules.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/hazard-banisher-rules.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/hazard-banisher-rules.ts->src/shared/run-number-guards.ts",
+      "source": "file:src/shared/hazard-banisher-rules.ts",
+      "target": "file:src/shared/run-number-guards.ts",
       "kind": "imports"
     },
     {
@@ -104148,6 +104397,24 @@
       "id": "imports:src/shared/next-floor-run-state-rules.ts->src/shared/contracts.ts",
       "source": "file:src/shared/next-floor-run-state-rules.ts",
       "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/next-floor-run-state-rules.ts->src/shared/gameplay-core-contracts.ts",
+      "source": "file:src/shared/next-floor-run-state-rules.ts",
+      "target": "file:src/shared/gameplay-core-contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/next-floor-run-state-rules.ts->src/shared/gameplay-core.ts",
+      "source": "file:src/shared/next-floor-run-state-rules.ts",
+      "target": "file:src/shared/gameplay-core.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/next-floor-run-state-rules.ts->src/shared/gameplay-journal.ts",
+      "source": "file:src/shared/next-floor-run-state-rules.ts",
+      "target": "file:src/shared/gameplay-journal.ts",
       "kind": "imports"
     },
     {
@@ -109541,6 +109808,36 @@
       "kind": "reads"
     },
     {
+      "id": "reads:mechanic:perk.hazard_banish_per_floor->state:destroyPairCharges",
+      "source": "mechanic:perk.hazard_banish_per_floor",
+      "target": "state:destroyPairCharges",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:perk.hazard_banish_per_floor->state:nextFloor",
+      "source": "mechanic:perk.hazard_banish_per_floor",
+      "target": "state:nextFloor",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:perk.hazard_banish_per_floor->state:noDestroy",
+      "source": "mechanic:perk.hazard_banish_per_floor",
+      "target": "state:noDestroy",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:perk.hazard_banish_per_floor->state:rewardPerkIds",
+      "source": "mechanic:perk.hazard_banish_per_floor",
+      "target": "state:rewardPerkIds",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:perk.hazard_banish_per_floor->state:tileHazardKind",
+      "source": "mechanic:perk.hazard_banish_per_floor",
+      "target": "state:tileHazardKind",
+      "kind": "reads"
+    },
+    {
       "id": "reads:mechanic:perk.trait_streak_toolkit->state:currentStreak",
       "source": "mechanic:perk.trait_streak_toolkit",
       "target": "state:currentStreak",
@@ -110393,21 +110690,15 @@
       "kind": "reads"
     },
     {
-      "id": "reads:mechanic:reward.hazard_banisher->state:noDestroy",
+      "id": "reads:mechanic:reward.hazard_banisher->state:destroyPairCharges",
       "source": "mechanic:reward.hazard_banisher",
-      "target": "state:noDestroy",
+      "target": "state:destroyPairCharges",
       "kind": "reads"
     },
     {
       "id": "reads:mechanic:reward.hazard_banisher->state:rewardPerkIds",
       "source": "mechanic:reward.hazard_banisher",
       "target": "state:rewardPerkIds",
-      "kind": "reads"
-    },
-    {
-      "id": "reads:mechanic:reward.hazard_banisher->state:tileHazardKind",
-      "source": "mechanic:reward.hazard_banisher",
-      "target": "state:tileHazardKind",
       "kind": "reads"
     },
     {
@@ -112134,6 +112425,37 @@
       "source": "mechanic:perk.free_first_swap_per_floor",
       "target": "file:src/shared/next-floor-run-state-rules.test.ts",
       "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:perk.hazard_banish_per_floor->file:src/renderer/store/gameplayFeedbackAdapter.test.ts",
+      "source": "mechanic:perk.hazard_banish_per_floor",
+      "target": "file:src/renderer/store/gameplayFeedbackAdapter.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:perk.hazard_banish_per_floor->file:src/shared/gameplay-core-simulation.test.ts",
+      "source": "mechanic:perk.hazard_banish_per_floor",
+      "target": "file:src/shared/gameplay-core-simulation.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:perk.hazard_banish_per_floor->file:src/shared/gameplay-core.test.ts",
+      "source": "mechanic:perk.hazard_banish_per_floor",
+      "target": "file:src/shared/gameplay-core.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:perk.hazard_banish_per_floor->file:src/shared/next-floor-run-state-rules.test.ts",
+      "source": "mechanic:perk.hazard_banish_per_floor",
+      "target": "file:src/shared/next-floor-run-state-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:perk.hazard_banish_per_floor->mechanic:simulation.gameplay_replay:strict command participates in deterministic replay",
+      "source": "mechanic:perk.hazard_banish_per_floor",
+      "target": "mechanic:simulation.gameplay_replay",
+      "kind": "tested_by",
+      "label": "strict command participates in deterministic replay"
     },
     {
       "id": "tested_by:mechanic:perk.trait_streak_toolkit->file:src/shared/gameplay-core.test.ts",
@@ -119532,6 +119854,13 @@
       "label": "trait match command"
     },
     {
+      "id": "triggers:mechanic:perk.hazard_banish_per_floor->mechanic:core.gameplay_commands:executes the strict floor-start command",
+      "source": "mechanic:perk.hazard_banish_per_floor",
+      "target": "mechanic:core.gameplay_commands",
+      "kind": "triggers",
+      "label": "executes the strict floor-start command"
+    },
+    {
       "id": "triggers:mechanic:perk.trait_streak_toolkit->mechanic:core.gameplay_commands:journals exact trait reward",
       "source": "mechanic:perk.trait_streak_toolkit",
       "target": "mechanic:core.gameplay_commands",
@@ -119544,6 +119873,13 @@
       "target": "mechanic:perk.free_first_swap_per_floor",
       "kind": "triggers",
       "label": "rearms the perk on each floor"
+    },
+    {
+      "id": "triggers:mechanic:progression.run_flow->mechanic:perk.hazard_banish_per_floor:resolves the perk on each prepared next floor",
+      "source": "mechanic:progression.run_flow",
+      "target": "mechanic:perk.hazard_banish_per_floor",
+      "kind": "triggers",
+      "label": "resolves the perk on each prepared next floor"
     },
     {
       "id": "triggers:mechanic:progression.run_flow->mechanic:relic.first_shuffle_free_per_floor:rearms the free full shuffle",
@@ -120682,6 +121018,36 @@
       "kind": "writes"
     },
     {
+      "id": "writes:mechanic:perk.hazard_banish_per_floor->state:destroyPairCharges",
+      "source": "mechanic:perk.hazard_banish_per_floor",
+      "target": "state:destroyPairCharges",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:perk.hazard_banish_per_floor->state:feedbackLines",
+      "source": "mechanic:perk.hazard_banish_per_floor",
+      "target": "state:feedbackLines",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:perk.hazard_banish_per_floor->state:gameplayCommands",
+      "source": "mechanic:perk.hazard_banish_per_floor",
+      "target": "state:gameplayCommands",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:perk.hazard_banish_per_floor->state:gameplayEvents",
+      "source": "mechanic:perk.hazard_banish_per_floor",
+      "target": "state:gameplayEvents",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:perk.hazard_banish_per_floor->state:tileHazardKind",
+      "source": "mechanic:perk.hazard_banish_per_floor",
+      "target": "state:tileHazardKind",
+      "kind": "writes"
+    },
+    {
       "id": "writes:mechanic:perk.trait_streak_toolkit->state:feedbackLines",
       "source": "mechanic:perk.trait_streak_toolkit",
       "target": "state:feedbackLines",
@@ -121687,12 +122053,6 @@
       "id": "writes:mechanic:reward.hazard_banisher->state:rewardPerkIds",
       "source": "mechanic:reward.hazard_banisher",
       "target": "state:rewardPerkIds",
-      "kind": "writes"
-    },
-    {
-      "id": "writes:mechanic:reward.hazard_banisher->state:tileHazardKind",
-      "source": "mechanic:reward.hazard_banisher",
-      "target": "state:tileHazardKind",
       "kind": "writes"
     },
     {

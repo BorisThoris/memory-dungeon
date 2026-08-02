@@ -15,6 +15,9 @@ import { calculateRating } from './scoring-rules';
 import { hasRunRelic } from './relics';
 import { normalizeSessionStats } from './session-stats-rules';
 import { getTraitRouteObjectiveSeed } from './trait-route-objectives';
+import { createGameplayHazardBanishCommand } from './gameplay-core-contracts';
+import { reduceGameplayCommand } from './gameplay-core';
+import { appendGameplayJournal } from './gameplay-journal';
 
 export interface CreateNextFloorRunStateOptions {
     lives: number;
@@ -26,42 +29,15 @@ export interface CreateNextFloorRunStateOptions {
     memorizeRemainingMs: number;
 }
 
-const banishOneHazardPair = (board: BoardState): { board: BoardState; banished: boolean } => {
-    const target = board.tiles.find((tile) =>
-        tile.tileHazardKind != null &&
-        tile.state !== 'matched' &&
-        tile.state !== 'removed'
-    );
-    if (!target) {
-        return { board, banished: false };
-    }
-
-    return {
-        board: {
-            ...board,
-            tiles: board.tiles.map((tile) =>
-                tile.pairKey === target.pairKey && tile.tileHazardKind === target.tileHazardKind
-                    ? { ...tile, tileHazardKind: undefined }
-                    : tile
-            )
-        },
-        banished: true
-    };
-};
-
 export const createNextFloorRunState = (
     run: RunState,
     options: CreateNextFloorRunStateOptions
 ): RunState => {
-    const canUseHazardBanisher = hasRewardPerk(run, 'hazard_banish_per_floor') && !run.activeContract?.noDestroy;
-    const hazardBanish = canUseHazardBanisher
-        ? banishOneHazardPair(options.board)
-        : { board: options.board, banished: false };
-    const nextBoard = hazardBanish.board;
+    const nextBoard = options.board;
     const traitRouteObjective = getTraitRouteObjectiveSeed(nextBoard);
     const stats = normalizeSessionStats(run.stats);
 
-    return {
+    const nextRun: RunState = {
         ...run,
         status: 'memorize',
         lives: options.lives,
@@ -73,8 +49,7 @@ export const createNextFloorRunState = (
         debugPeekActive: false,
         pendingMemorizeBonusMs: 0,
         pinnedTileIds: [],
-        destroyPairCharges:
-            run.destroyPairCharges + (canUseHazardBanisher && !hazardBanish.banished ? 1 : 0),
+        destroyPairCharges: run.destroyPairCharges,
         parasiteFloors: options.parasiteFloors,
         parasiteWardRemaining: options.parasiteWardRemaining,
         stickyBlockIndex: null,
@@ -151,4 +126,15 @@ export const createNextFloorRunState = (
             currentStreak: 0
         }
     };
+    if (!hasRewardPerk(run, 'hazard_banish_per_floor')) {
+        return nextRun;
+    }
+    const command = createGameplayHazardBanishCommand(
+        `hazard-banish:${run.runSeed}:${nextBoard.level}`
+    );
+    const result = reduceGameplayCommand(nextRun, command);
+    if (!result.accepted) {
+        throw new Error('Hazard Banish floor-start command was unexpectedly rejected.');
+    }
+    return appendGameplayJournal(result.run, [command], result.events);
 };

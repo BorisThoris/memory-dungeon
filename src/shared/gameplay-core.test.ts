@@ -36,6 +36,7 @@ import {
     createGameplayDungeonExitActivateCommand,
     createGameplayFlashPairCommand,
     createGameplayGambitCommitCommand,
+    createGameplayHazardBanishCommand,
     createGameplayParasiteAdvanceCommand,
     createGameplayPeekCommand,
     createGameplayPinToggleCommand,
@@ -487,6 +488,64 @@ describe('deterministic gameplay core', () => {
             }),
             expect.objectContaining({ type: 'feedback.requested', cue: 'build.ward_spark.matched' })
         ]));
+    });
+
+    it('resolves Hazard Banish as hazard removal, fallback Destroy, or explicit contract suppression', () => {
+        const perkRun = run({
+            status: 'memorize',
+            rewardPerkIds: ['hazard_banish_per_floor'],
+            destroyPairCharges: 0,
+            board: {
+                ...board(),
+                level: 2,
+                tiles: board().tiles.map((candidate) =>
+                    candidate.pairKey === 'echo'
+                        ? { ...candidate, tileHazardKind: 'shuffle_snare' as const }
+                        : candidate
+                )
+            }
+        });
+        const removed = reduceGameplayCommand(perkRun, createGameplayHazardBanishCommand('banish-hazard'));
+        const fallback = reduceGameplayCommand(
+            { ...perkRun, board: board() },
+            createGameplayHazardBanishCommand('banish-fallback')
+        );
+        const blocked = reduceGameplayCommand(
+            {
+                ...perkRun,
+                activeContract: { noDestroy: true, noShuffle: false, maxMismatches: null }
+            },
+            createGameplayHazardBanishCommand('banish-blocked')
+        );
+
+        expect(removed).toMatchObject({ accepted: true, run: { destroyPairCharges: 0 } });
+        expect(removed.run.board?.tiles.filter((candidate) => candidate.pairKey === 'echo'))
+            .toEqual(expect.arrayContaining([
+                expect.objectContaining({ tileHazardKind: undefined }),
+                expect.objectContaining({ tileHazardKind: undefined })
+            ]));
+        expect(removed.events).toEqual([
+            expect.objectContaining({
+                type: 'hazard_banish.resolved',
+                outcome: 'hazard_removed',
+                floor: 2,
+                targetPairKey: 'echo',
+                hazardKind: 'shuffle_snare',
+                affectedTileIds: ['echo-a', 'echo-b']
+            }),
+            expect.objectContaining({ type: 'feedback.requested', cue: 'perk.hazard_banish.hazard_removed' })
+        ]);
+        expect(fallback).toMatchObject({ accepted: true, run: { destroyPairCharges: 1 } });
+        expect(fallback.events).toEqual([
+            expect.objectContaining({ type: 'inventory.changed', itemId: 'destroy_charge', applied: 1 }),
+            expect.objectContaining({ type: 'hazard_banish.resolved', outcome: 'destroy_charge_granted' }),
+            expect.objectContaining({ type: 'feedback.requested', cue: 'perk.hazard_banish.destroy_granted' })
+        ]);
+        expect(blocked).toMatchObject({ accepted: true, run: { destroyPairCharges: 0 } });
+        expect(blocked.events).toEqual([
+            expect.objectContaining({ type: 'hazard_banish.resolved', outcome: 'contract_blocked' }),
+            expect.objectContaining({ type: 'feedback.requested', cue: 'perk.hazard_banish.contract_blocked' })
+        ]);
     });
 
     it('models Vaultbreaker treasure extraction from chest through opener, Shrine Echo, and Score Glint', () => {

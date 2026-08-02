@@ -127,6 +127,7 @@ describe('seeded gameplay core simulation', () => {
                 'shop.purchase',
                 'dungeon.exit_activate',
                 'board.destroy_pair',
+                'floor.hazard_banish',
                 'wild_match.consume'
             ])
         );

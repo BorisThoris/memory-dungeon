@@ -8,6 +8,7 @@ export type GameplayFeedbackAudioCategory =
     | 'destroy-pair'
     | 'flash-pair'
     | 'gambit-commit'
+    | 'hazard-banish'
     | 'match-resolution'
     | 'peek'
     | 'relic-pick'
@@ -53,6 +54,9 @@ const audioCategoryFor = (
     }
     if (feedback.source.kind === 'power' && feedback.cue === 'power.undo_resolve.used') {
         return 'undo';
+    }
+    if (feedback.source.kind === 'reward_perk' && feedback.source.id === 'hazard_banish_per_floor') {
+        return 'hazard-banish';
     }
     if (feedback.source.kind === 'shop') {
         return 'shop-purchase';
