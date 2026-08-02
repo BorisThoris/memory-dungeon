@@ -19,6 +19,7 @@ export const GAMEPLAY_RELIC_IDS = [
     'memorize_under_short_memorize',
     'region_shuffle_free_first',
     'combo_shard_plus_step',
+    'parasite_ward_once',
     'guard_token_plus_one',
     'destroy_bank_plus_one',
     'shrine_echo',
@@ -469,6 +470,23 @@ export const COMBO_SHARD_ENGINE_DEFINITIONS = z.array(gameplayContentDefinitionS
                 kind: 'feedback.emit',
                 cue: 'build.combo_shard_relic.claimed',
                 message: 'The Catalyst relic added one combo shard.',
+                tone: 'reward'
+            }
+        ]
+    },
+    {
+        id: 'relic.parasite_ward_once',
+        version: 1,
+        buildId: 'combo_shard_engine',
+        source: { kind: 'relic', id: 'parasite_ward_once' },
+        trigger: 'content.claimed',
+        conditions: [],
+        effects: [
+            { kind: 'parasite_ward.grant', amount: 1 },
+            {
+                kind: 'feedback.emit',
+                cue: 'build.parasite_ward_once.claimed',
+                message: 'Parasite Ward armed one life-loss shield against score-parasite pressure.',
                 tone: 'reward'
             }
         ]
@@ -1197,6 +1215,12 @@ export const gameplayCommandSchema = z.discriminatedUnion('type', [
             type: z.literal('dungeon.exit_activate'),
             spend: z.enum(['none', 'key', 'master_key'])
         })
+        .strict(),
+    z
+        .object({
+            ...commandBase,
+            type: z.literal('floor.parasite_advance')
+        })
         .strict()
 ]);
 
@@ -1446,6 +1470,22 @@ export const gameplayEventSchema = z.discriminatedUnion('type', [
     z
         .object({
             ...eventBase,
+            type: z.literal('score_parasite.advanced'),
+            active: z.boolean(),
+            pressureBefore: z.number().int().nonnegative(),
+            pressureAfter: z.number().int().nonnegative(),
+            wardBefore: z.number().int().nonnegative(),
+            wardAfter: z.number().int().nonnegative(),
+            livesBefore: z.number().int().nonnegative(),
+            livesAfter: z.number().int().nonnegative(),
+            thresholdTriggered: z.boolean(),
+            wardConsumed: z.boolean(),
+            lifeLost: z.boolean()
+        })
+        .strict(),
+    z
+        .object({
+            ...eventBase,
             type: z.literal('currency.changed'),
             currency: z.literal('shop_gold'),
             requested: z.number().int().positive(),
@@ -1641,4 +1681,11 @@ export const createGameplayDungeonExitActivateCommand = (
         commandId,
         type: 'dungeon.exit_activate',
         spend
+    });
+
+export const createGameplayParasiteAdvanceCommand = (commandId: string): GameplayCommand =>
+    gameplayCommandSchema.parse({
+        schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
+        commandId,
+        type: 'floor.parasite_advance'
     });

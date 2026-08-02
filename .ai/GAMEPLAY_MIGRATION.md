@@ -172,6 +172,19 @@ The Locksmith makes pre-lock insurance, shop fallback, and the final lock spend 
 
 The graph connects reward insurance and shop gold to typed and Master Key inventories, lock/caches, explicit exit activation, HUD feedback, persistence, and seeded replay. Direct parity tests cover successful Master Key purchase and spend, while existing shop, exit, topology, and softlock tests retain authority over legality.
 
+## Twelfth vertical slice: Combo Shard Survival
+
+The Combo Shard build now includes its chapter-pressure defense instead of ending at shard-to-life conversion:
+
+1. Claiming the one-shot Parasite Ward relic executes the same strict content command as other migrated relics and emits the exact ward delta plus acquisition feedback.
+2. Every cleared-floor transition executes `floor.parasite_advance`, delegating the established four-floor pressure calculation to the pure score-parasite rule.
+3. The command records pressure, ward, and life before/after values plus explicit threshold, ward-consumed, and life-lost flags.
+4. Only a real threshold consequence emits feedback: ward absorption is a reward cue and unprotected life loss is a warning cue.
+5. The transition appends the accepted command and events before creating the next board or game-over state, so replay, save data, HUD, audio, and accessibility share one persisted cause.
+6. Direct parity tests retain the existing ward-before-life rule, while the semantic graph connects relic acquisition through the ward state to score-parasite consumption and feedback.
+
+This closes the last unmodeled relic diagnostic without inventing a parallel survival system. The typed command owns orchestration and observability; `advanceScoreParasiteFloor` remains the deterministic calculation primitive.
+
 ## Current slice status
 
 Implemented in the Conduit Cartographer vertical slice:

@@ -47,6 +47,7 @@ const RELIC_IMMEDIATE_DEFINITION_IDS: Partial<Record<RelicId, string>> = {
     memorize_under_short_memorize: 'relic.memorize_under_short_memorize',
     region_shuffle_free_first: 'relic.region_shuffle_free_first',
     combo_shard_plus_step: 'relic.combo_shard_plus_step',
+    parasite_ward_once: 'relic.parasite_ward_once',
     destroy_bank_plus_one: 'relic.destroy_bank_plus_one',
     guard_token_plus_one: 'relic.guard_token_plus_one',
     peek_charge_plus_one: 'relic.peek_charge_plus_one',

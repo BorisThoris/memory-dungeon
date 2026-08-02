@@ -35,6 +35,8 @@ import { normalizeSessionStats } from './session-stats-rules';
 import { purchaseShopOffer } from './shop-rules';
 import { createDungeonExitActivationTransition } from './dungeon-exit-rules';
 import { getDungeonExitStatus } from './dungeon-board-status';
+import { advanceScoreParasiteFloor } from './score-parasite-rules';
+import { hasMutator } from './mutators';
 
 export interface GameplayCommandResult {
     run: RunState;
@@ -63,6 +65,7 @@ const FLASH_PAIR_SOURCE: GameplaySource = { kind: 'power', id: 'flash_pair' };
 const UNDO_RESOLVE_SOURCE: GameplaySource = { kind: 'power', id: 'undo_resolve' };
 const SHOP_SOURCE: GameplaySource = { kind: 'shop', id: 'run_shop' };
 const DUNGEON_EXIT_SOURCE: GameplaySource = { kind: 'system', id: 'dungeon_exit' };
+const SCORE_PARASITE_SOURCE: GameplaySource = { kind: 'system', id: 'score_parasite' };
 const gameplayRewardPerkIds = new Set<RewardPerkId>(GAMEPLAY_REWARD_PERK_IDS);
 type GameplayEventPayload<T = GameplayEvent> = T extends GameplayEvent
     ? Omit<T, 'schemaVersion' | 'eventId' | 'commandId' | 'sequence' | 'source'>
@@ -833,6 +836,60 @@ const applyDungeonExitActivateCommand = (
     return { run: nextRun, command, events, accepted: true };
 };
 
+const applyParasiteAdvanceCommand = (
+    run: RunState,
+    command: Extract<GameplayCommand, { type: 'floor.parasite_advance' }>
+): GameplayCommandResult => {
+    if (run.status !== 'levelComplete' || !run.board) {
+        return rejectedResult(run, command.commandId, 'Score-parasite pressure advances only from a cleared floor.', command);
+    }
+    const pressureBefore = runNonNegativeInteger(run.parasiteFloors);
+    const wardBefore = runNonNegativeInteger(run.parasiteWardRemaining);
+    const livesBefore = runNonNegativeInteger(run.lives);
+    const advanced = advanceScoreParasiteFloor(run);
+    const nextRun: RunState = {
+        ...run,
+        lives: advanced.lives,
+        parasiteFloors: advanced.parasiteFloors,
+        parasiteWardRemaining: advanced.parasiteWardRemaining
+    };
+    const active = hasMutator(run, 'score_parasite');
+    const thresholdTriggered = active && pressureBefore + 1 >= 4;
+    const wardConsumed = advanced.parasiteWardRemaining < wardBefore;
+    const lifeLost = advanced.lives < livesBefore;
+    const events: GameplayEvent[] = [];
+    const writeEvent = makeEventWriter(command.commandId, SCORE_PARASITE_SOURCE, events);
+    writeEvent({
+        type: 'score_parasite.advanced',
+        active,
+        pressureBefore,
+        pressureAfter: advanced.parasiteFloors,
+        wardBefore,
+        wardAfter: advanced.parasiteWardRemaining,
+        livesBefore,
+        livesAfter: advanced.lives,
+        thresholdTriggered,
+        wardConsumed,
+        lifeLost
+    });
+    if (wardConsumed) {
+        writeEvent({
+            type: 'feedback.requested',
+            cue: 'hazard.score_parasite.ward_consumed',
+            message: `Parasite Ward absorbed the life loss; ${advanced.parasiteWardRemaining} charge${advanced.parasiteWardRemaining === 1 ? '' : 's'} remain.`,
+            tone: 'reward'
+        });
+    } else if (lifeLost) {
+        writeEvent({
+            type: 'feedback.requested',
+            cue: 'hazard.score_parasite.life_lost',
+            message: `Score Parasite consumed one life; ${advanced.lives} ${advanced.lives === 1 ? 'life remains' : 'lives remain'}.`,
+            tone: 'warning'
+        });
+    }
+    return { run: nextRun, command, events, accepted: true };
+};
+
 export const reduceGameplayCommand = (run: RunState, input: unknown): GameplayCommandResult => {
     const parsed = gameplayCommandSchema.safeParse(input);
     if (!parsed.success) {
@@ -874,6 +931,9 @@ export const reduceGameplayCommand = (run: RunState, input: unknown): GameplayCo
     }
     if (command.type === 'dungeon.exit_activate') {
         return applyDungeonExitActivateCommand(run, command);
+    }
+    if (command.type === 'floor.parasite_advance') {
+        return applyParasiteAdvanceCommand(run, command);
     }
     const definition = getGameplayContentDefinition(command.definitionId);
     if (!definition) {

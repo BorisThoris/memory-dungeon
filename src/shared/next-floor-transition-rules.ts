@@ -20,10 +20,12 @@ import {
 import { getRunDungeonMapState } from './dungeon-run-state-rules';
 import { createTimerState } from './run-timer-rules';
 import { getMemorizeDurationForRun } from './scoring-rules';
-import { advanceScoreParasiteFloor } from './score-parasite-rules';
 import { buildBoard } from './board-build-rules';
 import { createNextFloorRunState } from './next-floor-run-state-rules';
 import { runMutatorIds } from './relics';
+import { createGameplayParasiteAdvanceCommand } from './gameplay-core-contracts';
+import { reduceGameplayCommand } from './gameplay-core';
+import { appendGameplayJournal } from './gameplay-journal';
 
 export const advanceToNextLevel = (run: RunState): RunState => {
     if (run.status !== 'levelComplete' || !run.board) {
@@ -74,14 +76,21 @@ export const advanceToNextLevel = (run: RunState): RunState => {
     nextFloorTag = floorTagForDungeonNode(selectedDungeonNode?.kind, nextFloorTag);
     nextFloorArchetypeId = floorArchetypeForDungeonNode(selectedDungeonNode?.kind, nextFloorArchetypeId);
 
-    const parasiteAdvance = advanceScoreParasiteFloor(run);
-    const parasiteFloors = parasiteAdvance.parasiteFloors;
-    const lives = parasiteAdvance.lives;
-    const nextParasiteWard = parasiteAdvance.parasiteWardRemaining;
+    const parasiteCommand = createGameplayParasiteAdvanceCommand(
+        `floor-advance:${run.runSeed}:${nextLevelNum}`
+    );
+    const parasiteResult = reduceGameplayCommand(run, parasiteCommand);
+    if (!parasiteResult.accepted) {
+        throw new Error('Score-parasite floor advance command was unexpectedly rejected.');
+    }
+    const transitionRun = appendGameplayJournal(parasiteResult.run, [parasiteCommand], parasiteResult.events);
+    const parasiteFloors = transitionRun.parasiteFloors;
+    const lives = transitionRun.lives;
+    const nextParasiteWard = transitionRun.parasiteWardRemaining;
 
     if (lives <= 0) {
         return {
-            ...run,
+            ...transitionRun,
             status: 'gameOver',
             lives: 0,
             parasiteFloors,
@@ -111,11 +120,11 @@ export const advanceToNextLevel = (run: RunState): RunState => {
         relicIds: run.relicIds,
         startingLoadoutId: run.startingLoadoutId
     });
-    const runForNextMemorize: RunState = { ...run, activeMutators: nextActiveMutators, board: nextBoard };
+    const runForNextMemorize: RunState = { ...transitionRun, activeMutators: nextActiveMutators, board: nextBoard };
     const baseMemorizeMs = getMemorizeDurationForRun(runForNextMemorize, nextBoard.level);
     const memorizeWithBonus = baseMemorizeMs + run.pendingMemorizeBonusMs;
 
-    return createNextFloorRunState(run, {
+    return createNextFloorRunState(transitionRun, {
         lives,
         activeMutators: nextActiveMutators,
         dungeonRun: nextDungeonRun,

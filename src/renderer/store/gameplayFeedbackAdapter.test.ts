@@ -138,6 +138,27 @@ describe('gameplayFeedbackAdapter', () => {
         expect(presentations.map((item) => item.audioCategory)).toEqual(['shop-purchase', 'exit-activate']);
     });
 
+    it('classifies score-parasite ward and life-loss feedback from the typed hazard source', () => {
+        const presentations = projectGameplayFeedback([
+            event(0, {
+                type: 'feedback.requested',
+                cue: 'hazard.score_parasite.ward_consumed',
+                message: 'Ward absorbed the hit.',
+                source: { kind: 'system', id: 'score_parasite' },
+                tone: 'reward'
+            }),
+            event(1, {
+                type: 'feedback.requested',
+                cue: 'hazard.score_parasite.life_lost',
+                message: 'A life was lost.',
+                source: { kind: 'system', id: 'score_parasite' },
+                tone: 'warning'
+            })
+        ]);
+
+        expect(presentations.map((item) => item.audioCategory)).toEqual(['parasite', 'parasite']);
+    });
+
     it('adds the actual typed overflow score to otherwise ambiguous proc feedback', () => {
         const presentation = projectGameplayFeedback([
             event(0, {

@@ -34,6 +34,7 @@ import {
     createGameplayDungeonExitActivateCommand,
     createGameplayFlashPairCommand,
     createGameplayGambitCommitCommand,
+    createGameplayParasiteAdvanceCommand,
     createGameplayPeekCommand,
     createGameplayPinToggleCommand,
     createGameplayRegionShuffleCommand,
@@ -218,6 +219,7 @@ describe('deterministic gameplay core', () => {
         expect(COMBO_SHARD_ENGINE_DEFINITIONS.map((definition) => definition.id)).toEqual([
             'bonus_reward.bonus_shards',
             'relic.combo_shard_plus_step',
+            'relic.parasite_ward_once',
             'findable.shard_spark',
             'relic.combo_shard_plus_step.sealed_match'
         ]);
@@ -247,6 +249,73 @@ describe('deterministic gameplay core', () => {
                 expect.objectContaining({ type: 'score.changed', reason: 'inventory_overflow', amount: 18 })
             ])
         );
+
+        const wardRelic = applyRelicImmediateThroughGameplayCore(
+            { ...initial, parasiteWardRemaining: 0 },
+            'parasite_ward_once',
+            'catalyst-parasite-ward'
+        );
+        expect(wardRelic).toMatchObject({ migrated: true, run: { parasiteWardRemaining: 1 } });
+        expect(wardRelic.events).toEqual(expect.arrayContaining([
+            expect.objectContaining({
+                type: 'parasite_ward.changed',
+                before: 0,
+                after: 1,
+                source: { kind: 'relic', id: 'parasite_ward_once' }
+            }),
+            expect.objectContaining({ type: 'feedback.requested', cue: 'build.parasite_ward_once.claimed' })
+        ]));
+    });
+
+    it('advances score-parasite pressure through a typed floor command and records ward or life outcomes', () => {
+        const warded = run({
+            status: 'levelComplete',
+            activeMutators: ['score_parasite'],
+            parasiteFloors: 3,
+            parasiteWardRemaining: 1,
+            lives: 2
+        });
+        const protectedResult = reduceGameplayCommand(
+            warded,
+            createGameplayParasiteAdvanceCommand('parasite-warded')
+        );
+        const hitResult = reduceGameplayCommand(
+            { ...warded, parasiteWardRemaining: 0 },
+            createGameplayParasiteAdvanceCommand('parasite-hit')
+        );
+
+        expect(protectedResult).toMatchObject({
+            accepted: true,
+            run: { parasiteFloors: 0, parasiteWardRemaining: 0, lives: 2 }
+        });
+        expect(protectedResult.events).toEqual([
+            expect.objectContaining({
+                type: 'score_parasite.advanced',
+                thresholdTriggered: true,
+                wardConsumed: true,
+                lifeLost: false
+            }),
+            expect.objectContaining({
+                type: 'feedback.requested',
+                cue: 'hazard.score_parasite.ward_consumed'
+            })
+        ]);
+        expect(hitResult).toMatchObject({
+            accepted: true,
+            run: { parasiteFloors: 0, parasiteWardRemaining: 0, lives: 1 }
+        });
+        expect(hitResult.events).toEqual([
+            expect.objectContaining({
+                type: 'score_parasite.advanced',
+                thresholdTriggered: true,
+                wardConsumed: false,
+                lifeLost: true
+            }),
+            expect.objectContaining({
+                type: 'feedback.requested',
+                cue: 'hazard.score_parasite.life_lost'
+            })
+        ]);
     });
 
     it('models the Saboteur reward, Breaker Chisel, and Ward Spark as one trap-control build', () => {

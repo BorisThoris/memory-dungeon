@@ -13,6 +13,7 @@ export type GameplayFeedbackAudioCategory =
     | 'reward-claim'
     | 'shop-purchase'
     | 'exit-activate'
+    | 'parasite'
     | 'undo'
     | 'wager';
 
@@ -53,6 +54,9 @@ const audioCategoryFor = (
     }
     if (feedback.source.kind === 'system' && feedback.cue === 'dungeon.exit.activated') {
         return 'exit-activate';
+    }
+    if (feedback.source.kind === 'system' && feedback.source.id === 'score_parasite') {
+        return 'parasite';
     }
     if (feedback.source.kind === 'system' && feedback.cue === 'build.route_gambler.wager_accepted') {
         return 'wager';

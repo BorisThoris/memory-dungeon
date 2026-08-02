@@ -1069,6 +1069,50 @@ describe('GLD-P0-003 lifecycle advance guards', () => {
         expect(next.lives).toBe(0);
         expect(next.board).toBe(doomed.board);
         expect(next.parasiteFloors).toBe(0);
+        expect(next.gameplayEventJournal).toEqual(expect.arrayContaining([
+            expect.objectContaining({
+                type: 'score_parasite.advanced',
+                lifeLost: true,
+                wardConsumed: false
+            }),
+            expect.objectContaining({
+                type: 'feedback.requested',
+                cue: 'hazard.score_parasite.life_lost'
+            })
+        ]));
+    });
+
+    it('journals a consumed parasite ward while preserving life through floor transition', () => {
+        const cleared = playPerfectFloors(
+            createNewRun(0, {
+                echoFeedbackEnabled: false,
+                runSeed: 30_010,
+                activeMutators: ['score_parasite']
+            }),
+            1
+        );
+        const warded: RunState = { ...cleared, lives: 1, parasiteFloors: 3, parasiteWardRemaining: 1 };
+
+        const next = advanceToNextLevel(warded);
+
+        expect(next.status).toBe('memorize');
+        expect(next.lives).toBe(1);
+        expect(next.parasiteFloors).toBe(0);
+        expect(next.parasiteWardRemaining).toBe(0);
+        expect(next.gameplayCommandJournal).toEqual(expect.arrayContaining([
+            expect.objectContaining({ type: 'floor.parasite_advance' })
+        ]));
+        expect(next.gameplayEventJournal).toEqual(expect.arrayContaining([
+            expect.objectContaining({
+                type: 'score_parasite.advanced',
+                lifeLost: false,
+                wardConsumed: true
+            }),
+            expect.objectContaining({
+                type: 'feedback.requested',
+                cue: 'hazard.score_parasite.ward_consumed'
+            })
+        ]));
     });
 
     it('clears next-room progress state when score parasite kills during floor transition', () => {

@@ -5,18 +5,18 @@
     "name": "memory-dungeon",
     "trackedFileCount": 2377,
     "codeFileCount": 876,
-    "exportedSymbolCount": 3197,
+    "exportedSymbolCount": 3198,
     "contentItemCount": 56,
-    "mechanicCount": 114,
+    "mechanicCount": 115,
     "stateFieldCount": 127,
-    "relationshipCount": 9045
+    "relationshipCount": 9094
   },
   "inventory": [
     {
       "path": ".ai/GAMEPLAY_MIGRATION.md",
       "category": "other",
-      "bytes": 18396,
-      "sha256": "676e71b46ad4ae25d87977cb61b29fa9baa627b180bc0fbda27072eff9caa9a8"
+      "bytes": 19747,
+      "sha256": "e12e727d957edcf7e4d6e785e1f31567495df4bd308767139e20449bfc6247ed"
     },
     {
       "path": ".ai/README.md",
@@ -831,8 +831,8 @@
     {
       "path": "docs/internal-wiki/APP_ANALYSIS.md",
       "category": "documentation",
-      "bytes": 21438,
-      "sha256": "374a80bcbb4d2cda2b5905a593d2795f4a9aa6155b0f346007c71f619c988f15"
+      "bytes": 21440,
+      "sha256": "d959cd4e6f84a9a4d9bf7e3a89ca9fec089093b1f34e12ceb46fee0a7e9c1775"
     },
     {
       "path": "docs/internal-wiki/ARCHITECTURE.md",
@@ -9183,14 +9183,14 @@
     {
       "path": "src/renderer/store/gameplayFeedbackAdapter.test.ts",
       "category": "test",
-      "bytes": 6719,
-      "sha256": "ac2c8270db356d7b37814660a671500320d46ceef4ce90b04212170a1ff34a7b"
+      "bytes": 7569,
+      "sha256": "155a3fe09397d66ab889ea08b02e987add28726e876784f82a3bc9fc00fc08ad"
     },
     {
       "path": "src/renderer/store/gameplayFeedbackAdapter.ts",
       "category": "source",
-      "bytes": 4366,
-      "sha256": "71300c9094438682f1366e0969c33c4525dd0fb5627759228daedd9775054b48"
+      "bytes": 4504,
+      "sha256": "ae858e44a0fab39b6d3061d29107dd7dca3635b39b7e970a94ef83ce7048a629"
     },
     {
       "path": "src/renderer/store/hydrationController.test.ts",
@@ -10587,8 +10587,8 @@
     {
       "path": "src/shared/game.test.ts",
       "category": "test",
-      "bytes": 375315,
-      "sha256": "220228014ee004c545fbb4de1f6bd4846e3276facda9e379267d1d8a2177ddd9"
+      "bytes": 376987,
+      "sha256": "cd3d336c4041bbf0e7cfbecd0d44883657dd4d1e91b8feebbdc4db7c5687e569"
     },
     {
       "path": "src/shared/game.ts",
@@ -10599,14 +10599,14 @@
     {
       "path": "src/shared/gameplay-core-adapters.ts",
       "category": "source",
-      "bytes": 7926,
-      "sha256": "d0459987fe7bb912485088a09078128cf7961c7b0c6062015ceccfed270fd5e7"
+      "bytes": 7978,
+      "sha256": "e9f7179a26c41001b549383b14fad4cebc6c2be222b0a00f294d28ca0529fb55"
     },
     {
       "path": "src/shared/gameplay-core-contracts.ts",
       "category": "source",
-      "bytes": 54746,
-      "sha256": "2a4ef1a51d81b5ffe5ae76aa9c3d8b14019ea3e7730ec1405304bf6e84dd1396"
+      "bytes": 56359,
+      "sha256": "6ecbf43db4f66a9c538a4c3384e7896970fe39ae08cea74209e73d506f04b563"
     },
     {
       "path": "src/shared/gameplay-core-simulation.test.ts",
@@ -10623,26 +10623,26 @@
     {
       "path": "src/shared/gameplay-core.test.ts",
       "category": "test",
-      "bytes": 47092,
-      "sha256": "1db296e237919ccea65c089da886f977e311a8a642cba6b00e178e0cfc3815f2"
+      "bytes": 49726,
+      "sha256": "70bcda16a2713945dd3ee72c2ff94946dc31922a9ce9ce262e69995a8fde585a"
     },
     {
       "path": "src/shared/gameplay-core.ts",
       "category": "source",
-      "bytes": 39142,
-      "sha256": "91facb5c69b0d50805113e795702dc4849146a9cc0150abf49b01fb3da18baed"
+      "bytes": 41705,
+      "sha256": "8002fe624df244657cd794afe11bb782c38479b0e3daf6ab64856dea670e44d4"
     },
     {
       "path": "src/shared/gameplay-interaction-graph-data.json",
       "category": "source",
-      "bytes": 144162,
-      "sha256": "36a6f53446726b81c1533587ac17917bb947b0cb06d66425564505369f2f8041"
+      "bytes": 146851,
+      "sha256": "a2be2e213923f1b2e3cfd22b0b9a054811b1bc5bf4b1d4e69434067c086a7bd7"
     },
     {
       "path": "src/shared/gameplay-interaction-graph.test.ts",
       "category": "test",
-      "bytes": 36775,
-      "sha256": "e60cd71712e3dc28602b9701585ddbe16fd81c8d9b64d5eac2026779445dbda1"
+      "bytes": 37235,
+      "sha256": "666a68d818f445f2af399aafed6ed137e43004c0c113edaa91a5fae264e1c399"
     },
     {
       "path": "src/shared/gameplay-interaction-graph.ts",
@@ -11019,8 +11019,8 @@
     {
       "path": "src/shared/next-floor-transition-rules.ts",
       "category": "source",
-      "bytes": 4948,
-      "sha256": "1c0733ccfc67a95828224b7a831613b85dcd2c8653bd7e2b22367aa93b69163a"
+      "bytes": 5488,
+      "sha256": "cc2eed530ab767dc015d0a76a875f298cd95a93ba7210524bdf82b1cf19f3b3a"
     },
     {
       "path": "src/shared/objective-board.test.ts",
@@ -21397,7 +21397,7 @@
       "path": "src/renderer/store/gameplayFeedbackAdapter.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 187,
+      "lineCount": 208,
       "imports": [
         "file:src/renderer/store/gameplayFeedbackAdapter.ts",
         "file:src/shared/gameplay-core-contracts.ts"
@@ -21410,7 +21410,7 @@
       "path": "src/renderer/store/gameplayFeedbackAdapter.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 119,
+      "lineCount": 123,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/gameplay-core-contracts.ts"
@@ -26244,7 +26244,7 @@
       "path": "src/shared/game.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 8693,
+      "lineCount": 8737,
       "imports": [
         "file:src/shared/board-generation.ts",
         "file:src/shared/board-powers.ts",
@@ -26536,7 +26536,7 @@
       "path": "src/shared/gameplay-core-adapters.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 209,
+      "lineCount": 210,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/gameplay-core-contracts.ts",
@@ -26562,7 +26562,7 @@
       "path": "src/shared/gameplay-core-contracts.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1645,
+      "lineCount": 1692,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/run-inventory-contracts.ts"
@@ -26575,6 +26575,7 @@
         "symbol:src/shared/gameplay-core-contracts.ts#createGameplayDungeonExitActivateCommand",
         "symbol:src/shared/gameplay-core-contracts.ts#createGameplayFlashPairCommand",
         "symbol:src/shared/gameplay-core-contracts.ts#createGameplayGambitCommitCommand",
+        "symbol:src/shared/gameplay-core-contracts.ts#createGameplayParasiteAdvanceCommand",
         "symbol:src/shared/gameplay-core-contracts.ts#createGameplayPeekCommand",
         "symbol:src/shared/gameplay-core-contracts.ts#createGameplayPinToggleCommand",
         "symbol:src/shared/gameplay-core-contracts.ts#createGameplayRegionShuffleCommand",
@@ -26664,7 +26665,7 @@
       "path": "src/shared/gameplay-core.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 1040,
+      "lineCount": 1109,
       "imports": [
         "file:src/shared/board-power-actions.ts",
         "file:src/shared/board-power-state.ts",
@@ -26688,7 +26689,7 @@
       "path": "src/shared/gameplay-core.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 907,
+      "lineCount": 967,
       "imports": [
         "file:src/shared/board-power-actions.ts",
         "file:src/shared/board-power-state.ts",
@@ -26696,11 +26697,13 @@
         "file:src/shared/dungeon-board-status.ts",
         "file:src/shared/dungeon-exit-rules.ts",
         "file:src/shared/gameplay-core-contracts.ts",
+        "file:src/shared/mutators.ts",
         "file:src/shared/relic-favor-rules.ts",
         "file:src/shared/risk-wager-rules.ts",
         "file:src/shared/run-array-guards.ts",
         "file:src/shared/run-inventory.ts",
         "file:src/shared/run-number-guards.ts",
+        "file:src/shared/score-parasite-rules.ts",
         "file:src/shared/session-stats-rules.ts",
         "file:src/shared/shop-rules.ts"
       ],
@@ -26722,7 +26725,7 @@
       "path": "src/shared/gameplay-interaction-graph-data.json",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1888,
+      "lineCount": 1909,
       "imports": [],
       "exports": [],
       "testedBy": []
@@ -26732,7 +26735,7 @@
       "path": "src/shared/gameplay-interaction-graph.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 602,
+      "lineCount": 606,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/gameplay-core-contracts.ts",
@@ -27983,18 +27986,20 @@
       "path": "src/shared/next-floor-transition-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 128,
+      "lineCount": 137,
       "imports": [
         "file:src/shared/board-build-rules.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/dungeon-encounter-context-rules.ts",
         "file:src/shared/dungeon-run-state-rules.ts",
         "file:src/shared/floor-mutator-schedule.ts",
+        "file:src/shared/gameplay-core-contracts.ts",
+        "file:src/shared/gameplay-core.ts",
+        "file:src/shared/gameplay-journal.ts",
         "file:src/shared/next-floor-run-state-rules.ts",
         "file:src/shared/relics.ts",
         "file:src/shared/run-map.ts",
         "file:src/shared/run-timer-rules.ts",
-        "file:src/shared/score-parasite-rules.ts",
         "file:src/shared/scoring-rules.ts"
       ],
       "exports": [
@@ -39059,39 +39064,39 @@
       "kind": "type",
       "file": "src/renderer/store/gameplayFeedbackAdapter.ts",
       "line": 7,
-      "endLine": 17
+      "endLine": 18
     },
     {
       "id": "symbol:src/renderer/store/gameplayFeedbackAdapter.ts#GameplayFeedbackPresentation",
       "name": "GameplayFeedbackPresentation",
       "kind": "interface",
       "file": "src/renderer/store/gameplayFeedbackAdapter.ts",
-      "line": 19,
-      "endLine": 28
+      "line": 20,
+      "endLine": 29
     },
     {
       "id": "symbol:src/renderer/store/gameplayFeedbackAdapter.ts#getLatestGameplayFeedback",
       "name": "getLatestGameplayFeedback",
       "kind": "value",
       "file": "src/renderer/store/gameplayFeedbackAdapter.ts",
-      "line": 108,
-      "endLine": 110
+      "line": 112,
+      "endLine": 114
     },
     {
       "id": "symbol:src/renderer/store/gameplayFeedbackAdapter.ts#getNewGameplayFeedback",
       "name": "getNewGameplayFeedback",
       "kind": "value",
       "file": "src/renderer/store/gameplayFeedbackAdapter.ts",
-      "line": 112,
-      "endLine": 118
+      "line": 116,
+      "endLine": 122
     },
     {
       "id": "symbol:src/renderer/store/gameplayFeedbackAdapter.ts#projectGameplayFeedback",
       "name": "projectGameplayFeedback",
       "kind": "value",
       "file": "src/renderer/store/gameplayFeedbackAdapter.ts",
-      "line": 88,
-      "endLine": 106
+      "line": 92,
+      "endLine": 110
     },
     {
       "id": "symbol:src/renderer/store/hydrationController.ts#createHydratedAppStatePatch",
@@ -48602,8 +48607,8 @@
       "name": "applyRelicImmediateThroughGameplayCore",
       "kind": "value",
       "file": "src/shared/gameplay-core-adapters.ts",
-      "line": 65,
-      "endLine": 84
+      "line": 66,
+      "endLine": 85
     },
     {
       "id": "symbol:src/shared/gameplay-core-adapters.ts#GameplayMatchRewardAdapterResult",
@@ -48642,152 +48647,160 @@
       "name": "resolveFindableMatchRewardThroughGameplayCore",
       "kind": "value",
       "file": "src/shared/gameplay-core-adapters.ts",
-      "line": 91,
-      "endLine": 145
+      "line": 92,
+      "endLine": 146
     },
     {
       "id": "symbol:src/shared/gameplay-core-adapters.ts#resolveSlayerFloorClearThroughGameplayCore",
       "name": "resolveSlayerFloorClearThroughGameplayCore",
       "kind": "value",
       "file": "src/shared/gameplay-core-adapters.ts",
-      "line": 151,
-      "endLine": 208
+      "line": 152,
+      "endLine": 209
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#BOARD_TACTICIAN_DEFINITIONS",
       "name": "BOARD_TACTICIAN_DEFINITIONS",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 570,
-      "endLine": 677
+      "line": 588,
+      "endLine": 695
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#COMBO_SHARD_ENGINE_DEFINITIONS",
       "name": "COMBO_SHARD_ENGINE_DEFINITIONS",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 440,
-      "endLine": 513
+      "line": 441,
+      "endLine": 531
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#CONDUIT_CARTOGRAPHER_DEFINITIONS",
       "name": "CONDUIT_CARTOGRAPHER_DEFINITIONS",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 303,
-      "endLine": 360
+      "line": 304,
+      "endLine": 361
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayDefinitionCommand",
       "name": "createGameplayDefinitionCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1527,
-      "endLine": 1544
+      "line": 1567,
+      "endLine": 1584
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayDungeonExitActivateCommand",
       "name": "createGameplayDungeonExitActivateCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1635,
-      "endLine": 1644
+      "line": 1675,
+      "endLine": 1684
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayFlashPairCommand",
       "name": "createGameplayFlashPairCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1613,
-      "endLine": 1618
+      "line": 1653,
+      "endLine": 1658
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayGambitCommitCommand",
       "name": "createGameplayGambitCommitCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1577,
-      "endLine": 1583
+      "line": 1617,
+      "endLine": 1623
+    },
+    {
+      "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayParasiteAdvanceCommand",
+      "name": "createGameplayParasiteAdvanceCommand",
+      "kind": "value",
+      "file": "src/shared/gameplay-core-contracts.ts",
+      "line": 1686,
+      "endLine": 1691
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayPeekCommand",
       "name": "createGameplayPeekCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1546,
-      "endLine": 1552
+      "line": 1586,
+      "endLine": 1592
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayPinToggleCommand",
       "name": "createGameplayPinToggleCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1554,
-      "endLine": 1560
+      "line": 1594,
+      "endLine": 1600
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayRegionShuffleCommand",
       "name": "createGameplayRegionShuffleCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1592,
-      "endLine": 1598
+      "line": 1632,
+      "endLine": 1638
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayRiskWagerAcceptCommand",
       "name": "createGameplayRiskWagerAcceptCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1570,
-      "endLine": 1575
+      "line": 1610,
+      "endLine": 1615
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayShopPurchaseCommand",
       "name": "createGameplayShopPurchaseCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1627,
-      "endLine": 1633
+      "line": 1667,
+      "endLine": 1673
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayShuffleCommand",
       "name": "createGameplayShuffleCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1585,
-      "endLine": 1590
+      "line": 1625,
+      "endLine": 1630
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayStrayRemoveCommand",
       "name": "createGameplayStrayRemoveCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1562,
-      "endLine": 1568
+      "line": 1602,
+      "endLine": 1608
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayTileSwapCommand",
       "name": "createGameplayTileSwapCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1600,
-      "endLine": 1611
+      "line": 1640,
+      "endLine": 1651
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayUndoResolveCommand",
       "name": "createGameplayUndoResolveCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1620,
-      "endLine": 1625
+      "line": 1660,
+      "endLine": 1665
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GAMEPLAY_CONTENT_DEFINITIONS",
       "name": "GAMEPLAY_CONTENT_DEFINITIONS",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1078,
-      "endLine": 1089
+      "line": 1096,
+      "endLine": 1107
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GAMEPLAY_CORE_SCHEMA_VERSION",
@@ -48802,8 +48815,8 @@
       "name": "GAMEPLAY_FINDABLE_KINDS",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 32,
-      "endLine": 37
+      "line": 33,
+      "endLine": 38
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GAMEPLAY_RELIC_IDS",
@@ -48811,7 +48824,7 @@
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
       "line": 15,
-      "endLine": 30
+      "endLine": 31
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GAMEPLAY_REWARD_PERK_IDS",
@@ -48826,192 +48839,192 @@
       "name": "GAMEPLAY_RUN_STATUSES",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 51,
-      "endLine": 58
+      "line": 52,
+      "endLine": 59
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GAMEPLAY_TILE_TRAIT_KINDS",
       "name": "GAMEPLAY_TILE_TRAIT_KINDS",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 39,
-      "endLine": 49
+      "line": 40,
+      "endLine": 50
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GameplayCommand",
       "name": "GameplayCommand",
       "kind": "type",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1519,
-      "endLine": 1519
+      "line": 1559,
+      "endLine": 1559
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#gameplayCommandSchema",
       "name": "gameplayCommandSchema",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1102,
-      "endLine": 1201
+      "line": 1120,
+      "endLine": 1225
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GameplayCondition",
       "name": "GameplayCondition",
       "kind": "type",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1093,
-      "endLine": 1093
+      "line": 1111,
+      "endLine": 1111
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#gameplayConditionSchema",
       "name": "gameplayConditionSchema",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 79,
-      "endLine": 161
+      "line": 80,
+      "endLine": 162
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GameplayContentDefinition",
       "name": "GameplayContentDefinition",
       "kind": "type",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1095,
-      "endLine": 1095
+      "line": 1113,
+      "endLine": 1113
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#gameplayContentDefinitionSchema",
       "name": "gameplayContentDefinitionSchema",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 291,
-      "endLine": 301
+      "line": 292,
+      "endLine": 302
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GameplayEffect",
       "name": "GameplayEffect",
       "kind": "type",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1094,
-      "endLine": 1094
+      "line": 1112,
+      "endLine": 1112
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#gameplayEffectSchema",
       "name": "gameplayEffectSchema",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 163,
-      "endLine": 289
+      "line": 164,
+      "endLine": 290
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GameplayEvent",
       "name": "GameplayEvent",
       "kind": "type",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1520,
-      "endLine": 1520
+      "line": 1560,
+      "endLine": 1560
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#gameplayEventSchema",
       "name": "gameplayEventSchema",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1211,
-      "endLine": 1517
+      "line": 1235,
+      "endLine": 1557
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GameplayFacts",
       "name": "GameplayFacts",
       "kind": "type",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1092,
-      "endLine": 1092
+      "line": 1110,
+      "endLine": 1110
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#gameplayFactsSchema",
       "name": "gameplayFactsSchema",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 67,
-      "endLine": 77
+      "line": 68,
+      "endLine": 78
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GameplaySource",
       "name": "GameplaySource",
       "kind": "type",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1091,
-      "endLine": 1091
+      "line": 1109,
+      "endLine": 1109
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#gameplaySourceSchema",
       "name": "gameplaySourceSchema",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 60,
-      "endLine": 65
+      "line": 61,
+      "endLine": 66
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#getGameplayContentDefinition",
       "name": "getGameplayContentDefinition",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1524,
-      "endLine": 1525
+      "line": 1564,
+      "endLine": 1565
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#LOCKSMITH_DEFINITIONS",
       "name": "LOCKSMITH_DEFINITIONS",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 753,
-      "endLine": 773
+      "line": 771,
+      "endLine": 791
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#MEMORY_SCOUT_DEFINITIONS",
       "name": "MEMORY_SCOUT_DEFINITIONS",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 679,
-      "endLine": 751
+      "line": 697,
+      "endLine": 769
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#SABOTEUR_DEFINITIONS",
       "name": "SABOTEUR_DEFINITIONS",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 515,
-      "endLine": 568
+      "line": 533,
+      "endLine": 586
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#SEER_DEFINITIONS",
       "name": "SEER_DEFINITIONS",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1006,
-      "endLine": 1076
+      "line": 1024,
+      "endLine": 1094
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#SLAYER_DEFINITIONS",
       "name": "SLAYER_DEFINITIONS",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 871,
-      "endLine": 1004
+      "line": 889,
+      "endLine": 1022
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#VAULTBREAKER_DEFINITIONS",
       "name": "VAULTBREAKER_DEFINITIONS",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 775,
-      "endLine": 869
+      "line": 793,
+      "endLine": 887
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#WARDEN_DEFINITIONS",
       "name": "WARDEN_DEFINITIONS",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 362,
-      "endLine": 438
+      "line": 363,
+      "endLine": 439
     },
     {
       "id": "symbol:src/shared/gameplay-core-simulation.ts#GameplayCoreSimulationOptions",
@@ -49042,32 +49055,32 @@
       "name": "GameplayCommandResult",
       "kind": "interface",
       "file": "src/shared/gameplay-core.ts",
-      "line": 39,
-      "endLine": 44
+      "line": 41,
+      "endLine": 46
     },
     {
       "id": "symbol:src/shared/gameplay-core.ts#GameplayReplayResult",
       "name": "GameplayReplayResult",
       "kind": "interface",
       "file": "src/shared/gameplay-core.ts",
-      "line": 46,
-      "endLine": 51
+      "line": 48,
+      "endLine": 53
     },
     {
       "id": "symbol:src/shared/gameplay-core.ts#reduceGameplayCommand",
       "name": "reduceGameplayCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core.ts",
-      "line": 836,
-      "endLine": 891
+      "line": 893,
+      "endLine": 951
     },
     {
       "id": "symbol:src/shared/gameplay-core.ts#replayGameplayCommands",
       "name": "replayGameplayCommands",
       "kind": "value",
       "file": "src/shared/gameplay-core.ts",
-      "line": 893,
-      "endLine": 906
+      "line": 953,
+      "endLine": 966
     },
     {
       "id": "symbol:src/shared/gameplay-interaction-graph.ts#auditGameplayInteractionGraph",
@@ -51074,8 +51087,8 @@
       "name": "advanceToNextLevel",
       "kind": "value",
       "file": "src/shared/next-floor-transition-rules.ts",
-      "line": 28,
-      "endLine": 127
+      "line": 30,
+      "endLine": 136
     },
     {
       "id": "symbol:src/shared/objective-board.ts#buildObjectiveBoardRows",
@@ -58099,7 +58112,7 @@
       "evidence": [
         {
           "path": "src/shared/gameplay-core-contracts.ts",
-          "line": 295
+          "line": 296
         },
         {
           "path": "src/shared/gameplay-core-adapters.ts",
@@ -58194,7 +58207,8 @@
       ],
       "enables": [
         "inventory.combo_shard",
-        "progression.shard_to_life"
+        "progression.shard_to_life",
+        "safety.parasite_ward"
       ],
       "blocks": [],
       "softlockGuards": [
@@ -58256,7 +58270,7 @@
       "evidence": [
         {
           "path": "src/shared/gameplay-core-contracts.ts",
-          "line": 295
+          "line": 296
         },
         {
           "path": "src/shared/relics.ts",
@@ -58301,7 +58315,7 @@
       "evidence": [
         {
           "path": "src/shared/gameplay-core-contracts.ts",
-          "line": 295
+          "line": 296
         },
         {
           "path": "src/shared/shop-rules.ts",
@@ -58358,7 +58372,7 @@
         },
         {
           "path": "src/shared/gameplay-core-contracts.ts",
-          "line": 36
+          "line": 37
         },
         {
           "path": "src/shared/memory-recall-feedback.ts",
@@ -58401,11 +58415,11 @@
       "evidence": [
         {
           "path": "src/shared/gameplay-core-contracts.ts",
-          "line": 286
+          "line": 287
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 402
+          "line": 405
         },
         {
           "path": "src/shared/gameplay-core-adapters.ts",
@@ -58462,7 +58476,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 475
+          "line": 478
         },
         {
           "path": "src/shared/risk-wager-rules.ts",
@@ -58480,7 +58494,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 153
+          "line": 154
         },
         {
           "path": "src/shared/risk-wager-rules.test.ts",
@@ -58522,11 +58536,11 @@
       "evidence": [
         {
           "path": "src/shared/gameplay-core-contracts.ts",
-          "line": 295
+          "line": 296
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 507
+          "line": 510
         },
         {
           "path": "src/shared/relics.ts",
@@ -58604,7 +58618,7 @@
       "evidence": [
         {
           "path": "src/shared/gameplay-core-contracts.ts",
-          "line": 295
+          "line": 296
         },
         {
           "path": "src/shared/bonus-rewards.ts",
@@ -58832,7 +58846,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 42
+          "line": 43
         },
         {
           "path": "src/shared/turn-match-economy-rules.test.ts",
@@ -58983,7 +58997,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 53
+          "line": 54
         }
       ],
       "enables": [
@@ -59014,7 +59028,7 @@
         },
         {
           "path": "src/shared/gameplay-core-contracts.ts",
-          "line": 34
+          "line": 35
         },
         {
           "path": "src/shared/game.ts",
@@ -59198,6 +59212,14 @@
           "line": 6
         },
         {
+          "path": "src/shared/gameplay-core.ts",
+          "line": 38
+        },
+        {
+          "path": "src/shared/next-floor-transition-rules.ts",
+          "line": 26
+        },
+        {
           "path": "src/shared/next-floor-run-state-rules.ts",
           "line": 24
         },
@@ -59216,12 +59238,17 @@
           "line": 34
         },
         {
+          "path": "src/shared/gameplay-core.test.ts",
+          "line": 37
+        },
+        {
           "path": "src/shared/game.test.ts",
           "line": 18
         }
       ],
       "enables": [
-        "build.boss_hunter"
+        "build.boss_hunter",
+        "build.combo_shard_engine"
       ],
       "blocks": [
         "score_bank"
@@ -59229,7 +59256,8 @@
       "softlockGuards": [
         "four-floor-cycle",
         "ward-before-life",
-        "featured-objective-relief"
+        "featured-objective-relief",
+        "typed-floor-transition"
       ]
     },
     {
@@ -59364,7 +59392,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 90
+          "line": 91
         }
       ],
       "enables": [
@@ -59503,7 +59531,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 97
+          "line": 98
         }
       ],
       "enables": [
@@ -59551,7 +59579,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 123
+          "line": 124
         }
       ],
       "enables": [
@@ -59604,7 +59632,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 123
+          "line": 124
         }
       ],
       "enables": [
@@ -60160,7 +60188,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 290
+          "line": 359
         },
         {
           "path": "src/shared/tile-trait-rules.test.ts",
@@ -60491,7 +60519,7 @@
       "evidence": [
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 58
+          "line": 60
         },
         {
           "path": "src/shared/flip-tile-transition.ts",
@@ -61049,7 +61077,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 52
+          "line": 53
         },
         {
           "path": "src/shared/dungeon-boss-clear-rules.test.ts",
@@ -61344,7 +61372,7 @@
         },
         {
           "path": "src/shared/gameplay-core-contracts.ts",
-          "line": 730
+          "line": 748
         }
       ],
       "tests": [
@@ -61388,7 +61416,7 @@
         },
         {
           "path": "src/shared/gameplay-core-contracts.ts",
-          "line": 746
+          "line": 764
         }
       ],
       "tests": [
@@ -61443,7 +61471,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 52
+          "line": 37
         },
         {
           "path": "src/shared/score-parasite-rules.test.ts",
@@ -61469,6 +61497,62 @@
         "score-parasite-only",
         "featured-objective-only",
         "non-negative-pressure"
+      ]
+    },
+    {
+      "id": "mechanic:relic.parasite_ward_once",
+      "mechanicId": "relic.parasite_ward_once",
+      "label": "One-Shot Parasite Ward Relic",
+      "kind": "relic",
+      "role": "parasite_survival_source",
+      "evidence": [
+        {
+          "path": "src/shared/relics.ts",
+          "line": 2
+        },
+        {
+          "path": "src/shared/gameplay-core-contracts.ts",
+          "line": 2
+        },
+        {
+          "path": "src/shared/gameplay-core-adapters.ts",
+          "line": 1
+        },
+        {
+          "path": "src/shared/next-floor-transition-rules.ts",
+          "line": 25
+        }
+      ],
+      "tests": [
+        {
+          "path": "src/shared/relic-immediate-rules.test.ts",
+          "line": 6
+        },
+        {
+          "path": "src/shared/gameplay-core.test.ts",
+          "line": 12
+        },
+        {
+          "path": "src/shared/game.test.ts",
+          "line": 17
+        },
+        {
+          "path": "src/renderer/store/gameplayFeedbackAdapter.test.ts",
+          "line": 47
+        }
+      ],
+      "enables": [
+        "safety.parasite_ward",
+        "build.combo_shard_engine"
+      ],
+      "blocks": [
+        "parasite_life_loss"
+      ],
+      "softlockGuards": [
+        "draft-eligibility",
+        "one-ward-per-claim",
+        "ward-before-life",
+        "typed-consumption-event"
       ]
     },
     {
@@ -61532,7 +61616,7 @@
         },
         {
           "path": "src/shared/gameplay-core-contracts.ts",
-          "line": 679
+          "line": 697
         }
       ],
       "tests": [
@@ -61633,7 +61717,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 52
+          "line": 53
         },
         {
           "path": "src/shared/relic-immediate-rules.test.ts",
@@ -61672,7 +61756,7 @@
         },
         {
           "path": "src/shared/gameplay-core-contracts.ts",
-          "line": 28
+          "line": 29
         }
       ],
       "tests": [
@@ -62111,7 +62195,7 @@
         },
         {
           "path": "src/shared/gameplay-core-contracts.ts",
-          "line": 755
+          "line": 773
         },
         {
           "path": "src/shared/gameplay-core.ts",
@@ -62125,7 +62209,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 889
+          "line": 958
         }
       ],
       "enables": [
@@ -62153,7 +62237,7 @@
         },
         {
           "path": "src/shared/gameplay-core-contracts.ts",
-          "line": 233
+          "line": 234
         },
         {
           "path": "src/shared/gameplay-core.ts",
@@ -62520,6 +62604,14 @@
         {
           "path": "src/shared/gameplay-core.ts",
           "line": 11
+        },
+        {
+          "path": "src/shared/next-floor-transition-rules.ts",
+          "line": 26
+        },
+        {
+          "path": "src/renderer/store/gameplayFeedbackAdapter.ts",
+          "line": 13
         }
       ],
       "tests": [
@@ -62534,6 +62626,14 @@
         {
           "path": "src/shared/gameplay-core.test.ts",
           "line": 12
+        },
+        {
+          "path": "src/shared/game.test.ts",
+          "line": 17
+        },
+        {
+          "path": "src/renderer/store/gameplayFeedbackAdapter.test.ts",
+          "line": 47
         }
       ],
       "enables": [
@@ -62672,7 +62772,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 42
+          "line": 43
         },
         {
           "path": "src/renderer/store/shopSurfaceState.test.ts",
@@ -63293,7 +63393,7 @@
         },
         {
           "path": "src/shared/gameplay-core-contracts.ts",
-          "line": 22
+          "line": 23
         },
         {
           "path": "src/shared/gameplay-core.ts",
@@ -63307,7 +63407,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 97
+          "line": 98
         }
       ],
       "enables": [
@@ -63857,6 +63957,7 @@
         "mechanic:findable.scout_glint",
         "mechanic:findable.shard_spark",
         "mechanic:findable.ward_spark",
+        "mechanic:hazard.score_parasite",
         "mechanic:objective.risk_wager",
         "mechanic:perk.cursed_opener_greed",
         "mechanic:perk.echo_conduit_double",
@@ -63880,6 +63981,7 @@
         "mechanic:relic.memorize_bonus_ms",
         "mechanic:relic.memorize_under_short_memorize",
         "mechanic:relic.parasite_ledger",
+        "mechanic:relic.parasite_ward_once",
         "mechanic:relic.peek_charge_plus_one",
         "mechanic:relic.pin_cap_plus_one",
         "mechanic:relic.region_shuffle_free_first",
@@ -63900,6 +64002,7 @@
         "mechanic:reward.trait_streak_lens",
         "mechanic:reward.trait_toolkit",
         "mechanic:safety.guard_absorption",
+        "mechanic:safety.parasite_ward",
         "mechanic:safety.safe_hazard_ward",
         "mechanic:shop.master_key",
         "mechanic:trait.volatile_heavy_guard"
@@ -64040,7 +64143,9 @@
         "mechanic:persistence.run_summary"
       ],
       "writtenBy": [
-        "mechanic:core.gameplay_commands"
+        "mechanic:core.gameplay_commands",
+        "mechanic:hazard.score_parasite",
+        "mechanic:safety.parasite_ward"
       ]
     },
     {
@@ -64067,7 +64172,9 @@
         "mechanic:persistence.run_summary"
       ],
       "writtenBy": [
-        "mechanic:core.gameplay_commands"
+        "mechanic:core.gameplay_commands",
+        "mechanic:hazard.score_parasite",
+        "mechanic:safety.parasite_ward"
       ]
     },
     {
@@ -64080,10 +64187,13 @@
       "writtenBy": [
         "mechanic:core.gameplay_commands",
         "mechanic:exit.primary",
+        "mechanic:hazard.score_parasite",
         "mechanic:perk.trait_streak_toolkit",
         "mechanic:power.flash_pair",
         "mechanic:power.undo_resolve",
+        "mechanic:relic.parasite_ward_once",
         "mechanic:reward.key_insurance",
+        "mechanic:safety.parasite_ward",
         "mechanic:shop.master_key"
       ]
     },
@@ -64179,9 +64289,11 @@
         "mechanic:build.guard_tank",
         "mechanic:feedback.gameplay_hud",
         "mechanic:progression.shard_to_life",
+        "mechanic:relic.parasite_ward_once",
         "mechanic:safety.guard_absorption"
       ],
       "writtenBy": [
+        "mechanic:core.gameplay_commands",
         "mechanic:hazard.enemy_patrol",
         "mechanic:hazard.score_parasite",
         "mechanic:progression.shard_to_life",
@@ -64285,12 +64397,15 @@
       "name": "parasiteFloors",
       "readBy": [
         "mechanic:build.boss_hunter",
+        "mechanic:build.combo_shard_engine",
         "mechanic:core.gameplay_commands",
         "mechanic:hazard.score_parasite",
         "mechanic:relic.parasite_ledger",
+        "mechanic:relic.parasite_ward_once",
         "mechanic:safety.parasite_ward"
       ],
       "writtenBy": [
+        "mechanic:core.gameplay_commands",
         "mechanic:hazard.score_parasite"
       ]
     },
@@ -64309,15 +64424,18 @@
       "id": "state:parasiteWardRemaining",
       "name": "parasiteWardRemaining",
       "readBy": [
+        "mechanic:build.combo_shard_engine",
         "mechanic:core.gameplay_commands",
         "mechanic:hazard.score_parasite",
         "mechanic:relic.parasite_ledger",
+        "mechanic:relic.parasite_ward_once",
         "mechanic:safety.parasite_ward"
       ],
       "writtenBy": [
         "mechanic:core.gameplay_commands",
         "mechanic:hazard.score_parasite",
         "mechanic:relic.parasite_ledger",
+        "mechanic:relic.parasite_ward_once",
         "mechanic:safety.parasite_ward"
       ]
     },
@@ -64545,6 +64663,7 @@
         "mechanic:relic.memorize_bonus_ms",
         "mechanic:relic.memorize_under_short_memorize",
         "mechanic:relic.parasite_ledger",
+        "mechanic:relic.parasite_ward_once",
         "mechanic:relic.region_shuffle_free_first",
         "mechanic:relic.shrine_echo",
         "mechanic:relic.wager_surety",
@@ -64557,6 +64676,7 @@
         "mechanic:relic.extra_shuffle_charge",
         "mechanic:relic.first_shuffle_free_per_floor",
         "mechanic:relic.guard_token_plus_one",
+        "mechanic:relic.parasite_ward_once",
         "mechanic:relic.peek_charge_plus_one",
         "mechanic:relic.pin_cap_plus_one",
         "mechanic:relic.region_shuffle_free_first",
@@ -64576,6 +64696,7 @@
         "mechanic:relic.extra_shuffle_charge",
         "mechanic:relic.first_shuffle_free_per_floor",
         "mechanic:relic.guard_token_plus_one",
+        "mechanic:relic.parasite_ward_once",
         "mechanic:relic.peek_charge_plus_one",
         "mechanic:relic.pin_cap_plus_one",
         "mechanic:relic.region_shuffle_free_first",
@@ -65197,6 +65318,13 @@
       "label": "Slayer chapter-pressure source"
     },
     {
+      "id": "belongs_to:mechanic:relic.parasite_ward_once->mechanic:build.combo_shard_engine:Catalyst survival source",
+      "source": "mechanic:relic.parasite_ward_once",
+      "target": "mechanic:build.combo_shard_engine",
+      "kind": "belongs_to",
+      "label": "Catalyst survival source"
+    },
+    {
       "id": "belongs_to:mechanic:relic.peek_charge_plus_one->mechanic:build.conduit_cartographer:supports build",
       "source": "mechanic:relic.peek_charge_plus_one",
       "target": "mechanic:build.conduit_cartographer",
@@ -65377,6 +65505,13 @@
       "target": "mechanic:progression.shard_to_life",
       "kind": "consequence",
       "label": "converts momentum sources into sustain"
+    },
+    {
+      "id": "consequence:mechanic:build.combo_shard_engine->mechanic:safety.parasite_ward:adds one-shot chapter-pressure survival",
+      "source": "mechanic:build.combo_shard_engine",
+      "target": "mechanic:safety.parasite_ward",
+      "kind": "consequence",
+      "label": "adds one-shot chapter-pressure survival"
     },
     {
       "id": "consequence:mechanic:build.conduit_cartographer->mechanic:route.mystery:converts information into route choice",
@@ -65783,6 +65918,13 @@
       "target": "mechanic:hazard.score_parasite",
       "kind": "counterplay",
       "label": "requests objective-based parasite relief"
+    },
+    {
+      "id": "counterplay:mechanic:relic.parasite_ward_once->mechanic:hazard.score_parasite:absorbs the next threshold hit",
+      "source": "mechanic:relic.parasite_ward_once",
+      "target": "mechanic:hazard.score_parasite",
+      "kind": "counterplay",
+      "label": "absorbs the next threshold hit"
     },
     {
       "id": "counterplay:mechanic:relic.wager_surety->mechanic:objective.risk_wager:softens loss without erasing wager failure",
@@ -66537,6 +66679,13 @@
       "label": "shows ward and pressure relief"
     },
     {
+      "id": "displays:mechanic:relic.parasite_ward_once->mechanic:feedback.gameplay_hud:shows acquisition and consumption",
+      "source": "mechanic:relic.parasite_ward_once",
+      "target": "mechanic:feedback.gameplay_hud",
+      "kind": "displays",
+      "label": "shows acquisition and consumption"
+    },
+    {
       "id": "displays:mechanic:relic.peek_charge_plus_one->mechanic:feedback.gameplay_hud:shows relic resource gain",
       "source": "mechanic:relic.peek_charge_plus_one",
       "target": "mechanic:feedback.gameplay_hud",
@@ -66675,6 +66824,19 @@
       "target": "mechanic:feedback.gameplay_hud",
       "kind": "displays",
       "label": "forecasts guard before life"
+    },
+    {
+      "id": "displays:mechanic:safety.parasite_ward->file:src/renderer/store/gameplayFeedbackAdapter.ts",
+      "source": "mechanic:safety.parasite_ward",
+      "target": "file:src/renderer/store/gameplayFeedbackAdapter.ts",
+      "kind": "displays"
+    },
+    {
+      "id": "displays:mechanic:safety.parasite_ward->mechanic:feedback.gameplay_hud:shows ward balance and absorption",
+      "source": "mechanic:safety.parasite_ward",
+      "target": "mechanic:feedback.gameplay_hud",
+      "kind": "displays",
+      "label": "shows ward balance and absorption"
     },
     {
       "id": "displays:mechanic:safety.safe_hazard_ward->file:src/shared/long-run-feedback.ts",
@@ -79752,6 +79914,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/gameplay-core-contracts.ts->symbol:src/shared/gameplay-core-contracts.ts#createGameplayParasiteAdvanceCommand",
+      "source": "file:src/shared/gameplay-core-contracts.ts",
+      "target": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayParasiteAdvanceCommand",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/gameplay-core-contracts.ts->symbol:src/shared/gameplay-core-contracts.ts#createGameplayPeekCommand",
       "source": "file:src/shared/gameplay-core-contracts.ts",
       "target": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayPeekCommand",
@@ -86367,6 +86535,13 @@
       "label": "grants one immediate parasite ward"
     },
     {
+      "id": "grants:mechanic:relic.parasite_ward_once->mechanic:safety.parasite_ward:arms one life-loss shield",
+      "source": "mechanic:relic.parasite_ward_once",
+      "target": "mechanic:safety.parasite_ward",
+      "kind": "grants",
+      "label": "arms one life-loss shield"
+    },
+    {
       "id": "grants:mechanic:relic.peek_charge_plus_one->mechanic:inventory.peek_charge:grants one charge",
       "source": "mechanic:relic.peek_charge_plus_one",
       "target": "mechanic:inventory.peek_charge",
@@ -87213,9 +87388,21 @@
       "kind": "implemented_by"
     },
     {
+      "id": "implemented_by:mechanic:hazard.score_parasite->file:src/shared/gameplay-core.ts",
+      "source": "mechanic:hazard.score_parasite",
+      "target": "file:src/shared/gameplay-core.ts",
+      "kind": "implemented_by"
+    },
+    {
       "id": "implemented_by:mechanic:hazard.score_parasite->file:src/shared/next-floor-run-state-rules.ts",
       "source": "mechanic:hazard.score_parasite",
       "target": "file:src/shared/next-floor-run-state-rules.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:hazard.score_parasite->file:src/shared/next-floor-transition-rules.ts",
+      "source": "mechanic:hazard.score_parasite",
+      "target": "file:src/shared/next-floor-transition-rules.ts",
       "kind": "implemented_by"
     },
     {
@@ -88197,6 +88384,30 @@
       "kind": "implemented_by"
     },
     {
+      "id": "implemented_by:mechanic:relic.parasite_ward_once->file:src/shared/gameplay-core-adapters.ts",
+      "source": "mechanic:relic.parasite_ward_once",
+      "target": "file:src/shared/gameplay-core-adapters.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:relic.parasite_ward_once->file:src/shared/gameplay-core-contracts.ts",
+      "source": "mechanic:relic.parasite_ward_once",
+      "target": "file:src/shared/gameplay-core-contracts.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:relic.parasite_ward_once->file:src/shared/next-floor-transition-rules.ts",
+      "source": "mechanic:relic.parasite_ward_once",
+      "target": "file:src/shared/next-floor-transition-rules.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:relic.parasite_ward_once->file:src/shared/relics.ts",
+      "source": "mechanic:relic.parasite_ward_once",
+      "target": "file:src/shared/relics.ts",
+      "kind": "implemented_by"
+    },
+    {
       "id": "implemented_by:mechanic:relic.peek_charge_plus_one->file:src/shared/gameplay-core-contracts.ts",
       "source": "mechanic:relic.peek_charge_plus_one",
       "target": "file:src/shared/gameplay-core-contracts.ts",
@@ -88644,6 +88855,12 @@
       "id": "implemented_by:mechanic:safety.parasite_ward->file:src/shared/gameplay-core.ts",
       "source": "mechanic:safety.parasite_ward",
       "target": "file:src/shared/gameplay-core.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:safety.parasite_ward->file:src/shared/next-floor-transition-rules.ts",
+      "source": "mechanic:safety.parasite_ward",
+      "target": "file:src/shared/next-floor-transition-rules.ts",
       "kind": "implemented_by"
     },
     {
@@ -101283,6 +101500,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/gameplay-core.ts->src/shared/mutators.ts",
+      "source": "file:src/shared/gameplay-core.ts",
+      "target": "file:src/shared/mutators.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/gameplay-core.ts->src/shared/relic-favor-rules.ts",
       "source": "file:src/shared/gameplay-core.ts",
       "target": "file:src/shared/relic-favor-rules.ts",
@@ -101310,6 +101533,12 @@
       "id": "imports:src/shared/gameplay-core.ts->src/shared/run-number-guards.ts",
       "source": "file:src/shared/gameplay-core.ts",
       "target": "file:src/shared/run-number-guards.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/gameplay-core.ts->src/shared/score-parasite-rules.ts",
+      "source": "file:src/shared/gameplay-core.ts",
+      "target": "file:src/shared/score-parasite-rules.ts",
       "kind": "imports"
     },
     {
@@ -102621,6 +102850,24 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/next-floor-transition-rules.ts->src/shared/gameplay-core-contracts.ts",
+      "source": "file:src/shared/next-floor-transition-rules.ts",
+      "target": "file:src/shared/gameplay-core-contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/next-floor-transition-rules.ts->src/shared/gameplay-core.ts",
+      "source": "file:src/shared/next-floor-transition-rules.ts",
+      "target": "file:src/shared/gameplay-core.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/next-floor-transition-rules.ts->src/shared/gameplay-journal.ts",
+      "source": "file:src/shared/next-floor-transition-rules.ts",
+      "target": "file:src/shared/gameplay-journal.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/next-floor-transition-rules.ts->src/shared/next-floor-run-state-rules.ts",
       "source": "file:src/shared/next-floor-transition-rules.ts",
       "target": "file:src/shared/next-floor-run-state-rules.ts",
@@ -102642,12 +102889,6 @@
       "id": "imports:src/shared/next-floor-transition-rules.ts->src/shared/run-timer-rules.ts",
       "source": "file:src/shared/next-floor-transition-rules.ts",
       "target": "file:src/shared/run-timer-rules.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/next-floor-transition-rules.ts->src/shared/score-parasite-rules.ts",
-      "source": "file:src/shared/next-floor-transition-rules.ts",
-      "target": "file:src/shared/score-parasite-rules.ts",
       "kind": "imports"
     },
     {
@@ -106571,6 +106812,18 @@
       "kind": "reads"
     },
     {
+      "id": "reads:mechanic:build.combo_shard_engine->state:parasiteFloors",
+      "source": "mechanic:build.combo_shard_engine",
+      "target": "state:parasiteFloors",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:build.combo_shard_engine->state:parasiteWardRemaining",
+      "source": "mechanic:build.combo_shard_engine",
+      "target": "state:parasiteWardRemaining",
+      "kind": "reads"
+    },
+    {
       "id": "reads:mechanic:build.combo_shard_engine->state:relicIds",
       "source": "mechanic:build.combo_shard_engine",
       "target": "state:relicIds",
@@ -108317,6 +108570,36 @@
       "kind": "reads"
     },
     {
+      "id": "reads:mechanic:relic.parasite_ward_once->state:lives",
+      "source": "mechanic:relic.parasite_ward_once",
+      "target": "state:lives",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:relic.parasite_ward_once->state:parasiteFloors",
+      "source": "mechanic:relic.parasite_ward_once",
+      "target": "state:parasiteFloors",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:relic.parasite_ward_once->state:parasiteWardRemaining",
+      "source": "mechanic:relic.parasite_ward_once",
+      "target": "state:parasiteWardRemaining",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:relic.parasite_ward_once->state:relicIds",
+      "source": "mechanic:relic.parasite_ward_once",
+      "target": "state:relicIds",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:relic.parasite_ward_once->state:relicOffer",
+      "source": "mechanic:relic.parasite_ward_once",
+      "target": "state:relicOffer",
+      "kind": "reads"
+    },
+    {
       "id": "reads:mechanic:relic.peek_charge_plus_one->state:relicOffer",
       "source": "mechanic:relic.peek_charge_plus_one",
       "target": "state:relicOffer",
@@ -109636,6 +109919,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:mechanic:hazard.score_parasite->file:src/shared/gameplay-core.test.ts",
+      "source": "mechanic:hazard.score_parasite",
+      "target": "file:src/shared/gameplay-core.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:mechanic:hazard.score_parasite->file:src/shared/next-floor-run-state-rules.test.ts",
       "source": "mechanic:hazard.score_parasite",
       "target": "file:src/shared/next-floor-run-state-rules.test.ts",
@@ -110524,6 +110813,30 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:mechanic:relic.parasite_ward_once->file:src/renderer/store/gameplayFeedbackAdapter.test.ts",
+      "source": "mechanic:relic.parasite_ward_once",
+      "target": "file:src/renderer/store/gameplayFeedbackAdapter.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:relic.parasite_ward_once->file:src/shared/game.test.ts",
+      "source": "mechanic:relic.parasite_ward_once",
+      "target": "file:src/shared/game.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:relic.parasite_ward_once->file:src/shared/gameplay-core.test.ts",
+      "source": "mechanic:relic.parasite_ward_once",
+      "target": "file:src/shared/gameplay-core.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:relic.parasite_ward_once->file:src/shared/relic-immediate-rules.test.ts",
+      "source": "mechanic:relic.parasite_ward_once",
+      "target": "file:src/shared/relic-immediate-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:mechanic:relic.peek_charge_plus_one->file:src/shared/gameplay-core.test.ts",
       "source": "mechanic:relic.peek_charge_plus_one",
       "target": "file:src/shared/gameplay-core.test.ts",
@@ -110869,6 +111182,18 @@
       "id": "tested_by:mechanic:safety.guard_absorption->file:src/shared/turn-mismatch-rules.test.ts",
       "source": "mechanic:safety.guard_absorption",
       "target": "file:src/shared/turn-mismatch-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:safety.parasite_ward->file:src/renderer/store/gameplayFeedbackAdapter.test.ts",
+      "source": "mechanic:safety.parasite_ward",
+      "target": "file:src/renderer/store/gameplayFeedbackAdapter.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:safety.parasite_ward->file:src/shared/game.test.ts",
+      "source": "mechanic:safety.parasite_ward",
+      "target": "file:src/shared/game.test.ts",
       "kind": "tested_by"
     },
     {
@@ -117277,6 +117602,13 @@
       "label": "matched Ward Spark command"
     },
     {
+      "id": "triggers:mechanic:hazard.score_parasite->mechanic:core.gameplay_commands:advances through typed floor command",
+      "source": "mechanic:hazard.score_parasite",
+      "target": "mechanic:core.gameplay_commands",
+      "kind": "triggers",
+      "label": "advances through typed floor command"
+    },
+    {
       "id": "triggers:mechanic:objective.defeat_boss->mechanic:reward.boss_trophy_cache:claimed boss objective opens trophy extraction",
       "source": "mechanic:objective.defeat_boss",
       "target": "mechanic:reward.boss_trophy_cache",
@@ -117387,6 +117719,13 @@
       "target": "mechanic:core.gameplay_commands",
       "kind": "triggers",
       "label": "Slayer parasite commands"
+    },
+    {
+      "id": "triggers:mechanic:relic.parasite_ward_once->mechanic:core.gameplay_commands:typed one-shot ward claim",
+      "source": "mechanic:relic.parasite_ward_once",
+      "target": "mechanic:core.gameplay_commands",
+      "kind": "triggers",
+      "label": "typed one-shot ward claim"
     },
     {
       "id": "triggers:mechanic:relic.peek_charge_plus_one->mechanic:core.gameplay_commands:relic command",
@@ -117798,6 +118137,18 @@
       "kind": "writes"
     },
     {
+      "id": "writes:mechanic:core.gameplay_commands->state:lives",
+      "source": "mechanic:core.gameplay_commands",
+      "target": "state:lives",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:core.gameplay_commands->state:parasiteFloors",
+      "source": "mechanic:core.gameplay_commands",
+      "target": "state:parasiteFloors",
+      "kind": "writes"
+    },
+    {
       "id": "writes:mechanic:core.gameplay_commands->state:parasiteReliefRequests",
       "source": "mechanic:core.gameplay_commands",
       "target": "state:parasiteReliefRequests",
@@ -118083,6 +118434,30 @@
       "id": "writes:mechanic:hazard.enemy_patrol->state:lives",
       "source": "mechanic:hazard.enemy_patrol",
       "target": "state:lives",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:hazard.score_parasite->state:feedbackLines",
+      "source": "mechanic:hazard.score_parasite",
+      "target": "state:feedbackLines",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:hazard.score_parasite->state:gameplayCommandJournal",
+      "source": "mechanic:hazard.score_parasite",
+      "target": "state:gameplayCommandJournal",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:hazard.score_parasite->state:gameplayEventJournal",
+      "source": "mechanic:hazard.score_parasite",
+      "target": "state:gameplayEventJournal",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:hazard.score_parasite->state:gameplayEvents",
+      "source": "mechanic:hazard.score_parasite",
+      "target": "state:gameplayEvents",
       "kind": "writes"
     },
     {
@@ -118962,6 +119337,30 @@
       "kind": "writes"
     },
     {
+      "id": "writes:mechanic:relic.parasite_ward_once->state:feedbackLines",
+      "source": "mechanic:relic.parasite_ward_once",
+      "target": "state:feedbackLines",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:relic.parasite_ward_once->state:gameplayEvents",
+      "source": "mechanic:relic.parasite_ward_once",
+      "target": "state:gameplayEvents",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:relic.parasite_ward_once->state:parasiteWardRemaining",
+      "source": "mechanic:relic.parasite_ward_once",
+      "target": "state:parasiteWardRemaining",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:relic.parasite_ward_once->state:relicIds",
+      "source": "mechanic:relic.parasite_ward_once",
+      "target": "state:relicIds",
+      "kind": "writes"
+    },
+    {
       "id": "writes:mechanic:relic.peek_charge_plus_one->state:feedbackLines",
       "source": "mechanic:relic.peek_charge_plus_one",
       "target": "state:feedbackLines",
@@ -119436,6 +119835,30 @@
       "kind": "writes"
     },
     {
+      "id": "writes:mechanic:safety.parasite_ward->state:feedbackLines",
+      "source": "mechanic:safety.parasite_ward",
+      "target": "state:feedbackLines",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:safety.parasite_ward->state:gameplayCommandJournal",
+      "source": "mechanic:safety.parasite_ward",
+      "target": "state:gameplayCommandJournal",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:safety.parasite_ward->state:gameplayEventJournal",
+      "source": "mechanic:safety.parasite_ward",
+      "target": "state:gameplayEventJournal",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:safety.parasite_ward->state:gameplayEvents",
+      "source": "mechanic:safety.parasite_ward",
+      "target": "state:gameplayEvents",
+      "kind": "writes"
+    },
+    {
       "id": "writes:mechanic:safety.parasite_ward->state:parasiteWardRemaining",
       "source": "mechanic:safety.parasite_ward",
       "target": "state:parasiteWardRemaining",
@@ -119766,12 +120189,6 @@
       "code": "unmodeled_content_family",
       "subject": "inventory_item",
       "detail": "4 source-declared items lack mechanic nodes: contract_loadout, mutator_loadout, relic_loadout, wild_match_token"
-    },
-    {
-      "severity": "warning",
-      "code": "unmodeled_content_family",
-      "subject": "relic",
-      "detail": "1 source-declared items lack mechanic nodes: parasite_ward_once"
     }
   ]
 }

@@ -285,6 +285,7 @@ describe('gameplay interaction graph', () => {
         const sourceNodeByDefinition = new Map([
             ['bonus_reward.bonus_shards', 'reward.bonus_shards'],
             ['relic.combo_shard_plus_step', 'relic.combo_shard_plus_step'],
+            ['relic.parasite_ward_once', 'relic.parasite_ward_once'],
             ['findable.shard_spark', 'findable.shard_spark'],
             ['relic.combo_shard_plus_step.sealed_match', 'relic.combo_shard_plus_step']
         ]);
@@ -311,7 +312,10 @@ describe('gameplay interaction graph', () => {
                 expect.objectContaining({ source: 'core.gameplay_commands', target: 'progression.shard_to_life', kind: 'triggers' }),
                 expect.objectContaining({ source: 'inventory.combo_shard', target: 'progression.shard_to_life', kind: 'enables' }),
                 expect.objectContaining({ source: 'progression.shard_to_life', target: 'inventory.combo_shard', kind: 'consumes' }),
-                expect.objectContaining({ source: 'build.combo_shard_engine', target: 'progression.shard_to_life', kind: 'consequence' })
+                expect.objectContaining({ source: 'build.combo_shard_engine', target: 'progression.shard_to_life', kind: 'consequence' }),
+                expect.objectContaining({ source: 'relic.parasite_ward_once', target: 'safety.parasite_ward', kind: 'grants' }),
+                expect.objectContaining({ source: 'safety.parasite_ward', target: 'hazard.score_parasite', kind: 'counterplay' }),
+                expect.objectContaining({ source: 'hazard.score_parasite', target: 'core.gameplay_commands', kind: 'triggers' })
             ])
         );
     });
