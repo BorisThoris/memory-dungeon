@@ -34,7 +34,11 @@ const initialRun = (seed: number): RunState => ({
     } satisfies BoardState,
     runSeed: seed,
     runRulesVersion: 1,
+    practiceMode: true,
     peekCharges: 0,
+    flashPairCharges: 1,
+    flashPairRevealedTileIds: [],
+    undoUsesThisFloor: 1,
     strayRemoveCharges: 1,
     strayRemoveArmed: true,
     recallFocus: 3,
@@ -49,7 +53,7 @@ const initialRun = (seed: number): RunState => ({
     powersUsedThisRun: false,
     forgottenTileIdsThisFloor: [],
     peekRevealedTileIds: [],
-    stats: { totalScore: 0, currentLevelScore: 0, comboShards: 0, guardTokens: 0, currentStreak: 0 }
+    stats: { totalScore: 0, currentLevelScore: 0, comboShards: 0, guardTokens: 0, currentStreak: 2 }
 } as unknown as RunState);
 
 describe('seeded gameplay core simulation', () => {
@@ -100,6 +104,10 @@ describe('seeded gameplay core simulation', () => {
                 'relic.extra_shuffle_charge',
                 'relic.first_shuffle_free_per_floor',
                 'relic.region_shuffle_free_first',
+                'bonus_reward.trait_streak_lens',
+                'reward_perk.trait_streak_toolkit',
+                'relic.memorize_bonus_ms',
+                'relic.memorize_under_short_memorize',
                 'board.peek',
                 'board.pin_toggle',
                 'board.stray_remove',
@@ -107,7 +115,9 @@ describe('seeded gameplay core simulation', () => {
                 'board.gambit_commit',
                 'board.shuffle',
                 'board.region_shuffle',
-                'board.tile_swap'
+                'board.tile_swap',
+                'board.flash_pair',
+                'board.undo_resolve'
             ])
         );
     });

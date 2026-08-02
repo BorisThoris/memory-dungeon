@@ -752,6 +752,7 @@ const MIGRATED_BONUS_REWARD_DEFINITION_IDS: Partial<Record<BonusRewardId, string
     hazard_ward: 'bonus_reward.hazard_ward',
     secret_favor: 'bonus_reward.secret_favor',
     stasis_lockbox: 'bonus_reward.stasis_lockbox',
+    trait_streak_lens: 'bonus_reward.trait_streak_lens',
     trait_toolkit: 'bonus_reward.trait_toolkit'
 };
 

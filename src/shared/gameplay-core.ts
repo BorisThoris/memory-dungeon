@@ -1,9 +1,11 @@
 import {
+    applyFlashPair,
     applyPeek,
     applyRegionShuffle,
     applyShuffle,
     applyStrayRemove,
-    applyTileSwap
+    applyTileSwap,
+    cancelResolvingWithUndo
 } from './board-power-actions';
 import { maxPinnedTilesForRun, togglePinnedTile } from './board-power-state';
 import type { RewardPerkId, RunState } from './contracts';
@@ -54,6 +56,8 @@ const GAMBIT_SOURCE: GameplaySource = { kind: 'power', id: 'gambit' };
 const SHUFFLE_SOURCE: GameplaySource = { kind: 'power', id: 'shuffle' };
 const REGION_SHUFFLE_SOURCE: GameplaySource = { kind: 'power', id: 'region_shuffle' };
 const TILE_SWAP_SOURCE: GameplaySource = { kind: 'power', id: 'tile_swap' };
+const FLASH_PAIR_SOURCE: GameplaySource = { kind: 'power', id: 'flash_pair' };
+const UNDO_RESOLVE_SOURCE: GameplaySource = { kind: 'power', id: 'undo_resolve' };
 const gameplayRewardPerkIds = new Set<RewardPerkId>(GAMEPLAY_REWARD_PERK_IDS);
 type GameplayEventPayload<T = GameplayEvent> = T extends GameplayEvent
     ? Omit<T, 'schemaVersion' | 'eventId' | 'commandId' | 'sequence' | 'source'>
@@ -106,6 +110,12 @@ const conditionFailure = (run: RunState, condition: GameplayCondition, facts: Ga
             return facts.matchedTraits.includes(condition.trait) ? null : `${condition.trait} was not matched`;
         case 'trait.adjacent':
             return facts.adjacentTraits.includes(condition.trait) ? null : `${condition.trait} was not adjacent`;
+        case 'trait.any_matched':
+            return facts.matchedTraits.length > 0 ? null : 'no trait was matched';
+        case 'streak.at_least':
+            return runNonNegativeInteger(normalizeSessionStats(run.stats).currentStreak) >= condition.amount
+                ? null
+                : `clean streak is below ${condition.amount}`;
         case 'findable.matched':
             return facts.matchedFindables.includes(condition.findable) ? null : `${condition.findable} was not matched`;
         case 'floor.match_resolutions_is':
@@ -657,6 +667,87 @@ const applyTileSwapCommand = (
     return { run: nextRun, command, events, accepted: true };
 };
 
+const applyFlashPairCommand = (
+    run: RunState,
+    command: Extract<GameplayCommand, { type: 'board.flash_pair' }>
+): GameplayCommandResult => {
+    const nextRun = applyFlashPair(run);
+    if (nextRun === run) {
+        return rejectedResult(run, command.commandId, 'Flash Pair is not legal for the current run.', command);
+    }
+    const revealedTileIds = runStringArray(nextRun.flashPairRevealedTileIds);
+    if (revealedTileIds.length !== 2) {
+        return rejectedResult(run, command.commandId, 'Flash Pair did not reveal exactly one pair.', command);
+    }
+    const events: GameplayEvent[] = [];
+    const writeEvent = makeEventWriter(command.commandId, FLASH_PAIR_SOURCE, events);
+    const beforeCharges = runNonNegativeInteger(run.flashPairCharges);
+    const afterCharges = runNonNegativeInteger(nextRun.flashPairCharges);
+    writeEvent({
+        type: 'inventory.changed',
+        itemId: 'flash_pair_charge',
+        operation: 'consume',
+        requested: 1,
+        applied: afterCharges - beforeCharges,
+        before: beforeCharges,
+        after: afterCharges
+    });
+    writeEvent({
+        type: 'board.flash_pair_revealed',
+        revealedTileIds: [revealedTileIds[0]!, revealedTileIds[1]!],
+        flashChargesBefore: beforeCharges,
+        flashChargesAfter: afterCharges,
+        shuffleNonceBefore: runNonNegativeInteger(run.shuffleNonce),
+        shuffleNonceAfter: runNonNegativeInteger(nextRun.shuffleNonce)
+    });
+    writeEvent({
+        type: 'feedback.requested',
+        cue: 'power.flash_pair.used',
+        message: `Flash Pair revealed ${revealedTileIds.join(' and ')}; ${afterCharges} charge${afterCharges === 1 ? '' : 's'} remain.`,
+        tone: 'information'
+    });
+    return { run: nextRun, command, events, accepted: true };
+};
+
+const applyUndoResolveCommand = (
+    run: RunState,
+    command: Extract<GameplayCommand, { type: 'board.undo_resolve' }>
+): GameplayCommandResult => {
+    const restoredTileIds = runStringArray(run.board?.flippedTileIds);
+    const nextRun = cancelResolvingWithUndo(run);
+    if (nextRun === run) {
+        return rejectedResult(run, command.commandId, 'Undo is not legal for the current resolving turn.', command);
+    }
+    const events: GameplayEvent[] = [];
+    const writeEvent = makeEventWriter(command.commandId, UNDO_RESOLVE_SOURCE, events);
+    const beforeUses = runNonNegativeInteger(run.undoUsesThisFloor);
+    const afterUses = runNonNegativeInteger(nextRun.undoUsesThisFloor);
+    writeEvent({
+        type: 'inventory.changed',
+        itemId: 'undo_charge',
+        operation: 'consume',
+        requested: 1,
+        applied: afterUses - beforeUses,
+        before: beforeUses,
+        after: afterUses
+    });
+    writeEvent({
+        type: 'board.resolve_undone',
+        restoredTileIds,
+        undoUsesBefore: beforeUses,
+        undoUsesAfter: afterUses,
+        recallFocusBefore: runNonNegativeInteger(run.recallFocus),
+        recallFocusAfter: runNonNegativeInteger(nextRun.recallFocus)
+    });
+    writeEvent({
+        type: 'feedback.requested',
+        cue: 'power.undo_resolve.used',
+        message: `Pending flip cancelled; ${afterUses} undo use${afterUses === 1 ? '' : 's'} remain this floor.`,
+        tone: 'information'
+    });
+    return { run: nextRun, command, events, accepted: true };
+};
+
 export const reduceGameplayCommand = (run: RunState, input: unknown): GameplayCommandResult => {
     const parsed = gameplayCommandSchema.safeParse(input);
     if (!parsed.success) {
@@ -686,6 +777,12 @@ export const reduceGameplayCommand = (run: RunState, input: unknown): GameplayCo
     }
     if (command.type === 'board.tile_swap') {
         return applyTileSwapCommand(run, command);
+    }
+    if (command.type === 'board.flash_pair') {
+        return applyFlashPairCommand(run, command);
+    }
+    if (command.type === 'board.undo_resolve') {
+        return applyUndoResolveCommand(run, command);
     }
     const definition = getGameplayContentDefinition(command.definitionId);
     if (!definition) {

@@ -1017,7 +1017,14 @@ export const resolveTileTraitEffects = ({
         }
 
         if (traits.size > 0 && currentStreak >= 2 && hasRewardPerk(run, 'trait_streak_toolkit')) {
-            result.flashPairChargeGain += 1;
+            const projectedFlashPairCharges = runNonNegativeInteger(run.flashPairCharges) + result.flashPairChargeGain;
+            const coreResult = applyCoreTraitDefinition(
+                'reward_perk.trait_streak_toolkit',
+                'trait-streak-flash',
+                { ...run, flashPairCharges: projectedFlashPairCharges }
+            );
+            result.flashPairChargeGain +=
+                runNonNegativeInteger(coreResult.run.flashPairCharges) - projectedFlashPairCharges;
             result.interactionTags.push('reward-perk:trait-streak-flash');
         }
 

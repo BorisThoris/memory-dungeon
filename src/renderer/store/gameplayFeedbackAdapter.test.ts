@@ -96,6 +96,27 @@ describe('gameplayFeedbackAdapter', () => {
         ]);
     });
 
+    it('classifies Memory Scout Flash and Undo cues from typed power sources', () => {
+        const presentations = projectGameplayFeedback([
+            event(0, {
+                type: 'feedback.requested',
+                cue: 'power.flash_pair.used',
+                message: 'Flash Pair used.',
+                source: { kind: 'power', id: 'flash_pair' },
+                tone: 'information'
+            }),
+            event(1, {
+                type: 'feedback.requested',
+                cue: 'power.undo_resolve.used',
+                message: 'Undo used.',
+                source: { kind: 'power', id: 'undo_resolve' },
+                tone: 'information'
+            })
+        ]);
+
+        expect(presentations.map((item) => item.audioCategory)).toEqual(['flash-pair', 'undo']);
+    });
+
     it('adds the actual typed overflow score to otherwise ambiguous proc feedback', () => {
         const presentation = projectGameplayFeedback([
             event(0, {

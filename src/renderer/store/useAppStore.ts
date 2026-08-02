@@ -7,7 +7,6 @@ import type {
     SubscreenReturnView
 } from '../../shared/contracts';
 import { isGauntletExpired } from '../../shared/game-core';
-import { cancelResolvingWithUndo } from '../../shared/board-powers';
 import {
     claimRouteSideRoomChoice,
     claimRouteSideRoomPrimary,
@@ -57,6 +56,7 @@ import {
     createShuffleBoardSurfaceResult,
     createStrayArmToggleResult,
     createTileSwapToggleResult,
+    createUndoResolvingSurfaceResult,
     createRunWithPeekDisarmedPatch
 } from './runSurfaceState';
 import { createPlayingTilePressSurfaceResult } from './tilePressController';
@@ -651,14 +651,12 @@ export const useAppStore = create<AppState>((set, get) => ({
 
     undoResolvingFlip: () => {
         const { run, view } = get();
-        if (!run || view !== 'playing' || run.status !== 'resolving') {
+        const result = createUndoResolvingSurfaceResult({ run, view });
+        if (result.kind === 'ignored') {
             return;
         }
         clearResolveTimer();
-        const nextRun = cancelResolvingWithUndo(run);
-        if (nextRun !== run) {
-            set({ run: nextRun });
-        }
+        set(result.patch);
     },
 
     toggleStrayArm: () => {

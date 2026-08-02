@@ -146,6 +146,19 @@ The Board Tactician expands the Saboteur from hazard removal into deliberate boa
 
 Seeded simulation now generates all three board-control command forms and verifies exact JSON replay, event schemas/order, and state invariants. Direct parity tests prove that the command reducers preserve the existing deterministic shuffle, row-shuffle, and tile-swap outcomes rather than introducing a second implementation.
 
+## Tenth vertical slice: The Memory Scout
+
+The Memory Scout turns study time, clean trait play, temporary recall, and bounded mistake recovery into one explicit loop:
+
+1. Trait Streak Lens grants the durable `trait_streak_toolkit` perk and score through a typed reward claim.
+2. Any trait match at an existing x2 clean streak triggers that perk through the command core, banking one `flash_pair_charge` without duplicating the established match calculation.
+3. Flash Pair is now a `board.flash_pair` command. It delegates deterministic pair selection to the existing pure action and journals the exact revealed tile IDs, charge delta, nonce, and feedback only after a legal Practice/Wild use.
+4. Lantern Study and Compressed Margins claims emit typed relic feedback, while the established pure study-window rule remains authoritative for their +280 ms global and +220 ms Short Memorize effects.
+5. The floor Undo is now a `board.undo_resolve` command. It delegates restoration to the existing pure action and records restored tiles, consumed use, recall-focus cost, forgotten-tile memory, timer clearing, and feedback.
+6. The renderer clears a pending resolve timer only after Undo succeeds, so an illegal no-charge press can no longer strand a resolving turn with its timer removed.
+
+The versioned graph connects reward choice to perk, clean trait match, Flash inventory, deterministic reveal, study-window counterplay, floor-reset Undo, HUD feedback, replay, and persistence. Seeded simulation generates both new command forms and retains exact JSON replay and nonnegative inventory invariants.
+
 ## Current slice status
 
 Implemented in the Conduit Cartographer vertical slice:

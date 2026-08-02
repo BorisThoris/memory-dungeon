@@ -23,6 +23,7 @@ import {
     createShuffleBoardSurfaceResult,
     createStrayArmToggleResult,
     createTileSwapToggleResult,
+    createUndoResolvingSurfaceResult,
     createBoardPowerContactPolicy,
     createRunWithArmedModesClearedPatch,
     createRunWithBoardInteractionClearedPatch,
@@ -519,7 +520,48 @@ describe('run surface state helpers', () => {
         if (result.kind === 'applied') {
             expect(result.patch.run.flashPairCharges).toBe(practiceRun.flashPairCharges - 1);
             expect(result.playArmSfx).toBe(true);
+            expect(result.patch.run.gameplayCommandJournal).toEqual([
+                expect.objectContaining({ type: 'board.flash_pair' })
+            ]);
+            expect(result.events).toEqual(expect.arrayContaining([
+                expect.objectContaining({ type: 'board.flash_pair_revealed' }),
+                expect.objectContaining({ type: 'feedback.requested', cue: 'power.flash_pair.used' })
+            ]));
         }
+    });
+
+    it('journals a successful resolving Undo and leaves illegal attempts untouched', () => {
+        const resolving = playingRun({
+            runSeed: 42,
+            runRulesVersion: 1,
+            status: 'resolving',
+            undoUsesThisFloor: 1,
+            recallFocus: 2,
+            forgottenTileIdsThisFloor: [],
+            board: board({
+                flippedTileIds: ['a1', 'a2'],
+                tiles: [
+                    { id: 'a1', pairKey: 'a', label: 'A', state: 'flipped', symbol: 'A' },
+                    { id: 'a2', pairKey: 'a', label: 'A', state: 'flipped', symbol: 'A' }
+                ]
+            })
+        });
+        const result = createUndoResolvingSurfaceResult({ run: resolving, view: 'playing' });
+        expect(result.kind).toBe('applied');
+        if (result.kind === 'applied') {
+            expect(result.patch.run).toMatchObject({ status: 'playing', undoUsesThisFloor: 0, recallFocus: 1 });
+            expect(result.patch.run.gameplayCommandJournal).toEqual([
+                expect.objectContaining({ type: 'board.undo_resolve' })
+            ]);
+            expect(result.events).toEqual(expect.arrayContaining([
+                expect.objectContaining({ type: 'board.resolve_undone', restoredTileIds: ['a1', 'a2'] }),
+                expect.objectContaining({ type: 'feedback.requested', cue: 'power.undo_resolve.used' })
+            ]));
+        }
+        expect(createUndoResolvingSurfaceResult({
+            run: { ...resolving, undoUsesThisFloor: 0 },
+            view: 'playing'
+        })).toEqual({ kind: 'ignored' });
     });
 
     it('creates the board-power contact policy for enemy-contact presses', () => {

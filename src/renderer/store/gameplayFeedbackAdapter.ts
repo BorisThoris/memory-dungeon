@@ -5,11 +5,13 @@ import {
 } from '../../shared/gameplay-core-contracts';
 
 export type GameplayFeedbackAudioCategory =
+    | 'flash-pair'
     | 'gambit-commit'
     | 'match-resolution'
     | 'peek'
     | 'relic-pick'
     | 'reward-claim'
+    | 'undo'
     | 'wager';
 
 export interface GameplayFeedbackPresentation {
@@ -37,6 +39,12 @@ const audioCategoryFor = (
     }
     if (feedback.source.kind === 'power' && feedback.cue === 'power.gambit.committed') {
         return 'gambit-commit';
+    }
+    if (feedback.source.kind === 'power' && feedback.cue === 'power.flash_pair.used') {
+        return 'flash-pair';
+    }
+    if (feedback.source.kind === 'power' && feedback.cue === 'power.undo_resolve.used') {
+        return 'undo';
     }
     if (feedback.source.kind === 'system' && feedback.cue === 'build.route_gambler.wager_accepted') {
         return 'wager';

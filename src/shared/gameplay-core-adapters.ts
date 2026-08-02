@@ -43,6 +43,8 @@ export interface GameplaySlayerFloorClearAdapterResult {
 const RELIC_IMMEDIATE_DEFINITION_IDS: Partial<Record<RelicId, string>> = {
     extra_shuffle_charge: 'relic.extra_shuffle_charge',
     first_shuffle_free_per_floor: 'relic.first_shuffle_free_per_floor',
+    memorize_bonus_ms: 'relic.memorize_bonus_ms',
+    memorize_under_short_memorize: 'relic.memorize_under_short_memorize',
     region_shuffle_free_first: 'relic.region_shuffle_free_first',
     combo_shard_plus_step: 'relic.combo_shard_plus_step',
     destroy_bank_plus_one: 'relic.destroy_bank_plus_one',

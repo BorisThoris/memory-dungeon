@@ -1,18 +1,19 @@
 import type { RunState, Tile, ViewState } from '../../shared/contracts';
 import type { GameplayEvent } from '../../shared/gameplay-core-contracts';
 import {
+    createGameplayFlashPairCommand,
     createGameplayGambitCommitCommand,
     createGameplayPeekCommand,
     createGameplayRegionShuffleCommand,
     createGameplayShuffleCommand,
     createGameplayStrayRemoveCommand,
-    createGameplayTileSwapCommand
+    createGameplayTileSwapCommand,
+    createGameplayUndoResolveCommand
 } from '../../shared/gameplay-core-contracts';
 import { reduceGameplayCommand } from '../../shared/gameplay-core';
 import { appendGameplayJournal } from '../../shared/gameplay-journal';
 import {
     applyDestroyPair,
-    applyFlashPair,
     armRegionShuffleRow,
     collectDestroyEligibleTileIds,
     toggleStrayRemoveArmed
@@ -390,10 +391,43 @@ export const createFlashPairSurfaceResult = ({
         return { kind: 'ignored' };
     }
 
-    const nextRun = applyFlashPair(run);
-    return nextRun === run
+    const command = createGameplayFlashPairCommand(
+        `flash-pair:${run.runSeed}:${run.board?.level ?? 0}:${run.shuffleNonce}:${run.flashPairCharges}`
+    );
+    const result = reduceGameplayCommand(run, command);
+    return !result.accepted
         ? { kind: 'ignored' }
-        : { kind: 'applied', patch: { run: nextRun }, playArmSfx: true };
+        : {
+              kind: 'applied',
+              patch: { run: appendGameplayJournal(result.run, [command], result.events) },
+              playArmSfx: true,
+              events: result.events
+          };
+};
+
+export const createUndoResolvingSurfaceResult = ({
+    run,
+    view
+}: {
+    run: RunState | null;
+    view: ViewState;
+}): RunSurfaceRunPatchResult => {
+    if (!run || view !== 'playing' || run.status !== 'resolving') {
+        return { kind: 'ignored' };
+    }
+
+    const command = createGameplayUndoResolveCommand(
+        `undo-resolve:${run.runSeed}:${run.board?.level ?? 0}:${run.board?.flippedTileIds.join('+') ?? 'none'}:${run.undoUsesThisFloor}`
+    );
+    const result = reduceGameplayCommand(run, command);
+    return !result.accepted
+        ? { kind: 'ignored' }
+        : {
+              kind: 'applied',
+              patch: { run: appendGameplayJournal(result.run, [command], result.events) },
+              playArmSfx: false,
+              events: result.events
+          };
 };
 
 export const createBoardPowerContactPolicy = ({

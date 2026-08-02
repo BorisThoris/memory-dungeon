@@ -189,6 +189,35 @@ describe('relicOfferSurfaceState', () => {
         }
     });
 
+    it('projects both Memory Scout timing relics through typed pick feedback', () => {
+        for (const row of [
+            { relicId: 'memorize_bonus_ms' as RelicId, cue: 'build.memorize_bonus_ms.claimed' },
+            {
+                relicId: 'memorize_under_short_memorize' as RelicId,
+                cue: 'build.memorize_under_short_memorize.claimed'
+            }
+        ]) {
+            const offered = offeredRun();
+            const result = createRelicPickSurfaceResult({
+                relicId: row.relicId,
+                run: {
+                    ...offered,
+                    relicOffer: { ...offered.relicOffer!, options: [row.relicId] }
+                },
+                saveData: createDefaultSaveData()
+            });
+
+            expect(result).toMatchObject({
+                kind: 'accepted',
+                feedback: {
+                    audioCategory: 'relic-pick',
+                    cue: row.cue,
+                    source: { kind: 'relic', id: row.relicId }
+                }
+            });
+        }
+    });
+
     it('applies relic offer services only while an offer is open', () => {
         expect(createRelicOfferServiceSurfaceResult({
             run: { ...offeredRun(), relicOffer: null },

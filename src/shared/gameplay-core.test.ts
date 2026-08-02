@@ -1,10 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import {
+    applyFlashPair,
     applyPeek,
     applyRegionShuffle,
     applyShuffle,
     applyStrayRemove,
-    applyTileSwap
+    applyTileSwap,
+    cancelResolvingWithUndo
 } from './board-power-actions';
 import { togglePinnedTile } from './board-power-state';
 import { BONUS_REWARD_CATALOG, previewBonusRewardClaim } from './bonus-rewards';
@@ -21,12 +23,14 @@ import {
     BOARD_TACTICIAN_DEFINITIONS,
     COMBO_SHARD_ENGINE_DEFINITIONS,
     GAMEPLAY_CORE_SCHEMA_VERSION,
+    MEMORY_SCOUT_DEFINITIONS,
     SABOTEUR_DEFINITIONS,
     SEER_DEFINITIONS,
     SLAYER_DEFINITIONS,
     VAULTBREAKER_DEFINITIONS,
     WARDEN_DEFINITIONS,
     createGameplayDefinitionCommand,
+    createGameplayFlashPairCommand,
     createGameplayGambitCommitCommand,
     createGameplayPeekCommand,
     createGameplayPinToggleCommand,
@@ -35,6 +39,7 @@ import {
     createGameplayShuffleCommand,
     createGameplayStrayRemoveCommand,
     createGameplayTileSwapCommand,
+    createGameplayUndoResolveCommand,
     gameplayCommandSchema,
     gameplayContentDefinitionSchema,
     gameplayEventSchema
@@ -473,7 +478,7 @@ describe('deterministic gameplay core', () => {
         const migratedSurety = applyRelicImmediateThroughGameplayCore(initial, 'wager_surety', 'adapter-surety');
         const migratedLedger = applyRelicImmediateThroughGameplayCore(initial, 'parasite_ledger', 'adapter-ledger');
         const migratedShuffle = applyRelicImmediateThroughGameplayCore(initial, 'extra_shuffle_charge', 'adapter-shuffle');
-        const legacy = applyRelicImmediateThroughGameplayCore(initial, 'memorize_bonus_ms', 'adapter-memorize');
+        const migratedMemorize = applyRelicImmediateThroughGameplayCore(initial, 'memorize_bonus_ms', 'adapter-memorize');
 
         expect(migrated).toMatchObject({ migrated: true, run: { peekCharges: 3 } });
         expect(migrated.events).toEqual(
@@ -483,7 +488,14 @@ describe('deterministic gameplay core', () => {
             ])
         );
         expect(migratedShuffle).toMatchObject({ migrated: true, run: { shuffleCharges: 2 } });
-        expect(legacy).toMatchObject({ migrated: false, events: [] });
+        expect(migratedMemorize).toMatchObject({ migrated: true });
+        expect(migratedMemorize.events).toEqual([
+            expect.objectContaining({
+                type: 'feedback.requested',
+                cue: 'build.memorize_bonus_ms.claimed',
+                source: { kind: 'relic', id: 'memorize_bonus_ms' }
+            })
+        ]);
         expect(migratedGuard).toMatchObject({ migrated: true, run: { stats: { guardTokens: 1 } } });
         expect(migratedCombo).toMatchObject({ migrated: true, run: { stats: { comboShards: 1 } } });
         expect(migratedDestroy).toMatchObject({ migrated: true, run: { destroyPairCharges: 1 } });
@@ -754,6 +766,116 @@ describe('deterministic gameplay core', () => {
                 secondTileId: 'conduit-a'
             }),
             expect.objectContaining({ type: 'feedback.requested', cue: 'power.tile_swap.used' })
+        ]);
+    });
+
+    it('models Memory Scout acquisition and clean-streak Flash Pair generation', () => {
+        expect(MEMORY_SCOUT_DEFINITIONS.map((definition) => definition.id)).toEqual([
+            'bonus_reward.trait_streak_lens',
+            'reward_perk.trait_streak_toolkit',
+            'relic.memorize_bonus_ms',
+            'relic.memorize_under_short_memorize'
+        ]);
+        expect(MEMORY_SCOUT_DEFINITIONS.every(
+            (definition) => gameplayContentDefinitionSchema.safeParse(definition).success
+        )).toBe(true);
+
+        const lens = reduceGameplayCommand(
+            run(),
+            createGameplayDefinitionCommand('trait-lens', 'bonus_reward.trait_streak_lens')
+        );
+        expect(lens.run.rewardPerkIds).toContain('trait_streak_toolkit');
+        expect(lens.run.stats.totalScore).toBe(10);
+
+        const active = run({
+            rewardPerkIds: ['trait_streak_toolkit'],
+            flashPairCharges: 0,
+            stats: { ...run().stats, currentStreak: 2 }
+        });
+        const sourceTiles = [tile('echo-a', 'echo', 'echo'), tile('echo-b', 'echo', 'echo')];
+        const traitResult = resolveTileTraitEffects({
+            run: active,
+            board: active.board,
+            sourceTiles,
+            source: 'match'
+        });
+        expect(traitResult.flashPairChargeGain).toBe(1);
+        expect(traitResult.gameplayCommands).toEqual([
+            expect.objectContaining({ type: 'effects.apply', definitionId: 'reward_perk.trait_streak_toolkit' })
+        ]);
+        expect(traitResult.gameplayEvents).toEqual(expect.arrayContaining([
+            expect.objectContaining({ type: 'inventory.changed', itemId: 'flash_pair_charge', applied: 1 }),
+            expect.objectContaining({ type: 'feedback.requested', cue: 'build.trait_streak_toolkit.triggered' })
+        ]));
+        const manufactured = reduceGameplayCommand(
+            active,
+            createGameplayDefinitionCommand('manufactured-flash', 'reward_perk.trait_streak_toolkit')
+        );
+        expect(manufactured.accepted).toBe(false);
+        expect(manufactured.run).toBe(active);
+        expect(manufactured.events).toEqual([
+            expect.objectContaining({ type: 'command.rejected', reason: expect.stringContaining('no trait was matched') })
+        ]);
+
+        for (const relicId of ['memorize_bonus_ms', 'memorize_under_short_memorize'] as const) {
+            const migrated = applyRelicImmediateThroughGameplayCore(active, relicId, `relic:${relicId}`);
+            expect(migrated.migrated).toBe(true);
+            expect(migrated.run).toEqual(expect.objectContaining({ gameplayCommandJournal: expect.any(Array) }));
+            expect(migrated.events).toEqual([
+                expect.objectContaining({ type: 'feedback.requested', source: { kind: 'relic', id: relicId } })
+            ]);
+        }
+    });
+
+    it('preserves Flash Pair and Undo parity while journaling exact recovery deltas', () => {
+        const flashRun = run({
+            practiceMode: true,
+            flashPairCharges: 1,
+            flashPairRevealedTileIds: [],
+            shuffleNonce: 0
+        });
+        const flashed = reduceGameplayCommand(flashRun, createGameplayFlashPairCommand('flash-pair'));
+        expect(flashed.accepted).toBe(true);
+        expect(flashed.run).toEqual(applyFlashPair(flashRun));
+        expect(flashed.events).toEqual([
+            expect.objectContaining({ type: 'inventory.changed', itemId: 'flash_pair_charge', applied: -1 }),
+            expect.objectContaining({
+                type: 'board.flash_pair_revealed',
+                revealedTileIds: ['echo-a', 'echo-b'],
+                shuffleNonceBefore: 0,
+                shuffleNonceAfter: 1
+            }),
+            expect.objectContaining({ type: 'feedback.requested', cue: 'power.flash_pair.used' })
+        ]);
+
+        const resolvingBoard = board();
+        resolvingBoard.flippedTileIds = ['echo-a', 'conduit-a'];
+        resolvingBoard.tiles = resolvingBoard.tiles.map((candidate) =>
+            resolvingBoard.flippedTileIds.includes(candidate.id)
+                ? { ...candidate, state: 'flipped' as const }
+                : candidate
+        );
+        const undoRun = run({
+            status: 'resolving',
+            board: resolvingBoard,
+            undoUsesThisFloor: 1,
+            recallFocus: 2,
+            forgottenTileIdsThisFloor: []
+        });
+        const undone = reduceGameplayCommand(undoRun, createGameplayUndoResolveCommand('undo-resolve'));
+        expect(undone.accepted).toBe(true);
+        expect(undone.run).toEqual(cancelResolvingWithUndo(undoRun));
+        expect(undone.events).toEqual([
+            expect.objectContaining({ type: 'inventory.changed', itemId: 'undo_charge', applied: -1 }),
+            expect.objectContaining({
+                type: 'board.resolve_undone',
+                restoredTileIds: ['echo-a', 'conduit-a'],
+                undoUsesBefore: 1,
+                undoUsesAfter: 0,
+                recallFocusBefore: 2,
+                recallFocusAfter: 1
+            }),
+            expect.objectContaining({ type: 'feedback.requested', cue: 'power.undo_resolve.used' })
         ]);
     });
 

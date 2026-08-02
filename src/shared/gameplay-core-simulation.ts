@@ -3,6 +3,7 @@ import { tileIsStrayEligiblePreview } from './board-power-targeting';
 import {
     GAMEPLAY_CONTENT_DEFINITIONS,
     createGameplayDefinitionCommand,
+    createGameplayFlashPairCommand,
     createGameplayGambitCommitCommand,
     createGameplayPeekCommand,
     createGameplayPinToggleCommand,
@@ -11,6 +12,7 @@ import {
     createGameplayShuffleCommand,
     createGameplayStrayRemoveCommand,
     createGameplayTileSwapCommand,
+    createGameplayUndoResolveCommand,
     gameplayCommandSchema,
     gameplayEventSchema,
     type GameplayCommand,
@@ -78,7 +80,7 @@ const commandForStep = (
     invalidTraitChance: number
 ): GameplayCommand => {
     const definitions = GAMEPLAY_CONTENT_DEFINITIONS;
-    const actionIndex = pickRngIndex(rng, definitions.length + 8);
+    const actionIndex = pickRngIndex(rng, definitions.length + 10);
     const commandId = `sim:${seed}:${String(step).padStart(4, '0')}`;
     if (actionIndex === definitions.length) {
         const targets = availablePeekTargets(run);
@@ -123,6 +125,12 @@ const commandForStep = (
         const secondTileId = remaining[pickRngIndex(rng, remaining.length)] ?? 'missing-swap-second';
         return createGameplayTileSwapCommand(commandId, firstTileId, secondTileId);
     }
+    if (actionIndex === definitions.length + 8) {
+        return createGameplayFlashPairCommand(commandId);
+    }
+    if (actionIndex === definitions.length + 9) {
+        return createGameplayUndoResolveCommand(commandId);
+    }
 
     const definition = definitions[actionIndex % definitions.length] ?? definitions[0];
     if (definition.trigger === 'trait.match') {
@@ -130,6 +138,12 @@ const commandForStep = (
         const matchedTraits = definition.conditions
             .filter((condition) => condition.kind === 'trait.matched')
             .map((condition) => condition.trait);
+        if (
+            matchedTraits.length === 0 &&
+            definition.conditions.some((condition) => condition.kind === 'trait.any_matched')
+        ) {
+            matchedTraits.push('echo');
+        }
         const adjacentTraits = definition.conditions
             .filter((condition) => condition.kind === 'trait.adjacent')
             .map((condition) => condition.trait);

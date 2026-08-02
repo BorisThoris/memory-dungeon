@@ -11,6 +11,7 @@ import {
     BOARD_TACTICIAN_DEFINITIONS,
     COMBO_SHARD_ENGINE_DEFINITIONS,
     CONDUIT_CARTOGRAPHER_DEFINITIONS,
+    MEMORY_SCOUT_DEFINITIONS,
     SABOTEUR_DEFINITIONS,
     SEER_DEFINITIONS,
     SLAYER_DEFINITIONS,
@@ -508,6 +509,59 @@ describe('gameplay interaction graph', () => {
             expect.objectContaining({ source: 'inventory.region_shuffle_charge', target: 'power.tile_swap', kind: 'enables' }),
             expect.objectContaining({ source: 'power.region_shuffle', target: 'objective.floor_clear', kind: 'counterplay' }),
             expect.objectContaining({ source: 'build.trap_control', target: 'power.tile_swap', kind: 'consequence' })
+        ]));
+    });
+
+    it('connects Memory Scout from study and clean streaks through Flash and Undo recovery', () => {
+        const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
+        const sourceNodeByDefinition = new Map([
+            ['bonus_reward.trait_streak_lens', 'reward.trait_streak_lens'],
+            ['reward_perk.trait_streak_toolkit', 'perk.trait_streak_toolkit'],
+            ['relic.memorize_bonus_ms', 'relic.memorize_bonus_ms'],
+            ['relic.memorize_under_short_memorize', 'relic.memorize_under_short_memorize']
+        ]);
+
+        for (const definition of MEMORY_SCOUT_DEFINITIONS) {
+            const nodeId = sourceNodeByDefinition.get(definition.id);
+            expect(nodeId, definition.id).toBeTruthy();
+            expect(byId.get(nodeId!), definition.id).toMatchObject({
+                tests: expect.arrayContaining(['src/shared/gameplay-core.test.ts'])
+            });
+        }
+
+        expect(byId.get('build.memory_scout')).toMatchObject({
+            kind: 'build',
+            role: 'study_recall_and_mistake_recovery_build'
+        });
+        expect(byId.get('phase.memorize')).toMatchObject({
+            kind: 'progression',
+            role: 'bounded_pre_flip_information_window'
+        });
+        expect(byId.get('inventory.flash_pair_charge')).toMatchObject({
+            kind: 'inventory',
+            role: 'earned_pair_reveal_resource'
+        });
+        expect(byId.get('inventory.undo_charge')).toMatchObject({
+            kind: 'inventory',
+            role: 'per_floor_pending_mistake_recovery'
+        });
+        expect(byId.get('power.flash_pair')).toMatchObject({
+            kind: 'power',
+            role: 'deterministic_hidden_pair_reveal'
+        });
+        expect(byId.get('power.undo_resolve')).toMatchObject({
+            kind: 'power',
+            role: 'pending_mistake_recovery_with_focus_cost'
+        });
+        expect(gameplayInteractionGraph.edges).toEqual(expect.arrayContaining([
+            expect.objectContaining({ source: 'reward.trait_streak_lens', target: 'perk.trait_streak_toolkit', kind: 'grants' }),
+            expect.objectContaining({ source: 'perk.trait_streak_toolkit', target: 'inventory.flash_pair_charge', kind: 'grants' }),
+            expect.objectContaining({ source: 'relic.memorize_bonus_ms', target: 'phase.memorize', kind: 'modifies' }),
+            expect.objectContaining({ source: 'relic.memorize_under_short_memorize', target: 'phase.memorize', kind: 'counterplay' }),
+            expect.objectContaining({ source: 'inventory.flash_pair_charge', target: 'power.flash_pair', kind: 'enables' }),
+            expect.objectContaining({ source: 'inventory.undo_charge', target: 'power.undo_resolve', kind: 'enables' }),
+            expect.objectContaining({ source: 'power.undo_resolve', target: 'objective.floor_clear', kind: 'counterplay' }),
+            expect.objectContaining({ source: 'build.memory_scout', target: 'power.flash_pair', kind: 'consequence' })
         ]));
     });
 });

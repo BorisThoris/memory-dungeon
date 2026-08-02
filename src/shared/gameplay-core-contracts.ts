@@ -15,6 +15,8 @@ export const GAMEPLAY_REWARD_PERK_IDS = [
 export const GAMEPLAY_RELIC_IDS = [
     'extra_shuffle_charge',
     'first_shuffle_free_per_floor',
+    'memorize_bonus_ms',
+    'memorize_under_short_memorize',
     'region_shuffle_free_first',
     'combo_shard_plus_step',
     'guard_token_plus_one',
@@ -110,6 +112,17 @@ export const gameplayConditionSchema = z.discriminatedUnion('kind', [
         .object({
             kind: z.literal('trait.adjacent'),
             trait: z.enum(GAMEPLAY_TILE_TRAIT_KINDS)
+        })
+        .strict(),
+    z
+        .object({
+            kind: z.literal('trait.any_matched')
+        })
+        .strict(),
+    z
+        .object({
+            kind: z.literal('streak.at_least'),
+            amount: z.number().int().nonnegative()
         })
         .strict(),
     z
@@ -663,6 +676,80 @@ export const BOARD_TACTICIAN_DEFINITIONS = z.array(gameplayContentDefinitionSche
     }
 ]);
 
+export const MEMORY_SCOUT_DEFINITIONS = z.array(gameplayContentDefinitionSchema).parse([
+    {
+        id: 'bonus_reward.trait_streak_lens',
+        version: 1,
+        buildId: 'memory_scout',
+        source: { kind: 'bonus_reward', id: 'trait_streak_lens' },
+        trigger: 'content.claimed',
+        conditions: [],
+        effects: [
+            { kind: 'reward_perk.grant', perkId: 'trait_streak_toolkit' },
+            { kind: 'score.grant', reason: 'content_reward', amount: 10 },
+            {
+                kind: 'feedback.emit',
+                cue: 'build.trait_streak_lens.claimed',
+                message: 'Trait Streak Lens armed a Flash Pair at clean streak x3 and added 10 score.',
+                tone: 'reward'
+            }
+        ]
+    },
+    {
+        id: 'reward_perk.trait_streak_toolkit',
+        version: 1,
+        buildId: 'memory_scout',
+        source: { kind: 'reward_perk', id: 'trait_streak_toolkit' },
+        trigger: 'trait.match',
+        conditions: [
+            { kind: 'reward_perk.active', perkId: 'trait_streak_toolkit' },
+            { kind: 'trait.any_matched' },
+            { kind: 'streak.at_least', amount: 2 }
+        ],
+        effects: [
+            { kind: 'inventory.grant', itemId: 'flash_pair_charge', amount: 1 },
+            {
+                kind: 'feedback.emit',
+                cue: 'build.trait_streak_toolkit.triggered',
+                message: 'The clean trait streak banked one Flash Pair charge.',
+                tone: 'reward'
+            }
+        ]
+    },
+    {
+        id: 'relic.memorize_bonus_ms',
+        version: 1,
+        buildId: 'memory_scout',
+        source: { kind: 'relic', id: 'memorize_bonus_ms' },
+        trigger: 'content.claimed',
+        conditions: [],
+        effects: [
+            {
+                kind: 'feedback.emit',
+                cue: 'build.memorize_bonus_ms.claimed',
+                message: 'Lantern Study added 280 ms to future study windows.',
+                tone: 'reward'
+            }
+        ]
+    },
+    {
+        id: 'relic.memorize_under_short_memorize',
+        version: 1,
+        buildId: 'memory_scout',
+        source: { kind: 'relic', id: 'memorize_under_short_memorize' },
+        trigger: 'content.claimed',
+        conditions: [],
+        effects: [
+            {
+                kind: 'feedback.emit',
+                cue: 'build.memorize_under_short_memorize.claimed',
+                message: 'Compressed Margins adds 220 ms whenever Short Memorize is active.',
+                tone: 'reward'
+            }
+        ]
+    }
+]);
+
 export const VAULTBREAKER_DEFINITIONS = z.array(gameplayContentDefinitionSchema).parse([
     {
         id: 'bonus_reward.chest_gold',
@@ -972,6 +1059,7 @@ export const GAMEPLAY_CONTENT_DEFINITIONS = [
     ...COMBO_SHARD_ENGINE_DEFINITIONS,
     ...SABOTEUR_DEFINITIONS,
     ...BOARD_TACTICIAN_DEFINITIONS,
+    ...MEMORY_SCOUT_DEFINITIONS,
     ...VAULTBREAKER_DEFINITIONS,
     ...SLAYER_DEFINITIONS,
     ...SEER_DEFINITIONS
@@ -1059,6 +1147,18 @@ export const gameplayCommandSchema = z.discriminatedUnion('type', [
             type: z.literal('board.tile_swap'),
             firstTileId: z.string().min(1).max(160),
             secondTileId: z.string().min(1).max(160)
+        })
+        .strict(),
+    z
+        .object({
+            ...commandBase,
+            type: z.literal('board.flash_pair')
+        })
+        .strict(),
+    z
+        .object({
+            ...commandBase,
+            type: z.literal('board.undo_resolve')
         })
         .strict()
 ]);
@@ -1260,6 +1360,28 @@ export const gameplayEventSchema = z.discriminatedUnion('type', [
     z
         .object({
             ...eventBase,
+            type: z.literal('board.flash_pair_revealed'),
+            revealedTileIds: z.tuple([z.string().min(1).max(160), z.string().min(1).max(160)]),
+            flashChargesBefore: z.number().int().nonnegative(),
+            flashChargesAfter: z.number().int().nonnegative(),
+            shuffleNonceBefore: z.number().int().nonnegative(),
+            shuffleNonceAfter: z.number().int().nonnegative()
+        })
+        .strict(),
+    z
+        .object({
+            ...eventBase,
+            type: z.literal('board.resolve_undone'),
+            restoredTileIds: z.array(z.string().min(1).max(160)),
+            undoUsesBefore: z.number().int().nonnegative(),
+            undoUsesAfter: z.number().int().nonnegative(),
+            recallFocusBefore: z.number().int().nonnegative(),
+            recallFocusAfter: z.number().int().nonnegative()
+        })
+        .strict(),
+    z
+        .object({
+            ...eventBase,
             type: z.literal('currency.changed'),
             currency: z.literal('shop_gold'),
             requested: z.number().int().positive(),
@@ -1422,4 +1544,18 @@ export const createGameplayTileSwapCommand = (
         type: 'board.tile_swap',
         firstTileId,
         secondTileId
+    });
+
+export const createGameplayFlashPairCommand = (commandId: string): GameplayCommand =>
+    gameplayCommandSchema.parse({
+        schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
+        commandId,
+        type: 'board.flash_pair'
+    });
+
+export const createGameplayUndoResolveCommand = (commandId: string): GameplayCommand =>
+    gameplayCommandSchema.parse({
+        schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
+        commandId,
+        type: 'board.undo_resolve'
     });
