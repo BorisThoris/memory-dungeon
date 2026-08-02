@@ -18,11 +18,13 @@ export interface GameplayMatchRewardAdapterResult {
     commands: GameplayCommand[];
     events: GameplayEvent[];
     comboShardGain: number;
+    safeHazardWardGain: number;
     migrated: boolean;
 }
 
 const RELIC_IMMEDIATE_DEFINITION_IDS: Partial<Record<RelicId, string>> = {
     combo_shard_plus_step: 'relic.combo_shard_plus_step',
+    destroy_bank_plus_one: 'relic.destroy_bank_plus_one',
     guard_token_plus_one: 'relic.guard_token_plus_one',
     peek_charge_plus_one: 'relic.peek_charge_plus_one'
 };
@@ -62,10 +64,16 @@ export const resolveFindableMatchRewardThroughGameplayCore = (
     findableKind: FindableKind | null,
     commandId: string
 ): GameplayMatchRewardAdapterResult => {
-    if (findableKind !== 'shard_spark') {
-        return { commands: [], events: [], comboShardGain: 0, migrated: false };
+    const definitionId =
+        findableKind === 'shard_spark'
+            ? 'findable.shard_spark'
+            : findableKind === 'ward_spark'
+              ? 'findable.ward_spark'
+              : null;
+    if (!definitionId || !findableKind) {
+        return { commands: [], events: [], comboShardGain: 0, safeHazardWardGain: 0, migrated: false };
     }
-    const command = createGameplayDefinitionCommand(commandId, 'findable.shard_spark', {
+    const command = createGameplayDefinitionCommand(commandId, definitionId, {
         matchedFindables: [findableKind]
     });
     const result = reduceGameplayCommand(run, command);
@@ -77,6 +85,10 @@ export const resolveFindableMatchRewardThroughGameplayCore = (
         events: result.events,
         comboShardGain: result.events.reduce(
             (sum, event) => sum + (event.type === 'combo_shard.requested' ? event.amount : 0),
+            0
+        ),
+        safeHazardWardGain: result.events.reduce(
+            (sum, event) => sum + (event.type === 'safe_hazard_ward.requested' ? event.amount : 0),
             0
         ),
         migrated: true

@@ -7794,6 +7794,10 @@ describe('board powers', () => {
             expect(resolved.safeHazardWardChargesThisFloor).toBe(1);
             expect(resolved.findablesClaimedThisFloor).toBe(1);
             expect(resolved.stats.totalScore).toBe(calculateMatchScore(1, 1, 1));
+            expect(resolved.gameplayEventJournal).toEqual(expect.arrayContaining([
+                expect.objectContaining({ type: 'safe_hazard_ward.requested', amount: 1 }),
+                expect.objectContaining({ type: 'feedback.requested', cue: 'build.ward_spark.matched' })
+            ]));
         });
 
         it('claims scout glint through the existing omen scout reveal path', () => {

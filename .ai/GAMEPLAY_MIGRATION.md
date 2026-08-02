@@ -70,6 +70,18 @@ All migrated slices now cross one read-only renderer adapter. It validates persi
 
 The adapter never mutates the run or infers whether an effect happened. Commands and events remain gameplay truth; Zustand, React, and audio only decide how a validated event is presented.
 
+## Fourth vertical slice: The Saboteur
+
+The Saboteur connects trap-control choices that previously appeared as separate inventory and HUD rows:
+
+1. Hazard Banisher grants a destroy charge and the durable floor-start hazard-banish perk through one typed claim command.
+2. The Breaker Chisel relic adds another uncapped destroy-pair charge through the same relic command boundary.
+3. Matching Ward Spark emits a typed safe-hazard-ward request; the compatibility adapter feeds that request into the existing one-charge floor ward cap.
+4. The player spends destroy charges on a chosen completion-safe pair, while the banked ward absorbs one remaining Shuffle Snare or Fragile Cache mistake.
+5. On later floors, Hazard Banisher removes one hazard pair automatically, or grants a destroy charge when no hazard exists; `noDestroy` contracts continue to block both lanes.
+
+Destroy Pair execution and floor-start hazard removal remain established deterministic compatibility consumers in this slice. They are not duplicated in the command reducer: the typed core owns source acquisition and Ward Spark intent, while the existing board/floor transitions own their already-tested completion and contract rules.
+
 ## Current slice status
 
 Implemented in the Conduit Cartographer vertical slice:

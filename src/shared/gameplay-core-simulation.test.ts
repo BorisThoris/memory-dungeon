@@ -66,6 +66,9 @@ describe('seeded gameplay core simulation', () => {
                 'relic.combo_shard_plus_step',
                 'findable.shard_spark',
                 'relic.combo_shard_plus_step.sealed_match',
+                'bonus_reward.hazard_banisher',
+                'relic.destroy_bank_plus_one',
+                'findable.ward_spark',
                 'board.peek'
             ])
         );

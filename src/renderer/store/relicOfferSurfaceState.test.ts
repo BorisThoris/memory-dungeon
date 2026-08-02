@@ -100,6 +100,30 @@ describe('relicOfferSurfaceState', () => {
         });
     });
 
+    it('projects the Saboteur destroy relic through the same typed pick boundary', () => {
+        const run = {
+            ...offeredRun(),
+            relicOffer: {
+                ...offeredRun().relicOffer!,
+                options: ['destroy_bank_plus_one' as RelicId]
+            }
+        };
+        const result = createRelicPickSurfaceResult({
+            relicId: 'destroy_bank_plus_one',
+            run,
+            saveData: createDefaultSaveData()
+        });
+
+        expect(result).toMatchObject({
+            kind: 'accepted',
+            feedback: {
+                audioCategory: 'relic-pick',
+                cue: 'build.breaker_chisel.claimed'
+            },
+            patch: { run: { destroyPairCharges: 1 } }
+        });
+    });
+
     it('applies relic offer services only while an offer is open', () => {
         expect(createRelicOfferServiceSurfaceResult({
             run: { ...offeredRun(), relicOffer: null },

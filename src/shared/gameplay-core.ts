@@ -207,6 +207,9 @@ const applyDefinition = (
             case 'combo_shard.request':
                 writeEvent({ type: 'combo_shard.requested', amount: effect.amount });
                 break;
+            case 'safe_hazard_ward.request':
+                writeEvent({ type: 'safe_hazard_ward.requested', amount: effect.amount });
+                break;
             case 'feedback.emit':
                 writeEvent({
                     type: 'feedback.requested',

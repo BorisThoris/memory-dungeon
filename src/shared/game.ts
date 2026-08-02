@@ -515,6 +515,9 @@ const resolveGambitThree = (run: RunState, encorePairKeys: string[]): RunState =
         const resolvedFindableComboShardGain = findableReward.migrated
             ? findableReward.comboShardGain
             : findableComboShardGain;
+        const resolvedFindableSafeHazardWardGain = findableReward.migrated
+            ? findableReward.safeHazardWardGain
+            : findableSafeHazardWardGain;
 
         const resolution = resolveTurnMatchBoardResolution({
             run,
@@ -617,7 +620,7 @@ const resolveGambitThree = (run: RunState, encorePairKeys: string[]): RunState =
             cursedMatchedEarly: scoring.cursedMatchedEarly,
             findablesClaimedDelta,
             routeCardSafeHazardWardCharges: routeCardReward.safeHazardWardCharges,
-            findableSafeHazardWardGain,
+            findableSafeHazardWardGain: resolvedFindableSafeHazardWardGain,
             cascadeHazardTriggered: cascadeHazard.triggered,
             fragileCacheClaimed,
             tollCacheClaimed,
@@ -788,6 +791,9 @@ const resolveTwoFlippedTiles = (run: RunState, encorePairKeys: string[]): RunSta
         const resolvedFindableComboShardGain = findableReward.migrated
             ? findableReward.comboShardGain
             : findableComboShardGain;
+        const resolvedFindableSafeHazardWardGain = findableReward.migrated
+            ? findableReward.safeHazardWardGain
+            : findableSafeHazardWardGain;
 
         const resolution = resolveTurnMatchBoardResolution({
             run,
@@ -890,7 +896,7 @@ const resolveTwoFlippedTiles = (run: RunState, encorePairKeys: string[]): RunSta
             cursedMatchedEarly: scoring.cursedMatchedEarly,
             findablesClaimedDelta,
             routeCardSafeHazardWardCharges: routeCardReward.safeHazardWardCharges,
-            findableSafeHazardWardGain,
+            findableSafeHazardWardGain: resolvedFindableSafeHazardWardGain,
             cascadeHazardTriggered: cascadeHazard.triggered,
             fragileCacheClaimed,
             tollCacheClaimed,

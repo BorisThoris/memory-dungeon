@@ -10,6 +10,7 @@ import type { TileTraitKind } from './contracts';
 import {
     COMBO_SHARD_ENGINE_DEFINITIONS,
     CONDUIT_CARTOGRAPHER_DEFINITIONS,
+    SABOTEUR_DEFINITIONS,
     WARDEN_DEFINITIONS
 } from './gameplay-core-contracts';
 
@@ -307,5 +308,35 @@ describe('gameplay interaction graph', () => {
                 expect.objectContaining({ source: 'build.combo_shard_engine', target: 'progression.shard_to_life', kind: 'consequence' })
             ])
         );
+    });
+
+    it('connects Saboteur sources through destroy control and safe-hazard ward consequences', () => {
+        const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
+        const sourceNodeByDefinition = new Map([
+            ['bonus_reward.hazard_banisher', 'reward.hazard_banisher'],
+            ['relic.destroy_bank_plus_one', 'relic.destroy_bank_plus_one'],
+            ['findable.ward_spark', 'findable.ward_spark']
+        ]);
+
+        for (const definition of SABOTEUR_DEFINITIONS) {
+            const nodeId = sourceNodeByDefinition.get(definition.id);
+            expect(nodeId, definition.id).toBeTruthy();
+            expect(byId.get(nodeId!), definition.id).toMatchObject({
+                tests: expect.arrayContaining(['src/shared/gameplay-core.test.ts'])
+            });
+        }
+
+        expect(byId.get('build.trap_control')).toMatchObject({ kind: 'build', role: 'trap_pressure_control_build' });
+        expect(byId.get('inventory.destroy_charge')).toMatchObject({ kind: 'inventory', role: 'pair_removal_resource' });
+        expect(byId.get('safety.safe_hazard_ward')).toMatchObject({ kind: 'safety', role: 'trap_pressure_consequence' });
+        expect(gameplayInteractionGraph.edges).toEqual(expect.arrayContaining([
+            expect.objectContaining({ source: 'reward.hazard_banisher', target: 'inventory.destroy_charge', kind: 'grants' }),
+            expect.objectContaining({ source: 'relic.destroy_bank_plus_one', target: 'inventory.destroy_charge', kind: 'grants' }),
+            expect.objectContaining({ source: 'findable.ward_spark', target: 'core.gameplay_commands', kind: 'triggers' }),
+            expect.objectContaining({ source: 'findable.ward_spark', target: 'safety.safe_hazard_ward', kind: 'grants' }),
+            expect.objectContaining({ source: 'inventory.destroy_charge', target: 'power.destroy_pair', kind: 'enables' }),
+            expect.objectContaining({ source: 'safety.safe_hazard_ward', target: 'hazard.tile_pressure', kind: 'counterplay' }),
+            expect.objectContaining({ source: 'build.trap_control', target: 'power.destroy_pair', kind: 'consequence' })
+        ]));
     });
 });

@@ -484,6 +484,33 @@ describe('REG-075 treasure, secret room, and bonus rewards', () => {
         );
     });
 
+    it('routes Hazard Banisher acquisition through the Saboteur command journal', () => {
+        const room = {
+            ...rollBonusRewardRoom({
+                runSeed: 75_126,
+                rulesVersion: GAME_RULES_VERSION,
+                floor: 6,
+                routeKind: 'event'
+            }),
+            ...BONUS_REWARD_CATALOG.hazard_banisher,
+            eligible: true,
+            unavailableReason: null
+        };
+        const result = claimBonusReward(makeRun(room.runSeed, room.rulesVersion), createBonusRewardLedger(), room);
+
+        expect(result.claimed).toBe(true);
+        expect(result.run.destroyPairCharges).toBe(1);
+        expect(result.run.rewardPerkIds).toContain('hazard_banish_per_floor');
+        expect(result.run.gameplayEventJournal).toEqual(expect.arrayContaining([
+            expect.objectContaining({
+                type: 'reward_perk.granted',
+                perkId: 'hazard_banish_per_floor',
+                source: { kind: 'bonus_reward', id: 'hazard_banisher' }
+            }),
+            expect.objectContaining({ type: 'feedback.requested', cue: 'build.hazard_banisher.claimed' })
+        ]));
+    });
+
     it('unlocks durable reward perks from build-defining draft rows without duplicating them', () => {
         const room = {
             ...rollBonusRewardRoom({

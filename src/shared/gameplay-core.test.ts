@@ -6,6 +6,7 @@ import {
     CONDUIT_CARTOGRAPHER_DEFINITIONS,
     COMBO_SHARD_ENGINE_DEFINITIONS,
     GAMEPLAY_CORE_SCHEMA_VERSION,
+    SABOTEUR_DEFINITIONS,
     WARDEN_DEFINITIONS,
     createGameplayDefinitionCommand,
     createGameplayPeekCommand,
@@ -210,11 +211,50 @@ describe('deterministic gameplay core', () => {
         );
     });
 
+    it('models the Saboteur reward, Breaker Chisel, and Ward Spark as one trap-control build', () => {
+        expect(SABOTEUR_DEFINITIONS.map((definition) => definition.id)).toEqual([
+            'bonus_reward.hazard_banisher',
+            'relic.destroy_bank_plus_one',
+            'findable.ward_spark'
+        ]);
+        const initial = run({ destroyPairCharges: 0 });
+        const reward = reduceGameplayCommand(
+            initial,
+            createGameplayDefinitionCommand('saboteur-reward', 'bonus_reward.hazard_banisher')
+        );
+        const relic = applyRelicImmediateThroughGameplayCore(
+            reward.run,
+            'destroy_bank_plus_one',
+            'saboteur-relic'
+        );
+        const ward = resolveFindableMatchRewardThroughGameplayCore(
+            relic.run,
+            'ward_spark',
+            'saboteur-ward'
+        );
+
+        expect(reward.run).toMatchObject({
+            destroyPairCharges: 1,
+            rewardPerkIds: ['hazard_banish_per_floor']
+        });
+        expect(relic).toMatchObject({ migrated: true, run: { destroyPairCharges: 2 } });
+        expect(ward).toMatchObject({ migrated: true, comboShardGain: 0, safeHazardWardGain: 1 });
+        expect(ward.events).toEqual(expect.arrayContaining([
+            expect.objectContaining({
+                type: 'safe_hazard_ward.requested',
+                amount: 1,
+                source: { kind: 'findable', id: 'ward_spark' }
+            }),
+            expect.objectContaining({ type: 'feedback.requested', cue: 'build.ward_spark.matched' })
+        ]));
+    });
+
     it('routes migrated relic immediates through the core while preserving legacy fallbacks', () => {
         const initial = run({ peekCharges: 2, shuffleCharges: 1 });
         const migrated = applyRelicImmediateThroughGameplayCore(initial, 'peek_charge_plus_one', 'adapter-peek');
         const migratedGuard = applyRelicImmediateThroughGameplayCore(initial, 'guard_token_plus_one', 'adapter-guard');
         const migratedCombo = applyRelicImmediateThroughGameplayCore(initial, 'combo_shard_plus_step', 'adapter-combo');
+        const migratedDestroy = applyRelicImmediateThroughGameplayCore(initial, 'destroy_bank_plus_one', 'adapter-destroy');
         const legacy = applyRelicImmediateThroughGameplayCore(initial, 'extra_shuffle_charge', 'adapter-shuffle');
 
         expect(migrated).toMatchObject({ migrated: true, run: { peekCharges: 3 } });
@@ -227,6 +267,7 @@ describe('deterministic gameplay core', () => {
         expect(legacy).toMatchObject({ migrated: false, run: { shuffleCharges: 2 }, events: [] });
         expect(migratedGuard).toMatchObject({ migrated: true, run: { stats: { guardTokens: 1 } } });
         expect(migratedCombo).toMatchObject({ migrated: true, run: { stats: { comboShards: 1 } } });
+        expect(migratedDestroy).toMatchObject({ migrated: true, run: { destroyPairCharges: 1 } });
     });
 
     it('models exactly the extra Peek granted by the existing Echo-Conduit perk condition', () => {

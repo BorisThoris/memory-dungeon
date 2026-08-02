@@ -745,6 +745,7 @@ export const getPrimaryRewardPerkReadinessRow = (
 const MIGRATED_BONUS_REWARD_DEFINITION_IDS: Partial<Record<BonusRewardId, string>> = {
     bonus_shards: 'bonus_reward.bonus_shards',
     echo_conduit_lens: 'bonus_reward.echo_conduit_lens',
+    hazard_banisher: 'bonus_reward.hazard_banisher',
     hazard_ward: 'bonus_reward.hazard_ward'
 };
 
@@ -900,6 +901,11 @@ export const previewBonusRewardClaim = (
                                 destroyPairCharges: journaledRun.destroyPairCharges,
                                 stats: { ...legacyStats, guardTokens: coreStats.guardTokens }
                               }
+                            : reward.id === 'hazard_banisher'
+                              ? {
+                                    destroyPairCharges: journaledRun.destroyPairCharges,
+                                    rewardPerkIds: journaledRun.rewardPerkIds
+                                }
                             : {
                                   stats: {
                                       ...legacyStats,

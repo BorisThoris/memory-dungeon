@@ -14,7 +14,8 @@ export const GAMEPLAY_REWARD_PERK_IDS = [
 
 export const GAMEPLAY_RELIC_IDS = [
     'combo_shard_plus_step',
-    'guard_token_plus_one'
+    'guard_token_plus_one',
+    'destroy_bank_plus_one'
 ] as const satisfies readonly RelicId[];
 
 export const GAMEPLAY_FINDABLE_KINDS = [
@@ -138,6 +139,12 @@ export const gameplayEffectSchema = z.discriminatedUnion('kind', [
     z
         .object({
             kind: z.literal('combo_shard.request'),
+            amount: z.number().int().positive()
+        })
+        .strict(),
+    z
+        .object({
+            kind: z.literal('safe_hazard_ward.request'),
             amount: z.number().int().positive()
         })
         .strict(),
@@ -375,10 +382,66 @@ export const COMBO_SHARD_ENGINE_DEFINITIONS = z.array(gameplayContentDefinitionS
     }
 ]);
 
+export const SABOTEUR_DEFINITIONS = z.array(gameplayContentDefinitionSchema).parse([
+    {
+        id: 'bonus_reward.hazard_banisher',
+        version: 1,
+        buildId: 'trap_control',
+        source: { kind: 'bonus_reward', id: 'hazard_banisher' },
+        trigger: 'content.claimed',
+        conditions: [],
+        effects: [
+            { kind: 'reward_perk.grant', perkId: 'hazard_banish_per_floor' },
+            { kind: 'inventory.grant', itemId: 'destroy_charge', amount: 1 },
+            {
+                kind: 'feedback.emit',
+                cue: 'build.hazard_banisher.claimed',
+                message: 'Hazard Banisher added one destroy charge and armed a floor-start hazard erase.',
+                tone: 'reward'
+            }
+        ]
+    },
+    {
+        id: 'relic.destroy_bank_plus_one',
+        version: 1,
+        buildId: 'trap_control',
+        source: { kind: 'relic', id: 'destroy_bank_plus_one' },
+        trigger: 'content.claimed',
+        conditions: [],
+        effects: [
+            { kind: 'inventory.grant', itemId: 'destroy_charge', amount: 1 },
+            {
+                kind: 'feedback.emit',
+                cue: 'build.breaker_chisel.claimed',
+                message: 'The Breaker Chisel added one destroy-pair charge.',
+                tone: 'reward'
+            }
+        ]
+    },
+    {
+        id: 'findable.ward_spark',
+        version: 1,
+        buildId: 'trap_control',
+        source: { kind: 'findable', id: 'ward_spark' },
+        trigger: 'findable.match',
+        conditions: [{ kind: 'findable.matched', findable: 'ward_spark' }],
+        effects: [
+            { kind: 'safe_hazard_ward.request', amount: 1 },
+            {
+                kind: 'feedback.emit',
+                cue: 'build.ward_spark.matched',
+                message: 'Ward Spark armed one safe-hazard ward for this floor.',
+                tone: 'reward'
+            }
+        ]
+    }
+]);
+
 export const GAMEPLAY_CONTENT_DEFINITIONS = [
     ...CONDUIT_CARTOGRAPHER_DEFINITIONS,
     ...WARDEN_DEFINITIONS,
-    ...COMBO_SHARD_ENGINE_DEFINITIONS
+    ...COMBO_SHARD_ENGINE_DEFINITIONS,
+    ...SABOTEUR_DEFINITIONS
 ] as const satisfies readonly GameplayContentDefinition[];
 
 export type GameplaySource = z.infer<typeof gameplaySourceSchema>;
@@ -456,6 +519,13 @@ export const gameplayEventSchema = z.discriminatedUnion('type', [
         .object({
             ...eventBase,
             type: z.literal('combo_shard.requested'),
+            amount: z.number().int().positive()
+        })
+        .strict(),
+    z
+        .object({
+            ...eventBase,
+            type: z.literal('safe_hazard_ward.requested'),
             amount: z.number().int().positive()
         })
         .strict(),
