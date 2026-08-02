@@ -1,8 +1,8 @@
 import type { BoardState, RunState } from './contracts';
 import { createDungeonExitActivationTransition, type DungeonExitActivationSpend } from './dungeon-exit-rules';
-import { isBoardComplete } from './board-inspection';
-import { applyDestroyPairTransition } from './board-power-actions';
-import { rotateRunShiftingSpotlight } from './shifting-spotlight-rules';
+import { createGameplayDestroyPairCommand } from './gameplay-core-contracts';
+import { reduceGameplayCommand } from './gameplay-core';
+import { appendGameplayJournal } from './gameplay-journal';
 
 interface FloorCompletionTransitionDeps {
     finalizeLevel: (run: RunState, board: BoardState) => RunState;
@@ -10,18 +10,21 @@ interface FloorCompletionTransitionDeps {
 
 export const createApplyDestroyPair = ({ finalizeLevel }: FloorCompletionTransitionDeps) =>
     (run: RunState, tileId: string): RunState => {
-        const transition = applyDestroyPairTransition(run, tileId, {
-            isBoardComplete,
-            rotateShiftingSpotlight: rotateRunShiftingSpotlight
-        });
-
-        if (!transition.changed) {
+        const command = createGameplayDestroyPairCommand(
+            `destroy-pair:${run.runSeed}:${run.board?.level ?? 0}:${run.destroyPairCharges}:${tileId}`,
+            tileId
+        );
+        const result = reduceGameplayCommand(run, command);
+        if (!result.accepted) {
             return run;
         }
-
-        return transition.boardComplete && transition.run.board
-            ? finalizeLevel(transition.run, transition.run.board)
-            : transition.run;
+        const journaledRun = appendGameplayJournal(result.run, [command], result.events);
+        const boardComplete = result.events.some(
+            (event) => event.type === 'board.pair_destroyed' && event.boardComplete
+        );
+        return boardComplete && journaledRun.board
+            ? finalizeLevel(journaledRun, journaledRun.board)
+            : journaledRun;
     };
 
 export const createActivateDungeonExit = ({ finalizeLevel }: FloorCompletionTransitionDeps) =>

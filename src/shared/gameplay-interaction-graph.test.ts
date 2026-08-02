@@ -662,7 +662,6 @@ describe('gameplay interaction graph', () => {
 
     it('models run loadouts as read-only projections over authoritative setup state', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
-        expect(gameplayInteractionGraph.version).toBe(13);
         expect(byId.get('progression.run_setup')).toMatchObject({
             kind: 'progression',
             role: 'authoritative_pre_run_loadout_selection'
@@ -696,6 +695,29 @@ describe('gameplay interaction graph', () => {
             expect.objectContaining({ source: 'inventory.relic_loadout', target: 'feedback.gameplay_hud', kind: 'displays' }),
             expect.objectContaining({ source: 'inventory.mutator_loadout', target: 'feedback.gameplay_hud', kind: 'displays' }),
             expect.objectContaining({ source: 'inventory.contract_loadout', target: 'feedback.gameplay_hud', kind: 'displays' })
+        ]));
+    });
+
+    it('connects typed Destroy Pair from charge and target choice through replayable floor consequence', () => {
+        const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
+        expect(gameplayInteractionGraph.version).toBe(14);
+        expect(byId.get('power.destroy_pair')).toMatchObject({
+            kind: 'power',
+            role: 'typed_completion_safe_pair_removal',
+            tests: expect.arrayContaining([
+                'src/shared/gameplay-core.test.ts',
+                'src/renderer/store/runSurfaceState.test.ts'
+            ])
+        });
+        expect(gameplayInteractionGraph.edges).toEqual(expect.arrayContaining([
+            expect.objectContaining({ source: 'inventory.destroy_charge', target: 'power.destroy_pair', kind: 'enables' }),
+            expect.objectContaining({ source: 'power.destroy_pair', target: 'inventory.destroy_charge', kind: 'consumes' }),
+            expect.objectContaining({ source: 'core.gameplay_commands', target: 'power.destroy_pair', kind: 'modifies' }),
+            expect.objectContaining({ source: 'power.destroy_pair', target: 'objective.floor_clear', kind: 'counterplay' }),
+            expect.objectContaining({ source: 'power.destroy_pair', target: 'feedback.gameplay_hud', kind: 'displays' }),
+            expect.objectContaining({ source: 'power.destroy_pair', target: 'simulation.gameplay_replay', kind: 'tested_by' }),
+            expect.objectContaining({ source: 'build.emergency_toolkit', target: 'power.destroy_pair', kind: 'consequence' }),
+            expect.objectContaining({ source: 'build.trap_control', target: 'power.destroy_pair', kind: 'consequence' })
         ]));
     });
 });

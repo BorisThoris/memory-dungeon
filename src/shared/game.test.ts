@@ -7564,6 +7564,13 @@ describe('board powers', () => {
         expect(after.destroyPairCharges).toBe(0);
         expect(after.powersUsedThisRun).toBe(true);
         expect(after.status).toBe('playing');
+        expect(after.gameplayCommandJournal).toEqual(expect.arrayContaining([
+            expect.objectContaining({ type: 'board.destroy_pair', targetTileId: 'a1' })
+        ]));
+        expect(after.gameplayEventJournal).toEqual(expect.arrayContaining([
+            expect.objectContaining({ type: 'board.pair_destroyed', boardComplete: false }),
+            expect.objectContaining({ type: 'feedback.requested', cue: 'power.destroy_pair.used' })
+        ]));
 
         const lastPairRun = {
             ...createRun(tiles),
@@ -7577,6 +7584,12 @@ describe('board powers', () => {
         const cleared = applyDestroyPair(lastPairRun, 'b1');
         expect(cleared.status).toBe('levelComplete');
         expect(cleared.lastLevelResult?.level).toBe(1);
+        expect(cleared.gameplayCommandJournal).toEqual(expect.arrayContaining([
+            expect.objectContaining({ type: 'board.destroy_pair', targetTileId: 'b1' })
+        ]));
+        expect(cleared.gameplayEventJournal).toEqual(expect.arrayContaining([
+            expect.objectContaining({ type: 'board.pair_destroyed', boardComplete: true })
+        ]));
     });
 
     describe('board power preview helpers', () => {

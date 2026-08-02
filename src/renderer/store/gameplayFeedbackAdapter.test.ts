@@ -117,6 +117,20 @@ describe('gameplayFeedbackAdapter', () => {
         expect(presentations.map((item) => item.audioCategory)).toEqual(['flash-pair', 'undo']);
     });
 
+    it('classifies Destroy Pair feedback from its typed power source', () => {
+        const presentation = projectGameplayFeedback([
+            event(0, {
+                type: 'feedback.requested',
+                cue: 'power.destroy_pair.used',
+                message: 'Pair removed.',
+                source: { kind: 'power', id: 'destroy_pair' },
+                tone: 'information'
+            })
+        ])[0];
+
+        expect(presentation).toMatchObject({ audioCategory: 'destroy-pair' });
+    });
+
     it('classifies Locksmith shop and exit cues from typed sources', () => {
         const presentations = projectGameplayFeedback([
             event(0, {

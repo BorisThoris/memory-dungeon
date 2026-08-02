@@ -1,8 +1,9 @@
 import type { RunState } from './contracts';
-import { tileIsStrayEligiblePreview } from './board-power-targeting';
+import { collectDestroyEligibleTileIds, tileIsStrayEligiblePreview } from './board-power-targeting';
 import {
     GAMEPLAY_CONTENT_DEFINITIONS,
     createGameplayDefinitionCommand,
+    createGameplayDestroyPairCommand,
     createGameplayDungeonExitActivateCommand,
     createGameplayFlashPairCommand,
     createGameplayGambitCommitCommand,
@@ -107,6 +108,13 @@ const commandForStep = (
             wildMatchPair.pairedTileId
         );
     }
+    if (step === 1) {
+        const targets = run.board
+            ? [...collectDestroyEligibleTileIds(run.board)].sort((left, right) => left.localeCompare(right))
+            : [];
+        const target = targets[pickRngIndex(rng, targets.length)] ?? 'missing-destroy-target';
+        return createGameplayDestroyPairCommand(commandId, target);
+    }
     if (actionIndex === definitions.length) {
         const targets = availablePeekTargets(run);
         const target = targets[pickRngIndex(rng, targets.length)];
@@ -161,7 +169,6 @@ const commandForStep = (
     if (actionIndex === definitions.length + 11) {
         return createGameplayDungeonExitActivateCommand(commandId, 'master_key');
     }
-
     const definition = definitions[actionIndex % definitions.length] ?? definitions[0];
     if (definition.trigger === 'trait.match') {
         const invalid = rng() < invalidTraitChance;

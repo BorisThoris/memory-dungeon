@@ -1182,6 +1182,13 @@ export const gameplayCommandSchema = z.discriminatedUnion('type', [
     z
         .object({
             ...commandBase,
+            type: z.literal('board.destroy_pair'),
+            targetTileId: z.string().min(1).max(160)
+        })
+        .strict(),
+    z
+        .object({
+            ...commandBase,
             type: z.literal('risk_wager.accept')
         })
         .strict(),
@@ -1385,6 +1392,29 @@ export const gameplayEventSchema = z.discriminatedUnion('type', [
             strayChargesAfter: z.number().int().nonnegative(),
             recallFocusBefore: z.number().int().nonnegative(),
             recallFocusAfter: z.number().int().nonnegative()
+        })
+        .strict(),
+    z
+        .object({
+            ...eventBase,
+            type: z.literal('board.pair_destroyed'),
+            targetTileId: z.string().min(1).max(160),
+            pairKey: z.string().min(1).max(160),
+            destroyedTileIds: z.tuple([
+                z.string().min(1).max(160),
+                z.string().min(1).max(160)
+            ]),
+            destroyChargesBefore: z.number().int().positive(),
+            destroyChargesAfter: z.number().int().nonnegative(),
+            matchedPairsBefore: z.number().int().nonnegative(),
+            matchedPairsAfter: z.number().int().nonnegative(),
+            recallFocusBefore: z.number().int().nonnegative(),
+            recallFocusAfter: z.number().int().nonnegative(),
+            parasitePressureBefore: z.number().int().nonnegative(),
+            parasitePressureAfter: z.number().int().nonnegative(),
+            shiftingSpotlightNonceBefore: z.number().int().nonnegative(),
+            shiftingSpotlightNonceAfter: z.number().int().nonnegative(),
+            boardComplete: z.boolean()
         })
         .strict(),
     z
@@ -1645,6 +1675,14 @@ export const createGameplayStrayRemoveCommand = (commandId: string, targetTileId
         schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
         commandId,
         type: 'board.stray_remove',
+        targetTileId
+    });
+
+export const createGameplayDestroyPairCommand = (commandId: string, targetTileId: string): GameplayCommand =>
+    gameplayCommandSchema.parse({
+        schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
+        commandId,
+        type: 'board.destroy_pair',
         targetTileId
     });
 

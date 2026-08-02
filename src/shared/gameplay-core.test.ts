@@ -32,6 +32,7 @@ import {
     VAULTBREAKER_DEFINITIONS,
     WARDEN_DEFINITIONS,
     createGameplayDefinitionCommand,
+    createGameplayDestroyPairCommand,
     createGameplayDungeonExitActivateCommand,
     createGameplayFlashPairCommand,
     createGameplayGambitCommitCommand,
@@ -293,6 +294,65 @@ describe('deterministic gameplay core', () => {
             expect.objectContaining({ type: 'score.changed', reason: 'content_reward', amount: 10 }),
             expect.objectContaining({ type: 'feedback.requested', cue: 'build.supply_cache.claimed' })
         ]);
+    });
+
+    it('removes one legal pair through a typed command and records every consequential delta', () => {
+        const initial = run({
+            destroyPairCharges: 2,
+            recallFocus: 2,
+            parasiteFloors: 3,
+            activeMutators: ['score_parasite'],
+            shiftingSpotlightNonce: 0
+        });
+        const command = createGameplayDestroyPairCommand('destroy-echo', 'echo-a');
+        const result = reduceGameplayCommand(initial, command);
+        const rejected = reduceGameplayCommand(
+            { ...initial, activeContract: { noDestroy: true, noShuffle: false, maxMismatches: null } },
+            createGameplayDestroyPairCommand('destroy-blocked', 'echo-a')
+        );
+
+        expect(result).toMatchObject({
+            accepted: true,
+            run: {
+                destroyPairCharges: 1,
+                destroyUsedThisFloor: true,
+                recallFocus: 1,
+                parasiteFloors: 0,
+                board: { matchedPairs: 1 },
+                stats: { matchesFound: 1, pairsDestroyed: 1 }
+            }
+        });
+        expect(result.run.board?.tiles.filter((candidate) => candidate.pairKey === 'echo'))
+            .toEqual(expect.arrayContaining([
+                expect.objectContaining({ id: 'echo-a', state: 'matched' }),
+                expect.objectContaining({ id: 'echo-b', state: 'matched' })
+            ]));
+        expect(result.events).toEqual([
+            expect.objectContaining({
+                type: 'inventory.changed',
+                itemId: 'destroy_charge',
+                operation: 'consume',
+                before: 2,
+                after: 1,
+                applied: -1
+            }),
+            expect.objectContaining({
+                type: 'board.pair_destroyed',
+                targetTileId: 'echo-a',
+                pairKey: 'echo',
+                destroyedTileIds: ['echo-a', 'echo-b'],
+                matchedPairsBefore: 0,
+                matchedPairsAfter: 1,
+                recallFocusBefore: 2,
+                recallFocusAfter: 1,
+                parasitePressureBefore: 3,
+                parasitePressureAfter: 0,
+                boardComplete: false
+            }),
+            expect.objectContaining({ type: 'feedback.requested', cue: 'power.destroy_pair.used' })
+        ]);
+        expect(replayGameplayCommands(initial, [JSON.parse(JSON.stringify(command))]).run).toEqual(result.run);
+        expect(rejected).toMatchObject({ accepted: false, run: { destroyPairCharges: 2 } });
     });
 
     it('advances score-parasite pressure through a typed floor command and records ward or life outcomes', () => {

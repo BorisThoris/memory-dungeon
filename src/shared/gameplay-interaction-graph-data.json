@@ -1,5 +1,5 @@
 {
-  "version": 13,
+  "version": 14,
   "mechanics": [
     {
       "id": "trait.echo",
@@ -148,14 +148,14 @@
       "id": "power.destroy_pair",
       "label": "Destroy Pair",
       "kind": "power",
-      "role": "removal_counterplay",
-      "evidence": ["src/shared/board-power-actions.ts", "src/shared/board-power-availability.ts"],
-      "reads": ["destroyCharges", "noDestroy", "exitSources"],
-      "writes": ["removedTiles", "forgottenTileIdsThisFloor", "powersUsedThisRun"],
-      "enables": ["objective.floor_clear"],
+      "role": "typed_completion_safe_pair_removal",
+      "evidence": ["src/shared/gameplay-core-contracts.ts", "src/shared/gameplay-core.ts", "src/shared/board-power-actions.ts", "src/shared/board-power-availability.ts", "src/shared/floor-completion-transitions.ts", "src/renderer/store/runSurfaceState.ts"],
+      "reads": ["destroyPairCharges", "noDestroy", "tileStates", "exitSources", "recallFocus", "parasiteFloors", "shiftingSpotlightNonce"],
+      "writes": ["destroyPairCharges", "tileStates", "matchedPairs", "forgottenTileIdsThisFloor", "powersUsedThisRun", "recallFocus", "parasiteFloors", "shiftingSpotlightNonce", "gameplayCommands", "gameplayEvents", "feedbackLines"],
+      "enables": ["objective.floor_clear", "build.trap_control", "build.emergency_toolkit"],
       "blocks": ["pair_rewards"],
-      "softlockGuards": ["exit-source-protection", "noDestroy-contract"],
-      "tests": ["src/shared/board-power-actions.test.ts", "src/shared/board-power-availability.test.ts"]
+      "softlockGuards": ["exactly-two-hidden-pair", "clear-flip-state", "exit-source-protection", "noDestroy-contract", "destroy-forfeits-pair-reward", "journal-before-finalize"],
+      "tests": ["src/shared/gameplay-core.test.ts", "src/shared/board-power-actions.test.ts", "src/shared/board-power-availability.test.ts", "src/shared/game.test.ts", "src/renderer/store/runSurfaceState.test.ts"]
     },
     {
       "id": "hazard.tile_pressure",
@@ -306,7 +306,7 @@
       "kind": "objective",
       "role": "terminal_condition",
       "evidence": ["src/shared/board-inspection.ts", "src/shared/game.ts", "src/shared/level-clear-rules.ts", "src/renderer/components/GameScreen.tsx"],
-      "reads": ["tileStates", "dungeonExitActivated", "objectiveCompleted", "tries"],
+      "reads": ["tileStates", "matchedPairs", "dungeonExitActivated", "objectiveCompleted", "tries"],
       "writes": ["levelComplete", "lastLevelResult", "routeChoices"],
       "enables": ["next_floor"],
       "blocks": [],
@@ -1793,6 +1793,9 @@
     { "source": "inventory.destroy_charge", "target": "power.destroy_pair", "kind": "enables", "label": "funds pair removal" },
     { "source": "inventory.destroy_charge", "target": "feedback.gameplay_hud", "kind": "displays", "label": "shows destroy bank" },
     { "source": "power.destroy_pair", "target": "inventory.destroy_charge", "kind": "consumes", "label": "spends one charge" },
+    { "source": "core.gameplay_commands", "target": "power.destroy_pair", "kind": "modifies", "label": "validates journals and replays exact pair removal" },
+    { "source": "power.destroy_pair", "target": "feedback.gameplay_hud", "kind": "displays", "label": "shows removed pair remaining charges and floor consequence" },
+    { "source": "power.destroy_pair", "target": "simulation.gameplay_replay", "kind": "tested_by", "label": "schema-valid deterministic rejection and accepted parity" },
     { "source": "power.destroy_pair", "target": "build.trap_control", "kind": "consequence", "label": "converts banked control into a chosen disarm" },
     { "source": "safety.safe_hazard_ward", "target": "feedback.gameplay_hud", "kind": "displays", "label": "shows ward charge and absorption" },
     { "source": "safety.safe_hazard_ward", "target": "hazard.tile_pressure", "kind": "counterplay", "label": "blocks one safe-tile hazard" },

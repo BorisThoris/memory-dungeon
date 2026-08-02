@@ -225,7 +225,9 @@ export const createPlayingTilePressSurfaceResult = ({
             };
         }
 
-        audio.push({ kind: 'destroyPair' });
+        if (projectGameplayFeedback(armedPowerPressResult.events).some((feedback) => feedback.audioCategory === 'destroy-pair')) {
+            audio.push({ kind: 'destroyPair' });
+        }
         return {
             kind: armedPowerPressResult.resolvesRun ? 'applyResolvedRun' : 'patch',
             run: armedPowerPressResult.run,

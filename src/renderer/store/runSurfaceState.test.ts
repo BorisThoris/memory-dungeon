@@ -788,6 +788,13 @@ describe('run surface state helpers', () => {
             expect(applied.run.destroyPairCharges).toBe(activeRun.destroyPairCharges - 1);
             expect(applied.run.board!.tiles.filter((tile) => tile.state === 'matched')).toHaveLength(2);
             expect(applied.resolvesRun).toBe(false);
+            expect(applied.events).toEqual(expect.arrayContaining([
+                expect.objectContaining({ type: 'board.pair_destroyed', targetTileId: tileId }),
+                expect.objectContaining({ type: 'feedback.requested', cue: 'power.destroy_pair.used' })
+            ]));
+            expect(applied.run.gameplayCommandJournal).toEqual(expect.arrayContaining([
+                expect.objectContaining({ type: 'board.destroy_pair', targetTileId: tileId })
+            ]));
         }
 
         expect(

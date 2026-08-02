@@ -9,7 +9,8 @@ import {
     createGameplayShuffleCommand,
     createGameplayStrayRemoveCommand,
     createGameplayTileSwapCommand,
-    createGameplayUndoResolveCommand
+    createGameplayUndoResolveCommand,
+    gameplayEventSchema
 } from '../../shared/gameplay-core-contracts';
 import {
     chooseDungeonExitActivationSpend,
@@ -75,7 +76,7 @@ type ArmedBoardPowerPressResult =
     | { kind: 'tileSwapFirstSelected'; tileId: string }
     | { kind: 'tileSwapFirstCleared' }
     | { kind: 'tileSwapApplied'; run: RunState; events: GameplayEvent[] }
-    | { kind: 'destroyApplied'; run: RunState; resolvesRun: boolean };
+    | { kind: 'destroyApplied'; run: RunState; resolvesRun: boolean; events: GameplayEvent[] };
 
 type OrdinaryTileFlipResult =
     | { kind: 'unchanged'; clearBoardInteraction: boolean; run: RunState }
@@ -580,7 +581,15 @@ export const createArmedBoardPowerPressResult = ({
         return {
             kind: 'destroyApplied',
             run: nextRun,
-            resolvesRun: nextRun.status === 'levelComplete' || nextRun.status === 'gameOver'
+            resolvesRun: nextRun.status === 'levelComplete' || nextRun.status === 'gameOver',
+            events: (nextRun.gameplayEventJournal ?? []).flatMap((event) => {
+                const parsed = gameplayEventSchema.safeParse(event);
+                return parsed.success &&
+                    parsed.data.commandId ===
+                        `destroy-pair:${run.runSeed}:${run.board?.level ?? 0}:${run.destroyPairCharges}:${tileId}`
+                    ? [parsed.data]
+                    : [];
+            })
         };
     }
 
