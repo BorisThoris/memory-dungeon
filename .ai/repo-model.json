@@ -5,18 +5,18 @@
     "name": "memory-dungeon",
     "trackedFileCount": 2375,
     "codeFileCount": 874,
-    "exportedSymbolCount": 3161,
+    "exportedSymbolCount": 3164,
     "contentItemCount": 56,
-    "mechanicCount": 40,
-    "stateFieldCount": 76,
-    "relationshipCount": 7627
+    "mechanicCount": 46,
+    "stateFieldCount": 77,
+    "relationshipCount": 7733
   },
   "inventory": [
     {
       "path": ".ai/GAMEPLAY_MIGRATION.md",
       "category": "other",
-      "bytes": 4036,
-      "sha256": "693214fb00f0071194bada8308c1c78391651a178cab499f03bbc20a6f7888a0"
+      "bytes": 4938,
+      "sha256": "e310700a1c46de96734d093be091c06ecdf839634346910b378e9ae391dcec29"
     },
     {
       "path": ".ai/README.md",
@@ -4539,8 +4539,8 @@
     {
       "path": "scripts/sim-gameplay-core.ts",
       "category": "script",
-      "bytes": 2211,
-      "sha256": "dfbe31f3cc54b9ee35eeadbcbf0c4b8b065456c54282ebda87b3bd6acc171e17"
+      "bytes": 2233,
+      "sha256": "7a446b187d4dc517452a86623718e01c7ecba2fc9b56e0556b9510285acd4ce1"
     },
     {
       "path": "scripts/svgo-optimize-card-front.mjs",
@@ -9903,14 +9903,14 @@
     {
       "path": "src/shared/bonus-rewards.test.ts",
       "category": "test",
-      "bytes": 39888,
-      "sha256": "b6174a9e5b387a9a7f3b8fcccc3f125daaf7ef7381de65ee3403e3e6bed0235b"
+      "bytes": 41124,
+      "sha256": "6f2a61b83e3d2e4bad300f80df297745fc842add68d0acddd77d6c9108cf75cc"
     },
     {
       "path": "src/shared/bonus-rewards.ts",
       "category": "source",
-      "bytes": 38652,
-      "sha256": "798783522875c4a555cddc4d8b49fef8b0bdbe955f3f9dd01db939dbe6bb5998"
+      "bytes": 39267,
+      "sha256": "0f908993d3c2b5ffa4b5143b05cc1fae11873928dc47b068411a7da2bae0cd13"
     },
     {
       "path": "src/shared/boss-encounters.test.ts",
@@ -10587,50 +10587,50 @@
     {
       "path": "src/shared/gameplay-core-adapters.ts",
       "category": "source",
-      "bytes": 1345,
-      "sha256": "f16125e98bbbf1a285658380f2d540b2809a90819c5d2a8f8ff96d7f5118a978"
+      "bytes": 1564,
+      "sha256": "be11fcad361bac9966a50f8a342a0ddffc5ba4693bb5a194b3c347c61e67093e"
     },
     {
       "path": "src/shared/gameplay-core-contracts.ts",
       "category": "source",
-      "bytes": 10036,
-      "sha256": "0a162cf69d72a6dea35ae46e96024b5011214d1ad61a0be9d87ba4e17bae185d"
+      "bytes": 13932,
+      "sha256": "32d4bfdf83f3c5cfb3e3299b25584d2f00c07f4dd5e59a03adef111a3d780442"
     },
     {
       "path": "src/shared/gameplay-core-simulation.test.ts",
       "category": "test",
-      "bytes": 2898,
-      "sha256": "c43cc9ac36bb3eaf6a01ce585ebebaaec592eeb6d7a33261e0eb074f7694efce"
+      "bytes": 3115,
+      "sha256": "ec113762c0397cb241651233154d134b7da760256dc86279bc901d0ced20c535"
     },
     {
       "path": "src/shared/gameplay-core-simulation.ts",
       "category": "source",
-      "bytes": 6746,
-      "sha256": "0ca830143d421abfad5cc285deb8386f76acb8cfb44e0279d83134f68e63f325"
+      "bytes": 7079,
+      "sha256": "d6d6974cfc92a76c369e3059a057eda15458b78000c6e81c01f51b29ff8aaf7a"
     },
     {
       "path": "src/shared/gameplay-core.test.ts",
       "category": "test",
-      "bytes": 10878,
-      "sha256": "aab2d077767a4f9ff4f313f7814aa88556263a691d55c37fdca5766a84a02903"
+      "bytes": 13088,
+      "sha256": "747883f4cb968f8e1233f51c210ab47435f100a8d5a25a009be002e2ef0157f8"
     },
     {
       "path": "src/shared/gameplay-core.ts",
       "category": "source",
-      "bytes": 10457,
-      "sha256": "d0068b2fe0e07f78101a6505befb90a2f2f1d2e01de1fc3bd4666192f4f84e95"
+      "bytes": 12519,
+      "sha256": "fe9b6387555e3b9ce11965e2b4132029cf0e960fedc074e66468a2e5b5660f9d"
     },
     {
       "path": "src/shared/gameplay-interaction-graph-data.json",
       "category": "source",
-      "bytes": 40918,
-      "sha256": "8d997195404d27ffb5555e4d8ae7a14e7f8da84142aa783971a3c5e5419f543f"
+      "bytes": 48407,
+      "sha256": "bc56b7adcf5b6c3d89235bc6420abf9db6d13fd682bd27d646becc1742317a29"
     },
     {
       "path": "src/shared/gameplay-interaction-graph.test.ts",
       "category": "test",
-      "bytes": 12430,
-      "sha256": "e41a46977dde2e28d40a0923bdb547ae9cc9f103491e5371173de6ec9b57b174"
+      "bytes": 14851,
+      "sha256": "570007e0dff61904040b1ed67e9ffbffed3f2837c7bd695206d23e505eec9d96"
     },
     {
       "path": "src/shared/gameplay-interaction-graph.ts",
@@ -11859,14 +11859,14 @@
     {
       "path": "src/shared/tile-trait-rules.test.ts",
       "category": "test",
-      "bytes": 41599,
-      "sha256": "fb376563cb64df886216cf3a79ac633c87e81f83f571be5ac1d10389af9c40ed"
+      "bytes": 42096,
+      "sha256": "1c21a5e64df47140e2fde0eb5697d8cbd027511b2f28723a690d9af0e1e0b99e"
     },
     {
       "path": "src/shared/tile-trait-rules.ts",
       "category": "source",
-      "bytes": 44257,
-      "sha256": "c5e8337ecf190cc6c6c626aa79a8b10aceb9d43e73bc0483f6a8c6a497035a3e"
+      "bytes": 45494,
+      "sha256": "0645e3ca9ebea24b5b52dd59fcd6b8726de05f8966432f87375cc9173aa56755"
     },
     {
       "path": "src/shared/trait-build-rewards.test.ts",
@@ -23492,7 +23492,7 @@
       "path": "src/shared/bonus-rewards.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 976,
+      "lineCount": 1004,
       "imports": [
         "file:src/shared/board-build-rules.ts",
         "file:src/shared/bonus-rewards.ts",
@@ -23507,7 +23507,7 @@
       "path": "src/shared/bonus-rewards.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 973,
+      "lineCount": 984,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/gameplay-core-contracts.ts",
@@ -26464,7 +26464,7 @@
       "path": "src/shared/gameplay-core-adapters.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 39,
+      "lineCount": 45,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/gameplay-core-contracts.ts",
@@ -26485,7 +26485,7 @@
       "path": "src/shared/gameplay-core-contracts.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 317,
+      "lineCount": 430,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/run-inventory-contracts.ts"
@@ -26494,7 +26494,9 @@
         "symbol:src/shared/gameplay-core-contracts.ts#CONDUIT_CARTOGRAPHER_DEFINITIONS",
         "symbol:src/shared/gameplay-core-contracts.ts#createGameplayDefinitionCommand",
         "symbol:src/shared/gameplay-core-contracts.ts#createGameplayPeekCommand",
+        "symbol:src/shared/gameplay-core-contracts.ts#GAMEPLAY_CONTENT_DEFINITIONS",
         "symbol:src/shared/gameplay-core-contracts.ts#GAMEPLAY_CORE_SCHEMA_VERSION",
+        "symbol:src/shared/gameplay-core-contracts.ts#GAMEPLAY_RELIC_IDS",
         "symbol:src/shared/gameplay-core-contracts.ts#GAMEPLAY_REWARD_PERK_IDS",
         "symbol:src/shared/gameplay-core-contracts.ts#GAMEPLAY_RUN_STATUSES",
         "symbol:src/shared/gameplay-core-contracts.ts#GAMEPLAY_TILE_TRAIT_KINDS",
@@ -26512,7 +26514,8 @@
         "symbol:src/shared/gameplay-core-contracts.ts#gameplayFactsSchema",
         "symbol:src/shared/gameplay-core-contracts.ts#GameplaySource",
         "symbol:src/shared/gameplay-core-contracts.ts#gameplaySourceSchema",
-        "symbol:src/shared/gameplay-core-contracts.ts#getGameplayContentDefinition"
+        "symbol:src/shared/gameplay-core-contracts.ts#getGameplayContentDefinition",
+        "symbol:src/shared/gameplay-core-contracts.ts#WARDEN_DEFINITIONS"
       ],
       "testedBy": [
         "file:src/shared/gameplay-core.test.ts",
@@ -26526,7 +26529,7 @@
       "path": "src/shared/gameplay-core-simulation.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 77,
+      "lineCount": 81,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/gameplay-core-simulation.ts"
@@ -26539,7 +26542,7 @@
       "path": "src/shared/gameplay-core-simulation.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 171,
+      "lineCount": 177,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/gameplay-core-contracts.ts",
@@ -26561,7 +26564,7 @@
       "path": "src/shared/gameplay-core.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 242,
+      "lineCount": 287,
       "imports": [
         "file:src/shared/board-power-actions.ts",
         "file:src/shared/bonus-rewards.ts",
@@ -26580,13 +26583,14 @@
       "path": "src/shared/gameplay-core.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 255,
+      "lineCount": 298,
       "imports": [
         "file:src/shared/board-power-actions.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/gameplay-core-contracts.ts",
         "file:src/shared/run-inventory.ts",
-        "file:src/shared/run-number-guards.ts"
+        "file:src/shared/run-number-guards.ts",
+        "file:src/shared/session-stats-rules.ts"
       ],
       "exports": [
         "symbol:src/shared/gameplay-core.ts#GameplayCommandResult",
@@ -26605,7 +26609,7 @@
       "path": "src/shared/gameplay-interaction-graph-data.json",
       "layer": "shared",
       "role": "production",
-      "lineCount": 625,
+      "lineCount": 725,
       "imports": [],
       "exports": [],
       "testedBy": []
@@ -26615,7 +26619,7 @@
       "path": "src/shared/gameplay-interaction-graph.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 238,
+      "lineCount": 272,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/gameplay-core-contracts.ts",
@@ -30925,7 +30929,7 @@
       "path": "src/shared/tile-trait-rules.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 939,
+      "lineCount": 948,
       "imports": [
         "file:src/shared/board-generation.ts",
         "file:src/shared/contracts.ts",
@@ -30942,7 +30946,7 @@
       "path": "src/shared/tile-trait-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1091,
+      "lineCount": 1111,
       "imports": [
         "file:src/shared/bonus-rewards.ts",
         "file:src/shared/contracts.ts",
@@ -41842,8 +41846,8 @@
       "name": "claimBonusReward",
       "kind": "value",
       "file": "src/shared/bonus-rewards.ts",
-      "line": 893,
-      "endLine": 957
+      "line": 904,
+      "endLine": 968
     },
     {
       "id": "symbol:src/shared/bonus-rewards.ts#createBonusRewardLedger",
@@ -41858,8 +41862,8 @@
       "name": "getBonusRewardRows",
       "kind": "value",
       "file": "src/shared/bonus-rewards.ts",
-      "line": 959,
-      "endLine": 972
+      "line": 970,
+      "endLine": 983
     },
     {
       "id": "symbol:src/shared/bonus-rewards.ts#getPrimaryRewardPerkReadinessRow",
@@ -41906,8 +41910,8 @@
       "name": "previewBonusRewardClaim",
       "kind": "value",
       "file": "src/shared/bonus-rewards.ts",
-      "line": 844,
-      "endLine": 891
+      "line": 849,
+      "endLine": 902
     },
     {
       "id": "symbol:src/shared/bonus-rewards.ts#resolveBonusRewardRoomByInstanceId",
@@ -48426,8 +48430,8 @@
       "name": "applyRelicImmediateThroughGameplayCore",
       "kind": "value",
       "file": "src/shared/gameplay-core-adapters.ts",
-      "line": 20,
-      "endLine": 38
+      "line": 25,
+      "endLine": 44
     },
     {
       "id": "symbol:src/shared/gameplay-core-adapters.ts#GameplayRelicImmediateAdapterResult",
@@ -48442,24 +48446,32 @@
       "name": "CONDUIT_CARTOGRAPHER_DEFINITIONS",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 127,
-      "endLine": 184
+      "line": 145,
+      "endLine": 202
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayDefinitionCommand",
       "name": "createGameplayDefinitionCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 291,
-      "endLine": 308
+      "line": 404,
+      "endLine": 421
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayPeekCommand",
       "name": "createGameplayPeekCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 310,
-      "endLine": 316
+      "line": 423,
+      "endLine": 429
+    },
+    {
+      "id": "symbol:src/shared/gameplay-core-contracts.ts#GAMEPLAY_CONTENT_DEFINITIONS",
+      "name": "GAMEPLAY_CONTENT_DEFINITIONS",
+      "kind": "value",
+      "file": "src/shared/gameplay-core-contracts.ts",
+      "line": 282,
+      "endLine": 285
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GAMEPLAY_CORE_SCHEMA_VERSION",
@@ -48468,6 +48480,14 @@
       "file": "src/shared/gameplay-core-contracts.ts",
       "line": 5,
       "endLine": 5
+    },
+    {
+      "id": "symbol:src/shared/gameplay-core-contracts.ts#GAMEPLAY_RELIC_IDS",
+      "name": "GAMEPLAY_RELIC_IDS",
+      "kind": "value",
+      "file": "src/shared/gameplay-core-contracts.ts",
+      "line": 15,
+      "endLine": 17
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GAMEPLAY_REWARD_PERK_IDS",
@@ -48482,136 +48502,144 @@
       "name": "GAMEPLAY_RUN_STATUSES",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 27,
-      "endLine": 34
+      "line": 31,
+      "endLine": 38
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GAMEPLAY_TILE_TRAIT_KINDS",
       "name": "GAMEPLAY_TILE_TRAIT_KINDS",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 15,
-      "endLine": 25
+      "line": 19,
+      "endLine": 29
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GameplayCommand",
       "name": "GameplayCommand",
       "kind": "type",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 283,
-      "endLine": 283
+      "line": 396,
+      "endLine": 396
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#gameplayCommandSchema",
       "name": "gameplayCommandSchema",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 197,
-      "endLine": 214
+      "line": 298,
+      "endLine": 315
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GameplayCondition",
       "name": "GameplayCondition",
       "kind": "type",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 188,
-      "endLine": 188
+      "line": 289,
+      "endLine": 289
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#gameplayConditionSchema",
       "name": "gameplayConditionSchema",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 50,
-      "endLine": 82
+      "line": 54,
+      "endLine": 92
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GameplayContentDefinition",
       "name": "GameplayContentDefinition",
       "kind": "type",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 190,
-      "endLine": 190
+      "line": 291,
+      "endLine": 291
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#gameplayContentDefinitionSchema",
       "name": "gameplayContentDefinitionSchema",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 115,
-      "endLine": 125
+      "line": 133,
+      "endLine": 143
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GameplayEffect",
       "name": "GameplayEffect",
       "kind": "type",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 189,
-      "endLine": 189
+      "line": 290,
+      "endLine": 290
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#gameplayEffectSchema",
       "name": "gameplayEffectSchema",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 84,
-      "endLine": 113
+      "line": 94,
+      "endLine": 131
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GameplayEvent",
       "name": "GameplayEvent",
       "kind": "type",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 284,
-      "endLine": 284
+      "line": 397,
+      "endLine": 397
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#gameplayEventSchema",
       "name": "gameplayEventSchema",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 224,
-      "endLine": 281
+      "line": 325,
+      "endLine": 394
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GameplayFacts",
       "name": "GameplayFacts",
       "kind": "type",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 187,
-      "endLine": 187
+      "line": 288,
+      "endLine": 288
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#gameplayFactsSchema",
       "name": "gameplayFactsSchema",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 43,
-      "endLine": 48
+      "line": 47,
+      "endLine": 52
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GameplaySource",
       "name": "GameplaySource",
       "kind": "type",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 186,
-      "endLine": 186
+      "line": 287,
+      "endLine": 287
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#gameplaySourceSchema",
       "name": "gameplaySourceSchema",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 36,
-      "endLine": 41
+      "line": 40,
+      "endLine": 45
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#getGameplayContentDefinition",
       "name": "getGameplayContentDefinition",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 288,
-      "endLine": 289
+      "line": 401,
+      "endLine": 402
+    },
+    {
+      "id": "symbol:src/shared/gameplay-core-contracts.ts#WARDEN_DEFINITIONS",
+      "name": "WARDEN_DEFINITIONS",
+      "kind": "value",
+      "file": "src/shared/gameplay-core-contracts.ts",
+      "line": 204,
+      "endLine": 280
     },
     {
       "id": "symbol:src/shared/gameplay-core-simulation.ts#GameplayCoreSimulationOptions",
@@ -48634,40 +48662,40 @@
       "name": "runGameplayCoreSimulation",
       "kind": "value",
       "file": "src/shared/gameplay-core-simulation.ts",
-      "line": 119,
-      "endLine": 170
+      "line": 125,
+      "endLine": 176
     },
     {
       "id": "symbol:src/shared/gameplay-core.ts#GameplayCommandResult",
       "name": "GameplayCommandResult",
       "kind": "interface",
       "file": "src/shared/gameplay-core.ts",
-      "line": 23,
-      "endLine": 28
+      "line": 24,
+      "endLine": 29
     },
     {
       "id": "symbol:src/shared/gameplay-core.ts#GameplayReplayResult",
       "name": "GameplayReplayResult",
       "kind": "interface",
       "file": "src/shared/gameplay-core.ts",
-      "line": 30,
-      "endLine": 35
+      "line": 31,
+      "endLine": 36
     },
     {
       "id": "symbol:src/shared/gameplay-core.ts#reduceGameplayCommand",
       "name": "reduceGameplayCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core.ts",
-      "line": 217,
-      "endLine": 239
+      "line": 260,
+      "endLine": 282
     },
     {
       "id": "symbol:src/shared/gameplay-core.ts#replayGameplayCommands",
       "name": "replayGameplayCommands",
       "kind": "value",
       "file": "src/shared/gameplay-core.ts",
-      "line": 241,
-      "endLine": 254
+      "line": 284,
+      "endLine": 297
     },
     {
       "id": "symbol:src/shared/gameplay-interaction-graph.ts#auditGameplayInteractionGraph",
@@ -55946,16 +55974,16 @@
       "name": "calculateTileTraitMatchRewards",
       "kind": "value",
       "file": "src/shared/tile-trait-rules.ts",
-      "line": 1050,
-      "endLine": 1071
+      "line": 1070,
+      "endLine": 1091
     },
     {
       "id": "symbol:src/shared/tile-trait-rules.ts#calculateTileTraitMismatchPenalty",
       "name": "calculateTileTraitMismatchPenalty",
       "kind": "value",
       "file": "src/shared/tile-trait-rules.ts",
-      "line": 1073,
-      "endLine": 1090
+      "line": 1093,
+      "endLine": 1110
     },
     {
       "id": "symbol:src/shared/tile-trait-rules.ts#countTraitComboOpportunityPairs",
@@ -56051,7 +56079,7 @@
       "kind": "value",
       "file": "src/shared/tile-trait-rules.ts",
       "line": 838,
-      "endLine": 1048
+      "endLine": 1068
     },
     {
       "id": "symbol:src/shared/tile-trait-rules.ts#TILE_TRAIT_COPY",
@@ -57685,6 +57713,51 @@
       ]
     },
     {
+      "id": "mechanic:build.guard_tank",
+      "mechanicId": "build.guard_tank",
+      "label": "The Warden Build",
+      "kind": "build",
+      "role": "guard_absorption_build",
+      "evidence": [
+        {
+          "path": "src/shared/gameplay-core-contracts.ts",
+          "line": 137
+        },
+        {
+          "path": "src/shared/relics.ts",
+          "line": 24
+        },
+        {
+          "path": "src/shared/tile-trait-rules.ts",
+          "line": 1030
+        }
+      ],
+      "tests": [
+        {
+          "path": "src/shared/gameplay-core.test.ts",
+          "line": 8
+        },
+        {
+          "path": "src/shared/tile-trait-rules.test.ts",
+          "line": 2
+        },
+        {
+          "path": "src/shared/relics.test.ts",
+          "line": 11
+        }
+      ],
+      "enables": [
+        "inventory.guard_token",
+        "safety.guard_absorption"
+      ],
+      "blocks": [],
+      "softlockGuards": [
+        "guard-cap",
+        "overflow-score",
+        "complete-source-effect-consequence-loop"
+      ]
+    },
+    {
       "id": "mechanic:core.gameplay_commands",
       "mechanicId": "core.gameplay_commands",
       "label": "Deterministic Gameplay Command Core",
@@ -57740,6 +57813,7 @@
       ],
       "enables": [
         "build.conduit_cartographer",
+        "build.guard_tank",
         "persistence.run_summary",
         "simulation.gameplay_replay"
       ],
@@ -57918,6 +57992,58 @@
       "softlockGuards": [
         "final-pair-hazard-clear",
         "all-real-pairs-cleared-clear"
+      ]
+    },
+    {
+      "id": "mechanic:inventory.guard_token",
+      "mechanicId": "inventory.guard_token",
+      "label": "Guard Token Inventory",
+      "kind": "inventory",
+      "role": "bounded_damage_buffer",
+      "evidence": [
+        {
+          "path": "src/shared/run-inventory.ts",
+          "line": 4
+        },
+        {
+          "path": "src/shared/gameplay-core.ts",
+          "line": 17
+        },
+        {
+          "path": "src/shared/turn-mismatch-rules.ts",
+          "line": 19
+        },
+        {
+          "path": "src/shared/dungeon-enemy-hazard-rules.ts",
+          "line": 26
+        }
+      ],
+      "tests": [
+        {
+          "path": "src/shared/run-inventory.test.ts",
+          "line": 5
+        },
+        {
+          "path": "src/shared/turn-mismatch-rules.test.ts",
+          "line": 30
+        },
+        {
+          "path": "src/shared/dungeon-enemy-hazard-rules.test.ts",
+          "line": 20
+        },
+        {
+          "path": "src/shared/gameplay-core.test.ts",
+          "line": 54
+        }
+      ],
+      "enables": [
+        "safety.guard_absorption"
+      ],
+      "blocks": [],
+      "softlockGuards": [
+        "non-negative-counter",
+        "two-token-cap",
+        "guard-before-life"
       ]
     },
     {
@@ -58457,6 +58583,55 @@
       ]
     },
     {
+      "id": "mechanic:relic.guard_token_plus_one",
+      "mechanicId": "relic.guard_token_plus_one",
+      "label": "Warden Sigil Relic",
+      "kind": "relic",
+      "role": "guard_source_and_mirror_modifier",
+      "evidence": [
+        {
+          "path": "src/shared/relics.ts",
+          "line": 2
+        },
+        {
+          "path": "src/shared/gameplay-core-adapters.ts",
+          "line": 1
+        },
+        {
+          "path": "src/shared/gameplay-core-contracts.ts",
+          "line": 2
+        },
+        {
+          "path": "src/shared/tile-trait-rules.ts",
+          "line": 6
+        }
+      ],
+      "tests": [
+        {
+          "path": "src/shared/relic-immediate-rules.test.ts",
+          "line": 6
+        },
+        {
+          "path": "src/shared/tile-trait-rules.test.ts",
+          "line": 3
+        },
+        {
+          "path": "src/shared/gameplay-core.test.ts",
+          "line": 8
+        }
+      ],
+      "enables": [
+        "inventory.guard_token",
+        "build.guard_tank"
+      ],
+      "blocks": [],
+      "softlockGuards": [
+        "draft-eligibility",
+        "guard-cap",
+        "overflow-score"
+      ]
+    },
+    {
       "id": "mechanic:relic.peek_charge_plus_one",
       "mechanicId": "relic.peek_charge_plus_one",
       "label": "Peek Charge Relic",
@@ -58473,7 +58648,7 @@
         },
         {
           "path": "src/shared/gameplay-core-contracts.ts",
-          "line": 38
+          "line": 2
         }
       ],
       "tests": [
@@ -58540,6 +58715,47 @@
         "reward-eligibility",
         "anti-grind-ledger",
         "schema-validation"
+      ]
+    },
+    {
+      "id": "mechanic:reward.hazard_ward",
+      "mechanicId": "reward.hazard_ward",
+      "label": "Hazard Ward Reward",
+      "kind": "reward",
+      "role": "defensive_build_choice",
+      "evidence": [
+        {
+          "path": "src/shared/bonus-rewards.ts",
+          "line": 2
+        },
+        {
+          "path": "src/shared/gameplay-core-contracts.ts",
+          "line": 2
+        },
+        {
+          "path": "src/shared/gameplay-core.ts",
+          "line": 2
+        }
+      ],
+      "tests": [
+        {
+          "path": "src/shared/bonus-rewards.test.ts",
+          "line": 3
+        },
+        {
+          "path": "src/shared/gameplay-core.test.ts",
+          "line": 3
+        }
+      ],
+      "enables": [
+        "inventory.guard_token",
+        "build.guard_tank"
+      ],
+      "blocks": [],
+      "softlockGuards": [
+        "reward-eligibility",
+        "anti-grind-ledger",
+        "inventory-cap"
       ]
     },
     {
@@ -58676,6 +58892,62 @@
         "boss-route-present",
         "completion-route-present",
         "route-target-board-audit"
+      ]
+    },
+    {
+      "id": "mechanic:safety.guard_absorption",
+      "mechanicId": "safety.guard_absorption",
+      "label": "Guard Damage Absorption",
+      "kind": "safety",
+      "role": "resource_consequence",
+      "evidence": [
+        {
+          "path": "src/shared/turn-mismatch-rules.ts",
+          "line": 19
+        },
+        {
+          "path": "src/shared/dungeon-enemy-card-rules.ts",
+          "line": 3
+        },
+        {
+          "path": "src/shared/dungeon-enemy-hazard-rules.ts",
+          "line": 26
+        },
+        {
+          "path": "src/shared/dungeon-trap-rules.ts",
+          "line": 3
+        },
+        {
+          "path": "src/shared/dungeon-board-status.ts",
+          "line": 25
+        }
+      ],
+      "tests": [
+        {
+          "path": "src/shared/turn-mismatch-rules.test.ts",
+          "line": 30
+        },
+        {
+          "path": "src/shared/dungeon-enemy-card-rules.test.ts",
+          "line": 9
+        },
+        {
+          "path": "src/shared/dungeon-enemy-hazard-rules.test.ts",
+          "line": 11
+        },
+        {
+          "path": "src/shared/dungeon-trap-rules.test.ts",
+          "line": 93
+        }
+      ],
+      "enables": [
+        "safety.softlock_fairness"
+      ],
+      "blocks": [],
+      "softlockGuards": [
+        "guard-spent-before-life",
+        "damage-floor",
+        "combat-forecast"
       ]
     },
     {
@@ -58867,7 +59139,7 @@
         },
         {
           "path": "src/shared/gameplay-core-simulation.ts",
-          "line": 4
+          "line": 3
         },
         {
           "path": "scripts/sim-gameplay-core.ts",
@@ -59309,6 +59581,47 @@
         "volatile-can-be-buffered",
         "no-completion-block"
       ]
+    },
+    {
+      "id": "mechanic:trait.volatile_heavy_guard",
+      "mechanicId": "trait.volatile_heavy_guard",
+      "label": "Volatile Heavy Guard Spark",
+      "kind": "perk",
+      "role": "conditional_guard_synergy",
+      "evidence": [
+        {
+          "path": "src/shared/tile-trait-rules.ts",
+          "line": 3
+        },
+        {
+          "path": "src/shared/gameplay-core-contracts.ts",
+          "line": 16
+        },
+        {
+          "path": "src/shared/gameplay-core.ts",
+          "line": 21
+        }
+      ],
+      "tests": [
+        {
+          "path": "src/shared/tile-trait-rules.test.ts",
+          "line": 8
+        },
+        {
+          "path": "src/shared/gameplay-core.test.ts",
+          "line": 54
+        }
+      ],
+      "enables": [
+        "inventory.guard_token",
+        "build.guard_tank"
+      ],
+      "blocks": [],
+      "softlockGuards": [
+        "matched-volatile",
+        "adjacent-heavy",
+        "guard-cap"
+      ]
     }
   ],
   "states": [
@@ -59326,11 +59639,13 @@
       "id": "state:adjacentTraits",
       "name": "adjacentTraits",
       "readBy": [
+        "mechanic:build.guard_tank",
         "mechanic:core.gameplay_commands",
         "mechanic:perk.echo_conduit_double",
         "mechanic:trait.conduit",
         "mechanic:trait.heavy",
-        "mechanic:trait.mirror"
+        "mechanic:trait.mirror",
+        "mechanic:trait.volatile_heavy_guard"
       ],
       "writtenBy": []
     },
@@ -59347,7 +59662,8 @@
       "id": "state:bonusRewardLedger",
       "name": "bonusRewardLedger",
       "readBy": [
-        "mechanic:reward.echo_conduit_lens"
+        "mechanic:reward.echo_conduit_lens",
+        "mechanic:reward.hazard_ward"
       ],
       "writtenBy": []
     },
@@ -59366,7 +59682,8 @@
       "name": "buildPlan",
       "readBy": [],
       "writtenBy": [
-        "mechanic:build.conduit_cartographer"
+        "mechanic:build.conduit_cartographer",
+        "mechanic:build.guard_tank"
       ]
     },
     {
@@ -59413,6 +59730,17 @@
         "mechanic:power.destroy_pair"
       ],
       "writtenBy": []
+    },
+    {
+      "id": "state:destroyPairCharges",
+      "name": "destroyPairCharges",
+      "readBy": [
+        "mechanic:feedback.gameplay_hud"
+      ],
+      "writtenBy": [
+        "mechanic:core.gameplay_commands",
+        "mechanic:reward.hazard_ward"
+      ]
     },
     {
       "id": "state:dungeonBossId",
@@ -59562,6 +59890,7 @@
         "mechanic:hazard.enemy_patrol",
         "mechanic:objective.defeat_boss",
         "mechanic:safety.dungeon_topology",
+        "mechanic:safety.guard_absorption",
         "mechanic:safety.softlock_fairness"
       ],
       "writtenBy": [
@@ -59615,8 +59944,12 @@
         "mechanic:feedback.gameplay_hud",
         "mechanic:perk.echo_conduit_double",
         "mechanic:power.peek",
+        "mechanic:relic.guard_token_plus_one",
         "mechanic:relic.peek_charge_plus_one",
-        "mechanic:reward.echo_conduit_lens"
+        "mechanic:reward.echo_conduit_lens",
+        "mechanic:reward.hazard_ward",
+        "mechanic:safety.guard_absorption",
+        "mechanic:trait.volatile_heavy_guard"
       ]
     },
     {
@@ -59694,12 +60027,25 @@
       "id": "state:guardTokens",
       "name": "guardTokens",
       "readBy": [
-        "mechanic:trait.volatile"
+        "mechanic:build.guard_tank",
+        "mechanic:core.gameplay_commands",
+        "mechanic:feedback.gameplay_hud",
+        "mechanic:inventory.guard_token",
+        "mechanic:relic.guard_token_plus_one",
+        "mechanic:safety.guard_absorption",
+        "mechanic:trait.volatile",
+        "mechanic:trait.volatile_heavy_guard"
       ],
       "writtenBy": [
+        "mechanic:core.gameplay_commands",
+        "mechanic:inventory.guard_token",
+        "mechanic:relic.guard_token_plus_one",
+        "mechanic:reward.hazard_ward",
+        "mechanic:safety.guard_absorption",
         "mechanic:trait.heavy",
         "mechanic:trait.mirror",
-        "mechanic:trait.stasis"
+        "mechanic:trait.stasis",
+        "mechanic:trait.volatile_heavy_guard"
       ]
     },
     {
@@ -59719,7 +60065,8 @@
         "mechanic:trait.mirror",
         "mechanic:trait.sealed",
         "mechanic:trait.stasis",
-        "mechanic:trait.volatile"
+        "mechanic:trait.volatile",
+        "mechanic:trait.volatile_heavy_guard"
       ]
     },
     {
@@ -59748,10 +60095,13 @@
       "id": "state:lives",
       "name": "lives",
       "readBy": [
-        "mechanic:feedback.gameplay_hud"
+        "mechanic:build.guard_tank",
+        "mechanic:feedback.gameplay_hud",
+        "mechanic:safety.guard_absorption"
       ],
       "writtenBy": [
-        "mechanic:hazard.enemy_patrol"
+        "mechanic:hazard.enemy_patrol",
+        "mechanic:safety.guard_absorption"
       ]
     },
     {
@@ -59897,9 +60247,13 @@
       "name": "relicIds",
       "readBy": [
         "mechanic:build.conduit_cartographer",
+        "mechanic:build.guard_tank",
+        "mechanic:core.gameplay_commands",
+        "mechanic:relic.guard_token_plus_one",
         "mechanic:trait.volatile"
       ],
       "writtenBy": [
+        "mechanic:relic.guard_token_plus_one",
         "mechanic:relic.peek_charge_plus_one"
       ]
     },
@@ -59909,6 +60263,7 @@
       "readBy": [
         "mechanic:feedback.gameplay_hud",
         "mechanic:progression.run_flow",
+        "mechanic:relic.guard_token_plus_one",
         "mechanic:relic.peek_charge_plus_one"
       ],
       "writtenBy": [
@@ -59981,6 +60336,9 @@
         "mechanic:economy.score_and_rewards"
       ],
       "writtenBy": [
+        "mechanic:core.gameplay_commands",
+        "mechanic:relic.guard_token_plus_one",
+        "mechanic:reward.hazard_ward",
         "mechanic:room.locked_cache",
         "mechanic:trait.conduit",
         "mechanic:trait.heavy",
@@ -60082,8 +60440,10 @@
       "id": "state:tileTraitKind",
       "name": "tileTraitKind",
       "readBy": [
+        "mechanic:build.guard_tank",
         "mechanic:core.gameplay_commands",
         "mechanic:perk.echo_conduit_double",
+        "mechanic:relic.guard_token_plus_one",
         "mechanic:safety.softlock_fairness",
         "mechanic:shop.trait_cleanse",
         "mechanic:shop.trait_routing_kit",
@@ -60095,7 +60455,8 @@
         "mechanic:trait.mirror",
         "mechanic:trait.sealed",
         "mechanic:trait.stasis",
-        "mechanic:trait.volatile"
+        "mechanic:trait.volatile",
+        "mechanic:trait.volatile_heavy_guard"
       ],
       "writtenBy": [
         "mechanic:shop.trait_cleanse"
@@ -60151,6 +60512,13 @@
       "label": "conditional payoff"
     },
     {
+      "id": "belongs_to:mechanic:relic.guard_token_plus_one->mechanic:build.guard_tank:Warden Sigil build source",
+      "source": "mechanic:relic.guard_token_plus_one",
+      "target": "mechanic:build.guard_tank",
+      "kind": "belongs_to",
+      "label": "Warden Sigil build source"
+    },
+    {
       "id": "belongs_to:mechanic:relic.peek_charge_plus_one->mechanic:build.conduit_cartographer:supports build",
       "source": "mechanic:relic.peek_charge_plus_one",
       "target": "mechanic:build.conduit_cartographer",
@@ -60163,6 +60531,20 @@
       "target": "mechanic:build.conduit_cartographer",
       "kind": "belongs_to",
       "label": "activates build"
+    },
+    {
+      "id": "belongs_to:mechanic:reward.hazard_ward->mechanic:build.guard_tank:activates Warden resources",
+      "source": "mechanic:reward.hazard_ward",
+      "target": "mechanic:build.guard_tank",
+      "kind": "belongs_to",
+      "label": "activates Warden resources"
+    },
+    {
+      "id": "belongs_to:mechanic:trait.volatile_heavy_guard->mechanic:build.guard_tank:trait guard source",
+      "source": "mechanic:trait.volatile_heavy_guard",
+      "target": "mechanic:build.guard_tank",
+      "kind": "belongs_to",
+      "label": "trait guard source"
     },
     {
       "id": "blocks:mechanic:lock.iron_key->mechanic:exit.primary:requires key",
@@ -60186,6 +60568,13 @@
       "label": "converts information into route choice"
     },
     {
+      "id": "consequence:mechanic:build.guard_tank->mechanic:safety.guard_absorption:converts guard sources into survivability",
+      "source": "mechanic:build.guard_tank",
+      "target": "mechanic:safety.guard_absorption",
+      "kind": "consequence",
+      "label": "converts guard sources into survivability"
+    },
+    {
       "id": "consequence:mechanic:power.peek->mechanic:route.mystery:reveals route information",
       "source": "mechanic:power.peek",
       "target": "mechanic:route.mystery",
@@ -60198,6 +60587,13 @@
       "target": "mechanic:inventory.peek_charge",
       "kind": "consumes",
       "label": "spends one charge"
+    },
+    {
+      "id": "consumes:mechanic:safety.guard_absorption->mechanic:inventory.guard_token:spends guard before life",
+      "source": "mechanic:safety.guard_absorption",
+      "target": "mechanic:inventory.guard_token",
+      "kind": "consumes",
+      "label": "spends guard before life"
     },
     {
       "id": "counterplay:mechanic:power.destroy_pair->mechanic:objective.floor_clear:removes pair safely",
@@ -60219,6 +60615,13 @@
       "target": "mechanic:trait.conduit",
       "kind": "counterplay",
       "label": "sets adjacency"
+    },
+    {
+      "id": "counterplay:mechanic:safety.guard_absorption->mechanic:hazard.enemy_patrol:absorbs patrol contact",
+      "source": "mechanic:safety.guard_absorption",
+      "target": "mechanic:hazard.enemy_patrol",
+      "kind": "counterplay",
+      "label": "absorbs patrol contact"
     },
     {
       "id": "counterplay:mechanic:shop.trait_cleanse->mechanic:trait.cursed:softens danger",
@@ -60625,6 +61028,13 @@
       "kind": "displays"
     },
     {
+      "id": "displays:mechanic:inventory.guard_token->mechanic:feedback.gameplay_hud:shows current guard balance",
+      "source": "mechanic:inventory.guard_token",
+      "target": "mechanic:feedback.gameplay_hud",
+      "kind": "displays",
+      "label": "shows current guard balance"
+    },
+    {
       "id": "displays:mechanic:inventory.peek_charge->mechanic:feedback.gameplay_hud:shows current charge balance",
       "source": "mechanic:inventory.peek_charge",
       "target": "mechanic:feedback.gameplay_hud",
@@ -60646,6 +61056,13 @@
       "label": "shows target and balance"
     },
     {
+      "id": "displays:mechanic:relic.guard_token_plus_one->mechanic:feedback.gameplay_hud:shows guard or overflow cause",
+      "source": "mechanic:relic.guard_token_plus_one",
+      "target": "mechanic:feedback.gameplay_hud",
+      "kind": "displays",
+      "label": "shows guard or overflow cause"
+    },
+    {
       "id": "displays:mechanic:relic.peek_charge_plus_one->mechanic:feedback.gameplay_hud:shows relic resource gain",
       "source": "mechanic:relic.peek_charge_plus_one",
       "target": "mechanic:feedback.gameplay_hud",
@@ -60658,6 +61075,20 @@
       "target": "mechanic:feedback.gameplay_hud",
       "kind": "displays",
       "label": "shows claimed perk and charge"
+    },
+    {
+      "id": "displays:mechanic:reward.hazard_ward->mechanic:feedback.gameplay_hud:shows guard and destroy gain",
+      "source": "mechanic:reward.hazard_ward",
+      "target": "mechanic:feedback.gameplay_hud",
+      "kind": "displays",
+      "label": "shows guard and destroy gain"
+    },
+    {
+      "id": "displays:mechanic:safety.guard_absorption->mechanic:feedback.gameplay_hud:forecasts guard before life",
+      "source": "mechanic:safety.guard_absorption",
+      "target": "mechanic:feedback.gameplay_hud",
+      "kind": "displays",
+      "label": "forecasts guard before life"
     },
     {
       "id": "displays:mechanic:trait.conduit->file:src/renderer/components/GameplayHudBar.tsx",
@@ -60708,6 +61139,13 @@
       "kind": "displays"
     },
     {
+      "id": "displays:mechanic:trait.volatile_heavy_guard->mechanic:feedback.gameplay_hud:shows guard spark cause",
+      "source": "mechanic:trait.volatile_heavy_guard",
+      "target": "mechanic:feedback.gameplay_hud",
+      "kind": "displays",
+      "label": "shows guard spark cause"
+    },
+    {
       "id": "displays:mechanic:trait.volatile->file:src/renderer/components/GameplayHudBar.tsx",
       "source": "mechanic:trait.volatile",
       "target": "file:src/renderer/components/GameplayHudBar.tsx",
@@ -60747,6 +61185,13 @@
       "target": "mechanic:feedback.gameplay_hud",
       "kind": "enables",
       "label": "shows patrol pressure"
+    },
+    {
+      "id": "enables:mechanic:inventory.guard_token->mechanic:safety.guard_absorption:buffers the next damage source",
+      "source": "mechanic:inventory.guard_token",
+      "target": "mechanic:safety.guard_absorption",
+      "kind": "enables",
+      "label": "buffers the next damage source"
     },
     {
       "id": "enables:mechanic:inventory.peek_charge->mechanic:power.peek:funds information action",
@@ -73465,9 +73910,21 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/gameplay-core-contracts.ts->symbol:src/shared/gameplay-core-contracts.ts#GAMEPLAY_CONTENT_DEFINITIONS",
+      "source": "file:src/shared/gameplay-core-contracts.ts",
+      "target": "symbol:src/shared/gameplay-core-contracts.ts#GAMEPLAY_CONTENT_DEFINITIONS",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/gameplay-core-contracts.ts->symbol:src/shared/gameplay-core-contracts.ts#GAMEPLAY_CORE_SCHEMA_VERSION",
       "source": "file:src/shared/gameplay-core-contracts.ts",
       "target": "symbol:src/shared/gameplay-core-contracts.ts#GAMEPLAY_CORE_SCHEMA_VERSION",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/gameplay-core-contracts.ts->symbol:src/shared/gameplay-core-contracts.ts#GAMEPLAY_RELIC_IDS",
+      "source": "file:src/shared/gameplay-core-contracts.ts",
+      "target": "symbol:src/shared/gameplay-core-contracts.ts#GAMEPLAY_RELIC_IDS",
       "kind": "exports"
     },
     {
@@ -73576,6 +74033,12 @@
       "id": "exports:src/shared/gameplay-core-contracts.ts->symbol:src/shared/gameplay-core-contracts.ts#getGameplayContentDefinition",
       "source": "file:src/shared/gameplay-core-contracts.ts",
       "target": "symbol:src/shared/gameplay-core-contracts.ts#getGameplayContentDefinition",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/gameplay-core-contracts.ts->symbol:src/shared/gameplay-core-contracts.ts#WARDEN_DEFINITIONS",
+      "source": "file:src/shared/gameplay-core-contracts.ts",
+      "target": "symbol:src/shared/gameplay-core-contracts.ts#WARDEN_DEFINITIONS",
       "kind": "exports"
     },
     {
@@ -79820,11 +80283,25 @@
       "label": "adjacency condition"
     },
     {
+      "id": "gates:mechanic:trait.heavy->mechanic:trait.volatile_heavy_guard:adjacent Heavy condition",
+      "source": "mechanic:trait.heavy",
+      "target": "mechanic:trait.volatile_heavy_guard",
+      "kind": "gates",
+      "label": "adjacent Heavy condition"
+    },
+    {
       "id": "grants:mechanic:perk.echo_conduit_double->mechanic:inventory.peek_charge:creates extra charge",
       "source": "mechanic:perk.echo_conduit_double",
       "target": "mechanic:inventory.peek_charge",
       "kind": "grants",
       "label": "creates extra charge"
+    },
+    {
+      "id": "grants:mechanic:relic.guard_token_plus_one->mechanic:inventory.guard_token:grants guard or overflow score",
+      "source": "mechanic:relic.guard_token_plus_one",
+      "target": "mechanic:inventory.guard_token",
+      "kind": "grants",
+      "label": "grants guard or overflow score"
     },
     {
       "id": "grants:mechanic:relic.peek_charge_plus_one->mechanic:inventory.peek_charge:grants one charge",
@@ -79846,6 +80323,20 @@
       "target": "mechanic:perk.echo_conduit_double",
       "kind": "grants",
       "label": "unlocks perk"
+    },
+    {
+      "id": "grants:mechanic:reward.hazard_ward->mechanic:inventory.guard_token:grants one guard token",
+      "source": "mechanic:reward.hazard_ward",
+      "target": "mechanic:inventory.guard_token",
+      "kind": "grants",
+      "label": "grants one guard token"
+    },
+    {
+      "id": "grants:mechanic:trait.volatile_heavy_guard->mechanic:inventory.guard_token:creates guard token",
+      "source": "mechanic:trait.volatile_heavy_guard",
+      "target": "mechanic:inventory.guard_token",
+      "kind": "grants",
+      "label": "creates guard token"
     },
     {
       "id": "guarded_by:mechanic:board.cleanup->mechanic:safety.softlock_fairness:sanitizes state",
@@ -80006,6 +80497,24 @@
       "kind": "implemented_by"
     },
     {
+      "id": "implemented_by:mechanic:build.guard_tank->file:src/shared/gameplay-core-contracts.ts",
+      "source": "mechanic:build.guard_tank",
+      "target": "file:src/shared/gameplay-core-contracts.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:build.guard_tank->file:src/shared/relics.ts",
+      "source": "mechanic:build.guard_tank",
+      "target": "file:src/shared/relics.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:build.guard_tank->file:src/shared/tile-trait-rules.ts",
+      "source": "mechanic:build.guard_tank",
+      "target": "file:src/shared/tile-trait-rules.ts",
+      "kind": "implemented_by"
+    },
+    {
       "id": "implemented_by:mechanic:core.gameplay_commands->file:.ai/GAMEPLAY_MIGRATION.md",
       "source": "mechanic:core.gameplay_commands",
       "target": "file:.ai/GAMEPLAY_MIGRATION.md",
@@ -80105,6 +80614,30 @@
       "id": "implemented_by:mechanic:hazard.enemy_patrol->file:src/shared/enemy-hazard-board-rules.ts",
       "source": "mechanic:hazard.enemy_patrol",
       "target": "file:src/shared/enemy-hazard-board-rules.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:inventory.guard_token->file:src/shared/dungeon-enemy-hazard-rules.ts",
+      "source": "mechanic:inventory.guard_token",
+      "target": "file:src/shared/dungeon-enemy-hazard-rules.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:inventory.guard_token->file:src/shared/gameplay-core.ts",
+      "source": "mechanic:inventory.guard_token",
+      "target": "file:src/shared/gameplay-core.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:inventory.guard_token->file:src/shared/run-inventory.ts",
+      "source": "mechanic:inventory.guard_token",
+      "target": "file:src/shared/run-inventory.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:inventory.guard_token->file:src/shared/turn-mismatch-rules.ts",
+      "source": "mechanic:inventory.guard_token",
+      "target": "file:src/shared/turn-mismatch-rules.ts",
       "kind": "implemented_by"
     },
     {
@@ -80330,6 +80863,30 @@
       "kind": "implemented_by"
     },
     {
+      "id": "implemented_by:mechanic:relic.guard_token_plus_one->file:src/shared/gameplay-core-adapters.ts",
+      "source": "mechanic:relic.guard_token_plus_one",
+      "target": "file:src/shared/gameplay-core-adapters.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:relic.guard_token_plus_one->file:src/shared/gameplay-core-contracts.ts",
+      "source": "mechanic:relic.guard_token_plus_one",
+      "target": "file:src/shared/gameplay-core-contracts.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:relic.guard_token_plus_one->file:src/shared/relics.ts",
+      "source": "mechanic:relic.guard_token_plus_one",
+      "target": "file:src/shared/relics.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:relic.guard_token_plus_one->file:src/shared/tile-trait-rules.ts",
+      "source": "mechanic:relic.guard_token_plus_one",
+      "target": "file:src/shared/tile-trait-rules.ts",
+      "kind": "implemented_by"
+    },
+    {
       "id": "implemented_by:mechanic:relic.peek_charge_plus_one->file:src/shared/gameplay-core-contracts.ts",
       "source": "mechanic:relic.peek_charge_plus_one",
       "target": "file:src/shared/gameplay-core-contracts.ts",
@@ -80362,6 +80919,24 @@
     {
       "id": "implemented_by:mechanic:reward.echo_conduit_lens->file:src/shared/gameplay-core.ts",
       "source": "mechanic:reward.echo_conduit_lens",
+      "target": "file:src/shared/gameplay-core.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:reward.hazard_ward->file:src/shared/bonus-rewards.ts",
+      "source": "mechanic:reward.hazard_ward",
+      "target": "file:src/shared/bonus-rewards.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:reward.hazard_ward->file:src/shared/gameplay-core-contracts.ts",
+      "source": "mechanic:reward.hazard_ward",
+      "target": "file:src/shared/gameplay-core-contracts.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:reward.hazard_ward->file:src/shared/gameplay-core.ts",
+      "source": "mechanic:reward.hazard_ward",
       "target": "file:src/shared/gameplay-core.ts",
       "kind": "implemented_by"
     },
@@ -80417,6 +80992,36 @@
       "id": "implemented_by:mechanic:safety.dungeon_topology->file:src/shared/run-map.ts",
       "source": "mechanic:safety.dungeon_topology",
       "target": "file:src/shared/run-map.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:safety.guard_absorption->file:src/shared/dungeon-board-status.ts",
+      "source": "mechanic:safety.guard_absorption",
+      "target": "file:src/shared/dungeon-board-status.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:safety.guard_absorption->file:src/shared/dungeon-enemy-card-rules.ts",
+      "source": "mechanic:safety.guard_absorption",
+      "target": "file:src/shared/dungeon-enemy-card-rules.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:safety.guard_absorption->file:src/shared/dungeon-enemy-hazard-rules.ts",
+      "source": "mechanic:safety.guard_absorption",
+      "target": "file:src/shared/dungeon-enemy-hazard-rules.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:safety.guard_absorption->file:src/shared/dungeon-trap-rules.ts",
+      "source": "mechanic:safety.guard_absorption",
+      "target": "file:src/shared/dungeon-trap-rules.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:safety.guard_absorption->file:src/shared/turn-mismatch-rules.ts",
+      "source": "mechanic:safety.guard_absorption",
+      "target": "file:src/shared/turn-mismatch-rules.ts",
       "kind": "implemented_by"
     },
     {
@@ -80633,6 +81238,24 @@
       "id": "implemented_by:mechanic:trait.stasis->file:src/shared/trait-build-rewards.ts",
       "source": "mechanic:trait.stasis",
       "target": "file:src/shared/trait-build-rewards.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:trait.volatile_heavy_guard->file:src/shared/gameplay-core-contracts.ts",
+      "source": "mechanic:trait.volatile_heavy_guard",
+      "target": "file:src/shared/gameplay-core-contracts.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:trait.volatile_heavy_guard->file:src/shared/gameplay-core.ts",
+      "source": "mechanic:trait.volatile_heavy_guard",
+      "target": "file:src/shared/gameplay-core.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:trait.volatile_heavy_guard->file:src/shared/tile-trait-rules.ts",
+      "source": "mechanic:trait.volatile_heavy_guard",
+      "target": "file:src/shared/tile-trait-rules.ts",
       "kind": "implemented_by"
     },
     {
@@ -92810,6 +93433,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/gameplay-core.ts->src/shared/session-stats-rules.ts",
+      "source": "file:src/shared/gameplay-core.ts",
+      "target": "file:src/shared/session-stats-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/gameplay-interaction-graph.test.ts->src/shared/contracts.ts",
       "source": "file:src/shared/gameplay-interaction-graph.test.ts",
       "target": "file:src/shared/contracts.ts",
@@ -97712,6 +98341,13 @@
       "kind": "imports"
     },
     {
+      "id": "modifies:mechanic:core.gameplay_commands->mechanic:inventory.guard_token:applies capped guard effects",
+      "source": "mechanic:core.gameplay_commands",
+      "target": "mechanic:inventory.guard_token",
+      "kind": "modifies",
+      "label": "applies capped guard effects"
+    },
+    {
       "id": "modifies:mechanic:route.mystery->mechanic:progression.run_flow:changes next decision",
       "source": "mechanic:route.mystery",
       "target": "mechanic:progression.run_flow",
@@ -97852,6 +98488,36 @@
       "kind": "reads"
     },
     {
+      "id": "reads:mechanic:build.guard_tank->state:adjacentTraits",
+      "source": "mechanic:build.guard_tank",
+      "target": "state:adjacentTraits",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:build.guard_tank->state:guardTokens",
+      "source": "mechanic:build.guard_tank",
+      "target": "state:guardTokens",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:build.guard_tank->state:lives",
+      "source": "mechanic:build.guard_tank",
+      "target": "state:lives",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:build.guard_tank->state:relicIds",
+      "source": "mechanic:build.guard_tank",
+      "target": "state:relicIds",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:build.guard_tank->state:tileTraitKind",
+      "source": "mechanic:build.guard_tank",
+      "target": "state:tileTraitKind",
+      "kind": "reads"
+    },
+    {
       "id": "reads:mechanic:core.gameplay_commands->state:adjacentTraits",
       "source": "mechanic:core.gameplay_commands",
       "target": "state:adjacentTraits",
@@ -97864,9 +98530,21 @@
       "kind": "reads"
     },
     {
+      "id": "reads:mechanic:core.gameplay_commands->state:guardTokens",
+      "source": "mechanic:core.gameplay_commands",
+      "target": "state:guardTokens",
+      "kind": "reads"
+    },
+    {
       "id": "reads:mechanic:core.gameplay_commands->state:peekCharges",
       "source": "mechanic:core.gameplay_commands",
       "target": "state:peekCharges",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:core.gameplay_commands->state:relicIds",
+      "source": "mechanic:core.gameplay_commands",
+      "target": "state:relicIds",
       "kind": "reads"
     },
     {
@@ -97966,6 +98644,12 @@
       "kind": "reads"
     },
     {
+      "id": "reads:mechanic:feedback.gameplay_hud->state:destroyPairCharges",
+      "source": "mechanic:feedback.gameplay_hud",
+      "target": "state:destroyPairCharges",
+      "kind": "reads"
+    },
+    {
       "id": "reads:mechanic:feedback.gameplay_hud->state:dungeonEnemiesDefeatedThisFloor",
       "source": "mechanic:feedback.gameplay_hud",
       "target": "state:dungeonEnemiesDefeatedThisFloor",
@@ -97981,6 +98665,12 @@
       "id": "reads:mechanic:feedback.gameplay_hud->state:feedbackLines",
       "source": "mechanic:feedback.gameplay_hud",
       "target": "state:feedbackLines",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:feedback.gameplay_hud->state:guardTokens",
+      "source": "mechanic:feedback.gameplay_hud",
+      "target": "state:guardTokens",
       "kind": "reads"
     },
     {
@@ -98059,6 +98749,12 @@
       "id": "reads:mechanic:hazard.enemy_patrol->state:tileStates",
       "source": "mechanic:hazard.enemy_patrol",
       "target": "state:tileStates",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:inventory.guard_token->state:guardTokens",
+      "source": "mechanic:inventory.guard_token",
+      "target": "state:guardTokens",
       "kind": "reads"
     },
     {
@@ -98296,6 +98992,30 @@
       "kind": "reads"
     },
     {
+      "id": "reads:mechanic:relic.guard_token_plus_one->state:guardTokens",
+      "source": "mechanic:relic.guard_token_plus_one",
+      "target": "state:guardTokens",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:relic.guard_token_plus_one->state:relicIds",
+      "source": "mechanic:relic.guard_token_plus_one",
+      "target": "state:relicIds",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:relic.guard_token_plus_one->state:relicOffer",
+      "source": "mechanic:relic.guard_token_plus_one",
+      "target": "state:relicOffer",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:relic.guard_token_plus_one->state:tileTraitKind",
+      "source": "mechanic:relic.guard_token_plus_one",
+      "target": "state:tileTraitKind",
+      "kind": "reads"
+    },
+    {
       "id": "reads:mechanic:relic.peek_charge_plus_one->state:relicOffer",
       "source": "mechanic:relic.peek_charge_plus_one",
       "target": "state:relicOffer",
@@ -98304,6 +99024,12 @@
     {
       "id": "reads:mechanic:reward.echo_conduit_lens->state:bonusRewardLedger",
       "source": "mechanic:reward.echo_conduit_lens",
+      "target": "state:bonusRewardLedger",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:reward.hazard_ward->state:bonusRewardLedger",
+      "source": "mechanic:reward.hazard_ward",
       "target": "state:bonusRewardLedger",
       "kind": "reads"
     },
@@ -98383,6 +99109,24 @@
       "id": "reads:mechanic:safety.dungeon_topology->state:tileStates",
       "source": "mechanic:safety.dungeon_topology",
       "target": "state:tileStates",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:safety.guard_absorption->state:enemyHazards",
+      "source": "mechanic:safety.guard_absorption",
+      "target": "state:enemyHazards",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:safety.guard_absorption->state:guardTokens",
+      "source": "mechanic:safety.guard_absorption",
+      "target": "state:guardTokens",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:safety.guard_absorption->state:lives",
+      "source": "mechanic:safety.guard_absorption",
+      "target": "state:lives",
       "kind": "reads"
     },
     {
@@ -98626,6 +99370,24 @@
       "kind": "reads"
     },
     {
+      "id": "reads:mechanic:trait.volatile_heavy_guard->state:adjacentTraits",
+      "source": "mechanic:trait.volatile_heavy_guard",
+      "target": "state:adjacentTraits",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:trait.volatile_heavy_guard->state:guardTokens",
+      "source": "mechanic:trait.volatile_heavy_guard",
+      "target": "state:guardTokens",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:trait.volatile_heavy_guard->state:tileTraitKind",
+      "source": "mechanic:trait.volatile_heavy_guard",
+      "target": "state:tileTraitKind",
+      "kind": "reads"
+    },
+    {
       "id": "reads:mechanic:trait.volatile->state:guardTokens",
       "source": "mechanic:trait.volatile",
       "target": "state:guardTokens",
@@ -98796,6 +99558,24 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:mechanic:build.guard_tank->file:src/shared/gameplay-core.test.ts",
+      "source": "mechanic:build.guard_tank",
+      "target": "file:src/shared/gameplay-core.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:build.guard_tank->file:src/shared/relics.test.ts",
+      "source": "mechanic:build.guard_tank",
+      "target": "file:src/shared/relics.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:build.guard_tank->file:src/shared/tile-trait-rules.test.ts",
+      "source": "mechanic:build.guard_tank",
+      "target": "file:src/shared/tile-trait-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:mechanic:core.gameplay_commands->file:src/renderer/store/runSurfaceState.test.ts",
       "source": "mechanic:core.gameplay_commands",
       "target": "file:src/renderer/store/runSurfaceState.test.ts",
@@ -98884,6 +99664,30 @@
       "id": "tested_by:mechanic:hazard.enemy_patrol->file:src/shared/softlock-fairness.test.ts",
       "source": "mechanic:hazard.enemy_patrol",
       "target": "file:src/shared/softlock-fairness.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:inventory.guard_token->file:src/shared/dungeon-enemy-hazard-rules.test.ts",
+      "source": "mechanic:inventory.guard_token",
+      "target": "file:src/shared/dungeon-enemy-hazard-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:inventory.guard_token->file:src/shared/gameplay-core.test.ts",
+      "source": "mechanic:inventory.guard_token",
+      "target": "file:src/shared/gameplay-core.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:inventory.guard_token->file:src/shared/run-inventory.test.ts",
+      "source": "mechanic:inventory.guard_token",
+      "target": "file:src/shared/run-inventory.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:inventory.guard_token->file:src/shared/turn-mismatch-rules.test.ts",
+      "source": "mechanic:inventory.guard_token",
+      "target": "file:src/shared/turn-mismatch-rules.test.ts",
       "kind": "tested_by"
     },
     {
@@ -99085,6 +99889,24 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:mechanic:relic.guard_token_plus_one->file:src/shared/gameplay-core.test.ts",
+      "source": "mechanic:relic.guard_token_plus_one",
+      "target": "file:src/shared/gameplay-core.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:relic.guard_token_plus_one->file:src/shared/relic-immediate-rules.test.ts",
+      "source": "mechanic:relic.guard_token_plus_one",
+      "target": "file:src/shared/relic-immediate-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:relic.guard_token_plus_one->file:src/shared/tile-trait-rules.test.ts",
+      "source": "mechanic:relic.guard_token_plus_one",
+      "target": "file:src/shared/tile-trait-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:mechanic:relic.peek_charge_plus_one->file:src/shared/gameplay-core.test.ts",
       "source": "mechanic:relic.peek_charge_plus_one",
       "target": "file:src/shared/gameplay-core.test.ts",
@@ -99111,6 +99933,18 @@
     {
       "id": "tested_by:mechanic:reward.echo_conduit_lens->file:src/shared/gameplay-core.test.ts",
       "source": "mechanic:reward.echo_conduit_lens",
+      "target": "file:src/shared/gameplay-core.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:reward.hazard_ward->file:src/shared/bonus-rewards.test.ts",
+      "source": "mechanic:reward.hazard_ward",
+      "target": "file:src/shared/bonus-rewards.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:reward.hazard_ward->file:src/shared/gameplay-core.test.ts",
+      "source": "mechanic:reward.hazard_ward",
       "target": "file:src/shared/gameplay-core.test.ts",
       "kind": "tested_by"
     },
@@ -99160,6 +99994,30 @@
       "id": "tested_by:mechanic:safety.dungeon_topology->file:src/shared/dungeon-topology.test.ts",
       "source": "mechanic:safety.dungeon_topology",
       "target": "file:src/shared/dungeon-topology.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:safety.guard_absorption->file:src/shared/dungeon-enemy-card-rules.test.ts",
+      "source": "mechanic:safety.guard_absorption",
+      "target": "file:src/shared/dungeon-enemy-card-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:safety.guard_absorption->file:src/shared/dungeon-enemy-hazard-rules.test.ts",
+      "source": "mechanic:safety.guard_absorption",
+      "target": "file:src/shared/dungeon-enemy-hazard-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:safety.guard_absorption->file:src/shared/dungeon-trap-rules.test.ts",
+      "source": "mechanic:safety.guard_absorption",
+      "target": "file:src/shared/dungeon-trap-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:safety.guard_absorption->file:src/shared/turn-mismatch-rules.test.ts",
+      "source": "mechanic:safety.guard_absorption",
+      "target": "file:src/shared/turn-mismatch-rules.test.ts",
       "kind": "tested_by"
     },
     {
@@ -99334,6 +100192,18 @@
     {
       "id": "tested_by:mechanic:trait.stasis->file:src/shared/tile-trait-rules.test.ts",
       "source": "mechanic:trait.stasis",
+      "target": "file:src/shared/tile-trait-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:trait.volatile_heavy_guard->file:src/shared/gameplay-core.test.ts",
+      "source": "mechanic:trait.volatile_heavy_guard",
+      "target": "file:src/shared/gameplay-core.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:trait.volatile_heavy_guard->file:src/shared/tile-trait-rules.test.ts",
+      "source": "mechanic:trait.volatile_heavy_guard",
       "target": "file:src/shared/tile-trait-rules.test.ts",
       "kind": "tested_by"
     },
@@ -105345,6 +106215,13 @@
       "label": "trait match command"
     },
     {
+      "id": "triggers:mechanic:relic.guard_token_plus_one->mechanic:core.gameplay_commands:relic and Mirror commands",
+      "source": "mechanic:relic.guard_token_plus_one",
+      "target": "mechanic:core.gameplay_commands",
+      "kind": "triggers",
+      "label": "relic and Mirror commands"
+    },
+    {
       "id": "triggers:mechanic:relic.peek_charge_plus_one->mechanic:core.gameplay_commands:relic command",
       "source": "mechanic:relic.peek_charge_plus_one",
       "target": "mechanic:core.gameplay_commands",
@@ -105359,11 +106236,39 @@
       "label": "claim command"
     },
     {
+      "id": "triggers:mechanic:reward.hazard_ward->mechanic:core.gameplay_commands:defensive reward command",
+      "source": "mechanic:reward.hazard_ward",
+      "target": "mechanic:core.gameplay_commands",
+      "kind": "triggers",
+      "label": "defensive reward command"
+    },
+    {
       "id": "triggers:mechanic:trait.echo->mechanic:perk.echo_conduit_double:matched trait condition",
       "source": "mechanic:trait.echo",
       "target": "mechanic:perk.echo_conduit_double",
       "kind": "triggers",
       "label": "matched trait condition"
+    },
+    {
+      "id": "triggers:mechanic:trait.mirror->mechanic:relic.guard_token_plus_one:Mirror invokes Warden Sigil",
+      "source": "mechanic:trait.mirror",
+      "target": "mechanic:relic.guard_token_plus_one",
+      "kind": "triggers",
+      "label": "Mirror invokes Warden Sigil"
+    },
+    {
+      "id": "triggers:mechanic:trait.volatile_heavy_guard->mechanic:core.gameplay_commands:guard spark command",
+      "source": "mechanic:trait.volatile_heavy_guard",
+      "target": "mechanic:core.gameplay_commands",
+      "kind": "triggers",
+      "label": "guard spark command"
+    },
+    {
+      "id": "triggers:mechanic:trait.volatile->mechanic:trait.volatile_heavy_guard:matched Volatile condition",
+      "source": "mechanic:trait.volatile",
+      "target": "mechanic:trait.volatile_heavy_guard",
+      "kind": "triggers",
+      "label": "matched Volatile condition"
     },
     {
       "id": "unblocks:mechanic:objective.defeat_boss->mechanic:exit.primary:allows exit",
@@ -105415,6 +106320,18 @@
       "kind": "writes"
     },
     {
+      "id": "writes:mechanic:build.guard_tank->state:buildPlan",
+      "source": "mechanic:build.guard_tank",
+      "target": "state:buildPlan",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:core.gameplay_commands->state:destroyPairCharges",
+      "source": "mechanic:core.gameplay_commands",
+      "target": "state:destroyPairCharges",
+      "kind": "writes"
+    },
+    {
       "id": "writes:mechanic:core.gameplay_commands->state:feedbackLines",
       "source": "mechanic:core.gameplay_commands",
       "target": "state:feedbackLines",
@@ -105439,6 +106356,12 @@
       "kind": "writes"
     },
     {
+      "id": "writes:mechanic:core.gameplay_commands->state:guardTokens",
+      "source": "mechanic:core.gameplay_commands",
+      "target": "state:guardTokens",
+      "kind": "writes"
+    },
+    {
       "id": "writes:mechanic:core.gameplay_commands->state:peekCharges",
       "source": "mechanic:core.gameplay_commands",
       "target": "state:peekCharges",
@@ -105454,6 +106377,12 @@
       "id": "writes:mechanic:core.gameplay_commands->state:rewardPerkIds",
       "source": "mechanic:core.gameplay_commands",
       "target": "state:rewardPerkIds",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:core.gameplay_commands->state:score",
+      "source": "mechanic:core.gameplay_commands",
+      "target": "state:score",
       "kind": "writes"
     },
     {
@@ -105508,6 +106437,12 @@
       "id": "writes:mechanic:hazard.enemy_patrol->state:lives",
       "source": "mechanic:hazard.enemy_patrol",
       "target": "state:lives",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:inventory.guard_token->state:guardTokens",
+      "source": "mechanic:inventory.guard_token",
+      "target": "state:guardTokens",
       "kind": "writes"
     },
     {
@@ -105685,6 +106620,30 @@
       "kind": "writes"
     },
     {
+      "id": "writes:mechanic:relic.guard_token_plus_one->state:feedbackLines",
+      "source": "mechanic:relic.guard_token_plus_one",
+      "target": "state:feedbackLines",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:relic.guard_token_plus_one->state:guardTokens",
+      "source": "mechanic:relic.guard_token_plus_one",
+      "target": "state:guardTokens",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:relic.guard_token_plus_one->state:relicIds",
+      "source": "mechanic:relic.guard_token_plus_one",
+      "target": "state:relicIds",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:relic.guard_token_plus_one->state:score",
+      "source": "mechanic:relic.guard_token_plus_one",
+      "target": "state:score",
+      "kind": "writes"
+    },
+    {
       "id": "writes:mechanic:relic.peek_charge_plus_one->state:feedbackLines",
       "source": "mechanic:relic.peek_charge_plus_one",
       "target": "state:feedbackLines",
@@ -105718,6 +106677,30 @@
       "id": "writes:mechanic:reward.echo_conduit_lens->state:rewardPerkIds",
       "source": "mechanic:reward.echo_conduit_lens",
       "target": "state:rewardPerkIds",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:reward.hazard_ward->state:destroyPairCharges",
+      "source": "mechanic:reward.hazard_ward",
+      "target": "state:destroyPairCharges",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:reward.hazard_ward->state:feedbackLines",
+      "source": "mechanic:reward.hazard_ward",
+      "target": "state:feedbackLines",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:reward.hazard_ward->state:guardTokens",
+      "source": "mechanic:reward.hazard_ward",
+      "target": "state:guardTokens",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:reward.hazard_ward->state:score",
+      "source": "mechanic:reward.hazard_ward",
+      "target": "state:score",
       "kind": "writes"
     },
     {
@@ -105760,6 +106743,24 @@
       "id": "writes:mechanic:safety.dungeon_topology->state:topologyReport",
       "source": "mechanic:safety.dungeon_topology",
       "target": "state:topologyReport",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:safety.guard_absorption->state:feedbackLines",
+      "source": "mechanic:safety.guard_absorption",
+      "target": "state:feedbackLines",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:safety.guard_absorption->state:guardTokens",
+      "source": "mechanic:safety.guard_absorption",
+      "target": "state:guardTokens",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:safety.guard_absorption->state:lives",
+      "source": "mechanic:safety.guard_absorption",
+      "target": "state:lives",
       "kind": "writes"
     },
     {
@@ -105979,6 +106980,24 @@
       "kind": "writes"
     },
     {
+      "id": "writes:mechanic:trait.volatile_heavy_guard->state:feedbackLines",
+      "source": "mechanic:trait.volatile_heavy_guard",
+      "target": "state:feedbackLines",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:trait.volatile_heavy_guard->state:guardTokens",
+      "source": "mechanic:trait.volatile_heavy_guard",
+      "target": "state:guardTokens",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:trait.volatile_heavy_guard->state:interactionTags",
+      "source": "mechanic:trait.volatile_heavy_guard",
+      "target": "state:interactionTags",
+      "kind": "writes"
+    },
+    {
       "id": "writes:mechanic:trait.volatile->state:interactionTags",
       "source": "mechanic:trait.volatile",
       "target": "state:interactionTags",
@@ -106002,13 +107021,13 @@
       "severity": "warning",
       "code": "unmodeled_content_family",
       "subject": "bonus_reward",
-      "detail": "12 source-declared items lack mechanic nodes: bonus_shards, chest_gold, cursed_opener_contract, free_swap_floor, hazard_banisher, hazard_ward, key_insurance, secret_favor, stasis_lockbox, supply_cache, trait_streak_lens, trait_toolkit"
+      "detail": "11 source-declared items lack mechanic nodes: bonus_shards, chest_gold, cursed_opener_contract, free_swap_floor, hazard_banisher, key_insurance, secret_favor, stasis_lockbox, supply_cache, trait_streak_lens, trait_toolkit"
     },
     {
       "severity": "warning",
       "code": "unmodeled_content_family",
       "subject": "build_archetype",
-      "detail": "7 source-declared items lack mechanic nodes: boss_hunter, combo_shard_engine, guard_tank, reveal_scout, route_gambler, trap_control, treasure_greed"
+      "detail": "6 source-declared items lack mechanic nodes: boss_hunter, combo_shard_engine, reveal_scout, route_gambler, trap_control, treasure_greed"
     },
     {
       "severity": "warning",
@@ -106020,13 +107039,13 @@
       "severity": "warning",
       "code": "unmodeled_content_family",
       "subject": "inventory_item",
-      "detail": "15 source-declared items lack mechanic nodes: combo_shard, contract_loadout, destroy_charge, flash_pair_charge, gambit_token, guard_token, iron_key, master_key, mutator_loadout, region_shuffle_charge, relic_loadout, shuffle_charge, stray_remove_charge, undo_charge, wild_match_token"
+      "detail": "14 source-declared items lack mechanic nodes: combo_shard, contract_loadout, destroy_charge, flash_pair_charge, gambit_token, iron_key, master_key, mutator_loadout, region_shuffle_charge, relic_loadout, shuffle_charge, stray_remove_charge, undo_charge, wild_match_token"
     },
     {
       "severity": "warning",
       "code": "unmodeled_content_family",
       "subject": "relic",
-      "detail": "15 source-declared items lack mechanic nodes: chapter_compass, combo_shard_plus_step, destroy_bank_plus_one, extra_shuffle_charge, first_shuffle_free_per_floor, guard_token_plus_one, memorize_bonus_ms, memorize_under_short_memorize, parasite_ledger, parasite_ward_once, pin_cap_plus_one, region_shuffle_free_first, shrine_echo, stray_charge_plus_one, wager_surety"
+      "detail": "14 source-declared items lack mechanic nodes: chapter_compass, combo_shard_plus_step, destroy_bank_plus_one, extra_shuffle_charge, first_shuffle_free_per_floor, memorize_bonus_ms, memorize_under_short_memorize, parasite_ledger, parasite_ward_once, pin_cap_plus_one, region_shuffle_free_first, shrine_echo, stray_charge_plus_one, wager_surety"
     }
   ]
 }

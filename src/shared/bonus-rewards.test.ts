@@ -456,6 +456,34 @@ describe('REG-075 treasure, secret room, and bonus rewards', () => {
         );
     });
 
+    it('routes Hazard Ward resources through the Warden command journal', () => {
+        const room = {
+            ...rollBonusRewardRoom({
+                runSeed: 75_125,
+                rulesVersion: GAME_RULES_VERSION,
+                floor: 6,
+                routeKind: 'event'
+            }),
+            ...BONUS_REWARD_CATALOG.hazard_ward,
+            eligible: true,
+            unavailableReason: null
+        };
+        const result = claimBonusReward(makeRun(room.runSeed, room.rulesVersion), createBonusRewardLedger(), room);
+
+        expect(result.claimed).toBe(true);
+        expect(result.run.destroyPairCharges).toBe(1);
+        expect(result.run.stats.guardTokens).toBe(1);
+        expect(result.run.gameplayCommandJournal).toEqual([
+            expect.objectContaining({ type: 'effects.apply', commandId: `bonus-reward:${room.instanceId}` })
+        ]);
+        expect(result.run.gameplayEventJournal).toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({ type: 'inventory.changed', source: { kind: 'bonus_reward', id: 'hazard_ward' } }),
+                expect.objectContaining({ type: 'feedback.requested', cue: 'build.hazard_ward.claimed' })
+            ])
+        );
+    });
+
     it('unlocks durable reward perks from build-defining draft rows without duplicating them', () => {
         const room = {
             ...rollBonusRewardRoom({

@@ -742,6 +742,11 @@ export const getPrimaryRewardPerkReadinessRow = (
         .filter((row) => row.readiness === 'armed')
         .sort((a, b) => REWARD_PERK_BOARD_CUE_PRIORITY[b.id] - REWARD_PERK_BOARD_CUE_PRIORITY[a.id])[0] ?? null;
 
+const MIGRATED_BONUS_REWARD_DEFINITION_IDS: Partial<Record<BonusRewardId, string>> = {
+    echo_conduit_lens: 'bonus_reward.echo_conduit_lens',
+    hazard_ward: 'bonus_reward.hazard_ward'
+};
+
 const applyBonusRewardPayout = (
     run: RunState,
     payout: BonusRewardPayout
@@ -855,30 +860,36 @@ export const previewBonusRewardClaim = (
         };
     }
     const legacyApplied = applyBonusRewardPayout(run, reward.payout);
-    const applied =
-        reward.id !== 'echo_conduit_lens'
-            ? legacyApplied
-            : (() => {
-                  const command = createGameplayDefinitionCommand(
-                      `bonus-reward:${reward.instanceId}`,
-                      'bonus_reward.echo_conduit_lens'
-                  );
-                  const coreResult = reduceGameplayCommand(run, command);
-                  if (!coreResult.accepted) {
-                      throw new Error(`Migrated bonus reward command rejected: ${reward.id}`);
+    const definitionId = MIGRATED_BONUS_REWARD_DEFINITION_IDS[reward.id];
+    const applied = !definitionId
+        ? legacyApplied
+        : (() => {
+              const command = createGameplayDefinitionCommand(`bonus-reward:${reward.instanceId}`, definitionId);
+              const coreResult = reduceGameplayCommand(run, command);
+              if (!coreResult.accepted) {
+                  throw new Error(`Migrated bonus reward command rejected: ${reward.id}`);
+              }
+              const journaledRun = appendGameplayJournal(coreResult.run, [command], coreResult.events);
+              const legacyStats = normalizeSessionStats(legacyApplied.run.stats);
+              const coreStats = normalizeSessionStats(journaledRun.stats);
+              return {
+                  ...legacyApplied,
+                  run: {
+                      ...legacyApplied.run,
+                      ...(reward.id === 'echo_conduit_lens'
+                          ? {
+                                peekCharges: journaledRun.peekCharges,
+                                rewardPerkIds: journaledRun.rewardPerkIds
+                            }
+                          : {
+                                destroyPairCharges: journaledRun.destroyPairCharges,
+                                stats: { ...legacyStats, guardTokens: coreStats.guardTokens }
+                            }),
+                      gameplayCommandJournal: journaledRun.gameplayCommandJournal,
+                      gameplayEventJournal: journaledRun.gameplayEventJournal
                   }
-                  const journaledRun = appendGameplayJournal(coreResult.run, [command], coreResult.events);
-                  return {
-                      ...legacyApplied,
-                      run: {
-                          ...legacyApplied.run,
-                          peekCharges: journaledRun.peekCharges,
-                          rewardPerkIds: journaledRun.rewardPerkIds,
-                          gameplayCommandJournal: journaledRun.gameplayCommandJournal,
-                          gameplayEventJournal: journaledRun.gameplayEventJournal
-                      }
-                  };
-              })();
+              };
+          })();
     return {
         eligible: true,
         rewardId: reward.id,

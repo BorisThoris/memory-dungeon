@@ -5,6 +5,7 @@ import type { BoardState, RunState, Tile } from './contracts';
 import {
     CONDUIT_CARTOGRAPHER_DEFINITIONS,
     GAMEPLAY_CORE_SCHEMA_VERSION,
+    WARDEN_DEFINITIONS,
     createGameplayDefinitionCommand,
     createGameplayPeekCommand,
     gameplayCommandSchema,
@@ -128,9 +129,52 @@ describe('deterministic gameplay core', () => {
         });
     });
 
+    it('models the Warden reward, relic, trait guard, and capped Mirror overflow as one build', () => {
+        expect(WARDEN_DEFINITIONS.map((definition) => definition.id)).toEqual([
+            'bonus_reward.hazard_ward',
+            'relic.guard_token_plus_one',
+            'trait.volatile_heavy_guard',
+            'relic.guard_token_plus_one.mirror_match'
+        ]);
+        const initial = run({
+            destroyPairCharges: 0,
+            relicIds: ['guard_token_plus_one'],
+            stats: { ...run().stats, guardTokens: 0, comboShards: 0 }
+        });
+        const reward = reduceGameplayCommand(
+            initial,
+            createGameplayDefinitionCommand('warden-reward', 'bonus_reward.hazard_ward')
+        );
+        const braced = reduceGameplayCommand(
+            reward.run,
+            createGameplayDefinitionCommand('warden-trait', 'trait.volatile_heavy_guard', {
+                matchedTraits: ['volatile'],
+                adjacentTraits: ['heavy']
+            })
+        );
+        const overflow = reduceGameplayCommand(
+            braced.run,
+            createGameplayDefinitionCommand('warden-overflow', 'relic.guard_token_plus_one.mirror_match', {
+                matchedTraits: ['mirror']
+            })
+        );
+
+        expect(reward.run).toMatchObject({ destroyPairCharges: 1, stats: { guardTokens: 1 } });
+        expect(braced.run.stats.guardTokens).toBe(2);
+        expect(overflow.run.stats).toMatchObject({ guardTokens: 2, totalScore: 20, currentLevelScore: 20 });
+        expect(overflow.events).toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({ type: 'inventory.changed', itemId: 'guard_token', applied: 0 }),
+                expect.objectContaining({ type: 'score.changed', reason: 'inventory_overflow', amount: 20 }),
+                expect.objectContaining({ type: 'feedback.requested', cue: 'build.warden_sigil.mirror_triggered' })
+            ])
+        );
+    });
+
     it('routes migrated relic immediates through the core while preserving legacy fallbacks', () => {
         const initial = run({ peekCharges: 2, shuffleCharges: 1 });
         const migrated = applyRelicImmediateThroughGameplayCore(initial, 'peek_charge_plus_one', 'adapter-peek');
+        const migratedGuard = applyRelicImmediateThroughGameplayCore(initial, 'guard_token_plus_one', 'adapter-guard');
         const legacy = applyRelicImmediateThroughGameplayCore(initial, 'extra_shuffle_charge', 'adapter-shuffle');
 
         expect(migrated).toMatchObject({ migrated: true, run: { peekCharges: 3 } });
@@ -141,6 +185,7 @@ describe('deterministic gameplay core', () => {
             ])
         );
         expect(legacy).toMatchObject({ migrated: false, run: { shuffleCharges: 2 }, events: [] });
+        expect(migratedGuard).toMatchObject({ migrated: true, run: { stats: { guardTokens: 1 } } });
     });
 
     it('models exactly the extra Peek granted by the existing Echo-Conduit perk condition', () => {

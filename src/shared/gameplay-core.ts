@@ -19,6 +19,7 @@ import {
     useRunInventoryItem
 } from './run-inventory';
 import { runNonNegativeInteger } from './run-number-guards';
+import { normalizeSessionStats } from './session-stats-rules';
 
 export interface GameplayCommandResult {
     run: RunState;
@@ -80,6 +81,10 @@ const conditionFailure = (run: RunState, condition: GameplayCondition, facts: Ga
                 : `${condition.itemId} is below ${condition.amount}`;
         case 'reward_perk.active':
             return hasGameplayRewardPerk(run, condition.perkId) ? null : `${condition.perkId} is not active`;
+        case 'relic.active':
+            return Array.isArray(run.relicIds) && run.relicIds.includes(condition.relicId)
+                ? null
+                : `${condition.relicId} is not active`;
         case 'trait.matched':
             return facts.matchedTraits.includes(condition.trait) ? null : `${condition.trait} was not matched`;
         case 'trait.adjacent':
@@ -146,6 +151,44 @@ const applyDefinition = (
                         type: 'effect.skipped',
                         effectKind: effect.kind,
                         reason: used.reason ?? `${effect.itemId} could not be consumed.`
+                    });
+                }
+                break;
+            }
+            case 'inventory.grant_or_score': {
+                const before = getRunInventoryItemQuantity(nextRun, effect.itemId);
+                nextRun = gainRunInventoryItem(nextRun, effect.itemId, effect.amount);
+                const after = getRunInventoryItemQuantity(nextRun, effect.itemId);
+                const applied = after - before;
+                writeEvent({
+                    type: 'inventory.changed',
+                    itemId: effect.itemId,
+                    operation: 'grant',
+                    requested: effect.amount,
+                    applied,
+                    before,
+                    after
+                });
+                if (applied === 0) {
+                    const stats = normalizeSessionStats(nextRun.stats);
+                    const totalBefore = runNonNegativeInteger(stats.totalScore);
+                    const currentLevelBefore = runNonNegativeInteger(stats.currentLevelScore);
+                    nextRun = {
+                        ...nextRun,
+                        stats: {
+                            ...stats,
+                            totalScore: totalBefore + effect.fallbackScore,
+                            currentLevelScore: currentLevelBefore + effect.fallbackScore
+                        }
+                    };
+                    writeEvent({
+                        type: 'score.changed',
+                        reason: 'inventory_overflow',
+                        amount: effect.fallbackScore,
+                        totalBefore,
+                        totalAfter: totalBefore + effect.fallbackScore,
+                        currentLevelBefore,
+                        currentLevelAfter: currentLevelBefore + effect.fallbackScore
                     });
                 }
                 break;

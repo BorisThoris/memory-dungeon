@@ -35,6 +35,17 @@ The slice is complete only when:
 
 After this proof slice, migrate the other source-derived content families build by build, prioritizing connections that reduce the `unmodeled_content_family` diagnostics rather than maximizing raw mechanic count.
 
+## Second vertical slice: The Warden
+
+The Warden is the first defensive slice and deliberately proves a different loop from Peek-based information control:
+
+1. Hazard Ward and the Warden Sigil create capped guard inventory through content claims.
+2. Volatile beside Heavy creates guard through a typed trait command.
+3. Mirror invokes the equipped Warden Sigil; a full guard bank converts that proc into explicit overflow score.
+4. Guard is consumed before life by mismatch, patrol, enemy, and trap rules, with the combat forecast exposing that consequence.
+
+The effect language now owns the reusable `inventory.grant_or_score` rule and emits a typed `score.changed` event for the overflow branch. Live reward claims, relic picks, and trait matches use the same journaled reducer; existing damage rules remain compatibility consumers until damage commands become the next relevant ownership boundary.
+
 ## Current slice status
 
 Implemented in the Conduit Cartographer vertical slice:

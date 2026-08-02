@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import type { RewardPerkId, RunStatus, TileTraitKind } from './contracts';
+import type { RelicId, RewardPerkId, RunStatus, TileTraitKind } from './contracts';
 import { RUN_INVENTORY_ITEM_IDS } from './run-inventory-contracts';
 
 export const GAMEPLAY_CORE_SCHEMA_VERSION = 1 as const;
@@ -11,6 +11,10 @@ export const GAMEPLAY_REWARD_PERK_IDS = [
     'cursed_opener_greed',
     'hazard_banish_per_floor'
 ] as const satisfies readonly RewardPerkId[];
+
+export const GAMEPLAY_RELIC_IDS = [
+    'guard_token_plus_one'
+] as const satisfies readonly RelicId[];
 
 export const GAMEPLAY_TILE_TRAIT_KINDS = [
     'echo',
@@ -69,6 +73,12 @@ export const gameplayConditionSchema = z.discriminatedUnion('kind', [
         .strict(),
     z
         .object({
+            kind: z.literal('relic.active'),
+            relicId: z.enum(GAMEPLAY_RELIC_IDS)
+        })
+        .strict(),
+    z
+        .object({
             kind: z.literal('trait.matched'),
             trait: z.enum(GAMEPLAY_TILE_TRAIT_KINDS)
         })
@@ -94,6 +104,14 @@ export const gameplayEffectSchema = z.discriminatedUnion('kind', [
             kind: z.literal('inventory.consume'),
             itemId: z.enum(RUN_INVENTORY_ITEM_IDS),
             amount: z.literal(1)
+        })
+        .strict(),
+    z
+        .object({
+            kind: z.literal('inventory.grant_or_score'),
+            itemId: z.enum(RUN_INVENTORY_ITEM_IDS),
+            amount: z.number().int().positive(),
+            fallbackScore: z.number().int().positive()
         })
         .strict(),
     z
@@ -183,6 +201,89 @@ export const CONDUIT_CARTOGRAPHER_DEFINITIONS = z.array(gameplayContentDefinitio
     }
 ]);
 
+export const WARDEN_DEFINITIONS = z.array(gameplayContentDefinitionSchema).parse([
+    {
+        id: 'bonus_reward.hazard_ward',
+        version: 1,
+        buildId: 'guard_tank',
+        source: { kind: 'bonus_reward', id: 'hazard_ward' },
+        trigger: 'content.claimed',
+        conditions: [],
+        effects: [
+            { kind: 'inventory.grant', itemId: 'destroy_charge', amount: 1 },
+            { kind: 'inventory.grant', itemId: 'guard_token', amount: 1 },
+            {
+                kind: 'feedback.emit',
+                cue: 'build.hazard_ward.claimed',
+                message: 'Hazard Ward added one destroy charge and one guard token.',
+                tone: 'reward'
+            }
+        ]
+    },
+    {
+        id: 'relic.guard_token_plus_one',
+        version: 1,
+        buildId: 'guard_tank',
+        source: { kind: 'relic', id: 'guard_token_plus_one' },
+        trigger: 'content.claimed',
+        conditions: [],
+        effects: [
+            { kind: 'inventory.grant', itemId: 'guard_token', amount: 1 },
+            {
+                kind: 'feedback.emit',
+                cue: 'build.warden_sigil.claimed',
+                message: 'The Warden Sigil added one guard token.',
+                tone: 'reward'
+            }
+        ]
+    },
+    {
+        id: 'trait.volatile_heavy_guard',
+        version: 1,
+        buildId: 'guard_tank',
+        source: { kind: 'trait', id: 'volatile_heavy_guard' },
+        trigger: 'trait.match',
+        conditions: [
+            { kind: 'trait.matched', trait: 'volatile' },
+            { kind: 'trait.adjacent', trait: 'heavy' }
+        ],
+        effects: [
+            { kind: 'inventory.grant', itemId: 'guard_token', amount: 1 },
+            {
+                kind: 'feedback.emit',
+                cue: 'build.volatile_heavy_guard.triggered',
+                message: 'Volatile pressure met Heavy bracing and created one guard token.',
+                tone: 'reward'
+            }
+        ]
+    },
+    {
+        id: 'relic.guard_token_plus_one.mirror_match',
+        version: 1,
+        buildId: 'guard_tank',
+        source: { kind: 'relic', id: 'guard_token_plus_one' },
+        trigger: 'trait.match',
+        conditions: [
+            { kind: 'relic.active', relicId: 'guard_token_plus_one' },
+            { kind: 'trait.matched', trait: 'mirror' }
+        ],
+        effects: [
+            { kind: 'inventory.grant_or_score', itemId: 'guard_token', amount: 1, fallbackScore: 20 },
+            {
+                kind: 'feedback.emit',
+                cue: 'build.warden_sigil.mirror_triggered',
+                message: 'Mirror invoked the Warden Sigil for guard or overflow score.',
+                tone: 'reward'
+            }
+        ]
+    }
+]);
+
+export const GAMEPLAY_CONTENT_DEFINITIONS = [
+    ...CONDUIT_CARTOGRAPHER_DEFINITIONS,
+    ...WARDEN_DEFINITIONS
+] as const satisfies readonly GameplayContentDefinition[];
+
 export type GameplaySource = z.infer<typeof gameplaySourceSchema>;
 export type GameplayFacts = z.infer<typeof gameplayFactsSchema>;
 export type GameplayCondition = z.infer<typeof gameplayConditionSchema>;
@@ -245,6 +346,18 @@ export const gameplayEventSchema = z.discriminatedUnion('type', [
     z
         .object({
             ...eventBase,
+            type: z.literal('score.changed'),
+            reason: z.enum(['inventory_overflow']),
+            amount: z.number().int().positive(),
+            totalBefore: z.number().int().nonnegative(),
+            totalAfter: z.number().int().nonnegative(),
+            currentLevelBefore: z.number().int().nonnegative(),
+            currentLevelAfter: z.number().int().nonnegative()
+        })
+        .strict(),
+    z
+        .object({
+            ...eventBase,
             type: z.literal('board.peeked'),
             targetTileId: z.string().min(1).max(160),
             peekChargesBefore: z.number().int().nonnegative(),
@@ -283,7 +396,7 @@ export const gameplayEventSchema = z.discriminatedUnion('type', [
 export type GameplayCommand = z.infer<typeof gameplayCommandSchema>;
 export type GameplayEvent = z.infer<typeof gameplayEventSchema>;
 
-const definitionById = new Map(CONDUIT_CARTOGRAPHER_DEFINITIONS.map((definition) => [definition.id, definition]));
+const definitionById = new Map(GAMEPLAY_CONTENT_DEFINITIONS.map((definition) => [definition.id, definition]));
 
 export const getGameplayContentDefinition = (id: string): GameplayContentDefinition | null =>
     definitionById.get(id) ?? null;

@@ -36,7 +36,7 @@ const initialRun = (seed: number): RunState => ({
     peekCharges: 0,
     recallFocus: 3,
     rewardPerkIds: [],
-    relicIds: [],
+    relicIds: ['guard_token_plus_one'],
     powersUsedThisRun: false,
     forgottenTileIdsThisFloor: [],
     peekRevealedTileIds: [],
@@ -58,6 +58,10 @@ describe('seeded gameplay core simulation', () => {
                 'bonus_reward.echo_conduit_lens',
                 'relic.peek_charge_plus_one',
                 'reward_perk.echo_conduit_double',
+                'bonus_reward.hazard_ward',
+                'relic.guard_token_plus_one',
+                'trait.volatile_heavy_guard',
+                'relic.guard_token_plus_one.mirror_match',
                 'board.peek'
             ])
         );

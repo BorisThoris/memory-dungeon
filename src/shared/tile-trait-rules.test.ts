@@ -617,6 +617,15 @@ describe('tile trait rules', () => {
         expect(mirrorEffect.guardTokenGain).toBe(1);
         expect(mirrorEffect.scoreBonus).toBe(20);
         expect(mirrorEffect.interactionTags).toContain('warden-sigil:mirror-ward');
+        expect(mirrorEffect.gameplayCommands).toEqual([
+            expect.objectContaining({ definitionId: 'relic.guard_token_plus_one.mirror_match' })
+        ]);
+        expect(mirrorEffect.gameplayEvents).toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({ type: 'inventory.changed', itemId: 'guard_token', applied: 0 }),
+                expect.objectContaining({ type: 'score.changed', reason: 'inventory_overflow', amount: 20 })
+            ])
+        );
         expect(sealedEffect.comboShardGain).toBe(0);
         expect(sealedEffect.scoreBonus).toBe(18);
     });

@@ -7,7 +7,7 @@ import {
     validateGameplayInteractionGraph
 } from './gameplay-interaction-graph';
 import type { TileTraitKind } from './contracts';
-import { CONDUIT_CARTOGRAPHER_DEFINITIONS } from './gameplay-core-contracts';
+import { CONDUIT_CARTOGRAPHER_DEFINITIONS, WARDEN_DEFINITIONS } from './gameplay-core-contracts';
 
 const TILE_TRAIT_KINDS: readonly TileTraitKind[] = [
     'echo',
@@ -231,6 +231,40 @@ describe('gameplay interaction graph', () => {
                 expect.objectContaining({ source: 'core.gameplay_commands', target: 'feedback.gameplay_hud', kind: 'displays' }),
                 expect.objectContaining({ source: 'core.gameplay_commands', target: 'persistence.run_summary', kind: 'persists' }),
                 expect.objectContaining({ source: 'core.gameplay_commands', target: 'simulation.gameplay_replay', kind: 'tested_by' })
+            ])
+        );
+    });
+
+    it('connects the Warden build from defensive choices through capped guard and damage absorption', () => {
+        const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
+        const sourceNodeByDefinition = new Map([
+            ['bonus_reward.hazard_ward', 'reward.hazard_ward'],
+            ['relic.guard_token_plus_one', 'relic.guard_token_plus_one'],
+            ['trait.volatile_heavy_guard', 'trait.volatile_heavy_guard'],
+            ['relic.guard_token_plus_one.mirror_match', 'relic.guard_token_plus_one']
+        ]);
+
+        for (const definition of WARDEN_DEFINITIONS) {
+            const nodeId = sourceNodeByDefinition.get(definition.id);
+            expect(nodeId, definition.id).toBeTruthy();
+            expect(byId.get(nodeId!), definition.id).toMatchObject({
+                evidence: expect.arrayContaining(['src/shared/gameplay-core-contracts.ts']),
+                tests: expect.arrayContaining(['src/shared/gameplay-core.test.ts'])
+            });
+        }
+
+        expect(byId.get('build.guard_tank')).toMatchObject({ kind: 'build', role: 'guard_absorption_build' });
+        expect(byId.get('inventory.guard_token')).toMatchObject({ kind: 'inventory', role: 'bounded_damage_buffer' });
+        expect(byId.get('safety.guard_absorption')).toMatchObject({ kind: 'safety', role: 'resource_consequence' });
+        expect(gameplayInteractionGraph.edges).toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({ source: 'reward.hazard_ward', target: 'inventory.guard_token', kind: 'grants' }),
+                expect.objectContaining({ source: 'relic.guard_token_plus_one', target: 'inventory.guard_token', kind: 'grants' }),
+                expect.objectContaining({ source: 'trait.volatile', target: 'trait.volatile_heavy_guard', kind: 'triggers' }),
+                expect.objectContaining({ source: 'trait.heavy', target: 'trait.volatile_heavy_guard', kind: 'gates' }),
+                expect.objectContaining({ source: 'inventory.guard_token', target: 'safety.guard_absorption', kind: 'enables' }),
+                expect.objectContaining({ source: 'safety.guard_absorption', target: 'inventory.guard_token', kind: 'consumes' }),
+                expect.objectContaining({ source: 'build.guard_tank', target: 'safety.guard_absorption', kind: 'consequence' })
             ])
         );
     });

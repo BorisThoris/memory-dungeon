@@ -856,6 +856,22 @@ export const resolveTileTraitEffects = ({
     const peekCharges = runNonNegativeInteger(run.peekCharges);
     const recallFocus = runNonNegativeInteger(run.recallFocus);
 
+    const applyCoreTraitDefinition = (definitionId: string, commandSuffix: string, commandRun: RunState = run) => {
+        const sourceHash = hashStringToSeed(sourceTiles.map((tile) => tile.id).sort().join('|'));
+        const command = createGameplayDefinitionCommand(
+            `trait-match:${run.runSeed}:${board?.level ?? 0}:${matchResolutionsThisFloor}:${sourceHash}:${commandSuffix}`,
+            definitionId,
+            { matchedTraits: [...traits], adjacentTraits: [...adjacentTraitKinds] }
+        );
+        const coreResult = reduceGameplayCommand(commandRun, command);
+        if (!coreResult.accepted) {
+            throw new Error(`Migrated trait command rejected: ${definitionId}`);
+        }
+        result.gameplayCommands = [...(result.gameplayCommands ?? []), command];
+        result.gameplayEvents = [...(result.gameplayEvents ?? []), ...coreResult.events];
+        return coreResult;
+    };
+
     if (source === 'match') {
         result.comboShardGain = hasTrait('sealed') && comboShards < MAX_COMBO_SHARDS ? 1 : 0;
         result.guardTokenGain =
@@ -874,20 +890,9 @@ export const resolveTileTraitEffects = ({
         }
 
         if (hasTrait('echo') && adjacentTraitKinds.has('conduit') && hasRewardPerk(run, 'echo_conduit_double')) {
-            const sourceHash = hashStringToSeed(sourceTiles.map((tile) => tile.id).sort().join('|'));
-            const command = createGameplayDefinitionCommand(
-                `trait-match:${run.runSeed}:${board?.level ?? 0}:${matchResolutionsThisFloor}:${sourceHash}`,
-                'reward_perk.echo_conduit_double',
-                { matchedTraits: [...traits], adjacentTraits: [...adjacentTraitKinds] }
-            );
-            const coreResult = reduceGameplayCommand(run, command);
-            if (!coreResult.accepted) {
-                throw new Error('Migrated Echo/Conduit trait command rejected.');
-            }
+            const coreResult = applyCoreTraitDefinition('reward_perk.echo_conduit_double', 'echo-conduit');
             result.peekChargeGain +=
                 runNonNegativeInteger(coreResult.run.peekCharges) - peekCharges;
-            result.gameplayEvents = coreResult.events;
-            result.gameplayCommands = [command];
             if (adjacentTraitKinds.has('sealed') && comboShards + result.comboShardGain < MAX_COMBO_SHARDS) {
                 result.comboShardGain += 1;
             }
@@ -933,7 +938,14 @@ export const resolveTileTraitEffects = ({
         }
 
         if (hasTrait('volatile') && adjacentTraitKinds.has('heavy')) {
-            result.guardTokenGain += 1;
+            const projectedGuardTokens = Math.min(MAX_GUARD_TOKENS, guardTokens + result.guardTokenGain);
+            const projectedRun = {
+                ...run,
+                stats: { ...stats, guardTokens: projectedGuardTokens }
+            };
+            const coreResult = applyCoreTraitDefinition('trait.volatile_heavy_guard', 'volatile-heavy', projectedRun);
+            result.guardTokenGain +=
+                normalizeSessionStats(coreResult.run.stats).guardTokens - projectedGuardTokens;
             result.interactionTags.push('volatile:heavy-guard');
         }
 
@@ -1008,11 +1020,19 @@ export const resolveTileTraitEffects = ({
         }
 
         if (hasTrait('mirror') && hasRunRelic(run, 'guard_token_plus_one')) {
-            if (guardTokens + result.guardTokenGain < MAX_GUARD_TOKENS) {
-                result.guardTokenGain += 1;
-            } else {
-                result.scoreBonus += 20;
-            }
+            const projectedGuardTokens = Math.min(MAX_GUARD_TOKENS, guardTokens + result.guardTokenGain);
+            const projectedRun = {
+                ...run,
+                stats: { ...stats, guardTokens: projectedGuardTokens }
+            };
+            const coreResult = applyCoreTraitDefinition(
+                'relic.guard_token_plus_one.mirror_match',
+                'warden-mirror',
+                projectedRun
+            );
+            const coreStats = normalizeSessionStats(coreResult.run.stats);
+            result.guardTokenGain += coreStats.guardTokens - projectedGuardTokens;
+            result.scoreBonus += coreStats.totalScore - stats.totalScore;
             result.interactionTags.push('warden-sigil:mirror-ward');
         }
 

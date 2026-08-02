@@ -1,6 +1,6 @@
 import type { RunState } from './contracts';
 import {
-    CONDUIT_CARTOGRAPHER_DEFINITIONS,
+    GAMEPLAY_CONTENT_DEFINITIONS,
     createGameplayDefinitionCommand,
     createGameplayPeekCommand,
     gameplayCommandSchema,
@@ -59,7 +59,7 @@ const commandForStep = (
     step: number,
     invalidTraitChance: number
 ): GameplayCommand => {
-    const definitions = CONDUIT_CARTOGRAPHER_DEFINITIONS;
+    const definitions = GAMEPLAY_CONTENT_DEFINITIONS;
     const actionIndex = pickRngIndex(rng, definitions.length + 1);
     const commandId = `sim:${seed}:${String(step).padStart(4, '0')}`;
     if (actionIndex === definitions.length) {
@@ -73,9 +73,15 @@ const commandForStep = (
     const definition = definitions[actionIndex % definitions.length] ?? definitions[0];
     if (definition.trigger === 'trait.match') {
         const invalid = rng() < invalidTraitChance;
+        const matchedTraits = definition.conditions
+            .filter((condition) => condition.kind === 'trait.matched')
+            .map((condition) => condition.trait);
+        const adjacentTraits = definition.conditions
+            .filter((condition) => condition.kind === 'trait.adjacent')
+            .map((condition) => condition.trait);
         return createGameplayDefinitionCommand(commandId, definition.id, {
-            matchedTraits: ['echo'],
-            adjacentTraits: invalid ? [] : ['conduit']
+            matchedTraits,
+            adjacentTraits: invalid ? [] : adjacentTraits
         });
     }
     return createGameplayDefinitionCommand(commandId, definition.id);
