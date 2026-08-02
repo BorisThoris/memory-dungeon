@@ -8,6 +8,11 @@ import {
     type GameplayEvent
 } from './gameplay-core-contracts';
 import { reduceGameplayCommand } from './gameplay-core';
+import type { FloorClearExecutionContext } from './floor-clear-transition';
+import {
+    collectSlayerFloorClearDefinitions,
+    resolveSlayerFloorClearEffects
+} from './slayer-floor-clear-transition';
 import { appendGameplayJournal } from './gameplay-journal';
 import { applyRelicImmediate } from './relic-immediate-rules';
 
@@ -195,35 +200,29 @@ export const resolveBoardTurnThroughGameplayCore = (
 export const resolveSlayerFloorClearThroughGameplayCore = (
     run: RunState,
     input: GameplaySlayerFloorClearInput,
-    commandIdPrefix: string
+    commandIdPrefix: string,
+    execution?: FloorClearExecutionContext
 ): GameplaySlayerFloorClearAdapterResult => {
-    const relicIds = new Set(Array.isArray(run.relicIds) ? run.relicIds : []);
-    const definitions: Array<{ id: string; suffix: string }> = [];
-    if (input.bossTrophyClaimed && relicIds.has('chapter_compass')) {
-        definitions.push({ id: 'relic.chapter_compass.boss_trophy', suffix: 'boss-trophy' });
-    }
-    if (input.riskWagerOutcome === 'won' && relicIds.has('wager_surety')) {
-        definitions.push({ id: 'relic.wager_surety.wager_won', suffix: 'wager-won' });
-    }
-    if (input.riskWagerOutcome === 'lost' && relicIds.has('wager_surety')) {
-        definitions.push({ id: 'relic.wager_surety.wager_lost', suffix: 'wager-lost' });
-    }
-    if (input.featuredObjectiveCompleted && input.scoreParasiteActive && relicIds.has('parasite_ledger')) {
-        definitions.push({ id: 'relic.parasite_ledger.featured_objective', suffix: 'parasite-relief' });
+    if (execution) {
+        return resolveSlayerFloorClearEffects(run, input, execution.commandId, execution.events);
     }
 
     const commands: GameplayCommand[] = [];
     const events: GameplayEvent[] = [];
-    for (const definition of definitions) {
-        const command = createGameplayDefinitionCommand(`${commandIdPrefix}:${definition.suffix}`, definition.id, {
-            bossTrophyClaimed: input.bossTrophyClaimed,
-            riskWagerOutcome: input.riskWagerOutcome ?? 'none',
-            featuredObjectiveCompleted: input.featuredObjectiveCompleted,
-            scoreParasiteActive: input.scoreParasiteActive
-        });
+    for (const definitionRef of collectSlayerFloorClearDefinitions(run, input)) {
+        const command = createGameplayDefinitionCommand(
+            `${commandIdPrefix}:${definitionRef.suffix}`,
+            definitionRef.id,
+            {
+                bossTrophyClaimed: input.bossTrophyClaimed,
+                riskWagerOutcome: input.riskWagerOutcome ?? 'none',
+                featuredObjectiveCompleted: input.featuredObjectiveCompleted,
+                scoreParasiteActive: input.scoreParasiteActive
+            }
+        );
         const result = reduceGameplayCommand(run, command);
         if (!result.accepted) {
-            throw new Error(`Migrated Slayer floor-clear command rejected: ${definition.id}`);
+            throw new Error(`Migrated Slayer floor-clear command rejected: ${definitionRef.id}`);
         }
         commands.push(command);
         events.push(...result.events);

@@ -62,6 +62,8 @@ import {
     type BoardTurnFindableRewardResult,
     type BoardTurnWildMatchResult
 } from './board-turn-transition';
+import { createFinalizeLevelTransition } from './floor-clear-transition';
+import { resolveSlayerFloorClearEffects } from './slayer-floor-clear-transition';
 
 export interface GameplayCommandResult {
     run: RunState;
@@ -1347,24 +1349,26 @@ const applyBoardTurnResolveCommand = (
     }
 
     const events: GameplayEvent[] = [];
-    let completionRequested = false;
-    const resolveTurn = createResolveBoardTurnTransition({
-        finalizeLevel: (candidateRun) => {
-            completionRequested = true;
-            return candidateRun;
+    const finalizeLevel = createFinalizeLevelTransition({
+        resolveSlayerFloorClear: (candidateRun, input, _legacyCommandId, execution) => {
+            if (!execution) {
+                throw new Error('Core-owned floor clear requires an outer execution context.');
+            }
+            return resolveSlayerFloorClearEffects(
+                candidateRun,
+                input,
+                execution.commandId,
+                execution.events
+            );
         },
+        appendGameplayJournal: (candidateRun) => candidateRun
+    });
+    const resolveTurn = createResolveBoardTurnTransition({
+        finalizeLevel,
         resolveFindableMatchReward: resolveBoardTurnFindableReward,
         consumeWildMatch: consumeBoardTurnWildMatch
     });
     const nextRun = resolveTurn(run, command.encorePairKeys, { commandId: command.commandId, events });
-    if (completionRequested) {
-        return rejectedResult(
-            run,
-            command.commandId,
-            'Board turn floor completion remains on the compatibility finalizer.',
-            command
-        );
-    }
     if (nextRun === run) {
         return rejectedResult(run, command.commandId, 'Board turn produced no transition.', command);
     }

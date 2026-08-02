@@ -7146,6 +7146,17 @@ describe('game rules', () => {
         expect(resolved.lastLevelResult?.mistakes).toBe(0);
         expect(resolved.lastLevelResult?.clearLifeReason).toBe('perfect');
         expect(resolved.lastLevelResult?.clearLifeGained).toBe(1);
+        expect(resolved.gameplayCommandJournal).toEqual([
+            expect.objectContaining({ type: 'board.turn_resolve' })
+        ]);
+        expect(resolved.gameplayEventJournal).toEqual(expect.arrayContaining([
+            expect.objectContaining({
+                type: 'board.turn_resolved',
+                outcome: 'match',
+                boardComplete: true,
+                statusAfter: 'levelComplete'
+            })
+        ]));
     });
 
     it('normalizes malformed persisted counters when finalizing a cleared floor', () => {

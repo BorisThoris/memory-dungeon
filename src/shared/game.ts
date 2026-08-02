@@ -1,24 +1,10 @@
-import {
-    GAUNTLET_FLOOR_CLEAR_TIME_BONUS_MS,
-    MAX_LIVES,
-    type BoardState,
-    type LevelResult,
-    type RunState
-} from './contracts';
-import { getDungeonLevelResultTags } from './secondary-objectives';
+import { type RunState } from './contracts';
 export {
     applyRelicOfferServiceToRun,
     computeRelicOfferPickBudget,
     openRelicOffer,
     useRelicOfferService
 } from './relic-offer-rules';
-import { generateRouteChoices } from './route-choice-rules';
-import { gainRelicFavor } from './relic-favor-rules';
-import {
-    clearCurrentDungeonNode,
-    revealDungeonChoices
-} from './run-map';
-import { getRunDungeonMapState } from './dungeon-run-state-rules';
 export {
     countFindablePairs
 } from './board-tile-generation-rules';
@@ -37,29 +23,10 @@ export {
     getEnemyHazardMovementCandidateIds,
     type EnemyHazardPatternDefinition
 } from './dungeon-enemy-hazard-rules';
-import { getDungeonBossTrophyCacheResult } from './dungeon-boss-clear-rules';
-import { calculateRating } from './scoring-rules';
-import {
-    applyFloorClearEnemyHazardDefeats,
-    calculateFloorClearScore,
-    createFloorClearLevelResult,
-    getClearLifeReason
-} from './level-clear-rules';
-import {
-    getFloorClearObjectiveResult
-} from './secondary-objective-rules';
-import {
-    clearResolveState,
-    extendTimerTimestampMs
-} from './run-timer-rules';
-import { getShopGoldRewardForFloor } from './shop-rules';
-import { hasMutator } from './mutators';
-import {
-    getParasiteFloorsAfterFeaturedObjectiveClear
-} from './score-parasite-rules';
 import { createFlipTileTransition } from './flip-tile-transition';
 import { createActivateDungeonExit, createApplyDestroyPair } from './floor-completion-transitions';
 import { createResolveBoardTurnTransition } from './board-turn-transition';
+import { createFinalizeLevelTransition } from './floor-clear-transition';
 import { appendGameplayJournal } from './gameplay-journal';
 import {
     consumeWildMatchThroughGameplayCore,
@@ -293,151 +260,10 @@ export {
     grantBonusRelicPickNextOffer
 } from './relic-immediate-rules';
 
-export const finalizeLevel = (run: RunState, board: BoardState): RunState => {
-    const floorClearHazards = applyFloorClearEnemyHazardDefeats(run, board);
-    run = floorClearHazards.run;
-    board = floorClearHazards.board;
-    const stats = normalizeSessionStats(run.stats);
-    const tries = runNonNegativeInteger(stats.tries);
-    const livesBeforeClear = runNonNegativeInteger(run.lives);
-    const currentLevelScoreBeforeClear = runNonNegativeInteger(stats.currentLevelScore);
-    const totalScoreBeforeClear = runNonNegativeInteger(stats.totalScore);
-    const perfect = tries === 0;
-    const clearLifeReason = getClearLifeReason(tries);
-    const clearLifeGained = clearLifeReason !== 'none' && livesBeforeClear < MAX_LIVES ? 1 : 0;
-    const legacyFloorClearObjective = getFloorClearObjectiveResult(run, board);
-    const legacyBossTrophyCache = getDungeonBossTrophyCacheResult(run, board);
-    const slayerFloorClear = resolveSlayerFloorClearThroughGameplayCore(
-        run,
-        {
-            bossTrophyClaimed: legacyBossTrophyCache.outcome === 'claimed',
-            riskWagerOutcome: legacyFloorClearObjective.featuredObjectiveClear.endlessRiskWagerOutcome,
-            featuredObjectiveCompleted: legacyFloorClearObjective.featuredObjectiveCompleted,
-            scoreParasiteActive: hasMutator(run, 'score_parasite')
-        },
-        `floor-clear:${run.runSeed}:${board.level}`
-    );
-    const floorClearObjective = getFloorClearObjectiveResult(run, board, {
-        wagerSuretyFavorBonus: slayerFloorClear.riskWagerFavorGain,
-        wagerSuretyLossStreakFloor: slayerFloorClear.riskWagerStreakFloor
-    });
-    const bonusTags: string[] = [...floorClearObjective.bonusTags];
-    if (run.traitRouteObjectiveCompletedThisFloor) {
-        bonusTags.push('trait_route_objective');
-    }
-    const objectiveBonus = floorClearObjective.objectiveBonus;
-    const featuredObjectiveId = floorClearObjective.featuredObjectiveId;
-    const featuredObjectiveCompleted = floorClearObjective.featuredObjectiveCompleted;
-    const featuredObjectiveClear = floorClearObjective.featuredObjectiveClear;
-    const bossTrophyCache = getDungeonBossTrophyCacheResult(run, board, {
-        chapterCompassScoreBonus: slayerFloorClear.bossTrophyScoreGain
-    });
-
-    const clearScore = calculateFloorClearScore({
-        bossTrophyCacheScore: bossTrophyCache.score,
-        currentLevelScore: currentLevelScoreBeforeClear,
-        featuredObjectiveStreakBonus: featuredObjectiveClear.featuredObjectiveStreakBonus,
-        floorTag: board.floorTag,
-        level: board.level,
-        objectiveBonus,
-        perfect
-    });
-    const scoreGained = clearScore.scoreGained;
-    if (board.floorTag === 'boss') {
-        bonusTags.push('boss_floor');
-        bonusTags.push(bossTrophyCache.outcome === 'claimed' ? 'boss_trophy_cache' : 'boss_trophy_forfeited');
-    }
-    bonusTags.push(...getDungeonLevelResultTags(run, board, perfect));
-    const bankedScoreBeforeClear = Math.max(0, totalScoreBeforeClear - currentLevelScoreBeforeClear);
-    const totalScore = bankedScoreBeforeClear + scoreGained;
-    const bestScore = Math.max(runNonNegativeInteger(stats.bestScore), totalScore);
-    const rating = calculateRating(tries);
-    const lives = Math.min(MAX_LIVES, livesBeforeClear + clearLifeGained);
-    const totalRelicFavorGained =
-        featuredObjectiveClear.relicFavorGained + featuredObjectiveClear.endlessRiskWagerFavorGained;
-    const relicFavor = gainRelicFavor(run, totalRelicFavorGained);
-    const routeChoices: LevelResult['routeChoices'] =
-        run.gameMode === 'endless' && board.level > 0 ? generateRouteChoices(run, board.level + 1) : undefined;
-    const currentDungeonRun = getRunDungeonMapState(run);
-    const dungeonRun = routeChoices
-        ? revealDungeonChoices(currentDungeonRun, board.level, routeChoices)
-        : clearCurrentDungeonNode(currentDungeonRun, board.level);
-    const parasiteFloors =
-        featuredObjectiveId != null
-            ? getParasiteFloorsAfterFeaturedObjectiveClear(run, featuredObjectiveCompleted, {
-                  reliefAmount: slayerFloorClear.parasiteRelief
-              })
-            : run.parasiteFloors;
-    const lastLevelResult = createFloorClearLevelResult({
-        bossTrophyCacheOutcome: bossTrophyCache.outcome,
-        bossTrophyCacheScore: bossTrophyCache.score,
-        bonusTags,
-        clearLifeGained,
-        clearLifeReason,
-        endlessRiskWagerFavorGained: featuredObjectiveClear.endlessRiskWagerFavorGained,
-        endlessRiskWagerOutcome: featuredObjectiveClear.endlessRiskWagerOutcome,
-        endlessRiskWagerStreakLost: featuredObjectiveClear.endlessRiskWagerStreakLost,
-        featuredObjectiveCompleted,
-        featuredObjectiveId,
-        featuredObjectiveStreak: featuredObjectiveClear.featuredObjectiveStreak,
-        featuredObjectiveStreakBonus: featuredObjectiveClear.featuredObjectiveStreakBonus,
-        level: board.level,
-        livesRemaining: lives,
-        mistakes: tries,
-        objectiveBonusScore: objectiveBonus,
-        perfect,
-        rating,
-        relicFavorGained: totalRelicFavorGained,
-        routeChoices,
-        run,
-        scoreGained,
-        traitRouteObjectiveCompleted: run.traitRouteObjectiveCompletedThisFloor,
-        traitRouteObjectiveProgress: run.traitRouteObjectiveProgressThisFloor,
-        traitRouteObjectiveRequired: run.traitRouteObjectiveRequiredThisFloor,
-        traitRouteObjectiveReward: run.traitRouteObjectiveRewardTextThisFloor ?? undefined
-    });
-
-    const journaledRun = appendGameplayJournal(run, slayerFloorClear.commands, slayerFloorClear.events);
-    return {
-        ...journaledRun,
-        status: 'levelComplete',
-        lives,
-        bonusRelicPicksNextOffer: relicFavor.bonusRelicPicksNextOffer,
-        favorBonusRelicPicksNextOffer: relicFavor.favorBonusRelicPicksNextOffer,
-        relicFavorProgress: relicFavor.relicFavorProgress,
-        shopGold: runNonNegativeInteger(run.shopGold) + getShopGoldRewardForFloor(board.level),
-        shopOffers: run.shopOffers,
-        parasiteFloors,
-        featuredObjectiveStreak: featuredObjectiveClear.featuredObjectiveStreak,
-        endlessRiskWager: featuredObjectiveClear.activeEndlessRiskWager ? null : run.endlessRiskWager,
-        gauntletDeadlineMs:
-            run.gameMode === 'gauntlet' && run.gauntletDeadlineMs !== null
-                ? extendTimerTimestampMs(run.gauntletDeadlineMs, GAUNTLET_FLOOR_CLEAR_TIME_BONUS_MS)
-                : run.gauntletDeadlineMs,
-        board,
-        pinnedTileIds: [],
-        peekRevealedTileIds: [],
-        flashPairRevealedTileIds: [],
-        strayRemoveArmed: false,
-        regionShuffleRowArmed: null,
-        stickyBlockIndex: null,
-        dungeonRun,
-        stats: {
-            ...stats,
-            totalScore,
-            bestScore,
-            currentLevelScore: scoreGained,
-            rating,
-            levelsCleared: runNonNegativeInteger(stats.levelsCleared) + 1,
-            highestLevel: Math.max(runNonNegativeInteger(stats.highestLevel), board.level),
-            perfectClears: perfect
-                ? runNonNegativeInteger(stats.perfectClears) + 1
-                : runNonNegativeInteger(stats.perfectClears)
-        },
-        timerState: clearResolveState(run),
-        lastLevelResult
-    };
-};
+export const finalizeLevel = createFinalizeLevelTransition({
+    resolveSlayerFloorClear: resolveSlayerFloorClearThroughGameplayCore,
+    appendGameplayJournal
+});
 
 export const flipTile = createFlipTileTransition({ finalizeLevel });
 

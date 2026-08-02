@@ -726,7 +726,7 @@ describe('gameplay interaction graph', () => {
 
     it('connects Hazard Banish acquisition to its typed floor-start removal or Destroy fallback', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
-        expect(gameplayInteractionGraph.version).toBe(22);
+        expect(gameplayInteractionGraph.version).toBe(23);
         expect(byId.get('perk.hazard_banish_per_floor')).toMatchObject({
             kind: 'perk',
             role: 'durable_floor_start_hazard_or_destroy_conversion',
@@ -749,7 +749,7 @@ describe('gameplay interaction graph', () => {
 
     it('connects typed route selection from floor clear through exact replayable consequences', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
-        expect(gameplayInteractionGraph.version).toBe(22);
+        expect(gameplayInteractionGraph.version).toBe(23);
         expect(byId.get('route.choice')).toMatchObject({
             kind: 'route',
             role: 'replayable_between_floor_commitment',
@@ -790,7 +790,7 @@ describe('gameplay interaction graph', () => {
 
     it('connects relic drafting and offer shaping to typed build acquisition, economy, feedback, persistence, and replay', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
-        expect(gameplayInteractionGraph.version).toBe(22);
+        expect(gameplayInteractionGraph.version).toBe(23);
         expect(byId.get('progression.relic_draft')).toMatchObject({
             kind: 'progression',
             role: 'typed_replayable_build_selection_and_offer_shaping',
@@ -819,7 +819,7 @@ describe('gameplay interaction graph', () => {
 
     it('connects flat typed side-room choices from routes through rewards, feedback, persistence, and replay', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
-        expect(gameplayInteractionGraph.version).toBe(22);
+        expect(gameplayInteractionGraph.version).toBe(23);
         expect(byId.get('progression.route_side_room')).toMatchObject({
             kind: 'progression',
             role: 'flat_replayable_between_floor_reward_choice',
@@ -848,7 +848,7 @@ describe('gameplay interaction graph', () => {
 
     it('connects flat typed floor advancement through pressure, board preparation, feedback, persistence, and replay', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
-        expect(gameplayInteractionGraph.version).toBe(22);
+        expect(gameplayInteractionGraph.version).toBe(23);
         expect(byId.get('progression.run_flow')).toMatchObject({
             kind: 'progression',
             role: 'typed_flat_replayable_floor_transition',
@@ -883,21 +883,24 @@ describe('gameplay interaction graph', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
         expect(byId.get('core.board_turn_resolution')).toMatchObject({
             kind: 'core',
-            role: 'single_command_match_mismatch_and_gambit_transition',
+            role: 'single_command_match_mismatch_gambit_and_pair_floor_clear_transition',
             evidence: expect.arrayContaining([
                 'src/shared/board-turn-transition.ts',
+                'src/shared/floor-clear-transition.ts',
+                'src/shared/slayer-floor-clear-transition.ts',
                 'src/shared/gameplay-effect-transition.ts',
                 'src/shared/gameplay-core.ts',
                 'src/shared/game.ts'
             ]),
             softlockGuards: expect.arrayContaining([
                 'deterministic-event-sequence',
-                'atomic-final-pair-fallback',
+                'atomic-pair-floor-clear',
                 'single-outer-command-journal'
             ])
         });
         expect(gameplayInteractionGraph.edges).toEqual(expect.arrayContaining([
             expect.objectContaining({ source: 'core.gameplay_commands', target: 'core.board_turn_resolution', kind: 'triggers' }),
+            expect.objectContaining({ source: 'core.board_turn_resolution', target: 'progression.run_flow', kind: 'enables' }),
             expect.objectContaining({ source: 'core.board_turn_resolution', target: 'power.wild_match', kind: 'modifies' }),
             expect.objectContaining({ source: 'trait.echo', target: 'core.board_turn_resolution', kind: 'triggers' }),
             expect.objectContaining({ source: 'core.board_turn_resolution', target: 'feedback.gameplay_hud', kind: 'displays' }),

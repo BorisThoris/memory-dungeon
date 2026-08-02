@@ -50,7 +50,11 @@ export interface BoardTurnWildMatchResult {
 }
 
 export interface BoardTurnTransitionDependencies {
-    finalizeLevel: (run: RunState, board: BoardState) => RunState;
+    finalizeLevel: (
+        run: RunState,
+        board: BoardState,
+        execution?: BoardTurnExecutionContext
+    ) => RunState;
     resolveFindableMatchReward: (
         run: RunState,
         findableKind: FindableKind | null,
@@ -360,7 +364,7 @@ export const createResolveBoardTurnTransition = ({
             return cleanedNextRun.status === 'gameOver'
                 ? cleanedNextRun
                 : isBoardComplete(completionBoard)
-                  ? finalizeLevel(cleanedNextRun, completionBoard)
+                  ? finalizeLevel(cleanedNextRun, completionBoard, execution)
                   : cleanedNextRun;
         }
     
@@ -657,7 +661,7 @@ export const createResolveBoardTurnTransition = ({
             return cleanedNextRun.status === 'gameOver'
                 ? cleanedNextRun
                 : isBoardComplete(completionBoard)
-                  ? finalizeLevel(cleanedNextRun, completionBoard)
+                  ? finalizeLevel(cleanedNextRun, completionBoard, execution)
                   : cleanedNextRun;
         }
     

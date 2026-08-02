@@ -60,7 +60,8 @@ import {
     createGameplayWildMatchConsumeCommand,
     gameplayCommandSchema,
     gameplayContentDefinitionSchema,
-    gameplayEventSchema
+    gameplayEventSchema,
+    type GameplayEvent
 } from './gameplay-core-contracts';
 import { reduceGameplayCommand, replayGameplayCommands } from './gameplay-core';
 import {
@@ -83,6 +84,7 @@ import {
     skipRouteSideRoom
 } from './route-side-room-rules';
 import { advanceToNextLevel } from './next-floor-transition-rules';
+import { resolveSlayerFloorClearEffects } from './slayer-floor-clear-transition';
 
 const tile = (id: string, pairKey: string, tileTraitKind?: Tile['tileTraitKind']): Tile => ({
     id,
@@ -171,8 +173,10 @@ describe('deterministic gameplay core', () => {
         expect(replayed.acceptedCommandIds).toEqual(['turn-1']);
     });
 
-    it('leaves final-pair turns on the compatibility finalizer without partial core effects', () => {
-        const initial = run({
+    it('resolves the final pair and floor-clear effects under the same outer turn command', () => {
+        const base = createNewRun(0, { runSeed: 9137 });
+        const initial: RunState = {
+            ...base,
             status: 'resolving',
             board: {
                 ...board(),
@@ -186,17 +190,30 @@ describe('deterministic gameplay core', () => {
             },
             findablesClaimedThisFloor: 0,
             findablesTotalThisFloor: 1
-        });
-        const result = reduceGameplayCommand(initial, createGameplayBoardTurnResolveCommand('final-turn'));
+        };
+        const command = createGameplayBoardTurnResolveCommand('final-turn');
+        const result = reduceGameplayCommand(initial, command);
 
-        expect(result.accepted).toBe(false);
-        expect(result.run).toBe(initial);
-        expect(result.events).toEqual([
+        expect(result.accepted).toBe(true);
+        expect(result.run.status).toBe('levelComplete');
+        expect(result.run.board?.matchedPairs).toBe(1);
+        expect(result.run.findablesClaimedThisFloor).toBe(1);
+        expect(result.run.gameplayCommandJournal).toEqual(initial.gameplayCommandJournal);
+        expect(result.events).toEqual(expect.arrayContaining([
+            expect.objectContaining({ type: 'score.requested', reason: 'findable_match', amount: 25 }),
             expect.objectContaining({
-                type: 'command.rejected',
-                reason: expect.stringContaining('compatibility finalizer')
+                type: 'board.turn_resolved',
+                outcome: 'match',
+                boardComplete: true,
+                statusAfter: 'levelComplete'
             })
-        ]);
+        ]));
+        expect(result.events.every((event) => event.commandId === command.commandId)).toBe(true);
+
+        const replayed = replayGameplayCommands(initial, [JSON.parse(JSON.stringify(command))]);
+        expect(replayed.run).toEqual(result.run);
+        expect(replayed.events).toEqual(result.events);
+        expect(replayed.acceptedCommandIds).toEqual(['final-turn']);
     });
 
     it('keeps every live relic representable by the typed gameplay schema', () => {
@@ -1074,11 +1091,35 @@ describe('deterministic gameplay core', () => {
             },
             'slayer-clear-lost'
         );
+        const outerEvents: GameplayEvent[] = [];
+        const flatWon = resolveSlayerFloorClearEffects(
+            ledger.run,
+            {
+                bossTrophyClaimed: true,
+                riskWagerOutcome: 'won',
+                featuredObjectiveCompleted: true,
+                scoreParasiteActive: true
+            },
+            'slayer-flat-clear',
+            outerEvents
+        );
 
         expect(compass).toMatchObject({ migrated: true, run: { peekCharges: 1 } });
         expect(surety).toMatchObject({ migrated: true, run: { stats: { guardTokens: 1 } } });
         expect(ledger).toMatchObject({ migrated: true, run: { parasiteWardRemaining: 1 } });
         expect(won).toMatchObject({ bossTrophyScoreGain: 30, riskWagerFavorGain: 1, parasiteRelief: 1 });
+        expect(flatWon).toMatchObject({
+            commands: [],
+            bossTrophyScoreGain: 30,
+            riskWagerFavorGain: 1,
+            parasiteRelief: 1
+        });
+        expect(flatWon.events).toEqual(outerEvents);
+        expect(flatWon.events.every((event, sequence) =>
+            event.commandId === 'slayer-flat-clear'
+            && event.sequence === sequence
+            && event.eventId === `slayer-flat-clear:${sequence}`
+        )).toBe(true);
         expect(won.events).toEqual(expect.arrayContaining([
             expect.objectContaining({ type: 'score.requested', reason: 'boss_trophy', amount: 30 }),
             expect.objectContaining({ type: 'relic_favor.requested', reason: 'risk_wager_win', amount: 1 }),
