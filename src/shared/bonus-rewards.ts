@@ -753,6 +753,7 @@ const MIGRATED_BONUS_REWARD_DEFINITION_IDS: Partial<Record<BonusRewardId, string
     key_insurance: 'bonus_reward.key_insurance',
     secret_favor: 'bonus_reward.secret_favor',
     stasis_lockbox: 'bonus_reward.stasis_lockbox',
+    supply_cache: 'bonus_reward.supply_cache',
     trait_streak_lens: 'bonus_reward.trait_streak_lens',
     trait_toolkit: 'bonus_reward.trait_toolkit'
 };
@@ -761,6 +762,13 @@ const bonusRewardMatchesMigratedDefinition = (reward: BonusRewardInstance): bool
     if (reward.id === 'secret_favor') {
         return (
             runNonNegativeInteger(reward.payout.relicFavorProgress) === 1 &&
+            runNonNegativeInteger(reward.payout.inventoryItems?.peek_charge) === 1
+        );
+    }
+    if (reward.id === 'supply_cache') {
+        return (
+            runNonNegativeInteger(reward.payout.score) === 10 &&
+            runNonNegativeInteger(reward.payout.inventoryItems?.destroy_charge) === 1 &&
             runNonNegativeInteger(reward.payout.inventoryItems?.peek_charge) === 1
         );
     }
@@ -944,11 +952,17 @@ export const previewBonusRewardClaim = (
                                     shopGold: journaledRun.shopGold,
                                     rewardPerkIds: journaledRun.rewardPerkIds
                                 }
-                          : reward.id === 'hazard_ward'
+                           : reward.id === 'hazard_ward'
                             ? {
                                 destroyPairCharges: journaledRun.destroyPairCharges,
                                 stats: { ...legacyStats, guardTokens: coreStats.guardTokens }
-                              }
+                                }
+                            : reward.id === 'supply_cache'
+                              ? {
+                                    destroyPairCharges: journaledRun.destroyPairCharges,
+                                    peekCharges: journaledRun.peekCharges,
+                                    stats: coreStats
+                                }
                             : reward.id === 'hazard_banisher'
                               ? {
                                     destroyPairCharges: journaledRun.destroyPairCharges,

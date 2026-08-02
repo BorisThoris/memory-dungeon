@@ -16,6 +16,7 @@ import {
     SABOTEUR_DEFINITIONS,
     SEER_DEFINITIONS,
     SLAYER_DEFINITIONS,
+    SUPPLY_CACHE_DEFINITIONS,
     VAULTBREAKER_DEFINITIONS,
     WARDEN_DEFINITIONS
 } from './gameplay-core-contracts';
@@ -318,6 +319,30 @@ describe('gameplay interaction graph', () => {
                 expect.objectContaining({ source: 'hazard.score_parasite', target: 'core.gameplay_commands', kind: 'triggers' })
             ])
         );
+    });
+
+    it('connects Supply Cache through reveal-then-remove emergency recovery', () => {
+        const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
+
+        expect(SUPPLY_CACHE_DEFINITIONS.map((definition) => definition.id)).toEqual([
+            'bonus_reward.supply_cache'
+        ]);
+        expect(byId.get('reward.supply_cache')).toMatchObject({
+            kind: 'reward',
+            role: 'emergency_information_and_removal_source',
+            tests: expect.arrayContaining(['src/shared/gameplay-core.test.ts'])
+        });
+        expect(byId.get('build.emergency_toolkit')).toMatchObject({
+            kind: 'build',
+            role: 'reveal_then_remove_recovery_build'
+        });
+        expect(gameplayInteractionGraph.edges).toEqual(expect.arrayContaining([
+            expect.objectContaining({ source: 'reward.supply_cache', target: 'core.gameplay_commands', kind: 'triggers' }),
+            expect.objectContaining({ source: 'reward.supply_cache', target: 'inventory.peek_charge', kind: 'grants' }),
+            expect.objectContaining({ source: 'reward.supply_cache', target: 'inventory.destroy_charge', kind: 'grants' }),
+            expect.objectContaining({ source: 'power.peek', target: 'power.destroy_pair', kind: 'synergy' }),
+            expect.objectContaining({ source: 'build.emergency_toolkit', target: 'objective.floor_clear', kind: 'consequence' })
+        ]));
     });
 
     it('connects Saboteur sources through destroy control and safe-hazard ward consequences', () => {

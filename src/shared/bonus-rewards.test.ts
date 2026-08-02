@@ -246,6 +246,15 @@ describe('REG-075 treasure, secret room, and bonus rewards', () => {
         expect(result.run.destroyPairCharges).toBe(1);
         expect(result.run.peekCharges).toBe(1);
         expect(result.feedback.gained).toEqual(expect.arrayContaining(['+1 destroy charge', '+1 peek charge', '+10 score']));
+        expect(result.run.gameplayCommandJournal).toEqual([
+            expect.objectContaining({ type: 'effects.apply', definitionId: 'bonus_reward.supply_cache' })
+        ]);
+        expect(result.run.gameplayEventJournal).toEqual(expect.arrayContaining([
+            expect.objectContaining({ type: 'inventory.changed', itemId: 'destroy_charge', applied: 1 }),
+            expect.objectContaining({ type: 'inventory.changed', itemId: 'peek_charge', applied: 1 }),
+            expect.objectContaining({ type: 'score.changed', reason: 'content_reward', amount: 10 }),
+            expect.objectContaining({ type: 'feedback.requested', cue: 'build.supply_cache.claimed' })
+        ]));
     });
 
     it('rolls deterministic reward drafts with build-defining trait, key, and hazard options', () => {

@@ -28,6 +28,7 @@ import {
     SABOTEUR_DEFINITIONS,
     SEER_DEFINITIONS,
     SLAYER_DEFINITIONS,
+    SUPPLY_CACHE_DEFINITIONS,
     VAULTBREAKER_DEFINITIONS,
     WARDEN_DEFINITIONS,
     createGameplayDefinitionCommand,
@@ -265,6 +266,32 @@ describe('deterministic gameplay core', () => {
             }),
             expect.objectContaining({ type: 'feedback.requested', cue: 'build.parasite_ward_once.claimed' })
         ]));
+    });
+
+    it('models Supply Cache as one typed emergency-tool claim across reveal, removal, and score', () => {
+        expect(SUPPLY_CACHE_DEFINITIONS.map((definition) => definition.id)).toEqual([
+            'bonus_reward.supply_cache'
+        ]);
+        const initial = run({ peekCharges: 0, destroyPairCharges: 0 });
+        const result = reduceGameplayCommand(
+            initial,
+            createGameplayDefinitionCommand('supply-cache', 'bonus_reward.supply_cache')
+        );
+
+        expect(result).toMatchObject({
+            accepted: true,
+            run: {
+                peekCharges: 1,
+                destroyPairCharges: 1,
+                stats: { totalScore: 10, currentLevelScore: 10 }
+            }
+        });
+        expect(result.events).toEqual([
+            expect.objectContaining({ type: 'inventory.changed', itemId: 'destroy_charge', applied: 1 }),
+            expect.objectContaining({ type: 'inventory.changed', itemId: 'peek_charge', applied: 1 }),
+            expect.objectContaining({ type: 'score.changed', reason: 'content_reward', amount: 10 }),
+            expect.objectContaining({ type: 'feedback.requested', cue: 'build.supply_cache.claimed' })
+        ]);
     });
 
     it('advances score-parasite pressure through a typed floor command and records ward or life outcomes', () => {

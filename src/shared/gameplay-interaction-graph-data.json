@@ -1,5 +1,5 @@
 {
-  "version": 10,
+  "version": 11,
   "mechanics": [
     {
       "id": "trait.echo",
@@ -587,6 +587,32 @@
       "tests": ["src/shared/gameplay-core.test.ts", "src/shared/board-power-actions.test.ts", "src/renderer/store/runSurfaceState.test.ts", "src/renderer/store/tilePressController.test.ts", "src/shared/game.test.ts", "src/shared/next-floor-run-state-rules.test.ts", "src/shared/hazard-tile-effect-rules.test.ts"]
     },
     {
+      "id": "build.emergency_toolkit",
+      "label": "Supply Cache Emergency Toolkit",
+      "kind": "build",
+      "role": "reveal_then_remove_recovery_build",
+      "evidence": ["src/shared/bonus-rewards.ts", "src/shared/gameplay-core-contracts.ts", "src/shared/gameplay-core.ts", "src/shared/board-power-actions.ts", "src/renderer/store/runSurfaceState.ts"],
+      "reads": ["bonusRewardLedger", "peekCharges", "destroyPairCharges", "tileStates", "tileHazardKind", "noDestroy"],
+      "writes": ["buildPlan"],
+      "enables": ["inventory.peek_charge", "inventory.destroy_charge", "power.peek", "power.destroy_pair", "objective.floor_clear"],
+      "blocks": [],
+      "softlockGuards": ["anti-grind-ledger", "hidden-target-only", "completion-safe-target", "no-destroy-contract", "complete-source-effect-consequence-loop"],
+      "tests": ["src/shared/bonus-rewards.test.ts", "src/shared/gameplay-core.test.ts", "src/shared/board-power-actions.test.ts", "src/renderer/store/runSurfaceState.test.ts"]
+    },
+    {
+      "id": "reward.supply_cache",
+      "label": "Supply Cache Reward",
+      "kind": "reward",
+      "role": "emergency_information_and_removal_source",
+      "evidence": ["src/shared/bonus-rewards.ts", "src/shared/gameplay-core-contracts.ts", "src/shared/gameplay-core.ts", "src/shared/route-side-room-rules.ts"],
+      "reads": ["bonusRewardLedger", "destroyPairCharges", "peekCharges"],
+      "writes": ["destroyPairCharges", "peekCharges", "score", "gameplayEvents", "feedbackLines"],
+      "enables": ["inventory.destroy_charge", "inventory.peek_charge", "build.emergency_toolkit"],
+      "blocks": [],
+      "softlockGuards": ["reward-eligibility", "two-claim-run-cap", "canonical-payout-parity", "definition-version-gate"],
+      "tests": ["src/shared/bonus-rewards.test.ts", "src/shared/gameplay-core.test.ts", "src/shared/gameplay-core-simulation.test.ts"]
+    },
+    {
       "id": "reward.hazard_banisher",
       "label": "Hazard Banisher Reward",
       "kind": "reward",
@@ -1023,7 +1049,7 @@
       "evidence": ["src/shared/gameplay-core-contracts.ts", "src/shared/gameplay-core.ts", "src/shared/gameplay-core-adapters.ts", "src/shared/gameplay-journal.ts", "src/renderer/store/runSurfaceState.ts", "src/renderer/store/tilePressController.ts", ".ai/GAMEPLAY_MIGRATION.md"],
       "reads": ["gameplayCommands", "rewardPerkIds", "relicIds", "matchedFindables", "peekCharges", "shuffleCharges", "regionShuffleCharges", "freeShuffleThisFloor", "regionShuffleFreeThisFloor", "shuffleNonce", "strayRemoveCharges", "pinnedTileIds", "guardTokens", "comboShards", "destroyPairCharges", "safeHazardWardChargesThisFloor", "dungeonKeys", "shopGold", "relicFavorProgress", "bonusRelicPicksNextOffer", "bossTrophyCacheOutcome", "endlessRiskWagerOutcome", "endlessRiskWager", "featuredObjectiveStreak", "featuredObjectiveCompleted", "gambitAvailableThisFloor", "gambitThirdFlipUsed", "flippedTileIds", "parasiteFloors", "parasiteWardRemaining", "tileTraitKind", "adjacentTraits", "matchResolutionsThisFloor"],
       "writes": ["gameplayEvents", "gameplayCommandJournal", "gameplayEventJournal", "comboShardRequests", "safeHazardWardRequests", "scoreRequests", "bossTrophyScoreRequests", "relicFavorRequests", "featuredStreakFloorRequests", "parasiteReliefRequests", "pinCapacityRequests", "scoutRevealRequests", "gambitCommitRequests", "rewardPerkIds", "peekCharges", "shuffleCharges", "regionShuffleCharges", "freeShuffleThisFloor", "regionShuffleFreeThisFloor", "shuffleNonce", "strayRemoveCharges", "pinnedTileIds", "pinsPlacedCountThisRun", "guardTokens", "comboShards", "destroyPairCharges", "dungeonKeys", "shopGold", "relicFavorProgress", "bonusRelicPicksNextOffer", "endlessRiskWager", "parasiteFloors", "parasiteWardRemaining", "lives", "score", "peekRevealedTileIds", "forgottenTileIdsThisFloor", "feedbackLines"],
-      "enables": ["build.conduit_cartographer", "build.guard_tank", "build.combo_shard_engine", "build.trap_control", "build.treasure_greed", "build.boss_hunter", "build.reveal_scout", "build.route_gambler", "persistence.run_summary", "simulation.gameplay_replay"],
+      "enables": ["build.conduit_cartographer", "build.guard_tank", "build.combo_shard_engine", "build.trap_control", "build.emergency_toolkit", "build.treasure_greed", "build.boss_hunter", "build.reveal_scout", "build.route_gambler", "persistence.run_summary", "simulation.gameplay_replay"],
       "blocks": [],
       "softlockGuards": ["strict-command-schema", "definition-version-gate", "atomic-condition-rejection"],
       "tests": ["src/shared/gameplay-core.test.ts", "src/shared/gameplay-journal.test.ts", "src/renderer/store/runSurfaceState.test.ts", "src/renderer/store/tilePressController.test.ts"]
@@ -1633,6 +1659,18 @@
     { "source": "progression.shard_to_life", "target": "feedback.gameplay_hud", "kind": "displays", "label": "shows life conversion consequence" },
     { "source": "build.combo_shard_engine", "target": "progression.shard_to_life", "kind": "consequence", "label": "converts momentum sources into sustain" },
     { "source": "build.combo_shard_engine", "target": "safety.parasite_ward", "kind": "consequence", "label": "adds one-shot chapter-pressure survival" },
+    { "source": "reward.supply_cache", "target": "core.gameplay_commands", "kind": "triggers", "label": "canonical emergency-tool claim" },
+    { "source": "reward.supply_cache", "target": "inventory.peek_charge", "kind": "grants", "label": "grants one blocker inspection" },
+    { "source": "reward.supply_cache", "target": "inventory.destroy_charge", "kind": "grants", "label": "grants one chosen pair removal" },
+    { "source": "reward.supply_cache", "target": "economy.score_and_rewards", "kind": "grants", "label": "adds ten detour score" },
+    { "source": "reward.supply_cache", "target": "build.emergency_toolkit", "kind": "belongs_to", "label": "activates reveal-then-remove recovery" },
+    { "source": "reward.supply_cache", "target": "feedback.gameplay_hud", "kind": "displays", "label": "shows both tools and score" },
+    { "source": "power.peek", "target": "power.destroy_pair", "kind": "synergy", "label": "reveals the pair worth removing" },
+    { "source": "build.emergency_toolkit", "target": "power.peek", "kind": "consequence", "label": "inspects a hidden blocker first" },
+    { "source": "build.emergency_toolkit", "target": "power.destroy_pair", "kind": "consequence", "label": "removes the chosen blocker second" },
+    { "source": "build.emergency_toolkit", "target": "objective.floor_clear", "kind": "consequence", "label": "converts the two-tool sequence into route recovery" },
+    { "source": "build.emergency_toolkit", "target": "build.trap_control", "kind": "synergy", "label": "feeds Saboteur removal planning" },
+    { "source": "build.emergency_toolkit", "target": "build.reveal_scout", "kind": "synergy", "label": "feeds Seer information planning" },
     { "source": "reward.hazard_banisher", "target": "core.gameplay_commands", "kind": "triggers", "label": "Saboteur reward command" },
     { "source": "reward.hazard_banisher", "target": "inventory.destroy_charge", "kind": "grants", "label": "grants one destroy charge" },
     { "source": "reward.hazard_banisher", "target": "build.trap_control", "kind": "belongs_to", "label": "activates Saboteur pressure control" },

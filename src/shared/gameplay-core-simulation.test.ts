@@ -76,6 +76,7 @@ describe('seeded gameplay core simulation', () => {
                 'trait.volatile_heavy_guard',
                 'relic.guard_token_plus_one.mirror_match',
                 'bonus_reward.bonus_shards',
+                'bonus_reward.supply_cache',
                 'relic.combo_shard_plus_step',
                 'findable.shard_spark',
                 'relic.combo_shard_plus_step.sealed_match',

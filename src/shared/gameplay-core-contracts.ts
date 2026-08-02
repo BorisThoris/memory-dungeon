@@ -530,6 +530,28 @@ export const COMBO_SHARD_ENGINE_DEFINITIONS = z.array(gameplayContentDefinitionS
     }
 ]);
 
+export const SUPPLY_CACHE_DEFINITIONS = z.array(gameplayContentDefinitionSchema).parse([
+    {
+        id: 'bonus_reward.supply_cache',
+        version: 1,
+        buildId: 'emergency_toolkit',
+        source: { kind: 'bonus_reward', id: 'supply_cache' },
+        trigger: 'content.claimed',
+        conditions: [],
+        effects: [
+            { kind: 'inventory.grant', itemId: 'destroy_charge', amount: 1 },
+            { kind: 'inventory.grant', itemId: 'peek_charge', amount: 1 },
+            { kind: 'score.grant', reason: 'content_reward', amount: 10 },
+            {
+                kind: 'feedback.emit',
+                cue: 'build.supply_cache.claimed',
+                message: 'Supply Cache added one Peek, one destroy charge, and 10 score.',
+                tone: 'reward'
+            }
+        ]
+    }
+]);
+
 export const SABOTEUR_DEFINITIONS = z.array(gameplayContentDefinitionSchema).parse([
     {
         id: 'bonus_reward.hazard_banisher',
@@ -1097,6 +1119,7 @@ export const GAMEPLAY_CONTENT_DEFINITIONS = [
     ...CONDUIT_CARTOGRAPHER_DEFINITIONS,
     ...WARDEN_DEFINITIONS,
     ...COMBO_SHARD_ENGINE_DEFINITIONS,
+    ...SUPPLY_CACHE_DEFINITIONS,
     ...SABOTEUR_DEFINITIONS,
     ...BOARD_TACTICIAN_DEFINITIONS,
     ...MEMORY_SCOUT_DEFINITIONS,
