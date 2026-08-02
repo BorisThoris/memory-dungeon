@@ -5,18 +5,18 @@
     "name": "memory-dungeon",
     "trackedFileCount": 2377,
     "codeFileCount": 876,
-    "exportedSymbolCount": 3174,
+    "exportedSymbolCount": 3175,
     "contentItemCount": 56,
-    "mechanicCount": 59,
-    "stateFieldCount": 85,
-    "relationshipCount": 7981
+    "mechanicCount": 68,
+    "stateFieldCount": 89,
+    "relationshipCount": 8132
   },
   "inventory": [
     {
       "path": ".ai/GAMEPLAY_MIGRATION.md",
       "category": "other",
-      "bytes": 7984,
-      "sha256": "31d124dff2b681db995fec0884bc599289c827683be59f939b37865e008be15c"
+      "bytes": 9183,
+      "sha256": "ba773884ed705c7b6a597681a1314201e47bd446fc6c8644036bb1475172ba02"
     },
     {
       "path": ".ai/README.md",
@@ -9339,8 +9339,8 @@
     {
       "path": "src/renderer/store/relicOfferSurfaceState.test.ts",
       "category": "test",
-      "bytes": 4919,
-      "sha256": "6160fb29da6e133a8ef06d8db204d4927243ee099efb8ca66bb8497d3197dc6c"
+      "bytes": 5705,
+      "sha256": "6d3b86354b755d37ec3bbfca8686db5b83576704c4c0ec6481c5580381813e08"
     },
     {
       "path": "src/renderer/store/relicOfferSurfaceState.ts",
@@ -9915,14 +9915,14 @@
     {
       "path": "src/shared/bonus-rewards.test.ts",
       "category": "test",
-      "bytes": 42728,
-      "sha256": "f581baa3ed3686674cb4477f86efc9a4c4d5bda4a859ae357805ee4c3e8e5f10"
+      "bytes": 45092,
+      "sha256": "4df8d7ad7f1703d92224a4abf00f6546e2aa52f5489548ccf35668c3b9d9c197"
     },
     {
       "path": "src/shared/bonus-rewards.ts",
       "category": "source",
-      "bytes": 40550,
-      "sha256": "1e1e4207cbe406cdb36cf29c349225259ed4c69aa4a757745605b79d5216835e"
+      "bytes": 41248,
+      "sha256": "702a7c7e0d873b29a40b6be91dec1df545cfd4aeb2c17f0f9bbedbfcee33ffe1"
     },
     {
       "path": "src/shared/boss-encounters.test.ts",
@@ -10587,32 +10587,32 @@
     {
       "path": "src/shared/game.test.ts",
       "category": "test",
-      "bytes": 372690,
-      "sha256": "c2a8af73cc650e04749eb26e45e04b883191498ad7b9e4e9a8b515ac967ebe73"
+      "bytes": 373164,
+      "sha256": "d9b37a51abb342450366f5a85a6a4a7bc528a9a9674051c73ff7a62f7031c747"
     },
     {
       "path": "src/shared/game.ts",
       "category": "source",
-      "bytes": 40657,
-      "sha256": "df880e22cb31a4ffadabf0c2eaed8dec980a5d0efa6c2ba34ecdec7e48030072"
+      "bytes": 40953,
+      "sha256": "88c84fce61b21f795571ecd031eb98319dc71a89d1f9f3e0874475918600af19"
     },
     {
       "path": "src/shared/gameplay-core-adapters.ts",
       "category": "source",
-      "bytes": 3416,
-      "sha256": "db0d9ccbb8a6af303119d7f0c0bdd089966e099a92a9c6daf0e2128ccaffe4ea"
+      "bytes": 3734,
+      "sha256": "d70f9378710b55ca6c881fb09147d53acc4efd19fa6a44b0a82340d802b4020e"
     },
     {
       "path": "src/shared/gameplay-core-contracts.ts",
       "category": "source",
-      "bytes": 19829,
-      "sha256": "210d7d2632e7669b425dd897495c20854dfa2e0668e41f3d2663bc99a1844833"
+      "bytes": 25298,
+      "sha256": "704841652aa3849d223cc263d882fbaaf7f14931de7ebf0850c4301c793ef6c2"
     },
     {
       "path": "src/shared/gameplay-core-simulation.test.ts",
       "category": "test",
-      "bytes": 3466,
-      "sha256": "9aee1de73997ae774a4bbbb81e3103e5d2a6df4f8cb8c9d2b584248e8f4296f2"
+      "bytes": 3692,
+      "sha256": "a87f6816c1f32491803c8706163377efc490ee2d078196798303bfb02b47283a"
     },
     {
       "path": "src/shared/gameplay-core-simulation.ts",
@@ -10623,26 +10623,26 @@
     {
       "path": "src/shared/gameplay-core.test.ts",
       "category": "test",
-      "bytes": 16988,
-      "sha256": "a2a4f4f14d9c0f96dc7547b801ec400502ab3aecf264c5b36b82c05937749fd9"
+      "bytes": 19879,
+      "sha256": "57138448b7858639257837f70b82fa3193f53ec4eb9e846afa00ef00910cb0bb"
     },
     {
       "path": "src/shared/gameplay-core.ts",
       "category": "source",
-      "bytes": 12981,
-      "sha256": "9bd52642f48407892fcc24c9d05dda4a48d2b517e54d8e7d86647609272722be"
+      "bytes": 15528,
+      "sha256": "4a52f18d834182faf3937d36f6944f13f65263b05f20717e488177c504520b5d"
     },
     {
       "path": "src/shared/gameplay-interaction-graph-data.json",
       "category": "source",
-      "bytes": 65313,
-      "sha256": "a083303e066f838fb2233e6b57ee316a24b24c94d91a00df0e501daa31f354c4"
+      "bytes": 77014,
+      "sha256": "fda97b9192d13143c62bf908559d9fcb72c2f67bc2c310cb819528b8a80b5e47"
     },
     {
       "path": "src/shared/gameplay-interaction-graph.test.ts",
       "category": "test",
-      "bytes": 19498,
-      "sha256": "73d07c06f30e587167b4e74dec970c49ff0c85a2db9c3023c1649f7bfb995dd4"
+      "bytes": 22075,
+      "sha256": "c53f954979a26667d5e34f4b5fd1c57f2f393ac312b408acab45f313bab51192"
     },
     {
       "path": "src/shared/gameplay-interaction-graph.ts",
@@ -11871,14 +11871,14 @@
     {
       "path": "src/shared/tile-trait-rules.test.ts",
       "category": "test",
-      "bytes": 42564,
-      "sha256": "71f7a54b2d5e70e5957191b14fc6ddbc0e07dabe54fed957eaf9afaf14976dc3"
+      "bytes": 43125,
+      "sha256": "64233635c84c74b5b1641ff77e9cd957080fa64a873d560db33c387a14b3c781"
     },
     {
       "path": "src/shared/tile-trait-rules.ts",
       "category": "source",
-      "bytes": 45903,
-      "sha256": "6fb0d959e0e720c7cdd0c8d90638521d28c4b7545a963b7529dd1509d81c9dbe"
+      "bytes": 46892,
+      "sha256": "d8d3013c1bf0c86782f2a14964b3e50e66cd7c3dda54820c6c34f6b84dcaa8bc"
     },
     {
       "path": "src/shared/trait-build-rewards.test.ts",
@@ -21891,7 +21891,7 @@
       "path": "src/renderer/store/relicOfferSurfaceState.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 146,
+      "lineCount": 171,
       "imports": [
         "file:src/renderer/store/relicOfferSurfaceState.ts",
         "file:src/shared/contracts.ts",
@@ -23545,7 +23545,7 @@
       "path": "src/shared/bonus-rewards.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 1038,
+      "lineCount": 1086,
       "imports": [
         "file:src/shared/board-build-rules.ts",
         "file:src/shared/bonus-rewards.ts",
@@ -23560,7 +23560,7 @@
       "path": "src/shared/bonus-rewards.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1012,
+      "lineCount": 1025,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/gameplay-core-contracts.ts",
@@ -26228,7 +26228,7 @@
       "path": "src/shared/game.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 8656,
+      "lineCount": 8663,
       "imports": [
         "file:src/shared/board-generation.ts",
         "file:src/shared/board-powers.ts",
@@ -26256,7 +26256,7 @@
       "path": "src/shared/game.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1027,
+      "lineCount": 1033,
       "imports": [
         "file:src/shared/board-build-rules.ts",
         "file:src/shared/board-inspection.ts",
@@ -26518,7 +26518,7 @@
       "path": "src/shared/gameplay-core-adapters.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 97,
+      "lineCount": 105,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/gameplay-core-contracts.ts",
@@ -26541,7 +26541,7 @@
       "path": "src/shared/gameplay-core-contracts.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 604,
+      "lineCount": 764,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/run-inventory-contracts.ts"
@@ -26574,6 +26574,7 @@
         "symbol:src/shared/gameplay-core-contracts.ts#gameplaySourceSchema",
         "symbol:src/shared/gameplay-core-contracts.ts#getGameplayContentDefinition",
         "symbol:src/shared/gameplay-core-contracts.ts#SABOTEUR_DEFINITIONS",
+        "symbol:src/shared/gameplay-core-contracts.ts#VAULTBREAKER_DEFINITIONS",
         "symbol:src/shared/gameplay-core-contracts.ts#WARDEN_DEFINITIONS"
       ],
       "testedBy": [
@@ -26589,7 +26590,7 @@
       "path": "src/shared/gameplay-core-simulation.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 88,
+      "lineCount": 93,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/gameplay-core-simulation.ts"
@@ -26624,7 +26625,7 @@
       "path": "src/shared/gameplay-core.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 369,
+      "lineCount": 420,
       "imports": [
         "file:src/shared/board-power-actions.ts",
         "file:src/shared/bonus-rewards.ts",
@@ -26643,7 +26644,7 @@
       "path": "src/shared/gameplay-core.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 306,
+      "lineCount": 363,
       "imports": [
         "file:src/shared/board-power-actions.ts",
         "file:src/shared/contracts.ts",
@@ -26669,7 +26670,7 @@
       "path": "src/shared/gameplay-interaction-graph-data.json",
       "layer": "shared",
       "role": "production",
-      "lineCount": 940,
+      "lineCount": 1093,
       "imports": [],
       "exports": [],
       "testedBy": []
@@ -26679,7 +26680,7 @@
       "path": "src/shared/gameplay-interaction-graph.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 343,
+      "lineCount": 378,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/gameplay-core-contracts.ts",
@@ -30989,7 +30990,7 @@
       "path": "src/shared/tile-trait-rules.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 957,
+      "lineCount": 965,
       "imports": [
         "file:src/shared/board-generation.ts",
         "file:src/shared/contracts.ts",
@@ -31006,7 +31007,7 @@
       "path": "src/shared/tile-trait-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1118,
+      "lineCount": 1136,
       "imports": [
         "file:src/shared/bonus-rewards.ts",
         "file:src/shared/contracts.ts",
@@ -41946,8 +41947,8 @@
       "name": "claimBonusReward",
       "kind": "value",
       "file": "src/shared/bonus-rewards.ts",
-      "line": 932,
-      "endLine": 996
+      "line": 945,
+      "endLine": 1009
     },
     {
       "id": "symbol:src/shared/bonus-rewards.ts#createBonusRewardLedger",
@@ -41962,8 +41963,8 @@
       "name": "getBonusRewardRows",
       "kind": "value",
       "file": "src/shared/bonus-rewards.ts",
-      "line": 998,
-      "endLine": 1011
+      "line": 1011,
+      "endLine": 1024
     },
     {
       "id": "symbol:src/shared/bonus-rewards.ts#getPrimaryRewardPerkReadinessRow",
@@ -42010,8 +42011,8 @@
       "name": "previewBonusRewardClaim",
       "kind": "value",
       "file": "src/shared/bonus-rewards.ts",
-      "line": 862,
-      "endLine": 930
+      "line": 864,
+      "endLine": 943
     },
     {
       "id": "symbol:src/shared/bonus-rewards.ts#resolveBonusRewardRoomByInstanceId",
@@ -48306,8 +48307,8 @@
       "name": "resolveBoardTurn",
       "kind": "value",
       "file": "src/shared/game.ts",
-      "line": 1008,
-      "endLine": 1026
+      "line": 1014,
+      "endLine": 1032
     },
     {
       "id": "symbol:src/shared/game.ts#resumeRun",
@@ -48530,8 +48531,8 @@
       "name": "applyRelicImmediateThroughGameplayCore",
       "kind": "value",
       "file": "src/shared/gameplay-core-adapters.ts",
-      "line": 36,
-      "endLine": 55
+      "line": 38,
+      "endLine": 57
     },
     {
       "id": "symbol:src/shared/gameplay-core-adapters.ts#GameplayMatchRewardAdapterResult",
@@ -48539,7 +48540,7 @@
       "kind": "interface",
       "file": "src/shared/gameplay-core-adapters.ts",
       "line": 17,
-      "endLine": 23
+      "endLine": 24
     },
     {
       "id": "symbol:src/shared/gameplay-core-adapters.ts#GameplayRelicImmediateAdapterResult",
@@ -48554,48 +48555,48 @@
       "name": "resolveFindableMatchRewardThroughGameplayCore",
       "kind": "value",
       "file": "src/shared/gameplay-core-adapters.ts",
-      "line": 62,
-      "endLine": 96
+      "line": 64,
+      "endLine": 104
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#COMBO_SHARD_ENGINE_DEFINITIONS",
       "name": "COMBO_SHARD_ENGINE_DEFINITIONS",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 310,
-      "endLine": 383
+      "line": 344,
+      "endLine": 417
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#CONDUIT_CARTOGRAPHER_DEFINITIONS",
       "name": "CONDUIT_CARTOGRAPHER_DEFINITIONS",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 173,
-      "endLine": 230
+      "line": 207,
+      "endLine": 264
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayDefinitionCommand",
       "name": "createGameplayDefinitionCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 578,
-      "endLine": 595
+      "line": 738,
+      "endLine": 755
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayPeekCommand",
       "name": "createGameplayPeekCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 597,
-      "endLine": 603
+      "line": 757,
+      "endLine": 763
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GAMEPLAY_CONTENT_DEFINITIONS",
       "name": "GAMEPLAY_CONTENT_DEFINITIONS",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 440,
-      "endLine": 445
+      "line": 570,
+      "endLine": 576
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GAMEPLAY_CORE_SCHEMA_VERSION",
@@ -48610,8 +48611,8 @@
       "name": "GAMEPLAY_FINDABLE_KINDS",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 21,
-      "endLine": 26
+      "line": 22,
+      "endLine": 27
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GAMEPLAY_RELIC_IDS",
@@ -48619,7 +48620,7 @@
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
       "line": 15,
-      "endLine": 19
+      "endLine": 20
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GAMEPLAY_REWARD_PERK_IDS",
@@ -48634,152 +48635,160 @@
       "name": "GAMEPLAY_RUN_STATUSES",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 40,
-      "endLine": 47
+      "line": 41,
+      "endLine": 48
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GAMEPLAY_TILE_TRAIT_KINDS",
       "name": "GAMEPLAY_TILE_TRAIT_KINDS",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 28,
-      "endLine": 38
+      "line": 29,
+      "endLine": 39
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GameplayCommand",
       "name": "GameplayCommand",
       "kind": "type",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 570,
-      "endLine": 570
+      "line": 730,
+      "endLine": 730
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#gameplayCommandSchema",
       "name": "gameplayCommandSchema",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 458,
-      "endLine": 475
+      "line": 589,
+      "endLine": 606
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GameplayCondition",
       "name": "GameplayCondition",
       "kind": "type",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 449,
-      "endLine": 449
+      "line": 580,
+      "endLine": 580
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#gameplayConditionSchema",
       "name": "gameplayConditionSchema",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 64,
-      "endLine": 108
+      "line": 65,
+      "endLine": 115
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GameplayContentDefinition",
       "name": "GameplayContentDefinition",
       "kind": "type",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 451,
-      "endLine": 451
+      "line": 582,
+      "endLine": 582
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#gameplayContentDefinitionSchema",
       "name": "gameplayContentDefinitionSchema",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 161,
-      "endLine": 171
+      "line": 195,
+      "endLine": 205
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GameplayEffect",
       "name": "GameplayEffect",
       "kind": "type",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 450,
-      "endLine": 450
+      "line": 581,
+      "endLine": 581
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#gameplayEffectSchema",
       "name": "gameplayEffectSchema",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 110,
-      "endLine": 159
+      "line": 117,
+      "endLine": 193
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GameplayEvent",
       "name": "GameplayEvent",
       "kind": "type",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 571,
-      "endLine": 571
+      "line": 731,
+      "endLine": 731
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#gameplayEventSchema",
       "name": "gameplayEventSchema",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 485,
-      "endLine": 568
+      "line": 616,
+      "endLine": 728
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GameplayFacts",
       "name": "GameplayFacts",
       "kind": "type",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 448,
-      "endLine": 448
+      "line": 579,
+      "endLine": 579
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#gameplayFactsSchema",
       "name": "gameplayFactsSchema",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 56,
-      "endLine": 62
+      "line": 57,
+      "endLine": 63
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GameplaySource",
       "name": "GameplaySource",
       "kind": "type",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 447,
-      "endLine": 447
+      "line": 578,
+      "endLine": 578
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#gameplaySourceSchema",
       "name": "gameplaySourceSchema",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 49,
-      "endLine": 54
+      "line": 50,
+      "endLine": 55
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#getGameplayContentDefinition",
       "name": "getGameplayContentDefinition",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 575,
-      "endLine": 576
+      "line": 735,
+      "endLine": 736
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#SABOTEUR_DEFINITIONS",
       "name": "SABOTEUR_DEFINITIONS",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 385,
-      "endLine": 438
+      "line": 419,
+      "endLine": 472
+    },
+    {
+      "id": "symbol:src/shared/gameplay-core-contracts.ts#VAULTBREAKER_DEFINITIONS",
+      "name": "VAULTBREAKER_DEFINITIONS",
+      "kind": "value",
+      "file": "src/shared/gameplay-core-contracts.ts",
+      "line": 474,
+      "endLine": 568
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#WARDEN_DEFINITIONS",
       "name": "WARDEN_DEFINITIONS",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 232,
-      "endLine": 308
+      "line": 266,
+      "endLine": 342
     },
     {
       "id": "symbol:src/shared/gameplay-core-simulation.ts#GameplayCoreSimulationOptions",
@@ -48826,16 +48835,16 @@
       "name": "reduceGameplayCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core.ts",
-      "line": 268,
-      "endLine": 290
+      "line": 325,
+      "endLine": 347
     },
     {
       "id": "symbol:src/shared/gameplay-core.ts#replayGameplayCommands",
       "name": "replayGameplayCommands",
       "kind": "value",
       "file": "src/shared/gameplay-core.ts",
-      "line": 292,
-      "endLine": 305
+      "line": 349,
+      "endLine": 362
     },
     {
       "id": "symbol:src/shared/gameplay-interaction-graph.ts#auditGameplayInteractionGraph",
@@ -56114,16 +56123,16 @@
       "name": "calculateTileTraitMatchRewards",
       "kind": "value",
       "file": "src/shared/tile-trait-rules.ts",
-      "line": 1077,
-      "endLine": 1098
+      "line": 1095,
+      "endLine": 1116
     },
     {
       "id": "symbol:src/shared/tile-trait-rules.ts#calculateTileTraitMismatchPenalty",
       "name": "calculateTileTraitMismatchPenalty",
       "kind": "value",
       "file": "src/shared/tile-trait-rules.ts",
-      "line": 1100,
-      "endLine": 1117
+      "line": 1118,
+      "endLine": 1135
     },
     {
       "id": "symbol:src/shared/tile-trait-rules.ts#countTraitComboOpportunityPairs",
@@ -56219,7 +56228,7 @@
       "kind": "value",
       "file": "src/shared/tile-trait-rules.ts",
       "line": 838,
-      "endLine": 1075
+      "endLine": 1093
     },
     {
       "id": "symbol:src/shared/tile-trait-rules.ts#TILE_TRAIT_COPY",
@@ -57915,7 +57924,7 @@
       "evidence": [
         {
           "path": "src/shared/gameplay-core-contracts.ts",
-          "line": 165
+          "line": 199
         },
         {
           "path": "src/shared/relics.ts",
@@ -57923,13 +57932,13 @@
         },
         {
           "path": "src/shared/tile-trait-rules.ts",
-          "line": 1037
+          "line": 1055
         }
       ],
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 10
+          "line": 11
         },
         {
           "path": "src/shared/tile-trait-rules.test.ts",
@@ -57960,7 +57969,7 @@
       "evidence": [
         {
           "path": "src/shared/gameplay-core-contracts.ts",
-          "line": 165
+          "line": 199
         },
         {
           "path": "src/shared/relics.ts",
@@ -58004,6 +58013,60 @@
         "hazard-ward-cap",
         "destroy-forfeits-findable",
         "complete-source-effect-consequence-loop"
+      ]
+    },
+    {
+      "id": "mechanic:build.treasure_greed",
+      "mechanicId": "build.treasure_greed",
+      "label": "The Vaultbreaker Build",
+      "kind": "build",
+      "role": "treasure_extraction_build",
+      "evidence": [
+        {
+          "path": "src/shared/gameplay-core-contracts.ts",
+          "line": 199
+        },
+        {
+          "path": "src/shared/bonus-rewards.ts",
+          "line": 26
+        },
+        {
+          "path": "src/shared/relics.ts",
+          "line": 24
+        },
+        {
+          "path": "src/shared/tile-trait-rules.ts",
+          "line": 425
+        }
+      ],
+      "tests": [
+        {
+          "path": "src/shared/gameplay-core.test.ts",
+          "line": 10
+        },
+        {
+          "path": "src/shared/bonus-rewards.test.ts",
+          "line": 17
+        },
+        {
+          "path": "src/shared/game.test.ts",
+          "line": 41
+        },
+        {
+          "path": "src/shared/tile-trait-rules.test.ts",
+          "line": 2
+        }
+      ],
+      "enables": [
+        "lock.iron_key",
+        "shop.typed_key",
+        "progression.relic_draft"
+      ],
+      "blocks": [],
+      "softlockGuards": [
+        "complete-source-effect-consequence-loop",
+        "first-match-only",
+        "typed-score-request"
       ]
     },
     {
@@ -58065,6 +58128,7 @@
         "build.guard_tank",
         "build.combo_shard_engine",
         "build.trap_control",
+        "build.treasure_greed",
         "persistence.run_summary",
         "simulation.gameplay_replay"
       ],
@@ -58116,6 +58180,51 @@
       "blocks": [],
       "softlockGuards": [
         "reward-priority-gate"
+      ]
+    },
+    {
+      "id": "mechanic:economy.shop_gold",
+      "mechanicId": "economy.shop_gold",
+      "label": "Shop Gold Economy",
+      "kind": "economy",
+      "role": "extracted_value_resource",
+      "evidence": [
+        {
+          "path": "src/shared/gameplay-core.ts",
+          "line": 218
+        },
+        {
+          "path": "src/shared/turn-match-economy-rules.ts",
+          "line": 2
+        },
+        {
+          "path": "src/shared/shop-rules.ts",
+          "line": 2
+        }
+      ],
+      "tests": [
+        {
+          "path": "src/shared/gameplay-core.test.ts",
+          "line": 255
+        },
+        {
+          "path": "src/shared/turn-match-economy-rules.test.ts",
+          "line": 3
+        },
+        {
+          "path": "src/shared/shop-rules.test.ts",
+          "line": 7
+        }
+      ],
+      "enables": [
+        "shop.typed_key",
+        "shop.trait_routing_kit"
+      ],
+      "blocks": [],
+      "softlockGuards": [
+        "non-negative-counter",
+        "shop-priority-key",
+        "affordability-check"
       ]
     },
     {
@@ -58201,6 +58310,55 @@
       "blocks": [],
       "softlockGuards": [
         "player-visible-state"
+      ]
+    },
+    {
+      "id": "mechanic:findable.score_glint",
+      "mechanicId": "findable.score_glint",
+      "label": "Score Glint Findable",
+      "kind": "findable",
+      "role": "remembered_pair_value_source",
+      "evidence": [
+        {
+          "path": "src/shared/findables.ts",
+          "line": 2
+        },
+        {
+          "path": "src/shared/match-claim-rules.ts",
+          "line": 2
+        },
+        {
+          "path": "src/shared/gameplay-core-adapters.ts",
+          "line": 1
+        },
+        {
+          "path": "src/shared/game.ts",
+          "line": 29
+        }
+      ],
+      "tests": [
+        {
+          "path": "src/shared/findables.test.ts",
+          "line": 3
+        },
+        {
+          "path": "src/shared/game.test.ts",
+          "line": 16
+        },
+        {
+          "path": "src/shared/gameplay-core.test.ts",
+          "line": 21
+        }
+      ],
+      "enables": [
+        "economy.shop_gold",
+        "build.treasure_greed"
+      ],
+      "blocks": [],
+      "softlockGuards": [
+        "matched-pair-only",
+        "typed-score-request",
+        "destroy-forfeits-findable"
       ]
     },
     {
@@ -58476,7 +58634,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 52
+          "line": 53
         }
       ],
       "enables": [
@@ -58528,7 +58686,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 59
+          "line": 60
         }
       ],
       "enables": [
@@ -58539,6 +58697,55 @@
         "non-negative-counter",
         "two-token-cap",
         "guard-before-life"
+      ]
+    },
+    {
+      "id": "mechanic:inventory.iron_key",
+      "mechanicId": "inventory.iron_key",
+      "label": "Iron Key Inventory",
+      "kind": "inventory",
+      "role": "treasure_extraction_resource",
+      "evidence": [
+        {
+          "path": "src/shared/run-inventory.ts",
+          "line": 11
+        },
+        {
+          "path": "src/shared/dungeon-key-rules.ts",
+          "line": 4
+        },
+        {
+          "path": "src/shared/gameplay-core.ts",
+          "line": 17
+        },
+        {
+          "path": "src/shared/turn-match-economy-rules.ts",
+          "line": 1
+        }
+      ],
+      "tests": [
+        {
+          "path": "src/shared/run-inventory.test.ts",
+          "line": 5
+        },
+        {
+          "path": "src/shared/dungeon-key-rules.test.ts",
+          "line": 5
+        },
+        {
+          "path": "src/shared/gameplay-core.test.ts",
+          "line": 86
+        }
+      ],
+      "enables": [
+        "lock.iron_key",
+        "room.locked_cache"
+      ],
+      "blocks": [],
+      "softlockGuards": [
+        "non-negative-counter",
+        "matching-key-kind",
+        "terminal-key-lock-fallback"
       ]
     },
     {
@@ -58777,6 +58984,47 @@
         "inspectBoardFairness",
         "softlock-generator-contract",
         "dungeon-topology-completion-route"
+      ]
+    },
+    {
+      "id": "mechanic:perk.cursed_opener_greed",
+      "mechanicId": "perk.cursed_opener_greed",
+      "label": "Cursed Opener Greed",
+      "kind": "perk",
+      "role": "first_match_risk_payoff",
+      "evidence": [
+        {
+          "path": "src/shared/gameplay-core-contracts.ts",
+          "line": 11
+        },
+        {
+          "path": "src/shared/gameplay-core.ts",
+          "line": 1
+        },
+        {
+          "path": "src/shared/tile-trait-rules.ts",
+          "line": 43
+        }
+      ],
+      "tests": [
+        {
+          "path": "src/shared/gameplay-core.test.ts",
+          "line": 253
+        },
+        {
+          "path": "src/shared/tile-trait-rules.test.ts",
+          "line": 57
+        }
+      ],
+      "enables": [
+        "economy.shop_gold",
+        "build.treasure_greed"
+      ],
+      "blocks": [],
+      "softlockGuards": [
+        "first-resolved-match-only",
+        "cursed-match-only",
+        "typed-condition-rejection"
       ]
     },
     {
@@ -59036,6 +59284,50 @@
       ]
     },
     {
+      "id": "mechanic:progression.relic_draft",
+      "mechanicId": "progression.relic_draft",
+      "label": "Relic Draft Progression",
+      "kind": "progression",
+      "role": "future_build_selection_consequence",
+      "evidence": [
+        {
+          "path": "src/shared/relics.ts",
+          "line": 2
+        },
+        {
+          "path": "src/shared/relic-offer-rules.ts",
+          "line": 1
+        },
+        {
+          "path": "src/shared/relic-immediate-rules.ts",
+          "line": 4
+        }
+      ],
+      "tests": [
+        {
+          "path": "src/shared/relic-offer-rules.test.ts",
+          "line": 4
+        },
+        {
+          "path": "src/shared/relic-pick-advance-rules.test.ts",
+          "line": 4
+        },
+        {
+          "path": "src/renderer/store/relicOfferSurfaceState.test.ts",
+          "line": 2
+        }
+      ],
+      "enables": [
+        "progression.run_flow"
+      ],
+      "blocks": [],
+      "softlockGuards": [
+        "offer-pick-budget",
+        "owned-relic-filter",
+        "next-offer-consumption"
+      ]
+    },
+    {
       "id": "mechanic:progression.run_flow",
       "mechanicId": "progression.run_flow",
       "label": "Run Progression Flow",
@@ -59209,7 +59501,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 19
+          "line": 10
         }
       ],
       "enables": [
@@ -59259,7 +59551,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 10
+          "line": 11
         }
       ],
       "enables": [
@@ -59318,6 +59610,55 @@
       ]
     },
     {
+      "id": "mechanic:relic.shrine_echo",
+      "mechanicId": "relic.shrine_echo",
+      "label": "Shrine Echo Relic",
+      "kind": "relic",
+      "role": "future_relic_selection_source",
+      "evidence": [
+        {
+          "path": "src/shared/relics.ts",
+          "line": 2
+        },
+        {
+          "path": "src/shared/gameplay-core-contracts.ts",
+          "line": 2
+        },
+        {
+          "path": "src/shared/gameplay-core-adapters.ts",
+          "line": 1
+        },
+        {
+          "path": "src/shared/relic-offer-rules.ts",
+          "line": 1
+        }
+      ],
+      "tests": [
+        {
+          "path": "src/shared/gameplay-core.test.ts",
+          "line": 20
+        },
+        {
+          "path": "src/shared/relic-immediate-rules.test.ts",
+          "line": 6
+        },
+        {
+          "path": "src/renderer/store/relicOfferSurfaceState.test.ts",
+          "line": 2
+        }
+      ],
+      "enables": [
+        "progression.relic_draft",
+        "build.treasure_greed"
+      ],
+      "blocks": [],
+      "softlockGuards": [
+        "draft-eligibility",
+        "definition-version-gate",
+        "next-offer-consumption"
+      ]
+    },
+    {
       "id": "mechanic:reward.bonus_shards",
       "mechanicId": "reward.bonus_shards",
       "label": "Bonus Shards Reward",
@@ -59357,6 +59698,90 @@
         "canonical-definition-boundary",
         "inventory-cap",
         "overflow-score"
+      ]
+    },
+    {
+      "id": "mechanic:reward.chest_gold",
+      "mechanicId": "reward.chest_gold",
+      "label": "Treasure Chest Reward",
+      "kind": "reward",
+      "role": "treasure_extraction_source",
+      "evidence": [
+        {
+          "path": "src/shared/bonus-rewards.ts",
+          "line": 2
+        },
+        {
+          "path": "src/shared/gameplay-core-contracts.ts",
+          "line": 2
+        },
+        {
+          "path": "src/shared/gameplay-core.ts",
+          "line": 2
+        }
+      ],
+      "tests": [
+        {
+          "path": "src/shared/bonus-rewards.test.ts",
+          "line": 3
+        },
+        {
+          "path": "src/shared/gameplay-core.test.ts",
+          "line": 3
+        }
+      ],
+      "enables": [
+        "inventory.iron_key",
+        "economy.shop_gold",
+        "build.treasure_greed"
+      ],
+      "blocks": [],
+      "softlockGuards": [
+        "reward-eligibility",
+        "anti-grind-ledger",
+        "non-negative-economy"
+      ]
+    },
+    {
+      "id": "mechanic:reward.cursed_opener_contract",
+      "mechanicId": "reward.cursed_opener_contract",
+      "label": "Cursed Opener Contract",
+      "kind": "reward",
+      "role": "risk_reward_activation_source",
+      "evidence": [
+        {
+          "path": "src/shared/bonus-rewards.ts",
+          "line": 9
+        },
+        {
+          "path": "src/shared/gameplay-core-contracts.ts",
+          "line": 2
+        },
+        {
+          "path": "src/shared/gameplay-core.ts",
+          "line": 2
+        }
+      ],
+      "tests": [
+        {
+          "path": "src/shared/bonus-rewards.test.ts",
+          "line": 18
+        },
+        {
+          "path": "src/shared/gameplay-core.test.ts",
+          "line": 4
+        }
+      ],
+      "enables": [
+        "perk.cursed_opener_greed",
+        "economy.shop_gold",
+        "build.treasure_greed"
+      ],
+      "blocks": [],
+      "softlockGuards": [
+        "reward-eligibility",
+        "anti-grind-ledger",
+        "idempotent-perk-grant"
       ]
     },
     {
@@ -60390,7 +60815,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 59
+          "line": 60
         }
       ],
       "enables": [
@@ -60440,10 +60865,27 @@
       "writtenBy": []
     },
     {
+      "id": "state:bonusRelicPicksNextOffer",
+      "name": "bonusRelicPicksNextOffer",
+      "readBy": [
+        "mechanic:build.treasure_greed",
+        "mechanic:core.gameplay_commands",
+        "mechanic:progression.relic_draft",
+        "mechanic:relic.shrine_echo"
+      ],
+      "writtenBy": [
+        "mechanic:core.gameplay_commands",
+        "mechanic:progression.relic_draft",
+        "mechanic:relic.shrine_echo"
+      ]
+    },
+    {
       "id": "state:bonusRewardLedger",
       "name": "bonusRewardLedger",
       "readBy": [
         "mechanic:reward.bonus_shards",
+        "mechanic:reward.chest_gold",
+        "mechanic:reward.cursed_opener_contract",
         "mechanic:reward.echo_conduit_lens",
         "mechanic:reward.hazard_banisher",
         "mechanic:reward.hazard_ward"
@@ -60468,7 +60910,8 @@
         "mechanic:build.combo_shard_engine",
         "mechanic:build.conduit_cartographer",
         "mechanic:build.guard_tank",
-        "mechanic:build.trap_control"
+        "mechanic:build.trap_control",
+        "mechanic:build.treasure_greed"
       ]
     },
     {
@@ -60604,6 +61047,7 @@
       "id": "state:dungeonExitLockKind",
       "name": "dungeonExitLockKind",
       "readBy": [
+        "mechanic:inventory.iron_key",
         "mechanic:lock.iron_key",
         "mechanic:lock.typed_key",
         "mechanic:safety.dungeon_topology",
@@ -60633,16 +61077,23 @@
       "id": "state:dungeonKeys",
       "name": "dungeonKeys",
       "readBy": [
+        "mechanic:build.treasure_greed",
+        "mechanic:core.gameplay_commands",
         "mechanic:exit.primary",
+        "mechanic:inventory.iron_key",
         "mechanic:lock.iron_key",
         "mechanic:lock.typed_key",
+        "mechanic:reward.chest_gold",
         "mechanic:room.locked_cache",
         "mechanic:safety.dungeon_topology",
         "mechanic:shop.typed_key"
       ],
       "writtenBy": [
+        "mechanic:core.gameplay_commands",
+        "mechanic:inventory.iron_key",
         "mechanic:lock.iron_key",
         "mechanic:lock.typed_key",
+        "mechanic:reward.chest_gold",
         "mechanic:room.locked_cache",
         "mechanic:shop.typed_key"
       ]
@@ -60758,8 +61209,10 @@
       "writtenBy": [
         "mechanic:core.gameplay_commands",
         "mechanic:feedback.gameplay_hud",
+        "mechanic:findable.score_glint",
         "mechanic:findable.shard_spark",
         "mechanic:findable.ward_spark",
+        "mechanic:perk.cursed_opener_greed",
         "mechanic:perk.echo_conduit_double",
         "mechanic:power.peek",
         "mechanic:progression.shard_to_life",
@@ -60767,7 +61220,10 @@
         "mechanic:relic.destroy_bank_plus_one",
         "mechanic:relic.guard_token_plus_one",
         "mechanic:relic.peek_charge_plus_one",
+        "mechanic:relic.shrine_echo",
         "mechanic:reward.bonus_shards",
+        "mechanic:reward.chest_gold",
+        "mechanic:reward.cursed_opener_contract",
         "mechanic:reward.echo_conduit_lens",
         "mechanic:reward.hazard_banisher",
         "mechanic:reward.hazard_ward",
@@ -60956,9 +61412,20 @@
       "readBy": [
         "mechanic:build.combo_shard_engine",
         "mechanic:build.trap_control",
+        "mechanic:build.treasure_greed",
         "mechanic:core.gameplay_commands",
+        "mechanic:findable.score_glint",
         "mechanic:findable.shard_spark",
         "mechanic:findable.ward_spark"
+      ],
+      "writtenBy": []
+    },
+    {
+      "id": "state:matchResolutionsThisFloor",
+      "name": "matchResolutionsThisFloor",
+      "readBy": [
+        "mechanic:core.gameplay_commands",
+        "mechanic:perk.cursed_opener_greed"
       ],
       "writtenBy": []
     },
@@ -61111,16 +61578,20 @@
         "mechanic:build.conduit_cartographer",
         "mechanic:build.guard_tank",
         "mechanic:core.gameplay_commands",
+        "mechanic:progression.relic_draft",
         "mechanic:relic.combo_shard_plus_step",
         "mechanic:relic.destroy_bank_plus_one",
         "mechanic:relic.guard_token_plus_one",
+        "mechanic:relic.shrine_echo",
         "mechanic:trait.volatile"
       ],
       "writtenBy": [
+        "mechanic:progression.relic_draft",
         "mechanic:relic.combo_shard_plus_step",
         "mechanic:relic.destroy_bank_plus_one",
         "mechanic:relic.guard_token_plus_one",
-        "mechanic:relic.peek_charge_plus_one"
+        "mechanic:relic.peek_charge_plus_one",
+        "mechanic:relic.shrine_echo"
       ]
     },
     {
@@ -61128,13 +61599,16 @@
       "name": "relicOffer",
       "readBy": [
         "mechanic:feedback.gameplay_hud",
+        "mechanic:progression.relic_draft",
         "mechanic:progression.run_flow",
         "mechanic:relic.combo_shard_plus_step",
         "mechanic:relic.destroy_bank_plus_one",
         "mechanic:relic.guard_token_plus_one",
-        "mechanic:relic.peek_charge_plus_one"
+        "mechanic:relic.peek_charge_plus_one",
+        "mechanic:relic.shrine_echo"
       ],
       "writtenBy": [
+        "mechanic:progression.relic_draft",
         "mechanic:progression.run_flow"
       ]
     },
@@ -61170,12 +61644,16 @@
       "readBy": [
         "mechanic:build.conduit_cartographer",
         "mechanic:build.trap_control",
+        "mechanic:build.treasure_greed",
         "mechanic:core.gameplay_commands",
+        "mechanic:perk.cursed_opener_greed",
         "mechanic:perk.echo_conduit_double",
+        "mechanic:reward.cursed_opener_contract",
         "mechanic:reward.hazard_banisher"
       ],
       "writtenBy": [
         "mechanic:core.gameplay_commands",
+        "mechanic:reward.cursed_opener_contract",
         "mechanic:reward.echo_conduit_lens",
         "mechanic:reward.hazard_banisher"
       ]
@@ -61241,18 +61719,33 @@
       "id": "state:score",
       "name": "score",
       "readBy": [
-        "mechanic:economy.score_and_rewards"
+        "mechanic:economy.score_and_rewards",
+        "mechanic:reward.chest_gold"
       ],
       "writtenBy": [
         "mechanic:core.gameplay_commands",
+        "mechanic:findable.score_glint",
+        "mechanic:perk.cursed_opener_greed",
         "mechanic:relic.combo_shard_plus_step",
         "mechanic:relic.guard_token_plus_one",
         "mechanic:reward.bonus_shards",
+        "mechanic:reward.chest_gold",
         "mechanic:reward.hazard_ward",
         "mechanic:room.locked_cache",
         "mechanic:trait.conduit",
         "mechanic:trait.heavy",
         "mechanic:trait.sealed"
+      ]
+    },
+    {
+      "id": "state:scoreRequests",
+      "name": "scoreRequests",
+      "readBy": [
+        "mechanic:economy.score_and_rewards"
+      ],
+      "writtenBy": [
+        "mechanic:core.gameplay_commands",
+        "mechanic:findable.score_glint"
       ]
     },
     {
@@ -61266,15 +61759,33 @@
       ]
     },
     {
+      "id": "state:shopCost",
+      "name": "shopCost",
+      "readBy": [
+        "mechanic:economy.shop_gold"
+      ],
+      "writtenBy": []
+    },
+    {
       "id": "state:shopGold",
       "name": "shopGold",
       "readBy": [
+        "mechanic:build.treasure_greed",
+        "mechanic:core.gameplay_commands",
         "mechanic:economy.score_and_rewards",
+        "mechanic:economy.shop_gold",
+        "mechanic:reward.chest_gold",
+        "mechanic:reward.cursed_opener_contract",
         "mechanic:shop.trait_cleanse",
         "mechanic:shop.trait_routing_kit",
         "mechanic:shop.typed_key"
       ],
       "writtenBy": [
+        "mechanic:core.gameplay_commands",
+        "mechanic:economy.shop_gold",
+        "mechanic:perk.cursed_opener_greed",
+        "mechanic:reward.chest_gold",
+        "mechanic:reward.cursed_opener_contract",
         "mechanic:room.locked_cache",
         "mechanic:shop.trait_cleanse",
         "mechanic:shop.typed_key",
@@ -61344,6 +61855,7 @@
       "name": "tileStates",
       "readBy": [
         "mechanic:board.cleanup",
+        "mechanic:findable.score_glint",
         "mechanic:findable.shard_spark",
         "mechanic:findable.ward_spark",
         "mechanic:hazard.enemy_patrol",
@@ -61372,6 +61884,7 @@
         "mechanic:build.combo_shard_engine",
         "mechanic:build.guard_tank",
         "mechanic:core.gameplay_commands",
+        "mechanic:perk.cursed_opener_greed",
         "mechanic:perk.echo_conduit_double",
         "mechanic:relic.combo_shard_plus_step",
         "mechanic:relic.guard_token_plus_one",
@@ -61436,6 +61949,13 @@
   ],
   "relationships": [
     {
+      "id": "belongs_to:mechanic:findable.score_glint->mechanic:build.treasure_greed:Vaultbreaker pickup source",
+      "source": "mechanic:findable.score_glint",
+      "target": "mechanic:build.treasure_greed",
+      "kind": "belongs_to",
+      "label": "Vaultbreaker pickup source"
+    },
+    {
       "id": "belongs_to:mechanic:findable.shard_spark->mechanic:build.combo_shard_engine:match pickup source",
       "source": "mechanic:findable.shard_spark",
       "target": "mechanic:build.combo_shard_engine",
@@ -61448,6 +61968,13 @@
       "target": "mechanic:build.trap_control",
       "kind": "belongs_to",
       "label": "Saboteur pickup source"
+    },
+    {
+      "id": "belongs_to:mechanic:perk.cursed_opener_greed->mechanic:build.treasure_greed:Vaultbreaker risk payoff",
+      "source": "mechanic:perk.cursed_opener_greed",
+      "target": "mechanic:build.treasure_greed",
+      "kind": "belongs_to",
+      "label": "Vaultbreaker risk payoff"
     },
     {
       "id": "belongs_to:mechanic:perk.echo_conduit_double->mechanic:build.conduit_cartographer:conditional payoff",
@@ -61485,11 +62012,32 @@
       "label": "supports build"
     },
     {
+      "id": "belongs_to:mechanic:relic.shrine_echo->mechanic:build.treasure_greed:Vaultbreaker relic source",
+      "source": "mechanic:relic.shrine_echo",
+      "target": "mechanic:build.treasure_greed",
+      "kind": "belongs_to",
+      "label": "Vaultbreaker relic source"
+    },
+    {
       "id": "belongs_to:mechanic:reward.bonus_shards->mechanic:build.combo_shard_engine:activates Catalyst resources",
       "source": "mechanic:reward.bonus_shards",
       "target": "mechanic:build.combo_shard_engine",
       "kind": "belongs_to",
       "label": "activates Catalyst resources"
+    },
+    {
+      "id": "belongs_to:mechanic:reward.chest_gold->mechanic:build.treasure_greed:Vaultbreaker treasure source",
+      "source": "mechanic:reward.chest_gold",
+      "target": "mechanic:build.treasure_greed",
+      "kind": "belongs_to",
+      "label": "Vaultbreaker treasure source"
+    },
+    {
+      "id": "belongs_to:mechanic:reward.cursed_opener_contract->mechanic:build.treasure_greed:Vaultbreaker risk source",
+      "source": "mechanic:reward.cursed_opener_contract",
+      "target": "mechanic:build.treasure_greed",
+      "kind": "belongs_to",
+      "label": "Vaultbreaker risk source"
     },
     {
       "id": "belongs_to:mechanic:reward.echo_conduit_lens->mechanic:build.conduit_cartographer:activates build",
@@ -61569,6 +62117,27 @@
       "label": "buffers the trap that remains"
     },
     {
+      "id": "consequence:mechanic:build.treasure_greed->mechanic:lock.iron_key:converts extraction into locked-route access",
+      "source": "mechanic:build.treasure_greed",
+      "target": "mechanic:lock.iron_key",
+      "kind": "consequence",
+      "label": "converts extraction into locked-route access"
+    },
+    {
+      "id": "consequence:mechanic:build.treasure_greed->mechanic:progression.relic_draft:compounds treasure into build selection",
+      "source": "mechanic:build.treasure_greed",
+      "target": "mechanic:progression.relic_draft",
+      "kind": "consequence",
+      "label": "compounds treasure into build selection"
+    },
+    {
+      "id": "consequence:mechanic:build.treasure_greed->mechanic:shop.typed_key:converts gold into chosen route insurance",
+      "source": "mechanic:build.treasure_greed",
+      "target": "mechanic:shop.typed_key",
+      "kind": "consequence",
+      "label": "converts gold into chosen route insurance"
+    },
+    {
       "id": "consequence:mechanic:power.destroy_pair->mechanic:build.trap_control:converts banked control into a chosen disarm",
       "source": "mechanic:power.destroy_pair",
       "target": "mechanic:build.trap_control",
@@ -61581,6 +62150,13 @@
       "target": "mechanic:route.mystery",
       "kind": "consequence",
       "label": "reveals route information"
+    },
+    {
+      "id": "consequence:mechanic:progression.relic_draft->mechanic:progression.run_flow:turns treasure success into future build selection",
+      "source": "mechanic:progression.relic_draft",
+      "target": "mechanic:progression.run_flow",
+      "kind": "consequence",
+      "label": "turns treasure success into future build selection"
     },
     {
       "id": "consumes:mechanic:power.destroy_pair->mechanic:inventory.destroy_charge:spends one charge",
@@ -62045,6 +62621,13 @@
       "label": "emits typed feedback"
     },
     {
+      "id": "displays:mechanic:economy.shop_gold->mechanic:feedback.gameplay_hud:shows spendable gold",
+      "source": "mechanic:economy.shop_gold",
+      "target": "mechanic:feedback.gameplay_hud",
+      "kind": "displays",
+      "label": "shows spendable gold"
+    },
+    {
       "id": "displays:mechanic:feedback.gameplay_hud->file:src/renderer/components/GameplayHudBar.tsx",
       "source": "mechanic:feedback.gameplay_hud",
       "target": "file:src/renderer/components/GameplayHudBar.tsx",
@@ -62055,6 +62638,13 @@
       "source": "mechanic:feedback.gameplay_hud",
       "target": "file:src/renderer/components/gameScreenFeedback.ts",
       "kind": "displays"
+    },
+    {
+      "id": "displays:mechanic:findable.score_glint->mechanic:feedback.gameplay_hud:shows score source",
+      "source": "mechanic:findable.score_glint",
+      "target": "mechanic:feedback.gameplay_hud",
+      "kind": "displays",
+      "label": "shows score source"
     },
     {
       "id": "displays:mechanic:findable.shard_spark->mechanic:feedback.gameplay_hud:shows shard spark cause",
@@ -62099,11 +62689,25 @@
       "label": "shows current guard balance"
     },
     {
+      "id": "displays:mechanic:inventory.iron_key->mechanic:feedback.gameplay_hud:shows key-ring quantity",
+      "source": "mechanic:inventory.iron_key",
+      "target": "mechanic:feedback.gameplay_hud",
+      "kind": "displays",
+      "label": "shows key-ring quantity"
+    },
+    {
       "id": "displays:mechanic:inventory.peek_charge->mechanic:feedback.gameplay_hud:shows current charge balance",
       "source": "mechanic:inventory.peek_charge",
       "target": "mechanic:feedback.gameplay_hud",
       "kind": "displays",
       "label": "shows current charge balance"
+    },
+    {
+      "id": "displays:mechanic:perk.cursed_opener_greed->mechanic:feedback.gameplay_hud:shows opener payout cause",
+      "source": "mechanic:perk.cursed_opener_greed",
+      "target": "mechanic:feedback.gameplay_hud",
+      "kind": "displays",
+      "label": "shows opener payout cause"
     },
     {
       "id": "displays:mechanic:perk.echo_conduit_double->mechanic:feedback.gameplay_hud:shows trigger cause",
@@ -62118,6 +62722,13 @@
       "target": "mechanic:feedback.gameplay_hud",
       "kind": "displays",
       "label": "shows target and balance"
+    },
+    {
+      "id": "displays:mechanic:progression.relic_draft->mechanic:feedback.gameplay_hud:shows relic pick budget",
+      "source": "mechanic:progression.relic_draft",
+      "target": "mechanic:feedback.gameplay_hud",
+      "kind": "displays",
+      "label": "shows relic pick budget"
     },
     {
       "id": "displays:mechanic:progression.shard_to_life->mechanic:feedback.gameplay_hud:shows life conversion consequence",
@@ -62155,11 +62766,32 @@
       "label": "shows relic resource gain"
     },
     {
+      "id": "displays:mechanic:relic.shrine_echo->mechanic:feedback.gameplay_hud:shows banked pick",
+      "source": "mechanic:relic.shrine_echo",
+      "target": "mechanic:feedback.gameplay_hud",
+      "kind": "displays",
+      "label": "shows banked pick"
+    },
+    {
       "id": "displays:mechanic:reward.bonus_shards->mechanic:feedback.gameplay_hud:shows shard guard and overflow",
       "source": "mechanic:reward.bonus_shards",
       "target": "mechanic:feedback.gameplay_hud",
       "kind": "displays",
       "label": "shows shard guard and overflow"
+    },
+    {
+      "id": "displays:mechanic:reward.chest_gold->mechanic:feedback.gameplay_hud:shows extracted key gold and score",
+      "source": "mechanic:reward.chest_gold",
+      "target": "mechanic:feedback.gameplay_hud",
+      "kind": "displays",
+      "label": "shows extracted key gold and score"
+    },
+    {
+      "id": "displays:mechanic:reward.cursed_opener_contract->mechanic:feedback.gameplay_hud:shows contract activation",
+      "source": "mechanic:reward.cursed_opener_contract",
+      "target": "mechanic:feedback.gameplay_hud",
+      "kind": "displays",
+      "label": "shows contract activation"
     },
     {
       "id": "displays:mechanic:reward.echo_conduit_lens->mechanic:feedback.gameplay_hud:shows claimed perk and charge",
@@ -62285,11 +62917,32 @@
       "label": "reward copy"
     },
     {
+      "id": "enables:mechanic:economy.shop_gold->mechanic:shop.trait_routing_kit:funds future board shaping",
+      "source": "mechanic:economy.shop_gold",
+      "target": "mechanic:shop.trait_routing_kit",
+      "kind": "enables",
+      "label": "funds future board shaping"
+    },
+    {
+      "id": "enables:mechanic:economy.shop_gold->mechanic:shop.typed_key:funds priority key purchases",
+      "source": "mechanic:economy.shop_gold",
+      "target": "mechanic:shop.typed_key",
+      "kind": "enables",
+      "label": "funds priority key purchases"
+    },
+    {
       "id": "enables:mechanic:exit.primary->mechanic:objective.floor_clear:activates floor clear",
       "source": "mechanic:exit.primary",
       "target": "mechanic:objective.floor_clear",
       "kind": "enables",
       "label": "activates floor clear"
+    },
+    {
+      "id": "enables:mechanic:findable.score_glint->mechanic:economy.shop_gold:adds remembered-pair value to extraction plan",
+      "source": "mechanic:findable.score_glint",
+      "target": "mechanic:economy.shop_gold",
+      "kind": "enables",
+      "label": "adds remembered-pair value to extraction plan"
     },
     {
       "id": "enables:mechanic:hazard.enemy_patrol->mechanic:feedback.gameplay_hud:shows patrol pressure",
@@ -75229,6 +75882,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/gameplay-core-contracts.ts->symbol:src/shared/gameplay-core-contracts.ts#VAULTBREAKER_DEFINITIONS",
+      "source": "file:src/shared/gameplay-core-contracts.ts",
+      "target": "symbol:src/shared/gameplay-core-contracts.ts#VAULTBREAKER_DEFINITIONS",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/gameplay-core-contracts.ts->symbol:src/shared/gameplay-core-contracts.ts#WARDEN_DEFINITIONS",
       "source": "file:src/shared/gameplay-core-contracts.ts",
       "target": "symbol:src/shared/gameplay-core-contracts.ts#WARDEN_DEFINITIONS",
@@ -81497,6 +82156,13 @@
       "label": "requests one floor ward"
     },
     {
+      "id": "grants:mechanic:perk.cursed_opener_greed->mechanic:economy.shop_gold:converts opener risk into gold",
+      "source": "mechanic:perk.cursed_opener_greed",
+      "target": "mechanic:economy.shop_gold",
+      "kind": "grants",
+      "label": "converts opener risk into gold"
+    },
+    {
       "id": "grants:mechanic:perk.echo_conduit_double->mechanic:inventory.peek_charge:creates extra charge",
       "source": "mechanic:perk.echo_conduit_double",
       "target": "mechanic:inventory.peek_charge",
@@ -81532,6 +82198,13 @@
       "label": "grants one charge"
     },
     {
+      "id": "grants:mechanic:relic.shrine_echo->mechanic:progression.relic_draft:banks one future relic pick",
+      "source": "mechanic:relic.shrine_echo",
+      "target": "mechanic:progression.relic_draft",
+      "kind": "grants",
+      "label": "banks one future relic pick"
+    },
+    {
       "id": "grants:mechanic:reward.bonus_shards->mechanic:inventory.combo_shard:grants one combo shard",
       "source": "mechanic:reward.bonus_shards",
       "target": "mechanic:inventory.combo_shard",
@@ -81544,6 +82217,34 @@
       "target": "mechanic:inventory.guard_token",
       "kind": "grants",
       "label": "grants one guard token"
+    },
+    {
+      "id": "grants:mechanic:reward.chest_gold->mechanic:economy.shop_gold:extracts shop buying power",
+      "source": "mechanic:reward.chest_gold",
+      "target": "mechanic:economy.shop_gold",
+      "kind": "grants",
+      "label": "extracts shop buying power"
+    },
+    {
+      "id": "grants:mechanic:reward.chest_gold->mechanic:inventory.iron_key:extracts one iron key",
+      "source": "mechanic:reward.chest_gold",
+      "target": "mechanic:inventory.iron_key",
+      "kind": "grants",
+      "label": "extracts one iron key"
+    },
+    {
+      "id": "grants:mechanic:reward.cursed_opener_contract->mechanic:economy.shop_gold:pays contract signing gold",
+      "source": "mechanic:reward.cursed_opener_contract",
+      "target": "mechanic:economy.shop_gold",
+      "kind": "grants",
+      "label": "pays contract signing gold"
+    },
+    {
+      "id": "grants:mechanic:reward.cursed_opener_contract->mechanic:perk.cursed_opener_greed:arms the risky first match",
+      "source": "mechanic:reward.cursed_opener_contract",
+      "target": "mechanic:perk.cursed_opener_greed",
+      "kind": "grants",
+      "label": "arms the risky first match"
     },
     {
       "id": "grants:mechanic:reward.echo_conduit_lens->mechanic:inventory.peek_charge:grants one charge",
@@ -81805,6 +82506,30 @@
       "kind": "implemented_by"
     },
     {
+      "id": "implemented_by:mechanic:build.treasure_greed->file:src/shared/bonus-rewards.ts",
+      "source": "mechanic:build.treasure_greed",
+      "target": "file:src/shared/bonus-rewards.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:build.treasure_greed->file:src/shared/gameplay-core-contracts.ts",
+      "source": "mechanic:build.treasure_greed",
+      "target": "file:src/shared/gameplay-core-contracts.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:build.treasure_greed->file:src/shared/relics.ts",
+      "source": "mechanic:build.treasure_greed",
+      "target": "file:src/shared/relics.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:build.treasure_greed->file:src/shared/tile-trait-rules.ts",
+      "source": "mechanic:build.treasure_greed",
+      "target": "file:src/shared/tile-trait-rules.ts",
+      "kind": "implemented_by"
+    },
+    {
       "id": "implemented_by:mechanic:core.gameplay_commands->file:.ai/GAMEPLAY_MIGRATION.md",
       "source": "mechanic:core.gameplay_commands",
       "target": "file:.ai/GAMEPLAY_MIGRATION.md",
@@ -81865,6 +82590,24 @@
       "kind": "implemented_by"
     },
     {
+      "id": "implemented_by:mechanic:economy.shop_gold->file:src/shared/gameplay-core.ts",
+      "source": "mechanic:economy.shop_gold",
+      "target": "file:src/shared/gameplay-core.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:economy.shop_gold->file:src/shared/shop-rules.ts",
+      "source": "mechanic:economy.shop_gold",
+      "target": "file:src/shared/shop-rules.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:economy.shop_gold->file:src/shared/turn-match-economy-rules.ts",
+      "source": "mechanic:economy.shop_gold",
+      "target": "file:src/shared/turn-match-economy-rules.ts",
+      "kind": "implemented_by"
+    },
+    {
       "id": "implemented_by:mechanic:exit.primary->file:src/shared/board-inspection.ts",
       "source": "mechanic:exit.primary",
       "target": "file:src/shared/board-inspection.ts",
@@ -81886,6 +82629,30 @@
       "id": "implemented_by:mechanic:feedback.gameplay_hud->file:src/renderer/hooks/useHudPoliteLiveAnnouncement.ts",
       "source": "mechanic:feedback.gameplay_hud",
       "target": "file:src/renderer/hooks/useHudPoliteLiveAnnouncement.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:findable.score_glint->file:src/shared/findables.ts",
+      "source": "mechanic:findable.score_glint",
+      "target": "file:src/shared/findables.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:findable.score_glint->file:src/shared/game.ts",
+      "source": "mechanic:findable.score_glint",
+      "target": "file:src/shared/game.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:findable.score_glint->file:src/shared/gameplay-core-adapters.ts",
+      "source": "mechanic:findable.score_glint",
+      "target": "file:src/shared/gameplay-core-adapters.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:findable.score_glint->file:src/shared/match-claim-rules.ts",
+      "source": "mechanic:findable.score_glint",
+      "target": "file:src/shared/match-claim-rules.ts",
       "kind": "implemented_by"
     },
     {
@@ -82045,6 +82812,30 @@
       "kind": "implemented_by"
     },
     {
+      "id": "implemented_by:mechanic:inventory.iron_key->file:src/shared/dungeon-key-rules.ts",
+      "source": "mechanic:inventory.iron_key",
+      "target": "file:src/shared/dungeon-key-rules.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:inventory.iron_key->file:src/shared/gameplay-core.ts",
+      "source": "mechanic:inventory.iron_key",
+      "target": "file:src/shared/gameplay-core.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:inventory.iron_key->file:src/shared/run-inventory.ts",
+      "source": "mechanic:inventory.iron_key",
+      "target": "file:src/shared/run-inventory.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:inventory.iron_key->file:src/shared/turn-match-economy-rules.ts",
+      "source": "mechanic:inventory.iron_key",
+      "target": "file:src/shared/turn-match-economy-rules.ts",
+      "kind": "implemented_by"
+    },
+    {
       "id": "implemented_by:mechanic:inventory.peek_charge->file:src/shared/gameplay-core.ts",
       "source": "mechanic:inventory.peek_charge",
       "target": "file:src/shared/gameplay-core.ts",
@@ -82147,6 +82938,24 @@
       "kind": "implemented_by"
     },
     {
+      "id": "implemented_by:mechanic:perk.cursed_opener_greed->file:src/shared/gameplay-core-contracts.ts",
+      "source": "mechanic:perk.cursed_opener_greed",
+      "target": "file:src/shared/gameplay-core-contracts.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:perk.cursed_opener_greed->file:src/shared/gameplay-core.ts",
+      "source": "mechanic:perk.cursed_opener_greed",
+      "target": "file:src/shared/gameplay-core.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:perk.cursed_opener_greed->file:src/shared/tile-trait-rules.ts",
+      "source": "mechanic:perk.cursed_opener_greed",
+      "target": "file:src/shared/tile-trait-rules.ts",
+      "kind": "implemented_by"
+    },
+    {
       "id": "implemented_by:mechanic:perk.echo_conduit_double->file:src/shared/bonus-rewards.ts",
       "source": "mechanic:perk.echo_conduit_double",
       "target": "file:src/shared/bonus-rewards.ts",
@@ -82246,6 +83055,24 @@
       "id": "implemented_by:mechanic:power.tile_swap->file:src/shared/board-power-actions.ts",
       "source": "mechanic:power.tile_swap",
       "target": "file:src/shared/board-power-actions.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:progression.relic_draft->file:src/shared/relic-immediate-rules.ts",
+      "source": "mechanic:progression.relic_draft",
+      "target": "file:src/shared/relic-immediate-rules.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:progression.relic_draft->file:src/shared/relic-offer-rules.ts",
+      "source": "mechanic:progression.relic_draft",
+      "target": "file:src/shared/relic-offer-rules.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:progression.relic_draft->file:src/shared/relics.ts",
+      "source": "mechanic:progression.relic_draft",
+      "target": "file:src/shared/relics.ts",
       "kind": "implemented_by"
     },
     {
@@ -82381,6 +83208,30 @@
       "kind": "implemented_by"
     },
     {
+      "id": "implemented_by:mechanic:relic.shrine_echo->file:src/shared/gameplay-core-adapters.ts",
+      "source": "mechanic:relic.shrine_echo",
+      "target": "file:src/shared/gameplay-core-adapters.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:relic.shrine_echo->file:src/shared/gameplay-core-contracts.ts",
+      "source": "mechanic:relic.shrine_echo",
+      "target": "file:src/shared/gameplay-core-contracts.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:relic.shrine_echo->file:src/shared/relic-offer-rules.ts",
+      "source": "mechanic:relic.shrine_echo",
+      "target": "file:src/shared/relic-offer-rules.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:relic.shrine_echo->file:src/shared/relics.ts",
+      "source": "mechanic:relic.shrine_echo",
+      "target": "file:src/shared/relics.ts",
+      "kind": "implemented_by"
+    },
+    {
       "id": "implemented_by:mechanic:reward.bonus_shards->file:src/shared/bonus-rewards.ts",
       "source": "mechanic:reward.bonus_shards",
       "target": "file:src/shared/bonus-rewards.ts",
@@ -82395,6 +83246,42 @@
     {
       "id": "implemented_by:mechanic:reward.bonus_shards->file:src/shared/gameplay-core.ts",
       "source": "mechanic:reward.bonus_shards",
+      "target": "file:src/shared/gameplay-core.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:reward.chest_gold->file:src/shared/bonus-rewards.ts",
+      "source": "mechanic:reward.chest_gold",
+      "target": "file:src/shared/bonus-rewards.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:reward.chest_gold->file:src/shared/gameplay-core-contracts.ts",
+      "source": "mechanic:reward.chest_gold",
+      "target": "file:src/shared/gameplay-core-contracts.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:reward.chest_gold->file:src/shared/gameplay-core.ts",
+      "source": "mechanic:reward.chest_gold",
+      "target": "file:src/shared/gameplay-core.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:reward.cursed_opener_contract->file:src/shared/bonus-rewards.ts",
+      "source": "mechanic:reward.cursed_opener_contract",
+      "target": "file:src/shared/bonus-rewards.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:reward.cursed_opener_contract->file:src/shared/gameplay-core-contracts.ts",
+      "source": "mechanic:reward.cursed_opener_contract",
+      "target": "file:src/shared/gameplay-core-contracts.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:reward.cursed_opener_contract->file:src/shared/gameplay-core.ts",
+      "source": "mechanic:reward.cursed_opener_contract",
       "target": "file:src/shared/gameplay-core.ts",
       "kind": "implemented_by"
     },
@@ -99937,6 +100824,13 @@
       "kind": "imports"
     },
     {
+      "id": "modifies:mechanic:core.gameplay_commands->mechanic:economy.shop_gold:applies typed gold grants",
+      "source": "mechanic:core.gameplay_commands",
+      "target": "mechanic:economy.shop_gold",
+      "kind": "modifies",
+      "label": "applies typed gold grants"
+    },
+    {
       "id": "modifies:mechanic:core.gameplay_commands->mechanic:inventory.combo_shard:applies capped shard effects and requests",
       "source": "mechanic:core.gameplay_commands",
       "target": "mechanic:inventory.combo_shard",
@@ -99956,6 +100850,20 @@
       "target": "mechanic:inventory.guard_token",
       "kind": "modifies",
       "label": "applies capped guard effects"
+    },
+    {
+      "id": "modifies:mechanic:core.gameplay_commands->mechanic:inventory.iron_key:applies typed iron-key grants",
+      "source": "mechanic:core.gameplay_commands",
+      "target": "mechanic:inventory.iron_key",
+      "kind": "modifies",
+      "label": "applies typed iron-key grants"
+    },
+    {
+      "id": "modifies:mechanic:core.gameplay_commands->mechanic:progression.relic_draft:applies typed future-pick grants",
+      "source": "mechanic:core.gameplay_commands",
+      "target": "mechanic:progression.relic_draft",
+      "kind": "modifies",
+      "label": "applies typed future-pick grants"
     },
     {
       "id": "modifies:mechanic:route.mystery->mechanic:progression.run_flow:changes next decision",
@@ -100188,9 +101096,45 @@
       "kind": "reads"
     },
     {
+      "id": "reads:mechanic:build.treasure_greed->state:bonusRelicPicksNextOffer",
+      "source": "mechanic:build.treasure_greed",
+      "target": "state:bonusRelicPicksNextOffer",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:build.treasure_greed->state:dungeonKeys",
+      "source": "mechanic:build.treasure_greed",
+      "target": "state:dungeonKeys",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:build.treasure_greed->state:matchedFindables",
+      "source": "mechanic:build.treasure_greed",
+      "target": "state:matchedFindables",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:build.treasure_greed->state:rewardPerkIds",
+      "source": "mechanic:build.treasure_greed",
+      "target": "state:rewardPerkIds",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:build.treasure_greed->state:shopGold",
+      "source": "mechanic:build.treasure_greed",
+      "target": "state:shopGold",
+      "kind": "reads"
+    },
+    {
       "id": "reads:mechanic:core.gameplay_commands->state:adjacentTraits",
       "source": "mechanic:core.gameplay_commands",
       "target": "state:adjacentTraits",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:core.gameplay_commands->state:bonusRelicPicksNextOffer",
+      "source": "mechanic:core.gameplay_commands",
+      "target": "state:bonusRelicPicksNextOffer",
       "kind": "reads"
     },
     {
@@ -100203,6 +101147,12 @@
       "id": "reads:mechanic:core.gameplay_commands->state:destroyPairCharges",
       "source": "mechanic:core.gameplay_commands",
       "target": "state:destroyPairCharges",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:core.gameplay_commands->state:dungeonKeys",
+      "source": "mechanic:core.gameplay_commands",
+      "target": "state:dungeonKeys",
       "kind": "reads"
     },
     {
@@ -100221,6 +101171,12 @@
       "id": "reads:mechanic:core.gameplay_commands->state:matchedFindables",
       "source": "mechanic:core.gameplay_commands",
       "target": "state:matchedFindables",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:core.gameplay_commands->state:matchResolutionsThisFloor",
+      "source": "mechanic:core.gameplay_commands",
+      "target": "state:matchResolutionsThisFloor",
       "kind": "reads"
     },
     {
@@ -100245,6 +101201,12 @@
       "id": "reads:mechanic:core.gameplay_commands->state:safeHazardWardChargesThisFloor",
       "source": "mechanic:core.gameplay_commands",
       "target": "state:safeHazardWardChargesThisFloor",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:core.gameplay_commands->state:shopGold",
+      "source": "mechanic:core.gameplay_commands",
+      "target": "state:shopGold",
       "kind": "reads"
     },
     {
@@ -100290,6 +101252,12 @@
       "kind": "reads"
     },
     {
+      "id": "reads:mechanic:economy.score_and_rewards->state:scoreRequests",
+      "source": "mechanic:economy.score_and_rewards",
+      "target": "state:scoreRequests",
+      "kind": "reads"
+    },
+    {
       "id": "reads:mechanic:economy.score_and_rewards->state:shopGold",
       "source": "mechanic:economy.score_and_rewards",
       "target": "state:shopGold",
@@ -100299,6 +101267,18 @@
       "id": "reads:mechanic:economy.score_and_rewards->state:totalScore",
       "source": "mechanic:economy.score_and_rewards",
       "target": "state:totalScore",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:economy.shop_gold->state:shopCost",
+      "source": "mechanic:economy.shop_gold",
+      "target": "state:shopCost",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:economy.shop_gold->state:shopGold",
+      "source": "mechanic:economy.shop_gold",
+      "target": "state:shopGold",
       "kind": "reads"
     },
     {
@@ -100440,6 +101420,18 @@
       "kind": "reads"
     },
     {
+      "id": "reads:mechanic:findable.score_glint->state:matchedFindables",
+      "source": "mechanic:findable.score_glint",
+      "target": "state:matchedFindables",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:findable.score_glint->state:tileStates",
+      "source": "mechanic:findable.score_glint",
+      "target": "state:tileStates",
+      "kind": "reads"
+    },
+    {
       "id": "reads:mechanic:findable.shard_spark->state:matchedFindables",
       "source": "mechanic:findable.shard_spark",
       "target": "state:matchedFindables",
@@ -100536,6 +101528,18 @@
       "kind": "reads"
     },
     {
+      "id": "reads:mechanic:inventory.iron_key->state:dungeonExitLockKind",
+      "source": "mechanic:inventory.iron_key",
+      "target": "state:dungeonExitLockKind",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:inventory.iron_key->state:dungeonKeys",
+      "source": "mechanic:inventory.iron_key",
+      "target": "state:dungeonKeys",
+      "kind": "reads"
+    },
+    {
       "id": "reads:mechanic:inventory.peek_charge->state:peekCharges",
       "source": "mechanic:inventory.peek_charge",
       "target": "state:peekCharges",
@@ -100617,6 +101621,24 @@
       "id": "reads:mechanic:objective.floor_clear->state:tileStates",
       "source": "mechanic:objective.floor_clear",
       "target": "state:tileStates",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:perk.cursed_opener_greed->state:matchResolutionsThisFloor",
+      "source": "mechanic:perk.cursed_opener_greed",
+      "target": "state:matchResolutionsThisFloor",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:perk.cursed_opener_greed->state:rewardPerkIds",
+      "source": "mechanic:perk.cursed_opener_greed",
+      "target": "state:rewardPerkIds",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:perk.cursed_opener_greed->state:tileTraitKind",
+      "source": "mechanic:perk.cursed_opener_greed",
+      "target": "state:tileTraitKind",
       "kind": "reads"
     },
     {
@@ -100731,6 +101753,24 @@
       "id": "reads:mechanic:power.tile_swap->state:tileSwapCharges",
       "source": "mechanic:power.tile_swap",
       "target": "state:tileSwapCharges",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:progression.relic_draft->state:bonusRelicPicksNextOffer",
+      "source": "mechanic:progression.relic_draft",
+      "target": "state:bonusRelicPicksNextOffer",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:progression.relic_draft->state:relicIds",
+      "source": "mechanic:progression.relic_draft",
+      "target": "state:relicIds",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:progression.relic_draft->state:relicOffer",
+      "source": "mechanic:progression.relic_draft",
+      "target": "state:relicOffer",
       "kind": "reads"
     },
     {
@@ -100872,9 +101912,69 @@
       "kind": "reads"
     },
     {
+      "id": "reads:mechanic:relic.shrine_echo->state:bonusRelicPicksNextOffer",
+      "source": "mechanic:relic.shrine_echo",
+      "target": "state:bonusRelicPicksNextOffer",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:relic.shrine_echo->state:relicIds",
+      "source": "mechanic:relic.shrine_echo",
+      "target": "state:relicIds",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:relic.shrine_echo->state:relicOffer",
+      "source": "mechanic:relic.shrine_echo",
+      "target": "state:relicOffer",
+      "kind": "reads"
+    },
+    {
       "id": "reads:mechanic:reward.bonus_shards->state:bonusRewardLedger",
       "source": "mechanic:reward.bonus_shards",
       "target": "state:bonusRewardLedger",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:reward.chest_gold->state:bonusRewardLedger",
+      "source": "mechanic:reward.chest_gold",
+      "target": "state:bonusRewardLedger",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:reward.chest_gold->state:dungeonKeys",
+      "source": "mechanic:reward.chest_gold",
+      "target": "state:dungeonKeys",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:reward.chest_gold->state:score",
+      "source": "mechanic:reward.chest_gold",
+      "target": "state:score",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:reward.chest_gold->state:shopGold",
+      "source": "mechanic:reward.chest_gold",
+      "target": "state:shopGold",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:reward.cursed_opener_contract->state:bonusRewardLedger",
+      "source": "mechanic:reward.cursed_opener_contract",
+      "target": "state:bonusRewardLedger",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:reward.cursed_opener_contract->state:rewardPerkIds",
+      "source": "mechanic:reward.cursed_opener_contract",
+      "target": "state:rewardPerkIds",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:reward.cursed_opener_contract->state:shopGold",
+      "source": "mechanic:reward.cursed_opener_contract",
+      "target": "state:shopGold",
       "kind": "reads"
     },
     {
@@ -101534,6 +102634,30 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:mechanic:build.treasure_greed->file:src/shared/bonus-rewards.test.ts",
+      "source": "mechanic:build.treasure_greed",
+      "target": "file:src/shared/bonus-rewards.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:build.treasure_greed->file:src/shared/game.test.ts",
+      "source": "mechanic:build.treasure_greed",
+      "target": "file:src/shared/game.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:build.treasure_greed->file:src/shared/gameplay-core.test.ts",
+      "source": "mechanic:build.treasure_greed",
+      "target": "file:src/shared/gameplay-core.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:build.treasure_greed->file:src/shared/tile-trait-rules.test.ts",
+      "source": "mechanic:build.treasure_greed",
+      "target": "file:src/shared/tile-trait-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:mechanic:core.gameplay_commands->file:src/renderer/store/runSurfaceState.test.ts",
       "source": "mechanic:core.gameplay_commands",
       "target": "file:src/renderer/store/runSurfaceState.test.ts",
@@ -101583,6 +102707,24 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:mechanic:economy.shop_gold->file:src/shared/gameplay-core.test.ts",
+      "source": "mechanic:economy.shop_gold",
+      "target": "file:src/shared/gameplay-core.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:economy.shop_gold->file:src/shared/shop-rules.test.ts",
+      "source": "mechanic:economy.shop_gold",
+      "target": "file:src/shared/shop-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:economy.shop_gold->file:src/shared/turn-match-economy-rules.test.ts",
+      "source": "mechanic:economy.shop_gold",
+      "target": "file:src/shared/turn-match-economy-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:mechanic:exit.primary->file:src/shared/dungeon-exit-rules.test.ts",
       "source": "mechanic:exit.primary",
       "target": "file:src/shared/dungeon-exit-rules.test.ts",
@@ -101610,6 +102752,24 @@
       "id": "tested_by:mechanic:feedback.gameplay_hud->file:src/renderer/hooks/useHudPoliteLiveAnnouncement.test.ts",
       "source": "mechanic:feedback.gameplay_hud",
       "target": "file:src/renderer/hooks/useHudPoliteLiveAnnouncement.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:findable.score_glint->file:src/shared/findables.test.ts",
+      "source": "mechanic:findable.score_glint",
+      "target": "file:src/shared/findables.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:findable.score_glint->file:src/shared/game.test.ts",
+      "source": "mechanic:findable.score_glint",
+      "target": "file:src/shared/game.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:findable.score_glint->file:src/shared/gameplay-core.test.ts",
+      "source": "mechanic:findable.score_glint",
+      "target": "file:src/shared/gameplay-core.test.ts",
       "kind": "tested_by"
     },
     {
@@ -101745,6 +102905,24 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:mechanic:inventory.iron_key->file:src/shared/dungeon-key-rules.test.ts",
+      "source": "mechanic:inventory.iron_key",
+      "target": "file:src/shared/dungeon-key-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:inventory.iron_key->file:src/shared/gameplay-core.test.ts",
+      "source": "mechanic:inventory.iron_key",
+      "target": "file:src/shared/gameplay-core.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:inventory.iron_key->file:src/shared/run-inventory.test.ts",
+      "source": "mechanic:inventory.iron_key",
+      "target": "file:src/shared/run-inventory.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:mechanic:inventory.peek_charge->file:src/shared/gameplay-core.test.ts",
       "source": "mechanic:inventory.peek_charge",
       "target": "file:src/shared/gameplay-core.test.ts",
@@ -101826,6 +103004,18 @@
       "id": "tested_by:mechanic:objective.floor_clear->file:src/shared/softlock-generator-contract.test.ts",
       "source": "mechanic:objective.floor_clear",
       "target": "file:src/shared/softlock-generator-contract.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:perk.cursed_opener_greed->file:src/shared/gameplay-core.test.ts",
+      "source": "mechanic:perk.cursed_opener_greed",
+      "target": "file:src/shared/gameplay-core.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:perk.cursed_opener_greed->file:src/shared/tile-trait-rules.test.ts",
+      "source": "mechanic:perk.cursed_opener_greed",
+      "target": "file:src/shared/tile-trait-rules.test.ts",
       "kind": "tested_by"
     },
     {
@@ -101922,6 +103112,24 @@
       "id": "tested_by:mechanic:power.tile_swap->file:src/shared/game.test.ts",
       "source": "mechanic:power.tile_swap",
       "target": "file:src/shared/game.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:progression.relic_draft->file:src/renderer/store/relicOfferSurfaceState.test.ts",
+      "source": "mechanic:progression.relic_draft",
+      "target": "file:src/renderer/store/relicOfferSurfaceState.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:progression.relic_draft->file:src/shared/relic-offer-rules.test.ts",
+      "source": "mechanic:progression.relic_draft",
+      "target": "file:src/shared/relic-offer-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:progression.relic_draft->file:src/shared/relic-pick-advance-rules.test.ts",
+      "source": "mechanic:progression.relic_draft",
+      "target": "file:src/shared/relic-pick-advance-rules.test.ts",
       "kind": "tested_by"
     },
     {
@@ -102033,6 +103241,24 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:mechanic:relic.shrine_echo->file:src/renderer/store/relicOfferSurfaceState.test.ts",
+      "source": "mechanic:relic.shrine_echo",
+      "target": "file:src/renderer/store/relicOfferSurfaceState.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:relic.shrine_echo->file:src/shared/gameplay-core.test.ts",
+      "source": "mechanic:relic.shrine_echo",
+      "target": "file:src/shared/gameplay-core.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:relic.shrine_echo->file:src/shared/relic-immediate-rules.test.ts",
+      "source": "mechanic:relic.shrine_echo",
+      "target": "file:src/shared/relic-immediate-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:mechanic:reward.bonus_shards->file:src/shared/bonus-rewards.test.ts",
       "source": "mechanic:reward.bonus_shards",
       "target": "file:src/shared/bonus-rewards.test.ts",
@@ -102041,6 +103267,30 @@
     {
       "id": "tested_by:mechanic:reward.bonus_shards->file:src/shared/gameplay-core.test.ts",
       "source": "mechanic:reward.bonus_shards",
+      "target": "file:src/shared/gameplay-core.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:reward.chest_gold->file:src/shared/bonus-rewards.test.ts",
+      "source": "mechanic:reward.chest_gold",
+      "target": "file:src/shared/bonus-rewards.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:reward.chest_gold->file:src/shared/gameplay-core.test.ts",
+      "source": "mechanic:reward.chest_gold",
+      "target": "file:src/shared/gameplay-core.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:reward.cursed_opener_contract->file:src/shared/bonus-rewards.test.ts",
+      "source": "mechanic:reward.cursed_opener_contract",
+      "target": "file:src/shared/bonus-rewards.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:reward.cursed_opener_contract->file:src/shared/gameplay-core.test.ts",
+      "source": "mechanic:reward.cursed_opener_contract",
       "target": "file:src/shared/gameplay-core.test.ts",
       "kind": "tested_by"
     },
@@ -108396,6 +109646,13 @@
       "label": "emits typed ward request"
     },
     {
+      "id": "triggers:mechanic:findable.score_glint->mechanic:core.gameplay_commands:matched Score Glint command",
+      "source": "mechanic:findable.score_glint",
+      "target": "mechanic:core.gameplay_commands",
+      "kind": "triggers",
+      "label": "matched Score Glint command"
+    },
+    {
       "id": "triggers:mechanic:findable.shard_spark->mechanic:core.gameplay_commands:matched findable command",
       "source": "mechanic:findable.shard_spark",
       "target": "mechanic:core.gameplay_commands",
@@ -108408,6 +109665,13 @@
       "target": "mechanic:core.gameplay_commands",
       "kind": "triggers",
       "label": "matched Ward Spark command"
+    },
+    {
+      "id": "triggers:mechanic:perk.cursed_opener_greed->mechanic:core.gameplay_commands:first Cursed match command",
+      "source": "mechanic:perk.cursed_opener_greed",
+      "target": "mechanic:core.gameplay_commands",
+      "kind": "triggers",
+      "label": "first Cursed match command"
     },
     {
       "id": "triggers:mechanic:perk.echo_conduit_double->mechanic:core.gameplay_commands:trait match command",
@@ -108445,11 +109709,32 @@
       "label": "relic command"
     },
     {
+      "id": "triggers:mechanic:relic.shrine_echo->mechanic:core.gameplay_commands:Shrine Echo relic command",
+      "source": "mechanic:relic.shrine_echo",
+      "target": "mechanic:core.gameplay_commands",
+      "kind": "triggers",
+      "label": "Shrine Echo relic command"
+    },
+    {
       "id": "triggers:mechanic:reward.bonus_shards->mechanic:core.gameplay_commands:canonical shard reward command",
       "source": "mechanic:reward.bonus_shards",
       "target": "mechanic:core.gameplay_commands",
       "kind": "triggers",
       "label": "canonical shard reward command"
+    },
+    {
+      "id": "triggers:mechanic:reward.chest_gold->mechanic:core.gameplay_commands:Vaultbreaker chest command",
+      "source": "mechanic:reward.chest_gold",
+      "target": "mechanic:core.gameplay_commands",
+      "kind": "triggers",
+      "label": "Vaultbreaker chest command"
+    },
+    {
+      "id": "triggers:mechanic:reward.cursed_opener_contract->mechanic:core.gameplay_commands:Vaultbreaker contract command",
+      "source": "mechanic:reward.cursed_opener_contract",
+      "target": "mechanic:core.gameplay_commands",
+      "kind": "triggers",
+      "label": "Vaultbreaker contract command"
     },
     {
       "id": "triggers:mechanic:reward.echo_conduit_lens->mechanic:core.gameplay_commands:claim command",
@@ -108506,6 +109791,20 @@
       "target": "mechanic:trait.volatile_heavy_guard",
       "kind": "triggers",
       "label": "matched Volatile condition"
+    },
+    {
+      "id": "unblocks:mechanic:inventory.iron_key->mechanic:lock.iron_key:opens iron locks",
+      "source": "mechanic:inventory.iron_key",
+      "target": "mechanic:lock.iron_key",
+      "kind": "unblocks",
+      "label": "opens iron locks"
+    },
+    {
+      "id": "unblocks:mechanic:inventory.iron_key->mechanic:room.locked_cache:opens optional locked caches",
+      "source": "mechanic:inventory.iron_key",
+      "target": "mechanic:room.locked_cache",
+      "kind": "unblocks",
+      "label": "opens optional locked caches"
     },
     {
       "id": "unblocks:mechanic:objective.defeat_boss->mechanic:exit.primary:allows exit",
@@ -108575,6 +109874,18 @@
       "kind": "writes"
     },
     {
+      "id": "writes:mechanic:build.treasure_greed->state:buildPlan",
+      "source": "mechanic:build.treasure_greed",
+      "target": "state:buildPlan",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:core.gameplay_commands->state:bonusRelicPicksNextOffer",
+      "source": "mechanic:core.gameplay_commands",
+      "target": "state:bonusRelicPicksNextOffer",
+      "kind": "writes"
+    },
+    {
       "id": "writes:mechanic:core.gameplay_commands->state:comboShardRequests",
       "source": "mechanic:core.gameplay_commands",
       "target": "state:comboShardRequests",
@@ -108590,6 +109901,12 @@
       "id": "writes:mechanic:core.gameplay_commands->state:destroyPairCharges",
       "source": "mechanic:core.gameplay_commands",
       "target": "state:destroyPairCharges",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:core.gameplay_commands->state:dungeonKeys",
+      "source": "mechanic:core.gameplay_commands",
+      "target": "state:dungeonKeys",
       "kind": "writes"
     },
     {
@@ -108653,6 +109970,18 @@
       "kind": "writes"
     },
     {
+      "id": "writes:mechanic:core.gameplay_commands->state:scoreRequests",
+      "source": "mechanic:core.gameplay_commands",
+      "target": "state:scoreRequests",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:core.gameplay_commands->state:shopGold",
+      "source": "mechanic:core.gameplay_commands",
+      "target": "state:shopGold",
+      "kind": "writes"
+    },
+    {
       "id": "writes:mechanic:economy.score_and_rewards->state:currentLevelScore",
       "source": "mechanic:economy.score_and_rewards",
       "target": "state:currentLevelScore",
@@ -108671,6 +110000,12 @@
       "kind": "writes"
     },
     {
+      "id": "writes:mechanic:economy.shop_gold->state:shopGold",
+      "source": "mechanic:economy.shop_gold",
+      "target": "state:shopGold",
+      "kind": "writes"
+    },
+    {
       "id": "writes:mechanic:exit.primary->state:dungeonExitActivated",
       "source": "mechanic:exit.primary",
       "target": "state:dungeonExitActivated",
@@ -108686,6 +110021,24 @@
       "id": "writes:mechanic:feedback.gameplay_hud->state:feedbackLines",
       "source": "mechanic:feedback.gameplay_hud",
       "target": "state:feedbackLines",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:findable.score_glint->state:feedbackLines",
+      "source": "mechanic:findable.score_glint",
+      "target": "state:feedbackLines",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:findable.score_glint->state:score",
+      "source": "mechanic:findable.score_glint",
+      "target": "state:score",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:findable.score_glint->state:scoreRequests",
+      "source": "mechanic:findable.score_glint",
+      "target": "state:scoreRequests",
       "kind": "writes"
     },
     {
@@ -108779,6 +110132,12 @@
       "kind": "writes"
     },
     {
+      "id": "writes:mechanic:inventory.iron_key->state:dungeonKeys",
+      "source": "mechanic:inventory.iron_key",
+      "target": "state:dungeonKeys",
+      "kind": "writes"
+    },
+    {
       "id": "writes:mechanic:inventory.peek_charge->state:peekCharges",
       "source": "mechanic:inventory.peek_charge",
       "target": "state:peekCharges",
@@ -108836,6 +110195,24 @@
       "id": "writes:mechanic:objective.floor_clear->state:routeChoices",
       "source": "mechanic:objective.floor_clear",
       "target": "state:routeChoices",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:perk.cursed_opener_greed->state:feedbackLines",
+      "source": "mechanic:perk.cursed_opener_greed",
+      "target": "state:feedbackLines",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:perk.cursed_opener_greed->state:score",
+      "source": "mechanic:perk.cursed_opener_greed",
+      "target": "state:score",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:perk.cursed_opener_greed->state:shopGold",
+      "source": "mechanic:perk.cursed_opener_greed",
+      "target": "state:shopGold",
       "kind": "writes"
     },
     {
@@ -108932,6 +110309,24 @@
       "id": "writes:mechanic:power.tile_swap->state:tilePositions",
       "source": "mechanic:power.tile_swap",
       "target": "state:tilePositions",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:progression.relic_draft->state:bonusRelicPicksNextOffer",
+      "source": "mechanic:progression.relic_draft",
+      "target": "state:bonusRelicPicksNextOffer",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:progression.relic_draft->state:relicIds",
+      "source": "mechanic:progression.relic_draft",
+      "target": "state:relicIds",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:progression.relic_draft->state:relicOffer",
+      "source": "mechanic:progression.relic_draft",
+      "target": "state:relicOffer",
       "kind": "writes"
     },
     {
@@ -109055,6 +110450,24 @@
       "kind": "writes"
     },
     {
+      "id": "writes:mechanic:relic.shrine_echo->state:bonusRelicPicksNextOffer",
+      "source": "mechanic:relic.shrine_echo",
+      "target": "state:bonusRelicPicksNextOffer",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:relic.shrine_echo->state:feedbackLines",
+      "source": "mechanic:relic.shrine_echo",
+      "target": "state:feedbackLines",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:relic.shrine_echo->state:relicIds",
+      "source": "mechanic:relic.shrine_echo",
+      "target": "state:relicIds",
+      "kind": "writes"
+    },
+    {
       "id": "writes:mechanic:reward.bonus_shards->state:comboShards",
       "source": "mechanic:reward.bonus_shards",
       "target": "state:comboShards",
@@ -109076,6 +110489,48 @@
       "id": "writes:mechanic:reward.bonus_shards->state:score",
       "source": "mechanic:reward.bonus_shards",
       "target": "state:score",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:reward.chest_gold->state:dungeonKeys",
+      "source": "mechanic:reward.chest_gold",
+      "target": "state:dungeonKeys",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:reward.chest_gold->state:feedbackLines",
+      "source": "mechanic:reward.chest_gold",
+      "target": "state:feedbackLines",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:reward.chest_gold->state:score",
+      "source": "mechanic:reward.chest_gold",
+      "target": "state:score",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:reward.chest_gold->state:shopGold",
+      "source": "mechanic:reward.chest_gold",
+      "target": "state:shopGold",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:reward.cursed_opener_contract->state:feedbackLines",
+      "source": "mechanic:reward.cursed_opener_contract",
+      "target": "state:feedbackLines",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:reward.cursed_opener_contract->state:rewardPerkIds",
+      "source": "mechanic:reward.cursed_opener_contract",
+      "target": "state:rewardPerkIds",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:reward.cursed_opener_contract->state:shopGold",
+      "source": "mechanic:reward.cursed_opener_contract",
+      "target": "state:shopGold",
       "kind": "writes"
     },
     {
@@ -109486,31 +110941,31 @@
       "severity": "warning",
       "code": "unmodeled_content_family",
       "subject": "bonus_reward",
-      "detail": "9 source-declared items lack mechanic nodes: chest_gold, cursed_opener_contract, free_swap_floor, key_insurance, secret_favor, stasis_lockbox, supply_cache, trait_streak_lens, trait_toolkit"
+      "detail": "7 source-declared items lack mechanic nodes: free_swap_floor, key_insurance, secret_favor, stasis_lockbox, supply_cache, trait_streak_lens, trait_toolkit"
     },
     {
       "severity": "warning",
       "code": "unmodeled_content_family",
       "subject": "build_archetype",
-      "detail": "4 source-declared items lack mechanic nodes: boss_hunter, reveal_scout, route_gambler, treasure_greed"
+      "detail": "3 source-declared items lack mechanic nodes: boss_hunter, reveal_scout, route_gambler"
     },
     {
       "severity": "warning",
       "code": "unmodeled_content_family",
       "subject": "findable",
-      "detail": "2 source-declared items lack mechanic nodes: score_glint, scout_glint"
+      "detail": "1 source-declared items lack mechanic nodes: scout_glint"
     },
     {
       "severity": "warning",
       "code": "unmodeled_content_family",
       "subject": "inventory_item",
-      "detail": "12 source-declared items lack mechanic nodes: contract_loadout, flash_pair_charge, gambit_token, iron_key, master_key, mutator_loadout, region_shuffle_charge, relic_loadout, shuffle_charge, stray_remove_charge, undo_charge, wild_match_token"
+      "detail": "11 source-declared items lack mechanic nodes: contract_loadout, flash_pair_charge, gambit_token, master_key, mutator_loadout, region_shuffle_charge, relic_loadout, shuffle_charge, stray_remove_charge, undo_charge, wild_match_token"
     },
     {
       "severity": "warning",
       "code": "unmodeled_content_family",
       "subject": "relic",
-      "detail": "12 source-declared items lack mechanic nodes: chapter_compass, extra_shuffle_charge, first_shuffle_free_per_floor, memorize_bonus_ms, memorize_under_short_memorize, parasite_ledger, parasite_ward_once, pin_cap_plus_one, region_shuffle_free_first, shrine_echo, stray_charge_plus_one, wager_surety"
+      "detail": "11 source-declared items lack mechanic nodes: chapter_compass, extra_shuffle_charge, first_shuffle_free_per_floor, memorize_bonus_ms, memorize_under_short_memorize, parasite_ledger, parasite_ward_once, pin_cap_plus_one, region_shuffle_free_first, stray_charge_plus_one, wager_surety"
     }
   ]
 }

@@ -15,7 +15,8 @@ export const GAMEPLAY_REWARD_PERK_IDS = [
 export const GAMEPLAY_RELIC_IDS = [
     'combo_shard_plus_step',
     'guard_token_plus_one',
-    'destroy_bank_plus_one'
+    'destroy_bank_plus_one',
+    'shrine_echo'
 ] as const satisfies readonly RelicId[];
 
 export const GAMEPLAY_FINDABLE_KINDS = [
@@ -104,6 +105,12 @@ export const gameplayConditionSchema = z.discriminatedUnion('kind', [
             kind: z.literal('findable.matched'),
             findable: z.enum(GAMEPLAY_FINDABLE_KINDS)
         })
+        .strict(),
+    z
+        .object({
+            kind: z.literal('floor.match_resolutions_is'),
+            amount: z.number().int().nonnegative()
+        })
         .strict()
 ]);
 
@@ -145,6 +152,33 @@ export const gameplayEffectSchema = z.discriminatedUnion('kind', [
     z
         .object({
             kind: z.literal('safe_hazard_ward.request'),
+            amount: z.number().int().positive()
+        })
+        .strict(),
+    z
+        .object({
+            kind: z.literal('currency.grant'),
+            currency: z.literal('shop_gold'),
+            amount: z.number().int().positive()
+        })
+        .strict(),
+    z
+        .object({
+            kind: z.literal('score.grant'),
+            reason: z.enum(['content_reward', 'trait_reward']),
+            amount: z.number().int().positive()
+        })
+        .strict(),
+    z
+        .object({
+            kind: z.literal('score.request'),
+            reason: z.literal('findable_match'),
+            amount: z.number().int().positive()
+        })
+        .strict(),
+    z
+        .object({
+            kind: z.literal('bonus_relic_pick.grant'),
             amount: z.number().int().positive()
         })
         .strict(),
@@ -437,11 +471,108 @@ export const SABOTEUR_DEFINITIONS = z.array(gameplayContentDefinitionSchema).par
     }
 ]);
 
+export const VAULTBREAKER_DEFINITIONS = z.array(gameplayContentDefinitionSchema).parse([
+    {
+        id: 'bonus_reward.chest_gold',
+        version: 1,
+        buildId: 'treasure_greed',
+        source: { kind: 'bonus_reward', id: 'chest_gold' },
+        trigger: 'content.claimed',
+        conditions: [],
+        effects: [
+            { kind: 'inventory.grant', itemId: 'iron_key', amount: 1 },
+            { kind: 'currency.grant', currency: 'shop_gold', amount: 2 },
+            { kind: 'score.grant', reason: 'content_reward', amount: 25 },
+            {
+                kind: 'feedback.emit',
+                cue: 'build.chest_gold.claimed',
+                message: 'Treasure chest added one iron key, two shop gold, and 25 score.',
+                tone: 'reward'
+            }
+        ]
+    },
+    {
+        id: 'bonus_reward.cursed_opener_contract',
+        version: 1,
+        buildId: 'treasure_greed',
+        source: { kind: 'bonus_reward', id: 'cursed_opener_contract' },
+        trigger: 'content.claimed',
+        conditions: [],
+        effects: [
+            { kind: 'reward_perk.grant', perkId: 'cursed_opener_greed' },
+            { kind: 'currency.grant', currency: 'shop_gold', amount: 1 },
+            {
+                kind: 'feedback.emit',
+                cue: 'build.cursed_opener_contract.claimed',
+                message: 'Cursed Opener armed the first clean Cursed match and added one shop gold.',
+                tone: 'reward'
+            }
+        ]
+    },
+    {
+        id: 'reward_perk.cursed_opener_greed',
+        version: 1,
+        buildId: 'treasure_greed',
+        source: { kind: 'reward_perk', id: 'cursed_opener_greed' },
+        trigger: 'trait.match',
+        conditions: [
+            { kind: 'reward_perk.active', perkId: 'cursed_opener_greed' },
+            { kind: 'trait.matched', trait: 'cursed' },
+            { kind: 'floor.match_resolutions_is', amount: 0 }
+        ],
+        effects: [
+            { kind: 'currency.grant', currency: 'shop_gold', amount: 1 },
+            { kind: 'score.grant', reason: 'trait_reward', amount: 25 },
+            {
+                kind: 'feedback.emit',
+                cue: 'build.cursed_opener_greed.triggered',
+                message: 'The clean Cursed opener paid one shop gold and 25 score.',
+                tone: 'reward'
+            }
+        ]
+    },
+    {
+        id: 'relic.shrine_echo',
+        version: 1,
+        buildId: 'treasure_greed',
+        source: { kind: 'relic', id: 'shrine_echo' },
+        trigger: 'content.claimed',
+        conditions: [],
+        effects: [
+            { kind: 'bonus_relic_pick.grant', amount: 1 },
+            {
+                kind: 'feedback.emit',
+                cue: 'build.shrine_echo.claimed',
+                message: 'Shrine Echo banked one extra pick for the next relic offer.',
+                tone: 'reward'
+            }
+        ]
+    },
+    {
+        id: 'findable.score_glint',
+        version: 1,
+        buildId: 'treasure_greed',
+        source: { kind: 'findable', id: 'score_glint' },
+        trigger: 'findable.match',
+        conditions: [{ kind: 'findable.matched', findable: 'score_glint' }],
+        effects: [
+            { kind: 'score.request', reason: 'findable_match', amount: 25 },
+            {
+                kind: 'feedback.emit',
+                cue: 'build.score_glint.matched',
+                message: 'Score Glint requested 25 score through match resolution.',
+                tone: 'reward'
+            }
+        ]
+    }
+]);
+
 export const GAMEPLAY_CONTENT_DEFINITIONS = [
     ...CONDUIT_CARTOGRAPHER_DEFINITIONS,
     ...WARDEN_DEFINITIONS,
     ...COMBO_SHARD_ENGINE_DEFINITIONS,
-    ...SABOTEUR_DEFINITIONS
+    ...SABOTEUR_DEFINITIONS,
+    ...VAULTBREAKER_DEFINITIONS
 ] as const satisfies readonly GameplayContentDefinition[];
 
 export type GameplaySource = z.infer<typeof gameplaySourceSchema>;
@@ -507,12 +638,41 @@ export const gameplayEventSchema = z.discriminatedUnion('type', [
         .object({
             ...eventBase,
             type: z.literal('score.changed'),
-            reason: z.enum(['inventory_overflow']),
+            reason: z.enum(['inventory_overflow', 'content_reward', 'trait_reward']),
             amount: z.number().int().positive(),
             totalBefore: z.number().int().nonnegative(),
             totalAfter: z.number().int().nonnegative(),
             currentLevelBefore: z.number().int().nonnegative(),
             currentLevelAfter: z.number().int().nonnegative()
+        })
+        .strict(),
+    z
+        .object({
+            ...eventBase,
+            type: z.literal('score.requested'),
+            reason: z.literal('findable_match'),
+            amount: z.number().int().positive()
+        })
+        .strict(),
+    z
+        .object({
+            ...eventBase,
+            type: z.literal('currency.changed'),
+            currency: z.literal('shop_gold'),
+            requested: z.number().int().positive(),
+            applied: z.number().int().nonnegative(),
+            before: z.number().int().nonnegative(),
+            after: z.number().int().nonnegative()
+        })
+        .strict(),
+    z
+        .object({
+            ...eventBase,
+            type: z.literal('bonus_relic_pick.changed'),
+            requested: z.number().int().positive(),
+            applied: z.number().int().nonnegative(),
+            before: z.number().int().nonnegative(),
+            after: z.number().int().nonnegative()
         })
         .strict(),
     z

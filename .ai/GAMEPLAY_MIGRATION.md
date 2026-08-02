@@ -82,6 +82,18 @@ The Saboteur connects trap-control choices that previously appeared as separate 
 
 Destroy Pair execution and floor-start hazard removal remain established deterministic compatibility consumers in this slice. They are not duplicated in the command reducer: the typed core owns source acquisition and Ward Spark intent, while the existing board/floor transitions own their already-tested completion and contract rules.
 
+## Fifth vertical slice: The Vaultbreaker
+
+The Vaultbreaker turns remembered treasure pairs into route access and future build selection:
+
+1. Treasure Chest grants one iron key, two shop gold, and 25 score through typed inventory, currency, and score effects.
+2. Cursed Opener Contract grants its durable perk and signing gold; only the first resolved Cursed match of a floor can execute the typed one-gold, 25-score payoff.
+3. Matching Score Glint emits `score.requested`; the compatibility adapter passes exactly 25 points into the established match-scoring summary without mutating score twice.
+4. Shrine Echo banks a typed bonus relic pick, consumed by the established next-offer draft budget.
+5. Iron keys open matching exits and optional caches, while shop gold funds route insurance and board-shaping purchases.
+
+Locked-cache resolution, shop purchases, match score composition, and relic-offer advancement remain deterministic compatibility consumers. The command core owns the content causes and durable economy mutations; typed request events bridge into calculations whose broader ownership has not yet migrated.
+
 ## Current slice status
 
 Implemented in the Conduit Cartographer vertical slice:
@@ -102,4 +114,4 @@ Still required before the vertical slice is complete:
 
 - migrate remaining legacy feedback producers onto the common journal adapter as their gameplay definitions move into the core;
 - add route-choice outcome scoring to the headless build evaluation once route decisions enter the command core;
-- migrate the next cohesive player build rather than adding isolated definitions.
+- continue migrating cohesive player builds rather than adding isolated definitions, using the graph diagnostics to choose the next least-overlapping loop.

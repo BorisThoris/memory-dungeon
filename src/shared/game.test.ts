@@ -7778,6 +7778,13 @@ describe('board powers', () => {
             const base = calculateMatchScore(1, 1, 1);
             expect(resolved.stats.totalScore).toBe(base + FINDABLE_MATCH_SCORE.score_glint);
             expect(resolved.findablesClaimedThisFloor).toBe(1);
+            expect(resolved.gameplayCommandJournal).toEqual([
+                expect.objectContaining({ definitionId: 'findable.score_glint' })
+            ]);
+            expect(resolved.gameplayEventJournal).toEqual(expect.arrayContaining([
+                expect.objectContaining({ type: 'score.requested', reason: 'findable_match', amount: 25 }),
+                expect.objectContaining({ type: 'feedback.requested', cue: 'build.score_glint.matched' })
+            ]));
         });
 
         it('claims ward spark as a capped safe hazard ward charge', () => {

@@ -744,6 +744,8 @@ export const getPrimaryRewardPerkReadinessRow = (
 
 const MIGRATED_BONUS_REWARD_DEFINITION_IDS: Partial<Record<BonusRewardId, string>> = {
     bonus_shards: 'bonus_reward.bonus_shards',
+    chest_gold: 'bonus_reward.chest_gold',
+    cursed_opener_contract: 'bonus_reward.cursed_opener_contract',
     echo_conduit_lens: 'bonus_reward.echo_conduit_lens',
     hazard_banisher: 'bonus_reward.hazard_banisher',
     hazard_ward: 'bonus_reward.hazard_ward'
@@ -896,6 +898,17 @@ export const previewBonusRewardClaim = (
                                 peekCharges: journaledRun.peekCharges,
                                 rewardPerkIds: journaledRun.rewardPerkIds
                             }
+                          : reward.id === 'chest_gold'
+                            ? {
+                                dungeonKeys: journaledRun.dungeonKeys,
+                                shopGold: journaledRun.shopGold,
+                                stats: coreStats
+                              }
+                            : reward.id === 'cursed_opener_contract'
+                              ? {
+                                    shopGold: journaledRun.shopGold,
+                                    rewardPerkIds: journaledRun.rewardPerkIds
+                                }
                           : reward.id === 'hazard_ward'
                             ? {
                                 destroyPairCharges: journaledRun.destroyPairCharges,

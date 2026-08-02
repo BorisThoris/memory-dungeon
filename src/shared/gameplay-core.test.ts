@@ -7,6 +7,7 @@ import {
     COMBO_SHARD_ENGINE_DEFINITIONS,
     GAMEPLAY_CORE_SCHEMA_VERSION,
     SABOTEUR_DEFINITIONS,
+    VAULTBREAKER_DEFINITIONS,
     WARDEN_DEFINITIONS,
     createGameplayDefinitionCommand,
     createGameplayPeekCommand,
@@ -249,12 +250,61 @@ describe('deterministic gameplay core', () => {
         ]));
     });
 
+    it('models Vaultbreaker treasure extraction from chest through opener, Shrine Echo, and Score Glint', () => {
+        expect(VAULTBREAKER_DEFINITIONS.map((definition) => definition.id)).toEqual([
+            'bonus_reward.chest_gold',
+            'bonus_reward.cursed_opener_contract',
+            'reward_perk.cursed_opener_greed',
+            'relic.shrine_echo',
+            'findable.score_glint'
+        ]);
+        const initial = run({ dungeonKeys: {}, shopGold: 0, bonusRelicPicksNextOffer: 0, matchResolutionsThisFloor: 0 });
+        const chest = reduceGameplayCommand(
+            initial,
+            createGameplayDefinitionCommand('vault-chest', 'bonus_reward.chest_gold')
+        );
+        const contract = reduceGameplayCommand(
+            chest.run,
+            createGameplayDefinitionCommand('vault-contract', 'bonus_reward.cursed_opener_contract')
+        );
+        const opener = reduceGameplayCommand(
+            contract.run,
+            createGameplayDefinitionCommand('vault-opener', 'reward_perk.cursed_opener_greed', {
+                matchedTraits: ['cursed']
+            })
+        );
+        const relic = applyRelicImmediateThroughGameplayCore(opener.run, 'shrine_echo', 'vault-relic');
+        const glint = resolveFindableMatchRewardThroughGameplayCore(relic.run, 'score_glint', 'vault-glint');
+
+        expect(chest.run).toMatchObject({ dungeonKeys: { iron: 1 }, shopGold: 2, stats: { totalScore: 25 } });
+        expect(contract.run).toMatchObject({ shopGold: 3, rewardPerkIds: ['cursed_opener_greed'] });
+        expect(opener.run).toMatchObject({ shopGold: 4, stats: { totalScore: 50, currentLevelScore: 50 } });
+        expect(relic).toMatchObject({ migrated: true, run: { bonusRelicPicksNextOffer: 1 } });
+        expect(glint).toMatchObject({ migrated: true, scoreGain: 25 });
+        expect(glint.events).toEqual(expect.arrayContaining([
+            expect.objectContaining({ type: 'score.requested', reason: 'findable_match', amount: 25 }),
+            expect.objectContaining({ type: 'feedback.requested', cue: 'build.score_glint.matched' })
+        ]));
+
+        const lateOpener = reduceGameplayCommand(
+            { ...contract.run, matchResolutionsThisFloor: 1 },
+            createGameplayDefinitionCommand('vault-late-opener', 'reward_perk.cursed_opener_greed', {
+                matchedTraits: ['cursed']
+            })
+        );
+        expect(lateOpener).toMatchObject({ accepted: false });
+        expect(lateOpener.events).toEqual([
+            expect.objectContaining({ type: 'command.rejected', reason: expect.stringContaining('floor match resolutions') })
+        ]);
+    });
+
     it('routes migrated relic immediates through the core while preserving legacy fallbacks', () => {
         const initial = run({ peekCharges: 2, shuffleCharges: 1 });
         const migrated = applyRelicImmediateThroughGameplayCore(initial, 'peek_charge_plus_one', 'adapter-peek');
         const migratedGuard = applyRelicImmediateThroughGameplayCore(initial, 'guard_token_plus_one', 'adapter-guard');
         const migratedCombo = applyRelicImmediateThroughGameplayCore(initial, 'combo_shard_plus_step', 'adapter-combo');
         const migratedDestroy = applyRelicImmediateThroughGameplayCore(initial, 'destroy_bank_plus_one', 'adapter-destroy');
+        const migratedShrine = applyRelicImmediateThroughGameplayCore(initial, 'shrine_echo', 'adapter-shrine');
         const legacy = applyRelicImmediateThroughGameplayCore(initial, 'extra_shuffle_charge', 'adapter-shuffle');
 
         expect(migrated).toMatchObject({ migrated: true, run: { peekCharges: 3 } });
@@ -268,6 +318,7 @@ describe('deterministic gameplay core', () => {
         expect(migratedGuard).toMatchObject({ migrated: true, run: { stats: { guardTokens: 1 } } });
         expect(migratedCombo).toMatchObject({ migrated: true, run: { stats: { comboShards: 1 } } });
         expect(migratedDestroy).toMatchObject({ migrated: true, run: { destroyPairCharges: 1 } });
+        expect(migratedShrine).toMatchObject({ migrated: true, run: { bonusRelicPicksNextOffer: 1 } });
     });
 
     it('models exactly the extra Peek granted by the existing Echo-Conduit perk condition', () => {

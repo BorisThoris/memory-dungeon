@@ -11,6 +11,7 @@ import {
     COMBO_SHARD_ENGINE_DEFINITIONS,
     CONDUIT_CARTOGRAPHER_DEFINITIONS,
     SABOTEUR_DEFINITIONS,
+    VAULTBREAKER_DEFINITIONS,
     WARDEN_DEFINITIONS
 } from './gameplay-core-contracts';
 
@@ -337,6 +338,40 @@ describe('gameplay interaction graph', () => {
             expect.objectContaining({ source: 'inventory.destroy_charge', target: 'power.destroy_pair', kind: 'enables' }),
             expect.objectContaining({ source: 'safety.safe_hazard_ward', target: 'hazard.tile_pressure', kind: 'counterplay' }),
             expect.objectContaining({ source: 'build.trap_control', target: 'power.destroy_pair', kind: 'consequence' })
+        ]));
+    });
+
+    it('connects Vaultbreaker treasure sources to keys, gold, and future relic selection', () => {
+        const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
+        const sourceNodeByDefinition = new Map([
+            ['bonus_reward.chest_gold', 'reward.chest_gold'],
+            ['bonus_reward.cursed_opener_contract', 'reward.cursed_opener_contract'],
+            ['reward_perk.cursed_opener_greed', 'perk.cursed_opener_greed'],
+            ['relic.shrine_echo', 'relic.shrine_echo'],
+            ['findable.score_glint', 'findable.score_glint']
+        ]);
+
+        for (const definition of VAULTBREAKER_DEFINITIONS) {
+            const nodeId = sourceNodeByDefinition.get(definition.id);
+            expect(nodeId, definition.id).toBeTruthy();
+            expect(byId.get(nodeId!), definition.id).toMatchObject({
+                tests: expect.arrayContaining(['src/shared/gameplay-core.test.ts'])
+            });
+        }
+
+        expect(byId.get('build.treasure_greed')).toMatchObject({ kind: 'build', role: 'treasure_extraction_build' });
+        expect(byId.get('inventory.iron_key')).toMatchObject({ kind: 'inventory', role: 'treasure_extraction_resource' });
+        expect(byId.get('economy.shop_gold')).toMatchObject({ kind: 'economy', role: 'extracted_value_resource' });
+        expect(byId.get('progression.relic_draft')).toMatchObject({ kind: 'progression', role: 'future_build_selection_consequence' });
+        expect(gameplayInteractionGraph.edges).toEqual(expect.arrayContaining([
+            expect.objectContaining({ source: 'reward.chest_gold', target: 'inventory.iron_key', kind: 'grants' }),
+            expect.objectContaining({ source: 'reward.cursed_opener_contract', target: 'perk.cursed_opener_greed', kind: 'grants' }),
+            expect.objectContaining({ source: 'perk.cursed_opener_greed', target: 'economy.shop_gold', kind: 'grants' }),
+            expect.objectContaining({ source: 'relic.shrine_echo', target: 'progression.relic_draft', kind: 'grants' }),
+            expect.objectContaining({ source: 'findable.score_glint', target: 'core.gameplay_commands', kind: 'triggers' }),
+            expect.objectContaining({ source: 'inventory.iron_key', target: 'lock.iron_key', kind: 'unblocks' }),
+            expect.objectContaining({ source: 'economy.shop_gold', target: 'shop.typed_key', kind: 'enables' }),
+            expect.objectContaining({ source: 'build.treasure_greed', target: 'progression.relic_draft', kind: 'consequence' })
         ]));
     });
 });

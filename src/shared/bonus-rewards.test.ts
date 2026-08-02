@@ -511,6 +511,54 @@ describe('REG-075 treasure, secret room, and bonus rewards', () => {
         ]));
     });
 
+    it('routes Treasure Chest extraction through the Vaultbreaker command journal', () => {
+        const room = {
+            ...rollBonusRewardRoom({
+                runSeed: 75_127,
+                rulesVersion: GAME_RULES_VERSION,
+                floor: 6,
+                routeKind: 'treasure'
+            }),
+            ...BONUS_REWARD_CATALOG.chest_gold,
+            eligible: true,
+            unavailableReason: null
+        };
+        const result = claimBonusReward(makeRun(room.runSeed, room.rulesVersion), createBonusRewardLedger(), room);
+
+        expect(result.claimed).toBe(true);
+        expect(result.run).toMatchObject({ shopGold: 3, dungeonKeys: { iron: 1 }, stats: { totalScore: 35 } });
+        expect(result.run.gameplayEventJournal).toEqual(expect.arrayContaining([
+            expect.objectContaining({ type: 'inventory.changed', itemId: 'iron_key', applied: 1 }),
+            expect.objectContaining({ type: 'currency.changed', currency: 'shop_gold', applied: 2 }),
+            expect.objectContaining({ type: 'score.changed', reason: 'content_reward', amount: 25 }),
+            expect.objectContaining({ type: 'feedback.requested', cue: 'build.chest_gold.claimed' })
+        ]));
+    });
+
+    it('routes Cursed Opener acquisition through the Vaultbreaker command journal', () => {
+        const room = {
+            ...rollBonusRewardRoom({
+                runSeed: 75_128,
+                rulesVersion: GAME_RULES_VERSION,
+                floor: 6,
+                routeKind: 'event'
+            }),
+            ...BONUS_REWARD_CATALOG.cursed_opener_contract,
+            eligible: true,
+            unavailableReason: null
+        };
+        const result = claimBonusReward(makeRun(room.runSeed, room.rulesVersion), createBonusRewardLedger(), room);
+
+        expect(result.claimed).toBe(true);
+        expect(result.run.shopGold).toBe(2);
+        expect(result.run.rewardPerkIds).toContain('cursed_opener_greed');
+        expect(result.run.gameplayEventJournal).toEqual(expect.arrayContaining([
+            expect.objectContaining({ type: 'reward_perk.granted', perkId: 'cursed_opener_greed' }),
+            expect.objectContaining({ type: 'currency.changed', currency: 'shop_gold', applied: 1 }),
+            expect.objectContaining({ type: 'feedback.requested', cue: 'build.cursed_opener_contract.claimed' })
+        ]));
+    });
+
     it('unlocks durable reward perks from build-defining draft rows without duplicating them', () => {
         const room = {
             ...rollBonusRewardRoom({

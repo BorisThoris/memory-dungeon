@@ -520,6 +520,14 @@ describe('tile trait rules', () => {
         expect(cursedEffect.shopGoldGain).toBe(1);
         expect(cursedEffect.scoreBonus).toBe(40);
         expect(cursedEffect.interactionTags).toContain('reward-perk:cursed-opener-greed');
+        expect(cursedEffect.gameplayCommands).toEqual([
+            expect.objectContaining({ definitionId: 'reward_perk.cursed_opener_greed' })
+        ]);
+        expect(cursedEffect.gameplayEvents).toEqual(expect.arrayContaining([
+            expect.objectContaining({ type: 'currency.changed', currency: 'shop_gold', applied: 1 }),
+            expect.objectContaining({ type: 'score.changed', reason: 'trait_reward', amount: 25 }),
+            expect.objectContaining({ type: 'feedback.requested', cue: 'build.cursed_opener_greed.triggered' })
+        ]));
     });
 
     it('applies trait streak flash-pair perk through normal two-card resolution', () => {

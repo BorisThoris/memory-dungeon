@@ -69,6 +69,11 @@ describe('seeded gameplay core simulation', () => {
                 'bonus_reward.hazard_banisher',
                 'relic.destroy_bank_plus_one',
                 'findable.ward_spark',
+                'bonus_reward.chest_gold',
+                'bonus_reward.cursed_opener_contract',
+                'reward_perk.cursed_opener_greed',
+                'relic.shrine_echo',
+                'findable.score_glint',
                 'board.peek'
             ])
         );

@@ -124,6 +124,31 @@ describe('relicOfferSurfaceState', () => {
         });
     });
 
+    it('projects Shrine Echo and its banked extra pick through the typed pick boundary', () => {
+        const run = {
+            ...offeredRun(),
+            bonusRelicPicksNextOffer: 0,
+            relicOffer: {
+                ...offeredRun().relicOffer!,
+                options: ['shrine_echo' as RelicId]
+            }
+        };
+        const result = createRelicPickSurfaceResult({
+            relicId: 'shrine_echo',
+            run,
+            saveData: createDefaultSaveData()
+        });
+
+        expect(result).toMatchObject({
+            kind: 'accepted',
+            feedback: {
+                audioCategory: 'relic-pick',
+                cue: 'build.shrine_echo.claimed'
+            },
+            patch: { run: { bonusRelicPicksNextOffer: 1 } }
+        });
+    });
+
     it('applies relic offer services only while an offer is open', () => {
         expect(createRelicOfferServiceSurfaceResult({
             run: { ...offeredRun(), relicOffer: null },

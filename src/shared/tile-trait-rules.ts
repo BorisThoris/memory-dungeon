@@ -932,8 +932,26 @@ export const resolveTileTraitEffects = ({
         }
 
         if (hasTrait('cursed') && matchResolutionsThisFloor === 0 && hasRewardPerk(run, 'cursed_opener_greed')) {
-            result.shopGoldGain += 1;
-            result.scoreBonus += 25;
+            const projectedShopGold = runNonNegativeInteger(run.shopGold) + result.shopGoldGain;
+            const projectedTotalScore = runNonNegativeInteger(stats.totalScore) + result.scoreBonus;
+            const projectedCurrentLevelScore = runNonNegativeInteger(stats.currentLevelScore) + result.scoreBonus;
+            const projectedRun = {
+                ...run,
+                shopGold: projectedShopGold,
+                stats: {
+                    ...stats,
+                    totalScore: projectedTotalScore,
+                    currentLevelScore: projectedCurrentLevelScore
+                }
+            };
+            const coreResult = applyCoreTraitDefinition(
+                'reward_perk.cursed_opener_greed',
+                'cursed-opener',
+                projectedRun
+            );
+            const coreStats = normalizeSessionStats(coreResult.run.stats);
+            result.shopGoldGain += runNonNegativeInteger(coreResult.run.shopGold) - projectedShopGold;
+            result.scoreBonus += coreStats.totalScore - projectedTotalScore;
             result.interactionTags.push('reward-perk:cursed-opener-greed');
         }
 

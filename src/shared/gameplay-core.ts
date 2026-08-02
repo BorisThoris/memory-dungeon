@@ -91,6 +91,10 @@ const conditionFailure = (run: RunState, condition: GameplayCondition, facts: Ga
             return facts.adjacentTraits.includes(condition.trait) ? null : `${condition.trait} was not adjacent`;
         case 'findable.matched':
             return facts.matchedFindables.includes(condition.findable) ? null : `${condition.findable} was not matched`;
+        case 'floor.match_resolutions_is':
+            return runNonNegativeInteger(run.matchResolutionsThisFloor) === condition.amount
+                ? null
+                : `floor match resolutions are ${runNonNegativeInteger(run.matchResolutionsThisFloor)}, expected ${condition.amount}`;
     }
 };
 
@@ -210,6 +214,59 @@ const applyDefinition = (
             case 'safe_hazard_ward.request':
                 writeEvent({ type: 'safe_hazard_ward.requested', amount: effect.amount });
                 break;
+            case 'currency.grant': {
+                const before = runNonNegativeInteger(nextRun.shopGold);
+                const after = before + effect.amount;
+                nextRun = { ...nextRun, shopGold: after };
+                writeEvent({
+                    type: 'currency.changed',
+                    currency: effect.currency,
+                    requested: effect.amount,
+                    applied: after - before,
+                    before,
+                    after
+                });
+                break;
+            }
+            case 'score.grant': {
+                const stats = normalizeSessionStats(nextRun.stats);
+                const totalBefore = runNonNegativeInteger(stats.totalScore);
+                const currentLevelBefore = runNonNegativeInteger(stats.currentLevelScore);
+                nextRun = {
+                    ...nextRun,
+                    stats: {
+                        ...stats,
+                        totalScore: totalBefore + effect.amount,
+                        currentLevelScore: currentLevelBefore + effect.amount
+                    }
+                };
+                writeEvent({
+                    type: 'score.changed',
+                    reason: effect.reason,
+                    amount: effect.amount,
+                    totalBefore,
+                    totalAfter: totalBefore + effect.amount,
+                    currentLevelBefore,
+                    currentLevelAfter: currentLevelBefore + effect.amount
+                });
+                break;
+            }
+            case 'score.request':
+                writeEvent({ type: 'score.requested', reason: effect.reason, amount: effect.amount });
+                break;
+            case 'bonus_relic_pick.grant': {
+                const before = runNonNegativeInteger(nextRun.bonusRelicPicksNextOffer);
+                const after = before + effect.amount;
+                nextRun = { ...nextRun, bonusRelicPicksNextOffer: after };
+                writeEvent({
+                    type: 'bonus_relic_pick.changed',
+                    requested: effect.amount,
+                    applied: after - before,
+                    before,
+                    after
+                });
+                break;
+            }
             case 'feedback.emit':
                 writeEvent({
                     type: 'feedback.requested',

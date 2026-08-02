@@ -518,6 +518,9 @@ const resolveGambitThree = (run: RunState, encorePairKeys: string[]): RunState =
         const resolvedFindableSafeHazardWardGain = findableReward.migrated
             ? findableReward.safeHazardWardGain
             : findableSafeHazardWardGain;
+        const resolvedFindableScoreBonus = findableReward.migrated
+            ? findableReward.scoreGain
+            : findableScoreBonus;
 
         const resolution = resolveTurnMatchBoardResolution({
             run,
@@ -556,7 +559,7 @@ const resolveGambitThree = (run: RunState, encorePairKeys: string[]): RunState =
             matchedPairKey,
             matchedTiles: [tileMatchA, tileMatchB],
             encorePairKeys,
-            findableScoreBonus: findableScoreBonus + traitReward.scoreBonus,
+            findableScoreBonus: resolvedFindableScoreBonus + traitReward.scoreBonus,
             routeCardScore: routeCardReward.score,
             dungeonScore: dungeonReward.score,
             enemyDamageScore: enemyDamage.score,
@@ -794,6 +797,9 @@ const resolveTwoFlippedTiles = (run: RunState, encorePairKeys: string[]): RunSta
         const resolvedFindableSafeHazardWardGain = findableReward.migrated
             ? findableReward.safeHazardWardGain
             : findableSafeHazardWardGain;
+        const resolvedFindableScoreBonus = findableReward.migrated
+            ? findableReward.scoreGain
+            : findableScoreBonus;
 
         const resolution = resolveTurnMatchBoardResolution({
             run,
@@ -831,7 +837,7 @@ const resolveTwoFlippedTiles = (run: RunState, encorePairKeys: string[]): RunSta
             matchedPairKey,
             matchedTiles: [firstTile, secondTile],
             encorePairKeys,
-            findableScoreBonus: findableScoreBonus + traitReward.scoreBonus,
+            findableScoreBonus: resolvedFindableScoreBonus + traitReward.scoreBonus,
             routeCardScore: routeCardReward.score,
             dungeonScore: dungeonReward.score,
             enemyDamageScore: enemyDamage.score,
