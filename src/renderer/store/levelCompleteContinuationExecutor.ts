@@ -3,9 +3,11 @@ import type {
     ViewState
 } from '../../shared/contracts';
 import {
-    applyRouteChoiceOutcome,
     openRouteSideRoom
 } from '../../shared/route-rules';
+import { createGameplayRouteChooseCommand } from '../../shared/gameplay-core-contracts';
+import { reduceGameplayCommand } from '../../shared/gameplay-core';
+import { appendGameplayJournal } from '../../shared/gameplay-journal';
 import {
     createLevelCompleteContinuationSurfaceResult,
     shouldPrepareMemorizeTimerForContinuation,
@@ -95,14 +97,19 @@ export const executeChooseRouteAndContinue = (
         return;
     }
 
-    const routeOutcome = applyRouteChoiceOutcome(run, choiceId);
-    if (!routeOutcome.applied) {
+    const command = createGameplayRouteChooseCommand(
+        `route-choice:${run.runRulesVersion}:${run.runSeed}:${run.lastLevelResult?.level ?? run.board?.level ?? 0}:${choiceId}`,
+        choiceId
+    );
+    const routeOutcome = reduceGameplayCommand(run, command);
+    if (!routeOutcome.accepted) {
         return;
     }
+    const journaledRun = appendGameplayJournal(routeOutcome.run, [command], routeOutcome.events);
 
     deps.clearAllTimers();
     applyContinuationResult(
-        createLevelCompleteContinuationSurfaceResult(openRouteSideRoom(routeOutcome.run), { includeSummaryShop: true }),
+        createLevelCompleteContinuationSurfaceResult(openRouteSideRoom(journaledRun), { includeSummaryShop: true }),
         deps
     );
 };

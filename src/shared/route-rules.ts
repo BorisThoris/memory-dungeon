@@ -1,5 +1,6 @@
 export {
     applyRouteChoiceOutcome,
+    type RouteChoiceOutcomeKind,
     type RouteChoiceOutcomeResult
 } from './route-choice-outcome-rules';
 

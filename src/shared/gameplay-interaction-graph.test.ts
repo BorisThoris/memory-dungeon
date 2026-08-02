@@ -722,7 +722,7 @@ describe('gameplay interaction graph', () => {
 
     it('connects Hazard Banish acquisition to its typed floor-start removal or Destroy fallback', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
-        expect(gameplayInteractionGraph.version).toBe(15);
+        expect(gameplayInteractionGraph.version).toBe(16);
         expect(byId.get('perk.hazard_banish_per_floor')).toMatchObject({
             kind: 'perk',
             role: 'durable_floor_start_hazard_or_destroy_conversion',
@@ -740,6 +740,30 @@ describe('gameplay interaction graph', () => {
             expect.objectContaining({ source: 'perk.hazard_banish_per_floor', target: 'feedback.gameplay_hud', kind: 'displays' }),
             expect.objectContaining({ source: 'inventory.contract_loadout', target: 'perk.hazard_banish_per_floor', kind: 'gates' }),
             expect.objectContaining({ source: 'build.trap_control', target: 'perk.hazard_banish_per_floor', kind: 'consequence' })
+        ]));
+    });
+
+    it('connects typed route selection from floor clear through exact replayable consequences', () => {
+        const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
+        expect(gameplayInteractionGraph.version).toBe(16);
+        expect(byId.get('route.choice')).toMatchObject({
+            kind: 'route',
+            role: 'replayable_between_floor_commitment',
+            tests: expect.arrayContaining([
+                'src/shared/gameplay-core.test.ts',
+                'src/renderer/store/levelCompleteContinuationExecutor.test.ts',
+                'src/shared/gameplay-core-simulation.test.ts'
+            ])
+        });
+        expect(gameplayInteractionGraph.edges).toEqual(expect.arrayContaining([
+            expect.objectContaining({ source: 'objective.floor_clear', target: 'route.choice', kind: 'enables' }),
+            expect.objectContaining({ source: 'route.choice', target: 'core.gameplay_commands', kind: 'triggers' }),
+            expect.objectContaining({ source: 'core.gameplay_commands', target: 'route.choice', kind: 'modifies' }),
+            expect.objectContaining({ source: 'route.choice', target: 'progression.run_flow', kind: 'modifies' }),
+            expect.objectContaining({ source: 'route.choice', target: 'economy.score_and_rewards', kind: 'modifies' }),
+            expect.objectContaining({ source: 'route.choice', target: 'feedback.gameplay_hud', kind: 'displays' }),
+            expect.objectContaining({ source: 'route.choice', target: 'persistence.run_summary', kind: 'persists' }),
+            expect.objectContaining({ source: 'route.choice', target: 'simulation.gameplay_replay', kind: 'tested_by' })
         ]));
     });
 });

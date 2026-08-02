@@ -145,6 +145,20 @@ describe('gameplayFeedbackAdapter', () => {
         expect(presentation).toMatchObject({ audioCategory: 'hazard-banish' });
     });
 
+    it('classifies route selection feedback from the typed progression source', () => {
+        const presentation = projectGameplayFeedback([
+            event(0, {
+                type: 'feedback.requested',
+                cue: 'route.choice.mystery',
+                message: 'Mystery route selected.',
+                source: { kind: 'system', id: 'route_choice' },
+                tone: 'reward'
+            })
+        ])[0];
+
+        expect(presentation).toMatchObject({ audioCategory: 'route-choice' });
+    });
+
     it('classifies Locksmith shop and exit cues from typed sources', () => {
         const presentations = projectGameplayFeedback([
             event(0, {

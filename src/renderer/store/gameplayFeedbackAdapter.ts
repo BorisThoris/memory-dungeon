@@ -16,6 +16,7 @@ export type GameplayFeedbackAudioCategory =
     | 'shop-purchase'
     | 'exit-activate'
     | 'parasite'
+    | 'route-choice'
     | 'wild-match'
     | 'undo'
     | 'wager';
@@ -66,6 +67,9 @@ const audioCategoryFor = (
     }
     if (feedback.source.kind === 'system' && feedback.source.id === 'score_parasite') {
         return 'parasite';
+    }
+    if (feedback.source.kind === 'system' && feedback.source.id === 'route_choice') {
+        return 'route-choice';
     }
     if (feedback.source.kind === 'system' && feedback.source.id === 'wild_joker') {
         return 'wild-match';

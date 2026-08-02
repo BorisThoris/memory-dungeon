@@ -42,6 +42,7 @@ import {
     createGameplayPinToggleCommand,
     createGameplayRegionShuffleCommand,
     createGameplayRiskWagerAcceptCommand,
+    createGameplayRouteChooseCommand,
     createGameplayShuffleCommand,
     createGameplayShopPurchaseCommand,
     createGameplayStrayRemoveCommand,
@@ -64,6 +65,8 @@ import { purchaseShopOffer } from './shop-rules';
 import { createDungeonExitActivationTransition } from './dungeon-exit-rules';
 import { createNewRun } from './game';
 import { EXIT_PAIR_KEY, WILD_PAIR_KEY } from './tile-identity';
+import { createPlayablePathFixture } from './playable-path-fixtures';
+import { normalizeSessionStats } from './session-stats-rules';
 
 const tile = (id: string, pairKey: string, tileTraitKind?: Tile['tileTraitKind']): Tile => ({
     id,
@@ -546,6 +549,48 @@ describe('deterministic gameplay core', () => {
             expect.objectContaining({ type: 'hazard_banish.resolved', outcome: 'contract_blocked' }),
             expect.objectContaining({ type: 'feedback.requested', cue: 'perk.hazard_banish.contract_blocked' })
         ]);
+    });
+
+    it('selects a route through a replayable command with exact progression deltas', () => {
+        const initial = createPlayablePathFixture('floorClearWithRouteChoices').run!;
+        const choice = initial.lastLevelResult!.routeChoices!.find((candidate) => candidate.routeType === 'greed')!;
+        const command = createGameplayRouteChooseCommand('route-greed', choice.id);
+        const result = reduceGameplayCommand(initial, command);
+        const beforeStats = normalizeSessionStats(initial.stats);
+
+        expect(result).toMatchObject({
+            accepted: true,
+            run: {
+                lives: initial.lives - 1,
+                shopGold: initial.shopGold + 3,
+                pendingRouteCardPlan: { choiceId: choice.id, routeType: 'greed' },
+                dungeonRun: { selectedNodeId: choice.id }
+            }
+        });
+        expect(normalizeSessionStats(result.run.stats).totalScore).toBe(beforeStats.totalScore + 35);
+        expect(result.events).toEqual([
+            expect.objectContaining({
+                type: 'route.choice_selected',
+                choiceId: choice.id,
+                routeType: 'greed',
+                outcome: 'greed',
+                selectedDungeonNodeId: choice.id,
+                livesBefore: initial.lives,
+                livesAfter: initial.lives - 1,
+                shopGoldBefore: initial.shopGold,
+                shopGoldAfter: initial.shopGold + 3,
+                totalScoreBefore: beforeStats.totalScore,
+                totalScoreAfter: beforeStats.totalScore + 35
+            }),
+            expect.objectContaining({
+                type: 'feedback.requested',
+                cue: 'route.choice.greed',
+                tone: 'warning'
+            })
+        ]);
+        expect(replayGameplayCommands(initial, [JSON.parse(JSON.stringify(command))]).run).toEqual(result.run);
+        expect(reduceGameplayCommand(initial, createGameplayRouteChooseCommand('route-missing', 'missing')))
+            .toMatchObject({ accepted: false, run: initial });
     });
 
     it('models Vaultbreaker treasure extraction from chest through opener, Shrine Echo, and Score Glint', () => {

@@ -43,6 +43,7 @@ import { WILD_PAIR_KEY } from './tile-identity';
 import { isBoardComplete } from './board-inspection';
 import { rotateRunShiftingSpotlight } from './shifting-spotlight-rules';
 import { resolveHazardBanisherFloorStart } from './hazard-banisher-rules';
+import { applyRouteChoiceOutcome } from './route-rules';
 
 export interface GameplayCommandResult {
     run: RunState;
@@ -74,6 +75,7 @@ const SHOP_SOURCE: GameplaySource = { kind: 'shop', id: 'run_shop' };
 const DUNGEON_EXIT_SOURCE: GameplaySource = { kind: 'system', id: 'dungeon_exit' };
 const SCORE_PARASITE_SOURCE: GameplaySource = { kind: 'system', id: 'score_parasite' };
 const HAZARD_BANISH_SOURCE: GameplaySource = { kind: 'reward_perk', id: 'hazard_banish_per_floor' };
+const ROUTE_CHOICE_SOURCE: GameplaySource = { kind: 'system', id: 'route_choice' };
 const WILD_JOKER_SOURCE: GameplaySource = { kind: 'system', id: 'wild_joker' };
 const gameplayRewardPerkIds = new Set<RewardPerkId>(GAMEPLAY_REWARD_PERK_IDS);
 type GameplayEventPayload<T = GameplayEvent> = T extends GameplayEvent
@@ -1009,6 +1011,55 @@ const applyHazardBanishCommand = (
     return { run: resolved.run, command, events, accepted: true };
 };
 
+const applyRouteChooseCommand = (
+    run: RunState,
+    command: Extract<GameplayCommand, { type: 'route.choose' }>
+): GameplayCommandResult => {
+    const outcome = applyRouteChoiceOutcome(run, command.choiceId);
+    if (!outcome.applied || !outcome.routeType || !outcome.outcomeKind || !outcome.summaryText) {
+        return rejectedResult(
+            run,
+            command.commandId,
+            `Route choice is not available${outcome.reason ? ` (${outcome.reason})` : ''}.`,
+            command
+        );
+    }
+
+    const statsBefore = normalizeSessionStats(run.stats);
+    const statsAfter = normalizeSessionStats(outcome.run.stats);
+    const events: GameplayEvent[] = [];
+    const writeEvent = makeEventWriter(command.commandId, ROUTE_CHOICE_SOURCE, events);
+    writeEvent({
+        type: 'route.choice_selected',
+        choiceId: command.choiceId,
+        routeType: outcome.routeType,
+        outcome: outcome.outcomeKind,
+        summaryText: outcome.summaryText,
+        selectedDungeonNodeId: outcome.run.dungeonRun?.selectedNodeId ?? null,
+        livesBefore: runNonNegativeInteger(run.lives),
+        livesAfter: runNonNegativeInteger(outcome.run.lives),
+        shopGoldBefore: runNonNegativeInteger(run.shopGold),
+        shopGoldAfter: runNonNegativeInteger(outcome.run.shopGold),
+        totalScoreBefore: statsBefore.totalScore,
+        totalScoreAfter: statsAfter.totalScore,
+        guardTokensBefore: statsBefore.guardTokens,
+        guardTokensAfter: statsAfter.guardTokens,
+        comboShardsBefore: statsBefore.comboShards,
+        comboShardsAfter: statsAfter.comboShards,
+        relicFavorBefore: runNonNegativeInteger(run.relicFavorProgress),
+        relicFavorAfter: runNonNegativeInteger(outcome.run.relicFavorProgress),
+        memorizeBonusMsBefore: runNonNegativeInteger(run.pendingMemorizeBonusMs),
+        memorizeBonusMsAfter: runNonNegativeInteger(outcome.run.pendingMemorizeBonusMs)
+    });
+    writeEvent({
+        type: 'feedback.requested',
+        cue: `route.choice.${outcome.routeType}`,
+        message: outcome.summaryText,
+        tone: outcome.routeType === 'greed' ? 'warning' : 'reward'
+    });
+    return { run: outcome.run, command, events, accepted: true };
+};
+
 const applyWildMatchConsumeCommand = (
     run: RunState,
     command: Extract<GameplayCommand, { type: 'wild_match.consume' }>
@@ -1110,6 +1161,9 @@ export const reduceGameplayCommand = (run: RunState, input: unknown): GameplayCo
     }
     if (command.type === 'floor.hazard_banish') {
         return applyHazardBanishCommand(run, command);
+    }
+    if (command.type === 'route.choose') {
+        return applyRouteChooseCommand(run, command);
     }
     if (command.type === 'wild_match.consume') {
         return applyWildMatchConsumeCommand(run, command);

@@ -12,6 +12,7 @@ import {
     createGameplayPinToggleCommand,
     createGameplayRegionShuffleCommand,
     createGameplayRiskWagerAcceptCommand,
+    createGameplayRouteChooseCommand,
     createGameplayShuffleCommand,
     createGameplayShopPurchaseCommand,
     createGameplayStrayRemoveCommand,
@@ -118,6 +119,12 @@ const commandForStep = (
     }
     if (step === 2) {
         return createGameplayHazardBanishCommand(commandId);
+    }
+    if (step === 3) {
+        const choiceId = Array.isArray(run.lastLevelResult?.routeChoices)
+            ? run.lastLevelResult.routeChoices[0]?.id
+            : undefined;
+        return createGameplayRouteChooseCommand(commandId, choiceId ?? 'missing-route-choice');
     }
     if (actionIndex === definitions.length) {
         const targets = availablePeekTargets(run);

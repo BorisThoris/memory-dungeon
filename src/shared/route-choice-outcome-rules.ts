@@ -26,11 +26,21 @@ import {
 import { normalizeSessionStats } from './session-stats-rules';
 
 type MysteryRouteOutcome = 'shop_gold' | 'combo_shard' | 'relic_favor';
+export type RouteChoiceOutcomeKind =
+    | 'safe_life'
+    | 'safe_guard'
+    | 'safe_guard_capped'
+    | 'greed'
+    | 'mystery_shop_gold'
+    | 'mystery_combo_shard'
+    | 'mystery_combo_shard_capped'
+    | 'mystery_relic_favor';
 
 export interface RouteChoiceOutcomeResult {
     run: RunState;
     applied: boolean;
     routeType?: RouteNodeType;
+    outcomeKind?: RouteChoiceOutcomeKind;
     reason?: 'missing_choice' | 'invalid_status' | 'unavailable';
     summaryText?: string;
 }
@@ -186,6 +196,7 @@ export const applyRouteChoiceOutcome = (run: RunState, choiceId: string): RouteC
                 run: withSelectedDungeonRoute(nextRun.run, choiceId, routeChoices),
                 applied: true,
                 routeType: choice.routeType,
+                outcomeKind: 'safe_life',
                 summaryText: `Safe route: +1 life.${tolled.summarySuffix}${nextRun.summarySuffix}`
             };
         }
@@ -206,6 +217,7 @@ export const applyRouteChoiceOutcome = (run: RunState, choiceId: string): RouteC
             run: withSelectedDungeonRoute(nextRun.run, choiceId, routeChoices),
             applied: true,
             routeType: choice.routeType,
+            outcomeKind: guardGained ? 'safe_guard' : 'safe_guard_capped',
             summaryText: `${guardSummary}${tolled.summarySuffix}${nextRun.summarySuffix}`
         };
     }
@@ -225,6 +237,7 @@ export const applyRouteChoiceOutcome = (run: RunState, choiceId: string): RouteC
             run: withSelectedDungeonRoute(nextRun, choiceId, routeChoices),
             applied: true,
             routeType: choice.routeType,
+            outcomeKind: 'greed',
             summaryText: `Greedy route: +${ROUTE_GREED_SHOP_GOLD_REWARD} shop gold, +${ROUTE_GREED_SCORE_REWARD} score, -1 life.`
         };
     }
@@ -233,6 +246,14 @@ export const applyRouteChoiceOutcome = (run: RunState, choiceId: string): RouteC
         run: withSelectedDungeonRoute({ ...outcome.run, pendingRouteCardPlan }, choiceId, routeChoices),
         applied: true,
         routeType: choice.routeType,
+        outcomeKind:
+            outcome.run.shopGold !== run.shopGold
+                ? 'mystery_shop_gold'
+                : normalizeSessionStats(outcome.run.stats).comboShards > normalizeSessionStats(run.stats).comboShards
+                  ? 'mystery_combo_shard'
+                  : outcome.summaryText.includes('already full')
+                    ? 'mystery_combo_shard_capped'
+                    : 'mystery_relic_favor',
         summaryText: outcome.summaryText
     };
 };

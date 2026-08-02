@@ -1261,6 +1261,13 @@ export const gameplayCommandSchema = z.discriminatedUnion('type', [
     z
         .object({
             ...commandBase,
+            type: z.literal('route.choose'),
+            choiceId: z.string().min(1).max(160)
+        })
+        .strict(),
+    z
+        .object({
+            ...commandBase,
             type: z.literal('wild_match.consume'),
             wildTileId: z.string().min(1).max(160),
             pairedTileId: z.string().min(1).max(160)
@@ -1566,6 +1573,40 @@ export const gameplayEventSchema = z.discriminatedUnion('type', [
     z
         .object({
             ...eventBase,
+            type: z.literal('route.choice_selected'),
+            choiceId: z.string().min(1).max(160),
+            routeType: z.enum(['safe', 'greed', 'mystery']),
+            outcome: z.enum([
+                'safe_life',
+                'safe_guard',
+                'safe_guard_capped',
+                'greed',
+                'mystery_shop_gold',
+                'mystery_combo_shard',
+                'mystery_combo_shard_capped',
+                'mystery_relic_favor'
+            ]),
+            summaryText: z.string().min(1).max(500),
+            selectedDungeonNodeId: z.string().min(1).max(160).nullable(),
+            livesBefore: z.number().int().nonnegative(),
+            livesAfter: z.number().int().nonnegative(),
+            shopGoldBefore: z.number().int().nonnegative(),
+            shopGoldAfter: z.number().int().nonnegative(),
+            totalScoreBefore: z.number().int().nonnegative(),
+            totalScoreAfter: z.number().int().nonnegative(),
+            guardTokensBefore: z.number().int().nonnegative(),
+            guardTokensAfter: z.number().int().nonnegative(),
+            comboShardsBefore: z.number().int().nonnegative(),
+            comboShardsAfter: z.number().int().nonnegative(),
+            relicFavorBefore: z.number().int().nonnegative(),
+            relicFavorAfter: z.number().int().nonnegative(),
+            memorizeBonusMsBefore: z.number().int().nonnegative(),
+            memorizeBonusMsAfter: z.number().int().nonnegative()
+        })
+        .strict(),
+    z
+        .object({
+            ...eventBase,
             type: z.literal('wild_match.consumed'),
             wildTileId: z.string().min(1).max(160),
             pairedTileId: z.string().min(1).max(160),
@@ -1793,6 +1834,14 @@ export const createGameplayHazardBanishCommand = (commandId: string): GameplayCo
         schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
         commandId,
         type: 'floor.hazard_banish'
+    });
+
+export const createGameplayRouteChooseCommand = (commandId: string, choiceId: string): GameplayCommand =>
+    gameplayCommandSchema.parse({
+        schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
+        commandId,
+        type: 'route.choose',
+        choiceId
     });
 
 export const createGameplayWildMatchConsumeCommand = (

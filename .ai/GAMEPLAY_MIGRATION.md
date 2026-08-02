@@ -253,6 +253,20 @@ The Saboteur's durable reward now has a typed payoff on every prepared floor ins
 
 Graph v15 separates reward acquisition from the durable perk, then connects run flow to hazard counterplay or Destroy fallback, contract gating, typed feedback, persistence, and simulation.
 
+## Eighteenth vertical slice: Typed Route Choice
+
+The between-floor Safe, Greed, or Mystery commitment now crosses the deterministic command boundary instead of bypassing the replay journal:
+
+1. The continuation surface submits `route.choose` with the exact generated choice id while the run is `levelComplete`.
+2. The core delegates availability and deterministic payoff calculation to the established pure route outcome rule, preserving its life, gold, score, guard, shard, Favor, and memorize-time behavior.
+3. Successful choices emit `route.choice_selected` with route and outcome kinds, selected dungeon node, summary, and before/after values for every affected build resource.
+4. Missing, stale, repeated, dead-run, and one-life Greed choices reject without mutating the run.
+5. The accepted command and events are appended before the established side-room and next-floor continuation adapters run.
+6. Renderer feedback is projected from `route.choice.safe`, `route.choice.greed`, or `route.choice.mystery`; Greed retains a warning tone for its life cost.
+7. Seeded simulation includes the strict command, while accepted core replay and live continuation tests prove state parity and persistence.
+
+Graph v16 connects floor clear, route commitment, the command core, exact economy/progression consequences, typed feedback, persistence, and deterministic simulation. This also establishes event data for later build-aware route outcome scoring in the headless evaluator.
+
 ## Current slice status
 
 Implemented in the Conduit Cartographer vertical slice:
@@ -272,5 +286,5 @@ Implemented in the Conduit Cartographer vertical slice:
 Still required before the vertical slice is complete:
 
 - migrate remaining legacy feedback producers onto the common journal adapter as their gameplay definitions move into the core;
-- add route-choice outcome scoring to the headless build evaluation once route decisions enter the command core;
+- score typed route-choice outcomes in the headless build evaluator so build profiles can be compared on decision quality as well as resource safety;
 - continue migrating cohesive player builds rather than adding isolated definitions, using the graph diagnostics to choose the next least-overlapping loop.

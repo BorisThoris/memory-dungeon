@@ -97,7 +97,16 @@ describe('level complete continuation executors', () => {
 
         expect(deps.clearAllTimers).toHaveBeenCalledTimes(1);
         expect(deps.setState).toHaveBeenCalledWith(expect.objectContaining({
-            view: expect.any(String)
+            view: expect.any(String),
+            run: expect.objectContaining({
+                gameplayCommandJournal: expect.arrayContaining([
+                    expect.objectContaining({ type: 'route.choose', choiceId })
+                ]),
+                gameplayEventJournal: expect.arrayContaining([
+                    expect.objectContaining({ type: 'route.choice_selected', choiceId }),
+                    expect.objectContaining({ type: 'feedback.requested', cue: 'route.choice.safe' })
+                ])
+            })
         }));
     });
 });

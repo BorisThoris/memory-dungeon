@@ -1,5 +1,5 @@
 {
-  "version": 15,
+  "version": 16,
   "mechanics": [
     {
       "id": "trait.echo",
@@ -371,12 +371,25 @@
       "kind": "progression",
       "role": "state_transition",
       "evidence": ["src/shared/next-floor-transition-rules.ts", "src/shared/relic-offer-rules.ts", "src/shared/route-choice-rules.ts"],
-      "reads": ["levelComplete", "lastLevelResult", "routeChoices", "powersUsedThisRun", "nextFloor", "relicOffer"],
+      "reads": ["levelComplete", "lastLevelResult", "routeChoices", "selectedDungeonNodeId", "powersUsedThisRun", "nextFloor", "relicOffer"],
       "writes": ["nextFloor", "relicOffer", "pendingRouteCardPlan"],
       "enables": ["objective.floor_clear"],
       "blocks": [],
       "softlockGuards": ["navigation-contracts"],
       "tests": ["src/shared/relic-offer-rules.test.ts", "src/shared/route-choice-rules.test.ts", "src/shared/next-floor-run-state-rules.test.ts"]
+    },
+    {
+      "id": "route.choice",
+      "label": "Typed Route Choice",
+      "kind": "route",
+      "role": "replayable_between_floor_commitment",
+      "evidence": ["src/shared/route-choice-outcome-rules.ts", "src/shared/gameplay-core.ts", "src/renderer/store/levelCompleteContinuationExecutor.ts", "src/renderer/store/gameplayFeedbackAdapter.ts"],
+      "reads": ["levelComplete", "routeChoices", "lives", "shopGold", "totalScore", "guardTokens", "comboShards", "relicFavorProgress", "pendingRouteCardPlan"],
+      "writes": ["pendingRouteCardPlan", "selectedDungeonNodeId", "lives", "shopGold", "totalScore", "guardTokens", "comboShards", "relicFavorProgress", "pendingMemorizeBonusMs", "gameplayCommandJournal", "gameplayEventJournal"],
+      "enables": ["nextFloor", "routeSideRoom"],
+      "blocks": [],
+      "softlockGuards": ["route-choice-availability", "greed-needs-more-lives", "single-pending-route-plan"],
+      "tests": ["src/shared/gameplay-core.test.ts", "src/renderer/store/levelCompleteContinuationExecutor.test.ts", "src/shared/gameplay-core-simulation.test.ts"]
     },
     {
       "id": "stats.session_tracking",
@@ -1385,7 +1398,7 @@
       "kind": "progression",
       "role": "bounded_pre_flip_information_window",
       "evidence": ["src/shared/scoring-rules.ts", "src/renderer/store/runTimerController.ts", "src/shared/memory-recall-feedback.ts"],
-      "reads": ["memorizeMs", "relicIds", "activeMutators", "gameMode"],
+      "reads": ["memorizeMs", "pendingMemorizeBonusMs", "relicIds", "activeMutators", "gameMode"],
       "writes": ["timerState", "runStatus"],
       "enables": ["objective.floor_clear", "build.memory_scout"],
       "blocks": [],
@@ -1702,6 +1715,14 @@
     { "source": "board.cleanup", "target": "safety.softlock_fairness", "kind": "guarded_by", "label": "sanitizes state" },
     { "source": "economy.score_and_rewards", "target": "feedback.gameplay_hud", "kind": "enables", "label": "reward copy" },
     { "source": "objective.floor_clear", "target": "progression.run_flow", "kind": "enables", "label": "next flow" },
+    { "source": "objective.floor_clear", "target": "route.choice", "kind": "enables", "label": "reveals the between-floor commitment" },
+    { "source": "route.choice", "target": "core.gameplay_commands", "kind": "triggers", "label": "submits the selected route id" },
+    { "source": "core.gameplay_commands", "target": "route.choice", "kind": "modifies", "label": "validates and applies exact route consequences" },
+    { "source": "route.choice", "target": "progression.run_flow", "kind": "modifies", "label": "selects the dungeon node and pending card plan" },
+    { "source": "route.choice", "target": "economy.score_and_rewards", "kind": "modifies", "label": "applies typed Safe Greed or Mystery deltas" },
+    { "source": "route.choice", "target": "feedback.gameplay_hud", "kind": "displays", "label": "emits the selected payoff and cost" },
+    { "source": "route.choice", "target": "persistence.run_summary", "kind": "persists", "label": "journals the choice and exact outcome" },
+    { "source": "route.choice", "target": "simulation.gameplay_replay", "kind": "tested_by", "label": "participates in deterministic command replay" },
     { "source": "objective.floor_clear", "target": "feedback.gameplay_hud", "kind": "enables", "label": "shows floor clear" },
     { "source": "progression.run_flow", "target": "feedback.gameplay_hud", "kind": "enables", "label": "route feedback" },
     { "source": "stats.session_tracking", "target": "feedback.gameplay_hud", "kind": "enables", "label": "stat feedback" },
@@ -2103,6 +2124,7 @@
     { "source": "core.gameplay_commands", "target": "simulation.gameplay_replay", "kind": "tested_by", "label": "deterministic replay" },
     { "source": "persistence.run_summary", "target": "simulation.gameplay_replay", "kind": "enables", "label": "retains replay diagnostics" },
     { "source": "simulation.gameplay_replay", "target": "core.gameplay_commands", "kind": "tested_by", "label": "replays command log" },
+    { "source": "route.mystery", "target": "route.choice", "kind": "enables", "label": "turns revealed uncertainty into an informed commitment" },
     { "source": "route.mystery", "target": "progression.run_flow", "kind": "modifies", "label": "changes next decision" }
   ],
   "coverage": {
