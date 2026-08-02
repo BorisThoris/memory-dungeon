@@ -1,5 +1,5 @@
 {
-  "version": 21,
+  "version": 22,
   "mechanics": [
     {
       "id": "trait.echo",
@@ -1677,6 +1677,19 @@
       "blocks": [],
       "softlockGuards": ["typed-route-command-only", "one-outcome-per-cleared-floor", "zero-rejected-profile-choices", "multi-seed-profile-bounds"],
       "tests": ["src/shared/balance-simulation.test.ts"]
+    },
+    {
+      "id": "core.board_turn_resolution",
+      "label": "Typed Board Turn Resolution",
+      "kind": "core",
+      "role": "single_command_match_mismatch_and_gambit_transition",
+      "evidence": ["src/shared/board-turn-transition.ts", "src/shared/gameplay-effect-transition.ts", "src/shared/gameplay-core-contracts.ts", "src/shared/gameplay-core.ts", "src/shared/gameplay-core-adapters.ts", "src/shared/game.ts"],
+      "reads": ["flippedTileIds", "tileStates", "pairKeys", "tileTraitKind", "findableKind", "wildMatchesRemaining", "encorePairKeys", "runStatus"],
+      "writes": ["tileStates", "matchedPairs", "score", "lives", "tries", "gameplayCommands", "gameplayEvents"],
+      "enables": ["objective.floor_clear", "simulation.gameplay_replay", "persistence.run_summary"],
+      "blocks": [],
+      "softlockGuards": ["strict-command-schema", "exactly-two-or-three-flips", "deterministic-event-sequence", "atomic-final-pair-fallback", "single-outer-command-journal"],
+      "tests": ["src/shared/gameplay-core.test.ts", "src/shared/game.test.ts", "src/shared/gameplay-effect-transition.test.ts"]
     }
   ],
   "edges": [
@@ -2181,6 +2194,15 @@
     { "source": "progression.run_flow", "target": "feedback.gameplay_hud", "kind": "displays", "label": "projects typed floor readiness parasite and banish outcomes" },
     { "source": "progression.run_flow", "target": "persistence.run_summary", "kind": "persists", "label": "retains one flat floor command and its exact domain events" },
     { "source": "progression.run_flow", "target": "simulation.gameplay_replay", "kind": "tested_by", "label": "replays deterministic floor advancement and rejection" },
+    { "source": "core.gameplay_commands", "target": "core.board_turn_resolution", "kind": "triggers", "label": "submits one strict delayed turn command" },
+    { "source": "core.board_turn_resolution", "target": "objective.floor_clear", "kind": "enables", "label": "advances matched board state toward completion" },
+    { "source": "core.board_turn_resolution", "target": "power.wild_match", "kind": "modifies", "label": "owns wildcard consumption inside the turn event sequence" },
+    { "source": "core.board_turn_resolution", "target": "board.scout_reveal", "kind": "triggers", "label": "turns Scout Glint into deterministic board information" },
+    { "source": "trait.echo", "target": "core.board_turn_resolution", "kind": "triggers", "label": "contributes schema-driven match effects under the outer turn" },
+    { "source": "findable.score_glint", "target": "core.board_turn_resolution", "kind": "triggers", "label": "contributes typed score request under the outer turn" },
+    { "source": "core.board_turn_resolution", "target": "feedback.gameplay_hud", "kind": "displays", "label": "projects source feedback from one ordered event envelope" },
+    { "source": "core.board_turn_resolution", "target": "persistence.run_summary", "kind": "persists", "label": "retains one outer command instead of nested effect commands" },
+    { "source": "core.board_turn_resolution", "target": "simulation.gameplay_replay", "kind": "tested_by", "label": "replays non-final match transitions exactly" },
     { "source": "route.mystery", "target": "progression.run_flow", "kind": "modifies", "label": "changes next decision" }
   ],
   "coverage": {

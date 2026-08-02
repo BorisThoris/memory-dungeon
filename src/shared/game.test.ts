@@ -7812,7 +7812,7 @@ describe('board powers', () => {
             expect(resolved.stats.comboShards).toBe(0);
             expect(resolved.findablesClaimedThisFloor).toBe(1);
             expect(resolved.gameplayCommandJournal).toEqual([
-                expect.objectContaining({ definitionId: 'findable.shard_spark' })
+                expect.objectContaining({ type: 'board.turn_resolve' })
             ]);
             expect(resolved.gameplayEventJournal).toEqual(
                 expect.arrayContaining([
@@ -7838,7 +7838,7 @@ describe('board powers', () => {
             expect(resolved.stats.totalScore).toBe(base + FINDABLE_MATCH_SCORE.score_glint);
             expect(resolved.findablesClaimedThisFloor).toBe(1);
             expect(resolved.gameplayCommandJournal).toEqual([
-                expect.objectContaining({ definitionId: 'findable.score_glint' })
+                expect.objectContaining({ type: 'board.turn_resolve' })
             ]);
             expect(resolved.gameplayEventJournal).toEqual(expect.arrayContaining([
                 expect.objectContaining({ type: 'score.requested', reason: 'findable_match', amount: 25 }),
@@ -7891,7 +7891,7 @@ describe('board powers', () => {
             expect(trapTiles.every((tile) => tile.dungeonCardState === 'revealed')).toBe(true);
             expect(trapTiles.every((tile) => tile.scoutRevealSource === 'omen_seal')).toBe(true);
             expect(resolved.gameplayCommandJournal).toEqual(expect.arrayContaining([
-                expect.objectContaining({ type: 'effects.apply', definitionId: 'findable.scout_glint' })
+                expect.objectContaining({ type: 'board.turn_resolve' })
             ]));
             expect(resolved.gameplayEventJournal).toEqual(expect.arrayContaining([
                 expect.objectContaining({ type: 'scout_reveal.requested', amount: 1 }),
@@ -8181,9 +8181,7 @@ describe('wildTileId bookkeeping', () => {
         expect(resolved.powersUsedThisRun).toBe(true);
         expect(resolved.gameplayCommandJournal).toEqual(expect.arrayContaining([
             expect.objectContaining({
-                type: 'wild_match.consume',
-                wildTileId: wild.id,
-                pairedTileId: target.id
+                type: 'board.turn_resolve'
             })
         ]));
         expect(resolved.gameplayEventJournal).toEqual(expect.arrayContaining([

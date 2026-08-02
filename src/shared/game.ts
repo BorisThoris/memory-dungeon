@@ -1,17 +1,11 @@
 import {
     GAUNTLET_FLOOR_CLEAR_TIME_BONUS_MS,
-    MAX_COMBO_SHARDS,
-    MAX_GUARD_TOKENS,
     MAX_LIVES,
-    RECALL_FOCUS_MAX,
     type BoardState,
     type LevelResult,
     type RunState
 } from './contracts';
 import { getDungeonLevelResultTags } from './secondary-objectives';
-import {
-    applyTraitRouteObjectiveProgress
-} from './trait-route-objectives';
 export {
     applyRelicOfferServiceToRun,
     computeRelicOfferPickBudget,
@@ -43,21 +37,8 @@ export {
     getEnemyHazardMovementCandidateIds,
     type EnemyHazardPatternDefinition
 } from './dungeon-enemy-hazard-rules';
-import {
-    clearFinalPairEnemyHazardOccupationForRun
-} from './enemy-hazard-board-rules';
 import { getDungeonBossTrophyCacheResult } from './dungeon-boss-clear-rules';
-import {
-    isBoardComplete
-} from './board-inspection';
-import {
-    DECOY_PAIR_KEY,
-    WILD_PAIR_KEY
-} from './tile-identity';
-import {
-    calculateRating,
-    tilesArePairMatch
-} from './scoring-rules';
+import { calculateRating } from './scoring-rules';
 import {
     applyFloorClearEnemyHazardDefeats,
     calculateFloorClearScore,
@@ -74,32 +55,19 @@ import {
 import { getShopGoldRewardForFloor } from './shop-rules';
 import { hasMutator } from './mutators';
 import {
-    rotateAnchorSealPressure,
-} from './shifting-spotlight-rules';
-import {
     getParasiteFloorsAfterFeaturedObjectiveClear
 } from './score-parasite-rules';
-import { deriveMatchClaimContext } from './match-claim-rules';
 import { createFlipTileTransition } from './flip-tile-transition';
 import { createActivateDungeonExit, createApplyDestroyPair } from './floor-completion-transitions';
-import { selectGambitMatchedPair } from './gambit-match-rules';
-import { resolveMismatchTurnTransition } from './turn-mismatch-rules';
-import { calculateResolvedMatchSurvivalReward } from './turn-match-reward-rules';
-import { resolveTurnMatchFollowup } from './turn-match-followup-rules';
-import { resolveTurnMatchBoardCleanup } from './turn-match-board-cleanup-rules';
-import { resolveTurnMatchEconomy } from './turn-match-economy-rules';
-import { resolveTurnMatchProgress } from './turn-match-progress-rules';
-import { resolveTurnMatchBoardResolution } from './turn-match-board-resolution-rules';
-import { resolveTurnMatchScoringSummary } from './turn-match-scoring-summary-rules';
-import { resolveTileTraitEffects } from './tile-trait-rules';
+import { createResolveBoardTurnTransition } from './board-turn-transition';
 import { appendGameplayJournal } from './gameplay-journal';
 import {
     consumeWildMatchThroughGameplayCore,
+    resolveBoardTurnThroughGameplayCore,
     resolveFindableMatchRewardThroughGameplayCore,
     resolveSlayerFloorClearThroughGameplayCore
 } from './gameplay-core-adapters';
-import { addTileTraitCountStats, normalizeSessionStats } from './session-stats-rules';
-import { runFilteredStringArrayOrNull, runStringArray } from './run-array-guards';
+import { normalizeSessionStats } from './session-stats-rules';
 import { runNonNegativeInteger } from './run-number-guards';
 export {
     completeRelicPickAndAdvance
@@ -247,8 +215,6 @@ export {
     createDungeonShowcaseRun
 } from './dungeon-showcase-run-rules';
 
-const GAMBIT_FAIL_EXTRA_TRIES = 1;
-
 export {
     generateRouteChoices,
     getRouteChoiceAvailability,
@@ -326,9 +292,6 @@ export {
 export {
     grantBonusRelicPickNextOffer
 } from './relic-immediate-rules';
-
-const flippedTileIdsForRun = (run: RunState): string[] | null =>
-    runFilteredStringArrayOrNull(run.board?.flippedTileIds);
 
 export const finalizeLevel = (run: RunState, board: BoardState): RunState => {
     const floorClearHazards = applyFloorClearEnemyHazardDefeats(run, board);
@@ -482,599 +445,21 @@ export const applyDestroyPair = createApplyDestroyPair({ finalizeLevel });
 
 export const activateDungeonExit = createActivateDungeonExit({ finalizeLevel });
 
-const resolveGambitThree = (run: RunState, encorePairKeys: string[]): RunState => {
-    const flippedTileIds = flippedTileIdsForRun(run);
-    if (!run.board || !flippedTileIds || flippedTileIds.length !== 3) {
-        return run;
-    }
-    const [aId, bId, cId] = flippedTileIds;
-    const ta = run.board.tiles.find((t) => t.id === aId);
-    const tb = run.board.tiles.find((t) => t.id === bId);
-    const tc = run.board.tiles.find((t) => t.id === cId);
-    if (!ta || !tb || !tc) {
-        return run;
-    }
-    const selection = selectGambitMatchedPair(run.board);
 
-    if (selection) {
-        const { firstTileId: matchA, secondTileId: matchB, thirdTileId: thirdId } = selection;
-        const tileMatchA = run.board.tiles.find((t) => t.id === matchA);
-        const tileMatchB = run.board.tiles.find((t) => t.id === matchB);
-        if (!tileMatchA || !tileMatchB) {
-            return run;
-        }
-        const matchClaimContext = deriveMatchClaimContext({
-            firstTile: tileMatchA,
-            firstTileId: matchA,
-            run,
-            secondTile: tileMatchB,
-            secondTileId: matchB
-        });
-        const {
-            anchorSealClaimed,
-            catalystAltarUpgraded,
-            dungeonReward,
-            dungeonTrapResolvedDelta,
-            claimedFindableKind,
-            findableComboShardGain,
-            findableSafeHazardWardGain,
-            findableScoreBonus,
-            findablesClaimedDelta,
-            loadedGatewayClaimed,
-            matchedDungeonKeyKind,
-            matchedDungeonKind,
-            matchedPairKey,
-            mimicCacheBite,
-            mimicCacheClaimed,
-            mimicCacheFatalBite,
-            mimicCacheGuardBite,
-            parasiteVesselConverted,
-            pinLatticeRewarded,
-            routeCardReward,
-            usedWild
-        } = matchClaimContext;
-        const findableReward = resolveFindableMatchRewardThroughGameplayCore(
-            run,
-            claimedFindableKind,
-            `findable-match:${run.runSeed}:${run.board.level}:${runNonNegativeInteger(run.matchResolutionsThisFloor)}:${matchedPairKey}:gambit`
-        );
-        const resolvedFindableComboShardGain = findableReward.migrated
-            ? findableReward.comboShardGain
-            : findableComboShardGain;
-        const resolvedFindableSafeHazardWardGain = findableReward.migrated
-            ? findableReward.safeHazardWardGain
-            : findableSafeHazardWardGain;
-        const resolvedFindableScoreBonus = findableReward.migrated
-            ? findableReward.scoreGain
-            : findableScoreBonus;
-        const resolvedFindableScoutGain = findableReward.migrated
-            ? findableReward.scoutRevealGain
-            : claimedFindableKind === 'scout_glint' ? 1 : 0;
 
-        const resolution = resolveTurnMatchBoardResolution({
-            run,
-            board: run.board,
-            context: matchClaimContext,
-            firstTile: tileMatchA,
-            secondTile: tileMatchB,
-            findableScoutGain: resolvedFindableScoutGain,
-            firstTileId: matchA,
-            secondTileId: matchB,
-            thirdTileId: thirdId
-        });
-        const {
-            board,
-            findableScout,
-            cascadeHazard,
-            fragileCacheClaimed,
-            tollCacheClaimed,
-            fuseCacheClaimed,
-            fuseCacheFresh,
-            enemyDamage,
-            hazardDamage,
-            lastPairHazardClear,
-            lanternScout,
-            omenScout
-        } = resolution;
-        const traitReward = resolveTileTraitEffects({
-            run,
-            board: run.board,
-            sourceTiles: [tileMatchA, tileMatchB],
-            source: 'match'
-        });
-        const scoring = resolveTurnMatchScoringSummary({
-            run,
-            sourceBoard: run.board,
-            resolvedBoard: board,
-            matchedPairKey,
-            matchedTiles: [tileMatchA, tileMatchB],
-            encorePairKeys,
-            findableScoreBonus: resolvedFindableScoreBonus + traitReward.scoreBonus,
-            routeCardScore: routeCardReward.score,
-            dungeonScore: dungeonReward.score,
-            enemyDamageScore: enemyDamage.score,
-            hazardDamageScore: hazardDamage.score,
-            fragileCacheClaimed,
-            fuseCacheFresh,
-            pinLatticeRewarded,
-            tollCacheClaimed
-        });
-        const survivalReward = calculateResolvedMatchSurvivalReward({
-            catalystAltarUpgraded,
-            currentStreak: scoring.currentStreak,
-            dungeonReward,
-            findableComboShardGain: resolvedFindableComboShardGain + traitReward.comboShardGain,
-            mimicCacheBite,
-            mimicCacheFatalBite,
-            mimicCacheGuardBite,
-            routeCardReward,
-            run
-        });
-        const traitRouteObjective = applyTraitRouteObjectiveProgress(run, traitReward.interactionTags);
-        const lives = survivalReward.lives;
-        const routeFavor = gainRelicFavor(run, routeCardReward.relicFavor + dungeonReward.relicFavor + traitReward.relicFavorGain);
-        const wildMatch = usedWild && runNonNegativeInteger(run.wildMatchesRemaining) > 0
-            ? consumeWildMatchThroughGameplayCore(
-                  run,
-                  tileMatchA.pairKey === WILD_PAIR_KEY ? tileMatchA.id : tileMatchB.id,
-                  tileMatchA.pairKey === WILD_PAIR_KEY ? tileMatchB.id : tileMatchA.id,
-                  `wild-match:${run.runSeed}:${run.board.level}:${runNonNegativeInteger(run.matchResolutionsThisFloor)}:gambit`
-              )
-            : { run, commands: [], events: [] };
-
-        const spunG = rotateAnchorSealPressure(run, board);
-        const followup = resolveTurnMatchFollowup({
-            run,
-            matchedPairKey,
-            encoreKey: scoring.encoreKey,
-            loadedGatewayClaimed,
-            dungeonGatewayRouteType: dungeonReward.gatewayRouteType
-        });
-        const boardCleanup = resolveTurnMatchBoardCleanup({
-            run,
-            board: run.board,
-            matchedTileIds: [matchA, matchB],
-            firstMatchedTileId: matchA,
-            recallBonus: scoring.recallBonus
-        });
-        const economy = resolveTurnMatchEconomy({
-            run,
-            routeCardShopGold: routeCardReward.shopGold,
-            dungeonShopGold: dungeonReward.shopGold,
-            dungeonKeysDelta: dungeonReward.keysHeldDelta,
-            dungeonMasterKeysDelta: dungeonReward.masterKeysHeldDelta,
-            tollCacheClaimed,
-            fuseCacheClaimed,
-            fuseCacheFresh,
-            matchedDungeonKind,
-            matchedDungeonKeyKind
-        });
-        const defeatedDungeonEnemies =
-            dungeonReward.enemiesDefeated +
-            enemyDamage.defeated +
-            hazardDamage.bossDefeated +
-            lastPairHazardClear.bossesDefeated;
-        const defeatedEnemyHazards = hazardDamage.defeated + lastPairHazardClear.defeated;
-        const progress = resolveTurnMatchProgress({
-            run,
-            cursedMatchedEarly: scoring.cursedMatchedEarly,
-            findablesClaimedDelta,
-            routeCardSafeHazardWardCharges: routeCardReward.safeHazardWardCharges,
-            findableSafeHazardWardGain: resolvedFindableSafeHazardWardGain,
-            cascadeHazardTriggered: cascadeHazard.triggered,
-            fragileCacheClaimed,
-            tollCacheClaimed,
-            fuseCacheClaimed,
-            fuseCacheFresh,
-            lanternScouted: lanternScout.scouted,
-            findableScouted: findableScout.scouted,
-            omenScouted: omenScout.scouted,
-            mimicCacheClaimed,
-            mimicCacheBite,
-            mimicCacheGuardBite,
-            anchorSealUsed: spunG.anchorSealUsed,
-            anchorSealClaimed,
-            loadedGatewayClaimed,
-            catalystAltarUpgraded,
-            parasiteVesselConverted,
-            pinLatticeRewarded,
-            defeatedDungeonEnemies,
-            defeatedEnemyHazards,
-            openedDungeonTreasures: dungeonReward.treasuresOpened,
-            resolvedDungeonTraps: dungeonTrapResolvedDelta,
-            usedDungeonGateways: dungeonReward.gatewaysUsed
-        });
-        const stats = normalizeSessionStats(run.stats);
-
-        const journaledRun = appendGameplayJournal(
-            wildMatch.run,
-            [...wildMatch.commands, ...findableReward.commands, ...(traitReward.gameplayCommands ?? [])],
-            [...wildMatch.events, ...findableReward.events, ...(traitReward.gameplayEvents ?? [])]
-        );
-        const nextRun: RunState = {
-            ...journaledRun,
-            gambitThirdFlipUsed: true,
-            gambitAvailableThisFloor: false,
-            powersUsedThisRun: true,
-            status: mimicCacheFatalBite ? 'gameOver' : 'playing',
-            lives,
-            board: spunG.board,
-            shiftingSpotlightNonce: spunG.shiftingSpotlightNonce,
-            wildMatchesRemaining: runNonNegativeInteger(journaledRun.wildMatchesRemaining),
-            peekCharges: runNonNegativeInteger(run.peekCharges) + runNonNegativeInteger(traitReward.peekChargeGain),
-            shuffleCharges: runNonNegativeInteger(run.shuffleCharges) + runNonNegativeInteger(traitReward.shuffleChargeGain),
-            regionShuffleCharges:
-                runNonNegativeInteger(run.regionShuffleCharges) + runNonNegativeInteger(traitReward.regionShuffleChargeGain),
-            flashPairCharges: runNonNegativeInteger(run.flashPairCharges) + runNonNegativeInteger(traitReward.flashPairChargeGain),
-            shopGold: runNonNegativeInteger(economy.shopGold) + runNonNegativeInteger(traitReward.shopGoldGain),
-            dungeonKeys: economy.dungeonKeys,
-            dungeonMasterKeys: economy.dungeonMasterKeys,
-            bonusRelicPicksNextOffer: routeFavor.bonusRelicPicksNextOffer,
-            favorBonusRelicPicksNextOffer: routeFavor.favorBonusRelicPicksNextOffer,
-            relicFavorProgress: routeFavor.relicFavorProgress,
-            nBackMatchCounter: followup.nBackMatchCounter,
-            nBackAnchorPairKey: followup.nBackAnchorPairKey,
-            matchedPairKeysThisRun: [...runStringArray(run.matchedPairKeysThisRun), scoring.encoreKey],
-            pendingRouteCardPlan: followup.pendingRouteCardPlan,
-            pinnedTileIds: boardCleanup.pinnedTileIds,
-            recallFocus: Math.min(RECALL_FOCUS_MAX, boardCleanup.recallFocus + traitReward.recallFocusGain),
-            recallMatchesThisFloor: boardCleanup.recallMatchesThisFloor,
-            recallBonusScoreThisFloor: boardCleanup.recallBonusScoreThisFloor,
-            forgottenTileIdsThisFloor: boardCleanup.forgottenTileIdsThisFloor,
-            stickyBlockIndex: traitReward.stickyBlockIndex ?? boardCleanup.stickyBlockIndex,
-            ...traitRouteObjective.runPatch,
-            ...progress,
-            stats: {
-                ...stats,
-                totalScore: runNonNegativeInteger(scoring.totalScore) + runNonNegativeInteger(traitRouteObjective.scoreBonus),
-                currentLevelScore:
-                    runNonNegativeInteger(scoring.currentLevelScore) + runNonNegativeInteger(traitRouteObjective.scoreBonus),
-                bestScore: Math.max(
-                    runNonNegativeInteger(scoring.bestScore),
-                    runNonNegativeInteger(scoring.totalScore) + runNonNegativeInteger(traitRouteObjective.scoreBonus)
-                ),
-                matchesFound: runNonNegativeInteger(stats.matchesFound) + 1,
-                currentStreak: runNonNegativeInteger(scoring.currentStreak),
-                bestStreak: Math.max(runNonNegativeInteger(stats.bestStreak), runNonNegativeInteger(scoring.currentStreak)),
-                highestLevel: Math.max(runNonNegativeInteger(stats.highestLevel), runNonNegativeInteger(board.level)),
-                guardTokens: Math.min(
-                    MAX_GUARD_TOKENS,
-                    runNonNegativeInteger(survivalReward.guardTokens) + runNonNegativeInteger(traitReward.guardTokenGain)
-                ),
-                comboShards: Math.min(
-                    MAX_COMBO_SHARDS,
-                    runNonNegativeInteger(survivalReward.comboShards) + runNonNegativeInteger(traitRouteObjective.comboShardGain)
-                ),
-                tileTraitMatches: addTileTraitCountStats(stats.tileTraitMatches, [tileMatchA, tileMatchB])
-            },
-            timerState: clearResolveState(run)
-        };
-        const cleanedNextRun = clearFinalPairEnemyHazardOccupationForRun(nextRun);
-        const completionBoard = cleanedNextRun.board ?? spunG.board;
-        return cleanedNextRun.status === 'gameOver'
-            ? cleanedNextRun
-            : isBoardComplete(completionBoard)
-              ? finalizeLevel(cleanedNextRun, completionBoard)
-              : cleanedNextRun;
-    }
-
-    const gambitDecoy =
-        ta.pairKey === DECOY_PAIR_KEY || tb.pairKey === DECOY_PAIR_KEY || tc.pairKey === DECOY_PAIR_KEY;
-    const mismatch = resolveMismatchTurnTransition({
-        run,
-        board: run.board,
-        tileIds: [aId, bId, cId],
-        sourceTiles: [ta, tb, tc],
-        triesDelta: GAMBIT_FAIL_EXTRA_TRIES,
-        decoyTouched: gambitDecoy
-    });
-    return {
-        ...mismatch,
-        gambitThirdFlipUsed: true,
-        gambitAvailableThisFloor: false,
-        powersUsedThisRun: true
-    };
-};
-
-const resolveTwoFlippedTiles = (run: RunState, encorePairKeys: string[]): RunState => {
-    const flippedTileIds = flippedTileIdsForRun(run);
-    if (!run.board || !flippedTileIds || flippedTileIds.length !== 2) {
-        return run;
-    }
-
-    const [firstId, secondId] = flippedTileIds;
-    const firstTile = run.board.tiles.find((tile) => tile.id === firstId);
-    const secondTile = run.board.tiles.find((tile) => tile.id === secondId);
-
-    if (!firstTile || !secondTile) {
-        return run;
-    }
-
-    const isMatch = tilesArePairMatch(firstTile, secondTile);
-
-    if (isMatch) {
-        const matchClaimContext = deriveMatchClaimContext({
-            firstTile,
-            firstTileId: firstId,
-            run,
-            secondTile,
-            secondTileId: secondId
-        });
-        const {
-            anchorSealClaimed,
-            catalystAltarUpgraded,
-            dungeonReward,
-            dungeonTrapResolvedDelta,
-            claimedFindableKind,
-            findableComboShardGain,
-            findableSafeHazardWardGain,
-            findableScoreBonus,
-            findablesClaimedDelta,
-            loadedGatewayClaimed,
-            matchedDungeonKeyKind,
-            matchedDungeonKind,
-            matchedPairKey,
-            mimicCacheBite,
-            mimicCacheClaimed,
-            mimicCacheFatalBite,
-            mimicCacheGuardBite,
-            parasiteVesselConverted,
-            pinLatticeRewarded,
-            routeCardReward,
-            usedWild
-        } = matchClaimContext;
-        const findableReward = resolveFindableMatchRewardThroughGameplayCore(
-            run,
-            claimedFindableKind,
-            `findable-match:${run.runSeed}:${run.board.level}:${runNonNegativeInteger(run.matchResolutionsThisFloor)}:${matchedPairKey}:match`
-        );
-        const resolvedFindableComboShardGain = findableReward.migrated
-            ? findableReward.comboShardGain
-            : findableComboShardGain;
-        const resolvedFindableSafeHazardWardGain = findableReward.migrated
-            ? findableReward.safeHazardWardGain
-            : findableSafeHazardWardGain;
-        const resolvedFindableScoreBonus = findableReward.migrated
-            ? findableReward.scoreGain
-            : findableScoreBonus;
-        const resolvedFindableScoutGain = findableReward.migrated
-            ? findableReward.scoutRevealGain
-            : claimedFindableKind === 'scout_glint' ? 1 : 0;
-
-        const resolution = resolveTurnMatchBoardResolution({
-            run,
-            board: run.board,
-            context: matchClaimContext,
-            firstTile,
-            secondTile,
-            findableScoutGain: resolvedFindableScoutGain,
-            firstTileId: firstId,
-            secondTileId: secondId
-        });
-        const {
-            board,
-            findableScout,
-            cascadeHazard,
-            fragileCacheClaimed,
-            tollCacheClaimed,
-            fuseCacheClaimed,
-            fuseCacheFresh,
-            enemyDamage,
-            hazardDamage,
-            lastPairHazardClear,
-            lanternScout,
-            omenScout
-        } = resolution;
-        const traitReward = resolveTileTraitEffects({
-            run,
-            board: run.board,
-            sourceTiles: [firstTile, secondTile],
-            source: 'match'
-        });
-        const scoring = resolveTurnMatchScoringSummary({
-            run,
-            sourceBoard: run.board,
-            resolvedBoard: board,
-            matchedPairKey,
-            matchedTiles: [firstTile, secondTile],
-            encorePairKeys,
-            findableScoreBonus: resolvedFindableScoreBonus + traitReward.scoreBonus,
-            routeCardScore: routeCardReward.score,
-            dungeonScore: dungeonReward.score,
-            enemyDamageScore: enemyDamage.score,
-            hazardDamageScore: hazardDamage.score,
-            fragileCacheClaimed,
-            fuseCacheFresh,
-            pinLatticeRewarded,
-            tollCacheClaimed
-        });
-        const survivalReward = calculateResolvedMatchSurvivalReward({
-            catalystAltarUpgraded,
-            currentStreak: scoring.currentStreak,
-            dungeonReward,
-            findableComboShardGain: resolvedFindableComboShardGain + traitReward.comboShardGain,
-            mimicCacheBite,
-            mimicCacheFatalBite,
-            mimicCacheGuardBite,
-            routeCardReward,
-            run
-        });
-        const traitRouteObjective = applyTraitRouteObjectiveProgress(run, traitReward.interactionTags);
-        const lives = survivalReward.lives;
-        const routeFavor = gainRelicFavor(run, routeCardReward.relicFavor + dungeonReward.relicFavor + traitReward.relicFavorGain);
-
-        const wildMatch = usedWild && runNonNegativeInteger(run.wildMatchesRemaining) > 0
-            ? consumeWildMatchThroughGameplayCore(
-                  run,
-                  firstTile.pairKey === WILD_PAIR_KEY ? firstTile.id : secondTile.id,
-                  firstTile.pairKey === WILD_PAIR_KEY ? secondTile.id : firstTile.id,
-                  `wild-match:${run.runSeed}:${run.board.level}:${runNonNegativeInteger(run.matchResolutionsThisFloor)}:match`
-              )
-            : { run, commands: [], events: [] };
-
-        const spun = rotateAnchorSealPressure(run, board);
-        const followup = resolveTurnMatchFollowup({
-            run,
-            matchedPairKey,
-            encoreKey: scoring.encoreKey,
-            loadedGatewayClaimed,
-            dungeonGatewayRouteType: dungeonReward.gatewayRouteType
-        });
-        const boardCleanup = resolveTurnMatchBoardCleanup({
-            run,
-            board: run.board,
-            matchedTileIds: [firstId, secondId],
-            firstMatchedTileId: firstId,
-            recallBonus: scoring.recallBonus
-        });
-        const economy = resolveTurnMatchEconomy({
-            run,
-            routeCardShopGold: routeCardReward.shopGold,
-            dungeonShopGold: dungeonReward.shopGold,
-            dungeonKeysDelta: dungeonReward.keysHeldDelta,
-            dungeonMasterKeysDelta: dungeonReward.masterKeysHeldDelta,
-            tollCacheClaimed,
-            fuseCacheClaimed,
-            fuseCacheFresh,
-            matchedDungeonKind,
-            matchedDungeonKeyKind
-        });
-        const defeatedDungeonEnemies =
-            dungeonReward.enemiesDefeated +
-            enemyDamage.defeated +
-            hazardDamage.bossDefeated +
-            lastPairHazardClear.bossesDefeated;
-        const defeatedEnemyHazards = hazardDamage.defeated + lastPairHazardClear.defeated;
-        const progress = resolveTurnMatchProgress({
-            run,
-            cursedMatchedEarly: scoring.cursedMatchedEarly,
-            findablesClaimedDelta,
-            routeCardSafeHazardWardCharges: routeCardReward.safeHazardWardCharges,
-            findableSafeHazardWardGain: resolvedFindableSafeHazardWardGain,
-            cascadeHazardTriggered: cascadeHazard.triggered,
-            fragileCacheClaimed,
-            tollCacheClaimed,
-            fuseCacheClaimed,
-            fuseCacheFresh,
-            lanternScouted: lanternScout.scouted,
-            findableScouted: findableScout.scouted,
-            omenScouted: omenScout.scouted,
-            mimicCacheClaimed,
-            mimicCacheBite,
-            mimicCacheGuardBite,
-            anchorSealUsed: spun.anchorSealUsed,
-            anchorSealClaimed,
-            loadedGatewayClaimed,
-            catalystAltarUpgraded,
-            parasiteVesselConverted,
-            pinLatticeRewarded,
-            defeatedDungeonEnemies,
-            defeatedEnemyHazards,
-            openedDungeonTreasures: dungeonReward.treasuresOpened,
-            resolvedDungeonTraps: dungeonTrapResolvedDelta,
-            usedDungeonGateways: dungeonReward.gatewaysUsed
-        });
-        const stats = normalizeSessionStats(run.stats);
-
-        const journaledRun = appendGameplayJournal(
-            wildMatch.run,
-            [...wildMatch.commands, ...findableReward.commands, ...(traitReward.gameplayCommands ?? [])],
-            [...wildMatch.events, ...findableReward.events, ...(traitReward.gameplayEvents ?? [])]
-        );
-        const nextRun: RunState = {
-            ...journaledRun,
-            status: mimicCacheFatalBite ? 'gameOver' : 'playing',
-            lives,
-            board: spun.board,
-            shiftingSpotlightNonce: spun.shiftingSpotlightNonce,
-            powersUsedThisRun: usedWild ? true : run.powersUsedThisRun,
-            wildMatchesRemaining: runNonNegativeInteger(journaledRun.wildMatchesRemaining),
-            peekCharges: runNonNegativeInteger(run.peekCharges) + runNonNegativeInteger(traitReward.peekChargeGain),
-            shuffleCharges: runNonNegativeInteger(run.shuffleCharges) + runNonNegativeInteger(traitReward.shuffleChargeGain),
-            regionShuffleCharges:
-                runNonNegativeInteger(run.regionShuffleCharges) + runNonNegativeInteger(traitReward.regionShuffleChargeGain),
-            flashPairCharges: runNonNegativeInteger(run.flashPairCharges) + runNonNegativeInteger(traitReward.flashPairChargeGain),
-            shopGold: runNonNegativeInteger(economy.shopGold) + runNonNegativeInteger(traitReward.shopGoldGain),
-            dungeonKeys: economy.dungeonKeys,
-            dungeonMasterKeys: economy.dungeonMasterKeys,
-            bonusRelicPicksNextOffer: routeFavor.bonusRelicPicksNextOffer,
-            favorBonusRelicPicksNextOffer: routeFavor.favorBonusRelicPicksNextOffer,
-            relicFavorProgress: routeFavor.relicFavorProgress,
-            nBackMatchCounter: followup.nBackMatchCounter,
-            nBackAnchorPairKey: followup.nBackAnchorPairKey,
-            matchedPairKeysThisRun: [...runStringArray(run.matchedPairKeysThisRun), scoring.encoreKey],
-            pendingRouteCardPlan: followup.pendingRouteCardPlan,
-            pinnedTileIds: boardCleanup.pinnedTileIds,
-            recallFocus: Math.min(RECALL_FOCUS_MAX, boardCleanup.recallFocus + traitReward.recallFocusGain),
-            recallMatchesThisFloor: boardCleanup.recallMatchesThisFloor,
-            recallBonusScoreThisFloor: boardCleanup.recallBonusScoreThisFloor,
-            forgottenTileIdsThisFloor: boardCleanup.forgottenTileIdsThisFloor,
-            stickyBlockIndex: traitReward.stickyBlockIndex ?? boardCleanup.stickyBlockIndex,
-            ...traitRouteObjective.runPatch,
-            ...progress,
-            stats: {
-                ...stats,
-                totalScore: runNonNegativeInteger(scoring.totalScore) + runNonNegativeInteger(traitRouteObjective.scoreBonus),
-                currentLevelScore:
-                    runNonNegativeInteger(scoring.currentLevelScore) + runNonNegativeInteger(traitRouteObjective.scoreBonus),
-                bestScore: Math.max(
-                    runNonNegativeInteger(scoring.bestScore),
-                    runNonNegativeInteger(scoring.totalScore) + runNonNegativeInteger(traitRouteObjective.scoreBonus)
-                ),
-                matchesFound: runNonNegativeInteger(stats.matchesFound) + 1,
-                currentStreak: runNonNegativeInteger(scoring.currentStreak),
-                bestStreak: Math.max(runNonNegativeInteger(stats.bestStreak), runNonNegativeInteger(scoring.currentStreak)),
-                highestLevel: Math.max(runNonNegativeInteger(stats.highestLevel), runNonNegativeInteger(board.level)),
-                guardTokens: Math.min(
-                    MAX_GUARD_TOKENS,
-                    runNonNegativeInteger(survivalReward.guardTokens) + runNonNegativeInteger(traitReward.guardTokenGain)
-                ),
-                comboShards: Math.min(
-                    MAX_COMBO_SHARDS,
-                    runNonNegativeInteger(survivalReward.comboShards) + runNonNegativeInteger(traitRouteObjective.comboShardGain)
-                ),
-                tileTraitMatches: addTileTraitCountStats(stats.tileTraitMatches, [firstTile, secondTile])
-            },
-            timerState: clearResolveState(run)
-        };
-
-        const cleanedNextRun = clearFinalPairEnemyHazardOccupationForRun(nextRun);
-        const completionBoard = cleanedNextRun.board ?? spun.board;
-        return cleanedNextRun.status === 'gameOver'
-            ? cleanedNextRun
-            : isBoardComplete(completionBoard)
-              ? finalizeLevel(cleanedNextRun, completionBoard)
-              : cleanedNextRun;
-    }
-
-    const decoyTouch =
-        firstTile.pairKey === DECOY_PAIR_KEY || secondTile.pairKey === DECOY_PAIR_KEY;
-    return resolveMismatchTurnTransition({
-        run,
-        board: run.board,
-        tileIds: [firstId, secondId],
-        sourceTiles: [firstTile, secondTile],
-        triesDelta: 1,
-        decoyTouched: decoyTouch
-    });
-};
+const resolveBoardTurnCompatibility = createResolveBoardTurnTransition({
+    finalizeLevel,
+    resolveFindableMatchReward: resolveFindableMatchRewardThroughGameplayCore,
+    consumeWildMatch: consumeWildMatchThroughGameplayCore
+});
 
 export const resolveBoardTurn = (run: RunState, encorePairKeys: string[] = []): RunState => {
-    if (run.status === 'gameOver') {
-        return run;
-    }
-    if (!run.board) {
-        return run;
-    }
-    const flippedTileIds = flippedTileIdsForRun(run);
-    if (!flippedTileIds) {
-        return run;
-    }
-    if (flippedTileIds.length === 3) {
-        return resolveGambitThree(run, encorePairKeys);
-    }
-    if (flippedTileIds.length !== 2) {
-        return run;
-    }
-    return resolveTwoFlippedTiles(run, encorePairKeys);
+    const migrated = resolveBoardTurnThroughGameplayCore(
+        run,
+        encorePairKeys,
+        `board-turn:${run.runSeed}:${run.board?.level ?? 0}:${runNonNegativeInteger(run.matchResolutionsThisFloor)}:${runNonNegativeInteger(normalizeSessionStats(run.stats).tries)}`
+    );
+    return migrated.migrated
+        ? appendGameplayJournal(migrated.run, [migrated.command], migrated.events)
+        : resolveBoardTurnCompatibility(run, encorePairKeys);
 };

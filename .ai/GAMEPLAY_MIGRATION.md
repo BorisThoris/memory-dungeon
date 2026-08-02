@@ -331,6 +331,19 @@ The cleared-floor boundary now prepares the next playable board through one repl
 
 Graph v21 connects floor clear and relic drafting through flat run advancement, parasite pressure, floor-start perks, deterministic board preparation, memorize feedback, persistence, and replay.
 
+## Twenty-third incremental slice: Typed Board Turn Resolution
+
+The live delayed match seam now begins moving as one gameplay transaction instead of journaling a separate command for each findable, trait proc, and Wild token:
+
+1. The mature ordinary and Gambit resolvers were extracted from `game.ts` into a core-independent transition factory; scoring, survival, hazards, dungeon rewards, traits, objectives, economy, and cleanup still use their established pure rules.
+2. Schema-driven effect execution was separated from the command reducer, removing the trait-to-core dependency cycle and allowing multiple content definitions to share one outer command id and event sequence.
+3. `board.turn_resolve` validates resolving state plus exactly two or three flipped tiles, then owns non-final match or mismatch state and emits `board.turn_resolved` with outcome, matched identity, board completion, status, life, score, tries, and match deltas.
+4. Findable requests, trait synergies, and Wild Joker inventory/feedback events execute under the turn command. The live journal now retains one outer turn command rather than nested `effects.apply` or `wild_match.consume` commands.
+5. JSON-round-tripped replay reproduces the same run and ordered events, while the extracted legacy factory remains the parity oracle used by the live fallback.
+6. A final-pair turn is rejected atomically by the new reducer and immediately resolved by the established compatibility finalizer. No partial effects escape that rejection; moving floor-clear Slayer effects under the same envelope is the next ownership step.
+
+Graph v22 connects delayed input, match/mismatch and Gambit resolution, schema effects, Wild consumption, feedback, bounded persistence, and replay. This slice is deliberately incremental: it migrates the most frequent gameplay transaction without pretending the mature floor-clear boundary has already moved.
+
 ## Current slice status
 
 Implemented in the Conduit Cartographer vertical slice:

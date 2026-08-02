@@ -1360,6 +1360,13 @@ export const gameplayCommandSchema = z.discriminatedUnion('type', [
     z
         .object({
             ...commandBase,
+            type: z.literal('board.turn_resolve'),
+            encorePairKeys: z.array(z.string().min(1).max(160)).max(80).default([])
+        })
+        .strict(),
+    z
+        .object({
+            ...commandBase,
             type: z.literal('wild_match.consume'),
             wildTileId: z.string().min(1).max(160),
             pairedTileId: z.string().min(1).max(160)
@@ -1800,6 +1807,26 @@ export const gameplayEventSchema = z.discriminatedUnion('type', [
     z
         .object({
             ...eventBase,
+            type: z.literal('board.turn_resolved'),
+            outcome: z.enum(['match', 'mismatch', 'gambit_match', 'gambit_mismatch']),
+            flippedTileIds: z.array(z.string().min(1).max(160)).min(2).max(3),
+            matchedPairKey: z.string().min(1).max(160).nullable(),
+            boardComplete: z.boolean(),
+            statusBefore: z.enum(['memorize', 'playing', 'resolving', 'paused', 'levelComplete', 'gameOver']),
+            statusAfter: z.enum(['memorize', 'playing', 'resolving', 'paused', 'levelComplete', 'gameOver']),
+            livesBefore: z.number().int().nonnegative(),
+            livesAfter: z.number().int().nonnegative(),
+            totalScoreBefore: z.number().int().nonnegative(),
+            totalScoreAfter: z.number().int().nonnegative(),
+            triesBefore: z.number().int().nonnegative(),
+            triesAfter: z.number().int().nonnegative(),
+            matchesBefore: z.number().int().nonnegative(),
+            matchesAfter: z.number().int().nonnegative()
+        })
+        .strict(),
+    z
+        .object({
+            ...eventBase,
             type: z.literal('wild_match.consumed'),
             wildTileId: z.string().min(1).max(160),
             pairedTileId: z.string().min(1).max(160),
@@ -2076,6 +2103,17 @@ export const createGameplayRelicOfferServiceCommand = (
         type: 'relic.offer_service_use',
         serviceId,
         ...(targetRelicId ? { targetRelicId } : {})
+    });
+
+export const createGameplayBoardTurnResolveCommand = (
+    commandId: string,
+    encorePairKeys: readonly string[] = []
+): GameplayCommand =>
+    gameplayCommandSchema.parse({
+        schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
+        commandId,
+        type: 'board.turn_resolve',
+        encorePairKeys: [...encorePairKeys]
     });
 
 export const createGameplayWildMatchConsumeCommand = (

@@ -36,6 +36,7 @@ import {
     VAULTBREAKER_DEFINITIONS,
     WARDEN_DEFINITIONS,
     createGameplayDefinitionCommand,
+    createGameplayBoardTurnResolveCommand,
     createGameplayDestroyPairCommand,
     createGameplayDungeonExitActivateCommand,
     createGameplayFlashPairCommand,
@@ -116,12 +117,88 @@ const run = (overrides: Partial<RunState> = {}): RunState =>
         relicIds: [],
         powersUsedThisRun: false,
         forgottenTileIdsThisFloor: [],
+        pinnedTileIds: [],
         peekRevealedTileIds: [],
         stats: { totalScore: 0, currentLevelScore: 0, comboShards: 0, guardTokens: 0, currentStreak: 0 },
         ...overrides
     }) as RunState;
 
 describe('deterministic gameplay core', () => {
+    it('resolves a non-final match through one replayable outer turn command', () => {
+        const initial = run({
+            status: 'resolving',
+            board: {
+                ...board(),
+                pairCount: 2,
+                matchedPairs: 0,
+                flippedTileIds: ['a1', 'a2'],
+                tiles: [
+                    { ...tile('a1', 'a'), state: 'flipped', findableKind: 'score_glint' },
+                    { ...tile('a2', 'a'), state: 'flipped', findableKind: 'score_glint' },
+                    tile('b1', 'b'),
+                    tile('b2', 'b')
+                ]
+            },
+            findablesClaimedThisFloor: 0,
+            findablesTotalThisFloor: 1
+        });
+        const command = createGameplayBoardTurnResolveCommand('turn-1');
+        const result = reduceGameplayCommand(initial, command);
+
+        expect(result.accepted).toBe(true);
+        expect(result.command).toEqual(command);
+        expect(result.run.board?.matchedPairs).toBe(1);
+        expect(result.run.findablesClaimedThisFloor).toBe(1);
+        expect(result.run.gameplayCommandJournal).toEqual(initial.gameplayCommandJournal);
+        expect(result.events).toEqual(expect.arrayContaining([
+            expect.objectContaining({ type: 'score.requested', reason: 'findable_match', amount: 25 }),
+            expect.objectContaining({
+                type: 'board.turn_resolved',
+                outcome: 'match',
+                flippedTileIds: ['a1', 'a2'],
+                matchedPairKey: 'a',
+                boardComplete: false
+            })
+        ]));
+        expect(result.events.every((event) => event.commandId === command.commandId)).toBe(true);
+        expect(result.events.map((event) => event.sequence)).toEqual(
+            result.events.map((_, sequence) => sequence)
+        );
+
+        const replayed = replayGameplayCommands(initial, [JSON.parse(JSON.stringify(command))]);
+        expect(replayed.run).toEqual(result.run);
+        expect(replayed.events).toEqual(result.events);
+        expect(replayed.acceptedCommandIds).toEqual(['turn-1']);
+    });
+
+    it('leaves final-pair turns on the compatibility finalizer without partial core effects', () => {
+        const initial = run({
+            status: 'resolving',
+            board: {
+                ...board(),
+                pairCount: 1,
+                matchedPairs: 0,
+                flippedTileIds: ['a1', 'a2'],
+                tiles: [
+                    { ...tile('a1', 'a'), state: 'flipped', findableKind: 'score_glint' },
+                    { ...tile('a2', 'a'), state: 'flipped', findableKind: 'score_glint' }
+                ]
+            },
+            findablesClaimedThisFloor: 0,
+            findablesTotalThisFloor: 1
+        });
+        const result = reduceGameplayCommand(initial, createGameplayBoardTurnResolveCommand('final-turn'));
+
+        expect(result.accepted).toBe(false);
+        expect(result.run).toBe(initial);
+        expect(result.events).toEqual([
+            expect.objectContaining({
+                type: 'command.rejected',
+                reason: expect.stringContaining('compatibility finalizer')
+            })
+        ]);
+    });
+
     it('keeps every live relic representable by the typed gameplay schema', () => {
         expect([...GAMEPLAY_RELIC_IDS].sort()).toEqual([...RELIC_POOL].sort());
         expect(GAMEPLAY_RELIC_OFFER_SERVICE_IDS).toEqual(RELIC_OFFER_SERVICE_IDS);

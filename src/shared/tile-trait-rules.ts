@@ -13,10 +13,12 @@ import {
 import { hasRewardPerk } from './bonus-rewards';
 import {
     createGameplayDefinitionCommand,
+    getGameplayContentDefinition,
     type GameplayCommand,
-    type GameplayEvent
+    type GameplayEvent,
+    type GameplayFacts
 } from './gameplay-core-contracts';
-import { reduceGameplayCommand } from './gameplay-core';
+import { applyGameplayDefinitionTransition } from './gameplay-effect-transition';
 import { hasRunRelic } from './relics';
 import { createMulberry32, hashStringToSeed, pickRngIndex, shuffleWithRng } from './rng';
 import { runArrayCount } from './run-array-guards';
@@ -110,6 +112,10 @@ export interface TileTraitEffectContext {
     board?: BoardState | null;
     sourceTiles: readonly Tile[];
     source: 'match' | 'mismatch';
+    gameplayEffectContext?: {
+        commandId: string;
+        events: GameplayEvent[];
+    };
 }
 
 const collectTileTraitInteractionTags = ({
@@ -839,7 +845,8 @@ export const resolveTileTraitEffects = ({
     run,
     board,
     sourceTiles,
-    source
+    source,
+    gameplayEffectContext
 }: TileTraitEffectContext): TileTraitEffectResult => {
     const result = createEmptyTraitEffectResult();
     const traits = new Set(sourceTiles.map((tile) => tile.tileTraitKind).filter((kind): kind is TileTraitKind => kind != null));
@@ -857,18 +864,42 @@ export const resolveTileTraitEffects = ({
     const recallFocus = runNonNegativeInteger(run.recallFocus);
 
     const applyCoreTraitDefinition = (definitionId: string, commandSuffix: string, commandRun: RunState = run) => {
+        const facts: GameplayFacts = {
+            matchedTraits: [...traits],
+            adjacentTraits: [...adjacentTraitKinds],
+            matchedFindables: [],
+            bossTrophyClaimed: false,
+            riskWagerOutcome: 'none',
+            featuredObjectiveCompleted: false,
+            scoreParasiteActive: false
+        };
         const sourceHash = hashStringToSeed(sourceTiles.map((tile) => tile.id).sort().join('|'));
         const command = createGameplayDefinitionCommand(
             `trait-match:${run.runSeed}:${board?.level ?? 0}:${matchResolutionsThisFloor}:${sourceHash}:${commandSuffix}`,
             definitionId,
-            { matchedTraits: [...traits], adjacentTraits: [...adjacentTraitKinds] }
+            facts
         );
-        const coreResult = reduceGameplayCommand(commandRun, command);
+        if (command.type !== 'effects.apply') {
+            throw new Error(`Trait definition command has an unexpected type: ${command.type}`);
+        }
+        const definition = getGameplayContentDefinition(definitionId);
+        if (!definition) {
+            throw new Error(`Missing migrated trait definition: ${definitionId}`);
+        }
+        const coreResult = applyGameplayDefinitionTransition(
+            commandRun,
+            gameplayEffectContext?.commandId ?? command.commandId,
+            definition,
+            facts,
+            gameplayEffectContext?.events
+        );
         if (!coreResult.accepted) {
             throw new Error(`Migrated trait command rejected: ${definitionId}`);
         }
-        result.gameplayCommands = [...(result.gameplayCommands ?? []), command];
-        result.gameplayEvents = [...(result.gameplayEvents ?? []), ...coreResult.events];
+        if (!gameplayEffectContext) {
+            result.gameplayCommands = [...(result.gameplayCommands ?? []), command];
+            result.gameplayEvents = [...(result.gameplayEvents ?? []), ...coreResult.events];
+        }
         return coreResult;
     };
 

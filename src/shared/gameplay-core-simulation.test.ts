@@ -13,7 +13,7 @@ const tile = (id: string, pairKey: string, tileTraitKind?: Tile['tileTraitKind']
 });
 
 const initialRun = (seed: number): RunState => ({
-    status: 'playing',
+    status: 'resolving',
     board: {
         level: 1,
         pairCount: 3,
@@ -56,6 +56,7 @@ const initialRun = (seed: number): RunState => ({
     ],
     powersUsedThisRun: false,
     forgottenTileIdsThisFloor: [],
+    pinnedTileIds: [],
     peekRevealedTileIds: [],
     stats: { totalScore: 0, currentLevelScore: 0, comboShards: 0, guardTokens: 0, currentStreak: 2 }
 } as unknown as RunState);
@@ -133,16 +134,19 @@ describe('seeded gameplay core simulation', () => {
                 'relic.pick',
                 'relic.offer_service_use',
                 'side_room.resolve',
-                'wild_match.consume'
+                'wild_match.consume',
+                'board.turn_resolve'
             ])
         );
         expect(first.commandTypeCounts['wild_match.consume']).toBe(1);
+        expect(first.commandTypeCounts['board.turn_resolve']).toBe(1);
         expect(first.commandTypeCounts['route.choose']).toBe(1);
         expect(first.commandTypeCounts['relic.pick']).toBe(1);
         expect(first.commandTypeCounts['relic.offer_service_use']).toBe(1);
         expect(first.commandTypeCounts['side_room.resolve']).toBe(1);
         expect(first.commandTypeCounts['floor.advance']).toBe(1);
         expect(first.eventTypeCounts['wild_match.consumed']).toBe(1);
+        expect(first.eventTypeCounts['board.turn_resolved']).toBe(1);
         expect(first.finalRun.wildMatchesRemaining).toBe(0);
     });
 

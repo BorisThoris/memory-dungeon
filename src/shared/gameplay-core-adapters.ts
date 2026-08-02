@@ -1,6 +1,7 @@
 import type { FindableKind, RelicId, RunState } from './contracts';
 import {
     createGameplayDefinitionCommand,
+    createGameplayBoardTurnResolveCommand,
     createGameplayFloorAdvanceCommand,
     createGameplayWildMatchConsumeCommand,
     type GameplayCommand,
@@ -46,6 +47,13 @@ export interface GameplayWildMatchAdapterResult {
     run: RunState;
     commands: GameplayCommand[];
     events: GameplayEvent[];
+}
+
+export interface GameplayBoardTurnAdapterResult {
+    run: RunState;
+    command: GameplayCommand;
+    events: GameplayEvent[];
+    migrated: boolean;
 }
 
 export interface GameplayFloorAdvanceAdapterResult {
@@ -157,6 +165,26 @@ export const resolveFindableMatchRewardThroughGameplayCore = (
             0
         ),
         migrated: true
+    };
+};
+
+/**
+ * Routes non-final delayed board resolution through one outer command. Final
+ * pairs deliberately remain on the legacy finalizer until floor-clear effects
+ * can share the same event envelope without a reducer cycle.
+ */
+export const resolveBoardTurnThroughGameplayCore = (
+    run: RunState,
+    encorePairKeys: readonly string[],
+    commandId: string
+): GameplayBoardTurnAdapterResult => {
+    const command = createGameplayBoardTurnResolveCommand(commandId, encorePairKeys);
+    const result = reduceGameplayCommand(run, command);
+    return {
+        run: result.run,
+        command,
+        events: result.accepted ? result.events : [],
+        migrated: result.accepted
     };
 };
 

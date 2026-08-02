@@ -9,7 +9,7 @@ import {
     cancelResolvingWithUndo
 } from './board-power-actions';
 import { maxPinnedTilesForRun, togglePinnedTile } from './board-power-state';
-import { MAX_LIVES, type BonusRewardId, type RewardPerkId, type RunState } from './contracts';
+import { MAX_LIVES, type BonusRewardId, type FindableKind, type RunState } from './contracts';
 import {
     GAMEPLAY_BONUS_REWARD_IDS,
     GAMEPLAY_BONUS_REWARD_RULES,
@@ -20,17 +20,21 @@ import {
     gameplayEventSchema,
     getGameplayContentDefinition,
     type GameplayCommand,
-    type GameplayCondition,
     type GameplayContentDefinition,
     type GameplayEvent,
     type GameplayFacts,
     type GameplaySource
 } from './gameplay-core-contracts';
 import {
-    gainRunInventoryItem,
     getRunInventoryItemQuantity,
     useRunInventoryItem
 } from './run-inventory';
+import {
+    applyGameplayDefinitionTransition,
+    hasGameplayRewardPerk,
+    makeGameplayEventWriter as makeEventWriter,
+    normalizeGameplayRewardPerkIds
+} from './gameplay-effect-transition';
 import { runNonNegativeInteger } from './run-number-guards';
 import { runStringArray } from './run-array-guards';
 import { gainRelicFavor } from './relic-favor-rules';
@@ -52,6 +56,12 @@ import { repairRunProgressionSoftlocks } from './run-progression-repair';
 import { applyRelicOfferService, hasRunRelic, RELIC_OFFER_SERVICE_CATALOG } from './relics';
 import { applyRunEventChoice, rollRunEventRoom, type RunEventChoiceEffect } from './run-events';
 import { advanceToNextLevel } from './next-floor-transition-rules';
+import {
+    createResolveBoardTurnTransition,
+    type BoardTurnExecutionContext,
+    type BoardTurnFindableRewardResult,
+    type BoardTurnWildMatchResult
+} from './board-turn-transition';
 
 export interface GameplayCommandResult {
     run: RunState;
@@ -88,34 +98,7 @@ const ROUTE_CHOICE_SOURCE: GameplaySource = { kind: 'system', id: 'route_choice'
 const SIDE_ROOM_SOURCE: GameplaySource = { kind: 'system', id: 'route_side_room' };
 const RELIC_OFFER_SOURCE: GameplaySource = { kind: 'system', id: 'relic_offer' };
 const WILD_JOKER_SOURCE: GameplaySource = { kind: 'system', id: 'wild_joker' };
-const gameplayRewardPerkIds = new Set<RewardPerkId>(GAMEPLAY_REWARD_PERK_IDS);
-type GameplayEventPayload<T = GameplayEvent> = T extends GameplayEvent
-    ? Omit<T, 'schemaVersion' | 'eventId' | 'commandId' | 'sequence' | 'source'>
-    : never;
-
-const normalizeGameplayRewardPerkIds = (value: unknown): RewardPerkId[] =>
-    Array.isArray(value)
-        ? value.filter((id): id is RewardPerkId => typeof id === 'string' && gameplayRewardPerkIds.has(id as RewardPerkId))
-        : [];
-
-const hasGameplayRewardPerk = (run: Pick<RunState, 'rewardPerkIds'>, perkId: RewardPerkId): boolean =>
-    normalizeGameplayRewardPerkIds(run.rewardPerkIds).includes(perkId);
-
-const makeEventWriter = (commandId: string, source: GameplaySource, events: GameplayEvent[]) =>
-    (event: GameplayEventPayload): void => {
-        const sequence = events.length;
-        events.push(
-            gameplayEventSchema.parse({
-                ...event,
-                schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
-                eventId: `${commandId}:${sequence}`,
-                commandId,
-                sequence,
-                source
-            })
-        );
-    };
-
+const BOARD_TURN_SOURCE: GameplaySource = { kind: 'system', id: 'board_turn' };
 const appendReindexedEvents = (
     commandId: string,
     sourceEvents: readonly GameplayEvent[],
@@ -132,53 +115,15 @@ const appendReindexedEvents = (
     }
 };
 
-const rejectedResult = (run: RunState, commandId: string, reason: string, command: GameplayCommand | null): GameplayCommandResult => {
+const rejectedResult = (
+    run: RunState,
+    commandId: string,
+    reason: string,
+    command: GameplayCommand | null
+): GameplayCommandResult => {
     const events: GameplayEvent[] = [];
     makeEventWriter(commandId, SYSTEM_SOURCE, events)({ type: 'command.rejected', reason });
     return { run, command, events, accepted: false };
-};
-
-const conditionFailure = (run: RunState, condition: GameplayCondition, facts: GameplayFacts): string | null => {
-    switch (condition.kind) {
-        case 'run.status_is':
-            return run.status === condition.status ? null : `run status is ${run.status}, expected ${condition.status}`;
-        case 'inventory.at_least':
-            return getRunInventoryItemQuantity(run, condition.itemId) >= condition.amount
-                ? null
-                : `${condition.itemId} is below ${condition.amount}`;
-        case 'reward_perk.active':
-            return hasGameplayRewardPerk(run, condition.perkId) ? null : `${condition.perkId} is not active`;
-        case 'relic.active':
-            return Array.isArray(run.relicIds) && run.relicIds.includes(condition.relicId)
-                ? null
-                : `${condition.relicId} is not active`;
-        case 'trait.matched':
-            return facts.matchedTraits.includes(condition.trait) ? null : `${condition.trait} was not matched`;
-        case 'trait.adjacent':
-            return facts.adjacentTraits.includes(condition.trait) ? null : `${condition.trait} was not adjacent`;
-        case 'trait.any_matched':
-            return facts.matchedTraits.length > 0 ? null : 'no trait was matched';
-        case 'streak.at_least':
-            return runNonNegativeInteger(normalizeSessionStats(run.stats).currentStreak) >= condition.amount
-                ? null
-                : `clean streak is below ${condition.amount}`;
-        case 'findable.matched':
-            return facts.matchedFindables.includes(condition.findable) ? null : `${condition.findable} was not matched`;
-        case 'floor.match_resolutions_is':
-            return runNonNegativeInteger(run.matchResolutionsThisFloor) === condition.amount
-                ? null
-                : `floor match resolutions are ${runNonNegativeInteger(run.matchResolutionsThisFloor)}, expected ${condition.amount}`;
-        case 'boss_trophy.claimed':
-            return facts.bossTrophyClaimed ? null : 'boss trophy was not claimed';
-        case 'risk_wager.outcome_is':
-            return facts.riskWagerOutcome === condition.outcome
-                ? null
-                : `risk wager outcome is ${facts.riskWagerOutcome}, expected ${condition.outcome}`;
-        case 'featured_objective.completed':
-            return facts.featuredObjectiveCompleted ? null : 'featured objective was not completed';
-        case 'score_parasite.active':
-            return facts.scoreParasiteActive ? null : 'score parasite is not active';
-    }
 };
 
 const applyDefinition = (
@@ -187,234 +132,20 @@ const applyDefinition = (
     definition: GameplayContentDefinition,
     events: GameplayEvent[] = []
 ): GameplayCommandResult => {
-    const writeEvent = makeEventWriter(command.commandId, definition.source, events);
-    for (const condition of definition.conditions) {
-        const failure = conditionFailure(run, condition, command.facts);
-        if (failure) {
-            writeEvent({ type: 'command.rejected', reason: `Condition failed: ${failure}.` });
-            return { run, command, events, accepted: false };
-        }
-    }
-
-    let nextRun = run;
-    for (const effect of definition.effects) {
-        switch (effect.kind) {
-            case 'inventory.grant': {
-                const before = getRunInventoryItemQuantity(nextRun, effect.itemId);
-                nextRun = gainRunInventoryItem(nextRun, effect.itemId, effect.amount);
-                const after = getRunInventoryItemQuantity(nextRun, effect.itemId);
-                writeEvent({
-                    type: 'inventory.changed',
-                    itemId: effect.itemId,
-                    operation: 'grant',
-                    requested: effect.amount,
-                    applied: after - before,
-                    before,
-                    after
-                });
-                if (after === before) {
-                    writeEvent({
-                        type: 'effect.skipped',
-                        effectKind: effect.kind,
-                        reason: `${effect.itemId} could not accept the requested grant.`
-                    });
-                }
-                break;
-            }
-            case 'inventory.consume': {
-                const before = getRunInventoryItemQuantity(nextRun, effect.itemId);
-                const used = useRunInventoryItem(nextRun, effect.itemId);
-                nextRun = used.run;
-                const after = getRunInventoryItemQuantity(nextRun, effect.itemId);
-                writeEvent({
-                    type: 'inventory.changed',
-                    itemId: effect.itemId,
-                    operation: 'consume',
-                    requested: effect.amount,
-                    applied: after - before,
-                    before,
-                    after
-                });
-                if (!used.applied) {
-                    writeEvent({
-                        type: 'effect.skipped',
-                        effectKind: effect.kind,
-                        reason: used.reason ?? `${effect.itemId} could not be consumed.`
-                    });
-                }
-                break;
-            }
-            case 'inventory.grant_or_score': {
-                const before = getRunInventoryItemQuantity(nextRun, effect.itemId);
-                nextRun = gainRunInventoryItem(nextRun, effect.itemId, effect.amount);
-                const after = getRunInventoryItemQuantity(nextRun, effect.itemId);
-                const applied = after - before;
-                writeEvent({
-                    type: 'inventory.changed',
-                    itemId: effect.itemId,
-                    operation: 'grant',
-                    requested: effect.amount,
-                    applied,
-                    before,
-                    after
-                });
-                if (applied === 0) {
-                    const stats = normalizeSessionStats(nextRun.stats);
-                    const totalBefore = runNonNegativeInteger(stats.totalScore);
-                    const currentLevelBefore = runNonNegativeInteger(stats.currentLevelScore);
-                    nextRun = {
-                        ...nextRun,
-                        stats: {
-                            ...stats,
-                            totalScore: totalBefore + effect.fallbackScore,
-                            currentLevelScore: currentLevelBefore + effect.fallbackScore
-                        }
-                    };
-                    writeEvent({
-                        type: 'score.changed',
-                        reason: 'inventory_overflow',
-                        amount: effect.fallbackScore,
-                        totalBefore,
-                        totalAfter: totalBefore + effect.fallbackScore,
-                        currentLevelBefore,
-                        currentLevelAfter: currentLevelBefore + effect.fallbackScore
-                    });
-                }
-                break;
-            }
-            case 'reward_perk.grant': {
-                const rewardPerkIds = normalizeGameplayRewardPerkIds(nextRun.rewardPerkIds);
-                const newlyGranted = !rewardPerkIds.includes(effect.perkId);
-                if (newlyGranted) {
-                    nextRun = { ...nextRun, rewardPerkIds: [...rewardPerkIds, effect.perkId] };
-                }
-                writeEvent({ type: 'reward_perk.granted', perkId: effect.perkId, newlyGranted });
-                break;
-            }
-            case 'combo_shard.request':
-                writeEvent({ type: 'combo_shard.requested', amount: effect.amount });
-                break;
-            case 'safe_hazard_ward.request':
-                writeEvent({ type: 'safe_hazard_ward.requested', amount: effect.amount });
-                break;
-            case 'currency.grant': {
-                const before = runNonNegativeInteger(nextRun.shopGold);
-                const after = before + effect.amount;
-                nextRun = { ...nextRun, shopGold: after };
-                writeEvent({
-                    type: 'currency.changed',
-                    currency: effect.currency,
-                    requested: effect.amount,
-                    applied: after - before,
-                    before,
-                    after
-                });
-                break;
-            }
-            case 'score.grant': {
-                const stats = normalizeSessionStats(nextRun.stats);
-                const totalBefore = runNonNegativeInteger(stats.totalScore);
-                const currentLevelBefore = runNonNegativeInteger(stats.currentLevelScore);
-                nextRun = {
-                    ...nextRun,
-                    stats: {
-                        ...stats,
-                        totalScore: totalBefore + effect.amount,
-                        currentLevelScore: currentLevelBefore + effect.amount
-                    }
-                };
-                writeEvent({
-                    type: 'score.changed',
-                    reason: effect.reason,
-                    amount: effect.amount,
-                    totalBefore,
-                    totalAfter: totalBefore + effect.amount,
-                    currentLevelBefore,
-                    currentLevelAfter: currentLevelBefore + effect.amount
-                });
-                break;
-            }
-            case 'score.request':
-                writeEvent({ type: 'score.requested', reason: effect.reason, amount: effect.amount });
-                break;
-            case 'bonus_relic_pick.grant': {
-                const before = runNonNegativeInteger(nextRun.bonusRelicPicksNextOffer);
-                const after = before + effect.amount;
-                nextRun = { ...nextRun, bonusRelicPicksNextOffer: after };
-                writeEvent({
-                    type: 'bonus_relic_pick.changed',
-                    requested: effect.amount,
-                    applied: after - before,
-                    before,
-                    after
-                });
-                break;
-            }
-            case 'relic_favor.request':
-                writeEvent({ type: 'relic_favor.requested', reason: effect.reason, amount: effect.amount });
-                break;
-            case 'featured_streak_floor.request':
-                writeEvent({ type: 'featured_streak_floor.requested', reason: effect.reason, amount: effect.amount });
-                break;
-            case 'parasite_relief.request':
-                writeEvent({ type: 'parasite_relief.requested', reason: effect.reason, amount: effect.amount });
-                break;
-            case 'parasite_ward.grant': {
-                const before = runNonNegativeInteger(nextRun.parasiteWardRemaining);
-                const after = before + effect.amount;
-                nextRun = { ...nextRun, parasiteWardRemaining: after };
-                writeEvent({
-                    type: 'parasite_ward.changed',
-                    requested: effect.amount,
-                    applied: after - before,
-                    before,
-                    after
-                });
-                break;
-            }
-            case 'relic_favor.grant': {
-                const progressBefore = runNonNegativeInteger(nextRun.relicFavorProgress);
-                const bonusPicksBefore = runNonNegativeInteger(nextRun.bonusRelicPicksNextOffer);
-                const favorBonusPicksBefore = runNonNegativeInteger(nextRun.favorBonusRelicPicksNextOffer);
-                const favor = gainRelicFavor(nextRun, effect.amount);
-                nextRun = { ...nextRun, ...favor };
-                writeEvent({
-                    type: 'relic_favor.changed',
-                    requested: effect.amount,
-                    progressBefore,
-                    progressAfter: favor.relicFavorProgress,
-                    bonusPicksBefore,
-                    bonusPicksAfter: favor.bonusRelicPicksNextOffer,
-                    favorBonusPicksBefore,
-                    favorBonusPicksAfter: favor.favorBonusRelicPicksNextOffer
-                });
-                break;
-            }
-            case 'pin_capacity.request':
-                writeEvent({ type: 'pin_capacity.requested', amount: effect.amount });
-                break;
-            case 'scout_reveal.request':
-                writeEvent({ type: 'scout_reveal.requested', amount: effect.amount });
-                break;
-            case 'free_shuffle.grant': {
-                const before = nextRun.freeShuffleThisFloor === true;
-                nextRun = { ...nextRun, freeShuffleThisFloor: true };
-                writeEvent({ type: 'free_shuffle.changed', before, after: true });
-                break;
-            }
-            case 'feedback.emit':
-                writeEvent({
-                    type: 'feedback.requested',
-                    cue: effect.cue,
-                    message: effect.message,
-                    tone: effect.tone
-                });
-                break;
-        }
-    }
-    return { run: nextRun, command, events, accepted: true };
+    const transition = applyGameplayDefinitionTransition(
+        run,
+        command.commandId,
+        definition,
+        command.facts,
+        events
+    );
+    return {
+        run: transition.run,
+        command,
+        events: transition.events,
+        accepted: transition.accepted
+    };
 };
-
 const applyPinToggleCommand = (
     run: RunState,
     command: Extract<GameplayCommand, { type: 'board.pin_toggle' }>
@@ -1473,6 +1204,203 @@ const applyRelicOfferServiceCommand = (
     return { run: result.run, command, events, accepted: true };
 };
 
+const findableDefinitionId = (findableKind: FindableKind | null): string | null =>
+    findableKind === 'shard_spark'
+        ? 'findable.shard_spark'
+        : findableKind === 'ward_spark'
+          ? 'findable.ward_spark'
+          : findableKind === 'score_glint'
+            ? 'findable.score_glint'
+            : findableKind === 'scout_glint'
+              ? 'findable.scout_glint'
+              : null;
+
+const resolveBoardTurnFindableReward = (
+    run: RunState,
+    findableKind: FindableKind | null,
+    _legacyCommandId: string,
+    execution?: BoardTurnExecutionContext
+): BoardTurnFindableRewardResult => {
+    const definitionId = findableDefinitionId(findableKind);
+    if (!definitionId || !findableKind) {
+        return {
+            commands: [],
+            events: [],
+            comboShardGain: 0,
+            safeHazardWardGain: 0,
+            scoreGain: 0,
+            scoutRevealGain: 0,
+            migrated: false
+        };
+    }
+    if (!execution) {
+        throw new Error('Core-owned board turn requires an outer execution context.');
+    }
+    const definition = getGameplayContentDefinition(definitionId);
+    if (!definition) {
+        throw new Error(`Missing board-turn findable definition: ${definitionId}`);
+    }
+    const eventStart = execution.events.length;
+    const facts: GameplayFacts = {
+        matchedTraits: [],
+        adjacentTraits: [],
+        matchedFindables: [findableKind],
+        bossTrophyClaimed: false,
+        riskWagerOutcome: 'none',
+        featuredObjectiveCompleted: false,
+        scoreParasiteActive: false
+    };
+    const transition = applyGameplayDefinitionTransition(
+        run,
+        execution.commandId,
+        definition,
+        facts,
+        execution.events
+    );
+    if (!transition.accepted) {
+        throw new Error(`Board-turn findable definition rejected: ${definitionId}`);
+    }
+    const events = execution.events.slice(eventStart);
+    return {
+        commands: [],
+        events,
+        comboShardGain: events.reduce(
+            (sum, event) => sum + (event.type === 'combo_shard.requested' ? event.amount : 0),
+            0
+        ),
+        safeHazardWardGain: events.reduce(
+            (sum, event) => sum + (event.type === 'safe_hazard_ward.requested' ? event.amount : 0),
+            0
+        ),
+        scoreGain: events.reduce(
+            (sum, event) => sum + (event.type === 'score.requested' ? event.amount : 0),
+            0
+        ),
+        scoutRevealGain: events.reduce(
+            (sum, event) => sum + (event.type === 'scout_reveal.requested' ? event.amount : 0),
+            0
+        ),
+        migrated: true
+    };
+};
+
+const consumeBoardTurnWildMatch = (
+    run: RunState,
+    wildTileId: string,
+    pairedTileId: string,
+    _legacyCommandId: string,
+    execution?: BoardTurnExecutionContext
+): BoardTurnWildMatchResult => {
+    if (!execution) {
+        throw new Error('Core-owned Wild match requires an outer execution context.');
+    }
+    const tokensBefore = getRunInventoryItemQuantity(run, 'wild_match_token');
+    const consumed = useRunInventoryItem(run, 'wild_match_token');
+    if (!consumed.applied) {
+        throw new Error('Core-owned Wild match could not consume its validated token.');
+    }
+    const tokensAfter = getRunInventoryItemQuantity(consumed.run, 'wild_match_token');
+    const eventStart = execution.events.length;
+    const writeEvent = makeEventWriter(execution.commandId, WILD_JOKER_SOURCE, execution.events);
+    writeEvent({
+        type: 'inventory.changed',
+        itemId: 'wild_match_token',
+        operation: 'consume',
+        requested: 1,
+        applied: tokensAfter - tokensBefore,
+        before: tokensBefore,
+        after: tokensAfter
+    });
+    writeEvent({
+        type: 'wild_match.consumed',
+        wildTileId,
+        pairedTileId,
+        tokensBefore,
+        tokensAfter
+    });
+    const pairedTile = run.board?.tiles.find((tile) => tile.id === pairedTileId);
+    writeEvent({
+        type: 'feedback.requested',
+        cue: 'wild_joker.match_consumed',
+        message: `Wild Joker bridged ${pairedTile?.label ?? 'a pair'}; ${tokensAfter} wildcard token${tokensAfter === 1 ? '' : 's'} remain.`,
+        tone: 'reward'
+    });
+    return {
+        run: consumed.run,
+        commands: [],
+        events: execution.events.slice(eventStart)
+    };
+};
+
+const applyBoardTurnResolveCommand = (
+    run: RunState,
+    command: Extract<GameplayCommand, { type: 'board.turn_resolve' }>
+): GameplayCommandResult => {
+    if (!run.board || run.status !== 'resolving') {
+        return rejectedResult(run, command.commandId, 'Board turn is not ready to resolve.', command);
+    }
+    const flippedTileIds = Array.isArray(run.board.flippedTileIds)
+        ? run.board.flippedTileIds.filter((tileId): tileId is string => typeof tileId === 'string')
+        : [];
+    if (flippedTileIds.length !== 2 && flippedTileIds.length !== 3) {
+        return rejectedResult(run, command.commandId, 'Board turn requires exactly two or three flipped tiles.', command);
+    }
+
+    const events: GameplayEvent[] = [];
+    let completionRequested = false;
+    const resolveTurn = createResolveBoardTurnTransition({
+        finalizeLevel: (candidateRun) => {
+            completionRequested = true;
+            return candidateRun;
+        },
+        resolveFindableMatchReward: resolveBoardTurnFindableReward,
+        consumeWildMatch: consumeBoardTurnWildMatch
+    });
+    const nextRun = resolveTurn(run, command.encorePairKeys, { commandId: command.commandId, events });
+    if (completionRequested) {
+        return rejectedResult(
+            run,
+            command.commandId,
+            'Board turn floor completion remains on the compatibility finalizer.',
+            command
+        );
+    }
+    if (nextRun === run) {
+        return rejectedResult(run, command.commandId, 'Board turn produced no transition.', command);
+    }
+
+    const statsBefore = normalizeSessionStats(run.stats);
+    const statsAfter = normalizeSessionStats(nextRun.stats);
+    const isMatch = statsAfter.matchesFound > statsBefore.matchesFound;
+    const matchedSourceTile = isMatch
+        ? flippedTileIds
+              .map((tileId) => nextRun.board?.tiles.find((tile) => tile.id === tileId))
+              .find((tile) => tile?.state === 'matched' && tile.pairKey !== WILD_PAIR_KEY)
+        : null;
+    const outcome = flippedTileIds.length === 3
+        ? isMatch ? 'gambit_match' : 'gambit_mismatch'
+        : isMatch ? 'match' : 'mismatch';
+    const writeEvent = makeEventWriter(command.commandId, BOARD_TURN_SOURCE, events);
+    writeEvent({
+        type: 'board.turn_resolved',
+        outcome,
+        flippedTileIds,
+        matchedPairKey: matchedSourceTile?.pairKey ?? null,
+        boardComplete: nextRun.board ? isBoardComplete(nextRun.board) : false,
+        statusBefore: run.status,
+        statusAfter: nextRun.status,
+        livesBefore: runNonNegativeInteger(run.lives),
+        livesAfter: runNonNegativeInteger(nextRun.lives),
+        totalScoreBefore: statsBefore.totalScore,
+        totalScoreAfter: statsAfter.totalScore,
+        triesBefore: statsBefore.tries,
+        triesAfter: statsAfter.tries,
+        matchesBefore: statsBefore.matchesFound,
+        matchesAfter: statsAfter.matchesFound
+    });
+    return { run: nextRun, command, events, accepted: true };
+};
+
 const applyWildMatchConsumeCommand = (
     run: RunState,
     command: Extract<GameplayCommand, { type: 'wild_match.consume' }>
@@ -1589,6 +1517,9 @@ export const reduceGameplayCommand = (run: RunState, input: unknown): GameplayCo
     }
     if (command.type === 'relic.offer_service_use') {
         return applyRelicOfferServiceCommand(run, command);
+    }
+    if (command.type === 'board.turn_resolve') {
+        return applyBoardTurnResolveCommand(run, command);
     }
     if (command.type === 'wild_match.consume') {
         return applyWildMatchConsumeCommand(run, command);

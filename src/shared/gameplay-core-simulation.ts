@@ -2,6 +2,7 @@ import type { RunState } from './contracts';
 import { collectDestroyEligibleTileIds, tileIsStrayEligiblePreview } from './board-power-targeting';
 import {
     GAMEPLAY_CONTENT_DEFINITIONS,
+    createGameplayBoardTurnResolveCommand,
     createGameplayDefinitionCommand,
     createGameplayDestroyPairCommand,
     createGameplayDungeonExitActivateCommand,
@@ -108,43 +109,46 @@ const commandForStep = (
     );
     const commandId = `sim:${seed}:${String(step).padStart(4, '0')}`;
     const actionIndex = pickRngIndex(rng, definitions.length + 12);
-    const wildMatchPair = step === 0 ? availableWildMatchPair(run) : null;
-    if (wildMatchPair) {
+    if (step === 0) {
+        return createGameplayBoardTurnResolveCommand(commandId);
+    }
+    const wildMatchPair = step === 1 ? availableWildMatchPair(run) : null;
+    if (step === 1) {
         return createGameplayWildMatchConsumeCommand(
             commandId,
-            wildMatchPair.wildTileId,
-            wildMatchPair.pairedTileId
+            wildMatchPair?.wildTileId ?? 'missing-wild-tile',
+            wildMatchPair?.pairedTileId ?? 'missing-wild-pair'
         );
     }
-    if (step === 1) {
+    if (step === 2) {
         const targets = run.board
             ? [...collectDestroyEligibleTileIds(run.board)].sort((left, right) => left.localeCompare(right))
             : [];
         const target = targets[pickRngIndex(rng, targets.length)] ?? 'missing-destroy-target';
         return createGameplayDestroyPairCommand(commandId, target);
     }
-    if (step === 2) {
+    if (step === 3) {
         return createGameplayHazardBanishCommand(commandId);
     }
-    if (step === 3) {
+    if (step === 4) {
         const choiceId = Array.isArray(run.lastLevelResult?.routeChoices)
             ? run.lastLevelResult.routeChoices[0]?.id
             : undefined;
         return createGameplayRouteChooseCommand(commandId, choiceId ?? 'missing-route-choice');
     }
-    if (step === 4) {
+    if (step === 5) {
         const relicId = Array.isArray(run.relicOffer?.options)
             ? run.relicOffer.options[0]
             : undefined;
         return createGameplayRelicPickCommand(commandId, relicId ?? 'extra_shuffle_charge');
     }
-    if (step === 5) {
+    if (step === 6) {
         return createGameplayRelicOfferServiceCommand(commandId, 'reroll_offer');
     }
-    if (step === 6) {
+    if (step === 7) {
         return createGameplaySideRoomResolveCommand(commandId, 'skip');
     }
-    if (step === 7) {
+    if (step === 8) {
         return createGameplayFloorAdvanceCommand(commandId);
     }
     if (actionIndex === definitions.length) {
