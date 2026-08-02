@@ -90,6 +90,19 @@ const commandForStep = (
             .map((condition) => condition.findable);
         return createGameplayDefinitionCommand(commandId, definition.id, { matchedFindables });
     }
+    if (definition.trigger === 'floor.cleared') {
+        const riskWagerOutcome = definition.conditions.find(
+            (condition) => condition.kind === 'risk_wager.outcome_is'
+        );
+        return createGameplayDefinitionCommand(commandId, definition.id, {
+            bossTrophyClaimed: definition.conditions.some((condition) => condition.kind === 'boss_trophy.claimed'),
+            riskWagerOutcome: riskWagerOutcome?.kind === 'risk_wager.outcome_is' ? riskWagerOutcome.outcome : 'none',
+            featuredObjectiveCompleted: definition.conditions.some(
+                (condition) => condition.kind === 'featured_objective.completed'
+            ),
+            scoreParasiteActive: definition.conditions.some((condition) => condition.kind === 'score_parasite.active')
+        });
+    }
     return createGameplayDefinitionCommand(commandId, definition.id);
 };
 

@@ -7,6 +7,7 @@ import {
     COMBO_SHARD_ENGINE_DEFINITIONS,
     GAMEPLAY_CORE_SCHEMA_VERSION,
     SABOTEUR_DEFINITIONS,
+    SLAYER_DEFINITIONS,
     VAULTBREAKER_DEFINITIONS,
     WARDEN_DEFINITIONS,
     createGameplayDefinitionCommand,
@@ -18,7 +19,8 @@ import {
 import { reduceGameplayCommand, replayGameplayCommands } from './gameplay-core';
 import {
     applyRelicImmediateThroughGameplayCore,
-    resolveFindableMatchRewardThroughGameplayCore
+    resolveFindableMatchRewardThroughGameplayCore,
+    resolveSlayerFloorClearThroughGameplayCore
 } from './gameplay-core-adapters';
 import { applyRelicImmediate } from './relic-immediate-rules';
 import { resolveTileTraitEffects } from './tile-trait-rules';
@@ -298,6 +300,60 @@ describe('deterministic gameplay core', () => {
         ]);
     });
 
+    it('models Slayer preparation and typed floor-clear extraction across boss, wager, and parasite hooks', () => {
+        expect(SLAYER_DEFINITIONS.map((definition) => definition.id)).toEqual([
+            'relic.chapter_compass',
+            'relic.wager_surety',
+            'relic.parasite_ledger',
+            'relic.chapter_compass.boss_trophy',
+            'relic.wager_surety.wager_won',
+            'relic.wager_surety.wager_lost',
+            'relic.parasite_ledger.featured_objective'
+        ]);
+        const initial = run({
+            relicIds: ['chapter_compass', 'wager_surety', 'parasite_ledger'],
+            peekCharges: 0,
+            parasiteWardRemaining: 0
+        });
+        const compass = applyRelicImmediateThroughGameplayCore(initial, 'chapter_compass', 'slayer-compass');
+        const surety = applyRelicImmediateThroughGameplayCore(compass.run, 'wager_surety', 'slayer-surety');
+        const ledger = applyRelicImmediateThroughGameplayCore(surety.run, 'parasite_ledger', 'slayer-ledger');
+        const won = resolveSlayerFloorClearThroughGameplayCore(
+            ledger.run,
+            {
+                bossTrophyClaimed: true,
+                riskWagerOutcome: 'won',
+                featuredObjectiveCompleted: true,
+                scoreParasiteActive: true
+            },
+            'slayer-clear-won'
+        );
+        const lost = resolveSlayerFloorClearThroughGameplayCore(
+            ledger.run,
+            {
+                bossTrophyClaimed: false,
+                riskWagerOutcome: 'lost',
+                featuredObjectiveCompleted: false,
+                scoreParasiteActive: true
+            },
+            'slayer-clear-lost'
+        );
+
+        expect(compass).toMatchObject({ migrated: true, run: { peekCharges: 1 } });
+        expect(surety).toMatchObject({ migrated: true, run: { stats: { guardTokens: 1 } } });
+        expect(ledger).toMatchObject({ migrated: true, run: { parasiteWardRemaining: 1 } });
+        expect(won).toMatchObject({ bossTrophyScoreGain: 30, riskWagerFavorGain: 1, parasiteRelief: 1 });
+        expect(won.events).toEqual(expect.arrayContaining([
+            expect.objectContaining({ type: 'score.requested', reason: 'boss_trophy', amount: 30 }),
+            expect.objectContaining({ type: 'relic_favor.requested', reason: 'risk_wager_win', amount: 1 }),
+            expect.objectContaining({ type: 'parasite_relief.requested', reason: 'featured_objective_clear', amount: 1 })
+        ]));
+        expect(lost).toMatchObject({ riskWagerFavorGain: 0, riskWagerStreakFloor: 1, parasiteRelief: 0 });
+        expect(lost.events).toEqual(expect.arrayContaining([
+            expect.objectContaining({ type: 'featured_streak_floor.requested', reason: 'risk_wager_loss', amount: 1 })
+        ]));
+    });
+
     it('routes migrated relic immediates through the core while preserving legacy fallbacks', () => {
         const initial = run({ peekCharges: 2, shuffleCharges: 1 });
         const migrated = applyRelicImmediateThroughGameplayCore(initial, 'peek_charge_plus_one', 'adapter-peek');
@@ -305,6 +361,9 @@ describe('deterministic gameplay core', () => {
         const migratedCombo = applyRelicImmediateThroughGameplayCore(initial, 'combo_shard_plus_step', 'adapter-combo');
         const migratedDestroy = applyRelicImmediateThroughGameplayCore(initial, 'destroy_bank_plus_one', 'adapter-destroy');
         const migratedShrine = applyRelicImmediateThroughGameplayCore(initial, 'shrine_echo', 'adapter-shrine');
+        const migratedCompass = applyRelicImmediateThroughGameplayCore(initial, 'chapter_compass', 'adapter-compass');
+        const migratedSurety = applyRelicImmediateThroughGameplayCore(initial, 'wager_surety', 'adapter-surety');
+        const migratedLedger = applyRelicImmediateThroughGameplayCore(initial, 'parasite_ledger', 'adapter-ledger');
         const legacy = applyRelicImmediateThroughGameplayCore(initial, 'extra_shuffle_charge', 'adapter-shuffle');
 
         expect(migrated).toMatchObject({ migrated: true, run: { peekCharges: 3 } });
@@ -319,6 +378,9 @@ describe('deterministic gameplay core', () => {
         expect(migratedCombo).toMatchObject({ migrated: true, run: { stats: { comboShards: 1 } } });
         expect(migratedDestroy).toMatchObject({ migrated: true, run: { destroyPairCharges: 1 } });
         expect(migratedShrine).toMatchObject({ migrated: true, run: { bonusRelicPicksNextOffer: 1 } });
+        expect(migratedCompass).toMatchObject({ migrated: true, run: { peekCharges: 3 } });
+        expect(migratedSurety).toMatchObject({ migrated: true, run: { stats: { guardTokens: 1 } } });
+        expect(migratedLedger).toMatchObject({ migrated: true, run: { parasiteWardRemaining: 1 } });
     });
 
     it('models exactly the extra Peek granted by the existing Echo-Conduit perk condition', () => {

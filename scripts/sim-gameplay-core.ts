@@ -45,7 +45,13 @@ const initialRun = {
     peekCharges: 0,
     recallFocus: 3,
     rewardPerkIds: [],
-    relicIds: ['combo_shard_plus_step', 'guard_token_plus_one'],
+    relicIds: [
+        'combo_shard_plus_step',
+        'guard_token_plus_one',
+        'chapter_compass',
+        'wager_surety',
+        'parasite_ledger'
+    ],
     powersUsedThisRun: false,
     forgottenTileIdsThisFloor: [],
     peekRevealedTileIds: [],

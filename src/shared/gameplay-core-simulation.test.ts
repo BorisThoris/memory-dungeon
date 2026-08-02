@@ -36,7 +36,13 @@ const initialRun = (seed: number): RunState => ({
     peekCharges: 0,
     recallFocus: 3,
     rewardPerkIds: [],
-    relicIds: ['combo_shard_plus_step', 'guard_token_plus_one'],
+    relicIds: [
+        'combo_shard_plus_step',
+        'guard_token_plus_one',
+        'chapter_compass',
+        'wager_surety',
+        'parasite_ledger'
+    ],
     powersUsedThisRun: false,
     forgottenTileIdsThisFloor: [],
     peekRevealedTileIds: [],
@@ -74,6 +80,13 @@ describe('seeded gameplay core simulation', () => {
                 'reward_perk.cursed_opener_greed',
                 'relic.shrine_echo',
                 'findable.score_glint',
+                'relic.chapter_compass',
+                'relic.wager_surety',
+                'relic.parasite_ledger',
+                'relic.chapter_compass.boss_trophy',
+                'relic.wager_surety.wager_won',
+                'relic.wager_surety.wager_lost',
+                'relic.parasite_ledger.featured_objective',
                 'board.peek'
             ])
         );

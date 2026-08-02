@@ -32,14 +32,18 @@ export const advanceScoreParasiteFloor = (run: RunState): ScoreParasiteFloorAdva
 
 export const getParasiteFloorsAfterFeaturedObjectiveClear = (
     run: RunState,
-    featuredObjectiveCompleted: boolean
+    featuredObjectiveCompleted: boolean,
+    options: { reliefAmount?: number } = {}
 ): number => {
     if (
         featuredObjectiveCompleted &&
         hasRunRelic(run, 'parasite_ledger') &&
         hasMutator(run, 'score_parasite')
     ) {
-        return decrementRunCounter(run.parasiteFloors);
+        return Math.max(
+            0,
+            runNonNegativeInteger(run.parasiteFloors) - runNonNegativeInteger(options.reliefAmount ?? 1)
+        );
     }
 
     return runNonNegativeInteger(run.parasiteFloors);

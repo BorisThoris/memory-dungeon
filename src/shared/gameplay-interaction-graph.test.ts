@@ -11,6 +11,7 @@ import {
     COMBO_SHARD_ENGINE_DEFINITIONS,
     CONDUIT_CARTOGRAPHER_DEFINITIONS,
     SABOTEUR_DEFINITIONS,
+    SLAYER_DEFINITIONS,
     VAULTBREAKER_DEFINITIONS,
     WARDEN_DEFINITIONS
 } from './gameplay-core-contracts';
@@ -372,6 +373,36 @@ describe('gameplay interaction graph', () => {
             expect.objectContaining({ source: 'inventory.iron_key', target: 'lock.iron_key', kind: 'unblocks' }),
             expect.objectContaining({ source: 'economy.shop_gold', target: 'shop.typed_key', kind: 'enables' }),
             expect.objectContaining({ source: 'build.treasure_greed', target: 'progression.relic_draft', kind: 'consequence' })
+        ]));
+    });
+
+    it('connects Slayer preparation through boss, wager, Favor, and parasite consequences', () => {
+        const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
+        const sourceNodeByDefinition = new Map(SLAYER_DEFINITIONS.map((definition) => [
+            definition.id,
+            `relic.${definition.source.id}`
+        ]));
+
+        for (const definition of SLAYER_DEFINITIONS) {
+            const nodeId = sourceNodeByDefinition.get(definition.id);
+            expect(byId.get(nodeId!), definition.id).toMatchObject({
+                tests: expect.arrayContaining(['src/shared/gameplay-core.test.ts'])
+            });
+        }
+
+        expect(byId.get('build.boss_hunter')).toMatchObject({ kind: 'build', role: 'boss_objective_extraction_build' });
+        expect(byId.get('reward.boss_trophy_cache')).toMatchObject({ kind: 'reward', role: 'boss_objective_score_consequence' });
+        expect(byId.get('economy.relic_favor')).toMatchObject({ kind: 'economy', role: 'objective_to_relic_selection_resource' });
+        expect(byId.get('hazard.score_parasite')).toMatchObject({ kind: 'hazard', role: 'chapter_pressure_and_objective_counterplay' });
+        expect(gameplayInteractionGraph.edges).toEqual(expect.arrayContaining([
+            expect.objectContaining({ source: 'relic.chapter_compass', target: 'reward.boss_trophy_cache', kind: 'modifies' }),
+            expect.objectContaining({ source: 'relic.wager_surety', target: 'economy.relic_favor', kind: 'modifies' }),
+            expect.objectContaining({ source: 'relic.wager_surety', target: 'objective.featured_streak', kind: 'modifies' }),
+            expect.objectContaining({ source: 'relic.parasite_ledger', target: 'hazard.score_parasite', kind: 'counterplay' }),
+            expect.objectContaining({ source: 'objective.defeat_boss', target: 'reward.boss_trophy_cache', kind: 'triggers' }),
+            expect.objectContaining({ source: 'economy.relic_favor', target: 'progression.relic_draft', kind: 'grants' }),
+            expect.objectContaining({ source: 'safety.parasite_ward', target: 'hazard.score_parasite', kind: 'counterplay' }),
+            expect.objectContaining({ source: 'build.boss_hunter', target: 'reward.boss_trophy_cache', kind: 'consequence' })
         ]));
     });
 });

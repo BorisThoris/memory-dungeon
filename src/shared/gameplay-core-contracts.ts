@@ -16,7 +16,10 @@ export const GAMEPLAY_RELIC_IDS = [
     'combo_shard_plus_step',
     'guard_token_plus_one',
     'destroy_bank_plus_one',
-    'shrine_echo'
+    'shrine_echo',
+    'chapter_compass',
+    'wager_surety',
+    'parasite_ledger'
 ] as const satisfies readonly RelicId[];
 
 export const GAMEPLAY_FINDABLE_KINDS = [
@@ -58,7 +61,11 @@ export const gameplayFactsSchema = z
     .object({
         matchedTraits: z.array(z.enum(GAMEPLAY_TILE_TRAIT_KINDS)).default([]),
         adjacentTraits: z.array(z.enum(GAMEPLAY_TILE_TRAIT_KINDS)).default([]),
-        matchedFindables: z.array(z.enum(GAMEPLAY_FINDABLE_KINDS)).default([])
+        matchedFindables: z.array(z.enum(GAMEPLAY_FINDABLE_KINDS)).default([]),
+        bossTrophyClaimed: z.boolean().default(false),
+        riskWagerOutcome: z.enum(['none', 'won', 'lost']).default('none'),
+        featuredObjectiveCompleted: z.boolean().default(false),
+        scoreParasiteActive: z.boolean().default(false)
     })
     .strict();
 
@@ -110,6 +117,27 @@ export const gameplayConditionSchema = z.discriminatedUnion('kind', [
         .object({
             kind: z.literal('floor.match_resolutions_is'),
             amount: z.number().int().nonnegative()
+        })
+        .strict(),
+    z
+        .object({
+            kind: z.literal('boss_trophy.claimed')
+        })
+        .strict(),
+    z
+        .object({
+            kind: z.literal('risk_wager.outcome_is'),
+            outcome: z.enum(['won', 'lost'])
+        })
+        .strict(),
+    z
+        .object({
+            kind: z.literal('featured_objective.completed')
+        })
+        .strict(),
+    z
+        .object({
+            kind: z.literal('score_parasite.active')
         })
         .strict()
 ]);
@@ -172,13 +200,40 @@ export const gameplayEffectSchema = z.discriminatedUnion('kind', [
     z
         .object({
             kind: z.literal('score.request'),
-            reason: z.literal('findable_match'),
+            reason: z.enum(['findable_match', 'boss_trophy']),
             amount: z.number().int().positive()
         })
         .strict(),
     z
         .object({
             kind: z.literal('bonus_relic_pick.grant'),
+            amount: z.number().int().positive()
+        })
+        .strict(),
+    z
+        .object({
+            kind: z.literal('relic_favor.request'),
+            reason: z.literal('risk_wager_win'),
+            amount: z.number().int().positive()
+        })
+        .strict(),
+    z
+        .object({
+            kind: z.literal('featured_streak_floor.request'),
+            reason: z.literal('risk_wager_loss'),
+            amount: z.number().int().positive()
+        })
+        .strict(),
+    z
+        .object({
+            kind: z.literal('parasite_relief.request'),
+            reason: z.literal('featured_objective_clear'),
+            amount: z.number().int().positive()
+        })
+        .strict(),
+    z
+        .object({
+            kind: z.literal('parasite_ward.grant'),
             amount: z.number().int().positive()
         })
         .strict(),
@@ -198,7 +253,7 @@ export const gameplayContentDefinitionSchema = z
         version: z.number().int().positive(),
         buildId: z.string().min(1).max(120),
         source: gameplaySourceSchema,
-        trigger: z.enum(['content.claimed', 'trait.match', 'findable.match', 'power.used']),
+        trigger: z.enum(['content.claimed', 'trait.match', 'findable.match', 'power.used', 'floor.cleared']),
         conditions: z.array(gameplayConditionSchema),
         effects: z.array(gameplayEffectSchema).min(1)
     })
@@ -567,12 +622,148 @@ export const VAULTBREAKER_DEFINITIONS = z.array(gameplayContentDefinitionSchema)
     }
 ]);
 
+export const SLAYER_DEFINITIONS = z.array(gameplayContentDefinitionSchema).parse([
+    {
+        id: 'relic.chapter_compass',
+        version: 1,
+        buildId: 'boss_hunter',
+        source: { kind: 'relic', id: 'chapter_compass' },
+        trigger: 'content.claimed',
+        conditions: [],
+        effects: [
+            { kind: 'inventory.grant', itemId: 'peek_charge', amount: 1 },
+            {
+                kind: 'feedback.emit',
+                cue: 'build.chapter_compass.claimed',
+                message: 'Chapter Compass added one Peek charge and aligned future boss preparation.',
+                tone: 'reward'
+            }
+        ]
+    },
+    {
+        id: 'relic.wager_surety',
+        version: 1,
+        buildId: 'boss_hunter',
+        source: { kind: 'relic', id: 'wager_surety' },
+        trigger: 'content.claimed',
+        conditions: [],
+        effects: [
+            { kind: 'inventory.grant', itemId: 'guard_token', amount: 1 },
+            {
+                kind: 'feedback.emit',
+                cue: 'build.wager_surety.claimed',
+                message: 'Wager Surety added one guard token and insured future objective wagers.',
+                tone: 'reward'
+            }
+        ]
+    },
+    {
+        id: 'relic.parasite_ledger',
+        version: 1,
+        buildId: 'boss_hunter',
+        source: { kind: 'relic', id: 'parasite_ledger' },
+        trigger: 'content.claimed',
+        conditions: [],
+        effects: [
+            { kind: 'parasite_ward.grant', amount: 1 },
+            {
+                kind: 'feedback.emit',
+                cue: 'build.parasite_ledger.claimed',
+                message: 'Parasite Ledger added one ward and linked featured objectives to parasite relief.',
+                tone: 'reward'
+            }
+        ]
+    },
+    {
+        id: 'relic.chapter_compass.boss_trophy',
+        version: 1,
+        buildId: 'boss_hunter',
+        source: { kind: 'relic', id: 'chapter_compass' },
+        trigger: 'floor.cleared',
+        conditions: [
+            { kind: 'relic.active', relicId: 'chapter_compass' },
+            { kind: 'boss_trophy.claimed' }
+        ],
+        effects: [
+            { kind: 'score.request', reason: 'boss_trophy', amount: 30 },
+            {
+                kind: 'feedback.emit',
+                cue: 'build.chapter_compass.boss_trophy',
+                message: 'Chapter Compass converted the claimed boss trophy into 30 bonus score.',
+                tone: 'reward'
+            }
+        ]
+    },
+    {
+        id: 'relic.wager_surety.wager_won',
+        version: 1,
+        buildId: 'boss_hunter',
+        source: { kind: 'relic', id: 'wager_surety' },
+        trigger: 'floor.cleared',
+        conditions: [
+            { kind: 'relic.active', relicId: 'wager_surety' },
+            { kind: 'risk_wager.outcome_is', outcome: 'won' }
+        ],
+        effects: [
+            { kind: 'relic_favor.request', reason: 'risk_wager_win', amount: 1 },
+            {
+                kind: 'feedback.emit',
+                cue: 'build.wager_surety.wager_won',
+                message: 'Wager Surety added one Favor to the successful objective wager.',
+                tone: 'reward'
+            }
+        ]
+    },
+    {
+        id: 'relic.wager_surety.wager_lost',
+        version: 1,
+        buildId: 'boss_hunter',
+        source: { kind: 'relic', id: 'wager_surety' },
+        trigger: 'floor.cleared',
+        conditions: [
+            { kind: 'relic.active', relicId: 'wager_surety' },
+            { kind: 'risk_wager.outcome_is', outcome: 'lost' }
+        ],
+        effects: [
+            { kind: 'featured_streak_floor.request', reason: 'risk_wager_loss', amount: 1 },
+            {
+                kind: 'feedback.emit',
+                cue: 'build.wager_surety.wager_lost',
+                message: 'Wager Surety preserved a one-step featured-objective streak after the loss.',
+                tone: 'information'
+            }
+        ]
+    },
+    {
+        id: 'relic.parasite_ledger.featured_objective',
+        version: 1,
+        buildId: 'boss_hunter',
+        source: { kind: 'relic', id: 'parasite_ledger' },
+        trigger: 'floor.cleared',
+        conditions: [
+            { kind: 'relic.active', relicId: 'parasite_ledger' },
+            { kind: 'featured_objective.completed' },
+            { kind: 'score_parasite.active' }
+        ],
+        effects: [
+            { kind: 'parasite_relief.request', reason: 'featured_objective_clear', amount: 1 },
+            {
+                kind: 'feedback.emit',
+                cue: 'build.parasite_ledger.objective_clear',
+                message: 'Parasite Ledger reduced score-parasite pressure by one floor.',
+                tone: 'reward'
+            }
+        ]
+    }
+]);
+
 export const GAMEPLAY_CONTENT_DEFINITIONS = [
     ...CONDUIT_CARTOGRAPHER_DEFINITIONS,
     ...WARDEN_DEFINITIONS,
     ...COMBO_SHARD_ENGINE_DEFINITIONS,
     ...SABOTEUR_DEFINITIONS,
-    ...VAULTBREAKER_DEFINITIONS
+    ...VAULTBREAKER_DEFINITIONS,
+    ...SLAYER_DEFINITIONS
 ] as const satisfies readonly GameplayContentDefinition[];
 
 export type GameplaySource = z.infer<typeof gameplaySourceSchema>;
@@ -593,7 +784,15 @@ export const gameplayCommandSchema = z.discriminatedUnion('type', [
             type: z.literal('effects.apply'),
             definitionId: z.string().min(1).max(120),
             definitionVersion: z.number().int().positive(),
-            facts: gameplayFactsSchema.default({ matchedTraits: [], adjacentTraits: [], matchedFindables: [] })
+            facts: gameplayFactsSchema.default({
+                matchedTraits: [],
+                adjacentTraits: [],
+                matchedFindables: [],
+                bossTrophyClaimed: false,
+                riskWagerOutcome: 'none',
+                featuredObjectiveCompleted: false,
+                scoreParasiteActive: false
+            })
         })
         .strict(),
     z
@@ -650,8 +849,42 @@ export const gameplayEventSchema = z.discriminatedUnion('type', [
         .object({
             ...eventBase,
             type: z.literal('score.requested'),
-            reason: z.literal('findable_match'),
+            reason: z.enum(['findable_match', 'boss_trophy']),
             amount: z.number().int().positive()
+        })
+        .strict(),
+    z
+        .object({
+            ...eventBase,
+            type: z.literal('relic_favor.requested'),
+            reason: z.literal('risk_wager_win'),
+            amount: z.number().int().positive()
+        })
+        .strict(),
+    z
+        .object({
+            ...eventBase,
+            type: z.literal('featured_streak_floor.requested'),
+            reason: z.literal('risk_wager_loss'),
+            amount: z.number().int().positive()
+        })
+        .strict(),
+    z
+        .object({
+            ...eventBase,
+            type: z.literal('parasite_relief.requested'),
+            reason: z.literal('featured_objective_clear'),
+            amount: z.number().int().positive()
+        })
+        .strict(),
+    z
+        .object({
+            ...eventBase,
+            type: z.literal('parasite_ward.changed'),
+            requested: z.number().int().positive(),
+            applied: z.number().int().nonnegative(),
+            before: z.number().int().nonnegative(),
+            after: z.number().int().nonnegative()
         })
         .strict(),
     z

@@ -23,12 +23,31 @@ export interface GameplayMatchRewardAdapterResult {
     migrated: boolean;
 }
 
+export interface GameplaySlayerFloorClearInput {
+    bossTrophyClaimed: boolean;
+    riskWagerOutcome: 'won' | 'lost' | undefined;
+    featuredObjectiveCompleted: boolean;
+    scoreParasiteActive: boolean;
+}
+
+export interface GameplaySlayerFloorClearAdapterResult {
+    commands: GameplayCommand[];
+    events: GameplayEvent[];
+    bossTrophyScoreGain: number;
+    riskWagerFavorGain: number;
+    riskWagerStreakFloor: number;
+    parasiteRelief: number;
+}
+
 const RELIC_IMMEDIATE_DEFINITION_IDS: Partial<Record<RelicId, string>> = {
     combo_shard_plus_step: 'relic.combo_shard_plus_step',
     destroy_bank_plus_one: 'relic.destroy_bank_plus_one',
     guard_token_plus_one: 'relic.guard_token_plus_one',
     peek_charge_plus_one: 'relic.peek_charge_plus_one',
-    shrine_echo: 'relic.shrine_echo'
+    shrine_echo: 'relic.shrine_echo',
+    chapter_compass: 'relic.chapter_compass',
+    wager_surety: 'relic.wager_surety',
+    parasite_ledger: 'relic.parasite_ledger'
 };
 
 /**
@@ -100,5 +119,68 @@ export const resolveFindableMatchRewardThroughGameplayCore = (
             0
         ),
         migrated: true
+    };
+};
+
+/**
+ * Typed source boundary for Slayer floor-clear relic hooks. Established boss,
+ * objective, Favor, and parasite rules consume these request amounts.
+ */
+export const resolveSlayerFloorClearThroughGameplayCore = (
+    run: RunState,
+    input: GameplaySlayerFloorClearInput,
+    commandIdPrefix: string
+): GameplaySlayerFloorClearAdapterResult => {
+    const relicIds = new Set(Array.isArray(run.relicIds) ? run.relicIds : []);
+    const definitions: Array<{ id: string; suffix: string }> = [];
+    if (input.bossTrophyClaimed && relicIds.has('chapter_compass')) {
+        definitions.push({ id: 'relic.chapter_compass.boss_trophy', suffix: 'boss-trophy' });
+    }
+    if (input.riskWagerOutcome === 'won' && relicIds.has('wager_surety')) {
+        definitions.push({ id: 'relic.wager_surety.wager_won', suffix: 'wager-won' });
+    }
+    if (input.riskWagerOutcome === 'lost' && relicIds.has('wager_surety')) {
+        definitions.push({ id: 'relic.wager_surety.wager_lost', suffix: 'wager-lost' });
+    }
+    if (input.featuredObjectiveCompleted && input.scoreParasiteActive && relicIds.has('parasite_ledger')) {
+        definitions.push({ id: 'relic.parasite_ledger.featured_objective', suffix: 'parasite-relief' });
+    }
+
+    const commands: GameplayCommand[] = [];
+    const events: GameplayEvent[] = [];
+    for (const definition of definitions) {
+        const command = createGameplayDefinitionCommand(`${commandIdPrefix}:${definition.suffix}`, definition.id, {
+            bossTrophyClaimed: input.bossTrophyClaimed,
+            riskWagerOutcome: input.riskWagerOutcome ?? 'none',
+            featuredObjectiveCompleted: input.featuredObjectiveCompleted,
+            scoreParasiteActive: input.scoreParasiteActive
+        });
+        const result = reduceGameplayCommand(run, command);
+        if (!result.accepted) {
+            throw new Error(`Migrated Slayer floor-clear command rejected: ${definition.id}`);
+        }
+        commands.push(command);
+        events.push(...result.events);
+    }
+
+    return {
+        commands,
+        events,
+        bossTrophyScoreGain: events.reduce(
+            (sum, event) => sum + (event.type === 'score.requested' && event.reason === 'boss_trophy' ? event.amount : 0),
+            0
+        ),
+        riskWagerFavorGain: events.reduce(
+            (sum, event) => sum + (event.type === 'relic_favor.requested' ? event.amount : 0),
+            0
+        ),
+        riskWagerStreakFloor: events.reduce(
+            (floor, event) => event.type === 'featured_streak_floor.requested' ? Math.max(floor, event.amount) : floor,
+            0
+        ),
+        parasiteRelief: events.reduce(
+            (sum, event) => sum + (event.type === 'parasite_relief.requested' ? event.amount : 0),
+            0
+        )
     };
 };

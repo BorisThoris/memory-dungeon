@@ -94,6 +94,18 @@ The Vaultbreaker turns remembered treasure pairs into route access and future bu
 
 Locked-cache resolution, shop purchases, match score composition, and relic-offer advancement remain deterministic compatibility consumers. The command core owns the content causes and durable economy mutations; typed request events bridge into calculations whose broader ownership has not yet migrated.
 
+## Sixth vertical slice: The Slayer
+
+The Slayer connects boss preparation to objective execution and future build growth:
+
+1. Chapter Compass grants a Peek charge immediately, then emits a typed 30-score request only when a boss trophy cache is actually claimed.
+2. Wager Surety grants a guard token immediately; a won objective wager emits a one-Favor request, while a lost wager emits a one-step streak-floor request.
+3. Parasite Ledger grants an immediate parasite ward; completing a featured objective while Score Parasite is active emits one pressure-relief request.
+4. Boss trophy scoring, featured-objective resolution, Favor conversion, and parasite advancement consume those requests through explicit compatibility parameters.
+5. Favor becomes extra relic selections, closing the loop from preparation through boss/objective execution into the next build decision.
+
+The floor-clear orchestrator journals every typed cause and supplies the requested amounts to existing pure calculators. Direct calculator callers retain legacy defaults, so parity tests can compare old and migrated behavior while live runs use the command-owned source boundary.
+
 ## Current slice status
 
 Implemented in the Conduit Cartographer vertical slice:

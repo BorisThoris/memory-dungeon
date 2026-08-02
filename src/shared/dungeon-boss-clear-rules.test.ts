@@ -53,6 +53,10 @@ describe('getDungeonBossTrophyCacheResult', () => {
             outcome: 'claimed',
             score: DUNGEON_BOSS_TROPHY_CACHE_SCORE_REWARD + CHAPTER_COMPASS_BOSS_TROPHY_SCORE_BONUS
         });
+        expect(getDungeonBossTrophyCacheResult(run, board, { chapterCompassScoreBonus: 0 })).toEqual({
+            outcome: 'claimed',
+            score: DUNGEON_BOSS_TROPHY_CACHE_SCORE_REWARD
+        });
     });
 
     it('forfeits the trophy cache when the boss objective is incomplete', () => {

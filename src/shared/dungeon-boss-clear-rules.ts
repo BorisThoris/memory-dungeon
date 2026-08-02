@@ -12,7 +12,8 @@ export interface DungeonBossTrophyCacheResult {
 
 export const getDungeonBossTrophyCacheResult = (
     run: RunState,
-    board: BoardState
+    board: BoardState,
+    options: { chapterCompassScoreBonus?: number } = {}
 ): DungeonBossTrophyCacheResult => {
     if (board.floorTag !== 'boss') {
         return {
@@ -25,7 +26,7 @@ export const getDungeonBossTrophyCacheResult = (
     const outcome = objectiveCompleted ? 'claimed' : 'forfeited';
     const chapterCompassBonus =
         outcome === 'claimed' && hasRunRelic(run, 'chapter_compass')
-            ? CHAPTER_COMPASS_BOSS_TROPHY_SCORE_BONUS
+            ? options.chapterCompassScoreBonus ?? CHAPTER_COMPASS_BOSS_TROPHY_SCORE_BONUS
             : 0;
     return {
         outcome,

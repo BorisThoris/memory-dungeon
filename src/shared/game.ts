@@ -71,6 +71,7 @@ import {
     extendTimerTimestampMs
 } from './run-timer-rules';
 import { getShopGoldRewardForFloor } from './shop-rules';
+import { hasMutator } from './mutators';
 import {
     rotateAnchorSealPressure,
 } from './shifting-spotlight-rules';
@@ -91,7 +92,10 @@ import { resolveTurnMatchBoardResolution } from './turn-match-board-resolution-r
 import { resolveTurnMatchScoringSummary } from './turn-match-scoring-summary-rules';
 import { resolveTileTraitEffects } from './tile-trait-rules';
 import { appendGameplayJournal } from './gameplay-journal';
-import { resolveFindableMatchRewardThroughGameplayCore } from './gameplay-core-adapters';
+import {
+    resolveFindableMatchRewardThroughGameplayCore,
+    resolveSlayerFloorClearThroughGameplayCore
+} from './gameplay-core-adapters';
 import { addTileTraitCountStats, normalizeSessionStats } from './session-stats-rules';
 import { runFilteredStringArrayOrNull, runStringArray } from './run-array-guards';
 import { runNonNegativeInteger } from './run-number-guards';
@@ -336,7 +340,22 @@ const finalizeLevel = (run: RunState, board: BoardState): RunState => {
     const perfect = tries === 0;
     const clearLifeReason = getClearLifeReason(tries);
     const clearLifeGained = clearLifeReason !== 'none' && livesBeforeClear < MAX_LIVES ? 1 : 0;
-    const floorClearObjective = getFloorClearObjectiveResult(run, board);
+    const legacyFloorClearObjective = getFloorClearObjectiveResult(run, board);
+    const legacyBossTrophyCache = getDungeonBossTrophyCacheResult(run, board);
+    const slayerFloorClear = resolveSlayerFloorClearThroughGameplayCore(
+        run,
+        {
+            bossTrophyClaimed: legacyBossTrophyCache.outcome === 'claimed',
+            riskWagerOutcome: legacyFloorClearObjective.featuredObjectiveClear.endlessRiskWagerOutcome,
+            featuredObjectiveCompleted: legacyFloorClearObjective.featuredObjectiveCompleted,
+            scoreParasiteActive: hasMutator(run, 'score_parasite')
+        },
+        `floor-clear:${run.runSeed}:${board.level}`
+    );
+    const floorClearObjective = getFloorClearObjectiveResult(run, board, {
+        wagerSuretyFavorBonus: slayerFloorClear.riskWagerFavorGain,
+        wagerSuretyLossStreakFloor: slayerFloorClear.riskWagerStreakFloor
+    });
     const bonusTags: string[] = [...floorClearObjective.bonusTags];
     if (run.traitRouteObjectiveCompletedThisFloor) {
         bonusTags.push('trait_route_objective');
@@ -345,7 +364,9 @@ const finalizeLevel = (run: RunState, board: BoardState): RunState => {
     const featuredObjectiveId = floorClearObjective.featuredObjectiveId;
     const featuredObjectiveCompleted = floorClearObjective.featuredObjectiveCompleted;
     const featuredObjectiveClear = floorClearObjective.featuredObjectiveClear;
-    const bossTrophyCache = getDungeonBossTrophyCacheResult(run, board);
+    const bossTrophyCache = getDungeonBossTrophyCacheResult(run, board, {
+        chapterCompassScoreBonus: slayerFloorClear.bossTrophyScoreGain
+    });
 
     const clearScore = calculateFloorClearScore({
         bossTrophyCacheScore: bossTrophyCache.score,
@@ -378,7 +399,9 @@ const finalizeLevel = (run: RunState, board: BoardState): RunState => {
         : clearCurrentDungeonNode(currentDungeonRun, board.level);
     const parasiteFloors =
         featuredObjectiveId != null
-            ? getParasiteFloorsAfterFeaturedObjectiveClear(run, featuredObjectiveCompleted)
+            ? getParasiteFloorsAfterFeaturedObjectiveClear(run, featuredObjectiveCompleted, {
+                  reliefAmount: slayerFloorClear.parasiteRelief
+              })
             : run.parasiteFloors;
     const lastLevelResult = createFloorClearLevelResult({
         bossTrophyCacheOutcome: bossTrophyCache.outcome,
@@ -409,8 +432,9 @@ const finalizeLevel = (run: RunState, board: BoardState): RunState => {
         traitRouteObjectiveReward: run.traitRouteObjectiveRewardTextThisFloor ?? undefined
     });
 
+    const journaledRun = appendGameplayJournal(run, slayerFloorClear.commands, slayerFloorClear.events);
     return {
-        ...run,
+        ...journaledRun,
         status: 'levelComplete',
         lives,
         bonusRelicPicksNextOffer: relicFavor.bonusRelicPicksNextOffer,

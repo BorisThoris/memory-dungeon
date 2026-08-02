@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { RelicId, RunState } from '../../shared/contracts';
+import { GAME_RULES_VERSION, type RelicId, type RunState } from '../../shared/contracts';
 import { createDefaultSaveData } from '../../shared/save-data';
 import { makePair, makeRun } from '../../shared/test/game-fixtures';
 import {
@@ -147,6 +147,43 @@ describe('relicOfferSurfaceState', () => {
             },
             patch: { run: { bonusRelicPicksNextOffer: 1 } }
         });
+    });
+
+    it('projects Slayer preparation relics through typed pick feedback', () => {
+        const cases = [
+            { relicId: 'chapter_compass' as RelicId, cue: 'build.chapter_compass.claimed', field: 'peekCharges' },
+            { relicId: 'wager_surety' as RelicId, cue: 'build.wager_surety.claimed', field: 'guardTokens' },
+            { relicId: 'parasite_ledger' as RelicId, cue: 'build.parasite_ledger.claimed', field: 'parasiteWardRemaining' }
+        ];
+
+        for (const row of cases) {
+            const offered = offeredRun();
+            const result = createRelicPickSurfaceResult({
+                relicId: row.relicId,
+                run: {
+                    ...offered,
+                    gameMode: 'endless',
+                    runRulesVersion: GAME_RULES_VERSION,
+                    board: { ...offered.board!, floorArchetypeId: 'survey_hall' },
+                    relicOffer: { ...offered.relicOffer!, options: [row.relicId] }
+                },
+                saveData: createDefaultSaveData()
+            });
+
+            expect(result).toMatchObject({
+                kind: 'accepted',
+                feedback: { audioCategory: 'relic-pick', cue: row.cue }
+            });
+            expect(result.kind).toBe('accepted');
+            if (result.kind !== 'accepted') continue;
+            const before = row.field === 'guardTokens'
+                ? offered.stats.guardTokens
+                : offered[row.field as 'peekCharges' | 'parasiteWardRemaining'];
+            const value = row.field === 'guardTokens'
+                ? result.patch.run.stats.guardTokens
+                : result.patch.run[row.field as 'peekCharges' | 'parasiteWardRemaining'];
+            expect(value).toBe(before + 1);
+        }
     });
 
     it('applies relic offer services only while an offer is open', () => {

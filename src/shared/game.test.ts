@@ -5513,6 +5513,7 @@ describe('dungeon cards', () => {
             ...createBoard([matchedA, matchedB, exit]),
             matchedPairs: 1,
             pairCount: 1,
+            floorTag: 'boss' as const,
             dungeonObjectiveId: 'defeat_boss' as const,
             dungeonBossId: 'trap_warden' as const,
             dungeonExitTileId: exit.id,
@@ -5536,6 +5537,7 @@ describe('dungeon cards', () => {
         const run: RunState = {
             ...createRun([matchedA, matchedB, exit]),
             board,
+            relicIds: ['chapter_compass'],
             dungeonKeys: {},
             dungeonMasterKeys: 0,
             status: 'playing'
@@ -5553,6 +5555,12 @@ describe('dungeon cards', () => {
         expect(cleared.status).toBe('levelComplete');
         expect(cleared.board!.dungeonExitActivated).toBe(true);
         expect(cleared.board!.enemyHazards?.[0]).toMatchObject({ hp: 0, state: 'defeated' });
+        expect(cleared.lastLevelResult?.bossTrophyCacheOutcome).toBe('claimed');
+        expect(cleared.lastLevelResult?.bossTrophyCacheScore).toBe(120);
+        expect(cleared.gameplayEventJournal).toEqual(expect.arrayContaining([
+            expect.objectContaining({ type: 'score.requested', reason: 'boss_trophy', amount: 30 }),
+            expect.objectContaining({ type: 'feedback.requested', cue: 'build.chapter_compass.boss_trophy' })
+        ]));
     });
 
     it('selects the next route by matching a gateway pair on the board', () => {
@@ -6717,9 +6725,17 @@ describe('endless chapters and featured objectives', () => {
         expect(won.lastLevelResult?.endlessRiskWagerOutcome).toBe('won');
         expect(won.lastLevelResult?.endlessRiskWagerFavorGained).toBe(ENDLESS_RISK_WAGER_BONUS_FAVOR + 1);
         expect(won.lastLevelResult?.relicFavorGained).toBe(1 + ENDLESS_RISK_WAGER_BONUS_FAVOR + 1);
+        expect(won.gameplayEventJournal).toEqual(expect.arrayContaining([
+            expect.objectContaining({ type: 'relic_favor.requested', reason: 'risk_wager_win', amount: 1 }),
+            expect.objectContaining({ type: 'feedback.requested', cue: 'build.wager_surety.wager_won' })
+        ]));
         expect(lost.lastLevelResult?.endlessRiskWagerOutcome).toBe('lost');
         expect(lost.featuredObjectiveStreak).toBe(1);
         expect(lost.lastLevelResult?.endlessRiskWagerStreakLost).toBe(ENDLESS_RISK_WAGER_MIN_STREAK - 1);
+        expect(lost.gameplayEventJournal).toEqual(expect.arrayContaining([
+            expect.objectContaining({ type: 'featured_streak_floor.requested', reason: 'risk_wager_loss', amount: 1 }),
+            expect.objectContaining({ type: 'feedback.requested', cue: 'build.wager_surety.wager_lost' })
+        ]));
     });
 
     it('loses a risk wager by missing the next featured objective and resets the streak', () => {
@@ -6799,8 +6815,15 @@ describe('endless chapters and featured objectives', () => {
 
         expect(success.lastLevelResult?.featuredObjectiveCompleted).toBe(true);
         expect(success.parasiteFloors).toBe(2);
+        expect(success.gameplayEventJournal).toEqual(expect.arrayContaining([
+            expect.objectContaining({ type: 'parasite_relief.requested', reason: 'featured_objective_clear', amount: 1 }),
+            expect.objectContaining({ type: 'feedback.requested', cue: 'build.parasite_ledger.objective_clear' })
+        ]));
         expect(missed.lastLevelResult?.featuredObjectiveCompleted).toBe(false);
         expect(missed.parasiteFloors).toBe(3);
+        expect(missed.gameplayEventJournal).not.toEqual(expect.arrayContaining([
+            expect.objectContaining({ type: 'parasite_relief.requested' })
+        ]));
     });
 
     it('grants +2 favor on boss floors when the featured objective succeeds', () => {

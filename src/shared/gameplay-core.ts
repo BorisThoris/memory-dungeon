@@ -95,6 +95,16 @@ const conditionFailure = (run: RunState, condition: GameplayCondition, facts: Ga
             return runNonNegativeInteger(run.matchResolutionsThisFloor) === condition.amount
                 ? null
                 : `floor match resolutions are ${runNonNegativeInteger(run.matchResolutionsThisFloor)}, expected ${condition.amount}`;
+        case 'boss_trophy.claimed':
+            return facts.bossTrophyClaimed ? null : 'boss trophy was not claimed';
+        case 'risk_wager.outcome_is':
+            return facts.riskWagerOutcome === condition.outcome
+                ? null
+                : `risk wager outcome is ${facts.riskWagerOutcome}, expected ${condition.outcome}`;
+        case 'featured_objective.completed':
+            return facts.featuredObjectiveCompleted ? null : 'featured objective was not completed';
+        case 'score_parasite.active':
+            return facts.scoreParasiteActive ? null : 'score parasite is not active';
     }
 };
 
@@ -260,6 +270,28 @@ const applyDefinition = (
                 nextRun = { ...nextRun, bonusRelicPicksNextOffer: after };
                 writeEvent({
                     type: 'bonus_relic_pick.changed',
+                    requested: effect.amount,
+                    applied: after - before,
+                    before,
+                    after
+                });
+                break;
+            }
+            case 'relic_favor.request':
+                writeEvent({ type: 'relic_favor.requested', reason: effect.reason, amount: effect.amount });
+                break;
+            case 'featured_streak_floor.request':
+                writeEvent({ type: 'featured_streak_floor.requested', reason: effect.reason, amount: effect.amount });
+                break;
+            case 'parasite_relief.request':
+                writeEvent({ type: 'parasite_relief.requested', reason: effect.reason, amount: effect.amount });
+                break;
+            case 'parasite_ward.grant': {
+                const before = runNonNegativeInteger(nextRun.parasiteWardRemaining);
+                const after = before + effect.amount;
+                nextRun = { ...nextRun, parasiteWardRemaining: after };
+                writeEvent({
+                    type: 'parasite_ward.changed',
                     requested: effect.amount,
                     applied: after - before,
                     before,

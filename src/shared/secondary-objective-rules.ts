@@ -90,16 +90,23 @@ export interface FeaturedObjectiveClearResult {
     relicFavorGained: number;
 }
 
+export interface FeaturedObjectiveClearOptions {
+    wagerSuretyFavorBonus?: number;
+    wagerSuretyLossStreakFloor?: number;
+}
+
 export const getFeaturedObjectiveClearResult = ({
     board,
     completed,
     objectiveId,
-    run
+    run,
+    options = {}
 }: {
     board: BoardState;
     completed: boolean;
     objectiveId: FeaturedObjectiveId | null;
     run: RunState;
+    options?: FeaturedObjectiveClearOptions;
 }): FeaturedObjectiveClearResult => {
     const activeEndlessRiskWager =
         objectiveId != null && run.endlessRiskWager?.targetLevel === board.level
@@ -108,6 +115,12 @@ export const getFeaturedObjectiveClearResult = ({
     const endlessRiskWagerOutcome =
         activeEndlessRiskWager != null ? (completed ? 'won' as const : 'lost' as const) : undefined;
     const hasWagerSurety = hasRunRelic(run, 'wager_surety');
+    const wagerSuretyFavorBonus = hasWagerSurety
+        ? runNonNegativeInteger(options.wagerSuretyFavorBonus ?? 1)
+        : 0;
+    const wagerSuretyLossStreakFloor = hasWagerSurety
+        ? runNonNegativeInteger(options.wagerSuretyLossStreakFloor ?? 1)
+        : 0;
     const previousFeaturedObjectiveStreak = runNonNegativeInteger(run.featuredObjectiveStreak);
     const featuredObjectiveStreak =
         objectiveId != null
@@ -115,7 +128,7 @@ export const getFeaturedObjectiveClearResult = ({
                 ? previousFeaturedObjectiveStreak + 1
                 : activeEndlessRiskWager
                   ? hasWagerSurety
-                      ? 1
+                      ? Math.min(previousFeaturedObjectiveStreak, wagerSuretyLossStreakFloor)
                       : 0
                   : Math.max(0, previousFeaturedObjectiveStreak - FEATURED_OBJECTIVE_STREAK_MISS_DECAY)
             : previousFeaturedObjectiveStreak;
@@ -133,7 +146,7 @@ export const getFeaturedObjectiveClearResult = ({
     const relicFavorGained = objectiveId != null && completed ? (board.floorTag === 'boss' ? 2 : 1) : 0;
     const endlessRiskWagerFavorGained =
         completed && activeEndlessRiskWager
-            ? runNonNegativeInteger(activeEndlessRiskWager.bonusFavorOnSuccess) + (hasWagerSurety ? 1 : 0)
+            ? runNonNegativeInteger(activeEndlessRiskWager.bonusFavorOnSuccess) + wagerSuretyFavorBonus
             : 0;
 
     return {
@@ -160,7 +173,11 @@ export interface FloorClearObjectiveResult {
     objectiveBonus: number;
 }
 
-export const getFloorClearObjectiveResult = (run: RunState, board: BoardState): FloorClearObjectiveResult => {
+export const getFloorClearObjectiveResult = (
+    run: RunState,
+    board: BoardState,
+    options: FeaturedObjectiveClearOptions = {}
+): FloorClearObjectiveResult => {
     const featuredObjectiveId = isEndlessFeaturedObjectiveBoard(run, board) ? board.featuredObjectiveId : null;
     const featuredObjectiveCompleted =
         featuredObjectiveId != null ? isFeaturedObjectiveCompleted(run, board, featuredObjectiveId) : false;
@@ -168,7 +185,8 @@ export const getFloorClearObjectiveResult = (run: RunState, board: BoardState): 
         board,
         completed: featuredObjectiveCompleted,
         objectiveId: featuredObjectiveId,
-        run
+        run,
+        options
     });
     const bonusTags: string[] = [];
     let objectiveBonus = 0;
