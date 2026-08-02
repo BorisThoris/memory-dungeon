@@ -212,6 +212,19 @@ Wild Run now treats its joker as a persistent, countable resource instead of col
 
 Graph v12 connects mode setup, token inventory, board generation, normal and Gambit match resolution, exact consumption, HUD feedback, floor completion, persistence, and next-floor continuity. Core and live-game tests cover rejection without a valid flipped pair and the two-token-to-one-token regression that previously erased the whole bank.
 
+## Fifteenth modeled slice: Run Loadout Composition
+
+The inventory's three loadout rows are now modeled as projections over existing authoritative state, not as additional consumables or a second state owner:
+
+1. Run Setup copies the selected contract, mode/daily mutators, starting relics, and starting-loadout identity into the new run exactly once.
+2. `relic_loadout` projects owned `relicIds`; relic drafts are its only mid-run mutation boundary, and owned relics gate later offers.
+3. `mutator_loadout` projects the active floor's `activeMutators`; the deterministic floor schedule may replace that list only during run-flow advancement.
+4. `contract_loadout` projects the immutable `activeContract`; its `noShuffle`, `noDestroy`, and total-pin constraints gate the same board-power legality functions used by the live UI.
+5. All three rows display through the shared inventory/HUD surfaces while the underlying run fields remain the single source of truth.
+6. Graph v13 connects run setup, relic drafting, floor scheduling, build composition, affected powers and hazards, feedback, and the existing run-flow boundary.
+
+This slice intentionally adds no command type: read-only projections should not pretend to mutate gameplay. Commands remain responsible for actual draft picks and board actions as those ownership boundaries migrate.
+
 ## Current slice status
 
 Implemented in the Conduit Cartographer vertical slice:

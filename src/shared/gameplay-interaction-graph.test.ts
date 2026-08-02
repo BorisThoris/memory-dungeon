@@ -630,7 +630,6 @@ describe('gameplay interaction graph', () => {
 
     it('connects Wild Run setup through one-token wildcard matches and floor continuity', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
-        expect(gameplayInteractionGraph.version).toBe(12);
         expect(byId.get('mode.wild_run')).toMatchObject({
             kind: 'progression',
             role: 'persistent_joker_mode_setup'
@@ -658,6 +657,45 @@ describe('gameplay interaction graph', () => {
             expect.objectContaining({ source: 'power.gambit', target: 'power.wild_match', kind: 'synergy' }),
             expect.objectContaining({ source: 'power.stray_remove', target: 'board.wild_joker_tile', kind: 'counterplay' }),
             expect.objectContaining({ source: 'power.wild_match', target: 'feedback.gameplay_hud', kind: 'displays' })
+        ]));
+    });
+
+    it('models run loadouts as read-only projections over authoritative setup state', () => {
+        const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
+        expect(gameplayInteractionGraph.version).toBe(13);
+        expect(byId.get('progression.run_setup')).toMatchObject({
+            kind: 'progression',
+            role: 'authoritative_pre_run_loadout_selection'
+        });
+        expect(byId.get('inventory.relic_loadout')).toMatchObject({
+            kind: 'inventory',
+            role: 'owned_relic_build_projection',
+            writes: []
+        });
+        expect(byId.get('inventory.mutator_loadout')).toMatchObject({
+            kind: 'inventory',
+            role: 'floor_pressure_projection',
+            writes: []
+        });
+        expect(byId.get('inventory.contract_loadout')).toMatchObject({
+            kind: 'inventory',
+            role: 'immutable_run_restriction_projection',
+            writes: []
+        });
+        expect(gameplayInteractionGraph.edges).toEqual(expect.arrayContaining([
+            expect.objectContaining({ source: 'progression.run_setup', target: 'inventory.relic_loadout', kind: 'grants' }),
+            expect.objectContaining({ source: 'progression.run_setup', target: 'inventory.mutator_loadout', kind: 'grants' }),
+            expect.objectContaining({ source: 'progression.run_setup', target: 'inventory.contract_loadout', kind: 'grants' }),
+            expect.objectContaining({ source: 'progression.relic_draft', target: 'inventory.relic_loadout', kind: 'modifies' }),
+            expect.objectContaining({ source: 'inventory.relic_loadout', target: 'progression.relic_draft', kind: 'gates' }),
+            expect.objectContaining({ source: 'progression.run_flow', target: 'inventory.mutator_loadout', kind: 'modifies' }),
+            expect.objectContaining({ source: 'inventory.mutator_loadout', target: 'hazard.score_parasite', kind: 'triggers' }),
+            expect.objectContaining({ source: 'inventory.contract_loadout', target: 'power.shuffle', kind: 'gates' }),
+            expect.objectContaining({ source: 'inventory.contract_loadout', target: 'power.destroy_pair', kind: 'gates' }),
+            expect.objectContaining({ source: 'inventory.contract_loadout', target: 'power.pin', kind: 'gates' }),
+            expect.objectContaining({ source: 'inventory.relic_loadout', target: 'feedback.gameplay_hud', kind: 'displays' }),
+            expect.objectContaining({ source: 'inventory.mutator_loadout', target: 'feedback.gameplay_hud', kind: 'displays' }),
+            expect.objectContaining({ source: 'inventory.contract_loadout', target: 'feedback.gameplay_hud', kind: 'displays' })
         ]));
     });
 });

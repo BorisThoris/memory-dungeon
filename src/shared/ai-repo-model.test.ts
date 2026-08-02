@@ -30,7 +30,7 @@ const packageJson = JSON.parse(fs.readFileSync(path.join(repoRoot, 'package.json
 };
 
 describe('AI repository model', () => {
-    it('is current, source-derived, queryable, and free of blocking diagnostics', () => {
+    it('is current, source-derived, queryable, and free of diagnostics', () => {
         expect(() =>
             execFileSync(process.execPath, [scriptPath, '--check'], {
                 cwd: repoRoot,
@@ -48,7 +48,7 @@ describe('AI repository model', () => {
         expect(model.repository.mechanicCount).toBeGreaterThan(20);
         expect(model.repository.stateFieldCount).toBeGreaterThan(20);
         expect(model.repository.relationshipCount).toBeGreaterThan(2_000);
-        expect(model.diagnostics.filter((item) => item.severity === 'error')).toEqual([]);
+        expect(model.diagnostics).toEqual([]);
         expect(model.symbols.every((symbol) => symbol.line > 0 && symbol.endLine >= symbol.line)).toBe(true);
         expect(new Set(model.content.map((item) => item.kind))).toEqual(
             new Set(['build_archetype', 'relic', 'findable', 'inventory_item', 'bonus_reward'])
@@ -60,7 +60,8 @@ describe('AI repository model', () => {
         expect(model.relationships.map((edge) => edge.kind)).toEqual(
             expect.arrayContaining(['imports', 'exports', 'declared_by', 'implemented_by', 'tested_by', 'reads', 'writes', 'displays'])
         );
-        expect(model.diagnostics.map((item) => item.code)).toContain('unmodeled_content_family');
+        const mechanicIds = new Set(model.mechanics.map((mechanic) => mechanic.id));
+        expect(model.content.filter((item) => !mechanicIds.has(`mechanic:${item.expectedMechanicId}`))).toEqual([]);
 
         const queryOutput = execFileSync(process.execPath, [scriptPath, '--query', 'recallFocus'], {
             cwd: repoRoot,

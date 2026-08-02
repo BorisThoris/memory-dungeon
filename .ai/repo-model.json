@@ -7,16 +7,16 @@
     "codeFileCount": 876,
     "exportedSymbolCount": 3202,
     "contentItemCount": 56,
-    "mechanicCount": 121,
-    "stateFieldCount": 130,
-    "relationshipCount": 9214
+    "mechanicCount": 125,
+    "stateFieldCount": 133,
+    "relationshipCount": 9285
   },
   "inventory": [
     {
       "path": ".ai/GAMEPLAY_MIGRATION.md",
       "category": "other",
-      "bytes": 22620,
-      "sha256": "a70f8729e9a6bdaf8d784566418c30d703cd83789279950f62cbb1ef05a2e9c6"
+      "bytes": 23962,
+      "sha256": "e521b502d120a72e40b311dac8956b0dcf3b7609943cf74404d95be08c969b78"
     },
     {
       "path": ".ai/README.md",
@@ -831,8 +831,8 @@
     {
       "path": "docs/internal-wiki/APP_ANALYSIS.md",
       "category": "documentation",
-      "bytes": 21498,
-      "sha256": "2b55735fdd178efc803e1fa55e69083876ff088daf83a4129e42cd7dfec32afc"
+      "bytes": 21578,
+      "sha256": "bf77bd41749902beb41d05c258ca8a4376a53f4ccad4b3930ba6c66d20bce7e6"
     },
     {
       "path": "docs/internal-wiki/ARCHITECTURE.md",
@@ -9759,8 +9759,8 @@
     {
       "path": "src/shared/ai-repo-model.test.ts",
       "category": "test",
-      "bytes": 4256,
-      "sha256": "ac438e6c57896e0489d9997bc61037b285fc92040a70896dd04751c04c1bcedc"
+      "bytes": 4307,
+      "sha256": "e6572711bf38953bcd840dbb53d71ec81b5d6f2806ae87cab79513558c394cbb"
     },
     {
       "path": "src/shared/audit-summary-script.test.ts",
@@ -10635,14 +10635,14 @@
     {
       "path": "src/shared/gameplay-interaction-graph-data.json",
       "category": "source",
-      "bytes": 155708,
-      "sha256": "1b10fa7e6a160d3b6d7b9aaf8adcaca1a8dded0b79ba07ddb3440c6ae1797b48"
+      "bytes": 162991,
+      "sha256": "dff4ec99c2d3828e28fd7471014519fcb7c39b58efeaac8026eed2c7cbfa3d17"
     },
     {
       "path": "src/shared/gameplay-interaction-graph.test.ts",
       "category": "test",
-      "bytes": 40931,
-      "sha256": "c2356b90e9cde8739177613a6eefad3bb332cc26631780ad82f9335ffa2503b9"
+      "bytes": 43604,
+      "sha256": "2ac2d730873483c5200546a71ecc3be3782345b95e0de34c67661b208f069dcf"
     },
     {
       "path": "src/shared/gameplay-interaction-graph.ts",
@@ -23000,7 +23000,7 @@
       "path": "src/shared/ai-repo-model.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 81,
+      "lineCount": 82,
       "imports": [],
       "exports": [],
       "testedBy": []
@@ -26734,7 +26734,7 @@
       "path": "src/shared/gameplay-interaction-graph-data.json",
       "layer": "shared",
       "role": "production",
-      "lineCount": 2012,
+      "lineCount": 2089,
       "imports": [],
       "exports": [],
       "testedBy": []
@@ -26744,7 +26744,7 @@
       "path": "src/shared/gameplay-interaction-graph.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 664,
+      "lineCount": 702,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/gameplay-core-contracts.ts",
@@ -59509,6 +59509,63 @@
       ]
     },
     {
+      "id": "mechanic:inventory.contract_loadout",
+      "mechanicId": "inventory.contract_loadout",
+      "label": "Contract Loadout Projection",
+      "kind": "inventory",
+      "role": "immutable_run_restriction_projection",
+      "evidence": [
+        {
+          "path": "src/shared/run-inventory.ts",
+          "line": 6
+        },
+        {
+          "path": "src/shared/run-creation-rules.ts",
+          "line": 11
+        },
+        {
+          "path": "src/shared/board-power-availability.ts",
+          "line": 1
+        },
+        {
+          "path": "src/shared/board-power-actions.ts",
+          "line": 4
+        },
+        {
+          "path": "src/renderer/components/GameplayHudBar.tsx",
+          "line": 2
+        }
+      ],
+      "tests": [
+        {
+          "path": "src/shared/run-inventory.test.ts",
+          "line": 13
+        },
+        {
+          "path": "src/shared/run-creation-rules.test.ts",
+          "line": 3
+        },
+        {
+          "path": "src/shared/board-power-actions.test.ts",
+          "line": 7
+        },
+        {
+          "path": "src/shared/softlock-generator-contract.test.ts",
+          "line": 5
+        }
+      ],
+      "enables": [
+        "progression.run_flow"
+      ],
+      "blocks": [],
+      "softlockGuards": [
+        "read-only-projection",
+        "run-start-lock",
+        "power-legality-checks",
+        "terminal-completion-route"
+      ]
+    },
+    {
       "id": "mechanic:inventory.destroy_charge",
       "mechanicId": "inventory.destroy_charge",
       "label": "Destroy Charge Inventory",
@@ -59806,6 +59863,65 @@
       ]
     },
     {
+      "id": "mechanic:inventory.mutator_loadout",
+      "mechanicId": "inventory.mutator_loadout",
+      "label": "Mutator Loadout Projection",
+      "kind": "inventory",
+      "role": "floor_pressure_projection",
+      "evidence": [
+        {
+          "path": "src/shared/run-inventory.ts",
+          "line": 7
+        },
+        {
+          "path": "src/shared/mutators.ts",
+          "line": 1
+        },
+        {
+          "path": "src/shared/floor-mutator-schedule.ts",
+          "line": 6
+        },
+        {
+          "path": "src/shared/next-floor-transition-rules.ts",
+          "line": 10
+        },
+        {
+          "path": "src/renderer/components/GameplayHudBar.tsx",
+          "line": 4
+        }
+      ],
+      "tests": [
+        {
+          "path": "src/shared/run-inventory.test.ts",
+          "line": 13
+        },
+        {
+          "path": "src/shared/mutators.test.ts",
+          "line": 2
+        },
+        {
+          "path": "src/shared/floor-mutator-schedule.test.ts",
+          "line": 13
+        },
+        {
+          "path": "src/shared/game.test.ts",
+          "line": 7
+        }
+      ],
+      "enables": [
+        "hazard.score_parasite",
+        "phase.memorize",
+        "progression.run_flow"
+      ],
+      "blocks": [],
+      "softlockGuards": [
+        "read-only-projection",
+        "active-floor-lock",
+        "deterministic-floor-schedule",
+        "next-floor-replacement-only"
+      ]
+    },
+    {
       "id": "mechanic:inventory.peek_charge",
       "mechanicId": "inventory.peek_charge",
       "label": "Peek Charge Inventory",
@@ -59888,6 +60004,63 @@
         "clear-flip-state",
         "hidden-target-only",
         "no-shuffle-contract"
+      ]
+    },
+    {
+      "id": "mechanic:inventory.relic_loadout",
+      "mechanicId": "inventory.relic_loadout",
+      "label": "Relic Loadout Projection",
+      "kind": "inventory",
+      "role": "owned_relic_build_projection",
+      "evidence": [
+        {
+          "path": "src/shared/run-inventory.ts",
+          "line": 7
+        },
+        {
+          "path": "src/shared/relics.ts",
+          "line": 2
+        },
+        {
+          "path": "src/shared/relic-offer-rules.ts",
+          "line": 1
+        },
+        {
+          "path": "src/renderer/components/GameplayHudBar.tsx",
+          "line": 26
+        }
+      ],
+      "tests": [
+        {
+          "path": "src/shared/run-inventory.test.ts",
+          "line": 13
+        },
+        {
+          "path": "src/shared/relics.test.ts",
+          "line": 2
+        },
+        {
+          "path": "src/shared/relic-offer-rules.test.ts",
+          "line": 4
+        }
+      ],
+      "enables": [
+        "progression.relic_draft",
+        "build.conduit_cartographer",
+        "build.guard_tank",
+        "build.combo_shard_engine",
+        "build.trap_control",
+        "build.treasure_greed",
+        "build.boss_hunter",
+        "build.reveal_scout",
+        "build.memory_scout"
+      ],
+      "blocks": [],
+      "softlockGuards": [
+        "read-only-projection",
+        "draft-only-mutation",
+        "owned-relic-filter",
+        "twelve-relic-display-cap"
       ]
     },
     {
@@ -61303,6 +61476,54 @@
       "blocks": [],
       "softlockGuards": [
         "navigation-contracts"
+      ]
+    },
+    {
+      "id": "mechanic:progression.run_setup",
+      "mechanicId": "progression.run_setup",
+      "label": "Run Setup Composition",
+      "kind": "progression",
+      "role": "authoritative_pre_run_loadout_selection",
+      "evidence": [
+        {
+          "path": "src/shared/run-creation-rules.ts",
+          "line": 1
+        },
+        {
+          "path": "src/shared/starting-loadouts.ts",
+          "line": 1
+        },
+        {
+          "path": "src/renderer/store/runStartState.ts",
+          "line": 1
+        }
+      ],
+      "tests": [
+        {
+          "path": "src/shared/run-creation-rules.test.ts",
+          "line": 1
+        },
+        {
+          "path": "src/shared/starting-loadouts.test.ts",
+          "line": 1
+        },
+        {
+          "path": "src/renderer/store/runStartState.test.ts",
+          "line": 1
+        }
+      ],
+      "enables": [
+        "inventory.contract_loadout",
+        "inventory.mutator_loadout",
+        "inventory.relic_loadout",
+        "progression.run_flow"
+      ],
+      "blocks": [],
+      "softlockGuards": [
+        "menu-owned-selection",
+        "copy-on-run-start",
+        "no-mid-run-contract-edit",
+        "starting-loadout-id-validation"
       ]
     },
     {
@@ -63788,13 +64009,26 @@
       ]
     },
     {
+      "id": "state:activeContract",
+      "name": "activeContract",
+      "readBy": [
+        "mechanic:inventory.contract_loadout"
+      ],
+      "writtenBy": [
+        "mechanic:progression.run_setup"
+      ]
+    },
+    {
       "id": "state:activeMutators",
       "name": "activeMutators",
       "readBy": [
+        "mechanic:inventory.mutator_loadout",
         "mechanic:phase.memorize",
         "mechanic:relic.memorize_under_short_memorize"
       ],
-      "writtenBy": []
+      "writtenBy": [
+        "mechanic:progression.run_setup"
+      ]
     },
     {
       "id": "state:adjacentTraits",
@@ -64493,6 +64727,7 @@
       "id": "state:gameMode",
       "name": "gameMode",
       "readBy": [
+        "mechanic:inventory.mutator_loadout",
         "mechanic:objective.risk_wager",
         "mechanic:phase.memorize",
         "mechanic:progression.shard_to_life"
@@ -64693,6 +64928,14 @@
       "writtenBy": []
     },
     {
+      "id": "state:maxPinsTotalRun",
+      "name": "maxPinsTotalRun",
+      "readBy": [
+        "mechanic:inventory.contract_loadout"
+      ],
+      "writtenBy": []
+    },
+    {
       "id": "state:memorizeMs",
       "name": "memorizeMs",
       "readBy": [
@@ -64717,6 +64960,7 @@
       "name": "nextFloor",
       "readBy": [
         "mechanic:feedback.gameplay_hud",
+        "mechanic:inventory.mutator_loadout",
         "mechanic:progression.run_flow"
       ],
       "writtenBy": [
@@ -64728,6 +64972,7 @@
       "name": "noDestroy",
       "readBy": [
         "mechanic:build.emergency_toolkit",
+        "mechanic:inventory.contract_loadout",
         "mechanic:inventory.destroy_charge",
         "mechanic:power.destroy_pair",
         "mechanic:relic.destroy_bank_plus_one",
@@ -64739,6 +64984,7 @@
       "id": "state:noShuffle",
       "name": "noShuffle",
       "readBy": [
+        "mechanic:inventory.contract_loadout",
         "mechanic:inventory.region_shuffle_charge",
         "mechanic:inventory.shuffle_charge",
         "mechanic:power.region_shuffle",
@@ -65032,6 +65278,7 @@
         "mechanic:build.conduit_cartographer",
         "mechanic:build.guard_tank",
         "mechanic:core.gameplay_commands",
+        "mechanic:inventory.relic_loadout",
         "mechanic:phase.memorize",
         "mechanic:power.pin",
         "mechanic:progression.relic_draft",
@@ -65052,6 +65299,7 @@
       ],
       "writtenBy": [
         "mechanic:progression.relic_draft",
+        "mechanic:progression.run_setup",
         "mechanic:relic.combo_shard_plus_step",
         "mechanic:relic.destroy_bank_plus_one",
         "mechanic:relic.extra_shuffle_charge",
@@ -65070,6 +65318,7 @@
       "name": "relicOffer",
       "readBy": [
         "mechanic:feedback.gameplay_hud",
+        "mechanic:inventory.relic_loadout",
         "mechanic:progression.relic_draft",
         "mechanic:progression.run_flow",
         "mechanic:relic.combo_shard_plus_step",
@@ -65169,7 +65418,8 @@
       "id": "state:runSeed",
       "name": "runSeed",
       "readBy": [
-        "mechanic:board.scout_reveal"
+        "mechanic:board.scout_reveal",
+        "mechanic:inventory.mutator_loadout"
       ],
       "writtenBy": []
     },
@@ -65386,6 +65636,16 @@
         "mechanic:power.region_shuffle",
         "mechanic:power.shuffle",
         "mechanic:power.tile_swap"
+      ]
+    },
+    {
+      "id": "state:startingLoadoutId",
+      "name": "startingLoadoutId",
+      "readBy": [
+        "mechanic:inventory.relic_loadout"
+      ],
+      "writtenBy": [
+        "mechanic:progression.run_setup"
       ]
     },
     {
@@ -66911,6 +67171,19 @@
       "label": "shows current shard bank"
     },
     {
+      "id": "displays:mechanic:inventory.contract_loadout->file:src/renderer/components/GameplayHudBar.tsx",
+      "source": "mechanic:inventory.contract_loadout",
+      "target": "file:src/renderer/components/GameplayHudBar.tsx",
+      "kind": "displays"
+    },
+    {
+      "id": "displays:mechanic:inventory.contract_loadout->mechanic:feedback.gameplay_hud:shows locked restrictions beside affected powers",
+      "source": "mechanic:inventory.contract_loadout",
+      "target": "mechanic:feedback.gameplay_hud",
+      "kind": "displays",
+      "label": "shows locked restrictions beside affected powers"
+    },
+    {
       "id": "displays:mechanic:inventory.destroy_charge->mechanic:feedback.gameplay_hud:shows destroy bank",
       "source": "mechanic:inventory.destroy_charge",
       "target": "mechanic:feedback.gameplay_hud",
@@ -66939,6 +67212,19 @@
       "label": "shows key-ring quantity"
     },
     {
+      "id": "displays:mechanic:inventory.mutator_loadout->file:src/renderer/components/GameplayHudBar.tsx",
+      "source": "mechanic:inventory.mutator_loadout",
+      "target": "file:src/renderer/components/GameplayHudBar.tsx",
+      "kind": "displays"
+    },
+    {
+      "id": "displays:mechanic:inventory.mutator_loadout->mechanic:feedback.gameplay_hud:shows current floor pressure chips",
+      "source": "mechanic:inventory.mutator_loadout",
+      "target": "mechanic:feedback.gameplay_hud",
+      "kind": "displays",
+      "label": "shows current floor pressure chips"
+    },
+    {
       "id": "displays:mechanic:inventory.peek_charge->mechanic:feedback.gameplay_hud:shows current charge balance",
       "source": "mechanic:inventory.peek_charge",
       "target": "mechanic:feedback.gameplay_hud",
@@ -66951,6 +67237,19 @@
       "target": "mechanic:feedback.gameplay_hud",
       "kind": "displays",
       "label": "shows remaining targeted control"
+    },
+    {
+      "id": "displays:mechanic:inventory.relic_loadout->file:src/renderer/components/GameplayHudBar.tsx",
+      "source": "mechanic:inventory.relic_loadout",
+      "target": "file:src/renderer/components/GameplayHudBar.tsx",
+      "kind": "displays"
+    },
+    {
+      "id": "displays:mechanic:inventory.relic_loadout->mechanic:feedback.gameplay_hud:shows owned relic slots without duplicating state",
+      "source": "mechanic:inventory.relic_loadout",
+      "target": "mechanic:feedback.gameplay_hud",
+      "kind": "displays",
+      "label": "shows owned relic slots without duplicating state"
     },
     {
       "id": "displays:mechanic:inventory.shuffle_charge->mechanic:feedback.gameplay_hud:shows remaining global control",
@@ -67536,6 +67835,62 @@
       "label": "funds a chosen two-tile swap"
     },
     {
+      "id": "enables:mechanic:inventory.relic_loadout->mechanic:build.boss_hunter:projects objective-build relic composition",
+      "source": "mechanic:inventory.relic_loadout",
+      "target": "mechanic:build.boss_hunter",
+      "kind": "enables",
+      "label": "projects objective-build relic composition"
+    },
+    {
+      "id": "enables:mechanic:inventory.relic_loadout->mechanic:build.combo_shard_engine:projects shard-build relic composition",
+      "source": "mechanic:inventory.relic_loadout",
+      "target": "mechanic:build.combo_shard_engine",
+      "kind": "enables",
+      "label": "projects shard-build relic composition"
+    },
+    {
+      "id": "enables:mechanic:inventory.relic_loadout->mechanic:build.conduit_cartographer:projects reveal-build relic composition",
+      "source": "mechanic:inventory.relic_loadout",
+      "target": "mechanic:build.conduit_cartographer",
+      "kind": "enables",
+      "label": "projects reveal-build relic composition"
+    },
+    {
+      "id": "enables:mechanic:inventory.relic_loadout->mechanic:build.guard_tank:projects defense-build relic composition",
+      "source": "mechanic:inventory.relic_loadout",
+      "target": "mechanic:build.guard_tank",
+      "kind": "enables",
+      "label": "projects defense-build relic composition"
+    },
+    {
+      "id": "enables:mechanic:inventory.relic_loadout->mechanic:build.memory_scout:projects recall-build relic composition",
+      "source": "mechanic:inventory.relic_loadout",
+      "target": "mechanic:build.memory_scout",
+      "kind": "enables",
+      "label": "projects recall-build relic composition"
+    },
+    {
+      "id": "enables:mechanic:inventory.relic_loadout->mechanic:build.reveal_scout:projects scouting-build relic composition",
+      "source": "mechanic:inventory.relic_loadout",
+      "target": "mechanic:build.reveal_scout",
+      "kind": "enables",
+      "label": "projects scouting-build relic composition"
+    },
+    {
+      "id": "enables:mechanic:inventory.relic_loadout->mechanic:build.trap_control:projects control-build relic composition",
+      "source": "mechanic:inventory.relic_loadout",
+      "target": "mechanic:build.trap_control",
+      "kind": "enables",
+      "label": "projects control-build relic composition"
+    },
+    {
+      "id": "enables:mechanic:inventory.relic_loadout->mechanic:build.treasure_greed:projects economy-build relic composition",
+      "source": "mechanic:inventory.relic_loadout",
+      "target": "mechanic:build.treasure_greed",
+      "kind": "enables",
+      "label": "projects economy-build relic composition"
+    },
+    {
       "id": "enables:mechanic:inventory.shuffle_charge->mechanic:power.shuffle:funds a full-board reorder",
       "source": "mechanic:inventory.shuffle_charge",
       "target": "mechanic:power.shuffle",
@@ -67632,6 +67987,13 @@
       "target": "mechanic:feedback.gameplay_hud",
       "kind": "enables",
       "label": "route feedback"
+    },
+    {
+      "id": "enables:mechanic:progression.run_setup->mechanic:progression.run_flow:starts play with one authoritative configuration",
+      "source": "mechanic:progression.run_setup",
+      "target": "mechanic:progression.run_flow",
+      "kind": "enables",
+      "label": "starts play with one authoritative configuration"
     },
     {
       "id": "enables:mechanic:relic.first_shuffle_free_per_floor->mechanic:power.shuffle:funds one free global reorder per floor",
@@ -86923,6 +87285,48 @@
       "kind": "exports"
     },
     {
+      "id": "gates:mechanic:inventory.contract_loadout->mechanic:power.destroy_pair:noDestroy disables pair removal",
+      "source": "mechanic:inventory.contract_loadout",
+      "target": "mechanic:power.destroy_pair",
+      "kind": "gates",
+      "label": "noDestroy disables pair removal"
+    },
+    {
+      "id": "gates:mechanic:inventory.contract_loadout->mechanic:power.pin:contract pin cap bounds run-wide marking",
+      "source": "mechanic:inventory.contract_loadout",
+      "target": "mechanic:power.pin",
+      "kind": "gates",
+      "label": "contract pin cap bounds run-wide marking"
+    },
+    {
+      "id": "gates:mechanic:inventory.contract_loadout->mechanic:power.region_shuffle:noShuffle disables row reorder",
+      "source": "mechanic:inventory.contract_loadout",
+      "target": "mechanic:power.region_shuffle",
+      "kind": "gates",
+      "label": "noShuffle disables row reorder"
+    },
+    {
+      "id": "gates:mechanic:inventory.contract_loadout->mechanic:power.shuffle:noShuffle disables full-board reorder",
+      "source": "mechanic:inventory.contract_loadout",
+      "target": "mechanic:power.shuffle",
+      "kind": "gates",
+      "label": "noShuffle disables full-board reorder"
+    },
+    {
+      "id": "gates:mechanic:inventory.contract_loadout->mechanic:power.tile_swap:noShuffle disables chosen tile swap",
+      "source": "mechanic:inventory.contract_loadout",
+      "target": "mechanic:power.tile_swap",
+      "kind": "gates",
+      "label": "noShuffle disables chosen tile swap"
+    },
+    {
+      "id": "gates:mechanic:inventory.relic_loadout->mechanic:progression.relic_draft:owned relics filter future draft offers",
+      "source": "mechanic:inventory.relic_loadout",
+      "target": "mechanic:progression.relic_draft",
+      "kind": "gates",
+      "label": "owned relics filter future draft offers"
+    },
+    {
       "id": "gates:mechanic:objective.featured_streak->mechanic:objective.floor_clear:resolves streak and wager at floor clear",
       "source": "mechanic:objective.featured_streak",
       "target": "mechanic:objective.floor_clear",
@@ -87033,6 +87437,27 @@
       "target": "mechanic:inventory.undo_charge",
       "kind": "grants",
       "label": "rearms the floor Undo"
+    },
+    {
+      "id": "grants:mechanic:progression.run_setup->mechanic:inventory.contract_loadout:locks the selected contract at run start",
+      "source": "mechanic:progression.run_setup",
+      "target": "mechanic:inventory.contract_loadout",
+      "kind": "grants",
+      "label": "locks the selected contract at run start"
+    },
+    {
+      "id": "grants:mechanic:progression.run_setup->mechanic:inventory.mutator_loadout:selects mode daily or scheduled opening pressure",
+      "source": "mechanic:progression.run_setup",
+      "target": "mechanic:inventory.mutator_loadout",
+      "kind": "grants",
+      "label": "selects mode daily or scheduled opening pressure"
+    },
+    {
+      "id": "grants:mechanic:progression.run_setup->mechanic:inventory.relic_loadout:copies starting relics and loadout grants into the run",
+      "source": "mechanic:progression.run_setup",
+      "target": "mechanic:inventory.relic_loadout",
+      "kind": "grants",
+      "label": "copies starting relics and loadout grants into the run"
     },
     {
       "id": "grants:mechanic:relic.chapter_compass->mechanic:inventory.peek_charge:grants one preparation Peek",
@@ -88071,6 +88496,30 @@
       "kind": "implemented_by"
     },
     {
+      "id": "implemented_by:mechanic:inventory.contract_loadout->file:src/shared/board-power-actions.ts",
+      "source": "mechanic:inventory.contract_loadout",
+      "target": "file:src/shared/board-power-actions.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:inventory.contract_loadout->file:src/shared/board-power-availability.ts",
+      "source": "mechanic:inventory.contract_loadout",
+      "target": "file:src/shared/board-power-availability.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:inventory.contract_loadout->file:src/shared/run-creation-rules.ts",
+      "source": "mechanic:inventory.contract_loadout",
+      "target": "file:src/shared/run-creation-rules.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:inventory.contract_loadout->file:src/shared/run-inventory.ts",
+      "source": "mechanic:inventory.contract_loadout",
+      "target": "file:src/shared/run-inventory.ts",
+      "kind": "implemented_by"
+    },
+    {
       "id": "implemented_by:mechanic:inventory.destroy_charge->file:src/shared/board-power-actions.ts",
       "source": "mechanic:inventory.destroy_charge",
       "target": "file:src/shared/board-power-actions.ts",
@@ -88209,6 +88658,30 @@
       "kind": "implemented_by"
     },
     {
+      "id": "implemented_by:mechanic:inventory.mutator_loadout->file:src/shared/floor-mutator-schedule.ts",
+      "source": "mechanic:inventory.mutator_loadout",
+      "target": "file:src/shared/floor-mutator-schedule.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:inventory.mutator_loadout->file:src/shared/mutators.ts",
+      "source": "mechanic:inventory.mutator_loadout",
+      "target": "file:src/shared/mutators.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:inventory.mutator_loadout->file:src/shared/next-floor-transition-rules.ts",
+      "source": "mechanic:inventory.mutator_loadout",
+      "target": "file:src/shared/next-floor-transition-rules.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:inventory.mutator_loadout->file:src/shared/run-inventory.ts",
+      "source": "mechanic:inventory.mutator_loadout",
+      "target": "file:src/shared/run-inventory.ts",
+      "kind": "implemented_by"
+    },
+    {
       "id": "implemented_by:mechanic:inventory.peek_charge->file:src/shared/gameplay-core.ts",
       "source": "mechanic:inventory.peek_charge",
       "target": "file:src/shared/gameplay-core.ts",
@@ -88241,6 +88714,24 @@
     {
       "id": "implemented_by:mechanic:inventory.region_shuffle_charge->file:src/shared/run-inventory.ts",
       "source": "mechanic:inventory.region_shuffle_charge",
+      "target": "file:src/shared/run-inventory.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:inventory.relic_loadout->file:src/shared/relic-offer-rules.ts",
+      "source": "mechanic:inventory.relic_loadout",
+      "target": "file:src/shared/relic-offer-rules.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:inventory.relic_loadout->file:src/shared/relics.ts",
+      "source": "mechanic:inventory.relic_loadout",
+      "target": "file:src/shared/relics.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:inventory.relic_loadout->file:src/shared/run-inventory.ts",
+      "source": "mechanic:inventory.relic_loadout",
       "target": "file:src/shared/run-inventory.ts",
       "kind": "implemented_by"
     },
@@ -88836,6 +89327,24 @@
       "id": "implemented_by:mechanic:progression.run_flow->file:src/shared/route-choice-rules.ts",
       "source": "mechanic:progression.run_flow",
       "target": "file:src/shared/route-choice-rules.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:progression.run_setup->file:src/renderer/store/runStartState.ts",
+      "source": "mechanic:progression.run_setup",
+      "target": "file:src/renderer/store/runStartState.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:progression.run_setup->file:src/shared/run-creation-rules.ts",
+      "source": "mechanic:progression.run_setup",
+      "target": "file:src/shared/run-creation-rules.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:progression.run_setup->file:src/shared/starting-loadouts.ts",
+      "source": "mechanic:progression.run_setup",
+      "target": "file:src/shared/starting-loadouts.ts",
       "kind": "implemented_by"
     },
     {
@@ -107352,6 +107861,27 @@
       "label": "applies immediate parasite ward"
     },
     {
+      "id": "modifies:mechanic:inventory.mutator_loadout->mechanic:phase.memorize:projects timing mutators into the study window",
+      "source": "mechanic:inventory.mutator_loadout",
+      "target": "mechanic:phase.memorize",
+      "kind": "modifies",
+      "label": "projects timing mutators into the study window"
+    },
+    {
+      "id": "modifies:mechanic:progression.relic_draft->mechanic:inventory.relic_loadout:adds the selected eligible relic",
+      "source": "mechanic:progression.relic_draft",
+      "target": "mechanic:inventory.relic_loadout",
+      "kind": "modifies",
+      "label": "adds the selected eligible relic"
+    },
+    {
+      "id": "modifies:mechanic:progression.run_flow->mechanic:inventory.mutator_loadout:replaces pressure only at the deterministic floor boundary",
+      "source": "mechanic:progression.run_flow",
+      "target": "mechanic:inventory.mutator_loadout",
+      "kind": "modifies",
+      "label": "replaces pressure only at the deterministic floor boundary"
+    },
+    {
       "id": "modifies:mechanic:relic.chapter_compass->mechanic:reward.boss_trophy_cache:requests claimed trophy score",
       "source": "mechanic:relic.chapter_compass",
       "target": "mechanic:reward.boss_trophy_cache",
@@ -108487,6 +109017,30 @@
       "kind": "reads"
     },
     {
+      "id": "reads:mechanic:inventory.contract_loadout->state:activeContract",
+      "source": "mechanic:inventory.contract_loadout",
+      "target": "state:activeContract",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:inventory.contract_loadout->state:maxPinsTotalRun",
+      "source": "mechanic:inventory.contract_loadout",
+      "target": "state:maxPinsTotalRun",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:inventory.contract_loadout->state:noDestroy",
+      "source": "mechanic:inventory.contract_loadout",
+      "target": "state:noDestroy",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:inventory.contract_loadout->state:noShuffle",
+      "source": "mechanic:inventory.contract_loadout",
+      "target": "state:noShuffle",
+      "kind": "reads"
+    },
+    {
       "id": "reads:mechanic:inventory.destroy_charge->state:destroyPairCharges",
       "source": "mechanic:inventory.destroy_charge",
       "target": "state:destroyPairCharges",
@@ -108553,6 +109107,30 @@
       "kind": "reads"
     },
     {
+      "id": "reads:mechanic:inventory.mutator_loadout->state:activeMutators",
+      "source": "mechanic:inventory.mutator_loadout",
+      "target": "state:activeMutators",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:inventory.mutator_loadout->state:gameMode",
+      "source": "mechanic:inventory.mutator_loadout",
+      "target": "state:gameMode",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:inventory.mutator_loadout->state:nextFloor",
+      "source": "mechanic:inventory.mutator_loadout",
+      "target": "state:nextFloor",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:inventory.mutator_loadout->state:runSeed",
+      "source": "mechanic:inventory.mutator_loadout",
+      "target": "state:runSeed",
+      "kind": "reads"
+    },
+    {
       "id": "reads:mechanic:inventory.peek_charge->state:peekCharges",
       "source": "mechanic:inventory.peek_charge",
       "target": "state:peekCharges",
@@ -108574,6 +109152,24 @@
       "id": "reads:mechanic:inventory.region_shuffle_charge->state:regionShuffleFreeThisFloor",
       "source": "mechanic:inventory.region_shuffle_charge",
       "target": "state:regionShuffleFreeThisFloor",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:inventory.relic_loadout->state:relicIds",
+      "source": "mechanic:inventory.relic_loadout",
+      "target": "state:relicIds",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:inventory.relic_loadout->state:relicOffer",
+      "source": "mechanic:inventory.relic_loadout",
+      "target": "state:relicOffer",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:inventory.relic_loadout->state:startingLoadoutId",
+      "source": "mechanic:inventory.relic_loadout",
+      "target": "state:startingLoadoutId",
       "kind": "reads"
     },
     {
@@ -110926,6 +111522,30 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:mechanic:inventory.contract_loadout->file:src/shared/board-power-actions.test.ts",
+      "source": "mechanic:inventory.contract_loadout",
+      "target": "file:src/shared/board-power-actions.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:inventory.contract_loadout->file:src/shared/run-creation-rules.test.ts",
+      "source": "mechanic:inventory.contract_loadout",
+      "target": "file:src/shared/run-creation-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:inventory.contract_loadout->file:src/shared/run-inventory.test.ts",
+      "source": "mechanic:inventory.contract_loadout",
+      "target": "file:src/shared/run-inventory.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:inventory.contract_loadout->file:src/shared/softlock-generator-contract.test.ts",
+      "source": "mechanic:inventory.contract_loadout",
+      "target": "file:src/shared/softlock-generator-contract.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:mechanic:inventory.destroy_charge->file:src/shared/board-power-actions.test.ts",
       "source": "mechanic:inventory.destroy_charge",
       "target": "file:src/shared/board-power-actions.test.ts",
@@ -111046,6 +111666,30 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:mechanic:inventory.mutator_loadout->file:src/shared/floor-mutator-schedule.test.ts",
+      "source": "mechanic:inventory.mutator_loadout",
+      "target": "file:src/shared/floor-mutator-schedule.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:inventory.mutator_loadout->file:src/shared/game.test.ts",
+      "source": "mechanic:inventory.mutator_loadout",
+      "target": "file:src/shared/game.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:inventory.mutator_loadout->file:src/shared/mutators.test.ts",
+      "source": "mechanic:inventory.mutator_loadout",
+      "target": "file:src/shared/mutators.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:inventory.mutator_loadout->file:src/shared/run-inventory.test.ts",
+      "source": "mechanic:inventory.mutator_loadout",
+      "target": "file:src/shared/run-inventory.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:mechanic:inventory.peek_charge->file:src/shared/gameplay-core.test.ts",
       "source": "mechanic:inventory.peek_charge",
       "target": "file:src/shared/gameplay-core.test.ts",
@@ -111072,6 +111716,24 @@
     {
       "id": "tested_by:mechanic:inventory.region_shuffle_charge->file:src/shared/run-inventory.test.ts",
       "source": "mechanic:inventory.region_shuffle_charge",
+      "target": "file:src/shared/run-inventory.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:inventory.relic_loadout->file:src/shared/relic-offer-rules.test.ts",
+      "source": "mechanic:inventory.relic_loadout",
+      "target": "file:src/shared/relic-offer-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:inventory.relic_loadout->file:src/shared/relics.test.ts",
+      "source": "mechanic:inventory.relic_loadout",
+      "target": "file:src/shared/relics.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:inventory.relic_loadout->file:src/shared/run-inventory.test.ts",
+      "source": "mechanic:inventory.relic_loadout",
       "target": "file:src/shared/run-inventory.test.ts",
       "kind": "tested_by"
     },
@@ -111619,6 +112281,24 @@
       "id": "tested_by:mechanic:progression.run_flow->file:src/shared/route-choice-rules.test.ts",
       "source": "mechanic:progression.run_flow",
       "target": "file:src/shared/route-choice-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:progression.run_setup->file:src/renderer/store/runStartState.test.ts",
+      "source": "mechanic:progression.run_setup",
+      "target": "file:src/renderer/store/runStartState.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:progression.run_setup->file:src/shared/run-creation-rules.test.ts",
+      "source": "mechanic:progression.run_setup",
+      "target": "file:src/shared/run-creation-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:progression.run_setup->file:src/shared/starting-loadouts.test.ts",
+      "source": "mechanic:progression.run_setup",
+      "target": "file:src/shared/starting-loadouts.test.ts",
       "kind": "tested_by"
     },
     {
@@ -118640,6 +119320,13 @@
       "label": "advances through typed floor command"
     },
     {
+      "id": "triggers:mechanic:inventory.mutator_loadout->mechanic:hazard.score_parasite:activates scheduled parasite pressure when selected",
+      "source": "mechanic:inventory.mutator_loadout",
+      "target": "mechanic:hazard.score_parasite",
+      "kind": "triggers",
+      "label": "activates scheduled parasite pressure when selected"
+    },
+    {
       "id": "triggers:mechanic:mode.wild_run->mechanic:board.wild_joker_tile:generates one joker tile while a token remains",
       "source": "mechanic:mode.wild_run",
       "target": "mechanic:board.wild_joker_tile",
@@ -120292,6 +120979,30 @@
       "kind": "writes"
     },
     {
+      "id": "writes:mechanic:progression.run_setup->state:activeContract",
+      "source": "mechanic:progression.run_setup",
+      "target": "state:activeContract",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:progression.run_setup->state:activeMutators",
+      "source": "mechanic:progression.run_setup",
+      "target": "state:activeMutators",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:progression.run_setup->state:relicIds",
+      "source": "mechanic:progression.run_setup",
+      "target": "state:relicIds",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:progression.run_setup->state:startingLoadoutId",
+      "source": "mechanic:progression.run_setup",
+      "target": "state:startingLoadoutId",
+      "kind": "writes"
+    },
+    {
       "id": "writes:mechanic:progression.shard_to_life->state:comboShards",
       "source": "mechanic:progression.shard_to_life",
       "target": "state:comboShards",
@@ -121342,12 +122053,5 @@
       "kind": "writes"
     }
   ],
-  "diagnostics": [
-    {
-      "severity": "warning",
-      "code": "unmodeled_content_family",
-      "subject": "inventory_item",
-      "detail": "3 source-declared items lack mechanic nodes: contract_loadout, mutator_loadout, relic_loadout"
-    }
-  ]
+  "diagnostics": []
 }
