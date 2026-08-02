@@ -37,6 +37,8 @@ import { createDungeonExitActivationTransition } from './dungeon-exit-rules';
 import { getDungeonExitStatus } from './dungeon-board-status';
 import { advanceScoreParasiteFloor } from './score-parasite-rules';
 import { hasMutator } from './mutators';
+import { tilesArePairMatch } from './scoring-rules';
+import { WILD_PAIR_KEY } from './tile-identity';
 
 export interface GameplayCommandResult {
     run: RunState;
@@ -66,6 +68,7 @@ const UNDO_RESOLVE_SOURCE: GameplaySource = { kind: 'power', id: 'undo_resolve' 
 const SHOP_SOURCE: GameplaySource = { kind: 'shop', id: 'run_shop' };
 const DUNGEON_EXIT_SOURCE: GameplaySource = { kind: 'system', id: 'dungeon_exit' };
 const SCORE_PARASITE_SOURCE: GameplaySource = { kind: 'system', id: 'score_parasite' };
+const WILD_JOKER_SOURCE: GameplaySource = { kind: 'system', id: 'wild_joker' };
 const gameplayRewardPerkIds = new Set<RewardPerkId>(GAMEPLAY_REWARD_PERK_IDS);
 type GameplayEventPayload<T = GameplayEvent> = T extends GameplayEvent
     ? Omit<T, 'schemaVersion' | 'eventId' | 'commandId' | 'sequence' | 'source'>
@@ -890,6 +893,57 @@ const applyParasiteAdvanceCommand = (
     return { run: nextRun, command, events, accepted: true };
 };
 
+const applyWildMatchConsumeCommand = (
+    run: RunState,
+    command: Extract<GameplayCommand, { type: 'wild_match.consume' }>
+): GameplayCommandResult => {
+    const wildTile = run.board?.tiles.find((tile) => tile.id === command.wildTileId);
+    const pairedTile = run.board?.tiles.find((tile) => tile.id === command.pairedTileId);
+    const tokensBefore = getRunInventoryItemQuantity(run, 'wild_match_token');
+    if (
+        !wildTile ||
+        !pairedTile ||
+        wildTile.id === pairedTile.id ||
+        wildTile.pairKey !== WILD_PAIR_KEY ||
+        wildTile.state !== 'flipped' ||
+        pairedTile.state !== 'flipped' ||
+        !tilesArePairMatch(wildTile, pairedTile) ||
+        tokensBefore <= 0
+    ) {
+        return rejectedResult(run, command.commandId, 'Wild match token cannot be consumed for these tiles.', command);
+    }
+    const consumed = useRunInventoryItem(run, 'wild_match_token');
+    if (!consumed.applied) {
+        return rejectedResult(run, command.commandId, 'Wild match token was unavailable.', command);
+    }
+    const tokensAfter = getRunInventoryItemQuantity(consumed.run, 'wild_match_token');
+    const events: GameplayEvent[] = [];
+    const writeEvent = makeEventWriter(command.commandId, WILD_JOKER_SOURCE, events);
+    writeEvent({
+        type: 'inventory.changed',
+        itemId: 'wild_match_token',
+        operation: 'consume',
+        requested: 1,
+        applied: tokensAfter - tokensBefore,
+        before: tokensBefore,
+        after: tokensAfter
+    });
+    writeEvent({
+        type: 'wild_match.consumed',
+        wildTileId: wildTile.id,
+        pairedTileId: pairedTile.id,
+        tokensBefore,
+        tokensAfter
+    });
+    writeEvent({
+        type: 'feedback.requested',
+        cue: 'wild_joker.match_consumed',
+        message: `Wild Joker bridged ${pairedTile.label}; ${tokensAfter} wildcard token${tokensAfter === 1 ? '' : 's'} remain.`,
+        tone: 'reward'
+    });
+    return { run: consumed.run, command, events, accepted: true };
+};
+
 export const reduceGameplayCommand = (run: RunState, input: unknown): GameplayCommandResult => {
     const parsed = gameplayCommandSchema.safeParse(input);
     if (!parsed.success) {
@@ -934,6 +988,9 @@ export const reduceGameplayCommand = (run: RunState, input: unknown): GameplayCo
     }
     if (command.type === 'floor.parasite_advance') {
         return applyParasiteAdvanceCommand(run, command);
+    }
+    if (command.type === 'wild_match.consume') {
+        return applyWildMatchConsumeCommand(run, command);
     }
     const definition = getGameplayContentDefinition(command.definitionId);
     if (!definition) {

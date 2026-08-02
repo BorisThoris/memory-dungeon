@@ -15,6 +15,7 @@ import {
     createGameplayStrayRemoveCommand,
     createGameplayTileSwapCommand,
     createGameplayUndoResolveCommand,
+    createGameplayWildMatchConsumeCommand,
     gameplayCommandSchema,
     gameplayEventSchema,
     type GameplayCommand,
@@ -23,6 +24,8 @@ import {
 import { reduceGameplayCommand, replayGameplayCommands } from './gameplay-core';
 import { RUN_INVENTORY_ITEM_IDS, getRunInventoryItemQuantity } from './run-inventory';
 import { createMulberry32, pickRngIndex } from './rng';
+import { tilesArePairMatch } from './scoring-rules';
+import { WILD_PAIR_KEY } from './tile-identity';
 
 export interface GameplayCoreSimulationOptions {
     seed: number;
@@ -74,6 +77,18 @@ const availableStrayTargets = (run: RunState): string[] => {
         : [];
 };
 
+const availableWildMatchPair = (run: RunState): { wildTileId: string; pairedTileId: string } | null => {
+    if (getRunInventoryItemQuantity(run, 'wild_match_token') <= 0) {
+        return null;
+    }
+    const flippedTiles = (run.board?.tiles ?? []).filter((tile) => tile.state === 'flipped');
+    const wildTile = flippedTiles.find((tile) => tile.pairKey === WILD_PAIR_KEY);
+    const pairedTile = flippedTiles.find((tile) => tile.id !== wildTile?.id && tile.pairKey !== WILD_PAIR_KEY);
+    return wildTile && pairedTile && tilesArePairMatch(wildTile, pairedTile)
+        ? { wildTileId: wildTile.id, pairedTileId: pairedTile.id }
+        : null;
+};
+
 const commandForStep = (
     run: RunState,
     rng: () => number,
@@ -82,8 +97,16 @@ const commandForStep = (
     invalidTraitChance: number
 ): GameplayCommand => {
     const definitions = GAMEPLAY_CONTENT_DEFINITIONS;
-    const actionIndex = pickRngIndex(rng, definitions.length + 12);
     const commandId = `sim:${seed}:${String(step).padStart(4, '0')}`;
+    const actionIndex = pickRngIndex(rng, definitions.length + 12);
+    const wildMatchPair = step === 0 ? availableWildMatchPair(run) : null;
+    if (wildMatchPair) {
+        return createGameplayWildMatchConsumeCommand(
+            commandId,
+            wildMatchPair.wildTileId,
+            wildMatchPair.pairedTileId
+        );
+    }
     if (actionIndex === definitions.length) {
         const targets = availablePeekTargets(run);
         const target = targets[pickRngIndex(rng, targets.length)];
@@ -100,10 +123,8 @@ const commandForStep = (
     }
     if (actionIndex === definitions.length + 2) {
         const targets = availableStrayTargets(run);
-        const target = targets[pickRngIndex(rng, targets.length)];
-        if (target) {
-            return createGameplayStrayRemoveCommand(commandId, target);
-        }
+        const target = targets[pickRngIndex(rng, targets.length)] ?? 'missing-stray-target';
+        return createGameplayStrayRemoveCommand(commandId, target);
     }
     if (actionIndex === definitions.length + 3) {
         return createGameplayRiskWagerAcceptCommand(commandId);

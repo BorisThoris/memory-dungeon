@@ -1,6 +1,7 @@
 import type { FindableKind, RelicId, RunState } from './contracts';
 import {
     createGameplayDefinitionCommand,
+    createGameplayWildMatchConsumeCommand,
     type GameplayCommand,
     type GameplayEvent
 } from './gameplay-core-contracts';
@@ -38,6 +39,12 @@ export interface GameplaySlayerFloorClearAdapterResult {
     riskWagerFavorGain: number;
     riskWagerStreakFloor: number;
     parasiteRelief: number;
+}
+
+export interface GameplayWildMatchAdapterResult {
+    run: RunState;
+    commands: GameplayCommand[];
+    events: GameplayEvent[];
 }
 
 const RELIC_IMMEDIATE_DEFINITION_IDS: Partial<Record<RelicId, string>> = {
@@ -206,4 +213,19 @@ export const resolveSlayerFloorClearThroughGameplayCore = (
             0
         )
     };
+};
+
+/** Records one wildcard bridge while delegating the surrounding match payout to the established resolver. */
+export const consumeWildMatchThroughGameplayCore = (
+    run: RunState,
+    wildTileId: string,
+    pairedTileId: string,
+    commandId: string
+): GameplayWildMatchAdapterResult => {
+    const command = createGameplayWildMatchConsumeCommand(commandId, wildTileId, pairedTileId);
+    const result = reduceGameplayCommand(run, command);
+    if (!result.accepted) {
+        throw new Error('Wild match consumption command was unexpectedly rejected.');
+    }
+    return { run: result.run, commands: [command], events: result.events };
 };

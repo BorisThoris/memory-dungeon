@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { BoardState, RunState, Tile } from './contracts';
 import { runGameplayCoreSimulation } from './gameplay-core-simulation';
+import { WILD_PAIR_KEY } from './tile-identity';
 
 const tile = (id: string, pairKey: string, tileTraitKind?: Tile['tileTraitKind']): Tile => ({
     id,
@@ -23,11 +24,11 @@ const initialRun = (seed: number): RunState => ({
             tile('echo-b', 'echo', 'echo'),
             tile('conduit-a', 'conduit', 'conduit'),
             tile('conduit-b', 'conduit', 'conduit'),
-            tile('plain-a', 'plain'),
+            { ...tile('plain-a', 'plain'), state: 'flipped' },
             tile('plain-b', 'plain'),
-            tile('wild', '__wild__')
+            { ...tile('wild', WILD_PAIR_KEY), state: 'flipped' }
         ],
-        flippedTileIds: [],
+        flippedTileIds: ['plain-a', 'wild'],
         matchedPairs: 0,
         floorArchetypeId: null,
         featuredObjectiveId: null
@@ -35,6 +36,9 @@ const initialRun = (seed: number): RunState => ({
     runSeed: seed,
     runRulesVersion: 1,
     practiceMode: true,
+    wildMenuRun: true,
+    wildTileId: 'wild',
+    wildMatchesRemaining: 1,
     peekCharges: 0,
     flashPairCharges: 1,
     flashPairRevealedTileIds: [],
@@ -121,9 +125,13 @@ describe('seeded gameplay core simulation', () => {
                 'board.flash_pair',
                 'board.undo_resolve',
                 'shop.purchase',
-                'dungeon.exit_activate'
+                'dungeon.exit_activate',
+                'wild_match.consume'
             ])
         );
+        expect(first.commandTypeCounts['wild_match.consume']).toBe(1);
+        expect(first.eventTypeCounts['wild_match.consumed']).toBe(1);
+        expect(first.finalRun.wildMatchesRemaining).toBe(0);
     });
 
     it('sweeps distinct seeds without negative inventory or replay drift', () => {

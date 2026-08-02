@@ -8173,6 +8173,37 @@ describe('wildTileId bookkeeping', () => {
         expect(getWildTileIdFromBoard(run.board!)).toBeNull();
     });
 
+    it('consumes one token per wild match and journals the wildcard bridge', () => {
+        const wild = createTile('wild', WILD_PAIR_KEY, 'Wild');
+        const target = createTile('a1', 'A', 'A');
+        const withTwoTokens = {
+            ...createRun([wild, target, createTile('a2', 'A', 'A')]),
+            status: 'playing' as const,
+            wildMatchesRemaining: 2,
+            wildTileId: wild.id
+        };
+
+        const resolved = resolveBoardTurn(flipTile(flipTile(withTwoTokens, wild.id), target.id));
+
+        expect(resolved.wildMatchesRemaining).toBe(1);
+        expect(resolved.powersUsedThisRun).toBe(true);
+        expect(resolved.gameplayCommandJournal).toEqual(expect.arrayContaining([
+            expect.objectContaining({
+                type: 'wild_match.consume',
+                wildTileId: wild.id,
+                pairedTileId: target.id
+            })
+        ]));
+        expect(resolved.gameplayEventJournal).toEqual(expect.arrayContaining([
+            expect.objectContaining({
+                type: 'wild_match.consumed',
+                tokensBefore: 2,
+                tokensAfter: 1
+            }),
+            expect.objectContaining({ type: 'feedback.requested', cue: 'wild_joker.match_consumed' })
+        ]));
+    });
+
     it('keeps wildTileId aligned with the board after advanceToNextLevel', () => {
         const start = finishMemorizePhase(createWildRun(0));
         expect(start.wildTileId).not.toBeNull();
@@ -8200,6 +8231,8 @@ describe('wildTileId bookkeeping', () => {
         const next = advanceToNextLevel(cleared);
         expect(next.board).not.toBeNull();
         expect(next.wildTileId).toBe(getWildTileIdFromBoard(next.board!));
+        expect(next.wildMatchesRemaining).toBe(1);
+        expect(next.wildTileId).not.toBeNull();
     });
 });
 

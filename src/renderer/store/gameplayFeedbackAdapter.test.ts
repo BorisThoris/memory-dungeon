@@ -159,6 +159,20 @@ describe('gameplayFeedbackAdapter', () => {
         expect(presentations.map((item) => item.audioCategory)).toEqual(['parasite', 'parasite']);
     });
 
+    it('classifies Wild Joker bridge feedback from the typed system source', () => {
+        const presentation = projectGameplayFeedback([
+            event(0, {
+                type: 'feedback.requested',
+                cue: 'wild_joker.match_consumed',
+                message: 'Wild Joker bridged a symbol.',
+                source: { kind: 'system', id: 'wild_joker' },
+                tone: 'reward'
+            })
+        ])[0];
+
+        expect(presentation).toMatchObject({ audioCategory: 'wild-match' });
+    });
+
     it('adds the actual typed overflow score to otherwise ambiguous proc feedback', () => {
         const presentation = projectGameplayFeedback([
             event(0, {

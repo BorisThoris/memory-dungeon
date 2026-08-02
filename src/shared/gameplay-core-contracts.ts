@@ -1244,6 +1244,14 @@ export const gameplayCommandSchema = z.discriminatedUnion('type', [
             ...commandBase,
             type: z.literal('floor.parasite_advance')
         })
+        .strict(),
+    z
+        .object({
+            ...commandBase,
+            type: z.literal('wild_match.consume'),
+            wildTileId: z.string().min(1).max(160),
+            pairedTileId: z.string().min(1).max(160)
+        })
         .strict()
 ]);
 
@@ -1509,6 +1517,16 @@ export const gameplayEventSchema = z.discriminatedUnion('type', [
     z
         .object({
             ...eventBase,
+            type: z.literal('wild_match.consumed'),
+            wildTileId: z.string().min(1).max(160),
+            pairedTileId: z.string().min(1).max(160),
+            tokensBefore: z.number().int().positive(),
+            tokensAfter: z.number().int().nonnegative()
+        })
+        .strict(),
+    z
+        .object({
+            ...eventBase,
             type: z.literal('currency.changed'),
             currency: z.literal('shop_gold'),
             requested: z.number().int().positive(),
@@ -1711,4 +1729,17 @@ export const createGameplayParasiteAdvanceCommand = (commandId: string): Gamepla
         schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
         commandId,
         type: 'floor.parasite_advance'
+    });
+
+export const createGameplayWildMatchConsumeCommand = (
+    commandId: string,
+    wildTileId: string,
+    pairedTileId: string
+): GameplayCommand =>
+    gameplayCommandSchema.parse({
+        schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
+        commandId,
+        type: 'wild_match.consume',
+        wildTileId,
+        pairedTileId
     });

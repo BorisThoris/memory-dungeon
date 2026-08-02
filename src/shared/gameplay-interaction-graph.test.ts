@@ -627,4 +627,37 @@ describe('gameplay interaction graph', () => {
             expect.objectContaining({ source: 'build.locksmith', target: 'lock.typed_key', kind: 'counterplay' })
         ]));
     });
+
+    it('connects Wild Run setup through one-token wildcard matches and floor continuity', () => {
+        const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
+        expect(gameplayInteractionGraph.version).toBe(12);
+        expect(byId.get('mode.wild_run')).toMatchObject({
+            kind: 'progression',
+            role: 'persistent_joker_mode_setup'
+        });
+        expect(byId.get('inventory.wild_match_token')).toMatchObject({
+            kind: 'inventory',
+            role: 'persistent_single_wild_match_resource',
+            tests: expect.arrayContaining(['src/shared/gameplay-core.test.ts', 'src/shared/game.test.ts'])
+        });
+        expect(byId.get('board.wild_joker_tile')).toMatchObject({
+            kind: 'board',
+            role: 'single_tile_pair_bridge'
+        });
+        expect(byId.get('power.wild_match')).toMatchObject({
+            kind: 'power',
+            role: 'chosen_pair_bridge_with_exact_token_spend'
+        });
+        expect(gameplayInteractionGraph.edges).toEqual(expect.arrayContaining([
+            expect.objectContaining({ source: 'mode.wild_run', target: 'inventory.wild_match_token', kind: 'grants' }),
+            expect.objectContaining({ source: 'inventory.wild_match_token', target: 'board.wild_joker_tile', kind: 'enables' }),
+            expect.objectContaining({ source: 'inventory.wild_match_token', target: 'power.wild_match', kind: 'enables' }),
+            expect.objectContaining({ source: 'inventory.wild_match_token', target: 'feedback.gameplay_hud', kind: 'displays' }),
+            expect.objectContaining({ source: 'power.wild_match', target: 'inventory.wild_match_token', kind: 'consumes' }),
+            expect.objectContaining({ source: 'power.wild_match', target: 'objective.floor_clear', kind: 'counterplay' }),
+            expect.objectContaining({ source: 'power.gambit', target: 'power.wild_match', kind: 'synergy' }),
+            expect.objectContaining({ source: 'power.stray_remove', target: 'board.wild_joker_tile', kind: 'counterplay' }),
+            expect.objectContaining({ source: 'power.wild_match', target: 'feedback.gameplay_hud', kind: 'displays' })
+        ]));
+    });
 });

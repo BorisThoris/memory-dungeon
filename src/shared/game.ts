@@ -51,7 +51,8 @@ import {
     isBoardComplete
 } from './board-inspection';
 import {
-    DECOY_PAIR_KEY
+    DECOY_PAIR_KEY,
+    WILD_PAIR_KEY
 } from './tile-identity';
 import {
     calculateRating,
@@ -93,6 +94,7 @@ import { resolveTurnMatchScoringSummary } from './turn-match-scoring-summary-rul
 import { resolveTileTraitEffects } from './tile-trait-rules';
 import { appendGameplayJournal } from './gameplay-journal';
 import {
+    consumeWildMatchThroughGameplayCore,
     resolveFindableMatchRewardThroughGameplayCore,
     resolveSlayerFloorClearThroughGameplayCore
 } from './gameplay-core-adapters';
@@ -611,7 +613,14 @@ const resolveGambitThree = (run: RunState, encorePairKeys: string[]): RunState =
         const traitRouteObjective = applyTraitRouteObjectiveProgress(run, traitReward.interactionTags);
         const lives = survivalReward.lives;
         const routeFavor = gainRelicFavor(run, routeCardReward.relicFavor + dungeonReward.relicFavor + traitReward.relicFavorGain);
-        const wildMatchesRemaining = usedWild ? 0 : run.wildMatchesRemaining;
+        const wildMatch = usedWild && runNonNegativeInteger(run.wildMatchesRemaining) > 0
+            ? consumeWildMatchThroughGameplayCore(
+                  run,
+                  tileMatchA.pairKey === WILD_PAIR_KEY ? tileMatchA.id : tileMatchB.id,
+                  tileMatchA.pairKey === WILD_PAIR_KEY ? tileMatchB.id : tileMatchA.id,
+                  `wild-match:${run.runSeed}:${run.board.level}:${runNonNegativeInteger(run.matchResolutionsThisFloor)}:gambit`
+              )
+            : { run, commands: [], events: [] };
 
         const spunG = rotateAnchorSealPressure(run, board);
         const followup = resolveTurnMatchFollowup({
@@ -678,9 +687,9 @@ const resolveGambitThree = (run: RunState, encorePairKeys: string[]): RunState =
         const stats = normalizeSessionStats(run.stats);
 
         const journaledRun = appendGameplayJournal(
-            run,
-            [...findableReward.commands, ...(traitReward.gameplayCommands ?? [])],
-            [...findableReward.events, ...(traitReward.gameplayEvents ?? [])]
+            wildMatch.run,
+            [...wildMatch.commands, ...findableReward.commands, ...(traitReward.gameplayCommands ?? [])],
+            [...wildMatch.events, ...findableReward.events, ...(traitReward.gameplayEvents ?? [])]
         );
         const nextRun: RunState = {
             ...journaledRun,
@@ -691,7 +700,7 @@ const resolveGambitThree = (run: RunState, encorePairKeys: string[]): RunState =
             lives,
             board: spunG.board,
             shiftingSpotlightNonce: spunG.shiftingSpotlightNonce,
-            wildMatchesRemaining: usedWild ? 0 : runNonNegativeInteger(wildMatchesRemaining),
+            wildMatchesRemaining: runNonNegativeInteger(journaledRun.wildMatchesRemaining),
             peekCharges: runNonNegativeInteger(run.peekCharges) + runNonNegativeInteger(traitReward.peekChargeGain),
             shuffleCharges: runNonNegativeInteger(run.shuffleCharges) + runNonNegativeInteger(traitReward.shuffleChargeGain),
             regionShuffleCharges:
@@ -894,7 +903,14 @@ const resolveTwoFlippedTiles = (run: RunState, encorePairKeys: string[]): RunSta
         const lives = survivalReward.lives;
         const routeFavor = gainRelicFavor(run, routeCardReward.relicFavor + dungeonReward.relicFavor + traitReward.relicFavorGain);
 
-        const wildMatchesRemaining = usedWild ? 0 : run.wildMatchesRemaining;
+        const wildMatch = usedWild && runNonNegativeInteger(run.wildMatchesRemaining) > 0
+            ? consumeWildMatchThroughGameplayCore(
+                  run,
+                  firstTile.pairKey === WILD_PAIR_KEY ? firstTile.id : secondTile.id,
+                  firstTile.pairKey === WILD_PAIR_KEY ? secondTile.id : firstTile.id,
+                  `wild-match:${run.runSeed}:${run.board.level}:${runNonNegativeInteger(run.matchResolutionsThisFloor)}:match`
+              )
+            : { run, commands: [], events: [] };
 
         const spun = rotateAnchorSealPressure(run, board);
         const followup = resolveTurnMatchFollowup({
@@ -961,9 +977,9 @@ const resolveTwoFlippedTiles = (run: RunState, encorePairKeys: string[]): RunSta
         const stats = normalizeSessionStats(run.stats);
 
         const journaledRun = appendGameplayJournal(
-            run,
-            [...findableReward.commands, ...(traitReward.gameplayCommands ?? [])],
-            [...findableReward.events, ...(traitReward.gameplayEvents ?? [])]
+            wildMatch.run,
+            [...wildMatch.commands, ...findableReward.commands, ...(traitReward.gameplayCommands ?? [])],
+            [...wildMatch.events, ...findableReward.events, ...(traitReward.gameplayEvents ?? [])]
         );
         const nextRun: RunState = {
             ...journaledRun,
@@ -972,7 +988,7 @@ const resolveTwoFlippedTiles = (run: RunState, encorePairKeys: string[]): RunSta
             board: spun.board,
             shiftingSpotlightNonce: spun.shiftingSpotlightNonce,
             powersUsedThisRun: usedWild ? true : run.powersUsedThisRun,
-            wildMatchesRemaining: usedWild ? 0 : runNonNegativeInteger(wildMatchesRemaining),
+            wildMatchesRemaining: runNonNegativeInteger(journaledRun.wildMatchesRemaining),
             peekCharges: runNonNegativeInteger(run.peekCharges) + runNonNegativeInteger(traitReward.peekChargeGain),
             shuffleCharges: runNonNegativeInteger(run.shuffleCharges) + runNonNegativeInteger(traitReward.shuffleChargeGain),
             regionShuffleCharges:

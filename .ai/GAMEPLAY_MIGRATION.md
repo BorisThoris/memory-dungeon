@@ -198,6 +198,20 @@ Supply Cache now has an explicit role between information control and blocker re
 
 Destroy Pair remains an established deterministic compatibility consumer because its floor-finalization callback is still owned by the game orchestrator. A later action-boundary migration can journal the removal itself without changing Supply Cache’s content definition.
 
+## Fourteenth vertical slice: Wild Joker Token
+
+Wild Run now treats its joker as a persistent, countable resource instead of collapsing every stored use after the first match:
+
+1. Starting Wild Run grants one `wild_match_token` and generates one Wild Joker tile through the established run-creation rules.
+2. A legal normal or Gambit-assisted wildcard pair executes `wild_match.consume` with the exact Wild and paired tile IDs.
+3. The reducer requires two distinct flipped tiles, exactly one Wild Joker, a legal wildcard pairing, and a positive token balance before spending anything.
+4. Successful resolution emits the inventory decrement, `wild_match.consumed`, and the `wild_joker.match_consumed` feedback cue as one deterministic journal sequence.
+5. Each match consumes exactly one token. Additional tokens remain banked instead of being reset to zero.
+6. If a token remains when the floor advances, the next generated board receives a new Wild Joker tile; if none remain, normal board generation resumes.
+7. Stray Remove remains the completion-safe escape hatch for an unwanted Wild singleton, and Gambit can still turn a third flip into a valid wildcard match.
+
+Graph v12 connects mode setup, token inventory, board generation, normal and Gambit match resolution, exact consumption, HUD feedback, floor completion, persistence, and next-floor continuity. Core and live-game tests cover rejection without a valid flipped pair and the two-token-to-one-token regression that previously erased the whole bank.
+
 ## Current slice status
 
 Implemented in the Conduit Cartographer vertical slice:

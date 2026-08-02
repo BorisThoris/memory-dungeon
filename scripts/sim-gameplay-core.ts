@@ -1,5 +1,6 @@
 import type { BoardState, RunState, Tile } from '../src/shared/contracts';
 import { runGameplayCoreSimulation } from '../src/shared/gameplay-core-simulation';
+import { WILD_PAIR_KEY } from '../src/shared/tile-identity';
 
 const numericArg = (name: string, fallback: number): number => {
     const prefix = `--${name}=`;
@@ -29,11 +30,11 @@ const board: BoardState = {
         tile('echo-b', 'echo', 'echo'),
         tile('conduit-a', 'conduit', 'conduit'),
         tile('conduit-b', 'conduit', 'conduit'),
-        tile('plain-a', 'plain'),
+        { ...tile('plain-a', 'plain'), state: 'flipped' },
         tile('plain-b', 'plain'),
-        tile('wild', '__wild__')
+        { ...tile('wild', WILD_PAIR_KEY), state: 'flipped' }
     ],
-    flippedTileIds: [],
+    flippedTileIds: ['plain-a', 'wild'],
     matchedPairs: 0,
     floorArchetypeId: null,
     featuredObjectiveId: null
@@ -43,6 +44,9 @@ const initialRun = {
     board,
     runSeed: seed,
     runRulesVersion: 1,
+    wildMenuRun: true,
+    wildTileId: 'wild',
+    wildMatchesRemaining: 1,
     peekCharges: 0,
     strayRemoveCharges: 1,
     strayRemoveArmed: true,

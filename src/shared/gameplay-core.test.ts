@@ -45,6 +45,7 @@ import {
     createGameplayStrayRemoveCommand,
     createGameplayTileSwapCommand,
     createGameplayUndoResolveCommand,
+    createGameplayWildMatchConsumeCommand,
     gameplayCommandSchema,
     gameplayContentDefinitionSchema,
     gameplayEventSchema
@@ -60,7 +61,7 @@ import { resolveTileTraitEffects } from './tile-trait-rules';
 import { purchaseShopOffer } from './shop-rules';
 import { createDungeonExitActivationTransition } from './dungeon-exit-rules';
 import { createNewRun } from './game';
-import { EXIT_PAIR_KEY } from './tile-identity';
+import { EXIT_PAIR_KEY, WILD_PAIR_KEY } from './tile-identity';
 
 const tile = (id: string, pairKey: string, tileTraitKind?: Tile['tileTraitKind']): Tile => ({
     id,
@@ -343,6 +344,51 @@ describe('deterministic gameplay core', () => {
                 cue: 'hazard.score_parasite.life_lost'
             })
         ]);
+    });
+
+    it('consumes exactly one Wild Match token for a resolved wildcard bridge', () => {
+        const wildcardRun = run({
+            wildMatchesRemaining: 2,
+            board: {
+                ...board(),
+                pairCount: 1,
+                tiles: [
+                    { ...tile('wild', WILD_PAIR_KEY), state: 'flipped' },
+                    { ...tile('symbol', 'symbol'), state: 'flipped' },
+                    tile('symbol-mate', 'symbol')
+                ],
+                flippedTileIds: ['wild', 'symbol']
+            }
+        });
+        const result = reduceGameplayCommand(
+            wildcardRun,
+            createGameplayWildMatchConsumeCommand('wild-consume', 'wild', 'symbol')
+        );
+        const rejected = reduceGameplayCommand(
+            wildcardRun,
+            createGameplayWildMatchConsumeCommand('wild-hidden', 'wild', 'symbol-mate')
+        );
+
+        expect(result).toMatchObject({ accepted: true, run: { wildMatchesRemaining: 1 } });
+        expect(result.events).toEqual([
+            expect.objectContaining({
+                type: 'inventory.changed',
+                itemId: 'wild_match_token',
+                operation: 'consume',
+                before: 2,
+                after: 1,
+                applied: -1
+            }),
+            expect.objectContaining({
+                type: 'wild_match.consumed',
+                wildTileId: 'wild',
+                pairedTileId: 'symbol',
+                tokensBefore: 2,
+                tokensAfter: 1
+            }),
+            expect.objectContaining({ type: 'feedback.requested', cue: 'wild_joker.match_consumed' })
+        ]);
+        expect(rejected).toMatchObject({ accepted: false, run: wildcardRun });
     });
 
     it('models the Saboteur reward, Breaker Chisel, and Ward Spark as one trap-control build', () => {
