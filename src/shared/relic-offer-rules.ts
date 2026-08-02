@@ -5,14 +5,16 @@ import {
     applyRelicOfferService,
     getRelicDraftOptionReasons,
     getRelicOfferServiceActions,
-    isRelicDraftEligible,
     needsRelicPick,
     relicMilestoneIndexForFloor,
-    runRelicIds,
     rollRelicOptions,
     skipRelicOfferMilestone
 } from './relics';
 import { decrementRunCounter, runNonNegativeInteger } from './run-number-guards';
+import {
+    createRelicPickTransitionResult,
+    type RelicPickTransitionResult
+} from './relic-pick-transition-rules';
 
 export const MAX_RELIC_PICKS_PER_OFFER = 3;
 
@@ -81,88 +83,16 @@ export const openRelicOffer = (run: RunState): RunState => {
     };
 };
 
-export type RelicPickAdvanceResult =
-    | { kind: 'unchanged'; run: RunState }
-    | { kind: 'offerContinues'; run: RunState }
-    | { kind: 'advanceToNextLevel'; run: RunState };
+export type RelicPickAdvanceResult = RelicPickTransitionResult;
 
-export const createRelicPickAdvanceResult = (run: RunState, relicId: RelicId): RelicPickAdvanceResult => {
-    if (run.status !== 'levelComplete' || runNonNegativeInteger(run.lives) <= 0) {
-        return { kind: 'unchanged', run };
-    }
-    const offer = run.relicOffer;
-    if (!offer?.options.includes(relicId) || !isRelicDraftEligible(relicId, run)) {
-        return { kind: 'unchanged', run };
-    }
-
-    let next: RunState = {
-        ...run,
-        relicIds: [...runRelicIds(run.relicIds), relicId]
-    };
-    next = applyRelicImmediateThroughGameplayCore(
-        next,
-        relicId,
-        `relic-pick:${run.runSeed}:${offer.tier}:${offer.pickRound}:${relicId}`
-    ).run;
-
-    const remainingAfter = decrementRunCounter(offer.picksRemaining);
-
-    if (remainingAfter > 0) {
-        const cleared = run.lastLevelResult!.level;
-        const tierIndex = relicMilestoneIndexForFloor(cleared);
-        if (tierIndex === null) {
-            return { kind: 'unchanged', run };
-        }
-        const newPickRound = runNonNegativeInteger(offer.pickRound) + 1;
-        const newOptions = rollRelicOptions(next, tierIndex, cleared, newPickRound);
-        const contextualOptionReasons = getRelicDraftOptionReasons(next, cleared, newOptions);
-        if (newOptions.length === 0) {
-            return {
-                kind: 'advanceToNextLevel',
-                run: {
-                    ...next,
-                    relicTiersClaimed: runNonNegativeInteger(run.relicTiersClaimed) + 1,
-                    relicOffer: null
-                }
-            };
-        }
-        return {
-            kind: 'offerContinues',
-            run: {
-                ...next,
-                relicOffer: {
-                    tier: offer.tier,
-                    options: newOptions,
-                    picksRemaining: remainingAfter,
-                    pickRound: newPickRound,
-                    serviceUses: offer.serviceUses,
-                    bannedRelicIds: offer.bannedRelicIds,
-                    upgradedOffer: offer.upgradedOffer,
-                    services: getRelicOfferServiceActions({
-                        ...next,
-                        relicOffer: {
-                            ...offer,
-                            options: newOptions,
-                            picksRemaining: remainingAfter,
-                            pickRound: newPickRound
-                        }
-                    }),
-                    favorBonusPicks: offer.favorBonusPicks,
-                    contextualOptionReasons
-                }
-            }
-        };
-    }
-
-    return {
-        kind: 'advanceToNextLevel',
-        run: {
-            ...next,
-            relicTiersClaimed: runNonNegativeInteger(run.relicTiersClaimed) + 1,
-            relicOffer: null
-        }
-    };
-};
+export const createRelicPickAdvanceResult = (run: RunState, relicId: RelicId): RelicPickAdvanceResult =>
+    createRelicPickTransitionResult(run, relicId, (ownedRun, selectedRelicId) =>
+        applyRelicImmediateThroughGameplayCore(
+            ownedRun,
+            selectedRelicId,
+            `relic-pick:${run.runSeed}:${run.relicOffer?.tier ?? 0}:${run.relicOffer?.pickRound ?? 0}:${selectedRelicId}`
+        ).run
+    );
 
 export const applyRelicOfferServiceToRun = (
     run: RunState,

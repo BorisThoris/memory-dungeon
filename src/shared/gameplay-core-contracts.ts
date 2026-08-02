@@ -16,6 +16,7 @@ export const GAMEPLAY_RELIC_IDS = [
     'extra_shuffle_charge',
     'first_shuffle_free_per_floor',
     'memorize_bonus_ms',
+    'peek_charge_plus_one',
     'memorize_under_short_memorize',
     'region_shuffle_free_first',
     'combo_shard_plus_step',
@@ -1268,6 +1269,13 @@ export const gameplayCommandSchema = z.discriminatedUnion('type', [
     z
         .object({
             ...commandBase,
+            type: z.literal('relic.pick'),
+            relicId: z.enum(GAMEPLAY_RELIC_IDS)
+        })
+        .strict(),
+    z
+        .object({
+            ...commandBase,
             type: z.literal('wild_match.consume'),
             wildTileId: z.string().min(1).max(160),
             pairedTileId: z.string().min(1).max(160)
@@ -1607,6 +1615,26 @@ export const gameplayEventSchema = z.discriminatedUnion('type', [
     z
         .object({
             ...eventBase,
+            type: z.literal('relic.picked'),
+            relicId: z.enum(GAMEPLAY_RELIC_IDS),
+            definitionId: z.string().min(1).max(120),
+            buildId: z.string().min(1).max(120).nullable(),
+            offerTier: z.number().int().nonnegative(),
+            pickRoundBefore: z.number().int().nonnegative(),
+            pickRoundAfter: z.number().int().nonnegative(),
+            picksRemainingBefore: z.number().int().nonnegative(),
+            picksRemainingAfter: z.number().int().nonnegative(),
+            outcome: z.enum(['offer_continues', 'advance_ready']),
+            nextOptions: z.array(z.enum(GAMEPLAY_RELIC_IDS)),
+            relicCountBefore: z.number().int().nonnegative(),
+            relicCountAfter: z.number().int().positive(),
+            relicTiersBefore: z.number().int().nonnegative(),
+            relicTiersAfter: z.number().int().nonnegative()
+        })
+        .strict(),
+    z
+        .object({
+            ...eventBase,
             type: z.literal('wild_match.consumed'),
             wildTileId: z.string().min(1).max(160),
             pairedTileId: z.string().min(1).max(160),
@@ -1842,6 +1870,14 @@ export const createGameplayRouteChooseCommand = (commandId: string, choiceId: st
         commandId,
         type: 'route.choose',
         choiceId
+    });
+
+export const createGameplayRelicPickCommand = (commandId: string, relicId: RelicId): GameplayCommand =>
+    gameplayCommandSchema.parse({
+        schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
+        commandId,
+        type: 'relic.pick',
+        relicId
     });
 
 export const createGameplayWildMatchConsumeCommand = (

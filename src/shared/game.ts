@@ -330,7 +330,7 @@ export {
 const flippedTileIdsForRun = (run: RunState): string[] | null =>
     runFilteredStringArrayOrNull(run.board?.flippedTileIds);
 
-const finalizeLevel = (run: RunState, board: BoardState): RunState => {
+export const finalizeLevel = (run: RunState, board: BoardState): RunState => {
     const floorClearHazards = applyFloorClearEnemyHazardDefeats(run, board);
     run = floorClearHazards.run;
     board = floorClearHazards.board;

@@ -23,6 +23,7 @@ import {
     BOARD_TACTICIAN_DEFINITIONS,
     COMBO_SHARD_ENGINE_DEFINITIONS,
     GAMEPLAY_CORE_SCHEMA_VERSION,
+    GAMEPLAY_RELIC_IDS,
     MEMORY_SCOUT_DEFINITIONS,
     LOCKSMITH_DEFINITIONS,
     SABOTEUR_DEFINITIONS,
@@ -42,6 +43,7 @@ import {
     createGameplayPinToggleCommand,
     createGameplayRegionShuffleCommand,
     createGameplayRiskWagerAcceptCommand,
+    createGameplayRelicPickCommand,
     createGameplayRouteChooseCommand,
     createGameplayShuffleCommand,
     createGameplayShopPurchaseCommand,
@@ -67,6 +69,7 @@ import { createNewRun } from './game';
 import { EXIT_PAIR_KEY, WILD_PAIR_KEY } from './tile-identity';
 import { createPlayablePathFixture } from './playable-path-fixtures';
 import { normalizeSessionStats } from './session-stats-rules';
+import { RELIC_POOL } from './relics';
 
 const tile = (id: string, pairKey: string, tileTraitKind?: Tile['tileTraitKind']): Tile => ({
     id,
@@ -107,6 +110,10 @@ const run = (overrides: Partial<RunState> = {}): RunState =>
     }) as RunState;
 
 describe('deterministic gameplay core', () => {
+    it('keeps every live relic representable by the typed gameplay schema', () => {
+        expect([...GAMEPLAY_RELIC_IDS].sort()).toEqual([...RELIC_POOL].sort());
+    });
+
     it('validates commands, effects, conditions, and definitions as strict serializable contracts', () => {
         expect(CONDUIT_CARTOGRAPHER_DEFINITIONS.map((definition) => definition.id)).toEqual([
             'bonus_reward.echo_conduit_lens',
@@ -591,6 +598,63 @@ describe('deterministic gameplay core', () => {
         expect(replayGameplayCommands(initial, [JSON.parse(JSON.stringify(command))]).run).toEqual(result.run);
         expect(reduceGameplayCommand(initial, createGameplayRouteChooseCommand('route-missing', 'missing')))
             .toMatchObject({ accepted: false, run: initial });
+    });
+
+    it('selects a relic through one replayable command covering ownership, immediate effect, and offer outcome', () => {
+        const initial = createPlayablePathFixture('relicDraft').run!;
+        const relicId = initial.relicOffer!.options[0]!;
+        const command = createGameplayRelicPickCommand('relic-pick-core', relicId);
+        const result = reduceGameplayCommand(initial, command);
+
+        expect(result).toMatchObject({
+            accepted: true,
+            run: {
+                relicIds: expect.arrayContaining([relicId]),
+                relicOffer: { picksRemaining: initial.relicOffer!.picksRemaining - 1, pickRound: 1 },
+                relicTiersClaimed: initial.relicTiersClaimed
+            }
+        });
+        expect(result.events).toEqual(expect.arrayContaining([
+            expect.objectContaining({
+                type: 'feedback.requested',
+                source: { kind: 'relic', id: relicId }
+            }),
+            expect.objectContaining({
+                type: 'relic.picked',
+                relicId,
+                outcome: 'offer_continues',
+                picksRemainingBefore: initial.relicOffer!.picksRemaining,
+                picksRemainingAfter: initial.relicOffer!.picksRemaining - 1,
+                relicCountAfter: initial.relicIds.length + 1
+            })
+        ]));
+        const secondRelicId = result.run.relicOffer!.options[0]!;
+        const secondCommand = createGameplayRelicPickCommand('relic-pick-core-final', secondRelicId);
+        const finalResult = reduceGameplayCommand(result.run, secondCommand);
+        expect(finalResult).toMatchObject({
+            accepted: true,
+            run: {
+                relicIds: expect.arrayContaining([relicId, secondRelicId]),
+                relicOffer: null,
+                relicTiersClaimed: initial.relicTiersClaimed + 1
+            },
+            events: expect.arrayContaining([
+                expect.objectContaining({
+                    type: 'relic.picked',
+                    relicId: secondRelicId,
+                    outcome: 'advance_ready',
+                    picksRemainingAfter: 0
+                })
+            ])
+        });
+        expect(replayGameplayCommands(
+            initial,
+            [JSON.parse(JSON.stringify(command)), JSON.parse(JSON.stringify(secondCommand))]
+        ).run).toEqual(finalResult.run);
+        expect(reduceGameplayCommand(
+            { ...initial, relicOffer: null },
+            createGameplayRelicPickCommand('relic-stale', relicId)
+        )).toMatchObject({ accepted: false, run: { relicOffer: null } });
     });
 
     it('models Vaultbreaker treasure extraction from chest through opener, Shrine Echo, and Score Glint', () => {

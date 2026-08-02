@@ -19,6 +19,7 @@ import {
 import { getDungeonExitStatus } from '../../shared/dungeon-board-status';
 import { reduceGameplayCommand } from '../../shared/gameplay-core';
 import { appendGameplayJournal } from '../../shared/gameplay-journal';
+import { finalizeLevel } from '../../shared/game';
 import {
     applyDestroyPair,
     armRegionShuffleRow,
@@ -455,11 +456,14 @@ export const createDungeonExitActivationSurfaceResult = ({
         resolvedSpend
     );
     const result = reduceGameplayCommand(run, command);
+    const journaledRun = result.accepted
+        ? appendGameplayJournal(result.run, [command], result.events)
+        : run;
     return !result.accepted
         ? { kind: 'ignored' }
         : {
               kind: 'applied',
-              patch: { run: appendGameplayJournal(result.run, [command], result.events) },
+              patch: { run: journaledRun.board ? finalizeLevel(journaledRun, journaledRun.board) : journaledRun },
               playArmSfx: false,
               events: result.events
           };

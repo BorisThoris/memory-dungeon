@@ -13,6 +13,7 @@ import type { RewardPerkId, RunState } from './contracts';
 import {
     GAMEPLAY_CORE_SCHEMA_VERSION,
     GAMEPLAY_REWARD_PERK_IDS,
+    createGameplayDefinitionCommand,
     gameplayCommandSchema,
     gameplayEventSchema,
     getGameplayContentDefinition,
@@ -44,6 +45,8 @@ import { isBoardComplete } from './board-inspection';
 import { rotateRunShiftingSpotlight } from './shifting-spotlight-rules';
 import { resolveHazardBanisherFloorStart } from './hazard-banisher-rules';
 import { applyRouteChoiceOutcome } from './route-rules';
+import { createRelicPickTransitionResult } from './relic-pick-transition-rules';
+import { repairRunProgressionSoftlocks } from './run-progression-repair';
 
 export interface GameplayCommandResult {
     run: RunState;
@@ -157,9 +160,9 @@ const conditionFailure = (run: RunState, condition: GameplayCondition, facts: Ga
 const applyDefinition = (
     run: RunState,
     command: Extract<GameplayCommand, { type: 'effects.apply' }>,
-    definition: GameplayContentDefinition
+    definition: GameplayContentDefinition,
+    events: GameplayEvent[] = []
 ): GameplayCommandResult => {
-    const events: GameplayEvent[] = [];
     const writeEvent = makeEventWriter(command.commandId, definition.source, events);
     for (const condition of definition.conditions) {
         const failure = conditionFailure(run, condition, command.facts);
@@ -1060,6 +1063,59 @@ const applyRouteChooseCommand = (
     return { run: outcome.run, command, events, accepted: true };
 };
 
+const applyRelicPickCommand = (
+    run: RunState,
+    command: Extract<GameplayCommand, { type: 'relic.pick' }>
+): GameplayCommandResult => {
+    const repairedRun = repairRunProgressionSoftlocks(run);
+    const offer = repairedRun.relicOffer;
+    const definition = getGameplayContentDefinition(`relic.${command.relicId}`);
+    if (!offer || !definition || definition.source.kind !== 'relic' || definition.source.id !== command.relicId) {
+        return rejectedResult(run, command.commandId, 'Relic pick has no matching open offer or definition.', command);
+    }
+
+    const events: GameplayEvent[] = [];
+    const effectCommand = createGameplayDefinitionCommand(command.commandId, definition.id);
+    if (effectCommand.type !== 'effects.apply') {
+        return rejectedResult(run, command.commandId, 'Relic definition did not produce an effect command.', command);
+    }
+    let effectAccepted = false;
+    const transition = createRelicPickTransitionResult(
+        repairedRun,
+        command.relicId,
+        (ownedRun) => {
+            const effectResult = applyDefinition(ownedRun, effectCommand, definition, events);
+            effectAccepted = effectResult.accepted;
+            return effectResult.run;
+        }
+    );
+    if (transition.kind === 'unchanged' || !effectAccepted) {
+        return rejectedResult(run, command.commandId, 'Relic is not eligible for the current draft offer.', command);
+    }
+
+    const nextOffer = transition.run.relicOffer;
+    const pickRoundBefore = runNonNegativeInteger(offer.pickRound);
+    const writeEvent = makeEventWriter(command.commandId, definition.source, events);
+    writeEvent({
+        type: 'relic.picked',
+        relicId: command.relicId,
+        definitionId: definition.id,
+        buildId: definition.buildId ?? null,
+        offerTier: runNonNegativeInteger(offer.tier),
+        pickRoundBefore,
+        pickRoundAfter: nextOffer ? runNonNegativeInteger(nextOffer.pickRound) : pickRoundBefore + 1,
+        picksRemainingBefore: runNonNegativeInteger(offer.picksRemaining),
+        picksRemainingAfter: nextOffer ? runNonNegativeInteger(nextOffer.picksRemaining) : 0,
+        outcome: transition.kind === 'offerContinues' ? 'offer_continues' : 'advance_ready',
+        nextOptions: nextOffer?.options ?? [],
+        relicCountBefore: Array.isArray(repairedRun.relicIds) ? repairedRun.relicIds.length : 0,
+        relicCountAfter: Array.isArray(transition.run.relicIds) ? transition.run.relicIds.length : 1,
+        relicTiersBefore: runNonNegativeInteger(repairedRun.relicTiersClaimed),
+        relicTiersAfter: runNonNegativeInteger(transition.run.relicTiersClaimed)
+    });
+    return { run: transition.run, command, events, accepted: true };
+};
+
 const applyWildMatchConsumeCommand = (
     run: RunState,
     command: Extract<GameplayCommand, { type: 'wild_match.consume' }>
@@ -1164,6 +1220,9 @@ export const reduceGameplayCommand = (run: RunState, input: unknown): GameplayCo
     }
     if (command.type === 'route.choose') {
         return applyRouteChooseCommand(run, command);
+    }
+    if (command.type === 'relic.pick') {
+        return applyRelicPickCommand(run, command);
     }
     if (command.type === 'wild_match.consume') {
         return applyWildMatchConsumeCommand(run, command);

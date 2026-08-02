@@ -279,6 +279,20 @@ The dungeon balance profiler now consumes the live route command rather than mai
 
 Graph v17 adds the typed build-strategy evaluator as an executable balance gate connected to route choice, the command core, economy, Route Gambler strategy, and per-seed fairness bounds.
 
+## Nineteenth vertical slice: Typed Relic Draft Selection
+
+The run's central build-composition choice now crosses one authoritative command boundary instead of relying on a legacy pick followed by a nested effect command:
+
+1. `relic.pick` accepts only a schema-enumerated relic that is currently offered, eligible, and selected while the run is alive and `levelComplete`.
+2. A new core-independent pure transition owns relic acquisition, remaining-pick normalization, deterministic next-round options, and final offer closure; legacy callers and the core share it without circular dependencies.
+3. The core applies the selected relic's existing schema-defined immediate effects under the same command id, retaining typed inventory, guard, ward, free-shuffle, bonus-pick, request, and feedback events.
+4. `relic.picked` records definition/build identity, offer tier, pick rounds, remaining budget, next options, relic counts, tier progress, and whether the offer continues or is ready to advance.
+5. Multi-pick visits remain on the relic surface; the final accepted pick is journaled before the mature next-floor constructor runs.
+6. JSON replay covers a complete two-pick visit, while live-surface tests prove command/event persistence survives final floor advancement.
+7. Expanding the strict relic enum exposed and fixed a schema gap where the live `peek_charge_plus_one` relic was absent from the enumerated command contract.
+
+Graph v18 connects relic draft choice to the command core, relic loadout projection, typed feedback, bounded persistence, deterministic replay, and downstream run flow.
+
 ## Current slice status
 
 Implemented in the Conduit Cartographer vertical slice:

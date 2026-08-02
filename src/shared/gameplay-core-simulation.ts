@@ -12,6 +12,7 @@ import {
     createGameplayPinToggleCommand,
     createGameplayRegionShuffleCommand,
     createGameplayRiskWagerAcceptCommand,
+    createGameplayRelicPickCommand,
     createGameplayRouteChooseCommand,
     createGameplayShuffleCommand,
     createGameplayShopPurchaseCommand,
@@ -125,6 +126,12 @@ const commandForStep = (
             ? run.lastLevelResult.routeChoices[0]?.id
             : undefined;
         return createGameplayRouteChooseCommand(commandId, choiceId ?? 'missing-route-choice');
+    }
+    if (step === 4) {
+        const relicId = Array.isArray(run.relicOffer?.options)
+            ? run.relicOffer.options[0]
+            : undefined;
+        return createGameplayRelicPickCommand(commandId, relicId ?? 'extra_shuffle_charge');
     }
     if (actionIndex === definitions.length) {
         const targets = availablePeekTargets(run);

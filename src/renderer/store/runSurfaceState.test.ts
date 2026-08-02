@@ -603,7 +603,11 @@ describe('run surface state helpers', () => {
         });
         expect(result.kind).toBe('applied');
         if (result.kind === 'applied') {
-            expect(result.patch.run).toMatchObject({ dungeonMasterKeys: 0, dungeonGatewaysUsed: 1 });
+            expect(result.patch.run).toMatchObject({
+                status: 'levelComplete',
+                dungeonMasterKeys: 0,
+                dungeonGatewaysUsed: 1
+            });
             expect(result.patch.run.gameplayCommandJournal).toEqual([
                 expect.objectContaining({ type: 'dungeon.exit_activate', spend: 'master_key' })
             ]);

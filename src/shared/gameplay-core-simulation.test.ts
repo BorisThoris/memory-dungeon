@@ -129,11 +129,13 @@ describe('seeded gameplay core simulation', () => {
                 'board.destroy_pair',
                 'floor.hazard_banish',
                 'route.choose',
+                'relic.pick',
                 'wild_match.consume'
             ])
         );
         expect(first.commandTypeCounts['wild_match.consume']).toBe(1);
         expect(first.commandTypeCounts['route.choose']).toBe(1);
+        expect(first.commandTypeCounts['relic.pick']).toBe(1);
         expect(first.eventTypeCounts['wild_match.consumed']).toBe(1);
         expect(first.finalRun.wildMatchesRemaining).toBe(0);
     });

@@ -1,5 +1,9 @@
 import type { RelicId, RelicOfferServiceId, RunState, SaveData, Settings } from '../../shared/contracts';
-import { applyRelicOfferServiceToRun, completeRelicPickAndAdvance } from '../../shared/objective-rules';
+import { applyRelicOfferServiceToRun } from '../../shared/objective-rules';
+import { createGameplayRelicPickCommand } from '../../shared/gameplay-core-contracts';
+import { reduceGameplayCommand } from '../../shared/gameplay-core';
+import { appendGameplayJournal } from '../../shared/gameplay-journal';
+import { advanceToNextLevel } from '../../shared/next-floor-transition-rules';
 import { mergeHonorUnlockTags } from '../../shared/honorUnlocks';
 import { mergeRelicPickStat, normalizeSaveData } from '../../shared/save-data';
 import { clearRunSurfaceArmedModes, type RunSurfaceState } from './runSurfaceState';
@@ -44,10 +48,21 @@ export const createRelicPickSurfaceResult = ({
         return { kind: 'ignored' };
     }
 
-    const nextRun = completeRelicPickAndAdvance(run, relicId);
-    if (nextRun === run) {
+    const offer = run.relicOffer;
+    const command = createGameplayRelicPickCommand(
+        `relic-pick:${run.runSeed}:${offer.tier}:${offer.pickRound}:${relicId}`,
+        relicId
+    );
+    const result = reduceGameplayCommand(run, command);
+    if (!result.accepted) {
         return { kind: 'ignored' };
     }
+    const pickEvent = result.events.find((event) => event.type === 'relic.picked');
+    if (!pickEvent) {
+        return { kind: 'ignored' };
+    }
+    const journaledRun = appendGameplayJournal(result.run, [command], result.events);
+    const nextRun = pickEvent.outcome === 'advance_ready' ? advanceToNextLevel(journaledRun) : journaledRun;
 
     const nextSave = mergeHonorUnlockTags(normalizeSaveData(mergeRelicPickStat(saveData, relicId)));
 

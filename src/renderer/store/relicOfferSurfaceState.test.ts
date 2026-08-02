@@ -73,6 +73,12 @@ describe('relicOfferSurfaceState', () => {
         }
         expect(result.patch.run.relicIds).toContain('extra_shuffle_charge');
         expect(result.patch.run.relicOffer).toBeNull();
+        expect(result.patch.run.gameplayCommandJournal).toEqual(expect.arrayContaining([
+            expect.objectContaining({ type: 'relic.pick', relicId: 'extra_shuffle_charge' })
+        ]));
+        expect(result.patch.run.gameplayEventJournal).toEqual(expect.arrayContaining([
+            expect.objectContaining({ type: 'relic.picked', relicId: 'extra_shuffle_charge', outcome: 'advance_ready' })
+        ]));
         expect(result.patch.boardPinMode).toBe(false);
         expect(result.patch.destroyPairArmed).toBe(false);
         expect(result.patch.peekModeArmed).toBe(false);

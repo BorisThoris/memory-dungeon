@@ -396,7 +396,7 @@ describe('gameplay interaction graph', () => {
         expect(byId.get('build.treasure_greed')).toMatchObject({ kind: 'build', role: 'treasure_extraction_build' });
         expect(byId.get('inventory.iron_key')).toMatchObject({ kind: 'inventory', role: 'treasure_extraction_resource' });
         expect(byId.get('economy.shop_gold')).toMatchObject({ kind: 'economy', role: 'extracted_value_resource' });
-        expect(byId.get('progression.relic_draft')).toMatchObject({ kind: 'progression', role: 'future_build_selection_consequence' });
+        expect(byId.get('progression.relic_draft')).toMatchObject({ kind: 'progression', role: 'typed_replayable_build_selection' });
         expect(gameplayInteractionGraph.edges).toEqual(expect.arrayContaining([
             expect.objectContaining({ source: 'reward.chest_gold', target: 'inventory.iron_key', kind: 'grants' }),
             expect.objectContaining({ source: 'reward.cursed_opener_contract', target: 'perk.cursed_opener_greed', kind: 'grants' }),
@@ -722,7 +722,7 @@ describe('gameplay interaction graph', () => {
 
     it('connects Hazard Banish acquisition to its typed floor-start removal or Destroy fallback', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
-        expect(gameplayInteractionGraph.version).toBe(17);
+        expect(gameplayInteractionGraph.version).toBe(18);
         expect(byId.get('perk.hazard_banish_per_floor')).toMatchObject({
             kind: 'perk',
             role: 'durable_floor_start_hazard_or_destroy_conversion',
@@ -745,7 +745,7 @@ describe('gameplay interaction graph', () => {
 
     it('connects typed route selection from floor clear through exact replayable consequences', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
-        expect(gameplayInteractionGraph.version).toBe(17);
+        expect(gameplayInteractionGraph.version).toBe(18);
         expect(byId.get('route.choice')).toMatchObject({
             kind: 'route',
             role: 'replayable_between_floor_commitment',
@@ -781,6 +781,33 @@ describe('gameplay interaction graph', () => {
             expect.objectContaining({ source: 'simulation.build_evaluation', target: 'build.route_gambler', kind: 'tested_by' }),
             expect.objectContaining({ source: 'simulation.build_evaluation', target: 'economy.score_and_rewards', kind: 'tested_by' }),
             expect.objectContaining({ source: 'simulation.build_evaluation', target: 'safety.softlock_fairness', kind: 'guarded_by' })
+        ]));
+    });
+
+    it('connects relic drafting to typed build acquisition, feedback, persistence, and replay', () => {
+        const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
+        expect(gameplayInteractionGraph.version).toBe(18);
+        expect(byId.get('progression.relic_draft')).toMatchObject({
+            kind: 'progression',
+            role: 'typed_replayable_build_selection',
+            evidence: expect.arrayContaining([
+                'src/shared/relic-pick-transition-rules.ts',
+                'src/shared/gameplay-core.ts',
+                'src/renderer/store/relicOfferSurfaceState.ts'
+            ]),
+            tests: expect.arrayContaining([
+                'src/shared/gameplay-core.test.ts',
+                'src/renderer/store/relicOfferSurfaceState.test.ts'
+            ])
+        });
+        expect(gameplayInteractionGraph.edges).toEqual(expect.arrayContaining([
+            expect.objectContaining({ source: 'progression.relic_draft', target: 'core.gameplay_commands', kind: 'triggers' }),
+            expect.objectContaining({ source: 'core.gameplay_commands', target: 'progression.relic_draft', kind: 'modifies' }),
+            expect.objectContaining({ source: 'progression.relic_draft', target: 'inventory.relic_loadout', kind: 'modifies' }),
+            expect.objectContaining({ source: 'inventory.relic_loadout', target: 'progression.relic_draft', kind: 'gates' }),
+            expect.objectContaining({ source: 'progression.relic_draft', target: 'feedback.gameplay_hud', kind: 'displays' }),
+            expect.objectContaining({ source: 'progression.relic_draft', target: 'persistence.run_summary', kind: 'persists' }),
+            expect.objectContaining({ source: 'progression.relic_draft', target: 'simulation.gameplay_replay', kind: 'tested_by' })
         ]));
     });
 });
