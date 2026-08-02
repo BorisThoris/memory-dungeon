@@ -1,4 +1,10 @@
-import { applyPeek, applyStrayRemove } from './board-power-actions';
+import {
+    applyPeek,
+    applyRegionShuffle,
+    applyShuffle,
+    applyStrayRemove,
+    applyTileSwap
+} from './board-power-actions';
 import { maxPinnedTilesForRun, togglePinnedTile } from './board-power-state';
 import type { RewardPerkId, RunState } from './contracts';
 import {
@@ -45,6 +51,9 @@ const PIN_SOURCE: GameplaySource = { kind: 'power', id: 'pin' };
 const STRAY_REMOVE_SOURCE: GameplaySource = { kind: 'power', id: 'stray_remove' };
 const RISK_WAGER_SOURCE: GameplaySource = { kind: 'system', id: 'risk_wager' };
 const GAMBIT_SOURCE: GameplaySource = { kind: 'power', id: 'gambit' };
+const SHUFFLE_SOURCE: GameplaySource = { kind: 'power', id: 'shuffle' };
+const REGION_SHUFFLE_SOURCE: GameplaySource = { kind: 'power', id: 'region_shuffle' };
+const TILE_SWAP_SOURCE: GameplaySource = { kind: 'power', id: 'tile_swap' };
 const gameplayRewardPerkIds = new Set<RewardPerkId>(GAMEPLAY_REWARD_PERK_IDS);
 type GameplayEventPayload<T = GameplayEvent> = T extends GameplayEvent
     ? Omit<T, 'schemaVersion' | 'eventId' | 'commandId' | 'sequence' | 'source'>
@@ -331,6 +340,12 @@ const applyDefinition = (
             case 'scout_reveal.request':
                 writeEvent({ type: 'scout_reveal.requested', amount: effect.amount });
                 break;
+            case 'free_shuffle.grant': {
+                const before = nextRun.freeShuffleThisFloor === true;
+                nextRun = { ...nextRun, freeShuffleThisFloor: true };
+                writeEvent({ type: 'free_shuffle.changed', before, after: true });
+                break;
+            }
             case 'feedback.emit':
                 writeEvent({
                     type: 'feedback.requested',
@@ -521,6 +536,127 @@ const applyGambitCommitCommand = (
     return { run, command, events, accepted: true };
 };
 
+const applyShuffleCommand = (
+    run: RunState,
+    command: Extract<GameplayCommand, { type: 'board.shuffle' }>
+): GameplayCommandResult => {
+    const nextRun = applyShuffle(run);
+    if (nextRun === run) {
+        return rejectedResult(run, command.commandId, 'Full-board shuffle is not legal for the current run.', command);
+    }
+    const events: GameplayEvent[] = [];
+    const writeEvent = makeEventWriter(command.commandId, SHUFFLE_SOURCE, events);
+    const beforeCharges = runNonNegativeInteger(run.shuffleCharges);
+    const afterCharges = runNonNegativeInteger(nextRun.shuffleCharges);
+    const usedFreeCharge = run.freeShuffleThisFloor === true && nextRun.freeShuffleThisFloor === false;
+    writeEvent({
+        type: 'inventory.changed',
+        itemId: 'shuffle_charge',
+        operation: 'consume',
+        requested: 1,
+        applied: afterCharges - beforeCharges,
+        before: beforeCharges,
+        after: afterCharges
+    });
+    writeEvent({
+        type: 'board.shuffled',
+        affectedTileIds: (run.board?.tiles ?? [])
+            .filter((tile) => tile.state === 'hidden')
+            .map((tile) => tile.id),
+        shuffleNonceBefore: runNonNegativeInteger(run.shuffleNonce),
+        shuffleNonceAfter: runNonNegativeInteger(nextRun.shuffleNonce),
+        usedFreeCharge
+    });
+    writeEvent({
+        type: 'feedback.requested',
+        cue: 'power.shuffle.used',
+        message: `Full-board shuffle committed${usedFreeCharge ? ' its free use' : `; ${afterCharges} charge${afterCharges === 1 ? '' : 's'} remain`}.`,
+        tone: 'information'
+    });
+    return { run: nextRun, command, events, accepted: true };
+};
+
+const applyRegionShuffleCommand = (
+    run: RunState,
+    command: Extract<GameplayCommand, { type: 'board.region_shuffle' }>
+): GameplayCommandResult => {
+    const nextRun = applyRegionShuffle(run, command.rowIndex);
+    if (nextRun === run) {
+        return rejectedResult(run, command.commandId, 'Row shuffle is not legal for the current run and row.', command);
+    }
+    const events: GameplayEvent[] = [];
+    const writeEvent = makeEventWriter(command.commandId, REGION_SHUFFLE_SOURCE, events);
+    const beforeCharges = runNonNegativeInteger(run.regionShuffleCharges);
+    const afterCharges = runNonNegativeInteger(nextRun.regionShuffleCharges);
+    const usedFreeCharge = run.regionShuffleFreeThisFloor === true && nextRun.regionShuffleFreeThisFloor === false;
+    const columns = runNonNegativeInteger(run.board?.columns);
+    writeEvent({
+        type: 'inventory.changed',
+        itemId: 'region_shuffle_charge',
+        operation: 'consume',
+        requested: 1,
+        applied: afterCharges - beforeCharges,
+        before: beforeCharges,
+        after: afterCharges
+    });
+    writeEvent({
+        type: 'board.region_shuffled',
+        rowIndex: command.rowIndex,
+        affectedTileIds: (run.board?.tiles ?? [])
+            .filter((tile, index) => tile.state === 'hidden' && columns > 0 && Math.floor(index / columns) === command.rowIndex)
+            .map((tile) => tile.id),
+        shuffleNonceBefore: runNonNegativeInteger(run.shuffleNonce),
+        shuffleNonceAfter: runNonNegativeInteger(nextRun.shuffleNonce),
+        usedFreeCharge
+    });
+    writeEvent({
+        type: 'feedback.requested',
+        cue: 'power.region_shuffle.used',
+        message: `Row ${command.rowIndex + 1} shuffled${usedFreeCharge ? ' for free' : `; ${afterCharges} row/swap charge${afterCharges === 1 ? '' : 's'} remain`}.`,
+        tone: 'information'
+    });
+    return { run: nextRun, command, events, accepted: true };
+};
+
+const applyTileSwapCommand = (
+    run: RunState,
+    command: Extract<GameplayCommand, { type: 'board.tile_swap' }>
+): GameplayCommandResult => {
+    const nextRun = applyTileSwap(run, command.firstTileId, command.secondTileId);
+    if (nextRun === run) {
+        return rejectedResult(run, command.commandId, 'Tile swap is not legal for the current run and targets.', command);
+    }
+    const events: GameplayEvent[] = [];
+    const writeEvent = makeEventWriter(command.commandId, TILE_SWAP_SOURCE, events);
+    const beforeCharges = runNonNegativeInteger(run.regionShuffleCharges);
+    const afterCharges = runNonNegativeInteger(nextRun.regionShuffleCharges);
+    const usedFreeCharge = run.regionShuffleFreeThisFloor === true && nextRun.regionShuffleFreeThisFloor === false;
+    writeEvent({
+        type: 'inventory.changed',
+        itemId: 'region_shuffle_charge',
+        operation: 'consume',
+        requested: 1,
+        applied: afterCharges - beforeCharges,
+        before: beforeCharges,
+        after: afterCharges
+    });
+    writeEvent({
+        type: 'board.tiles_swapped',
+        firstTileId: command.firstTileId,
+        secondTileId: command.secondTileId,
+        shuffleNonceBefore: runNonNegativeInteger(run.shuffleNonce),
+        shuffleNonceAfter: runNonNegativeInteger(nextRun.shuffleNonce),
+        usedFreeCharge
+    });
+    writeEvent({
+        type: 'feedback.requested',
+        cue: 'power.tile_swap.used',
+        message: `${command.firstTileId} swapped with ${command.secondTileId}${usedFreeCharge ? ' for free' : `; ${afterCharges} row/swap charge${afterCharges === 1 ? '' : 's'} remain`}.`,
+        tone: 'information'
+    });
+    return { run: nextRun, command, events, accepted: true };
+};
+
 export const reduceGameplayCommand = (run: RunState, input: unknown): GameplayCommandResult => {
     const parsed = gameplayCommandSchema.safeParse(input);
     if (!parsed.success) {
@@ -541,6 +677,15 @@ export const reduceGameplayCommand = (run: RunState, input: unknown): GameplayCo
     }
     if (command.type === 'board.gambit_commit') {
         return applyGambitCommitCommand(run, command);
+    }
+    if (command.type === 'board.shuffle') {
+        return applyShuffleCommand(run, command);
+    }
+    if (command.type === 'board.region_shuffle') {
+        return applyRegionShuffleCommand(run, command);
+    }
+    if (command.type === 'board.tile_swap') {
+        return applyTileSwapCommand(run, command);
     }
     const definition = getGameplayContentDefinition(command.definitionId);
     if (!definition) {

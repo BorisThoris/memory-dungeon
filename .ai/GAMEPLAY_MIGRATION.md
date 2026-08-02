@@ -133,6 +133,19 @@ The Route Gambler makes optional risk, one-floor rescue capacity, and Favor cash
 
 The renderer derives wager and Gambit audio exclusively from typed feedback categories. Seeded simulation generates both new command forms, and the graph connects floor start → Gambit token → rescue decision plus objective streak → wager → Favor → relic draft.
 
+## Ninth vertical slice: The Board Tactician
+
+The Board Tactician expands the Saboteur from hazard removal into deliberate board control, while keeping every source and spend in one replayable loop:
+
+1. Trait Toolkit and Stasis Lockbox grant targeted row-shuffle charges alongside Peek or Guard support, so their mixed rewards feed both information/defense and board shaping.
+2. Free Swap Floor grants the durable first-swap-per-floor perk; Extra Shuffle Charge grants a full-board shuffle; First Shuffle Free Per Floor and Region Shuffle Free First expose their existing floor-reset benefits through typed relic claims.
+3. Full shuffle, selected-row shuffle, and selected-tile swap enter the core as `board.shuffle`, `board.region_shuffle`, and `board.tile_swap` commands.
+4. Each reducer delegates legality and permutation to the established pure board-power implementation, then journals exact affected tiles, nonces, charge/free-use consumption, and typed feedback only when the action succeeds.
+5. The renderer retains only UI arming and target selection. It projects returned state/events and derives sound from feedback rather than mutating inventory or announcing rejected presses.
+6. The semantic graph joins all six content sources to shuffle resources, floor-reset perks, the three board powers, trap-control synergies, and floor completion.
+
+Seeded simulation now generates all three board-control command forms and verifies exact JSON replay, event schemas/order, and state invariants. Direct parity tests prove that the command reducers preserve the existing deterministic shuffle, row-shuffle, and tile-swap outcomes rather than introducing a second implementation.
+
 ## Current slice status
 
 Implemented in the Conduit Cartographer vertical slice:

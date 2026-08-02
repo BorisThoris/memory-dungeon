@@ -6,8 +6,11 @@ import {
     createGameplayGambitCommitCommand,
     createGameplayPeekCommand,
     createGameplayPinToggleCommand,
+    createGameplayRegionShuffleCommand,
     createGameplayRiskWagerAcceptCommand,
+    createGameplayShuffleCommand,
     createGameplayStrayRemoveCommand,
+    createGameplayTileSwapCommand,
     gameplayCommandSchema,
     gameplayEventSchema,
     type GameplayCommand,
@@ -75,7 +78,7 @@ const commandForStep = (
     invalidTraitChance: number
 ): GameplayCommand => {
     const definitions = GAMEPLAY_CONTENT_DEFINITIONS;
-    const actionIndex = pickRngIndex(rng, definitions.length + 5);
+    const actionIndex = pickRngIndex(rng, definitions.length + 8);
     const commandId = `sim:${seed}:${String(step).padStart(4, '0')}`;
     if (actionIndex === definitions.length) {
         const targets = availablePeekTargets(run);
@@ -105,6 +108,20 @@ const commandForStep = (
         const targets = availablePeekTargets(run);
         const target = targets[pickRngIndex(rng, targets.length)] ?? 'missing-gambit-target';
         return createGameplayGambitCommitCommand(commandId, target);
+    }
+    if (actionIndex === definitions.length + 5) {
+        return createGameplayShuffleCommand(commandId);
+    }
+    if (actionIndex === definitions.length + 6) {
+        const rowCount = Math.max(1, run.board?.rows ?? 1);
+        return createGameplayRegionShuffleCommand(commandId, pickRngIndex(rng, rowCount));
+    }
+    if (actionIndex === definitions.length + 7) {
+        const targets = availablePeekTargets(run);
+        const firstTileId = targets[pickRngIndex(rng, targets.length)] ?? 'missing-swap-first';
+        const remaining = targets.filter((target) => target !== firstTileId);
+        const secondTileId = remaining[pickRngIndex(rng, remaining.length)] ?? 'missing-swap-second';
+        return createGameplayTileSwapCommand(commandId, firstTileId, secondTileId);
     }
 
     const definition = definitions[actionIndex % definitions.length] ?? definitions[0];

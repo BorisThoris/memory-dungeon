@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { applyPeek, applyStrayRemove } from './board-power-actions';
+import {
+    applyPeek,
+    applyRegionShuffle,
+    applyShuffle,
+    applyStrayRemove,
+    applyTileSwap
+} from './board-power-actions';
 import { togglePinnedTile } from './board-power-state';
 import { BONUS_REWARD_CATALOG, previewBonusRewardClaim } from './bonus-rewards';
 import {
@@ -12,6 +18,7 @@ import {
 } from './contracts';
 import {
     CONDUIT_CARTOGRAPHER_DEFINITIONS,
+    BOARD_TACTICIAN_DEFINITIONS,
     COMBO_SHARD_ENGINE_DEFINITIONS,
     GAMEPLAY_CORE_SCHEMA_VERSION,
     SABOTEUR_DEFINITIONS,
@@ -23,8 +30,11 @@ import {
     createGameplayGambitCommitCommand,
     createGameplayPeekCommand,
     createGameplayPinToggleCommand,
+    createGameplayRegionShuffleCommand,
     createGameplayRiskWagerAcceptCommand,
+    createGameplayShuffleCommand,
     createGameplayStrayRemoveCommand,
+    createGameplayTileSwapCommand,
     gameplayCommandSchema,
     gameplayContentDefinitionSchema,
     gameplayEventSchema
@@ -462,7 +472,8 @@ describe('deterministic gameplay core', () => {
         const migratedCompass = applyRelicImmediateThroughGameplayCore(initial, 'chapter_compass', 'adapter-compass');
         const migratedSurety = applyRelicImmediateThroughGameplayCore(initial, 'wager_surety', 'adapter-surety');
         const migratedLedger = applyRelicImmediateThroughGameplayCore(initial, 'parasite_ledger', 'adapter-ledger');
-        const legacy = applyRelicImmediateThroughGameplayCore(initial, 'extra_shuffle_charge', 'adapter-shuffle');
+        const migratedShuffle = applyRelicImmediateThroughGameplayCore(initial, 'extra_shuffle_charge', 'adapter-shuffle');
+        const legacy = applyRelicImmediateThroughGameplayCore(initial, 'memorize_bonus_ms', 'adapter-memorize');
 
         expect(migrated).toMatchObject({ migrated: true, run: { peekCharges: 3 } });
         expect(migrated.events).toEqual(
@@ -471,7 +482,8 @@ describe('deterministic gameplay core', () => {
                 expect.objectContaining({ type: 'feedback.requested', cue: 'build.peek_relic.claimed' })
             ])
         );
-        expect(legacy).toMatchObject({ migrated: false, run: { shuffleCharges: 2 }, events: [] });
+        expect(migratedShuffle).toMatchObject({ migrated: true, run: { shuffleCharges: 2 } });
+        expect(legacy).toMatchObject({ migrated: false, events: [] });
         expect(migratedGuard).toMatchObject({ migrated: true, run: { stats: { guardTokens: 1 } } });
         expect(migratedCombo).toMatchObject({ migrated: true, run: { stats: { comboShards: 1 } } });
         expect(migratedDestroy).toMatchObject({ migrated: true, run: { destroyPairCharges: 1 } });
@@ -622,6 +634,126 @@ describe('deterministic gameplay core', () => {
         expect(rejected.accepted).toBe(false);
         expect(rejected.events).toEqual([
             expect.objectContaining({ type: 'command.rejected', reason: expect.stringContaining('cannot commit') })
+        ]);
+    });
+
+    it('models the complete Board Tactician reward and relic source set', () => {
+        expect(BOARD_TACTICIAN_DEFINITIONS.map((definition) => definition.id)).toEqual([
+            'bonus_reward.trait_toolkit',
+            'bonus_reward.stasis_lockbox',
+            'bonus_reward.free_swap_floor',
+            'relic.extra_shuffle_charge',
+            'relic.first_shuffle_free_per_floor',
+            'relic.region_shuffle_free_first'
+        ]);
+        expect(BOARD_TACTICIAN_DEFINITIONS.every(
+            (definition) => gameplayContentDefinitionSchema.safeParse(definition).success
+        )).toBe(true);
+
+        const toolkit = reduceGameplayCommand(
+            run({ regionShuffleCharges: 0, peekCharges: 0 }),
+            createGameplayDefinitionCommand('toolkit', 'bonus_reward.trait_toolkit')
+        );
+        expect(toolkit.run).toMatchObject({ regionShuffleCharges: 1, peekCharges: 1 });
+        expect(toolkit.run.stats.totalScore).toBe(10);
+
+        const lockbox = reduceGameplayCommand(
+            run({ regionShuffleCharges: 0 }),
+            createGameplayDefinitionCommand('lockbox', 'bonus_reward.stasis_lockbox')
+        );
+        expect(lockbox.run.regionShuffleCharges).toBe(1);
+        expect(lockbox.run.stats.guardTokens).toBe(1);
+        expect(lockbox.run.stats.totalScore).toBe(15);
+
+        const discipline = reduceGameplayCommand(
+            run(),
+            createGameplayDefinitionCommand('discipline', 'bonus_reward.free_swap_floor')
+        );
+        expect(discipline.run.rewardPerkIds).toContain('free_first_swap_per_floor');
+        expect(discipline.run.stats.totalScore).toBe(15);
+
+        const shuffleRelic = reduceGameplayCommand(
+            run({ shuffleCharges: 0 }),
+            createGameplayDefinitionCommand('shuffle-relic', 'relic.extra_shuffle_charge')
+        );
+        expect(shuffleRelic.run.shuffleCharges).toBe(1);
+
+        const freeShuffleRelic = reduceGameplayCommand(
+            run({ freeShuffleThisFloor: false }),
+            createGameplayDefinitionCommand('free-shuffle-relic', 'relic.first_shuffle_free_per_floor')
+        );
+        expect(freeShuffleRelic.run.freeShuffleThisFloor).toBe(true);
+        expect(freeShuffleRelic.events).toEqual(expect.arrayContaining([
+            expect.objectContaining({ type: 'free_shuffle.changed', before: false, after: true })
+        ]));
+
+        const regionRelic = reduceGameplayCommand(
+            run(),
+            createGameplayDefinitionCommand('region-relic', 'relic.region_shuffle_free_first')
+        );
+        expect(regionRelic.run).toEqual(run());
+        expect(regionRelic.events).toEqual([
+            expect.objectContaining({
+                type: 'feedback.requested',
+                cue: 'build.region_shuffle_free_first.claimed'
+            })
+        ]);
+    });
+
+    it('preserves deterministic shuffle, row-shuffle, and tile-swap parity with typed consumption events', () => {
+        const initial = run({
+            board: {
+                ...board(),
+                tiles: board().tiles.map((candidate) =>
+                    candidate.id === 'plain-a' ? { ...candidate, pairKey: 'conduit' } : candidate
+                )
+            },
+            shuffleCharges: 1,
+            regionShuffleCharges: 2,
+            shuffleNonce: 0,
+            freeShuffleThisFloor: false,
+            regionShuffleFreeThisFloor: false,
+            pinnedTileIds: [],
+            forgottenTileIdsThisFloor: [],
+            matchScoreMultiplier: 1,
+            shuffleScoreTaxActive: false
+        });
+
+        const shuffled = reduceGameplayCommand(initial, createGameplayShuffleCommand('shuffle-board'));
+        expect(shuffled.accepted).toBe(true);
+        expect(shuffled.run).toEqual(applyShuffle(initial));
+        expect(shuffled.events).toEqual([
+            expect.objectContaining({ type: 'inventory.changed', itemId: 'shuffle_charge', applied: -1 }),
+            expect.objectContaining({ type: 'board.shuffled', shuffleNonceBefore: 0, shuffleNonceAfter: 1 }),
+            expect.objectContaining({ type: 'feedback.requested', cue: 'power.shuffle.used' })
+        ]);
+
+        const regionShuffled = reduceGameplayCommand(
+            initial,
+            createGameplayRegionShuffleCommand('shuffle-row', 0)
+        );
+        expect(regionShuffled.accepted).toBe(true);
+        expect(regionShuffled.run).toEqual(applyRegionShuffle(initial, 0));
+        expect(regionShuffled.events).toEqual([
+            expect.objectContaining({ type: 'inventory.changed', itemId: 'region_shuffle_charge', applied: -1 }),
+            expect.objectContaining({ type: 'board.region_shuffled', rowIndex: 0 }),
+            expect.objectContaining({ type: 'feedback.requested', cue: 'power.region_shuffle.used' })
+        ]);
+
+        const swapped = reduceGameplayCommand(
+            initial,
+            createGameplayTileSwapCommand('swap-tiles', 'echo-a', 'conduit-a')
+        );
+        expect(swapped.accepted).toBe(true);
+        expect(swapped.run).toEqual(applyTileSwap(initial, 'echo-a', 'conduit-a'));
+        expect(swapped.events).toEqual([
+            expect.objectContaining({ type: 'inventory.changed', itemId: 'region_shuffle_charge', applied: -1 }),
+            expect.objectContaining({
+                type: 'board.tiles_swapped',
+                firstTileId: 'echo-a',
+                secondTileId: 'conduit-a'
+            }),
+            expect.objectContaining({ type: 'feedback.requested', cue: 'power.tile_swap.used' })
         ]);
     });
 

@@ -747,9 +747,12 @@ const MIGRATED_BONUS_REWARD_DEFINITION_IDS: Partial<Record<BonusRewardId, string
     chest_gold: 'bonus_reward.chest_gold',
     cursed_opener_contract: 'bonus_reward.cursed_opener_contract',
     echo_conduit_lens: 'bonus_reward.echo_conduit_lens',
+    free_swap_floor: 'bonus_reward.free_swap_floor',
     hazard_banisher: 'bonus_reward.hazard_banisher',
     hazard_ward: 'bonus_reward.hazard_ward',
-    secret_favor: 'bonus_reward.secret_favor'
+    secret_favor: 'bonus_reward.secret_favor',
+    stasis_lockbox: 'bonus_reward.stasis_lockbox',
+    trait_toolkit: 'bonus_reward.trait_toolkit'
 };
 
 const bonusRewardMatchesMigratedDefinition = (reward: BonusRewardInstance): boolean => {
@@ -911,6 +914,22 @@ export const previewBonusRewardClaim = (
                                   relicFavorProgress: journaledRun.relicFavorProgress,
                                   bonusRelicPicksNextOffer: journaledRun.bonusRelicPicksNextOffer,
                                   favorBonusRelicPicksNextOffer: journaledRun.favorBonusRelicPicksNextOffer
+                              }
+                          : reward.id === 'trait_toolkit'
+                            ? {
+                                  regionShuffleCharges: journaledRun.regionShuffleCharges,
+                                  peekCharges: journaledRun.peekCharges,
+                                  stats: coreStats
+                              }
+                          : reward.id === 'stasis_lockbox'
+                            ? {
+                                  regionShuffleCharges: journaledRun.regionShuffleCharges,
+                                  stats: coreStats
+                              }
+                          : reward.id === 'free_swap_floor'
+                            ? {
+                                  rewardPerkIds: journaledRun.rewardPerkIds,
+                                  stats: coreStats
                               }
                           : reward.id === 'chest_gold'
                             ? {

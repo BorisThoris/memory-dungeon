@@ -3,16 +3,16 @@ import type { GameplayEvent } from '../../shared/gameplay-core-contracts';
 import {
     createGameplayGambitCommitCommand,
     createGameplayPeekCommand,
-    createGameplayStrayRemoveCommand
+    createGameplayRegionShuffleCommand,
+    createGameplayShuffleCommand,
+    createGameplayStrayRemoveCommand,
+    createGameplayTileSwapCommand
 } from '../../shared/gameplay-core-contracts';
 import { reduceGameplayCommand } from '../../shared/gameplay-core';
 import { appendGameplayJournal } from '../../shared/gameplay-journal';
 import {
     applyDestroyPair,
     applyFlashPair,
-    applyRegionShuffle,
-    applyShuffle,
-    applyTileSwap,
     armRegionShuffleRow,
     collectDestroyEligibleTileIds,
     toggleStrayRemoveArmed
@@ -56,6 +56,7 @@ type RunSurfaceRunPatchResult =
           kind: 'applied';
           patch: { run: RunState } | ReturnType<typeof createRunWithArmedModesClearedPatch>;
           playArmSfx: boolean;
+          events?: GameplayEvent[];
       };
 
 type ArmedBoardPowerPressResult =
@@ -66,7 +67,7 @@ type ArmedBoardPowerPressResult =
     | { kind: 'peekApplied'; run: RunState; events: GameplayEvent[] }
     | { kind: 'tileSwapFirstSelected'; tileId: string }
     | { kind: 'tileSwapFirstCleared' }
-    | { kind: 'tileSwapApplied'; run: RunState }
+    | { kind: 'tileSwapApplied'; run: RunState; events: GameplayEvent[] }
     | { kind: 'destroyApplied'; run: RunState; resolvesRun: boolean };
 
 type OrdinaryTileFlipResult =
@@ -311,10 +312,18 @@ export const createShuffleBoardSurfaceResult = ({
         return { kind: 'ignored' };
     }
 
-    const nextRun = applyShuffle(run);
-    return nextRun === run
+    const command = createGameplayShuffleCommand(
+        `shuffle:${run.runSeed}:${run.board?.level ?? 0}:${run.shuffleNonce}`
+    );
+    const result = reduceGameplayCommand(run, command);
+    return !result.accepted
         ? { kind: 'ignored' }
-        : { kind: 'applied', patch: { run: nextRun }, playArmSfx: false };
+        : {
+              kind: 'applied',
+              patch: { run: appendGameplayJournal(result.run, [command], result.events) },
+              playArmSfx: false,
+              events: result.events
+          };
 };
 
 export const createRegionShuffleArmSurfaceResult = ({
@@ -353,13 +362,20 @@ export const createRegionShuffleSurfaceResult = ({
         return { kind: 'ignored' };
     }
 
-    const nextRun = applyRegionShuffle(run, row);
-    return nextRun === run
+    const command = createGameplayRegionShuffleCommand(
+        `region-shuffle:${run.runSeed}:${run.board?.level ?? 0}:${run.shuffleNonce}:${row}`,
+        row
+    );
+    const result = reduceGameplayCommand(run, command);
+    return !result.accepted
         ? { kind: 'ignored' }
         : {
               kind: 'applied',
-              patch: createRunWithArmedModesClearedPatch(nextRun),
-              playArmSfx: false
+              patch: createRunWithArmedModesClearedPatch(
+                  appendGameplayJournal(result.run, [command], result.events)
+              ),
+              playArmSfx: false,
+              events: result.events
           };
 };
 
@@ -451,8 +467,19 @@ export const createArmedBoardPowerPressResult = ({
         if (tileSwapFirstTileId === tileId) {
             return { kind: 'tileSwapFirstCleared' };
         }
-        const nextRun = applyTileSwap(run, tileSwapFirstTileId, tileId);
-        return nextRun === run ? { kind: 'handled' } : { kind: 'tileSwapApplied', run: nextRun };
+        const command = createGameplayTileSwapCommand(
+            `tile-swap:${run.runSeed}:${run.board?.level ?? 0}:${run.shuffleNonce}:${tileSwapFirstTileId}:${tileId}`,
+            tileSwapFirstTileId,
+            tileId
+        );
+        const result = reduceGameplayCommand(run, command);
+        return !result.accepted
+            ? { kind: 'handled' }
+            : {
+                  kind: 'tileSwapApplied',
+                  run: appendGameplayJournal(result.run, [command], result.events),
+                  events: result.events
+              };
     }
 
     if (

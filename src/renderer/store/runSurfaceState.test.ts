@@ -424,6 +424,13 @@ describe('run surface state helpers', () => {
         if (result.kind === 'applied') {
             expect(result.patch.run.shuffleNonce).toBe(activeRun.shuffleNonce + 1);
             expect(result.playArmSfx).toBe(false);
+            expect(result.patch.run.gameplayCommandJournal).toEqual([
+                expect.objectContaining({ type: 'board.shuffle' })
+            ]);
+            expect(result.events).toEqual(expect.arrayContaining([
+                expect.objectContaining({ type: 'board.shuffled' }),
+                expect.objectContaining({ type: 'feedback.requested', cue: 'power.shuffle.used' })
+            ]));
         }
     });
 
@@ -447,6 +454,13 @@ describe('run surface state helpers', () => {
         if (shuffled.kind === 'applied') {
             expect(shuffled.patch.run.regionShuffleRowArmed).toBeNull();
             expect(shuffled.patch.run.shuffleNonce).toBe(activeRun.shuffleNonce + 1);
+            expect(shuffled.patch.run.gameplayCommandJournal).toEqual([
+                expect.objectContaining({ type: 'board.region_shuffle', rowIndex: 0 })
+            ]);
+            expect(shuffled.events).toEqual(expect.arrayContaining([
+                expect.objectContaining({ type: 'board.region_shuffled', rowIndex: 0 }),
+                expect.objectContaining({ type: 'feedback.requested', cue: 'power.region_shuffle.used' })
+            ]));
         }
     });
 

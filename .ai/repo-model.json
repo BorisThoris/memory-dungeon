@@ -5,18 +5,18 @@
     "name": "memory-dungeon",
     "trackedFileCount": 2377,
     "codeFileCount": 876,
-    "exportedSymbolCount": 3185,
+    "exportedSymbolCount": 3189,
     "contentItemCount": 56,
-    "mechanicCount": 90,
-    "stateFieldCount": 113,
-    "relationshipCount": 8566
+    "mechanicCount": 100,
+    "stateFieldCount": 115,
+    "relationshipCount": 8791
   },
   "inventory": [
     {
       "path": ".ai/GAMEPLAY_MIGRATION.md",
       "category": "other",
-      "bytes": 13435,
-      "sha256": "f1aab037debdc71173e8b3e508015b9ce6100899bff9f5a4d1f4f9dc42d90f0e"
+      "bytes": 15117,
+      "sha256": "e66911e212db766aa8da2ddd0c54983737f656c7a9785264775746b3eddf29f2"
     },
     {
       "path": ".ai/README.md",
@@ -831,8 +831,8 @@
     {
       "path": "docs/internal-wiki/APP_ANALYSIS.md",
       "category": "documentation",
-      "bytes": 21383,
-      "sha256": "8de8d3e530a32bcb490293775f48edaecde30f9f7861e2786202f908510b9fb5"
+      "bytes": 21422,
+      "sha256": "fbbe03e48524020f1d5b61b7801528e4903a1fb3d2e4336b3f51503a4272e9d9"
     },
     {
       "path": "docs/internal-wiki/ARCHITECTURE.md",
@@ -9339,8 +9339,8 @@
     {
       "path": "src/renderer/store/relicOfferSurfaceState.test.ts",
       "category": "test",
-      "bytes": 7482,
-      "sha256": "bb1cf49fde36dfbedff30f59305f466a0e7c9cbc013d58eedbb575de99b2b848"
+      "bytes": 7593,
+      "sha256": "41963ed1e218ad9985234659e0b087eb4cf4e8c954003f8535b0ab30a8d54967"
     },
     {
       "path": "src/renderer/store/relicOfferSurfaceState.ts",
@@ -9423,14 +9423,14 @@
     {
       "path": "src/renderer/store/runSurfaceState.test.ts",
       "category": "test",
-      "bytes": 35195,
-      "sha256": "c8d7ef34312edeaaa14058cfe462aff2cd6ea07d03b8336d3a1de98651031813"
+      "bytes": 36056,
+      "sha256": "f80397b22162d00baf8de16e75620b07349a03bc543cca97a86206e937433dfb"
     },
     {
       "path": "src/renderer/store/runSurfaceState.ts",
       "category": "source",
-      "bytes": 19401,
-      "sha256": "3be1ae7be4459444f85cd9c3741ebfe1e1eba5c434bf5038f9a5bbac424f5d34"
+      "bytes": 20493,
+      "sha256": "1b3b768d2f53969ff0d38dcb50e8f1435d3653bf04c58b56bbf42975f2fdafc5"
     },
     {
       "path": "src/renderer/store/runTimerController.test.ts",
@@ -9543,8 +9543,8 @@
     {
       "path": "src/renderer/store/tilePressController.test.ts",
       "category": "test",
-      "bytes": 9702,
-      "sha256": "904b21bd3359a0d1e09fa63d16596c626daa128d5355a70f3de2e80245273f0e"
+      "bytes": 10268,
+      "sha256": "50ec6e2d2fcb77f7c1534b0b5f58298e3de7235b5eda16226ae1a84e1a67d692"
     },
     {
       "path": "src/renderer/store/tilePressController.ts",
@@ -9921,8 +9921,8 @@
     {
       "path": "src/shared/bonus-rewards.ts",
       "category": "source",
-      "bytes": 42017,
-      "sha256": "8565c0957d8504fed1b21601d03bcca04bb61573c0d3dc3c3c6af54f9672943a"
+      "bytes": 43024,
+      "sha256": "b70287b9b999647e118fd32842a6674bf1a1b5be5316f405acd8832cec31e9d1"
     },
     {
       "path": "src/shared/boss-encounters.test.ts",
@@ -10599,50 +10599,50 @@
     {
       "path": "src/shared/gameplay-core-adapters.ts",
       "category": "source",
-      "bytes": 7608,
-      "sha256": "6811efa06b26f207c79278d79e47090544ce167ca98ee53940d0b415882cfefd"
+      "bytes": 7802,
+      "sha256": "85892e817894f6b0aaaa8cf17cb3210fdaf689db894f523dfa9a27eea7e9e656"
     },
     {
       "path": "src/shared/gameplay-core-contracts.ts",
       "category": "source",
-      "bytes": 40258,
-      "sha256": "aa68797a220459e6821ca411fa09e70b7c55bbdcb400f4065f9254d684154968"
+      "bytes": 47211,
+      "sha256": "7976b40b5c7fe42ce3f2b0b48433ffe1d15a0c7c197b3a1e876d94390b059482"
     },
     {
       "path": "src/shared/gameplay-core-simulation.test.ts",
       "category": "test",
-      "bytes": 4539,
-      "sha256": "0fd2f804b80eb5e09a883eb5dc54daf3292c87c922f887d7403017f19148aec3"
+      "bytes": 4939,
+      "sha256": "fe4826e01f9694724fc61d1bf74b4bdda1b34ffe2d2d866ba7a9f2f67c1623de"
     },
     {
       "path": "src/shared/gameplay-core-simulation.ts",
       "category": "source",
-      "bytes": 9711,
-      "sha256": "126b485dd3ab4ebaff096612f81589cc26d4d8390929a34084c3aeba62459617"
+      "bytes": 10606,
+      "sha256": "857eff91b0c6edc7a5f3b0ae533d5f01cd3152a5b9ce0c6ea0cc80e82e219639"
     },
     {
       "path": "src/shared/gameplay-core.test.ts",
       "category": "test",
-      "bytes": 30921,
-      "sha256": "c8319d373e39cb8e5f64092e1ef66fc274afde4da6dc5a6840faec9775fb4053"
+      "bytes": 36825,
+      "sha256": "c72cd4b609b7f42ee61793c426d8ae684cb4c23d9c7e6776e278d01e303cc494"
     },
     {
       "path": "src/shared/gameplay-core.ts",
       "category": "source",
-      "bytes": 24849,
-      "sha256": "655bd78126edaafb61baa68143364a5d93d9d1d133090474c87f69c1f6f6f0a2"
+      "bytes": 31104,
+      "sha256": "3a2d2fdc3a329571c34cc5539fadb8e8798146efe3cd41f2c5cbf19df7c43e7d"
     },
     {
       "path": "src/shared/gameplay-interaction-graph-data.json",
       "category": "source",
-      "bytes": 108994,
-      "sha256": "b17a9e0d1ddb1c1f862685f9fd42691a3ea99ada4df212dbbd0532b45087dcf9"
+      "bytes": 126152,
+      "sha256": "a4bfec66399bff38a19bb5c5467e1938550758bce618ec06af3b58c64243f3e1"
     },
     {
       "path": "src/shared/gameplay-interaction-graph.test.ts",
       "category": "test",
-      "bytes": 28975,
-      "sha256": "25c9dd6350015a5849ea60a908fda472f7aaf38e8792642ca3cf858d176ce913"
+      "bytes": 31729,
+      "sha256": "ec7996764697adf6d2371ff5105aa4045cb5a76569644cac131eeda3b1f5c8e6"
     },
     {
       "path": "src/shared/gameplay-interaction-graph.ts",
@@ -21891,7 +21891,7 @@
       "path": "src/renderer/store/relicOfferSurfaceState.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 208,
+      "lineCount": 211,
       "imports": [
         "file:src/renderer/store/relicOfferSurfaceState.ts",
         "file:src/shared/contracts.ts",
@@ -22149,7 +22149,7 @@
       "path": "src/renderer/store/runSurfaceState.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 956,
+      "lineCount": 970,
       "imports": [
         "file:src/renderer/store/matchScorePop.ts",
         "file:src/renderer/store/runSurfaceState.ts",
@@ -22168,7 +22168,7 @@
       "path": "src/renderer/store/runSurfaceState.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 664,
+      "lineCount": 691,
       "imports": [
         "file:src/renderer/store/matchScorePop.ts",
         "file:src/shared/board-powers.ts",
@@ -22529,7 +22529,7 @@
       "path": "src/renderer/store/tilePressController.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 264,
+      "lineCount": 275,
       "imports": [
         "file:src/renderer/store/tilePressController.ts",
         "file:src/shared/board-generation.ts",
@@ -23569,7 +23569,7 @@
       "path": "src/shared/bonus-rewards.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1039,
+      "lineCount": 1058,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/gameplay-core-contracts.ts",
@@ -26529,7 +26529,7 @@
       "path": "src/shared/gameplay-core-adapters.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 204,
+      "lineCount": 207,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/gameplay-core-contracts.ts",
@@ -26555,20 +26555,24 @@
       "path": "src/shared/gameplay-core-contracts.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1219,
+      "lineCount": 1426,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/run-inventory-contracts.ts"
       ],
       "exports": [
+        "symbol:src/shared/gameplay-core-contracts.ts#BOARD_TACTICIAN_DEFINITIONS",
         "symbol:src/shared/gameplay-core-contracts.ts#COMBO_SHARD_ENGINE_DEFINITIONS",
         "symbol:src/shared/gameplay-core-contracts.ts#CONDUIT_CARTOGRAPHER_DEFINITIONS",
         "symbol:src/shared/gameplay-core-contracts.ts#createGameplayDefinitionCommand",
         "symbol:src/shared/gameplay-core-contracts.ts#createGameplayGambitCommitCommand",
         "symbol:src/shared/gameplay-core-contracts.ts#createGameplayPeekCommand",
         "symbol:src/shared/gameplay-core-contracts.ts#createGameplayPinToggleCommand",
+        "symbol:src/shared/gameplay-core-contracts.ts#createGameplayRegionShuffleCommand",
         "symbol:src/shared/gameplay-core-contracts.ts#createGameplayRiskWagerAcceptCommand",
+        "symbol:src/shared/gameplay-core-contracts.ts#createGameplayShuffleCommand",
         "symbol:src/shared/gameplay-core-contracts.ts#createGameplayStrayRemoveCommand",
+        "symbol:src/shared/gameplay-core-contracts.ts#createGameplayTileSwapCommand",
         "symbol:src/shared/gameplay-core-contracts.ts#GAMEPLAY_CONTENT_DEFINITIONS",
         "symbol:src/shared/gameplay-core-contracts.ts#GAMEPLAY_CORE_SCHEMA_VERSION",
         "symbol:src/shared/gameplay-core-contracts.ts#GAMEPLAY_FINDABLE_KINDS",
@@ -26611,7 +26615,7 @@
       "path": "src/shared/gameplay-core-simulation.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 117,
+      "lineCount": 126,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/gameplay-core-simulation.ts"
@@ -26624,7 +26628,7 @@
       "path": "src/shared/gameplay-core-simulation.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 233,
+      "lineCount": 250,
       "imports": [
         "file:src/shared/board-power-targeting.ts",
         "file:src/shared/contracts.ts",
@@ -26647,7 +26651,7 @@
       "path": "src/shared/gameplay-core.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 667,
+      "lineCount": 799,
       "imports": [
         "file:src/shared/board-power-actions.ts",
         "file:src/shared/board-power-state.ts",
@@ -26667,7 +26671,7 @@
       "path": "src/shared/gameplay-core.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 574,
+      "lineCount": 719,
       "imports": [
         "file:src/shared/board-power-actions.ts",
         "file:src/shared/board-power-state.ts",
@@ -26698,7 +26702,7 @@
       "path": "src/shared/gameplay-interaction-graph-data.json",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1472,
+      "lineCount": 1655,
       "imports": [],
       "exports": [],
       "testedBy": []
@@ -26708,7 +26712,7 @@
       "path": "src/shared/gameplay-interaction-graph.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 478,
+      "lineCount": 514,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/gameplay-core-contracts.ts",
@@ -39816,168 +39820,168 @@
       "name": "canPauseRunSurface",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 122,
-      "endLine": 123
+      "line": 123,
+      "endLine": 124
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#clearRunSurfaceArmedModes",
       "name": "clearRunSurfaceArmedModes",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 607,
-      "endLine": 616
+      "line": 634,
+      "endLine": 643
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createArmedBoardPowerPressResult",
       "name": "createArmedBoardPowerPressResult",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 407,
-      "endLine": 493
+      "line": 423,
+      "endLine": 520
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createBoardPinModeToggleResult",
       "name": "createBoardPinModeToggleResult",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 125,
-      "endLine": 151
+      "line": 126,
+      "endLine": 152
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createBoardPowerContactPolicy",
       "name": "createBoardPowerContactPolicy",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 383,
-      "endLine": 405
+      "line": 399,
+      "endLine": 421
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createDestroyPairArmedToggleResult",
       "name": "createDestroyPairArmedToggleResult",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 153,
-      "endLine": 189
+      "line": 154,
+      "endLine": 190
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createFlashPairSurfaceResult",
       "name": "createFlashPairSurfaceResult",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 366,
-      "endLine": 381
+      "line": 382,
+      "endLine": 397
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createGambitThirdPickPressResult",
       "name": "createGambitThirdPickPressResult",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 536,
-      "endLine": 605
+      "line": 563,
+      "endLine": 632
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createOrdinaryTileFlipResult",
       "name": "createOrdinaryTileFlipResult",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 495,
-      "endLine": 534
+      "line": 522,
+      "endLine": 561
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createPausedRunSurfacePatch",
       "name": "createPausedRunSurfacePatch",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 657,
-      "endLine": 663
+      "line": 684,
+      "endLine": 690
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createPeekModeToggleResult",
       "name": "createPeekModeToggleResult",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 191,
-      "endLine": 233
+      "line": 192,
+      "endLine": 234
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createRegionShuffleArmSurfaceResult",
       "name": "createRegionShuffleArmSurfaceResult",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 320,
-      "endLine": 341
+      "line": 329,
+      "endLine": 350
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createRegionShuffleSurfaceResult",
       "name": "createRegionShuffleSurfaceResult",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 343,
-      "endLine": 364
+      "line": 352,
+      "endLine": 380
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createRunSurfaceReset",
       "name": "createRunSurfaceReset",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 111,
-      "endLine": 120
+      "line": 112,
+      "endLine": 121
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createRunWithArmedModesClearedPatch",
       "name": "createRunWithArmedModesClearedPatch",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 637,
-      "endLine": 644
+      "line": 664,
+      "endLine": 671
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createRunWithBoardInteractionClearedPatch",
       "name": "createRunWithBoardInteractionClearedPatch",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 646,
-      "endLine": 655
+      "line": 673,
+      "endLine": 682
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createRunWithBoardPowersDisarmedPatch",
       "name": "createRunWithBoardPowersDisarmedPatch",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 627,
-      "endLine": 635
+      "line": 654,
+      "endLine": 662
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createRunWithPeekDisarmedPatch",
       "name": "createRunWithPeekDisarmedPatch",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 618,
-      "endLine": 625
+      "line": 645,
+      "endLine": 652
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createShuffleBoardSurfaceResult",
       "name": "createShuffleBoardSurfaceResult",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 303,
-      "endLine": 318
+      "line": 304,
+      "endLine": 327
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createStrayArmToggleResult",
       "name": "createStrayArmToggleResult",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 279,
-      "endLine": 301
+      "line": 280,
+      "endLine": 302
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createTileSwapToggleResult",
       "name": "createTileSwapToggleResult",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 235,
-      "endLine": 277
+      "line": 236,
+      "endLine": 278
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#RunSurfaceState",
@@ -41976,8 +41980,8 @@
       "name": "claimBonusReward",
       "kind": "value",
       "file": "src/shared/bonus-rewards.ts",
-      "line": 959,
-      "endLine": 1023
+      "line": 978,
+      "endLine": 1042
     },
     {
       "id": "symbol:src/shared/bonus-rewards.ts#createBonusRewardLedger",
@@ -41992,8 +41996,8 @@
       "name": "getBonusRewardRows",
       "kind": "value",
       "file": "src/shared/bonus-rewards.ts",
-      "line": 1025,
-      "endLine": 1038
+      "line": 1044,
+      "endLine": 1057
     },
     {
       "id": "symbol:src/shared/bonus-rewards.ts#getPrimaryRewardPerkReadinessRow",
@@ -42040,8 +42044,8 @@
       "name": "previewBonusRewardClaim",
       "kind": "value",
       "file": "src/shared/bonus-rewards.ts",
-      "line": 871,
-      "endLine": 957
+      "line": 874,
+      "endLine": 976
     },
     {
       "id": "symbol:src/shared/bonus-rewards.ts#resolveBonusRewardRoomByInstanceId",
@@ -48560,8 +48564,8 @@
       "name": "applyRelicImmediateThroughGameplayCore",
       "kind": "value",
       "file": "src/shared/gameplay-core-adapters.ts",
-      "line": 60,
-      "endLine": 79
+      "line": 63,
+      "endLine": 82
     },
     {
       "id": "symbol:src/shared/gameplay-core-adapters.ts#GameplayMatchRewardAdapterResult",
@@ -48600,88 +48604,120 @@
       "name": "resolveFindableMatchRewardThroughGameplayCore",
       "kind": "value",
       "file": "src/shared/gameplay-core-adapters.ts",
-      "line": 86,
-      "endLine": 140
+      "line": 89,
+      "endLine": 143
     },
     {
       "id": "symbol:src/shared/gameplay-core-adapters.ts#resolveSlayerFloorClearThroughGameplayCore",
       "name": "resolveSlayerFloorClearThroughGameplayCore",
       "kind": "value",
       "file": "src/shared/gameplay-core-adapters.ts",
-      "line": 146,
-      "endLine": 203
+      "line": 149,
+      "endLine": 206
+    },
+    {
+      "id": "symbol:src/shared/gameplay-core-contracts.ts#BOARD_TACTICIAN_DEFINITIONS",
+      "name": "BOARD_TACTICIAN_DEFINITIONS",
+      "kind": "value",
+      "file": "src/shared/gameplay-core-contracts.ts",
+      "line": 557,
+      "endLine": 664
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#COMBO_SHARD_ENGINE_DEFINITIONS",
       "name": "COMBO_SHARD_ENGINE_DEFINITIONS",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 419,
-      "endLine": 492
+      "line": 427,
+      "endLine": 500
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#CONDUIT_CARTOGRAPHER_DEFINITIONS",
       "name": "CONDUIT_CARTOGRAPHER_DEFINITIONS",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 282,
-      "endLine": 339
+      "line": 290,
+      "endLine": 347
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayDefinitionCommand",
       "name": "createGameplayDefinitionCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1162,
-      "endLine": 1179
+      "line": 1341,
+      "endLine": 1358
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayGambitCommitCommand",
       "name": "createGameplayGambitCommitCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1212,
-      "endLine": 1218
+      "line": 1391,
+      "endLine": 1397
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayPeekCommand",
       "name": "createGameplayPeekCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1181,
-      "endLine": 1187
+      "line": 1360,
+      "endLine": 1366
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayPinToggleCommand",
       "name": "createGameplayPinToggleCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1189,
-      "endLine": 1195
+      "line": 1368,
+      "endLine": 1374
+    },
+    {
+      "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayRegionShuffleCommand",
+      "name": "createGameplayRegionShuffleCommand",
+      "kind": "value",
+      "file": "src/shared/gameplay-core-contracts.ts",
+      "line": 1406,
+      "endLine": 1412
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayRiskWagerAcceptCommand",
       "name": "createGameplayRiskWagerAcceptCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1205,
-      "endLine": 1210
+      "line": 1384,
+      "endLine": 1389
+    },
+    {
+      "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayShuffleCommand",
+      "name": "createGameplayShuffleCommand",
+      "kind": "value",
+      "file": "src/shared/gameplay-core-contracts.ts",
+      "line": 1399,
+      "endLine": 1404
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayStrayRemoveCommand",
       "name": "createGameplayStrayRemoveCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1197,
-      "endLine": 1203
+      "line": 1376,
+      "endLine": 1382
+    },
+    {
+      "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayTileSwapCommand",
+      "name": "createGameplayTileSwapCommand",
+      "kind": "value",
+      "file": "src/shared/gameplay-core-contracts.ts",
+      "line": 1414,
+      "endLine": 1425
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GAMEPLAY_CONTENT_DEFINITIONS",
       "name": "GAMEPLAY_CONTENT_DEFINITIONS",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 852,
-      "endLine": 860
+      "line": 969,
+      "endLine": 978
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GAMEPLAY_CORE_SCHEMA_VERSION",
@@ -48696,8 +48732,8 @@
       "name": "GAMEPLAY_FINDABLE_KINDS",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 27,
-      "endLine": 32
+      "line": 30,
+      "endLine": 35
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GAMEPLAY_RELIC_IDS",
@@ -48705,7 +48741,7 @@
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
       "line": 15,
-      "endLine": 25
+      "endLine": 28
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GAMEPLAY_REWARD_PERK_IDS",
@@ -48720,232 +48756,232 @@
       "name": "GAMEPLAY_RUN_STATUSES",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 46,
-      "endLine": 53
+      "line": 49,
+      "endLine": 56
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GAMEPLAY_TILE_TRAIT_KINDS",
       "name": "GAMEPLAY_TILE_TRAIT_KINDS",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 34,
-      "endLine": 44
+      "line": 37,
+      "endLine": 47
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GameplayCommand",
       "name": "GameplayCommand",
       "kind": "type",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1154,
-      "endLine": 1154
+      "line": 1333,
+      "endLine": 1333
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#gameplayCommandSchema",
       "name": "gameplayCommandSchema",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 873,
-      "endLine": 925
+      "line": 991,
+      "endLine": 1064
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GameplayCondition",
       "name": "GameplayCondition",
       "kind": "type",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 864,
-      "endLine": 864
+      "line": 982,
+      "endLine": 982
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#gameplayConditionSchema",
       "name": "gameplayConditionSchema",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 74,
-      "endLine": 145
+      "line": 77,
+      "endLine": 148
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GameplayContentDefinition",
       "name": "GameplayContentDefinition",
       "kind": "type",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 866,
-      "endLine": 866
+      "line": 984,
+      "endLine": 984
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#gameplayContentDefinitionSchema",
       "name": "gameplayContentDefinitionSchema",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 270,
-      "endLine": 280
+      "line": 278,
+      "endLine": 288
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GameplayEffect",
       "name": "GameplayEffect",
       "kind": "type",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 865,
-      "endLine": 865
+      "line": 983,
+      "endLine": 983
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#gameplayEffectSchema",
       "name": "gameplayEffectSchema",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 147,
-      "endLine": 268
+      "line": 150,
+      "endLine": 276
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GameplayEvent",
       "name": "GameplayEvent",
       "kind": "type",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1155,
-      "endLine": 1155
+      "line": 1334,
+      "endLine": 1334
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#gameplayEventSchema",
       "name": "gameplayEventSchema",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 935,
-      "endLine": 1152
+      "line": 1074,
+      "endLine": 1331
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GameplayFacts",
       "name": "GameplayFacts",
       "kind": "type",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 863,
-      "endLine": 863
+      "line": 981,
+      "endLine": 981
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#gameplayFactsSchema",
       "name": "gameplayFactsSchema",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 62,
-      "endLine": 72
+      "line": 65,
+      "endLine": 75
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GameplaySource",
       "name": "GameplaySource",
       "kind": "type",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 862,
-      "endLine": 862
+      "line": 980,
+      "endLine": 980
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#gameplaySourceSchema",
       "name": "gameplaySourceSchema",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 55,
-      "endLine": 60
+      "line": 58,
+      "endLine": 63
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#getGameplayContentDefinition",
       "name": "getGameplayContentDefinition",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1159,
-      "endLine": 1160
+      "line": 1338,
+      "endLine": 1339
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#SABOTEUR_DEFINITIONS",
       "name": "SABOTEUR_DEFINITIONS",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 494,
-      "endLine": 547
+      "line": 502,
+      "endLine": 555
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#SEER_DEFINITIONS",
       "name": "SEER_DEFINITIONS",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 780,
-      "endLine": 850
+      "line": 897,
+      "endLine": 967
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#SLAYER_DEFINITIONS",
       "name": "SLAYER_DEFINITIONS",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 645,
-      "endLine": 778
+      "line": 762,
+      "endLine": 895
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#VAULTBREAKER_DEFINITIONS",
       "name": "VAULTBREAKER_DEFINITIONS",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 549,
-      "endLine": 643
+      "line": 666,
+      "endLine": 760
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#WARDEN_DEFINITIONS",
       "name": "WARDEN_DEFINITIONS",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 341,
-      "endLine": 417
+      "line": 349,
+      "endLine": 425
     },
     {
       "id": "symbol:src/shared/gameplay-core-simulation.ts#GameplayCoreSimulationOptions",
       "name": "GameplayCoreSimulationOptions",
       "kind": "interface",
       "file": "src/shared/gameplay-core-simulation.ts",
-      "line": 20,
-      "endLine": 24
+      "line": 23,
+      "endLine": 27
     },
     {
       "id": "symbol:src/shared/gameplay-core-simulation.ts#GameplayCoreSimulationReport",
       "name": "GameplayCoreSimulationReport",
       "kind": "interface",
       "file": "src/shared/gameplay-core-simulation.ts",
-      "line": 26,
-      "endLine": 38
+      "line": 29,
+      "endLine": 41
     },
     {
       "id": "symbol:src/shared/gameplay-core-simulation.ts#runGameplayCoreSimulation",
       "name": "runGameplayCoreSimulation",
       "kind": "value",
       "file": "src/shared/gameplay-core-simulation.ts",
-      "line": 181,
-      "endLine": 232
+      "line": 198,
+      "endLine": 249
     },
     {
       "id": "symbol:src/shared/gameplay-core.ts#GameplayCommandResult",
       "name": "GameplayCommandResult",
       "kind": "interface",
       "file": "src/shared/gameplay-core.ts",
-      "line": 28,
-      "endLine": 33
+      "line": 34,
+      "endLine": 39
     },
     {
       "id": "symbol:src/shared/gameplay-core.ts#GameplayReplayResult",
       "name": "GameplayReplayResult",
       "kind": "interface",
       "file": "src/shared/gameplay-core.ts",
-      "line": 35,
-      "endLine": 40
+      "line": 41,
+      "endLine": 46
     },
     {
       "id": "symbol:src/shared/gameplay-core.ts#reduceGameplayCommand",
       "name": "reduceGameplayCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core.ts",
-      "line": 524,
-      "endLine": 558
+      "line": 660,
+      "endLine": 703
     },
     {
       "id": "symbol:src/shared/gameplay-core.ts#replayGameplayCommands",
       "name": "replayGameplayCommands",
       "kind": "value",
       "file": "src/shared/gameplay-core.ts",
-      "line": 560,
-      "endLine": 573
+      "line": 705,
+      "endLine": 718
     },
     {
       "id": "symbol:src/shared/gameplay-interaction-graph.ts#auditGameplayInteractionGraph",
@@ -57977,7 +58013,7 @@
       "evidence": [
         {
           "path": "src/shared/gameplay-core-contracts.ts",
-          "line": 274
+          "line": 282
         },
         {
           "path": "src/shared/gameplay-core-adapters.ts",
@@ -57999,7 +58035,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 19
+          "line": 26
         },
         {
           "path": "src/shared/game.test.ts",
@@ -58037,7 +58073,7 @@
       "evidence": [
         {
           "path": "src/shared/gameplay-core-contracts.ts",
-          "line": 16
+          "line": 19
         },
         {
           "path": "src/shared/relics.ts",
@@ -58055,7 +58091,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 15
+          "line": 22
         },
         {
           "path": "src/shared/game.test.ts",
@@ -58105,7 +58141,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 14
+          "line": 20
         },
         {
           "path": "src/shared/relics.test.ts",
@@ -58134,7 +58170,7 @@
       "evidence": [
         {
           "path": "src/shared/gameplay-core-contracts.ts",
-          "line": 274
+          "line": 282
         },
         {
           "path": "src/shared/relics.ts",
@@ -58148,7 +58184,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 21
+          "line": 28
         },
         {
           "path": "src/shared/tile-trait-rules.test.ts",
@@ -58179,11 +58215,11 @@
       "evidence": [
         {
           "path": "src/shared/gameplay-core-contracts.ts",
-          "line": 265
+          "line": 273
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 372
+          "line": 387
         },
         {
           "path": "src/shared/gameplay-core-adapters.ts",
@@ -58197,7 +58233,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 18
+          "line": 25
         },
         {
           "path": "src/shared/game.test.ts",
@@ -58240,7 +58276,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 445
+          "line": 460
         },
         {
           "path": "src/shared/risk-wager-rules.ts",
@@ -58258,7 +58294,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 131
+          "line": 141
         },
         {
           "path": "src/shared/risk-wager-rules.test.ts",
@@ -58300,11 +58336,19 @@
       "evidence": [
         {
           "path": "src/shared/gameplay-core-contracts.ts",
-          "line": 274
+          "line": 282
+        },
+        {
+          "path": "src/shared/gameplay-core.ts",
+          "line": 492
         },
         {
           "path": "src/shared/relics.ts",
           "line": 24
+        },
+        {
+          "path": "src/shared/board-power-actions.ts",
+          "line": 1
         },
         {
           "path": "src/shared/next-floor-run-state-rules.ts",
@@ -58318,7 +58362,19 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 17
+          "line": 24
+        },
+        {
+          "path": "src/shared/board-power-actions.test.ts",
+          "line": 1
+        },
+        {
+          "path": "src/renderer/store/runSurfaceState.test.ts",
+          "line": 4
+        },
+        {
+          "path": "src/renderer/store/tilePressController.test.ts",
+          "line": 3
         },
         {
           "path": "src/shared/game.test.ts",
@@ -58335,12 +58391,19 @@
       ],
       "enables": [
         "inventory.destroy_charge",
+        "inventory.shuffle_charge",
+        "inventory.region_shuffle_charge",
         "safety.safe_hazard_ward",
-        "power.destroy_pair"
+        "power.destroy_pair",
+        "power.shuffle",
+        "power.region_shuffle",
+        "power.tile_swap"
       ],
       "blocks": [],
       "softlockGuards": [
         "no-destroy-contract",
+        "no-shuffle-contract",
+        "clear-flip-state",
         "hazard-ward-cap",
         "destroy-forfeits-findable",
         "complete-source-effect-consequence-loop"
@@ -58355,7 +58418,7 @@
       "evidence": [
         {
           "path": "src/shared/gameplay-core-contracts.ts",
-          "line": 274
+          "line": 282
         },
         {
           "path": "src/shared/bonus-rewards.ts",
@@ -58373,7 +58436,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 20
+          "line": 27
         },
         {
           "path": "src/shared/bonus-rewards.test.ts",
@@ -58413,7 +58476,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 5
+          "line": 11
         },
         {
           "path": "src/shared/gameplay-core-adapters.ts",
@@ -58439,7 +58502,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 16
+          "line": 23
         },
         {
           "path": "src/shared/gameplay-journal.test.ts",
@@ -58569,7 +58632,7 @@
       "evidence": [
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 236
+          "line": 245
         },
         {
           "path": "src/shared/turn-match-economy-rules.ts",
@@ -58583,7 +58646,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 270
+          "line": 280
         },
         {
           "path": "src/shared/turn-match-economy-rules.test.ts",
@@ -58725,7 +58788,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 35
+          "line": 45
         }
       ],
       "enables": [
@@ -58756,7 +58819,7 @@
         },
         {
           "path": "src/shared/gameplay-core-contracts.ts",
-          "line": 29
+          "line": 32
         },
         {
           "path": "src/shared/game.ts",
@@ -58774,7 +58837,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 268
+          "line": 278
         }
       ],
       "enables": [
@@ -58822,7 +58885,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 15
+          "line": 22
         }
       ],
       "enables": [
@@ -58871,7 +58934,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 4
+          "line": 10
         }
       ],
       "enables": [
@@ -59036,7 +59099,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 18
+          "line": 24
         }
       ],
       "tests": [
@@ -59054,7 +59117,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 15
+          "line": 22
         }
       ],
       "enables": [
@@ -59088,7 +59151,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 18
+          "line": 24
         }
       ],
       "tests": [
@@ -59106,7 +59169,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 68
+          "line": 78
         }
       ],
       "enables": [
@@ -59180,7 +59243,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 18
+          "line": 24
         },
         {
           "path": "src/shared/turn-mismatch-rules.ts",
@@ -59206,7 +59269,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 75
+          "line": 85
         }
       ],
       "enables": [
@@ -59236,7 +59299,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 18
+          "line": 24
         },
         {
           "path": "src/shared/turn-match-economy-rules.ts",
@@ -59254,7 +59317,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 101
+          "line": 111
         }
       ],
       "enables": [
@@ -59281,7 +59344,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 1
+          "line": 2
         },
         {
           "path": "src/shared/power-verbs.ts",
@@ -59295,7 +59358,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 2
+          "line": 3
         }
       ],
       "enables": [
@@ -59305,6 +59368,96 @@
       "softlockGuards": [
         "non-negative-counter",
         "availability-check"
+      ]
+    },
+    {
+      "id": "mechanic:inventory.region_shuffle_charge",
+      "mechanicId": "inventory.region_shuffle_charge",
+      "label": "Row and Swap Charge Inventory",
+      "kind": "inventory",
+      "role": "targeted_board_control_resource",
+      "evidence": [
+        {
+          "path": "src/shared/run-inventory.ts",
+          "line": 11
+        },
+        {
+          "path": "src/shared/board-power-actions.ts",
+          "line": 21
+        },
+        {
+          "path": "src/shared/gameplay-core.ts",
+          "line": 6
+        }
+      ],
+      "tests": [
+        {
+          "path": "src/shared/run-inventory.test.ts",
+          "line": 5
+        },
+        {
+          "path": "src/shared/board-power-actions.test.ts",
+          "line": 15
+        },
+        {
+          "path": "src/shared/gameplay-core.test.ts",
+          "line": 7
+        }
+      ],
+      "enables": [
+        "power.region_shuffle",
+        "power.tile_swap"
+      ],
+      "blocks": [],
+      "softlockGuards": [
+        "non-negative-counter",
+        "clear-flip-state",
+        "hidden-target-only",
+        "no-shuffle-contract"
+      ]
+    },
+    {
+      "id": "mechanic:inventory.shuffle_charge",
+      "mechanicId": "inventory.shuffle_charge",
+      "label": "Shuffle Charge Inventory",
+      "kind": "inventory",
+      "role": "full_board_control_resource",
+      "evidence": [
+        {
+          "path": "src/shared/run-inventory.ts",
+          "line": 11
+        },
+        {
+          "path": "src/shared/board-power-actions.ts",
+          "line": 7
+        },
+        {
+          "path": "src/shared/gameplay-core.ts",
+          "line": 3
+        }
+      ],
+      "tests": [
+        {
+          "path": "src/shared/run-inventory.test.ts",
+          "line": 5
+        },
+        {
+          "path": "src/shared/board-power-actions.test.ts",
+          "line": 12
+        },
+        {
+          "path": "src/shared/gameplay-core.test.ts",
+          "line": 4
+        }
+      ],
+      "enables": [
+        "power.shuffle"
+      ],
+      "blocks": [],
+      "softlockGuards": [
+        "non-negative-counter",
+        "clear-flip-state",
+        "no-shuffle-contract"
       ]
     },
     {
@@ -59324,7 +59477,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 1
+          "line": 5
         }
       ],
       "tests": [
@@ -59338,7 +59491,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 2
+          "line": 6
         }
       ],
       "enables": [
@@ -59607,7 +59760,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 25
+          "line": 31
         },
         {
           "path": "src/shared/game.ts",
@@ -59625,7 +59778,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 6
+          "line": 12
         },
         {
           "path": "src/shared/game.test.ts",
@@ -59673,7 +59826,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 268
+          "line": 278
         },
         {
           "path": "src/shared/tile-trait-rules.test.ts",
@@ -59718,7 +59871,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 14
+          "line": 20
         }
       ],
       "enables": [
@@ -59730,6 +59883,51 @@
         "matched-echo",
         "adjacent-conduit",
         "active-perk-condition"
+      ]
+    },
+    {
+      "id": "mechanic:perk.free_first_swap_per_floor",
+      "mechanicId": "perk.free_first_swap_per_floor",
+      "label": "Free First Swap Per Floor",
+      "kind": "perk",
+      "role": "renewable_region_control_modifier",
+      "evidence": [
+        {
+          "path": "src/shared/bonus-rewards.ts",
+          "line": 59
+        },
+        {
+          "path": "src/shared/next-floor-run-state-rules.ts",
+          "line": 19
+        },
+        {
+          "path": "src/shared/board-power-actions.ts",
+          "line": 21
+        }
+      ],
+      "tests": [
+        {
+          "path": "src/shared/bonus-rewards.test.ts",
+          "line": 42
+        },
+        {
+          "path": "src/shared/next-floor-run-state-rules.test.ts",
+          "line": 4
+        },
+        {
+          "path": "src/shared/board-power-actions.test.ts",
+          "line": 15
+        }
+      ],
+      "enables": [
+        "power.region_shuffle",
+        "power.tile_swap"
+      ],
+      "blocks": [],
+      "softlockGuards": [
+        "one-free-use-per-floor",
+        "floor-reset",
+        "no-shuffle-contract"
       ]
     },
     {
@@ -59830,7 +60028,7 @@
       "evidence": [
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 47
+          "line": 53
         },
         {
           "path": "src/shared/flip-tile-transition.ts",
@@ -59852,7 +60050,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 23
+          "line": 30
         },
         {
           "path": "src/shared/gambit-match-rules.test.ts",
@@ -59896,7 +60094,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 1
+          "line": 2
         },
         {
           "path": "src/renderer/store/runSurfaceState.ts",
@@ -59914,7 +60112,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 2
+          "line": 3
         },
         {
           "path": "src/renderer/store/runSurfaceState.test.ts",
@@ -59949,7 +60147,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 2
+          "line": 8
         },
         {
           "path": "src/renderer/store/tilePressController.ts",
@@ -59963,7 +60161,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 3
+          "line": 9
         },
         {
           "path": "src/renderer/store/tilePressController.test.ts",
@@ -59983,17 +60181,21 @@
     {
       "id": "mechanic:power.region_shuffle",
       "mechanicId": "power.region_shuffle",
-      "label": "Region Shuffle",
+      "label": "Region Row Shuffle",
       "kind": "power",
-      "role": "routing_counterplay",
+      "role": "targeted_hidden_row_reordering",
       "evidence": [
         {
           "path": "src/shared/board-power-actions.ts",
           "line": 7
         },
         {
-          "path": "src/shared/board-power-availability.ts",
-          "line": 9
+          "path": "src/shared/gameplay-core.ts",
+          "line": 3
+        },
+        {
+          "path": "src/renderer/store/runSurfaceState.ts",
+          "line": 6
         }
       ],
       "tests": [
@@ -60004,16 +60206,75 @@
         {
           "path": "src/shared/board-power-availability.test.ts",
           "line": 9
+        },
+        {
+          "path": "src/shared/gameplay-core.test.ts",
+          "line": 4
+        },
+        {
+          "path": "src/renderer/store/runSurfaceState.test.ts",
+          "line": 20
         }
       ],
       "enables": [
         "trait.drift",
-        "trait.conduit"
+        "trait.conduit",
+        "objective.floor_clear",
+        "build.trap_control"
       ],
       "blocks": [],
       "softlockGuards": [
-        "shuffle-legality-checks",
+        "two-hidden-row-tiles",
+        "clear-flip-state",
+        "deterministic-seed",
+        "no-shuffle-contract",
         "exit-source-protection"
+      ]
+    },
+    {
+      "id": "mechanic:power.shuffle",
+      "mechanicId": "power.shuffle",
+      "label": "Full Board Shuffle",
+      "kind": "power",
+      "role": "global_hidden_board_reordering",
+      "evidence": [
+        {
+          "path": "src/shared/board-power-actions.ts",
+          "line": 2
+        },
+        {
+          "path": "src/shared/gameplay-core.ts",
+          "line": 3
+        },
+        {
+          "path": "src/renderer/store/runSurfaceState.ts",
+          "line": 6
+        }
+      ],
+      "tests": [
+        {
+          "path": "src/shared/board-power-actions.test.ts",
+          "line": 3
+        },
+        {
+          "path": "src/shared/gameplay-core.test.ts",
+          "line": 4
+        },
+        {
+          "path": "src/renderer/store/runSurfaceState.test.ts",
+          "line": 2
+        }
+      ],
+      "enables": [
+        "objective.floor_clear",
+        "build.trap_control"
+      ],
+      "blocks": [],
+      "softlockGuards": [
+        "two-hidden-pairs",
+        "clear-flip-state",
+        "deterministic-seed",
+        "no-shuffle-contract"
       ]
     },
     {
@@ -60029,11 +60290,11 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 1
+          "line": 5
         },
         {
           "path": "src/renderer/store/runSurfaceState.ts",
-          "line": 6
+          "line": 8
         }
       ],
       "tests": [
@@ -60043,7 +60304,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 2
+          "line": 6
         },
         {
           "path": "src/renderer/store/runSurfaceState.test.ts",
@@ -60064,17 +60325,25 @@
     {
       "id": "mechanic:power.tile_swap",
       "mechanicId": "power.tile_swap",
-      "label": "Tile Swap",
+      "label": "Hidden Tile Swap",
       "kind": "power",
-      "role": "routing_counterplay",
+      "role": "player_selected_board_reordering",
       "evidence": [
         {
           "path": "src/shared/board-power-actions.ts",
           "line": 14
         },
         {
-          "path": "src/shared/board-power-actions.test.ts",
+          "path": "src/shared/gameplay-core.ts",
           "line": 6
+        },
+        {
+          "path": "src/renderer/store/runSurfaceState.ts",
+          "line": 1
+        },
+        {
+          "path": "src/renderer/store/tilePressController.ts",
+          "line": 11
         }
       ],
       "tests": [
@@ -60083,18 +60352,26 @@
           "line": 6
         },
         {
-          "path": "src/shared/game.test.ts",
-          "line": 10
+          "path": "src/shared/gameplay-core.test.ts",
+          "line": 7
+        },
+        {
+          "path": "src/renderer/store/tilePressController.test.ts",
+          "line": 6
         }
       ],
       "enables": [
         "trait.conduit",
         "trait.drift",
-        "trait.stasis"
+        "trait.stasis",
+        "objective.floor_clear",
+        "build.trap_control"
       ],
       "blocks": [],
       "softlockGuards": [
-        "noShuffle-contract",
+        "two-distinct-hidden-targets",
+        "clear-flip-state",
+        "no-shuffle-contract",
         "matchable-pair-remains"
       ]
     },
@@ -60259,7 +60536,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 34
+          "line": 44
         },
         {
           "path": "src/shared/dungeon-boss-clear-rules.test.ts",
@@ -60321,7 +60598,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 15
+          "line": 22
         }
       ],
       "enables": [
@@ -60370,7 +60647,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 20
+          "line": 27
         }
       ],
       "enables": [
@@ -60383,6 +60660,109 @@
         "draft-eligibility",
         "no-destroy-contract",
         "definition-version-gate"
+      ]
+    },
+    {
+      "id": "mechanic:relic.extra_shuffle_charge",
+      "mechanicId": "relic.extra_shuffle_charge",
+      "label": "Extra Shuffle Charge Relic",
+      "kind": "relic",
+      "role": "full_board_shuffle_source",
+      "evidence": [
+        {
+          "path": "src/shared/relics.ts",
+          "line": 2
+        },
+        {
+          "path": "src/shared/relic-immediate-rules.ts",
+          "line": 4
+        },
+        {
+          "path": "src/shared/gameplay-core-adapters.ts",
+          "line": 1
+        },
+        {
+          "path": "src/shared/gameplay-core-contracts.ts",
+          "line": 2
+        }
+      ],
+      "tests": [
+        {
+          "path": "src/shared/relic-immediate-rules.test.ts",
+          "line": 6
+        },
+        {
+          "path": "src/shared/relics.test.ts",
+          "line": 2
+        },
+        {
+          "path": "src/shared/gameplay-core.test.ts",
+          "line": 4
+        },
+        {
+          "path": "src/renderer/store/relicOfferSurfaceState.test.ts",
+          "line": 2
+        }
+      ],
+      "enables": [
+        "inventory.shuffle_charge",
+        "power.shuffle",
+        "build.trap_control"
+      ],
+      "blocks": [],
+      "softlockGuards": [
+        "draft-eligibility",
+        "no-shuffle-contract",
+        "definition-version-gate"
+      ]
+    },
+    {
+      "id": "mechanic:relic.first_shuffle_free_per_floor",
+      "mechanicId": "relic.first_shuffle_free_per_floor",
+      "label": "Free First Shuffle Relic",
+      "kind": "relic",
+      "role": "renewable_full_board_shuffle_source",
+      "evidence": [
+        {
+          "path": "src/shared/relics.ts",
+          "line": 2
+        },
+        {
+          "path": "src/shared/run-creation-rules.ts",
+          "line": 5
+        },
+        {
+          "path": "src/shared/next-floor-run-state-rules.ts",
+          "line": 2
+        },
+        {
+          "path": "src/shared/gameplay-core-contracts.ts",
+          "line": 2
+        }
+      ],
+      "tests": [
+        {
+          "path": "src/shared/board-power-actions.test.ts",
+          "line": 12
+        },
+        {
+          "path": "src/shared/next-floor-run-state-rules.test.ts",
+          "line": 2
+        },
+        {
+          "path": "src/shared/gameplay-core.test.ts",
+          "line": 4
+        }
+      ],
+      "enables": [
+        "power.shuffle",
+        "build.trap_control"
+      ],
+      "blocks": [],
+      "softlockGuards": [
+        "one-free-use-per-floor",
+        "floor-reset",
+        "no-shuffle-contract"
       ]
     },
     {
@@ -60420,7 +60800,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 21
+          "line": 28
         }
       ],
       "enables": [
@@ -60461,7 +60841,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 34
+          "line": 44
         },
         {
           "path": "src/shared/score-parasite-rules.test.ts",
@@ -60520,7 +60900,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 2
+          "line": 3
         }
       ],
       "enables": [
@@ -60550,7 +60930,7 @@
         },
         {
           "path": "src/shared/gameplay-core-contracts.ts",
-          "line": 827
+          "line": 944
         }
       ],
       "tests": [
@@ -60560,7 +60940,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 398
+          "line": 408
         }
       ],
       "enables": [
@@ -60572,6 +60952,56 @@
         "draft-eligibility",
         "pin-capacity-check",
         "contract-total-pin-cap"
+      ]
+    },
+    {
+      "id": "mechanic:relic.region_shuffle_free_first",
+      "mechanicId": "relic.region_shuffle_free_first",
+      "label": "Free First Region Shuffle Relic",
+      "kind": "relic",
+      "role": "renewable_row_or_swap_source",
+      "evidence": [
+        {
+          "path": "src/shared/relics.ts",
+          "line": 2
+        },
+        {
+          "path": "src/shared/next-floor-run-state-rules.ts",
+          "line": 2
+        },
+        {
+          "path": "src/shared/board-power-actions.ts",
+          "line": 7
+        },
+        {
+          "path": "src/shared/gameplay-core-contracts.ts",
+          "line": 2
+        }
+      ],
+      "tests": [
+        {
+          "path": "src/shared/board-power-actions.test.ts",
+          "line": 12
+        },
+        {
+          "path": "src/shared/board-power-availability.test.ts",
+          "line": 9
+        },
+        {
+          "path": "src/shared/gameplay-core.test.ts",
+          "line": 4
+        }
+      ],
+      "enables": [
+        "power.region_shuffle",
+        "power.tile_swap",
+        "build.trap_control"
+      ],
+      "blocks": [],
+      "softlockGuards": [
+        "one-free-use-per-floor",
+        "floor-reset",
+        "no-shuffle-contract"
       ]
     },
     {
@@ -60601,7 +61031,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 34
+          "line": 44
         },
         {
           "path": "src/shared/relic-immediate-rules.test.ts",
@@ -60640,7 +61070,7 @@
         },
         {
           "path": "src/shared/gameplay-core-contracts.ts",
-          "line": 23
+          "line": 26
         }
       ],
       "tests": [
@@ -60650,7 +61080,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 2
+          "line": 6
         }
       ],
       "enables": [
@@ -60691,7 +61121,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 6
+          "line": 12
         },
         {
           "path": "src/shared/secondary-objective-rules.test.ts",
@@ -60736,7 +61166,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 3
+          "line": 9
         }
       ],
       "tests": [
@@ -60746,7 +61176,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 4
+          "line": 10
         }
       ],
       "enables": [
@@ -60823,7 +61253,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 3
+          "line": 9
         }
       ],
       "tests": [
@@ -60833,7 +61263,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 4
+          "line": 10
         }
       ],
       "enables": [
@@ -60865,7 +61295,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 3
+          "line": 9
         }
       ],
       "tests": [
@@ -60875,7 +61305,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 12
+          "line": 18
         }
       ],
       "enables": [
@@ -60917,7 +61347,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 14
+          "line": 20
         }
       ],
       "enables": [
@@ -60930,6 +61360,53 @@
         "reward-eligibility",
         "anti-grind-ledger",
         "schema-validation"
+      ]
+    },
+    {
+      "id": "mechanic:reward.free_swap_floor",
+      "mechanicId": "reward.free_swap_floor",
+      "label": "Free Swap Discipline",
+      "kind": "reward",
+      "role": "durable_floor_board_control_source",
+      "evidence": [
+        {
+          "path": "src/shared/bonus-rewards.ts",
+          "line": 73
+        },
+        {
+          "path": "src/shared/gameplay-core-contracts.ts",
+          "line": 8
+        },
+        {
+          "path": "src/shared/next-floor-run-state-rules.ts",
+          "line": 81
+        }
+      ],
+      "tests": [
+        {
+          "path": "src/shared/bonus-rewards.test.ts",
+          "line": 273
+        },
+        {
+          "path": "src/shared/next-floor-run-state-rules.test.ts",
+          "line": 80
+        },
+        {
+          "path": "src/shared/gameplay-core.test.ts",
+          "line": 7
+        }
+      ],
+      "enables": [
+        "perk.free_first_swap_per_floor",
+        "power.region_shuffle",
+        "power.tile_swap",
+        "build.trap_control"
+      ],
+      "blocks": [],
+      "softlockGuards": [
+        "one-claim-per-run",
+        "one-free-use-per-floor",
+        "no-shuffle-contract"
       ]
     },
     {
@@ -60959,7 +61436,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 4
+          "line": 10
         },
         {
           "path": "src/shared/next-floor-run-state-rules.test.ts",
@@ -60995,7 +61472,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 3
+          "line": 9
         }
       ],
       "tests": [
@@ -61005,7 +61482,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 4
+          "line": 10
         }
       ],
       "enables": [
@@ -61032,11 +61509,11 @@
         },
         {
           "path": "src/shared/gameplay-core-contracts.ts",
-          "line": 217
+          "line": 220
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 24
+          "line": 30
         }
       ],
       "tests": [
@@ -61046,7 +61523,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 6
+          "line": 12
         }
       ],
       "enables": [
@@ -61059,6 +61536,94 @@
         "reward-eligibility",
         "one-secret-per-run",
         "schema-validation"
+      ]
+    },
+    {
+      "id": "mechanic:reward.stasis_lockbox",
+      "mechanicId": "reward.stasis_lockbox",
+      "label": "Stasis Lockbox Reward",
+      "kind": "reward",
+      "role": "board_control_and_guard_source",
+      "evidence": [
+        {
+          "path": "src/shared/bonus-rewards.ts",
+          "line": 2
+        },
+        {
+          "path": "src/shared/gameplay-core-contracts.ts",
+          "line": 2
+        },
+        {
+          "path": "src/shared/gameplay-core.ts",
+          "line": 9
+        }
+      ],
+      "tests": [
+        {
+          "path": "src/shared/bonus-rewards.test.ts",
+          "line": 3
+        },
+        {
+          "path": "src/shared/gameplay-core.test.ts",
+          "line": 10
+        }
+      ],
+      "enables": [
+        "inventory.region_shuffle_charge",
+        "power.region_shuffle",
+        "power.tile_swap",
+        "build.trap_control"
+      ],
+      "blocks": [],
+      "softlockGuards": [
+        "reward-eligibility",
+        "anti-grind-ledger",
+        "guard-cap",
+        "no-shuffle-contract"
+      ]
+    },
+    {
+      "id": "mechanic:reward.trait_toolkit",
+      "mechanicId": "reward.trait_toolkit",
+      "label": "Trait Toolkit Reward",
+      "kind": "reward",
+      "role": "board_routing_resource_source",
+      "evidence": [
+        {
+          "path": "src/shared/bonus-rewards.ts",
+          "line": 2
+        },
+        {
+          "path": "src/shared/gameplay-core-contracts.ts",
+          "line": 2
+        },
+        {
+          "path": "src/shared/gameplay-core.ts",
+          "line": 9
+        }
+      ],
+      "tests": [
+        {
+          "path": "src/shared/bonus-rewards.test.ts",
+          "line": 3
+        },
+        {
+          "path": "src/shared/gameplay-core.test.ts",
+          "line": 10
+        }
+      ],
+      "enables": [
+        "inventory.region_shuffle_charge",
+        "power.region_shuffle",
+        "power.tile_swap",
+        "power.peek",
+        "build.trap_control"
+      ],
+      "blocks": [],
+      "softlockGuards": [
+        "reward-eligibility",
+        "anti-grind-ledger",
+        "no-shuffle-contract"
       ]
     },
     {
@@ -61270,7 +61835,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 3
+          "line": 9
         }
       ],
       "tests": [
@@ -61284,7 +61849,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 4
+          "line": 10
         }
       ],
       "enables": [
@@ -61535,7 +62100,7 @@
       "evidence": [
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 5
+          "line": 11
         },
         {
           "path": "src/shared/gameplay-core-simulation.ts",
@@ -61549,7 +62114,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 16
+          "line": 23
         },
         {
           "path": "src/shared/gameplay-core-simulation.test.ts",
@@ -61995,11 +62560,11 @@
         },
         {
           "path": "src/shared/gameplay-core-contracts.ts",
-          "line": 17
+          "line": 20
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 22
+          "line": 28
         }
       ],
       "tests": [
@@ -62009,7 +62574,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 75
+          "line": 85
         }
       ],
       "enables": [
@@ -62083,9 +62648,12 @@
         "mechanic:reward.chest_gold",
         "mechanic:reward.cursed_opener_contract",
         "mechanic:reward.echo_conduit_lens",
+        "mechanic:reward.free_swap_floor",
         "mechanic:reward.hazard_banisher",
         "mechanic:reward.hazard_ward",
-        "mechanic:reward.secret_favor"
+        "mechanic:reward.secret_favor",
+        "mechanic:reward.stasis_lockbox",
+        "mechanic:reward.trait_toolkit"
       ],
       "writtenBy": []
     },
@@ -62517,15 +63085,21 @@
         "mechanic:power.gambit",
         "mechanic:power.peek",
         "mechanic:power.pin",
+        "mechanic:power.region_shuffle",
+        "mechanic:power.shuffle",
         "mechanic:power.stray_remove",
+        "mechanic:power.tile_swap",
         "mechanic:progression.shard_to_life",
         "mechanic:relic.chapter_compass",
         "mechanic:relic.combo_shard_plus_step",
         "mechanic:relic.destroy_bank_plus_one",
+        "mechanic:relic.extra_shuffle_charge",
+        "mechanic:relic.first_shuffle_free_per_floor",
         "mechanic:relic.guard_token_plus_one",
         "mechanic:relic.parasite_ledger",
         "mechanic:relic.peek_charge_plus_one",
         "mechanic:relic.pin_cap_plus_one",
+        "mechanic:relic.region_shuffle_free_first",
         "mechanic:relic.shrine_echo",
         "mechanic:relic.stray_charge_plus_one",
         "mechanic:relic.wager_surety",
@@ -62534,9 +63108,12 @@
         "mechanic:reward.chest_gold",
         "mechanic:reward.cursed_opener_contract",
         "mechanic:reward.echo_conduit_lens",
+        "mechanic:reward.free_swap_floor",
         "mechanic:reward.hazard_banisher",
         "mechanic:reward.hazard_ward",
         "mechanic:reward.secret_favor",
+        "mechanic:reward.stasis_lockbox",
+        "mechanic:reward.trait_toolkit",
         "mechanic:safety.guard_absorption",
         "mechanic:safety.safe_hazard_ward",
         "mechanic:trait.volatile_heavy_guard"
@@ -62570,9 +63147,29 @@
         "mechanic:stats.session_tracking"
       ],
       "writtenBy": [
+        "mechanic:core.gameplay_commands",
         "mechanic:power.destroy_pair",
         "mechanic:power.peek",
-        "mechanic:power.stray_remove"
+        "mechanic:power.region_shuffle",
+        "mechanic:power.shuffle",
+        "mechanic:power.stray_remove",
+        "mechanic:power.tile_swap"
+      ]
+    },
+    {
+      "id": "state:freeShuffleThisFloor",
+      "name": "freeShuffleThisFloor",
+      "readBy": [
+        "mechanic:build.trap_control",
+        "mechanic:core.gameplay_commands",
+        "mechanic:inventory.shuffle_charge",
+        "mechanic:power.shuffle",
+        "mechanic:relic.first_shuffle_free_per_floor"
+      ],
+      "writtenBy": [
+        "mechanic:core.gameplay_commands",
+        "mechanic:power.shuffle",
+        "mechanic:relic.first_shuffle_free_per_floor"
       ]
     },
     {
@@ -62674,6 +63271,7 @@
         "mechanic:inventory.guard_token",
         "mechanic:relic.guard_token_plus_one",
         "mechanic:relic.wager_surety",
+        "mechanic:reward.stasis_lockbox",
         "mechanic:safety.guard_absorption",
         "mechanic:trait.volatile",
         "mechanic:trait.volatile_heavy_guard"
@@ -62685,6 +63283,7 @@
         "mechanic:relic.wager_surety",
         "mechanic:reward.bonus_shards",
         "mechanic:reward.hazard_ward",
+        "mechanic:reward.stasis_lockbox",
         "mechanic:safety.guard_absorption",
         "mechanic:trait.heavy",
         "mechanic:trait.mirror",
@@ -62821,8 +63420,14 @@
       "id": "state:noShuffle",
       "name": "noShuffle",
       "readBy": [
+        "mechanic:inventory.region_shuffle_charge",
+        "mechanic:inventory.shuffle_charge",
         "mechanic:power.region_shuffle",
-        "mechanic:power.tile_swap"
+        "mechanic:power.shuffle",
+        "mechanic:power.tile_swap",
+        "mechanic:relic.extra_shuffle_charge",
+        "mechanic:relic.first_shuffle_free_per_floor",
+        "mechanic:relic.region_shuffle_free_first"
       ],
       "writtenBy": []
     },
@@ -62888,7 +63493,8 @@
         "mechanic:feedback.gameplay_hud",
         "mechanic:inventory.peek_charge",
         "mechanic:power.peek",
-        "mechanic:relic.chapter_compass"
+        "mechanic:relic.chapter_compass",
+        "mechanic:reward.trait_toolkit"
       ],
       "writtenBy": [
         "mechanic:core.gameplay_commands",
@@ -62899,6 +63505,7 @@
         "mechanic:relic.peek_charge_plus_one",
         "mechanic:reward.echo_conduit_lens",
         "mechanic:reward.secret_favor",
+        "mechanic:reward.trait_toolkit",
         "mechanic:shop.trait_routing_kit",
         "mechanic:trait.conduit",
         "mechanic:trait.echo"
@@ -62970,6 +63577,7 @@
         "mechanic:power.gambit",
         "mechanic:power.peek",
         "mechanic:power.region_shuffle",
+        "mechanic:power.shuffle",
         "mechanic:power.stray_remove",
         "mechanic:power.tile_swap"
       ]
@@ -62992,12 +63600,46 @@
       "id": "state:regionShuffleCharges",
       "name": "regionShuffleCharges",
       "readBy": [
+        "mechanic:build.trap_control",
+        "mechanic:core.gameplay_commands",
+        "mechanic:inventory.region_shuffle_charge",
         "mechanic:power.region_shuffle",
+        "mechanic:power.tile_swap",
+        "mechanic:reward.stasis_lockbox",
+        "mechanic:reward.trait_toolkit",
         "mechanic:shop.trait_routing_kit"
       ],
       "writtenBy": [
+        "mechanic:core.gameplay_commands",
+        "mechanic:inventory.region_shuffle_charge",
+        "mechanic:power.region_shuffle",
+        "mechanic:power.tile_swap",
+        "mechanic:reward.stasis_lockbox",
+        "mechanic:reward.trait_toolkit",
         "mechanic:shop.trait_routing_kit",
         "mechanic:trait.drift"
+      ]
+    },
+    {
+      "id": "state:regionShuffleFreeThisFloor",
+      "name": "regionShuffleFreeThisFloor",
+      "readBy": [
+        "mechanic:build.trap_control",
+        "mechanic:core.gameplay_commands",
+        "mechanic:inventory.region_shuffle_charge",
+        "mechanic:perk.free_first_swap_per_floor",
+        "mechanic:power.region_shuffle",
+        "mechanic:power.tile_swap",
+        "mechanic:relic.region_shuffle_free_first",
+        "mechanic:reward.free_swap_floor"
+      ],
+      "writtenBy": [
+        "mechanic:core.gameplay_commands",
+        "mechanic:perk.free_first_swap_per_floor",
+        "mechanic:power.region_shuffle",
+        "mechanic:power.tile_swap",
+        "mechanic:relic.region_shuffle_free_first",
+        "mechanic:reward.free_swap_floor"
       ]
     },
     {
@@ -63046,8 +63688,11 @@
         "mechanic:relic.chapter_compass",
         "mechanic:relic.combo_shard_plus_step",
         "mechanic:relic.destroy_bank_plus_one",
+        "mechanic:relic.extra_shuffle_charge",
+        "mechanic:relic.first_shuffle_free_per_floor",
         "mechanic:relic.guard_token_plus_one",
         "mechanic:relic.parasite_ledger",
+        "mechanic:relic.region_shuffle_free_first",
         "mechanic:relic.shrine_echo",
         "mechanic:relic.wager_surety",
         "mechanic:trait.volatile"
@@ -63056,9 +63701,12 @@
         "mechanic:progression.relic_draft",
         "mechanic:relic.combo_shard_plus_step",
         "mechanic:relic.destroy_bank_plus_one",
+        "mechanic:relic.extra_shuffle_charge",
+        "mechanic:relic.first_shuffle_free_per_floor",
         "mechanic:relic.guard_token_plus_one",
         "mechanic:relic.peek_charge_plus_one",
         "mechanic:relic.pin_cap_plus_one",
+        "mechanic:relic.region_shuffle_free_first",
         "mechanic:relic.shrine_echo",
         "mechanic:relic.stray_charge_plus_one"
       ]
@@ -63072,9 +63720,12 @@
         "mechanic:progression.run_flow",
         "mechanic:relic.combo_shard_plus_step",
         "mechanic:relic.destroy_bank_plus_one",
+        "mechanic:relic.extra_shuffle_charge",
+        "mechanic:relic.first_shuffle_free_per_floor",
         "mechanic:relic.guard_token_plus_one",
         "mechanic:relic.peek_charge_plus_one",
         "mechanic:relic.pin_cap_plus_one",
+        "mechanic:relic.region_shuffle_free_first",
         "mechanic:relic.shrine_echo",
         "mechanic:relic.stray_charge_plus_one"
       ],
@@ -63119,13 +63770,16 @@
         "mechanic:core.gameplay_commands",
         "mechanic:perk.cursed_opener_greed",
         "mechanic:perk.echo_conduit_double",
+        "mechanic:perk.free_first_swap_per_floor",
         "mechanic:reward.cursed_opener_contract",
+        "mechanic:reward.free_swap_floor",
         "mechanic:reward.hazard_banisher"
       ],
       "writtenBy": [
         "mechanic:core.gameplay_commands",
         "mechanic:reward.cursed_opener_contract",
         "mechanic:reward.echo_conduit_lens",
+        "mechanic:reward.free_swap_floor",
         "mechanic:reward.hazard_banisher"
       ]
     },
@@ -63222,7 +63876,10 @@
         "mechanic:reward.bonus_shards",
         "mechanic:reward.boss_trophy_cache",
         "mechanic:reward.chest_gold",
+        "mechanic:reward.free_swap_floor",
         "mechanic:reward.hazard_ward",
+        "mechanic:reward.stasis_lockbox",
+        "mechanic:reward.trait_toolkit",
         "mechanic:room.locked_cache",
         "mechanic:trait.conduit",
         "mechanic:trait.heavy",
@@ -63309,10 +63966,35 @@
       "id": "state:shuffleCharges",
       "name": "shuffleCharges",
       "readBy": [
+        "mechanic:build.trap_control",
+        "mechanic:core.gameplay_commands",
+        "mechanic:inventory.shuffle_charge",
+        "mechanic:power.shuffle",
+        "mechanic:relic.extra_shuffle_charge",
         "mechanic:trait.drift"
       ],
       "writtenBy": [
+        "mechanic:core.gameplay_commands",
+        "mechanic:inventory.shuffle_charge",
+        "mechanic:power.shuffle",
+        "mechanic:relic.extra_shuffle_charge",
         "mechanic:trait.drift"
+      ]
+    },
+    {
+      "id": "state:shuffleNonce",
+      "name": "shuffleNonce",
+      "readBy": [
+        "mechanic:core.gameplay_commands",
+        "mechanic:power.region_shuffle",
+        "mechanic:power.shuffle",
+        "mechanic:power.tile_swap"
+      ],
+      "writtenBy": [
+        "mechanic:core.gameplay_commands",
+        "mechanic:power.region_shuffle",
+        "mechanic:power.shuffle",
+        "mechanic:power.tile_swap"
       ]
     },
     {
@@ -63370,13 +64052,10 @@
       "id": "state:tilePositions",
       "name": "tilePositions",
       "readBy": [
-        "mechanic:power.tile_swap",
         "mechanic:shop.trait_routing_kit"
       ],
       "writtenBy": [
-        "mechanic:hazard.tile_pressure",
-        "mechanic:power.region_shuffle",
-        "mechanic:power.tile_swap"
+        "mechanic:hazard.tile_pressure"
       ]
     },
     {
@@ -63394,22 +64073,20 @@
         "mechanic:power.gambit",
         "mechanic:power.peek",
         "mechanic:power.pin",
+        "mechanic:power.region_shuffle",
+        "mechanic:power.shuffle",
         "mechanic:power.stray_remove",
+        "mechanic:power.tile_swap",
         "mechanic:safety.dungeon_topology",
         "mechanic:safety.softlock_fairness"
       ],
       "writtenBy": [
         "mechanic:board.cleanup",
-        "mechanic:power.stray_remove"
-      ]
-    },
-    {
-      "id": "state:tileSwapCharges",
-      "name": "tileSwapCharges",
-      "readBy": [
+        "mechanic:power.region_shuffle",
+        "mechanic:power.shuffle",
+        "mechanic:power.stray_remove",
         "mechanic:power.tile_swap"
-      ],
-      "writtenBy": []
+      ]
     },
     {
       "id": "state:tileTraitKind",
@@ -63556,6 +64233,20 @@
       "label": "Saboteur relic source"
     },
     {
+      "id": "belongs_to:mechanic:relic.extra_shuffle_charge->mechanic:build.trap_control:Saboteur global control source",
+      "source": "mechanic:relic.extra_shuffle_charge",
+      "target": "mechanic:build.trap_control",
+      "kind": "belongs_to",
+      "label": "Saboteur global control source"
+    },
+    {
+      "id": "belongs_to:mechanic:relic.first_shuffle_free_per_floor->mechanic:build.trap_control:Saboteur renewable global control source",
+      "source": "mechanic:relic.first_shuffle_free_per_floor",
+      "target": "mechanic:build.trap_control",
+      "kind": "belongs_to",
+      "label": "Saboteur renewable global control source"
+    },
+    {
       "id": "belongs_to:mechanic:relic.guard_token_plus_one->mechanic:build.guard_tank:Warden Sigil build source",
       "source": "mechanic:relic.guard_token_plus_one",
       "target": "mechanic:build.guard_tank",
@@ -63582,6 +64273,13 @@
       "target": "mechanic:build.reveal_scout",
       "kind": "belongs_to",
       "label": "Seer memory marker source"
+    },
+    {
+      "id": "belongs_to:mechanic:relic.region_shuffle_free_first->mechanic:build.trap_control:Saboteur renewable targeted control source",
+      "source": "mechanic:relic.region_shuffle_free_first",
+      "target": "mechanic:build.trap_control",
+      "kind": "belongs_to",
+      "label": "Saboteur renewable targeted control source"
     },
     {
       "id": "belongs_to:mechanic:relic.shrine_echo->mechanic:build.treasure_greed:Vaultbreaker relic source",
@@ -63633,6 +64331,13 @@
       "label": "activates build"
     },
     {
+      "id": "belongs_to:mechanic:reward.free_swap_floor->mechanic:build.trap_control:Saboteur renewable control source",
+      "source": "mechanic:reward.free_swap_floor",
+      "target": "mechanic:build.trap_control",
+      "kind": "belongs_to",
+      "label": "Saboteur renewable control source"
+    },
+    {
       "id": "belongs_to:mechanic:reward.hazard_banisher->mechanic:build.trap_control:activates Saboteur pressure control",
       "source": "mechanic:reward.hazard_banisher",
       "target": "mechanic:build.trap_control",
@@ -63652,6 +64357,20 @@
       "target": "mechanic:build.reveal_scout",
       "kind": "belongs_to",
       "label": "Seer information resource source"
+    },
+    {
+      "id": "belongs_to:mechanic:reward.stasis_lockbox->mechanic:build.trap_control:Saboteur control and guard source",
+      "source": "mechanic:reward.stasis_lockbox",
+      "target": "mechanic:build.trap_control",
+      "kind": "belongs_to",
+      "label": "Saboteur control and guard source"
+    },
+    {
+      "id": "belongs_to:mechanic:reward.trait_toolkit->mechanic:build.trap_control:Saboteur routing source",
+      "source": "mechanic:reward.trait_toolkit",
+      "target": "mechanic:build.trap_control",
+      "kind": "belongs_to",
+      "label": "Saboteur routing source"
     },
     {
       "id": "belongs_to:mechanic:trait.volatile_heavy_guard->mechanic:build.guard_tank:trait guard source",
@@ -63780,6 +64499,27 @@
       "label": "turns trap pressure into target selection"
     },
     {
+      "id": "consequence:mechanic:build.trap_control->mechanic:power.region_shuffle:reshapes one pressured row",
+      "source": "mechanic:build.trap_control",
+      "target": "mechanic:power.region_shuffle",
+      "kind": "consequence",
+      "label": "reshapes one pressured row"
+    },
+    {
+      "id": "consequence:mechanic:build.trap_control->mechanic:power.shuffle:converts global pressure into a reset",
+      "source": "mechanic:build.trap_control",
+      "target": "mechanic:power.shuffle",
+      "kind": "consequence",
+      "label": "converts global pressure into a reset"
+    },
+    {
+      "id": "consequence:mechanic:build.trap_control->mechanic:power.tile_swap:turns memory into deliberate repositioning",
+      "source": "mechanic:build.trap_control",
+      "target": "mechanic:power.tile_swap",
+      "kind": "consequence",
+      "label": "turns memory into deliberate repositioning"
+    },
+    {
       "id": "consequence:mechanic:build.trap_control->mechanic:safety.safe_hazard_ward:buffers the trap that remains",
       "source": "mechanic:build.trap_control",
       "target": "mechanic:safety.safe_hazard_ward",
@@ -63871,11 +64611,32 @@
       "label": "spends one charge"
     },
     {
+      "id": "consumes:mechanic:power.region_shuffle->mechanic:inventory.region_shuffle_charge:spends a charge unless free",
+      "source": "mechanic:power.region_shuffle",
+      "target": "mechanic:inventory.region_shuffle_charge",
+      "kind": "consumes",
+      "label": "spends a charge unless free"
+    },
+    {
+      "id": "consumes:mechanic:power.shuffle->mechanic:inventory.shuffle_charge:spends a charge unless free",
+      "source": "mechanic:power.shuffle",
+      "target": "mechanic:inventory.shuffle_charge",
+      "kind": "consumes",
+      "label": "spends a charge unless free"
+    },
+    {
       "id": "consumes:mechanic:power.stray_remove->mechanic:inventory.stray_remove_charge:spends one charge",
       "source": "mechanic:power.stray_remove",
       "target": "mechanic:inventory.stray_remove_charge",
       "kind": "consumes",
       "label": "spends one charge"
+    },
+    {
+      "id": "consumes:mechanic:power.tile_swap->mechanic:inventory.region_shuffle_charge:spends a charge unless free",
+      "source": "mechanic:power.tile_swap",
+      "target": "mechanic:inventory.region_shuffle_charge",
+      "kind": "consumes",
+      "label": "spends a charge unless free"
     },
     {
       "id": "consumes:mechanic:progression.shard_to_life->mechanic:inventory.combo_shard:spends three shards for life",
@@ -63927,6 +64688,13 @@
       "label": "can rescue a mismatched pair while retaining failure cost"
     },
     {
+      "id": "counterplay:mechanic:power.region_shuffle->mechanic:objective.floor_clear:reorders one unresolved row",
+      "source": "mechanic:power.region_shuffle",
+      "target": "mechanic:objective.floor_clear",
+      "kind": "counterplay",
+      "label": "reorders one unresolved row"
+    },
+    {
       "id": "counterplay:mechanic:power.region_shuffle->mechanic:trait.drift:repositions route",
       "source": "mechanic:power.region_shuffle",
       "target": "mechanic:trait.drift",
@@ -63934,11 +64702,25 @@
       "label": "repositions route"
     },
     {
+      "id": "counterplay:mechanic:power.shuffle->mechanic:objective.floor_clear:reorders unresolved hidden pairs",
+      "source": "mechanic:power.shuffle",
+      "target": "mechanic:objective.floor_clear",
+      "kind": "counterplay",
+      "label": "reorders unresolved hidden pairs"
+    },
+    {
       "id": "counterplay:mechanic:power.stray_remove->mechanic:objective.floor_clear:removes only completion-safe singleton tiles",
       "source": "mechanic:power.stray_remove",
       "target": "mechanic:objective.floor_clear",
       "kind": "counterplay",
       "label": "removes only completion-safe singleton tiles"
+    },
+    {
+      "id": "counterplay:mechanic:power.tile_swap->mechanic:objective.floor_clear:moves two chosen hidden tiles",
+      "source": "mechanic:power.tile_swap",
+      "target": "mechanic:objective.floor_clear",
+      "kind": "counterplay",
+      "label": "moves two chosen hidden tiles"
     },
     {
       "id": "counterplay:mechanic:power.tile_swap->mechanic:trait.conduit:sets adjacency",
@@ -64492,6 +65274,20 @@
       "label": "shows current charge balance"
     },
     {
+      "id": "displays:mechanic:inventory.region_shuffle_charge->mechanic:feedback.gameplay_hud:shows remaining targeted control",
+      "source": "mechanic:inventory.region_shuffle_charge",
+      "target": "mechanic:feedback.gameplay_hud",
+      "kind": "displays",
+      "label": "shows remaining targeted control"
+    },
+    {
+      "id": "displays:mechanic:inventory.shuffle_charge->mechanic:feedback.gameplay_hud:shows remaining global control",
+      "source": "mechanic:inventory.shuffle_charge",
+      "target": "mechanic:feedback.gameplay_hud",
+      "kind": "displays",
+      "label": "shows remaining global control"
+    },
+    {
       "id": "displays:mechanic:inventory.stray_remove_charge->mechanic:feedback.gameplay_hud:shows remaining corrections",
       "source": "mechanic:inventory.stray_remove_charge",
       "target": "mechanic:feedback.gameplay_hud",
@@ -64548,11 +65344,32 @@
       "label": "shows marker state and capacity"
     },
     {
+      "id": "displays:mechanic:power.region_shuffle->mechanic:feedback.gameplay_hud:shows row and balance",
+      "source": "mechanic:power.region_shuffle",
+      "target": "mechanic:feedback.gameplay_hud",
+      "kind": "displays",
+      "label": "shows row and balance"
+    },
+    {
+      "id": "displays:mechanic:power.shuffle->mechanic:feedback.gameplay_hud:shows shuffle cause and balance",
+      "source": "mechanic:power.shuffle",
+      "target": "mechanic:feedback.gameplay_hud",
+      "kind": "displays",
+      "label": "shows shuffle cause and balance"
+    },
+    {
       "id": "displays:mechanic:power.stray_remove->mechanic:feedback.gameplay_hud:shows removed target and balance",
       "source": "mechanic:power.stray_remove",
       "target": "mechanic:feedback.gameplay_hud",
       "kind": "displays",
       "label": "shows removed target and balance"
+    },
+    {
+      "id": "displays:mechanic:power.tile_swap->mechanic:feedback.gameplay_hud:shows swapped targets and balance",
+      "source": "mechanic:power.tile_swap",
+      "target": "mechanic:feedback.gameplay_hud",
+      "kind": "displays",
+      "label": "shows swapped targets and balance"
     },
     {
       "id": "displays:mechanic:progression.relic_draft->mechanic:feedback.gameplay_hud:shows relic pick budget",
@@ -64590,6 +65407,20 @@
       "label": "shows Breaker Chisel gain"
     },
     {
+      "id": "displays:mechanic:relic.extra_shuffle_charge->mechanic:feedback.gameplay_hud:shows gained shuffle charge",
+      "source": "mechanic:relic.extra_shuffle_charge",
+      "target": "mechanic:feedback.gameplay_hud",
+      "kind": "displays",
+      "label": "shows gained shuffle charge"
+    },
+    {
+      "id": "displays:mechanic:relic.first_shuffle_free_per_floor->mechanic:feedback.gameplay_hud:shows free shuffle availability",
+      "source": "mechanic:relic.first_shuffle_free_per_floor",
+      "target": "mechanic:feedback.gameplay_hud",
+      "kind": "displays",
+      "label": "shows free shuffle availability"
+    },
+    {
       "id": "displays:mechanic:relic.guard_token_plus_one->mechanic:feedback.gameplay_hud:shows guard or overflow cause",
       "source": "mechanic:relic.guard_token_plus_one",
       "target": "mechanic:feedback.gameplay_hud",
@@ -64616,6 +65447,13 @@
       "target": "mechanic:feedback.gameplay_hud",
       "kind": "displays",
       "label": "shows capacity gain"
+    },
+    {
+      "id": "displays:mechanic:relic.region_shuffle_free_first->mechanic:feedback.gameplay_hud:shows free targeted use",
+      "source": "mechanic:relic.region_shuffle_free_first",
+      "target": "mechanic:feedback.gameplay_hud",
+      "kind": "displays",
+      "label": "shows free targeted use"
     },
     {
       "id": "displays:mechanic:relic.shrine_echo->mechanic:feedback.gameplay_hud:shows banked pick",
@@ -64674,6 +65512,13 @@
       "label": "shows claimed perk and charge"
     },
     {
+      "id": "displays:mechanic:reward.free_swap_floor->mechanic:feedback.gameplay_hud:shows durable perk and score",
+      "source": "mechanic:reward.free_swap_floor",
+      "target": "mechanic:feedback.gameplay_hud",
+      "kind": "displays",
+      "label": "shows durable perk and score"
+    },
+    {
       "id": "displays:mechanic:reward.hazard_banisher->mechanic:feedback.gameplay_hud:shows charge and durable perk",
       "source": "mechanic:reward.hazard_banisher",
       "target": "mechanic:feedback.gameplay_hud",
@@ -64693,6 +65538,20 @@
       "target": "mechanic:feedback.gameplay_hud",
       "kind": "displays",
       "label": "shows Peek and Favor gains"
+    },
+    {
+      "id": "displays:mechanic:reward.stasis_lockbox->mechanic:feedback.gameplay_hud:shows charge guard and score",
+      "source": "mechanic:reward.stasis_lockbox",
+      "target": "mechanic:feedback.gameplay_hud",
+      "kind": "displays",
+      "label": "shows charge guard and score"
+    },
+    {
+      "id": "displays:mechanic:reward.trait_toolkit->mechanic:feedback.gameplay_hud:shows charges Peek and score",
+      "source": "mechanic:reward.trait_toolkit",
+      "target": "mechanic:feedback.gameplay_hud",
+      "kind": "displays",
+      "label": "shows charges Peek and score"
     },
     {
       "id": "displays:mechanic:safety.guard_absorption->mechanic:feedback.gameplay_hud:forecasts guard before life",
@@ -64867,6 +65726,27 @@
       "label": "funds information action"
     },
     {
+      "id": "enables:mechanic:inventory.region_shuffle_charge->mechanic:power.region_shuffle:funds a targeted row reorder",
+      "source": "mechanic:inventory.region_shuffle_charge",
+      "target": "mechanic:power.region_shuffle",
+      "kind": "enables",
+      "label": "funds a targeted row reorder"
+    },
+    {
+      "id": "enables:mechanic:inventory.region_shuffle_charge->mechanic:power.tile_swap:funds a chosen two-tile swap",
+      "source": "mechanic:inventory.region_shuffle_charge",
+      "target": "mechanic:power.tile_swap",
+      "kind": "enables",
+      "label": "funds a chosen two-tile swap"
+    },
+    {
+      "id": "enables:mechanic:inventory.shuffle_charge->mechanic:power.shuffle:funds a full-board reorder",
+      "source": "mechanic:inventory.shuffle_charge",
+      "target": "mechanic:power.shuffle",
+      "kind": "enables",
+      "label": "funds a full-board reorder"
+    },
+    {
       "id": "enables:mechanic:inventory.stray_remove_charge->mechanic:power.stray_remove:funds one safe correction",
       "source": "mechanic:inventory.stray_remove_charge",
       "target": "mechanic:power.stray_remove",
@@ -64902,6 +65782,20 @@
       "label": "next flow"
     },
     {
+      "id": "enables:mechanic:perk.free_first_swap_per_floor->mechanic:power.region_shuffle:funds a free row shuffle",
+      "source": "mechanic:perk.free_first_swap_per_floor",
+      "target": "mechanic:power.region_shuffle",
+      "kind": "enables",
+      "label": "funds a free row shuffle"
+    },
+    {
+      "id": "enables:mechanic:perk.free_first_swap_per_floor->mechanic:power.tile_swap:funds a free tile swap",
+      "source": "mechanic:perk.free_first_swap_per_floor",
+      "target": "mechanic:power.tile_swap",
+      "kind": "enables",
+      "label": "funds a free tile swap"
+    },
+    {
       "id": "enables:mechanic:persistence.run_summary->mechanic:simulation.gameplay_replay:retains replay diagnostics",
       "source": "mechanic:persistence.run_summary",
       "target": "mechanic:simulation.gameplay_replay",
@@ -64914,6 +65808,27 @@
       "target": "mechanic:feedback.gameplay_hud",
       "kind": "enables",
       "label": "route feedback"
+    },
+    {
+      "id": "enables:mechanic:relic.first_shuffle_free_per_floor->mechanic:power.shuffle:funds one free global reorder per floor",
+      "source": "mechanic:relic.first_shuffle_free_per_floor",
+      "target": "mechanic:power.shuffle",
+      "kind": "enables",
+      "label": "funds one free global reorder per floor"
+    },
+    {
+      "id": "enables:mechanic:relic.region_shuffle_free_first->mechanic:power.region_shuffle:funds one free row shuffle per floor",
+      "source": "mechanic:relic.region_shuffle_free_first",
+      "target": "mechanic:power.region_shuffle",
+      "kind": "enables",
+      "label": "funds one free row shuffle per floor"
+    },
+    {
+      "id": "enables:mechanic:relic.region_shuffle_free_first->mechanic:power.tile_swap:funds one free tile swap per floor",
+      "source": "mechanic:relic.region_shuffle_free_first",
+      "target": "mechanic:power.tile_swap",
+      "kind": "enables",
+      "label": "funds one free tile swap per floor"
     },
     {
       "id": "enables:mechanic:reward.hazard_banisher->mechanic:power.destroy_pair:funds pair removal",
@@ -77632,6 +78547,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/gameplay-core-contracts.ts->symbol:src/shared/gameplay-core-contracts.ts#BOARD_TACTICIAN_DEFINITIONS",
+      "source": "file:src/shared/gameplay-core-contracts.ts",
+      "target": "symbol:src/shared/gameplay-core-contracts.ts#BOARD_TACTICIAN_DEFINITIONS",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/gameplay-core-contracts.ts->symbol:src/shared/gameplay-core-contracts.ts#COMBO_SHARD_ENGINE_DEFINITIONS",
       "source": "file:src/shared/gameplay-core-contracts.ts",
       "target": "symbol:src/shared/gameplay-core-contracts.ts#COMBO_SHARD_ENGINE_DEFINITIONS",
@@ -77668,15 +78589,33 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/gameplay-core-contracts.ts->symbol:src/shared/gameplay-core-contracts.ts#createGameplayRegionShuffleCommand",
+      "source": "file:src/shared/gameplay-core-contracts.ts",
+      "target": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayRegionShuffleCommand",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/gameplay-core-contracts.ts->symbol:src/shared/gameplay-core-contracts.ts#createGameplayRiskWagerAcceptCommand",
       "source": "file:src/shared/gameplay-core-contracts.ts",
       "target": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayRiskWagerAcceptCommand",
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/gameplay-core-contracts.ts->symbol:src/shared/gameplay-core-contracts.ts#createGameplayShuffleCommand",
+      "source": "file:src/shared/gameplay-core-contracts.ts",
+      "target": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayShuffleCommand",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/gameplay-core-contracts.ts->symbol:src/shared/gameplay-core-contracts.ts#createGameplayStrayRemoveCommand",
       "source": "file:src/shared/gameplay-core-contracts.ts",
       "target": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayStrayRemoveCommand",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/gameplay-core-contracts.ts->symbol:src/shared/gameplay-core-contracts.ts#createGameplayTileSwapCommand",
+      "source": "file:src/shared/gameplay-core-contracts.ts",
+      "target": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayTileSwapCommand",
       "kind": "exports"
     },
     {
@@ -84194,6 +85133,13 @@
       "label": "grants one destroy charge"
     },
     {
+      "id": "grants:mechanic:relic.extra_shuffle_charge->mechanic:inventory.shuffle_charge:adds one full-board shuffle",
+      "source": "mechanic:relic.extra_shuffle_charge",
+      "target": "mechanic:inventory.shuffle_charge",
+      "kind": "grants",
+      "label": "adds one full-board shuffle"
+    },
+    {
       "id": "grants:mechanic:relic.guard_token_plus_one->mechanic:inventory.guard_token:grants guard or overflow score",
       "source": "mechanic:relic.guard_token_plus_one",
       "target": "mechanic:inventory.guard_token",
@@ -84299,6 +85245,13 @@
       "label": "unlocks perk"
     },
     {
+      "id": "grants:mechanic:reward.free_swap_floor->mechanic:perk.free_first_swap_per_floor:arms one free targeted use per floor",
+      "source": "mechanic:reward.free_swap_floor",
+      "target": "mechanic:perk.free_first_swap_per_floor",
+      "kind": "grants",
+      "label": "arms one free targeted use per floor"
+    },
+    {
       "id": "grants:mechanic:reward.hazard_banisher->mechanic:inventory.destroy_charge:grants one destroy charge",
       "source": "mechanic:reward.hazard_banisher",
       "target": "mechanic:inventory.destroy_charge",
@@ -84325,6 +85278,27 @@
       "target": "mechanic:inventory.peek_charge",
       "kind": "grants",
       "label": "grants one chosen reveal"
+    },
+    {
+      "id": "grants:mechanic:reward.stasis_lockbox->mechanic:inventory.region_shuffle_charge:adds targeted board control",
+      "source": "mechanic:reward.stasis_lockbox",
+      "target": "mechanic:inventory.region_shuffle_charge",
+      "kind": "grants",
+      "label": "adds targeted board control"
+    },
+    {
+      "id": "grants:mechanic:reward.trait_toolkit->mechanic:inventory.region_shuffle_charge:adds one targeted board-control use",
+      "source": "mechanic:reward.trait_toolkit",
+      "target": "mechanic:inventory.region_shuffle_charge",
+      "kind": "grants",
+      "label": "adds one targeted board-control use"
+    },
+    {
+      "id": "grants:mechanic:reward.trait_toolkit->mechanic:power.peek:adds one information use before reshaping",
+      "source": "mechanic:reward.trait_toolkit",
+      "target": "mechanic:power.peek",
+      "kind": "grants",
+      "label": "adds one information use before reshaping"
     },
     {
       "id": "grants:mechanic:trait.volatile_heavy_guard->mechanic:inventory.guard_token:creates guard token",
@@ -84650,9 +85624,21 @@
       "kind": "implemented_by"
     },
     {
+      "id": "implemented_by:mechanic:build.trap_control->file:src/shared/board-power-actions.ts",
+      "source": "mechanic:build.trap_control",
+      "target": "file:src/shared/board-power-actions.ts",
+      "kind": "implemented_by"
+    },
+    {
       "id": "implemented_by:mechanic:build.trap_control->file:src/shared/gameplay-core-contracts.ts",
       "source": "mechanic:build.trap_control",
       "target": "file:src/shared/gameplay-core-contracts.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:build.trap_control->file:src/shared/gameplay-core.ts",
+      "source": "mechanic:build.trap_control",
+      "target": "file:src/shared/gameplay-core.ts",
       "kind": "implemented_by"
     },
     {
@@ -85106,6 +86092,42 @@
       "kind": "implemented_by"
     },
     {
+      "id": "implemented_by:mechanic:inventory.region_shuffle_charge->file:src/shared/board-power-actions.ts",
+      "source": "mechanic:inventory.region_shuffle_charge",
+      "target": "file:src/shared/board-power-actions.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:inventory.region_shuffle_charge->file:src/shared/gameplay-core.ts",
+      "source": "mechanic:inventory.region_shuffle_charge",
+      "target": "file:src/shared/gameplay-core.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:inventory.region_shuffle_charge->file:src/shared/run-inventory.ts",
+      "source": "mechanic:inventory.region_shuffle_charge",
+      "target": "file:src/shared/run-inventory.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:inventory.shuffle_charge->file:src/shared/board-power-actions.ts",
+      "source": "mechanic:inventory.shuffle_charge",
+      "target": "file:src/shared/board-power-actions.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:inventory.shuffle_charge->file:src/shared/gameplay-core.ts",
+      "source": "mechanic:inventory.shuffle_charge",
+      "target": "file:src/shared/gameplay-core.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:inventory.shuffle_charge->file:src/shared/run-inventory.ts",
+      "source": "mechanic:inventory.shuffle_charge",
+      "target": "file:src/shared/run-inventory.ts",
+      "kind": "implemented_by"
+    },
+    {
       "id": "implemented_by:mechanic:inventory.stray_remove_charge->file:src/shared/board-power-actions.ts",
       "source": "mechanic:inventory.stray_remove_charge",
       "target": "file:src/shared/board-power-actions.ts",
@@ -85286,6 +86308,24 @@
       "kind": "implemented_by"
     },
     {
+      "id": "implemented_by:mechanic:perk.free_first_swap_per_floor->file:src/shared/board-power-actions.ts",
+      "source": "mechanic:perk.free_first_swap_per_floor",
+      "target": "file:src/shared/board-power-actions.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:perk.free_first_swap_per_floor->file:src/shared/bonus-rewards.ts",
+      "source": "mechanic:perk.free_first_swap_per_floor",
+      "target": "file:src/shared/bonus-rewards.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:perk.free_first_swap_per_floor->file:src/shared/next-floor-run-state-rules.ts",
+      "source": "mechanic:perk.free_first_swap_per_floor",
+      "target": "file:src/shared/next-floor-run-state-rules.ts",
+      "kind": "implemented_by"
+    },
+    {
       "id": "implemented_by:mechanic:persistence.run_summary->file:src/main/persistence.ts",
       "source": "mechanic:persistence.run_summary",
       "target": "file:src/main/persistence.ts",
@@ -85394,15 +86434,39 @@
       "kind": "implemented_by"
     },
     {
+      "id": "implemented_by:mechanic:power.region_shuffle->file:src/renderer/store/runSurfaceState.ts",
+      "source": "mechanic:power.region_shuffle",
+      "target": "file:src/renderer/store/runSurfaceState.ts",
+      "kind": "implemented_by"
+    },
+    {
       "id": "implemented_by:mechanic:power.region_shuffle->file:src/shared/board-power-actions.ts",
       "source": "mechanic:power.region_shuffle",
       "target": "file:src/shared/board-power-actions.ts",
       "kind": "implemented_by"
     },
     {
-      "id": "implemented_by:mechanic:power.region_shuffle->file:src/shared/board-power-availability.ts",
+      "id": "implemented_by:mechanic:power.region_shuffle->file:src/shared/gameplay-core.ts",
       "source": "mechanic:power.region_shuffle",
-      "target": "file:src/shared/board-power-availability.ts",
+      "target": "file:src/shared/gameplay-core.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:power.shuffle->file:src/renderer/store/runSurfaceState.ts",
+      "source": "mechanic:power.shuffle",
+      "target": "file:src/renderer/store/runSurfaceState.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:power.shuffle->file:src/shared/board-power-actions.ts",
+      "source": "mechanic:power.shuffle",
+      "target": "file:src/shared/board-power-actions.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:power.shuffle->file:src/shared/gameplay-core.ts",
+      "source": "mechanic:power.shuffle",
+      "target": "file:src/shared/gameplay-core.ts",
       "kind": "implemented_by"
     },
     {
@@ -85424,15 +86488,27 @@
       "kind": "implemented_by"
     },
     {
-      "id": "implemented_by:mechanic:power.tile_swap->file:src/shared/board-power-actions.test.ts",
+      "id": "implemented_by:mechanic:power.tile_swap->file:src/renderer/store/runSurfaceState.ts",
       "source": "mechanic:power.tile_swap",
-      "target": "file:src/shared/board-power-actions.test.ts",
+      "target": "file:src/renderer/store/runSurfaceState.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:power.tile_swap->file:src/renderer/store/tilePressController.ts",
+      "source": "mechanic:power.tile_swap",
+      "target": "file:src/renderer/store/tilePressController.ts",
       "kind": "implemented_by"
     },
     {
       "id": "implemented_by:mechanic:power.tile_swap->file:src/shared/board-power-actions.ts",
       "source": "mechanic:power.tile_swap",
       "target": "file:src/shared/board-power-actions.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:power.tile_swap->file:src/shared/gameplay-core.ts",
+      "source": "mechanic:power.tile_swap",
+      "target": "file:src/shared/gameplay-core.ts",
       "kind": "implemented_by"
     },
     {
@@ -85568,6 +86644,54 @@
       "kind": "implemented_by"
     },
     {
+      "id": "implemented_by:mechanic:relic.extra_shuffle_charge->file:src/shared/gameplay-core-adapters.ts",
+      "source": "mechanic:relic.extra_shuffle_charge",
+      "target": "file:src/shared/gameplay-core-adapters.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:relic.extra_shuffle_charge->file:src/shared/gameplay-core-contracts.ts",
+      "source": "mechanic:relic.extra_shuffle_charge",
+      "target": "file:src/shared/gameplay-core-contracts.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:relic.extra_shuffle_charge->file:src/shared/relic-immediate-rules.ts",
+      "source": "mechanic:relic.extra_shuffle_charge",
+      "target": "file:src/shared/relic-immediate-rules.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:relic.extra_shuffle_charge->file:src/shared/relics.ts",
+      "source": "mechanic:relic.extra_shuffle_charge",
+      "target": "file:src/shared/relics.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:relic.first_shuffle_free_per_floor->file:src/shared/gameplay-core-contracts.ts",
+      "source": "mechanic:relic.first_shuffle_free_per_floor",
+      "target": "file:src/shared/gameplay-core-contracts.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:relic.first_shuffle_free_per_floor->file:src/shared/next-floor-run-state-rules.ts",
+      "source": "mechanic:relic.first_shuffle_free_per_floor",
+      "target": "file:src/shared/next-floor-run-state-rules.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:relic.first_shuffle_free_per_floor->file:src/shared/relics.ts",
+      "source": "mechanic:relic.first_shuffle_free_per_floor",
+      "target": "file:src/shared/relics.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:relic.first_shuffle_free_per_floor->file:src/shared/run-creation-rules.ts",
+      "source": "mechanic:relic.first_shuffle_free_per_floor",
+      "target": "file:src/shared/run-creation-rules.ts",
+      "kind": "implemented_by"
+    },
+    {
       "id": "implemented_by:mechanic:relic.guard_token_plus_one->file:src/shared/gameplay-core-adapters.ts",
       "source": "mechanic:relic.guard_token_plus_one",
       "target": "file:src/shared/gameplay-core-adapters.ts",
@@ -85648,6 +86772,30 @@
     {
       "id": "implemented_by:mechanic:relic.pin_cap_plus_one->file:src/shared/relics.ts",
       "source": "mechanic:relic.pin_cap_plus_one",
+      "target": "file:src/shared/relics.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:relic.region_shuffle_free_first->file:src/shared/board-power-actions.ts",
+      "source": "mechanic:relic.region_shuffle_free_first",
+      "target": "file:src/shared/board-power-actions.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:relic.region_shuffle_free_first->file:src/shared/gameplay-core-contracts.ts",
+      "source": "mechanic:relic.region_shuffle_free_first",
+      "target": "file:src/shared/gameplay-core-contracts.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:relic.region_shuffle_free_first->file:src/shared/next-floor-run-state-rules.ts",
+      "source": "mechanic:relic.region_shuffle_free_first",
+      "target": "file:src/shared/next-floor-run-state-rules.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:relic.region_shuffle_free_first->file:src/shared/relics.ts",
+      "source": "mechanic:relic.region_shuffle_free_first",
       "target": "file:src/shared/relics.ts",
       "kind": "implemented_by"
     },
@@ -85808,6 +86956,24 @@
       "kind": "implemented_by"
     },
     {
+      "id": "implemented_by:mechanic:reward.free_swap_floor->file:src/shared/bonus-rewards.ts",
+      "source": "mechanic:reward.free_swap_floor",
+      "target": "file:src/shared/bonus-rewards.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:reward.free_swap_floor->file:src/shared/gameplay-core-contracts.ts",
+      "source": "mechanic:reward.free_swap_floor",
+      "target": "file:src/shared/gameplay-core-contracts.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:reward.free_swap_floor->file:src/shared/next-floor-run-state-rules.ts",
+      "source": "mechanic:reward.free_swap_floor",
+      "target": "file:src/shared/next-floor-run-state-rules.ts",
+      "kind": "implemented_by"
+    },
+    {
       "id": "implemented_by:mechanic:reward.hazard_banisher->file:src/shared/bonus-rewards.ts",
       "source": "mechanic:reward.hazard_banisher",
       "target": "file:src/shared/bonus-rewards.ts",
@@ -85858,6 +87024,42 @@
     {
       "id": "implemented_by:mechanic:reward.secret_favor->file:src/shared/gameplay-core.ts",
       "source": "mechanic:reward.secret_favor",
+      "target": "file:src/shared/gameplay-core.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:reward.stasis_lockbox->file:src/shared/bonus-rewards.ts",
+      "source": "mechanic:reward.stasis_lockbox",
+      "target": "file:src/shared/bonus-rewards.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:reward.stasis_lockbox->file:src/shared/gameplay-core-contracts.ts",
+      "source": "mechanic:reward.stasis_lockbox",
+      "target": "file:src/shared/gameplay-core-contracts.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:reward.stasis_lockbox->file:src/shared/gameplay-core.ts",
+      "source": "mechanic:reward.stasis_lockbox",
+      "target": "file:src/shared/gameplay-core.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:reward.trait_toolkit->file:src/shared/bonus-rewards.ts",
+      "source": "mechanic:reward.trait_toolkit",
+      "target": "file:src/shared/bonus-rewards.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:reward.trait_toolkit->file:src/shared/gameplay-core-contracts.ts",
+      "source": "mechanic:reward.trait_toolkit",
+      "target": "file:src/shared/gameplay-core-contracts.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:reward.trait_toolkit->file:src/shared/gameplay-core.ts",
+      "source": "mechanic:reward.trait_toolkit",
       "target": "file:src/shared/gameplay-core.ts",
       "kind": "implemented_by"
     },
@@ -103496,6 +104698,20 @@
       "label": "applies typed iron-key grants"
     },
     {
+      "id": "modifies:mechanic:core.gameplay_commands->mechanic:inventory.region_shuffle_charge:grants and consumes typed row/swap charges",
+      "source": "mechanic:core.gameplay_commands",
+      "target": "mechanic:inventory.region_shuffle_charge",
+      "kind": "modifies",
+      "label": "grants and consumes typed row/swap charges"
+    },
+    {
+      "id": "modifies:mechanic:core.gameplay_commands->mechanic:inventory.shuffle_charge:grants and consumes typed shuffle charges",
+      "source": "mechanic:core.gameplay_commands",
+      "target": "mechanic:inventory.shuffle_charge",
+      "kind": "modifies",
+      "label": "grants and consumes typed shuffle charges"
+    },
+    {
       "id": "modifies:mechanic:core.gameplay_commands->mechanic:inventory.stray_remove_charge:applies and consumes typed stray charges",
       "source": "mechanic:core.gameplay_commands",
       "target": "mechanic:inventory.stray_remove_charge",
@@ -103517,11 +104733,32 @@
       "label": "executes typed pin decisions"
     },
     {
+      "id": "modifies:mechanic:core.gameplay_commands->mechanic:power.region_shuffle:executes deterministic row shuffle",
+      "source": "mechanic:core.gameplay_commands",
+      "target": "mechanic:power.region_shuffle",
+      "kind": "modifies",
+      "label": "executes deterministic row shuffle"
+    },
+    {
+      "id": "modifies:mechanic:core.gameplay_commands->mechanic:power.shuffle:executes deterministic full shuffle",
+      "source": "mechanic:core.gameplay_commands",
+      "target": "mechanic:power.shuffle",
+      "kind": "modifies",
+      "label": "executes deterministic full shuffle"
+    },
+    {
       "id": "modifies:mechanic:core.gameplay_commands->mechanic:power.stray_remove:executes typed stray removal",
       "source": "mechanic:core.gameplay_commands",
       "target": "mechanic:power.stray_remove",
       "kind": "modifies",
       "label": "executes typed stray removal"
+    },
+    {
+      "id": "modifies:mechanic:core.gameplay_commands->mechanic:power.tile_swap:executes chosen hidden-tile swap",
+      "source": "mechanic:core.gameplay_commands",
+      "target": "mechanic:power.tile_swap",
+      "kind": "modifies",
+      "label": "executes chosen hidden-tile swap"
     },
     {
       "id": "modifies:mechanic:core.gameplay_commands->mechanic:progression.relic_draft:applies typed future-pick grants",
@@ -103904,9 +105141,27 @@
       "kind": "reads"
     },
     {
+      "id": "reads:mechanic:build.trap_control->state:freeShuffleThisFloor",
+      "source": "mechanic:build.trap_control",
+      "target": "state:freeShuffleThisFloor",
+      "kind": "reads"
+    },
+    {
       "id": "reads:mechanic:build.trap_control->state:matchedFindables",
       "source": "mechanic:build.trap_control",
       "target": "state:matchedFindables",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:build.trap_control->state:regionShuffleCharges",
+      "source": "mechanic:build.trap_control",
+      "target": "state:regionShuffleCharges",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:build.trap_control->state:regionShuffleFreeThisFloor",
+      "source": "mechanic:build.trap_control",
+      "target": "state:regionShuffleFreeThisFloor",
       "kind": "reads"
     },
     {
@@ -103919,6 +105174,12 @@
       "id": "reads:mechanic:build.trap_control->state:safeHazardWardChargesThisFloor",
       "source": "mechanic:build.trap_control",
       "target": "state:safeHazardWardChargesThisFloor",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:build.trap_control->state:shuffleCharges",
+      "source": "mechanic:build.trap_control",
+      "target": "state:shuffleCharges",
       "kind": "reads"
     },
     {
@@ -104024,6 +105285,12 @@
       "kind": "reads"
     },
     {
+      "id": "reads:mechanic:core.gameplay_commands->state:freeShuffleThisFloor",
+      "source": "mechanic:core.gameplay_commands",
+      "target": "state:freeShuffleThisFloor",
+      "kind": "reads"
+    },
+    {
       "id": "reads:mechanic:core.gameplay_commands->state:gambitAvailableThisFloor",
       "source": "mechanic:core.gameplay_commands",
       "target": "state:gambitAvailableThisFloor",
@@ -104084,6 +105351,18 @@
       "kind": "reads"
     },
     {
+      "id": "reads:mechanic:core.gameplay_commands->state:regionShuffleCharges",
+      "source": "mechanic:core.gameplay_commands",
+      "target": "state:regionShuffleCharges",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:core.gameplay_commands->state:regionShuffleFreeThisFloor",
+      "source": "mechanic:core.gameplay_commands",
+      "target": "state:regionShuffleFreeThisFloor",
+      "kind": "reads"
+    },
+    {
       "id": "reads:mechanic:core.gameplay_commands->state:relicFavorProgress",
       "source": "mechanic:core.gameplay_commands",
       "target": "state:relicFavorProgress",
@@ -104111,6 +105390,18 @@
       "id": "reads:mechanic:core.gameplay_commands->state:shopGold",
       "source": "mechanic:core.gameplay_commands",
       "target": "state:shopGold",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:core.gameplay_commands->state:shuffleCharges",
+      "source": "mechanic:core.gameplay_commands",
+      "target": "state:shuffleCharges",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:core.gameplay_commands->state:shuffleNonce",
+      "source": "mechanic:core.gameplay_commands",
+      "target": "state:shuffleNonce",
       "kind": "reads"
     },
     {
@@ -104522,6 +105813,42 @@
       "kind": "reads"
     },
     {
+      "id": "reads:mechanic:inventory.region_shuffle_charge->state:noShuffle",
+      "source": "mechanic:inventory.region_shuffle_charge",
+      "target": "state:noShuffle",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:inventory.region_shuffle_charge->state:regionShuffleCharges",
+      "source": "mechanic:inventory.region_shuffle_charge",
+      "target": "state:regionShuffleCharges",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:inventory.region_shuffle_charge->state:regionShuffleFreeThisFloor",
+      "source": "mechanic:inventory.region_shuffle_charge",
+      "target": "state:regionShuffleFreeThisFloor",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:inventory.shuffle_charge->state:freeShuffleThisFloor",
+      "source": "mechanic:inventory.shuffle_charge",
+      "target": "state:freeShuffleThisFloor",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:inventory.shuffle_charge->state:noShuffle",
+      "source": "mechanic:inventory.shuffle_charge",
+      "target": "state:noShuffle",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:inventory.shuffle_charge->state:shuffleCharges",
+      "source": "mechanic:inventory.shuffle_charge",
+      "target": "state:shuffleCharges",
+      "kind": "reads"
+    },
+    {
       "id": "reads:mechanic:inventory.stray_remove_charge->state:strayRemoveCharges",
       "source": "mechanic:inventory.stray_remove_charge",
       "target": "state:strayRemoveCharges",
@@ -104696,6 +106023,18 @@
       "kind": "reads"
     },
     {
+      "id": "reads:mechanic:perk.free_first_swap_per_floor->state:regionShuffleFreeThisFloor",
+      "source": "mechanic:perk.free_first_swap_per_floor",
+      "target": "state:regionShuffleFreeThisFloor",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:perk.free_first_swap_per_floor->state:rewardPerkIds",
+      "source": "mechanic:perk.free_first_swap_per_floor",
+      "target": "state:rewardPerkIds",
+      "kind": "reads"
+    },
+    {
       "id": "reads:mechanic:persistence.run_summary->state:gameplayCommandJournal",
       "source": "mechanic:persistence.run_summary",
       "target": "state:gameplayCommandJournal",
@@ -104828,6 +106167,54 @@
       "kind": "reads"
     },
     {
+      "id": "reads:mechanic:power.region_shuffle->state:regionShuffleFreeThisFloor",
+      "source": "mechanic:power.region_shuffle",
+      "target": "state:regionShuffleFreeThisFloor",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:power.region_shuffle->state:shuffleNonce",
+      "source": "mechanic:power.region_shuffle",
+      "target": "state:shuffleNonce",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:power.region_shuffle->state:tileStates",
+      "source": "mechanic:power.region_shuffle",
+      "target": "state:tileStates",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:power.shuffle->state:freeShuffleThisFloor",
+      "source": "mechanic:power.shuffle",
+      "target": "state:freeShuffleThisFloor",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:power.shuffle->state:noShuffle",
+      "source": "mechanic:power.shuffle",
+      "target": "state:noShuffle",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:power.shuffle->state:shuffleCharges",
+      "source": "mechanic:power.shuffle",
+      "target": "state:shuffleCharges",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:power.shuffle->state:shuffleNonce",
+      "source": "mechanic:power.shuffle",
+      "target": "state:shuffleNonce",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:power.shuffle->state:tileStates",
+      "source": "mechanic:power.shuffle",
+      "target": "state:tileStates",
+      "kind": "reads"
+    },
+    {
       "id": "reads:mechanic:power.stray_remove->state:recallFocus",
       "source": "mechanic:power.stray_remove",
       "target": "state:recallFocus",
@@ -104852,15 +106239,27 @@
       "kind": "reads"
     },
     {
-      "id": "reads:mechanic:power.tile_swap->state:tilePositions",
+      "id": "reads:mechanic:power.tile_swap->state:regionShuffleCharges",
       "source": "mechanic:power.tile_swap",
-      "target": "state:tilePositions",
+      "target": "state:regionShuffleCharges",
       "kind": "reads"
     },
     {
-      "id": "reads:mechanic:power.tile_swap->state:tileSwapCharges",
+      "id": "reads:mechanic:power.tile_swap->state:regionShuffleFreeThisFloor",
       "source": "mechanic:power.tile_swap",
-      "target": "state:tileSwapCharges",
+      "target": "state:regionShuffleFreeThisFloor",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:power.tile_swap->state:shuffleNonce",
+      "source": "mechanic:power.tile_swap",
+      "target": "state:shuffleNonce",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:power.tile_swap->state:tileStates",
+      "source": "mechanic:power.tile_swap",
+      "target": "state:tileStates",
       "kind": "reads"
     },
     {
@@ -105008,6 +106407,54 @@
       "kind": "reads"
     },
     {
+      "id": "reads:mechanic:relic.extra_shuffle_charge->state:noShuffle",
+      "source": "mechanic:relic.extra_shuffle_charge",
+      "target": "state:noShuffle",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:relic.extra_shuffle_charge->state:relicIds",
+      "source": "mechanic:relic.extra_shuffle_charge",
+      "target": "state:relicIds",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:relic.extra_shuffle_charge->state:relicOffer",
+      "source": "mechanic:relic.extra_shuffle_charge",
+      "target": "state:relicOffer",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:relic.extra_shuffle_charge->state:shuffleCharges",
+      "source": "mechanic:relic.extra_shuffle_charge",
+      "target": "state:shuffleCharges",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:relic.first_shuffle_free_per_floor->state:freeShuffleThisFloor",
+      "source": "mechanic:relic.first_shuffle_free_per_floor",
+      "target": "state:freeShuffleThisFloor",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:relic.first_shuffle_free_per_floor->state:noShuffle",
+      "source": "mechanic:relic.first_shuffle_free_per_floor",
+      "target": "state:noShuffle",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:relic.first_shuffle_free_per_floor->state:relicIds",
+      "source": "mechanic:relic.first_shuffle_free_per_floor",
+      "target": "state:relicIds",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:relic.first_shuffle_free_per_floor->state:relicOffer",
+      "source": "mechanic:relic.first_shuffle_free_per_floor",
+      "target": "state:relicOffer",
+      "kind": "reads"
+    },
+    {
       "id": "reads:mechanic:relic.guard_token_plus_one->state:guardTokens",
       "source": "mechanic:relic.guard_token_plus_one",
       "target": "state:guardTokens",
@@ -105064,6 +106511,30 @@
     {
       "id": "reads:mechanic:relic.pin_cap_plus_one->state:relicOffer",
       "source": "mechanic:relic.pin_cap_plus_one",
+      "target": "state:relicOffer",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:relic.region_shuffle_free_first->state:noShuffle",
+      "source": "mechanic:relic.region_shuffle_free_first",
+      "target": "state:noShuffle",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:relic.region_shuffle_free_first->state:regionShuffleFreeThisFloor",
+      "source": "mechanic:relic.region_shuffle_free_first",
+      "target": "state:regionShuffleFreeThisFloor",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:relic.region_shuffle_free_first->state:relicIds",
+      "source": "mechanic:relic.region_shuffle_free_first",
+      "target": "state:relicIds",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:relic.region_shuffle_free_first->state:relicOffer",
+      "source": "mechanic:relic.region_shuffle_free_first",
       "target": "state:relicOffer",
       "kind": "reads"
     },
@@ -105188,6 +106659,24 @@
       "kind": "reads"
     },
     {
+      "id": "reads:mechanic:reward.free_swap_floor->state:bonusRewardLedger",
+      "source": "mechanic:reward.free_swap_floor",
+      "target": "state:bonusRewardLedger",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:reward.free_swap_floor->state:regionShuffleFreeThisFloor",
+      "source": "mechanic:reward.free_swap_floor",
+      "target": "state:regionShuffleFreeThisFloor",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:reward.free_swap_floor->state:rewardPerkIds",
+      "source": "mechanic:reward.free_swap_floor",
+      "target": "state:rewardPerkIds",
+      "kind": "reads"
+    },
+    {
       "id": "reads:mechanic:reward.hazard_banisher->state:bonusRewardLedger",
       "source": "mechanic:reward.hazard_banisher",
       "target": "state:bonusRewardLedger",
@@ -105227,6 +106716,42 @@
       "id": "reads:mechanic:reward.secret_favor->state:relicFavorProgress",
       "source": "mechanic:reward.secret_favor",
       "target": "state:relicFavorProgress",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:reward.stasis_lockbox->state:bonusRewardLedger",
+      "source": "mechanic:reward.stasis_lockbox",
+      "target": "state:bonusRewardLedger",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:reward.stasis_lockbox->state:guardTokens",
+      "source": "mechanic:reward.stasis_lockbox",
+      "target": "state:guardTokens",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:reward.stasis_lockbox->state:regionShuffleCharges",
+      "source": "mechanic:reward.stasis_lockbox",
+      "target": "state:regionShuffleCharges",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:reward.trait_toolkit->state:bonusRewardLedger",
+      "source": "mechanic:reward.trait_toolkit",
+      "target": "state:bonusRewardLedger",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:reward.trait_toolkit->state:peekCharges",
+      "source": "mechanic:reward.trait_toolkit",
+      "target": "state:peekCharges",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:reward.trait_toolkit->state:regionShuffleCharges",
+      "source": "mechanic:reward.trait_toolkit",
+      "target": "state:regionShuffleCharges",
       "kind": "reads"
     },
     {
@@ -105942,6 +107467,24 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:mechanic:build.trap_control->file:src/renderer/store/runSurfaceState.test.ts",
+      "source": "mechanic:build.trap_control",
+      "target": "file:src/renderer/store/runSurfaceState.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:build.trap_control->file:src/renderer/store/tilePressController.test.ts",
+      "source": "mechanic:build.trap_control",
+      "target": "file:src/renderer/store/tilePressController.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:build.trap_control->file:src/shared/board-power-actions.test.ts",
+      "source": "mechanic:build.trap_control",
+      "target": "file:src/shared/board-power-actions.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:mechanic:build.trap_control->file:src/shared/game.test.ts",
       "source": "mechanic:build.trap_control",
       "target": "file:src/shared/game.test.ts",
@@ -106339,6 +107882,42 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:mechanic:inventory.region_shuffle_charge->file:src/shared/board-power-actions.test.ts",
+      "source": "mechanic:inventory.region_shuffle_charge",
+      "target": "file:src/shared/board-power-actions.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:inventory.region_shuffle_charge->file:src/shared/gameplay-core.test.ts",
+      "source": "mechanic:inventory.region_shuffle_charge",
+      "target": "file:src/shared/gameplay-core.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:inventory.region_shuffle_charge->file:src/shared/run-inventory.test.ts",
+      "source": "mechanic:inventory.region_shuffle_charge",
+      "target": "file:src/shared/run-inventory.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:inventory.shuffle_charge->file:src/shared/board-power-actions.test.ts",
+      "source": "mechanic:inventory.shuffle_charge",
+      "target": "file:src/shared/board-power-actions.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:inventory.shuffle_charge->file:src/shared/gameplay-core.test.ts",
+      "source": "mechanic:inventory.shuffle_charge",
+      "target": "file:src/shared/gameplay-core.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:inventory.shuffle_charge->file:src/shared/run-inventory.test.ts",
+      "source": "mechanic:inventory.shuffle_charge",
+      "target": "file:src/shared/run-inventory.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:mechanic:inventory.stray_remove_charge->file:src/shared/board-power-actions.test.ts",
       "source": "mechanic:inventory.stray_remove_charge",
       "target": "file:src/shared/board-power-actions.test.ts",
@@ -106495,6 +108074,24 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:mechanic:perk.free_first_swap_per_floor->file:src/shared/board-power-actions.test.ts",
+      "source": "mechanic:perk.free_first_swap_per_floor",
+      "target": "file:src/shared/board-power-actions.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:perk.free_first_swap_per_floor->file:src/shared/bonus-rewards.test.ts",
+      "source": "mechanic:perk.free_first_swap_per_floor",
+      "target": "file:src/shared/bonus-rewards.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:perk.free_first_swap_per_floor->file:src/shared/next-floor-run-state-rules.test.ts",
+      "source": "mechanic:perk.free_first_swap_per_floor",
+      "target": "file:src/shared/next-floor-run-state-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:mechanic:persistence.run_summary->file:src/shared/gameplay-journal.test.ts",
       "source": "mechanic:persistence.run_summary",
       "target": "file:src/shared/gameplay-journal.test.ts",
@@ -106603,6 +108200,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:mechanic:power.region_shuffle->file:src/renderer/store/runSurfaceState.test.ts",
+      "source": "mechanic:power.region_shuffle",
+      "target": "file:src/renderer/store/runSurfaceState.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:mechanic:power.region_shuffle->file:src/shared/board-power-actions.test.ts",
       "source": "mechanic:power.region_shuffle",
       "target": "file:src/shared/board-power-actions.test.ts",
@@ -106612,6 +108215,30 @@
       "id": "tested_by:mechanic:power.region_shuffle->file:src/shared/board-power-availability.test.ts",
       "source": "mechanic:power.region_shuffle",
       "target": "file:src/shared/board-power-availability.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:power.region_shuffle->file:src/shared/gameplay-core.test.ts",
+      "source": "mechanic:power.region_shuffle",
+      "target": "file:src/shared/gameplay-core.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:power.shuffle->file:src/renderer/store/runSurfaceState.test.ts",
+      "source": "mechanic:power.shuffle",
+      "target": "file:src/renderer/store/runSurfaceState.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:power.shuffle->file:src/shared/board-power-actions.test.ts",
+      "source": "mechanic:power.shuffle",
+      "target": "file:src/shared/board-power-actions.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:power.shuffle->file:src/shared/gameplay-core.test.ts",
+      "source": "mechanic:power.shuffle",
+      "target": "file:src/shared/gameplay-core.test.ts",
       "kind": "tested_by"
     },
     {
@@ -106633,15 +108260,21 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:mechanic:power.tile_swap->file:src/renderer/store/tilePressController.test.ts",
+      "source": "mechanic:power.tile_swap",
+      "target": "file:src/renderer/store/tilePressController.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:mechanic:power.tile_swap->file:src/shared/board-power-actions.test.ts",
       "source": "mechanic:power.tile_swap",
       "target": "file:src/shared/board-power-actions.test.ts",
       "kind": "tested_by"
     },
     {
-      "id": "tested_by:mechanic:power.tile_swap->file:src/shared/game.test.ts",
+      "id": "tested_by:mechanic:power.tile_swap->file:src/shared/gameplay-core.test.ts",
       "source": "mechanic:power.tile_swap",
-      "target": "file:src/shared/game.test.ts",
+      "target": "file:src/shared/gameplay-core.test.ts",
       "kind": "tested_by"
     },
     {
@@ -106759,6 +108392,48 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:mechanic:relic.extra_shuffle_charge->file:src/renderer/store/relicOfferSurfaceState.test.ts",
+      "source": "mechanic:relic.extra_shuffle_charge",
+      "target": "file:src/renderer/store/relicOfferSurfaceState.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:relic.extra_shuffle_charge->file:src/shared/gameplay-core.test.ts",
+      "source": "mechanic:relic.extra_shuffle_charge",
+      "target": "file:src/shared/gameplay-core.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:relic.extra_shuffle_charge->file:src/shared/relic-immediate-rules.test.ts",
+      "source": "mechanic:relic.extra_shuffle_charge",
+      "target": "file:src/shared/relic-immediate-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:relic.extra_shuffle_charge->file:src/shared/relics.test.ts",
+      "source": "mechanic:relic.extra_shuffle_charge",
+      "target": "file:src/shared/relics.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:relic.first_shuffle_free_per_floor->file:src/shared/board-power-actions.test.ts",
+      "source": "mechanic:relic.first_shuffle_free_per_floor",
+      "target": "file:src/shared/board-power-actions.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:relic.first_shuffle_free_per_floor->file:src/shared/gameplay-core.test.ts",
+      "source": "mechanic:relic.first_shuffle_free_per_floor",
+      "target": "file:src/shared/gameplay-core.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:relic.first_shuffle_free_per_floor->file:src/shared/next-floor-run-state-rules.test.ts",
+      "source": "mechanic:relic.first_shuffle_free_per_floor",
+      "target": "file:src/shared/next-floor-run-state-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:mechanic:relic.guard_token_plus_one->file:src/shared/gameplay-core.test.ts",
       "source": "mechanic:relic.guard_token_plus_one",
       "target": "file:src/shared/gameplay-core.test.ts",
@@ -106827,6 +108502,24 @@
     {
       "id": "tested_by:mechanic:relic.pin_cap_plus_one->file:src/shared/gameplay-core.test.ts",
       "source": "mechanic:relic.pin_cap_plus_one",
+      "target": "file:src/shared/gameplay-core.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:relic.region_shuffle_free_first->file:src/shared/board-power-actions.test.ts",
+      "source": "mechanic:relic.region_shuffle_free_first",
+      "target": "file:src/shared/board-power-actions.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:relic.region_shuffle_free_first->file:src/shared/board-power-availability.test.ts",
+      "source": "mechanic:relic.region_shuffle_free_first",
+      "target": "file:src/shared/board-power-availability.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:relic.region_shuffle_free_first->file:src/shared/gameplay-core.test.ts",
+      "source": "mechanic:relic.region_shuffle_free_first",
       "target": "file:src/shared/gameplay-core.test.ts",
       "kind": "tested_by"
     },
@@ -106951,6 +108644,24 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:mechanic:reward.free_swap_floor->file:src/shared/bonus-rewards.test.ts",
+      "source": "mechanic:reward.free_swap_floor",
+      "target": "file:src/shared/bonus-rewards.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:reward.free_swap_floor->file:src/shared/gameplay-core.test.ts",
+      "source": "mechanic:reward.free_swap_floor",
+      "target": "file:src/shared/gameplay-core.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:reward.free_swap_floor->file:src/shared/next-floor-run-state-rules.test.ts",
+      "source": "mechanic:reward.free_swap_floor",
+      "target": "file:src/shared/next-floor-run-state-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:mechanic:reward.hazard_banisher->file:src/shared/bonus-rewards.test.ts",
       "source": "mechanic:reward.hazard_banisher",
       "target": "file:src/shared/bonus-rewards.test.ts",
@@ -106989,6 +108700,30 @@
     {
       "id": "tested_by:mechanic:reward.secret_favor->file:src/shared/gameplay-core.test.ts",
       "source": "mechanic:reward.secret_favor",
+      "target": "file:src/shared/gameplay-core.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:reward.stasis_lockbox->file:src/shared/bonus-rewards.test.ts",
+      "source": "mechanic:reward.stasis_lockbox",
+      "target": "file:src/shared/bonus-rewards.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:reward.stasis_lockbox->file:src/shared/gameplay-core.test.ts",
+      "source": "mechanic:reward.stasis_lockbox",
+      "target": "file:src/shared/gameplay-core.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:reward.trait_toolkit->file:src/shared/bonus-rewards.test.ts",
+      "source": "mechanic:reward.trait_toolkit",
+      "target": "file:src/shared/bonus-rewards.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:reward.trait_toolkit->file:src/shared/gameplay-core.test.ts",
+      "source": "mechanic:reward.trait_toolkit",
       "target": "file:src/shared/gameplay-core.test.ts",
       "kind": "tested_by"
     },
@@ -113442,6 +115177,27 @@
       "label": "trait match command"
     },
     {
+      "id": "triggers:mechanic:progression.run_flow->mechanic:perk.free_first_swap_per_floor:rearms the perk on each floor",
+      "source": "mechanic:progression.run_flow",
+      "target": "mechanic:perk.free_first_swap_per_floor",
+      "kind": "triggers",
+      "label": "rearms the perk on each floor"
+    },
+    {
+      "id": "triggers:mechanic:progression.run_flow->mechanic:relic.first_shuffle_free_per_floor:rearms the free full shuffle",
+      "source": "mechanic:progression.run_flow",
+      "target": "mechanic:relic.first_shuffle_free_per_floor",
+      "kind": "triggers",
+      "label": "rearms the free full shuffle"
+    },
+    {
+      "id": "triggers:mechanic:progression.run_flow->mechanic:relic.region_shuffle_free_first:rearms the free targeted use",
+      "source": "mechanic:progression.run_flow",
+      "target": "mechanic:relic.region_shuffle_free_first",
+      "kind": "triggers",
+      "label": "rearms the free targeted use"
+    },
+    {
       "id": "triggers:mechanic:relic.chapter_compass->mechanic:core.gameplay_commands:Slayer preparation and trophy commands",
       "source": "mechanic:relic.chapter_compass",
       "target": "mechanic:core.gameplay_commands",
@@ -113461,6 +115217,20 @@
       "target": "mechanic:core.gameplay_commands",
       "kind": "triggers",
       "label": "Breaker Chisel relic command"
+    },
+    {
+      "id": "triggers:mechanic:relic.extra_shuffle_charge->mechanic:core.gameplay_commands:typed shuffle-charge relic command",
+      "source": "mechanic:relic.extra_shuffle_charge",
+      "target": "mechanic:core.gameplay_commands",
+      "kind": "triggers",
+      "label": "typed shuffle-charge relic command"
+    },
+    {
+      "id": "triggers:mechanic:relic.first_shuffle_free_per_floor->mechanic:core.gameplay_commands:typed free-shuffle relic command",
+      "source": "mechanic:relic.first_shuffle_free_per_floor",
+      "target": "mechanic:core.gameplay_commands",
+      "kind": "triggers",
+      "label": "typed free-shuffle relic command"
     },
     {
       "id": "triggers:mechanic:relic.guard_token_plus_one->mechanic:core.gameplay_commands:relic and Mirror commands",
@@ -113489,6 +115259,13 @@
       "target": "mechanic:core.gameplay_commands",
       "kind": "triggers",
       "label": "Memory Nail relic command"
+    },
+    {
+      "id": "triggers:mechanic:relic.region_shuffle_free_first->mechanic:core.gameplay_commands:typed free-region relic command",
+      "source": "mechanic:relic.region_shuffle_free_first",
+      "target": "mechanic:core.gameplay_commands",
+      "kind": "triggers",
+      "label": "typed free-region relic command"
     },
     {
       "id": "triggers:mechanic:relic.shrine_echo->mechanic:core.gameplay_commands:Shrine Echo relic command",
@@ -113540,6 +115317,13 @@
       "label": "claim command"
     },
     {
+      "id": "triggers:mechanic:reward.free_swap_floor->mechanic:core.gameplay_commands:typed durable free-swap command",
+      "source": "mechanic:reward.free_swap_floor",
+      "target": "mechanic:core.gameplay_commands",
+      "kind": "triggers",
+      "label": "typed durable free-swap command"
+    },
+    {
       "id": "triggers:mechanic:reward.hazard_banisher->mechanic:core.gameplay_commands:Saboteur reward command",
       "source": "mechanic:reward.hazard_banisher",
       "target": "mechanic:core.gameplay_commands",
@@ -113559,6 +115343,20 @@
       "target": "mechanic:core.gameplay_commands",
       "kind": "triggers",
       "label": "Seer secret reward command"
+    },
+    {
+      "id": "triggers:mechanic:reward.stasis_lockbox->mechanic:core.gameplay_commands:typed Stasis Lockbox command",
+      "source": "mechanic:reward.stasis_lockbox",
+      "target": "mechanic:core.gameplay_commands",
+      "kind": "triggers",
+      "label": "typed Stasis Lockbox command"
+    },
+    {
+      "id": "triggers:mechanic:reward.trait_toolkit->mechanic:core.gameplay_commands:typed Toolkit reward command",
+      "source": "mechanic:reward.trait_toolkit",
+      "target": "mechanic:core.gameplay_commands",
+      "kind": "triggers",
+      "label": "typed Toolkit reward command"
     },
     {
       "id": "triggers:mechanic:trait.echo->mechanic:perk.echo_conduit_double:matched trait condition",
@@ -113767,6 +115565,18 @@
       "kind": "writes"
     },
     {
+      "id": "writes:mechanic:core.gameplay_commands->state:forgottenTileIdsThisFloor",
+      "source": "mechanic:core.gameplay_commands",
+      "target": "state:forgottenTileIdsThisFloor",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:core.gameplay_commands->state:freeShuffleThisFloor",
+      "source": "mechanic:core.gameplay_commands",
+      "target": "state:freeShuffleThisFloor",
+      "kind": "writes"
+    },
+    {
       "id": "writes:mechanic:core.gameplay_commands->state:gambitCommitRequests",
       "source": "mechanic:core.gameplay_commands",
       "target": "state:gambitCommitRequests",
@@ -113839,6 +115649,18 @@
       "kind": "writes"
     },
     {
+      "id": "writes:mechanic:core.gameplay_commands->state:regionShuffleCharges",
+      "source": "mechanic:core.gameplay_commands",
+      "target": "state:regionShuffleCharges",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:core.gameplay_commands->state:regionShuffleFreeThisFloor",
+      "source": "mechanic:core.gameplay_commands",
+      "target": "state:regionShuffleFreeThisFloor",
+      "kind": "writes"
+    },
+    {
       "id": "writes:mechanic:core.gameplay_commands->state:relicFavorProgress",
       "source": "mechanic:core.gameplay_commands",
       "target": "state:relicFavorProgress",
@@ -113884,6 +115706,18 @@
       "id": "writes:mechanic:core.gameplay_commands->state:shopGold",
       "source": "mechanic:core.gameplay_commands",
       "target": "state:shopGold",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:core.gameplay_commands->state:shuffleCharges",
+      "source": "mechanic:core.gameplay_commands",
+      "target": "state:shuffleCharges",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:core.gameplay_commands->state:shuffleNonce",
+      "source": "mechanic:core.gameplay_commands",
+      "target": "state:shuffleNonce",
       "kind": "writes"
     },
     {
@@ -114109,6 +115943,18 @@
       "kind": "writes"
     },
     {
+      "id": "writes:mechanic:inventory.region_shuffle_charge->state:regionShuffleCharges",
+      "source": "mechanic:inventory.region_shuffle_charge",
+      "target": "state:regionShuffleCharges",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:inventory.shuffle_charge->state:shuffleCharges",
+      "source": "mechanic:inventory.shuffle_charge",
+      "target": "state:shuffleCharges",
+      "kind": "writes"
+    },
+    {
       "id": "writes:mechanic:inventory.stray_remove_charge->state:strayRemoveCharges",
       "source": "mechanic:inventory.stray_remove_charge",
       "target": "state:strayRemoveCharges",
@@ -114247,6 +116093,12 @@
       "kind": "writes"
     },
     {
+      "id": "writes:mechanic:perk.free_first_swap_per_floor->state:regionShuffleFreeThisFloor",
+      "source": "mechanic:perk.free_first_swap_per_floor",
+      "target": "state:regionShuffleFreeThisFloor",
+      "kind": "writes"
+    },
+    {
       "id": "writes:mechanic:persistence.run_summary->state:saveReport",
       "source": "mechanic:persistence.run_summary",
       "target": "state:saveReport",
@@ -114355,15 +116207,87 @@
       "kind": "writes"
     },
     {
+      "id": "writes:mechanic:power.region_shuffle->state:feedbackLines",
+      "source": "mechanic:power.region_shuffle",
+      "target": "state:feedbackLines",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:power.region_shuffle->state:forgottenTileIdsThisFloor",
+      "source": "mechanic:power.region_shuffle",
+      "target": "state:forgottenTileIdsThisFloor",
+      "kind": "writes"
+    },
+    {
       "id": "writes:mechanic:power.region_shuffle->state:powersUsedThisRun",
       "source": "mechanic:power.region_shuffle",
       "target": "state:powersUsedThisRun",
       "kind": "writes"
     },
     {
-      "id": "writes:mechanic:power.region_shuffle->state:tilePositions",
+      "id": "writes:mechanic:power.region_shuffle->state:regionShuffleCharges",
       "source": "mechanic:power.region_shuffle",
-      "target": "state:tilePositions",
+      "target": "state:regionShuffleCharges",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:power.region_shuffle->state:regionShuffleFreeThisFloor",
+      "source": "mechanic:power.region_shuffle",
+      "target": "state:regionShuffleFreeThisFloor",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:power.region_shuffle->state:shuffleNonce",
+      "source": "mechanic:power.region_shuffle",
+      "target": "state:shuffleNonce",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:power.region_shuffle->state:tileStates",
+      "source": "mechanic:power.region_shuffle",
+      "target": "state:tileStates",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:power.shuffle->state:feedbackLines",
+      "source": "mechanic:power.shuffle",
+      "target": "state:feedbackLines",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:power.shuffle->state:forgottenTileIdsThisFloor",
+      "source": "mechanic:power.shuffle",
+      "target": "state:forgottenTileIdsThisFloor",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:power.shuffle->state:freeShuffleThisFloor",
+      "source": "mechanic:power.shuffle",
+      "target": "state:freeShuffleThisFloor",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:power.shuffle->state:powersUsedThisRun",
+      "source": "mechanic:power.shuffle",
+      "target": "state:powersUsedThisRun",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:power.shuffle->state:shuffleCharges",
+      "source": "mechanic:power.shuffle",
+      "target": "state:shuffleCharges",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:power.shuffle->state:shuffleNonce",
+      "source": "mechanic:power.shuffle",
+      "target": "state:shuffleNonce",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:power.shuffle->state:tileStates",
+      "source": "mechanic:power.shuffle",
+      "target": "state:tileStates",
       "kind": "writes"
     },
     {
@@ -114397,15 +116321,45 @@
       "kind": "writes"
     },
     {
+      "id": "writes:mechanic:power.tile_swap->state:feedbackLines",
+      "source": "mechanic:power.tile_swap",
+      "target": "state:feedbackLines",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:power.tile_swap->state:forgottenTileIdsThisFloor",
+      "source": "mechanic:power.tile_swap",
+      "target": "state:forgottenTileIdsThisFloor",
+      "kind": "writes"
+    },
+    {
       "id": "writes:mechanic:power.tile_swap->state:powersUsedThisRun",
       "source": "mechanic:power.tile_swap",
       "target": "state:powersUsedThisRun",
       "kind": "writes"
     },
     {
-      "id": "writes:mechanic:power.tile_swap->state:tilePositions",
+      "id": "writes:mechanic:power.tile_swap->state:regionShuffleCharges",
       "source": "mechanic:power.tile_swap",
-      "target": "state:tilePositions",
+      "target": "state:regionShuffleCharges",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:power.tile_swap->state:regionShuffleFreeThisFloor",
+      "source": "mechanic:power.tile_swap",
+      "target": "state:regionShuffleFreeThisFloor",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:power.tile_swap->state:shuffleNonce",
+      "source": "mechanic:power.tile_swap",
+      "target": "state:shuffleNonce",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:power.tile_swap->state:tileStates",
+      "source": "mechanic:power.tile_swap",
+      "target": "state:tileStates",
       "kind": "writes"
     },
     {
@@ -114523,6 +116477,42 @@
       "kind": "writes"
     },
     {
+      "id": "writes:mechanic:relic.extra_shuffle_charge->state:feedbackLines",
+      "source": "mechanic:relic.extra_shuffle_charge",
+      "target": "state:feedbackLines",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:relic.extra_shuffle_charge->state:relicIds",
+      "source": "mechanic:relic.extra_shuffle_charge",
+      "target": "state:relicIds",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:relic.extra_shuffle_charge->state:shuffleCharges",
+      "source": "mechanic:relic.extra_shuffle_charge",
+      "target": "state:shuffleCharges",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:relic.first_shuffle_free_per_floor->state:feedbackLines",
+      "source": "mechanic:relic.first_shuffle_free_per_floor",
+      "target": "state:feedbackLines",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:relic.first_shuffle_free_per_floor->state:freeShuffleThisFloor",
+      "source": "mechanic:relic.first_shuffle_free_per_floor",
+      "target": "state:freeShuffleThisFloor",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:relic.first_shuffle_free_per_floor->state:relicIds",
+      "source": "mechanic:relic.first_shuffle_free_per_floor",
+      "target": "state:relicIds",
+      "kind": "writes"
+    },
+    {
       "id": "writes:mechanic:relic.guard_token_plus_one->state:feedbackLines",
       "source": "mechanic:relic.guard_token_plus_one",
       "target": "state:feedbackLines",
@@ -114597,6 +116587,24 @@
     {
       "id": "writes:mechanic:relic.pin_cap_plus_one->state:relicIds",
       "source": "mechanic:relic.pin_cap_plus_one",
+      "target": "state:relicIds",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:relic.region_shuffle_free_first->state:feedbackLines",
+      "source": "mechanic:relic.region_shuffle_free_first",
+      "target": "state:feedbackLines",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:relic.region_shuffle_free_first->state:regionShuffleFreeThisFloor",
+      "source": "mechanic:relic.region_shuffle_free_first",
+      "target": "state:regionShuffleFreeThisFloor",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:relic.region_shuffle_free_first->state:relicIds",
+      "source": "mechanic:relic.region_shuffle_free_first",
       "target": "state:relicIds",
       "kind": "writes"
     },
@@ -114763,6 +116771,30 @@
       "kind": "writes"
     },
     {
+      "id": "writes:mechanic:reward.free_swap_floor->state:feedbackLines",
+      "source": "mechanic:reward.free_swap_floor",
+      "target": "state:feedbackLines",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:reward.free_swap_floor->state:regionShuffleFreeThisFloor",
+      "source": "mechanic:reward.free_swap_floor",
+      "target": "state:regionShuffleFreeThisFloor",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:reward.free_swap_floor->state:rewardPerkIds",
+      "source": "mechanic:reward.free_swap_floor",
+      "target": "state:rewardPerkIds",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:reward.free_swap_floor->state:score",
+      "source": "mechanic:reward.free_swap_floor",
+      "target": "state:score",
+      "kind": "writes"
+    },
+    {
       "id": "writes:mechanic:reward.hazard_banisher->state:destroyPairCharges",
       "source": "mechanic:reward.hazard_banisher",
       "target": "state:destroyPairCharges",
@@ -114832,6 +116864,54 @@
       "id": "writes:mechanic:reward.secret_favor->state:relicFavorProgress",
       "source": "mechanic:reward.secret_favor",
       "target": "state:relicFavorProgress",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:reward.stasis_lockbox->state:feedbackLines",
+      "source": "mechanic:reward.stasis_lockbox",
+      "target": "state:feedbackLines",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:reward.stasis_lockbox->state:guardTokens",
+      "source": "mechanic:reward.stasis_lockbox",
+      "target": "state:guardTokens",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:reward.stasis_lockbox->state:regionShuffleCharges",
+      "source": "mechanic:reward.stasis_lockbox",
+      "target": "state:regionShuffleCharges",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:reward.stasis_lockbox->state:score",
+      "source": "mechanic:reward.stasis_lockbox",
+      "target": "state:score",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:reward.trait_toolkit->state:feedbackLines",
+      "source": "mechanic:reward.trait_toolkit",
+      "target": "state:feedbackLines",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:reward.trait_toolkit->state:peekCharges",
+      "source": "mechanic:reward.trait_toolkit",
+      "target": "state:peekCharges",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:reward.trait_toolkit->state:regionShuffleCharges",
+      "source": "mechanic:reward.trait_toolkit",
+      "target": "state:regionShuffleCharges",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:reward.trait_toolkit->state:score",
+      "source": "mechanic:reward.trait_toolkit",
+      "target": "state:score",
       "kind": "writes"
     },
     {
@@ -115182,19 +117262,19 @@
       "severity": "warning",
       "code": "unmodeled_content_family",
       "subject": "bonus_reward",
-      "detail": "6 source-declared items lack mechanic nodes: free_swap_floor, key_insurance, stasis_lockbox, supply_cache, trait_streak_lens, trait_toolkit"
+      "detail": "3 source-declared items lack mechanic nodes: key_insurance, supply_cache, trait_streak_lens"
     },
     {
       "severity": "warning",
       "code": "unmodeled_content_family",
       "subject": "inventory_item",
-      "detail": "9 source-declared items lack mechanic nodes: contract_loadout, flash_pair_charge, master_key, mutator_loadout, region_shuffle_charge, relic_loadout, shuffle_charge, undo_charge, wild_match_token"
+      "detail": "7 source-declared items lack mechanic nodes: contract_loadout, flash_pair_charge, master_key, mutator_loadout, relic_loadout, undo_charge, wild_match_token"
     },
     {
       "severity": "warning",
       "code": "unmodeled_content_family",
       "subject": "relic",
-      "detail": "6 source-declared items lack mechanic nodes: extra_shuffle_charge, first_shuffle_free_per_floor, memorize_bonus_ms, memorize_under_short_memorize, parasite_ward_once, region_shuffle_free_first"
+      "detail": "3 source-declared items lack mechanic nodes: memorize_bonus_ms, memorize_under_short_memorize, parasite_ward_once"
     }
   ]
 }

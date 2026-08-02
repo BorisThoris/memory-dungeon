@@ -80,7 +80,10 @@ describe('relicOfferSurfaceState', () => {
         expect(result.patch.tileSwapFirstTileId).toBeNull();
         expect(result.patch.saveData.playerStats?.relicPickCounts?.extra_shuffle_charge).toBe(1);
         expect(result.patch.settings).toBe(result.nextSave.settings);
-        expect(result.feedback).toBeNull();
+        expect(result.feedback).toMatchObject({
+            audioCategory: 'relic-pick',
+            cue: 'build.extra_shuffle_charge.claimed'
+        });
     });
 
     it('projects migrated relic pick feedback from the typed gameplay journal', () => {

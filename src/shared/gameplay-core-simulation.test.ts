@@ -94,11 +94,20 @@ describe('seeded gameplay core simulation', () => {
                 'relic.stray_charge_plus_one',
                 'relic.pin_cap_plus_one',
                 'findable.scout_glint',
+                'bonus_reward.trait_toolkit',
+                'bonus_reward.stasis_lockbox',
+                'bonus_reward.free_swap_floor',
+                'relic.extra_shuffle_charge',
+                'relic.first_shuffle_free_per_floor',
+                'relic.region_shuffle_free_first',
                 'board.peek',
                 'board.pin_toggle',
                 'board.stray_remove',
                 'risk_wager.accept',
-                'board.gambit_commit'
+                'board.gambit_commit',
+                'board.shuffle',
+                'board.region_shuffle',
+                'board.tile_swap'
             ])
         );
     });

@@ -207,6 +207,17 @@ describe('tile press controller', () => {
             expect(swapped.patch.tileSwapArmed).toBe(false);
             expect(swapped.patch.tileSwapFirstTileId).toBeNull();
             expect(swapped.audio).toEqual([]);
+            expect(swapped.patch.run?.gameplayCommandJournal).toEqual([
+                expect.objectContaining({
+                    type: 'board.tile_swap',
+                    firstTileId: first.id,
+                    secondTileId: second.id
+                })
+            ]);
+            expect(swapped.patch.run?.gameplayEventJournal).toEqual(expect.arrayContaining([
+                expect.objectContaining({ type: 'board.tiles_swapped' }),
+                expect.objectContaining({ type: 'feedback.requested', cue: 'power.tile_swap.used' })
+            ]));
         }
     });
 

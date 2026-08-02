@@ -8,6 +8,7 @@ import {
 } from './gameplay-interaction-graph';
 import type { TileTraitKind } from './contracts';
 import {
+    BOARD_TACTICIAN_DEFINITIONS,
     COMBO_SHARD_ENGINE_DEFINITIONS,
     CONDUIT_CARTOGRAPHER_DEFINITIONS,
     SABOTEUR_DEFINITIONS,
@@ -472,6 +473,41 @@ describe('gameplay interaction graph', () => {
             expect.objectContaining({ source: 'objective.risk_wager', target: 'economy.relic_favor', kind: 'grants' }),
             expect.objectContaining({ source: 'relic.wager_surety', target: 'objective.risk_wager', kind: 'counterplay' }),
             expect.objectContaining({ source: 'build.route_gambler', target: 'power.gambit', kind: 'consequence' })
+        ]));
+    });
+
+    it('connects Saboteur board-control sources through charges into deterministic board choices', () => {
+        const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
+        const sourceNodeByDefinition = new Map([
+            ['bonus_reward.trait_toolkit', 'reward.trait_toolkit'],
+            ['bonus_reward.stasis_lockbox', 'reward.stasis_lockbox'],
+            ['bonus_reward.free_swap_floor', 'reward.free_swap_floor'],
+            ['relic.extra_shuffle_charge', 'relic.extra_shuffle_charge'],
+            ['relic.first_shuffle_free_per_floor', 'relic.first_shuffle_free_per_floor'],
+            ['relic.region_shuffle_free_first', 'relic.region_shuffle_free_first']
+        ]);
+
+        for (const definition of BOARD_TACTICIAN_DEFINITIONS) {
+            const nodeId = sourceNodeByDefinition.get(definition.id);
+            expect(nodeId, definition.id).toBeTruthy();
+            expect(byId.get(nodeId!), definition.id).toMatchObject({
+                tests: expect.arrayContaining(['src/shared/gameplay-core.test.ts'])
+            });
+        }
+
+        expect(byId.get('inventory.shuffle_charge')).toMatchObject({ kind: 'inventory', role: 'full_board_control_resource' });
+        expect(byId.get('inventory.region_shuffle_charge')).toMatchObject({ kind: 'inventory', role: 'targeted_board_control_resource' });
+        expect(byId.get('power.shuffle')).toMatchObject({ kind: 'power', role: 'global_hidden_board_reordering' });
+        expect(byId.get('power.region_shuffle')).toMatchObject({ kind: 'power', role: 'targeted_hidden_row_reordering' });
+        expect(byId.get('power.tile_swap')).toMatchObject({ kind: 'power', role: 'player_selected_board_reordering' });
+        expect(gameplayInteractionGraph.edges).toEqual(expect.arrayContaining([
+            expect.objectContaining({ source: 'reward.trait_toolkit', target: 'inventory.region_shuffle_charge', kind: 'grants' }),
+            expect.objectContaining({ source: 'reward.free_swap_floor', target: 'perk.free_first_swap_per_floor', kind: 'grants' }),
+            expect.objectContaining({ source: 'relic.extra_shuffle_charge', target: 'inventory.shuffle_charge', kind: 'grants' }),
+            expect.objectContaining({ source: 'inventory.shuffle_charge', target: 'power.shuffle', kind: 'enables' }),
+            expect.objectContaining({ source: 'inventory.region_shuffle_charge', target: 'power.tile_swap', kind: 'enables' }),
+            expect.objectContaining({ source: 'power.region_shuffle', target: 'objective.floor_clear', kind: 'counterplay' }),
+            expect.objectContaining({ source: 'build.trap_control', target: 'power.tile_swap', kind: 'consequence' })
         ]));
     });
 });

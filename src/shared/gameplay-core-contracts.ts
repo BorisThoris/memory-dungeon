@@ -13,6 +13,9 @@ export const GAMEPLAY_REWARD_PERK_IDS = [
 ] as const satisfies readonly RewardPerkId[];
 
 export const GAMEPLAY_RELIC_IDS = [
+    'extra_shuffle_charge',
+    'first_shuffle_free_per_floor',
+    'region_shuffle_free_first',
     'combo_shard_plus_step',
     'guard_token_plus_one',
     'destroy_bank_plus_one',
@@ -255,6 +258,11 @@ export const gameplayEffectSchema = z.discriminatedUnion('kind', [
         .object({
             kind: z.literal('scout_reveal.request'),
             amount: z.number().int().positive()
+        })
+        .strict(),
+    z
+        .object({
+            kind: z.literal('free_shuffle.grant')
         })
         .strict(),
     z
@@ -540,6 +548,115 @@ export const SABOTEUR_DEFINITIONS = z.array(gameplayContentDefinitionSchema).par
                 kind: 'feedback.emit',
                 cue: 'build.ward_spark.matched',
                 message: 'Ward Spark armed one safe-hazard ward for this floor.',
+                tone: 'reward'
+            }
+        ]
+    }
+]);
+
+export const BOARD_TACTICIAN_DEFINITIONS = z.array(gameplayContentDefinitionSchema).parse([
+    {
+        id: 'bonus_reward.trait_toolkit',
+        version: 1,
+        buildId: 'trap_control',
+        source: { kind: 'bonus_reward', id: 'trait_toolkit' },
+        trigger: 'content.claimed',
+        conditions: [],
+        effects: [
+            { kind: 'inventory.grant', itemId: 'region_shuffle_charge', amount: 1 },
+            { kind: 'inventory.grant', itemId: 'peek_charge', amount: 1 },
+            { kind: 'score.grant', reason: 'content_reward', amount: 10 },
+            {
+                kind: 'feedback.emit',
+                cue: 'build.trait_toolkit.claimed',
+                message: 'Trait Toolkit added one row/swap charge, one Peek, and 10 score.',
+                tone: 'reward'
+            }
+        ]
+    },
+    {
+        id: 'bonus_reward.stasis_lockbox',
+        version: 1,
+        buildId: 'trap_control',
+        source: { kind: 'bonus_reward', id: 'stasis_lockbox' },
+        trigger: 'content.claimed',
+        conditions: [],
+        effects: [
+            { kind: 'inventory.grant', itemId: 'region_shuffle_charge', amount: 1 },
+            { kind: 'inventory.grant', itemId: 'guard_token', amount: 1 },
+            { kind: 'score.grant', reason: 'content_reward', amount: 15 },
+            {
+                kind: 'feedback.emit',
+                cue: 'build.stasis_lockbox.claimed',
+                message: 'Stasis Lockbox added one row/swap charge, one guard token, and 15 score.',
+                tone: 'reward'
+            }
+        ]
+    },
+    {
+        id: 'bonus_reward.free_swap_floor',
+        version: 1,
+        buildId: 'trap_control',
+        source: { kind: 'bonus_reward', id: 'free_swap_floor' },
+        trigger: 'content.claimed',
+        conditions: [],
+        effects: [
+            { kind: 'reward_perk.grant', perkId: 'free_first_swap_per_floor' },
+            { kind: 'score.grant', reason: 'content_reward', amount: 15 },
+            {
+                kind: 'feedback.emit',
+                cue: 'build.free_swap_floor.claimed',
+                message: 'Free Swap Discipline armed one free row or swap each floor and added 15 score.',
+                tone: 'reward'
+            }
+        ]
+    },
+    {
+        id: 'relic.extra_shuffle_charge',
+        version: 1,
+        buildId: 'trap_control',
+        source: { kind: 'relic', id: 'extra_shuffle_charge' },
+        trigger: 'content.claimed',
+        conditions: [],
+        effects: [
+            { kind: 'inventory.grant', itemId: 'shuffle_charge', amount: 1 },
+            {
+                kind: 'feedback.emit',
+                cue: 'build.extra_shuffle_charge.claimed',
+                message: 'The shuffle relic added one full-board shuffle charge.',
+                tone: 'reward'
+            }
+        ]
+    },
+    {
+        id: 'relic.first_shuffle_free_per_floor',
+        version: 1,
+        buildId: 'trap_control',
+        source: { kind: 'relic', id: 'first_shuffle_free_per_floor' },
+        trigger: 'content.claimed',
+        conditions: [],
+        effects: [
+            { kind: 'free_shuffle.grant' },
+            {
+                kind: 'feedback.emit',
+                cue: 'build.first_shuffle_free_per_floor.claimed',
+                message: 'The first full-board shuffle is free now and on each new floor.',
+                tone: 'reward'
+            }
+        ]
+    },
+    {
+        id: 'relic.region_shuffle_free_first',
+        version: 1,
+        buildId: 'trap_control',
+        source: { kind: 'relic', id: 'region_shuffle_free_first' },
+        trigger: 'content.claimed',
+        conditions: [],
+        effects: [
+            {
+                kind: 'feedback.emit',
+                cue: 'build.region_shuffle_free_first.claimed',
+                message: 'The first row shuffle or tile swap on each new floor is free.',
                 tone: 'reward'
             }
         ]
@@ -854,6 +971,7 @@ export const GAMEPLAY_CONTENT_DEFINITIONS = [
     ...WARDEN_DEFINITIONS,
     ...COMBO_SHARD_ENGINE_DEFINITIONS,
     ...SABOTEUR_DEFINITIONS,
+    ...BOARD_TACTICIAN_DEFINITIONS,
     ...VAULTBREAKER_DEFINITIONS,
     ...SLAYER_DEFINITIONS,
     ...SEER_DEFINITIONS
@@ -920,6 +1038,27 @@ export const gameplayCommandSchema = z.discriminatedUnion('type', [
             ...commandBase,
             type: z.literal('board.gambit_commit'),
             targetTileId: z.string().min(1).max(160)
+        })
+        .strict(),
+    z
+        .object({
+            ...commandBase,
+            type: z.literal('board.shuffle')
+        })
+        .strict(),
+    z
+        .object({
+            ...commandBase,
+            type: z.literal('board.region_shuffle'),
+            rowIndex: z.number().int().nonnegative()
+        })
+        .strict(),
+    z
+        .object({
+            ...commandBase,
+            type: z.literal('board.tile_swap'),
+            firstTileId: z.string().min(1).max(160),
+            secondTileId: z.string().min(1).max(160)
         })
         .strict()
 ]);
@@ -1081,6 +1220,46 @@ export const gameplayEventSchema = z.discriminatedUnion('type', [
     z
         .object({
             ...eventBase,
+            type: z.literal('free_shuffle.changed'),
+            before: z.boolean(),
+            after: z.literal(true)
+        })
+        .strict(),
+    z
+        .object({
+            ...eventBase,
+            type: z.literal('board.shuffled'),
+            affectedTileIds: z.array(z.string().min(1).max(160)),
+            shuffleNonceBefore: z.number().int().nonnegative(),
+            shuffleNonceAfter: z.number().int().nonnegative(),
+            usedFreeCharge: z.boolean()
+        })
+        .strict(),
+    z
+        .object({
+            ...eventBase,
+            type: z.literal('board.region_shuffled'),
+            rowIndex: z.number().int().nonnegative(),
+            affectedTileIds: z.array(z.string().min(1).max(160)),
+            shuffleNonceBefore: z.number().int().nonnegative(),
+            shuffleNonceAfter: z.number().int().nonnegative(),
+            usedFreeCharge: z.boolean()
+        })
+        .strict(),
+    z
+        .object({
+            ...eventBase,
+            type: z.literal('board.tiles_swapped'),
+            firstTileId: z.string().min(1).max(160),
+            secondTileId: z.string().min(1).max(160),
+            shuffleNonceBefore: z.number().int().nonnegative(),
+            shuffleNonceAfter: z.number().int().nonnegative(),
+            usedFreeCharge: z.boolean()
+        })
+        .strict(),
+    z
+        .object({
+            ...eventBase,
             type: z.literal('currency.changed'),
             currency: z.literal('shop_gold'),
             requested: z.number().int().positive(),
@@ -1215,4 +1394,32 @@ export const createGameplayGambitCommitCommand = (commandId: string, targetTileI
         commandId,
         type: 'board.gambit_commit',
         targetTileId
+    });
+
+export const createGameplayShuffleCommand = (commandId: string): GameplayCommand =>
+    gameplayCommandSchema.parse({
+        schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
+        commandId,
+        type: 'board.shuffle'
+    });
+
+export const createGameplayRegionShuffleCommand = (commandId: string, rowIndex: number): GameplayCommand =>
+    gameplayCommandSchema.parse({
+        schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
+        commandId,
+        type: 'board.region_shuffle',
+        rowIndex
+    });
+
+export const createGameplayTileSwapCommand = (
+    commandId: string,
+    firstTileId: string,
+    secondTileId: string
+): GameplayCommand =>
+    gameplayCommandSchema.parse({
+        schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
+        commandId,
+        type: 'board.tile_swap',
+        firstTileId,
+        secondTileId
     });
