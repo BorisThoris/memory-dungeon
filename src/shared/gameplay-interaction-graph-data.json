@@ -1,5 +1,5 @@
 {
-  "version": 48,
+  "version": 49,
   "mechanics": [
     {
       "id": "trait.echo",
@@ -1734,13 +1734,13 @@
       "id": "core.board_turn_resolution",
       "label": "Typed Board Turn Resolution",
       "kind": "core",
-      "role": "single_command_match_mismatch_gambit_floor_clear_and_feedback_fact_transition",
+      "role": "renderer_direct_single_command_match_mismatch_gambit_floor_clear_and_feedback_fact_transition",
       "evidence": ["src/shared/board-turn-transition.ts", "src/shared/turn-mismatch-rules.ts", "src/shared/floor-clear-transition.ts", "src/shared/slayer-floor-clear-transition.ts", "src/shared/gameplay-effect-transition.ts", "src/shared/gameplay-core-contracts.ts", "src/shared/gameplay-core.ts", "src/shared/gameplay-core-adapters.ts", "src/shared/game.ts", "src/renderer/store/matchScorePop.ts", "src/renderer/store/runResolutionController.ts"],
       "reads": ["flippedTileIds", "tileStates", "pairKeys", "tileTraitKind", "findableKind", "routeSpecialKind", "wildMatchesRemaining", "encorePairKeys", "runStatus", "currentStreak", "comboShards", "guardTokens", "mismatches"],
       "writes": ["tileStates", "matchedPairs", "score", "totalScore", "lives", "tries", "mismatches", "currentStreak", "comboShards", "guardTokens", "gameplayCommands", "gameplayEvents", "floaterTileIds", "matchedFindableKind", "matchedRouteKind", "traitInteractionTags"],
       "enables": ["objective.floor_clear", "simulation.gameplay_replay", "persistence.run_summary", "feedback.board_turn_floater"],
       "blocks": [],
-      "softlockGuards": ["strict-command-schema", "exactly-two-or-three-flips", "deterministic-event-sequence", "atomic-pair-floor-clear", "single-outer-command-journal", "shared-floor-finalizer-owned-by-core-commands", "authoritative-feedback-facts"],
+      "softlockGuards": ["strict-command-schema", "exactly-two-or-three-flips", "deterministic-event-sequence", "atomic-pair-floor-clear", "single-outer-command-journal", "adapter-owned-outer-journal", "renderer-direct-command-adapter", "no-renderer-turn-compatibility-import", "shared-floor-finalizer-owned-by-core-commands", "authoritative-feedback-facts"],
       "tests": ["src/shared/gameplay-core.test.ts", "src/shared/game.test.ts", "src/shared/gameplay-effect-transition.test.ts", "src/shared/board-turn-feedback-boundary.test.ts", "src/renderer/store/matchScorePop.test.ts", "src/renderer/store/runResolutionController.test.ts"]
     },
     {

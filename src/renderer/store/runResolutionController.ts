@@ -19,9 +19,10 @@ import {
 } from '../../shared/save-data';
 import {
     deactivateDebugRevealThroughGameplayCore,
-    repairRunProgressionThroughGameplayCore
+    repairRunProgressionThroughGameplayCore,
+    resolveBoardTurnThroughGameplayCore
 } from '../../shared/gameplay-core-adapters';
-import { resolveBoardTurnWithEvent } from '../../shared/turn-resolution';
+import type { GameplayEvent } from '../../shared/gameplay-core-contracts';
 import { trackEvent } from '../../shared/telemetry';
 import { playFloorClearSfx, playMatchPayoffSfx, playResolveSfx, resumeAudioContext } from '../audio/gameSfx';
 import { ACHIEVEMENT_SYNC_FAILURE_NOTICE } from './achievementPersistence';
@@ -220,10 +221,14 @@ export const createRunResolutionController = ({
     const applyResolveBoardTurn = (run: RunState): void => {
         const { saveData } = getState();
         const encore = saveData.playerStats?.encorePairKeysLastRun ?? [];
-        const resolution = resolveBoardTurnWithEvent(run, encore);
+        const resolution = resolveBoardTurnThroughGameplayCore(run, encore);
         const next = resolution.run;
-        const pop = resolution.event ? buildMatchScorePopPayload(resolution.event) : null;
-        const missPop = resolution.event ? buildMismatchScorePopPayload(resolution.event) : null;
+        const event = [...resolution.events].reverse().find(
+            (item): item is Extract<GameplayEvent, { type: 'board.turn_resolved' }> =>
+                item.type === 'board.turn_resolved'
+        ) ?? null;
+        const pop = event ? buildMatchScorePopPayload(event) : null;
+        const missPop = event ? buildMismatchScorePopPayload(event) : null;
         if (pop) {
             setState({ ...BOARD_FLOATER_POP_CLEAR, matchScorePop: pop });
         } else if (missPop) {

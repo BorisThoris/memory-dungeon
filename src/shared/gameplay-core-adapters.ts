@@ -27,6 +27,8 @@ import {
 import { appendGameplayJournal } from './gameplay-journal';
 import { applyRelicImmediate } from './relic-immediate-rules';
 import { createTileFlipCommandForRun } from './tile-flip-command-transition';
+import { normalizeSessionStats } from './session-stats-rules';
+import { runNonNegativeInteger } from './run-number-guards';
 
 export interface GameplayRelicImmediateAdapterResult {
     run: RunState;
@@ -368,12 +370,12 @@ export const resolveFindableMatchRewardThroughGameplayCore = (
 export const resolveBoardTurnThroughGameplayCore = (
     run: RunState,
     encorePairKeys: readonly string[],
-    commandId: string
+    commandId = `board-turn:${run.runSeed}:${run.board?.level ?? 0}:${runNonNegativeInteger(run.matchResolutionsThisFloor)}:${runNonNegativeInteger(normalizeSessionStats(run.stats).tries)}`
 ): GameplayBoardTurnAdapterResult => {
     const command = createGameplayBoardTurnResolveCommand(commandId, encorePairKeys);
     const result = reduceGameplayCommand(run, command);
     return {
-        run: result.run,
+        run: result.accepted ? appendGameplayJournal(result.run, [command], result.events) : run,
         command,
         events: result.accepted ? result.events : [],
         migrated: result.accepted

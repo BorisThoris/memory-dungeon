@@ -34,8 +34,6 @@ import {
     resolveFindableMatchRewardThroughGameplayCore,
     resolveSlayerFloorClearThroughGameplayCore
 } from './gameplay-core-adapters';
-import { normalizeSessionStats } from './session-stats-rules';
-import { runNonNegativeInteger } from './run-number-guards';
 import type { GameplayEvent } from './gameplay-core-contracts';
 export {
     completeRelicPickAndAdvance
@@ -289,11 +287,7 @@ export const resolveBoardTurnWithEvent = (
     run: RunState,
     encorePairKeys: string[] = []
 ): BoardTurnResolutionResult => {
-    const migrated = resolveBoardTurnThroughGameplayCore(
-        run,
-        encorePairKeys,
-        `board-turn:${run.runSeed}:${run.board?.level ?? 0}:${runNonNegativeInteger(run.matchResolutionsThisFloor)}:${runNonNegativeInteger(normalizeSessionStats(run.stats).tries)}`
-    );
+    const migrated = resolveBoardTurnThroughGameplayCore(run, encorePairKeys);
     if (!migrated.migrated) {
         return { run: resolveBoardTurnCompatibility(run, encorePairKeys), event: null };
     }
@@ -302,7 +296,7 @@ export const resolveBoardTurnWithEvent = (
             item.type === 'board.turn_resolved'
     ) ?? null;
     return {
-        run: appendGameplayJournal(migrated.run, [migrated.command], migrated.events),
+        run: migrated.run,
         event
     };
 };

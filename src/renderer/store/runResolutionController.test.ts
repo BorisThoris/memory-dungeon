@@ -494,6 +494,9 @@ describe('runResolutionController', () => {
             traitInteractionTags: ['echo:sealed-combo'],
             floaterTileIds: ['a1', 'a2']
         }));
+        expect(harness.state.run?.gameplayCommandJournal).toContainEqual(expect.objectContaining({
+            type: 'board.turn_resolve'
+        }));
         expect(gameSfxMocks.playResolveSfx).toHaveBeenCalledWith(run, expect.any(Object), 0.5);
         expect(gameSfxMocks.playMatchPayoffSfx).toHaveBeenCalledWith(0.5, harness.state.matchScorePop);
     });

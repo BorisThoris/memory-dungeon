@@ -56,7 +56,7 @@
 | Mechanic | Where | Epic / note |
 |-----------|--------|-------------|
 | Pair match predicate (incl. wild/decoy rules) | `tilesArePairMatch` | [epic-core-memory-loop](./epic-core-memory-loop.md) |
-| Two-flip resolution | `resolveTwoFlippedTiles` (internal) via `resolveBoardTurn` | [epic-core-memory-loop](./epic-core-memory-loop.md) |
+| Two-/three-flip resolution | `board.turn_resolve` via `resolveBoardTurnThroughGameplayCore`; legacy `resolveBoardTurn` remains a compatibility export | [epic-core-memory-loop](./epic-core-memory-loop.md) |
 | Gambit three-flip resolution | `resolveGambitThree` | [epic-core-memory-loop](./epic-core-memory-loop.md) |
 | Wild pair key | `WILD_PAIR_KEY`, `wildMatchesRemaining` | [epic-core-memory-loop](./epic-core-memory-loop.md) |
 | Wild tile id (HUD / export) | `wildTileId`; discovery helper `getWildTileIdFromBoard` | [epic-core-memory-loop](./epic-core-memory-loop.md) |

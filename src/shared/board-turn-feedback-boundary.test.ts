@@ -27,8 +27,11 @@ describe('board-turn feedback ownership boundary', () => {
     it('requires the live controller to project the typed event directly', () => {
         const source = readSource('src/renderer/store/runResolutionController.ts');
 
-        expect(source).toContain('buildMatchScorePopPayload(resolution.event)');
-        expect(source).toContain('buildMismatchScorePopPayload(resolution.event)');
+        expect(source).toContain('resolveBoardTurnThroughGameplayCore(run, encore)');
+        expect(source).not.toContain('resolveBoardTurnWithEvent');
+        expect(source).toContain("item.type === 'board.turn_resolved'");
+        expect(source).toContain('buildMatchScorePopPayload(event)');
+        expect(source).toContain('buildMismatchScorePopPayload(event)');
         expect(source).not.toMatch(/build(?:Match|Mismatch)ScorePopPayload\(run,\s*next/u);
     });
 

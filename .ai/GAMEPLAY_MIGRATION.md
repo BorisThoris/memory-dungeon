@@ -690,6 +690,18 @@ Board-power arming is now treated as short-lived interface intent instead of dur
 
 Graph v48 records transient intent ownership, typed-command independence from UI arm flags, the no-live-serialized-arm boundary, and direct Region Shuffle row commands across the core, store, presentation, and test evidence.
 
+## Forty-ninth vertical slice: Direct Renderer Turn Resolution
+
+The delayed match/mismatch boundary now enters the gameplay core directly from the renderer:
+
+1. `runResolutionController` calls `resolveBoardTurnThroughGameplayCore` instead of importing the `resolveBoardTurnWithEvent` compatibility facade.
+2. The adapter owns deterministic `board.turn_resolve` command identity, reduction, exact current-command events, and outer command/event journal persistence.
+3. Match and mismatch floaters are built from the `board.turn_resolved` event returned by that exact reduction, preserving event-only feedback without scanning retained history or diffing state snapshots.
+4. The legacy `resolveBoardTurnWithEvent` and `resolveBoardTurn` exports remain for non-renderer compatibility callers, but now reuse the already-journaled adapter result rather than appending the outer command a second time.
+5. Source-boundary coverage rejects reintroduction of the renderer compatibility import and requires the direct adapter, while behavioral coverage proves the outer turn command is retained with its authoritative feedback facts.
+
+Graph v49 marks board-turn resolution as a renderer-direct command adapter with adapter-owned journaling and a no-renderer-compatibility-import guard.
+
 ## Current slice status
 
 Implemented in the Conduit Cartographer vertical slice:

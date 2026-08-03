@@ -74,6 +74,7 @@ describe('run surface state helpers', () => {
             'src/renderer/store/runSurfaceState.ts',
             'src/renderer/store/dungeonPressSurfaceState.ts',
             'src/renderer/store/tilePressController.ts',
+            'src/renderer/store/runResolutionController.ts',
             'src/renderer/store/useAppStore.ts',
             'src/renderer/components/GameScreen.tsx',
             'src/renderer/components/GameLeftToolbar.tsx',
@@ -88,6 +89,8 @@ describe('run surface state helpers', () => {
         }
         expect(rendererSources.join('\n')).toContain('applyTileFlipThroughGameplayCore');
         expect(rendererSources.join('\n')).toContain('applyDestroyPairThroughGameplayCore');
+        expect(rendererSources.join('\n')).toContain('resolveBoardTurnThroughGameplayCore');
+        expect(rendererSources.join('\n')).not.toContain('resolveBoardTurnWithEvent');
         expect(rendererSources.join('\n')).not.toContain('run.strayRemoveArmed');
         expect(rendererSources.join('\n')).not.toContain('armRegionShuffleRowPick');
         expect(rendererSources.join('\n')).not.toContain('createRegionShuffleArmSurfaceResult');
