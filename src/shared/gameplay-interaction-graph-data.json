@@ -1,5 +1,5 @@
 {
-  "version": 60,
+  "version": 61,
   "mechanics": [
     {
       "id": "trait.echo",
@@ -358,11 +358,11 @@
       "kind": "safety",
       "role": "deterministic_feedback_critical_transition_invariant",
       "evidence": ["src/shared/gameplay-feedback-facts.ts", "src/shared/gameplay-feedback-completeness.ts", "src/shared/gameplay-core-simulation.ts", "src/shared/gameplay-feedback-completeness.test.ts", "src/shared/gameplay-core-simulation.test.ts", "src/shared/typed-gameplay-feedback-boundary.test.ts", "src/renderer/hooks/useHudPoliteLiveAnnouncement.ts", "src/renderer/components/GameScreen.tsx"],
-      "reads": ["acceptedCommand", "gameplayEvents", "lives", "guardTokens", "comboShards", "shopGold", "objectiveProgress", "recallFocus", "recallMatchesThisFloor", "recallMistakesThisFloor", "recallBonusScoreThisFloor", "forgottenTileCountThisFloor", "dungeonEnemiesDefeatedThisFloor", "enemyHazardHitsThisFloor", "enemyHazardsDefeatedThisFloor"],
+      "reads": ["acceptedCommand", "gameplayEvents", "lives", "guardTokens", "comboShards", "currentStreak", "currentLevelScore", "totalScore", "tries", "mismatches", "shopGold", "dungeonKeys", "shuffleCharges", "regionShuffleCharges", "destroyPairCharges", "peekCharges", "flashPairCharges", "strayRemoveCharges", "relicFavorProgress", "pinnedTileIds", "objectiveCompleted", "recallFocus", "recallMatchesThisFloor", "recallMistakesThisFloor", "recallBonusScoreThisFloor", "forgottenTileIdsThisFloor", "dungeonEnemiesDefeatedThisFloor", "enemyHazardHitsThisFloor", "enemyHazardsDefeatedThisFloor"],
       "writes": ["feedbackCompletenessDiagnostic", "invariantViolations"],
       "enables": ["feedback.typed_command_announcement", "feedback.board_turn_floater", "feedback.gameplay_hud"],
       "blocks": ["missing_feedback", "renderer_state_inference"],
-      "softlockGuards": ["normalized-feedback-critical-snapshot", "exact-changed-field-diagnostic", "accepted-transition-only", "typed-feedback-or-board-envelope", "seeded-command-corpus", "no-legacy-action-fallback", "no-renderer-gameplay-state-props"],
+      "softlockGuards": ["normalized-feedback-critical-snapshot", "single-player-visible-state-registry", "exact-changed-field-diagnostic", "accepted-transition-only", "typed-feedback-or-board-envelope", "seeded-command-corpus", "ai-model-visible-state-drift-check", "no-legacy-action-fallback", "no-renderer-gameplay-state-props"],
       "tests": ["src/shared/gameplay-feedback-completeness.test.ts", "src/shared/gameplay-core-simulation.test.ts", "src/shared/typed-gameplay-feedback-boundary.test.ts", "src/shared/board-turn-feedback-boundary.test.ts", "src/renderer/hooks/useHudPoliteLiveAnnouncement.test.ts", "src/renderer/components/GameScreen.test.tsx"]
     },
     {
@@ -371,7 +371,7 @@
       "kind": "feedback",
       "role": "strict_event_only_readability_gate",
       "evidence": ["src/shared/gameplay-feedback-facts.ts", "src/shared/gameplay-feedback-completeness.ts", "src/shared/gameplay-core-simulation.ts", "src/renderer/components/GameplayHudBar.tsx", "src/renderer/components/gameScreenFeedback.ts", "src/renderer/hooks/useHudPoliteLiveAnnouncement.ts"],
-      "reads": ["interactionTags", "matchScorePop", "mismatchScorePop", "pickupToast", "politeLiveAnnouncement", "peekCharges", "guardTokens", "comboShards", "comboShardRequests", "destroyPairCharges", "lives", "triesDelta", "enemyHazardsDefeatedThisFloor", "dungeonEnemiesDefeatedThisFloor", "lastLevelResult", "feedbackLines", "totalScore", "currentLevelScore", "relicFavorProgress", "sessionStats", "achievementProgress", "nextFloor", "relicOffer"],
+      "reads": ["interactionTags", "matchScorePop", "mismatchScorePop", "pickupToast", "politeLiveAnnouncement", "lives", "guardTokens", "comboShards", "comboShardRequests", "currentStreak", "currentLevelScore", "totalScore", "tries", "triesDelta", "mismatches", "shopGold", "dungeonKeys", "shuffleCharges", "regionShuffleCharges", "destroyPairCharges", "peekCharges", "flashPairCharges", "strayRemoveCharges", "relicFavorProgress", "pinnedTileIds", "objectiveCompleted", "recallFocus", "recallMatchesThisFloor", "recallMistakesThisFloor", "recallBonusScoreThisFloor", "forgottenTileIdsThisFloor", "enemyHazardHitsThisFloor", "enemyHazardsDefeatedThisFloor", "dungeonEnemiesDefeatedThisFloor", "lastLevelResult", "feedbackLines", "sessionStats", "achievementProgress", "nextFloor", "relicOffer"],
       "writes": ["feedbackLines"],
       "enables": ["objective.floor_clear"],
       "blocks": [],
@@ -1847,8 +1847,10 @@
     { "source": "objective.defeat_boss", "target": "feedback.gameplay_hud", "kind": "enables", "label": "shows boss defeat progress" },
     { "source": "lock.iron_key", "target": "exit.primary", "kind": "blocks", "label": "requires key" },
     { "source": "lock.iron_key", "target": "safety.dungeon_topology", "kind": "guarded_by", "label": "key source audit" },
+    { "source": "lock.iron_key", "target": "feedback.gameplay_hud", "kind": "displays", "label": "shows exact Iron Key spend or remaining lock" },
     { "source": "lock.typed_key", "target": "exit.primary", "kind": "blocks", "label": "requires matching key kind" },
     { "source": "lock.typed_key", "target": "safety.dungeon_topology", "kind": "guarded_by", "label": "typed key source audit" },
+    { "source": "lock.typed_key", "target": "feedback.gameplay_hud", "kind": "displays", "label": "shows exact typed-key spend or mismatch" },
     { "source": "shop.typed_key", "target": "lock.typed_key", "kind": "counterplay", "label": "sells matching lock key" },
     { "source": "shop.typed_key", "target": "lock.typed_key", "kind": "priority_guard", "label": "typed lock insurance first" },
     { "source": "shop.typed_key", "target": "feedback.gameplay_hud", "kind": "enables", "label": "shows typed key insurance" },
@@ -2241,6 +2243,7 @@
     { "source": "relic.memorize_under_short_memorize", "target": "build.memory_scout", "kind": "belongs_to", "label": "Memory Scout pressure answer" },
     { "source": "relic.memorize_under_short_memorize", "target": "feedback.gameplay_hud", "kind": "displays", "label": "shows Short Memorize counterplay" },
     { "source": "inventory.flash_pair_charge", "target": "power.flash_pair", "kind": "enables", "label": "funds one deterministic pair reveal" },
+    { "source": "inventory.flash_pair_charge", "target": "feedback.gameplay_hud", "kind": "displays", "label": "shows earned and spent Flash charges" },
     { "source": "power.flash_pair", "target": "inventory.flash_pair_charge", "kind": "consumes", "label": "spends one Flash charge" },
     { "source": "core.gameplay_commands", "target": "power.flash_pair", "kind": "modifies", "label": "executes and journals the pure Flash action" },
     { "source": "power.flash_pair", "target": "feedback.gameplay_hud", "kind": "displays", "label": "shows revealed pair and remaining charges" },

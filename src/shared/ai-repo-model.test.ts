@@ -12,12 +12,15 @@ type AiRepoModel = {
         contentItemCount: number;
         mechanicCount: number;
         stateFieldCount: number;
+        playerVisibleStateCount: number;
         relationshipCount: number;
     };
     files: { id: string; path: string; testedBy: string[] }[];
     symbols: { id: string; file: string; line: number; endLine: number }[];
     content: { id: string; kind: string; expectedMechanicId: string; source: { path: string; line: number | null } }[];
     mechanics: { id: string; evidence: { path: string; line: number | null }[]; tests: { path: string; line: number | null }[] }[];
+    states: { id: string; name: string; playerVisible: boolean }[];
+    playerVisibleStates: string[];
     relationships: { source: string; target: string; kind: string }[];
     diagnostics: { severity: 'error' | 'warning'; code: string }[];
 };
@@ -47,6 +50,7 @@ describe('AI repository model', () => {
         expect(model.repository.contentItemCount).toBeGreaterThan(50);
         expect(model.repository.mechanicCount).toBeGreaterThan(20);
         expect(model.repository.stateFieldCount).toBeGreaterThan(20);
+        expect(model.repository.playerVisibleStateCount).toBeGreaterThanOrEqual(27);
         expect(model.repository.relationshipCount).toBeGreaterThan(2_000);
         expect(model.diagnostics).toEqual([]);
         expect(model.symbols.every((symbol) => symbol.line > 0 && symbol.endLine >= symbol.line)).toBe(true);
@@ -57,6 +61,18 @@ describe('AI repository model', () => {
             expect.arrayContaining(['content:relic.peek_charge_plus_one', 'content:findable.scout_glint', 'content:bonus_reward.echo_conduit_lens'])
         );
         expect(model.mechanics.every((mechanic) => mechanic.evidence.length > 0 && mechanic.tests.length > 0)).toBe(true);
+        expect(model.playerVisibleStates).toEqual(expect.arrayContaining([
+            'currentLevelScore',
+            'destroyPairCharges',
+            'dungeonKeys',
+            'peekCharges',
+            'pinnedTileIds',
+            'relicFavorProgress',
+            'totalScore'
+        ]));
+        expect(model.states.filter((state) => state.playerVisible).map((state) => state.name).sort()).toEqual(
+            [...model.playerVisibleStates].sort()
+        );
         expect(model.relationships.map((edge) => edge.kind)).toEqual(
             expect.arrayContaining(['imports', 'exports', 'declared_by', 'implemented_by', 'tested_by', 'reads', 'writes', 'displays'])
         );

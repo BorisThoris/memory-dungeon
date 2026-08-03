@@ -11,11 +11,34 @@ export interface GameplayFeedbackObjectiveSnapshot {
     required: number;
 }
 
+export interface GameplayFeedbackDungeonKeySnapshot {
+    iron: number;
+    treasure: number;
+    shrine: number;
+    boss: number;
+    trap: number;
+    master: number;
+}
+
 export interface GameplayFeedbackCriticalSnapshot {
     lives: number;
     guardTokens: number;
     comboShards: number;
+    currentStreak: number;
+    currentLevelScore: number;
+    totalScore: number;
+    tries: number;
+    mismatches: number;
     shopGold: number;
+    dungeonKeys: GameplayFeedbackDungeonKeySnapshot;
+    shuffleCharges: number;
+    regionShuffleCharges: number;
+    destroyPairCharges: number;
+    peekCharges: number;
+    flashPairCharges: number;
+    strayRemoveCharges: number;
+    relicFavorProgress: number;
+    pinnedTileCount: number;
     objective: GameplayFeedbackObjectiveSnapshot | null;
     recallFocus: number;
     recallMatchesThisFloor: number;
@@ -26,6 +49,46 @@ export interface GameplayFeedbackCriticalSnapshot {
     enemyHazardHitsThisFloor: number;
     enemyHazardsDefeatedThisFloor: number;
 }
+
+/**
+ * Single source mapping normalized feedback facts to the graph state fields
+ * visible in the HUD or action toolbar. The AI model reads these literal
+ * values from source, so runtime completeness and semantic diagnostics cannot
+ * silently drift into different definitions of "player visible".
+ */
+export const GAMEPLAY_FEEDBACK_CRITICAL_FIELD_SOURCES = {
+    lives: 'lives',
+    guardTokens: 'guardTokens',
+    comboShards: 'comboShards',
+    currentStreak: 'currentStreak',
+    currentLevelScore: 'currentLevelScore',
+    totalScore: 'totalScore',
+    tries: 'tries',
+    mismatches: 'mismatches',
+    shopGold: 'shopGold',
+    dungeonKeys: 'dungeonKeys',
+    shuffleCharges: 'shuffleCharges',
+    regionShuffleCharges: 'regionShuffleCharges',
+    destroyPairCharges: 'destroyPairCharges',
+    peekCharges: 'peekCharges',
+    flashPairCharges: 'flashPairCharges',
+    strayRemoveCharges: 'strayRemoveCharges',
+    relicFavorProgress: 'relicFavorProgress',
+    pinnedTileCount: 'pinnedTileIds',
+    objective: 'objectiveCompleted',
+    recallFocus: 'recallFocus',
+    recallMatchesThisFloor: 'recallMatchesThisFloor',
+    recallMistakesThisFloor: 'recallMistakesThisFloor',
+    recallBonusScoreThisFloor: 'recallBonusScoreThisFloor',
+    forgottenTileCountThisFloor: 'forgottenTileIdsThisFloor',
+    dungeonEnemiesDefeatedThisFloor: 'dungeonEnemiesDefeatedThisFloor',
+    enemyHazardHitsThisFloor: 'enemyHazardHitsThisFloor',
+    enemyHazardsDefeatedThisFloor: 'enemyHazardsDefeatedThisFloor'
+} as const satisfies Record<keyof GameplayFeedbackCriticalSnapshot, string>;
+
+export const GAMEPLAY_FEEDBACK_CRITICAL_FIELDS = Object.keys(
+    GAMEPLAY_FEEDBACK_CRITICAL_FIELD_SOURCES
+) as (keyof GameplayFeedbackCriticalSnapshot)[];
 
 export const getGameplayFeedbackObjectiveSnapshot = (
     run: RunState
@@ -63,7 +126,28 @@ export const getGameplayFeedbackCriticalSnapshot = (
         lives: runNonNegativeInteger(run.lives),
         guardTokens: stats.guardTokens,
         comboShards: stats.comboShards,
+        currentStreak: stats.currentStreak,
+        currentLevelScore: stats.currentLevelScore,
+        totalScore: stats.totalScore,
+        tries: stats.tries,
+        mismatches: stats.mismatches,
         shopGold: runNonNegativeInteger(run.shopGold),
+        dungeonKeys: {
+            iron: runNonNegativeInteger(run.dungeonKeys?.iron),
+            treasure: runNonNegativeInteger(run.dungeonKeys?.treasure),
+            shrine: runNonNegativeInteger(run.dungeonKeys?.shrine),
+            boss: runNonNegativeInteger(run.dungeonKeys?.boss),
+            trap: runNonNegativeInteger(run.dungeonKeys?.trap),
+            master: runNonNegativeInteger(run.dungeonMasterKeys)
+        },
+        shuffleCharges: runNonNegativeInteger(run.shuffleCharges),
+        regionShuffleCharges: runNonNegativeInteger(run.regionShuffleCharges),
+        destroyPairCharges: runNonNegativeInteger(run.destroyPairCharges),
+        peekCharges: runNonNegativeInteger(run.peekCharges),
+        flashPairCharges: runNonNegativeInteger(run.flashPairCharges),
+        strayRemoveCharges: runNonNegativeInteger(run.strayRemoveCharges),
+        relicFavorProgress: runNonNegativeInteger(run.relicFavorProgress),
+        pinnedTileCount: runArrayCount(run.pinnedTileIds),
         objective: getGameplayFeedbackObjectiveSnapshot(run),
         recallFocus: runNonNegativeInteger(run.recallFocus),
         recallMatchesThisFloor: runNonNegativeInteger(run.recallMatchesThisFloor),

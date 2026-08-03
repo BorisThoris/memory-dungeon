@@ -125,6 +125,7 @@
 | Undo resolving | `cancelResolvingWithUndo` | `undoResolvingFlip` | [epic-powers-and-interactions](./epic-powers-and-interactions.md), [epic-run-session-flow](./epic-run-session-flow.md) |
 | Undo uses / floor | `undoUsesThisFloor` | — | [epic-run-session-flow](./epic-run-session-flow.md) |
 | Flash pair reveal | `applyFlashPair`, `flashPairCharges`, `flashPairRevealedTileIds` | `applyFlashPairPower` | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
+| Typed HUD completeness registry | `GAMEPLAY_FEEDBACK_CRITICAL_FIELD_SOURCES` maps 27 normalized HUD/resource facts to graph state fields; every accepted core command must emit typed feedback or the board-turn envelope when one changes | AI model marks the same state nodes `playerVisible` and rejects registry/graph drift | [epic-audio-feedback](./epic-audio-feedback.md) |
 | Gambit availability / used | `gambitAvailableThisFloor`, `gambitThirdFlipUsed` | `pressTile` third path | [epic-core-memory-loop](./epic-core-memory-loop.md) |
 | Powers used (achievement gate) | `powersUsedThisRun` | many actions set it | [epic-meta-progression](./epic-meta-progression.md) |
 

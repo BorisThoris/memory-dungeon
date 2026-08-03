@@ -5,24 +5,25 @@
     "name": "memory-dungeon",
     "trackedFileCount": 2407,
     "codeFileCount": 904,
-    "exportedSymbolCount": 3357,
+    "exportedSymbolCount": 3360,
     "contentItemCount": 57,
     "mechanicCount": 139,
-    "stateFieldCount": 285,
-    "relationshipCount": 10669
+    "stateFieldCount": 283,
+    "playerVisibleStateCount": 27,
+    "relationshipCount": 10709
   },
   "inventory": [
     {
       "path": ".ai/GAMEPLAY_MIGRATION.md",
       "category": "other",
-      "bytes": 109408,
-      "sha256": "d4d00293353d20af530f5b332f70fedeca6133806ad6e67da7b6b57ed3091b3a"
+      "bytes": 111665,
+      "sha256": "6238887457c003de6f5a6aba29eb518449b2c2cebe9e2bf923d9859471d1ced7"
     },
     {
       "path": ".ai/README.md",
       "category": "documentation",
-      "bytes": 1277,
-      "sha256": "821bd9e7f420a3422679830332d6448b63e0881b118399ff076de0a995673b1c"
+      "bytes": 1509,
+      "sha256": "849cd87bd976c55043262c47e049a18508048c4649ba70c6af0eaeb56d018fdd"
     },
     {
       "path": ".depcheckrc.json",
@@ -777,8 +778,8 @@
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
       "category": "documentation",
-      "bytes": 37494,
-      "sha256": "c1c883da4c4ec698fc1af864aea752deb1acf1cf0e2c0eeeab6b62d1eed0991d"
+      "bytes": 37870,
+      "sha256": "e2bedba065507df3175b9dcd1e5d43cfe2fd69ff9e82d7be172a733627a9ccf5"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_POLISH_AND_GAPS.md",
@@ -831,8 +832,8 @@
     {
       "path": "docs/internal-wiki/APP_ANALYSIS.md",
       "category": "documentation",
-      "bytes": 21742,
-      "sha256": "71e791adfb5af9ef0acef384dc5191bcb2b8324f400025fef534bc053aff7572"
+      "bytes": 21721,
+      "sha256": "1ac869f286c0f9a683aa1dee2b769b72e59905103ced2bacc07a624996037806"
     },
     {
       "path": "docs/internal-wiki/ARCHITECTURE.md",
@@ -4095,8 +4096,8 @@
     {
       "path": "scripts/ai-repo-model.mjs",
       "category": "script",
-      "bytes": 27157,
-      "sha256": "7eb834e945dcd430756468ba3d3f0bd1f98778a274227f746b1baf0a06df894f"
+      "bytes": 29178,
+      "sha256": "72b75056a32c289f502962b4e0a30c3202e36f65e80865ea850a954d1ad9b25c"
     },
     {
       "path": "scripts/ast-allowlist.json",
@@ -9795,8 +9796,8 @@
     {
       "path": "src/shared/ai-repo-model.test.ts",
       "category": "test",
-      "bytes": 4307,
-      "sha256": "e6572711bf38953bcd840dbb53d71ec81b5d6f2806ae87cab79513558c394cbb"
+      "bytes": 5005,
+      "sha256": "deea8ab4e0efec91e4350d29ef53d3e24f130982929cc31ea7d6c8196198d9b2"
     },
     {
       "path": "src/shared/audit-summary-script.test.ts",
@@ -10749,38 +10750,38 @@
     {
       "path": "src/shared/gameplay-feedback-completeness.test.ts",
       "category": "test",
-      "bytes": 3867,
-      "sha256": "9a10d0fbd4450d872eb5775c9b759338626ff82de90be2dd79e8507a9e735311"
+      "bytes": 6378,
+      "sha256": "495295fffe336590eb7f5fd7631ee3b85e354920fcfa1b5241704d13fa7c2783"
     },
     {
       "path": "src/shared/gameplay-feedback-completeness.ts",
       "category": "source",
-      "bytes": 2835,
-      "sha256": "b9cf9cf57e92f7414be95c36fe0e7d6a8eddc85b33f3384c35cf8f0536e404e1"
+      "bytes": 2481,
+      "sha256": "7e0f178cfe4dec204139cc5d275a319651addbc59de938883953a21746813935"
     },
     {
       "path": "src/shared/gameplay-feedback-facts.ts",
       "category": "source",
-      "bytes": 3183,
-      "sha256": "d0b35769a172d1df7fd734bdf7eced814615871b574b4bc03cc177797c91825f"
+      "bytes": 6704,
+      "sha256": "5247df892c4a303bd2300b94d66429daad92eaf18a1af030be6e105294354b68"
     },
     {
       "path": "src/shared/gameplay-interaction-graph-data.json",
       "category": "source",
-      "bytes": 234662,
-      "sha256": "5190cc8065207e28571c1aa7c5d3e33bbbbf3e908a3aadee6f9ee66bef94fd57"
+      "bytes": 235776,
+      "sha256": "ebdaf3a161f00adfff83044f977dd49edc93f73884ca65a6f3c7d83635cec490"
     },
     {
       "path": "src/shared/gameplay-interaction-graph.test.ts",
       "category": "test",
-      "bytes": 111763,
-      "sha256": "049fe58339d307af5868970cd321b0c973855ad3b1ac2dfb252dc3449799920e"
+      "bytes": 112665,
+      "sha256": "9259dd134699b01c18e9b78a1f618dc79971de007cf190148fd0c5d3ed439124"
     },
     {
       "path": "src/shared/gameplay-interaction-graph.ts",
       "category": "source",
-      "bytes": 14940,
-      "sha256": "47b0f5b82285f6e3ce6aea4d9c3f52bb7029ec4c353265e2d29383c66ab0b22f"
+      "bytes": 14453,
+      "sha256": "c0600b3f71692234eaf3d7fa63c57cdac8483d2e3b5c38b27fea7aef5b78718d"
     },
     {
       "path": "src/shared/gameplay-journal.test.ts",
@@ -23250,7 +23251,7 @@
       "path": "src/shared/ai-repo-model.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 82,
+      "lineCount": 98,
       "imports": [],
       "exports": [],
       "testedBy": []
@@ -27408,11 +27409,12 @@
       "path": "src/shared/gameplay-feedback-completeness.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 111,
+      "lineCount": 176,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/gameplay-core-contracts.ts",
         "file:src/shared/gameplay-feedback-completeness.ts",
+        "file:src/shared/gameplay-feedback-facts.ts",
         "file:src/shared/test/gameplay-event-fixtures.ts"
       ],
       "exports": [],
@@ -27423,7 +27425,7 @@
       "path": "src/shared/gameplay-feedback-completeness.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 86,
+      "lineCount": 71,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/gameplay-core-contracts.ts",
@@ -27444,7 +27446,7 @@
       "path": "src/shared/gameplay-feedback-facts.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 78,
+      "lineCount": 162,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/dungeon-board-status.ts",
@@ -27454,19 +27456,24 @@
         "file:src/shared/trait-route-objectives.ts"
       ],
       "exports": [
+        "symbol:src/shared/gameplay-feedback-facts.ts#GAMEPLAY_FEEDBACK_CRITICAL_FIELD_SOURCES",
+        "symbol:src/shared/gameplay-feedback-facts.ts#GAMEPLAY_FEEDBACK_CRITICAL_FIELDS",
         "symbol:src/shared/gameplay-feedback-facts.ts#GameplayFeedbackCriticalSnapshot",
+        "symbol:src/shared/gameplay-feedback-facts.ts#GameplayFeedbackDungeonKeySnapshot",
         "symbol:src/shared/gameplay-feedback-facts.ts#GameplayFeedbackObjectiveSnapshot",
         "symbol:src/shared/gameplay-feedback-facts.ts#getGameplayFeedbackCriticalSnapshot",
         "symbol:src/shared/gameplay-feedback-facts.ts#getGameplayFeedbackObjectiveSnapshot"
       ],
-      "testedBy": []
+      "testedBy": [
+        "file:src/shared/gameplay-feedback-completeness.test.ts"
+      ]
     },
     {
       "id": "file:src/shared/gameplay-interaction-graph-data.json",
       "path": "src/shared/gameplay-interaction-graph-data.json",
       "layer": "shared",
       "role": "production",
-      "lineCount": 2454,
+      "lineCount": 2457,
       "imports": [],
       "exports": [],
       "testedBy": []
@@ -27476,7 +27483,7 @@
       "path": "src/shared/gameplay-interaction-graph.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 1842,
+      "lineCount": 1859,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/gameplay-core-contracts.ts",
@@ -27490,8 +27497,9 @@
       "path": "src/shared/gameplay-interaction-graph.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 444,
+      "lineCount": 420,
       "imports": [
+        "file:src/shared/gameplay-feedback-facts.ts",
         "file:src/shared/gameplay-interaction-graph-data.json"
       ],
       "exports": [
@@ -50971,32 +50979,56 @@
       "name": "GameplayFeedbackCompletenessDiagnostic",
       "kind": "interface",
       "file": "src/shared/gameplay-feedback-completeness.ts",
-      "line": 10,
-      "endLine": 16
+      "line": 11,
+      "endLine": 17
     },
     {
       "id": "symbol:src/shared/gameplay-feedback-completeness.ts#GameplayFeedbackCriticalField",
       "name": "GameplayFeedbackCriticalField",
       "kind": "type",
       "file": "src/shared/gameplay-feedback-completeness.ts",
-      "line": 8,
-      "endLine": 8
+      "line": 9,
+      "endLine": 9
     },
     {
       "id": "symbol:src/shared/gameplay-feedback-completeness.ts#inspectGameplayFeedbackCompleteness",
       "name": "inspectGameplayFeedbackCompleteness",
       "kind": "value",
       "file": "src/shared/gameplay-feedback-completeness.ts",
-      "line": 53,
-      "endLine": 85
+      "line": 38,
+      "endLine": 70
+    },
+    {
+      "id": "symbol:src/shared/gameplay-feedback-facts.ts#GAMEPLAY_FEEDBACK_CRITICAL_FIELD_SOURCES",
+      "name": "GAMEPLAY_FEEDBACK_CRITICAL_FIELD_SOURCES",
+      "kind": "value",
+      "file": "src/shared/gameplay-feedback-facts.ts",
+      "line": 59,
+      "endLine": 87
+    },
+    {
+      "id": "symbol:src/shared/gameplay-feedback-facts.ts#GAMEPLAY_FEEDBACK_CRITICAL_FIELDS",
+      "name": "GAMEPLAY_FEEDBACK_CRITICAL_FIELDS",
+      "kind": "value",
+      "file": "src/shared/gameplay-feedback-facts.ts",
+      "line": 89,
+      "endLine": 91
     },
     {
       "id": "symbol:src/shared/gameplay-feedback-facts.ts#GameplayFeedbackCriticalSnapshot",
       "name": "GameplayFeedbackCriticalSnapshot",
       "kind": "interface",
       "file": "src/shared/gameplay-feedback-facts.ts",
+      "line": 23,
+      "endLine": 51
+    },
+    {
+      "id": "symbol:src/shared/gameplay-feedback-facts.ts#GameplayFeedbackDungeonKeySnapshot",
+      "name": "GameplayFeedbackDungeonKeySnapshot",
+      "kind": "interface",
+      "file": "src/shared/gameplay-feedback-facts.ts",
       "line": 14,
-      "endLine": 28
+      "endLine": 21
     },
     {
       "id": "symbol:src/shared/gameplay-feedback-facts.ts#GameplayFeedbackObjectiveSnapshot",
@@ -51011,120 +51043,120 @@
       "name": "getGameplayFeedbackCriticalSnapshot",
       "kind": "value",
       "file": "src/shared/gameplay-feedback-facts.ts",
-      "line": 58,
-      "endLine": 77
+      "line": 121,
+      "endLine": 161
     },
     {
       "id": "symbol:src/shared/gameplay-feedback-facts.ts#getGameplayFeedbackObjectiveSnapshot",
       "name": "getGameplayFeedbackObjectiveSnapshot",
       "kind": "value",
       "file": "src/shared/gameplay-feedback-facts.ts",
-      "line": 30,
-      "endLine": 51
+      "line": 93,
+      "endLine": 114
     },
     {
       "id": "symbol:src/shared/gameplay-interaction-graph.ts#auditGameplayInteractionGraph",
       "name": "auditGameplayInteractionGraph",
       "kind": "value",
       "file": "src/shared/gameplay-interaction-graph.ts",
-      "line": 332,
-      "endLine": 443
+      "line": 333,
+      "endLine": 419
     },
     {
       "id": "symbol:src/shared/gameplay-interaction-graph.ts#GameplayInteractionEdge",
       "name": "GameplayInteractionEdge",
       "kind": "interface",
       "file": "src/shared/gameplay-interaction-graph.ts",
-      "line": 64,
-      "endLine": 69
+      "line": 65,
+      "endLine": 70
     },
     {
       "id": "symbol:src/shared/gameplay-interaction-graph.ts#GameplayInteractionEdgeKind",
       "name": "GameplayInteractionEdgeKind",
       "kind": "type",
       "file": "src/shared/gameplay-interaction-graph.ts",
-      "line": 30,
-      "endLine": 48
+      "line": 31,
+      "endLine": 49
     },
     {
       "id": "symbol:src/shared/gameplay-interaction-graph.ts#gameplayInteractionGraph",
       "name": "gameplayInteractionGraph",
       "kind": "value",
       "file": "src/shared/gameplay-interaction-graph.ts",
-      "line": 204,
-      "endLine": 204
+      "line": 205,
+      "endLine": 205
     },
     {
       "id": "symbol:src/shared/gameplay-interaction-graph.ts#GameplayInteractionGraph",
       "name": "GameplayInteractionGraph",
       "kind": "interface",
       "file": "src/shared/gameplay-interaction-graph.ts",
-      "line": 71,
-      "endLine": 81
+      "line": 72,
+      "endLine": 82
     },
     {
       "id": "symbol:src/shared/gameplay-interaction-graph.ts#GameplayInteractionGraphAudit",
       "name": "GameplayInteractionGraphAudit",
       "kind": "interface",
       "file": "src/shared/gameplay-interaction-graph.ts",
-      "line": 100,
-      "endLine": 112
+      "line": 101,
+      "endLine": 113
     },
     {
       "id": "symbol:src/shared/gameplay-interaction-graph.ts#GameplayInteractionGraphIssue",
       "name": "GameplayInteractionGraphIssue",
       "kind": "interface",
       "file": "src/shared/gameplay-interaction-graph.ts",
-      "line": 83,
-      "endLine": 98
+      "line": 84,
+      "endLine": 99
     },
     {
       "id": "symbol:src/shared/gameplay-interaction-graph.ts#gameplayInteractionGraphSchema",
       "name": "gameplayInteractionGraphSchema",
       "kind": "value",
       "file": "src/shared/gameplay-interaction-graph.ts",
-      "line": 163,
-      "endLine": 202
+      "line": 164,
+      "endLine": 203
     },
     {
       "id": "symbol:src/shared/gameplay-interaction-graph.ts#GameplayInteractionMechanic",
       "name": "GameplayInteractionMechanic",
       "kind": "interface",
       "file": "src/shared/gameplay-interaction-graph.ts",
-      "line": 50,
-      "endLine": 62
+      "line": 51,
+      "endLine": 63
     },
     {
       "id": "symbol:src/shared/gameplay-interaction-graph.ts#GameplayInteractionMechanicKind",
       "name": "GameplayInteractionMechanicKind",
       "kind": "type",
       "file": "src/shared/gameplay-interaction-graph.ts",
-      "line": 4,
-      "endLine": 28
+      "line": 5,
+      "endLine": 29
     },
     {
       "id": "symbol:src/shared/gameplay-interaction-graph.ts#getGameplayInteractionEdgesForMechanic",
       "name": "getGameplayInteractionEdgesForMechanic",
       "kind": "value",
       "file": "src/shared/gameplay-interaction-graph.ts",
-      "line": 209,
-      "endLine": 210
+      "line": 210,
+      "endLine": 211
     },
     {
       "id": "symbol:src/shared/gameplay-interaction-graph.ts#getGameplayInteractionMechanicById",
       "name": "getGameplayInteractionMechanicById",
       "kind": "value",
       "file": "src/shared/gameplay-interaction-graph.ts",
-      "line": 206,
-      "endLine": 207
+      "line": 207,
+      "endLine": 208
     },
     {
       "id": "symbol:src/shared/gameplay-interaction-graph.ts#validateGameplayInteractionGraph",
       "name": "validateGameplayInteractionGraph",
       "kind": "value",
       "file": "src/shared/gameplay-interaction-graph.ts",
-      "line": 227,
-      "endLine": 330
+      "line": 228,
+      "endLine": 331
     },
     {
       "id": "symbol:src/shared/gameplay-journal.ts#appendGameplayJournal",
@@ -66721,10 +66753,12 @@
       ],
       "softlockGuards": [
         "normalized-feedback-critical-snapshot",
+        "single-player-visible-state-registry",
         "exact-changed-field-diagnostic",
         "accepted-transition-only",
         "typed-feedback-or-board-envelope",
         "seeded-command-corpus",
+        "ai-model-visible-state-drift-check",
         "no-legacy-action-fallback",
         "no-renderer-gameplay-state-props"
       ]
@@ -68031,7 +68065,8 @@
       "readBy": [
         "mechanic:safety.feedback_completeness"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:achievementProgress",
@@ -68041,7 +68076,8 @@
       ],
       "writtenBy": [
         "mechanic:stats.session_tracking"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:achievementsEnabled",
@@ -68051,7 +68087,8 @@
       ],
       "writtenBy": [
         "mechanic:debug.reveal_lifecycle"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:activeContract",
@@ -68061,7 +68098,8 @@
       ],
       "writtenBy": [
         "mechanic:progression.run_setup"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:activeMutators",
@@ -68074,7 +68112,8 @@
       ],
       "writtenBy": [
         "mechanic:progression.run_setup"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:adjacentTraits",
@@ -68088,7 +68127,8 @@
         "mechanic:trait.mirror",
         "mechanic:trait.volatile_heavy_guard"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:balanceProfileReport",
@@ -68096,7 +68136,8 @@
       "readBy": [],
       "writtenBy": [
         "mechanic:simulation.build_evaluation"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:bannedRelicIds",
@@ -68106,7 +68147,8 @@
       ],
       "writtenBy": [
         "mechanic:progression.relic_draft"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:board.level",
@@ -68114,7 +68156,8 @@
       "readBy": [
         "mechanic:shop.stock_reroll"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:boardLevel",
@@ -68122,7 +68165,8 @@
       "readBy": [
         "mechanic:feedback.board_turn_floater"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:boardRows",
@@ -68131,7 +68175,8 @@
         "mechanic:power.region_shuffle",
         "mechanic:trait.drift"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:bonusRelicPicksNextOffer",
@@ -68148,7 +68193,8 @@
         "mechanic:progression.relic_draft",
         "mechanic:relic.shrine_echo",
         "mechanic:reward.secret_favor"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:bonusRewardLedger",
@@ -68173,7 +68219,8 @@
       ],
       "writtenBy": [
         "mechanic:progression.route_side_room"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:bossTrophyCacheOutcome",
@@ -68188,7 +68235,8 @@
       ],
       "writtenBy": [
         "mechanic:objective.defeat_boss"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:bossTrophyCacheScore",
@@ -68198,7 +68246,8 @@
       ],
       "writtenBy": [
         "mechanic:reward.boss_trophy_cache"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:bossTrophyConversionReport",
@@ -68206,7 +68255,8 @@
       "readBy": [],
       "writtenBy": [
         "mechanic:simulation.build_evaluation"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:bossTrophyScoreRequests",
@@ -68217,7 +68267,8 @@
       "writtenBy": [
         "mechanic:core.gameplay_commands",
         "mechanic:relic.chapter_compass"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:boundedInformationReport",
@@ -68226,7 +68277,8 @@
       "writtenBy": [
         "mechanic:simulation.build_evaluation",
         "mechanic:simulation.generated_board_playthrough"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:buildPlan",
@@ -68241,7 +68293,8 @@
         "mechanic:build.route_gambler",
         "mechanic:build.trap_control",
         "mechanic:build.treasure_greed"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:buildStrategyReport",
@@ -68249,7 +68302,8 @@
       "readBy": [],
       "writtenBy": [
         "mechanic:simulation.build_evaluation"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:cohesiveBuildCoverageReport",
@@ -68257,7 +68311,8 @@
       "readBy": [],
       "writtenBy": [
         "mechanic:simulation.build_evaluation"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:comboShardRequests",
@@ -68270,7 +68325,8 @@
       "writtenBy": [
         "mechanic:core.gameplay_commands",
         "mechanic:findable.shard_spark"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:comboShards",
@@ -68300,7 +68356,8 @@
         "mechanic:reward.bonus_shards",
         "mechanic:route.choice",
         "mechanic:trait.sealed"
-      ]
+      ],
+      "playerVisible": true
     },
     {
       "id": "state:comboShardSourceReport",
@@ -68308,7 +68365,8 @@
       "readBy": [],
       "writtenBy": [
         "mechanic:simulation.build_evaluation"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:commandId",
@@ -68316,7 +68374,8 @@
       "readBy": [
         "mechanic:feedback.typed_command_announcement"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:contentDefinitionIds",
@@ -68324,7 +68383,8 @@
       "readBy": [
         "mechanic:simulation.build_evaluation"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:conversionRiskCredit",
@@ -68332,7 +68392,8 @@
       "readBy": [
         "mechanic:simulation.build_evaluation"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:coverageReport",
@@ -68340,29 +68401,35 @@
       "readBy": [],
       "writtenBy": [
         "mechanic:safety.dungeon_topology"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:currentLevelScore",
       "name": "currentLevelScore",
       "readBy": [
         "mechanic:economy.score_and_rewards",
-        "mechanic:feedback.gameplay_hud"
+        "mechanic:feedback.gameplay_hud",
+        "mechanic:safety.feedback_completeness"
       ],
       "writtenBy": [
         "mechanic:economy.score_and_rewards"
-      ]
+      ],
+      "playerVisible": true
     },
     {
       "id": "state:currentStreak",
       "name": "currentStreak",
       "readBy": [
         "mechanic:core.board_turn_resolution",
-        "mechanic:perk.trait_streak_toolkit"
+        "mechanic:feedback.gameplay_hud",
+        "mechanic:perk.trait_streak_toolkit",
+        "mechanic:safety.feedback_completeness"
       ],
       "writtenBy": [
         "mechanic:core.board_turn_resolution"
-      ]
+      ],
+      "playerVisible": true
     },
     {
       "id": "state:currentStreakAfter",
@@ -68370,7 +68437,8 @@
       "readBy": [
         "mechanic:feedback.board_turn_floater"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:currentStreakBefore",
@@ -68378,7 +68446,8 @@
       "readBy": [
         "mechanic:feedback.board_turn_floater"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:dangerTraits",
@@ -68386,7 +68455,8 @@
       "readBy": [
         "mechanic:trait.conduit"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:debugPeekActive",
@@ -68396,7 +68466,8 @@
       ],
       "writtenBy": [
         "mechanic:debug.reveal_lifecycle"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:debugRevealRemainingMs",
@@ -68406,7 +68477,8 @@
       ],
       "writtenBy": [
         "mechanic:debug.reveal_lifecycle"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:debugUsed",
@@ -68416,7 +68488,8 @@
       ],
       "writtenBy": [
         "mechanic:debug.reveal_lifecycle"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:destroyPairCharges",
@@ -68433,6 +68506,7 @@
         "mechanic:relic.destroy_bank_plus_one",
         "mechanic:reward.hazard_banisher",
         "mechanic:reward.supply_cache",
+        "mechanic:safety.feedback_completeness",
         "mechanic:simulation.build_evaluation"
       ],
       "writtenBy": [
@@ -68446,7 +68520,8 @@
         "mechanic:reward.hazard_banisher",
         "mechanic:reward.hazard_ward",
         "mechanic:reward.supply_cache"
-      ]
+      ],
+      "playerVisible": true
     },
     {
       "id": "state:disableAchievementsOnDebug",
@@ -68454,7 +68529,8 @@
       "readBy": [
         "mechanic:debug.reveal_lifecycle"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:dungeonBossId",
@@ -68463,7 +68539,8 @@
         "mechanic:boss.moving_patrol",
         "mechanic:simulation.build_evaluation"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:dungeonCardKind",
@@ -68471,7 +68548,8 @@
       "readBy": [
         "mechanic:core.tile_input"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:dungeonEnemiesDefeated",
@@ -68482,7 +68560,8 @@
       "writtenBy": [
         "mechanic:boss.moving_patrol",
         "mechanic:safety.softlock_fairness"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:dungeonEnemiesDefeatedAfter",
@@ -68490,7 +68569,8 @@
       "readBy": [
         "mechanic:feedback.board_turn_floater"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:dungeonEnemiesDefeatedBefore",
@@ -68498,7 +68578,8 @@
       "readBy": [
         "mechanic:feedback.board_turn_floater"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:dungeonEnemiesDefeatedThisFloor",
@@ -68511,7 +68592,8 @@
       "writtenBy": [
         "mechanic:boss.moving_patrol",
         "mechanic:safety.softlock_fairness"
-      ]
+      ],
+      "playerVisible": true
     },
     {
       "id": "state:dungeonExitActivated",
@@ -68525,7 +68607,8 @@
         "mechanic:exit.primary",
         "mechanic:lock.iron_key",
         "mechanic:lock.typed_key"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:dungeonExitLockKind",
@@ -68546,7 +68629,8 @@
       ],
       "writtenBy": [
         "mechanic:safety.softlock_fairness"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:dungeonExitRequiredLeverCount",
@@ -68556,7 +68640,8 @@
       ],
       "writtenBy": [
         "mechanic:safety.softlock_fairness"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:dungeonExitTileId",
@@ -68564,7 +68649,8 @@
       "readBy": [
         "mechanic:exit.primary"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:dungeonGatewaysUsed",
@@ -68574,7 +68660,8 @@
       ],
       "writtenBy": [
         "mechanic:exit.primary"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:dungeonKeyKind",
@@ -68587,7 +68674,8 @@
         "mechanic:simulation.build_evaluation",
         "mechanic:simulation.generated_board_playthrough"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:dungeonKeys",
@@ -68598,6 +68686,7 @@
         "mechanic:core.gameplay_commands",
         "mechanic:exit.locked_alternate",
         "mechanic:exit.primary",
+        "mechanic:feedback.gameplay_hud",
         "mechanic:inventory.iron_key",
         "mechanic:lock.iron_key",
         "mechanic:lock.typed_key",
@@ -68606,6 +68695,7 @@
         "mechanic:reward.key_insurance",
         "mechanic:room.locked_cache",
         "mechanic:safety.dungeon_topology",
+        "mechanic:safety.feedback_completeness",
         "mechanic:safety.softlock_fairness",
         "mechanic:shop.typed_key",
         "mechanic:simulation.build_evaluation",
@@ -68623,7 +68713,8 @@
         "mechanic:reward.key_insurance",
         "mechanic:room.locked_cache",
         "mechanic:shop.typed_key"
-      ]
+      ],
+      "playerVisible": true
     },
     {
       "id": "state:dungeonLeverCount",
@@ -68632,7 +68723,8 @@
         "mechanic:exit.primary",
         "mechanic:safety.dungeon_topology"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:dungeonMasterKeys",
@@ -68657,7 +68749,8 @@
         "mechanic:inventory.master_key",
         "mechanic:room.locked_cache",
         "mechanic:shop.master_key"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:dungeonObjectiveCompleted",
@@ -68665,7 +68758,8 @@
       "readBy": [
         "mechanic:reward.boss_trophy_cache"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:dungeonObjectiveId",
@@ -68675,7 +68769,8 @@
         "mechanic:objective.defeat_boss",
         "mechanic:safety.dungeon_topology"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:dungeonRoomUsed",
@@ -68685,7 +68780,8 @@
       ],
       "writtenBy": [
         "mechanic:room.locked_cache"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:dungeonRun",
@@ -68693,7 +68789,8 @@
       "readBy": [
         "mechanic:safety.dungeon_topology"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:encorePairKeys",
@@ -68701,7 +68798,8 @@
       "readBy": [
         "mechanic:core.board_turn_resolution"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:endlessRiskWager",
@@ -68716,7 +68814,8 @@
       "writtenBy": [
         "mechanic:core.gameplay_commands",
         "mechanic:objective.risk_wager"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:endlessRiskWagerOutcome",
@@ -68728,7 +68827,8 @@
       ],
       "writtenBy": [
         "mechanic:objective.featured_streak"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:enemyHazardHitsAfter",
@@ -68737,7 +68837,8 @@
         "mechanic:feedback.board_turn_floater",
         "mechanic:feedback.typed_command_announcement"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:enemyHazardHitsBefore",
@@ -68746,15 +68847,18 @@
         "mechanic:feedback.board_turn_floater",
         "mechanic:feedback.typed_command_announcement"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:enemyHazardHitsThisFloor",
       "name": "enemyHazardHitsThisFloor",
       "readBy": [
+        "mechanic:feedback.gameplay_hud",
         "mechanic:safety.feedback_completeness"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": true
     },
     {
       "id": "state:enemyHazards",
@@ -68773,7 +68877,8 @@
       "writtenBy": [
         "mechanic:hazard.enemy_patrol",
         "mechanic:safety.softlock_fairness"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:enemyHazardsDefeatedAfter",
@@ -68781,7 +68886,8 @@
       "readBy": [
         "mechanic:feedback.board_turn_floater"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:enemyHazardsDefeatedBefore",
@@ -68789,7 +68895,8 @@
       "readBy": [
         "mechanic:feedback.board_turn_floater"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:enemyHazardsDefeatedThisFloor",
@@ -68803,7 +68910,8 @@
         "mechanic:boss.moving_patrol",
         "mechanic:hazard.enemy_patrol",
         "mechanic:safety.softlock_fairness"
-      ]
+      ],
+      "playerVisible": true
     },
     {
       "id": "state:enemyHazardTurn",
@@ -68811,7 +68919,8 @@
       "readBy": [
         "mechanic:hazard.enemy_patrol"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:eventId",
@@ -68819,7 +68928,8 @@
       "readBy": [
         "mechanic:feedback.typed_command_announcement"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:exitSources",
@@ -68827,7 +68937,8 @@
       "readBy": [
         "mechanic:power.destroy_pair"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:fairnessReport",
@@ -68835,7 +68946,8 @@
       "readBy": [],
       "writtenBy": [
         "mechanic:safety.softlock_fairness"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:favorBonusRelicPicksNextOffer",
@@ -68845,7 +68957,8 @@
       ],
       "writtenBy": [
         "mechanic:progression.relic_draft"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:featuredObjectiveCompleted",
@@ -68859,7 +68972,8 @@
         "mechanic:relic.parasite_ledger",
         "mechanic:simulation.build_evaluation"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:featuredObjectiveStreak",
@@ -68875,7 +68989,8 @@
       "writtenBy": [
         "mechanic:objective.featured_streak",
         "mechanic:objective.risk_wager"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:featuredStreakFloorRequests",
@@ -68886,7 +69001,8 @@
       "writtenBy": [
         "mechanic:core.gameplay_commands",
         "mechanic:relic.wager_surety"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:feedbackCompletenessDiagnostic",
@@ -68897,7 +69013,8 @@
       ],
       "writtenBy": [
         "mechanic:safety.feedback_completeness"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:feedbackCues",
@@ -68905,7 +69022,8 @@
       "readBy": [
         "mechanic:simulation.build_evaluation"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:feedbackLines",
@@ -68985,7 +69103,8 @@
         "mechanic:safety.softlock_fairness",
         "mechanic:shop.master_key",
         "mechanic:trait.volatile_heavy_guard"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:findableKind",
@@ -68993,7 +69112,8 @@
       "readBy": [
         "mechanic:core.board_turn_resolution"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:findablesClaimedAfter",
@@ -69001,7 +69121,8 @@
       "readBy": [
         "mechanic:feedback.board_turn_floater"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:findablesClaimedBefore",
@@ -69009,7 +69130,8 @@
       "readBy": [
         "mechanic:feedback.board_turn_floater"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:findablesTotalAfter",
@@ -69017,7 +69139,8 @@
       "readBy": [
         "mechanic:feedback.board_turn_floater"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:findablesTotalBefore",
@@ -69025,7 +69148,8 @@
       "readBy": [
         "mechanic:feedback.board_turn_floater"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:firstPair",
@@ -69033,22 +69157,26 @@
       "readBy": [
         "mechanic:trait.cursed"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:flashPairCharges",
       "name": "flashPairCharges",
       "readBy": [
         "mechanic:build.memory_scout",
+        "mechanic:feedback.gameplay_hud",
         "mechanic:inventory.flash_pair_charge",
         "mechanic:power.flash_pair",
+        "mechanic:safety.feedback_completeness",
         "mechanic:simulation.build_evaluation"
       ],
       "writtenBy": [
         "mechanic:inventory.flash_pair_charge",
         "mechanic:perk.trait_streak_toolkit",
         "mechanic:power.flash_pair"
-      ]
+      ],
+      "playerVisible": true
     },
     {
       "id": "state:flashPairRevealedTileIds",
@@ -69058,7 +69186,8 @@
       ],
       "writtenBy": [
         "mechanic:power.flash_pair"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:flashPairUseReport",
@@ -69066,7 +69195,8 @@
       "readBy": [],
       "writtenBy": [
         "mechanic:simulation.build_evaluation"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:flippedTileIds",
@@ -69084,7 +69214,8 @@
       "writtenBy": [
         "mechanic:board.cleanup",
         "mechanic:core.tile_input"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:floaterTileIds",
@@ -69094,7 +69225,8 @@
       ],
       "writtenBy": [
         "mechanic:core.board_turn_resolution"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:floorMatchup",
@@ -69104,7 +69236,8 @@
         "mechanic:build.memory_scout",
         "mechanic:exit.locked_alternate"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:floorTag",
@@ -69112,7 +69245,8 @@
       "readBy": [
         "mechanic:simulation.build_evaluation"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:forgottenTileCountAfter",
@@ -69121,7 +69255,8 @@
         "mechanic:feedback.board_turn_floater",
         "mechanic:feedback.typed_command_announcement"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:forgottenTileCountBefore",
@@ -69130,21 +69265,16 @@
         "mechanic:feedback.board_turn_floater",
         "mechanic:feedback.typed_command_announcement"
       ],
-      "writtenBy": []
-    },
-    {
-      "id": "state:forgottenTileCountThisFloor",
-      "name": "forgottenTileCountThisFloor",
-      "readBy": [
-        "mechanic:safety.feedback_completeness"
-      ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:forgottenTileIdsThisFloor",
       "name": "forgottenTileIdsThisFloor",
       "readBy": [
         "mechanic:board.cleanup",
+        "mechanic:feedback.gameplay_hud",
+        "mechanic:safety.feedback_completeness",
         "mechanic:stats.session_tracking"
       ],
       "writtenBy": [
@@ -69156,7 +69286,8 @@
         "mechanic:power.stray_remove",
         "mechanic:power.tile_swap",
         "mechanic:power.undo_resolve"
-      ]
+      ],
+      "playerVisible": true
     },
     {
       "id": "state:freeShuffleThisFloor",
@@ -69172,7 +69303,8 @@
         "mechanic:core.gameplay_commands",
         "mechanic:power.shuffle",
         "mechanic:relic.first_shuffle_free_per_floor"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:gambitAvailableThisFloor",
@@ -69187,7 +69319,8 @@
       "writtenBy": [
         "mechanic:inventory.gambit_token",
         "mechanic:power.gambit"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:gambitCommitReport",
@@ -69196,7 +69329,8 @@
       "writtenBy": [
         "mechanic:simulation.build_evaluation",
         "mechanic:simulation.generated_board_playthrough"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:gambitCommitRequests",
@@ -69207,7 +69341,8 @@
       "writtenBy": [
         "mechanic:core.gameplay_commands",
         "mechanic:power.gambit"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:gambitPolicy",
@@ -69216,7 +69351,8 @@
         "mechanic:simulation.build_evaluation",
         "mechanic:simulation.generated_board_playthrough"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:gambitSuppressedMatchups",
@@ -69224,7 +69360,8 @@
       "readBy": [
         "mechanic:simulation.build_evaluation"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:gambitThirdFlipUsed",
@@ -69239,7 +69376,8 @@
       "writtenBy": [
         "mechanic:inventory.gambit_token",
         "mechanic:power.gambit"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:gameMode",
@@ -69252,7 +69390,8 @@
         "mechanic:phase.pause_resume",
         "mechanic:progression.shard_to_life"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:gameplayCommandJournal",
@@ -69273,7 +69412,8 @@
         "mechanic:route.choice",
         "mechanic:safety.parasite_ward",
         "mechanic:safety.softlock_fairness"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:gameplayCommands",
@@ -69300,7 +69440,8 @@
         "mechanic:reward.key_insurance",
         "mechanic:shop.master_key",
         "mechanic:shop.stock_reroll"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:gameplayEventJournal",
@@ -69322,7 +69463,8 @@
         "mechanic:route.choice",
         "mechanic:safety.parasite_ward",
         "mechanic:safety.softlock_fairness"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:gameplayEvents",
@@ -69355,7 +69497,8 @@
         "mechanic:safety.parasite_ward",
         "mechanic:shop.master_key",
         "mechanic:shop.stock_reroll"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:gauntletDeadlineMs",
@@ -69366,7 +69509,8 @@
       ],
       "writtenBy": [
         "mechanic:phase.pause_resume"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:generatedBoardPlaythroughReport",
@@ -69375,7 +69519,8 @@
       "writtenBy": [
         "mechanic:simulation.build_evaluation",
         "mechanic:simulation.generated_board_playthrough"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:guardTokens",
@@ -69416,7 +69561,8 @@
         "mechanic:trait.mirror",
         "mechanic:trait.stasis",
         "mechanic:trait.volatile_heavy_guard"
-      ]
+      ],
+      "playerVisible": true
     },
     {
       "id": "state:guardTokensAfter",
@@ -69424,7 +69570,8 @@
       "readBy": [
         "mechanic:feedback.typed_command_announcement"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:guardTokensBefore",
@@ -69432,7 +69579,8 @@
       "readBy": [
         "mechanic:feedback.typed_command_announcement"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:hazardPinConservationReport",
@@ -69440,7 +69588,8 @@
       "readBy": [],
       "writtenBy": [
         "mechanic:simulation.build_evaluation"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:hazardTilesAfter",
@@ -69448,7 +69597,8 @@
       "readBy": [
         "mechanic:feedback.board_turn_floater"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:hazardTilesBefore",
@@ -69456,7 +69606,8 @@
       "readBy": [
         "mechanic:feedback.board_turn_floater"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:hazardTileTriggersThisFloor",
@@ -69466,7 +69617,8 @@
       ],
       "writtenBy": [
         "mechanic:hazard.tile_pressure"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:informationPolicy",
@@ -69476,7 +69628,8 @@
         "mechanic:simulation.build_evaluation",
         "mechanic:simulation.generated_board_playthrough"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:interactionTags",
@@ -69497,7 +69650,8 @@
         "mechanic:trait.stasis",
         "mechanic:trait.volatile",
         "mechanic:trait.volatile_heavy_guard"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:invariantViolations",
@@ -69509,7 +69663,8 @@
         "mechanic:safety.feedback_completeness",
         "mechanic:simulation.build_evaluation",
         "mechanic:simulation.generated_board_playthrough"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:lastLevelResult",
@@ -69522,7 +69677,8 @@
       ],
       "writtenBy": [
         "mechanic:objective.floor_clear"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:levelComplete",
@@ -69536,7 +69692,8 @@
       "writtenBy": [
         "mechanic:exit.primary",
         "mechanic:objective.floor_clear"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:lives",
@@ -69571,7 +69728,8 @@
         "mechanic:progression.shard_to_life",
         "mechanic:route.choice",
         "mechanic:safety.guard_absorption"
-      ]
+      ],
+      "playerVisible": true
     },
     {
       "id": "state:livesAfter",
@@ -69579,7 +69737,8 @@
       "readBy": [
         "mechanic:feedback.typed_command_announcement"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:livesBefore",
@@ -69587,7 +69746,8 @@
       "readBy": [
         "mechanic:feedback.typed_command_announcement"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:lockPolicy",
@@ -69598,7 +69758,8 @@
         "mechanic:simulation.build_evaluation",
         "mechanic:simulation.generated_board_playthrough"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:lockPolicySuppressedMatchups",
@@ -69607,7 +69768,8 @@
         "mechanic:build.locksmith",
         "mechanic:simulation.build_evaluation"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:lockPressureConservationReport",
@@ -69615,7 +69777,8 @@
       "readBy": [],
       "writtenBy": [
         "mechanic:simulation.build_evaluation"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:masterKeyLockUseReport",
@@ -69624,7 +69787,8 @@
       "writtenBy": [
         "mechanic:simulation.build_evaluation",
         "mechanic:simulation.generated_board_playthrough"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:masterKeyPurchaseReport",
@@ -69633,7 +69797,8 @@
       "writtenBy": [
         "mechanic:simulation.build_evaluation",
         "mechanic:simulation.generated_board_playthrough"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:matchedFindableKind",
@@ -69644,7 +69809,8 @@
       ],
       "writtenBy": [
         "mechanic:core.board_turn_resolution"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:matchedFindables",
@@ -69660,7 +69826,8 @@
         "mechanic:findable.shard_spark",
         "mechanic:findable.ward_spark"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:matchedPairs",
@@ -69671,7 +69838,8 @@
       "writtenBy": [
         "mechanic:core.board_turn_resolution",
         "mechanic:power.destroy_pair"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:matchedPairsAfter",
@@ -69679,7 +69847,8 @@
       "readBy": [
         "mechanic:feedback.board_turn_floater"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:matchedPairsBefore",
@@ -69687,7 +69856,8 @@
       "readBy": [
         "mechanic:feedback.board_turn_floater"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:matchedRouteKind",
@@ -69697,7 +69867,8 @@
       ],
       "writtenBy": [
         "mechanic:core.board_turn_resolution"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:matchedTraitKinds",
@@ -69705,7 +69876,8 @@
       "readBy": [
         "mechanic:feedback.board_turn_floater"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:matchResolutionsThisFloor",
@@ -69714,7 +69886,8 @@
         "mechanic:core.gameplay_commands",
         "mechanic:perk.cursed_opener_greed"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:matchScorePop",
@@ -69724,7 +69897,8 @@
       ],
       "writtenBy": [
         "mechanic:feedback.board_turn_floater"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:maxPinsTotalRun",
@@ -69732,7 +69906,8 @@
       "readBy": [
         "mechanic:inventory.contract_loadout"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:memorizeMs",
@@ -69744,7 +69919,8 @@
       "writtenBy": [
         "mechanic:relic.memorize_bonus_ms",
         "mechanic:relic.memorize_under_short_memorize"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:memoryPressureConservationReport",
@@ -69752,7 +69928,8 @@
       "readBy": [],
       "writtenBy": [
         "mechanic:simulation.build_evaluation"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:memoryTileCapacity",
@@ -69761,7 +69938,8 @@
         "mechanic:simulation.build_evaluation",
         "mechanic:simulation.generated_board_playthrough"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:message",
@@ -69769,7 +69947,8 @@
       "readBy": [
         "mechanic:feedback.typed_command_announcement"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:mimicCacheAfter",
@@ -69777,7 +69956,8 @@
       "readBy": [
         "mechanic:feedback.board_turn_floater"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:mimicCacheBefore",
@@ -69785,7 +69965,8 @@
       "readBy": [
         "mechanic:feedback.board_turn_floater"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:mismatchedTraitKinds",
@@ -69793,18 +69974,22 @@
       "readBy": [
         "mechanic:feedback.board_turn_floater"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:mismatches",
       "name": "mismatches",
       "readBy": [
         "mechanic:core.board_turn_resolution",
-        "mechanic:feedback.board_turn_floater"
+        "mechanic:feedback.board_turn_floater",
+        "mechanic:feedback.gameplay_hud",
+        "mechanic:safety.feedback_completeness"
       ],
       "writtenBy": [
         "mechanic:core.board_turn_resolution"
-      ]
+      ],
+      "playerVisible": true
     },
     {
       "id": "state:mismatchScorePop",
@@ -69814,7 +69999,8 @@
       ],
       "writtenBy": [
         "mechanic:feedback.board_turn_floater"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:nearbyTraits",
@@ -69822,7 +70008,8 @@
       "readBy": [
         "mechanic:trait.stasis"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:nextFloor",
@@ -69835,7 +70022,8 @@
       ],
       "writtenBy": [
         "mechanic:progression.run_flow"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:noDestroy",
@@ -69848,7 +70036,8 @@
         "mechanic:power.destroy_pair",
         "mechanic:relic.destroy_bank_plus_one"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:noShuffle",
@@ -69864,7 +70053,8 @@
         "mechanic:relic.first_shuffle_free_per_floor",
         "mechanic:relic.region_shuffle_free_first"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:objectiveAfter",
@@ -69872,7 +70062,8 @@
       "readBy": [
         "mechanic:feedback.board_turn_floater"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:objectiveBefore",
@@ -69880,26 +70071,22 @@
       "readBy": [
         "mechanic:feedback.board_turn_floater"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:objectiveCompleted",
       "name": "objectiveCompleted",
       "readBy": [
         "mechanic:economy.score_and_rewards",
-        "mechanic:objective.floor_clear"
+        "mechanic:feedback.gameplay_hud",
+        "mechanic:objective.floor_clear",
+        "mechanic:safety.feedback_completeness"
       ],
       "writtenBy": [
         "mechanic:objective.defeat_boss"
-      ]
-    },
-    {
-      "id": "state:objectiveProgress",
-      "name": "objectiveProgress",
-      "readBy": [
-        "mechanic:safety.feedback_completeness"
       ],
-      "writtenBy": []
+      "playerVisible": true
     },
     {
       "id": "state:observedTileIds",
@@ -69907,7 +70094,8 @@
       "readBy": [
         "mechanic:simulation.build_evaluation"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:orderedFeedbackBatch",
@@ -69915,7 +70103,8 @@
       "readBy": [
         "mechanic:feedback.typed_command_announcement"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:pairCountAfter",
@@ -69923,7 +70112,8 @@
       "readBy": [
         "mechanic:feedback.board_turn_floater"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:pairCountBefore",
@@ -69931,7 +70121,8 @@
       "readBy": [
         "mechanic:feedback.board_turn_floater"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:pairKeys",
@@ -69941,7 +70132,8 @@
         "mechanic:core.board_turn_resolution",
         "mechanic:power.wild_match"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:pairwiseAxisDistances",
@@ -69951,7 +70143,8 @@
       ],
       "writtenBy": [
         "mechanic:simulation.build_evaluation"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:parasiteFloors",
@@ -69972,7 +70165,8 @@
         "mechanic:hazard.score_parasite",
         "mechanic:power.destroy_pair",
         "mechanic:progression.run_flow"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:parasitePressureAfter",
@@ -69980,7 +70174,8 @@
       "readBy": [
         "mechanic:feedback.typed_command_announcement"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:parasitePressureBefore",
@@ -69988,7 +70183,8 @@
       "readBy": [
         "mechanic:feedback.typed_command_announcement"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:parasiteReliefReport",
@@ -69996,7 +70192,8 @@
       "readBy": [],
       "writtenBy": [
         "mechanic:simulation.build_evaluation"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:parasiteReliefRequests",
@@ -70007,7 +70204,8 @@
       "writtenBy": [
         "mechanic:core.gameplay_commands",
         "mechanic:relic.parasite_ledger"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:parasiteWardAfter",
@@ -70015,7 +70213,8 @@
       "readBy": [
         "mechanic:feedback.typed_command_announcement"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:parasiteWardBefore",
@@ -70023,7 +70222,8 @@
       "readBy": [
         "mechanic:feedback.typed_command_announcement"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:parasiteWardRemaining",
@@ -70045,7 +70245,8 @@
         "mechanic:relic.parasite_ledger",
         "mechanic:relic.parasite_ward_once",
         "mechanic:safety.parasite_ward"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:peekCharges",
@@ -70060,7 +70261,8 @@
         "mechanic:progression.route_side_room",
         "mechanic:relic.chapter_compass",
         "mechanic:reward.supply_cache",
-        "mechanic:reward.trait_toolkit"
+        "mechanic:reward.trait_toolkit",
+        "mechanic:safety.feedback_completeness"
       ],
       "writtenBy": [
         "mechanic:core.gameplay_commands",
@@ -70077,7 +70279,8 @@
         "mechanic:shop.trait_routing_kit",
         "mechanic:trait.conduit",
         "mechanic:trait.echo"
-      ]
+      ],
+      "playerVisible": true
     },
     {
       "id": "state:peekRevealedTileIds",
@@ -70088,7 +70291,8 @@
       "writtenBy": [
         "mechanic:core.gameplay_commands",
         "mechanic:power.peek"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:pendingMemorizeBonusMs",
@@ -70101,7 +70305,8 @@
       ],
       "writtenBy": [
         "mechanic:route.choice"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:pendingRouteCardPlan",
@@ -70114,7 +70319,8 @@
         "mechanic:exit.locked_alternate",
         "mechanic:progression.run_flow",
         "mechanic:route.choice"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:pickupToast",
@@ -70124,7 +70330,8 @@
       ],
       "writtenBy": [
         "mechanic:feedback.board_turn_floater"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:pinCapacityRequests",
@@ -70135,7 +70342,8 @@
       "writtenBy": [
         "mechanic:core.gameplay_commands",
         "mechanic:relic.pin_cap_plus_one"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:pinnedTileIds",
@@ -70143,14 +70351,17 @@
       "readBy": [
         "mechanic:build.conduit_cartographer",
         "mechanic:core.gameplay_commands",
+        "mechanic:feedback.gameplay_hud",
         "mechanic:power.pin",
+        "mechanic:safety.feedback_completeness",
         "mechanic:simulation.build_evaluation",
         "mechanic:simulation.generated_board_playthrough"
       ],
       "writtenBy": [
         "mechanic:core.gameplay_commands",
         "mechanic:power.pin"
-      ]
+      ],
+      "playerVisible": true
     },
     {
       "id": "state:pinPlacementReport",
@@ -70159,7 +70370,8 @@
       "writtenBy": [
         "mechanic:simulation.build_evaluation",
         "mechanic:simulation.generated_board_playthrough"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:pinPolicy",
@@ -70169,7 +70381,8 @@
         "mechanic:simulation.build_evaluation",
         "mechanic:simulation.generated_board_playthrough"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:pinPolicySuppressedMatchups",
@@ -70177,7 +70390,8 @@
       "readBy": [
         "mechanic:simulation.build_evaluation"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:pinsPlacedCountThisRun",
@@ -70188,7 +70402,8 @@
       "writtenBy": [
         "mechanic:core.gameplay_commands",
         "mechanic:power.pin"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:politeLiveAnnouncement",
@@ -70199,7 +70414,8 @@
       "writtenBy": [
         "mechanic:feedback.board_turn_floater",
         "mechanic:feedback.typed_command_announcement"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:powersUsedThisRun",
@@ -70218,7 +70434,8 @@
         "mechanic:power.stray_remove",
         "mechanic:power.tile_swap",
         "mechanic:power.undo_resolve"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:practiceMode",
@@ -70226,7 +70443,8 @@
       "readBy": [
         "mechanic:power.flash_pair"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:recallBonusScoreAfter",
@@ -70234,7 +70452,8 @@
       "readBy": [
         "mechanic:feedback.board_turn_floater"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:recallBonusScoreBefore",
@@ -70242,21 +70461,25 @@
       "readBy": [
         "mechanic:feedback.board_turn_floater"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:recallBonusScoreThisFloor",
       "name": "recallBonusScoreThisFloor",
       "readBy": [
+        "mechanic:feedback.gameplay_hud",
         "mechanic:safety.feedback_completeness"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": true
     },
     {
       "id": "state:recallFocus",
       "name": "recallFocus",
       "readBy": [
         "mechanic:core.gameplay_commands",
+        "mechanic:feedback.gameplay_hud",
         "mechanic:phase.memorize",
         "mechanic:power.destroy_pair",
         "mechanic:power.peek",
@@ -70273,7 +70496,8 @@
         "mechanic:trait.conduit",
         "mechanic:trait.echo",
         "mechanic:trait.mirror"
-      ]
+      ],
+      "playerVisible": true
     },
     {
       "id": "state:recallFocusAfter",
@@ -70282,7 +70506,8 @@
         "mechanic:feedback.board_turn_floater",
         "mechanic:feedback.typed_command_announcement"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:recallFocusBefore",
@@ -70291,7 +70516,8 @@
         "mechanic:feedback.board_turn_floater",
         "mechanic:feedback.typed_command_announcement"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:recallMatchesAfter",
@@ -70299,7 +70525,8 @@
       "readBy": [
         "mechanic:feedback.board_turn_floater"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:recallMatchesBefore",
@@ -70307,15 +70534,18 @@
       "readBy": [
         "mechanic:feedback.board_turn_floater"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:recallMatchesThisFloor",
       "name": "recallMatchesThisFloor",
       "readBy": [
+        "mechanic:feedback.gameplay_hud",
         "mechanic:safety.feedback_completeness"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": true
     },
     {
       "id": "state:recallMistakesAfter",
@@ -70323,7 +70553,8 @@
       "readBy": [
         "mechanic:feedback.board_turn_floater"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:recallMistakesBefore",
@@ -70331,15 +70562,18 @@
       "readBy": [
         "mechanic:feedback.board_turn_floater"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:recallMistakesThisFloor",
       "name": "recallMistakesThisFloor",
       "readBy": [
+        "mechanic:feedback.gameplay_hud",
         "mechanic:safety.feedback_completeness"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": true
     },
     {
       "id": "state:recoveryPolicy",
@@ -70349,7 +70583,8 @@
         "mechanic:simulation.build_evaluation",
         "mechanic:simulation.generated_board_playthrough"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:recoverySuppressedMatchups",
@@ -70357,7 +70592,8 @@
       "readBy": [
         "mechanic:simulation.build_evaluation"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:regionShuffleCharges",
@@ -70365,12 +70601,14 @@
       "readBy": [
         "mechanic:build.trap_control",
         "mechanic:core.gameplay_commands",
+        "mechanic:feedback.gameplay_hud",
         "mechanic:inventory.region_shuffle_charge",
         "mechanic:power.region_shuffle",
         "mechanic:power.tile_swap",
         "mechanic:progression.route_side_room",
         "mechanic:reward.stasis_lockbox",
         "mechanic:reward.trait_toolkit",
+        "mechanic:safety.feedback_completeness",
         "mechanic:shop.trait_routing_kit",
         "mechanic:simulation.build_evaluation"
       ],
@@ -70384,7 +70622,8 @@
         "mechanic:reward.trait_toolkit",
         "mechanic:shop.trait_routing_kit",
         "mechanic:trait.drift"
-      ]
+      ],
+      "playerVisible": true
     },
     {
       "id": "state:regionShuffleChargesAfter",
@@ -70392,7 +70631,8 @@
       "readBy": [
         "mechanic:feedback.board_turn_floater"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:regionShuffleChargesBefore",
@@ -70400,7 +70640,8 @@
       "readBy": [
         "mechanic:feedback.board_turn_floater"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:regionShuffleFreeThisFloor",
@@ -70423,7 +70664,8 @@
         "mechanic:power.tile_swap",
         "mechanic:relic.region_shuffle_free_first",
         "mechanic:reward.free_swap_floor"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:relicFavorProgress",
@@ -70437,6 +70679,7 @@
         "mechanic:progression.route_side_room",
         "mechanic:reward.secret_favor",
         "mechanic:route.choice",
+        "mechanic:safety.feedback_completeness",
         "mechanic:simulation.build_evaluation"
       ],
       "writtenBy": [
@@ -70448,7 +70691,8 @@
         "mechanic:relic.shrine_echo",
         "mechanic:reward.secret_favor",
         "mechanic:route.choice"
-      ]
+      ],
+      "playerVisible": true
     },
     {
       "id": "state:relicFavorRequests",
@@ -70460,7 +70704,8 @@
         "mechanic:core.gameplay_commands",
         "mechanic:objective.featured_streak",
         "mechanic:relic.wager_surety"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:relicIds",
@@ -70508,7 +70753,8 @@
         "mechanic:relic.region_shuffle_free_first",
         "mechanic:relic.shrine_echo",
         "mechanic:relic.stray_charge_plus_one"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:relicOffer",
@@ -70533,7 +70779,8 @@
       "writtenBy": [
         "mechanic:progression.relic_draft",
         "mechanic:progression.run_flow"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:relicOfferServiceUses",
@@ -70543,7 +70790,8 @@
       ],
       "writtenBy": [
         "mechanic:progression.relic_draft"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:relicTiersClaimed",
@@ -70551,7 +70799,8 @@
       "readBy": [
         "mechanic:progression.relic_draft"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:removedTiles",
@@ -70559,7 +70808,8 @@
       "readBy": [
         "mechanic:board.cleanup"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:repairPlan",
@@ -70567,7 +70817,8 @@
       "readBy": [],
       "writtenBy": [
         "mechanic:safety.softlock_fairness"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:replayReport",
@@ -70577,7 +70828,8 @@
         "mechanic:simulation.build_evaluation",
         "mechanic:simulation.gameplay_replay",
         "mechanic:simulation.generated_board_playthrough"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:rewardPerkIds",
@@ -70610,7 +70862,8 @@
         "mechanic:reward.free_swap_floor",
         "mechanic:reward.hazard_banisher",
         "mechanic:reward.trait_streak_lens"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:riskWagerOutcomeReport",
@@ -70618,7 +70871,8 @@
       "readBy": [],
       "writtenBy": [
         "mechanic:simulation.build_evaluation"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:routeChoiceOutcomes",
@@ -70626,7 +70880,8 @@
       "readBy": [
         "mechanic:simulation.build_evaluation"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:routeChoices",
@@ -70641,7 +70896,8 @@
       ],
       "writtenBy": [
         "mechanic:objective.floor_clear"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:routeRiskAssessmentReport",
@@ -70649,7 +70905,8 @@
       "readBy": [],
       "writtenBy": [
         "mechanic:simulation.build_evaluation"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:routeSideRoom",
@@ -70661,7 +70918,8 @@
       "writtenBy": [
         "mechanic:progression.route_side_room",
         "mechanic:route.choice"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:routeSpecialKind",
@@ -70669,7 +70927,8 @@
       "readBy": [
         "mechanic:core.board_turn_resolution"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:routeSpecialRevealed",
@@ -70679,7 +70938,8 @@
       ],
       "writtenBy": [
         "mechanic:board.scout_reveal"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:routeSpecialsAfter",
@@ -70687,7 +70947,8 @@
       "readBy": [
         "mechanic:feedback.board_turn_floater"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:routeSpecialsBefore",
@@ -70695,7 +70956,8 @@
       "readBy": [
         "mechanic:feedback.board_turn_floater"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:runEventChoiceEffects",
@@ -70703,7 +70965,8 @@
       "readBy": [
         "mechanic:simulation.build_evaluation"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:runRulesVersion",
@@ -70714,7 +70977,8 @@
         "mechanic:shop.stock_reroll",
         "mechanic:simulation.generated_board_playthrough"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:runSeed",
@@ -70727,7 +70991,8 @@
         "mechanic:shop.stock_reroll",
         "mechanic:simulation.generated_board_playthrough"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:runStatus",
@@ -70749,7 +71014,8 @@
         "mechanic:phase.memorize",
         "mechanic:phase.pause_resume",
         "mechanic:power.undo_resolve"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:safeHazardWardChargesThisFloor",
@@ -70766,7 +71032,8 @@
         "mechanic:findable.ward_spark",
         "mechanic:hazard.tile_pressure",
         "mechanic:safety.safe_hazard_ward"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:safeHazardWardRequests",
@@ -70777,7 +71044,8 @@
       "writtenBy": [
         "mechanic:core.gameplay_commands",
         "mechanic:findable.ward_spark"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:safeHazardWardsUsedAfter",
@@ -70785,7 +71053,8 @@
       "readBy": [
         "mechanic:feedback.board_turn_floater"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:safeHazardWardsUsedBefore",
@@ -70793,7 +71062,8 @@
       "readBy": [
         "mechanic:feedback.board_turn_floater"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:safeHazardWardsUsedThisFloor",
@@ -70803,7 +71073,8 @@
       ],
       "writtenBy": [
         "mechanic:safety.safe_hazard_ward"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:saveReport",
@@ -70811,7 +71082,8 @@
       "readBy": [],
       "writtenBy": [
         "mechanic:persistence.run_summary"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:score",
@@ -70842,7 +71114,8 @@
         "mechanic:trait.conduit",
         "mechanic:trait.heavy",
         "mechanic:trait.sealed"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:scoreParasite",
@@ -70850,7 +71123,8 @@
       "readBy": [
         "mechanic:simulation.build_evaluation"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:scoreRequests",
@@ -70861,7 +71135,8 @@
       "writtenBy": [
         "mechanic:core.gameplay_commands",
         "mechanic:findable.score_glint"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:scoutGlintMatchReport",
@@ -70869,7 +71144,8 @@
       "readBy": [],
       "writtenBy": [
         "mechanic:simulation.build_evaluation"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:scoutRevealRequests",
@@ -70880,7 +71156,8 @@
       "writtenBy": [
         "mechanic:core.gameplay_commands",
         "mechanic:findable.scout_glint"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:scoutRevealSource",
@@ -70890,7 +71167,8 @@
       ],
       "writtenBy": [
         "mechanic:board.scout_reveal"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:scoutsAfter",
@@ -70898,7 +71176,8 @@
       "readBy": [
         "mechanic:feedback.board_turn_floater"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:scoutsBefore",
@@ -70906,7 +71185,8 @@
       "readBy": [
         "mechanic:feedback.board_turn_floater"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:selectedDungeonNodeId",
@@ -70916,7 +71196,8 @@
       ],
       "writtenBy": [
         "mechanic:route.choice"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:sessionStats",
@@ -70926,7 +71207,8 @@
       ],
       "writtenBy": [
         "mechanic:stats.session_tracking"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:shardLifeConversionReport",
@@ -70934,7 +71216,8 @@
       "readBy": [],
       "writtenBy": [
         "mechanic:simulation.build_evaluation"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:shiftingSpotlightNonce",
@@ -70944,7 +71227,8 @@
       ],
       "writtenBy": [
         "mechanic:power.destroy_pair"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:shopCost",
@@ -70952,7 +71236,8 @@
       "readBy": [
         "mechanic:economy.shop_gold"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:shopGold",
@@ -70963,6 +71248,7 @@
         "mechanic:core.gameplay_commands",
         "mechanic:economy.score_and_rewards",
         "mechanic:economy.shop_gold",
+        "mechanic:feedback.gameplay_hud",
         "mechanic:progression.relic_draft",
         "mechanic:progression.route_side_room",
         "mechanic:reward.chest_gold",
@@ -70993,7 +71279,8 @@
         "mechanic:shop.trait_cleanse",
         "mechanic:shop.typed_key",
         "mechanic:trait.cursed"
-      ]
+      ],
+      "playerVisible": true
     },
     {
       "id": "state:shopGoldAfter",
@@ -71002,7 +71289,8 @@
         "mechanic:feedback.board_turn_floater",
         "mechanic:feedback.typed_command_announcement"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:shopGoldBefore",
@@ -71011,7 +71299,8 @@
         "mechanic:feedback.board_turn_floater",
         "mechanic:feedback.typed_command_announcement"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:shopOffers",
@@ -71026,7 +71315,8 @@
       "writtenBy": [
         "mechanic:shop.master_key",
         "mechanic:shop.stock_reroll"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:shopRerolls",
@@ -71036,7 +71326,8 @@
       ],
       "writtenBy": [
         "mechanic:shop.stock_reroll"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:shuffleCharges",
@@ -71044,9 +71335,11 @@
       "readBy": [
         "mechanic:build.trap_control",
         "mechanic:core.gameplay_commands",
+        "mechanic:feedback.gameplay_hud",
         "mechanic:inventory.shuffle_charge",
         "mechanic:power.shuffle",
         "mechanic:relic.extra_shuffle_charge",
+        "mechanic:safety.feedback_completeness",
         "mechanic:trait.drift"
       ],
       "writtenBy": [
@@ -71055,7 +71348,8 @@
         "mechanic:power.shuffle",
         "mechanic:relic.extra_shuffle_charge",
         "mechanic:trait.drift"
-      ]
+      ],
+      "playerVisible": true
     },
     {
       "id": "state:shuffleChargesAfter",
@@ -71063,7 +71357,8 @@
       "readBy": [
         "mechanic:feedback.board_turn_floater"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:shuffleChargesBefore",
@@ -71071,7 +71366,8 @@
       "readBy": [
         "mechanic:feedback.board_turn_floater"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:shuffleNonce",
@@ -71089,7 +71385,8 @@
         "mechanic:power.region_shuffle",
         "mechanic:power.shuffle",
         "mechanic:power.tile_swap"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:sideRoom",
@@ -71097,7 +71394,8 @@
       "readBy": [
         "mechanic:progression.run_flow"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:sideRoomResourceAssessmentReport",
@@ -71105,7 +71403,8 @@
       "readBy": [],
       "writtenBy": [
         "mechanic:simulation.build_evaluation"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:startingLoadoutId",
@@ -71116,7 +71415,8 @@
       ],
       "writtenBy": [
         "mechanic:progression.run_setup"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:stasisBuffer",
@@ -71125,7 +71425,8 @@
         "mechanic:trait.cursed",
         "mechanic:trait.sealed"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:stickyBlockIndex",
@@ -71137,7 +71438,8 @@
       "writtenBy": [
         "mechanic:board.cleanup",
         "mechanic:trait.stasis"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:stickyBlockIndexAfter",
@@ -71145,7 +71447,8 @@
       "readBy": [
         "mechanic:feedback.board_turn_floater"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:stickyBlockIndexBefore",
@@ -71153,7 +71456,8 @@
       "readBy": [
         "mechanic:feedback.board_turn_floater"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:strategyAxisScores",
@@ -71163,22 +71467,26 @@
       ],
       "writtenBy": [
         "mechanic:simulation.build_evaluation"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:strayRemoveCharges",
       "name": "strayRemoveCharges",
       "readBy": [
         "mechanic:core.gameplay_commands",
+        "mechanic:feedback.gameplay_hud",
         "mechanic:inventory.stray_remove_charge",
-        "mechanic:power.stray_remove"
+        "mechanic:power.stray_remove",
+        "mechanic:safety.feedback_completeness"
       ],
       "writtenBy": [
         "mechanic:core.gameplay_commands",
         "mechanic:inventory.stray_remove_charge",
         "mechanic:power.stray_remove",
         "mechanic:relic.stray_charge_plus_one"
-      ]
+      ],
+      "playerVisible": true
     },
     {
       "id": "state:targetedReconfigurationReport",
@@ -71186,7 +71494,8 @@
       "readBy": [],
       "writtenBy": [
         "mechanic:simulation.build_evaluation"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:tileHazardKind",
@@ -71203,7 +71512,8 @@
         "mechanic:hazard.tile_pressure",
         "mechanic:perk.hazard_banish_per_floor",
         "mechanic:safety.safe_hazard_ward"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:tilePositions",
@@ -71213,7 +71523,8 @@
       ],
       "writtenBy": [
         "mechanic:hazard.tile_pressure"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:tileStates",
@@ -71259,7 +71570,8 @@
         "mechanic:power.undo_resolve",
         "mechanic:power.wild_match",
         "mechanic:progression.run_flow"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:tileTraitKind",
@@ -71290,7 +71602,8 @@
       ],
       "writtenBy": [
         "mechanic:shop.trait_cleanse"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:timerState",
@@ -71310,7 +71623,8 @@
         "mechanic:phase.pause_resume",
         "mechanic:power.undo_resolve",
         "mechanic:progression.run_flow"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:tone",
@@ -71318,7 +71632,8 @@
       "readBy": [
         "mechanic:feedback.typed_command_announcement"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:topologyReport",
@@ -71326,7 +71641,8 @@
       "readBy": [],
       "writtenBy": [
         "mechanic:safety.dungeon_topology"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:totalScore",
@@ -71337,6 +71653,7 @@
         "mechanic:feedback.gameplay_hud",
         "mechanic:progression.route_side_room",
         "mechanic:route.choice",
+        "mechanic:safety.feedback_completeness",
         "mechanic:simulation.build_evaluation"
       ],
       "writtenBy": [
@@ -71344,7 +71661,8 @@
         "mechanic:economy.score_and_rewards",
         "mechanic:progression.route_side_room",
         "mechanic:route.choice"
-      ]
+      ],
+      "playerVisible": true
     },
     {
       "id": "state:traitInteractionTags",
@@ -71355,18 +71673,22 @@
       ],
       "writtenBy": [
         "mechanic:core.board_turn_resolution"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:tries",
       "name": "tries",
       "readBy": [
-        "mechanic:objective.floor_clear"
+        "mechanic:feedback.gameplay_hud",
+        "mechanic:objective.floor_clear",
+        "mechanic:safety.feedback_completeness"
       ],
       "writtenBy": [
         "mechanic:core.board_turn_resolution",
         "mechanic:power.gambit"
-      ]
+      ],
+      "playerVisible": true
     },
     {
       "id": "state:triesDelta",
@@ -71377,7 +71699,8 @@
       "writtenBy": [
         "mechanic:trait.cursed",
         "mechanic:trait.volatile"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:typedKeyLockUseReport",
@@ -71386,7 +71709,8 @@
       "writtenBy": [
         "mechanic:simulation.build_evaluation",
         "mechanic:simulation.generated_board_playthrough"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:uncertainTurnBudget",
@@ -71395,7 +71719,8 @@
         "mechanic:simulation.build_evaluation",
         "mechanic:simulation.generated_board_playthrough"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:undoResolveReport",
@@ -71404,7 +71729,8 @@
       "writtenBy": [
         "mechanic:simulation.build_evaluation",
         "mechanic:simulation.generated_board_playthrough"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:undoUsesThisFloor",
@@ -71419,7 +71745,8 @@
       "writtenBy": [
         "mechanic:inventory.undo_charge",
         "mechanic:power.undo_resolve"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:upgradedOffer",
@@ -71429,7 +71756,8 @@
       ],
       "writtenBy": [
         "mechanic:progression.relic_draft"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:volatileTraitShuffles",
@@ -71439,7 +71767,8 @@
       ],
       "writtenBy": [
         "mechanic:trait.volatile"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:volatileTraitShufflesAfter",
@@ -71447,7 +71776,8 @@
       "readBy": [
         "mechanic:feedback.board_turn_floater"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:volatileTraitShufflesBefore",
@@ -71455,7 +71785,8 @@
       "readBy": [
         "mechanic:feedback.board_turn_floater"
       ],
-      "writtenBy": []
+      "writtenBy": [],
+      "playerVisible": false
     },
     {
       "id": "state:wildMatchesRemaining",
@@ -71471,7 +71802,8 @@
         "mechanic:inventory.wild_match_token",
         "mechanic:mode.wild_run",
         "mechanic:power.wild_match"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:wildMenuRun",
@@ -71482,7 +71814,8 @@
       ],
       "writtenBy": [
         "mechanic:mode.wild_run"
-      ]
+      ],
+      "playerVisible": false
     },
     {
       "id": "state:wildTileId",
@@ -71494,8 +71827,38 @@
       ],
       "writtenBy": [
         "mechanic:mode.wild_run"
-      ]
+      ],
+      "playerVisible": false
     }
+  ],
+  "playerVisibleStates": [
+    "comboShards",
+    "currentLevelScore",
+    "currentStreak",
+    "destroyPairCharges",
+    "dungeonEnemiesDefeatedThisFloor",
+    "dungeonKeys",
+    "enemyHazardHitsThisFloor",
+    "enemyHazardsDefeatedThisFloor",
+    "flashPairCharges",
+    "forgottenTileIdsThisFloor",
+    "guardTokens",
+    "lives",
+    "mismatches",
+    "objectiveCompleted",
+    "peekCharges",
+    "pinnedTileIds",
+    "recallBonusScoreThisFloor",
+    "recallFocus",
+    "recallMatchesThisFloor",
+    "recallMistakesThisFloor",
+    "regionShuffleCharges",
+    "relicFavorProgress",
+    "shopGold",
+    "shuffleCharges",
+    "strayRemoveCharges",
+    "totalScore",
+    "tries"
   ],
   "relationships": [
     {
@@ -72985,6 +73348,13 @@
       "label": "shows destroy bank"
     },
     {
+      "id": "displays:mechanic:inventory.flash_pair_charge->mechanic:feedback.gameplay_hud:shows earned and spent Flash charges",
+      "source": "mechanic:inventory.flash_pair_charge",
+      "target": "mechanic:feedback.gameplay_hud",
+      "kind": "displays",
+      "label": "shows earned and spent Flash charges"
+    },
+    {
       "id": "displays:mechanic:inventory.gambit_token->mechanic:feedback.gameplay_hud:shows whether the floor rescue remains",
       "source": "mechanic:inventory.gambit_token",
       "target": "mechanic:feedback.gameplay_hud",
@@ -73065,6 +73435,20 @@
       "target": "mechanic:feedback.gameplay_hud",
       "kind": "displays",
       "label": "shows the remaining wildcard balance"
+    },
+    {
+      "id": "displays:mechanic:lock.iron_key->mechanic:feedback.gameplay_hud:shows exact Iron Key spend or remaining lock",
+      "source": "mechanic:lock.iron_key",
+      "target": "mechanic:feedback.gameplay_hud",
+      "kind": "displays",
+      "label": "shows exact Iron Key spend or remaining lock"
+    },
+    {
+      "id": "displays:mechanic:lock.typed_key->mechanic:feedback.gameplay_hud:shows exact typed-key spend or mismatch",
+      "source": "mechanic:lock.typed_key",
+      "target": "mechanic:feedback.gameplay_hud",
+      "kind": "displays",
+      "label": "shows exact typed-key spend or mismatch"
     },
     {
       "id": "displays:mechanic:mode.gauntlet_clock->file:src/renderer/store/gameplayFeedbackAdapter.ts",
@@ -87931,9 +88315,27 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/gameplay-feedback-facts.ts->symbol:src/shared/gameplay-feedback-facts.ts#GAMEPLAY_FEEDBACK_CRITICAL_FIELD_SOURCES",
+      "source": "file:src/shared/gameplay-feedback-facts.ts",
+      "target": "symbol:src/shared/gameplay-feedback-facts.ts#GAMEPLAY_FEEDBACK_CRITICAL_FIELD_SOURCES",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/gameplay-feedback-facts.ts->symbol:src/shared/gameplay-feedback-facts.ts#GAMEPLAY_FEEDBACK_CRITICAL_FIELDS",
+      "source": "file:src/shared/gameplay-feedback-facts.ts",
+      "target": "symbol:src/shared/gameplay-feedback-facts.ts#GAMEPLAY_FEEDBACK_CRITICAL_FIELDS",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/gameplay-feedback-facts.ts->symbol:src/shared/gameplay-feedback-facts.ts#GameplayFeedbackCriticalSnapshot",
       "source": "file:src/shared/gameplay-feedback-facts.ts",
       "target": "symbol:src/shared/gameplay-feedback-facts.ts#GameplayFeedbackCriticalSnapshot",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/gameplay-feedback-facts.ts->symbol:src/shared/gameplay-feedback-facts.ts#GameplayFeedbackDungeonKeySnapshot",
+      "source": "file:src/shared/gameplay-feedback-facts.ts",
+      "target": "symbol:src/shared/gameplay-feedback-facts.ts#GameplayFeedbackDungeonKeySnapshot",
       "kind": "exports"
     },
     {
@@ -111935,6 +112337,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/gameplay-feedback-completeness.test.ts->src/shared/gameplay-feedback-facts.ts",
+      "source": "file:src/shared/gameplay-feedback-completeness.test.ts",
+      "target": "file:src/shared/gameplay-feedback-facts.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/gameplay-feedback-completeness.test.ts->src/shared/test/gameplay-event-fixtures.ts",
       "source": "file:src/shared/gameplay-feedback-completeness.test.ts",
       "target": "file:src/shared/test/gameplay-event-fixtures.ts",
@@ -112010,6 +112418,12 @@
       "id": "imports:src/shared/gameplay-interaction-graph.test.ts->src/shared/gameplay-interaction-graph.ts",
       "source": "file:src/shared/gameplay-interaction-graph.test.ts",
       "target": "file:src/shared/gameplay-interaction-graph.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/gameplay-interaction-graph.ts->src/shared/gameplay-feedback-facts.ts",
+      "source": "file:src/shared/gameplay-interaction-graph.ts",
+      "target": "file:src/shared/gameplay-feedback-facts.ts",
       "kind": "imports"
     },
     {
@@ -119018,6 +119432,12 @@
       "kind": "reads"
     },
     {
+      "id": "reads:mechanic:feedback.gameplay_hud->state:currentStreak",
+      "source": "mechanic:feedback.gameplay_hud",
+      "target": "state:currentStreak",
+      "kind": "reads"
+    },
+    {
       "id": "reads:mechanic:feedback.gameplay_hud->state:destroyPairCharges",
       "source": "mechanic:feedback.gameplay_hud",
       "target": "state:destroyPairCharges",
@@ -119030,6 +119450,18 @@
       "kind": "reads"
     },
     {
+      "id": "reads:mechanic:feedback.gameplay_hud->state:dungeonKeys",
+      "source": "mechanic:feedback.gameplay_hud",
+      "target": "state:dungeonKeys",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:feedback.gameplay_hud->state:enemyHazardHitsThisFloor",
+      "source": "mechanic:feedback.gameplay_hud",
+      "target": "state:enemyHazardHitsThisFloor",
+      "kind": "reads"
+    },
+    {
       "id": "reads:mechanic:feedback.gameplay_hud->state:enemyHazardsDefeatedThisFloor",
       "source": "mechanic:feedback.gameplay_hud",
       "target": "state:enemyHazardsDefeatedThisFloor",
@@ -119039,6 +119471,18 @@
       "id": "reads:mechanic:feedback.gameplay_hud->state:feedbackLines",
       "source": "mechanic:feedback.gameplay_hud",
       "target": "state:feedbackLines",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:feedback.gameplay_hud->state:flashPairCharges",
+      "source": "mechanic:feedback.gameplay_hud",
+      "target": "state:flashPairCharges",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:feedback.gameplay_hud->state:forgottenTileIdsThisFloor",
+      "source": "mechanic:feedback.gameplay_hud",
+      "target": "state:forgottenTileIdsThisFloor",
       "kind": "reads"
     },
     {
@@ -119072,6 +119516,12 @@
       "kind": "reads"
     },
     {
+      "id": "reads:mechanic:feedback.gameplay_hud->state:mismatches",
+      "source": "mechanic:feedback.gameplay_hud",
+      "target": "state:mismatches",
+      "kind": "reads"
+    },
+    {
       "id": "reads:mechanic:feedback.gameplay_hud->state:mismatchScorePop",
       "source": "mechanic:feedback.gameplay_hud",
       "target": "state:mismatchScorePop",
@@ -119081,6 +119531,12 @@
       "id": "reads:mechanic:feedback.gameplay_hud->state:nextFloor",
       "source": "mechanic:feedback.gameplay_hud",
       "target": "state:nextFloor",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:feedback.gameplay_hud->state:objectiveCompleted",
+      "source": "mechanic:feedback.gameplay_hud",
+      "target": "state:objectiveCompleted",
       "kind": "reads"
     },
     {
@@ -119096,9 +119552,45 @@
       "kind": "reads"
     },
     {
+      "id": "reads:mechanic:feedback.gameplay_hud->state:pinnedTileIds",
+      "source": "mechanic:feedback.gameplay_hud",
+      "target": "state:pinnedTileIds",
+      "kind": "reads"
+    },
+    {
       "id": "reads:mechanic:feedback.gameplay_hud->state:politeLiveAnnouncement",
       "source": "mechanic:feedback.gameplay_hud",
       "target": "state:politeLiveAnnouncement",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:feedback.gameplay_hud->state:recallBonusScoreThisFloor",
+      "source": "mechanic:feedback.gameplay_hud",
+      "target": "state:recallBonusScoreThisFloor",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:feedback.gameplay_hud->state:recallFocus",
+      "source": "mechanic:feedback.gameplay_hud",
+      "target": "state:recallFocus",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:feedback.gameplay_hud->state:recallMatchesThisFloor",
+      "source": "mechanic:feedback.gameplay_hud",
+      "target": "state:recallMatchesThisFloor",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:feedback.gameplay_hud->state:recallMistakesThisFloor",
+      "source": "mechanic:feedback.gameplay_hud",
+      "target": "state:recallMistakesThisFloor",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:feedback.gameplay_hud->state:regionShuffleCharges",
+      "source": "mechanic:feedback.gameplay_hud",
+      "target": "state:regionShuffleCharges",
       "kind": "reads"
     },
     {
@@ -119120,9 +119612,33 @@
       "kind": "reads"
     },
     {
+      "id": "reads:mechanic:feedback.gameplay_hud->state:shopGold",
+      "source": "mechanic:feedback.gameplay_hud",
+      "target": "state:shopGold",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:feedback.gameplay_hud->state:shuffleCharges",
+      "source": "mechanic:feedback.gameplay_hud",
+      "target": "state:shuffleCharges",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:feedback.gameplay_hud->state:strayRemoveCharges",
+      "source": "mechanic:feedback.gameplay_hud",
+      "target": "state:strayRemoveCharges",
+      "kind": "reads"
+    },
+    {
       "id": "reads:mechanic:feedback.gameplay_hud->state:totalScore",
       "source": "mechanic:feedback.gameplay_hud",
       "target": "state:totalScore",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:feedback.gameplay_hud->state:tries",
+      "source": "mechanic:feedback.gameplay_hud",
+      "target": "state:tries",
       "kind": "reads"
     },
     {
@@ -121250,9 +121766,33 @@
       "kind": "reads"
     },
     {
+      "id": "reads:mechanic:safety.feedback_completeness->state:currentLevelScore",
+      "source": "mechanic:safety.feedback_completeness",
+      "target": "state:currentLevelScore",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:safety.feedback_completeness->state:currentStreak",
+      "source": "mechanic:safety.feedback_completeness",
+      "target": "state:currentStreak",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:safety.feedback_completeness->state:destroyPairCharges",
+      "source": "mechanic:safety.feedback_completeness",
+      "target": "state:destroyPairCharges",
+      "kind": "reads"
+    },
+    {
       "id": "reads:mechanic:safety.feedback_completeness->state:dungeonEnemiesDefeatedThisFloor",
       "source": "mechanic:safety.feedback_completeness",
       "target": "state:dungeonEnemiesDefeatedThisFloor",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:safety.feedback_completeness->state:dungeonKeys",
+      "source": "mechanic:safety.feedback_completeness",
+      "target": "state:dungeonKeys",
       "kind": "reads"
     },
     {
@@ -121268,9 +121808,15 @@
       "kind": "reads"
     },
     {
-      "id": "reads:mechanic:safety.feedback_completeness->state:forgottenTileCountThisFloor",
+      "id": "reads:mechanic:safety.feedback_completeness->state:flashPairCharges",
       "source": "mechanic:safety.feedback_completeness",
-      "target": "state:forgottenTileCountThisFloor",
+      "target": "state:flashPairCharges",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:safety.feedback_completeness->state:forgottenTileIdsThisFloor",
+      "source": "mechanic:safety.feedback_completeness",
+      "target": "state:forgottenTileIdsThisFloor",
       "kind": "reads"
     },
     {
@@ -121292,9 +121838,27 @@
       "kind": "reads"
     },
     {
-      "id": "reads:mechanic:safety.feedback_completeness->state:objectiveProgress",
+      "id": "reads:mechanic:safety.feedback_completeness->state:mismatches",
       "source": "mechanic:safety.feedback_completeness",
-      "target": "state:objectiveProgress",
+      "target": "state:mismatches",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:safety.feedback_completeness->state:objectiveCompleted",
+      "source": "mechanic:safety.feedback_completeness",
+      "target": "state:objectiveCompleted",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:safety.feedback_completeness->state:peekCharges",
+      "source": "mechanic:safety.feedback_completeness",
+      "target": "state:peekCharges",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:safety.feedback_completeness->state:pinnedTileIds",
+      "source": "mechanic:safety.feedback_completeness",
+      "target": "state:pinnedTileIds",
       "kind": "reads"
     },
     {
@@ -121322,9 +121886,45 @@
       "kind": "reads"
     },
     {
+      "id": "reads:mechanic:safety.feedback_completeness->state:regionShuffleCharges",
+      "source": "mechanic:safety.feedback_completeness",
+      "target": "state:regionShuffleCharges",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:safety.feedback_completeness->state:relicFavorProgress",
+      "source": "mechanic:safety.feedback_completeness",
+      "target": "state:relicFavorProgress",
+      "kind": "reads"
+    },
+    {
       "id": "reads:mechanic:safety.feedback_completeness->state:shopGold",
       "source": "mechanic:safety.feedback_completeness",
       "target": "state:shopGold",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:safety.feedback_completeness->state:shuffleCharges",
+      "source": "mechanic:safety.feedback_completeness",
+      "target": "state:shuffleCharges",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:safety.feedback_completeness->state:strayRemoveCharges",
+      "source": "mechanic:safety.feedback_completeness",
+      "target": "state:strayRemoveCharges",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:safety.feedback_completeness->state:totalScore",
+      "source": "mechanic:safety.feedback_completeness",
+      "target": "state:totalScore",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:safety.feedback_completeness->state:tries",
+      "source": "mechanic:safety.feedback_completeness",
+      "target": "state:tries",
       "kind": "reads"
     },
     {
@@ -130042,6 +130642,12 @@
     {
       "id": "tested_by:src/shared/gameplay-feedback-completeness.ts->file:src/shared/gameplay-feedback-completeness.test.ts",
       "source": "file:src/shared/gameplay-feedback-completeness.ts",
+      "target": "file:src/shared/gameplay-feedback-completeness.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/gameplay-feedback-facts.ts->file:src/shared/gameplay-feedback-completeness.test.ts",
+      "source": "file:src/shared/gameplay-feedback-facts.ts",
       "target": "file:src/shared/gameplay-feedback-completeness.test.ts",
       "kind": "tested_by"
     },

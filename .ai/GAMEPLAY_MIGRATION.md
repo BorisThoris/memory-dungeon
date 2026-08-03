@@ -864,6 +864,21 @@ Graph diagnostics selected a redundancy seam instead of another build: the decla
 
 Graph v60 removes the redundant Seer build node, rehomes safe correction, expands Conduit's source/choice/effect/feedback/consequence path, and adds known-pair, two-Pin, Scout Glint, favorable-pressure, counter-pressure, and long-horizon guards.
 
+## Sixty-first vertical slice: Source-Derived Player-Visible Feedback Registry
+
+The feedback-completeness seam is widened without creating another overlapping build:
+
+1. `GAMEPLAY_FEEDBACK_CRITICAL_FIELD_SOURCES` is now the single typed registry mapping normalized deterministic feedback facts to their graph state fields.
+2. Coverage expands from 13 former narration counters to 27 actual HUD/action-resource facts: life, guard, shards, streak, floor/total score, tries, mismatches, gold, typed/master keys, all six power charge banks, Favor, Pins, objectives, recall facts, and enemy/hazard progress.
+3. `inspectGameplayFeedbackCompleteness` derives its ordered comparison fields from that registry. Accepted commands that change any registered fact still require typed feedback or the authoritative board-turn envelope; rejected and normalized no-op transitions remain exempt.
+4. Graph auditing consumes the same registry instead of maintaining a second player-visible list. The widened check immediately found missing direct display relationships for Iron Key locks, typed-key locks, and Flash Pair charges; Graph v61 now records each source-to-HUD path and tests it.
+5. `ai-repo-model.mjs` reads the registry literal from TypeScript source, marks matching semantic state nodes with `playerVisible: true`, publishes the sorted registry and count, and rejects missing graph states, stale flags, or count drift.
+6. The generated model now contains 10,709 relationships, 27 player-visible states, and zero orphan, dead-end, missing-test, missing-feedback, unmodeled-content, or visible-state drift diagnostics.
+7. The focused command corpus and the complete nine-build, three-seed, twelve-floor corpus pass the widened invariant. All 324 generated floors still complete with zero rejected commands and exact replay.
+8. Emergency Toolkit remains a bounded support package rather than being promoted into a synthetic tenth long-run axis: its one-shot Stray correction is meaningful and graph-complete, while its renewable Peek/Destroy tools already belong to retained information/control loops.
+
+Graph v61 makes the runtime accessibility invariant, graph audit, and AI semantic model agree on the exact player-visible state boundary.
+
 ## Current slice status
 
 Implemented in the Conduit Cartographer vertical slice:
@@ -882,6 +897,6 @@ Implemented in the Conduit Cartographer vertical slice:
 
 Still required before the vertical slice is complete:
 
-- widen the feedback-completeness audit beyond the former HUD-critical fields as additional gameplay ownership enters the core;
-- use Graph v60 diagnostics and nine-build traces to select the next least-overlapping cohesive loop or architectural ownership seam, without presenting simulator survival as human win-rate proof;
+- extend the shared player-visible registry when additional gameplay ownership enters the core, rather than adding renderer or model-only field lists;
+- use Graph v61 diagnostics and nine-build traces to select the next least-overlapping cohesive loop or architectural ownership seam, without presenting simulator survival as human win-rate proof;
 - continue migrating cohesive player builds rather than adding isolated definitions, using the graph diagnostics to choose the next least-overlapping loop.

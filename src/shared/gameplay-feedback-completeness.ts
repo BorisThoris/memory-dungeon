@@ -1,6 +1,7 @@
 import type { RunState } from './contracts';
 import type { GameplayCommand, GameplayEvent } from './gameplay-core-contracts';
 import {
+    GAMEPLAY_FEEDBACK_CRITICAL_FIELDS,
     getGameplayFeedbackCriticalSnapshot,
     type GameplayFeedbackCriticalSnapshot
 } from './gameplay-feedback-facts';
@@ -22,22 +23,6 @@ interface GameplayFeedbackCompletenessInput {
     events: readonly GameplayEvent[];
     accepted: boolean;
 }
-
-const CRITICAL_FIELDS: readonly GameplayFeedbackCriticalField[] = [
-    'lives',
-    'guardTokens',
-    'comboShards',
-    'shopGold',
-    'objective',
-    'recallFocus',
-    'recallMatchesThisFloor',
-    'recallMistakesThisFloor',
-    'recallBonusScoreThisFloor',
-    'forgottenTileCountThisFloor',
-    'dungeonEnemiesDefeatedThisFloor',
-    'enemyHazardHitsThisFloor',
-    'enemyHazardsDefeatedThisFloor'
-];
 
 const sameSnapshotValue = (left: unknown, right: unknown): boolean =>
     JSON.stringify(left) === JSON.stringify(right);
@@ -63,7 +48,7 @@ export const inspectGameplayFeedbackCompleteness = ({
 
     const beforeSnapshot = getGameplayFeedbackCriticalSnapshot(before);
     const afterSnapshot = getGameplayFeedbackCriticalSnapshot(after);
-    const changedFields = CRITICAL_FIELDS.filter(
+    const changedFields = GAMEPLAY_FEEDBACK_CRITICAL_FIELDS.filter(
         (field) => !sameSnapshotValue(beforeSnapshot[field], afterSnapshot[field])
     );
     const hasAuthoritativePresentation = events.some(

@@ -29,32 +29,10 @@ const CONTENT_REGISTRIES = [
     { kind: 'inventory_item', file: 'src/shared/run-inventory-contracts.ts', variable: 'RUN_INVENTORY_ITEM_IDS', mechanicPrefix: 'inventory' },
     { kind: 'bonus_reward', file: 'src/shared/bonus-rewards.ts', variable: 'BONUS_REWARD_IDS', mechanicPrefix: 'reward' }
 ];
-const PLAYER_VISIBLE_STATES = new Set([
-    'achievementProgress',
-    'bossTrophyCacheOutcome',
-    'comboShards',
-    'currentLevelScore',
-    'dungeonEnemiesDefeatedThisFloor',
-    'enemyHazardsDefeatedThisFloor',
-    'feedbackLines',
-    'guardTokens',
-    'interactionTags',
-    'lastLevelResult',
-    'lives',
-    'nextFloor',
-    'objectiveCompleted',
-    'peekCharges',
-    'recallFocus',
-    'regionShuffleCharges',
-    'relicFavorProgress',
-    'relicOffer',
-    'routeChoices',
-    'score',
-    'sessionStats',
-    'shopGold',
-    'totalScore',
-    'triesDelta'
-]);
+const PLAYER_VISIBLE_STATE_REGISTRY = {
+    file: 'src/shared/gameplay-feedback-facts.ts',
+    variable: 'GAMEPLAY_FEEDBACK_CRITICAL_FIELD_SOURCES'
+};
 const TERMINAL_MECHANIC_IDS = new Set([
     'board.cleanup',
     'feedback.gameplay_hud',
@@ -72,6 +50,38 @@ const stateId = (value) => `state:${value}`;
 const contentId = (kind, value) => `content:${kind}.${value}`;
 const sha256 = (buffer) => crypto.createHash('sha256').update(buffer).digest('hex');
 const uniqueSorted = (values) => [...new Set(values)].sort((a, b) => a.localeCompare(b));
+
+const readLiteralRegistryValues = (repoRoot, registry) => {
+    const absolute = path.join(repoRoot, registry.file);
+    if (!fs.existsSync(absolute)) {
+        throw new Error(`Missing source registry ${registry.variable} at ${registry.file}.`);
+    }
+    const sourceFile = ts.createSourceFile(
+        absolute,
+        fs.readFileSync(absolute, 'utf8'),
+        ts.ScriptTarget.Latest,
+        true
+    );
+    let declaration = null;
+    const findDeclaration = (node) => {
+        if (ts.isVariableDeclaration(node) && ts.isIdentifier(node.name) && node.name.text === registry.variable) {
+            declaration = node;
+            return;
+        }
+        if (!declaration) ts.forEachChild(node, findDeclaration);
+    };
+    findDeclaration(sourceFile);
+    if (!declaration?.initializer) {
+        throw new Error(`Missing literal initializer for ${registry.variable} at ${registry.file}.`);
+    }
+    const values = [];
+    const collectValues = (node) => {
+        if (ts.isStringLiteralLike(node)) values.push(node.text);
+        else ts.forEachChild(node, collectValues);
+    };
+    collectValues(declaration.initializer);
+    return uniqueSorted(values);
+};
 
 const classifyTrackedFile = (file) => {
     if (/\.(test|spec)\.[cm]?[jt]sx?$/.test(file) || file.startsWith('e2e/')) return 'test';
@@ -322,7 +332,7 @@ const lineReference = (repoRoot, file, mechanic) => {
     return { path: file, line: index >= 0 ? index + 1 : 1 };
 };
 
-const buildGameplayIndex = (repoRoot) => {
+const buildGameplayIndex = (repoRoot, playerVisibleStates) => {
     const graphPath = path.join(repoRoot, 'src/shared/gameplay-interaction-graph-data.json');
     const graph = JSON.parse(fs.readFileSync(graphPath, 'utf8'));
     const mechanics = graph.mechanics
@@ -370,13 +380,18 @@ const buildGameplayIndex = (repoRoot) => {
         addRelationship(mechanicId(edge.source), mechanicId(edge.target), edge.kind, edge.label);
     }
     const normalizedStates = [...states.values()]
-        .map((state) => ({ ...state, readBy: uniqueSorted(state.readBy), writtenBy: uniqueSorted(state.writtenBy) }))
+        .map((state) => ({
+            ...state,
+            playerVisible: playerVisibleStates.has(state.name),
+            readBy: uniqueSorted(state.readBy),
+            writtenBy: uniqueSorted(state.writtenBy)
+        }))
         .sort((a, b) => a.id.localeCompare(b.id));
     relationships.sort((a, b) => a.id.localeCompare(b.id));
     return { mechanics, states: normalizedStates, relationships, graph };
 };
 
-const buildDiagnostics = (repoRoot, gameplay, content) => {
+const buildDiagnostics = (repoRoot, gameplay, content, playerVisibleStates) => {
     const diagnostics = [];
     const mechanicIds = new Set(gameplay.mechanics.map((mechanic) => mechanic.mechanicId));
     const gameplayDegree = new Map(gameplay.mechanics.map((mechanic) => [mechanic.mechanicId, 0]));
@@ -408,7 +423,7 @@ const buildDiagnostics = (repoRoot, gameplay, content) => {
             diagnostics.push({ severity: 'error', code: 'missing_implementation_evidence', subject: mechanic.mechanicId, detail: 'Mechanic has no implementation evidence.' });
         }
         const sourceMechanic = gameplay.graph.mechanics.find((item) => item.id === mechanic.mechanicId);
-        const writesVisibleState = sourceMechanic?.writes.some((state) => PLAYER_VISIBLE_STATES.has(state)) ?? false;
+        const writesVisibleState = sourceMechanic?.writes.some((state) => playerVisibleStates.has(state)) ?? false;
         const hasFeedbackEvidence = mechanic.evidence.some((reference) => /renderer|hud|feedback/i.test(reference.path));
         const hasFeedbackEdge = gameplay.graph.edges.some(
             (edge) =>
@@ -445,8 +460,9 @@ export const buildAiRepoModel = (repoRoot = defaultRepoRoot) => {
     const inventory = buildInventory(repoRoot);
     const code = buildCodeIndex(repoRoot);
     const content = buildContentIndex(repoRoot);
-    const gameplay = buildGameplayIndex(repoRoot);
-    const diagnostics = buildDiagnostics(repoRoot, gameplay, content.content);
+    const playerVisibleStates = new Set(readLiteralRegistryValues(repoRoot, PLAYER_VISIBLE_STATE_REGISTRY));
+    const gameplay = buildGameplayIndex(repoRoot, playerVisibleStates);
+    const diagnostics = buildDiagnostics(repoRoot, gameplay, content.content, playerVisibleStates);
     const relationships = [...code.relationships, ...content.relationships, ...gameplay.relationships].sort((a, b) => a.id.localeCompare(b.id));
     return {
         schemaVersion: MODEL_VERSION,
@@ -459,6 +475,7 @@ export const buildAiRepoModel = (repoRoot = defaultRepoRoot) => {
             contentItemCount: content.content.length,
             mechanicCount: gameplay.mechanics.length,
             stateFieldCount: gameplay.states.length,
+            playerVisibleStateCount: playerVisibleStates.size,
             relationshipCount: relationships.length
         },
         inventory,
@@ -467,6 +484,7 @@ export const buildAiRepoModel = (repoRoot = defaultRepoRoot) => {
         content: content.content,
         mechanics: gameplay.mechanics,
         states: gameplay.states,
+        playerVisibleStates: [...playerVisibleStates].sort((a, b) => a.localeCompare(b)),
         relationships,
         diagnostics
     };
@@ -475,6 +493,20 @@ export const buildAiRepoModel = (repoRoot = defaultRepoRoot) => {
 export const validateAiRepoModel = (model) => {
     const issues = [];
     if (model.schemaVersion !== MODEL_VERSION) issues.push(`Unsupported schemaVersion ${model.schemaVersion}.`);
+    const playerVisibleStates = Array.isArray(model.playerVisibleStates) ? model.playerVisibleStates : [];
+    if (playerVisibleStates.length !== model.repository.playerVisibleStateCount) {
+        issues.push('repository.playerVisibleStateCount does not match playerVisibleStates.');
+    }
+    const modeledStateNames = new Set(model.states.map((state) => state.name));
+    for (const state of playerVisibleStates) {
+        if (!modeledStateNames.has(state)) issues.push(`Player-visible state ${state} is not modeled by the gameplay graph.`);
+    }
+    const playerVisibleStateSet = new Set(playerVisibleStates);
+    for (const state of model.states) {
+        if (state.playerVisible !== playerVisibleStateSet.has(state.name)) {
+            issues.push(`${state.id} has stale playerVisible metadata.`);
+        }
+    }
     const allNodeIds = [
         ...model.inventory.map((item) => fileId(item.path)),
         ...model.files.map((node) => node.id),
