@@ -762,6 +762,20 @@ Route Gambler is now the fourth retained long-horizon build, connecting the prev
 
 Graph v53 promotes Route Gambler from an unsampled `gates` edge to tested long-horizon coverage, adds the fourth strategy and risk-conversion guards, and records identity-blind Gambit targeting, commit-before-third-flip ordering, one-floor token use, wager outcomes, and hazard-matchup suppression.
 
+## Fifty-fourth vertical slice: Combo Shard Sustain-Conversion Build
+
+The Combo Shard Engine is now the fifth retained long-horizon build, connecting authored shard sources, capped inventory, board streaks, route risk, life recovery, and parasite pressure:
+
+1. The structural evaluator adds a fifth `sustain_conversion` axis. The Catalyst activates the shipped Bonus Shards reward and Combo Shard + Step relic definitions, resolves a real matching turn from a one-life deficit and two-shard bank, and observes the third effective shard convert into one life through `board.turn_resolve` / `board.turn_resolved`.
+2. The long-horizon policy starts with the Vaultbreaker loadout and the actual Combo Shard + Step relic, prefers Greed then Mystery, ranks Bonus Shards and Shard Spark resources, and retains Sealed/Heavy/Conduit interactions instead of injecting signature effects outside normal commands.
+3. Its normal route cap is one risk unit with a five-point effective-survival reserve. An explicit `conversionRiskCredit` allows Greed above that cap only while the visible shard bank is full; once the bank is spent, later over-budget Greed routes are rejected and the policy adapts to Mystery or Safe.
+4. The favorable hypothesis is `economy_opportunity`, where a full shard bank can fund an intentional Greed cost before normal play restores life. The counter hypothesis is `parasite_pressure`, recognized from the shipped Score Parasite floor and completed through the same bounded-memory command stream.
+5. Source evidence includes typed Combo Shard requests and positive shard inventory changes from Bonus Shards, Combo Shard + Step, Shard Spark, and clean streak play. Conversion evidence requires an authoritative board-turn event where life increases while the shard bank decreases.
+6. The default report now covers five builds x three seeds x twelve floors: all 180 floors complete with zero rejected gameplay commands and exact replay. Combo Shard Engine completes all 36 of its floors, records 18 shard-source events, 22 shard-to-life conversions, 116 policy decisions, 6 over-budget route rejections, 6 adaptive selections, 2 favorable economy floors, and 3 completed parasite-counter floors.
+7. Pairwise mean-turn ratios remain between 1.00 and 1.12. These traces prove deterministic cohesion and explicit matchup exposure; they do not claim human win rate or final balance.
+
+Graph v54 adds five-strategy and sustain-conversion guards, full-shard Greed credit, third-shard life conversion, parasite-counter coverage, build-specific source/conversion reports, and a tested edge from the evaluator to `build.combo_shard_engine`.
+
 ## Current slice status
 
 Implemented in the Conduit Cartographer vertical slice:
@@ -781,5 +795,5 @@ Implemented in the Conduit Cartographer vertical slice:
 Still required before the vertical slice is complete:
 
 - widen the feedback-completeness audit beyond the former HUD-critical fields as additional gameplay ownership enters the core;
-- use four-build traces and graph diagnostics to select the next least-overlapping cohesive build (currently likely Combo Shard Engine/life conversion), without presenting simulator survival as human win-rate proof;
+- use five-build traces and graph diagnostics to select the next least-overlapping cohesive build (currently likely Trap Control), without presenting simulator survival as human win-rate proof;
 - continue migrating cohesive player builds rather than adding isolated definitions, using the graph diagnostics to choose the next least-overlapping loop.

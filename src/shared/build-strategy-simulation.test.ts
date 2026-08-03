@@ -7,7 +7,7 @@ import {
 import { GAME_RULES_VERSION } from './contracts';
 
 describe('typed gameplay build strategy simulation', () => {
-    it('proves four shipped builds through distinct replayable command/event loops', () => {
+    it('proves five shipped builds through distinct replayable command/event loops', () => {
         const report = runGameplayBuildStrategySimulation({
             seeds: [42_001, 42_077, 42_123],
             rulesVersion: GAME_RULES_VERSION
@@ -20,7 +20,8 @@ describe('typed gameplay build strategy simulation', () => {
             'information',
             'control',
             'economy',
-            'risk_conversion'
+            'risk_conversion',
+            'sustain_conversion'
         ]);
         for (const strategy of report.strategies) {
             expect(strategy.viableSeedShare).toBe(1);
@@ -41,9 +42,13 @@ describe('typed gameplay build strategy simulation', () => {
             { left: 'conduit_cartographer', right: 'guard_tank', distance: 2 },
             { left: 'conduit_cartographer', right: 'treasure_greed', distance: 2 },
             { left: 'conduit_cartographer', right: 'route_gambler', distance: 2 },
+            { left: 'conduit_cartographer', right: 'combo_shard_engine', distance: 2 },
             { left: 'guard_tank', right: 'treasure_greed', distance: 2 },
             { left: 'guard_tank', right: 'route_gambler', distance: 2 },
-            { left: 'treasure_greed', right: 'route_gambler', distance: 2 }
+            { left: 'guard_tank', right: 'combo_shard_engine', distance: 2 },
+            { left: 'treasure_greed', right: 'route_gambler', distance: 2 },
+            { left: 'treasure_greed', right: 'combo_shard_engine', distance: 2 },
+            { left: 'route_gambler', right: 'combo_shard_engine', distance: 2 }
         ]);
         expect(assertGameplayBuildStrategiesViable(report)).toEqual({ ok: true, issues: [] });
     });
@@ -91,6 +96,13 @@ describe('typed gameplay build strategy simulation', () => {
                 definitions: ['relic.wager_surety'],
                 command: 'board.gambit_commit',
                 event: 'board.gambit_commit.requested'
+            },
+            {
+                id: 'combo_shard_engine',
+                loadout: 'vaultbreaker',
+                definitions: ['bonus_reward.bonus_shards', 'relic.combo_shard_plus_step'],
+                command: 'board.turn_resolve',
+                event: 'board.turn_resolved'
             }
         ]);
     });

@@ -8,7 +8,7 @@ import { GAMEPLAY_BUILD_STRATEGIES } from './build-strategy-simulation';
 import { GAME_RULES_VERSION } from './contracts';
 
 describe('multi-floor typed build strategy simulation', () => {
-    it('carries four distinct builds through generated floors, interludes, a relic milestone, and exact replay', () => {
+    it('carries five distinct builds through generated floors, interludes, a relic milestone, and exact replay', () => {
         const report = runGameplayBuildMultiFloorSimulation({ rulesVersion: GAME_RULES_VERSION });
 
         expect(report.strategies.map((strategy) => strategy.id)).toEqual(
@@ -18,7 +18,8 @@ describe('multi-floor typed build strategy simulation', () => {
             'information',
             'control',
             'economy',
-            'risk_conversion'
+            'risk_conversion',
+            'sustain_conversion'
         ]);
         for (const strategy of report.strategies) {
             expect(strategy.floorCompletionShare).toBe(1);
@@ -99,7 +100,7 @@ describe('multi-floor typed build strategy simulation', () => {
             (sum, strategy) => sum + strategy.adaptiveRouteSelections,
             0
         )).toBeGreaterThanOrEqual(report.bounds.minAdaptiveRouteSelections);
-        expect(report.cohesiveBuildCoverage).toMatchObject({
+        expect(report.cohesiveBuildCoverage.routeGambler).toMatchObject({
             id: 'route_gambler',
             buildMechanicId: 'build.route_gambler',
             startingLoadoutId: 'route_tactician',
@@ -108,21 +109,21 @@ describe('multi-floor typed build strategy simulation', () => {
             counterMatchup: 'hazard_pressure',
             longHorizonSampled: true
         });
-        expect(report.cohesiveBuildCoverage.requiredSystems).toEqual([
+        expect(report.cohesiveBuildCoverage.routeGambler.requiredSystems).toEqual([
             'relic.wager_surety',
             'objective.risk_wager',
             'inventory.gambit_token',
             'power.gambit',
             'route.mystery'
         ]);
-        expect(report.cohesiveBuildCoverage.evidence.gambitCommits).toBeGreaterThanOrEqual(report.seeds.length);
-        expect(report.cohesiveBuildCoverage.evidence.riskWagersAccepted).toBeGreaterThan(0);
+        expect(report.cohesiveBuildCoverage.routeGambler.evidence.gambitCommits).toBeGreaterThanOrEqual(report.seeds.length);
+        expect(report.cohesiveBuildCoverage.routeGambler.evidence.riskWagersAccepted).toBeGreaterThan(0);
         expect(
-            report.cohesiveBuildCoverage.evidence.riskWagerWins +
-            report.cohesiveBuildCoverage.evidence.riskWagerLosses
+            report.cohesiveBuildCoverage.routeGambler.evidence.riskWagerWins +
+            report.cohesiveBuildCoverage.routeGambler.evidence.riskWagerLosses
         ).toBeGreaterThan(0);
-        expect(report.cohesiveBuildCoverage.evidence.favorableMatchupFloors).toBeGreaterThan(0);
-        expect(report.cohesiveBuildCoverage.evidence.counterMatchupFloors).toBeGreaterThan(0);
+        expect(report.cohesiveBuildCoverage.routeGambler.evidence.favorableMatchupFloors).toBeGreaterThan(0);
+        expect(report.cohesiveBuildCoverage.routeGambler.evidence.counterMatchupFloors).toBeGreaterThan(0);
         const routeGambler = report.strategies.find((strategy) => strategy.id === 'route_gambler');
         expect(routeGambler?.samples.every((sample) =>
             sample.floorTraces.some((floor) => floor.gambitCommits > 0)
@@ -130,6 +131,28 @@ describe('multi-floor typed build strategy simulation', () => {
         expect(routeGambler?.samples.flatMap((sample) => sample.floorTraces)
             .filter((floor) => floor.matchup === 'hazard_pressure')
             .every((floor) => floor.gambitSuppressedByMatchup && floor.gambitCommits === 0)).toBe(true);
+        expect(report.cohesiveBuildCoverage.comboShardEngine).toMatchObject({
+            id: 'combo_shard_engine',
+            buildMechanicId: 'build.combo_shard_engine',
+            startingLoadoutId: 'vaultbreaker',
+            axis: 'sustain_conversion',
+            favorableMatchup: 'economy_opportunity',
+            counterMatchup: 'parasite_pressure',
+            longHorizonSampled: true
+        });
+        expect(report.cohesiveBuildCoverage.comboShardEngine.requiredSystems).toEqual([
+            'reward.bonus_shards',
+            'relic.combo_shard_plus_step',
+            'findable.shard_spark',
+            'inventory.combo_shard',
+            'progression.shard_to_life'
+        ]);
+        expect(report.cohesiveBuildCoverage.comboShardEngine.evidence.comboShardSourceEvents)
+            .toBeGreaterThanOrEqual(report.seeds.length);
+        expect(report.cohesiveBuildCoverage.comboShardEngine.evidence.shardLifeConversions)
+            .toBeGreaterThanOrEqual(report.seeds.length);
+        expect(report.cohesiveBuildCoverage.comboShardEngine.evidence.favorableMatchupFloors).toBeGreaterThan(0);
+        expect(report.cohesiveBuildCoverage.comboShardEngine.evidence.counterMatchupFloors).toBeGreaterThan(0);
         expect(assertGameplayBuildMultiFloorViable(report)).toEqual({ ok: true, issues: [] });
     }, 30_000);
 
@@ -166,6 +189,8 @@ describe('multi-floor typed build strategy simulation', () => {
         broken.strategies[3].riskWagersAccepted = 0;
         broken.strategies[3].riskWagerWins = 0;
         broken.strategies[3].riskWagerLosses = 0;
+        broken.strategies[4].shardLifeConversions = 0;
+        broken.strategies[4].comboShardSourceEvents = 0;
 
         expect(assertGameplayBuildMultiFloorViable(broken).issues).toEqual(expect.arrayContaining([
             'floorsPerSeed=3; required=12',
@@ -181,7 +206,9 @@ describe('multi-floor typed build strategy simulation', () => {
             'guard_tank@seed:42001:full replay diverged',
             'route_gambler@seeds:42001:gambitCommits=0; required=1',
             'route_gambler@seeds:42001:riskWagersAccepted=0; required=1',
-            'route_gambler@seeds:42001:riskWagerOutcomes=0; required=1'
+            'route_gambler@seeds:42001:riskWagerOutcomes=0; required=1',
+            'combo_shard_engine@seeds:42001:shardLifeConversions=0; required=1',
+            'combo_shard_engine@seeds:42001:comboShardSourceEvents=0; required=1'
         ]));
     });
 });

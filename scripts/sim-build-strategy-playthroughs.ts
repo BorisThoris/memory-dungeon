@@ -67,6 +67,8 @@ export const runBuildStrategyPlaythroughSimulationCli = (argv: readonly string[]
             riskWagersAccepted: strategy.riskWagersAccepted,
             riskWagerWins: strategy.riskWagerWins,
             riskWagerLosses: strategy.riskWagerLosses,
+            shardLifeConversions: strategy.shardLifeConversions,
+            comboShardSourceEvents: strategy.comboShardSourceEvents,
             adaptiveRoutes: strategy.samples.flatMap((sample) => sample.policyDecisions
                 .filter((decision) => decision.phase === 'route' && decision.adaptedFromPriority)
                 .map((decision) => ({

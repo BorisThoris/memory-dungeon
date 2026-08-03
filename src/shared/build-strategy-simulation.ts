@@ -1,6 +1,7 @@
 import { collectDestroyEligibleTileIds } from './board-power-targeting';
-import { GAME_RULES_VERSION, type RunState, type StartingLoadoutId } from './contracts';
+import { GAME_RULES_VERSION, MAX_LIVES, type RunState, type StartingLoadoutId } from './contracts';
 import {
+    createGameplayBoardTurnResolveCommand,
     createGameplayDefinitionCommand,
     createGameplayDestroyPairCommand,
     createGameplayGambitCommitCommand,
@@ -19,14 +20,21 @@ import { inspectGameplayFeedbackCompleteness } from './gameplay-feedback-complet
 import { createNewRun } from './run-creation-rules';
 import { createRunShopOffers } from './shop-rules';
 
-export const GAMEPLAY_BUILD_STRATEGY_AXES = ['information', 'control', 'economy', 'risk_conversion'] as const;
+export const GAMEPLAY_BUILD_STRATEGY_AXES = [
+    'information',
+    'control',
+    'economy',
+    'risk_conversion',
+    'sustain_conversion'
+] as const;
 
 export type GameplayBuildStrategyAxis = (typeof GAMEPLAY_BUILD_STRATEGY_AXES)[number];
 export type GameplayBuildStrategyId =
     | 'conduit_cartographer'
     | 'guard_tank'
     | 'treasure_greed'
-    | 'route_gambler';
+    | 'route_gambler'
+    | 'combo_shard_engine';
 
 export interface GameplayBuildStrategyDefinition {
     id: GameplayBuildStrategyId;
@@ -152,6 +160,19 @@ export const GAMEPLAY_BUILD_STRATEGIES: readonly GameplayBuildStrategyDefinition
         consequenceCommandType: 'board.gambit_commit',
         consequenceEventType: 'board.gambit_commit.requested',
         expectedDominantAxis: 'risk_conversion'
+    },
+    {
+        id: 'combo_shard_engine',
+        label: 'The Catalyst',
+        buildMechanicId: 'build.combo_shard_engine',
+        startingLoadoutId: 'vaultbreaker',
+        activationDefinitionIds: [
+            'bonus_reward.bonus_shards',
+            'relic.combo_shard_plus_step'
+        ],
+        consequenceCommandType: 'board.turn_resolve',
+        consequenceEventType: 'board.turn_resolved',
+        expectedDominantAxis: 'sustain_conversion'
     }
 ] as const;
 
@@ -163,7 +184,8 @@ const emptyAxisScores = (): Record<GameplayBuildStrategyAxis, number> => ({
     information: 0,
     control: 0,
     economy: 0,
-    risk_conversion: 0
+    risk_conversion: 0,
+    sustain_conversion: 0
 });
 
 const increment = (counts: Record<string, number>, key: string): void => {
@@ -213,6 +235,13 @@ const createStrategyInitialRun = (
         practiceMode: true,
         echoFeedbackEnabled: false
     });
+    if (strategy.id === 'combo_shard_engine') {
+        return {
+            ...base,
+            lives: MAX_LIVES - 1,
+            stats: { ...base.stats, currentStreak: 1 }
+        };
+    }
     if (strategy.id !== 'treasure_greed') {
         return base;
     }
@@ -254,6 +283,8 @@ const consequenceCommand = (
                 .sort((left, right) => left.localeCompare(right))[0];
             return createGameplayGambitCommitCommand(commandId, targetTileId ?? 'missing-gambit-target');
         }
+        case 'combo_shard_engine':
+            return createGameplayBoardTurnResolveCommand(commandId);
     }
 };
 
@@ -264,12 +295,15 @@ const collectAxisScores = (events: readonly GameplayEvent[]): Record<GameplayBui
             if (event.itemId === 'peek_charge') scores.information += 1;
             if (
                 (event.itemId === 'guard_token' || event.itemId === 'destroy_charge') &&
-                event.source.id !== 'wager_surety'
+                event.source.id !== 'wager_surety' &&
+                event.source.id !== 'bonus_shards'
             ) {
                 scores.control += 1;
             }
             if (event.itemId === 'iron_key') scores.economy += 1;
             if (event.source.id === 'wager_surety') scores.risk_conversion += 1;
+            if (event.itemId === 'combo_shard') scores.sustain_conversion += 1;
+            if (event.source.id === 'bonus_shards') scores.sustain_conversion += 1;
         }
         if (event.type === 'board.peeked') scores.information += 1;
         if (event.type === 'board.pair_destroyed') scores.control += 1;
@@ -286,6 +320,13 @@ const collectAxisScores = (events: readonly GameplayEvent[]): Record<GameplayBui
             (event.type === 'relic_favor.requested' || event.type === 'featured_streak_floor.requested')
         ) {
             scores.risk_conversion += 1;
+        }
+        if (
+            event.type === 'board.turn_resolved' &&
+            event.livesAfter > event.livesBefore &&
+            event.comboShardsAfter < event.comboShardsBefore
+        ) {
+            scores.sustain_conversion += 2;
         }
     }
     return scores;
@@ -358,6 +399,19 @@ const runStrategySeed = (
         if (first && second) {
             execute(createGameplayTileFlipCommand(`build:${strategy.id}:${seed}:${commands.length}:gambit-first`, first.id));
             execute(createGameplayTileFlipCommand(`build:${strategy.id}:${seed}:${commands.length}:gambit-second`, second.id));
+        }
+    }
+    if (strategy.id === 'combo_shard_engine') {
+        const candidates = (run.board?.tiles ?? [])
+            .filter((tile) => tile.state === 'hidden')
+            .sort((left, right) => left.id.localeCompare(right.id));
+        const first = candidates[0];
+        const second = first
+            ? candidates.find((tile) => tile.id !== first.id && tile.pairKey === first.pairKey)
+            : null;
+        if (first && second) {
+            execute(createGameplayTileFlipCommand(`build:${strategy.id}:${seed}:${commands.length}:convert-first`, first.id));
+            execute(createGameplayTileFlipCommand(`build:${strategy.id}:${seed}:${commands.length}:convert-second`, second.id));
         }
     }
     execute(consequenceCommand(strategy, run, seed, commands.length));
@@ -468,7 +522,7 @@ export const runGameplayBuildStrategySimulation = (
         strategies,
         pairwiseAxisDistances,
         bounds: {
-            requiredStrategyCount: 4,
+            requiredStrategyCount: 5,
             minViableSeedShare: 1,
             minFeedbackEventsPerSeed: 3,
             minSignatureAxisScorePerSeed: 1,
@@ -477,7 +531,7 @@ export const runGameplayBuildStrategySimulation = (
         notes: [
             'Each strategy starts from a shipped loadout, activates schema-validated content, and spends its payoff through the authoritative gameplay reducer.',
             'Viability means every sampled seed accepts the complete command chain, keeps the run alive, emits typed feedback, and replays exactly.',
-            'Distinctness is measured from typed event fingerprints for information, control, economy, and risk-conversion consequences rather than build labels.',
+            'Distinctness is measured from typed event fingerprints for information, control, economy, risk conversion, and shard-to-life sustain consequences rather than build labels.',
             'This is a deterministic structural viability gate, not a claim that final balance or long-run win rates are complete.'
         ]
     };

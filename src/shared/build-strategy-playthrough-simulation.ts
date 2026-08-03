@@ -1,6 +1,7 @@
 import { collectDestroyEligibleTileIds } from './board-power-targeting';
 import {
     GAME_RULES_VERSION,
+    MAX_COMBO_SHARDS,
     MAX_LIVES,
     type BonusRewardId,
     type RelicId,
@@ -55,6 +56,7 @@ export type GameplayBuildMatchup =
     | 'neutral'
     | 'memory_pressure'
     | 'hazard_pressure'
+    | 'parasite_pressure'
     | 'boss_pressure'
     | 'economy_opportunity';
 
@@ -93,6 +95,8 @@ export interface GameplayBuildRouteRiskAssessment {
     protectionAfter: number;
     effectiveSurvivalAfter: number;
     minimumEffectiveSurvivalAfter: number;
+    comboShardsBefore: number;
+    conversionRiskCredit: boolean;
     accepted: boolean;
     reason: string;
 }
@@ -233,6 +237,8 @@ export interface GameplayBuildMultiFloorMetrics {
     riskWagersAccepted: number;
     riskWagerWins: number;
     riskWagerLosses: number;
+    shardLifeConversions: number;
+    comboShardSourceEvents: number;
     samples: GameplayBuildMultiFloorSeedSample[];
 }
 
@@ -248,27 +254,51 @@ export interface GameplayBuildMultiFloorReport {
         ratio: number;
     }>;
     cohesiveBuildCoverage: {
-        id: 'route_gambler';
-        buildMechanicId: 'build.route_gambler';
-        startingLoadoutId: 'route_tactician';
-        axis: 'risk_conversion';
-        favorableMatchup: 'economy_opportunity';
-        counterMatchup: 'hazard_pressure';
-        requiredSystems: readonly [
-            'relic.wager_surety',
-            'objective.risk_wager',
-            'inventory.gambit_token',
-            'power.gambit',
-            'route.mystery'
-        ];
-        longHorizonSampled: true;
-        evidence: {
-            gambitCommits: number;
-            riskWagersAccepted: number;
-            riskWagerWins: number;
-            riskWagerLosses: number;
-            favorableMatchupFloors: number;
-            counterMatchupFloors: number;
+        routeGambler: {
+            id: 'route_gambler';
+            buildMechanicId: 'build.route_gambler';
+            startingLoadoutId: 'route_tactician';
+            axis: 'risk_conversion';
+            favorableMatchup: 'economy_opportunity';
+            counterMatchup: 'hazard_pressure';
+            requiredSystems: readonly [
+                'relic.wager_surety',
+                'objective.risk_wager',
+                'inventory.gambit_token',
+                'power.gambit',
+                'route.mystery'
+            ];
+            longHorizonSampled: true;
+            evidence: {
+                gambitCommits: number;
+                riskWagersAccepted: number;
+                riskWagerWins: number;
+                riskWagerLosses: number;
+                favorableMatchupFloors: number;
+                counterMatchupFloors: number;
+            };
+        };
+        comboShardEngine: {
+            id: 'combo_shard_engine';
+            buildMechanicId: 'build.combo_shard_engine';
+            startingLoadoutId: 'vaultbreaker';
+            axis: 'sustain_conversion';
+            favorableMatchup: 'economy_opportunity';
+            counterMatchup: 'parasite_pressure';
+            requiredSystems: readonly [
+                'reward.bonus_shards',
+                'relic.combo_shard_plus_step',
+                'findable.shard_spark',
+                'inventory.combo_shard',
+                'progression.shard_to_life'
+            ];
+            longHorizonSampled: true;
+            evidence: {
+                comboShardSourceEvents: number;
+                shardLifeConversions: number;
+                favorableMatchupFloors: number;
+                counterMatchupFloors: number;
+            };
         };
     };
     bounds: {
@@ -291,6 +321,8 @@ export interface GameplayBuildMultiFloorReport {
         minRouteGamblerGambitCommitsPerSeed: number;
         minRouteGamblerRiskWagersAccepted: number;
         minRouteGamblerRiskWagerOutcomes: number;
+        minComboShardLifeConversionsPerSeed: number;
+        minComboShardSourceEventsPerSeed: number;
         maxPairwiseMeanTurnRatio: number;
     };
     notes: string[];
@@ -405,6 +437,26 @@ export const GAMEPLAY_BUILD_POLICIES: Readonly<Record<GameplayBuildStrategyId, G
         signatureTiming: 'after_board',
         favorableMatchup: 'economy_opportunity',
         counterMatchup: 'hazard_pressure'
+    },
+    combo_shard_engine: {
+        id: 'combo_shard_engine_policy_v1',
+        strategyId: 'combo_shard_engine',
+        routePriorities: ['greed', 'mystery', 'safe'],
+        bonusRewardPriorities: ['bonus_shards', 'supply_cache', 'hazard_ward', 'trait_toolkit'],
+        relicPriorities: ['combo_shard_plus_step', 'parasite_ledger', 'parasite_ward_once', 'guard_token_plus_one'],
+        shopItemPriorities: ['heal_life', 'trait_routing_kit', 'iron_key', 'destroy_charge'],
+        informationPolicy: { kind: 'bounded_memory', memoryTileCapacity: 8, uncertainTurnBudget: 24 },
+        gambitPolicy: null,
+        gambitSuppressedMatchups: [],
+        interludeRiskPolicy: {
+            maxRouteRiskUnits: 1,
+            minimumEffectiveSurvivalAfterRoute: 5,
+            openingUnbufferedGreedFloors: 1,
+            eventEffectPriorities: ['heal_or_guard', 'gain_destroy_charge', 'gain_iron_key', 'gain_relic_favor', 'gain_shop_gold', 'gain_score']
+        },
+        signatureTiming: 'after_board',
+        favorableMatchup: 'economy_opportunity',
+        counterMatchup: 'parasite_pressure'
     }
 };
 
@@ -414,7 +466,8 @@ const emptyAxisScores = (): Record<GameplayBuildStrategyAxis, number> => ({
     information: 0,
     control: 0,
     economy: 0,
-    risk_conversion: 0
+    risk_conversion: 0,
+    sustain_conversion: 0
 });
 
 const normalizeSeeds = (seeds: readonly number[] | undefined): number[] => {
@@ -492,6 +545,11 @@ const createInitialRun = (
     seed: number,
     rulesVersion: number
 ): RunState => {
+    const initialRelicIds: RelicId[] = strategy.id === 'route_gambler'
+        ? ['wager_surety']
+        : strategy.id === 'combo_shard_engine'
+          ? ['combo_shard_plus_step']
+          : [];
     const base = createNewRun(0, {
         runSeed: seed,
         runRulesVersionOverride: rulesVersion,
@@ -499,7 +557,7 @@ const createInitialRun = (
         onboardingSafeFirstFloor: true,
         practiceMode: true,
         echoFeedbackEnabled: false,
-        initialRelicIds: strategy.id === 'route_gambler' ? ['wager_surety'] : []
+        initialRelicIds
     });
     return { ...base, shopOffers: createRunShopOffers(base) };
 };
@@ -543,6 +601,7 @@ const signatureConsequenceCommand = (
             ? createGameplayRiskWagerAcceptCommand(commandId)
             : null;
     }
+    if (strategy.id === 'combo_shard_engine') return null;
     if (trace.run.status !== 'levelComplete') return null;
     const itemPriority = new Map(policy.shopItemPriorities.map((itemId, index) => [itemId, index]));
     const offerId = (Array.isArray(trace.run.shopOffers) ? trace.run.shopOffers : [])
@@ -591,15 +650,24 @@ const chooseRoute = (
         const withinRiskBudget = riskUnits <= policy.interludeRiskPolicy.maxRouteRiskUnits;
         const openingRiskCredit = choice.routeType === 'greed' &&
             runNonNegativeInteger(run.board?.level) <= policy.interludeRiskPolicy.openingUnbufferedGreedFloors;
+        const comboShardsBefore = runNonNegativeInteger(run.stats?.comboShards);
+        const conversionRiskCredit =
+            policy.strategyId === 'combo_shard_engine' &&
+            choice.routeType === 'greed' &&
+            comboShardsBefore >= MAX_COMBO_SHARDS;
         const preservesSurvival = openingRiskCredit || effectiveSurvivalAfter >=
             policy.interludeRiskPolicy.minimumEffectiveSurvivalAfterRoute;
-        const accepted = legal && withinRiskBudget && preservesSurvival;
+        const accepted = legal &&
+            (withinRiskBudget || openingRiskCredit || conversionRiskCredit) &&
+            preservesSurvival;
         const reason = !legal
             ? availability.label ?? outcome.reason ?? 'Route did not produce a legal interlude.'
-            : !withinRiskBudget
-              ? `Risk ${riskUnits} exceeds policy cap ${policy.interludeRiskPolicy.maxRouteRiskUnits}.`
-              : openingRiskCredit
-                ? `Opening Greed credit permits one unbuffered route; effective survival ${effectiveSurvivalAfter}.`
+            : openingRiskCredit
+              ? `Opening Greed credit permits one route above the sustained cap or reserve; effective survival ${effectiveSurvivalAfter}.`
+              : conversionRiskCredit
+                ? `A full ${comboShardsBefore}/${MAX_COMBO_SHARDS} shard bank permits Greed above the sustained cap while survival remains ${effectiveSurvivalAfter}.`
+              : !withinRiskBudget
+                ? `Risk ${riskUnits} exceeds policy cap ${policy.interludeRiskPolicy.maxRouteRiskUnits}.`
                 : !preservesSurvival
                   ? `Effective survival ${effectiveSurvivalAfter} is below reserve ${policy.interludeRiskPolicy.minimumEffectiveSurvivalAfterRoute}.`
                   : `Risk ${riskUnits}/${policy.interludeRiskPolicy.maxRouteRiskUnits}; effective survival ${effectiveSurvivalAfter}/${policy.interludeRiskPolicy.minimumEffectiveSurvivalAfterRoute}.`;
@@ -615,6 +683,8 @@ const chooseRoute = (
             protectionAfter,
             effectiveSurvivalAfter,
             minimumEffectiveSurvivalAfter: policy.interludeRiskPolicy.minimumEffectiveSurvivalAfterRoute,
+            comboShardsBefore,
+            conversionRiskCredit,
             accepted,
             reason
         };
@@ -813,6 +883,7 @@ const floorMatchup = (run: RunState): GameplayBuildMatchup => {
     const board = run.board;
     const mutators = Array.isArray(run.activeMutators) ? run.activeMutators : [];
     if (board?.floorTag === 'boss' || board?.dungeonBossId) return 'boss_pressure';
+    if (mutators.includes('score_parasite')) return 'parasite_pressure';
     if (
         mutators.some((mutator) => HAZARD_PRESSURE_MUTATORS.has(mutator)) ||
         (Array.isArray(board?.enemyHazards) && board.enemyHazards.length > 0)
@@ -820,7 +891,11 @@ const floorMatchup = (run: RunState): GameplayBuildMatchup => {
         return 'hazard_pressure';
     }
     if (mutators.some((mutator) => MEMORY_PRESSURE_MUTATORS.has(mutator))) return 'memory_pressure';
-    if (board?.dungeonShopTileId || runNonNegativeInteger(run.dungeonTreasuresOpenedThisFloor) > 0) {
+    if (
+        mutators.includes('findables_floor') ||
+        board?.dungeonShopTileId ||
+        runNonNegativeInteger(run.dungeonTreasuresOpenedThisFloor) > 0
+    ) {
         return 'economy_opportunity';
     }
     return 'neutral';
@@ -836,6 +911,9 @@ const recurringSynergyTags = (strategy: GameplayBuildStrategyDefinition): Set<st
     if (strategy.id === 'route_gambler') {
         return new Set(['drift:row-shuffle', 'drift:volatile-full-shuffle', 'volatile:heavy-guard']);
     }
+    if (strategy.id === 'combo_shard_engine') {
+        return new Set(['echo:sealed-combo', 'sealed:conduit-shard-spark', 'sealed:heavy-score']);
+    }
     return new Set(['cursed:volatile-greed', 'reward-perk:cursed-opener-greed', 'sealed:heavy-score']);
 };
 
@@ -850,7 +928,9 @@ const signatureAxisScores = (
           ? new Set(['hazard_ward', 'volatile_heavy_guard'])
           : strategy.id === 'treasure_greed'
             ? new Set(['chest_gold', 'cursed_opener_contract', 'cursed_opener_greed'])
-            : new Set(['gambit', 'risk_wager', 'wager_surety']);
+            : strategy.id === 'route_gambler'
+              ? new Set(['gambit', 'risk_wager', 'wager_surety'])
+              : new Set(['bonus_shards', 'combo_shard_plus_step', 'shard_spark']);
     for (const event of events) {
         const fromBuildSource = sourceIds.has(event.source.id);
         if (
@@ -881,6 +961,16 @@ const signatureAxisScores = (
                         event.type === 'featured_streak_floor.requested')))
         ) {
             scores.risk_conversion += 1;
+        }
+        if (
+            strategy.id === 'combo_shard_engine' &&
+            ((event.type === 'board.turn_resolved' &&
+                event.livesAfter > event.livesBefore &&
+                event.comboShardsAfter < event.comboShardsBefore) ||
+                (fromBuildSource &&
+                    (event.type === 'inventory.changed' || event.type === 'combo_shard.requested')))
+        ) {
+            scores.sustain_conversion += 1;
         }
     }
     return scores;
@@ -973,6 +1063,19 @@ const runSeed = (
                 event.type === 'board.gambit_commit.requested' || event.source.id === 'wager_surety'
             ));
             signatureConsequenceUses += solver.gambitCommits;
+        }
+        if (strategy.id === 'combo_shard_engine') {
+            const isShardLifeConversion = (event: GameplayEvent): boolean =>
+                event.type === 'board.turn_resolved' &&
+                event.livesAfter > event.livesBefore &&
+                event.comboShardsAfter < event.comboShardsBefore;
+            const conversions = solver.events.filter(isShardLifeConversion);
+            trace.signatureEvents.push(...solver.events.filter((event) =>
+                isShardLifeConversion(event) ||
+                event.source.id === 'combo_shard_plus_step' ||
+                event.source.id === 'shard_spark'
+            ));
+            signatureConsequenceUses += conversions.length;
         }
 
         if (policy.signatureTiming === 'after_board') {
@@ -1177,6 +1280,7 @@ const aggregateMatchups = (samples: readonly GameplayBuildMultiFloorSeedSample[]
         'neutral',
         'memory_pressure',
         'hazard_pressure',
+        'parasite_pressure',
         'boss_pressure',
         'economy_opportunity'
     ];
@@ -1299,6 +1403,27 @@ export const runGameplayBuildMultiFloorSimulation = (
                 ).length,
                 0
             ),
+            shardLifeConversions: strategy.id === 'combo_shard_engine'
+                ? samples.reduce(
+                    (sum, sample) => sum + sample.events.filter((event) =>
+                        event.type === 'board.turn_resolved' &&
+                        event.livesAfter > event.livesBefore &&
+                        event.comboShardsAfter < event.comboShardsBefore
+                    ).length,
+                    0
+                )
+                : 0,
+            comboShardSourceEvents: strategy.id === 'combo_shard_engine'
+                ? samples.reduce(
+                    (sum, sample) => sum + sample.events.filter((event) =>
+                        event.type === 'combo_shard.requested' ||
+                        (event.type === 'inventory.changed' &&
+                            event.itemId === 'combo_shard' &&
+                            event.applied > 0)
+                    ).length,
+                    0
+                )
+                : 0,
             samples
         };
     });
@@ -1313,6 +1438,7 @@ export const runGameplayBuildMultiFloorSimulation = (
         }
     }
     const routeGambler = strategies.find((strategy) => strategy.id === 'route_gambler');
+    const comboShardEngine = strategies.find((strategy) => strategy.id === 'combo_shard_engine');
     return {
         rulesVersion,
         seeds,
@@ -1321,31 +1447,55 @@ export const runGameplayBuildMultiFloorSimulation = (
         strategies,
         pairwiseMeanTurnRatios,
         cohesiveBuildCoverage: {
-            id: 'route_gambler',
-            buildMechanicId: 'build.route_gambler',
-            startingLoadoutId: 'route_tactician',
-            axis: 'risk_conversion',
-            favorableMatchup: 'economy_opportunity',
-            counterMatchup: 'hazard_pressure',
-            requiredSystems: [
-                'relic.wager_surety',
-                'objective.risk_wager',
-                'inventory.gambit_token',
-                'power.gambit',
-                'route.mystery'
-            ],
-            longHorizonSampled: true,
-            evidence: {
-                gambitCommits: routeGambler?.gambitCommits ?? 0,
-                riskWagersAccepted: routeGambler?.riskWagersAccepted ?? 0,
-                riskWagerWins: routeGambler?.riskWagerWins ?? 0,
-                riskWagerLosses: routeGambler?.riskWagerLosses ?? 0,
-                favorableMatchupFloors: routeGambler?.favorableMatchupMetrics?.sampledFloors ?? 0,
-                counterMatchupFloors: routeGambler?.counterMatchupMetrics?.sampledFloors ?? 0
+            routeGambler: {
+                id: 'route_gambler',
+                buildMechanicId: 'build.route_gambler',
+                startingLoadoutId: 'route_tactician',
+                axis: 'risk_conversion',
+                favorableMatchup: 'economy_opportunity',
+                counterMatchup: 'hazard_pressure',
+                requiredSystems: [
+                    'relic.wager_surety',
+                    'objective.risk_wager',
+                    'inventory.gambit_token',
+                    'power.gambit',
+                    'route.mystery'
+                ],
+                longHorizonSampled: true,
+                evidence: {
+                    gambitCommits: routeGambler?.gambitCommits ?? 0,
+                    riskWagersAccepted: routeGambler?.riskWagersAccepted ?? 0,
+                    riskWagerWins: routeGambler?.riskWagerWins ?? 0,
+                    riskWagerLosses: routeGambler?.riskWagerLosses ?? 0,
+                    favorableMatchupFloors: routeGambler?.favorableMatchupMetrics?.sampledFloors ?? 0,
+                    counterMatchupFloors: routeGambler?.counterMatchupMetrics?.sampledFloors ?? 0
+                }
+            },
+            comboShardEngine: {
+                id: 'combo_shard_engine',
+                buildMechanicId: 'build.combo_shard_engine',
+                startingLoadoutId: 'vaultbreaker',
+                axis: 'sustain_conversion',
+                favorableMatchup: 'economy_opportunity',
+                counterMatchup: 'parasite_pressure',
+                requiredSystems: [
+                    'reward.bonus_shards',
+                    'relic.combo_shard_plus_step',
+                    'findable.shard_spark',
+                    'inventory.combo_shard',
+                    'progression.shard_to_life'
+                ],
+                longHorizonSampled: true,
+                evidence: {
+                    comboShardSourceEvents: comboShardEngine?.comboShardSourceEvents ?? 0,
+                    shardLifeConversions: comboShardEngine?.shardLifeConversions ?? 0,
+                    favorableMatchupFloors: comboShardEngine?.favorableMatchupMetrics?.sampledFloors ?? 0,
+                    counterMatchupFloors: comboShardEngine?.counterMatchupMetrics?.sampledFloors ?? 0
+                }
             }
         },
         bounds: {
-            requiredStrategyCount: 4,
+            requiredStrategyCount: 5,
             minFloorsPerSeed: 12,
             minFloorCompletionShare: 1,
             minDeterministicReplayShare: 1,
@@ -1364,6 +1514,8 @@ export const runGameplayBuildMultiFloorSimulation = (
             minRouteGamblerGambitCommitsPerSeed: 1,
             minRouteGamblerRiskWagersAccepted: 1,
             minRouteGamblerRiskWagerOutcomes: 1,
+            minComboShardLifeConversionsPerSeed: 1,
+            minComboShardSourceEventsPerSeed: 1,
             maxPairwiseMeanTurnRatio: 1.5
         },
         notes: [
@@ -1375,7 +1527,8 @@ export const runGameplayBuildMultiFloorSimulation = (
             'Matchup distributions are observed from shipped schedule mutators, hazards, bosses, and economy nodes; absent buckets are reported as unsampled rather than invented.',
             'Favorable and counter labels are explicit design hypotheses. The gate requires shipped exposure, bounded-memory completion, feedback, and replay evidence but does not report simulator outcomes as human win rates.',
             'The gate proves longer structural viability and balance envelopes for a deterministic bounded-memory policy, not final human difficulty balance.',
-            'Route Gambler is retained as the fourth long-horizon build: Route Tactician movement, one-floor Gambit rescue, objective wagers, Wager Surety, Favor cash-out, and Mystery routing form one distinct risk-conversion trace.'
+            'Route Gambler is retained as the fourth long-horizon build: Route Tactician movement, one-floor Gambit rescue, objective wagers, Wager Surety, Favor cash-out, and Mystery routing form one distinct risk-conversion trace.',
+            'Combo Shard Engine is retained as the fifth build: Greed creates a visible life deficit, Bonus Shards and the Catalyst relic stock bounded momentum, clean matches convert the next shard into life, and authored parasite floors test its sustain counter.'
         ]
     };
 };
@@ -1498,6 +1651,23 @@ export const assertGameplayBuildMultiFloorViable = (
         if (wagerOutcomes < report.bounds.minRouteGamblerRiskWagerOutcomes) {
             issues.push(
                 `route_gambler@seeds:${report.seeds.join(',')}:riskWagerOutcomes=${wagerOutcomes}; required=${report.bounds.minRouteGamblerRiskWagerOutcomes}`
+            );
+        }
+    }
+    const comboShardEngine = report.strategies.find((strategy) => strategy.id === 'combo_shard_engine');
+    if (comboShardEngine) {
+        const minimumConversions =
+            report.bounds.minComboShardLifeConversionsPerSeed * report.seeds.length;
+        if (comboShardEngine.shardLifeConversions < minimumConversions) {
+            issues.push(
+                `combo_shard_engine@seeds:${report.seeds.join(',')}:shardLifeConversions=${comboShardEngine.shardLifeConversions}; required=${minimumConversions}`
+            );
+        }
+        const minimumSourceEvents =
+            report.bounds.minComboShardSourceEventsPerSeed * report.seeds.length;
+        if (comboShardEngine.comboShardSourceEvents < minimumSourceEvents) {
+            issues.push(
+                `combo_shard_engine@seeds:${report.seeds.join(',')}:comboShardSourceEvents=${comboShardEngine.comboShardSourceEvents}; required=${minimumSourceEvents}`
             );
         }
     }
