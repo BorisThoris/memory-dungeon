@@ -803,6 +803,21 @@ The Saboteur is now the sixth retained long-horizon build, using the corrected r
 
 Graph v56 adds the sixth strategy, distinct board-reconfiguration axis, renewable-source, hazard-use, and memory-conservation guards, build-specific evidence reports, and a tested long-horizon edge to `build.trap_control`.
 
+## Fifty-seventh vertical slice: Boss Hunter Objective-Extraction Build
+
+The Slayer is now the seventh retained long-horizon build, connecting boss preparation, objective wagers, trophy extraction, Favor insurance, and chapter-pressure relief:
+
+1. The structural evaluator adds `boss_extraction` as a seventh axis. Memory Scout stocks Chapter Compass, Wager Surety, and Parasite Ledger; the typed trophy definition accepts only with an active Compass and claimed trophy, then emits the validated 30-score request and reward feedback.
+2. Incidental Peek, Guard, and parasite ward grants from the three mixed relics remain useful secondary resources but do not define the axis fingerprint. Pairwise structural distance remains 2 against every retained build.
+3. The long-horizon policy prioritizes Safe then Mystery routes, recovery/Favor event effects, boss-preparation rewards, and Peek/healing shop resources. It starts with the three actual relics so their floor-clear hooks—not synthetic state injection—provide consequence evidence.
+4. The favorable hypothesis is `boss_pressure`. Claimed boss trophy caches invoke Chapter Compass through the normal board-turn/floor-clear envelope; evidence requires `score.requested` with reason `boss_trophy` and the Compass source.
+5. The counter hypothesis is `parasite_pressure`. Completing the shipped featured objective with Score Parasite active invokes Parasite Ledger and requires an actual `parasite_relief.requested` event.
+6. Wager Surety initially remained disconnected: the first healthy report recorded zero wagers. The final policy now submits eligible `risk_wager.accept` commands after clears and requires actual insured win/loss outcomes, keeping the relic inside the retained loop rather than counting its immediate Guard alone.
+7. The default report covers seven builds x three seeds x twelve floors: all 252 floors complete with zero rejected gameplay commands and exact replay. Boss Hunter completes all 36 floors, makes 126 policy decisions, rejects 33 over-budget route options, converts 12 claimed boss trophies, emits 3 parasite-relief requests, and accepts 19 wagers with 13 insured wins and 5 insured losses.
+8. All 12 boss floors and all 3 parasite-counter floors complete without life loss; Conduit/Echo synergy recurs on 11 boss floors, and the worst pairwise mean-turn ratio remains 1.12.
+
+Graph v57 adds the seventh strategy, distinct boss-extraction axis, trophy, parasite-relief, insured-wager, and long-horizon guards, build-specific evidence reports, and a tested evaluator edge to `build.boss_hunter`.
+
 ## Current slice status
 
 Implemented in the Conduit Cartographer vertical slice:
@@ -822,5 +837,5 @@ Implemented in the Conduit Cartographer vertical slice:
 Still required before the vertical slice is complete:
 
 - widen the feedback-completeness audit beyond the former HUD-critical fields as additional gameplay ownership enters the core;
-- use six-build traces and graph diagnostics to select the next least-overlapping cohesive build or architectural ownership seam, without presenting simulator survival as human win-rate proof;
+- use seven-build traces and graph diagnostics to select the next least-overlapping cohesive build or architectural ownership seam, without presenting simulator survival as human win-rate proof;
 - continue migrating cohesive player builds rather than adding isolated definitions, using the graph diagnostics to choose the next least-overlapping loop.

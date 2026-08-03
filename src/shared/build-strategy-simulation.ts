@@ -27,7 +27,8 @@ export const GAMEPLAY_BUILD_STRATEGY_AXES = [
     'economy',
     'risk_conversion',
     'sustain_conversion',
-    'board_reconfiguration'
+    'board_reconfiguration',
+    'boss_extraction'
 ] as const;
 
 export type GameplayBuildStrategyAxis = (typeof GAMEPLAY_BUILD_STRATEGY_AXES)[number];
@@ -37,7 +38,8 @@ export type GameplayBuildStrategyId =
     | 'treasure_greed'
     | 'route_gambler'
     | 'combo_shard_engine'
-    | 'trap_control';
+    | 'trap_control'
+    | 'boss_hunter';
 
 export interface GameplayBuildStrategyDefinition {
     id: GameplayBuildStrategyId;
@@ -189,6 +191,20 @@ export const GAMEPLAY_BUILD_STRATEGIES: readonly GameplayBuildStrategyDefinition
         consequenceCommandType: 'board.region_shuffle',
         consequenceEventType: 'board.region_shuffled',
         expectedDominantAxis: 'board_reconfiguration'
+    },
+    {
+        id: 'boss_hunter',
+        label: 'The Slayer',
+        buildMechanicId: 'build.boss_hunter',
+        startingLoadoutId: 'memory_scout',
+        activationDefinitionIds: [
+            'relic.chapter_compass',
+            'relic.wager_surety',
+            'relic.parasite_ledger'
+        ],
+        consequenceCommandType: 'effects.apply',
+        consequenceEventType: 'score.requested',
+        expectedDominantAxis: 'boss_extraction'
     }
 ] as const;
 
@@ -202,7 +218,8 @@ const emptyAxisScores = (): Record<GameplayBuildStrategyAxis, number> => ({
     economy: 0,
     risk_conversion: 0,
     sustain_conversion: 0,
-    board_reconfiguration: 0
+    board_reconfiguration: 0,
+    boss_extraction: 0
 });
 
 const increment = (counts: Record<string, number>, key: string): void => {
@@ -250,7 +267,10 @@ const createStrategyInitialRun = (
         startingLoadoutId: strategy.startingLoadoutId,
         onboardingSafeFirstFloor: true,
         practiceMode: true,
-        echoFeedbackEnabled: false
+        echoFeedbackEnabled: false,
+        initialRelicIds: strategy.id === 'boss_hunter'
+            ? ['chapter_compass', 'wager_surety', 'parasite_ledger']
+            : undefined
     });
     if (strategy.id === 'combo_shard_engine') {
         return {
@@ -312,14 +332,31 @@ const consequenceCommand = (
                 : 0;
             return createGameplayRegionShuffleCommand(commandId, rowIndex);
         }
+        case 'boss_hunter':
+            return createGameplayDefinitionCommand(
+                commandId,
+                'relic.chapter_compass.boss_trophy',
+                { bossTrophyClaimed: true }
+            );
     }
 };
 
-const collectAxisScores = (events: readonly GameplayEvent[]): Record<GameplayBuildStrategyAxis, number> => {
+const collectAxisScores = (
+    events: readonly GameplayEvent[],
+    strategy: GameplayBuildStrategyDefinition
+): Record<GameplayBuildStrategyAxis, number> => {
     const scores = emptyAxisScores();
+    const bossSourceIds = new Set(['chapter_compass', 'wager_surety', 'parasite_ledger']);
     for (const event of events) {
+        const fromBossSource = strategy.id === 'boss_hunter' && bossSourceIds.has(event.source.id);
         if (event.type === 'inventory.changed' && event.applied !== 0) {
-            if (event.itemId === 'peek_charge' && event.source.id !== 'trait_toolkit') scores.information += 1;
+            if (
+                event.itemId === 'peek_charge' &&
+                event.source.id !== 'trait_toolkit' &&
+                !fromBossSource
+            ) {
+                scores.information += 1;
+            }
             if (
                 (event.itemId === 'guard_token' || event.itemId === 'destroy_charge') &&
                 event.source.id !== 'wager_surety' &&
@@ -328,7 +365,9 @@ const collectAxisScores = (events: readonly GameplayEvent[]): Record<GameplayBui
                 scores.control += 1;
             }
             if (event.itemId === 'iron_key') scores.economy += 1;
-            if (event.source.id === 'wager_surety') scores.risk_conversion += 1;
+            if (event.source.id === 'wager_surety' && strategy.id !== 'boss_hunter') {
+                scores.risk_conversion += 1;
+            }
             if (event.itemId === 'combo_shard') scores.sustain_conversion += 1;
             if (event.source.id === 'bonus_shards') scores.sustain_conversion += 1;
             if (event.itemId === 'region_shuffle_charge' && event.source.id === 'trait_toolkit') {
@@ -367,6 +406,13 @@ const collectAxisScores = (events: readonly GameplayEvent[]): Record<GameplayBui
         }
         if (event.type === 'board.region_shuffled' || event.type === 'board.tiles_swapped') {
             scores.board_reconfiguration += 1;
+        }
+        if (
+            strategy.id === 'boss_hunter' &&
+            ((event.type === 'score.requested' && event.reason === 'boss_trophy') ||
+                (fromBossSource && event.type === 'parasite_relief.requested'))
+        ) {
+            scores.boss_extraction += 1;
         }
     }
     return scores;
@@ -480,7 +526,7 @@ const runStrategySeed = (
         events,
         eventTypeCounts,
         feedbackCues,
-        axisScores: collectAxisScores(events),
+        axisScores: collectAxisScores(events, strategy),
         consequenceAccepted: events.some((event) => event.type === strategy.consequenceEventType),
         replayDeterministic,
         livesRemaining: run.lives,
@@ -562,7 +608,7 @@ export const runGameplayBuildStrategySimulation = (
         strategies,
         pairwiseAxisDistances,
         bounds: {
-            requiredStrategyCount: 6,
+            requiredStrategyCount: 7,
             minViableSeedShare: 1,
             minFeedbackEventsPerSeed: 3,
             minSignatureAxisScorePerSeed: 1,
@@ -571,7 +617,7 @@ export const runGameplayBuildStrategySimulation = (
         notes: [
             'Each strategy starts from a shipped loadout, activates schema-validated content, and spends its payoff through the authoritative gameplay reducer.',
             'Viability means every sampled seed accepts the complete command chain, keeps the run alive, emits typed feedback, and replays exactly.',
-            'Distinctness is measured from typed event fingerprints for information, control, economy, risk conversion, shard-to-life sustain, and targeted board-reconfiguration consequences rather than build labels.',
+            'Distinctness is measured from typed event fingerprints for information, control, economy, risk conversion, shard-to-life sustain, targeted board reconfiguration, and boss-extraction consequences rather than build labels.',
             'This is a deterministic structural viability gate, not a claim that final balance or long-run win rates are complete.'
         ]
     };

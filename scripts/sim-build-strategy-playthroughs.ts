@@ -71,6 +71,8 @@ export const runBuildStrategyPlaythroughSimulationCli = (argv: readonly string[]
             comboShardSourceEvents: strategy.comboShardSourceEvents,
             targetedReconfigurationUses: strategy.targetedReconfigurationUses,
             memoryPressureConservations: strategy.memoryPressureConservations,
+            bossTrophyConversions: strategy.bossTrophyConversions,
+            parasiteReliefEvents: strategy.parasiteReliefEvents,
             adaptiveRoutes: strategy.samples.flatMap((sample) => sample.policyDecisions
                 .filter((decision) => decision.phase === 'route' && decision.adaptedFromPriority)
                 .map((decision) => ({

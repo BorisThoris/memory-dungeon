@@ -8,7 +8,7 @@ import { GAMEPLAY_BUILD_STRATEGIES } from './build-strategy-simulation';
 import { GAME_RULES_VERSION } from './contracts';
 
 describe('multi-floor typed build strategy simulation', () => {
-    it('carries six distinct builds through generated floors, interludes, a relic milestone, and exact replay', () => {
+    it('carries seven distinct builds through generated floors, interludes, a relic milestone, and exact replay', () => {
         const report = runGameplayBuildMultiFloorSimulation({ rulesVersion: GAME_RULES_VERSION });
 
         expect(report.strategies.map((strategy) => strategy.id)).toEqual(
@@ -20,7 +20,8 @@ describe('multi-floor typed build strategy simulation', () => {
             'economy',
             'risk_conversion',
             'sustain_conversion',
-            'board_reconfiguration'
+            'board_reconfiguration',
+            'boss_extraction'
         ]);
         for (const strategy of report.strategies) {
             expect(strategy.floorCompletionShare).toBe(1);
@@ -178,8 +179,34 @@ describe('multi-floor typed build strategy simulation', () => {
         expect(trapControl?.samples.flatMap((sample) => sample.floorTraces)
             .filter((floor) => floor.matchup === 'memory_pressure')
             .every((floor) => floor.signatureConsequenceUses === 0)).toBe(true);
+        expect(report.cohesiveBuildCoverage.bossHunter).toMatchObject({
+            id: 'boss_hunter',
+            buildMechanicId: 'build.boss_hunter',
+            startingLoadoutId: 'memory_scout',
+            axis: 'boss_extraction',
+            favorableMatchup: 'boss_pressure',
+            counterMatchup: 'parasite_pressure',
+            longHorizonSampled: true
+        });
+        expect(report.cohesiveBuildCoverage.bossHunter.requiredSystems).toEqual([
+            'relic.chapter_compass',
+            'reward.boss_trophy_cache',
+            'objective.featured_streak',
+            'relic.wager_surety',
+            'relic.parasite_ledger'
+        ]);
+        expect(report.cohesiveBuildCoverage.bossHunter.evidence.bossTrophyConversions)
+            .toBeGreaterThanOrEqual(report.seeds.length);
+        expect(report.cohesiveBuildCoverage.bossHunter.evidence.parasiteReliefEvents).toBeGreaterThan(0);
+        expect(report.cohesiveBuildCoverage.bossHunter.evidence.riskWagersAccepted).toBeGreaterThan(0);
+        expect(
+            report.cohesiveBuildCoverage.bossHunter.evidence.riskWagerWins +
+            report.cohesiveBuildCoverage.bossHunter.evidence.riskWagerLosses
+        ).toBeGreaterThan(0);
+        expect(report.cohesiveBuildCoverage.bossHunter.evidence.favorableMatchupFloors).toBeGreaterThan(0);
+        expect(report.cohesiveBuildCoverage.bossHunter.evidence.counterMatchupFloors).toBeGreaterThan(0);
         expect(assertGameplayBuildMultiFloorViable(report)).toEqual({ ok: true, issues: [] });
-    }, 40_000);
+    }, 50_000);
 
     it('is deterministic for a selected build and preserves observed matchup distributions', () => {
         const input = { seeds: [7_241], floors: 3, strategies: ['conduit_cartographer'] as const };
@@ -218,6 +245,11 @@ describe('multi-floor typed build strategy simulation', () => {
         broken.strategies[4].comboShardSourceEvents = 0;
         broken.strategies[5].targetedReconfigurationUses = 0;
         broken.strategies[5].memoryPressureConservations = 0;
+        broken.strategies[6].bossTrophyConversions = 0;
+        broken.strategies[6].parasiteReliefEvents = 0;
+        broken.strategies[6].riskWagersAccepted = 0;
+        broken.strategies[6].riskWagerWins = 0;
+        broken.strategies[6].riskWagerLosses = 0;
 
         expect(assertGameplayBuildMultiFloorViable(broken).issues).toEqual(expect.arrayContaining([
             'floorsPerSeed=3; required=12',
@@ -237,7 +269,11 @@ describe('multi-floor typed build strategy simulation', () => {
             'combo_shard_engine@seeds:42001:shardLifeConversions=0; required=1',
             'combo_shard_engine@seeds:42001:comboShardSourceEvents=0; required=1',
             'trap_control@seeds:42001:targetedReconfigurationUses=0; required=1',
-            'trap_control@seeds:42001:memoryPressureConservations=0; required=1'
+            'trap_control@seeds:42001:memoryPressureConservations=0; required=1',
+            'boss_hunter@seeds:42001:bossTrophyConversions=0; required=1',
+            'boss_hunter@seeds:42001:parasiteReliefEvents=0; required=1',
+            'boss_hunter@seeds:42001:riskWagersAccepted=0; required=1',
+            'boss_hunter@seeds:42001:riskWagerOutcomes=0; required=1'
         ]));
     });
 });

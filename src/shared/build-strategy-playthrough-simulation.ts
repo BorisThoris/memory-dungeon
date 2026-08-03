@@ -242,6 +242,8 @@ export interface GameplayBuildMultiFloorMetrics {
     comboShardSourceEvents: number;
     targetedReconfigurationUses: number;
     memoryPressureConservations: number;
+    bossTrophyConversions: number;
+    parasiteReliefEvents: number;
     samples: GameplayBuildMultiFloorSeedSample[];
 }
 
@@ -325,6 +327,31 @@ export interface GameplayBuildMultiFloorReport {
                 counterMatchupFloors: number;
             };
         };
+        bossHunter: {
+            id: 'boss_hunter';
+            buildMechanicId: 'build.boss_hunter';
+            startingLoadoutId: 'memory_scout';
+            axis: 'boss_extraction';
+            favorableMatchup: 'boss_pressure';
+            counterMatchup: 'parasite_pressure';
+            requiredSystems: readonly [
+                'relic.chapter_compass',
+                'reward.boss_trophy_cache',
+                'objective.featured_streak',
+                'relic.wager_surety',
+                'relic.parasite_ledger'
+            ];
+            longHorizonSampled: true;
+            evidence: {
+                bossTrophyConversions: number;
+                parasiteReliefEvents: number;
+                riskWagersAccepted: number;
+                riskWagerWins: number;
+                riskWagerLosses: number;
+                favorableMatchupFloors: number;
+                counterMatchupFloors: number;
+            };
+        };
     };
     bounds: {
         requiredStrategyCount: number;
@@ -350,6 +377,10 @@ export interface GameplayBuildMultiFloorReport {
         minComboShardSourceEventsPerSeed: number;
         minTargetedReconfigurationUsesPerSeed: number;
         minMemoryPressureConservations: number;
+        minBossTrophyConversionsPerSeed: number;
+        minBossHunterParasiteReliefEvents: number;
+        minBossHunterRiskWagersAccepted: number;
+        minBossHunterRiskWagerOutcomes: number;
         maxPairwiseMeanTurnRatio: number;
     };
     notes: string[];
@@ -504,6 +535,26 @@ export const GAMEPLAY_BUILD_POLICIES: Readonly<Record<GameplayBuildStrategyId, G
         signatureTiming: 'before_board',
         favorableMatchup: 'hazard_pressure',
         counterMatchup: 'memory_pressure'
+    },
+    boss_hunter: {
+        id: 'boss_hunter_policy_v1',
+        strategyId: 'boss_hunter',
+        routePriorities: ['safe', 'mystery', 'greed'],
+        bonusRewardPriorities: ['hazard_ward', 'secret_favor', 'trait_toolkit', 'supply_cache'],
+        relicPriorities: ['chapter_compass', 'wager_surety', 'parasite_ledger', 'guard_token_plus_one'],
+        shopItemPriorities: ['peek_charge', 'heal_life', 'trait_routing_kit', 'destroy_charge'],
+        informationPolicy: { kind: 'bounded_memory', memoryTileCapacity: 9, uncertainTurnBudget: 24 },
+        gambitPolicy: null,
+        gambitSuppressedMatchups: [],
+        interludeRiskPolicy: {
+            maxRouteRiskUnits: 1,
+            minimumEffectiveSurvivalAfterRoute: 5,
+            openingUnbufferedGreedFloors: 0,
+            eventEffectPriorities: ['heal_or_guard', 'gain_relic_favor', 'gain_destroy_charge', 'gain_iron_key', 'gain_shop_gold', 'gain_score']
+        },
+        signatureTiming: 'after_board',
+        favorableMatchup: 'boss_pressure',
+        counterMatchup: 'parasite_pressure'
     }
 };
 
@@ -515,7 +566,8 @@ const emptyAxisScores = (): Record<GameplayBuildStrategyAxis, number> => ({
     economy: 0,
     risk_conversion: 0,
     sustain_conversion: 0,
-    board_reconfiguration: 0
+    board_reconfiguration: 0,
+    boss_extraction: 0
 });
 
 const normalizeSeeds = (seeds: readonly number[] | undefined): number[] => {
@@ -597,7 +649,9 @@ const createInitialRun = (
         ? ['wager_surety']
         : strategy.id === 'combo_shard_engine'
           ? ['combo_shard_plus_step']
-          : [];
+          : strategy.id === 'boss_hunter'
+            ? ['chapter_compass', 'wager_surety', 'parasite_ledger']
+            : [];
     const base = createNewRun(0, {
         runSeed: seed,
         runRulesVersionOverride: rulesVersion,
@@ -651,6 +705,11 @@ const signatureConsequenceCommand = (
             : null;
     }
     if (strategy.id === 'combo_shard_engine') return null;
+    if (strategy.id === 'boss_hunter') {
+        return canOfferEndlessRiskWager(trace.run)
+            ? createGameplayRiskWagerAcceptCommand(commandId)
+            : null;
+    }
     if (strategy.id === 'trap_control') {
         if (matchup !== 'hazard_pressure' || !trace.run.board) return null;
         const columns = Math.max(1, trace.run.board.columns);
@@ -984,6 +1043,9 @@ const recurringSynergyTags = (strategy: GameplayBuildStrategyDefinition): Set<st
     if (strategy.id === 'trap_control') {
         return new Set(['drift:row-shuffle', 'drift:volatile-full-shuffle', 'conduit:echo-peek']);
     }
+    if (strategy.id === 'boss_hunter') {
+        return new Set(['conduit:echo-peek', 'mirror:stasis-guard', 'sealed:heavy-score']);
+    }
     return new Set(['cursed:volatile-greed', 'reward-perk:cursed-opener-greed', 'sealed:heavy-score']);
 };
 
@@ -1002,7 +1064,9 @@ const signatureAxisScores = (
               ? new Set(['gambit', 'risk_wager', 'wager_surety'])
               : strategy.id === 'combo_shard_engine'
                 ? new Set(['bonus_shards', 'combo_shard_plus_step', 'shard_spark'])
-                : new Set(['free_swap_floor', 'trait_toolkit', 'region_shuffle']);
+                : strategy.id === 'trap_control'
+                  ? new Set(['free_swap_floor', 'trait_toolkit', 'region_shuffle'])
+                  : new Set(['chapter_compass', 'wager_surety', 'parasite_ledger']);
     for (const event of events) {
         const fromBuildSource = sourceIds.has(event.source.id);
         if (
@@ -1054,6 +1118,13 @@ const signatureAxisScores = (
         ) {
             scores.board_reconfiguration += 1;
         }
+        if (
+            strategy.id === 'boss_hunter' &&
+            ((event.type === 'score.requested' && event.reason === 'boss_trophy') ||
+                (fromBuildSource && event.type === 'parasite_relief.requested'))
+        ) {
+            scores.boss_extraction += 1;
+        }
     }
     return scores;
 };
@@ -1095,7 +1166,7 @@ const runSeed = (
         return applied ? 1 : 0;
     };
     const setupDefinitions = strategy.activationDefinitionIds.filter((definitionId) =>
-        definitionId.startsWith('bonus_reward.')
+        definitionId.startsWith('bonus_reward.') || strategy.id === 'boss_hunter'
     );
     for (const definitionId of setupDefinitions) {
         executeCommand(
@@ -1158,6 +1229,20 @@ const runSeed = (
                 event.source.id === 'shard_spark'
             ));
             signatureConsequenceUses += conversions.length;
+        }
+        if (strategy.id === 'boss_hunter') {
+            const bossTrophyConversions = solver.events.filter((event) =>
+                event.type === 'score.requested' &&
+                event.reason === 'boss_trophy' &&
+                event.source.id === 'chapter_compass'
+            );
+            trace.signatureEvents.push(...solver.events.filter((event) =>
+                (event.type === 'score.requested' &&
+                    event.reason === 'boss_trophy' &&
+                    event.source.id === 'chapter_compass') ||
+                (event.type === 'parasite_relief.requested' && event.source.id === 'parasite_ledger')
+            ));
+            signatureConsequenceUses += bossTrophyConversions.length;
         }
 
         if (policy.signatureTiming === 'after_board') {
@@ -1522,6 +1607,24 @@ export const runGameplayBuildMultiFloorSimulation = (
                     floor.replayCheckpointDeterministic
                 ).length
                 : 0,
+            bossTrophyConversions: strategy.id === 'boss_hunter'
+                ? samples.reduce(
+                    (sum, sample) => sum + sample.events.filter((event) =>
+                        event.type === 'score.requested' &&
+                        event.reason === 'boss_trophy' &&
+                        event.source.id === 'chapter_compass'
+                    ).length,
+                    0
+                )
+                : 0,
+            parasiteReliefEvents: strategy.id === 'boss_hunter'
+                ? samples.reduce(
+                    (sum, sample) => sum + sample.events.filter((event) =>
+                        event.type === 'parasite_relief.requested' && event.source.id === 'parasite_ledger'
+                    ).length,
+                    0
+                )
+                : 0,
             samples
         };
     });
@@ -1538,6 +1641,7 @@ export const runGameplayBuildMultiFloorSimulation = (
     const routeGambler = strategies.find((strategy) => strategy.id === 'route_gambler');
     const comboShardEngine = strategies.find((strategy) => strategy.id === 'combo_shard_engine');
     const trapControl = strategies.find((strategy) => strategy.id === 'trap_control');
+    const bossHunter = strategies.find((strategy) => strategy.id === 'boss_hunter');
     return {
         rulesVersion,
         seeds,
@@ -1613,10 +1717,35 @@ export const runGameplayBuildMultiFloorSimulation = (
                     favorableMatchupFloors: trapControl?.favorableMatchupMetrics?.sampledFloors ?? 0,
                     counterMatchupFloors: trapControl?.counterMatchupMetrics?.sampledFloors ?? 0
                 }
+            },
+            bossHunter: {
+                id: 'boss_hunter',
+                buildMechanicId: 'build.boss_hunter',
+                startingLoadoutId: 'memory_scout',
+                axis: 'boss_extraction',
+                favorableMatchup: 'boss_pressure',
+                counterMatchup: 'parasite_pressure',
+                requiredSystems: [
+                    'relic.chapter_compass',
+                    'reward.boss_trophy_cache',
+                    'objective.featured_streak',
+                    'relic.wager_surety',
+                    'relic.parasite_ledger'
+                ],
+                longHorizonSampled: true,
+                evidence: {
+                    bossTrophyConversions: bossHunter?.bossTrophyConversions ?? 0,
+                    parasiteReliefEvents: bossHunter?.parasiteReliefEvents ?? 0,
+                    riskWagersAccepted: bossHunter?.riskWagersAccepted ?? 0,
+                    riskWagerWins: bossHunter?.riskWagerWins ?? 0,
+                    riskWagerLosses: bossHunter?.riskWagerLosses ?? 0,
+                    favorableMatchupFloors: bossHunter?.favorableMatchupMetrics?.sampledFloors ?? 0,
+                    counterMatchupFloors: bossHunter?.counterMatchupMetrics?.sampledFloors ?? 0
+                }
             }
         },
         bounds: {
-            requiredStrategyCount: 6,
+            requiredStrategyCount: 7,
             minFloorsPerSeed: 12,
             minFloorCompletionShare: 1,
             minDeterministicReplayShare: 1,
@@ -1639,6 +1768,10 @@ export const runGameplayBuildMultiFloorSimulation = (
             minComboShardSourceEventsPerSeed: 1,
             minTargetedReconfigurationUsesPerSeed: 1,
             minMemoryPressureConservations: 1,
+            minBossTrophyConversionsPerSeed: 1,
+            minBossHunterParasiteReliefEvents: 1,
+            minBossHunterRiskWagersAccepted: 1,
+            minBossHunterRiskWagerOutcomes: 1,
             maxPairwiseMeanTurnRatio: 1.5
         },
         notes: [
@@ -1652,7 +1785,8 @@ export const runGameplayBuildMultiFloorSimulation = (
             'The gate proves longer structural viability and balance envelopes for a deterministic bounded-memory policy, not final human difficulty balance.',
             'Route Gambler is retained as the fourth long-horizon build: Route Tactician movement, one-floor Gambit rescue, objective wagers, Wager Surety, Favor cash-out, and Mystery routing form one distinct risk-conversion trace.',
             'Combo Shard Engine is retained as the fifth build: Greed creates a visible life deficit, Bonus Shards and the Catalyst relic stock bounded momentum, clean matches convert the next shard into life, and authored parasite floors test its sustain counter.',
-            'Trap Control is retained as the sixth build: renewable Free Swap sources fund typed row reconfiguration on visible hazard-pressure floors, while memory-pressure floors conserve the spatial-disruption resource.'
+            'Trap Control is retained as the sixth build: renewable Free Swap sources fund typed row reconfiguration on visible hazard-pressure floors, while memory-pressure floors conserve the spatial-disruption resource.',
+            'Boss Hunter is retained as the seventh build: Chapter Compass converts claimed boss trophies into score, while objective success through Wager Surety and Parasite Ledger converts chapter preparation into Favor or pressure relief.'
         ]
     };
 };
@@ -1807,6 +1941,32 @@ export const assertGameplayBuildMultiFloorViable = (
         if (trapControl.memoryPressureConservations < report.bounds.minMemoryPressureConservations) {
             issues.push(
                 `trap_control@seeds:${report.seeds.join(',')}:memoryPressureConservations=${trapControl.memoryPressureConservations}; required=${report.bounds.minMemoryPressureConservations}`
+            );
+        }
+    }
+    const bossHunter = report.strategies.find((strategy) => strategy.id === 'boss_hunter');
+    if (bossHunter) {
+        const minimumTrophies =
+            report.bounds.minBossTrophyConversionsPerSeed * report.seeds.length;
+        if (bossHunter.bossTrophyConversions < minimumTrophies) {
+            issues.push(
+                `boss_hunter@seeds:${report.seeds.join(',')}:bossTrophyConversions=${bossHunter.bossTrophyConversions}; required=${minimumTrophies}`
+            );
+        }
+        if (bossHunter.parasiteReliefEvents < report.bounds.minBossHunterParasiteReliefEvents) {
+            issues.push(
+                `boss_hunter@seeds:${report.seeds.join(',')}:parasiteReliefEvents=${bossHunter.parasiteReliefEvents}; required=${report.bounds.minBossHunterParasiteReliefEvents}`
+            );
+        }
+        if (bossHunter.riskWagersAccepted < report.bounds.minBossHunterRiskWagersAccepted) {
+            issues.push(
+                `boss_hunter@seeds:${report.seeds.join(',')}:riskWagersAccepted=${bossHunter.riskWagersAccepted}; required=${report.bounds.minBossHunterRiskWagersAccepted}`
+            );
+        }
+        const bossWagerOutcomes = bossHunter.riskWagerWins + bossHunter.riskWagerLosses;
+        if (bossWagerOutcomes < report.bounds.minBossHunterRiskWagerOutcomes) {
+            issues.push(
+                `boss_hunter@seeds:${report.seeds.join(',')}:riskWagerOutcomes=${bossWagerOutcomes}; required=${report.bounds.minBossHunterRiskWagerOutcomes}`
             );
         }
     }
