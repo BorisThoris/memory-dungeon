@@ -948,14 +948,17 @@ describe('run surface state helpers', () => {
                 expect.objectContaining({ type: 'feedback.requested', cue: 'power.gambit.committed' })
             ]);
             expect(result.run.board!.flippedTileIds).toHaveLength(3);
-            expect(result.run.gameplayCommandJournal).toEqual([
-                expect.objectContaining({ type: 'board.gambit_commit', targetTileId: third.id })
+            expect(result.run.gameplayCommandJournal?.map((command) => command.type)).toEqual([
+                'board.tile_flip',
+                'board.tile_flip',
+                'board.gambit_commit',
+                'board.tile_flip'
             ]);
             expect(result.resolveDelayMs).toBe(result.run.timerState.resolveRemainingMs);
         }
     });
 
-    it('persists a fatal third-pick trap without claiming a Gambit commitment', () => {
+    it('persists fatal third-pick trap intent before its replayable tile consequence', () => {
         const runSeed = 51;
         const baseRun = createNewRun(0, { echoFeedbackEnabled: false, runSeed });
         const generated = buildBoard(5, {
@@ -1001,8 +1004,18 @@ describe('run surface state helpers', () => {
         expect(result.kind).toBe('flipGameOver');
         if (result.kind === 'flipGameOver') {
             expect(result.run.status).toBe('gameOver');
-            expect(result.events).toEqual([]);
-            expect(result.run.gameplayCommandJournal).toBeUndefined();
+            expect(result.playTrapSfx).toBe(true);
+            expect(result.events).toEqual(expect.arrayContaining([
+                expect.objectContaining({ type: 'board.gambit_commit.requested' })
+            ]));
+            expect(result.run.gameplayCommandJournal?.map((command) => command.type)).toEqual([
+                'board.gambit_commit',
+                'board.tile_flip'
+            ]);
+            expect(result.run.gameplayEventJournal).toEqual(expect.arrayContaining([
+                expect.objectContaining({ type: 'board.gambit_commit.requested' }),
+                expect.objectContaining({ type: 'board.tile_flipped', outcome: 'trap_triggered' })
+            ]));
         }
     });
 
@@ -1064,6 +1077,16 @@ describe('run surface state helpers', () => {
         });
         if (result.kind === 'flipped') {
             expect(result.run.board!.flippedTileIds).toEqual(['a1', 'b1', 'a2']);
+            expect(result.run.gameplayCommandJournal?.map((command) => command.type)).toEqual([
+                'enemy_hazard.contact',
+                'board.gambit_commit',
+                'board.tile_flip'
+            ]);
+            expect(result.run.gameplayEventJournal).toEqual(expect.arrayContaining([
+                expect.objectContaining({ type: 'enemy_hazard.contacted', targetTileId: 'a2' }),
+                expect.objectContaining({ type: 'board.gambit_commit.requested', targetTileId: 'a2' }),
+                expect.objectContaining({ type: 'board.tile_flipped', targetTileId: 'a2' })
+            ]));
             expect(result.events).toEqual(expect.arrayContaining([
                 expect.objectContaining({ type: 'feedback.requested', cue: 'power.gambit.committed' })
             ]));

@@ -4,6 +4,7 @@ import {
     RECALL_FOCUS_MAX,
     type BoardState,
     type FindableKind,
+    type RouteSpecialKind,
     type RunState
 } from './contracts';
 import { clearFinalPairEnemyHazardOccupationForRun } from './enemy-hazard-board-rules';
@@ -30,6 +31,7 @@ import { runFilteredStringArrayOrNull, runStringArray } from './run-array-guards
 import { runNonNegativeInteger } from './run-number-guards';
 import { gainRelicFavor } from './relic-favor-rules';
 import { applyTraitRouteObjectiveProgress } from './trait-route-objectives';
+import type { TileTraitInteractionTag } from './tile-trait-interaction-copy';
 
 const GAMBIT_FAIL_EXTRA_TRIES = 1;
 
@@ -73,6 +75,14 @@ export interface BoardTurnTransitionDependencies {
 export interface BoardTurnExecutionContext {
     commandId: string;
     events: GameplayEvent[];
+    resolutionFacts?: BoardTurnResolutionFacts;
+}
+
+export interface BoardTurnResolutionFacts {
+    floaterTileIds: [string, string] | [string, string, string];
+    matchedFindableKind: FindableKind | null;
+    matchedRouteKind: RouteSpecialKind | null;
+    traitInteractionTags: TileTraitInteractionTag[];
 }
 
 const flippedTileIdsForRun = (run: RunState): string[] | null =>
@@ -121,6 +131,7 @@ export const createResolveBoardTurnTransition = ({
                 dungeonReward,
                 dungeonTrapResolvedDelta,
                 claimedFindableKind,
+                claimedRouteCardKind,
                 findableComboShardGain,
                 findableSafeHazardWardGain,
                 findableScoreBonus,
@@ -189,6 +200,14 @@ export const createResolveBoardTurnTransition = ({
             source: 'match',
             gameplayEffectContext: execution
             });
+            if (execution) {
+                execution.resolutionFacts = {
+                    floaterTileIds: [matchA, matchB],
+                    matchedFindableKind: claimedFindableKind,
+                    matchedRouteKind: claimedRouteCardKind,
+                    traitInteractionTags: [...traitReward.interactionTags]
+                };
+            }
             const scoring = resolveTurnMatchScoringSummary({
                 run,
                 sourceBoard: run.board,
@@ -376,7 +395,17 @@ export const createResolveBoardTurnTransition = ({
             tileIds: [aId, bId, cId],
             sourceTiles: [ta, tb, tc],
             triesDelta: GAMBIT_FAIL_EXTRA_TRIES,
-            decoyTouched: gambitDecoy
+            decoyTouched: gambitDecoy,
+            onTraitInteractionTags: (traitInteractionTags) => {
+                if (execution) {
+                    execution.resolutionFacts = {
+                        floaterTileIds: [aId, bId, cId],
+                        matchedFindableKind: null,
+                        matchedRouteKind: null,
+                        traitInteractionTags: [...traitInteractionTags]
+                    };
+                }
+            }
         });
         return {
             ...mismatch,
@@ -419,6 +448,7 @@ export const createResolveBoardTurnTransition = ({
                 dungeonReward,
                 dungeonTrapResolvedDelta,
                 claimedFindableKind,
+                claimedRouteCardKind,
                 findableComboShardGain,
                 findableSafeHazardWardGain,
                 findableScoreBonus,
@@ -486,6 +516,14 @@ export const createResolveBoardTurnTransition = ({
             source: 'match',
             gameplayEffectContext: execution
             });
+            if (execution) {
+                execution.resolutionFacts = {
+                    floaterTileIds: [firstId, secondId],
+                    matchedFindableKind: claimedFindableKind,
+                    matchedRouteKind: claimedRouteCardKind,
+                    traitInteractionTags: [...traitReward.interactionTags]
+                };
+            }
             const scoring = resolveTurnMatchScoringSummary({
                 run,
                 sourceBoard: run.board,
@@ -673,7 +711,17 @@ export const createResolveBoardTurnTransition = ({
             tileIds: [firstId, secondId],
             sourceTiles: [firstTile, secondTile],
             triesDelta: 1,
-            decoyTouched: decoyTouch
+            decoyTouched: decoyTouch,
+            onTraitInteractionTags: (traitInteractionTags) => {
+                if (execution) {
+                    execution.resolutionFacts = {
+                        floaterTileIds: [firstId, secondId],
+                        matchedFindableKind: null,
+                        matchedRouteKind: null,
+                        traitInteractionTags: [...traitInteractionTags]
+                    };
+                }
+            }
         });
     };
     

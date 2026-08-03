@@ -1,8 +1,9 @@
 import type { RunState } from '../../shared/contracts';
-import { openRelicOffer } from '../../shared/game-core';
-import { advanceFloorThroughGameplayCore } from '../../shared/gameplay-core-adapters';
-import { needsRelicPick } from '../../shared/relics';
-import { repairRunProgressionSoftlocks } from '../../shared/run-progression-repair';
+import {
+    advanceFloorThroughGameplayCore,
+    openRelicOfferThroughGameplayCore,
+    repairRunProgressionThroughGameplayCore
+} from '../../shared/gameplay-core-adapters';
 import { createRunWithBoardInteractionClearedPatch, type RunSurfaceState } from './runSurfaceState';
 
 export type LevelCompleteContinuationSurfaceResult =
@@ -92,7 +93,10 @@ export const createLevelCompleteContinuationSurfaceResult = (
     run: RunState,
     { includeSummaryShop }: LevelCompleteContinuationSurfaceOptions
 ): LevelCompleteContinuationSurfaceResult => {
-    run = repairRunProgressionSoftlocks(run);
+    run = repairRunProgressionThroughGameplayCore(
+        run,
+        `progression-repair:${run.runSeed}:${run.board?.level ?? 0}:${Array.isArray(run.gameplayCommandJournal) ? run.gameplayCommandJournal.length : 0}`
+    ).run;
 
     if (run.sideRoom) {
         return {
@@ -117,18 +121,23 @@ export const createLevelCompleteContinuationSurfaceResult = (
 
     let nextRun = run;
 
-    if (needsRelicPick(nextRun) && !nextRun.relicOffer) {
-        const offerRun = openRelicOffer(nextRun);
-        if (offerRun.relicOffer) {
+    if (!nextRun.relicOffer) {
+        const offerOpen = openRelicOfferThroughGameplayCore(
+            nextRun,
+            `relic-offer-open:${nextRun.runSeed}:${nextRun.lastLevelResult?.level ?? 0}:${nextRun.relicTiersClaimed}`
+        );
+        if (offerOpen.accepted) {
+            nextRun = offerOpen.run;
+        }
+        if (nextRun.relicOffer) {
             return {
                 kind: 'relicOffer',
                 patch: {
                     view: 'playing',
-                    ...createRunWithBoardInteractionClearedPatch(offerRun)
+                    ...createRunWithBoardInteractionClearedPatch(nextRun)
                 }
             };
         }
-        nextRun = offerRun;
     }
 
     if (nextRun.relicOffer) {

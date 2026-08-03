@@ -5,10 +5,13 @@ import type {
     RelicId,
     RelicOfferServiceId,
     RewardPerkId,
+    RouteSpecialKind,
     RunStatus,
     TileTraitKind
 } from './contracts';
 import { RUN_INVENTORY_ITEM_IDS } from './run-inventory-contracts';
+import { RUN_PROGRESSION_REPAIR_KINDS } from './run-progression-repair';
+import { TILE_TRAIT_INTERACTION_TAGS } from './tile-trait-interaction-copy';
 
 export const GAMEPLAY_CORE_SCHEMA_VERSION = 1 as const;
 
@@ -82,6 +85,27 @@ export const GAMEPLAY_FINDABLE_KINDS = [
     'ward_spark',
     'scout_glint'
 ] as const satisfies readonly FindableKind[];
+
+export const GAMEPLAY_ROUTE_SPECIAL_KINDS = [
+    'safe_ward',
+    'greed_cache',
+    'mystery_veil',
+    'elite_cache',
+    'final_ward',
+    'greed_toll',
+    'fragile_cache',
+    'guard_cache',
+    'lantern_ward',
+    'mimic_cache',
+    'anchor_seal',
+    'loaded_gateway',
+    'catalyst_altar',
+    'parasite_vessel',
+    'pin_lattice',
+    'omen_seal',
+    'secret_door',
+    'keystone_pair'
+] as const satisfies readonly RouteSpecialKind[];
 
 export const GAMEPLAY_TILE_TRAIT_KINDS = [
     'echo',
@@ -1203,7 +1227,74 @@ const commandBase = {
     commandId: z.string().min(1).max(160)
 };
 
+export const gameplayPauseTimerSnapshotSchema = z
+    .object({
+        memorizeRemainingMs: z.number().int().nonnegative().nullable(),
+        resolveRemainingMs: z.number().int().nonnegative().nullable(),
+        debugRevealRemainingMs: z.number().int().nonnegative().nullable()
+    })
+    .strict();
+
+export type GameplayPauseTimerSnapshot = z.infer<typeof gameplayPauseTimerSnapshotSchema>;
+
+export const GAMEPLAY_DEBUG_REVEAL_DEACTIVATION_REASONS = [
+    'timer_elapsed',
+    'resume_expired',
+    'phase_ended'
+] as const;
+
+export type GameplayDebugRevealDeactivationReason =
+    (typeof GAMEPLAY_DEBUG_REVEAL_DEACTIVATION_REASONS)[number];
+
 export const gameplayCommandSchema = z.discriminatedUnion('type', [
+    z
+        .object({
+            ...commandBase,
+            type: z.literal('phase.memorize_complete')
+        })
+        .strict(),
+    z
+        .object({
+            ...commandBase,
+            type: z.literal('run.gauntlet_expire'),
+            observedAtMs: z.number().int().nonnegative()
+        })
+        .strict(),
+    z
+        .object({
+            ...commandBase,
+            type: z.literal('run.pause'),
+            observedAtMs: z.number().int().nonnegative(),
+            timerSnapshot: gameplayPauseTimerSnapshotSchema
+        })
+        .strict(),
+    z
+        .object({
+            ...commandBase,
+            type: z.literal('run.resume'),
+            observedAtMs: z.number().int().nonnegative()
+        })
+        .strict(),
+    z
+        .object({
+            ...commandBase,
+            type: z.literal('debug.reveal_activate'),
+            disableAchievementsOnDebug: z.boolean()
+        })
+        .strict(),
+    z
+        .object({
+            ...commandBase,
+            type: z.literal('debug.reveal_deactivate'),
+            reason: z.enum(GAMEPLAY_DEBUG_REVEAL_DEACTIVATION_REASONS)
+        })
+        .strict(),
+    z
+        .object({
+            ...commandBase,
+            type: z.literal('run.progression_repair')
+        })
+        .strict(),
     z
         .object({
             ...commandBase,
@@ -1226,6 +1317,21 @@ export const gameplayCommandSchema = z.discriminatedUnion('type', [
             ...commandBase,
             type: z.literal('board.peek'),
             targetTileId: z.string().min(1).max(160)
+        })
+        .strict(),
+    z
+        .object({
+            ...commandBase,
+            type: z.literal('board.tile_flip'),
+            targetTileId: z.string().min(1).max(160)
+        })
+        .strict(),
+    z
+        .object({
+            ...commandBase,
+            type: z.literal('enemy_hazard.contact'),
+            targetTileId: z.string().min(1).max(160),
+            advanceHazards: z.boolean()
         })
         .strict(),
     z
@@ -1305,6 +1411,12 @@ export const gameplayCommandSchema = z.discriminatedUnion('type', [
     z
         .object({
             ...commandBase,
+            type: z.literal('shop.reroll')
+        })
+        .strict(),
+    z
+        .object({
+            ...commandBase,
             type: z.literal('dungeon.exit_activate'),
             spend: z.enum(['none', 'key', 'master_key'])
         })
@@ -1340,6 +1452,12 @@ export const gameplayCommandSchema = z.discriminatedUnion('type', [
             type: z.literal('side_room.resolve'),
             action: z.enum(['claim', 'skip']),
             choiceId: z.string().min(1).max(200).optional()
+        })
+        .strict(),
+    z
+        .object({
+            ...commandBase,
+            type: z.literal('relic.offer_open')
         })
         .strict(),
     z
@@ -1382,7 +1500,193 @@ const eventBase = {
     source: gameplaySourceSchema
 };
 
+const boardTurnObjectiveSnapshotSchema = z
+    .object({
+        label: z.string().min(1).max(160),
+        progress: z.number().int().nonnegative(),
+        required: z.number().int().nonnegative()
+    })
+    .strict();
+
+const boardTurnHazardTileCountersSchema = z
+    .object({
+        totalTriggers: z.number().int().nonnegative(),
+        shuffleSnares: z.number().int().nonnegative(),
+        cascadeCaches: z.number().int().nonnegative(),
+        mirrorDecoys: z.number().int().nonnegative(),
+        fragileCacheClaims: z.number().int().nonnegative(),
+        fragileCacheBreaks: z.number().int().nonnegative(),
+        tollCaches: z.number().int().nonnegative(),
+        fuseCaches: z.number().int().nonnegative(),
+        fuseExpiredClaims: z.number().int().nonnegative()
+    })
+    .strict();
+
+const boardTurnScoutCountersSchema = z
+    .object({
+        lanternWard: z.number().int().nonnegative(),
+        omenSeal: z.number().int().nonnegative()
+    })
+    .strict();
+
+const boardTurnMimicCacheCountersSchema = z
+    .object({
+        claims: z.number().int().nonnegative(),
+        bites: z.number().int().nonnegative(),
+        guardBites: z.number().int().nonnegative()
+    })
+    .strict();
+
+const boardTurnRouteSpecialCountersSchema = z
+    .object({
+        anchorSealUses: z.number().int().nonnegative(),
+        loadedGatewayPlans: z.number().int().nonnegative(),
+        catalystAltarUpgrades: z.number().int().nonnegative(),
+        parasiteVesselConversions: z.number().int().nonnegative(),
+        pinLatticeRewards: z.number().int().nonnegative()
+    })
+    .strict();
+
+export const boardTurnAnnouncementFactsSchema = z
+    .object({
+        matchedPairsBefore: z.number().int().nonnegative(),
+        matchedPairsAfter: z.number().int().nonnegative(),
+        pairCountBefore: z.number().int().nonnegative(),
+        pairCountAfter: z.number().int().nonnegative(),
+        shopGoldBefore: z.number().int().nonnegative(),
+        shopGoldAfter: z.number().int().nonnegative(),
+        shuffleChargesBefore: z.number().int().nonnegative(),
+        shuffleChargesAfter: z.number().int().nonnegative(),
+        regionShuffleChargesBefore: z.number().int().nonnegative(),
+        regionShuffleChargesAfter: z.number().int().nonnegative(),
+        stickyBlockIndexBefore: z.number().int().nonnegative().nullable(),
+        stickyBlockIndexAfter: z.number().int().nonnegative().nullable(),
+        matchedTraitKinds: z.array(z.enum(GAMEPLAY_TILE_TRAIT_KINDS)),
+        mismatchedTraitKinds: z.array(z.enum(GAMEPLAY_TILE_TRAIT_KINDS)),
+        volatileTraitShufflesBefore: z.number().int().nonnegative(),
+        volatileTraitShufflesAfter: z.number().int().nonnegative(),
+        objectiveBefore: boardTurnObjectiveSnapshotSchema.nullable(),
+        objectiveAfter: boardTurnObjectiveSnapshotSchema.nullable(),
+        recallFocusBefore: z.number().int().nonnegative(),
+        recallFocusAfter: z.number().int().nonnegative(),
+        recallMatchesBefore: z.number().int().nonnegative(),
+        recallMatchesAfter: z.number().int().nonnegative(),
+        recallMistakesBefore: z.number().int().nonnegative(),
+        recallMistakesAfter: z.number().int().nonnegative(),
+        recallBonusScoreBefore: z.number().int().nonnegative(),
+        recallBonusScoreAfter: z.number().int().nonnegative(),
+        forgottenTileCountBefore: z.number().int().nonnegative(),
+        forgottenTileCountAfter: z.number().int().nonnegative(),
+        dungeonEnemiesDefeatedBefore: z.number().int().nonnegative(),
+        dungeonEnemiesDefeatedAfter: z.number().int().nonnegative(),
+        enemyHazardHitsBefore: z.number().int().nonnegative(),
+        enemyHazardHitsAfter: z.number().int().nonnegative(),
+        enemyHazardsDefeatedBefore: z.number().int().nonnegative(),
+        enemyHazardsDefeatedAfter: z.number().int().nonnegative(),
+        hazardTilesBefore: boardTurnHazardTileCountersSchema,
+        hazardTilesAfter: boardTurnHazardTileCountersSchema,
+        scoutsBefore: boardTurnScoutCountersSchema,
+        scoutsAfter: boardTurnScoutCountersSchema,
+        mimicCacheBefore: boardTurnMimicCacheCountersSchema,
+        mimicCacheAfter: boardTurnMimicCacheCountersSchema,
+        routeSpecialsBefore: boardTurnRouteSpecialCountersSchema,
+        routeSpecialsAfter: boardTurnRouteSpecialCountersSchema,
+        safeHazardWardsUsedBefore: z.number().int().nonnegative(),
+        safeHazardWardsUsedAfter: z.number().int().nonnegative()
+    })
+    .strict();
+
+export type BoardTurnAnnouncementFacts = z.infer<typeof boardTurnAnnouncementFactsSchema>;
+
 export const gameplayEventSchema = z.discriminatedUnion('type', [
+    z
+        .object({
+            ...eventBase,
+            type: z.literal('phase.memorize_completed'),
+            floor: z.number().int().positive(),
+            memorizeRemainingMsBefore: z.number().int().nonnegative().nullable(),
+            recallFocusBefore: z.number().int().nonnegative(),
+            recallFocusAfter: z.number().int().nonnegative(),
+            pendingMemorizeBonusMs: z.number().int().nonnegative()
+        })
+        .strict(),
+    z
+        .object({
+            ...eventBase,
+            type: z.literal('run.gauntlet_expired'),
+            observedAtMs: z.number().int().nonnegative(),
+            deadlineMs: z.number().int().nonnegative(),
+            overdueMs: z.number().int().positive(),
+            statusBefore: z.enum(['memorize', 'playing', 'resolving']),
+            livesBefore: z.number().int().positive(),
+            livesAfter: z.literal(0)
+        })
+        .strict(),
+    z
+        .object({
+            ...eventBase,
+            type: z.literal('run.paused'),
+            observedAtMs: z.number().int().nonnegative(),
+            statusBefore: z.enum(['memorize', 'playing', 'resolving']),
+            statusAfter: z.literal('paused'),
+            gauntletDeadlineMs: z.number().int().nonnegative().nullable(),
+            gauntletPausedAtMs: z.number().int().nonnegative().nullable(),
+            timerSnapshot: gameplayPauseTimerSnapshotSchema
+        })
+        .strict(),
+    z
+        .object({
+            ...eventBase,
+            type: z.literal('run.resumed'),
+            observedAtMs: z.number().int().nonnegative(),
+            pausedFromStatus: z.enum(['memorize', 'playing', 'resolving']),
+            statusAfter: z.enum(['memorize', 'playing', 'resolving', 'gameOver']),
+            outcome: z.enum(['resumed', 'recovered_to_playing', 'game_over']),
+            gauntletDeadlineMsBefore: z.number().int().nonnegative().nullable(),
+            gauntletDeadlineMsAfter: z.number().int().nonnegative().nullable(),
+            gauntletPauseDurationMs: z.number().int().nonnegative()
+        })
+        .strict(),
+    z
+        .object({
+            ...eventBase,
+            type: z.literal('debug.reveal_activated'),
+            outcome: z.enum(['activated', 'refreshed']),
+            revealDurationMs: z.number().int().positive(),
+            debugUsedBefore: z.boolean(),
+            debugUsedAfter: z.literal(true),
+            achievementsEnabledBefore: z.boolean(),
+            achievementsEnabledAfter: z.boolean()
+        })
+        .strict(),
+    z
+        .object({
+            ...eventBase,
+            type: z.literal('debug.reveal_deactivated'),
+            reason: z.enum(GAMEPLAY_DEBUG_REVEAL_DEACTIVATION_REASONS),
+            debugRevealRemainingMsBefore: z.number().int().nonnegative().nullable(),
+            debugPeekActiveAfter: z.literal(false)
+        })
+        .strict(),
+    z
+        .object({
+            ...eventBase,
+            type: z.literal('run.progression_repaired'),
+            repairKinds: z.array(z.enum(RUN_PROGRESSION_REPAIR_KINDS)).min(1).max(RUN_PROGRESSION_REPAIR_KINDS.length),
+            exitTileId: z.string().min(1).max(160).nullable(),
+            exitLockKindBefore: z.enum(['none', 'lever', 'iron', 'treasure', 'shrine', 'boss', 'trap']),
+            exitLockKindAfter: z.enum(['none', 'lever', 'iron', 'treasure', 'shrine', 'boss', 'trap']),
+            exitRequiredLeverCountBefore: z.number().int().nonnegative(),
+            exitRequiredLeverCountAfter: z.number().int().nonnegative(),
+            enemyHazardIdsDefeated: z.array(z.string().min(1).max(160)).max(32),
+            dungeonEnemiesDefeatedBefore: z.number().int().nonnegative(),
+            dungeonEnemiesDefeatedAfter: z.number().int().nonnegative(),
+            dungeonEnemiesDefeatedThisFloorBefore: z.number().int().nonnegative(),
+            dungeonEnemiesDefeatedThisFloorAfter: z.number().int().nonnegative(),
+            enemyHazardsDefeatedThisFloorBefore: z.number().int().nonnegative(),
+            enemyHazardsDefeatedThisFloorAfter: z.number().int().nonnegative()
+        })
+        .strict(),
     z
         .object({
             ...eventBase,
@@ -1487,6 +1791,54 @@ export const gameplayEventSchema = z.discriminatedUnion('type', [
     z
         .object({
             ...eventBase,
+            type: z.literal('board.tile_flipped'),
+            targetTileId: z.string().min(1).max(160),
+            outcome: z.enum([
+                'flipped',
+                'trap_triggered',
+                'exit_revealed',
+                'shop_revealed',
+                'room_resolved',
+                'cleanup'
+            ]),
+            tileStateBefore: z.enum(['hidden', 'flipped', 'matched', 'removed']),
+            tileStateAfter: z.enum(['hidden', 'flipped', 'matched', 'removed']),
+            flippedTileIdsBefore: z.array(z.string().min(1).max(160)).max(3),
+            flippedTileIdsAfter: z.array(z.string().min(1).max(160)).max(3),
+            statusBefore: z.enum(GAMEPLAY_RUN_STATUSES),
+            statusAfter: z.enum(GAMEPLAY_RUN_STATUSES),
+            resolveDelayMs: z.number().int().nonnegative().nullable(),
+            trapsTriggeredBefore: z.number().int().nonnegative(),
+            trapsTriggeredAfter: z.number().int().nonnegative(),
+            livesBefore: z.number().int().nonnegative(),
+            livesAfter: z.number().int().nonnegative(),
+            boardComplete: z.boolean()
+        })
+        .strict(),
+    z
+        .object({
+            ...eventBase,
+            type: z.literal('enemy_hazard.contacted'),
+            hazardId: z.string().min(1).max(160),
+            targetTileId: z.string().min(1).max(160),
+            advanceHazards: z.boolean(),
+            damage: z.number().int().nonnegative(),
+            guardTokensBefore: z.number().int().nonnegative(),
+            guardTokensAfter: z.number().int().nonnegative(),
+            livesBefore: z.number().int().nonnegative(),
+            livesAfter: z.number().int().nonnegative(),
+            pendingMemorizeBonusBefore: z.number().int().nonnegative(),
+            pendingMemorizeBonusAfter: z.number().int().nonnegative(),
+            hazardTurnBefore: z.number().int().nonnegative(),
+            hazardTurnAfter: z.number().int().nonnegative(),
+            enemyHazardHitsBefore: z.number().int().nonnegative(),
+            enemyHazardHitsAfter: z.number().int().nonnegative(),
+            gameOver: z.boolean()
+        })
+        .strict(),
+    z
+        .object({
+            ...eventBase,
             type: z.literal('board.pin_changed'),
             targetTileId: z.string().min(1).max(160),
             pinned: z.boolean(),
@@ -1503,7 +1855,9 @@ export const gameplayEventSchema = z.discriminatedUnion('type', [
             strayChargesBefore: z.number().int().nonnegative(),
             strayChargesAfter: z.number().int().nonnegative(),
             recallFocusBefore: z.number().int().nonnegative(),
-            recallFocusAfter: z.number().int().nonnegative()
+            recallFocusAfter: z.number().int().nonnegative(),
+            forgottenTileCountBefore: z.number().int().nonnegative(),
+            forgottenTileCountAfter: z.number().int().nonnegative()
         })
         .strict(),
     z
@@ -1522,6 +1876,8 @@ export const gameplayEventSchema = z.discriminatedUnion('type', [
             matchedPairsAfter: z.number().int().nonnegative(),
             recallFocusBefore: z.number().int().nonnegative(),
             recallFocusAfter: z.number().int().nonnegative(),
+            forgottenTileCountBefore: z.number().int().nonnegative(),
+            forgottenTileCountAfter: z.number().int().nonnegative(),
             parasitePressureBefore: z.number().int().nonnegative(),
             parasitePressureAfter: z.number().int().nonnegative(),
             shiftingSpotlightNonceBefore: z.number().int().nonnegative(),
@@ -1566,6 +1922,10 @@ export const gameplayEventSchema = z.discriminatedUnion('type', [
             affectedTileIds: z.array(z.string().min(1).max(160)),
             shuffleNonceBefore: z.number().int().nonnegative(),
             shuffleNonceAfter: z.number().int().nonnegative(),
+            recallFocusBefore: z.number().int().nonnegative(),
+            recallFocusAfter: z.number().int().nonnegative(),
+            forgottenTileCountBefore: z.number().int().nonnegative(),
+            forgottenTileCountAfter: z.number().int().nonnegative(),
             usedFreeCharge: z.boolean()
         })
         .strict(),
@@ -1577,6 +1937,10 @@ export const gameplayEventSchema = z.discriminatedUnion('type', [
             affectedTileIds: z.array(z.string().min(1).max(160)),
             shuffleNonceBefore: z.number().int().nonnegative(),
             shuffleNonceAfter: z.number().int().nonnegative(),
+            recallFocusBefore: z.number().int().nonnegative(),
+            recallFocusAfter: z.number().int().nonnegative(),
+            forgottenTileCountBefore: z.number().int().nonnegative(),
+            forgottenTileCountAfter: z.number().int().nonnegative(),
             usedFreeCharge: z.boolean()
         })
         .strict(),
@@ -1588,6 +1952,10 @@ export const gameplayEventSchema = z.discriminatedUnion('type', [
             secondTileId: z.string().min(1).max(160),
             shuffleNonceBefore: z.number().int().nonnegative(),
             shuffleNonceAfter: z.number().int().nonnegative(),
+            recallFocusBefore: z.number().int().nonnegative(),
+            recallFocusAfter: z.number().int().nonnegative(),
+            forgottenTileCountBefore: z.number().int().nonnegative(),
+            forgottenTileCountAfter: z.number().int().nonnegative(),
             usedFreeCharge: z.boolean()
         })
         .strict(),
@@ -1610,7 +1978,9 @@ export const gameplayEventSchema = z.discriminatedUnion('type', [
             undoUsesBefore: z.number().int().nonnegative(),
             undoUsesAfter: z.number().int().nonnegative(),
             recallFocusBefore: z.number().int().nonnegative(),
-            recallFocusAfter: z.number().int().nonnegative()
+            recallFocusAfter: z.number().int().nonnegative(),
+            forgottenTileCountBefore: z.number().int().nonnegative(),
+            forgottenTileCountAfter: z.number().int().nonnegative()
         })
         .strict(),
     z
@@ -1624,6 +1994,22 @@ export const gameplayEventSchema = z.discriminatedUnion('type', [
             shopGoldAfter: z.number().int().nonnegative(),
             masterKeysBefore: z.number().int().nonnegative(),
             masterKeysAfter: z.number().int().nonnegative()
+        })
+        .strict(),
+    z
+        .object({
+            ...eventBase,
+            type: z.literal('shop.stock_rerolled'),
+            floor: z.number().int().positive(),
+            cost: z.number().int().positive(),
+            shopGoldBefore: z.number().int().nonnegative(),
+            shopGoldAfter: z.number().int().nonnegative(),
+            rerollsBefore: z.number().int().nonnegative(),
+            rerollsAfter: z.number().int().positive(),
+            offerIdsBefore: z.array(z.string().min(1).max(160)).max(16),
+            offerIdsAfter: z.array(z.string().min(1).max(160)).min(1).max(16),
+            itemIdsBefore: z.array(z.string().min(1).max(120)).max(16),
+            itemIdsAfter: z.array(z.string().min(1).max(120)).min(1).max(16)
         })
         .strict(),
     z
@@ -1731,6 +2117,22 @@ export const gameplayEventSchema = z.discriminatedUnion('type', [
     z
         .object({
             ...eventBase,
+            type: z.literal('side_room.opened'),
+            roomId: z.string().min(1).max(220),
+            roomKind: z.enum(['rest_shrine', 'run_event', 'bonus_reward']),
+            routeType: z.enum(['safe', 'greed', 'mystery']),
+            nodeKind: z.enum(['combat', 'shop', 'elite', 'rest', 'event', 'treasure']),
+            floor: z.number().int().positive(),
+            payloadKind: z.enum(['rest_heal', 'event_choice', 'bonus_reward']),
+            payloadId: z.string().min(1).max(240),
+            eventKey: z.string().min(1).max(220).nullable(),
+            choiceIds: z.array(z.string().min(1).max(200)).max(16),
+            primaryChoiceId: z.string().min(1).max(200).nullable()
+        })
+        .strict(),
+    z
+        .object({
+            ...eventBase,
             type: z.literal('side_room.resolved'),
             roomId: z.string().min(1).max(220),
             roomKind: z.enum(['rest_shrine', 'run_event', 'bonus_reward']),
@@ -1763,6 +2165,26 @@ export const gameplayEventSchema = z.discriminatedUnion('type', [
             ironKeysAfter: z.number().int().nonnegative(),
             rewardPerkCountBefore: z.number().int().nonnegative(),
             rewardPerkCountAfter: z.number().int().nonnegative()
+        })
+        .strict(),
+    z
+        .object({
+            ...eventBase,
+            type: z.literal('relic.offer_opened'),
+            outcome: z.enum(['opened', 'milestone_skipped']),
+            clearedFloor: z.number().int().positive(),
+            offerTier: z.number().int().positive(),
+            options: z.array(z.enum(GAMEPLAY_RELIC_IDS)).max(3),
+            picksRemaining: z.number().int().nonnegative().max(3),
+            availableServiceIds: z.array(z.enum(GAMEPLAY_RELIC_OFFER_SERVICE_IDS)).max(3),
+            contextualReasonRelicIds: z.array(z.enum(GAMEPLAY_RELIC_IDS)).max(3),
+            bonusPicksBefore: z.number().int().nonnegative(),
+            bonusPicksAfter: z.number().int().nonnegative(),
+            favorBonusPicksBefore: z.number().int().nonnegative(),
+            favorBonusPicksAfter: z.number().int().nonnegative(),
+            favorBonusPicksInOffer: z.number().int().nonnegative().max(2),
+            relicTiersBefore: z.number().int().nonnegative(),
+            relicTiersAfter: z.number().int().nonnegative()
         })
         .strict(),
     z
@@ -1809,8 +2231,18 @@ export const gameplayEventSchema = z.discriminatedUnion('type', [
             ...eventBase,
             type: z.literal('board.turn_resolved'),
             outcome: z.enum(['match', 'mismatch', 'gambit_match', 'gambit_mismatch']),
+            boardLevel: z.number().int().nonnegative(),
             flippedTileIds: z.array(z.string().min(1).max(160)).min(2).max(3),
+            floaterTileIds: z.array(z.string().min(1).max(160)).min(2).max(3),
             matchedPairKey: z.string().min(1).max(160).nullable(),
+            matchedFindableKind: z.enum(GAMEPLAY_FINDABLE_KINDS).nullable(),
+            findablesClaimedBefore: z.number().int().nonnegative(),
+            findablesClaimedAfter: z.number().int().nonnegative(),
+            findablesTotalBefore: z.number().int().nonnegative(),
+            findablesTotalAfter: z.number().int().nonnegative(),
+            announcement: boardTurnAnnouncementFactsSchema,
+            matchedRouteKind: z.enum(GAMEPLAY_ROUTE_SPECIAL_KINDS).nullable(),
+            traitInteractionTags: z.array(z.enum(TILE_TRAIT_INTERACTION_TAGS)),
             boardComplete: z.boolean(),
             statusBefore: z.enum(['memorize', 'playing', 'resolving', 'paused', 'levelComplete', 'gameOver']),
             statusAfter: z.enum(['memorize', 'playing', 'resolving', 'paused', 'levelComplete', 'gameOver']),
@@ -1821,7 +2253,15 @@ export const gameplayEventSchema = z.discriminatedUnion('type', [
             triesBefore: z.number().int().nonnegative(),
             triesAfter: z.number().int().nonnegative(),
             matchesBefore: z.number().int().nonnegative(),
-            matchesAfter: z.number().int().nonnegative()
+            matchesAfter: z.number().int().nonnegative(),
+            mismatchesBefore: z.number().int().nonnegative(),
+            mismatchesAfter: z.number().int().nonnegative(),
+            currentStreakBefore: z.number().int().nonnegative(),
+            currentStreakAfter: z.number().int().nonnegative(),
+            comboShardsBefore: z.number().int().nonnegative(),
+            comboShardsAfter: z.number().int().nonnegative(),
+            guardTokensBefore: z.number().int().nonnegative(),
+            guardTokensAfter: z.number().int().nonnegative()
         })
         .strict(),
     z
@@ -1878,6 +2318,8 @@ export const gameplayEventSchema = z.discriminatedUnion('type', [
             peekChargesAfter: z.number().int().nonnegative(),
             recallFocusBefore: z.number().int().nonnegative(),
             recallFocusAfter: z.number().int().nonnegative(),
+            forgottenTileCountBefore: z.number().int().nonnegative(),
+            forgottenTileCountAfter: z.number().int().nonnegative(),
             routeSpecialRevealed: z.boolean()
         })
         .strict(),
@@ -1915,6 +2357,77 @@ const definitionById = new Map(GAMEPLAY_CONTENT_DEFINITIONS.map((definition) => 
 export const getGameplayContentDefinition = (id: string): GameplayContentDefinition | null =>
     definitionById.get(id) ?? null;
 
+export const createGameplayMemorizeCompleteCommand = (commandId: string): GameplayCommand =>
+    gameplayCommandSchema.parse({
+        schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
+        commandId,
+        type: 'phase.memorize_complete'
+    });
+
+export const createGameplayGauntletExpireCommand = (
+    commandId: string,
+    observedAtMs: number
+): GameplayCommand =>
+    gameplayCommandSchema.parse({
+        schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
+        commandId,
+        type: 'run.gauntlet_expire',
+        observedAtMs
+    });
+
+export const createGameplayPauseCommand = (
+    commandId: string,
+    observedAtMs: number,
+    timerSnapshot: GameplayPauseTimerSnapshot
+): GameplayCommand =>
+    gameplayCommandSchema.parse({
+        schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
+        commandId,
+        type: 'run.pause',
+        observedAtMs,
+        timerSnapshot
+    });
+
+export const createGameplayResumeCommand = (
+    commandId: string,
+    observedAtMs: number
+): GameplayCommand =>
+    gameplayCommandSchema.parse({
+        schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
+        commandId,
+        type: 'run.resume',
+        observedAtMs
+    });
+
+export const createGameplayDebugRevealActivateCommand = (
+    commandId: string,
+    disableAchievementsOnDebug: boolean
+): GameplayCommand =>
+    gameplayCommandSchema.parse({
+        schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
+        commandId,
+        type: 'debug.reveal_activate',
+        disableAchievementsOnDebug
+    });
+
+export const createGameplayDebugRevealDeactivateCommand = (
+    commandId: string,
+    reason: GameplayDebugRevealDeactivationReason
+): GameplayCommand =>
+    gameplayCommandSchema.parse({
+        schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
+        commandId,
+        type: 'debug.reveal_deactivate',
+        reason
+    });
+
+export const createGameplayProgressionRepairCommand = (commandId: string): GameplayCommand =>
+    gameplayCommandSchema.parse({
+        schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
+        commandId,
+        type: 'run.progression_repair'
+    });
+
 export const createGameplayDefinitionCommand = (
     commandId: string,
     definitionId: string,
@@ -1940,6 +2453,27 @@ export const createGameplayPeekCommand = (commandId: string, targetTileId: strin
         commandId,
         type: 'board.peek',
         targetTileId
+    });
+
+export const createGameplayTileFlipCommand = (commandId: string, targetTileId: string): GameplayCommand =>
+    gameplayCommandSchema.parse({
+        schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
+        commandId,
+        type: 'board.tile_flip',
+        targetTileId
+    });
+
+export const createGameplayEnemyHazardContactCommand = (
+    commandId: string,
+    targetTileId: string,
+    advanceHazards: boolean
+): GameplayCommand =>
+    gameplayCommandSchema.parse({
+        schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
+        commandId,
+        type: 'enemy_hazard.contact',
+        targetTileId,
+        advanceHazards
     });
 
 export const createGameplayPinToggleCommand = (commandId: string, targetTileId: string): GameplayCommand =>
@@ -2031,6 +2565,13 @@ export const createGameplayShopPurchaseCommand = (commandId: string, offerId: st
         offerId
     });
 
+export const createGameplayShopRerollCommand = (commandId: string): GameplayCommand =>
+    gameplayCommandSchema.parse({
+        schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
+        commandId,
+        type: 'shop.reroll'
+    });
+
 export const createGameplayDungeonExitActivateCommand = (
     commandId: string,
     spend: 'none' | 'key' | 'master_key'
@@ -2090,6 +2631,13 @@ export const createGameplayRelicPickCommand = (commandId: string, relicId: Relic
         commandId,
         type: 'relic.pick',
         relicId
+    });
+
+export const createGameplayRelicOfferOpenCommand = (commandId: string): GameplayCommand =>
+    gameplayCommandSchema.parse({
+        schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
+        commandId,
+        type: 'relic.offer_open'
     });
 
 export const createGameplayRelicOfferServiceCommand = (

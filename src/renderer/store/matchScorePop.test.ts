@@ -1,15 +1,20 @@
 import { describe, expect, it } from 'vitest';
+import { getBoardTurnAnnouncementFacts } from '../../shared/board-turn-event-facts';
 import type { BoardState, RunState } from '../../shared/contracts';
+import type { GameplayEvent } from '../../shared/gameplay-core-contracts';
+import type { TileTraitInteractionTag } from '../../shared/tile-trait-interaction-copy';
 import {
     buildMatchScorePopImpactCue,
     buildMatchScorePopCrescendo,
-    buildMatchScorePopPayload,
+    buildMatchScorePopPayload as projectMatchScorePopPayload,
     buildMatchScorePopPayoffLaneMap,
     buildMatchScorePopPayoffSummary,
-    buildMismatchScorePopPayload,
+    buildMismatchScorePopPayload as projectMismatchScorePopPayload,
     getMatchScorePopChainMilestone,
     getMatchScorePopFeedbackProfile,
-    getMatchScorePopSignal
+    getMatchScorePopSignal,
+    type MatchScorePop,
+    type MismatchScorePop
 } from './matchScorePop';
 
 const minimalRun = (partial: Partial<RunState>): RunState =>
@@ -33,6 +38,99 @@ const minimalRun = (partial: Partial<RunState>): RunState =>
         board: null,
         ...partial
     }) as RunState;
+
+type BoardTurnResolvedEvent = Extract<GameplayEvent, { type: 'board.turn_resolved' }>;
+
+const nonNegativeInteger = (value: unknown): number =>
+    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
+
+const boardTurnResolvedEvent = (
+    run: RunState,
+    next: RunState,
+    options: {
+        outcome?: BoardTurnResolvedEvent['outcome'];
+        traitInteractionTags?: TileTraitInteractionTag[];
+    } = {}
+): BoardTurnResolvedEvent => {
+    const flippedTileIds = [...(run.board?.flippedTileIds ?? [])];
+    const outcome = options.outcome ?? 'match';
+    const isMatch = outcome === 'match' || outcome === 'gambit_match';
+    const matchedFloaterTileIds = isMatch && flippedTileIds.length === 3
+        ? flippedTileIds.flatMap((firstId, firstIndex) =>
+              flippedTileIds.slice(firstIndex + 1).flatMap((secondId) => {
+                  const firstTile = run.board?.tiles.find((tile) => tile.id === firstId);
+                  const secondTile = run.board?.tiles.find((tile) => tile.id === secondId);
+                  return firstTile?.pairKey != null && firstTile.pairKey === secondTile?.pairKey
+                      ? [[firstId, secondId]]
+                      : [];
+              })
+          )[0] ?? []
+        : flippedTileIds;
+    const floaterTileIds = isMatch ? matchedFloaterTileIds : flippedTileIds;
+    const firstTile = run.board?.tiles.find((tile) => tile.id === floaterTileIds[0]);
+    const secondTile = run.board?.tiles.find((tile) => tile.id === floaterTileIds[1]);
+    return {
+        schemaVersion: 1,
+        eventId: 'test-board-turn:0',
+        commandId: 'test-board-turn',
+        sequence: 0,
+        source: { kind: 'system', id: 'board_turn' },
+        type: 'board.turn_resolved',
+        outcome,
+        boardLevel: nonNegativeInteger(run.board?.level),
+        flippedTileIds,
+        floaterTileIds,
+        matchedPairKey: isMatch ? (firstTile?.pairKey ?? null) : null,
+        matchedFindableKind: isMatch ? (firstTile?.findableKind ?? secondTile?.findableKind ?? null) : null,
+        findablesClaimedBefore: nonNegativeInteger(run.findablesClaimedThisFloor),
+        findablesClaimedAfter: nonNegativeInteger(next.findablesClaimedThisFloor),
+        findablesTotalBefore: nonNegativeInteger(run.findablesTotalThisFloor),
+        findablesTotalAfter: nonNegativeInteger(next.findablesTotalThisFloor),
+        announcement: getBoardTurnAnnouncementFacts(run, next),
+        matchedRouteKind: isMatch
+            ? (firstTile?.routeSpecialKind ?? secondTile?.routeSpecialKind ?? firstTile?.routeCardKind ?? secondTile?.routeCardKind ?? null)
+            : null,
+        traitInteractionTags: options.traitInteractionTags ?? [],
+        boardComplete: false,
+        statusBefore: run.status ?? 'resolving',
+        statusAfter: next.status ?? 'playing',
+        livesBefore: nonNegativeInteger(run.lives),
+        livesAfter: nonNegativeInteger(next.lives),
+        totalScoreBefore: nonNegativeInteger(run.stats.totalScore),
+        totalScoreAfter: nonNegativeInteger(next.stats.totalScore),
+        triesBefore: nonNegativeInteger(run.stats.tries),
+        triesAfter: nonNegativeInteger(next.stats.tries),
+        matchesBefore: nonNegativeInteger(run.stats.matchesFound),
+        matchesAfter: nonNegativeInteger(next.stats.matchesFound),
+        mismatchesBefore: nonNegativeInteger(run.stats.mismatches),
+        mismatchesAfter: nonNegativeInteger(next.stats.mismatches),
+        currentStreakBefore: nonNegativeInteger(run.stats.currentStreak),
+        currentStreakAfter: nonNegativeInteger(next.stats.currentStreak),
+        comboShardsBefore: nonNegativeInteger(run.stats.comboShards),
+        comboShardsAfter: nonNegativeInteger(next.stats.comboShards),
+        guardTokensBefore: nonNegativeInteger(run.stats.guardTokens),
+        guardTokensAfter: nonNegativeInteger(next.stats.guardTokens)
+    };
+};
+
+const buildMatchScorePopPayload = (
+    run: RunState,
+    next: RunState,
+    keyNonce?: string,
+    event?: BoardTurnResolvedEvent
+): MatchScorePop | null =>
+    projectMatchScorePopPayload(event ?? boardTurnResolvedEvent(run, next), keyNonce);
+
+const buildMismatchScorePopPayload = (
+    run: RunState,
+    next: RunState,
+    keyNonce?: string,
+    event?: BoardTurnResolvedEvent
+): MismatchScorePop | null =>
+    projectMismatchScorePopPayload(
+        event ?? boardTurnResolvedEvent(run, next, { outcome: 'mismatch' }),
+        keyNonce
+    );
 
 describe('buildMatchScorePopPayload', () => {
     it('returns null when not a new match', () => {
@@ -609,7 +707,14 @@ describe('buildMatchScorePopPayload', () => {
                 currentStreak: 4
             }
         };
-        const pop = buildMatchScorePopPayload(run, next, 'stack-cashout');
+        const pop = buildMatchScorePopPayload(
+            run,
+            next,
+            'stack-cashout',
+            boardTurnResolvedEvent(run, next, {
+                traitInteractionTags: ['reward-perk:echo-conduit-double']
+            })
+        );
 
         expect(pop?.payoffSummary).toEqual({
             label: 'Super stack',
@@ -816,10 +921,11 @@ describe('buildMatchScorePopPayload', () => {
             ...run,
             stats: { ...run.stats, matchesFound: 3, totalScore: 60 }
         };
-        expect(buildMatchScorePopPayload(run, next, 'trait')?.traitInteractionTexts).toContain(
+        const event = boardTurnResolvedEvent(run, next, { traitInteractionTags: ['echo:sealed-combo'] });
+        expect(buildMatchScorePopPayload(run, next, 'trait', event)?.traitInteractionTexts).toContain(
             'Echo + Sealed: combo shard'
         );
-        expect(buildMatchScorePopPayload(run, next, 'trait')).toMatchObject({
+        expect(buildMatchScorePopPayload(run, next, 'trait', event)).toMatchObject({
             feedbackHeadline: 'Surge',
             feedbackIntensity: 'high',
             feedbackSignal: { label: 'Trait', tone: 'trait' },
@@ -853,7 +959,17 @@ describe('buildMatchScorePopPayload', () => {
             ...run,
             stats: { ...run.stats, matchesFound: 3, totalScore: 80, currentStreak: 3 }
         };
-        const pop = buildMatchScorePopPayload(run, next, 'perk-trait');
+        const pop = buildMatchScorePopPayload(
+            run,
+            next,
+            'perk-trait',
+            boardTurnResolvedEvent(run, next, {
+                traitInteractionTags: [
+                    'reward-perk:echo-conduit-double',
+                    'reward-perk:trait-streak-flash'
+                ]
+            })
+        );
 
         expect(pop?.traitInteractionTexts).toEqual(
             expect.arrayContaining([
@@ -1298,7 +1414,15 @@ describe('buildMismatchScorePopPayload', () => {
             ...run,
             stats: { ...run.stats, mismatches: 2 }
         };
-        expect(buildMismatchScorePopPayload(run, next, 'trait')?.traitInteractionTexts).toContain(
+        expect(buildMismatchScorePopPayload(
+            run,
+            next,
+            'trait',
+            boardTurnResolvedEvent(run, next, {
+                outcome: 'mismatch',
+                traitInteractionTags: ['cursed:volatile-danger']
+            })
+        )?.traitInteractionTexts).toContain(
             'Cursed + Volatile: recall pressure'
         );
     });

@@ -104,8 +104,10 @@ describe('level complete continuation executors', () => {
                 ]),
                 gameplayEventJournal: expect.arrayContaining([
                     expect.objectContaining({ type: 'route.choice_selected', choiceId }),
+                    expect.objectContaining({ type: 'side_room.opened' }),
                     expect.objectContaining({ type: 'feedback.requested', cue: 'route.choice.safe' })
-                ])
+                ]),
+                sideRoom: expect.objectContaining({ routeType: 'safe' })
             })
         }));
     });

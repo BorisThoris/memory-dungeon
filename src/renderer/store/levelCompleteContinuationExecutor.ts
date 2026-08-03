@@ -2,9 +2,6 @@ import type {
     RunState,
     ViewState
 } from '../../shared/contracts';
-import {
-    openRouteSideRoom
-} from '../../shared/route-rules';
 import { createGameplayRouteChooseCommand } from '../../shared/gameplay-core-contracts';
 import { reduceGameplayCommand } from '../../shared/gameplay-core';
 import { appendGameplayJournal } from '../../shared/gameplay-journal';
@@ -109,7 +106,7 @@ export const executeChooseRouteAndContinue = (
 
     deps.clearAllTimers();
     applyContinuationResult(
-        createLevelCompleteContinuationSurfaceResult(openRouteSideRoom(journaledRun), { includeSummaryShop: true }),
+        createLevelCompleteContinuationSurfaceResult(journaledRun, { includeSummaryShop: true }),
         deps
     );
 };

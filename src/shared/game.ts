@@ -23,7 +23,7 @@ export {
     getEnemyHazardMovementCandidateIds,
     type EnemyHazardPatternDefinition
 } from './dungeon-enemy-hazard-rules';
-import { createFlipTileTransition } from './flip-tile-transition';
+import { createApplyTileFlip } from './tile-flip-command-transition';
 import { createActivateDungeonExit, createApplyDestroyPair } from './floor-completion-transitions';
 import { createResolveBoardTurnTransition } from './board-turn-transition';
 import { createFinalizeLevelTransition } from './floor-clear-transition';
@@ -36,6 +36,7 @@ import {
 } from './gameplay-core-adapters';
 import { normalizeSessionStats } from './session-stats-rules';
 import { runNonNegativeInteger } from './run-number-guards';
+import type { GameplayEvent } from './gameplay-core-contracts';
 export {
     completeRelicPickAndAdvance
 } from './relic-pick-advance-rules';
@@ -265,11 +266,11 @@ export const finalizeLevel = createFinalizeLevelTransition({
     appendGameplayJournal
 });
 
-export const flipTile = createFlipTileTransition({ finalizeLevel });
+export const flipTile = createApplyTileFlip();
 
-export const applyDestroyPair = createApplyDestroyPair({ finalizeLevel });
+export const applyDestroyPair = createApplyDestroyPair();
 
-export const activateDungeonExit = createActivateDungeonExit({ finalizeLevel });
+export const activateDungeonExit = createActivateDungeonExit();
 
 
 
@@ -279,13 +280,32 @@ const resolveBoardTurnCompatibility = createResolveBoardTurnTransition({
     consumeWildMatch: consumeWildMatchThroughGameplayCore
 });
 
-export const resolveBoardTurn = (run: RunState, encorePairKeys: string[] = []): RunState => {
+export interface BoardTurnResolutionResult {
+    run: RunState;
+    event: Extract<GameplayEvent, { type: 'board.turn_resolved' }> | null;
+}
+
+export const resolveBoardTurnWithEvent = (
+    run: RunState,
+    encorePairKeys: string[] = []
+): BoardTurnResolutionResult => {
     const migrated = resolveBoardTurnThroughGameplayCore(
         run,
         encorePairKeys,
         `board-turn:${run.runSeed}:${run.board?.level ?? 0}:${runNonNegativeInteger(run.matchResolutionsThisFloor)}:${runNonNegativeInteger(normalizeSessionStats(run.stats).tries)}`
     );
-    return migrated.migrated
-        ? appendGameplayJournal(migrated.run, [migrated.command], migrated.events)
-        : resolveBoardTurnCompatibility(run, encorePairKeys);
+    if (!migrated.migrated) {
+        return { run: resolveBoardTurnCompatibility(run, encorePairKeys), event: null };
+    }
+    const event = [...migrated.events].reverse().find(
+        (item): item is Extract<GameplayEvent, { type: 'board.turn_resolved' }> =>
+            item.type === 'board.turn_resolved'
+    ) ?? null;
+    return {
+        run: appendGameplayJournal(migrated.run, [migrated.command], migrated.events),
+        event
+    };
 };
+
+export const resolveBoardTurn = (run: RunState, encorePairKeys: string[] = []): RunState =>
+    resolveBoardTurnWithEvent(run, encorePairKeys).run;

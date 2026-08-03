@@ -1,52 +1,16 @@
-import type { BoardState, RunState, Tile } from './contracts';
+import type { RunState } from './contracts';
 import { activateDungeonExit } from './dungeon-rules';
 import { revealDungeonExit } from './dungeon-reveal-rules';
 import { flipTile, resolveBoardTurn } from './game';
+import {
+    getPrimaryPlaythroughExitTile,
+    getUnresolvedPlayablePairGroups,
+    type PlaythroughSolverTrace
+} from './playthrough-solver-rules';
 import { repairRunProgressionSoftlocks } from './run-progression-repair';
-import { DECOY_PAIR_KEY, EXIT_PAIR_KEY, isSingletonUtilityPairKey } from './tile-identity';
+import { EXIT_PAIR_KEY } from './tile-identity';
 
-export type PlaythroughSolverStopReason =
-    | 'missing_board'
-    | 'terminal_status'
-    | 'level_complete'
-    | 'no_exit'
-    | 'exit_attempted'
-    | 'missing_pair_tile'
-    | 'no_progress'
-    | 'turn_guard';
-
-export interface PlaythroughSolverTrace {
-    run: RunState;
-    stopReason: PlaythroughSolverStopReason;
-    turns: number;
-    lastPairKey: string | null;
-    lastTileIds: string[];
-}
-
-const unresolvedPlayablePairGroups = (board: BoardState): Tile[][] => {
-    const groups = new Map<string, Tile[]>();
-    for (const tile of board.tiles) {
-        if (
-            tile.state === 'matched' ||
-            tile.state === 'removed' ||
-            tile.dungeonCardState === 'resolved' ||
-            isSingletonUtilityPairKey(tile.pairKey) ||
-            tile.pairKey === DECOY_PAIR_KEY
-        ) {
-            continue;
-        }
-        const group = groups.get(tile.pairKey) ?? [];
-        group.push(tile);
-        groups.set(tile.pairKey, group);
-    }
-    return [...groups.values()]
-        .filter((group) => group.length >= 2)
-        .sort((left, right) => {
-            const leftHasExposed = left.some((tile) => tile.state !== 'hidden') ? 0 : 1;
-            const rightHasExposed = right.some((tile) => tile.state !== 'hidden') ? 0 : 1;
-            return leftHasExposed - rightHasExposed;
-        });
-};
+export type { PlaythroughSolverStopReason, PlaythroughSolverTrace } from './playthrough-solver-rules';
 
 export const solveRunByExhaustingPlayablePairsWithTrace = (run: RunState, maxTurns = 160): PlaythroughSolverTrace => {
     let current = run;
@@ -66,11 +30,9 @@ export const solveRunByExhaustingPlayablePairsWithTrace = (run: RunState, maxTur
         if (current.status === 'gameOver') {
             return { run: current, stopReason: 'terminal_status', turns: guard, lastPairKey: null, lastTileIds: [] };
         }
-        const pair = unresolvedPlayablePairGroups(current.board)[0] ?? null;
+        const pair = getUnresolvedPlayablePairGroups(current.board)[0] ?? null;
         if (!pair) {
-            const exit = current.board.dungeonExitTileId
-                ? current.board.tiles.find((tile) => tile.id === current.board?.dungeonExitTileId)
-                : current.board.tiles.find((tile) => tile.pairKey === EXIT_PAIR_KEY);
+            const exit = getPrimaryPlaythroughExitTile(current.board);
             if (!exit) {
                 return { run: current, stopReason: 'no_exit', turns: guard, lastPairKey: null, lastTileIds: [] };
             }

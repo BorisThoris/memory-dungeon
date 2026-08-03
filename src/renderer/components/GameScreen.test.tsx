@@ -5,6 +5,8 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { BoardState, RunState, Tile } from '../../shared/contracts';
 import { EXIT_PAIR_KEY, ROOM_PAIR_KEY, SHOP_PAIR_KEY } from '../../shared/dungeon-rules';
 import { createNewRun, finishMemorizePhase } from '../../shared/game-core';
+import { gameplayEventSchema } from '../../shared/gameplay-core-contracts';
+import { createBoardTurnAnnouncementFactsFixture } from '../../shared/test/gameplay-event-fixtures';
 import { applyEnemyHazardClick } from '../../shared/turn-resolution';
 import { getPlayableOnboardingStep } from '../../shared/playable-onboarding';
 import { createDungeonRunMapState, revealDungeonChoices, selectDungeonNode } from '../../shared/run-map';
@@ -46,7 +48,6 @@ const uiSfxMocks = vi.hoisted(() => ({
 }));
 
 const hudAnnouncementMock = vi.hoisted(() => ({
-    claimedFindableKind: null as 'shard_spark' | null,
     message: '',
     priority: 'info' as 'info' | 'error',
     queuePoliteAnnouncement: vi.fn(),
@@ -153,7 +154,6 @@ vi.mock('../hooks/useDistractionChannelTick', () => ({
     useDistractionChannelTick: () => 0
 }));
 vi.mock('../hooks/useHudPoliteLiveAnnouncement', () => ({
-    detectClaimedFindableKind: () => hudAnnouncementMock.claimedFindableKind,
     formatHudActionFeedbackText: hudAnnouncementMock.formatHudActionFeedbackText,
     getFindableToastText: hudAnnouncementMock.getFindableToastText,
     useHudPoliteLiveAnnouncement: () => ({
@@ -213,7 +213,6 @@ const levelCompleteRunFixture = (): RunState => {
 describe('GameScreen (OVR-014)', () => {
     beforeEach(() => {
         vi.clearAllMocks();
-        hudAnnouncementMock.claimedFindableKind = null;
         hudAnnouncementMock.message = '';
         hudAnnouncementMock.priority = 'info';
         gameLeftToolbarMock.props = null;
@@ -528,9 +527,57 @@ describe('GameScreen (OVR-014)', () => {
                 currentStreak: 3
             }
         } as RunState;
+        const pickupTurnEvent = gameplayEventSchema.parse({
+            schemaVersion: 1,
+            commandId: 'pickup-turn',
+            eventId: 'pickup-turn:0',
+            sequence: 0,
+            source: { kind: 'system', id: 'board_turn' },
+            type: 'board.turn_resolved',
+            outcome: 'match',
+            boardLevel: initialRun.board!.level,
+            flippedTileIds: ['a1', 'a2'],
+            floaterTileIds: ['a1', 'a2'],
+            matchedPairKey: 'A',
+            matchedFindableKind: 'shard_spark',
+            findablesClaimedBefore: 0,
+            findablesClaimedAfter: 1,
+            findablesTotalBefore: 2,
+            findablesTotalAfter: 2,
+            announcement: createBoardTurnAnnouncementFactsFixture({
+                matchedPairsAfter: 1,
+                pairCountBefore: initialRun.board!.pairCount,
+                pairCountAfter: initialRun.board!.pairCount
+            }),
+            matchedRouteKind: null,
+            traitInteractionTags: [],
+            boardComplete: false,
+            statusBefore: 'resolving',
+            statusAfter: 'playing',
+            livesBefore: 4,
+            livesAfter: 4,
+            totalScoreBefore: 0,
+            totalScoreAfter: 25,
+            triesBefore: 0,
+            triesAfter: 1,
+            matchesBefore: 0,
+            matchesAfter: 1,
+            mismatchesBefore: 0,
+            mismatchesAfter: 0,
+            currentStreakBefore: 2,
+            currentStreakAfter: 3,
+            comboShardsBefore: 0,
+            comboShardsAfter: 1,
+            guardTokensBefore: 0,
+            guardTokensAfter: 0
+        });
         const claimedRun = {
             ...initialRun,
             findablesClaimedThisFloor: 1,
+            gameplayEventJournal: [
+                ...(initialRun.gameplayEventJournal ?? []),
+                pickupTurnEvent
+            ],
             board: {
                 ...initialRun.board!,
                 tiles: [...initialRun.board!.tiles]
@@ -545,7 +592,6 @@ describe('GameScreen (OVR-014)', () => {
             </PlatformTiltProvider>
         );
 
-        hudAnnouncementMock.claimedFindableKind = 'shard_spark';
         rendered.rerender(
             <PlatformTiltProvider>
                 <NotificationHost>
@@ -557,7 +603,7 @@ describe('GameScreen (OVR-014)', () => {
         await waitFor(() => {
             const pickupToast = useNotificationStore
                 .getState()
-                .notifications.find((notification) => notification.stackKey === 'pickup:1:1');
+                .notifications.find((notification) => notification.stackKey === 'pickup:pickup-turn:0');
             expect(pickupToast?.message).toBe(
                 'Stack prime: Shard spark +1 combo shard. Double cashout: x4 +1 shard in 1 match. Pickups 1/2.'
             );
@@ -4536,6 +4582,17 @@ describe('GameScreen (OVR-014)', () => {
     it('shows relic draft title, progress, and Scholar footnote for a multi-pick offer', () => {
         const base = createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'puzzle' });
         const playing = finishMemorizePhase(base);
+        const relicOfferFeedback = gameplayEventSchema.parse({
+            schemaVersion: 1,
+            commandId: 'relic-offer-open-test',
+            eventId: 'relic-offer-open-test:0',
+            sequence: 0,
+            source: { kind: 'system', id: 'relic_offer' },
+            type: 'feedback.requested',
+            cue: 'relic.offer.opened',
+            message: 'Relic draft opened.',
+            tone: 'reward'
+        });
         const run: RunState = {
             ...playing,
             status: 'playing',
@@ -4561,7 +4618,8 @@ describe('GameScreen (OVR-014)', () => {
                 picksRemaining: 2,
                 pickRound: 0,
                 favorBonusPicks: 1
-            }
+            },
+            gameplayEventJournal: [relicOfferFeedback]
         };
 
         const { getByTestId, getByText } = render(

@@ -1,12 +1,10 @@
 import type { RunState } from '../../shared/contracts';
 import {
     EXIT_PAIR_KEY,
-    revealDungeonExit,
-    revealDungeonRoom,
-    revealDungeonShop,
     ROOM_PAIR_KEY,
     SHOP_PAIR_KEY
 } from '../../shared/dungeon-rules';
+import { flipTile } from '../../shared/turn-resolution';
 
 type DungeonTilePressSurfaceResult =
     | { kind: 'notDungeonTile' }
@@ -37,7 +35,7 @@ export const createDungeonTilePressSurfaceResult = ({
     tileId: string;
 }): DungeonTilePressSurfaceResult => {
     if (pairKey === EXIT_PAIR_KEY) {
-        const nextRun = revealDungeonExit(run, tileId);
+        const nextRun = flipTile(run, tileId);
         return {
             kind: 'exitPrompt',
             run: nextRun,
@@ -46,7 +44,7 @@ export const createDungeonTilePressSurfaceResult = ({
     }
 
     if (pairKey === SHOP_PAIR_KEY) {
-        const nextRun = revealDungeonShop(run, tileId);
+        const nextRun = flipTile(run, tileId);
         return nextRun === run || nextRun.shopOffers.length === 0
             ? { kind: 'ignored' }
             : {
@@ -57,7 +55,7 @@ export const createDungeonTilePressSurfaceResult = ({
     }
 
     if (pairKey === ROOM_PAIR_KEY) {
-        const nextRun = revealDungeonRoom(run, tileId);
+        const nextRun = flipTile(run, tileId);
         return nextRun === run
             ? { kind: 'ignored' }
             : {

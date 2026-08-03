@@ -252,6 +252,15 @@ describe('tile press controller', () => {
             expect(selected.patch.tileSwapFirstTileId).toBe(hazard.currentTileId);
             expect(selected.patch.run?.lives).toBe(run.lives - hazard.damage);
             expect(selected.patch.run?.enemyHazardHitsThisFloor).toBe(1);
+            expect(selected.patch.run?.gameplayCommandJournal).toEqual([
+                expect.objectContaining({
+                    type: 'enemy_hazard.contact',
+                    targetTileId: hazard.currentTileId
+                })
+            ]);
+            expect(selected.patch.run?.gameplayEventJournal).toEqual(expect.arrayContaining([
+                expect.objectContaining({ type: 'enemy_hazard.contacted', targetTileId: hazard.currentTileId })
+            ]));
         }
 
         const failed = createPlayingTilePressSurfaceResult({
@@ -269,6 +278,15 @@ describe('tile press controller', () => {
             expect(failed.patch.run?.enemyHazardHitsThisFloor).toBe(1);
             expect(failed.patch.tileSwapArmed).toBeUndefined();
             expect(failed.patch.tileSwapFirstTileId).toBeUndefined();
+            expect(failed.patch.run?.gameplayCommandJournal).toEqual([
+                expect.objectContaining({
+                    type: 'enemy_hazard.contact',
+                    targetTileId: hazard.currentTileId
+                })
+            ]);
+            expect(failed.patch.run?.gameplayEventJournal).toEqual(expect.arrayContaining([
+                expect.objectContaining({ type: 'enemy_hazard.contacted', targetTileId: hazard.currentTileId })
+            ]));
         }
     });
 });

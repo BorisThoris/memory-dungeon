@@ -31,10 +31,11 @@ export const executePauseRun = (deps: PauseResumeExecutorDeps): void => {
         return;
     }
 
+    const patch = createPausedRunSurfacePatch(run, deps.freezeRun);
     deps.clearAllTimers();
     deps.resumeUiSfxContext();
     deps.playPauseOpenSfx();
-    deps.setState(createPausedRunSurfacePatch(run, deps.freezeRun));
+    deps.setState(patch);
 };
 
 export const executeResumeRun = (deps: PauseResumeExecutorDeps): void => {

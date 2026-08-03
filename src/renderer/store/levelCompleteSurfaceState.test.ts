@@ -76,6 +76,13 @@ describe('levelCompleteSurfaceState', () => {
         });
         if (result.kind === 'relicOffer') {
             expect(result.patch.run.relicOffer).not.toBeNull();
+            expect(result.patch.run.gameplayCommandJournal).toEqual(expect.arrayContaining([
+                expect.objectContaining({ type: 'relic.offer_open' })
+            ]));
+            expect(result.patch.run.gameplayEventJournal).toEqual(expect.arrayContaining([
+                expect.objectContaining({ type: 'relic.offer_opened', outcome: 'opened' }),
+                expect.objectContaining({ type: 'feedback.requested', cue: 'relic.offer.opened' })
+            ]));
         }
     });
 
@@ -123,6 +130,18 @@ describe('levelCompleteSurfaceState', () => {
             expect(result.patch.run.board?.enemyHazards?.[0]).toMatchObject({ hp: 0, state: 'defeated' });
             expect(result.patch.run.dungeonEnemiesDefeated).toBe(1);
             expect(result.patch.run.enemyHazardsDefeatedThisFloor).toBe(1);
+            expect(result.patch.run.gameplayCommandJournal).toEqual(expect.arrayContaining([
+                expect.objectContaining({ type: 'run.progression_repair' }),
+                expect.objectContaining({ type: 'relic.offer_open' })
+            ]));
+            expect(result.patch.run.gameplayEventJournal).toEqual(expect.arrayContaining([
+                expect.objectContaining({
+                    type: 'run.progression_repaired',
+                    repairKinds: ['enemy_hazard'],
+                    enemyHazardIdsDefeated: ['stale-warden']
+                }),
+                expect.objectContaining({ type: 'feedback.requested', cue: 'safety.progression.repaired' })
+            ]));
         }
     });
 

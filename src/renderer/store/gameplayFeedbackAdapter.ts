@@ -6,19 +6,27 @@ import {
 
 export type GameplayFeedbackAudioCategory =
     | 'destroy-pair'
+    | 'debug-reveal'
     | 'flash-pair'
     | 'gambit-commit'
     | 'hazard-banish'
     | 'match-resolution'
+    | 'memorize-complete'
+    | 'pause'
     | 'peek'
+    | 'relic-offer'
     | 'relic-pick'
     | 'relic-service'
     | 'reward-claim'
+    | 'safety-repair'
     | 'shop-purchase'
+    | 'shop-reroll'
     | 'exit-activate'
     | 'floor-advance'
+    | 'gauntlet-expire'
     | 'parasite'
     | 'route-choice'
+    | 'resume'
     | 'side-room'
     | 'wild-match'
     | 'undo'
@@ -35,17 +43,43 @@ export interface GameplayFeedbackPresentation {
     tone: Extract<GameplayEvent, { type: 'feedback.requested' }>['tone'];
 }
 
+export type BoardTurnResolvedEvent = Extract<GameplayEvent, { type: 'board.turn_resolved' }>;
+
 const parseEvents = (value: unknown): GameplayEvent[] =>
     (Array.isArray(value) ? value : []).flatMap((entry) => {
         const parsed = gameplayEventSchema.safeParse(entry);
         return parsed.success ? [parsed.data] : [];
     });
 
+export const projectBoardTurnResolvedEvents = (value: unknown): BoardTurnResolvedEvent[] =>
+    parseEvents(value).filter(
+        (event): event is BoardTurnResolvedEvent => event.type === 'board.turn_resolved'
+    );
+
+export const getLatestBoardTurnResolvedEvent = (
+    run: Pick<RunState, 'gameplayEventJournal'> | null | undefined
+): BoardTurnResolvedEvent | null => projectBoardTurnResolvedEvents(run?.gameplayEventJournal).at(-1) ?? null;
+
 const audioCategoryFor = (
     feedback: Extract<GameplayEvent, { type: 'feedback.requested' }>
 ): GameplayFeedbackAudioCategory => {
     if (feedback.source.kind === 'power' && feedback.cue === 'power.peek.used') {
         return 'peek';
+    }
+    if (feedback.source.kind === 'system' && feedback.cue === 'phase.memorize.completed') {
+        return 'memorize-complete';
+    }
+    if (feedback.source.kind === 'system' && feedback.cue === 'mode.gauntlet.expired') {
+        return 'gauntlet-expire';
+    }
+    if (feedback.source.kind === 'system' && feedback.source.id === 'run_lifecycle') {
+        return feedback.cue === 'run.paused' ? 'pause' : 'resume';
+    }
+    if (feedback.source.kind === 'system' && feedback.source.id === 'debug_reveal') {
+        return 'debug-reveal';
+    }
+    if (feedback.source.kind === 'system' && feedback.source.id === 'progression_safety') {
+        return 'safety-repair';
     }
     if (feedback.source.kind === 'power' && feedback.cue === 'power.destroy_pair.used') {
         return 'destroy-pair';
@@ -61,6 +95,9 @@ const audioCategoryFor = (
     }
     if (feedback.source.kind === 'reward_perk' && feedback.source.id === 'hazard_banish_per_floor') {
         return 'hazard-banish';
+    }
+    if (feedback.source.kind === 'shop' && feedback.cue === 'shop.stock.rerolled') {
+        return 'shop-reroll';
     }
     if (feedback.source.kind === 'shop') {
         return 'shop-purchase';
@@ -79,6 +116,13 @@ const audioCategoryFor = (
     }
     if (feedback.source.kind === 'system' && feedback.source.id === 'route_side_room') {
         return 'side-room';
+    }
+    if (
+        feedback.source.kind === 'system' &&
+        feedback.source.id === 'relic_offer' &&
+        feedback.cue === 'relic.offer.opened'
+    ) {
+        return 'relic-offer';
     }
     if (feedback.source.kind === 'system' && feedback.source.id === 'relic_offer') {
         return 'relic-service';
@@ -140,6 +184,21 @@ export const projectGameplayFeedback = (value: unknown): GameplayFeedbackPresent
 export const getLatestGameplayFeedback = (
     run: Pick<RunState, 'gameplayEventJournal'> | null | undefined
 ): GameplayFeedbackPresentation | null => projectGameplayFeedback(run?.gameplayEventJournal).at(-1) ?? null;
+
+/**
+ * Returns every feedback event emitted by the latest command that requested
+ * feedback. Compound commands intentionally keep journal order so renderers do
+ * not silently discard an earlier consequence in favor of the final summary.
+ */
+export const getLatestGameplayFeedbackBatch = (
+    run: Pick<RunState, 'gameplayEventJournal'> | null | undefined
+): GameplayFeedbackPresentation[] => {
+    const feedback = projectGameplayFeedback(run?.gameplayEventJournal);
+    const latestCommandId = feedback.at(-1)?.commandId;
+    return latestCommandId
+        ? feedback.filter((presentation) => presentation.commandId === latestCommandId)
+        : [];
+};
 
 export const getNewGameplayFeedback = (
     before: Pick<RunState, 'gameplayEventJournal'> | null | undefined,

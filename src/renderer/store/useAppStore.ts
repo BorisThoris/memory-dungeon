@@ -6,7 +6,7 @@ import type {
     SaveData,
     SubscreenReturnView
 } from '../../shared/contracts';
-import { isGauntletExpired } from '../../shared/game-core';
+import { expireGauntletThroughGameplayCore } from '../../shared/gameplay-core-adapters';
 import { trackEvent } from '../../shared/telemetry';
 import { executeRunStartRequest } from './runStartExecutor';
 import type { RunStartRequest } from './runStartState';
@@ -103,6 +103,7 @@ import {
     playPauseOpenSfx,
     playPauseResumeSfx,
     playRunStartSfx,
+    playUiConfirmSfx,
     resumeUiSfxContext
 } from '../audio/uiSfx';
 import type { StoreNavigationAction } from './navigationModel';
@@ -154,6 +155,20 @@ const applyResolveBoardTurn = (run: RunState): void => runResolutionController.a
 const applyResolvedRun = (resolvedRun: RunState): void => runResolutionController.applyResolvedRun(resolvedRun);
 const applyImmediateGameOverFromTilePress = (resolvedRun: RunState): void =>
     runResolutionController.applyImmediateGameOverFromTilePress(resolvedRun);
+
+const applyGauntletExpiryAtInputBoundary = (run: RunState): boolean => {
+    const observedAtMs = Date.now();
+    const result = expireGauntletThroughGameplayCore(
+        run,
+        observedAtMs,
+        `gauntlet-expire:${run.runSeed}:${run.gauntletDeadlineMs ?? 'none'}:${observedAtMs}`
+    );
+    if (!result.accepted) {
+        return false;
+    }
+    applyResolvedRun(result.run);
+    return true;
+};
 
 const runTimerController = createRunTimerController({
     getState: () => useAppStore.getState(),
@@ -512,8 +527,7 @@ export const useAppStore = create<AppState>((set, get) => ({
             run.board.flippedTileIds.length === 2;
 
         if (gambitThirdPick) {
-            if (isGauntletExpired(run)) {
-                applyResolvedRun({ ...run, status: 'gameOver', lives: 0 });
+            if (applyGauntletExpiryAtInputBoundary(run)) {
                 return;
             }
             const result = createGambitThirdPickPressResult(run, tileId);
@@ -536,6 +550,10 @@ export const useAppStore = create<AppState>((set, get) => ({
                     playGambitCommitSfx(g);
                 }
             }
+            if (result.playTrapSfx) {
+                void resumeAudioContext();
+                playTrapSfx(sfxGainFromStore());
+            }
             if (result.kind === 'flipGameOver') {
                 applyImmediateGameOverFromTilePress(result.run);
                 return;
@@ -551,8 +569,7 @@ export const useAppStore = create<AppState>((set, get) => ({
             return;
         }
 
-        if (isGauntletExpired(run)) {
-            applyResolvedRun({ ...run, status: 'gameOver', lives: 0 });
+        if (applyGauntletExpiryAtInputBoundary(run)) {
             return;
         }
 
@@ -788,6 +805,10 @@ export const useAppStore = create<AppState>((set, get) => ({
         if (result.kind === 'ignored') {
             return;
         }
+        if (result.feedback?.audioCategory === 'shop-purchase') {
+            void resumeUiSfxContext();
+            playUiConfirmSfx(sfxGainFromStore());
+        }
         set(result.patch);
     },
 
@@ -800,6 +821,10 @@ export const useAppStore = create<AppState>((set, get) => ({
         });
         if (result.kind === 'ignored') {
             return;
+        }
+        if (result.feedback?.audioCategory === 'shop-reroll') {
+            void resumeUiSfxContext();
+            playUiConfirmSfx(sfxGainFromStore());
         }
         set(result.patch);
     },

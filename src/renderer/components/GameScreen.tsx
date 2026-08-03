@@ -23,7 +23,6 @@ import {
     canOfferEndlessRiskWager
 } from '../../shared/objective-rules';
 import { getRouteChoiceAvailability, routeChoicesForResult } from '../../shared/route-rules';
-import { getTraitRouteObjectiveStatus } from '../../shared/trait-route-objectives';
 import {
     canRegionShuffle,
     canRegionShuffleRow,
@@ -31,8 +30,7 @@ import {
 } from '../../shared/board-powers';
 import {
     getDungeonBoardPresentation,
-    getDungeonExitStatus,
-    getDungeonObjectiveStatus
+    getDungeonExitStatus
 } from '../../shared/dungeon-rules';
 import { getMemoryRecallFeedback } from '../../shared/memory-recall-feedback';
 import { getDungeonMapPresentation, getDungeonRouteDecisionPresentation, getRepairedSelectedDungeonNode } from '../../shared/run-map';
@@ -56,7 +54,6 @@ import { useDistractionChannelTick } from '../hooks/useDistractionChannelTick';
 import { useEffectiveReducedMotion } from '../hooks/useEffectiveReducedMotion';
 import { useLatestRef } from '../hooks/useLatestRef';
 import {
-    detectClaimedFindableKind,
     formatHudActionFeedbackText,
     getFindableToastText,
     useHudPoliteLiveAnnouncement
@@ -74,7 +71,11 @@ import { GAMEPLAY_SHORTCUT_ROWS } from '../keyboard/gameplayShortcuts';
 import { usePlatformTiltField } from '../platformTilt/usePlatformTiltField';
 import { StatTile } from '../ui';
 import { useAppStore } from '../store/useAppStore';
-import { getLatestGameplayFeedback } from '../store/gameplayFeedbackAdapter';
+import {
+    getLatestBoardTurnResolvedEvent,
+    getLatestGameplayFeedbackBatch,
+    type BoardTurnResolvedEvent
+} from '../store/gameplayFeedbackAdapter';
 import GameLeftToolbar from './GameLeftToolbar';
 import { GameScreenActionFeedbackRail } from './GameScreenActionFeedbackRail';
 import { GameScreenDungeonRunStrip } from './GameScreenDungeonRunStrip';
@@ -1303,23 +1304,21 @@ const getFloorClearPayoffStackSignal = (
     };
 };
 
-type PickupStackToastState = Pick<RunState, 'findablesClaimedThisFloor' | 'findablesTotalThisFloor' | 'lives'> & {
-    comboShards: number;
-    currentStreak: number;
-};
-
 const getPickupStackToastText = (
-    pickupState: PickupStackToastState,
-    claimedKind: Parameters<typeof getFindableToastText>[0]
-): string => {
+    turnEvent: BoardTurnResolvedEvent
+): string | null => {
+    const claimedKind = turnEvent.matchedFindableKind;
+    if (claimedKind == null) {
+        return null;
+    }
     const baseText = getFindableToastText(claimedKind);
     const nextReward = getChainRewardForecastCues(
-        runNonNegativeInteger(pickupState.currentStreak),
-        runNonNegativeInteger(pickupState.comboShards),
-        runNonNegativeInteger(pickupState.lives)
+        turnEvent.currentStreakAfter,
+        turnEvent.comboShardsAfter,
+        turnEvent.livesAfter
     )[0];
-    const pickupClaimed = runNonNegativeInteger(pickupState.findablesClaimedThisFloor);
-    const pickupTotal = runNonNegativeInteger(pickupState.findablesTotalThisFloor);
+    const pickupClaimed = turnEvent.findablesClaimedAfter;
+    const pickupTotal = turnEvent.findablesTotalAfter;
     const pickupProgress =
         pickupTotal > 0
             ? `Pickups ${pickupClaimed}/${pickupTotal}.`
@@ -2982,10 +2981,9 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         );
     }, [boardFloaterMismatchRecoveryCrescendo, boardFloaterPayload, shuffleSfxGain]);
     const seenAchievementToastIdsRef = useRef<Set<string>>(new Set());
-    const pickupToastSnapshotRef = useRef<{
-        level: number;
-        claimed: number;
-        tiles: NonNullable<RunState['board']>['tiles'];
+    const pickupToastEventRef = useRef<{
+        runSeed: number;
+        eventId: string | null;
     } | null>(null);
     /** OVR-014: queue unlock toasts while the floor-cleared dialog is up; `continueToNextLevel` clears `newlyUnlockedAchievements` before the next paint. */
     const pendingAchievementToastIdsRef = useRef<AchievementId[]>([]);
@@ -3031,7 +3029,16 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const relicDraftProgressText = run.relicOffer ? relicDraftProgressLine(run.relicOffer) : null;
     const relicBonusFootnoteLines = run.relicOffer ? buildRelicDraftBonusFootnoteLines(run) : [];
     const relicDraftPayoffEngineSignal = run.relicOffer ? getInventoryPayoffEngineSignal(run) : null;
-    const previousRelicOfferOpenRef = useRef(false);
+    const gameplayEventJournal = run.gameplayEventJournal;
+    const typedGameplayFeedbackBatch = useMemo(
+        () => getLatestGameplayFeedbackBatch({ gameplayEventJournal }),
+        [gameplayEventJournal]
+    );
+    const typedBoardTurnEvent = useMemo(
+        () => getLatestBoardTurnResolvedEvent({ gameplayEventJournal }),
+        [gameplayEventJournal]
+    );
+    const previousRelicOfferOpenEventIdRef = useRef<string | null>(null);
     const previousCountdownPressureSecondRef = useRef<number | null>(null);
     const announcedTraitRouteSetupKeyRef = useRef<string | null>(null);
     const playMenuOpen = useCallback((): void => {
@@ -3080,13 +3087,20 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     });
 
     useEffect(() => {
-        const relicOfferOpen = Boolean(run.relicOffer);
-        if (relicOfferOpen && !previousRelicOfferOpenRef.current) {
-            void resumeAudioContext();
-            playRelicOfferOpenSfx(shuffleSfxGain);
+        const relicOfferOpenFeedback = typedGameplayFeedbackBatch.find(
+            (feedback) => feedback.audioCategory === 'relic-offer'
+        );
+        if (
+            !run.relicOffer ||
+            !relicOfferOpenFeedback ||
+            relicOfferOpenFeedback.eventId === previousRelicOfferOpenEventIdRef.current
+        ) {
+            return;
         }
-        previousRelicOfferOpenRef.current = relicOfferOpen;
-    }, [run.relicOffer, shuffleSfxGain]);
+        previousRelicOfferOpenEventIdRef.current = relicOfferOpenFeedback.eventId;
+        void resumeAudioContext();
+        playRelicOfferOpenSfx(shuffleSfxGain);
+    }, [run.relicOffer, shuffleSfxGain, typedGameplayFeedbackBatch]);
 
     /** Pause / resume: toolbar control removed — **P** toggles pause when gameplay is active (not when meta overlays suppress status). */
     useEffect(() => {
@@ -3236,55 +3250,47 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     ]);
 
     useEffect(() => {
-        if (!run.board) {
-            pickupToastSnapshotRef.current = null;
+        const previousEvent = pickupToastEventRef.current;
+        if (!previousEvent || previousEvent.runSeed !== run.runSeed) {
+            pickupToastEventRef.current = {
+                runSeed: run.runSeed,
+                eventId: typedBoardTurnEvent?.eventId ?? null
+            };
+            return;
+        }
+        if (!typedBoardTurnEvent || typedBoardTurnEvent.eventId === previousEvent.eventId) {
             return;
         }
 
-        const nextSnapshot = {
-            level: run.board.level,
-            claimed: run.findablesClaimedThisFloor,
-            tiles: run.board.tiles
+        pickupToastEventRef.current = {
+            runSeed: run.runSeed,
+            eventId: typedBoardTurnEvent.eventId
         };
-        const previousSnapshot = pickupToastSnapshotRef.current;
-
         if (
-            previousSnapshot &&
-            previousSnapshot.level === run.board.level &&
-            run.findablesClaimedThisFloor > previousSnapshot.claimed
+            !run.board ||
+            typedBoardTurnEvent.boardLevel !== run.board.level ||
+            typedBoardTurnEvent.matchedFindableKind == null
         ) {
-            const claimedKind = detectClaimedFindableKind(previousSnapshot.tiles, run.board.tiles);
-            if (claimedKind != null) {
-                const { showInfo } = useNotificationStore.getState();
-                const infoDuration = reduceMotion ? 2200 : 3200;
-                showInfo(
-                    getPickupStackToastText(
-                        {
-                            comboShards: run.stats.comboShards,
-                            currentStreak: run.stats.currentStreak,
-                            findablesClaimedThisFloor: run.findablesClaimedThisFloor,
-                            findablesTotalThisFloor: run.findablesTotalThisFloor,
-                            lives: run.lives
-                        },
-                        claimedKind
-                    ),
-                    infoDuration,
-                    {
-                    stackKey: `pickup:${run.board.level}:${run.findablesClaimedThisFloor}`
-                    }
-                );
-            }
+            return;
         }
 
-        pickupToastSnapshotRef.current = nextSnapshot;
+        const pickupToastText = getPickupStackToastText(typedBoardTurnEvent);
+        if (pickupToastText == null) {
+            return;
+        }
+
+        const { showInfo } = useNotificationStore.getState();
+        const infoDuration = reduceMotion ? 2200 : 3200;
+        showInfo(
+            pickupToastText,
+            infoDuration,
+            { stackKey: `pickup:${typedBoardTurnEvent.eventId}` }
+        );
     }, [
         run.board,
-        run.findablesClaimedThisFloor,
-        run.findablesTotalThisFloor,
-        run.lives,
-        run.stats.comboShards,
-        run.stats.currentStreak,
-        reduceMotion
+        run.runSeed,
+        reduceMotion,
+        typedBoardTurnEvent
     ]);
 
     /** Persist `powersFtueSeen` once the player leaves tutorial floors (pair markers no longer needed). */
@@ -3716,9 +3722,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     );
     const dungeonPresentation = getDungeonBoardPresentation(run);
     const activeDungeonPanel = run.status !== 'levelComplete' && dungeonPresentation.visible ? dungeonPresentation : null;
-    const activeDungeonObjectiveStatus = activeDungeonPanel ? getDungeonObjectiveStatus(run) : null;
-    const traitRouteObjectiveStatus = getTraitRouteObjectiveStatus(run);
-    const liveObjectiveStatus = activeDungeonObjectiveStatus ?? traitRouteObjectiveStatus;
     const armedRewardPerkCue = getPrimaryRewardPerkReadinessRow(run);
     const dungeonCombatLogRows = activeDungeonPanel ? getDungeonCombatLogRows(run) : [];
     const nextFloorPreview =
@@ -3808,75 +3811,20 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         void resumeAudioContext();
         playCountdownPressureSfx(shuffleSfxGain);
     }, [gauntletActive, gauntletRemainingMs, run.status, shuffleSfxGain]);
-    const typedGameplayFeedback = useMemo(
-        () => getLatestGameplayFeedback(run),
-        [run.gameplayEventJournal]
-    );
     const {
         message: politeHudAnnouncement,
         priority: politeHudAnnouncementPriority,
         queuePoliteAnnouncement
     } = useHudPoliteLiveAnnouncement({
-        gameplayFeedback: typedGameplayFeedback,
+        boardTurnEvent: typedBoardTurnEvent,
+        gameplayFeedbackBatch: typedGameplayFeedbackBatch,
         boardLevel: run.board?.level ?? null,
-        boardTiles: run.board?.tiles ?? [],
-        findablesClaimedThisFloor: run.findablesClaimedThisFloor,
         gauntletActive,
         gauntletRemainingMs,
-        lives: run.lives,
-        guardTokens: run.stats.guardTokens,
-        comboShards: run.stats.comboShards,
-        shopGold: run.shopGold,
-        shuffleCharges: run.shuffleCharges,
-        regionShuffleCharges: run.regionShuffleCharges,
-        stickyBlockIndex: run.stickyBlockIndex,
-        parasiteFloors: run.parasiteFloors,
-        parasiteWardRemaining: run.parasiteWardRemaining,
-        scoreParasiteActive: run.activeMutators.includes('score_parasite'),
-        matchedPairs: run.board?.matchedPairs ?? 0,
-        pairCount: run.board?.pairCount ?? 0,
-        mismatches: run.stats.mismatches,
-        tileTraitMatches: run.stats.tileTraitMatches,
-        tileTraitMismatches: run.stats.tileTraitMismatches,
-        volatileTraitShuffles: run.stats.volatileTraitShuffles,
-        objectiveProgress: liveObjectiveStatus?.progress,
-        objectiveRequired: liveObjectiveStatus?.required,
-        objectiveLabel: liveObjectiveStatus?.label,
-        recallFocus: run.recallFocus,
-        recallFocusMax: RECALL_FOCUS_MAX,
-        recallMatchesThisFloor: run.recallMatchesThisFloor,
-        recallMistakesThisFloor: run.recallMistakesThisFloor,
-        recallBonusScoreThisFloor: run.recallBonusScoreThisFloor,
-        forgottenTileCountThisFloor: run.forgottenTileIdsThisFloor.length,
-        chainMatchStreak: run.stats.currentStreak,
-        chainAnnounceActive: run.status === 'playing',
         gambitThirdPickActive,
         gambitOpportunityFlippedIds:
             gambitThirdPickActive && run.board ? run.board.flippedTileIds : null,
-        reduceMotion,
-        hazardTileTriggersThisFloor: run.hazardTileTriggersThisFloor,
-        hazardShuffleSnaresThisFloor: run.hazardShuffleSnaresThisFloor,
-        hazardCascadeCachesThisFloor: run.hazardCascadeCachesThisFloor,
-        hazardMirrorDecoysThisFloor: run.hazardMirrorDecoysThisFloor,
-        hazardFragileCacheClaimsThisFloor: run.hazardFragileCacheClaimsThisFloor,
-        hazardFragileCacheBreaksThisFloor: run.hazardFragileCacheBreaksThisFloor,
-        hazardTollCachesThisFloor: run.hazardTollCachesThisFloor,
-        hazardFuseCachesThisFloor: run.hazardFuseCachesThisFloor,
-        hazardFuseCacheExpiredClaimsThisFloor: run.hazardFuseCacheExpiredClaimsThisFloor,
-        lanternWardScoutsThisFloor: run.lanternWardScoutsThisFloor,
-        omenSealScoutsThisFloor: run.omenSealScoutsThisFloor,
-        mimicCacheClaimsThisFloor: run.mimicCacheClaimsThisFloor,
-        mimicCacheBitesThisFloor: run.mimicCacheBitesThisFloor,
-        mimicCacheGuardBitesThisFloor: run.mimicCacheGuardBitesThisFloor,
-        anchorSealUsesThisFloor: run.anchorSealUsesThisFloor,
-        loadedGatewayPlansThisFloor: run.loadedGatewayPlansThisFloor,
-        catalystAltarUpgradesThisFloor: run.catalystAltarUpgradesThisFloor,
-        parasiteVesselConversionsThisFloor: run.parasiteVesselConversionsThisFloor,
-        pinLatticeRewardsThisFloor: run.pinLatticeRewardsThisFloor,
-        safeHazardWardsUsedThisFloor: run.safeHazardWardsUsedThisFloor,
-        dungeonEnemiesDefeatedThisFloor: run.dungeonEnemiesDefeatedThisFloor,
-        enemyHazardHitsThisFloor: run.enemyHazardHitsThisFloor,
-        enemyHazardsDefeatedThisFloor: run.enemyHazardsDefeatedThisFloor
+        reduceMotion
     });
     const actionFeedbackAnnouncement = boardFloaterLiveText || politeHudAnnouncement;
     const actionFeedbackPriority =

@@ -56,6 +56,7 @@ describe('sim-endless CSV output', () => {
         expect(lines.some((line) => line.startsWith('fairnessIssue,'))).toBe(false);
         expect(lines.some((line) => line.startsWith('topologyIssue,'))).toBe(false);
         expect(lines.some((line) => line.startsWith('playableMetric,checkedFloors,'))).toBe(true);
+        expect(lines).toContain('playableMetric,replayCheckedFloors,24');
         expect(lines.some((line) => line.startsWith('playableMetric,lockedExitFloors,'))).toBe(true);
         expect(lines.some((line) => line.startsWith('dungeonMetric,lockedCacheRoomFloors,'))).toBe(true);
         expect(lines.some((line) => line.startsWith('dungeonMetric,typedLockedCacheRoomFloors,'))).toBe(true);
@@ -76,6 +77,7 @@ describe('sim-endless CSV output', () => {
         expect(summary).toContain('- Topology gates:');
         expect(summary).toContain('issue types (none).');
         expect(summary).toContain('- Playable gates:');
+        expect(summary).toContain('24 replay-verified floors');
         expect(summary).toContain('locked-exit floors');
         expect(summary).toContain('issue floors (none).');
         expect(summary).toContain('- Dungeon room gates:');
@@ -107,6 +109,7 @@ describe('sim-endless CSV output', () => {
             topologyIssueFloors: 0,
             topologyIssueTypes: 0,
             lockedCacheRoomFloors: expect.any(Number),
+            coreReplayCheckedFloors: expect.any(Number),
             playableFailureDetails: [],
             playableIssueFloors: 0,
             playableIssueReasons: [],
@@ -115,6 +118,7 @@ describe('sim-endless CSV output', () => {
             typedLockedCacheRoomFloors: expect.any(Number)
         });
         expect(health.metrics.lockedCacheRoomFloors).toBeGreaterThan(0);
+        expect(health.metrics.coreReplayCheckedFloors).toBeGreaterThanOrEqual(24);
         expect(health.metrics.typedLockedCacheRoomFloors).toBeGreaterThan(0);
         expect(health.metrics.playableCheckedFloors).toBeGreaterThan(500);
         expect(health.metrics.playableLockedExitFloors).toBeGreaterThan(0);
@@ -175,6 +179,7 @@ describe('sim-endless CSV output', () => {
                 findableTotal: 2,
                 lockedCacheRoomFloors: 0,
                 objectiveKinds: 1,
+                coreReplayCheckedFloors: 0,
                 playableCheckedFloors: 0,
                 playableFailureDetails: [
                     'floor=7|reason=exit_attempted|status=playing|turns=12|lastPair=__exit__|lastTiles=exit|activeStaleHazards=0|undefeatedStaleHazards=0|archetype=trap_hall|objective=defeat_boss'
@@ -204,6 +209,7 @@ describe('sim-endless CSV output', () => {
                 'Expected generated boards to pass fairness inspection, saw 3 floor(s) with 2 issue type(s): exit_lock_unreachable, completion_route_missing.',
                 'Expected generated boards to pass topology inspection, saw 5 floor(s) with 1 issue type(s): topology_exit_lock_source_missing.',
                 'Expected executable playable solver sampling to inspect at least one floor.',
+                'Expected command replay verification on the first 20 sampled floor(s), saw 0.',
                 'Expected playable solver sample to clear every checked floor, saw 4 issue floor(s): exit_attempted. Details: floor=7|reason=exit_attempted|status=playing|turns=12|lastPair=__exit__|lastTiles=exit|activeStaleHazards=0|undefeatedStaleHazards=0|archetype=trap_hall|objective=defeat_boss.',
                 'Expected executable playable solver sampling to include at least one live locked-exit floor.',
                 'Expected match-triggerable trait routes on at least 95.0% of trait floors, saw 40.0%.',

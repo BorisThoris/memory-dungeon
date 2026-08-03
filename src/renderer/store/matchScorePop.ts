@@ -1,12 +1,10 @@
-import type { RunState } from '../../shared/contracts';
-import { getMatchFloaterAnchorTileIds, getMismatchFloaterAnchorTileIds } from '../../shared/turn-resolution';
+import type { GameplayEvent } from '../../shared/gameplay-core-contracts';
 import { routeSpecialLabel, routeSpecialRewardLine } from '../../shared/route-world';
-import { formatTileTraitInteractionTags, resolveTileTraitEffects } from '../../shared/tile-trait-rules';
+import { formatTileTraitInteractionTags } from '../../shared/tile-trait-interaction-copy';
 import { getFindableKindLabel, getFindableRewardCopy } from '../../shared/findables';
 import { runArray } from '../../shared/run-array-guards';
 import { runNonNegativeInteger } from '../../shared/run-number-guards';
 import { getChainMilestoneFeedback, type ChainMilestoneFeedback } from '../copy/chainMilestoneFeedback';
-import { detectClaimedFindableKind } from '../copy/hudActionFeedback';
 import { getChainRewardForecastCues, getChainRewardUrgencyCopy, type ChainRewardForecastCue } from '../copy/chainMomentum';
 
 export type MatchScorePop = {
@@ -142,32 +140,7 @@ export const BOARD_FLOATER_POP_CLEAR = {
     mismatchScorePop: null as MismatchScorePop | null
 };
 
-const getTilesByIds = (run: RunState, tileIds: readonly string[]) =>
-    tileIds
-        .map((tileId) => run.board?.tiles.find((tile) => tile.id === tileId))
-        .filter((tile): tile is NonNullable<RunState['board']>['tiles'][number] => tile != null);
-
-const resolveTraitInteractionTexts = (
-    run: RunState,
-    tileIds: readonly string[],
-    source: 'match' | 'mismatch'
-): string[] => {
-    if (!run.board) {
-        return [];
-    }
-    const sourceTiles = getTilesByIds(run, tileIds);
-    if (sourceTiles.length === 0) {
-        return [];
-    }
-    return formatTileTraitInteractionTags(
-        resolveTileTraitEffects({
-            run,
-            board: run.board,
-            sourceTiles,
-            source
-        }).interactionTags
-    );
-};
+type BoardTurnResolvedEvent = Extract<GameplayEvent, { type: 'board.turn_resolved' }>;
 
 const nextRewardPayoffLabel = (cue: ChainRewardForecastCue): string => {
     if (cue.tone === 'guard') {
@@ -189,19 +162,35 @@ const isRewardPerkInteractionText = (text: string): boolean => text.startsWith('
 const isRewardPerkOnlyTraitBurst = (traitInteractionTexts: readonly string[]): boolean =>
     traitInteractionTexts.length > 0 && traitInteractionTexts.every(isRewardPerkInteractionText);
 
-const buildChainRewardText = (before: RunState, after: RunState, chainDepth: number): string | undefined => {
+const buildChainRewardText = ({
+    chainDepth,
+    comboShardsAfter,
+    comboShardsBefore,
+    guardTokensAfter,
+    guardTokensBefore,
+    livesAfter,
+    livesBefore
+}: {
+    chainDepth: number;
+    comboShardsAfter: number;
+    comboShardsBefore: number;
+    guardTokensAfter: number;
+    guardTokensBefore: number;
+    livesAfter: number;
+    livesBefore: number;
+}): string | undefined => {
     if (chainDepth < 3) {
         return undefined;
     }
     const comboShardGain = Math.max(
         0,
-        runNonNegativeInteger(after.stats.comboShards) - runNonNegativeInteger(before.stats.comboShards)
+        runNonNegativeInteger(comboShardsAfter) - runNonNegativeInteger(comboShardsBefore)
     );
     const guardGain = Math.max(
         0,
-        runNonNegativeInteger(after.stats.guardTokens) - runNonNegativeInteger(before.stats.guardTokens)
+        runNonNegativeInteger(guardTokensAfter) - runNonNegativeInteger(guardTokensBefore)
     );
-    const lifeGain = Math.max(0, runNonNegativeInteger(after.lives) - runNonNegativeInteger(before.lives));
+    const lifeGain = Math.max(0, runNonNegativeInteger(livesAfter) - runNonNegativeInteger(livesBefore));
     const parts = [
         comboShardGain > 0 ? formatGain(comboShardGain, 'combo shard') : null,
         guardGain > 0 ? formatGain(guardGain, 'guard token') : null,
@@ -811,40 +800,44 @@ export const buildMatchScorePopCrescendo = ({
  * Pure payload for the floating +score floater after a successful match resolve.
  */
 export function buildMatchScorePopPayload(
-    run: RunState | null,
-    next: RunState,
+    turnEvent: BoardTurnResolvedEvent,
     keyNonce?: string
 ): MatchScorePop | null {
-    if (!run?.board) {
+    const eventIsMatch = turnEvent.outcome === 'match' || turnEvent.outcome === 'gambit_match';
+    const eventAnchor = eventIsMatch && turnEvent.floaterTileIds.length === 2
+        ? { tileIdA: turnEvent.floaterTileIds[0], tileIdB: turnEvent.floaterTileIds[1] }
+        : null;
+    if (!eventAnchor) {
         return null;
     }
-    const anchor = getMatchFloaterAnchorTileIds(run);
-    if (!anchor) {
+    if (turnEvent.matchesAfter <= turnEvent.matchesBefore) {
         return null;
     }
-    if (next.stats.matchesFound <= run.stats.matchesFound) {
-        return null;
-    }
-    const amount = next.stats.totalScore - run.stats.totalScore;
+    const amount = turnEvent.totalScoreAfter - turnEvent.totalScoreBefore;
     if (!Number.isFinite(amount) || amount <= 0) {
         return null;
     }
-    const { tileIdA, tileIdB } = anchor;
-    const routeKind =
-        run.board.tiles.find((tile) => tile.id === tileIdA)?.routeSpecialKind ??
-        run.board.tiles.find((tile) => tile.id === tileIdB)?.routeSpecialKind ??
-        run.board.tiles.find((tile) => tile.id === tileIdA)?.routeCardKind ??
-        run.board.tiles.find((tile) => tile.id === tileIdB)?.routeCardKind ??
-        null;
+    const { tileIdA, tileIdB } = eventAnchor;
+    const routeKind = turnEvent.matchedRouteKind;
     const routeRewardText = routeKind ? `${routeSpecialLabel(routeKind)} ${routeSpecialRewardLine(routeKind)}` : undefined;
-    const claimedFindableKind = next.board ? detectClaimedFindableKind(run.board.tiles, next.board.tiles) : null;
+    const claimedFindableKind = turnEvent.matchedFindableKind;
     const pickupRewardText = claimedFindableKind
         ? `${getFindableKindLabel(claimedFindableKind)} ${getFindableRewardCopy(claimedFindableKind)}`
         : undefined;
-    const traitInteractionTexts = resolveTraitInteractionTexts(run, [tileIdA, tileIdB], 'match');
-    const chainDepth = matchScoreChainDepth(next.stats.currentStreak);
-    const chainRewardText = buildChainRewardText(run, next, chainDepth);
-    const chainMilestone = getMatchScorePopChainMilestone(run.stats.currentStreak, chainDepth);
+    const traitInteractionTexts = formatTileTraitInteractionTags(turnEvent.traitInteractionTags);
+    const currentStreakBefore = turnEvent.currentStreakBefore;
+    const currentStreakAfter = turnEvent.currentStreakAfter;
+    const chainDepth = matchScoreChainDepth(currentStreakAfter);
+    const chainRewardText = buildChainRewardText({
+        chainDepth,
+        comboShardsBefore: turnEvent.comboShardsBefore,
+        comboShardsAfter: turnEvent.comboShardsAfter,
+        guardTokensBefore: turnEvent.guardTokensBefore,
+        guardTokensAfter: turnEvent.guardTokensAfter,
+        livesBefore: turnEvent.livesBefore,
+        livesAfter: turnEvent.livesAfter
+    });
+    const chainMilestone = getMatchScorePopChainMilestone(currentStreakBefore, chainDepth);
     const feedbackProfile = pickupRewardText || chainRewardText
         ? { feedbackHeadline: 'Reward' as const, feedbackIntensity: 'high' as const }
         : getMatchScorePopFeedbackProfile(chainDepth, traitInteractionTexts.length);
@@ -854,10 +847,16 @@ export function buildMatchScorePopPayload(
         hasRouteReward: Boolean(routeRewardText),
         traitInteractionCount: traitInteractionTexts.length
     });
-    const nonce = keyNonce ?? `${Date.now()}`;
-    const key = `${run.board.level}-${nonce}-${tileIdA}-${tileIdB}`;
+    const nonce = keyNonce ?? turnEvent.commandId;
+    const key = `${turnEvent.boardLevel}-${nonce}-${tileIdA}-${tileIdB}`;
     const chainRewardForecastCues =
-        chainDepth >= 3 ? getChainRewardForecastCues(chainDepth, next.stats.comboShards, next.lives) : [];
+        chainDepth >= 3
+            ? getChainRewardForecastCues(
+                  chainDepth,
+                  turnEvent.comboShardsAfter,
+                  turnEvent.livesAfter
+              )
+            : [];
     const rewardBurst = buildMatchScorePopRewardBurst({
         chainDepth,
         chainMilestone,
@@ -962,32 +961,31 @@ export function buildMatchScorePopPayload(
  * Pure payload for the floating miss floater after a mismatch resolve.
  */
 export function buildMismatchScorePopPayload(
-    run: RunState | null,
-    next: RunState,
+    turnEvent: BoardTurnResolvedEvent,
     keyNonce?: string
 ): MismatchScorePop | null {
-    if (!run?.board) {
+    const eventIsMismatch = turnEvent.outcome === 'mismatch' || turnEvent.outcome === 'gambit_mismatch';
+    const eventAnchor = eventIsMismatch
+        ? {
+              tileIdA: turnEvent.floaterTileIds[0],
+              tileIdB: turnEvent.floaterTileIds[1],
+              ...(turnEvent.floaterTileIds[2] ? { tileIdC: turnEvent.floaterTileIds[2] } : {})
+          }
+        : null;
+    if (!eventAnchor) {
         return null;
     }
-    const anchor = getMismatchFloaterAnchorTileIds(run);
-    if (!anchor) {
+    if (turnEvent.mismatchesAfter <= turnEvent.mismatchesBefore) {
         return null;
     }
-    if (next.stats.mismatches <= run.stats.mismatches) {
-        return null;
-    }
-    const nonce = keyNonce ?? `${Date.now()}`;
-    const { tileIdA, tileIdB, tileIdC } = anchor;
+    const nonce = keyNonce ?? turnEvent.commandId;
+    const { tileIdA, tileIdB, tileIdC } = eventAnchor;
     const key = tileIdC
-        ? `miss-${run.board.level}-${nonce}-${tileIdA}-${tileIdB}-${tileIdC}`
-        : `miss-${run.board.level}-${nonce}-${tileIdA}-${tileIdB}`;
-    const traitInteractionTexts = resolveTraitInteractionTexts(
-        run,
-        tileIdC ? [tileIdA, tileIdB, tileIdC] : [tileIdA, tileIdB],
-        'mismatch'
-    );
-    const previousStreak = runNonNegativeInteger(run.stats.currentStreak);
-    const nextStreak = runNonNegativeInteger(next.stats.currentStreak);
+        ? `miss-${turnEvent.boardLevel}-${nonce}-${tileIdA}-${tileIdB}-${tileIdC}`
+        : `miss-${turnEvent.boardLevel}-${nonce}-${tileIdA}-${tileIdB}`;
+    const traitInteractionTexts = formatTileTraitInteractionTags(turnEvent.traitInteractionTags);
+    const previousStreak = runNonNegativeInteger(turnEvent.currentStreakBefore);
+    const nextStreak = runNonNegativeInteger(turnEvent.currentStreakAfter);
     const brokenChainDepth = previousStreak > 1 && nextStreak < previousStreak ? previousStreak : 0;
     const payload: MismatchScorePop = { tileIdA, tileIdB, key };
     if (tileIdC !== undefined) {
@@ -997,8 +995,8 @@ export function buildMismatchScorePopPayload(
         payload.brokenChainDepth = brokenChainDepth;
         const brokenChainRewardCue = getChainRewardForecastCues(
             brokenChainDepth,
-            run.stats.comboShards,
-            run.lives
+            turnEvent.comboShardsBefore,
+            turnEvent.livesBefore
         )[0];
         if (brokenChainRewardCue) {
             payload.brokenChainRewardCue = brokenChainRewardCue;

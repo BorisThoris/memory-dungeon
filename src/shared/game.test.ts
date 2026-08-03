@@ -5580,7 +5580,12 @@ describe('dungeon cards', () => {
         expect(cleared.board!.enemyHazards?.[0]).toMatchObject({ hp: 0, state: 'defeated' });
         expect(cleared.lastLevelResult?.bossTrophyCacheOutcome).toBe('claimed');
         expect(cleared.lastLevelResult?.bossTrophyCacheScore).toBe(120);
+        expect(cleared.gameplayCommandJournal).toEqual([
+            expect.objectContaining({ type: 'dungeon.exit_activate', spend: 'none' })
+        ]);
+        expect(cleared.gameplayCommandJournal?.map((command) => command.type)).not.toContain('effects.apply');
         expect(cleared.gameplayEventJournal).toEqual(expect.arrayContaining([
+            expect.objectContaining({ type: 'dungeon.exit_activated', commandId: expect.any(String) }),
             expect.objectContaining({ type: 'score.requested', reason: 'boss_trophy', amount: 30 }),
             expect.objectContaining({ type: 'feedback.requested', cue: 'build.chapter_compass.boss_trophy' })
         ]));
@@ -7146,8 +7151,10 @@ describe('game rules', () => {
         expect(resolved.lastLevelResult?.mistakes).toBe(0);
         expect(resolved.lastLevelResult?.clearLifeReason).toBe('perfect');
         expect(resolved.lastLevelResult?.clearLifeGained).toBe(1);
-        expect(resolved.gameplayCommandJournal).toEqual([
-            expect.objectContaining({ type: 'board.turn_resolve' })
+        expect(resolved.gameplayCommandJournal?.map((command) => command.type)).toEqual([
+            'board.tile_flip',
+            'board.tile_flip',
+            'board.turn_resolve'
         ]);
         expect(resolved.gameplayEventJournal).toEqual(expect.arrayContaining([
             expect.objectContaining({
@@ -7823,8 +7830,10 @@ describe('board powers', () => {
             expect(resolved.lives).toBe(4);
             expect(resolved.stats.comboShards).toBe(0);
             expect(resolved.findablesClaimedThisFloor).toBe(1);
-            expect(resolved.gameplayCommandJournal).toEqual([
-                expect.objectContaining({ type: 'board.turn_resolve' })
+            expect(resolved.gameplayCommandJournal?.map((command) => command.type)).toEqual([
+                'board.tile_flip',
+                'board.tile_flip',
+                'board.turn_resolve'
             ]);
             expect(resolved.gameplayEventJournal).toEqual(
                 expect.arrayContaining([
@@ -7849,8 +7858,10 @@ describe('board powers', () => {
             const base = calculateMatchScore(1, 1, 1);
             expect(resolved.stats.totalScore).toBe(base + FINDABLE_MATCH_SCORE.score_glint);
             expect(resolved.findablesClaimedThisFloor).toBe(1);
-            expect(resolved.gameplayCommandJournal).toEqual([
-                expect.objectContaining({ type: 'board.turn_resolve' })
+            expect(resolved.gameplayCommandJournal?.map((command) => command.type)).toEqual([
+                'board.tile_flip',
+                'board.tile_flip',
+                'board.turn_resolve'
             ]);
             expect(resolved.gameplayEventJournal).toEqual(expect.arrayContaining([
                 expect.objectContaining({ type: 'score.requested', reason: 'findable_match', amount: 25 }),

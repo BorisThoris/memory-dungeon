@@ -71,6 +71,13 @@ describe('runTimerController', () => {
 
         expect(harness.setRun).toHaveBeenCalledTimes(1);
         expect(harness.state.run?.status).toBe('playing');
+        expect(harness.state.run?.gameplayCommandJournal).toEqual([
+            expect.objectContaining({ type: 'phase.memorize_complete' })
+        ]);
+        expect(harness.state.run?.gameplayEventJournal).toEqual([
+            expect.objectContaining({ type: 'phase.memorize_completed' }),
+            expect.objectContaining({ type: 'feedback.requested', cue: 'phase.memorize.completed' })
+        ]);
     });
 
     it('snapshots remaining memorize time when freezing an active memorize run', () => {
@@ -96,6 +103,13 @@ describe('runTimerController', () => {
         expect(frozen.status).toBe('paused');
         expect(frozen.timerState.pausedFromStatus).toBe('memorize');
         expect(frozen.timerState.memorizeRemainingMs).toBe(650);
+        expect(frozen.gameplayCommandJournal).toEqual([
+            expect.objectContaining({ type: 'run.pause', timerSnapshot: expect.objectContaining({ memorizeRemainingMs: 650 }) })
+        ]);
+        expect(frozen.gameplayEventJournal).toEqual([
+            expect.objectContaining({ type: 'run.paused', timerSnapshot: expect.objectContaining({ memorizeRemainingMs: 650 }) }),
+            expect.objectContaining({ type: 'feedback.requested', cue: 'run.paused' })
+        ]);
     });
 
     it('resumes a paused resolving run and fires the delayed resolve callback', async () => {
@@ -119,6 +133,13 @@ describe('runTimerController', () => {
         await vi.advanceTimersByTimeAsync(251);
 
         expect(resumed.status).toBe('resolving');
+        expect(resumed.gameplayCommandJournal).toEqual([
+            expect.objectContaining({ type: 'run.resume' })
+        ]);
+        expect(resumed.gameplayEventJournal).toEqual([
+            expect.objectContaining({ type: 'run.resumed', statusAfter: 'resolving' }),
+            expect.objectContaining({ type: 'feedback.requested', cue: 'run.resumed' })
+        ]);
         expect(harness.onResolveBoardTurn).toHaveBeenCalledWith(resumed);
     });
 
@@ -140,6 +161,16 @@ describe('runTimerController', () => {
 
         expect(resumed.status).toBe('playing');
         expect(resumed.timerState.memorizeRemainingMs).toBeNull();
+        expect(resumed.gameplayCommandJournal).toEqual([
+            expect.objectContaining({ type: 'run.resume' }),
+            expect.objectContaining({ type: 'phase.memorize_complete' })
+        ]);
+        expect(resumed.gameplayEventJournal).toEqual([
+            expect.objectContaining({ type: 'run.resumed', statusAfter: 'memorize' }),
+            expect.objectContaining({ type: 'feedback.requested', cue: 'run.resumed' }),
+            expect.objectContaining({ type: 'phase.memorize_completed' }),
+            expect.objectContaining({ type: 'feedback.requested', cue: 'phase.memorize.completed' })
+        ]);
         expect(harness.setRun).not.toHaveBeenCalled();
     });
 
@@ -161,7 +192,40 @@ describe('runTimerController', () => {
 
         expect(resumed.debugPeekActive).toBe(false);
         expect(resumed.timerState.debugRevealRemainingMs).toBeNull();
+        expect(resumed.gameplayCommandJournal).toEqual([
+            expect.objectContaining({ type: 'run.resume' }),
+            expect.objectContaining({ type: 'debug.reveal_deactivate', reason: 'resume_expired' })
+        ]);
+        expect(resumed.gameplayEventJournal).toEqual([
+            expect.objectContaining({ type: 'run.resumed', statusAfter: 'playing' }),
+            expect.objectContaining({ type: 'feedback.requested', cue: 'run.resumed' }),
+            expect.objectContaining({ type: 'debug.reveal_deactivated', reason: 'resume_expired' }),
+            expect.objectContaining({ type: 'feedback.requested', cue: 'debug.reveal.resume_expired' })
+        ]);
         expect(harness.setRun).not.toHaveBeenCalled();
+    });
+
+    it('expires an active debug reveal through a journaled timer lifecycle command', async () => {
+        vi.useFakeTimers();
+        const playing = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'puzzle' }));
+        const debugRun = enableDebugPeek(playing, false);
+        const harness = createHarnessWithCallbacks(debugRun);
+
+        harness.timer.scheduleDebugRevealTimer(75);
+        await vi.advanceTimersByTimeAsync(76);
+
+        expect(harness.setRun).toHaveBeenCalledTimes(1);
+        expect(harness.state.run).toMatchObject({
+            debugPeekActive: false,
+            timerState: { debugRevealRemainingMs: null },
+            gameplayCommandJournal: [
+                expect.objectContaining({ type: 'debug.reveal_deactivate', reason: 'timer_elapsed' })
+            ],
+            gameplayEventJournal: [
+                expect.objectContaining({ type: 'debug.reveal_deactivated', reason: 'timer_elapsed' }),
+                expect.objectContaining({ type: 'feedback.requested', cue: 'debug.reveal.timer_elapsed' })
+            ]
+        });
     });
 
     it('routes expired gauntlet runs through the resolved-run callback', async () => {
@@ -179,7 +243,20 @@ describe('runTimerController', () => {
         harness.timer.syncGauntletExpiryWatch();
         await vi.advanceTimersByTimeAsync(301);
 
-        expect(harness.onResolvedRun).toHaveBeenCalledWith(expect.objectContaining({ lives: 0, status: 'gameOver' }));
+        expect(harness.onResolvedRun).toHaveBeenCalledWith(expect.objectContaining({
+            lives: 0,
+            status: 'gameOver',
+            gameplayCommandJournal: [expect.objectContaining({ type: 'run.gauntlet_expire' })],
+            gameplayEventJournal: [
+                expect.objectContaining({
+                    type: 'run.gauntlet_expired',
+                    observedAtMs: 10_300,
+                    deadlineMs: 9_999,
+                    overdueMs: 301
+                }),
+                expect.objectContaining({ type: 'feedback.requested', cue: 'mode.gauntlet.expired' })
+            ]
+        }));
     });
 
     it('clears pending resolve timers without clearing memorize board readiness', async () => {

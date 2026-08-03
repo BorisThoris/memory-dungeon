@@ -1,0 +1,101 @@
+import { describe, expect, it } from 'vitest';
+import {
+    GAMEPLAY_BUILD_STRATEGIES,
+    assertGameplayBuildStrategiesViable,
+    runGameplayBuildStrategySimulation
+} from './build-strategy-simulation';
+import { GAME_RULES_VERSION } from './contracts';
+
+describe('typed gameplay build strategy simulation', () => {
+    it('proves three shipped builds through distinct replayable command/event loops', () => {
+        const report = runGameplayBuildStrategySimulation({
+            seeds: [42_001, 42_077, 42_123],
+            rulesVersion: GAME_RULES_VERSION
+        });
+
+        expect(report.strategies.map((strategy) => strategy.id)).toEqual(
+            GAMEPLAY_BUILD_STRATEGIES.map((strategy) => strategy.id)
+        );
+        expect(report.strategies.map((strategy) => strategy.dominantAxis)).toEqual([
+            'information',
+            'control',
+            'economy'
+        ]);
+        for (const strategy of report.strategies) {
+            expect(strategy.viableSeedShare).toBe(1);
+            expect(strategy.rejectedCommands).toBe(0);
+            expect(strategy.consequenceAcceptedSeeds).toBe(report.seeds.length);
+            expect(strategy.deterministicReplaySeeds).toBe(report.seeds.length);
+            expect(strategy.axisScores[strategy.expectedDominantAxis]).toBeGreaterThan(0);
+            for (const sample of strategy.samples) {
+                expect(sample.consequenceAccepted).toBe(true);
+                expect(sample.replayDeterministic).toBe(true);
+                expect(sample.invariantViolations).toEqual([]);
+                expect(sample.feedbackCues.length).toBeGreaterThanOrEqual(3);
+                expect(sample.eventTypeCounts[strategy.consequenceEventType]).toBe(1);
+                expect(sample.commands.at(-1)?.type).toBe(strategy.consequenceCommandType);
+            }
+        }
+        expect(report.pairwiseAxisDistances).toEqual([
+            { left: 'conduit_cartographer', right: 'guard_tank', distance: 2 },
+            { left: 'conduit_cartographer', right: 'treasure_greed', distance: 2 },
+            { left: 'guard_tank', right: 'treasure_greed', distance: 2 }
+        ]);
+        expect(assertGameplayBuildStrategiesViable(report)).toEqual({ ok: true, issues: [] });
+    });
+
+    it('is deterministic and keeps exact source, choice, effect, feedback, and consequence evidence', () => {
+        const first = runGameplayBuildStrategySimulation({ seeds: [7_241] });
+        const second = runGameplayBuildStrategySimulation({ seeds: [7_241] });
+
+        expect(first).toEqual(second);
+        expect(first.strategies.map((strategy) => ({
+            id: strategy.id,
+            loadout: strategy.startingLoadoutId,
+            definitions: strategy.activationDefinitionIds,
+            command: strategy.consequenceCommandType,
+            event: strategy.consequenceEventType
+        }))).toEqual([
+            {
+                id: 'conduit_cartographer',
+                loadout: 'memory_scout',
+                definitions: ['bonus_reward.echo_conduit_lens', 'reward_perk.echo_conduit_double'],
+                command: 'board.peek',
+                event: 'board.peeked'
+            },
+            {
+                id: 'guard_tank',
+                loadout: 'cursebreaker',
+                definitions: ['bonus_reward.hazard_ward', 'trait.volatile_heavy_guard'],
+                command: 'board.destroy_pair',
+                event: 'board.pair_destroyed'
+            },
+            {
+                id: 'treasure_greed',
+                loadout: 'vaultbreaker',
+                definitions: [
+                    'bonus_reward.chest_gold',
+                    'bonus_reward.cursed_opener_contract',
+                    'reward_perk.cursed_opener_greed'
+                ],
+                command: 'shop.purchase',
+                event: 'shop.offer_purchased'
+            }
+        ]);
+    });
+
+    it('returns exact build and seed diagnostics when a viability contract drifts', () => {
+        const report = runGameplayBuildStrategySimulation({ seeds: [42_001] });
+        const broken = structuredClone(report);
+        broken.strategies[1].samples[0].consequenceAccepted = false;
+        broken.strategies[1].samples[0].feedbackCues = [];
+
+        expect(assertGameplayBuildStrategiesViable(broken)).toEqual({
+            ok: false,
+            issues: [
+                'guard_tank@seed:42001:missing board.pair_destroyed',
+                'guard_tank@seed:42001:feedbackEvents=0; required=3'
+            ]
+        });
+    });
+});

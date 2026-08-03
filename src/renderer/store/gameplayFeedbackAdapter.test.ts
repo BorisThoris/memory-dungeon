@@ -1,8 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import type { GameplayEvent } from '../../shared/gameplay-core-contracts';
+import { createBoardTurnResolvedEventFixture } from '../../shared/test/gameplay-event-fixtures';
 import {
+    getLatestBoardTurnResolvedEvent,
     getLatestGameplayFeedback,
+    getLatestGameplayFeedbackBatch,
     getNewGameplayFeedback,
+    projectBoardTurnResolvedEvents,
     projectGameplayFeedback
 } from './gameplayFeedbackAdapter';
 
@@ -19,6 +23,128 @@ const event = (
 } as GameplayEvent);
 
 describe('gameplayFeedbackAdapter', () => {
+    it('selects only schema-valid board-turn facts and preserves their event identity', () => {
+        const turn = createBoardTurnResolvedEventFixture({
+            commandId: 'command-1',
+            eventId: 'command-1:2',
+            sequence: 2,
+            boardLevel: 2,
+            matchedFindableKind: 'shard_spark',
+            findablesClaimedBefore: 0,
+            findablesClaimedAfter: 1,
+            findablesTotalBefore: 2,
+            findablesTotalAfter: 2,
+            totalScoreAfter: 25,
+            comboShardsAfter: 1
+        });
+        const journal = [
+            { ...turn, matchedFindableKind: 'not-a-findable' },
+            event(1, {
+                type: 'feedback.requested',
+                cue: 'build.shard_spark.matched',
+                message: 'Shard spark claimed.',
+                source: { kind: 'findable', id: 'shard_spark' },
+                tone: 'reward'
+            }),
+            turn
+        ];
+
+        expect(projectBoardTurnResolvedEvents(journal)).toEqual([turn]);
+        expect(getLatestBoardTurnResolvedEvent({ gameplayEventJournal: journal })).toEqual(turn);
+    });
+
+    it('projects typed pause and resume lifecycle feedback separately', () => {
+        const presentations = projectGameplayFeedback([
+            event(0, {
+                type: 'feedback.requested',
+                cue: 'run.paused',
+                message: 'Run paused from playing.',
+                source: { kind: 'system', id: 'run_lifecycle' },
+                tone: 'information'
+            }),
+            event(1, {
+                type: 'feedback.requested',
+                cue: 'run.resumed',
+                message: 'Run resumed into playing.',
+                source: { kind: 'system', id: 'run_lifecycle' },
+                tone: 'information'
+            })
+        ]);
+
+        expect(presentations.map((item) => item.audioCategory)).toEqual(['pause', 'resume']);
+    });
+
+    it('projects debug reveal lifecycle feedback separately from the consumable Peek power', () => {
+        const presentation = projectGameplayFeedback([
+            event(0, {
+                type: 'feedback.requested',
+                cue: 'debug.reveal.timer_elapsed',
+                message: 'Debug reveal expired; hidden tiles are concealed again.',
+                source: { kind: 'system', id: 'debug_reveal' },
+                tone: 'information'
+            })
+        ])[0];
+
+        expect(presentation).toMatchObject({
+            audioCategory: 'debug-reveal',
+            cue: 'debug.reveal.timer_elapsed'
+        });
+    });
+
+    it('projects progression safety repair as explicit system feedback', () => {
+        const presentation = projectGameplayFeedback([
+            event(0, {
+                type: 'feedback.requested',
+                cue: 'safety.progression.repaired',
+                message: 'Progression safety repaired exit lock.',
+                source: { kind: 'system', id: 'progression_safety' },
+                tone: 'information'
+            })
+        ])[0];
+
+        expect(presentation).toMatchObject({
+            audioCategory: 'safety-repair',
+            cue: 'safety.progression.repaired',
+            priority: 'info'
+        });
+    });
+
+    it('projects typed Gauntlet expiry as terminal pressure feedback', () => {
+        expect(projectGameplayFeedback([
+            event(0, {
+                type: 'feedback.requested',
+                cue: 'mode.gauntlet.expired',
+                message: 'Gauntlet time expired.',
+                source: { kind: 'system', id: 'gauntlet_clock' },
+                tone: 'warning'
+            })
+        ])).toEqual([
+            expect.objectContaining({
+                audioCategory: 'gauntlet-expire',
+                cue: 'mode.gauntlet.expired',
+                priority: 'error'
+            })
+        ]);
+    });
+
+    it('projects typed study completion as its own feedback category', () => {
+        expect(projectGameplayFeedback([
+            event(0, {
+                type: 'feedback.requested',
+                cue: 'phase.memorize.completed',
+                message: 'Study complete; 2 Focus charges are ready.',
+                source: { kind: 'system', id: 'memorize_phase' },
+                tone: 'information'
+            })
+        ])).toEqual([
+            expect.objectContaining({
+                audioCategory: 'memorize-complete',
+                cue: 'phase.memorize.completed',
+                message: 'Study complete; 2 Focus charges are ready.'
+            })
+        ]);
+    });
+
     it('projects valid feedback and ignores corrupt persisted entries', () => {
         expect(projectGameplayFeedback([
             { bad: true },
@@ -120,6 +246,30 @@ describe('gameplayFeedbackAdapter', () => {
         ]);
     });
 
+    it('classifies typed relic-offer opening separately from paid offer services', () => {
+        const presentations = projectGameplayFeedback([
+            event(0, {
+                type: 'feedback.requested',
+                cue: 'relic.offer.opened',
+                message: 'Relic draft opened.',
+                source: { kind: 'system', id: 'relic_offer' },
+                tone: 'reward'
+            }),
+            event(1, {
+                type: 'feedback.requested',
+                cue: 'relic.offer_service.reroll_offer',
+                message: 'Relic offer rerolled.',
+                source: { kind: 'system', id: 'relic_offer' },
+                tone: 'information'
+            })
+        ]);
+
+        expect(presentations.map((item) => item.audioCategory)).toEqual([
+            'relic-offer',
+            'relic-service'
+        ]);
+    });
+
     it('classifies Memory Scout Flash and Undo cues from typed power sources', () => {
         const presentations = projectGameplayFeedback([
             event(0, {
@@ -204,6 +354,23 @@ describe('gameplayFeedbackAdapter', () => {
         expect(presentations.map((item) => item.audioCategory)).toEqual(['shop-purchase', 'exit-activate']);
     });
 
+    it('classifies typed stock rerolls separately from purchases', () => {
+        const presentation = projectGameplayFeedback([
+            event(0, {
+                type: 'feedback.requested',
+                cue: 'shop.stock.rerolled',
+                message: 'Shop stock rerolled.',
+                source: { kind: 'shop', id: 'run_shop' },
+                tone: 'information'
+            })
+        ])[0];
+
+        expect(presentation).toMatchObject({
+            audioCategory: 'shop-reroll',
+            cue: 'shop.stock.rerolled'
+        });
+    });
+
     it('classifies score-parasite ward and life-loss feedback from the typed hazard source', () => {
         const presentations = projectGameplayFeedback([
             event(0, {
@@ -283,5 +450,47 @@ describe('gameplayFeedbackAdapter', () => {
         )).toEqual([expect.objectContaining({ eventId: 'command-1:1', priority: 'error' })]);
         expect(getLatestGameplayFeedback({ gameplayEventJournal: [first, second] }))
             .toEqual(expect.objectContaining({ eventId: 'command-1:1' }));
+    });
+
+    it('returns every ordered feedback event from the latest command', () => {
+        const older = event(1, {
+            type: 'feedback.requested',
+            commandId: 'older-command',
+            eventId: 'older-command:1',
+            cue: 'older',
+            message: 'Older feedback.',
+            tone: 'warning'
+        });
+        const first = event(1, {
+            type: 'feedback.requested',
+            commandId: 'floor-advance',
+            eventId: 'floor-advance:1',
+            cue: 'hazard.score_parasite.drain_warning',
+            message: 'Drain warning.',
+            source: { kind: 'system', id: 'score_parasite' },
+            tone: 'warning'
+        });
+        const second = event(5, {
+            type: 'feedback.requested',
+            commandId: 'floor-advance',
+            eventId: 'floor-advance:5',
+            cue: 'floor.advance.ready',
+            message: 'Floor ready.',
+            source: { kind: 'system', id: 'floor_advance' },
+            tone: 'information'
+        });
+
+        expect(getLatestGameplayFeedbackBatch({
+            gameplayEventJournal: [
+                older,
+                first,
+                { corrupt: true } as unknown as GameplayEvent,
+                second
+            ]
+        })).toEqual([
+            expect.objectContaining({ eventId: 'floor-advance:1', priority: 'error' }),
+            expect.objectContaining({ eventId: 'floor-advance:5', priority: 'info' })
+        ]);
+        expect(getLatestGameplayFeedbackBatch({ gameplayEventJournal: [] })).toEqual([]);
     });
 });

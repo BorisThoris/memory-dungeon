@@ -357,6 +357,296 @@ Destroy Pair now owns its completion consequence instead of handing a complete b
 
 Graph v24 connects Destroy removal directly to the completed-floor run flow, flat persistence, feedback, and replay. Dungeon Exit activation is now the remaining common floor-finalizer handoff.
 
+## Twenty-fifth vertical slice: Flat Typed Dungeon Exit Completion
+
+Dungeon Exit activation now owns its floor-completion consequence instead of returning an opened board for a wrapper to finalize separately:
+
+1. `dungeon.exit_activate` still delegates reveal, objective, lock-spend, key, Master Key, hazard cleanup, gateway, and route-plan calculation to the established pure exit transition.
+2. The reducer emits the exact activation and feedback events, then invokes the core-owned floor finalizer under the same command id and event list.
+3. Boss trophy, featured objective, wager, Favor, and parasite effects therefore share the exit command envelope without nested `effects.apply` journal entries.
+4. Shared and renderer wrappers now only choose the explicit spend, submit the command, and append one journal transaction; neither owns floor-clear rules.
+5. Direct reducer tests prove legacy state parity, untouched reducer journals, deterministic event identity, and JSON-round-tripped replay equality.
+6. Live boss-exit and renderer tests require one `dungeon.exit_activate` command that returns the complete `levelComplete` state.
+
+Graph v25 connects explicit exit and lock choice directly to completed run flow, typed feedback, persistence, topology safety, and replay. Ordinary matches, Destroy Pair, and Dungeon Exit now share the same core-owned floor finalizer without wrapper-level gameplay mutation.
+
+## Twenty-sixth vertical slice: Typed Tile Input
+
+Board input now enters the deterministic core before it changes run state:
+
+1. `board.tile_flip` owns ordinary flips, trap triggers, exit/shop/room reveals, and board cleanup through the established pure tile transition.
+2. `enemy_hazard.contact` owns patrol contact, hazard advancement, pending-memorize pressure, Guard-before-life absorption, game-over state, and typed feedback.
+3. Shared and renderer entry points append accepted commands and ordered events; they retain only UI timing, modal, and audio coordination.
+4. Gambit now journals `board.gambit_commit` before the chosen `board.tile_flip`, preserving causal replay even when the third pick is a fatal or surviving trap.
+5. Utility tiles use the same command path as ordinary board tiles, so exit, shop, and room reveals are reconstructible from pre-input state.
+6. Reducer tests prove JSON-round-tripped replay across flip → flip → turn resolution and exact enemy-contact parity, while the seeded simulation reports accepted and rejected command types separately and proves accepted tile input plus rejected contact legality.
+
+Graph v26 connects typed tile input to delayed turn resolution, enemy patrols, Guard absorption, Gambit, utility exits, feedback, persistence, and deterministic replay.
+
+## Twenty-seventh vertical slice: Typed Shop Stock Reroll
+
+The vendor's paid stock refresh now crosses the deterministic command boundary instead of mutating economy and offer state in a renderer helper:
+
+1. `shop.reroll` delegates affordability, one-use legality, floor-scaled cost, and seeded route-aware offer generation to the established pure shop rule.
+2. `shop.stock_rerolled` records the exact cost, wallet and reroll-count deltas, plus old and refreshed offer/item identities.
+3. The live shop surface appends one accepted command and its ordered events; rejected, unaffordable, and repeated rerolls remain no-ops.
+4. Purchase and reroll confirmation audio now follows typed feedback acceptance, while `ShopScreen` exposes the journal message through a polite live region.
+5. Direct reducer tests prove legacy parity, untouched reducer journals, strict rejection, and JSON-round-tripped replay equality.
+6. The headless simulation begins with deterministic stock and proves an accepted reroll while reporting accepted and rejected command types separately.
+
+Graph v27 registers the previously unmodeled stock-reroll mechanic and connects its gold sink, refreshed build/key choices, priority guards, feedback, persistence, and replay coverage.
+
+## Twenty-eighth vertical slice: Flat Typed Route Interlude Opening
+
+Route selection now owns its immediate between-floor consequence instead of returning a partially advanced run for a renderer helper to mutate:
+
+1. `route.choose` applies the existing deterministic Safe, Greed, or Mystery outcome and opens the seeded rest, event, or bonus-reward side room in one atomic reducer transaction.
+2. Accepted choices emit `route.choice_selected`, `side_room.opened`, and typed route feedback under the same command id; the opening event records exact room, route, node, floor, payload, event, and visible-choice identity.
+3. If the selected route cannot produce its deterministic interlude, the entire command rejects against the original run rather than retaining a route plan without its required continuation.
+4. The continuation executor now journals the reducer result and performs navigation only; it no longer calls a gameplay mutation after the typed command.
+5. Shop purchase and stock-reroll commands now require a live cleared-floor or paused-board shop interlude, preventing replay-valid economy mutations from unrelated run phases.
+6. The seeded simulator proves a causal flip → resolve → floor clear → route → side room → shop purchase/reroll → next-floor sequence, plus strict out-of-context contact rejection and JSON replay equality.
+
+Graph v28 connects the route commitment directly to deterministic side-room creation, captures the new typed opening event and atomicity guards, and records the shop lifecycle boundary used by both live play and replay.
+
+## Twenty-ninth vertical slice: Flat Typed Relic Offer Opening
+
+The source of a build-defining relic choice now crosses the same deterministic boundary as offer services and final selection:
+
+1. Milestone option generation and pick-budget consumption were extracted into a core-independent rule so legacy callers and command reduction share one seeded implementation without a core-adapter dependency cycle.
+2. `relic.offer_open` validates a live eligible cleared milestone with no unresolved side room, repairs deterministic progression state, and opens the exact tier, options, pick budget, service availability, and contextual reasons.
+3. `relic.offer_opened` records the cleared floor, tier, visible choices, available services, contextual-reason identities, banked/Favor pick consumption, and claimed-tier deltas under one command id.
+4. An exhausted relic pool is an accepted `milestone_skipped` outcome that advances the tier ledger and emits explicit feedback instead of leaving an empty draft or dead end.
+5. The level-complete continuation surface no longer calls `openRelicOffer` directly; it journals the typed adapter result before presenting the draft or advancing after a safe skip.
+6. Relic-offer reveal audio now follows the typed `relic.offer.opened` feedback event rather than inferring causality from `run.relicOffer` becoming non-null.
+7. The seeded simulator clears milestone floor 3 and proves an accepted route → side room → shop purchase/reroll → offer open → paid service → relic pick → floor advance chain with JSON replay equality.
+
+Graph v29 connects run progression to deterministic draft creation, empty-pool safety, build feedback, persistence, and replay before the existing service and selection consequences.
+
+## Thirtieth vertical slice: Typed Memorize Completion
+
+The first state-changing boundary on every playable floor now enters the deterministic core instead of being applied directly by the renderer timer:
+
+1. `phase.memorize_complete` accepts only a live memorize phase and delegates Focus initialization and timer cleanup to the established pure `finishMemorizePhase` rule.
+2. `phase.memorize_completed` records the floor, remaining study time, pending timing bonus, and exact before/after Focus under one deterministic command id.
+3. The reducer emits typed study-complete feedback, rejects duplicate or out-of-phase completion, leaves journals untouched, and reproduces the legacy result under JSON-round-tripped replay.
+4. `runTimerController` retains ownership of browser timers but submits their expiration consequence through the journaling adapter, including zero-duration and paused-resume completion.
+5. The renderer feedback adapter classifies study completion separately so HUD and accessibility announcements consume the same event without inventing gameplay truth.
+6. The seeded simulator now starts from an actual memorize state with a hidden board, then proves memorize → six flips → three resolves → route → side room → shop → relic draft → next floor as one replayable causal sequence.
+
+Graph v30 connects the study window directly to the command core, ready-Focus feedback, persistence, and seeded replay. This closes the previously missing opening transition between core-owned floor construction and typed tile input.
+
+## Thirty-first vertical slice: Typed Gauntlet Expiry
+
+The run-wide Gauntlet deadline now terminates play through serialized command data instead of renderer-owned wall-clock mutation:
+
+1. `run.gauntlet_expire` carries the host's integer `observedAtMs` into the deterministic reducer; replay never reads the current clock.
+2. The reducer accepts only an active Gauntlet with positive lives and an observation strictly after its normalized deadline, then owns the exact `lives: 0` and `gameOver` consequence.
+3. `run.gauntlet_expired` records the observation, deadline, overdue duration, previous phase, and life delta, followed by typed warning feedback under the same command id.
+4. Paused, non-Gauntlet, terminal, duplicate, at-deadline, and before-deadline commands reject without changing the run.
+5. Both the interval watcher and the normal/Gambit tile-input boundary call the same journaling adapter, so a deadline cannot be crossed by clicking between timer ticks.
+6. The seeded simulator includes a dedicated Gauntlet scenario that serializes the clock observation and proves schema validity, invariant safety, event ordering, and JSON replay equality through the terminal state.
+
+Graph v31 adds the Gauntlet clock as an executable hazard and connects run setup, earned floor time, memorize and tile-input gates, command-owned terminal state, HUD feedback, persistence, and deterministic simulation.
+
+## Thirty-second vertical slice: Typed Pause And Resume
+
+Every live pause boundary now freezes and restores authoritative run timing through serialized commands instead of renderer calls that read the wall clock internally:
+
+1. `run.pause` records one integer host observation plus the exact memorize, resolve, and debug-reveal timer snapshot captured before browser timers are cleared.
+2. `run.paused` records the prior phase, frozen timer values, Gauntlet deadline, and pause timestamp; only memorize, playing, or resolving runs may accept it.
+3. `run.resume` carries a new host observation, and `run.resumed` records the restored phase, Gauntlet deadline extension, paused duration, and whether corrupted resolving state recovered to play or terminated safely.
+4. The command core calls explicit `pauseRunAt` and `resumeRunAt` rules with no ambient clock read; legacy clock-reading wrappers remain only for unmigrated shared callers and tests.
+5. Manual pause, inventory/settings overlays, playable-board shops, and their return paths all use the same journaling timer adapter, including zero-duration memorize completion after resume.
+6. Dead or impossible paused snapshots still reach the established game-over summary path, now with a causal resume command, terminal event, and warning feedback.
+7. Seeded simulation inserts an accepted pause → resume pair into the full 384-step scenario and proves schema validity, event order, invariant safety, and JSON replay equality.
+
+Graph v32 registers pause/resume as a core lifecycle mechanic and connects all playable phases, serialized timer state, Gauntlet clock extension, HUD feedback, persistence, and deterministic simulation.
+
+## Thirty-third vertical slice: Typed Debug Reveal Lifecycle
+
+Temporary debug-board visibility now crosses the deterministic command boundary instead of toggling run truth from three renderer controllers:
+
+1. `debug.reveal_activate` accepts only active board play, carries the user-setting achievement policy, and deterministically activates or refreshes the established reveal duration.
+2. `debug.reveal_activated` records activation versus refresh, reveal duration, prior debug use, and exact before/after achievement eligibility.
+3. `debug.reveal_deactivate` requires an explicit schema-validated cause: browser timer elapsed, a paused zero-duration timer resumed, or the gameplay phase ended.
+4. `debug.reveal_deactivated` records that cause and the serialized remaining duration before clearing visibility; typed feedback distinguishes the developer reveal from the consumable Peek power.
+5. `runLifecycleController`, `runTimerController`, and `runResolutionController` now retain only settings, browser-timer, and presentation coordination while core adapters own every `debugPeekActive`, `debugUsed`, timer, and achievement-policy mutation.
+6. Pausing preserves the exact debug-reveal remainder, refreshing cannot restore achievement eligibility once disabled, and phase-end cleanup is journaled before summary/persistence work.
+7. Seeded simulation proves memorize → activation → deactivation after pause/resume, with strict schemas, ordered events, invariant safety, and JSON replay equality.
+
+Graph v33 registers debug reveal separately from `power.peek` and connects typed commands, pause-aware timer state, phase cleanup, achievement gating, HUD feedback, persistence, and deterministic simulation.
+
+## Thirty-fourth vertical slice: Typed Progression Safety Repair
+
+Automatic anti-softlock repair now crosses the deterministic command boundary instead of silently changing exit, hazard, and counter state in renderer continuation code:
+
+1. `run.progression_repair` accepts only when the pure repair transition finds a concrete stale exit requirement or enemy-hazard occupancy; healthy runs reject without state or journal noise.
+2. The repair transition records ordered repair kinds, exact exit lock and lever-count before/after values, defeated hazard identities, and all affected enemy-counter deltas.
+3. `run.progression_repaired` carries that complete diff under a `progression_safety` source, followed by typed feedback that names the automatic reachability repair.
+4. Primary resolution and level-complete continuation now call one journaling adapter; they retain presentation, achievement, persistence, and navigation coordination without mutating board truth directly.
+5. Stale terminal key locks become open only after progression pairs are exhausted, reachable or held keys remain authoritative, and final-pair boss hazards still update all established defeat counters exactly once.
+6. Direct reducer and adapter tests prove legacy parity, effect-only acceptance, strict schema/event identity, bounded journals, and JSON-round-tripped replay.
+7. The CLI headless simulation includes an accepted corrupted-board fixture containing both a stale iron exit lock and stale boss hazard, and fails if repair acceptance, schema validity, invariants, or replay diverge.
+
+Graph v34 upgrades `safety.softlock_fairness` into a typed invariant and replayable repair gate connected to command ownership, exit reachability, HUD feedback, persistence, and deterministic simulation.
+
+## Thirty-fifth vertical slice: Authoritative Board Turn Feedback Projection
+
+Match and mismatch floaters now project the typed board-turn event instead of independently re-running gameplay rules or reconstructing consequences from mutable board snapshots:
+
+1. `board.turn_resolved` now records the board level, exact two- or three-tile floater anchor, claimed findable and route identity, validated trait-interaction tags, and before/after streak, mismatch, shard, guard, life, and score counters.
+2. The established match and mismatch transitions capture the interaction tags they actually applied. Gambit matches record only the selected matching pair as their score anchor, while Gambit misses retain all three tiles.
+3. `resolveBoardTurnWithEvent` returns the journaled run together with the authoritative resolution event; state-only callers retain the existing compatibility wrapper.
+4. `runResolutionController` passes that event to the floater projector. `matchScorePop` formats typed tags and reward identities but no longer calls `resolveTileTraitEffects` or recalculates gameplay effects.
+5. Live floater keys use the deterministic command id rather than wall-clock time, so identical accepted transitions retain stable presentation identity.
+6. Core tests prove ordinary route/findable/trait/resource facts, mismatch chain-break facts, Gambit anchors, strict schema validity, and JSON replay equality. Renderer tests prove the exact event drives HUD copy and audio payoff coordination.
+7. The core gate now includes the dedicated floater projection suite, keeping this feedback ownership boundary under architectural drift enforcement.
+
+Graph v35 adds `feedback.board_turn_floater` and connects authoritative turn facts to HUD projection, bounded persistence, and deterministic replay.
+
+## Thirty-sixth vertical slice: Event-Only Board Turn Feedback Boundary
+
+The board-turn floater strangler no longer retains a renderer-side state reconstruction path:
+
+1. `buildMatchScorePopPayload` and `buildMismatchScorePopPayload` accept only the typed `board.turn_resolved` event plus an optional deterministic test nonce; they no longer accept before/after `RunState` snapshots.
+2. Anchor selection, claimed findable and route identity, trait tags, score, streak, shard, guard, life, and mismatch changes all come exclusively from the event envelope.
+3. Wall-clock keys were removed from the projector. The command id is now the production identity for both match and mismatch floaters.
+4. `runResolutionController` projects only when the core returns a resolution event. A rejected or unmigrated compatibility transition cannot synthesize authoritative feedback from board diffs.
+5. Existing presentation scenarios remain readable through a test-only event factory; it converts fixture state into the same event contract before invoking production code and is not bundled at runtime.
+6. `board-turn-feedback-boundary.test.ts` reads the production sources and fails if `RunState`, board-anchor helpers, pickup-diff detection, trait effect resolution, wall-clock identity, or state-shaped controller calls return.
+7. The gameplay-core gate executes the new boundary test alongside event projection, controller, replay, and simulation coverage.
+
+Graph v36 upgrades `feedback.board_turn_floater` to an event-only projection boundary with explicit drift enforcement against renderer gameplay reconstruction.
+
+## Thirty-seventh vertical slice: Event-Owned Pickup Feedback
+
+Pickup feedback now shares the same schema-validated board-turn envelope as match and mismatch floaters instead of rediscovering claimed findables by comparing React board snapshots:
+
+1. `gameplayFeedbackAdapter` exposes the latest valid `board.turn_resolved` event from the bounded journal and ignores malformed persisted entries.
+2. `GameScreen` keys pickup toasts by deterministic event id and reads the claimed findable identity directly from `matchedFindableKind`; it no longer retains previous tiles or scans pair state.
+3. The polite live-region hook consumes the same typed event, suppresses stale history on mount, and coordinates with same-command `feedback.requested` events to avoid duplicate screen-reader announcements.
+4. The obsolete `detectClaimedFindableKind` renderer rule and its `Tile` dependency were removed from production copy and hook modules.
+5. Focused adapter, screen, and accessibility tests prove invalid-event rejection, exact pickup identity, stable deduplication, and reward-stack copy.
+6. The board-turn ownership test reads all affected production sources and fails if board-diff helpers or snapshot refs return.
+7. Graph v37 broadens `feedback.board_turn_floater` into event-only multi-surface board-turn feedback, covering visual floaters, pickup toasts, accessible announcements, replay, and drift enforcement.
+
+## Thirty-eighth vertical slice: Replay-Stable Pickup Toast Context
+
+Pickup toast copy no longer mixes event-owned identity with live run counters:
+
+1. `board.turn_resolved` now carries claimed-findable and total-findable counters before and after every accepted turn alongside its existing streak, shard, life, and identity facts.
+2. The reducer records those counters from the exact transition inputs and outputs, so replay preserves pickup progress without consulting a later mutable run snapshot.
+3. `getPickupStackToastText` accepts only `BoardTurnResolvedEvent` and derives reward identity, chain forecast, lives, and pickup progress from that envelope.
+4. The `GameScreen` pickup effect retains only run identity/current-board guards and reduced-motion timing; it no longer passes score, inventory, life, or findable state into the toast formatter.
+5. Core tests prove the `0 → 1 of 1` pickup transition, while renderer fixtures and UI coverage exercise the stricter schema across floaters, accessibility, and stacked toast copy.
+6. The source-reading boundary test rejects restoration of the former state-shaped toast input and requires all four findable counter facts in schema and reducer ownership.
+7. Graph v38 marks board-turn feedback as an event-only, replay-stable multi-surface projection and adds the `event-only-pickup-toast-context` drift guard.
+
+## Thirty-ninth vertical slice: Event-Owned Board Turn Live Narration
+
+The HUD live region now narrates accepted board turns from the same schema-validated event as visual floaters and pickup toasts, rather than inferring gameplay consequences from cumulative React snapshots:
+
+1. `board.turn_resolved` contains a strict nested announcement snapshot with exact pair progress, currencies, charges, Stasis state, applied trait kinds, objective progress, Recall state, forgotten tiles, and enemy outcomes before and after the transition.
+2. `getBoardTurnAnnouncementFacts` captures those values at the core boundary and normalizes optional or malformed legacy counters before the event enters bounded persistence and replay.
+3. `buildBoardTurnAnnouncement` is a pure event-only projector that orders match or mismatch, traits, resources, objectives, Recall consequences, enemy outcomes, pickup identity, and payoff intensity into one deterministic message.
+4. Same-command `feedback.requested` copy is consumed exactly once by that projector, so accessible feedback does not repeat rewards already described by the board event.
+5. The live-region hook still observes snapshots for genuinely non-turn actions such as shops, powers, and enemy contact, but advances past board-turn snapshots without reconstructing their consequences.
+6. Removed hook inputs and dead trait-diff helpers make the ownership boundary explicit; source-reading checks reject restoration of board-turn counter subtraction, trait-counter inference, or state-shaped `GameScreen` inputs.
+7. Fact-capture, copy, core, hook, and architectural boundary tests are part of the gameplay-core gate, while the semantic model records every narrated state fact and its exact implementing and testing files.
+
+Graph v39 upgrades `feedback.board_turn_floater` into an event-only authoritative board-turn narration projection with explicit guards against HUD snapshot inference and duplicate accessible narration.
+
+## Fortieth vertical slice: Typed Command Live Feedback Boundary
+
+Accepted non-turn commands now reach the HUD live region through their schema-validated feedback event without being augmented by mutable React state deltas:
+
+1. `buildGameplayEventAnnouncement` projects exact core-owned copy, warning priority, and a replay-stable dedupe key from the typed feedback event alone.
+2. The live-region hook processes that projection independently, marks the same transition consumed by the legacy action snapshot, and advances the snapshot without narrating inferred resource, health, objective, Recall, or enemy deltas a second time.
+3. State-only mutations still retain the former fallback during the strangler migration, but its keys and tests now identify it explicitly as `legacy-action` rather than presenting it as equivalent to typed truth.
+4. Peek, Destroy Pair, Stray Remove, full shuffle, row shuffle, tile swap, and Undo events now require Recall-focus and unstable-memory counts before and after the action; their feedback messages expose that complete memory-aid consequence.
+5. Enemy contact events now retain the moving-enemy hit counter before and after guard-first damage resolution. Shop purchase feedback includes the item, exact spend, and remaining wallet.
+6. Focused hook tests prove typed shop, enemy, reward, and power feedback wins over simultaneous snapshot changes while legacy-only recovery and resource tests remain intact.
+7. A source-reading boundary rejects renderer state dependencies in the typed projector, restoration of feedback-plus-snapshot message assembly, and incomplete power consequence contracts.
+8. The gameplay-core gate runs the new projector and boundary suites, and replay parity tests validate the stricter event payloads and exact feedback copy.
+
+Graph v40 adds `feedback.typed_command_announcement`, connecting typed commands, tile contact, powers, shops, and moving hazards to accessible HUD feedback, bounded persistence, deterministic replay, and explicit anti-inference guards.
+
+## Forty-first vertical slice: Complete Board Turn Consequence Envelope
+
+Hazards, scouts, route specials, defensive wards, and chain milestones now join match rules and rewards in one replay-stable board-turn narration instead of running six additional React counter observers:
+
+1. `board.turn_resolved.announcement` now requires nested before/after counters for every hazard-tile outcome, Lantern Ward and Omen Seal scouts, Mimic Cache claims and bites, five route-special payoffs, and Guard Cache ward use.
+2. `getBoardTurnAnnouncementFacts` captures those counters directly from the reducer input and output, preserving exact turn ownership even when several consequences fire together.
+3. `buildBoardTurnAnnouncement` projects hazard copy in stable gameplay order, retains reduced-motion variants, reports every simultaneous route-special payoff, and gives Mimic bites warning priority without consulting live health or guard state.
+4. Chain thresholds and breaks now use `currentStreakBefore` and `currentStreakAfter` from the same event. A turn that crosses a threshold reports its match, build payoff, next reward target, and other consequences in one message.
+5. The hook removed chain, hazard, scout, Mimic, route-special, and ward refs and effects. `GameScreen` no longer passes any of their cumulative counters into the accessibility boundary.
+6. Deep-partial test fixtures keep strict production events readable while always filling the complete nested schema; core fact tests verify the normalized source snapshot rather than constructing renderer-shaped state.
+7. Focused projector, hook, adapter, GameScreen, core, and source-boundary coverage proves stable ordering, late Fuse copy, reduced motion, multi-scout turns, controlled and biting Mimics, stale-event suppression, and complete route-special narration.
+8. Architectural enforcement rejects restoration of the removed counter props, snapshot refs, renderer hazard-copy dependency, or chain-threshold reconstruction.
+
+Graph v41 upgrades `feedback.board_turn_floater` into the complete event-only board-consequence projection and connects hazard pressure, moving enemies, safe wards, and route payoffs to the same persisted and replay-tested feedback boundary.
+
+## Forty-second vertical slice: Lossless Typed Command Feedback Batches
+
+Compound accepted commands now retain every ordered feedback consequence at the renderer boundary instead of exposing only the final `feedback.requested` event:
+
+1. `getLatestGameplayFeedbackBatch` validates the bounded event journal, selects the latest feedback-producing command, and preserves all of that command's feedback in journal order.
+2. `buildGameplayEventBatchAnnouncement` joins the exact typed messages under one replay-stable command key, ignores duplicate persisted event identities, and promotes the batch to error priority when any member is a warning.
+3. `GameScreen` passes the complete batch to the HUD and searches that same batch for relic-offer audio, so presentation consumers no longer depend on a lossy latest-event projection.
+4. Board narration consumes every same-command proc message before projecting its complete turn facts, records all consumed event IDs, and excludes unrelated command feedback.
+5. `floor.parasite_advance` now emits a typed one-floor-before-drain warning when pressure reaches three, alongside its existing ward and life-loss outcomes.
+6. The HUD's score-parasite snapshot ref, active flag, pressure counter, ward counter, and level-delta effect were removed; typed floor events now own warning, protection, damage, and floor-ready narration.
+7. Focused tests prove multi-feedback floor ordering, strongest priority, duplicate filtering, stale-first-render suppression, board proc losslessness, strict core replay, and the absence of retired renderer inference.
+8. The legacy action snapshot remains only for still-untyped state mutations and is advanced—not narrated—whenever any event in a new typed command batch arrives.
+
+Graph v42 upgrades typed command feedback to a lossless command-scoped projection, connects floor flow and Score Parasite directly to it, and adds guards for journal ordering, compound-feedback completeness, strongest-priority propagation, stale-history suppression, and the removal of parasite snapshot ownership.
+
+## Forty-third vertical slice: Strict Event-Only HUD And Feedback Completeness Gate
+
+The last React gameplay-delta narrator is gone, backed by a deterministic audit that fails when accepted commands change accessibility-critical state without authoritative presentation:
+
+1. `getGameplayFeedbackCriticalSnapshot` normalizes the exact health, guard, shard, gold, objective, Recall, forgotten-memory, and enemy-outcome fields formerly compared inside the HUD hook.
+2. `getGameplayFeedbackObjectiveSnapshot` is shared by board-turn event capture and the audit, eliminating duplicate dungeon-versus-trait-route objective selection logic.
+3. `inspectGameplayFeedbackCompleteness` compares before/after critical snapshots and returns the exact command id, command type, changed fields, emitted event types, and a machine-readable failure message.
+4. Rejected and normalized no-op transitions owe no feedback. Meaningful accepted transitions must emit either `feedback.requested` or the authoritative `board.turn_resolved` envelope.
+5. The seeded core simulation applies this invariant after every reduced command, so a missing feedback path becomes an ordinary deterministic `invariantViolations` failure and replay gate regression.
+6. `useHudPoliteLiveAnnouncement` removed `actionSnapRef`, its consumed-event bookkeeping, all gameplay delta calculations, and the `legacy-action` dedupe path.
+7. `GameScreen` no longer passes lives, currencies, objective counters, Recall fields, shuffle state, or enemy counters into the announcement hook. React now supplies only typed events plus timer and Gambit presentation signals.
+8. Dedicated unit, simulation, hook, GameScreen, and source-boundary tests prove exact diagnostics, accepted presentation paths, normalization, seeded corpus coverage, and architectural non-regression. The new suite is part of `gate:gameplay-core`.
+
+Graph v43 adds `safety.feedback_completeness`, upgrades the gameplay HUD to a strict event-only readability gate, and links deterministic commands, board turns, typed announcements, simulation, and the HUD through explicit audit, gate, guard, and `tested_by` relationships.
+
+## Forty-fourth vertical slice: Three Distinct Typed Build Strategy Gate
+
+The platform now proves three retained gameplay builds through executable command/event loops instead of relying on build labels or route-risk profiles as evidence of build viability:
+
+1. `GAMEPLAY_BUILD_STRATEGIES` maps each evaluated build to a shipped starting loadout, schema-validated activation definitions, one authoritative consequence command, and its expected event fingerprint.
+2. Conduit Cartographer starts from Memory Scout, claims Echo Conduit Lens, triggers Echo beside Conduit, and spends the resulting information resource through `board.peek` → `board.peeked`.
+3. The Warden starts from Cursebreaker, claims Hazard Ward, triggers Volatile beside Heavy, and spends its control resource through `board.destroy_pair` → `board.pair_destroyed`.
+4. The Vaultbreaker starts from its matching loadout, claims treasure and Cursed Opener sources, triggers the clean Cursed payoff, and spends earned gold through `shop.purchase` → `shop.offer_purchased`.
+5. Every seed records the exact commands, events, feedback cues, acceptance results, remaining lives, schema/order diagnostics, and JSON-round-tripped replay result. The existing feedback-completeness invariant audits each reduced transition.
+6. Viability requires a complete accepted chain, a live run, at least three typed feedback events, an accepted downstream consequence, no invariant violations, and exact replay on every sampled seed.
+7. Distinctness comes from typed event axes—information, control, and economy. The gate requires a unique dominant axis for each build and a pairwise presence distance of two, so renamed copies or overlapping resource loops cannot satisfy the requirement.
+8. `sim:build-strategies` emits a queryable JSON summary and exits nonzero on drift. `gate:rewards-economy` runs the focused tests and simulation, while exact build/seed diagnostics identify a failed consequence, feedback gap, replay divergence, or collapsed strategy identity.
+
+Graph v44 expands `simulation.build_evaluation` from route-only profile outcomes into a combined route-profile and three-build command/event viability gate, connecting the core, replay, event-only HUD, Conduit Cartographer, Warden, Vaultbreaker, economy, and fairness checks.
+
+## Forty-fifth vertical slice: Generated-Board Command Playthrough Gate
+
+Generated-board fairness now executes the same serializable command/event boundary as live play instead of relying on direct compatibility transitions:
+
+1. `solveRunThroughGameplayCoreWithTrace` exhausts a board through typed memorize completion, tile flips, delayed turn resolution, progression repair, and exit activation commands.
+2. Every step validates command and event schemas, deterministic event identity and order, accepted/rejected agreement, nonnegative run inventory, stable run identity, and typed feedback completeness.
+3. The planner respects live Stasis behavior by placing the currently sticky-blocked tile second; seeded parity coverage compares the final gameplay state and stop reason with the retained legacy solver before that compatibility path can be removed.
+4. Exact commands, events, accepted and rejected command IDs, stop diagnostics, and invariant violations remain queryable. Full verification JSON-round-trips the command list and compares the complete run, event sequence, and acceptance ledger.
+5. The feedback audit exposed an existing `reveal_unknowns` gap: ordinary tile reveals could advance the dungeon objective without an authoritative presentation event. Tile-flip reduction now emits `objective.progress.changed` with the exact label and progress whenever that snapshot changes.
+6. The softlock generator contract and endless simulation now use the command solver. Direct `flipTile`/`resolveBoardTurn` playthrough remains only as parity evidence during the strangler migration.
+7. Long-run simulation executes all command, schema, event-order, feedback, inventory, and fairness invariants on every selected playable floor. It fully replays the first 24 floors, every boss floor, and each hundredth-floor checkpoint, and exposes `replayCheckedFloors` as a gated CSV and health-report metric.
+8. Focused tests prove simple exit activation, typed stale-boss repair, generated-board parity across seeds and depths, explainable no-exit/no-progress stops, optional replay sampling, consumer source boundaries, and the missing objective-feedback regression.
+
+Graph v45 adds `simulation.generated_board_playthrough` and connects typed tile input, turn resolution, exits, feedback completeness, floor progression, softlock/topology safety, and sampled deterministic replay through source-referenced `tested_by` and `guarded_by` relationships.
+
 ## Current slice status
 
 Implemented in the Conduit Cartographer vertical slice:
@@ -375,6 +665,7 @@ Implemented in the Conduit Cartographer vertical slice:
 
 Still required before the vertical slice is complete:
 
-- migrate remaining legacy feedback producers onto the common journal adapter as their gameplay definitions move into the core;
-- extend typed profile evaluation beyond routes as additional build-defining combat and reward decisions enter the command core;
+- widen the feedback-completeness audit beyond the former HUD-critical fields as additional gameplay ownership enters the core;
+- extend the structural three-build proof into longer multi-floor performance, counter-matchup, and balance distributions as more combat decisions enter the command core;
+- build that multi-floor three-strategy proof on `simulation.generated_board_playthrough`, retaining exact command/event traces and replay checkpoints across floor transitions;
 - continue migrating cohesive player builds rather than adding isolated definitions, using the graph diagnostics to choose the next least-overlapping loop.

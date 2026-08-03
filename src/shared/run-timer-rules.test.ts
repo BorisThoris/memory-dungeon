@@ -8,7 +8,9 @@ import {
     enableDebugPeek,
     isResumableStatus,
     pauseRun,
-    resumeRun
+    pauseRunAt,
+    resumeRun,
+    resumeRunAt
 } from './run-timer-rules';
 
 describe('run timer rules', () => {
@@ -103,6 +105,16 @@ describe('run timer rules', () => {
         vi.setSystemTime(2_500);
         const resumed = resumeRun(paused);
         expect(resumed.gauntletDeadlineMs).toBe((playing.gauntletDeadlineMs ?? 0) + 1_500);
+        expect(resumed.timerState.gauntletPausedAtMs).toBeNull();
+    });
+
+    it('supports explicit deterministic pause and resume observations for the command core', () => {
+        const playing = finishMemorizePhase(createGauntletRun(0, 60_000));
+        const paused = pauseRunAt(playing, 4_000);
+        const resumed = resumeRunAt(paused, 5_250);
+
+        expect(paused.timerState.gauntletPausedAtMs).toBe(4_000);
+        expect(resumed.gauntletDeadlineMs).toBe((playing.gauntletDeadlineMs ?? 0) + 1_250);
         expect(resumed.timerState.gauntletPausedAtMs).toBeNull();
     });
 

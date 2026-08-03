@@ -1,13 +1,17 @@
 import type { RunState, ViewState } from '../../shared/contracts';
 import type { GameplayEvent } from '../../shared/gameplay-core-contracts';
-import { createGameplayShopPurchaseCommand } from '../../shared/gameplay-core-contracts';
+import {
+    createGameplayShopPurchaseCommand,
+    createGameplayShopRerollCommand
+} from '../../shared/gameplay-core-contracts';
 import { reduceGameplayCommand } from '../../shared/gameplay-core';
 import { appendGameplayJournal } from '../../shared/gameplay-journal';
-import {
-    rerollShopOffers
-} from '../../shared/shop-rules';
 import type { StoreNavigationTransition } from './navigationModel';
 import type { RunSurfaceState } from './runSurfaceState';
+import {
+    getNewGameplayFeedback,
+    type GameplayFeedbackPresentation
+} from './gameplayFeedbackAdapter';
 
 type ShopReturnMode = RunSurfaceState['shopReturnMode'];
 
@@ -42,7 +46,8 @@ type ShopActionSurfaceResult =
     | {
           kind: 'applied';
           patch: { run: RunState };
-          events?: GameplayEvent[];
+          events: GameplayEvent[];
+          feedback: GameplayFeedbackPresentation | null;
       };
 
 export const shouldResumeShopRunOnClose = (
@@ -131,13 +136,18 @@ export const createShopPurchaseSurfaceResult = ({
         offerId
     );
     const result = reduceGameplayCommand(run, command);
-    return !result.accepted
-        ? { kind: 'ignored' }
-        : {
-              kind: 'applied',
-              patch: { run: appendGameplayJournal(result.run, [command], result.events) },
-              events: result.events
-          };
+    if (!result.accepted) {
+        return { kind: 'ignored' };
+    }
+    const nextRun = appendGameplayJournal(result.run, [command], result.events);
+    return {
+        kind: 'applied',
+        patch: { run: nextRun },
+        events: result.events,
+        feedback: getNewGameplayFeedback(run, nextRun).find(
+            (item) => item.audioCategory === 'shop-purchase'
+        ) ?? null
+    };
 };
 
 export const createShopRerollSurfaceResult = ({
@@ -153,10 +163,20 @@ export const createShopRerollSurfaceResult = ({
         return { kind: 'ignored' };
     }
 
+    const command = createGameplayShopRerollCommand(
+        `shop-reroll:${run.runSeed}:${run.board?.level ?? 0}:${run.shopRerolls}`
+    );
+    const result = reduceGameplayCommand(run, command);
+    if (!result.accepted) {
+        return { kind: 'ignored' };
+    }
+    const nextRun = appendGameplayJournal(result.run, [command], result.events);
     return {
         kind: 'applied',
-        patch: {
-            run: rerollShopOffers(run)
-        }
+        patch: { run: nextRun },
+        events: result.events,
+        feedback: getNewGameplayFeedback(run, nextRun).find(
+            (item) => item.audioCategory === 'shop-reroll'
+        ) ?? null
     };
 };

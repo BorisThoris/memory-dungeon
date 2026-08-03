@@ -9,12 +9,18 @@ import {
     cancelResolvingWithUndo
 } from './board-power-actions';
 import { maxPinnedTilesForRun, togglePinnedTile } from './board-power-state';
-import { MAX_LIVES, type BonusRewardId, type FindableKind, type RunState } from './contracts';
+import {
+    DEBUG_REVEAL_MS,
+    MAX_LIVES,
+    RECALL_FOCUS_MAX,
+    type BonusRewardId,
+    type FindableKind,
+    type RunState
+} from './contracts';
 import {
     GAMEPLAY_BONUS_REWARD_IDS,
     GAMEPLAY_BONUS_REWARD_RULES,
     GAMEPLAY_CORE_SCHEMA_VERSION,
-    GAMEPLAY_REWARD_PERK_IDS,
     createGameplayDefinitionCommand,
     gameplayCommandSchema,
     gameplayEventSchema,
@@ -27,7 +33,7 @@ import {
 } from './gameplay-core-contracts';
 import {
     getRunInventoryItemQuantity,
-    useRunInventoryItem
+    useRunInventoryItem as consumeRunInventoryItem
 } from './run-inventory';
 import {
     applyGameplayDefinitionTransition,
@@ -37,23 +43,34 @@ import {
 } from './gameplay-effect-transition';
 import { runNonNegativeInteger } from './run-number-guards';
 import { runStringArray } from './run-array-guards';
-import { gainRelicFavor } from './relic-favor-rules';
 import { acceptEndlessRiskWager } from './risk-wager-rules';
 import { normalizeSessionStats } from './session-stats-rules';
-import { purchaseShopOffer } from './shop-rules';
+import { purchaseShopOffer, rerollShopOffers, runShopOffers } from './shop-rules';
+import { applyEnemyHazardClick } from './dungeon-enemy-hazard-rules';
 import { createDungeonExitActivationTransition } from './dungeon-exit-rules';
 import { getDungeonExitStatus } from './dungeon-board-status';
 import { advanceScoreParasiteFloor } from './score-parasite-rules';
 import { hasMutator } from './mutators';
 import { tilesArePairMatch } from './scoring-rules';
-import { WILD_PAIR_KEY } from './tile-identity';
+import { EXIT_PAIR_KEY, ROOM_PAIR_KEY, SHOP_PAIR_KEY, WILD_PAIR_KEY } from './tile-identity';
 import { isBoardComplete } from './board-inspection';
 import { rotateRunShiftingSpotlight } from './shifting-spotlight-rules';
 import { resolveHazardBanisherFloorStart } from './hazard-banisher-rules';
 import { applyRouteChoiceOutcome } from './route-rules';
+import { openRouteSideRoom } from './route-side-room-rules';
+import { openRelicOffer } from './relic-offer-open-rules';
 import { createRelicPickTransitionResult } from './relic-pick-transition-rules';
-import { repairRunProgressionSoftlocks } from './run-progression-repair';
-import { applyRelicOfferService, hasRunRelic, RELIC_OFFER_SERVICE_CATALOG } from './relics';
+import {
+    createRunProgressionRepairTransition,
+    repairRunProgressionSoftlocks
+} from './run-progression-repair';
+import {
+    applyRelicOfferService,
+    hasRunRelic,
+    needsRelicPick,
+    relicMilestoneIndexForFloor,
+    RELIC_OFFER_SERVICE_CATALOG
+} from './relics';
 import { applyRunEventChoice, rollRunEventRoom, type RunEventChoiceEffect } from './run-events';
 import { advanceToNextLevel } from './next-floor-transition-rules';
 import {
@@ -62,8 +79,19 @@ import {
     type BoardTurnFindableRewardResult,
     type BoardTurnWildMatchResult
 } from './board-turn-transition';
+import { getBoardTurnAnnouncementFacts } from './board-turn-event-facts';
+import { getGameplayFeedbackObjectiveSnapshot } from './gameplay-feedback-facts';
 import { createFinalizeLevelTransition } from './floor-clear-transition';
 import { resolveSlayerFloorClearEffects } from './slayer-floor-clear-transition';
+import { createFlipTileTransition } from './flip-tile-transition';
+import { finishMemorizePhase } from './memorize-phase-rules';
+import {
+    disableDebugPeek,
+    enableDebugPeek,
+    normalizeTimerTimestampMs,
+    pauseRunAt,
+    resumeRunAt
+} from './run-timer-rules';
 
 export interface GameplayCommandResult {
     run: RunState;
@@ -80,6 +108,13 @@ export interface GameplayReplayResult {
 }
 
 const SYSTEM_SOURCE: GameplaySource = { kind: 'system', id: 'gameplay-core' };
+const MEMORIZE_PHASE_SOURCE: GameplaySource = { kind: 'system', id: 'memorize_phase' };
+const GAUNTLET_CLOCK_SOURCE: GameplaySource = { kind: 'system', id: 'gauntlet_clock' };
+const RUN_LIFECYCLE_SOURCE: GameplaySource = { kind: 'system', id: 'run_lifecycle' };
+const DEBUG_REVEAL_SOURCE: GameplaySource = { kind: 'system', id: 'debug_reveal' };
+const PROGRESSION_SAFETY_SOURCE: GameplaySource = { kind: 'system', id: 'progression_safety' };
+const TILE_FLIP_SOURCE: GameplaySource = { kind: 'system', id: 'board_tile' };
+const ENEMY_HAZARD_CONTACT_SOURCE: GameplaySource = { kind: 'system', id: 'enemy_hazard_contact' };
 const PEEK_SOURCE: GameplaySource = { kind: 'power', id: 'peek' };
 const PIN_SOURCE: GameplaySource = { kind: 'power', id: 'pin' };
 const STRAY_REMOVE_SOURCE: GameplaySource = { kind: 'power', id: 'stray_remove' };
@@ -110,6 +145,33 @@ const finalizeLevelThroughCore = createFinalizeLevelTransition({
     },
     appendGameplayJournal: (run) => run
 });
+const hasLiveShopInterlude = (run: RunState): boolean =>
+    runNonNegativeInteger(run.lives) > 0 &&
+    ((run.status === 'levelComplete' && !run.sideRoom && !run.relicOffer) ||
+        (run.status === 'paused' &&
+            run.timerState?.pausedFromStatus != null &&
+            run.board?.dungeonShopVisited === true));
+const memoryAidEventFacts = (before: RunState, after: RunState) => ({
+    recallFocusBefore: runNonNegativeInteger(before.recallFocus),
+    recallFocusAfter: runNonNegativeInteger(after.recallFocus),
+    forgottenTileCountBefore: runStringArray(before.forgottenTileIdsThisFloor).length,
+    forgottenTileCountAfter: runStringArray(after.forgottenTileIdsThisFloor).length
+});
+const memoryAidFeedbackSuffix = (before: RunState, after: RunState): string => {
+    const facts = memoryAidEventFacts(before, after);
+    if (
+        facts.recallFocusBefore === facts.recallFocusAfter &&
+        facts.forgottenTileCountBefore === facts.forgottenTileCountAfter
+    ) {
+        return '';
+    }
+    const memoryLine = facts.forgottenTileCountAfter > 0
+        ? `; ${facts.forgottenTileCountAfter} ${
+              facts.forgottenTileCountAfter === 1 ? 'tile memory is' : 'tile memories are'
+          } unstable`
+        : '';
+    return ` Recall focus ${facts.recallFocusAfter}/${RECALL_FOCUS_MAX}${memoryLine}.`;
+};
 const appendReindexedEvents = (
     commandId: string,
     sourceEvents: readonly GameplayEvent[],
@@ -137,6 +199,274 @@ const rejectedResult = (
     return { run, command, events, accepted: false };
 };
 
+const applyMemorizeCompleteCommand = (
+    run: RunState,
+    command: Extract<GameplayCommand, { type: 'phase.memorize_complete' }>
+): GameplayCommandResult => {
+    const nextRun = finishMemorizePhase(run);
+    if (nextRun === run) {
+        return rejectedResult(run, command.commandId, 'Memorize completion requires an active study phase.', command);
+    }
+    const rawRemainingMs = run.timerState?.memorizeRemainingMs;
+    const memorizeRemainingMsBefore =
+        typeof rawRemainingMs === 'number' && Number.isFinite(rawRemainingMs)
+            ? Math.max(0, Math.floor(rawRemainingMs))
+            : null;
+    const recallFocusBefore = runNonNegativeInteger(run.recallFocus);
+    const recallFocusAfter = runNonNegativeInteger(nextRun.recallFocus);
+    const events: GameplayEvent[] = [];
+    const writeEvent = makeEventWriter(command.commandId, MEMORIZE_PHASE_SOURCE, events);
+    writeEvent({
+        type: 'phase.memorize_completed',
+        floor: Math.max(1, runNonNegativeInteger(run.board?.level ?? normalizeSessionStats(run.stats).highestLevel)),
+        memorizeRemainingMsBefore,
+        recallFocusBefore,
+        recallFocusAfter,
+        pendingMemorizeBonusMs: runNonNegativeInteger(run.pendingMemorizeBonusMs)
+    });
+    writeEvent({
+        type: 'feedback.requested',
+        cue: 'phase.memorize.completed',
+        message: `Study complete; ${recallFocusAfter} Focus ${recallFocusAfter === 1 ? 'charge is' : 'charges are'} ready.`,
+        tone: 'information'
+    });
+    return { run: nextRun, command, events, accepted: true };
+};
+
+const applyGauntletExpireCommand = (
+    run: RunState,
+    command: Extract<GameplayCommand, { type: 'run.gauntlet_expire' }>
+): GameplayCommandResult => {
+    const deadlineMs = normalizeTimerTimestampMs(run.gauntletDeadlineMs);
+    if (
+        run.gameMode !== 'gauntlet' ||
+        (run.status !== 'memorize' && run.status !== 'playing' && run.status !== 'resolving') ||
+        runNonNegativeInteger(run.lives) <= 0 ||
+        deadlineMs === null ||
+        !Number.isSafeInteger(deadlineMs) ||
+        deadlineMs < 0 ||
+        command.observedAtMs <= deadlineMs
+    ) {
+        return rejectedResult(run, command.commandId, 'Gauntlet expiry requires an active run observed after its deadline.', command);
+    }
+    const nextRun: RunState = { ...run, status: 'gameOver', lives: 0 };
+    const events: GameplayEvent[] = [];
+    const writeEvent = makeEventWriter(command.commandId, GAUNTLET_CLOCK_SOURCE, events);
+    writeEvent({
+        type: 'run.gauntlet_expired',
+        observedAtMs: command.observedAtMs,
+        deadlineMs,
+        overdueMs: command.observedAtMs - deadlineMs,
+        statusBefore: run.status,
+        livesBefore: runNonNegativeInteger(run.lives),
+        livesAfter: 0
+    });
+    writeEvent({
+        type: 'feedback.requested',
+        cue: 'mode.gauntlet.expired',
+        message: `Gauntlet time expired ${command.observedAtMs - deadlineMs} ms past the deadline.`,
+        tone: 'warning'
+    });
+    return { run: nextRun, command, events, accepted: true };
+};
+
+const eventTimestampMs = (value: unknown): number | null => {
+    const normalized = normalizeTimerTimestampMs(value);
+    return normalized !== null && Number.isSafeInteger(normalized) && normalized >= 0
+        ? normalized
+        : null;
+};
+
+const applyPauseCommand = (
+    run: RunState,
+    command: Extract<GameplayCommand, { type: 'run.pause' }>
+): GameplayCommandResult => {
+    if (run.status !== 'memorize' && run.status !== 'playing' && run.status !== 'resolving') {
+        return rejectedResult(run, command.commandId, 'Pause requires an active memorize, playing, or resolving run.', command);
+    }
+    const pausedRun = pauseRunAt(run, command.observedAtMs);
+    if (pausedRun === run) {
+        return rejectedResult(run, command.commandId, 'Pause requires an active memorize, playing, or resolving run.', command);
+    }
+    const nextRun: RunState = {
+        ...pausedRun,
+        timerState: {
+            ...pausedRun.timerState,
+            ...command.timerSnapshot
+        }
+    };
+    const events: GameplayEvent[] = [];
+    const writeEvent = makeEventWriter(command.commandId, RUN_LIFECYCLE_SOURCE, events);
+    writeEvent({
+        type: 'run.paused',
+        observedAtMs: command.observedAtMs,
+        statusBefore: run.status,
+        statusAfter: 'paused',
+        gauntletDeadlineMs: eventTimestampMs(nextRun.gauntletDeadlineMs),
+        gauntletPausedAtMs: eventTimestampMs(nextRun.timerState.gauntletPausedAtMs),
+        timerSnapshot: command.timerSnapshot
+    });
+    writeEvent({
+        type: 'feedback.requested',
+        cue: 'run.paused',
+        message: `Run paused from ${run.status}.`,
+        tone: 'information'
+    });
+    return { run: nextRun, command, events, accepted: true };
+};
+
+const applyResumeCommand = (
+    run: RunState,
+    command: Extract<GameplayCommand, { type: 'run.resume' }>
+): GameplayCommandResult => {
+    const pausedFromStatus = run.timerState?.pausedFromStatus;
+    const nextRun = resumeRunAt(run, command.observedAtMs);
+    if (
+        nextRun === run ||
+        (pausedFromStatus !== 'memorize' && pausedFromStatus !== 'playing' && pausedFromStatus !== 'resolving')
+    ) {
+        return rejectedResult(run, command.commandId, 'Resume requires a paused run with a valid prior gameplay phase.', command);
+    }
+    if (
+        nextRun.status !== 'memorize' &&
+        nextRun.status !== 'playing' &&
+        nextRun.status !== 'resolving' &&
+        nextRun.status !== 'gameOver'
+    ) {
+        return rejectedResult(run, command.commandId, 'Resume produced an invalid gameplay phase.', command);
+    }
+    const deadlineBefore = eventTimestampMs(run.gauntletDeadlineMs);
+    const deadlineAfter = eventTimestampMs(nextRun.gauntletDeadlineMs);
+    const pausedAtMs = eventTimestampMs(run.timerState?.gauntletPausedAtMs);
+    const gauntletPauseDurationMs =
+        run.gameMode === 'gauntlet' && deadlineBefore !== null && pausedAtMs !== null
+            ? Math.max(0, command.observedAtMs - pausedAtMs)
+            : 0;
+    const outcome = nextRun.status === 'gameOver'
+        ? 'game_over'
+        : pausedFromStatus === 'resolving' && nextRun.status === 'playing'
+            ? 'recovered_to_playing'
+            : 'resumed';
+    const events: GameplayEvent[] = [];
+    const writeEvent = makeEventWriter(command.commandId, RUN_LIFECYCLE_SOURCE, events);
+    writeEvent({
+        type: 'run.resumed',
+        observedAtMs: command.observedAtMs,
+        pausedFromStatus,
+        statusAfter: nextRun.status,
+        outcome,
+        gauntletDeadlineMsBefore: deadlineBefore,
+        gauntletDeadlineMsAfter: deadlineAfter,
+        gauntletPauseDurationMs
+    });
+    writeEvent({
+        type: 'feedback.requested',
+        cue: outcome === 'game_over' ? 'run.resume.game_over' : 'run.resumed',
+        message: outcome === 'game_over'
+            ? 'Paused run could not resume safely and ended.'
+            : `Run resumed into ${nextRun.status}.`,
+        tone: outcome === 'game_over' ? 'warning' : 'information'
+    });
+    return { run: nextRun, command, events, accepted: true };
+};
+
+const applyDebugRevealActivateCommand = (
+    run: RunState,
+    command: Extract<GameplayCommand, { type: 'debug.reveal_activate' }>
+): GameplayCommandResult => {
+    if (run.status !== 'playing') {
+        return rejectedResult(run, command.commandId, 'Debug reveal activation requires an active playing phase.', command);
+    }
+    const outcome = run.debugPeekActive ? 'refreshed' : 'activated';
+    const nextRun = enableDebugPeek(run, command.disableAchievementsOnDebug);
+    const events: GameplayEvent[] = [];
+    const writeEvent = makeEventWriter(command.commandId, DEBUG_REVEAL_SOURCE, events);
+    writeEvent({
+        type: 'debug.reveal_activated',
+        outcome,
+        revealDurationMs: DEBUG_REVEAL_MS,
+        debugUsedBefore: Boolean(run.debugUsed),
+        debugUsedAfter: true,
+        achievementsEnabledBefore: Boolean(run.achievementsEnabled),
+        achievementsEnabledAfter: nextRun.achievementsEnabled
+    });
+    writeEvent({
+        type: 'feedback.requested',
+        cue: outcome === 'refreshed' ? 'debug.reveal.refreshed' : 'debug.reveal.activated',
+        message: command.disableAchievementsOnDebug
+            ? `Debug reveal active for ${DEBUG_REVEAL_MS} ms; achievements are disabled for this run.`
+            : `Debug reveal active for ${DEBUG_REVEAL_MS} ms.`,
+        tone: 'information'
+    });
+    return { run: nextRun, command, events, accepted: true };
+};
+
+const applyDebugRevealDeactivateCommand = (
+    run: RunState,
+    command: Extract<GameplayCommand, { type: 'debug.reveal_deactivate' }>
+): GameplayCommandResult => {
+    if (!run.debugPeekActive) {
+        return rejectedResult(run, command.commandId, 'Debug reveal deactivation requires an active debug reveal.', command);
+    }
+    const remainingMs = run.timerState?.debugRevealRemainingMs;
+    const nextRun = disableDebugPeek(run);
+    const events: GameplayEvent[] = [];
+    const writeEvent = makeEventWriter(command.commandId, DEBUG_REVEAL_SOURCE, events);
+    writeEvent({
+        type: 'debug.reveal_deactivated',
+        reason: command.reason,
+        debugRevealRemainingMsBefore:
+            typeof remainingMs === 'number' && Number.isSafeInteger(remainingMs) && remainingMs >= 0
+                ? remainingMs
+                : null,
+        debugPeekActiveAfter: false
+    });
+    writeEvent({
+        type: 'feedback.requested',
+        cue: `debug.reveal.${command.reason}`,
+        message: command.reason === 'phase_ended'
+            ? 'Debug reveal ended with the gameplay phase.'
+            : 'Debug reveal expired; hidden tiles are concealed again.',
+        tone: 'information'
+    });
+    return { run: nextRun, command, events, accepted: true };
+};
+
+const applyProgressionRepairCommand = (
+    run: RunState,
+    command: Extract<GameplayCommand, { type: 'run.progression_repair' }>
+): GameplayCommandResult => {
+    const transition = createRunProgressionRepairTransition(run);
+    if (!transition.repaired || transition.summary.repairKinds.length === 0) {
+        return rejectedResult(run, command.commandId, 'Progression repair requires a stale exit or enemy-hazard softlock.', command);
+    }
+    const events: GameplayEvent[] = [];
+    const writeEvent = makeEventWriter(command.commandId, PROGRESSION_SAFETY_SOURCE, events);
+    writeEvent({
+        type: 'run.progression_repaired',
+        ...transition.summary
+    });
+    const repairLabels = [
+        transition.summary.repairKinds.includes('exit_lock') ? 'exit lock' : null,
+        transition.summary.repairKinds.includes('exit_lever_count') ? 'lever requirement' : null,
+        transition.summary.repairKinds.includes('enemy_hazard')
+            ? `${transition.summary.enemyHazardIdsDefeated.length} stale enemy hazard${transition.summary.enemyHazardIdsDefeated.length === 1 ? '' : 's'}`
+            : null,
+        transition.summary.repairKinds.includes('exit_metadata') &&
+        !transition.summary.repairKinds.includes('exit_lock') &&
+        !transition.summary.repairKinds.includes('exit_lever_count')
+            ? 'exit metadata'
+            : null
+    ].filter((label): label is string => label !== null);
+    writeEvent({
+        type: 'feedback.requested',
+        cue: 'safety.progression.repaired',
+        message: `Progression safety repaired ${repairLabels.join(' and ')}.`,
+        tone: 'information'
+    });
+    return { run: transition.run, command, events, accepted: true };
+};
+
 const applyDefinition = (
     run: RunState,
     command: Extract<GameplayCommand, { type: 'effects.apply' }>,
@@ -157,6 +487,147 @@ const applyDefinition = (
         accepted: transition.accepted
     };
 };
+
+const applyTileFlipCommand = (
+    run: RunState,
+    command: Extract<GameplayCommand, { type: 'board.tile_flip' }>
+): GameplayCommandResult => {
+    const targetBefore = run.board?.tiles.find((tile) => tile.id === command.targetTileId);
+    if (!targetBefore) {
+        return rejectedResult(run, command.commandId, 'Tile flip requires a current board target.', command);
+    }
+    const floorEvents: GameplayEvent[] = [];
+    const flipTile = createFlipTileTransition({
+        finalizeLevel: (candidateRun, board) => finalizeLevelThroughCore(candidateRun, board, {
+            commandId: command.commandId,
+            events: floorEvents
+        })
+    });
+    const nextRun = flipTile(run, command.targetTileId);
+    if (nextRun === run) {
+        return rejectedResult(run, command.commandId, 'Tile cannot be flipped in the current board state.', command);
+    }
+    const targetAfter = nextRun.board?.tiles.find((tile) => tile.id === command.targetTileId) ?? targetBefore;
+    const trapsTriggeredBefore = runNonNegativeInteger(run.dungeonTrapsTriggered);
+    const trapsTriggeredAfter = runNonNegativeInteger(nextRun.dungeonTrapsTriggered);
+    const outcome = trapsTriggeredAfter > trapsTriggeredBefore
+        ? 'trap_triggered'
+        : targetBefore.pairKey === EXIT_PAIR_KEY
+          ? 'exit_revealed'
+          : targetBefore.pairKey === SHOP_PAIR_KEY
+            ? 'shop_revealed'
+            : targetBefore.pairKey === ROOM_PAIR_KEY
+              ? 'room_resolved'
+              : targetBefore.state === 'hidden' && targetAfter.state === 'flipped'
+                ? 'flipped'
+                : 'cleanup';
+    const events: GameplayEvent[] = [];
+    const writeEvent = makeEventWriter(command.commandId, TILE_FLIP_SOURCE, events);
+    const objectiveBefore = getGameplayFeedbackObjectiveSnapshot(run);
+    const objectiveAfter = getGameplayFeedbackObjectiveSnapshot(nextRun);
+    writeEvent({
+        type: 'board.tile_flipped',
+        targetTileId: command.targetTileId,
+        outcome,
+        tileStateBefore: targetBefore.state,
+        tileStateAfter: targetAfter.state,
+        flippedTileIdsBefore: runStringArray(run.board?.flippedTileIds),
+        flippedTileIdsAfter: runStringArray(nextRun.board?.flippedTileIds),
+        statusBefore: run.status,
+        statusAfter: nextRun.status,
+        resolveDelayMs:
+            nextRun.status === 'resolving'
+                ? Math.max(0, Math.floor(nextRun.timerState.resolveRemainingMs ?? 0))
+                : null,
+        trapsTriggeredBefore,
+        trapsTriggeredAfter,
+        livesBefore: runNonNegativeInteger(run.lives),
+        livesAfter: runNonNegativeInteger(nextRun.lives),
+        boardComplete: nextRun.board ? isBoardComplete(nextRun.board) : false
+    });
+    if (outcome === 'trap_triggered') {
+        writeEvent({
+            type: 'feedback.requested',
+            cue: 'board.tile.trap_triggered',
+            message: `${targetBefore.label} sprung a trap; ${runNonNegativeInteger(nextRun.lives)} lives remain.`,
+            tone: 'warning'
+        });
+    } else if (outcome === 'exit_revealed' || outcome === 'shop_revealed' || outcome === 'room_resolved') {
+        writeEvent({
+            type: 'feedback.requested',
+            cue: `board.tile.${outcome}`,
+            message: `${targetBefore.label} ${outcome === 'room_resolved' ? 'resolved' : 'revealed'}.`,
+            tone: 'information'
+        });
+    }
+    if (JSON.stringify(objectiveBefore) !== JSON.stringify(objectiveAfter) && objectiveAfter) {
+        writeEvent({
+            type: 'feedback.requested',
+            cue: 'objective.progress.changed',
+            message: `${objectiveAfter.label}: ${objectiveAfter.progress}/${objectiveAfter.required}.`,
+            tone: 'information'
+        });
+    }
+    appendReindexedEvents(command.commandId, floorEvents, events);
+    return { run: nextRun, command, events, accepted: true };
+};
+
+const applyEnemyHazardContactCommand = (
+    run: RunState,
+    command: Extract<GameplayCommand, { type: 'enemy_hazard.contact' }>
+): GameplayCommandResult => {
+    const hazard = (Array.isArray(run.board?.enemyHazards) ? run.board.enemyHazards : []).find(
+        (candidate) =>
+            candidate.currentTileId === command.targetTileId &&
+            candidate.state !== 'defeated' &&
+            runNonNegativeInteger(candidate.hp) > 0
+    );
+    if (!hazard) {
+        return rejectedResult(run, command.commandId, 'No active enemy hazard occupies the selected tile.', command);
+    }
+    const nextRun = applyEnemyHazardClick(run, command.targetTileId, {
+        advanceHazards: command.advanceHazards
+    });
+    if (nextRun === run) {
+        return rejectedResult(run, command.commandId, 'Enemy hazard contact is not legal for the current run.', command);
+    }
+    const guardTokensBefore = runNonNegativeInteger(run.stats.guardTokens);
+    const guardTokensAfter = runNonNegativeInteger(nextRun.stats.guardTokens);
+    const livesBefore = runNonNegativeInteger(run.lives);
+    const livesAfter = runNonNegativeInteger(nextRun.lives);
+    const events: GameplayEvent[] = [];
+    const writeEvent = makeEventWriter(command.commandId, ENEMY_HAZARD_CONTACT_SOURCE, events);
+    writeEvent({
+        type: 'enemy_hazard.contacted',
+        hazardId: hazard.id,
+        targetTileId: command.targetTileId,
+        advanceHazards: command.advanceHazards,
+        damage: runNonNegativeInteger(hazard.damage),
+        guardTokensBefore,
+        guardTokensAfter,
+        livesBefore,
+        livesAfter,
+        pendingMemorizeBonusBefore: runNonNegativeInteger(run.pendingMemorizeBonusMs),
+        pendingMemorizeBonusAfter: runNonNegativeInteger(nextRun.pendingMemorizeBonusMs),
+        hazardTurnBefore: runNonNegativeInteger(run.board?.enemyHazardTurn),
+        hazardTurnAfter: runNonNegativeInteger(nextRun.board?.enemyHazardTurn),
+        enemyHazardHitsBefore: runNonNegativeInteger(run.enemyHazardHitsThisFloor),
+        enemyHazardHitsAfter: runNonNegativeInteger(nextRun.enemyHazardHitsThisFloor),
+        gameOver: nextRun.status === 'gameOver'
+    });
+    writeEvent({
+        type: 'feedback.requested',
+        cue: guardTokensAfter < guardTokensBefore
+            ? 'hazard.enemy_contact.guard_absorbed'
+            : 'hazard.enemy_contact.life_lost',
+        message: guardTokensAfter < guardTokensBefore
+            ? `${hazard.label} struck; Guard absorbed the hit.`
+            : `${hazard.label} struck for ${livesBefore - livesAfter} life; ${livesAfter} remain.`,
+        tone: guardTokensAfter < guardTokensBefore ? 'information' : 'warning'
+    });
+    return { run: nextRun, command, events, accepted: true };
+};
+
 const applyPinToggleCommand = (
     run: RunState,
     command: Extract<GameplayCommand, { type: 'board.pin_toggle' }>
@@ -213,13 +684,12 @@ const applyStrayRemoveCommand = (
         targetTileId: command.targetTileId,
         strayChargesBefore: before,
         strayChargesAfter: after,
-        recallFocusBefore: runNonNegativeInteger(run.recallFocus),
-        recallFocusAfter: runNonNegativeInteger(nextRun.recallFocus)
+        ...memoryAidEventFacts(run, nextRun)
     });
     writeEvent({
         type: 'feedback.requested',
         cue: 'power.stray_remove.used',
-        message: `Stray Remove cleared ${command.targetTileId}; ${after} charge${after === 1 ? '' : 's'} remain.`,
+        message: `Stray Remove cleared ${command.targetTileId}; ${after} charge${after === 1 ? '' : 's'} remain.${memoryAidFeedbackSuffix(run, nextRun)}`,
         tone: 'information'
     });
     return { run: nextRun, command, events, accepted: true };
@@ -264,8 +734,7 @@ const applyDestroyPairCommand = (
         destroyChargesAfter,
         matchedPairsBefore: runNonNegativeInteger(run.board?.matchedPairs),
         matchedPairsAfter: runNonNegativeInteger(nextRun.board?.matchedPairs),
-        recallFocusBefore: runNonNegativeInteger(run.recallFocus),
-        recallFocusAfter: runNonNegativeInteger(nextRun.recallFocus),
+        ...memoryAidEventFacts(run, nextRun),
         parasitePressureBefore: runNonNegativeInteger(run.parasiteFloors),
         parasitePressureAfter: runNonNegativeInteger(nextRun.parasiteFloors),
         shiftingSpotlightNonceBefore: runNonNegativeInteger(run.shiftingSpotlightNonce),
@@ -275,7 +744,7 @@ const applyDestroyPairCommand = (
     writeEvent({
         type: 'feedback.requested',
         cue: 'power.destroy_pair.used',
-        message: `${target.label} pair removed; ${destroyChargesAfter} Destroy charge${destroyChargesAfter === 1 ? '' : 's'} remain${transition.boardComplete ? ' and the floor route is clear' : ''}.`,
+        message: `${target.label} pair removed; ${destroyChargesAfter} Destroy charge${destroyChargesAfter === 1 ? '' : 's'} remain${transition.boardComplete ? ' and the floor route is clear' : ''}.${memoryAidFeedbackSuffix(run, nextRun)}`,
         tone: 'information'
     });
     const resolvedRun = transition.boardComplete && nextRun.board
@@ -312,15 +781,14 @@ const applyPeekCommand = (
         targetTileId: command.targetTileId,
         peekChargesBefore: before,
         peekChargesAfter: after,
-        recallFocusBefore: runNonNegativeInteger(run.recallFocus),
-        recallFocusAfter: runNonNegativeInteger(nextRun.recallFocus),
+        ...memoryAidEventFacts(run, nextRun),
         routeSpecialRevealed:
             beforeTile?.routeSpecialRevealed !== true && afterTile?.routeSpecialRevealed === true
     });
     writeEvent({
         type: 'feedback.requested',
         cue: 'power.peek.used',
-        message: `Peek revealed ${command.targetTileId}; ${after} charge${after === 1 ? '' : 's'} remain.`,
+        message: `Peek revealed ${command.targetTileId}; ${after} charge${after === 1 ? '' : 's'} remain.${memoryAidFeedbackSuffix(run, nextRun)}`,
         tone: 'information'
     });
     return { run: nextRun, command, events, accepted: true };
@@ -422,12 +890,13 @@ const applyShuffleCommand = (
             .map((tile) => tile.id),
         shuffleNonceBefore: runNonNegativeInteger(run.shuffleNonce),
         shuffleNonceAfter: runNonNegativeInteger(nextRun.shuffleNonce),
+        ...memoryAidEventFacts(run, nextRun),
         usedFreeCharge
     });
     writeEvent({
         type: 'feedback.requested',
         cue: 'power.shuffle.used',
-        message: `Full-board shuffle committed${usedFreeCharge ? ' its free use' : `; ${afterCharges} charge${afterCharges === 1 ? '' : 's'} remain`}.`,
+        message: `Full-board shuffle committed${usedFreeCharge ? ' its free use' : `; ${afterCharges} charge${afterCharges === 1 ? '' : 's'} remain`}.${memoryAidFeedbackSuffix(run, nextRun)}`,
         tone: 'information'
     });
     return { run: nextRun, command, events, accepted: true };
@@ -464,12 +933,13 @@ const applyRegionShuffleCommand = (
             .map((tile) => tile.id),
         shuffleNonceBefore: runNonNegativeInteger(run.shuffleNonce),
         shuffleNonceAfter: runNonNegativeInteger(nextRun.shuffleNonce),
+        ...memoryAidEventFacts(run, nextRun),
         usedFreeCharge
     });
     writeEvent({
         type: 'feedback.requested',
         cue: 'power.region_shuffle.used',
-        message: `Row ${command.rowIndex + 1} shuffled${usedFreeCharge ? ' for free' : `; ${afterCharges} row/swap charge${afterCharges === 1 ? '' : 's'} remain`}.`,
+        message: `Row ${command.rowIndex + 1} shuffled${usedFreeCharge ? ' for free' : `; ${afterCharges} row/swap charge${afterCharges === 1 ? '' : 's'} remain`}.${memoryAidFeedbackSuffix(run, nextRun)}`,
         tone: 'information'
     });
     return { run: nextRun, command, events, accepted: true };
@@ -503,12 +973,13 @@ const applyTileSwapCommand = (
         secondTileId: command.secondTileId,
         shuffleNonceBefore: runNonNegativeInteger(run.shuffleNonce),
         shuffleNonceAfter: runNonNegativeInteger(nextRun.shuffleNonce),
+        ...memoryAidEventFacts(run, nextRun),
         usedFreeCharge
     });
     writeEvent({
         type: 'feedback.requested',
         cue: 'power.tile_swap.used',
-        message: `${command.firstTileId} swapped with ${command.secondTileId}${usedFreeCharge ? ' for free' : `; ${afterCharges} row/swap charge${afterCharges === 1 ? '' : 's'} remain`}.`,
+        message: `${command.firstTileId} swapped with ${command.secondTileId}${usedFreeCharge ? ' for free' : `; ${afterCharges} row/swap charge${afterCharges === 1 ? '' : 's'} remain`}.${memoryAidFeedbackSuffix(run, nextRun)}`,
         tone: 'information'
     });
     return { run: nextRun, command, events, accepted: true };
@@ -583,13 +1054,12 @@ const applyUndoResolveCommand = (
         restoredTileIds,
         undoUsesBefore: beforeUses,
         undoUsesAfter: afterUses,
-        recallFocusBefore: runNonNegativeInteger(run.recallFocus),
-        recallFocusAfter: runNonNegativeInteger(nextRun.recallFocus)
+        ...memoryAidEventFacts(run, nextRun)
     });
     writeEvent({
         type: 'feedback.requested',
         cue: 'power.undo_resolve.used',
-        message: `Pending flip cancelled; ${afterUses} undo use${afterUses === 1 ? '' : 's'} remain this floor.`,
+        message: `Pending flip cancelled; ${afterUses} undo use${afterUses === 1 ? '' : 's'} remain this floor.${memoryAidFeedbackSuffix(run, nextRun)}`,
         tone: 'information'
     });
     return { run: nextRun, command, events, accepted: true };
@@ -599,6 +1069,9 @@ const applyShopPurchaseCommand = (
     run: RunState,
     command: Extract<GameplayCommand, { type: 'shop.purchase' }>
 ): GameplayCommandResult => {
+    if (!hasLiveShopInterlude(run)) {
+        return rejectedResult(run, command.commandId, 'Shop purchase requires a live shop interlude.', command);
+    }
     const offer = (Array.isArray(run.shopOffers) ? run.shopOffers : []).find(
         (candidate) => candidate.id === command.offerId
     );
@@ -625,8 +1098,49 @@ const applyShopPurchaseCommand = (
     writeEvent({
         type: 'feedback.requested',
         cue: offer.itemId === 'master_key' ? 'shop.master_key.purchased' : 'shop.offer.purchased',
-        message: `${offer.label} purchased for ${shopGoldBefore - shopGoldAfter} shop gold.`,
+        message: `${offer.label} purchased for ${shopGoldBefore - shopGoldAfter} shop gold; ${shopGoldAfter} remains.`,
         tone: 'reward'
+    });
+    return { run: nextRun, command, events, accepted: true };
+};
+
+const applyShopRerollCommand = (
+    run: RunState,
+    command: Extract<GameplayCommand, { type: 'shop.reroll' }>
+): GameplayCommandResult => {
+    if (!hasLiveShopInterlude(run)) {
+        return rejectedResult(run, command.commandId, 'Shop reroll requires a live shop interlude.', command);
+    }
+    const nextRun = rerollShopOffers(run);
+    if (nextRun === run) {
+        return rejectedResult(run, command.commandId, 'Shop stock cannot be rerolled.', command);
+    }
+    const shopGoldBefore = runNonNegativeInteger(run.shopGold);
+    const shopGoldAfter = runNonNegativeInteger(nextRun.shopGold);
+    const rerollsBefore = runNonNegativeInteger(run.shopRerolls);
+    const rerollsAfter = runNonNegativeInteger(nextRun.shopRerolls);
+    const offersBefore = runShopOffers(run.shopOffers);
+    const offersAfter = runShopOffers(nextRun.shopOffers);
+    const events: GameplayEvent[] = [];
+    const writeEvent = makeEventWriter(command.commandId, SHOP_SOURCE, events);
+    writeEvent({
+        type: 'shop.stock_rerolled',
+        floor: Math.max(1, runNonNegativeInteger(run.board?.level ?? normalizeSessionStats(run.stats).highestLevel)),
+        cost: shopGoldBefore - shopGoldAfter,
+        shopGoldBefore,
+        shopGoldAfter,
+        rerollsBefore,
+        rerollsAfter,
+        offerIdsBefore: offersBefore.map((offer) => offer.id),
+        offerIdsAfter: offersAfter.map((offer) => offer.id),
+        itemIdsBefore: offersBefore.map((offer) => offer.itemId),
+        itemIdsAfter: offersAfter.map((offer) => offer.itemId)
+    });
+    writeEvent({
+        type: 'feedback.requested',
+        cue: 'shop.stock.rerolled',
+        message: `Shop stock rerolled for ${shopGoldBefore - shopGoldAfter} shop gold; ${shopGoldAfter} remains.`,
+        tone: 'information'
     });
     return { run: nextRun, command, events, accepted: true };
 };
@@ -672,7 +1186,11 @@ const applyDungeonExitActivateCommand = (
               : 'Dungeon exit activated without spending a key.',
         tone: 'information'
     });
-    return { run: nextRun, command, events, accepted: true };
+    const resolvedRun = finalizeLevelThroughCore(nextRun, transition.board, {
+        commandId: command.commandId,
+        events
+    });
+    return { run: resolvedRun, command, events, accepted: true };
 };
 
 const applyParasiteAdvanceCommand = (
@@ -711,7 +1229,14 @@ const applyParasiteAdvanceCommand = (
         wardConsumed,
         lifeLost
     });
-    if (wardConsumed) {
+    if (active && pressureBefore < 3 && advanced.parasiteFloors === 3) {
+        writeEvent({
+            type: 'feedback.requested',
+            cue: 'hazard.score_parasite.drain_warning',
+            message: 'Score Parasite: next cleared floor triggers the drain unless warded.',
+            tone: 'warning'
+        });
+    } else if (wardConsumed) {
         writeEvent({
             type: 'feedback.requested',
             cue: 'hazard.score_parasite.ward_consumed',
@@ -890,7 +1415,12 @@ const applyRouteChooseCommand = (
     }
 
     const statsBefore = normalizeSessionStats(run.stats);
-    const statsAfter = normalizeSessionStats(outcome.run.stats);
+    const nextRun = openRouteSideRoom(outcome.run);
+    const sideRoom = nextRun.sideRoom;
+    if (!sideRoom) {
+        return rejectedResult(run, command.commandId, 'Route choice could not open its deterministic side room.', command);
+    }
+    const statsAfter = normalizeSessionStats(nextRun.stats);
     const events: GameplayEvent[] = [];
     const writeEvent = makeEventWriter(command.commandId, ROUTE_CHOICE_SOURCE, events);
     writeEvent({
@@ -899,11 +1429,11 @@ const applyRouteChooseCommand = (
         routeType: outcome.routeType,
         outcome: outcome.outcomeKind,
         summaryText: outcome.summaryText,
-        selectedDungeonNodeId: outcome.run.dungeonRun?.selectedNodeId ?? null,
+        selectedDungeonNodeId: nextRun.dungeonRun?.selectedNodeId ?? null,
         livesBefore: runNonNegativeInteger(run.lives),
-        livesAfter: runNonNegativeInteger(outcome.run.lives),
+        livesAfter: runNonNegativeInteger(nextRun.lives),
         shopGoldBefore: runNonNegativeInteger(run.shopGold),
-        shopGoldAfter: runNonNegativeInteger(outcome.run.shopGold),
+        shopGoldAfter: runNonNegativeInteger(nextRun.shopGold),
         totalScoreBefore: statsBefore.totalScore,
         totalScoreAfter: statsAfter.totalScore,
         guardTokensBefore: statsBefore.guardTokens,
@@ -911,9 +1441,30 @@ const applyRouteChooseCommand = (
         comboShardsBefore: statsBefore.comboShards,
         comboShardsAfter: statsAfter.comboShards,
         relicFavorBefore: runNonNegativeInteger(run.relicFavorProgress),
-        relicFavorAfter: runNonNegativeInteger(outcome.run.relicFavorProgress),
+        relicFavorAfter: runNonNegativeInteger(nextRun.relicFavorProgress),
         memorizeBonusMsBefore: runNonNegativeInteger(run.pendingMemorizeBonusMs),
-        memorizeBonusMsAfter: runNonNegativeInteger(outcome.run.pendingMemorizeBonusMs)
+        memorizeBonusMsAfter: runNonNegativeInteger(nextRun.pendingMemorizeBonusMs)
+    });
+    const choices = Array.isArray(sideRoom.choices) ? sideRoom.choices : [];
+    const payloadId = sideRoom.payload.kind === 'rest_heal'
+        ? sideRoom.payload.serviceId
+        : sideRoom.payload.kind === 'event_choice'
+          ? sideRoom.payload.choiceId
+          : sideRoom.payload.instanceId;
+    writeEvent({
+        type: 'side_room.opened',
+        roomId: sideRoom.id,
+        roomKind: sideRoom.kind,
+        routeType: sideRoom.routeType,
+        nodeKind: sideRoom.nodeKind,
+        floor: sideRoom.floor,
+        payloadKind: sideRoom.payload.kind,
+        payloadId,
+        eventKey: sideRoom.payload.kind === 'event_choice' ? sideRoom.payload.eventKey : null,
+        choiceIds: choices.map((choice) => choice.id),
+        primaryChoiceId:
+            choices.find((choice) => choice.primary)?.id ??
+            (sideRoom.payload.kind === 'event_choice' ? sideRoom.payload.choiceId : null)
     });
     writeEvent({
         type: 'feedback.requested',
@@ -921,7 +1472,7 @@ const applyRouteChooseCommand = (
         message: outcome.summaryText,
         tone: outcome.routeType === 'greed' ? 'warning' : 'reward'
     });
-    return { run: outcome.run, command, events, accepted: true };
+    return { run: nextRun, command, events, accepted: true };
 };
 
 const gameplayBonusRewardIds = new Set<BonusRewardId>(GAMEPLAY_BONUS_REWARD_IDS);
@@ -1163,6 +1714,66 @@ const applyRelicPickCommand = (
     return { run: transition.run, command, events, accepted: true };
 };
 
+const applyRelicOfferOpenCommand = (
+    run: RunState,
+    command: Extract<GameplayCommand, { type: 'relic.offer_open' }>
+): GameplayCommandResult => {
+    const repairedRun = repairRunProgressionSoftlocks(run);
+    if (!needsRelicPick(repairedRun) || repairedRun.sideRoom) {
+        return rejectedResult(
+            run,
+            command.commandId,
+            'Relic offer opening requires an eligible cleared milestone with no unresolved side room.',
+            command
+        );
+    }
+
+    const clearedFloor = repairedRun.lastLevelResult!.level;
+    const tierIndex = relicMilestoneIndexForFloor(clearedFloor);
+    if (tierIndex === null) {
+        return rejectedResult(run, command.commandId, 'Relic offer milestone is not available.', command);
+    }
+    const nextRun = openRelicOffer(repairedRun);
+    if (nextRun === repairedRun) {
+        return rejectedResult(run, command.commandId, 'Relic offer could not be opened.', command);
+    }
+
+    const offer = nextRun.relicOffer;
+    const options = offer?.options ?? [];
+    const events: GameplayEvent[] = [];
+    const writeEvent = makeEventWriter(command.commandId, RELIC_OFFER_SOURCE, events);
+    writeEvent({
+        type: 'relic.offer_opened',
+        outcome: offer ? 'opened' : 'milestone_skipped',
+        clearedFloor,
+        offerTier: offer?.tier ?? tierIndex + 1,
+        options,
+        picksRemaining: runNonNegativeInteger(offer?.picksRemaining),
+        availableServiceIds: (offer?.services ?? [])
+            .filter((service) => service.available)
+            .map((service) => service.serviceId),
+        contextualReasonRelicIds: options.filter(
+            (relicId) => Boolean(offer?.contextualOptionReasons?.[relicId])
+        ),
+        bonusPicksBefore: runNonNegativeInteger(repairedRun.bonusRelicPicksNextOffer),
+        bonusPicksAfter: runNonNegativeInteger(nextRun.bonusRelicPicksNextOffer),
+        favorBonusPicksBefore: runNonNegativeInteger(repairedRun.favorBonusRelicPicksNextOffer),
+        favorBonusPicksAfter: runNonNegativeInteger(nextRun.favorBonusRelicPicksNextOffer),
+        favorBonusPicksInOffer: runNonNegativeInteger(offer?.favorBonusPicks),
+        relicTiersBefore: runNonNegativeInteger(repairedRun.relicTiersClaimed),
+        relicTiersAfter: runNonNegativeInteger(nextRun.relicTiersClaimed)
+    });
+    writeEvent({
+        type: 'feedback.requested',
+        cue: offer ? 'relic.offer.opened' : 'relic.offer.milestone_skipped',
+        message: offer
+            ? `Relic draft tier ${offer.tier} opened with ${offer.options.length} choices and ${offer.picksRemaining} pick${offer.picksRemaining === 1 ? '' : 's'}.`
+            : `Relic draft tier ${tierIndex + 1} had no eligible choices and was safely completed.`,
+        tone: offer ? 'reward' : 'information'
+    });
+    return { run: nextRun, command, events, accepted: true };
+};
+
 const applyRelicOfferServiceCommand = (
     run: RunState,
     command: Extract<GameplayCommand, { type: 'relic.offer_service_use' }>
@@ -1309,7 +1920,7 @@ const consumeBoardTurnWildMatch = (
         throw new Error('Core-owned Wild match requires an outer execution context.');
     }
     const tokensBefore = getRunInventoryItemQuantity(run, 'wild_match_token');
-    const consumed = useRunInventoryItem(run, 'wild_match_token');
+    const consumed = consumeRunInventoryItem(run, 'wild_match_token');
     if (!consumed.applied) {
         throw new Error('Core-owned Wild match could not consume its validated token.');
     }
@@ -1366,7 +1977,8 @@ const applyBoardTurnResolveCommand = (
         resolveFindableMatchReward: resolveBoardTurnFindableReward,
         consumeWildMatch: consumeBoardTurnWildMatch
     });
-    const nextRun = resolveTurn(run, command.encorePairKeys, { commandId: command.commandId, events });
+    const execution: BoardTurnExecutionContext = { commandId: command.commandId, events };
+    const nextRun = resolveTurn(run, command.encorePairKeys, execution);
     if (nextRun === run) {
         return rejectedResult(run, command.commandId, 'Board turn produced no transition.', command);
     }
@@ -1386,8 +1998,18 @@ const applyBoardTurnResolveCommand = (
     writeEvent({
         type: 'board.turn_resolved',
         outcome,
+        boardLevel: runNonNegativeInteger(run.board.level),
         flippedTileIds,
+        floaterTileIds: execution.resolutionFacts?.floaterTileIds ?? flippedTileIds,
         matchedPairKey: matchedSourceTile?.pairKey ?? null,
+        matchedFindableKind: execution.resolutionFacts?.matchedFindableKind ?? null,
+        findablesClaimedBefore: runNonNegativeInteger(run.findablesClaimedThisFloor),
+        findablesClaimedAfter: runNonNegativeInteger(nextRun.findablesClaimedThisFloor),
+        findablesTotalBefore: runNonNegativeInteger(run.findablesTotalThisFloor),
+        findablesTotalAfter: runNonNegativeInteger(nextRun.findablesTotalThisFloor),
+        announcement: getBoardTurnAnnouncementFacts(run, nextRun),
+        matchedRouteKind: execution.resolutionFacts?.matchedRouteKind ?? null,
+        traitInteractionTags: execution.resolutionFacts?.traitInteractionTags ?? [],
         boardComplete: nextRun.board ? isBoardComplete(nextRun.board) : false,
         statusBefore: run.status,
         statusAfter: nextRun.status,
@@ -1398,7 +2020,15 @@ const applyBoardTurnResolveCommand = (
         triesBefore: statsBefore.tries,
         triesAfter: statsAfter.tries,
         matchesBefore: statsBefore.matchesFound,
-        matchesAfter: statsAfter.matchesFound
+        matchesAfter: statsAfter.matchesFound,
+        mismatchesBefore: statsBefore.mismatches,
+        mismatchesAfter: statsAfter.mismatches,
+        currentStreakBefore: statsBefore.currentStreak,
+        currentStreakAfter: statsAfter.currentStreak,
+        comboShardsBefore: statsBefore.comboShards,
+        comboShardsAfter: statsAfter.comboShards,
+        guardTokensBefore: statsBefore.guardTokens,
+        guardTokensAfter: statsAfter.guardTokens
     });
     return { run: nextRun, command, events, accepted: true };
 };
@@ -1422,7 +2052,7 @@ const applyWildMatchConsumeCommand = (
     ) {
         return rejectedResult(run, command.commandId, 'Wild match token cannot be consumed for these tiles.', command);
     }
-    const consumed = useRunInventoryItem(run, 'wild_match_token');
+    const consumed = consumeRunInventoryItem(run, 'wild_match_token');
     if (!consumed.applied) {
         return rejectedResult(run, command.commandId, 'Wild match token was unavailable.', command);
     }
@@ -1460,8 +2090,35 @@ export const reduceGameplayCommand = (run: RunState, input: unknown): GameplayCo
         return rejectedResult(run, 'invalid-command', 'Command failed schema validation.', null);
     }
     const command = parsed.data;
+    if (command.type === 'phase.memorize_complete') {
+        return applyMemorizeCompleteCommand(run, command);
+    }
+    if (command.type === 'run.gauntlet_expire') {
+        return applyGauntletExpireCommand(run, command);
+    }
+    if (command.type === 'run.pause') {
+        return applyPauseCommand(run, command);
+    }
+    if (command.type === 'run.resume') {
+        return applyResumeCommand(run, command);
+    }
+    if (command.type === 'debug.reveal_activate') {
+        return applyDebugRevealActivateCommand(run, command);
+    }
+    if (command.type === 'debug.reveal_deactivate') {
+        return applyDebugRevealDeactivateCommand(run, command);
+    }
+    if (command.type === 'run.progression_repair') {
+        return applyProgressionRepairCommand(run, command);
+    }
     if (command.type === 'board.peek') {
         return applyPeekCommand(run, command);
+    }
+    if (command.type === 'board.tile_flip') {
+        return applyTileFlipCommand(run, command);
+    }
+    if (command.type === 'enemy_hazard.contact') {
+        return applyEnemyHazardContactCommand(run, command);
     }
     if (command.type === 'board.pin_toggle') {
         return applyPinToggleCommand(run, command);
@@ -1496,6 +2153,9 @@ export const reduceGameplayCommand = (run: RunState, input: unknown): GameplayCo
     if (command.type === 'shop.purchase') {
         return applyShopPurchaseCommand(run, command);
     }
+    if (command.type === 'shop.reroll') {
+        return applyShopRerollCommand(run, command);
+    }
     if (command.type === 'dungeon.exit_activate') {
         return applyDungeonExitActivateCommand(run, command);
     }
@@ -1513,6 +2173,9 @@ export const reduceGameplayCommand = (run: RunState, input: unknown): GameplayCo
     }
     if (command.type === 'side_room.resolve') {
         return applySideRoomResolveCommand(run, command);
+    }
+    if (command.type === 'relic.offer_open') {
+        return applyRelicOfferOpenCommand(run, command);
     }
     if (command.type === 'relic.pick') {
         return applyRelicPickCommand(run, command);

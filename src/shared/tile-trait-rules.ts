@@ -1159,6 +1159,7 @@ export const calculateTileTraitMismatchPenalty = (
     board?: BoardState | null
 ): {
     blocksVolatileShuffle: boolean;
+    interactionTags: TileTraitInteractionTag[];
     peekChargeLoss: number;
     recallMistakesDelta: number;
     triesDelta: number;
@@ -1166,6 +1167,7 @@ export const calculateTileTraitMismatchPenalty = (
     const effect = resolveTileTraitEffects({ run, board, sourceTiles, source: 'mismatch' });
     return {
         blocksVolatileShuffle: effect.blocksVolatileShuffle,
+        interactionTags: effect.interactionTags,
         peekChargeLoss: effect.peekChargeLoss,
         recallMistakesDelta: effect.recallMistakesDelta,
         triesDelta: effect.triesDelta

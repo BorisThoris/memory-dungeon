@@ -104,13 +104,13 @@ export const DUNGEON_AUDIO_EVENT_COVERAGE: readonly DungeonAudioEventCoverageRow
     },
     {
         id: 'dungeon_shop_purchase',
-        label: 'Dungeon shop purchase succeeds',
+        label: 'Dungeon shop purchase or stock reroll succeeds',
         cue: 'confirm',
-        callsite: 'ShopScreen purchase buttons',
+        callsite: 'typed ShopScreen purchase and reroll feedback',
         semanticMoment: 'commit',
         gainMultiplier: 0.78,
         ducking: 'ui_click',
-        mergePolicy: 'one confirm per accepted purchase',
+        mergePolicy: 'one confirm per accepted shop command',
         respectsSettingsGain: true,
         finalAssetStatus: 'existing_sample_or_procedural_fallback'
     },

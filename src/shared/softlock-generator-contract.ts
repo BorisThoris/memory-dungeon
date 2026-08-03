@@ -23,9 +23,9 @@ import {
 } from './board-inspection';
 import { advanceToNextLevel } from './next-floor-transition-rules';
 import {
-    solveRunByExhaustingPlayablePairsWithTrace,
-    type PlaythroughSolverTrace
-} from './playthrough-solver';
+    solveRunThroughGameplayCoreWithTrace,
+    type GameplayCorePlaythroughSolverTrace
+} from './gameplay-core-playthrough-solver';
 import { EXIT_PAIR_KEY, isSingletonUtilityPairKey } from './tile-identity';
 import { createNewRun } from './run-creation-rules';
 import { createDungeonRunMapState, inspectDungeonRunMapProgression } from './run-map';
@@ -170,7 +170,7 @@ export const createGeneratedBoardSolverRun = (
 
 export const solveGeneratedBoardByExhaustingPairs = (board: BoardState, seed: number): RunState => {
     const run = createGeneratedBoardSolverRun(board, seed);
-    return solveRunByExhaustingPlayablePairsWithTrace(run).run;
+    return solveRunThroughGameplayCoreWithTrace(run).run;
 };
 
 export const createShopStockInspectionRun = (run: RunState, board: BoardState): RunState => ({
@@ -183,8 +183,11 @@ export const createShopStockInspectionRun = (run: RunState, board: BoardState): 
     }
 });
 
-const solveGeneratedBoardByExhaustingPairsWithTrace = (board: BoardState, seed: number): PlaythroughSolverTrace => {
-    return solveRunByExhaustingPlayablePairsWithTrace(createGeneratedBoardSolverRun(board, seed));
+const solveGeneratedBoardByExhaustingPairsWithTrace = (
+    board: BoardState,
+    seed: number
+): GameplayCorePlaythroughSolverTrace => {
+    return solveRunThroughGameplayCoreWithTrace(createGeneratedBoardSolverRun(board, seed));
 };
 
 const pickFinalPairKey = (board: BoardState): string | null => {
@@ -468,8 +471,16 @@ const recordPlayableClearInspection = (
         solved.status === 'levelComplete'
             ? enemyHazardsForBoard(solved.board).filter((hazard) => hazard.state !== 'defeated')
             : [];
+    const coreSolverIssues = [
+        ...(trace.replayVerified && !trace.replayDeterministic ? ['command replay diverged'] : []),
+        ...(trace.rejectedCommandIds.length === 0
+            ? []
+            : [`rejected commands: ${trace.rejectedCommandIds.join(',')}`]),
+        ...trace.invariantViolations
+    ];
     if (
         solved.status === 'levelComplete' &&
+        coreSolverIssues.length === 0 &&
         report.issues.length === 0 &&
         topologyIssues.length === 0 &&
         staleEnemyHazards.length === 0
@@ -532,7 +543,9 @@ const recordPlayableClearInspection = (
     const issue: BoardFairnessIssue = {
         code: 'completion_route_missing',
         message:
-            staleEnemyHazards.length > 0
+            coreSolverIssues.length > 0
+                ? `Gameplay-core pair-exhaustion solver violated command/event invariants: ${coreSolverIssues.join('; ')}.`
+                : staleEnemyHazards.length > 0
                 ? `Executable pair-exhaustion solver ended with ${staleEnemyHazards.length} stale enemy hazard overlay(s); expected all hazards defeated.`
                 : `Executable pair-exhaustion solver stopped at ${trace.stopReason} after ${trace.turns} turn(s) with status=${solved.status}; expected levelComplete.`
     };
@@ -556,6 +569,7 @@ const recordPlayableClearInspection = (
         issueDetails: [
             formatIssueDetail(issue),
             `solver_trace: reason=${trace.stopReason} turns=${trace.turns} lastPair=${trace.lastPairKey ?? 'none'} lastTiles=${trace.lastTileIds.join(',') || 'none'}`,
+            ...coreSolverIssues.map((candidate) => `core_solver: ${candidate}`),
             ...staleEnemyIssues.map(formatIssueDetail),
             ...report.issues.map(formatIssueDetail),
             ...topologyIssues.map(formatIssueDetail)

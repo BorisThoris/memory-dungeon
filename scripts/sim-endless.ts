@@ -14,7 +14,7 @@ import { pickFloorScheduleEntry } from '../src/shared/floor-mutator-schedule';
 import { buildBoard } from '../src/shared/board-generation';
 import { getEffectivePrimaryExitLock, inspectBoardFairness } from '../src/shared/board-inspection';
 import { activeEnemyHazardsForBoard } from '../src/shared/enemy-hazard-board-rules';
-import { solveRunByExhaustingPlayablePairsWithTrace } from '../src/shared/playthrough-solver';
+import { solveRunThroughGameplayCoreWithTrace } from '../src/shared/gameplay-core-playthrough-solver';
 import { createGeneratedBoardSolverRun } from '../src/shared/softlock-generator-contract';
 import { inspectDungeonBoardTopology, inspectDungeonRunMapTopology } from '../src/shared/dungeon-topology';
 import { advanceToNextLevel } from '../src/shared/next-floor-transition-rules';
@@ -57,6 +57,7 @@ export interface EndlessSimulationHealthReport {
         findableTotal: number;
         lockedCacheRoomFloors: number;
         objectiveKinds: number;
+        coreReplayCheckedFloors: number;
         playableCheckedFloors: number;
         playableFailureDetails: string[];
         playableIssueFloors: number;
@@ -89,6 +90,9 @@ const shouldCheckPlayableBoard = (board: BoardState): boolean =>
     board.floorTag === 'boss' ||
     getEffectivePrimaryExitLock({ board }).lockKind !== 'none';
 
+const shouldVerifyPlayableReplay = (board: BoardState): boolean =>
+    board.level <= 24 || board.level % 100 === 0 || board.floorTag === 'boss';
+
 export const countUndefeatedEnemyHazardsForPlayableGate = (board: BoardState | null | undefined): number =>
     board?.enemyHazards?.filter((hazard) => hazard.state !== 'defeated').length ?? 0;
 
@@ -111,6 +115,7 @@ export const buildEndlessSimulationCsv = ({
     const topologyIssueCounts: Record<string, number> = {};
     const playableIssueCounts: Record<string, number> = {};
     const playableFailureDetails: string[] = [];
+    let coreReplayCheckedFloors = 0;
     let playableCheckedFloors = 0;
     let playableLockedExitFloors = 0;
     let lockedCacheRoomFloors = 0;
@@ -185,9 +190,12 @@ export const buildEndlessSimulationCsv = ({
             if (effectiveExitLock.lockKind !== 'none') {
                 playableLockedExitFloors += 1;
             }
-            const trace = solveRunByExhaustingPlayablePairsWithTrace(
-                createGeneratedBoardSolverRun(board, safeRunSeed, rulesVersion)
+            const trace = solveRunThroughGameplayCoreWithTrace(
+                createGeneratedBoardSolverRun(board, safeRunSeed, rulesVersion),
+                160,
+                shouldVerifyPlayableReplay(board)
             );
+            coreReplayCheckedFloors += trace.replayVerified ? 1 : 0;
             const activeStaleHazards =
                 trace.run.status === 'levelComplete' ? activeEnemyHazardsForBoard(trace.run.board).length : 0;
             const undefeatedStaleHazards =
@@ -205,15 +213,23 @@ export const buildEndlessSimulationCsv = ({
                 trace.run.status === 'levelComplete' && activeStaleHazards === 0 && undefeatedStaleHazards === 0
                     ? inspectDungeonRunMapTopology(advanceToNextLevel(trace.run).dungeonRun).issues
                     : [];
+            const coreSolverIssues = [
+                ...(trace.replayVerified && !trace.replayDeterministic ? ['command_replay_diverged'] : []),
+                ...trace.rejectedCommandIds.map((commandId) => `rejected:${commandId}`),
+                ...trace.invariantViolations
+            ];
             if (
                 trace.run.status !== 'levelComplete' ||
+                coreSolverIssues.length > 0 ||
                 activeStaleHazards > 0 ||
                 undefeatedStaleHazards > 0 ||
                 solvedBoardTopologyIssues.length > 0 ||
                 nextFloorRouteTopologyIssues.length > 0
             ) {
                 const reason =
-                    solvedBoardTopologyIssues.length > 0
+                    coreSolverIssues.length > 0
+                        ? 'core_solver_invariant'
+                        : solvedBoardTopologyIssues.length > 0
                         ? 'solved_board_topology'
                         : nextFloorRouteTopologyIssues.length > 0
                         ? 'next_floor_route_topology'
@@ -234,6 +250,7 @@ export const buildEndlessSimulationCsv = ({
                         `undefeatedStaleHazards=${undefeatedStaleHazards}`,
                         `solvedTopologyIssues=${solvedBoardTopologyIssues.map((issue) => issue.code).join('+') || 'none'}`,
                         `routeTopologyIssues=${nextFloorRouteTopologyIssues.map((issue) => issue.code).join('+') || 'none'}`,
+                        `coreSolverIssues=${coreSolverIssues.join('+') || 'none'}`,
                         `archetype=${floorArchetypeId ?? 'none'}`,
                         `objective=${board.dungeonObjectiveId ?? 'none'}`
                     ].join('|')
@@ -315,6 +332,7 @@ export const buildEndlessSimulationCsv = ({
             .sort(([a], [b]) => a.localeCompare(b))
             .map(([k, v]) => `topologyIssue,${k},${v}`),
         `playableMetric,checkedFloors,${playableCheckedFloors}`,
+        `playableMetric,replayCheckedFloors,${coreReplayCheckedFloors}`,
         `playableMetric,lockedExitFloors,${playableLockedExitFloors}`,
         `dungeonMetric,lockedCacheRoomFloors,${lockedCacheRoomFloors}`,
         `dungeonMetric,typedLockedCacheRoomFloors,${typedLockedCacheRoomFloors}`,
@@ -380,6 +398,7 @@ const readEndlessSimulationMetrics = (input: EndlessSimulationCsvInput): Endless
         findableTotal,
         lockedCacheRoomFloors: counts.dungeonMetric?.lockedCacheRoomFloors ?? 0,
         objectiveKinds,
+        coreReplayCheckedFloors: counts.playableMetric?.replayCheckedFloors ?? 0,
         playableCheckedFloors: counts.playableMetric?.checkedFloors ?? 0,
         playableFailureDetails,
         playableIssueFloors: counts.playableIssue?.floorWithIssue ?? 0,
@@ -417,6 +436,9 @@ export const evaluateEndlessSimulationHealth = (
             : null,
         metrics.playableCheckedFloors <= 0
             ? 'Expected executable playable solver sampling to inspect at least one floor.'
+            : null,
+        metrics.coreReplayCheckedFloors < Math.min(safeFloors, 24)
+            ? `Expected command replay verification on the first ${Math.min(safeFloors, 24)} sampled floor(s), saw ${metrics.coreReplayCheckedFloors}.`
             : null,
         metrics.playableIssueFloors > 0
             ? `Expected playable solver sample to clear every checked floor, saw ${metrics.playableIssueFloors} issue floor(s): ${metrics.playableIssueReasons.join(', ') || 'unknown'}. Details: ${metrics.playableFailureDetails.slice(0, 5).join('; ') || 'none'}.`
@@ -476,7 +498,7 @@ const formatEndlessSimulationSummary = (
         `- Route gates: ${metrics.routeKinds} floor archetypes, ${metrics.objectiveKinds} objectives, ${metrics.exitLockTypes} exit lock types, ${metrics.exitlessFloors} exitless floors.`,
         `- Fairness gates: ${metrics.fairnessIssueFloors} issue floors across ${metrics.fairnessIssueTypes} issue types (${metrics.fairnessIssueCodes.join(', ') || 'none'}).`,
         `- Topology gates: ${metrics.topologyIssueFloors} issue floors across ${metrics.topologyIssueTypes} issue types (${metrics.topologyIssueCodes.join(', ') || 'none'}).`,
-        `- Playable gates: ${metrics.playableCheckedFloors} sampled floors, ${metrics.playableLockedExitFloors} locked-exit floors, ${metrics.playableIssueFloors} issue floors (${metrics.playableIssueReasons.join(', ') || 'none'}).`,
+        `- Playable gates: ${metrics.playableCheckedFloors} sampled floors, ${metrics.coreReplayCheckedFloors} replay-verified floors, ${metrics.playableLockedExitFloors} locked-exit floors, ${metrics.playableIssueFloors} issue floors (${metrics.playableIssueReasons.join(', ') || 'none'}).`,
         `- Dungeon room gates: ${metrics.lockedCacheRoomFloors} locked cache room floors, ${metrics.typedLockedCacheRoomFloors} typed locked cache room floors.`,
         `- Reward gates: ${metrics.findableTotal} findable rewards across ${metrics.rewardKinds} active reward kinds.`,
         `- Trait gates: ${Math.round(metrics.traitFloorShare * floors)} trait floors (${pct(metrics.traitFloorShare * floors)}), ${metrics.traitInteractionLines} interaction lines, ${metrics.deadTraitFloors} dead trait floors.`,

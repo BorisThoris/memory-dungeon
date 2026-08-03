@@ -13,6 +13,7 @@ import { BONUS_REWARD_CATALOG, previewBonusRewardClaim } from './bonus-rewards';
 import {
     ENDLESS_RISK_WAGER_BONUS_FAVOR,
     ENDLESS_RISK_WAGER_MIN_STREAK,
+    DEBUG_REVEAL_MS,
     GAME_RULES_VERSION,
     type BoardState,
     type RunState,
@@ -35,10 +36,18 @@ import {
     SUPPLY_CACHE_DEFINITIONS,
     VAULTBREAKER_DEFINITIONS,
     WARDEN_DEFINITIONS,
+    createGameplayGauntletExpireCommand,
+    createGameplayDebugRevealActivateCommand,
+    createGameplayDebugRevealDeactivateCommand,
+    createGameplayMemorizeCompleteCommand,
+    createGameplayPauseCommand,
+    createGameplayProgressionRepairCommand,
+    createGameplayResumeCommand,
     createGameplayDefinitionCommand,
     createGameplayBoardTurnResolveCommand,
     createGameplayDestroyPairCommand,
     createGameplayDungeonExitActivateCommand,
+    createGameplayEnemyHazardContactCommand,
     createGameplayFlashPairCommand,
     createGameplayFloorAdvanceCommand,
     createGameplayGambitCommitCommand,
@@ -48,14 +57,17 @@ import {
     createGameplayPinToggleCommand,
     createGameplayRegionShuffleCommand,
     createGameplayRiskWagerAcceptCommand,
+    createGameplayRelicOfferOpenCommand,
     createGameplayRelicPickCommand,
     createGameplayRelicOfferServiceCommand,
     createGameplayRouteChooseCommand,
     createGameplaySideRoomResolveCommand,
     createGameplayShuffleCommand,
     createGameplayShopPurchaseCommand,
+    createGameplayShopRerollCommand,
     createGameplayStrayRemoveCommand,
     createGameplayTileSwapCommand,
+    createGameplayTileFlipCommand,
     createGameplayUndoResolveCommand,
     createGameplayWildMatchConsumeCommand,
     gameplayCommandSchema,
@@ -66,14 +78,17 @@ import {
 import { reduceGameplayCommand, replayGameplayCommands } from './gameplay-core';
 import {
     applyRelicImmediateThroughGameplayCore,
+    repairRunProgressionThroughGameplayCore,
     resolveFindableMatchRewardThroughGameplayCore,
     resolveSlayerFloorClearThroughGameplayCore
 } from './gameplay-core-adapters';
 import { applyRelicImmediate } from './relic-immediate-rules';
+import { openRelicOffer } from './relic-offer-open-rules';
 import { resolveTileTraitEffects } from './tile-trait-rules';
-import { purchaseShopOffer } from './shop-rules';
+import { createRunShopOffers, purchaseShopOffer, rerollShopOffers } from './shop-rules';
 import { createDungeonExitActivationTransition } from './dungeon-exit-rules';
-import { createNewRun } from './game';
+import { applyEnemyHazardClick } from './dungeon-enemy-hazard-rules';
+import { createNewRun, finalizeLevel } from './game';
 import { EXIT_PAIR_KEY, WILD_PAIR_KEY } from './tile-identity';
 import { createPlayablePathFixture } from './playable-path-fixtures';
 import { normalizeSessionStats } from './session-stats-rules';
@@ -85,6 +100,7 @@ import {
 } from './route-side-room-rules';
 import { advanceToNextLevel } from './next-floor-transition-rules';
 import { resolveSlayerFloorClearEffects } from './slayer-floor-clear-transition';
+import { finishMemorizePhase } from './memorize-phase-rules';
 
 const tile = (id: string, pairKey: string, tileTraitKind?: Tile['tileTraitKind']): Tile => ({
     id,
@@ -126,6 +142,517 @@ const run = (overrides: Partial<RunState> = {}): RunState =>
     }) as RunState;
 
 describe('deterministic gameplay core', () => {
+    it('completes study through one replayable command with exact Focus parity', () => {
+        const base = createNewRun(0, { echoFeedbackEnabled: false, runSeed: 9136 });
+        const initial: RunState = {
+            ...base,
+            recallFocus: 0,
+            timerState: {
+                ...base.timerState,
+                memorizeRemainingMs: 640,
+                pausedFromStatus: 'memorize'
+            }
+        };
+        const command = createGameplayMemorizeCompleteCommand('memorize-complete-1');
+        const result = reduceGameplayCommand(initial, command);
+
+        expect(result.accepted).toBe(true);
+        expect(result.command).toEqual(command);
+        expect(result.run).toEqual(finishMemorizePhase(initial));
+        expect(result.run.gameplayCommandJournal).toEqual(initial.gameplayCommandJournal);
+        expect(result.run.gameplayEventJournal).toEqual(initial.gameplayEventJournal);
+        expect(result.events).toEqual([
+            {
+                schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
+                commandId: command.commandId,
+                eventId: `${command.commandId}:0`,
+                sequence: 0,
+                source: { kind: 'system', id: 'memorize_phase' },
+                type: 'phase.memorize_completed',
+                floor: initial.board!.level,
+                memorizeRemainingMsBefore: 640,
+                recallFocusBefore: 0,
+                recallFocusAfter: result.run.recallFocus,
+                pendingMemorizeBonusMs: initial.pendingMemorizeBonusMs
+            },
+            {
+                schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
+                commandId: command.commandId,
+                eventId: `${command.commandId}:1`,
+                sequence: 1,
+                source: { kind: 'system', id: 'memorize_phase' },
+                type: 'feedback.requested',
+                cue: 'phase.memorize.completed',
+                message: `Study complete; ${result.run.recallFocus} Focus charge is ready.`,
+                tone: 'information'
+            }
+        ]);
+
+        const replayed = replayGameplayCommands(initial, [JSON.parse(JSON.stringify(command))]);
+        expect(replayed.run).toEqual(result.run);
+        expect(replayed.events).toEqual(result.events);
+        expect(replayed.acceptedCommandIds).toEqual([command.commandId]);
+
+        const duplicate = reduceGameplayCommand(result.run, command);
+        expect(duplicate.accepted).toBe(false);
+        expect(duplicate.run).toBe(result.run);
+        expect(duplicate.events).toEqual([
+            expect.objectContaining({
+                type: 'command.rejected',
+                reason: 'Memorize completion requires an active study phase.'
+            })
+        ]);
+    });
+
+    it('expires an active Gauntlet from a serialized clock observation', () => {
+        const base = createNewRun(0, { echoFeedbackEnabled: false, runSeed: 9135 });
+        const initial: RunState = {
+            ...base,
+            gameMode: 'gauntlet',
+            gauntletDeadlineMs: 10_000,
+            status: 'playing',
+            lives: 3
+        };
+        const command = createGameplayGauntletExpireCommand('gauntlet-expire-1', 10_025);
+        const result = reduceGameplayCommand(initial, command);
+
+        expect(result.accepted).toBe(true);
+        expect(result.command).toEqual(command);
+        expect(result.run).toEqual({ ...initial, status: 'gameOver', lives: 0 });
+        expect(result.run.gameplayCommandJournal).toEqual(initial.gameplayCommandJournal);
+        expect(result.run.gameplayEventJournal).toEqual(initial.gameplayEventJournal);
+        expect(result.events).toEqual([
+            {
+                schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
+                commandId: command.commandId,
+                eventId: `${command.commandId}:0`,
+                sequence: 0,
+                source: { kind: 'system', id: 'gauntlet_clock' },
+                type: 'run.gauntlet_expired',
+                observedAtMs: 10_025,
+                deadlineMs: 10_000,
+                overdueMs: 25,
+                statusBefore: 'playing',
+                livesBefore: 3,
+                livesAfter: 0
+            },
+            {
+                schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
+                commandId: command.commandId,
+                eventId: `${command.commandId}:1`,
+                sequence: 1,
+                source: { kind: 'system', id: 'gauntlet_clock' },
+                type: 'feedback.requested',
+                cue: 'mode.gauntlet.expired',
+                message: 'Gauntlet time expired 25 ms past the deadline.',
+                tone: 'warning'
+            }
+        ]);
+
+        expect(replayGameplayCommands(initial, [JSON.parse(JSON.stringify(command))])).toMatchObject({
+            run: result.run,
+            events: result.events,
+            acceptedCommandIds: [command.commandId],
+            rejectedCommandIds: []
+        });
+
+        for (const invalid of [
+            createGameplayGauntletExpireCommand('at-deadline', 10_000),
+            createGameplayGauntletExpireCommand('before-deadline', 9_999)
+        ]) {
+            expect(reduceGameplayCommand(initial, invalid)).toMatchObject({ accepted: false, run: initial });
+        }
+        expect(reduceGameplayCommand({ ...initial, status: 'paused' }, command)).toMatchObject({ accepted: false });
+        expect(reduceGameplayCommand({ ...initial, gameMode: 'endless' }, command)).toMatchObject({ accepted: false });
+        expect(reduceGameplayCommand({ ...initial, gauntletDeadlineMs: 9_999.5 }, command)).toMatchObject({ accepted: false });
+        expect(reduceGameplayCommand({ ...initial, gauntletDeadlineMs: -1 }, command)).toMatchObject({ accepted: false });
+        expect(reduceGameplayCommand(result.run, command)).toMatchObject({ accepted: false, run: result.run });
+    });
+
+    it('pauses and resumes timer state from serialized host observations', () => {
+        const base = createNewRun(0, { echoFeedbackEnabled: false, runSeed: 4401 });
+        const initial: RunState = {
+            ...base,
+            gameMode: 'gauntlet',
+            gauntletDeadlineMs: 50_000,
+            status: 'playing',
+            timerState: {
+                ...base.timerState,
+                debugRevealRemainingMs: 900
+            }
+        };
+        const timerSnapshot = {
+            memorizeRemainingMs: null,
+            resolveRemainingMs: null,
+            debugRevealRemainingMs: 350
+        };
+        const pauseCommand = createGameplayPauseCommand('pause-1', 10_000, timerSnapshot);
+        const paused = reduceGameplayCommand(initial, pauseCommand);
+
+        expect(paused.accepted).toBe(true);
+        expect(paused.run).toEqual({
+            ...initial,
+            status: 'paused',
+            timerState: {
+                ...initial.timerState,
+                memorizeRemainingMs: null,
+                debugRevealRemainingMs: 350,
+                pausedFromStatus: 'playing',
+                gauntletPausedAtMs: 10_000
+            }
+        });
+        expect(paused.run.gameplayCommandJournal).toEqual(initial.gameplayCommandJournal);
+        expect(paused.events).toEqual([
+            {
+                schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
+                commandId: pauseCommand.commandId,
+                eventId: `${pauseCommand.commandId}:0`,
+                sequence: 0,
+                source: { kind: 'system', id: 'run_lifecycle' },
+                type: 'run.paused',
+                observedAtMs: 10_000,
+                statusBefore: 'playing',
+                statusAfter: 'paused',
+                gauntletDeadlineMs: 50_000,
+                gauntletPausedAtMs: 10_000,
+                timerSnapshot
+            },
+            {
+                schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
+                commandId: pauseCommand.commandId,
+                eventId: `${pauseCommand.commandId}:1`,
+                sequence: 1,
+                source: { kind: 'system', id: 'run_lifecycle' },
+                type: 'feedback.requested',
+                cue: 'run.paused',
+                message: 'Run paused from playing.',
+                tone: 'information'
+            }
+        ]);
+
+        const resumeCommand = createGameplayResumeCommand('resume-1', 12_500);
+        const resumed = reduceGameplayCommand(paused.run, resumeCommand);
+        expect(resumed.accepted).toBe(true);
+        expect(resumed.run).toEqual({
+            ...paused.run,
+            gauntletDeadlineMs: 52_500,
+            status: 'playing',
+            timerState: {
+                ...paused.run.timerState,
+                pausedFromStatus: null,
+                gauntletPausedAtMs: null
+            }
+        });
+        expect(resumed.events).toEqual([
+            {
+                schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
+                commandId: resumeCommand.commandId,
+                eventId: `${resumeCommand.commandId}:0`,
+                sequence: 0,
+                source: { kind: 'system', id: 'run_lifecycle' },
+                type: 'run.resumed',
+                observedAtMs: 12_500,
+                pausedFromStatus: 'playing',
+                statusAfter: 'playing',
+                outcome: 'resumed',
+                gauntletDeadlineMsBefore: 50_000,
+                gauntletDeadlineMsAfter: 52_500,
+                gauntletPauseDurationMs: 2_500
+            },
+            {
+                schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
+                commandId: resumeCommand.commandId,
+                eventId: `${resumeCommand.commandId}:1`,
+                sequence: 1,
+                source: { kind: 'system', id: 'run_lifecycle' },
+                type: 'feedback.requested',
+                cue: 'run.resumed',
+                message: 'Run resumed into playing.',
+                tone: 'information'
+            }
+        ]);
+
+        const replayed = replayGameplayCommands(initial, JSON.parse(JSON.stringify([pauseCommand, resumeCommand])));
+        expect(replayed.run).toEqual(resumed.run);
+        expect(replayed.events).toEqual([...paused.events, ...resumed.events]);
+        expect(replayed.acceptedCommandIds).toEqual([pauseCommand.commandId, resumeCommand.commandId]);
+        expect(reduceGameplayCommand(paused.run, pauseCommand)).toMatchObject({ accepted: false, run: paused.run });
+        expect(reduceGameplayCommand(initial, resumeCommand)).toMatchObject({ accepted: false, run: initial });
+    });
+
+    it('records terminal and resolving-state recovery when a paused run resumes', () => {
+        const base = createNewRun(0, { echoFeedbackEnabled: false });
+        const pausedResolving: RunState = {
+            ...base,
+            status: 'paused',
+            board: base.board ? { ...base.board, flippedTileIds: [] } : null,
+            timerState: {
+                ...base.timerState,
+                pausedFromStatus: 'resolving',
+                resolveRemainingMs: 120
+            }
+        };
+        const recovered = reduceGameplayCommand(pausedResolving, createGameplayResumeCommand('recover-1', 5_000));
+        expect(recovered).toMatchObject({
+            accepted: true,
+            run: { status: 'playing', timerState: { resolveRemainingMs: null } },
+            events: [expect.objectContaining({ type: 'run.resumed', outcome: 'recovered_to_playing' }), expect.anything()]
+        });
+
+        const deadPaused = { ...pausedResolving, lives: 0 };
+        const terminal = reduceGameplayCommand(deadPaused, createGameplayResumeCommand('recover-dead', 5_000));
+        expect(terminal).toMatchObject({
+            accepted: true,
+            run: { status: 'gameOver', lives: 0 },
+            events: [
+                expect.objectContaining({ type: 'run.resumed', outcome: 'game_over', statusAfter: 'gameOver' }),
+                expect.objectContaining({ type: 'feedback.requested', cue: 'run.resume.game_over', tone: 'warning' })
+            ]
+        });
+    });
+
+    it('activates, refreshes, and deactivates debug reveal through replayable lifecycle commands', () => {
+        const initial = finishMemorizePhase(createNewRun(0, {
+            echoFeedbackEnabled: false,
+            runSeed: 4402
+        }));
+        const activateCommand = createGameplayDebugRevealActivateCommand('debug-activate-1', true);
+        const activated = reduceGameplayCommand(initial, activateCommand);
+
+        expect(activated.accepted).toBe(true);
+        expect(activated.run).toEqual({
+            ...initial,
+            achievementsEnabled: false,
+            debugPeekActive: true,
+            debugUsed: true,
+            timerState: {
+                ...initial.timerState,
+                debugRevealRemainingMs: DEBUG_REVEAL_MS
+            }
+        });
+        expect(activated.events).toEqual([
+            {
+                schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
+                commandId: activateCommand.commandId,
+                eventId: `${activateCommand.commandId}:0`,
+                sequence: 0,
+                source: { kind: 'system', id: 'debug_reveal' },
+                type: 'debug.reveal_activated',
+                outcome: 'activated',
+                revealDurationMs: DEBUG_REVEAL_MS,
+                debugUsedBefore: false,
+                debugUsedAfter: true,
+                achievementsEnabledBefore: true,
+                achievementsEnabledAfter: false
+            },
+            {
+                schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
+                commandId: activateCommand.commandId,
+                eventId: `${activateCommand.commandId}:1`,
+                sequence: 1,
+                source: { kind: 'system', id: 'debug_reveal' },
+                type: 'feedback.requested',
+                cue: 'debug.reveal.activated',
+                message: `Debug reveal active for ${DEBUG_REVEAL_MS} ms; achievements are disabled for this run.`,
+                tone: 'information'
+            }
+        ]);
+
+        const refreshCommand = createGameplayDebugRevealActivateCommand('debug-activate-2', false);
+        const refreshed = reduceGameplayCommand(activated.run, refreshCommand);
+        expect(refreshed.accepted).toBe(true);
+        expect(refreshed.run.achievementsEnabled).toBe(false);
+        expect(refreshed.run.timerState.debugRevealRemainingMs).toBe(DEBUG_REVEAL_MS);
+        expect(refreshed.events).toEqual([
+            expect.objectContaining({
+                type: 'debug.reveal_activated',
+                outcome: 'refreshed',
+                debugUsedBefore: true,
+                achievementsEnabledBefore: false,
+                achievementsEnabledAfter: false
+            }),
+            expect.objectContaining({
+                type: 'feedback.requested',
+                cue: 'debug.reveal.refreshed'
+            })
+        ]);
+
+        const deactivateCommand = createGameplayDebugRevealDeactivateCommand('debug-deactivate-1', 'timer_elapsed');
+        const deactivated = reduceGameplayCommand(refreshed.run, deactivateCommand);
+        expect(deactivated.accepted).toBe(true);
+        expect(deactivated.run.debugPeekActive).toBe(false);
+        expect(deactivated.run.timerState.debugRevealRemainingMs).toBeNull();
+        expect(deactivated.events).toEqual([
+            {
+                schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
+                commandId: deactivateCommand.commandId,
+                eventId: `${deactivateCommand.commandId}:0`,
+                sequence: 0,
+                source: { kind: 'system', id: 'debug_reveal' },
+                type: 'debug.reveal_deactivated',
+                reason: 'timer_elapsed',
+                debugRevealRemainingMsBefore: DEBUG_REVEAL_MS,
+                debugPeekActiveAfter: false
+            },
+            {
+                schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
+                commandId: deactivateCommand.commandId,
+                eventId: `${deactivateCommand.commandId}:1`,
+                sequence: 1,
+                source: { kind: 'system', id: 'debug_reveal' },
+                type: 'feedback.requested',
+                cue: 'debug.reveal.timer_elapsed',
+                message: 'Debug reveal expired; hidden tiles are concealed again.',
+                tone: 'information'
+            }
+        ]);
+
+        const commands = JSON.parse(JSON.stringify([activateCommand, refreshCommand, deactivateCommand]));
+        expect(replayGameplayCommands(initial, commands)).toMatchObject({
+            run: deactivated.run,
+            events: [...activated.events, ...refreshed.events, ...deactivated.events],
+            acceptedCommandIds: commands.map((command: { commandId: string }) => command.commandId),
+            rejectedCommandIds: []
+        });
+        expect(reduceGameplayCommand(initial, deactivateCommand)).toMatchObject({ accepted: false, run: initial });
+        expect(reduceGameplayCommand({ ...initial, status: 'paused' }, activateCommand)).toMatchObject({
+            accepted: false
+        });
+        expect(gameplayCommandSchema.safeParse({
+            schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
+            commandId: 'bad-debug-reason',
+            type: 'debug.reveal_deactivate',
+            reason: 'unknown'
+        }).success).toBe(false);
+    });
+
+    it('repairs stale progression blockers through one replayable safety command', () => {
+        const base = createNewRun(0, { echoFeedbackEnabled: false, runSeed: 4403 });
+        const initial: RunState = {
+            ...base,
+            board: {
+                level: 3,
+                pairCount: 1,
+                columns: 2,
+                rows: 2,
+                tiles: [
+                    { id: 'pair-a', pairKey: 'pair', label: 'Pair A', state: 'matched', symbol: 'a' },
+                    { id: 'pair-b', pairKey: 'pair', label: 'Pair B', state: 'matched', symbol: 'b' },
+                    {
+                        id: 'exit',
+                        pairKey: EXIT_PAIR_KEY,
+                        label: 'Exit',
+                        state: 'flipped',
+                        symbol: 'exit',
+                        dungeonCardKind: 'exit',
+                        dungeonExitLockKind: 'iron'
+                    }
+                ],
+                flippedTileIds: ['exit'],
+                matchedPairs: 1,
+                floorArchetypeId: null,
+                featuredObjectiveId: null,
+                dungeonExitTileId: 'exit',
+                dungeonExitLockKind: 'iron',
+                dungeonObjectiveId: 'defeat_boss',
+                dungeonBossId: 'trap_warden',
+                enemyHazards: [
+                    {
+                        id: 'stale-warden',
+                        kind: 'warden',
+                        label: 'Stale Warden',
+                        currentTileId: 'pair-a',
+                        nextTileId: 'pair-b',
+                        pattern: 'guard',
+                        state: 'revealed',
+                        damage: 1,
+                        hp: 1,
+                        maxHp: 1,
+                        bossId: 'trap_warden'
+                    }
+                ]
+            },
+            dungeonKeys: {},
+            dungeonMasterKeys: 0,
+            dungeonEnemiesDefeated: 0,
+            dungeonEnemiesDefeatedThisFloor: 0,
+            enemyHazardsDefeatedThisFloor: 0,
+            status: 'levelComplete'
+        };
+        const command = createGameplayProgressionRepairCommand('progression-repair-1');
+        const result = reduceGameplayCommand(initial, command);
+
+        expect(result.accepted).toBe(true);
+        expect(result.run.board?.dungeonExitLockKind).toBe('none');
+        expect(result.run.board?.tiles.find((candidate) => candidate.id === 'exit')).toMatchObject({
+            dungeonExitLockKind: 'none'
+        });
+        expect(result.run.board?.enemyHazards).toMatchObject([
+            { id: 'stale-warden', hp: 0, state: 'defeated' }
+        ]);
+        expect(result.run).toMatchObject({
+            dungeonEnemiesDefeated: 1,
+            dungeonEnemiesDefeatedThisFloor: 1,
+            enemyHazardsDefeatedThisFloor: 1
+        });
+        expect(result.events).toEqual([
+            {
+                schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
+                commandId: command.commandId,
+                eventId: `${command.commandId}:0`,
+                sequence: 0,
+                source: { kind: 'system', id: 'progression_safety' },
+                type: 'run.progression_repaired',
+                repairKinds: ['exit_lock', 'exit_metadata', 'enemy_hazard'],
+                exitTileId: 'exit',
+                exitLockKindBefore: 'iron',
+                exitLockKindAfter: 'none',
+                exitRequiredLeverCountBefore: 0,
+                exitRequiredLeverCountAfter: 0,
+                enemyHazardIdsDefeated: ['stale-warden'],
+                dungeonEnemiesDefeatedBefore: 0,
+                dungeonEnemiesDefeatedAfter: 1,
+                dungeonEnemiesDefeatedThisFloorBefore: 0,
+                dungeonEnemiesDefeatedThisFloorAfter: 1,
+                enemyHazardsDefeatedThisFloorBefore: 0,
+                enemyHazardsDefeatedThisFloorAfter: 1
+            },
+            {
+                schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
+                commandId: command.commandId,
+                eventId: `${command.commandId}:1`,
+                sequence: 1,
+                source: { kind: 'system', id: 'progression_safety' },
+                type: 'feedback.requested',
+                cue: 'safety.progression.repaired',
+                message: 'Progression safety repaired exit lock and 1 stale enemy hazard.',
+                tone: 'information'
+            }
+        ]);
+        expect(result.events.every((event) => gameplayEventSchema.safeParse(event).success)).toBe(true);
+
+        const replayed = replayGameplayCommands(initial, [JSON.parse(JSON.stringify(command))]);
+        expect(replayed.run).toEqual(result.run);
+        expect(replayed.events).toEqual(result.events);
+        expect(replayed.acceptedCommandIds).toEqual([command.commandId]);
+
+        const journaled = repairRunProgressionThroughGameplayCore(initial, 'progression-repair-adapter');
+        expect(journaled.accepted).toBe(true);
+        expect(journaled.run.gameplayCommandJournal).toEqual([
+            expect.objectContaining({ type: 'run.progression_repair' })
+        ]);
+        expect(journaled.run.gameplayEventJournal).toEqual(expect.arrayContaining([
+            expect.objectContaining({ type: 'run.progression_repaired' }),
+            expect.objectContaining({ type: 'feedback.requested', cue: 'safety.progression.repaired' })
+        ]));
+
+        const healthy = { ...initial, board: result.run.board };
+        expect(reduceGameplayCommand(healthy, createGameplayProgressionRepairCommand('healthy-repair'))).toMatchObject({
+            accepted: false,
+            run: healthy
+        });
+    });
+
     it('resolves a non-final match through one replayable outer turn command', () => {
         const initial = run({
             status: 'resolving',
@@ -135,14 +662,34 @@ describe('deterministic gameplay core', () => {
                 matchedPairs: 0,
                 flippedTileIds: ['a1', 'a2'],
                 tiles: [
-                    { ...tile('a1', 'a'), state: 'flipped', findableKind: 'score_glint' },
-                    { ...tile('a2', 'a'), state: 'flipped', findableKind: 'score_glint' },
-                    tile('b1', 'b'),
-                    tile('b2', 'b')
+                    {
+                        ...tile('a1', 'a', 'echo'),
+                        state: 'flipped',
+                        findableKind: 'score_glint',
+                        routeCardKind: 'greed_cache'
+                    },
+                    {
+                        ...tile('a2', 'a', 'echo'),
+                        state: 'flipped',
+                        findableKind: 'score_glint',
+                        routeCardKind: 'greed_cache'
+                    },
+                    tile('b1', 'b', 'sealed'),
+                    tile('b2', 'b', 'sealed')
                 ]
             },
             findablesClaimedThisFloor: 0,
-            findablesTotalThisFloor: 1
+            findablesTotalThisFloor: 1,
+            stats: {
+                totalScore: 10,
+                currentLevelScore: 10,
+                comboShards: 0,
+                guardTokens: 0,
+                currentStreak: 2,
+                matchesFound: 1,
+                mismatches: 1,
+                tries: 2
+            } as RunState['stats']
         });
         const command = createGameplayBoardTurnResolveCommand('turn-1');
         const result = reduceGameplayCommand(initial, command);
@@ -157,8 +704,31 @@ describe('deterministic gameplay core', () => {
             expect.objectContaining({
                 type: 'board.turn_resolved',
                 outcome: 'match',
+                boardLevel: 1,
                 flippedTileIds: ['a1', 'a2'],
+                floaterTileIds: ['a1', 'a2'],
                 matchedPairKey: 'a',
+                matchedFindableKind: 'score_glint',
+                findablesClaimedBefore: 0,
+                findablesClaimedAfter: 1,
+                findablesTotalBefore: 1,
+                findablesTotalAfter: 1,
+                announcement: expect.objectContaining({
+                    matchedPairsBefore: 0,
+                    matchedPairsAfter: 1,
+                    pairCountBefore: 2,
+                    pairCountAfter: 2,
+                    matchedTraitKinds: ['echo'],
+                    mismatchedTraitKinds: []
+                }),
+                matchedRouteKind: 'greed_cache',
+                traitInteractionTags: ['echo:sealed-combo'],
+                currentStreakBefore: 2,
+                currentStreakAfter: 3,
+                matchesBefore: 1,
+                matchesAfter: 2,
+                mismatchesBefore: 1,
+                mismatchesAfter: 1,
                 boardComplete: false
             })
         ]));
@@ -171,6 +741,89 @@ describe('deterministic gameplay core', () => {
         expect(replayed.run).toEqual(result.run);
         expect(replayed.events).toEqual(result.events);
         expect(replayed.acceptedCommandIds).toEqual(['turn-1']);
+    });
+
+    it('emits authoritative mismatch feedback facts without renderer rule evaluation', () => {
+        const initial = run({
+            status: 'resolving',
+            lives: 3,
+            board: {
+                ...board(),
+                flippedTileIds: ['c1', 'v1'],
+                tiles: [
+                    { ...tile('c1', 'cursed', 'cursed'), state: 'flipped' },
+                    tile('nearby-v', 'nearby-v', 'volatile'),
+                    { ...tile('v1', 'volatile', 'volatile'), state: 'flipped' },
+                    tile('c2', 'cursed', 'cursed')
+                ]
+            },
+            stats: {
+                totalScore: 90,
+                currentLevelScore: 90,
+                comboShards: 2,
+                guardTokens: 0,
+                currentStreak: 4,
+                matchesFound: 3,
+                mismatches: 1,
+                tries: 3
+            } as RunState['stats']
+        });
+        const command = createGameplayBoardTurnResolveCommand('turn-mismatch-feedback');
+        const result = reduceGameplayCommand(initial, command);
+
+        expect(result.accepted).toBe(true);
+        expect(result.events).toContainEqual(expect.objectContaining({
+            type: 'board.turn_resolved',
+            outcome: 'mismatch',
+            floaterTileIds: ['c1', 'v1'],
+            matchedPairKey: null,
+            matchedFindableKind: null,
+            matchedRouteKind: null,
+            traitInteractionTags: ['cursed:volatile-danger'],
+            currentStreakBefore: 4,
+            currentStreakAfter: 2,
+            comboShardsBefore: 2,
+            comboShardsAfter: 2,
+            mismatchesBefore: 1,
+            mismatchesAfter: 2
+        }));
+        expect(result.events.every((event) => gameplayEventSchema.safeParse(event).success)).toBe(true);
+        expect(replayGameplayCommands(initial, [JSON.parse(JSON.stringify(command))])).toMatchObject({
+            run: result.run,
+            events: result.events,
+            acceptedCommandIds: [command.commandId]
+        });
+    });
+
+    it('emits the matched pair as the deterministic Gambit floater anchor', () => {
+        const initial = run({
+            status: 'resolving',
+            board: {
+                ...board(),
+                flippedTileIds: ['a1', 'b1', 'a2'],
+                tiles: [
+                    { ...tile('a1', 'a'), state: 'flipped' },
+                    { ...tile('b1', 'b'), state: 'flipped' },
+                    { ...tile('a2', 'a'), state: 'flipped' },
+                    tile('b2', 'b')
+                ]
+            },
+            gambitAvailableThisFloor: true,
+            gambitThirdFlipUsed: false
+        });
+        const result = reduceGameplayCommand(
+            initial,
+            createGameplayBoardTurnResolveCommand('turn-gambit-feedback')
+        );
+
+        expect(result.accepted).toBe(true);
+        expect(result.events).toContainEqual(expect.objectContaining({
+            type: 'board.turn_resolved',
+            outcome: 'gambit_match',
+            flippedTileIds: ['a1', 'b1', 'a2'],
+            floaterTileIds: ['a1', 'a2'],
+            matchedPairKey: 'a'
+        }));
     });
 
     it('resolves the final pair and floor-clear effects under the same outer turn command', () => {
@@ -214,6 +867,152 @@ describe('deterministic gameplay core', () => {
         expect(replayed.run).toEqual(result.run);
         expect(replayed.events).toEqual(result.events);
         expect(replayed.acceptedCommandIds).toEqual(['final-turn']);
+    });
+
+    it('replays tile flips and turn resolution from the pre-input board state', () => {
+        const base = createNewRun(0, { echoFeedbackEnabled: false, runSeed: 9138 });
+        const initial: RunState = { ...base, status: 'playing' };
+        const pair = initial.board!.tiles.filter(
+            (tile, _index, tiles) =>
+                tile.state === 'hidden' &&
+                tiles.filter((candidate) => candidate.pairKey === tile.pairKey).length === 2
+        ).filter((tile, _index, candidates) => tile.pairKey === candidates[0]?.pairKey);
+        expect(pair).toHaveLength(2);
+        const commands = [
+            createGameplayTileFlipCommand('flip-first', pair[0]!.id),
+            createGameplayTileFlipCommand('flip-second', pair[1]!.id),
+            createGameplayBoardTurnResolveCommand('resolve-flipped-pair')
+        ];
+        const first = reduceGameplayCommand(initial, commands[0]);
+        const second = reduceGameplayCommand(first.run, commands[1]);
+        const resolved = reduceGameplayCommand(second.run, commands[2]);
+
+        expect(first).toMatchObject({ accepted: true, run: { status: 'playing' } });
+        expect(second).toMatchObject({ accepted: true, run: { status: 'resolving' } });
+        expect(first.events).toEqual([
+            expect.objectContaining({
+                type: 'board.tile_flipped',
+                targetTileId: pair[0]!.id,
+                outcome: 'flipped',
+                flippedTileIdsBefore: [],
+                flippedTileIdsAfter: [pair[0]!.id]
+            })
+        ]);
+        expect(second.events).toEqual([
+            expect.objectContaining({
+                type: 'board.tile_flipped',
+                targetTileId: pair[1]!.id,
+                outcome: 'flipped',
+                flippedTileIdsAfter: [pair[0]!.id, pair[1]!.id]
+            })
+        ]);
+        expect(resolved.accepted).toBe(true);
+        expect(resolved.run.gameplayCommandJournal).toEqual(initial.gameplayCommandJournal);
+
+        const replayed = replayGameplayCommands(initial, JSON.parse(JSON.stringify(commands)));
+        expect(replayed.run).toEqual(resolved.run);
+        expect(replayed.events).toEqual([...first.events, ...second.events, ...resolved.events]);
+        expect(replayed.acceptedCommandIds).toEqual(['flip-first', 'flip-second', 'resolve-flipped-pair']);
+    });
+
+    it('emits typed feedback when a tile reveal advances the dungeon objective', () => {
+        const base = createNewRun(0, { echoFeedbackEnabled: false, runSeed: 9_138 });
+        const unknownPair = base.board!.tiles.slice(0, 2).map((candidate) => ({
+            ...candidate,
+            pairKey: 'unknown-room',
+            dungeonCardKind: 'room' as const,
+            dungeonCardState: 'hidden' as const
+        }));
+        const initial: RunState = {
+            ...base,
+            status: 'playing',
+            board: {
+                ...base.board!,
+                dungeonObjectiveId: 'reveal_unknowns',
+                tiles: unknownPair,
+                pairCount: 1,
+                matchedPairs: 0,
+                flippedTileIds: []
+            }
+        };
+        const command = createGameplayTileFlipCommand('reveal-objective', unknownPair[0]!.id);
+        const result = reduceGameplayCommand(initial, command);
+
+        expect(result.accepted).toBe(true);
+        expect(result.events).toEqual(expect.arrayContaining([
+            expect.objectContaining({
+                type: 'feedback.requested',
+                cue: 'objective.progress.changed',
+                message: 'Reveal unknowns: 1/1.',
+                tone: 'information'
+            })
+        ]));
+        expect(replayGameplayCommands(initial, [JSON.parse(JSON.stringify(command))])).toMatchObject({
+            run: result.run,
+            events: result.events,
+            acceptedCommandIds: [command.commandId],
+            rejectedCommandIds: []
+        });
+    });
+
+    it('replays enemy contact with guard-before-life parity and typed feedback', () => {
+        const base = createNewRun(0, { echoFeedbackEnabled: false, runSeed: 9139 });
+        const target = base.board!.tiles.find((tile) => tile.state === 'hidden')!;
+        const nextTarget = base.board!.tiles.find((tile) => tile.id !== target.id)!;
+        const initial: RunState = {
+            ...base,
+            status: 'playing',
+            stats: { ...base.stats, guardTokens: 1 },
+            board: {
+                ...base.board!,
+                enemyHazardTurn: 0,
+                enemyHazards: [{
+                    id: 'typed-contact',
+                    kind: 'sentinel',
+                    label: 'Typed Sentinel',
+                    currentTileId: target.id,
+                    nextTileId: nextTarget.id,
+                    pattern: 'patrol',
+                    state: 'hidden',
+                    damage: 1,
+                    hp: 1,
+                    maxHp: 1
+                }]
+            }
+        };
+        const command = createGameplayEnemyHazardContactCommand(
+            'contact-guarded',
+            target.id,
+            true
+        );
+        const result = reduceGameplayCommand(initial, command);
+
+        expect(result.accepted).toBe(true);
+        expect(result.run).toEqual(applyEnemyHazardClick(initial, target.id, { advanceHazards: true }));
+        expect(result.events).toEqual([
+            expect.objectContaining({
+                type: 'enemy_hazard.contacted',
+                hazardId: 'typed-contact',
+                guardTokensBefore: 1,
+                guardTokensAfter: 0,
+                livesBefore: initial.lives,
+                livesAfter: initial.lives,
+                enemyHazardHitsBefore: 0,
+                enemyHazardHitsAfter: 1
+            }),
+            expect.objectContaining({
+                type: 'feedback.requested',
+                cue: 'hazard.enemy_contact.guard_absorbed'
+            })
+        ]);
+        expect(replayGameplayCommands(
+            initial,
+            [JSON.parse(JSON.stringify(command))]
+        )).toMatchObject({
+            run: result.run,
+            events: result.events,
+            acceptedCommandIds: ['contact-guarded']
+        });
     });
 
     it('keeps every live relic representable by the typed gameplay schema', () => {
@@ -470,11 +1269,17 @@ describe('deterministic gameplay core', () => {
                 matchedPairsAfter: 1,
                 recallFocusBefore: 2,
                 recallFocusAfter: 1,
+                forgottenTileCountBefore: 0,
+                forgottenTileCountAfter: 2,
                 parasitePressureBefore: 3,
                 parasitePressureAfter: 0,
                 boardComplete: false
             }),
-            expect.objectContaining({ type: 'feedback.requested', cue: 'power.destroy_pair.used' })
+            expect.objectContaining({
+                type: 'feedback.requested',
+                cue: 'power.destroy_pair.used',
+                message: expect.stringContaining('Recall focus 1/3; 2 tile memories are unstable.')
+            })
         ]);
         expect(replayGameplayCommands(initial, [JSON.parse(JSON.stringify(command))]).run).toEqual(result.run);
         expect(rejected).toMatchObject({ accepted: false, run: { destroyPairCharges: 2 } });
@@ -512,6 +1317,15 @@ describe('deterministic gameplay core', () => {
     });
 
     it('advances score-parasite pressure through a typed floor command and records ward or life outcomes', () => {
+        const primed = run({
+            status: 'levelComplete',
+            activeMutators: ['score_parasite'],
+            parasiteFloors: 2,
+            parasiteWardRemaining: 0,
+            lives: 2
+        });
+        const primeCommand = createGameplayParasiteAdvanceCommand('parasite-warning');
+        const primeResult = reduceGameplayCommand(primed, primeCommand);
         const warded = run({
             status: 'levelComplete',
             activeMutators: ['score_parasite'],
@@ -528,6 +1342,28 @@ describe('deterministic gameplay core', () => {
             createGameplayParasiteAdvanceCommand('parasite-hit')
         );
 
+        expect(primeResult).toMatchObject({
+            accepted: true,
+            run: { parasiteFloors: 3, parasiteWardRemaining: 0, lives: 2 }
+        });
+        expect(primeResult.events).toEqual([
+            expect.objectContaining({
+                type: 'score_parasite.advanced',
+                pressureBefore: 2,
+                pressureAfter: 3,
+                thresholdTriggered: false
+            }),
+            expect.objectContaining({
+                type: 'feedback.requested',
+                cue: 'hazard.score_parasite.drain_warning',
+                message: 'Score Parasite: next cleared floor triggers the drain unless warded.',
+                tone: 'warning'
+            })
+        ]);
+        expect(replayGameplayCommands(
+            primed,
+            [JSON.parse(JSON.stringify(primeCommand))]
+        )).toEqual(expect.objectContaining({ run: primeResult.run, events: primeResult.events }));
         expect(protectedResult).toMatchObject({
             accepted: true,
             run: { parasiteFloors: 0, parasiteWardRemaining: 0, lives: 2 }
@@ -613,6 +1449,13 @@ describe('deterministic gameplay core', () => {
                 cue: 'floor.advance.ready'
             })
         ]));
+        expect(result.events.flatMap((event) =>
+            event.type === 'feedback.requested' ? [event.cue] : []
+        )).toEqual([
+            'hazard.score_parasite.ward_consumed',
+            expect.stringMatching(/^perk\.hazard_banish\./u),
+            'floor.advance.ready'
+        ]);
         expect(result.events.every((event, sequence) =>
             event.commandId === command.commandId &&
             event.sequence === sequence &&
@@ -791,7 +1634,11 @@ describe('deterministic gameplay core', () => {
                 lives: initial.lives - 1,
                 shopGold: initial.shopGold + 3,
                 pendingRouteCardPlan: { choiceId: choice.id, routeType: 'greed' },
-                dungeonRun: { selectedNodeId: choice.id }
+                dungeonRun: { selectedNodeId: choice.id },
+                sideRoom: {
+                    routeType: 'greed',
+                    floor: initial.board!.level + 1
+                }
             }
         });
         expect(normalizeSessionStats(result.run.stats).totalScore).toBe(beforeStats.totalScore + 35);
@@ -810,12 +1657,23 @@ describe('deterministic gameplay core', () => {
                 totalScoreAfter: beforeStats.totalScore + 35
             }),
             expect.objectContaining({
+                type: 'side_room.opened',
+                roomId: result.run.sideRoom!.id,
+                roomKind: result.run.sideRoom!.kind,
+                routeType: 'greed',
+                nodeKind: result.run.sideRoom!.nodeKind,
+                floor: result.run.sideRoom!.floor,
+                payloadKind: result.run.sideRoom!.payload.kind
+            }),
+            expect.objectContaining({
                 type: 'feedback.requested',
                 cue: 'route.choice.greed',
                 tone: 'warning'
             })
         ]);
-        expect(replayGameplayCommands(initial, [JSON.parse(JSON.stringify(command))]).run).toEqual(result.run);
+        const replayed = replayGameplayCommands(initial, [JSON.parse(JSON.stringify(command))]);
+        expect(replayed.run).toEqual(result.run);
+        expect(replayed.events).toEqual(result.events);
         expect(reduceGameplayCommand(initial, createGameplayRouteChooseCommand('route-missing', 'missing')))
             .toMatchObject({ accepted: false, run: initial });
     });
@@ -875,6 +1733,94 @@ describe('deterministic gameplay core', () => {
             { ...initial, relicOffer: null },
             createGameplayRelicPickCommand('relic-stale', relicId)
         )).toMatchObject({ accepted: false, run: { relicOffer: null } });
+    });
+
+    it('opens or safely skips a milestone relic draft through one replayable command', () => {
+        const fixture = createPlayablePathFixture('relicDraft').run!;
+        const initial: RunState = {
+            ...fixture,
+            relicIds: [],
+            relicOffer: null,
+            relicTiersClaimed: 0,
+            bonusRelicPicksNextOffer: 2,
+            favorBonusRelicPicksNextOffer: 2
+        };
+        const command = createGameplayRelicOfferOpenCommand('relic-offer-open-core');
+        const result = reduceGameplayCommand(initial, command);
+        const legacy = openRelicOffer(initial);
+
+        expect(result.accepted).toBe(true);
+        expect(result.run).toEqual(legacy);
+        expect(result.run.gameplayCommandJournal).toEqual(initial.gameplayCommandJournal);
+        expect(result).toMatchObject({
+            run: {
+                bonusRelicPicksNextOffer: 0,
+                favorBonusRelicPicksNextOffer: 0,
+                relicOffer: {
+                    tier: 1,
+                    options: expect.any(Array),
+                    picksRemaining: 3,
+                    pickRound: 0,
+                    favorBonusPicks: 2
+                }
+            }
+        });
+        expect(result.events).toEqual([
+            expect.objectContaining({
+                type: 'relic.offer_opened',
+                outcome: 'opened',
+                clearedFloor: 3,
+                offerTier: 1,
+                options: result.run.relicOffer!.options,
+                picksRemaining: 3,
+                bonusPicksBefore: 2,
+                bonusPicksAfter: 0,
+                favorBonusPicksBefore: 2,
+                favorBonusPicksAfter: 0,
+                favorBonusPicksInOffer: 2,
+                relicTiersBefore: 0,
+                relicTiersAfter: 0
+            }),
+            expect.objectContaining({
+                type: 'feedback.requested',
+                cue: 'relic.offer.opened',
+                tone: 'reward'
+            })
+        ]);
+        const replayed = replayGameplayCommands(initial, [JSON.parse(JSON.stringify(command))]);
+        expect(replayed.run).toEqual(result.run);
+        expect(replayed.events).toEqual(result.events);
+        expect(reduceGameplayCommand(result.run, createGameplayRelicOfferOpenCommand('relic-offer-repeat')))
+            .toMatchObject({ accepted: false, run: result.run });
+
+        const exhausted: RunState = {
+            ...initial,
+            relicIds: [...GAMEPLAY_RELIC_IDS],
+            bonusRelicPicksNextOffer: 0,
+            favorBonusRelicPicksNextOffer: 0
+        };
+        const skipped = reduceGameplayCommand(
+            exhausted,
+            createGameplayRelicOfferOpenCommand('relic-offer-skip')
+        );
+        expect(skipped).toMatchObject({
+            accepted: true,
+            run: { relicOffer: null, relicTiersClaimed: 1 },
+            events: [
+                expect.objectContaining({
+                    type: 'relic.offer_opened',
+                    outcome: 'milestone_skipped',
+                    options: [],
+                    picksRemaining: 0,
+                    relicTiersBefore: 0,
+                    relicTiersAfter: 1
+                }),
+                expect.objectContaining({
+                    type: 'feedback.requested',
+                    cue: 'relic.offer.milestone_skipped'
+                })
+            ]
+        });
     });
 
     it('resolves rest, event, bonus, and skip side rooms through flat replayable commands', () => {
@@ -1243,7 +2189,18 @@ describe('deterministic gameplay core', () => {
         expect(removed.run).toEqual(applyStrayRemove(strayRun, 'wild'));
         expect(removed.events).toEqual(expect.arrayContaining([
             expect.objectContaining({ type: 'inventory.changed', itemId: 'stray_remove_charge', applied: -1 }),
-            expect.objectContaining({ type: 'board.stray_removed', targetTileId: 'wild', recallFocusAfter: 1 })
+            expect.objectContaining({
+                type: 'board.stray_removed',
+                targetTileId: 'wild',
+                recallFocusAfter: 1,
+                forgottenTileCountBefore: 0,
+                forgottenTileCountAfter: 1
+            }),
+            expect.objectContaining({
+                type: 'feedback.requested',
+                cue: 'power.stray_remove.used',
+                message: expect.stringContaining('Recall focus 1/3; 1 tile memory is unstable.')
+            })
         ]));
     });
 
@@ -1336,8 +2293,19 @@ describe('deterministic gameplay core', () => {
         expect(result.run).toEqual(legacy);
         expect(result.events).toEqual([
             expect.objectContaining({ type: 'inventory.changed', applied: -1, before: 2, after: 1 }),
-            expect.objectContaining({ type: 'board.peeked', targetTileId: 'echo-a', recallFocusBefore: 2 }),
-            expect.objectContaining({ type: 'feedback.requested', cue: 'power.peek.used' })
+            expect.objectContaining({
+                type: 'board.peeked',
+                targetTileId: 'echo-a',
+                recallFocusBefore: 2,
+                recallFocusAfter: 1,
+                forgottenTileCountBefore: 0,
+                forgottenTileCountAfter: 1
+            }),
+            expect.objectContaining({
+                type: 'feedback.requested',
+                cue: 'power.peek.used',
+                message: expect.stringContaining('Recall focus 1/3; 1 tile memory is unstable.')
+            })
         ]);
         expect(result.events.every((event) => gameplayEventSchema.safeParse(event).success)).toBe(true);
     });
@@ -1516,8 +2484,20 @@ describe('deterministic gameplay core', () => {
         expect(shuffled.run).toEqual(applyShuffle(initial));
         expect(shuffled.events).toEqual([
             expect.objectContaining({ type: 'inventory.changed', itemId: 'shuffle_charge', applied: -1 }),
-            expect.objectContaining({ type: 'board.shuffled', shuffleNonceBefore: 0, shuffleNonceAfter: 1 }),
-            expect.objectContaining({ type: 'feedback.requested', cue: 'power.shuffle.used' })
+            expect.objectContaining({
+                type: 'board.shuffled',
+                shuffleNonceBefore: 0,
+                shuffleNonceAfter: 1,
+                recallFocusBefore: 2,
+                recallFocusAfter: 0,
+                forgottenTileCountBefore: 0,
+                forgottenTileCountAfter: 4
+            }),
+            expect.objectContaining({
+                type: 'feedback.requested',
+                cue: 'power.shuffle.used',
+                message: expect.stringContaining('Recall focus 0/3; 4 tile memories are unstable.')
+            })
         ]);
 
         const regionShuffled = reduceGameplayCommand(
@@ -1528,7 +2508,14 @@ describe('deterministic gameplay core', () => {
         expect(regionShuffled.run).toEqual(applyRegionShuffle(initial, 0));
         expect(regionShuffled.events).toEqual([
             expect.objectContaining({ type: 'inventory.changed', itemId: 'region_shuffle_charge', applied: -1 }),
-            expect.objectContaining({ type: 'board.region_shuffled', rowIndex: 0 }),
+            expect.objectContaining({
+                type: 'board.region_shuffled',
+                rowIndex: 0,
+                recallFocusBefore: 2,
+                recallFocusAfter: 0,
+                forgottenTileCountBefore: 0,
+                forgottenTileCountAfter: 2
+            }),
             expect.objectContaining({ type: 'feedback.requested', cue: 'power.region_shuffle.used' })
         ]);
 
@@ -1543,7 +2530,11 @@ describe('deterministic gameplay core', () => {
             expect.objectContaining({
                 type: 'board.tiles_swapped',
                 firstTileId: 'echo-a',
-                secondTileId: 'conduit-a'
+                secondTileId: 'conduit-a',
+                recallFocusBefore: 2,
+                recallFocusAfter: 0,
+                forgottenTileCountBefore: 0,
+                forgottenTileCountAfter: 2
             }),
             expect.objectContaining({ type: 'feedback.requested', cue: 'power.tile_swap.used' })
         ]);
@@ -1653,9 +2644,15 @@ describe('deterministic gameplay core', () => {
                 undoUsesBefore: 1,
                 undoUsesAfter: 0,
                 recallFocusBefore: 2,
-                recallFocusAfter: 1
+                recallFocusAfter: 1,
+                forgottenTileCountBefore: 0,
+                forgottenTileCountAfter: 2
             }),
-            expect.objectContaining({ type: 'feedback.requested', cue: 'power.undo_resolve.used' })
+            expect.objectContaining({
+                type: 'feedback.requested',
+                cue: 'power.undo_resolve.used',
+                message: expect.stringContaining('Recall focus 1/3; 2 tile memories are unstable.')
+            })
         ]);
     });
 
@@ -1684,6 +2681,7 @@ describe('deterministic gameplay core', () => {
         expect(claimed.run.stats.totalScore).toBe(legacyReward.stats.totalScore);
 
         const shopRun = run({
+            status: 'levelComplete',
             shopGold: 5,
             dungeonMasterKeys: 0,
             lives: 3,
@@ -1719,8 +2717,91 @@ describe('deterministic gameplay core', () => {
                 masterKeysBefore: 0,
                 masterKeysAfter: 1
             }),
-            expect.objectContaining({ type: 'feedback.requested', cue: 'shop.master_key.purchased' })
+            expect.objectContaining({
+                type: 'feedback.requested',
+                cue: 'shop.master_key.purchased',
+                message: 'Master key purchased for 2 shop gold; 3 remains.'
+            })
         ]);
+        expect(reduceGameplayCommand(
+            { ...shopRun, status: 'playing' },
+            createGameplayShopPurchaseCommand('buy-outside-shop', 'offer-master')
+        )).toMatchObject({
+            accepted: false,
+            run: { status: 'playing', shopGold: 5 },
+            events: [expect.objectContaining({ type: 'command.rejected' })]
+        });
+
+        const rerollBase = createNewRun(0, { echoFeedbackEnabled: false, runSeed: 2404 });
+        const rerollRun: RunState = {
+            ...rerollBase,
+            status: 'levelComplete',
+            shopGold: 10,
+            shopRerolls: 0,
+            shopOffers: createRunShopOffers({ ...rerollBase, shopGold: 10, shopRerolls: 0 })
+        };
+        const rerollCommand = createGameplayShopRerollCommand('reroll-stock');
+        const rerolled = reduceGameplayCommand(rerollRun, rerollCommand);
+        const legacyReroll = rerollShopOffers(rerollRun);
+        expect(rerolled.accepted).toBe(true);
+        expect(rerolled.run).toEqual(legacyReroll);
+        expect(rerolled.run.gameplayCommandJournal).toEqual(rerollRun.gameplayCommandJournal);
+        expect(rerolled.events).toEqual([
+            expect.objectContaining({
+                type: 'shop.stock_rerolled',
+                floor: rerollRun.board!.level,
+                cost: 1,
+                shopGoldBefore: 10,
+                shopGoldAfter: 9,
+                rerollsBefore: 0,
+                rerollsAfter: 1,
+                offerIdsBefore: rerollRun.shopOffers.map((offer) => offer.id),
+                offerIdsAfter: legacyReroll.shopOffers.map((offer) => offer.id),
+                itemIdsBefore: rerollRun.shopOffers.map((offer) => offer.itemId),
+                itemIdsAfter: legacyReroll.shopOffers.map((offer) => offer.itemId)
+            }),
+            expect.objectContaining({ type: 'feedback.requested', cue: 'shop.stock.rerolled' })
+        ]);
+        const replayedReroll = replayGameplayCommands(
+            rerollRun,
+            JSON.parse(JSON.stringify([rerollCommand])) as unknown[]
+        );
+        expect(replayedReroll.run).toEqual(rerolled.run);
+        expect(replayedReroll.events).toEqual(rerolled.events);
+        expect(reduceGameplayCommand(rerolled.run, createGameplayShopRerollCommand('reroll-again'))).toMatchObject({
+            accepted: false,
+            run: rerolled.run,
+            events: [expect.objectContaining({ type: 'command.rejected' })]
+        });
+        expect(reduceGameplayCommand(
+            { ...rerollRun, status: 'playing' },
+            createGameplayShopRerollCommand('reroll-outside-shop')
+        )).toMatchObject({
+            accepted: false,
+            run: { status: 'playing', shopGold: 10, shopRerolls: 0 },
+            events: [expect.objectContaining({ type: 'command.rejected' })]
+        });
+        const pausedBoardShopRun: RunState = {
+            ...rerollRun,
+            status: 'paused',
+            board: { ...rerollRun.board!, dungeonShopVisited: true },
+            timerState: { ...rerollRun.timerState, pausedFromStatus: 'playing' }
+        };
+        expect(reduceGameplayCommand(
+            pausedBoardShopRun,
+            createGameplayShopRerollCommand('reroll-paused-board-shop')
+        )).toMatchObject({
+            accepted: true,
+            run: { status: 'paused', shopGold: 9, shopRerolls: 1 }
+        });
+        expect(reduceGameplayCommand(
+            { ...pausedBoardShopRun, board: { ...pausedBoardShopRun.board!, dungeonShopVisited: false } },
+            createGameplayShopRerollCommand('reroll-paused-non-shop')
+        )).toMatchObject({
+            accepted: false,
+            run: { status: 'paused', shopGold: 10, shopRerolls: 0 },
+            events: [expect.objectContaining({ type: 'command.rejected' })]
+        });
 
         const base = createNewRun(0, { runSeed: 2405 });
         const exitBoard: BoardState = {
@@ -1756,8 +2837,12 @@ describe('deterministic gameplay core', () => {
             exitRun,
             createGameplayDungeonExitActivateCommand('activate-master-exit', 'master_key')
         );
+        const legacyExit = createDungeonExitActivationTransition(exitRun, 'master_key')!;
         expect(activated.accepted).toBe(true);
-        expect(activated.run).toEqual(createDungeonExitActivationTransition(exitRun, 'master_key')?.run);
+        expect(activated.run).toEqual(finalizeLevel(legacyExit.run, legacyExit.board));
+        expect(activated.run.status).toBe('levelComplete');
+        expect(activated.run.gameplayCommandJournal).toEqual(exitRun.gameplayCommandJournal);
+        expect(activated.run.gameplayEventJournal).toEqual(exitRun.gameplayEventJournal);
         expect(activated.events).toEqual([
             expect.objectContaining({
                 type: 'dungeon.exit_activated',
@@ -1769,6 +2854,22 @@ describe('deterministic gameplay core', () => {
             }),
             expect.objectContaining({ type: 'feedback.requested', cue: 'dungeon.exit.activated' })
         ]);
+        expect(activated.events.every((event, sequence) =>
+            event.commandId === 'activate-master-exit' &&
+            event.sequence === sequence &&
+            event.eventId === `activate-master-exit:${sequence}`
+        )).toBe(true);
+        expect(replayGameplayCommands(
+            exitRun,
+            [JSON.parse(JSON.stringify(createGameplayDungeonExitActivateCommand(
+                'activate-master-exit',
+                'master_key'
+            )))]
+        )).toMatchObject({
+            run: activated.run,
+            events: activated.events,
+            acceptedCommandIds: ['activate-master-exit']
+        });
     });
 
     it('replays a JSON-round-tripped build sequence deterministically', () => {

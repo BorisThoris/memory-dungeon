@@ -40,7 +40,7 @@ export const clearResolveState = (run: RunState): RunState['timerState'] => ({
 export const isResumableStatus = (status: RunState['status']): status is ResumableRunStatus =>
     isResumableLifecycleState(lifecycleStateFromRunStatus(status));
 
-export const pauseRun = (run: RunState): RunState => {
+export const pauseRunAt = (run: RunState, observedAtMs: number): RunState => {
     if (!isResumableStatus(run.status)) {
         return run;
     }
@@ -48,7 +48,7 @@ export const pauseRun = (run: RunState): RunState => {
     const gauntletDeadlineMs = normalizeTimerTimestampMs(run.gauntletDeadlineMs);
     const gauntletPausedAtMs =
         run.gameMode === 'gauntlet' && gauntletDeadlineMs !== null
-            ? normalizeTimerTimestampMs(Date.now())
+            ? normalizeTimerTimestampMs(observedAtMs)
             : (timerState.gauntletPausedAtMs ?? null);
 
     return {
@@ -63,7 +63,9 @@ export const pauseRun = (run: RunState): RunState => {
     };
 };
 
-export const resumeRun = (run: RunState): RunState => {
+export const pauseRun = (run: RunState): RunState => pauseRunAt(run, Date.now());
+
+export const resumeRunAt = (run: RunState, observedAtMs: number): RunState => {
     const timerState = timerStateForRun(run.timerState);
     const pausedFromStatus = timerState.pausedFromStatus;
     if (run.status !== 'paused' || !pausedFromStatus || !isResumableStatus(pausedFromStatus)) {
@@ -120,7 +122,7 @@ export const resumeRun = (run: RunState): RunState => {
     const gauntletPausedAtMs = normalizeTimerTimestampMs(timerState.gauntletPausedAtMs);
     const gauntletPauseDeltaMs =
         run.gameMode === 'gauntlet' && gauntletDeadlineMs !== null && gauntletPausedAtMs !== null
-            ? Math.max(0, Date.now() - gauntletPausedAtMs)
+            ? Math.max(0, observedAtMs - gauntletPausedAtMs)
             : 0;
 
     return {
@@ -134,6 +136,8 @@ export const resumeRun = (run: RunState): RunState => {
         }
     };
 };
+
+export const resumeRun = (run: RunState): RunState => resumeRunAt(run, Date.now());
 
 export const enableDebugPeek = (run: RunState, disableAchievementsOnDebug: boolean): RunState => ({
     ...run,

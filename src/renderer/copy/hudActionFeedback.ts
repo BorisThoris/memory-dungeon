@@ -1,7 +1,5 @@
-import type { FindableKind, Tile, TileTraitKind } from '../../shared/contracts';
+import type { FindableKind } from '../../shared/contracts';
 import { getFindableKindLabel, getFindableRewardCopy } from '../../shared/findables';
-import { TILE_TRAIT_COUNT_KINDS } from '../../shared/session-stats-rules';
-import { TILE_TRAIT_COPY } from '../../shared/tile-trait-rules';
 
 export const GAUNTLET_WARN_SECS = [60, 30, 10, 5] as const;
 
@@ -16,32 +14,6 @@ export const gauntletMessageForThreshold = (secs: number): string => {
         return 'Gauntlet: thirty seconds or less remaining.';
     }
     return 'Gauntlet: one minute or less remaining.';
-};
-
-export const detectClaimedFindableKind = (
-    previousTiles: readonly Tile[],
-    nextTiles: readonly Tile[]
-): FindableKind | null => {
-    const previousKinds = new Map<string, FindableKind>();
-    for (const tile of previousTiles) {
-        if (tile.findableKind != null) {
-            previousKinds.set(tile.pairKey, tile.findableKind);
-        }
-    }
-    for (const [pairKey, kind] of previousKinds) {
-        const nextPairTiles = nextTiles.filter((tile) => tile.pairKey === pairKey);
-        if (
-            nextPairTiles.length > 0 &&
-            nextPairTiles.every(
-                (tile) =>
-                    (tile.state === 'matched' || tile.state === 'removed') &&
-                    tile.findableKind == null
-            )
-        ) {
-            return kind;
-        }
-    }
-    return null;
 };
 
 export const getFindableAnnouncementText = (kind: FindableKind): string =>
@@ -138,17 +110,6 @@ export const getHudActionFeedbackProfile = (
     }
     return { label: 'Action result', tone: 'info' };
 };
-
-export const countTileTraitTotal = (counts: Partial<Record<TileTraitKind, number>> | undefined): number =>
-    TILE_TRAIT_COUNT_KINDS.reduce((sum, kind) => sum + (counts?.[kind] ?? 0), 0);
-
-export const changedTileTraitLabels = (
-    previous: Partial<Record<TileTraitKind, number>> | undefined,
-    next: Partial<Record<TileTraitKind, number>> | undefined
-): string[] =>
-    TILE_TRAIT_COUNT_KINDS.filter((kind) => (next?.[kind] ?? 0) > (previous?.[kind] ?? 0)).map(
-        (kind) => TILE_TRAIT_COPY[kind].label
-    );
 
 export const joinReadableList = (items: readonly string[]): string =>
     items.length <= 1 ? items[0] ?? '' : `${items.slice(0, -1).join(', ')} and ${items.at(-1)}`;

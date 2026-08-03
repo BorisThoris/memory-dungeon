@@ -1,6 +1,11 @@
 import type { BoardState, RunState, Tile } from '../src/shared/contracts';
-import { runGameplayCoreSimulation } from '../src/shared/gameplay-core-simulation';
-import { WILD_PAIR_KEY } from '../src/shared/tile-identity';
+import {
+    runGameplayCoreSimulation,
+    runGameplayProgressionRepairSimulation
+} from '../src/shared/gameplay-core-simulation';
+import { createTimerState } from '../src/shared/run-timer-rules';
+import { createRunShopOffers } from '../src/shared/shop-rules';
+import { EXIT_PAIR_KEY, WILD_PAIR_KEY } from '../src/shared/tile-identity';
 
 const numericArg = (name: string, fallback: number): number => {
     const prefix = `--${name}=`;
@@ -21,7 +26,7 @@ const tile = (id: string, pairKey: string, tileTraitKind?: Tile['tileTraitKind']
 const seed = numericArg('seed', 42001);
 const steps = numericArg('steps', 256);
 const board: BoardState = {
-    level: 1,
+    level: 3,
     pairCount: 3,
     columns: 3,
     rows: 3,
@@ -30,27 +35,38 @@ const board: BoardState = {
         tile('echo-b', 'echo', 'echo'),
         tile('conduit-a', 'conduit', 'conduit'),
         tile('conduit-b', 'conduit', 'conduit'),
-        { ...tile('plain-a', 'plain'), state: 'flipped' },
-        tile('plain-b', 'plain'),
-        { ...tile('wild', WILD_PAIR_KEY), state: 'flipped' }
+        tile('plain-a', 'plain'),
+        tile('wild', WILD_PAIR_KEY)
     ],
-    flippedTileIds: ['plain-a', 'wild'],
+    flippedTileIds: [],
     matchedPairs: 0,
     floorArchetypeId: null,
     featuredObjectiveId: null
 };
-const initialRun = {
-    status: 'playing',
+const initialRunBase = {
+    status: 'memorize',
+    lives: 3,
     board,
     runSeed: seed,
     runRulesVersion: 1,
+    gameMode: 'endless',
+    practiceMode: true,
     wildMenuRun: true,
     wildTileId: 'wild',
     wildMatchesRemaining: 1,
+    flipHistory: [],
+    timerState: createTimerState({ memorizeRemainingMs: 900 }),
+    resolveDelayMultiplier: 1,
+    echoFeedbackEnabled: false,
+    dungeonTrapsTriggered: 0,
+    pendingMemorizeBonusMs: 0,
     peekCharges: 0,
+    flashPairCharges: 1,
+    flashPairRevealedTileIds: [],
+    undoUsesThisFloor: 1,
     strayRemoveCharges: 1,
     strayRemoveArmed: true,
-    recallFocus: 3,
+    recallFocus: 0,
     rewardPerkIds: [],
     relicIds: [
         'combo_shard_plus_step',
@@ -61,10 +77,67 @@ const initialRun = {
     ],
     powersUsedThisRun: false,
     forgottenTileIdsThisFloor: [],
+    pinnedTileIds: [],
     peekRevealedTileIds: [],
+    shopGold: 10,
+    shopRerolls: 0,
+    shopOffers: [],
     stats: { totalScore: 0, currentLevelScore: 0, comboShards: 0, guardTokens: 0, currentStreak: 0 }
 } as unknown as RunState;
+const initialRun: RunState = {
+    ...initialRunBase,
+    shopOffers: createRunShopOffers(initialRunBase)
+};
 const report = runGameplayCoreSimulation(initialRun, { seed, steps });
+const repairRun: RunState = {
+    ...initialRun,
+    board: {
+        level: 5,
+        pairCount: 1,
+        columns: 2,
+        rows: 2,
+        tiles: [
+            { ...tile('repair-pair-a', 'repair-pair'), state: 'matched' },
+            { ...tile('repair-pair-b', 'repair-pair'), state: 'matched' },
+            {
+                ...tile('repair-exit', EXIT_PAIR_KEY),
+                state: 'flipped',
+                dungeonCardKind: 'exit',
+                dungeonExitLockKind: 'iron'
+            }
+        ],
+        flippedTileIds: ['repair-exit'],
+        matchedPairs: 1,
+        floorArchetypeId: null,
+        featuredObjectiveId: null,
+        dungeonExitTileId: 'repair-exit',
+        dungeonExitLockKind: 'iron',
+        dungeonObjectiveId: 'defeat_boss',
+        dungeonBossId: 'trap_warden',
+        enemyHazards: [
+            {
+                id: 'repair-stale-warden',
+                kind: 'warden',
+                label: 'Repair Stale Warden',
+                currentTileId: 'repair-pair-a',
+                nextTileId: 'repair-pair-b',
+                pattern: 'guard',
+                state: 'revealed',
+                damage: 1,
+                hp: 1,
+                maxHp: 1,
+                bossId: 'trap_warden'
+            }
+        ]
+    },
+    dungeonKeys: {},
+    dungeonMasterKeys: 0,
+    dungeonEnemiesDefeated: 0,
+    dungeonEnemiesDefeatedThisFloor: 0,
+    enemyHazardsDefeatedThisFloor: 0,
+    status: 'levelComplete'
+};
+const repairReport = runGameplayProgressionRepairSimulation(repairRun);
 
 console.log(JSON.stringify({
     seed: report.seed,
@@ -72,12 +145,27 @@ console.log(JSON.stringify({
     accepted: report.acceptedCommandIds.length,
     rejected: report.rejectedCommandIds.length,
     commandTypeCounts: report.commandTypeCounts,
+    acceptedCommandTypeCounts: report.acceptedCommandTypeCounts,
+    rejectedCommandTypeCounts: report.rejectedCommandTypeCounts,
     eventTypeCounts: report.eventTypeCounts,
     finalPeekCharges: report.finalRun.peekCharges ?? 0,
+    progressionRepair: {
+        accepted: repairReport.accepted,
+        commandType: repairReport.command.type,
+        eventTypes: repairReport.events.map((event) => event.type),
+        replayDeterministic: repairReport.replayDeterministic,
+        invariantViolations: repairReport.invariantViolations
+    },
     replayDeterministic: report.replayDeterministic,
     invariantViolations: report.invariantViolations
 }, null, 2));
 
-if (!report.replayDeterministic || report.invariantViolations.length > 0) {
+if (
+    !report.replayDeterministic ||
+    report.invariantViolations.length > 0 ||
+    !repairReport.accepted ||
+    !repairReport.replayDeterministic ||
+    repairReport.invariantViolations.length > 0
+) {
     process.exitCode = 1;
 }

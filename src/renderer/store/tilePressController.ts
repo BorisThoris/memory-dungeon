@@ -1,5 +1,4 @@
 import type { RunState, ViewState } from '../../shared/contracts';
-import { applyEnemyHazardClick } from '../../shared/turn-resolution';
 import { createGameplayPinToggleCommand } from '../../shared/gameplay-core-contracts';
 import { reduceGameplayCommand } from '../../shared/gameplay-core';
 import { appendGameplayJournal } from '../../shared/gameplay-journal';
@@ -12,6 +11,7 @@ import { createDungeonTilePressSurfaceResult } from './dungeonPressSurfaceState'
 import { projectGameplayFeedback } from './gameplayFeedbackAdapter';
 import {
     clearRunSurfaceArmedModes,
+    applyEnemyHazardContactThroughGameplayCore,
     createArmedBoardPowerPressResult,
     createBoardPowerContactPolicy,
     createOrdinaryTileFlipResult,
@@ -77,8 +77,9 @@ export const createPlayingTilePressSurfaceResult = ({
     let actionRun = run;
     let pressedTile = actionRun.board?.tiles.find((tile) => tile.id === tileId) ?? null;
     const flippedBefore = actionRun.board?.flippedTileIds.length ?? 0;
-    const hazardRun = applyEnemyHazardClick(actionRun, tileId, { advanceHazards: flippedBefore === 0 });
-    const enemyContacted = hazardRun !== actionRun;
+    const contact = applyEnemyHazardContactThroughGameplayCore(actionRun, tileId, flippedBefore === 0);
+    const hazardRun = contact.run;
+    const enemyContacted = contact.contacted;
 
     if (enemyContacted) {
         audio.push({ kind: 'resolveContact', fromRun: run, toRun: hazardRun });

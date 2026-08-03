@@ -62,6 +62,12 @@ describe('dungeon press surface state helpers', () => {
                 state: 'flipped',
                 dungeonCardState: 'revealed'
             });
+            expect(result.run.gameplayCommandJournal).toEqual([
+                expect.objectContaining({ type: 'board.tile_flip', targetTileId: exitTile.id })
+            ]);
+            expect(result.run.gameplayEventJournal).toEqual(expect.arrayContaining([
+                expect.objectContaining({ type: 'board.tile_flipped', outcome: 'exit_revealed' })
+            ]));
         }
     });
 
@@ -87,6 +93,12 @@ describe('dungeon press surface state helpers', () => {
             expect(result.playFlipSfx).toBe(true);
             expect(result.run.board!.dungeonShopVisited).toBe(true);
             expect(result.run.shopOffers).toHaveLength(1);
+            expect(result.run.gameplayCommandJournal).toEqual([
+                expect.objectContaining({ type: 'board.tile_flip', targetTileId: shopTile.id })
+            ]);
+            expect(result.run.gameplayEventJournal).toEqual(expect.arrayContaining([
+                expect.objectContaining({ type: 'board.tile_flipped', outcome: 'shop_revealed' })
+            ]));
         }
     });
 
@@ -114,6 +126,12 @@ describe('dungeon press surface state helpers', () => {
                 dungeonRoomUsed: true,
                 dungeonCardState: 'resolved'
             });
+            expect(result.run.gameplayCommandJournal).toEqual([
+                expect.objectContaining({ type: 'board.tile_flip', targetTileId: roomTile.id })
+            ]);
+            expect(result.run.gameplayEventJournal).toEqual(expect.arrayContaining([
+                expect.objectContaining({ type: 'board.tile_flipped', outcome: 'room_resolved' })
+            ]));
         }
     });
 });

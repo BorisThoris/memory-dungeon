@@ -1,6 +1,12 @@
 import type { RunState, ViewState } from '../../shared/contracts';
-import { finishMemorizePhase, isGauntletExpired } from '../../shared/game-core';
-import { disableDebugPeek, pauseRun, resumeRun } from '../../shared/run-timer-rules';
+import {
+    completeMemorizePhaseThroughGameplayCore,
+    deactivateDebugRevealThroughGameplayCore,
+    expireGauntletThroughGameplayCore,
+    pauseRunThroughGameplayCore,
+    resumeRunThroughGameplayCore
+} from '../../shared/gameplay-core-adapters';
+import type { GameplayPauseTimerSnapshot } from '../../shared/gameplay-core-contracts';
 import {
     clearActiveTimer,
     createActiveTimer,
@@ -49,6 +55,37 @@ export const createRunTimerController = ({
     let debugRevealTimer: ActiveTimer | null = null;
     let pendingMemorizeBoardKey: string | null = null;
     let gauntletExpiryIntervalId: ReturnType<typeof setInterval> | null = null;
+
+    const completeMemorizePhase = (run: RunState): RunState =>
+        completeMemorizePhaseThroughGameplayCore(
+            run,
+            `memorize-complete:${run.runSeed}:${run.board?.level ?? 0}`
+        ).run;
+
+    const expireGauntlet = (run: RunState, observedAtMs: number) =>
+        expireGauntletThroughGameplayCore(
+            run,
+            observedAtMs,
+            `gauntlet-expire:${run.runSeed}:${run.gauntletDeadlineMs ?? 'none'}:${observedAtMs}`
+        );
+
+    const commandJournalLength = (run: RunState): number =>
+        Array.isArray(run.gameplayCommandJournal) ? run.gameplayCommandJournal.length : 0;
+
+    const deactivateDebugReveal = (
+        run: RunState,
+        reason: 'timer_elapsed' | 'resume_expired'
+    ): RunState =>
+        deactivateDebugRevealThroughGameplayCore(
+            run,
+            reason,
+            `debug-reveal-deactivate:${run.runSeed}:${commandJournalLength(run)}:${reason}`
+        ).run;
+
+    const timerRemainingMs = (value: number | null): number | null =>
+        typeof value === 'number' && Number.isFinite(value)
+            ? Math.max(0, Math.floor(value))
+            : null;
 
     const clearMemorizeTimer = (): void => {
         clearActiveTimer(memorizeTimer);
@@ -120,9 +157,10 @@ export const createRunTimerController = ({
                 clearGauntletExpiryWatch();
                 return;
             }
-            if (isGauntletExpired(currentRun)) {
+            const expiry = expireGauntlet(currentRun, Date.now());
+            if (expiry.accepted) {
                 clearGauntletExpiryWatch();
-                onResolvedRun({ ...currentRun, status: 'gameOver', lives: 0 });
+                onResolvedRun(expiry.run);
             }
         }, 300);
     };
@@ -143,7 +181,7 @@ export const createRunTimerController = ({
             const { run } = getState();
 
             if (run && run.status === 'memorize') {
-                setRun(finishMemorizePhase(run));
+                setRun(completeMemorizePhase(run));
             }
 
             return;
@@ -157,7 +195,7 @@ export const createRunTimerController = ({
                 return;
             }
 
-            setRun(finishMemorizePhase(run));
+            setRun(completeMemorizePhase(run));
         });
     };
 
@@ -193,7 +231,7 @@ export const createRunTimerController = ({
             const { run } = getState();
 
             if (run?.debugPeekActive) {
-                setRun(disableDebugPeek(run));
+                setRun(deactivateDebugReveal(run, 'timer_elapsed'));
             }
 
             return;
@@ -207,42 +245,52 @@ export const createRunTimerController = ({
                 return;
             }
 
-            setRun(disableDebugPeek(run));
+            setRun(deactivateDebugReveal(run, 'timer_elapsed'));
         });
     };
 
     const freezeRun = (run: RunState): RunState => {
-        const pausedRun = pauseRun(run);
-
-        return {
-            ...pausedRun,
-            timerState: {
-                ...pausedRun.timerState,
-                memorizeRemainingMs:
-                    run.status === 'memorize'
-                        ? getActiveTimerRemainingMs(memorizeTimer, run.timerState.memorizeRemainingMs)
-                        : pausedRun.timerState.memorizeRemainingMs,
-                resolveRemainingMs:
-                    run.status === 'resolving'
-                        ? getActiveTimerRemainingMs(resolveTimer, run.timerState.resolveRemainingMs)
-                        : pausedRun.timerState.resolveRemainingMs,
-                debugRevealRemainingMs: run.debugPeekActive
-                    ? getActiveTimerRemainingMs(debugRevealTimer, run.timerState.debugRevealRemainingMs)
-                    : pausedRun.timerState.debugRevealRemainingMs
-            }
+        const observedAtMs = Date.now();
+        const timerSnapshot: GameplayPauseTimerSnapshot = {
+            memorizeRemainingMs: timerRemainingMs(
+                run.status === 'memorize'
+                    ? getActiveTimerRemainingMs(memorizeTimer, run.timerState.memorizeRemainingMs, observedAtMs)
+                    : run.timerState.memorizeRemainingMs
+            ),
+            resolveRemainingMs: timerRemainingMs(
+                run.status === 'resolving'
+                    ? getActiveTimerRemainingMs(resolveTimer, run.timerState.resolveRemainingMs, observedAtMs)
+                    : run.timerState.resolveRemainingMs
+            ),
+            debugRevealRemainingMs: timerRemainingMs(
+                run.debugPeekActive
+                    ? getActiveTimerRemainingMs(debugRevealTimer, run.timerState.debugRevealRemainingMs, observedAtMs)
+                    : run.timerState.debugRevealRemainingMs
+            )
         };
+        return pauseRunThroughGameplayCore(
+            run,
+            observedAtMs,
+            timerSnapshot,
+            `run-pause:${run.runSeed}:${commandJournalLength(run)}:${observedAtMs}`
+        ).run;
     };
 
     const freezeRunSnapshotForPlayingMetaOverlay = (run: RunState): RunState =>
         run.status === 'paused' || run.status === 'levelComplete' || run.status === 'gameOver' ? run : freezeRun(run);
 
     const resumeRunWithTimers = (run: RunState): RunState => {
-        let resumedRun = resumeRun(run);
+        const observedAtMs = Date.now();
+        let resumedRun = resumeRunThroughGameplayCore(
+            run,
+            observedAtMs,
+            `run-resume:${run.runSeed}:${commandJournalLength(run)}:${observedAtMs}`
+        ).run;
         const memorizeRemainingMs = resumedRun.timerState.memorizeRemainingMs;
 
         if (shouldScheduleMemorizeTimerOnResume(resumedRun) && memorizeRemainingMs !== null) {
             if (memorizeRemainingMs <= 0) {
-                resumedRun = finishMemorizePhase(resumedRun);
+                resumedRun = completeMemorizePhase(resumedRun);
             } else {
                 scheduleMemorizeTimer(memorizeRemainingMs);
             }
@@ -255,7 +303,7 @@ export const createRunTimerController = ({
         const debugRevealRemainingMs = resumedRun.timerState.debugRevealRemainingMs;
         if (shouldScheduleDebugRevealTimerOnResume(resumedRun) && debugRevealRemainingMs !== null) {
             if (debugRevealRemainingMs <= 0) {
-                resumedRun = disableDebugPeek(resumedRun);
+                resumedRun = deactivateDebugReveal(resumedRun, 'resume_expired');
             } else {
                 scheduleDebugRevealTimer(debugRevealRemainingMs);
             }

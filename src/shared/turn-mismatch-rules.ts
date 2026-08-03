@@ -25,6 +25,7 @@ import {
     applyVolatileMismatchTrait,
     calculateTileTraitMismatchPenalty
 } from './tile-trait-rules';
+import type { TileTraitInteractionTag } from './tile-trait-interaction-copy';
 
 export interface MismatchPenalty {
     consumesGuardToken: boolean;
@@ -92,6 +93,7 @@ export interface MismatchTurnTransitionInput {
     sourceTiles: readonly Tile[];
     triesDelta: number;
     decoyTouched: boolean;
+    onTraitInteractionTags?: (tags: readonly TileTraitInteractionTag[]) => void;
 }
 
 export const resolveMismatchTurnTransition = ({
@@ -100,11 +102,13 @@ export const resolveMismatchTurnTransition = ({
     tileIds,
     sourceTiles,
     triesDelta,
-    decoyTouched
+    decoyTouched,
+    onTraitInteractionTags
 }: MismatchTurnTransitionInput): RunState => {
     const stats = normalizeSessionStats(run.stats);
     const normalizedRun = { ...run, stats };
     const traitPenalty = calculateTileTraitMismatchPenalty(normalizedRun, sourceTiles, board);
+    onTraitInteractionTags?.(traitPenalty.interactionTags);
     const bossPressure = board.floorTag === 'boss' ? getActiveDungeonBossPressureRule(board) : null;
     const penalty = calculateMismatchPenalty(
         normalizedRun,

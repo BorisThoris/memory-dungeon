@@ -212,5 +212,21 @@ describe('shopSurfaceState', () => {
         }
         expect(result.patch.run.shopRerolls).toBe(shopRun.shopRerolls + 1);
         expect(result.patch.run.shopGold).toBeLessThan(shopRun.shopGold);
+        expect(result.patch.run.gameplayCommandJournal).toEqual([
+            expect.objectContaining({ type: 'shop.reroll' })
+        ]);
+        expect(result.events).toEqual([
+            expect.objectContaining({ type: 'shop.stock_rerolled' }),
+            expect.objectContaining({ type: 'feedback.requested', cue: 'shop.stock.rerolled' })
+        ]);
+        expect(result.feedback).toMatchObject({
+            audioCategory: 'shop-reroll',
+            cue: 'shop.stock.rerolled'
+        });
+        expect(createShopRerollSurfaceResult({
+            run: result.patch.run,
+            shopReturnMode: 'summary',
+            view: 'shop'
+        })).toEqual({ kind: 'ignored' });
     });
 });

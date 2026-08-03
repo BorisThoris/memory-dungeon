@@ -1,9 +1,19 @@
 import type { FindableKind, RelicId, RunState } from './contracts';
 import {
     createGameplayDefinitionCommand,
+    createGameplayDebugRevealActivateCommand,
+    createGameplayDebugRevealDeactivateCommand,
     createGameplayBoardTurnResolveCommand,
     createGameplayFloorAdvanceCommand,
+    createGameplayGauntletExpireCommand,
+    createGameplayMemorizeCompleteCommand,
+    createGameplayPauseCommand,
+    createGameplayProgressionRepairCommand,
+    createGameplayRelicOfferOpenCommand,
+    createGameplayResumeCommand,
     createGameplayWildMatchConsumeCommand,
+    type GameplayDebugRevealDeactivationReason,
+    type GameplayPauseTimerSnapshot,
     type GameplayCommand,
     type GameplayEvent
 } from './gameplay-core-contracts';
@@ -68,6 +78,34 @@ export interface GameplayFloorAdvanceAdapterResult {
     accepted: boolean;
 }
 
+export interface GameplayRelicOfferOpenAdapterResult {
+    run: RunState;
+    command: GameplayCommand;
+    events: GameplayEvent[];
+    accepted: boolean;
+}
+
+export interface GameplayMemorizeCompleteAdapterResult {
+    run: RunState;
+    command: GameplayCommand;
+    events: GameplayEvent[];
+    accepted: boolean;
+}
+
+export interface GameplayGauntletExpireAdapterResult {
+    run: RunState;
+    command: GameplayCommand;
+    events: GameplayEvent[];
+    accepted: boolean;
+}
+
+export interface GameplayRunLifecycleAdapterResult {
+    run: RunState;
+    command: GameplayCommand;
+    events: GameplayEvent[];
+    accepted: boolean;
+}
+
 const RELIC_IMMEDIATE_DEFINITION_IDS: Partial<Record<RelicId, string>> = {
     extra_shuffle_charge: 'relic.extra_shuffle_charge',
     first_shuffle_free_per_floor: 'relic.first_shuffle_free_per_floor',
@@ -85,6 +123,117 @@ const RELIC_IMMEDIATE_DEFINITION_IDS: Partial<Record<RelicId, string>> = {
     parasite_ledger: 'relic.parasite_ledger',
     stray_charge_plus_one: 'relic.stray_charge_plus_one',
     pin_cap_plus_one: 'relic.pin_cap_plus_one'
+};
+
+/** Completes the deterministic study phase while leaving wall-clock scheduling to the renderer. */
+export const completeMemorizePhaseThroughGameplayCore = (
+    run: RunState,
+    commandId: string
+): GameplayMemorizeCompleteAdapterResult => {
+    const command = createGameplayMemorizeCompleteCommand(commandId);
+    const result = reduceGameplayCommand(run, command);
+    return {
+        accepted: result.accepted,
+        command,
+        events: result.events,
+        run: result.accepted ? appendGameplayJournal(result.run, [command], result.events) : run
+    };
+};
+
+/** Converts a host-clock observation into one deterministic terminal gameplay transition. */
+export const expireGauntletThroughGameplayCore = (
+    run: RunState,
+    observedAtMs: number,
+    commandId: string
+): GameplayGauntletExpireAdapterResult => {
+    const command = createGameplayGauntletExpireCommand(commandId, observedAtMs);
+    const result = reduceGameplayCommand(run, command);
+    return {
+        accepted: result.accepted,
+        command,
+        events: result.events,
+        run: result.accepted ? appendGameplayJournal(result.run, [command], result.events) : run
+    };
+};
+
+/** Freezes gameplay timing from one serialized host observation and timer snapshot. */
+export const pauseRunThroughGameplayCore = (
+    run: RunState,
+    observedAtMs: number,
+    timerSnapshot: GameplayPauseTimerSnapshot,
+    commandId: string
+): GameplayRunLifecycleAdapterResult => {
+    const command = createGameplayPauseCommand(commandId, observedAtMs, timerSnapshot);
+    const result = reduceGameplayCommand(run, command);
+    return {
+        accepted: result.accepted,
+        command,
+        events: result.events,
+        run: result.accepted ? appendGameplayJournal(result.run, [command], result.events) : run
+    };
+};
+
+/** Restores a paused gameplay phase from one serialized host-clock observation. */
+export const resumeRunThroughGameplayCore = (
+    run: RunState,
+    observedAtMs: number,
+    commandId: string
+): GameplayRunLifecycleAdapterResult => {
+    const command = createGameplayResumeCommand(commandId, observedAtMs);
+    const result = reduceGameplayCommand(run, command);
+    return {
+        accepted: result.accepted,
+        command,
+        events: result.events,
+        run: result.accepted ? appendGameplayJournal(result.run, [command], result.events) : run
+    };
+};
+
+/** Activates or refreshes the debug board reveal through replayable gameplay truth. */
+export const activateDebugRevealThroughGameplayCore = (
+    run: RunState,
+    disableAchievementsOnDebug: boolean,
+    commandId: string
+): GameplayRunLifecycleAdapterResult => {
+    const command = createGameplayDebugRevealActivateCommand(commandId, disableAchievementsOnDebug);
+    const result = reduceGameplayCommand(run, command);
+    return {
+        accepted: result.accepted,
+        command,
+        events: result.events,
+        run: result.accepted ? appendGameplayJournal(result.run, [command], result.events) : run
+    };
+};
+
+/** Ends an active debug board reveal with an explicit replayable lifecycle cause. */
+export const deactivateDebugRevealThroughGameplayCore = (
+    run: RunState,
+    reason: GameplayDebugRevealDeactivationReason,
+    commandId: string
+): GameplayRunLifecycleAdapterResult => {
+    const command = createGameplayDebugRevealDeactivateCommand(commandId, reason);
+    const result = reduceGameplayCommand(run, command);
+    return {
+        accepted: result.accepted,
+        command,
+        events: result.events,
+        run: result.accepted ? appendGameplayJournal(result.run, [command], result.events) : run
+    };
+};
+
+/** Applies only concrete anti-softlock repairs and journals their exact board consequences. */
+export const repairRunProgressionThroughGameplayCore = (
+    run: RunState,
+    commandId: string
+): GameplayRunLifecycleAdapterResult => {
+    const command = createGameplayProgressionRepairCommand(commandId);
+    const result = reduceGameplayCommand(run, command);
+    return {
+        accepted: result.accepted,
+        command,
+        events: result.events,
+        run: result.accepted ? appendGameplayJournal(result.run, [command], result.events) : run
+    };
 };
 
 /**
@@ -173,11 +322,7 @@ export const resolveFindableMatchRewardThroughGameplayCore = (
     };
 };
 
-/**
- * Routes non-final delayed board resolution through one outer command. Final
- * pairs deliberately remain on the legacy finalizer until floor-clear effects
- * can share the same event envelope without a reducer cycle.
- */
+/** Routes delayed board resolution and any floor-clear effects through one outer command. */
 export const resolveBoardTurnThroughGameplayCore = (
     run: RunState,
     encorePairKeys: readonly string[],
@@ -263,6 +408,21 @@ export const consumeWildMatchThroughGameplayCore = (
         throw new Error('Wild match consumption command was unexpectedly rejected.');
     }
     return { run: result.run, commands: [command], events: result.events };
+};
+
+/** Opens or safely skips one deterministic milestone draft under a serializable command. */
+export const openRelicOfferThroughGameplayCore = (
+    run: RunState,
+    commandId: string
+): GameplayRelicOfferOpenAdapterResult => {
+    const command = createGameplayRelicOfferOpenCommand(commandId);
+    const result = reduceGameplayCommand(run, command);
+    return {
+        accepted: result.accepted,
+        command,
+        events: result.events,
+        run: result.accepted ? appendGameplayJournal(result.run, [command], result.events) : run
+    };
 };
 
 /** Owns one complete floor transition without journaling nested parasite or floor-start perk commands. */

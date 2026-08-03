@@ -21,11 +21,15 @@ export const createActiveTimer = (duration: number, onElapsed: () => void): Acti
     };
 };
 
-export const getActiveTimerRemainingMs = (timer: ActiveTimer | null, fallback: number | null): number | null => {
+export const getActiveTimerRemainingMs = (
+    timer: ActiveTimer | null,
+    fallback: number | null,
+    observedAtMs: number = Date.now()
+): number | null => {
     if (!timer) {
         return fallback;
     }
 
-    const remaining = timer.deadline - Date.now();
+    const remaining = timer.deadline - observedAtMs;
     return Number.isFinite(remaining) ? Math.max(remaining, 0) : fallback;
 };

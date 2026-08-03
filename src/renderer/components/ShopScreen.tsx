@@ -5,7 +5,6 @@ import { canRerollShopOffers, getShopRerollCostForFloor } from '../../shared/sho
 import { getTraitBuildRewardRowsForBoard } from '../../shared/trait-build-rewards';
 import {
     playUiBackSfx,
-    playUiClickSfx,
     playUiConfirmSfx,
     resumeUiSfxContext,
     uiSfxGainFromSettings
@@ -13,6 +12,7 @@ import {
 import { useModalFocusTrap } from '../hooks/useModalFocusTrap';
 import { OverlayActionDock } from '../ui';
 import { useAppStore } from '../store/useAppStore';
+import { getLatestGameplayFeedback } from '../store/gameplayFeedbackAdapter';
 import { GAMEPLAY_VISUAL_CSS_VARS } from './gameplayVisualConfig';
 import { getInventoryPayoffEngineSignal } from './inventoryScreenModel';
 import styles from './ShopScreen.module.css';
@@ -966,6 +966,7 @@ const ShopScreen = () => {
     const inFloorShop = shopReturnMode === 'floor';
     const rerollCost = getShopRerollCostForFloor(run.board?.level ?? run.stats.highestLevel);
     const rerollAvailable = canRerollShopOffers(run);
+    const latestShopFeedback = getLatestGameplayFeedback(run);
     const pendingRouteCardKind = run.pendingRouteCardPlan
         ? routeCardKindForRouteType(run.pendingRouteCardPlan.routeType)
         : null;
@@ -1014,6 +1015,14 @@ const ShopScreen = () => {
             style={GAMEPLAY_VISUAL_CSS_VARS}
             tabIndex={-1}
         >
+            <p
+                aria-live="polite"
+                className={styles.liveRegion}
+                data-testid="shop-live-region"
+                role="status"
+            >
+                {latestShopFeedback?.source.kind === 'shop' ? latestShopFeedback.message : ''}
+            </p>
             <div className={styles.shell}>
                 <header className={styles.header}>
                     <div className={styles.headerText}>
@@ -1373,8 +1382,6 @@ const ShopScreen = () => {
                                     data-testid={`shop-offer-${offer.itemId}-action`}
                                     disabled={disabled}
                                     onClick={() => {
-                                        resumeUiSfxContext();
-                                        playUiClickSfx(uiGain);
                                         purchaseShopOffer(offer.id);
                                     }}
                                     type="button"
@@ -1415,8 +1422,6 @@ const ShopScreen = () => {
                                 data-testid="shop-reroll-button"
                                 disabled={!rerollAvailable}
                                 onClick={() => {
-                                    resumeUiSfxContext();
-                                    playUiClickSfx(uiGain);
                                     rerollShopOffers();
                                 }}
                                 type="button"

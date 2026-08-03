@@ -12,7 +12,7 @@ import {
 import {
     gainRunInventoryItem,
     getRunInventoryItemQuantity,
-    useRunInventoryItem
+    useRunInventoryItem as consumeRunInventoryItem
 } from './run-inventory';
 import { gainRelicFavor } from './relic-favor-rules';
 import { runNonNegativeInteger } from './run-number-guards';
@@ -151,7 +151,7 @@ export const applyGameplayDefinitionTransition = (
             }
             case 'inventory.consume': {
                 const before = getRunInventoryItemQuantity(nextRun, effect.itemId);
-                const used = useRunInventoryItem(nextRun, effect.itemId);
+                const used = consumeRunInventoryItem(nextRun, effect.itemId);
                 nextRun = used.run;
                 const after = getRunInventoryItemQuantity(nextRun, effect.itemId);
                 writeEvent({

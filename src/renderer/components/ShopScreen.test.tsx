@@ -1,9 +1,9 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { RunShopOfferState, RunState } from '../../shared/contracts';
 import { createNewRun } from '../../shared/game-core';
 import { createDefaultSaveData } from '../../shared/save-data';
-import { SHOP_ITEM_CATALOG } from '../../shared/shop-rules';
+import { createRunShopOffers, SHOP_ITEM_CATALOG } from '../../shared/shop-rules';
 import { useAppStore } from '../store/useAppStore';
 import ShopScreen from './ShopScreen';
 
@@ -34,6 +34,36 @@ describe('ShopScreen', () => {
     beforeEach(() => {
         vi.clearAllMocks();
         useAppStore.setState({ run: null, view: 'menu', shopReturnMode: null });
+    });
+
+    it('announces accepted typed stock rerolls and lets the store own confirm audio', () => {
+        const saveData = createDefaultSaveData();
+        const baseRun = createNewRun(0, { echoFeedbackEnabled: false, runSeed: 78 });
+        const stockedRun = {
+            ...baseRun,
+            status: 'levelComplete' as const,
+            shopGold: 10,
+            shopRerolls: 0,
+            shopOffers: createRunShopOffers({ ...baseRun, shopGold: 10, shopRerolls: 0 })
+        };
+        useAppStore.setState({
+            hydrated: true,
+            hydrating: false,
+            view: 'shop',
+            saveData,
+            settings: saveData.settings,
+            run: stockedRun,
+            shopReturnMode: 'summary'
+        });
+
+        render(<ShopScreen />);
+        fireEvent.click(screen.getByTestId('shop-reroll-button'));
+
+        expect(screen.getByTestId('shop-live-region')).toHaveTextContent(
+            'Shop stock rerolled for 1 shop gold; 9 remains.'
+        );
+        expect(uiSfxMocks.playUiConfirmSfx).toHaveBeenCalledTimes(1);
+        expect(uiSfxMocks.playUiClickSfx).not.toHaveBeenCalled();
     });
 
     it('shows shop offer signal chips and payoff rows for setup, key, and blocked buys', () => {

@@ -406,7 +406,7 @@ export const AUDIO_INTERACTION_COVERAGE: readonly AudioInteractionCoverageRow[] 
         domain: 'overlay',
         interaction: 'Relic offer opens and relic is picked',
         cue: 'relic-offer-open',
-        callsite: 'GameScreen relic offer effect / useAppStore.pickRelic',
+        callsite: 'typed relic.offer_open feedback in GameScreen / useAppStore.pickRelic',
         semanticMoment: 'reward',
         decision: 'sampled_with_fallback',
         cooldownPolicy: 'power category polyphony cap',

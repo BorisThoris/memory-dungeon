@@ -3,6 +3,7 @@ import type { AchievementId, BoardState, RunState, SaveData, Settings, Tile, Vie
 import { createNewRun } from '../../shared/game-core';
 import { createDefaultSaveData } from '../../shared/save-data';
 import { EXIT_PAIR_KEY } from '../../shared/tile-identity';
+import { enableDebugPeek } from '../../shared/run-timer-rules';
 import type { MatchScorePop, MismatchScorePop } from './matchScorePop';
 import { createRunResolutionController } from './runResolutionController';
 
@@ -142,6 +143,28 @@ describe('runResolutionController', () => {
         expect(harness.persistSaveData).toHaveBeenCalledWith(harness.state.saveData);
         expect(harness.persistSaveDataThenUnlockAchievements).not.toHaveBeenCalled();
         expect(gameSfxMocks.playFloorClearSfx).toHaveBeenCalledWith(0.5);
+    });
+
+    it('deactivates debug reveal through the gameplay core when a phase ends', () => {
+        const baseRun = enableDebugPeek(
+            createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless' }),
+            false
+        );
+        const harness = createHarness(baseRun);
+
+        harness.controller.applyResolvedRun({ ...baseRun, status: 'levelComplete' });
+
+        expect(harness.state.run).toMatchObject({
+            debugPeekActive: false,
+            timerState: { debugRevealRemainingMs: null },
+            gameplayCommandJournal: [
+                expect.objectContaining({ type: 'debug.reveal_deactivate', reason: 'phase_ended' })
+            ],
+            gameplayEventJournal: [
+                expect.objectContaining({ type: 'debug.reveal_deactivated', reason: 'phase_ended' }),
+                expect.objectContaining({ type: 'feedback.requested', cue: 'debug.reveal.phase_ended' })
+            ]
+        });
     });
 
     it('turns game-over runs into summaries, resets run surface state, and tracks completion', () => {
@@ -328,6 +351,16 @@ describe('runResolutionController', () => {
         expect(harness.state.run?.board?.tiles.find((candidate) => candidate.id === 'exit')?.dungeonExitLockKind).toBe(
             'none'
         );
+        expect(harness.state.run?.gameplayCommandJournal).toEqual([
+            expect.objectContaining({ type: 'run.progression_repair' })
+        ]);
+        expect(harness.state.run?.gameplayEventJournal).toEqual(expect.arrayContaining([
+            expect.objectContaining({
+                type: 'run.progression_repaired',
+                repairKinds: expect.arrayContaining(['exit_lock', 'exit_metadata'])
+            }),
+            expect.objectContaining({ type: 'feedback.requested', cue: 'safety.progression.repaired' })
+        ]));
     });
 
     it('keeps primary exit locks when the run already carries the required key', () => {
@@ -397,16 +430,43 @@ describe('runResolutionController', () => {
         expect(harness.state.run?.dungeonEnemiesDefeated).toBe(1);
         expect(harness.state.run?.dungeonEnemiesDefeatedThisFloor).toBe(1);
         expect(harness.state.run?.enemyHazardsDefeatedThisFloor).toBe(1);
+        expect(harness.state.run?.gameplayCommandJournal).toEqual([
+            expect.objectContaining({ type: 'run.progression_repair' })
+        ]);
+        expect(harness.state.run?.gameplayEventJournal).toEqual(expect.arrayContaining([
+            expect.objectContaining({
+                type: 'run.progression_repaired',
+                repairKinds: ['enemy_hazard'],
+                enemyHazardIdsDefeated: ['stale-warden']
+            }),
+            expect.objectContaining({ type: 'feedback.requested', cue: 'safety.progression.repaired' })
+        ]));
     });
 
     it('plays a payoff cue from the match pop payload when a board resolve creates match feedback', () => {
         const baseRun = createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless' });
-        const matchBoard = board([tile('a1', 'a', 'flipped'), tile('a2', 'a', 'flipped')], {
-            flippedTileIds: ['a1', 'a2']
-        });
+        const matchBoard = board([
+            {
+                ...tile('a1', 'a', 'flipped'),
+                findableKind: 'score_glint',
+                routeCardKind: 'greed_cache',
+                tileTraitKind: 'echo'
+            },
+            tile('b1', 'b'),
+            {
+                ...tile('a2', 'a', 'flipped'),
+                findableKind: 'score_glint',
+                routeCardKind: 'greed_cache',
+                tileTraitKind: 'echo'
+            },
+            { ...tile('b2', 'b'), tileTraitKind: 'sealed' }
+        ], { flippedTileIds: ['a1', 'a2'] });
         const run: RunState = {
             ...baseRun,
+            status: 'resolving',
             board: matchBoard,
+            findablesClaimedThisFloor: 0,
+            findablesTotalThisFloor: 1,
             stats: {
                 ...baseRun.stats,
                 currentStreak: 2,
@@ -419,6 +479,19 @@ describe('runResolutionController', () => {
         harness.controller.applyResolveBoardTurn(run);
 
         expect(harness.state.matchScorePop).not.toBeNull();
+        expect(harness.state.matchScorePop).toMatchObject({
+            pickupRewardText: expect.any(String),
+            routeRewardText: expect.any(String),
+            traitInteractionTexts: ['Echo + Sealed: combo shard'],
+            key: expect.stringContaining('board-turn:')
+        });
+        expect(harness.state.run?.gameplayEventJournal).toContainEqual(expect.objectContaining({
+            type: 'board.turn_resolved',
+            matchedFindableKind: 'score_glint',
+            matchedRouteKind: 'greed_cache',
+            traitInteractionTags: ['echo:sealed-combo'],
+            floaterTileIds: ['a1', 'a2']
+        }));
         expect(gameSfxMocks.playResolveSfx).toHaveBeenCalledWith(run, expect.any(Object), 0.5);
         expect(gameSfxMocks.playMatchPayoffSfx).toHaveBeenCalledWith(0.5, harness.state.matchScorePop);
     });
@@ -430,6 +503,7 @@ describe('runResolutionController', () => {
         });
         const run: RunState = {
             ...baseRun,
+            status: 'resolving',
             board: mismatchBoard,
             stats: {
                 ...baseRun.stats,

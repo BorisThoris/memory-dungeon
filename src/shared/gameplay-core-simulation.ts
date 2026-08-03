@@ -4,23 +4,34 @@ import {
     GAMEPLAY_CONTENT_DEFINITIONS,
     createGameplayBoardTurnResolveCommand,
     createGameplayDefinitionCommand,
+    createGameplayDebugRevealActivateCommand,
+    createGameplayDebugRevealDeactivateCommand,
     createGameplayDestroyPairCommand,
     createGameplayDungeonExitActivateCommand,
+    createGameplayEnemyHazardContactCommand,
     createGameplayFlashPairCommand,
     createGameplayFloorAdvanceCommand,
+    createGameplayGauntletExpireCommand,
     createGameplayGambitCommitCommand,
     createGameplayHazardBanishCommand,
+    createGameplayMemorizeCompleteCommand,
+    createGameplayPauseCommand,
     createGameplayPeekCommand,
     createGameplayPinToggleCommand,
+    createGameplayProgressionRepairCommand,
     createGameplayRegionShuffleCommand,
     createGameplayRiskWagerAcceptCommand,
+    createGameplayRelicOfferOpenCommand,
     createGameplayRelicPickCommand,
     createGameplayRelicOfferServiceCommand,
+    createGameplayResumeCommand,
     createGameplayRouteChooseCommand,
     createGameplaySideRoomResolveCommand,
     createGameplayShuffleCommand,
     createGameplayShopPurchaseCommand,
+    createGameplayShopRerollCommand,
     createGameplayStrayRemoveCommand,
+    createGameplayTileFlipCommand,
     createGameplayTileSwapCommand,
     createGameplayUndoResolveCommand,
     createGameplayWildMatchConsumeCommand,
@@ -30,9 +41,11 @@ import {
     type GameplayEvent
 } from './gameplay-core-contracts';
 import { reduceGameplayCommand, replayGameplayCommands } from './gameplay-core';
+import { inspectGameplayFeedbackCompleteness } from './gameplay-feedback-completeness';
 import { RUN_INVENTORY_ITEM_IDS, getRunInventoryItemQuantity } from './run-inventory';
 import { createMulberry32, pickRngIndex } from './rng';
 import { tilesArePairMatch } from './scoring-rules';
+import { purchaseShopOffer } from './shop-rules';
 import { WILD_PAIR_KEY } from './tile-identity';
 
 export interface GameplayCoreSimulationOptions {
@@ -50,7 +63,18 @@ export interface GameplayCoreSimulationReport {
     acceptedCommandIds: string[];
     rejectedCommandIds: string[];
     commandTypeCounts: Record<string, number>;
+    acceptedCommandTypeCounts: Record<string, number>;
+    rejectedCommandTypeCounts: Record<string, number>;
     eventTypeCounts: Record<string, number>;
+    replayDeterministic: boolean;
+    invariantViolations: string[];
+}
+
+export interface GameplayProgressionRepairSimulationReport {
+    command: GameplayCommand;
+    events: GameplayEvent[];
+    finalRun: RunState;
+    accepted: boolean;
     replayDeterministic: boolean;
     invariantViolations: string[];
 }
@@ -60,6 +84,11 @@ const boundedChance = (value: number | undefined, fallback: number): number =>
 
 const positiveStepCount = (value: number): number =>
     Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
+
+const timerRemainingMs = (value: unknown): number | null =>
+    typeof value === 'number' && Number.isFinite(value)
+        ? Math.max(0, Math.floor(value))
+        : null;
 
 const incrementCount = (counts: Record<string, number>, key: string): void => {
     counts[key] = (counts[key] ?? 0) + 1;
@@ -85,6 +114,29 @@ const availableStrayTargets = (run: RunState): string[] => {
         : [];
 };
 
+const availableMatchingFlipTarget = (run: RunState): string | null => {
+    const board = run.board;
+    if (!board) {
+        return null;
+    }
+    const flipped = board.tiles.find((tile) => tile.state === 'flipped' && tile.pairKey !== WILD_PAIR_KEY);
+    return board.tiles
+        .filter((tile) => tile.state === 'hidden' && tile.pairKey === flipped?.pairKey)
+        .map((tile) => tile.id)
+        .sort((left, right) => left.localeCompare(right))[0] ?? null;
+};
+
+const availableShopPurchaseTarget = (run: RunState): string | null => {
+    const offers = Array.isArray(run.shopOffers) ? run.shopOffers : [];
+    return (
+        offers.find(
+            (offer) =>
+                offer.itemId !== 'heal_life' &&
+                purchaseShopOffer(run, offer.id) !== run
+        ) ?? offers.find((offer) => purchaseShopOffer(run, offer.id) !== run)
+    )?.id ?? null;
+};
+
 const availableWildMatchPair = (run: RunState): { wildTileId: string; pairedTileId: string } | null => {
     if (getRunInventoryItemQuantity(run, 'wild_match_token') <= 0) {
         return null;
@@ -95,6 +147,23 @@ const availableWildMatchPair = (run: RunState): { wildTileId: string; pairedTile
     return wildTile && pairedTile && tilesArePairMatch(wildTile, pairedTile)
         ? { wildTileId: wildTile.id, pairedTileId: pairedTile.id }
         : null;
+};
+
+const availableHiddenWildTile = (run: RunState): string | null =>
+    (run.board?.tiles ?? [])
+        .filter((tile) => tile.state === 'hidden' && tile.pairKey === WILD_PAIR_KEY)
+        .map((tile) => tile.id)
+        .sort((left, right) => left.localeCompare(right))[0] ?? null;
+
+const availableHiddenWildPartner = (run: RunState): string | null => {
+    const hidden = (run.board?.tiles ?? []).filter(
+        (tile) => tile.state === 'hidden' && tile.pairKey !== WILD_PAIR_KEY
+    );
+    const singletonTargets = hidden
+        .filter((tile) => hidden.filter((candidate) => candidate.pairKey === tile.pairKey).length === 1)
+        .map((tile) => tile.id)
+        .sort((left, right) => left.localeCompare(right));
+    return singletonTargets[0] ?? hidden.map((tile) => tile.id).sort((left, right) => left.localeCompare(right))[0] ?? null;
 };
 
 const commandForStep = (
@@ -110,46 +179,127 @@ const commandForStep = (
     const commandId = `sim:${seed}:${String(step).padStart(4, '0')}`;
     const actionIndex = pickRngIndex(rng, definitions.length + 12);
     if (step === 0) {
+        return createGameplayMemorizeCompleteCommand(commandId);
+    }
+    if (step === 1) {
+        return createGameplayTileFlipCommand(
+            commandId,
+            availableHiddenWildPartner(run) ?? 'missing-wild-partner'
+        );
+    }
+    if (step === 2) {
+        return createGameplayTileFlipCommand(
+            commandId,
+            availableHiddenWildTile(run) ?? 'missing-wild-tile'
+        );
+    }
+    if (step === 3) {
         return createGameplayBoardTurnResolveCommand(commandId);
     }
-    const wildMatchPair = step === 1 ? availableWildMatchPair(run) : null;
-    if (step === 1) {
+    const wildMatchPair = step === 4 ? availableWildMatchPair(run) : null;
+    if (step === 4) {
         return createGameplayWildMatchConsumeCommand(
             commandId,
             wildMatchPair?.wildTileId ?? 'missing-wild-tile',
             wildMatchPair?.pairedTileId ?? 'missing-wild-pair'
         );
     }
-    if (step === 2) {
+    if (step === 5) {
+        const target = availablePeekTargets(run)[0] ?? 'missing-flip-target';
+        return createGameplayTileFlipCommand(commandId, target);
+    }
+    if (step === 6) {
+        return createGameplayTileFlipCommand(
+            commandId,
+            availableMatchingFlipTarget(run) ?? 'missing-matching-flip-target'
+        );
+    }
+    if (step === 7) {
+        return createGameplayBoardTurnResolveCommand(commandId);
+    }
+    if (step === 8) {
+        const target = availablePeekTargets(run)[0] ?? 'missing-flip-target';
+        return createGameplayTileFlipCommand(commandId, target);
+    }
+    if (step === 9) {
+        return createGameplayTileFlipCommand(
+            commandId,
+            availableMatchingFlipTarget(run) ?? 'missing-matching-flip-target'
+        );
+    }
+    if (step === 10) {
+        return createGameplayBoardTurnResolveCommand(commandId);
+    }
+    if (step === 11) {
+        const choiceId = Array.isArray(run.lastLevelResult?.routeChoices)
+            ? run.lastLevelResult.routeChoices[0]?.id
+            : undefined;
+        return createGameplayRouteChooseCommand(commandId, choiceId ?? 'missing-route-choice');
+    }
+    if (step === 12) {
+        return createGameplaySideRoomResolveCommand(commandId, 'skip');
+    }
+    if (step === 13) {
+        return createGameplayShopPurchaseCommand(
+            commandId,
+            availableShopPurchaseTarget(run) ?? 'missing-shop-offer'
+        );
+    }
+    if (step === 14) {
+        return createGameplayShopRerollCommand(commandId);
+    }
+    if (step === 15) {
+        return createGameplayRelicOfferOpenCommand(commandId);
+    }
+    if (step === 16) {
+        return createGameplayRelicOfferServiceCommand(commandId, 'reroll_offer');
+    }
+    if (step === 17) {
+        const relicId = Array.isArray(run.relicOffer?.options)
+            ? run.relicOffer.options[0]
+            : undefined;
+        return createGameplayRelicPickCommand(commandId, relicId ?? 'extra_shuffle_charge');
+    }
+    if (step === 18) {
+        return createGameplayFloorAdvanceCommand(commandId);
+    }
+    if (step === 19) {
+        return createGameplayEnemyHazardContactCommand(commandId, 'missing-enemy-contact', true);
+    }
+    if (step === 20) {
         const targets = run.board
             ? [...collectDestroyEligibleTileIds(run.board)].sort((left, right) => left.localeCompare(right))
             : [];
         const target = targets[pickRngIndex(rng, targets.length)] ?? 'missing-destroy-target';
         return createGameplayDestroyPairCommand(commandId, target);
     }
-    if (step === 3) {
+    if (step === 21) {
         return createGameplayHazardBanishCommand(commandId);
     }
-    if (step === 4) {
-        const choiceId = Array.isArray(run.lastLevelResult?.routeChoices)
-            ? run.lastLevelResult.routeChoices[0]?.id
-            : undefined;
-        return createGameplayRouteChooseCommand(commandId, choiceId ?? 'missing-route-choice');
+    if (step === 22 && run.gameMode === 'gauntlet') {
+        const deadlineMs = typeof run.gauntletDeadlineMs === 'number' && Number.isFinite(run.gauntletDeadlineMs)
+            ? Math.max(0, Math.floor(run.gauntletDeadlineMs))
+            : 0;
+        return createGameplayGauntletExpireCommand(commandId, deadlineMs + 1);
     }
-    if (step === 5) {
-        const relicId = Array.isArray(run.relicOffer?.options)
-            ? run.relicOffer.options[0]
-            : undefined;
-        return createGameplayRelicPickCommand(commandId, relicId ?? 'extra_shuffle_charge');
+    if (step === 23) {
+        return createGameplayPauseCommand(commandId, 100_023, {
+            memorizeRemainingMs: timerRemainingMs(run.timerState?.memorizeRemainingMs),
+            resolveRemainingMs: timerRemainingMs(run.timerState?.resolveRemainingMs),
+            debugRevealRemainingMs: timerRemainingMs(run.timerState?.debugRevealRemainingMs)
+        });
     }
-    if (step === 6) {
-        return createGameplayRelicOfferServiceCommand(commandId, 'reroll_offer');
+    if (step === 24) {
+        return createGameplayResumeCommand(commandId, 100_524);
     }
-    if (step === 7) {
-        return createGameplaySideRoomResolveCommand(commandId, 'skip');
+    if (step === 25) {
+        return createGameplayMemorizeCompleteCommand(commandId);
     }
-    if (step === 8) {
-        return createGameplayFloorAdvanceCommand(commandId);
+    if (step === 26) {
+        return createGameplayDebugRevealActivateCommand(commandId, true);
+    }
+    if (step === 27) {
+        return createGameplayDebugRevealDeactivateCommand(commandId, 'timer_elapsed');
     }
     if (actionIndex === definitions.length) {
         const targets = availablePeekTargets(run);
@@ -249,6 +399,7 @@ const commandForStep = (
 
 const collectStepInvariants = (
     initialRun: RunState,
+    previousRun: RunState,
     run: RunState,
     command: GameplayCommand,
     events: GameplayEvent[],
@@ -280,6 +431,16 @@ const collectStepInvariants = (
     if (run.runSeed !== initialRun.runSeed || run.runRulesVersion !== initialRun.runRulesVersion) {
         violations.push(`${prefix}: command changed deterministic run identity.`);
     }
+    const feedbackDiagnostic = inspectGameplayFeedbackCompleteness({
+        before: previousRun,
+        after: run,
+        command,
+        events,
+        accepted
+    });
+    if (feedbackDiagnostic) {
+        violations.push(`${prefix}: ${feedbackDiagnostic.message}`);
+    }
 };
 
 export const runGameplayCoreSimulation = (
@@ -295,19 +456,33 @@ export const runGameplayCoreSimulation = (
     const acceptedCommandIds: string[] = [];
     const rejectedCommandIds: string[] = [];
     const commandTypeCounts: Record<string, number> = {};
+    const acceptedCommandTypeCounts: Record<string, number> = {};
+    const rejectedCommandTypeCounts: Record<string, number> = {};
     const eventTypeCounts: Record<string, number> = {};
     const invariantViolations: string[] = [];
 
     for (let step = 0; step < steps; step += 1) {
+        const previousRun = run;
         const command = commandForStep(run, rng, options.seed, step, invalidTraitChance);
         const result = reduceGameplayCommand(run, command);
         commands.push(command);
         events.push(...result.events);
-        incrementCount(commandTypeCounts, command.type === 'effects.apply' ? command.definitionId : command.type);
+        const commandType = command.type === 'effects.apply' ? command.definitionId : command.type;
+        incrementCount(commandTypeCounts, commandType);
+        incrementCount(result.accepted ? acceptedCommandTypeCounts : rejectedCommandTypeCounts, commandType);
         result.events.forEach((event) => incrementCount(eventTypeCounts, event.type));
         (result.accepted ? acceptedCommandIds : rejectedCommandIds).push(command.commandId);
         run = result.run;
-        collectStepInvariants(initialRun, run, command, result.events, result.accepted, step, invariantViolations);
+        collectStepInvariants(
+            initialRun,
+            previousRun,
+            run,
+            command,
+            result.events,
+            result.accepted,
+            step,
+            invariantViolations
+        );
     }
 
     const replay = replayGameplayCommands(initialRun, JSON.parse(stableJson(commands)) as unknown[]);
@@ -329,7 +504,57 @@ export const runGameplayCoreSimulation = (
         acceptedCommandIds,
         rejectedCommandIds,
         commandTypeCounts,
+        acceptedCommandTypeCounts,
+        rejectedCommandTypeCounts,
         eventTypeCounts,
+        replayDeterministic,
+        invariantViolations
+    };
+};
+
+export const runGameplayProgressionRepairSimulation = (
+    initialRun: RunState
+): GameplayProgressionRepairSimulationReport => {
+    const command = createGameplayProgressionRepairCommand(
+        `sim-repair:${initialRun.runSeed}:${initialRun.board?.level ?? 0}`
+    );
+    const result = reduceGameplayCommand(initialRun, command);
+    const invariantViolations: string[] = [];
+    if (!gameplayCommandSchema.safeParse(command).success) {
+        invariantViolations.push('Progression repair command failed its schema.');
+    }
+    result.events.forEach((event, sequence) => {
+        if (!gameplayEventSchema.safeParse(event).success) {
+            invariantViolations.push(`Progression repair event ${sequence} failed its schema.`);
+        }
+        if (
+            event.commandId !== command.commandId ||
+            event.sequence !== sequence ||
+            event.eventId !== `${command.commandId}:${sequence}`
+        ) {
+            invariantViolations.push(`Progression repair event ${sequence} lost deterministic identity or ordering.`);
+        }
+    });
+    if (!result.accepted) {
+        invariantViolations.push('Progression repair fixture was rejected.');
+    }
+    if (!result.events.some((event) => event.type === 'run.progression_repaired')) {
+        invariantViolations.push('Progression repair fixture emitted no repair event.');
+    }
+    const replay = replayGameplayCommands(initialRun, [JSON.parse(stableJson(command))]);
+    const replayDeterministic =
+        stableJson(replay.run) === stableJson(result.run) &&
+        stableJson(replay.events) === stableJson(result.events) &&
+        stableJson(replay.acceptedCommandIds) === stableJson(result.accepted ? [command.commandId] : []) &&
+        stableJson(replay.rejectedCommandIds) === stableJson(result.accepted ? [] : [command.commandId]);
+    if (!replayDeterministic) {
+        invariantViolations.push('Progression repair replay diverged after JSON serialization.');
+    }
+    return {
+        command,
+        events: result.events,
+        finalRun: result.run,
+        accepted: result.accepted,
         replayDeterministic,
         invariantViolations
     };

@@ -1,6 +1,7 @@
 import type { RunState, Tile, ViewState } from '../../shared/contracts';
 import type { GameplayEvent } from '../../shared/gameplay-core-contracts';
 import {
+    createGameplayEnemyHazardContactCommand,
     createGameplayDungeonExitActivateCommand,
     createGameplayFlashPairCommand,
     createGameplayGambitCommitCommand,
@@ -19,7 +20,6 @@ import {
 import { getDungeonExitStatus } from '../../shared/dungeon-board-status';
 import { reduceGameplayCommand } from '../../shared/gameplay-core';
 import { appendGameplayJournal } from '../../shared/gameplay-journal';
-import { finalizeLevel } from '../../shared/game';
 import {
     applyDestroyPair,
     armRegionShuffleRow,
@@ -27,7 +27,6 @@ import {
     toggleStrayRemoveArmed
 } from '../../shared/board-powers';
 import {
-    applyEnemyHazardClick,
     flipTile
 } from '../../shared/turn-resolution';
 import { isResumableLifecycleState, lifecycleStateFromRun } from '../../shared/run-lifecycle-machine';
@@ -95,6 +94,26 @@ interface EnemyHazardContactResult {
     toRun: RunState;
 }
 
+export const applyEnemyHazardContactThroughGameplayCore = (
+    run: RunState,
+    tileId: string,
+    advanceHazards: boolean
+): { run: RunState; contacted: boolean; events: GameplayEvent[] } => {
+    const command = createGameplayEnemyHazardContactCommand(
+        `enemy-contact:${run.runSeed}:${run.board?.level ?? 0}:${run.enemyHazardHitsThisFloor ?? 0}:${advanceHazards ? 'advance' : 'hold'}:${tileId}`,
+        tileId,
+        advanceHazards
+    );
+    const result = reduceGameplayCommand(run, command);
+    return result.accepted
+        ? {
+              run: appendGameplayJournal(result.run, [command], result.events),
+              contacted: true,
+              events: result.events
+          }
+        : { run, contacted: false, events: [] };
+};
+
 type GambitThirdPickPressResult =
     | { kind: 'unchanged'; hazardContact: EnemyHazardContactResult | null }
     | {
@@ -107,6 +126,7 @@ type GambitThirdPickPressResult =
           run: RunState;
           hazardContact: EnemyHazardContactResult | null;
           playFlipSfx: boolean;
+          playTrapSfx: boolean;
           events: GameplayEvent[];
       }
     | {
@@ -114,6 +134,7 @@ type GambitThirdPickPressResult =
           run: RunState;
           hazardContact: EnemyHazardContactResult | null;
           playFlipSfx: boolean;
+          playTrapSfx: boolean;
           events: GameplayEvent[];
           resolveDelayMs: number | null;
       };
@@ -463,7 +484,7 @@ export const createDungeonExitActivationSurfaceResult = ({
         ? { kind: 'ignored' }
         : {
               kind: 'applied',
-              patch: { run: journaledRun.board ? finalizeLevel(journaledRun, journaledRun.board) : journaledRun },
+              patch: { run: journaledRun },
               playArmSfx: false,
               events: result.events
           };
@@ -645,8 +666,9 @@ export const createGambitThirdPickPressResult = (
     run: RunState,
     tileId: string
 ): GambitThirdPickPressResult => {
-    const hazardRun = applyEnemyHazardClick(run, tileId, { advanceHazards: false });
-    const hazardContact = hazardRun !== run ? { fromRun: run, toRun: hazardRun } : null;
+    const contact = applyEnemyHazardContactThroughGameplayCore(run, tileId, false);
+    const hazardRun = contact.run;
+    const hazardContact = contact.contacted ? { fromRun: run, toRun: hazardRun } : null;
 
     if (hazardRun.status === 'gameOver') {
         return {
@@ -665,12 +687,19 @@ export const createGambitThirdPickPressResult = (
     if (!commandResult.accepted) {
         return { kind: 'unchanged', hazardContact };
     }
+    const intentRun = appendGameplayJournal(actionRun, [command], commandResult.events);
     const flippedBefore = actionRun.board?.flippedTileIds.length ?? 0;
-    const transitionedRun = flipTile(actionRun, tileId);
+    const transitionedRun = flipTile(intentRun, tileId);
 
     const flippedAfter = transitionedRun.board?.flippedTileIds.length ?? 0;
+    const pressedTileAfter = transitionedRun.board?.tiles.find((tile) => tile.id === tileId) ?? null;
+    const pressedTileBecameFaceUp =
+        actionRun.board?.tiles.find((tile) => tile.id === tileId)?.state === 'hidden' &&
+        pressedTileAfter?.state === 'flipped';
+    const playFlipSfx = flippedAfter > flippedBefore || pressedTileBecameFaceUp;
+    const playTrapSfx = transitionedRun.dungeonTrapsTriggered > actionRun.dungeonTrapsTriggered;
     const committed =
-        transitionedRun !== actionRun &&
+        transitionedRun !== intentRun &&
         flippedAfter === 3 &&
         transitionedRun.board?.flippedTileIds.includes(tileId) === true;
     if (!committed && transitionedRun.status === 'gameOver') {
@@ -678,16 +707,29 @@ export const createGambitThirdPickPressResult = (
             kind: 'flipGameOver',
             run: transitionedRun,
             hazardContact,
-            playFlipSfx: flippedAfter > flippedBefore,
-            events: []
+            playFlipSfx,
+            playTrapSfx,
+            events: commandResult.events
         };
     }
     if (!committed) {
-        return { kind: 'unchanged', hazardContact };
+        return transitionedRun === intentRun
+            ? { kind: 'unchanged', hazardContact }
+            : {
+                  kind: 'flipped',
+                  run: transitionedRun,
+                  hazardContact,
+                  playFlipSfx,
+                  playTrapSfx,
+                  events: commandResult.events,
+                  resolveDelayMs:
+                      transitionedRun.status === 'resolving' && transitionedRun.timerState.resolveRemainingMs !== null
+                          ? transitionedRun.timerState.resolveRemainingMs
+                          : null
+              };
     }
 
-    const nextRun = appendGameplayJournal(transitionedRun, [command], commandResult.events);
-    const playFlipSfx = flippedAfter > flippedBefore;
+    const nextRun = transitionedRun;
 
     if (nextRun.status === 'gameOver') {
         return {
@@ -695,6 +737,7 @@ export const createGambitThirdPickPressResult = (
             run: nextRun,
             hazardContact,
             playFlipSfx,
+            playTrapSfx,
             events: commandResult.events
         };
     }
@@ -704,6 +747,7 @@ export const createGambitThirdPickPressResult = (
         run: nextRun,
         hazardContact,
         playFlipSfx,
+        playTrapSfx,
         events: commandResult.events,
         resolveDelayMs:
             nextRun.status === 'resolving' && nextRun.timerState.resolveRemainingMs !== null

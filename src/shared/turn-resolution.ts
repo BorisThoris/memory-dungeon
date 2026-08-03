@@ -4,7 +4,8 @@ export {
     flipTile,
     getMatchFloaterAnchorTileIds,
     getMismatchFloaterAnchorTileIds,
-    resolveBoardTurn
+    resolveBoardTurn,
+    resolveBoardTurnWithEvent
 } from './game';
 export {
     calculateMatchScore,

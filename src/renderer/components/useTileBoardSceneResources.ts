@@ -66,7 +66,9 @@ export const useTileBoardSceneResources = ({
             getAnisotropyCap: getBoardAnisotropyCap,
             getMaxAnisotropy: () => gl.capabilities.getMaxAnisotropy(),
             graphicsQuality,
-            preloadRankFont: preloadCardRankOpentypeFont,
+            preloadRankFont: (quality) => {
+                void preloadCardRankOpentypeFont(quality);
+            },
             setSamplingQuality: setTileTextureSamplingQuality
         });
     }, [gl, graphicsQuality, textureRevision]);

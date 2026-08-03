@@ -6,7 +6,7 @@ import type {
     SubscreenReturnView,
     ViewState
 } from '../../shared/contracts';
-import { enableDebugPeek } from '../../shared/run-timer-rules';
+import { activateDebugRevealThroughGameplayCore } from '../../shared/gameplay-core-adapters';
 import { trackEvent } from '../../shared/telemetry';
 import { patchRunFromUserSettings } from './runSettingsPatch';
 import {
@@ -87,7 +87,14 @@ export const createRunLifecycleController = ({
             return;
         }
 
-        const nextRun = enableDebugPeek(run, settings.debugFlags.disableAchievementsOnDebug);
+        const commandJournalLength = Array.isArray(run.gameplayCommandJournal)
+            ? run.gameplayCommandJournal.length
+            : 0;
+        const nextRun = activateDebugRevealThroughGameplayCore(
+            run,
+            settings.debugFlags.disableAchievementsOnDebug,
+            `debug-reveal-activate:${run.runSeed}:${commandJournalLength}`
+        ).run;
 
         setState({ run: nextRun });
 
