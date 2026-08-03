@@ -1,4 +1,5 @@
 import type { RunState } from './contracts';
+import { hasFreeTargetedReconfiguration } from './board-power-availability';
 import {
     CORE_SAFE_MEMORY_TAX,
     perfectMemoryImpactCopy,
@@ -7,7 +8,6 @@ import {
     type MemoryTaxScore,
     type PerfectMemoryImpact
 } from './mechanic-feedback';
-import { hasRunRelic } from './relics';
 import { runArrayCount, runStringArray } from './run-array-guards';
 import { runNonNegativeInteger } from './run-number-guards';
 
@@ -70,8 +70,7 @@ const hasPeekTarget = (run: RunState): boolean =>
     );
 
 const hasRowShufflePayment = (run: RunState): boolean =>
-    runNonNegativeInteger(run.regionShuffleCharges) > 0 ||
-    (run.regionShuffleFreeThisFloor && hasRunRelic(run, 'region_shuffle_free_first'));
+    runNonNegativeInteger(run.regionShuffleCharges) > 0 || hasFreeTargetedReconfiguration(run);
 
 const hiddenTileCount = (run: RunState): number =>
     (run.board?.tiles ?? []).filter((tile) => tile.state === 'hidden').length;
@@ -189,7 +188,7 @@ export const getPowerVerbRows = (run: RunState): PowerVerbTeachingRow[] => {
         mechanicClass: 'bailout',
         tokens: ['cost', 'forfeit', 'locked'],
         purpose: 'Shuffle one row while preserving the rest of your spatial read.',
-        cost: `${regionShuffleCharges} row/swap charge(s); relics may make the first row shuffle or tile swap free.`,
+        cost: `${regionShuffleCharges} row/swap charge(s); build effects may make the first row shuffle or tile swap free.`,
         consequence: 'Breaks memory for one row and counts as an assist.',
         perfectMemoryImpact: 'locks_perfect_memory',
         perfectMemoryCopy: locksPerfectMemory,
@@ -211,7 +210,7 @@ export const getPowerVerbRows = (run: RunState): PowerVerbTeachingRow[] => {
         mechanicClass: 'bailout',
         tokens: ['cost', 'forfeit', 'locked'],
         purpose: 'Exchange two hidden tile positions to set up trait adjacency or repair a bad layout read.',
-        cost: `${regionShuffleCharges} row/swap charge(s); relics may make the first row shuffle or tile swap free.`,
+        cost: `${regionShuffleCharges} row/swap charge(s); build effects may make the first row shuffle or tile swap free.`,
         consequence: 'Invalidates memory for the two moved tiles and counts as an assist.',
         perfectMemoryImpact: 'locks_perfect_memory',
         perfectMemoryCopy: locksPerfectMemory,

@@ -2642,6 +2642,28 @@ describe('deterministic gameplay core', () => {
         ]);
     });
 
+    it('spends the rearmed free-swap perk through one typed row-shuffle command', () => {
+        const initial = run({
+            regionShuffleCharges: 0,
+            regionShuffleFreeThisFloor: true,
+            rewardPerkIds: ['free_first_swap_per_floor']
+        });
+        const result = reduceGameplayCommand(
+            initial,
+            createGameplayRegionShuffleCommand('free-perk-row', 0)
+        );
+
+        expect(result.accepted).toBe(true);
+        expect(result.run.regionShuffleCharges).toBe(0);
+        expect(result.run.regionShuffleFreeThisFloor).toBe(false);
+        expect(result.events).toEqual(expect.arrayContaining([
+            expect.objectContaining({
+                type: 'board.region_shuffled',
+                usedFreeCharge: true
+            })
+        ]));
+    });
+
     it('models Memory Scout acquisition and clean-streak Flash Pair generation', () => {
         expect(MEMORY_SCOUT_DEFINITIONS.map((definition) => definition.id)).toEqual([
             'bonus_reward.trait_streak_lens',

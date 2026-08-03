@@ -1,5 +1,5 @@
 {
-  "version": 54,
+  "version": 55,
   "mechanics": [
     {
       "id": "trait.echo",
@@ -123,26 +123,26 @@
       "label": "Hidden Tile Swap",
       "kind": "power",
       "role": "player_selected_board_reordering",
-      "evidence": ["src/shared/board-power-actions.ts", "src/shared/gameplay-core.ts", "src/renderer/store/runSurfaceState.ts", "src/renderer/store/tilePressController.ts"],
-      "reads": ["regionShuffleCharges", "regionShuffleFreeThisFloor", "shuffleNonce", "tileStates", "noShuffle"],
+      "evidence": ["src/shared/board-power-availability.ts", "src/shared/board-power-actions.ts", "src/shared/gameplay-core.ts", "src/shared/power-verbs.ts", "src/renderer/store/runSurfaceState.ts", "src/renderer/store/tilePressController.ts"],
+      "reads": ["regionShuffleCharges", "regionShuffleFreeThisFloor", "rewardPerkIds", "relicIds", "shuffleNonce", "tileStates", "noShuffle"],
       "writes": ["regionShuffleCharges", "regionShuffleFreeThisFloor", "shuffleNonce", "tileStates", "forgottenTileIdsThisFloor", "powersUsedThisRun", "feedbackLines"],
       "enables": ["trait.conduit", "trait.drift", "trait.stasis", "objective.floor_clear", "build.trap_control"],
       "blocks": [],
-      "softlockGuards": ["two-distinct-hidden-targets", "clear-flip-state", "no-shuffle-contract", "matchable-pair-remains"],
-      "tests": ["src/shared/board-power-actions.test.ts", "src/shared/gameplay-core.test.ts", "src/renderer/store/tilePressController.test.ts"]
+      "softlockGuards": ["two-distinct-hidden-targets", "clear-flip-state", "no-shuffle-contract", "reward-perk-or-relic-free-use", "free-use-before-paid-charge", "matchable-pair-remains"],
+      "tests": ["src/shared/board-power-availability.test.ts", "src/shared/board-power-actions.test.ts", "src/shared/gameplay-core.test.ts", "src/shared/power-verbs.test.ts", "src/renderer/store/tilePressController.test.ts"]
     },
     {
       "id": "power.region_shuffle",
       "label": "Region Row Shuffle",
       "kind": "power",
       "role": "targeted_hidden_row_reordering",
-      "evidence": ["src/shared/board-power-actions.ts", "src/shared/gameplay-core.ts", "src/renderer/store/runSurfaceState.ts", "src/renderer/store/useAppStore.ts", "src/renderer/components/GameLeftToolbar.tsx"],
-      "reads": ["regionShuffleCharges", "regionShuffleFreeThisFloor", "shuffleNonce", "tileStates", "noShuffle", "boardRows"],
+      "evidence": ["src/shared/board-power-availability.ts", "src/shared/board-power-actions.ts", "src/shared/gameplay-core.ts", "src/shared/power-verbs.ts", "src/renderer/store/runSurfaceState.ts", "src/renderer/store/useAppStore.ts", "src/renderer/components/GameLeftToolbar.tsx"],
+      "reads": ["regionShuffleCharges", "regionShuffleFreeThisFloor", "rewardPerkIds", "relicIds", "shuffleNonce", "tileStates", "noShuffle", "boardRows"],
       "writes": ["regionShuffleCharges", "regionShuffleFreeThisFloor", "shuffleNonce", "tileStates", "forgottenTileIdsThisFloor", "powersUsedThisRun", "feedbackLines"],
       "enables": ["trait.drift", "trait.conduit", "objective.floor_clear", "build.trap_control"],
       "blocks": [],
-      "softlockGuards": ["two-hidden-row-tiles", "clear-flip-state", "deterministic-seed", "no-shuffle-contract", "exit-source-protection", "direct-row-command-no-dead-arm-state"],
-      "tests": ["src/shared/board-power-actions.test.ts", "src/shared/board-power-availability.test.ts", "src/shared/gameplay-core.test.ts", "src/renderer/store/runSurfaceState.test.ts"]
+      "softlockGuards": ["two-hidden-row-tiles", "clear-flip-state", "deterministic-seed", "no-shuffle-contract", "reward-perk-or-relic-free-use", "free-use-before-paid-charge", "exit-source-protection", "direct-row-command-no-dead-arm-state"],
+      "tests": ["src/shared/board-power-actions.test.ts", "src/shared/board-power-availability.test.ts", "src/shared/gameplay-core.test.ts", "src/shared/power-verbs.test.ts", "src/renderer/store/runSurfaceState.test.ts"]
     },
     {
       "id": "power.destroy_pair",
@@ -799,13 +799,13 @@
       "label": "Free First Swap Per Floor",
       "kind": "perk",
       "role": "renewable_region_control_modifier",
-      "evidence": ["src/shared/bonus-rewards.ts", "src/shared/next-floor-run-state-rules.ts", "src/shared/board-power-actions.ts"],
+      "evidence": ["src/shared/bonus-rewards.ts", "src/shared/next-floor-run-state-rules.ts", "src/shared/board-power-availability.ts", "src/shared/board-power-actions.ts", "src/shared/gameplay-core.ts", "src/shared/power-verbs.ts"],
       "reads": ["rewardPerkIds", "regionShuffleFreeThisFloor"],
       "writes": ["regionShuffleFreeThisFloor"],
       "enables": ["power.region_shuffle", "power.tile_swap"],
       "blocks": [],
-      "softlockGuards": ["one-free-use-per-floor", "floor-reset", "no-shuffle-contract"],
-      "tests": ["src/shared/bonus-rewards.test.ts", "src/shared/next-floor-run-state-rules.test.ts", "src/shared/board-power-actions.test.ts"]
+      "softlockGuards": ["one-free-use-per-floor", "floor-reset", "reward-perk-or-relic-free-use", "free-use-before-paid-charge", "no-shuffle-contract"],
+      "tests": ["src/shared/bonus-rewards.test.ts", "src/shared/next-floor-run-state-rules.test.ts", "src/shared/board-power-availability.test.ts", "src/shared/board-power-actions.test.ts", "src/shared/gameplay-core.test.ts", "src/shared/power-verbs.test.ts"]
     },
     {
       "id": "relic.extra_shuffle_charge",

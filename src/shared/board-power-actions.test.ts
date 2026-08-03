@@ -349,6 +349,21 @@ describe('board power actions', () => {
         expect(swapped.regionShuffleFreeThisFloor).toBe(false);
     });
 
+    it('uses the free targeted-reconfiguration perk before spending normal row/swap charges', () => {
+        const perkRun = run({
+            regionShuffleCharges: 1,
+            regionShuffleFreeThisFloor: true,
+            rewardPerkIds: ['free_first_swap_per_floor']
+        });
+        const rowShuffled = applyRegionShuffle(perkRun, 0);
+        const tileSwapped = applyTileSwap(perkRun, 'a1', 'b1');
+
+        expect(rowShuffled.regionShuffleCharges).toBe(1);
+        expect(rowShuffled.regionShuffleFreeThisFloor).toBe(false);
+        expect(tileSwapped.regionShuffleCharges).toBe(1);
+        expect(tileSwapped.regionShuffleFreeThisFloor).toBe(false);
+    });
+
     it('refuses tile swaps while blocked by state, contract, or target legality', () => {
         const flipped = run({ board: { ...defaultBoard(), flippedTileIds: ['a1'] } });
         expect(applyTileSwap(flipped, 'a1', 'b1')).toBe(flipped);

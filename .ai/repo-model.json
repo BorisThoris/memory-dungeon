@@ -5,18 +5,18 @@
     "name": "memory-dungeon",
     "trackedFileCount": 2407,
     "codeFileCount": 904,
-    "exportedSymbolCount": 3354,
+    "exportedSymbolCount": 3355,
     "contentItemCount": 56,
     "mechanicCount": 139,
     "stateFieldCount": 265,
-    "relationshipCount": 10528
+    "relationshipCount": 10547
   },
   "inventory": [
     {
       "path": ".ai/GAMEPLAY_MIGRATION.md",
       "category": "other",
-      "bytes": 95180,
-      "sha256": "5226d9661f840ce7f56abb486406f458d961c5fe25ca775e3c3af18bee69d1c7"
+      "bytes": 96810,
+      "sha256": "a9c7993d8604d0c5c4a05b0dbb352f963d0fb29c11042a768b639515c1369530"
     },
     {
       "path": ".ai/README.md",
@@ -777,8 +777,8 @@
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
       "category": "documentation",
-      "bytes": 35476,
-      "sha256": "fb27ad16dfa9972eefbdc8b447b7a084bd6003c4c2cacc82998f1304e71e79e3"
+      "bytes": 35794,
+      "sha256": "f06f90434acbd20df7de866a68194df77c72631ca3afc78e38ababc0d7a71294"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_POLISH_AND_GAPS.md",
@@ -831,8 +831,8 @@
     {
       "path": "docs/internal-wiki/APP_ANALYSIS.md",
       "category": "documentation",
-      "bytes": 21857,
-      "sha256": "ede0894d623bfd5343ca9a88c88f934cc1c0a291c89a33459673924bfdf12cb1"
+      "bytes": 21692,
+      "sha256": "1a14b41803ac9c30f3dcf20e10141b771b9ba0142812eb952112eb33cbadb326"
     },
     {
       "path": "docs/internal-wiki/ARCHITECTURE.md",
@@ -9885,26 +9885,26 @@
     {
       "path": "src/shared/board-power-actions.test.ts",
       "category": "test",
-      "bytes": 21531,
-      "sha256": "a9c9bba700a4834b42ffb8e7affad590dc95aaeca01926c35185c9795623180e"
+      "bytes": 22201,
+      "sha256": "361178afd1889e5cdc5fbf0665811e922e2b377d095d90cb9fd0d31b6c15d174"
     },
     {
       "path": "src/shared/board-power-actions.ts",
       "category": "source",
-      "bytes": 16272,
-      "sha256": "8904a8f31f8a6b58b69188ed8cb2cac1ff02fe19c7d6af0a1c2ad2518c5ec190"
+      "bytes": 16264,
+      "sha256": "732551a138059f9e3bbf1488a05b0e0c0b0ceb79c52fdefb23c05011e6db0edc"
     },
     {
       "path": "src/shared/board-power-availability.test.ts",
       "category": "test",
-      "bytes": 7518,
-      "sha256": "72cb25efae43e7db7898296ae75ebe521ea679948f14683c6f787934e9ccc7aa"
+      "bytes": 7938,
+      "sha256": "f06137d7da3b09f2ec0333fb165d3187adf20d9412d671ea53224b9ee8ece4cc"
     },
     {
       "path": "src/shared/board-power-availability.ts",
       "category": "source",
-      "bytes": 2863,
-      "sha256": "331adb40273b362c910498e9abd17edfa0b528bcadb18b9146399ee3e69072a7"
+      "bytes": 3098,
+      "sha256": "02756bf313bce4e459faae0e267cbfeed83b2d37daddab6b4eddd2a5990da3c1"
     },
     {
       "path": "src/shared/board-power-state.test.ts",
@@ -10725,8 +10725,8 @@
     {
       "path": "src/shared/gameplay-core.test.ts",
       "category": "test",
-      "bytes": 133002,
-      "sha256": "1d589f89e768b4532026dd48911dab9d0145928b3bf8f8dd0267f395145e81aa"
+      "bytes": 133810,
+      "sha256": "6f8975980fd8e7b3d2c122eafeac5ea658f3de24aaefd89760d1f186a4cc3c44"
     },
     {
       "path": "src/shared/gameplay-core.ts",
@@ -10767,14 +10767,14 @@
     {
       "path": "src/shared/gameplay-interaction-graph-data.json",
       "category": "source",
-      "bytes": 226314,
-      "sha256": "422ee2d8ac3dcdb2823fe51bea63c9144553f9a15e93fd854e7c91b5b858359e"
+      "bytes": 227040,
+      "sha256": "fd780344de2d6083333703c1344002775a8e562452d233b1917f911d53899a6e"
     },
     {
       "path": "src/shared/gameplay-interaction-graph.test.ts",
       "category": "test",
-      "bytes": 102813,
-      "sha256": "eb3d942a961ed8e111698a1517fe892355dd67bd8dd906a330dbd14fa23dd23f"
+      "bytes": 103603,
+      "sha256": "56840f47031ab50d58df056eff06f101518a0d7443c98d4738656a7c72171aa1"
     },
     {
       "path": "src/shared/gameplay-interaction-graph.ts",
@@ -11253,14 +11253,14 @@
     {
       "path": "src/shared/power-verbs.test.ts",
       "category": "test",
-      "bytes": 6567,
-      "sha256": "e436f1b42f393c794333f2f22944061f8444c901a7a46d28cc774e316e9f0480"
+      "bytes": 6991,
+      "sha256": "9c3b368cd6a0c6ce58d98818e0acd5f2a49d37f6bc1e6fbe62b93c08e5ad1019"
     },
     {
       "path": "src/shared/power-verbs.ts",
       "category": "source",
-      "bytes": 12731,
-      "sha256": "41cd3ed8c6a3779b0615d0a75824edfc4820beb8eaf431c4af0d7b6b10fe6d00"
+      "bytes": 12732,
+      "sha256": "f081844b4bf0d445c7a634514eb676603667f8246e1600000bce22116f4f7546"
     },
     {
       "path": "src/shared/premium-economy-policy.test.ts",
@@ -23565,7 +23565,7 @@
       "path": "src/shared/board-power-actions.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 565,
+      "lineCount": 580,
       "imports": [
         "file:src/shared/board-power-actions.ts",
         "file:src/shared/contracts.ts",
@@ -23579,7 +23579,7 @@
       "path": "src/shared/board-power-actions.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 473,
+      "lineCount": 474,
       "imports": [
         "file:src/shared/board-power-availability.ts",
         "file:src/shared/board-power-targeting.ts",
@@ -23618,7 +23618,7 @@
       "path": "src/shared/board-power-availability.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 200,
+      "lineCount": 210,
       "imports": [
         "file:src/shared/board-power-availability.ts",
         "file:src/shared/contracts.ts",
@@ -23632,12 +23632,13 @@
       "path": "src/shared/board-power-availability.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 74,
+      "lineCount": 80,
       "imports": [
         "file:src/shared/board-inspection.ts",
         "file:src/shared/board-power-targeting.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/relics.ts",
+        "file:src/shared/run-array-guards.ts",
         "file:src/shared/run-number-guards.ts"
       ],
       "exports": [
@@ -23646,7 +23647,8 @@
         "symbol:src/shared/board-power-availability.ts#canRegionShuffleRow",
         "symbol:src/shared/board-power-availability.ts#canShuffleBoard",
         "symbol:src/shared/board-power-availability.ts#canSwapHiddenTiles",
-        "symbol:src/shared/board-power-availability.ts#hasClearFlipState"
+        "symbol:src/shared/board-power-availability.ts#hasClearFlipState",
+        "symbol:src/shared/board-power-availability.ts#hasFreeTargetedReconfiguration"
       ],
       "testedBy": [
         "file:src/shared/board-power-availability.test.ts",
@@ -27264,7 +27266,7 @@
       "path": "src/shared/gameplay-core.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 3016,
+      "lineCount": 3038,
       "imports": [
         "file:src/shared/board-power-actions.ts",
         "file:src/shared/board-power-state.ts",
@@ -27466,7 +27468,7 @@
       "path": "src/shared/gameplay-interaction-graph.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 1675,
+      "lineCount": 1690,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/gameplay-core-contracts.ts",
@@ -29066,7 +29068,7 @@
       "path": "src/shared/power-verbs.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 124,
+      "lineCount": 132,
       "imports": [
         "file:src/shared/game-core.ts",
         "file:src/shared/mechanic-feedback.ts",
@@ -29080,11 +29082,11 @@
       "path": "src/shared/power-verbs.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 296,
+      "lineCount": 295,
       "imports": [
+        "file:src/shared/board-power-availability.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/mechanic-feedback.ts",
-        "file:src/shared/relics.ts",
         "file:src/shared/run-array-guards.ts",
         "file:src/shared/run-number-guards.ts"
       ],
@@ -42473,128 +42475,136 @@
       "name": "applyDestroyPairTransition",
       "kind": "value",
       "file": "src/shared/board-power-actions.ts",
-      "line": 57,
-      "endLine": 119
+      "line": 58,
+      "endLine": 120
     },
     {
       "id": "symbol:src/shared/board-power-actions.ts#applyFlashPair",
       "name": "applyFlashPair",
       "kind": "value",
       "file": "src/shared/board-power-actions.ts",
-      "line": 314,
-      "endLine": 354
+      "line": 315,
+      "endLine": 355
     },
     {
       "id": "symbol:src/shared/board-power-actions.ts#applyPeek",
       "name": "applyPeek",
       "kind": "value",
       "file": "src/shared/board-power-actions.ts",
-      "line": 356,
-      "endLine": 392
+      "line": 357,
+      "endLine": 393
     },
     {
       "id": "symbol:src/shared/board-power-actions.ts#applyRegionShuffle",
       "name": "applyRegionShuffle",
       "kind": "value",
       "file": "src/shared/board-power-actions.ts",
-      "line": 201,
-      "endLine": 260
+      "line": 202,
+      "endLine": 261
     },
     {
       "id": "symbol:src/shared/board-power-actions.ts#applyShuffle",
       "name": "applyShuffle",
       "kind": "value",
       "file": "src/shared/board-power-actions.ts",
-      "line": 121,
-      "endLine": 199
+      "line": 122,
+      "endLine": 200
     },
     {
       "id": "symbol:src/shared/board-power-actions.ts#applyStrayRemove",
       "name": "applyStrayRemove",
       "kind": "value",
       "file": "src/shared/board-power-actions.ts",
-      "line": 394,
-      "endLine": 446
+      "line": 395,
+      "endLine": 447
     },
     {
       "id": "symbol:src/shared/board-power-actions.ts#applyTileSwap",
       "name": "applyTileSwap",
       "kind": "value",
       "file": "src/shared/board-power-actions.ts",
-      "line": 262,
-      "endLine": 312
+      "line": 263,
+      "endLine": 313
     },
     {
       "id": "symbol:src/shared/board-power-actions.ts#cancelResolvingWithUndo",
       "name": "cancelResolvingWithUndo",
       "kind": "value",
       "file": "src/shared/board-power-actions.ts",
-      "line": 448,
-      "endLine": 472
+      "line": 449,
+      "endLine": 473
     },
     {
       "id": "symbol:src/shared/board-power-actions.ts#DestroyPairTransitionOptions",
       "name": "DestroyPairTransitionOptions",
       "kind": "interface",
       "file": "src/shared/board-power-actions.ts",
-      "line": 43,
-      "endLine": 49
+      "line": 44,
+      "endLine": 50
     },
     {
       "id": "symbol:src/shared/board-power-actions.ts#DestroyPairTransitionResult",
       "name": "DestroyPairTransitionResult",
       "kind": "interface",
       "file": "src/shared/board-power-actions.ts",
-      "line": 51,
-      "endLine": 55
+      "line": 52,
+      "endLine": 56
     },
     {
       "id": "symbol:src/shared/board-power-availability.ts#canDestroyPair",
       "name": "canDestroyPair",
       "kind": "value",
       "file": "src/shared/board-power-availability.ts",
-      "line": 22,
-      "endLine": 28
+      "line": 28,
+      "endLine": 34
     },
     {
       "id": "symbol:src/shared/board-power-availability.ts#canRegionShuffle",
       "name": "canRegionShuffle",
       "kind": "value",
       "file": "src/shared/board-power-availability.ts",
-      "line": 30,
-      "endLine": 41
+      "line": 36,
+      "endLine": 47
     },
     {
       "id": "symbol:src/shared/board-power-availability.ts#canRegionShuffleRow",
       "name": "canRegionShuffleRow",
       "kind": "value",
       "file": "src/shared/board-power-availability.ts",
-      "line": 44,
-      "endLine": 56
+      "line": 50,
+      "endLine": 62
     },
     {
       "id": "symbol:src/shared/board-power-availability.ts#canShuffleBoard",
       "name": "canShuffleBoard",
       "kind": "value",
       "file": "src/shared/board-power-availability.ts",
-      "line": 9,
-      "endLine": 20
+      "line": 15,
+      "endLine": 26
     },
     {
       "id": "symbol:src/shared/board-power-availability.ts#canSwapHiddenTiles",
       "name": "canSwapHiddenTiles",
       "kind": "value",
       "file": "src/shared/board-power-availability.ts",
-      "line": 58,
-      "endLine": 73
+      "line": 64,
+      "endLine": 79
     },
     {
       "id": "symbol:src/shared/board-power-availability.ts#hasClearFlipState",
       "name": "hasClearFlipState",
       "kind": "value",
       "file": "src/shared/board-power-availability.ts",
-      "line": 7,
-      "endLine": 7
+      "line": 8,
+      "endLine": 8
+    },
+    {
+      "id": "symbol:src/shared/board-power-availability.ts#hasFreeTargetedReconfiguration",
+      "name": "hasFreeTargetedReconfiguration",
+      "kind": "value",
+      "file": "src/shared/board-power-availability.ts",
+      "line": 10,
+      "endLine": 13
     },
     {
       "id": "symbol:src/shared/board-power-state.ts#armRegionShuffleRow",
@@ -53385,24 +53395,24 @@
       "name": "getPowerVerbRows",
       "kind": "value",
       "file": "src/shared/power-verbs.ts",
-      "line": 101,
-      "endLine": 288
+      "line": 100,
+      "endLine": 287
     },
     {
       "id": "symbol:src/shared/power-verbs.ts#getPowerVerbTeachingRows",
       "name": "getPowerVerbTeachingRows",
       "kind": "value",
       "file": "src/shared/power-verbs.ts",
-      "line": 290,
-      "endLine": 290
+      "line": 289,
+      "endLine": 289
     },
     {
       "id": "symbol:src/shared/power-verbs.ts#getPowerVerbTeachingSummary",
       "name": "getPowerVerbTeachingSummary",
       "kind": "value",
       "file": "src/shared/power-verbs.ts",
-      "line": 292,
-      "endLine": 295
+      "line": 291,
+      "endLine": 294
     },
     {
       "id": "symbol:src/shared/power-verbs.ts#POWER_VERB_GROUPS",
@@ -62621,7 +62631,7 @@
         },
         {
           "path": "src/shared/board-power-actions.ts",
-          "line": 21
+          "line": 22
         },
         {
           "path": "src/shared/gameplay-core.ts",
@@ -62768,7 +62778,7 @@
         },
         {
           "path": "src/shared/board-power-actions.ts",
-          "line": 27
+          "line": 28
         },
         {
           "path": "src/shared/gameplay-core.ts",
@@ -63421,8 +63431,20 @@
           "line": 18
         },
         {
+          "path": "src/shared/board-power-availability.ts",
+          "line": 10
+        },
+        {
           "path": "src/shared/board-power-actions.ts",
-          "line": 21
+          "line": 20
+        },
+        {
+          "path": "src/shared/gameplay-core.ts",
+          "line": 8
+        },
+        {
+          "path": "src/shared/power-verbs.ts",
+          "line": 2
         }
       ],
       "tests": [
@@ -63435,8 +63457,20 @@
           "line": 4
         },
         {
+          "path": "src/shared/board-power-availability.test.ts",
+          "line": 12
+        },
+        {
           "path": "src/shared/board-power-actions.test.ts",
           "line": 15
+        },
+        {
+          "path": "src/shared/gameplay-core.test.ts",
+          "line": 8
+        },
+        {
+          "path": "src/shared/power-verbs.test.ts",
+          "line": 18
         }
       ],
       "enables": [
@@ -63447,6 +63481,8 @@
       "softlockGuards": [
         "one-free-use-per-floor",
         "floor-reset",
+        "reward-perk-or-relic-free-use",
+        "free-use-before-paid-charge",
         "no-shuffle-contract"
       ]
     },
@@ -63994,7 +64030,7 @@
       "evidence": [
         {
           "path": "src/shared/board-power-actions.ts",
-          "line": 23
+          "line": 24
         },
         {
           "path": "src/shared/gameplay-core.ts",
@@ -64090,12 +64126,20 @@
       "role": "targeted_hidden_row_reordering",
       "evidence": [
         {
+          "path": "src/shared/board-power-availability.ts",
+          "line": 11
+        },
+        {
           "path": "src/shared/board-power-actions.ts",
           "line": 7
         },
         {
           "path": "src/shared/gameplay-core.ts",
           "line": 5
+        },
+        {
+          "path": "src/shared/power-verbs.ts",
+          "line": 15
         },
         {
           "path": "src/renderer/store/runSurfaceState.ts",
@@ -64124,6 +64168,10 @@
           "line": 5
         },
         {
+          "path": "src/shared/power-verbs.test.ts",
+          "line": 16
+        },
+        {
           "path": "src/renderer/store/runSurfaceState.test.ts",
           "line": 23
         }
@@ -64140,6 +64188,8 @@
         "clear-flip-state",
         "deterministic-seed",
         "no-shuffle-contract",
+        "reward-perk-or-relic-free-use",
+        "free-use-before-paid-charge",
         "exit-source-protection",
         "direct-row-command-no-dead-arm-state"
       ]
@@ -64199,7 +64249,7 @@
       "evidence": [
         {
           "path": "src/shared/board-power-actions.ts",
-          "line": 27
+          "line": 28
         },
         {
           "path": "src/shared/gameplay-core.ts",
@@ -64282,12 +64332,20 @@
       "role": "player_selected_board_reordering",
       "evidence": [
         {
+          "path": "src/shared/board-power-availability.ts",
+          "line": 2
+        },
+        {
           "path": "src/shared/board-power-actions.ts",
           "line": 14
         },
         {
           "path": "src/shared/gameplay-core.ts",
           "line": 8
+        },
+        {
+          "path": "src/shared/power-verbs.ts",
+          "line": 17
         },
         {
           "path": "src/renderer/store/runSurfaceState.ts",
@@ -64300,12 +64358,20 @@
       ],
       "tests": [
         {
+          "path": "src/shared/board-power-availability.test.ts",
+          "line": 5
+        },
+        {
           "path": "src/shared/board-power-actions.test.ts",
           "line": 6
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
           "line": 8
+        },
+        {
+          "path": "src/shared/power-verbs.test.ts",
+          "line": 18
         },
         {
           "path": "src/renderer/store/tilePressController.test.ts",
@@ -64324,6 +64390,8 @@
         "two-distinct-hidden-targets",
         "clear-flip-state",
         "no-shuffle-contract",
+        "reward-perk-or-relic-free-use",
+        "free-use-before-paid-charge",
         "matchable-pair-remains"
       ]
     },
@@ -64336,7 +64404,7 @@
       "evidence": [
         {
           "path": "src/shared/board-power-actions.ts",
-          "line": 29
+          "line": 30
         },
         {
           "path": "src/shared/gameplay-core.ts",
@@ -65960,7 +66028,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 2761
+          "line": 2783
         }
       ],
       "enables": [
@@ -69995,6 +70063,8 @@
         "mechanic:inventory.relic_loadout",
         "mechanic:phase.memorize",
         "mechanic:power.pin",
+        "mechanic:power.region_shuffle",
+        "mechanic:power.tile_swap",
         "mechanic:progression.relic_draft",
         "mechanic:progression.route_side_room",
         "mechanic:relic.chapter_compass",
@@ -70111,6 +70181,8 @@
         "mechanic:perk.free_first_swap_per_floor",
         "mechanic:perk.hazard_banish_per_floor",
         "mechanic:perk.trait_streak_toolkit",
+        "mechanic:power.region_shuffle",
+        "mechanic:power.tile_swap",
         "mechanic:progression.route_side_room",
         "mechanic:progression.run_flow",
         "mechanic:reward.cursed_opener_contract",
@@ -81098,6 +81170,12 @@
       "id": "exports:src/shared/board-power-availability.ts->symbol:src/shared/board-power-availability.ts#hasClearFlipState",
       "source": "file:src/shared/board-power-availability.ts",
       "target": "symbol:src/shared/board-power-availability.ts#hasClearFlipState",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/board-power-availability.ts->symbol:src/shared/board-power-availability.ts#hasFreeTargetedReconfiguration",
+      "source": "file:src/shared/board-power-availability.ts",
+      "target": "symbol:src/shared/board-power-availability.ts#hasFreeTargetedReconfiguration",
       "kind": "exports"
     },
     {
@@ -95961,15 +96039,33 @@
       "kind": "implemented_by"
     },
     {
+      "id": "implemented_by:mechanic:perk.free_first_swap_per_floor->file:src/shared/board-power-availability.ts",
+      "source": "mechanic:perk.free_first_swap_per_floor",
+      "target": "file:src/shared/board-power-availability.ts",
+      "kind": "implemented_by"
+    },
+    {
       "id": "implemented_by:mechanic:perk.free_first_swap_per_floor->file:src/shared/bonus-rewards.ts",
       "source": "mechanic:perk.free_first_swap_per_floor",
       "target": "file:src/shared/bonus-rewards.ts",
       "kind": "implemented_by"
     },
     {
+      "id": "implemented_by:mechanic:perk.free_first_swap_per_floor->file:src/shared/gameplay-core.ts",
+      "source": "mechanic:perk.free_first_swap_per_floor",
+      "target": "file:src/shared/gameplay-core.ts",
+      "kind": "implemented_by"
+    },
+    {
       "id": "implemented_by:mechanic:perk.free_first_swap_per_floor->file:src/shared/next-floor-run-state-rules.ts",
       "source": "mechanic:perk.free_first_swap_per_floor",
       "target": "file:src/shared/next-floor-run-state-rules.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:perk.free_first_swap_per_floor->file:src/shared/power-verbs.ts",
+      "source": "mechanic:perk.free_first_swap_per_floor",
+      "target": "file:src/shared/power-verbs.ts",
       "kind": "implemented_by"
     },
     {
@@ -96303,9 +96399,21 @@
       "kind": "implemented_by"
     },
     {
+      "id": "implemented_by:mechanic:power.region_shuffle->file:src/shared/board-power-availability.ts",
+      "source": "mechanic:power.region_shuffle",
+      "target": "file:src/shared/board-power-availability.ts",
+      "kind": "implemented_by"
+    },
+    {
       "id": "implemented_by:mechanic:power.region_shuffle->file:src/shared/gameplay-core.ts",
       "source": "mechanic:power.region_shuffle",
       "target": "file:src/shared/gameplay-core.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:power.region_shuffle->file:src/shared/power-verbs.ts",
+      "source": "mechanic:power.region_shuffle",
+      "target": "file:src/shared/power-verbs.ts",
       "kind": "implemented_by"
     },
     {
@@ -96405,9 +96513,21 @@
       "kind": "implemented_by"
     },
     {
+      "id": "implemented_by:mechanic:power.tile_swap->file:src/shared/board-power-availability.ts",
+      "source": "mechanic:power.tile_swap",
+      "target": "file:src/shared/board-power-availability.ts",
+      "kind": "implemented_by"
+    },
+    {
       "id": "implemented_by:mechanic:power.tile_swap->file:src/shared/gameplay-core.ts",
       "source": "mechanic:power.tile_swap",
       "target": "file:src/shared/gameplay-core.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:power.tile_swap->file:src/shared/power-verbs.ts",
+      "source": "mechanic:power.tile_swap",
+      "target": "file:src/shared/power-verbs.ts",
       "kind": "implemented_by"
     },
     {
@@ -107421,6 +107541,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/board-power-availability.ts->src/shared/run-array-guards.ts",
+      "source": "file:src/shared/board-power-availability.ts",
+      "target": "file:src/shared/run-array-guards.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/board-power-availability.ts->src/shared/run-number-guards.ts",
       "source": "file:src/shared/board-power-availability.ts",
       "target": "file:src/shared/run-number-guards.ts",
@@ -112941,6 +113067,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/power-verbs.ts->src/shared/board-power-availability.ts",
+      "source": "file:src/shared/power-verbs.ts",
+      "target": "file:src/shared/board-power-availability.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/power-verbs.ts->src/shared/contracts.ts",
       "source": "file:src/shared/power-verbs.ts",
       "target": "file:src/shared/contracts.ts",
@@ -112950,12 +113082,6 @@
       "id": "imports:src/shared/power-verbs.ts->src/shared/mechanic-feedback.ts",
       "source": "file:src/shared/power-verbs.ts",
       "target": "file:src/shared/mechanic-feedback.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/power-verbs.ts->src/shared/relics.ts",
-      "source": "file:src/shared/power-verbs.ts",
-      "target": "file:src/shared/relics.ts",
       "kind": "imports"
     },
     {
@@ -119334,6 +119460,18 @@
       "kind": "reads"
     },
     {
+      "id": "reads:mechanic:power.region_shuffle->state:relicIds",
+      "source": "mechanic:power.region_shuffle",
+      "target": "state:relicIds",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:power.region_shuffle->state:rewardPerkIds",
+      "source": "mechanic:power.region_shuffle",
+      "target": "state:rewardPerkIds",
+      "kind": "reads"
+    },
+    {
       "id": "reads:mechanic:power.region_shuffle->state:shuffleNonce",
       "source": "mechanic:power.region_shuffle",
       "target": "state:shuffleNonce",
@@ -119409,6 +119547,18 @@
       "id": "reads:mechanic:power.tile_swap->state:regionShuffleFreeThisFloor",
       "source": "mechanic:power.tile_swap",
       "target": "state:regionShuffleFreeThisFloor",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:power.tile_swap->state:relicIds",
+      "source": "mechanic:power.tile_swap",
+      "target": "state:relicIds",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:power.tile_swap->state:rewardPerkIds",
+      "source": "mechanic:power.tile_swap",
+      "target": "state:rewardPerkIds",
       "kind": "reads"
     },
     {
@@ -122766,15 +122916,33 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:mechanic:perk.free_first_swap_per_floor->file:src/shared/board-power-availability.test.ts",
+      "source": "mechanic:perk.free_first_swap_per_floor",
+      "target": "file:src/shared/board-power-availability.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:mechanic:perk.free_first_swap_per_floor->file:src/shared/bonus-rewards.test.ts",
       "source": "mechanic:perk.free_first_swap_per_floor",
       "target": "file:src/shared/bonus-rewards.test.ts",
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:mechanic:perk.free_first_swap_per_floor->file:src/shared/gameplay-core.test.ts",
+      "source": "mechanic:perk.free_first_swap_per_floor",
+      "target": "file:src/shared/gameplay-core.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:mechanic:perk.free_first_swap_per_floor->file:src/shared/next-floor-run-state-rules.test.ts",
       "source": "mechanic:perk.free_first_swap_per_floor",
       "target": "file:src/shared/next-floor-run-state-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:perk.free_first_swap_per_floor->file:src/shared/power-verbs.test.ts",
+      "source": "mechanic:perk.free_first_swap_per_floor",
+      "target": "file:src/shared/power-verbs.test.ts",
       "kind": "tested_by"
     },
     {
@@ -123100,6 +123268,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:mechanic:power.region_shuffle->file:src/shared/power-verbs.test.ts",
+      "source": "mechanic:power.region_shuffle",
+      "target": "file:src/shared/power-verbs.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:mechanic:power.shuffle->file:src/renderer/store/runSurfaceState.test.ts",
       "source": "mechanic:power.shuffle",
       "target": "file:src/renderer/store/runSurfaceState.test.ts",
@@ -123160,9 +123334,21 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:mechanic:power.tile_swap->file:src/shared/board-power-availability.test.ts",
+      "source": "mechanic:power.tile_swap",
+      "target": "file:src/shared/board-power-availability.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:mechanic:power.tile_swap->file:src/shared/gameplay-core.test.ts",
       "source": "mechanic:power.tile_swap",
       "target": "file:src/shared/gameplay-core.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:power.tile_swap->file:src/shared/power-verbs.test.ts",
+      "source": "mechanic:power.tile_swap",
+      "target": "file:src/shared/power-verbs.test.ts",
       "kind": "tested_by"
     },
     {

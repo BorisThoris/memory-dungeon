@@ -17,6 +17,7 @@ import { DECOY_PAIR_KEY } from './tile-identity';
 import {
     canDestroyPair,
     hasClearFlipState,
+    hasFreeTargetedReconfiguration,
     canRegionShuffle,
     canSwapHiddenTiles,
     canShuffleBoard
@@ -216,7 +217,7 @@ export const applyRegionShuffle = (run: RunState, rowIndex: number): RunState =>
 
     let nextFree = run.regionShuffleFreeThisFloor;
     let nextCharges = runNonNegativeInteger(run.regionShuffleCharges);
-    if (nextFree && hasRunRelic(run, 'region_shuffle_free_first')) {
+    if (hasFreeTargetedReconfiguration(run)) {
         nextFree = false;
     } else if (nextCharges > 0) {
         nextCharges -= 1;
@@ -271,7 +272,7 @@ export const applyTileSwap = (run: RunState, firstTileId: string, secondTileId: 
 
     let nextFree = run.regionShuffleFreeThisFloor;
     let nextCharges = runNonNegativeInteger(run.regionShuffleCharges);
-    if (nextFree && hasRunRelic(run, 'region_shuffle_free_first')) {
+    if (hasFreeTargetedReconfiguration(run)) {
         nextFree = false;
     } else if (nextCharges > 0) {
         nextCharges -= 1;

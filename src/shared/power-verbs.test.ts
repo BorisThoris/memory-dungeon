@@ -45,17 +45,25 @@ describe('REG-045 power verb teaching', () => {
             'No shuffle charges.'
         );
         expect(rows.find((row) => row.id === 'region_shuffle')?.cost).toBe(
-            '1 row/swap charge(s); relics may make the first row shuffle or tile swap free.'
+            '1 row/swap charge(s); build effects may make the first row shuffle or tile swap free.'
         );
         expect(getPowerVerbRows({ ...run, regionShuffleCharges: 0 }).find((row) => row.id === 'region_shuffle')?.disabledReason).toBe(
             'No row/swap charge or free row shuffle.'
         );
         expect(rows.find((row) => row.id === 'tile_swap')?.cost).toBe(
-            '1 row/swap charge(s); relics may make the first row shuffle or tile swap free.'
+            '1 row/swap charge(s); build effects may make the first row shuffle or tile swap free.'
         );
         expect(getPowerVerbRows({ ...run, regionShuffleCharges: 0 }).find((row) => row.id === 'tile_swap')?.disabledReason).toBe(
             'No row/swap charge or free swap.'
         );
+        const perkRows = getPowerVerbRows({
+            ...run,
+            regionShuffleCharges: 0,
+            regionShuffleFreeThisFloor: true,
+            rewardPerkIds: ['free_first_swap_per_floor']
+        });
+        expect(perkRows.find((row) => row.id === 'region_shuffle')?.disabledReason).toBeNull();
+        expect(perkRows.find((row) => row.id === 'tile_swap')?.disabledReason).toBeNull();
         expect(getPowerVerbRows({ ...run, status: 'memorize' }).find((row) => row.id === 'peek')?.disabledReason).toBe(
             'Only while playing.'
         );
@@ -91,7 +99,7 @@ describe('REG-045 power verb teaching', () => {
         expect(rows.find((row) => row.id === 'flash_pair')?.disabledReason).toBe('No flash charges.');
         expect(rows.find((row) => row.id === 'shuffle')?.cost).toBe('0 full-board charge(s).');
         expect(rows.find((row) => row.id === 'region_shuffle')?.cost).toBe(
-            '0 row/swap charge(s); relics may make the first row shuffle or tile swap free.'
+            '0 row/swap charge(s); build effects may make the first row shuffle or tile swap free.'
         );
         expect(rows.find((row) => row.id === 'destroy_pair')?.cost).toBe('0 destroy charge(s).');
         expect(rows.find((row) => row.id === 'stray_remove')?.disabledReason).toBe('No stray-remove charges.');

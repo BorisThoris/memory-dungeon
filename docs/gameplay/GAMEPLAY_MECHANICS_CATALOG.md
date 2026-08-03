@@ -161,6 +161,7 @@
 | Offline bounded-memory build-policy/counter gate | `GAMEPLAY_BUILD_POLICIES`, five distinct axes, capped observation ledgers, explicit uncertain-turn budgets, typed route-outcome previews, visible life/protection/resource risk caps and survival reserves, actual event-effect ranking, 5 builds × 3 seeds × 12 generated floors, shipped favorable/counter exposure, exact replay | [epic-modes-and-runs](./epic-modes-and-runs.md) |
 | Route Gambler long-horizon build | Route Tactician + Wager Surety + identity-blind `board.gambit_commit` + eligible `risk_wager.accept` + Favor/streak outcomes + Greed/Mystery route policy; `risk_conversion` axis, favorable `economy_opportunity`, counter `hazard_pressure` with Gambit suppression | [epic-modes-and-runs](./epic-modes-and-runs.md) |
 | Combo Shard Engine long-horizon build | Vaultbreaker + Bonus Shards + Combo Shard + Step + Shard Spark + full-bank Greed credit + authoritative third-shard life conversion; `sustain_conversion` axis, favorable `economy_opportunity`, counter `parasite_pressure` | [epic-modes-and-runs](./epic-modes-and-runs.md) |
+| Free targeted reconfiguration | Route Tactician / Free Swap Discipline perk or Region Shuffle Free First relic rearms one typed row-shuffle/tile-swap use per floor; shared legality spends the free use before paid charges and respects `noShuffle` | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
 
 ---
 

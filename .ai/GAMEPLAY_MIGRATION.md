@@ -776,6 +776,19 @@ The Combo Shard Engine is now the fifth retained long-horizon build, connecting 
 
 Graph v54 adds five-strategy and sustain-conversion guards, full-shard Greed credit, third-shard life conversion, parasite-counter coverage, build-specific source/conversion reports, and a tested edge from the evaluator to `build.combo_shard_engine`.
 
+## Fifty-fifth vertical slice: Free Targeted Reconfiguration Ownership
+
+The Trap Control audit found and closed a shipped source-to-command break before adding a sixth simulation policy:
+
+1. Route Tactician and Free Swap Discipline already granted `free_first_swap_per_floor`, and floor setup correctly rearmed `regionShuffleFreeThisFloor`.
+2. Row-shuffle and tile-swap legality nevertheless recognized that free flag only when the separate `region_shuffle_free_first` relic was owned. After the loadout's initial paid charge, the perk advertised a free use that its commands could not spend.
+3. One shared `hasFreeTargetedReconfiguration` rule now recognizes either the durable reward perk or the relic, while still requiring the per-floor flag, a clear flip state, legal hidden targets, and no `noShuffle` contract.
+4. Both pure actions consume the free flag before paid row/swap charges. Typed `board.region_shuffle` continues to emit `usedFreeCharge: true`, zero inventory spend, deterministic tile IDs, feedback, and exact replay.
+5. Power teaching consumes the same shared availability rule and now describes free uses as build effects rather than relic-only behavior.
+6. Availability, pure action, command reducer, teaching projection, and graph tests cover both source paths. The focused gate passes 86 tests across those boundaries.
+
+Graph v55 adds reward-perk-or-relic and free-before-paid guards to targeted reconfiguration, connects reward perk state to both powers' read sets, and records the command and presentation tests that enforce the complete source/effect/consequence loop.
+
 ## Current slice status
 
 Implemented in the Conduit Cartographer vertical slice:
@@ -795,5 +808,5 @@ Implemented in the Conduit Cartographer vertical slice:
 Still required before the vertical slice is complete:
 
 - widen the feedback-completeness audit beyond the former HUD-critical fields as additional gameplay ownership enters the core;
-- use five-build traces and graph diagnostics to select the next least-overlapping cohesive build (currently likely Trap Control), without presenting simulator survival as human win-rate proof;
+- add Trap Control as a sixth long-horizon `board_reconfiguration` strategy now that its renewable free-use source reaches the typed row-shuffle/tile-swap commands, without presenting simulator survival as human win-rate proof;
 - continue migrating cohesive player builds rather than adding isolated definitions, using the graph diagnostics to choose the next least-overlapping loop.
