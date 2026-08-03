@@ -1014,6 +1014,21 @@ The route decision now has one independently testable semantic contract instead 
 
 Graph v70 makes route choice a cohesive decision loop—reward, risk, memory readiness, immediate action, and next-floor consequence—rather than a collection of screen-local labels.
 
+## Seventy-first vertical slice: Board-Floater Orchestration Model
+
+The remaining match/mismatch floater decision layer now sits outside the rendering component:
+
+1. Match heat, impact beats, reward bursts, cascades, payoff summaries, jackpots, lane focus, trait lanes, ladder steps, milestones, payoff-chip cues, forecast cues, mismatch heat, and recovery-chip cues moved into `gameScreenBoardFloaterModel.ts`.
+2. A small `gameScreenBoardModels.ts` facade exposes both the lower-level lane normalization model and the higher-level floater orchestration model without introducing a second GameScreen dependency.
+3. The model derives screen intensity, audio identity, beat count, and accessible semantics from the same typed payoff or recovery facts, preserving super-stack and lost-reward prominence.
+4. Six focused tests cover explicit/fallback lane counting, super-stack heat, reward-burst strength, jackpot derivation, payoff-chip parity, and lost-cashout recovery.
+5. All 67 existing `GameScreen` tests remain green across match, mismatch, chain, route, trait, pickup, jackpot, and recovery floaters.
+6. `GameScreen` drops from 5,308 to 4,723 physical lines; the generated model measures 4,724 indexed lines and 61 direct imports.
+7. The orchestration budget ratchets from 5,350 lines/62 imports to 4,750 lines/61 imports, preventing both code and dependency growth from reversing the extraction.
+8. Graph v71 regenerates 15,763 relationships with 127 active-run fields, zero renderer run-state writes, zero orchestration violations, all 34 commands and 54 events, 27 player-visible states, and zero diagnostics.
+
+Graph v71 separates board-feedback semantics from React rendering while keeping the full score/recovery language queryable and independently testable.
+
 ## Current slice status
 
 Implemented in the Conduit Cartographer vertical slice:
@@ -1033,5 +1048,5 @@ Implemented in the Conduit Cartographer vertical slice:
 Still required before the vertical slice is complete:
 
 - extend the shared player-visible registry when additional gameplay ownership enters the core, rather than adding renderer or model-only field lists;
-- use Graph v70 diagnostics, orchestration budgets, and nine-build traces to select the next least-overlapping cohesive loop or architectural ownership seam, without presenting simulator survival as human win-rate proof;
+- use Graph v71 diagnostics, orchestration budgets, and nine-build traces to select the next least-overlapping cohesive loop or architectural ownership seam, without presenting simulator survival as human win-rate proof;
 - continue migrating cohesive player builds rather than adding isolated definitions, using the graph diagnostics to choose the next least-overlapping loop.

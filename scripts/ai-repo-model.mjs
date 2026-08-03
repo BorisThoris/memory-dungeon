@@ -48,8 +48,8 @@ const RUN_STATE_WRITE_ACCESS_KINDS = new Set(['direct_assignment', 'state_constr
 const ORCHESTRATION_FILE_BUDGETS = [
     {
         path: 'src/renderer/components/GameScreen.tsx',
-        maxLines: 5_350,
-        maxImports: 62
+        maxLines: 4_750,
+        maxImports: 61
     }
 ];
 

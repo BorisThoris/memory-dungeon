@@ -173,13 +173,13 @@ describe('AI repository model', () => {
                 path: 'src/renderer/components/GameScreen.tsx',
                 lineCount: expect.any(Number),
                 importCount: expect.any(Number),
-                maxLines: 5_350,
-                maxImports: 62,
+                maxLines: 4_750,
+                maxImports: 61,
                 withinBudget: true
             }
         ]);
-        expect(model.orchestrationBudgets[0]?.lineCount).toBeLessThanOrEqual(5_350);
-        expect(model.orchestrationBudgets[0]?.importCount).toBeLessThanOrEqual(62);
+        expect(model.orchestrationBudgets[0]?.lineCount).toBeLessThanOrEqual(4_750);
+        expect(model.orchestrationBudgets[0]?.importCount).toBeLessThanOrEqual(61);
         expect(model.files.find((file) => file.path === 'src/renderer/components/gameScreenBoardFeedbackModel.ts')).toMatchObject({
             testedBy: expect.arrayContaining([
                 'file:src/renderer/components/gameScreenBoardFeedbackModel.test.ts'
@@ -198,6 +198,11 @@ describe('AI repository model', () => {
         expect(model.files.find((file) => file.path === 'src/renderer/components/gameScreenRouteChoiceModel.ts')).toMatchObject({
             testedBy: expect.arrayContaining([
                 'file:src/renderer/components/gameScreenRouteChoiceModel.test.ts'
+            ])
+        });
+        expect(model.files.find((file) => file.path === 'src/renderer/components/gameScreenBoardFloaterModel.ts')).toMatchObject({
+            testedBy: expect.arrayContaining([
+                'file:src/renderer/components/gameScreenBoardFloaterModel.test.ts'
             ])
         });
         expect(model.gameplayCommands.every(
