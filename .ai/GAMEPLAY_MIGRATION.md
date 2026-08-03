@@ -1029,6 +1029,20 @@ The remaining match/mismatch floater decision layer now sits outside the renderi
 
 Graph v71 separates board-feedback semantics from React rendering while keeping the full score/recovery language queryable and independently testable.
 
+## Seventy-second vertical slice: Board-Floater Projection Hook
+
+The screen now consumes one coherent board-floater projection instead of assembling dozens of dependent values inline:
+
+1. `useGameScreenBoardFloaterProjection.ts` owns active match/mismatch payload selection, normalized chips/lanes/traits, detail lines, accessible live text, recovery crescendo/burst/sequence, primary-lane focus, payoff-stack sequencing, jackpot cues, and progress fills.
+2. One hook result keeps the renderer-facing projection synchronized with the pure board-feedback and floater models while retaining memoization around the expensive array/read-model work.
+3. GameScreen now destructures the projection and remains responsible for positioning, dismissal effects, sound playback, and JSX only.
+4. Three hook tests prove stable empty state, combined match stack/trait/live-region projection, and mismatch lost-reward/recovery projection; all 67 GameScreen tests remain green.
+5. `GameScreen` drops from 4,723 to 4,456 physical lines; the generated model measures 4,457 indexed lines and 60 direct imports.
+6. The orchestration budget ratchets from 4,750 lines/61 imports to 4,500 lines/60 imports.
+7. Graph v72 regenerates 15,776 relationships with 127 active-run fields, zero renderer run-state writes, zero orchestration violations, all 34 commands and 54 events, 27 player-visible states, and zero diagnostics.
+
+Graph v72 gives the board-feedback rendering path a single typed projection boundary and leaves GameScreen closer to a composition shell.
+
 ## Current slice status
 
 Implemented in the Conduit Cartographer vertical slice:
@@ -1048,5 +1062,5 @@ Implemented in the Conduit Cartographer vertical slice:
 Still required before the vertical slice is complete:
 
 - extend the shared player-visible registry when additional gameplay ownership enters the core, rather than adding renderer or model-only field lists;
-- use Graph v71 diagnostics, orchestration budgets, and nine-build traces to select the next least-overlapping cohesive loop or architectural ownership seam, without presenting simulator survival as human win-rate proof;
+- use Graph v72 diagnostics, orchestration budgets, and nine-build traces to select the next least-overlapping cohesive loop or architectural ownership seam, without presenting simulator survival as human win-rate proof;
 - continue migrating cohesive player builds rather than adding isolated definitions, using the graph diagnostics to choose the next least-overlapping loop.

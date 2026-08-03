@@ -3,9 +3,9 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2419,
-    "codeFileCount": 916,
-    "exportedSymbolCount": 3490,
+    "trackedFileCount": 2421,
+    "codeFileCount": 918,
+    "exportedSymbolCount": 3491,
     "contentItemCount": 57,
     "mechanicCount": 140,
     "stateFieldCount": 298,
@@ -19,14 +19,14 @@
     "unemittedGameplayEventTypeCount": 0,
     "untestedGameplayProtocolTypeCount": 0,
     "playerVisibleStateCount": 27,
-    "relationshipCount": 15763
+    "relationshipCount": 15776
   },
   "inventory": [
     {
       "path": ".ai/GAMEPLAY_MIGRATION.md",
       "category": "other",
-      "bytes": 130396,
-      "sha256": "55acc66e5c267252ac8243c4c56a195295176e84ec762cf5fcffff67aadf718e"
+      "bytes": 131936,
+      "sha256": "c43b0fc9855f9751e5845f695cbc47fa1e1b63867f9f171efb789c2576396204"
     },
     {
       "path": ".ai/README.md",
@@ -841,8 +841,8 @@
     {
       "path": "docs/internal-wiki/APP_ANALYSIS.md",
       "category": "documentation",
-      "bytes": 22075,
-      "sha256": "4d1910c6f19af51b0968eaa472b81e84869e135786beb9510609df2d343f6660"
+      "bytes": 22068,
+      "sha256": "584a06699a0feb114ea5f393fb1989a5566c37a94adf635673b798f4fefb1651"
     },
     {
       "path": "docs/internal-wiki/ARCHITECTURE.md",
@@ -4106,7 +4106,7 @@
       "path": "scripts/ai-repo-model.mjs",
       "category": "script",
       "bytes": 60638,
-      "sha256": "08186116e607ed75891d2d2308c2e6ae953095160d430811fb5dc5ed28c01c09"
+      "sha256": "e2ce22a4349919a7917601e9de3a3864a2bf2246324d2bac12f6de325aad88b4"
     },
     {
       "path": "scripts/ast-allowlist.json",
@@ -7471,8 +7471,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 299754,
-      "sha256": "3b0b7456cebef9438ed1352cae7f8add4565bc1eb7fbd8a65bfafccaf3b1de87"
+      "bytes": 285873,
+      "sha256": "cd4978028a9e345839207da3c4a6d97479d1d2377b40d4afbe3900f8b2edb0eb"
     },
     {
       "path": "src/renderer/components/GameScreenActionFeedbackRail.test.tsx",
@@ -7513,8 +7513,8 @@
     {
       "path": "src/renderer/components/gameScreenBoardModels.ts",
       "category": "source",
-      "bytes": 95,
-      "sha256": "1cd167fc2204dcb472981f67a0bbad3d8d3bccae0e9e2c76ac2fb61de29d85fd"
+      "bytes": 150,
+      "sha256": "345e3cd3c376ccb24153c0cb89585670d2efdc9781a2b633781c34dc8a0c5033"
     },
     {
       "path": "src/renderer/components/gameScreenDecisionSignals.test.tsx",
@@ -8673,6 +8673,18 @@
       "category": "source",
       "bytes": 2909,
       "sha256": "27f03dacda818eefc4b7e955c13ac8cddd76e44630ab8de0a7b483d0315c97c0"
+    },
+    {
+      "path": "src/renderer/components/useGameScreenBoardFloaterProjection.test.ts",
+      "category": "test",
+      "bytes": 3430,
+      "sha256": "7d795605b6b80496352c3fc6dd247d22dc8d41dfce836e9f4e1eb2f7f27a4ef9"
+    },
+    {
+      "path": "src/renderer/components/useGameScreenBoardFloaterProjection.ts",
+      "category": "source",
+      "bytes": 18018,
+      "sha256": "22e971811b23a4e606ede60b796e89297e1f029f5b30d4dad4a4322df2ef2ab5"
     },
     {
       "path": "src/renderer/components/useGameScreenPowerTileHints.ts",
@@ -9859,8 +9871,8 @@
     {
       "path": "src/shared/ai-repo-model.test.ts",
       "category": "test",
-      "bytes": 15800,
-      "sha256": "b1784966372beed9ee759e5251a8a74cd7db802c7581046d5a661265cdbc8de0"
+      "bytes": 16104,
+      "sha256": "87d28e1a0472af2f8f7419f77d1daf05ead678546e6dda4f3d25e059d4052480"
     },
     {
       "path": "src/shared/audit-summary-script.test.ts",
@@ -10832,13 +10844,13 @@
       "path": "src/shared/gameplay-interaction-graph-data.json",
       "category": "source",
       "bytes": 239056,
-      "sha256": "52d7d58627d656535242f79bc731d3b1c4abe272da35e4ea5699838d8c9a45e4"
+      "sha256": "9a44e2f355b88b8b091cd3d1491103aff1dac904b16c528634379b98cfca8df3"
     },
     {
       "path": "src/shared/gameplay-interaction-graph.test.ts",
       "category": "test",
       "bytes": 116727,
-      "sha256": "d99bb864019c6dc23539a89cacdc1f0c47b932f309037a9500a7e6a7735e41a9"
+      "sha256": "8dcc6c96669761e7c11e20cc81cbcb2daf0f8e0b1a8bb22a6e60dbedfc208bca"
     },
     {
       "path": "src/shared/gameplay-interaction-graph.ts",
@@ -16821,7 +16833,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 4724,
+      "lineCount": 4457,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -16849,7 +16861,6 @@
         "file:src/renderer/components/useGameScreenTraitRouteTargets.ts",
         "file:src/renderer/copy/chainMomentum.ts",
         "file:src/renderer/copy/gameplayHints.ts",
-        "file:src/renderer/copy/matchScoreFloater.ts",
         "file:src/renderer/copy/mismatchFloater.ts",
         "file:src/renderer/copy/relicDraftOffer.ts",
         "file:src/renderer/copy/traitInteractionLaneMap.ts",
@@ -17049,10 +17060,11 @@
       "path": "src/renderer/components/gameScreenBoardModels.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 3,
+      "lineCount": 4,
       "imports": [
         "file:src/renderer/components/gameScreenBoardFeedbackModel.ts",
-        "file:src/renderer/components/gameScreenBoardFloaterModel.ts"
+        "file:src/renderer/components/gameScreenBoardFloaterModel.ts",
+        "file:src/renderer/components/useGameScreenBoardFloaterProjection.ts"
       ],
       "exports": [],
       "testedBy": []
@@ -20454,6 +20466,42 @@
       "testedBy": []
     },
     {
+      "id": "file:src/renderer/components/useGameScreenBoardFloaterProjection.test.ts",
+      "path": "src/renderer/components/useGameScreenBoardFloaterProjection.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 75,
+      "imports": [
+        "file:src/renderer/components/useGameScreenBoardFloaterProjection.ts",
+        "file:src/renderer/store/matchScorePop.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/useGameScreenBoardFloaterProjection.ts",
+      "path": "src/renderer/components/useGameScreenBoardFloaterProjection.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 381,
+      "imports": [
+        "file:src/renderer/components/gameScreenBoardFeedbackModel.ts",
+        "file:src/renderer/components/gameScreenBoardFloaterModel.ts",
+        "file:src/renderer/components/matchScoreFloaterTiming.ts",
+        "file:src/renderer/copy/chainMomentum.ts",
+        "file:src/renderer/copy/matchScoreFloater.ts",
+        "file:src/renderer/copy/mismatchFloater.ts",
+        "file:src/renderer/copy/traitInteractionLaneMap.ts",
+        "file:src/renderer/store/matchScorePop.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/useGameScreenBoardFloaterProjection.ts#useGameScreenBoardFloaterProjection"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/useGameScreenBoardFloaterProjection.test.ts"
+      ]
+    },
+    {
       "id": "file:src/renderer/components/useGameScreenPowerTileHints.ts",
       "path": "src/renderer/components/useGameScreenPowerTileHints.ts",
       "layer": "renderer",
@@ -22272,6 +22320,7 @@
         "file:src/renderer/components/GameScreen.test.tsx",
         "file:src/renderer/components/gameScreenBoardFeedbackModel.test.ts",
         "file:src/renderer/components/gameScreenBoardFloaterModel.test.ts",
+        "file:src/renderer/components/useGameScreenBoardFloaterProjection.test.ts",
         "file:src/renderer/store/matchScorePop.test.ts",
         "file:src/renderer/store/runResolutionController.test.ts",
         "file:src/renderer/store/runSurfaceState.test.ts",
@@ -23616,7 +23665,7 @@
       "path": "src/shared/ai-repo-model.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 314,
+      "lineCount": 319,
       "imports": [],
       "exports": [],
       "testedBy": []
@@ -35385,8 +35434,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 4723,
-      "endLine": 4723
+      "line": 4456,
+      "endLine": 4456
     },
     {
       "id": "symbol:src/renderer/components/GameScreenActionFeedbackRail.tsx#GameScreenActionFeedbackRail",
@@ -40003,6 +40052,14 @@
       "file": "src/renderer/components/TutorialPairMarkerPlane.tsx",
       "line": 36,
       "endLine": 89
+    },
+    {
+      "id": "symbol:src/renderer/components/useGameScreenBoardFloaterProjection.ts#useGameScreenBoardFloaterProjection",
+      "name": "useGameScreenBoardFloaterProjection",
+      "kind": "value",
+      "file": "src/renderer/components/useGameScreenBoardFloaterProjection.ts",
+      "line": 48,
+      "endLine": 380
     },
     {
       "id": "symbol:src/renderer/components/useGameScreenPowerTileHints.ts#useGameScreenPowerTileHints",
@@ -64674,7 +64731,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 353
+          "line": 330
         }
       ],
       "tests": [
@@ -65902,7 +65959,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 402
+          "line": 379
         },
         {
           "path": "src/renderer/components/GameLeftToolbar.tsx",
@@ -73724,19 +73781,19 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1793
+          "line": 1526
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1854
+          "line": 1587
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1864
+          "line": 1597
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1891
+          "line": 1624
         },
         {
           "path": "src/renderer/components/InventoryScreen.tsx",
@@ -73997,39 +74054,39 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1217
+          "line": 1020
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1247
+          "line": 438
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1252
+          "line": 439
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1262
+          "line": 950
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1263
+          "line": 980
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1264
+          "line": 985
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1287
+          "line": 995
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 461
+          "line": 996
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 462
+          "line": 997
         },
         {
           "path": "src/renderer/components/InventoryScreen.tsx",
@@ -74232,163 +74289,131 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1182
+          "line": 1014
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1183
+          "line": 1015
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1202
+          "line": 1016
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1210
+          "line": 1018
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1214
+          "line": 1019
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1229
+          "line": 1344
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1232
+          "line": 1466
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1238
+          "line": 1471
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1240
+          "line": 1489
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1242
+          "line": 1504
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1252
+          "line": 1505
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1261
+          "line": 1507
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1281
+          "line": 1524
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1282
+          "line": 1527
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1283
+          "line": 1528
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1285
+          "line": 1534
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1286
+          "line": 1575
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1611
+          "line": 1583
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1733
+          "line": 1593
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1738
+          "line": 1599
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1756
+          "line": 1617
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1771
+          "line": 1621
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1772
+          "line": 1630
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1774
+          "line": 1685
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1791
+          "line": 1976
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1794
+          "line": 1977
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1795
+          "line": 1978
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1801
+          "line": 1979
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1842
+          "line": 402
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1850
+          "line": 404
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1860
+          "line": 406
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1866
-        },
-        {
-          "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1884
-        },
-        {
-          "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1888
-        },
-        {
-          "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1897
-        },
-        {
-          "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1952
-        },
-        {
-          "path": "src/renderer/components/GameScreen.tsx",
-          "line": 2243
-        },
-        {
-          "path": "src/renderer/components/GameScreen.tsx",
-          "line": 2244
-        },
-        {
-          "path": "src/renderer/components/GameScreen.tsx",
-          "line": 2245
-        },
-        {
-          "path": "src/renderer/components/GameScreen.tsx",
-          "line": 2246
+          "line": 424
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
@@ -74396,31 +74421,63 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
+          "line": 426
+        },
+        {
+          "path": "src/renderer/components/GameScreen.tsx",
           "line": 427
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 429
+          "line": 438
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 447
+          "line": 915
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 448
+          "line": 916
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 449
+          "line": 935
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 450
+          "line": 943
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 461
+          "line": 947
+        },
+        {
+          "path": "src/renderer/components/GameScreen.tsx",
+          "line": 962
+        },
+        {
+          "path": "src/renderer/components/GameScreen.tsx",
+          "line": 965
+        },
+        {
+          "path": "src/renderer/components/GameScreen.tsx",
+          "line": 971
+        },
+        {
+          "path": "src/renderer/components/GameScreen.tsx",
+          "line": 973
+        },
+        {
+          "path": "src/renderer/components/GameScreen.tsx",
+          "line": 975
+        },
+        {
+          "path": "src/renderer/components/GameScreen.tsx",
+          "line": 985
+        },
+        {
+          "path": "src/renderer/components/GameScreen.tsx",
+          "line": 994
         },
         {
           "path": "src/renderer/components/InventoryScreen.tsx",
@@ -76606,7 +76663,7 @@
       "readReferences": [
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 2247
+          "line": 1980
         },
         {
           "path": "src/renderer/store/runResolutionController.ts",
@@ -76807,7 +76864,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1907
+          "line": 1640
         },
         {
           "path": "src/renderer/components/useGameScreenPowerTileHints.ts",
@@ -77803,19 +77860,19 @@
       "readReferences": [
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1486
+          "line": 1219
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1487
+          "line": 1220
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1490
+          "line": 1223
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1605
+          "line": 1338
         },
         {
           "path": "src/shared/dungeon-run-state-rules.ts",
@@ -78179,11 +78236,11 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1441
+          "line": 1174
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1442
+          "line": 1175
         },
         {
           "path": "src/shared/floor-clear-transition.ts",
@@ -78540,15 +78597,15 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1449
+          "line": 1182
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1457
+          "line": 1190
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 4606
+          "line": 4339
         },
         {
           "path": "src/shared/risk-wager-rules.ts",
@@ -78630,7 +78687,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1319
+          "line": 1052
         },
         {
           "path": "src/renderer/components/gameScreenFloorClearFeedbackModel.ts",
@@ -78775,11 +78832,11 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1315
+          "line": 1048
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1319
+          "line": 1052
         },
         {
           "path": "src/renderer/components/gameScreenFloorClearFeedbackModel.ts",
@@ -78928,11 +78985,11 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1883
+          "line": 1616
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1886
+          "line": 1619
         },
         {
           "path": "src/renderer/store/runSurfaceState.ts",
@@ -79039,11 +79096,11 @@
       "readReferences": [
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1254
+          "line": 987
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1256
+          "line": 989
         },
         {
           "path": "src/shared/flip-tile-transition.ts",
@@ -79283,7 +79340,7 @@
       "readReferences": [
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1895
+          "line": 1628
         },
         {
           "path": "src/renderer/components/InventoryScreen.tsx",
@@ -79380,7 +79437,7 @@
       "readReferences": [
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1257
+          "line": 990
         },
         {
           "path": "src/renderer/store/useAppStore.ts",
@@ -79466,7 +79523,7 @@
       "readReferences": [
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1257
+          "line": 990
         },
         {
           "path": "src/renderer/store/useAppStore.ts",
@@ -79588,15 +79645,15 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1280
+          "line": 1013
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1641
+          "line": 1374
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1712
+          "line": 1445
         },
         {
           "path": "src/renderer/components/InventoryScreen.tsx",
@@ -79843,7 +79900,7 @@
       "readReferences": [
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 944
+          "line": 677
         },
         {
           "path": "src/renderer/store/gameplayFeedbackAdapter.ts",
@@ -79897,19 +79954,19 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1711
+          "line": 1444
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1712
+          "line": 1445
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 358
+          "line": 335
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 367
+          "line": 344
         },
         {
           "path": "src/renderer/store/runTimerController.ts",
@@ -80510,7 +80567,175 @@
       "readReferences": [
         {
           "path": "src/renderer/components/GameScreen.tsx",
+          "line": 1000
+        },
+        {
+          "path": "src/renderer/components/GameScreen.tsx",
+          "line": 1002
+        },
+        {
+          "path": "src/renderer/components/GameScreen.tsx",
+          "line": 1003
+        },
+        {
+          "path": "src/renderer/components/GameScreen.tsx",
+          "line": 1005
+        },
+        {
+          "path": "src/renderer/components/GameScreen.tsx",
+          "line": 1007
+        },
+        {
+          "path": "src/renderer/components/GameScreen.tsx",
+          "line": 1008
+        },
+        {
+          "path": "src/renderer/components/GameScreen.tsx",
+          "line": 1009
+        },
+        {
+          "path": "src/renderer/components/GameScreen.tsx",
+          "line": 1010
+        },
+        {
+          "path": "src/renderer/components/GameScreen.tsx",
+          "line": 1024
+        },
+        {
+          "path": "src/renderer/components/GameScreen.tsx",
+          "line": 1025
+        },
+        {
+          "path": "src/renderer/components/GameScreen.tsx",
+          "line": 1027
+        },
+        {
+          "path": "src/renderer/components/GameScreen.tsx",
+          "line": 1029
+        },
+        {
+          "path": "src/renderer/components/GameScreen.tsx",
+          "line": 1034
+        },
+        {
+          "path": "src/renderer/components/GameScreen.tsx",
+          "line": 1039
+        },
+        {
+          "path": "src/renderer/components/GameScreen.tsx",
+          "line": 1084
+        },
+        {
+          "path": "src/renderer/components/GameScreen.tsx",
+          "line": 1086
+        },
+        {
+          "path": "src/renderer/components/GameScreen.tsx",
+          "line": 1089
+        },
+        {
+          "path": "src/renderer/components/GameScreen.tsx",
+          "line": 1090
+        },
+        {
+          "path": "src/renderer/components/GameScreen.tsx",
+          "line": 1091
+        },
+        {
+          "path": "src/renderer/components/GameScreen.tsx",
+          "line": 1093
+        },
+        {
+          "path": "src/renderer/components/GameScreen.tsx",
+          "line": 1096
+        },
+        {
+          "path": "src/renderer/components/GameScreen.tsx",
+          "line": 1100
+        },
+        {
+          "path": "src/renderer/components/GameScreen.tsx",
+          "line": 1101
+        },
+        {
+          "path": "src/renderer/components/GameScreen.tsx",
+          "line": 1102
+        },
+        {
+          "path": "src/renderer/components/GameScreen.tsx",
+          "line": 1105
+        },
+        {
+          "path": "src/renderer/components/GameScreen.tsx",
           "line": 1108
+        },
+        {
+          "path": "src/renderer/components/GameScreen.tsx",
+          "line": 1111
+        },
+        {
+          "path": "src/renderer/components/GameScreen.tsx",
+          "line": 1112
+        },
+        {
+          "path": "src/renderer/components/GameScreen.tsx",
+          "line": 1113
+        },
+        {
+          "path": "src/renderer/components/GameScreen.tsx",
+          "line": 1114
+        },
+        {
+          "path": "src/renderer/components/GameScreen.tsx",
+          "line": 1115
+        },
+        {
+          "path": "src/renderer/components/GameScreen.tsx",
+          "line": 1118
+        },
+        {
+          "path": "src/renderer/components/GameScreen.tsx",
+          "line": 1122
+        },
+        {
+          "path": "src/renderer/components/GameScreen.tsx",
+          "line": 1126
+        },
+        {
+          "path": "src/renderer/components/GameScreen.tsx",
+          "line": 1127
+        },
+        {
+          "path": "src/renderer/components/GameScreen.tsx",
+          "line": 1128
+        },
+        {
+          "path": "src/renderer/components/GameScreen.tsx",
+          "line": 1129
+        },
+        {
+          "path": "src/renderer/components/GameScreen.tsx",
+          "line": 1144
+        },
+        {
+          "path": "src/renderer/components/GameScreen.tsx",
+          "line": 1147
+        },
+        {
+          "path": "src/renderer/components/GameScreen.tsx",
+          "line": 1151
+        },
+        {
+          "path": "src/renderer/components/GameScreen.tsx",
+          "line": 1152
+        },
+        {
+          "path": "src/renderer/components/GameScreen.tsx",
+          "line": 1153
+        },
+        {
+          "path": "src/renderer/components/GameScreen.tsx",
+          "line": 1154
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
@@ -80518,255 +80743,87 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1267
+          "line": 1158
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1269
+          "line": 1159
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1270
+          "line": 1160
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1272
+          "line": 1169
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1274
+          "line": 1174
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1275
+          "line": 1205
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1276
+          "line": 1214
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1277
+          "line": 1373
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1291
+          "line": 1374
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1292
+          "line": 1654
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1294
+          "line": 285
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1296
+          "line": 286
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1301
+          "line": 3435
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1306
+          "line": 3469
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1351
+          "line": 3508
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1353
+          "line": 4366
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1356
+          "line": 4372
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1357
+          "line": 4378
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1358
+          "line": 721
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1360
+          "line": 841
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1363
-        },
-        {
-          "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1367
-        },
-        {
-          "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1368
-        },
-        {
-          "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1369
-        },
-        {
-          "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1372
-        },
-        {
-          "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1375
-        },
-        {
-          "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1378
-        },
-        {
-          "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1379
-        },
-        {
-          "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1380
-        },
-        {
-          "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1381
-        },
-        {
-          "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1382
-        },
-        {
-          "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1385
-        },
-        {
-          "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1389
-        },
-        {
-          "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1393
-        },
-        {
-          "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1394
-        },
-        {
-          "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1395
-        },
-        {
-          "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1396
-        },
-        {
-          "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1411
-        },
-        {
-          "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1414
-        },
-        {
-          "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1418
-        },
-        {
-          "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1419
-        },
-        {
-          "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1420
-        },
-        {
-          "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1421
-        },
-        {
-          "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1424
-        },
-        {
-          "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1425
-        },
-        {
-          "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1426
-        },
-        {
-          "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1427
-        },
-        {
-          "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1436
-        },
-        {
-          "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1441
-        },
-        {
-          "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1472
-        },
-        {
-          "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1481
-        },
-        {
-          "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1640
-        },
-        {
-          "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1641
-        },
-        {
-          "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1921
-        },
-        {
-          "path": "src/renderer/components/GameScreen.tsx",
-          "line": 308
-        },
-        {
-          "path": "src/renderer/components/GameScreen.tsx",
-          "line": 309
-        },
-        {
-          "path": "src/renderer/components/GameScreen.tsx",
-          "line": 3702
-        },
-        {
-          "path": "src/renderer/components/GameScreen.tsx",
-          "line": 3736
-        },
-        {
-          "path": "src/renderer/components/GameScreen.tsx",
-          "line": 3775
-        },
-        {
-          "path": "src/renderer/components/GameScreen.tsx",
-          "line": 4633
-        },
-        {
-          "path": "src/renderer/components/GameScreen.tsx",
-          "line": 4639
-        },
-        {
-          "path": "src/renderer/components/GameScreen.tsx",
-          "line": 4645
-        },
-        {
-          "path": "src/renderer/components/GameScreen.tsx",
-          "line": 988
+          "line": 890
         },
         {
           "path": "src/renderer/components/gameScreenFloorClearFeedbackModel.ts",
@@ -81243,11 +81300,11 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1762
+          "line": 1495
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 2257
+          "line": 1990
         },
         {
           "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -82106,7 +82163,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 2264
+          "line": 1997
         },
         {
           "path": "src/shared/turn-match-followup-rules.ts",
@@ -82751,11 +82808,11 @@
       "readReferences": [
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1254
+          "line": 987
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1256
+          "line": 989
         },
         {
           "path": "src/shared/board-power-actions.ts",
@@ -82914,75 +82971,75 @@
       "readReferences": [
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1473
+          "line": 1206
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1583
+          "line": 1316
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1584
+          "line": 1317
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1587
+          "line": 1320
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1588
+          "line": 1321
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1589
+          "line": 1322
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1591
+          "line": 1324
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1596
+          "line": 1329
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1597
+          "line": 1330
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1599
+          "line": 1332
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1600
+          "line": 1333
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1602
+          "line": 1335
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1603
+          "line": 1336
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1605
+          "line": 1338
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 3744
+          "line": 3477
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 3745
+          "line": 3478
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 3986
+          "line": 3719
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 3999
+          "line": 3732
         },
         {
           "path": "src/renderer/components/gameScreenFloorClearFeedbackModel.ts",
@@ -83268,7 +83325,7 @@
       "readReferences": [
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 2267
+          "line": 2000
         },
         {
           "path": "src/renderer/store/tilePressController.ts",
@@ -83462,7 +83519,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1292
+          "line": 1025
         },
         {
           "path": "src/renderer/components/InventoryScreen.tsx",
@@ -83574,7 +83631,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1880
+          "line": 1613
         },
         {
           "path": "src/renderer/components/InventoryScreen.tsx",
@@ -84048,15 +84105,15 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1797
+          "line": 1530
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1857
+          "line": 1590
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1870
+          "line": 1603
         },
         {
           "path": "src/renderer/components/useGameScreenTraitRouteTargets.ts",
@@ -84237,15 +84294,15 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1798
+          "line": 1531
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1858
+          "line": 1591
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1871
+          "line": 1604
         },
         {
           "path": "src/renderer/components/useGameScreenTraitRouteTargets.ts",
@@ -84377,11 +84434,11 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1295
+          "line": 1028
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1336
+          "line": 1069
         },
         {
           "path": "src/shared/bonus-rewards.ts",
@@ -84506,27 +84563,27 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1415
+          "line": 1148
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1798
+          "line": 1531
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1858
+          "line": 1591
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1871
+          "line": 1604
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1895
+          "line": 1628
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 3719
+          "line": 3452
         },
         {
           "path": "src/renderer/components/InventoryScreen.tsx",
@@ -84660,75 +84717,75 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1006
+          "line": 1653
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1015
+          "line": 1654
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1109
+          "line": 3429
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1158
+          "line": 3436
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1920
+          "line": 3439
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1921
+          "line": 3456
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 3696
+          "line": 3458
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 3703
+          "line": 3459
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 3706
+          "line": 3460
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 3723
+          "line": 3470
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 3725
+          "line": 674
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 3726
+          "line": 675
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 3727
+          "line": 676
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 3737
+          "line": 723
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 941
+          "line": 739
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 942
+          "line": 748
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 943
+          "line": 842
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 990
+          "line": 891
         },
         {
           "path": "src/renderer/copy/relicDraftOffer.ts",
@@ -85175,11 +85232,11 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1280
+          "line": 1013
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1641
+          "line": 1374
         },
         {
           "path": "src/renderer/store/levelCompleteContinuationExecutor.ts",
@@ -85376,23 +85433,23 @@
       "readReferences": [
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1166
+          "line": 1374
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1168
+          "line": 899
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1178
+          "line": 901
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1203
+          "line": 911
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1641
+          "line": 936
         },
         {
           "path": "src/renderer/store/levelCompleteContinuationExecutor.ts",
@@ -85947,7 +86004,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 4097
+          "line": 3830
         },
         {
           "path": "src/renderer/components/ShopScreen.tsx",
@@ -86420,15 +86477,15 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 3751
+          "line": 3484
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 4095
+          "line": 3828
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 4097
+          "line": 3830
         },
         {
           "path": "src/renderer/components/ShopScreen.tsx",
@@ -86705,7 +86762,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1894
+          "line": 1627
         },
         {
           "path": "src/shared/board-power-actions.ts",
@@ -87453,35 +87510,35 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1308
+          "line": 1041
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1312
+          "line": 1045
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1322
+          "line": 1055
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1326
+          "line": 1059
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1775
+          "line": 1508
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 2255
+          "line": 1988
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 2256
+          "line": 1989
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 4651
+          "line": 4384
         },
         {
           "path": "src/renderer/components/gameScreenFloorClearFeedbackModel.ts",
@@ -88227,127 +88284,127 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1107
+          "line": 1360
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1159
+          "line": 1369
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1220
+          "line": 1447
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1229
+          "line": 1458
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1233
+          "line": 1493
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1240
+          "line": 1506
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1243
+          "line": 1536
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1252
+          "line": 1551
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1259
+          "line": 1554
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1627
+          "line": 1583
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1636
+          "line": 1584
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1714
+          "line": 1613
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1725
+          "line": 1652
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1760
+          "line": 1654
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1773
+          "line": 1656
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1803
+          "line": 1995
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1818
+          "line": 2004
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1821
+          "line": 2012
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1850
+          "line": 3217
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1851
+          "line": 3407
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1880
+          "line": 3468
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1919
+          "line": 423
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1921
+          "line": 725
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1923
+          "line": 840
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 2262
+          "line": 892
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 2271
+          "line": 953
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 2279
+          "line": 962
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 3484
+          "line": 966
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 3674
+          "line": 973
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 3735
+          "line": 976
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 446
+          "line": 985
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
@@ -89238,11 +89295,11 @@
       "readReferences": [
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1249
+          "line": 982
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1252
+          "line": 985
         },
         {
           "path": "src/shared/board-turn-event-facts.ts",
@@ -90308,7 +90365,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1880
+          "line": 1613
         },
         {
           "path": "src/renderer/store/runStartState.ts",
@@ -90348,10 +90405,10 @@
     {
       "id": "orchestration_budget:src/renderer/components/GameScreen.tsx",
       "path": "src/renderer/components/GameScreen.tsx",
-      "maxLines": 4750,
-      "maxImports": 61,
-      "lineCount": 4724,
-      "importCount": 61,
+      "maxLines": 4500,
+      "maxImports": 60,
+      "lineCount": 4457,
+      "importCount": 60,
       "withinBudget": true
     }
   ],
@@ -107182,6 +107239,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/useGameScreenBoardFloaterProjection.ts->symbol:src/renderer/components/useGameScreenBoardFloaterProjection.ts#useGameScreenBoardFloaterProjection",
+      "source": "file:src/renderer/components/useGameScreenBoardFloaterProjection.ts",
+      "target": "symbol:src/renderer/components/useGameScreenBoardFloaterProjection.ts#useGameScreenBoardFloaterProjection",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/useGameScreenPowerTileHints.ts->symbol:src/renderer/components/useGameScreenPowerTileHints.ts#useGameScreenPowerTileHints",
       "source": "file:src/renderer/components/useGameScreenPowerTileHints.ts",
       "target": "symbol:src/renderer/components/useGameScreenPowerTileHints.ts#useGameScreenPowerTileHints",
@@ -123109,7 +123172,7 @@
       "source": "orchestration_budget:src/renderer/components/GameScreen.tsx",
       "target": "file:src/renderer/components/GameScreen.tsx",
       "kind": "gates",
-      "label": "<=4750 lines, <=61 imports"
+      "label": "<=4500 lines, <=60 imports"
     },
     {
       "id": "grants:mechanic:economy.relic_favor->mechanic:progression.relic_draft:converts Favor into future relic picks",
@@ -129893,12 +129956,6 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/copy/matchScoreFloater.ts",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "file:src/renderer/copy/matchScoreFloater.ts",
-      "kind": "imports"
-    },
-    {
       "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/copy/mismatchFloater.ts",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "file:src/renderer/copy/mismatchFloater.ts",
@@ -130232,6 +130289,12 @@
       "id": "imports:src/renderer/components/gameScreenBoardModels.ts->src/renderer/components/gameScreenBoardFloaterModel.ts",
       "source": "file:src/renderer/components/gameScreenBoardModels.ts",
       "target": "file:src/renderer/components/gameScreenBoardFloaterModel.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/gameScreenBoardModels.ts->src/renderer/components/useGameScreenBoardFloaterProjection.ts",
+      "source": "file:src/renderer/components/gameScreenBoardModels.ts",
+      "target": "file:src/renderer/components/useGameScreenBoardFloaterProjection.ts",
       "kind": "imports"
     },
     {
@@ -134006,6 +134069,66 @@
       "id": "imports:src/renderer/components/TutorialPairMarkerPlane.tsx->src/renderer/components/tileShatter.ts",
       "source": "file:src/renderer/components/TutorialPairMarkerPlane.tsx",
       "target": "file:src/renderer/components/tileShatter.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/useGameScreenBoardFloaterProjection.test.ts->src/renderer/components/useGameScreenBoardFloaterProjection.ts",
+      "source": "file:src/renderer/components/useGameScreenBoardFloaterProjection.test.ts",
+      "target": "file:src/renderer/components/useGameScreenBoardFloaterProjection.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/useGameScreenBoardFloaterProjection.test.ts->src/renderer/store/matchScorePop.ts",
+      "source": "file:src/renderer/components/useGameScreenBoardFloaterProjection.test.ts",
+      "target": "file:src/renderer/store/matchScorePop.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/useGameScreenBoardFloaterProjection.ts->src/renderer/components/gameScreenBoardFeedbackModel.ts",
+      "source": "file:src/renderer/components/useGameScreenBoardFloaterProjection.ts",
+      "target": "file:src/renderer/components/gameScreenBoardFeedbackModel.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/useGameScreenBoardFloaterProjection.ts->src/renderer/components/gameScreenBoardFloaterModel.ts",
+      "source": "file:src/renderer/components/useGameScreenBoardFloaterProjection.ts",
+      "target": "file:src/renderer/components/gameScreenBoardFloaterModel.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/useGameScreenBoardFloaterProjection.ts->src/renderer/components/matchScoreFloaterTiming.ts",
+      "source": "file:src/renderer/components/useGameScreenBoardFloaterProjection.ts",
+      "target": "file:src/renderer/components/matchScoreFloaterTiming.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/useGameScreenBoardFloaterProjection.ts->src/renderer/copy/chainMomentum.ts",
+      "source": "file:src/renderer/components/useGameScreenBoardFloaterProjection.ts",
+      "target": "file:src/renderer/copy/chainMomentum.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/useGameScreenBoardFloaterProjection.ts->src/renderer/copy/matchScoreFloater.ts",
+      "source": "file:src/renderer/components/useGameScreenBoardFloaterProjection.ts",
+      "target": "file:src/renderer/copy/matchScoreFloater.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/useGameScreenBoardFloaterProjection.ts->src/renderer/copy/mismatchFloater.ts",
+      "source": "file:src/renderer/components/useGameScreenBoardFloaterProjection.ts",
+      "target": "file:src/renderer/copy/mismatchFloater.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/useGameScreenBoardFloaterProjection.ts->src/renderer/copy/traitInteractionLaneMap.ts",
+      "source": "file:src/renderer/components/useGameScreenBoardFloaterProjection.ts",
+      "target": "file:src/renderer/copy/traitInteractionLaneMap.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/useGameScreenBoardFloaterProjection.ts->src/renderer/store/matchScorePop.ts",
+      "source": "file:src/renderer/components/useGameScreenBoardFloaterProjection.ts",
+      "target": "file:src/renderer/store/matchScorePop.ts",
       "kind": "imports"
     },
     {
@@ -149321,375 +149444,319 @@
       "label": "L3418"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:activeContract:L1793",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:activeContract:L1526",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:activeContract",
       "kind": "reads",
-      "label": "L1793"
+      "label": "L1526"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:activeContract:L1854",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:activeContract:L1587",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:activeContract",
       "kind": "reads",
-      "label": "L1854"
+      "label": "L1587"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:activeContract:L1864",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:activeContract:L1597",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:activeContract",
       "kind": "reads",
-      "label": "L1864"
+      "label": "L1597"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:activeContract:L1891",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:activeContract:L1624",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:activeContract",
       "kind": "reads",
-      "label": "L1891"
+      "label": "L1624"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:activeMutators:L1217",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:activeMutators:L1020",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:activeMutators",
       "kind": "reads",
-      "label": "L1217"
+      "label": "L1020"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:activeMutators:L1247",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:activeMutators:L438",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:activeMutators",
       "kind": "reads",
-      "label": "L1247"
+      "label": "L438"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:activeMutators:L1252",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:activeMutators:L439",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:activeMutators",
       "kind": "reads",
-      "label": "L1252"
+      "label": "L439"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:activeMutators:L1262",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:activeMutators:L950",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:activeMutators",
       "kind": "reads",
-      "label": "L1262"
+      "label": "L950"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:activeMutators:L1263",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:activeMutators:L980",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:activeMutators",
       "kind": "reads",
-      "label": "L1263"
+      "label": "L980"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:activeMutators:L1264",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:activeMutators:L985",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:activeMutators",
       "kind": "reads",
-      "label": "L1264"
+      "label": "L985"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:activeMutators:L1287",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:activeMutators:L995",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:activeMutators",
       "kind": "reads",
-      "label": "L1287"
+      "label": "L995"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:activeMutators:L461",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:activeMutators:L996",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:activeMutators",
       "kind": "reads",
-      "label": "L461"
+      "label": "L996"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:activeMutators:L462",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:activeMutators:L997",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:activeMutators",
       "kind": "reads",
-      "label": "L462"
+      "label": "L997"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L1182",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L1014",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:board",
       "kind": "reads",
-      "label": "L1182"
+      "label": "L1014"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L1183",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L1015",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:board",
       "kind": "reads",
-      "label": "L1183"
+      "label": "L1015"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L1202",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L1016",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:board",
       "kind": "reads",
-      "label": "L1202"
+      "label": "L1016"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L1210",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L1018",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:board",
       "kind": "reads",
-      "label": "L1210"
+      "label": "L1018"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L1214",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L1019",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:board",
       "kind": "reads",
-      "label": "L1214"
+      "label": "L1019"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L1229",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L1344",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:board",
       "kind": "reads",
-      "label": "L1229"
+      "label": "L1344"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L1232",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L1466",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:board",
       "kind": "reads",
-      "label": "L1232"
+      "label": "L1466"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L1238",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L1471",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:board",
       "kind": "reads",
-      "label": "L1238"
+      "label": "L1471"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L1240",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L1489",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:board",
       "kind": "reads",
-      "label": "L1240"
+      "label": "L1489"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L1242",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L1504",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:board",
       "kind": "reads",
-      "label": "L1242"
+      "label": "L1504"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L1252",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L1505",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:board",
       "kind": "reads",
-      "label": "L1252"
+      "label": "L1505"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L1261",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L1507",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:board",
       "kind": "reads",
-      "label": "L1261"
+      "label": "L1507"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L1281",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L1524",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:board",
       "kind": "reads",
-      "label": "L1281"
+      "label": "L1524"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L1282",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L1527",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:board",
       "kind": "reads",
-      "label": "L1282"
+      "label": "L1527"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L1283",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L1528",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:board",
       "kind": "reads",
-      "label": "L1283"
+      "label": "L1528"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L1285",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L1534",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:board",
       "kind": "reads",
-      "label": "L1285"
+      "label": "L1534"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L1286",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L1575",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:board",
       "kind": "reads",
-      "label": "L1286"
+      "label": "L1575"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L1611",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L1583",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:board",
       "kind": "reads",
-      "label": "L1611"
+      "label": "L1583"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L1733",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L1593",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:board",
       "kind": "reads",
-      "label": "L1733"
+      "label": "L1593"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L1738",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L1599",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:board",
       "kind": "reads",
-      "label": "L1738"
+      "label": "L1599"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L1756",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L1617",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:board",
       "kind": "reads",
-      "label": "L1756"
+      "label": "L1617"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L1771",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L1621",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:board",
       "kind": "reads",
-      "label": "L1771"
+      "label": "L1621"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L1772",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L1630",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:board",
       "kind": "reads",
-      "label": "L1772"
+      "label": "L1630"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L1774",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L1685",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:board",
       "kind": "reads",
-      "label": "L1774"
+      "label": "L1685"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L1791",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L1976",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:board",
       "kind": "reads",
-      "label": "L1791"
+      "label": "L1976"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L1794",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L1977",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:board",
       "kind": "reads",
-      "label": "L1794"
+      "label": "L1977"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L1795",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L1978",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:board",
       "kind": "reads",
-      "label": "L1795"
+      "label": "L1978"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L1801",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L1979",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:board",
       "kind": "reads",
-      "label": "L1801"
+      "label": "L1979"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L1842",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L402",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:board",
       "kind": "reads",
-      "label": "L1842"
+      "label": "L402"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L1850",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L404",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:board",
       "kind": "reads",
-      "label": "L1850"
+      "label": "L404"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L1860",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L406",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:board",
       "kind": "reads",
-      "label": "L1860"
+      "label": "L406"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L1866",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L424",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:board",
       "kind": "reads",
-      "label": "L1866"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L1884",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:board",
-      "kind": "reads",
-      "label": "L1884"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L1888",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:board",
-      "kind": "reads",
-      "label": "L1888"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L1897",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:board",
-      "kind": "reads",
-      "label": "L1897"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L1952",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:board",
-      "kind": "reads",
-      "label": "L1952"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L2243",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:board",
-      "kind": "reads",
-      "label": "L2243"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L2244",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:board",
-      "kind": "reads",
-      "label": "L2244"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L2245",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:board",
-      "kind": "reads",
-      "label": "L2245"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L2246",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:board",
-      "kind": "reads",
-      "label": "L2246"
+      "label": "L424"
     },
     {
       "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L425",
@@ -149699,6 +149766,13 @@
       "label": "L425"
     },
     {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L426",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:board",
+      "kind": "reads",
+      "label": "L426"
+    },
+    {
       "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L427",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:board",
@@ -149706,249 +149780,473 @@
       "label": "L427"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L429",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L438",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:board",
       "kind": "reads",
-      "label": "L429"
+      "label": "L438"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L447",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L915",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:board",
       "kind": "reads",
-      "label": "L447"
+      "label": "L915"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L448",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L916",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:board",
       "kind": "reads",
-      "label": "L448"
+      "label": "L916"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L449",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L935",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:board",
       "kind": "reads",
-      "label": "L449"
+      "label": "L935"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L450",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L943",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:board",
       "kind": "reads",
-      "label": "L450"
+      "label": "L943"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L461",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L947",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:board",
       "kind": "reads",
-      "label": "L461"
+      "label": "L947"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:debugPeekActive:L2247",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L962",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:board",
+      "kind": "reads",
+      "label": "L962"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L965",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:board",
+      "kind": "reads",
+      "label": "L965"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L971",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:board",
+      "kind": "reads",
+      "label": "L971"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L973",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:board",
+      "kind": "reads",
+      "label": "L973"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L975",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:board",
+      "kind": "reads",
+      "label": "L975"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L985",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:board",
+      "kind": "reads",
+      "label": "L985"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:board:L994",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:board",
+      "kind": "reads",
+      "label": "L994"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:debugPeekActive:L1980",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:debugPeekActive",
       "kind": "reads",
-      "label": "L2247"
+      "label": "L1980"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:destroyPairCharges:L1907",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:destroyPairCharges:L1640",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:destroyPairCharges",
       "kind": "reads",
-      "label": "L1907"
+      "label": "L1640"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:dungeonRun:L1486",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:dungeonRun:L1219",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:dungeonRun",
       "kind": "reads",
-      "label": "L1486"
+      "label": "L1219"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:dungeonRun:L1487",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:dungeonRun:L1220",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:dungeonRun",
       "kind": "reads",
-      "label": "L1487"
+      "label": "L1220"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:dungeonRun:L1490",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:dungeonRun:L1223",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:dungeonRun",
       "kind": "reads",
-      "label": "L1490"
+      "label": "L1223"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:dungeonRun:L1605",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:dungeonRun:L1338",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:dungeonRun",
       "kind": "reads",
-      "label": "L1605"
+      "label": "L1338"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:endlessRiskWager:L1441",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:endlessRiskWager:L1174",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:endlessRiskWager",
       "kind": "reads",
-      "label": "L1441"
+      "label": "L1174"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:endlessRiskWager:L1442",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:endlessRiskWager:L1175",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:endlessRiskWager",
       "kind": "reads",
-      "label": "L1442"
+      "label": "L1175"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:featuredObjectiveStreak:L1449",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:featuredObjectiveStreak:L1182",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:featuredObjectiveStreak",
       "kind": "reads",
-      "label": "L1449"
+      "label": "L1182"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:featuredObjectiveStreak:L1457",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:featuredObjectiveStreak:L1190",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:featuredObjectiveStreak",
       "kind": "reads",
-      "label": "L1457"
+      "label": "L1190"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:featuredObjectiveStreak:L4606",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:featuredObjectiveStreak:L4339",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:featuredObjectiveStreak",
       "kind": "reads",
-      "label": "L4606"
+      "label": "L4339"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:findablesClaimedThisFloor:L1319",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:findablesClaimedThisFloor:L1052",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:findablesClaimedThisFloor",
       "kind": "reads",
-      "label": "L1319"
+      "label": "L1052"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:findablesTotalThisFloor:L1315",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:findablesTotalThisFloor:L1048",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:findablesTotalThisFloor",
       "kind": "reads",
-      "label": "L1315"
+      "label": "L1048"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:findablesTotalThisFloor:L1319",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:findablesTotalThisFloor:L1052",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:findablesTotalThisFloor",
       "kind": "reads",
-      "label": "L1319"
+      "label": "L1052"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:flashPairCharges:L1883",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:flashPairCharges:L1616",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:flashPairCharges",
       "kind": "reads",
-      "label": "L1883"
+      "label": "L1616"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:flashPairCharges:L1886",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:flashPairCharges:L1619",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:flashPairCharges",
       "kind": "reads",
-      "label": "L1886"
+      "label": "L1619"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:flashPairRevealedTileIds:L1254",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:flashPairRevealedTileIds:L987",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:flashPairRevealedTileIds",
       "kind": "reads",
-      "label": "L1254"
+      "label": "L987"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:flashPairRevealedTileIds:L1256",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:flashPairRevealedTileIds:L989",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:flashPairRevealedTileIds",
       "kind": "reads",
-      "label": "L1256"
+      "label": "L989"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:freeShuffleThisFloor:L1895",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:freeShuffleThisFloor:L1628",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:freeShuffleThisFloor",
       "kind": "reads",
-      "label": "L1895"
+      "label": "L1628"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:gambitAvailableThisFloor:L1257",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:gambitAvailableThisFloor:L990",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:gambitAvailableThisFloor",
       "kind": "reads",
-      "label": "L1257"
+      "label": "L990"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:gambitThirdFlipUsed:L1257",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:gambitThirdFlipUsed:L990",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:gambitThirdFlipUsed",
       "kind": "reads",
-      "label": "L1257"
+      "label": "L990"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:gameMode:L1280",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:gameMode:L1013",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:gameMode",
       "kind": "reads",
-      "label": "L1280"
+      "label": "L1013"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:gameMode:L1641",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:gameMode:L1374",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:gameMode",
       "kind": "reads",
-      "label": "L1641"
+      "label": "L1374"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:gameMode:L1712",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:gameMode:L1445",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:gameMode",
       "kind": "reads",
-      "label": "L1712"
+      "label": "L1445"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:gameplayEventJournal:L944",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:gameplayEventJournal:L677",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:gameplayEventJournal",
       "kind": "reads",
-      "label": "L944"
+      "label": "L677"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:gauntletDeadlineMs:L1711",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:gauntletDeadlineMs:L1444",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:gauntletDeadlineMs",
       "kind": "reads",
-      "label": "L1711"
+      "label": "L1444"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:gauntletDeadlineMs:L1712",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:gauntletDeadlineMs:L1445",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:gauntletDeadlineMs",
       "kind": "reads",
-      "label": "L1712"
+      "label": "L1445"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:gauntletDeadlineMs:L358",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:gauntletDeadlineMs:L335",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:gauntletDeadlineMs",
       "kind": "reads",
-      "label": "L358"
+      "label": "L335"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:gauntletDeadlineMs:L367",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:gauntletDeadlineMs:L344",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:gauntletDeadlineMs",
       "kind": "reads",
-      "label": "L367"
+      "label": "L344"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1000",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:lastLevelResult",
+      "kind": "reads",
+      "label": "L1000"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1002",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:lastLevelResult",
+      "kind": "reads",
+      "label": "L1002"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1003",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:lastLevelResult",
+      "kind": "reads",
+      "label": "L1003"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1005",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:lastLevelResult",
+      "kind": "reads",
+      "label": "L1005"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1007",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:lastLevelResult",
+      "kind": "reads",
+      "label": "L1007"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1008",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:lastLevelResult",
+      "kind": "reads",
+      "label": "L1008"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1009",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:lastLevelResult",
+      "kind": "reads",
+      "label": "L1009"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1010",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:lastLevelResult",
+      "kind": "reads",
+      "label": "L1010"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1024",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:lastLevelResult",
+      "kind": "reads",
+      "label": "L1024"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1025",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:lastLevelResult",
+      "kind": "reads",
+      "label": "L1025"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1027",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:lastLevelResult",
+      "kind": "reads",
+      "label": "L1027"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1029",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:lastLevelResult",
+      "kind": "reads",
+      "label": "L1029"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1034",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:lastLevelResult",
+      "kind": "reads",
+      "label": "L1034"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1039",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:lastLevelResult",
+      "kind": "reads",
+      "label": "L1039"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1084",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:lastLevelResult",
+      "kind": "reads",
+      "label": "L1084"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1086",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:lastLevelResult",
+      "kind": "reads",
+      "label": "L1086"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1089",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:lastLevelResult",
+      "kind": "reads",
+      "label": "L1089"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1090",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:lastLevelResult",
+      "kind": "reads",
+      "label": "L1090"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1091",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:lastLevelResult",
+      "kind": "reads",
+      "label": "L1091"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1093",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:lastLevelResult",
+      "kind": "reads",
+      "label": "L1093"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1096",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:lastLevelResult",
+      "kind": "reads",
+      "label": "L1096"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1100",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:lastLevelResult",
+      "kind": "reads",
+      "label": "L1100"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1101",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:lastLevelResult",
+      "kind": "reads",
+      "label": "L1101"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1102",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:lastLevelResult",
+      "kind": "reads",
+      "label": "L1102"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1105",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:lastLevelResult",
+      "kind": "reads",
+      "label": "L1105"
     },
     {
       "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1108",
@@ -149958,6 +150256,125 @@
       "label": "L1108"
     },
     {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1111",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:lastLevelResult",
+      "kind": "reads",
+      "label": "L1111"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1112",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:lastLevelResult",
+      "kind": "reads",
+      "label": "L1112"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1113",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:lastLevelResult",
+      "kind": "reads",
+      "label": "L1113"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1114",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:lastLevelResult",
+      "kind": "reads",
+      "label": "L1114"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1115",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:lastLevelResult",
+      "kind": "reads",
+      "label": "L1115"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1118",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:lastLevelResult",
+      "kind": "reads",
+      "label": "L1118"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1122",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:lastLevelResult",
+      "kind": "reads",
+      "label": "L1122"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1126",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:lastLevelResult",
+      "kind": "reads",
+      "label": "L1126"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1127",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:lastLevelResult",
+      "kind": "reads",
+      "label": "L1127"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1128",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:lastLevelResult",
+      "kind": "reads",
+      "label": "L1128"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1129",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:lastLevelResult",
+      "kind": "reads",
+      "label": "L1129"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1144",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:lastLevelResult",
+      "kind": "reads",
+      "label": "L1144"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1147",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:lastLevelResult",
+      "kind": "reads",
+      "label": "L1147"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1151",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:lastLevelResult",
+      "kind": "reads",
+      "label": "L1151"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1152",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:lastLevelResult",
+      "kind": "reads",
+      "label": "L1152"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1153",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:lastLevelResult",
+      "kind": "reads",
+      "label": "L1153"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1154",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:lastLevelResult",
+      "kind": "reads",
+      "label": "L1154"
+    },
+    {
       "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1157",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:lastLevelResult",
@@ -149965,1208 +150382,914 @@
       "label": "L1157"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1267",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1158",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:lastLevelResult",
-      "kind": "reads",
-      "label": "L1267"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1269",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:lastLevelResult",
-      "kind": "reads",
-      "label": "L1269"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1270",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:lastLevelResult",
-      "kind": "reads",
-      "label": "L1270"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1272",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:lastLevelResult",
-      "kind": "reads",
-      "label": "L1272"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1274",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:lastLevelResult",
-      "kind": "reads",
-      "label": "L1274"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1275",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:lastLevelResult",
-      "kind": "reads",
-      "label": "L1275"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1276",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:lastLevelResult",
-      "kind": "reads",
-      "label": "L1276"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1277",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:lastLevelResult",
-      "kind": "reads",
-      "label": "L1277"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1291",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:lastLevelResult",
-      "kind": "reads",
-      "label": "L1291"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1292",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:lastLevelResult",
-      "kind": "reads",
-      "label": "L1292"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1294",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:lastLevelResult",
-      "kind": "reads",
-      "label": "L1294"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1296",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:lastLevelResult",
-      "kind": "reads",
-      "label": "L1296"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1301",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:lastLevelResult",
-      "kind": "reads",
-      "label": "L1301"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1306",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:lastLevelResult",
-      "kind": "reads",
-      "label": "L1306"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1351",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:lastLevelResult",
-      "kind": "reads",
-      "label": "L1351"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1353",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:lastLevelResult",
-      "kind": "reads",
-      "label": "L1353"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1356",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:lastLevelResult",
-      "kind": "reads",
-      "label": "L1356"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1357",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:lastLevelResult",
-      "kind": "reads",
-      "label": "L1357"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1358",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:lastLevelResult",
-      "kind": "reads",
-      "label": "L1358"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1360",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:lastLevelResult",
-      "kind": "reads",
-      "label": "L1360"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1363",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:lastLevelResult",
-      "kind": "reads",
-      "label": "L1363"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1367",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:lastLevelResult",
-      "kind": "reads",
-      "label": "L1367"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1368",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:lastLevelResult",
-      "kind": "reads",
-      "label": "L1368"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1369",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:lastLevelResult",
-      "kind": "reads",
-      "label": "L1369"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1372",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:lastLevelResult",
-      "kind": "reads",
-      "label": "L1372"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1375",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:lastLevelResult",
-      "kind": "reads",
-      "label": "L1375"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1378",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:lastLevelResult",
-      "kind": "reads",
-      "label": "L1378"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1379",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:lastLevelResult",
-      "kind": "reads",
-      "label": "L1379"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1380",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:lastLevelResult",
-      "kind": "reads",
-      "label": "L1380"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1381",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:lastLevelResult",
-      "kind": "reads",
-      "label": "L1381"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1382",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:lastLevelResult",
-      "kind": "reads",
-      "label": "L1382"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1385",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:lastLevelResult",
-      "kind": "reads",
-      "label": "L1385"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1389",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:lastLevelResult",
-      "kind": "reads",
-      "label": "L1389"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1393",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:lastLevelResult",
-      "kind": "reads",
-      "label": "L1393"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1394",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:lastLevelResult",
-      "kind": "reads",
-      "label": "L1394"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1395",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:lastLevelResult",
-      "kind": "reads",
-      "label": "L1395"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1396",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:lastLevelResult",
-      "kind": "reads",
-      "label": "L1396"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1411",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:lastLevelResult",
-      "kind": "reads",
-      "label": "L1411"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1414",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:lastLevelResult",
-      "kind": "reads",
-      "label": "L1414"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1418",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:lastLevelResult",
-      "kind": "reads",
-      "label": "L1418"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1419",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:lastLevelResult",
-      "kind": "reads",
-      "label": "L1419"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1420",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:lastLevelResult",
-      "kind": "reads",
-      "label": "L1420"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1421",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:lastLevelResult",
-      "kind": "reads",
-      "label": "L1421"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1424",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:lastLevelResult",
-      "kind": "reads",
-      "label": "L1424"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1425",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:lastLevelResult",
-      "kind": "reads",
-      "label": "L1425"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1426",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:lastLevelResult",
-      "kind": "reads",
-      "label": "L1426"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1427",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:lastLevelResult",
-      "kind": "reads",
-      "label": "L1427"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1436",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:lastLevelResult",
-      "kind": "reads",
-      "label": "L1436"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1441",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:lastLevelResult",
-      "kind": "reads",
-      "label": "L1441"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1472",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:lastLevelResult",
-      "kind": "reads",
-      "label": "L1472"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1481",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:lastLevelResult",
-      "kind": "reads",
-      "label": "L1481"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1640",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:lastLevelResult",
-      "kind": "reads",
-      "label": "L1640"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1641",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:lastLevelResult",
-      "kind": "reads",
-      "label": "L1641"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1921",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:lastLevelResult",
-      "kind": "reads",
-      "label": "L1921"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L308",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:lastLevelResult",
-      "kind": "reads",
-      "label": "L308"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L309",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:lastLevelResult",
-      "kind": "reads",
-      "label": "L309"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L3702",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:lastLevelResult",
-      "kind": "reads",
-      "label": "L3702"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L3736",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:lastLevelResult",
-      "kind": "reads",
-      "label": "L3736"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L3775",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:lastLevelResult",
-      "kind": "reads",
-      "label": "L3775"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L4633",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:lastLevelResult",
-      "kind": "reads",
-      "label": "L4633"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L4639",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:lastLevelResult",
-      "kind": "reads",
-      "label": "L4639"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L4645",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:lastLevelResult",
-      "kind": "reads",
-      "label": "L4645"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L988",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:lastLevelResult",
-      "kind": "reads",
-      "label": "L988"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lives:L1762",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:lives",
-      "kind": "reads",
-      "label": "L1762"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lives:L2257",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:lives",
-      "kind": "reads",
-      "label": "L2257"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:nBackAnchorPairKey:L2264",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:nBackAnchorPairKey",
-      "kind": "reads",
-      "label": "L2264"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:peekRevealedTileIds:L1254",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:peekRevealedTileIds",
-      "kind": "reads",
-      "label": "L1254"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:peekRevealedTileIds:L1256",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:peekRevealedTileIds",
-      "kind": "reads",
-      "label": "L1256"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:pendingRouteCardPlan:L1473",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:pendingRouteCardPlan",
-      "kind": "reads",
-      "label": "L1473"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:pendingRouteCardPlan:L1583",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:pendingRouteCardPlan",
-      "kind": "reads",
-      "label": "L1583"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:pendingRouteCardPlan:L1584",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:pendingRouteCardPlan",
-      "kind": "reads",
-      "label": "L1584"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:pendingRouteCardPlan:L1587",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:pendingRouteCardPlan",
-      "kind": "reads",
-      "label": "L1587"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:pendingRouteCardPlan:L1588",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:pendingRouteCardPlan",
-      "kind": "reads",
-      "label": "L1588"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:pendingRouteCardPlan:L1589",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:pendingRouteCardPlan",
-      "kind": "reads",
-      "label": "L1589"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:pendingRouteCardPlan:L1591",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:pendingRouteCardPlan",
-      "kind": "reads",
-      "label": "L1591"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:pendingRouteCardPlan:L1596",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:pendingRouteCardPlan",
-      "kind": "reads",
-      "label": "L1596"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:pendingRouteCardPlan:L1597",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:pendingRouteCardPlan",
-      "kind": "reads",
-      "label": "L1597"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:pendingRouteCardPlan:L1599",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:pendingRouteCardPlan",
-      "kind": "reads",
-      "label": "L1599"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:pendingRouteCardPlan:L1600",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:pendingRouteCardPlan",
-      "kind": "reads",
-      "label": "L1600"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:pendingRouteCardPlan:L1602",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:pendingRouteCardPlan",
-      "kind": "reads",
-      "label": "L1602"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:pendingRouteCardPlan:L1603",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:pendingRouteCardPlan",
-      "kind": "reads",
-      "label": "L1603"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:pendingRouteCardPlan:L1605",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:pendingRouteCardPlan",
-      "kind": "reads",
-      "label": "L1605"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:pendingRouteCardPlan:L3744",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:pendingRouteCardPlan",
-      "kind": "reads",
-      "label": "L3744"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:pendingRouteCardPlan:L3745",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:pendingRouteCardPlan",
-      "kind": "reads",
-      "label": "L3745"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:pendingRouteCardPlan:L3986",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:pendingRouteCardPlan",
-      "kind": "reads",
-      "label": "L3986"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:pendingRouteCardPlan:L3999",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:pendingRouteCardPlan",
-      "kind": "reads",
-      "label": "L3999"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:pinnedTileIds:L2267",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:pinnedTileIds",
-      "kind": "reads",
-      "label": "L2267"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:powersUsedThisRun:L1292",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:powersUsedThisRun",
-      "kind": "reads",
-      "label": "L1292"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:practiceMode:L1880",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:practiceMode",
-      "kind": "reads",
-      "label": "L1880"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:regionShuffleCharges:L1797",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:regionShuffleCharges",
-      "kind": "reads",
-      "label": "L1797"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:regionShuffleCharges:L1857",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:regionShuffleCharges",
-      "kind": "reads",
-      "label": "L1857"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:regionShuffleCharges:L1870",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:regionShuffleCharges",
-      "kind": "reads",
-      "label": "L1870"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:regionShuffleFreeThisFloor:L1798",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:regionShuffleFreeThisFloor",
-      "kind": "reads",
-      "label": "L1798"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:regionShuffleFreeThisFloor:L1858",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:regionShuffleFreeThisFloor",
-      "kind": "reads",
-      "label": "L1858"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:regionShuffleFreeThisFloor:L1871",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:regionShuffleFreeThisFloor",
-      "kind": "reads",
-      "label": "L1871"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:relicFavorProgress:L1295",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:relicFavorProgress",
-      "kind": "reads",
-      "label": "L1295"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:relicFavorProgress:L1336",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:relicFavorProgress",
-      "kind": "reads",
-      "label": "L1336"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:relicIds:L1415",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:relicIds",
-      "kind": "reads",
-      "label": "L1415"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:relicIds:L1798",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:relicIds",
-      "kind": "reads",
-      "label": "L1798"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:relicIds:L1858",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:relicIds",
-      "kind": "reads",
-      "label": "L1858"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:relicIds:L1871",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:relicIds",
-      "kind": "reads",
-      "label": "L1871"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:relicIds:L1895",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:relicIds",
-      "kind": "reads",
-      "label": "L1895"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:relicIds:L3719",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:relicIds",
-      "kind": "reads",
-      "label": "L3719"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:relicOffer:L1006",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:relicOffer",
-      "kind": "reads",
-      "label": "L1006"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:relicOffer:L1015",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:relicOffer",
-      "kind": "reads",
-      "label": "L1015"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:relicOffer:L1109",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:relicOffer",
-      "kind": "reads",
-      "label": "L1109"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:relicOffer:L1158",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:relicOffer",
       "kind": "reads",
       "label": "L1158"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:relicOffer:L1920",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1159",
       "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:relicOffer",
-      "kind": "reads",
-      "label": "L1920"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:relicOffer:L1921",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:relicOffer",
-      "kind": "reads",
-      "label": "L1921"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:relicOffer:L3696",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:relicOffer",
-      "kind": "reads",
-      "label": "L3696"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:relicOffer:L3703",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:relicOffer",
-      "kind": "reads",
-      "label": "L3703"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:relicOffer:L3706",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:relicOffer",
-      "kind": "reads",
-      "label": "L3706"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:relicOffer:L3723",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:relicOffer",
-      "kind": "reads",
-      "label": "L3723"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:relicOffer:L3725",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:relicOffer",
-      "kind": "reads",
-      "label": "L3725"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:relicOffer:L3726",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:relicOffer",
-      "kind": "reads",
-      "label": "L3726"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:relicOffer:L3727",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:relicOffer",
-      "kind": "reads",
-      "label": "L3727"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:relicOffer:L3737",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:relicOffer",
-      "kind": "reads",
-      "label": "L3737"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:relicOffer:L941",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:relicOffer",
-      "kind": "reads",
-      "label": "L941"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:relicOffer:L942",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:relicOffer",
-      "kind": "reads",
-      "label": "L942"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:relicOffer:L943",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:relicOffer",
-      "kind": "reads",
-      "label": "L943"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:relicOffer:L990",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:relicOffer",
-      "kind": "reads",
-      "label": "L990"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:runRulesVersion:L1280",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:runRulesVersion",
-      "kind": "reads",
-      "label": "L1280"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:runRulesVersion:L1641",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:runRulesVersion",
-      "kind": "reads",
-      "label": "L1641"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:runSeed:L1166",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:runSeed",
-      "kind": "reads",
-      "label": "L1166"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:runSeed:L1168",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:runSeed",
-      "kind": "reads",
-      "label": "L1168"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:runSeed:L1178",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:runSeed",
-      "kind": "reads",
-      "label": "L1178"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:runSeed:L1203",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:runSeed",
-      "kind": "reads",
-      "label": "L1203"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:runSeed:L1641",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:runSeed",
-      "kind": "reads",
-      "label": "L1641"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:shopGold:L4097",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:shopGold",
-      "kind": "reads",
-      "label": "L4097"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:shopOffers:L3751",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:shopOffers",
-      "kind": "reads",
-      "label": "L3751"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:shopOffers:L4095",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:shopOffers",
-      "kind": "reads",
-      "label": "L4095"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:shopOffers:L4097",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:shopOffers",
-      "kind": "reads",
-      "label": "L4097"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:shuffleCharges:L1894",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:shuffleCharges",
-      "kind": "reads",
-      "label": "L1894"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:stats:L1308",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:stats",
-      "kind": "reads",
-      "label": "L1308"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:stats:L1312",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:stats",
-      "kind": "reads",
-      "label": "L1312"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:stats:L1322",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:stats",
-      "kind": "reads",
-      "label": "L1322"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:stats:L1326",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:stats",
-      "kind": "reads",
-      "label": "L1326"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:stats:L1775",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:stats",
-      "kind": "reads",
-      "label": "L1775"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:stats:L2255",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:stats",
-      "kind": "reads",
-      "label": "L2255"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:stats:L2256",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:stats",
-      "kind": "reads",
-      "label": "L2256"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:stats:L4651",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:stats",
-      "kind": "reads",
-      "label": "L4651"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:status:L1107",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:status",
-      "kind": "reads",
-      "label": "L1107"
-    },
-    {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:status:L1159",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:status",
+      "target": "run_state_field:lastLevelResult",
       "kind": "reads",
       "label": "L1159"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:status:L1220",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1160",
       "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:status",
+      "target": "run_state_field:lastLevelResult",
       "kind": "reads",
-      "label": "L1220"
+      "label": "L1160"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:status:L1229",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1169",
       "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:status",
+      "target": "run_state_field:lastLevelResult",
       "kind": "reads",
-      "label": "L1229"
+      "label": "L1169"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:status:L1233",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1174",
       "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:status",
+      "target": "run_state_field:lastLevelResult",
       "kind": "reads",
-      "label": "L1233"
+      "label": "L1174"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:status:L1240",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1205",
       "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:status",
+      "target": "run_state_field:lastLevelResult",
       "kind": "reads",
-      "label": "L1240"
+      "label": "L1205"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:status:L1243",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1214",
       "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:status",
+      "target": "run_state_field:lastLevelResult",
       "kind": "reads",
-      "label": "L1243"
+      "label": "L1214"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:status:L1252",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1373",
       "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:status",
+      "target": "run_state_field:lastLevelResult",
       "kind": "reads",
-      "label": "L1252"
+      "label": "L1373"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:status:L1259",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1374",
       "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:status",
+      "target": "run_state_field:lastLevelResult",
       "kind": "reads",
-      "label": "L1259"
+      "label": "L1374"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:status:L1627",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L1654",
       "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:status",
+      "target": "run_state_field:lastLevelResult",
       "kind": "reads",
-      "label": "L1627"
+      "label": "L1654"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:status:L1636",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L285",
       "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:status",
+      "target": "run_state_field:lastLevelResult",
       "kind": "reads",
-      "label": "L1636"
+      "label": "L285"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:status:L1714",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L286",
       "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:status",
+      "target": "run_state_field:lastLevelResult",
       "kind": "reads",
-      "label": "L1714"
+      "label": "L286"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:status:L1725",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L3435",
       "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:status",
+      "target": "run_state_field:lastLevelResult",
       "kind": "reads",
-      "label": "L1725"
+      "label": "L3435"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:status:L1760",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L3469",
       "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:status",
+      "target": "run_state_field:lastLevelResult",
       "kind": "reads",
-      "label": "L1760"
+      "label": "L3469"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:status:L1773",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L3508",
       "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:status",
+      "target": "run_state_field:lastLevelResult",
       "kind": "reads",
-      "label": "L1773"
+      "label": "L3508"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:status:L1803",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L4366",
       "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:status",
+      "target": "run_state_field:lastLevelResult",
       "kind": "reads",
-      "label": "L1803"
+      "label": "L4366"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:status:L1818",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L4372",
       "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:status",
+      "target": "run_state_field:lastLevelResult",
       "kind": "reads",
-      "label": "L1818"
+      "label": "L4372"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:status:L1821",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L4378",
       "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:status",
+      "target": "run_state_field:lastLevelResult",
       "kind": "reads",
-      "label": "L1821"
+      "label": "L4378"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:status:L1850",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L721",
       "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:status",
+      "target": "run_state_field:lastLevelResult",
       "kind": "reads",
-      "label": "L1850"
+      "label": "L721"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:status:L1851",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L841",
       "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:status",
+      "target": "run_state_field:lastLevelResult",
       "kind": "reads",
-      "label": "L1851"
+      "label": "L841"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:status:L1880",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lastLevelResult:L890",
       "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:status",
+      "target": "run_state_field:lastLevelResult",
       "kind": "reads",
-      "label": "L1880"
+      "label": "L890"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:status:L1919",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lives:L1495",
       "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:status",
+      "target": "run_state_field:lives",
       "kind": "reads",
-      "label": "L1919"
+      "label": "L1495"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:status:L1921",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:lives:L1990",
       "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:status",
+      "target": "run_state_field:lives",
       "kind": "reads",
-      "label": "L1921"
+      "label": "L1990"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:status:L1923",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:nBackAnchorPairKey:L1997",
       "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:status",
+      "target": "run_state_field:nBackAnchorPairKey",
       "kind": "reads",
-      "label": "L1923"
+      "label": "L1997"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:status:L2262",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:peekRevealedTileIds:L987",
       "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:status",
+      "target": "run_state_field:peekRevealedTileIds",
       "kind": "reads",
-      "label": "L2262"
+      "label": "L987"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:status:L2271",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:peekRevealedTileIds:L989",
       "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:status",
+      "target": "run_state_field:peekRevealedTileIds",
       "kind": "reads",
-      "label": "L2271"
+      "label": "L989"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:status:L2279",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:pendingRouteCardPlan:L1206",
       "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:status",
+      "target": "run_state_field:pendingRouteCardPlan",
       "kind": "reads",
-      "label": "L2279"
+      "label": "L1206"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:status:L3484",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:pendingRouteCardPlan:L1316",
       "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:status",
+      "target": "run_state_field:pendingRouteCardPlan",
+      "kind": "reads",
+      "label": "L1316"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:pendingRouteCardPlan:L1317",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:pendingRouteCardPlan",
+      "kind": "reads",
+      "label": "L1317"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:pendingRouteCardPlan:L1320",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:pendingRouteCardPlan",
+      "kind": "reads",
+      "label": "L1320"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:pendingRouteCardPlan:L1321",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:pendingRouteCardPlan",
+      "kind": "reads",
+      "label": "L1321"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:pendingRouteCardPlan:L1322",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:pendingRouteCardPlan",
+      "kind": "reads",
+      "label": "L1322"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:pendingRouteCardPlan:L1324",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:pendingRouteCardPlan",
+      "kind": "reads",
+      "label": "L1324"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:pendingRouteCardPlan:L1329",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:pendingRouteCardPlan",
+      "kind": "reads",
+      "label": "L1329"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:pendingRouteCardPlan:L1330",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:pendingRouteCardPlan",
+      "kind": "reads",
+      "label": "L1330"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:pendingRouteCardPlan:L1332",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:pendingRouteCardPlan",
+      "kind": "reads",
+      "label": "L1332"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:pendingRouteCardPlan:L1333",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:pendingRouteCardPlan",
+      "kind": "reads",
+      "label": "L1333"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:pendingRouteCardPlan:L1335",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:pendingRouteCardPlan",
+      "kind": "reads",
+      "label": "L1335"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:pendingRouteCardPlan:L1336",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:pendingRouteCardPlan",
+      "kind": "reads",
+      "label": "L1336"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:pendingRouteCardPlan:L1338",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:pendingRouteCardPlan",
+      "kind": "reads",
+      "label": "L1338"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:pendingRouteCardPlan:L3477",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:pendingRouteCardPlan",
+      "kind": "reads",
+      "label": "L3477"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:pendingRouteCardPlan:L3478",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:pendingRouteCardPlan",
+      "kind": "reads",
+      "label": "L3478"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:pendingRouteCardPlan:L3719",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:pendingRouteCardPlan",
+      "kind": "reads",
+      "label": "L3719"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:pendingRouteCardPlan:L3732",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:pendingRouteCardPlan",
+      "kind": "reads",
+      "label": "L3732"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:pinnedTileIds:L2000",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:pinnedTileIds",
+      "kind": "reads",
+      "label": "L2000"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:powersUsedThisRun:L1025",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:powersUsedThisRun",
+      "kind": "reads",
+      "label": "L1025"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:practiceMode:L1613",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:practiceMode",
+      "kind": "reads",
+      "label": "L1613"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:regionShuffleCharges:L1530",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:regionShuffleCharges",
+      "kind": "reads",
+      "label": "L1530"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:regionShuffleCharges:L1590",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:regionShuffleCharges",
+      "kind": "reads",
+      "label": "L1590"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:regionShuffleCharges:L1603",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:regionShuffleCharges",
+      "kind": "reads",
+      "label": "L1603"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:regionShuffleFreeThisFloor:L1531",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:regionShuffleFreeThisFloor",
+      "kind": "reads",
+      "label": "L1531"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:regionShuffleFreeThisFloor:L1591",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:regionShuffleFreeThisFloor",
+      "kind": "reads",
+      "label": "L1591"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:regionShuffleFreeThisFloor:L1604",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:regionShuffleFreeThisFloor",
+      "kind": "reads",
+      "label": "L1604"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:relicFavorProgress:L1028",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:relicFavorProgress",
+      "kind": "reads",
+      "label": "L1028"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:relicFavorProgress:L1069",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:relicFavorProgress",
+      "kind": "reads",
+      "label": "L1069"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:relicIds:L1148",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:relicIds",
+      "kind": "reads",
+      "label": "L1148"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:relicIds:L1531",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:relicIds",
+      "kind": "reads",
+      "label": "L1531"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:relicIds:L1591",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:relicIds",
+      "kind": "reads",
+      "label": "L1591"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:relicIds:L1604",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:relicIds",
+      "kind": "reads",
+      "label": "L1604"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:relicIds:L1628",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:relicIds",
+      "kind": "reads",
+      "label": "L1628"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:relicIds:L3452",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:relicIds",
+      "kind": "reads",
+      "label": "L3452"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:relicOffer:L1653",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:relicOffer",
+      "kind": "reads",
+      "label": "L1653"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:relicOffer:L1654",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:relicOffer",
+      "kind": "reads",
+      "label": "L1654"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:relicOffer:L3429",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:relicOffer",
+      "kind": "reads",
+      "label": "L3429"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:relicOffer:L3436",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:relicOffer",
+      "kind": "reads",
+      "label": "L3436"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:relicOffer:L3439",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:relicOffer",
+      "kind": "reads",
+      "label": "L3439"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:relicOffer:L3456",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:relicOffer",
+      "kind": "reads",
+      "label": "L3456"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:relicOffer:L3458",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:relicOffer",
+      "kind": "reads",
+      "label": "L3458"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:relicOffer:L3459",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:relicOffer",
+      "kind": "reads",
+      "label": "L3459"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:relicOffer:L3460",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:relicOffer",
+      "kind": "reads",
+      "label": "L3460"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:relicOffer:L3470",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:relicOffer",
+      "kind": "reads",
+      "label": "L3470"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:relicOffer:L674",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:relicOffer",
+      "kind": "reads",
+      "label": "L674"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:relicOffer:L675",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:relicOffer",
+      "kind": "reads",
+      "label": "L675"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:relicOffer:L676",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:relicOffer",
+      "kind": "reads",
+      "label": "L676"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:relicOffer:L723",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:relicOffer",
+      "kind": "reads",
+      "label": "L723"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:relicOffer:L739",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:relicOffer",
+      "kind": "reads",
+      "label": "L739"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:relicOffer:L748",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:relicOffer",
+      "kind": "reads",
+      "label": "L748"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:relicOffer:L842",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:relicOffer",
+      "kind": "reads",
+      "label": "L842"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:relicOffer:L891",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:relicOffer",
+      "kind": "reads",
+      "label": "L891"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:runRulesVersion:L1013",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:runRulesVersion",
+      "kind": "reads",
+      "label": "L1013"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:runRulesVersion:L1374",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:runRulesVersion",
+      "kind": "reads",
+      "label": "L1374"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:runSeed:L1374",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:runSeed",
+      "kind": "reads",
+      "label": "L1374"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:runSeed:L899",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:runSeed",
+      "kind": "reads",
+      "label": "L899"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:runSeed:L901",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:runSeed",
+      "kind": "reads",
+      "label": "L901"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:runSeed:L911",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:runSeed",
+      "kind": "reads",
+      "label": "L911"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:runSeed:L936",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:runSeed",
+      "kind": "reads",
+      "label": "L936"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:shopGold:L3830",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:shopGold",
+      "kind": "reads",
+      "label": "L3830"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:shopOffers:L3484",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:shopOffers",
       "kind": "reads",
       "label": "L3484"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:status:L3674",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:shopOffers:L3828",
       "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:status",
+      "target": "run_state_field:shopOffers",
       "kind": "reads",
-      "label": "L3674"
+      "label": "L3828"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:status:L3735",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:shopOffers:L3830",
       "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "run_state_field:status",
+      "target": "run_state_field:shopOffers",
       "kind": "reads",
-      "label": "L3735"
+      "label": "L3830"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:status:L446",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:shuffleCharges:L1627",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:shuffleCharges",
+      "kind": "reads",
+      "label": "L1627"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:stats:L1041",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:stats",
+      "kind": "reads",
+      "label": "L1041"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:stats:L1045",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:stats",
+      "kind": "reads",
+      "label": "L1045"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:stats:L1055",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:stats",
+      "kind": "reads",
+      "label": "L1055"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:stats:L1059",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:stats",
+      "kind": "reads",
+      "label": "L1059"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:stats:L1508",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:stats",
+      "kind": "reads",
+      "label": "L1508"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:stats:L1988",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:stats",
+      "kind": "reads",
+      "label": "L1988"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:stats:L1989",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:stats",
+      "kind": "reads",
+      "label": "L1989"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:stats:L4384",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:stats",
+      "kind": "reads",
+      "label": "L4384"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:status:L1360",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:status",
       "kind": "reads",
-      "label": "L446"
+      "label": "L1360"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:status:L1369",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:status",
+      "kind": "reads",
+      "label": "L1369"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:status:L1447",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:status",
+      "kind": "reads",
+      "label": "L1447"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:status:L1458",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:status",
+      "kind": "reads",
+      "label": "L1458"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:status:L1493",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:status",
+      "kind": "reads",
+      "label": "L1493"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:status:L1506",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:status",
+      "kind": "reads",
+      "label": "L1506"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:status:L1536",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:status",
+      "kind": "reads",
+      "label": "L1536"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:status:L1551",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:status",
+      "kind": "reads",
+      "label": "L1551"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:status:L1554",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:status",
+      "kind": "reads",
+      "label": "L1554"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:status:L1583",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:status",
+      "kind": "reads",
+      "label": "L1583"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:status:L1584",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:status",
+      "kind": "reads",
+      "label": "L1584"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:status:L1613",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:status",
+      "kind": "reads",
+      "label": "L1613"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:status:L1652",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:status",
+      "kind": "reads",
+      "label": "L1652"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:status:L1654",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:status",
+      "kind": "reads",
+      "label": "L1654"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:status:L1656",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:status",
+      "kind": "reads",
+      "label": "L1656"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:status:L1995",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:status",
+      "kind": "reads",
+      "label": "L1995"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:status:L2004",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:status",
+      "kind": "reads",
+      "label": "L2004"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:status:L2012",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:status",
+      "kind": "reads",
+      "label": "L2012"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:status:L3217",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:status",
+      "kind": "reads",
+      "label": "L3217"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:status:L3407",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:status",
+      "kind": "reads",
+      "label": "L3407"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:status:L3468",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:status",
+      "kind": "reads",
+      "label": "L3468"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:status:L423",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:status",
+      "kind": "reads",
+      "label": "L423"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:status:L725",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:status",
+      "kind": "reads",
+      "label": "L725"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:status:L840",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:status",
+      "kind": "reads",
+      "label": "L840"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:status:L892",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:status",
+      "kind": "reads",
+      "label": "L892"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:status:L953",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:status",
+      "kind": "reads",
+      "label": "L953"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:status:L962",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:status",
+      "kind": "reads",
+      "label": "L962"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:status:L966",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:status",
+      "kind": "reads",
+      "label": "L966"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:status:L973",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:status",
+      "kind": "reads",
+      "label": "L973"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:status:L976",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:status",
+      "kind": "reads",
+      "label": "L976"
+    },
+    {
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:status:L985",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "run_state_field:status",
+      "kind": "reads",
+      "label": "L985"
     },
     {
       "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:status:L992",
@@ -151176,25 +151299,25 @@
       "label": "L992"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:stickyBlockIndex:L1249",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:stickyBlockIndex:L982",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:stickyBlockIndex",
       "kind": "reads",
-      "label": "L1249"
+      "label": "L982"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:stickyBlockIndex:L1252",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:stickyBlockIndex:L985",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:stickyBlockIndex",
       "kind": "reads",
-      "label": "L1252"
+      "label": "L985"
     },
     {
-      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:wildMenuRun:L1880",
+      "id": "reads:file:src/renderer/components/GameScreen.tsx->run_state_field:wildMenuRun:L1613",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "run_state_field:wildMenuRun",
       "kind": "reads",
-      "label": "L1880"
+      "label": "L1613"
     },
     {
       "id": "reads:file:src/renderer/components/gameScreenDecisionSignals.tsx->run_state_field:dungeonKeys:L199",
@@ -181157,6 +181280,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/components/useGameScreenBoardFloaterProjection.ts->file:src/renderer/components/useGameScreenBoardFloaterProjection.test.ts",
+      "source": "file:src/renderer/components/useGameScreenBoardFloaterProjection.ts",
+      "target": "file:src/renderer/components/useGameScreenBoardFloaterProjection.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/components/useGameScreenTraitRouteTargets.ts->file:src/renderer/components/useGameScreenTraitRouteTargets.test.tsx",
       "source": "file:src/renderer/components/useGameScreenTraitRouteTargets.ts",
       "target": "file:src/renderer/components/useGameScreenTraitRouteTargets.test.tsx",
@@ -181556,6 +181685,12 @@
       "id": "tested_by:src/renderer/store/matchScorePop.ts->file:src/renderer/components/gameScreenBoardFloaterModel.test.ts",
       "source": "file:src/renderer/store/matchScorePop.ts",
       "target": "file:src/renderer/components/gameScreenBoardFloaterModel.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/store/matchScorePop.ts->file:src/renderer/components/useGameScreenBoardFloaterProjection.test.ts",
+      "source": "file:src/renderer/store/matchScorePop.ts",
+      "target": "file:src/renderer/components/useGameScreenBoardFloaterProjection.test.ts",
       "kind": "tested_by"
     },
     {

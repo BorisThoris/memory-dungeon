@@ -173,13 +173,13 @@ describe('AI repository model', () => {
                 path: 'src/renderer/components/GameScreen.tsx',
                 lineCount: expect.any(Number),
                 importCount: expect.any(Number),
-                maxLines: 4_750,
-                maxImports: 61,
+                maxLines: 4_500,
+                maxImports: 60,
                 withinBudget: true
             }
         ]);
-        expect(model.orchestrationBudgets[0]?.lineCount).toBeLessThanOrEqual(4_750);
-        expect(model.orchestrationBudgets[0]?.importCount).toBeLessThanOrEqual(61);
+        expect(model.orchestrationBudgets[0]?.lineCount).toBeLessThanOrEqual(4_500);
+        expect(model.orchestrationBudgets[0]?.importCount).toBeLessThanOrEqual(60);
         expect(model.files.find((file) => file.path === 'src/renderer/components/gameScreenBoardFeedbackModel.ts')).toMatchObject({
             testedBy: expect.arrayContaining([
                 'file:src/renderer/components/gameScreenBoardFeedbackModel.test.ts'
@@ -203,6 +203,11 @@ describe('AI repository model', () => {
         expect(model.files.find((file) => file.path === 'src/renderer/components/gameScreenBoardFloaterModel.ts')).toMatchObject({
             testedBy: expect.arrayContaining([
                 'file:src/renderer/components/gameScreenBoardFloaterModel.test.ts'
+            ])
+        });
+        expect(model.files.find((file) => file.path === 'src/renderer/components/useGameScreenBoardFloaterProjection.ts')).toMatchObject({
+            testedBy: expect.arrayContaining([
+                'file:src/renderer/components/useGameScreenBoardFloaterProjection.test.ts'
             ])
         });
         expect(model.gameplayCommands.every(
