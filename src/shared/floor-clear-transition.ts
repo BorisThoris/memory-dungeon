@@ -194,7 +194,6 @@ export const createFinalizeLevelTransition = ({
             pinnedTileIds: [],
             peekRevealedTileIds: [],
             flashPairRevealedTileIds: [],
-            regionShuffleRowArmed: null,
             stickyBlockIndex: null,
             dungeonRun,
             stats: {

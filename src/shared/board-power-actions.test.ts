@@ -272,8 +272,7 @@ describe('board power actions', () => {
                 tile('a2', 'A'),
                 tile('b1', 'B'),
                 tile('b2', 'B', 'matched')
-            ], 2),
-            regionShuffleRowArmed: 0
+            ], 2)
         });
 
         const wrongRow = applyRegionShuffle(state, 1);
@@ -282,7 +281,6 @@ describe('board power actions', () => {
         const shuffled = applyRegionShuffle(state, 0);
         expect(shuffled).not.toBe(state);
         expect(shuffled.regionShuffleCharges).toBe(0);
-        expect(shuffled.regionShuffleRowArmed).toBeNull();
         expect(shuffled.pinnedTileIds).toEqual([]);
         expect(shuffled.forgottenTileIdsThisFloor).toEqual(expect.arrayContaining(['a1', 'a2']));
         expect(shuffled.stats.shufflesUsed).toBe(1);
@@ -292,7 +290,6 @@ describe('board power actions', () => {
 
     it('normalizes malformed stat blocks before applying row shuffle accounting', () => {
         const shuffled = applyRegionShuffle(run({
-            regionShuffleRowArmed: 0,
             stats: Number.NaN as unknown as RunState['stats']
         }), 0);
 
@@ -317,7 +314,6 @@ describe('board power actions', () => {
 
         expect(swapped).not.toBe(state);
         expect(swapped.regionShuffleCharges).toBe(0);
-        expect(swapped.regionShuffleRowArmed).toBeNull();
         expect(swapped.powersUsedThisRun).toBe(true);
         expect(swapped.shuffleUsedThisFloor).toBe(true);
         expect(swapped.shuffleNonce).toBe(1);

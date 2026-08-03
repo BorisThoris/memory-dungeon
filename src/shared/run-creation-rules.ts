@@ -198,7 +198,6 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
             options.practiceMode || options.wildMenuRun ? 1 : 0,
         flashPairRevealedTileIds: [],
         regionShuffleCharges: INITIAL_REGION_SHUFFLE_CHARGES,
-        regionShuffleRowArmed: null,
         regionShuffleFreeThisFloor: false,
         pinsPlacedCountThisRun: 0,
         findablesClaimedThisFloor: 0,

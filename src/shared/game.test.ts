@@ -5317,7 +5317,6 @@ describe('dungeon cards', () => {
             pinnedTileIds: ['a1'],
             peekRevealedTileIds: ['a2'],
             flashPairRevealedTileIds: ['a1'],
-            regionShuffleRowArmed: 0,
             stickyBlockIndex: 1,
             board: {
                 ...baseRun.board!,
@@ -5348,7 +5347,6 @@ describe('dungeon cards', () => {
         expect(cleared.pinnedTileIds).toEqual([]);
         expect(cleared.peekRevealedTileIds).toEqual([]);
         expect(cleared.flashPairRevealedTileIds).toEqual([]);
-        expect(cleared.regionShuffleRowArmed).toBeNull();
         expect(cleared.stickyBlockIndex).toBeNull();
         expect(cleared.board!.enemyHazards![0]).toMatchObject({ state: 'defeated', hp: 0 });
         expect(cleared.enemyHazardsDefeatedThisFloor).toBe(1);

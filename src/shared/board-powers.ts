@@ -20,10 +20,7 @@ export {
     canSwapHiddenTiles
 } from './board-power-availability';
 
-export {
-    armRegionShuffleRow,
-    togglePinnedTile
-} from './board-power-state';
+export { togglePinnedTile } from './board-power-state';
 
 export {
     collectDestroyEligibleTileIds,

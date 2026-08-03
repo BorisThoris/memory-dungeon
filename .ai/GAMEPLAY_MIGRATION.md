@@ -685,7 +685,7 @@ Board-power arming is now treated as short-lived interface intent instead of dur
 3. At Graph v48, the serialized `RunState.strayRemoveArmed` field and the legacy pure helper's armed-by-default precondition remained temporarily during the strangler migration; Graph v62 removes both after proving the renderer boundary.
 4. A typed `board.stray_remove` command is self-contained player intent. Core reduction preserves every target, charge, route-anchor, completion-safety, and feedback rule without consulting interface state.
 5. Successful actions, mode changes, hazards, run transitions, and mutual-exclusion helpers clear the transient flag without changing replayable run state.
-6. Region Shuffle already submits a row directly through a typed command. Its unused renderer arm action and state writer were removed instead of formalizing dead state.
+6. Region Shuffle already submits a row directly through a typed command. Graph v48 removed its unused renderer arm action and state writer; the durable compatibility field/helper were subsequently removed in Graph v63.
 7. Source-boundary tests reject live renderer reads of the serialized Stray arm field and reject reintroduction of the dead Region Shuffle arm action, while behavioral tests prove command independence and transient-state cleanup.
 
 Graph v48 records transient intent ownership, typed-command independence from UI arm flags, the no-live-serialized-arm boundary, and direct Region Shuffle row commands across the core, store, presentation, and test evidence.
@@ -892,6 +892,19 @@ The temporary compatibility seam from Graph v48 is now closed:
 
 Graph v62 records the no-serialized-arm invariant on both Stray Remove and typed tile input without changing player-facing rules or replay semantics.
 
+## Sixty-third vertical slice: Direct Region Shuffle Row Ownership
+
+The second obsolete board-power intent seam is now closed:
+
+1. `RunState.regionShuffleRowArmed` is removed from the durable contract, run creation, floor transitions, and action results. A selected row was never gameplay state: live UI already constructs `board.region_shuffle` with its `rowIndex` directly.
+2. The uncalled `armRegionShuffleRow` helper and its public barrel exports are removed. `applyRegionShuffle` remains the single pure legality/consequence path, shared by typed command reduction and compatibility callers.
+3. Row shuffle and Tile Swap no longer write a ceremonial null field after success. Their charge, free-use, nonce, Pin cleanup, memory disruption, objective, feedback, fairness, and replay behavior is unchanged.
+4. Source-boundary coverage rejects both the field and helper across durable run/core sources. The renderer still proves direct typed row submission and explicitly rejects resurrection of the old renderer arm action.
+5. Save schema remains 6 because active `RunState` is not persisted; the existing legacy-`currentRun` normalization fixture now includes both retired arm fields and proves they are discarded.
+6. Regeneration removes the retired helper/export symbols and records 10,703 relationships with the same 27 player-visible states and zero diagnostics.
+
+Graph v63 records the no-serialized-row-arm invariant on Region Shuffle and typed tile input, completing direct row ownership without changing player-facing rules.
+
 ## Current slice status
 
 Implemented in the Conduit Cartographer vertical slice:
@@ -911,5 +924,5 @@ Implemented in the Conduit Cartographer vertical slice:
 Still required before the vertical slice is complete:
 
 - extend the shared player-visible registry when additional gameplay ownership enters the core, rather than adding renderer or model-only field lists;
-- use Graph v62 diagnostics and nine-build traces to select the next least-overlapping cohesive loop or architectural ownership seam, without presenting simulator survival as human win-rate proof;
+- use Graph v63 diagnostics and nine-build traces to select the next least-overlapping cohesive loop or architectural ownership seam, without presenting simulator survival as human win-rate proof;
 - continue migrating cohesive player builds rather than adding isolated definitions, using the graph diagnostics to choose the next least-overlapping loop.

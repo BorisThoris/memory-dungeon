@@ -96,7 +96,6 @@ export const createNextFloorRunState = (
         safeHazardWardsUsedThisFloor: 0,
         shiftingSpotlightNonce: 0,
         flashPairRevealedTileIds: [],
-        regionShuffleRowArmed: null,
         regionShuffleCharges: INITIAL_REGION_SHUFFLE_CHARGES,
         traitRouteObjectiveProgressThisFloor: 0,
         traitRouteObjectiveRequiredThisFloor: traitRouteObjective?.required ?? 0,

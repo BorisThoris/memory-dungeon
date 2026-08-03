@@ -1046,8 +1046,6 @@ export interface RunState {
     flashPairRevealedTileIds: string[];
     /** GP-H01: charges for shuffling a single row or swapping two hidden tiles. */
     regionShuffleCharges: number;
-    /** GP-H01: arm row index or null. */
-    regionShuffleRowArmed: number | null;
     /** First region shuffle or tile swap this floor free when relic (GP-R03). */
     regionShuffleFreeThisFloor: boolean;
     /** GP-C01: cumulative pins placed this run (for maxPinsTotalRun contract). */

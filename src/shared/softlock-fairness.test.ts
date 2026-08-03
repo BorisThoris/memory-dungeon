@@ -1126,7 +1126,6 @@ describe('REG-087 action eligibility edge cases', () => {
 
         expect(afterRowShuffle).not.toBe(rowShuffleRun);
         expectRunFair(afterRowShuffle);
-        expect(afterRowShuffle.regionShuffleRowArmed).toBeNull();
 
         const tileSwapRun = playableRun(
             createNewRun(0, {
@@ -1140,7 +1139,6 @@ describe('REG-087 action eligibility edge cases', () => {
 
         expect(afterTileSwap).not.toBe(tileSwapRun);
         expectRunFair(afterTileSwap);
-        expect(afterTileSwap.regionShuffleRowArmed).toBeNull();
     });
 
     it('preserves completion routes across generated board-power permutations', () => {

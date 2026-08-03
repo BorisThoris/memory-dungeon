@@ -106,9 +106,9 @@
 | Shuffle charges / nonce | `shuffleCharges`, `shuffleNonce` | — | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
 | Free shuffle per floor (relic) | `freeShuffleThisFloor` | — | [epic-relics](./epic-relics.md) |
 | Scholar: shuffle used flag | `shuffleUsedThisFloor` | — | [epic-scoring-objectives](./epic-scoring-objectives.md) |
-| Region shuffle | `canRegionShuffle`, `canRegionShuffleRow`, legacy `armRegionShuffleRow`, `applyRegionShuffle` | direct typed `shuffleRegionRow`; no renderer arm action | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
+| Region shuffle | `canRegionShuffle`, `canRegionShuffleRow`, `applyRegionShuffle`; typed command carries the chosen row directly | direct typed `shuffleRegionRow`; no renderer or serialized arm state | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
 | Tile swap | `canSwapHiddenTiles`, `applyTileSwap` | `toggleTileSwapArmed`, `pressTile` | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
-| Region charges / arm row / free first | `regionShuffleCharges`, `regionShuffleRowArmed`, `regionShuffleFreeThisFloor`; also spent by tile swap | — | [epic-relics](./epic-relics.md) |
+| Region charges / free first | `regionShuffleCharges`, `regionShuffleFreeThisFloor`; also spent by tile swap | — | [epic-relics](./epic-relics.md) |
 | Destroy pair | `applyDestroyPair`, `canDestroyPair` | `pressTile` when armed | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
 | Destroy-denied route rewards | `applyDestroyPair` clears route metadata before reward resolution | `pressTile` when armed | [epic-route-world-pipeline](./epic-route-world-pipeline.md) |
 | Destroy charges | `destroyPairCharges` | — | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
@@ -298,7 +298,6 @@ Source: [`RunState`](../../src/shared/contracts.ts) interface.
 | `flashPairCharges` | Practice / wild flash reveal | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
 | `flashPairRevealedTileIds` | Tiles shown by flash | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
 | `regionShuffleCharges` | Row shuffle / tile swap budget | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
-| `regionShuffleRowArmed` | Pending row index | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
 | `regionShuffleFreeThisFloor` | Relic free row shuffle or tile swap | [epic-relics](./epic-relics.md) |
 | `pinsPlacedCountThisRun` | Contract pin cap | [epic-contracts-challenge-runs](./epic-contracts-challenge-runs.md) |
 | `findablesClaimedThisFloor` | Successful findable pickup matches this floor | [epic-mutators](./epic-mutators.md) |

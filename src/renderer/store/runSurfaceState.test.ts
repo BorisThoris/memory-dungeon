@@ -83,6 +83,7 @@ describe('run surface state helpers', () => {
             'src/shared/contracts.ts',
             'src/shared/run-creation-rules.ts',
             'src/shared/floor-clear-transition.ts',
+            'src/shared/next-floor-run-state-rules.ts',
             'src/shared/board-power-state.ts',
             'src/shared/board-power-actions.ts',
             'src/shared/board-powers.ts',
@@ -104,6 +105,8 @@ describe('run surface state helpers', () => {
         expect(rendererSources.join('\n')).toContain('strayRemoveArmed');
         expect(durableRunSources.join('\n')).not.toContain('strayRemoveArmed');
         expect(durableRunSources.join('\n')).not.toContain('toggleStrayRemoveArmed');
+        expect(durableRunSources.join('\n')).not.toContain('regionShuffleRowArmed');
+        expect(durableRunSources.join('\n')).not.toContain('armRegionShuffleRow');
         expect(rendererSources.join('\n')).not.toContain('armRegionShuffleRowPick');
         expect(rendererSources.join('\n')).not.toContain('createRegionShuffleArmSurfaceResult');
     });
@@ -500,7 +503,6 @@ describe('run surface state helpers', () => {
         const shuffled = createRegionShuffleSurfaceResult({ row: 0, run: activeRun, view: 'playing' });
         expect(shuffled.kind).toBe('applied');
         if (shuffled.kind === 'applied') {
-            expect(shuffled.patch.run.regionShuffleRowArmed).toBeNull();
             expect(shuffled.patch.run.shuffleNonce).toBe(activeRun.shuffleNonce + 1);
             expect(shuffled.patch.run.gameplayCommandJournal).toEqual([
                 expect.objectContaining({ type: 'board.region_shuffle', rowIndex: 0 })
