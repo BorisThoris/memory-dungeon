@@ -952,6 +952,23 @@ The compiler-derived field index now enforces the architecture boundary it descr
 
 Graph v66 turns “the core owns run state” into a source-derived build invariant while allowing React and Zustand to retain presentation and application coordination.
 
+## Sixty-seventh vertical slice: Source-Derived Renderer Orchestration Budget
+
+The model now turns the explicit oversized-component migration requirement into an incremental source-derived gate:
+
+1. Model schema v6 publishes queryable `orchestration_budget:*` nodes derived from the same indexed file `lineCount` and unique import graph used by repository queries.
+2. Each budget has configured line/import ceilings, its current source metrics, a `withinBudget` result, and a typed `gates` relationship to the guarded file.
+3. Missing budget targets and exceeded ceilings are zero-tolerance diagnostics; validation recomputes the report from indexed files so a hand-edited generated artifact cannot claim compliance.
+4. The first budget guards `GameScreen.tsx` at 6,600 modeled lines and 62 direct imports. This is a ratcheting ceiling for continued extraction, not a claim that the component is fully decomposed.
+5. A 279-line pure match/mismatch lane model moved into `gameScreenBoardFeedbackModel.ts`, covering persisted chip/lane normalization, accessibility labels, action cues, beat counts, audio cues, and screen cues.
+6. `GameScreen` now imports that focused presentation contract instead of owning it inline, dropping from 6,812 to 6,553 physical lines while retaining its React/Pixi coordination role.
+7. Dedicated unit tests prove malformed persisted presentation data is filtered and that match, mismatch, reward-forecast, and payoff-stack outputs remain multimodally coherent.
+8. All 67 existing `GameScreen` tests remain green, including score/mismatch floaters, chain cashouts, floor-clear feedback, route decisions, and relic-draft presentation.
+9. Graph v67 records source metrics, the orchestration budget report, the extracted model/test, and line/import ceiling guards on the executable AI-model gate.
+10. Regeneration records 127 active-run fields, zero production renderer run-state writes, zero orchestration violations, all 34 commands and 54 events, 15,609 relationships, 27 player-visible states, and zero diagnostics.
+
+Graph v67 makes oversized renderer decomposition monotonic and machine-enforced while preserving the playable screen and its feedback behavior.
+
 ## Current slice status
 
 Implemented in the Conduit Cartographer vertical slice:
@@ -971,5 +988,5 @@ Implemented in the Conduit Cartographer vertical slice:
 Still required before the vertical slice is complete:
 
 - extend the shared player-visible registry when additional gameplay ownership enters the core, rather than adding renderer or model-only field lists;
-- use Graph v66 diagnostics and nine-build traces to select the next least-overlapping cohesive loop or architectural ownership seam, without presenting simulator survival as human win-rate proof;
+- use Graph v67 diagnostics, orchestration budgets, and nine-build traces to select the next least-overlapping cohesive loop or architectural ownership seam, without presenting simulator survival as human win-rate proof;
 - continue migrating cohesive player builds rather than adding isolated definitions, using the graph diagnostics to choose the next least-overlapping loop.

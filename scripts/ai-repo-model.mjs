@@ -20,7 +20,7 @@ import ts from 'typescript';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const defaultRepoRoot = path.resolve(__dirname, '..');
 export const AI_REPO_MODEL_PATH = '.ai/repo-model.json';
-const MODEL_VERSION = 5;
+const MODEL_VERSION = 6;
 const GENERATED_PATHS = new Set([AI_REPO_MODEL_PATH]);
 const CONTENT_REGISTRIES = [
     { kind: 'build_archetype', file: 'src/shared/relics.ts', variable: 'RELIC_BUILD_ARCHETYPE_ORDER', mechanicPrefix: 'build' },
@@ -45,6 +45,13 @@ const GAMEPLAY_PROTOCOL_COVERAGE_TEST_EXCLUSIONS = new Set([
     'src/shared/gameplay-interaction-graph.test.ts'
 ]);
 const RUN_STATE_WRITE_ACCESS_KINDS = new Set(['direct_assignment', 'state_construction']);
+const ORCHESTRATION_FILE_BUDGETS = [
+    {
+        path: 'src/renderer/components/GameScreen.tsx',
+        maxLines: 6_600,
+        maxImports: 62
+    }
+];
 
 const toPosix = (value) => value.split(path.sep).join('/');
 const fromRoot = (repoRoot, value) => toPosix(path.relative(repoRoot, path.normalize(value)));
@@ -351,6 +358,38 @@ const rendererRunStateWriteLocations = (runStateFields) => {
     return [...byLocation.values()]
         .map((location) => ({ ...location, fields: uniqueSorted(location.fields) }))
         .sort((a, b) => `${a.path}:${a.line}:${a.accessKind}`.localeCompare(`${b.path}:${b.line}:${b.accessKind}`));
+};
+
+const buildOrchestrationBudgetIndex = (files) => {
+    const filesByPath = new Map(files.map((file) => [file.path, file]));
+    const budgets = ORCHESTRATION_FILE_BUDGETS.map((budget) => {
+        const file = filesByPath.get(budget.path);
+        const lineCount = file?.lineCount ?? null;
+        const importCount = file?.imports.length ?? null;
+        return {
+            id: `orchestration_budget:${budget.path}`,
+            ...budget,
+            lineCount,
+            importCount,
+            withinBudget:
+                lineCount !== null &&
+                importCount !== null &&
+                lineCount <= budget.maxLines &&
+                importCount <= budget.maxImports
+        };
+    });
+    const relationships = budgets.flatMap((budget) =>
+        budget.lineCount === null
+            ? []
+            : [{
+                  id: `gates:${budget.id}->${fileId(budget.path)}`,
+                  source: budget.id,
+                  target: fileId(budget.path),
+                  kind: 'gates',
+                  label: `<=${budget.maxLines} lines, <=${budget.maxImports} imports`
+              }]
+    );
+    return { budgets, relationships };
 };
 
 const isZodLiteralCall = (node) =>
@@ -818,7 +857,16 @@ const buildGameplayIndex = (repoRoot, playerVisibleStates) => {
     return { mechanics, states: normalizedStates, relationships, graph };
 };
 
-const buildDiagnostics = (repoRoot, gameplay, content, playerVisibleStates, runStateFields, gameplayCommands, gameplayEvents) => {
+const buildDiagnostics = (
+    repoRoot,
+    gameplay,
+    content,
+    playerVisibleStates,
+    runStateFields,
+    gameplayCommands,
+    gameplayEvents,
+    orchestrationBudgets
+) => {
     const diagnostics = [];
     const mechanicIds = new Set(gameplay.mechanics.map((mechanic) => mechanic.mechanicId));
     const gameplayDegree = new Map(gameplay.mechanics.map((mechanic) => [mechanic.mechanicId, 0]));
@@ -885,6 +933,23 @@ const buildDiagnostics = (repoRoot, gameplay, content, playerVisibleStates, runS
             subject: `${location.path}:L${location.line}`,
             detail: `Renderer ${location.accessKind} writes core-owned RunState fields: ${location.fields.join(', ')}.`
         });
+    }
+    for (const budget of orchestrationBudgets) {
+        if (budget.lineCount === null || budget.importCount === null) {
+            diagnostics.push({
+                severity: 'error',
+                code: 'orchestration_budget_file_missing',
+                subject: budget.path,
+                detail: 'Configured orchestration budget has no indexed source file.'
+            });
+        } else if (!budget.withinBudget) {
+            diagnostics.push({
+                severity: 'error',
+                code: 'orchestration_budget_exceeded',
+                subject: budget.path,
+                detail: `${budget.lineCount}/${budget.maxLines} lines and ${budget.importCount}/${budget.maxImports} imports.`
+            });
+        }
     }
     for (const command of gameplayCommands) {
         if (command.handlerReferences.length === 0) {
@@ -955,6 +1020,7 @@ export const buildAiRepoModel = (repoRoot = defaultRepoRoot) => {
     const playerVisibleStates = new Set(readLiteralRegistryValues(repoRoot, PLAYER_VISIBLE_STATE_REGISTRY));
     const gameplay = buildGameplayIndex(repoRoot, playerVisibleStates);
     const rendererRunStateWrites = rendererRunStateWriteLocations(code.runStateFields);
+    const orchestration = buildOrchestrationBudgetIndex(code.files);
     const diagnostics = buildDiagnostics(
         repoRoot,
         gameplay,
@@ -962,9 +1028,15 @@ export const buildAiRepoModel = (repoRoot = defaultRepoRoot) => {
         playerVisibleStates,
         code.runStateFields,
         code.gameplayCommands,
-        code.gameplayEvents
+        code.gameplayEvents,
+        orchestration.budgets
     );
-    const relationships = [...code.relationships, ...content.relationships, ...gameplay.relationships].sort((a, b) => a.id.localeCompare(b.id));
+    const relationships = [
+        ...code.relationships,
+        ...content.relationships,
+        ...gameplay.relationships,
+        ...orchestration.relationships
+    ].sort((a, b) => a.id.localeCompare(b.id));
     return {
         schemaVersion: MODEL_VERSION,
         generator: 'scripts/ai-repo-model.mjs',
@@ -979,6 +1051,7 @@ export const buildAiRepoModel = (repoRoot = defaultRepoRoot) => {
             runStateFieldCount: code.runStateFields.length,
             dormantRunStateFieldCount: code.runStateFields.filter((field) => field.readReferences.length === 0).length,
             rendererRunStateWriteCount: rendererRunStateWrites.length,
+            orchestrationBudgetViolationCount: orchestration.budgets.filter((budget) => !budget.withinBudget).length,
             gameplayCommandTypeCount: code.gameplayCommands.length,
             gameplayEventTypeCount: code.gameplayEvents.length,
             unhandledGameplayCommandTypeCount: code.gameplayCommands.filter((command) => command.handlerReferences.length === 0).length,
@@ -996,6 +1069,7 @@ export const buildAiRepoModel = (repoRoot = defaultRepoRoot) => {
         mechanics: gameplay.mechanics,
         states: gameplay.states,
         runStateFields: code.runStateFields,
+        orchestrationBudgets: orchestration.budgets,
         gameplayCommands: code.gameplayCommands,
         gameplayEvents: code.gameplayEvents,
         playerVisibleStates: [...playerVisibleStates].sort((a, b) => a.localeCompare(b)),
@@ -1022,6 +1096,17 @@ export const validateAiRepoModel = (model) => {
     }
     if (rendererRunStateWriteLocations(runStateFields).length !== model.repository.rendererRunStateWriteCount) {
         issues.push('repository.rendererRunStateWriteCount does not match runStateFields.');
+    }
+    const orchestrationBudgets = Array.isArray(model.orchestrationBudgets) ? model.orchestrationBudgets : [];
+    const expectedOrchestrationBudgets = buildOrchestrationBudgetIndex(model.files).budgets;
+    if (JSON.stringify(orchestrationBudgets) !== JSON.stringify(expectedOrchestrationBudgets)) {
+        issues.push('orchestrationBudgets does not match configured source-file budgets.');
+    }
+    if (
+        orchestrationBudgets.filter((budget) => !budget.withinBudget).length !==
+        model.repository.orchestrationBudgetViolationCount
+    ) {
+        issues.push('repository.orchestrationBudgetViolationCount does not match orchestrationBudgets.');
     }
     const gameplayCommands = Array.isArray(model.gameplayCommands) ? model.gameplayCommands : [];
     const gameplayEvents = Array.isArray(model.gameplayEvents) ? model.gameplayEvents : [];
@@ -1071,6 +1156,7 @@ export const validateAiRepoModel = (model) => {
         ...model.mechanics.map((node) => node.id),
         ...model.states.map((node) => node.id),
         ...runStateFields.map((node) => node.id),
+        ...orchestrationBudgets.map((node) => node.id),
         ...gameplayCommands.map((node) => node.id),
         ...gameplayEvents.map((node) => node.id)
     ];
@@ -1105,6 +1191,7 @@ export const queryAiRepoModel = (model, query, limit = 40) => {
         ...model.mechanics.map((item) => ({ type: 'mechanic', ...item })),
         ...model.states.map((item) => ({ type: 'state', ...item })),
         ...(model.runStateFields ?? []).map((item) => ({ type: 'run_state_field', ...item })),
+        ...(model.orchestrationBudgets ?? []).map((item) => ({ type: 'orchestration_budget', ...item })),
         ...(model.gameplayCommands ?? []).map((item) => ({ type: 'gameplay_command', ...item })),
         ...(model.gameplayEvents ?? []).map((item) => ({ type: 'gameplay_event', ...item }))
     ];

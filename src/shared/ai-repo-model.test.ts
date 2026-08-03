@@ -15,6 +15,7 @@ type AiRepoModel = {
         runStateFieldCount: number;
         dormantRunStateFieldCount: number;
         rendererRunStateWriteCount: number;
+        orchestrationBudgetViolationCount: number;
         gameplayCommandTypeCount: number;
         gameplayEventTypeCount: number;
         unhandledGameplayCommandTypeCount: number;
@@ -23,7 +24,7 @@ type AiRepoModel = {
         playerVisibleStateCount: number;
         relationshipCount: number;
     };
-    files: { id: string; path: string; testedBy: string[] }[];
+    files: { id: string; path: string; lineCount: number; imports: string[]; testedBy: string[] }[];
     symbols: { id: string; file: string; line: number; endLine: number }[];
     content: { id: string; kind: string; expectedMechanicId: string; source: { path: string; line: number | null } }[];
     mechanics: { id: string; evidence: { path: string; line: number | null }[]; tests: { path: string; line: number | null }[] }[];
@@ -38,6 +39,15 @@ type AiRepoModel = {
             line: number;
             accessKind: 'direct_assignment' | 'state_construction';
         }[];
+    }[];
+    orchestrationBudgets: {
+        id: string;
+        path: string;
+        lineCount: number | null;
+        importCount: number | null;
+        maxLines: number;
+        maxImports: number;
+        withinBudget: boolean;
     }[];
     gameplayCommands: {
         id: string;
@@ -80,7 +90,7 @@ describe('AI repository model', () => {
         ).not.toThrow();
 
         const model = JSON.parse(fs.readFileSync(modelPath, 'utf8')) as AiRepoModel;
-        expect(model.schemaVersion).toBe(5);
+        expect(model.schemaVersion).toBe(6);
         expect(model.repository.trackedFileCount).toBeGreaterThan(2_000);
         expect(model.repository.codeFileCount).toBeGreaterThan(800);
         expect(model.repository.exportedSymbolCount).toBeGreaterThan(1_000);
@@ -91,6 +101,7 @@ describe('AI repository model', () => {
         expect(model.repository.runStateFieldCount).toBe(model.runStateFields.length);
         expect(model.repository.dormantRunStateFieldCount).toBe(0);
         expect(model.repository.rendererRunStateWriteCount).toBe(0);
+        expect(model.repository.orchestrationBudgetViolationCount).toBe(0);
         expect(model.repository.gameplayCommandTypeCount).toBe(34);
         expect(model.repository.gameplayEventTypeCount).toBe(54);
         expect(model.repository.unhandledGameplayCommandTypeCount).toBe(0);
@@ -154,6 +165,24 @@ describe('AI repository model', () => {
                     line: expect.any(Number),
                     accessKind: 'state_construction'
                 })
+            ])
+        });
+        expect(model.orchestrationBudgets).toEqual([
+            {
+                id: 'orchestration_budget:src/renderer/components/GameScreen.tsx',
+                path: 'src/renderer/components/GameScreen.tsx',
+                lineCount: expect.any(Number),
+                importCount: expect.any(Number),
+                maxLines: 6_600,
+                maxImports: 62,
+                withinBudget: true
+            }
+        ]);
+        expect(model.orchestrationBudgets[0]?.lineCount).toBeLessThanOrEqual(6_600);
+        expect(model.orchestrationBudgets[0]?.importCount).toBeLessThanOrEqual(62);
+        expect(model.files.find((file) => file.path === 'src/renderer/components/gameScreenBoardFeedbackModel.ts')).toMatchObject({
+            testedBy: expect.arrayContaining([
+                'file:src/renderer/components/gameScreenBoardFeedbackModel.test.ts'
             ])
         });
         expect(model.gameplayCommands.every(
@@ -239,6 +268,20 @@ describe('AI repository model', () => {
         const protocolQuery = JSON.parse(protocolQueryOutput) as { nodes: { id: string }[]; relationships: unknown[] };
         expect(protocolQuery.nodes.map((node) => node.id)).toContain('gameplay_command:board.region_shuffle');
         expect(protocolQuery.relationships.length).toBeGreaterThan(0);
+
+        const orchestrationQueryOutput = execFileSync(
+            process.execPath,
+            [scriptPath, '--query', 'orchestration_budget:src/renderer/components/GameScreen.tsx'],
+            { cwd: repoRoot, encoding: 'utf8' }
+        );
+        const orchestrationQuery = JSON.parse(orchestrationQueryOutput) as {
+            nodes: { id: string }[];
+            relationships: unknown[];
+        };
+        expect(orchestrationQuery.nodes.map((node) => node.id)).toContain(
+            'orchestration_budget:src/renderer/components/GameScreen.tsx'
+        );
+        expect(orchestrationQuery.relationships.length).toBeGreaterThan(0);
     }, 180_000);
 
     it('registers model generation and drift checks in the project gates', () => {
