@@ -6,17 +6,17 @@
     "trackedFileCount": 2407,
     "codeFileCount": 904,
     "exportedSymbolCount": 3357,
-    "contentItemCount": 56,
-    "mechanicCount": 140,
-    "stateFieldCount": 280,
-    "relationshipCount": 10658
+    "contentItemCount": 57,
+    "mechanicCount": 139,
+    "stateFieldCount": 285,
+    "relationshipCount": 10669
   },
   "inventory": [
     {
       "path": ".ai/GAMEPLAY_MIGRATION.md",
       "category": "other",
-      "bytes": 106696,
-      "sha256": "c0eaf1426259982e9bdfb0ee4e8201b0f1747615c8e15a0a0f22b321fbc1e38b"
+      "bytes": 109408,
+      "sha256": "d4d00293353d20af530f5b332f70fedeca6133806ad6e67da7b6b57ed3091b3a"
     },
     {
       "path": ".ai/README.md",
@@ -777,8 +777,8 @@
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
       "category": "documentation",
-      "bytes": 37137,
-      "sha256": "8218dd93a91f4d0138d0689796c5df09725164783707f67b8e066361efa4578e"
+      "bytes": 37494,
+      "sha256": "c1c883da4c4ec698fc1af864aea752deb1acf1cf0e2c0eeeab6b62d1eed0991d"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_POLISH_AND_GAPS.md",
@@ -831,8 +831,8 @@
     {
       "path": "docs/internal-wiki/APP_ANALYSIS.md",
       "category": "documentation",
-      "bytes": 21952,
-      "sha256": "d80e0bbdd0052086e28a75aefd8ef63e93ddd83ff5151313718c7732f592bedf"
+      "bytes": 21742,
+      "sha256": "71e791adfb5af9ef0acef384dc5191bcb2b8324f400025fef534bc053aff7572"
     },
     {
       "path": "docs/internal-wiki/ARCHITECTURE.md",
@@ -4539,8 +4539,8 @@
     {
       "path": "scripts/sim-build-strategy-playthroughs.ts",
       "category": "script",
-      "bytes": 6351,
-      "sha256": "670760ea93aa62cac7e6d97675e38ab6983734e4f347439a261a9969f3c7f94f"
+      "bytes": 6723,
+      "sha256": "771f5edabdf1ea60b2989f452dd0e107d8979e5f8846fcc45a3ee56ecb9216da"
     },
     {
       "path": "scripts/sim-endless.ts",
@@ -7335,8 +7335,8 @@
     {
       "path": "src/renderer/components/CodexScreen.test.tsx",
       "category": "test",
-      "bytes": 2427,
-      "sha256": "5e29d96b2d0ed3f22af6abd4b329c810eafde6a415f125b56f9dfe74b44bb0cb"
+      "bytes": 2522,
+      "sha256": "133880aa7ac69cc77703a8ac66195fbc58946ac9078c1a47377383652bf7070e"
     },
     {
       "path": "src/renderer/components/CodexScreen.tsx",
@@ -7347,8 +7347,8 @@
     {
       "path": "src/renderer/components/codexScreenModel.test.ts",
       "category": "test",
-      "bytes": 2648,
-      "sha256": "3fdc63b905895c5957881c61cae7bc10f6c7dbbe949af2c7c18294da1577aed7"
+      "bytes": 2820,
+      "sha256": "0c5fa18dc28022c990360f2c7ad702d3bf28428856796930be26fa5c265a9dfa"
     },
     {
       "path": "src/renderer/components/codexScreenModel.ts",
@@ -7413,8 +7413,8 @@
     {
       "path": "src/renderer/components/GameplayHudBar.test.tsx",
       "category": "test",
-      "bytes": 118135,
-      "sha256": "1e15e8c786770a90a45c4b54ad637665ed5f48f25527b8693a26b0c33ecd07ad"
+      "bytes": 118151,
+      "sha256": "38dc2bfa994fb02d5bedb328acf533d21e2efff1e340444e4bc4957073bce5a9"
     },
     {
       "path": "src/renderer/components/GameplayHudBar.tsx",
@@ -7455,8 +7455,8 @@
     {
       "path": "src/renderer/components/GameScreen.test.tsx",
       "category": "test",
-      "bytes": 359008,
-      "sha256": "c4a8be8457232c69c4fad72375ff916885e7f9207e9f426e0b5a8ae6ec7e923b"
+      "bytes": 359024,
+      "sha256": "bf8013ae33842013027d72b0bf6d3ab46937994ebc0f57743d1556a3320ed4fa"
     },
     {
       "path": "src/renderer/components/GameScreen.tsx",
@@ -7515,8 +7515,8 @@
     {
       "path": "src/renderer/components/InventoryScreen.test.tsx",
       "category": "test",
-      "bytes": 27569,
-      "sha256": "3ba7727da51fb21beb4c4615a1d28d18f3bd5af2f210efd05fb7731454a0f6f1"
+      "bytes": 27585,
+      "sha256": "0287d67d12336d400a9ca92d91e102b8083620561d5543119555f1639ae551db"
     },
     {
       "path": "src/renderer/components/InventoryScreen.tsx",
@@ -7527,8 +7527,8 @@
     {
       "path": "src/renderer/components/inventoryScreenModel.test.ts",
       "category": "test",
-      "bytes": 7774,
-      "sha256": "46a4b014878db3cd3d02af340f6490a588b551b893fa0f1c173966087c31958e"
+      "bytes": 7790,
+      "sha256": "bf85b35fc81fd0d0a8b7fd72108f4641a4baa1186000a9a6a5520d2cc1c86374"
     },
     {
       "path": "src/renderer/components/inventoryScreenModel.ts",
@@ -9999,26 +9999,26 @@
     {
       "path": "src/shared/build-strategy-playthrough-simulation.test.ts",
       "category": "test",
-      "bytes": 20081,
-      "sha256": "7f852e73f1a2a1abe3b46f2536a67816a8e1a4c93b022592dd199e31c2b4e649"
+      "bytes": 22272,
+      "sha256": "a47d53ee224afb3cc55b19204039b86fa0def38b6677c145888dd8984b16f363"
     },
     {
       "path": "src/shared/build-strategy-playthrough-simulation.ts",
       "category": "source",
-      "bytes": 112101,
-      "sha256": "065fbcaa44bfe3ccae44e6875f6d5c31800da02cb4e907973673d404ccac4046"
+      "bytes": 120370,
+      "sha256": "c7fbba57734e801e6bb487415e5899b3aaf28d2495356b7825660a6e169afd1c"
     },
     {
       "path": "src/shared/build-strategy-simulation.test.ts",
       "category": "test",
-      "bytes": 6641,
-      "sha256": "6169b7bc980d733669163c00b59e12701378b64f0f2269f4cfc6a45f6df8c033"
+      "bytes": 6745,
+      "sha256": "4764c952c0d2494cf8ef28299e638bd4bd1324611f05c54af2ffa162e71a5693"
     },
     {
       "path": "src/shared/build-strategy-simulation.ts",
       "category": "source",
-      "bytes": 32112,
-      "sha256": "c8c577bb0a5407fda27756c23525876bee234ff86ac1a81f7fd128501fac9e11"
+      "bytes": 32238,
+      "sha256": "9d37adfe602f057873034daa1daed4e99d36e6a361d9eb7467515ec0c36b41cb"
     },
     {
       "path": "src/shared/builtin-puzzles.ts",
@@ -10695,20 +10695,20 @@
     {
       "path": "src/shared/gameplay-core-contracts.ts",
       "category": "source",
-      "bytes": 97991,
-      "sha256": "1c33ea045325416faf74ae30a54ee02ddbcfa1c70d9466da4b27eaa71be9e260"
+      "bytes": 97926,
+      "sha256": "a6794d99207b807c904073ef08036488cbd68844850e83718f9d5a0527928c29"
     },
     {
       "path": "src/shared/gameplay-core-playthrough-solver.test.ts",
       "category": "test",
-      "bytes": 20145,
-      "sha256": "712de4853880a7f96b33a32c4270d0e78d6e95a83139d858f92fe5774417e133"
+      "bytes": 22219,
+      "sha256": "72924fee69c72b22a86b21eecac23a3267c125b543cebcf3069f1caf3bb64f60"
     },
     {
       "path": "src/shared/gameplay-core-playthrough-solver.ts",
       "category": "source",
-      "bytes": 35423,
-      "sha256": "87aabeec669d0685ac31387dd02962c706c0713feff69b10a019f23061084072"
+      "bytes": 38393,
+      "sha256": "cf1e57add3e97f6a4a5104490347862d106e22a817bddec57097a4fba72748a9"
     },
     {
       "path": "src/shared/gameplay-core-simulation.test.ts",
@@ -10725,8 +10725,8 @@
     {
       "path": "src/shared/gameplay-core.test.ts",
       "category": "test",
-      "bytes": 136177,
-      "sha256": "2631b358701a33ccf5b46597fc5874e32fdf2d9f1764cf17d1db9a539018487c"
+      "bytes": 136338,
+      "sha256": "184134a3c3f4b717ce0e6cc0d6f8ac83cdd40ab9de4eacf8e0410351afe67a23"
     },
     {
       "path": "src/shared/gameplay-core.ts",
@@ -10767,14 +10767,14 @@
     {
       "path": "src/shared/gameplay-interaction-graph-data.json",
       "category": "source",
-      "bytes": 234284,
-      "sha256": "9b20f2eda35de6a069ee2d2cdb68118a85c957de50e21a591b66a2c85be40cd4"
+      "bytes": 234662,
+      "sha256": "5190cc8065207e28571c1aa7c5d3e33bbbbf3e908a3aadee6f9ee66bef94fd57"
     },
     {
       "path": "src/shared/gameplay-interaction-graph.test.ts",
       "category": "test",
-      "bytes": 109748,
-      "sha256": "1ea191b7e2be87f3b59f69e176677d85765143030f9163ed89e909346a4f5f09"
+      "bytes": 111763,
+      "sha256": "049fe58339d307af5868970cd321b0c973855ad3b1ac2dfb252dc3449799920e"
     },
     {
       "path": "src/shared/gameplay-interaction-graph.ts",
@@ -11427,14 +11427,14 @@
     {
       "path": "src/shared/relics.test.ts",
       "category": "test",
-      "bytes": 32222,
-      "sha256": "e1bbdab3eed4f1a14475e42bd05a243a5298a1fc285ddabe553d6a8be6b07d92"
+      "bytes": 32761,
+      "sha256": "f977e3d3b587824612cf49ff6f074d60e53f93bf58d3c5d966c4289d88e20427"
     },
     {
       "path": "src/shared/relics.ts",
       "category": "source",
-      "bytes": 43229,
-      "sha256": "544b61ac535fc0c2e167ad67858e8e685ed168abf24db6b5e4a5b0630369df07"
+      "bytes": 44216,
+      "sha256": "270027f7ec7365d06557d5e46b822c67889e827a1241f682edb011a7242c7120"
     },
     {
       "path": "src/shared/renderer-bundle-budget-script.test.ts",
@@ -16354,7 +16354,7 @@
       "path": "src/renderer/components/CodexScreen.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 61,
+      "lineCount": 62,
       "imports": [
         "file:src/renderer/components/CodexScreen.tsx",
         "file:src/shared/save-data.ts"
@@ -16393,7 +16393,7 @@
       "path": "src/renderer/components/codexScreenModel.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 58,
+      "lineCount": 59,
       "imports": [
         "file:src/renderer/components/codexScreenModel.ts",
         "file:src/shared/contracts.ts",
@@ -24020,7 +24020,7 @@
       "path": "src/shared/build-strategy-playthrough-simulation.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 346,
+      "lineCount": 382,
       "imports": [
         "file:src/shared/build-strategy-playthrough-simulation.ts",
         "file:src/shared/build-strategy-simulation.ts",
@@ -24034,7 +24034,7 @@
       "path": "src/shared/build-strategy-playthrough-simulation.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 2341,
+      "lineCount": 2494,
       "imports": [
         "file:src/shared/board-power-targeting.ts",
         "file:src/shared/build-strategy-simulation.ts",
@@ -24080,7 +24080,7 @@
       "path": "src/shared/build-strategy-simulation.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 156,
+      "lineCount": 160,
       "imports": [
         "file:src/shared/build-strategy-simulation.ts",
         "file:src/shared/contracts.ts"
@@ -24093,7 +24093,7 @@
       "path": "src/shared/build-strategy-simulation.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 766,
+      "lineCount": 769,
       "imports": [
         "file:src/shared/board-build-rules.ts",
         "file:src/shared/board-power-targeting.ts",
@@ -27067,7 +27067,7 @@
       "path": "src/shared/gameplay-core-contracts.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 2703,
+      "lineCount": 2699,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/run-inventory-contracts.ts",
@@ -27148,7 +27148,6 @@
         "symbol:src/shared/gameplay-core-contracts.ts#LOCKSMITH_DEFINITIONS",
         "symbol:src/shared/gameplay-core-contracts.ts#MEMORY_SCOUT_DEFINITIONS",
         "symbol:src/shared/gameplay-core-contracts.ts#SABOTEUR_DEFINITIONS",
-        "symbol:src/shared/gameplay-core-contracts.ts#SEER_DEFINITIONS",
         "symbol:src/shared/gameplay-core-contracts.ts#SLAYER_DEFINITIONS",
         "symbol:src/shared/gameplay-core-contracts.ts#SUPPLY_CACHE_DEFINITIONS",
         "symbol:src/shared/gameplay-core-contracts.ts#VAULTBREAKER_DEFINITIONS",
@@ -27159,6 +27158,7 @@
         "file:src/renderer/store/gameplayFeedbackAdapter.test.ts",
         "file:src/renderer/store/matchScorePop.test.ts",
         "file:src/renderer/store/runSurfaceState.test.ts",
+        "file:src/shared/gameplay-core-playthrough-solver.test.ts",
         "file:src/shared/gameplay-core.test.ts",
         "file:src/shared/gameplay-effect-transition.test.ts",
         "file:src/shared/gameplay-feedback-completeness.test.ts",
@@ -27172,11 +27172,12 @@
       "path": "src/shared/gameplay-core-playthrough-solver.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 491,
+      "lineCount": 538,
       "imports": [
         "file:src/shared/board-build-rules.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/game-core.ts",
+        "file:src/shared/gameplay-core-contracts.ts",
         "file:src/shared/gameplay-core-playthrough-solver.ts",
         "file:src/shared/playthrough-solver.ts",
         "file:src/shared/softlock-generator-contract.ts",
@@ -27190,8 +27191,9 @@
       "path": "src/shared/gameplay-core-playthrough-solver.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 861,
+      "lineCount": 934,
       "imports": [
+        "file:src/shared/board-power-state.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/dungeon-board-status.ts",
         "file:src/shared/dungeon-exit-rules.ts",
@@ -27199,6 +27201,7 @@
         "file:src/shared/gameplay-core.ts",
         "file:src/shared/gameplay-feedback-completeness.ts",
         "file:src/shared/playthrough-solver-rules.ts",
+        "file:src/shared/run-array-guards.ts",
         "file:src/shared/run-inventory.ts",
         "file:src/shared/run-progression-repair.ts",
         "file:src/shared/tile-identity.ts"
@@ -27208,6 +27211,7 @@
         "symbol:src/shared/gameplay-core-playthrough-solver.ts#GameplayCoreGambitPolicy",
         "symbol:src/shared/gameplay-core-playthrough-solver.ts#GameplayCoreLockPolicy",
         "symbol:src/shared/gameplay-core-playthrough-solver.ts#GameplayCorePerfectInformationPolicy",
+        "symbol:src/shared/gameplay-core-playthrough-solver.ts#GameplayCorePinPolicy",
         "symbol:src/shared/gameplay-core-playthrough-solver.ts#GameplayCorePlaythroughInformationPolicy",
         "symbol:src/shared/gameplay-core-playthrough-solver.ts#GameplayCorePlaythroughInformationTrace",
         "symbol:src/shared/gameplay-core-playthrough-solver.ts#GameplayCorePlaythroughSolverOptions",
@@ -27270,7 +27274,7 @@
       "path": "src/shared/gameplay-core.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 3103,
+      "lineCount": 3102,
       "imports": [
         "file:src/shared/board-power-actions.ts",
         "file:src/shared/board-power-state.ts",
@@ -27462,7 +27466,7 @@
       "path": "src/shared/gameplay-interaction-graph-data.json",
       "layer": "shared",
       "role": "production",
-      "lineCount": 2468,
+      "lineCount": 2454,
       "imports": [],
       "exports": [],
       "testedBy": []
@@ -27472,7 +27476,7 @@
       "path": "src/shared/gameplay-interaction-graph.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 1808,
+      "lineCount": 1842,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/gameplay-core-contracts.ts",
@@ -29623,7 +29627,7 @@
       "path": "src/shared/relics.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 759,
+      "lineCount": 767,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/floor-mutator-schedule.ts",
@@ -29638,7 +29642,7 @@
       "path": "src/shared/relics.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1113,
+      "lineCount": 1125,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/floor-mutator-schedule.ts",
@@ -43271,136 +43275,136 @@
       "name": "assertGameplayBuildMultiFloorViable",
       "kind": "value",
       "file": "src/shared/build-strategy-playthrough-simulation.ts",
-      "line": 2104,
-      "endLine": 2340
+      "line": 2230,
+      "endLine": 2493
     },
     {
       "id": "symbol:src/shared/build-strategy-playthrough-simulation.ts#GAMEPLAY_BUILD_POLICIES",
       "name": "GAMEPLAY_BUILD_POLICIES",
       "kind": "value",
       "file": "src/shared/build-strategy-playthrough-simulation.ts",
-      "line": 496,
-      "endLine": 681
+      "line": 538,
+      "endLine": 725
     },
     {
       "id": "symbol:src/shared/build-strategy-playthrough-simulation.ts#GameplayBuildDistribution",
       "name": "GameplayBuildDistribution",
       "kind": "interface",
       "file": "src/shared/build-strategy-playthrough-simulation.ts",
-      "line": 193,
-      "endLine": 197
+      "line": 199,
+      "endLine": 203
     },
     {
       "id": "symbol:src/shared/build-strategy-playthrough-simulation.ts#GameplayBuildFloorTrace",
       "name": "GameplayBuildFloorTrace",
       "kind": "interface",
       "file": "src/shared/build-strategy-playthrough-simulation.ts",
-      "line": 138,
-      "endLine": 170
+      "line": 141,
+      "endLine": 176
     },
     {
       "id": "symbol:src/shared/build-strategy-playthrough-simulation.ts#GameplayBuildInterludeRiskPolicy",
       "name": "GameplayBuildInterludeRiskPolicy",
       "kind": "interface",
       "file": "src/shared/build-strategy-playthrough-simulation.ts",
-      "line": 88,
-      "endLine": 93
+      "line": 91,
+      "endLine": 96
     },
     {
       "id": "symbol:src/shared/build-strategy-playthrough-simulation.ts#GameplayBuildMatchup",
       "name": "GameplayBuildMatchup",
       "kind": "type",
       "file": "src/shared/build-strategy-playthrough-simulation.ts",
-      "line": 59,
-      "endLine": 66
+      "line": 60,
+      "endLine": 67
     },
     {
       "id": "symbol:src/shared/build-strategy-playthrough-simulation.ts#GameplayBuildMatchupMetrics",
       "name": "GameplayBuildMatchupMetrics",
       "kind": "interface",
       "file": "src/shared/build-strategy-playthrough-simulation.ts",
-      "line": 199,
-      "endLine": 207
+      "line": 205,
+      "endLine": 213
     },
     {
       "id": "symbol:src/shared/build-strategy-playthrough-simulation.ts#GameplayBuildMultiFloorMetrics",
       "name": "GameplayBuildMultiFloorMetrics",
       "kind": "interface",
       "file": "src/shared/build-strategy-playthrough-simulation.ts",
-      "line": 209,
-      "endLine": 271
+      "line": 215,
+      "endLine": 283
     },
     {
       "id": "symbol:src/shared/build-strategy-playthrough-simulation.ts#GameplayBuildMultiFloorReport",
       "name": "GameplayBuildMultiFloorReport",
       "kind": "interface",
       "file": "src/shared/build-strategy-playthrough-simulation.ts",
-      "line": 273,
-      "endLine": 465
+      "line": 285,
+      "endLine": 507
     },
     {
       "id": "symbol:src/shared/build-strategy-playthrough-simulation.ts#GameplayBuildMultiFloorSeedSample",
       "name": "GameplayBuildMultiFloorSeedSample",
       "kind": "interface",
       "file": "src/shared/build-strategy-playthrough-simulation.ts",
-      "line": 172,
-      "endLine": 191
+      "line": 178,
+      "endLine": 197
     },
     {
       "id": "symbol:src/shared/build-strategy-playthrough-simulation.ts#GameplayBuildMultiFloorSimulationInput",
       "name": "GameplayBuildMultiFloorSimulationInput",
       "kind": "interface",
       "file": "src/shared/build-strategy-playthrough-simulation.ts",
-      "line": 467,
-      "endLine": 472
+      "line": 509,
+      "endLine": 514
     },
     {
       "id": "symbol:src/shared/build-strategy-playthrough-simulation.ts#GameplayBuildPolicyDecision",
       "name": "GameplayBuildPolicyDecision",
       "kind": "interface",
       "file": "src/shared/build-strategy-playthrough-simulation.ts",
-      "line": 125,
-      "endLine": 136
+      "line": 128,
+      "endLine": 139
     },
     {
       "id": "symbol:src/shared/build-strategy-playthrough-simulation.ts#GameplayBuildPolicyDefinition",
       "name": "GameplayBuildPolicyDefinition",
       "kind": "interface",
       "file": "src/shared/build-strategy-playthrough-simulation.ts",
-      "line": 68,
-      "endLine": 86
+      "line": 69,
+      "endLine": 89
     },
     {
       "id": "symbol:src/shared/build-strategy-playthrough-simulation.ts#GameplayBuildRouteRiskAssessment",
       "name": "GameplayBuildRouteRiskAssessment",
       "kind": "interface",
       "file": "src/shared/build-strategy-playthrough-simulation.ts",
-      "line": 95,
-      "endLine": 111
+      "line": 98,
+      "endLine": 114
     },
     {
       "id": "symbol:src/shared/build-strategy-playthrough-simulation.ts#GameplayBuildSideRoomResourceAssessment",
       "name": "GameplayBuildSideRoomResourceAssessment",
       "kind": "interface",
       "file": "src/shared/build-strategy-playthrough-simulation.ts",
-      "line": 113,
-      "endLine": 123
+      "line": 116,
+      "endLine": 126
     },
     {
       "id": "symbol:src/shared/build-strategy-playthrough-simulation.ts#runGameplayBuildMultiFloorSimulation",
       "name": "runGameplayBuildMultiFloorSimulation",
       "kind": "value",
       "file": "src/shared/build-strategy-playthrough-simulation.ts",
-      "line": 1691,
-      "endLine": 2102
+      "line": 1760,
+      "endLine": 2228
     },
     {
       "id": "symbol:src/shared/build-strategy-simulation.ts#assertGameplayBuildStrategiesViable",
       "name": "assertGameplayBuildStrategiesViable",
       "kind": "value",
       "file": "src/shared/build-strategy-simulation.ts",
-      "line": 722,
-      "endLine": 765
+      "line": 725,
+      "endLine": 768
     },
     {
       "id": "symbol:src/shared/build-strategy-simulation.ts#GAMEPLAY_BUILD_STRATEGIES",
@@ -43408,7 +43412,7 @@
       "kind": "value",
       "file": "src/shared/build-strategy-simulation.ts",
       "line": 126,
-      "endLine": 242
+      "endLine": 243
     },
     {
       "id": "symbol:src/shared/build-strategy-simulation.ts#GAMEPLAY_BUILD_STRATEGY_AXES",
@@ -43479,8 +43483,8 @@
       "name": "runGameplayBuildStrategySimulation",
       "kind": "value",
       "file": "src/shared/build-strategy-simulation.ts",
-      "line": 653,
-      "endLine": 720
+      "line": 656,
+      "endLine": 723
     },
     {
       "id": "symbol:src/shared/builtin-puzzles.ts#BUILTIN_PUZZLE_IDS",
@@ -50135,32 +50139,32 @@
       "name": "BOARD_TACTICIAN_DEFINITIONS",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 680,
-      "endLine": 787
+      "line": 749,
+      "endLine": 856
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#BoardTurnAnnouncementFacts",
       "name": "BoardTurnAnnouncementFacts",
       "kind": "type",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1599,
-      "endLine": 1599
+      "line": 1595,
+      "endLine": 1595
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#boardTurnAnnouncementFactsSchema",
       "name": "boardTurnAnnouncementFactsSchema",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1550,
-      "endLine": 1597
+      "line": 1546,
+      "endLine": 1593
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#COMBO_SHARD_ENGINE_DEFINITIONS",
       "name": "COMBO_SHARD_ENGINE_DEFINITIONS",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 511,
-      "endLine": 601
+      "line": 563,
+      "endLine": 653
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#CONDUIT_CARTOGRAPHER_DEFINITIONS",
@@ -50168,279 +50172,279 @@
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
       "line": 374,
-      "endLine": 431
+      "endLine": 483
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayBoardTurnResolveCommand",
       "name": "createGameplayBoardTurnResolveCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2680,
-      "endLine": 2689
+      "line": 2676,
+      "endLine": 2685
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayDebugRevealActivateCommand",
       "name": "createGameplayDebugRevealActivateCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2426,
-      "endLine": 2435
+      "line": 2422,
+      "endLine": 2431
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayDebugRevealDeactivateCommand",
       "name": "createGameplayDebugRevealDeactivateCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2437,
-      "endLine": 2446
+      "line": 2433,
+      "endLine": 2442
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayDefinitionCommand",
       "name": "createGameplayDefinitionCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2455,
-      "endLine": 2472
+      "line": 2451,
+      "endLine": 2468
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayDestroyPairCommand",
       "name": "createGameplayDestroyPairCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2519,
-      "endLine": 2525
+      "line": 2515,
+      "endLine": 2521
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayDungeonExitActivateCommand",
       "name": "createGameplayDungeonExitActivateCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2599,
-      "endLine": 2608
+      "line": 2595,
+      "endLine": 2604
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayEnemyHazardContactCommand",
       "name": "createGameplayEnemyHazardContactCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2490,
-      "endLine": 2501
+      "line": 2486,
+      "endLine": 2497
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayFlashPairCommand",
       "name": "createGameplayFlashPairCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2570,
-      "endLine": 2575
+      "line": 2566,
+      "endLine": 2571
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayFloorAdvanceCommand",
       "name": "createGameplayFloorAdvanceCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2624,
-      "endLine": 2629
+      "line": 2620,
+      "endLine": 2625
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayGambitCommitCommand",
       "name": "createGameplayGambitCommitCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2534,
-      "endLine": 2540
+      "line": 2530,
+      "endLine": 2536
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayGauntletExpireCommand",
       "name": "createGameplayGauntletExpireCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2391,
-      "endLine": 2400
+      "line": 2387,
+      "endLine": 2396
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayHazardBanishCommand",
       "name": "createGameplayHazardBanishCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2617,
-      "endLine": 2622
+      "line": 2613,
+      "endLine": 2618
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayMemorizeCompleteCommand",
       "name": "createGameplayMemorizeCompleteCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2384,
-      "endLine": 2389
+      "line": 2380,
+      "endLine": 2385
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayParasiteAdvanceCommand",
       "name": "createGameplayParasiteAdvanceCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2610,
-      "endLine": 2615
+      "line": 2606,
+      "endLine": 2611
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayPauseCommand",
       "name": "createGameplayPauseCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2402,
-      "endLine": 2413
+      "line": 2398,
+      "endLine": 2409
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayPeekCommand",
       "name": "createGameplayPeekCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2474,
-      "endLine": 2480
+      "line": 2470,
+      "endLine": 2476
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayPinToggleCommand",
       "name": "createGameplayPinToggleCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2503,
-      "endLine": 2509
+      "line": 2499,
+      "endLine": 2505
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayProgressionRepairCommand",
       "name": "createGameplayProgressionRepairCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2448,
-      "endLine": 2453
+      "line": 2444,
+      "endLine": 2449
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayRegionShuffleCommand",
       "name": "createGameplayRegionShuffleCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2549,
-      "endLine": 2555
+      "line": 2545,
+      "endLine": 2551
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayRelicOfferOpenCommand",
       "name": "createGameplayRelicOfferOpenCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2660,
-      "endLine": 2665
+      "line": 2656,
+      "endLine": 2661
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayRelicOfferServiceCommand",
       "name": "createGameplayRelicOfferServiceCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2667,
-      "endLine": 2678
+      "line": 2663,
+      "endLine": 2674
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayRelicPickCommand",
       "name": "createGameplayRelicPickCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2652,
-      "endLine": 2658
+      "line": 2648,
+      "endLine": 2654
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayResumeCommand",
       "name": "createGameplayResumeCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2415,
-      "endLine": 2424
+      "line": 2411,
+      "endLine": 2420
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayRiskWagerAcceptCommand",
       "name": "createGameplayRiskWagerAcceptCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2527,
-      "endLine": 2532
+      "line": 2523,
+      "endLine": 2528
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayRouteChooseCommand",
       "name": "createGameplayRouteChooseCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2631,
-      "endLine": 2637
+      "line": 2627,
+      "endLine": 2633
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayShopPurchaseCommand",
       "name": "createGameplayShopPurchaseCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2584,
-      "endLine": 2590
+      "line": 2580,
+      "endLine": 2586
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayShopRerollCommand",
       "name": "createGameplayShopRerollCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2592,
-      "endLine": 2597
+      "line": 2588,
+      "endLine": 2593
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayShuffleCommand",
       "name": "createGameplayShuffleCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2542,
-      "endLine": 2547
+      "line": 2538,
+      "endLine": 2543
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplaySideRoomResolveCommand",
       "name": "createGameplaySideRoomResolveCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2639,
-      "endLine": 2650
+      "line": 2635,
+      "endLine": 2646
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayStrayRemoveCommand",
       "name": "createGameplayStrayRemoveCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2511,
-      "endLine": 2517
+      "line": 2507,
+      "endLine": 2513
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayTileFlipCommand",
       "name": "createGameplayTileFlipCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2482,
-      "endLine": 2488
+      "line": 2478,
+      "endLine": 2484
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayTileSwapCommand",
       "name": "createGameplayTileSwapCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2557,
-      "endLine": 2568
+      "line": 2553,
+      "endLine": 2564
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayUndoResolveCommand",
       "name": "createGameplayUndoResolveCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2577,
-      "endLine": 2582
+      "line": 2573,
+      "endLine": 2578
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayWildMatchConsumeCommand",
       "name": "createGameplayWildMatchConsumeCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2691,
-      "endLine": 2702
+      "line": 2687,
+      "endLine": 2698
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GAMEPLAY_BONUS_REWARD_IDS",
@@ -50463,8 +50467,8 @@
       "name": "GAMEPLAY_CONTENT_DEFINITIONS",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1205,
-      "endLine": 1217
+      "line": 1202,
+      "endLine": 1213
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GAMEPLAY_CORE_SCHEMA_VERSION",
@@ -50479,8 +50483,8 @@
       "name": "GAMEPLAY_DEBUG_REVEAL_DEACTIVATION_REASONS",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1240,
-      "endLine": 1244
+      "line": 1236,
+      "endLine": 1240
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GAMEPLAY_FINDABLE_KINDS",
@@ -50551,24 +50555,24 @@
       "name": "GameplayCommand",
       "kind": "type",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2376,
-      "endLine": 2376
+      "line": 2372,
+      "endLine": 2372
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#gameplayCommandSchema",
       "name": "gameplayCommandSchema",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1249,
-      "endLine": 1493
+      "line": 1245,
+      "endLine": 1489
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GameplayCondition",
       "name": "GameplayCondition",
       "kind": "type",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1221,
-      "endLine": 1221
+      "line": 1217,
+      "endLine": 1217
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#gameplayConditionSchema",
@@ -50583,8 +50587,8 @@
       "name": "GameplayContentDefinition",
       "kind": "type",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1223,
-      "endLine": 1223
+      "line": 1219,
+      "endLine": 1219
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#gameplayContentDefinitionSchema",
@@ -50599,16 +50603,16 @@
       "name": "GameplayDebugRevealDeactivationReason",
       "kind": "type",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1246,
-      "endLine": 1247
+      "line": 1242,
+      "endLine": 1243
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GameplayEffect",
       "name": "GameplayEffect",
       "kind": "type",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1222,
-      "endLine": 1222
+      "line": 1218,
+      "endLine": 1218
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#gameplayEffectSchema",
@@ -50623,24 +50627,24 @@
       "name": "GameplayEvent",
       "kind": "type",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2377,
-      "endLine": 2377
+      "line": 2373,
+      "endLine": 2373
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#gameplayEventSchema",
       "name": "gameplayEventSchema",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1601,
-      "endLine": 2374
+      "line": 1597,
+      "endLine": 2370
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GameplayFacts",
       "name": "GameplayFacts",
       "kind": "type",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1220,
-      "endLine": 1220
+      "line": 1216,
+      "endLine": 1216
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#gameplayFactsSchema",
@@ -50655,24 +50659,24 @@
       "name": "GameplayPauseTimerSnapshot",
       "kind": "type",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1238,
-      "endLine": 1238
+      "line": 1234,
+      "endLine": 1234
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#gameplayPauseTimerSnapshotSchema",
       "name": "gameplayPauseTimerSnapshotSchema",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1230,
-      "endLine": 1236
+      "line": 1226,
+      "endLine": 1232
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GameplaySource",
       "name": "GameplaySource",
       "kind": "type",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1219,
-      "endLine": 1219
+      "line": 1215,
+      "endLine": 1215
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#gameplaySourceSchema",
@@ -50687,160 +50691,160 @@
       "name": "getGameplayContentDefinition",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2381,
-      "endLine": 2382
+      "line": 2377,
+      "endLine": 2378
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#LOCKSMITH_DEFINITIONS",
       "name": "LOCKSMITH_DEFINITIONS",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 863,
-      "endLine": 883
+      "line": 932,
+      "endLine": 952
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#MEMORY_SCOUT_DEFINITIONS",
       "name": "MEMORY_SCOUT_DEFINITIONS",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 789,
-      "endLine": 861
+      "line": 858,
+      "endLine": 930
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#SABOTEUR_DEFINITIONS",
       "name": "SABOTEUR_DEFINITIONS",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 625,
-      "endLine": 678
-    },
-    {
-      "id": "symbol:src/shared/gameplay-core-contracts.ts#SEER_DEFINITIONS",
-      "name": "SEER_DEFINITIONS",
-      "kind": "value",
-      "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1133,
-      "endLine": 1203
+      "line": 694,
+      "endLine": 747
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#SLAYER_DEFINITIONS",
       "name": "SLAYER_DEFINITIONS",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 998,
-      "endLine": 1131
+      "line": 1067,
+      "endLine": 1200
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#SUPPLY_CACHE_DEFINITIONS",
       "name": "SUPPLY_CACHE_DEFINITIONS",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 603,
-      "endLine": 623
+      "line": 655,
+      "endLine": 692
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#VAULTBREAKER_DEFINITIONS",
       "name": "VAULTBREAKER_DEFINITIONS",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 885,
-      "endLine": 996
+      "line": 954,
+      "endLine": 1065
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#WARDEN_DEFINITIONS",
       "name": "WARDEN_DEFINITIONS",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 433,
-      "endLine": 509
+      "line": 485,
+      "endLine": 561
     },
     {
       "id": "symbol:src/shared/gameplay-core-playthrough-solver.ts#GameplayCoreBoundedMemoryPolicy",
       "name": "GameplayCoreBoundedMemoryPolicy",
       "kind": "interface",
       "file": "src/shared/gameplay-core-playthrough-solver.ts",
-      "line": 49,
-      "endLine": 53
+      "line": 53,
+      "endLine": 57
     },
     {
       "id": "symbol:src/shared/gameplay-core-playthrough-solver.ts#GameplayCoreGambitPolicy",
       "name": "GameplayCoreGambitPolicy",
       "kind": "interface",
       "file": "src/shared/gameplay-core-playthrough-solver.ts",
-      "line": 66,
-      "endLine": 68
+      "line": 71,
+      "endLine": 73
     },
     {
       "id": "symbol:src/shared/gameplay-core-playthrough-solver.ts#GameplayCoreLockPolicy",
       "name": "GameplayCoreLockPolicy",
       "kind": "interface",
       "file": "src/shared/gameplay-core-playthrough-solver.ts",
-      "line": 74,
-      "endLine": 76
+      "line": 79,
+      "endLine": 81
     },
     {
       "id": "symbol:src/shared/gameplay-core-playthrough-solver.ts#GameplayCorePerfectInformationPolicy",
       "name": "GameplayCorePerfectInformationPolicy",
       "kind": "interface",
       "file": "src/shared/gameplay-core-playthrough-solver.ts",
-      "line": 45,
-      "endLine": 47
+      "line": 49,
+      "endLine": 51
+    },
+    {
+      "id": "symbol:src/shared/gameplay-core-playthrough-solver.ts#GameplayCorePinPolicy",
+      "name": "GameplayCorePinPolicy",
+      "kind": "interface",
+      "file": "src/shared/gameplay-core-playthrough-solver.ts",
+      "line": 83,
+      "endLine": 85
     },
     {
       "id": "symbol:src/shared/gameplay-core-playthrough-solver.ts#GameplayCorePlaythroughInformationPolicy",
       "name": "GameplayCorePlaythroughInformationPolicy",
       "kind": "type",
       "file": "src/shared/gameplay-core-playthrough-solver.ts",
-      "line": 55,
-      "endLine": 57
+      "line": 59,
+      "endLine": 61
     },
     {
       "id": "symbol:src/shared/gameplay-core-playthrough-solver.ts#GameplayCorePlaythroughInformationTrace",
       "name": "GameplayCorePlaythroughInformationTrace",
       "kind": "interface",
       "file": "src/shared/gameplay-core-playthrough-solver.ts",
-      "line": 78,
-      "endLine": 89
+      "line": 87,
+      "endLine": 98
     },
     {
       "id": "symbol:src/shared/gameplay-core-playthrough-solver.ts#GameplayCorePlaythroughSolverOptions",
       "name": "GameplayCorePlaythroughSolverOptions",
       "kind": "interface",
       "file": "src/shared/gameplay-core-playthrough-solver.ts",
-      "line": 59,
-      "endLine": 64
+      "line": 63,
+      "endLine": 69
     },
     {
       "id": "symbol:src/shared/gameplay-core-playthrough-solver.ts#GameplayCorePlaythroughSolverTrace",
       "name": "GameplayCorePlaythroughSolverTrace",
       "kind": "interface",
       "file": "src/shared/gameplay-core-playthrough-solver.ts",
-      "line": 32,
-      "endLine": 43
+      "line": 35,
+      "endLine": 47
     },
     {
       "id": "symbol:src/shared/gameplay-core-playthrough-solver.ts#GameplayCoreRecoveryPolicy",
       "name": "GameplayCoreRecoveryPolicy",
       "kind": "interface",
       "file": "src/shared/gameplay-core-playthrough-solver.ts",
-      "line": 70,
-      "endLine": 72
+      "line": 75,
+      "endLine": 77
     },
     {
       "id": "symbol:src/shared/gameplay-core-playthrough-solver.ts#solveRunThroughGameplayCore",
       "name": "solveRunThroughGameplayCore",
       "kind": "value",
       "file": "src/shared/gameplay-core-playthrough-solver.ts",
-      "line": 859,
-      "endLine": 860
+      "line": 932,
+      "endLine": 933
     },
     {
       "id": "symbol:src/shared/gameplay-core-playthrough-solver.ts#solveRunThroughGameplayCoreWithTrace",
       "name": "solveRunThroughGameplayCoreWithTrace",
       "kind": "value",
       "file": "src/shared/gameplay-core-playthrough-solver.ts",
-      "line": 541,
-      "endLine": 857
+      "line": 593,
+      "endLine": 930
     },
     {
       "id": "symbol:src/shared/gameplay-core-simulation.ts#GameplayCoreSimulationOptions",
@@ -54231,176 +54235,176 @@
       "name": "applyRelicOfferService",
       "kind": "value",
       "file": "src/shared/relics.ts",
-      "line": 1040,
-      "endLine": 1112
+      "line": 1052,
+      "endLine": 1124
     },
     {
       "id": "symbol:src/shared/relics.ts#createRelicOfferServices",
       "name": "createRelicOfferServices",
       "kind": "value",
       "file": "src/shared/relics.ts",
-      "line": 926,
-      "endLine": 953
+      "line": 938,
+      "endLine": 965
     },
     {
       "id": "symbol:src/shared/relics.ts#effectiveRelicDraftWeight",
       "name": "effectiveRelicDraftWeight",
       "kind": "value",
       "file": "src/shared/relics.ts",
-      "line": 352,
-      "endLine": 355
+      "line": 364,
+      "endLine": 367
     },
     {
       "id": "symbol:src/shared/relics.ts#getContextualRelicDraftWeight",
       "name": "getContextualRelicDraftWeight",
       "kind": "value",
       "file": "src/shared/relics.ts",
-      "line": 669,
-      "endLine": 742
+      "line": 681,
+      "endLine": 754
     },
     {
       "id": "symbol:src/shared/relics.ts#getRelicArchetypeLabels",
       "name": "getRelicArchetypeLabels",
       "kind": "value",
       "file": "src/shared/relics.ts",
-      "line": 361,
-      "endLine": 362
+      "line": 373,
+      "endLine": 374
     },
     {
       "id": "symbol:src/shared/relics.ts#getRelicArchetypeSummary",
       "name": "getRelicArchetypeSummary",
       "kind": "value",
       "file": "src/shared/relics.ts",
-      "line": 364,
-      "endLine": 365
+      "line": 376,
+      "endLine": 377
     },
     {
       "id": "symbol:src/shared/relics.ts#getRelicBuildArchetypeDefinition",
       "name": "getRelicBuildArchetypeDefinition",
       "kind": "value",
       "file": "src/shared/relics.ts",
-      "line": 367,
-      "endLine": 368
+      "line": 379,
+      "endLine": 380
     },
     {
       "id": "symbol:src/shared/relics.ts#getRelicBuildArchetypes",
       "name": "getRelicBuildArchetypes",
       "kind": "value",
       "file": "src/shared/relics.ts",
-      "line": 359,
-      "endLine": 359
+      "line": 371,
+      "endLine": 371
     },
     {
       "id": "symbol:src/shared/relics.ts#getRelicBuildArchetypeSummaries",
       "name": "getRelicBuildArchetypeSummaries",
       "kind": "value",
       "file": "src/shared/relics.ts",
-      "line": 370,
-      "endLine": 394
+      "line": 382,
+      "endLine": 406
     },
     {
       "id": "symbol:src/shared/relics.ts#getRelicDecisionImpactCopy",
       "name": "getRelicDecisionImpactCopy",
       "kind": "value",
       "file": "src/shared/relics.ts",
-      "line": 528,
-      "endLine": 529
+      "line": 540,
+      "endLine": 541
     },
     {
       "id": "symbol:src/shared/relics.ts#getRelicDecisionImpactLabels",
       "name": "getRelicDecisionImpactLabels",
       "kind": "value",
       "file": "src/shared/relics.ts",
-      "line": 531,
-      "endLine": 534
+      "line": 543,
+      "endLine": 546
     },
     {
       "id": "symbol:src/shared/relics.ts#getRelicDraftContext",
       "name": "getRelicDraftContext",
       "kind": "value",
       "file": "src/shared/relics.ts",
-      "line": 536,
-      "endLine": 567
+      "line": 548,
+      "endLine": 579
     },
     {
       "id": "symbol:src/shared/relics.ts#getRelicDraftOptionReasonRows",
       "name": "getRelicDraftOptionReasonRows",
       "kind": "value",
       "file": "src/shared/relics.ts",
-      "line": 657,
-      "endLine": 663
+      "line": 669,
+      "endLine": 675
     },
     {
       "id": "symbol:src/shared/relics.ts#getRelicDraftOptionReasons",
       "name": "getRelicDraftOptionReasons",
       "kind": "value",
       "file": "src/shared/relics.ts",
-      "line": 883,
-      "endLine": 900
+      "line": 895,
+      "endLine": 912
     },
     {
       "id": "symbol:src/shared/relics.ts#getRelicDraftReason",
       "name": "getRelicDraftReason",
       "kind": "value",
       "file": "src/shared/relics.ts",
-      "line": 652,
-      "endLine": 655
+      "line": 664,
+      "endLine": 667
     },
     {
       "id": "symbol:src/shared/relics.ts#getRelicDraftRow",
       "name": "getRelicDraftRow",
       "kind": "value",
       "file": "src/shared/relics.ts",
-      "line": 357,
-      "endLine": 357
+      "line": 369,
+      "endLine": 369
     },
     {
       "id": "symbol:src/shared/relics.ts#getRelicOfferServiceActions",
       "name": "getRelicOfferServiceActions",
       "kind": "value",
       "file": "src/shared/relics.ts",
-      "line": 959,
-      "endLine": 968
+      "line": 971,
+      "endLine": 980
     },
     {
       "id": "symbol:src/shared/relics.ts#getRelicRoleAuditRows",
       "name": "getRelicRoleAuditRows",
       "kind": "value",
       "file": "src/shared/relics.ts",
-      "line": 516,
-      "endLine": 526
+      "line": 528,
+      "endLine": 538
     },
     {
       "id": "symbol:src/shared/relics.ts#getRunBuildProfile",
       "name": "getRunBuildProfile",
       "kind": "value",
       "file": "src/shared/relics.ts",
-      "line": 418,
-      "endLine": 466
+      "line": 430,
+      "endLine": 478
     },
     {
       "id": "symbol:src/shared/relics.ts#hasRelicDraftOptionReasons",
       "name": "hasRelicDraftOptionReasons",
       "kind": "value",
       "file": "src/shared/relics.ts",
-      "line": 665,
-      "endLine": 667
+      "line": 677,
+      "endLine": 679
     },
     {
       "id": "symbol:src/shared/relics.ts#hasRunRelic",
       "name": "hasRunRelic",
       "kind": "value",
       "file": "src/shared/relics.ts",
-      "line": 416,
-      "endLine": 416
+      "line": 428,
+      "endLine": 428
     },
     {
       "id": "symbol:src/shared/relics.ts#isRelicDraftEligible",
       "name": "isRelicDraftEligible",
       "kind": "value",
       "file": "src/shared/relics.ts",
-      "line": 569,
-      "endLine": 581
+      "line": 581,
+      "endLine": 593
     },
     {
       "id": "symbol:src/shared/relics.ts#MAX_RELIC_PICKS_PER_RUN",
@@ -54415,40 +54419,40 @@
       "name": "needsRelicPick",
       "kind": "value",
       "file": "src/shared/relics.ts",
-      "line": 795,
-      "endLine": 814
+      "line": 807,
+      "endLine": 826
     },
     {
       "id": "symbol:src/shared/relics.ts#RELIC_BUILD_ARCHETYPE_DEFINITIONS",
       "name": "RELIC_BUILD_ARCHETYPE_DEFINITIONS",
       "kind": "value",
       "file": "src/shared/relics.ts",
-      "line": 115,
-      "endLine": 188
+      "line": 117,
+      "endLine": 199
     },
     {
       "id": "symbol:src/shared/relics.ts#RELIC_BUILD_ARCHETYPE_LABELS",
       "name": "RELIC_BUILD_ARCHETYPE_LABELS",
       "kind": "value",
       "file": "src/shared/relics.ts",
-      "line": 190,
-      "endLine": 198
+      "line": 201,
+      "endLine": 210
     },
     {
       "id": "symbol:src/shared/relics.ts#RELIC_BUILD_ARCHETYPE_ORDER",
       "name": "RELIC_BUILD_ARCHETYPE_ORDER",
       "kind": "value",
       "file": "src/shared/relics.ts",
-      "line": 65,
-      "endLine": 73
+      "line": 66,
+      "endLine": 75
     },
     {
       "id": "symbol:src/shared/relics.ts#RELIC_DRAFT",
       "name": "RELIC_DRAFT",
       "kind": "value",
       "file": "src/shared/relics.ts",
-      "line": 204,
-      "endLine": 255
+      "line": 216,
+      "endLine": 267
     },
     {
       "id": "symbol:src/shared/relics.ts#RELIC_FIRST_MILESTONE_FLOOR",
@@ -54463,8 +54467,8 @@
       "name": "RELIC_MILESTONE_FLOORS",
       "kind": "value",
       "file": "src/shared/relics.ts",
-      "line": 778,
-      "endLine": 782
+      "line": 790,
+      "endLine": 794
     },
     {
       "id": "symbol:src/shared/relics.ts#RELIC_MILESTONE_STEP",
@@ -54479,8 +54483,8 @@
       "name": "RELIC_OFFER_SERVICE_CATALOG",
       "kind": "value",
       "file": "src/shared/relics.ts",
-      "line": 902,
-      "endLine": 921
+      "line": 914,
+      "endLine": 933
     },
     {
       "id": "symbol:src/shared/relics.ts#RELIC_OFFER_SERVICE_IDS",
@@ -54495,24 +54499,24 @@
       "name": "RELIC_POOL",
       "kind": "value",
       "file": "src/shared/relics.ts",
-      "line": 258,
-      "endLine": 275
+      "line": 270,
+      "endLine": 287
     },
     {
       "id": "symbol:src/shared/relics.ts#RELIC_POOL_COMFORT",
       "name": "RELIC_POOL_COMFORT",
       "kind": "value",
       "file": "src/shared/relics.ts",
-      "line": 758,
-      "endLine": 758
+      "line": 770,
+      "endLine": 770
     },
     {
       "id": "symbol:src/shared/relics.ts#RELIC_POOL_POWER",
       "name": "RELIC_POOL_POWER",
       "kind": "value",
       "file": "src/shared/relics.ts",
-      "line": 761,
-      "endLine": 761
+      "line": 773,
+      "endLine": 773
     },
     {
       "id": "symbol:src/shared/relics.ts#RelicBuildArchetype",
@@ -54520,31 +54524,31 @@
       "kind": "type",
       "file": "src/shared/relics.ts",
       "line": 56,
-      "endLine": 63
+      "endLine": 64
     },
     {
       "id": "symbol:src/shared/relics.ts#RelicBuildArchetypeDefinition",
       "name": "RelicBuildArchetypeDefinition",
       "kind": "interface",
       "file": "src/shared/relics.ts",
-      "line": 104,
-      "endLine": 113
+      "line": 106,
+      "endLine": 115
     },
     {
       "id": "symbol:src/shared/relics.ts#RelicDecisionImpact",
       "name": "RelicDecisionImpact",
       "kind": "type",
       "file": "src/shared/relics.ts",
-      "line": 468,
-      "endLine": 475
+      "line": 480,
+      "endLine": 487
     },
     {
       "id": "symbol:src/shared/relics.ts#RelicDraftContext",
       "name": "RelicDraftContext",
       "kind": "interface",
       "file": "src/shared/relics.ts",
-      "line": 77,
-      "endLine": 92
+      "line": 79,
+      "endLine": 94
     },
     {
       "id": "symbol:src/shared/relics.ts#RelicDraftRarity",
@@ -54559,16 +54563,16 @@
       "name": "relicDraftRarityLabel",
       "kind": "value",
       "file": "src/shared/relics.ts",
-      "line": 744,
-      "endLine": 755
+      "line": 756,
+      "endLine": 767
     },
     {
       "id": "symbol:src/shared/relics.ts#RelicDraftRow",
       "name": "RelicDraftRow",
       "kind": "interface",
       "file": "src/shared/relics.ts",
-      "line": 94,
-      "endLine": 102
+      "line": 96,
+      "endLine": 104
     },
     {
       "id": "symbol:src/shared/relics.ts#RelicDraftTag",
@@ -54583,88 +54587,88 @@
       "name": "relicMilestoneIndexForFloor",
       "kind": "value",
       "file": "src/shared/relics.ts",
-      "line": 766,
-      "endLine": 775
+      "line": 778,
+      "endLine": 787
     },
     {
       "id": "symbol:src/shared/relics.ts#RelicOfferServiceAction",
       "name": "RelicOfferServiceAction",
       "kind": "interface",
       "file": "src/shared/relics.ts",
-      "line": 955,
-      "endLine": 957
+      "line": 967,
+      "endLine": 969
     },
     {
       "id": "symbol:src/shared/relics.ts#RelicOfferServiceResult",
       "name": "RelicOfferServiceResult",
       "kind": "interface",
       "file": "src/shared/relics.ts",
-      "line": 978,
-      "endLine": 983
+      "line": 990,
+      "endLine": 995
     },
     {
       "id": "symbol:src/shared/relics.ts#RelicRoleAuditRow",
       "name": "RelicRoleAuditRow",
       "kind": "interface",
       "file": "src/shared/relics.ts",
-      "line": 477,
-      "endLine": 483
+      "line": 489,
+      "endLine": 495
     },
     {
       "id": "symbol:src/shared/relics.ts#rollRelicOptions",
       "name": "rollRelicOptions",
       "kind": "value",
       "file": "src/shared/relics.ts",
-      "line": 838,
-      "endLine": 881
+      "line": 850,
+      "endLine": 893
     },
     {
       "id": "symbol:src/shared/relics.ts#RunBuildArchetypeSignal",
       "name": "RunBuildArchetypeSignal",
       "kind": "interface",
       "file": "src/shared/relics.ts",
-      "line": 396,
-      "endLine": 403
+      "line": 408,
+      "endLine": 415
     },
     {
       "id": "symbol:src/shared/relics.ts#RunBuildProfile",
       "name": "RunBuildProfile",
       "kind": "interface",
       "file": "src/shared/relics.ts",
-      "line": 405,
-      "endLine": 410
+      "line": 417,
+      "endLine": 422
     },
     {
       "id": "symbol:src/shared/relics.ts#runMutatorIds",
       "name": "runMutatorIds",
       "kind": "value",
       "file": "src/shared/relics.ts",
-      "line": 414,
-      "endLine": 414
+      "line": 426,
+      "endLine": 426
     },
     {
       "id": "symbol:src/shared/relics.ts#runRelicIds",
       "name": "runRelicIds",
       "kind": "value",
       "file": "src/shared/relics.ts",
-      "line": 412,
-      "endLine": 412
+      "line": 424,
+      "endLine": 424
     },
     {
       "id": "symbol:src/shared/relics.ts#skipRelicOfferMilestone",
       "name": "skipRelicOfferMilestone",
       "kind": "value",
       "file": "src/shared/relics.ts",
-      "line": 816,
-      "endLine": 831
+      "line": 828,
+      "endLine": 843
     },
     {
       "id": "symbol:src/shared/relics.ts#withRelicOfferServiceActions",
       "name": "withRelicOfferServiceActions",
       "kind": "value",
       "file": "src/shared/relics.ts",
-      "line": 970,
-      "endLine": 976
+      "line": 982,
+      "endLine": 988
     },
     {
       "id": "symbol:src/shared/rest-shrine.ts#createRestShrineServices",
@@ -59683,7 +59687,7 @@
       "expectedMechanicId": "build.boss_hunter",
       "source": {
         "path": "src/shared/relics.ts",
-        "line": 65
+        "line": 66
       }
     },
     {
@@ -59694,7 +59698,29 @@
       "expectedMechanicId": "build.combo_shard_engine",
       "source": {
         "path": "src/shared/relics.ts",
-        "line": 65
+        "line": 66
+      }
+    },
+    {
+      "id": "content:build_archetype.conduit_cartographer",
+      "contentId": "conduit_cartographer",
+      "kind": "build_archetype",
+      "registry": "RELIC_BUILD_ARCHETYPE_ORDER",
+      "expectedMechanicId": "build.conduit_cartographer",
+      "source": {
+        "path": "src/shared/relics.ts",
+        "line": 66
+      }
+    },
+    {
+      "id": "content:build_archetype.emergency_toolkit",
+      "contentId": "emergency_toolkit",
+      "kind": "build_archetype",
+      "registry": "RELIC_BUILD_ARCHETYPE_ORDER",
+      "expectedMechanicId": "build.emergency_toolkit",
+      "source": {
+        "path": "src/shared/relics.ts",
+        "line": 66
       }
     },
     {
@@ -59705,18 +59731,7 @@
       "expectedMechanicId": "build.guard_tank",
       "source": {
         "path": "src/shared/relics.ts",
-        "line": 65
-      }
-    },
-    {
-      "id": "content:build_archetype.reveal_scout",
-      "contentId": "reveal_scout",
-      "kind": "build_archetype",
-      "registry": "RELIC_BUILD_ARCHETYPE_ORDER",
-      "expectedMechanicId": "build.reveal_scout",
-      "source": {
-        "path": "src/shared/relics.ts",
-        "line": 65
+        "line": 66
       }
     },
     {
@@ -59727,7 +59742,7 @@
       "expectedMechanicId": "build.route_gambler",
       "source": {
         "path": "src/shared/relics.ts",
-        "line": 65
+        "line": 66
       }
     },
     {
@@ -59738,7 +59753,7 @@
       "expectedMechanicId": "build.trap_control",
       "source": {
         "path": "src/shared/relics.ts",
-        "line": 65
+        "line": 66
       }
     },
     {
@@ -59749,7 +59764,7 @@
       "expectedMechanicId": "build.treasure_greed",
       "source": {
         "path": "src/shared/relics.ts",
-        "line": 65
+        "line": 66
       }
     },
     {
@@ -59980,7 +59995,7 @@
       "expectedMechanicId": "relic.chapter_compass",
       "source": {
         "path": "src/shared/relics.ts",
-        "line": 258
+        "line": 270
       }
     },
     {
@@ -59991,7 +60006,7 @@
       "expectedMechanicId": "relic.combo_shard_plus_step",
       "source": {
         "path": "src/shared/relics.ts",
-        "line": 258
+        "line": 270
       }
     },
     {
@@ -60002,7 +60017,7 @@
       "expectedMechanicId": "relic.destroy_bank_plus_one",
       "source": {
         "path": "src/shared/relics.ts",
-        "line": 258
+        "line": 270
       }
     },
     {
@@ -60013,7 +60028,7 @@
       "expectedMechanicId": "relic.extra_shuffle_charge",
       "source": {
         "path": "src/shared/relics.ts",
-        "line": 258
+        "line": 270
       }
     },
     {
@@ -60024,7 +60039,7 @@
       "expectedMechanicId": "relic.first_shuffle_free_per_floor",
       "source": {
         "path": "src/shared/relics.ts",
-        "line": 258
+        "line": 270
       }
     },
     {
@@ -60035,7 +60050,7 @@
       "expectedMechanicId": "relic.guard_token_plus_one",
       "source": {
         "path": "src/shared/relics.ts",
-        "line": 258
+        "line": 270
       }
     },
     {
@@ -60046,7 +60061,7 @@
       "expectedMechanicId": "relic.memorize_bonus_ms",
       "source": {
         "path": "src/shared/relics.ts",
-        "line": 258
+        "line": 270
       }
     },
     {
@@ -60057,7 +60072,7 @@
       "expectedMechanicId": "relic.memorize_under_short_memorize",
       "source": {
         "path": "src/shared/relics.ts",
-        "line": 258
+        "line": 270
       }
     },
     {
@@ -60068,7 +60083,7 @@
       "expectedMechanicId": "relic.parasite_ledger",
       "source": {
         "path": "src/shared/relics.ts",
-        "line": 258
+        "line": 270
       }
     },
     {
@@ -60079,7 +60094,7 @@
       "expectedMechanicId": "relic.parasite_ward_once",
       "source": {
         "path": "src/shared/relics.ts",
-        "line": 258
+        "line": 270
       }
     },
     {
@@ -60090,7 +60105,7 @@
       "expectedMechanicId": "relic.peek_charge_plus_one",
       "source": {
         "path": "src/shared/relics.ts",
-        "line": 258
+        "line": 270
       }
     },
     {
@@ -60101,7 +60116,7 @@
       "expectedMechanicId": "relic.pin_cap_plus_one",
       "source": {
         "path": "src/shared/relics.ts",
-        "line": 258
+        "line": 270
       }
     },
     {
@@ -60112,7 +60127,7 @@
       "expectedMechanicId": "relic.region_shuffle_free_first",
       "source": {
         "path": "src/shared/relics.ts",
-        "line": 258
+        "line": 270
       }
     },
     {
@@ -60123,7 +60138,7 @@
       "expectedMechanicId": "relic.shrine_echo",
       "source": {
         "path": "src/shared/relics.ts",
-        "line": 258
+        "line": 270
       }
     },
     {
@@ -60134,7 +60149,7 @@
       "expectedMechanicId": "relic.stray_charge_plus_one",
       "source": {
         "path": "src/shared/relics.ts",
-        "line": 258
+        "line": 270
       }
     },
     {
@@ -60145,7 +60160,7 @@
       "expectedMechanicId": "relic.wager_surety",
       "source": {
         "path": "src/shared/relics.ts",
-        "line": 258
+        "line": 270
       }
     }
   ],
@@ -60225,7 +60240,7 @@
       ],
       "enables": [
         "route.mystery",
-        "build.reveal_scout"
+        "build.conduit_cartographer"
       ],
       "blocks": [],
       "softlockGuards": [
@@ -60368,7 +60383,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 35
+          "line": 34
         },
         {
           "path": "src/shared/game.test.ts",
@@ -60455,13 +60470,33 @@
     {
       "id": "mechanic:build.conduit_cartographer",
       "mechanicId": "build.conduit_cartographer",
-      "label": "Conduit Cartographer Build",
+      "label": "Conduit Cartographer Information-Control Build",
       "kind": "build",
-      "role": "reveal_control_build",
+      "role": "scout_reveal_pin_and_peek_information_control_build",
       "evidence": [
         {
           "path": "src/shared/gameplay-core-contracts.ts",
           "line": 20
+        },
+        {
+          "path": "src/shared/gameplay-core.ts",
+          "line": 880
+        },
+        {
+          "path": "src/shared/gameplay-core-playthrough-solver.ts",
+          "line": 1
+        },
+        {
+          "path": "src/shared/build-strategy-playthrough-simulation.ts",
+          "line": 13
+        },
+        {
+          "path": "src/shared/dungeon-scout-rules.ts",
+          "line": 1
+        },
+        {
+          "path": "src/shared/board-power-state.ts",
+          "line": 1
         },
         {
           "path": "src/shared/relics.ts",
@@ -60478,6 +60513,18 @@
           "line": 23
         },
         {
+          "path": "src/shared/gameplay-core-playthrough-solver.test.ts",
+          "line": 6
+        },
+        {
+          "path": "src/shared/build-strategy-playthrough-simulation.test.ts",
+          "line": 3
+        },
+        {
+          "path": "src/shared/game.test.ts",
+          "line": 41
+        },
+        {
           "path": "src/shared/relics.test.ts",
           "line": 11
         },
@@ -60488,11 +60535,19 @@
       ],
       "enables": [
         "power.peek",
+        "power.pin",
+        "board.scout_reveal",
+        "progression.relic_draft",
         "route.mystery"
       ],
       "blocks": [],
       "softlockGuards": [
-        "complete-source-effect-consequence-loop"
+        "complete-source-effect-consequence-loop",
+        "observed-known-pair-pin-only",
+        "two-pins-per-floor",
+        "hazard-pressure-pin-conservation",
+        "deterministic-scout-selection",
+        "exact-command-replay"
       ]
     },
     {
@@ -60530,7 +60585,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 36
+          "line": 35
         },
         {
           "path": "src/shared/board-power-actions.test.ts",
@@ -60580,7 +60635,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 38
+          "line": 37
         },
         {
           "path": "src/shared/tile-trait-rules.test.ts",
@@ -60704,7 +60759,7 @@
         },
         {
           "path": "src/shared/gameplay-core-playthrough-solver.ts",
-          "line": 49
+          "line": 53
         },
         {
           "path": "src/shared/build-strategy-simulation.ts",
@@ -60759,63 +60814,6 @@
       ]
     },
     {
-      "id": "mechanic:build.reveal_scout",
-      "mechanicId": "build.reveal_scout",
-      "label": "Seer Information Control Build",
-      "kind": "build",
-      "role": "information_control_build",
-      "evidence": [
-        {
-          "path": "src/shared/gameplay-core-contracts.ts",
-          "line": 357
-        },
-        {
-          "path": "src/shared/gameplay-core.ts",
-          "line": 231
-        },
-        {
-          "path": "src/shared/gameplay-core-adapters.ts",
-          "line": 1
-        },
-        {
-          "path": "src/shared/dungeon-scout-rules.ts",
-          "line": 1
-        }
-      ],
-      "tests": [
-        {
-          "path": "src/shared/gameplay-core.test.ts",
-          "line": 34
-        },
-        {
-          "path": "src/shared/game.test.ts",
-          "line": 41
-        },
-        {
-          "path": "src/renderer/store/runSurfaceState.test.ts",
-          "line": 6
-        },
-        {
-          "path": "src/renderer/store/tilePressController.test.ts",
-          "line": 3
-        }
-      ],
-      "enables": [
-        "power.peek",
-        "power.pin",
-        "power.stray_remove",
-        "board.scout_reveal",
-        "progression.relic_draft",
-        "route.mystery"
-      ],
-      "blocks": [],
-      "softlockGuards": [
-        "completion-safe-stray-target",
-        "hidden-pin-target",
-        "deterministic-scout-selection"
-      ]
-    },
-    {
       "id": "mechanic:build.route_gambler",
       "mechanicId": "build.route_gambler",
       "label": "Route Gambler Build",
@@ -60846,7 +60844,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 63
+          "line": 62
         },
         {
           "path": "src/shared/risk-wager-rules.test.ts",
@@ -60988,7 +60986,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 37
+          "line": 36
         },
         {
           "path": "src/shared/bonus-rewards.test.ts",
@@ -61175,7 +61173,6 @@
         "build.emergency_toolkit",
         "build.treasure_greed",
         "build.boss_hunter",
-        "build.reveal_scout",
         "build.route_gambler",
         "persistence.run_summary",
         "simulation.gameplay_replay"
@@ -61492,7 +61489,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 66
+          "line": 65
         },
         {
           "path": "src/shared/turn-match-economy-rules.test.ts",
@@ -61539,7 +61536,7 @@
         },
         {
           "path": "src/shared/build-strategy-playthrough-simulation.ts",
-          "line": 414
+          "line": 452
         }
       ],
       "tests": [
@@ -61553,15 +61550,15 @@
         },
         {
           "path": "src/shared/gameplay-core-playthrough-solver.test.ts",
-          "line": 11
+          "line": 12
         },
         {
           "path": "src/shared/build-strategy-simulation.test.ts",
-          "line": 135
+          "line": 139
         },
         {
           "path": "src/shared/build-strategy-playthrough-simulation.test.ts",
-          "line": 256
+          "line": 292
         }
       ],
       "enables": [
@@ -61625,7 +61622,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 49
+          "line": 48
         },
         {
           "path": "src/shared/game.test.ts",
@@ -61845,7 +61842,7 @@
       "evidence": [
         {
           "path": "src/shared/gameplay-core-contracts.ts",
-          "line": 1225
+          "line": 1221
         },
         {
           "path": "src/shared/gameplay-core.ts",
@@ -61875,7 +61872,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 39
+          "line": 38
         },
         {
           "path": "src/shared/typed-gameplay-feedback-boundary.test.ts",
@@ -61949,7 +61946,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 83
+          "line": 82
         }
       ],
       "enables": [
@@ -62003,7 +62000,7 @@
       ],
       "enables": [
         "board.scout_reveal",
-        "build.reveal_scout"
+        "build.conduit_cartographer"
       ],
       "blocks": [],
       "softlockGuards": [
@@ -62191,7 +62188,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 55
+          "line": 54
         },
         {
           "path": "src/shared/game.test.ts",
@@ -62401,7 +62398,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 48
+          "line": 47
         }
       ],
       "enables": [
@@ -62540,7 +62537,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 141
+          "line": 140
         }
       ],
       "enables": [
@@ -62588,7 +62585,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 549
+          "line": 548
         }
       ],
       "enables": [
@@ -62641,7 +62638,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 577
+          "line": 576
         }
       ],
       "enables": [
@@ -62850,7 +62847,6 @@
         "build.trap_control",
         "build.treasure_greed",
         "build.boss_hunter",
-        "build.reveal_scout",
         "build.memory_scout"
       ],
       "blocks": [],
@@ -63022,7 +63018,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 72
+          "line": 71
         },
         {
           "path": "src/shared/game.test.ts",
@@ -63162,7 +63158,7 @@
         },
         {
           "path": "src/shared/gameplay-core-contracts.ts",
-          "line": 1259
+          "line": 1255
         },
         {
           "path": "src/shared/gameplay-core.ts",
@@ -63196,7 +63192,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 39
+          "line": 38
         },
         {
           "path": "src/shared/gameplay-core-simulation.test.ts",
@@ -63496,7 +63492,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 670
+          "line": 669
         },
         {
           "path": "src/shared/tile-trait-rules.test.ts",
@@ -63653,7 +63649,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 50
+          "line": 49
         },
         {
           "path": "src/shared/next-floor-run-state-rules.test.ts",
@@ -63829,7 +63825,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 42
+          "line": 41
         },
         {
           "path": "src/shared/gameplay-core-simulation.test.ts",
@@ -63923,7 +63919,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 43
+          "line": 42
         },
         {
           "path": "src/shared/gameplay-core-simulation.test.ts",
@@ -64130,7 +64126,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 53
+          "line": 52
         },
         {
           "path": "src/shared/gambit-match-rules.test.ts",
@@ -64249,7 +64245,7 @@
         }
       ],
       "enables": [
-        "build.reveal_scout"
+        "build.conduit_cartographer"
       ],
       "blocks": [],
       "softlockGuards": [
@@ -64452,7 +64448,7 @@
       ],
       "enables": [
         "objective.floor_clear",
-        "build.reveal_scout"
+        "build.emergency_toolkit"
       ],
       "blocks": [],
       "softlockGuards": [
@@ -64612,7 +64608,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 72
+          "line": 71
         },
         {
           "path": "src/shared/game.test.ts",
@@ -64782,7 +64778,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 63
+          "line": 62
         },
         {
           "path": "src/shared/route-side-room-rules.test.ts",
@@ -64865,7 +64861,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 44
+          "line": 43
         },
         {
           "path": "src/shared/gameplay-core-simulation.test.ts",
@@ -65322,7 +65318,7 @@
       "evidence": [
         {
           "path": "src/shared/relics.ts",
-          "line": 121
+          "line": 123
         },
         {
           "path": "src/shared/scoring-rules.ts",
@@ -65340,7 +65336,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 146
+          "line": 145
         },
         {
           "path": "src/renderer/store/relicOfferSurfaceState.test.ts",
@@ -65374,7 +65370,7 @@
         },
         {
           "path": "src/shared/gameplay-core-contracts.ts",
-          "line": 856
+          "line": 925
         }
       ],
       "tests": [
@@ -65566,7 +65562,7 @@
       "evidence": [
         {
           "path": "src/shared/relics.ts",
-          "line": 164
+          "line": 166
         },
         {
           "path": "src/shared/board-power-state.ts",
@@ -65574,7 +65570,7 @@
         },
         {
           "path": "src/shared/gameplay-core-contracts.ts",
-          "line": 789
+          "line": 460
         }
       ],
       "tests": [
@@ -65589,7 +65585,7 @@
       ],
       "enables": [
         "power.pin",
-        "build.reveal_scout"
+        "build.conduit_cartographer"
       ],
       "blocks": [],
       "softlockGuards": [
@@ -65706,7 +65702,7 @@
       "evidence": [
         {
           "path": "src/shared/relics.ts",
-          "line": 111
+          "line": 113
         },
         {
           "path": "src/shared/relic-immediate-rules.ts",
@@ -65730,7 +65726,7 @@
       "enables": [
         "inventory.stray_remove_charge",
         "power.stray_remove",
-        "build.reveal_scout"
+        "build.emergency_toolkit"
       ],
       "blocks": [],
       "softlockGuards": [
@@ -66162,11 +66158,11 @@
         },
         {
           "path": "src/shared/build-strategy-simulation.ts",
-          "line": 237
+          "line": 238
         },
         {
           "path": "src/shared/build-strategy-playthrough-simulation.ts",
-          "line": 410
+          "line": 448
         }
       ],
       "tests": [
@@ -66176,15 +66172,15 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 2783
+          "line": 2782
         },
         {
           "path": "src/shared/build-strategy-simulation.test.ts",
-          "line": 134
+          "line": 138
         },
         {
           "path": "src/shared/build-strategy-playthrough-simulation.test.ts",
-          "line": 252
+          "line": 288
         }
       ],
       "enables": [
@@ -66232,7 +66228,7 @@
       "enables": [
         "inventory.peek_charge",
         "economy.relic_favor",
-        "build.reveal_scout"
+        "build.conduit_cartographer"
       ],
       "blocks": [],
       "softlockGuards": [
@@ -66445,7 +66441,7 @@
         },
         {
           "path": "src/shared/gameplay-core-playthrough-solver.ts",
-          "line": 145
+          "line": 154
         }
       ],
       "tests": [
@@ -66459,15 +66455,15 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 36
+          "line": 35
         },
         {
           "path": "src/shared/gameplay-core-playthrough-solver.test.ts",
-          "line": 11
+          "line": 12
         },
         {
           "path": "src/shared/build-strategy-playthrough-simulation.test.ts",
-          "line": 57
+          "line": 61
         }
       ],
       "enables": [
@@ -66526,7 +66522,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 63
+          "line": 62
         },
         {
           "path": "src/renderer/store/levelCompleteContinuationExecutor.test.ts",
@@ -67024,7 +67020,7 @@
         },
         {
           "path": "src/shared/gameplay-core-playthrough-solver.ts",
-          "line": 13
+          "line": 14
         },
         {
           "path": "src/shared/build-strategy-playthrough-simulation.ts",
@@ -67046,11 +67042,11 @@
         },
         {
           "path": "src/shared/gameplay-core-playthrough-solver.test.ts",
-          "line": 11
+          "line": 12
         },
         {
           "path": "src/shared/build-strategy-playthrough-simulation.test.ts",
-          "line": 99
+          "line": 103
         },
         {
           "path": "src/renderer/store/shopSurfaceState.test.ts",
@@ -67120,7 +67116,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 66
+          "line": 65
         },
         {
           "path": "src/shared/gameplay-core-simulation.test.ts",
@@ -67299,7 +67295,7 @@
       "mechanicId": "simulation.build_evaluation",
       "label": "Nine-Build Risk, Sustain, Reconfiguration, Boss, Recovery, and Lock-Extraction Long-Horizon Policy Evaluation",
       "kind": "simulation",
-      "role": "route_profile_and_twelve_floor_nine_build_bounded_memory_visible_resource_interlude_risk_sustain_board_reconfiguration_boss_recovery_and_lock_extraction_policy_counter_matchup_viability_balance_feedback_and_replay_gate",
+      "role": "route_profile_and_twelve_floor_nine_build_bounded_memory_information_annotation_visible_resource_interlude_risk_sustain_board_reconfiguration_boss_recovery_and_lock_extraction_policy_counter_matchup_viability_balance_feedback_and_replay_gate",
       "evidence": [
         {
           "path": "src/shared/balance-simulation.ts",
@@ -67307,7 +67303,7 @@
         },
         {
           "path": "src/shared/build-strategy-simulation.ts",
-          "line": 716
+          "line": 719
         },
         {
           "path": "src/shared/build-strategy-playthrough-simulation.ts",
@@ -67315,7 +67311,7 @@
         },
         {
           "path": "src/shared/gameplay-core-playthrough-solver.ts",
-          "line": 45
+          "line": 49
         },
         {
           "path": "src/shared/gameplay-core.ts",
@@ -67349,7 +67345,7 @@
         },
         {
           "path": "src/shared/gameplay-core-playthrough-solver.test.ts",
-          "line": 82
+          "line": 83
         }
       ],
       "enables": [
@@ -67376,6 +67372,10 @@
         "adaptive-route-selection",
         "actual-event-effect-ranking",
         "recovery-below-reserve",
+        "conduit-information-control-long-horizon-coverage",
+        "observed-known-pair-pin-only",
+        "scout-glint-match-source",
+        "hazard-pressure-pin-conservation",
         "route-gambler-long-horizon-coverage",
         "combo-shard-long-horizon-coverage",
         "trap-control-long-horizon-coverage",
@@ -67431,7 +67431,7 @@
         "uncertain-turn-budget",
         "imperfect-information-floor-minimum",
         "zero-risk-budget-exhaustion",
-        "mid-turn-resolution-before-third-choice",
+        "mid-turn-resolving-state",
         "shipped-favorable-matchup-exposure",
         "shipped-counter-matchup-exposure",
         "counter-matchup-replay",
@@ -67494,7 +67494,7 @@
       "mechanicId": "simulation.generated_board_playthrough",
       "label": "Generated Board Command Playthrough",
       "kind": "simulation",
-      "role": "core_command_event_perfect_bounded_information_identity_blind_gambit_recovery_and_opt_in_lock_extraction_generated_board_fairness_and_replay_gate",
+      "role": "core_command_event_perfect_bounded_information_identity_blind_gambit_recovery_opt_in_pin_annotation_and_lock_extraction_generated_board_fairness_and_replay_gate",
       "evidence": [
         {
           "path": "src/shared/playthrough-solver-rules.ts",
@@ -67529,6 +67529,7 @@
       ],
       "enables": [
         "objective.floor_clear",
+        "power.pin",
         "exit.primary",
         "exit.locked_alternate",
         "room.locked_cache",
@@ -67554,6 +67555,8 @@
         "undo-only-after-uncertain-mismatch",
         "single-floor-gambit-token",
         "single-floor-undo-use",
+        "observed-known-pair-pin-only",
+        "two-pins-per-floor",
         "affordable-lock-only",
         "typed-key-first",
         "typed-pause-purchase-resume",
@@ -68006,7 +68009,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 141
+          "line": 140
         }
       ],
       "enables": [
@@ -68235,7 +68238,6 @@
         "mechanic:build.conduit_cartographer",
         "mechanic:build.emergency_toolkit",
         "mechanic:build.guard_tank",
-        "mechanic:build.reveal_scout",
         "mechanic:build.route_gambler",
         "mechanic:build.trap_control",
         "mechanic:build.treasure_greed"
@@ -69433,6 +69435,14 @@
       "writtenBy": []
     },
     {
+      "id": "state:hazardPinConservationReport",
+      "name": "hazardPinConservationReport",
+      "readBy": [],
+      "writtenBy": [
+        "mechanic:simulation.build_evaluation"
+      ]
+    },
+    {
       "id": "state:hazardTilesAfter",
       "name": "hazardTilesAfter",
       "readBy": [
@@ -69629,7 +69639,8 @@
       "id": "state:matchedFindableKind",
       "name": "matchedFindableKind",
       "readBy": [
-        "mechanic:feedback.board_turn_floater"
+        "mechanic:feedback.board_turn_floater",
+        "mechanic:simulation.build_evaluation"
       ],
       "writtenBy": [
         "mechanic:core.board_turn_resolution"
@@ -69640,6 +69651,7 @@
       "name": "matchedFindables",
       "readBy": [
         "mechanic:build.combo_shard_engine",
+        "mechanic:build.conduit_cartographer",
         "mechanic:build.trap_control",
         "mechanic:build.treasure_greed",
         "mechanic:core.gameplay_commands",
@@ -70041,7 +70053,6 @@
       "readBy": [
         "mechanic:build.conduit_cartographer",
         "mechanic:build.emergency_toolkit",
-        "mechanic:build.reveal_scout",
         "mechanic:core.gameplay_commands",
         "mechanic:feedback.gameplay_hud",
         "mechanic:inventory.peek_charge",
@@ -70130,9 +70141,11 @@
       "id": "state:pinnedTileIds",
       "name": "pinnedTileIds",
       "readBy": [
-        "mechanic:build.reveal_scout",
+        "mechanic:build.conduit_cartographer",
         "mechanic:core.gameplay_commands",
-        "mechanic:power.pin"
+        "mechanic:power.pin",
+        "mechanic:simulation.build_evaluation",
+        "mechanic:simulation.generated_board_playthrough"
       ],
       "writtenBy": [
         "mechanic:core.gameplay_commands",
@@ -70140,10 +70153,37 @@
       ]
     },
     {
+      "id": "state:pinPlacementReport",
+      "name": "pinPlacementReport",
+      "readBy": [],
+      "writtenBy": [
+        "mechanic:simulation.build_evaluation",
+        "mechanic:simulation.generated_board_playthrough"
+      ]
+    },
+    {
+      "id": "state:pinPolicy",
+      "name": "pinPolicy",
+      "readBy": [
+        "mechanic:build.conduit_cartographer",
+        "mechanic:simulation.build_evaluation",
+        "mechanic:simulation.generated_board_playthrough"
+      ],
+      "writtenBy": []
+    },
+    {
+      "id": "state:pinPolicySuppressedMatchups",
+      "name": "pinPolicySuppressedMatchups",
+      "readBy": [
+        "mechanic:simulation.build_evaluation"
+      ],
+      "writtenBy": []
+    },
+    {
       "id": "state:pinsPlacedCountThisRun",
       "name": "pinsPlacedCountThisRun",
       "readBy": [
-        "mechanic:build.reveal_scout"
+        "mechanic:build.conduit_cartographer"
       ],
       "writtenBy": [
         "mechanic:core.gameplay_commands",
@@ -70389,7 +70429,6 @@
       "id": "state:relicFavorProgress",
       "name": "relicFavorProgress",
       "readBy": [
-        "mechanic:build.reveal_scout",
         "mechanic:build.route_gambler",
         "mechanic:core.gameplay_commands",
         "mechanic:economy.relic_favor",
@@ -70594,7 +70633,6 @@
       "name": "routeChoices",
       "readBy": [
         "mechanic:build.conduit_cartographer",
-        "mechanic:build.reveal_scout",
         "mechanic:build.route_gambler",
         "mechanic:progression.run_flow",
         "mechanic:route.choice",
@@ -70637,7 +70675,7 @@
       "id": "state:routeSpecialRevealed",
       "name": "routeSpecialRevealed",
       "readBy": [
-        "mechanic:build.reveal_scout"
+        "mechanic:build.conduit_cartographer"
       ],
       "writtenBy": [
         "mechanic:board.scout_reveal"
@@ -70826,6 +70864,14 @@
       ]
     },
     {
+      "id": "state:scoutGlintMatchReport",
+      "name": "scoutGlintMatchReport",
+      "readBy": [],
+      "writtenBy": [
+        "mechanic:simulation.build_evaluation"
+      ]
+    },
+    {
       "id": "state:scoutRevealRequests",
       "name": "scoutRevealRequests",
       "readBy": [
@@ -70840,7 +70886,7 @@
       "id": "state:scoutRevealSource",
       "name": "scoutRevealSource",
       "readBy": [
-        "mechanic:build.reveal_scout"
+        "mechanic:build.conduit_cartographer"
       ],
       "writtenBy": [
         "mechanic:board.scout_reveal"
@@ -71123,7 +71169,6 @@
       "id": "state:strayRemoveCharges",
       "name": "strayRemoveCharges",
       "readBy": [
-        "mechanic:build.reveal_scout",
         "mechanic:core.gameplay_commands",
         "mechanic:inventory.stray_remove_charge",
         "mechanic:power.stray_remove"
@@ -71475,11 +71520,11 @@
       "label": "Vaultbreaker pickup source"
     },
     {
-      "id": "belongs_to:mechanic:findable.scout_glint->mechanic:build.reveal_scout:Seer board-information source",
+      "id": "belongs_to:mechanic:findable.scout_glint->mechanic:build.conduit_cartographer:retained information-control pickup source",
       "source": "mechanic:findable.scout_glint",
-      "target": "mechanic:build.reveal_scout",
+      "target": "mechanic:build.conduit_cartographer",
       "kind": "belongs_to",
-      "label": "Seer board-information source"
+      "label": "retained information-control pickup source"
     },
     {
       "id": "belongs_to:mechanic:findable.shard_spark->mechanic:build.combo_shard_engine:match pickup source",
@@ -71587,11 +71632,11 @@
       "label": "supports build"
     },
     {
-      "id": "belongs_to:mechanic:relic.pin_cap_plus_one->mechanic:build.reveal_scout:Seer memory marker source",
+      "id": "belongs_to:mechanic:relic.pin_cap_plus_one->mechanic:build.conduit_cartographer:retained information-control memory marker source",
       "source": "mechanic:relic.pin_cap_plus_one",
-      "target": "mechanic:build.reveal_scout",
+      "target": "mechanic:build.conduit_cartographer",
       "kind": "belongs_to",
-      "label": "Seer memory marker source"
+      "label": "retained information-control memory marker source"
     },
     {
       "id": "belongs_to:mechanic:relic.region_shuffle_free_first->mechanic:build.trap_control:Saboteur renewable targeted control source",
@@ -71608,11 +71653,11 @@
       "label": "Vaultbreaker relic source"
     },
     {
-      "id": "belongs_to:mechanic:relic.stray_charge_plus_one->mechanic:build.reveal_scout:Seer correction source",
+      "id": "belongs_to:mechanic:relic.stray_charge_plus_one->mechanic:build.emergency_toolkit:completion-safe emergency correction source",
       "source": "mechanic:relic.stray_charge_plus_one",
-      "target": "mechanic:build.reveal_scout",
+      "target": "mechanic:build.emergency_toolkit",
       "kind": "belongs_to",
-      "label": "Seer correction source"
+      "label": "completion-safe emergency correction source"
     },
     {
       "id": "belongs_to:mechanic:relic.wager_surety->mechanic:build.boss_hunter:Slayer wager insurance source",
@@ -71678,11 +71723,11 @@
       "label": "Locksmith reward source"
     },
     {
-      "id": "belongs_to:mechanic:reward.secret_favor->mechanic:build.reveal_scout:Seer information resource source",
+      "id": "belongs_to:mechanic:reward.secret_favor->mechanic:build.conduit_cartographer:retained information-control resource source",
       "source": "mechanic:reward.secret_favor",
-      "target": "mechanic:build.reveal_scout",
+      "target": "mechanic:build.conduit_cartographer",
       "kind": "belongs_to",
-      "label": "Seer information resource source"
+      "label": "retained information-control resource source"
     },
     {
       "id": "belongs_to:mechanic:reward.stasis_lockbox->mechanic:build.trap_control:Saboteur control and guard source",
@@ -71776,6 +71821,34 @@
       "label": "adds one-shot chapter-pressure survival"
     },
     {
+      "id": "consequence:mechanic:build.conduit_cartographer->mechanic:board.scout_reveal:turns matched Glints into deterministic threat knowledge",
+      "source": "mechanic:build.conduit_cartographer",
+      "target": "mechanic:board.scout_reveal",
+      "kind": "consequence",
+      "label": "turns matched Glints into deterministic threat knowledge"
+    },
+    {
+      "id": "consequence:mechanic:build.conduit_cartographer->mechanic:power.peek:turns earned information into chosen inspection",
+      "source": "mechanic:build.conduit_cartographer",
+      "target": "mechanic:power.peek",
+      "kind": "consequence",
+      "label": "turns earned information into chosen inspection"
+    },
+    {
+      "id": "consequence:mechanic:build.conduit_cartographer->mechanic:power.pin:records a genuinely remembered pair through typed Pins",
+      "source": "mechanic:build.conduit_cartographer",
+      "target": "mechanic:power.pin",
+      "kind": "consequence",
+      "label": "records a genuinely remembered pair through typed Pins"
+    },
+    {
+      "id": "consequence:mechanic:build.conduit_cartographer->mechanic:progression.relic_draft:converts secrets into future information-control selection",
+      "source": "mechanic:build.conduit_cartographer",
+      "target": "mechanic:progression.relic_draft",
+      "kind": "consequence",
+      "label": "converts secrets into future information-control selection"
+    },
+    {
       "id": "consequence:mechanic:build.conduit_cartographer->mechanic:route.mystery:converts information into route choice",
       "source": "mechanic:build.conduit_cartographer",
       "target": "mechanic:route.mystery",
@@ -71802,6 +71875,13 @@
       "target": "mechanic:power.peek",
       "kind": "consequence",
       "label": "inspects a hidden blocker first"
+    },
+    {
+      "id": "consequence:mechanic:build.emergency_toolkit->mechanic:power.stray_remove:corrects completion-safe uncertainty",
+      "source": "mechanic:build.emergency_toolkit",
+      "target": "mechanic:power.stray_remove",
+      "kind": "consequence",
+      "label": "corrects completion-safe uncertainty"
     },
     {
       "id": "consequence:mechanic:build.guard_tank->mechanic:safety.guard_absorption:converts guard sources into survivability",
@@ -71844,41 +71924,6 @@
       "target": "mechanic:power.undo_resolve",
       "kind": "consequence",
       "label": "retains bounded mistake recovery"
-    },
-    {
-      "id": "consequence:mechanic:build.reveal_scout->mechanic:board.scout_reveal:turns matched Glints into deterministic knowledge",
-      "source": "mechanic:build.reveal_scout",
-      "target": "mechanic:board.scout_reveal",
-      "kind": "consequence",
-      "label": "turns matched Glints into deterministic knowledge"
-    },
-    {
-      "id": "consequence:mechanic:build.reveal_scout->mechanic:power.peek:turns earned information into chosen inspection",
-      "source": "mechanic:build.reveal_scout",
-      "target": "mechanic:power.peek",
-      "kind": "consequence",
-      "label": "turns earned information into chosen inspection"
-    },
-    {
-      "id": "consequence:mechanic:build.reveal_scout->mechanic:power.pin:records the most valuable hidden targets",
-      "source": "mechanic:build.reveal_scout",
-      "target": "mechanic:power.pin",
-      "kind": "consequence",
-      "label": "records the most valuable hidden targets"
-    },
-    {
-      "id": "consequence:mechanic:build.reveal_scout->mechanic:power.stray_remove:corrects completion-safe uncertainty",
-      "source": "mechanic:build.reveal_scout",
-      "target": "mechanic:power.stray_remove",
-      "kind": "consequence",
-      "label": "corrects completion-safe uncertainty"
-    },
-    {
-      "id": "consequence:mechanic:build.reveal_scout->mechanic:progression.relic_draft:converts secrets into future build selection",
-      "source": "mechanic:build.reveal_scout",
-      "target": "mechanic:progression.relic_draft",
-      "kind": "consequence",
-      "label": "converts secrets into future build selection"
     },
     {
       "id": "consequence:mechanic:build.route_gambler->mechanic:economy.relic_favor:cashes successful risks into future build choices",
@@ -71972,11 +72017,11 @@
       "label": "converts gold into chosen route insurance"
     },
     {
-      "id": "consequence:mechanic:economy.relic_favor->mechanic:build.reveal_scout:compounds information rewards into relic choices",
+      "id": "consequence:mechanic:economy.relic_favor->mechanic:build.conduit_cartographer:compounds information rewards into retained relic choices",
       "source": "mechanic:economy.relic_favor",
-      "target": "mechanic:build.reveal_scout",
+      "target": "mechanic:build.conduit_cartographer",
       "kind": "consequence",
-      "label": "compounds information rewards into relic choices"
+      "label": "compounds information rewards into retained relic choices"
     },
     {
       "id": "consequence:mechanic:objective.featured_streak->mechanic:build.boss_hunter:creates boss preparation wager",
@@ -72447,14 +72492,20 @@
       "kind": "declared_by"
     },
     {
-      "id": "declared_by:content:build_archetype.guard_tank->file:src/shared/relics.ts",
-      "source": "content:build_archetype.guard_tank",
+      "id": "declared_by:content:build_archetype.conduit_cartographer->file:src/shared/relics.ts",
+      "source": "content:build_archetype.conduit_cartographer",
       "target": "file:src/shared/relics.ts",
       "kind": "declared_by"
     },
     {
-      "id": "declared_by:content:build_archetype.reveal_scout->file:src/shared/relics.ts",
-      "source": "content:build_archetype.reveal_scout",
+      "id": "declared_by:content:build_archetype.emergency_toolkit->file:src/shared/relics.ts",
+      "source": "content:build_archetype.emergency_toolkit",
+      "target": "file:src/shared/relics.ts",
+      "kind": "declared_by"
+    },
+    {
+      "id": "declared_by:content:build_archetype.guard_tank->file:src/shared/relics.ts",
+      "source": "content:build_archetype.guard_tank",
       "target": "file:src/shared/relics.ts",
       "kind": "declared_by"
     },
@@ -73871,13 +73922,6 @@
       "target": "mechanic:build.memory_scout",
       "kind": "enables",
       "label": "projects recall-build relic composition"
-    },
-    {
-      "id": "enables:mechanic:inventory.relic_loadout->mechanic:build.reveal_scout:projects scouting-build relic composition",
-      "source": "mechanic:inventory.relic_loadout",
-      "target": "mechanic:build.reveal_scout",
-      "kind": "enables",
-      "label": "projects scouting-build relic composition"
     },
     {
       "id": "enables:mechanic:inventory.relic_loadout->mechanic:build.trap_control:projects control-build relic composition",
@@ -87683,12 +87727,6 @@
       "kind": "exports"
     },
     {
-      "id": "exports:src/shared/gameplay-core-contracts.ts->symbol:src/shared/gameplay-core-contracts.ts#SEER_DEFINITIONS",
-      "source": "file:src/shared/gameplay-core-contracts.ts",
-      "target": "symbol:src/shared/gameplay-core-contracts.ts#SEER_DEFINITIONS",
-      "kind": "exports"
-    },
-    {
       "id": "exports:src/shared/gameplay-core-contracts.ts->symbol:src/shared/gameplay-core-contracts.ts#SLAYER_DEFINITIONS",
       "source": "file:src/shared/gameplay-core-contracts.ts",
       "target": "symbol:src/shared/gameplay-core-contracts.ts#SLAYER_DEFINITIONS",
@@ -87734,6 +87772,12 @@
       "id": "exports:src/shared/gameplay-core-playthrough-solver.ts->symbol:src/shared/gameplay-core-playthrough-solver.ts#GameplayCorePerfectInformationPolicy",
       "source": "file:src/shared/gameplay-core-playthrough-solver.ts",
       "target": "symbol:src/shared/gameplay-core-playthrough-solver.ts#GameplayCorePerfectInformationPolicy",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/gameplay-core-playthrough-solver.ts->symbol:src/shared/gameplay-core-playthrough-solver.ts#GameplayCorePinPolicy",
+      "source": "file:src/shared/gameplay-core-playthrough-solver.ts",
+      "target": "symbol:src/shared/gameplay-core-playthrough-solver.ts#GameplayCorePinPolicy",
       "kind": "exports"
     },
     {
@@ -95091,9 +95135,39 @@
       "kind": "implemented_by"
     },
     {
+      "id": "implemented_by:mechanic:build.conduit_cartographer->file:src/shared/board-power-state.ts",
+      "source": "mechanic:build.conduit_cartographer",
+      "target": "file:src/shared/board-power-state.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:build.conduit_cartographer->file:src/shared/build-strategy-playthrough-simulation.ts",
+      "source": "mechanic:build.conduit_cartographer",
+      "target": "file:src/shared/build-strategy-playthrough-simulation.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:build.conduit_cartographer->file:src/shared/dungeon-scout-rules.ts",
+      "source": "mechanic:build.conduit_cartographer",
+      "target": "file:src/shared/dungeon-scout-rules.ts",
+      "kind": "implemented_by"
+    },
+    {
       "id": "implemented_by:mechanic:build.conduit_cartographer->file:src/shared/gameplay-core-contracts.ts",
       "source": "mechanic:build.conduit_cartographer",
       "target": "file:src/shared/gameplay-core-contracts.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:build.conduit_cartographer->file:src/shared/gameplay-core-playthrough-solver.ts",
+      "source": "mechanic:build.conduit_cartographer",
+      "target": "file:src/shared/gameplay-core-playthrough-solver.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:build.conduit_cartographer->file:src/shared/gameplay-core.ts",
+      "source": "mechanic:build.conduit_cartographer",
+      "target": "file:src/shared/gameplay-core.ts",
       "kind": "implemented_by"
     },
     {
@@ -95226,30 +95300,6 @@
       "id": "implemented_by:mechanic:build.memory_scout->file:src/shared/starting-loadouts.ts",
       "source": "mechanic:build.memory_scout",
       "target": "file:src/shared/starting-loadouts.ts",
-      "kind": "implemented_by"
-    },
-    {
-      "id": "implemented_by:mechanic:build.reveal_scout->file:src/shared/dungeon-scout-rules.ts",
-      "source": "mechanic:build.reveal_scout",
-      "target": "file:src/shared/dungeon-scout-rules.ts",
-      "kind": "implemented_by"
-    },
-    {
-      "id": "implemented_by:mechanic:build.reveal_scout->file:src/shared/gameplay-core-adapters.ts",
-      "source": "mechanic:build.reveal_scout",
-      "target": "file:src/shared/gameplay-core-adapters.ts",
-      "kind": "implemented_by"
-    },
-    {
-      "id": "implemented_by:mechanic:build.reveal_scout->file:src/shared/gameplay-core-contracts.ts",
-      "source": "mechanic:build.reveal_scout",
-      "target": "file:src/shared/gameplay-core-contracts.ts",
-      "kind": "implemented_by"
-    },
-    {
-      "id": "implemented_by:mechanic:build.reveal_scout->file:src/shared/gameplay-core.ts",
-      "source": "mechanic:build.reveal_scout",
-      "target": "file:src/shared/gameplay-core.ts",
       "kind": "implemented_by"
     },
     {
@@ -111255,6 +111305,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/gameplay-core-playthrough-solver.test.ts->src/shared/gameplay-core-contracts.ts",
+      "source": "file:src/shared/gameplay-core-playthrough-solver.test.ts",
+      "target": "file:src/shared/gameplay-core-contracts.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/gameplay-core-playthrough-solver.test.ts->src/shared/gameplay-core-playthrough-solver.ts",
       "source": "file:src/shared/gameplay-core-playthrough-solver.test.ts",
       "target": "file:src/shared/gameplay-core-playthrough-solver.ts",
@@ -111276,6 +111332,12 @@
       "id": "imports:src/shared/gameplay-core-playthrough-solver.test.ts->src/shared/tile-identity.ts",
       "source": "file:src/shared/gameplay-core-playthrough-solver.test.ts",
       "target": "file:src/shared/tile-identity.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/gameplay-core-playthrough-solver.ts->src/shared/board-power-state.ts",
+      "source": "file:src/shared/gameplay-core-playthrough-solver.ts",
+      "target": "file:src/shared/board-power-state.ts",
       "kind": "imports"
     },
     {
@@ -111318,6 +111380,12 @@
       "id": "imports:src/shared/gameplay-core-playthrough-solver.ts->src/shared/playthrough-solver-rules.ts",
       "source": "file:src/shared/gameplay-core-playthrough-solver.ts",
       "target": "file:src/shared/playthrough-solver-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/gameplay-core-playthrough-solver.ts->src/shared/run-array-guards.ts",
+      "source": "file:src/shared/gameplay-core-playthrough-solver.ts",
+      "target": "file:src/shared/run-array-guards.ts",
       "kind": "imports"
     },
     {
@@ -117684,9 +117752,33 @@
       "kind": "reads"
     },
     {
+      "id": "reads:mechanic:build.conduit_cartographer->state:matchedFindables",
+      "source": "mechanic:build.conduit_cartographer",
+      "target": "state:matchedFindables",
+      "kind": "reads"
+    },
+    {
       "id": "reads:mechanic:build.conduit_cartographer->state:peekCharges",
       "source": "mechanic:build.conduit_cartographer",
       "target": "state:peekCharges",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:build.conduit_cartographer->state:pinnedTileIds",
+      "source": "mechanic:build.conduit_cartographer",
+      "target": "state:pinnedTileIds",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:build.conduit_cartographer->state:pinPolicy",
+      "source": "mechanic:build.conduit_cartographer",
+      "target": "state:pinPolicy",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:build.conduit_cartographer->state:pinsPlacedCountThisRun",
+      "source": "mechanic:build.conduit_cartographer",
+      "target": "state:pinsPlacedCountThisRun",
       "kind": "reads"
     },
     {
@@ -117705,6 +117797,18 @@
       "id": "reads:mechanic:build.conduit_cartographer->state:routeChoices",
       "source": "mechanic:build.conduit_cartographer",
       "target": "state:routeChoices",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:build.conduit_cartographer->state:routeSpecialRevealed",
+      "source": "mechanic:build.conduit_cartographer",
+      "target": "state:routeSpecialRevealed",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:build.conduit_cartographer->state:scoutRevealSource",
+      "source": "mechanic:build.conduit_cartographer",
+      "target": "state:scoutRevealSource",
       "kind": "reads"
     },
     {
@@ -117867,54 +117971,6 @@
       "id": "reads:mechanic:build.memory_scout->state:undoUsesThisFloor",
       "source": "mechanic:build.memory_scout",
       "target": "state:undoUsesThisFloor",
-      "kind": "reads"
-    },
-    {
-      "id": "reads:mechanic:build.reveal_scout->state:peekCharges",
-      "source": "mechanic:build.reveal_scout",
-      "target": "state:peekCharges",
-      "kind": "reads"
-    },
-    {
-      "id": "reads:mechanic:build.reveal_scout->state:pinnedTileIds",
-      "source": "mechanic:build.reveal_scout",
-      "target": "state:pinnedTileIds",
-      "kind": "reads"
-    },
-    {
-      "id": "reads:mechanic:build.reveal_scout->state:pinsPlacedCountThisRun",
-      "source": "mechanic:build.reveal_scout",
-      "target": "state:pinsPlacedCountThisRun",
-      "kind": "reads"
-    },
-    {
-      "id": "reads:mechanic:build.reveal_scout->state:relicFavorProgress",
-      "source": "mechanic:build.reveal_scout",
-      "target": "state:relicFavorProgress",
-      "kind": "reads"
-    },
-    {
-      "id": "reads:mechanic:build.reveal_scout->state:routeChoices",
-      "source": "mechanic:build.reveal_scout",
-      "target": "state:routeChoices",
-      "kind": "reads"
-    },
-    {
-      "id": "reads:mechanic:build.reveal_scout->state:routeSpecialRevealed",
-      "source": "mechanic:build.reveal_scout",
-      "target": "state:routeSpecialRevealed",
-      "kind": "reads"
-    },
-    {
-      "id": "reads:mechanic:build.reveal_scout->state:scoutRevealSource",
-      "source": "mechanic:build.reveal_scout",
-      "target": "state:scoutRevealSource",
-      "kind": "reads"
-    },
-    {
-      "id": "reads:mechanic:build.reveal_scout->state:strayRemoveCharges",
-      "source": "mechanic:build.reveal_scout",
-      "target": "state:strayRemoveCharges",
       "kind": "reads"
     },
     {
@@ -121650,6 +121706,12 @@
       "kind": "reads"
     },
     {
+      "id": "reads:mechanic:simulation.build_evaluation->state:matchedFindableKind",
+      "source": "mechanic:simulation.build_evaluation",
+      "target": "state:matchedFindableKind",
+      "kind": "reads"
+    },
+    {
       "id": "reads:mechanic:simulation.build_evaluation->state:memoryTileCapacity",
       "source": "mechanic:simulation.build_evaluation",
       "target": "state:memoryTileCapacity",
@@ -121677,6 +121739,24 @@
       "id": "reads:mechanic:simulation.build_evaluation->state:pendingMemorizeBonusMs",
       "source": "mechanic:simulation.build_evaluation",
       "target": "state:pendingMemorizeBonusMs",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:simulation.build_evaluation->state:pinnedTileIds",
+      "source": "mechanic:simulation.build_evaluation",
+      "target": "state:pinnedTileIds",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:simulation.build_evaluation->state:pinPolicy",
+      "source": "mechanic:simulation.build_evaluation",
+      "target": "state:pinPolicy",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:simulation.build_evaluation->state:pinPolicySuppressedMatchups",
+      "source": "mechanic:simulation.build_evaluation",
+      "target": "state:pinPolicySuppressedMatchups",
       "kind": "reads"
     },
     {
@@ -121917,6 +121997,18 @@
       "id": "reads:mechanic:simulation.generated_board_playthrough->state:memoryTileCapacity",
       "source": "mechanic:simulation.generated_board_playthrough",
       "target": "state:memoryTileCapacity",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:simulation.generated_board_playthrough->state:pinnedTileIds",
+      "source": "mechanic:simulation.generated_board_playthrough",
+      "target": "state:pinnedTileIds",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:simulation.generated_board_playthrough->state:pinPolicy",
+      "source": "mechanic:simulation.generated_board_playthrough",
+      "target": "state:pinPolicy",
       "kind": "reads"
     },
     {
@@ -122188,11 +122280,11 @@
       "label": "greed pressure"
     },
     {
-      "id": "synergy:mechanic:build.emergency_toolkit->mechanic:build.reveal_scout:feeds Seer information planning",
+      "id": "synergy:mechanic:build.emergency_toolkit->mechanic:build.conduit_cartographer:feeds retained information-control planning",
       "source": "mechanic:build.emergency_toolkit",
-      "target": "mechanic:build.reveal_scout",
+      "target": "mechanic:build.conduit_cartographer",
       "kind": "synergy",
-      "label": "feeds Seer information planning"
+      "label": "feeds retained information-control planning"
     },
     {
       "id": "synergy:mechanic:build.emergency_toolkit->mechanic:build.trap_control:feeds Saboteur removal planning",
@@ -122414,6 +122506,24 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:mechanic:build.conduit_cartographer->file:src/shared/build-strategy-playthrough-simulation.test.ts",
+      "source": "mechanic:build.conduit_cartographer",
+      "target": "file:src/shared/build-strategy-playthrough-simulation.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:build.conduit_cartographer->file:src/shared/game.test.ts",
+      "source": "mechanic:build.conduit_cartographer",
+      "target": "file:src/shared/game.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:build.conduit_cartographer->file:src/shared/gameplay-core-playthrough-solver.test.ts",
+      "source": "mechanic:build.conduit_cartographer",
+      "target": "file:src/shared/gameplay-core-playthrough-solver.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:mechanic:build.conduit_cartographer->file:src/shared/gameplay-core.test.ts",
       "source": "mechanic:build.conduit_cartographer",
       "target": "file:src/shared/gameplay-core.test.ts",
@@ -122543,30 +122653,6 @@
       "id": "tested_by:mechanic:build.memory_scout->file:src/shared/tile-trait-rules.test.ts",
       "source": "mechanic:build.memory_scout",
       "target": "file:src/shared/tile-trait-rules.test.ts",
-      "kind": "tested_by"
-    },
-    {
-      "id": "tested_by:mechanic:build.reveal_scout->file:src/renderer/store/runSurfaceState.test.ts",
-      "source": "mechanic:build.reveal_scout",
-      "target": "file:src/renderer/store/runSurfaceState.test.ts",
-      "kind": "tested_by"
-    },
-    {
-      "id": "tested_by:mechanic:build.reveal_scout->file:src/renderer/store/tilePressController.test.ts",
-      "source": "mechanic:build.reveal_scout",
-      "target": "file:src/renderer/store/tilePressController.test.ts",
-      "kind": "tested_by"
-    },
-    {
-      "id": "tested_by:mechanic:build.reveal_scout->file:src/shared/game.test.ts",
-      "source": "mechanic:build.reveal_scout",
-      "target": "file:src/shared/game.test.ts",
-      "kind": "tested_by"
-    },
-    {
-      "id": "tested_by:mechanic:build.reveal_scout->file:src/shared/gameplay-core.test.ts",
-      "source": "mechanic:build.reveal_scout",
-      "target": "file:src/shared/gameplay-core.test.ts",
       "kind": "tested_by"
     },
     {
@@ -125374,11 +125460,11 @@
       "label": "proves shard sources full-bank route risk life conversion and parasite-pressure survival across seeded long-horizon replay"
     },
     {
-      "id": "tested_by:mechanic:simulation.build_evaluation->mechanic:build.conduit_cartographer:proves reveal activation and Peek consumption across seeded command replay",
+      "id": "tested_by:mechanic:simulation.build_evaluation->mechanic:build.conduit_cartographer:proves Echo and Conduit activation real Scout Glint matches known-pair Pins Memory Nail capacity Peek use and hazard-pressure conservation across seeded long-horizon replay",
       "source": "mechanic:simulation.build_evaluation",
       "target": "mechanic:build.conduit_cartographer",
       "kind": "tested_by",
-      "label": "proves reveal activation and Peek consumption across seeded command replay"
+      "label": "proves Echo and Conduit activation real Scout Glint matches known-pair Pins Memory Nail capacity Peek use and hazard-pressure conservation across seeded long-horizon replay"
     },
     {
       "id": "tested_by:mechanic:simulation.build_evaluation->mechanic:build.guard_tank:proves guard control activation and destroy-charge consumption across seeded command replay",
@@ -129858,6 +129944,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/gameplay-core-contracts.ts->file:src/shared/gameplay-core-playthrough-solver.test.ts",
+      "source": "file:src/shared/gameplay-core-contracts.ts",
+      "target": "file:src/shared/gameplay-core-playthrough-solver.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/gameplay-core-contracts.ts->file:src/shared/gameplay-core.test.ts",
       "source": "file:src/shared/gameplay-core-contracts.ts",
       "target": "file:src/shared/gameplay-core.test.ts",
@@ -132459,11 +132551,11 @@
       "label": "typed insurance reward claim"
     },
     {
-      "id": "triggers:mechanic:reward.secret_favor->mechanic:core.gameplay_commands:Seer secret reward command",
+      "id": "triggers:mechanic:reward.secret_favor->mechanic:core.gameplay_commands:information-control secret reward command",
       "source": "mechanic:reward.secret_favor",
       "target": "mechanic:core.gameplay_commands",
       "kind": "triggers",
-      "label": "Seer secret reward command"
+      "label": "information-control secret reward command"
     },
     {
       "id": "triggers:mechanic:reward.stasis_lockbox->mechanic:core.gameplay_commands:typed Stasis Lockbox command",
@@ -132714,12 +132806,6 @@
     {
       "id": "writes:mechanic:build.guard_tank->state:buildPlan",
       "source": "mechanic:build.guard_tank",
-      "target": "state:buildPlan",
-      "kind": "writes"
-    },
-    {
-      "id": "writes:mechanic:build.reveal_scout->state:buildPlan",
-      "source": "mechanic:build.reveal_scout",
       "target": "state:buildPlan",
       "kind": "writes"
     },
@@ -135682,6 +135768,12 @@
       "kind": "writes"
     },
     {
+      "id": "writes:mechanic:simulation.build_evaluation->state:hazardPinConservationReport",
+      "source": "mechanic:simulation.build_evaluation",
+      "target": "state:hazardPinConservationReport",
+      "kind": "writes"
+    },
+    {
       "id": "writes:mechanic:simulation.build_evaluation->state:invariantViolations",
       "source": "mechanic:simulation.build_evaluation",
       "target": "state:invariantViolations",
@@ -135724,6 +135816,12 @@
       "kind": "writes"
     },
     {
+      "id": "writes:mechanic:simulation.build_evaluation->state:pinPlacementReport",
+      "source": "mechanic:simulation.build_evaluation",
+      "target": "state:pinPlacementReport",
+      "kind": "writes"
+    },
+    {
       "id": "writes:mechanic:simulation.build_evaluation->state:replayReport",
       "source": "mechanic:simulation.build_evaluation",
       "target": "state:replayReport",
@@ -135739,6 +135837,12 @@
       "id": "writes:mechanic:simulation.build_evaluation->state:routeRiskAssessmentReport",
       "source": "mechanic:simulation.build_evaluation",
       "target": "state:routeRiskAssessmentReport",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:simulation.build_evaluation->state:scoutGlintMatchReport",
+      "source": "mechanic:simulation.build_evaluation",
+      "target": "state:scoutGlintMatchReport",
       "kind": "writes"
     },
     {
@@ -135817,6 +135921,12 @@
       "id": "writes:mechanic:simulation.generated_board_playthrough->state:masterKeyPurchaseReport",
       "source": "mechanic:simulation.generated_board_playthrough",
       "target": "state:masterKeyPurchaseReport",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:simulation.generated_board_playthrough->state:pinPlacementReport",
+      "source": "mechanic:simulation.generated_board_playthrough",
+      "target": "state:pinPlacementReport",
       "kind": "writes"
     },
     {

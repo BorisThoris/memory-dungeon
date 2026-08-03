@@ -848,6 +848,22 @@ The Locksmith is now the ninth retained long-horizon build, connecting Key Insur
 
 Graph v59 adds the ninth strategy, distinct lock-extraction axis, cache and alternate-exit spend guards, typed-key-first and Master-Key-fallback policy, vendor purchase evidence, hazard-pressure conservation, and a tested evaluator edge to `build.locksmith`.
 
+## Sixtieth vertical slice: Conduit / Seer Information-Control Consolidation
+
+Graph diagnostics selected a redundancy seam instead of another build: the declared Seer sources are now owned by the retained Conduit Cartographer information axis.
+
+1. `build.reveal_scout` is removed from the executable graph. Echo Conduit Lens/Double, Scout Glint, deterministic Scout reveal, Memory Nail, typed Pin, Peek, Mystery routing, and future relic selection now converge on `build.conduit_cartographer`.
+2. Stray Hook and completion-safe Stray Remove move to `build.emergency_toolkit`, where correction belongs, rather than remaining attached to a second information-build label with no long-horizon policy.
+3. The structural Conduit fixture now claims the real `relic.pin_cap_plus_one` definition while starting with Memory Nail, so its capacity request, feedback, build source, and replay evidence are explicit.
+4. The bounded-memory solver adds the opt-in `pin_next_known_pair` policy. It can pin only hidden tiles whose complete pair identity is already present in the observation ledger, caps automation at two placements per floor, and leaves default solver parity unchanged.
+5. Pinned observations are protected from eviction. Ledger settlement now defers to the authoritative unresolved-playable-pair set instead of independently treating resolved dungeon metadata as proof that a hidden tile is no longer playable.
+6. Conduit keeps a six-tile working ledger and Memory Nail's four simultaneous Pin slots. The policy annotates one genuinely remembered target pair, then normal command-core matching removes those Pins through established cleanup ownership.
+7. Real board turns—not injected pickup state—record 9 Scout Glint matches across the three retained seeds. The build places 46 typed Pins, exercises Pins on both sampled memory-pressure floors, and suppresses automated Pins on all 13 hazard-pressure floors where board disruption makes annotations unreliable.
+8. The complete nine-build report still clears all 324 generated floors with zero rejected commands, exact per-floor checkpoints, exact full-run replay, and unchanged pairwise strategy bounds.
+9. Source taxonomy now matches the graph: Conduit content definitions own Secret Favor, Memory Nail, and Scout Glint; Emergency Toolkit owns Stray Hook; the player-facing relic profile replaces the retired Seer alias with Conduit Cartographer and exposes Emergency Toolkit as the correction build.
+
+Graph v60 removes the redundant Seer build node, rehomes safe correction, expands Conduit's source/choice/effect/feedback/consequence path, and adds known-pair, two-Pin, Scout Glint, favorable-pressure, counter-pressure, and long-horizon guards.
+
 ## Current slice status
 
 Implemented in the Conduit Cartographer vertical slice:
@@ -867,5 +883,5 @@ Implemented in the Conduit Cartographer vertical slice:
 Still required before the vertical slice is complete:
 
 - widen the feedback-completeness audit beyond the former HUD-critical fields as additional gameplay ownership enters the core;
-- use nine-build traces and graph diagnostics to select the next least-overlapping cohesive build or architectural ownership seam, without presenting simulator survival as human win-rate proof;
+- use Graph v60 diagnostics and nine-build traces to select the next least-overlapping cohesive loop or architectural ownership seam, without presenting simulator survival as human win-rate proof;
 - continue migrating cohesive player builds rather than adding isolated definitions, using the graph diagnostics to choose the next least-overlapping loop.

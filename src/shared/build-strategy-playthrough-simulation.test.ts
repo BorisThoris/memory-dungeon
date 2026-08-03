@@ -41,6 +41,10 @@ describe('multi-floor typed build strategy simulation', () => {
             expect(strategy.lockPolicySuppressedMatchups).toEqual(
                 GAMEPLAY_BUILD_POLICIES[strategy.id].lockPolicySuppressedMatchups ?? []
             );
+            expect(strategy.pinPolicy).toEqual(GAMEPLAY_BUILD_POLICIES[strategy.id].pinPolicy ?? null);
+            expect(strategy.pinPolicySuppressedMatchups).toEqual(
+                GAMEPLAY_BUILD_POLICIES[strategy.id].pinPolicySuppressedMatchups ?? []
+            );
             expect(strategy.gambitSuppressedMatchups).toEqual(
                 GAMEPLAY_BUILD_POLICIES[strategy.id].gambitSuppressedMatchups
             );
@@ -112,6 +116,38 @@ describe('multi-floor typed build strategy simulation', () => {
             (sum, strategy) => sum + strategy.adaptiveRouteSelections,
             0
         )).toBeGreaterThanOrEqual(report.bounds.minAdaptiveRouteSelections);
+        expect(report.cohesiveBuildCoverage.conduitCartographer).toMatchObject({
+            id: 'conduit_cartographer',
+            buildMechanicId: 'build.conduit_cartographer',
+            startingLoadoutId: 'memory_scout',
+            axis: 'information',
+            favorableMatchup: 'memory_pressure',
+            counterMatchup: 'hazard_pressure',
+            longHorizonSampled: true
+        });
+        expect(report.cohesiveBuildCoverage.conduitCartographer.requiredSystems).toEqual([
+            'reward.echo_conduit_lens',
+            'perk.echo_conduit_double',
+            'findable.scout_glint',
+            'board.scout_reveal',
+            'relic.pin_cap_plus_one',
+            'power.pin',
+            'power.peek'
+        ]);
+        expect(report.cohesiveBuildCoverage.conduitCartographer.evidence.pinPlacements)
+            .toBeGreaterThanOrEqual(report.seeds.length);
+        expect(report.cohesiveBuildCoverage.conduitCartographer.evidence.scoutGlintMatches)
+            .toBeGreaterThanOrEqual(report.seeds.length);
+        expect(report.cohesiveBuildCoverage.conduitCartographer.evidence.memoryPressurePinFloors).toBeGreaterThan(0);
+        expect(report.cohesiveBuildCoverage.conduitCartographer.evidence.hazardPinConservations).toBeGreaterThan(0);
+        const conduitCartographer = report.strategies.find((strategy) => strategy.id === 'conduit_cartographer');
+        expect(conduitCartographer?.samples.every((sample) =>
+            sample.floorTraces.reduce((sum, floor) => sum + floor.pinPlacements, 0) > 0 &&
+            sample.floorTraces.reduce((sum, floor) => sum + floor.scoutGlintMatches, 0) > 0
+        )).toBe(true);
+        expect(conduitCartographer?.samples.flatMap((sample) => sample.floorTraces)
+            .filter((floor) => floor.matchup === 'hazard_pressure')
+            .every((floor) => floor.pinPolicySuppressedByMatchup && floor.pinPlacements === 0)).toBe(true);
         expect(report.cohesiveBuildCoverage.routeGambler).toMatchObject({
             id: 'route_gambler',
             buildMechanicId: 'build.route_gambler',

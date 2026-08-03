@@ -50,7 +50,7 @@ describe('InventoryScreen REG-079 run inventory model', () => {
     it('shows active relic archetype as the run build identity', () => {
         render(<InventoryScreen />);
 
-        expect(screen.getByTestId('inventory-build-identity')).toHaveTextContent('The Seer');
+        expect(screen.getByTestId('inventory-build-identity')).toHaveTextContent('The Conduit Cartographer');
         expect(screen.getByTestId('inventory-build-identity')).toHaveTextContent('peek, pin, read');
         expect(screen.getByTestId('inventory-build-identity')).toHaveTextContent('Scrying Spark');
     });

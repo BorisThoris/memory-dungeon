@@ -14,7 +14,6 @@ import {
     MEMORY_SCOUT_DEFINITIONS,
     LOCKSMITH_DEFINITIONS,
     SABOTEUR_DEFINITIONS,
-    SEER_DEFINITIONS,
     SLAYER_DEFINITIONS,
     SUPPLY_CACHE_DEFINITIONS,
     VAULTBREAKER_DEFINITIONS,
@@ -190,7 +189,7 @@ describe('gameplay interaction graph', () => {
     it('connects concrete progression safety repairs to commands, feedback, persistence, and replay', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
 
-        expect(gameplayInteractionGraph.version).toBe(59);
+        expect(gameplayInteractionGraph.version).toBe(60);
         expect(byId.get('safety.softlock_fairness')).toMatchObject({
             kind: 'safety',
             role: 'typed_invariant_and_replayable_repair_gate',
@@ -284,7 +283,8 @@ describe('gameplay interaction graph', () => {
         const prefixBySourceKind = {
             bonus_reward: 'reward',
             relic: 'relic',
-            reward_perk: 'perk'
+            reward_perk: 'perk',
+            findable: 'findable'
         } as const;
 
         for (const definition of CONDUIT_CARTOGRAPHER_DEFINITIONS) {
@@ -397,7 +397,8 @@ describe('gameplay interaction graph', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
 
         expect(SUPPLY_CACHE_DEFINITIONS.map((definition) => definition.id)).toEqual([
-            'bonus_reward.supply_cache'
+            'bonus_reward.supply_cache',
+            'relic.stray_charge_plus_one'
         ]);
         expect(byId.get('reward.supply_cache')).toMatchObject({
             kind: 'reward',
@@ -515,7 +516,7 @@ describe('gameplay interaction graph', () => {
         ]));
     });
 
-    it('connects the Seer from secrets and Scout Glints through Pin, Peek, and safe correction decisions', () => {
+    it('consolidates Seer information sources into Conduit and routes safe correction to the emergency toolkit', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
         const sourceNodeByDefinition = new Map([
             ['bonus_reward.secret_favor', 'reward.secret_favor'],
@@ -524,7 +525,11 @@ describe('gameplay interaction graph', () => {
             ['findable.scout_glint', 'findable.scout_glint']
         ]);
 
-        for (const definition of SEER_DEFINITIONS) {
+        const consolidatedDefinitions = [
+            ...CONDUIT_CARTOGRAPHER_DEFINITIONS.filter((definition) => sourceNodeByDefinition.has(definition.id)),
+            ...SUPPLY_CACHE_DEFINITIONS.filter((definition) => sourceNodeByDefinition.has(definition.id))
+        ];
+        for (const definition of consolidatedDefinitions) {
             const nodeId = sourceNodeByDefinition.get(definition.id);
             expect(nodeId, definition.id).toBeTruthy();
             expect(byId.get(nodeId!), definition.id).toMatchObject({
@@ -532,7 +537,15 @@ describe('gameplay interaction graph', () => {
             });
         }
 
-        expect(byId.get('build.reveal_scout')).toMatchObject({ kind: 'build', role: 'information_control_build' });
+        expect(byId.has('build.reveal_scout')).toBe(false);
+        expect(byId.get('build.conduit_cartographer')).toMatchObject({
+            kind: 'build',
+            role: 'scout_reveal_pin_and_peek_information_control_build',
+            tests: expect.arrayContaining([
+                'src/shared/gameplay-core-playthrough-solver.test.ts',
+                'src/shared/build-strategy-playthrough-simulation.test.ts'
+            ])
+        });
         expect(byId.get('inventory.stray_remove_charge')).toMatchObject({
             kind: 'inventory',
             role: 'bounded_board_control_resource'
@@ -552,7 +565,12 @@ describe('gameplay interaction graph', () => {
             expect.objectContaining({ source: 'inventory.stray_remove_charge', target: 'power.stray_remove', kind: 'enables' }),
             expect.objectContaining({ source: 'power.stray_remove', target: 'objective.floor_clear', kind: 'counterplay' }),
             expect.objectContaining({ source: 'board.scout_reveal', target: 'route.mystery', kind: 'consequence' }),
-            expect.objectContaining({ source: 'build.reveal_scout', target: 'progression.relic_draft', kind: 'consequence' })
+            expect.objectContaining({ source: 'relic.pin_cap_plus_one', target: 'build.conduit_cartographer', kind: 'belongs_to' }),
+            expect.objectContaining({ source: 'findable.scout_glint', target: 'build.conduit_cartographer', kind: 'belongs_to' }),
+            expect.objectContaining({ source: 'build.conduit_cartographer', target: 'power.pin', kind: 'consequence' }),
+            expect.objectContaining({ source: 'build.conduit_cartographer', target: 'progression.relic_draft', kind: 'consequence' }),
+            expect.objectContaining({ source: 'relic.stray_charge_plus_one', target: 'build.emergency_toolkit', kind: 'belongs_to' }),
+            expect.objectContaining({ source: 'build.emergency_toolkit', target: 'power.stray_remove', kind: 'consequence' })
         ]));
     });
 
@@ -714,7 +732,7 @@ describe('gameplay interaction graph', () => {
     it('connects the Gauntlet clock from run setup through a replayable terminal consequence', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
 
-        expect(gameplayInteractionGraph.version).toBe(59);
+        expect(gameplayInteractionGraph.version).toBe(60);
         expect(byId.get('mode.gauntlet_clock')).toMatchObject({
             kind: 'hazard',
             role: 'serialized_host_clock_terminal_transition',
@@ -754,7 +772,7 @@ describe('gameplay interaction graph', () => {
     it('connects pause and resume across timer snapshots, lifecycle recovery, persistence, and replay', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
 
-        expect(gameplayInteractionGraph.version).toBe(59);
+        expect(gameplayInteractionGraph.version).toBe(60);
         expect(byId.get('phase.pause_resume')).toMatchObject({
             kind: 'core',
             role: 'serialized_timer_snapshot_and_clock_lifecycle_transition',
@@ -801,7 +819,7 @@ describe('gameplay interaction graph', () => {
     it('separates typed debug reveal lifecycle from the consumable Peek power', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
 
-        expect(gameplayInteractionGraph.version).toBe(59);
+        expect(gameplayInteractionGraph.version).toBe(60);
         expect(byId.get('debug.reveal_lifecycle')).toMatchObject({
             kind: 'core',
             role: 'replayable_debug_visibility_and_achievement_policy_transition',
@@ -980,7 +998,7 @@ describe('gameplay interaction graph', () => {
 
     it('connects Hazard Banish acquisition to its typed floor-start removal or Destroy fallback', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
-        expect(gameplayInteractionGraph.version).toBe(59);
+        expect(gameplayInteractionGraph.version).toBe(60);
         expect(byId.get('perk.hazard_banish_per_floor')).toMatchObject({
             kind: 'perk',
             role: 'durable_floor_start_hazard_or_destroy_conversion',
@@ -1003,7 +1021,7 @@ describe('gameplay interaction graph', () => {
 
     it('connects typed route selection from floor clear through exact replayable consequences', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
-        expect(gameplayInteractionGraph.version).toBe(59);
+        expect(gameplayInteractionGraph.version).toBe(60);
         expect(byId.get('route.choice')).toMatchObject({
             kind: 'route',
             role: 'flat_replayable_commitment_and_interlude_open',
@@ -1040,7 +1058,7 @@ describe('gameplay interaction graph', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
         expect(byId.get('simulation.build_evaluation')).toMatchObject({
             kind: 'simulation',
-            role: 'route_profile_and_twelve_floor_nine_build_bounded_memory_visible_resource_interlude_risk_sustain_board_reconfiguration_boss_recovery_and_lock_extraction_policy_counter_matchup_viability_balance_feedback_and_replay_gate',
+            role: 'route_profile_and_twelve_floor_nine_build_bounded_memory_information_annotation_visible_resource_interlude_risk_sustain_board_reconfiguration_boss_recovery_and_lock_extraction_policy_counter_matchup_viability_balance_feedback_and_replay_gate',
             evidence: expect.arrayContaining([
                 'src/shared/balance-simulation.ts',
                 'src/shared/build-strategy-simulation.ts',
@@ -1074,6 +1092,9 @@ describe('gameplay interaction graph', () => {
                 'recoverySuppressedMatchups',
                 'lockPolicy',
                 'lockPolicySuppressedMatchups',
+                'pinPolicy',
+                'pinPolicySuppressedMatchups',
+                'pinnedTileIds',
                 'flashPairCharges',
                 'undoUsesThisFloor',
                 'endlessRiskWager',
@@ -1110,6 +1131,9 @@ describe('gameplay interaction graph', () => {
                 'masterKeyLockUseReport',
                 'masterKeyPurchaseReport',
                 'lockPressureConservationReport',
+                'pinPlacementReport',
+                'scoutGlintMatchReport',
+                'hazardPinConservationReport',
                 'strategyAxisScores',
                 'pairwiseAxisDistances',
                 'generatedBoardPlaythroughReport',
@@ -1164,7 +1188,7 @@ describe('gameplay interaction graph', () => {
                 'uncertain-turn-budget',
                 'imperfect-information-floor-minimum',
                 'zero-risk-budget-exhaustion',
-                'mid-turn-resolution-before-third-choice',
+                'mid-turn-resolving-state',
                 'shipped-favorable-matchup-exposure',
                 'shipped-counter-matchup-exposure',
                 'counter-matchup-replay',
@@ -1184,6 +1208,10 @@ describe('gameplay interaction graph', () => {
                 'boss-hunter-long-horizon-coverage',
                 'memory-scout-long-horizon-coverage',
                 'locksmith-long-horizon-coverage',
+                'conduit-information-control-long-horizon-coverage',
+                'observed-known-pair-pin-only',
+                'scout-glint-match-source',
+                'hazard-pressure-pin-conservation',
                 'typed-key-lock-use',
                 'master-key-shop-purchase',
                 'master-key-lock-fallback',
@@ -1222,10 +1250,10 @@ describe('gameplay interaction graph', () => {
 
     it('executes generated-board fairness through typed commands, feedback audits, and sampled replay', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
-        expect(gameplayInteractionGraph.version).toBe(59);
+        expect(gameplayInteractionGraph.version).toBe(60);
         expect(byId.get('simulation.generated_board_playthrough')).toMatchObject({
             kind: 'simulation',
-            role: 'core_command_event_perfect_bounded_information_identity_blind_gambit_recovery_and_opt_in_lock_extraction_generated_board_fairness_and_replay_gate',
+            role: 'core_command_event_perfect_bounded_information_identity_blind_gambit_recovery_opt_in_pin_annotation_and_lock_extraction_generated_board_fairness_and_replay_gate',
             evidence: expect.arrayContaining([
                 'src/shared/playthrough-solver-rules.ts',
                 'src/shared/gameplay-core-playthrough-solver.ts',
@@ -1242,6 +1270,8 @@ describe('gameplay interaction graph', () => {
                 'gambitPolicy',
                 'recoveryPolicy',
                 'lockPolicy',
+                'pinPolicy',
+                'pinnedTileIds',
                 'undoUsesThisFloor',
                 'gambitAvailableThisFloor',
                 'gambitThirdFlipUsed',
@@ -1257,6 +1287,7 @@ describe('gameplay interaction graph', () => {
                 'typedKeyLockUseReport',
                 'masterKeyLockUseReport',
                 'masterKeyPurchaseReport',
+                'pinPlacementReport',
                 'replayReport',
                 'invariantViolations'
             ]),
@@ -1266,6 +1297,7 @@ describe('gameplay interaction graph', () => {
                 'exit.locked_alternate',
                 'room.locked_cache',
                 'shop.master_key',
+                'power.pin',
                 'progression.run_flow',
                 'safety.softlock_fairness',
                 'simulation.gameplay_replay'
@@ -1283,6 +1315,8 @@ describe('gameplay interaction graph', () => {
                 'undo-only-after-uncertain-mismatch',
                 'single-floor-gambit-token',
                 'single-floor-undo-use',
+                'observed-known-pair-pin-only',
+                'two-pins-per-floor',
                 'affordable-lock-only',
                 'typed-key-first',
                 'typed-pause-purchase-resume',
@@ -1313,7 +1347,7 @@ describe('gameplay interaction graph', () => {
 
     it('connects relic drafting and offer shaping to typed build acquisition, economy, feedback, persistence, and replay', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
-        expect(gameplayInteractionGraph.version).toBe(59);
+        expect(gameplayInteractionGraph.version).toBe(60);
         expect(byId.get('progression.relic_draft')).toMatchObject({
             kind: 'progression',
             role: 'flat_typed_offer_open_selection_and_shaping',
@@ -1352,7 +1386,7 @@ describe('gameplay interaction graph', () => {
 
     it('connects flat typed side-room choices from routes through rewards, feedback, persistence, and replay', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
-        expect(gameplayInteractionGraph.version).toBe(59);
+        expect(gameplayInteractionGraph.version).toBe(60);
         expect(byId.get('progression.route_side_room')).toMatchObject({
             kind: 'progression',
             role: 'flat_replayable_between_floor_reward_choice',
@@ -1381,7 +1415,7 @@ describe('gameplay interaction graph', () => {
 
     it('connects Locksmith insurance through board-shop fallback into cache and alternate-exit extraction', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
-        expect(gameplayInteractionGraph.version).toBe(59);
+        expect(gameplayInteractionGraph.version).toBe(60);
         expect(byId.get('build.locksmith')).toMatchObject({
             kind: 'build',
             role: 'typed_key_cache_and_alternate_exit_extraction_build',
@@ -1431,7 +1465,7 @@ describe('gameplay interaction graph', () => {
 
     it('connects flat typed floor advancement through pressure, board preparation, feedback, persistence, and replay', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
-        expect(gameplayInteractionGraph.version).toBe(59);
+        expect(gameplayInteractionGraph.version).toBe(60);
         expect(byId.get('progression.run_flow')).toMatchObject({
             kind: 'progression',
             role: 'typed_flat_replayable_floor_transition',
@@ -1464,7 +1498,7 @@ describe('gameplay interaction graph', () => {
 
     it('connects one typed non-final board turn through effects, feedback, persistence, and replay', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
-        expect(gameplayInteractionGraph.version).toBe(59);
+        expect(gameplayInteractionGraph.version).toBe(60);
         expect(byId.get('core.board_turn_resolution')).toMatchObject({
             kind: 'core',
             role: 'renderer_direct_single_command_match_mismatch_gambit_floor_clear_and_feedback_fact_transition',

@@ -4637,7 +4637,7 @@ describe('GameScreen (OVR-014)', () => {
         expect(getByText(/Scholar contract/)).toBeTruthy();
         expect(getByText(/Trait build: Conduit Cartographer/)).toBeTruthy();
         expect(getByText(/The Saboteur \/ The Slayer: disarm, delete, reroute./)).toBeTruthy();
-        expect(getByText(/The Warden \/ The Seer: guard, absorb, stabilize./)).toBeTruthy();
+        expect(getByText(/The Warden \/ The Conduit Cartographer: guard, absorb, stabilize./)).toBeTruthy();
         expect(gameSfxMocks.playRelicOfferOpenSfx).toHaveBeenCalledTimes(1);
     });
 

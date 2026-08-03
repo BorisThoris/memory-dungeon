@@ -2,8 +2,9 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import type { BoardState, RunState, Tile } from './contracts';
-import { GAME_RULES_VERSION } from './contracts';
+import { GAME_RULES_VERSION, MAX_PINNED_TILES } from './contracts';
 import { buildBoard } from './board-build-rules';
+import type { GameplayEvent } from './gameplay-core-contracts';
 import { solveRunThroughGameplayCoreWithTrace } from './gameplay-core-playthrough-solver';
 import { createNewRun, finishMemorizePhase } from './game-core';
 import { solveRunByExhaustingPlayablePairsWithTrace } from './playthrough-solver';
@@ -337,6 +338,52 @@ describe('gameplay-core playthrough solver', () => {
             .filter((command) => command.type === 'board.tile_flip')
             .map((command) => command.targetTileId)
             .slice(2, 4)).toEqual(['2-b', '3-c']);
+    });
+
+    it('pins the next genuinely remembered pair as a replayable annotation only when opted in', () => {
+        const initial: RunState = {
+            ...runWithBoard(board(
+                [
+                    tile('1-a', 'a'),
+                    tile('2-b', 'b'),
+                    tile('3-c', 'c'),
+                    tile('4-a', 'a'),
+                    tile('5-b', 'b'),
+                    tile('6-c', 'c')
+                ],
+                { pairCount: 3, columns: 3, rows: 2 }
+            )),
+            relicIds: ['pin_cap_plus_one']
+        };
+        const options = {
+            informationPolicy: {
+                kind: 'bounded_memory' as const,
+                memoryTileCapacity: 2,
+                uncertainTurnBudget: 4
+            }
+        };
+        const defaultTrace = solveRunThroughGameplayCoreWithTrace(initial, 40, true, options);
+        const pinTrace = solveRunThroughGameplayCoreWithTrace(initial, 40, true, {
+            ...options,
+            pinPolicy: { kind: 'pin_next_known_pair' }
+        });
+        const pinEvents = pinTrace.events.filter((event): event is Extract<GameplayEvent, { type: 'board.pin_changed' }> =>
+            event.type === 'board.pin_changed' && event.pinned
+        );
+
+        expect(defaultTrace.commands.some((command) => command.type === 'board.pin_toggle')).toBe(false);
+        expect(pinTrace.run.status).toBe('levelComplete');
+        expect(pinTrace.pinPlacements).toBeGreaterThanOrEqual(2);
+        expect(pinEvents.map((event) => event.pinCapacity)).toEqual(
+            expect.arrayContaining([MAX_PINNED_TILES + 1])
+        );
+        expect(pinEvents.every((event) =>
+            !pinTrace.information.evictedTileIds.includes(event.targetTileId)
+        )).toBe(true);
+        expect(pinTrace.run.pinnedTileIds).toEqual([]);
+        expect(pinTrace.rejectedCommandIds).toEqual([]);
+        expect(pinTrace.replayDeterministic).toBe(true);
+        expect(pinTrace.invariantViolations).toEqual([]);
     });
 
     it('stops before an unsupported guess when the bounded risk budget is spent', () => {

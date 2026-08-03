@@ -168,7 +168,8 @@ describe('rollRelicOptions', () => {
             'The Vaultbreaker',
             'The Slayer',
             'The Gambit',
-            'The Seer',
+            'The Conduit Cartographer',
+            'The Emergency Toolkit',
             'The Catalyst'
         ]);
         expect(summaries.every((summary) => summary.relicIds.length >= 2)).toBe(true);
@@ -196,8 +197,11 @@ describe('rollRelicOptions', () => {
         expect(summaries.find((summary) => summary.id === 'route_gambler')?.relicIds).toEqual(
             expect.arrayContaining(['shrine_echo', 'wager_surety'])
         );
-        expect(summaries.find((summary) => summary.id === 'reveal_scout')?.relicIds).toEqual(
-            expect.arrayContaining(['peek_charge_plus_one', 'pin_cap_plus_one', 'stray_charge_plus_one'])
+        expect(summaries.find((summary) => summary.id === 'conduit_cartographer')?.relicIds).toEqual(
+            expect.arrayContaining(['peek_charge_plus_one', 'pin_cap_plus_one'])
+        );
+        expect(summaries.find((summary) => summary.id === 'emergency_toolkit')?.relicIds).toEqual(
+            expect.arrayContaining(['peek_charge_plus_one', 'stray_charge_plus_one'])
         );
         expect(summaries.find((summary) => summary.id === 'combo_shard_engine')?.relicIds).toEqual(
             expect.arrayContaining(['combo_shard_plus_step', 'parasite_ledger'])
@@ -217,22 +221,22 @@ describe('rollRelicOptions', () => {
     it('derives a deterministic run build profile from drafted relic archetypes', () => {
         const run = {
             ...createNewRun(0),
-            relicIds: ['peek_charge_plus_one', 'pin_cap_plus_one', 'stray_charge_plus_one', 'wager_surety']
+            relicIds: ['peek_charge_plus_one', 'pin_cap_plus_one', 'stray_charge_plus_one', 'chapter_compass']
         } as RunState;
         const profile = getRunBuildProfile(run);
 
         expect(profile.primary).toMatchObject({
-            id: 'reveal_scout',
-            label: 'The Seer',
+            id: 'conduit_cartographer',
+            label: 'The Conduit Cartographer',
             score: 3,
-            supportingRelicIds: ['peek_charge_plus_one', 'pin_cap_plus_one', 'stray_charge_plus_one']
+            supportingRelicIds: ['peek_charge_plus_one', 'pin_cap_plus_one', 'chapter_compass']
         });
-        expect(profile.summary).toBe('The Seer · 3 build signals');
+        expect(profile.summary).toBe('The Conduit Cartographer · 3 build signals');
         expect(profile.tooltip).toContain('peek, pin, read');
         expect(profile.signals.map((signal) => signal.id).slice(0, 3)).toEqual([
-            'reveal_scout',
-            'route_gambler',
-            'treasure_greed'
+            'conduit_cartographer',
+            'emergency_toolkit',
+            'boss_hunter'
         ]);
     });
 
@@ -258,12 +262,16 @@ describe('rollRelicOptions', () => {
     });
 
     it('uses pickRound in the RNG (rerolls are not identical to round 0)', () => {
-        const run = createNewRun(42);
-        const r0 = rollRelicOptions(run, 0, 3, 0);
-        const r1 = rollRelicOptions(run, 0, 3, 1);
-        expect(r0.length).toBe(3);
-        expect(r1.length).toBe(3);
-        expect(r0).not.toEqual(r1);
+        const results = Array.from({ length: 32 }, (_, seed) => {
+            const run = createNewRun(seed);
+            const roundZero = rollRelicOptions(run, 0, 3, 0);
+            const roundOne = rollRelicOptions(run, 0, 3, 1);
+            expect(roundZero.length).toBe(3);
+            expect(roundOne.length).toBe(3);
+            return { roundZero, roundOne };
+        });
+
+        expect(results.some(({ roundZero, roundOne }) => JSON.stringify(roundZero) !== JSON.stringify(roundOne))).toBe(true);
     });
 
     it('returns at most three options from the pool', () => {

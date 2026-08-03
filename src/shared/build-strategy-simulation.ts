@@ -131,7 +131,8 @@ export const GAMEPLAY_BUILD_STRATEGIES: readonly GameplayBuildStrategyDefinition
         startingLoadoutId: 'memory_scout',
         activationDefinitionIds: [
             'bonus_reward.echo_conduit_lens',
-            'reward_perk.echo_conduit_double'
+            'reward_perk.echo_conduit_double',
+            'relic.pin_cap_plus_one'
         ],
         consequenceCommandType: 'board.peek',
         consequenceEventType: 'board.peeked',
@@ -323,7 +324,9 @@ const createStrategyInitialRun = (
         activeMutators: locksmithSchedule ? [...locksmithSchedule.mutators] : undefined,
         practiceMode: true,
         echoFeedbackEnabled: false,
-        initialRelicIds: strategy.id === 'boss_hunter'
+        initialRelicIds: strategy.id === 'conduit_cartographer'
+            ? ['pin_cap_plus_one']
+            : strategy.id === 'boss_hunter'
             ? ['chapter_compass', 'wager_surety', 'parasite_ledger']
             : strategy.id === 'memory_scout'
               ? ['memorize_bonus_ms', 'memorize_under_short_memorize']

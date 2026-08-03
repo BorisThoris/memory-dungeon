@@ -8,6 +8,7 @@ import {
     createGameplayUndoResolveCommand,
     createGameplayMemorizeCompleteCommand,
     createGameplayPauseCommand,
+    createGameplayPinToggleCommand,
     createGameplayProgressionRepairCommand,
     createGameplayResumeCommand,
     createGameplayShopPurchaseCommand,
@@ -26,6 +27,8 @@ import {
     type PlaythroughSolverTrace
 } from './playthrough-solver-rules';
 import { createRunProgressionRepairTransition } from './run-progression-repair';
+import { maxPinnedTilesForRun } from './board-power-state';
+import { runStringArray } from './run-array-guards';
 import { RUN_INVENTORY_ITEM_IDS, getRunInventoryItemQuantity } from './run-inventory';
 import { EXIT_PAIR_KEY, SHOP_PAIR_KEY } from './tile-identity';
 
@@ -38,6 +41,7 @@ export interface GameplayCorePlaythroughSolverTrace extends PlaythroughSolverTra
     replayDeterministic: boolean;
     gambitCommits: number;
     undoResolveUses: number;
+    pinPlacements: number;
     information: GameplayCorePlaythroughInformationTrace;
     invariantViolations: string[];
 }
@@ -61,6 +65,7 @@ export interface GameplayCorePlaythroughSolverOptions {
     gambitPolicy?: GameplayCoreGambitPolicy;
     recoveryPolicy?: GameplayCoreRecoveryPolicy;
     lockPolicy?: GameplayCoreLockPolicy;
+    pinPolicy?: GameplayCorePinPolicy;
 }
 
 export interface GameplayCoreGambitPolicy {
@@ -73,6 +78,10 @@ export interface GameplayCoreRecoveryPolicy {
 
 export interface GameplayCoreLockPolicy {
     kind: 'prefer_affordable_lock_rewards';
+}
+
+export interface GameplayCorePinPolicy {
+    kind: 'pin_next_known_pair';
 }
 
 export interface GameplayCorePlaythroughInformationTrace {
@@ -327,9 +336,10 @@ const rememberObservedTile = (
 const settleBoundedMemory = (memory: BoundedMemoryState, run: RunState): void => {
     const board = run.board;
     if (!board) return;
+    const playableTileIds = new Set(getUnresolvedPlayablePairGroups(board).flat().map((tile) => tile.id));
     for (const tileId of [...memory.entries.keys()]) {
         const tile = board.tiles.find((candidate) => candidate.id === tileId);
-        if (!tile || tile.state === 'matched' || tile.state === 'removed' || tile.dungeonCardState === 'resolved') {
+        if (!tile || !playableTileIds.has(tileId) || tile.state === 'matched' || tile.state === 'removed') {
             memory.entries.delete(tileId);
         }
     }
@@ -344,8 +354,49 @@ const syncVisibleAssists = (memory: BoundedMemoryState, run: RunState): void => 
     ];
     for (const tileId of visibleIds) {
         const tile = board.tiles.find((candidate) => candidate.id === tileId);
-        if (tile && tile.state !== 'matched' && tile.state !== 'removed') rememberObservedTile(memory, tile);
+        if (tile && tile.state !== 'matched' && tile.state !== 'removed') {
+            rememberObservedTile(memory, tile, runStringArray(run.pinnedTileIds));
+        }
     }
+};
+
+const nextKnownPairPinCandidate = (
+    memory: BoundedMemoryState,
+    run: RunState,
+    pinPlacements: number
+): Tile | null => {
+    const board = run.board;
+    const pinnedIds = runStringArray(run.pinnedTileIds);
+    if (
+        !board ||
+        run.status !== 'playing' ||
+        pinPlacements >= 2 ||
+        pinnedIds.length >= maxPinnedTilesForRun(run)
+    ) {
+        return null;
+    }
+    const rememberedPairCounts = new Map<string, number>();
+    for (const entry of memory.entries.values()) {
+        rememberedPairCounts.set(entry.pairKey, (rememberedPairCounts.get(entry.pairKey) ?? 0) + 1);
+    }
+    const pinned = new Set(pinnedIds);
+    return [...memory.entries.entries()]
+        .flatMap(([tileId, entry]) => {
+            const tile = board.tiles.find((candidate) => candidate.id === tileId);
+            return tile &&
+                tile.state === 'hidden' &&
+                !pinned.has(tile.id) &&
+                (rememberedPairCounts.get(entry.pairKey) ?? 0) >= 2
+                ? [{ tile, entry }]
+                : [];
+        })
+        .sort((left, right) => {
+            const leftScouted = left.tile.scoutRevealSource != null || left.tile.routeSpecialRevealed === true;
+            const rightScouted = right.tile.scoutRevealSource != null || right.tile.routeSpecialRevealed === true;
+            return Number(rightScouted) - Number(leftScouted) ||
+                left.entry.lastObservedAt - right.entry.lastObservedAt ||
+                left.tile.id.localeCompare(right.tile.id);
+        })[0]?.tile ?? null;
 };
 
 const knownPairFromMemory = (memory: BoundedMemoryState, run: RunState): Tile[] | null => {
@@ -528,6 +579,7 @@ const finalizeTrace = (
         replayDeterministic,
         gambitCommits: state.events.filter((event) => event.type === 'board.gambit_commit.requested').length,
         undoResolveUses: state.events.filter((event) => event.type === 'board.resolve_undone').length,
+        pinPlacements: state.events.filter((event) => event.type === 'board.pin_changed' && event.pinned).length,
         information: boundedMemoryTrace(state),
         invariantViolations: state.invariantViolations
     };
@@ -639,6 +691,20 @@ export const solveRunThroughGameplayCoreWithTrace = (
             }
         }
 
+        if (options.pinPolicy?.kind === 'pin_next_known_pair' && state.boundedMemory) {
+            const pinPlacements = state.events.filter((event) =>
+                event.type === 'board.pin_changed' && event.pinned
+            ).length;
+            const pinCandidate = nextKnownPairPinCandidate(state.boundedMemory, state.run, pinPlacements);
+            if (pinCandidate) {
+                executeSolverCommand(
+                    state,
+                    createGameplayPinToggleCommand(commandIdFor(state, 'pin_observed_singleton'), pinCandidate.id)
+                );
+                continue;
+            }
+        }
+
         const boundedTurnTileIds = state.boundedMemory
             ? playablePolicyTiles(state.run).map((tile) => tile.id)
             : [];
@@ -711,7 +777,10 @@ export const solveRunThroughGameplayCoreWithTrace = (
             rememberObservedTile(
                 state.boundedMemory,
                 firstNow,
-                rememberedPartner ? [rememberedPartner.id] : []
+                [
+                    ...runStringArray(state.run.pinnedTileIds),
+                    ...(rememberedPartner ? [rememberedPartner.id] : [])
+                ]
             );
             second = rememberedPartner ?? second;
         }
@@ -792,7 +861,11 @@ export const solveRunThroughGameplayCoreWithTrace = (
             observedSecond &&
             state.run.board?.flippedTileIds.includes(observedSecond.id)
         ) {
-            rememberObservedTile(state.boundedMemory, observedSecond, [first.id]);
+            rememberObservedTile(
+                state.boundedMemory,
+                observedSecond,
+                [...runStringArray(state.run.pinnedTileIds), first.id]
+            );
         }
         if (
             options.gambitPolicy?.kind === 'first_uncertain_mismatch_rescue' &&

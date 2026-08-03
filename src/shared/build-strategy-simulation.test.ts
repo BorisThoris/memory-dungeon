@@ -66,7 +66,11 @@ describe('typed gameplay build strategy simulation', () => {
             {
                 id: 'conduit_cartographer',
                 loadout: 'memory_scout',
-                definitions: ['bonus_reward.echo_conduit_lens', 'reward_perk.echo_conduit_double'],
+                definitions: [
+                    'bonus_reward.echo_conduit_lens',
+                    'reward_perk.echo_conduit_double',
+                    'relic.pin_cap_plus_one'
+                ],
                 command: 'board.peek',
                 event: 'board.peeked'
             },

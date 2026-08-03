@@ -47,7 +47,8 @@ describe('codexScreenModel', () => {
 
     it('builds player-facing mode and relic build rows', () => {
         expect(buildCodexModeRows().some((row) => row.id === 'visual_endless_locked')).toBe(true);
-        expect(buildCodexBuildRows().some((row) => row.title === 'The Seer' && /peek, pin, read/i.test(row.description))).toBe(true);
+        expect(buildCodexBuildRows().some((row) => row.title === 'The Conduit Cartographer' && /peek, pin, read/i.test(row.description))).toBe(true);
+        expect(buildCodexBuildRows().some((row) => row.title === 'The Emergency Toolkit' && /inspect, remove, recover/i.test(row.description))).toBe(true);
     });
 
     it('builds relic and mutator tables through shared catalog row order', () => {

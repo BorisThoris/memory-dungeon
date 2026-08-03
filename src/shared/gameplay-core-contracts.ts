@@ -402,7 +402,7 @@ export const CONDUIT_CARTOGRAPHER_DEFINITIONS = z.array(gameplayContentDefinitio
             {
                 kind: 'feedback.emit',
                 cue: 'build.peek_relic.claimed',
-                message: 'The Seer relic added one Peek charge.',
+                message: 'The Conduit Cartographer relic added one Peek charge.',
                 tone: 'reward'
             }
         ]
@@ -425,6 +425,58 @@ export const CONDUIT_CARTOGRAPHER_DEFINITIONS = z.array(gameplayContentDefinitio
                 cue: 'build.echo_conduit_double.triggered',
                 message: 'Echo touched Conduit and created an extra Peek charge.',
                 tone: 'reward'
+            }
+        ]
+    },
+    {
+        id: 'bonus_reward.secret_favor',
+        version: 1,
+        buildId: 'conduit_cartographer',
+        source: { kind: 'bonus_reward', id: 'secret_favor' },
+        trigger: 'content.claimed',
+        conditions: [],
+        effects: [
+            { kind: 'relic_favor.grant', amount: 1 },
+            { kind: 'inventory.grant', itemId: 'peek_charge', amount: 1 },
+            {
+                kind: 'feedback.emit',
+                cue: 'build.secret_favor.claimed',
+                message: 'Secret Shrine added one Favor progress and one Peek charge.',
+                tone: 'reward'
+            }
+        ]
+    },
+    {
+        id: 'relic.pin_cap_plus_one',
+        version: 1,
+        buildId: 'conduit_cartographer',
+        source: { kind: 'relic', id: 'pin_cap_plus_one' },
+        trigger: 'content.claimed',
+        conditions: [],
+        effects: [
+            { kind: 'pin_capacity.request', amount: 1 },
+            {
+                kind: 'feedback.emit',
+                cue: 'build.memory_nail.claimed',
+                message: 'Memory Nail expanded simultaneous pin capacity by one tile.',
+                tone: 'reward'
+            }
+        ]
+    },
+    {
+        id: 'findable.scout_glint',
+        version: 1,
+        buildId: 'conduit_cartographer',
+        source: { kind: 'findable', id: 'scout_glint' },
+        trigger: 'findable.match',
+        conditions: [{ kind: 'findable.matched', findable: 'scout_glint' }],
+        effects: [
+            { kind: 'scout_reveal.request', amount: 1 },
+            {
+                kind: 'feedback.emit',
+                cue: 'build.scout_glint.matched',
+                message: 'Scout Glint requested one deterministic hazard or dungeon-family reveal.',
+                tone: 'information'
             }
         ]
     }
@@ -616,6 +668,23 @@ export const SUPPLY_CACHE_DEFINITIONS = z.array(gameplayContentDefinitionSchema)
                 kind: 'feedback.emit',
                 cue: 'build.supply_cache.claimed',
                 message: 'Supply Cache added one Peek, one destroy charge, and 10 score.',
+                tone: 'reward'
+            }
+        ]
+    },
+    {
+        id: 'relic.stray_charge_plus_one',
+        version: 1,
+        buildId: 'emergency_toolkit',
+        source: { kind: 'relic', id: 'stray_charge_plus_one' },
+        trigger: 'content.claimed',
+        conditions: [],
+        effects: [
+            { kind: 'inventory.grant', itemId: 'stray_remove_charge', amount: 1 },
+            {
+                kind: 'feedback.emit',
+                cue: 'build.stray_hook.claimed',
+                message: 'Stray Hook added one completion-safe stray-removal charge.',
                 tone: 'reward'
             }
         ]
@@ -1130,78 +1199,6 @@ export const SLAYER_DEFINITIONS = z.array(gameplayContentDefinitionSchema).parse
     }
 ]);
 
-export const SEER_DEFINITIONS = z.array(gameplayContentDefinitionSchema).parse([
-    {
-        id: 'bonus_reward.secret_favor',
-        version: 1,
-        buildId: 'reveal_scout',
-        source: { kind: 'bonus_reward', id: 'secret_favor' },
-        trigger: 'content.claimed',
-        conditions: [],
-        effects: [
-            { kind: 'relic_favor.grant', amount: 1 },
-            { kind: 'inventory.grant', itemId: 'peek_charge', amount: 1 },
-            {
-                kind: 'feedback.emit',
-                cue: 'build.secret_favor.claimed',
-                message: 'Secret Shrine added one Favor progress and one Peek charge.',
-                tone: 'reward'
-            }
-        ]
-    },
-    {
-        id: 'relic.stray_charge_plus_one',
-        version: 1,
-        buildId: 'reveal_scout',
-        source: { kind: 'relic', id: 'stray_charge_plus_one' },
-        trigger: 'content.claimed',
-        conditions: [],
-        effects: [
-            { kind: 'inventory.grant', itemId: 'stray_remove_charge', amount: 1 },
-            {
-                kind: 'feedback.emit',
-                cue: 'build.stray_hook.claimed',
-                message: 'Stray Hook added one completion-safe stray-removal charge.',
-                tone: 'reward'
-            }
-        ]
-    },
-    {
-        id: 'relic.pin_cap_plus_one',
-        version: 1,
-        buildId: 'reveal_scout',
-        source: { kind: 'relic', id: 'pin_cap_plus_one' },
-        trigger: 'content.claimed',
-        conditions: [],
-        effects: [
-            { kind: 'pin_capacity.request', amount: 1 },
-            {
-                kind: 'feedback.emit',
-                cue: 'build.memory_nail.claimed',
-                message: 'Memory Nail expanded simultaneous pin capacity by one tile.',
-                tone: 'reward'
-            }
-        ]
-    },
-    {
-        id: 'findable.scout_glint',
-        version: 1,
-        buildId: 'reveal_scout',
-        source: { kind: 'findable', id: 'scout_glint' },
-        trigger: 'findable.match',
-        conditions: [{ kind: 'findable.matched', findable: 'scout_glint' }],
-        effects: [
-            { kind: 'scout_reveal.request', amount: 1 },
-            {
-                kind: 'feedback.emit',
-                cue: 'build.scout_glint.matched',
-                message: 'Scout Glint requested one deterministic hazard or dungeon-family reveal.',
-                tone: 'information'
-            }
-        ]
-    }
-]);
-
 export const GAMEPLAY_CONTENT_DEFINITIONS = [
     ...CONDUIT_CARTOGRAPHER_DEFINITIONS,
     ...WARDEN_DEFINITIONS,
@@ -1212,8 +1209,7 @@ export const GAMEPLAY_CONTENT_DEFINITIONS = [
     ...MEMORY_SCOUT_DEFINITIONS,
     ...LOCKSMITH_DEFINITIONS,
     ...VAULTBREAKER_DEFINITIONS,
-    ...SLAYER_DEFINITIONS,
-    ...SEER_DEFINITIONS
+    ...SLAYER_DEFINITIONS
 ] as const satisfies readonly GameplayContentDefinition[];
 
 export type GameplaySource = z.infer<typeof gameplaySourceSchema>;

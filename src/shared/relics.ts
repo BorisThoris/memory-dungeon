@@ -59,7 +59,8 @@ export type RelicBuildArchetype =
     | 'treasure_greed'
     | 'boss_hunter'
     | 'route_gambler'
-    | 'reveal_scout'
+    | 'conduit_cartographer'
+    | 'emergency_toolkit'
     | 'combo_shard_engine';
 
 export const RELIC_BUILD_ARCHETYPE_ORDER = [
@@ -68,7 +69,8 @@ export const RELIC_BUILD_ARCHETYPE_ORDER = [
     'treasure_greed',
     'boss_hunter',
     'route_gambler',
-    'reveal_scout',
+    'conduit_cartographer',
+    'emergency_toolkit',
     'combo_shard_engine'
 ] as const satisfies readonly RelicBuildArchetype[];
 
@@ -167,14 +169,23 @@ export const RELIC_BUILD_ARCHETYPE_DEFINITIONS: Record<RelicBuildArchetype, Reli
         dungeonInteractions: ['risk wagers', 'Greed routes', 'Mystery routes', 'Relic Favor'],
         supportHooks: ['risk wager payout hook', 'wager_surety immediate guard and loss floor', 'route contextual draft weighting']
     },
-    reveal_scout: {
-        id: 'reveal_scout',
-        label: 'The Seer',
-        fantasy: 'Make hidden cards give up fair clues before commitment.',
+    conduit_cartographer: {
+        id: 'conduit_cartographer',
+        label: 'The Conduit Cartographer',
+        fantasy: 'Turn every fair clue into a route through the hidden board.',
         decisionVerbs: ['peek', 'pin', 'read'],
-        summary: 'Use peeks, pins, stray removal, and study time to separate true pair memory from Mystery-route noise.',
-        dungeonInteractions: ['Mystery routes', 'hidden dungeon cards', 'observe patrols', 'memorize phase'],
-        supportHooks: ['peek_charge_plus_one immediate charge', 'pin_cap_plus_one capacity cap', 'stray_charge_plus_one immediate charge']
+        summary: 'Chain Echo-Conduit rewards, Scout Glints, peeks, and durable pins into reliable pair knowledge without erasing Mystery-route uncertainty.',
+        dungeonInteractions: ['Echo-Conduit trait routes', 'Scout Glints', 'Mystery routes', 'hidden dungeon cards'],
+        supportHooks: ['peek_charge_plus_one immediate charge', 'pin_cap_plus_one durable annotation capacity', 'Scout Glint deterministic reveal']
+    },
+    emergency_toolkit: {
+        id: 'emergency_toolkit',
+        label: 'The Emergency Toolkit',
+        fantasy: 'Carry one clean correction for the board that went wrong.',
+        decisionVerbs: ['inspect', 'remove', 'recover'],
+        summary: 'Use Supply Cache tools and Stray Hook correction to reveal a blocker, remove only a completion-safe target, and recover the route.',
+        dungeonInteractions: ['hidden blockers', 'completion-safe stray targets', 'Supply Cache', 'route recovery'],
+        supportHooks: ['peek_charge_plus_one inspection charge', 'stray_charge_plus_one completion-safe correction', 'Supply Cache reveal-then-remove payout']
     },
     combo_shard_engine: {
         id: 'combo_shard_engine',
@@ -193,7 +204,8 @@ export const RELIC_BUILD_ARCHETYPE_LABELS: Record<RelicBuildArchetype, string> =
     treasure_greed: RELIC_BUILD_ARCHETYPE_DEFINITIONS.treasure_greed.label,
     boss_hunter: RELIC_BUILD_ARCHETYPE_DEFINITIONS.boss_hunter.label,
     route_gambler: RELIC_BUILD_ARCHETYPE_DEFINITIONS.route_gambler.label,
-    reveal_scout: RELIC_BUILD_ARCHETYPE_DEFINITIONS.reveal_scout.label,
+    conduit_cartographer: RELIC_BUILD_ARCHETYPE_DEFINITIONS.conduit_cartographer.label,
+    emergency_toolkit: RELIC_BUILD_ARCHETYPE_DEFINITIONS.emergency_toolkit.label,
     combo_shard_engine: RELIC_BUILD_ARCHETYPE_DEFINITIONS.combo_shard_engine.label
 };
 
@@ -216,8 +228,8 @@ export const RELIC_DRAFT: Record<RelicId, RelicDraftRow> = {
         archetypes: ['trap_control'],
         forbiddenWithContract: ['noShuffle']
     },
-    memorize_bonus_ms: { rarity: 'common', weight: 92, tags: ['memorize'], archetypes: ['guard_tank', 'reveal_scout'] },
-    memorize_under_short_memorize: { rarity: 'uncommon', weight: 52, tags: ['memorize'], archetypes: ['reveal_scout'] },
+    memorize_bonus_ms: { rarity: 'common', weight: 92, tags: ['memorize'], archetypes: ['guard_tank', 'conduit_cartographer'] },
+    memorize_under_short_memorize: { rarity: 'uncommon', weight: 52, tags: ['memorize'], archetypes: ['conduit_cartographer'] },
     region_shuffle_free_first: {
         rarity: 'common',
         weight: 85,
@@ -239,9 +251,9 @@ export const RELIC_DRAFT: Record<RelicId, RelicDraftRow> = {
         archetypes: ['combo_shard_engine']
     },
     parasite_ward_once: { rarity: 'rare', weight: 28, tags: ['parasite'], archetypes: ['combo_shard_engine'] },
-    peek_charge_plus_one: { rarity: 'uncommon', weight: 50, tags: ['peek', 'wager'], archetypes: ['reveal_scout', 'route_gambler'] },
-    stray_charge_plus_one: { rarity: 'rare', weight: 26, tags: ['search'], archetypes: ['reveal_scout'] },
-    pin_cap_plus_one: { rarity: 'rare', weight: 24, tags: ['pin'], archetypes: ['reveal_scout'] },
+    peek_charge_plus_one: { rarity: 'uncommon', weight: 50, tags: ['peek', 'wager'], archetypes: ['conduit_cartographer', 'emergency_toolkit', 'route_gambler'] },
+    stray_charge_plus_one: { rarity: 'rare', weight: 26, tags: ['search'], archetypes: ['emergency_toolkit'] },
+    pin_cap_plus_one: { rarity: 'rare', weight: 24, tags: ['pin'], archetypes: ['conduit_cartographer'] },
     guard_token_plus_one: {
         rarity: 'rare',
         weight: 30,
@@ -249,7 +261,7 @@ export const RELIC_DRAFT: Record<RelicId, RelicDraftRow> = {
         archetypes: ['guard_tank', 'combo_shard_engine', 'route_gambler']
     },
     shrine_echo: { rarity: 'uncommon', weight: 36, tags: ['favor', 'wager'], archetypes: ['treasure_greed', 'route_gambler'] },
-    chapter_compass: { rarity: 'uncommon', weight: 34, tags: ['draft'], archetypes: ['boss_hunter', 'reveal_scout'] },
+    chapter_compass: { rarity: 'uncommon', weight: 34, tags: ['draft'], archetypes: ['boss_hunter', 'conduit_cartographer'] },
     wager_surety: { rarity: 'rare', weight: 22, tags: ['wager'], archetypes: ['boss_hunter', 'route_gambler', 'treasure_greed'] },
     parasite_ledger: { rarity: 'uncommon', weight: 38, tags: ['parasite'], archetypes: ['combo_shard_engine', 'boss_hunter'] }
 };

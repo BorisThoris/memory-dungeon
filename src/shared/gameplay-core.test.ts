@@ -31,7 +31,6 @@ import {
     MEMORY_SCOUT_DEFINITIONS,
     LOCKSMITH_DEFINITIONS,
     SABOTEUR_DEFINITIONS,
-    SEER_DEFINITIONS,
     SLAYER_DEFINITIONS,
     SUPPLY_CACHE_DEFINITIONS,
     VAULTBREAKER_DEFINITIONS,
@@ -1133,7 +1132,10 @@ describe('deterministic gameplay core', () => {
         expect(CONDUIT_CARTOGRAPHER_DEFINITIONS.map((definition) => definition.id)).toEqual([
             'bonus_reward.echo_conduit_lens',
             'relic.peek_charge_plus_one',
-            'reward_perk.echo_conduit_double'
+            'reward_perk.echo_conduit_double',
+            'bonus_reward.secret_favor',
+            'relic.pin_cap_plus_one',
+            'findable.scout_glint'
         ]);
         expect(CONDUIT_CARTOGRAPHER_DEFINITIONS.every((definition) => gameplayContentDefinitionSchema.safeParse(definition).success)).toBe(true);
         expect(
@@ -1298,7 +1300,8 @@ describe('deterministic gameplay core', () => {
 
     it('models Supply Cache as one typed emergency-tool claim across reveal, removal, and score', () => {
         expect(SUPPLY_CACHE_DEFINITIONS.map((definition) => definition.id)).toEqual([
-            'bonus_reward.supply_cache'
+            'bonus_reward.supply_cache',
+            'relic.stray_charge_plus_one'
         ]);
         const initial = run({ peekCharges: 0, destroyPairCharges: 0 });
         const result = reduceGameplayCommand(
@@ -2210,13 +2213,9 @@ describe('deterministic gameplay core', () => {
         ]));
     });
 
-    it('models the Seer reward, relic tools, Scout Glint, and board decisions as one information-control build', () => {
-        expect(SEER_DEFINITIONS.map((definition) => definition.id)).toEqual([
-            'bonus_reward.secret_favor',
-            'relic.stray_charge_plus_one',
-            'relic.pin_cap_plus_one',
-            'findable.scout_glint'
-        ]);
+    it('models Conduit information control and Emergency Toolkit correction through their authoritative definitions', () => {
+        expect(CONDUIT_CARTOGRAPHER_DEFINITIONS.every((definition) => definition.buildId === 'conduit_cartographer')).toBe(true);
+        expect(SUPPLY_CACHE_DEFINITIONS.every((definition) => definition.buildId === 'emergency_toolkit')).toBe(true);
         const initial = run({
             peekCharges: 0,
             strayRemoveCharges: 0,
@@ -2228,22 +2227,22 @@ describe('deterministic gameplay core', () => {
         });
         const reward = reduceGameplayCommand(
             initial,
-            createGameplayDefinitionCommand('seer-secret', 'bonus_reward.secret_favor')
+            createGameplayDefinitionCommand('conduit-secret', 'bonus_reward.secret_favor')
         );
         const strayRelic = applyRelicImmediateThroughGameplayCore(
             reward.run,
             'stray_charge_plus_one',
-            'seer-stray-hook'
+            'toolkit-stray-hook'
         );
         const pinRelic = applyRelicImmediateThroughGameplayCore(
             strayRelic.run,
             'pin_cap_plus_one',
-            'seer-memory-nail'
+            'conduit-memory-nail'
         );
         const glint = resolveFindableMatchRewardThroughGameplayCore(
             pinRelic.run,
             'scout_glint',
-            'seer-scout-glint'
+            'conduit-scout-glint'
         );
 
         expect(reward.run).toMatchObject({
@@ -2267,7 +2266,7 @@ describe('deterministic gameplay core', () => {
             expect.objectContaining({ type: 'feedback.requested', cue: 'build.scout_glint.matched' })
         ]));
 
-        const pinCommand = createGameplayPinToggleCommand('seer-pin', 'echo-a');
+        const pinCommand = createGameplayPinToggleCommand('conduit-pin', 'echo-a');
         const pinned = reduceGameplayCommand(pinRelic.run, pinCommand);
         expect(pinned.accepted).toBe(true);
         expect(pinned.run).toEqual(togglePinnedTile(pinRelic.run, 'echo-a'));
@@ -2285,7 +2284,7 @@ describe('deterministic gameplay core', () => {
             strayRemoveArmed: false,
             recallFocus: 2
         } as RunState;
-        const strayCommand = createGameplayStrayRemoveCommand('seer-stray', 'wild');
+        const strayCommand = createGameplayStrayRemoveCommand('toolkit-stray', 'wild');
         const removed = reduceGameplayCommand(strayRun, strayCommand);
         expect(removed.accepted).toBe(true);
         expect(removed.run).toEqual(applyStrayRemove(strayRun, 'wild', { requireArmed: false }));

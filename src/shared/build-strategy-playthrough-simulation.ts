@@ -41,6 +41,7 @@ import {
     type GameplayCoreBoundedMemoryPolicy,
     type GameplayCoreGambitPolicy,
     type GameplayCoreLockPolicy,
+    type GameplayCorePinPolicy,
     type GameplayCoreRecoveryPolicy,
     type GameplayCorePlaythroughInformationTrace,
     type GameplayCorePlaythroughSolverTrace
@@ -79,6 +80,8 @@ export interface GameplayBuildPolicyDefinition {
     recoverySuppressedMatchups?: readonly GameplayBuildMatchup[];
     lockPolicy?: GameplayCoreLockPolicy | null;
     lockPolicySuppressedMatchups?: readonly GameplayBuildMatchup[];
+    pinPolicy?: GameplayCorePinPolicy | null;
+    pinPolicySuppressedMatchups?: readonly GameplayBuildMatchup[];
     interludeRiskPolicy: GameplayBuildInterludeRiskPolicy;
     signatureTiming: 'before_board' | 'after_board';
     favorableMatchup: GameplayBuildMatchup;
@@ -159,6 +162,9 @@ export interface GameplayBuildFloorTrace {
     typedKeyLockUses: number;
     masterKeyLockUses: number;
     masterKeyPurchases: number;
+    pinPlacements: number;
+    scoutGlintMatches: number;
+    pinPolicySuppressedByMatchup: boolean;
     lockPolicySuppressedByMatchup: boolean;
     gambitSuppressedByMatchup: boolean;
     information: GameplayCorePlaythroughInformationTrace;
@@ -220,6 +226,8 @@ export interface GameplayBuildMultiFloorMetrics {
     recoverySuppressedMatchups: readonly GameplayBuildMatchup[];
     lockPolicy: GameplayCoreLockPolicy | null;
     lockPolicySuppressedMatchups: readonly GameplayBuildMatchup[];
+    pinPolicy: GameplayCorePinPolicy | null;
+    pinPolicySuppressedMatchups: readonly GameplayBuildMatchup[];
     gambitSuppressedMatchups: readonly GameplayBuildMatchup[];
     interludeRiskPolicy: GameplayBuildInterludeRiskPolicy;
     favorableMatchup: GameplayBuildMatchup;
@@ -267,6 +275,10 @@ export interface GameplayBuildMultiFloorMetrics {
     masterKeyLockUses: number;
     masterKeyPurchases: number;
     lockPressureConservations: number;
+    pinPlacements: number;
+    scoutGlintMatches: number;
+    memoryPressurePinFloors: number;
+    hazardPinConservations: number;
     samples: GameplayBuildMultiFloorSeedSample[];
 }
 
@@ -282,6 +294,32 @@ export interface GameplayBuildMultiFloorReport {
         ratio: number;
     }>;
     cohesiveBuildCoverage: {
+        conduitCartographer: {
+            id: 'conduit_cartographer';
+            buildMechanicId: 'build.conduit_cartographer';
+            startingLoadoutId: 'memory_scout';
+            axis: 'information';
+            favorableMatchup: 'memory_pressure';
+            counterMatchup: 'hazard_pressure';
+            requiredSystems: readonly [
+                'reward.echo_conduit_lens',
+                'perk.echo_conduit_double',
+                'findable.scout_glint',
+                'board.scout_reveal',
+                'relic.pin_cap_plus_one',
+                'power.pin',
+                'power.peek'
+            ];
+            longHorizonSampled: true;
+            evidence: {
+                pinPlacements: number;
+                scoutGlintMatches: number;
+                memoryPressurePinFloors: number;
+                hazardPinConservations: number;
+                favorableMatchupFloors: number;
+                counterMatchupFloors: number;
+            };
+        };
         routeGambler: {
             id: 'route_gambler';
             buildMechanicId: 'build.route_gambler';
@@ -459,6 +497,10 @@ export interface GameplayBuildMultiFloorReport {
         minLocksmithMasterKeyUses: number;
         minLocksmithMasterKeyPurchases: number;
         minLockPressureConservations: number;
+        minConduitPinPlacementsPerSeed: number;
+        minConduitScoutGlintMatchesPerSeed: number;
+        minConduitMemoryPressurePinFloors: number;
+        minHazardPinConservations: number;
         maxPairwiseMeanTurnRatio: number;
     };
     notes: string[];
@@ -501,9 +543,11 @@ export const GAMEPLAY_BUILD_POLICIES: Readonly<Record<GameplayBuildStrategyId, G
         bonusRewardPriorities: ['echo_conduit_lens', 'trait_toolkit', 'secret_favor', 'trait_streak_lens'],
         relicPriorities: ['peek_charge_plus_one', 'shrine_echo', 'chapter_compass', 'pin_cap_plus_one'],
         shopItemPriorities: ['peek_charge', 'trait_routing_kit', 'region_shuffle_charge', 'iron_key'],
-        informationPolicy: { kind: 'bounded_memory', memoryTileCapacity: 10, uncertainTurnBudget: 20 },
+        informationPolicy: { kind: 'bounded_memory', memoryTileCapacity: 6, uncertainTurnBudget: 20 },
         gambitPolicy: null,
         gambitSuppressedMatchups: [],
+        pinPolicy: { kind: 'pin_next_known_pair' },
+        pinPolicySuppressedMatchups: ['hazard_pressure'],
         interludeRiskPolicy: {
             maxRouteRiskUnits: 1,
             minimumEffectiveSurvivalAfterRoute: 4,
@@ -512,7 +556,7 @@ export const GAMEPLAY_BUILD_POLICIES: Readonly<Record<GameplayBuildStrategyId, G
         },
         signatureTiming: 'before_board',
         favorableMatchup: 'memory_pressure',
-        counterMatchup: 'boss_pressure'
+        counterMatchup: 'hazard_pressure'
     },
     guard_tank: {
         id: 'guard_tank_policy_v1',
@@ -769,7 +813,9 @@ const createInitialRun = (
     seed: number,
     rulesVersion: number
 ): RunState => {
-    const initialRelicIds: RelicId[] = strategy.id === 'route_gambler'
+    const initialRelicIds: RelicId[] = strategy.id === 'conduit_cartographer'
+        ? ['pin_cap_plus_one']
+        : strategy.id === 'route_gambler'
         ? ['wager_surety']
         : strategy.id === 'combo_shard_engine'
           ? ['combo_shard_plus_step']
@@ -1213,7 +1259,7 @@ const signatureAxisScores = (
 ): Record<GameplayBuildStrategyAxis, number> => {
     const scores = emptyAxisScores();
     const sourceIds = strategy.id === 'conduit_cartographer'
-        ? new Set(['echo_conduit_lens', 'echo_conduit_double'])
+        ? new Set(['echo_conduit_lens', 'echo_conduit_double', 'pin_cap_plus_one', 'pin', 'scout_glint'])
         : strategy.id === 'guard_tank'
           ? new Set(['hazard_ward', 'volatile_heavy_guard'])
           : strategy.id === 'treasure_greed'
@@ -1233,7 +1279,11 @@ const signatureAxisScores = (
         const fromBuildSource = sourceIds.has(event.source.id);
         if (
             strategy.id === 'conduit_cartographer' &&
-            (event.type === 'board.peeked' || (fromBuildSource && event.type === 'inventory.changed'))
+            (event.type === 'board.peeked' ||
+                (event.type === 'board.pin_changed' && event.pinned) ||
+                (event.type === 'board.turn_resolved' && event.matchedFindableKind === 'scout_glint') ||
+                (fromBuildSource &&
+                    (event.type === 'inventory.changed' || event.type === 'pin_capacity.requested')))
         ) {
             scores.information += 1;
         }
@@ -1344,6 +1394,7 @@ const runSeed = (
     };
     const setupDefinitions = strategy.activationDefinitionIds.filter((definitionId) =>
         definitionId.startsWith('bonus_reward.') ||
+        (strategy.id === 'conduit_cartographer' && definitionId.startsWith('relic.')) ||
         strategy.id === 'boss_hunter' ||
         (strategy.id === 'memory_scout' && definitionId.startsWith('relic.'))
     );
@@ -1394,9 +1445,20 @@ const runSeed = (
             lockPolicy: matchup !== policy.favorableMatchup ||
                 (policy.lockPolicySuppressedMatchups ?? []).includes(matchup)
                 ? undefined
-                : policy.lockPolicy ?? undefined
+                : policy.lockPolicy ?? undefined,
+            pinPolicy: (policy.pinPolicySuppressedMatchups ?? []).includes(matchup)
+                ? undefined
+                : policy.pinPolicy ?? undefined
         });
         appendSolverTrace(trace, solver);
+        if (strategy.id === 'conduit_cartographer') {
+            const informationControlEvents = solver.events.filter((event) =>
+                (event.type === 'board.pin_changed' && event.pinned) ||
+                (event.type === 'board.turn_resolved' && event.matchedFindableKind === 'scout_glint')
+            );
+            trace.signatureEvents.push(...informationControlEvents);
+            signatureConsequenceUses += solver.pinPlacements;
+        }
         if (strategy.id === 'route_gambler') {
             trace.signatureEvents.push(...solver.events.filter((event) =>
                 event.type === 'board.gambit_commit.requested' || event.source.id === 'wager_surety'
@@ -1462,6 +1524,9 @@ const runSeed = (
         const masterKeyPurchases = floorEvents.filter((event) =>
             event.type === 'shop.offer_purchased' && event.itemId === 'master_key'
         ).length;
+        const scoutGlintMatches = floorEvents.filter((event) =>
+            event.type === 'board.turn_resolved' && event.matchedFindableKind === 'scout_glint'
+        ).length;
         const expectedSynergyTags = recurringSynergyTags(strategy);
         const observedTraitInteractionTags = floorEvents.flatMap((event) =>
             event.type === 'board.turn_resolved'
@@ -1494,6 +1559,10 @@ const runSeed = (
             typedKeyLockUses,
             masterKeyLockUses,
             masterKeyPurchases,
+            pinPlacements: solver.pinPlacements,
+            scoutGlintMatches,
+            pinPolicySuppressedByMatchup:
+                policy.pinPolicy != null && (policy.pinPolicySuppressedMatchups ?? []).includes(matchup),
             lockPolicySuppressedByMatchup:
                 policy.lockPolicy != null && (policy.lockPolicySuppressedMatchups ?? []).includes(matchup),
             gambitSuppressedByMatchup:
@@ -1723,6 +1792,8 @@ export const runGameplayBuildMultiFloorSimulation = (
             recoverySuppressedMatchups: policy.recoverySuppressedMatchups ?? [],
             lockPolicy: policy.lockPolicy ?? null,
             lockPolicySuppressedMatchups: policy.lockPolicySuppressedMatchups ?? [],
+            pinPolicy: policy.pinPolicy ?? null,
+            pinPolicySuppressedMatchups: policy.pinPolicySuppressedMatchups ?? [],
             gambitSuppressedMatchups: policy.gambitSuppressedMatchups,
             interludeRiskPolicy: policy.interludeRiskPolicy,
             favorableMatchup: policy.favorableMatchup,
@@ -1876,6 +1947,29 @@ export const runGameplayBuildMultiFloorSimulation = (
                     floor.replayCheckpointDeterministic
                 ).length
                 : 0,
+            pinPlacements: strategy.id === 'conduit_cartographer'
+                ? floorTraces.reduce((sum, floor) => sum + floor.pinPlacements, 0)
+                : 0,
+            scoutGlintMatches: strategy.id === 'conduit_cartographer'
+                ? floorTraces.reduce((sum, floor) => sum + floor.scoutGlintMatches, 0)
+                : 0,
+            memoryPressurePinFloors: strategy.id === 'conduit_cartographer'
+                ? floorTraces.filter((floor) =>
+                    floor.matchup === 'memory_pressure' &&
+                    floor.pinPlacements > 0 &&
+                    floor.completed &&
+                    floor.replayCheckpointDeterministic
+                ).length
+                : 0,
+            hazardPinConservations: strategy.id === 'conduit_cartographer'
+                ? floorTraces.filter((floor) =>
+                    floor.matchup === 'hazard_pressure' &&
+                    floor.pinPolicySuppressedByMatchup &&
+                    floor.pinPlacements === 0 &&
+                    floor.completed &&
+                    floor.replayCheckpointDeterministic
+                ).length
+                : 0,
             samples
         };
     });
@@ -1889,6 +1983,7 @@ export const runGameplayBuildMultiFloorSimulation = (
             pairwiseMeanTurnRatios.push({ left: left.id, right: right.id, ratio: round(high / low) });
         }
     }
+    const conduitCartographer = strategies.find((strategy) => strategy.id === 'conduit_cartographer');
     const routeGambler = strategies.find((strategy) => strategy.id === 'route_gambler');
     const comboShardEngine = strategies.find((strategy) => strategy.id === 'combo_shard_engine');
     const trapControl = strategies.find((strategy) => strategy.id === 'trap_control');
@@ -1903,6 +1998,32 @@ export const runGameplayBuildMultiFloorSimulation = (
         strategies,
         pairwiseMeanTurnRatios,
         cohesiveBuildCoverage: {
+            conduitCartographer: {
+                id: 'conduit_cartographer',
+                buildMechanicId: 'build.conduit_cartographer',
+                startingLoadoutId: 'memory_scout',
+                axis: 'information',
+                favorableMatchup: 'memory_pressure',
+                counterMatchup: 'hazard_pressure',
+                requiredSystems: [
+                    'reward.echo_conduit_lens',
+                    'perk.echo_conduit_double',
+                    'findable.scout_glint',
+                    'board.scout_reveal',
+                    'relic.pin_cap_plus_one',
+                    'power.pin',
+                    'power.peek'
+                ],
+                longHorizonSampled: true,
+                evidence: {
+                    pinPlacements: conduitCartographer?.pinPlacements ?? 0,
+                    scoutGlintMatches: conduitCartographer?.scoutGlintMatches ?? 0,
+                    memoryPressurePinFloors: conduitCartographer?.memoryPressurePinFloors ?? 0,
+                    hazardPinConservations: conduitCartographer?.hazardPinConservations ?? 0,
+                    favorableMatchupFloors: conduitCartographer?.favorableMatchupMetrics?.sampledFloors ?? 0,
+                    counterMatchupFloors: conduitCartographer?.counterMatchupMetrics?.sampledFloors ?? 0
+                }
+            },
             routeGambler: {
                 id: 'route_gambler',
                 buildMechanicId: 'build.route_gambler',
@@ -2080,6 +2201,10 @@ export const runGameplayBuildMultiFloorSimulation = (
             minLocksmithMasterKeyUses: 1,
             minLocksmithMasterKeyPurchases: 1,
             minLockPressureConservations: 1,
+            minConduitPinPlacementsPerSeed: 1,
+            minConduitScoutGlintMatchesPerSeed: 1,
+            minConduitMemoryPressurePinFloors: 1,
+            minHazardPinConservations: 1,
             maxPairwiseMeanTurnRatio: 1.5
         },
         notes: [
@@ -2091,6 +2216,7 @@ export const runGameplayBuildMultiFloorSimulation = (
             'Matchup distributions are observed from shipped schedule mutators, hazards, bosses, and economy nodes; absent buckets are reported as unsampled rather than invented.',
             'Favorable and counter labels are explicit design hypotheses. The gate requires shipped exposure, bounded-memory completion, feedback, and replay evidence but does not report simulator outcomes as human win rates.',
             'The gate proves longer structural viability and balance envelopes for a deterministic bounded-memory policy, not final human difficulty balance.',
+            'Conduit Cartographer now absorbs the former Seer declaration: Echo and Conduit stock information, Scout Glint reveals threats, Memory Nail expands durable authored pins, and the pin policy protects only observed singleton identities while conserving annotations under hazard-driven board disruption.',
             'Route Gambler is retained as the fourth long-horizon build: Route Tactician movement, one-floor Gambit rescue, objective wagers, Wager Surety, Favor cash-out, and Mystery routing form one distinct risk-conversion trace.',
             'Combo Shard Engine is retained as the fifth build: Greed creates a visible life deficit, Bonus Shards and the Catalyst relic stock bounded momentum, clean matches convert the next shard into life, and authored parasite floors test its sustain counter.',
             'Trap Control is retained as the sixth build: renewable Free Swap sources fund typed row reconfiguration on visible hazard-pressure floors, while memory-pressure floors conserve the spatial-disruption resource.',
@@ -2199,6 +2325,33 @@ export const assertGameplayBuildMultiFloorViable = (
             }
             if (!sample.fullReplayDeterministic) issues.push(`${sampleContext}:full replay diverged`);
             issues.push(...sample.invariantViolations.map((issue) => `${sampleContext}:${issue}`));
+        }
+    }
+    const conduitCartographer = report.strategies.find((strategy) => strategy.id === 'conduit_cartographer');
+    if (conduitCartographer) {
+        for (const sample of conduitCartographer.samples) {
+            const pinPlacements = sample.floorTraces.reduce((sum, floor) => sum + floor.pinPlacements, 0);
+            if (pinPlacements < report.bounds.minConduitPinPlacementsPerSeed) {
+                issues.push(
+                    `conduit_cartographer@seed:${sample.seed}:pinPlacements=${pinPlacements}; required=${report.bounds.minConduitPinPlacementsPerSeed}`
+                );
+            }
+            const scoutGlintMatches = sample.floorTraces.reduce((sum, floor) => sum + floor.scoutGlintMatches, 0);
+            if (scoutGlintMatches < report.bounds.minConduitScoutGlintMatchesPerSeed) {
+                issues.push(
+                    `conduit_cartographer@seed:${sample.seed}:scoutGlintMatches=${scoutGlintMatches}; required=${report.bounds.minConduitScoutGlintMatchesPerSeed}`
+                );
+            }
+        }
+        if (conduitCartographer.memoryPressurePinFloors < report.bounds.minConduitMemoryPressurePinFloors) {
+            issues.push(
+                `conduit_cartographer@seeds:${report.seeds.join(',')}:memoryPressurePinFloors=${conduitCartographer.memoryPressurePinFloors}; required=${report.bounds.minConduitMemoryPressurePinFloors}`
+            );
+        }
+        if (conduitCartographer.hazardPinConservations < report.bounds.minHazardPinConservations) {
+            issues.push(
+                `conduit_cartographer@seeds:${report.seeds.join(',')}:hazardPinConservations=${conduitCartographer.hazardPinConservations}; required=${report.bounds.minHazardPinConservations}`
+            );
         }
     }
     const routeGambler = report.strategies.find((strategy) => strategy.id === 'route_gambler');
