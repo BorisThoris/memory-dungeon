@@ -1,5 +1,5 @@
 {
-  "version": 45,
+  "version": 46,
   "mechanics": [
     {
       "id": "trait.echo",
@@ -1719,16 +1719,16 @@
     },
     {
       "id": "simulation.build_evaluation",
-      "label": "Typed Build Strategy Evaluation",
+      "label": "Multi-Floor Typed Build Strategy Evaluation",
       "kind": "simulation",
-      "role": "route_profile_and_three_build_command_event_viability_gate",
-      "evidence": ["src/shared/balance-simulation.ts", "src/shared/build-strategy-simulation.ts", "src/shared/gameplay-core.ts", "src/shared/route-choice-outcome-rules.ts", "scripts/sim-build-strategies.ts"],
-      "reads": ["routeChoices", "startingLoadoutId", "contentDefinitionIds", "gameplayCommands", "gameplayEvents", "feedbackCues", "strategyAxisScores", "pairwiseAxisDistances", "lives", "shopGold", "totalScore", "guardTokens", "comboShards", "relicFavorProgress", "pendingMemorizeBonusMs"],
-      "writes": ["balanceProfileReport", "buildStrategyReport", "strategyAxisScores", "pairwiseAxisDistances"],
+      "role": "route_profile_and_multi_floor_three_build_command_event_viability_balance_and_replay_gate",
+      "evidence": ["src/shared/balance-simulation.ts", "src/shared/build-strategy-simulation.ts", "src/shared/build-strategy-playthrough-simulation.ts", "src/shared/gameplay-core-playthrough-solver.ts", "src/shared/gameplay-core.ts", "src/shared/route-choice-outcome-rules.ts", "scripts/sim-build-strategies.ts", "scripts/sim-build-strategy-playthroughs.ts"],
+      "reads": ["routeChoices", "startingLoadoutId", "contentDefinitionIds", "gameplayCommands", "gameplayEvents", "feedbackCues", "traitInteractionTags", "activeMutators", "floorTag", "strategyAxisScores", "pairwiseAxisDistances", "lives", "shopGold", "totalScore", "guardTokens", "comboShards", "relicFavorProgress", "pendingMemorizeBonusMs"],
+      "writes": ["balanceProfileReport", "buildStrategyReport", "strategyAxisScores", "pairwiseAxisDistances", "generatedBoardPlaythroughReport", "replayReport", "invariantViolations"],
       "enables": ["build.route_gambler", "build.conduit_cartographer", "build.guard_tank", "build.treasure_greed", "economy.score_and_rewards", "safety.softlock_fairness"],
       "blocks": [],
-      "softlockGuards": ["typed-route-command-only", "one-outcome-per-cleared-floor", "zero-rejected-profile-choices", "multi-seed-profile-bounds", "three-strategy-minimum", "typed-content-definition-activation", "authoritative-consequence-command", "deterministic-command-replay", "typed-feedback-minimum", "distinct-axis-fingerprint"],
-      "tests": ["src/shared/balance-simulation.test.ts", "src/shared/build-strategy-simulation.test.ts"]
+      "softlockGuards": ["typed-route-command-only", "one-outcome-per-cleared-floor", "zero-rejected-profile-choices", "multi-seed-profile-bounds", "three-strategy-minimum", "typed-content-definition-activation", "authoritative-consequence-command", "deterministic-command-replay", "typed-feedback-minimum", "distinct-axis-fingerprint", "multi-floor-command-id-uniqueness", "per-floor-replay-checkpoint", "full-run-json-replay", "observed-matchup-distribution", "recurring-trait-synergy-minimum", "synergy-preserving-destroy-policy", "pairwise-turn-ratio-bound"],
+      "tests": ["src/shared/balance-simulation.test.ts", "src/shared/build-strategy-simulation.test.ts", "src/shared/build-strategy-playthrough-simulation.test.ts", "src/shared/gameplay-core-playthrough-solver.test.ts"]
     },
     {
       "id": "core.board_turn_resolution",
@@ -1898,6 +1898,10 @@
     { "source": "simulation.build_evaluation", "target": "feedback.gameplay_hud", "kind": "tested_by", "label": "requires typed feedback for every retained build loop" },
     { "source": "simulation.build_evaluation", "target": "simulation.gameplay_replay", "kind": "guarded_by", "label": "replays every build command and event sequence exactly" },
     { "source": "simulation.build_evaluation", "target": "safety.softlock_fairness", "kind": "guarded_by", "label": "keeps per-seed survival within profile bounds" },
+    { "source": "simulation.generated_board_playthrough", "target": "simulation.build_evaluation", "kind": "tested_by", "label": "carries each build through real generated boards with per-floor replay checkpoints" },
+    { "source": "progression.run_flow", "target": "simulation.build_evaluation", "kind": "tested_by", "label": "executes typed route side-room relic milestone and floor advancement across each retained build" },
+    { "source": "core.board_turn_resolution", "target": "simulation.build_evaluation", "kind": "tested_by", "label": "records actual loadout trait synergies instead of injected recurring effects" },
+    { "source": "simulation.build_evaluation", "target": "progression.relic_draft", "kind": "tested_by", "label": "crosses the floor-three build-choice milestone inside the retained command stream" },
     { "source": "objective.floor_clear", "target": "feedback.gameplay_hud", "kind": "enables", "label": "shows floor clear" },
     { "source": "progression.run_flow", "target": "feedback.gameplay_hud", "kind": "enables", "label": "route feedback" },
     { "source": "stats.session_tracking", "target": "feedback.gameplay_hud", "kind": "enables", "label": "stat feedback" },

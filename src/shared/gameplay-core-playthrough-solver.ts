@@ -46,7 +46,7 @@ interface MutableSolverState {
 const stableJson = (value: unknown): string => JSON.stringify(value);
 
 const commandIdFor = (state: MutableSolverState, label: string): string =>
-    `solver:${state.run.runSeed}:${String(state.commands.length).padStart(4, '0')}:${label}`;
+    `solver:${state.run.runSeed}:floor-${state.run.board?.level ?? 0}:${String(state.commands.length).padStart(4, '0')}:${label}`;
 
 const orderPairForCurrentBoard = (run: RunState, pair: readonly Tile[]): Tile[] => {
     const blockedIndex = run.stickyBlockIndex;

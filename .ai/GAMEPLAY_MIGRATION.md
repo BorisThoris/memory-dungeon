@@ -647,6 +647,21 @@ Generated-board fairness now executes the same serializable command/event bounda
 
 Graph v45 adds `simulation.generated_board_playthrough` and connects typed tile input, turn resolution, exits, feedback completeness, floor progression, softlock/topology safety, and sampled deterministic replay through source-referenced `tested_by` and `guarded_by` relationships.
 
+## Forty-sixth vertical slice: Multi-Floor Three-Build Playthrough Gate
+
+The three retained build proofs now traverse the real floor loop instead of stopping after one injected payoff:
+
+1. `build-strategy-playthrough-simulation` carries Conduit Cartographer, Warden, and Vaultbreaker through generated boards, typed turns, route decisions, side-room resolution, the floor-three relic milestone, and typed floor advancement.
+2. Every floor retains its exact commands, events, completion stop reason, schema/feedback invariants, observed mutator matchup, lives, score, turn cost, and isolated JSON replay checkpoint.
+3. The complete multi-floor command list also replays from one deterministic stocked initial run, with globally unique solver command and event identities that include the board floor.
+4. Strategy evidence comes from authoritative events: Peek usage and Echo/Conduit tags for information, Destroy usage and Mirror/Stasis guard tags for control, and shop spending plus Cursed/Volatile or Sealed/Heavy tags for economy.
+5. The Warden policy exposed and fixed a cohesion failure: eager Destroy could erase its seeded Mirror/Stasis setup. Destroy now waits for a non-synergy pair, preserving the recurring guard payoff while still spending the control resource.
+6. Matchup distributions report shipped memory pressure, hazard pressure, bosses, economy opportunities, or neutral floors without inventing unsampled counterfactuals.
+7. Balance summaries retain min/mean/max turns, commands, lives, and score plus pairwise mean-turn ratios. The current gate requires complete floors, exact replay, at least one downstream consequence per build/seed, and at least one real recurring synergy per build.
+8. `sim:build-strategy-playthroughs` emits the queryable three-seed/four-floor report and is part of `gate:rewards-economy` alongside the original structural proof.
+
+Graph v46 upgrades `simulation.build_evaluation` into a multi-floor command/event viability, matchup, balance, synergy, and replay gate connected to generated-board playthrough, run flow, board-turn facts, relic drafting, three cohesive builds, and deterministic replay.
+
 ## Current slice status
 
 Implemented in the Conduit Cartographer vertical slice:
@@ -666,6 +681,6 @@ Implemented in the Conduit Cartographer vertical slice:
 Still required before the vertical slice is complete:
 
 - widen the feedback-completeness audit beyond the former HUD-critical fields as additional gameplay ownership enters the core;
-- extend the structural three-build proof into longer multi-floor performance, counter-matchup, and balance distributions as more combat decisions enter the command core;
-- build that multi-floor three-strategy proof on `simulation.generated_board_playthrough`, retaining exact command/event traces and replay checkpoints across floor transitions;
+- extend the four-floor perfect-information proof into longer strategy-aware player policies and explicit adversarial counter-matchups without replacing observed shipped-schedule distributions with synthetic claims;
+- use the retained trace to identify and migrate any remaining non-command gameplay mutations between generated floors and presentation surfaces;
 - continue migrating cohesive player builds rather than adding isolated definitions, using the graph diagnostics to choose the next least-overlapping loop.

@@ -190,7 +190,7 @@ describe('gameplay interaction graph', () => {
     it('connects concrete progression safety repairs to commands, feedback, persistence, and replay', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
 
-        expect(gameplayInteractionGraph.version).toBe(45);
+        expect(gameplayInteractionGraph.version).toBe(46);
         expect(byId.get('safety.softlock_fairness')).toMatchObject({
             kind: 'safety',
             role: 'typed_invariant_and_replayable_repair_gate',
@@ -696,7 +696,7 @@ describe('gameplay interaction graph', () => {
     it('connects the Gauntlet clock from run setup through a replayable terminal consequence', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
 
-        expect(gameplayInteractionGraph.version).toBe(45);
+        expect(gameplayInteractionGraph.version).toBe(46);
         expect(byId.get('mode.gauntlet_clock')).toMatchObject({
             kind: 'hazard',
             role: 'serialized_host_clock_terminal_transition',
@@ -736,7 +736,7 @@ describe('gameplay interaction graph', () => {
     it('connects pause and resume across timer snapshots, lifecycle recovery, persistence, and replay', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
 
-        expect(gameplayInteractionGraph.version).toBe(45);
+        expect(gameplayInteractionGraph.version).toBe(46);
         expect(byId.get('phase.pause_resume')).toMatchObject({
             kind: 'core',
             role: 'serialized_timer_snapshot_and_clock_lifecycle_transition',
@@ -783,7 +783,7 @@ describe('gameplay interaction graph', () => {
     it('separates typed debug reveal lifecycle from the consumable Peek power', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
 
-        expect(gameplayInteractionGraph.version).toBe(45);
+        expect(gameplayInteractionGraph.version).toBe(46);
         expect(byId.get('debug.reveal_lifecycle')).toMatchObject({
             kind: 'core',
             role: 'replayable_debug_visibility_and_achievement_policy_transition',
@@ -962,7 +962,7 @@ describe('gameplay interaction graph', () => {
 
     it('connects Hazard Banish acquisition to its typed floor-start removal or Destroy fallback', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
-        expect(gameplayInteractionGraph.version).toBe(45);
+        expect(gameplayInteractionGraph.version).toBe(46);
         expect(byId.get('perk.hazard_banish_per_floor')).toMatchObject({
             kind: 'perk',
             role: 'durable_floor_start_hazard_or_destroy_conversion',
@@ -985,7 +985,7 @@ describe('gameplay interaction graph', () => {
 
     it('connects typed route selection from floor clear through exact replayable consequences', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
-        expect(gameplayInteractionGraph.version).toBe(45);
+        expect(gameplayInteractionGraph.version).toBe(46);
         expect(byId.get('route.choice')).toMatchObject({
             kind: 'route',
             role: 'flat_replayable_commitment_and_interlude_open',
@@ -1018,28 +1018,37 @@ describe('gameplay interaction graph', () => {
         ]));
     });
 
-    it('evaluates route profiles and three distinct builds through typed commands and events', () => {
+    it('evaluates route profiles and three distinct builds through multi-floor typed commands and events', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
         expect(byId.get('simulation.build_evaluation')).toMatchObject({
             kind: 'simulation',
-            role: 'route_profile_and_three_build_command_event_viability_gate',
+            role: 'route_profile_and_multi_floor_three_build_command_event_viability_balance_and_replay_gate',
             evidence: expect.arrayContaining([
                 'src/shared/balance-simulation.ts',
                 'src/shared/build-strategy-simulation.ts',
-                'scripts/sim-build-strategies.ts'
+                'src/shared/build-strategy-playthrough-simulation.ts',
+                'src/shared/gameplay-core-playthrough-solver.ts',
+                'scripts/sim-build-strategies.ts',
+                'scripts/sim-build-strategy-playthroughs.ts'
             ]),
             reads: expect.arrayContaining([
                 'startingLoadoutId',
                 'contentDefinitionIds',
                 'gameplayCommands',
                 'gameplayEvents',
-                'feedbackCues'
+                'feedbackCues',
+                'traitInteractionTags',
+                'activeMutators',
+                'floorTag'
             ]),
             writes: expect.arrayContaining([
                 'balanceProfileReport',
                 'buildStrategyReport',
                 'strategyAxisScores',
-                'pairwiseAxisDistances'
+                'pairwiseAxisDistances',
+                'generatedBoardPlaythroughReport',
+                'replayReport',
+                'invariantViolations'
             ]),
             enables: expect.arrayContaining([
                 'build.route_gambler',
@@ -1053,11 +1062,20 @@ describe('gameplay interaction graph', () => {
                 'authoritative-consequence-command',
                 'deterministic-command-replay',
                 'typed-feedback-minimum',
-                'distinct-axis-fingerprint'
+                'distinct-axis-fingerprint',
+                'multi-floor-command-id-uniqueness',
+                'per-floor-replay-checkpoint',
+                'full-run-json-replay',
+                'observed-matchup-distribution',
+                'recurring-trait-synergy-minimum',
+                'synergy-preserving-destroy-policy',
+                'pairwise-turn-ratio-bound'
             ]),
             tests: expect.arrayContaining([
                 'src/shared/balance-simulation.test.ts',
-                'src/shared/build-strategy-simulation.test.ts'
+                'src/shared/build-strategy-simulation.test.ts',
+                'src/shared/build-strategy-playthrough-simulation.test.ts',
+                'src/shared/gameplay-core-playthrough-solver.test.ts'
             ])
         });
         expect(gameplayInteractionGraph.edges).toEqual(expect.arrayContaining([
@@ -1070,13 +1088,17 @@ describe('gameplay interaction graph', () => {
             expect.objectContaining({ source: 'simulation.build_evaluation', target: 'economy.score_and_rewards', kind: 'tested_by' }),
             expect.objectContaining({ source: 'simulation.build_evaluation', target: 'feedback.gameplay_hud', kind: 'tested_by' }),
             expect.objectContaining({ source: 'simulation.build_evaluation', target: 'simulation.gameplay_replay', kind: 'guarded_by' }),
-            expect.objectContaining({ source: 'simulation.build_evaluation', target: 'safety.softlock_fairness', kind: 'guarded_by' })
+            expect.objectContaining({ source: 'simulation.build_evaluation', target: 'safety.softlock_fairness', kind: 'guarded_by' }),
+            expect.objectContaining({ source: 'simulation.generated_board_playthrough', target: 'simulation.build_evaluation', kind: 'tested_by' }),
+            expect.objectContaining({ source: 'progression.run_flow', target: 'simulation.build_evaluation', kind: 'tested_by' }),
+            expect.objectContaining({ source: 'core.board_turn_resolution', target: 'simulation.build_evaluation', kind: 'tested_by' }),
+            expect.objectContaining({ source: 'simulation.build_evaluation', target: 'progression.relic_draft', kind: 'tested_by' })
         ]));
     });
 
     it('executes generated-board fairness through typed commands, feedback audits, and sampled replay', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
-        expect(gameplayInteractionGraph.version).toBe(45);
+        expect(gameplayInteractionGraph.version).toBe(46);
         expect(byId.get('simulation.generated_board_playthrough')).toMatchObject({
             kind: 'simulation',
             role: 'core_command_event_generated_board_fairness_and_replay_gate',
@@ -1135,7 +1157,7 @@ describe('gameplay interaction graph', () => {
 
     it('connects relic drafting and offer shaping to typed build acquisition, economy, feedback, persistence, and replay', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
-        expect(gameplayInteractionGraph.version).toBe(45);
+        expect(gameplayInteractionGraph.version).toBe(46);
         expect(byId.get('progression.relic_draft')).toMatchObject({
             kind: 'progression',
             role: 'flat_typed_offer_open_selection_and_shaping',
@@ -1174,7 +1196,7 @@ describe('gameplay interaction graph', () => {
 
     it('connects flat typed side-room choices from routes through rewards, feedback, persistence, and replay', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
-        expect(gameplayInteractionGraph.version).toBe(45);
+        expect(gameplayInteractionGraph.version).toBe(46);
         expect(byId.get('progression.route_side_room')).toMatchObject({
             kind: 'progression',
             role: 'flat_replayable_between_floor_reward_choice',
@@ -1203,7 +1225,7 @@ describe('gameplay interaction graph', () => {
 
     it('connects flat typed floor advancement through pressure, board preparation, feedback, persistence, and replay', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
-        expect(gameplayInteractionGraph.version).toBe(45);
+        expect(gameplayInteractionGraph.version).toBe(46);
         expect(byId.get('progression.run_flow')).toMatchObject({
             kind: 'progression',
             role: 'typed_flat_replayable_floor_transition',
@@ -1236,7 +1258,7 @@ describe('gameplay interaction graph', () => {
 
     it('connects one typed non-final board turn through effects, feedback, persistence, and replay', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
-        expect(gameplayInteractionGraph.version).toBe(45);
+        expect(gameplayInteractionGraph.version).toBe(46);
         expect(byId.get('core.board_turn_resolution')).toMatchObject({
             kind: 'core',
             role: 'single_command_match_mismatch_gambit_floor_clear_and_feedback_fact_transition',
