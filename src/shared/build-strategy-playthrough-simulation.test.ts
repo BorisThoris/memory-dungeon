@@ -8,7 +8,7 @@ import { GAMEPLAY_BUILD_STRATEGIES } from './build-strategy-simulation';
 import { GAME_RULES_VERSION } from './contracts';
 
 describe('multi-floor typed build strategy simulation', () => {
-    it('carries three distinct builds through generated floors, interludes, a relic milestone, and exact replay', () => {
+    it('carries four distinct builds through generated floors, interludes, a relic milestone, and exact replay', () => {
         const report = runGameplayBuildMultiFloorSimulation({ rulesVersion: GAME_RULES_VERSION });
 
         expect(report.strategies.map((strategy) => strategy.id)).toEqual(
@@ -17,7 +17,8 @@ describe('multi-floor typed build strategy simulation', () => {
         expect(report.strategies.map((strategy) => strategy.dominantAxis)).toEqual([
             'information',
             'control',
-            'economy'
+            'economy',
+            'risk_conversion'
         ]);
         for (const strategy of report.strategies) {
             expect(strategy.floorCompletionShare).toBe(1);
@@ -26,6 +27,10 @@ describe('multi-floor typed build strategy simulation', () => {
             expect(strategy.matchupMetrics.length).toBeGreaterThan(0);
             expect(strategy.policyId).toBe(GAMEPLAY_BUILD_POLICIES[strategy.id].id);
             expect(strategy.informationPolicy).toEqual(GAMEPLAY_BUILD_POLICIES[strategy.id].informationPolicy);
+            expect(strategy.gambitPolicy).toEqual(GAMEPLAY_BUILD_POLICIES[strategy.id].gambitPolicy);
+            expect(strategy.gambitSuppressedMatchups).toEqual(
+                GAMEPLAY_BUILD_POLICIES[strategy.id].gambitSuppressedMatchups
+            );
             expect(strategy.interludeRiskPolicy).toEqual(GAMEPLAY_BUILD_POLICIES[strategy.id].interludeRiskPolicy);
             expect(strategy.favorableMatchupMetrics?.sampledFloors).toBeGreaterThanOrEqual(1);
             expect(strategy.counterMatchupMetrics?.sampledFloors).toBeGreaterThanOrEqual(1);
@@ -94,28 +99,37 @@ describe('multi-floor typed build strategy simulation', () => {
             (sum, strategy) => sum + strategy.adaptiveRouteSelections,
             0
         )).toBeGreaterThanOrEqual(report.bounds.minAdaptiveRouteSelections);
-        expect(report.nextCohesiveBuildCandidate).toMatchObject({
+        expect(report.cohesiveBuildCoverage).toMatchObject({
             id: 'route_gambler',
             buildMechanicId: 'build.route_gambler',
             startingLoadoutId: 'route_tactician',
-            expectedNewAxis: 'risk_conversion',
-            favorableMatchupHypothesis: 'economy_opportunity',
-            counterMatchupHypothesis: 'hazard_pressure',
-            longHorizonSampled: false,
-            evidence: {
-                retainedStrategyIds: GAMEPLAY_BUILD_STRATEGIES.map((strategy) => strategy.id)
-            }
+            axis: 'risk_conversion',
+            favorableMatchup: 'economy_opportunity',
+            counterMatchup: 'hazard_pressure',
+            longHorizonSampled: true
         });
-        expect(report.nextCohesiveBuildCandidate.requiredSystems).toEqual([
+        expect(report.cohesiveBuildCoverage.requiredSystems).toEqual([
             'relic.wager_surety',
             'objective.risk_wager',
             'inventory.gambit_token',
             'power.gambit',
             'route.mystery'
         ]);
-        expect(report.nextCohesiveBuildCandidate.evidence.routeRiskAssessments).toBeGreaterThan(0);
-        expect(report.nextCohesiveBuildCandidate.evidence.routeRiskRejections).toBeGreaterThan(0);
-        expect(report.nextCohesiveBuildCandidate.evidence.adaptiveRouteSelections).toBeGreaterThan(0);
+        expect(report.cohesiveBuildCoverage.evidence.gambitCommits).toBeGreaterThanOrEqual(report.seeds.length);
+        expect(report.cohesiveBuildCoverage.evidence.riskWagersAccepted).toBeGreaterThan(0);
+        expect(
+            report.cohesiveBuildCoverage.evidence.riskWagerWins +
+            report.cohesiveBuildCoverage.evidence.riskWagerLosses
+        ).toBeGreaterThan(0);
+        expect(report.cohesiveBuildCoverage.evidence.favorableMatchupFloors).toBeGreaterThan(0);
+        expect(report.cohesiveBuildCoverage.evidence.counterMatchupFloors).toBeGreaterThan(0);
+        const routeGambler = report.strategies.find((strategy) => strategy.id === 'route_gambler');
+        expect(routeGambler?.samples.every((sample) =>
+            sample.floorTraces.some((floor) => floor.gambitCommits > 0)
+        )).toBe(true);
+        expect(routeGambler?.samples.flatMap((sample) => sample.floorTraces)
+            .filter((floor) => floor.matchup === 'hazard_pressure')
+            .every((floor) => floor.gambitSuppressedByMatchup && floor.gambitCommits === 0)).toBe(true);
         expect(assertGameplayBuildMultiFloorViable(report)).toEqual({ ok: true, issues: [] });
     }, 30_000);
 
@@ -148,6 +162,10 @@ describe('multi-floor typed build strategy simulation', () => {
         broken.strategies[1].routeRiskAssessmentCount = 0;
         broken.strategies[1].routeRiskRejections = 0;
         broken.strategies[1].sideRoomResourceAssessmentCount = 0;
+        broken.strategies[3].gambitCommits = 0;
+        broken.strategies[3].riskWagersAccepted = 0;
+        broken.strategies[3].riskWagerWins = 0;
+        broken.strategies[3].riskWagerLosses = 0;
 
         expect(assertGameplayBuildMultiFloorViable(broken).issues).toEqual(expect.arrayContaining([
             'floorsPerSeed=3; required=12',
@@ -160,7 +178,10 @@ describe('multi-floor typed build strategy simulation', () => {
             'guard_tank@seeds:42001:routeRiskRejections=0; required=1',
             'guard_tank@seeds:42001:sideRoomResourceAssessments=0; required=1',
             'guard_tank@seed:42001:completedFloors=2; requested=3',
-            'guard_tank@seed:42001:full replay diverged'
+            'guard_tank@seed:42001:full replay diverged',
+            'route_gambler@seeds:42001:gambitCommits=0; required=1',
+            'route_gambler@seeds:42001:riskWagersAccepted=0; required=1',
+            'route_gambler@seeds:42001:riskWagerOutcomes=0; required=1'
         ]));
     });
 });

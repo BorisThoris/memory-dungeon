@@ -7,7 +7,7 @@ import {
 import { GAME_RULES_VERSION } from './contracts';
 
 describe('typed gameplay build strategy simulation', () => {
-    it('proves three shipped builds through distinct replayable command/event loops', () => {
+    it('proves four shipped builds through distinct replayable command/event loops', () => {
         const report = runGameplayBuildStrategySimulation({
             seeds: [42_001, 42_077, 42_123],
             rulesVersion: GAME_RULES_VERSION
@@ -19,7 +19,8 @@ describe('typed gameplay build strategy simulation', () => {
         expect(report.strategies.map((strategy) => strategy.dominantAxis)).toEqual([
             'information',
             'control',
-            'economy'
+            'economy',
+            'risk_conversion'
         ]);
         for (const strategy of report.strategies) {
             expect(strategy.viableSeedShare).toBe(1);
@@ -39,7 +40,10 @@ describe('typed gameplay build strategy simulation', () => {
         expect(report.pairwiseAxisDistances).toEqual([
             { left: 'conduit_cartographer', right: 'guard_tank', distance: 2 },
             { left: 'conduit_cartographer', right: 'treasure_greed', distance: 2 },
-            { left: 'guard_tank', right: 'treasure_greed', distance: 2 }
+            { left: 'conduit_cartographer', right: 'route_gambler', distance: 2 },
+            { left: 'guard_tank', right: 'treasure_greed', distance: 2 },
+            { left: 'guard_tank', right: 'route_gambler', distance: 2 },
+            { left: 'treasure_greed', right: 'route_gambler', distance: 2 }
         ]);
         expect(assertGameplayBuildStrategiesViable(report)).toEqual({ ok: true, issues: [] });
     });
@@ -80,6 +84,13 @@ describe('typed gameplay build strategy simulation', () => {
                 ],
                 command: 'shop.purchase',
                 event: 'shop.offer_purchased'
+            },
+            {
+                id: 'route_gambler',
+                loadout: 'route_tactician',
+                definitions: ['relic.wager_surety'],
+                command: 'board.gambit_commit',
+                event: 'board.gambit_commit.requested'
             }
         ]);
     });

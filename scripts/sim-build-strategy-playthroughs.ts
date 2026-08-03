@@ -32,6 +32,8 @@ export const runBuildStrategyPlaythroughSimulationCli = (argv: readonly string[]
             dominantAxis: strategy.dominantAxis,
             policyId: strategy.policyId,
             informationPolicy: strategy.informationPolicy,
+            gambitPolicy: strategy.gambitPolicy,
+            gambitSuppressedMatchups: strategy.gambitSuppressedMatchups,
             interludeRiskPolicy: strategy.interludeRiskPolicy,
             favorableMatchup: strategy.favorableMatchup,
             counterMatchup: strategy.counterMatchup,
@@ -61,6 +63,10 @@ export const runBuildStrategyPlaythroughSimulationCli = (argv: readonly string[]
             routeRiskRejections: strategy.routeRiskRejections,
             adaptiveRouteSelections: strategy.adaptiveRouteSelections,
             sideRoomResourceAssessmentCount: strategy.sideRoomResourceAssessmentCount,
+            gambitCommits: strategy.gambitCommits,
+            riskWagersAccepted: strategy.riskWagersAccepted,
+            riskWagerWins: strategy.riskWagerWins,
+            riskWagerLosses: strategy.riskWagerLosses,
             adaptiveRoutes: strategy.samples.flatMap((sample) => sample.policyDecisions
                 .filter((decision) => decision.phase === 'route' && decision.adaptedFromPriority)
                 .map((decision) => ({
@@ -85,7 +91,7 @@ export const runBuildStrategyPlaythroughSimulationCli = (argv: readonly string[]
                 })))
         })),
         pairwiseMeanTurnRatios: report.pairwiseMeanTurnRatios,
-        nextCohesiveBuildCandidate: report.nextCohesiveBuildCandidate,
+        cohesiveBuildCoverage: report.cohesiveBuildCoverage,
         bounds: report.bounds,
         notes: report.notes
     };

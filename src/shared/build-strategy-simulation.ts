@@ -3,9 +3,11 @@ import { GAME_RULES_VERSION, type RunState, type StartingLoadoutId } from './con
 import {
     createGameplayDefinitionCommand,
     createGameplayDestroyPairCommand,
+    createGameplayGambitCommitCommand,
     createGameplayMemorizeCompleteCommand,
     createGameplayPeekCommand,
     createGameplayShopPurchaseCommand,
+    createGameplayTileFlipCommand,
     gameplayCommandSchema,
     gameplayEventSchema,
     type GameplayCommand,
@@ -17,10 +19,14 @@ import { inspectGameplayFeedbackCompleteness } from './gameplay-feedback-complet
 import { createNewRun } from './run-creation-rules';
 import { createRunShopOffers } from './shop-rules';
 
-export const GAMEPLAY_BUILD_STRATEGY_AXES = ['information', 'control', 'economy'] as const;
+export const GAMEPLAY_BUILD_STRATEGY_AXES = ['information', 'control', 'economy', 'risk_conversion'] as const;
 
 export type GameplayBuildStrategyAxis = (typeof GAMEPLAY_BUILD_STRATEGY_AXES)[number];
-export type GameplayBuildStrategyId = 'conduit_cartographer' | 'guard_tank' | 'treasure_greed';
+export type GameplayBuildStrategyId =
+    | 'conduit_cartographer'
+    | 'guard_tank'
+    | 'treasure_greed'
+    | 'route_gambler';
 
 export interface GameplayBuildStrategyDefinition {
     id: GameplayBuildStrategyId;
@@ -136,6 +142,16 @@ export const GAMEPLAY_BUILD_STRATEGIES: readonly GameplayBuildStrategyDefinition
         consequenceCommandType: 'shop.purchase',
         consequenceEventType: 'shop.offer_purchased',
         expectedDominantAxis: 'economy'
+    },
+    {
+        id: 'route_gambler',
+        label: 'The Route Gambler',
+        buildMechanicId: 'build.route_gambler',
+        startingLoadoutId: 'route_tactician',
+        activationDefinitionIds: ['relic.wager_surety'],
+        consequenceCommandType: 'board.gambit_commit',
+        consequenceEventType: 'board.gambit_commit.requested',
+        expectedDominantAxis: 'risk_conversion'
     }
 ] as const;
 
@@ -146,7 +162,8 @@ const stableJson = (value: unknown): string => JSON.stringify(value);
 const emptyAxisScores = (): Record<GameplayBuildStrategyAxis, number> => ({
     information: 0,
     control: 0,
-    economy: 0
+    economy: 0,
+    risk_conversion: 0
 });
 
 const increment = (counts: Record<string, number>, key: string): void => {
@@ -230,6 +247,13 @@ const consequenceCommand = (
                 .sort((left, right) => left.cost - right.cost || left.id.localeCompare(right.id))[0]?.id;
             return createGameplayShopPurchaseCommand(commandId, offerId ?? 'missing-affordable-offer');
         }
+        case 'route_gambler': {
+            const targetTileId = (run.board?.tiles ?? [])
+                .filter((tile) => tile.state === 'hidden' && !run.board?.flippedTileIds.includes(tile.id))
+                .map((tile) => tile.id)
+                .sort((left, right) => left.localeCompare(right))[0];
+            return createGameplayGambitCommitCommand(commandId, targetTileId ?? 'missing-gambit-target');
+        }
     }
 };
 
@@ -238,8 +262,14 @@ const collectAxisScores = (events: readonly GameplayEvent[]): Record<GameplayBui
     for (const event of events) {
         if (event.type === 'inventory.changed' && event.applied !== 0) {
             if (event.itemId === 'peek_charge') scores.information += 1;
-            if (event.itemId === 'guard_token' || event.itemId === 'destroy_charge') scores.control += 1;
+            if (
+                (event.itemId === 'guard_token' || event.itemId === 'destroy_charge') &&
+                event.source.id !== 'wager_surety'
+            ) {
+                scores.control += 1;
+            }
             if (event.itemId === 'iron_key') scores.economy += 1;
+            if (event.source.id === 'wager_surety') scores.risk_conversion += 1;
         }
         if (event.type === 'board.peeked') scores.information += 1;
         if (event.type === 'board.pair_destroyed') scores.control += 1;
@@ -248,6 +278,15 @@ const collectAxisScores = (events: readonly GameplayEvent[]): Record<GameplayBui
         }
         if (event.type === 'score.changed' && event.amount > 0) scores.economy += 1;
         if (event.type === 'shop.offer_purchased') scores.economy += 1;
+        if (event.type === 'risk_wager.accepted' || event.type === 'board.gambit_commit.requested') {
+            scores.risk_conversion += 1;
+        }
+        if (
+            event.source.id === 'wager_surety' &&
+            (event.type === 'relic_favor.requested' || event.type === 'featured_streak_floor.requested')
+        ) {
+            scores.risk_conversion += 1;
+        }
     }
     return scores;
 };
@@ -307,6 +346,19 @@ const runStrategySeed = (
             definitionId,
             factsForDefinition(definitionId)
         ));
+    }
+    if (strategy.id === 'route_gambler') {
+        const candidates = (run.board?.tiles ?? [])
+            .filter((tile) => tile.state === 'hidden')
+            .sort((left, right) => left.id.localeCompare(right.id));
+        const first = candidates[0];
+        const second = first
+            ? candidates.find((tile) => tile.id !== first.id && tile.pairKey !== first.pairKey)
+            : null;
+        if (first && second) {
+            execute(createGameplayTileFlipCommand(`build:${strategy.id}:${seed}:${commands.length}:gambit-first`, first.id));
+            execute(createGameplayTileFlipCommand(`build:${strategy.id}:${seed}:${commands.length}:gambit-second`, second.id));
+        }
     }
     execute(consequenceCommand(strategy, run, seed, commands.length));
 
@@ -416,7 +468,7 @@ export const runGameplayBuildStrategySimulation = (
         strategies,
         pairwiseAxisDistances,
         bounds: {
-            requiredStrategyCount: 3,
+            requiredStrategyCount: 4,
             minViableSeedShare: 1,
             minFeedbackEventsPerSeed: 3,
             minSignatureAxisScorePerSeed: 1,
@@ -425,7 +477,7 @@ export const runGameplayBuildStrategySimulation = (
         notes: [
             'Each strategy starts from a shipped loadout, activates schema-validated content, and spends its payoff through the authoritative gameplay reducer.',
             'Viability means every sampled seed accepts the complete command chain, keeps the run alive, emits typed feedback, and replays exactly.',
-            'Distinctness is measured from typed event fingerprints for information, control, and economy consequences rather than build labels.',
+            'Distinctness is measured from typed event fingerprints for information, control, economy, and risk-conversion consequences rather than build labels.',
             'This is a deterministic structural viability gate, not a claim that final balance or long-run win rates are complete.'
         ]
     };

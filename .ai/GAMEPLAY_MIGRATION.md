@@ -747,6 +747,21 @@ Long-horizon policies now make route and side-room decisions from visible surviv
 
 Graph v52 adds typed route-outcome previews, visible-resource budgets, survival reserves, bounded opening risk, adaptive selection, actual event-effect ranking, recovery-below-reserve, and a machine-readable next-build gap. `simulation.build_evaluation` no longer lists Route Gambler as covered; a `gates` edge marks it as the next unsampled candidate.
 
+## Fifty-third vertical slice: Route Gambler Risk-Conversion Build
+
+Route Gambler is now the fourth retained long-horizon build, connecting the previously separate wager, Gambit, Favor, loadout, trait, and route pieces:
+
+1. The structural build evaluator adds a fourth `risk_conversion` axis. Route Tactician plus Wager Surety prepares a real resolving board, submits `board.gambit_commit`, emits its typed commitment event, and remains pairwise distinct from information, control, and economy fingerprints.
+2. The bounded-memory solver accepts an explicit `first_uncertain_mismatch_rescue` Gambit policy. It chooses the uncertain second card and potential third target by visible tile order and its observation ledger, never by grouping hidden `pairKey` identities.
+3. A Gambit trace submits the commitment command before the third flip, follows through the normal tile-flip and turn-resolution commands, consumes the one-floor token through existing rules, and remains exactly replayable.
+4. Route Gambler starts from the shipped Route Tactician loadout with Wager Surety active, prefers Greed then Mystery subject to the same visible survival reserve, prioritizes Favor/event resources, and retains Drift/Volatile/Heavy trait interactions as recurring board cohesion.
+5. Actual `risk_wager.accept` commands occur only when the shipped featured-objective streak rule says the wager is eligible. The following floor resolves the wager through normal floor-clear logic; Wager Surety's Favor-on-win or streak-floor-on-loss events provide the retained conversion evidence.
+6. The policy suppresses Gambit under `hazard_pressure`. An early far-edge experiment exposed two `missing_pair_tile` stops on hazard floors; the final counter policy treats hidden hazard cards as a reason to conserve the one-floor rescue, while still completing and replaying every hazard matchup.
+7. The default report now covers four builds × three seeds × twelve floors: all 144 floors complete with zero rejected commands and exact replay. Route Gambler records 9 Gambit commits, 19 accepted wagers, 13 insured wins, 5 insured losses, 3 favorable economy floors, and 21 completed hazard-counter floors.
+8. Pairwise mean-turn ratios remain between 1.00 and 1.12. These are deterministic policy traces and explicit matchup hypotheses, not player win-rate or final balance claims.
+
+Graph v53 promotes Route Gambler from an unsampled `gates` edge to tested long-horizon coverage, adds the fourth strategy and risk-conversion guards, and records identity-blind Gambit targeting, commit-before-third-flip ordering, one-floor token use, wager outcomes, and hazard-matchup suppression.
+
 ## Current slice status
 
 Implemented in the Conduit Cartographer vertical slice:
@@ -766,5 +781,5 @@ Implemented in the Conduit Cartographer vertical slice:
 Still required before the vertical slice is complete:
 
 - widen the feedback-completeness audit beyond the former HUD-critical fields as additional gameplay ownership enters the core;
-- implement Route Gambler as the fourth long-horizon strategy with a distinct `risk_conversion` axis, then prove its favorable economy-opportunity and counter hazard-pressure traces without presenting simulator survival as human win-rate proof;
+- use four-build traces and graph diagnostics to select the next least-overlapping cohesive build (currently likely Combo Shard Engine/life conversion), without presenting simulator survival as human win-rate proof;
 - continue migrating cohesive player builds rather than adding isolated definitions, using the graph diagnostics to choose the next least-overlapping loop.

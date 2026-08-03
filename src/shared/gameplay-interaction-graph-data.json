@@ -1,5 +1,5 @@
 {
-  "version": 52,
+  "version": 53,
   "mechanics": [
     {
       "id": "trait.echo",
@@ -1708,26 +1708,26 @@
       "id": "simulation.generated_board_playthrough",
       "label": "Generated Board Command Playthrough",
       "kind": "simulation",
-      "role": "core_command_event_perfect_and_bounded_information_generated_board_fairness_and_replay_gate",
+      "role": "core_command_event_perfect_bounded_information_and_identity_blind_gambit_generated_board_fairness_and_replay_gate",
       "evidence": ["src/shared/playthrough-solver-rules.ts", "src/shared/gameplay-core-playthrough-solver.ts", "src/shared/softlock-generator-contract.ts", "scripts/sim-endless.ts"],
-      "reads": ["runSeed", "runRulesVersion", "tileStates", "flippedTileIds", "stickyBlockIndex", "dungeonExitLockKind", "enemyHazards", "informationPolicy", "memoryTileCapacity", "uncertainTurnBudget", "gameplayCommands", "gameplayEvents", "feedbackCompletenessDiagnostic"],
-      "writes": ["generatedBoardPlaythroughReport", "boundedInformationReport", "replayReport", "invariantViolations"],
+      "reads": ["runSeed", "runRulesVersion", "tileStates", "flippedTileIds", "stickyBlockIndex", "dungeonExitLockKind", "enemyHazards", "informationPolicy", "memoryTileCapacity", "uncertainTurnBudget", "gambitPolicy", "gambitAvailableThisFloor", "gambitThirdFlipUsed", "gameplayCommands", "gameplayEvents", "feedbackCompletenessDiagnostic"],
+      "writes": ["generatedBoardPlaythroughReport", "boundedInformationReport", "gambitCommitReport", "replayReport", "invariantViolations"],
       "enables": ["objective.floor_clear", "exit.primary", "progression.run_flow", "safety.softlock_fairness", "simulation.gameplay_replay"],
       "blocks": [],
-      "softlockGuards": ["strict-command-schema", "deterministic-command-and-event-identity", "sticky-blocked-tile-second", "typed-progression-repair", "typed-feedback-completeness", "nonnegative-inventory", "default-perfect-information-parity", "bounded-observation-ledger", "identity-blind-unknown-tile-selection", "uncertain-turn-budget", "mid-turn-resolving-state", "json-round-trip-replay", "sampled-long-run-replay-coverage"],
+      "softlockGuards": ["strict-command-schema", "deterministic-command-and-event-identity", "sticky-blocked-tile-second", "typed-progression-repair", "typed-feedback-completeness", "nonnegative-inventory", "default-perfect-information-parity", "bounded-observation-ledger", "identity-blind-unknown-tile-selection", "identity-blind-gambit-target", "gambit-command-before-third-flip", "single-floor-gambit-token", "uncertain-turn-budget", "mid-turn-resolving-state", "json-round-trip-replay", "sampled-long-run-replay-coverage"],
       "tests": ["src/shared/gameplay-core-playthrough-solver.test.ts", "src/shared/softlock-generator-contract.test.ts", "src/shared/sim-endless-output.test.ts"]
     },
     {
       "id": "simulation.build_evaluation",
-      "label": "Visible-Resource Long-Horizon Policy And Counter-Matchup Build Evaluation",
+      "label": "Four-Build Risk-Conversion Long-Horizon Policy Evaluation",
       "kind": "simulation",
-      "role": "route_profile_and_twelve_floor_three_build_bounded_memory_visible_resource_interlude_policy_counter_matchup_viability_balance_feedback_replay_and_next_build_gap_gate",
+      "role": "route_profile_and_twelve_floor_four_build_bounded_memory_visible_resource_interlude_risk_conversion_policy_counter_matchup_viability_balance_feedback_and_replay_gate",
       "evidence": ["src/shared/balance-simulation.ts", "src/shared/build-strategy-simulation.ts", "src/shared/build-strategy-playthrough-simulation.ts", "src/shared/gameplay-core-playthrough-solver.ts", "src/shared/gameplay-core.ts", "src/shared/route-choice-outcome-rules.ts", "scripts/sim-build-strategies.ts", "scripts/sim-build-strategy-playthroughs.ts"],
-      "reads": ["routeChoices", "routeChoiceOutcomes", "runEventChoiceEffects", "startingLoadoutId", "contentDefinitionIds", "gameplayCommands", "gameplayEvents", "feedbackCues", "traitInteractionTags", "activeMutators", "floorTag", "informationPolicy", "memoryTileCapacity", "uncertainTurnBudget", "observedTileIds", "strategyAxisScores", "pairwiseAxisDistances", "lives", "shopGold", "totalScore", "guardTokens", "safeHazardWardChargesThisFloor", "parasiteWardRemaining", "destroyPairCharges", "comboShards", "relicFavorProgress", "pendingMemorizeBonusMs"],
-      "writes": ["balanceProfileReport", "buildStrategyReport", "boundedInformationReport", "routeRiskAssessmentReport", "sideRoomResourceAssessmentReport", "buildCoverageGapReport", "strategyAxisScores", "pairwiseAxisDistances", "generatedBoardPlaythroughReport", "replayReport", "invariantViolations"],
-      "enables": ["build.conduit_cartographer", "build.guard_tank", "build.treasure_greed", "economy.score_and_rewards", "safety.softlock_fairness"],
+      "reads": ["routeChoices", "routeChoiceOutcomes", "runEventChoiceEffects", "startingLoadoutId", "contentDefinitionIds", "gameplayCommands", "gameplayEvents", "feedbackCues", "traitInteractionTags", "activeMutators", "floorTag", "informationPolicy", "memoryTileCapacity", "uncertainTurnBudget", "observedTileIds", "gambitPolicy", "gambitSuppressedMatchups", "endlessRiskWager", "featuredObjectiveStreak", "strategyAxisScores", "pairwiseAxisDistances", "lives", "shopGold", "totalScore", "guardTokens", "safeHazardWardChargesThisFloor", "parasiteWardRemaining", "destroyPairCharges", "comboShards", "relicFavorProgress", "pendingMemorizeBonusMs"],
+      "writes": ["balanceProfileReport", "buildStrategyReport", "boundedInformationReport", "routeRiskAssessmentReport", "sideRoomResourceAssessmentReport", "cohesiveBuildCoverageReport", "gambitCommitReport", "riskWagerOutcomeReport", "strategyAxisScores", "pairwiseAxisDistances", "generatedBoardPlaythroughReport", "replayReport", "invariantViolations"],
+      "enables": ["build.route_gambler", "build.conduit_cartographer", "build.guard_tank", "build.treasure_greed", "economy.score_and_rewards", "safety.softlock_fairness"],
       "blocks": [],
-      "softlockGuards": ["typed-route-command-only", "typed-route-outcome-preview", "visible-resource-risk-budget", "survival-reserve", "bounded-opening-risk-credit", "adaptive-route-selection", "actual-event-effect-ranking", "recovery-below-reserve", "next-build-gap-identification", "one-outcome-per-cleared-floor", "zero-rejected-profile-choices", "multi-seed-profile-bounds", "three-strategy-minimum", "typed-content-definition-activation", "authoritative-consequence-command", "deterministic-command-replay", "typed-feedback-minimum", "distinct-axis-fingerprint", "multi-floor-command-id-uniqueness", "strictly-increasing-floor-identity", "per-floor-replay-checkpoint", "full-run-json-replay", "observed-matchup-distribution", "recurring-trait-synergy-minimum", "synergy-preserving-destroy-policy", "twelve-floor-policy-horizon", "legality-aware-policy-selection", "bounded-memory-policy", "identity-blind-unknown-choice", "uncertain-turn-budget", "imperfect-information-floor-minimum", "zero-risk-budget-exhaustion", "mid-turn-resolution-before-third-choice", "shipped-favorable-matchup-exposure", "shipped-counter-matchup-exposure", "counter-matchup-replay", "tile-flip-enemy-defeat-feedback", "pairwise-turn-ratio-bound"],
+      "softlockGuards": ["typed-route-command-only", "typed-route-outcome-preview", "visible-resource-risk-budget", "survival-reserve", "bounded-opening-risk-credit", "adaptive-route-selection", "actual-event-effect-ranking", "recovery-below-reserve", "route-gambler-long-horizon-coverage", "four-strategy-minimum", "distinct-risk-conversion-axis", "route-gambler-wager-outcome", "hazard-matchup-gambit-suppression", "one-outcome-per-cleared-floor", "zero-rejected-profile-choices", "multi-seed-profile-bounds", "typed-content-definition-activation", "authoritative-consequence-command", "deterministic-command-replay", "typed-feedback-minimum", "distinct-axis-fingerprint", "multi-floor-command-id-uniqueness", "strictly-increasing-floor-identity", "per-floor-replay-checkpoint", "full-run-json-replay", "observed-matchup-distribution", "recurring-trait-synergy-minimum", "synergy-preserving-destroy-policy", "twelve-floor-policy-horizon", "legality-aware-policy-selection", "bounded-memory-policy", "identity-blind-unknown-choice", "uncertain-turn-budget", "imperfect-information-floor-minimum", "zero-risk-budget-exhaustion", "mid-turn-resolution-before-third-choice", "shipped-favorable-matchup-exposure", "shipped-counter-matchup-exposure", "counter-matchup-replay", "tile-flip-enemy-defeat-feedback", "pairwise-turn-ratio-bound"],
       "tests": ["src/shared/balance-simulation.test.ts", "src/shared/build-strategy-simulation.test.ts", "src/shared/build-strategy-playthrough-simulation.test.ts", "src/shared/gameplay-core-playthrough-solver.test.ts"]
     },
     {
@@ -1890,7 +1890,7 @@
     { "source": "route.choice", "target": "simulation.gameplay_replay", "kind": "tested_by", "label": "participates in deterministic command replay" },
     { "source": "route.choice", "target": "simulation.build_evaluation", "kind": "tested_by", "label": "scores exact typed route outcomes across profiles" },
     { "source": "core.gameplay_commands", "target": "simulation.build_evaluation", "kind": "tested_by", "label": "drives route profiles and build consequences without parallel reward arithmetic" },
-    { "source": "simulation.build_evaluation", "target": "build.route_gambler", "kind": "gates", "label": "identifies the shipped risk-conversion build as the next unsampled long-horizon candidate" },
+    { "source": "simulation.build_evaluation", "target": "build.route_gambler", "kind": "tested_by", "label": "proves Gambit wager Wager Surety Favor and contextual route risk across seeded long-horizon replay" },
     { "source": "simulation.build_evaluation", "target": "build.conduit_cartographer", "kind": "tested_by", "label": "proves reveal activation and Peek consumption across seeded command replay" },
     { "source": "simulation.build_evaluation", "target": "build.guard_tank", "kind": "tested_by", "label": "proves guard control activation and destroy-charge consumption across seeded command replay" },
     { "source": "simulation.build_evaluation", "target": "build.treasure_greed", "kind": "tested_by", "label": "proves treasure activation and shop-gold spending across seeded command replay" },

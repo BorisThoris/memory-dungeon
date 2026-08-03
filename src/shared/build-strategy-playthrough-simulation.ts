@@ -23,6 +23,7 @@ import {
     createGameplayPeekCommand,
     createGameplayRelicOfferOpenCommand,
     createGameplayRelicPickCommand,
+    createGameplayRiskWagerAcceptCommand,
     createGameplayRouteChooseCommand,
     createGameplayShopPurchaseCommand,
     createGameplaySideRoomResolveCommand,
@@ -35,6 +36,7 @@ import { reduceGameplayCommand, replayGameplayCommands } from './gameplay-core';
 import {
     solveRunThroughGameplayCoreWithTrace,
     type GameplayCoreBoundedMemoryPolicy,
+    type GameplayCoreGambitPolicy,
     type GameplayCorePlaythroughInformationTrace,
     type GameplayCorePlaythroughSolverTrace
 } from './gameplay-core-playthrough-solver';
@@ -46,6 +48,7 @@ import { applyRouteChoiceOutcome } from './route-choice-outcome-rules';
 import { openRouteSideRoom } from './route-side-room-rules';
 import { createNewRun } from './run-creation-rules';
 import { runNonNegativeInteger } from './run-number-guards';
+import { canOfferEndlessRiskWager } from './risk-wager-rules';
 import { createRunShopOffers } from './shop-rules';
 
 export type GameplayBuildMatchup =
@@ -63,6 +66,8 @@ export interface GameplayBuildPolicyDefinition {
     relicPriorities: readonly RelicId[];
     shopItemPriorities: readonly RunShopItemId[];
     informationPolicy: GameplayCoreBoundedMemoryPolicy;
+    gambitPolicy: GameplayCoreGambitPolicy | null;
+    gambitSuppressedMatchups: readonly GameplayBuildMatchup[];
     interludeRiskPolicy: GameplayBuildInterludeRiskPolicy;
     signatureTiming: 'before_board' | 'after_board';
     favorableMatchup: GameplayBuildMatchup;
@@ -136,6 +141,8 @@ export interface GameplayBuildFloorTrace {
     scoreBefore: number;
     scoreAfter: number;
     signatureConsequenceUses: number;
+    gambitCommits: number;
+    gambitSuppressedByMatchup: boolean;
     information: GameplayCorePlaythroughInformationTrace;
     observedTraitInteractionTags: string[];
     recurringSynergyTags: string[];
@@ -190,6 +197,8 @@ export interface GameplayBuildMultiFloorMetrics {
     expectedDominantAxis: GameplayBuildStrategyAxis;
     policyId: GameplayBuildPolicyDefinition['id'];
     informationPolicy: GameplayCoreBoundedMemoryPolicy;
+    gambitPolicy: GameplayCoreGambitPolicy | null;
+    gambitSuppressedMatchups: readonly GameplayBuildMatchup[];
     interludeRiskPolicy: GameplayBuildInterludeRiskPolicy;
     favorableMatchup: GameplayBuildMatchup;
     counterMatchup: GameplayBuildMatchup;
@@ -220,6 +229,10 @@ export interface GameplayBuildMultiFloorMetrics {
     routeRiskRejections: number;
     adaptiveRouteSelections: number;
     sideRoomResourceAssessmentCount: number;
+    gambitCommits: number;
+    riskWagersAccepted: number;
+    riskWagerWins: number;
+    riskWagerLosses: number;
     samples: GameplayBuildMultiFloorSeedSample[];
 }
 
@@ -234,13 +247,13 @@ export interface GameplayBuildMultiFloorReport {
         right: GameplayBuildStrategyId;
         ratio: number;
     }>;
-    nextCohesiveBuildCandidate: {
+    cohesiveBuildCoverage: {
         id: 'route_gambler';
         buildMechanicId: 'build.route_gambler';
         startingLoadoutId: 'route_tactician';
-        expectedNewAxis: 'risk_conversion';
-        favorableMatchupHypothesis: 'economy_opportunity';
-        counterMatchupHypothesis: 'hazard_pressure';
+        axis: 'risk_conversion';
+        favorableMatchup: 'economy_opportunity';
+        counterMatchup: 'hazard_pressure';
         requiredSystems: readonly [
             'relic.wager_surety',
             'objective.risk_wager',
@@ -248,12 +261,14 @@ export interface GameplayBuildMultiFloorReport {
             'power.gambit',
             'route.mystery'
         ];
-        longHorizonSampled: false;
+        longHorizonSampled: true;
         evidence: {
-            retainedStrategyIds: GameplayBuildStrategyId[];
-            routeRiskAssessments: number;
-            routeRiskRejections: number;
-            adaptiveRouteSelections: number;
+            gambitCommits: number;
+            riskWagersAccepted: number;
+            riskWagerWins: number;
+            riskWagerLosses: number;
+            favorableMatchupFloors: number;
+            counterMatchupFloors: number;
         };
     };
     bounds: {
@@ -273,6 +288,9 @@ export interface GameplayBuildMultiFloorReport {
         minRouteRiskRejectionsPerStrategy: number;
         minSideRoomResourceAssessmentsPerSeed: number;
         minAdaptiveRouteSelections: number;
+        minRouteGamblerGambitCommitsPerSeed: number;
+        minRouteGamblerRiskWagersAccepted: number;
+        minRouteGamblerRiskWagerOutcomes: number;
         maxPairwiseMeanTurnRatio: number;
     };
     notes: string[];
@@ -316,6 +334,8 @@ export const GAMEPLAY_BUILD_POLICIES: Readonly<Record<GameplayBuildStrategyId, G
         relicPriorities: ['peek_charge_plus_one', 'shrine_echo', 'chapter_compass', 'pin_cap_plus_one'],
         shopItemPriorities: ['peek_charge', 'trait_routing_kit', 'region_shuffle_charge', 'iron_key'],
         informationPolicy: { kind: 'bounded_memory', memoryTileCapacity: 10, uncertainTurnBudget: 20 },
+        gambitPolicy: null,
+        gambitSuppressedMatchups: [],
         interludeRiskPolicy: {
             maxRouteRiskUnits: 1,
             minimumEffectiveSurvivalAfterRoute: 4,
@@ -334,6 +354,8 @@ export const GAMEPLAY_BUILD_POLICIES: Readonly<Record<GameplayBuildStrategyId, G
         relicPriorities: ['guard_token_plus_one', 'destroy_bank_plus_one', 'parasite_ward_once', 'combo_shard_plus_step'],
         shopItemPriorities: ['destroy_charge', 'heal_life', 'trait_cleanse', 'iron_key'],
         informationPolicy: { kind: 'bounded_memory', memoryTileCapacity: 8, uncertainTurnBudget: 24 },
+        gambitPolicy: null,
+        gambitSuppressedMatchups: [],
         interludeRiskPolicy: {
             maxRouteRiskUnits: 1,
             minimumEffectiveSurvivalAfterRoute: 4,
@@ -352,6 +374,8 @@ export const GAMEPLAY_BUILD_POLICIES: Readonly<Record<GameplayBuildStrategyId, G
         relicPriorities: ['wager_surety', 'parasite_ledger', 'chapter_compass', 'extra_shuffle_charge'],
         shopItemPriorities: ['master_key', 'treasure_key', 'iron_key', 'trait_routing_kit'],
         informationPolicy: { kind: 'bounded_memory', memoryTileCapacity: 6, uncertainTurnBudget: 28 },
+        gambitPolicy: null,
+        gambitSuppressedMatchups: [],
         interludeRiskPolicy: {
             maxRouteRiskUnits: 2,
             minimumEffectiveSurvivalAfterRoute: 5,
@@ -361,6 +385,26 @@ export const GAMEPLAY_BUILD_POLICIES: Readonly<Record<GameplayBuildStrategyId, G
         signatureTiming: 'after_board',
         favorableMatchup: 'economy_opportunity',
         counterMatchup: 'boss_pressure'
+    },
+    route_gambler: {
+        id: 'route_gambler_policy_v1',
+        strategyId: 'route_gambler',
+        routePriorities: ['greed', 'mystery', 'safe'],
+        bonusRewardPriorities: ['free_swap_floor', 'trait_toolkit', 'secret_favor', 'hazard_ward'],
+        relicPriorities: ['wager_surety', 'region_shuffle_free_first', 'guard_token_plus_one', 'chapter_compass'],
+        shopItemPriorities: ['region_shuffle_charge', 'trait_routing_kit', 'heal_life', 'iron_key'],
+        informationPolicy: { kind: 'bounded_memory', memoryTileCapacity: 7, uncertainTurnBudget: 26 },
+        gambitPolicy: { kind: 'first_uncertain_mismatch_rescue' },
+        gambitSuppressedMatchups: ['hazard_pressure'],
+        interludeRiskPolicy: {
+            maxRouteRiskUnits: 2,
+            minimumEffectiveSurvivalAfterRoute: 5,
+            openingUnbufferedGreedFloors: 1,
+            eventEffectPriorities: ['gain_relic_favor', 'gain_iron_key', 'heal_or_guard', 'gain_destroy_charge', 'gain_shop_gold', 'gain_score']
+        },
+        signatureTiming: 'after_board',
+        favorableMatchup: 'economy_opportunity',
+        counterMatchup: 'hazard_pressure'
     }
 };
 
@@ -369,7 +413,8 @@ const round = (value: number): number => Number(value.toFixed(2));
 const emptyAxisScores = (): Record<GameplayBuildStrategyAxis, number> => ({
     information: 0,
     control: 0,
-    economy: 0
+    economy: 0,
+    risk_conversion: 0
 });
 
 const normalizeSeeds = (seeds: readonly number[] | undefined): number[] => {
@@ -453,7 +498,8 @@ const createInitialRun = (
         startingLoadoutId: strategy.startingLoadoutId,
         onboardingSafeFirstFloor: true,
         practiceMode: true,
-        echoFeedbackEnabled: false
+        echoFeedbackEnabled: false,
+        initialRelicIds: strategy.id === 'route_gambler' ? ['wager_surety'] : []
     });
     return { ...base, shopOffers: createRunShopOffers(base) };
 };
@@ -491,6 +537,11 @@ const signatureConsequenceCommand = (
             .map((candidate) => candidate.candidateId)
             .sort((left, right) => left.localeCompare(right))[0];
         return tileId ? createGameplayDestroyPairCommand(commandId, tileId) : null;
+    }
+    if (strategy.id === 'route_gambler') {
+        return canOfferEndlessRiskWager(trace.run)
+            ? createGameplayRiskWagerAcceptCommand(commandId)
+            : null;
     }
     if (trace.run.status !== 'levelComplete') return null;
     const itemPriority = new Map(policy.shopItemPriorities.map((itemId, index) => [itemId, index]));
@@ -782,6 +833,9 @@ const recurringSynergyTags = (strategy: GameplayBuildStrategyDefinition): Set<st
     if (strategy.id === 'guard_tank') {
         return new Set(['mirror:stasis-guard', 'heavy:mirror-guard', 'stasis:sealed-buffer']);
     }
+    if (strategy.id === 'route_gambler') {
+        return new Set(['drift:row-shuffle', 'drift:volatile-full-shuffle', 'volatile:heavy-guard']);
+    }
     return new Set(['cursed:volatile-greed', 'reward-perk:cursed-opener-greed', 'sealed:heavy-score']);
 };
 
@@ -794,7 +848,9 @@ const signatureAxisScores = (
         ? new Set(['echo_conduit_lens', 'echo_conduit_double'])
         : strategy.id === 'guard_tank'
           ? new Set(['hazard_ward', 'volatile_heavy_guard'])
-          : new Set(['chest_gold', 'cursed_opener_contract', 'cursed_opener_greed']);
+          : strategy.id === 'treasure_greed'
+            ? new Set(['chest_gold', 'cursed_opener_contract', 'cursed_opener_greed'])
+            : new Set(['gambit', 'risk_wager', 'wager_surety']);
     for (const event of events) {
         const fromBuildSource = sourceIds.has(event.source.id);
         if (
@@ -815,6 +871,16 @@ const signatureAxisScores = (
                 (fromBuildSource && (event.type === 'currency.changed' || event.type === 'score.changed')))
         ) {
             scores.economy += 1;
+        }
+        if (
+            strategy.id === 'route_gambler' &&
+            (event.type === 'board.gambit_commit.requested' ||
+                event.type === 'risk_wager.accepted' ||
+                (fromBuildSource &&
+                    (event.type === 'relic_favor.requested' ||
+                        event.type === 'featured_streak_floor.requested')))
+        ) {
+            scores.risk_conversion += 1;
         }
     }
     return scores;
@@ -896,9 +962,18 @@ const runSeed = (
         }
 
         const solver = solveRunThroughGameplayCoreWithTrace(trace.run, 240, true, {
-            informationPolicy: policy.informationPolicy
+            informationPolicy: policy.informationPolicy,
+            gambitPolicy: policy.gambitSuppressedMatchups.includes(matchup)
+                ? undefined
+                : policy.gambitPolicy ?? undefined
         });
         appendSolverTrace(trace, solver);
+        if (strategy.id === 'route_gambler') {
+            trace.signatureEvents.push(...solver.events.filter((event) =>
+                event.type === 'board.gambit_commit.requested' || event.source.id === 'wager_surety'
+            ));
+            signatureConsequenceUses += solver.gambitCommits;
+        }
 
         if (policy.signatureTiming === 'after_board') {
             signatureConsequenceUses += applySignaturePolicy(floor, matchup);
@@ -932,6 +1007,9 @@ const runSeed = (
             scoreBefore,
             scoreAfter: runNonNegativeInteger(trace.run.stats?.totalScore),
             signatureConsequenceUses,
+            gambitCommits: solver.gambitCommits,
+            gambitSuppressedByMatchup:
+                policy.gambitPolicy != null && policy.gambitSuppressedMatchups.includes(matchup),
             information: solver.information,
             observedTraitInteractionTags: [...new Set(observedTraitInteractionTags)],
             recurringSynergyTags: [...new Set(appliedSynergyTags)],
@@ -1150,6 +1228,8 @@ export const runGameplayBuildMultiFloorSimulation = (
             expectedDominantAxis: strategy.expectedDominantAxis,
             policyId: policy.id,
             informationPolicy: policy.informationPolicy,
+            gambitPolicy: policy.gambitPolicy,
+            gambitSuppressedMatchups: policy.gambitSuppressedMatchups,
             interludeRiskPolicy: policy.interludeRiskPolicy,
             favorableMatchup: policy.favorableMatchup,
             counterMatchup: policy.counterMatchup,
@@ -1199,6 +1279,26 @@ export const runGameplayBuildMultiFloorSimulation = (
             sideRoomResourceAssessmentCount: policyDecisions.filter(
                 (decision) => decision.phase === 'side_room' && decision.sideRoomResourceAssessment != null
             ).length,
+            gambitCommits: samples.reduce(
+                (sum, sample) => sum + (sample.eventTypeCounts['board.gambit_commit.requested'] ?? 0),
+                0
+            ),
+            riskWagersAccepted: samples.reduce(
+                (sum, sample) => sum + (sample.eventTypeCounts['risk_wager.accepted'] ?? 0),
+                0
+            ),
+            riskWagerWins: samples.reduce(
+                (sum, sample) => sum + sample.events.filter((event) =>
+                    event.source.id === 'wager_surety' && event.type === 'relic_favor.requested'
+                ).length,
+                0
+            ),
+            riskWagerLosses: samples.reduce(
+                (sum, sample) => sum + sample.events.filter((event) =>
+                    event.source.id === 'wager_surety' && event.type === 'featured_streak_floor.requested'
+                ).length,
+                0
+            ),
             samples
         };
     });
@@ -1212,12 +1312,7 @@ export const runGameplayBuildMultiFloorSimulation = (
             pairwiseMeanTurnRatios.push({ left: left.id, right: right.id, ratio: round(high / low) });
         }
     }
-    const routeRiskAssessments = strategies.reduce(
-        (sum, strategy) => sum + strategy.routeRiskAssessmentCount,
-        0
-    );
-    const routeRiskRejections = strategies.reduce((sum, strategy) => sum + strategy.routeRiskRejections, 0);
-    const adaptiveRouteSelections = strategies.reduce((sum, strategy) => sum + strategy.adaptiveRouteSelections, 0);
+    const routeGambler = strategies.find((strategy) => strategy.id === 'route_gambler');
     return {
         rulesVersion,
         seeds,
@@ -1225,13 +1320,13 @@ export const runGameplayBuildMultiFloorSimulation = (
         offlineOnly: true,
         strategies,
         pairwiseMeanTurnRatios,
-        nextCohesiveBuildCandidate: {
+        cohesiveBuildCoverage: {
             id: 'route_gambler',
             buildMechanicId: 'build.route_gambler',
             startingLoadoutId: 'route_tactician',
-            expectedNewAxis: 'risk_conversion',
-            favorableMatchupHypothesis: 'economy_opportunity',
-            counterMatchupHypothesis: 'hazard_pressure',
+            axis: 'risk_conversion',
+            favorableMatchup: 'economy_opportunity',
+            counterMatchup: 'hazard_pressure',
             requiredSystems: [
                 'relic.wager_surety',
                 'objective.risk_wager',
@@ -1239,16 +1334,18 @@ export const runGameplayBuildMultiFloorSimulation = (
                 'power.gambit',
                 'route.mystery'
             ],
-            longHorizonSampled: false,
+            longHorizonSampled: true,
             evidence: {
-                retainedStrategyIds: strategies.map((strategy) => strategy.id),
-                routeRiskAssessments,
-                routeRiskRejections,
-                adaptiveRouteSelections
+                gambitCommits: routeGambler?.gambitCommits ?? 0,
+                riskWagersAccepted: routeGambler?.riskWagersAccepted ?? 0,
+                riskWagerWins: routeGambler?.riskWagerWins ?? 0,
+                riskWagerLosses: routeGambler?.riskWagerLosses ?? 0,
+                favorableMatchupFloors: routeGambler?.favorableMatchupMetrics?.sampledFloors ?? 0,
+                counterMatchupFloors: routeGambler?.counterMatchupMetrics?.sampledFloors ?? 0
             }
         },
         bounds: {
-            requiredStrategyCount: 3,
+            requiredStrategyCount: 4,
             minFloorsPerSeed: 12,
             minFloorCompletionShare: 1,
             minDeterministicReplayShare: 1,
@@ -1264,6 +1361,9 @@ export const runGameplayBuildMultiFloorSimulation = (
             minRouteRiskRejectionsPerStrategy: 1,
             minSideRoomResourceAssessmentsPerSeed: 1,
             minAdaptiveRouteSelections: 1,
+            minRouteGamblerGambitCommitsPerSeed: 1,
+            minRouteGamblerRiskWagersAccepted: 1,
+            minRouteGamblerRiskWagerOutcomes: 1,
             maxPairwiseMeanTurnRatio: 1.5
         },
         notes: [
@@ -1275,7 +1375,7 @@ export const runGameplayBuildMultiFloorSimulation = (
             'Matchup distributions are observed from shipped schedule mutators, hazards, bosses, and economy nodes; absent buckets are reported as unsampled rather than invented.',
             'Favorable and counter labels are explicit design hypotheses. The gate requires shipped exposure, bounded-memory completion, feedback, and replay evidence but does not report simulator outcomes as human win rates.',
             'The gate proves longer structural viability and balance envelopes for a deterministic bounded-memory policy, not final human difficulty balance.',
-            'The next retained coverage gap is Route Gambler: its shipped loadout, wager, Gambit, Favor, and Mystery-route systems exist, but no long-horizon policy currently owns a distinct risk-conversion axis or hazard-pressure counter trace.'
+            'Route Gambler is retained as the fourth long-horizon build: Route Tactician movement, one-floor Gambit rescue, objective wagers, Wager Surety, Favor cash-out, and Mystery routing form one distinct risk-conversion trace.'
         ]
     };
 };
@@ -1378,6 +1478,27 @@ export const assertGameplayBuildMultiFloorViable = (
             }
             if (!sample.fullReplayDeterministic) issues.push(`${sampleContext}:full replay diverged`);
             issues.push(...sample.invariantViolations.map((issue) => `${sampleContext}:${issue}`));
+        }
+    }
+    const routeGambler = report.strategies.find((strategy) => strategy.id === 'route_gambler');
+    if (routeGambler) {
+        const minimumGambitCommits =
+            report.bounds.minRouteGamblerGambitCommitsPerSeed * report.seeds.length;
+        if (routeGambler.gambitCommits < minimumGambitCommits) {
+            issues.push(
+                `route_gambler@seeds:${report.seeds.join(',')}:gambitCommits=${routeGambler.gambitCommits}; required=${minimumGambitCommits}`
+            );
+        }
+        if (routeGambler.riskWagersAccepted < report.bounds.minRouteGamblerRiskWagersAccepted) {
+            issues.push(
+                `route_gambler@seeds:${report.seeds.join(',')}:riskWagersAccepted=${routeGambler.riskWagersAccepted}; required=${report.bounds.minRouteGamblerRiskWagersAccepted}`
+            );
+        }
+        const wagerOutcomes = routeGambler.riskWagerWins + routeGambler.riskWagerLosses;
+        if (wagerOutcomes < report.bounds.minRouteGamblerRiskWagerOutcomes) {
+            issues.push(
+                `route_gambler@seeds:${report.seeds.join(',')}:riskWagerOutcomes=${wagerOutcomes}; required=${report.bounds.minRouteGamblerRiskWagerOutcomes}`
+            );
         }
     }
     const adaptiveRouteSelections = report.strategies.reduce(

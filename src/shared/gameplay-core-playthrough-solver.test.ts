@@ -237,6 +237,41 @@ describe('gameplay-core playthrough solver', () => {
         expect(trace.invariantViolations).toEqual([]);
     });
 
+    it('commits one replayable Gambit on the first identity-blind uncertain mismatch', () => {
+        const initial = runWithBoard(board(
+            [
+                tile('1-a', 'a'),
+                tile('2-b', 'b'),
+                tile('3-c', 'c'),
+                tile('4-a', 'a'),
+                tile('5-b', 'b'),
+                tile('6-c', 'c')
+            ],
+            { pairCount: 3, columns: 3, rows: 2 }
+        ));
+        const trace = solveRunThroughGameplayCoreWithTrace(initial, 40, true, {
+            informationPolicy: {
+                kind: 'bounded_memory',
+                memoryTileCapacity: 2,
+                uncertainTurnBudget: 4
+            },
+            gambitPolicy: { kind: 'first_uncertain_mismatch_rescue' }
+        });
+
+        expect(trace.run.status).toBe('levelComplete');
+        expect(trace.gambitCommits).toBe(1);
+        expect(trace.commands).toEqual(expect.arrayContaining([
+            expect.objectContaining({ type: 'board.gambit_commit', targetTileId: '3-c' })
+        ]));
+        expect(trace.events).toEqual(expect.arrayContaining([
+            expect.objectContaining({ type: 'board.gambit_commit.requested', targetTileId: '3-c' }),
+            expect.objectContaining({ type: 'board.turn_resolved', outcome: 'gambit_match' })
+        ]));
+        expect(trace.rejectedCommandIds).toEqual([]);
+        expect(trace.replayDeterministic).toBe(true);
+        expect(trace.invariantViolations).toEqual([]);
+    });
+
     it('retains explainable no-exit and no-progress terminal traces', () => {
         const noExit = solveRunThroughGameplayCoreWithTrace(runWithBoard(board(
             [tile('a1', 'a', 'matched'), tile('a2', 'a', 'matched')],

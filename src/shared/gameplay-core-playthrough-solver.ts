@@ -4,6 +4,7 @@ import { getDungeonExitStatus } from './dungeon-board-status';
 import {
     createGameplayBoardTurnResolveCommand,
     createGameplayDungeonExitActivateCommand,
+    createGameplayGambitCommitCommand,
     createGameplayMemorizeCompleteCommand,
     createGameplayProgressionRepairCommand,
     createGameplayTileFlipCommand,
@@ -31,6 +32,7 @@ export interface GameplayCorePlaythroughSolverTrace extends PlaythroughSolverTra
     rejectedCommandIds: string[];
     replayVerified: boolean;
     replayDeterministic: boolean;
+    gambitCommits: number;
     information: GameplayCorePlaythroughInformationTrace;
     invariantViolations: string[];
 }
@@ -51,6 +53,11 @@ export type GameplayCorePlaythroughInformationPolicy =
 
 export interface GameplayCorePlaythroughSolverOptions {
     informationPolicy?: GameplayCorePlaythroughInformationPolicy;
+    gambitPolicy?: GameplayCoreGambitPolicy;
+}
+
+export interface GameplayCoreGambitPolicy {
+    kind: 'first_uncertain_mismatch_rescue';
 }
 
 export interface GameplayCorePlaythroughInformationTrace {
@@ -286,6 +293,18 @@ const chooseUnknownTile = (
     return candidates.find((tile) => !memory.entries.has(tile.id)) ?? candidates[0] ?? null;
 };
 
+const chooseUnknownTileFromOppositeEdge = (
+    memory: BoundedMemoryState,
+    run: RunState,
+    excludedTileIds: readonly string[] = []
+): Tile | null => {
+    const excluded = new Set(excludedTileIds);
+    const candidates = playablePolicyTiles(run)
+        .filter((tile) => tile.state === 'hidden' && !excluded.has(tile.id))
+        .reverse();
+    return candidates.find((tile) => !memory.entries.has(tile.id)) ?? candidates[0] ?? null;
+};
+
 const chooseUnknownTileFromPriorCandidates = (
     memory: BoundedMemoryState,
     run: RunState,
@@ -408,6 +427,7 @@ const finalizeTrace = (
         rejectedCommandIds: state.rejectedCommandIds,
         replayVerified: verifyReplay,
         replayDeterministic,
+        gambitCommits: state.events.filter((event) => event.type === 'board.gambit_commit.requested').length,
         information: boundedMemoryTrace(state),
         invariantViolations: state.invariantViolations
     };
@@ -566,7 +586,13 @@ export const solveRunThroughGameplayCoreWithTrace = (
                     verifyReplay
                 );
             }
-            second = chooseUnknownTile(state.boundedMemory, state.run, [first.id]) ??
+            const shouldOpenGambitRisk =
+                options.gambitPolicy?.kind === 'first_uncertain_mismatch_rescue' &&
+                state.run.gambitAvailableThisFloor &&
+                !state.run.gambitThirdFlipUsed;
+            second = (shouldOpenGambitRisk
+                ? chooseUnknownTileFromOppositeEdge(state.boundedMemory, state.run, [first.id])
+                : chooseUnknownTile(state.boundedMemory, state.run, [first.id])) ??
                 chooseUnknownTileFromPriorCandidates(
                     state.boundedMemory,
                     state.run,
@@ -615,6 +641,32 @@ export const solveRunThroughGameplayCoreWithTrace = (
             state.run.board?.flippedTileIds.includes(observedSecond.id)
         ) {
             rememberObservedTile(state.boundedMemory, observedSecond, [first.id]);
+        }
+        if (
+            options.gambitPolicy?.kind === 'first_uncertain_mismatch_rescue' &&
+            state.boundedMemory &&
+            firstNow &&
+            observedSecond &&
+            firstNow.pairKey !== observedSecond.pairKey &&
+            currentRunStatus(state) === 'resolving' &&
+            state.run.gambitAvailableThisFloor &&
+            !state.run.gambitThirdFlipUsed
+        ) {
+            const third = knownPartnerFor(state.boundedMemory, state.run, firstNow) ??
+                knownPartnerFor(state.boundedMemory, state.run, observedSecond) ??
+                chooseUnknownTile(state.boundedMemory, state.run, [first.id, second.id]);
+            if (third) {
+                const committed = executeSolverCommand(
+                    state,
+                    createGameplayGambitCommitCommand(commandIdFor(state, 'gambit_commit'), third.id)
+                );
+                if (committed) {
+                    executeSolverCommand(
+                        state,
+                        createGameplayTileFlipCommand(commandIdFor(state, 'gambit_third'), third.id)
+                    );
+                }
+            }
         }
         if (currentRunStatus(state) === 'resolving') {
             executeSolverCommand(
