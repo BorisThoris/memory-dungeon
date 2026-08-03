@@ -31,6 +31,7 @@ export const runBuildStrategyPlaythroughSimulationCli = (argv: readonly string[]
             expectedDominantAxis: strategy.expectedDominantAxis,
             dominantAxis: strategy.dominantAxis,
             policyId: strategy.policyId,
+            informationPolicy: strategy.informationPolicy,
             favorableMatchup: strategy.favorableMatchup,
             counterMatchup: strategy.counterMatchup,
             signatureAxisScores: strategy.signatureAxisScores,
@@ -50,7 +51,24 @@ export const runBuildStrategyPlaythroughSimulationCli = (argv: readonly string[]
             favorableMatchupMetrics: strategy.favorableMatchupMetrics,
             counterMatchupMetrics: strategy.counterMatchupMetrics,
             policyDecisionCount: strategy.policyDecisionCount,
-            counterMatchupReplayFloors: strategy.counterMatchupReplayFloors
+            counterMatchupReplayFloors: strategy.counterMatchupReplayFloors,
+            imperfectInformationFloors: strategy.imperfectInformationFloors,
+            uncertainTurns: strategy.uncertainTurns,
+            memoryEvictions: strategy.memoryEvictions,
+            riskBudgetExhaustions: strategy.riskBudgetExhaustions,
+            failedFloors: strategy.samples.flatMap((sample) => sample.floorTraces
+                .filter((floor) => !floor.completed)
+                .map((floor) => ({
+                    seed: sample.seed,
+                    floor: floor.floor,
+                    matchup: floor.matchup,
+                    stopReason: floor.stopReason,
+                    lastPairKey: floor.lastPairKey,
+                    lastTileIds: floor.lastTileIds,
+                    turns: floor.turns,
+                    information: floor.information,
+                    invariantViolations: floor.invariantViolations
+                })))
         })),
         pairwiseMeanTurnRatios: report.pairwiseMeanTurnRatios,
         bounds: report.bounds,

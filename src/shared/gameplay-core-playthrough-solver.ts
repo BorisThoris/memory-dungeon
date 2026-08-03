@@ -31,7 +31,57 @@ export interface GameplayCorePlaythroughSolverTrace extends PlaythroughSolverTra
     rejectedCommandIds: string[];
     replayVerified: boolean;
     replayDeterministic: boolean;
+    information: GameplayCorePlaythroughInformationTrace;
     invariantViolations: string[];
+}
+
+export interface GameplayCorePerfectInformationPolicy {
+    kind: 'perfect_information';
+}
+
+export interface GameplayCoreBoundedMemoryPolicy {
+    kind: 'bounded_memory';
+    memoryTileCapacity: number;
+    uncertainTurnBudget: number;
+}
+
+export type GameplayCorePlaythroughInformationPolicy =
+    | GameplayCorePerfectInformationPolicy
+    | GameplayCoreBoundedMemoryPolicy;
+
+export interface GameplayCorePlaythroughSolverOptions {
+    informationPolicy?: GameplayCorePlaythroughInformationPolicy;
+}
+
+export interface GameplayCorePlaythroughInformationTrace {
+    kind: GameplayCorePlaythroughInformationPolicy['kind'];
+    memoryTileCapacity: number | null;
+    uncertainTurnBudget: number | null;
+    uncertainTurns: number;
+    initialPlayableTileCount: number;
+    initialRememberedTileIds: string[];
+    observedTileIds: string[];
+    evictedTileIds: string[];
+    maximumRememberedTiles: number;
+    riskBudgetExhausted: boolean;
+}
+
+interface BoundedMemoryEntry {
+    pairKey: string;
+    lastObservedAt: number;
+}
+
+interface BoundedMemoryState {
+    policy: GameplayCoreBoundedMemoryPolicy;
+    entries: Map<string, BoundedMemoryEntry>;
+    observationClock: number;
+    initialPlayableTileCount: number;
+    initialRememberedTileIds: string[];
+    observedTileIds: string[];
+    evictedTileIds: string[];
+    uncertainTurns: number;
+    maximumRememberedTiles: number;
+    riskBudgetExhausted: boolean;
 }
 
 interface MutableSolverState {
@@ -40,6 +90,7 @@ interface MutableSolverState {
     events: GameplayEvent[];
     acceptedCommandIds: string[];
     rejectedCommandIds: string[];
+    boundedMemory: BoundedMemoryState | null;
     invariantViolations: string[];
 }
 
@@ -47,6 +98,8 @@ const stableJson = (value: unknown): string => JSON.stringify(value);
 
 const commandIdFor = (state: MutableSolverState, label: string): string =>
     `solver:${state.run.runSeed}:floor-${state.run.board?.level ?? 0}:${String(state.commands.length).padStart(4, '0')}:${label}`;
+
+const currentRunStatus = (state: MutableSolverState): RunState['status'] => state.run.status;
 
 const orderPairForCurrentBoard = (run: RunState, pair: readonly Tile[]): Tile[] => {
     const blockedIndex = run.stickyBlockIndex;
@@ -58,6 +111,213 @@ const orderPairForCurrentBoard = (run: RunState, pair: readonly Tile[]): Tile[] 
         const rightBlocked = run.board?.tiles.findIndex((tile) => tile.id === right.id) === blockedIndex;
         return Number(leftBlocked) - Number(rightBlocked);
     });
+};
+
+const normalizeBoundedMemoryPolicy = (
+    policy: GameplayCoreBoundedMemoryPolicy
+): GameplayCoreBoundedMemoryPolicy => ({
+    kind: 'bounded_memory',
+    memoryTileCapacity: Math.max(2, Math.floor(policy.memoryTileCapacity)),
+    uncertainTurnBudget: Math.max(0, Math.floor(policy.uncertainTurnBudget))
+});
+
+const createBoundedMemoryState = (
+    run: RunState,
+    policy: GameplayCoreBoundedMemoryPolicy
+): BoundedMemoryState => {
+    const normalizedPolicy = normalizeBoundedMemoryPolicy(policy);
+    const groups = run.board ? getUnresolvedPlayablePairGroups(run.board) : [];
+    const state: BoundedMemoryState = {
+        policy: normalizedPolicy,
+        entries: new Map(),
+        observationClock: 0,
+        initialPlayableTileCount: groups.reduce((sum, group) => sum + group.length, 0),
+        initialRememberedTileIds: [],
+        observedTileIds: [],
+        evictedTileIds: [],
+        uncertainTurns: 0,
+        maximumRememberedTiles: 0,
+        riskBudgetExhausted: false
+    };
+
+    // The memorize phase is the only time the policy may intentionally retain
+    // hidden identities. It focuses on complete pairs until its tile budget is full.
+    const orderedGroups = [...groups].sort((left, right) =>
+        (left[0]?.id ?? '').localeCompare(right[0]?.id ?? '')
+    );
+    for (const group of orderedGroups) {
+        const pair = [...group].sort((left, right) => left.id.localeCompare(right.id)).slice(0, 2);
+        if (pair.length < 2 || state.entries.size + pair.length > normalizedPolicy.memoryTileCapacity) continue;
+        for (const tile of pair) {
+            state.observationClock += 1;
+            state.entries.set(tile.id, { pairKey: tile.pairKey, lastObservedAt: state.observationClock });
+        }
+    }
+    state.initialRememberedTileIds = [...state.entries.keys()];
+    state.maximumRememberedTiles = state.entries.size;
+    return state;
+};
+
+const boundedMemoryTrace = (state: MutableSolverState): GameplayCorePlaythroughInformationTrace => {
+    const memory = state.boundedMemory;
+    if (!memory) {
+        return {
+            kind: 'perfect_information',
+            memoryTileCapacity: null,
+            uncertainTurnBudget: null,
+            uncertainTurns: 0,
+            initialPlayableTileCount: 0,
+            initialRememberedTileIds: [],
+            observedTileIds: [],
+            evictedTileIds: [],
+            maximumRememberedTiles: 0,
+            riskBudgetExhausted: false
+        };
+    }
+    return {
+        kind: 'bounded_memory',
+        memoryTileCapacity: memory.policy.memoryTileCapacity,
+        uncertainTurnBudget: memory.policy.uncertainTurnBudget,
+        uncertainTurns: memory.uncertainTurns,
+        initialPlayableTileCount: memory.initialPlayableTileCount,
+        initialRememberedTileIds: [...memory.initialRememberedTileIds],
+        observedTileIds: [...memory.observedTileIds],
+        evictedTileIds: [...memory.evictedTileIds],
+        maximumRememberedTiles: memory.maximumRememberedTiles,
+        riskBudgetExhausted: memory.riskBudgetExhausted
+    };
+};
+
+const rememberObservedTile = (
+    memory: BoundedMemoryState,
+    tile: Tile,
+    protectedTileIds: readonly string[] = []
+): void => {
+    memory.observationClock += 1;
+    if (!memory.observedTileIds.includes(tile.id)) memory.observedTileIds.push(tile.id);
+    const existing = memory.entries.get(tile.id);
+    if (existing) {
+        memory.entries.set(tile.id, { pairKey: tile.pairKey, lastObservedAt: memory.observationClock });
+        return;
+    }
+    const protectedIds = new Set(protectedTileIds);
+    while (memory.entries.size >= memory.policy.memoryTileCapacity) {
+        const eviction = [...memory.entries.entries()]
+            .filter(([tileId]) => !protectedIds.has(tileId))
+            .sort((left, right) =>
+                left[1].lastObservedAt - right[1].lastObservedAt || left[0].localeCompare(right[0])
+            )[0];
+        if (!eviction) {
+            if (!memory.evictedTileIds.includes(tile.id)) memory.evictedTileIds.push(tile.id);
+            return;
+        }
+        memory.entries.delete(eviction[0]);
+        if (!memory.evictedTileIds.includes(eviction[0])) memory.evictedTileIds.push(eviction[0]);
+    }
+    memory.entries.set(tile.id, { pairKey: tile.pairKey, lastObservedAt: memory.observationClock });
+    memory.maximumRememberedTiles = Math.max(memory.maximumRememberedTiles, memory.entries.size);
+};
+
+const settleBoundedMemory = (memory: BoundedMemoryState, run: RunState): void => {
+    const board = run.board;
+    if (!board) return;
+    for (const tileId of [...memory.entries.keys()]) {
+        const tile = board.tiles.find((candidate) => candidate.id === tileId);
+        if (!tile || tile.state === 'matched' || tile.state === 'removed' || tile.dungeonCardState === 'resolved') {
+            memory.entries.delete(tileId);
+        }
+    }
+};
+
+const syncVisibleAssists = (memory: BoundedMemoryState, run: RunState): void => {
+    const board = run.board;
+    if (!board) return;
+    const visibleIds = [
+        ...(Array.isArray(run.peekRevealedTileIds) ? run.peekRevealedTileIds : []),
+        ...(Array.isArray(run.flashPairRevealedTileIds) ? run.flashPairRevealedTileIds : [])
+    ];
+    for (const tileId of visibleIds) {
+        const tile = board.tiles.find((candidate) => candidate.id === tileId);
+        if (tile && tile.state !== 'matched' && tile.state !== 'removed') rememberObservedTile(memory, tile);
+    }
+};
+
+const knownPairFromMemory = (memory: BoundedMemoryState, run: RunState): Tile[] | null => {
+    const board = run.board;
+    if (!board) return null;
+    const groups = new Map<string, Tile[]>();
+    for (const [tileId, entry] of memory.entries) {
+        const tile = board.tiles.find((candidate) => candidate.id === tileId);
+        if (!tile || tile.state !== 'hidden') continue;
+        const group = groups.get(entry.pairKey) ?? [];
+        group.push(tile);
+        groups.set(entry.pairKey, group);
+    }
+    const pair = [...groups.values()]
+        .filter((group) => group.length >= 2)
+        .sort((left, right) => (left[0]?.id ?? '').localeCompare(right[0]?.id ?? ''))[0];
+    return pair ? pair.slice(0, 2) : null;
+};
+
+const playablePolicyTiles = (run: RunState): Tile[] => {
+    if (!run.board) return [];
+    // Structural eligibility is derived by the engine. The policy receives only
+    // the resulting tile IDs/states and never groups unobserved identities.
+    const tiles = getUnresolvedPlayablePairGroups(run.board).flat();
+    const unique = new Map(tiles.map((tile) => [tile.id, tile]));
+    const blockedIndex = run.stickyBlockIndex;
+    return [...unique.values()].sort((left, right) => {
+        const leftIndex = run.board?.tiles.findIndex((tile) => tile.id === left.id) ?? -1;
+        const rightIndex = run.board?.tiles.findIndex((tile) => tile.id === right.id) ?? -1;
+        const leftBlocked = blockedIndex != null && leftIndex === blockedIndex ? 1 : 0;
+        const rightBlocked = blockedIndex != null && rightIndex === blockedIndex ? 1 : 0;
+        return leftBlocked - rightBlocked || left.id.localeCompare(right.id);
+    });
+};
+
+const chooseUnknownTile = (
+    memory: BoundedMemoryState,
+    run: RunState,
+    excludedTileIds: readonly string[] = []
+): Tile | null => {
+    const excluded = new Set(excludedTileIds);
+    const candidates = playablePolicyTiles(run)
+        .filter((tile) => tile.state === 'hidden' && !excluded.has(tile.id));
+    return candidates.find((tile) => !memory.entries.has(tile.id)) ?? candidates[0] ?? null;
+};
+
+const chooseUnknownTileFromPriorCandidates = (
+    memory: BoundedMemoryState,
+    run: RunState,
+    candidateTileIds: readonly string[],
+    excludedTileIds: readonly string[] = []
+): Tile | null => {
+    const board = run.board;
+    if (!board) return null;
+    const excluded = new Set(excludedTileIds);
+    const candidates = candidateTileIds
+        .filter((tileId) => !excluded.has(tileId))
+        .map((tileId) => board.tiles.find((tile) => tile.id === tileId))
+        .filter((tile): tile is Tile => tile?.state === 'hidden')
+        .sort((left, right) => left.id.localeCompare(right.id));
+    return candidates.find((tile) => !memory.entries.has(tile.id)) ?? candidates[0] ?? null;
+};
+
+const knownPartnerFor = (
+    memory: BoundedMemoryState,
+    run: RunState,
+    observedTile: Tile
+): Tile | null => {
+    const board = run.board;
+    if (!board) return null;
+    const candidateId = [...memory.entries.entries()]
+        .filter(([tileId, entry]) => tileId !== observedTile.id && entry.pairKey === observedTile.pairKey)
+        .map(([tileId]) => tileId)
+        .sort((left, right) => left.localeCompare(right))[0];
+    const candidate = candidateId
+        ? board.tiles.find((tile) => tile.id === candidateId && tile.state === 'hidden')
+        : null;
+    return candidate ?? null;
 };
 
 const executeSolverCommand = (state: MutableSolverState, command: GameplayCommand): boolean => {
@@ -105,6 +365,10 @@ const executeSolverCommand = (state: MutableSolverState, command: GameplayComman
     if (feedbackDiagnostic) {
         state.invariantViolations.push(feedbackDiagnostic.message);
     }
+    if (state.boundedMemory) {
+        settleBoundedMemory(state.boundedMemory, result.run);
+        syncVisibleAssists(state.boundedMemory, result.run);
+    }
     return result.accepted;
 };
 
@@ -144,6 +408,7 @@ const finalizeTrace = (
         rejectedCommandIds: state.rejectedCommandIds,
         replayVerified: verifyReplay,
         replayDeterministic,
+        information: boundedMemoryTrace(state),
         invariantViolations: state.invariantViolations
     };
 };
@@ -156,16 +421,22 @@ const finalizeTrace = (
 export const solveRunThroughGameplayCoreWithTrace = (
     initialRun: RunState,
     maxTurns = 160,
-    verifyReplay = true
+    verifyReplay = true,
+    options: GameplayCorePlaythroughSolverOptions = {}
 ): GameplayCorePlaythroughSolverTrace => {
+    const boundedPolicy = options.informationPolicy?.kind === 'bounded_memory'
+        ? options.informationPolicy
+        : null;
     const state: MutableSolverState = {
         run: initialRun,
         commands: [],
         events: [],
         acceptedCommandIds: [],
         rejectedCommandIds: [],
+        boundedMemory: boundedPolicy ? createBoundedMemoryState(initialRun, boundedPolicy) : null,
         invariantViolations: []
     };
+    if (state.boundedMemory) syncVisibleAssists(state.boundedMemory, initialRun);
 
     for (let turn = 0; turn < maxTurns; turn += 1) {
         if (!state.run.board) {
@@ -191,8 +462,24 @@ export const solveRunThroughGameplayCoreWithTrace = (
             continue;
         }
 
-        const pair = getUnresolvedPlayablePairGroups(state.run.board)[0] ?? null;
-        if (!pair) {
+        if (state.run.status === 'resolving') {
+            executeSolverCommand(
+                state,
+                createGameplayBoardTurnResolveCommand(commandIdFor(state, 'resolve_turn'))
+            );
+            continue;
+        }
+
+        const boundedTurnTileIds = state.boundedMemory
+            ? playablePolicyTiles(state.run).map((tile) => tile.id)
+            : [];
+        const pair = state.boundedMemory
+            ? knownPairFromMemory(state.boundedMemory, state.run)
+            : getUnresolvedPlayablePairGroups(state.run.board)[0] ?? null;
+        const boundedUnknownFirst = state.boundedMemory && !pair
+            ? chooseUnknownTile(state.boundedMemory, state.run)
+            : null;
+        if (!pair && !boundedUnknownFirst) {
             if (createRunProgressionRepairTransition(state.run).repaired) {
                 executeSolverCommand(
                     state,
@@ -224,15 +511,17 @@ export const solveRunThroughGameplayCoreWithTrace = (
             return finalizeTrace(initialRun, state, 'exit_attempted', turn, EXIT_PAIR_KEY, [exit.id], verifyReplay);
         }
 
-        const [first, second] = orderPairForCurrentBoard(state.run, pair);
-        if (!first || !second) {
+        const orderedKnownPair = pair ? orderPairForCurrentBoard(state.run, pair) : [];
+        const first = orderedKnownPair[0] ?? boundedUnknownFirst;
+        let second: Tile | null = orderedKnownPair[1] ?? null;
+        if (!first) {
             return finalizeTrace(
                 initialRun,
                 state,
                 'missing_pair_tile',
                 turn,
-                pair[0]?.pairKey ?? null,
-                pair.map((tile) => tile.id),
+                pair?.[0]?.pairKey ?? null,
+                pair?.map((tile) => tile.id) ?? [],
                 verifyReplay
             );
         }
@@ -243,6 +532,75 @@ export const solveRunThroughGameplayCoreWithTrace = (
                 createGameplayTileFlipCommand(commandIdFor(state, 'flip_first'), first.id)
             );
         }
+        const firstNow = state.run.board?.tiles.find((tile) => tile.id === first.id) ?? null;
+        if (
+            state.boundedMemory &&
+            firstNow &&
+            state.run.board?.flippedTileIds.includes(firstNow.id)
+        ) {
+            const rememberedPartner = knownPartnerFor(state.boundedMemory, state.run, firstNow);
+            rememberObservedTile(
+                state.boundedMemory,
+                firstNow,
+                rememberedPartner ? [rememberedPartner.id] : []
+            );
+            second = rememberedPartner ?? second;
+        }
+        if (currentRunStatus(state) === 'resolving') {
+            executeSolverCommand(
+                state,
+                createGameplayBoardTurnResolveCommand(commandIdFor(state, 'resolve_turn'))
+            );
+            continue;
+        }
+        if (state.boundedMemory && !second) {
+            if (state.boundedMemory.uncertainTurns >= state.boundedMemory.policy.uncertainTurnBudget) {
+                state.boundedMemory.riskBudgetExhausted = true;
+                return finalizeTrace(
+                    initialRun,
+                    state,
+                    'risk_budget_exhausted',
+                    turn,
+                    firstNow?.pairKey ?? null,
+                    [first.id],
+                    verifyReplay
+                );
+            }
+            second = chooseUnknownTile(state.boundedMemory, state.run, [first.id]) ??
+                chooseUnknownTileFromPriorCandidates(
+                    state.boundedMemory,
+                    state.run,
+                    boundedTurnTileIds,
+                    [first.id]
+                );
+            if (second) state.boundedMemory.uncertainTurns += 1;
+        }
+        if (!second && createRunProgressionRepairTransition(state.run).repaired) {
+            executeSolverCommand(
+                state,
+                createGameplayProgressionRepairCommand(commandIdFor(state, 'progression_repair'))
+            );
+            continue;
+        }
+        if (
+            !second &&
+            (currentRunStatus(state) === 'levelComplete' ||
+                currentRunStatus(state) === 'gameOver' ||
+                ((state.run.board?.flippedTileIds.length ?? 0) === 0 && stableJson(state.run) !== stableJson(before)))
+        ) {
+            continue;
+        }
+        if (!second) {
+            return finalizeTrace(
+                initialRun,
+                state,
+                'missing_pair_tile',
+                turn,
+                firstNow?.pairKey ?? first.pairKey,
+                [first.id],
+                verifyReplay
+            );
+        }
         const secondNow = state.run.board?.tiles.find((tile) => tile.id === second.id);
         if (secondNow?.state === 'hidden') {
             executeSolverCommand(
@@ -250,7 +608,15 @@ export const solveRunThroughGameplayCoreWithTrace = (
                 createGameplayTileFlipCommand(commandIdFor(state, 'flip_second'), second.id)
             );
         }
-        if (state.run.status === 'resolving') {
+        const observedSecond = state.run.board?.tiles.find((tile) => tile.id === second.id) ?? null;
+        if (
+            state.boundedMemory &&
+            observedSecond &&
+            state.run.board?.flippedTileIds.includes(observedSecond.id)
+        ) {
+            rememberObservedTile(state.boundedMemory, observedSecond, [first.id]);
+        }
+        if (currentRunStatus(state) === 'resolving') {
             executeSolverCommand(
                 state,
                 createGameplayBoardTurnResolveCommand(commandIdFor(state, 'resolve_turn'))

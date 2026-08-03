@@ -1,5 +1,5 @@
 {
-  "version": 50,
+  "version": 51,
   "mechanics": [
     {
       "id": "trait.echo",
@@ -1708,26 +1708,26 @@
       "id": "simulation.generated_board_playthrough",
       "label": "Generated Board Command Playthrough",
       "kind": "simulation",
-      "role": "core_command_event_generated_board_fairness_and_replay_gate",
+      "role": "core_command_event_perfect_and_bounded_information_generated_board_fairness_and_replay_gate",
       "evidence": ["src/shared/playthrough-solver-rules.ts", "src/shared/gameplay-core-playthrough-solver.ts", "src/shared/softlock-generator-contract.ts", "scripts/sim-endless.ts"],
-      "reads": ["runSeed", "runRulesVersion", "tileStates", "flippedTileIds", "stickyBlockIndex", "dungeonExitLockKind", "enemyHazards", "gameplayCommands", "gameplayEvents", "feedbackCompletenessDiagnostic"],
-      "writes": ["generatedBoardPlaythroughReport", "replayReport", "invariantViolations"],
+      "reads": ["runSeed", "runRulesVersion", "tileStates", "flippedTileIds", "stickyBlockIndex", "dungeonExitLockKind", "enemyHazards", "informationPolicy", "memoryTileCapacity", "uncertainTurnBudget", "gameplayCommands", "gameplayEvents", "feedbackCompletenessDiagnostic"],
+      "writes": ["generatedBoardPlaythroughReport", "boundedInformationReport", "replayReport", "invariantViolations"],
       "enables": ["objective.floor_clear", "exit.primary", "progression.run_flow", "safety.softlock_fairness", "simulation.gameplay_replay"],
       "blocks": [],
-      "softlockGuards": ["strict-command-schema", "deterministic-command-and-event-identity", "sticky-blocked-tile-second", "typed-progression-repair", "typed-feedback-completeness", "nonnegative-inventory", "legacy-solver-parity", "json-round-trip-replay", "sampled-long-run-replay-coverage"],
+      "softlockGuards": ["strict-command-schema", "deterministic-command-and-event-identity", "sticky-blocked-tile-second", "typed-progression-repair", "typed-feedback-completeness", "nonnegative-inventory", "default-perfect-information-parity", "bounded-observation-ledger", "identity-blind-unknown-tile-selection", "uncertain-turn-budget", "mid-turn-resolving-state", "json-round-trip-replay", "sampled-long-run-replay-coverage"],
       "tests": ["src/shared/gameplay-core-playthrough-solver.test.ts", "src/shared/softlock-generator-contract.test.ts", "src/shared/sim-endless-output.test.ts"]
     },
     {
       "id": "simulation.build_evaluation",
-      "label": "Long-Horizon Policy And Counter-Matchup Build Evaluation",
+      "label": "Bounded-Memory Long-Horizon Policy And Counter-Matchup Build Evaluation",
       "kind": "simulation",
-      "role": "route_profile_and_twelve_floor_three_build_policy_counter_matchup_viability_balance_feedback_and_replay_gate",
+      "role": "route_profile_and_twelve_floor_three_build_bounded_memory_policy_counter_matchup_viability_balance_feedback_and_replay_gate",
       "evidence": ["src/shared/balance-simulation.ts", "src/shared/build-strategy-simulation.ts", "src/shared/build-strategy-playthrough-simulation.ts", "src/shared/gameplay-core-playthrough-solver.ts", "src/shared/gameplay-core.ts", "src/shared/route-choice-outcome-rules.ts", "scripts/sim-build-strategies.ts", "scripts/sim-build-strategy-playthroughs.ts"],
-      "reads": ["routeChoices", "startingLoadoutId", "contentDefinitionIds", "gameplayCommands", "gameplayEvents", "feedbackCues", "traitInteractionTags", "activeMutators", "floorTag", "strategyAxisScores", "pairwiseAxisDistances", "lives", "shopGold", "totalScore", "guardTokens", "comboShards", "relicFavorProgress", "pendingMemorizeBonusMs"],
-      "writes": ["balanceProfileReport", "buildStrategyReport", "strategyAxisScores", "pairwiseAxisDistances", "generatedBoardPlaythroughReport", "replayReport", "invariantViolations"],
+      "reads": ["routeChoices", "startingLoadoutId", "contentDefinitionIds", "gameplayCommands", "gameplayEvents", "feedbackCues", "traitInteractionTags", "activeMutators", "floorTag", "informationPolicy", "memoryTileCapacity", "uncertainTurnBudget", "observedTileIds", "strategyAxisScores", "pairwiseAxisDistances", "lives", "shopGold", "totalScore", "guardTokens", "comboShards", "relicFavorProgress", "pendingMemorizeBonusMs"],
+      "writes": ["balanceProfileReport", "buildStrategyReport", "boundedInformationReport", "strategyAxisScores", "pairwiseAxisDistances", "generatedBoardPlaythroughReport", "replayReport", "invariantViolations"],
       "enables": ["build.route_gambler", "build.conduit_cartographer", "build.guard_tank", "build.treasure_greed", "economy.score_and_rewards", "safety.softlock_fairness"],
       "blocks": [],
-      "softlockGuards": ["typed-route-command-only", "one-outcome-per-cleared-floor", "zero-rejected-profile-choices", "multi-seed-profile-bounds", "three-strategy-minimum", "typed-content-definition-activation", "authoritative-consequence-command", "deterministic-command-replay", "typed-feedback-minimum", "distinct-axis-fingerprint", "multi-floor-command-id-uniqueness", "strictly-increasing-floor-identity", "per-floor-replay-checkpoint", "full-run-json-replay", "observed-matchup-distribution", "recurring-trait-synergy-minimum", "synergy-preserving-destroy-policy", "twelve-floor-policy-horizon", "legality-aware-policy-selection", "shipped-favorable-matchup-exposure", "shipped-counter-matchup-exposure", "counter-matchup-replay", "tile-flip-enemy-defeat-feedback", "pairwise-turn-ratio-bound"],
+      "softlockGuards": ["typed-route-command-only", "one-outcome-per-cleared-floor", "zero-rejected-profile-choices", "multi-seed-profile-bounds", "three-strategy-minimum", "typed-content-definition-activation", "authoritative-consequence-command", "deterministic-command-replay", "typed-feedback-minimum", "distinct-axis-fingerprint", "multi-floor-command-id-uniqueness", "strictly-increasing-floor-identity", "per-floor-replay-checkpoint", "full-run-json-replay", "observed-matchup-distribution", "recurring-trait-synergy-minimum", "synergy-preserving-destroy-policy", "twelve-floor-policy-horizon", "legality-aware-policy-selection", "bounded-memory-policy", "identity-blind-unknown-choice", "uncertain-turn-budget", "imperfect-information-floor-minimum", "zero-risk-budget-exhaustion", "mid-turn-resolution-before-third-choice", "shipped-favorable-matchup-exposure", "shipped-counter-matchup-exposure", "counter-matchup-replay", "tile-flip-enemy-defeat-feedback", "pairwise-turn-ratio-bound"],
       "tests": ["src/shared/balance-simulation.test.ts", "src/shared/build-strategy-simulation.test.ts", "src/shared/build-strategy-playthrough-simulation.test.ts", "src/shared/gameplay-core-playthrough-solver.test.ts"]
     },
     {

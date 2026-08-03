@@ -717,6 +717,21 @@ The build gate now evaluates sustained policy behavior and explicit pressure hyp
 
 Graph v50 upgrades `simulation.build_evaluation` to a twelve-floor legality-aware policy and shipped counter-matchup gate, requires unique strictly increasing floor identities so a stalled interlude cannot inflate the horizon, and adds exact final-pair enemy-defeat facts/feedback guards to `core.tile_input`.
 
+## Fifty-first vertical slice: Bounded-Memory And Risk-Budget Playthroughs
+
+The retained build gate no longer chooses board pairs from hidden `pairKey` groups:
+
+1. `solveRunThroughGameplayCoreWithTrace` keeps perfect-information behavior as its default for legacy parity, topology, and exhaustive fairness callers, while accepting an optional bounded-memory information policy for strategy evaluation.
+2. Bounded policies retain only a capped transient tile ledger from the memorize phase. Runtime observations enter the ledger only through active flips or explicit Peek/Flash assistance; resolved traps and passively exposed cards cannot be replayed as actionable pairs.
+3. A known pair may be selected only from observed ledger entries. An unknown choice is ranked by visible tile ID/order from engine-provided structural eligibility and never groups unobserved identities by `pairKey`.
+4. Every unsupported second choice consumes one deterministic uncertain-turn unit. Each build has an explicit ceiling—20 with 10 remembered tiles for Conduit Cartographer, 24/8 for Warden, and 28/6 for Vaultbreaker—and the solver stops with `risk_budget_exhausted` instead of silently borrowing hidden information.
+5. Solver traces expose initial playable/remembered tiles, observations, evictions, maximum ledger size, uncertain turns, and budget exhaustion beside the exact command/event replay.
+6. The action loop handles self-resolving traps, passive face-up cards, progression repairs, and a mid-turn transition to `resolving` before seeking another tile. These cases were found by the bounded policy rather than by synthetic fixtures alone.
+7. The default 108-floor gate remains complete with zero rejected commands, zero budget exhaustion, and exact replay. It records 108 uncertain turns for Conduit Cartographer, 116 for Warden, and 169 for Vaultbreaker across 24, 24, and 30 genuinely imperfect-information floors respectively.
+8. These deterministic bounded-memory traces are stronger structural evidence than perfect-information survival, but remain simulator behavior—not measured player win rate or final difficulty balance.
+
+Graph v51 records the optional perfect/bounded solver modes, capped observation ledger, identity-blind unknown choices, uncertain-turn budgets, imperfect-information minimums, and mid-turn resolution guard across generated-board and build-evaluation simulations.
+
 ## Current slice status
 
 Implemented in the Conduit Cartographer vertical slice:
@@ -736,6 +751,6 @@ Implemented in the Conduit Cartographer vertical slice:
 Still required before the vertical slice is complete:
 
 - widen the feedback-completeness audit beyond the former HUD-critical fields as additional gameplay ownership enters the core;
-- evolve the deterministic perfect-information policies toward bounded imperfect-memory and risk-budget models without presenting simulator survival as human win-rate proof;
-- use the retained traces to prioritize the next cohesive build or counter that is missing from actual shipped schedule coverage;
+- extend bounded risk from board uncertainty into route/side-room decisions using visible lives and protection resources, without presenting simulator survival as human win-rate proof;
+- use the new uncertainty traces to prioritize the next cohesive build or counter that is missing from actual shipped schedule coverage;
 - continue migrating cohesive player builds rather than adding isolated definitions, using the graph diagnostics to choose the next least-overlapping loop.

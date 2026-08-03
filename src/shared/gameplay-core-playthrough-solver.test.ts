@@ -163,6 +163,80 @@ describe('gameplay-core playthrough solver', () => {
         expect(trace.invariantViolations).toEqual([]);
     });
 
+    it('solves from a capped observation ledger without grouping unknown hidden identities', () => {
+        const initial = runWithBoard(board(
+            [
+                tile('1-a', 'a'),
+                tile('2-b', 'b'),
+                tile('3-c', 'c'),
+                tile('4-a', 'a'),
+                tile('5-b', 'b'),
+                tile('6-c', 'c')
+            ],
+            { pairCount: 3, columns: 3, rows: 2 }
+        ));
+        const trace = solveRunThroughGameplayCoreWithTrace(initial, 40, true, {
+            informationPolicy: {
+                kind: 'bounded_memory',
+                memoryTileCapacity: 2,
+                uncertainTurnBudget: 4
+            }
+        });
+
+        expect(trace.run.status).toBe('levelComplete');
+        expect(trace.rejectedCommandIds).toEqual([]);
+        expect(trace.replayDeterministic).toBe(true);
+        expect(trace.invariantViolations).toEqual([]);
+        expect(trace.information).toMatchObject({
+            kind: 'bounded_memory',
+            memoryTileCapacity: 2,
+            uncertainTurnBudget: 4,
+            uncertainTurns: 2,
+            initialPlayableTileCount: 6,
+            initialRememberedTileIds: ['1-a', '4-a'],
+            maximumRememberedTiles: 2,
+            riskBudgetExhausted: false
+        });
+        expect(trace.information.observedTileIds).toEqual(expect.arrayContaining(['2-b', '3-c', '5-b', '6-c']));
+        expect(trace.information.evictedTileIds).toContain('3-c');
+        expect(trace.commands
+            .filter((command) => command.type === 'board.tile_flip')
+            .map((command) => command.targetTileId)
+            .slice(2, 4)).toEqual(['2-b', '3-c']);
+    });
+
+    it('stops before an unsupported guess when the bounded risk budget is spent', () => {
+        const initial = runWithBoard(board(
+            [
+                tile('1-a', 'a'),
+                tile('2-b', 'b'),
+                tile('3-c', 'c'),
+                tile('4-a', 'a'),
+                tile('5-b', 'b'),
+                tile('6-c', 'c')
+            ],
+            { pairCount: 3, columns: 3, rows: 2 }
+        ));
+        const trace = solveRunThroughGameplayCoreWithTrace(initial, 40, true, {
+            informationPolicy: {
+                kind: 'bounded_memory',
+                memoryTileCapacity: 2,
+                uncertainTurnBudget: 1
+            }
+        });
+
+        expect(trace.stopReason).toBe('risk_budget_exhausted');
+        expect(trace.run.status).toBe('playing');
+        expect(trace.information).toMatchObject({
+            kind: 'bounded_memory',
+            uncertainTurns: 1,
+            riskBudgetExhausted: true
+        });
+        expect(trace.rejectedCommandIds).toEqual([]);
+        expect(trace.replayDeterministic).toBe(true);
+        expect(trace.invariantViolations).toEqual([]);
+    });
+
     it('retains explainable no-exit and no-progress terminal traces', () => {
         const noExit = solveRunThroughGameplayCoreWithTrace(runWithBoard(board(
             [tile('a1', 'a', 'matched'), tile('a2', 'a', 'matched')],

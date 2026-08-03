@@ -9,6 +9,7 @@ export type PlaythroughSolverStopReason =
     | 'exit_attempted'
     | 'missing_pair_tile'
     | 'no_progress'
+    | 'risk_budget_exhausted'
     | 'turn_guard';
 
 export interface PlaythroughSolverTrace {

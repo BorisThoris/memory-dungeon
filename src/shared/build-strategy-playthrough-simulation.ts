@@ -34,6 +34,8 @@ import {
 import { reduceGameplayCommand, replayGameplayCommands } from './gameplay-core';
 import {
     solveRunThroughGameplayCoreWithTrace,
+    type GameplayCoreBoundedMemoryPolicy,
+    type GameplayCorePlaythroughInformationTrace,
     type GameplayCorePlaythroughSolverTrace
 } from './gameplay-core-playthrough-solver';
 import { inspectGameplayFeedbackCompleteness } from './gameplay-feedback-completeness';
@@ -59,6 +61,7 @@ export interface GameplayBuildPolicyDefinition {
     bonusRewardPriorities: readonly BonusRewardId[];
     relicPriorities: readonly RelicId[];
     shopItemPriorities: readonly RunShopItemId[];
+    informationPolicy: GameplayCoreBoundedMemoryPolicy;
     signatureTiming: 'before_board' | 'after_board';
     favorableMatchup: GameplayBuildMatchup;
     counterMatchup: GameplayBuildMatchup;
@@ -83,6 +86,8 @@ export interface GameplayBuildFloorTrace {
     boardTraitKinds: string[];
     completed: boolean;
     stopReason: GameplayCorePlaythroughSolverTrace['stopReason'];
+    lastPairKey: string | null;
+    lastTileIds: string[];
     turns: number;
     commandCount: number;
     eventCount: number;
@@ -91,6 +96,7 @@ export interface GameplayBuildFloorTrace {
     scoreBefore: number;
     scoreAfter: number;
     signatureConsequenceUses: number;
+    information: GameplayCorePlaythroughInformationTrace;
     observedTraitInteractionTags: string[];
     recurringSynergyTags: string[];
     replayCheckpointVerified: boolean;
@@ -143,6 +149,7 @@ export interface GameplayBuildMultiFloorMetrics {
     consequenceEventType: GameplayEvent['type'];
     expectedDominantAxis: GameplayBuildStrategyAxis;
     policyId: GameplayBuildPolicyDefinition['id'];
+    informationPolicy: GameplayCoreBoundedMemoryPolicy;
     favorableMatchup: GameplayBuildMatchup;
     counterMatchup: GameplayBuildMatchup;
     dominantAxis: GameplayBuildStrategyAxis;
@@ -164,6 +171,10 @@ export interface GameplayBuildMultiFloorMetrics {
     counterMatchupMetrics: GameplayBuildMatchupMetrics | null;
     policyDecisionCount: number;
     counterMatchupReplayFloors: number;
+    imperfectInformationFloors: number;
+    uncertainTurns: number;
+    memoryEvictions: number;
+    riskBudgetExhaustions: number;
     samples: GameplayBuildMultiFloorSeedSample[];
 }
 
@@ -188,6 +199,9 @@ export interface GameplayBuildMultiFloorReport {
         minPolicyDecisionsPerFloor: number;
         minFavorableMatchupFloors: number;
         minCounterMatchupFloors: number;
+        minImperfectInformationFloorsPerSeed: number;
+        minUncertainTurnsPerSeed: number;
+        maxRiskBudgetExhaustions: number;
         maxPairwiseMeanTurnRatio: number;
     };
     notes: string[];
@@ -230,6 +244,7 @@ export const GAMEPLAY_BUILD_POLICIES: Readonly<Record<GameplayBuildStrategyId, G
         bonusRewardPriorities: ['echo_conduit_lens', 'trait_toolkit', 'secret_favor', 'trait_streak_lens'],
         relicPriorities: ['peek_charge_plus_one', 'shrine_echo', 'chapter_compass', 'pin_cap_plus_one'],
         shopItemPriorities: ['peek_charge', 'trait_routing_kit', 'region_shuffle_charge', 'iron_key'],
+        informationPolicy: { kind: 'bounded_memory', memoryTileCapacity: 10, uncertainTurnBudget: 20 },
         signatureTiming: 'before_board',
         favorableMatchup: 'memory_pressure',
         counterMatchup: 'boss_pressure'
@@ -241,6 +256,7 @@ export const GAMEPLAY_BUILD_POLICIES: Readonly<Record<GameplayBuildStrategyId, G
         bonusRewardPriorities: ['hazard_ward', 'stasis_lockbox', 'hazard_banisher', 'supply_cache'],
         relicPriorities: ['guard_token_plus_one', 'destroy_bank_plus_one', 'parasite_ward_once', 'combo_shard_plus_step'],
         shopItemPriorities: ['destroy_charge', 'heal_life', 'trait_cleanse', 'iron_key'],
+        informationPolicy: { kind: 'bounded_memory', memoryTileCapacity: 8, uncertainTurnBudget: 24 },
         signatureTiming: 'before_board',
         favorableMatchup: 'hazard_pressure',
         counterMatchup: 'memory_pressure'
@@ -252,6 +268,7 @@ export const GAMEPLAY_BUILD_POLICIES: Readonly<Record<GameplayBuildStrategyId, G
         bonusRewardPriorities: ['chest_gold', 'cursed_opener_contract', 'key_insurance', 'bonus_shards'],
         relicPriorities: ['wager_surety', 'parasite_ledger', 'chapter_compass', 'extra_shuffle_charge'],
         shopItemPriorities: ['master_key', 'treasure_key', 'iron_key', 'trait_routing_kit'],
+        informationPolicy: { kind: 'bounded_memory', memoryTileCapacity: 6, uncertainTurnBudget: 28 },
         signatureTiming: 'after_board',
         favorableMatchup: 'economy_opportunity',
         counterMatchup: 'boss_pressure'
@@ -633,7 +650,9 @@ const runSeed = (
             signatureConsequenceUses += applySignaturePolicy(floor, matchup);
         }
 
-        const solver = solveRunThroughGameplayCoreWithTrace(trace.run, 240, true);
+        const solver = solveRunThroughGameplayCoreWithTrace(trace.run, 240, true, {
+            informationPolicy: policy.informationPolicy
+        });
         appendSolverTrace(trace, solver);
 
         if (policy.signatureTiming === 'after_board') {
@@ -658,6 +677,8 @@ const runSeed = (
             boardTraitKinds,
             completed,
             stopReason: solver.stopReason,
+            lastPairKey: solver.lastPairKey,
+            lastTileIds: [...solver.lastTileIds],
             turns: solver.turns,
             commandCount: trace.commands.length - commandStart,
             eventCount: floorEvents.length,
@@ -666,6 +687,7 @@ const runSeed = (
             scoreBefore,
             scoreAfter: runNonNegativeInteger(trace.run.stats?.totalScore),
             signatureConsequenceUses,
+            information: solver.information,
             observedTraitInteractionTags: [...new Set(observedTraitInteractionTags)],
             recurringSynergyTags: [...new Set(appliedSynergyTags)],
             replayCheckpointVerified: solver.replayVerified,
@@ -872,6 +894,7 @@ export const runGameplayBuildMultiFloorSimulation = (
             consequenceEventType: strategy.consequenceEventType,
             expectedDominantAxis: strategy.expectedDominantAxis,
             policyId: policy.id,
+            informationPolicy: policy.informationPolicy,
             favorableMatchup: policy.favorableMatchup,
             counterMatchup: policy.counterMatchup,
             dominantAxis: dominantAxisFor(signatureScores),
@@ -899,6 +922,13 @@ export const runGameplayBuildMultiFloorSimulation = (
                 floor.replayCheckpointDeterministic &&
                 floor.invariantViolations.length === 0
             ).length,
+            imperfectInformationFloors: floorTraces.filter((floor) =>
+                floor.information.kind === 'bounded_memory' &&
+                floor.information.initialRememberedTileIds.length < floor.information.initialPlayableTileCount
+            ).length,
+            uncertainTurns: floorTraces.reduce((sum, floor) => sum + floor.information.uncertainTurns, 0),
+            memoryEvictions: floorTraces.reduce((sum, floor) => sum + floor.information.evictedTileIds.length, 0),
+            riskBudgetExhaustions: floorTraces.filter((floor) => floor.information.riskBudgetExhausted).length,
             samples
         };
     });
@@ -929,15 +959,19 @@ export const runGameplayBuildMultiFloorSimulation = (
             minPolicyDecisionsPerFloor: 1,
             minFavorableMatchupFloors: 1,
             minCounterMatchupFloors: 1,
+            minImperfectInformationFloorsPerSeed: 1,
+            minUncertainTurnsPerSeed: 1,
+            maxRiskBudgetExhaustions: 0,
             maxPairwiseMeanTurnRatio: 1.5
         },
         notes: [
             'Each sample retains one command/event trace from content claim through generated boards, routes, side rooms, milestone relics, and floor advancement.',
             'Every generated floor is replayed as an isolated checkpoint and the complete multi-floor command list is replayed from the stocked initial run.',
             'Exported strategy policies rank real route choices, side-room rewards, relics, shop items, and signature timing; every decision remains attached to its observed floor matchup.',
+            'Board choices use capped transient observation ledgers. Unknown hidden identities are never grouped by the policy, and unsupported guesses stop at an explicit per-build uncertain-turn budget.',
             'Matchup distributions are observed from shipped schedule mutators, hazards, bosses, and economy nodes; absent buckets are reported as unsampled rather than invented.',
-            'Favorable and counter labels are explicit design hypotheses. The gate requires shipped exposure, completion, feedback, and replay evidence but does not misreport perfect-information outcomes as human difficulty or win-rate proof.',
-            'The gate proves longer structural viability and balance envelopes for a deterministic policy solver, not final human win-rate balance.'
+            'Favorable and counter labels are explicit design hypotheses. The gate requires shipped exposure, bounded-memory completion, feedback, and replay evidence but does not report simulator outcomes as human win rates.',
+            'The gate proves longer structural viability and balance envelopes for a deterministic bounded-memory policy, not final human difficulty balance.'
         ]
     };
 };
@@ -992,6 +1026,21 @@ export const assertGameplayBuildMultiFloorViable = (
         if (strategy.counterMatchupReplayFloors < report.bounds.minCounterMatchupFloors) {
             issues.push(
                 `${context}:counterMatchupReplayFloors=${strategy.counterMatchupReplayFloors}; required=${report.bounds.minCounterMatchupFloors}`
+            );
+        }
+        const minimumImperfectFloors = report.bounds.minImperfectInformationFloorsPerSeed * report.seeds.length;
+        if (strategy.imperfectInformationFloors < minimumImperfectFloors) {
+            issues.push(
+                `${context}:imperfectInformationFloors=${strategy.imperfectInformationFloors}; required=${minimumImperfectFloors}`
+            );
+        }
+        const minimumUncertainTurns = report.bounds.minUncertainTurnsPerSeed * report.seeds.length;
+        if (strategy.uncertainTurns < minimumUncertainTurns) {
+            issues.push(`${context}:uncertainTurns=${strategy.uncertainTurns}; required=${minimumUncertainTurns}`);
+        }
+        if (strategy.riskBudgetExhaustions > report.bounds.maxRiskBudgetExhaustions) {
+            issues.push(
+                `${context}:riskBudgetExhaustions=${strategy.riskBudgetExhaustions}; max=${report.bounds.maxRiskBudgetExhaustions}`
             );
         }
         for (const sample of strategy.samples) {

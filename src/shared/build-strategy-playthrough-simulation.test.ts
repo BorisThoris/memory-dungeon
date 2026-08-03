@@ -25,10 +25,14 @@ describe('multi-floor typed build strategy simulation', () => {
             expect(strategy.signatureConsequenceUses).toBeGreaterThanOrEqual(report.seeds.length);
             expect(strategy.matchupMetrics.length).toBeGreaterThan(0);
             expect(strategy.policyId).toBe(GAMEPLAY_BUILD_POLICIES[strategy.id].id);
+            expect(strategy.informationPolicy).toEqual(GAMEPLAY_BUILD_POLICIES[strategy.id].informationPolicy);
             expect(strategy.favorableMatchupMetrics?.sampledFloors).toBeGreaterThanOrEqual(1);
             expect(strategy.counterMatchupMetrics?.sampledFloors).toBeGreaterThanOrEqual(1);
             expect(strategy.counterMatchupReplayFloors).toBeGreaterThanOrEqual(1);
             expect(strategy.policyDecisionCount).toBeGreaterThanOrEqual(strategy.floorsAttempted);
+            expect(strategy.imperfectInformationFloors).toBeGreaterThanOrEqual(report.seeds.length);
+            expect(strategy.uncertainTurns).toBeGreaterThanOrEqual(report.seeds.length);
+            expect(strategy.riskBudgetExhaustions).toBe(0);
             expect(strategy.matchupMetrics.reduce(
                 (sum, matchup) => sum + matchup.recurringSynergyFloors,
                 0
@@ -42,6 +46,12 @@ describe('multi-floor typed build strategy simulation', () => {
                 expect(sample.floorTraces).toHaveLength(report.floorsPerSeed);
                 expect(sample.floorTraces.every((floor) => floor.completed)).toBe(true);
                 expect(sample.floorTraces.every((floor) => floor.replayCheckpointDeterministic)).toBe(true);
+                expect(sample.floorTraces.every((floor) =>
+                    floor.information.kind === 'bounded_memory' &&
+                    floor.information.maximumRememberedTiles <= GAMEPLAY_BUILD_POLICIES[strategy.id].informationPolicy.memoryTileCapacity &&
+                    floor.information.uncertainTurns <= GAMEPLAY_BUILD_POLICIES[strategy.id].informationPolicy.uncertainTurnBudget &&
+                    !floor.information.riskBudgetExhausted
+                )).toBe(true);
                 const observedFloors = sample.floorTraces.map((floor) => floor.floor);
                 expect(new Set(observedFloors).size).toBe(observedFloors.length);
                 expect(observedFloors.every(
@@ -92,11 +102,17 @@ describe('multi-floor typed build strategy simulation', () => {
         broken.strategies[1].samples[0].fullReplayDeterministic = false;
         broken.strategies[1].counterMatchupReplayFloors = 0;
         broken.strategies[1].favorableMatchupMetrics = null;
+        broken.strategies[1].imperfectInformationFloors = 0;
+        broken.strategies[1].uncertainTurns = 0;
+        broken.strategies[1].riskBudgetExhaustions = 1;
 
         expect(assertGameplayBuildMultiFloorViable(broken).issues).toEqual(expect.arrayContaining([
             'floorsPerSeed=3; required=12',
             'guard_tank@seeds:42001:favorableMatchup=hazard_pressure; sampled=0; required=1',
             'guard_tank@seeds:42001:counterMatchupReplayFloors=0; required=1',
+            'guard_tank@seeds:42001:imperfectInformationFloors=0; required=1',
+            'guard_tank@seeds:42001:uncertainTurns=0; required=1',
+            'guard_tank@seeds:42001:riskBudgetExhaustions=1; max=0',
             'guard_tank@seed:42001:completedFloors=2; requested=3',
             'guard_tank@seed:42001:full replay diverged'
         ]));

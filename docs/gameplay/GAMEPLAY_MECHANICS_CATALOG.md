@@ -158,7 +158,7 @@
 | `createNewRun`, options (practice, contract, mutators, …) | `game.ts` | [epic-modes-and-runs](./epic-modes-and-runs.md) |
 | Daily / gauntlet / puzzle / meditation / wild / import | dedicated `create*` functions | [epic-modes-and-runs](./epic-modes-and-runs.md) |
 | Practice / scholar / wild / pin vow flags | `practiceMode`, `wildMenuRun`, `activeContract` | [epic-modes-and-runs](./epic-modes-and-runs.md), contracts epic |
-| Offline build-policy/counter gate | `GAMEPLAY_BUILD_POLICIES`, 3 seeds × 12 generated floors, legality-checked choices, shipped favorable/counter exposure, exact replay | [epic-modes-and-runs](./epic-modes-and-runs.md) |
+| Offline bounded-memory build-policy/counter gate | `GAMEPLAY_BUILD_POLICIES`, capped observation ledgers, explicit uncertain-turn budgets, 3 seeds × 12 generated floors, legality-checked choices, shipped favorable/counter exposure, exact replay | [epic-modes-and-runs](./epic-modes-and-runs.md) |
 
 ---
 
