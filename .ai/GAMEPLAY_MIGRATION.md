@@ -999,6 +999,21 @@ The orchestration ratchet now separates the floor-clear read model from the scre
 
 Graph v69 makes the end-of-floor feedback loop independently testable while preserving the screen's rendering and navigation behavior.
 
+## Seventieth vertical slice: Route-Choice Decision Model
+
+The route decision now has one independently testable semantic contract instead of being assembled inside the screen:
+
+1. Safe, Greed, and Mystery reward/risk labels, primary beats, payoff rows, recall readiness, decision stacks, actions, preview impacts, and selected-route opening tactics moved into `gameScreenRouteChoiceModel.ts`.
+2. Unsafe Greed explicitly produces repair-before-cashout guidance, while Safe stabilizes recall and Mystery primes the changed-board clue; route identities therefore remain mechanically and cognitively distinct.
+3. Beat counts, audio cues, screen cues, accessibility copy, and impact labels derive from the same typed payoff tone and route decision data.
+4. `gameScreenDecisionSignals.tsx` acts as the presentation facade for the pure route model, keeping `GameScreen` at 62 direct imports rather than relaxing the orchestration ceiling.
+5. `GameScreen` drops from 5,616 to 5,308 physical lines; the generated model measures 5,309 indexed lines, and the ceiling ratchets from 5,650 to 5,350 lines.
+6. Six focused tests cover route identity, recall-aware rows, decision-stack copy, unsafe Greed recovery, selected-route parity, and multimodal metadata.
+7. All 67 existing `GameScreen` tests remain green, preserving live route-choice rendering, selected routes, floor continuation, and feedback behavior.
+8. Graph v70 records the extracted model/test and regenerates 15,716 relationships with 127 active-run fields, zero renderer run-state writes, zero orchestration violations, all 34 commands and 54 events, 27 player-visible states, and zero diagnostics.
+
+Graph v70 makes route choice a cohesive decision loop—reward, risk, memory readiness, immediate action, and next-floor consequence—rather than a collection of screen-local labels.
+
 ## Current slice status
 
 Implemented in the Conduit Cartographer vertical slice:
@@ -1018,5 +1033,5 @@ Implemented in the Conduit Cartographer vertical slice:
 Still required before the vertical slice is complete:
 
 - extend the shared player-visible registry when additional gameplay ownership enters the core, rather than adding renderer or model-only field lists;
-- use Graph v69 diagnostics, orchestration budgets, and nine-build traces to select the next least-overlapping cohesive loop or architectural ownership seam, without presenting simulator survival as human win-rate proof;
+- use Graph v70 diagnostics, orchestration budgets, and nine-build traces to select the next least-overlapping cohesive loop or architectural ownership seam, without presenting simulator survival as human win-rate proof;
 - continue migrating cohesive player builds rather than adding isolated definitions, using the graph diagnostics to choose the next least-overlapping loop.

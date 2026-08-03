@@ -9,6 +9,23 @@ import type { OnboardingStepId } from '../../shared/playable-onboarding';
 import { routeSpecialLabel, routeSpecialRewardLine } from '../../shared/route-world';
 import styles from './GameScreen.module.css';
 
+export {
+    getRouteChoiceActionCue,
+    getRouteChoiceBeatCue,
+    getRouteChoiceDecisionStack,
+    getRouteChoiceImpactCue,
+    getRouteChoicePayoffAudioCue,
+    getRouteChoicePayoffRows,
+    getRouteChoicePayoffScreenCue,
+    getRouteChoiceSignalAudioCue,
+    getRouteChoiceSignalLabels,
+    getRouteChoiceSignalScreenCue,
+    getRouteChoiceToneBeatCount,
+    getSelectedRouteActionCue,
+    getSelectedRouteImpactCue,
+    trimTerminalPunctuation
+} from './gameScreenRouteChoiceModel';
+
 /** PLAY-009: pair-index rings on face-down DOM tiles only for very early floors + until FTUE flag clears after tutorial floors. */
 export const TUTORIAL_PAIR_MARKER_MAX_LEVEL = 2;
 
