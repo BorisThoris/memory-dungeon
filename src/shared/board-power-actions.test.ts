@@ -68,7 +68,6 @@ const run = (overrides: Partial<RunState> = {}): RunState => ({
     flashPairCharges: 1,
     peekCharges: 1,
     strayRemoveCharges: 1,
-    strayRemoveArmed: true,
     practiceMode: true,
     wildMenuRun: false,
     weakerShuffleMode: null,
@@ -410,8 +409,7 @@ describe('board power actions', () => {
                 tile('w1', WILD_PAIR_KEY),
                 tile('a1', 'A')
             ]),
-            strayRemoveCharges: 1.8,
-            strayRemoveArmed: true
+            strayRemoveCharges: 1.8
         }), 'w1');
         const undone = cancelResolvingWithUndo(run({
             status: 'resolving',
@@ -505,14 +503,12 @@ describe('board power actions', () => {
                 tile('a1', 'A')
             ]),
             strayRemoveCharges: 1,
-            strayRemoveArmed: true,
             recallFocus: 2
         });
 
         const removed = applyStrayRemove(state, 'w1');
 
         expect(removed.strayRemoveCharges).toBe(0);
-        expect(removed.strayRemoveArmed).toBe(false);
         expect(removed.powersUsedThisRun).toBe(true);
         expect(removed.recallFocus).toBe(1);
         expect(removed.forgottenTileIdsThisFloor).toEqual(['w1']);

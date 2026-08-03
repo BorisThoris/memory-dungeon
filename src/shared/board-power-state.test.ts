@@ -8,8 +8,7 @@ import type {
 import {
     armRegionShuffleRow,
     maxPinnedTilesForRun,
-    togglePinnedTile,
-    toggleStrayRemoveArmed
+    togglePinnedTile
 } from './board-power-state';
 
 const tile = (id: string, state: Tile['state'] = 'hidden'): Tile => ({
@@ -43,7 +42,6 @@ const run = (overrides: Partial<RunState> = {}): RunState => ({
     pinnedTileIds: [],
     pinsPlacedCountThisRun: 0,
     strayRemoveCharges: 1,
-    strayRemoveArmed: false,
     ...overrides
 } as RunState);
 
@@ -92,17 +90,5 @@ describe('board power state rules', () => {
             pinsPlacedCountThisRun: 1.9
         });
         expect(togglePinnedTile(capped, 'a1')).toBe(capped);
-    });
-
-    it('toggles stray remove arming only while playing with charges', () => {
-        expect(toggleStrayRemoveArmed(run()).strayRemoveArmed).toBe(true);
-        expect(toggleStrayRemoveArmed(run({ strayRemoveCharges: 0 })).strayRemoveArmed).toBe(false);
-        expect(toggleStrayRemoveArmed(run({ status: 'paused' })).strayRemoveArmed).toBe(false);
-    });
-
-    it('normalizes malformed stray remove charges before arming', () => {
-        expect(toggleStrayRemoveArmed(run({ strayRemoveCharges: Number.NaN })).strayRemoveArmed).toBe(false);
-        expect(toggleStrayRemoveArmed(run({ strayRemoveCharges: Number.POSITIVE_INFINITY })).strayRemoveArmed).toBe(false);
-        expect(toggleStrayRemoveArmed(run({ strayRemoveCharges: 1.9 })).strayRemoveArmed).toBe(true);
     });
 });

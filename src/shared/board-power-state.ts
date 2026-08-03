@@ -49,8 +49,3 @@ export const togglePinnedTile = (run: RunState, tileId: string): RunState => {
         pinnedTileIds
     };
 };
-
-export const toggleStrayRemoveArmed = (run: RunState): RunState =>
-    runNonNegativeInteger(run.strayRemoveCharges) > 0 && run.status === 'playing'
-        ? { ...run, strayRemoveArmed: !run.strayRemoveArmed }
-        : run;

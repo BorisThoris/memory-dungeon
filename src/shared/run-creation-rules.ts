@@ -177,7 +177,6 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
         wildTileId: getWildTileIdFromBoard(board),
         wildMatchesRemaining: enableWildJoker ? 1 : 0,
         strayRemoveCharges: options.initialStrayRemoveCharges ?? 0,
-        strayRemoveArmed: false,
         matchScoreMultiplier: 1,
         nBackMatchCounter: 0,
         nBackAnchorPairKey: null,

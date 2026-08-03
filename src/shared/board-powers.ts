@@ -22,8 +22,7 @@ export {
 
 export {
     armRegionShuffleRow,
-    togglePinnedTile,
-    toggleStrayRemoveArmed
+    togglePinnedTile
 } from './board-power-state';
 
 export {

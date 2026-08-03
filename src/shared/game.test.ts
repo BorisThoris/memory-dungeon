@@ -3085,7 +3085,7 @@ describe('REG-017 route choices', () => {
         const base = finishMemorizePhase(
             createNewRun(0, { echoFeedbackEnabled: false, runSeed: 17_216, initialStrayRemoveCharges: 1 })
         );
-        const run: RunState = { ...base, board, status: 'playing', strayRemoveArmed: true };
+        const run: RunState = { ...base, board, status: 'playing' };
         const keystone = run.board!.tiles.find((tile) => tile.routeSpecialKind === 'keystone_pair')!;
 
         expect(tileIsStrayEligiblePreview(board, keystone.id)).toBe(false);
@@ -3100,8 +3100,8 @@ describe('REG-017 route choices', () => {
         const omenBoard = routeBoard('mystery', 4, 'normal', { activeMutators: ['glass_floor'] });
         const finalWard = finalWardBoard.tiles.find((tile) => tile.routeSpecialKind === 'final_ward')!;
         const omen = omenBoard.tiles.find((tile) => tile.routeSpecialKind === 'omen_seal')!;
-        const finalWardRun: RunState = { ...base, board: finalWardBoard, status: 'playing', strayRemoveArmed: true };
-        const omenRun: RunState = { ...base, board: omenBoard, status: 'playing', strayRemoveArmed: true };
+        const finalWardRun: RunState = { ...base, board: finalWardBoard, status: 'playing' };
+        const omenRun: RunState = { ...base, board: omenBoard, status: 'playing' };
 
         expect(tileIsStrayEligiblePreview(finalWardBoard, finalWard.id)).toBe(false);
         expect(applyStrayRemove(finalWardRun, finalWard.id)).toBe(finalWardRun);
@@ -5317,7 +5317,6 @@ describe('dungeon cards', () => {
             pinnedTileIds: ['a1'],
             peekRevealedTileIds: ['a2'],
             flashPairRevealedTileIds: ['a1'],
-            strayRemoveArmed: true,
             regionShuffleRowArmed: 0,
             stickyBlockIndex: 1,
             board: {
@@ -5349,7 +5348,6 @@ describe('dungeon cards', () => {
         expect(cleared.pinnedTileIds).toEqual([]);
         expect(cleared.peekRevealedTileIds).toEqual([]);
         expect(cleared.flashPairRevealedTileIds).toEqual([]);
-        expect(cleared.strayRemoveArmed).toBe(false);
         expect(cleared.regionShuffleRowArmed).toBeNull();
         expect(cleared.stickyBlockIndex).toBeNull();
         expect(cleared.board!.enemyHazards![0]).toMatchObject({ state: 'defeated', hp: 0 });
@@ -7634,14 +7632,12 @@ describe('board powers', () => {
             const run = {
                 ...createRun([createTile('a1', 'A', 'A'), createTile('a2', 'A', 'A')]),
                 status: 'playing' as const,
-                strayRemoveArmed: true,
                 strayRemoveCharges: 1
             };
 
             const after = applyStrayRemove(run, 'a1');
 
             expect(after).toBe(run);
-            expect(after.strayRemoveArmed).toBe(true);
             expect(after.strayRemoveCharges).toBe(1);
         });
 
@@ -7651,7 +7647,6 @@ describe('board powers', () => {
             const run = {
                 ...createRun(tiles, { board }),
                 status: 'playing' as const,
-                strayRemoveArmed: true,
                 strayRemoveCharges: 1
             };
 
@@ -7659,7 +7654,6 @@ describe('board powers', () => {
 
             expect(after).not.toBe(run);
             expect(after.board!.tiles.find((tile) => tile.id === 'w1')?.state).toBe('removed');
-            expect(after.strayRemoveArmed).toBe(false);
             expect(after.strayRemoveCharges).toBe(0);
             expect(after.powersUsedThisRun).toBe(true);
             expect(inspectBoardFairness(after.board!).issues).toEqual([]);

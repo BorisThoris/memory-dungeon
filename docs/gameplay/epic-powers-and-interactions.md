@@ -16,7 +16,7 @@ Player actions beyond flipping: peek, shuffles, tile swap, destroy pair, pinning
 | Tile swap | **Shippable** | `applyTileSwap`; spends row-shuffle accounting to exchange two hidden tiles for trait-position setup; clears pins and locks Perfect Memory. |
 | Destroy pair | **Shippable** | `applyDestroyPair`; can clear floor without flip resolution; findable markers stripped; spotlight rotation. |
 | Pin mode | **Shippable** | `togglePinnedTile`; does **not** set `powersUsedThisRun` (pins allowed for “perfect” achievement intent). |
-| Stray remove | **Functional** | Arm + `applyStrayRemove`; less prominent than core powers. |
+| Stray remove | **Functional** | Transient renderer arm + typed `board.stray_remove`; `applyStrayRemove` owns durable legality and consequence. |
 | Undo resolving | **Shippable** | `cancelResolvingWithUndo`; sets `powersUsedThisRun`. |
 | Flash pair | **Functional** | Practice/Wild-only v1: store calls `applyFlashPair`, game rules no-op outside `practiceMode` / `wildMenuRun`, and UI only exposes usable charges in those modes. |
 

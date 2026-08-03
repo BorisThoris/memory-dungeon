@@ -1059,7 +1059,6 @@ describe('REG-087 action eligibility edge cases', () => {
         const run: RunState = {
             ...playableRun(createNewRun(0, { initialStrayRemoveCharges: 1 })),
             board,
-            strayRemoveArmed: true,
             strayRemoveCharges: 1
         };
 
@@ -1173,7 +1172,7 @@ describe('REG-087 action eligibility edge cases', () => {
 
             const strayTile = hiddenTiles.find((candidate) => tileIsStrayEligiblePreview(baseRun.board!, candidate.id));
             if (strayTile) {
-                expectRunFair(applyStrayRemove({ ...baseRun, strayRemoveArmed: true }, strayTile.id));
+                expectRunFair(applyStrayRemove(baseRun, strayTile.id));
             }
         }
     });

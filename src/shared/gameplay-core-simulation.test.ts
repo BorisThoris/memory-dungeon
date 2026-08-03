@@ -58,7 +58,6 @@ const initialRun = (seed: number, gameMode: RunState['gameMode'] = 'endless'): R
         flashPairRevealedTileIds: [],
         undoUsesThisFloor: 1,
         strayRemoveCharges: 1,
-        strayRemoveArmed: true,
         recallFocus: 0,
         rewardPerkIds: [],
         relicIds: [

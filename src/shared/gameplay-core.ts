@@ -725,7 +725,7 @@ const applyStrayRemoveCommand = (
     run: RunState,
     command: Extract<GameplayCommand, { type: 'board.stray_remove' }>
 ): GameplayCommandResult => {
-    const nextRun = applyStrayRemove(run, command.targetTileId, { requireArmed: false });
+    const nextRun = applyStrayRemove(run, command.targetTileId);
     if (nextRun === run) {
         return rejectedResult(run, command.commandId, 'Stray Remove is not legal for the current run and target.', command);
     }

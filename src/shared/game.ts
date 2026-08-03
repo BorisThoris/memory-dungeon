@@ -123,8 +123,7 @@ export {
 } from './board-power-availability';
 export {
     armRegionShuffleRow,
-    togglePinnedTile,
-    toggleStrayRemoveArmed
+    togglePinnedTile
 } from './board-power-state';
 export {
     countFullyHiddenPairs

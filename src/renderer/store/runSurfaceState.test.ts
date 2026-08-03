@@ -52,7 +52,6 @@ const playingRun = (overrides: Partial<RunState> = {}): RunState =>
         board: board(),
         destroyPairCharges: 1,
         peekCharges: 1,
-        strayRemoveArmed: false,
         strayRemoveCharges: 1,
         status: 'playing',
         ...overrides
@@ -80,6 +79,16 @@ describe('run surface state helpers', () => {
             'src/renderer/components/GameLeftToolbar.tsx',
             'src/renderer/components/useGameScreenPowerTileHints.ts'
         ].map((relativePath) => readFileSync(join(process.cwd(), relativePath), 'utf8'));
+        const durableRunSources = [
+            'src/shared/contracts.ts',
+            'src/shared/run-creation-rules.ts',
+            'src/shared/floor-clear-transition.ts',
+            'src/shared/board-power-state.ts',
+            'src/shared/board-power-actions.ts',
+            'src/shared/board-powers.ts',
+            'src/shared/game.ts',
+            'src/shared/gameplay-core.ts'
+        ].map((relativePath) => readFileSync(join(process.cwd(), relativePath), 'utf8'));
 
         for (const source of rendererSources) {
             expect(source).not.toMatch(
@@ -92,6 +101,9 @@ describe('run surface state helpers', () => {
         expect(rendererSources.join('\n')).toContain('resolveBoardTurnThroughGameplayCore');
         expect(rendererSources.join('\n')).not.toContain('resolveBoardTurnWithEvent');
         expect(rendererSources.join('\n')).not.toContain('run.strayRemoveArmed');
+        expect(rendererSources.join('\n')).toContain('strayRemoveArmed');
+        expect(durableRunSources.join('\n')).not.toContain('strayRemoveArmed');
+        expect(durableRunSources.join('\n')).not.toContain('toggleStrayRemoveArmed');
         expect(rendererSources.join('\n')).not.toContain('armRegionShuffleRowPick');
         expect(rendererSources.join('\n')).not.toContain('createRegionShuffleArmSurfaceResult');
     });
@@ -712,7 +724,6 @@ describe('run surface state helpers', () => {
                     { id: 'a2', pairKey: 'a', label: 'A', state: 'hidden', symbol: 'A' }
                 ]
             }),
-            strayRemoveArmed: false,
             strayRemoveCharges: 1
         });
 

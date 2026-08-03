@@ -5,19 +5,19 @@
     "name": "memory-dungeon",
     "trackedFileCount": 2407,
     "codeFileCount": 904,
-    "exportedSymbolCount": 3360,
+    "exportedSymbolCount": 3357,
     "contentItemCount": 57,
     "mechanicCount": 139,
     "stateFieldCount": 283,
     "playerVisibleStateCount": 27,
-    "relationshipCount": 10709
+    "relationshipCount": 10706
   },
   "inventory": [
     {
       "path": ".ai/GAMEPLAY_MIGRATION.md",
       "category": "other",
-      "bytes": 111665,
-      "sha256": "6238887457c003de6f5a6aba29eb518449b2c2cebe9e2bf923d9859471d1ced7"
+      "bytes": 113301,
+      "sha256": "7feea7f38a28beb0004e7598d3c903e1934b80838e768f105ab5a83db4c7bc3d"
     },
     {
       "path": ".ai/README.md",
@@ -472,8 +472,8 @@
     {
       "path": "docs/gameplay-depth/02-helper-tiers-and-cognitive-jobs.md",
       "category": "documentation",
-      "bytes": 7749,
-      "sha256": "812163e9c37a894ebf2d754080b6240a691f814fcef8e5a2586af00d591e913d"
+      "bytes": 7803,
+      "sha256": "486059015eb2ab3791fb0f76584331514f3f626bfa1846d68a302fd0db9ea6e0"
     },
     {
       "path": "docs/gameplay-depth/03-mutators-as-spine-relics-as-build.md",
@@ -724,8 +724,8 @@
     {
       "path": "docs/gameplay/epic-powers-and-interactions.md",
       "category": "documentation",
-      "bytes": 3269,
-      "sha256": "67fbf25e2e25441d711efa3960a1f29c78d01a4b5fe06b5fb710e9606c16cb5a"
+      "bytes": 3321,
+      "sha256": "75a9f2ac0e79196448072ccf9b2e09aa6024b8ce527dfe71b271b2b590bd5bba"
     },
     {
       "path": "docs/gameplay/epic-presentation-motion-fx.md",
@@ -778,8 +778,8 @@
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
       "category": "documentation",
-      "bytes": 37870,
-      "sha256": "e2bedba065507df3175b9dcd1e5d43cfe2fd69ff9e82d7be172a733627a9ccf5"
+      "bytes": 37676,
+      "sha256": "2f5ee08d53022f4876a1188fc75dff2563c51126b42e68dfee7054e13186ddab"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_POLISH_AND_GAPS.md",
@@ -832,8 +832,8 @@
     {
       "path": "docs/internal-wiki/APP_ANALYSIS.md",
       "category": "documentation",
-      "bytes": 21721,
-      "sha256": "1ac869f286c0f9a683aa1dee2b769b72e59905103ced2bacc07a624996037806"
+      "bytes": 21658,
+      "sha256": "a5cc10a4d1761f673c6f4f875f4a27745b046c21796f7c03282366ccf6b2e416"
     },
     {
       "path": "docs/internal-wiki/ARCHITECTURE.md",
@@ -4552,8 +4552,8 @@
     {
       "path": "scripts/sim-gameplay-core.ts",
       "category": "script",
-      "bytes": 5411,
-      "sha256": "f357822b4411c99587946e7d8c9f88ea80418e293e0579738f5dde2622c742ef"
+      "bytes": 5383,
+      "sha256": "e12db5105d197c535ff3103b8831006752c53f1fa54e4216cb442e3d0c11e529"
     },
     {
       "path": "scripts/svgo-optimize-card-front.mjs",
@@ -7384,8 +7384,8 @@
     {
       "path": "src/renderer/components/GameLeftToolbar.test.tsx",
       "category": "test",
-      "bytes": 36056,
-      "sha256": "6f82b6110f75f6010f664728cdb1d8a7bfaef1ded5a1bbcef7058a0f88eba477"
+      "bytes": 36041,
+      "sha256": "3546a40637ea5d9f85c6f53fde373c2a26182ebf535fe2e14c0d6b67ae68b8ef"
     },
     {
       "path": "src/renderer/components/GameLeftToolbar.tsx",
@@ -9460,8 +9460,8 @@
     {
       "path": "src/renderer/store/runSurfaceState.test.ts",
       "category": "test",
-      "bytes": 43994,
-      "sha256": "ac2e0691617076382a270cb12747d1ef44e0edfc92779610eb9606779f572f70"
+      "bytes": 44643,
+      "sha256": "422ea130f62e20dda9da4c41170fa0e3e382e86511dff7773e807aab7a4c45c0"
     },
     {
       "path": "src/renderer/store/runSurfaceState.ts",
@@ -9886,14 +9886,14 @@
     {
       "path": "src/shared/board-power-actions.test.ts",
       "category": "test",
-      "bytes": 22201,
-      "sha256": "361178afd1889e5cdc5fbf0665811e922e2b377d095d90cb9fd0d31b6c15d174"
+      "bytes": 22047,
+      "sha256": "f43c961da6100a2862ebe283aaf14614a353a099f0312fc7c4a5af1ba46322bd"
     },
     {
       "path": "src/shared/board-power-actions.ts",
       "category": "source",
-      "bytes": 16264,
-      "sha256": "732551a138059f9e3bbf1488a05b0e0c0b0ceb79c52fdefb23c05011e6db0edc"
+      "bytes": 16116,
+      "sha256": "64e838e12e57b90b93f3b67a47110ef27f1babc11fcf46951a079e28069a41d8"
     },
     {
       "path": "src/shared/board-power-availability.test.ts",
@@ -9910,14 +9910,14 @@
     {
       "path": "src/shared/board-power-state.test.ts",
       "category": "test",
-      "bytes": 3925,
-      "sha256": "20bdc9487ec0c85455e5deb4cad212dd6644e03830acbcb7042354567d7b30ba"
+      "bytes": 3090,
+      "sha256": "f78fb885420871147f6a4b530c767b7653b98558d7f456244d0fc102b2a5f99e"
     },
     {
       "path": "src/shared/board-power-state.ts",
       "category": "source",
-      "bytes": 1947,
-      "sha256": "7119b53b213afed1450a027ae2b8fe13462001307b41b139a4e347ac7c547eb8"
+      "bytes": 1720,
+      "sha256": "6b2902c8e6701603f1475d84f05fa1ba62f4047540a551631848a9961804a3b7"
     },
     {
       "path": "src/shared/board-power-targeting.test.ts",
@@ -9934,8 +9934,8 @@
     {
       "path": "src/shared/board-powers.ts",
       "category": "source",
-      "bytes": 715,
-      "sha256": "db48e08e6a4468cd65b5d2f9a293e0ea09b10e5fce629d6fdefae1fc04f822b3"
+      "bytes": 687,
+      "sha256": "488cd464ffe7f1b47f762460f31148d8000266ddc6ae81f620798773d10de8f3"
     },
     {
       "path": "src/shared/board-tile-generation-rules.test.ts",
@@ -10108,8 +10108,8 @@
     {
       "path": "src/shared/contracts.ts",
       "category": "source",
-      "bytes": 44357,
-      "sha256": "5bea36e501e28740774aed19d68d592eccabedf3c65031d29ded58ad9940ca38"
+      "bytes": 44326,
+      "sha256": "b59427396c58a894f132b4f7a129b44e067aa47ebe3ce1ed823148b8d011747d"
     },
     {
       "path": "src/shared/copy-tone.test.ts",
@@ -10600,8 +10600,8 @@
     {
       "path": "src/shared/floor-clear-transition.ts",
       "category": "source",
-      "bytes": 10471,
-      "sha256": "76a389a4cff46404078de8dfa049d1c52f340c46725aae17d2807ce17e95e23b"
+      "bytes": 10434,
+      "sha256": "7ef590e0a0ef110ec242cfd1b9d7cd9b6a4daff9fa47e93953a059e71aee700d"
     },
     {
       "path": "src/shared/floor-completion-transitions.ts",
@@ -10678,14 +10678,14 @@
     {
       "path": "src/shared/game.test.ts",
       "category": "test",
-      "bytes": 379487,
-      "sha256": "cf6faf0a919015734d931165b56a12cea95a6e057f485a71c0dcc644bc62cc88"
+      "bytes": 379134,
+      "sha256": "463416f9fa240e49fab211982e2f644de43f3c6f1d608727499635177df5b5b1"
     },
     {
       "path": "src/shared/game.ts",
       "category": "source",
-      "bytes": 8524,
-      "sha256": "625a8ce752a6fcbcb78533c5fbd4a8d9e6a4c9376776ea9b33a3cc4addaf5fc6"
+      "bytes": 8496,
+      "sha256": "304d6631c9f78874a45860ebe52270e0d4fbe7f47dd37ba8b6c65e237d549db5"
     },
     {
       "path": "src/shared/gameplay-core-adapters.ts",
@@ -10714,8 +10714,8 @@
     {
       "path": "src/shared/gameplay-core-simulation.test.ts",
       "category": "test",
-      "bytes": 15249,
-      "sha256": "8e432a40a9aca50f1f496ee35924d33dcfcfbace835cc6af723f16a4efb84e46"
+      "bytes": 15217,
+      "sha256": "e40dd13d3803f3cb68cd709ef5ba43fa75903bd35c18ce51d829ddfa4eb077d5"
     },
     {
       "path": "src/shared/gameplay-core-simulation.ts",
@@ -10726,14 +10726,14 @@
     {
       "path": "src/shared/gameplay-core.test.ts",
       "category": "test",
-      "bytes": 136338,
-      "sha256": "184134a3c3f4b717ce0e6cc0d6f8ac83cdd40ab9de4eacf8e0410351afe67a23"
+      "bytes": 136276,
+      "sha256": "c4ac9cc929ea59891e416f0b5a6f1d329d13508e185032ce509d6dbd36681359"
     },
     {
       "path": "src/shared/gameplay-core.ts",
       "category": "source",
-      "bytes": 101159,
-      "sha256": "a6dd9691882c77fe3c51837ca36b70a385c6831efb3b614718176c5ec6137a6a"
+      "bytes": 101134,
+      "sha256": "638f1c5459564a9e7053409786b2f6e8d233a3ad30535404451488fa5628376e"
     },
     {
       "path": "src/shared/gameplay-effect-transition.test.ts",
@@ -10768,14 +10768,14 @@
     {
       "path": "src/shared/gameplay-interaction-graph-data.json",
       "category": "source",
-      "bytes": 235776,
-      "sha256": "ebdaf3a161f00adfff83044f977dd49edc93f73884ca65a6f3c7d83635cec490"
+      "bytes": 235842,
+      "sha256": "dedf8912a59ccd957b0bc3d8b8d5e84d3f314c4e0947b9a264cd8533e56a30dd"
     },
     {
       "path": "src/shared/gameplay-interaction-graph.test.ts",
       "category": "test",
-      "bytes": 112665,
-      "sha256": "9259dd134699b01c18e9b78a1f618dc79971de007cf190148fd0c5d3ed439124"
+      "bytes": 112763,
+      "sha256": "788d7628769834643b44e56b1c352ee6d7e6dc813e916a4dccb9d88593b6e36d"
     },
     {
       "path": "src/shared/gameplay-interaction-graph.ts",
@@ -10798,8 +10798,8 @@
     {
       "path": "src/shared/gameplay-property-invariants.test.ts",
       "category": "test",
-      "bytes": 28882,
-      "sha256": "7d4f3f1205ba600affb7a40f6bfa7befab5412d7b22f9b020b9b96cc3c7b78b6"
+      "bytes": 28851,
+      "sha256": "f5929815bd79d080abc997a141f5b136676785683ba9e45f6e4c548ff271eddb"
     },
     {
       "path": "src/shared/gameplay-rules-edit-map.test.ts",
@@ -11584,8 +11584,8 @@
     {
       "path": "src/shared/run-creation-rules.ts",
       "category": "source",
-      "bytes": 14160,
-      "sha256": "e8d74401df77e1b1473cb632c0e3f237f03fd567c7f0fd66dcd4e06af3548eb9"
+      "bytes": 14127,
+      "sha256": "70c163cbc2f343c75441f41721683e938d085af38c268bbaba78582503aec131"
     },
     {
       "path": "src/shared/run-economy.test.ts",
@@ -11752,8 +11752,8 @@
     {
       "path": "src/shared/save-data.test.ts",
       "category": "test",
-      "bytes": 35681,
-      "sha256": "5febe097b7e8351183190d722984381e70331966e178b06394a8924526af256d"
+      "bytes": 35721,
+      "sha256": "adbe30c8e2a219221f3a409c108559fc676774927a9faee9d7f7393b419d4c94"
     },
     {
       "path": "src/shared/save-data.ts",
@@ -11902,8 +11902,8 @@
     {
       "path": "src/shared/softlock-fairness.test.ts",
       "category": "test",
-      "bytes": 45863,
-      "sha256": "05a6588084dcdc31a5b7de06a7ed6d83056edb072bb7ae8e5f61d8a76e2e9182"
+      "bytes": 45796,
+      "sha256": "e70809f55da98fa414f6eb074d291d887625c5030e0a88b5c4bf216d6d47ce73"
     },
     {
       "path": "src/shared/softlock-generator-contract.test.ts",
@@ -22399,7 +22399,7 @@
       "path": "src/renderer/store/runSurfaceState.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 1133,
+      "lineCount": 1144,
       "imports": [
         "file:src/renderer/store/matchScorePop.ts",
         "file:src/renderer/store/runSurfaceState.ts",
@@ -23566,7 +23566,7 @@
       "path": "src/shared/board-power-actions.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 580,
+      "lineCount": 576,
       "imports": [
         "file:src/shared/board-power-actions.ts",
         "file:src/shared/contracts.ts",
@@ -23580,7 +23580,7 @@
       "path": "src/shared/board-power-actions.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 474,
+      "lineCount": 469,
       "imports": [
         "file:src/shared/board-power-availability.ts",
         "file:src/shared/board-power-targeting.ts",
@@ -23661,7 +23661,7 @@
       "path": "src/shared/board-power-state.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 109,
+      "lineCount": 95,
       "imports": [
         "file:src/shared/board-power-state.ts",
         "file:src/shared/contracts.ts"
@@ -23674,7 +23674,7 @@
       "path": "src/shared/board-power-state.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 57,
+      "lineCount": 52,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/relics.ts",
@@ -23684,8 +23684,7 @@
       "exports": [
         "symbol:src/shared/board-power-state.ts#armRegionShuffleRow",
         "symbol:src/shared/board-power-state.ts#maxPinnedTilesForRun",
-        "symbol:src/shared/board-power-state.ts#togglePinnedTile",
-        "symbol:src/shared/board-power-state.ts#toggleStrayRemoveArmed"
+        "symbol:src/shared/board-power-state.ts#togglePinnedTile"
       ],
       "testedBy": [
         "file:src/shared/board-power-state.test.ts",
@@ -23737,7 +23736,7 @@
       "path": "src/shared/board-powers.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 36,
+      "lineCount": 35,
       "imports": [
         "file:src/shared/board-power-actions.ts",
         "file:src/shared/board-power-availability.ts",
@@ -23765,8 +23764,7 @@
         "symbol:src/shared/board-powers.ts#tileIsDestroyEligiblePreview",
         "symbol:src/shared/board-powers.ts#tileIsPeekEligiblePreview",
         "symbol:src/shared/board-powers.ts#tileIsStrayEligiblePreview",
-        "symbol:src/shared/board-powers.ts#togglePinnedTile",
-        "symbol:src/shared/board-powers.ts#toggleStrayRemoveArmed"
+        "symbol:src/shared/board-powers.ts#togglePinnedTile"
       ],
       "testedBy": [
         "file:src/shared/game.test.ts",
@@ -24378,7 +24376,7 @@
       "path": "src/shared/contracts.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1154,
+      "lineCount": 1153,
       "imports": [],
       "exports": [
         "symbol:src/shared/contracts.ts#AchievementId",
@@ -26352,7 +26350,7 @@
       "path": "src/shared/floor-clear-transition.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 219,
+      "lineCount": 218,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/dungeon-boss-clear-rules.ts",
@@ -26742,7 +26740,7 @@
       "path": "src/shared/game.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 8783,
+      "lineCount": 8777,
       "imports": [
         "file:src/shared/board-generation.ts",
         "file:src/shared/board-powers.ts",
@@ -26770,7 +26768,7 @@
       "path": "src/shared/game.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 306,
+      "lineCount": 305,
       "imports": [
         "file:src/shared/board-build-rules.ts",
         "file:src/shared/board-inspection.ts",
@@ -26990,7 +26988,6 @@
         "symbol:src/shared/game.ts#tileIsStrayEligiblePreview",
         "symbol:src/shared/game.ts#tilesArePairMatch",
         "symbol:src/shared/game.ts#togglePinnedTile",
-        "symbol:src/shared/game.ts#toggleStrayRemoveArmed",
         "symbol:src/shared/game.ts#useRelicOfferService",
         "symbol:src/shared/game.ts#WILD_PAIR_KEY"
       ],
@@ -27230,7 +27227,7 @@
       "path": "src/shared/gameplay-core-simulation.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 332,
+      "lineCount": 331,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/gameplay-core-simulation.ts",
@@ -27275,7 +27272,7 @@
       "path": "src/shared/gameplay-core.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 3102,
+      "lineCount": 3101,
       "imports": [
         "file:src/shared/board-power-actions.ts",
         "file:src/shared/board-power-state.ts",
@@ -27483,7 +27480,7 @@
       "path": "src/shared/gameplay-interaction-graph.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 1859,
+      "lineCount": 1861,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/gameplay-core-contracts.ts",
@@ -30193,7 +30190,7 @@
       "path": "src/shared/run-creation-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 351,
+      "lineCount": 350,
       "imports": [
         "file:src/shared/board-build-rules.ts",
         "file:src/shared/board-inspection.ts",
@@ -30861,7 +30858,7 @@
       "path": "src/shared/save-data.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 824,
+      "lineCount": 825,
       "imports": [
         "file:src/shared/builtin-puzzles.ts",
         "file:src/shared/contracts.ts",
@@ -31448,7 +31445,7 @@
       "path": "src/shared/softlock-fairness.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 1181,
+      "lineCount": 1180,
       "imports": [
         "file:src/shared/board-generation.ts",
         "file:src/shared/board-powers.ts",
@@ -42532,7 +42529,7 @@
       "kind": "value",
       "file": "src/shared/board-power-actions.ts",
       "line": 395,
-      "endLine": 447
+      "endLine": 442
     },
     {
       "id": "symbol:src/shared/board-power-actions.ts#applyTileSwap",
@@ -42547,8 +42544,8 @@
       "name": "cancelResolvingWithUndo",
       "kind": "value",
       "file": "src/shared/board-power-actions.ts",
-      "line": 449,
-      "endLine": 473
+      "line": 444,
+      "endLine": 468
     },
     {
       "id": "symbol:src/shared/board-power-actions.ts#DestroyPairTransitionOptions",
@@ -42645,14 +42642,6 @@
       "file": "src/shared/board-power-state.ts",
       "line": 15,
       "endLine": 51
-    },
-    {
-      "id": "symbol:src/shared/board-power-state.ts#toggleStrayRemoveArmed",
-      "name": "toggleStrayRemoveArmed",
-      "kind": "value",
-      "file": "src/shared/board-power-state.ts",
-      "line": 53,
-      "endLine": 56
     },
     {
       "id": "symbol:src/shared/board-power-targeting.ts#collectDestroyEligibleTileIds",
@@ -42843,40 +42832,40 @@
       "name": "collectDestroyEligibleTileIds",
       "kind": "ExportSpecifier",
       "file": "src/shared/board-powers.ts",
-      "line": 30,
-      "endLine": 30
+      "line": 29,
+      "endLine": 29
     },
     {
       "id": "symbol:src/shared/board-powers.ts#collectPeekEligibleTileIds",
       "name": "collectPeekEligibleTileIds",
       "kind": "ExportSpecifier",
       "file": "src/shared/board-powers.ts",
-      "line": 31,
-      "endLine": 31
+      "line": 30,
+      "endLine": 30
     },
     {
       "id": "symbol:src/shared/board-powers.ts#tileIsDestroyEligiblePreview",
       "name": "tileIsDestroyEligiblePreview",
       "kind": "ExportSpecifier",
       "file": "src/shared/board-powers.ts",
-      "line": 32,
-      "endLine": 32
+      "line": 31,
+      "endLine": 31
     },
     {
       "id": "symbol:src/shared/board-powers.ts#tileIsPeekEligiblePreview",
       "name": "tileIsPeekEligiblePreview",
       "kind": "ExportSpecifier",
       "file": "src/shared/board-powers.ts",
-      "line": 33,
-      "endLine": 33
+      "line": 32,
+      "endLine": 32
     },
     {
       "id": "symbol:src/shared/board-powers.ts#tileIsStrayEligiblePreview",
       "name": "tileIsStrayEligiblePreview",
       "kind": "ExportSpecifier",
       "file": "src/shared/board-powers.ts",
-      "line": 34,
-      "endLine": 34
+      "line": 33,
+      "endLine": 33
     },
     {
       "id": "symbol:src/shared/board-powers.ts#togglePinnedTile",
@@ -42885,14 +42874,6 @@
       "file": "src/shared/board-powers.ts",
       "line": 25,
       "endLine": 25
-    },
-    {
-      "id": "symbol:src/shared/board-powers.ts#toggleStrayRemoveArmed",
-      "name": "toggleStrayRemoveArmed",
-      "kind": "ExportSpecifier",
-      "file": "src/shared/board-powers.ts",
-      "line": 26,
-      "endLine": 26
     },
     {
       "id": "symbol:src/shared/board-tile-generation-rules.ts#assignFindableKindsToTiles",
@@ -43819,16 +43800,16 @@
       "name": "AchievementState",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1107,
-      "endLine": 1107
+      "line": 1106,
+      "endLine": 1106
     },
     {
       "id": "symbol:src/shared/contracts.ts#AchievementUnlockResult",
       "name": "AchievementUnlockResult",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1140,
-      "endLine": 1142
+      "line": 1139,
+      "endLine": 1141
     },
     {
       "id": "symbol:src/shared/contracts.ts#BoardPresentationMode",
@@ -43971,8 +43952,8 @@
       "name": "DesktopApi",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1144,
-      "endLine": 1153
+      "line": 1143,
+      "endLine": 1152
     },
     {
       "id": "symbol:src/shared/contracts.ts#DisplayMode",
@@ -44547,8 +44528,8 @@
       "name": "PlayerStatsPersisted",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1109,
-      "endLine": 1122
+      "line": 1108,
+      "endLine": 1121
     },
     {
       "id": "symbol:src/shared/contracts.ts#PuzzleCompletionRecord",
@@ -44788,7 +44769,7 @@
       "kind": "interface",
       "file": "src/shared/contracts.ts",
       "line": 898,
-      "endLine": 1105
+      "endLine": 1104
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunStatus",
@@ -44827,8 +44808,8 @@
       "name": "SaveData",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1124,
-      "endLine": 1137
+      "line": 1123,
+      "endLine": 1136
     },
     {
       "id": "symbol:src/shared/contracts.ts#SCHOLAR_STYLE_FLOOR_BONUS_SCORE",
@@ -47836,7 +47817,7 @@
       "kind": "value",
       "file": "src/shared/floor-clear-transition.ts",
       "line": 65,
-      "endLine": 218
+      "endLine": 217
     },
     {
       "id": "symbol:src/shared/floor-clear-transition.ts#FloorClearExecutionContext",
@@ -48515,32 +48496,32 @@
       "name": "acceptEndlessRiskWager",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 154,
-      "endLine": 154
+      "line": 153,
+      "endLine": 153
     },
     {
       "id": "symbol:src/shared/game.ts#activateDungeonExit",
       "name": "activateDungeonExit",
       "kind": "value",
       "file": "src/shared/game.ts",
-      "line": 271,
-      "endLine": 271
+      "line": 270,
+      "endLine": 270
     },
     {
       "id": "symbol:src/shared/game.ts#advanceToNextLevel",
       "name": "advanceToNextLevel",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 172,
-      "endLine": 172
+      "line": 171,
+      "endLine": 171
     },
     {
       "id": "symbol:src/shared/game.ts#applyDestroyPair",
       "name": "applyDestroyPair",
       "kind": "value",
       "file": "src/shared/game.ts",
-      "line": 269,
-      "endLine": 269
+      "line": 268,
+      "endLine": 268
     },
     {
       "id": "symbol:src/shared/game.ts#applyDestroyPairTransition",
@@ -48603,8 +48584,8 @@
       "name": "applyRouteChoiceOutcome",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 190,
-      "endLine": 190
+      "line": 189,
+      "endLine": 189
     },
     {
       "id": "symbol:src/shared/game.ts#applyShuffle",
@@ -48683,56 +48664,56 @@
       "name": "BoardTurnResolutionResult",
       "kind": "interface",
       "file": "src/shared/game.ts",
-      "line": 281,
-      "endLine": 284
+      "line": 280,
+      "endLine": 283
     },
     {
       "id": "symbol:src/shared/game.ts#buildBoard",
       "name": "buildBoard",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 158,
-      "endLine": 158
+      "line": 157,
+      "endLine": 157
     },
     {
       "id": "symbol:src/shared/game.ts#BuildBoardOptions",
       "name": "BuildBoardOptions",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 159,
-      "endLine": 159
+      "line": 158,
+      "endLine": 158
     },
     {
       "id": "symbol:src/shared/game.ts#calculateLevelClearBonus",
       "name": "calculateLevelClearBonus",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 143,
-      "endLine": 143
+      "line": 142,
+      "endLine": 142
     },
     {
       "id": "symbol:src/shared/game.ts#calculateMatchScore",
       "name": "calculateMatchScore",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 144,
-      "endLine": 144
+      "line": 143,
+      "endLine": 143
     },
     {
       "id": "symbol:src/shared/game.ts#calculatePerfectClearBonus",
       "name": "calculatePerfectClearBonus",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 145,
-      "endLine": 145
+      "line": 144,
+      "endLine": 144
     },
     {
       "id": "symbol:src/shared/game.ts#calculateRating",
       "name": "calculateRating",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 146,
-      "endLine": 146
+      "line": 145,
+      "endLine": 145
     },
     {
       "id": "symbol:src/shared/game.ts#cancelResolvingWithUndo",
@@ -48755,8 +48736,8 @@
       "name": "canOfferEndlessRiskWager",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 155,
-      "endLine": 155
+      "line": 154,
+      "endLine": 154
     },
     {
       "id": "symbol:src/shared/game.ts#canRegionShuffle",
@@ -48811,16 +48792,16 @@
       "name": "claimRouteSideRoomChoice",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 195,
-      "endLine": 195
+      "line": 194,
+      "endLine": 194
     },
     {
       "id": "symbol:src/shared/game.ts#claimRouteSideRoomPrimary",
       "name": "claimRouteSideRoomPrimary",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 196,
-      "endLine": 196
+      "line": 195,
+      "endLine": 195
     },
     {
       "id": "symbol:src/shared/game.ts#collectDestroyEligibleTileIds",
@@ -48851,8 +48832,8 @@
       "name": "computeFlipResolveDelayMs",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 147,
-      "endLine": 147
+      "line": 146,
+      "endLine": 146
     },
     {
       "id": "symbol:src/shared/game.ts#computeRelicOfferPickBudget",
@@ -48875,24 +48856,24 @@
       "name": "countFullyHiddenPairs",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 130,
-      "endLine": 130
+      "line": 129,
+      "endLine": 129
     },
     {
       "id": "symbol:src/shared/game.ts#createDailyRun",
       "name": "createDailyRun",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 162,
-      "endLine": 162
+      "line": 161,
+      "endLine": 161
     },
     {
       "id": "symbol:src/shared/game.ts#createDungeonEncounterContext",
       "name": "createDungeonEncounterContext",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 215,
-      "endLine": 215
+      "line": 214,
+      "endLine": 214
     },
     {
       "id": "symbol:src/shared/game.ts#createDungeonFloorBlueprint",
@@ -48907,48 +48888,48 @@
       "name": "createDungeonShowcaseRun",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 181,
-      "endLine": 181
+      "line": 180,
+      "endLine": 180
     },
     {
       "id": "symbol:src/shared/game.ts#createGauntletRun",
       "name": "createGauntletRun",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 163,
-      "endLine": 163
+      "line": 162,
+      "endLine": 162
     },
     {
       "id": "symbol:src/shared/game.ts#createMeditationRun",
       "name": "createMeditationRun",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 164,
-      "endLine": 164
+      "line": 163,
+      "endLine": 163
     },
     {
       "id": "symbol:src/shared/game.ts#createNewRun",
       "name": "createNewRun",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 165,
-      "endLine": 165
+      "line": 164,
+      "endLine": 164
     },
     {
       "id": "symbol:src/shared/game.ts#createPuzzleRun",
       "name": "createPuzzleRun",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 166,
-      "endLine": 166
+      "line": 165,
+      "endLine": 165
     },
     {
       "id": "symbol:src/shared/game.ts#CreateRunOptions",
       "name": "CreateRunOptions",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 169,
-      "endLine": 169
+      "line": 168,
+      "endLine": 168
     },
     {
       "id": "symbol:src/shared/game.ts#createRunShopOffers",
@@ -48963,8 +48944,8 @@
       "name": "createRunSummary",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 175,
-      "endLine": 175
+      "line": 174,
+      "endLine": 174
     },
     {
       "id": "symbol:src/shared/game.ts#createTimerState",
@@ -48979,8 +48960,8 @@
       "name": "createWildRun",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 167,
-      "endLine": 167
+      "line": 166,
+      "endLine": 166
     },
     {
       "id": "symbol:src/shared/game.ts#DECOY_PAIR_KEY",
@@ -49003,120 +48984,120 @@
       "name": "DUNGEON_BOSS_DEFEAT_SCORE",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 202,
-      "endLine": 202
+      "line": 201,
+      "endLine": 201
     },
     {
       "id": "symbol:src/shared/game.ts#DUNGEON_BOSS_DEFINITIONS",
       "name": "DUNGEON_BOSS_DEFINITIONS",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 203,
-      "endLine": 203
+      "line": 202,
+      "endLine": 202
     },
     {
       "id": "symbol:src/shared/game.ts#DUNGEON_ELITE_ENCOUNTER_RULES",
       "name": "DUNGEON_ELITE_ENCOUNTER_RULES",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 204,
-      "endLine": 204
+      "line": 203,
+      "endLine": 203
     },
     {
       "id": "symbol:src/shared/game.ts#DUNGEON_ROOM_EFFECT_DEFINITIONS",
       "name": "DUNGEON_ROOM_EFFECT_DEFINITIONS",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 223,
-      "endLine": 223
+      "line": 222,
+      "endLine": 222
     },
     {
       "id": "symbol:src/shared/game.ts#DUNGEON_TREASURE_REWARD_DEFINITIONS",
       "name": "DUNGEON_TREASURE_REWARD_DEFINITIONS",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 224,
-      "endLine": 224
+      "line": 223,
+      "endLine": 223
     },
     {
       "id": "symbol:src/shared/game.ts#DungeonBoardPresentation",
       "name": "DungeonBoardPresentation",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 248,
-      "endLine": 248
+      "line": 247,
+      "endLine": 247
     },
     {
       "id": "symbol:src/shared/game.ts#DungeonBoardPresentationChip",
       "name": "DungeonBoardPresentationChip",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 249,
-      "endLine": 249
+      "line": 248,
+      "endLine": 248
     },
     {
       "id": "symbol:src/shared/game.ts#DungeonBoardPresentationChipTone",
       "name": "DungeonBoardPresentationChipTone",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 250,
-      "endLine": 250
+      "line": 249,
+      "endLine": 249
     },
     {
       "id": "symbol:src/shared/game.ts#DungeonBoardStatus",
       "name": "DungeonBoardStatus",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 251,
-      "endLine": 251
+      "line": 250,
+      "endLine": 250
     },
     {
       "id": "symbol:src/shared/game.ts#DungeonBossDefinition",
       "name": "DungeonBossDefinition",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 207,
-      "endLine": 207
+      "line": 206,
+      "endLine": 206
     },
     {
       "id": "symbol:src/shared/game.ts#DungeonBossLifecycleSource",
       "name": "DungeonBossLifecycleSource",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 208,
-      "endLine": 208
+      "line": 207,
+      "endLine": 207
     },
     {
       "id": "symbol:src/shared/game.ts#DungeonBossPhase",
       "name": "DungeonBossPhase",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 209,
-      "endLine": 209
+      "line": 208,
+      "endLine": 208
     },
     {
       "id": "symbol:src/shared/game.ts#DungeonBossReadModel",
       "name": "DungeonBossReadModel",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 252,
-      "endLine": 252
+      "line": 251,
+      "endLine": 251
     },
     {
       "id": "symbol:src/shared/game.ts#DungeonBossRewardHook",
       "name": "DungeonBossRewardHook",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 210,
-      "endLine": 210
+      "line": 209,
+      "endLine": 209
     },
     {
       "id": "symbol:src/shared/game.ts#DungeonEliteEncounterRules",
       "name": "DungeonEliteEncounterRules",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 211,
-      "endLine": 211
+      "line": 210,
+      "endLine": 210
     },
     {
       "id": "symbol:src/shared/game.ts#DungeonEncounterBudgetSummary",
@@ -49131,16 +49112,16 @@
       "name": "DungeonEncounterContext",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 219,
-      "endLine": 219
+      "line": 218,
+      "endLine": 218
     },
     {
       "id": "symbol:src/shared/game.ts#DungeonEnemyLifecycleStatus",
       "name": "DungeonEnemyLifecycleStatus",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 253,
-      "endLine": 253
+      "line": 252,
+      "endLine": 252
     },
     {
       "id": "symbol:src/shared/game.ts#DungeonExitActivationSpend",
@@ -49155,104 +49136,104 @@
       "name": "DungeonExitStatus",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 254,
-      "endLine": 254
+      "line": 253,
+      "endLine": 253
     },
     {
       "id": "symbol:src/shared/game.ts#DungeonObjectiveStatus",
       "name": "DungeonObjectiveStatus",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 255,
-      "endLine": 255
+      "line": 254,
+      "endLine": 254
     },
     {
       "id": "symbol:src/shared/game.ts#DungeonRoomEffectDefinition",
       "name": "DungeonRoomEffectDefinition",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 230,
-      "endLine": 230
+      "line": 229,
+      "endLine": 229
     },
     {
       "id": "symbol:src/shared/game.ts#DungeonRoomEffectId",
       "name": "DungeonRoomEffectId",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 231,
-      "endLine": 231
+      "line": 230,
+      "endLine": 230
     },
     {
       "id": "symbol:src/shared/game.ts#DungeonRoomReadModel",
       "name": "DungeonRoomReadModel",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 232,
-      "endLine": 232
+      "line": 231,
+      "endLine": 231
     },
     {
       "id": "symbol:src/shared/game.ts#DungeonRoomResolvedState",
       "name": "DungeonRoomResolvedState",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 233,
-      "endLine": 233
+      "line": 232,
+      "endLine": 232
     },
     {
       "id": "symbol:src/shared/game.ts#DungeonRoomTrigger",
       "name": "DungeonRoomTrigger",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 234,
-      "endLine": 234
+      "line": 233,
+      "endLine": 233
     },
     {
       "id": "symbol:src/shared/game.ts#DungeonThreatStatus",
       "name": "DungeonThreatStatus",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 256,
-      "endLine": 256
+      "line": 255,
+      "endLine": 255
     },
     {
       "id": "symbol:src/shared/game.ts#DungeonTreasureReadModel",
       "name": "DungeonTreasureReadModel",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 235,
-      "endLine": 235
+      "line": 234,
+      "endLine": 234
     },
     {
       "id": "symbol:src/shared/game.ts#DungeonTreasureRewardDefinition",
       "name": "DungeonTreasureRewardDefinition",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 236,
-      "endLine": 236
+      "line": 235,
+      "endLine": 235
     },
     {
       "id": "symbol:src/shared/game.ts#DungeonTreasureRewardId",
       "name": "DungeonTreasureRewardId",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 237,
-      "endLine": 237
+      "line": 236,
+      "endLine": 236
     },
     {
       "id": "symbol:src/shared/game.ts#DungeonTreasureTier",
       "name": "DungeonTreasureTier",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 238,
-      "endLine": 238
+      "line": 237,
+      "endLine": 237
     },
     {
       "id": "symbol:src/shared/game.ts#eligibleSpotlightPairKeys",
       "name": "eligibleSpotlightPairKeys",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 133,
-      "endLine": 133
+      "line": 132,
+      "endLine": 132
     },
     {
       "id": "symbol:src/shared/game.ts#enableDebugPeek",
@@ -49283,8 +49264,8 @@
       "name": "enemyHazardProfileForBoss",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 216,
-      "endLine": 216
+      "line": 215,
+      "endLine": 215
     },
     {
       "id": "symbol:src/shared/game.ts#EXIT_PAIR_KEY",
@@ -49299,160 +49280,160 @@
       "name": "finalizeLevel",
       "kind": "value",
       "file": "src/shared/game.ts",
-      "line": 262,
-      "endLine": 265
+      "line": 261,
+      "endLine": 264
     },
     {
       "id": "symbol:src/shared/game.ts#finishMemorizePhase",
       "name": "finishMemorizePhase",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 178,
-      "endLine": 178
+      "line": 177,
+      "endLine": 177
     },
     {
       "id": "symbol:src/shared/game.ts#flipTile",
       "name": "flipTile",
       "kind": "value",
       "file": "src/shared/game.ts",
-      "line": 267,
-      "endLine": 267
+      "line": 266,
+      "endLine": 266
     },
     {
       "id": "symbol:src/shared/game.ts#floorArchetypeForDungeonNode",
       "name": "floorArchetypeForDungeonNode",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 217,
-      "endLine": 217
+      "line": 216,
+      "endLine": 216
     },
     {
       "id": "symbol:src/shared/game.ts#floorTagForDungeonNode",
       "name": "floorTagForDungeonNode",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 218,
-      "endLine": 218
+      "line": 217,
+      "endLine": 217
     },
     {
       "id": "symbol:src/shared/game.ts#generateRouteChoices",
       "name": "generateRouteChoices",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 185,
-      "endLine": 185
+      "line": 184,
+      "endLine": 184
     },
     {
       "id": "symbol:src/shared/game.ts#getDungeonBoardPresentation",
       "name": "getDungeonBoardPresentation",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 241,
-      "endLine": 241
+      "line": 240,
+      "endLine": 240
     },
     {
       "id": "symbol:src/shared/game.ts#getDungeonBoardStatus",
       "name": "getDungeonBoardStatus",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 242,
-      "endLine": 242
+      "line": 241,
+      "endLine": 241
     },
     {
       "id": "symbol:src/shared/game.ts#getDungeonBossDefinition",
       "name": "getDungeonBossDefinition",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 205,
-      "endLine": 205
+      "line": 204,
+      "endLine": 204
     },
     {
       "id": "symbol:src/shared/game.ts#getDungeonBossReadModel",
       "name": "getDungeonBossReadModel",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 243,
-      "endLine": 243
+      "line": 242,
+      "endLine": 242
     },
     {
       "id": "symbol:src/shared/game.ts#getDungeonCardCopy",
       "name": "getDungeonCardCopy",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 225,
-      "endLine": 225
+      "line": 224,
+      "endLine": 224
     },
     {
       "id": "symbol:src/shared/game.ts#getDungeonEliteEncounterRules",
       "name": "getDungeonEliteEncounterRules",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 206,
-      "endLine": 206
+      "line": 205,
+      "endLine": 205
     },
     {
       "id": "symbol:src/shared/game.ts#getDungeonEnemyLifecycleStatus",
       "name": "getDungeonEnemyLifecycleStatus",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 244,
-      "endLine": 244
+      "line": 243,
+      "endLine": 243
     },
     {
       "id": "symbol:src/shared/game.ts#getDungeonExitStatus",
       "name": "getDungeonExitStatus",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 245,
-      "endLine": 245
+      "line": 244,
+      "endLine": 244
     },
     {
       "id": "symbol:src/shared/game.ts#getDungeonObjectiveStatus",
       "name": "getDungeonObjectiveStatus",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 246,
-      "endLine": 246
+      "line": 245,
+      "endLine": 245
     },
     {
       "id": "symbol:src/shared/game.ts#getDungeonRoomEffectDefinition",
       "name": "getDungeonRoomEffectDefinition",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 226,
-      "endLine": 226
+      "line": 225,
+      "endLine": 225
     },
     {
       "id": "symbol:src/shared/game.ts#getDungeonRoomReadModel",
       "name": "getDungeonRoomReadModel",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 227,
-      "endLine": 227
+      "line": 226,
+      "endLine": 226
     },
     {
       "id": "symbol:src/shared/game.ts#getDungeonThreatStatus",
       "name": "getDungeonThreatStatus",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 247,
-      "endLine": 247
+      "line": 246,
+      "endLine": 246
     },
     {
       "id": "symbol:src/shared/game.ts#getDungeonTreasureReadModel",
       "name": "getDungeonTreasureReadModel",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 228,
-      "endLine": 228
+      "line": 227,
+      "endLine": 227
     },
     {
       "id": "symbol:src/shared/game.ts#getDungeonTreasureRewardDefinition",
       "name": "getDungeonTreasureRewardDefinition",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 229,
-      "endLine": 229
+      "line": 228,
+      "endLine": 228
     },
     {
       "id": "symbol:src/shared/game.ts#getEnemyHazardMovementCandidateIds",
@@ -49475,16 +49456,16 @@
       "name": "getMemorizeDuration",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 148,
-      "endLine": 148
+      "line": 147,
+      "endLine": 147
     },
     {
       "id": "symbol:src/shared/game.ts#getMemorizeDurationForRun",
       "name": "getMemorizeDurationForRun",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 149,
-      "endLine": 149
+      "line": 148,
+      "endLine": 148
     },
     {
       "id": "symbol:src/shared/game.ts#getMismatchFloaterAnchorTileIds",
@@ -49499,16 +49480,16 @@
       "name": "getPresentationMutatorMatchPenalty",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 150,
-      "endLine": 150
+      "line": 149,
+      "endLine": 149
     },
     {
       "id": "symbol:src/shared/game.ts#getRouteChoiceAvailability",
       "name": "getRouteChoiceAvailability",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 186,
-      "endLine": 186
+      "line": 185,
+      "endLine": 185
     },
     {
       "id": "symbol:src/shared/game.ts#getRunShopReadModel",
@@ -49571,8 +49552,8 @@
       "name": "grantBonusRelicPickNextOffer",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 259,
-      "endLine": 259
+      "line": 258,
+      "endLine": 258
     },
     {
       "id": "symbol:src/shared/game.ts#inspectBoardFairness",
@@ -49611,8 +49592,8 @@
       "name": "isGauntletExpired",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 168,
-      "endLine": 168
+      "line": 167,
+      "endLine": 167
     },
     {
       "id": "symbol:src/shared/game.ts#isSingletonUtilityPairKey",
@@ -49643,8 +49624,8 @@
       "name": "openRouteSideRoom",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 197,
-      "endLine": 197
+      "line": 196,
+      "endLine": 196
     },
     {
       "id": "symbol:src/shared/game.ts#pauseRun",
@@ -49659,16 +49640,16 @@
       "name": "pickShiftingSpotlightKeys",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 134,
-      "endLine": 134
+      "line": 133,
+      "endLine": 133
     },
     {
       "id": "symbol:src/shared/game.ts#PRESENTATION_MUTATOR_MATCH_PENALTIES",
       "name": "PRESENTATION_MUTATOR_MATCH_PENALTIES",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 142,
-      "endLine": 142
+      "line": 141,
+      "endLine": 141
     },
     {
       "id": "symbol:src/shared/game.ts#purchaseShopOffer",
@@ -49691,16 +49672,16 @@
       "name": "resolveBoardTurn",
       "kind": "value",
       "file": "src/shared/game.ts",
-      "line": 304,
-      "endLine": 305
+      "line": 303,
+      "endLine": 304
     },
     {
       "id": "symbol:src/shared/game.ts#resolveBoardTurnWithEvent",
       "name": "resolveBoardTurnWithEvent",
       "kind": "value",
       "file": "src/shared/game.ts",
-      "line": 286,
-      "endLine": 302
+      "line": 285,
+      "endLine": 301
     },
     {
       "id": "symbol:src/shared/game.ts#resumeRun",
@@ -49747,48 +49728,48 @@
       "name": "rotateAnchorSealPressure",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 135,
-      "endLine": 135
+      "line": 134,
+      "endLine": 134
     },
     {
       "id": "symbol:src/shared/game.ts#rotateRunShiftingSpotlight",
       "name": "rotateRunShiftingSpotlight",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 136,
-      "endLine": 136
+      "line": 135,
+      "endLine": 135
     },
     {
       "id": "symbol:src/shared/game.ts#rotateShiftingSpotlight",
       "name": "rotateShiftingSpotlight",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 137,
-      "endLine": 137
+      "line": 136,
+      "endLine": 136
     },
     {
       "id": "symbol:src/shared/game.ts#RouteChoiceAvailability",
       "name": "RouteChoiceAvailability",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 187,
-      "endLine": 187
+      "line": 186,
+      "endLine": 186
     },
     {
       "id": "symbol:src/shared/game.ts#RouteChoiceOutcomeResult",
       "name": "RouteChoiceOutcomeResult",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 191,
-      "endLine": 191
+      "line": 190,
+      "endLine": 190
     },
     {
       "id": "symbol:src/shared/game.ts#routeNodeKindForSideRoom",
       "name": "routeNodeKindForSideRoom",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 198,
-      "endLine": 198
+      "line": 197,
+      "endLine": 197
     },
     {
       "id": "symbol:src/shared/game.ts#RunFairnessReport",
@@ -49827,8 +49808,8 @@
       "name": "shiftingSpotlightMatchDelta",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 138,
-      "endLine": 138
+      "line": 137,
+      "endLine": 137
     },
     {
       "id": "symbol:src/shared/game.ts#SHOP_ITEM_CATALOG",
@@ -49851,8 +49832,8 @@
       "name": "skipRouteSideRoom",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 199,
-      "endLine": 199
+      "line": 198,
+      "endLine": 198
     },
     {
       "id": "symbol:src/shared/game.ts#tileIsDestroyEligiblePreview",
@@ -49883,8 +49864,8 @@
       "name": "tilesArePairMatch",
       "kind": "ExportSpecifier",
       "file": "src/shared/game.ts",
-      "line": 151,
-      "endLine": 151
+      "line": 150,
+      "endLine": 150
     },
     {
       "id": "symbol:src/shared/game.ts#togglePinnedTile",
@@ -49893,14 +49874,6 @@
       "file": "src/shared/game.ts",
       "line": 126,
       "endLine": 126
-    },
-    {
-      "id": "symbol:src/shared/game.ts#toggleStrayRemoveArmed",
-      "name": "toggleStrayRemoveArmed",
-      "kind": "ExportSpecifier",
-      "file": "src/shared/game.ts",
-      "line": 127,
-      "endLine": 127
     },
     {
       "id": "symbol:src/shared/game.ts#useRelicOfferService",
@@ -55363,24 +55336,24 @@
       "name": "createDailyRun",
       "kind": "value",
       "file": "src/shared/run-creation-rules.ts",
-      "line": 291,
-      "endLine": 304
+      "line": 290,
+      "endLine": 303
     },
     {
       "id": "symbol:src/shared/run-creation-rules.ts#createGauntletRun",
       "name": "createGauntletRun",
       "kind": "value",
       "file": "src/shared/run-creation-rules.ts",
-      "line": 306,
-      "endLine": 315
+      "line": 305,
+      "endLine": 314
     },
     {
       "id": "symbol:src/shared/run-creation-rules.ts#createMeditationRun",
       "name": "createMeditationRun",
       "kind": "value",
       "file": "src/shared/run-creation-rules.ts",
-      "line": 271,
-      "endLine": 280
+      "line": 270,
+      "endLine": 279
     },
     {
       "id": "symbol:src/shared/run-creation-rules.ts#createNewRun",
@@ -55388,15 +55361,15 @@
       "kind": "value",
       "file": "src/shared/run-creation-rules.ts",
       "line": 68,
-      "endLine": 269
+      "endLine": 268
     },
     {
       "id": "symbol:src/shared/run-creation-rules.ts#createPuzzleRun",
       "name": "createPuzzleRun",
       "kind": "value",
       "file": "src/shared/run-creation-rules.ts",
-      "line": 317,
-      "endLine": 344
+      "line": 316,
+      "endLine": 343
     },
     {
       "id": "symbol:src/shared/run-creation-rules.ts#CreateRunOptions",
@@ -55411,16 +55384,16 @@
       "name": "createWildRun",
       "kind": "value",
       "file": "src/shared/run-creation-rules.ts",
-      "line": 282,
-      "endLine": 289
+      "line": 281,
+      "endLine": 288
     },
     {
       "id": "symbol:src/shared/run-creation-rules.ts#isGauntletExpired",
       "name": "isGauntletExpired",
       "kind": "value",
       "file": "src/shared/run-creation-rules.ts",
-      "line": 346,
-      "endLine": 350
+      "line": 345,
+      "endLine": 349
     },
     {
       "id": "symbol:src/shared/run-economy.ts#getRunEconomyEntry",
@@ -60621,7 +60594,7 @@
         },
         {
           "path": "src/shared/board-power-actions.test.ts",
-          "line": 102
+          "line": 101
         },
         {
           "path": "src/renderer/store/runSurfaceState.test.ts",
@@ -61316,6 +61289,7 @@
         "renderer-transient-arming-state",
         "typed-command-independent-of-ui-arm-flag",
         "no-live-run-stray-arm-read",
+        "no-serialized-stray-arm-field",
         "dead-region-arm-action-removed",
         "final-pair-enemy-defeat-event-facts",
         "final-pair-enemy-defeat-feedback",
@@ -62206,7 +62180,7 @@
         },
         {
           "path": "src/shared/game.ts",
-          "line": 135
+          "line": 134
         }
       ],
       "tests": [
@@ -63368,7 +63342,7 @@
         },
         {
           "path": "src/shared/game.ts",
-          "line": 246
+          "line": 245
         }
       ],
       "tests": [
@@ -63462,7 +63436,7 @@
         },
         {
           "path": "src/shared/game.ts",
-          "line": 154
+          "line": 153
         },
         {
           "path": "src/renderer/store/riskWagerSurfaceState.ts",
@@ -63955,7 +63929,7 @@
         },
         {
           "path": "src/shared/gameplay-core-simulation.test.ts",
-          "line": 138
+          "line": 137
         },
         {
           "path": "src/renderer/store/runTimerController.test.ts",
@@ -64489,7 +64463,8 @@
         "protected-route-special",
         "renderer-transient-arming-state",
         "typed-command-independent-of-ui-arm-flag",
-        "no-live-run-stray-arm-read"
+        "no-live-run-stray-arm-read",
+        "no-serialized-stray-arm-field"
       ]
     },
     {
@@ -64830,7 +64805,7 @@
         },
         {
           "path": "src/shared/gameplay-core-simulation.test.ts",
-          "line": 158
+          "line": 157
         }
       ],
       "enables": [
@@ -65005,7 +64980,7 @@
         },
         {
           "path": "src/shared/game.ts",
-          "line": 208
+          "line": 207
         },
         {
           "path": "src/shared/mechanics-encyclopedia.ts",
@@ -65876,7 +65851,7 @@
         },
         {
           "path": "src/shared/game.ts",
-          "line": 202
+          "line": 201
         },
         {
           "path": "src/shared/level-clear-rules.ts",
@@ -66204,7 +66179,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 2782
+          "line": 2781
         },
         {
           "path": "src/shared/build-strategy-simulation.test.ts",
@@ -66348,7 +66323,7 @@
         },
         {
           "path": "src/shared/gameplay-core-simulation.test.ts",
-          "line": 63
+          "line": 62
         }
       ],
       "enables": [
@@ -66562,7 +66537,7 @@
         },
         {
           "path": "src/shared/gameplay-core-simulation.test.ts",
-          "line": 158
+          "line": 157
         }
       ],
       "enables": [
@@ -82051,12 +82026,6 @@
       "kind": "exports"
     },
     {
-      "id": "exports:src/shared/board-power-state.ts->symbol:src/shared/board-power-state.ts#toggleStrayRemoveArmed",
-      "source": "file:src/shared/board-power-state.ts",
-      "target": "symbol:src/shared/board-power-state.ts#toggleStrayRemoveArmed",
-      "kind": "exports"
-    },
-    {
       "id": "exports:src/shared/board-power-targeting.ts->symbol:src/shared/board-power-targeting.ts#collectDestroyEligibleTileIds",
       "source": "file:src/shared/board-power-targeting.ts",
       "target": "symbol:src/shared/board-power-targeting.ts#collectDestroyEligibleTileIds",
@@ -82228,12 +82197,6 @@
       "id": "exports:src/shared/board-powers.ts->symbol:src/shared/board-powers.ts#togglePinnedTile",
       "source": "file:src/shared/board-powers.ts",
       "target": "symbol:src/shared/board-powers.ts#togglePinnedTile",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/board-powers.ts->symbol:src/shared/board-powers.ts#toggleStrayRemoveArmed",
-      "source": "file:src/shared/board-powers.ts",
-      "target": "symbol:src/shared/board-powers.ts#toggleStrayRemoveArmed",
       "kind": "exports"
     },
     {
@@ -87484,12 +87447,6 @@
       "id": "exports:src/shared/game.ts->symbol:src/shared/game.ts#togglePinnedTile",
       "source": "file:src/shared/game.ts",
       "target": "symbol:src/shared/game.ts#togglePinnedTile",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/game.ts->symbol:src/shared/game.ts#toggleStrayRemoveArmed",
-      "source": "file:src/shared/game.ts",
-      "target": "symbol:src/shared/game.ts#toggleStrayRemoveArmed",
       "kind": "exports"
     },
     {

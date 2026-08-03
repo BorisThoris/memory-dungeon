@@ -1010,7 +1010,6 @@ export interface RunState {
     wildMatchesRemaining: number;
     /** Stray remover power charges (remove one completion-safe hidden singleton from play). */
     strayRemoveCharges: number;
-    strayRemoveArmed: boolean;
     /** Match score multiplier (shuffle tax stacks). */
     matchScoreMultiplier: number;
     /** N-back mutator: matches since last anchor highlight. */

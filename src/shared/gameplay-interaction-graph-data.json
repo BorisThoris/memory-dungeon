@@ -1,5 +1,5 @@
 {
-  "version": 61,
+  "version": 62,
   "mechanics": [
     {
       "id": "trait.echo",
@@ -1298,7 +1298,7 @@
       "writes": ["strayRemoveCharges", "tileStates", "forgottenTileIdsThisFloor", "powersUsedThisRun", "feedbackLines"],
       "enables": ["objective.floor_clear", "build.emergency_toolkit"],
       "blocks": [],
-      "softlockGuards": ["completion-safe-stray-target", "clear-flip-state", "protected-route-special", "renderer-transient-arming-state", "typed-command-independent-of-ui-arm-flag", "no-live-run-stray-arm-read"],
+      "softlockGuards": ["completion-safe-stray-target", "clear-flip-state", "protected-route-special", "renderer-transient-arming-state", "typed-command-independent-of-ui-arm-flag", "no-live-run-stray-arm-read", "no-serialized-stray-arm-field"],
       "tests": ["src/shared/board-power-actions.test.ts", "src/shared/gameplay-core.test.ts", "src/renderer/store/runSurfaceState.test.ts", "src/renderer/store/useAppStore.test.ts", "src/renderer/components/GameLeftToolbar.test.tsx"]
     },
     {
@@ -1753,7 +1753,7 @@
       "writes": ["tileStates", "flippedTileIds", "lives", "guardTokens", "timerState", "gameplayCommands", "gameplayEvents"],
       "enables": ["core.board_turn_resolution", "exit.primary", "progression.run_flow"],
       "blocks": [],
-      "softlockGuards": ["strict-command-schema", "target-legality", "guard-before-life", "gambit-intent-before-flip", "single-command-state-transition", "renderer-command-only-board-input", "no-renderer-compatibility-mutation-imports", "current-command-event-return", "renderer-transient-arming-state", "typed-command-independent-of-ui-arm-flag", "no-live-run-stray-arm-read", "dead-region-arm-action-removed", "final-pair-enemy-defeat-event-facts", "final-pair-enemy-defeat-feedback", "json-round-trip"],
+      "softlockGuards": ["strict-command-schema", "target-legality", "guard-before-life", "gambit-intent-before-flip", "single-command-state-transition", "renderer-command-only-board-input", "no-renderer-compatibility-mutation-imports", "current-command-event-return", "renderer-transient-arming-state", "typed-command-independent-of-ui-arm-flag", "no-live-run-stray-arm-read", "no-serialized-stray-arm-field", "dead-region-arm-action-removed", "final-pair-enemy-defeat-event-facts", "final-pair-enemy-defeat-feedback", "json-round-trip"],
       "tests": ["src/shared/gameplay-core.test.ts", "src/shared/game.test.ts", "src/renderer/store/runSurfaceState.test.ts", "src/renderer/store/tilePressController.test.ts", "src/renderer/store/dungeonPressSurfaceState.test.ts"]
     },
     {

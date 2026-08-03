@@ -682,10 +682,10 @@ Board-power arming is now treated as short-lived interface intent instead of dur
 
 1. Live Stray Remove arming belongs to `RunSurfaceState.strayRemoveArmed` in Zustand and is initialized, toggled, reset, and cleared alongside Peek, Destroy, Pin, and Swap surface modes.
 2. `GameScreen`, `GameLeftToolbar`, tile hints, and the tile-press controller consume the transient surface flag; production renderer code no longer reads or writes `run.strayRemoveArmed`.
-3. The serialized `RunState.strayRemoveArmed` field and the legacy pure helper's armed-by-default precondition remain temporarily for save and compatibility callers during the strangler migration.
-4. A typed `board.stray_remove` command is self-contained player intent. Core reduction deliberately bypasses the legacy UI-arm precondition while preserving every target, charge, route-anchor, completion-safety, and feedback rule.
+3. At Graph v48, the serialized `RunState.strayRemoveArmed` field and the legacy pure helper's armed-by-default precondition remained temporarily during the strangler migration; Graph v62 removes both after proving the renderer boundary.
+4. A typed `board.stray_remove` command is self-contained player intent. Core reduction preserves every target, charge, route-anchor, completion-safety, and feedback rule without consulting interface state.
 5. Successful actions, mode changes, hazards, run transitions, and mutual-exclusion helpers clear the transient flag without changing replayable run state.
-6. Region Shuffle already submits a row directly through a typed command. Its unused renderer arm action and state writer were removed instead of formalizing dead state; the legacy shared helper remains only as compatibility surface.
+6. Region Shuffle already submits a row directly through a typed command. Its unused renderer arm action and state writer were removed instead of formalizing dead state.
 7. Source-boundary tests reject live renderer reads of the serialized Stray arm field and reject reintroduction of the dead Region Shuffle arm action, while behavioral tests prove command independence and transient-state cleanup.
 
 Graph v48 records transient intent ownership, typed-command independence from UI arm flags, the no-live-serialized-arm boundary, and direct Region Shuffle row commands across the core, store, presentation, and test evidence.
@@ -879,6 +879,19 @@ The feedback-completeness seam is widened without creating another overlapping b
 
 Graph v61 makes the runtime accessibility invariant, graph audit, and AI semantic model agree on the exact player-visible state boundary.
 
+## Sixty-second vertical slice: Stray Remove Intent Boundary Completion
+
+The temporary compatibility seam from Graph v48 is now closed:
+
+1. `RunState.strayRemoveArmed` is removed from the durable gameplay contract, run creation, and floor-clear transitions. Stray Remove charges and board consequences remain deterministic core state; click-to-arm intent remains renderer-only `RunSurfaceState`.
+2. `applyStrayRemove` no longer accepts a `requireArmed` escape hatch or reads interface state. The typed `board.stray_remove` command and the shared pure action now use the same legality path for status, charge, clear-flip state, completion safety, and protected route anchors.
+3. The obsolete shared `toggleStrayRemoveArmed` helper and its barrel exports are removed. Zustand's transient toggle remains the sole owner of arming, mutual exclusion, and post-contact clearing.
+4. Source-boundary coverage requires the renderer to retain transient arming while rejecting `strayRemoveArmed` and its legacy toggle from durable run/core sources. Behavioral tests retain exact typed-command outcomes, replay, charge use, feedback, and softlock fairness.
+5. No save-schema bump is required: `SaveData` persists summaries and profile data, not active `RunState`; normalization already drops legacy `currentRun` payloads, including any old arm flag. `SAVE_SCHEMA_VERSION` therefore remains 6.
+6. Regeneration removes the retired helper/export symbols and records 10,706 relationships with the same 27 player-visible states and zero diagnostics.
+
+Graph v62 records the no-serialized-arm invariant on both Stray Remove and typed tile input without changing player-facing rules or replay semantics.
+
 ## Current slice status
 
 Implemented in the Conduit Cartographer vertical slice:
@@ -898,5 +911,5 @@ Implemented in the Conduit Cartographer vertical slice:
 Still required before the vertical slice is complete:
 
 - extend the shared player-visible registry when additional gameplay ownership enters the core, rather than adding renderer or model-only field lists;
-- use Graph v61 diagnostics and nine-build traces to select the next least-overlapping cohesive loop or architectural ownership seam, without presenting simulator survival as human win-rate proof;
+- use Graph v62 diagnostics and nine-build traces to select the next least-overlapping cohesive loop or architectural ownership seam, without presenting simulator survival as human win-rate proof;
 - continue migrating cohesive player builds rather than adding isolated definitions, using the graph diagnostics to choose the next least-overlapping loop.

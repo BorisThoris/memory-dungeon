@@ -121,7 +121,7 @@
 | Pin tiles | `togglePinnedTile`, `pinnedTileIds`, `pinsPlacedCountThisRun` | `toggleBoardPinMode`, `pressTile` | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
 | Stray remove | `applyStrayRemove` removes completion-safe hidden singleton/special tiles; typed command carries intent without a serialized arm flag | transient `strayRemoveArmed`, `toggleStrayArm`, `pressTile` | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
 | Stray-protected route anchors | `tileIsStrayEligiblePreview`, `applyStrayRemove` deny Keystone Pair, Final Ward, Omen Seal | `toggleStrayArm`, `pressTile` | [epic-route-world-pipeline](./epic-route-world-pipeline.md) |
-| Stray charges / intent | `strayRemoveCharges`; serialized `strayRemoveArmed` retained only for save compatibility | live arming belongs to transient `AppState.strayRemoveArmed` | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
+| Stray charges / intent | `strayRemoveCharges`; `RunState` contains no serialized arm intent | live arming belongs exclusively to transient `AppState.strayRemoveArmed` | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
 | Undo resolving | `cancelResolvingWithUndo` | `undoResolvingFlip` | [epic-powers-and-interactions](./epic-powers-and-interactions.md), [epic-run-session-flow](./epic-run-session-flow.md) |
 | Undo uses / floor | `undoUsesThisFloor` | — | [epic-run-session-flow](./epic-run-session-flow.md) |
 | Flash pair reveal | `applyFlashPair`, `flashPairCharges`, `flashPairRevealedTileIds` | `applyFlashPairPower` | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
@@ -279,7 +279,6 @@ Source: [`RunState`](../../src/shared/contracts.ts) interface.
 | `wildTileId` | Contract field; pairing uses `pairKey` in sim | [epic-core-memory-loop](./epic-core-memory-loop.md) |
 | `wildMatchesRemaining` | Wild joker uses left | [epic-core-memory-loop](./epic-core-memory-loop.md) |
 | `strayRemoveCharges` | Stray remover budget | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
-| `strayRemoveArmed` | Legacy serialized compatibility field; live renderer intent is transient application state | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
 | `matchScoreMultiplier` | Shuffle tax stacks | [epic-scoring-objectives](./epic-scoring-objectives.md) |
 | `nBackMatchCounter` | N-back mutator cadence | [epic-mutators](./epic-mutators.md) |
 | `nBackAnchorPairKey` | Current anchor pair key | [epic-mutators](./epic-mutators.md) |

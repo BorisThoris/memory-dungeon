@@ -65,7 +65,6 @@ const initialRunBase = {
     flashPairRevealedTileIds: [],
     undoUsesThisFloor: 1,
     strayRemoveCharges: 1,
-    strayRemoveArmed: true,
     recallFocus: 0,
     rewardPerkIds: [],
     relicIds: [
