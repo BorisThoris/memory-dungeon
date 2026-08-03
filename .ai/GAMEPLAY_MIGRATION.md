@@ -984,6 +984,21 @@ The orchestration ratchet now separates another cohesive presentation domain wit
 
 Graph v68 continues the monotonic decomposition of the playable screen while keeping route, onboarding, Gambit, and wager feedback as one coherent decision-language contract.
 
+## Sixty-ninth vertical slice: Floor-Clear Feedback Model
+
+The orchestration ratchet now separates the floor-clear read model from the screen that renders it:
+
+1. Cashout rows, missed-value recovery, chain rewards, pickup stacking, carry-forward priorities, payoff-stack signals, and the next-floor action sequence moved into `gameScreenFloorClearFeedbackModel.ts`.
+2. Payoff, objective, and next-floor rows keep their beat count, audio cue, screen cue, action, and player-facing detail derived from one typed signal contract.
+3. `GameScreen` retains the floor-clear UI composition while dropping from 6,103 to 5,616 physical lines; the generated model measures 5,617 indexed lines and 62 direct imports.
+4. The executable orchestration ceiling ratchets from 6,150 to 5,650 modeled lines while retaining the 62-import cap.
+5. Six focused tests cover paid versus missed value, super-stack collapse, banked relic-pick priority, objective/next-floor multimodal parity, pickup progress, and route-first continuation sequencing.
+6. All 67 existing `GameScreen` tests remain green, including floor-clear objective, Favor, route, relic, score, mismatch, and wager presentation.
+7. Graph v69 records the extracted pure model/test and the lower source-derived orchestration ceiling.
+8. Regeneration records 127 active-run fields, zero production renderer run-state writes, zero orchestration violations, all 34 commands and 54 events, 15,681 relationships, 27 player-visible states, and zero diagnostics.
+
+Graph v69 makes the end-of-floor feedback loop independently testable while preserving the screen's rendering and navigation behavior.
+
 ## Current slice status
 
 Implemented in the Conduit Cartographer vertical slice:
@@ -1003,5 +1018,5 @@ Implemented in the Conduit Cartographer vertical slice:
 Still required before the vertical slice is complete:
 
 - extend the shared player-visible registry when additional gameplay ownership enters the core, rather than adding renderer or model-only field lists;
-- use Graph v68 diagnostics, orchestration budgets, and nine-build traces to select the next least-overlapping cohesive loop or architectural ownership seam, without presenting simulator survival as human win-rate proof;
+- use Graph v69 diagnostics, orchestration budgets, and nine-build traces to select the next least-overlapping cohesive loop or architectural ownership seam, without presenting simulator survival as human win-rate proof;
 - continue migrating cohesive player builds rather than adding isolated definitions, using the graph diagnostics to choose the next least-overlapping loop.
