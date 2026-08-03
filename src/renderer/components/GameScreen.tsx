@@ -1,6 +1,5 @@
 import { ACHIEVEMENTS } from '../../shared/achievements';
 import {
-    ENDLESS_RISK_WAGER_BONUS_FAVOR,
     MAX_PINNED_TILES,
     RECALL_FOCUS_MAX,
     type AchievementId,
@@ -9,15 +8,10 @@ import {
 } from '../../shared/contracts';
 import { computeFocusDimmedTileIds } from '../../shared/focusDimmedTileIds';
 import { getPrimaryRewardPerkReadinessRow } from '../../shared/bonus-rewards';
-import { getFloorClearCausalityRows } from '../../shared/level-result-presentation';
 import { getFloorIdentityContract } from '../../shared/boss-encounters';
 import { getPlayableOnboardingStep } from '../../shared/playable-onboarding';
-import { formatLevelResultObjectiveLine } from '../../shared/secondary-objectives';
 import { runNonNegativeInteger } from '../../shared/run-number-guards';
-import {
-    canOfferEndlessRiskWager
-} from '../../shared/objective-rules';
-import { getRouteChoiceAvailability, routeChoicesForResult } from '../../shared/route-rules';
+import { getRouteChoiceAvailability } from '../../shared/route-rules';
 import {
     canRegionShuffle,
     canRegionShuffleRow,
@@ -39,10 +33,8 @@ import { isNarrowShortLandscapeForMenuStack } from '../breakpoints';
 import { deriveCameraViewportMode, latchPhoneWidthForMobileCamera } from '../../shared/cameraViewportMode';
 import {
     getFeaturedObjectiveLabel,
-    getFloorArchetypeDefinition,
     getFloorChapterIdentity,
-    pickFloorScheduleEntry,
-    usesEndlessFloorSchedule
+    pickFloorScheduleEntry
 } from '../../shared/floor-mutator-schedule';
 import { GAMBIT_OPPORTUNITY_HINT_LINE } from '../copy/gameplayHints';
 import { useDistractionChannelTick } from '../hooks/useDistractionChannelTick';
@@ -188,7 +180,6 @@ import {
     dungeonExitPromptTitle,
     formatGameplayDetailRowsLabel,
     formatGameplaySignalRowsLabel,
-    getClearLifeBonusLabel,
     getFirstRouteChoiceTeachingLabel,
     getGambitSignalAudioCue,
     getGambitSignalBeatCount,
@@ -197,8 +188,6 @@ import {
     getOnboardingPromptSignalBeatCount,
     getOnboardingPromptSignalScreenCue,
     getOnboardingPromptSignals,
-    getRiskWagerPrimaryCue,
-    getRiskWagerSignalRows,
     getRouteChoiceActionCue,
     getRouteChoiceBeatCue,
     getRouteChoiceDecisionStack,
@@ -223,11 +212,7 @@ import {
     trimTerminalPunctuation
 } from './gameScreenDecisionSignals';
 import {
-    type FloorClearObjectiveSignalRow,
     type NextFloorSignalRow,
-    getFloorClearActionSequenceCue,
-    getFloorClearCarryForwardCue,
-    getFloorClearCashoutRows,
     getFloorClearObjectiveSignalAudioCue,
     getFloorClearObjectiveSignalBeatCount,
     getFloorClearObjectiveSignalScreenCue,
@@ -235,12 +220,12 @@ import {
     getFloorClearPayoffStackAudioCue,
     getFloorClearPayoffStackBeatCount,
     getFloorClearPayoffStackScreenCue,
-    getFloorClearPayoffStackSignal,
     getNextFloorSignalAudioCue,
     getNextFloorSignalBeatCount,
     getNextFloorSignalScreenCue,
     getPickupStackToastText
 } from './gameScreenFloorClearFeedbackModel';
+import { useGameScreenFloorClearProjection } from './useGameScreenFloorClearProjection';
 
 /** OVR-007 / HUD-020: decoy readout for `distraction_channel` — not gameplay state; hidden when reduce motion or assist toggle is off. */
 const DISTRACTION_CHANNEL_LABEL = 'Chaff';
@@ -257,57 +242,6 @@ interface GameScreenProps {
     run: RunState;
     suppressStatusOverlays?: boolean;
 }
-
-const BONUS_TAG_LABELS: Record<string, string> = {
-    scholar_style: 'Scholar style',
-    glass_witness: 'Glass witness',
-    cursed_last: 'Cursed last',
-    flip_par: 'Flip par',
-    objective_streak: 'Objective streak',
-    boss_floor: 'Boss floor',
-    boss_defeated: 'Boss defeated',
-    boss_trophy_cache: 'Boss trophy cache',
-    boss_trophy_forfeited: 'Boss trophy forfeited',
-    traps_disarmed: 'Traps disarmed',
-    treasure_claimed: 'Treasure claimed',
-    route_claimed: 'Route claimed',
-    perfect_scout: 'Perfect scout'
-};
-
-const formatBonusTagsLine = (tags: string[] | undefined): string | null => {
-    if (!tags || tags.length === 0) {
-        return null;
-    }
-    return tags.map((t) => BONUS_TAG_LABELS[t] ?? t).join(' · ');
-};
-
-const featuredObjectiveFailReason = (run: RunState): string | null => {
-    const id = run.lastLevelResult?.featuredObjectiveId;
-    if (!id || run.lastLevelResult?.featuredObjectiveCompleted) {
-        return null;
-    }
-    if (id === 'scholar_style') {
-        return 'Failed: shuffle or destroy was used this floor.';
-    }
-    if (id === 'glass_witness') {
-        return 'Failed: the glass decoy entered a mismatch.';
-    }
-    if (id === 'cursed_last') {
-        return 'Failed: the cursed pair was cleared before the last real pair.';
-    }
-    if (id === 'flip_par') {
-        return 'Failed: match resolutions exceeded the floor par.';
-    }
-    return null;
-};
-
-const countFavorBonusPicksBanked = (favorProgressAfter: number, favorGain: number): number => {
-    if (favorGain <= 0) {
-        return 0;
-    }
-    const previousProgress = favorProgressAfter - favorGain;
-    return previousProgress < 0 ? 1 : 0;
-};
 
 const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameScreenProps) => {
     const shellRef = useRef<HTMLElement | null>(null);
@@ -997,225 +931,46 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const nBackMutatorActive = run.activeMutators.includes('n_back_anchor');
     const viewportWantsMobileCamera = compactTouchChrome;
     const cameraViewportMode = deriveCameraViewportMode(settingsCameraViewportModePreference, viewportWantsMobileCamera);
-    const clearLifeBonusLabel = run.lastLevelResult ? getClearLifeBonusLabel(run.lastLevelResult) : null;
-    const objectiveBonusLine =
-        run.lastLevelResult && runNonNegativeInteger(run.lastLevelResult.objectiveBonusScore) > 0
-            ? `Objective bonuses: +${runNonNegativeInteger(run.lastLevelResult.objectiveBonusScore).toLocaleString()}`
-            : null;
-    const bonusTagsLine = run.lastLevelResult ? formatBonusTagsLine(run.lastLevelResult.bonusTags) : null;
-    const traitRouteObjectiveLine =
-        run.lastLevelResult?.traitRouteObjectiveRequired != null
-            ? run.lastLevelResult.traitRouteObjectiveCompleted
-                ? `Trait routes: Complete (${run.lastLevelResult.traitRouteObjectiveReward ?? 'trait route cashout'})`
-                : `Trait routes: ${runNonNegativeInteger(run.lastLevelResult.traitRouteObjectiveProgress)}/${runNonNegativeInteger(run.lastLevelResult.traitRouteObjectiveRequired)}`
-            : null;
-    const endlessChapterActive =
-        run.gameMode === 'endless' && usesEndlessFloorSchedule(run.gameMode, run.runRulesVersion);
-    const currentArchetype = getFloorArchetypeDefinition(run.board?.floorArchetypeId ?? null);
-    const currentFeaturedObjectiveLabel = getFeaturedObjectiveLabel(run.board?.featuredObjectiveId ?? null);
-    const currentFloorIdentity = run.board
-        ? getFloorIdentityContract({
-              floorTag: run.board.floorTag ?? 'normal',
-              floorArchetypeId: run.board.floorArchetypeId,
-              mutators: run.activeMutators,
-              featuredObjectiveLabel: currentFeaturedObjectiveLabel
-          })
-        : null;
-    const floorClearCausalityRows = run.lastLevelResult
-        ? getFloorClearCausalityRows(run.lastLevelResult, run.powersUsedThisRun, currentFloorIdentity)
-        : [];
-    const favorGained = runNonNegativeInteger(run.lastLevelResult?.relicFavorGained);
-    const favorBankedPickCount = countFavorBonusPicksBanked(run.relicFavorProgress, favorGained);
-    const floorClearMomentumRows = run.lastLevelResult
-        ? [
-              {
-                  id: 'score',
-                  label: 'Score pop',
-                  value: `+${runNonNegativeInteger(run.lastLevelResult.scoreGained).toLocaleString()}`
-              },
-              {
-                  id: 'rating',
-                  label: 'Rating',
-                  value: run.lastLevelResult.rating
-              },
-              runNonNegativeInteger(run.stats.bestStreak) > 0
-                  ? {
-                        id: 'streak',
-                        label: 'Best chain',
-                        value: `x${runNonNegativeInteger(run.stats.bestStreak)}`
-                    }
-                  : null,
-              runNonNegativeInteger(run.findablesTotalThisFloor) > 0
-                  ? {
-                        id: 'pickups',
-                        label: 'Pickups',
-                        value: `${runNonNegativeInteger(run.findablesClaimedThisFloor)}/${runNonNegativeInteger(run.findablesTotalThisFloor)}`
-                    }
-                  : null,
-              runNonNegativeInteger(run.stats.comboShards) > 0
-                  ? {
-                        id: 'shards',
-                        label: 'Shards',
-                        value: `${runNonNegativeInteger(run.stats.comboShards)}`
-                    }
-                  : null,
-              favorGained > 0
-                  ? {
-                        id: 'favor',
-                        label: 'Favor',
-                        value:
-                            favorBankedPickCount > 0
-                                ? `+${favorGained} pick banked`
-                                : `+${favorGained} -> ${run.relicFavorProgress}/3`
-                    }
-                  : null
-          ].filter((row): row is { id: string; label: string; value: string } => row != null)
-        : [];
-    const floorClearMomentumRowsLabel = formatGameplaySignalRowsLabel(
-        'Floor clear momentum signals',
-        floorClearMomentumRows
-    );
-    const floorClearCashoutRows = getFloorClearCashoutRows(run);
-    const floorClearCashoutRowsLabel = formatGameplayDetailRowsLabel(
-        'Floor clear cashout read',
-        floorClearCashoutRows
-    );
-    const floorClearCarryForwardCue = getFloorClearCarryForwardCue(run, favorBankedPickCount);
-    const floorClearObjectiveSignalRows = run.lastLevelResult
-        ? [
-              run.lastLevelResult.featuredObjectiveId != null
-                  ? {
-                        id: 'featured-objective',
-                        label: run.lastLevelResult.featuredObjectiveCompleted ? 'Objective paid' : 'Objective missed',
-                        value: run.lastLevelResult.featuredObjectiveCompleted
-                            ? `+${runNonNegativeInteger(run.lastLevelResult.objectiveBonusScore).toLocaleString()} score`
-                            : 'Payout lost',
-                        tone: run.lastLevelResult.featuredObjectiveCompleted ? 'reward' : 'risk'
-                    }
-                  : null,
-              run.lastLevelResult.featuredObjectiveId != null
-                  ? {
-                        id: 'objective-streak',
-                        label: 'Objective streak',
-                        value: `x${runNonNegativeInteger(run.lastLevelResult.featuredObjectiveStreak)}${
-                            runNonNegativeInteger(run.lastLevelResult.featuredObjectiveStreakBonus) > 0
-                                ? ` +${runNonNegativeInteger(run.lastLevelResult.featuredObjectiveStreakBonus).toLocaleString()}`
-                                : ''
-                        }`,
-                        tone: runNonNegativeInteger(run.lastLevelResult.featuredObjectiveStreak) > 1 ? 'momentum' : 'neutral'
-                    }
-                  : null,
-              run.lastLevelResult.traitRouteObjectiveRequired != null
-                  ? {
-                        id: 'trait-route-objective',
-                        label: run.lastLevelResult.traitRouteObjectiveCompleted ? 'Trait route paid' : 'Trait route',
-                        value: run.lastLevelResult.traitRouteObjectiveCompleted
-                            ? run.lastLevelResult.traitRouteObjectiveReward ?? 'Trait route cashout'
-                            : `${runNonNegativeInteger(run.lastLevelResult.traitRouteObjectiveProgress)}/${runNonNegativeInteger(run.lastLevelResult.traitRouteObjectiveRequired)}`,
-                        tone: run.lastLevelResult.traitRouteObjectiveCompleted ? 'trait' : 'neutral'
-                    }
-                  : null,
-              run.lastLevelResult.endlessRiskWagerOutcome
-                  ? {
-                        id: 'risk-wager',
-                        label:
-                            run.lastLevelResult.endlessRiskWagerOutcome === 'won'
-                                ? 'Wager paid'
-                                : 'Wager lost',
-                        value:
-                            run.lastLevelResult.endlessRiskWagerOutcome === 'won'
-                                ? `+${runNonNegativeInteger(run.lastLevelResult.endlessRiskWagerFavorGained)} Favor`
-                                : `-${runNonNegativeInteger(run.lastLevelResult.endlessRiskWagerStreakLost)} streak`,
-                        tone: run.lastLevelResult.endlessRiskWagerOutcome === 'won' ? 'reward' : 'risk'
-                    }
-                  : null
-          ].filter((row): row is FloorClearObjectiveSignalRow => row != null)
-        : [];
-    const floorClearObjectiveSignalRowsLabel = formatGameplaySignalRowsLabel(
-        'Floor clear objective signals',
-        floorClearObjectiveSignalRows
-    );
-    const floorClearPayoffStackSignal = getFloorClearPayoffStackSignal(
-        run,
+    const {
+        clearLifeBonusLabel,
+        objectiveBonusLine,
+        bonusTagsLine,
+        traitRouteObjectiveLine,
+        endlessChapterActive,
+        currentArchetype,
+        currentFeaturedObjectiveLabel,
+        currentFloorIdentity,
+        floorClearCausalityRows,
+        floorClearMomentumRows,
+        floorClearMomentumRowsLabel,
         floorClearCashoutRows,
+        floorClearCashoutRowsLabel,
+        floorClearCarryForwardCue,
         floorClearObjectiveSignalRows,
-        favorBankedPickCount
-    );
-    const featuredObjectiveResultLine = run.lastLevelResult ? formatLevelResultObjectiveLine(run.lastLevelResult) : null;
-    const featuredObjectiveFailureLine = featuredObjectiveFailReason(run);
-    const favorGainLine =
-        run.lastLevelResult?.featuredObjectiveId != null ? `Favor gained: +${favorGained}` : null;
-    const wagerSuretyActive = run.relicIds.includes('wager_surety');
-    const offeredRiskWagerFavor = ENDLESS_RISK_WAGER_BONUS_FAVOR + (wagerSuretyActive ? 1 : 0);
-    const endlessRiskWagerOutcomeLine =
-        run.lastLevelResult?.endlessRiskWagerOutcome === 'won'
-            ? `Risk wager won: +${runNonNegativeInteger(run.lastLevelResult.endlessRiskWagerFavorGained)} Favor`
-            : run.lastLevelResult?.endlessRiskWagerOutcome === 'lost'
-              ? `Risk wager lost: -${runNonNegativeInteger(run.lastLevelResult.endlessRiskWagerStreakLost)} streak`
-              : null;
-    const featuredObjectiveStreakLine =
-        run.lastLevelResult?.featuredObjectiveId != null
-            ? `Objective streak: x${runNonNegativeInteger(run.lastLevelResult.featuredObjectiveStreak)}${
-                  runNonNegativeInteger(run.lastLevelResult.featuredObjectiveStreakBonus) > 0
-                      ? ` (+${runNonNegativeInteger(run.lastLevelResult.featuredObjectiveStreakBonus).toLocaleString()})`
-                      : ''
-              }`
-            : null;
-    const favorBankedLine =
-        favorBankedPickCount > 0
-            ? `Extra relic ${favorBankedPickCount === 1 ? 'pick' : 'picks'} banked for the next shrine`
-            : null;
-    const firstClearOnboardingLine =
-        run.lastLevelResult?.level === 1 && saveData.onboardingDismissed
-            ? 'First-run guide complete. Continue when you are ready; deeper help stays available from Codex.'
-            : null;
-    const endlessRiskWagerOfferAvailable = canOfferEndlessRiskWager(run);
-    const acceptedEndlessRiskWager =
-        run.lastLevelResult && run.endlessRiskWager?.acceptedOnLevel === run.lastLevelResult.level
-            ? run.endlessRiskWager
-            : null;
-    const visibleRiskWagerSignalRows =
-        acceptedEndlessRiskWager || endlessRiskWagerOfferAvailable
-            ? getRiskWagerSignalRows({
-                  armed: Boolean(acceptedEndlessRiskWager),
-                  bonusFavor: acceptedEndlessRiskWager?.bonusFavorOnSuccess ?? offeredRiskWagerFavor,
-                  streakAtRisk: acceptedEndlessRiskWager?.streakAtRisk ?? run.featuredObjectiveStreak
-              })
-            : [];
-    const riskWagerPrimaryCue =
-        acceptedEndlessRiskWager || endlessRiskWagerOfferAvailable
-            ? getRiskWagerPrimaryCue({
-                  armed: Boolean(acceptedEndlessRiskWager),
-                  bonusFavor: acceptedEndlessRiskWager?.bonusFavorOnSuccess ?? offeredRiskWagerFavor,
-                  streakAtRisk: acceptedEndlessRiskWager?.streakAtRisk ?? run.featuredObjectiveStreak
-              })
-            : null;
-    const riskWagerArmAriaLabel =
-        visibleRiskWagerSignalRows.length > 0
-            ? `Arm wager. ${visibleRiskWagerSignalRows
-                  .map((row) => `${row.label}: ${row.value}`)
-                  .join('. ')}. Complete the next featured objective for bonus Favor; miss it and the streak ${
-                  wagerSuretyActive ? 'falls to x1' : 'breaks'
-              }.`
-            : 'Arm wager';
-    const riskWagerSignalRowsLabel = formatGameplaySignalRowsLabel(
-        'Risk wager decision signals',
-        visibleRiskWagerSignalRows
-    );
-    const routeChoices = useMemo(() => routeChoicesForResult(run.lastLevelResult), [run.lastLevelResult]);
-    const routeChoiceRequired = routeChoices.length > 0 && !run.pendingRouteCardPlan;
-    const floorClearActionSequenceCue = getFloorClearActionSequenceCue({
-        carryForwardCue: floorClearCarryForwardCue,
-        cashoutRows: floorClearCashoutRows,
-        payoffStackSignal: floorClearPayoffStackSignal,
+        floorClearObjectiveSignalRowsLabel,
+        floorClearPayoffStackSignal,
+        featuredObjectiveResultLine,
+        featuredObjectiveFailureLine,
+        favorGainLine,
+        wagerSuretyActive,
+        offeredRiskWagerFavor,
+        endlessRiskWagerOutcomeLine,
+        featuredObjectiveStreakLine,
+        favorBankedLine,
+        firstClearOnboardingLine,
+        endlessRiskWagerOfferAvailable,
+        acceptedEndlessRiskWager,
+        visibleRiskWagerSignalRows,
+        riskWagerPrimaryCue,
+        riskWagerArmAriaLabel,
+        riskWagerSignalRowsLabel,
+        routeChoices,
         routeChoiceRequired,
-        run
-    });
-    const firstRouteChoiceRequired = routeChoiceRequired && run.lastLevelResult?.level === 1;
-    const routeChoiceRequiredCopy =
-        firstRouteChoiceRequired
-            ? 'Choose the next room type. Safe protects the run, Greed trades danger for reward, and Mystery changes the next board.'
-            : 'Pick one room to continue. Route choice is the active decision; other floor-clear actions resume after the route is locked.';
+        floorClearActionSequenceCue,
+        firstRouteChoiceRequired,
+        routeChoiceRequiredCopy
+    } = useGameScreenFloorClearProjection({ onboardingDismissed: saveData.onboardingDismissed, run });
+
     const currentDungeonNode = run.dungeonRun?.nodes.find((node) => node.id === run.dungeonRun.currentNodeId) ?? null;
     const dungeonMapPresentation = getDungeonMapPresentation(run.dungeonRun);
     const dungeonRouteDecisionPresentation =

@@ -512,3 +512,54 @@ export const getFloorClearActionSequenceCue = ({
         tone
     };
 };
+
+const BONUS_TAG_LABELS: Record<string, string> = {
+    scholar_style: 'Scholar style',
+    glass_witness: 'Glass witness',
+    cursed_last: 'Cursed last',
+    flip_par: 'Flip par',
+    objective_streak: 'Objective streak',
+    boss_floor: 'Boss floor',
+    boss_defeated: 'Boss defeated',
+    boss_trophy_cache: 'Boss trophy cache',
+    boss_trophy_forfeited: 'Boss trophy forfeited',
+    traps_disarmed: 'Traps disarmed',
+    treasure_claimed: 'Treasure claimed',
+    route_claimed: 'Route claimed',
+    perfect_scout: 'Perfect scout'
+};
+
+export const formatBonusTagsLine = (tags: string[] | undefined): string | null => {
+    if (!tags || tags.length === 0) {
+        return null;
+    }
+    return tags.map((t) => BONUS_TAG_LABELS[t] ?? t).join(' · ');
+};
+
+export const featuredObjectiveFailReason = (run: RunState): string | null => {
+    const id = run.lastLevelResult?.featuredObjectiveId;
+    if (!id || run.lastLevelResult?.featuredObjectiveCompleted) {
+        return null;
+    }
+    if (id === 'scholar_style') {
+        return 'Failed: shuffle or destroy was used this floor.';
+    }
+    if (id === 'glass_witness') {
+        return 'Failed: the glass decoy entered a mismatch.';
+    }
+    if (id === 'cursed_last') {
+        return 'Failed: the cursed pair was cleared before the last real pair.';
+    }
+    if (id === 'flip_par') {
+        return 'Failed: match resolutions exceeded the floor par.';
+    }
+    return null;
+};
+
+export const countFavorBonusPicksBanked = (favorProgressAfter: number, favorGain: number): number => {
+    if (favorGain <= 0) {
+        return 0;
+    }
+    const previousProgress = favorProgressAfter - favorGain;
+    return previousProgress < 0 ? 1 : 0;
+};

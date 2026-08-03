@@ -1043,6 +1043,20 @@ The screen now consumes one coherent board-floater projection instead of assembl
 
 Graph v72 gives the board-feedback rendering path a single typed projection boundary and leaves GameScreen closer to a composition shell.
 
+## Seventy-third vertical slice: Floor-Clear Projection Hook
+
+The floor-clear decision surface now has one typed renderer projection instead of being assembled inside GameScreen:
+
+1. `useGameScreenFloorClearProjection.ts` owns clear-life, objective, bonus-tag, trait-route, floor identity, causality, Favor, momentum, cashout, carry-forward, payoff-stack, risk-wager, route-choice, and continuation facts.
+2. The hook has only two inputs—authoritative `run` state and the onboarding-dismissed flag—while shared rules/models remain the source of truth.
+3. `formatBonusTagsLine`, `featuredObjectiveFailReason`, and `countFavorBonusPicksBanked` moved into `gameScreenFloorClearFeedbackModel.ts`, eliminating dependencies back into GameScreen.
+4. Three hook tests cover inert play state, a first-floor clear projection, and synchronized accepted-wager stake/payoff/accessibility facts; all 67 GameScreen tests remain green.
+5. `GameScreen` drops from 4,456 to 4,211 physical lines; the generated model measures 4,212 indexed lines and 58 direct imports.
+6. The orchestration budget ratchets from 4,500 lines/60 imports to 4,250 lines/58 imports.
+7. Graph v73 regenerates 15,794 relationships with 127 active-run fields, zero renderer run-state writes, zero orchestration violations, all 34 commands and 54 events, 27 player-visible states, and zero diagnostics.
+
+Graph v73 makes floor-clear reward, wager, route, and continuation feedback one coherent read-model boundary while leaving GameScreen responsible for composition and interaction wiring.
+
 ## Current slice status
 
 Implemented in the Conduit Cartographer vertical slice:
@@ -1062,5 +1076,5 @@ Implemented in the Conduit Cartographer vertical slice:
 Still required before the vertical slice is complete:
 
 - extend the shared player-visible registry when additional gameplay ownership enters the core, rather than adding renderer or model-only field lists;
-- use Graph v72 diagnostics, orchestration budgets, and nine-build traces to select the next least-overlapping cohesive loop or architectural ownership seam, without presenting simulator survival as human win-rate proof;
+- use Graph v73 diagnostics, orchestration budgets, and nine-build traces to select the next least-overlapping cohesive loop or architectural ownership seam, without presenting simulator survival as human win-rate proof;
 - continue migrating cohesive player builds rather than adding isolated definitions, using the graph diagnostics to choose the next least-overlapping loop.
