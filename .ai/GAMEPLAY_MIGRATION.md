@@ -969,6 +969,21 @@ The model now turns the explicit oversized-component migration requirement into 
 
 Graph v67 makes oversized renderer decomposition monotonic and machine-enforced while preserving the playable screen and its feedback behavior.
 
+## Sixty-eighth vertical slice: Gameplay Decision-Signal Decomposition
+
+The orchestration ratchet now separates another cohesive presentation domain without changing the playable loop:
+
+1. Route-card labels, route-special payoff rows, dungeon-exit lock prompts, clear-life teaching, onboarding cues, Gambit signals, and Endless risk-wager signals moved into `gameScreenDecisionSignals.tsx`.
+2. The extracted model keeps each decision's text, beat count, audio cue, screen cue, and accessibility label derived from the same typed row or primary cue instead of parallel component branches.
+3. `GameScreen` retains orchestration and rendering composition while dropping from 6,553 to 6,103 physical lines; the generated model measures 6,104 indexed lines and 62 direct imports.
+4. The executable orchestration ceiling ratchets from 6,600 to 6,150 modeled lines while retaining the 62-import cap, preventing this decomposition from being silently reversed.
+5. Six focused tests cover route risk, exit-key fallback, life/route teaching, onboarding reward signals, Gambit costs, and armed wager payoff cues.
+6. All 67 existing `GameScreen` tests remain green, preserving score and mismatch floaters, chain cashouts, route decisions, relic drafting, floor-clear feedback, and wager presentation.
+7. Graph v68 records the new model/test, lowered orchestration ceiling, and updated source/test relationships on the executable AI-model gate.
+8. Regeneration records 127 active-run fields, zero production renderer run-state writes, zero orchestration violations, all 34 commands and 54 events, 15,651 relationships, 27 player-visible states, and zero diagnostics.
+
+Graph v68 continues the monotonic decomposition of the playable screen while keeping route, onboarding, Gambit, and wager feedback as one coherent decision-language contract.
+
 ## Current slice status
 
 Implemented in the Conduit Cartographer vertical slice:
@@ -988,5 +1003,5 @@ Implemented in the Conduit Cartographer vertical slice:
 Still required before the vertical slice is complete:
 
 - extend the shared player-visible registry when additional gameplay ownership enters the core, rather than adding renderer or model-only field lists;
-- use Graph v67 diagnostics, orchestration budgets, and nine-build traces to select the next least-overlapping cohesive loop or architectural ownership seam, without presenting simulator survival as human win-rate proof;
+- use Graph v68 diagnostics, orchestration budgets, and nine-build traces to select the next least-overlapping cohesive loop or architectural ownership seam, without presenting simulator survival as human win-rate proof;
 - continue migrating cohesive player builds rather than adding isolated definitions, using the graph diagnostics to choose the next least-overlapping loop.

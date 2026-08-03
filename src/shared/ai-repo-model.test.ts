@@ -173,16 +173,21 @@ describe('AI repository model', () => {
                 path: 'src/renderer/components/GameScreen.tsx',
                 lineCount: expect.any(Number),
                 importCount: expect.any(Number),
-                maxLines: 6_600,
+                maxLines: 6_150,
                 maxImports: 62,
                 withinBudget: true
             }
         ]);
-        expect(model.orchestrationBudgets[0]?.lineCount).toBeLessThanOrEqual(6_600);
+        expect(model.orchestrationBudgets[0]?.lineCount).toBeLessThanOrEqual(6_150);
         expect(model.orchestrationBudgets[0]?.importCount).toBeLessThanOrEqual(62);
         expect(model.files.find((file) => file.path === 'src/renderer/components/gameScreenBoardFeedbackModel.ts')).toMatchObject({
             testedBy: expect.arrayContaining([
                 'file:src/renderer/components/gameScreenBoardFeedbackModel.test.ts'
+            ])
+        });
+        expect(model.files.find((file) => file.path === 'src/renderer/components/gameScreenDecisionSignals.tsx')).toMatchObject({
+            testedBy: expect.arrayContaining([
+                'file:src/renderer/components/gameScreenDecisionSignals.test.tsx'
             ])
         });
         expect(model.gameplayCommands.every(
