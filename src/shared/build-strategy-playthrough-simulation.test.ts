@@ -8,7 +8,7 @@ import { GAMEPLAY_BUILD_STRATEGIES } from './build-strategy-simulation';
 import { GAME_RULES_VERSION } from './contracts';
 
 describe('multi-floor typed build strategy simulation', () => {
-    it('carries five distinct builds through generated floors, interludes, a relic milestone, and exact replay', () => {
+    it('carries six distinct builds through generated floors, interludes, a relic milestone, and exact replay', () => {
         const report = runGameplayBuildMultiFloorSimulation({ rulesVersion: GAME_RULES_VERSION });
 
         expect(report.strategies.map((strategy) => strategy.id)).toEqual(
@@ -19,7 +19,8 @@ describe('multi-floor typed build strategy simulation', () => {
             'control',
             'economy',
             'risk_conversion',
-            'sustain_conversion'
+            'sustain_conversion',
+            'board_reconfiguration'
         ]);
         for (const strategy of report.strategies) {
             expect(strategy.floorCompletionShare).toBe(1);
@@ -153,8 +154,32 @@ describe('multi-floor typed build strategy simulation', () => {
             .toBeGreaterThanOrEqual(report.seeds.length);
         expect(report.cohesiveBuildCoverage.comboShardEngine.evidence.favorableMatchupFloors).toBeGreaterThan(0);
         expect(report.cohesiveBuildCoverage.comboShardEngine.evidence.counterMatchupFloors).toBeGreaterThan(0);
+        expect(report.cohesiveBuildCoverage.trapControl).toMatchObject({
+            id: 'trap_control',
+            buildMechanicId: 'build.trap_control',
+            startingLoadoutId: 'route_tactician',
+            axis: 'board_reconfiguration',
+            favorableMatchup: 'hazard_pressure',
+            counterMatchup: 'memory_pressure',
+            longHorizonSampled: true
+        });
+        expect(report.cohesiveBuildCoverage.trapControl.requiredSystems).toEqual([
+            'reward.free_swap_floor',
+            'perk.free_first_swap_per_floor',
+            'inventory.region_shuffle_charge',
+            'power.region_shuffle',
+            'power.tile_swap'
+        ]);
+        expect(report.cohesiveBuildCoverage.trapControl.evidence.targetedReconfigurationUses)
+            .toBeGreaterThanOrEqual(report.seeds.length);
+        expect(report.cohesiveBuildCoverage.trapControl.evidence.memoryPressureConservations)
+            .toBeGreaterThan(0);
+        const trapControl = report.strategies.find((strategy) => strategy.id === 'trap_control');
+        expect(trapControl?.samples.flatMap((sample) => sample.floorTraces)
+            .filter((floor) => floor.matchup === 'memory_pressure')
+            .every((floor) => floor.signatureConsequenceUses === 0)).toBe(true);
         expect(assertGameplayBuildMultiFloorViable(report)).toEqual({ ok: true, issues: [] });
-    }, 30_000);
+    }, 40_000);
 
     it('is deterministic for a selected build and preserves observed matchup distributions', () => {
         const input = { seeds: [7_241], floors: 3, strategies: ['conduit_cartographer'] as const };
@@ -191,6 +216,8 @@ describe('multi-floor typed build strategy simulation', () => {
         broken.strategies[3].riskWagerLosses = 0;
         broken.strategies[4].shardLifeConversions = 0;
         broken.strategies[4].comboShardSourceEvents = 0;
+        broken.strategies[5].targetedReconfigurationUses = 0;
+        broken.strategies[5].memoryPressureConservations = 0;
 
         expect(assertGameplayBuildMultiFloorViable(broken).issues).toEqual(expect.arrayContaining([
             'floorsPerSeed=3; required=12',
@@ -208,7 +235,9 @@ describe('multi-floor typed build strategy simulation', () => {
             'route_gambler@seeds:42001:riskWagersAccepted=0; required=1',
             'route_gambler@seeds:42001:riskWagerOutcomes=0; required=1',
             'combo_shard_engine@seeds:42001:shardLifeConversions=0; required=1',
-            'combo_shard_engine@seeds:42001:comboShardSourceEvents=0; required=1'
+            'combo_shard_engine@seeds:42001:comboShardSourceEvents=0; required=1',
+            'trap_control@seeds:42001:targetedReconfigurationUses=0; required=1',
+            'trap_control@seeds:42001:memoryPressureConservations=0; required=1'
         ]));
     });
 });

@@ -24,6 +24,7 @@ import {
     createGameplayPeekCommand,
     createGameplayRelicOfferOpenCommand,
     createGameplayRelicPickCommand,
+    createGameplayRegionShuffleCommand,
     createGameplayRiskWagerAcceptCommand,
     createGameplayRouteChooseCommand,
     createGameplayShopPurchaseCommand,
@@ -239,6 +240,8 @@ export interface GameplayBuildMultiFloorMetrics {
     riskWagerLosses: number;
     shardLifeConversions: number;
     comboShardSourceEvents: number;
+    targetedReconfigurationUses: number;
+    memoryPressureConservations: number;
     samples: GameplayBuildMultiFloorSeedSample[];
 }
 
@@ -300,6 +303,28 @@ export interface GameplayBuildMultiFloorReport {
                 counterMatchupFloors: number;
             };
         };
+        trapControl: {
+            id: 'trap_control';
+            buildMechanicId: 'build.trap_control';
+            startingLoadoutId: 'route_tactician';
+            axis: 'board_reconfiguration';
+            favorableMatchup: 'hazard_pressure';
+            counterMatchup: 'memory_pressure';
+            requiredSystems: readonly [
+                'reward.free_swap_floor',
+                'perk.free_first_swap_per_floor',
+                'inventory.region_shuffle_charge',
+                'power.region_shuffle',
+                'power.tile_swap'
+            ];
+            longHorizonSampled: true;
+            evidence: {
+                targetedReconfigurationUses: number;
+                memoryPressureConservations: number;
+                favorableMatchupFloors: number;
+                counterMatchupFloors: number;
+            };
+        };
     };
     bounds: {
         requiredStrategyCount: number;
@@ -323,6 +348,8 @@ export interface GameplayBuildMultiFloorReport {
         minRouteGamblerRiskWagerOutcomes: number;
         minComboShardLifeConversionsPerSeed: number;
         minComboShardSourceEventsPerSeed: number;
+        minTargetedReconfigurationUsesPerSeed: number;
+        minMemoryPressureConservations: number;
         maxPairwiseMeanTurnRatio: number;
     };
     notes: string[];
@@ -457,6 +484,26 @@ export const GAMEPLAY_BUILD_POLICIES: Readonly<Record<GameplayBuildStrategyId, G
         signatureTiming: 'after_board',
         favorableMatchup: 'economy_opportunity',
         counterMatchup: 'parasite_pressure'
+    },
+    trap_control: {
+        id: 'trap_control_policy_v1',
+        strategyId: 'trap_control',
+        routePriorities: ['safe', 'mystery', 'greed'],
+        bonusRewardPriorities: ['free_swap_floor', 'trait_toolkit', 'stasis_lockbox', 'hazard_banisher'],
+        relicPriorities: ['region_shuffle_free_first', 'extra_shuffle_charge', 'first_shuffle_free_per_floor', 'destroy_bank_plus_one'],
+        shopItemPriorities: ['region_shuffle_charge', 'trait_routing_kit', 'destroy_charge', 'heal_life'],
+        informationPolicy: { kind: 'bounded_memory', memoryTileCapacity: 8, uncertainTurnBudget: 24 },
+        gambitPolicy: null,
+        gambitSuppressedMatchups: [],
+        interludeRiskPolicy: {
+            maxRouteRiskUnits: 1,
+            minimumEffectiveSurvivalAfterRoute: 4,
+            openingUnbufferedGreedFloors: 0,
+            eventEffectPriorities: ['gain_destroy_charge', 'heal_or_guard', 'gain_iron_key', 'gain_relic_favor', 'gain_shop_gold', 'gain_score']
+        },
+        signatureTiming: 'before_board',
+        favorableMatchup: 'hazard_pressure',
+        counterMatchup: 'memory_pressure'
     }
 };
 
@@ -467,7 +514,8 @@ const emptyAxisScores = (): Record<GameplayBuildStrategyAxis, number> => ({
     control: 0,
     economy: 0,
     risk_conversion: 0,
-    sustain_conversion: 0
+    sustain_conversion: 0,
+    board_reconfiguration: 0
 });
 
 const normalizeSeeds = (seeds: readonly number[] | undefined): number[] => {
@@ -565,7 +613,8 @@ const createInitialRun = (
 const signatureConsequenceCommand = (
     trace: MutableBuildTrace,
     strategy: GameplayBuildStrategyDefinition,
-    policy: GameplayBuildPolicyDefinition
+    policy: GameplayBuildPolicyDefinition,
+    matchup: GameplayBuildMatchup
 ): GameplayCommand | null => {
     const commandId = commandIdFor(trace, strategy, 'signature_consequence');
     if (strategy.id === 'conduit_cartographer') {
@@ -602,6 +651,24 @@ const signatureConsequenceCommand = (
             : null;
     }
     if (strategy.id === 'combo_shard_engine') return null;
+    if (strategy.id === 'trap_control') {
+        if (matchup !== 'hazard_pressure' || !trace.run.board) return null;
+        const columns = Math.max(1, trace.run.board.columns);
+        const row = Array.from({ length: Math.max(1, trace.run.board.rows) }, (_, rowIndex) => ({
+            rowIndex,
+            hiddenTiles: trace.run.board!.tiles.filter((tile, index) =>
+                tile.state === 'hidden' && Math.floor(index / columns) === rowIndex
+            ),
+            visibleHazards: trace.run.board!.tiles.filter((tile, index) =>
+                tile.state === 'hidden' &&
+                tile.tileHazardKind != null &&
+                Math.floor(index / columns) === rowIndex
+            ).length
+        }))
+            .filter((candidate) => candidate.hiddenTiles.length >= 2)
+            .sort((left, right) => right.visibleHazards - left.visibleHazards || left.rowIndex - right.rowIndex)[0];
+        return row ? createGameplayRegionShuffleCommand(commandId, row.rowIndex) : null;
+    }
     if (trace.run.status !== 'levelComplete') return null;
     const itemPriority = new Map(policy.shopItemPriorities.map((itemId, index) => [itemId, index]));
     const offerId = (Array.isArray(trace.run.shopOffers) ? trace.run.shopOffers : [])
@@ -914,6 +981,9 @@ const recurringSynergyTags = (strategy: GameplayBuildStrategyDefinition): Set<st
     if (strategy.id === 'combo_shard_engine') {
         return new Set(['echo:sealed-combo', 'sealed:conduit-shard-spark', 'sealed:heavy-score']);
     }
+    if (strategy.id === 'trap_control') {
+        return new Set(['drift:row-shuffle', 'drift:volatile-full-shuffle', 'conduit:echo-peek']);
+    }
     return new Set(['cursed:volatile-greed', 'reward-perk:cursed-opener-greed', 'sealed:heavy-score']);
 };
 
@@ -930,7 +1000,9 @@ const signatureAxisScores = (
             ? new Set(['chest_gold', 'cursed_opener_contract', 'cursed_opener_greed'])
             : strategy.id === 'route_gambler'
               ? new Set(['gambit', 'risk_wager', 'wager_surety'])
-              : new Set(['bonus_shards', 'combo_shard_plus_step', 'shard_spark']);
+              : strategy.id === 'combo_shard_engine'
+                ? new Set(['bonus_shards', 'combo_shard_plus_step', 'shard_spark'])
+                : new Set(['free_swap_floor', 'trait_toolkit', 'region_shuffle']);
     for (const event of events) {
         const fromBuildSource = sourceIds.has(event.source.id);
         if (
@@ -972,6 +1044,16 @@ const signatureAxisScores = (
         ) {
             scores.sustain_conversion += 1;
         }
+        if (
+            strategy.id === 'trap_control' &&
+            (event.type === 'board.region_shuffled' ||
+                event.type === 'board.tiles_swapped' ||
+                (fromBuildSource &&
+                    ((event.type === 'inventory.changed' && event.itemId === 'region_shuffle_charge') ||
+                        event.type === 'reward_perk.granted')))
+        ) {
+            scores.board_reconfiguration += 1;
+        }
     }
     return scores;
 };
@@ -997,7 +1079,7 @@ const runSeed = (
     const floorTraces: GameplayBuildFloorTrace[] = [];
     const policyDecisions: GameplayBuildPolicyDecision[] = [];
     const applySignaturePolicy = (floor: number, matchup: GameplayBuildMatchup): number => {
-        const consequence = signatureConsequenceCommand(trace, strategy, policy);
+        const consequence = signatureConsequenceCommand(trace, strategy, policy, matchup);
         const applied = consequence ? executeCommand(trace, strategy, consequence, true) : false;
         policyDecisions.push({
             floor,
@@ -1424,6 +1506,22 @@ export const runGameplayBuildMultiFloorSimulation = (
                     0
                 )
                 : 0,
+            targetedReconfigurationUses: strategy.id === 'trap_control'
+                ? samples.reduce(
+                    (sum, sample) => sum + sample.events.filter((event) =>
+                        event.type === 'board.region_shuffled' || event.type === 'board.tiles_swapped'
+                    ).length,
+                    0
+                )
+                : 0,
+            memoryPressureConservations: strategy.id === 'trap_control'
+                ? floorTraces.filter((floor) =>
+                    floor.matchup === 'memory_pressure' &&
+                    floor.signatureConsequenceUses === 0 &&
+                    floor.completed &&
+                    floor.replayCheckpointDeterministic
+                ).length
+                : 0,
             samples
         };
     });
@@ -1439,6 +1537,7 @@ export const runGameplayBuildMultiFloorSimulation = (
     }
     const routeGambler = strategies.find((strategy) => strategy.id === 'route_gambler');
     const comboShardEngine = strategies.find((strategy) => strategy.id === 'combo_shard_engine');
+    const trapControl = strategies.find((strategy) => strategy.id === 'trap_control');
     return {
         rulesVersion,
         seeds,
@@ -1492,10 +1591,32 @@ export const runGameplayBuildMultiFloorSimulation = (
                     favorableMatchupFloors: comboShardEngine?.favorableMatchupMetrics?.sampledFloors ?? 0,
                     counterMatchupFloors: comboShardEngine?.counterMatchupMetrics?.sampledFloors ?? 0
                 }
+            },
+            trapControl: {
+                id: 'trap_control',
+                buildMechanicId: 'build.trap_control',
+                startingLoadoutId: 'route_tactician',
+                axis: 'board_reconfiguration',
+                favorableMatchup: 'hazard_pressure',
+                counterMatchup: 'memory_pressure',
+                requiredSystems: [
+                    'reward.free_swap_floor',
+                    'perk.free_first_swap_per_floor',
+                    'inventory.region_shuffle_charge',
+                    'power.region_shuffle',
+                    'power.tile_swap'
+                ],
+                longHorizonSampled: true,
+                evidence: {
+                    targetedReconfigurationUses: trapControl?.targetedReconfigurationUses ?? 0,
+                    memoryPressureConservations: trapControl?.memoryPressureConservations ?? 0,
+                    favorableMatchupFloors: trapControl?.favorableMatchupMetrics?.sampledFloors ?? 0,
+                    counterMatchupFloors: trapControl?.counterMatchupMetrics?.sampledFloors ?? 0
+                }
             }
         },
         bounds: {
-            requiredStrategyCount: 5,
+            requiredStrategyCount: 6,
             minFloorsPerSeed: 12,
             minFloorCompletionShare: 1,
             minDeterministicReplayShare: 1,
@@ -1516,6 +1637,8 @@ export const runGameplayBuildMultiFloorSimulation = (
             minRouteGamblerRiskWagerOutcomes: 1,
             minComboShardLifeConversionsPerSeed: 1,
             minComboShardSourceEventsPerSeed: 1,
+            minTargetedReconfigurationUsesPerSeed: 1,
+            minMemoryPressureConservations: 1,
             maxPairwiseMeanTurnRatio: 1.5
         },
         notes: [
@@ -1528,7 +1651,8 @@ export const runGameplayBuildMultiFloorSimulation = (
             'Favorable and counter labels are explicit design hypotheses. The gate requires shipped exposure, bounded-memory completion, feedback, and replay evidence but does not report simulator outcomes as human win rates.',
             'The gate proves longer structural viability and balance envelopes for a deterministic bounded-memory policy, not final human difficulty balance.',
             'Route Gambler is retained as the fourth long-horizon build: Route Tactician movement, one-floor Gambit rescue, objective wagers, Wager Surety, Favor cash-out, and Mystery routing form one distinct risk-conversion trace.',
-            'Combo Shard Engine is retained as the fifth build: Greed creates a visible life deficit, Bonus Shards and the Catalyst relic stock bounded momentum, clean matches convert the next shard into life, and authored parasite floors test its sustain counter.'
+            'Combo Shard Engine is retained as the fifth build: Greed creates a visible life deficit, Bonus Shards and the Catalyst relic stock bounded momentum, clean matches convert the next shard into life, and authored parasite floors test its sustain counter.',
+            'Trap Control is retained as the sixth build: renewable Free Swap sources fund typed row reconfiguration on visible hazard-pressure floors, while memory-pressure floors conserve the spatial-disruption resource.'
         ]
     };
 };
@@ -1668,6 +1792,21 @@ export const assertGameplayBuildMultiFloorViable = (
         if (comboShardEngine.comboShardSourceEvents < minimumSourceEvents) {
             issues.push(
                 `combo_shard_engine@seeds:${report.seeds.join(',')}:comboShardSourceEvents=${comboShardEngine.comboShardSourceEvents}; required=${minimumSourceEvents}`
+            );
+        }
+    }
+    const trapControl = report.strategies.find((strategy) => strategy.id === 'trap_control');
+    if (trapControl) {
+        const minimumUses =
+            report.bounds.minTargetedReconfigurationUsesPerSeed * report.seeds.length;
+        if (trapControl.targetedReconfigurationUses < minimumUses) {
+            issues.push(
+                `trap_control@seeds:${report.seeds.join(',')}:targetedReconfigurationUses=${trapControl.targetedReconfigurationUses}; required=${minimumUses}`
+            );
+        }
+        if (trapControl.memoryPressureConservations < report.bounds.minMemoryPressureConservations) {
+            issues.push(
+                `trap_control@seeds:${report.seeds.join(',')}:memoryPressureConservations=${trapControl.memoryPressureConservations}; required=${report.bounds.minMemoryPressureConservations}`
             );
         }
     }

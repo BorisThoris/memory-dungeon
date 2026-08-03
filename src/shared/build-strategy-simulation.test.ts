@@ -7,7 +7,7 @@ import {
 import { GAME_RULES_VERSION } from './contracts';
 
 describe('typed gameplay build strategy simulation', () => {
-    it('proves five shipped builds through distinct replayable command/event loops', () => {
+    it('proves six shipped builds through distinct replayable command/event loops', () => {
         const report = runGameplayBuildStrategySimulation({
             seeds: [42_001, 42_077, 42_123],
             rulesVersion: GAME_RULES_VERSION
@@ -21,7 +21,8 @@ describe('typed gameplay build strategy simulation', () => {
             'control',
             'economy',
             'risk_conversion',
-            'sustain_conversion'
+            'sustain_conversion',
+            'board_reconfiguration'
         ]);
         for (const strategy of report.strategies) {
             expect(strategy.viableSeedShare).toBe(1);
@@ -43,12 +44,17 @@ describe('typed gameplay build strategy simulation', () => {
             { left: 'conduit_cartographer', right: 'treasure_greed', distance: 2 },
             { left: 'conduit_cartographer', right: 'route_gambler', distance: 2 },
             { left: 'conduit_cartographer', right: 'combo_shard_engine', distance: 2 },
+            { left: 'conduit_cartographer', right: 'trap_control', distance: 2 },
             { left: 'guard_tank', right: 'treasure_greed', distance: 2 },
             { left: 'guard_tank', right: 'route_gambler', distance: 2 },
             { left: 'guard_tank', right: 'combo_shard_engine', distance: 2 },
+            { left: 'guard_tank', right: 'trap_control', distance: 2 },
             { left: 'treasure_greed', right: 'route_gambler', distance: 2 },
             { left: 'treasure_greed', right: 'combo_shard_engine', distance: 2 },
-            { left: 'route_gambler', right: 'combo_shard_engine', distance: 2 }
+            { left: 'treasure_greed', right: 'trap_control', distance: 2 },
+            { left: 'route_gambler', right: 'combo_shard_engine', distance: 2 },
+            { left: 'route_gambler', right: 'trap_control', distance: 2 },
+            { left: 'combo_shard_engine', right: 'trap_control', distance: 2 }
         ]);
         expect(assertGameplayBuildStrategiesViable(report)).toEqual({ ok: true, issues: [] });
     });
@@ -103,6 +109,13 @@ describe('typed gameplay build strategy simulation', () => {
                 definitions: ['bonus_reward.bonus_shards', 'relic.combo_shard_plus_step'],
                 command: 'board.turn_resolve',
                 event: 'board.turn_resolved'
+            },
+            {
+                id: 'trap_control',
+                loadout: 'route_tactician',
+                definitions: ['bonus_reward.trait_toolkit', 'bonus_reward.free_swap_floor'],
+                command: 'board.region_shuffle',
+                event: 'board.region_shuffled'
             }
         ]);
     });

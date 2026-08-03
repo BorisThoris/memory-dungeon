@@ -789,6 +789,20 @@ The Trap Control audit found and closed a shipped source-to-command break before
 
 Graph v55 adds reward-perk-or-relic and free-before-paid guards to targeted reconfiguration, connects reward perk state to both powers' read sets, and records the command and presentation tests that enforce the complete source/effect/consequence loop.
 
+## Fifty-sixth vertical slice: Trap Control Board-Reconfiguration Build
+
+The Saboteur is now the sixth retained long-horizon build, using the corrected renewable Free Swap loop as a distinct board-reconfiguration policy rather than duplicating the Warden's Destroy signature:
+
+1. The structural evaluator adds `board_reconfiguration` as a sixth axis. Route Tactician activates Trait Toolkit and Free Swap Discipline, preserves its paid row/swap charge, and spends the renewable free use through `board.region_shuffle` / `board.region_shuffled` with exact replay and typed feedback.
+2. The long-horizon policy prioritizes Safe then Mystery routes, Free Swap Discipline, Trait Toolkit, Stasis Lockbox, Hazard Banisher, region-shuffle relics, and targeted-control shop inventory.
+3. The favorable hypothesis is `hazard_pressure`. Before board play, the policy chooses a legal row with at least two hidden tiles, preferring the row with the most visible hazard markers, and submits one typed row-shuffle command.
+4. The counter hypothesis is `memory_pressure`. The policy explicitly conserves targeted reconfiguration on those floors because spatial disruption compounds short-memorize and recall pressure; normal bounded-memory play still completes and replays the floor.
+5. Signature evidence counts only accepted `board.region_shuffled` or `board.tiles_swapped` events and build-sourced region-charge/perk facts. Incidental Peek or score attached to mixed rewards does not define the axis fingerprint.
+6. The default report now covers six builds x three seeds x twelve floors: all 216 floors complete with zero rejected gameplay commands and exact replay. Saboteur completes all 36 of its floors, makes 123 policy decisions, rejects 33 over-budget route options, executes 12 hazard-pressure reconfigurations, and records 6 memory-pressure conservations.
+7. All 12 favorable hazard floors and all 6 counter floors complete without life loss. Drift row-shuffle and Drift/Volatile full-shuffle tags recur on 9 favorable floors, while the worst pairwise mean-turn ratio remains 1.12.
+
+Graph v56 adds the sixth strategy, distinct board-reconfiguration axis, renewable-source, hazard-use, and memory-conservation guards, build-specific evidence reports, and a tested long-horizon edge to `build.trap_control`.
+
 ## Current slice status
 
 Implemented in the Conduit Cartographer vertical slice:
@@ -808,5 +822,5 @@ Implemented in the Conduit Cartographer vertical slice:
 Still required before the vertical slice is complete:
 
 - widen the feedback-completeness audit beyond the former HUD-critical fields as additional gameplay ownership enters the core;
-- add Trap Control as a sixth long-horizon `board_reconfiguration` strategy now that its renewable free-use source reaches the typed row-shuffle/tile-swap commands, without presenting simulator survival as human win-rate proof;
+- use six-build traces and graph diagnostics to select the next least-overlapping cohesive build or architectural ownership seam, without presenting simulator survival as human win-rate proof;
 - continue migrating cohesive player builds rather than adding isolated definitions, using the graph diagnostics to choose the next least-overlapping loop.

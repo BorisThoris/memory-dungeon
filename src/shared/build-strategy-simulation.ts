@@ -7,6 +7,7 @@ import {
     createGameplayGambitCommitCommand,
     createGameplayMemorizeCompleteCommand,
     createGameplayPeekCommand,
+    createGameplayRegionShuffleCommand,
     createGameplayShopPurchaseCommand,
     createGameplayTileFlipCommand,
     gameplayCommandSchema,
@@ -25,7 +26,8 @@ export const GAMEPLAY_BUILD_STRATEGY_AXES = [
     'control',
     'economy',
     'risk_conversion',
-    'sustain_conversion'
+    'sustain_conversion',
+    'board_reconfiguration'
 ] as const;
 
 export type GameplayBuildStrategyAxis = (typeof GAMEPLAY_BUILD_STRATEGY_AXES)[number];
@@ -34,7 +36,8 @@ export type GameplayBuildStrategyId =
     | 'guard_tank'
     | 'treasure_greed'
     | 'route_gambler'
-    | 'combo_shard_engine';
+    | 'combo_shard_engine'
+    | 'trap_control';
 
 export interface GameplayBuildStrategyDefinition {
     id: GameplayBuildStrategyId;
@@ -173,6 +176,19 @@ export const GAMEPLAY_BUILD_STRATEGIES: readonly GameplayBuildStrategyDefinition
         consequenceCommandType: 'board.turn_resolve',
         consequenceEventType: 'board.turn_resolved',
         expectedDominantAxis: 'sustain_conversion'
+    },
+    {
+        id: 'trap_control',
+        label: 'The Saboteur',
+        buildMechanicId: 'build.trap_control',
+        startingLoadoutId: 'route_tactician',
+        activationDefinitionIds: [
+            'bonus_reward.trait_toolkit',
+            'bonus_reward.free_swap_floor'
+        ],
+        consequenceCommandType: 'board.region_shuffle',
+        consequenceEventType: 'board.region_shuffled',
+        expectedDominantAxis: 'board_reconfiguration'
     }
 ] as const;
 
@@ -185,7 +201,8 @@ const emptyAxisScores = (): Record<GameplayBuildStrategyAxis, number> => ({
     control: 0,
     economy: 0,
     risk_conversion: 0,
-    sustain_conversion: 0
+    sustain_conversion: 0,
+    board_reconfiguration: 0
 });
 
 const increment = (counts: Record<string, number>, key: string): void => {
@@ -285,6 +302,16 @@ const consequenceCommand = (
         }
         case 'combo_shard_engine':
             return createGameplayBoardTurnResolveCommand(commandId);
+        case 'trap_control': {
+            const columns = Math.max(1, run.board?.columns ?? 1);
+            const rowIndex = run.board
+                ? Array.from({ length: Math.max(1, run.board.rows) }, (_, index) => index)
+                    .find((candidateRow) => run.board!.tiles.filter((tile, index) =>
+                        tile.state === 'hidden' && Math.floor(index / columns) === candidateRow
+                    ).length >= 2) ?? 0
+                : 0;
+            return createGameplayRegionShuffleCommand(commandId, rowIndex);
+        }
     }
 };
 
@@ -292,7 +319,7 @@ const collectAxisScores = (events: readonly GameplayEvent[]): Record<GameplayBui
     const scores = emptyAxisScores();
     for (const event of events) {
         if (event.type === 'inventory.changed' && event.applied !== 0) {
-            if (event.itemId === 'peek_charge') scores.information += 1;
+            if (event.itemId === 'peek_charge' && event.source.id !== 'trait_toolkit') scores.information += 1;
             if (
                 (event.itemId === 'guard_token' || event.itemId === 'destroy_charge') &&
                 event.source.id !== 'wager_surety' &&
@@ -304,13 +331,23 @@ const collectAxisScores = (events: readonly GameplayEvent[]): Record<GameplayBui
             if (event.source.id === 'wager_surety') scores.risk_conversion += 1;
             if (event.itemId === 'combo_shard') scores.sustain_conversion += 1;
             if (event.source.id === 'bonus_shards') scores.sustain_conversion += 1;
+            if (event.itemId === 'region_shuffle_charge' && event.source.id === 'trait_toolkit') {
+                scores.board_reconfiguration += 1;
+            }
         }
         if (event.type === 'board.peeked') scores.information += 1;
         if (event.type === 'board.pair_destroyed') scores.control += 1;
         if (event.type === 'currency.changed' && event.currency === 'shop_gold' && event.applied !== 0) {
             scores.economy += 1;
         }
-        if (event.type === 'score.changed' && event.amount > 0) scores.economy += 1;
+        if (
+            event.type === 'score.changed' &&
+            event.amount > 0 &&
+            event.source.id !== 'trait_toolkit' &&
+            event.source.id !== 'free_swap_floor'
+        ) {
+            scores.economy += 1;
+        }
         if (event.type === 'shop.offer_purchased') scores.economy += 1;
         if (event.type === 'risk_wager.accepted' || event.type === 'board.gambit_commit.requested') {
             scores.risk_conversion += 1;
@@ -327,6 +364,9 @@ const collectAxisScores = (events: readonly GameplayEvent[]): Record<GameplayBui
             event.comboShardsAfter < event.comboShardsBefore
         ) {
             scores.sustain_conversion += 2;
+        }
+        if (event.type === 'board.region_shuffled' || event.type === 'board.tiles_swapped') {
+            scores.board_reconfiguration += 1;
         }
     }
     return scores;
@@ -522,7 +562,7 @@ export const runGameplayBuildStrategySimulation = (
         strategies,
         pairwiseAxisDistances,
         bounds: {
-            requiredStrategyCount: 5,
+            requiredStrategyCount: 6,
             minViableSeedShare: 1,
             minFeedbackEventsPerSeed: 3,
             minSignatureAxisScorePerSeed: 1,
@@ -531,7 +571,7 @@ export const runGameplayBuildStrategySimulation = (
         notes: [
             'Each strategy starts from a shipped loadout, activates schema-validated content, and spends its payoff through the authoritative gameplay reducer.',
             'Viability means every sampled seed accepts the complete command chain, keeps the run alive, emits typed feedback, and replays exactly.',
-            'Distinctness is measured from typed event fingerprints for information, control, economy, risk conversion, and shard-to-life sustain consequences rather than build labels.',
+            'Distinctness is measured from typed event fingerprints for information, control, economy, risk conversion, shard-to-life sustain, and targeted board-reconfiguration consequences rather than build labels.',
             'This is a deterministic structural viability gate, not a claim that final balance or long-run win rates are complete.'
         ]
     };
