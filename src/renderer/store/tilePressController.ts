@@ -38,6 +38,7 @@ type TilePressPatch = Partial<{
     peekModeArmed: boolean;
     run: RunState;
     shopReturnMode: 'floor' | 'summary' | null;
+    strayRemoveArmed: boolean;
     tileSwapArmed: boolean;
     tileSwapFirstTileId: string | null;
     view: ViewState;
@@ -54,6 +55,7 @@ export const createPlayingTilePressSurfaceResult = ({
     destroyPairArmed,
     peekModeArmed,
     run,
+    strayRemoveArmed = false,
     tileSwapArmed = false,
     tileSwapFirstTileId = null,
     tileId
@@ -62,6 +64,7 @@ export const createPlayingTilePressSurfaceResult = ({
     destroyPairArmed: boolean;
     peekModeArmed: boolean;
     run: RunState;
+    strayRemoveArmed?: boolean;
     tileSwapArmed?: boolean;
     tileSwapFirstTileId?: string | null;
     tileId: string;
@@ -72,7 +75,7 @@ export const createPlayingTilePressSurfaceResult = ({
         destroyPairArmed,
         peekModeArmed,
         tileSwapArmed,
-        strayRemoveArmed: run.strayRemoveArmed
+        strayRemoveArmed
     });
     let actionRun = run;
     let pressedTile = actionRun.board?.tiles.find((tile) => tile.id === tileId) ?? null;
@@ -86,7 +89,7 @@ export const createPlayingTilePressSurfaceResult = ({
         if (hazardRun.status === 'gameOver') {
             return {
                 kind: 'applyResolvedRun',
-                run: { ...hazardRun, strayRemoveArmed: false },
+                run: hazardRun,
                 audio,
                 patch: {
                     ...clearRunSurfaceArmedModes(),
@@ -94,10 +97,7 @@ export const createPlayingTilePressSurfaceResult = ({
                 }
             };
         }
-        actionRun = {
-            ...hazardRun,
-            strayRemoveArmed: canContinueSinglePowerAfterContact ? hazardRun.strayRemoveArmed : false
-        };
+        actionRun = hazardRun;
         pressedTile = actionRun.board?.tiles.find((tile) => tile.id === tileId) ?? pressedTile;
     }
 
@@ -166,6 +166,7 @@ export const createPlayingTilePressSurfaceResult = ({
         enemyContacted,
         peekModeArmed,
         run: actionRun,
+        strayRemoveArmed,
         tileSwapArmed,
         tileSwapFirstTileId,
         tileId
@@ -182,7 +183,12 @@ export const createPlayingTilePressSurfaceResult = ({
         }
         if (armedPowerPressResult.kind === 'strayApplied') {
             audio.push({ kind: 'strayPower' });
-            return { kind: 'patch', patch: { run: armedPowerPressResult.run }, audio, resolveDelayMs: null };
+            return {
+                kind: 'patch',
+                patch: { run: armedPowerPressResult.run, strayRemoveArmed: false },
+                audio,
+                resolveDelayMs: null
+            };
         }
         if (armedPowerPressResult.kind === 'peekApplied') {
             if (projectGameplayFeedback(armedPowerPressResult.events).some((feedback) => feedback.audioCategory === 'peek')) {

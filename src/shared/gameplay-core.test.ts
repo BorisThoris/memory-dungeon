@@ -2180,13 +2180,13 @@ describe('deterministic gameplay core', () => {
                 pairCount: 1,
                 tiles: [tile('wild', '__wild__'), tile('plain-a', 'plain'), tile('plain-b', 'plain')]
             },
-            strayRemoveArmed: true,
+            strayRemoveArmed: false,
             recallFocus: 2
         } as RunState;
         const strayCommand = createGameplayStrayRemoveCommand('seer-stray', 'wild');
         const removed = reduceGameplayCommand(strayRun, strayCommand);
         expect(removed.accepted).toBe(true);
-        expect(removed.run).toEqual(applyStrayRemove(strayRun, 'wild'));
+        expect(removed.run).toEqual(applyStrayRemove(strayRun, 'wild', { requireArmed: false }));
         expect(removed.events).toEqual(expect.arrayContaining([
             expect.objectContaining({ type: 'inventory.changed', itemId: 'stray_remove_charge', applied: -1 }),
             expect.objectContaining({

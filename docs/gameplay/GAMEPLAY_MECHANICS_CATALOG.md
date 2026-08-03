@@ -105,7 +105,7 @@
 | Shuffle charges / nonce | `shuffleCharges`, `shuffleNonce` | — | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
 | Free shuffle per floor (relic) | `freeShuffleThisFloor` | — | [epic-relics](./epic-relics.md) |
 | Scholar: shuffle used flag | `shuffleUsedThisFloor` | — | [epic-scoring-objectives](./epic-scoring-objectives.md) |
-| Region shuffle | `canRegionShuffle`, `canRegionShuffleRow`, `armRegionShuffleRow`, `applyRegionShuffle` | `armRegionShuffleRowPick`, `shuffleRegionRow` | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
+| Region shuffle | `canRegionShuffle`, `canRegionShuffleRow`, legacy `armRegionShuffleRow`, `applyRegionShuffle` | direct typed `shuffleRegionRow`; no renderer arm action | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
 | Tile swap | `canSwapHiddenTiles`, `applyTileSwap` | `toggleTileSwapArmed`, `pressTile` | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
 | Region charges / arm row / free first | `regionShuffleCharges`, `regionShuffleRowArmed`, `regionShuffleFreeThisFloor`; also spent by tile swap | — | [epic-relics](./epic-relics.md) |
 | Destroy pair | `applyDestroyPair`, `canDestroyPair` | `pressTile` when armed | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
@@ -118,9 +118,9 @@
 | Mimic Cache claim | `resolveBoardTurn` pays full loot if route-revealed first; blind match bites guard/life and pays reduced loot | `pressTile` pair match | [epic-route-world-pipeline](./epic-route-world-pipeline.md) |
 | Peek charges / revealed ids | `peekCharges`, `peekRevealedTileIds` | — | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
 | Pin tiles | `togglePinnedTile`, `pinnedTileIds`, `pinsPlacedCountThisRun` | `toggleBoardPinMode`, `pressTile` | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
-| Stray remove | `toggleStrayRemoveArmed`, `applyStrayRemove` removes completion-safe hidden singleton/special tiles only | `toggleStrayArm`, `pressTile` | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
+| Stray remove | `applyStrayRemove` removes completion-safe hidden singleton/special tiles; typed command carries intent without a serialized arm flag | transient `strayRemoveArmed`, `toggleStrayArm`, `pressTile` | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
 | Stray-protected route anchors | `tileIsStrayEligiblePreview`, `applyStrayRemove` deny Keystone Pair, Final Ward, Omen Seal | `toggleStrayArm`, `pressTile` | [epic-route-world-pipeline](./epic-route-world-pipeline.md) |
-| Stray charges | `strayRemoveCharges`, `strayRemoveArmed` | — | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
+| Stray charges / intent | `strayRemoveCharges`; serialized `strayRemoveArmed` retained only for save compatibility | live arming belongs to transient `AppState.strayRemoveArmed` | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
 | Undo resolving | `cancelResolvingWithUndo` | `undoResolvingFlip` | [epic-powers-and-interactions](./epic-powers-and-interactions.md), [epic-run-session-flow](./epic-run-session-flow.md) |
 | Undo uses / floor | `undoUsesThisFloor` | — | [epic-run-session-flow](./epic-run-session-flow.md) |
 | Flash pair reveal | `applyFlashPair`, `flashPairCharges`, `flashPairRevealedTileIds` | `applyFlashPairPower` | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
@@ -268,7 +268,7 @@ Source: [`RunState`](../../src/shared/contracts.ts) interface.
 | `wildTileId` | Contract field; pairing uses `pairKey` in sim | [epic-core-memory-loop](./epic-core-memory-loop.md) |
 | `wildMatchesRemaining` | Wild joker uses left | [epic-core-memory-loop](./epic-core-memory-loop.md) |
 | `strayRemoveCharges` | Stray remover budget | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
-| `strayRemoveArmed` | Stray mode armed | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
+| `strayRemoveArmed` | Legacy serialized compatibility field; live renderer intent is transient application state | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
 | `matchScoreMultiplier` | Shuffle tax stacks | [epic-scoring-objectives](./epic-scoring-objectives.md) |
 | `nBackMatchCounter` | N-back mutator cadence | [epic-mutators](./epic-mutators.md) |
 | `nBackAnchorPairKey` | Current anchor pair key | [epic-mutators](./epic-mutators.md) |

@@ -391,9 +391,13 @@ export const applyPeek = (run: RunState, tileId: string): RunState => {
     };
 };
 
-export const applyStrayRemove = (run: RunState, tileId: string): RunState => {
+export const applyStrayRemove = (
+    run: RunState,
+    tileId: string,
+    { requireArmed = true }: { requireArmed?: boolean } = {}
+): RunState => {
     const strayRemoveCharges = runNonNegativeInteger(run.strayRemoveCharges);
-    if (!run.strayRemoveArmed || run.status !== 'playing' || !run.board || strayRemoveCharges < 1) {
+    if ((requireArmed && !run.strayRemoveArmed) || run.status !== 'playing' || !run.board || strayRemoveCharges < 1) {
         return run;
     }
     if (!hasClearFlipState(run)) {

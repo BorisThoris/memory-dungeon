@@ -24,6 +24,7 @@ type AppStoreInitialState = Pick<
     | 'settingsReturnView'
     | 'shopReturnMode'
     | 'steamConnected'
+    | 'strayRemoveArmed'
     | 'subscreenReturnView'
     | 'tileSwapArmed'
     | 'tileSwapFirstTileId'
@@ -51,6 +52,7 @@ export const createAppStoreInitialState = (): AppStoreInitialState => {
         boardPinMode: false,
         destroyPairArmed: false,
         peekModeArmed: false,
+        strayRemoveArmed: false,
         tileSwapArmed: false,
         tileSwapFirstTileId: null,
         dungeonExitPromptOpen: false,

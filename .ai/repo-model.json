@@ -5,18 +5,18 @@
     "name": "memory-dungeon",
     "trackedFileCount": 2407,
     "codeFileCount": 904,
-    "exportedSymbolCount": 3343,
+    "exportedSymbolCount": 3342,
     "contentItemCount": 56,
     "mechanicCount": 139,
     "stateFieldCount": 247,
-    "relationshipCount": 10468
+    "relationshipCount": 10480
   },
   "inventory": [
     {
       "path": ".ai/GAMEPLAY_MIGRATION.md",
       "category": "other",
-      "bytes": 79341,
-      "sha256": "615b71ceb6ea6ea11195a30cc5e8a95e62fcf01c6d425fe0c5f7fcd59801154f"
+      "bytes": 81195,
+      "sha256": "694045d7decafa2a381462fad29516a5e92f7a3d3b8114f9f9a467ef6b8dd12e"
     },
     {
       "path": ".ai/README.md",
@@ -777,8 +777,8 @@
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
       "category": "documentation",
-      "bytes": 33811,
-      "sha256": "428962d9674be0907a040ec4a0560022c86f18ac5969bf6f1dfd62cf6305a05f"
+      "bytes": 34075,
+      "sha256": "bf5bab6e58975c1800317111c6ea8352b051466bada4cd0d46bf902b53e1cf04"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_POLISH_AND_GAPS.md",
@@ -831,8 +831,8 @@
     {
       "path": "docs/internal-wiki/APP_ANALYSIS.md",
       "category": "documentation",
-      "bytes": 21715,
-      "sha256": "6df5b17ee2e483515733b0089f1879ddb808ab254060017c282fe24f738ec12b"
+      "bytes": 21821,
+      "sha256": "c77c433e07208f9208bcd24f8cd9683198ea2d5ef25a3e540afac2efebb8f9af"
     },
     {
       "path": "docs/internal-wiki/ARCHITECTURE.md",
@@ -7383,14 +7383,14 @@
     {
       "path": "src/renderer/components/GameLeftToolbar.test.tsx",
       "category": "test",
-      "bytes": 36004,
-      "sha256": "100ffd2fa06e420562b02e9acd6c48799214ce1ad583be3bb285d54456cbf6f6"
+      "bytes": 36056,
+      "sha256": "6f82b6110f75f6010f664728cdb1d8a7bfaef1ded5a1bbcef7058a0f88eba477"
     },
     {
       "path": "src/renderer/components/GameLeftToolbar.tsx",
       "category": "source",
-      "bytes": 55455,
-      "sha256": "ee22695de4fcbf6bae4c6e31196c8cdb2ded3c57c8efb37c78a16ba6febb23f7"
+      "bytes": 55468,
+      "sha256": "16bcc53a2308302a96016479fb043c016e70c9e88075a601c171ad22235addad"
     },
     {
       "path": "src/renderer/components/GameOverScreen.module.css",
@@ -7461,8 +7461,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 369543,
-      "sha256": "0bcff84f64544cbf87a51a54b9a5d0815d5c6fd35a901f954ae3c7663ae47cbb"
+      "bytes": 369705,
+      "sha256": "817f91fe2b4279ec471305b2723ffb6f6ccc196da5345e2a9354f4eea01f25f1"
     },
     {
       "path": "src/renderer/components/GameScreenActionFeedbackRail.test.tsx",
@@ -8601,8 +8601,8 @@
     {
       "path": "src/renderer/components/useGameScreenPowerTileHints.ts",
       "category": "source",
-      "bytes": 3804,
-      "sha256": "c2925ab03cd5018705030c503eaeee22b9002df1361d36aa627f215fdb64f945"
+      "bytes": 3849,
+      "sha256": "4ec99e4c507842ed3f5bf901e88db93696d6955a3b64959d5de82c1642fd81f8"
     },
     {
       "path": "src/renderer/components/useGameScreenTraitRouteTargets.test.tsx",
@@ -9183,14 +9183,14 @@
     {
       "path": "src/renderer/store/appStoreInitialState.ts",
       "category": "source",
-      "bytes": 1690,
-      "sha256": "49f06e7d2d52420b042c7f1da9bfa37bf9f5e3b413b664533c305088ecd1f7ed"
+      "bytes": 1748,
+      "sha256": "67b5cb6c4ec8e374a448eca92b1b93da4c6177fff0772d95d2fc942bfdce0e54"
     },
     {
       "path": "src/renderer/store/appStoreTypes.ts",
       "category": "source",
-      "bytes": 4407,
-      "sha256": "9d6de916234c45b09d11752ac9d81fb2ac8f9a8e737c94fb34e95957d4395afe"
+      "bytes": 4379,
+      "sha256": "b7ea1426e3604e14dd3eefe10d3f171b6a5381172daea7e51c7cc042f2f9a43c"
     },
     {
       "path": "src/renderer/store/backgroundPersistence.test.ts",
@@ -9411,8 +9411,8 @@
     {
       "path": "src/renderer/store/runResolutionController.test.ts",
       "category": "test",
-      "bytes": 21231,
-      "sha256": "e51f59f8495075aa97af4bc94ad2da2b7969e0f68971b24043726628edb2afca"
+      "bytes": 21291,
+      "sha256": "8091ef8d3f6adb14dbbf27f2352d608294a6fe67672ef68b5518ee448009ab22"
     },
     {
       "path": "src/renderer/store/runResolutionController.ts",
@@ -9459,14 +9459,14 @@
     {
       "path": "src/renderer/store/runSurfaceState.test.ts",
       "category": "test",
-      "bytes": 42969,
-      "sha256": "0dcf6567dbbac2b02ac2251fd898c00b5778cd492db965841ed664307caf3ea1"
+      "bytes": 43753,
+      "sha256": "55a29ca2ad72a6be95fcef248118aa861a90ddad168829d5c4dc4461525d7a4c"
     },
     {
       "path": "src/renderer/store/runSurfaceState.ts",
       "category": "source",
-      "bytes": 25141,
-      "sha256": "ce86fd2266ea18ce31340024c8cb1661a17ca87602bfcbd80cc19a928526721b"
+      "bytes": 24862,
+      "sha256": "1b9ce8755f11d9b29d65e2163df68f91d504da49b3e64e9f0a1ab51b60bd4550"
     },
     {
       "path": "src/renderer/store/runTimerController.test.ts",
@@ -9585,20 +9585,20 @@
     {
       "path": "src/renderer/store/tilePressController.ts",
       "category": "source",
-      "bytes": 9939,
-      "sha256": "ed8ae95a7b1f72a113a847f4503c817af958271b89dc840600d27698c0948e81"
+      "bytes": 9975,
+      "sha256": "ae3fe12e6a3ce87cebdd778cb02777b24a6c1637b83590570caac9a8db84996d"
     },
     {
       "path": "src/renderer/store/useAppStore.test.ts",
       "category": "test",
-      "bytes": 116192,
-      "sha256": "5cf508acc38527ba877b4603b0f81f5b9cd2dfdc8bc6e9fe3a9672fbe79b4a8d"
+      "bytes": 116376,
+      "sha256": "c1de486eb4c5b7db81ced41caa9ba47fc98c9e1a169c8c1116d24abd853c076d"
     },
     {
       "path": "src/renderer/store/useAppStore.ts",
       "category": "source",
-      "bytes": 27735,
-      "sha256": "134c8bd0d258b04708d7e71f73d17d2fc18682aa7bfefeba88168756214b0333"
+      "bytes": 27531,
+      "sha256": "214376dcb000be61dba6824220e5ac2791d762e02d6ce66fd41aa7e2ebe3f2a4"
     },
     {
       "path": "src/renderer/styles/App.module.css",
@@ -9891,8 +9891,8 @@
     {
       "path": "src/shared/board-power-actions.ts",
       "category": "source",
-      "bytes": 16182,
-      "sha256": "7cd7de74642a602c4883f1c5d66a4c1b5e8960df03272375be6fd0820d3e2088"
+      "bytes": 16272,
+      "sha256": "8904a8f31f8a6b58b69188ed8cb2cac1ff02fe19c7d6af0a1c2ad2518c5ec190"
     },
     {
       "path": "src/shared/board-power-availability.test.ts",
@@ -10725,14 +10725,14 @@
     {
       "path": "src/shared/gameplay-core.test.ts",
       "category": "test",
-      "bytes": 128576,
-      "sha256": "dc46bcfbfef49f69db82709955e76fdffbe7e3979620cec7589b565545e58b3f"
+      "bytes": 128602,
+      "sha256": "e8eee26b3b8b7ab7a9bf98c5c3ca4252733440add4eedc1495089d03908c3951"
     },
     {
       "path": "src/shared/gameplay-core.ts",
       "category": "source",
-      "bytes": 97632,
-      "sha256": "fa4e5c958f58a9fb7cdc20da4f7dd1eb6501eaf4059e9e64226af2fcb9f426ec"
+      "bytes": 97657,
+      "sha256": "503a2e64f33462277676510c56dbfea5f22804b679a540007159e1842ba63325"
     },
     {
       "path": "src/shared/gameplay-effect-transition.test.ts",
@@ -10767,14 +10767,14 @@
     {
       "path": "src/shared/gameplay-interaction-graph-data.json",
       "category": "source",
-      "bytes": 222801,
-      "sha256": "4b2df75159f7a11b73a67d20595eb4ba66da08da3daca9e4cdd628313c73db91"
+      "bytes": 223715,
+      "sha256": "a1c00f6e3bbc0bb690721e8d42e7b00525c15ee39afdb97a9b724c067ab1dfc0"
     },
     {
       "path": "src/shared/gameplay-interaction-graph.test.ts",
       "category": "test",
-      "bytes": 97827,
-      "sha256": "47962c262bc3291d052db8dff1b6b84f070de8a303ed19da3719940ae9d6a2ef"
+      "bytes": 99176,
+      "sha256": "afb6d7395c48dae2d020efed913401d7c41542bba318b9b55f8903009f2a8161"
     },
     {
       "path": "src/shared/gameplay-interaction-graph.ts",
@@ -16488,7 +16488,7 @@
       "path": "src/renderer/components/GameLeftToolbar.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 472,
+      "lineCount": 473,
       "imports": [
         "file:src/renderer/components/GameLeftToolbar.tsx",
         "file:src/renderer/components/TileBoard.tsx",
@@ -16504,7 +16504,7 @@
       "path": "src/renderer/components/GameLeftToolbar.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 1154,
+      "lineCount": 1156,
       "imports": [
         "file:src/renderer/a11y/toolbarRoving.ts",
         "file:src/renderer/assets/ui/icons/index.ts",
@@ -16739,7 +16739,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 6810,
+      "lineCount": 6813,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -20068,7 +20068,7 @@
       "path": "src/renderer/components/useGameScreenPowerTileHints.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 121,
+      "lineCount": 123,
       "imports": [
         "file:src/shared/board-powers.ts",
         "file:src/shared/contracts.ts"
@@ -21543,7 +21543,7 @@
       "path": "src/renderer/store/appStoreInitialState.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 61,
+      "lineCount": 63,
       "imports": [
         "file:src/renderer/store/appStoreTypes.ts",
         "file:src/renderer/store/matchScorePop.ts",
@@ -22246,7 +22246,7 @@
       "path": "src/renderer/store/runResolutionController.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 551,
+      "lineCount": 553,
       "imports": [
         "file:src/renderer/store/matchScorePop.ts",
         "file:src/renderer/store/runResolutionController.ts",
@@ -22398,7 +22398,7 @@
       "path": "src/renderer/store/runSurfaceState.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 1114,
+      "lineCount": 1130,
       "imports": [
         "file:src/renderer/store/matchScorePop.ts",
         "file:src/renderer/store/runSurfaceState.ts",
@@ -22417,7 +22417,7 @@
       "path": "src/renderer/store/runSurfaceState.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 810,
+      "lineCount": 793,
       "imports": [
         "file:src/renderer/store/matchScorePop.ts",
         "file:src/shared/board-powers.ts",
@@ -22444,7 +22444,6 @@
         "symbol:src/renderer/store/runSurfaceState.ts#createOrdinaryTileFlipResult",
         "symbol:src/renderer/store/runSurfaceState.ts#createPausedRunSurfacePatch",
         "symbol:src/renderer/store/runSurfaceState.ts#createPeekModeToggleResult",
-        "symbol:src/renderer/store/runSurfaceState.ts#createRegionShuffleArmSurfaceResult",
         "symbol:src/renderer/store/runSurfaceState.ts#createRegionShuffleSurfaceResult",
         "symbol:src/renderer/store/runSurfaceState.ts#createRunSurfaceReset",
         "symbol:src/renderer/store/runSurfaceState.ts#createRunWithArmedModesClearedPatch",
@@ -22805,7 +22804,7 @@
       "path": "src/renderer/store/tilePressController.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 276,
+      "lineCount": 282,
       "imports": [
         "file:src/renderer/store/dungeonPressSurfaceState.ts",
         "file:src/renderer/store/gameplayFeedbackAdapter.ts",
@@ -22831,7 +22830,7 @@
       "path": "src/renderer/store/useAppStore.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 2855,
+      "lineCount": 2859,
       "imports": [
         "file:src/renderer/store/matchScorePop.ts",
         "file:src/renderer/store/useAppStore.ts",
@@ -22855,7 +22854,7 @@
       "path": "src/renderer/store/useAppStore.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 876,
+      "lineCount": 868,
       "imports": [
         "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/audio/uiSfx.ts",
@@ -23580,7 +23579,7 @@
       "path": "src/shared/board-power-actions.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 469,
+      "lineCount": 473,
       "imports": [
         "file:src/shared/board-power-availability.ts",
         "file:src/shared/board-power-targeting.ts",
@@ -27451,7 +27450,7 @@
       "path": "src/shared/gameplay-interaction-graph.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 1573,
+      "lineCount": 1600,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/gameplay-core-contracts.ts",
@@ -34842,8 +34841,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameLeftToolbar.tsx",
-      "line": 1153,
-      "endLine": 1153
+      "line": 1155,
+      "endLine": 1155
     },
     {
       "id": "symbol:src/renderer/components/GameOverScreen.tsx#default",
@@ -34938,8 +34937,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 6809,
-      "endLine": 6809
+      "line": 6812,
+      "endLine": 6812
     },
     {
       "id": "symbol:src/renderer/components/GameScreenActionFeedbackRail.tsx#GameScreenActionFeedbackRail",
@@ -38498,8 +38497,8 @@
       "name": "useGameScreenPowerTileHints",
       "kind": "value",
       "file": "src/renderer/components/useGameScreenPowerTileHints.ts",
-      "line": 20,
-      "endLine": 120
+      "line": 21,
+      "endLine": 122
     },
     {
       "id": "symbol:src/renderer/components/useGameScreenTraitRouteTargets.ts#useGameScreenTraitRouteTargets",
@@ -39938,8 +39937,8 @@
       "name": "createAppStoreInitialState",
       "kind": "value",
       "file": "src/renderer/store/appStoreInitialState.ts",
-      "line": 33,
-      "endLine": 60
+      "line": 34,
+      "endLine": 62
     },
     {
       "id": "symbol:src/renderer/store/appStoreTypes.ts#AppState",
@@ -40786,55 +40785,55 @@
       "name": "applyEnemyHazardContactThroughGameplayCore",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 96,
-      "endLine": 114
+      "line": 93,
+      "endLine": 111
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#canPauseRunSurface",
       "name": "canPauseRunSurface",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 152,
-      "endLine": 153
+      "line": 150,
+      "endLine": 151
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#clearRunSurfaceArmedModes",
       "name": "clearRunSurfaceArmedModes",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 753,
-      "endLine": 762
+      "line": 733,
+      "endLine": 743
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createArmedBoardPowerPressResult",
       "name": "createArmedBoardPowerPressResult",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 516,
-      "endLine": 614
+      "line": 494,
+      "endLine": 594
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createBoardPinModeToggleResult",
       "name": "createBoardPinModeToggleResult",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 155,
-      "endLine": 181
+      "line": 153,
+      "endLine": 180
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createBoardPowerContactPolicy",
       "name": "createBoardPowerContactPolicy",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 492,
-      "endLine": 514
+      "line": 470,
+      "endLine": 492
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createDestroyPairArmedToggleResult",
       "name": "createDestroyPairArmedToggleResult",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 183,
+      "line": 182,
       "endLine": 219
     },
     {
@@ -40842,40 +40841,40 @@
       "name": "createDungeonExitActivationSurfaceResult",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 461,
-      "endLine": 490
+      "line": 439,
+      "endLine": 468
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createFlashPairSurfaceResult",
       "name": "createFlashPairSurfaceResult",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 411,
-      "endLine": 434
+      "line": 389,
+      "endLine": 412
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createGambitThirdPickPressResult",
       "name": "createGambitThirdPickPressResult",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 658,
-      "endLine": 751
+      "line": 638,
+      "endLine": 731
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createOrdinaryTileFlipResult",
       "name": "createOrdinaryTileFlipResult",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 616,
-      "endLine": 656
+      "line": 596,
+      "endLine": 636
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createPausedRunSurfacePatch",
       "name": "createPausedRunSurfacePatch",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 803,
-      "endLine": 809
+      "line": 786,
+      "endLine": 792
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createPeekModeToggleResult",
@@ -40883,71 +40882,63 @@
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
       "line": 221,
-      "endLine": 263
-    },
-    {
-      "id": "symbol:src/renderer/store/runSurfaceState.ts#createRegionShuffleArmSurfaceResult",
-      "name": "createRegionShuffleArmSurfaceResult",
-      "kind": "value",
-      "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 358,
-      "endLine": 379
+      "endLine": 262
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createRegionShuffleSurfaceResult",
       "name": "createRegionShuffleSurfaceResult",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 381,
-      "endLine": 409
+      "line": 359,
+      "endLine": 387
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createRunSurfaceReset",
       "name": "createRunSurfaceReset",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 141,
-      "endLine": 150
+      "line": 138,
+      "endLine": 148
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createRunWithArmedModesClearedPatch",
       "name": "createRunWithArmedModesClearedPatch",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 783,
-      "endLine": 790
+      "line": 766,
+      "endLine": 773
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createRunWithBoardInteractionClearedPatch",
       "name": "createRunWithBoardInteractionClearedPatch",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 792,
-      "endLine": 801
+      "line": 775,
+      "endLine": 784
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createRunWithBoardPowersDisarmedPatch",
       "name": "createRunWithBoardPowersDisarmedPatch",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 773,
-      "endLine": 781
+      "line": 755,
+      "endLine": 764
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createRunWithPeekDisarmedPatch",
       "name": "createRunWithPeekDisarmedPatch",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 764,
-      "endLine": 771
+      "line": 745,
+      "endLine": 753
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createShuffleBoardSurfaceResult",
       "name": "createShuffleBoardSurfaceResult",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 333,
-      "endLine": 356
+      "line": 334,
+      "endLine": 357
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createStrayArmToggleResult",
@@ -40955,14 +40946,14 @@
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
       "line": 309,
-      "endLine": 331
+      "endLine": 332
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createTileSwapToggleResult",
       "name": "createTileSwapToggleResult",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 265,
+      "line": 264,
       "endLine": 307
     },
     {
@@ -40970,16 +40961,16 @@
       "name": "createUndoResolvingSurfaceResult",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 436,
-      "endLine": 459
+      "line": 414,
+      "endLine": 437
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#RunSurfaceState",
       "name": "RunSurfaceState",
       "kind": "interface",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 38,
-      "endLine": 48
+      "line": 34,
+      "endLine": 45
     },
     {
       "id": "symbol:src/renderer/store/runTimerController.ts#createRunTimerController",
@@ -41266,16 +41257,16 @@
       "name": "createPlayingTilePressSurfaceResult",
       "kind": "value",
       "file": "src/renderer/store/tilePressController.ts",
-      "line": 52,
-      "endLine": 275
+      "line": 53,
+      "endLine": 281
     },
     {
       "id": "symbol:src/renderer/store/tilePressController.ts#PlayingTilePressSurfaceResult",
       "name": "PlayingTilePressSurfaceResult",
       "kind": "type",
       "file": "src/renderer/store/tilePressController.ts",
-      "line": 46,
-      "endLine": 50
+      "line": 47,
+      "endLine": 51
     },
     {
       "id": "symbol:src/renderer/store/tilePressController.ts#TilePressAudioCue",
@@ -41290,8 +41281,8 @@
       "name": "useAppStore",
       "kind": "value",
       "file": "src/renderer/store/useAppStore.ts",
-      "line": 274,
-      "endLine": 865
+      "line": 273,
+      "endLine": 857
     },
     {
       "id": "symbol:src/renderer/styles/theme.ts#buildRendererThemeStyle",
@@ -42507,7 +42498,7 @@
       "kind": "value",
       "file": "src/shared/board-power-actions.ts",
       "line": 394,
-      "endLine": 442
+      "endLine": 446
     },
     {
       "id": "symbol:src/shared/board-power-actions.ts#applyTileSwap",
@@ -42522,8 +42513,8 @@
       "name": "cancelResolvingWithUndo",
       "kind": "value",
       "file": "src/shared/board-power-actions.ts",
-      "line": 444,
-      "endLine": 468
+      "line": 448,
+      "endLine": 472
     },
     {
       "id": "symbol:src/shared/board-power-actions.ts#DestroyPairTransitionOptions",
@@ -61000,7 +60991,7 @@
       "mechanicId": "core.tile_input",
       "label": "Typed Tile Input",
       "kind": "core",
-      "role": "serializable_flip_utility_contact_and_gambit_input",
+      "role": "serializable_flip_utility_contact_gambit_and_transient_intent_input",
       "evidence": [
         {
           "path": "src/shared/flip-tile-transition.ts",
@@ -61035,6 +61026,10 @@
           "line": 1
         },
         {
+          "path": "src/renderer/store/appStoreInitialState.ts",
+          "line": 29
+        },
+        {
           "path": "src/renderer/store/tilePressController.ts",
           "line": 10
         },
@@ -61045,6 +61040,10 @@
         {
           "path": "src/renderer/store/dungeonPressSurfaceState.ts",
           "line": 7
+        },
+        {
+          "path": "src/renderer/store/useAppStore.ts",
+          "line": 50
         }
       ],
       "tests": [
@@ -61084,6 +61083,10 @@
         "renderer-command-only-board-input",
         "no-renderer-compatibility-mutation-imports",
         "current-command-event-return",
+        "renderer-transient-arming-state",
+        "typed-command-independent-of-ui-arm-flag",
+        "no-live-run-stray-arm-read",
+        "dead-region-arm-action-removed",
         "json-round-trip"
       ]
     },
@@ -62942,7 +62945,7 @@
         },
         {
           "path": "src/renderer/store/useAppStore.test.ts",
-          "line": 520
+          "line": 523
         },
         {
           "path": "src/renderer/store/gameplayFeedbackAdapter.test.ts",
@@ -63613,7 +63616,7 @@
         },
         {
           "path": "src/renderer/store/useAppStore.ts",
-          "line": 68
+          "line": 67
         },
         {
           "path": "src/renderer/store/gameplayFeedbackAdapter.ts",
@@ -63980,6 +63983,14 @@
         {
           "path": "src/renderer/store/runSurfaceState.ts",
           "line": 9
+        },
+        {
+          "path": "src/renderer/store/useAppStore.ts",
+          "line": 46
+        },
+        {
+          "path": "src/renderer/components/GameLeftToolbar.tsx",
+          "line": 161
         }
       ],
       "tests": [
@@ -64012,7 +64023,8 @@
         "clear-flip-state",
         "deterministic-seed",
         "no-shuffle-contract",
-        "exit-source-protection"
+        "exit-source-protection",
+        "direct-row-command-no-dead-arm-state"
       ]
     },
     {
@@ -64066,7 +64078,7 @@
       "mechanicId": "power.stray_remove",
       "label": "Stray Remove",
       "kind": "power",
-      "role": "completion_safe_board_control",
+      "role": "completion_safe_typed_control_with_transient_surface_intent",
       "evidence": [
         {
           "path": "src/shared/board-power-actions.ts",
@@ -64077,8 +64089,36 @@
           "line": 7
         },
         {
+          "path": "src/renderer/store/appStoreInitialState.ts",
+          "line": 27
+        },
+        {
+          "path": "src/renderer/store/appStoreTypes.ts",
+          "line": 41
+        },
+        {
           "path": "src/renderer/store/runSurfaceState.ts",
           "line": 11
+        },
+        {
+          "path": "src/renderer/store/tilePressController.ts",
+          "line": 29
+        },
+        {
+          "path": "src/renderer/store/useAppStore.ts",
+          "line": 49
+        },
+        {
+          "path": "src/renderer/components/GameScreen.tsx",
+          "line": 2491
+        },
+        {
+          "path": "src/renderer/components/GameLeftToolbar.tsx",
+          "line": 191
+        },
+        {
+          "path": "src/renderer/components/useGameScreenPowerTileHints.ts",
+          "line": 6
         }
       ],
       "tests": [
@@ -64092,7 +64132,15 @@
         },
         {
           "path": "src/renderer/store/runSurfaceState.test.ts",
-          "line": 27
+          "line": 26
+        },
+        {
+          "path": "src/renderer/store/useAppStore.test.ts",
+          "line": 26
+        },
+        {
+          "path": "src/renderer/components/GameLeftToolbar.test.tsx",
+          "line": 46
         }
       ],
       "enables": [
@@ -64103,7 +64151,10 @@
       "softlockGuards": [
         "completion-safe-stray-target",
         "clear-flip-state",
-        "protected-route-special"
+        "protected-route-special",
+        "renderer-transient-arming-state",
+        "typed-command-independent-of-ui-arm-flag",
+        "no-live-run-stray-arm-read"
       ]
     },
     {
@@ -64180,7 +64231,7 @@
         },
         {
           "path": "src/renderer/store/useAppStore.ts",
-          "line": 52
+          "line": 51
         }
       ],
       "tests": [
@@ -64194,7 +64245,7 @@
         },
         {
           "path": "src/renderer/store/runSurfaceState.test.ts",
-          "line": 29
+          "line": 28
         }
       ],
       "enables": [
@@ -79467,12 +79518,6 @@
       "kind": "exports"
     },
     {
-      "id": "exports:src/renderer/store/runSurfaceState.ts->symbol:src/renderer/store/runSurfaceState.ts#createRegionShuffleArmSurfaceResult",
-      "source": "file:src/renderer/store/runSurfaceState.ts",
-      "target": "symbol:src/renderer/store/runSurfaceState.ts#createRegionShuffleArmSurfaceResult",
-      "kind": "exports"
-    },
-    {
       "id": "exports:src/renderer/store/runSurfaceState.ts->symbol:src/renderer/store/runSurfaceState.ts#createRegionShuffleSurfaceResult",
       "source": "file:src/renderer/store/runSurfaceState.ts",
       "target": "symbol:src/renderer/store/runSurfaceState.ts#createRegionShuffleSurfaceResult",
@@ -94477,6 +94522,12 @@
       "kind": "implemented_by"
     },
     {
+      "id": "implemented_by:mechanic:core.tile_input->file:src/renderer/store/appStoreInitialState.ts",
+      "source": "mechanic:core.tile_input",
+      "target": "file:src/renderer/store/appStoreInitialState.ts",
+      "kind": "implemented_by"
+    },
+    {
       "id": "implemented_by:mechanic:core.tile_input->file:src/renderer/store/dungeonPressSurfaceState.ts",
       "source": "mechanic:core.tile_input",
       "target": "file:src/renderer/store/dungeonPressSurfaceState.ts",
@@ -94492,6 +94543,12 @@
       "id": "implemented_by:mechanic:core.tile_input->file:src/renderer/store/tilePressController.ts",
       "source": "mechanic:core.tile_input",
       "target": "file:src/renderer/store/tilePressController.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:core.tile_input->file:src/renderer/store/useAppStore.ts",
+      "source": "mechanic:core.tile_input",
+      "target": "file:src/renderer/store/useAppStore.ts",
       "kind": "implemented_by"
     },
     {
@@ -95839,9 +95896,21 @@
       "kind": "implemented_by"
     },
     {
+      "id": "implemented_by:mechanic:power.region_shuffle->file:src/renderer/components/GameLeftToolbar.tsx",
+      "source": "mechanic:power.region_shuffle",
+      "target": "file:src/renderer/components/GameLeftToolbar.tsx",
+      "kind": "implemented_by"
+    },
+    {
       "id": "implemented_by:mechanic:power.region_shuffle->file:src/renderer/store/runSurfaceState.ts",
       "source": "mechanic:power.region_shuffle",
       "target": "file:src/renderer/store/runSurfaceState.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:power.region_shuffle->file:src/renderer/store/useAppStore.ts",
+      "source": "mechanic:power.region_shuffle",
+      "target": "file:src/renderer/store/useAppStore.ts",
       "kind": "implemented_by"
     },
     {
@@ -95875,9 +95944,51 @@
       "kind": "implemented_by"
     },
     {
+      "id": "implemented_by:mechanic:power.stray_remove->file:src/renderer/components/GameLeftToolbar.tsx",
+      "source": "mechanic:power.stray_remove",
+      "target": "file:src/renderer/components/GameLeftToolbar.tsx",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:power.stray_remove->file:src/renderer/components/GameScreen.tsx",
+      "source": "mechanic:power.stray_remove",
+      "target": "file:src/renderer/components/GameScreen.tsx",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:power.stray_remove->file:src/renderer/components/useGameScreenPowerTileHints.ts",
+      "source": "mechanic:power.stray_remove",
+      "target": "file:src/renderer/components/useGameScreenPowerTileHints.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:power.stray_remove->file:src/renderer/store/appStoreInitialState.ts",
+      "source": "mechanic:power.stray_remove",
+      "target": "file:src/renderer/store/appStoreInitialState.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:power.stray_remove->file:src/renderer/store/appStoreTypes.ts",
+      "source": "mechanic:power.stray_remove",
+      "target": "file:src/renderer/store/appStoreTypes.ts",
+      "kind": "implemented_by"
+    },
+    {
       "id": "implemented_by:mechanic:power.stray_remove->file:src/renderer/store/runSurfaceState.ts",
       "source": "mechanic:power.stray_remove",
       "target": "file:src/renderer/store/runSurfaceState.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:power.stray_remove->file:src/renderer/store/tilePressController.ts",
+      "source": "mechanic:power.stray_remove",
+      "target": "file:src/renderer/store/tilePressController.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:power.stray_remove->file:src/renderer/store/useAppStore.ts",
+      "source": "mechanic:power.stray_remove",
+      "target": "file:src/renderer/store/useAppStore.ts",
       "kind": "implemented_by"
     },
     {
@@ -122480,9 +122591,21 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:mechanic:power.stray_remove->file:src/renderer/components/GameLeftToolbar.test.tsx",
+      "source": "mechanic:power.stray_remove",
+      "target": "file:src/renderer/components/GameLeftToolbar.test.tsx",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:mechanic:power.stray_remove->file:src/renderer/store/runSurfaceState.test.ts",
       "source": "mechanic:power.stray_remove",
       "target": "file:src/renderer/store/runSurfaceState.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:power.stray_remove->file:src/renderer/store/useAppStore.test.ts",
+      "source": "mechanic:power.stray_remove",
+      "target": "file:src/renderer/store/useAppStore.test.ts",
       "kind": "tested_by"
     },
     {

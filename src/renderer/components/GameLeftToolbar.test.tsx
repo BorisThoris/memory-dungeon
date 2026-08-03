@@ -43,6 +43,7 @@ const renderToolbar = (run: RunState, overrides: ToolbarOverrideProps = {}) =>
             shuffleDisabled={false}
             shuffleRegionRow={noop}
             shuffleTitle="Shuffle hidden tiles"
+            strayRemoveArmed={run.strayRemoveArmed}
             tileBoardRef={createRef<TileBoardHandle | null>()}
             tileSwapArmed={false}
             tileSwapDisabled={false}

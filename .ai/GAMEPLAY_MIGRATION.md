@@ -676,6 +676,20 @@ The live board no longer reaches through compatibility exports for its highest-f
 
 Graph v47 strengthens `core.tile_input` with explicit renderer-command-only, no-compatibility-import, and current-command-event guards across the shared adapter and both live board presentation surfaces.
 
+## Forty-eighth vertical slice: Transient Surface Intent Ownership
+
+Board-power arming is now treated as short-lived interface intent instead of durable gameplay truth:
+
+1. Live Stray Remove arming belongs to `RunSurfaceState.strayRemoveArmed` in Zustand and is initialized, toggled, reset, and cleared alongside Peek, Destroy, Pin, and Swap surface modes.
+2. `GameScreen`, `GameLeftToolbar`, tile hints, and the tile-press controller consume the transient surface flag; production renderer code no longer reads or writes `run.strayRemoveArmed`.
+3. The serialized `RunState.strayRemoveArmed` field and the legacy pure helper's armed-by-default precondition remain temporarily for save and compatibility callers during the strangler migration.
+4. A typed `board.stray_remove` command is self-contained player intent. Core reduction deliberately bypasses the legacy UI-arm precondition while preserving every target, charge, route-anchor, completion-safety, and feedback rule.
+5. Successful actions, mode changes, hazards, run transitions, and mutual-exclusion helpers clear the transient flag without changing replayable run state.
+6. Region Shuffle already submits a row directly through a typed command. Its unused renderer arm action and state writer were removed instead of formalizing dead state; the legacy shared helper remains only as compatibility surface.
+7. Source-boundary tests reject live renderer reads of the serialized Stray arm field and reject reintroduction of the dead Region Shuffle arm action, while behavioral tests prove command independence and transient-state cleanup.
+
+Graph v48 records transient intent ownership, typed-command independence from UI arm flags, the no-live-serialized-arm boundary, and direct Region Shuffle row commands across the core, store, presentation, and test evidence.
+
 ## Current slice status
 
 Implemented in the Conduit Cartographer vertical slice:
@@ -696,5 +710,5 @@ Still required before the vertical slice is complete:
 
 - widen the feedback-completeness audit beyond the former HUD-critical fields as additional gameplay ownership enters the core;
 - extend the four-floor perfect-information proof into longer strategy-aware player policies and explicit adversarial counter-matchups without replacing observed shipped-schedule distributions with synthetic claims;
-- use the retained trace to identify and migrate any remaining non-command gameplay mutations between generated floors and presentation surfaces;
+- use the retained trace to identify and migrate the remaining non-command gameplay mutations and serialized UI-intent fields between generated floors and presentation surfaces;
 - continue migrating cohesive player builds rather than adding isolated definitions, using the graph diagnostics to choose the next least-overlapping loop.

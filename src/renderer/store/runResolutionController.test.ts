@@ -35,6 +35,7 @@ type ResolutionPatch = Partial<{
     saveData: SaveData;
     settings: Settings;
     shopReturnMode: 'floor' | 'summary' | null;
+    strayRemoveArmed: boolean;
     tileSwapArmed: boolean;
     tileSwapFirstTileId: string | null;
     view: ViewState;
@@ -60,6 +61,7 @@ const runSurfaceReset = {
     mismatchScorePop: null,
     peekModeArmed: false,
     shopReturnMode: null,
+    strayRemoveArmed: false,
     tileSwapArmed: false,
     tileSwapFirstTileId: null
 } satisfies ResolutionPatch;

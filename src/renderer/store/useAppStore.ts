@@ -43,7 +43,6 @@ import {
     createFlashPairSurfaceResult,
     createGambitThirdPickPressResult,
     createPeekModeToggleResult,
-    createRegionShuffleArmSurfaceResult,
     createRegionShuffleSurfaceResult,
     createRunSurfaceReset,
     createShuffleBoardSurfaceResult,
@@ -511,6 +510,7 @@ export const useAppStore = create<AppState>((set, get) => ({
             boardPinMode,
             destroyPairArmed,
             peekModeArmed,
+            strayRemoveArmed,
             tileSwapArmed,
             tileSwapFirstTileId
         } = get();
@@ -579,6 +579,7 @@ export const useAppStore = create<AppState>((set, get) => ({
                 destroyPairArmed,
                 peekModeArmed,
                 run,
+                strayRemoveArmed,
                 tileSwapArmed,
                 tileSwapFirstTileId,
                 tileId
@@ -671,8 +672,8 @@ export const useAppStore = create<AppState>((set, get) => ({
     },
 
     toggleStrayArm: () => {
-        const { run, view } = get();
-        const result = createStrayArmToggleResult({ run, view });
+        const { run, strayRemoveArmed, view } = get();
+        const result = createStrayArmToggleResult({ run, strayRemoveArmed, view });
         if (result.kind === 'ignored') {
             return;
         }
@@ -686,15 +687,6 @@ export const useAppStore = create<AppState>((set, get) => ({
     shuffleBoard: () => {
         const { run, view } = get();
         const result = createShuffleBoardSurfaceResult({ run, view });
-        if (result.kind === 'ignored') {
-            return;
-        }
-        set(result.patch);
-    },
-
-    armRegionShuffleRowPick: (row) => {
-        const { run, view } = get();
-        const result = createRegionShuffleArmSurfaceResult({ row, run, view });
         if (result.kind === 'ignored') {
             return;
         }

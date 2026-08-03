@@ -14,6 +14,7 @@ interface GameScreenPowerTileHintsOptions {
     mergedPeekTileIds: readonly string[];
     peekModeArmed: boolean;
     run: RunState;
+    strayRemoveArmed: boolean;
     tileSwapPowerVisualActive: boolean;
 }
 
@@ -23,6 +24,7 @@ export const useGameScreenPowerTileHints = ({
     mergedPeekTileIds,
     peekModeArmed,
     run,
+    strayRemoveArmed,
     tileSwapPowerVisualActive
 }: GameScreenPowerTileHintsOptions) => {
     const shiftingSpotlightActive = useMemo(
@@ -55,10 +57,10 @@ export const useGameScreenPowerTileHints = ({
         () =>
             Boolean(run.board) &&
             run.status === 'playing' &&
-            run.strayRemoveArmed &&
+            strayRemoveArmed &&
             run.strayRemoveCharges > 0 &&
             run.board!.flippedTileIds.length === 0,
-        [run.board, run.status, run.strayRemoveArmed, run.strayRemoveCharges]
+        [run.board, run.status, strayRemoveArmed, run.strayRemoveCharges]
     );
 
     const pinModeBoardHintActive = useMemo(

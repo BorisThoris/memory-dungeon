@@ -2550,11 +2550,12 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             : run.activeMutators.length > 0 && run.board?.matchedPairs === 0
               ? `New pressure: ${run.activeMutators.map((id) => MUTATOR_CATALOG[id]?.title ?? id).join(', ')}.`
               : null);
-    const { boardPinMode, destroyPairArmed, peekModeArmed, tileSwapArmed, tileSwapFirstTileId } = useAppStore(
+    const { boardPinMode, destroyPairArmed, peekModeArmed, strayRemoveArmed, tileSwapArmed, tileSwapFirstTileId } = useAppStore(
         useShallow((state) => ({
             boardPinMode: state.boardPinMode,
             destroyPairArmed: state.destroyPairArmed,
             peekModeArmed: state.peekModeArmed,
+            strayRemoveArmed: state.strayRemoveArmed,
             tileSwapArmed: state.tileSwapArmed,
             tileSwapFirstTileId: state.tileSwapFirstTileId
         }))
@@ -3923,6 +3924,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         mergedPeekTileIds,
         peekModeArmed,
         run,
+        strayRemoveArmed,
         tileSwapPowerVisualActive
     });
 
@@ -5673,6 +5675,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                             shuffleDisabled={shuffleDisabled}
                             shuffleRegionRow={shuffleRegionRow}
                             shuffleTitle={shuffleTitle}
+                            strayRemoveArmed={strayRemoveArmed}
                             tileBoardRef={tileBoardRef}
                             tileSwapArmed={tileSwapArmed}
                             tileSwapDisabled={tileSwapDisabled}

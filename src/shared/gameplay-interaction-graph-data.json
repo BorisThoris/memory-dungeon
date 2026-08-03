@@ -1,5 +1,5 @@
 {
-  "version": 47,
+  "version": 48,
   "mechanics": [
     {
       "id": "trait.echo",
@@ -136,12 +136,12 @@
       "label": "Region Row Shuffle",
       "kind": "power",
       "role": "targeted_hidden_row_reordering",
-      "evidence": ["src/shared/board-power-actions.ts", "src/shared/gameplay-core.ts", "src/renderer/store/runSurfaceState.ts"],
+      "evidence": ["src/shared/board-power-actions.ts", "src/shared/gameplay-core.ts", "src/renderer/store/runSurfaceState.ts", "src/renderer/store/useAppStore.ts", "src/renderer/components/GameLeftToolbar.tsx"],
       "reads": ["regionShuffleCharges", "regionShuffleFreeThisFloor", "shuffleNonce", "tileStates", "noShuffle", "boardRows"],
       "writes": ["regionShuffleCharges", "regionShuffleFreeThisFloor", "shuffleNonce", "tileStates", "forgottenTileIdsThisFloor", "powersUsedThisRun", "feedbackLines"],
       "enables": ["trait.drift", "trait.conduit", "objective.floor_clear", "build.trap_control"],
       "blocks": [],
-      "softlockGuards": ["two-hidden-row-tiles", "clear-flip-state", "deterministic-seed", "no-shuffle-contract", "exit-source-protection"],
+      "softlockGuards": ["two-hidden-row-tiles", "clear-flip-state", "deterministic-seed", "no-shuffle-contract", "exit-source-protection", "direct-row-command-no-dead-arm-state"],
       "tests": ["src/shared/board-power-actions.test.ts", "src/shared/board-power-availability.test.ts", "src/shared/gameplay-core.test.ts", "src/renderer/store/runSurfaceState.test.ts"]
     },
     {
@@ -1292,14 +1292,14 @@
       "id": "power.stray_remove",
       "label": "Stray Remove",
       "kind": "power",
-      "role": "completion_safe_board_control",
-      "evidence": ["src/shared/board-power-actions.ts", "src/shared/gameplay-core.ts", "src/renderer/store/runSurfaceState.ts"],
+      "role": "completion_safe_typed_control_with_transient_surface_intent",
+      "evidence": ["src/shared/board-power-actions.ts", "src/shared/gameplay-core.ts", "src/renderer/store/appStoreInitialState.ts", "src/renderer/store/appStoreTypes.ts", "src/renderer/store/runSurfaceState.ts", "src/renderer/store/tilePressController.ts", "src/renderer/store/useAppStore.ts", "src/renderer/components/GameScreen.tsx", "src/renderer/components/GameLeftToolbar.tsx", "src/renderer/components/useGameScreenPowerTileHints.ts"],
       "reads": ["strayRemoveCharges", "tileStates", "recallFocus"],
       "writes": ["strayRemoveCharges", "tileStates", "forgottenTileIdsThisFloor", "powersUsedThisRun", "feedbackLines"],
       "enables": ["objective.floor_clear", "build.reveal_scout"],
       "blocks": [],
-      "softlockGuards": ["completion-safe-stray-target", "clear-flip-state", "protected-route-special"],
-      "tests": ["src/shared/board-power-actions.test.ts", "src/shared/gameplay-core.test.ts", "src/renderer/store/runSurfaceState.test.ts"]
+      "softlockGuards": ["completion-safe-stray-target", "clear-flip-state", "protected-route-special", "renderer-transient-arming-state", "typed-command-independent-of-ui-arm-flag", "no-live-run-stray-arm-read"],
+      "tests": ["src/shared/board-power-actions.test.ts", "src/shared/gameplay-core.test.ts", "src/renderer/store/runSurfaceState.test.ts", "src/renderer/store/useAppStore.test.ts", "src/renderer/components/GameLeftToolbar.test.tsx"]
     },
     {
       "id": "power.pin",
@@ -1747,13 +1747,13 @@
       "id": "core.tile_input",
       "label": "Typed Tile Input",
       "kind": "core",
-      "role": "serializable_flip_utility_contact_and_gambit_input",
-      "evidence": ["src/shared/flip-tile-transition.ts", "src/shared/tile-flip-command-transition.ts", "src/shared/dungeon-enemy-hazard-rules.ts", "src/shared/gameplay-core-contracts.ts", "src/shared/gameplay-core.ts", "src/shared/gameplay-core-adapters.ts", "src/shared/gameplay-core-simulation.ts", "scripts/sim-gameplay-core.ts", "src/renderer/store/tilePressController.ts", "src/renderer/store/runSurfaceState.ts", "src/renderer/store/dungeonPressSurfaceState.ts"],
+      "role": "serializable_flip_utility_contact_gambit_and_transient_intent_input",
+      "evidence": ["src/shared/flip-tile-transition.ts", "src/shared/tile-flip-command-transition.ts", "src/shared/dungeon-enemy-hazard-rules.ts", "src/shared/gameplay-core-contracts.ts", "src/shared/gameplay-core.ts", "src/shared/gameplay-core-adapters.ts", "src/shared/gameplay-core-simulation.ts", "scripts/sim-gameplay-core.ts", "src/renderer/store/appStoreInitialState.ts", "src/renderer/store/tilePressController.ts", "src/renderer/store/runSurfaceState.ts", "src/renderer/store/dungeonPressSurfaceState.ts", "src/renderer/store/useAppStore.ts"],
       "reads": ["tileStates", "flippedTileIds", "enemyHazards", "guardTokens", "lives", "dungeonCardKind", "runStatus"],
       "writes": ["tileStates", "flippedTileIds", "lives", "guardTokens", "timerState", "gameplayCommands", "gameplayEvents"],
       "enables": ["core.board_turn_resolution", "exit.primary", "progression.run_flow"],
       "blocks": [],
-      "softlockGuards": ["strict-command-schema", "target-legality", "guard-before-life", "gambit-intent-before-flip", "single-command-state-transition", "renderer-command-only-board-input", "no-renderer-compatibility-mutation-imports", "current-command-event-return", "json-round-trip"],
+      "softlockGuards": ["strict-command-schema", "target-legality", "guard-before-life", "gambit-intent-before-flip", "single-command-state-transition", "renderer-command-only-board-input", "no-renderer-compatibility-mutation-imports", "current-command-event-return", "renderer-transient-arming-state", "typed-command-independent-of-ui-arm-flag", "no-live-run-stray-arm-read", "dead-region-arm-action-removed", "json-round-trip"],
       "tests": ["src/shared/gameplay-core.test.ts", "src/shared/game.test.ts", "src/renderer/store/runSurfaceState.test.ts", "src/renderer/store/tilePressController.test.ts", "src/renderer/store/dungeonPressSurfaceState.test.ts"]
     },
     {

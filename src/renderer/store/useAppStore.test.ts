@@ -64,6 +64,9 @@ const resetStore = (): void => {
         boardPinMode: false,
         destroyPairArmed: false,
         peekModeArmed: false,
+        strayRemoveArmed: false,
+        tileSwapArmed: false,
+        tileSwapFirstTileId: null,
         dungeonExitPromptOpen: false,
         shopReturnMode: null,
         ...BOARD_FLOATER_POP_CLEAR
@@ -1054,13 +1057,13 @@ describe('useAppStore timers', () => {
                 ...baseRun,
                 board,
                 status: 'playing',
-                strayRemoveArmed: true,
                 stats: { ...baseRun.stats, guardTokens: 0 },
                 findablesTotalThisFloor: countFindablePairs(board.tiles)
             },
             boardPinMode: true,
             destroyPairArmed: true,
             peekModeArmed: true,
+            strayRemoveArmed: true,
             tileSwapArmed: true,
             tileSwapFirstTileId: hazard.currentTileId
         });
@@ -1073,7 +1076,7 @@ describe('useAppStore timers', () => {
         expect(nextRun.board!.tiles.find((tile) => tile.id === hazard.currentTileId)!.state).toBe('flipped');
         expect(nextRun.board!.flippedTileIds).toEqual([hazard.currentTileId]);
         expect(nextRun.board!.enemyHazards!.find((item) => item.id === hazard.id)!.currentTileId).toBe(hazard.nextTileId);
-        expect(nextRun.strayRemoveArmed).toBe(false);
+        expect(useAppStore.getState().strayRemoveArmed).toBe(false);
         expect(useAppStore.getState().boardPinMode).toBe(false);
         expect(useAppStore.getState().destroyPairArmed).toBe(false);
         expect(useAppStore.getState().peekModeArmed).toBe(false);
@@ -1245,10 +1248,10 @@ describe('useAppStore timers', () => {
                 ...baseRun,
                 board,
                 status: 'playing',
-                strayRemoveArmed: true,
                 strayRemoveCharges: 1,
                 stats: { ...baseRun.stats, guardTokens: 0 }
-            }
+            },
+            strayRemoveArmed: true
         });
 
         useAppStore.getState().pressTile('w1');
@@ -1257,7 +1260,7 @@ describe('useAppStore timers', () => {
         expect(nextRun.lives).toBe(baseRun.lives - 1);
         expect(nextRun.enemyHazardHitsThisFloor).toBe(1);
         expect(nextRun.strayRemoveCharges).toBe(0);
-        expect(nextRun.strayRemoveArmed).toBe(false);
+        expect(useAppStore.getState().strayRemoveArmed).toBe(false);
         expect(nextRun.board!.tiles.find((tile) => tile.id === 'w1')!.state).toBe('removed');
         expect(nextRun.board!.flippedTileIds).toEqual([]);
         expect(nextRun.board!.enemyHazards![0]).toMatchObject({ state: 'revealed', currentTileId: 'b1' });
@@ -1303,10 +1306,10 @@ describe('useAppStore timers', () => {
                 ...baseRun,
                 board,
                 status: 'playing',
-                strayRemoveArmed: true,
                 strayRemoveCharges: 1,
                 stats: { ...baseRun.stats, guardTokens: 0 }
-            }
+            },
+            strayRemoveArmed: true
         });
 
         useAppStore.getState().pressTile('a1');
@@ -1315,6 +1318,7 @@ describe('useAppStore timers', () => {
         expect(nextRun.lives).toBe(baseRun.lives - 1);
         expect(nextRun.enemyHazardHitsThisFloor).toBe(1);
         expect(nextRun.strayRemoveCharges).toBe(1);
+        expect(useAppStore.getState().strayRemoveArmed).toBe(true);
         expect(nextRun.board!.tiles.find((tile) => tile.id === 'a1')!.state).toBe('hidden');
         expect(nextRun.board!.enemyHazards![0]).toMatchObject({ state: 'revealed', currentTileId: 'b1' });
     });
