@@ -5,12 +5,12 @@ import type {
 import { createGameplayRouteChooseCommand } from '../../shared/gameplay-core-contracts';
 import { reduceGameplayCommand } from '../../shared/gameplay-core';
 import { appendGameplayJournal } from '../../shared/gameplay-journal';
+import { createDeadInterludeGameOverRun } from '../../shared/interlude-transition-rules';
 import {
     createLevelCompleteContinuationSurfaceResult,
     shouldPrepareMemorizeTimerForContinuation,
     type LevelCompleteContinuationSurfaceResult
 } from './levelCompleteSurfaceState';
-import { createDeadInterludeGameOverRun } from './sideRoomSurfaceState';
 
 type ContinuationPatch = Exclude<LevelCompleteContinuationSurfaceResult, { kind: 'gameOver' }>['patch'];
 

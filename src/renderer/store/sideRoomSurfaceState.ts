@@ -4,6 +4,7 @@ import { clearRunSurfaceArmedModes, type RunSurfaceState } from './runSurfaceSta
 import { createGameplaySideRoomResolveCommand } from '../../shared/gameplay-core-contracts';
 import { reduceGameplayCommand } from '../../shared/gameplay-core';
 import { appendGameplayJournal } from '../../shared/gameplay-journal';
+import { createDeadInterludeGameOverRun } from '../../shared/interlude-transition-rules';
 import {
     getNewGameplayFeedback,
     type GameplayFeedbackPresentation
@@ -72,22 +73,6 @@ type SideRoomActionSurfaceResult =
       };
 
 export type SideRoomActionSurfacePatch = Extract<SideRoomActionSurfaceResult, { patch: unknown }>['patch'];
-
-export const createDeadInterludeGameOverRun = (run: RunState): RunState | null => {
-    if (run.status !== 'gameOver' && run.lives > 0) {
-        return null;
-    }
-
-    return {
-        ...run,
-        status: 'gameOver',
-        lives: 0,
-        pendingRouteCardPlan: null,
-        sideRoom: null,
-        relicOffer: null,
-        shopOffers: []
-    };
-};
 
 export const createSideRoomActionSurfaceResult = (
     view: ViewState,

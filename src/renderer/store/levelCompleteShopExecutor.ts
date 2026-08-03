@@ -3,10 +3,10 @@ import type {
     SubscreenReturnView,
     ViewState
 } from '../../shared/contracts';
+import { createDeadInterludeGameOverRun } from '../../shared/interlude-transition-rules';
 import {
     resolveNavigationTransition
 } from './navigationModel';
-import { createDeadInterludeGameOverRun } from './sideRoomSurfaceState';
 import {
     canOpenLevelCompleteShopSurface,
     createLevelCompleteShopOpenSurfacePatch,

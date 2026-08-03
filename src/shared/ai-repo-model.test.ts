@@ -14,6 +14,7 @@ type AiRepoModel = {
         stateFieldCount: number;
         runStateFieldCount: number;
         dormantRunStateFieldCount: number;
+        rendererRunStateWriteCount: number;
         gameplayCommandTypeCount: number;
         gameplayEventTypeCount: number;
         unhandledGameplayCommandTypeCount: number;
@@ -32,7 +33,11 @@ type AiRepoModel = {
         name: string;
         source: { path: string; line: number };
         readReferences: { path: string; line: number }[];
-        writeReferences: { path: string; line: number }[];
+        writeReferences: {
+            path: string;
+            line: number;
+            accessKind: 'direct_assignment' | 'state_construction';
+        }[];
     }[];
     gameplayCommands: {
         id: string;
@@ -75,7 +80,7 @@ describe('AI repository model', () => {
         ).not.toThrow();
 
         const model = JSON.parse(fs.readFileSync(modelPath, 'utf8')) as AiRepoModel;
-        expect(model.schemaVersion).toBe(4);
+        expect(model.schemaVersion).toBe(5);
         expect(model.repository.trackedFileCount).toBeGreaterThan(2_000);
         expect(model.repository.codeFileCount).toBeGreaterThan(800);
         expect(model.repository.exportedSymbolCount).toBeGreaterThan(1_000);
@@ -85,6 +90,7 @@ describe('AI repository model', () => {
         expect(model.repository.runStateFieldCount).toBeGreaterThan(120);
         expect(model.repository.runStateFieldCount).toBe(model.runStateFields.length);
         expect(model.repository.dormantRunStateFieldCount).toBe(0);
+        expect(model.repository.rendererRunStateWriteCount).toBe(0);
         expect(model.repository.gameplayCommandTypeCount).toBe(34);
         expect(model.repository.gameplayEventTypeCount).toBe(54);
         expect(model.repository.unhandledGameplayCommandTypeCount).toBe(0);
@@ -114,6 +120,20 @@ describe('AI repository model', () => {
             [...model.playerVisibleStates].sort()
         );
         expect(model.runStateFields.every((field) => field.source.line > 0 && field.readReferences.length > 0)).toBe(true);
+        expect(model.runStateFields.flatMap((field) => field.writeReferences).every(
+            (reference) => reference.accessKind === 'direct_assignment' || reference.accessKind === 'state_construction'
+        )).toBe(true);
+        expect(model.runStateFields.flatMap((field) => field.writeReferences).filter(
+            (reference) => reference.path.startsWith('src/renderer/') && !reference.path.startsWith('src/renderer/dev/')
+        )).toEqual([]);
+        expect(model.runStateFields.flatMap((field) => field.writeReferences)).toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({
+                    path: 'src/renderer/dev/hudFixtures.ts',
+                    accessKind: 'state_construction'
+                })
+            ])
+        );
         expect(model.runStateFields.map((field) => field.name)).not.toEqual(
             expect.arrayContaining(['dailyStreakCount', 'dungeonShopVisitedThisFloor', 'wildTileId'])
         );
@@ -125,6 +145,15 @@ describe('AI repository model', () => {
             ]),
             writeReferences: expect.arrayContaining([
                 expect.objectContaining({ path: 'src/shared/run-creation-rules.ts', line: expect.any(Number) })
+            ])
+        });
+        expect(model.runStateFields.find((field) => field.name === 'weakerShuffleMode')).toMatchObject({
+            writeReferences: expect.arrayContaining([
+                expect.objectContaining({
+                    path: 'src/shared/run-settings-rules.ts',
+                    line: expect.any(Number),
+                    accessKind: 'state_construction'
+                })
             ])
         });
         expect(model.gameplayCommands.every(

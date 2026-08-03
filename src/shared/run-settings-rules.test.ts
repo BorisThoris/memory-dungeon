@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import type { Settings } from '../../shared/contracts';
-import { createNewRun } from '../../shared/game-core';
-import { createDefaultSaveData } from '../../shared/save-data';
-import { patchRunFromUserSettings } from './runSettingsPatch';
+import type { Settings } from './contracts';
+import { createNewRun } from './game-core';
+import { createDefaultSaveData } from './save-data';
+import { applyRunSettings } from './run-settings-rules';
 
-describe('patchRunFromUserSettings', () => {
+describe('applyRunSettings', () => {
     it('copies player settings that affect run behavior without changing run identity', () => {
         const run = createNewRun(0, { runSeed: 123 });
         const settings: Settings = {
@@ -15,7 +15,7 @@ describe('patchRunFromUserSettings', () => {
             echoFeedbackEnabled: false
         };
 
-        const patched = patchRunFromUserSettings(run, settings);
+        const patched = applyRunSettings(run, settings);
 
         expect(patched).toMatchObject({
             runSeed: run.runSeed,

@@ -1,5 +1,5 @@
 {
-  "version": 65,
+  "version": 66,
   "mechanics": [
     {
       "id": "trait.echo",
@@ -1812,14 +1812,14 @@
       "id": "simulation.ai_repository_model",
       "label": "Source-Derived AI Repository Model",
       "kind": "simulation",
-      "role": "compiler_derived_repository_run_state_protocol_and_gameplay_relationship_gate",
-      "evidence": ["scripts/ai-repo-model.mjs", "src/shared/contracts.ts", "src/shared/gameplay-core-contracts.ts", "src/shared/gameplay-core.ts", "src/shared/gameplay-effect-transition.ts", "src/shared/gameplay-journal.ts", "src/shared/gameplay-interaction-graph-data.json", "src/shared/gameplay-feedback-facts.ts", "src/renderer/store/gameplayFeedbackAdapter.ts", ".ai/README.md"],
-      "reads": ["repositoryFiles", "RunState", "gameplayCommandSchema", "gameplayEventSchema", "gameplayInteractionGraph", "contentRegistries", "playerVisibleFieldRegistry"],
-      "writes": ["repositoryModelReport", "runStateFieldUsageReport", "gameplayProtocolReport", "modelDiagnosticsReport"],
+      "role": "compiler_derived_repository_run_state_protocol_renderer_ownership_and_gameplay_relationship_gate",
+      "evidence": ["scripts/ai-repo-model.mjs", "src/shared/contracts.ts", "src/shared/gameplay-core-contracts.ts", "src/shared/gameplay-core.ts", "src/shared/gameplay-effect-transition.ts", "src/shared/gameplay-journal.ts", "src/shared/run-settings-rules.ts", "src/shared/interlude-transition-rules.ts", "src/shared/run-summary-rules.ts", "src/shared/gameplay-interaction-graph-data.json", "src/shared/gameplay-feedback-facts.ts", "src/renderer/store/gameplayFeedbackAdapter.ts", ".ai/README.md"],
+      "reads": ["repositoryFiles", "RunState", "runStateWriteSites", "gameplayCommandSchema", "gameplayEventSchema", "gameplayInteractionGraph", "contentRegistries", "playerVisibleFieldRegistry"],
+      "writes": ["repositoryModelReport", "runStateFieldUsageReport", "rendererRunStateOwnershipReport", "gameplayProtocolReport", "modelDiagnosticsReport"],
       "enables": ["core.gameplay_commands", "feedback.gameplay_hud", "persistence.run_summary", "safety.softlock_fairness", "simulation.gameplay_replay"],
       "blocks": [],
-      "softlockGuards": ["compiler-derived-run-state-fields", "schema-derived-gameplay-protocol", "command-handler-completeness", "event-emitter-completeness", "protocol-test-completeness", "feedback-display-consumer", "exact-source-references", "dormant-run-state-field-error", "generated-model-drift-check", "zero-diagnostics"],
-      "tests": ["src/shared/ai-repo-model.test.ts", "src/shared/gameplay-effect-transition.test.ts", "src/shared/gameplay-interaction-graph.test.ts"]
+      "softlockGuards": ["compiler-derived-run-state-fields", "full-run-state-construction-classification", "renderer-run-state-write-error", "schema-derived-gameplay-protocol", "command-handler-completeness", "event-emitter-completeness", "protocol-test-completeness", "feedback-display-consumer", "exact-source-references", "dormant-run-state-field-error", "generated-model-drift-check", "zero-diagnostics"],
+      "tests": ["src/shared/ai-repo-model.test.ts", "src/shared/run-settings-rules.test.ts", "src/shared/run-summary-rules.test.ts", "src/renderer/store/sideRoomSurfaceState.test.ts", "src/shared/gameplay-effect-transition.test.ts", "src/shared/gameplay-interaction-graph.test.ts"]
     }
   ],
   "edges": [

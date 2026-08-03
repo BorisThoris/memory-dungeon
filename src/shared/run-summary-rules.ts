@@ -7,6 +7,7 @@ import { runArrayCount } from './run-array-guards';
 import { runNonNegativeInteger } from './run-number-guards';
 import { normalizeSessionStats } from './session-stats-rules';
 import { getGameplayJournalSummaryFields } from './gameplay-journal';
+import { normalizeRunSummary } from './save-data';
 
 export const createRunSummary = (run: RunState, unlockedAchievements: AchievementId[]): RunState => ({
     ...run,
@@ -45,3 +46,17 @@ export const createRunSummary = (run: RunState, unlockedAchievements: Achievemen
         };
     })()
 });
+
+export const createGameOverRunSummary = (run: RunState, unlockedAchievements: AchievementId[]): RunState =>
+    createRunSummary({ ...run, status: 'gameOver', lives: 0 }, unlockedAchievements);
+
+export const createValidatedGameOverRunSummary = (
+    run: RunState,
+    unlockedAchievements: AchievementId[]
+): RunState => {
+    const summarized = createGameOverRunSummary(run, unlockedAchievements);
+    return {
+        ...summarized,
+        lastRunSummary: normalizeRunSummary(summarized.lastRunSummary)
+    };
+};

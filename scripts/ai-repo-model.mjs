@@ -20,7 +20,7 @@ import ts from 'typescript';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const defaultRepoRoot = path.resolve(__dirname, '..');
 export const AI_REPO_MODEL_PATH = '.ai/repo-model.json';
-const MODEL_VERSION = 4;
+const MODEL_VERSION = 5;
 const GENERATED_PATHS = new Set([AI_REPO_MODEL_PATH]);
 const CONTENT_REGISTRIES = [
     { kind: 'build_archetype', file: 'src/shared/relics.ts', variable: 'RELIC_BUILD_ARCHETYPE_ORDER', mechanicPrefix: 'build' },
@@ -44,6 +44,7 @@ const GAMEPLAY_PROTOCOL_COVERAGE_TEST_EXCLUSIONS = new Set([
     'src/shared/ai-repo-model.test.ts',
     'src/shared/gameplay-interaction-graph.test.ts'
 ]);
+const RUN_STATE_WRITE_ACCESS_KINDS = new Set(['direct_assignment', 'state_construction']);
 
 const toPosix = (value) => value.split(path.sep).join('/');
 const fromRoot = (repoRoot, value) => toPosix(path.relative(repoRoot, path.normalize(value)));
@@ -196,6 +197,7 @@ const buildRunStateFieldIndex = (repoRoot, sourceFiles, checker) => {
         }];
     });
     const byName = new Map(fields.map((field) => [field.name, field]));
+    const fieldNames = [...byName.keys()];
     const membersByName = new Map(
         declaration.members.flatMap((member) => {
             if (!ts.isPropertySignature(member) || !member.name) return [];
@@ -215,22 +217,37 @@ const buildRunStateFieldIndex = (repoRoot, sourceFiles, checker) => {
         const apparent = checker.getApparentType(type);
         return apparent !== type && typeOwnsField(apparent, fieldName, visited);
     };
-    const objectLiteralOwnsField = (objectLiteral, fieldName) => {
-        const contextual = checker.getContextualType(objectLiteral);
-        if (typeOwnsField(contextual, fieldName)) return true;
-        return objectLiteral.properties.some(
-            (property) => ts.isSpreadAssignment(property) && typeOwnsField(checker.getTypeAtLocation(property.expression), fieldName)
-        );
+    const runStateTypeCache = new Map();
+    const typeHasRunStateShape = (type) => {
+        if (!type || (type.flags & (ts.TypeFlags.Any | ts.TypeFlags.Unknown))) return false;
+        if (runStateTypeCache.has(type)) return runStateTypeCache.get(type);
+        const apparent = checker.getApparentType(type);
+        const result = fieldNames.every((fieldName) => Boolean(apparent.getProperty?.(fieldName)));
+        runStateTypeCache.set(type, result);
+        return result;
     };
-    const record = (fieldName, kind, sourceFile, node) => {
+    const runStateObjectLiteralCache = new Map();
+    const objectLiteralCreatesRunState = (objectLiteral) => {
+        if (runStateObjectLiteralCache.has(objectLiteral)) return runStateObjectLiteralCache.get(objectLiteral);
+        const result = [checker.getContextualType(objectLiteral), checker.getTypeAtLocation(objectLiteral)]
+            .filter(Boolean)
+            .some(typeHasRunStateShape) || objectLiteral.properties.some(
+                (property) => ts.isSpreadAssignment(property) && typeHasRunStateShape(checker.getTypeAtLocation(property.expression))
+            );
+        runStateObjectLiteralCache.set(objectLiteral, result);
+        return result;
+    };
+    const record = (fieldName, kind, sourceFile, node, accessKind = undefined) => {
         const field = byName.get(fieldName);
         if (!field) return;
         const file = fromRoot(repoRoot, sourceFile.fileName);
         if (getCodeRole(file) !== 'production') return;
         const position = sourceFile.getLineAndCharacterOfPosition(node.getStart(sourceFile));
         const references = kind === 'read' ? field.readReferences : field.writeReferences;
-        const reference = { path: file, line: position.line + 1 };
-        if (!references.some((item) => item.path === reference.path && item.line === reference.line)) {
+        const reference = { path: file, line: position.line + 1, ...(accessKind ? { accessKind } : {}) };
+        if (!references.some(
+            (item) => item.path === reference.path && item.line === reference.line && item.accessKind === reference.accessKind
+        )) {
             references.push(reference);
         }
     };
@@ -240,21 +257,27 @@ const buildRunStateFieldIndex = (repoRoot, sourceFiles, checker) => {
             if (node === declaration) return;
             if (ts.isPropertyAccessExpression(node)) {
                 if (symbolOwnsField(checker.getSymbolAtLocation(node.name), node.name.text)) {
-                    record(node.name.text, isRuntimeAssignmentTarget(node) ? 'write' : 'read', sourceFile, node.name);
+                    const write = isRuntimeAssignmentTarget(node);
+                    record(node.name.text, write ? 'write' : 'read', sourceFile, node.name, write ? 'direct_assignment' : undefined);
                 }
             } else if (ts.isElementAccessExpression(node) && node.argumentExpression && ts.isStringLiteralLike(node.argumentExpression)) {
                 const name = node.argumentExpression.text;
                 if (typeOwnsField(checker.getTypeAtLocation(node.expression), name)) {
-                    record(name, isRuntimeAssignmentTarget(node) ? 'write' : 'read', sourceFile, node.argumentExpression);
+                    const write = isRuntimeAssignmentTarget(node);
+                    record(name, write ? 'write' : 'read', sourceFile, node.argumentExpression, write ? 'direct_assignment' : undefined);
                 }
             } else if (ts.isPropertyAssignment(node)) {
                 const name = syntaxPropertyName(node.name);
-                if (name && ts.isObjectLiteralExpression(node.parent) && objectLiteralOwnsField(node.parent, name)) {
-                    record(name, 'write', sourceFile, node.name);
+                if (name && byName.has(name) && ts.isObjectLiteralExpression(node.parent) && objectLiteralCreatesRunState(node.parent)) {
+                    record(name, 'write', sourceFile, node.name, 'state_construction');
                 }
             } else if (ts.isShorthandPropertyAssignment(node)) {
-                if (ts.isObjectLiteralExpression(node.parent) && objectLiteralOwnsField(node.parent, node.name.text)) {
-                    record(node.name.text, 'write', sourceFile, node.name);
+                if (
+                    byName.has(node.name.text) &&
+                    ts.isObjectLiteralExpression(node.parent) &&
+                    objectLiteralCreatesRunState(node.parent)
+                ) {
+                    record(node.name.text, 'write', sourceFile, node.name, 'state_construction');
                 }
             } else if (ts.isBindingElement(node) && ts.isObjectBindingPattern(node.parent)) {
                 const name = node.propertyName ? syntaxPropertyName(node.propertyName) : ts.isIdentifier(node.name) ? node.name.text : null;
@@ -296,17 +319,38 @@ const buildRunStateFieldIndex = (repoRoot, sourceFiles, checker) => {
         }
         for (const reference of field.writeReferences) {
             relationships.push({
-                id: `writes:${fileId(reference.path)}->${field.id}:L${reference.line}`,
+                id: `writes:${fileId(reference.path)}->${field.id}:L${reference.line}:${reference.accessKind}`,
                 source: fileId(reference.path),
                 target: field.id,
                 kind: 'writes',
-                label: `L${reference.line}`
+                label: `L${reference.line} ${reference.accessKind}`
             });
         }
     }
     fields.sort((a, b) => a.id.localeCompare(b.id));
     relationships.sort((a, b) => a.id.localeCompare(b.id));
     return { fields, relationships };
+};
+
+const rendererRunStateWriteLocations = (runStateFields) => {
+    const byLocation = new Map();
+    for (const field of runStateFields) {
+        for (const reference of field.writeReferences) {
+            if (!reference.path.startsWith('src/renderer/') || reference.path.startsWith('src/renderer/dev/')) continue;
+            const key = `${reference.path}:L${reference.line}:${reference.accessKind}`;
+            const current = byLocation.get(key) ?? {
+                path: reference.path,
+                line: reference.line,
+                accessKind: reference.accessKind,
+                fields: []
+            };
+            current.fields.push(field.name);
+            byLocation.set(key, current);
+        }
+    }
+    return [...byLocation.values()]
+        .map((location) => ({ ...location, fields: uniqueSorted(location.fields) }))
+        .sort((a, b) => `${a.path}:${a.line}:${a.accessKind}`.localeCompare(`${b.path}:${b.line}:${b.accessKind}`));
 };
 
 const isZodLiteralCall = (node) =>
@@ -834,6 +878,14 @@ const buildDiagnostics = (repoRoot, gameplay, content, playerVisibleStates, runS
             });
         }
     }
+    for (const location of rendererRunStateWriteLocations(runStateFields)) {
+        diagnostics.push({
+            severity: 'error',
+            code: 'renderer_run_state_write',
+            subject: `${location.path}:L${location.line}`,
+            detail: `Renderer ${location.accessKind} writes core-owned RunState fields: ${location.fields.join(', ')}.`
+        });
+    }
     for (const command of gameplayCommands) {
         if (command.handlerReferences.length === 0) {
             diagnostics.push({
@@ -902,6 +954,7 @@ export const buildAiRepoModel = (repoRoot = defaultRepoRoot) => {
     const content = buildContentIndex(repoRoot);
     const playerVisibleStates = new Set(readLiteralRegistryValues(repoRoot, PLAYER_VISIBLE_STATE_REGISTRY));
     const gameplay = buildGameplayIndex(repoRoot, playerVisibleStates);
+    const rendererRunStateWrites = rendererRunStateWriteLocations(code.runStateFields);
     const diagnostics = buildDiagnostics(
         repoRoot,
         gameplay,
@@ -925,6 +978,7 @@ export const buildAiRepoModel = (repoRoot = defaultRepoRoot) => {
             stateFieldCount: gameplay.states.length,
             runStateFieldCount: code.runStateFields.length,
             dormantRunStateFieldCount: code.runStateFields.filter((field) => field.readReferences.length === 0).length,
+            rendererRunStateWriteCount: rendererRunStateWrites.length,
             gameplayCommandTypeCount: code.gameplayCommands.length,
             gameplayEventTypeCount: code.gameplayEvents.length,
             unhandledGameplayCommandTypeCount: code.gameplayCommands.filter((command) => command.handlerReferences.length === 0).length,
@@ -960,6 +1014,14 @@ export const validateAiRepoModel = (model) => {
     const dormantRunStateFields = runStateFields.filter((field) => field.readReferences.length === 0);
     if (dormantRunStateFields.length !== model.repository.dormantRunStateFieldCount) {
         issues.push('repository.dormantRunStateFieldCount does not match runStateFields.');
+    }
+    if (runStateFields.some(
+        (field) => field.writeReferences.some((reference) => !RUN_STATE_WRITE_ACCESS_KINDS.has(reference.accessKind))
+    )) {
+        issues.push('runStateFields contains a write reference with an unsupported accessKind.');
+    }
+    if (rendererRunStateWriteLocations(runStateFields).length !== model.repository.rendererRunStateWriteCount) {
+        issues.push('repository.rendererRunStateWriteCount does not match runStateFields.');
     }
     const gameplayCommands = Array.isArray(model.gameplayCommands) ? model.gameplayCommands : [];
     const gameplayEvents = Array.isArray(model.gameplayEvents) ? model.gameplayEvents : [];

@@ -7,7 +7,7 @@ import type {
     Settings,
     ViewState
 } from '../../shared/contracts';
-import { createRunSummary } from '../../shared/game-core';
+import { createValidatedGameOverRunSummary } from '../../shared/run-summary-rules';
 import { mergeHonorUnlockTags } from '../../shared/honorUnlocks';
 import { runArrayCount } from '../../shared/run-array-guards';
 import {
@@ -152,14 +152,7 @@ export const createRunResolutionController = ({
 
         if (nextRun.status === 'gameOver') {
             nextSave = mergeEncoreFromRun(nextSave, nextRun.matchedPairKeysThisRun);
-            nextRun = createRunSummary(nextRun, unlockedAchievements);
-            nextRun = {
-                ...nextRun,
-                lastRunSummary: normalizeSaveData({
-                    ...nextSave,
-                    lastRunSummary: nextRun.lastRunSummary
-                }).lastRunSummary
-            };
+            nextRun = createValidatedGameOverRunSummary(nextRun, unlockedAchievements);
             if (!nextRun.powersUsedThisRun) {
                 nextSave = mergeBestFloorNoPowers(nextSave, nextRun.stats.highestLevel);
             }

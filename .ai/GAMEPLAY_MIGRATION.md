@@ -936,6 +936,22 @@ The semantic model now treats the deterministic command/event boundary as a firs
 
 Graph v65 makes protocol drift visible at the schema boundary before a new command or event can become an unhandled, unobservable, untested, or unqueryable gameplay path.
 
+## Sixty-sixth vertical slice: Source-Derived Renderer Run-State Ownership
+
+The compiler-derived field index now enforces the architecture boundary it describes instead of merely listing write sites:
+
+1. Model schema v5 classifies each `RunState` write as a direct assignment or a complete immutable state construction. Partial renderer projections such as feedback inputs are reads/data views, not false state writers.
+2. Full-shape detection uses the TypeScript object/context/spread type rather than a filename or text pattern, and every write relationship retains its exact source line plus access kind.
+3. Any production renderer write to core-owned run state now emits `renderer_run_state_write`; `src/renderer/dev/` fixtures remain inspectable but are excluded from the production ownership error.
+4. Run-affecting user settings moved from the renderer store into `src/shared/run-settings-rules.ts`, preserving run identity and the four established settings projections.
+5. Dead side-room/shop/continuation normalization moved into `src/shared/interlude-transition-rules.ts`; renderer executors now request the deterministic transition and only route the returned run.
+6. Terminal status/life normalization and save-valid summary construction moved into `src/shared/run-summary-rules.ts`. The run-resolution controller and dev E2E seam no longer manufacture terminal run objects.
+7. The obsolete renderer `runSettingsPatch` module and its renderer test were removed after direct imports and shared parity coverage replaced them.
+8. Graph v66 records the writer-site input, renderer ownership report, full-state classification, and zero-renderer-write guard on the executable AI-model gate.
+9. Regeneration records 127 active-run fields, zero production renderer run-state writes, all 34 commands and 54 events, 15,570 relationships, 27 player-visible states, and zero diagnostics.
+
+Graph v66 turns “the core owns run state” into a source-derived build invariant while allowing React and Zustand to retain presentation and application coordination.
+
 ## Current slice status
 
 Implemented in the Conduit Cartographer vertical slice:
@@ -955,5 +971,5 @@ Implemented in the Conduit Cartographer vertical slice:
 Still required before the vertical slice is complete:
 
 - extend the shared player-visible registry when additional gameplay ownership enters the core, rather than adding renderer or model-only field lists;
-- use Graph v65 diagnostics and nine-build traces to select the next least-overlapping cohesive loop or architectural ownership seam, without presenting simulator survival as human win-rate proof;
+- use Graph v66 diagnostics and nine-build traces to select the next least-overlapping cohesive loop or architectural ownership seam, without presenting simulator survival as human win-rate proof;
 - continue migrating cohesive player builds rather than adding isolated definitions, using the graph diagnostics to choose the next least-overlapping loop.

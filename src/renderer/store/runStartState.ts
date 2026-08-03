@@ -10,7 +10,7 @@ import {
     createWildRun
 } from '../../shared/game-core';
 import { metaRelicDraftExtraPerMilestoneFromSave } from '../../shared/save-data';
-import { patchRunFromUserSettings } from './runSettingsPatch';
+import { applyRunSettings } from '../../shared/run-settings-rules';
 import { createRunSurfaceReset, type RunSurfaceState } from './runSurfaceState';
 
 export type RunStartTelemetryExtra = Record<string, boolean | number | string | undefined>;
@@ -144,7 +144,7 @@ export const createRunStartPlan = ({
             break;
     }
 
-    const patchedRun = patchRunFromUserSettings(run, settings);
+    const patchedRun = applyRunSettings(run, settings);
     return {
         patch: createRunStartStatePatch(patchedRun, saveData),
         run: patchedRun,

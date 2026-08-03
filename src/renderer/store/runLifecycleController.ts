@@ -7,8 +7,8 @@ import type {
     ViewState
 } from '../../shared/contracts';
 import { activateDebugRevealThroughGameplayCore } from '../../shared/gameplay-core-adapters';
+import { applyRunSettings } from '../../shared/run-settings-rules';
 import { trackEvent } from '../../shared/telemetry';
-import { patchRunFromUserSettings } from './runSettingsPatch';
 import {
     createRestartRun,
     createRunStartStatePatch,
@@ -71,7 +71,7 @@ export const createRunLifecycleController = ({
     restartRun: () => {
         clearAllTimers();
         const { run: previousRun, saveData, settings } = getState();
-        const run = patchRunFromUserSettings(createRestartRun(previousRun, saveData), settings);
+        const run = applyRunSettings(createRestartRun(previousRun, saveData), settings);
 
         trackEvent('run_start', createRunStartTelemetryPayload(run, { restarted: true }));
         playRunStartSfx();
