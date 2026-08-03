@@ -20,6 +20,7 @@ import {
     createGameplayDefinitionCommand,
     createGameplayDestroyPairCommand,
     createGameplayFloorAdvanceCommand,
+    createGameplayFlashPairCommand,
     createGameplayMemorizeCompleteCommand,
     createGameplayPeekCommand,
     createGameplayRelicOfferOpenCommand,
@@ -39,6 +40,7 @@ import {
     solveRunThroughGameplayCoreWithTrace,
     type GameplayCoreBoundedMemoryPolicy,
     type GameplayCoreGambitPolicy,
+    type GameplayCoreRecoveryPolicy,
     type GameplayCorePlaythroughInformationTrace,
     type GameplayCorePlaythroughSolverTrace
 } from './gameplay-core-playthrough-solver';
@@ -71,6 +73,8 @@ export interface GameplayBuildPolicyDefinition {
     informationPolicy: GameplayCoreBoundedMemoryPolicy;
     gambitPolicy: GameplayCoreGambitPolicy | null;
     gambitSuppressedMatchups: readonly GameplayBuildMatchup[];
+    recoveryPolicy?: GameplayCoreRecoveryPolicy | null;
+    recoverySuppressedMatchups?: readonly GameplayBuildMatchup[];
     interludeRiskPolicy: GameplayBuildInterludeRiskPolicy;
     signatureTiming: 'before_board' | 'after_board';
     favorableMatchup: GameplayBuildMatchup;
@@ -147,6 +151,7 @@ export interface GameplayBuildFloorTrace {
     scoreAfter: number;
     signatureConsequenceUses: number;
     gambitCommits: number;
+    undoResolveUses: number;
     gambitSuppressedByMatchup: boolean;
     information: GameplayCorePlaythroughInformationTrace;
     observedTraitInteractionTags: string[];
@@ -203,6 +208,8 @@ export interface GameplayBuildMultiFloorMetrics {
     policyId: GameplayBuildPolicyDefinition['id'];
     informationPolicy: GameplayCoreBoundedMemoryPolicy;
     gambitPolicy: GameplayCoreGambitPolicy | null;
+    recoveryPolicy: GameplayCoreRecoveryPolicy | null;
+    recoverySuppressedMatchups: readonly GameplayBuildMatchup[];
     gambitSuppressedMatchups: readonly GameplayBuildMatchup[];
     interludeRiskPolicy: GameplayBuildInterludeRiskPolicy;
     favorableMatchup: GameplayBuildMatchup;
@@ -244,6 +251,8 @@ export interface GameplayBuildMultiFloorMetrics {
     memoryPressureConservations: number;
     bossTrophyConversions: number;
     parasiteReliefEvents: number;
+    flashPairUses: number;
+    undoResolveUses: number;
     samples: GameplayBuildMultiFloorSeedSample[];
 }
 
@@ -352,6 +361,30 @@ export interface GameplayBuildMultiFloorReport {
                 counterMatchupFloors: number;
             };
         };
+        memoryScout: {
+            id: 'memory_scout';
+            buildMechanicId: 'build.memory_scout';
+            startingLoadoutId: 'memory_scout';
+            axis: 'mistake_recovery';
+            favorableMatchup: 'memory_pressure';
+            counterMatchup: 'hazard_pressure';
+            requiredSystems: readonly [
+                'reward.trait_streak_lens',
+                'perk.trait_streak_toolkit',
+                'relic.memorize_bonus_ms',
+                'relic.memorize_under_short_memorize',
+                'inventory.flash_pair_charge',
+                'power.flash_pair',
+                'power.undo_resolve'
+            ];
+            longHorizonSampled: true;
+            evidence: {
+                flashPairUses: number;
+                undoResolveUses: number;
+                favorableMatchupFloors: number;
+                counterMatchupFloors: number;
+            };
+        };
     };
     bounds: {
         requiredStrategyCount: number;
@@ -381,6 +414,8 @@ export interface GameplayBuildMultiFloorReport {
         minBossHunterParasiteReliefEvents: number;
         minBossHunterRiskWagersAccepted: number;
         minBossHunterRiskWagerOutcomes: number;
+        minMemoryScoutFlashPairUsesPerSeed: number;
+        minMemoryScoutUndoResolveUsesPerSeed: number;
         maxPairwiseMeanTurnRatio: number;
     };
     notes: string[];
@@ -555,6 +590,28 @@ export const GAMEPLAY_BUILD_POLICIES: Readonly<Record<GameplayBuildStrategyId, G
         signatureTiming: 'after_board',
         favorableMatchup: 'boss_pressure',
         counterMatchup: 'parasite_pressure'
+    },
+    memory_scout: {
+        id: 'memory_scout_policy_v1',
+        strategyId: 'memory_scout',
+        routePriorities: ['safe', 'mystery', 'greed'],
+        bonusRewardPriorities: ['trait_streak_lens', 'trait_toolkit', 'secret_favor', 'supply_cache'],
+        relicPriorities: ['memorize_under_short_memorize', 'memorize_bonus_ms', 'peek_charge_plus_one', 'pin_cap_plus_one'],
+        shopItemPriorities: ['peek_charge', 'trait_routing_kit', 'heal_life', 'region_shuffle_charge'],
+        informationPolicy: { kind: 'bounded_memory', memoryTileCapacity: 8, uncertainTurnBudget: 24 },
+        gambitPolicy: null,
+        gambitSuppressedMatchups: [],
+        recoveryPolicy: { kind: 'first_uncertain_mismatch_undo' },
+        recoverySuppressedMatchups: ['boss_pressure'],
+        interludeRiskPolicy: {
+            maxRouteRiskUnits: 1,
+            minimumEffectiveSurvivalAfterRoute: 4,
+            openingUnbufferedGreedFloors: 0,
+            eventEffectPriorities: ['heal_or_guard', 'gain_relic_favor', 'gain_destroy_charge', 'gain_iron_key', 'gain_shop_gold', 'gain_score']
+        },
+        signatureTiming: 'before_board',
+        favorableMatchup: 'memory_pressure',
+        counterMatchup: 'hazard_pressure'
     }
 };
 
@@ -567,7 +624,8 @@ const emptyAxisScores = (): Record<GameplayBuildStrategyAxis, number> => ({
     risk_conversion: 0,
     sustain_conversion: 0,
     board_reconfiguration: 0,
-    boss_extraction: 0
+    boss_extraction: 0,
+    mistake_recovery: 0
 });
 
 const normalizeSeeds = (seeds: readonly number[] | undefined): number[] => {
@@ -651,6 +709,8 @@ const createInitialRun = (
           ? ['combo_shard_plus_step']
           : strategy.id === 'boss_hunter'
             ? ['chapter_compass', 'wager_surety', 'parasite_ledger']
+            : strategy.id === 'memory_scout'
+              ? ['memorize_bonus_ms', 'memorize_under_short_memorize']
             : [];
     const base = createNewRun(0, {
         runSeed: seed,
@@ -727,6 +787,11 @@ const signatureConsequenceCommand = (
             .filter((candidate) => candidate.hiddenTiles.length >= 2)
             .sort((left, right) => right.visibleHazards - left.visibleHazards || left.rowIndex - right.rowIndex)[0];
         return row ? createGameplayRegionShuffleCommand(commandId, row.rowIndex) : null;
+    }
+    if (strategy.id === 'memory_scout') {
+        return matchup === 'memory_pressure' && runNonNegativeInteger(trace.run.flashPairCharges) > 0
+            ? createGameplayFlashPairCommand(commandId)
+            : null;
     }
     if (trace.run.status !== 'levelComplete') return null;
     const itemPriority = new Map(policy.shopItemPriorities.map((itemId, index) => [itemId, index]));
@@ -1046,6 +1111,9 @@ const recurringSynergyTags = (strategy: GameplayBuildStrategyDefinition): Set<st
     if (strategy.id === 'boss_hunter') {
         return new Set(['conduit:echo-peek', 'mirror:stasis-guard', 'sealed:heavy-score']);
     }
+    if (strategy.id === 'memory_scout') {
+        return new Set(['reward-perk:trait-streak-flash', 'conduit:echo-peek', 'echo:sealed-combo']);
+    }
     return new Set(['cursed:volatile-greed', 'reward-perk:cursed-opener-greed', 'sealed:heavy-score']);
 };
 
@@ -1066,7 +1134,9 @@ const signatureAxisScores = (
                 ? new Set(['bonus_shards', 'combo_shard_plus_step', 'shard_spark'])
                 : strategy.id === 'trap_control'
                   ? new Set(['free_swap_floor', 'trait_toolkit', 'region_shuffle'])
-                  : new Set(['chapter_compass', 'wager_surety', 'parasite_ledger']);
+                  : strategy.id === 'boss_hunter'
+                    ? new Set(['chapter_compass', 'wager_surety', 'parasite_ledger'])
+                    : new Set(['trait_streak_lens', 'trait_streak_toolkit', 'flash_pair', 'undo_resolve']);
     for (const event of events) {
         const fromBuildSource = sourceIds.has(event.source.id);
         if (
@@ -1125,6 +1195,12 @@ const signatureAxisScores = (
         ) {
             scores.boss_extraction += 1;
         }
+        if (
+            strategy.id === 'memory_scout' &&
+            (event.type === 'board.flash_pair_revealed' || event.type === 'board.resolve_undone')
+        ) {
+            scores.mistake_recovery += 1;
+        }
     }
     return scores;
 };
@@ -1166,7 +1242,9 @@ const runSeed = (
         return applied ? 1 : 0;
     };
     const setupDefinitions = strategy.activationDefinitionIds.filter((definitionId) =>
-        definitionId.startsWith('bonus_reward.') || strategy.id === 'boss_hunter'
+        definitionId.startsWith('bonus_reward.') ||
+        strategy.id === 'boss_hunter' ||
+        (strategy.id === 'memory_scout' && definitionId.startsWith('relic.'))
     );
     for (const definitionId of setupDefinitions) {
         executeCommand(
@@ -1208,7 +1286,10 @@ const runSeed = (
             informationPolicy: policy.informationPolicy,
             gambitPolicy: policy.gambitSuppressedMatchups.includes(matchup)
                 ? undefined
-                : policy.gambitPolicy ?? undefined
+                : policy.gambitPolicy ?? undefined,
+            recoveryPolicy: (policy.recoverySuppressedMatchups ?? []).includes(matchup)
+                ? undefined
+                : policy.recoveryPolicy ?? undefined
         });
         appendSolverTrace(trace, solver);
         if (strategy.id === 'route_gambler') {
@@ -1244,6 +1325,13 @@ const runSeed = (
             ));
             signatureConsequenceUses += bossTrophyConversions.length;
         }
+        if (strategy.id === 'memory_scout') {
+            const recoveryEvents = solver.events.filter((event) => event.type === 'board.resolve_undone');
+            trace.signatureEvents.push(...solver.events.filter((event) =>
+                event.type === 'board.resolve_undone' || event.type === 'board.flash_pair_revealed'
+            ));
+            signatureConsequenceUses += recoveryEvents.length;
+        }
 
         if (policy.signatureTiming === 'after_board') {
             signatureConsequenceUses += applySignaturePolicy(floor, matchup);
@@ -1278,6 +1366,7 @@ const runSeed = (
             scoreAfter: runNonNegativeInteger(trace.run.stats?.totalScore),
             signatureConsequenceUses,
             gambitCommits: solver.gambitCommits,
+            undoResolveUses: solver.undoResolveUses,
             gambitSuppressedByMatchup:
                 policy.gambitPolicy != null && policy.gambitSuppressedMatchups.includes(matchup),
             information: solver.information,
@@ -1500,6 +1589,8 @@ export const runGameplayBuildMultiFloorSimulation = (
             policyId: policy.id,
             informationPolicy: policy.informationPolicy,
             gambitPolicy: policy.gambitPolicy,
+            recoveryPolicy: policy.recoveryPolicy ?? null,
+            recoverySuppressedMatchups: policy.recoverySuppressedMatchups ?? [],
             gambitSuppressedMatchups: policy.gambitSuppressedMatchups,
             interludeRiskPolicy: policy.interludeRiskPolicy,
             favorableMatchup: policy.favorableMatchup,
@@ -1625,6 +1716,15 @@ export const runGameplayBuildMultiFloorSimulation = (
                     0
                 )
                 : 0,
+            flashPairUses: strategy.id === 'memory_scout'
+                ? samples.reduce(
+                    (sum, sample) => sum + (sample.eventTypeCounts['board.flash_pair_revealed'] ?? 0),
+                    0
+                )
+                : 0,
+            undoResolveUses: strategy.id === 'memory_scout'
+                ? floorTraces.reduce((sum, floor) => sum + floor.undoResolveUses, 0)
+                : 0,
             samples
         };
     });
@@ -1642,6 +1742,7 @@ export const runGameplayBuildMultiFloorSimulation = (
     const comboShardEngine = strategies.find((strategy) => strategy.id === 'combo_shard_engine');
     const trapControl = strategies.find((strategy) => strategy.id === 'trap_control');
     const bossHunter = strategies.find((strategy) => strategy.id === 'boss_hunter');
+    const memoryScout = strategies.find((strategy) => strategy.id === 'memory_scout');
     return {
         rulesVersion,
         seeds,
@@ -1742,10 +1843,34 @@ export const runGameplayBuildMultiFloorSimulation = (
                     favorableMatchupFloors: bossHunter?.favorableMatchupMetrics?.sampledFloors ?? 0,
                     counterMatchupFloors: bossHunter?.counterMatchupMetrics?.sampledFloors ?? 0
                 }
+            },
+            memoryScout: {
+                id: 'memory_scout',
+                buildMechanicId: 'build.memory_scout',
+                startingLoadoutId: 'memory_scout',
+                axis: 'mistake_recovery',
+                favorableMatchup: 'memory_pressure',
+                counterMatchup: 'hazard_pressure',
+                requiredSystems: [
+                    'reward.trait_streak_lens',
+                    'perk.trait_streak_toolkit',
+                    'relic.memorize_bonus_ms',
+                    'relic.memorize_under_short_memorize',
+                    'inventory.flash_pair_charge',
+                    'power.flash_pair',
+                    'power.undo_resolve'
+                ],
+                longHorizonSampled: true,
+                evidence: {
+                    flashPairUses: memoryScout?.flashPairUses ?? 0,
+                    undoResolveUses: memoryScout?.undoResolveUses ?? 0,
+                    favorableMatchupFloors: memoryScout?.favorableMatchupMetrics?.sampledFloors ?? 0,
+                    counterMatchupFloors: memoryScout?.counterMatchupMetrics?.sampledFloors ?? 0
+                }
             }
         },
         bounds: {
-            requiredStrategyCount: 7,
+            requiredStrategyCount: 8,
             minFloorsPerSeed: 12,
             minFloorCompletionShare: 1,
             minDeterministicReplayShare: 1,
@@ -1772,6 +1897,8 @@ export const runGameplayBuildMultiFloorSimulation = (
             minBossHunterParasiteReliefEvents: 1,
             minBossHunterRiskWagersAccepted: 1,
             minBossHunterRiskWagerOutcomes: 1,
+            minMemoryScoutFlashPairUsesPerSeed: 1,
+            minMemoryScoutUndoResolveUsesPerSeed: 1,
             maxPairwiseMeanTurnRatio: 1.5
         },
         notes: [
@@ -1786,7 +1913,8 @@ export const runGameplayBuildMultiFloorSimulation = (
             'Route Gambler is retained as the fourth long-horizon build: Route Tactician movement, one-floor Gambit rescue, objective wagers, Wager Surety, Favor cash-out, and Mystery routing form one distinct risk-conversion trace.',
             'Combo Shard Engine is retained as the fifth build: Greed creates a visible life deficit, Bonus Shards and the Catalyst relic stock bounded momentum, clean matches convert the next shard into life, and authored parasite floors test its sustain counter.',
             'Trap Control is retained as the sixth build: renewable Free Swap sources fund typed row reconfiguration on visible hazard-pressure floors, while memory-pressure floors conserve the spatial-disruption resource.',
-            'Boss Hunter is retained as the seventh build: Chapter Compass converts claimed boss trophies into score, while objective success through Wager Surety and Parasite Ledger converts chapter preparation into Favor or pressure relief.'
+            'Boss Hunter is retained as the seventh build: Chapter Compass converts claimed boss trophies into score, while objective success through Wager Surety and Parasite Ledger converts chapter preparation into Favor or pressure relief.',
+            'Memory Scout is retained as the eighth build: study-window relics answer Short Memorize, clean trait streaks renew Flash Pair, and one floor Undo converts an observed uncertain mismatch into bounded recovery with an explicit recall-focus cost.'
         ]
     };
 };
@@ -1967,6 +2095,23 @@ export const assertGameplayBuildMultiFloorViable = (
         if (bossWagerOutcomes < report.bounds.minBossHunterRiskWagerOutcomes) {
             issues.push(
                 `boss_hunter@seeds:${report.seeds.join(',')}:riskWagerOutcomes=${bossWagerOutcomes}; required=${report.bounds.minBossHunterRiskWagerOutcomes}`
+            );
+        }
+    }
+    const memoryScout = report.strategies.find((strategy) => strategy.id === 'memory_scout');
+    if (memoryScout) {
+        const minimumFlashUses =
+            report.bounds.minMemoryScoutFlashPairUsesPerSeed * report.seeds.length;
+        if (memoryScout.flashPairUses < minimumFlashUses) {
+            issues.push(
+                `memory_scout@seeds:${report.seeds.join(',')}:flashPairUses=${memoryScout.flashPairUses}; required=${minimumFlashUses}`
+            );
+        }
+        const minimumUndoUses =
+            report.bounds.minMemoryScoutUndoResolveUsesPerSeed * report.seeds.length;
+        if (memoryScout.undoResolveUses < minimumUndoUses) {
+            issues.push(
+                `memory_scout@seeds:${report.seeds.join(',')}:undoResolveUses=${memoryScout.undoResolveUses}; required=${minimumUndoUses}`
             );
         }
     }

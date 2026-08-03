@@ -5,6 +5,7 @@ import {
     createGameplayBoardTurnResolveCommand,
     createGameplayDungeonExitActivateCommand,
     createGameplayGambitCommitCommand,
+    createGameplayUndoResolveCommand,
     createGameplayMemorizeCompleteCommand,
     createGameplayProgressionRepairCommand,
     createGameplayTileFlipCommand,
@@ -33,6 +34,7 @@ export interface GameplayCorePlaythroughSolverTrace extends PlaythroughSolverTra
     replayVerified: boolean;
     replayDeterministic: boolean;
     gambitCommits: number;
+    undoResolveUses: number;
     information: GameplayCorePlaythroughInformationTrace;
     invariantViolations: string[];
 }
@@ -54,10 +56,15 @@ export type GameplayCorePlaythroughInformationPolicy =
 export interface GameplayCorePlaythroughSolverOptions {
     informationPolicy?: GameplayCorePlaythroughInformationPolicy;
     gambitPolicy?: GameplayCoreGambitPolicy;
+    recoveryPolicy?: GameplayCoreRecoveryPolicy;
 }
 
 export interface GameplayCoreGambitPolicy {
     kind: 'first_uncertain_mismatch_rescue';
+}
+
+export interface GameplayCoreRecoveryPolicy {
+    kind: 'first_uncertain_mismatch_undo';
 }
 
 export interface GameplayCorePlaythroughInformationTrace {
@@ -428,6 +435,7 @@ const finalizeTrace = (
         replayVerified: verifyReplay,
         replayDeterministic,
         gambitCommits: state.events.filter((event) => event.type === 'board.gambit_commit.requested').length,
+        undoResolveUses: state.events.filter((event) => event.type === 'board.resolve_undone').length,
         information: boundedMemoryTrace(state),
         invariantViolations: state.invariantViolations
     };
@@ -590,7 +598,10 @@ export const solveRunThroughGameplayCoreWithTrace = (
                 options.gambitPolicy?.kind === 'first_uncertain_mismatch_rescue' &&
                 state.run.gambitAvailableThisFloor &&
                 !state.run.gambitThirdFlipUsed;
-            second = (shouldOpenGambitRisk
+            const shouldOpenRecoveryRisk =
+                options.recoveryPolicy?.kind === 'first_uncertain_mismatch_undo' &&
+                state.run.undoUsesThisFloor > 0;
+            second = (shouldOpenGambitRisk || shouldOpenRecoveryRisk
                 ? chooseUnknownTileFromOppositeEdge(state.boundedMemory, state.run, [first.id])
                 : chooseUnknownTile(state.boundedMemory, state.run, [first.id])) ??
                 chooseUnknownTileFromPriorCandidates(
@@ -667,6 +678,20 @@ export const solveRunThroughGameplayCoreWithTrace = (
                     );
                 }
             }
+        }
+        if (
+            options.recoveryPolicy?.kind === 'first_uncertain_mismatch_undo' &&
+            state.boundedMemory &&
+            firstNow &&
+            observedSecond &&
+            firstNow.pairKey !== observedSecond.pairKey &&
+            currentRunStatus(state) === 'resolving' &&
+            state.run.undoUsesThisFloor > 0
+        ) {
+            executeSolverCommand(
+                state,
+                createGameplayUndoResolveCommand(commandIdFor(state, 'undo_uncertain_mismatch'))
+            );
         }
         if (currentRunStatus(state) === 'resolving') {
             executeSolverCommand(

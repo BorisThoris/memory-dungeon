@@ -8,7 +8,7 @@ import { GAMEPLAY_BUILD_STRATEGIES } from './build-strategy-simulation';
 import { GAME_RULES_VERSION } from './contracts';
 
 describe('multi-floor typed build strategy simulation', () => {
-    it('carries seven distinct builds through generated floors, interludes, a relic milestone, and exact replay', () => {
+    it('carries eight distinct builds through generated floors, interludes, a relic milestone, and exact replay', () => {
         const report = runGameplayBuildMultiFloorSimulation({ rulesVersion: GAME_RULES_VERSION });
 
         expect(report.strategies.map((strategy) => strategy.id)).toEqual(
@@ -21,7 +21,8 @@ describe('multi-floor typed build strategy simulation', () => {
             'risk_conversion',
             'sustain_conversion',
             'board_reconfiguration',
-            'boss_extraction'
+            'boss_extraction',
+            'mistake_recovery'
         ]);
         for (const strategy of report.strategies) {
             expect(strategy.floorCompletionShare).toBe(1);
@@ -31,6 +32,10 @@ describe('multi-floor typed build strategy simulation', () => {
             expect(strategy.policyId).toBe(GAMEPLAY_BUILD_POLICIES[strategy.id].id);
             expect(strategy.informationPolicy).toEqual(GAMEPLAY_BUILD_POLICIES[strategy.id].informationPolicy);
             expect(strategy.gambitPolicy).toEqual(GAMEPLAY_BUILD_POLICIES[strategy.id].gambitPolicy);
+            expect(strategy.recoveryPolicy).toEqual(GAMEPLAY_BUILD_POLICIES[strategy.id].recoveryPolicy ?? null);
+            expect(strategy.recoverySuppressedMatchups).toEqual(
+                GAMEPLAY_BUILD_POLICIES[strategy.id].recoverySuppressedMatchups ?? []
+            );
             expect(strategy.gambitSuppressedMatchups).toEqual(
                 GAMEPLAY_BUILD_POLICIES[strategy.id].gambitSuppressedMatchups
             );
@@ -205,8 +210,32 @@ describe('multi-floor typed build strategy simulation', () => {
         ).toBeGreaterThan(0);
         expect(report.cohesiveBuildCoverage.bossHunter.evidence.favorableMatchupFloors).toBeGreaterThan(0);
         expect(report.cohesiveBuildCoverage.bossHunter.evidence.counterMatchupFloors).toBeGreaterThan(0);
+        expect(report.cohesiveBuildCoverage.memoryScout).toMatchObject({
+            id: 'memory_scout',
+            buildMechanicId: 'build.memory_scout',
+            startingLoadoutId: 'memory_scout',
+            axis: 'mistake_recovery',
+            favorableMatchup: 'memory_pressure',
+            counterMatchup: 'hazard_pressure',
+            longHorizonSampled: true
+        });
+        expect(report.cohesiveBuildCoverage.memoryScout.requiredSystems).toEqual([
+            'reward.trait_streak_lens',
+            'perk.trait_streak_toolkit',
+            'relic.memorize_bonus_ms',
+            'relic.memorize_under_short_memorize',
+            'inventory.flash_pair_charge',
+            'power.flash_pair',
+            'power.undo_resolve'
+        ]);
+        expect(report.cohesiveBuildCoverage.memoryScout.evidence.flashPairUses)
+            .toBeGreaterThanOrEqual(report.seeds.length);
+        expect(report.cohesiveBuildCoverage.memoryScout.evidence.undoResolveUses)
+            .toBeGreaterThanOrEqual(report.seeds.length);
+        expect(report.cohesiveBuildCoverage.memoryScout.evidence.favorableMatchupFloors).toBeGreaterThan(0);
+        expect(report.cohesiveBuildCoverage.memoryScout.evidence.counterMatchupFloors).toBeGreaterThan(0);
         expect(assertGameplayBuildMultiFloorViable(report)).toEqual({ ok: true, issues: [] });
-    }, 50_000);
+    }, 90_000);
 
     it('is deterministic for a selected build and preserves observed matchup distributions', () => {
         const input = { seeds: [7_241], floors: 3, strategies: ['conduit_cartographer'] as const };

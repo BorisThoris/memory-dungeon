@@ -7,7 +7,7 @@ import {
 import { GAME_RULES_VERSION } from './contracts';
 
 describe('typed gameplay build strategy simulation', () => {
-    it('proves seven shipped builds through distinct replayable command/event loops', () => {
+    it('proves eight shipped builds through distinct replayable command/event loops', () => {
         const report = runGameplayBuildStrategySimulation({
             seeds: [42_001, 42_077, 42_123],
             rulesVersion: GAME_RULES_VERSION
@@ -23,7 +23,8 @@ describe('typed gameplay build strategy simulation', () => {
             'risk_conversion',
             'sustain_conversion',
             'board_reconfiguration',
-            'boss_extraction'
+            'boss_extraction',
+            'mistake_recovery'
         ]);
         for (const strategy of report.strategies) {
             expect(strategy.viableSeedShare).toBe(1);
@@ -40,29 +41,8 @@ describe('typed gameplay build strategy simulation', () => {
                 expect(sample.commands.at(-1)?.type).toBe(strategy.consequenceCommandType);
             }
         }
-        expect(report.pairwiseAxisDistances).toEqual([
-            { left: 'conduit_cartographer', right: 'guard_tank', distance: 2 },
-            { left: 'conduit_cartographer', right: 'treasure_greed', distance: 2 },
-            { left: 'conduit_cartographer', right: 'route_gambler', distance: 2 },
-            { left: 'conduit_cartographer', right: 'combo_shard_engine', distance: 2 },
-            { left: 'conduit_cartographer', right: 'trap_control', distance: 2 },
-            { left: 'conduit_cartographer', right: 'boss_hunter', distance: 2 },
-            { left: 'guard_tank', right: 'treasure_greed', distance: 2 },
-            { left: 'guard_tank', right: 'route_gambler', distance: 2 },
-            { left: 'guard_tank', right: 'combo_shard_engine', distance: 2 },
-            { left: 'guard_tank', right: 'trap_control', distance: 2 },
-            { left: 'guard_tank', right: 'boss_hunter', distance: 2 },
-            { left: 'treasure_greed', right: 'route_gambler', distance: 2 },
-            { left: 'treasure_greed', right: 'combo_shard_engine', distance: 2 },
-            { left: 'treasure_greed', right: 'trap_control', distance: 2 },
-            { left: 'treasure_greed', right: 'boss_hunter', distance: 2 },
-            { left: 'route_gambler', right: 'combo_shard_engine', distance: 2 },
-            { left: 'route_gambler', right: 'trap_control', distance: 2 },
-            { left: 'route_gambler', right: 'boss_hunter', distance: 2 },
-            { left: 'combo_shard_engine', right: 'trap_control', distance: 2 },
-            { left: 'combo_shard_engine', right: 'boss_hunter', distance: 2 },
-            { left: 'trap_control', right: 'boss_hunter', distance: 2 }
-        ]);
+        expect(report.pairwiseAxisDistances).toHaveLength(28);
+        expect(report.pairwiseAxisDistances.every((pair) => pair.distance === 2)).toBe(true);
         expect(assertGameplayBuildStrategiesViable(report)).toEqual({ ok: true, issues: [] });
     });
 
@@ -130,6 +110,18 @@ describe('typed gameplay build strategy simulation', () => {
                 definitions: ['relic.chapter_compass', 'relic.wager_surety', 'relic.parasite_ledger'],
                 command: 'effects.apply',
                 event: 'score.requested'
+            },
+            {
+                id: 'memory_scout',
+                loadout: 'memory_scout',
+                definitions: [
+                    'bonus_reward.trait_streak_lens',
+                    'reward_perk.trait_streak_toolkit',
+                    'relic.memorize_bonus_ms',
+                    'relic.memorize_under_short_memorize'
+                ],
+                command: 'board.flash_pair',
+                event: 'board.flash_pair_revealed'
             }
         ]);
     });

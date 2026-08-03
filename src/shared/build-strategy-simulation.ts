@@ -5,6 +5,7 @@ import {
     createGameplayDefinitionCommand,
     createGameplayDestroyPairCommand,
     createGameplayGambitCommitCommand,
+    createGameplayFlashPairCommand,
     createGameplayMemorizeCompleteCommand,
     createGameplayPeekCommand,
     createGameplayRegionShuffleCommand,
@@ -28,7 +29,8 @@ export const GAMEPLAY_BUILD_STRATEGY_AXES = [
     'risk_conversion',
     'sustain_conversion',
     'board_reconfiguration',
-    'boss_extraction'
+    'boss_extraction',
+    'mistake_recovery'
 ] as const;
 
 export type GameplayBuildStrategyAxis = (typeof GAMEPLAY_BUILD_STRATEGY_AXES)[number];
@@ -39,7 +41,8 @@ export type GameplayBuildStrategyId =
     | 'route_gambler'
     | 'combo_shard_engine'
     | 'trap_control'
-    | 'boss_hunter';
+    | 'boss_hunter'
+    | 'memory_scout';
 
 export interface GameplayBuildStrategyDefinition {
     id: GameplayBuildStrategyId;
@@ -205,6 +208,21 @@ export const GAMEPLAY_BUILD_STRATEGIES: readonly GameplayBuildStrategyDefinition
         consequenceCommandType: 'effects.apply',
         consequenceEventType: 'score.requested',
         expectedDominantAxis: 'boss_extraction'
+    },
+    {
+        id: 'memory_scout',
+        label: 'The Memory Scout',
+        buildMechanicId: 'build.memory_scout',
+        startingLoadoutId: 'memory_scout',
+        activationDefinitionIds: [
+            'bonus_reward.trait_streak_lens',
+            'reward_perk.trait_streak_toolkit',
+            'relic.memorize_bonus_ms',
+            'relic.memorize_under_short_memorize'
+        ],
+        consequenceCommandType: 'board.flash_pair',
+        consequenceEventType: 'board.flash_pair_revealed',
+        expectedDominantAxis: 'mistake_recovery'
     }
 ] as const;
 
@@ -219,7 +237,8 @@ const emptyAxisScores = (): Record<GameplayBuildStrategyAxis, number> => ({
     risk_conversion: 0,
     sustain_conversion: 0,
     board_reconfiguration: 0,
-    boss_extraction: 0
+    boss_extraction: 0,
+    mistake_recovery: 0
 });
 
 const increment = (counts: Record<string, number>, key: string): void => {
@@ -234,6 +253,8 @@ const factsForDefinition = (definitionId: string): Partial<GameplayFacts> => {
             return { matchedTraits: ['volatile'], adjacentTraits: ['heavy'] };
         case 'reward_perk.cursed_opener_greed':
             return { matchedTraits: ['cursed'] };
+        case 'reward_perk.trait_streak_toolkit':
+            return { matchedTraits: ['echo'] };
         default:
             return {};
     }
@@ -270,13 +291,15 @@ const createStrategyInitialRun = (
         echoFeedbackEnabled: false,
         initialRelicIds: strategy.id === 'boss_hunter'
             ? ['chapter_compass', 'wager_surety', 'parasite_ledger']
-            : undefined
+            : strategy.id === 'memory_scout'
+              ? ['memorize_bonus_ms', 'memorize_under_short_memorize']
+              : undefined
     });
-    if (strategy.id === 'combo_shard_engine') {
+    if (strategy.id === 'combo_shard_engine' || strategy.id === 'memory_scout') {
         return {
             ...base,
-            lives: MAX_LIVES - 1,
-            stats: { ...base.stats, currentStreak: 1 }
+            lives: strategy.id === 'combo_shard_engine' ? MAX_LIVES - 1 : base.lives,
+            stats: { ...base.stats, currentStreak: strategy.id === 'combo_shard_engine' ? 1 : 2 }
         };
     }
     if (strategy.id !== 'treasure_greed') {
@@ -338,6 +361,8 @@ const consequenceCommand = (
                 'relic.chapter_compass.boss_trophy',
                 { bossTrophyClaimed: true }
             );
+        case 'memory_scout':
+            return createGameplayFlashPairCommand(commandId);
     }
 };
 
@@ -382,6 +407,7 @@ const collectAxisScores = (
         if (
             event.type === 'score.changed' &&
             event.amount > 0 &&
+            strategy.id !== 'memory_scout' &&
             event.source.id !== 'trait_toolkit' &&
             event.source.id !== 'free_swap_floor'
         ) {
@@ -413,6 +439,12 @@ const collectAxisScores = (
                 (fromBossSource && event.type === 'parasite_relief.requested'))
         ) {
             scores.boss_extraction += 1;
+        }
+        if (
+            strategy.id === 'memory_scout' &&
+            (event.type === 'board.flash_pair_revealed' || event.type === 'board.resolve_undone')
+        ) {
+            scores.mistake_recovery += 1;
         }
     }
     return scores;
@@ -608,7 +640,7 @@ export const runGameplayBuildStrategySimulation = (
         strategies,
         pairwiseAxisDistances,
         bounds: {
-            requiredStrategyCount: 7,
+            requiredStrategyCount: 8,
             minViableSeedShare: 1,
             minFeedbackEventsPerSeed: 3,
             minSignatureAxisScorePerSeed: 1,
@@ -617,7 +649,7 @@ export const runGameplayBuildStrategySimulation = (
         notes: [
             'Each strategy starts from a shipped loadout, activates schema-validated content, and spends its payoff through the authoritative gameplay reducer.',
             'Viability means every sampled seed accepts the complete command chain, keeps the run alive, emits typed feedback, and replays exactly.',
-            'Distinctness is measured from typed event fingerprints for information, control, economy, risk conversion, shard-to-life sustain, targeted board reconfiguration, and boss-extraction consequences rather than build labels.',
+            'Distinctness is measured from typed event fingerprints for information, control, economy, risk conversion, shard-to-life sustain, targeted board reconfiguration, boss extraction, and mistake-recovery consequences rather than build labels.',
             'This is a deterministic structural viability gate, not a claim that final balance or long-run win rates are complete.'
         ]
     };

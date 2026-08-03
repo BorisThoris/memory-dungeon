@@ -818,6 +818,21 @@ The Slayer is now the seventh retained long-horizon build, connecting boss prepa
 
 Graph v57 adds the seventh strategy, distinct boss-extraction axis, trophy, parasite-relief, insured-wager, and long-horizon guards, build-specific evidence reports, and a tested evaluator edge to `build.boss_hunter`.
 
+## Fifty-eighth vertical slice: Memory Scout Mistake-Recovery Build
+
+Memory Scout is now the eighth retained long-horizon build, connecting study-window counterplay, clean trait chains, deterministic recall, and bounded mistake recovery:
+
+1. The structural evaluator adds `mistake_recovery` as an eighth axis. Trait Streak Lens grants the durable toolkit, a real x2 streak trigger banks a Flash charge, both study relic definitions are claimed, and `board.flash_pair` consumes the authored charge through the command core.
+2. Lantern Study and Compressed Margins are stocked as actual relics, so the established +280 ms global and +220 ms Short Memorize rules remain authoritative rather than being simulated as parallel timing arithmetic.
+3. The long-horizon policy spends Flash only on shipped `memory_pressure` floors. Clean trait matches renew the finite charge through `reward_perk.trait_streak_toolkit`, joining loadout, pickup, perk, inventory, and consequence in one trace.
+4. The bounded-memory solver adds an opt-in `first_uncertain_mismatch_undo` policy. It chooses the second unknown from the opposite board edge without reading hidden identities and submits `board.undo_resolve` only after an observed mismatch enters resolving state.
+5. Undo retains its shipped focus cost, forgotten-tile record, one-use floor reset, feedback, and replay contract. Boss-special floors suppress the automated policy because already-sprung special cards intentionally remain visible and are not safe generic pair-solver recovery targets.
+6. The favorable hypothesis is `memory_pressure`; the counter hypothesis is `hazard_pressure`. Both must be sampled, completed, and replayed, while Flash and Undo each have per-seed evidence bounds.
+7. The default report now covers eight builds x three seeds x twelve floors: all 288 floors complete with zero rejected gameplay commands and exact full-run replay. Memory Scout completes all 36 floors, makes 125 policy decisions, rejects 33 over-budget route options, spends 6 Flash charges and 11 Undo uses, and records 17 total signature consequences.
+8. All 6 favorable memory-pressure floors and all 12 hazard-counter floors complete without life loss; clean-streak/recall synergy recurs on 2 favorable and 10 counter floors, while the worst pairwise mean-turn ratio remains 1.12.
+
+Graph v58 adds the eighth strategy, opposite-edge identity-blind recovery, Flash/Undo evidence reports, boss-special suppression, Short Memorize relic counterplay, and a tested evaluator edge to `build.memory_scout`.
+
 ## Current slice status
 
 Implemented in the Conduit Cartographer vertical slice:
@@ -837,5 +852,5 @@ Implemented in the Conduit Cartographer vertical slice:
 Still required before the vertical slice is complete:
 
 - widen the feedback-completeness audit beyond the former HUD-critical fields as additional gameplay ownership enters the core;
-- use seven-build traces and graph diagnostics to select the next least-overlapping cohesive build or architectural ownership seam, without presenting simulator survival as human win-rate proof;
+- use eight-build traces and graph diagnostics to select the next least-overlapping cohesive build or architectural ownership seam, without presenting simulator survival as human win-rate proof;
 - continue migrating cohesive player builds rather than adding isolated definitions, using the graph diagnostics to choose the next least-overlapping loop.

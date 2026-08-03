@@ -272,6 +272,46 @@ describe('gameplay-core playthrough solver', () => {
         expect(trace.invariantViolations).toEqual([]);
     });
 
+    it('spends the floor Undo only after an identity-blind uncertain mismatch', () => {
+        const initial = runWithBoard(board(
+            [
+                tile('1-a', 'a'),
+                tile('2-b', 'b'),
+                tile('3-c', 'c'),
+                tile('4-a', 'a'),
+                tile('5-b', 'b'),
+                tile('6-c', 'c')
+            ],
+            { pairCount: 3, columns: 3, rows: 2 }
+        ));
+        const trace = solveRunThroughGameplayCoreWithTrace(initial, 40, true, {
+            informationPolicy: {
+                kind: 'bounded_memory',
+                memoryTileCapacity: 2,
+                uncertainTurnBudget: 4
+            },
+            recoveryPolicy: { kind: 'first_uncertain_mismatch_undo' }
+        });
+
+        expect(trace.run.status).toBe('levelComplete');
+        expect(trace.undoResolveUses).toBe(1);
+        expect(trace.commands).toEqual(expect.arrayContaining([
+            expect.objectContaining({ type: 'board.undo_resolve' })
+        ]));
+        expect(trace.events).toEqual(expect.arrayContaining([
+            expect.objectContaining({
+                type: 'board.resolve_undone',
+                restoredTileIds: ['2-b', '6-c'],
+                undoUsesBefore: 1,
+                undoUsesAfter: 0
+            }),
+            expect.objectContaining({ type: 'feedback.requested', cue: 'power.undo_resolve.used' })
+        ]));
+        expect(trace.rejectedCommandIds).toEqual([]);
+        expect(trace.replayDeterministic).toBe(true);
+        expect(trace.invariantViolations).toEqual([]);
+    });
+
     it('retains explainable no-exit and no-progress terminal traces', () => {
         const noExit = solveRunThroughGameplayCoreWithTrace(runWithBoard(board(
             [tile('a1', 'a', 'matched'), tile('a2', 'a', 'matched')],
