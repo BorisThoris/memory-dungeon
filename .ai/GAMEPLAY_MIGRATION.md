@@ -702,6 +702,21 @@ The delayed match/mismatch boundary now enters the gameplay core directly from t
 
 Graph v49 marks board-turn resolution as a renderer-direct command adapter with adapter-owned journaling and a no-renderer-compatibility-import guard.
 
+## Fiftieth vertical slice: Long-Horizon Build Policies And Shipped Counter-Matchups
+
+The build gate now evaluates sustained policy behavior and explicit pressure hypotheses instead of repeating a four-floor perfect-information script:
+
+1. `GAMEPLAY_BUILD_POLICIES` exports deterministic policy definitions for Conduit Cartographer, Warden, and Vaultbreaker, including route ranking, side-room reward priorities, relic priorities, shop-item priorities, signature timing, one favorable matchup, and one counter matchup.
+2. Policies choose only from real generated route, side-room, relic, and shop options. Side-room candidates are previewed through the pure typed reducer, preventing stale read-model eligibility from cascading into rejected interlude commands.
+3. Every policy decision records floor, observed matchup, phase, selection, application result, and reason beside the retained command/event trace.
+4. The default gate horizon increases from four to twelve floors across three seeds: 108 generated floors total, with isolated floor replay plus full multi-floor JSON replay.
+5. The gate requires actual shipped exposure to each declared favorable and counter pressure, complete/replay-clean counter floors, at least one policy decision per attempted floor, zero rejected commands, recurring synergy, signature consequences, and the existing pairwise balance envelope.
+6. Counter labels remain explicit design hypotheses. The report does not turn perfect-information survival into a synthetic human win-rate or claim that unsampled schedule buckets occurred.
+7. The first long sweep exposed a real feedback omission: final-pair enemy blockers could be defeated during `board.tile_flip` without typed presentation. `board.tile_flipped` now carries exact defeated IDs and before/after enemy counters, plus `hazard.enemy_blocker.cleared` feedback.
+8. The repaired default report completes all 108 floors with exact replay, zero rejected commands, and observed counter samples for every build.
+
+Graph v50 upgrades `simulation.build_evaluation` to a twelve-floor legality-aware policy and shipped counter-matchup gate, requires unique strictly increasing floor identities so a stalled interlude cannot inflate the horizon, and adds exact final-pair enemy-defeat facts/feedback guards to `core.tile_input`.
+
 ## Current slice status
 
 Implemented in the Conduit Cartographer vertical slice:
@@ -721,6 +736,6 @@ Implemented in the Conduit Cartographer vertical slice:
 Still required before the vertical slice is complete:
 
 - widen the feedback-completeness audit beyond the former HUD-critical fields as additional gameplay ownership enters the core;
-- extend the four-floor perfect-information proof into longer strategy-aware player policies and explicit adversarial counter-matchups without replacing observed shipped-schedule distributions with synthetic claims;
-- use the retained trace to identify and migrate the remaining non-command gameplay mutations and serialized UI-intent fields between generated floors and presentation surfaces;
+- evolve the deterministic perfect-information policies toward bounded imperfect-memory and risk-budget models without presenting simulator survival as human win-rate proof;
+- use the retained traces to prioritize the next cohesive build or counter that is missing from actual shipped schedule coverage;
 - continue migrating cohesive player builds rather than adding isolated definitions, using the graph diagnostics to choose the next least-overlapping loop.

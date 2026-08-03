@@ -13,7 +13,7 @@ const DEFAULT_SEEDS = [42_001, 42_077, 42_123] as const;
 export const runBuildStrategyPlaythroughSimulationCli = (argv: readonly string[]): number => {
     const report = runGameplayBuildMultiFloorSimulation({
         seeds: readSeedListCliArg(argv, DEFAULT_SEEDS),
-        floors: readPositiveFlooredNumericCliArg(argv, 'floors', 4)
+        floors: readPositiveFlooredNumericCliArg(argv, 'floors', 12)
     });
     const health = assertGameplayBuildMultiFloorViable(report);
     const summary = {
@@ -30,6 +30,9 @@ export const runBuildStrategyPlaythroughSimulationCli = (argv: readonly string[]
             consequenceEventType: strategy.consequenceEventType,
             expectedDominantAxis: strategy.expectedDominantAxis,
             dominantAxis: strategy.dominantAxis,
+            policyId: strategy.policyId,
+            favorableMatchup: strategy.favorableMatchup,
+            counterMatchup: strategy.counterMatchup,
             signatureAxisScores: strategy.signatureAxisScores,
             floorsAttempted: strategy.floorsAttempted,
             floorsCompleted: strategy.floorsCompleted,
@@ -43,7 +46,11 @@ export const runBuildStrategyPlaythroughSimulationCli = (argv: readonly string[]
             commandsPerFloor: strategy.commandsPerFloor,
             livesRemaining: strategy.livesRemaining,
             scoreGained: strategy.scoreGained,
-            matchupMetrics: strategy.matchupMetrics
+            matchupMetrics: strategy.matchupMetrics,
+            favorableMatchupMetrics: strategy.favorableMatchupMetrics,
+            counterMatchupMetrics: strategy.counterMatchupMetrics,
+            policyDecisionCount: strategy.policyDecisionCount,
+            counterMatchupReplayFloors: strategy.counterMatchupReplayFloors
         })),
         pairwiseMeanTurnRatios: report.pairwiseMeanTurnRatios,
         bounds: report.bounds,

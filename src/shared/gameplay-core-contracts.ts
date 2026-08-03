@@ -1812,6 +1812,13 @@ export const gameplayEventSchema = z.discriminatedUnion('type', [
             trapsTriggeredAfter: z.number().int().nonnegative(),
             livesBefore: z.number().int().nonnegative(),
             livesAfter: z.number().int().nonnegative(),
+            enemyHazardIdsDefeated: z.array(z.string().min(1).max(160)).max(32).default([]),
+            dungeonEnemiesDefeatedBefore: z.number().int().nonnegative().default(0),
+            dungeonEnemiesDefeatedAfter: z.number().int().nonnegative().default(0),
+            dungeonEnemiesDefeatedThisFloorBefore: z.number().int().nonnegative().default(0),
+            dungeonEnemiesDefeatedThisFloorAfter: z.number().int().nonnegative().default(0),
+            enemyHazardsDefeatedThisFloorBefore: z.number().int().nonnegative().default(0),
+            enemyHazardsDefeatedThisFloorAfter: z.number().int().nonnegative().default(0),
             boardComplete: z.boolean()
         })
         .strict(),

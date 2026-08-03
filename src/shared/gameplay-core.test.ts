@@ -76,6 +76,7 @@ import {
     type GameplayEvent
 } from './gameplay-core-contracts';
 import { reduceGameplayCommand, replayGameplayCommands } from './gameplay-core';
+import { inspectGameplayFeedbackCompleteness } from './gameplay-feedback-completeness';
 import {
     applyRelicImmediateThroughGameplayCore,
     repairRunProgressionThroughGameplayCore,
@@ -947,6 +948,107 @@ describe('deterministic gameplay core', () => {
                 tone: 'information'
             })
         ]));
+        expect(replayGameplayCommands(initial, [JSON.parse(JSON.stringify(command))])).toMatchObject({
+            run: result.run,
+            events: result.events,
+            acceptedCommandIds: [command.commandId],
+            rejectedCommandIds: []
+        });
+    });
+
+    it('emits exact typed feedback when a tile flip clears a final-pair enemy blocker', () => {
+        const base = createNewRun(0, { echoFeedbackEnabled: false, runSeed: 9_140 });
+        const initial: RunState = {
+            ...base,
+            status: 'playing',
+            dungeonEnemiesDefeated: 0,
+            dungeonEnemiesDefeatedThisFloor: 0,
+            enemyHazardsDefeatedThisFloor: 0,
+            board: {
+                ...base.board!,
+                pairCount: 2,
+                matchedPairs: 1,
+                flippedTileIds: [],
+                tiles: [
+                    { ...tile('final-a', 'final'), state: 'hidden' },
+                    { ...tile('final-b', 'final'), state: 'hidden' },
+                    { ...tile('done-a', 'done'), state: 'matched' },
+                    { ...tile('done-b', 'done'), state: 'matched' }
+                ],
+                enemyHazards: [{
+                    id: 'final-pair-warden',
+                    kind: 'warden',
+                    label: 'Final Pair Warden',
+                    currentTileId: 'final-a',
+                    nextTileId: 'final-b',
+                    pattern: 'guard',
+                    state: 'hidden',
+                    damage: 1,
+                    hp: 1,
+                    maxHp: 1,
+                    bossId: 'trap_warden'
+                }]
+            }
+        };
+        const command = createGameplayTileFlipCommand('clear-final-pair-blocker', 'final-a');
+        const result = reduceGameplayCommand(initial, command);
+
+        expect(result.accepted).toBe(true);
+        expect(result.run).toMatchObject({
+            dungeonEnemiesDefeated: 1,
+            dungeonEnemiesDefeatedThisFloor: 1,
+            enemyHazardsDefeatedThisFloor: 1
+        });
+        expect(result.events).toEqual(expect.arrayContaining([
+            expect.objectContaining({
+                type: 'board.tile_flipped',
+                targetTileId: 'final-a',
+                enemyHazardIdsDefeated: ['final-pair-warden'],
+                dungeonEnemiesDefeatedBefore: 0,
+                dungeonEnemiesDefeatedAfter: 1,
+                dungeonEnemiesDefeatedThisFloorBefore: 0,
+                dungeonEnemiesDefeatedThisFloorAfter: 1,
+                enemyHazardsDefeatedThisFloorBefore: 0,
+                enemyHazardsDefeatedThisFloorAfter: 1
+            }),
+            expect.objectContaining({
+                type: 'feedback.requested',
+                cue: 'hazard.enemy_blocker.cleared',
+                message: '1 enemy blocker cleared from the final pair.',
+                tone: 'information'
+            })
+        ]));
+        expect(inspectGameplayFeedbackCompleteness({
+            before: initial,
+            after: result.run,
+            command,
+            events: result.events,
+            accepted: result.accepted
+        })).toBeNull();
+        const currentFlipEvent = result.events.find((event) => event.type === 'board.tile_flipped');
+        expect(currentFlipEvent).toBeDefined();
+        if (!currentFlipEvent) throw new Error('Expected a current board.tile_flipped event.');
+        const legacyFlipEvent = { ...currentFlipEvent } as Record<string, unknown>;
+        for (const field of [
+            'enemyHazardIdsDefeated',
+            'dungeonEnemiesDefeatedBefore',
+            'dungeonEnemiesDefeatedAfter',
+            'dungeonEnemiesDefeatedThisFloorBefore',
+            'dungeonEnemiesDefeatedThisFloorAfter',
+            'enemyHazardsDefeatedThisFloorBefore',
+            'enemyHazardsDefeatedThisFloorAfter'
+        ]) {
+            delete legacyFlipEvent[field];
+        }
+        expect(gameplayEventSchema.parse(legacyFlipEvent)).toMatchObject({
+            enemyHazardIdsDefeated: [],
+            dungeonEnemiesDefeatedBefore: 0,
+            dungeonEnemiesDefeatedAfter: 0,
+            dungeonEnemiesDefeatedThisFloorBefore: 0,
+            dungeonEnemiesDefeatedThisFloorAfter: 0,
+            enemyHazardsDefeatedThisFloorBefore: 0,
+            enemyHazardsDefeatedThisFloorAfter: 0
+        });
         expect(replayGameplayCommands(initial, [JSON.parse(JSON.stringify(command))])).toMatchObject({
             run: result.run,
             events: result.events,

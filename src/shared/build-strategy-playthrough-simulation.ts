@@ -1,7 +1,11 @@
 import { collectDestroyEligibleTileIds } from './board-power-targeting';
 import {
     GAME_RULES_VERSION,
+    MAX_LIVES,
+    type BonusRewardId,
+    type RelicId,
     type RouteNodeType,
+    type RunShopItemId,
     type RunState
 } from './contracts';
 import {
@@ -48,6 +52,28 @@ export type GameplayBuildMatchup =
     | 'boss_pressure'
     | 'economy_opportunity';
 
+export interface GameplayBuildPolicyDefinition {
+    id: `${GameplayBuildStrategyId}_policy_v1`;
+    strategyId: GameplayBuildStrategyId;
+    routePriorities: readonly RouteNodeType[];
+    bonusRewardPriorities: readonly BonusRewardId[];
+    relicPriorities: readonly RelicId[];
+    shopItemPriorities: readonly RunShopItemId[];
+    signatureTiming: 'before_board' | 'after_board';
+    favorableMatchup: GameplayBuildMatchup;
+    counterMatchup: GameplayBuildMatchup;
+}
+
+export interface GameplayBuildPolicyDecision {
+    floor: number;
+    matchup: GameplayBuildMatchup;
+    phase: 'signature' | 'route' | 'side_room' | 'relic';
+    decision: string;
+    selectedId: string | null;
+    applied: boolean;
+    reason: string;
+}
+
 export interface GameplayBuildFloorTrace {
     floor: number;
     matchup: GameplayBuildMatchup;
@@ -81,6 +107,7 @@ export interface GameplayBuildMultiFloorSeedSample {
     acceptedCommandIds: string[];
     rejectedCommandIds: string[];
     floorTraces: GameplayBuildFloorTrace[];
+    policyDecisions: GameplayBuildPolicyDecision[];
     eventTypeCounts: Record<string, number>;
     feedbackCues: string[];
     signatureAxisScores: Record<GameplayBuildStrategyAxis, number>;
@@ -115,6 +142,9 @@ export interface GameplayBuildMultiFloorMetrics {
     consequenceCommandType: GameplayCommand['type'];
     consequenceEventType: GameplayEvent['type'];
     expectedDominantAxis: GameplayBuildStrategyAxis;
+    policyId: GameplayBuildPolicyDefinition['id'];
+    favorableMatchup: GameplayBuildMatchup;
+    counterMatchup: GameplayBuildMatchup;
     dominantAxis: GameplayBuildStrategyAxis;
     signatureAxisScores: Record<GameplayBuildStrategyAxis, number>;
     floorsAttempted: number;
@@ -130,6 +160,10 @@ export interface GameplayBuildMultiFloorMetrics {
     livesRemaining: GameplayBuildDistribution;
     scoreGained: GameplayBuildDistribution;
     matchupMetrics: GameplayBuildMatchupMetrics[];
+    favorableMatchupMetrics: GameplayBuildMatchupMetrics | null;
+    counterMatchupMetrics: GameplayBuildMatchupMetrics | null;
+    policyDecisionCount: number;
+    counterMatchupReplayFloors: number;
     samples: GameplayBuildMultiFloorSeedSample[];
 }
 
@@ -151,6 +185,9 @@ export interface GameplayBuildMultiFloorReport {
         minDeterministicReplayShare: number;
         minSignatureConsequenceUsesPerSeed: number;
         minRecurringSynergyFloors: number;
+        minPolicyDecisionsPerFloor: number;
+        minFavorableMatchupFloors: number;
+        minCounterMatchupFloors: number;
         maxPairwiseMeanTurnRatio: number;
     };
     notes: string[];
@@ -175,7 +212,7 @@ interface MutableBuildTrace {
 }
 
 const DEFAULT_SEEDS = [42_001, 42_077, 42_123] as const;
-const DEFAULT_FLOORS = 4;
+const DEFAULT_FLOORS = 12;
 const MEMORY_PRESSURE_MUTATORS = new Set([
     'short_memorize',
     'silhouette_twist',
@@ -184,6 +221,42 @@ const MEMORY_PRESSURE_MUTATORS = new Set([
     'wide_recall'
 ]);
 const HAZARD_PRESSURE_MUTATORS = new Set(['glass_floor', 'sticky_fingers', 'shifting_spotlight']);
+
+export const GAMEPLAY_BUILD_POLICIES: Readonly<Record<GameplayBuildStrategyId, GameplayBuildPolicyDefinition>> = {
+    conduit_cartographer: {
+        id: 'conduit_cartographer_policy_v1',
+        strategyId: 'conduit_cartographer',
+        routePriorities: ['mystery', 'safe', 'greed'],
+        bonusRewardPriorities: ['echo_conduit_lens', 'trait_toolkit', 'secret_favor', 'trait_streak_lens'],
+        relicPriorities: ['peek_charge_plus_one', 'shrine_echo', 'chapter_compass', 'pin_cap_plus_one'],
+        shopItemPriorities: ['peek_charge', 'trait_routing_kit', 'region_shuffle_charge', 'iron_key'],
+        signatureTiming: 'before_board',
+        favorableMatchup: 'memory_pressure',
+        counterMatchup: 'boss_pressure'
+    },
+    guard_tank: {
+        id: 'guard_tank_policy_v1',
+        strategyId: 'guard_tank',
+        routePriorities: ['safe', 'mystery', 'greed'],
+        bonusRewardPriorities: ['hazard_ward', 'stasis_lockbox', 'hazard_banisher', 'supply_cache'],
+        relicPriorities: ['guard_token_plus_one', 'destroy_bank_plus_one', 'parasite_ward_once', 'combo_shard_plus_step'],
+        shopItemPriorities: ['destroy_charge', 'heal_life', 'trait_cleanse', 'iron_key'],
+        signatureTiming: 'before_board',
+        favorableMatchup: 'hazard_pressure',
+        counterMatchup: 'memory_pressure'
+    },
+    treasure_greed: {
+        id: 'treasure_greed_policy_v1',
+        strategyId: 'treasure_greed',
+        routePriorities: ['greed', 'mystery', 'safe'],
+        bonusRewardPriorities: ['chest_gold', 'cursed_opener_contract', 'key_insurance', 'bonus_shards'],
+        relicPriorities: ['wager_surety', 'parasite_ledger', 'chapter_compass', 'extra_shuffle_charge'],
+        shopItemPriorities: ['master_key', 'treasure_key', 'iron_key', 'trait_routing_kit'],
+        signatureTiming: 'after_board',
+        favorableMatchup: 'economy_opportunity',
+        counterMatchup: 'boss_pressure'
+    }
+};
 
 const stableJson = (value: unknown): string => JSON.stringify(value);
 const round = (value: number): number => Number(value.toFixed(2));
@@ -281,7 +354,8 @@ const createInitialRun = (
 
 const signatureConsequenceCommand = (
     trace: MutableBuildTrace,
-    strategy: GameplayBuildStrategyDefinition
+    strategy: GameplayBuildStrategyDefinition,
+    policy: GameplayBuildPolicyDefinition
 ): GameplayCommand | null => {
     const commandId = commandIdFor(trace, strategy, 'signature_consequence');
     if (strategy.id === 'conduit_cartographer') {
@@ -313,23 +387,113 @@ const signatureConsequenceCommand = (
         return tileId ? createGameplayDestroyPairCommand(commandId, tileId) : null;
     }
     if (trace.run.status !== 'levelComplete') return null;
+    const itemPriority = new Map(policy.shopItemPriorities.map((itemId, index) => [itemId, index]));
     const offerId = (Array.isArray(trace.run.shopOffers) ? trace.run.shopOffers : [])
         .filter((offer) => !offer.purchased && offer.compatible && offer.cost <= trace.run.shopGold)
-        .sort((left, right) => left.cost - right.cost || left.id.localeCompare(right.id))[0]?.id;
+        .sort((left, right) =>
+            (itemPriority.get(left.itemId) ?? Number.MAX_SAFE_INTEGER) -
+                (itemPriority.get(right.itemId) ?? Number.MAX_SAFE_INTEGER) ||
+            left.cost - right.cost ||
+            left.id.localeCompare(right.id)
+        )[0]?.id;
     return offerId ? createGameplayShopPurchaseCommand(commandId, offerId) : null;
 };
 
-const preferredRoute = (strategy: GameplayBuildStrategyDefinition): RouteNodeType =>
-    strategy.id === 'guard_tank' ? 'safe' : strategy.id === 'treasure_greed' ? 'greed' : 'mystery';
-
-const chooseRouteId = (run: RunState, preferred: RouteNodeType): string | null => {
+const chooseRouteId = (run: RunState, priorities: readonly RouteNodeType[]): string | null => {
     const choices = Array.isArray(run.lastLevelResult?.routeChoices) ? run.lastLevelResult.routeChoices : [];
     const viable = choices.filter((choice) => {
         if (!getRouteChoiceAvailability(run, choice).available) return false;
         const outcome = applyRouteChoiceOutcome(run, choice.id);
         return outcome.applied && openRouteSideRoom(outcome.run).sideRoom != null;
     });
-    return viable.find((choice) => choice.routeType === preferred)?.id ?? viable[0]?.id ?? null;
+    for (const routeType of priorities) {
+        const choiceId = viable.find((choice) => choice.routeType === routeType)?.id;
+        if (choiceId) return choiceId;
+    }
+    return viable[0]?.id ?? null;
+};
+
+const bonusRewardIdFromChoiceId = (choiceId: string): BonusRewardId | null => {
+    for (const rewardId of [
+        'chest_gold',
+        'secret_favor',
+        'bonus_shards',
+        'supply_cache',
+        'trait_toolkit',
+        'key_insurance',
+        'hazard_ward',
+        'free_swap_floor',
+        'echo_conduit_lens',
+        'trait_streak_lens',
+        'cursed_opener_contract',
+        'stasis_lockbox',
+        'hazard_banisher'
+    ] as const satisfies readonly BonusRewardId[]) {
+        if (choiceId.endsWith(`:${rewardId}`)) return rewardId;
+    }
+    return null;
+};
+
+const chooseSideRoomAction = (
+    run: RunState,
+    policy: GameplayBuildPolicyDefinition
+): { action: 'claim' | 'skip'; choiceId?: string; reason: string } => {
+    const room = run.sideRoom;
+    if (!room) return { action: 'skip', reason: 'No side room is open.' };
+    const claimIsLegal = (choiceId?: string): boolean => reduceGameplayCommand(
+        run,
+        createGameplaySideRoomResolveCommand(
+            `policy-preview:${run.runSeed}:${room.floor}:${choiceId ? 'choice' : 'primary'}`,
+            'claim',
+            choiceId
+        )
+    ).accepted;
+    if (room.payload.kind === 'rest_heal') {
+        return runNonNegativeInteger(run.lives) < MAX_LIVES && claimIsLegal()
+            ? { action: 'claim', reason: 'Recovery policy spends the safe stop only when life is missing.' }
+            : { action: 'skip', reason: 'Recovery policy preserves gold at full life.' };
+    }
+    const choices = Array.isArray(room.choices) ? room.choices : [];
+    if (room.payload.kind === 'event_choice') {
+        const primary = choices.find((choice) => choice.primary)?.id ?? room.payload.choiceId;
+        return claimIsLegal(primary)
+            ? { action: 'claim', choiceId: primary, reason: 'Event policy accepts the shipped primary legal non-skip outcome.' }
+            : { action: 'skip', reason: 'Event policy declines a stale or illegal primary outcome.' };
+    }
+    const rewardPriority = new Map(policy.bonusRewardPriorities.map((rewardId, index) => [rewardId, index]));
+    const rankedChoices = choices
+        .filter((choice) => choice.rewardImpactKind !== 'risk')
+        .map((choice) => ({ choice, rewardId: bonusRewardIdFromChoiceId(choice.id) }))
+        .sort((left, right) =>
+            (left.rewardId == null ? Number.MAX_SAFE_INTEGER : rewardPriority.get(left.rewardId) ?? Number.MAX_SAFE_INTEGER) -
+                (right.rewardId == null ? Number.MAX_SAFE_INTEGER : rewardPriority.get(right.rewardId) ?? Number.MAX_SAFE_INTEGER) ||
+            Number(Boolean(right.choice.primary)) - Number(Boolean(left.choice.primary)) ||
+            left.choice.id.localeCompare(right.choice.id)
+        )
+        .map(({ choice }) => choice);
+    const selected = rankedChoices.find((choice) => claimIsLegal(choice.id));
+    if (!selected && choices.length > 0) {
+        return { action: 'skip', reason: 'No visible bonus choice is both policy-safe and command-legal.' };
+    }
+    if (choices.length === 0 && !claimIsLegal()) {
+        return { action: 'skip', reason: 'The deterministic single reward is no longer legal.' };
+    }
+    return {
+        action: 'claim',
+        choiceId: selected?.id,
+        reason: selected
+            ? 'Bonus policy selected the highest-priority eligible build reward.'
+            : 'Bonus policy claims the deterministic single reward.'
+    };
+};
+
+const chooseRelicId = (run: RunState, policy: GameplayBuildPolicyDefinition): RelicId | null => {
+    const options = run.relicOffer?.options ?? [];
+    const priority = new Map(policy.relicPriorities.map((relicId, index) => [relicId, index]));
+    return [...options].sort((left, right) =>
+        (priority.get(left) ?? Number.MAX_SAFE_INTEGER) - (priority.get(right) ?? Number.MAX_SAFE_INTEGER) ||
+        left.localeCompare(right)
+    )[0] ?? null;
 };
 
 const floorMatchup = (run: RunState): GameplayBuildMatchup => {
@@ -400,6 +564,7 @@ const runSeed = (
     rulesVersion: number,
     requestedFloors: number
 ): GameplayBuildMultiFloorSeedSample => {
+    const policy = GAMEPLAY_BUILD_POLICIES[strategy.id];
     const initialRun = createInitialRun(strategy, seed, rulesVersion);
     const trace: MutableBuildTrace = {
         initialRun,
@@ -412,6 +577,23 @@ const runSeed = (
         invariantViolations: []
     };
     const floorTraces: GameplayBuildFloorTrace[] = [];
+    const policyDecisions: GameplayBuildPolicyDecision[] = [];
+    const applySignaturePolicy = (floor: number, matchup: GameplayBuildMatchup): number => {
+        const consequence = signatureConsequenceCommand(trace, strategy, policy);
+        const applied = consequence ? executeCommand(trace, strategy, consequence, true) : false;
+        policyDecisions.push({
+            floor,
+            matchup,
+            phase: 'signature',
+            decision: consequence?.type ?? 'conserve_or_unavailable',
+            selectedId: consequence?.commandId ?? null,
+            applied,
+            reason: consequence
+                ? `${policy.id} spends its ${strategy.expectedDominantAxis} consequence ${policy.signatureTiming.replace('_', ' ')}.`
+                : `${policy.id} found no legal stocked signature consequence and conserved state.`
+        });
+        return applied ? 1 : 0;
+    };
     const setupDefinitions = strategy.activationDefinitionIds.filter((definitionId) =>
         definitionId.startsWith('bonus_reward.')
     );
@@ -447,17 +629,15 @@ const runSeed = (
                 createGameplayMemorizeCompleteCommand(commandIdFor(trace, strategy, 'memorize_complete'))
             );
         }
-        if (strategy.id !== 'treasure_greed') {
-            const consequence = signatureConsequenceCommand(trace, strategy);
-            if (consequence && executeCommand(trace, strategy, consequence, true)) signatureConsequenceUses += 1;
+        if (policy.signatureTiming === 'before_board') {
+            signatureConsequenceUses += applySignaturePolicy(floor, matchup);
         }
 
         const solver = solveRunThroughGameplayCoreWithTrace(trace.run, 240, true);
         appendSolverTrace(trace, solver);
 
-        if (strategy.id === 'treasure_greed') {
-            const consequence = signatureConsequenceCommand(trace, strategy);
-            if (consequence && executeCommand(trace, strategy, consequence, true)) signatureConsequenceUses += 1;
+        if (policy.signatureTiming === 'after_board') {
+            signatureConsequenceUses += applySignaturePolicy(floor, matchup);
         }
 
         const floorEvents = trace.events.slice(eventStart);
@@ -494,19 +674,44 @@ const runSeed = (
         });
         if (!completed || floorIndex === requestedFloors - 1) break;
 
-        const routeId = chooseRouteId(trace.run, preferredRoute(strategy));
+        const routeId = chooseRouteId(trace.run, policy.routePriorities);
         if (routeId) {
-            executeCommand(
+            const selectedRoute = trace.run.lastLevelResult?.routeChoices?.find((choice) => choice.id === routeId);
+            const routeApplied = executeCommand(
                 trace,
                 strategy,
                 createGameplayRouteChooseCommand(commandIdFor(trace, strategy, 'route_choose'), routeId)
             );
+            policyDecisions.push({
+                floor,
+                matchup,
+                phase: 'route',
+                decision: selectedRoute?.routeType ?? 'fallback',
+                selectedId: routeId,
+                applied: routeApplied,
+                reason: `${policy.id} ranked shipped route types ${policy.routePriorities.join(' > ')}.`
+            });
             if (trace.run.sideRoom) {
-                executeCommand(
+                const sideRoomChoice = chooseSideRoomAction(trace.run, policy);
+                const sideRoomApplied = executeCommand(
                     trace,
                     strategy,
-                    createGameplaySideRoomResolveCommand(commandIdFor(trace, strategy, 'side_room_skip'), 'skip')
+                    createGameplaySideRoomResolveCommand(
+                        commandIdFor(trace, strategy, `side_room_${sideRoomChoice.action}`),
+                        sideRoomChoice.action,
+                        sideRoomChoice.choiceId
+                    ),
+                    sideRoomChoice.action === 'claim'
                 );
+                policyDecisions.push({
+                    floor,
+                    matchup,
+                    phase: 'side_room',
+                    decision: sideRoomChoice.action,
+                    selectedId: sideRoomChoice.choiceId ?? null,
+                    applied: sideRoomApplied,
+                    reason: sideRoomChoice.reason
+                });
             }
         }
         if (needsRelicPick(trace.run)) {
@@ -516,19 +721,38 @@ const runSeed = (
                 createGameplayRelicOfferOpenCommand(commandIdFor(trace, strategy, 'relic_offer_open'))
             );
             for (let pick = 0; trace.run.relicOffer && pick < 4; pick += 1) {
-                const relicId = trace.run.relicOffer.options[0];
+                const relicId = chooseRelicId(trace.run, policy);
                 if (!relicId) break;
-                executeCommand(
+                const relicApplied = executeCommand(
                     trace,
                     strategy,
                     createGameplayRelicPickCommand(commandIdFor(trace, strategy, 'relic_pick'), relicId)
                 );
+                policyDecisions.push({
+                    floor,
+                    matchup,
+                    phase: 'relic',
+                    decision: 'pick',
+                    selectedId: relicId,
+                    applied: relicApplied,
+                    reason: `${policy.id} selected the highest offered relic in its explicit priority order.`
+                });
             }
         }
         executeCommand(
             trace,
             strategy,
             createGameplayFloorAdvanceCommand(commandIdFor(trace, strategy, 'floor_advance'))
+        );
+    }
+
+    const observedFloors = floorTraces.map((floor) => floor.floor);
+    const floorsAreStrictlyIncreasing = observedFloors.every(
+        (floor, index) => index === 0 || floor > observedFloors[index - 1]
+    );
+    if (new Set(observedFloors).size !== observedFloors.length || !floorsAreStrictlyIncreasing) {
+        trace.invariantViolations.push(
+            `${strategy.id}@seed:${seed}: floor identities were not unique and strictly increasing (${observedFloors.join(',')}).`
         );
     }
 
@@ -569,6 +793,7 @@ const runSeed = (
         acceptedCommandIds: trace.acceptedCommandIds,
         rejectedCommandIds: trace.rejectedCommandIds,
         floorTraces,
+        policyDecisions,
         eventTypeCounts,
         feedbackCues,
         signatureAxisScores: signatureScores,
@@ -637,6 +862,8 @@ export const runGameplayBuildMultiFloorSimulation = (
         }
         const floorsCompleted = floorTraces.filter((floor) => floor.completed).length;
         const firstScores = samples.map((sample) => sample.floorTraces[0]?.scoreBefore ?? 0);
+        const policy = GAMEPLAY_BUILD_POLICIES[strategy.id];
+        const matchupMetrics = aggregateMatchups(samples);
         return {
             id: strategy.id,
             label: strategy.label,
@@ -644,6 +871,9 @@ export const runGameplayBuildMultiFloorSimulation = (
             consequenceCommandType: strategy.consequenceCommandType,
             consequenceEventType: strategy.consequenceEventType,
             expectedDominantAxis: strategy.expectedDominantAxis,
+            policyId: policy.id,
+            favorableMatchup: policy.favorableMatchup,
+            counterMatchup: policy.counterMatchup,
             dominantAxis: dominantAxisFor(signatureScores),
             signatureAxisScores: signatureScores,
             floorsAttempted: floorTraces.length,
@@ -658,7 +888,17 @@ export const runGameplayBuildMultiFloorSimulation = (
             commandsPerFloor: distribution(floorTraces.map((floor) => floor.commandCount)),
             livesRemaining: distribution(samples.map((sample) => sample.finalLives)),
             scoreGained: distribution(samples.map((sample, index) => sample.finalScore - (firstScores[index] ?? 0))),
-            matchupMetrics: aggregateMatchups(samples),
+            matchupMetrics,
+            favorableMatchupMetrics: matchupMetrics.find((metrics) => metrics.matchup === policy.favorableMatchup) ?? null,
+            counterMatchupMetrics: matchupMetrics.find((metrics) => metrics.matchup === policy.counterMatchup) ?? null,
+            policyDecisionCount: samples.reduce((sum, sample) => sum + sample.policyDecisions.length, 0),
+            counterMatchupReplayFloors: floorTraces.filter((floor) =>
+                floor.matchup === policy.counterMatchup &&
+                floor.completed &&
+                floor.replayCheckpointVerified &&
+                floor.replayCheckpointDeterministic &&
+                floor.invariantViolations.length === 0
+            ).length,
             samples
         };
     });
@@ -681,18 +921,23 @@ export const runGameplayBuildMultiFloorSimulation = (
         pairwiseMeanTurnRatios,
         bounds: {
             requiredStrategyCount: 3,
-            minFloorsPerSeed: 3,
+            minFloorsPerSeed: 12,
             minFloorCompletionShare: 1,
             minDeterministicReplayShare: 1,
             minSignatureConsequenceUsesPerSeed: 1,
             minRecurringSynergyFloors: 1,
+            minPolicyDecisionsPerFloor: 1,
+            minFavorableMatchupFloors: 1,
+            minCounterMatchupFloors: 1,
             maxPairwiseMeanTurnRatio: 1.5
         },
         notes: [
             'Each sample retains one command/event trace from content claim through generated boards, routes, side rooms, milestone relics, and floor advancement.',
             'Every generated floor is replayed as an isolated checkpoint and the complete multi-floor command list is replayed from the stocked initial run.',
+            'Exported strategy policies rank real route choices, side-room rewards, relics, shop items, and signature timing; every decision remains attached to its observed floor matchup.',
             'Matchup distributions are observed from shipped schedule mutators, hazards, bosses, and economy nodes; absent buckets are reported as unsampled rather than invented.',
-            'The gate proves structural viability and balance envelopes for a perfect-information solver, not final human win-rate balance.'
+            'Favorable and counter labels are explicit design hypotheses. The gate requires shipped exposure, completion, feedback, and replay evidence but does not misreport perfect-information outcomes as human difficulty or win-rate proof.',
+            'The gate proves longer structural viability and balance envelopes for a deterministic policy solver, not final human win-rate balance.'
         ]
     };
 };
@@ -728,6 +973,26 @@ export const assertGameplayBuildMultiFloorViable = (
         );
         if (recurringSynergyFloors < report.bounds.minRecurringSynergyFloors) {
             issues.push(`${context}:recurringSynergyFloors=${recurringSynergyFloors}; required=${report.bounds.minRecurringSynergyFloors}`);
+        }
+        const minimumPolicyDecisions =
+            strategy.floorsAttempted * report.bounds.minPolicyDecisionsPerFloor;
+        if (strategy.policyDecisionCount < minimumPolicyDecisions) {
+            issues.push(`${context}:policyDecisions=${strategy.policyDecisionCount}; required=${minimumPolicyDecisions}`);
+        }
+        if ((strategy.favorableMatchupMetrics?.sampledFloors ?? 0) < report.bounds.minFavorableMatchupFloors) {
+            issues.push(
+                `${context}:favorableMatchup=${strategy.favorableMatchup}; sampled=${strategy.favorableMatchupMetrics?.sampledFloors ?? 0}; required=${report.bounds.minFavorableMatchupFloors}`
+            );
+        }
+        if ((strategy.counterMatchupMetrics?.sampledFloors ?? 0) < report.bounds.minCounterMatchupFloors) {
+            issues.push(
+                `${context}:counterMatchup=${strategy.counterMatchup}; sampled=${strategy.counterMatchupMetrics?.sampledFloors ?? 0}; required=${report.bounds.minCounterMatchupFloors}`
+            );
+        }
+        if (strategy.counterMatchupReplayFloors < report.bounds.minCounterMatchupFloors) {
+            issues.push(
+                `${context}:counterMatchupReplayFloors=${strategy.counterMatchupReplayFloors}; required=${report.bounds.minCounterMatchupFloors}`
+            );
         }
         for (const sample of strategy.samples) {
             const sampleContext = `${strategy.id}@seed:${sample.seed}`;

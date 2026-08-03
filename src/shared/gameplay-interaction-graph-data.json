@@ -1,5 +1,5 @@
 {
-  "version": 49,
+  "version": 50,
   "mechanics": [
     {
       "id": "trait.echo",
@@ -1719,15 +1719,15 @@
     },
     {
       "id": "simulation.build_evaluation",
-      "label": "Multi-Floor Typed Build Strategy Evaluation",
+      "label": "Long-Horizon Policy And Counter-Matchup Build Evaluation",
       "kind": "simulation",
-      "role": "route_profile_and_multi_floor_three_build_command_event_viability_balance_and_replay_gate",
+      "role": "route_profile_and_twelve_floor_three_build_policy_counter_matchup_viability_balance_feedback_and_replay_gate",
       "evidence": ["src/shared/balance-simulation.ts", "src/shared/build-strategy-simulation.ts", "src/shared/build-strategy-playthrough-simulation.ts", "src/shared/gameplay-core-playthrough-solver.ts", "src/shared/gameplay-core.ts", "src/shared/route-choice-outcome-rules.ts", "scripts/sim-build-strategies.ts", "scripts/sim-build-strategy-playthroughs.ts"],
       "reads": ["routeChoices", "startingLoadoutId", "contentDefinitionIds", "gameplayCommands", "gameplayEvents", "feedbackCues", "traitInteractionTags", "activeMutators", "floorTag", "strategyAxisScores", "pairwiseAxisDistances", "lives", "shopGold", "totalScore", "guardTokens", "comboShards", "relicFavorProgress", "pendingMemorizeBonusMs"],
       "writes": ["balanceProfileReport", "buildStrategyReport", "strategyAxisScores", "pairwiseAxisDistances", "generatedBoardPlaythroughReport", "replayReport", "invariantViolations"],
       "enables": ["build.route_gambler", "build.conduit_cartographer", "build.guard_tank", "build.treasure_greed", "economy.score_and_rewards", "safety.softlock_fairness"],
       "blocks": [],
-      "softlockGuards": ["typed-route-command-only", "one-outcome-per-cleared-floor", "zero-rejected-profile-choices", "multi-seed-profile-bounds", "three-strategy-minimum", "typed-content-definition-activation", "authoritative-consequence-command", "deterministic-command-replay", "typed-feedback-minimum", "distinct-axis-fingerprint", "multi-floor-command-id-uniqueness", "per-floor-replay-checkpoint", "full-run-json-replay", "observed-matchup-distribution", "recurring-trait-synergy-minimum", "synergy-preserving-destroy-policy", "pairwise-turn-ratio-bound"],
+      "softlockGuards": ["typed-route-command-only", "one-outcome-per-cleared-floor", "zero-rejected-profile-choices", "multi-seed-profile-bounds", "three-strategy-minimum", "typed-content-definition-activation", "authoritative-consequence-command", "deterministic-command-replay", "typed-feedback-minimum", "distinct-axis-fingerprint", "multi-floor-command-id-uniqueness", "strictly-increasing-floor-identity", "per-floor-replay-checkpoint", "full-run-json-replay", "observed-matchup-distribution", "recurring-trait-synergy-minimum", "synergy-preserving-destroy-policy", "twelve-floor-policy-horizon", "legality-aware-policy-selection", "shipped-favorable-matchup-exposure", "shipped-counter-matchup-exposure", "counter-matchup-replay", "tile-flip-enemy-defeat-feedback", "pairwise-turn-ratio-bound"],
       "tests": ["src/shared/balance-simulation.test.ts", "src/shared/build-strategy-simulation.test.ts", "src/shared/build-strategy-playthrough-simulation.test.ts", "src/shared/gameplay-core-playthrough-solver.test.ts"]
     },
     {
@@ -1753,7 +1753,7 @@
       "writes": ["tileStates", "flippedTileIds", "lives", "guardTokens", "timerState", "gameplayCommands", "gameplayEvents"],
       "enables": ["core.board_turn_resolution", "exit.primary", "progression.run_flow"],
       "blocks": [],
-      "softlockGuards": ["strict-command-schema", "target-legality", "guard-before-life", "gambit-intent-before-flip", "single-command-state-transition", "renderer-command-only-board-input", "no-renderer-compatibility-mutation-imports", "current-command-event-return", "renderer-transient-arming-state", "typed-command-independent-of-ui-arm-flag", "no-live-run-stray-arm-read", "dead-region-arm-action-removed", "json-round-trip"],
+      "softlockGuards": ["strict-command-schema", "target-legality", "guard-before-life", "gambit-intent-before-flip", "single-command-state-transition", "renderer-command-only-board-input", "no-renderer-compatibility-mutation-imports", "current-command-event-return", "renderer-transient-arming-state", "typed-command-independent-of-ui-arm-flag", "no-live-run-stray-arm-read", "dead-region-arm-action-removed", "final-pair-enemy-defeat-event-facts", "final-pair-enemy-defeat-feedback", "json-round-trip"],
       "tests": ["src/shared/gameplay-core.test.ts", "src/shared/game.test.ts", "src/renderer/store/runSurfaceState.test.ts", "src/renderer/store/tilePressController.test.ts", "src/renderer/store/dungeonPressSurfaceState.test.ts"]
     },
     {

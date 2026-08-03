@@ -525,6 +525,18 @@ const applyTileFlipCommand = (
     const writeEvent = makeEventWriter(command.commandId, TILE_FLIP_SOURCE, events);
     const objectiveBefore = getGameplayFeedbackObjectiveSnapshot(run);
     const objectiveAfter = getGameplayFeedbackObjectiveSnapshot(nextRun);
+    const hazardsAfter = new Map(
+        (Array.isArray(nextRun.board?.enemyHazards) ? nextRun.board.enemyHazards : [])
+            .map((hazard) => [hazard.id, hazard] as const)
+    );
+    const enemyHazardIdsDefeated = (Array.isArray(run.board?.enemyHazards) ? run.board.enemyHazards : [])
+        .filter((hazard) =>
+            hazard.state !== 'defeated' &&
+            runNonNegativeInteger(hazard.hp) > 0 &&
+            hazardsAfter.get(hazard.id)?.state === 'defeated'
+        )
+        .map((hazard) => hazard.id)
+        .sort((left, right) => left.localeCompare(right));
     writeEvent({
         type: 'board.tile_flipped',
         targetTileId: command.targetTileId,
@@ -543,6 +555,13 @@ const applyTileFlipCommand = (
         trapsTriggeredAfter,
         livesBefore: runNonNegativeInteger(run.lives),
         livesAfter: runNonNegativeInteger(nextRun.lives),
+        enemyHazardIdsDefeated,
+        dungeonEnemiesDefeatedBefore: runNonNegativeInteger(run.dungeonEnemiesDefeated),
+        dungeonEnemiesDefeatedAfter: runNonNegativeInteger(nextRun.dungeonEnemiesDefeated),
+        dungeonEnemiesDefeatedThisFloorBefore: runNonNegativeInteger(run.dungeonEnemiesDefeatedThisFloor),
+        dungeonEnemiesDefeatedThisFloorAfter: runNonNegativeInteger(nextRun.dungeonEnemiesDefeatedThisFloor),
+        enemyHazardsDefeatedThisFloorBefore: runNonNegativeInteger(run.enemyHazardsDefeatedThisFloor),
+        enemyHazardsDefeatedThisFloorAfter: runNonNegativeInteger(nextRun.enemyHazardsDefeatedThisFloor),
         boardComplete: nextRun.board ? isBoardComplete(nextRun.board) : false
     });
     if (outcome === 'trap_triggered') {
@@ -557,6 +576,14 @@ const applyTileFlipCommand = (
             type: 'feedback.requested',
             cue: `board.tile.${outcome}`,
             message: `${targetBefore.label} ${outcome === 'room_resolved' ? 'resolved' : 'revealed'}.`,
+            tone: 'information'
+        });
+    }
+    if (enemyHazardIdsDefeated.length > 0) {
+        writeEvent({
+            type: 'feedback.requested',
+            cue: 'hazard.enemy_blocker.cleared',
+            message: `${enemyHazardIdsDefeated.length} enemy blocker${enemyHazardIdsDefeated.length === 1 ? '' : 's'} cleared from the final pair.`,
             tone: 'information'
         });
     }

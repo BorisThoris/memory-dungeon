@@ -5,18 +5,18 @@
     "name": "memory-dungeon",
     "trackedFileCount": 2407,
     "codeFileCount": 904,
-    "exportedSymbolCount": 3342,
+    "exportedSymbolCount": 3345,
     "contentItemCount": 56,
     "mechanicCount": 139,
     "stateFieldCount": 247,
-    "relationshipCount": 10480
+    "relationshipCount": 10485
   },
   "inventory": [
     {
       "path": ".ai/GAMEPLAY_MIGRATION.md",
       "category": "other",
-      "bytes": 82472,
-      "sha256": "bc4753a1c7cb215e1b9b2a8b0b712fc48306178decb9d57b5b7e1287101f3299"
+      "bytes": 84693,
+      "sha256": "6b94acdb54f0ce70a8f2bf9ea232e35a225bf80ba2a0925639b91c79ac9aff1b"
     },
     {
       "path": ".ai/README.md",
@@ -777,8 +777,8 @@
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
       "category": "documentation",
-      "bytes": 34144,
-      "sha256": "e22d9cd2f5089829d26f8739fae52db78d8ee2cbe8be99ba49edc4546caaa833"
+      "bytes": 34603,
+      "sha256": "a02c528131e2552ffa660bfd7d71c6ffc3ea3b4a448215d95a1d9a06b028d013"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_POLISH_AND_GAPS.md",
@@ -831,8 +831,8 @@
     {
       "path": "docs/internal-wiki/APP_ANALYSIS.md",
       "category": "documentation",
-      "bytes": 21812,
-      "sha256": "bb74298f8e8fab244ca7b1b2e61ef94b92cf9a27275a611a5f6a9db6e453e5b2"
+      "bytes": 21684,
+      "sha256": "9da7d1ca4a02956a86803715436b5c8c28619f99826fa36638a798ecd487443b"
     },
     {
       "path": "docs/internal-wiki/ARCHITECTURE.md",
@@ -4539,8 +4539,8 @@
     {
       "path": "scripts/sim-build-strategy-playthroughs.ts",
       "category": "script",
-      "bytes": 2693,
-      "sha256": "33c34f469a38d854edebfc571c1e54ab9a5994f88e7ab621ec0542263034150d"
+      "bytes": 3123,
+      "sha256": "aa3594a19cb8a7f3ecbe21e3f4cb812c89ae35fc15306e15045423b5894ee5f9"
     },
     {
       "path": "scripts/sim-endless.ts",
@@ -9999,14 +9999,14 @@
     {
       "path": "src/shared/build-strategy-playthrough-simulation.test.ts",
       "category": "test",
-      "bytes": 4436,
-      "sha256": "43509333fd1d447e7db2672284d646080ab59e2c2f80ca3c920370194085d113"
+      "bytes": 5805,
+      "sha256": "3382c465652773c03423ee0b50fc9379fa7838168a2a9db267b8a7fadbc77d4d"
     },
     {
       "path": "src/shared/build-strategy-playthrough-simulation.ts",
       "category": "source",
-      "bytes": 33204,
-      "sha256": "14574d63461138546b760cefba22574f4710b968dad903ba4bef97824b531338"
+      "bytes": 46267,
+      "sha256": "5b0a8cb33087ac6cf1edb961281690ad4de35b32e2a31248738821a75ddb52cd"
     },
     {
       "path": "src/shared/build-strategy-simulation.test.ts",
@@ -10695,8 +10695,8 @@
     {
       "path": "src/shared/gameplay-core-contracts.ts",
       "category": "source",
-      "bytes": 96571,
-      "sha256": "86efdc249a5583a54be7db3c853731d6d0eb428cc911c027f4acf011d6d90a2a"
+      "bytes": 97203,
+      "sha256": "8579c07f160733431c950e7b9a149a714492b02542125905189134e98cde4fa2"
     },
     {
       "path": "src/shared/gameplay-core-playthrough-solver.test.ts",
@@ -10725,14 +10725,14 @@
     {
       "path": "src/shared/gameplay-core.test.ts",
       "category": "test",
-      "bytes": 128602,
-      "sha256": "e8eee26b3b8b7ab7a9bf98c5c3ca4252733440add4eedc1495089d03908c3951"
+      "bytes": 133002,
+      "sha256": "1d589f89e768b4532026dd48911dab9d0145928b3bf8f8dd0267f395145e81aa"
     },
     {
       "path": "src/shared/gameplay-core.ts",
       "category": "source",
-      "bytes": 97657,
-      "sha256": "503a2e64f33462277676510c56dbfea5f22804b679a540007159e1842ba63325"
+      "bytes": 99233,
+      "sha256": "cc97bcb1cfdf948ab18d2b61fbf5fb78d820841fe7c1ca410d137658dfed968b"
     },
     {
       "path": "src/shared/gameplay-effect-transition.test.ts",
@@ -10767,14 +10767,14 @@
     {
       "path": "src/shared/gameplay-interaction-graph-data.json",
       "category": "source",
-      "bytes": 223838,
-      "sha256": "29a36ad88a93b9743d6420beb195f209b513c8b27b03ed8814a625a58d69d17f"
+      "bytes": 224184,
+      "sha256": "f7843ff953841a4f489389e46003cd45d4d89869c63702a8258b170e543a63e2"
     },
     {
       "path": "src/shared/gameplay-interaction-graph.test.ts",
       "category": "test",
-      "bytes": 99347,
-      "sha256": "ccc1716c192bcb18d1a85e54e7f539cd085bb69c93b2b65d30e8a5279e3feda3"
+      "bytes": 99837,
+      "sha256": "6c6da2ed7bacd7a04e339ab4cef55aacde93c8dab099c1f2da163c993d668ce2"
     },
     {
       "path": "src/shared/gameplay-interaction-graph.ts",
@@ -24018,7 +24018,7 @@
       "path": "src/shared/build-strategy-playthrough-simulation.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 91,
+      "lineCount": 105,
       "imports": [
         "file:src/shared/build-strategy-playthrough-simulation.ts",
         "file:src/shared/build-strategy-simulation.ts",
@@ -24032,7 +24032,7 @@
       "path": "src/shared/build-strategy-playthrough-simulation.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 754,
+      "lineCount": 1019,
       "imports": [
         "file:src/shared/board-power-targeting.ts",
         "file:src/shared/build-strategy-simulation.ts",
@@ -24051,6 +24051,7 @@
       ],
       "exports": [
         "symbol:src/shared/build-strategy-playthrough-simulation.ts#assertGameplayBuildMultiFloorViable",
+        "symbol:src/shared/build-strategy-playthrough-simulation.ts#GAMEPLAY_BUILD_POLICIES",
         "symbol:src/shared/build-strategy-playthrough-simulation.ts#GameplayBuildDistribution",
         "symbol:src/shared/build-strategy-playthrough-simulation.ts#GameplayBuildFloorTrace",
         "symbol:src/shared/build-strategy-playthrough-simulation.ts#GameplayBuildMatchup",
@@ -24059,6 +24060,8 @@
         "symbol:src/shared/build-strategy-playthrough-simulation.ts#GameplayBuildMultiFloorReport",
         "symbol:src/shared/build-strategy-playthrough-simulation.ts#GameplayBuildMultiFloorSeedSample",
         "symbol:src/shared/build-strategy-playthrough-simulation.ts#GameplayBuildMultiFloorSimulationInput",
+        "symbol:src/shared/build-strategy-playthrough-simulation.ts#GameplayBuildPolicyDecision",
+        "symbol:src/shared/build-strategy-playthrough-simulation.ts#GameplayBuildPolicyDefinition",
         "symbol:src/shared/build-strategy-playthrough-simulation.ts#runGameplayBuildMultiFloorSimulation"
       ],
       "testedBy": [
@@ -27055,7 +27058,7 @@
       "path": "src/shared/gameplay-core-contracts.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 2679,
+      "lineCount": 2686,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/run-inventory-contracts.ts",
@@ -27250,7 +27253,7 @@
       "path": "src/shared/gameplay-core.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 2914,
+      "lineCount": 3016,
       "imports": [
         "file:src/shared/board-power-actions.ts",
         "file:src/shared/board-power-state.ts",
@@ -27262,6 +27265,7 @@
         "file:src/shared/gameplay-core-adapters.ts",
         "file:src/shared/gameplay-core-contracts.ts",
         "file:src/shared/gameplay-core.ts",
+        "file:src/shared/gameplay-feedback-completeness.ts",
         "file:src/shared/memorize-phase-rules.ts",
         "file:src/shared/next-floor-transition-rules.ts",
         "file:src/shared/playable-path-fixtures.ts",
@@ -27283,7 +27287,7 @@
       "path": "src/shared/gameplay-core.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 2221,
+      "lineCount": 2248,
       "imports": [
         "file:src/shared/board-inspection.ts",
         "file:src/shared/board-power-actions.ts",
@@ -27410,6 +27414,7 @@
         "symbol:src/shared/gameplay-feedback-completeness.ts#inspectGameplayFeedbackCompleteness"
       ],
       "testedBy": [
+        "file:src/shared/gameplay-core.test.ts",
         "file:src/shared/gameplay-feedback-completeness.test.ts"
       ]
     },
@@ -27450,7 +27455,7 @@
       "path": "src/shared/gameplay-interaction-graph.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 1603,
+      "lineCount": 1612,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/gameplay-core-contracts.ts",
@@ -43241,80 +43246,104 @@
       "name": "assertGameplayBuildMultiFloorViable",
       "kind": "value",
       "file": "src/shared/build-strategy-playthrough-simulation.ts",
-      "line": 700,
-      "endLine": 753
+      "line": 945,
+      "endLine": 1018
+    },
+    {
+      "id": "symbol:src/shared/build-strategy-playthrough-simulation.ts#GAMEPLAY_BUILD_POLICIES",
+      "name": "GAMEPLAY_BUILD_POLICIES",
+      "kind": "value",
+      "file": "src/shared/build-strategy-playthrough-simulation.ts",
+      "line": 225,
+      "endLine": 259
     },
     {
       "id": "symbol:src/shared/build-strategy-playthrough-simulation.ts#GameplayBuildDistribution",
       "name": "GameplayBuildDistribution",
       "kind": "interface",
       "file": "src/shared/build-strategy-playthrough-simulation.ts",
-      "line": 95,
-      "endLine": 99
+      "line": 122,
+      "endLine": 126
     },
     {
       "id": "symbol:src/shared/build-strategy-playthrough-simulation.ts#GameplayBuildFloorTrace",
       "name": "GameplayBuildFloorTrace",
       "kind": "interface",
       "file": "src/shared/build-strategy-playthrough-simulation.ts",
-      "line": 51,
-      "endLine": 73
+      "line": 77,
+      "endLine": 99
     },
     {
       "id": "symbol:src/shared/build-strategy-playthrough-simulation.ts#GameplayBuildMatchup",
       "name": "GameplayBuildMatchup",
       "kind": "type",
       "file": "src/shared/build-strategy-playthrough-simulation.ts",
-      "line": 44,
-      "endLine": 49
+      "line": 48,
+      "endLine": 53
     },
     {
       "id": "symbol:src/shared/build-strategy-playthrough-simulation.ts#GameplayBuildMatchupMetrics",
       "name": "GameplayBuildMatchupMetrics",
       "kind": "interface",
       "file": "src/shared/build-strategy-playthrough-simulation.ts",
-      "line": 101,
-      "endLine": 109
+      "line": 128,
+      "endLine": 136
     },
     {
       "id": "symbol:src/shared/build-strategy-playthrough-simulation.ts#GameplayBuildMultiFloorMetrics",
       "name": "GameplayBuildMultiFloorMetrics",
       "kind": "interface",
       "file": "src/shared/build-strategy-playthrough-simulation.ts",
-      "line": 111,
-      "endLine": 134
+      "line": 138,
+      "endLine": 168
     },
     {
       "id": "symbol:src/shared/build-strategy-playthrough-simulation.ts#GameplayBuildMultiFloorReport",
       "name": "GameplayBuildMultiFloorReport",
       "kind": "interface",
       "file": "src/shared/build-strategy-playthrough-simulation.ts",
-      "line": 136,
-      "endLine": 157
+      "line": 170,
+      "endLine": 194
     },
     {
       "id": "symbol:src/shared/build-strategy-playthrough-simulation.ts#GameplayBuildMultiFloorSeedSample",
       "name": "GameplayBuildMultiFloorSeedSample",
       "kind": "interface",
       "file": "src/shared/build-strategy-playthrough-simulation.ts",
-      "line": 75,
-      "endLine": 93
+      "line": 101,
+      "endLine": 120
     },
     {
       "id": "symbol:src/shared/build-strategy-playthrough-simulation.ts#GameplayBuildMultiFloorSimulationInput",
       "name": "GameplayBuildMultiFloorSimulationInput",
       "kind": "interface",
       "file": "src/shared/build-strategy-playthrough-simulation.ts",
-      "line": 159,
-      "endLine": 164
+      "line": 196,
+      "endLine": 201
+    },
+    {
+      "id": "symbol:src/shared/build-strategy-playthrough-simulation.ts#GameplayBuildPolicyDecision",
+      "name": "GameplayBuildPolicyDecision",
+      "kind": "interface",
+      "file": "src/shared/build-strategy-playthrough-simulation.ts",
+      "line": 67,
+      "endLine": 75
+    },
+    {
+      "id": "symbol:src/shared/build-strategy-playthrough-simulation.ts#GameplayBuildPolicyDefinition",
+      "name": "GameplayBuildPolicyDefinition",
+      "kind": "interface",
+      "file": "src/shared/build-strategy-playthrough-simulation.ts",
+      "line": 55,
+      "endLine": 65
     },
     {
       "id": "symbol:src/shared/build-strategy-playthrough-simulation.ts#runGameplayBuildMultiFloorSimulation",
       "name": "runGameplayBuildMultiFloorSimulation",
       "kind": "value",
       "file": "src/shared/build-strategy-playthrough-simulation.ts",
-      "line": 623,
-      "endLine": 698
+      "line": 848,
+      "endLine": 943
     },
     {
       "id": "symbol:src/shared/build-strategy-simulation.ts#assertGameplayBuildStrategiesViable",
@@ -50097,272 +50126,272 @@
       "name": "createGameplayBoardTurnResolveCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2656,
-      "endLine": 2665
+      "line": 2663,
+      "endLine": 2672
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayDebugRevealActivateCommand",
       "name": "createGameplayDebugRevealActivateCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2402,
-      "endLine": 2411
+      "line": 2409,
+      "endLine": 2418
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayDebugRevealDeactivateCommand",
       "name": "createGameplayDebugRevealDeactivateCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2413,
-      "endLine": 2422
+      "line": 2420,
+      "endLine": 2429
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayDefinitionCommand",
       "name": "createGameplayDefinitionCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2431,
-      "endLine": 2448
+      "line": 2438,
+      "endLine": 2455
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayDestroyPairCommand",
       "name": "createGameplayDestroyPairCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2495,
-      "endLine": 2501
+      "line": 2502,
+      "endLine": 2508
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayDungeonExitActivateCommand",
       "name": "createGameplayDungeonExitActivateCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2575,
-      "endLine": 2584
+      "line": 2582,
+      "endLine": 2591
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayEnemyHazardContactCommand",
       "name": "createGameplayEnemyHazardContactCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2466,
-      "endLine": 2477
+      "line": 2473,
+      "endLine": 2484
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayFlashPairCommand",
       "name": "createGameplayFlashPairCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2546,
-      "endLine": 2551
+      "line": 2553,
+      "endLine": 2558
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayFloorAdvanceCommand",
       "name": "createGameplayFloorAdvanceCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2600,
-      "endLine": 2605
+      "line": 2607,
+      "endLine": 2612
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayGambitCommitCommand",
       "name": "createGameplayGambitCommitCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2510,
-      "endLine": 2516
+      "line": 2517,
+      "endLine": 2523
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayGauntletExpireCommand",
       "name": "createGameplayGauntletExpireCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2367,
-      "endLine": 2376
+      "line": 2374,
+      "endLine": 2383
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayHazardBanishCommand",
       "name": "createGameplayHazardBanishCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2593,
-      "endLine": 2598
+      "line": 2600,
+      "endLine": 2605
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayMemorizeCompleteCommand",
       "name": "createGameplayMemorizeCompleteCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2360,
-      "endLine": 2365
+      "line": 2367,
+      "endLine": 2372
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayParasiteAdvanceCommand",
       "name": "createGameplayParasiteAdvanceCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2586,
-      "endLine": 2591
+      "line": 2593,
+      "endLine": 2598
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayPauseCommand",
       "name": "createGameplayPauseCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2378,
-      "endLine": 2389
+      "line": 2385,
+      "endLine": 2396
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayPeekCommand",
       "name": "createGameplayPeekCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2450,
-      "endLine": 2456
+      "line": 2457,
+      "endLine": 2463
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayPinToggleCommand",
       "name": "createGameplayPinToggleCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2479,
-      "endLine": 2485
+      "line": 2486,
+      "endLine": 2492
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayProgressionRepairCommand",
       "name": "createGameplayProgressionRepairCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2424,
-      "endLine": 2429
+      "line": 2431,
+      "endLine": 2436
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayRegionShuffleCommand",
       "name": "createGameplayRegionShuffleCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2525,
-      "endLine": 2531
+      "line": 2532,
+      "endLine": 2538
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayRelicOfferOpenCommand",
       "name": "createGameplayRelicOfferOpenCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2636,
-      "endLine": 2641
+      "line": 2643,
+      "endLine": 2648
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayRelicOfferServiceCommand",
       "name": "createGameplayRelicOfferServiceCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2643,
-      "endLine": 2654
+      "line": 2650,
+      "endLine": 2661
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayRelicPickCommand",
       "name": "createGameplayRelicPickCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2628,
-      "endLine": 2634
+      "line": 2635,
+      "endLine": 2641
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayResumeCommand",
       "name": "createGameplayResumeCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2391,
-      "endLine": 2400
+      "line": 2398,
+      "endLine": 2407
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayRiskWagerAcceptCommand",
       "name": "createGameplayRiskWagerAcceptCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2503,
-      "endLine": 2508
+      "line": 2510,
+      "endLine": 2515
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayRouteChooseCommand",
       "name": "createGameplayRouteChooseCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2607,
-      "endLine": 2613
+      "line": 2614,
+      "endLine": 2620
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayShopPurchaseCommand",
       "name": "createGameplayShopPurchaseCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2560,
-      "endLine": 2566
+      "line": 2567,
+      "endLine": 2573
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayShopRerollCommand",
       "name": "createGameplayShopRerollCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2568,
-      "endLine": 2573
+      "line": 2575,
+      "endLine": 2580
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayShuffleCommand",
       "name": "createGameplayShuffleCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2518,
-      "endLine": 2523
+      "line": 2525,
+      "endLine": 2530
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplaySideRoomResolveCommand",
       "name": "createGameplaySideRoomResolveCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2615,
-      "endLine": 2626
+      "line": 2622,
+      "endLine": 2633
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayStrayRemoveCommand",
       "name": "createGameplayStrayRemoveCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2487,
-      "endLine": 2493
+      "line": 2494,
+      "endLine": 2500
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayTileFlipCommand",
       "name": "createGameplayTileFlipCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2458,
-      "endLine": 2464
+      "line": 2465,
+      "endLine": 2471
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayTileSwapCommand",
       "name": "createGameplayTileSwapCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2533,
-      "endLine": 2544
+      "line": 2540,
+      "endLine": 2551
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayUndoResolveCommand",
       "name": "createGameplayUndoResolveCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2553,
-      "endLine": 2558
+      "line": 2560,
+      "endLine": 2565
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayWildMatchConsumeCommand",
       "name": "createGameplayWildMatchConsumeCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2667,
-      "endLine": 2678
+      "line": 2674,
+      "endLine": 2685
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GAMEPLAY_BONUS_REWARD_IDS",
@@ -50473,8 +50502,8 @@
       "name": "GameplayCommand",
       "kind": "type",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2352,
-      "endLine": 2352
+      "line": 2359,
+      "endLine": 2359
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#gameplayCommandSchema",
@@ -50545,8 +50574,8 @@
       "name": "GameplayEvent",
       "kind": "type",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2353,
-      "endLine": 2353
+      "line": 2360,
+      "endLine": 2360
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#gameplayEventSchema",
@@ -50554,7 +50583,7 @@
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
       "line": 1601,
-      "endLine": 2350
+      "endLine": 2357
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GameplayFacts",
@@ -50609,8 +50638,8 @@
       "name": "getGameplayContentDefinition",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2357,
-      "endLine": 2358
+      "line": 2364,
+      "endLine": 2365
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#LOCKSMITH_DEFINITIONS",
@@ -50761,16 +50790,16 @@
       "name": "reduceGameplayCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core.ts",
-      "line": 2087,
-      "endLine": 2205
+      "line": 2114,
+      "endLine": 2232
     },
     {
       "id": "symbol:src/shared/gameplay-core.ts#replayGameplayCommands",
       "name": "replayGameplayCommands",
       "kind": "value",
       "file": "src/shared/gameplay-core.ts",
-      "line": 2207,
-      "endLine": 2220
+      "line": 2234,
+      "endLine": 2247
     },
     {
       "id": "symbol:src/shared/gameplay-effect-transition.ts#applyGameplayDefinitionTransition",
@@ -60694,7 +60723,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 817
+          "line": 844
         },
         {
           "path": "src/shared/relics.ts",
@@ -61090,6 +61119,8 @@
         "typed-command-independent-of-ui-arm-flag",
         "no-live-run-stray-arm-read",
         "dead-region-arm-action-removed",
+        "final-pair-enemy-defeat-event-facts",
+        "final-pair-enemy-defeat-feedback",
         "json-round-trip"
       ]
     },
@@ -61686,7 +61717,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 82
+          "line": 83
         }
       ],
       "enables": [
@@ -62277,7 +62308,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 140
+          "line": 141
         }
       ],
       "enables": [
@@ -62325,7 +62356,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 548
+          "line": 549
         }
       ],
       "enables": [
@@ -62378,7 +62409,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 576
+          "line": 577
         }
       ],
       "enables": [
@@ -63222,7 +63253,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 1473
+          "line": 1500
         },
         {
           "path": "src/shared/tile-trait-rules.ts",
@@ -63232,7 +63263,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 669
+          "line": 670
         },
         {
           "path": "src/shared/tile-trait-rules.test.ts",
@@ -65018,7 +65049,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 145
+          "line": 146
         },
         {
           "path": "src/renderer/store/relicOfferSurfaceState.test.ts",
@@ -65846,7 +65877,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 2659
+          "line": 2761
         }
       ],
       "enables": [
@@ -65878,7 +65909,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 813
+          "line": 840
         }
       ],
       "tests": [
@@ -66914,9 +66945,9 @@
     {
       "id": "mechanic:simulation.build_evaluation",
       "mechanicId": "simulation.build_evaluation",
-      "label": "Multi-Floor Typed Build Strategy Evaluation",
+      "label": "Long-Horizon Policy And Counter-Matchup Build Evaluation",
       "kind": "simulation",
-      "role": "route_profile_and_multi_floor_three_build_command_event_viability_balance_and_replay_gate",
+      "role": "route_profile_and_twelve_floor_three_build_policy_counter_matchup_viability_balance_feedback_and_replay_gate",
       "evidence": [
         {
           "path": "src/shared/balance-simulation.ts",
@@ -66928,7 +66959,7 @@
         },
         {
           "path": "src/shared/build-strategy-playthrough-simulation.ts",
-          "line": 8
+          "line": 12
         },
         {
           "path": "src/shared/gameplay-core-playthrough-solver.ts",
@@ -66936,7 +66967,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 817
+          "line": 844
         },
         {
           "path": "src/shared/route-choice-outcome-rules.ts",
@@ -66990,11 +67021,18 @@
         "typed-feedback-minimum",
         "distinct-axis-fingerprint",
         "multi-floor-command-id-uniqueness",
+        "strictly-increasing-floor-identity",
         "per-floor-replay-checkpoint",
         "full-run-json-replay",
         "observed-matchup-distribution",
         "recurring-trait-synergy-minimum",
         "synergy-preserving-destroy-policy",
+        "twelve-floor-policy-horizon",
+        "legality-aware-policy-selection",
+        "shipped-favorable-matchup-exposure",
+        "shipped-counter-matchup-exposure",
+        "counter-matchup-replay",
+        "tile-flip-enemy-defeat-feedback",
         "pairwise-turn-ratio-bound"
       ]
     },
@@ -67548,7 +67586,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 140
+          "line": 141
         }
       ],
       "enables": [
@@ -81291,6 +81329,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/build-strategy-playthrough-simulation.ts->symbol:src/shared/build-strategy-playthrough-simulation.ts#GAMEPLAY_BUILD_POLICIES",
+      "source": "file:src/shared/build-strategy-playthrough-simulation.ts",
+      "target": "symbol:src/shared/build-strategy-playthrough-simulation.ts#GAMEPLAY_BUILD_POLICIES",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/build-strategy-playthrough-simulation.ts->symbol:src/shared/build-strategy-playthrough-simulation.ts#GameplayBuildDistribution",
       "source": "file:src/shared/build-strategy-playthrough-simulation.ts",
       "target": "symbol:src/shared/build-strategy-playthrough-simulation.ts#GameplayBuildDistribution",
@@ -81336,6 +81380,18 @@
       "id": "exports:src/shared/build-strategy-playthrough-simulation.ts->symbol:src/shared/build-strategy-playthrough-simulation.ts#GameplayBuildMultiFloorSimulationInput",
       "source": "file:src/shared/build-strategy-playthrough-simulation.ts",
       "target": "symbol:src/shared/build-strategy-playthrough-simulation.ts#GameplayBuildMultiFloorSimulationInput",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/build-strategy-playthrough-simulation.ts->symbol:src/shared/build-strategy-playthrough-simulation.ts#GameplayBuildPolicyDecision",
+      "source": "file:src/shared/build-strategy-playthrough-simulation.ts",
+      "target": "symbol:src/shared/build-strategy-playthrough-simulation.ts#GameplayBuildPolicyDecision",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/build-strategy-playthrough-simulation.ts->symbol:src/shared/build-strategy-playthrough-simulation.ts#GameplayBuildPolicyDefinition",
+      "source": "file:src/shared/build-strategy-playthrough-simulation.ts",
+      "target": "symbol:src/shared/build-strategy-playthrough-simulation.ts#GameplayBuildPolicyDefinition",
       "kind": "exports"
     },
     {
@@ -110413,6 +110469,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/gameplay-core.test.ts->src/shared/gameplay-feedback-completeness.ts",
+      "source": "file:src/shared/gameplay-core.test.ts",
+      "target": "file:src/shared/gameplay-feedback-completeness.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/gameplay-core.test.ts->src/shared/memorize-phase-rules.ts",
       "source": "file:src/shared/gameplay-core.test.ts",
       "target": "file:src/shared/memorize-phase-rules.ts",
@@ -128300,6 +128362,12 @@
       "id": "tested_by:src/shared/gameplay-effect-transition.ts->file:src/shared/gameplay-effect-transition.test.ts",
       "source": "file:src/shared/gameplay-effect-transition.ts",
       "target": "file:src/shared/gameplay-effect-transition.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/gameplay-feedback-completeness.ts->file:src/shared/gameplay-core.test.ts",
+      "source": "file:src/shared/gameplay-feedback-completeness.ts",
+      "target": "file:src/shared/gameplay-core.test.ts",
       "kind": "tested_by"
     },
     {

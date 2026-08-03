@@ -93,6 +93,7 @@
 | Score parasite floors / ward | `parasiteFloors`, `parasiteWardRemaining` | [epic-lives-and-pressure](./epic-lives-and-pressure.md), [epic-relics](./epic-relics.md) |
 | Echo feedback (resolve delay) | `echoFeedbackEnabled`, `computeFlipResolveDelayMs` | [epic-lives-and-pressure](./epic-lives-and-pressure.md) |
 | Resolve delay multiplier | `resolveDelayMultiplier` (from settings at run start) | Settings + [epic-lives-and-pressure](./epic-lives-and-pressure.md) |
+| Final-pair enemy blocker cleanup | `board.tile_flipped` carries defeated hazard IDs and before/after defeat counters; `hazard.enemy_blocker.cleared` supplies typed feedback | [epic-lives-and-pressure](./epic-lives-and-pressure.md) |
 
 ---
 
@@ -157,6 +158,7 @@
 | `createNewRun`, options (practice, contract, mutators, …) | `game.ts` | [epic-modes-and-runs](./epic-modes-and-runs.md) |
 | Daily / gauntlet / puzzle / meditation / wild / import | dedicated `create*` functions | [epic-modes-and-runs](./epic-modes-and-runs.md) |
 | Practice / scholar / wild / pin vow flags | `practiceMode`, `wildMenuRun`, `activeContract` | [epic-modes-and-runs](./epic-modes-and-runs.md), contracts epic |
+| Offline build-policy/counter gate | `GAMEPLAY_BUILD_POLICIES`, 3 seeds × 12 generated floors, legality-checked choices, shipped favorable/counter exposure, exact replay | [epic-modes-and-runs](./epic-modes-and-runs.md) |
 
 ---
 
