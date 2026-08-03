@@ -158,7 +158,8 @@
 | `createNewRun`, options (practice, contract, mutators, …) | `game.ts` | [epic-modes-and-runs](./epic-modes-and-runs.md) |
 | Daily / gauntlet / puzzle / meditation / wild / import | dedicated `create*` functions | [epic-modes-and-runs](./epic-modes-and-runs.md) |
 | Practice / scholar / wild / pin vow flags | `practiceMode`, `wildMenuRun`, `activeContract` | [epic-modes-and-runs](./epic-modes-and-runs.md), contracts epic |
-| Offline bounded-memory build-policy/counter gate | `GAMEPLAY_BUILD_POLICIES`, capped observation ledgers, explicit uncertain-turn budgets, 3 seeds × 12 generated floors, legality-checked choices, shipped favorable/counter exposure, exact replay | [epic-modes-and-runs](./epic-modes-and-runs.md) |
+| Offline bounded-memory build-policy/counter gate | `GAMEPLAY_BUILD_POLICIES`, capped observation ledgers, explicit uncertain-turn budgets, typed route-outcome previews, visible life/protection risk caps and survival reserves, actual event-effect ranking, 3 seeds × 12 generated floors, shipped favorable/counter exposure, exact replay | [epic-modes-and-runs](./epic-modes-and-runs.md) |
+| Long-horizon build coverage gap | `nextCohesiveBuildCandidate` identifies Route Gambler's shipped loadout/Wager/Gambit/Mystery pieces as unsampled; proposed axis `risk_conversion`, favorable `economy_opportunity`, counter `hazard_pressure` | [epic-modes-and-runs](./epic-modes-and-runs.md) |
 
 ---
 

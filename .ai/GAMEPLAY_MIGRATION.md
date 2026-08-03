@@ -732,6 +732,21 @@ The retained build gate no longer chooses board pairs from hidden `pairKey` grou
 
 Graph v51 records the optional perfect/bounded solver modes, capped observation ledger, identity-blind unknown choices, uncertain-turn budgets, imperfect-information minimums, and mid-turn resolution guard across generated-board and build-evaluation simulations.
 
+## Fifty-second vertical slice: Visible-Resource Interlude Risk And Route Gambler Gap
+
+Long-horizon policies now make route and side-room decisions from visible survival resources instead of following a static reward preference:
+
+1. Every generated route is previewed through `applyRouteChoiceOutcome` and `openRouteSideRoom`, so policy assessment uses the same typed rules as the applied command and rejects stale or non-opening choices.
+2. Each build owns a route-risk cap and minimum effective-survival reserve. Effective survival combines lives with a bounded contribution from visible guard tokens, floor hazard ward, parasite ward, and Destroy charges; hidden board identities never enter the route decision.
+3. Conduit Cartographer and Warden accept at most one risk unit and preserve four effective survival. Vaultbreaker accepts two risk units and preserves five, with one explicit opening-floor Greed credit that retains real economy exposure without exempting later choices from the reserve.
+4. Every route decision retains all candidate assessments: legality, risk units/cap, before/after lives and protection, effective survival, acceptance, and reason. The default report records 240 assessments, 48 policy rejections, and one actual adaptive switch—Vaultbreaker seed `42123`, floor 5, rejects Greed for the floor-6 transition and chooses Mystery.
+5. Side-room claims are also pure-reducer previews. Rest stops are spent only while wounded, bonus rewards remain build-ranked and command-legal, and event rooms recover their actual deterministic effects from `rollRunEventRoom` rather than inferring value from presentation labels.
+6. Event priorities remain build-specific, but `heal_or_guard` moves to the front whenever visible effective survival is below reserve. Current event effects are beneficial resources; this is resource selection evidence, not a fabricated downside model.
+7. The gate requires route assessments and rejections for every strategy, at least one assessed side room per seed, at least one adaptive route selection report-wide, complete 108-floor play, zero rejected gameplay commands, and exact replay.
+8. The report now names the next cohesive coverage gap instead of overclaiming it: Route Gambler's shipped `route_tactician`, Wager Surety, Risk Wager, Gambit Token, Gambit, and Mystery-route pieces exist, but the build is not yet sampled by the long-horizon policy gate. Its proposed distinct axis is `risk_conversion`, with `economy_opportunity` favorable and `hazard_pressure` counter hypotheses.
+
+Graph v52 adds typed route-outcome previews, visible-resource budgets, survival reserves, bounded opening risk, adaptive selection, actual event-effect ranking, recovery-below-reserve, and a machine-readable next-build gap. `simulation.build_evaluation` no longer lists Route Gambler as covered; a `gates` edge marks it as the next unsampled candidate.
+
 ## Current slice status
 
 Implemented in the Conduit Cartographer vertical slice:
@@ -751,6 +766,5 @@ Implemented in the Conduit Cartographer vertical slice:
 Still required before the vertical slice is complete:
 
 - widen the feedback-completeness audit beyond the former HUD-critical fields as additional gameplay ownership enters the core;
-- extend bounded risk from board uncertainty into route/side-room decisions using visible lives and protection resources, without presenting simulator survival as human win-rate proof;
-- use the new uncertainty traces to prioritize the next cohesive build or counter that is missing from actual shipped schedule coverage;
+- implement Route Gambler as the fourth long-horizon strategy with a distinct `risk_conversion` axis, then prove its favorable economy-opportunity and counter hazard-pressure traces without presenting simulator survival as human win-rate proof;
 - continue migrating cohesive player builds rather than adding isolated definitions, using the graph diagnostics to choose the next least-overlapping loop.

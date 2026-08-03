@@ -26,6 +26,7 @@ describe('multi-floor typed build strategy simulation', () => {
             expect(strategy.matchupMetrics.length).toBeGreaterThan(0);
             expect(strategy.policyId).toBe(GAMEPLAY_BUILD_POLICIES[strategy.id].id);
             expect(strategy.informationPolicy).toEqual(GAMEPLAY_BUILD_POLICIES[strategy.id].informationPolicy);
+            expect(strategy.interludeRiskPolicy).toEqual(GAMEPLAY_BUILD_POLICIES[strategy.id].interludeRiskPolicy);
             expect(strategy.favorableMatchupMetrics?.sampledFloors).toBeGreaterThanOrEqual(1);
             expect(strategy.counterMatchupMetrics?.sampledFloors).toBeGreaterThanOrEqual(1);
             expect(strategy.counterMatchupReplayFloors).toBeGreaterThanOrEqual(1);
@@ -33,6 +34,9 @@ describe('multi-floor typed build strategy simulation', () => {
             expect(strategy.imperfectInformationFloors).toBeGreaterThanOrEqual(report.seeds.length);
             expect(strategy.uncertainTurns).toBeGreaterThanOrEqual(report.seeds.length);
             expect(strategy.riskBudgetExhaustions).toBe(0);
+            expect(strategy.routeRiskAssessmentCount).toBeGreaterThanOrEqual(report.seeds.length * 3);
+            expect(strategy.routeRiskRejections).toBeGreaterThanOrEqual(1);
+            expect(strategy.sideRoomResourceAssessmentCount).toBeGreaterThanOrEqual(report.seeds.length);
             expect(strategy.matchupMetrics.reduce(
                 (sum, matchup) => sum + matchup.recurringSynergyFloors,
                 0
@@ -58,6 +62,16 @@ describe('multi-floor typed build strategy simulation', () => {
                     (floor, index) => index === 0 || floor > observedFloors[index - 1]
                 )).toBe(true);
                 expect(sample.policyDecisions.length).toBeGreaterThanOrEqual(sample.floorTraces.length);
+                const routeDecisions = sample.policyDecisions.filter((decision) => decision.phase === 'route');
+                expect(routeDecisions.every((decision) =>
+                    decision.routeRiskAssessments?.length === 3 &&
+                    decision.routeRiskAssessments.some((assessment) =>
+                        assessment.routeId === decision.selectedId && assessment.accepted
+                    )
+                )).toBe(true);
+                expect(sample.policyDecisions
+                    .filter((decision) => decision.phase === 'side_room' && decision.applied)
+                    .some((decision) => decision.sideRoomResourceAssessment != null)).toBe(true);
                 expect(sample.commands.map((command) => command.type)).toEqual(expect.arrayContaining([
                     'phase.memorize_complete',
                     'board.tile_flip',
@@ -76,6 +90,32 @@ describe('multi-floor typed build strategy simulation', () => {
         expect(report.pairwiseMeanTurnRatios.every(
             (pair) => pair.ratio <= report.bounds.maxPairwiseMeanTurnRatio
         )).toBe(true);
+        expect(report.strategies.reduce(
+            (sum, strategy) => sum + strategy.adaptiveRouteSelections,
+            0
+        )).toBeGreaterThanOrEqual(report.bounds.minAdaptiveRouteSelections);
+        expect(report.nextCohesiveBuildCandidate).toMatchObject({
+            id: 'route_gambler',
+            buildMechanicId: 'build.route_gambler',
+            startingLoadoutId: 'route_tactician',
+            expectedNewAxis: 'risk_conversion',
+            favorableMatchupHypothesis: 'economy_opportunity',
+            counterMatchupHypothesis: 'hazard_pressure',
+            longHorizonSampled: false,
+            evidence: {
+                retainedStrategyIds: GAMEPLAY_BUILD_STRATEGIES.map((strategy) => strategy.id)
+            }
+        });
+        expect(report.nextCohesiveBuildCandidate.requiredSystems).toEqual([
+            'relic.wager_surety',
+            'objective.risk_wager',
+            'inventory.gambit_token',
+            'power.gambit',
+            'route.mystery'
+        ]);
+        expect(report.nextCohesiveBuildCandidate.evidence.routeRiskAssessments).toBeGreaterThan(0);
+        expect(report.nextCohesiveBuildCandidate.evidence.routeRiskRejections).toBeGreaterThan(0);
+        expect(report.nextCohesiveBuildCandidate.evidence.adaptiveRouteSelections).toBeGreaterThan(0);
         expect(assertGameplayBuildMultiFloorViable(report)).toEqual({ ok: true, issues: [] });
     }, 30_000);
 
@@ -105,6 +145,9 @@ describe('multi-floor typed build strategy simulation', () => {
         broken.strategies[1].imperfectInformationFloors = 0;
         broken.strategies[1].uncertainTurns = 0;
         broken.strategies[1].riskBudgetExhaustions = 1;
+        broken.strategies[1].routeRiskAssessmentCount = 0;
+        broken.strategies[1].routeRiskRejections = 0;
+        broken.strategies[1].sideRoomResourceAssessmentCount = 0;
 
         expect(assertGameplayBuildMultiFloorViable(broken).issues).toEqual(expect.arrayContaining([
             'floorsPerSeed=3; required=12',
@@ -113,6 +156,9 @@ describe('multi-floor typed build strategy simulation', () => {
             'guard_tank@seeds:42001:imperfectInformationFloors=0; required=1',
             'guard_tank@seeds:42001:uncertainTurns=0; required=1',
             'guard_tank@seeds:42001:riskBudgetExhaustions=1; max=0',
+            'guard_tank@seeds:42001:routeRiskAssessments=0; required=3',
+            'guard_tank@seeds:42001:routeRiskRejections=0; required=1',
+            'guard_tank@seeds:42001:sideRoomResourceAssessments=0; required=1',
             'guard_tank@seed:42001:completedFloors=2; requested=3',
             'guard_tank@seed:42001:full replay diverged'
         ]));

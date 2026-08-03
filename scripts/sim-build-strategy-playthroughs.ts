@@ -32,6 +32,7 @@ export const runBuildStrategyPlaythroughSimulationCli = (argv: readonly string[]
             dominantAxis: strategy.dominantAxis,
             policyId: strategy.policyId,
             informationPolicy: strategy.informationPolicy,
+            interludeRiskPolicy: strategy.interludeRiskPolicy,
             favorableMatchup: strategy.favorableMatchup,
             counterMatchup: strategy.counterMatchup,
             signatureAxisScores: strategy.signatureAxisScores,
@@ -56,6 +57,19 @@ export const runBuildStrategyPlaythroughSimulationCli = (argv: readonly string[]
             uncertainTurns: strategy.uncertainTurns,
             memoryEvictions: strategy.memoryEvictions,
             riskBudgetExhaustions: strategy.riskBudgetExhaustions,
+            routeRiskAssessmentCount: strategy.routeRiskAssessmentCount,
+            routeRiskRejections: strategy.routeRiskRejections,
+            adaptiveRouteSelections: strategy.adaptiveRouteSelections,
+            sideRoomResourceAssessmentCount: strategy.sideRoomResourceAssessmentCount,
+            adaptiveRoutes: strategy.samples.flatMap((sample) => sample.policyDecisions
+                .filter((decision) => decision.phase === 'route' && decision.adaptedFromPriority)
+                .map((decision) => ({
+                    seed: sample.seed,
+                    floor: decision.floor,
+                    selectedId: decision.selectedId,
+                    decision: decision.decision,
+                    assessments: decision.routeRiskAssessments
+                }))),
             failedFloors: strategy.samples.flatMap((sample) => sample.floorTraces
                 .filter((floor) => !floor.completed)
                 .map((floor) => ({
@@ -71,6 +85,7 @@ export const runBuildStrategyPlaythroughSimulationCli = (argv: readonly string[]
                 })))
         })),
         pairwiseMeanTurnRatios: report.pairwiseMeanTurnRatios,
+        nextCohesiveBuildCandidate: report.nextCohesiveBuildCandidate,
         bounds: report.bounds,
         notes: report.notes
     };
