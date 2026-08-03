@@ -1,9 +1,11 @@
 import { collectDestroyEligibleTileIds } from './board-power-targeting';
 import { GAME_RULES_VERSION, MAX_LIVES, type RunState, type StartingLoadoutId } from './contracts';
+import { buildBoard } from './board-build-rules';
 import {
     createGameplayBoardTurnResolveCommand,
     createGameplayDefinitionCommand,
     createGameplayDestroyPairCommand,
+    createGameplayDungeonExitActivateCommand,
     createGameplayGambitCommitCommand,
     createGameplayFlashPairCommand,
     createGameplayMemorizeCompleteCommand,
@@ -20,6 +22,7 @@ import {
 import { reduceGameplayCommand, replayGameplayCommands } from './gameplay-core';
 import { inspectGameplayFeedbackCompleteness } from './gameplay-feedback-completeness';
 import { createNewRun } from './run-creation-rules';
+import { pickFloorScheduleEntry } from './floor-mutator-schedule';
 import { createRunShopOffers } from './shop-rules';
 
 export const GAMEPLAY_BUILD_STRATEGY_AXES = [
@@ -30,7 +33,8 @@ export const GAMEPLAY_BUILD_STRATEGY_AXES = [
     'sustain_conversion',
     'board_reconfiguration',
     'boss_extraction',
-    'mistake_recovery'
+    'mistake_recovery',
+    'lock_extraction'
 ] as const;
 
 export type GameplayBuildStrategyAxis = (typeof GAMEPLAY_BUILD_STRATEGY_AXES)[number];
@@ -42,7 +46,8 @@ export type GameplayBuildStrategyId =
     | 'combo_shard_engine'
     | 'trap_control'
     | 'boss_hunter'
-    | 'memory_scout';
+    | 'memory_scout'
+    | 'locksmith';
 
 export interface GameplayBuildStrategyDefinition {
     id: GameplayBuildStrategyId;
@@ -223,6 +228,16 @@ export const GAMEPLAY_BUILD_STRATEGIES: readonly GameplayBuildStrategyDefinition
         consequenceCommandType: 'board.flash_pair',
         consequenceEventType: 'board.flash_pair_revealed',
         expectedDominantAxis: 'mistake_recovery'
+    },
+    {
+        id: 'locksmith',
+        label: 'The Locksmith',
+        buildMechanicId: 'build.locksmith',
+        startingLoadoutId: 'vaultbreaker',
+        activationDefinitionIds: ['bonus_reward.key_insurance'],
+        consequenceCommandType: 'dungeon.exit_activate',
+        consequenceEventType: 'dungeon.exit_activated',
+        expectedDominantAxis: 'lock_extraction'
     }
 ] as const;
 
@@ -238,7 +253,8 @@ const emptyAxisScores = (): Record<GameplayBuildStrategyAxis, number> => ({
     sustain_conversion: 0,
     board_reconfiguration: 0,
     boss_extraction: 0,
-    mistake_recovery: 0
+    mistake_recovery: 0,
+    lock_extraction: 0
 });
 
 const increment = (counts: Record<string, number>, key: string): void => {
@@ -282,11 +298,29 @@ const createStrategyInitialRun = (
     seed: number,
     rulesVersion: number
 ): RunState => {
+    const locksmithSchedule = strategy.id === 'locksmith'
+        ? pickFloorScheduleEntry(seed, rulesVersion, 8, 'endless')
+        : null;
+    const locksmithBoard = locksmithSchedule
+        ? buildBoard(8, {
+              runSeed: seed,
+              runRulesVersion: rulesVersion,
+              activeMutators: [...locksmithSchedule.mutators],
+              floorTag: locksmithSchedule.floorTag,
+              floorArchetypeId: locksmithSchedule.floorArchetypeId,
+              featuredObjectiveId: locksmithSchedule.featuredObjectiveId,
+              cycleFloor: locksmithSchedule.cycleFloor,
+              gameMode: 'endless',
+              startingLoadoutId: strategy.startingLoadoutId
+          })
+        : undefined;
     const base = createNewRun(0, {
         runSeed: seed,
         runRulesVersionOverride: rulesVersion,
         startingLoadoutId: strategy.startingLoadoutId,
-        onboardingSafeFirstFloor: true,
+        onboardingSafeFirstFloor: strategy.id !== 'locksmith',
+        fixedBoard: locksmithBoard,
+        activeMutators: locksmithSchedule ? [...locksmithSchedule.mutators] : undefined,
         practiceMode: true,
         echoFeedbackEnabled: false,
         initialRelicIds: strategy.id === 'boss_hunter'
@@ -363,6 +397,8 @@ const consequenceCommand = (
             );
         case 'memory_scout':
             return createGameplayFlashPairCommand(commandId);
+        case 'locksmith':
+            return createGameplayDungeonExitActivateCommand(commandId, 'key');
     }
 };
 
@@ -389,7 +425,7 @@ const collectAxisScores = (
             ) {
                 scores.control += 1;
             }
-            if (event.itemId === 'iron_key') scores.economy += 1;
+            if (event.itemId === 'iron_key' && strategy.id !== 'locksmith') scores.economy += 1;
             if (event.source.id === 'wager_surety' && strategy.id !== 'boss_hunter') {
                 scores.risk_conversion += 1;
             }
@@ -401,13 +437,19 @@ const collectAxisScores = (
         }
         if (event.type === 'board.peeked') scores.information += 1;
         if (event.type === 'board.pair_destroyed') scores.control += 1;
-        if (event.type === 'currency.changed' && event.currency === 'shop_gold' && event.applied !== 0) {
+        if (
+            event.type === 'currency.changed' &&
+            event.currency === 'shop_gold' &&
+            event.applied !== 0 &&
+            strategy.id !== 'locksmith'
+        ) {
             scores.economy += 1;
         }
         if (
             event.type === 'score.changed' &&
             event.amount > 0 &&
             strategy.id !== 'memory_scout' &&
+            strategy.id !== 'locksmith' &&
             event.source.id !== 'trait_toolkit' &&
             event.source.id !== 'free_swap_floor'
         ) {
@@ -445,6 +487,13 @@ const collectAxisScores = (
             (event.type === 'board.flash_pair_revealed' || event.type === 'board.resolve_undone')
         ) {
             scores.mistake_recovery += 1;
+        }
+        if (
+            strategy.id === 'locksmith' &&
+            ((event.type === 'inventory.changed' && event.source.id === 'key_insurance') ||
+                (event.type === 'dungeon.exit_activated' && event.spend !== 'none'))
+        ) {
+            scores.lock_extraction += 1;
         }
     }
     return scores;
@@ -530,6 +579,21 @@ const runStrategySeed = (
         if (first && second) {
             execute(createGameplayTileFlipCommand(`build:${strategy.id}:${seed}:${commands.length}:convert-first`, first.id));
             execute(createGameplayTileFlipCommand(`build:${strategy.id}:${seed}:${commands.length}:convert-second`, second.id));
+        }
+    }
+    if (strategy.id === 'locksmith') {
+        const lockedExit = (run.board?.tiles ?? [])
+            .filter((tile) =>
+                tile.state === 'hidden' &&
+                tile.dungeonCardKind === 'exit' &&
+                tile.dungeonExitLockKind === 'iron'
+            )
+            .sort((left, right) => left.id.localeCompare(right.id))[0];
+        if (lockedExit) {
+            execute(createGameplayTileFlipCommand(
+                `build:${strategy.id}:${seed}:${commands.length}:reveal-locked-exit`,
+                lockedExit.id
+            ));
         }
     }
     execute(consequenceCommand(strategy, run, seed, commands.length));
@@ -640,7 +704,7 @@ export const runGameplayBuildStrategySimulation = (
         strategies,
         pairwiseAxisDistances,
         bounds: {
-            requiredStrategyCount: 8,
+            requiredStrategyCount: 9,
             minViableSeedShare: 1,
             minFeedbackEventsPerSeed: 3,
             minSignatureAxisScorePerSeed: 1,
@@ -649,7 +713,7 @@ export const runGameplayBuildStrategySimulation = (
         notes: [
             'Each strategy starts from a shipped loadout, activates schema-validated content, and spends its payoff through the authoritative gameplay reducer.',
             'Viability means every sampled seed accepts the complete command chain, keeps the run alive, emits typed feedback, and replays exactly.',
-            'Distinctness is measured from typed event fingerprints for information, control, economy, risk conversion, shard-to-life sustain, targeted board reconfiguration, boss extraction, and mistake-recovery consequences rather than build labels.',
+            'Distinctness is measured from typed event fingerprints for information, control, economy, risk conversion, shard-to-life sustain, targeted board reconfiguration, boss extraction, mistake recovery, and lock-extraction consequences rather than build labels.',
             'This is a deterministic structural viability gate, not a claim that final balance or long-run win rates are complete.'
         ]
     };

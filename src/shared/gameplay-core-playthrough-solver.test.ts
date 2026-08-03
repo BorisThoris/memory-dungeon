@@ -8,7 +8,7 @@ import { solveRunThroughGameplayCoreWithTrace } from './gameplay-core-playthroug
 import { createNewRun, finishMemorizePhase } from './game-core';
 import { solveRunByExhaustingPlayablePairsWithTrace } from './playthrough-solver';
 import { createGeneratedBoardSolverRun } from './softlock-generator-contract';
-import { EXIT_PAIR_KEY } from './tile-identity';
+import { EXIT_PAIR_KEY, ROOM_PAIR_KEY, SHOP_PAIR_KEY } from './tile-identity';
 
 const tile = (id: string, pairKey: string, state: Tile['state'] = 'hidden'): Tile => ({
     id,
@@ -75,6 +75,140 @@ describe('gameplay-core playthrough solver', () => {
         expect(trace.acceptedCommandIds).toHaveLength(trace.commands.length);
         expect(trace.rejectedCommandIds).toEqual([]);
         expect(trace.replayVerified).toBe(true);
+        expect(trace.replayDeterministic).toBe(true);
+        expect(trace.invariantViolations).toEqual([]);
+    });
+
+    it('spends typed keys on an affordable locked cache and alternate exit only when lock policy opts in', () => {
+        const primaryExit: Tile = {
+            ...tile('exit-primary', EXIT_PAIR_KEY),
+            dungeonCardKind: 'exit',
+            dungeonExitLockKind: 'none'
+        };
+        const lockedExit: Tile = {
+            ...tile('exit-locked', EXIT_PAIR_KEY),
+            dungeonCardKind: 'exit',
+            dungeonExitLockKind: 'iron'
+        };
+        const lockedCache: Tile = {
+            ...tile('cache', ROOM_PAIR_KEY),
+            dungeonCardKind: 'room',
+            dungeonCardEffectId: 'room_locked_cache',
+            dungeonCardState: 'hidden',
+            dungeonKeyKind: 'iron',
+            dungeonRoomUsed: false
+        };
+        const initial: RunState = {
+            ...runWithBoard(board(
+                [tile('a1', 'a'), tile('a2', 'a'), lockedCache, primaryExit, lockedExit],
+                {
+                    columns: 3,
+                    rows: 2,
+                    dungeonExitTileId: primaryExit.id,
+                    dungeonExitActivated: false,
+                    dungeonExitLockKind: 'none'
+                }
+            )),
+            dungeonKeys: { iron: 2 },
+            dungeonMasterKeys: 1
+        };
+        const trace = solveRunThroughGameplayCoreWithTrace(initial, 40, true, {
+            lockPolicy: { kind: 'prefer_affordable_lock_rewards' }
+        });
+
+        expect(trace.run.status).toBe('levelComplete');
+        expect(trace.run.dungeonKeys.iron).toBe(0);
+        expect(trace.run.dungeonMasterKeys).toBe(1);
+        expect(trace.commands[0]).toMatchObject({ type: 'board.tile_flip', targetTileId: lockedCache.id });
+        expect(trace.commands).toEqual(expect.arrayContaining([
+            expect.objectContaining({ type: 'board.tile_flip', targetTileId: lockedExit.id }),
+            expect.objectContaining({ type: 'dungeon.exit_activate', spend: 'key' })
+        ]));
+        expect(trace.events).toEqual(expect.arrayContaining([
+            expect.objectContaining({
+                type: 'dungeon.locked_cache_opened',
+                tileId: lockedCache.id,
+                spend: 'key',
+                keyKind: 'iron'
+            }),
+            expect.objectContaining({
+                type: 'dungeon.exit_activated',
+                exitTileId: lockedExit.id,
+                spend: 'key',
+                keyKind: 'iron'
+            })
+        ]));
+        expect(trace.rejectedCommandIds).toEqual([]);
+        expect(trace.replayDeterministic).toBe(true);
+        expect(trace.invariantViolations).toEqual([]);
+    });
+
+    it('visits a board vendor, pauses for a typed purchase, and spends Master Key on a locked exit', () => {
+        const primaryExit: Tile = {
+            ...tile('exit-primary', EXIT_PAIR_KEY),
+            dungeonCardKind: 'exit',
+            dungeonExitLockKind: 'none'
+        };
+        const lockedExit: Tile = {
+            ...tile('exit-treasure', EXIT_PAIR_KEY),
+            dungeonCardKind: 'exit',
+            dungeonExitLockKind: 'treasure'
+        };
+        const shop: Tile = {
+            ...tile('shop', SHOP_PAIR_KEY),
+            dungeonCardKind: 'shop',
+            dungeonCardEffectId: 'shop_vendor',
+            dungeonCardState: 'hidden'
+        };
+        const initial: RunState = {
+            ...runWithBoard(board(
+                [tile('a1', 'a'), tile('a2', 'a'), shop, primaryExit, lockedExit],
+                {
+                    level: 10,
+                    columns: 3,
+                    rows: 2,
+                    dungeonShopTileId: shop.id,
+                    dungeonShopVisited: false,
+                    dungeonExitTileId: primaryExit.id,
+                    dungeonExitActivated: false,
+                    dungeonExitLockKind: 'none'
+                }
+            )),
+            shopGold: 10,
+            shopOffers: [],
+            shopRerolls: 0,
+            dungeonKeys: {},
+            dungeonMasterKeys: 0
+        };
+        const trace = solveRunThroughGameplayCoreWithTrace(initial, 40, true, {
+            lockPolicy: { kind: 'prefer_affordable_lock_rewards' }
+        });
+
+        expect(trace.run.status).toBe('levelComplete');
+        expect(trace.commands).toEqual(expect.arrayContaining([
+            expect.objectContaining({ type: 'board.tile_flip', targetTileId: shop.id }),
+            expect.objectContaining({ type: 'run.pause' }),
+            expect.objectContaining({ type: 'shop.purchase' }),
+            expect.objectContaining({ type: 'run.resume' }),
+            expect.objectContaining({ type: 'board.tile_flip', targetTileId: lockedExit.id }),
+            expect.objectContaining({ type: 'dungeon.exit_activate', spend: 'master_key' })
+        ]));
+        expect(trace.events).toEqual(expect.arrayContaining([
+            expect.objectContaining({
+                type: 'shop.offer_purchased',
+                itemId: 'master_key',
+                masterKeysBefore: 0,
+                masterKeysAfter: 1
+            }),
+            expect.objectContaining({
+                type: 'dungeon.exit_activated',
+                exitTileId: lockedExit.id,
+                spend: 'master_key',
+                masterKeysBefore: 1,
+                masterKeysAfter: 0
+            })
+        ]));
+        expect(trace.rejectedCommandIds).toEqual([]);
         expect(trace.replayDeterministic).toBe(true);
         expect(trace.invariantViolations).toEqual([]);
     });

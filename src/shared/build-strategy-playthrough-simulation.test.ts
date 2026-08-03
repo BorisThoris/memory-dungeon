@@ -8,7 +8,7 @@ import { GAMEPLAY_BUILD_STRATEGIES } from './build-strategy-simulation';
 import { GAME_RULES_VERSION } from './contracts';
 
 describe('multi-floor typed build strategy simulation', () => {
-    it('carries eight distinct builds through generated floors, interludes, a relic milestone, and exact replay', () => {
+    it('carries nine distinct builds through generated floors, interludes, a relic milestone, and exact replay', () => {
         const report = runGameplayBuildMultiFloorSimulation({ rulesVersion: GAME_RULES_VERSION });
 
         expect(report.strategies.map((strategy) => strategy.id)).toEqual(
@@ -22,7 +22,8 @@ describe('multi-floor typed build strategy simulation', () => {
             'sustain_conversion',
             'board_reconfiguration',
             'boss_extraction',
-            'mistake_recovery'
+            'mistake_recovery',
+            'lock_extraction'
         ]);
         for (const strategy of report.strategies) {
             expect(strategy.floorCompletionShare).toBe(1);
@@ -35,6 +36,10 @@ describe('multi-floor typed build strategy simulation', () => {
             expect(strategy.recoveryPolicy).toEqual(GAMEPLAY_BUILD_POLICIES[strategy.id].recoveryPolicy ?? null);
             expect(strategy.recoverySuppressedMatchups).toEqual(
                 GAMEPLAY_BUILD_POLICIES[strategy.id].recoverySuppressedMatchups ?? []
+            );
+            expect(strategy.lockPolicy).toEqual(GAMEPLAY_BUILD_POLICIES[strategy.id].lockPolicy ?? null);
+            expect(strategy.lockPolicySuppressedMatchups).toEqual(
+                GAMEPLAY_BUILD_POLICIES[strategy.id].lockPolicySuppressedMatchups ?? []
             );
             expect(strategy.gambitSuppressedMatchups).toEqual(
                 GAMEPLAY_BUILD_POLICIES[strategy.id].gambitSuppressedMatchups
@@ -234,6 +239,38 @@ describe('multi-floor typed build strategy simulation', () => {
             .toBeGreaterThanOrEqual(report.seeds.length);
         expect(report.cohesiveBuildCoverage.memoryScout.evidence.favorableMatchupFloors).toBeGreaterThan(0);
         expect(report.cohesiveBuildCoverage.memoryScout.evidence.counterMatchupFloors).toBeGreaterThan(0);
+        expect(report.cohesiveBuildCoverage.locksmith).toMatchObject({
+            id: 'locksmith',
+            buildMechanicId: 'build.locksmith',
+            startingLoadoutId: 'vaultbreaker',
+            axis: 'lock_extraction',
+            favorableMatchup: 'lock_pressure',
+            counterMatchup: 'hazard_pressure',
+            longHorizonSampled: true
+        });
+        expect(report.cohesiveBuildCoverage.locksmith.requiredSystems).toEqual([
+            'reward.key_insurance',
+            'inventory.iron_key',
+            'shop.master_key',
+            'inventory.master_key',
+            'dungeon.room_locked_cache',
+            'exit.locked_alternate'
+        ]);
+        expect(report.cohesiveBuildCoverage.locksmith.evidence.typedKeyLockUses)
+            .toBeGreaterThanOrEqual(report.seeds.length);
+        expect(report.cohesiveBuildCoverage.locksmith.evidence.masterKeyLockUses).toBeGreaterThan(0);
+        expect(report.cohesiveBuildCoverage.locksmith.evidence.masterKeyPurchases).toBeGreaterThan(0);
+        expect(report.cohesiveBuildCoverage.locksmith.evidence.lockPressureConservations).toBeGreaterThan(0);
+        expect(report.cohesiveBuildCoverage.locksmith.evidence.favorableMatchupFloors).toBeGreaterThan(0);
+        expect(report.cohesiveBuildCoverage.locksmith.evidence.counterMatchupFloors).toBeGreaterThan(0);
+        const locksmith = report.strategies.find((strategy) => strategy.id === 'locksmith');
+        expect(locksmith?.samples.flatMap((sample) => sample.floorTraces)
+            .filter((floor) => floor.matchup === 'hazard_pressure')
+            .every((floor) =>
+                floor.lockPolicySuppressedByMatchup &&
+                floor.typedKeyLockUses === 0 &&
+                floor.masterKeyLockUses === 0
+            )).toBe(true);
         expect(assertGameplayBuildMultiFloorViable(report)).toEqual({ ok: true, issues: [] });
     }, 90_000);
 

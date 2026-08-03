@@ -7,7 +7,7 @@ import {
 import { GAME_RULES_VERSION } from './contracts';
 
 describe('typed gameplay build strategy simulation', () => {
-    it('proves eight shipped builds through distinct replayable command/event loops', () => {
+    it('proves nine shipped builds through distinct replayable command/event loops', () => {
         const report = runGameplayBuildStrategySimulation({
             seeds: [42_001, 42_077, 42_123],
             rulesVersion: GAME_RULES_VERSION
@@ -24,7 +24,8 @@ describe('typed gameplay build strategy simulation', () => {
             'sustain_conversion',
             'board_reconfiguration',
             'boss_extraction',
-            'mistake_recovery'
+            'mistake_recovery',
+            'lock_extraction'
         ]);
         for (const strategy of report.strategies) {
             expect(strategy.viableSeedShare).toBe(1);
@@ -41,8 +42,12 @@ describe('typed gameplay build strategy simulation', () => {
                 expect(sample.commands.at(-1)?.type).toBe(strategy.consequenceCommandType);
             }
         }
-        expect(report.pairwiseAxisDistances).toHaveLength(28);
+        expect(report.pairwiseAxisDistances).toHaveLength(36);
         expect(report.pairwiseAxisDistances.every((pair) => pair.distance === 2)).toBe(true);
+        expect(report.bounds.requiredStrategyCount).toBe(9);
+        expect(report.notes).toEqual(expect.arrayContaining([
+            expect.stringContaining('lock-extraction consequences')
+        ]));
         expect(assertGameplayBuildStrategiesViable(report)).toEqual({ ok: true, issues: [] });
     });
 
@@ -122,6 +127,13 @@ describe('typed gameplay build strategy simulation', () => {
                 ],
                 command: 'board.flash_pair',
                 event: 'board.flash_pair_revealed'
+            },
+            {
+                id: 'locksmith',
+                loadout: 'vaultbreaker',
+                definitions: ['bonus_reward.key_insurance'],
+                command: 'dungeon.exit_activate',
+                event: 'dungeon.exit_activated'
             }
         ]);
     });

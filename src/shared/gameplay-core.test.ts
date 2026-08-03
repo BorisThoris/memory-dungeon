@@ -90,7 +90,7 @@ import { createRunShopOffers, purchaseShopOffer, rerollShopOffers } from './shop
 import { createDungeonExitActivationTransition } from './dungeon-exit-rules';
 import { applyEnemyHazardClick } from './dungeon-enemy-hazard-rules';
 import { createNewRun, finalizeLevel } from './game';
-import { EXIT_PAIR_KEY, WILD_PAIR_KEY } from './tile-identity';
+import { EXIT_PAIR_KEY, ROOM_PAIR_KEY, WILD_PAIR_KEY } from './tile-identity';
 import { createPlayablePathFixture } from './playable-path-fixtures';
 import { normalizeSessionStats } from './session-stats-rules';
 import { applyRelicOfferService, RELIC_OFFER_SERVICE_IDS, RELIC_POOL } from './relics';
@@ -2994,6 +2994,71 @@ describe('deterministic gameplay core', () => {
             events: activated.events,
             acceptedCommandIds: ['activate-master-exit']
         });
+    });
+
+    it('emits exact typed spend and reward feedback when a locked room cache opens', () => {
+        const lockedCache: Tile = {
+            ...tile('locked-cache', ROOM_PAIR_KEY),
+            dungeonCardKind: 'room',
+            dungeonCardState: 'hidden',
+            dungeonCardEffectId: 'room_locked_cache',
+            dungeonKeyKind: 'treasure',
+            dungeonRoomUsed: false
+        };
+        const initial = run({
+            board: {
+                ...board(),
+                tiles: [lockedCache, tile('a1', 'a'), tile('a2', 'a')],
+                pairCount: 1,
+                matchedPairs: 0
+            },
+            dungeonKeys: { treasure: 1 },
+            dungeonMasterKeys: 1,
+            shopGold: 2,
+            stats: {
+                ...run().stats,
+                totalScore: 10,
+                currentLevelScore: 10,
+                comboShards: 0,
+                guardTokens: 0,
+                currentStreak: 0
+            }
+        });
+        const result = reduceGameplayCommand(
+            initial,
+            createGameplayTileFlipCommand('open-locked-cache', lockedCache.id)
+        );
+
+        expect(result.accepted).toBe(true);
+        expect(result.run.dungeonKeys.treasure).toBe(0);
+        expect(result.run.dungeonMasterKeys).toBe(1);
+        expect(result.run.shopGold).toBe(6);
+        expect(result.run.stats.totalScore).toBe(60);
+        expect(result.events).toEqual(expect.arrayContaining([
+            expect.objectContaining({
+                type: 'dungeon.locked_cache_opened',
+                tileId: lockedCache.id,
+                spend: 'key',
+                keyKind: 'treasure',
+                keyCountBefore: 1,
+                keyCountAfter: 0,
+                masterKeysBefore: 1,
+                masterKeysAfter: 1,
+                shopGoldBefore: 2,
+                shopGoldAfter: 6,
+                scoreBefore: 10,
+                scoreAfter: 60
+            }),
+            expect.objectContaining({
+                type: 'feedback.requested',
+                cue: 'dungeon.locked_cache.opened'
+            })
+        ]));
+        expect(result.events.every((event, sequence) =>
+            gameplayEventSchema.safeParse(event).success &&
+            event.sequence === sequence &&
+            event.eventId === `open-locked-cache:${sequence}`
+        )).toBe(true);
     });
 
     it('replays a JSON-round-tripped build sequence deterministically', () => {

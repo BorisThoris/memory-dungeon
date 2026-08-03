@@ -508,6 +508,15 @@ const applyTileFlipCommand = (
         return rejectedResult(run, command.commandId, 'Tile cannot be flipped in the current board state.', command);
     }
     const targetAfter = nextRun.board?.tiles.find((tile) => tile.id === command.targetTileId) ?? targetBefore;
+    const lockedCacheKeyKind = targetBefore.dungeonKeyKind ?? 'iron';
+    const lockedCacheKeyCountBefore = runNonNegativeInteger(run.dungeonKeys?.[lockedCacheKeyKind]);
+    const lockedCacheKeyCountAfter = runNonNegativeInteger(nextRun.dungeonKeys?.[lockedCacheKeyKind]);
+    const lockedCacheMasterKeysBefore = runNonNegativeInteger(run.dungeonMasterKeys);
+    const lockedCacheMasterKeysAfter = runNonNegativeInteger(nextRun.dungeonMasterKeys);
+    const lockedCacheOpened =
+        targetBefore.dungeonCardEffectId === 'room_locked_cache' &&
+        targetBefore.dungeonRoomUsed !== true &&
+        targetAfter.dungeonRoomUsed === true;
     const trapsTriggeredBefore = runNonNegativeInteger(run.dungeonTrapsTriggered);
     const trapsTriggeredAfter = runNonNegativeInteger(nextRun.dungeonTrapsTriggered);
     const outcome = trapsTriggeredAfter > trapsTriggeredBefore
@@ -564,6 +573,29 @@ const applyTileFlipCommand = (
         enemyHazardsDefeatedThisFloorAfter: runNonNegativeInteger(nextRun.enemyHazardsDefeatedThisFloor),
         boardComplete: nextRun.board ? isBoardComplete(nextRun.board) : false
     });
+    if (lockedCacheOpened) {
+        const spend = lockedCacheKeyCountAfter < lockedCacheKeyCountBefore ? 'key' : 'master_key';
+        writeEvent({
+            type: 'dungeon.locked_cache_opened',
+            tileId: command.targetTileId,
+            spend,
+            keyKind: lockedCacheKeyKind,
+            keyCountBefore: lockedCacheKeyCountBefore,
+            keyCountAfter: lockedCacheKeyCountAfter,
+            masterKeysBefore: lockedCacheMasterKeysBefore,
+            masterKeysAfter: lockedCacheMasterKeysAfter,
+            shopGoldBefore: runNonNegativeInteger(run.shopGold),
+            shopGoldAfter: runNonNegativeInteger(nextRun.shopGold),
+            scoreBefore: runNonNegativeInteger(normalizeSessionStats(run.stats).totalScore),
+            scoreAfter: runNonNegativeInteger(normalizeSessionStats(nextRun.stats).totalScore)
+        });
+        writeEvent({
+            type: 'feedback.requested',
+            cue: 'dungeon.locked_cache.opened',
+            message: `${spend === 'key' ? `${lockedCacheKeyKind} key` : 'Master Key'} opened ${targetBefore.label}; ${runNonNegativeInteger(nextRun.shopGold) - runNonNegativeInteger(run.shopGold)} shop gold recovered.`,
+            tone: 'reward'
+        });
+    }
     if (outcome === 'trap_triggered') {
         writeEvent({
             type: 'feedback.requested',
@@ -571,7 +603,11 @@ const applyTileFlipCommand = (
             message: `${targetBefore.label} sprung a trap; ${runNonNegativeInteger(nextRun.lives)} lives remain.`,
             tone: 'warning'
         });
-    } else if (outcome === 'exit_revealed' || outcome === 'shop_revealed' || outcome === 'room_resolved') {
+    } else if (
+        outcome === 'exit_revealed' ||
+        outcome === 'shop_revealed' ||
+        (outcome === 'room_resolved' && !lockedCacheOpened)
+    ) {
         writeEvent({
             type: 'feedback.requested',
             cue: `board.tile.${outcome}`,

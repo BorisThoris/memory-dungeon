@@ -833,6 +833,21 @@ Memory Scout is now the eighth retained long-horizon build, connecting study-win
 
 Graph v58 adds the eighth strategy, opposite-edge identity-blind recovery, Flash/Undo evidence reports, boss-special suppression, Short Memorize relic counterplay, and a tested evaluator edge to `build.memory_scout`.
 
+## Fifty-ninth vertical slice: Locksmith Lock-Extraction Build
+
+The Locksmith is now the ninth retained long-horizon build, connecting Key Insurance, typed keys, board vendors, Master Key fallback, locked caches, and optional alternate extraction:
+
+1. The structural evaluator adds `lock_extraction` as a ninth axis. Vaultbreaker and Key Insurance stock real typed keys, and the generated-board fixture spends an Iron Key on an affordable locked alternate exit through `dungeon.exit_activate` / `dungeon.exit_activated` with exact replay.
+2. The bounded-memory solver adds an opt-in `prefer_affordable_lock_rewards` policy. It prefers matching typed keys, falls back to Master Key, and never consumes either resource when the lock cannot be afforded.
+3. The policy visits real hidden board vendors through typed `run.pause`, `shop.purchase`, and `run.resume` commands. It reserves generic shop gold for Master Key instead of allowing unrelated purchases to erase the build's extraction option.
+4. Affordable locked caches emit `dungeon.locked_cache_opened` with exact key, Master Key, gold, and score deltas plus typed feedback. Locked alternate exits use the established exit command, floor-clear consequence, feedback, persistence, and replay ownership.
+5. The primary exit remains available throughout. The favorable hypothesis is `lock_pressure`; the counter hypothesis is `hazard_pressure`, where automation is suppressed and access resources are explicitly conserved rather than treated as mandatory survival costs.
+6. Signature evidence counts only accepted cache/exit lock spends, Master Key purchases, and Key Insurance facts. Incidental economy gains from the mixed insurance reward do not define the axis fingerprint.
+7. The default report now covers nine builds x three seeds x twelve floors: all 324 floors complete with zero rejected gameplay commands and exact full-run replay. Locksmith completes all 36 floors, uses 8 typed keys and 1 Master Key on locks, purchases 7 Master Keys, and records 13 hazard-pressure conservation floors.
+8. All 9 favorable lock-pressure floors and all 13 counter floors complete within the shared bounds, and the structural build remains pairwise distinct from every retained strategy.
+
+Graph v59 adds the ninth strategy, distinct lock-extraction axis, cache and alternate-exit spend guards, typed-key-first and Master-Key-fallback policy, vendor purchase evidence, hazard-pressure conservation, and a tested evaluator edge to `build.locksmith`.
+
 ## Current slice status
 
 Implemented in the Conduit Cartographer vertical slice:
@@ -852,5 +867,5 @@ Implemented in the Conduit Cartographer vertical slice:
 Still required before the vertical slice is complete:
 
 - widen the feedback-completeness audit beyond the former HUD-critical fields as additional gameplay ownership enters the core;
-- use eight-build traces and graph diagnostics to select the next least-overlapping cohesive build or architectural ownership seam, without presenting simulator survival as human win-rate proof;
+- use nine-build traces and graph diagnostics to select the next least-overlapping cohesive build or architectural ownership seam, without presenting simulator survival as human win-rate proof;
 - continue migrating cohesive player builds rather than adding isolated definitions, using the graph diagnostics to choose the next least-overlapping loop.

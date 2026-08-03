@@ -1825,6 +1825,23 @@ export const gameplayEventSchema = z.discriminatedUnion('type', [
     z
         .object({
             ...eventBase,
+            type: z.literal('dungeon.locked_cache_opened'),
+            tileId: z.string().min(1).max(160),
+            spend: z.enum(['key', 'master_key']),
+            keyKind: z.enum(['iron', 'treasure', 'shrine', 'boss', 'trap']),
+            keyCountBefore: z.number().int().nonnegative(),
+            keyCountAfter: z.number().int().nonnegative(),
+            masterKeysBefore: z.number().int().nonnegative(),
+            masterKeysAfter: z.number().int().nonnegative(),
+            shopGoldBefore: z.number().int().nonnegative(),
+            shopGoldAfter: z.number().int().nonnegative(),
+            scoreBefore: z.number().int().nonnegative(),
+            scoreAfter: z.number().int().nonnegative()
+        })
+        .strict(),
+    z
+        .object({
+            ...eventBase,
             type: z.literal('enemy_hazard.contacted'),
             hazardId: z.string().min(1).max(160),
             targetTileId: z.string().min(1).max(160),

@@ -36,6 +36,8 @@ export const runBuildStrategyPlaythroughSimulationCli = (argv: readonly string[]
             gambitSuppressedMatchups: strategy.gambitSuppressedMatchups,
             recoveryPolicy: strategy.recoveryPolicy,
             recoverySuppressedMatchups: strategy.recoverySuppressedMatchups,
+            lockPolicy: strategy.lockPolicy,
+            lockPolicySuppressedMatchups: strategy.lockPolicySuppressedMatchups,
             interludeRiskPolicy: strategy.interludeRiskPolicy,
             favorableMatchup: strategy.favorableMatchup,
             counterMatchup: strategy.counterMatchup,
@@ -77,6 +79,10 @@ export const runBuildStrategyPlaythroughSimulationCli = (argv: readonly string[]
             parasiteReliefEvents: strategy.parasiteReliefEvents,
             flashPairUses: strategy.flashPairUses,
             undoResolveUses: strategy.undoResolveUses,
+            typedKeyLockUses: strategy.typedKeyLockUses,
+            masterKeyLockUses: strategy.masterKeyLockUses,
+            masterKeyPurchases: strategy.masterKeyPurchases,
+            lockPressureConservations: strategy.lockPressureConservations,
             adaptiveRoutes: strategy.samples.flatMap((sample) => sample.policyDecisions
                 .filter((decision) => decision.phase === 'route' && decision.adaptedFromPriority)
                 .map((decision) => ({

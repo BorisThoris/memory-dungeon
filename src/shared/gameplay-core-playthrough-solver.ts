@@ -1,4 +1,4 @@
-import type { RunState, Tile } from './contracts';
+import type { DungeonKeyKind, RunState, Tile } from './contracts';
 import { chooseDungeonExitActivationSpend } from './dungeon-exit-rules';
 import { getDungeonExitStatus } from './dungeon-board-status';
 import {
@@ -7,7 +7,10 @@ import {
     createGameplayGambitCommitCommand,
     createGameplayUndoResolveCommand,
     createGameplayMemorizeCompleteCommand,
+    createGameplayPauseCommand,
     createGameplayProgressionRepairCommand,
+    createGameplayResumeCommand,
+    createGameplayShopPurchaseCommand,
     createGameplayTileFlipCommand,
     gameplayCommandSchema,
     gameplayEventSchema,
@@ -24,7 +27,7 @@ import {
 } from './playthrough-solver-rules';
 import { createRunProgressionRepairTransition } from './run-progression-repair';
 import { RUN_INVENTORY_ITEM_IDS, getRunInventoryItemQuantity } from './run-inventory';
-import { EXIT_PAIR_KEY } from './tile-identity';
+import { EXIT_PAIR_KEY, SHOP_PAIR_KEY } from './tile-identity';
 
 export interface GameplayCorePlaythroughSolverTrace extends PlaythroughSolverTrace {
     commands: GameplayCommand[];
@@ -57,6 +60,7 @@ export interface GameplayCorePlaythroughSolverOptions {
     informationPolicy?: GameplayCorePlaythroughInformationPolicy;
     gambitPolicy?: GameplayCoreGambitPolicy;
     recoveryPolicy?: GameplayCoreRecoveryPolicy;
+    lockPolicy?: GameplayCoreLockPolicy;
 }
 
 export interface GameplayCoreGambitPolicy {
@@ -65,6 +69,10 @@ export interface GameplayCoreGambitPolicy {
 
 export interface GameplayCoreRecoveryPolicy {
     kind: 'first_uncertain_mismatch_undo';
+}
+
+export interface GameplayCoreLockPolicy {
+    kind: 'prefer_affordable_lock_rewards';
 }
 
 export interface GameplayCorePlaythroughInformationTrace {
@@ -114,6 +122,90 @@ const commandIdFor = (state: MutableSolverState, label: string): string =>
     `solver:${state.run.runSeed}:floor-${state.run.board?.level ?? 0}:${String(state.commands.length).padStart(4, '0')}:${label}`;
 
 const currentRunStatus = (state: MutableSolverState): RunState['status'] => state.run.status;
+
+const availableRunCount = (value: unknown): number =>
+    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
+
+const isTypedDungeonLock = (value: Tile['dungeonExitLockKind']): value is DungeonKeyKind =>
+    value != null && value !== 'none' && value !== 'lever';
+
+const canAffordTileLock = (run: RunState, tile: Tile): boolean => {
+    const lockKind = tile.dungeonExitLockKind;
+    return isTypedDungeonLock(lockKind) && (
+        availableRunCount(run.dungeonKeys[lockKind]) > 0 ||
+        availableRunCount(run.dungeonMasterKeys) > 0
+    );
+};
+
+const availableTypedExitKeyCount = (run: RunState, tile: Tile): number =>
+    isTypedDungeonLock(tile.dungeonExitLockKind)
+        ? availableRunCount(run.dungeonKeys[tile.dungeonExitLockKind])
+        : 0;
+
+const getAffordableLockedRoomTile = (run: RunState): Tile | null =>
+    (run.board?.tiles ?? [])
+        .filter((tile) =>
+            tile.state === 'hidden' &&
+            tile.dungeonCardKind === 'room' &&
+            tile.dungeonCardEffectId === 'room_locked_cache' &&
+            (availableRunCount(run.dungeonKeys[tile.dungeonKeyKind ?? 'iron']) > 0 ||
+                availableRunCount(run.dungeonMasterKeys) > 0)
+        )
+        .sort((left, right) => {
+            const leftHasTypedKey = availableRunCount(run.dungeonKeys[left.dungeonKeyKind ?? 'iron']) > 0;
+            const rightHasTypedKey = availableRunCount(run.dungeonKeys[right.dungeonKeyKind ?? 'iron']) > 0;
+            return Number(rightHasTypedKey) - Number(leftHasTypedKey) || left.id.localeCompare(right.id);
+        })[0] ?? null;
+
+const getHiddenBoardShopTile = (run: RunState): Tile | null => {
+    const board = run.board;
+    if (!board || board.dungeonShopVisited === true) return null;
+    const declaredShop = board.dungeonShopTileId
+        ? board.tiles.find((tile) => tile.id === board.dungeonShopTileId) ?? null
+        : null;
+    const shop = declaredShop ?? board.tiles.find((tile) => tile.pairKey === SHOP_PAIR_KEY) ?? null;
+    return shop?.state === 'hidden' ? shop : null;
+};
+
+const getAffordableMasterKeyOfferId = (run: RunState): string | null =>
+    (Array.isArray(run.shopOffers) ? run.shopOffers : [])
+        .filter((offer) =>
+            offer.itemId === 'master_key' &&
+            !offer.purchased &&
+            offer.compatible &&
+            offer.cost <= availableRunCount(run.shopGold)
+        )
+        .sort((left, right) => left.cost - right.cost || left.id.localeCompare(right.id))[0]?.id ?? null;
+
+const timerSnapshotValue = (value: unknown): number | null =>
+    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : null;
+
+const pauseTimestampFor = (state: MutableSolverState): number =>
+    100_000 + availableRunCount(state.run.board?.level) * 1_000 + state.commands.length;
+
+const getPlaythroughExitTile = (
+    run: RunState,
+    lockPolicy: GameplayCoreLockPolicy | undefined
+): Tile | null => {
+    const board = run.board;
+    if (!board || lockPolicy?.kind !== 'prefer_affordable_lock_rewards') {
+        return board ? getPrimaryPlaythroughExitTile(board) : null;
+    }
+    const lockedExit = board.tiles
+        .filter((tile) =>
+            tile.pairKey === EXIT_PAIR_KEY &&
+            tile.state !== 'matched' &&
+            tile.state !== 'removed' &&
+            tile.dungeonExitActivated !== true &&
+            canAffordTileLock(run, tile)
+        )
+        .sort((left, right) => {
+            const leftHasTypedKey = availableTypedExitKeyCount(run, left) > 0;
+            const rightHasTypedKey = availableTypedExitKeyCount(run, right) > 0;
+            return Number(rightHasTypedKey) - Number(leftHasTypedKey) || left.id.localeCompare(right.id);
+        })[0];
+    return lockedExit ?? getPrimaryPlaythroughExitTile(board);
+};
 
 const orderPairForCurrentBoard = (run: RunState, pair: readonly Tile[]): Tile[] => {
     const blockedIndex = run.stickyBlockIndex;
@@ -498,6 +590,55 @@ export const solveRunThroughGameplayCoreWithTrace = (
             continue;
         }
 
+        if (options.lockPolicy?.kind === 'prefer_affordable_lock_rewards') {
+            const boardShop = getHiddenBoardShopTile(state.run);
+            if (boardShop) {
+                executeSolverCommand(
+                    state,
+                    createGameplayTileFlipCommand(commandIdFor(state, 'reveal_lock_shop'), boardShop.id)
+                );
+                continue;
+            }
+            const masterKeyOfferId = getAffordableMasterKeyOfferId(state.run);
+            if (masterKeyOfferId) {
+                if (state.run.status === 'playing') {
+                    executeSolverCommand(
+                        state,
+                        createGameplayPauseCommand(
+                            commandIdFor(state, 'pause_lock_shop'),
+                            pauseTimestampFor(state),
+                            {
+                                memorizeRemainingMs: timerSnapshotValue(state.run.timerState?.memorizeRemainingMs),
+                                resolveRemainingMs: timerSnapshotValue(state.run.timerState?.resolveRemainingMs),
+                                debugRevealRemainingMs: timerSnapshotValue(state.run.timerState?.debugRevealRemainingMs)
+                            }
+                        )
+                    );
+                    continue;
+                }
+                executeSolverCommand(
+                    state,
+                    createGameplayShopPurchaseCommand(commandIdFor(state, 'buy_master_key'), masterKeyOfferId)
+                );
+                continue;
+            }
+            if (state.run.status === 'paused' && state.run.timerState?.pausedFromStatus === 'playing') {
+                executeSolverCommand(
+                    state,
+                    createGameplayResumeCommand(commandIdFor(state, 'resume_lock_shop'), pauseTimestampFor(state))
+                );
+                continue;
+            }
+            const lockedRoom = getAffordableLockedRoomTile(state.run);
+            if (lockedRoom) {
+                executeSolverCommand(
+                    state,
+                    createGameplayTileFlipCommand(commandIdFor(state, 'open_locked_room'), lockedRoom.id)
+                );
+                continue;
+            }
+        }
+
         const boundedTurnTileIds = state.boundedMemory
             ? playablePolicyTiles(state.run).map((tile) => tile.id)
             : [];
@@ -518,7 +659,7 @@ export const solveRunThroughGameplayCoreWithTrace = (
             if (!board) {
                 return finalizeTrace(initialRun, state, 'missing_board', turn, null, [], verifyReplay);
             }
-            const exit = getPrimaryPlaythroughExitTile(board);
+            const exit = getPlaythroughExitTile(state.run, options.lockPolicy);
             if (!exit) {
                 return finalizeTrace(initialRun, state, 'no_exit', turn, null, [], verifyReplay);
             }

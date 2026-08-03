@@ -40,6 +40,7 @@ import {
     solveRunThroughGameplayCoreWithTrace,
     type GameplayCoreBoundedMemoryPolicy,
     type GameplayCoreGambitPolicy,
+    type GameplayCoreLockPolicy,
     type GameplayCoreRecoveryPolicy,
     type GameplayCorePlaythroughInformationTrace,
     type GameplayCorePlaythroughSolverTrace
@@ -61,6 +62,7 @@ export type GameplayBuildMatchup =
     | 'hazard_pressure'
     | 'parasite_pressure'
     | 'boss_pressure'
+    | 'lock_pressure'
     | 'economy_opportunity';
 
 export interface GameplayBuildPolicyDefinition {
@@ -75,6 +77,8 @@ export interface GameplayBuildPolicyDefinition {
     gambitSuppressedMatchups: readonly GameplayBuildMatchup[];
     recoveryPolicy?: GameplayCoreRecoveryPolicy | null;
     recoverySuppressedMatchups?: readonly GameplayBuildMatchup[];
+    lockPolicy?: GameplayCoreLockPolicy | null;
+    lockPolicySuppressedMatchups?: readonly GameplayBuildMatchup[];
     interludeRiskPolicy: GameplayBuildInterludeRiskPolicy;
     signatureTiming: 'before_board' | 'after_board';
     favorableMatchup: GameplayBuildMatchup;
@@ -152,6 +156,10 @@ export interface GameplayBuildFloorTrace {
     signatureConsequenceUses: number;
     gambitCommits: number;
     undoResolveUses: number;
+    typedKeyLockUses: number;
+    masterKeyLockUses: number;
+    masterKeyPurchases: number;
+    lockPolicySuppressedByMatchup: boolean;
     gambitSuppressedByMatchup: boolean;
     information: GameplayCorePlaythroughInformationTrace;
     observedTraitInteractionTags: string[];
@@ -210,6 +218,8 @@ export interface GameplayBuildMultiFloorMetrics {
     gambitPolicy: GameplayCoreGambitPolicy | null;
     recoveryPolicy: GameplayCoreRecoveryPolicy | null;
     recoverySuppressedMatchups: readonly GameplayBuildMatchup[];
+    lockPolicy: GameplayCoreLockPolicy | null;
+    lockPolicySuppressedMatchups: readonly GameplayBuildMatchup[];
     gambitSuppressedMatchups: readonly GameplayBuildMatchup[];
     interludeRiskPolicy: GameplayBuildInterludeRiskPolicy;
     favorableMatchup: GameplayBuildMatchup;
@@ -253,6 +263,10 @@ export interface GameplayBuildMultiFloorMetrics {
     parasiteReliefEvents: number;
     flashPairUses: number;
     undoResolveUses: number;
+    typedKeyLockUses: number;
+    masterKeyLockUses: number;
+    masterKeyPurchases: number;
+    lockPressureConservations: number;
     samples: GameplayBuildMultiFloorSeedSample[];
 }
 
@@ -385,6 +399,31 @@ export interface GameplayBuildMultiFloorReport {
                 counterMatchupFloors: number;
             };
         };
+        locksmith: {
+            id: 'locksmith';
+            buildMechanicId: 'build.locksmith';
+            startingLoadoutId: 'vaultbreaker';
+            axis: 'lock_extraction';
+            favorableMatchup: 'lock_pressure';
+            counterMatchup: 'hazard_pressure';
+            requiredSystems: readonly [
+                'reward.key_insurance',
+                'inventory.iron_key',
+                'shop.master_key',
+                'inventory.master_key',
+                'dungeon.room_locked_cache',
+                'exit.locked_alternate'
+            ];
+            longHorizonSampled: true;
+            evidence: {
+                typedKeyLockUses: number;
+                masterKeyLockUses: number;
+                masterKeyPurchases: number;
+                lockPressureConservations: number;
+                favorableMatchupFloors: number;
+                counterMatchupFloors: number;
+            };
+        };
     };
     bounds: {
         requiredStrategyCount: number;
@@ -416,6 +455,10 @@ export interface GameplayBuildMultiFloorReport {
         minBossHunterRiskWagerOutcomes: number;
         minMemoryScoutFlashPairUsesPerSeed: number;
         minMemoryScoutUndoResolveUsesPerSeed: number;
+        minLocksmithTypedKeyUsesPerSeed: number;
+        minLocksmithMasterKeyUses: number;
+        minLocksmithMasterKeyPurchases: number;
+        minLockPressureConservations: number;
         maxPairwiseMeanTurnRatio: number;
     };
     notes: string[];
@@ -612,6 +655,28 @@ export const GAMEPLAY_BUILD_POLICIES: Readonly<Record<GameplayBuildStrategyId, G
         signatureTiming: 'before_board',
         favorableMatchup: 'memory_pressure',
         counterMatchup: 'hazard_pressure'
+    },
+    locksmith: {
+        id: 'locksmith_policy_v1',
+        strategyId: 'locksmith',
+        routePriorities: ['mystery', 'safe', 'greed'],
+        bonusRewardPriorities: ['key_insurance', 'chest_gold', 'supply_cache', 'secret_favor'],
+        relicPriorities: ['chapter_compass', 'wager_surety', 'extra_shuffle_charge', 'peek_charge_plus_one'],
+        shopItemPriorities: ['master_key', 'treasure_key', 'iron_key', 'peek_charge'],
+        informationPolicy: { kind: 'bounded_memory', memoryTileCapacity: 7, uncertainTurnBudget: 26 },
+        gambitPolicy: null,
+        gambitSuppressedMatchups: [],
+        lockPolicy: { kind: 'prefer_affordable_lock_rewards' },
+        lockPolicySuppressedMatchups: ['hazard_pressure'],
+        interludeRiskPolicy: {
+            maxRouteRiskUnits: 1,
+            minimumEffectiveSurvivalAfterRoute: 4,
+            openingUnbufferedGreedFloors: 0,
+            eventEffectPriorities: ['gain_iron_key', 'gain_shop_gold', 'gain_relic_favor', 'heal_or_guard', 'gain_destroy_charge', 'gain_score']
+        },
+        signatureTiming: 'after_board',
+        favorableMatchup: 'lock_pressure',
+        counterMatchup: 'hazard_pressure'
     }
 };
 
@@ -625,7 +690,8 @@ const emptyAxisScores = (): Record<GameplayBuildStrategyAxis, number> => ({
     sustain_conversion: 0,
     board_reconfiguration: 0,
     boss_extraction: 0,
-    mistake_recovery: 0
+    mistake_recovery: 0,
+    lock_extraction: 0
 });
 
 const normalizeSeeds = (seeds: readonly number[] | undefined): number[] => {
@@ -794,6 +860,18 @@ const signatureConsequenceCommand = (
             : null;
     }
     if (trace.run.status !== 'levelComplete') return null;
+    if (strategy.id === 'locksmith') {
+        const masterKeyOffer = (Array.isArray(trace.run.shopOffers) ? trace.run.shopOffers : [])
+            .filter((offer) =>
+                offer.itemId === 'master_key' &&
+                !offer.purchased &&
+                offer.compatible
+            )
+            .sort((left, right) => left.cost - right.cost || left.id.localeCompare(right.id))[0];
+        return masterKeyOffer && masterKeyOffer.cost <= trace.run.shopGold
+            ? createGameplayShopPurchaseCommand(commandId, masterKeyOffer.id)
+            : null;
+    }
     const itemPriority = new Map(policy.shopItemPriorities.map((itemId, index) => [itemId, index]));
     const offerId = (Array.isArray(trace.run.shopOffers) ? trace.run.shopOffers : [])
         .filter((offer) => !offer.purchased && offer.compatible && offer.cost <= trace.run.shopGold)
@@ -1075,6 +1153,15 @@ const floorMatchup = (run: RunState): GameplayBuildMatchup => {
     const mutators = Array.isArray(run.activeMutators) ? run.activeMutators : [];
     if (board?.floorTag === 'boss' || board?.dungeonBossId) return 'boss_pressure';
     if (mutators.includes('score_parasite')) return 'parasite_pressure';
+    if ((board?.tiles ?? []).some((tile) =>
+        (tile.dungeonCardKind === 'exit' &&
+            tile.dungeonExitLockKind != null &&
+            tile.dungeonExitLockKind !== 'none' &&
+            tile.dungeonExitLockKind !== 'lever') ||
+        (tile.dungeonCardKind === 'room' && tile.dungeonCardEffectId === 'room_locked_cache')
+    )) {
+        return 'lock_pressure';
+    }
     if (
         mutators.some((mutator) => HAZARD_PRESSURE_MUTATORS.has(mutator)) ||
         (Array.isArray(board?.enemyHazards) && board.enemyHazards.length > 0)
@@ -1114,6 +1201,9 @@ const recurringSynergyTags = (strategy: GameplayBuildStrategyDefinition): Set<st
     if (strategy.id === 'memory_scout') {
         return new Set(['reward-perk:trait-streak-flash', 'conduit:echo-peek', 'echo:sealed-combo']);
     }
+    if (strategy.id === 'locksmith') {
+        return new Set(['cursed:volatile-greed', 'reward-perk:cursed-opener-greed', 'sealed:heavy-score']);
+    }
     return new Set(['cursed:volatile-greed', 'reward-perk:cursed-opener-greed', 'sealed:heavy-score']);
 };
 
@@ -1136,7 +1226,9 @@ const signatureAxisScores = (
                   ? new Set(['free_swap_floor', 'trait_toolkit', 'region_shuffle'])
                   : strategy.id === 'boss_hunter'
                     ? new Set(['chapter_compass', 'wager_surety', 'parasite_ledger'])
-                    : new Set(['trait_streak_lens', 'trait_streak_toolkit', 'flash_pair', 'undo_resolve']);
+                    : strategy.id === 'memory_scout'
+                      ? new Set(['trait_streak_lens', 'trait_streak_toolkit', 'flash_pair', 'undo_resolve'])
+                      : new Set(['key_insurance', 'run_shop', 'dungeon_exit', 'board_tile']);
     for (const event of events) {
         const fromBuildSource = sourceIds.has(event.source.id);
         if (
@@ -1201,6 +1293,15 @@ const signatureAxisScores = (
         ) {
             scores.mistake_recovery += 1;
         }
+        if (
+            strategy.id === 'locksmith' &&
+            ((event.type === 'dungeon.exit_activated' && event.spend !== 'none') ||
+                event.type === 'dungeon.locked_cache_opened' ||
+                (event.type === 'inventory.changed' && event.source.id === 'key_insurance') ||
+                (event.type === 'shop.offer_purchased' && event.itemId === 'master_key'))
+        ) {
+            scores.lock_extraction += 1;
+        }
     }
     return scores;
 };
@@ -1239,7 +1340,7 @@ const runSeed = (
                 ? `${policy.id} spends its ${strategy.expectedDominantAxis} consequence ${policy.signatureTiming.replace('_', ' ')}.`
                 : `${policy.id} found no legal stocked signature consequence and conserved state.`
         });
-        return applied ? 1 : 0;
+        return applied && strategy.id !== 'locksmith' ? 1 : 0;
     };
     const setupDefinitions = strategy.activationDefinitionIds.filter((definitionId) =>
         definitionId.startsWith('bonus_reward.') ||
@@ -1289,7 +1390,11 @@ const runSeed = (
                 : policy.gambitPolicy ?? undefined,
             recoveryPolicy: (policy.recoverySuppressedMatchups ?? []).includes(matchup)
                 ? undefined
-                : policy.recoveryPolicy ?? undefined
+                : policy.recoveryPolicy ?? undefined,
+            lockPolicy: matchup !== policy.favorableMatchup ||
+                (policy.lockPolicySuppressedMatchups ?? []).includes(matchup)
+                ? undefined
+                : policy.lockPolicy ?? undefined
         });
         appendSolverTrace(trace, solver);
         if (strategy.id === 'route_gambler') {
@@ -1332,12 +1437,31 @@ const runSeed = (
             ));
             signatureConsequenceUses += recoveryEvents.length;
         }
+        if (strategy.id === 'locksmith') {
+            const lockEvents = solver.events.filter((event) =>
+                event.type === 'dungeon.locked_cache_opened' ||
+                (event.type === 'dungeon.exit_activated' && event.spend !== 'none')
+            );
+            trace.signatureEvents.push(...lockEvents);
+            signatureConsequenceUses += lockEvents.length;
+        }
 
         if (policy.signatureTiming === 'after_board') {
             signatureConsequenceUses += applySignaturePolicy(floor, matchup);
         }
 
         const floorEvents = trace.events.slice(eventStart);
+        const typedKeyLockUses = floorEvents.filter((event) =>
+            (event.type === 'dungeon.locked_cache_opened' || event.type === 'dungeon.exit_activated') &&
+            event.spend === 'key'
+        ).length;
+        const masterKeyLockUses = floorEvents.filter((event) =>
+            (event.type === 'dungeon.locked_cache_opened' || event.type === 'dungeon.exit_activated') &&
+            event.spend === 'master_key'
+        ).length;
+        const masterKeyPurchases = floorEvents.filter((event) =>
+            event.type === 'shop.offer_purchased' && event.itemId === 'master_key'
+        ).length;
         const expectedSynergyTags = recurringSynergyTags(strategy);
         const observedTraitInteractionTags = floorEvents.flatMap((event) =>
             event.type === 'board.turn_resolved'
@@ -1367,6 +1491,11 @@ const runSeed = (
             signatureConsequenceUses,
             gambitCommits: solver.gambitCommits,
             undoResolveUses: solver.undoResolveUses,
+            typedKeyLockUses,
+            masterKeyLockUses,
+            masterKeyPurchases,
+            lockPolicySuppressedByMatchup:
+                policy.lockPolicy != null && (policy.lockPolicySuppressedMatchups ?? []).includes(matchup),
             gambitSuppressedByMatchup:
                 policy.gambitPolicy != null && policy.gambitSuppressedMatchups.includes(matchup),
             information: solver.information,
@@ -1538,6 +1667,7 @@ const aggregateMatchups = (samples: readonly GameplayBuildMultiFloorSeedSample[]
         'hazard_pressure',
         'parasite_pressure',
         'boss_pressure',
+        'lock_pressure',
         'economy_opportunity'
     ];
     return order.flatMap((matchup) => {
@@ -1591,6 +1721,8 @@ export const runGameplayBuildMultiFloorSimulation = (
             gambitPolicy: policy.gambitPolicy,
             recoveryPolicy: policy.recoveryPolicy ?? null,
             recoverySuppressedMatchups: policy.recoverySuppressedMatchups ?? [],
+            lockPolicy: policy.lockPolicy ?? null,
+            lockPolicySuppressedMatchups: policy.lockPolicySuppressedMatchups ?? [],
             gambitSuppressedMatchups: policy.gambitSuppressedMatchups,
             interludeRiskPolicy: policy.interludeRiskPolicy,
             favorableMatchup: policy.favorableMatchup,
@@ -1725,6 +1857,25 @@ export const runGameplayBuildMultiFloorSimulation = (
             undoResolveUses: strategy.id === 'memory_scout'
                 ? floorTraces.reduce((sum, floor) => sum + floor.undoResolveUses, 0)
                 : 0,
+            typedKeyLockUses: strategy.id === 'locksmith'
+                ? floorTraces.reduce((sum, floor) => sum + floor.typedKeyLockUses, 0)
+                : 0,
+            masterKeyLockUses: strategy.id === 'locksmith'
+                ? floorTraces.reduce((sum, floor) => sum + floor.masterKeyLockUses, 0)
+                : 0,
+            masterKeyPurchases: strategy.id === 'locksmith'
+                ? floorTraces.reduce((sum, floor) => sum + floor.masterKeyPurchases, 0)
+                : 0,
+            lockPressureConservations: strategy.id === 'locksmith'
+                ? floorTraces.filter((floor) =>
+                    floor.matchup === 'hazard_pressure' &&
+                    floor.lockPolicySuppressedByMatchup &&
+                    floor.typedKeyLockUses === 0 &&
+                    floor.masterKeyLockUses === 0 &&
+                    floor.completed &&
+                    floor.replayCheckpointDeterministic
+                ).length
+                : 0,
             samples
         };
     });
@@ -1743,6 +1894,7 @@ export const runGameplayBuildMultiFloorSimulation = (
     const trapControl = strategies.find((strategy) => strategy.id === 'trap_control');
     const bossHunter = strategies.find((strategy) => strategy.id === 'boss_hunter');
     const memoryScout = strategies.find((strategy) => strategy.id === 'memory_scout');
+    const locksmith = strategies.find((strategy) => strategy.id === 'locksmith');
     return {
         rulesVersion,
         seeds,
@@ -1867,10 +2019,35 @@ export const runGameplayBuildMultiFloorSimulation = (
                     favorableMatchupFloors: memoryScout?.favorableMatchupMetrics?.sampledFloors ?? 0,
                     counterMatchupFloors: memoryScout?.counterMatchupMetrics?.sampledFloors ?? 0
                 }
+            },
+            locksmith: {
+                id: 'locksmith',
+                buildMechanicId: 'build.locksmith',
+                startingLoadoutId: 'vaultbreaker',
+                axis: 'lock_extraction',
+                favorableMatchup: 'lock_pressure',
+                counterMatchup: 'hazard_pressure',
+                requiredSystems: [
+                    'reward.key_insurance',
+                    'inventory.iron_key',
+                    'shop.master_key',
+                    'inventory.master_key',
+                    'dungeon.room_locked_cache',
+                    'exit.locked_alternate'
+                ],
+                longHorizonSampled: true,
+                evidence: {
+                    typedKeyLockUses: locksmith?.typedKeyLockUses ?? 0,
+                    masterKeyLockUses: locksmith?.masterKeyLockUses ?? 0,
+                    masterKeyPurchases: locksmith?.masterKeyPurchases ?? 0,
+                    lockPressureConservations: locksmith?.lockPressureConservations ?? 0,
+                    favorableMatchupFloors: locksmith?.favorableMatchupMetrics?.sampledFloors ?? 0,
+                    counterMatchupFloors: locksmith?.counterMatchupMetrics?.sampledFloors ?? 0
+                }
             }
         },
         bounds: {
-            requiredStrategyCount: 8,
+            requiredStrategyCount: 9,
             minFloorsPerSeed: 12,
             minFloorCompletionShare: 1,
             minDeterministicReplayShare: 1,
@@ -1899,6 +2076,10 @@ export const runGameplayBuildMultiFloorSimulation = (
             minBossHunterRiskWagerOutcomes: 1,
             minMemoryScoutFlashPairUsesPerSeed: 1,
             minMemoryScoutUndoResolveUsesPerSeed: 1,
+            minLocksmithTypedKeyUsesPerSeed: 1,
+            minLocksmithMasterKeyUses: 1,
+            minLocksmithMasterKeyPurchases: 1,
+            minLockPressureConservations: 1,
             maxPairwiseMeanTurnRatio: 1.5
         },
         notes: [
@@ -1914,7 +2095,8 @@ export const runGameplayBuildMultiFloorSimulation = (
             'Combo Shard Engine is retained as the fifth build: Greed creates a visible life deficit, Bonus Shards and the Catalyst relic stock bounded momentum, clean matches convert the next shard into life, and authored parasite floors test its sustain counter.',
             'Trap Control is retained as the sixth build: renewable Free Swap sources fund typed row reconfiguration on visible hazard-pressure floors, while memory-pressure floors conserve the spatial-disruption resource.',
             'Boss Hunter is retained as the seventh build: Chapter Compass converts claimed boss trophies into score, while objective success through Wager Surety and Parasite Ledger converts chapter preparation into Favor or pressure relief.',
-            'Memory Scout is retained as the eighth build: study-window relics answer Short Memorize, clean trait streaks renew Flash Pair, and one floor Undo converts an observed uncertain mismatch into bounded recovery with an explicit recall-focus cost.'
+            'Memory Scout is retained as the eighth build: study-window relics answer Short Memorize, clean trait streaks renew Flash Pair, and one floor Undo converts an observed uncertain mismatch into bounded recovery with an explicit recall-focus cost.',
+            'Locksmith is retained as the ninth build: Key Insurance and Vaultbreaker stock typed keys, deterministic shops offer Master Key fallback, and an opt-in lock policy opens affordable caches or alternate exits while conserving keys under hazard pressure.'
         ]
     };
 };
@@ -2112,6 +2294,31 @@ export const assertGameplayBuildMultiFloorViable = (
         if (memoryScout.undoResolveUses < minimumUndoUses) {
             issues.push(
                 `memory_scout@seeds:${report.seeds.join(',')}:undoResolveUses=${memoryScout.undoResolveUses}; required=${minimumUndoUses}`
+            );
+        }
+    }
+    const locksmith = report.strategies.find((strategy) => strategy.id === 'locksmith');
+    if (locksmith) {
+        const minimumTypedKeyUses =
+            report.bounds.minLocksmithTypedKeyUsesPerSeed * report.seeds.length;
+        if (locksmith.typedKeyLockUses < minimumTypedKeyUses) {
+            issues.push(
+                `locksmith@seeds:${report.seeds.join(',')}:typedKeyLockUses=${locksmith.typedKeyLockUses}; required=${minimumTypedKeyUses}`
+            );
+        }
+        if (locksmith.masterKeyLockUses < report.bounds.minLocksmithMasterKeyUses) {
+            issues.push(
+                `locksmith@seeds:${report.seeds.join(',')}:masterKeyLockUses=${locksmith.masterKeyLockUses}; required=${report.bounds.minLocksmithMasterKeyUses}`
+            );
+        }
+        if (locksmith.masterKeyPurchases < report.bounds.minLocksmithMasterKeyPurchases) {
+            issues.push(
+                `locksmith@seeds:${report.seeds.join(',')}:masterKeyPurchases=${locksmith.masterKeyPurchases}; required=${report.bounds.minLocksmithMasterKeyPurchases}`
+            );
+        }
+        if (locksmith.lockPressureConservations < report.bounds.minLockPressureConservations) {
+            issues.push(
+                `locksmith@seeds:${report.seeds.join(',')}:lockPressureConservations=${locksmith.lockPressureConservations}; required=${report.bounds.minLockPressureConservations}`
             );
         }
     }
