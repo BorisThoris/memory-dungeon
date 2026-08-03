@@ -14,7 +14,6 @@ import { countFindablePairs } from './board-generation';
 import {
     countReachableExitKeySources,
     getEffectivePrimaryExitLock,
-    getWildTileIdFromBoard,
     inspectBoardFairness,
     inspectRunFairness,
     boardHasActionableProgressionPair,
@@ -156,7 +155,6 @@ export const createGeneratedBoardSolverRun = (
         board,
         status: 'playing',
         dungeonRun: createDungeonRunMapState(seed, rulesVersion, board.level),
-        wildTileId: getWildTileIdFromBoard(board),
         glassDecoyActiveThisFloor: boardHasGlassDecoy(board),
         findablesTotalThisFloor: countFindablePairs(board.tiles),
         traitRouteObjectiveProgressThisFloor: 0,
@@ -183,10 +181,7 @@ export const createShopStockInspectionRun = (run: RunState, board: BoardState): 
     }
 });
 
-const solveGeneratedBoardByExhaustingPairsWithTrace = (
-    board: BoardState,
-    seed: number
-): GameplayCorePlaythroughSolverTrace => {
+const solveGeneratedBoardByExhaustingPairsWithTrace = (board: BoardState, seed: number): GameplayCorePlaythroughSolverTrace => {
     return solveRunThroughGameplayCoreWithTrace(createGeneratedBoardSolverRun(board, seed));
 };
 
@@ -472,10 +467,9 @@ const recordPlayableClearInspection = (
             ? enemyHazardsForBoard(solved.board).filter((hazard) => hazard.state !== 'defeated')
             : [];
     const coreSolverIssues = [
-        ...(trace.replayVerified && !trace.replayDeterministic ? ['command replay diverged'] : []),
-        ...(trace.rejectedCommandIds.length === 0
-            ? []
-            : [`rejected commands: ${trace.rejectedCommandIds.join(',')}`]),
+        ...(!trace.replayVerified ? ['command_replay_not_verified'] : []),
+        ...(trace.replayVerified && !trace.replayDeterministic ? ['command_replay_diverged'] : []),
+        ...trace.rejectedCommandIds.map((commandId) => `rejected:${commandId}`),
         ...trace.invariantViolations
     ];
     if (
@@ -544,7 +538,7 @@ const recordPlayableClearInspection = (
         code: 'completion_route_missing',
         message:
             coreSolverIssues.length > 0
-                ? `Gameplay-core pair-exhaustion solver violated command/event invariants: ${coreSolverIssues.join('; ')}.`
+                ? `Typed gameplay-core solver reported ${coreSolverIssues.join(', ')}.`
                 : staleEnemyHazards.length > 0
                 ? `Executable pair-exhaustion solver ended with ${staleEnemyHazards.length} stale enemy hazard overlay(s); expected all hazards defeated.`
                 : `Executable pair-exhaustion solver stopped at ${trace.stopReason} after ${trace.turns} turn(s) with status=${solved.status}; expected levelComplete.`
@@ -568,8 +562,7 @@ const recordPlayableClearInspection = (
         ],
         issueDetails: [
             formatIssueDetail(issue),
-            `solver_trace: reason=${trace.stopReason} turns=${trace.turns} lastPair=${trace.lastPairKey ?? 'none'} lastTiles=${trace.lastTileIds.join(',') || 'none'}`,
-            ...coreSolverIssues.map((candidate) => `core_solver: ${candidate}`),
+            `solver_trace: reason=${trace.stopReason} turns=${trace.turns} lastPair=${trace.lastPairKey ?? 'none'} lastTiles=${trace.lastTileIds.join(',') || 'none'} replayVerified=${trace.replayVerified} replayDeterministic=${trace.replayDeterministic} rejected=${trace.rejectedCommandIds.join(',') || 'none'} invariants=${trace.invariantViolations.join(',') || 'none'}`,
             ...staleEnemyIssues.map(formatIssueDetail),
             ...report.issues.map(formatIssueDetail),
             ...topologyIssues.map(formatIssueDetail)

@@ -12,6 +12,8 @@ type AiRepoModel = {
         contentItemCount: number;
         mechanicCount: number;
         stateFieldCount: number;
+        runStateFieldCount: number;
+        dormantRunStateFieldCount: number;
         playerVisibleStateCount: number;
         relationshipCount: number;
     };
@@ -20,6 +22,13 @@ type AiRepoModel = {
     content: { id: string; kind: string; expectedMechanicId: string; source: { path: string; line: number | null } }[];
     mechanics: { id: string; evidence: { path: string; line: number | null }[]; tests: { path: string; line: number | null }[] }[];
     states: { id: string; name: string; playerVisible: boolean }[];
+    runStateFields: {
+        id: string;
+        name: string;
+        source: { path: string; line: number };
+        readReferences: { path: string; line: number }[];
+        writeReferences: { path: string; line: number }[];
+    }[];
     playerVisibleStates: string[];
     relationships: { source: string; target: string; kind: string }[];
     diagnostics: { severity: 'error' | 'warning'; code: string }[];
@@ -43,13 +52,16 @@ describe('AI repository model', () => {
         ).not.toThrow();
 
         const model = JSON.parse(fs.readFileSync(modelPath, 'utf8')) as AiRepoModel;
-        expect(model.schemaVersion).toBe(2);
+        expect(model.schemaVersion).toBe(3);
         expect(model.repository.trackedFileCount).toBeGreaterThan(2_000);
         expect(model.repository.codeFileCount).toBeGreaterThan(800);
         expect(model.repository.exportedSymbolCount).toBeGreaterThan(1_000);
         expect(model.repository.contentItemCount).toBeGreaterThan(50);
         expect(model.repository.mechanicCount).toBeGreaterThan(20);
         expect(model.repository.stateFieldCount).toBeGreaterThan(20);
+        expect(model.repository.runStateFieldCount).toBeGreaterThan(120);
+        expect(model.repository.runStateFieldCount).toBe(model.runStateFields.length);
+        expect(model.repository.dormantRunStateFieldCount).toBe(0);
         expect(model.repository.playerVisibleStateCount).toBeGreaterThanOrEqual(27);
         expect(model.repository.relationshipCount).toBeGreaterThan(2_000);
         expect(model.diagnostics).toEqual([]);
@@ -73,8 +85,22 @@ describe('AI repository model', () => {
         expect(model.states.filter((state) => state.playerVisible).map((state) => state.name).sort()).toEqual(
             [...model.playerVisibleStates].sort()
         );
+        expect(model.runStateFields.every((field) => field.source.line > 0 && field.readReferences.length > 0)).toBe(true);
+        expect(model.runStateFields.map((field) => field.name)).not.toEqual(
+            expect.arrayContaining(['dailyStreakCount', 'dungeonShopVisitedThisFloor', 'wildTileId'])
+        );
+        expect(model.runStateFields.find((field) => field.name === 'regionShuffleCharges')).toMatchObject({
+            id: 'run_state_field:regionShuffleCharges',
+            source: { path: 'src/shared/contracts.ts', line: expect.any(Number) },
+            readReferences: expect.arrayContaining([
+                expect.objectContaining({ path: 'src/shared/board-power-actions.ts', line: expect.any(Number) })
+            ]),
+            writeReferences: expect.arrayContaining([
+                expect.objectContaining({ path: 'src/shared/run-creation-rules.ts', line: expect.any(Number) })
+            ])
+        });
         expect(model.relationships.map((edge) => edge.kind)).toEqual(
-            expect.arrayContaining(['imports', 'exports', 'declared_by', 'implemented_by', 'tested_by', 'reads', 'writes', 'displays'])
+            expect.arrayContaining(['imports', 'exports', 'declares', 'declared_by', 'implemented_by', 'tested_by', 'reads', 'writes', 'displays'])
         );
         const mechanicIds = new Set(model.mechanics.map((mechanic) => mechanic.id));
         expect(model.content.filter((item) => !mechanicIds.has(`mechanic:${item.expectedMechanicId}`))).toEqual([]);
@@ -86,6 +112,14 @@ describe('AI repository model', () => {
         const query = JSON.parse(queryOutput) as { nodes: { id: string }[]; relationships: unknown[] };
         expect(query.nodes.map((node) => node.id)).toContain('state:recallFocus');
         expect(query.relationships.length).toBeGreaterThan(0);
+
+        const runStateQueryOutput = execFileSync(process.execPath, [scriptPath, '--query', 'run_state_field:recallFocus'], {
+            cwd: repoRoot,
+            encoding: 'utf8'
+        });
+        const runStateQuery = JSON.parse(runStateQueryOutput) as { nodes: { id: string }[]; relationships: unknown[] };
+        expect(runStateQuery.nodes.map((node) => node.id)).toContain('run_state_field:recallFocus');
+        expect(runStateQuery.relationships.length).toBeGreaterThan(0);
     }, 120_000);
 
     it('registers model generation and drift checks in the project gates', () => {

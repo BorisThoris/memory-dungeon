@@ -46,7 +46,6 @@ const run = (b: BoardState, overrides: Partial<RunState> = {}): RunState =>
         status: 'playing',
         board: b,
         shopOffers: [existingOffer],
-        dungeonShopVisitedThisFloor: false,
         ...overrides
     }) as RunState;
 
@@ -69,7 +68,6 @@ describe('dungeon reveal rules', () => {
         const revealed = revealDungeonShop(run(b), 'shop');
 
         expect(revealed.board?.dungeonShopVisited).toBe(true);
-        expect(revealed.dungeonShopVisitedThisFloor).toBe(true);
         expect(revealed.shopOffers).toEqual([existingOffer]);
         expect(revealed.board?.tiles[0]).toMatchObject({
             id: 'shop',

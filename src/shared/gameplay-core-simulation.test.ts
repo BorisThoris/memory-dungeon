@@ -45,7 +45,6 @@ const initialRun = (seed: number, gameMode: RunState['gameMode'] = 'endless'): R
         gauntletDeadlineMs: gameMode === 'gauntlet' ? 10_000 : null,
         practiceMode: true,
         wildMenuRun: true,
-        wildTileId: 'wild',
         wildMatchesRemaining: 1,
         flipHistory: [],
         timerState: createTimerState({ memorizeRemainingMs: 900 }),

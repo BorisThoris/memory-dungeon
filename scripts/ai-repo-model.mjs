@@ -20,7 +20,7 @@ import ts from 'typescript';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const defaultRepoRoot = path.resolve(__dirname, '..');
 export const AI_REPO_MODEL_PATH = '.ai/repo-model.json';
-const MODEL_VERSION = 2;
+const MODEL_VERSION = 3;
 const GENERATED_PATHS = new Set([AI_REPO_MODEL_PATH]);
 const CONTENT_REGISTRIES = [
     { kind: 'build_archetype', file: 'src/shared/relics.ts', variable: 'RELIC_BUILD_ARCHETYPE_ORDER', mechanicPrefix: 'build' },
@@ -47,6 +47,7 @@ const fileId = (value) => `file:${value}`;
 const symbolId = (file, name) => `symbol:${file}#${name}`;
 const mechanicId = (value) => `mechanic:${value}`;
 const stateId = (value) => `state:${value}`;
+const runStateFieldId = (value) => `run_state_field:${value}`;
 const contentId = (kind, value) => `content:${kind}.${value}`;
 const sha256 = (buffer) => crypto.createHash('sha256').update(buffer).digest('hex');
 const uniqueSorted = (values) => [...new Set(values)].sort((a, b) => a.localeCompare(b));
@@ -151,6 +152,157 @@ const readTsConfig = (repoRoot) => {
     return ts.parseJsonConfigFileContent(result.config, ts.sys, repoRoot, undefined, configPath);
 };
 
+const syntaxPropertyName = (name) => {
+    if (ts.isIdentifier(name) || ts.isStringLiteralLike(name) || ts.isNumericLiteral(name)) return name.text;
+    return null;
+};
+
+const isRuntimeAssignmentTarget = (node) => {
+    const parent = node.parent;
+    if (ts.isBinaryExpression(parent) && parent.left === node) {
+        return parent.operatorToken.kind >= ts.SyntaxKind.FirstAssignment &&
+            parent.operatorToken.kind <= ts.SyntaxKind.LastAssignment;
+    }
+    return (ts.isPrefixUnaryExpression(parent) || ts.isPostfixUnaryExpression(parent)) &&
+        (parent.operator === ts.SyntaxKind.PlusPlusToken || parent.operator === ts.SyntaxKind.MinusMinusToken);
+};
+
+const buildRunStateFieldIndex = (repoRoot, sourceFiles, checker) => {
+    const contractsFile = sourceFiles.find((sourceFile) => fromRoot(repoRoot, sourceFile.fileName) === 'src/shared/contracts.ts');
+    const declaration = contractsFile?.statements.find(
+        (statement) => ts.isInterfaceDeclaration(statement) && statement.name.text === 'RunState'
+    );
+    if (!contractsFile || !declaration || !ts.isInterfaceDeclaration(declaration)) {
+        throw new Error('Unable to locate the authoritative RunState interface in src/shared/contracts.ts.');
+    }
+
+    const fields = declaration.members.flatMap((member) => {
+        if (!ts.isPropertySignature(member) || !member.name) return [];
+        const name = syntaxPropertyName(member.name);
+        if (!name) return [];
+        const position = contractsFile.getLineAndCharacterOfPosition(member.name.getStart(contractsFile));
+        return [{
+            id: runStateFieldId(name),
+            name,
+            source: { path: 'src/shared/contracts.ts', line: position.line + 1 },
+            readReferences: [],
+            writeReferences: []
+        }];
+    });
+    const byName = new Map(fields.map((field) => [field.name, field]));
+    const membersByName = new Map(
+        declaration.members.flatMap((member) => {
+            if (!ts.isPropertySignature(member) || !member.name) return [];
+            const name = syntaxPropertyName(member.name);
+            return name ? [[name, member]] : [];
+        })
+    );
+    const symbolOwnsField = (symbol, fieldName) =>
+        Boolean(symbol?.declarations?.some((candidate) => candidate === membersByName.get(fieldName)));
+    const typeOwnsField = (type, fieldName, visited = new Set()) => {
+        if (!type || visited.has(type) || (type.flags & (ts.TypeFlags.Any | ts.TypeFlags.Unknown))) return false;
+        visited.add(type);
+        if (symbolOwnsField(type.getProperty?.(fieldName), fieldName)) return true;
+        if ((type.isUnion?.() || type.isIntersection?.()) && type.types.some((item) => typeOwnsField(item, fieldName, visited))) {
+            return true;
+        }
+        const apparent = checker.getApparentType(type);
+        return apparent !== type && typeOwnsField(apparent, fieldName, visited);
+    };
+    const objectLiteralOwnsField = (objectLiteral, fieldName) => {
+        const contextual = checker.getContextualType(objectLiteral);
+        if (typeOwnsField(contextual, fieldName)) return true;
+        return objectLiteral.properties.some(
+            (property) => ts.isSpreadAssignment(property) && typeOwnsField(checker.getTypeAtLocation(property.expression), fieldName)
+        );
+    };
+    const record = (fieldName, kind, sourceFile, node) => {
+        const field = byName.get(fieldName);
+        if (!field) return;
+        const file = fromRoot(repoRoot, sourceFile.fileName);
+        if (getCodeRole(file) !== 'production') return;
+        const position = sourceFile.getLineAndCharacterOfPosition(node.getStart(sourceFile));
+        const references = kind === 'read' ? field.readReferences : field.writeReferences;
+        const reference = { path: file, line: position.line + 1 };
+        if (!references.some((item) => item.path === reference.path && item.line === reference.line)) {
+            references.push(reference);
+        }
+    };
+
+    for (const sourceFile of sourceFiles) {
+        const visit = (node) => {
+            if (node === declaration) return;
+            if (ts.isPropertyAccessExpression(node)) {
+                if (symbolOwnsField(checker.getSymbolAtLocation(node.name), node.name.text)) {
+                    record(node.name.text, isRuntimeAssignmentTarget(node) ? 'write' : 'read', sourceFile, node.name);
+                }
+            } else if (ts.isElementAccessExpression(node) && node.argumentExpression && ts.isStringLiteralLike(node.argumentExpression)) {
+                const name = node.argumentExpression.text;
+                if (typeOwnsField(checker.getTypeAtLocation(node.expression), name)) {
+                    record(name, isRuntimeAssignmentTarget(node) ? 'write' : 'read', sourceFile, node.argumentExpression);
+                }
+            } else if (ts.isPropertyAssignment(node)) {
+                const name = syntaxPropertyName(node.name);
+                if (name && ts.isObjectLiteralExpression(node.parent) && objectLiteralOwnsField(node.parent, name)) {
+                    record(name, 'write', sourceFile, node.name);
+                }
+            } else if (ts.isShorthandPropertyAssignment(node)) {
+                if (ts.isObjectLiteralExpression(node.parent) && objectLiteralOwnsField(node.parent, node.name.text)) {
+                    record(node.name.text, 'write', sourceFile, node.name);
+                }
+            } else if (ts.isBindingElement(node) && ts.isObjectBindingPattern(node.parent)) {
+                const name = node.propertyName ? syntaxPropertyName(node.propertyName) : ts.isIdentifier(node.name) ? node.name.text : null;
+                if (name && typeOwnsField(checker.getTypeAtLocation(node.parent), name)) {
+                    record(name, 'read', sourceFile, node.propertyName ?? node.name);
+                }
+            } else if (
+                ts.isBinaryExpression(node) &&
+                node.operatorToken.kind === ts.SyntaxKind.InKeyword &&
+                ts.isStringLiteralLike(node.left) &&
+                typeOwnsField(checker.getTypeAtLocation(node.right), node.left.text)
+            ) {
+                record(node.left.text, 'read', sourceFile, node.left);
+            }
+            ts.forEachChild(node, visit);
+        };
+        visit(sourceFile);
+    }
+
+    const relationships = [];
+    for (const field of fields) {
+        field.readReferences.sort((a, b) => `${a.path}:${a.line}`.localeCompare(`${b.path}:${b.line}`));
+        field.writeReferences.sort((a, b) => `${a.path}:${a.line}`.localeCompare(`${b.path}:${b.line}`));
+        relationships.push({
+            id: `declares:${fileId(field.source.path)}->${field.id}`,
+            source: fileId(field.source.path),
+            target: field.id,
+            kind: 'declares',
+            label: `L${field.source.line}`
+        });
+        for (const reference of field.readReferences) {
+            relationships.push({
+                id: `reads:${fileId(reference.path)}->${field.id}:L${reference.line}`,
+                source: fileId(reference.path),
+                target: field.id,
+                kind: 'reads',
+                label: `L${reference.line}`
+            });
+        }
+        for (const reference of field.writeReferences) {
+            relationships.push({
+                id: `writes:${fileId(reference.path)}->${field.id}:L${reference.line}`,
+                source: fileId(reference.path),
+                target: field.id,
+                kind: 'writes',
+                label: `L${reference.line}`
+            });
+        }
+    }
+    fields.sort((a, b) => a.id.localeCompare(b.id));
+    relationships.sort((a, b) => a.id.localeCompare(b.id));
+    return { fields, relationships };
+};
+
 const buildCodeIndex = (repoRoot) => {
     const parsed = readTsConfig(repoRoot);
     const program = ts.createProgram({
@@ -247,9 +399,11 @@ const buildCodeIndex = (repoRoot) => {
             });
         }
     }
+    const runState = buildRunStateFieldIndex(repoRoot, sourceFiles, checker);
+    relationships.push(...runState.relationships);
     symbols.sort((a, b) => a.id.localeCompare(b.id));
     relationships.sort((a, b) => a.id.localeCompare(b.id));
-    return { files, symbols, relationships };
+    return { files, symbols, runStateFields: runState.fields, relationships };
 };
 
 const buildContentIndex = (repoRoot) => {
@@ -391,7 +545,7 @@ const buildGameplayIndex = (repoRoot, playerVisibleStates) => {
     return { mechanics, states: normalizedStates, relationships, graph };
 };
 
-const buildDiagnostics = (repoRoot, gameplay, content, playerVisibleStates) => {
+const buildDiagnostics = (repoRoot, gameplay, content, playerVisibleStates, runStateFields) => {
     const diagnostics = [];
     const mechanicIds = new Set(gameplay.mechanics.map((mechanic) => mechanic.mechanicId));
     const gameplayDegree = new Map(gameplay.mechanics.map((mechanic) => [mechanic.mechanicId, 0]));
@@ -439,6 +593,18 @@ const buildDiagnostics = (repoRoot, gameplay, content, playerVisibleStates) => {
             diagnostics.push({ severity: 'warning', code: 'write_without_reader', subject: state.name, detail: `Written by ${state.writtenBy.join(', ')}` });
         }
     }
+    for (const field of runStateFields) {
+        if (field.readReferences.length === 0) {
+            diagnostics.push({
+                severity: 'error',
+                code: 'run_state_field_without_reader',
+                subject: field.name,
+                detail: field.writeReferences.length > 0
+                    ? `Written at ${field.writeReferences.map((reference) => `${reference.path}:${reference.line}`).join(', ')} but never read by production source.`
+                    : 'Declared on RunState but never read or written by production source.'
+            });
+        }
+    }
     const modeledMechanicIds = new Set(gameplay.mechanics.map((mechanic) => mechanic.mechanicId));
     for (const registry of CONTENT_REGISTRIES) {
         const uncovered = content
@@ -462,7 +628,7 @@ export const buildAiRepoModel = (repoRoot = defaultRepoRoot) => {
     const content = buildContentIndex(repoRoot);
     const playerVisibleStates = new Set(readLiteralRegistryValues(repoRoot, PLAYER_VISIBLE_STATE_REGISTRY));
     const gameplay = buildGameplayIndex(repoRoot, playerVisibleStates);
-    const diagnostics = buildDiagnostics(repoRoot, gameplay, content.content, playerVisibleStates);
+    const diagnostics = buildDiagnostics(repoRoot, gameplay, content.content, playerVisibleStates, code.runStateFields);
     const relationships = [...code.relationships, ...content.relationships, ...gameplay.relationships].sort((a, b) => a.id.localeCompare(b.id));
     return {
         schemaVersion: MODEL_VERSION,
@@ -475,6 +641,8 @@ export const buildAiRepoModel = (repoRoot = defaultRepoRoot) => {
             contentItemCount: content.content.length,
             mechanicCount: gameplay.mechanics.length,
             stateFieldCount: gameplay.states.length,
+            runStateFieldCount: code.runStateFields.length,
+            dormantRunStateFieldCount: code.runStateFields.filter((field) => field.readReferences.length === 0).length,
             playerVisibleStateCount: playerVisibleStates.size,
             relationshipCount: relationships.length
         },
@@ -484,6 +652,7 @@ export const buildAiRepoModel = (repoRoot = defaultRepoRoot) => {
         content: content.content,
         mechanics: gameplay.mechanics,
         states: gameplay.states,
+        runStateFields: code.runStateFields,
         playerVisibleStates: [...playerVisibleStates].sort((a, b) => a.localeCompare(b)),
         relationships,
         diagnostics
@@ -493,6 +662,14 @@ export const buildAiRepoModel = (repoRoot = defaultRepoRoot) => {
 export const validateAiRepoModel = (model) => {
     const issues = [];
     if (model.schemaVersion !== MODEL_VERSION) issues.push(`Unsupported schemaVersion ${model.schemaVersion}.`);
+    const runStateFields = Array.isArray(model.runStateFields) ? model.runStateFields : [];
+    if (runStateFields.length !== model.repository.runStateFieldCount) {
+        issues.push('repository.runStateFieldCount does not match runStateFields.');
+    }
+    const dormantRunStateFields = runStateFields.filter((field) => field.readReferences.length === 0);
+    if (dormantRunStateFields.length !== model.repository.dormantRunStateFieldCount) {
+        issues.push('repository.dormantRunStateFieldCount does not match runStateFields.');
+    }
     const playerVisibleStates = Array.isArray(model.playerVisibleStates) ? model.playerVisibleStates : [];
     if (playerVisibleStates.length !== model.repository.playerVisibleStateCount) {
         issues.push('repository.playerVisibleStateCount does not match playerVisibleStates.');
@@ -513,7 +690,8 @@ export const validateAiRepoModel = (model) => {
         ...model.symbols.map((node) => node.id),
         ...model.content.map((node) => node.id),
         ...model.mechanics.map((node) => node.id),
-        ...model.states.map((node) => node.id)
+        ...model.states.map((node) => node.id),
+        ...runStateFields.map((node) => node.id)
     ];
     const nodeIds = new Set(allNodeIds);
     const duplicateNodeIds = uniqueSorted(allNodeIds.filter((id, index) => allNodeIds.indexOf(id) !== index));
@@ -544,7 +722,8 @@ export const queryAiRepoModel = (model, query, limit = 40) => {
         ...model.symbols.map((item) => ({ type: 'symbol', ...item })),
         ...model.content.map((item) => ({ type: 'content', ...item })),
         ...model.mechanics.map((item) => ({ type: 'mechanic', ...item })),
-        ...model.states.map((item) => ({ type: 'state', ...item }))
+        ...model.states.map((item) => ({ type: 'state', ...item })),
+        ...(model.runStateFields ?? []).map((item) => ({ type: 'run_state_field', ...item }))
     ];
     const nodes = candidates
         .filter((item) => JSON.stringify(item).toLowerCase().includes(needle))

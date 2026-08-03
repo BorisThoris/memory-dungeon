@@ -59,7 +59,7 @@
 | Two-/three-flip resolution | `board.turn_resolve` via `resolveBoardTurnThroughGameplayCore`; legacy `resolveBoardTurn` remains a compatibility export | [epic-core-memory-loop](./epic-core-memory-loop.md) |
 | Gambit three-flip resolution | `resolveGambitThree` | [epic-core-memory-loop](./epic-core-memory-loop.md) |
 | Wild pair key | `WILD_PAIR_KEY`, `wildMatchesRemaining` | [epic-core-memory-loop](./epic-core-memory-loop.md) |
-| Wild tile id (HUD / export) | `wildTileId`; discovery helper `getWildTileIdFromBoard` | [epic-core-memory-loop](./epic-core-memory-loop.md) |
+| Wild tile identity | `BoardState.tiles` + `WILD_PAIR_KEY`; derived query `getWildTileIdFromBoard` | [epic-core-memory-loop](./epic-core-memory-loop.md) |
 | Glass / decoy | `boardHasGlassDecoy`, `DECOY` handling | [epic-mutators](./epic-mutators.md), core |
 | Shifting spotlight scoring + rotation | `shiftingSpotlightMatchDelta`, `withRotatedShiftingSpotlight` | [epic-mutators](./epic-mutators.md), [epic-board-rendering-assists](./epic-board-rendering-assists.md) |
 | Cursed pair early match flag | `cursedMatchedEarlyThisFloor` | [epic-core-memory-loop](./epic-core-memory-loop.md) |
@@ -269,14 +269,12 @@ Source: [`RunState`](../../src/shared/contracts.ts) interface.
 | `freeShuffleThisFloor` | Relic: first shuffle free this floor | [epic-relics](./epic-relics.md) |
 | `gauntletDeadlineMs` | Run-wide countdown or null | [epic-lives-and-pressure](./epic-lives-and-pressure.md) |
 | `gauntletSessionDurationMs` | Configured gauntlet length (ms) at run start; used for **restart** | [epic-lives-and-pressure](./epic-lives-and-pressure.md) |
-| `dailyStreakCount` | Cosmetic streak on run | [epic-modes-and-runs](./epic-modes-and-runs.md) |
 | `flipHistory` | Recent flip ids (ghost / export) | [epic-modes-and-runs](./epic-modes-and-runs.md) |
 | `peekCharges` | Peek power budget | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
 | `peekRevealedTileIds` | Ephemeral peek faces | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
 | `undoUsesThisFloor` | Undo resolving budget | [epic-run-session-flow](./epic-run-session-flow.md) |
 | `gambitAvailableThisFloor` | Third flip allowed once | [epic-core-memory-loop](./epic-core-memory-loop.md) |
 | `gambitThirdFlipUsed` | Gambit consumed | [epic-core-memory-loop](./epic-core-memory-loop.md) |
-| `wildTileId` | Contract field; pairing uses `pairKey` in sim | [epic-core-memory-loop](./epic-core-memory-loop.md) |
 | `wildMatchesRemaining` | Wild joker uses left | [epic-core-memory-loop](./epic-core-memory-loop.md) |
 | `strayRemoveCharges` | Stray remover budget | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
 | `matchScoreMultiplier` | Shuffle tax stacks | [epic-scoring-objectives](./epic-scoring-objectives.md) |

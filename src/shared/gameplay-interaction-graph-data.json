@@ -1,5 +1,5 @@
 {
-  "version": 63,
+  "version": 64,
   "mechanics": [
     {
       "id": "trait.echo",
@@ -1807,6 +1807,19 @@
       "blocks": [],
       "softlockGuards": ["strict-command-schema", "live-shop-interlude", "one-reroll-per-visit", "affordable-only", "deterministic-stock", "required-key-priority", "json-round-trip"],
       "tests": ["src/shared/gameplay-core.test.ts", "src/shared/gameplay-core-simulation.test.ts", "src/shared/shop-rules.test.ts", "src/renderer/store/shopSurfaceState.test.ts", "src/renderer/store/useAppStore.test.ts", "src/renderer/store/gameplayFeedbackAdapter.test.ts", "src/renderer/components/ShopScreen.test.tsx"]
+    },
+    {
+      "id": "simulation.ai_repository_model",
+      "label": "Source-Derived AI Repository Model",
+      "kind": "simulation",
+      "role": "compiler_derived_repository_run_state_and_gameplay_relationship_gate",
+      "evidence": ["scripts/ai-repo-model.mjs", "src/shared/contracts.ts", "src/shared/gameplay-interaction-graph-data.json", "src/shared/gameplay-feedback-facts.ts", ".ai/README.md"],
+      "reads": ["repositoryFiles", "RunState", "gameplayInteractionGraph", "contentRegistries", "playerVisibleFieldRegistry"],
+      "writes": ["repositoryModelReport", "runStateFieldUsageReport", "modelDiagnosticsReport"],
+      "enables": ["core.gameplay_commands", "feedback.gameplay_hud", "persistence.run_summary", "safety.softlock_fairness", "simulation.gameplay_replay"],
+      "blocks": [],
+      "softlockGuards": ["compiler-derived-run-state-fields", "exact-source-references", "dormant-run-state-field-error", "generated-model-drift-check", "zero-diagnostics"],
+      "tests": ["src/shared/ai-repo-model.test.ts", "src/shared/gameplay-interaction-graph.test.ts"]
     }
   ],
   "edges": [
@@ -2445,6 +2458,11 @@
     { "source": "shop.stock_reroll", "target": "feedback.gameplay_hud", "kind": "displays", "label": "announces accepted spend and remaining wallet from the typed event" },
     { "source": "shop.stock_reroll", "target": "persistence.run_summary", "kind": "persists", "label": "retains exact old and refreshed offer identities" },
     { "source": "shop.stock_reroll", "target": "simulation.gameplay_replay", "kind": "tested_by", "label": "replays JSON-round-tripped stock refresh from pre-choice state" },
+    { "source": "simulation.ai_repository_model", "target": "core.gameplay_commands", "kind": "gates", "label": "indexes authoritative command symbols state and tests" },
+    { "source": "simulation.ai_repository_model", "target": "feedback.gameplay_hud", "kind": "gates", "label": "checks player-visible state and feedback relationships" },
+    { "source": "simulation.ai_repository_model", "target": "persistence.run_summary", "kind": "gates", "label": "maps durable state and save boundaries" },
+    { "source": "simulation.ai_repository_model", "target": "safety.softlock_fairness", "kind": "gates", "label": "keeps safety evidence discoverable and tested" },
+    { "source": "simulation.ai_repository_model", "target": "simulation.gameplay_replay", "kind": "tested_by", "label": "drift checks preserve replay evidence and exact source references" },
     { "source": "route.mystery", "target": "progression.run_flow", "kind": "modifies", "label": "changes next decision" }
   ],
   "coverage": {

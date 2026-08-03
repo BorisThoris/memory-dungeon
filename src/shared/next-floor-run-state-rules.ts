@@ -5,10 +5,7 @@ import {
     type RunState
 } from './contracts';
 import { hasRewardPerk } from './bonus-rewards';
-import {
-    boardHasGlassDecoy,
-    getWildTileIdFromBoard
-} from './board-inspection';
+import { boardHasGlassDecoy } from './board-inspection';
 import { countFindablePairs } from './board-tile-generation-rules';
 import { createTimerState } from './run-timer-rules';
 import { calculateRating } from './scoring-rules';
@@ -109,10 +106,8 @@ export const createNextFloorRunState = (
         dungeonTrapsResolvedThisFloor: 0,
         dungeonTreasuresOpenedThisFloor: 0,
         dungeonGatewaysUsedThisFloor: 0,
-        dungeonShopVisitedThisFloor: false,
         enemyHazardHitsThisFloor: 0,
         enemyHazardsDefeatedThisFloor: 0,
-        wildTileId: getWildTileIdFromBoard(nextBoard),
         timerState: createTimerState({ memorizeRemainingMs: options.memorizeRemainingMs }),
         lastLevelResult: null,
         stats: {

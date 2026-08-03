@@ -21,7 +21,7 @@ import { hasRunRelic } from './relics';
 import { deriveDailyMutatorIndex, deriveDailyRunSeed, formatDailyDateKeyUtc } from './rng';
 import { createDungeonRunMapState } from './run-map';
 import { countFindablePairs } from './board-tile-generation-rules';
-import { boardHasGlassDecoy, getWildTileIdFromBoard } from './board-inspection';
+import { boardHasGlassDecoy } from './board-inspection';
 import { DECOY_PAIR_KEY } from './tile-identity';
 import { getMemorizeDurationForRun } from './scoring-rules';
 import { createSessionStats } from './session-stats-rules';
@@ -167,14 +167,12 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
         gauntletDeadlineMs:
             options.gauntletDurationMs != null ? Date.now() + options.gauntletDurationMs : null,
         gauntletSessionDurationMs: options.gauntletDurationMs ?? null,
-        dailyStreakCount: 0,
         flipHistory: [],
         peekCharges,
         peekRevealedTileIds: [],
         undoUsesThisFloor: 1,
         gambitAvailableThisFloor: true,
         gambitThirdFlipUsed: false,
-        wildTileId: getWildTileIdFromBoard(board),
         wildMatchesRemaining: enableWildJoker ? 1 : 0,
         strayRemoveCharges: options.initialStrayRemoveCharges ?? 0,
         matchScoreMultiplier: 1,
@@ -240,7 +238,6 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
         dungeonGatewaysUsedThisFloor: 0,
         dungeonKeys: {},
         dungeonMasterKeys: 0,
-        dungeonShopVisitedThisFloor: false,
         enemyHazardHitsThisFloor: 0,
         enemyHazardsDefeatedThisFloor: 0
     };

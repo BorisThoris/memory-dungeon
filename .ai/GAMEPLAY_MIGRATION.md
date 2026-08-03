@@ -905,6 +905,21 @@ The second obsolete board-power intent seam is now closed:
 
 Graph v63 records the no-serialized-row-arm invariant on Region Shuffle and typed tile input, completing direct row ownership without changing player-facing rules.
 
+## Sixty-fourth vertical slice: Compiler-Derived RunState Ownership Index
+
+The semantic model now audits the active gameplay contract directly instead of relying only on curated graph state names:
+
+1. Model schema v3 extracts every `RunState` property from the TypeScript compiler tree with its exact declaration line and production read/write references.
+2. Each field is a queryable `run_state_field:*` node. Typed `declares`, `reads`, and `writes` relationships connect contract and consumer files back to the active-run state boundary with exact lines.
+3. A `run_state_field_without_reader` error now rejects any active-run field that is only initialized, reset, or written. Generated-model freshness and zero-diagnostic checks therefore enforce state ownership continuously.
+4. The first audit found three real dormant fields. `dailyStreakCount` was a cosmetic zero initialized and never consumed; `dungeonShopVisitedThisFloor` duplicated authoritative `BoardState.dungeonShopVisited`; and `wildTileId` duplicated the wild tile already identified by `BoardState.tiles` plus `WILD_PAIR_KEY`. All three are removed rather than allowlisted.
+5. The source-derived index stays distinct from curated semantic state: exact TypeScript ownership answers “where is this field read or written,” while graph state and edges answer “what gameplay relationship does it represent.” Queries can return both views.
+6. Save schema remains 6 because active `RunState` is not persisted. Daily profile data, board shop visit behavior, shop offers, rerolls, feedback, and replay outcomes are unchanged.
+7. Graph v64 adds the AI repository model as an executable simulation/gate node connected to command ownership, HUD feedback, persistence, softlock safety, and replay evidence.
+8. Regeneration records 127 source-derived `RunState` fields, 14,497 relationships, the same 27 player-visible states, and zero diagnostics.
+
+Graph v64 makes dormant active-run state a source-derived build failure and records the model itself as part of the gameplay architecture rather than passive documentation.
+
 ## Current slice status
 
 Implemented in the Conduit Cartographer vertical slice:
@@ -924,5 +939,5 @@ Implemented in the Conduit Cartographer vertical slice:
 Still required before the vertical slice is complete:
 
 - extend the shared player-visible registry when additional gameplay ownership enters the core, rather than adding renderer or model-only field lists;
-- use Graph v63 diagnostics and nine-build traces to select the next least-overlapping cohesive loop or architectural ownership seam, without presenting simulator survival as human win-rate proof;
+- use Graph v64 diagnostics and nine-build traces to select the next least-overlapping cohesive loop or architectural ownership seam, without presenting simulator survival as human win-rate proof;
 - continue migrating cohesive player builds rather than adding isolated definitions, using the graph diagnostics to choose the next least-overlapping loop.

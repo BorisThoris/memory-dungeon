@@ -51,8 +51,7 @@ export const revealDungeonShop = (run: RunState, tileId: string): RunState => {
     });
     const nextRun: RunState = {
         ...run,
-        board: nextBoard,
-        dungeonShopVisitedThisFloor: true
+        board: nextBoard
     };
     const existingShopOffers = runShopOffers(run.shopOffers);
     return {

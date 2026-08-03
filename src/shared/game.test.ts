@@ -41,7 +41,6 @@ import {
     buildBoard,
     countFindablePairs,
     countFullyHiddenPairs,
-    getWildTileIdFromBoard,
     inspectBoardFairness,
     isBoardComplete
 } from './board-generation';
@@ -4987,7 +4986,6 @@ describe('dungeon cards', () => {
         expect(opened.status).toBe('playing');
         expect(opened.shopGold).toBe(3);
         expect(opened.shopOffers.length).toBeGreaterThan(0);
-        expect(opened.dungeonShopVisitedThisFloor).toBe(true);
         expect(opened.board!.dungeonShopVisited).toBe(true);
         const rerolled = rerollShopOffers({ ...opened, shopGold: 10 });
         const reopened = revealDungeonShop(rerolled, 'manual-shop');
@@ -8162,32 +8160,14 @@ describe('applyFlashPair', () => {
     });
 });
 
-describe('wildTileId bookkeeping', () => {
-    it('sets wildTileId to the wild tile id in createWildRun', () => {
-        const run = createWildRun(0);
-        expect(run.board).not.toBeNull();
-        const board = run.board!;
-        const wild = board.tiles.find((t) => t.pairKey === WILD_PAIR_KEY);
-        expect(wild).toBeDefined();
-        expect(run.wildTileId).toBe(wild!.id);
-        expect(getWildTileIdFromBoard(board)).toBe(wild!.id);
-    });
-
-    it('leaves wildTileId null when no wild tile is on the board', () => {
-        const run = createNewRun(0, { gameMode: 'endless' });
-        expect(run.board).not.toBeNull();
-        expect(run.wildTileId).toBeNull();
-        expect(getWildTileIdFromBoard(run.board!)).toBeNull();
-    });
-
+describe('wild joker consumption', () => {
     it('consumes one token per wild match and journals the wildcard bridge', () => {
         const wild = createTile('wild', WILD_PAIR_KEY, 'Wild');
         const target = createTile('a1', 'A', 'A');
         const withTwoTokens = {
             ...createRun([wild, target, createTile('a2', 'A', 'A')]),
             status: 'playing' as const,
-            wildMatchesRemaining: 2,
-            wildTileId: wild.id
+            wildMatchesRemaining: 2
         };
 
         const resolved = resolveBoardTurn(flipTile(flipTile(withTwoTokens, wild.id), target.id));
@@ -8209,36 +8189,6 @@ describe('wildTileId bookkeeping', () => {
         ]));
     });
 
-    it('keeps wildTileId aligned with the board after advanceToNextLevel', () => {
-        const start = finishMemorizePhase(createWildRun(0));
-        expect(start.wildTileId).not.toBeNull();
-        const b = start.board!;
-        const cleared = {
-            ...start,
-            status: 'levelComplete' as const,
-            lastLevelResult: {
-                level: b.level,
-                scoreGained: 100,
-                rating: 'S' as const,
-                livesRemaining: start.lives,
-                perfect: true,
-                mistakes: 0,
-                clearLifeReason: 'perfect' as const,
-                clearLifeGained: 0
-            },
-            board: {
-                ...b,
-                matchedPairs: b.pairCount,
-                flippedTileIds: [],
-                tiles: b.tiles.map((t) => ({ ...t, state: 'matched' as const }))
-            }
-        };
-        const next = advanceToNextLevel(cleared);
-        expect(next.board).not.toBeNull();
-        expect(next.wildTileId).toBe(getWildTileIdFromBoard(next.board!));
-        expect(next.wildMatchesRemaining).toBe(1);
-        expect(next.wildTileId).not.toBeNull();
-    });
 });
 
 describe('wild run with scholar-style contracts', () => {

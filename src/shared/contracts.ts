@@ -990,8 +990,6 @@ export interface RunState {
     gauntletDeadlineMs: number | null;
     /** Gauntlet: configured session length (ms) at run start; used for restart and diagnostics. */
     gauntletSessionDurationMs: number | null;
-    /** Cosmetic daily streak count (low pressure). */
-    dailyStreakCount: number;
     /** Last run flip tile ids (local ghost / export). */
     flipHistory: string[];
     /** H1 Peek: charges and ephemeral reveals (do not count as committed flips). */
@@ -1002,11 +1000,6 @@ export interface RunState {
     /** H3 Gambit: one third-flip attempt per floor. */
     gambitAvailableThisFloor: boolean;
     gambitThirdFlipUsed: boolean;
-    /**
-     * H4 Wild: tile id of the wild joker when `board` includes `WILD_PAIR_KEY`; null if no wild tile is in play.
-     * Matching logic still uses `pairKey`; this field is metadata (HUD, export, diagnostics).
-     */
-    wildTileId: string | null;
     wildMatchesRemaining: number;
     /** Stray remover power charges (remove one completion-safe hidden singleton from play). */
     strayRemoveCharges: number;
@@ -1096,7 +1089,6 @@ export interface RunState {
     dungeonGatewaysUsedThisFloor: number;
     dungeonKeys: Partial<Record<DungeonKeyKind, number>>;
     dungeonMasterKeys: number;
-    dungeonShopVisitedThisFloor: boolean;
     enemyHazardHitsThisFloor: number;
     enemyHazardsDefeatedThisFloor: number;
 }

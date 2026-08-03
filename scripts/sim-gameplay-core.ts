@@ -52,7 +52,6 @@ const initialRunBase = {
     gameMode: 'endless',
     practiceMode: true,
     wildMenuRun: true,
-    wildTileId: 'wild',
     wildMatchesRemaining: 1,
     flipHistory: [],
     timerState: createTimerState({ memorizeRemainingMs: 900 }),
