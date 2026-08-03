@@ -10,9 +10,12 @@ import {
     createGameplayShuffleCommand,
     createGameplayStrayRemoveCommand,
     createGameplayTileSwapCommand,
-    createGameplayUndoResolveCommand,
-    gameplayEventSchema
+    createGameplayUndoResolveCommand
 } from '../../shared/gameplay-core-contracts';
+import {
+    applyDestroyPairThroughGameplayCore,
+    applyTileFlipThroughGameplayCore
+} from '../../shared/gameplay-core-adapters';
 import {
     chooseDungeonExitActivationSpend,
     type DungeonExitActivationSpend
@@ -21,14 +24,10 @@ import { getDungeonExitStatus } from '../../shared/dungeon-board-status';
 import { reduceGameplayCommand } from '../../shared/gameplay-core';
 import { appendGameplayJournal } from '../../shared/gameplay-journal';
 import {
-    applyDestroyPair,
     armRegionShuffleRow,
     collectDestroyEligibleTileIds,
     toggleStrayRemoveArmed
 } from '../../shared/board-powers';
-import {
-    flipTile
-} from '../../shared/turn-resolution';
 import { isResumableLifecycleState, lifecycleStateFromRun } from '../../shared/run-lifecycle-machine';
 import {
     BOARD_FLOATER_POP_CLEAR,
@@ -598,23 +597,16 @@ export const createArmedBoardPowerPressResult = ({
     }
 
     if (canApplyAfterContact && destroyPairArmed) {
-        const nextRun = applyDestroyPair(run, tileId);
-        if (nextRun === run) {
+        const result = applyDestroyPairThroughGameplayCore(run, tileId);
+        if (!result.accepted) {
             return enemyContacted ? { kind: 'persistEnemyContact', run } : { kind: 'handled' };
         }
 
         return {
             kind: 'destroyApplied',
-            run: nextRun,
-            resolvesRun: nextRun.status === 'levelComplete' || nextRun.status === 'gameOver',
-            events: (nextRun.gameplayEventJournal ?? []).flatMap((event) => {
-                const parsed = gameplayEventSchema.safeParse(event);
-                return parsed.success &&
-                    parsed.data.commandId ===
-                        `destroy-pair:${run.runSeed}:${run.board?.level ?? 0}:${run.destroyPairCharges}:${tileId}`
-                    ? [parsed.data]
-                    : [];
-            })
+            run: result.run,
+            resolvesRun: result.run.status === 'levelComplete' || result.run.status === 'gameOver',
+            events: result.events
         };
     }
 
@@ -634,9 +626,10 @@ export const createOrdinaryTileFlipResult = ({
     run: RunState;
     tileId: string;
 }): OrdinaryTileFlipResult => {
-    const nextRun = flipTile(run, tileId);
+    const transition = applyTileFlipThroughGameplayCore(run, tileId);
+    const nextRun = transition.run;
 
-    if (nextRun === run) {
+    if (!transition.accepted) {
         return {
             kind: 'unchanged',
             clearBoardInteraction: enemyContacted,
@@ -689,7 +682,8 @@ export const createGambitThirdPickPressResult = (
     }
     const intentRun = appendGameplayJournal(actionRun, [command], commandResult.events);
     const flippedBefore = actionRun.board?.flippedTileIds.length ?? 0;
-    const transitionedRun = flipTile(intentRun, tileId);
+    const flipTransition = applyTileFlipThroughGameplayCore(intentRun, tileId);
+    const transitionedRun = flipTransition.run;
 
     const flippedAfter = transitionedRun.board?.flippedTileIds.length ?? 0;
     const pressedTileAfter = transitionedRun.board?.tiles.find((tile) => tile.id === tileId) ?? null;

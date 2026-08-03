@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { BOARD_FLOATER_POP_CLEAR } from './matchScorePop';
 import type { BoardState, RunState, Tile } from '../../shared/contracts';
@@ -68,6 +70,22 @@ const pairGroups = (tiles: readonly Tile[]): Tile[][] => {
 };
 
 describe('run surface state helpers', () => {
+    it('keeps live renderer board mutations behind typed gameplay-core adapters', () => {
+        const rendererSources = [
+            'src/renderer/store/runSurfaceState.ts',
+            'src/renderer/store/dungeonPressSurfaceState.ts'
+        ].map((relativePath) => readFileSync(join(process.cwd(), relativePath), 'utf8'));
+
+        for (const source of rendererSources) {
+            expect(source).not.toMatch(
+                /import\s*\{[^}]*(?:applyDestroyPair|flipTile)(?![A-Za-z0-9_$])[^}]*\}\s*from/
+            );
+            expect(source).not.toContain('gameplayEventSchema.safeParse');
+        }
+        expect(rendererSources.join('\n')).toContain('applyTileFlipThroughGameplayCore');
+        expect(rendererSources.join('\n')).toContain('applyDestroyPairThroughGameplayCore');
+    });
+
     it('resets board interaction modes, shop return, prompt, and floaters', () => {
         expect(createRunSurfaceReset()).toEqual({
             boardPinMode: false,

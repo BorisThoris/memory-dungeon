@@ -1,5 +1,5 @@
 {
-  "version": 46,
+  "version": 47,
   "mechanics": [
     {
       "id": "trait.echo",
@@ -1748,12 +1748,12 @@
       "label": "Typed Tile Input",
       "kind": "core",
       "role": "serializable_flip_utility_contact_and_gambit_input",
-      "evidence": ["src/shared/flip-tile-transition.ts", "src/shared/tile-flip-command-transition.ts", "src/shared/dungeon-enemy-hazard-rules.ts", "src/shared/gameplay-core-contracts.ts", "src/shared/gameplay-core.ts", "src/shared/gameplay-core-simulation.ts", "scripts/sim-gameplay-core.ts", "src/renderer/store/tilePressController.ts", "src/renderer/store/runSurfaceState.ts", "src/renderer/store/dungeonPressSurfaceState.ts"],
+      "evidence": ["src/shared/flip-tile-transition.ts", "src/shared/tile-flip-command-transition.ts", "src/shared/dungeon-enemy-hazard-rules.ts", "src/shared/gameplay-core-contracts.ts", "src/shared/gameplay-core.ts", "src/shared/gameplay-core-adapters.ts", "src/shared/gameplay-core-simulation.ts", "scripts/sim-gameplay-core.ts", "src/renderer/store/tilePressController.ts", "src/renderer/store/runSurfaceState.ts", "src/renderer/store/dungeonPressSurfaceState.ts"],
       "reads": ["tileStates", "flippedTileIds", "enemyHazards", "guardTokens", "lives", "dungeonCardKind", "runStatus"],
       "writes": ["tileStates", "flippedTileIds", "lives", "guardTokens", "timerState", "gameplayCommands", "gameplayEvents"],
       "enables": ["core.board_turn_resolution", "exit.primary", "progression.run_flow"],
       "blocks": [],
-      "softlockGuards": ["strict-command-schema", "target-legality", "guard-before-life", "gambit-intent-before-flip", "single-command-state-transition", "json-round-trip"],
+      "softlockGuards": ["strict-command-schema", "target-legality", "guard-before-life", "gambit-intent-before-flip", "single-command-state-transition", "renderer-command-only-board-input", "no-renderer-compatibility-mutation-imports", "current-command-event-return", "json-round-trip"],
       "tests": ["src/shared/gameplay-core.test.ts", "src/shared/game.test.ts", "src/renderer/store/runSurfaceState.test.ts", "src/renderer/store/tilePressController.test.ts", "src/renderer/store/dungeonPressSurfaceState.test.ts"]
     },
     {

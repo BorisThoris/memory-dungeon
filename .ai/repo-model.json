@@ -5,18 +5,18 @@
     "name": "memory-dungeon",
     "trackedFileCount": 2407,
     "codeFileCount": 904,
-    "exportedSymbolCount": 3340,
+    "exportedSymbolCount": 3343,
     "contentItemCount": 56,
     "mechanicCount": 139,
     "stateFieldCount": 247,
-    "relationshipCount": 10463
+    "relationshipCount": 10468
   },
   "inventory": [
     {
       "path": ".ai/GAMEPLAY_MIGRATION.md",
       "category": "other",
-      "bytes": 77722,
-      "sha256": "af54944cc6148c5ae5928dc4a6d1109ce800aff12e382cc5ddf13266a5287f97"
+      "bytes": 79341,
+      "sha256": "615b71ceb6ea6ea11195a30cc5e8a95e62fcf01c6d425fe0c5f7fcd59801154f"
     },
     {
       "path": ".ai/README.md",
@@ -831,8 +831,8 @@
     {
       "path": "docs/internal-wiki/APP_ANALYSIS.md",
       "category": "documentation",
-      "bytes": 21592,
-      "sha256": "18a8f1b8ca4e17e285ed6462e22e90b884263dedb9364c42d046aadf349c1149"
+      "bytes": 21715,
+      "sha256": "6df5b17ee2e483515733b0089f1879ddb808ab254060017c282fe24f738ec12b"
     },
     {
       "path": "docs/internal-wiki/ARCHITECTURE.md",
@@ -9213,8 +9213,8 @@
     {
       "path": "src/renderer/store/dungeonPressSurfaceState.ts",
       "category": "source",
-      "bytes": 1694,
-      "sha256": "3decbb9c5162efd7f4cdbaae8f4cb2187340bb10048794a1362ea2196d14f6ae"
+      "bytes": 1848,
+      "sha256": "eab35948035e0bdb0305a8ae04405d93ae1dc327dffc65a4603cd06e72f1376b"
     },
     {
       "path": "src/renderer/store/gameplayFeedbackAdapter.test.ts",
@@ -9459,14 +9459,14 @@
     {
       "path": "src/renderer/store/runSurfaceState.test.ts",
       "category": "test",
-      "bytes": 42091,
-      "sha256": "7ae3e3a069545f2c825abfa24b8e34da82011452e308b1215f5eb35aaeb00fba"
+      "bytes": 42969,
+      "sha256": "0dcf6567dbbac2b02ac2251fd898c00b5778cd492db965841ed664307caf3ea1"
     },
     {
       "path": "src/renderer/store/runSurfaceState.ts",
       "category": "source",
-      "bytes": 25341,
-      "sha256": "ef9e2b65615d55518ee6272049e6d96d06f88d0aeff57915eede80f9a8931901"
+      "bytes": 25141,
+      "sha256": "ce86fd2266ea18ce31340024c8cb1661a17ca87602bfcbd80cc19a928526721b"
     },
     {
       "path": "src/renderer/store/runTimerController.test.ts",
@@ -10689,8 +10689,8 @@
     {
       "path": "src/shared/gameplay-core-adapters.ts",
       "category": "source",
-      "bytes": 15734,
-      "sha256": "b3c411d2da7ef226489e26c45addf1bb3767f26d2cf46c1c0763d8ff6c81d860"
+      "bytes": 17218,
+      "sha256": "e24e8b598d3201159e2f68feb31f1c577d4c7041d1c61f99c4a2e7dd4ca79ede"
     },
     {
       "path": "src/shared/gameplay-core-contracts.ts",
@@ -10767,14 +10767,14 @@
     {
       "path": "src/shared/gameplay-interaction-graph-data.json",
       "category": "source",
-      "bytes": 222646,
-      "sha256": "ec43c7288b34a4ccad8344f26fba3057d7889aaef7768457089da2e36ae1aa3f"
+      "bytes": 222801,
+      "sha256": "4b2df75159f7a11b73a67d20595eb4ba66da08da3daca9e4cdd628313c73db91"
     },
     {
       "path": "src/shared/gameplay-interaction-graph.test.ts",
       "category": "test",
-      "bytes": 97608,
-      "sha256": "fff39846862ecd13e17a016a1f22d8e16f0aff841ff3980de6e76fe6f3385e6e"
+      "bytes": 97827,
+      "sha256": "47962c262bc3291d052db8dff1b6b84f070de8a303ed19da3719940ae9d6a2ef"
     },
     {
       "path": "src/shared/gameplay-interaction-graph.ts",
@@ -21622,7 +21622,7 @@
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/dungeon-rules.ts",
-        "file:src/shared/turn-resolution.ts"
+        "file:src/shared/gameplay-core-adapters.ts"
       ],
       "exports": [
         "symbol:src/renderer/store/dungeonPressSurfaceState.ts#createDungeonTilePressSurfaceResult"
@@ -22398,7 +22398,7 @@
       "path": "src/renderer/store/runSurfaceState.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 1096,
+      "lineCount": 1114,
       "imports": [
         "file:src/renderer/store/matchScorePop.ts",
         "file:src/renderer/store/runSurfaceState.ts",
@@ -22417,18 +22417,18 @@
       "path": "src/renderer/store/runSurfaceState.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 816,
+      "lineCount": 810,
       "imports": [
         "file:src/renderer/store/matchScorePop.ts",
         "file:src/shared/board-powers.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/dungeon-board-status.ts",
         "file:src/shared/dungeon-exit-rules.ts",
+        "file:src/shared/gameplay-core-adapters.ts",
         "file:src/shared/gameplay-core-contracts.ts",
         "file:src/shared/gameplay-core.ts",
         "file:src/shared/gameplay-journal.ts",
-        "file:src/shared/run-lifecycle-machine.ts",
-        "file:src/shared/turn-resolution.ts"
+        "file:src/shared/run-lifecycle-machine.ts"
       ],
       "exports": [
         "symbol:src/renderer/store/runSurfaceState.ts#applyEnemyHazardContactThroughGameplayCore",
@@ -27006,7 +27006,7 @@
       "path": "src/shared/gameplay-core-adapters.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 442,
+      "lineCount": 484,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/floor-clear-transition.ts",
@@ -27014,16 +27014,20 @@
         "file:src/shared/gameplay-core.ts",
         "file:src/shared/gameplay-journal.ts",
         "file:src/shared/relic-immediate-rules.ts",
-        "file:src/shared/slayer-floor-clear-transition.ts"
+        "file:src/shared/slayer-floor-clear-transition.ts",
+        "file:src/shared/tile-flip-command-transition.ts"
       ],
       "exports": [
         "symbol:src/shared/gameplay-core-adapters.ts#activateDebugRevealThroughGameplayCore",
         "symbol:src/shared/gameplay-core-adapters.ts#advanceFloorThroughGameplayCore",
+        "symbol:src/shared/gameplay-core-adapters.ts#applyDestroyPairThroughGameplayCore",
         "symbol:src/shared/gameplay-core-adapters.ts#applyRelicImmediateThroughGameplayCore",
+        "symbol:src/shared/gameplay-core-adapters.ts#applyTileFlipThroughGameplayCore",
         "symbol:src/shared/gameplay-core-adapters.ts#completeMemorizePhaseThroughGameplayCore",
         "symbol:src/shared/gameplay-core-adapters.ts#consumeWildMatchThroughGameplayCore",
         "symbol:src/shared/gameplay-core-adapters.ts#deactivateDebugRevealThroughGameplayCore",
         "symbol:src/shared/gameplay-core-adapters.ts#expireGauntletThroughGameplayCore",
+        "symbol:src/shared/gameplay-core-adapters.ts#GameplayBoardInputAdapterResult",
         "symbol:src/shared/gameplay-core-adapters.ts#GameplayBoardTurnAdapterResult",
         "symbol:src/shared/gameplay-core-adapters.ts#GameplayFloorAdvanceAdapterResult",
         "symbol:src/shared/gameplay-core-adapters.ts#GameplayGauntletExpireAdapterResult",
@@ -27447,7 +27451,7 @@
       "path": "src/shared/gameplay-interaction-graph.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 1569,
+      "lineCount": 1573,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/gameplay-core-contracts.ts",
@@ -40782,200 +40786,200 @@
       "name": "applyEnemyHazardContactThroughGameplayCore",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 97,
-      "endLine": 115
+      "line": 96,
+      "endLine": 114
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#canPauseRunSurface",
       "name": "canPauseRunSurface",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 153,
-      "endLine": 154
+      "line": 152,
+      "endLine": 153
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#clearRunSurfaceArmedModes",
       "name": "clearRunSurfaceArmedModes",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 759,
-      "endLine": 768
+      "line": 753,
+      "endLine": 762
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createArmedBoardPowerPressResult",
       "name": "createArmedBoardPowerPressResult",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 517,
-      "endLine": 622
+      "line": 516,
+      "endLine": 614
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createBoardPinModeToggleResult",
       "name": "createBoardPinModeToggleResult",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 156,
-      "endLine": 182
+      "line": 155,
+      "endLine": 181
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createBoardPowerContactPolicy",
       "name": "createBoardPowerContactPolicy",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 493,
-      "endLine": 515
+      "line": 492,
+      "endLine": 514
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createDestroyPairArmedToggleResult",
       "name": "createDestroyPairArmedToggleResult",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 184,
-      "endLine": 220
+      "line": 183,
+      "endLine": 219
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createDungeonExitActivationSurfaceResult",
       "name": "createDungeonExitActivationSurfaceResult",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 462,
-      "endLine": 491
+      "line": 461,
+      "endLine": 490
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createFlashPairSurfaceResult",
       "name": "createFlashPairSurfaceResult",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 412,
-      "endLine": 435
+      "line": 411,
+      "endLine": 434
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createGambitThirdPickPressResult",
       "name": "createGambitThirdPickPressResult",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 665,
-      "endLine": 757
+      "line": 658,
+      "endLine": 751
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createOrdinaryTileFlipResult",
       "name": "createOrdinaryTileFlipResult",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 624,
-      "endLine": 663
+      "line": 616,
+      "endLine": 656
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createPausedRunSurfacePatch",
       "name": "createPausedRunSurfacePatch",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 809,
-      "endLine": 815
+      "line": 803,
+      "endLine": 809
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createPeekModeToggleResult",
       "name": "createPeekModeToggleResult",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 222,
-      "endLine": 264
+      "line": 221,
+      "endLine": 263
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createRegionShuffleArmSurfaceResult",
       "name": "createRegionShuffleArmSurfaceResult",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 359,
-      "endLine": 380
+      "line": 358,
+      "endLine": 379
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createRegionShuffleSurfaceResult",
       "name": "createRegionShuffleSurfaceResult",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 382,
-      "endLine": 410
+      "line": 381,
+      "endLine": 409
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createRunSurfaceReset",
       "name": "createRunSurfaceReset",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 142,
-      "endLine": 151
+      "line": 141,
+      "endLine": 150
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createRunWithArmedModesClearedPatch",
       "name": "createRunWithArmedModesClearedPatch",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 789,
-      "endLine": 796
+      "line": 783,
+      "endLine": 790
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createRunWithBoardInteractionClearedPatch",
       "name": "createRunWithBoardInteractionClearedPatch",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 798,
-      "endLine": 807
+      "line": 792,
+      "endLine": 801
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createRunWithBoardPowersDisarmedPatch",
       "name": "createRunWithBoardPowersDisarmedPatch",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 779,
-      "endLine": 787
+      "line": 773,
+      "endLine": 781
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createRunWithPeekDisarmedPatch",
       "name": "createRunWithPeekDisarmedPatch",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 770,
-      "endLine": 777
+      "line": 764,
+      "endLine": 771
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createShuffleBoardSurfaceResult",
       "name": "createShuffleBoardSurfaceResult",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 334,
-      "endLine": 357
+      "line": 333,
+      "endLine": 356
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createStrayArmToggleResult",
       "name": "createStrayArmToggleResult",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 310,
-      "endLine": 332
+      "line": 309,
+      "endLine": 331
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createTileSwapToggleResult",
       "name": "createTileSwapToggleResult",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 266,
-      "endLine": 308
+      "line": 265,
+      "endLine": 307
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createUndoResolvingSurfaceResult",
       "name": "createUndoResolvingSurfaceResult",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 437,
-      "endLine": 460
+      "line": 436,
+      "endLine": 459
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#RunSurfaceState",
       "name": "RunSurfaceState",
       "kind": "interface",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 39,
-      "endLine": 49
+      "line": 38,
+      "endLine": 48
     },
     {
       "id": "symbol:src/renderer/store/runTimerController.ts#createRunTimerController",
@@ -49838,200 +49842,224 @@
       "name": "activateDebugRevealThroughGameplayCore",
       "kind": "value",
       "file": "src/shared/gameplay-core-adapters.ts",
-      "line": 193,
-      "endLine": 206
+      "line": 202,
+      "endLine": 215
     },
     {
       "id": "symbol:src/shared/gameplay-core-adapters.ts#advanceFloorThroughGameplayCore",
       "name": "advanceFloorThroughGameplayCore",
       "kind": "value",
       "file": "src/shared/gameplay-core-adapters.ts",
-      "line": 429,
-      "endLine": 441
+      "line": 471,
+      "endLine": 483
+    },
+    {
+      "id": "symbol:src/shared/gameplay-core-adapters.ts#applyDestroyPairThroughGameplayCore",
+      "name": "applyDestroyPairThroughGameplayCore",
+      "kind": "value",
+      "file": "src/shared/gameplay-core-adapters.ts",
+      "line": 264,
+      "endLine": 279
     },
     {
       "id": "symbol:src/shared/gameplay-core-adapters.ts#applyRelicImmediateThroughGameplayCore",
       "name": "applyRelicImmediateThroughGameplayCore",
       "kind": "value",
       "file": "src/shared/gameplay-core-adapters.ts",
-      "line": 243,
-      "endLine": 262
+      "line": 285,
+      "endLine": 304
+    },
+    {
+      "id": "symbol:src/shared/gameplay-core-adapters.ts#applyTileFlipThroughGameplayCore",
+      "name": "applyTileFlipThroughGameplayCore",
+      "kind": "value",
+      "file": "src/shared/gameplay-core-adapters.ts",
+      "line": 249,
+      "endLine": 261
     },
     {
       "id": "symbol:src/shared/gameplay-core-adapters.ts#completeMemorizePhaseThroughGameplayCore",
       "name": "completeMemorizePhaseThroughGameplayCore",
       "kind": "value",
       "file": "src/shared/gameplay-core-adapters.ts",
-      "line": 129,
-      "endLine": 141
+      "line": 138,
+      "endLine": 150
     },
     {
       "id": "symbol:src/shared/gameplay-core-adapters.ts#consumeWildMatchThroughGameplayCore",
       "name": "consumeWildMatchThroughGameplayCore",
       "kind": "value",
       "file": "src/shared/gameplay-core-adapters.ts",
-      "line": 399,
-      "endLine": 411
+      "line": 441,
+      "endLine": 453
     },
     {
       "id": "symbol:src/shared/gameplay-core-adapters.ts#deactivateDebugRevealThroughGameplayCore",
       "name": "deactivateDebugRevealThroughGameplayCore",
       "kind": "value",
       "file": "src/shared/gameplay-core-adapters.ts",
-      "line": 209,
-      "endLine": 222
+      "line": 218,
+      "endLine": 231
     },
     {
       "id": "symbol:src/shared/gameplay-core-adapters.ts#expireGauntletThroughGameplayCore",
       "name": "expireGauntletThroughGameplayCore",
       "kind": "value",
       "file": "src/shared/gameplay-core-adapters.ts",
-      "line": 144,
-      "endLine": 157
+      "line": 153,
+      "endLine": 166
+    },
+    {
+      "id": "symbol:src/shared/gameplay-core-adapters.ts#GameplayBoardInputAdapterResult",
+      "name": "GameplayBoardInputAdapterResult",
+      "kind": "interface",
+      "file": "src/shared/gameplay-core-adapters.ts",
+      "line": 111,
+      "endLine": 116
     },
     {
       "id": "symbol:src/shared/gameplay-core-adapters.ts#GameplayBoardTurnAdapterResult",
       "name": "GameplayBoardTurnAdapterResult",
       "kind": "interface",
       "file": "src/shared/gameplay-core-adapters.ts",
-      "line": 67,
-      "endLine": 72
+      "line": 69,
+      "endLine": 74
     },
     {
       "id": "symbol:src/shared/gameplay-core-adapters.ts#GameplayFloorAdvanceAdapterResult",
       "name": "GameplayFloorAdvanceAdapterResult",
       "kind": "interface",
       "file": "src/shared/gameplay-core-adapters.ts",
-      "line": 74,
-      "endLine": 79
+      "line": 76,
+      "endLine": 81
     },
     {
       "id": "symbol:src/shared/gameplay-core-adapters.ts#GameplayGauntletExpireAdapterResult",
       "name": "GameplayGauntletExpireAdapterResult",
       "kind": "interface",
       "file": "src/shared/gameplay-core-adapters.ts",
-      "line": 95,
-      "endLine": 100
+      "line": 97,
+      "endLine": 102
     },
     {
       "id": "symbol:src/shared/gameplay-core-adapters.ts#GameplayMatchRewardAdapterResult",
       "name": "GameplayMatchRewardAdapterResult",
       "kind": "interface",
       "file": "src/shared/gameplay-core-adapters.ts",
-      "line": 35,
-      "endLine": 43
+      "line": 37,
+      "endLine": 45
     },
     {
       "id": "symbol:src/shared/gameplay-core-adapters.ts#GameplayMemorizeCompleteAdapterResult",
       "name": "GameplayMemorizeCompleteAdapterResult",
       "kind": "interface",
       "file": "src/shared/gameplay-core-adapters.ts",
-      "line": 88,
-      "endLine": 93
+      "line": 90,
+      "endLine": 95
     },
     {
       "id": "symbol:src/shared/gameplay-core-adapters.ts#GameplayRelicImmediateAdapterResult",
       "name": "GameplayRelicImmediateAdapterResult",
       "kind": "interface",
       "file": "src/shared/gameplay-core-adapters.ts",
-      "line": 29,
-      "endLine": 33
+      "line": 31,
+      "endLine": 35
     },
     {
       "id": "symbol:src/shared/gameplay-core-adapters.ts#GameplayRelicOfferOpenAdapterResult",
       "name": "GameplayRelicOfferOpenAdapterResult",
       "kind": "interface",
       "file": "src/shared/gameplay-core-adapters.ts",
-      "line": 81,
-      "endLine": 86
+      "line": 83,
+      "endLine": 88
     },
     {
       "id": "symbol:src/shared/gameplay-core-adapters.ts#GameplayRunLifecycleAdapterResult",
       "name": "GameplayRunLifecycleAdapterResult",
       "kind": "interface",
       "file": "src/shared/gameplay-core-adapters.ts",
-      "line": 102,
-      "endLine": 107
+      "line": 104,
+      "endLine": 109
     },
     {
       "id": "symbol:src/shared/gameplay-core-adapters.ts#GameplaySlayerFloorClearAdapterResult",
       "name": "GameplaySlayerFloorClearAdapterResult",
       "kind": "interface",
       "file": "src/shared/gameplay-core-adapters.ts",
-      "line": 52,
-      "endLine": 59
+      "line": 54,
+      "endLine": 61
     },
     {
       "id": "symbol:src/shared/gameplay-core-adapters.ts#GameplaySlayerFloorClearInput",
       "name": "GameplaySlayerFloorClearInput",
       "kind": "interface",
       "file": "src/shared/gameplay-core-adapters.ts",
-      "line": 45,
-      "endLine": 50
+      "line": 47,
+      "endLine": 52
     },
     {
       "id": "symbol:src/shared/gameplay-core-adapters.ts#GameplayWildMatchAdapterResult",
       "name": "GameplayWildMatchAdapterResult",
       "kind": "interface",
       "file": "src/shared/gameplay-core-adapters.ts",
-      "line": 61,
-      "endLine": 65
+      "line": 63,
+      "endLine": 67
     },
     {
       "id": "symbol:src/shared/gameplay-core-adapters.ts#openRelicOfferThroughGameplayCore",
       "name": "openRelicOfferThroughGameplayCore",
       "kind": "value",
       "file": "src/shared/gameplay-core-adapters.ts",
-      "line": 414,
-      "endLine": 426
+      "line": 456,
+      "endLine": 468
     },
     {
       "id": "symbol:src/shared/gameplay-core-adapters.ts#pauseRunThroughGameplayCore",
       "name": "pauseRunThroughGameplayCore",
       "kind": "value",
       "file": "src/shared/gameplay-core-adapters.ts",
-      "line": 160,
-      "endLine": 174
+      "line": 169,
+      "endLine": 183
     },
     {
       "id": "symbol:src/shared/gameplay-core-adapters.ts#repairRunProgressionThroughGameplayCore",
       "name": "repairRunProgressionThroughGameplayCore",
       "kind": "value",
       "file": "src/shared/gameplay-core-adapters.ts",
-      "line": 225,
-      "endLine": 237
+      "line": 234,
+      "endLine": 246
     },
     {
       "id": "symbol:src/shared/gameplay-core-adapters.ts#resolveBoardTurnThroughGameplayCore",
       "name": "resolveBoardTurnThroughGameplayCore",
       "kind": "value",
       "file": "src/shared/gameplay-core-adapters.ts",
-      "line": 326,
-      "endLine": 339
+      "line": 368,
+      "endLine": 381
     },
     {
       "id": "symbol:src/shared/gameplay-core-adapters.ts#resolveFindableMatchRewardThroughGameplayCore",
       "name": "resolveFindableMatchRewardThroughGameplayCore",
       "kind": "value",
       "file": "src/shared/gameplay-core-adapters.ts",
-      "line": 269,
-      "endLine": 323
+      "line": 311,
+      "endLine": 365
     },
     {
       "id": "symbol:src/shared/gameplay-core-adapters.ts#resolveSlayerFloorClearThroughGameplayCore",
       "name": "resolveSlayerFloorClearThroughGameplayCore",
       "kind": "value",
       "file": "src/shared/gameplay-core-adapters.ts",
-      "line": 345,
-      "endLine": 396
+      "line": 387,
+      "endLine": 438
     },
     {
       "id": "symbol:src/shared/gameplay-core-adapters.ts#resumeRunThroughGameplayCore",
       "name": "resumeRunThroughGameplayCore",
       "kind": "value",
       "file": "src/shared/gameplay-core-adapters.ts",
-      "line": 177,
-      "endLine": 190
+      "line": 186,
+      "endLine": 199
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#BOARD_TACTICIAN_DEFINITIONS",
@@ -60189,7 +60217,7 @@
         },
         {
           "path": "src/shared/gameplay-core-adapters.ts",
-          "line": 23
+          "line": 24
         },
         {
           "path": "src/shared/dungeon-boss-clear-rules.ts",
@@ -60525,7 +60553,7 @@
         },
         {
           "path": "src/renderer/store/runSurfaceState.test.ts",
-          "line": 4
+          "line": 6
         }
       ],
       "enables": [
@@ -60576,7 +60604,7 @@
         },
         {
           "path": "src/renderer/store/runSurfaceState.test.ts",
-          "line": 4
+          "line": 6
         },
         {
           "path": "src/renderer/store/tilePressController.test.ts",
@@ -60641,7 +60669,7 @@
         },
         {
           "path": "src/renderer/store/runSurfaceState.test.ts",
-          "line": 4
+          "line": 6
         },
         {
           "path": "src/renderer/store/useAppStore.test.ts",
@@ -60705,7 +60733,7 @@
         },
         {
           "path": "src/renderer/store/runSurfaceState.test.ts",
-          "line": 4
+          "line": 6
         },
         {
           "path": "src/renderer/store/tilePressController.test.ts",
@@ -60940,7 +60968,7 @@
         },
         {
           "path": "src/renderer/store/runSurfaceState.test.ts",
-          "line": 2
+          "line": 4
         },
         {
           "path": "src/renderer/store/tilePressController.test.ts",
@@ -60995,6 +61023,10 @@
           "line": 8
         },
         {
+          "path": "src/shared/gameplay-core-adapters.ts",
+          "line": 29
+        },
+        {
           "path": "src/shared/gameplay-core-simulation.ts",
           "line": 2
         },
@@ -61026,7 +61058,7 @@
         },
         {
           "path": "src/renderer/store/runSurfaceState.test.ts",
-          "line": 3
+          "line": 5
         },
         {
           "path": "src/renderer/store/tilePressController.test.ts",
@@ -61049,6 +61081,9 @@
         "guard-before-life",
         "gambit-intent-before-flip",
         "single-command-state-transition",
+        "renderer-command-only-board-input",
+        "no-renderer-compatibility-mutation-imports",
+        "current-command-event-return",
         "json-round-trip"
       ]
     },
@@ -61328,7 +61363,7 @@
         },
         {
           "path": "src/renderer/store/runSurfaceState.test.ts",
-          "line": 8
+          "line": 10
         }
       ],
       "enables": [
@@ -62865,7 +62900,7 @@
         },
         {
           "path": "src/shared/gameplay-core-adapters.ts",
-          "line": 8
+          "line": 9
         },
         {
           "path": "src/shared/gameplay-core-simulation.ts",
@@ -63468,7 +63503,7 @@
         },
         {
           "path": "src/shared/gameplay-core-adapters.ts",
-          "line": 9
+          "line": 10
         },
         {
           "path": "src/shared/gameplay-core-simulation.ts",
@@ -63550,7 +63585,7 @@
         },
         {
           "path": "src/shared/gameplay-core-adapters.ts",
-          "line": 10
+          "line": 11
         },
         {
           "path": "src/shared/gameplay-core-simulation.ts",
@@ -63702,7 +63737,7 @@
         },
         {
           "path": "src/renderer/store/runSurfaceState.test.ts",
-          "line": 4
+          "line": 6
         }
       ],
       "enables": [
@@ -63753,7 +63788,7 @@
         },
         {
           "path": "src/renderer/store/runSurfaceState.test.ts",
-          "line": 4
+          "line": 6
         }
       ],
       "enables": [
@@ -63811,7 +63846,7 @@
         },
         {
           "path": "src/renderer/store/runSurfaceState.test.ts",
-          "line": 6
+          "line": 8
         },
         {
           "path": "src/renderer/store/useAppStore.test.ts",
@@ -63865,7 +63900,7 @@
         },
         {
           "path": "src/renderer/store/runSurfaceState.test.ts",
-          "line": 12
+          "line": 14
         },
         {
           "path": "src/renderer/store/tilePressController.test.ts",
@@ -63962,7 +63997,7 @@
         },
         {
           "path": "src/renderer/store/runSurfaceState.test.ts",
-          "line": 21
+          "line": 23
         }
       ],
       "enables": [
@@ -64011,7 +64046,7 @@
         },
         {
           "path": "src/renderer/store/runSurfaceState.test.ts",
-          "line": 2
+          "line": 4
         }
       ],
       "enables": [
@@ -64057,7 +64092,7 @@
         },
         {
           "path": "src/renderer/store/runSurfaceState.test.ts",
-          "line": 25
+          "line": 27
         }
       ],
       "enables": [
@@ -64159,7 +64194,7 @@
         },
         {
           "path": "src/renderer/store/runSurfaceState.test.ts",
-          "line": 27
+          "line": 29
         }
       ],
       "enables": [
@@ -64191,7 +64226,7 @@
         },
         {
           "path": "src/shared/gameplay-core-adapters.ts",
-          "line": 14
+          "line": 15
         },
         {
           "path": "src/shared/game.ts",
@@ -64436,7 +64471,7 @@
         },
         {
           "path": "src/shared/gameplay-core-adapters.ts",
-          "line": 11
+          "line": 12
         },
         {
           "path": "src/renderer/store/levelCompleteSurfaceState.ts",
@@ -66476,7 +66511,7 @@
         },
         {
           "path": "src/shared/gameplay-core-adapters.ts",
-          "line": 224
+          "line": 233
         },
         {
           "path": "src/shared/gameplay-core-simulation.ts",
@@ -86158,9 +86193,21 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/gameplay-core-adapters.ts->symbol:src/shared/gameplay-core-adapters.ts#applyDestroyPairThroughGameplayCore",
+      "source": "file:src/shared/gameplay-core-adapters.ts",
+      "target": "symbol:src/shared/gameplay-core-adapters.ts#applyDestroyPairThroughGameplayCore",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/gameplay-core-adapters.ts->symbol:src/shared/gameplay-core-adapters.ts#applyRelicImmediateThroughGameplayCore",
       "source": "file:src/shared/gameplay-core-adapters.ts",
       "target": "symbol:src/shared/gameplay-core-adapters.ts#applyRelicImmediateThroughGameplayCore",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/gameplay-core-adapters.ts->symbol:src/shared/gameplay-core-adapters.ts#applyTileFlipThroughGameplayCore",
+      "source": "file:src/shared/gameplay-core-adapters.ts",
+      "target": "symbol:src/shared/gameplay-core-adapters.ts#applyTileFlipThroughGameplayCore",
       "kind": "exports"
     },
     {
@@ -86185,6 +86232,12 @@
       "id": "exports:src/shared/gameplay-core-adapters.ts->symbol:src/shared/gameplay-core-adapters.ts#expireGauntletThroughGameplayCore",
       "source": "file:src/shared/gameplay-core-adapters.ts",
       "target": "symbol:src/shared/gameplay-core-adapters.ts#expireGauntletThroughGameplayCore",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/gameplay-core-adapters.ts->symbol:src/shared/gameplay-core-adapters.ts#GameplayBoardInputAdapterResult",
+      "source": "file:src/shared/gameplay-core-adapters.ts",
+      "target": "symbol:src/shared/gameplay-core-adapters.ts#GameplayBoardInputAdapterResult",
       "kind": "exports"
     },
     {
@@ -94451,6 +94504,12 @@
       "id": "implemented_by:mechanic:core.tile_input->file:src/shared/flip-tile-transition.ts",
       "source": "mechanic:core.tile_input",
       "target": "file:src/shared/flip-tile-transition.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:core.tile_input->file:src/shared/gameplay-core-adapters.ts",
+      "source": "mechanic:core.tile_input",
+      "target": "file:src/shared/gameplay-core-adapters.ts",
       "kind": "implemented_by"
     },
     {
@@ -104468,9 +104527,9 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/store/dungeonPressSurfaceState.ts->src/shared/turn-resolution.ts",
+      "id": "imports:src/renderer/store/dungeonPressSurfaceState.ts->src/shared/gameplay-core-adapters.ts",
       "source": "file:src/renderer/store/dungeonPressSurfaceState.ts",
-      "target": "file:src/shared/turn-resolution.ts",
+      "target": "file:src/shared/gameplay-core-adapters.ts",
       "kind": "imports"
     },
     {
@@ -105470,6 +105529,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/store/runSurfaceState.ts->src/shared/gameplay-core-adapters.ts",
+      "source": "file:src/renderer/store/runSurfaceState.ts",
+      "target": "file:src/shared/gameplay-core-adapters.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/store/runSurfaceState.ts->src/shared/gameplay-core-contracts.ts",
       "source": "file:src/renderer/store/runSurfaceState.ts",
       "target": "file:src/shared/gameplay-core-contracts.ts",
@@ -105491,12 +105556,6 @@
       "id": "imports:src/renderer/store/runSurfaceState.ts->src/shared/run-lifecycle-machine.ts",
       "source": "file:src/renderer/store/runSurfaceState.ts",
       "target": "file:src/shared/run-lifecycle-machine.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/store/runSurfaceState.ts->src/shared/turn-resolution.ts",
-      "source": "file:src/renderer/store/runSurfaceState.ts",
-      "target": "file:src/shared/turn-resolution.ts",
       "kind": "imports"
     },
     {
@@ -109955,6 +110014,12 @@
       "id": "imports:src/shared/gameplay-core-adapters.ts->src/shared/slayer-floor-clear-transition.ts",
       "source": "file:src/shared/gameplay-core-adapters.ts",
       "target": "file:src/shared/slayer-floor-clear-transition.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/gameplay-core-adapters.ts->src/shared/tile-flip-command-transition.ts",
+      "source": "file:src/shared/gameplay-core-adapters.ts",
+      "target": "file:src/shared/tile-flip-command-transition.ts",
       "kind": "imports"
     },
     {

@@ -662,6 +662,20 @@ The three retained build proofs now traverse the real floor loop instead of stop
 
 Graph v46 upgrades `simulation.build_evaluation` into a multi-floor command/event viability, matchup, balance, synergy, and replay gate connected to generated-board playthrough, run flow, board-turn facts, relic drafting, three cohesive builds, and deterministic replay.
 
+## Forty-seventh vertical slice: Typed-Only Renderer Board Input Boundary
+
+The live board no longer reaches through compatibility exports for its highest-frequency gameplay mutations:
+
+1. `applyTileFlipThroughGameplayCore` is the shared adapter for ordinary presses, Gambit's committed third press, and dungeon exit, shop, and room reveals.
+2. `applyDestroyPairThroughGameplayCore` owns Destroy command construction, reduction, journal persistence, and the exact current-command event result.
+3. `runSurfaceState` no longer imports `flipTile` or `applyDestroyPair`; its audio and completion decisions consume the typed adapter result.
+4. Destroy feedback no longer scans the retained event journal and reparses historical entries to recover the current action. The reducer's event batch is returned directly, avoiding retention- and command-id-coupled presentation logic.
+5. `dungeonPressSurfaceState` uses the same typed flip path as ordinary cards, so exit, shop, and side-room board interactions cannot bypass the replay boundary.
+6. Existing deterministic command IDs, command/event journals, tile outcomes, floor completion, trap behavior, and Gambit intent-before-flip ordering are preserved.
+7. A source-boundary test rejects renderer imports of the legacy mutation names while requiring both typed adapters, alongside behavioral coverage for ordinary, power, hazard, Gambit, exit, shop, and room presses.
+
+Graph v47 strengthens `core.tile_input` with explicit renderer-command-only, no-compatibility-import, and current-command-event guards across the shared adapter and both live board presentation surfaces.
+
 ## Current slice status
 
 Implemented in the Conduit Cartographer vertical slice:

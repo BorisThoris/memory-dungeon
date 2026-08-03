@@ -4,6 +4,7 @@ import {
     createGameplayDebugRevealActivateCommand,
     createGameplayDebugRevealDeactivateCommand,
     createGameplayBoardTurnResolveCommand,
+    createGameplayDestroyPairCommand,
     createGameplayFloorAdvanceCommand,
     createGameplayGauntletExpireCommand,
     createGameplayMemorizeCompleteCommand,
@@ -25,6 +26,7 @@ import {
 } from './slayer-floor-clear-transition';
 import { appendGameplayJournal } from './gameplay-journal';
 import { applyRelicImmediate } from './relic-immediate-rules';
+import { createTileFlipCommandForRun } from './tile-flip-command-transition';
 
 export interface GameplayRelicImmediateAdapterResult {
     run: RunState;
@@ -100,6 +102,13 @@ export interface GameplayGauntletExpireAdapterResult {
 }
 
 export interface GameplayRunLifecycleAdapterResult {
+    run: RunState;
+    command: GameplayCommand;
+    events: GameplayEvent[];
+    accepted: boolean;
+}
+
+export interface GameplayBoardInputAdapterResult {
     run: RunState;
     command: GameplayCommand;
     events: GameplayEvent[];
@@ -227,6 +236,39 @@ export const repairRunProgressionThroughGameplayCore = (
     commandId: string
 ): GameplayRunLifecycleAdapterResult => {
     const command = createGameplayProgressionRepairCommand(commandId);
+    const result = reduceGameplayCommand(run, command);
+    return {
+        accepted: result.accepted,
+        command,
+        events: result.events,
+        run: result.accepted ? appendGameplayJournal(result.run, [command], result.events) : run
+    };
+};
+
+/** Applies an ordinary or dungeon-card flip through the same command boundary used by replay. */
+export const applyTileFlipThroughGameplayCore = (
+    run: RunState,
+    tileId: string
+): GameplayBoardInputAdapterResult => {
+    const command = createTileFlipCommandForRun(run, tileId);
+    const result = reduceGameplayCommand(run, command);
+    return {
+        accepted: result.accepted,
+        command,
+        events: result.events,
+        run: result.accepted ? appendGameplayJournal(result.run, [command], result.events) : run
+    };
+};
+
+/** Spends Destroy through one explicit command and returns its authoritative events directly. */
+export const applyDestroyPairThroughGameplayCore = (
+    run: RunState,
+    tileId: string
+): GameplayBoardInputAdapterResult => {
+    const command = createGameplayDestroyPairCommand(
+        `destroy-pair:${run.runSeed}:${run.board?.level ?? 0}:${run.destroyPairCharges}:${tileId}`,
+        tileId
+    );
     const result = reduceGameplayCommand(run, command);
     return {
         accepted: result.accepted,
