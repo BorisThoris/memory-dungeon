@@ -920,6 +920,22 @@ The semantic model now audits the active gameplay contract directly instead of r
 
 Graph v64 makes dormant active-run state a source-derived build failure and records the model itself as part of the gameplay architecture rather than passive documentation.
 
+## Sixty-fifth vertical slice: Schema-Derived Gameplay Protocol Index
+
+The semantic model now treats the deterministic command/event boundary as a first-class protocol rather than ordinary strings and symbols:
+
+1. Model schema v4 extracts every `gameplayCommandSchema` and `gameplayEventSchema` discriminant directly from the Zod unions with exact declaration lines and payload field names.
+2. Command nodes record exact creators, reducer handlers, and tests. Event nodes record exact production emitters, typed consumers, renderer display consumers, and tests.
+3. Every protocol node connects to the bounded gameplay journal through `persists`; source files connect through `declares`, `creates`, `handles`, `emits`, and `consumes`, while direct tests and renderer feedback use `tested_by` and `displays`.
+4. Error diagnostics reject schema commands without an explicit reducer branch, schema events without a production emitter, any protocol variant without a direct test reference, and `feedback.requested` without a renderer consumer.
+5. `effects.apply` is now an explicit reducer branch with a compile-time exhaustive `never` boundary instead of the implicit final fallthrough.
+6. The first protocol audit found two emitted but indirectly covered events. Dedicated pure-transition tests now prove exact `bonus_relic_pick.changed` deltas and `effect.skipped` evidence for an unapplied inventory consumption.
+7. Command/event payloads, tests, persistence support, and feedback consumption are queryable with exact `gameplay_command:*` and `gameplay_event:*` node IDs.
+8. Graph v65 expands the AI repository model gate across command ownership, event emission, journal persistence, HUD display, replay, and zero-diagnostic enforcement.
+9. Regeneration records all 34 command variants and 54 event variants, 127 active-run fields, 15,570 relationships, 27 player-visible states, and zero diagnostics.
+
+Graph v65 makes protocol drift visible at the schema boundary before a new command or event can become an unhandled, unobservable, untested, or unqueryable gameplay path.
+
 ## Current slice status
 
 Implemented in the Conduit Cartographer vertical slice:
@@ -939,5 +955,5 @@ Implemented in the Conduit Cartographer vertical slice:
 Still required before the vertical slice is complete:
 
 - extend the shared player-visible registry when additional gameplay ownership enters the core, rather than adding renderer or model-only field lists;
-- use Graph v64 diagnostics and nine-build traces to select the next least-overlapping cohesive loop or architectural ownership seam, without presenting simulator survival as human win-rate proof;
+- use Graph v65 diagnostics and nine-build traces to select the next least-overlapping cohesive loop or architectural ownership seam, without presenting simulator survival as human win-rate proof;
 - continue migrating cohesive player builds rather than adding isolated definitions, using the graph diagnostics to choose the next least-overlapping loop.

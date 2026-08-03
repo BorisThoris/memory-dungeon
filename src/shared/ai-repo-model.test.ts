@@ -14,6 +14,11 @@ type AiRepoModel = {
         stateFieldCount: number;
         runStateFieldCount: number;
         dormantRunStateFieldCount: number;
+        gameplayCommandTypeCount: number;
+        gameplayEventTypeCount: number;
+        unhandledGameplayCommandTypeCount: number;
+        unemittedGameplayEventTypeCount: number;
+        untestedGameplayProtocolTypeCount: number;
         playerVisibleStateCount: number;
         relationshipCount: number;
     };
@@ -28,6 +33,24 @@ type AiRepoModel = {
         source: { path: string; line: number };
         readReferences: { path: string; line: number }[];
         writeReferences: { path: string; line: number }[];
+    }[];
+    gameplayCommands: {
+        id: string;
+        name: string;
+        source: { path: string; line: number };
+        payloadFields: string[];
+        handlerReferences: { path: string; line: number }[];
+        creatorReferences: { path: string; line: number }[];
+        testReferences: { path: string; line: number }[];
+    }[];
+    gameplayEvents: {
+        id: string;
+        name: string;
+        source: { path: string; line: number };
+        payloadFields: string[];
+        emitterReferences: { path: string; line: number }[];
+        consumerReferences: { path: string; line: number }[];
+        testReferences: { path: string; line: number }[];
     }[];
     playerVisibleStates: string[];
     relationships: { source: string; target: string; kind: string }[];
@@ -52,7 +75,7 @@ describe('AI repository model', () => {
         ).not.toThrow();
 
         const model = JSON.parse(fs.readFileSync(modelPath, 'utf8')) as AiRepoModel;
-        expect(model.schemaVersion).toBe(3);
+        expect(model.schemaVersion).toBe(4);
         expect(model.repository.trackedFileCount).toBeGreaterThan(2_000);
         expect(model.repository.codeFileCount).toBeGreaterThan(800);
         expect(model.repository.exportedSymbolCount).toBeGreaterThan(1_000);
@@ -62,6 +85,11 @@ describe('AI repository model', () => {
         expect(model.repository.runStateFieldCount).toBeGreaterThan(120);
         expect(model.repository.runStateFieldCount).toBe(model.runStateFields.length);
         expect(model.repository.dormantRunStateFieldCount).toBe(0);
+        expect(model.repository.gameplayCommandTypeCount).toBe(34);
+        expect(model.repository.gameplayEventTypeCount).toBe(54);
+        expect(model.repository.unhandledGameplayCommandTypeCount).toBe(0);
+        expect(model.repository.unemittedGameplayEventTypeCount).toBe(0);
+        expect(model.repository.untestedGameplayProtocolTypeCount).toBe(0);
         expect(model.repository.playerVisibleStateCount).toBeGreaterThanOrEqual(27);
         expect(model.repository.relationshipCount).toBeGreaterThan(2_000);
         expect(model.diagnostics).toEqual([]);
@@ -99,8 +127,61 @@ describe('AI repository model', () => {
                 expect.objectContaining({ path: 'src/shared/run-creation-rules.ts', line: expect.any(Number) })
             ])
         });
+        expect(model.gameplayCommands.every(
+            (command) => command.source.line > 0 && command.handlerReferences.length > 0 && command.testReferences.length > 0
+        )).toBe(true);
+        expect(model.gameplayEvents.every(
+            (event) => event.source.line > 0 && event.emitterReferences.length > 0 && event.testReferences.length > 0
+        )).toBe(true);
+        expect(
+            [...model.gameplayCommands, ...model.gameplayEvents].flatMap((variant) =>
+                variant.testReferences.map((reference) => reference.path)
+            )
+        ).not.toEqual(expect.arrayContaining([
+            'src/shared/ai-repo-model.test.ts',
+            'src/shared/gameplay-interaction-graph.test.ts'
+        ]));
+        expect(model.gameplayCommands.find((command) => command.name === 'effects.apply')).toMatchObject({
+            id: 'gameplay_command:effects.apply',
+            source: { path: 'src/shared/gameplay-core-contracts.ts', line: expect.any(Number) },
+            handlerReferences: expect.arrayContaining([
+                expect.objectContaining({ path: 'src/shared/gameplay-core.ts', line: expect.any(Number) })
+            ]),
+            creatorReferences: expect.arrayContaining([
+                expect.objectContaining({ path: 'src/shared/gameplay-core-contracts.ts', line: expect.any(Number) })
+            ])
+        });
+        expect(model.gameplayEvents.find((event) => event.name === 'effect.skipped')).toMatchObject({
+            id: 'gameplay_event:effect.skipped',
+            emitterReferences: expect.arrayContaining([
+                expect.objectContaining({ path: 'src/shared/gameplay-effect-transition.ts', line: expect.any(Number) })
+            ]),
+            testReferences: expect.arrayContaining([
+                expect.objectContaining({ path: 'src/shared/gameplay-effect-transition.test.ts', line: expect.any(Number) })
+            ])
+        });
+        expect(model.gameplayEvents.find((event) => event.name === 'feedback.requested')).toMatchObject({
+            consumerReferences: expect.arrayContaining([
+                expect.objectContaining({ path: 'src/renderer/store/gameplayFeedbackAdapter.ts', line: expect.any(Number) })
+            ])
+        });
         expect(model.relationships.map((edge) => edge.kind)).toEqual(
-            expect.arrayContaining(['imports', 'exports', 'declares', 'declared_by', 'implemented_by', 'tested_by', 'reads', 'writes', 'displays'])
+            expect.arrayContaining([
+                'imports',
+                'exports',
+                'declares',
+                'declared_by',
+                'implemented_by',
+                'tested_by',
+                'reads',
+                'writes',
+                'handles',
+                'creates',
+                'emits',
+                'consumes',
+                'persists',
+                'displays'
+            ])
         );
         const mechanicIds = new Set(model.mechanics.map((mechanic) => mechanic.id));
         expect(model.content.filter((item) => !mechanicIds.has(`mechanic:${item.expectedMechanicId}`))).toEqual([]);
@@ -120,7 +201,16 @@ describe('AI repository model', () => {
         const runStateQuery = JSON.parse(runStateQueryOutput) as { nodes: { id: string }[]; relationships: unknown[] };
         expect(runStateQuery.nodes.map((node) => node.id)).toContain('run_state_field:recallFocus');
         expect(runStateQuery.relationships.length).toBeGreaterThan(0);
-    }, 120_000);
+
+        const protocolQueryOutput = execFileSync(
+            process.execPath,
+            [scriptPath, '--query', 'gameplay_command:board.region_shuffle'],
+            { cwd: repoRoot, encoding: 'utf8' }
+        );
+        const protocolQuery = JSON.parse(protocolQueryOutput) as { nodes: { id: string }[]; relationships: unknown[] };
+        expect(protocolQuery.nodes.map((node) => node.id)).toContain('gameplay_command:board.region_shuffle');
+        expect(protocolQuery.relationships.length).toBeGreaterThan(0);
+    }, 180_000);
 
     it('registers model generation and drift checks in the project gates', () => {
         expect(packageJson.scripts['ai:model']).toBe('node scripts/ai-repo-model.mjs --write');

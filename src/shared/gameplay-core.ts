@@ -488,6 +488,25 @@ const applyDefinition = (
     };
 };
 
+const applyEffectsCommand = (
+    run: RunState,
+    command: Extract<GameplayCommand, { type: 'effects.apply' }>
+): GameplayCommandResult => {
+    const definition = getGameplayContentDefinition(command.definitionId);
+    if (!definition) {
+        return rejectedResult(run, command.commandId, `Unknown gameplay definition ${command.definitionId}.`, command);
+    }
+    if (definition.version !== command.definitionVersion) {
+        return rejectedResult(
+            run,
+            command.commandId,
+            `Definition version mismatch for ${definition.id}: command ${command.definitionVersion}, current ${definition.version}.`,
+            command
+        );
+    }
+    return applyDefinition(run, command, definition);
+};
+
 const applyTileFlipCommand = (
     run: RunState,
     command: Extract<GameplayCommand, { type: 'board.tile_flip' }>
@@ -2174,6 +2193,9 @@ export const reduceGameplayCommand = (run: RunState, input: unknown): GameplayCo
     if (command.type === 'run.progression_repair') {
         return applyProgressionRepairCommand(run, command);
     }
+    if (command.type === 'effects.apply') {
+        return applyEffectsCommand(run, command);
+    }
     if (command.type === 'board.peek') {
         return applyPeekCommand(run, command);
     }
@@ -2252,19 +2274,8 @@ export const reduceGameplayCommand = (run: RunState, input: unknown): GameplayCo
     if (command.type === 'wild_match.consume') {
         return applyWildMatchConsumeCommand(run, command);
     }
-    const definition = getGameplayContentDefinition(command.definitionId);
-    if (!definition) {
-        return rejectedResult(run, command.commandId, `Unknown gameplay definition ${command.definitionId}.`, command);
-    }
-    if (definition.version !== command.definitionVersion) {
-        return rejectedResult(
-            run,
-            command.commandId,
-            `Definition version mismatch for ${definition.id}: command ${command.definitionVersion}, current ${definition.version}.`,
-            command
-        );
-    }
-    return applyDefinition(run, command, definition);
+    const unhandledCommand: never = command;
+    return rejectedResult(run, 'unhandled-command', 'Parsed command has no reducer handler.', unhandledCommand);
 };
 
 export const replayGameplayCommands = (initialRun: RunState, inputs: readonly unknown[]): GameplayReplayResult => {

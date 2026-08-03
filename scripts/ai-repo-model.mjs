@@ -20,7 +20,7 @@ import ts from 'typescript';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const defaultRepoRoot = path.resolve(__dirname, '..');
 export const AI_REPO_MODEL_PATH = '.ai/repo-model.json';
-const MODEL_VERSION = 3;
+const MODEL_VERSION = 4;
 const GENERATED_PATHS = new Set([AI_REPO_MODEL_PATH]);
 const CONTENT_REGISTRIES = [
     { kind: 'build_archetype', file: 'src/shared/relics.ts', variable: 'RELIC_BUILD_ARCHETYPE_ORDER', mechanicPrefix: 'build' },
@@ -40,6 +40,10 @@ const TERMINAL_MECHANIC_IDS = new Set([
     'progression.run_flow',
     'stats.session_tracking'
 ]);
+const GAMEPLAY_PROTOCOL_COVERAGE_TEST_EXCLUSIONS = new Set([
+    'src/shared/ai-repo-model.test.ts',
+    'src/shared/gameplay-interaction-graph.test.ts'
+]);
 
 const toPosix = (value) => value.split(path.sep).join('/');
 const fromRoot = (repoRoot, value) => toPosix(path.relative(repoRoot, path.normalize(value)));
@@ -48,6 +52,8 @@ const symbolId = (file, name) => `symbol:${file}#${name}`;
 const mechanicId = (value) => `mechanic:${value}`;
 const stateId = (value) => `state:${value}`;
 const runStateFieldId = (value) => `run_state_field:${value}`;
+const gameplayCommandId = (value) => `gameplay_command:${value}`;
+const gameplayEventId = (value) => `gameplay_event:${value}`;
 const contentId = (kind, value) => `content:${kind}.${value}`;
 const sha256 = (buffer) => crypto.createHash('sha256').update(buffer).digest('hex');
 const uniqueSorted = (values) => [...new Set(values)].sort((a, b) => a.localeCompare(b));
@@ -303,6 +309,221 @@ const buildRunStateFieldIndex = (repoRoot, sourceFiles, checker) => {
     return { fields, relationships };
 };
 
+const isZodLiteralCall = (node) =>
+    ts.isCallExpression(node) &&
+    ts.isPropertyAccessExpression(node.expression) &&
+    ts.isIdentifier(node.expression.expression) &&
+    node.expression.expression.text === 'z' &&
+    node.expression.name.text === 'literal' &&
+    node.arguments.length === 1 &&
+    ts.isStringLiteralLike(node.arguments[0]);
+
+const findVariableDeclaration = (sourceFile, variableName) => {
+    let declaration = null;
+    const visit = (node) => {
+        if (ts.isVariableDeclaration(node) && ts.isIdentifier(node.name) && node.name.text === variableName) {
+            declaration = node;
+            return;
+        }
+        if (!declaration) ts.forEachChild(node, visit);
+    };
+    visit(sourceFile);
+    return declaration;
+};
+
+const extractGameplayProtocolVariants = (sourceFile, schemaName, kind) => {
+    const declaration = findVariableDeclaration(sourceFile, schemaName);
+    if (!declaration?.initializer) {
+        throw new Error(`Unable to locate ${schemaName} in src/shared/gameplay-core-contracts.ts.`);
+    }
+    const variants = [];
+    const visit = (node) => {
+        if (
+            ts.isPropertyAssignment(node) &&
+            syntaxPropertyName(node.name) === 'type' &&
+            isZodLiteralCall(node.initializer)
+        ) {
+            const literal = node.initializer.arguments[0];
+            const name = literal.text;
+            const position = sourceFile.getLineAndCharacterOfPosition(node.name.getStart(sourceFile));
+            const objectLiteral = ts.isObjectLiteralExpression(node.parent) ? node.parent : null;
+            const payloadFields = objectLiteral
+                ? objectLiteral.properties.flatMap((property) => {
+                      if (!('name' in property) || !property.name) return [];
+                      const fieldName = syntaxPropertyName(property.name);
+                      return fieldName && fieldName !== 'type' ? [fieldName] : [];
+                  })
+                : [];
+            variants.push({
+                id: kind === 'command' ? gameplayCommandId(name) : gameplayEventId(name),
+                name,
+                kind,
+                schema: schemaName,
+                source: {
+                    path: 'src/shared/gameplay-core-contracts.ts',
+                    line: position.line + 1
+                },
+                payloadFields: uniqueSorted(payloadFields),
+                ...(kind === 'command'
+                    ? { handlerReferences: [], creatorReferences: [], testReferences: [] }
+                    : { emitterReferences: [], consumerReferences: [], testReferences: [] })
+            });
+        }
+        ts.forEachChild(node, visit);
+    };
+    visit(declaration.initializer);
+    const duplicateNames = uniqueSorted(
+        variants.map((variant) => variant.name).filter((name, index, names) => names.indexOf(name) !== index)
+    );
+    if (duplicateNames.length > 0) {
+        throw new Error(`${schemaName} contains duplicate variants: ${duplicateNames.join(', ')}.`);
+    }
+    return { declaration, variants };
+};
+
+const discriminantComparison = (literal) => {
+    const binary = literal.parent;
+    if (!ts.isBinaryExpression(binary)) return null;
+    const positive = binary.operatorToken.kind === ts.SyntaxKind.EqualsEqualsEqualsToken ||
+        binary.operatorToken.kind === ts.SyntaxKind.EqualsEqualsToken;
+    const negative = binary.operatorToken.kind === ts.SyntaxKind.ExclamationEqualsEqualsToken ||
+        binary.operatorToken.kind === ts.SyntaxKind.ExclamationEqualsToken;
+    if (!positive && !negative) return null;
+    const candidate = binary.left === literal ? binary.right : binary.left;
+    if (!ts.isPropertyAccessExpression(candidate) || candidate.name.text !== 'type') return null;
+    return {
+        objectName: ts.isIdentifier(candidate.expression) ? candidate.expression.text : null,
+        positive
+    };
+};
+
+const switchDiscriminant = (literal) => {
+    const clause = literal.parent;
+    if (!ts.isCaseClause(clause) || !ts.isCaseBlock(clause.parent) || !ts.isSwitchStatement(clause.parent.parent)) return null;
+    const expression = clause.parent.parent.expression;
+    if (!ts.isPropertyAccessExpression(expression) || expression.name.text !== 'type') return null;
+    return ts.isIdentifier(expression.expression) ? expression.expression.text : null;
+};
+
+const buildGameplayProtocolIndex = (repoRoot, sourceFiles) => {
+    const contractsFile = sourceFiles.find(
+        (sourceFile) => fromRoot(repoRoot, sourceFile.fileName) === 'src/shared/gameplay-core-contracts.ts'
+    );
+    if (!contractsFile) {
+        throw new Error('Unable to locate src/shared/gameplay-core-contracts.ts.');
+    }
+    const commandSchema = extractGameplayProtocolVariants(contractsFile, 'gameplayCommandSchema', 'command');
+    const eventSchema = extractGameplayProtocolVariants(contractsFile, 'gameplayEventSchema', 'event');
+    const commandsByName = new Map(commandSchema.variants.map((variant) => [variant.name, variant]));
+    const eventsByName = new Map(eventSchema.variants.map((variant) => [variant.name, variant]));
+    const addReference = (variant, field, sourceFile, node) => {
+        const path = fromRoot(repoRoot, sourceFile.fileName);
+        const position = sourceFile.getLineAndCharacterOfPosition(node.getStart(sourceFile));
+        const reference = { path, line: position.line + 1 };
+        if (!variant[field].some((item) => item.path === reference.path && item.line === reference.line)) {
+            variant[field].push(reference);
+        }
+    };
+
+    for (const sourceFile of sourceFiles) {
+        const path = fromRoot(repoRoot, sourceFile.fileName);
+        const role = getCodeRole(path);
+        const visit = (node) => {
+            if (node === commandSchema.declaration || node === eventSchema.declaration) return;
+            if (ts.isStringLiteralLike(node)) {
+                const command = commandsByName.get(node.text);
+                const event = eventsByName.get(node.text);
+                if (role === 'test' && !GAMEPLAY_PROTOCOL_COVERAGE_TEST_EXCLUSIONS.has(path)) {
+                    if (command) addReference(command, 'testReferences', sourceFile, node);
+                    if (event) addReference(event, 'testReferences', sourceFile, node);
+                } else {
+                    const comparison = discriminantComparison(node);
+                    const switchedObject = switchDiscriminant(node);
+                    const isTypeProperty =
+                        ts.isPropertyAssignment(node.parent) && syntaxPropertyName(node.parent.name) === 'type';
+                    if (
+                        command &&
+                        path === 'src/shared/gameplay-core.ts' &&
+                        comparison?.positive &&
+                        comparison.objectName === 'command'
+                    ) {
+                        addReference(command, 'handlerReferences', sourceFile, node);
+                    }
+                    if (command && isTypeProperty) {
+                        addReference(command, 'creatorReferences', sourceFile, node);
+                    }
+                    if (event && isTypeProperty) {
+                        addReference(event, 'emitterReferences', sourceFile, node);
+                    }
+                    if (event && (comparison || switchedObject)) {
+                        addReference(event, 'consumerReferences', sourceFile, node);
+                    }
+                }
+            }
+            ts.forEachChild(node, visit);
+        };
+        visit(sourceFile);
+    }
+
+    const relationships = [];
+    const addRelationship = (source, target, kind, reference) => {
+        const label = reference ? `L${reference.line}` : undefined;
+        const suffix = reference ? `:${reference.path}:L${reference.line}` : '';
+        relationships.push({
+            id: `${kind}:${source}->${target}${suffix}`,
+            source,
+            target,
+            kind,
+            ...(label ? { label } : {})
+        });
+    };
+    const journalFile = fileId('src/shared/gameplay-journal.ts');
+    for (const command of commandSchema.variants) {
+        addRelationship(fileId(command.source.path), command.id, 'declares', command.source);
+        for (const reference of command.handlerReferences) {
+            addRelationship(fileId(reference.path), command.id, 'handles', reference);
+        }
+        for (const reference of command.creatorReferences) {
+            addRelationship(fileId(reference.path), command.id, 'creates', reference);
+        }
+        for (const reference of command.testReferences) {
+            addRelationship(command.id, fileId(reference.path), 'tested_by', reference);
+        }
+        addRelationship(command.id, journalFile, 'persists');
+    }
+    for (const event of eventSchema.variants) {
+        addRelationship(fileId(event.source.path), event.id, 'declares', event.source);
+        for (const reference of event.emitterReferences) {
+            addRelationship(fileId(reference.path), event.id, 'emits', reference);
+        }
+        for (const reference of event.consumerReferences) {
+            addRelationship(fileId(reference.path), event.id, 'consumes', reference);
+            if (reference.path.startsWith('src/renderer/')) {
+                addRelationship(event.id, fileId(reference.path), 'displays', reference);
+            }
+        }
+        for (const reference of event.testReferences) {
+            addRelationship(event.id, fileId(reference.path), 'tested_by', reference);
+        }
+        addRelationship(event.id, journalFile, 'persists');
+    }
+    const sortReferences = (variant) => {
+        for (const field of Object.keys(variant).filter((key) => key.endsWith('References'))) {
+            variant[field].sort((a, b) => `${a.path}:${a.line}`.localeCompare(`${b.path}:${b.line}`));
+        }
+    };
+    commandSchema.variants.forEach(sortReferences);
+    eventSchema.variants.forEach(sortReferences);
+    commandSchema.variants.sort((a, b) => a.id.localeCompare(b.id));
+    eventSchema.variants.sort((a, b) => a.id.localeCompare(b.id));
+    relationships.sort((a, b) => a.id.localeCompare(b.id));
+    return {
+        commands: commandSchema.variants,
+        events: eventSchema.variants,
+        relationships
+    };
+};
+
 const buildCodeIndex = (repoRoot) => {
     const parsed = readTsConfig(repoRoot);
     const program = ts.createProgram({
@@ -400,10 +621,18 @@ const buildCodeIndex = (repoRoot) => {
         }
     }
     const runState = buildRunStateFieldIndex(repoRoot, sourceFiles, checker);
-    relationships.push(...runState.relationships);
+    const gameplayProtocol = buildGameplayProtocolIndex(repoRoot, sourceFiles);
+    relationships.push(...runState.relationships, ...gameplayProtocol.relationships);
     symbols.sort((a, b) => a.id.localeCompare(b.id));
     relationships.sort((a, b) => a.id.localeCompare(b.id));
-    return { files, symbols, runStateFields: runState.fields, relationships };
+    return {
+        files,
+        symbols,
+        runStateFields: runState.fields,
+        gameplayCommands: gameplayProtocol.commands,
+        gameplayEvents: gameplayProtocol.events,
+        relationships
+    };
 };
 
 const buildContentIndex = (repoRoot) => {
@@ -545,7 +774,7 @@ const buildGameplayIndex = (repoRoot, playerVisibleStates) => {
     return { mechanics, states: normalizedStates, relationships, graph };
 };
 
-const buildDiagnostics = (repoRoot, gameplay, content, playerVisibleStates, runStateFields) => {
+const buildDiagnostics = (repoRoot, gameplay, content, playerVisibleStates, runStateFields, gameplayCommands, gameplayEvents) => {
     const diagnostics = [];
     const mechanicIds = new Set(gameplay.mechanics.map((mechanic) => mechanic.mechanicId));
     const gameplayDegree = new Map(gameplay.mechanics.map((mechanic) => [mechanic.mechanicId, 0]));
@@ -605,6 +834,51 @@ const buildDiagnostics = (repoRoot, gameplay, content, playerVisibleStates, runS
             });
         }
     }
+    for (const command of gameplayCommands) {
+        if (command.handlerReferences.length === 0) {
+            diagnostics.push({
+                severity: 'error',
+                code: 'gameplay_command_without_handler',
+                subject: command.name,
+                detail: 'Declared by gameplayCommandSchema but not dispatched by reduceGameplayCommand.'
+            });
+        }
+        if (command.testReferences.length === 0) {
+            diagnostics.push({
+                severity: 'error',
+                code: 'gameplay_protocol_variant_without_test',
+                subject: command.name,
+                detail: 'Gameplay command variant has no exact test-source reference.'
+            });
+        }
+    }
+    for (const event of gameplayEvents) {
+        if (event.emitterReferences.length === 0) {
+            diagnostics.push({
+                severity: 'error',
+                code: 'gameplay_event_without_emitter',
+                subject: event.name,
+                detail: 'Declared by gameplayEventSchema but never emitted by production source.'
+            });
+        }
+        if (event.testReferences.length === 0) {
+            diagnostics.push({
+                severity: 'error',
+                code: 'gameplay_protocol_variant_without_test',
+                subject: event.name,
+                detail: 'Gameplay event variant has no exact test-source reference.'
+            });
+        }
+    }
+    const feedbackEvent = gameplayEvents.find((event) => event.name === 'feedback.requested');
+    if (!feedbackEvent || !feedbackEvent.consumerReferences.some((reference) => reference.path.startsWith('src/renderer/'))) {
+        diagnostics.push({
+            severity: 'error',
+            code: 'gameplay_feedback_event_without_display_consumer',
+            subject: 'feedback.requested',
+            detail: 'Typed feedback event has no exact renderer consumer reference.'
+        });
+    }
     const modeledMechanicIds = new Set(gameplay.mechanics.map((mechanic) => mechanic.mechanicId));
     for (const registry of CONTENT_REGISTRIES) {
         const uncovered = content
@@ -628,7 +902,15 @@ export const buildAiRepoModel = (repoRoot = defaultRepoRoot) => {
     const content = buildContentIndex(repoRoot);
     const playerVisibleStates = new Set(readLiteralRegistryValues(repoRoot, PLAYER_VISIBLE_STATE_REGISTRY));
     const gameplay = buildGameplayIndex(repoRoot, playerVisibleStates);
-    const diagnostics = buildDiagnostics(repoRoot, gameplay, content.content, playerVisibleStates, code.runStateFields);
+    const diagnostics = buildDiagnostics(
+        repoRoot,
+        gameplay,
+        content.content,
+        playerVisibleStates,
+        code.runStateFields,
+        code.gameplayCommands,
+        code.gameplayEvents
+    );
     const relationships = [...code.relationships, ...content.relationships, ...gameplay.relationships].sort((a, b) => a.id.localeCompare(b.id));
     return {
         schemaVersion: MODEL_VERSION,
@@ -643,6 +925,13 @@ export const buildAiRepoModel = (repoRoot = defaultRepoRoot) => {
             stateFieldCount: gameplay.states.length,
             runStateFieldCount: code.runStateFields.length,
             dormantRunStateFieldCount: code.runStateFields.filter((field) => field.readReferences.length === 0).length,
+            gameplayCommandTypeCount: code.gameplayCommands.length,
+            gameplayEventTypeCount: code.gameplayEvents.length,
+            unhandledGameplayCommandTypeCount: code.gameplayCommands.filter((command) => command.handlerReferences.length === 0).length,
+            unemittedGameplayEventTypeCount: code.gameplayEvents.filter((event) => event.emitterReferences.length === 0).length,
+            untestedGameplayProtocolTypeCount: [...code.gameplayCommands, ...code.gameplayEvents].filter(
+                (variant) => variant.testReferences.length === 0
+            ).length,
             playerVisibleStateCount: playerVisibleStates.size,
             relationshipCount: relationships.length
         },
@@ -653,6 +942,8 @@ export const buildAiRepoModel = (repoRoot = defaultRepoRoot) => {
         mechanics: gameplay.mechanics,
         states: gameplay.states,
         runStateFields: code.runStateFields,
+        gameplayCommands: code.gameplayCommands,
+        gameplayEvents: code.gameplayEvents,
         playerVisibleStates: [...playerVisibleStates].sort((a, b) => a.localeCompare(b)),
         relationships,
         diagnostics
@@ -669,6 +960,32 @@ export const validateAiRepoModel = (model) => {
     const dormantRunStateFields = runStateFields.filter((field) => field.readReferences.length === 0);
     if (dormantRunStateFields.length !== model.repository.dormantRunStateFieldCount) {
         issues.push('repository.dormantRunStateFieldCount does not match runStateFields.');
+    }
+    const gameplayCommands = Array.isArray(model.gameplayCommands) ? model.gameplayCommands : [];
+    const gameplayEvents = Array.isArray(model.gameplayEvents) ? model.gameplayEvents : [];
+    if (gameplayCommands.length !== model.repository.gameplayCommandTypeCount) {
+        issues.push('repository.gameplayCommandTypeCount does not match gameplayCommands.');
+    }
+    if (gameplayEvents.length !== model.repository.gameplayEventTypeCount) {
+        issues.push('repository.gameplayEventTypeCount does not match gameplayEvents.');
+    }
+    if (
+        gameplayCommands.filter((command) => command.handlerReferences.length === 0).length !==
+        model.repository.unhandledGameplayCommandTypeCount
+    ) {
+        issues.push('repository.unhandledGameplayCommandTypeCount does not match gameplayCommands.');
+    }
+    if (
+        gameplayEvents.filter((event) => event.emitterReferences.length === 0).length !==
+        model.repository.unemittedGameplayEventTypeCount
+    ) {
+        issues.push('repository.unemittedGameplayEventTypeCount does not match gameplayEvents.');
+    }
+    if (
+        [...gameplayCommands, ...gameplayEvents].filter((variant) => variant.testReferences.length === 0).length !==
+        model.repository.untestedGameplayProtocolTypeCount
+    ) {
+        issues.push('repository.untestedGameplayProtocolTypeCount does not match gameplay protocol variants.');
     }
     const playerVisibleStates = Array.isArray(model.playerVisibleStates) ? model.playerVisibleStates : [];
     if (playerVisibleStates.length !== model.repository.playerVisibleStateCount) {
@@ -691,7 +1008,9 @@ export const validateAiRepoModel = (model) => {
         ...model.content.map((node) => node.id),
         ...model.mechanics.map((node) => node.id),
         ...model.states.map((node) => node.id),
-        ...runStateFields.map((node) => node.id)
+        ...runStateFields.map((node) => node.id),
+        ...gameplayCommands.map((node) => node.id),
+        ...gameplayEvents.map((node) => node.id)
     ];
     const nodeIds = new Set(allNodeIds);
     const duplicateNodeIds = uniqueSorted(allNodeIds.filter((id, index) => allNodeIds.indexOf(id) !== index));
@@ -723,7 +1042,9 @@ export const queryAiRepoModel = (model, query, limit = 40) => {
         ...model.content.map((item) => ({ type: 'content', ...item })),
         ...model.mechanics.map((item) => ({ type: 'mechanic', ...item })),
         ...model.states.map((item) => ({ type: 'state', ...item })),
-        ...(model.runStateFields ?? []).map((item) => ({ type: 'run_state_field', ...item }))
+        ...(model.runStateFields ?? []).map((item) => ({ type: 'run_state_field', ...item })),
+        ...(model.gameplayCommands ?? []).map((item) => ({ type: 'gameplay_command', ...item })),
+        ...(model.gameplayEvents ?? []).map((item) => ({ type: 'gameplay_event', ...item }))
     ];
     const nodes = candidates
         .filter((item) => JSON.stringify(item).toLowerCase().includes(needle))

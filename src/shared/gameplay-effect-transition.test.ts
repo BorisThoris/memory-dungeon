@@ -3,6 +3,9 @@ import type { RunState } from './contracts';
 import {
     createGameplayDefinitionCommand,
     getGameplayContentDefinition,
+    gameplayContentDefinitionSchema,
+    gameplayFactsSchema,
+    type GameplayContentDefinition,
     type GameplayEvent
 } from './gameplay-core-contracts';
 import { reduceGameplayCommand } from './gameplay-core';
@@ -42,6 +45,21 @@ const applyPure = (initial: RunState, command: ReturnType<typeof createGameplayD
         command.facts
     );
 };
+
+const testDefinition = (
+    id: string,
+    effects: GameplayContentDefinition['effects']
+): GameplayContentDefinition => gameplayContentDefinitionSchema.parse({
+    id,
+    version: 1,
+    buildId: 'protocol_event_test',
+    source: { kind: 'system', id: 'protocol_event_test' },
+    trigger: 'content.claimed',
+    conditions: [],
+    effects
+});
+
+const defaultFacts = gameplayFactsSchema.parse({});
 
 describe('pure gameplay effect transition', () => {
     it('is the same accepted definition authority used by the command core', () => {
@@ -103,5 +121,51 @@ describe('pure gameplay effect transition', () => {
         )).toBe(true);
         expect(second.run.gameplayCommandJournal).toEqual(initial.gameplayCommandJournal);
         expect(second.run.gameplayEventJournal).toEqual(initial.gameplayEventJournal);
+    });
+
+    it('emits the exact bonus relic-pick delta protocol event', () => {
+        const result = applyGameplayDefinitionTransition(
+            run({ bonusRelicPicksNextOffer: 2 }),
+            'bonus-pick-event',
+            testDefinition('test.bonus_pick_event', [{ kind: 'bonus_relic_pick.grant', amount: 1 }]),
+            defaultFacts
+        );
+
+        expect(result).toMatchObject({ accepted: true, run: { bonusRelicPicksNextOffer: 3 } });
+        expect(result.events).toEqual([
+            expect.objectContaining({
+                type: 'bonus_relic_pick.changed',
+                requested: 1,
+                applied: 1,
+                before: 2,
+                after: 3
+            })
+        ]);
+    });
+
+    it('emits an explicit skipped-effect event when inventory consumption cannot apply', () => {
+        const result = applyGameplayDefinitionTransition(
+            run({ peekCharges: 0 }),
+            'skipped-effect-event',
+            testDefinition('test.skipped_effect_event', [{ kind: 'inventory.consume', itemId: 'peek_charge', amount: 1 }]),
+            defaultFacts
+        );
+
+        expect(result).toMatchObject({ accepted: true, run: { peekCharges: 0 } });
+        expect(result.events).toEqual([
+            expect.objectContaining({
+                type: 'inventory.changed',
+                itemId: 'peek_charge',
+                operation: 'consume',
+                requested: 1,
+                applied: 0,
+                before: 0,
+                after: 0
+            }),
+            expect.objectContaining({
+                type: 'effect.skipped',
+                effectKind: 'inventory.consume'
+            })
+        ]);
     });
 });
