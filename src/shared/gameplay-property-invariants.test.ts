@@ -17,8 +17,8 @@ import { canRegionShuffleRow, canShuffleBoard, canSwapHiddenTiles } from './boar
 import { applyFlashPair, applyPeek, applyRegionShuffle, applyShuffle, applyStrayRemove, applyTileSwap } from './board-power-actions';
 import { buildBoard } from './board-build-rules';
 import { createNewRun, finishMemorizePhase } from './game-core';
+import { solveRunThroughGameplayCoreWithTrace } from './gameplay-core-playthrough-solver';
 import { advanceToNextLevel } from './next-floor-transition-rules';
-import { solveRunByExhaustingPlayablePairs } from './playthrough-solver';
 import { grantBonusRelicPickNextOffer } from './relic-immediate-rules';
 import { computeRelicOfferPickBudget, openRelicOffer } from './relic-offer-rules';
 import { completeRelicPickAndAdvance } from './relic-pick-advance-rules';
@@ -34,6 +34,17 @@ import { DECOY_PAIR_KEY, EXIT_PAIR_KEY, isSingletonUtilityPairKey } from './tile
 import { flipTile, resolveBoardTurn } from './turn-resolution';
 
 const propertyRuns = Number(process.env.GAMEPLAY_PROPERTY_RUNS ?? 80);
+
+const solveGeneratedRunThroughCommandCore = (run: RunState, verifyReplay = false): RunState => {
+    const trace = solveRunThroughGameplayCoreWithTrace(run, 160, verifyReplay);
+    expect(trace.rejectedCommandIds).toEqual([]);
+    expect(trace.invariantViolations).toEqual([]);
+    if (verifyReplay) {
+        expect(trace.replayVerified).toBe(true);
+        expect(trace.replayDeterministic).toBe(true);
+    }
+    return trace.run;
+};
 
 const generatedRun = fc.record({
     level: fc.integer({ min: 1, max: 24 }),
@@ -345,7 +356,7 @@ describe('gameplay property invariants', () => {
                     runRulesVersion: rulesVersion
                 });
                 const run = createGeneratedBoardSolverRun(board, runSeed, rulesVersion);
-                const solved = solveRunByExhaustingPlayablePairs(run);
+                const solved = solveGeneratedRunThroughCommandCore(run);
 
                 expect(run.board?.level).toBe(level);
                 expect(run.dungeonRun.currentFloor).toBe(level);
@@ -380,7 +391,7 @@ describe('gameplay property invariants', () => {
                         : undefined
                 });
                 const run = createGeneratedBoardSolverRun(board, runSeed, rulesVersion);
-                const solved = solveRunByExhaustingPlayablePairs(run);
+                const solved = solveGeneratedRunThroughCommandCore(run);
 
                 expect(run.board?.level).toBe(level);
                 expect(run.dungeonRun.currentFloor).toBe(level);
@@ -414,7 +425,7 @@ describe('gameplay property invariants', () => {
         });
         const run = createGeneratedBoardSolverRun(board, runSeed, GAME_RULES_VERSION);
 
-        const solved = solveRunByExhaustingPlayablePairs(run);
+        const solved = solveGeneratedRunThroughCommandCore(run, true);
 
         expect(run.board?.level).toBe(level);
         expect(run.dungeonRun.currentFloor).toBe(level);
@@ -444,7 +455,7 @@ describe('gameplay property invariants', () => {
         });
         const run = createGeneratedBoardSolverRun(board, runSeed, 1);
 
-        const solved = solveRunByExhaustingPlayablePairs(run);
+        const solved = solveGeneratedRunThroughCommandCore(run, true);
 
         expect(run.board?.level).toBe(level);
         expect(run.dungeonRun.currentFloor).toBe(level);

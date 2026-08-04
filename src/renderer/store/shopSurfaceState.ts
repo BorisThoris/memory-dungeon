@@ -4,8 +4,7 @@ import {
     createGameplayShopPurchaseCommand,
     createGameplayShopRerollCommand
 } from '../../shared/gameplay-core-contracts';
-import { reduceGameplayCommand } from '../../shared/gameplay-core';
-import { appendGameplayJournal } from '../../shared/gameplay-journal';
+import { executeGameplayCommandThroughGameplayCore } from '../../shared/gameplay-core-adapters';
 import type { StoreNavigationTransition } from './navigationModel';
 import type { RunSurfaceState } from './runSurfaceState';
 import {
@@ -135,11 +134,11 @@ export const createShopPurchaseSurfaceResult = ({
         `shop-purchase:${run.runSeed}:${run.board?.level ?? 0}:${run.shopRerolls}:${offerId}`,
         offerId
     );
-    const result = reduceGameplayCommand(run, command);
+    const result = executeGameplayCommandThroughGameplayCore(run, command);
     if (!result.accepted) {
         return { kind: 'ignored' };
     }
-    const nextRun = appendGameplayJournal(result.run, [command], result.events);
+    const nextRun = result.run;
     return {
         kind: 'applied',
         patch: { run: nextRun },
@@ -166,11 +165,11 @@ export const createShopRerollSurfaceResult = ({
     const command = createGameplayShopRerollCommand(
         `shop-reroll:${run.runSeed}:${run.board?.level ?? 0}:${run.shopRerolls}`
     );
-    const result = reduceGameplayCommand(run, command);
+    const result = executeGameplayCommandThroughGameplayCore(run, command);
     if (!result.accepted) {
         return { kind: 'ignored' };
     }
-    const nextRun = appendGameplayJournal(result.run, [command], result.events);
+    const nextRun = result.run;
     return {
         kind: 'applied',
         patch: { run: nextRun },

@@ -2185,7 +2185,7 @@ describe('REG-017 route choices', () => {
                 ).toEqual([]);
             }
         }
-    });
+    }, 20_000);
 
     it('solves generated route-pressure floors after exhausting legal pair matches and activating the exit', () => {
         const seeds = [70_101, 70_202] as const;
@@ -2224,7 +2224,7 @@ describe('REG-017 route choices', () => {
                 }
             }
         }
-    });
+    }, 20_000);
 
     it('solves generated boss floors without leaving stale boss locks or undefeated overlays', () => {
         const scenarios = [

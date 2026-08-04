@@ -2,9 +2,10 @@ import type { RunState, ViewState } from '../../shared/contracts';
 import { BOARD_FLOATER_POP_CLEAR } from './matchScorePop';
 import { clearRunSurfaceArmedModes, type RunSurfaceState } from './runSurfaceState';
 import { createGameplaySideRoomResolveCommand } from '../../shared/gameplay-core-contracts';
-import { reduceGameplayCommand } from '../../shared/gameplay-core';
-import { appendGameplayJournal } from '../../shared/gameplay-journal';
-import { createDeadInterludeGameOverRun } from '../../shared/interlude-transition-rules';
+import {
+    executeGameplayCommandThroughGameplayCore,
+    resolveInterludeTerminalThroughGameplayCore
+} from '../../shared/gameplay-core-adapters';
 import {
     getNewGameplayFeedback,
     type GameplayFeedbackPresentation
@@ -88,9 +89,12 @@ export const createSideRoomActionSurfaceResult = (
         return { kind: 'menu', patch: { view: 'menu' } };
     }
 
-    const gameOverRun = createDeadInterludeGameOverRun(run);
-    if (gameOverRun) {
-        return { kind: 'gameOver', run: gameOverRun };
+    const terminal = resolveInterludeTerminalThroughGameplayCore(
+        run,
+        `interlude-terminal:${run.runSeed}:${run.board?.level ?? 0}:side-room:${Array.isArray(run.gameplayCommandJournal) ? run.gameplayCommandJournal.length : 0}`
+    );
+    if (terminal.accepted || run.status === 'gameOver') {
+        return { kind: 'gameOver', run: terminal.run };
     }
 
     if (run.status !== 'levelComplete' || !run.sideRoom) {
@@ -102,11 +106,11 @@ export const createSideRoomActionSurfaceResult = (
         action,
         choiceId
     );
-    const result = reduceGameplayCommand(run, command);
+    const result = executeGameplayCommandThroughGameplayCore(run, command);
     if (!result.accepted) {
         return { kind: 'ignored' };
     }
-    const nextRun = appendGameplayJournal(result.run, [command], result.events);
+    const nextRun = result.run;
 
     const patch = createSideRoomResultSurfacePatch(nextRun);
     const feedback = getNewGameplayFeedback(run, nextRun).find(

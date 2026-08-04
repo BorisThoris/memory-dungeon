@@ -200,6 +200,22 @@ describe('runResolutionController', () => {
         expect(harness.state.run?.status).toBe('gameOver');
         expect(harness.state.run?.lastRunSummary).not.toBeNull();
         expect(harness.state.saveData.lastRunSummary).toEqual(harness.state.run?.lastRunSummary);
+        expect(harness.state.run?.gameplayCommandJournal?.at(-1)).toMatchObject({
+            type: 'run.finalize',
+            unlockedAchievements: []
+        });
+        expect(harness.state.run?.gameplayEventJournal?.at(-1)).toMatchObject({
+            type: 'run.finalized',
+            totalScore: 500,
+            highestLevel: 3,
+            summaryValidated: true
+        });
+        expect(harness.state.run?.lastRunSummary?.gameplayCommandJournal).toEqual(
+            harness.state.run?.gameplayCommandJournal
+        );
+        expect(harness.state.run?.lastRunSummary?.gameplayEventJournal).toEqual(
+            harness.state.run?.gameplayEventJournal
+        );
         expect(harness.state.saveData.bestScore).toBe(500);
         expect(harness.state.boardPinMode).toBe(false);
         expect(harness.state.destroyPairArmed).toBe(false);
@@ -212,6 +228,33 @@ describe('runResolutionController', () => {
             'run_complete',
             expect.objectContaining({ highestLevel: 3, totalScore: 500 })
         );
+    });
+
+    it('serializes evaluated terminal achievements into the finalization command and event', () => {
+        const baseRun = createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless' });
+        const harness = createHarness(baseRun);
+
+        harness.controller.applyResolvedRun({
+            ...baseRun,
+            achievementsEnabled: true,
+            lives: 0,
+            status: 'gameOver',
+            stats: {
+                ...baseRun.stats,
+                levelsCleared: 1
+            }
+        });
+
+        expect(harness.state.run?.gameplayCommandJournal?.at(-1)).toMatchObject({
+            type: 'run.finalize',
+            unlockedAchievements: ['ACH_FIRST_CLEAR']
+        });
+        expect(harness.state.run?.gameplayEventJournal?.at(-1)).toMatchObject({
+            type: 'run.finalized',
+            unlockedAchievements: ['ACH_FIRST_CLEAR']
+        });
+        expect(harness.state.run?.lastRunSummary?.unlockedAchievements).toEqual(['ACH_FIRST_CLEAR']);
+        expect(harness.state.saveData.lastRunSummary).toEqual(harness.state.run?.lastRunSummary);
     });
 
     it('normalizes malformed summary arrays before run completion telemetry', () => {

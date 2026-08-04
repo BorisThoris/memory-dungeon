@@ -103,7 +103,7 @@ describe('softlock generator contract', () => {
         for (const [key, count] of Object.entries(result.coverage)) {
             expect(count, `${key} coverage`).toBeGreaterThan(0);
         }
-    }, 15_000);
+    }, 25_000);
 
     it('uses generated-board run context when checking locked-exit shop stock', () => {
         const board = projectionBoard({

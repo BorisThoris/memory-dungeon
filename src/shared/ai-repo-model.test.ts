@@ -102,8 +102,8 @@ describe('AI repository model', () => {
         expect(model.repository.dormantRunStateFieldCount).toBe(0);
         expect(model.repository.rendererRunStateWriteCount).toBe(0);
         expect(model.repository.orchestrationBudgetViolationCount).toBe(0);
-        expect(model.repository.gameplayCommandTypeCount).toBe(34);
-        expect(model.repository.gameplayEventTypeCount).toBe(54);
+        expect(model.repository.gameplayCommandTypeCount).toBe(37);
+        expect(model.repository.gameplayEventTypeCount).toBe(57);
         expect(model.repository.unhandledGameplayCommandTypeCount).toBe(0);
         expect(model.repository.unemittedGameplayEventTypeCount).toBe(0);
         expect(model.repository.untestedGameplayProtocolTypeCount).toBe(0);
@@ -173,13 +173,46 @@ describe('AI repository model', () => {
                 path: 'src/renderer/components/GameScreen.tsx',
                 lineCount: expect.any(Number),
                 importCount: expect.any(Number),
-                maxLines: 4_250,
-                maxImports: 58,
+                maxLines: 1_950,
+                maxImports: 55,
+                withinBudget: true
+            },
+            {
+                id: 'orchestration_budget:src/renderer/components/GameScreenBoardFloater.tsx',
+                path: 'src/renderer/components/GameScreenBoardFloater.tsx',
+                lineCount: expect.any(Number),
+                importCount: expect.any(Number),
+                maxLines: 225,
+                maxImports: 4,
+                withinBudget: true
+            },
+            {
+                id: 'orchestration_budget:src/renderer/components/GameScreenMatchFloaterContent.tsx',
+                path: 'src/renderer/components/GameScreenMatchFloaterContent.tsx',
+                lineCount: expect.any(Number),
+                importCount: expect.any(Number),
+                maxLines: 875,
+                maxImports: 5,
+                withinBudget: true
+            },
+            {
+                id: 'orchestration_budget:src/renderer/components/GameScreenMismatchFloaterContent.tsx',
+                path: 'src/renderer/components/GameScreenMismatchFloaterContent.tsx',
+                lineCount: expect.any(Number),
+                importCount: expect.any(Number),
+                maxLines: 350,
+                maxImports: 3,
                 withinBudget: true
             }
         ]);
-        expect(model.orchestrationBudgets[0]?.lineCount).toBeLessThanOrEqual(4_250);
-        expect(model.orchestrationBudgets[0]?.importCount).toBeLessThanOrEqual(58);
+        expect(model.orchestrationBudgets[0]?.lineCount).toBeLessThanOrEqual(1_950);
+        expect(model.orchestrationBudgets[0]?.importCount).toBeLessThanOrEqual(55);
+        expect(model.orchestrationBudgets[1]?.lineCount).toBeLessThanOrEqual(225);
+        expect(model.orchestrationBudgets[1]?.importCount).toBeLessThanOrEqual(4);
+        expect(model.orchestrationBudgets[2]?.lineCount).toBeLessThanOrEqual(875);
+        expect(model.orchestrationBudgets[2]?.importCount).toBeLessThanOrEqual(5);
+        expect(model.orchestrationBudgets[3]?.lineCount).toBeLessThanOrEqual(350);
+        expect(model.orchestrationBudgets[3]?.importCount).toBeLessThanOrEqual(3);
         expect(model.files.find((file) => file.path === 'src/renderer/components/gameScreenBoardFeedbackModel.ts')).toMatchObject({
             testedBy: expect.arrayContaining([
                 'file:src/renderer/components/gameScreenBoardFeedbackModel.test.ts'
@@ -200,6 +233,41 @@ describe('AI repository model', () => {
                 'file:src/renderer/components/gameScreenRouteChoiceModel.test.ts'
             ])
         });
+        expect(model.files.find((file) => file.path === 'src/renderer/components/useGameScreenRouteChoiceProjection.ts')).toMatchObject({
+            testedBy: expect.arrayContaining([
+                'file:src/renderer/components/useGameScreenRouteChoiceProjection.test.ts'
+            ])
+        });
+        expect(model.files.find((file) => file.path === 'src/renderer/components/GameScreenRouteChoicePanel.tsx')).toMatchObject({
+            testedBy: expect.arrayContaining([
+                'file:src/renderer/components/GameScreenRouteChoicePanel.test.tsx'
+            ])
+        });
+        expect(model.files.find((file) => file.path === 'src/renderer/components/gameScreenRouteConsequenceProjection.ts')).toMatchObject({
+            testedBy: expect.arrayContaining([
+                'file:src/renderer/components/gameScreenRouteConsequenceProjection.test.ts'
+            ])
+        });
+        expect(model.files.find((file) => file.path === 'src/renderer/components/GameScreenRouteConsequenceFeedback.tsx')).toMatchObject({
+            testedBy: expect.arrayContaining([
+                'file:src/renderer/components/GameScreenRouteConsequenceFeedback.test.tsx'
+            ])
+        });
+        expect(model.files.find((file) => file.path === 'src/renderer/components/gameScreenNextFloorProjection.ts')).toMatchObject({
+            testedBy: expect.arrayContaining([
+                'file:src/renderer/components/gameScreenNextFloorProjection.test.ts'
+            ])
+        });
+        expect(model.files.find((file) => file.path === 'src/renderer/components/GameScreenNextFloorPreview.tsx')).toMatchObject({
+            testedBy: expect.arrayContaining([
+                'file:src/renderer/components/GameScreenNextFloorPreview.test.tsx'
+            ])
+        });
+        expect(model.files.find((file) => file.path === 'src/renderer/components/GameScreenFloorClearResult.tsx')).toMatchObject({
+            testedBy: expect.arrayContaining([
+                'file:src/renderer/components/GameScreenFloorClearResult.test.tsx'
+            ])
+        });
         expect(model.files.find((file) => file.path === 'src/renderer/components/gameScreenBoardFloaterModel.ts')).toMatchObject({
             testedBy: expect.arrayContaining([
                 'file:src/renderer/components/gameScreenBoardFloaterModel.test.ts'
@@ -210,9 +278,29 @@ describe('AI repository model', () => {
                 'file:src/renderer/components/useGameScreenBoardFloaterProjection.test.ts'
             ])
         });
+        expect(model.files.find((file) => file.path === 'src/renderer/components/GameScreenBoardFloater.tsx')).toMatchObject({
+            testedBy: expect.arrayContaining([
+                'file:src/renderer/components/GameScreenBoardFloater.test.tsx'
+            ])
+        });
+        expect(model.files.find((file) => file.path === 'src/renderer/components/GameScreenMatchFloaterContent.tsx')).toMatchObject({
+            testedBy: expect.arrayContaining([
+                'file:src/renderer/components/GameScreenBoardFloater.test.tsx'
+            ])
+        });
+        expect(model.files.find((file) => file.path === 'src/renderer/components/GameScreenMismatchFloaterContent.tsx')).toMatchObject({
+            testedBy: expect.arrayContaining([
+                'file:src/renderer/components/GameScreenBoardFloater.test.tsx'
+            ])
+        });
         expect(model.files.find((file) => file.path === 'src/renderer/components/useGameScreenFloorClearProjection.ts')).toMatchObject({
             testedBy: expect.arrayContaining([
                 'file:src/renderer/components/useGameScreenFloorClearProjection.test.ts'
+            ])
+        });
+        expect(model.files.find((file) => file.path === 'src/shared/run-start-core.ts')).toMatchObject({
+            testedBy: expect.arrayContaining([
+                'file:src/shared/run-start-core.test.ts'
             ])
         });
         expect(model.gameplayCommands.every(
@@ -237,6 +325,86 @@ describe('AI repository model', () => {
             ]),
             creatorReferences: expect.arrayContaining([
                 expect.objectContaining({ path: 'src/shared/gameplay-core-contracts.ts', line: expect.any(Number) })
+            ])
+        });
+        expect(model.gameplayCommands.find((command) => command.name === 'run.start')).toMatchObject({
+            id: 'gameplay_command:run.start',
+            schema: 'runStartCommandSchema',
+            source: { path: 'src/shared/run-start-core-contracts.ts', line: expect.any(Number) },
+            handlerReferences: expect.arrayContaining([
+                expect.objectContaining({ path: 'src/shared/run-start-core.ts', line: expect.any(Number) })
+            ]),
+            creatorReferences: expect.arrayContaining([
+                expect.objectContaining({ path: 'src/shared/run-start-core-contracts.ts', line: expect.any(Number) })
+            ]),
+            testReferences: expect.arrayContaining([
+                expect.objectContaining({ path: 'src/shared/run-start-core.test.ts', line: expect.any(Number) })
+            ])
+        });
+        expect(model.gameplayEvents.find((event) => event.name === 'run.started')).toMatchObject({
+            id: 'gameplay_event:run.started',
+            emitterReferences: expect.arrayContaining([
+                expect.objectContaining({ path: 'src/shared/run-start-core.ts', line: expect.any(Number) })
+            ]),
+            consumerReferences: expect.arrayContaining([
+                expect.objectContaining({ path: 'src/renderer/store/runStartState.ts', line: expect.any(Number) })
+            ]),
+            testReferences: expect.arrayContaining([
+                expect.objectContaining({ path: 'src/shared/run-start-core.test.ts', line: expect.any(Number) })
+            ])
+        });
+        expect(model.gameplayCommands.find((command) => command.name === 'run.interlude_terminal_resolve')).toMatchObject({
+            id: 'gameplay_command:run.interlude_terminal_resolve',
+            source: { path: 'src/shared/gameplay-core-contracts.ts', line: expect.any(Number) },
+            handlerReferences: expect.arrayContaining([
+                expect.objectContaining({ path: 'src/shared/gameplay-core.ts', line: expect.any(Number) })
+            ]),
+            creatorReferences: expect.arrayContaining([
+                expect.objectContaining({ path: 'src/shared/gameplay-core-contracts.ts', line: expect.any(Number) })
+            ]),
+            testReferences: expect.arrayContaining([
+                expect.objectContaining({ path: 'src/shared/gameplay-core.test.ts', line: expect.any(Number) }),
+                expect.objectContaining({ path: 'src/shared/gameplay-core-simulation.test.ts', line: expect.any(Number) })
+            ])
+        });
+        expect(model.gameplayEvents.find((event) => event.name === 'run.interlude_terminal_resolved')).toMatchObject({
+            id: 'gameplay_event:run.interlude_terminal_resolved',
+            source: { path: 'src/shared/gameplay-core-contracts.ts', line: expect.any(Number) },
+            emitterReferences: expect.arrayContaining([
+                expect.objectContaining({ path: 'src/shared/gameplay-core.ts', line: expect.any(Number) })
+            ]),
+            testReferences: expect.arrayContaining([
+                expect.objectContaining({ path: 'src/shared/gameplay-core.test.ts', line: expect.any(Number) }),
+                expect.objectContaining({ path: 'src/shared/gameplay-core-simulation.test.ts', line: expect.any(Number) })
+            ])
+        });
+        expect(model.gameplayCommands.find((command) => command.name === 'run.finalize')).toMatchObject({
+            id: 'gameplay_command:run.finalize',
+            source: { path: 'src/shared/gameplay-core-contracts.ts', line: expect.any(Number) },
+            handlerReferences: expect.arrayContaining([
+                expect.objectContaining({ path: 'src/shared/gameplay-core.ts', line: expect.any(Number) })
+            ]),
+            creatorReferences: expect.arrayContaining([
+                expect.objectContaining({ path: 'src/shared/gameplay-core-contracts.ts', line: expect.any(Number) })
+            ]),
+            testReferences: expect.arrayContaining([
+                expect.objectContaining({ path: 'src/shared/gameplay-core.test.ts', line: expect.any(Number) }),
+                expect.objectContaining({ path: 'src/shared/gameplay-core-simulation.test.ts', line: expect.any(Number) }),
+                expect.objectContaining({ path: 'src/renderer/store/runResolutionController.test.ts', line: expect.any(Number) }),
+                expect.objectContaining({ path: 'src/renderer/store/useAppStore.test.ts', line: expect.any(Number) })
+            ])
+        });
+        expect(model.gameplayEvents.find((event) => event.name === 'run.finalized')).toMatchObject({
+            id: 'gameplay_event:run.finalized',
+            source: { path: 'src/shared/gameplay-core-contracts.ts', line: expect.any(Number) },
+            emitterReferences: expect.arrayContaining([
+                expect.objectContaining({ path: 'src/shared/gameplay-core.ts', line: expect.any(Number) })
+            ]),
+            testReferences: expect.arrayContaining([
+                expect.objectContaining({ path: 'src/shared/gameplay-core.test.ts', line: expect.any(Number) }),
+                expect.objectContaining({ path: 'src/shared/gameplay-core-simulation.test.ts', line: expect.any(Number) }),
+                expect.objectContaining({ path: 'src/renderer/store/runResolutionController.test.ts', line: expect.any(Number) }),
+                expect.objectContaining({ path: 'src/renderer/store/useAppStore.test.ts', line: expect.any(Number) })
             ])
         });
         expect(model.gameplayEvents.find((event) => event.name === 'effect.skipped')).toMatchObject({

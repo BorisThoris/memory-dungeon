@@ -1,7 +1,6 @@
 import type { RunState, ViewState } from '../../shared/contracts';
 import { createGameplayPinToggleCommand } from '../../shared/gameplay-core-contracts';
-import { reduceGameplayCommand } from '../../shared/gameplay-core';
-import { appendGameplayJournal } from '../../shared/gameplay-journal';
+import { executeGameplayCommandThroughGameplayCore } from '../../shared/gameplay-core-adapters';
 import {
     BOARD_FLOATER_POP_CLEAR,
     type MatchScorePop,
@@ -149,12 +148,12 @@ export const createPlayingTilePressSurfaceResult = ({
             `pin-toggle:${actionRun.runSeed}:${actionRun.board?.level ?? 0}:${Array.isArray(actionRun.pinnedTileIds) ? actionRun.pinnedTileIds.length : 0}:${tileId}`,
             tileId
         );
-        const result = reduceGameplayCommand(actionRun, command);
+        const result = executeGameplayCommandThroughGameplayCore(actionRun, command);
         return !result.accepted
             ? { kind: 'ignored', audio }
             : {
                   kind: 'patch',
-                  patch: { run: appendGameplayJournal(result.run, [command], result.events) },
+                  patch: { run: result.run },
                   audio,
                   resolveDelayMs: null
               };

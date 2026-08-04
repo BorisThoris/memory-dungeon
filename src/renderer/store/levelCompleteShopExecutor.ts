@@ -3,7 +3,7 @@ import type {
     SubscreenReturnView,
     ViewState
 } from '../../shared/contracts';
-import { createDeadInterludeGameOverRun } from '../../shared/interlude-transition-rules';
+import { resolveInterludeTerminalThroughGameplayCore } from '../../shared/gameplay-core-adapters';
 import {
     resolveNavigationTransition
 } from './navigationModel';
@@ -29,9 +29,12 @@ export interface LevelCompleteShopExecutorDeps {
 export const executeOpenShopFromLevelComplete = (deps: LevelCompleteShopExecutorDeps): void => {
     const { run, view } = deps.getState();
     if (run && view === 'playing' && run.status === 'levelComplete' && run.lives <= 0) {
-        const gameOverRun = createDeadInterludeGameOverRun(run);
-        if (gameOverRun) {
-            deps.applyResolvedRun(gameOverRun);
+        const terminal = resolveInterludeTerminalThroughGameplayCore(
+            run,
+            `interlude-terminal:${run.runSeed}:${run.board?.level ?? 0}:shop:${Array.isArray(run.gameplayCommandJournal) ? run.gameplayCommandJournal.length : 0}`
+        );
+        if (terminal.accepted) {
+            deps.applyResolvedRun(terminal.run);
         }
         return;
     }

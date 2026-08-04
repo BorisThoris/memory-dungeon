@@ -1,12 +1,15 @@
 export {
     activateDungeonExit,
+} from './gameplay-command-compatibility';
+
+export {
     chooseDungeonExitActivationSpend,
-    EXIT_PAIR_KEY,
-    revealDungeonRoom,
-    ROOM_PAIR_KEY,
-    SHOP_PAIR_KEY,
     type DungeonExitActivationSpend
-} from './game';
+} from './dungeon-exit-rules';
+
+export { revealDungeonRoom } from './dungeon-room-rules';
+
+export { EXIT_PAIR_KEY, ROOM_PAIR_KEY, SHOP_PAIR_KEY } from './tile-identity';
 
 export {
     revealDungeonExit,

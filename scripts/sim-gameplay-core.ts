@@ -1,6 +1,8 @@
 import type { BoardState, RunState, Tile } from '../src/shared/contracts';
 import {
     runGameplayCoreSimulation,
+    runGameplayInterludeTerminalSimulation,
+    runGameplayRunFinalizationSimulation,
     runGameplayProgressionRepairSimulation
 } from '../src/shared/gameplay-core-simulation';
 import { createTimerState } from '../src/shared/run-timer-rules';
@@ -136,6 +138,21 @@ const repairRun: RunState = {
     status: 'levelComplete'
 };
 const repairReport = runGameplayProgressionRepairSimulation(repairRun);
+const interludeTerminalReport = runGameplayInterludeTerminalSimulation({
+    ...initialRun,
+    lives: 0,
+    pendingRouteCardPlan: {
+        choiceId: 'terminal-safe',
+        routeType: 'safe',
+        sourceLevel: initialRun.board?.level ?? 1,
+        targetLevel: (initialRun.board?.level ?? 1) + 1
+    },
+    status: 'levelComplete'
+});
+const runFinalizationReport = runGameplayRunFinalizationSimulation({
+    ...interludeTerminalReport.finalRun,
+    achievementsEnabled: true
+});
 
 console.log(JSON.stringify({
     seed: report.seed,
@@ -154,6 +171,20 @@ console.log(JSON.stringify({
         replayDeterministic: repairReport.replayDeterministic,
         invariantViolations: repairReport.invariantViolations
     },
+    interludeTerminal: {
+        accepted: interludeTerminalReport.accepted,
+        commandType: interludeTerminalReport.command.type,
+        eventTypes: interludeTerminalReport.events.map((event) => event.type),
+        replayDeterministic: interludeTerminalReport.replayDeterministic,
+        invariantViolations: interludeTerminalReport.invariantViolations
+    },
+    runFinalization: {
+        accepted: runFinalizationReport.accepted,
+        commandType: runFinalizationReport.command.type,
+        eventTypes: runFinalizationReport.events.map((event) => event.type),
+        replayDeterministic: runFinalizationReport.replayDeterministic,
+        invariantViolations: runFinalizationReport.invariantViolations
+    },
     replayDeterministic: report.replayDeterministic,
     invariantViolations: report.invariantViolations
 }, null, 2));
@@ -163,7 +194,13 @@ if (
     report.invariantViolations.length > 0 ||
     !repairReport.accepted ||
     !repairReport.replayDeterministic ||
-    repairReport.invariantViolations.length > 0
+    repairReport.invariantViolations.length > 0 ||
+    !interludeTerminalReport.accepted ||
+    !interludeTerminalReport.replayDeterministic ||
+    interludeTerminalReport.invariantViolations.length > 0 ||
+    !runFinalizationReport.accepted ||
+    !runFinalizationReport.replayDeterministic ||
+    runFinalizationReport.invariantViolations.length > 0
 ) {
     process.exitCode = 1;
 }

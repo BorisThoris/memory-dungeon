@@ -36,6 +36,8 @@ import {
     VAULTBREAKER_DEFINITIONS,
     WARDEN_DEFINITIONS,
     createGameplayGauntletExpireCommand,
+    createGameplayInterludeTerminalResolveCommand,
+    createGameplayRunFinalizeCommand,
     createGameplayDebugRevealActivateCommand,
     createGameplayDebugRevealDeactivateCommand,
     createGameplayMemorizeCompleteCommand,
@@ -78,6 +80,8 @@ import { reduceGameplayCommand, replayGameplayCommands } from './gameplay-core';
 import { inspectGameplayFeedbackCompleteness } from './gameplay-feedback-completeness';
 import {
     applyRelicImmediateThroughGameplayCore,
+    executeGameplayCommandThroughGameplayCore,
+    finalizeRunThroughGameplayCore,
     repairRunProgressionThroughGameplayCore,
     resolveFindableMatchRewardThroughGameplayCore,
     resolveSlayerFloorClearThroughGameplayCore
@@ -86,9 +90,8 @@ import { applyRelicImmediate } from './relic-immediate-rules';
 import { openRelicOffer } from './relic-offer-open-rules';
 import { resolveTileTraitEffects } from './tile-trait-rules';
 import { createRunShopOffers, purchaseShopOffer, rerollShopOffers } from './shop-rules';
-import { createDungeonExitActivationTransition } from './dungeon-exit-rules';
 import { applyEnemyHazardClick } from './dungeon-enemy-hazard-rules';
-import { createNewRun, finalizeLevel } from './game';
+import { createNewRun } from './run-creation-rules';
 import { EXIT_PAIR_KEY, ROOM_PAIR_KEY, WILD_PAIR_KEY } from './tile-identity';
 import { createPlayablePathFixture } from './playable-path-fixtures';
 import { normalizeSessionStats } from './session-stats-rules';
@@ -101,6 +104,8 @@ import {
 import { advanceToNextLevel } from './next-floor-transition-rules';
 import { resolveSlayerFloorClearEffects } from './slayer-floor-clear-transition';
 import { finishMemorizePhase } from './memorize-phase-rules';
+import { createDeadInterludeGameOverRun } from './interlude-transition-rules';
+import { normalizeSaveData } from './save-data';
 
 const tile = (id: string, pairKey: string, tileTraitKind?: Tile['tileTraitKind']): Tile => ({
     id,
@@ -142,6 +147,37 @@ const run = (overrides: Partial<RunState> = {}): RunState =>
     }) as RunState;
 
 describe('deterministic gameplay core', () => {
+    it('owns accepted command journaling and leaves rejected inputs untouched', () => {
+        const initial = createNewRun(0, { echoFeedbackEnabled: false, runSeed: 9137 });
+        const command = createGameplayMemorizeCompleteCommand('journaled-command-1');
+
+        const accepted = executeGameplayCommandThroughGameplayCore(initial, command);
+
+        expect(accepted.accepted).toBe(true);
+        expect(accepted.command).toEqual(command);
+        expect(accepted.run.gameplayCommandJournal).toEqual([
+            ...(initial.gameplayCommandJournal ?? []),
+            command
+        ]);
+        expect(accepted.run.gameplayEventJournal?.slice(-(accepted.events.length))).toEqual(accepted.events);
+        expect(initial.gameplayCommandJournal).toBeUndefined();
+        expect(initial.gameplayEventJournal).toBeUndefined();
+
+        const rejected = executeGameplayCommandThroughGameplayCore(accepted.run, command);
+
+        expect(rejected.accepted).toBe(false);
+        expect(rejected.run).toBe(accepted.run);
+        expect(rejected.command).toEqual(command);
+        expect(rejected.events).toEqual([
+            expect.objectContaining({
+                type: 'command.rejected',
+                commandId: command.commandId
+            })
+        ]);
+        expect(rejected.run.gameplayCommandJournal).toEqual(accepted.run.gameplayCommandJournal);
+        expect(rejected.run.gameplayEventJournal).toEqual(accepted.run.gameplayEventJournal);
+    });
+
     it('completes study through one replayable command with exact Focus parity', () => {
         const base = createNewRun(0, { echoFeedbackEnabled: false, runSeed: 9136 });
         const initial: RunState = {
@@ -409,6 +445,153 @@ describe('deterministic gameplay core', () => {
                 expect.objectContaining({ type: 'feedback.requested', cue: 'run.resume.game_over', tone: 'warning' })
             ]
         });
+    });
+
+    it('normalizes dead interludes through one typed, replayable terminal transition', () => {
+        const sideRoomRun = createPlayablePathFixture('sideRoomThenShop').run!;
+        const initial: RunState = {
+            ...sideRoomRun,
+            lives: 0,
+            pendingRouteCardPlan: {
+                choiceId: 'terminal-safe',
+                routeType: 'safe',
+                sourceLevel: sideRoomRun.board?.level ?? 1,
+                targetLevel: (sideRoomRun.board?.level ?? 1) + 1
+            },
+            relicOffer: createPlayablePathFixture('relicDraft').run!.relicOffer
+        };
+        const command = createGameplayInterludeTerminalResolveCommand('interlude-terminal-1');
+        const result = reduceGameplayCommand(initial, command);
+
+        expect(command).toMatchObject({ type: 'run.interlude_terminal_resolve' });
+        expect(result.accepted).toBe(true);
+        expect(result.run).toEqual(createDeadInterludeGameOverRun(initial));
+        expect(result.run.gameplayCommandJournal).toEqual(initial.gameplayCommandJournal);
+        expect(result.run.gameplayEventJournal).toEqual(initial.gameplayEventJournal);
+        expect(result.events).toEqual([
+            {
+                schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
+                commandId: command.commandId,
+                eventId: `${command.commandId}:0`,
+                sequence: 0,
+                source: { kind: 'system', id: 'run_lifecycle' },
+                type: 'run.interlude_terminal_resolved',
+                cause: 'zero_lives',
+                statusBefore: 'levelComplete',
+                statusAfter: 'gameOver',
+                livesBefore: 0,
+                livesAfter: 0,
+                pendingRouteCleared: true,
+                sideRoomCleared: true,
+                relicOfferCleared: true,
+                shopOfferCountCleared: initial.shopOffers.length
+            },
+            {
+                schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
+                commandId: command.commandId,
+                eventId: `${command.commandId}:1`,
+                sequence: 1,
+                source: { kind: 'system', id: 'run_lifecycle' },
+                type: 'feedback.requested',
+                cue: 'run.interlude.terminal',
+                message: 'Run ended at zero lives; pending interlude routes and rewards were cleared.',
+                tone: 'warning'
+            }
+        ]);
+        expect(replayGameplayCommands(initial, [JSON.parse(JSON.stringify(command))])).toMatchObject({
+            run: result.run,
+            events: result.events,
+            acceptedCommandIds: [command.commandId],
+            rejectedCommandIds: []
+        });
+        expect(reduceGameplayCommand({ ...initial, lives: 1 }, command)).toMatchObject({
+            accepted: false
+        });
+        expect(reduceGameplayCommand(result.run, command)).toMatchObject({
+            accepted: false,
+            run: result.run
+        });
+    });
+
+    it('finalizes a terminal run through one validated command and journals the saved summary', () => {
+        const base = finishMemorizePhase(createNewRun(0, {
+            echoFeedbackEnabled: false,
+            runSeed: 0x8201
+        }));
+        const initial: RunState = {
+            ...base,
+            achievementsEnabled: true,
+            lives: 0,
+            status: 'gameOver',
+            stats: {
+                ...base.stats,
+                totalScore: 820,
+                levelsCleared: 2,
+                highestLevel: 3
+            }
+        };
+        const command = createGameplayRunFinalizeCommand('run-finalize-1', ['ACH_FIRST_CLEAR']);
+        const result = reduceGameplayCommand(initial, command);
+
+        expect(gameplayCommandSchema.parse(command)).toEqual(command);
+        expect(command).toMatchObject({
+            type: 'run.finalize',
+            unlockedAchievements: ['ACH_FIRST_CLEAR']
+        });
+        expect(result.accepted).toBe(true);
+        expect(result.run).toMatchObject({ status: 'gameOver', lives: 0 });
+        expect(result.run.gameplayCommandJournal).toEqual(initial.gameplayCommandJournal);
+        expect(result.run.gameplayEventJournal).toEqual(initial.gameplayEventJournal);
+        expect(result.run.lastRunSummary).toMatchObject({
+            totalScore: 820,
+            levelsCleared: 2,
+            highestLevel: 3,
+            unlockedAchievements: ['ACH_FIRST_CLEAR']
+        });
+        expect(result.events).toEqual([
+            {
+                schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
+                commandId: command.commandId,
+                eventId: `${command.commandId}:0`,
+                sequence: 0,
+                source: { kind: 'system', id: 'run_finalization' },
+                type: 'run.finalized',
+                totalScore: 820,
+                levelsCleared: 2,
+                highestLevel: 3,
+                achievementsEnabled: true,
+                unlockedAchievements: ['ACH_FIRST_CLEAR'],
+                summaryValidated: true
+            }
+        ]);
+        expect(gameplayEventSchema.parse(result.events[0])).toEqual(result.events[0]);
+        expect(replayGameplayCommands(initial, [JSON.parse(JSON.stringify(command))])).toMatchObject({
+            run: result.run,
+            events: result.events,
+            acceptedCommandIds: [command.commandId],
+            rejectedCommandIds: []
+        });
+
+        const adapted = finalizeRunThroughGameplayCore(initial, ['ACH_FIRST_CLEAR'], command.commandId);
+        expect(adapted.accepted).toBe(true);
+        expect(adapted.run.gameplayCommandJournal?.at(-1)).toEqual(command);
+        expect(adapted.run.gameplayEventJournal?.at(-1)).toEqual(result.events[0]);
+        expect(adapted.run.lastRunSummary?.gameplayCommandJournal?.at(-1)).toEqual(command);
+        expect(adapted.run.lastRunSummary?.gameplayEventJournal?.at(-1)).toEqual(result.events[0]);
+        expect(normalizeSaveData({ lastRunSummary: adapted.run.lastRunSummary }).lastRunSummary).toEqual(
+            adapted.run.lastRunSummary
+        );
+
+        expect(reduceGameplayCommand(base, command)).toMatchObject({ accepted: false, run: base });
+        expect(reduceGameplayCommand(result.run, command)).toMatchObject({ accepted: false, run: result.run });
+        expect(reduceGameplayCommand(
+            { ...initial, achievementsEnabled: false },
+            command
+        )).toMatchObject({ accepted: false });
+        expect(gameplayCommandSchema.safeParse({
+            ...command,
+            unlockedAchievements: ['ACH_FIRST_CLEAR', 'ACH_FIRST_CLEAR']
+        }).success).toBe(false);
     });
 
     it('activates, refreshes, and deactivates debug reveal through replayable lifecycle commands', () => {
@@ -2959,10 +3142,11 @@ describe('deterministic gameplay core', () => {
             exitRun,
             createGameplayDungeonExitActivateCommand('activate-master-exit', 'master_key')
         );
-        const legacyExit = createDungeonExitActivationTransition(exitRun, 'master_key')!;
         expect(activated.accepted).toBe(true);
-        expect(activated.run).toEqual(finalizeLevel(legacyExit.run, legacyExit.board));
         expect(activated.run.status).toBe('levelComplete');
+        expect(activated.run.dungeonMasterKeys).toBe(0);
+        expect(activated.run.dungeonGatewaysUsed).toBe(1);
+        expect(activated.run.board?.dungeonExitActivated).toBe(true);
         expect(activated.run.gameplayCommandJournal).toEqual(exitRun.gameplayCommandJournal);
         expect(activated.run.gameplayEventJournal).toEqual(exitRun.gameplayEventJournal);
         expect(activated.events).toEqual([

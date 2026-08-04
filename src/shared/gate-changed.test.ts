@@ -412,7 +412,7 @@ describe('gate:changed selector', () => {
             'src/shared/floor-mutator-schedule.ts',
             'src/shared/board-generation.ts',
             'src/shared/bonus-rewards.ts',
-            'src/shared/playthrough-solver.ts',
+            'src/shared/gameplay-core-playthrough-solver.ts',
             'src/shared/contracts.ts'
         );
 
@@ -428,12 +428,12 @@ describe('gate:changed selector', () => {
         expect(payload.reasons.filter((reason) => reason.gateId === 'simHealth')).toHaveLength(6);
         expect(
             payload.reasons.some(
-                (reason) => reason.gateId === 'actionLoop' && reason.file === 'src/shared/playthrough-solver.ts'
+                (reason) => reason.gateId === 'actionLoop' && reason.file === 'src/shared/gameplay-core-playthrough-solver.ts'
             )
         ).toBe(true);
         expect(
             payload.reasons.some(
-                (reason) => reason.gateId === 'simSoftlockSeeds' && reason.file === 'src/shared/playthrough-solver.ts'
+                (reason) => reason.gateId === 'simSoftlockSeeds' && reason.file === 'src/shared/gameplay-core-playthrough-solver.ts'
             )
         ).toBe(true);
     });
@@ -509,7 +509,8 @@ describe('gate:changed selector', () => {
             'scripts/gate-softlock-seeds.ts',
             'scripts/audit-dungeon-topology.ts',
             'scripts/seed-sweep-options.ts',
-            'src/shared/playthrough-solver.ts',
+            'src/shared/gameplay-core-playthrough-solver.ts',
+            'src/shared/playthrough-solver-rules.ts',
             'src/shared/run-progression-repair.ts',
             'src/shared/softlock-fairness.ts',
             'src/shared/board-generation.ts',

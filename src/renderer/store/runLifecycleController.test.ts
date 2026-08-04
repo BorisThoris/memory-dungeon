@@ -37,6 +37,8 @@ const createHarness = (initialState?: Partial<TestState>) => {
     const scheduleDebugRevealTimer = vi.fn();
     const controller = createRunLifecycleController({
         clearAllTimers,
+        getObservedAtMs: () => Date.UTC(2026, 7, 4, 12),
+        getProposedRunSeed: () => 91_001,
         getState: () => state,
         playRunStartSfx,
         prepareMemorizeTimerForBoardReady,
@@ -84,6 +86,14 @@ describe('runLifecycleController', () => {
         expect(harness.clearAllTimers).toHaveBeenCalledTimes(1);
         expect(harness.playRunStartSfx).toHaveBeenCalledTimes(1);
         expect(harness.getState().run?.practiceMode).toBe(true);
+        expect(harness.getState().run?.runSeed).toBe(91_001);
+        expect(harness.getState().run?.gameplayCommandJournal).toEqual([
+            expect.objectContaining({ type: 'run.start', reason: 'restart' })
+        ]);
+        expect(harness.getState().run?.gameplayEventJournal).toEqual([
+            expect.objectContaining({ type: 'run.started', reason: 'restart' }),
+            expect.objectContaining({ type: 'feedback.requested', cue: 'run.started' })
+        ]);
         expect(harness.getState().runStartSaveData).toBe(harness.getState().saveData);
         expect(harness.prepareMemorizeTimerForBoardReady).toHaveBeenCalledWith(harness.getState().run);
     });

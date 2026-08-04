@@ -26,6 +26,8 @@ export type GameplayFeedbackAudioCategory =
     | 'gauntlet-expire'
     | 'parasite'
     | 'route-choice'
+    | 'run-end'
+    | 'run-start'
     | 'resume'
     | 'side-room'
     | 'wild-match'
@@ -73,7 +75,13 @@ const audioCategoryFor = (
         return 'gauntlet-expire';
     }
     if (feedback.source.kind === 'system' && feedback.source.id === 'run_lifecycle') {
-        return feedback.cue === 'run.paused' ? 'pause' : 'resume';
+        if (feedback.cue === 'run.paused') {
+            return 'pause';
+        }
+        return feedback.cue === 'run.interlude.terminal' ? 'run-end' : 'resume';
+    }
+    if (feedback.source.kind === 'system' && feedback.source.id === 'run_start') {
+        return 'run-start';
     }
     if (feedback.source.kind === 'system' && feedback.source.id === 'debug_reveal') {
         return 'debug-reveal';

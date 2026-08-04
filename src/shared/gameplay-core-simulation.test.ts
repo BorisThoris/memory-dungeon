@@ -2,8 +2,11 @@ import { describe, expect, it } from 'vitest';
 import type { BoardState, RunState, Tile } from './contracts';
 import {
     runGameplayCoreSimulation,
+    runGameplayInterludeTerminalSimulation,
+    runGameplayRunFinalizationSimulation,
     runGameplayProgressionRepairSimulation
 } from './gameplay-core-simulation';
+import { createPlayablePathFixture } from './playable-path-fixtures';
 import { createTimerState } from './run-timer-rules';
 import { createRunShopOffers } from './shop-rules';
 import { EXIT_PAIR_KEY, WILD_PAIR_KEY } from './tile-identity';
@@ -314,6 +317,97 @@ describe('seeded gameplay core simulation', () => {
         ]));
         expect(first.finalRun.board?.dungeonExitLockKind).toBe('none');
         expect(first.finalRun.board?.enemyHazards?.[0]).toMatchObject({ hp: 0, state: 'defeated' });
+    });
+
+    it('replays an accepted zero-life interlude terminal transition', () => {
+        const source = createPlayablePathFixture('sideRoomThenShop').run!;
+        const terminalRun: RunState = {
+            ...source,
+            lives: 0,
+            pendingRouteCardPlan: {
+                choiceId: 'terminal-safe',
+                routeType: 'safe',
+                sourceLevel: source.board?.level ?? 1,
+                targetLevel: (source.board?.level ?? 1) + 1
+            },
+            relicOffer: createPlayablePathFixture('relicDraft').run!.relicOffer
+        };
+
+        const first = runGameplayInterludeTerminalSimulation(terminalRun);
+        const second = runGameplayInterludeTerminalSimulation(terminalRun);
+
+        expect(first).toEqual(second);
+        expect(first.accepted).toBe(true);
+        expect(first.replayDeterministic).toBe(true);
+        expect(first.invariantViolations).toEqual([]);
+        expect(first.command).toMatchObject({ type: 'run.interlude_terminal_resolve' });
+        expect(first.events).toEqual(expect.arrayContaining([
+            expect.objectContaining({
+                type: 'run.interlude_terminal_resolved',
+                cause: 'zero_lives',
+                pendingRouteCleared: true,
+                sideRoomCleared: true,
+                relicOfferCleared: true
+            }),
+            expect.objectContaining({ type: 'feedback.requested', cue: 'run.interlude.terminal' })
+        ]));
+        expect(first.finalRun).toMatchObject({
+            lives: 0,
+            pendingRouteCardPlan: null,
+            relicOffer: null,
+            shopOffers: [],
+            sideRoom: null,
+            status: 'gameOver'
+        });
+    });
+
+    it('replays a validated terminal summary with exact finalization facts', () => {
+        const source = createPlayablePathFixture('sideRoomThenShop').run!;
+        const terminal = runGameplayInterludeTerminalSimulation({ ...source, lives: 0 });
+        const terminalRun: RunState = {
+            ...terminal.finalRun,
+            achievementsEnabled: true,
+            stats: {
+                ...terminal.finalRun.stats,
+                totalScore: 1_820,
+                levelsCleared: 4,
+                highestLevel: 5
+            }
+        };
+
+        const first = runGameplayRunFinalizationSimulation(terminalRun, [
+            'ACH_FIRST_CLEAR',
+            'ACH_LEVEL_FIVE'
+        ]);
+        const second = runGameplayRunFinalizationSimulation(terminalRun, [
+            'ACH_FIRST_CLEAR',
+            'ACH_LEVEL_FIVE'
+        ]);
+
+        expect(first).toEqual(second);
+        expect(first.accepted).toBe(true);
+        expect(first.replayDeterministic).toBe(true);
+        expect(first.invariantViolations).toEqual([]);
+        expect(first.command).toMatchObject({
+            type: 'run.finalize',
+            unlockedAchievements: ['ACH_FIRST_CLEAR', 'ACH_LEVEL_FIVE']
+        });
+        expect(first.events).toEqual([
+            expect.objectContaining({
+                type: 'run.finalized',
+                totalScore: 1_820,
+                levelsCleared: 4,
+                highestLevel: 5,
+                unlockedAchievements: ['ACH_FIRST_CLEAR', 'ACH_LEVEL_FIVE'],
+                summaryValidated: true
+            })
+        ]);
+        expect(first.finalRun.lastRunSummary).toMatchObject({
+            totalScore: 1_820,
+            levelsCleared: 4,
+            highestLevel: 5,
+            unlockedAchievements: ['ACH_FIRST_CLEAR', 'ACH_LEVEL_FIVE']
+        });
     });
 
     it('sweeps distinct seeds without negative inventory or replay drift', () => {

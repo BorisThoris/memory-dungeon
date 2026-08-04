@@ -7,12 +7,10 @@ import type {
     ViewState
 } from '../../shared/contracts';
 import { activateDebugRevealThroughGameplayCore } from '../../shared/gameplay-core-adapters';
-import { applyRunSettings } from '../../shared/run-settings-rules';
 import { trackEvent } from '../../shared/telemetry';
 import {
-    createRestartRun,
-    createRunStartStatePatch,
-    createRunStartTelemetryPayload
+    createRestartRunSelection,
+    createRunStartPlan
 } from './runStartState';
 import { createRunSurfaceReset, type RunSurfaceState } from './runSurfaceState';
 
@@ -33,6 +31,8 @@ interface RunLifecycleMutableState extends RunSurfaceState {
 
 interface RunLifecycleControllerDeps {
     clearAllTimers: () => void;
+    getObservedAtMs: () => number;
+    getProposedRunSeed: () => number;
     getState: () => RunLifecycleControllerState;
     playRunStartSfx: () => void;
     prepareMemorizeTimerForBoardReady: (run: RunState) => void;
@@ -48,6 +48,8 @@ interface RunLifecycleController {
 
 export const createRunLifecycleController = ({
     clearAllTimers,
+    getObservedAtMs,
+    getProposedRunSeed,
     getState,
     playRunStartSfx,
     prepareMemorizeTimerForBoardReady,
@@ -69,15 +71,26 @@ export const createRunLifecycleController = ({
     },
 
     restartRun: () => {
-        clearAllTimers();
         const { run: previousRun, saveData, settings } = getState();
-        const run = applyRunSettings(createRestartRun(previousRun, saveData), settings);
+        const selection = createRestartRunSelection(previousRun);
+        const plan = createRunStartPlan({
+            activeContractOverride: selection.activeContractOverride,
+            request: selection.request,
+            saveData,
+            settings,
+            observedAtMs: getObservedAtMs(),
+            proposedRunSeed: getProposedRunSeed(),
+            reason: 'restart',
+            startingLoadoutId: selection.startingLoadoutId
+        });
+        if (!plan) return;
 
-        trackEvent('run_start', createRunStartTelemetryPayload(run, { restarted: true }));
-        playRunStartSfx();
+        clearAllTimers();
+        trackEvent('run_start', plan.telemetry);
+        if (plan.feedback?.audioCategory === 'run-start') playRunStartSfx();
 
-        setState(createRunStartStatePatch(run, saveData));
-        prepareMemorizeTimerForBoardReady(run);
+        setState(plan.patch);
+        prepareMemorizeTimerForBoardReady(plan.run);
     },
 
     triggerDebugReveal: () => {

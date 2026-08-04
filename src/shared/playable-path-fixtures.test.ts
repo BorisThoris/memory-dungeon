@@ -1,9 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import {
+    createFinalizedGameOverPlayablePathRun,
     createPlayablePathFixture,
     PLAYABLE_PATH_FIXTURE_IDS,
     type PlayablePathFixtureId
 } from './playable-path-fixtures';
+import { createNewRun, finishMemorizePhase } from './game-core';
 import {
     applyRouteChoiceOutcome,
     openRouteSideRoom
@@ -76,12 +78,43 @@ describe('playable path fixtures', () => {
 
         const gameOverFixture = createPlayablePathFixture('gameOver');
         expect(gameOverFixture.run?.lastRunSummary).not.toBeNull();
+        expect(gameOverFixture.run?.gameplayCommandJournal?.at(-1)?.type).toBe('run.finalize');
+        expect(gameOverFixture.run?.gameplayEventJournal?.at(-1)?.type).toBe('run.finalized');
+        expect(gameOverFixture.run?.lastRunSummary?.gameplayCommandJournal).toEqual(
+            gameOverFixture.run?.gameplayCommandJournal
+        );
+        expect(gameOverFixture.run?.lastRunSummary?.gameplayEventJournal).toEqual(
+            gameOverFixture.run?.gameplayEventJournal
+        );
 
         const pickupFixture = createPlayablePathFixture('activeRunWithPickupCashout');
         expect(pickupFixture.run?.findablesTotalThisFloor).toBe(1);
         expect(pickupFixture.run?.board?.tiles.filter((tile) => tile.findableKind === 'shard_spark')).toHaveLength(2);
         expect(pickupFixture.run?.stats.currentStreak).toBe(0);
         expect(pickupFixture.run?.stats.comboShards).toBeGreaterThan(0);
+    });
+
+    it('finalizes a forced post-run fixture deterministically without mutating its live input', () => {
+        const liveRun = finishMemorizePhase(createNewRun(0, { runSeed: 712_004 }));
+        const startingLives = liveRun.lives;
+
+        const first = createFinalizedGameOverPlayablePathRun(liveRun);
+        const second = createFinalizedGameOverPlayablePathRun(liveRun);
+
+        expect(first).toEqual(second);
+        expect(liveRun).toMatchObject({ lives: startingLives, status: 'playing', lastRunSummary: null });
+        expect(first).toMatchObject({ lives: 0, status: 'gameOver' });
+        expect(first.gameplayCommandJournal?.at(-1)).toMatchObject({
+            type: 'run.finalize',
+            unlockedAchievements: []
+        });
+        expect(first.gameplayEventJournal?.at(-1)).toMatchObject({
+            type: 'run.finalized',
+            summaryValidated: true,
+            unlockedAchievements: []
+        });
+        expect(first.lastRunSummary?.gameplayCommandJournal).toEqual(first.gameplayCommandJournal);
+        expect(first.lastRunSummary?.gameplayEventJournal).toEqual(first.gameplayEventJournal);
     });
 
     it.each([

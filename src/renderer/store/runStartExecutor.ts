@@ -18,6 +18,8 @@ export interface RunStartExecutorState {
 export interface RunStartExecutorDeps {
     clearAllTimers: () => void;
     getState: () => RunStartExecutorState;
+    getObservedAtMs: () => number;
+    getProposedRunSeed: () => number;
     playRunStartSfx: () => void;
     prepareMemorizeTimerForBoardReady: (run: RunState) => void;
     setState: (patch: RunStartStatePatch) => void;
@@ -29,7 +31,13 @@ export const executeRunStartRequest = (
     deps: RunStartExecutorDeps
 ): void => {
     const { saveData, settings } = deps.getState();
-    const plan = createRunStartPlan({ request, saveData, settings });
+    const plan = createRunStartPlan({
+        request,
+        saveData,
+        settings,
+        observedAtMs: deps.getObservedAtMs(),
+        proposedRunSeed: deps.getProposedRunSeed()
+    });
 
     if (!plan) {
         return;
@@ -37,7 +45,9 @@ export const executeRunStartRequest = (
 
     deps.clearAllTimers();
     deps.trackRunStart(plan.telemetry);
-    deps.playRunStartSfx();
+    if (plan.feedback?.audioCategory === 'run-start') {
+        deps.playRunStartSfx();
+    }
     deps.setState(plan.patch);
     deps.prepareMemorizeTimerForBoardReady(plan.run);
 };

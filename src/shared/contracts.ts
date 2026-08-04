@@ -295,14 +295,17 @@ export interface ContractFlags {
 export type ResumableRunStatus = 'memorize' | 'playing' | 'resolving';
 export type RunStatus = ResumableRunStatus | 'paused' | 'levelComplete' | 'gameOver';
 
-export type AchievementId =
-    | 'ACH_FIRST_CLEAR'
-    | 'ACH_LEVEL_FIVE'
-    | 'ACH_SCORE_THOUSAND'
-    | 'ACH_PERFECT_CLEAR'
-    | 'ACH_LAST_LIFE'
-    | 'ACH_ENDLESS_TEN'
-    | 'ACH_SEVEN_DAILIES';
+export const ACHIEVEMENT_IDS = [
+    'ACH_FIRST_CLEAR',
+    'ACH_LEVEL_FIVE',
+    'ACH_SCORE_THOUSAND',
+    'ACH_PERFECT_CLEAR',
+    'ACH_LAST_LIFE',
+    'ACH_ENDLESS_TEN',
+    'ACH_SEVEN_DAILIES'
+] as const;
+
+export type AchievementId = (typeof ACHIEVEMENT_IDS)[number];
 
 export interface DebugFlags {
     showDebugTools: boolean;

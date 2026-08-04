@@ -1,4 +1,3 @@
-import { type RunState } from './contracts';
 export {
     applyRelicOfferServiceToRun,
     computeRelicOfferPickBudget,
@@ -23,18 +22,6 @@ export {
     getEnemyHazardMovementCandidateIds,
     type EnemyHazardPatternDefinition
 } from './dungeon-enemy-hazard-rules';
-import { createApplyTileFlip } from './tile-flip-command-transition';
-import { createActivateDungeonExit, createApplyDestroyPair } from './floor-completion-transitions';
-import { createResolveBoardTurnTransition } from './board-turn-transition';
-import { createFinalizeLevelTransition } from './floor-clear-transition';
-import { appendGameplayJournal } from './gameplay-journal';
-import {
-    consumeWildMatchThroughGameplayCore,
-    resolveBoardTurnThroughGameplayCore,
-    resolveFindableMatchRewardThroughGameplayCore,
-    resolveSlayerFloorClearThroughGameplayCore
-} from './gameplay-core-adapters';
-import type { GameplayEvent } from './gameplay-core-contracts';
 export {
     completeRelicPickAndAdvance
 } from './relic-pick-advance-rules';
@@ -255,47 +242,11 @@ export {
     grantBonusRelicPickNextOffer
 } from './relic-immediate-rules';
 
-export const finalizeLevel = createFinalizeLevelTransition({
-    resolveSlayerFloorClear: resolveSlayerFloorClearThroughGameplayCore,
-    appendGameplayJournal
-});
-
-export const flipTile = createApplyTileFlip();
-
-export const applyDestroyPair = createApplyDestroyPair();
-
-export const activateDungeonExit = createActivateDungeonExit();
-
-
-
-const resolveBoardTurnCompatibility = createResolveBoardTurnTransition({
-    finalizeLevel,
-    resolveFindableMatchReward: resolveFindableMatchRewardThroughGameplayCore,
-    consumeWildMatch: consumeWildMatchThroughGameplayCore
-});
-
-export interface BoardTurnResolutionResult {
-    run: RunState;
-    event: Extract<GameplayEvent, { type: 'board.turn_resolved' }> | null;
-}
-
-export const resolveBoardTurnWithEvent = (
-    run: RunState,
-    encorePairKeys: string[] = []
-): BoardTurnResolutionResult => {
-    const migrated = resolveBoardTurnThroughGameplayCore(run, encorePairKeys);
-    if (!migrated.migrated) {
-        return { run: resolveBoardTurnCompatibility(run, encorePairKeys), event: null };
-    }
-    const event = [...migrated.events].reverse().find(
-        (item): item is Extract<GameplayEvent, { type: 'board.turn_resolved' }> =>
-            item.type === 'board.turn_resolved'
-    ) ?? null;
-    return {
-        run: migrated.run,
-        event
-    };
-};
-
-export const resolveBoardTurn = (run: RunState, encorePairKeys: string[] = []): RunState =>
-    resolveBoardTurnWithEvent(run, encorePairKeys).run;
+export {
+    activateDungeonExit,
+    applyDestroyPair,
+    flipTile,
+    resolveBoardTurn,
+    resolveBoardTurnWithEvent,
+    type BoardTurnResolutionResult
+} from './gameplay-command-compatibility';

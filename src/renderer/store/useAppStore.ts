@@ -114,6 +114,9 @@ import type { AppState } from './appStoreTypes';
 
 const RUN_SURFACE_RESET = createRunSurfaceReset();
 
+/** Host-only entropy boundary; the sampled value is captured in the serialized run.start command. */
+const sampleRunStartSeed = (): number => Math.floor(Math.random() * 0x7fff_ffff);
+
 const sfxGainFromStore = (): number => {
     const { settings } = useAppStore.getState();
     return sfxGainFromSettings(settings.masterVolume, settings.sfxVolume);
@@ -201,6 +204,8 @@ const sideRoomActionController = createSideRoomActionController({
 
 const runLifecycleController = createRunLifecycleController({
     clearAllTimers,
+    getObservedAtMs: Date.now,
+    getProposedRunSeed: sampleRunStartSeed,
     getState: () => useAppStore.getState(),
     playRunStartSfx: playRunStartUiSfxFromStore,
     prepareMemorizeTimerForBoardReady,
@@ -216,6 +221,8 @@ const executeStoreRunStartRequest = (
     executeRunStartRequest(request, {
         clearAllTimers,
         getState: get,
+        getObservedAtMs: Date.now,
+        getProposedRunSeed: sampleRunStartSeed,
         playRunStartSfx: playRunStartUiSfxFromStore,
         prepareMemorizeTimerForBoardReady,
         setState: set,

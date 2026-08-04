@@ -210,19 +210,36 @@ const buildGameplayDiagram = (repoRoot) => {
     return {
         id: 'gameplay-resolution',
         title: 'Gameplay Resolution',
-        summary: 'Card flips resolve through matching, traits, hazards, enemies, board powers, scoring, and run progression.',
+        summary: 'Serialized run bootstrap, renderer intent, and historical shared state-in/state-out calls converge on one accepted-command journal transaction before pure rules; one command playthrough gate proves generated-board completion, feedback, fairness, and replay.',
         nodes: [
             node('input', 'Player Input', 'interaction', 'renderer', 'Flip, inspect, match, shuffle, swap, and consume powers.', evidence(repoRoot, ['src/renderer/App.tsx', 'src/renderer/components'])),
+            node('run_bootstrap', 'Run Bootstrap', 'domain', 'shared', 'A schema-validated command captures seed, time, mode, settings, and restart context before constructing run state.', evidence(repoRoot, ['src/shared/run-start-core-contracts.ts', 'src/shared/run-start-core.ts', 'src/renderer/store/runStartState.ts'])),
+            node('command_transaction', 'Command Transaction', 'domain', 'shared', 'One adapter reduces serialized intent and appends accepted commands plus ordered events to bounded journals.', evidence(repoRoot, ['src/shared/gameplay-core-adapters.ts', 'src/shared/gameplay-journal.ts', 'src/shared/renderer-command-transaction-boundary.test.ts'])),
+            node('compatibility_facade', 'Compatibility Facade', 'domain', 'shared', 'Historical shared flip, turn, Destroy, and exit calls retain their return shape but execute only through the command adapter; game.ts is an import-free barrel.', evidence(repoRoot, ['src/shared/gameplay-command-compatibility.ts', 'src/shared/game-barrel-ownership-boundary.test.ts', 'src/shared/game.ts'])),
             node('rules', 'Shared Rules', 'domain', 'shared', 'Pure rules resolve matches, hazards, traits, enemies, and resources.', evidence(repoRoot, ['src/shared/game.ts', 'src/shared/tile-trait-rules.ts'])),
+            node('command_playthrough', 'Command Playthrough Gate', 'domain', 'shared', 'Generated-board properties, fairness consumers, and endless simulation use one replayable solver; the retired direct-mutation solver cannot return.', evidence(repoRoot, ['src/shared/gameplay-core-playthrough-solver.ts', 'src/shared/playthrough-solver-rules.ts', 'src/shared/legacy-playthrough-solver-boundary.test.ts'])),
             node('board_powers', 'Board Powers', 'domain', 'shared', 'Peek, shuffle, region shuffle, and swap modify board state under legality rules.', evidence(repoRoot, ['src/shared/board-power-actions.ts', 'src/shared/board-power-availability.ts'])),
             node('feedback', 'HUD Feedback', 'ui', 'renderer', 'Gameplay HUD exposes route, trait, resource, and action state.', evidence(repoRoot, ['src/renderer/components/GameplayHudBar.tsx'])),
-            node('progression', 'Run Progression', 'domain', 'shared', 'Room completion advances route, rewards, shops, elites, and bosses.', evidence(repoRoot, ['src/shared/run-map.ts', 'src/shared/bonus-rewards.ts']))
+            node('progression', 'Run Progression', 'domain', 'shared', 'Room completion advances route, rewards, shops, elites, and bosses.', evidence(repoRoot, ['src/shared/run-map.ts', 'src/shared/bonus-rewards.ts'])),
+            node('terminal_cleanup', 'Terminal Interlude', 'domain', 'shared', 'A strict command converts zero-life reward/shop/continuation states into journaled game over.', evidence(repoRoot, ['src/shared/interlude-transition-rules.ts', 'src/shared/gameplay-core.ts', 'src/renderer/store/levelCompleteContinuationExecutor.ts'])),
+            node('run_finalization', 'Run Finalization', 'domain', 'shared', 'A strict command validates the terminal summary and journals its own command/event before persistence.', evidence(repoRoot, ['src/shared/gameplay-core-contracts.ts', 'src/shared/gameplay-core-adapters.ts', 'src/shared/run-summary-rules.ts', 'src/renderer/store/runResolutionController.ts', 'src/renderer/components/GameOverScreen.tsx']))
         ],
         edges: [
-            edge('input', 'rules', 'dispatches action'),
+            edge('run_bootstrap', 'rules', 'initializes deterministic state'),
+            edge('run_bootstrap', 'feedback', 'emits typed start cue'),
+            edge('input', 'command_transaction', 'submits serialized intent'),
+            edge('compatibility_facade', 'command_transaction', 'submits historical shared calls'),
+            edge('command_transaction', 'rules', 'reduces and journals acceptance'),
+            edge('rules', 'command_playthrough', 'executes generated floors'),
+            edge('command_playthrough', 'progression', 'proves replayable completion'),
             edge('rules', 'board_powers', 'checks legality'),
             edge('rules', 'feedback', 'publishes state'),
-            edge('rules', 'progression', 'completes rooms')
+            edge('rules', 'progression', 'completes rooms'),
+            edge('progression', 'terminal_cleanup', 'guards dead interludes'),
+            edge('terminal_cleanup', 'feedback', 'emits typed warning'),
+            edge('rules', 'run_finalization', 'submits terminal state'),
+            edge('terminal_cleanup', 'run_finalization', 'hands off cleaned terminal state'),
+            edge('run_finalization', 'feedback', 'feeds validated game-over summary')
         ],
         findings: [
             finding(

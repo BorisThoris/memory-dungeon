@@ -13,6 +13,8 @@ const createDeps = (): RunStartExecutorDeps => {
             saveData,
             settings: saveData.settings
         })),
+        getObservedAtMs: vi.fn(() => Date.UTC(2026, 7, 4, 12)),
+        getProposedRunSeed: vi.fn(() => 91_001),
         playRunStartSfx: vi.fn(),
         prepareMemorizeTimerForBoardReady: vi.fn(),
         setState: vi.fn(),

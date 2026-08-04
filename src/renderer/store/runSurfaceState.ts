@@ -14,15 +14,14 @@ import {
 } from '../../shared/gameplay-core-contracts';
 import {
     applyDestroyPairThroughGameplayCore,
-    applyTileFlipThroughGameplayCore
+    applyTileFlipThroughGameplayCore,
+    executeGameplayCommandThroughGameplayCore
 } from '../../shared/gameplay-core-adapters';
 import {
     chooseDungeonExitActivationSpend,
     type DungeonExitActivationSpend
 } from '../../shared/dungeon-exit-rules';
 import { getDungeonExitStatus } from '../../shared/dungeon-board-status';
-import { reduceGameplayCommand } from '../../shared/gameplay-core';
-import { appendGameplayJournal } from '../../shared/gameplay-journal';
 import { collectDestroyEligibleTileIds } from '../../shared/board-powers';
 import { isResumableLifecycleState, lifecycleStateFromRun } from '../../shared/run-lifecycle-machine';
 import {
@@ -100,10 +99,10 @@ export const applyEnemyHazardContactThroughGameplayCore = (
         tileId,
         advanceHazards
     );
-    const result = reduceGameplayCommand(run, command);
+    const result = executeGameplayCommandThroughGameplayCore(run, command);
     return result.accepted
         ? {
-              run: appendGameplayJournal(result.run, [command], result.events),
+              run: result.run,
               contacted: true,
               events: result.events
           }
@@ -345,12 +344,12 @@ export const createShuffleBoardSurfaceResult = ({
     const command = createGameplayShuffleCommand(
         `shuffle:${run.runSeed}:${run.board?.level ?? 0}:${run.shuffleNonce}`
     );
-    const result = reduceGameplayCommand(run, command);
+    const result = executeGameplayCommandThroughGameplayCore(run, command);
     return !result.accepted
         ? { kind: 'ignored' }
         : {
               kind: 'applied',
-              patch: { run: appendGameplayJournal(result.run, [command], result.events) },
+              patch: { run: result.run },
               playArmSfx: false,
               events: result.events
           };
@@ -373,14 +372,12 @@ export const createRegionShuffleSurfaceResult = ({
         `region-shuffle:${run.runSeed}:${run.board?.level ?? 0}:${run.shuffleNonce}:${row}`,
         row
     );
-    const result = reduceGameplayCommand(run, command);
+    const result = executeGameplayCommandThroughGameplayCore(run, command);
     return !result.accepted
         ? { kind: 'ignored' }
         : {
               kind: 'applied',
-              patch: createRunWithArmedModesClearedPatch(
-                  appendGameplayJournal(result.run, [command], result.events)
-              ),
+              patch: createRunWithArmedModesClearedPatch(result.run),
               playArmSfx: false,
               events: result.events
           };
@@ -400,12 +397,12 @@ export const createFlashPairSurfaceResult = ({
     const command = createGameplayFlashPairCommand(
         `flash-pair:${run.runSeed}:${run.board?.level ?? 0}:${run.shuffleNonce}:${run.flashPairCharges}`
     );
-    const result = reduceGameplayCommand(run, command);
+    const result = executeGameplayCommandThroughGameplayCore(run, command);
     return !result.accepted
         ? { kind: 'ignored' }
         : {
               kind: 'applied',
-              patch: { run: appendGameplayJournal(result.run, [command], result.events) },
+              patch: { run: result.run },
               playArmSfx: true,
               events: result.events
           };
@@ -425,12 +422,12 @@ export const createUndoResolvingSurfaceResult = ({
     const command = createGameplayUndoResolveCommand(
         `undo-resolve:${run.runSeed}:${run.board?.level ?? 0}:${run.board?.flippedTileIds.join('+') ?? 'none'}:${run.undoUsesThisFloor}`
     );
-    const result = reduceGameplayCommand(run, command);
+    const result = executeGameplayCommandThroughGameplayCore(run, command);
     return !result.accepted
         ? { kind: 'ignored' }
         : {
               kind: 'applied',
-              patch: { run: appendGameplayJournal(result.run, [command], result.events) },
+              patch: { run: result.run },
               playArmSfx: false,
               events: result.events
           };
@@ -453,15 +450,12 @@ export const createDungeonExitActivationSurfaceResult = ({
         `dungeon-exit:${run.runSeed}:${run.board?.level ?? 0}:${run.dungeonGatewaysUsed}:${resolvedSpend}`,
         resolvedSpend
     );
-    const result = reduceGameplayCommand(run, command);
-    const journaledRun = result.accepted
-        ? appendGameplayJournal(result.run, [command], result.events)
-        : run;
+    const result = executeGameplayCommandThroughGameplayCore(run, command);
     return !result.accepted
         ? { kind: 'ignored' }
         : {
               kind: 'applied',
-              patch: { run: journaledRun },
+              patch: { run: result.run },
               playArmSfx: false,
               events: result.events
           };
@@ -519,11 +513,11 @@ export const createArmedBoardPowerPressResult = ({
             `stray-remove:${run.runSeed}:${run.board?.level ?? 0}:${run.strayRemoveCharges}:${tileId}`,
             tileId
         );
-        const result = reduceGameplayCommand(run, command);
+        const result = executeGameplayCommandThroughGameplayCore(run, command);
         if (result.accepted) {
             return {
                 kind: 'strayApplied',
-                run: appendGameplayJournal(result.run, [command], result.events)
+                run: result.run
             };
         }
         return enemyContacted ? { kind: 'persistEnemyContact', run } : { kind: 'handled' };
@@ -545,12 +539,12 @@ export const createArmedBoardPowerPressResult = ({
             tileSwapFirstTileId,
             tileId
         );
-        const result = reduceGameplayCommand(run, command);
+        const result = executeGameplayCommandThroughGameplayCore(run, command);
         return !result.accepted
             ? { kind: 'handled' }
             : {
                   kind: 'tileSwapApplied',
-                  run: appendGameplayJournal(result.run, [command], result.events),
+                  run: result.run,
                   events: result.events
               };
     }
@@ -566,11 +560,11 @@ export const createArmedBoardPowerPressResult = ({
             `peek:${run.runSeed}:${run.board.level}:${run.peekCharges}:${tileId}`,
             tileId
         );
-        const result = reduceGameplayCommand(run, command);
+        const result = executeGameplayCommandThroughGameplayCore(run, command);
         return result.accepted
             ? {
                   kind: 'peekApplied',
-                  run: appendGameplayJournal(result.run, [command], result.events),
+                  run: result.run,
                   events: result.events
               }
             : { kind: 'handled' };
@@ -656,11 +650,11 @@ export const createGambitThirdPickPressResult = (
         `gambit-commit:${actionRun.runSeed}:${actionRun.board?.level ?? 0}:${actionRun.board?.flippedTileIds.join('+') ?? 'none'}:${tileId}`,
         tileId
     );
-    const commandResult = reduceGameplayCommand(actionRun, command);
+    const commandResult = executeGameplayCommandThroughGameplayCore(actionRun, command);
     if (!commandResult.accepted) {
         return { kind: 'unchanged', hazardContact };
     }
-    const intentRun = appendGameplayJournal(actionRun, [command], commandResult.events);
+    const intentRun = commandResult.run;
     const flippedBefore = actionRun.board?.flippedTileIds.length ?? 0;
     const flipTransition = applyTileFlipThroughGameplayCore(intentRun, tileId);
     const transitionedRun = flipTransition.run;

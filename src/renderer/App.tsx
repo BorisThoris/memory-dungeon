@@ -23,8 +23,8 @@ import styles from './styles/App.module.css';
 import { buildRendererThemeStyle } from './styles/theme';
 import { resolveAdaptiveMusicState, useGameplayMusic } from './audio/gameplayMusic';
 import { setTelemetrySink } from '../shared/telemetry';
-import { createGameOverRunSummary } from '../shared/run-summary-rules';
 import {
+    createFinalizedGameOverPlayablePathRun,
     createPlayablePathFixture,
     type PlayablePathFixtureId
 } from '../shared/playable-path-fixtures';
@@ -187,7 +187,7 @@ const App = () => {
             }
             useAppStore.setState({
                 view: 'gameOver',
-                run: createGameOverRunSummary(current, [])
+                run: createFinalizedGameOverPlayablePathRun(current)
             });
         };
         w.__memoryDungeonE2e = {

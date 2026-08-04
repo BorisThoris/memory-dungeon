@@ -1,4 +1,4 @@
-import type { FindableKind, RelicId, RunState } from './contracts';
+import type { AchievementId, FindableKind, RelicId, RunState } from './contracts';
 import {
     createGameplayDefinitionCommand,
     createGameplayDebugRevealActivateCommand,
@@ -7,6 +7,8 @@ import {
     createGameplayDestroyPairCommand,
     createGameplayFloorAdvanceCommand,
     createGameplayGauntletExpireCommand,
+    createGameplayInterludeTerminalResolveCommand,
+    createGameplayRunFinalizeCommand,
     createGameplayMemorizeCompleteCommand,
     createGameplayPauseCommand,
     createGameplayProgressionRepairCommand,
@@ -26,9 +28,10 @@ import {
 } from './slayer-floor-clear-transition';
 import { appendGameplayJournal } from './gameplay-journal';
 import { applyRelicImmediate } from './relic-immediate-rules';
-import { createTileFlipCommandForRun } from './tile-flip-command-transition';
+import { createTileFlipCommandForRun } from './tile-flip-command-rules';
 import { normalizeSessionStats } from './session-stats-rules';
 import { runNonNegativeInteger } from './run-number-guards';
+import { createValidatedGameOverRunSummary } from './run-summary-rules';
 
 export interface GameplayRelicImmediateAdapterResult {
     run: RunState;
@@ -117,6 +120,24 @@ export interface GameplayBoardInputAdapterResult {
     accepted: boolean;
 }
 
+/**
+ * Executes one serialized command and owns its accepted journal transaction.
+ * Renderer callers may construct intent, but reducer and persistence ordering
+ * stay behind this shared deterministic boundary.
+ */
+export const executeGameplayCommandThroughGameplayCore = (
+    run: RunState,
+    command: GameplayCommand
+): GameplayRunLifecycleAdapterResult => {
+    const result = reduceGameplayCommand(run, command);
+    return {
+        accepted: result.accepted,
+        command,
+        events: result.events,
+        run: result.accepted ? appendGameplayJournal(result.run, [command], result.events) : run
+    };
+};
+
 const RELIC_IMMEDIATE_DEFINITION_IDS: Partial<Record<RelicId, string>> = {
     extra_shuffle_charge: 'relic.extra_shuffle_charge',
     first_shuffle_free_per_floor: 'relic.first_shuffle_free_per_floor',
@@ -142,13 +163,7 @@ export const completeMemorizePhaseThroughGameplayCore = (
     commandId: string
 ): GameplayMemorizeCompleteAdapterResult => {
     const command = createGameplayMemorizeCompleteCommand(commandId);
-    const result = reduceGameplayCommand(run, command);
-    return {
-        accepted: result.accepted,
-        command,
-        events: result.events,
-        run: result.accepted ? appendGameplayJournal(result.run, [command], result.events) : run
-    };
+    return executeGameplayCommandThroughGameplayCore(run, command);
 };
 
 /** Converts a host-clock observation into one deterministic terminal gameplay transition. */
@@ -158,13 +173,7 @@ export const expireGauntletThroughGameplayCore = (
     commandId: string
 ): GameplayGauntletExpireAdapterResult => {
     const command = createGameplayGauntletExpireCommand(commandId, observedAtMs);
-    const result = reduceGameplayCommand(run, command);
-    return {
-        accepted: result.accepted,
-        command,
-        events: result.events,
-        run: result.accepted ? appendGameplayJournal(result.run, [command], result.events) : run
-    };
+    return executeGameplayCommandThroughGameplayCore(run, command);
 };
 
 /** Freezes gameplay timing from one serialized host observation and timer snapshot. */
@@ -175,13 +184,7 @@ export const pauseRunThroughGameplayCore = (
     commandId: string
 ): GameplayRunLifecycleAdapterResult => {
     const command = createGameplayPauseCommand(commandId, observedAtMs, timerSnapshot);
-    const result = reduceGameplayCommand(run, command);
-    return {
-        accepted: result.accepted,
-        command,
-        events: result.events,
-        run: result.accepted ? appendGameplayJournal(result.run, [command], result.events) : run
-    };
+    return executeGameplayCommandThroughGameplayCore(run, command);
 };
 
 /** Restores a paused gameplay phase from one serialized host-clock observation. */
@@ -191,12 +194,32 @@ export const resumeRunThroughGameplayCore = (
     commandId: string
 ): GameplayRunLifecycleAdapterResult => {
     const command = createGameplayResumeCommand(commandId, observedAtMs);
-    const result = reduceGameplayCommand(run, command);
+    return executeGameplayCommandThroughGameplayCore(run, command);
+};
+
+/** Normalizes a zero-life or stale terminal interlude before the renderer selects the game-over screen. */
+export const resolveInterludeTerminalThroughGameplayCore = (
+    run: RunState,
+    commandId: string
+): GameplayRunLifecycleAdapterResult => {
+    const command = createGameplayInterludeTerminalResolveCommand(commandId);
+    return executeGameplayCommandThroughGameplayCore(run, command);
+};
+
+/** Creates the validated terminal summary after journaling its own final command and event. */
+export const finalizeRunThroughGameplayCore = (
+    run: RunState,
+    unlockedAchievements: readonly AchievementId[],
+    commandId: string
+): GameplayRunLifecycleAdapterResult => {
+    const command = createGameplayRunFinalizeCommand(commandId, unlockedAchievements);
+    const result = executeGameplayCommandThroughGameplayCore(run, command);
+    if (!result.accepted) {
+        return result;
+    }
     return {
-        accepted: result.accepted,
-        command,
-        events: result.events,
-        run: result.accepted ? appendGameplayJournal(result.run, [command], result.events) : run
+        ...result,
+        run: createValidatedGameOverRunSummary(result.run, [...unlockedAchievements])
     };
 };
 
@@ -207,13 +230,7 @@ export const activateDebugRevealThroughGameplayCore = (
     commandId: string
 ): GameplayRunLifecycleAdapterResult => {
     const command = createGameplayDebugRevealActivateCommand(commandId, disableAchievementsOnDebug);
-    const result = reduceGameplayCommand(run, command);
-    return {
-        accepted: result.accepted,
-        command,
-        events: result.events,
-        run: result.accepted ? appendGameplayJournal(result.run, [command], result.events) : run
-    };
+    return executeGameplayCommandThroughGameplayCore(run, command);
 };
 
 /** Ends an active debug board reveal with an explicit replayable lifecycle cause. */
@@ -223,13 +240,7 @@ export const deactivateDebugRevealThroughGameplayCore = (
     commandId: string
 ): GameplayRunLifecycleAdapterResult => {
     const command = createGameplayDebugRevealDeactivateCommand(commandId, reason);
-    const result = reduceGameplayCommand(run, command);
-    return {
-        accepted: result.accepted,
-        command,
-        events: result.events,
-        run: result.accepted ? appendGameplayJournal(result.run, [command], result.events) : run
-    };
+    return executeGameplayCommandThroughGameplayCore(run, command);
 };
 
 /** Applies only concrete anti-softlock repairs and journals their exact board consequences. */
@@ -238,13 +249,7 @@ export const repairRunProgressionThroughGameplayCore = (
     commandId: string
 ): GameplayRunLifecycleAdapterResult => {
     const command = createGameplayProgressionRepairCommand(commandId);
-    const result = reduceGameplayCommand(run, command);
-    return {
-        accepted: result.accepted,
-        command,
-        events: result.events,
-        run: result.accepted ? appendGameplayJournal(result.run, [command], result.events) : run
-    };
+    return executeGameplayCommandThroughGameplayCore(run, command);
 };
 
 /** Applies an ordinary or dungeon-card flip through the same command boundary used by replay. */
@@ -253,13 +258,7 @@ export const applyTileFlipThroughGameplayCore = (
     tileId: string
 ): GameplayBoardInputAdapterResult => {
     const command = createTileFlipCommandForRun(run, tileId);
-    const result = reduceGameplayCommand(run, command);
-    return {
-        accepted: result.accepted,
-        command,
-        events: result.events,
-        run: result.accepted ? appendGameplayJournal(result.run, [command], result.events) : run
-    };
+    return executeGameplayCommandThroughGameplayCore(run, command);
 };
 
 /** Spends Destroy through one explicit command and returns its authoritative events directly. */
@@ -271,13 +270,7 @@ export const applyDestroyPairThroughGameplayCore = (
         `destroy-pair:${run.runSeed}:${run.board?.level ?? 0}:${run.destroyPairCharges}:${tileId}`,
         tileId
     );
-    const result = reduceGameplayCommand(run, command);
-    return {
-        accepted: result.accepted,
-        command,
-        events: result.events,
-        run: result.accepted ? appendGameplayJournal(result.run, [command], result.events) : run
-    };
+    return executeGameplayCommandThroughGameplayCore(run, command);
 };
 
 /**
@@ -294,12 +287,12 @@ export const applyRelicImmediateThroughGameplayCore = (
         return { run: applyRelicImmediate(run, relicId), events: [], migrated: false };
     }
     const command = createGameplayDefinitionCommand(commandId, definitionId);
-    const result = reduceGameplayCommand(run, command);
+    const result = executeGameplayCommandThroughGameplayCore(run, command);
     if (!result.accepted) {
         throw new Error(`Migrated relic command rejected: ${relicId}`);
     }
     return {
-        run: appendGameplayJournal(result.run, [command], result.events),
+        run: result.run,
         events: result.events,
         migrated: true
     };
@@ -373,9 +366,9 @@ export const resolveBoardTurnThroughGameplayCore = (
     commandId = `board-turn:${run.runSeed}:${run.board?.level ?? 0}:${runNonNegativeInteger(run.matchResolutionsThisFloor)}:${runNonNegativeInteger(normalizeSessionStats(run.stats).tries)}`
 ): GameplayBoardTurnAdapterResult => {
     const command = createGameplayBoardTurnResolveCommand(commandId, encorePairKeys);
-    const result = reduceGameplayCommand(run, command);
+    const result = executeGameplayCommandThroughGameplayCore(run, command);
     return {
-        run: result.accepted ? appendGameplayJournal(result.run, [command], result.events) : run,
+        run: result.run,
         command,
         events: result.accepted ? result.events : [],
         migrated: result.accepted
@@ -460,13 +453,7 @@ export const openRelicOfferThroughGameplayCore = (
     commandId: string
 ): GameplayRelicOfferOpenAdapterResult => {
     const command = createGameplayRelicOfferOpenCommand(commandId);
-    const result = reduceGameplayCommand(run, command);
-    return {
-        accepted: result.accepted,
-        command,
-        events: result.events,
-        run: result.accepted ? appendGameplayJournal(result.run, [command], result.events) : run
-    };
+    return executeGameplayCommandThroughGameplayCore(run, command);
 };
 
 /** Owns one complete floor transition without journaling nested parasite or floor-start perk commands. */
@@ -475,11 +462,5 @@ export const advanceFloorThroughGameplayCore = (
     commandId: string
 ): GameplayFloorAdvanceAdapterResult => {
     const command = createGameplayFloorAdvanceCommand(commandId);
-    const result = reduceGameplayCommand(run, command);
-    return {
-        accepted: result.accepted,
-        command,
-        events: result.events,
-        run: result.accepted ? appendGameplayJournal(result.run, [command], result.events) : run
-    };
+    return executeGameplayCommandThroughGameplayCore(run, command);
 };

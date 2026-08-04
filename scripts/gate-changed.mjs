@@ -94,11 +94,16 @@ export const selectGatesForChangedPaths = (paths) => {
         file === 'scripts/gate-long-run.ts' ||
         file === 'src/shared/gate-long-run-script.test.ts' ||
         file === 'src/shared/sim-endless-output.test.ts';
+    const isPlaythroughSolverBoundaryFile = (file) =>
+        file === 'src/shared/playthrough-solver.ts' ||
+        file === 'src/shared/playthrough-solver.test.ts' ||
+        file.startsWith('src/shared/playthrough-solver-rules') ||
+        file.startsWith('src/shared/gameplay-core-playthrough-solver');
     const isFullSoftlockGateFile = (file) =>
         file === 'scripts/gate-softlock-seeds.ts' ||
         file === 'scripts/audit-dungeon-topology.ts' ||
         isSeedSweepContractFile(file) ||
-        file.startsWith('src/shared/playthrough-solver') ||
+        isPlaythroughSolverBoundaryFile(file) ||
         file.startsWith('src/shared/run-progression-repair') ||
         file.startsWith('src/shared/softlock') ||
         file.startsWith('src/shared/board-generation') ||
@@ -242,7 +247,7 @@ export const selectGatesForChangedPaths = (paths) => {
             file.startsWith('src/shared/bonus-rewards') ||
             file.startsWith('src/shared/findables') ||
             file.startsWith('src/shared/objective-rules') ||
-            file.startsWith('src/shared/playthrough-solver') ||
+            isPlaythroughSolverBoundaryFile(file) ||
             file.startsWith('src/shared/run-progression-repair') ||
             file === 'src/shared/contracts.ts'
         ) {
@@ -273,7 +278,7 @@ export const selectGatesForChangedPaths = (paths) => {
             file === 'scripts/gate-softlock-seeds.ts' ||
             file === 'scripts/audit-dungeon-topology.ts' ||
             isSeedSweepContractFile(file) ||
-            file.startsWith('src/shared/playthrough-solver') ||
+            isPlaythroughSolverBoundaryFile(file) ||
             file.startsWith('src/shared/run-progression-repair') ||
             file.startsWith('src/shared/softlock') ||
             file.startsWith('src/shared/board-generation') ||
@@ -289,7 +294,7 @@ export const selectGatesForChangedPaths = (paths) => {
         ) {
             add('simSoftlockSeeds', file, 'multi-seed executable softlock coverage can change');
         }
-        if (file.startsWith('src/shared/tile-trait') || file.startsWith('src/shared/board-power') || isCoreGameRuleFile(file) || file.startsWith('src/shared/playthrough-solver') || file.startsWith('src/shared/run-progression-repair') || file.startsWith('src/shared/turn-resolution') || file.startsWith('src/shared/hazard') || file.startsWith('src/shared/enemy')) {
+        if (file.startsWith('src/shared/tile-trait') || file.startsWith('src/shared/board-power') || isCoreGameRuleFile(file) || isPlaythroughSolverBoundaryFile(file) || file.startsWith('src/shared/run-progression-repair') || file.startsWith('src/shared/turn-resolution') || file.startsWith('src/shared/hazard') || file.startsWith('src/shared/enemy')) {
             add('actionLoop', file, 'core turn, trait, hazard, enemy, or board-power rules changed');
         }
         if (file.startsWith('src/shared/board-generation') || file.startsWith('src/shared/board-build') || file.startsWith('src/shared/board-inspection') || file.startsWith('src/shared/dungeon-topology') || file.startsWith('src/shared/dungeon-board-status') || file.startsWith('src/shared/softlock') || file.startsWith('src/shared/objective-rules')) {

@@ -1,6 +1,6 @@
 export {
     completeRelicPickAndAdvance,
-} from './game';
+} from './relic-pick-advance-rules';
 
 export {
     acceptEndlessRiskWager,

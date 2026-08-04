@@ -69,6 +69,13 @@ describe('level complete continuation executors', () => {
         executeContinueToNextLevel(deps);
 
         expect(deps.applyResolvedRun).toHaveBeenCalledWith(expect.objectContaining({
+            gameplayCommandJournal: expect.arrayContaining([
+                expect.objectContaining({ type: 'run.interlude_terminal_resolve' })
+            ]),
+            gameplayEventJournal: expect.arrayContaining([
+                expect.objectContaining({ type: 'run.interlude_terminal_resolved' }),
+                expect.objectContaining({ type: 'feedback.requested', cue: 'run.interlude.terminal' })
+            ]),
             lives: 0,
             status: 'gameOver'
         }));

@@ -12,12 +12,35 @@ import {
 } from '../../shared/game-core';
 import { createDefaultSaveData } from '../../shared/save-data';
 import {
-    createRestartRun,
+    createRestartRunSelection,
     createRunStartPlan,
     createRunStartStatePatch,
     createRunStartTelemetryPayload,
     isDungeonShowcaseRestartRun
 } from './runStartState';
+
+const OBSERVED_AT_MS = Date.UTC(2026, 7, 4, 12);
+const PROPOSED_RUN_SEED = 91_001;
+
+const createPlan = (
+    input: Omit<Parameters<typeof createRunStartPlan>[0], 'observedAtMs' | 'proposedRunSeed'>
+) => createRunStartPlan({
+    ...input,
+    observedAtMs: OBSERVED_AT_MS,
+    proposedRunSeed: PROPOSED_RUN_SEED
+});
+
+const createRestartedRun = (previousRun: Parameters<typeof createRestartRunSelection>[0], saveData: ReturnType<typeof createDefaultSaveData>) => {
+    const selection = createRestartRunSelection(previousRun);
+    return createPlan({
+        activeContractOverride: selection.activeContractOverride,
+        request: selection.request,
+        saveData,
+        settings: saveData.settings,
+        reason: 'restart',
+        startingLoadoutId: selection.startingLoadoutId
+    })!.run;
+};
 
 describe('runStartState', () => {
     it('creates the standard playing-state patch for a new run', () => {
@@ -44,7 +67,7 @@ describe('runStartState', () => {
     it('builds common run-start telemetry payloads with mode-specific extras', () => {
         const run = createNewRun(0, { practiceMode: true });
 
-        expect(createRunStartTelemetryPayload(run, { scholar: true })).toEqual({
+        expect(createRunStartTelemetryPayload(run, [], { scholar: true })).toEqual({
             mode: 'endless',
             practice: true,
             scholar: true
@@ -55,19 +78,19 @@ describe('runStartState', () => {
         const saveData = createDefaultSaveData();
         const settings = { ...saveData.settings, resolveDelayMultiplier: 1.5 };
 
-        expect(createRunStartPlan({ request: { kind: 'endless' }, saveData, settings })).toMatchObject({
+        expect(createPlan({ request: { kind: 'endless' }, saveData, settings })).toMatchObject({
             patch: { view: 'playing' },
             run: { gameMode: 'endless', resolveDelayMultiplier: 1.5 },
             telemetry: { mode: 'endless', practice: false }
         });
-        expect(createRunStartPlan({ request: { kind: 'daily' }, saveData, settings })?.run.gameMode).toBe('daily');
+        expect(createPlan({ request: { kind: 'daily' }, saveData, settings })?.run.gameMode).toBe('daily');
         expect(
-            createRunStartPlan({ request: { durationMs: 123_000, kind: 'gauntlet' }, saveData, settings })?.run
+            createPlan({ request: { durationMs: 123_000, kind: 'gauntlet' }, saveData, settings })?.run
         ).toMatchObject({
             gameMode: 'gauntlet',
             gauntletSessionDurationMs: 123_000
         });
-        expect(createRunStartPlan({ request: { kind: 'wild' }, saveData, settings })).toMatchObject({
+        expect(createPlan({ request: { kind: 'wild' }, saveData, settings })).toMatchObject({
             run: { wildMenuRun: true },
             telemetry: { wild: true }
         });
@@ -78,16 +101,16 @@ describe('runStartState', () => {
         const settings = saveData.settings;
         const puzzle = BUILTIN_PUZZLES.starter_pairs;
 
-        expect(createRunStartPlan({ request: { kind: 'dungeonShowcase' }, saveData, settings })).toMatchObject({
+        expect(createPlan({ request: { kind: 'dungeonShowcase' }, saveData, settings })).toMatchObject({
             run: { dungeonShowcaseRun: true },
             telemetry: { showcase: 'dungeon' }
         });
-        expect(createRunStartPlan({ request: { kind: 'puzzle', puzzleId: puzzle.id }, saveData, settings })).toMatchObject({
+        expect(createPlan({ request: { kind: 'puzzle', puzzleId: puzzle.id }, saveData, settings })).toMatchObject({
             run: { gameMode: 'puzzle', puzzleId: puzzle.id },
             telemetry: { puzzleId: puzzle.id }
         });
         expect(
-            createRunStartPlan({
+            createPlan({
                 request: { kind: 'meditationWithMutators', mutators: ['wide_recall', 'n_back_anchor'] },
                 saveData,
                 settings
@@ -102,7 +125,7 @@ describe('runStartState', () => {
         const saveData = createDefaultSaveData();
 
         expect(
-            createRunStartPlan({
+            createPlan({
                 request: { kind: 'puzzle', puzzleId: 'missing' },
                 saveData,
                 settings: saveData.settings
@@ -122,12 +145,12 @@ describe('runStartState', () => {
     it('restarts authored game modes from the previous run type', () => {
         const saveData = createDefaultSaveData();
 
-        expect(createRestartRun(createDailyRun(0), saveData).gameMode).toBe('daily');
-        expect(createRestartRun(createGauntletRun(0, 123_000), saveData)).toMatchObject({
+        expect(createRestartedRun(createDailyRun(0), saveData).gameMode).toBe('daily');
+        expect(createRestartedRun(createGauntletRun(0, 123_000), saveData)).toMatchObject({
             gameMode: 'gauntlet',
             gauntletSessionDurationMs: 123_000
         });
-        expect(createRestartRun(createMeditationRun(0, ['wide_recall']), saveData)).toMatchObject({
+        expect(createRestartedRun(createMeditationRun(0, ['wide_recall']), saveData)).toMatchObject({
             gameMode: 'meditation',
             activeMutators: ['wide_recall']
         });
@@ -137,17 +160,17 @@ describe('runStartState', () => {
         const saveData = createDefaultSaveData();
         const puzzle = BUILTIN_PUZZLES.starter_pairs;
 
-        expect(createRestartRun(createDungeonShowcaseRun(0), saveData)).toMatchObject({
+        expect(createRestartedRun(createDungeonShowcaseRun(0), saveData)).toMatchObject({
             dungeonShowcaseRun: true,
             gameMode: 'endless',
             practiceMode: true
         });
-        expect(createRestartRun(createWildRun(0), saveData)).toMatchObject({
+        expect(createRestartedRun(createWildRun(0), saveData)).toMatchObject({
             wildMenuRun: true,
             activeMutators: ['sticky_fingers', 'short_memorize', 'findables_floor']
         });
-        expect(createRestartRun(createNewRun(0, { practiceMode: true }), saveData).practiceMode).toBe(true);
-        expect(createRestartRun(createPuzzleRun(0, puzzle.id, puzzle.tiles, 1), saveData)).toMatchObject({
+        expect(createRestartedRun(createNewRun(0, { practiceMode: true }), saveData).practiceMode).toBe(true);
+        expect(createRestartedRun(createPuzzleRun(0, puzzle.id, puzzle.tiles, 1), saveData)).toMatchObject({
             gameMode: 'puzzle',
             puzzleId: puzzle.id
         });
@@ -165,10 +188,10 @@ describe('runStartState', () => {
             activeContract: { noShuffle: true, noDestroy: true, maxMismatches: null }
         });
 
-        expect(createRestartRun(pinVow, saveData).activeContract).toEqual(pinVow.activeContract);
-        expect(createRestartRun(scholar, saveData).activeContract).toEqual(scholar.activeContract);
+        expect(createRestartedRun(pinVow, saveData).activeContract).toEqual(pinVow.activeContract);
+        expect(createRestartedRun(scholar, saveData).activeContract).toEqual(scholar.activeContract);
 
-        const endless = createRestartRun(createNewRun(0), saveData);
+        const endless = createRestartedRun(createNewRun(0), saveData);
         expect(endless.gameMode).toBe('endless');
         expect(endless.activeContract).toBeNull();
         expect(endless.wildMenuRun).toBe(false);
@@ -177,7 +200,7 @@ describe('runStartState', () => {
     it('preserves starting loadout identity on ordinary restarts', () => {
         const saveData = createDefaultSaveData();
         const previous = createNewRun(0, { startingLoadoutId: 'route_tactician' });
-        const restarted = createRestartRun(previous, saveData);
+        const restarted = createRestartedRun(previous, saveData);
 
         expect(restarted.startingLoadoutId).toBe('route_tactician');
         expect(restarted.rewardPerkIds).toContain('free_first_swap_per_floor');

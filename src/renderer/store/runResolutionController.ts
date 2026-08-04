@@ -7,7 +7,6 @@ import type {
     Settings,
     ViewState
 } from '../../shared/contracts';
-import { createValidatedGameOverRunSummary } from '../../shared/run-summary-rules';
 import { mergeHonorUnlockTags } from '../../shared/honorUnlocks';
 import { runArrayCount } from '../../shared/run-array-guards';
 import {
@@ -19,6 +18,7 @@ import {
 } from '../../shared/save-data';
 import {
     deactivateDebugRevealThroughGameplayCore,
+    finalizeRunThroughGameplayCore,
     repairRunProgressionThroughGameplayCore,
     resolveBoardTurnThroughGameplayCore
 } from '../../shared/gameplay-core-adapters';
@@ -152,7 +152,17 @@ export const createRunResolutionController = ({
 
         if (nextRun.status === 'gameOver') {
             nextSave = mergeEncoreFromRun(nextSave, nextRun.matchedPairKeysThisRun);
-            nextRun = createValidatedGameOverRunSummary(nextRun, unlockedAchievements);
+            if (!nextRun.lastRunSummary) {
+                const finalization = finalizeRunThroughGameplayCore(
+                    nextRun,
+                    unlockedAchievements,
+                    `run-finalize:${nextRun.runSeed}:${nextRun.board?.level ?? 0}:${Array.isArray(nextRun.gameplayCommandJournal) ? nextRun.gameplayCommandJournal.length : 0}`
+                );
+                if (!finalization.accepted || !finalization.run.lastRunSummary) {
+                    throw new Error('Game-over run could not be finalized through the gameplay core.');
+                }
+                nextRun = finalization.run;
+            }
             if (!nextRun.powersUsedThisRun) {
                 nextSave = mergeBestFloorNoPowers(nextSave, nextRun.stats.highestLevel);
             }

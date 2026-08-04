@@ -1583,6 +1583,10 @@ describe('useAppStore timers', () => {
         expect(nextRun.dungeonTrapsTriggered).toBe(1);
         expect(nextRun.lastRunSummary).not.toBeNull();
         expect(state.saveData.lastRunSummary).toEqual(nextRun.lastRunSummary);
+        expect(nextRun.gameplayCommandJournal?.at(-1)).toMatchObject({ type: 'run.finalize' });
+        expect(nextRun.gameplayEventJournal?.at(-1)).toMatchObject({ type: 'run.finalized' });
+        expect(nextRun.lastRunSummary?.gameplayCommandJournal).toEqual(nextRun.gameplayCommandJournal);
+        expect(nextRun.lastRunSummary?.gameplayEventJournal).toEqual(nextRun.gameplayEventJournal);
         expect(gameSfxMocks.playFlipSfx).toHaveBeenCalled();
         expect(gameSfxMocks.playTrapSfx).toHaveBeenCalled();
         expect(state.boardPinMode).toBe(false);
@@ -1767,10 +1771,28 @@ describe('useAppStore timers', () => {
 
         useAppStore.getState().openShopFromLevelComplete();
 
-        expect(useAppStore.getState().view).toBe('gameOver');
-        expect(useAppStore.getState().run?.status).toBe('gameOver');
-        expect(useAppStore.getState().run?.lives).toBe(0);
-        expect(useAppStore.getState().run?.lastRunSummary).not.toBeNull();
+        const terminal = useAppStore.getState();
+        expect(terminal.view).toBe('gameOver');
+        expect(terminal.run?.status).toBe('gameOver');
+        expect(terminal.run?.lives).toBe(0);
+        expect(terminal.run?.gameplayCommandJournal).toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({ type: 'run.interlude_terminal_resolve' }),
+                expect.objectContaining({ type: 'run.finalize' })
+            ])
+        );
+        expect(terminal.run?.gameplayEventJournal).toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({ type: 'run.interlude_terminal_resolved' }),
+                expect.objectContaining({ type: 'feedback.requested', cue: 'run.interlude.terminal' }),
+                expect.objectContaining({ type: 'run.finalized' })
+            ])
+        );
+        expect(terminal.run?.lastRunSummary?.gameplayCommandJournal).toEqual(
+            terminal.run?.gameplayCommandJournal
+        );
+        expect(terminal.run?.lastRunSummary?.gameplayEventJournal).toEqual(terminal.run?.gameplayEventJournal);
+        expect(terminal.saveData.lastRunSummary).toEqual(terminal.run?.lastRunSummary);
     });
 
     it('keeps the shop route unavailable without an active completed floor', () => {
@@ -2144,11 +2166,17 @@ describe('useAppStore timers', () => {
         expect(useAppStore.getState().view).toBe('gameOver');
         expect(useAppStore.getState().run?.status).toBe('gameOver');
         expect(useAppStore.getState().run?.lives).toBe(0);
-        expect(useAppStore.getState().run?.gameplayCommandJournal).toEqual([
-            expect.objectContaining({ type: 'run.resume' })
-        ]);
+        expect(useAppStore.getState().run?.gameplayCommandJournal).toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({ type: 'run.resume' }),
+                expect.objectContaining({ type: 'run.finalize' })
+            ])
+        );
         expect(useAppStore.getState().run?.gameplayEventJournal).toEqual(
-            expect.arrayContaining([expect.objectContaining({ type: 'run.resumed', outcome: 'game_over' })])
+            expect.arrayContaining([
+                expect.objectContaining({ type: 'run.resumed', outcome: 'game_over' }),
+                expect.objectContaining({ type: 'run.finalized' })
+            ])
         );
         expect(uiSfxMocks.playPauseResumeSfx).not.toHaveBeenCalled();
     });
@@ -2578,9 +2606,10 @@ describe('useAppStore timers', () => {
         expect(gameSfxMocks.resumeAudioContext).toHaveBeenCalled();
         expect(gameSfxMocks.playWagerArmSfx).toHaveBeenCalledTimes(1);
         expect(run).not.toBe(useAppStore.getState().run);
-        expect(useAppStore.getState().run?.gameplayCommandJournal).toEqual([
+        expect(useAppStore.getState().run?.gameplayCommandJournal).toEqual(expect.arrayContaining([
+            expect.objectContaining({ type: 'run.start' }),
             expect.objectContaining({ type: 'risk_wager.accept' })
-        ]);
+        ]));
         expect(useAppStore.getState().run?.gameplayEventJournal).toEqual(expect.arrayContaining([
             expect.objectContaining({ type: 'risk_wager.accepted', targetLevel: 2 }),
             expect.objectContaining({ type: 'feedback.requested', cue: 'build.route_gambler.wager_accepted' })

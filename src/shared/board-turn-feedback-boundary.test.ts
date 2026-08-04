@@ -41,6 +41,9 @@ describe('board-turn feedback ownership boundary', () => {
         const turnFacts = readSource('src/shared/board-turn-event-facts.ts');
         const adapter = readSource('src/renderer/store/gameplayFeedbackAdapter.ts');
         const gameScreen = readSource('src/renderer/components/GameScreen.tsx');
+        const floorClearFeedbackModel = readSource(
+            'src/renderer/components/gameScreenFloorClearFeedbackModel.ts'
+        );
         const announcementHook = readSource('src/renderer/hooks/useHudPoliteLiveAnnouncement.ts');
         const turnAnnouncement = readSource('src/renderer/copy/boardTurnAnnouncement.ts');
         const hudCopy = readSource('src/renderer/copy/hudActionFeedback.ts');
@@ -68,10 +71,12 @@ describe('board-turn feedback ownership boundary', () => {
         }
         expect(gameScreen).toContain('getLatestBoardTurnResolvedEvent({ gameplayEventJournal })');
         expect(gameScreen).toContain('typedBoardTurnEvent.matchedFindableKind');
-        expect(gameScreen).toMatch(/getPickupStackToastText = \(\s*turnEvent: BoardTurnResolvedEvent/u);
+        expect(floorClearFeedbackModel).toMatch(
+            /getPickupStackToastText = \(\s*turnEvent: BoardTurnResolvedEvent/u
+        );
         expect(gameScreen).toContain('getPickupStackToastText(typedBoardTurnEvent)');
-        expect(gameScreen).toContain('turnEvent.findablesClaimedAfter');
-        expect(gameScreen).toContain('turnEvent.findablesTotalAfter');
+        expect(floorClearFeedbackModel).toContain('turnEvent.findablesClaimedAfter');
+        expect(floorClearFeedbackModel).toContain('turnEvent.findablesTotalAfter');
         expect(gameScreen).not.toContain('PickupStackToastState');
         expect(turnAnnouncement).toContain('turnEvent.matchedFindableKind');
         expect(turnAnnouncement).toContain('board-turn:${turnEvent.eventId}');

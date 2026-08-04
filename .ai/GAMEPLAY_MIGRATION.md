@@ -1057,6 +1057,197 @@ The floor-clear decision surface now has one typed renderer projection instead o
 
 Graph v73 makes floor-clear reward, wager, route, and continuation feedback one coherent read-model boundary while leaving GameScreen responsible for composition and interaction wiring.
 
+## Seventy-fourth vertical slice: Route-Choice Projection And Presentation Boundary
+
+The route-choice decision surface now crosses one typed projection boundary and one presentation-only component instead of recomputing the same facts inside GameScreen:
+
+1. `useGameScreenRouteChoiceProjection.ts` consumes authoritative route choices, run state, memory recall feedback, availability rules, dungeon-map presentation, and the pure route-choice model once per decision.
+2. Each projected card keeps availability, recommendation rank, memory readiness, action/beat/impact cues, reward/risk signals, payoff rows, recipe steps, audio cues, screen cues, and accessibility copy synchronized from the same facts.
+3. `GameScreenRouteChoicePanel.tsx` receives only that typed projection and emits only the selected choice ID; it owns no gameplay state or rules.
+4. `GameScreen` retains the orchestration boundary—UI click audio plus the existing route-selection command—and no longer owns route-choice recommendation or card-model construction.
+5. Six direct tests cover inactive projections, synchronized safe-route facts, one-life Greed gating, recommendation behavior, typed rendering, and identity-only selection; all 67 existing `GameScreen` tests preserve the complete integrated surface.
+6. `GameScreen` drops from 4,211 to 3,637 physical lines; the generated model measures 3,638 indexed lines and 58 direct imports.
+7. The orchestration budget ratchets from 4,250 to 3,700 lines while holding the 58-import ceiling, and the navigation gate now runs both boundary tests.
+8. Graph v74 records the projection/panel evidence and guards, regenerating 15,834 relationships with 127 active-run fields, zero renderer run-state writes, zero orchestration violations, all 34 commands and 54 events, 27 player-visible states, and zero diagnostics.
+
+Graph v74 turns route selection into one queryable source-to-choice-to-feedback boundary while leaving gameplay truth in shared rules and interaction wiring in the composition shell.
+
+## Seventy-fifth vertical slice: Selected-To-Active Route Consequence Boundary
+
+The route loop now keeps selected commitment and active-board payoff in one pure read model instead of rebuilding its consequence feedback at two screen locations:
+
+1. `gameScreenRouteConsequenceProjection.ts` derives a JSON-serializable selected/active lifecycle projection from authoritative run, board-tile, route-world, dungeon-map repair, and pure route cue facts.
+2. Selected-route projection keeps route identity, card kind, commitment copy, opening action, impact, reward/risk signals, audio, screen cues, beat counts, accessibility copy, and the repaired armed node synchronized.
+3. Active-route projection finds the surviving route-special pair and projects its role, payoff, risk, reward line, multimodal metadata, pair count, and complete accessible signal summary once.
+4. `GameScreenRouteConsequenceFeedback.tsx` owns two presentation-only views; neither component reads gameplay state or reconstructs rules.
+5. Six direct tests cover inert serialization, selected Greed commitment, active Greed payoff/risk, accessible rendering, multimodal parity, and null rendering; all 67 existing `GameScreen` tests preserve integrated selection, corrupt-node repair, board payoff, and surrounding behavior.
+6. `GameScreen` drops from 3,637 to 3,435 physical lines; the generated model measures 3,436 indexed lines and holds at 58 direct imports.
+7. The orchestration budget ratchets from 3,700 to 3,450 lines, the navigation gate runs both new test files, and its exhaustive solver cases retain targeted 20-second budgets under the repository's two-worker policy.
+8. Graph v75 records the consequence projection/view evidence and guards, regenerating 15,852 relationships with 127 active-run fields, zero renderer run-state writes, zero orchestration violations, all 34 commands and 54 events, 27 player-visible states, and zero diagnostics.
+
+Graph v75 completes the route source → choice → commitment → board effect → feedback chain with a single queryable consequence boundary.
+
+## Seventy-sixth vertical slice: Deterministic Next-Floor Preview Boundary
+
+The next-floor continuation read now comes from one pure schedule projection instead of being assembled inside GameScreen:
+
+1. `gameScreenNextFloorProjection.ts` reads the versioned endless schedule, next floor identity, featured objective, chapter/biome, mutator pressure, counterplay contract, and current dungeon node from authoritative rules and run state.
+2. The projection is JSON-serializable and emits synchronized route, objective, pressure, and counterplay rows with audio cues, screen cues, beat counts, detail copy, and a complete accessibility label.
+3. Non-endless modes emit no schedule claims while retaining connected-room guidance, and active floors emit no continuation projection at all.
+4. `GameScreenNextFloorPreview.tsx` is presentation-only; it renders projected rows and cleared-node guidance without importing gameplay rules.
+5. `useGameScreenFloorClearProjection.ts` now owns the next-floor projection alongside the rest of the floor-clear read model, leaving `GameScreen` to compose one view.
+6. Nine focused model/view/hook tests cover inactive state, deterministic endless schedule facts, non-endless suppression, JSON round-trip, multimodal rendering, cleared-node guidance, and floor-clear integration; all 67 existing `GameScreen` tests preserve the integrated preview and surrounding behavior.
+7. `GameScreen` drops from 3,435 to 3,323 physical lines; the generated model measures 3,324 indexed lines and 57 direct imports, so the orchestration budget ratchets from 3,450 lines/58 imports to 3,350 lines/57 imports.
+8. Graph v76 records the preview projection/view evidence and guards, regenerating 15,884 relationships with 127 active-run fields, zero renderer run-state writes, zero orchestration violations, all 34 commands and 54 events, 27 player-visible states, and zero diagnostics.
+
+Graph v76 makes the route consequence visible through the next scheduled floor without letting React reinterpret schedule, objective, pressure, or counterplay rules.
+
+## Seventy-seventh vertical slice: Floor-Clear Result Presentation Boundary
+
+The complete floor-clear result stack now crosses one typed projection boundary and one presentation-only view instead of remaining embedded in the orchestration screen:
+
+1. `useGameScreenFloorClearProjection.ts` now projects result visibility, accessible labels, payoff-stack action/audio/beat/screen metadata, objective audio/beat/screen metadata, carry-forward copy, action sequence, cashout, causality, and next-floor preview before rendering.
+2. `GameScreenFloorClearResult.tsx` receives only that typed projection and renders momentum, payoff, cashout, carry-forward, continuation order, objective signals, causality, result notes, and the deterministic next-floor preview without reading run state or importing gameplay rules.
+3. Payoff-stack and objective beat pips, audio identities, screen cues, tones, actions, and accessibility labels therefore remain derived from the same projected facts instead of being reconstructed inside `GameScreen`.
+4. Active play produces an inert projection/view, while malformed-result normalization and the existing level-complete overlay boundary remain unchanged.
+5. Seven direct hook/view tests cover inactive state, result visibility, cashout/carry/action composition, accepted wager parity, projection-owned multimodal cues, objective rendering, and deterministic next-floor rendering; all 67 integrated `GameScreen` tests preserve the existing floor-clear behavior.
+6. `GameScreen` drops from 3,323 to 3,121 physical lines; the generated model measures 3,122 indexed lines and 57 direct imports.
+7. The orchestration budget ratchets from 3,350 to 3,150 modeled lines while holding the 57-import ceiling, and the navigation gate now runs both floor-clear boundary tests.
+8. Graph v77 records the projection/view evidence and guards, regenerating 15,903 relationships with 127 active-run fields, zero renderer run-state writes, zero orchestration violations, all 34 commands and 54 events, 27 player-visible states, and zero diagnostics.
+
+Graph v77 gives floor-clear source → payoff → feedback → carry-forward → next-floor consequence one queryable presentation boundary while leaving gameplay truth in shared rules and overlay interaction wiring in the composition shell.
+
+## Seventy-eighth vertical slice: Board-Floater Presentation Boundary
+
+The match/mismatch payoff renderer now consumes the existing typed board-floater projection through one presentation-only component instead of remaining embedded in GameScreen:
+
+1. `GameScreenBoardFloater.tsx` owns the polite live region plus match impact, crescendo, jackpot, cascade, milestone, reward burst, payoff summary, payoff ladder, payoff/trait lanes, forecast, recovery stack, recovery sequence, recovery lanes, and recovery chips.
+2. The component receives only the typed `GameScreenBoardFloaterProjection`, a screen position, and a DOM ref; it reads no run state, store, commands, or gameplay core.
+3. `useGameScreenBoardFloaterProjection.ts` now carries reduced-motion presentation state in the same projection contract as the normalized match/mismatch facts.
+4. `GameScreen` retains the correct orchestration responsibilities: board-relative positioning, animation completion/fallback dismissal, live-announcement priority, and mismatch-crescendo sound playback.
+5. Six direct hook/view tests cover inactive state, match payoff/trait/stack facts, mismatch recovery/lane priority, typed match rendering, typed mismatch rendering, and reduced-motion presentation; all 67 integrated `GameScreen` tests preserve the complete floater behavior.
+6. `GameScreen` drops from 3,121 to 1,874 physical lines; the generated model measures 1,875 indexed lines and 55 direct imports. The extracted view measures 1,285 physical/1,286 indexed lines and six resolved imports.
+7. The GameScreen ceiling ratchets from 3,150 lines/57 imports to 1,950 lines/55 imports, while the transitional board-floater view receives its own 1,300-line/six-import ceiling and direct audio-feedback gate coverage.
+8. Graph v78 records the model/hook/view evidence and guards, regenerating 15,921 relationships with 127 active-run fields, zero renderer run-state writes, zero budget violations, all 34 commands and 54 events, 27 player-visible states, and zero diagnostics.
+
+Graph v78 completes the board-floater model → projection → presentation strangler boundary and makes the still-large match/mismatch view an explicit, independently ratcheted candidate for later focused decomposition.
+
+## Seventy-ninth vertical slice: Match/Mismatch Floater Presentation Split
+
+The transitional board-floater view now separates reward cashout from recovery feedback instead of keeping both branches in one oversized presentation module:
+
+1. `GameScreenBoardFloater.tsx` is a small adapter that owns the polite live region, position/timing style, shared root metadata, signal badge, and typed match-versus-mismatch dispatch.
+2. `GameScreenMatchFloaterContent.tsx` owns match-only jackpot, impact, crescendo, cascade, milestone, reward burst, payoff summary, payoff/trait lanes, ladder, score/streak, forecast, and payoff chips.
+3. `GameScreenMismatchFloaterContent.tsx` owns mismatch-only headline, lost-value detail, next action, recovery burst/crescendo, recovery stack/sequence, recovery lanes, and recovery chips.
+4. Both branch components guard the discriminated projection payload before rendering and receive no store, run state, command, timer, position, or dismissal dependency.
+5. Five direct presentation tests cover inactive dispatch, integrated match/mismatch rendering, and both independently rendered branches; three hook tests retain projection coverage, and all 67 integrated `GameScreen` tests preserve complete floater behavior.
+6. The outer adapter drops from 1,285 to 182 physical lines (183 indexed/four imports); the match view is 847 physical lines (848 indexed/five imports), and the mismatch view is 320 physical lines (321 indexed/three imports).
+7. Source-derived ceilings ratchet to 225 lines/four imports for the adapter, 875/five for match content, and 350/three for mismatch content, while the 1,950-line/55-import GameScreen ceiling remains unchanged.
+8. Graph v79 records both typed branch views and the branch-separation guards, regenerating 15,937 relationships with 127 active-run fields, zero renderer run-state writes, zero budget violations, all 34 commands and 54 events, 27 player-visible states, and zero diagnostics.
+
+Graph v79 turns the board-floater boundary into focused reward and recovery presentation modules while retaining a single source-derived projection and one orchestration owner.
+
+## Eightieth vertical slice: Deterministic Run Bootstrap Boundary
+
+Fresh starts and restarts now cross one schema-validated core boundary instead of letting the renderer construct authoritative run state with implicit clock and random inputs:
+
+1. `run-start-core-contracts.ts` declares the strict `run.start` command, all eleven live start requests, captured seed/time/rules/save/settings context, canonical Daily and showcase seeds, bounded Gauntlet deadlines, typed restart reasons, starting loadouts, and exact legacy contract overrides.
+2. `run-start-core.ts` is the pure bootstrap reducer. It owns mode construction, built-in puzzle validation, Daily identity, Gauntlet deadline derivation, settings application, the `run.started` domain event, typed start feedback, and the first bounded journal entries.
+3. `run-creation-rules.ts` accepts an explicit start observation, removing hidden wall-clock dependence from deterministic Daily and Gauntlet construction while retaining legacy defaults for unmigrated callers.
+4. `runStartState.ts` is now a renderer adapter: it snapshots save-derived inputs into a command, projects typed feedback and telemetry, and creates the Zustand surface patch without defining gameplay rules. `runStartExecutor.ts` and `runLifecycleController.ts` trigger start audio only when the core feedback event classifies as `run-start`.
+5. Restart mode and loadout selection moved into shared contracts. Exact prior Pin Vow or Scholar contract shapes are serialized as overrides, preserving partial/legacy behavioral parity instead of reconstructing a newer preset.
+6. `gameplay-journal.ts` validates both active-run commands and bootstrap commands, so `run.start` plus `run.started` survive run summaries and save normalization under the existing bounded persistence contract.
+7. Seven focused core tests exercise every start mode, fixed UTC Daily/Gauntlet semantics, standalone and full-session JSON replay from no `RunState`, schema rejection, unknown puzzle rejection, restart derivation, and validated save-summary persistence; renderer executor/lifecycle/feedback tests prove the live host boundary and event-owned cue.
+8. The model compiler now indexes multiple authoritative command schemas and reducer paths rather than assuming every protocol begins with an existing `RunState`; missing bootstrap handlers, emitters, or exact tests fail the same drift gate as active-run commands.
+9. Graph v80 records the complete selection → command → deterministic state → event/feedback → journal/save → replay loop, regenerating 16,084 relationships across 141 mechanics, 127 active-run fields, all 35 commands and 55 events, 27 player-visible states, and zero diagnostics.
+
+Graph v80 makes run creation itself inspectable and replayable while leaving host time/entropy sampling, screen navigation, timers, and audio playback in the renderer shell.
+
+## Eighty-first vertical slice: Typed Interlude Terminal Resolution
+
+Zero-life reward and continuation surfaces now cross one strict core boundary instead of asking three renderer paths to mutate run state through a legacy helper:
+
+1. `run.interlude_terminal_resolve` accepts only a zero-life run or stale terminal state and rejects healthy runs plus already-normalized game-over snapshots.
+2. The pure reducer reuses `createDeadInterludeGameOverRun` as the retained parity primitive, then atomically sets game over and clears pending route, side-room, relic-offer, and shop state.
+3. `run.interlude_terminal_resolved` records the terminal cause, prior status/lives, and every cleared interlude category before `feedback.requested` publishes a warning consequence.
+4. `resolveInterludeTerminalThroughGameplayCore` appends the command and events only after acceptance, preserving the bounded journal and validated completed-run summary path.
+5. Side-room actions, level-complete shop opening, and ordinary/puzzle continuation now use the core adapter; production renderer code no longer imports the legacy terminal mutation.
+6. Direct core tests prove exact legacy state parity, healthy/already-normalized rejection, untouched reducer journals, schema-valid event identity, and JSON-round-tripped replay.
+7. A dedicated headless terminal simulation validates atomic cleanup, feedback completeness, event order, and replay; the CLI gate fails if the zero-life fixture is rejected or retains an interlude.
+8. Live surface tests require the terminal command, domain event, and feedback cue to reach `applyResolvedRun`, which continues to own achievements, save normalization, validated summary persistence, and screen selection.
+9. Graph v81 records the full zero-life interlude → command → terminal cleanup → feedback → summary persistence → replay/fairness chain, regenerating 16,201 relationships across 142 mechanics, 127 active-run fields, all 36 commands and 56 events, 27 player-visible states, and zero diagnostics.
+
+Graph v81 closes a real core-ownership seam without changing the working game-over presentation or discarding the proven transition primitive.
+
+## Eighty-second vertical slice: Typed Run Finalization
+
+Every live game-over path now crosses one strict core boundary before the application persists or presents the completed run:
+
+1. `contracts.ts` owns the canonical seven achievement IDs, and `save-data.ts` re-exports the same registry; the finalization schema no longer needs a circular dependency or an unbounded string payload.
+2. `run.finalize` serializes the exact achievement IDs already evaluated against application save state. It rejects non-terminal runs, existing summaries, duplicate or unknown IDs, and achievement-disabled runs carrying unlocks.
+3. The pure reducer normalizes terminal status/lives through the retained summary primitive, creates a save-valid `lastRunSummary`, and emits one deterministic `run.finalized` event with score, depth, achievement, and validation facts.
+4. `finalizeRunThroughGameplayCore` appends the command and event first, then rebuilds the validated summary so its bounded journals include the finalization transition itself rather than stopping one command early.
+5. `runResolutionController` retains the correct application responsibilities—achievement evaluation, save merging, Steam synchronization, telemetry, persistence, screen selection, and audio—but no longer imports or invokes the summary mutation helper; the dev E2E seam also consumes a shared finalized fixture instead of manufacturing renderer-owned summary state.
+6. Direct core tests prove exact schema/event identity, untouched reducer journals, JSON replay, save normalization, disabled-achievement rejection, duplicate-ID rejection, and journal-complete adapter output.
+7. The dedicated headless finalization simulation validates event/summary parity, normalized summary fields, deterministic ordering, and JSON replay; the gameplay-core CLI fails on rejected or divergent finalization.
+8. Renderer controller and full-store tests prove ordinary trap death, paused zero-life recovery, and dead interlude completion all persist `run.finalize` plus `run.finalized` in both the active terminal run and saved summary.
+9. A recursive source boundary test prevents every production renderer file from re-importing `run-summary-rules` or calling any summary constructor, while requiring the shared playable-path fixture and Game Over screen to consume the core-finalized state.
+10. Graph v82 records terminal source → command → validated summary → persistence/display → replay/fairness as a complete ownership chain across 16,313 relationships, 143 mechanics, 37 commands, 57 events, 127 active-run fields, 27 visible states, and zero diagnostics.
+
+Graph v82 makes completed-run persistence part of the replayable gameplay protocol without moving save I/O, platform achievements, telemetry, or React presentation into the deterministic engine.
+
+## Eighty-third vertical slice: Journaled Command Transaction Boundary
+
+Every production renderer command path now submits serialized intent through one shared accepted-command transaction instead of importing the reducer and journal implementation independently:
+
+1. A Graph v82 import query identified exactly seven production renderer modules that each repeated `reduceGameplayCommand` followed by conditional `appendGameplayJournal` orchestration.
+2. `executeGameplayCommandThroughGameplayCore` now owns reducer invocation, accepted-command journaling, command-before-event ordering, and rejected-input identity for any serialized gameplay command.
+3. The existing phase, timer, terminal, finalization, debug, progression-repair, board-input, relic, and floor adapters reuse the same primitive; deliberately nested request evaluators remain non-journaled under their outer command.
+4. Route selection, risk wagers, relic picks/services, side-room choices, shop purchase/reroll, Pin, powers, enemy contact, Gambit intent, and other run surfaces still construct explicit commands but only project the returned run/events into Zustand UI state.
+5. Rejected commands return the original run reference and rejection events without contaminating either bounded journal; accepted commands append the command and its ordered events exactly once.
+6. Finalization still rebuilds the validated summary after the shared transaction, so the final `run.finalize` command and `run.finalized` event remain inside both active and persisted journals.
+7. A recursive source guard rejects any production renderer import of `gameplay-core` or `gameplay-journal`, direct reducer/journal invocation, and drift in the reviewed seven-consumer set.
+8. Direct adapter tests prove accepted/rejected identity and ordering, while 140 focused tests preserve all seven renderer surface behaviors plus interlude and finalization semantics.
+9. Graph v83 adds the queryable `core.command_transaction` mechanic and connects serialized commands to reduction, persistence, replay, finalization, and the source-derived architecture gate.
+10. Graph v83 regenerates 16,345 relationships across 144 mechanics and 672 curated edges, with all 37 commands, 57 events, 127 active-run fields, 27 visible states, and zero diagnostics.
+
+Graph v83 makes Zustand a command client and presentation coordinator without allowing renderer modules to own reducer execution or causal journal ordering.
+
+## Eighty-fourth vertical slice: Authoritative Generated-Board Command Solver
+
+The strangler migration now has one generated-board execution path instead of retaining a direct-mutation solver beside the replayable command solver:
+
+1. A repository/model query confirmed that live fairness, softlock generation, endless simulation, and all nine long-horizon build traces already use `solveRunThroughGameplayCoreWithTrace`; the older `playthrough-solver.ts` remained only for property and parity scaffolding.
+2. The redundant solver and its duplicate five-case test are removed after seeded state/stop-reason parity had been proven continuously since Graph v47 and after command consumers accumulated exact replay, schema, feedback, and invariant coverage.
+3. Generated-board property tests now run through the command solver, require zero rejected commands and zero invariant violations on every sample, and retain explicit JSON replay checks for the elite mystery and stale-boss regression fixtures.
+4. Core solver tests no longer compare against a second implementation. They assert authoritative terminal state, activated exits, typed progression repair, command/event order, seeded completion, zero rejection, and exact JSON replay directly.
+5. `legacy-playthrough-solver-boundary.test.ts` prevents both deleted files from returning, rejects direct-mutation solver imports/symbols in every fairness consumer, and requires property, softlock, build, and endless consumers to import the command solver.
+6. Changed-file selection now treats both `gameplay-core-playthrough-solver` and `playthrough-solver-rules` as action-loop, simulation-health, multi-seed softlock, and full-stress inputs. This closes the prior blind spot where only the retired filename selected every relevant gate.
+7. The Gameplay Resolution diagram exposes the single command playthrough gate between shared rules and progression, with exact evidence for the solver, selection policy, and retirement boundary.
+8. Graph v84 enriches `simulation.generated_board_playthrough` with the property, drift, and gate-routing evidence; a new AI-model `gates` edge makes single-solver ownership queryable without inventing a second decorative mechanic.
+9. Regeneration records 16,328 relationships across 144 mechanics and 673 curated edges, 127 active-run fields, all 37 commands and 57 events, 27 visible states, and zero diagnostics; the lower relationship count reflects deletion of the duplicate implementation and test rather than lost gameplay coverage.
+10. The exhaustive seeded softlock contract retains every scenario and assertion but widens its explicit per-test budget from 15 to 25 seconds; it completes in about six seconds alone but can exceed fifteen while the full multi-worker action-loop suite contends for CPU.
+
+Graph v84 removes a parity-only legacy path only after the replayable replacement became the sole production and simulation authority, while preserving the shared tile-selection rules used by that replacement.
+
+## Eighty-fifth vertical slice: Command-Only Gameplay Compatibility Facade
+
+The historical `game.ts` surface is now a public compatibility barrel rather than a live gameplay owner:
+
+1. A Graph v84 import query found seven production shared modules still importing `game.ts`, while that file assembled flip, Destroy, exit activation, floor finalization, and a raw board-turn fallback around the migrated core.
+2. `gameplay-command-compatibility.ts` preserves the established state-in/state-out API for flip, delayed turn resolution, Destroy, and exit activation, but submits every call through `gameplay-core-adapters.ts`; accepted calls retain bounded command/event journals and rejected calls return the original run.
+3. Board-turn compatibility no longer falls back to a separately assembled `createResolveBoardTurnTransition` path when the strict command rejects. Existing exhaustive rule tests, properties, generated playthroughs, and direct facade cases now prove the command path itself.
+4. Tile-flip command identity moved to the core-independent `tile-flip-command-rules.ts`, breaking the adapter cycle cleanly. The former `tile-flip-command-transition.ts` and `floor-completion-transitions.ts` reducer/journal wrappers are deleted.
+5. `game.ts` contains no imports and only re-exports authoritative modules plus the command-only facade. `game-core.ts`, `turn-resolution.ts`, `board-powers.ts`, `dungeon-rules.ts`, `objective-rules.ts`, `long-run-feedback.ts`, and playable fixtures now import their actual owners directly; no production TypeScript module imports `game.ts`.
+6. `game-barrel-ownership-boundary.test.ts` recursively scans all production TypeScript, prevents new `game.ts` imports, requires the barrel to remain import-free, forbids reducer/journal/fallback ownership in the facade, and keeps both superseded wrapper files deleted.
+7. Focused facade tests prove accepted flip/turn command ordering, typed turn events, rejection identity with no journal creation, and Destroy command/event persistence. The gameplay core test now asserts the authoritative exit consequence directly instead of preserving a parity-only `finalizeLevel` export.
+8. Changed gameplay-core and action-loop gates include both facade behavior and the recursive source boundary, so a compatibility ownership regression cannot hide behind unchanged renderer paths.
+9. The Gameplay Resolution diagram shows renderer intent and historical shared calls converging on the same accepted-command transaction before pure rules.
+10. Graph v85 adds the queryable `core.gameplay_compatibility_facade` mechanic and connects it to command transactions, typed input/turns, Destroy, exits, HUD feedback, and the source-derived AI architecture gate.
+11. Regeneration records 16,399 relationships across 145 mechanics and 681 curated edges, 127 active-run fields, all 37 commands and 57 events, 27 visible states, and zero diagnostics.
+
+Graph v85 removes another strangler-era execution path while retaining the working public call shapes needed by the mature TypeScript rule suite.
+
 ## Current slice status
 
 Implemented in the Conduit Cartographer vertical slice:
@@ -1076,5 +1267,5 @@ Implemented in the Conduit Cartographer vertical slice:
 Still required before the vertical slice is complete:
 
 - extend the shared player-visible registry when additional gameplay ownership enters the core, rather than adding renderer or model-only field lists;
-- use Graph v73 diagnostics, orchestration budgets, and nine-build traces to select the next least-overlapping cohesive loop or architectural ownership seam, without presenting simulator survival as human win-rate proof;
+- use Graph v85 diagnostics, orchestration budgets, and nine-build traces to select the next least-overlapping cohesive loop or architectural ownership seam, without presenting simulator survival as human win-rate proof;
 - continue migrating cohesive player builds rather than adding isolated definitions, using the graph diagnostics to choose the next least-overlapping loop.

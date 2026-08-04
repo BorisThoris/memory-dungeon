@@ -61,6 +61,8 @@ export interface CreateRunOptions {
     metaRelicDraftExtraPerMilestone?: number;
     /** Optional starting archetype/loadout for early run identity. */
     startingLoadoutId?: StartingLoadoutId | null;
+    /** Captured host-clock observation used for deterministic deadline/date derivation. */
+    startedAtMs?: number;
 }
 
 const randomRunSeed = (): number => Math.floor(Math.random() * 0x7fffffff);
@@ -165,7 +167,9 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
         parasiteFloors: 0,
         freeShuffleThisFloor: false,
         gauntletDeadlineMs:
-            options.gauntletDurationMs != null ? Date.now() + options.gauntletDurationMs : null,
+            options.gauntletDurationMs != null
+                ? (normalizeTimerTimestampMs(options.startedAtMs) ?? Date.now()) + options.gauntletDurationMs
+                : null,
         gauntletSessionDurationMs: options.gauntletDurationMs ?? null,
         flipHistory: [],
         peekCharges,
@@ -284,7 +288,8 @@ export const createWildRun = (bestScore: number, extra: Partial<CreateRunOptions
     });
 
 export const createDailyRun = (bestScore: number, extra: Partial<CreateRunOptions> = {}): RunState => {
-    const runSeed = deriveDailyRunSeed(GAME_RULES_VERSION);
+    const observedDate = extra.startedAtMs == null ? new Date() : new Date(extra.startedAtMs);
+    const runSeed = extra.runSeed ?? deriveDailyRunSeed(GAME_RULES_VERSION, observedDate);
     const mutIndex = deriveDailyMutatorIndex(runSeed, DAILY_MUTATOR_TABLE.length);
     const dailyMutator = DAILY_MUTATOR_TABLE[mutIndex] ?? DAILY_MUTATOR_TABLE[0];
     const activeMutators = dailyMutator ? [dailyMutator] : [];
@@ -293,7 +298,7 @@ export const createDailyRun = (bestScore: number, extra: Partial<CreateRunOption
         runSeed,
         gameMode: 'daily',
         activeMutators,
-        dailyDateKeyUtc: formatDailyDateKeyUtc(),
+        dailyDateKeyUtc: extra.dailyDateKeyUtc ?? formatDailyDateKeyUtc(observedDate),
         ...extra
     });
 };

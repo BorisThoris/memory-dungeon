@@ -92,6 +92,8 @@ import {
     pauseRunAt,
     resumeRunAt
 } from './run-timer-rules';
+import { createDeadInterludeGameOverRun } from './interlude-transition-rules';
+import { createValidatedGameOverRunSummary } from './run-summary-rules';
 
 export interface GameplayCommandResult {
     run: RunState;
@@ -111,6 +113,7 @@ const SYSTEM_SOURCE: GameplaySource = { kind: 'system', id: 'gameplay-core' };
 const MEMORIZE_PHASE_SOURCE: GameplaySource = { kind: 'system', id: 'memorize_phase' };
 const GAUNTLET_CLOCK_SOURCE: GameplaySource = { kind: 'system', id: 'gauntlet_clock' };
 const RUN_LIFECYCLE_SOURCE: GameplaySource = { kind: 'system', id: 'run_lifecycle' };
+const RUN_FINALIZATION_SOURCE: GameplaySource = { kind: 'system', id: 'run_finalization' };
 const DEBUG_REVEAL_SOURCE: GameplaySource = { kind: 'system', id: 'debug_reveal' };
 const PROGRESSION_SAFETY_SOURCE: GameplaySource = { kind: 'system', id: 'progression_safety' };
 const TILE_FLIP_SOURCE: GameplaySource = { kind: 'system', id: 'board_tile' };
@@ -366,6 +369,102 @@ const applyResumeCommand = (
             ? 'Paused run could not resume safely and ended.'
             : `Run resumed into ${nextRun.status}.`,
         tone: outcome === 'game_over' ? 'warning' : 'information'
+    });
+    return { run: nextRun, command, events, accepted: true };
+};
+
+const applyInterludeTerminalResolveCommand = (
+    run: RunState,
+    command: Extract<GameplayCommand, { type: 'run.interlude_terminal_resolve' }>
+): GameplayCommandResult => {
+    const nextRun = createDeadInterludeGameOverRun(run);
+    if (!nextRun) {
+        return rejectedResult(
+            run,
+            command.commandId,
+            'Terminal interlude resolution requires zero lives or an existing game-over state.',
+            command
+        );
+    }
+    const pendingRouteCleared = run.pendingRouteCardPlan != null;
+    const sideRoomCleared = run.sideRoom != null;
+    const relicOfferCleared = run.relicOffer != null;
+    const shopOfferCountCleared = Array.isArray(run.shopOffers) ? run.shopOffers.length : 0;
+    const changed =
+        run.status !== 'gameOver' ||
+        runNonNegativeInteger(run.lives) !== 0 ||
+        pendingRouteCleared ||
+        sideRoomCleared ||
+        relicOfferCleared ||
+        shopOfferCountCleared > 0;
+    if (!changed) {
+        return rejectedResult(
+            run,
+            command.commandId,
+            'Terminal interlude state is already normalized.',
+            command
+        );
+    }
+    const cause = run.status === 'gameOver' ? 'already_game_over' : 'zero_lives';
+    const events: GameplayEvent[] = [];
+    const writeEvent = makeEventWriter(command.commandId, RUN_LIFECYCLE_SOURCE, events);
+    writeEvent({
+        type: 'run.interlude_terminal_resolved',
+        cause,
+        statusBefore: run.status,
+        statusAfter: 'gameOver',
+        livesBefore: runNonNegativeInteger(run.lives),
+        livesAfter: 0,
+        pendingRouteCleared,
+        sideRoomCleared,
+        relicOfferCleared,
+        shopOfferCountCleared
+    });
+    writeEvent({
+        type: 'feedback.requested',
+        cue: 'run.interlude.terminal',
+        message:
+            cause === 'zero_lives'
+                ? 'Run ended at zero lives; pending interlude routes and rewards were cleared.'
+                : 'Terminal run cleanup cleared pending interlude routes and rewards.',
+        tone: 'warning'
+    });
+    return { run: nextRun, command, events, accepted: true };
+};
+
+const applyRunFinalizeCommand = (
+    run: RunState,
+    command: Extract<GameplayCommand, { type: 'run.finalize' }>
+): GameplayCommandResult => {
+    if (run.status !== 'gameOver') {
+        return rejectedResult(run, command.commandId, 'Run finalization requires a game-over run.', command);
+    }
+    if (run.lastRunSummary != null) {
+        return rejectedResult(run, command.commandId, 'Run finalization requires a run without an existing summary.', command);
+    }
+    if (!run.achievementsEnabled && command.unlockedAchievements.length > 0) {
+        return rejectedResult(
+            run,
+            command.commandId,
+            'Achievement-disabled runs cannot finalize with newly unlocked achievements.',
+            command
+        );
+    }
+    const nextRun = createValidatedGameOverRunSummary(run, command.unlockedAchievements);
+    const summary = nextRun.lastRunSummary;
+    if (!summary) {
+        return rejectedResult(run, command.commandId, 'Run finalization could not create a valid summary.', command);
+    }
+    const events: GameplayEvent[] = [];
+    const writeEvent = makeEventWriter(command.commandId, RUN_FINALIZATION_SOURCE, events);
+    writeEvent({
+        type: 'run.finalized',
+        totalScore: summary.totalScore,
+        levelsCleared: summary.levelsCleared,
+        highestLevel: summary.highestLevel,
+        achievementsEnabled: summary.achievementsEnabled,
+        unlockedAchievements: summary.unlockedAchievements,
+        summaryValidated: true
     });
     return { run: nextRun, command, events, accepted: true };
 };
@@ -2183,6 +2282,12 @@ export const reduceGameplayCommand = (run: RunState, input: unknown): GameplayCo
     }
     if (command.type === 'run.resume') {
         return applyResumeCommand(run, command);
+    }
+    if (command.type === 'run.interlude_terminal_resolve') {
+        return applyInterludeTerminalResolveCommand(run, command);
+    }
+    if (command.type === 'run.finalize') {
+        return applyRunFinalizeCommand(run, command);
     }
     if (command.type === 'debug.reveal_activate') {
         return applyDebugRevealActivateCommand(run, command);

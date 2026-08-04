@@ -48,8 +48,23 @@ const RUN_STATE_WRITE_ACCESS_KINDS = new Set(['direct_assignment', 'state_constr
 const ORCHESTRATION_FILE_BUDGETS = [
     {
         path: 'src/renderer/components/GameScreen.tsx',
-        maxLines: 4_250,
-        maxImports: 58
+        maxLines: 1_950,
+        maxImports: 55
+    },
+    {
+        path: 'src/renderer/components/GameScreenBoardFloater.tsx',
+        maxLines: 225,
+        maxImports: 4
+    },
+    {
+        path: 'src/renderer/components/GameScreenMatchFloaterContent.tsx',
+        maxLines: 875,
+        maxImports: 5
+    },
+    {
+        path: 'src/renderer/components/GameScreenMismatchFloaterContent.tsx',
+        maxLines: 350,
+        maxImports: 3
     }
 ];
 
@@ -414,10 +429,10 @@ const findVariableDeclaration = (sourceFile, variableName) => {
     return declaration;
 };
 
-const extractGameplayProtocolVariants = (sourceFile, schemaName, kind) => {
+const extractGameplayProtocolVariants = (sourceFile, sourcePath, schemaName, kind) => {
     const declaration = findVariableDeclaration(sourceFile, schemaName);
     if (!declaration?.initializer) {
-        throw new Error(`Unable to locate ${schemaName} in src/shared/gameplay-core-contracts.ts.`);
+        throw new Error(`Unable to locate ${schemaName} in ${sourcePath}.`);
     }
     const variants = [];
     const visit = (node) => {
@@ -443,7 +458,7 @@ const extractGameplayProtocolVariants = (sourceFile, schemaName, kind) => {
                 kind,
                 schema: schemaName,
                 source: {
-                    path: 'src/shared/gameplay-core-contracts.ts',
+                    path: sourcePath,
                     line: position.line + 1
                 },
                 payloadFields: uniqueSorted(payloadFields),
@@ -489,15 +504,40 @@ const switchDiscriminant = (literal) => {
 };
 
 const buildGameplayProtocolIndex = (repoRoot, sourceFiles) => {
+    const gameplayContractsPath = 'src/shared/gameplay-core-contracts.ts';
+    const runStartContractsPath = 'src/shared/run-start-core-contracts.ts';
     const contractsFile = sourceFiles.find(
-        (sourceFile) => fromRoot(repoRoot, sourceFile.fileName) === 'src/shared/gameplay-core-contracts.ts'
+        (sourceFile) => fromRoot(repoRoot, sourceFile.fileName) === gameplayContractsPath
+    );
+    const runStartContractsFile = sourceFiles.find(
+        (sourceFile) => fromRoot(repoRoot, sourceFile.fileName) === runStartContractsPath
     );
     if (!contractsFile) {
-        throw new Error('Unable to locate src/shared/gameplay-core-contracts.ts.');
+        throw new Error(`Unable to locate ${gameplayContractsPath}.`);
     }
-    const commandSchema = extractGameplayProtocolVariants(contractsFile, 'gameplayCommandSchema', 'command');
-    const eventSchema = extractGameplayProtocolVariants(contractsFile, 'gameplayEventSchema', 'event');
-    const commandsByName = new Map(commandSchema.variants.map((variant) => [variant.name, variant]));
+    if (!runStartContractsFile) {
+        throw new Error(`Unable to locate ${runStartContractsPath}.`);
+    }
+    const commandSchemas = [
+        extractGameplayProtocolVariants(contractsFile, gameplayContractsPath, 'gameplayCommandSchema', 'command'),
+        extractGameplayProtocolVariants(runStartContractsFile, runStartContractsPath, 'runStartCommandSchema', 'command')
+    ];
+    const eventSchema = extractGameplayProtocolVariants(
+        contractsFile,
+        gameplayContractsPath,
+        'gameplayEventSchema',
+        'event'
+    );
+    const commandVariants = commandSchemas.flatMap((schema) => schema.variants);
+    const duplicateCommandNames = uniqueSorted(
+        commandVariants
+            .map((variant) => variant.name)
+            .filter((name, index, names) => names.indexOf(name) !== index)
+    );
+    if (duplicateCommandNames.length > 0) {
+        throw new Error(`Gameplay command schemas contain duplicate variants: ${duplicateCommandNames.join(', ')}.`);
+    }
+    const commandsByName = new Map(commandVariants.map((variant) => [variant.name, variant]));
     const eventsByName = new Map(eventSchema.variants.map((variant) => [variant.name, variant]));
     const addReference = (variant, field, sourceFile, node) => {
         const path = fromRoot(repoRoot, sourceFile.fileName);
@@ -512,7 +552,7 @@ const buildGameplayProtocolIndex = (repoRoot, sourceFiles) => {
         const path = fromRoot(repoRoot, sourceFile.fileName);
         const role = getCodeRole(path);
         const visit = (node) => {
-            if (node === commandSchema.declaration || node === eventSchema.declaration) return;
+            if (commandSchemas.some((schema) => node === schema.declaration) || node === eventSchema.declaration) return;
             if (ts.isStringLiteralLike(node)) {
                 const command = commandsByName.get(node.text);
                 const event = eventsByName.get(node.text);
@@ -526,7 +566,9 @@ const buildGameplayProtocolIndex = (repoRoot, sourceFiles) => {
                         ts.isPropertyAssignment(node.parent) && syntaxPropertyName(node.parent.name) === 'type';
                     if (
                         command &&
-                        path === 'src/shared/gameplay-core.ts' &&
+                        path === (command.schema === 'runStartCommandSchema'
+                            ? 'src/shared/run-start-core.ts'
+                            : 'src/shared/gameplay-core.ts') &&
                         comparison?.positive &&
                         comparison.objectName === 'command'
                     ) {
@@ -561,7 +603,7 @@ const buildGameplayProtocolIndex = (repoRoot, sourceFiles) => {
         });
     };
     const journalFile = fileId('src/shared/gameplay-journal.ts');
-    for (const command of commandSchema.variants) {
+    for (const command of commandVariants) {
         addRelationship(fileId(command.source.path), command.id, 'declares', command.source);
         for (const reference of command.handlerReferences) {
             addRelationship(fileId(reference.path), command.id, 'handles', reference);
@@ -595,13 +637,13 @@ const buildGameplayProtocolIndex = (repoRoot, sourceFiles) => {
             variant[field].sort((a, b) => `${a.path}:${a.line}`.localeCompare(`${b.path}:${b.line}`));
         }
     };
-    commandSchema.variants.forEach(sortReferences);
+    commandVariants.forEach(sortReferences);
     eventSchema.variants.forEach(sortReferences);
-    commandSchema.variants.sort((a, b) => a.id.localeCompare(b.id));
+    commandVariants.sort((a, b) => a.id.localeCompare(b.id));
     eventSchema.variants.sort((a, b) => a.id.localeCompare(b.id));
     relationships.sort((a, b) => a.id.localeCompare(b.id));
     return {
-        commands: commandSchema.variants,
+        commands: commandVariants,
         events: eventSchema.variants,
         relationships
     };
@@ -957,7 +999,7 @@ const buildDiagnostics = (
                 severity: 'error',
                 code: 'gameplay_command_without_handler',
                 subject: command.name,
-                detail: 'Declared by gameplayCommandSchema but not dispatched by reduceGameplayCommand.'
+                detail: `Declared by ${command.schema} but not dispatched by its authoritative reducer.`
             });
         }
         if (command.testReferences.length === 0) {

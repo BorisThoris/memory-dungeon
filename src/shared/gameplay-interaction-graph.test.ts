@@ -191,7 +191,7 @@ describe('gameplay interaction graph', () => {
     it('connects concrete progression safety repairs to commands, feedback, persistence, and replay', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
 
-        expect(gameplayInteractionGraph.version).toBe(73);
+        expect(gameplayInteractionGraph.version).toBe(85);
         expect(byId.get('safety.softlock_fairness')).toMatchObject({
             kind: 'safety',
             role: 'typed_invariant_and_replayable_repair_gate',
@@ -280,6 +280,315 @@ describe('gameplay interaction graph', () => {
         );
     });
 
+    it('connects deterministic run bootstrap to setup, feedback, persistence, and replay', () => {
+        const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
+        const hasEdge = (source: string, target: string, kind: string): boolean =>
+            gameplayInteractionGraph.edges.some(
+                (edge) => edge.source === source && edge.target === target && edge.kind === kind
+            );
+
+        expect(byId.get('core.run_bootstrap')).toMatchObject({
+            kind: 'core',
+            role: 'schema_validated_seeded_run_start_and_restart_reducer',
+            evidence: expect.arrayContaining([
+                'src/shared/run-start-core-contracts.ts',
+                'src/shared/run-start-core.ts',
+                'src/shared/run-creation-rules.ts',
+                'src/shared/gameplay-journal.ts',
+                'src/renderer/store/runStartState.ts',
+                'src/renderer/store/runLifecycleController.ts',
+                'src/renderer/store/gameplayFeedbackAdapter.ts'
+            ]),
+            reads: expect.arrayContaining([
+                'runStartRequest',
+                'observedAtMs',
+                'runSeed',
+                'activeContractOverride'
+            ]),
+            writes: expect.arrayContaining([
+                'RunState',
+                'gauntletDeadlineMs',
+                'dailyDateKeyUtc',
+                'gameplayCommandJournal',
+                'gameplayEventJournal',
+                'feedbackLines'
+            ]),
+            softlockGuards: expect.arrayContaining([
+                'strict-run-start-command-schema',
+                'captured-host-time-and-seed',
+                'exact-restart-contract-override',
+                'single-bootstrap-command-journal',
+                'json-round-trip-replay'
+            ]),
+            tests: expect.arrayContaining([
+                'src/shared/run-start-core.test.ts',
+                'src/renderer/store/runStartState.test.ts',
+                'src/renderer/store/runLifecycleController.test.ts'
+            ])
+        });
+        expect(hasEdge('progression.run_setup', 'core.run_bootstrap', 'triggers')).toBe(true);
+        expect(hasEdge('core.run_bootstrap', 'progression.run_flow', 'enables')).toBe(true);
+        expect(hasEdge('core.run_bootstrap', 'feedback.gameplay_hud', 'displays')).toBe(true);
+        expect(hasEdge('core.run_bootstrap', 'persistence.run_summary', 'persists')).toBe(true);
+        expect(hasEdge('core.run_bootstrap', 'simulation.gameplay_replay', 'tested_by')).toBe(true);
+        expect(hasEdge('simulation.ai_repository_model', 'core.run_bootstrap', 'gates')).toBe(true);
+    });
+
+    it('connects dead interludes through typed terminal cleanup, feedback, persistence, and replay', () => {
+        const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
+        const hasEdge = (source: string, target: string, kind: string): boolean =>
+            gameplayInteractionGraph.edges.some(
+                (edge) => edge.source === source && edge.target === target && edge.kind === kind
+            );
+
+        expect(byId.get('core.interlude_terminal_resolution')).toMatchObject({
+            kind: 'core',
+            role: 'zero_life_interlude_to_persisted_game_over_transition',
+            evidence: expect.arrayContaining([
+                'src/shared/interlude-transition-rules.ts',
+                'src/shared/gameplay-core-contracts.ts',
+                'src/shared/gameplay-core.ts',
+                'src/shared/gameplay-core-adapters.ts',
+                'src/shared/gameplay-core-simulation.ts',
+                'src/shared/interlude-terminal-boundary.test.ts',
+                'src/renderer/store/sideRoomSurfaceState.ts',
+                'src/renderer/store/levelCompleteShopExecutor.ts',
+                'src/renderer/store/levelCompleteContinuationExecutor.ts',
+                'src/renderer/store/runResolutionController.ts'
+            ]),
+            reads: expect.arrayContaining([
+                'runStatus',
+                'lives',
+                'pendingRouteCardPlan',
+                'sideRoom',
+                'relicOffer',
+                'shopOffers'
+            ]),
+            writes: expect.arrayContaining([
+                'runStatus',
+                'lives',
+                'gameplayCommandJournal',
+                'gameplayEventJournal',
+                'feedbackLines'
+            ]),
+            softlockGuards: expect.arrayContaining([
+                'strict-interlude-terminal-command',
+                'healthy-run-rejection',
+                'atomic-interlude-cleanup',
+                'no-renderer-legacy-terminal-mutation',
+                'validated-game-over-summary',
+                'json-round-trip-replay'
+            ]),
+            tests: expect.arrayContaining([
+                'src/shared/gameplay-core.test.ts',
+                'src/shared/gameplay-core-simulation.test.ts',
+                'src/shared/interlude-terminal-boundary.test.ts',
+                'src/renderer/store/sideRoomSurfaceState.test.ts',
+                'src/renderer/store/levelCompleteShopExecutor.test.ts',
+                'src/renderer/store/levelCompleteContinuationExecutor.test.ts'
+            ])
+        });
+        expect(hasEdge('progression.run_flow', 'core.interlude_terminal_resolution', 'triggers')).toBe(true);
+        expect(hasEdge('core.gameplay_commands', 'core.interlude_terminal_resolution', 'modifies')).toBe(true);
+        expect(hasEdge('core.interlude_terminal_resolution', 'progression.run_flow', 'gates')).toBe(true);
+        expect(hasEdge('core.interlude_terminal_resolution', 'feedback.gameplay_hud', 'displays')).toBe(true);
+        expect(hasEdge('core.interlude_terminal_resolution', 'persistence.run_summary', 'persists')).toBe(true);
+        expect(hasEdge('core.interlude_terminal_resolution', 'simulation.gameplay_replay', 'tested_by')).toBe(true);
+        expect(hasEdge('core.interlude_terminal_resolution', 'safety.softlock_fairness', 'guarded_by')).toBe(true);
+        expect(hasEdge('simulation.ai_repository_model', 'core.interlude_terminal_resolution', 'gates')).toBe(true);
+    });
+
+    it('connects terminal runs through typed finalization, validated persistence, display, and replay', () => {
+        const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
+        const hasEdge = (source: string, target: string, kind: string): boolean =>
+            gameplayInteractionGraph.edges.some(
+                (edge) => edge.source === source && edge.target === target && edge.kind === kind
+            );
+
+        expect(byId.get('core.run_finalization')).toMatchObject({
+            kind: 'core',
+            role: 'schema_validated_terminal_summary_and_persistence_transition',
+            evidence: expect.arrayContaining([
+                'src/shared/contracts.ts',
+                'src/shared/gameplay-core-contracts.ts',
+                'src/shared/gameplay-core.ts',
+                'src/shared/gameplay-core-adapters.ts',
+                'src/shared/gameplay-journal.ts',
+                'src/shared/run-summary-rules.ts',
+                'src/shared/save-data.ts',
+                'src/shared/playable-path-fixtures.ts',
+                'src/shared/gameplay-core-simulation.ts',
+                'src/shared/run-finalization-boundary.test.ts',
+                'src/renderer/App.tsx',
+                'src/renderer/store/runResolutionController.ts',
+                'src/renderer/components/GameOverScreen.tsx'
+            ]),
+            reads: expect.arrayContaining([
+                'runStatus',
+                'lastRunSummary',
+                'achievementsEnabled',
+                'unlockedAchievements',
+                'gameplayCommandJournal',
+                'gameplayEventJournal'
+            ]),
+            writes: expect.arrayContaining([
+                'lastRunSummary',
+                'gameplayCommandJournal',
+                'gameplayEventJournal',
+                'saveReport'
+            ]),
+            softlockGuards: expect.arrayContaining([
+                'strict-run-finalize-command',
+                'canonical-achievement-id-schema',
+                'game-over-only-finalization',
+                'existing-summary-rejection',
+                'achievement-disabled-unlock-rejection',
+                'summary-includes-final-command-and-event',
+                'no-renderer-summary-mutation',
+                'dev-fixture-core-finalization',
+                'json-round-trip-replay'
+            ]),
+            tests: expect.arrayContaining([
+                'src/shared/gameplay-core.test.ts',
+                'src/shared/gameplay-core-simulation.test.ts',
+                'src/shared/run-finalization-boundary.test.ts',
+                'src/shared/run-summary-rules.test.ts',
+                'src/shared/save-data.test.ts',
+                'src/shared/playable-path-fixtures.test.ts',
+                'src/renderer/store/runResolutionController.test.ts',
+                'src/renderer/store/useAppStore.test.ts'
+            ])
+        });
+        expect(hasEdge('progression.run_flow', 'core.run_finalization', 'triggers')).toBe(true);
+        expect(hasEdge('core.interlude_terminal_resolution', 'core.run_finalization', 'triggers')).toBe(true);
+        expect(hasEdge('mode.gauntlet_clock', 'core.run_finalization', 'triggers')).toBe(true);
+        expect(hasEdge('stats.session_tracking', 'core.run_finalization', 'modifies')).toBe(true);
+        expect(hasEdge('core.gameplay_commands', 'core.run_finalization', 'modifies')).toBe(true);
+        expect(hasEdge('core.run_finalization', 'progression.run_flow', 'gates')).toBe(true);
+        expect(hasEdge('core.run_finalization', 'persistence.run_summary', 'persists')).toBe(true);
+        expect(hasEdge('core.run_finalization', 'feedback.gameplay_hud', 'displays')).toBe(true);
+        expect(hasEdge('core.run_finalization', 'simulation.gameplay_replay', 'tested_by')).toBe(true);
+        expect(hasEdge('core.run_finalization', 'safety.softlock_fairness', 'guarded_by')).toBe(true);
+        expect(hasEdge('simulation.ai_repository_model', 'core.run_finalization', 'gates')).toBe(true);
+    });
+
+    it('connects renderer command intent through one accepted journal transaction boundary', () => {
+        const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
+        const hasEdge = (source: string, target: string, kind: string): boolean =>
+            gameplayInteractionGraph.edges.some(
+                (edge) => edge.source === source && edge.target === target && edge.kind === kind
+            );
+
+        expect(gameplayInteractionGraph.version).toBe(85);
+        expect(byId.get('core.command_transaction')).toMatchObject({
+            kind: 'core',
+            role: 'shared_accepted_command_reduction_and_bounded_journal_boundary',
+            evidence: expect.arrayContaining([
+                'src/shared/gameplay-core-adapters.ts',
+                'src/shared/gameplay-core.ts',
+                'src/shared/gameplay-journal.ts',
+                'src/shared/gameplay-command-compatibility.ts',
+                'src/shared/renderer-command-transaction-boundary.test.ts',
+                'src/shared/game-barrel-ownership-boundary.test.ts',
+                'src/renderer/store/runSurfaceState.ts',
+                'src/renderer/store/tilePressController.ts',
+                'src/renderer/store/shopSurfaceState.ts',
+                'src/renderer/store/relicOfferSurfaceState.ts',
+                'src/renderer/store/sideRoomSurfaceState.ts',
+                'src/renderer/store/riskWagerSurfaceState.ts',
+                'src/renderer/store/levelCompleteContinuationExecutor.ts'
+            ]),
+            writes: expect.arrayContaining(['gameplayCommandJournal', 'gameplayEventJournal']),
+            blocks: [],
+            softlockGuards: expect.arrayContaining([
+                'accepted-commands-only',
+                'command-before-events-order',
+                'bounded-journal-normalization',
+                'rejected-input-identity',
+                'rejected-command-journal-pollution',
+                'renderer-owned-command-reduction',
+                'renderer-owned-journal-ordering',
+                'legacy-facade-owned-command-reduction',
+                'legacy-facade-owned-journal-ordering',
+                'single-shared-transaction-adapter',
+                'no-production-renderer-gameplay-core-import',
+                'no-production-renderer-gameplay-journal-import'
+            ]),
+            tests: expect.arrayContaining([
+                'src/shared/gameplay-core.test.ts',
+                'src/shared/gameplay-command-compatibility.test.ts',
+                'src/shared/gameplay-journal.test.ts',
+                'src/shared/renderer-command-transaction-boundary.test.ts',
+                'src/shared/game-barrel-ownership-boundary.test.ts',
+                'src/renderer/store/runSurfaceState.test.ts',
+                'src/renderer/store/shopSurfaceState.test.ts'
+            ])
+        });
+        expect(hasEdge('core.command_transaction', 'core.gameplay_commands', 'triggers')).toBe(true);
+        expect(hasEdge('core.gameplay_commands', 'core.command_transaction', 'modifies')).toBe(true);
+        expect(hasEdge('core.command_transaction', 'core.run_finalization', 'enables')).toBe(true);
+        expect(hasEdge('core.command_transaction', 'persistence.run_summary', 'persists')).toBe(true);
+        expect(hasEdge('core.command_transaction', 'simulation.gameplay_replay', 'tested_by')).toBe(true);
+        expect(hasEdge('simulation.ai_repository_model', 'core.command_transaction', 'gates')).toBe(true);
+    });
+
+    it('keeps the historical gameplay facade command-only and game.ts import-free', () => {
+        const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
+        const hasEdge = (source: string, target: string, kind: string): boolean =>
+            gameplayInteractionGraph.edges.some(
+                (edge) => edge.source === source && edge.target === target && edge.kind === kind
+            );
+
+        expect(gameplayInteractionGraph.version).toBe(85);
+        expect(byId.get('core.gameplay_compatibility_facade')).toMatchObject({
+            kind: 'core',
+            role: 'import_free_legacy_barrel_and_shared_command_adapter_facade',
+            evidence: expect.arrayContaining([
+                'src/shared/game.ts',
+                'src/shared/gameplay-command-compatibility.ts',
+                'src/shared/tile-flip-command-rules.ts',
+                'src/shared/gameplay-core-adapters.ts',
+                'src/shared/board-powers.ts',
+                'src/shared/dungeon-rules.ts',
+                'src/shared/turn-resolution.ts',
+                'src/shared/game-core.ts',
+                'src/shared/objective-rules.ts',
+                'src/shared/long-run-feedback.ts',
+                'src/shared/playable-path-fixtures.ts',
+                'src/shared/game-barrel-ownership-boundary.test.ts'
+            ]),
+            writes: expect.arrayContaining(['gameplayCommandJournal', 'gameplayEventJournal']),
+            blocks: [],
+            softlockGuards: expect.arrayContaining([
+                'zero-production-game-barrel-imports',
+                'import-free-game-barrel',
+                'shared-command-adapter-only',
+                'no-facade-reducer-import',
+                'no-facade-journal-import',
+                'no-direct-board-turn-fallback',
+                'accepted-command-journaling',
+                'rejected-input-identity',
+                'retired-tile-flip-command-transition',
+                'retired-floor-completion-transitions'
+            ]),
+            tests: expect.arrayContaining([
+                'src/shared/gameplay-command-compatibility.test.ts',
+                'src/shared/game-barrel-ownership-boundary.test.ts',
+                'src/shared/gameplay-core.test.ts',
+                'src/shared/game.test.ts',
+                'src/shared/gameplay-property-invariants.test.ts'
+            ])
+        });
+        expect(hasEdge('core.gameplay_compatibility_facade', 'core.command_transaction', 'triggers')).toBe(true);
+        expect(hasEdge('core.command_transaction', 'core.gameplay_compatibility_facade', 'modifies')).toBe(true);
+        expect(hasEdge('core.gameplay_compatibility_facade', 'core.tile_input', 'enables')).toBe(true);
+        expect(hasEdge('core.gameplay_compatibility_facade', 'core.board_turn_resolution', 'enables')).toBe(true);
+        expect(hasEdge('core.gameplay_compatibility_facade', 'power.destroy_pair', 'enables')).toBe(true);
+        expect(hasEdge('core.gameplay_compatibility_facade', 'exit.primary', 'enables')).toBe(true);
+        expect(hasEdge('core.gameplay_compatibility_facade', 'feedback.gameplay_hud', 'displays')).toBe(true);
+        expect(hasEdge('simulation.ai_repository_model', 'core.gameplay_compatibility_facade', 'gates')).toBe(true);
+    });
+
     it('connects the source-derived AI model to run-state, protocol, and architecture drift gates', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
 
@@ -291,11 +600,34 @@ describe('gameplay interaction graph', () => {
                 'src/shared/contracts.ts',
                 'src/shared/gameplay-core-contracts.ts',
                 'src/shared/gameplay-core.ts',
+                'src/shared/gameplay-core-adapters.ts',
+                'src/shared/gameplay-command-compatibility.ts',
+                'src/shared/game-barrel-ownership-boundary.test.ts',
+                'src/shared/run-start-core-contracts.ts',
+                'src/shared/run-start-core.ts',
                 'src/shared/run-settings-rules.ts',
                 'src/shared/interlude-transition-rules.ts',
                 'src/shared/run-summary-rules.ts',
+                'src/shared/run-finalization-boundary.test.ts',
+                'src/shared/renderer-command-transaction-boundary.test.ts',
+                'src/shared/legacy-playthrough-solver-boundary.test.ts',
+                'src/shared/game-barrel-ownership-boundary.test.ts',
                 'src/renderer/components/GameScreen.tsx',
                 'src/renderer/components/gameScreenBoardFeedbackModel.ts',
+                'src/renderer/components/gameScreenBoardFloaterModel.ts',
+                'src/renderer/components/useGameScreenBoardFloaterProjection.ts',
+                'src/renderer/components/GameScreenBoardFloater.tsx',
+                'src/renderer/components/GameScreenMatchFloaterContent.tsx',
+                'src/renderer/components/GameScreenMismatchFloaterContent.tsx',
+                'src/renderer/components/gameScreenRouteChoiceModel.ts',
+                'src/renderer/components/useGameScreenRouteChoiceProjection.ts',
+                'src/renderer/components/GameScreenRouteChoicePanel.tsx',
+                'src/renderer/components/gameScreenRouteConsequenceProjection.ts',
+                'src/renderer/components/GameScreenRouteConsequenceFeedback.tsx',
+                'src/renderer/components/gameScreenNextFloorProjection.ts',
+                'src/renderer/components/GameScreenNextFloorPreview.tsx',
+                'src/renderer/components/useGameScreenFloorClearProjection.ts',
+                'src/renderer/components/GameScreenFloorClearResult.tsx',
                 'src/shared/gameplay-interaction-graph-data.json',
                 'src/shared/gameplay-feedback-facts.ts',
                 'src/renderer/store/gameplayFeedbackAdapter.ts'
@@ -305,6 +637,7 @@ describe('gameplay interaction graph', () => {
                 'sourceFileMetrics',
                 'runStateWriteSites',
                 'gameplayCommandSchema',
+                'runStartCommandSchema',
                 'gameplayEventSchema',
                 'gameplayInteractionGraph',
                 'playerVisibleFieldRegistry'
@@ -321,9 +654,42 @@ describe('gameplay interaction graph', () => {
                 'compiler-derived-run-state-fields',
                 'full-run-state-construction-classification',
                 'renderer-run-state-write-error',
+                'renderer-command-transaction-boundary',
+                'no-renderer-reducer-import',
+                'no-renderer-journal-import',
+                'zero-production-game-barrel-imports',
+                'import-free-game-barrel',
+                'command-only-gameplay-compatibility-facade',
+                'no-compatibility-reducer-import',
+                'no-compatibility-journal-import',
+                'no-direct-board-turn-fallback',
+                'retired-legacy-playthrough-solver',
+                'generated-board-command-solver-consumers',
+                'authoritative-solver-changed-file-gates',
                 'source-derived-orchestration-budget',
                 'game-screen-line-and-import-ceiling',
+                'single-route-choice-projection',
+                'presentation-only-route-choice-panel',
+                'route-choice-line-budget-ratchet',
+                'single-route-consequence-projection',
+                'selected-active-route-feedback-parity',
+                'route-consequence-line-budget-ratchet',
+                'single-next-floor-projection',
+                'schedule-objective-pressure-counterplay-parity',
+                'next-floor-line-and-import-ratchet',
+                'single-floor-clear-result-presentation',
+                'projection-owned-floor-clear-multimodal-cues',
+                'floor-clear-result-line-ratchet',
+                'single-board-floater-presentation',
+                'typed-board-floater-projection-boundary',
+                'board-floater-line-and-import-ratchet',
+                'separate-match-mismatch-floater-presentations',
+                'board-floater-branch-type-guards',
+                'board-floater-subview-budget-ratchet',
                 'schema-derived-gameplay-protocol',
+                'multi-reducer-command-schema-index',
+                'run-start-command-handler-completeness',
+                'run-finalization-command-handler-completeness',
                 'command-handler-completeness',
                 'event-emitter-completeness',
                 'protocol-test-completeness',
@@ -337,16 +703,35 @@ describe('gameplay interaction graph', () => {
                 'src/shared/ai-repo-model.test.ts',
                 'src/shared/run-settings-rules.test.ts',
                 'src/shared/run-summary-rules.test.ts',
+                'src/shared/run-finalization-boundary.test.ts',
+                'src/shared/renderer-command-transaction-boundary.test.ts',
+                'src/shared/legacy-playthrough-solver-boundary.test.ts',
+                'src/shared/game-barrel-ownership-boundary.test.ts',
+                'src/shared/gameplay-command-compatibility.test.ts',
                 'src/renderer/store/sideRoomSurfaceState.test.ts',
                 'src/renderer/components/gameScreenBoardFeedbackModel.test.ts',
+                'src/renderer/components/useGameScreenBoardFloaterProjection.test.ts',
+                'src/renderer/components/GameScreenBoardFloater.test.tsx',
+                'src/renderer/components/useGameScreenRouteChoiceProjection.test.ts',
+                'src/renderer/components/GameScreenRouteChoicePanel.test.tsx',
+                'src/renderer/components/gameScreenRouteConsequenceProjection.test.ts',
+                'src/renderer/components/GameScreenRouteConsequenceFeedback.test.tsx',
+                'src/renderer/components/gameScreenNextFloorProjection.test.ts',
+                'src/renderer/components/GameScreenNextFloorPreview.test.tsx',
+                'src/renderer/components/useGameScreenFloorClearProjection.test.ts',
+                'src/renderer/components/GameScreenFloorClearResult.test.tsx',
                 'src/shared/gameplay-effect-transition.test.ts'
             ])
         });
         expect(gameplayInteractionGraph.edges).toEqual(expect.arrayContaining([
             expect.objectContaining({ source: 'simulation.ai_repository_model', target: 'core.gameplay_commands', kind: 'gates' }),
+            expect.objectContaining({ source: 'simulation.ai_repository_model', target: 'core.command_transaction', kind: 'gates' }),
+            expect.objectContaining({ source: 'simulation.ai_repository_model', target: 'core.gameplay_compatibility_facade', kind: 'gates' }),
+            expect.objectContaining({ source: 'simulation.ai_repository_model', target: 'core.run_finalization', kind: 'gates' }),
             expect.objectContaining({ source: 'simulation.ai_repository_model', target: 'feedback.gameplay_hud', kind: 'gates' }),
             expect.objectContaining({ source: 'simulation.ai_repository_model', target: 'persistence.run_summary', kind: 'gates' }),
             expect.objectContaining({ source: 'simulation.ai_repository_model', target: 'safety.softlock_fairness', kind: 'gates' }),
+            expect.objectContaining({ source: 'simulation.ai_repository_model', target: 'simulation.generated_board_playthrough', kind: 'gates' }),
             expect.objectContaining({ source: 'simulation.ai_repository_model', target: 'simulation.gameplay_replay', kind: 'tested_by' })
         ]));
     });
@@ -374,7 +759,7 @@ describe('gameplay interaction graph', () => {
         expect(byId.get('power.peek')).toMatchObject({ kind: 'power', role: 'information_conversion' });
         expect(byId.get('persistence.run_summary')).toMatchObject({
             kind: 'persistence',
-            role: 'bounded_journal_persistence'
+            role: 'core_finalized_bounded_journal_persistence'
         });
         expect(byId.get('simulation.gameplay_replay')).toMatchObject({ kind: 'simulation' });
         expect(gameplayInteractionGraph.edges).toEqual(
@@ -806,7 +1191,7 @@ describe('gameplay interaction graph', () => {
     it('connects the Gauntlet clock from run setup through a replayable terminal consequence', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
 
-        expect(gameplayInteractionGraph.version).toBe(73);
+        expect(gameplayInteractionGraph.version).toBe(85);
         expect(byId.get('mode.gauntlet_clock')).toMatchObject({
             kind: 'hazard',
             role: 'serialized_host_clock_terminal_transition',
@@ -831,7 +1216,7 @@ describe('gameplay interaction graph', () => {
             ])
         });
         expect(gameplayInteractionGraph.edges).toEqual(expect.arrayContaining([
-            expect.objectContaining({ source: 'progression.run_setup', target: 'mode.gauntlet_clock', kind: 'enables' }),
+            expect.objectContaining({ source: 'core.run_bootstrap', target: 'mode.gauntlet_clock', kind: 'modifies' }),
             expect.objectContaining({ source: 'progression.run_flow', target: 'mode.gauntlet_clock', kind: 'modifies' }),
             expect.objectContaining({ source: 'mode.gauntlet_clock', target: 'core.gameplay_commands', kind: 'triggers' }),
             expect.objectContaining({ source: 'core.gameplay_commands', target: 'mode.gauntlet_clock', kind: 'modifies' }),
@@ -846,7 +1231,7 @@ describe('gameplay interaction graph', () => {
     it('connects pause and resume across timer snapshots, lifecycle recovery, persistence, and replay', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
 
-        expect(gameplayInteractionGraph.version).toBe(73);
+        expect(gameplayInteractionGraph.version).toBe(85);
         expect(byId.get('phase.pause_resume')).toMatchObject({
             kind: 'core',
             role: 'serialized_timer_snapshot_and_clock_lifecycle_transition',
@@ -893,7 +1278,7 @@ describe('gameplay interaction graph', () => {
     it('separates typed debug reveal lifecycle from the consumable Peek power', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
 
-        expect(gameplayInteractionGraph.version).toBe(73);
+        expect(gameplayInteractionGraph.version).toBe(85);
         expect(byId.get('debug.reveal_lifecycle')).toMatchObject({
             kind: 'core',
             role: 'replayable_debug_visibility_and_achievement_policy_transition',
@@ -1013,7 +1398,7 @@ describe('gameplay interaction graph', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
         expect(byId.get('progression.run_setup')).toMatchObject({
             kind: 'progression',
-            role: 'authoritative_pre_run_loadout_selection'
+            role: 'player_selected_core_applied_pre_run_loadout'
         });
         expect(byId.get('inventory.relic_loadout')).toMatchObject({
             kind: 'inventory',
@@ -1031,9 +1416,10 @@ describe('gameplay interaction graph', () => {
             writes: []
         });
         expect(gameplayInteractionGraph.edges).toEqual(expect.arrayContaining([
-            expect.objectContaining({ source: 'progression.run_setup', target: 'inventory.relic_loadout', kind: 'grants' }),
-            expect.objectContaining({ source: 'progression.run_setup', target: 'inventory.mutator_loadout', kind: 'grants' }),
-            expect.objectContaining({ source: 'progression.run_setup', target: 'inventory.contract_loadout', kind: 'grants' }),
+            expect.objectContaining({ source: 'progression.run_setup', target: 'core.run_bootstrap', kind: 'triggers' }),
+            expect.objectContaining({ source: 'core.run_bootstrap', target: 'inventory.relic_loadout', kind: 'grants' }),
+            expect.objectContaining({ source: 'core.run_bootstrap', target: 'inventory.mutator_loadout', kind: 'grants' }),
+            expect.objectContaining({ source: 'core.run_bootstrap', target: 'inventory.contract_loadout', kind: 'grants' }),
             expect.objectContaining({ source: 'progression.relic_draft', target: 'inventory.relic_loadout', kind: 'modifies' }),
             expect.objectContaining({ source: 'inventory.relic_loadout', target: 'progression.relic_draft', kind: 'gates' }),
             expect.objectContaining({ source: 'progression.run_flow', target: 'inventory.mutator_loadout', kind: 'modifies' }),
@@ -1072,7 +1458,7 @@ describe('gameplay interaction graph', () => {
 
     it('connects Hazard Banish acquisition to its typed floor-start removal or Destroy fallback', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
-        expect(gameplayInteractionGraph.version).toBe(73);
+        expect(gameplayInteractionGraph.version).toBe(85);
         expect(byId.get('perk.hazard_banish_per_floor')).toMatchObject({
             kind: 'perk',
             role: 'durable_floor_start_hazard_or_destroy_conversion',
@@ -1095,7 +1481,7 @@ describe('gameplay interaction graph', () => {
 
     it('connects typed route selection from floor clear through exact replayable consequences', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
-        expect(gameplayInteractionGraph.version).toBe(73);
+        expect(gameplayInteractionGraph.version).toBe(85);
         expect(byId.get('route.choice')).toMatchObject({
             kind: 'route',
             role: 'flat_replayable_commitment_and_interlude_open',
@@ -1324,14 +1710,17 @@ describe('gameplay interaction graph', () => {
 
     it('executes generated-board fairness through typed commands, feedback audits, and sampled replay', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
-        expect(gameplayInteractionGraph.version).toBe(73);
+        expect(gameplayInteractionGraph.version).toBe(85);
         expect(byId.get('simulation.generated_board_playthrough')).toMatchObject({
             kind: 'simulation',
-            role: 'core_command_event_perfect_bounded_information_identity_blind_gambit_recovery_opt_in_pin_annotation_and_lock_extraction_generated_board_fairness_and_replay_gate',
+            role: 'single_authoritative_core_command_event_perfect_bounded_information_identity_blind_gambit_recovery_opt_in_pin_annotation_and_lock_extraction_generated_board_fairness_and_replay_gate',
             evidence: expect.arrayContaining([
                 'src/shared/playthrough-solver-rules.ts',
                 'src/shared/gameplay-core-playthrough-solver.ts',
+                'src/shared/legacy-playthrough-solver-boundary.test.ts',
+                'src/shared/gameplay-property-invariants.test.ts',
                 'src/shared/softlock-generator-contract.ts',
+                'scripts/gate-changed.mjs',
                 'scripts/sim-endless.ts'
             ]),
             reads: expect.arrayContaining([
@@ -1380,7 +1769,11 @@ describe('gameplay interaction graph', () => {
                 'strict-command-schema',
                 'sticky-blocked-tile-second',
                 'typed-feedback-completeness',
-                'default-perfect-information-parity',
+                'single-authoritative-command-solver',
+                'retired-direct-mutation-solver',
+                'generated-board-property-command-coverage',
+                'authoritative-solver-changed-file-gates',
+                'default-perfect-information-policy',
                 'bounded-observation-ledger',
                 'identity-blind-unknown-tile-selection',
                 'identity-blind-gambit-target',
@@ -1394,7 +1787,7 @@ describe('gameplay interaction graph', () => {
                 'affordable-lock-only',
                 'typed-key-first',
                 'typed-pause-purchase-resume',
-                'default-primary-exit-parity',
+                'default-primary-exit-policy',
                 'uncertain-turn-budget',
                 'mid-turn-resolving-state',
                 'json-round-trip-replay',
@@ -1402,7 +1795,10 @@ describe('gameplay interaction graph', () => {
             ]),
             tests: expect.arrayContaining([
                 'src/shared/gameplay-core-playthrough-solver.test.ts',
+                'src/shared/legacy-playthrough-solver-boundary.test.ts',
+                'src/shared/gameplay-property-invariants.test.ts',
                 'src/shared/softlock-generator-contract.test.ts',
+                'src/shared/gate-changed.test.ts',
                 'src/shared/sim-endless-output.test.ts'
             ])
         });
@@ -1415,13 +1811,14 @@ describe('gameplay interaction graph', () => {
             expect.objectContaining({ source: 'simulation.generated_board_playthrough', target: 'objective.floor_clear', kind: 'tested_by' }),
             expect.objectContaining({ source: 'simulation.generated_board_playthrough', target: 'safety.softlock_fairness', kind: 'guarded_by' }),
             expect.objectContaining({ source: 'simulation.generated_board_playthrough', target: 'safety.dungeon_topology', kind: 'guarded_by' }),
-            expect.objectContaining({ source: 'simulation.generated_board_playthrough', target: 'simulation.gameplay_replay', kind: 'guarded_by' })
+            expect.objectContaining({ source: 'simulation.generated_board_playthrough', target: 'simulation.gameplay_replay', kind: 'guarded_by' }),
+            expect.objectContaining({ source: 'simulation.ai_repository_model', target: 'simulation.generated_board_playthrough', kind: 'gates' })
         ]));
     });
 
     it('connects relic drafting and offer shaping to typed build acquisition, economy, feedback, persistence, and replay', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
-        expect(gameplayInteractionGraph.version).toBe(73);
+        expect(gameplayInteractionGraph.version).toBe(85);
         expect(byId.get('progression.relic_draft')).toMatchObject({
             kind: 'progression',
             role: 'flat_typed_offer_open_selection_and_shaping',
@@ -1460,7 +1857,7 @@ describe('gameplay interaction graph', () => {
 
     it('connects flat typed side-room choices from routes through rewards, feedback, persistence, and replay', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
-        expect(gameplayInteractionGraph.version).toBe(73);
+        expect(gameplayInteractionGraph.version).toBe(85);
         expect(byId.get('progression.route_side_room')).toMatchObject({
             kind: 'progression',
             role: 'flat_replayable_between_floor_reward_choice',
@@ -1489,7 +1886,7 @@ describe('gameplay interaction graph', () => {
 
     it('connects Locksmith insurance through board-shop fallback into cache and alternate-exit extraction', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
-        expect(gameplayInteractionGraph.version).toBe(73);
+        expect(gameplayInteractionGraph.version).toBe(85);
         expect(byId.get('build.locksmith')).toMatchObject({
             kind: 'build',
             role: 'typed_key_cache_and_alternate_exit_extraction_build',
@@ -1539,7 +1936,7 @@ describe('gameplay interaction graph', () => {
 
     it('connects flat typed floor advancement through pressure, board preparation, feedback, persistence, and replay', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
-        expect(gameplayInteractionGraph.version).toBe(73);
+        expect(gameplayInteractionGraph.version).toBe(85);
         expect(byId.get('progression.run_flow')).toMatchObject({
             kind: 'progression',
             role: 'typed_flat_replayable_floor_transition',
@@ -1572,7 +1969,7 @@ describe('gameplay interaction graph', () => {
 
     it('connects one typed non-final board turn through effects, feedback, persistence, and replay', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
-        expect(gameplayInteractionGraph.version).toBe(73);
+        expect(gameplayInteractionGraph.version).toBe(85);
         expect(byId.get('core.board_turn_resolution')).toMatchObject({
             kind: 'core',
             role: 'renderer_direct_single_command_match_mismatch_gambit_floor_clear_and_feedback_fact_transition',
@@ -1838,7 +2235,8 @@ describe('gameplay interaction graph', () => {
             kind: 'core',
             role: 'serializable_flip_utility_contact_gambit_and_transient_intent_input',
             evidence: expect.arrayContaining([
-                'src/shared/tile-flip-command-transition.ts',
+                'src/shared/tile-flip-command-rules.ts',
+                'src/shared/gameplay-command-compatibility.ts',
                 'src/shared/gameplay-core-contracts.ts',
                 'src/shared/gameplay-core.ts',
                 'src/shared/gameplay-core-adapters.ts',

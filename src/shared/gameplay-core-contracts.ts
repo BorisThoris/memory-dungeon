@@ -1,13 +1,15 @@
 import { z } from 'zod';
-import type {
-    BonusRewardId,
-    FindableKind,
-    RelicId,
-    RelicOfferServiceId,
-    RewardPerkId,
-    RouteSpecialKind,
-    RunStatus,
-    TileTraitKind
+import {
+    ACHIEVEMENT_IDS,
+    type AchievementId,
+    type BonusRewardId,
+    type FindableKind,
+    type RelicId,
+    type RelicOfferServiceId,
+    type RewardPerkId,
+    type RouteSpecialKind,
+    type RunStatus,
+    type TileTraitKind
 } from './contracts';
 import { RUN_INVENTORY_ITEM_IDS } from './run-inventory-contracts';
 import { RUN_PROGRESSION_REPAIR_KINDS } from './run-progression-repair';
@@ -1274,6 +1276,22 @@ export const gameplayCommandSchema = z.discriminatedUnion('type', [
     z
         .object({
             ...commandBase,
+            type: z.literal('run.interlude_terminal_resolve')
+        })
+        .strict(),
+    z
+        .object({
+            ...commandBase,
+            type: z.literal('run.finalize'),
+            unlockedAchievements: z
+                .array(z.enum(ACHIEVEMENT_IDS))
+                .max(ACHIEVEMENT_IDS.length)
+                .refine((ids) => new Set(ids).size === ids.length, 'Achievement ids must be unique.')
+        })
+        .strict(),
+    z
+        .object({
+            ...commandBase,
             type: z.literal('debug.reveal_activate'),
             disableAchievementsOnDebug: z.boolean()
         })
@@ -1598,6 +1616,35 @@ export const gameplayEventSchema = z.discriminatedUnion('type', [
     z
         .object({
             ...eventBase,
+            type: z.literal('run.started'),
+            reason: z.enum(['new', 'restart']),
+            startKind: z.enum([
+                'daily',
+                'dungeonShowcase',
+                'endless',
+                'gauntlet',
+                'meditation',
+                'meditationWithMutators',
+                'pinVow',
+                'practice',
+                'puzzle',
+                'scholarContract',
+                'wild'
+            ]),
+            runSeed: z.number().int().nonnegative(),
+            runRulesVersion: z.number().int().positive(),
+            gameMode: z.enum(['endless', 'daily', 'gauntlet', 'puzzle', 'meditation']),
+            practiceMode: z.boolean(),
+            startingLoadoutId: z.string().min(1).max(80).nullable(),
+            floor: z.number().int().positive(),
+            memorizeDurationMs: z.number().int().nonnegative(),
+            gauntletDeadlineMs: z.number().int().nonnegative().nullable(),
+            dailyDateKeyUtc: z.string().regex(/^\d{8}$/).nullable()
+        })
+        .strict(),
+    z
+        .object({
+            ...eventBase,
             type: z.literal('phase.memorize_completed'),
             floor: z.number().int().positive(),
             memorizeRemainingMsBefore: z.number().int().nonnegative().nullable(),
@@ -1641,6 +1688,36 @@ export const gameplayEventSchema = z.discriminatedUnion('type', [
             gauntletDeadlineMsBefore: z.number().int().nonnegative().nullable(),
             gauntletDeadlineMsAfter: z.number().int().nonnegative().nullable(),
             gauntletPauseDurationMs: z.number().int().nonnegative()
+        })
+        .strict(),
+    z
+        .object({
+            ...eventBase,
+            type: z.literal('run.interlude_terminal_resolved'),
+            cause: z.enum(['already_game_over', 'zero_lives']),
+            statusBefore: z.enum(['memorize', 'playing', 'resolving', 'levelComplete', 'paused', 'gameOver']),
+            statusAfter: z.literal('gameOver'),
+            livesBefore: z.number().int().nonnegative(),
+            livesAfter: z.literal(0),
+            pendingRouteCleared: z.boolean(),
+            sideRoomCleared: z.boolean(),
+            relicOfferCleared: z.boolean(),
+            shopOfferCountCleared: z.number().int().nonnegative()
+        })
+        .strict(),
+    z
+        .object({
+            ...eventBase,
+            type: z.literal('run.finalized'),
+            totalScore: z.number().int().nonnegative(),
+            levelsCleared: z.number().int().nonnegative(),
+            highestLevel: z.number().int().nonnegative(),
+            achievementsEnabled: z.boolean(),
+            unlockedAchievements: z
+                .array(z.enum(ACHIEVEMENT_IDS))
+                .max(ACHIEVEMENT_IDS.length)
+                .refine((ids) => new Set(ids).size === ids.length, 'Achievement ids must be unique.'),
+            summaryValidated: z.literal(true)
         })
         .strict(),
     z
@@ -2417,6 +2494,24 @@ export const createGameplayResumeCommand = (
         commandId,
         type: 'run.resume',
         observedAtMs
+    });
+
+export const createGameplayInterludeTerminalResolveCommand = (commandId: string): GameplayCommand =>
+    gameplayCommandSchema.parse({
+        schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
+        commandId,
+        type: 'run.interlude_terminal_resolve'
+    });
+
+export const createGameplayRunFinalizeCommand = (
+    commandId: string,
+    unlockedAchievements: readonly AchievementId[]
+): GameplayCommand =>
+    gameplayCommandSchema.parse({
+        schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
+        commandId,
+        type: 'run.finalize',
+        unlockedAchievements: [...unlockedAchievements]
     });
 
 export const createGameplayDebugRevealActivateCommand = (

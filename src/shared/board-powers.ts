@@ -1,6 +1,6 @@
 export {
     applyDestroyPair,
-} from './game';
+} from './gameplay-command-compatibility';
 
 export {
     applyFlashPair,

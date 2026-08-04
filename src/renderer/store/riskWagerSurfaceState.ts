@@ -1,8 +1,7 @@
 import type { RunState } from '../../shared/contracts';
 import type { GameplayEvent } from '../../shared/gameplay-core-contracts';
 import { createGameplayRiskWagerAcceptCommand } from '../../shared/gameplay-core-contracts';
-import { reduceGameplayCommand } from '../../shared/gameplay-core';
-import { appendGameplayJournal } from '../../shared/gameplay-journal';
+import { executeGameplayCommandThroughGameplayCore } from '../../shared/gameplay-core-adapters';
 
 type RiskWagerSurfaceResult =
     | { kind: 'ignored' }
@@ -20,7 +19,7 @@ export const createRiskWagerSurfaceResult = (run: RunState | null): RiskWagerSur
     const command = createGameplayRiskWagerAcceptCommand(
         `risk-wager:${run.runSeed}:${run.lastLevelResult?.level ?? run.board?.level ?? 0}`
     );
-    const result = reduceGameplayCommand(run, command);
+    const result = executeGameplayCommandThroughGameplayCore(run, command);
     if (!result.accepted) {
         return { kind: 'ignored' };
     }
@@ -28,7 +27,7 @@ export const createRiskWagerSurfaceResult = (run: RunState | null): RiskWagerSur
     return {
         kind: 'applied',
         patch: {
-            run: appendGameplayJournal(result.run, [command], result.events)
+            run: result.run
         },
         events: result.events
     };

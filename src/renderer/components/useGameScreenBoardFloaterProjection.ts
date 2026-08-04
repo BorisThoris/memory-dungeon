@@ -338,6 +338,7 @@ export const useGameScreenBoardFloaterProjection = ({
             : 0;
 
     return {
+        reduceMotion,
         boardFloaterPayload,
         boardFloaterDurationMs,
         boardFloaterMatchPayoffChips,
@@ -378,3 +379,5 @@ export const useGameScreenBoardFloaterProjection = ({
         boardFloaterRewardBurstFill
     };
 };
+
+export type GameScreenBoardFloaterProjection = ReturnType<typeof useGameScreenBoardFloaterProjection>;

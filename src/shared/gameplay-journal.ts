@@ -1,5 +1,4 @@
 import type {
-    GameplayCommandJournalEntry,
     GameplayEventJournalEntry,
     RunState
 } from './contracts';
@@ -9,14 +8,20 @@ import {
     type GameplayCommand,
     type GameplayEvent
 } from './gameplay-core-contracts';
+import {
+    runStartCommandSchema,
+    type RunStartCommand
+} from './run-start-core-contracts';
 
 export const GAMEPLAY_COMMAND_JOURNAL_LIMIT = 64;
 export const GAMEPLAY_EVENT_JOURNAL_LIMIT = 256;
 
 export interface GameplayJournalSnapshot {
-    commands: GameplayCommandJournalEntry[];
+    commands: GameplayJournalCommand[];
     events: GameplayEventJournalEntry[];
 }
+
+export type GameplayJournalCommand = GameplayCommand | RunStartCommand;
 
 const boundedUniqueBy = <T>(items: readonly T[], limit: number, keyOf: (item: T) => string): T[] => {
     const byId = new Map<string, T>();
@@ -28,11 +33,19 @@ const boundedUniqueBy = <T>(items: readonly T[], limit: number, keyOf: (item: T)
     return [...byId.values()].slice(-limit);
 };
 
-const normalizeCommands = (value: unknown): GameplayCommand[] =>
-    (Array.isArray(value) ? value : []).flatMap((entry) => {
-        const parsed = gameplayCommandSchema.safeParse(entry);
-        return parsed.success ? [parsed.data] : [];
-    });
+const normalizeCommands = (value: unknown): GameplayJournalCommand[] => {
+    const commands: GameplayJournalCommand[] = [];
+    for (const entry of Array.isArray(value) ? value : []) {
+        const gameplayCommand = gameplayCommandSchema.safeParse(entry);
+        if (gameplayCommand.success) {
+            commands.push(gameplayCommand.data);
+            continue;
+        }
+        const runStartCommand = runStartCommandSchema.safeParse(entry);
+        if (runStartCommand.success) commands.push(runStartCommand.data);
+    }
+    return commands;
+};
 
 const normalizeEvents = (value: unknown): GameplayEvent[] =>
     (Array.isArray(value) ? value : []).flatMap((entry) => {
@@ -62,7 +75,7 @@ export const getGameplayJournalSnapshot = (
 
 export const appendGameplayJournal = (
     run: RunState,
-    commands: readonly GameplayCommand[],
+    commands: readonly GameplayJournalCommand[],
     events: readonly GameplayEvent[]
 ): RunState => {
     if (commands.length === 0 && events.length === 0) return run;

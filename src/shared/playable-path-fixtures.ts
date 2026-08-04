@@ -11,11 +11,11 @@ import { createDefaultSaveData, normalizeSaveData } from './save-data';
 import {
     advanceToNextLevel,
     createNewRun,
-    createRunSummary,
     finishMemorizePhase,
     openRelicOffer
 } from './game-core';
-import { buildBoard } from './game';
+import { finalizeRunThroughGameplayCore } from './gameplay-core-adapters';
+import { buildBoard } from './board-build-rules';
 import { flipTile, resolveBoardTurn } from './turn-resolution';
 import {
     activateDungeonExit,
@@ -59,6 +59,28 @@ export interface PlayablePathFixtureOptions {
 
 const PLAYABLE_PATH_SEED = 172_501;
 const HAZARD_PATH_SEED = 81_004;
+
+/**
+ * Builds the dev/E2E terminal fixture through the same serialized finalization
+ * boundary as a live run. The fixture may force the precondition (`gameOver`)
+ * so tests can skip mismatch burn time, but it cannot manufacture a summary.
+ */
+export const createFinalizedGameOverPlayablePathRun = (run: RunState): RunState => {
+    const terminalRun: RunState = {
+        ...run,
+        lives: 0,
+        status: 'gameOver'
+    };
+    const finalization = finalizeRunThroughGameplayCore(
+        terminalRun,
+        [],
+        `playable-path-run-finalize:${run.runSeed}:${run.board?.level ?? 0}:${Array.isArray(run.gameplayCommandJournal) ? run.gameplayCommandJournal.length : 0}`
+    );
+    if (!finalization.accepted || !finalization.run.lastRunSummary) {
+        throw new Error('Playable-path game-over fixture could not be finalized through the gameplay core.');
+    }
+    return finalization.run;
+};
 
 export const PLAYABLE_PATH_FIXTURE_IDS: readonly PlayablePathFixtureId[] = [
     'freshProfile',
@@ -347,7 +369,7 @@ const relicDraftRun = (): RunState => {
 
 const gameOverRun = (): RunState => {
     const run = finishMemorizePhase(baseEndlessRun());
-    return createRunSummary({ ...run, status: 'gameOver', lives: 0 }, []);
+    return createFinalizedGameOverPlayablePathRun(run);
 };
 
 const assertNever = (value: never): never => {

@@ -29,8 +29,16 @@ import {
     getFloorClearActionSequenceCue,
     getFloorClearCarryForwardCue,
     getFloorClearCashoutRows,
+    getFloorClearObjectiveSignalAudioCue,
+    getFloorClearObjectiveSignalBeatCount,
+    getFloorClearObjectiveSignalScreenCue,
+    getFloorClearPayoffStackAction,
+    getFloorClearPayoffStackAudioCue,
+    getFloorClearPayoffStackBeatCount,
+    getFloorClearPayoffStackScreenCue,
     getFloorClearPayoffStackSignal
 } from './gameScreenFloorClearFeedbackModel';
+import { getGameScreenNextFloorProjection } from './gameScreenNextFloorProjection';
 
 export const useGameScreenFloorClearProjection = ({
     onboardingDismissed,
@@ -39,6 +47,7 @@ export const useGameScreenFloorClearProjection = ({
     onboardingDismissed: boolean;
     run: RunState;
 }) => {
+    const floorClearVisible = run.status === 'levelComplete' && run.lastLevelResult != null;
     const clearLifeBonusLabel = run.lastLevelResult ? getClearLifeBonusLabel(run.lastLevelResult) : null;
     const objectiveBonusLine =
         run.lastLevelResult && runNonNegativeInteger(run.lastLevelResult.objectiveBonusScore) > 0
@@ -66,6 +75,10 @@ export const useGameScreenFloorClearProjection = ({
     const floorClearCausalityRows = run.lastLevelResult
         ? getFloorClearCausalityRows(run.lastLevelResult, run.powersUsedThisRun, currentFloorIdentity)
         : [];
+    const floorClearCausalityRowsLabel = formatGameplayDetailRowsLabel(
+        'Floor clear cause signals',
+        floorClearCausalityRows
+    );
     const favorGained = runNonNegativeInteger(run.lastLevelResult?.relicFavorGained);
     const favorBankedPickCount = countFavorBonusPicksBanked(run.relicFavorProgress, favorGained);
     const floorClearMomentumRows = run.lastLevelResult
@@ -183,6 +196,26 @@ export const useGameScreenFloorClearProjection = ({
         floorClearObjectiveSignalRows,
         favorBankedPickCount
     );
+    const floorClearPayoffStackProjection = floorClearPayoffStackSignal
+        ? {
+              ...floorClearPayoffStackSignal,
+              action: getFloorClearPayoffStackAction(floorClearPayoffStackSignal),
+              ariaLabel: `${floorClearPayoffStackSignal.label}: ${floorClearPayoffStackSignal.value}. ${getFloorClearPayoffStackAction(
+                  floorClearPayoffStackSignal
+              )}. ${getFloorClearPayoffStackBeatCount(floorClearPayoffStackSignal)} beats. ${
+                  floorClearPayoffStackSignal.detail
+              }`,
+              audioCue: getFloorClearPayoffStackAudioCue(floorClearPayoffStackSignal),
+              beatCount: getFloorClearPayoffStackBeatCount(floorClearPayoffStackSignal),
+              screenCue: getFloorClearPayoffStackScreenCue(floorClearPayoffStackSignal)
+          }
+        : null;
+    const floorClearObjectiveSignalProjections = floorClearObjectiveSignalRows.map((row) => ({
+        ...row,
+        audioCue: getFloorClearObjectiveSignalAudioCue(row),
+        beatCount: getFloorClearObjectiveSignalBeatCount(row),
+        screenCue: getFloorClearObjectiveSignalScreenCue(row)
+    }));
     const featuredObjectiveResultLine = run.lastLevelResult ? formatLevelResultObjectiveLine(run.lastLevelResult) : null;
     const featuredObjectiveFailureLine = featuredObjectiveFailReason(run);
     const favorGainLine =
@@ -258,8 +291,16 @@ export const useGameScreenFloorClearProjection = ({
         firstRouteChoiceRequired
             ? 'Choose the next room type. Safe protects the run, Greed trades danger for reward, and Mystery changes the next board.'
             : 'Pick one room to continue. Route choice is the active decision; other floor-clear actions resume after the route is locked.';
+    const nextFloorProjection = getGameScreenNextFloorProjection(run);
+    const floorClearCarryForwardAriaLabel = floorClearCarryForwardCue
+        ? `${floorClearCarryForwardCue.label}: ${floorClearCarryForwardCue.value}. ${floorClearCarryForwardCue.detail}`
+        : null;
+    const floorClearActionSequenceAriaLabel = floorClearActionSequenceCue
+        ? `${floorClearActionSequenceCue.label}. First: ${floorClearActionSequenceCue.first}. Then: ${floorClearActionSequenceCue.then}. Keep: ${floorClearActionSequenceCue.keep}.`
+        : null;
 
     return {
+        floorClearVisible,
         clearLifeBonusLabel,
         objectiveBonusLine,
         bonusTagsLine,
@@ -269,6 +310,7 @@ export const useGameScreenFloorClearProjection = ({
         currentFeaturedObjectiveLabel,
         currentFloorIdentity,
         floorClearCausalityRows,
+        floorClearCausalityRowsLabel,
         favorGained,
         favorBankedPickCount,
         floorClearMomentumRows,
@@ -276,9 +318,12 @@ export const useGameScreenFloorClearProjection = ({
         floorClearCashoutRows,
         floorClearCashoutRowsLabel,
         floorClearCarryForwardCue,
+        floorClearCarryForwardAriaLabel,
         floorClearObjectiveSignalRows,
         floorClearObjectiveSignalRowsLabel,
+        floorClearObjectiveSignalProjections,
         floorClearPayoffStackSignal,
+        floorClearPayoffStackProjection,
         featuredObjectiveResultLine,
         featuredObjectiveFailureLine,
         favorGainLine,
@@ -297,7 +342,11 @@ export const useGameScreenFloorClearProjection = ({
         routeChoices,
         routeChoiceRequired,
         floorClearActionSequenceCue,
+        floorClearActionSequenceAriaLabel,
         firstRouteChoiceRequired,
-        routeChoiceRequiredCopy
+        routeChoiceRequiredCopy,
+        nextFloorProjection
     };
 };
+
+export type GameScreenFloorClearProjection = ReturnType<typeof useGameScreenFloorClearProjection>;

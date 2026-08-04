@@ -1,4 +1,5 @@
 import {
+    ACHIEVEMENT_IDS,
     MUTATOR_IDS,
     RESOLVE_DELAY_MULTIPLIER_MIN,
     SAVE_SCHEMA_VERSION,
@@ -91,15 +92,7 @@ export const SETTINGS_NUMERIC_RANGES = {
     resolveDelayMultiplier: { min: RESOLVE_DELAY_MULTIPLIER_MIN, max: 2.5 }
 } as const satisfies Record<NumericSettingsKey, { min: number; max: number }>;
 
-export const ACHIEVEMENT_IDS = [
-    'ACH_FIRST_CLEAR',
-    'ACH_LEVEL_FIVE',
-    'ACH_SCORE_THOUSAND',
-    'ACH_PERFECT_CLEAR',
-    'ACH_LAST_LIFE',
-    'ACH_ENDLESS_TEN',
-    'ACH_SEVEN_DAILIES'
-] as const satisfies readonly AchievementId[];
+export { ACHIEVEMENT_IDS };
 
 export const createAchievementState = (): AchievementState =>
     ACHIEVEMENT_IDS.reduce<AchievementState>(

@@ -3,9 +3,10 @@ import {
     createGameplayRelicOfferServiceCommand,
     createGameplayRelicPickCommand
 } from '../../shared/gameplay-core-contracts';
-import { reduceGameplayCommand } from '../../shared/gameplay-core';
-import { appendGameplayJournal } from '../../shared/gameplay-journal';
-import { advanceFloorThroughGameplayCore } from '../../shared/gameplay-core-adapters';
+import {
+    advanceFloorThroughGameplayCore,
+    executeGameplayCommandThroughGameplayCore
+} from '../../shared/gameplay-core-adapters';
 import { mergeHonorUnlockTags } from '../../shared/honorUnlocks';
 import { mergeRelicPickStat, normalizeSaveData } from '../../shared/save-data';
 import { clearRunSurfaceArmedModes, type RunSurfaceState } from './runSurfaceState';
@@ -56,7 +57,7 @@ export const createRelicPickSurfaceResult = ({
         `relic-pick:${run.runSeed}:${offer.tier}:${offer.pickRound}:${relicId}`,
         relicId
     );
-    const result = reduceGameplayCommand(run, command);
+    const result = executeGameplayCommandThroughGameplayCore(run, command);
     if (!result.accepted) {
         return { kind: 'ignored' };
     }
@@ -64,7 +65,7 @@ export const createRelicPickSurfaceResult = ({
     if (!pickEvent) {
         return { kind: 'ignored' };
     }
-    const journaledRun = appendGameplayJournal(result.run, [command], result.events);
+    const journaledRun = result.run;
     const floorAdvance = pickEvent.outcome === 'advance_ready'
         ? advanceFloorThroughGameplayCore(
               journaledRun,
@@ -107,11 +108,11 @@ export const createRelicOfferServiceSurfaceResult = ({
         serviceId,
         targetRelicId
     );
-    const result = reduceGameplayCommand(run, command);
+    const result = executeGameplayCommandThroughGameplayCore(run, command);
     if (!result.accepted) {
         return { kind: 'ignored' };
     }
-    const journaledRun = appendGameplayJournal(result.run, [command], result.events);
+    const journaledRun = result.run;
 
     return {
         kind: 'applied',

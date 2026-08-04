@@ -7,7 +7,6 @@ import { buildBoard } from './board-build-rules';
 import type { GameplayEvent } from './gameplay-core-contracts';
 import { solveRunThroughGameplayCoreWithTrace } from './gameplay-core-playthrough-solver';
 import { createNewRun, finishMemorizePhase } from './game-core';
-import { solveRunByExhaustingPlayablePairsWithTrace } from './playthrough-solver';
 import { createGeneratedBoardSolverRun } from './softlock-generator-contract';
 import { EXIT_PAIR_KEY, ROOM_PAIR_KEY, SHOP_PAIR_KEY } from './tile-identity';
 
@@ -38,15 +37,6 @@ const runWithBoard = (candidate: BoardState): RunState => ({
     status: 'playing'
 });
 
-const gameplayStateWithoutJournals = (run: RunState): RunState => {
-    const {
-        gameplayCommandJournal: _gameplayCommandJournal,
-        gameplayEventJournal: _gameplayEventJournal,
-        ...gameplayState
-    } = run;
-    return gameplayState as RunState;
-};
-
 describe('gameplay-core playthrough solver', () => {
     it('solves an exit board exclusively through replayable commands and events', () => {
         const exit = { ...tile('exit', EXIT_PAIR_KEY), dungeonCardKind: 'exit' as const };
@@ -55,11 +45,10 @@ describe('gameplay-core playthrough solver', () => {
             { dungeonExitTileId: exit.id, dungeonExitActivated: false }
         ));
         const trace = solveRunThroughGameplayCoreWithTrace(initial);
-        const legacy = solveRunByExhaustingPlayablePairsWithTrace(initial);
 
         expect(trace.stopReason).toBe('exit_attempted');
-        expect(gameplayStateWithoutJournals(trace.run)).toEqual(gameplayStateWithoutJournals(legacy.run));
         expect(trace.run.status).toBe('levelComplete');
+        expect(trace.run.board?.dungeonExitActivated).toBe(true);
         expect(trace.commands.map((command) => command.type)).toEqual([
             'board.tile_flip',
             'board.tile_flip',
@@ -239,9 +228,7 @@ describe('gameplay-core playthrough solver', () => {
             }
         ));
         const trace = solveRunThroughGameplayCoreWithTrace(initial);
-        const legacy = solveRunByExhaustingPlayablePairsWithTrace(initial);
 
-        expect(gameplayStateWithoutJournals(trace.run)).toEqual(gameplayStateWithoutJournals(legacy.run));
         expect(trace.commands.map((command) => command.type)).toEqual([
             'run.progression_repair',
             'dungeon.exit_activate'
@@ -255,7 +242,7 @@ describe('gameplay-core playthrough solver', () => {
         expect(trace.invariantViolations).toEqual([]);
     });
 
-    it('matches the legacy solver across seeded generated boards before consumer migration', () => {
+    it('completes seeded generated boards with exact replay and no rejected commands', () => {
         for (const seed of [42_001, 42_077]) {
             for (const floor of [1, 5, 10]) {
                 const generated = buildBoard(floor, {
@@ -265,12 +252,9 @@ describe('gameplay-core playthrough solver', () => {
                 });
                 const initial = createGeneratedBoardSolverRun(generated, seed, GAME_RULES_VERSION);
                 const core = solveRunThroughGameplayCoreWithTrace(initial);
-                const legacy = solveRunByExhaustingPlayablePairsWithTrace(initial);
 
-                expect(gameplayStateWithoutJournals(core.run), `run ${seed}/${floor}`).toEqual(
-                    gameplayStateWithoutJournals(legacy.run)
-                );
-                expect(core.stopReason, `stop ${seed}/${floor}`).toBe(legacy.stopReason);
+                expect(core.run.status, `status ${seed}/${floor}`).toBe('levelComplete');
+                expect(core.stopReason, `stop ${seed}/${floor}`).toBe('exit_attempted');
                 expect(core.rejectedCommandIds, `rejections ${seed}/${floor}`).toEqual([]);
                 expect(core.replayVerified, `replay checked ${seed}/${floor}`).toBe(true);
                 expect(core.replayDeterministic, `replay ${seed}/${floor}`).toBe(true);

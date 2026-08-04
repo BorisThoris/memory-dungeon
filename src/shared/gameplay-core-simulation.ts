@@ -1,4 +1,4 @@
-import type { RunState } from './contracts';
+import type { AchievementId, RunState } from './contracts';
 import { collectDestroyEligibleTileIds, tileIsStrayEligiblePreview } from './board-power-targeting';
 import {
     GAMEPLAY_CONTENT_DEFINITIONS,
@@ -14,6 +14,8 @@ import {
     createGameplayGauntletExpireCommand,
     createGameplayGambitCommitCommand,
     createGameplayHazardBanishCommand,
+    createGameplayInterludeTerminalResolveCommand,
+    createGameplayRunFinalizeCommand,
     createGameplayMemorizeCompleteCommand,
     createGameplayPauseCommand,
     createGameplayPeekCommand,
@@ -47,6 +49,7 @@ import { createMulberry32, pickRngIndex } from './rng';
 import { tilesArePairMatch } from './scoring-rules';
 import { purchaseShopOffer } from './shop-rules';
 import { WILD_PAIR_KEY } from './tile-identity';
+import { normalizeRunSummary } from './save-data';
 
 export interface GameplayCoreSimulationOptions {
     seed: number;
@@ -71,6 +74,24 @@ export interface GameplayCoreSimulationReport {
 }
 
 export interface GameplayProgressionRepairSimulationReport {
+    command: GameplayCommand;
+    events: GameplayEvent[];
+    finalRun: RunState;
+    accepted: boolean;
+    replayDeterministic: boolean;
+    invariantViolations: string[];
+}
+
+export interface GameplayInterludeTerminalSimulationReport {
+    command: GameplayCommand;
+    events: GameplayEvent[];
+    finalRun: RunState;
+    accepted: boolean;
+    replayDeterministic: boolean;
+    invariantViolations: string[];
+}
+
+export interface GameplayRunFinalizationSimulationReport {
     command: GameplayCommand;
     events: GameplayEvent[];
     finalRun: RunState;
@@ -549,6 +570,153 @@ export const runGameplayProgressionRepairSimulation = (
         stableJson(replay.rejectedCommandIds) === stableJson(result.accepted ? [] : [command.commandId]);
     if (!replayDeterministic) {
         invariantViolations.push('Progression repair replay diverged after JSON serialization.');
+    }
+    return {
+        command,
+        events: result.events,
+        finalRun: result.run,
+        accepted: result.accepted,
+        replayDeterministic,
+        invariantViolations
+    };
+};
+
+export const runGameplayInterludeTerminalSimulation = (
+    initialRun: RunState
+): GameplayInterludeTerminalSimulationReport => {
+    const command = createGameplayInterludeTerminalResolveCommand(
+        `sim-interlude-terminal:${initialRun.runSeed}:${initialRun.board?.level ?? 0}`
+    );
+    const result = reduceGameplayCommand(initialRun, command);
+    const invariantViolations: string[] = [];
+    if (!gameplayCommandSchema.safeParse(command).success) {
+        invariantViolations.push('Interlude terminal command failed its schema.');
+    }
+    result.events.forEach((event, sequence) => {
+        if (!gameplayEventSchema.safeParse(event).success) {
+            invariantViolations.push(`Interlude terminal event ${sequence} failed its schema.`);
+        }
+        if (
+            event.commandId !== command.commandId ||
+            event.sequence !== sequence ||
+            event.eventId !== `${command.commandId}:${sequence}`
+        ) {
+            invariantViolations.push(`Interlude terminal event ${sequence} lost deterministic identity or ordering.`);
+        }
+    });
+    if (!result.accepted) {
+        invariantViolations.push('Dead interlude terminal fixture was rejected.');
+    }
+    if (!result.events.some((event) => event.type === 'run.interlude_terminal_resolved')) {
+        invariantViolations.push('Dead interlude terminal fixture emitted no terminal event.');
+    }
+    if (!result.events.some((event) => event.type === 'feedback.requested')) {
+        invariantViolations.push('Dead interlude terminal fixture emitted no typed feedback.');
+    }
+    if (
+        result.run.status !== 'gameOver' ||
+        result.run.lives !== 0 ||
+        result.run.pendingRouteCardPlan != null ||
+        result.run.sideRoom != null ||
+        result.run.relicOffer != null ||
+        result.run.shopOffers.length > 0
+    ) {
+        invariantViolations.push('Dead interlude terminal fixture retained non-terminal run state.');
+    }
+    const feedbackDiagnostic = inspectGameplayFeedbackCompleteness({
+        before: initialRun,
+        after: result.run,
+        command,
+        events: result.events,
+        accepted: result.accepted
+    });
+    if (feedbackDiagnostic) {
+        invariantViolations.push(feedbackDiagnostic.message);
+    }
+    const replay = replayGameplayCommands(initialRun, [JSON.parse(stableJson(command))]);
+    const replayDeterministic =
+        stableJson(replay.run) === stableJson(result.run) &&
+        stableJson(replay.events) === stableJson(result.events) &&
+        stableJson(replay.acceptedCommandIds) === stableJson(result.accepted ? [command.commandId] : []) &&
+        stableJson(replay.rejectedCommandIds) === stableJson(result.accepted ? [] : [command.commandId]);
+    if (!replayDeterministic) {
+        invariantViolations.push('Interlude terminal replay diverged after JSON serialization.');
+    }
+    return {
+        command,
+        events: result.events,
+        finalRun: result.run,
+        accepted: result.accepted,
+        replayDeterministic,
+        invariantViolations
+    };
+};
+
+export const runGameplayRunFinalizationSimulation = (
+    initialRun: RunState,
+    unlockedAchievements: readonly AchievementId[] = ['ACH_FIRST_CLEAR']
+): GameplayRunFinalizationSimulationReport => {
+    const command = createGameplayRunFinalizeCommand(
+        `sim-run-finalize:${initialRun.runSeed}:${initialRun.board?.level ?? 0}`,
+        unlockedAchievements
+    );
+    const result = reduceGameplayCommand(initialRun, command);
+    const invariantViolations: string[] = [];
+    if (!gameplayCommandSchema.safeParse(command).success) {
+        invariantViolations.push('Run finalization command failed its schema.');
+    }
+    result.events.forEach((event, sequence) => {
+        if (!gameplayEventSchema.safeParse(event).success) {
+            invariantViolations.push(`Run finalization event ${sequence} failed its schema.`);
+        }
+        if (
+            event.commandId !== command.commandId ||
+            event.sequence !== sequence ||
+            event.eventId !== `${command.commandId}:${sequence}`
+        ) {
+            invariantViolations.push(`Run finalization event ${sequence} lost deterministic identity or ordering.`);
+        }
+    });
+    if (!result.accepted) {
+        invariantViolations.push('Terminal run finalization fixture was rejected.');
+    }
+    const finalizationEvent = result.events.find(
+        (event): event is Extract<GameplayEvent, { type: 'run.finalized' }> =>
+            event.type === 'run.finalized'
+    );
+    if (!finalizationEvent) {
+        invariantViolations.push('Terminal run finalization fixture emitted no finalization event.');
+    }
+    const summary = result.run.lastRunSummary;
+    if (
+        result.run.status !== 'gameOver' ||
+        result.run.lives !== 0 ||
+        !summary ||
+        stableJson(summary.unlockedAchievements) !== stableJson(unlockedAchievements) ||
+        stableJson(normalizeRunSummary(summary)) !== stableJson(summary)
+    ) {
+        invariantViolations.push('Terminal run finalization fixture did not create the expected validated summary.');
+    }
+    if (
+        finalizationEvent &&
+        summary &&
+        (
+            finalizationEvent.totalScore !== summary.totalScore ||
+            finalizationEvent.levelsCleared !== summary.levelsCleared ||
+            finalizationEvent.highestLevel !== summary.highestLevel ||
+            stableJson(finalizationEvent.unlockedAchievements) !== stableJson(summary.unlockedAchievements)
+        )
+    ) {
+        invariantViolations.push('Run finalization event diverged from the validated summary.');
+    }
+    const replay = replayGameplayCommands(initialRun, [JSON.parse(stableJson(command))]);
+    const replayDeterministic =
+        stableJson(replay.run) === stableJson(result.run) &&
+        stableJson(replay.events) === stableJson(result.events) &&
+        stableJson(replay.acceptedCommandIds) === stableJson(result.accepted ? [command.commandId] : []) &&
+        stableJson(replay.rejectedCommandIds) === stableJson(result.accepted ? [] : [command.commandId]);
+    if (!replayDeterministic) {
+        invariantViolations.push('Run finalization replay diverged after JSON serialization.');
     }
     return {
         command,

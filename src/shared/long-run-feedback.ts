@@ -5,7 +5,7 @@ import {
     getDungeonBoardStatus,
     getDungeonBossReadModel,
     getDungeonObjectiveStatus
-} from './game';
+} from './dungeon-board-status';
 import type { MechanicTokenId } from './mechanic-feedback';
 import { getMemoryRecallFeedback } from './memory-recall-feedback';
 import { getRunEconomyRows } from './run-economy';

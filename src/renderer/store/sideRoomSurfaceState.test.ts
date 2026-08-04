@@ -2,7 +2,6 @@ import { describe, expect, it } from 'vitest';
 import type { RunShopOfferState, RunState } from '../../shared/contracts';
 import { createNewRun } from '../../shared/game-core';
 import { createPlayablePathFixture } from '../../shared/playable-path-fixtures';
-import { createDeadInterludeGameOverRun } from '../../shared/interlude-transition-rules';
 import {
     createSideRoomActionSurfaceResult,
     createSideRoomResultSurfacePatch,
@@ -82,17 +81,20 @@ describe('sideRoomSurfaceState', () => {
             lives: 0
         };
 
-        expect(createDeadInterludeGameOverRun(run)).toMatchObject({
-            lives: 0,
-            pendingRouteCardPlan: null,
-            relicOffer: null,
-            shopOffers: [],
-            sideRoom: null,
-            status: 'gameOver'
-        });
         expect(createSideRoomActionSurfaceResult('sideRoom', run, 'skip')).toMatchObject({
             kind: 'gameOver',
             run: {
+                gameplayCommandJournal: expect.arrayContaining([
+                    expect.objectContaining({ type: 'run.interlude_terminal_resolve' })
+                ]),
+                gameplayEventJournal: expect.arrayContaining([
+                    expect.objectContaining({ type: 'run.interlude_terminal_resolved' }),
+                    expect.objectContaining({ type: 'feedback.requested', cue: 'run.interlude.terminal' })
+                ]),
+                lives: 0,
+                pendingRouteCardPlan: null,
+                relicOffer: null,
+                shopOffers: [],
                 sideRoom: null,
                 status: 'gameOver'
             }

@@ -45,9 +45,11 @@ describe('useGameScreenFloorClearProjection', () => {
             run
         }));
 
+        expect(result.current.floorClearVisible).toBe(false);
         expect(result.current.clearLifeBonusLabel).toBeNull();
         expect(result.current.floorClearCashoutRows).toEqual([]);
         expect(result.current.floorClearPayoffStackSignal).toBeNull();
+        expect(result.current.floorClearPayoffStackProjection).toBeNull();
         expect(result.current.routeChoiceRequired).toBe(false);
     });
 
@@ -58,14 +60,30 @@ describe('useGameScreenFloorClearProjection', () => {
             run
         }));
 
+        expect(result.current.floorClearVisible).toBe(true);
         expect(result.current.floorClearMomentumRows).toEqual(expect.arrayContaining([
             { id: 'score', label: 'Score pop', value: '+120' },
             { id: 'rating', label: 'Rating', value: 'S' }
         ]));
         expect(result.current.floorClearCashoutRows).toHaveLength(3);
         expect(result.current.floorClearCarryForwardCue).not.toBeNull();
+        expect(result.current.floorClearCarryForwardAriaLabel).toContain('Carry forward:');
         expect(result.current.floorClearActionSequenceCue).not.toBeNull();
+        expect(result.current.floorClearActionSequenceAriaLabel).toContain('Next floor loop. First:');
+        expect(result.current.floorClearPayoffStackProjection).toMatchObject({
+            action: expect.any(String),
+            ariaLabel: expect.stringContaining('beats'),
+            audioCue: expect.stringMatching(/^floor-stack-/u),
+            beatCount: expect.any(Number),
+            screenCue: expect.any(String)
+        });
         expect(result.current.firstClearOnboardingLine).toContain('First-run guide complete');
+        expect(result.current.nextFloorProjection?.signals.map((signal) => signal.id)).toEqual([
+            'next-floor',
+            'next-objective',
+            'next-pressure',
+            'next-counterplay'
+        ]);
     });
 
     it('keeps accepted wager stake, payoff, primary cue, and accessibility copy synchronized', () => {
@@ -90,5 +108,41 @@ describe('useGameScreenFloorClearProjection', () => {
         ]));
         expect(result.current.riskWagerPrimaryCue).toMatchObject({ label: 'Wager armed', risk: 'x4 streak' });
         expect(result.current.riskWagerArmAriaLabel).toContain('Payoff: +3 Favor');
+    });
+
+    it('projects objective audio, beat, and screen cues before presentation', () => {
+        const base = levelCompleteRun();
+        const run: RunState = {
+            ...base,
+            featuredObjectiveStreak: 2,
+            lastLevelResult: {
+                ...base.lastLevelResult!,
+                featuredObjectiveId: 'flip_par',
+                featuredObjectiveCompleted: true,
+                featuredObjectiveStreak: 2,
+                featuredObjectiveStreakBonus: 10,
+                objectiveBonusScore: 30,
+                relicFavorGained: 1
+            }
+        };
+        const { result } = renderHook(() => useGameScreenFloorClearProjection({
+            onboardingDismissed: false,
+            run
+        }));
+
+        expect(result.current.floorClearObjectiveSignalProjections).toEqual(expect.arrayContaining([
+            expect.objectContaining({
+                id: 'featured-objective',
+                audioCue: 'floor-objective-reward',
+                beatCount: 4,
+                screenCue: 'burst'
+            }),
+            expect.objectContaining({
+                id: 'objective-streak',
+                audioCue: 'floor-objective-momentum',
+                beatCount: 3,
+                screenCue: 'pulse'
+            })
+        ]));
     });
 });

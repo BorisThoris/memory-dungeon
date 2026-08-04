@@ -53,7 +53,7 @@ describe('gameplayFeedbackAdapter', () => {
         expect(getLatestBoardTurnResolvedEvent({ gameplayEventJournal: journal })).toEqual(turn);
     });
 
-    it('projects typed pause and resume lifecycle feedback separately', () => {
+    it('projects typed pause, resume, and terminal lifecycle feedback separately', () => {
         const presentations = projectGameplayFeedback([
             event(0, {
                 type: 'feedback.requested',
@@ -68,10 +68,36 @@ describe('gameplayFeedbackAdapter', () => {
                 message: 'Run resumed into playing.',
                 source: { kind: 'system', id: 'run_lifecycle' },
                 tone: 'information'
+            }),
+            event(2, {
+                type: 'feedback.requested',
+                cue: 'run.interlude.terminal',
+                message: 'Run ended at zero lives.',
+                source: { kind: 'system', id: 'run_lifecycle' },
+                tone: 'warning'
             })
         ]);
 
-        expect(presentations.map((item) => item.audioCategory)).toEqual(['pause', 'resume']);
+        expect(presentations.map((item) => item.audioCategory)).toEqual(['pause', 'resume', 'run-end']);
+        expect(presentations.at(-1)).toMatchObject({ priority: 'error' });
+    });
+
+    it('projects typed run bootstrap feedback as the sole start-audio cause', () => {
+        expect(projectGameplayFeedback([
+            event(0, {
+                type: 'feedback.requested',
+                cue: 'run.started',
+                message: 'Started endless on seed 81337.',
+                source: { kind: 'system', id: 'run_start' },
+                tone: 'information'
+            })
+        ])).toEqual([
+            expect.objectContaining({
+                audioCategory: 'run-start',
+                cue: 'run.started',
+                message: 'Started endless on seed 81337.'
+            })
+        ]);
     });
 
     it('projects debug reveal lifecycle feedback separately from the consumable Peek power', () => {

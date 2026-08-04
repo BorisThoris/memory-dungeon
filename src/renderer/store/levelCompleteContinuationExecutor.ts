@@ -3,9 +3,10 @@ import type {
     ViewState
 } from '../../shared/contracts';
 import { createGameplayRouteChooseCommand } from '../../shared/gameplay-core-contracts';
-import { reduceGameplayCommand } from '../../shared/gameplay-core';
-import { appendGameplayJournal } from '../../shared/gameplay-journal';
-import { createDeadInterludeGameOverRun } from '../../shared/interlude-transition-rules';
+import {
+    executeGameplayCommandThroughGameplayCore,
+    resolveInterludeTerminalThroughGameplayCore
+} from '../../shared/gameplay-core-adapters';
 import {
     createLevelCompleteContinuationSurfaceResult,
     shouldPrepareMemorizeTimerForContinuation,
@@ -32,13 +33,16 @@ const routeDeadInterludeRunToGameOver = (
     run: RunState,
     applyResolvedRun: (run: RunState) => void
 ): boolean => {
-    const gameOverRun = createDeadInterludeGameOverRun(run);
+    const terminal = resolveInterludeTerminalThroughGameplayCore(
+        run,
+        `interlude-terminal:${run.runSeed}:${run.board?.level ?? 0}:continue:${Array.isArray(run.gameplayCommandJournal) ? run.gameplayCommandJournal.length : 0}`
+    );
 
-    if (!gameOverRun) {
+    if (!terminal.accepted && run.status !== 'gameOver') {
         return false;
     }
 
-    applyResolvedRun(gameOverRun);
+    applyResolvedRun(terminal.run);
     return true;
 };
 
@@ -98,15 +102,14 @@ export const executeChooseRouteAndContinue = (
         `route-choice:${run.runRulesVersion}:${run.runSeed}:${run.lastLevelResult?.level ?? run.board?.level ?? 0}:${choiceId}`,
         choiceId
     );
-    const routeOutcome = reduceGameplayCommand(run, command);
+    const routeOutcome = executeGameplayCommandThroughGameplayCore(run, command);
     if (!routeOutcome.accepted) {
         return;
     }
-    const journaledRun = appendGameplayJournal(routeOutcome.run, [command], routeOutcome.events);
 
     deps.clearAllTimers();
     applyContinuationResult(
-        createLevelCompleteContinuationSurfaceResult(journaledRun, { includeSummaryShop: true }),
+        createLevelCompleteContinuationSurfaceResult(routeOutcome.run, { includeSummaryShop: true }),
         deps
     );
 };
