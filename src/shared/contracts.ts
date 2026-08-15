@@ -990,8 +990,6 @@ export interface RunState {
     gauntletDeadlineMs: number | null;
     /** Gauntlet: configured session length (ms) at run start; used for restart and diagnostics. */
     gauntletSessionDurationMs: number | null;
-    /** Cosmetic daily streak count (low pressure). */
-    dailyStreakCount: number;
     /** Last run flip tile ids (local ghost / export). */
     flipHistory: string[];
     /** H1 Peek: charges and ephemeral reveals (do not count as committed flips). */
@@ -1002,15 +1000,9 @@ export interface RunState {
     /** H3 Gambit: one third-flip attempt per floor. */
     gambitAvailableThisFloor: boolean;
     gambitThirdFlipUsed: boolean;
-    /**
-     * H4 Wild: tile id of the wild joker when `board` includes `WILD_PAIR_KEY`; null if no wild tile is in play.
-     * Matching logic still uses `pairKey`; this field is metadata (HUD, export, diagnostics).
-     */
-    wildTileId: string | null;
     wildMatchesRemaining: number;
     /** Stray remover power charges (remove one completion-safe hidden singleton from play). */
     strayRemoveCharges: number;
-    strayRemoveArmed: boolean;
     /** Match score multiplier (shuffle tax stacks). */
     matchScoreMultiplier: number;
     /** N-back mutator: matches since last anchor highlight. */
@@ -1047,8 +1039,6 @@ export interface RunState {
     flashPairRevealedTileIds: string[];
     /** GP-H01: charges for shuffling a single row or swapping two hidden tiles. */
     regionShuffleCharges: number;
-    /** GP-H01: arm row index or null. */
-    regionShuffleRowArmed: number | null;
     /** First region shuffle or tile swap this floor free when relic (GP-R03). */
     regionShuffleFreeThisFloor: boolean;
     /** GP-C01: cumulative pins placed this run (for maxPinsTotalRun contract). */
@@ -1099,7 +1089,6 @@ export interface RunState {
     dungeonGatewaysUsedThisFloor: number;
     dungeonKeys: Partial<Record<DungeonKeyKind, number>>;
     dungeonMasterKeys: number;
-    dungeonShopVisitedThisFloor: boolean;
     enemyHazardHitsThisFloor: number;
     enemyHazardsDefeatedThisFloor: number;
 }

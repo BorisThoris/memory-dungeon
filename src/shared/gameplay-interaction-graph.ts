@@ -1,5 +1,6 @@
 import graphData from './gameplay-interaction-graph-data.json';
 import { z } from 'zod';
+import { GAMEPLAY_FEEDBACK_CRITICAL_FIELD_SOURCES } from './gameplay-feedback-facts';
 
 export type GameplayInteractionMechanicKind =
     | 'board'
@@ -356,32 +357,7 @@ export const auditGameplayInteractionGraph = (
                 )
         )
         .map((mechanic) => mechanic.id);
-    const playerVisibleWrites = new Set([
-        'achievementProgress',
-        'bossTrophyCacheOutcome',
-        'comboShards',
-        'currentLevelScore',
-        'dungeonEnemiesDefeatedThisFloor',
-        'enemyHazardsDefeatedThisFloor',
-        'feedbackLines',
-        'guardTokens',
-        'interactionTags',
-        'lastLevelResult',
-        'lives',
-        'nextFloor',
-        'objectiveCompleted',
-        'peekCharges',
-        'recallFocus',
-        'regionShuffleCharges',
-        'relicFavorProgress',
-        'relicOffer',
-        'routeChoices',
-        'score',
-        'sessionStats',
-        'shopGold',
-        'totalScore',
-        'triesDelta'
-    ]);
+    const playerVisibleWrites = new Set<string>(Object.values(GAMEPLAY_FEEDBACK_CRITICAL_FIELD_SOURCES));
     const playerVisibleWriteWithoutHudIds = graph.mechanics
         .filter((mechanic) => mechanic.writes.some((write) => playerVisibleWrites.has(write)))
         .filter(

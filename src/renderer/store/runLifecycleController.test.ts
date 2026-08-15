@@ -114,6 +114,13 @@ describe('runLifecycleController', () => {
 
         expect(harness.getState().run?.debugPeekActive).toBe(true);
         expect(harness.getState().run?.achievementsEnabled).toBe(false);
+        expect(harness.getState().run?.gameplayCommandJournal).toEqual([
+            expect.objectContaining({ type: 'debug.reveal_activate', disableAchievementsOnDebug: true })
+        ]);
+        expect(harness.getState().run?.gameplayEventJournal).toEqual([
+            expect.objectContaining({ type: 'debug.reveal_activated', outcome: 'activated' }),
+            expect.objectContaining({ type: 'feedback.requested', cue: 'debug.reveal.activated' })
+        ]);
         expect(harness.scheduleDebugRevealTimer).toHaveBeenCalledWith(expect.any(Number));
     });
 });

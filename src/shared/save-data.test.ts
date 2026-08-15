@@ -413,6 +413,8 @@ describe('save normalization', () => {
                 board: null
             },
             currentRun: {
+                strayRemoveArmed: true,
+                regionShuffleRowArmed: 0,
                 dungeonRun: null,
                 dungeonKeys: null,
                 dungeonMasterKeys: null,

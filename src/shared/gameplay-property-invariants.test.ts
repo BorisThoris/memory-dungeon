@@ -287,7 +287,7 @@ describe('gameplay property invariants', () => {
 
                 const strayTarget = hiddenTiles.find((candidate) => candidate.pairKey === DECOY_PAIR_KEY) ?? tile;
                 const strayRemoved = strayTarget
-                    ? applyStrayRemove({ ...run, strayRemoveArmed: true }, strayTarget.id)
+                    ? applyStrayRemove(run, strayTarget.id)
                     : run;
                 expectRunResourceBounds(strayRemoved);
                 expectFlippedTileReferencesExist(strayRemoved);

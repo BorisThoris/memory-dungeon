@@ -56,10 +56,10 @@
 | Mechanic | Where | Epic / note |
 |-----------|--------|-------------|
 | Pair match predicate (incl. wild/decoy rules) | `tilesArePairMatch` | [epic-core-memory-loop](./epic-core-memory-loop.md) |
-| Two-flip resolution | `resolveTwoFlippedTiles` (internal) via `resolveBoardTurn` | [epic-core-memory-loop](./epic-core-memory-loop.md) |
+| Two-/three-flip resolution | `board.turn_resolve` via `resolveBoardTurnThroughGameplayCore`; legacy `resolveBoardTurn` remains a compatibility export | [epic-core-memory-loop](./epic-core-memory-loop.md) |
 | Gambit three-flip resolution | `resolveGambitThree` | [epic-core-memory-loop](./epic-core-memory-loop.md) |
 | Wild pair key | `WILD_PAIR_KEY`, `wildMatchesRemaining` | [epic-core-memory-loop](./epic-core-memory-loop.md) |
-| Wild tile id (HUD / export) | `wildTileId`; discovery helper `getWildTileIdFromBoard` | [epic-core-memory-loop](./epic-core-memory-loop.md) |
+| Wild tile identity | `BoardState.tiles` + `WILD_PAIR_KEY`; derived query `getWildTileIdFromBoard` | [epic-core-memory-loop](./epic-core-memory-loop.md) |
 | Glass / decoy | `boardHasGlassDecoy`, `DECOY` handling | [epic-mutators](./epic-mutators.md), core |
 | Shifting spotlight scoring + rotation | `shiftingSpotlightMatchDelta`, `withRotatedShiftingSpotlight` | [epic-mutators](./epic-mutators.md), [epic-board-rendering-assists](./epic-board-rendering-assists.md) |
 | Cursed pair early match flag | `cursedMatchedEarlyThisFloor` | [epic-core-memory-loop](./epic-core-memory-loop.md) |
@@ -93,6 +93,7 @@
 | Score parasite floors / ward | `parasiteFloors`, `parasiteWardRemaining` | [epic-lives-and-pressure](./epic-lives-and-pressure.md), [epic-relics](./epic-relics.md) |
 | Echo feedback (resolve delay) | `echoFeedbackEnabled`, `computeFlipResolveDelayMs` | [epic-lives-and-pressure](./epic-lives-and-pressure.md) |
 | Resolve delay multiplier | `resolveDelayMultiplier` (from settings at run start) | Settings + [epic-lives-and-pressure](./epic-lives-and-pressure.md) |
+| Final-pair enemy blocker cleanup | `board.tile_flipped` carries defeated hazard IDs and before/after defeat counters; `hazard.enemy_blocker.cleared` supplies typed feedback | [epic-lives-and-pressure](./epic-lives-and-pressure.md) |
 
 ---
 
@@ -105,9 +106,9 @@
 | Shuffle charges / nonce | `shuffleCharges`, `shuffleNonce` | — | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
 | Free shuffle per floor (relic) | `freeShuffleThisFloor` | — | [epic-relics](./epic-relics.md) |
 | Scholar: shuffle used flag | `shuffleUsedThisFloor` | — | [epic-scoring-objectives](./epic-scoring-objectives.md) |
-| Region shuffle | `canRegionShuffle`, `canRegionShuffleRow`, `armRegionShuffleRow`, `applyRegionShuffle` | `armRegionShuffleRowPick`, `shuffleRegionRow` | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
+| Region shuffle | `canRegionShuffle`, `canRegionShuffleRow`, `applyRegionShuffle`; typed command carries the chosen row directly | direct typed `shuffleRegionRow`; no renderer or serialized arm state | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
 | Tile swap | `canSwapHiddenTiles`, `applyTileSwap` | `toggleTileSwapArmed`, `pressTile` | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
-| Region charges / arm row / free first | `regionShuffleCharges`, `regionShuffleRowArmed`, `regionShuffleFreeThisFloor`; also spent by tile swap | — | [epic-relics](./epic-relics.md) |
+| Region charges / free first | `regionShuffleCharges`, `regionShuffleFreeThisFloor`; also spent by tile swap | — | [epic-relics](./epic-relics.md) |
 | Destroy pair | `applyDestroyPair`, `canDestroyPair` | `pressTile` when armed | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
 | Destroy-denied route rewards | `applyDestroyPair` clears route metadata before reward resolution | `pressTile` when armed | [epic-route-world-pipeline](./epic-route-world-pipeline.md) |
 | Destroy charges | `destroyPairCharges` | — | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
@@ -118,12 +119,13 @@
 | Mimic Cache claim | `resolveBoardTurn` pays full loot if route-revealed first; blind match bites guard/life and pays reduced loot | `pressTile` pair match | [epic-route-world-pipeline](./epic-route-world-pipeline.md) |
 | Peek charges / revealed ids | `peekCharges`, `peekRevealedTileIds` | — | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
 | Pin tiles | `togglePinnedTile`, `pinnedTileIds`, `pinsPlacedCountThisRun` | `toggleBoardPinMode`, `pressTile` | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
-| Stray remove | `toggleStrayRemoveArmed`, `applyStrayRemove` removes completion-safe hidden singleton/special tiles only | `toggleStrayArm`, `pressTile` | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
+| Stray remove | `applyStrayRemove` removes completion-safe hidden singleton/special tiles; typed command carries intent without a serialized arm flag | transient `strayRemoveArmed`, `toggleStrayArm`, `pressTile` | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
 | Stray-protected route anchors | `tileIsStrayEligiblePreview`, `applyStrayRemove` deny Keystone Pair, Final Ward, Omen Seal | `toggleStrayArm`, `pressTile` | [epic-route-world-pipeline](./epic-route-world-pipeline.md) |
-| Stray charges | `strayRemoveCharges`, `strayRemoveArmed` | — | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
+| Stray charges / intent | `strayRemoveCharges`; `RunState` contains no serialized arm intent | live arming belongs exclusively to transient `AppState.strayRemoveArmed` | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
 | Undo resolving | `cancelResolvingWithUndo` | `undoResolvingFlip` | [epic-powers-and-interactions](./epic-powers-and-interactions.md), [epic-run-session-flow](./epic-run-session-flow.md) |
 | Undo uses / floor | `undoUsesThisFloor` | — | [epic-run-session-flow](./epic-run-session-flow.md) |
 | Flash pair reveal | `applyFlashPair`, `flashPairCharges`, `flashPairRevealedTileIds` | `applyFlashPairPower` | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
+| Typed HUD completeness registry | `GAMEPLAY_FEEDBACK_CRITICAL_FIELD_SOURCES` maps 27 normalized HUD/resource facts to graph state fields; every accepted core command must emit typed feedback or the board-turn envelope when one changes | AI model marks the same state nodes `playerVisible` and rejects registry/graph drift | [epic-audio-feedback](./epic-audio-feedback.md) |
 | Gambit availability / used | `gambitAvailableThisFloor`, `gambitThirdFlipUsed` | `pressTile` third path | [epic-core-memory-loop](./epic-core-memory-loop.md) |
 | Powers used (achievement gate) | `powersUsedThisRun` | many actions set it | [epic-meta-progression](./epic-meta-progression.md) |
 
@@ -157,6 +159,15 @@
 | `createNewRun`, options (practice, contract, mutators, …) | `game.ts` | [epic-modes-and-runs](./epic-modes-and-runs.md) |
 | Daily / gauntlet / puzzle / meditation / wild / import | dedicated `create*` functions | [epic-modes-and-runs](./epic-modes-and-runs.md) |
 | Practice / scholar / wild / pin vow flags | `practiceMode`, `wildMenuRun`, `activeContract` | [epic-modes-and-runs](./epic-modes-and-runs.md), contracts epic |
+| Offline bounded-memory build-policy/counter gate | `GAMEPLAY_BUILD_POLICIES`, nine distinct axes, capped observation ledgers, explicit uncertain-turn budgets, typed route-outcome previews, visible life/protection/resource risk caps and survival reserves, actual event-effect ranking, 9 builds × 3 seeds × 12 generated floors, shipped favorable/counter exposure, exact replay | [epic-modes-and-runs](./epic-modes-and-runs.md) |
+| Conduit Cartographer information-control build | Memory Scout + Echo Conduit Lens/Double + real Scout Glint matches + deterministic Scout reveal + Memory Nail + typed known-pair Pins + Peek; consolidated former Seer ownership, favorable `memory_pressure`, counter `hazard_pressure` with Pin suppression | [epic-modes-and-runs](./epic-modes-and-runs.md) |
+| Route Gambler long-horizon build | Route Tactician + Wager Surety + identity-blind `board.gambit_commit` + eligible `risk_wager.accept` + Favor/streak outcomes + Greed/Mystery route policy; `risk_conversion` axis, favorable `economy_opportunity`, counter `hazard_pressure` with Gambit suppression | [epic-modes-and-runs](./epic-modes-and-runs.md) |
+| Combo Shard Engine long-horizon build | Vaultbreaker + Bonus Shards + Combo Shard + Step + Shard Spark + full-bank Greed credit + authoritative third-shard life conversion; `sustain_conversion` axis, favorable `economy_opportunity`, counter `parasite_pressure` | [epic-modes-and-runs](./epic-modes-and-runs.md) |
+| Free targeted reconfiguration | Route Tactician / Free Swap Discipline perk or Region Shuffle Free First relic rearms one typed row-shuffle/tile-swap use per floor; shared legality spends the free use before paid charges and respects `noShuffle` | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
+| Trap Control long-horizon build | Route Tactician + Trait Toolkit + Free Swap Discipline + typed hazard-row reconfiguration + explicit memory-pressure conservation; `board_reconfiguration` axis, favorable `hazard_pressure`, counter `memory_pressure` | [epic-modes-and-runs](./epic-modes-and-runs.md) |
+| Boss Hunter long-horizon build | Memory Scout + Chapter Compass trophy conversion + Wager Surety insured objective wagers + Parasite Ledger relief; `boss_extraction` axis, favorable `boss_pressure`, counter `parasite_pressure` | [epic-modes-and-runs](./epic-modes-and-runs.md) |
+| Memory Scout long-horizon build | Memory Scout loadout + Lantern Study + Compressed Margins + Trait Streak Lens/Toolkit + typed Flash Pair + identity-blind uncertain-mismatch Undo; `mistake_recovery` axis, favorable `memory_pressure`, counter `hazard_pressure`, automated Undo suppressed for boss-special resolution | [epic-modes-and-runs](./epic-modes-and-runs.md) |
+| Locksmith long-horizon build | Vaultbreaker + Key Insurance + typed keys + board-vendor Master Key purchase through typed pause/purchase/resume + affordable locked-cache/alternate-exit selection; `lock_extraction` axis, favorable `lock_pressure`, counter `hazard_pressure` with lock-policy conservation and safe primary-exit fallback | [epic-modes-and-runs](./epic-modes-and-runs.md) |
 
 ---
 
@@ -258,17 +269,14 @@ Source: [`RunState`](../../src/shared/contracts.ts) interface.
 | `freeShuffleThisFloor` | Relic: first shuffle free this floor | [epic-relics](./epic-relics.md) |
 | `gauntletDeadlineMs` | Run-wide countdown or null | [epic-lives-and-pressure](./epic-lives-and-pressure.md) |
 | `gauntletSessionDurationMs` | Configured gauntlet length (ms) at run start; used for **restart** | [epic-lives-and-pressure](./epic-lives-and-pressure.md) |
-| `dailyStreakCount` | Cosmetic streak on run | [epic-modes-and-runs](./epic-modes-and-runs.md) |
 | `flipHistory` | Recent flip ids (ghost / export) | [epic-modes-and-runs](./epic-modes-and-runs.md) |
 | `peekCharges` | Peek power budget | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
 | `peekRevealedTileIds` | Ephemeral peek faces | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
 | `undoUsesThisFloor` | Undo resolving budget | [epic-run-session-flow](./epic-run-session-flow.md) |
 | `gambitAvailableThisFloor` | Third flip allowed once | [epic-core-memory-loop](./epic-core-memory-loop.md) |
 | `gambitThirdFlipUsed` | Gambit consumed | [epic-core-memory-loop](./epic-core-memory-loop.md) |
-| `wildTileId` | Contract field; pairing uses `pairKey` in sim | [epic-core-memory-loop](./epic-core-memory-loop.md) |
 | `wildMatchesRemaining` | Wild joker uses left | [epic-core-memory-loop](./epic-core-memory-loop.md) |
 | `strayRemoveCharges` | Stray remover budget | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
-| `strayRemoveArmed` | Stray mode armed | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
 | `matchScoreMultiplier` | Shuffle tax stacks | [epic-scoring-objectives](./epic-scoring-objectives.md) |
 | `nBackMatchCounter` | N-back mutator cadence | [epic-mutators](./epic-mutators.md) |
 | `nBackAnchorPairKey` | Current anchor pair key | [epic-mutators](./epic-mutators.md) |
@@ -288,7 +296,6 @@ Source: [`RunState`](../../src/shared/contracts.ts) interface.
 | `flashPairCharges` | Practice / wild flash reveal | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
 | `flashPairRevealedTileIds` | Tiles shown by flash | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
 | `regionShuffleCharges` | Row shuffle / tile swap budget | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
-| `regionShuffleRowArmed` | Pending row index | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
 | `regionShuffleFreeThisFloor` | Relic free row shuffle or tile swap | [epic-relics](./epic-relics.md) |
 | `pinsPlacedCountThisRun` | Contract pin cap | [epic-contracts-challenge-runs](./epic-contracts-challenge-runs.md) |
 | `findablesClaimedThisFloor` | Successful findable pickup matches this floor | [epic-mutators](./epic-mutators.md) |

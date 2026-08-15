@@ -188,6 +188,7 @@ interface GameLeftToolbarProps {
     toggleTileSwapArmed: () => void;
     tileSwapArmed: boolean;
     tileSwapFirstTileId: string | null;
+    strayRemoveArmed: boolean;
     toggleStrayArm: () => void;
     undoResolvingFlip: () => void;
     triggerDebugReveal: () => void;
@@ -231,6 +232,7 @@ const GameLeftToolbar = memo(function GameLeftToolbar({
     toggleTileSwapArmed,
     tileSwapArmed,
     tileSwapFirstTileId,
+    strayRemoveArmed,
     toggleStrayArm,
     undoResolvingFlip,
     triggerDebugReveal,
@@ -274,7 +276,7 @@ const GameLeftToolbar = memo(function GameLeftToolbar({
         run.peekCharges,
         run.regionShuffleCharges,
         run.shuffleCharges,
-        run.strayRemoveArmed,
+        strayRemoveArmed,
         run.strayRemoveCharges,
         shuffleDisabled,
         showBoardPowerBar,
@@ -484,7 +486,7 @@ const GameLeftToolbar = memo(function GameLeftToolbar({
     const destroyImpactCue = run.destroyPairCharges > 0 ? (destroyPairArmed ? 'Risk clear' : 'Board control') : 'Recharge tools';
     const peekImpactCue = run.peekCharges > 0 ? (peekModeArmed ? 'Pair reveal' : 'Recall route') : 'Recharge tools';
     const flashImpactCue = run.flashPairCharges > 0 ? 'Pair spark' : 'Recharge tools';
-    const strayImpactCue = run.strayRemoveCharges > 0 ? (run.strayRemoveArmed ? 'Space clear' : 'Board control') : 'Recharge tools';
+    const strayImpactCue = run.strayRemoveCharges > 0 ? (strayRemoveArmed ? 'Space clear' : 'Board control') : 'Recharge tools';
     const destroyIntentAria =
         run.destroyPairCharges > 0 ? (destroyPairArmed ? 'Remove pair action armed.' : 'Cut risk action available.') : 'No destroy charge available.';
     const peekIntentAria =
@@ -492,7 +494,7 @@ const GameLeftToolbar = memo(function GameLeftToolbar({
     const flashIntentAria =
         run.flashPairCharges > 0 ? 'Pair reveal action available.' : 'No flash pair charge available.';
     const strayIntentAria =
-        run.strayRemoveCharges > 0 ? (run.strayRemoveArmed ? 'Remove stray action armed.' : 'Clear stray action available.') : 'No stray remove charge available.';
+        run.strayRemoveCharges > 0 ? (strayRemoveArmed ? 'Remove stray action armed.' : 'Clear stray action available.') : 'No stray remove charge available.';
     const liveToolLanes = [
         rowSwapPayoffTone === 'combo' ? 'Route' : null,
         rowSwapPayoffTone === 'combo' && swapRouteStacksChainReward ? 'Chain' : null,
@@ -1064,16 +1066,16 @@ const GameLeftToolbar = memo(function GameLeftToolbar({
                         </button>
                     ) : null}
                     <button
-                        aria-label={`Remove one safe stray singleton. Power payoff: ${run.strayRemoveCharges > 0 ? 'Space clear' : DEPLETED_POWER_PAYOFF_LABEL}. Impact cue: ${strayImpactCue}. ${strayIntentAria} Charges: ${run.strayRemoveCharges}. ${run.strayRemoveArmed ? 'Tap a valid singleton' : 'Arm then tap a valid singleton'}. ${powerRow('stray_remove').perfectMemoryCopy}`}
-                        aria-pressed={run.strayRemoveArmed}
-                        className={`${styles.iconAction} ${styles.iconActionWithBadge} ${run.strayRemoveArmed ? styles.iconActionActive : ''}`}
+                        aria-label={`Remove one safe stray singleton. Power payoff: ${run.strayRemoveCharges > 0 ? 'Space clear' : DEPLETED_POWER_PAYOFF_LABEL}. Impact cue: ${strayImpactCue}. ${strayIntentAria} Charges: ${run.strayRemoveCharges}. ${strayRemoveArmed ? 'Tap a valid singleton' : 'Arm then tap a valid singleton'}. ${powerRow('stray_remove').perfectMemoryCopy}`}
+                        aria-pressed={strayRemoveArmed}
+                        className={`${styles.iconAction} ${styles.iconActionWithBadge} ${strayRemoveArmed ? styles.iconActionActive : ''}`}
                         disabled={run.strayRemoveCharges < 1}
                         onClick={() => toggleStrayArm()}
                         title={powerTitle(
                             'stray_remove',
                             run.strayRemoveCharges < 1
                                 ? 'No stray-remove charges'
-                                : run.strayRemoveArmed
+                                : strayRemoveArmed
                                   ? 'Tap a valid singleton tile to remove it from play'
                                   : 'Arm stray remove, then tap a valid singleton tile'
                         )}
@@ -1090,16 +1092,16 @@ const GameLeftToolbar = memo(function GameLeftToolbar({
                         >
                             {run.strayRemoveCharges}
                         </span>
-                        {powerPayoffChip('stray-remove-payoff-chip', run.strayRemoveCharges > 0 ? 'Space clear' : DEPLETED_POWER_PAYOFF_LABEL, run.strayRemoveCharges > 0 ? 'control' : 'empty', run.strayRemoveCharges > 0 ? (run.strayRemoveArmed ? 'Tap stray' : 'Arm tool') : 'Recharge', strayImpactCue)}
+                        {powerPayoffChip('stray-remove-payoff-chip', run.strayRemoveCharges > 0 ? 'Space clear' : DEPLETED_POWER_PAYOFF_LABEL, run.strayRemoveCharges > 0 ? 'control' : 'empty', run.strayRemoveCharges > 0 ? (strayRemoveArmed ? 'Tap stray' : 'Arm tool') : 'Recharge', strayImpactCue)}
                         <span
                             aria-hidden="true"
                             className={styles.powerIntentChip}
                             data-power-intent={run.strayRemoveCharges > 0 ? 'control' : 'empty'}
                             data-testid="stray-remove-intent-chip"
                         >
-                            {run.strayRemoveCharges > 0 ? (run.strayRemoveArmed ? 'Remove stray' : 'Clear stray') : 'No charge'}
+                            {run.strayRemoveCharges > 0 ? (strayRemoveArmed ? 'Remove stray' : 'Clear stray') : 'No charge'}
                         </span>
-                        {powerRoleChip('stray_remove', run.strayRemoveArmed ? 'Tap' : undefined)}
+                        {powerRoleChip('stray_remove', strayRemoveArmed ? 'Tap' : undefined)}
                     </button>
                     <details className={styles.powerTeachingDetails}>
                         <summary aria-label="Power roles" title="Power roles">

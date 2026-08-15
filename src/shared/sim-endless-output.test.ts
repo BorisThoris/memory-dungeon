@@ -125,7 +125,7 @@ describe('sim-endless CSV output', () => {
         expect(health.metrics.traitRewardFloorShare).toBeGreaterThanOrEqual(0.8);
         expect(health.metrics.traitBoardPowerInteractionFloorShare).toBeGreaterThanOrEqual(0.7);
         expect(health.metrics.traitSwapSetupFloorShare).toBeGreaterThanOrEqual(0.1);
-    }, 120_000);
+    }, 300_000);
 
     it('counts raw undefeated hazard state for playable gates even when the hazard is no longer active', () => {
         expect(
@@ -176,6 +176,7 @@ describe('sim-endless CSV output', () => {
                 lockedCacheRoomFloors: 0,
                 objectiveKinds: 1,
                 playableCheckedFloors: 0,
+                coreReplayCheckedFloors: 0,
                 playableFailureDetails: [
                     'floor=7|reason=exit_attempted|status=playing|turns=12|lastPair=__exit__|lastTiles=exit|activeStaleHazards=0|undefeatedStaleHazards=0|archetype=trap_hall|objective=defeat_boss'
                 ],

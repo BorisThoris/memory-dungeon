@@ -335,7 +335,7 @@ const normalizeContractFlags = (input: unknown): ContractFlags | null => {
     };
 };
 
-const normalizeLastRunSummary = (input: unknown): RunSummary | null => {
+export const normalizeRunSummary = (input: unknown): RunSummary | null => {
     if (!isUnknownRecord(input)) {
         return null;
     }
@@ -649,7 +649,7 @@ export const normalizeSaveData = (input?: SaveDataNormalizationInput | null): Sa
     const relicPickCounts = normalizeRelicPickCounts(psIn.relicPickCounts);
     const relicShrineExtraPickUnlocked = psIn.relicShrineExtraPickUnlocked === true;
     const lastRunSummary =
-        migrationGate.keepLastRunSummary ? normalizeLastRunSummary(input.lastRunSummary) : defaults.lastRunSummary;
+        migrationGate.keepLastRunSummary ? normalizeRunSummary(input.lastRunSummary) : defaults.lastRunSummary;
 
     return {
         schemaVersion: SAVE_SCHEMA_VERSION,

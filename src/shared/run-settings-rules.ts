@@ -1,6 +1,6 @@
-import type { RunState, Settings } from '../../shared/contracts';
+import type { RunState, Settings } from './contracts';
 
-export const patchRunFromUserSettings = (run: RunState, settings: Settings): RunState => ({
+export const applyRunSettings = (run: RunState, settings: Settings): RunState => ({
     ...run,
     weakerShuffleMode: settings.weakerShuffleMode,
     shuffleScoreTaxActive: settings.shuffleScoreTaxEnabled,

@@ -2045,7 +2045,7 @@ describe('GameplayHudBar', () => {
             />
         );
 
-        expect(screen.getByTestId('hud-build-profile')).toHaveTextContent('The Seer');
+        expect(screen.getByTestId('hud-build-profile')).toHaveTextContent('The Conduit Cartographer');
         expect(screen.getByTestId('hud-build-profile')).toHaveTextContent('peek / pin / read');
         expect(screen.getByTestId('hud-build-profile').getAttribute('title')).toContain('peek, pin, read');
     });

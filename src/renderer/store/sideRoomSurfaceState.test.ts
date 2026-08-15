@@ -2,8 +2,8 @@ import { describe, expect, it } from 'vitest';
 import type { RunShopOfferState, RunState } from '../../shared/contracts';
 import { createNewRun } from '../../shared/game-core';
 import { createPlayablePathFixture } from '../../shared/playable-path-fixtures';
+import { createDeadInterludeGameOverRun } from '../../shared/interlude-transition-rules';
 import {
-    createDeadInterludeGameOverRun,
     createSideRoomActionSurfaceResult,
     createSideRoomResultSurfacePatch,
     shouldContinueAfterSideRoomResult

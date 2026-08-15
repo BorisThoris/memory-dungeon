@@ -1,12 +1,10 @@
 import type { RunState } from '../../shared/contracts';
 import {
     EXIT_PAIR_KEY,
-    revealDungeonExit,
-    revealDungeonRoom,
-    revealDungeonShop,
     ROOM_PAIR_KEY,
     SHOP_PAIR_KEY
 } from '../../shared/dungeon-rules';
+import { applyTileFlipThroughGameplayCore } from '../../shared/gameplay-core-adapters';
 
 type DungeonTilePressSurfaceResult =
     | { kind: 'notDungeonTile' }
@@ -37,32 +35,32 @@ export const createDungeonTilePressSurfaceResult = ({
     tileId: string;
 }): DungeonTilePressSurfaceResult => {
     if (pairKey === EXIT_PAIR_KEY) {
-        const nextRun = revealDungeonExit(run, tileId);
+        const transition = applyTileFlipThroughGameplayCore(run, tileId);
         return {
             kind: 'exitPrompt',
-            run: nextRun,
-            playFlipSfx: nextRun !== run
+            run: transition.run,
+            playFlipSfx: transition.accepted
         };
     }
 
     if (pairKey === SHOP_PAIR_KEY) {
-        const nextRun = revealDungeonShop(run, tileId);
-        return nextRun === run || nextRun.shopOffers.length === 0
+        const transition = applyTileFlipThroughGameplayCore(run, tileId);
+        return !transition.accepted || transition.run.shopOffers.length === 0
             ? { kind: 'ignored' }
             : {
                   kind: 'shop',
-                  run: nextRun,
+                  run: transition.run,
                   playFlipSfx: true
               };
     }
 
     if (pairKey === ROOM_PAIR_KEY) {
-        const nextRun = revealDungeonRoom(run, tileId);
-        return nextRun === run
+        const transition = applyTileFlipThroughGameplayCore(run, tileId);
+        return !transition.accepted
             ? { kind: 'ignored' }
             : {
                   kind: 'room',
-                  run: nextRun,
+                  run: transition.run,
                   playFlipSfx: true
               };
     }

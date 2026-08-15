@@ -68,7 +68,6 @@ const run = (overrides: Partial<RunState> = {}): RunState => ({
     flashPairCharges: 1,
     peekCharges: 1,
     strayRemoveCharges: 1,
-    strayRemoveArmed: true,
     practiceMode: true,
     wildMenuRun: false,
     weakerShuffleMode: null,
@@ -273,8 +272,7 @@ describe('board power actions', () => {
                 tile('a2', 'A'),
                 tile('b1', 'B'),
                 tile('b2', 'B', 'matched')
-            ], 2),
-            regionShuffleRowArmed: 0
+            ], 2)
         });
 
         const wrongRow = applyRegionShuffle(state, 1);
@@ -283,7 +281,6 @@ describe('board power actions', () => {
         const shuffled = applyRegionShuffle(state, 0);
         expect(shuffled).not.toBe(state);
         expect(shuffled.regionShuffleCharges).toBe(0);
-        expect(shuffled.regionShuffleRowArmed).toBeNull();
         expect(shuffled.pinnedTileIds).toEqual([]);
         expect(shuffled.forgottenTileIdsThisFloor).toEqual(expect.arrayContaining(['a1', 'a2']));
         expect(shuffled.stats.shufflesUsed).toBe(1);
@@ -293,7 +290,6 @@ describe('board power actions', () => {
 
     it('normalizes malformed stat blocks before applying row shuffle accounting', () => {
         const shuffled = applyRegionShuffle(run({
-            regionShuffleRowArmed: 0,
             stats: Number.NaN as unknown as RunState['stats']
         }), 0);
 
@@ -318,7 +314,6 @@ describe('board power actions', () => {
 
         expect(swapped).not.toBe(state);
         expect(swapped.regionShuffleCharges).toBe(0);
-        expect(swapped.regionShuffleRowArmed).toBeNull();
         expect(swapped.powersUsedThisRun).toBe(true);
         expect(swapped.shuffleUsedThisFloor).toBe(true);
         expect(swapped.shuffleNonce).toBe(1);
@@ -347,6 +342,21 @@ describe('board power actions', () => {
 
         expect(swapped.regionShuffleCharges).toBe(1);
         expect(swapped.regionShuffleFreeThisFloor).toBe(false);
+    });
+
+    it('uses the free targeted-reconfiguration perk before spending normal row/swap charges', () => {
+        const perkRun = run({
+            regionShuffleCharges: 1,
+            regionShuffleFreeThisFloor: true,
+            rewardPerkIds: ['free_first_swap_per_floor']
+        });
+        const rowShuffled = applyRegionShuffle(perkRun, 0);
+        const tileSwapped = applyTileSwap(perkRun, 'a1', 'b1');
+
+        expect(rowShuffled.regionShuffleCharges).toBe(1);
+        expect(rowShuffled.regionShuffleFreeThisFloor).toBe(false);
+        expect(tileSwapped.regionShuffleCharges).toBe(1);
+        expect(tileSwapped.regionShuffleFreeThisFloor).toBe(false);
     });
 
     it('refuses tile swaps while blocked by state, contract, or target legality', () => {
@@ -395,8 +405,7 @@ describe('board power actions', () => {
                 tile('w1', WILD_PAIR_KEY),
                 tile('a1', 'A')
             ]),
-            strayRemoveCharges: 1.8,
-            strayRemoveArmed: true
+            strayRemoveCharges: 1.8
         }), 'w1');
         const undone = cancelResolvingWithUndo(run({
             status: 'resolving',
@@ -490,14 +499,12 @@ describe('board power actions', () => {
                 tile('a1', 'A')
             ]),
             strayRemoveCharges: 1,
-            strayRemoveArmed: true,
             recallFocus: 2
         });
 
         const removed = applyStrayRemove(state, 'w1');
 
         expect(removed.strayRemoveCharges).toBe(0);
-        expect(removed.strayRemoveArmed).toBe(false);
         expect(removed.powersUsedThisRun).toBe(true);
         expect(removed.recallFocus).toBe(1);
         expect(removed.forgottenTileIdsThisFloor).toEqual(['w1']);

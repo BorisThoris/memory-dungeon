@@ -35,6 +35,7 @@ const uiSfxMocks = vi.hoisted(() => ({
     playPauseOpenSfx: vi.fn(),
     playPauseResumeSfx: vi.fn(),
     playRunStartSfx: vi.fn(),
+    playUiConfirmSfx: vi.fn(),
     resumeUiSfxContext: vi.fn()
 }));
 
@@ -63,6 +64,9 @@ const resetStore = (): void => {
         boardPinMode: false,
         destroyPairArmed: false,
         peekModeArmed: false,
+        strayRemoveArmed: false,
+        tileSwapArmed: false,
+        tileSwapFirstTileId: null,
         dungeonExitPromptOpen: false,
         shopReturnMode: null,
         ...BOARD_FLOATER_POP_CLEAR
@@ -526,6 +530,42 @@ describe('useAppStore timers', () => {
         await vi.advanceTimersByTimeAsync(400);
         expect(useAppStore.getState().run?.status).toBe('gameOver');
         expect(useAppStore.getState().view).toBe('gameOver');
+        expect(useAppStore.getState().run?.gameplayCommandJournal).toEqual(
+            expect.arrayContaining([expect.objectContaining({ type: 'run.gauntlet_expire' })])
+        );
+        expect(useAppStore.getState().run?.gameplayEventJournal).toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({ type: 'run.gauntlet_expired' }),
+                expect.objectContaining({ type: 'feedback.requested', cue: 'mode.gauntlet.expired' })
+            ])
+        );
+    });
+
+    it('journals Gauntlet expiry before an expired tile input can mutate the board', () => {
+        useAppStore.getState().startGauntletRun();
+        const started = useAppStore.getState().run!;
+        const target = started.board!.tiles.find((tile) => tile.state === 'hidden')!;
+        useAppStore.setState({
+            view: 'playing',
+            run: {
+                ...started,
+                status: 'playing',
+                gauntletDeadlineMs: Date.now() - 1
+            }
+        });
+
+        useAppStore.getState().pressTile(target.id);
+
+        const expired = useAppStore.getState().run!;
+        expect(useAppStore.getState().view).toBe('gameOver');
+        expect(expired).toMatchObject({ status: 'gameOver', lives: 0 });
+        expect(expired.board?.tiles.find((tile) => tile.id === target.id)?.state).toBe('hidden');
+        expect(expired.gameplayCommandJournal).toEqual(
+            expect.arrayContaining([expect.objectContaining({ type: 'run.gauntlet_expire' })])
+        );
+        expect(expired.gameplayEventJournal).toEqual(
+            expect.arrayContaining([expect.objectContaining({ type: 'run.gauntlet_expired' })])
+        );
     });
 
     it('does not expire a paused gauntlet until the run resumes', async () => {
@@ -570,10 +610,16 @@ describe('useAppStore timers', () => {
         expect(useAppStore.getState().view).toBe('inventory');
         expect(frozenForInventory?.status).toBe('paused');
         expect(frozenForInventory?.timerState.pausedFromStatus).toBe('playing');
+        expect(frozenForInventory?.gameplayCommandJournal).toEqual(
+            expect.arrayContaining([expect.objectContaining({ type: 'run.pause' })])
+        );
 
         useAppStore.getState().closeSubscreen();
         expect(useAppStore.getState().view).toBe('playing');
         expect(useAppStore.getState().run?.status).toBe('playing');
+        expect(useAppStore.getState().run?.gameplayCommandJournal).toEqual(
+            expect.arrayContaining([expect.objectContaining({ type: 'run.resume' })])
+        );
 
         useAppStore.getState().openSettings('playing');
         const frozenForSettings = useAppStore.getState().run;
@@ -581,6 +627,7 @@ describe('useAppStore timers', () => {
         expect(frozenForSettings?.status).toBe('paused');
         expect(frozenForSettings?.timerState.pausedFromStatus).toBe('playing');
         expect(frozenForSettings?.timerState).toEqual(frozenForInventory?.timerState);
+        expect(frozenForSettings?.gameplayCommandJournal?.filter((command) => command.type === 'run.pause')).toHaveLength(2);
     });
 
     it('SIDE-014: closing in-run inventory when run was cleared routes to menu instead of a blank playing shell', () => {
@@ -644,6 +691,15 @@ describe('useAppStore timers', () => {
         useAppStore.getState().purchaseShopOffer(peekOffer.id);
         expect(useAppStore.getState().run?.shopGold).toBe(5 - peekOffer.cost);
         expect(useAppStore.getState().run?.shopOffers.find((offer) => offer.id === peekOffer.id)?.purchased).toBe(true);
+        expect(uiSfxMocks.playUiConfirmSfx).toHaveBeenCalledTimes(1);
+
+        useAppStore.getState().rerollShopOffers();
+        expect(useAppStore.getState().run?.shopRerolls).toBe(1);
+        expect(useAppStore.getState().run?.gameplayCommandJournal?.map((command) => command.type)).toEqual([
+            'shop.purchase',
+            'shop.reroll'
+        ]);
+        expect(uiSfxMocks.playUiConfirmSfx).toHaveBeenCalledTimes(2);
 
         useAppStore.getState().closeShopToFloorSummary();
         expect(useAppStore.getState().view).toBe('playing');
@@ -935,6 +991,16 @@ describe('useAppStore timers', () => {
         expect(useAppStore.getState().peekModeArmed).toBe(false);
         expect(useAppStore.getState().tileSwapArmed).toBe(false);
         expect(useAppStore.getState().tileSwapFirstTileId).toBeNull();
+
+        expect(useAppStore.getState().run?.gameplayCommandJournal).toEqual(
+            expect.arrayContaining([expect.objectContaining({ type: 'run.pause' })])
+        );
+        useAppStore.getState().closeShopToFloorSummary();
+        expect(useAppStore.getState().view).toBe('playing');
+        expect(useAppStore.getState().run?.status).toBe('playing');
+        expect(useAppStore.getState().run?.gameplayCommandJournal).toEqual(
+            expect.arrayContaining([expect.objectContaining({ type: 'run.resume' })])
+        );
     });
 
     it('claims a generated in-board dungeon room through tile press without leaving the board', () => {
@@ -991,13 +1057,13 @@ describe('useAppStore timers', () => {
                 ...baseRun,
                 board,
                 status: 'playing',
-                strayRemoveArmed: true,
                 stats: { ...baseRun.stats, guardTokens: 0 },
                 findablesTotalThisFloor: countFindablePairs(board.tiles)
             },
             boardPinMode: true,
             destroyPairArmed: true,
             peekModeArmed: true,
+            strayRemoveArmed: true,
             tileSwapArmed: true,
             tileSwapFirstTileId: hazard.currentTileId
         });
@@ -1010,7 +1076,7 @@ describe('useAppStore timers', () => {
         expect(nextRun.board!.tiles.find((tile) => tile.id === hazard.currentTileId)!.state).toBe('flipped');
         expect(nextRun.board!.flippedTileIds).toEqual([hazard.currentTileId]);
         expect(nextRun.board!.enemyHazards!.find((item) => item.id === hazard.id)!.currentTileId).toBe(hazard.nextTileId);
-        expect(nextRun.strayRemoveArmed).toBe(false);
+        expect(useAppStore.getState().strayRemoveArmed).toBe(false);
         expect(useAppStore.getState().boardPinMode).toBe(false);
         expect(useAppStore.getState().destroyPairArmed).toBe(false);
         expect(useAppStore.getState().peekModeArmed).toBe(false);
@@ -1182,10 +1248,10 @@ describe('useAppStore timers', () => {
                 ...baseRun,
                 board,
                 status: 'playing',
-                strayRemoveArmed: true,
                 strayRemoveCharges: 1,
                 stats: { ...baseRun.stats, guardTokens: 0 }
-            }
+            },
+            strayRemoveArmed: true
         });
 
         useAppStore.getState().pressTile('w1');
@@ -1194,7 +1260,7 @@ describe('useAppStore timers', () => {
         expect(nextRun.lives).toBe(baseRun.lives - 1);
         expect(nextRun.enemyHazardHitsThisFloor).toBe(1);
         expect(nextRun.strayRemoveCharges).toBe(0);
-        expect(nextRun.strayRemoveArmed).toBe(false);
+        expect(useAppStore.getState().strayRemoveArmed).toBe(false);
         expect(nextRun.board!.tiles.find((tile) => tile.id === 'w1')!.state).toBe('removed');
         expect(nextRun.board!.flippedTileIds).toEqual([]);
         expect(nextRun.board!.enemyHazards![0]).toMatchObject({ state: 'revealed', currentTileId: 'b1' });
@@ -1240,10 +1306,10 @@ describe('useAppStore timers', () => {
                 ...baseRun,
                 board,
                 status: 'playing',
-                strayRemoveArmed: true,
                 strayRemoveCharges: 1,
                 stats: { ...baseRun.stats, guardTokens: 0 }
-            }
+            },
+            strayRemoveArmed: true
         });
 
         useAppStore.getState().pressTile('a1');
@@ -1252,6 +1318,7 @@ describe('useAppStore timers', () => {
         expect(nextRun.lives).toBe(baseRun.lives - 1);
         expect(nextRun.enemyHazardHitsThisFloor).toBe(1);
         expect(nextRun.strayRemoveCharges).toBe(1);
+        expect(useAppStore.getState().strayRemoveArmed).toBe(true);
         expect(nextRun.board!.tiles.find((tile) => tile.id === 'a1')!.state).toBe('hidden');
         expect(nextRun.board!.enemyHazards![0]).toMatchObject({ state: 'revealed', currentTileId: 'b1' });
     });
@@ -2013,9 +2080,38 @@ describe('useAppStore timers', () => {
         useAppStore.getState().pause();
         expect(uiSfxMocks.resumeUiSfxContext).toHaveBeenCalled();
         expect(uiSfxMocks.playPauseOpenSfx).toHaveBeenCalledTimes(1);
+        expect(useAppStore.getState().run?.gameplayCommandJournal).toEqual(
+            expect.arrayContaining([expect.objectContaining({ type: 'run.pause' })])
+        );
+        expect(useAppStore.getState().run?.gameplayEventJournal).toEqual(
+            expect.arrayContaining([expect.objectContaining({ type: 'run.paused' })])
+        );
 
         useAppStore.getState().resume();
         expect(uiSfxMocks.playPauseResumeSfx).toHaveBeenCalledTimes(1);
+        expect(useAppStore.getState().run?.gameplayCommandJournal).toEqual(
+            expect.arrayContaining([expect.objectContaining({ type: 'run.resume' })])
+        );
+        expect(useAppStore.getState().run?.gameplayEventJournal).toEqual(
+            expect.arrayContaining([expect.objectContaining({ type: 'run.resumed' })])
+        );
+    });
+
+    it('serializes the elapsed memorize timer before manual pause clears browser timers', async () => {
+        useAppStore.getState().startRun();
+        notifyCurrentBoardReady();
+        const initialRemainingMs = useAppStore.getState().run?.timerState.memorizeRemainingMs ?? 0;
+
+        await vi.advanceTimersByTimeAsync(350);
+        useAppStore.getState().pause();
+
+        const paused = useAppStore.getState().run!;
+        expect(paused.status).toBe('paused');
+        expect(paused.timerState.memorizeRemainingMs).toBe(Math.max(0, initialRemainingMs - 350));
+        expect(paused.gameplayCommandJournal?.at(-1)).toMatchObject({
+            type: 'run.pause',
+            timerSnapshot: { memorizeRemainingMs: Math.max(0, initialRemainingMs - 350) }
+        });
     });
 
     it('does not play pause or resume cues for no-op transitions', () => {
@@ -2048,6 +2144,12 @@ describe('useAppStore timers', () => {
         expect(useAppStore.getState().view).toBe('gameOver');
         expect(useAppStore.getState().run?.status).toBe('gameOver');
         expect(useAppStore.getState().run?.lives).toBe(0);
+        expect(useAppStore.getState().run?.gameplayCommandJournal).toEqual([
+            expect.objectContaining({ type: 'run.resume' })
+        ]);
+        expect(useAppStore.getState().run?.gameplayEventJournal).toEqual(
+            expect.arrayContaining([expect.objectContaining({ type: 'run.resumed', outcome: 'game_over' })])
+        );
         expect(uiSfxMocks.playPauseResumeSfx).not.toHaveBeenCalled();
     });
 

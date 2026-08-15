@@ -40,7 +40,7 @@
 
 | Item | Status | Notes | Epic |
 |------|--------|-------|------|
-| `wildTileId` on `RunState` | **Functional** | Set from the board whenever a wild tile is spawned (`getWildTileIdFromBoard`); null when absent. Simulation still keys off `pairKey` / `WILD_PAIR_KEY`. | [epic-core-memory-loop](./epic-core-memory-loop.md) |
+| Wild tile identity | **Shippable** | `BoardState.tiles` plus `WILD_PAIR_KEY` are authoritative; `getWildTileIdFromBoard` provides a derived query without duplicated run state. | [epic-core-memory-loop](./epic-core-memory-loop.md) |
 | Fixed / puzzle `fixedTiles` boards | **Functional** | Built-in puzzles are layout-only tile lists unless a caller wires extra init (cursed pair, shifting spotlight seeds, etc.); see [`builtin-puzzles.ts`](../../src/shared/builtin-puzzles.ts) header and [PUZZLE_CONTRIBUTING.md](../PUZZLE_CONTRIBUTING.md). Authored payload validation enforces playable base structure. | [epic-core-memory-loop](./epic-core-memory-loop.md) |
 | Gambit vs echo timing | **Functional** | Mismatch **resolve delay** differs 2-flip vs 3-flip (echo-aware vs not)—no bug flagged; revisit if balance changes. | [epic-core-memory-loop](./epic-core-memory-loop.md) |
 
@@ -203,7 +203,7 @@ From [GAMEPLAY_SYSTEMS_ANALYSIS.md](../GAMEPLAY_SYSTEMS_ANALYSIS.md) §10:
 |------|-------------------|
 | [epic-board-rendering-assists](./epic-board-rendering-assists.md) | 3D presentation mutators, prop wiring |
 | [epic-mutators](./epic-mutators.md) | Visual reading vs score tax, sticky UX |
-| [epic-core-memory-loop](./epic-core-memory-loop.md) | `wildTileId`, puzzle board completeness |
+| [epic-core-memory-loop](./epic-core-memory-loop.md) | Board-derived wild identity, puzzle board completeness |
 | [epic-powers-and-interactions](./epic-powers-and-interactions.md) | `powersUsedThisRun` / perfect clear semantics, flash pair |
 | [epic-meta-progression](./epic-meta-progression.md) | Telemetry sink, achievement clarity |
 | [epic-audio-feedback](./epic-audio-feedback.md) | Procedural gameplay SFX vs product audio pass |

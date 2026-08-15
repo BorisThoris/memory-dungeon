@@ -5,12 +5,7 @@ import type {
     RunState,
     Tile
 } from './contracts';
-import {
-    armRegionShuffleRow,
-    maxPinnedTilesForRun,
-    togglePinnedTile,
-    toggleStrayRemoveArmed
-} from './board-power-state';
+import { maxPinnedTilesForRun, togglePinnedTile } from './board-power-state';
 
 const tile = (id: string, state: Tile['state'] = 'hidden'): Tile => ({
     id,
@@ -43,17 +38,10 @@ const run = (overrides: Partial<RunState> = {}): RunState => ({
     pinnedTileIds: [],
     pinsPlacedCountThisRun: 0,
     strayRemoveCharges: 1,
-    strayRemoveArmed: false,
     ...overrides
 } as RunState);
 
 describe('board power state rules', () => {
-    it('arms a region shuffle row only while playing with a board', () => {
-        expect(armRegionShuffleRow(run(), 1).regionShuffleRowArmed).toBe(1);
-        expect(armRegionShuffleRow(run({ status: 'memorize' }), 1).regionShuffleRowArmed).toBeUndefined();
-        expect(armRegionShuffleRow(run({ board: null }), 1).regionShuffleRowArmed).toBeUndefined();
-    });
-
     it('toggles hidden tile pins and tracks new pin placements', () => {
         const pinned = togglePinnedTile(run(), 'a1');
         expect(pinned.pinnedTileIds).toEqual(['a1']);
@@ -92,17 +80,5 @@ describe('board power state rules', () => {
             pinsPlacedCountThisRun: 1.9
         });
         expect(togglePinnedTile(capped, 'a1')).toBe(capped);
-    });
-
-    it('toggles stray remove arming only while playing with charges', () => {
-        expect(toggleStrayRemoveArmed(run()).strayRemoveArmed).toBe(true);
-        expect(toggleStrayRemoveArmed(run({ strayRemoveCharges: 0 })).strayRemoveArmed).toBe(false);
-        expect(toggleStrayRemoveArmed(run({ status: 'paused' })).strayRemoveArmed).toBe(false);
-    });
-
-    it('normalizes malformed stray remove charges before arming', () => {
-        expect(toggleStrayRemoveArmed(run({ strayRemoveCharges: Number.NaN })).strayRemoveArmed).toBe(false);
-        expect(toggleStrayRemoveArmed(run({ strayRemoveCharges: Number.POSITIVE_INFINITY })).strayRemoveArmed).toBe(false);
-        expect(toggleStrayRemoveArmed(run({ strayRemoveCharges: 1.9 })).strayRemoveArmed).toBe(true);
     });
 });

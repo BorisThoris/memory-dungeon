@@ -6,9 +6,9 @@ import type {
     SubscreenReturnView,
     ViewState
 } from '../../shared/contracts';
-import { enableDebugPeek } from '../../shared/run-timer-rules';
+import { activateDebugRevealThroughGameplayCore } from '../../shared/gameplay-core-adapters';
+import { applyRunSettings } from '../../shared/run-settings-rules';
 import { trackEvent } from '../../shared/telemetry';
-import { patchRunFromUserSettings } from './runSettingsPatch';
 import {
     createRestartRun,
     createRunStartStatePatch,
@@ -71,7 +71,7 @@ export const createRunLifecycleController = ({
     restartRun: () => {
         clearAllTimers();
         const { run: previousRun, saveData, settings } = getState();
-        const run = patchRunFromUserSettings(createRestartRun(previousRun, saveData), settings);
+        const run = applyRunSettings(createRestartRun(previousRun, saveData), settings);
 
         trackEvent('run_start', createRunStartTelemetryPayload(run, { restarted: true }));
         playRunStartSfx();
@@ -87,7 +87,14 @@ export const createRunLifecycleController = ({
             return;
         }
 
-        const nextRun = enableDebugPeek(run, settings.debugFlags.disableAchievementsOnDebug);
+        const commandJournalLength = Array.isArray(run.gameplayCommandJournal)
+            ? run.gameplayCommandJournal.length
+            : 0;
+        const nextRun = activateDebugRevealThroughGameplayCore(
+            run,
+            settings.debugFlags.disableAchievementsOnDebug,
+            `debug-reveal-activate:${run.runSeed}:${commandJournalLength}`
+        ).run;
 
         setState({ run: nextRun });
 

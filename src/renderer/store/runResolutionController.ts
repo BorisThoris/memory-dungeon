@@ -7,7 +7,7 @@ import type {
     Settings,
     ViewState
 } from '../../shared/contracts';
-import { createRunSummary } from '../../shared/game-core';
+import { createValidatedGameOverRunSummary } from '../../shared/run-summary-rules';
 import { mergeHonorUnlockTags } from '../../shared/honorUnlocks';
 import { runArrayCount } from '../../shared/run-array-guards';
 import {
@@ -17,9 +17,12 @@ import {
     mergePuzzleCompletion,
     normalizeSaveData
 } from '../../shared/save-data';
-import { disableDebugPeek } from '../../shared/run-timer-rules';
-import { repairRunProgressionSoftlocks } from '../../shared/run-progression-repair';
-import { resolveBoardTurn } from '../../shared/turn-resolution';
+import {
+    deactivateDebugRevealThroughGameplayCore,
+    repairRunProgressionThroughGameplayCore,
+    resolveBoardTurnThroughGameplayCore
+} from '../../shared/gameplay-core-adapters';
+import type { GameplayEvent } from '../../shared/gameplay-core-contracts';
 import { trackEvent } from '../../shared/telemetry';
 import { playFloorClearSfx, playMatchPayoffSfx, playResolveSfx, resumeAudioContext } from '../audio/gameSfx';
 import { ACHIEVEMENT_SYNC_FAILURE_NOTICE } from './achievementPersistence';
@@ -84,14 +87,24 @@ export const createRunResolutionController = ({
     setState
 }: RunResolutionControllerOptions): RunResolutionController => {
     const applyResolvedRun = (resolvedRun: RunState): void => {
-        resolvedRun = repairRunProgressionSoftlocks(resolvedRun);
+        resolvedRun = repairRunProgressionThroughGameplayCore(
+            resolvedRun,
+            `progression-repair:${resolvedRun.runSeed}:${resolvedRun.board?.level ?? 0}:${Array.isArray(resolvedRun.gameplayCommandJournal) ? resolvedRun.gameplayCommandJournal.length : 0}`
+        ).run;
         const state = getState();
         const prevStatus = state.run?.status;
         if (resolvedRun.status === 'levelComplete' && prevStatus !== 'levelComplete') {
             void resumeAudioContext();
             playFloorClearSfx(getSfxGain());
         }
-        let nextRun = resolvedRun.status === 'playing' ? resolvedRun : disableDebugPeek(resolvedRun);
+        let nextRun =
+            resolvedRun.status === 'playing' || !resolvedRun.debugPeekActive
+                ? resolvedRun
+                : deactivateDebugRevealThroughGameplayCore(
+                      resolvedRun,
+                      'phase_ended',
+                      `debug-reveal-deactivate:${resolvedRun.runSeed}:${Array.isArray(resolvedRun.gameplayCommandJournal) ? resolvedRun.gameplayCommandJournal.length : 0}:phase_ended`
+                  ).run;
 
         let saveForAchievements = state.saveData;
         if (nextRun.status === 'levelComplete' && nextRun.gameMode === 'daily' && nextRun.dailyDateKeyUtc) {
@@ -139,14 +152,7 @@ export const createRunResolutionController = ({
 
         if (nextRun.status === 'gameOver') {
             nextSave = mergeEncoreFromRun(nextSave, nextRun.matchedPairKeysThisRun);
-            nextRun = createRunSummary(nextRun, unlockedAchievements);
-            nextRun = {
-                ...nextRun,
-                lastRunSummary: normalizeSaveData({
-                    ...nextSave,
-                    lastRunSummary: nextRun.lastRunSummary
-                }).lastRunSummary
-            };
+            nextRun = createValidatedGameOverRunSummary(nextRun, unlockedAchievements);
             if (!nextRun.powersUsedThisRun) {
                 nextSave = mergeBestFloorNoPowers(nextSave, nextRun.stats.highestLevel);
             }
@@ -208,9 +214,14 @@ export const createRunResolutionController = ({
     const applyResolveBoardTurn = (run: RunState): void => {
         const { saveData } = getState();
         const encore = saveData.playerStats?.encorePairKeysLastRun ?? [];
-        const next = resolveBoardTurn(run, encore);
-        const pop = buildMatchScorePopPayload(run, next);
-        const missPop = buildMismatchScorePopPayload(run, next);
+        const resolution = resolveBoardTurnThroughGameplayCore(run, encore);
+        const next = resolution.run;
+        const event = [...resolution.events].reverse().find(
+            (item): item is Extract<GameplayEvent, { type: 'board.turn_resolved' }> =>
+                item.type === 'board.turn_resolved'
+        ) ?? null;
+        const pop = event ? buildMatchScorePopPayload(event) : null;
+        const missPop = event ? buildMismatchScorePopPayload(event) : null;
         if (pop) {
             setState({ ...BOARD_FLOATER_POP_CLEAR, matchScorePop: pop });
         } else if (missPop) {

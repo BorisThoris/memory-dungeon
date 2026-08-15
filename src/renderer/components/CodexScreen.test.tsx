@@ -43,7 +43,8 @@ describe('CodexScreen REG-095 knowledge base', () => {
 
         expect(screen.getByRole('link', { name: 'Builds' })).toBeInTheDocument();
         expect(screen.getByText('Build archetypes')).toBeInTheDocument();
-        expect(screen.getByText('The Seer')).toBeInTheDocument();
+        expect(screen.getByText('The Conduit Cartographer')).toBeInTheDocument();
+        expect(screen.getByText('The Emergency Toolkit')).toBeInTheDocument();
         expect(screen.getByText(/peek, pin, read/i)).toBeInTheDocument();
         expect(screen.getAllByText(/Peek charge/i).length).toBeGreaterThan(0);
     });

@@ -171,6 +171,11 @@ describe('board power availability rules', () => {
         expect(canRegionShuffle(run({
             regionShuffleCharges: 0,
             regionShuffleFreeThisFloor: true,
+            rewardPerkIds: ['free_first_swap_per_floor']
+        }))).toBe(true);
+        expect(canRegionShuffle(run({
+            regionShuffleCharges: 0,
+            regionShuffleFreeThisFloor: true,
             relicIds: Number.NaN as unknown as []
         }))).toBe(false);
     });
@@ -185,6 +190,11 @@ describe('board power availability rules', () => {
             regionShuffleCharges: 0,
             regionShuffleFreeThisFloor: true,
             relicIds: ['region_shuffle_free_first']
+        }), 'a1', 'b1')).toBe(true);
+        expect(canSwapHiddenTiles(run({
+            regionShuffleCharges: 0,
+            regionShuffleFreeThisFloor: true,
+            rewardPerkIds: ['free_first_swap_per_floor']
         }), 'a1', 'b1')).toBe(true);
         expect(canSwapHiddenTiles(run(), 'a1', 'a1')).toBe(false);
         expect(canSwapHiddenTiles(run({

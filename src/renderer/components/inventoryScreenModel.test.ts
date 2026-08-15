@@ -55,7 +55,7 @@ describe('inventoryScreenModel', () => {
         };
         const model = createInventoryScreenModel(run, createDefaultSaveData());
 
-        expect(model.buildProfile.summary).toContain('The Seer');
+        expect(model.buildProfile.summary).toContain('The Conduit Cartographer');
         expect(model.inventoryRows.length).toBeGreaterThan(0);
         expect(model.equippedCosmetic?.id).toBe('title_seeker');
     });

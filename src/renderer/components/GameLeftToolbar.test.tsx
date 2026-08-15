@@ -43,6 +43,7 @@ const renderToolbar = (run: RunState, overrides: ToolbarOverrideProps = {}) =>
             shuffleDisabled={false}
             shuffleRegionRow={noop}
             shuffleTitle="Shuffle hidden tiles"
+            strayRemoveArmed={false}
             tileBoardRef={createRef<TileBoardHandle | null>()}
             tileSwapArmed={false}
             tileSwapDisabled={false}
@@ -176,7 +177,6 @@ describe('GameLeftToolbar', () => {
             destroyPairCharges: 1,
             peekCharges: 1,
             regionShuffleCharges: 1,
-            strayRemoveArmed: true,
             strayRemoveCharges: 1
         } as RunState;
 
@@ -184,6 +184,7 @@ describe('GameLeftToolbar', () => {
             boardPinMode: true,
             destroyPairArmed: true,
             peekModeArmed: true,
+            strayRemoveArmed: true,
             tileSwapArmed: true,
             tileSwapFirstTileId: 'tile-a'
         });

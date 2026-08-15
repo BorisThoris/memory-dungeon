@@ -64,8 +64,8 @@ Sid Meier’s “interesting choices” mantra (often paraphrased in design talk
 
 - **Destroy pair** (`destroyPairCharges`, `applyDestroyPair`) — removes a pair for no score; gated with `glass_floor` decoy rules.
 - **Undo** (`undoUsesThisFloor` on `RunState`) — limited per floor.
-- **Stray remove** (`strayRemoveCharges`, `strayRemoveArmed`) — narrow escape hatch for specific tile pressure.
-- **Gambit / wild** (`gambitAvailableThisFloor`, `wildTileId`, `wildMatchesRemaining`) — risk/reward shape.
+- **Stray remove** (`RunState.strayRemoveCharges`; transient renderer `strayRemoveArmed`) — narrow escape hatch for specific tile pressure without durable UI intent.
+- **Gambit / wild** (`gambitAvailableThisFloor`, `wildMatchesRemaining`; joker identity comes from `BoardState.tiles`) — risk/reward shape.
 
 **Design lever:** Tie these to **visible systems** so the press feels like a save or a gamble:
 

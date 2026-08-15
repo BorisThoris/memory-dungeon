@@ -1,13 +1,30 @@
 import { describe, expect, it } from 'vitest';
 import type { RunState } from './contracts';
 import { createNewRun, finishMemorizePhase } from './game-core';
-import { createRunSummary } from './run-summary-rules';
+import {
+    createGameOverRunSummary,
+    createRunSummary,
+    createValidatedGameOverRunSummary
+} from './run-summary-rules';
 import { normalizeSaveData } from './save-data';
 import { createGameplayDefinitionCommand } from './gameplay-core-contracts';
 import { reduceGameplayCommand } from './gameplay-core';
 import { appendGameplayJournal } from './gameplay-journal';
 
 describe('createRunSummary', () => {
+    it('owns terminal status, life normalization, and save-valid summary construction', () => {
+        const run = finishMemorizePhase(createNewRun(100, { runSeed: 0x6601 }));
+        const terminal = createGameOverRunSummary(run, []);
+        const validated = createValidatedGameOverRunSummary(run, []);
+
+        expect(terminal).toMatchObject({ status: 'gameOver', lives: 0 });
+        expect(terminal.lastRunSummary).not.toBeNull();
+        expect(validated).toMatchObject({ status: 'gameOver', lives: 0 });
+        expect(validated.lastRunSummary).toEqual(
+            normalizeSaveData({ lastRunSummary: terminal.lastRunSummary }).lastRunSummary
+        );
+    });
+
     it('persists final payoff counters for archive recap surfaces', () => {
         const run = finishMemorizePhase(createNewRun(100, { runSeed: 0xbeef }));
         const summarized = createRunSummary(

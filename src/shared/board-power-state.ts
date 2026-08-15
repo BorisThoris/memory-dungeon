@@ -9,9 +9,6 @@ import { runNonNegativeInteger } from './run-number-guards';
 export const maxPinnedTilesForRun = (run: RunState): number =>
     MAX_PINNED_TILES + (hasRunRelic(run, 'pin_cap_plus_one') ? 1 : 0);
 
-export const armRegionShuffleRow = (run: RunState, row: number | null): RunState =>
-    run.status === 'playing' && run.board ? { ...run, regionShuffleRowArmed: row } : run;
-
 export const togglePinnedTile = (run: RunState, tileId: string): RunState => {
     if (run.status !== 'playing' || !run.board) {
         return run;
@@ -49,8 +46,3 @@ export const togglePinnedTile = (run: RunState, tileId: string): RunState => {
         pinnedTileIds
     };
 };
-
-export const toggleStrayRemoveArmed = (run: RunState): RunState =>
-    runNonNegativeInteger(run.strayRemoveCharges) > 0 && run.status === 'playing'
-        ? { ...run, strayRemoveArmed: !run.strayRemoveArmed }
-        : run;

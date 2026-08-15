@@ -172,7 +172,7 @@ Post-relic / post-mutator tuning. Constants live in `src/shared/contracts.ts` un
 - **Powers:** `INITIAL_SHUFFLE_CHARGES`; destroy charges are uncapped run-local pickups. Relics and shops that add charges should not trivialize **Scholar** contract runs; contract still hard-disables shuffle/destroy where set.  
 - **Gauntlet:** Menu presets **5 / 10 / 15** minutes; default factory still **10m** when unspecified. Each cleared floor extends the deadline by **+30s**, rewarding pace without removing the timer fail state.
 - **Routes:** Floor clears expose **Safe / Greed / Mystery** choices. Shared rules can now apply outcomes: Safe recovers life or guard, Greed pays gold/score for life risk, Mystery rolls deterministic local gold/shard/Favor rewards.
-- **Wild joker metadata:** `RunState.wildTileId` is set to the wild tile’s `id` whenever the board includes `WILD_PAIR_KEY` (`getWildTileIdFromBoard` on run start and after each level advance). Matching logic is unchanged (`pairKey`-driven).
+- **Wild joker identity:** `BoardState.tiles` and `WILD_PAIR_KEY` are authoritative; `getWildTileIdFromBoard` derives the tile id when an inspection surface needs it. Matching remains `pairKey`-driven.
 
 ## V3 cycle 1 progression/meta wrap-up
 

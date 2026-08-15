@@ -17,6 +17,7 @@ import { DECOY_PAIR_KEY } from './tile-identity';
 import {
     canDestroyPair,
     hasClearFlipState,
+    hasFreeTargetedReconfiguration,
     canRegionShuffle,
     canSwapHiddenTiles,
     canShuffleBoard
@@ -216,7 +217,7 @@ export const applyRegionShuffle = (run: RunState, rowIndex: number): RunState =>
 
     let nextFree = run.regionShuffleFreeThisFloor;
     let nextCharges = runNonNegativeInteger(run.regionShuffleCharges);
-    if (nextFree && hasRunRelic(run, 'region_shuffle_free_first')) {
+    if (hasFreeTargetedReconfiguration(run)) {
         nextFree = false;
     } else if (nextCharges > 0) {
         nextCharges -= 1;
@@ -244,7 +245,6 @@ export const applyRegionShuffle = (run: RunState, rowIndex: number): RunState =>
         shuffleNonce: shuffleNonce + 1,
         regionShuffleCharges: nextCharges,
         regionShuffleFreeThisFloor: nextFree,
-        regionShuffleRowArmed: null,
         pinnedTileIds: [],
         recallFocus: 0,
         forgottenTileIdsThisFloor: rememberForgottenTiles(run.forgottenTileIdsThisFloor, shuffledTileIds),
@@ -271,7 +271,7 @@ export const applyTileSwap = (run: RunState, firstTileId: string, secondTileId: 
 
     let nextFree = run.regionShuffleFreeThisFloor;
     let nextCharges = runNonNegativeInteger(run.regionShuffleCharges);
-    if (nextFree && hasRunRelic(run, 'region_shuffle_free_first')) {
+    if (hasFreeTargetedReconfiguration(run)) {
         nextFree = false;
     } else if (nextCharges > 0) {
         nextCharges -= 1;
@@ -296,7 +296,6 @@ export const applyTileSwap = (run: RunState, firstTileId: string, secondTileId: 
         shuffleNonce: runNonNegativeInteger(run.shuffleNonce) + 1,
         regionShuffleCharges: nextCharges,
         regionShuffleFreeThisFloor: nextFree,
-        regionShuffleRowArmed: null,
         pinnedTileIds: [],
         recallFocus: 0,
         forgottenTileIdsThisFloor: rememberForgottenTiles(run.forgottenTileIdsThisFloor, [firstTileId, secondTileId]),
@@ -393,7 +392,7 @@ export const applyPeek = (run: RunState, tileId: string): RunState => {
 
 export const applyStrayRemove = (run: RunState, tileId: string): RunState => {
     const strayRemoveCharges = runNonNegativeInteger(run.strayRemoveCharges);
-    if (!run.strayRemoveArmed || run.status !== 'playing' || !run.board || strayRemoveCharges < 1) {
+    if (run.status !== 'playing' || !run.board || strayRemoveCharges < 1) {
         return run;
     }
     if (!hasClearFlipState(run)) {
@@ -434,7 +433,6 @@ export const applyStrayRemove = (run: RunState, tileId: string): RunState => {
         ...run,
         powersUsedThisRun: true,
         strayRemoveCharges: decrementRunCounter(strayRemoveCharges),
-        strayRemoveArmed: false,
         recallFocus: decreaseRecallFocus(run),
         forgottenTileIdsThisFloor: rememberForgottenTiles(run.forgottenTileIdsThisFloor, [tileId]),
         board
