@@ -316,6 +316,7 @@ const GameLeftToolbar = memo(function GameLeftToolbar({
     const controlsToolbarRef = useRef<HTMLDivElement | null>(null);
     const powersToolbarRef = useRef<HTMLDivElement | null>(null);
     const resolveToolbarRef = useRef<HTMLDivElement | null>(null);
+    const mobileDockAlignmentKeyRef = useRef('');
 
     useLayoutEffect(() => {
         syncToolbarTabIndices(controlsToolbarRef.current);
@@ -374,6 +375,33 @@ const GameLeftToolbar = memo(function GameLeftToolbar({
         aside.addEventListener('focusin', onFocusIn);
         return () => aside.removeEventListener('focusin', onFocusIn);
     }, []);
+
+    useLayoutEffect(() => {
+        if (!cameraViewportMode || typeof window === 'undefined' || window.innerWidth > 430) {
+            mobileDockAlignmentKeyRef.current = '';
+            return;
+        }
+        const aside = asideRef.current;
+        const controlsToolbar = controlsToolbarRef.current;
+        const initialToolbar = showBoardPowerBar ? powersToolbarRef.current : controlsToolbar;
+        if (!aside || !initialToolbar) {
+            return;
+        }
+        const alignmentKey = `${run.status}:${run.level}:${run.board?.id ?? 'no-board'}`;
+        if (mobileDockAlignmentKeyRef.current === alignmentKey) {
+            return;
+        }
+        const frame = window.requestAnimationFrame(() => {
+            if (aside.scrollLeft <= 4) {
+                initialToolbar.scrollIntoView({
+                    block: 'nearest',
+                    inline: 'nearest'
+                });
+            }
+            mobileDockAlignmentKeyRef.current = alignmentKey;
+        });
+        return () => window.cancelAnimationFrame(frame);
+    }, [cameraViewportMode, run.board?.id, run.level, run.status, showBoardPowerBar]);
 
     const pinVowCap = run.activeContract?.maxPinsTotalRun;
     const pinTitle =
@@ -687,6 +715,8 @@ const GameLeftToolbar = memo(function GameLeftToolbar({
                 aria-label="Game controls"
                 aria-orientation="horizontal"
                 className={styles.actionDockGroup}
+                data-dock-group="controls"
+                data-testid="game-controls-toolbar"
                 onKeyDown={handleHorizontalToolbarKeyDown}
                 ref={controlsToolbarRef}
                 role="toolbar"
@@ -768,7 +798,7 @@ const GameLeftToolbar = memo(function GameLeftToolbar({
                 ) : null}
             </div>
             {showForgivenessHint ? (
-                <div className={styles.actionDockRules}>
+                <div className={styles.actionDockRules} data-dock-group="rules">
                     <button
                         aria-expanded={rulesHintsExpanded}
                         aria-label={rulesHintsExpanded ? 'Hide rule tips' : 'Show rule tips'}
@@ -793,6 +823,8 @@ const GameLeftToolbar = memo(function GameLeftToolbar({
                     aria-label={`Board powers. ${toolPayoffStackLabel} ${toolCrescendoLabel}`}
                     aria-orientation="horizontal"
                     className={styles.actionDockGroup}
+                    data-dock-group="powers"
+                    data-testid="game-power-toolbar"
                     data-tool-crescendo-action={toolCrescendoActionCue}
                     data-tool-crescendo-audio={toolCrescendoAudioCueValue}
                     data-tool-crescendo-beats={toolCrescendo.beats}
@@ -876,6 +908,7 @@ const GameLeftToolbar = memo(function GameLeftToolbar({
                         aria-label={`Shuffle hidden tiles. Power payoff: ${run.shuffleCharges > 0 ? 'Combo reroll' : DEPLETED_POWER_PAYOFF_LABEL}. Impact cue: ${shuffleImpactCue}. Charges: ${run.shuffleCharges}.`}
                         aria-pressed={false}
                         className={`${styles.iconAction} ${styles.iconActionWithBadge}`}
+                        data-testid="game-power-shuffle"
                         disabled={shuffleDisabled}
                         onClick={() => {
                             if (shuffleDisabled) {
@@ -1226,6 +1259,7 @@ const GameLeftToolbar = memo(function GameLeftToolbar({
                     aria-label="Resolve options"
                     aria-orientation="horizontal"
                     className={styles.actionDockGroup}
+                    data-dock-group="resolve"
                     onKeyDown={handleHorizontalToolbarKeyDown}
                     ref={resolveToolbarRef}
                     role="toolbar"

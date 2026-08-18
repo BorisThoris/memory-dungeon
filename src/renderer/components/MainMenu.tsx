@@ -25,6 +25,61 @@ import MainMenuBackground from './MainMenuBackground';
 import { useAppStore } from '../store/useAppStore';
 import styles from './MainMenu.module.css';
 
+interface MenuActionConfig {
+    label: string;
+    onClick: () => void;
+    tone?: 'default' | 'play' | 'showcase';
+    variant: 'ghost' | 'primary' | 'secondary';
+}
+
+interface MenuActionButtonProps {
+    action: MenuActionConfig;
+    onPress: () => void;
+    size: 'lg' | 'md' | 'sm';
+}
+
+const MenuActionButton = ({ action, onPress, size }: MenuActionButtonProps) => {
+    const toneClassName =
+        action.tone === 'play'
+            ? styles.ctaButtonPlay
+            : action.tone === 'showcase'
+              ? styles.ctaButtonShowcase
+              : '';
+
+    return (
+        <UiButton
+            aria-label={action.label}
+            className={`${styles.ctaButton} ${toneClassName}`.trim()}
+            fullWidth
+            size={size}
+            variant={action.variant}
+            onClick={() => {
+                onPress();
+                action.onClick();
+            }}
+        >
+            <span className={styles.ctaContent}>
+                <span className={styles.ctaTitle}>{action.label}</span>
+            </span>
+        </UiButton>
+    );
+};
+
+interface MenuNoticeStripProps {
+    message: string;
+    onDismiss: () => void;
+    role: 'alert' | 'status';
+}
+
+const MenuNoticeStrip = ({ message, onDismiss, role }: MenuNoticeStripProps) => (
+    <div className={styles.steamBridgeNotice} role={role}>
+        <span>{message}</span>
+        <button type="button" className={styles.steamBridgeNoticeDismiss} onClick={onDismiss}>
+            Dismiss
+        </button>
+    </div>
+);
+
 interface MainMenuProps {
     saveData: SaveData;
     reduceMotion: boolean;
@@ -79,6 +134,7 @@ const MainMenu = ({
     const touchCompactLayout = isPhoneViewport || isNarrowShortLandscapeForMenuStack(width, height);
     const shortDesktopShell = !touchCompactLayout && width >= 1024 && height <= 760;
     const ultraShortDesktopShell = shortDesktopShell && height <= 700;
+    const denseSecondaryActionGrid = touchCompactLayout;
     const fitShellPadding = getHubShellFitPadding(width, height, 'menu');
     const { fitZoom: rawFitZoom } = useFitShellZoom({
         enabled: true,
@@ -91,31 +147,58 @@ const MainMenu = ({
     const hubButtonSize = touchCompactLayout || isShortLandscapeShell || ultraCompactPhone ? 'md' : 'sm';
     const playButtonSize = touchCompactLayout || isShortLandscapeShell || ultraCompactPhone ? 'lg' : 'md';
     const helpCenterRows = getFirstRunHelpCenterRows(saveData);
-    const secondaryActions = [
+    const visibleHelpCenterRows = touchCompactLayout ? helpCenterRows.slice(0, 3) : helpCenterRows;
+    const balanceTouchHeroColumn =
+        touchCompactLayout &&
+        !showHowToPlay &&
+        !achievementBridgeNotice &&
+        !persistenceWriteNotice;
+    const primaryActions: MenuActionConfig[] = [
+        {
+            label: 'Play',
+            onClick: onPlay,
+            tone: 'play',
+            variant: 'primary'
+        },
+        {
+            label: 'Dungeon Showcase',
+            onClick: onStartDungeonShowcase,
+            tone: 'showcase',
+            variant: 'secondary'
+        }
+    ];
+    const secondaryActions: MenuActionConfig[] = [
         {
             label: 'Collection',
             onClick: onOpenCollection,
-            variant: 'secondary' as const
+            variant: 'secondary'
         },
         {
             label: 'Profile',
             onClick: onOpenProfile,
-            variant: 'secondary' as const
+            variant: 'secondary'
         },
         {
             label: 'Inventory',
             onClick: onOpenInventory,
-            variant: 'ghost' as const
+            variant: 'ghost'
         },
         {
             label: 'Codex',
             onClick: onOpenCodex,
-            variant: 'ghost' as const
+            variant: 'ghost'
         },
         {
             label: 'Settings',
             onClick: onOpenSettings,
-            variant: 'secondary' as const
+            variant: 'secondary'
+        },
+        {
+            label: 'Exit Game',
+            onClick: () => {
+                void desktopClient.quitApp();
+            },
+            variant: 'ghost'
         }
     ];
     const uiGain = uiSfxGainFromSettings(saveData.settings.masterVolume, saveData.settings.sfxVolume);
@@ -133,20 +216,28 @@ const MainMenu = ({
     };
 
     const howToPanel = showHowToPlay ? (
-        <Panel className={styles.supportPanel} padding="md" variant="accent">
+        <Panel className={styles.supportPanel} data-testid="main-menu-how-to-panel" padding="md" variant="accent">
             <details className={styles.helpDisclosure}>
                 <summary>
                     <span>
                         <Eyebrow tone="tight">How To Play</Eyebrow>
                         <strong className={styles.supportHeading}>Read, match, and protect the streak</strong>
                     </span>
-                    <span className={styles.helpSummaryAction}>Open</span>
+                    <span className={styles.helpSummaryAction}>
+                        <span className={styles.helpSummaryOpenLabel}>Open</span>
+                        <span className={styles.helpSummaryCloseLabel}>Close</span>
+                    </span>
                 </summary>
-            <p className={styles.emptyState}>Skippable help center - guided prompts continue inside the first run.</p>
+            <p className={styles.emptyState}>
+                {touchCompactLayout
+                    ? 'Quick prompts continue inside Play.'
+                    : 'Skippable help center - guided prompts continue inside the first run.'}
+            </p>
             <div className={styles.howToGrid} data-testid="main-menu-help-center">
-                {helpCenterRows.map((row) => (
+                {visibleHelpCenterRows.map((row) => (
                     <p key={row.id}>
-                        <strong>{row.title}:</strong> {row.body}
+                        <strong>{row.title.replace(/^\d+\.\s*/, '')}</strong>
+                        <span>{touchCompactLayout ? row.action : row.body}</span>
                     </p>
                 ))}
             </div>
@@ -186,32 +277,56 @@ const MainMenu = ({
             <div className={styles.scrim} />
 
             <div className={styles.fitViewport}>
-                <div ref={menuFitMeasureRef} className={styles.fitMeasureOuter}>
-                    <div className={styles.content} style={{ zoom: shellFitZoom }}>
+                <div
+                    ref={menuFitMeasureRef}
+                    className={[
+                        styles.fitMeasureOuter,
+                        balanceTouchHeroColumn && styles.touchCompactMeasureBalanced
+                    ]
+                        .filter(Boolean)
+                        .join(' ')}
+                >
+                    <div
+                        className={[
+                            styles.content,
+                            balanceTouchHeroColumn && styles.touchCompactContentBalanced
+                        ]
+                            .filter(Boolean)
+                            .join(' ')}
+                        style={{ zoom: shellFitZoom }}
+                    >
                         {persistenceWriteNotice ? (
-                            <div className={styles.steamBridgeNotice} role="alert">
-                                <span>{persistenceWriteNotice}</span>
-                                <button
-                                    type="button"
-                                    className={styles.steamBridgeNoticeDismiss}
-                                    onClick={clearPersistenceWriteNotice}
-                                >
-                                    Dismiss
-                                </button>
-                            </div>
+                            <MenuNoticeStrip
+                                message={persistenceWriteNotice}
+                                onDismiss={clearPersistenceWriteNotice}
+                                role="alert"
+                            />
                         ) : null}
 
                         {achievementBridgeNotice ? (
-                            <div className={styles.steamBridgeNotice} role="status">
-                                <span>{achievementBridgeNotice}</span>
-                                <button type="button" className={styles.steamBridgeNoticeDismiss} onClick={clearAchievementBridgeNotice}>
-                                    Dismiss
-                                </button>
-                            </div>
+                            <MenuNoticeStrip
+                                message={achievementBridgeNotice}
+                                onDismiss={clearAchievementBridgeNotice}
+                                role="status"
+                            />
                         ) : null}
 
-                        <div className={styles.layout}>
-                            <main className={styles.heroColumn}>
+                        <div
+                            className={[
+                                styles.layout,
+                                balanceTouchHeroColumn && styles.touchCompactLayoutBalanced
+                            ]
+                                .filter(Boolean)
+                                .join(' ')}
+                        >
+                            <main
+                                className={[
+                                    styles.heroColumn,
+                                    balanceTouchHeroColumn && styles.touchCompactHeroBalanced
+                                ]
+                                    .filter(Boolean)
+                                    .join(' ')}
+                            >
                                 <div className={styles.brandLockup}>
                                     <img alt="" className={styles.brandCrest} src={UI_ART.brandCrest} />
                                     <Eyebrow className={styles.heroEyebrow} tone="menu">
@@ -232,71 +347,28 @@ const MainMenu = ({
                                                 <img alt="" className={styles.ctaBandFlourish} src={UI_ART.dividerOrnament} />
                                             </div>
                                             <div className={styles.actionStack} role="group" aria-label="Primary actions">
-                                                <UiButton
-                                                    aria-label="Play"
-                                                    className={`${styles.ctaButton} ${styles.ctaButtonPlay}`}
-                                                    fullWidth
-                                                    size={playButtonSize}
-                                                    variant="primary"
-                                                    onClick={() => {
-                                                        playMenuOpen();
-                                                        onPlay();
-                                                    }}
+                                                {primaryActions.map((action) => (
+                                                    <MenuActionButton
+                                                        action={action}
+                                                        key={action.label}
+                                                        onPress={playMenuOpen}
+                                                        size={playButtonSize}
+                                                    />
+                                                ))}
+                                                <div
+                                                    className={styles.secondaryActionGrid}
+                                                    data-layout={denseSecondaryActionGrid ? 'dense-grid' : 'stack'}
+                                                    data-testid="main-menu-secondary-actions"
                                                 >
-                                                    <span className={styles.ctaContent}>
-                                                        <span className={styles.ctaTitle}>Play</span>
-                                                    </span>
-                                                </UiButton>
-                                                <UiButton
-                                                    aria-label="Dungeon Showcase"
-                                                    className={`${styles.ctaButton} ${styles.ctaButtonShowcase}`}
-                                                    fullWidth
-                                                    size={playButtonSize}
-                                                    variant="secondary"
-                                                    onClick={() => {
-                                                        playMenuOpen();
-                                                        onStartDungeonShowcase();
-                                                    }}
-                                                >
-                                                    <span className={styles.ctaContent}>
-                                                        <span className={styles.ctaTitle}>Dungeon Showcase</span>
-                                                    </span>
-                                                </UiButton>
-                                                <div className={styles.secondaryActionGrid} data-testid="main-menu-secondary-actions">
                                                     {secondaryActions.map((action) => (
-                                                        <UiButton
-                                                            aria-label={action.label}
-                                                            className={styles.ctaButton}
-                                                            fullWidth
+                                                        <MenuActionButton
+                                                            action={action}
                                                             key={action.label}
+                                                            onPress={action.label === 'Exit Game' ? playUiBack : playMenuOpen}
                                                             size={hubButtonSize}
-                                                            variant={action.variant}
-                                                            onClick={() => {
-                                                                playMenuOpen();
-                                                                action.onClick();
-                                                            }}
-                                                        >
-                                                            <span className={styles.ctaContent}>
-                                                                <span className={styles.ctaTitle}>{action.label}</span>
-                                                            </span>
-                                                        </UiButton>
+                                                        />
                                                     ))}
                                                 </div>
-                                                <UiButton
-                                                    aria-label="Exit Game"
-                                                    className={styles.ctaButton}
-                                                    fullWidth
-                                                    size={hubButtonSize}
-                                                    variant="ghost"
-                                                    onClick={() => {
-                                                        playUiBack();
-                                                        void desktopClient.quitApp();
-                                                    }}
-                                                >
-                                                    <span className={styles.ctaContent}>
-                                                        <span className={styles.ctaTitle}>Exit Game</span>
-                                                    </span>
-                                                </UiButton>
                                             </div>
                                         </Panel>
                                     </MetaFrame>

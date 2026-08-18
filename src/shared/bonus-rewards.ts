@@ -561,7 +561,7 @@ const REWARD_PERK_MOMENTS: Record<RewardPerkId, string> = {
 };
 
 const REWARD_PERK_NEXT_CUES: Record<RewardPerkId, string> = {
-    free_first_swap_per_floor: 'Use Swap or row shuffle to connect trait routes.',
+    free_first_swap_per_floor: 'Use Swap or row shuffle to link traits.',
     echo_conduit_double: 'Match Echo touching Conduit before cashing adjacent Sealed.',
     trait_streak_toolkit: 'Keep the clean chain alive; cash a trait match at x3+ for a tool.',
     cursed_opener_greed: 'Open the floor with Cursed when the board is already readable.',

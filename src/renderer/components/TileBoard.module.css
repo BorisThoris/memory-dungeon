@@ -1046,9 +1046,9 @@
     display: inline-flex;
     align-items: center;
     gap: 0.28rem;
-    max-width: min(20rem, calc(100% - 1rem));
+    max-width: min(15rem, calc(100% - 1rem));
     min-height: 1.64rem;
-    padding: 0.24rem 0.42rem;
+    padding: 0.22rem 0.34rem;
     border: 1px solid color-mix(in srgb, var(--theme-cyan-bright) 44%, var(--theme-gold-bright) 20%);
     border-radius: 0.42rem;
     background:
@@ -1063,12 +1063,50 @@
 }
 
 .chainOpportunityChip:is(:hover, :focus-within) {
-    max-width: min(30rem, calc(100% - 1rem));
+    max-width: min(24rem, calc(100% - 1rem));
 }
 
 @media (hover: hover) and (pointer: fine) {
     .chainOpportunityChip {
         pointer-events: auto;
+    }
+
+    .chainOpportunityChip:not(:hover, :focus-within) {
+        gap: 0.14rem;
+        max-width: min(12.5rem, 16vw);
+        min-height: 0;
+        padding: 0;
+        border-color: transparent;
+        background: transparent;
+        box-shadow: none;
+    }
+
+    .chainOpportunityChip:not(:hover, :focus-within) > :not(.chainOpportunityLines) {
+        display: none !important;
+    }
+
+    .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityLines {
+        display: inline-flex;
+        align-items: center;
+        max-width: min(12.5rem, 16vw);
+        padding: 0.08rem 0.18rem;
+        overflow: hidden;
+        border: 1px solid color-mix(in srgb, currentColor 22%, transparent);
+        border-radius: 999px;
+        background: color-mix(in srgb, var(--theme-void) 44%, transparent);
+        box-shadow:
+            inset 0 1px 0 color-mix(in srgb, white 6%, transparent),
+            0 0 0.28rem color-mix(in srgb, currentColor 10%, transparent);
+        font-size: 0.54rem;
+        font-weight: 900;
+        line-height: 1;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityLinesMeter,
+    .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityLinesBeatPips {
+        display: none;
     }
 
     .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityRecipe,
@@ -1124,6 +1162,30 @@
         max-width: min(11rem, 30vi);
         min-height: 0;
         padding-block: 0.11rem;
+    }
+
+    .frame .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityRewardLadder,
+    .frame .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityTargetPlan,
+    .frame .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityLines {
+        display: none;
+    }
+
+    .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityArcadeCallout,
+    .frame[data-chain-opportunity-next-action='cashout'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityRewardLadder,
+    .frame[data-chain-opportunity-next-action='cashout'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityMeter,
+    .frame[data-chain-opportunity-next-action='cashout'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityTargetPlan,
+    .frame[data-chain-opportunity-next-action='cashout'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityLines,
+    .frame[data-chain-opportunity-next-action='follow-up'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityRewardLadder,
+    .frame[data-chain-opportunity-next-action='follow-up'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityMeter,
+    .frame[data-chain-opportunity-next-action='follow-up'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityTargetPlan,
+    .frame[data-chain-opportunity-next-action='follow-up'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityLines,
+    .frame[data-chain-opportunity-next-action='match-route'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityRewardLadder,
+    .frame[data-chain-opportunity-next-action='match-route'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityMeter,
+    .frame[data-chain-opportunity-next-action='match-route'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityTargetPlan,
+    .frame[data-chain-opportunity-next-action='match-route'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityLines,
+    .frame[data-chain-opportunity-next-action='prime-route'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityExamples,
+    .frame[data-chain-opportunity-next-action='prime-route'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityLines {
+        display: none;
     }
 }
 
@@ -10783,6 +10845,49 @@
     box-shadow: 0 0 0.24rem color-mix(in srgb, var(--theme-cyan-bright) 18%, transparent);
 }
 
+.boardStatusTopLeftDock,
+.boardStatusTopRightDock,
+.boardStatusBottomRightDock {
+    position: absolute;
+    z-index: 5;
+    display: flex;
+    flex-direction: column;
+    gap: 0.18rem;
+    pointer-events: none;
+}
+
+.boardStatusTopLeftDock {
+    top: calc(var(--ui-space-xs) + 4.6rem);
+    left: var(--ui-space-xs);
+    align-items: flex-start;
+    max-width: min(18rem, calc(100% - 1rem));
+}
+
+.boardStatusTopRightDock {
+    top: var(--ui-space-xs);
+    right: var(--ui-space-xs);
+    align-items: flex-end;
+    max-width: min(13rem, calc(100% - 1rem));
+}
+
+.boardStatusBottomRightDock {
+    right: var(--ui-space-xs);
+    bottom: var(--ui-space-xs);
+    align-items: flex-end;
+    max-width: min(16rem, calc(100% - 1rem));
+}
+
+.boardStatusTopLeftDock > .traitModeCue,
+.boardStatusTopRightDock > .activePowerBoardChip,
+.boardStatusBottomRightDock > .pickupOpportunityChip {
+    position: static;
+    top: auto;
+    right: auto;
+    bottom: auto;
+    left: auto;
+    max-width: 100%;
+}
+
 .activePowerBoardChip {
     position: absolute;
     top: var(--ui-space-xs);
@@ -11809,14 +11914,14 @@
 .opportunityCompass {
     position: absolute;
     left: 50%;
-    bottom: clamp(3.35rem, 8vmin, 4.35rem);
+    bottom: clamp(3.1rem, 7.2vmin, 3.9rem);
     z-index: 5;
     display: flex;
     flex-wrap: wrap;
     align-items: stretch;
     justify-content: center;
-    gap: 0.24rem;
-    width: min(34rem, calc(100% - 1.3rem));
+    gap: 0.18rem;
+    width: min(24rem, calc(100% - 1.3rem));
     transform: translateX(-50%);
     pointer-events: none;
 }
@@ -11884,7 +11989,7 @@
     gap: 0.12rem;
     min-width: 0;
     margin-right: 0.08rem;
-    padding: 0.16rem 0.36rem;
+    padding: 0.14rem 0.3rem;
     border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 44%, transparent);
     border-radius: 0.34rem;
     background:
@@ -12342,10 +12447,10 @@
 
 @media (hover: hover) and (pointer: fine) {
     .opportunityCompass {
-        left: calc(var(--gameplay-html-edge-pad, 0.75rem) + min(18rem, 23vw) + 0.75rem);
-        bottom: max(0.82rem, env(safe-area-inset-bottom, 0px));
+        left: calc(var(--gameplay-html-edge-pad, 0.75rem) + var(--gameplay-left-rail-width, min(13.25rem, 16vw)) + 0.62rem);
+        bottom: max(0.72rem, env(safe-area-inset-bottom, 0px));
         justify-content: flex-start;
-        width: min(17rem, 24vw);
+        width: var(--gameplay-opportunity-width, min(14.5rem, 18vw));
         transform: none;
         pointer-events: auto;
     }
@@ -12356,19 +12461,30 @@
         display: none;
     }
 
-    .opportunityCompass[data-opportunity-compass-hot='cashout']:not(:hover, :focus-within) .opportunityPayoffStack,
-    .opportunityCompass[data-opportunity-compass-hot='ready']:not(:hover, :focus-within) .opportunityPayoffStack,
-    .opportunityCompass[data-opportunity-compass-surge='true']:not(:hover, :focus-within) .opportunityPayoffStack {
-        display: grid;
+    .opportunityCompass:not(:hover, :focus-within) .opportunityCompassSummary {
+        margin-right: 0;
+        padding: 0.12rem 0.22rem;
+    }
+
+    .opportunityCompass:not(:hover, :focus-within) .opportunityCompassSummary small {
+        display: none;
     }
 
     .opportunityCompass:not(:hover, :focus-within) .opportunityCompassRow {
         flex: 0 1 auto;
-        max-width: min(17rem, 24vw);
+        max-width: var(--gameplay-opportunity-width, min(14.5rem, 18vw));
+        min-height: 1.92rem;
+        padding: 0.18rem 0.24rem;
     }
 
+    .opportunityCompass:not(:hover, :focus-within) .opportunityCompassRow b,
     .opportunityCompass:not(:hover, :focus-within) .opportunityCompassRow em {
-        max-width: min(10rem, 14vw);
+        display: none;
+    }
+
+    .opportunityCompass:not(:hover, :focus-within) .opportunityCompassRow strong {
+        font-size: clamp(0.62rem, 1.1vmin, 0.72rem);
+        -webkit-line-clamp: 1;
     }
 
     .opportunityCompass[data-opportunity-compass-surge='true'] {
@@ -13853,12 +13969,12 @@
 .opportunityCompassRow {
     position: relative;
     display: grid;
-    grid-template-rows: auto auto auto auto 1fr;
-    gap: 0.06rem;
+    grid-template-rows: auto auto 1fr;
+    gap: 0.04rem;
     flex: 1 1 0;
     min-width: 0;
-    min-height: 2.85rem;
-    padding: 0.34rem 0.46rem;
+    min-height: 2.18rem;
+    padding: 0.24rem 0.34rem;
     overflow: hidden;
     border: 1px solid color-mix(in srgb, var(--theme-border-strong) 46%, transparent);
     border-radius: 0.44rem;
@@ -13885,6 +14001,20 @@
     transform: scaleX(var(--opportunity-compass-row-meter-fill, 0));
     transition: transform 140ms ease-out;
     pointer-events: none;
+}
+
+.opportunityCompassRow small,
+.opportunityCompassRow em {
+    display: none;
+}
+
+.opportunityCompassRow strong {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-height: 1.12;
+    white-space: normal;
 }
 
 .opportunityCompassRow[data-opportunity-priority='best'] {
@@ -15908,14 +16038,287 @@
         display: none;
     }
 
+    .frame[data-mobile-camera-mode='true'] .chainOpportunityChip {
+        top: max(4.65rem, env(safe-area-inset-top, 0px));
+        gap: 0.18rem;
+        max-width: min(15.4rem, calc(100% - 0.7rem));
+        min-height: 0;
+        padding: 0.18rem 0.26rem;
+        border-radius: 0.38rem;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .chainOpportunityChip > .chainOpportunityPriority,
+    .frame[data-mobile-camera-mode='true'] .chainOpportunityChip > .chainOpportunityRoleSummary,
+    .frame[data-mobile-camera-mode='true'] .chainOpportunityChip > .chainOpportunityPrimaryTraitLane,
+    .frame[data-mobile-camera-mode='true'] .chainOpportunityChip > .chainOpportunityNextAction,
+    .frame[data-mobile-camera-mode='true'] .chainOpportunityChip > .chainOpportunityPrimaryShot,
+    .frame[data-mobile-camera-mode='true'] .chainOpportunityChip > .chainOpportunityArcadeCallout,
+    .frame[data-mobile-camera-mode='true'] .chainOpportunityChip > .chainOpportunityRecipe,
+    .frame[data-mobile-camera-mode='true'] .chainOpportunityChip > .chainOpportunityTraitLaneMap,
+    .frame[data-mobile-camera-mode='true'] .chainOpportunityChip > .chainOpportunityMarkerKey,
+    .frame[data-mobile-camera-mode='true'] .chainOpportunityChip > .chainOpportunityActionPriority,
+    .frame[data-mobile-camera-mode='true'] .chainOpportunityChip > .chainOpportunityShotMap,
+    .frame[data-mobile-camera-mode='true'] .chainOpportunityChip > .chainOpportunityBeatMap,
+    .frame[data-mobile-camera-mode='true'] .chainOpportunityChip > .chainOpportunityCadenceMap,
+    .frame[data-mobile-camera-mode='true'] .chainOpportunityChip > .chainOpportunityTraitLaneBeatMap,
+    .frame[data-mobile-camera-mode='true'] .chainOpportunityChip > .chainOpportunityMeter,
+    .frame[data-mobile-camera-mode='true'] .chainOpportunityChip > .chainOpportunityTarget,
+    .frame[data-mobile-camera-mode='true'] .chainOpportunityChip > .chainOpportunityMilestone,
+    .frame[data-mobile-camera-mode='true'] .chainOpportunityChip > .chainOpportunityTargetPlan,
+    .frame[data-mobile-camera-mode='true'] .chainOpportunityChip > .chainOpportunitySequenceCue,
+    .frame[data-mobile-camera-mode='true'] .chainOpportunityChip > .chainOpportunityFollowup,
+    .frame[data-mobile-camera-mode='true'] .chainOpportunityChip > .chainOpportunityArmedPerk,
+    .frame[data-mobile-camera-mode='true'] .chainOpportunityChip > .chainOpportunityRewardUrgency,
+    .frame[data-mobile-camera-mode='true'] .chainOpportunityChip > .chainOpportunityRewardCue,
+    .frame[data-mobile-camera-mode='true'] .chainOpportunityChip > .chainOpportunityPayoffBurst,
+    .frame[data-mobile-camera-mode='true'] .chainOpportunityChip > .chainOpportunityHotBand,
+    .frame[data-mobile-camera-mode='true'] .chainOpportunityChip > .chainOpportunitySurgeBand,
+    .frame[data-mobile-camera-mode='true'] .chainOpportunityChip > .chainOpportunityMomentum {
+        display: none;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .chainOpportunityEyebrowBeatPips,
+    .frame[data-mobile-camera-mode='true'] .chainOpportunityCueBeatPips,
+    .frame[data-mobile-camera-mode='true'] .chainOpportunityBeat strong,
+    .frame[data-mobile-camera-mode='true'] .chainOpportunityLinesBeatPips,
+    .frame[data-mobile-camera-mode='true'] .chainOpportunityExamplesBeatPips {
+        display: none;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .chainOpportunityBeat {
+        min-width: 0;
+        padding: 0.2rem 0.26rem;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .chainOpportunityBeat em {
+        display: none;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .chainOpportunityLines,
+    .frame[data-mobile-camera-mode='true'] .chainOpportunityExamples {
+        max-width: 100%;
+        min-width: 0;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .traitPreviewChip {
+        gap: 0.12rem;
+        max-width: min(15.6rem, calc(100% - 0.7rem));
+        padding: 0.28rem 0.34rem;
+        border-radius: 0.38rem;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .traitPreviewSummary {
+        gap: 0.08rem 0.18rem;
+        padding: 0.06rem 0.16rem 0.08rem;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .traitPreviewChip > .traitPreviewSignal,
+    .frame[data-mobile-camera-mode='true'] .traitPreviewChip > .traitPreviewSignalMeter,
+    .frame[data-mobile-camera-mode='true'] .traitPreviewChip > .traitPreviewBeatPips,
+    .frame[data-mobile-camera-mode='true'] .traitPreviewChip > .traitPreviewCashout,
+    .frame[data-mobile-camera-mode='true'] .traitPreviewChip > .traitPreviewLine[data-preview-line-focus='support'] {
+        display: none;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .traitPreviewSummaryBeatPips,
+    .frame[data-mobile-camera-mode='true'] .traitPreviewActionBeatPips,
+    .frame[data-mobile-camera-mode='true'] .traitPreviewLineBeatPips {
+        display: none;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .traitPreviewAction {
+        padding: 0.1rem 0.28rem;
+        font-size: 0.6rem;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .traitPreviewLine {
+        font-size: 0.62rem;
+        line-height: 1.14;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .boardStatusTopLeftDock {
+        top: calc(var(--ui-space-xs) + 4.15rem);
+        gap: 0.12rem;
+        max-width: min(12.8rem, calc(100% - 0.7rem));
+    }
+
+    .frame[data-mobile-camera-mode='true'][data-has-dungeon-status-panel='true'] .boardStatusTopLeftDock {
+        top: calc(var(--ui-space-xs) + 8.75rem);
+    }
+
+    .frame[data-mobile-camera-mode='true'][data-chain-opportunity-next-action]:not(
+            [data-chain-opportunity-next-action='none']
+        )
+        .boardStatusTopLeftDock {
+        display: none;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .boardStatusTopRightDock {
+        gap: 0.12rem;
+        max-width: min(10.8rem, calc(100% - 0.7rem));
+    }
+
+    .frame[data-mobile-camera-mode='true'] .boardStatusBottomRightDock {
+        right: 0.34rem;
+        bottom: calc(clamp(0.8rem, 2.6vmin, 1.15rem) + 3.55rem);
+        gap: 0.12rem;
+        max-width: min(11.8rem, calc(100% - 0.7rem));
+    }
+
+    .frame[data-mobile-camera-mode='true'][data-opportunity-best-tone='pickup'] .boardStatusBottomRightDock {
+        display: none;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .traitModeCue {
+        gap: 0.04rem;
+        max-width: min(12.8rem, calc(100% - 0.7rem));
+        padding: 0.24rem 0.32rem;
+        border-radius: 0.36rem;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .traitModeCue span {
+        font-size: 0.46rem;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .traitModeCue strong {
+        font-size: 0.64rem;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .traitModeCue small {
+        font-size: 0.52rem;
+        -webkit-line-clamp: 1;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .traitModeCueBeatPips {
+        display: none;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .activePowerBoardChip {
+        gap: 0.06rem;
+        max-width: min(10.8rem, calc(100% - 0.7rem));
+        min-height: 0;
+        padding: 0.24rem 0.32rem;
+        border-radius: 0.36rem;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .activePowerBoardChip span {
+        font-size: 0.48rem;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .activePowerBoardChip strong {
+        font-size: 0.62rem;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .activePowerBoardChip small,
+    .frame[data-mobile-camera-mode='true'] .activePowerBoardChipBeatPips,
+    .frame[data-mobile-camera-mode='true'] .activePowerBoardStepBeatPips {
+        display: none;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .activePowerBoardChipMeter {
+        height: 0.18rem;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .pickupOpportunityChip {
+        gap: 0.06rem;
+        max-width: min(11.8rem, calc(100% - 0.7rem));
+        padding: 0.26rem 0.34rem;
+        border-radius: 0.36rem;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .pickupOpportunityChip span {
+        font-size: 0.46rem;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .pickupOpportunityChip strong,
+    .frame[data-mobile-camera-mode='true'] .pickupOpportunityChip b {
+        font-size: 0.6rem;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .pickupOpportunityChip em,
+    .frame[data-mobile-camera-mode='true'] .pickupOpportunityChip i,
+    .frame[data-mobile-camera-mode='true'] .pickupOpportunityChipBeatPips,
+    .frame[data-mobile-camera-mode='true'] .pickupOpportunitySequence {
+        display: none;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .pickupOpportunityMeter {
+        height: 0.18rem;
+    }
+
     .opportunityCompass {
         bottom: clamp(2.8rem, 7vmin, 3.35rem);
         gap: 0.18rem;
         width: min(24rem, calc(100% - 0.8rem));
     }
 
+    .frame[data-mobile-camera-mode='true'] .opportunityCompass {
+        bottom: max(4.15rem, env(safe-area-inset-bottom, 0px));
+        gap: 0.1rem;
+        right: 0.34rem;
+        left: auto;
+        width: min(17rem, calc(100% - 0.7rem));
+        transform: none;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassSummary {
+        margin-right: 0;
+        padding: 0.08rem 0.18rem;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassSummary small,
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassMeter,
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassSummaryBeatPips,
+    .frame[data-mobile-camera-mode='true'] .opportunityPayoffStack u,
+    .frame[data-mobile-camera-mode='true'] .opportunityPayoffStack b,
+    .frame[data-mobile-camera-mode='true'] .opportunityPayoffStack .opportunityPayoffCrescendo em,
+    .frame[data-mobile-camera-mode='true'] .opportunityPayoffStackBeatPips,
+    .frame[data-mobile-camera-mode='true'] .opportunityPayoffStack [data-payoff-stack-sequence-step='then'],
+    .frame[data-mobile-camera-mode='true'] .opportunityPayoffStack [data-payoff-stack-sequence-step='keep'],
+    .frame[data-mobile-camera-mode='true'] .opportunityLaneMapSummaryBeatPips,
+    .frame[data-mobile-camera-mode='true'] .opportunityPrimaryLane small,
+    .frame[data-mobile-camera-mode='true'] .opportunityPrimaryLane em,
+    .frame[data-mobile-camera-mode='true'] .opportunityPrimaryLaneBeatPips,
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassRow:not([data-opportunity-priority='best']),
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassRow small,
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassRow em,
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassBeatPips {
+        display: none;
+    }
+
     .opportunityPayoffStack {
         grid-template-columns: auto auto minmax(0, 1fr);
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityPayoffStack {
+        gap: 0.12rem;
+        padding: 0.16rem 0.24rem;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityPayoffStack small {
+        font-size: 0.48rem;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityPayoffStack span {
+        padding: 0.06rem 0.22rem;
+        font-size: 0.5rem;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityPayoffStack strong {
+        font-size: 0.6rem;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityPayoffStack .opportunityPayoffCrescendo {
+        gap: 0.16rem;
+        padding: 0.08rem 0.24rem;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityPayoffStack .opportunityPayoffCrescendo small {
+        font-size: 0.44rem;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityPayoffStack .opportunityPayoffCrescendo strong {
+        gap: 0.08rem;
     }
 
     .opportunityPayoffStack u,
@@ -15923,9 +16326,30 @@
         display: none;
     }
 
+    .frame[data-mobile-camera-mode='true'] .opportunityLaneMap {
+        gap: 0.1rem;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityLaneMap > span:not(.opportunityLaneMapSummary):not(.opportunityPrimaryLane) {
+        display: none;
+    }
+
     .opportunityLaneMap > span {
         max-width: 7.2rem;
         padding-inline: 0.28rem;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityLaneMapSummary,
+    .frame[data-mobile-camera-mode='true'] .opportunityLaneMap > .opportunityPrimaryLane {
+        padding: 0.12rem 0.18rem;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityLaneMapSummary b,
+    .frame[data-mobile-camera-mode='true'] .opportunityLaneMap > .opportunityPrimaryLane b,
+    .frame[data-mobile-camera-mode='true'] .opportunityLaneMap > .opportunityPrimaryLane strong,
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassRow b,
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassRow strong {
+        font-size: 0.5rem;
     }
 
     .opportunityLaneMap em {
@@ -15935,6 +16359,31 @@
     .opportunityCompassRow {
         min-height: 2.45rem;
         padding: 0.28rem 0.36rem;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassRow[data-opportunity-priority='best'] {
+        flex: 1 1 0;
+        grid-template-columns: auto minmax(0, 1fr);
+        grid-template-rows: auto auto auto;
+        max-width: none;
+        min-height: 0;
+        padding: 0.14rem 0.2rem;
+        transform: none;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassPriority,
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassImpact {
+        padding: 0.07rem 0.22rem;
+        font-size: 0.46rem;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassImpact {
+        max-width: none;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassRow[data-opportunity-priority='best'] b,
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassRow[data-opportunity-priority='best'] strong {
+        grid-column: 1 / -1;
     }
 
     .opportunityCompassRow em {
@@ -15978,6 +16427,21 @@
 
     .stageMobileCamera {
         inset: 0;
+    }
+}
+
+/* UI-CLEANUP-006: keep board opportunity hints above the compact landscape action tray. */
+@media (max-height: 520px) and (orientation: landscape) {
+    .frame[data-mobile-camera-mode='true'] .opportunityCompass {
+        bottom: calc(env(safe-area-inset-bottom, 0px) + 5.18rem);
+    }
+
+    .frame[data-mobile-camera-mode='true'] .boardStatusBottomRightDock {
+        bottom: calc(env(safe-area-inset-bottom, 0px) + 5.08rem);
+    }
+
+    .frame[data-mobile-camera-mode='true'] .motionChip {
+        bottom: calc(env(safe-area-inset-bottom, 0px) + 5.08rem);
     }
 }
 
@@ -16157,5 +16621,1143 @@
         filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.28));
         transform: translate3d(var(--stack-x), var(--stack-y), var(--stack-z))
             rotateX(44deg) rotateY(-24deg) rotateZ(calc(-5deg + var(--deck-i, 0) * 0.65deg));
+    }
+}
+
+/* UI-CLEANUP-001: phone board gets one concise opportunity callout above the tool dock. */
+.frame[data-mobile-camera-mode='true'] .opportunityCompass {
+    right: max(0.48rem, env(safe-area-inset-right, 0px));
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 3.55rem);
+    left: max(0.48rem, env(safe-area-inset-left, 0px));
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+    width: auto;
+    max-width: none;
+    transform: none;
+    pointer-events: none;
+}
+
+.frame[data-mobile-camera-mode='true'] .opportunityCompassSummary,
+.frame[data-mobile-camera-mode='true'] .opportunityPayoffStack,
+.frame[data-mobile-camera-mode='true'] .opportunityLaneMap,
+.frame[data-mobile-camera-mode='true'] .opportunityCompassRow:not([data-opportunity-priority='best']) {
+    display: none;
+}
+
+.frame[data-mobile-camera-mode='true'] .opportunityCompassRow[data-opportunity-priority='best'] {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-rows: auto;
+    align-items: center;
+    gap: 0.2rem;
+    min-height: 2.18rem;
+    max-width: none;
+    padding: 0.28rem 0.42rem;
+    border-radius: var(--ui-radius-sm);
+    background: color-mix(in srgb, var(--theme-void) 82%, transparent);
+    box-shadow:
+        0 10px 24px color-mix(in srgb, var(--theme-shadow) 40%, transparent),
+        inset 0 1px 0 color-mix(in srgb, var(--theme-text) 6%, transparent);
+    backdrop-filter: blur(10px) saturate(1.06);
+}
+
+.frame[data-mobile-camera-mode='true'] .opportunityCompassPriority {
+    padding: 0.08rem 0.26rem;
+    font-size: 0.48rem;
+    line-height: 1;
+}
+
+.frame[data-mobile-camera-mode='true'] .opportunityCompassImpact {
+    justify-self: end;
+    max-width: 6.6rem;
+    padding: 0.08rem 0.28rem;
+    font-size: 0.5rem;
+    line-height: 1;
+}
+
+.frame[data-mobile-camera-mode='true'] .opportunityCompassRow[data-opportunity-priority='best'] b,
+.frame[data-mobile-camera-mode='true'] .opportunityCompassRow[data-opportunity-priority='best'] strong {
+    grid-column: auto;
+    min-width: 0;
+    overflow: hidden;
+    font-size: 0.58rem;
+    line-height: 1.06;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.frame[data-mobile-camera-mode='true'] .opportunityCompassRow[data-opportunity-priority='best'] b {
+    display: none;
+}
+
+.frame[data-mobile-camera-mode='true'] .opportunityCompassRow[data-opportunity-priority='best'] small,
+.frame[data-mobile-camera-mode='true'] .opportunityCompassRow[data-opportunity-priority='best'] em,
+.frame[data-mobile-camera-mode='true'] .opportunityCompassBeatPips {
+    display: none;
+}
+
+/* UI-CLEANUP-002: desktop opportunity hint stays off the playable card cluster. */
+.frame:not([data-mobile-camera-mode='true']) .opportunityCompass {
+    right: max(1rem, env(safe-area-inset-right, 0px));
+    bottom: max(1rem, env(safe-area-inset-bottom, 0px));
+    left: auto;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    width: min(18rem, 22vw);
+    max-width: 18rem;
+    transform: none;
+    pointer-events: none;
+}
+
+.frame:not([data-mobile-camera-mode='true']) .opportunityCompassSummary,
+.frame:not([data-mobile-camera-mode='true']) .opportunityPayoffStack,
+.frame:not([data-mobile-camera-mode='true']) .opportunityLaneMap,
+.frame:not([data-mobile-camera-mode='true']) .opportunityCompassRow:not([data-opportunity-priority='best']) {
+    display: none;
+}
+
+.frame:not([data-mobile-camera-mode='true']) .opportunityCompassRow[data-opportunity-priority='best'] {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.24rem;
+    min-height: 2.36rem;
+    padding: 0.32rem 0.5rem;
+    border-radius: var(--ui-radius-sm);
+    background: color-mix(in srgb, var(--theme-void) 78%, transparent);
+    box-shadow:
+        0 10px 26px color-mix(in srgb, var(--theme-shadow) 36%, transparent),
+        inset 0 1px 0 color-mix(in srgb, var(--theme-text) 6%, transparent);
+    backdrop-filter: blur(10px) saturate(1.06);
+}
+
+.frame:not([data-mobile-camera-mode='true']) .opportunityCompassRow[data-opportunity-priority='best'] b,
+.frame:not([data-mobile-camera-mode='true']) .opportunityCompassRow[data-opportunity-priority='best'] strong {
+    min-width: 0;
+    overflow: hidden;
+    font-size: 0.66rem;
+    line-height: 1.06;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.frame:not([data-mobile-camera-mode='true']) .opportunityCompassRow[data-opportunity-priority='best'] b {
+    display: none;
+}
+
+.frame:not([data-mobile-camera-mode='true']) .opportunityCompassImpact {
+    justify-self: end;
+    max-width: 7.5rem;
+    padding: 0.08rem 0.3rem;
+    font-size: 0.54rem;
+    line-height: 1;
+}
+
+.frame:not([data-mobile-camera-mode='true']) .opportunityCompassRow[data-opportunity-priority='best'] small,
+.frame:not([data-mobile-camera-mode='true']) .opportunityCompassRow[data-opportunity-priority='best'] em,
+.frame:not([data-mobile-camera-mode='true']) .opportunityCompassBeatPips {
+    display: none;
+}
+
+.frame:not([data-mobile-camera-mode='true']) .boardStatusTopLeftDock {
+    top: 5.05rem;
+    left: max(0.75rem, env(safe-area-inset-left, 0px));
+    max-width: min(13rem, 16vw);
+}
+
+.frame:not([data-mobile-camera-mode='true']) .boardStatusTopLeftDock > .traitModeCue {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.08rem;
+    max-width: 100%;
+    min-height: 0;
+    padding: 0.32rem 0.46rem;
+    overflow: hidden;
+    border-radius: var(--ui-radius-sm);
+    background: color-mix(in srgb, var(--theme-void) 76%, transparent);
+    box-shadow:
+        0 10px 24px color-mix(in srgb, var(--theme-shadow) 34%, transparent),
+        inset 0 1px 0 color-mix(in srgb, var(--theme-text) 6%, transparent);
+    backdrop-filter: blur(10px) saturate(1.06);
+}
+
+.frame:not([data-mobile-camera-mode='true']) .boardStatusTopLeftDock > .traitModeCue span,
+.frame:not([data-mobile-camera-mode='true']) .boardStatusTopLeftDock > .traitModeCue strong {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.frame:not([data-mobile-camera-mode='true']) .boardStatusTopLeftDock > .traitModeCue span {
+    font-size: 0.54rem;
+}
+
+.frame:not([data-mobile-camera-mode='true']) .boardStatusTopLeftDock > .traitModeCue strong {
+    font-size: 0.72rem;
+}
+
+.frame:not([data-mobile-camera-mode='true']) .boardStatusTopLeftDock > .traitModeCue small,
+.frame:not([data-mobile-camera-mode='true']) .boardStatusTopLeftDock > .traitModeCue .traitModeCueBeatPips {
+    display: none;
+}
+
+/* UI-CLEANUP-003: desktop board surface keeps persistent text off the cards. */
+.frame:not([data-mobile-camera-mode='true']) .boardStatusTopLeftDock,
+.frame:not([data-mobile-camera-mode='true']) .boardStatusTopRightDock,
+.frame:not([data-mobile-camera-mode='true']) .boardStatusBottomRightDock {
+    display: none;
+}
+
+.frame:not([data-mobile-camera-mode='true']) .opportunityCompass {
+    opacity: 0.26;
+    transform: translateY(0.2rem);
+    transition:
+        opacity 140ms ease,
+        transform 140ms ease;
+}
+
+.frame:not([data-mobile-camera-mode='true']):hover .opportunityCompass,
+.frame:not([data-mobile-camera-mode='true']):focus-within .opportunityCompass {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.frame:not([data-mobile-camera-mode='true']) .opportunityCompassRow[data-opportunity-priority='best'] {
+    min-height: 1.92rem;
+    padding: 0.22rem 0.38rem;
+    background: color-mix(in srgb, var(--theme-void) 68%, transparent);
+}
+
+.frame:not([data-mobile-camera-mode='true']) .opportunityCompassPriority,
+.frame:not([data-mobile-camera-mode='true']) .opportunityCompassImpact {
+    font-size: 0.48rem;
+}
+
+.frame:not([data-mobile-camera-mode='true']) .opportunityCompassRow[data-opportunity-priority='best'] strong {
+    font-size: 0.58rem;
+}
+
+/* UI-CLEANUP-059: board feedback should be a hint layer, not another persistent HUD. */
+.frame[data-mobile-camera-mode='true'] .opportunityCompass {
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 3.08rem);
+    left: max(0.6rem, env(safe-area-inset-left, 0px));
+    right: max(0.6rem, env(safe-area-inset-right, 0px));
+    opacity: 0.58;
+}
+
+.frame[data-mobile-camera-mode='true'] .opportunityCompass:focus-within,
+.frame[data-mobile-camera-mode='true']:hover .opportunityCompass {
+    opacity: 0.92;
+}
+
+.frame[data-mobile-camera-mode='true'] .opportunityCompassRow[data-opportunity-priority='best'] {
+    min-height: 1.74rem;
+    padding: 0.2rem 0.34rem;
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 10%, transparent);
+    background: color-mix(in srgb, var(--theme-void) 64%, transparent);
+    box-shadow: 0 6px 14px color-mix(in srgb, var(--theme-shadow) 18%, transparent);
+}
+
+.frame[data-mobile-camera-mode='true'] .opportunityCompassPriority,
+.frame[data-mobile-camera-mode='true'] .opportunityCompassImpact {
+    padding: 0.06rem 0.22rem;
+    font-size: 0.42rem;
+}
+
+.frame[data-mobile-camera-mode='true'] .opportunityCompassRow[data-opportunity-priority='best'] strong {
+    font-size: 0.5rem;
+    line-height: 1;
+}
+
+/* UI-CLEANUP-005: keep board overlay chips above the mobile action tray. */
+.frame[data-mobile-camera-mode='true'] .boardStatusBottomRightDock {
+    right: max(0.5rem, env(safe-area-inset-right, 0px));
+    bottom: max(6.1rem, calc(env(safe-area-inset-bottom, 0px) + 5.9rem));
+    width: auto;
+    max-width: none;
+}
+
+.frame[data-mobile-camera-mode='true'] .pickupOpportunityChip {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.04rem;
+    width: 4.9rem;
+    min-width: 4.9rem;
+    max-width: 4.9rem;
+    padding: 0.24rem 0.34rem;
+    overflow: hidden;
+}
+
+.frame[data-mobile-camera-mode='true'] .pickupOpportunityChip span,
+.frame[data-mobile-camera-mode='true'] .pickupOpportunityChip strong {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.frame[data-mobile-camera-mode='true'] .pickupOpportunityChip span {
+    font-size: 0;
+}
+
+.frame[data-mobile-camera-mode='true'] .pickupOpportunityChip span::before {
+    content: 'Pickup';
+    font-size: 0.45rem;
+}
+
+.frame[data-mobile-camera-mode='true'] .pickupOpportunityChip strong {
+    font-size: 0.58rem;
+}
+
+.frame[data-mobile-camera-mode='true'] .pickupOpportunityChip b,
+.frame[data-mobile-camera-mode='true'] .pickupOpportunityChip small,
+.frame[data-mobile-camera-mode='true'] .pickupOpportunityMeter {
+    display: none;
+}
+
+@media (max-height: 520px) and (orientation: landscape) {
+    .motionChip {
+        display: none;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityCompass,
+    .frame[data-mobile-camera-mode='true'] .boardStatusBottomRightDock {
+        bottom: calc(env(safe-area-inset-bottom, 0px) + 5.08rem);
+    }
+}
+
+/* UI-CLEANUP-010: phone opportunity callout should not read as a full-width HUD layer. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .frame[data-mobile-camera-mode='true'] .opportunityCompass {
+        right: max(0.46rem, env(safe-area-inset-right, 0px));
+        bottom: calc(env(safe-area-inset-bottom, 0px) + 3.18rem);
+        left: auto;
+        width: fit-content;
+        max-width: min(72vw, 17rem);
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassRow[data-opportunity-priority='best'] {
+        grid-template-columns: auto minmax(0, 1fr);
+        gap: 0.2rem;
+        min-height: 1.58rem;
+        padding: 0.18rem 0.36rem;
+        border-radius: 999px;
+        opacity: 0.9;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassPriority {
+        padding: 0;
+        border: 0;
+        background: transparent;
+        font-size: 0.46rem;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassImpact {
+        display: none;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassRow[data-opportunity-priority='best'] strong {
+        max-width: 11rem;
+        font-size: 0.56rem;
+    }
+}
+
+/* UI-CLEANUP-016: phone board feedback should be a small cue layer, not a second HUD. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .frame[data-mobile-camera-mode='true'] .opportunityCompass {
+        right: max(0.32rem, env(safe-area-inset-right, 0px));
+        bottom: calc(env(safe-area-inset-bottom, 0px) + 2.66rem);
+        max-width: min(49vw, 10.8rem);
+        opacity: 0.72;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassRow[data-opportunity-priority='best'] {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0;
+        min-height: 1.08rem;
+        padding: 0.08rem 0.2rem;
+        border-radius: 999px;
+        background: color-mix(in srgb, var(--theme-void) 74%, transparent);
+        box-shadow:
+            0 4px 12px color-mix(in srgb, var(--theme-shadow) 26%, transparent),
+            inset 0 1px 0 color-mix(in srgb, var(--theme-text) 5%, transparent);
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassPriority,
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassImpact {
+        display: none;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassRow[data-opportunity-priority='best'] strong {
+        max-width: 100%;
+        font-size: 0.46rem;
+        line-height: 1;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .boardStatusBottomRightDock {
+        right: max(0.36rem, env(safe-area-inset-right, 0px));
+        bottom: calc(env(safe-area-inset-bottom, 0px) + 4.02rem);
+    }
+
+    .frame[data-mobile-camera-mode='true'] .pickupOpportunityChip {
+        width: 3.9rem;
+        min-width: 3.9rem;
+        max-width: 3.9rem;
+        gap: 0.02rem;
+        padding: 0.14rem 0.22rem;
+        border-radius: 0.34rem;
+        opacity: 0.72;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .pickupOpportunityChip span::before {
+        font-size: 0.4rem;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .pickupOpportunityChip strong {
+        font-size: 0.46rem;
+        line-height: 1;
+    }
+}
+
+/* UI-CLEANUP-020: keep compact board feedback above the larger phone action dock. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .frame[data-mobile-camera-mode='true'] .opportunityCompass {
+        bottom: calc(env(safe-area-inset-bottom, 0px) + 2.96rem);
+    }
+
+    .frame[data-mobile-camera-mode='true'] .boardStatusBottomRightDock {
+        bottom: calc(env(safe-area-inset-bottom, 0px) + 4.34rem);
+    }
+}
+
+/* UI-CLEANUP-024: phone board opportunity is a board cue, not another bottom-dock control. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .frame[data-mobile-camera-mode='true'] .opportunityCompass {
+        right: auto;
+        bottom: calc(env(safe-area-inset-bottom, 0px) + 3.62rem);
+        left: 50%;
+        max-width: min(68vw, 14rem);
+        opacity: 0.82;
+        transform: translateX(-50%);
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassRow[data-opportunity-priority='best'] {
+        min-height: 1.2rem;
+        padding: 0.1rem 0.3rem;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassRow[data-opportunity-priority='best'] strong {
+        font-size: 0.5rem;
+    }
+}
+
+/* UI-CLEANUP-030: keep phone gameplay to one bottom board cue; secondary pickup chips read as clutter. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .frame[data-mobile-camera-mode='true'] .boardStatusBottomRightDock {
+        display: none;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityCompass {
+        opacity: 0.72;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassRow[data-opportunity-priority='best'] {
+        min-height: 1.1rem;
+        padding: 0.08rem 0.28rem;
+        background: color-mix(in srgb, var(--theme-void) 68%, transparent);
+        box-shadow:
+            0 3px 10px color-mix(in srgb, var(--theme-shadow) 20%, transparent),
+            inset 0 1px 0 color-mix(in srgb, var(--theme-text) 4%, transparent);
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassRow[data-opportunity-priority='best'] strong {
+        font-size: 0.46rem;
+    }
+}
+
+/* UI-CLEANUP-036: phone gameplay gets one readable bottom cue above the action dock. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .frame[data-mobile-camera-mode='true'] .opportunityCompass {
+        right: 0;
+        bottom: calc(env(safe-area-inset-bottom, 0px) + 3.82rem);
+        left: 0;
+        width: min(78vw, 17.5rem);
+        max-width: min(78vw, 17.5rem);
+        margin-inline: auto;
+        opacity: 0.9;
+        transform: none;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassRow[data-opportunity-priority='best'] {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr);
+        gap: 0.22rem;
+        min-height: 1.42rem;
+        padding: 0.12rem 0.36rem;
+        border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 18%, transparent);
+        border-radius: 999px;
+        background: color-mix(in srgb, var(--theme-void) 78%, transparent);
+        box-shadow:
+            0 6px 16px color-mix(in srgb, var(--theme-shadow) 26%, transparent),
+            inset 0 1px 0 color-mix(in srgb, var(--theme-text) 6%, transparent);
+        backdrop-filter: blur(8px) saturate(1.05);
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassPriority {
+        display: inline-grid;
+        place-items: center;
+        min-width: 2.2rem;
+        max-width: 2.9rem;
+        overflow: hidden;
+        padding: 0.08rem 0.22rem;
+        border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 18%, transparent);
+        border-radius: 999px;
+        background: color-mix(in srgb, var(--theme-gold-bright) 7%, transparent);
+        color: color-mix(in srgb, var(--theme-gold-bright) 78%, white);
+        font-size: 0.42rem;
+        line-height: 1;
+        text-overflow: ellipsis;
+        text-transform: uppercase;
+        white-space: nowrap;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassImpact,
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassRow[data-opportunity-priority='best'] small,
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassRow[data-opportunity-priority='best'] em,
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassBeatPips {
+        display: none;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassRow[data-opportunity-priority='best'] strong {
+        display: block;
+        min-width: 0;
+        overflow: hidden;
+        max-width: 100%;
+        color: color-mix(in srgb, var(--theme-text) 92%, white);
+        font-size: 0.56rem;
+        font-weight: 850;
+        line-height: 1.05;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+}
+
+/* UI-CLEANUP-038: phone opportunity cue should be a quiet status chip above the dock. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .frame[data-mobile-camera-mode='true'] .opportunityCompass {
+        bottom: calc(env(safe-area-inset-bottom, 0px) + 3.18rem);
+        width: min(62vw, 13rem);
+        max-width: min(62vw, 13rem);
+        opacity: 0.78;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassRow[data-opportunity-priority='best'] {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0;
+        min-height: 1.08rem;
+        padding: 0.08rem 0.28rem;
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 12%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 74%, transparent);
+        box-shadow:
+            0 4px 10px color-mix(in srgb, var(--theme-shadow) 22%, transparent),
+            inset 0 1px 0 color-mix(in srgb, var(--theme-text) 5%, transparent);
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassPriority,
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassImpact,
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassRow[data-opportunity-priority='best'] small,
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassRow[data-opportunity-priority='best'] em,
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassBeatPips {
+        display: none;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassRow[data-opportunity-priority='best'] strong {
+        font-size: 0.48rem;
+        font-weight: 820;
+        line-height: 1;
+    }
+}
+
+/* UI-CLEANUP-050: phone board cue should stay compact, but readable above the tool dock. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .frame[data-mobile-camera-mode='true'] .opportunityCompass {
+        right: 0;
+        bottom: calc(env(safe-area-inset-bottom, 0px) + 3.62rem);
+        left: 0;
+        width: min(72vw, 17.5rem);
+        max-width: min(72vw, 17.5rem);
+        margin-inline: auto;
+        opacity: 0.86;
+        pointer-events: none;
+        transform: none;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassRow[data-opportunity-priority='best'] {
+        min-height: 2.34rem;
+        padding: 0.32rem 0.5rem;
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 18%, transparent);
+        background:
+            linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent), transparent 58%),
+            color-mix(in srgb, var(--theme-void) 84%, transparent);
+        box-shadow:
+            0 8px 18px color-mix(in srgb, var(--theme-shadow) 28%, transparent),
+            inset 0 1px 0 color-mix(in srgb, var(--theme-text) 6%, transparent);
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassRow[data-opportunity-priority='best'] strong {
+        font-size: 0.66rem;
+        font-weight: 850;
+        line-height: 1.08;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .stage::after {
+        inset: 0.4rem;
+        border-color: color-mix(in srgb, var(--theme-cyan-bright) 10%, transparent) !important;
+        box-shadow:
+            inset 0 0 0 1px color-mix(in srgb, var(--theme-cyan-bright) 5%, transparent),
+            inset 0 0 12px color-mix(in srgb, var(--theme-cyan-bright) 4%, transparent) !important;
+        opacity: 0.16 !important;
+    }
+}
+
+/* UI-CLEANUP-052: keep phone opportunity feedback subordinate to the board and dock. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .frame[data-mobile-camera-mode='true'] .opportunityCompass {
+        bottom: calc(env(safe-area-inset-bottom, 0px) + 3.18rem);
+        width: min(52vw, 12rem);
+        max-width: min(52vw, 12rem);
+        opacity: 0.78;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassRow[data-opportunity-priority='best'] {
+        min-height: 1.62rem;
+        padding: 0.16rem 0.38rem;
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 13%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 78%, transparent);
+        box-shadow:
+            0 5px 12px color-mix(in srgb, var(--theme-shadow) 20%, transparent),
+            inset 0 1px 0 color-mix(in srgb, var(--theme-text) 5%, transparent);
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassRow[data-opportunity-priority='best'] strong {
+        font-size: 0.54rem;
+        font-weight: 820;
+        line-height: 1.04;
+    }
+}
+
+/* UI-CLEANUP-057: the phone board cue is a small status chip, not another HUD row. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .frame[data-mobile-camera-mode='true'] .opportunityCompass {
+        bottom: calc(env(safe-area-inset-bottom, 0px) + 2.7rem);
+        width: min(46vw, 10.2rem);
+        max-width: min(46vw, 10.2rem);
+        opacity: 0.58;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassRow[data-opportunity-priority='best'] {
+        min-height: 1.52rem;
+        padding: 0.1rem 0.28rem;
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 9%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 66%, transparent);
+        box-shadow:
+            0 3px 9px color-mix(in srgb, var(--theme-shadow) 16%, transparent),
+            inset 0 1px 0 color-mix(in srgb, var(--theme-text) 4%, transparent);
+        backdrop-filter: blur(6px) saturate(1.02);
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassRow[data-opportunity-priority='best'] strong {
+        font-size: 0.46rem;
+        font-weight: 780;
+        line-height: 1;
+    }
+}
+
+/* UI-CLEANUP-061: short landscape cannot afford bottom board HUD strips across the cards. */
+@media (max-height: 520px) and (orientation: landscape) {
+    .frame[data-mobile-camera-mode='true'] .opportunityCompass,
+    .frame[data-mobile-camera-mode='true'] .boardStatusBottomRightDock {
+        display: none !important;
+    }
+}
+
+/* UI-CLEANUP-070: mobile opportunity feedback is a single compact play hint, not another HUD panel. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .frame[data-mobile-camera-mode='true'] .opportunityCompass {
+        right: max(0.28rem, env(safe-area-inset-right, 0px));
+        bottom: calc(env(safe-area-inset-bottom, 0px) + 3.22rem);
+        left: auto;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.08rem;
+        width: auto;
+        max-width: min(54vw, 10.5rem);
+        min-height: 1.72rem;
+        padding: 0.14rem 0.18rem;
+        overflow: hidden;
+        border-radius: var(--ui-radius-sm);
+        background: color-mix(in srgb, var(--theme-void) 72%, transparent);
+        box-shadow:
+            0 6px 16px color-mix(in srgb, var(--theme-shadow) 22%, transparent),
+            inset 0 1px 0 color-mix(in srgb, white 5%, transparent);
+        opacity: 0.84;
+        animation: none;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassSummary,
+    .frame[data-mobile-camera-mode='true'] .opportunityPayoffStack,
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassRow:not([data-opportunity-priority='best']),
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassMeter {
+        display: none !important;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassRow[data-opportunity-priority='best'] {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr);
+        align-items: center;
+        gap: 0.08rem 0.16rem;
+        min-width: 0;
+        max-width: 100%;
+        min-height: 1.42rem;
+        padding: 0.1rem 0.18rem;
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassPriority {
+        min-width: 0;
+        padding: 0.04rem 0.16rem;
+        font-size: 0.42rem;
+        line-height: 1;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassImpact,
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassBeatPips,
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassRow[data-opportunity-priority='best'] small,
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassRow[data-opportunity-priority='best'] em {
+        display: none !important;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassRow[data-opportunity-priority='best'] b,
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassRow[data-opportunity-priority='best'] strong {
+        min-width: 0;
+        overflow: hidden;
+        font-size: 0.62rem;
+        line-height: 1;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassRow[data-opportunity-priority='best'] strong {
+        justify-self: start;
+        max-width: 100%;
+        font-size: 0.56rem;
+        opacity: 0.86;
+    }
+}
+
+/* UI-CLEANUP-081: route/chain cue should not compete with cards on phone. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .frame[data-mobile-camera-mode='true'] .opportunityCompass {
+        right: max(0.22rem, env(safe-area-inset-right, 0px));
+        bottom: calc(env(safe-area-inset-bottom, 0px) + 2.68rem);
+        max-width: min(42vw, 8.8rem);
+        min-height: 1.5rem;
+        padding: 0.08rem 0.12rem;
+        opacity: 0.7;
+        box-shadow:
+            0 4px 10px color-mix(in srgb, var(--theme-shadow) 18%, transparent),
+            inset 0 1px 0 color-mix(in srgb, white 4%, transparent);
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassRow[data-opportunity-priority='best'] {
+        min-height: 1.38rem;
+        padding: 0.06rem 0.12rem;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassPriority {
+        display: none !important;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassRow[data-opportunity-priority='best'] b,
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassRow[data-opportunity-priority='best'] strong {
+        font-size: 0.48rem;
+    }
+}
+
+/* UI-CLEANUP-088: route setup detail is available through the compass; avoid duplicate phone overlays. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .frame[data-mobile-camera-mode='true'][data-chain-opportunity-next-action]:not(
+            [data-chain-opportunity-next-action='none']
+        )
+        .boardStatusTopLeftDock {
+        display: none !important;
+    }
+}
+
+/* UI-CLEANUP-098: final mobile board chrome pass - feedback stays glanceable and cards stay central. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .frame[data-mobile-camera-mode='true'] .boardCanvasApplication {
+        transform: translateY(-7.5dvh);
+        transform-origin: center center;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .stage::after {
+        inset: 0.62rem;
+        border-color: color-mix(in srgb, var(--theme-cyan-bright) 7%, transparent) !important;
+        box-shadow: none !important;
+        opacity: 0.1 !important;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityCompass {
+        right: max(0.22rem, env(safe-area-inset-right, 0px));
+        bottom: calc(env(safe-area-inset-bottom, 0px) + 2.6rem);
+        max-width: min(38vw, 7.5rem);
+        min-height: 1.5rem;
+        padding: 0.08rem 0.12rem;
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 8%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 62%, transparent);
+        box-shadow:
+            0 3px 8px color-mix(in srgb, var(--theme-shadow) 14%, transparent),
+            inset 0 1px 0 color-mix(in srgb, white 3%, transparent);
+        opacity: 0.62;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassRow[data-opportunity-priority='best'] {
+        min-height: 1.34rem;
+        padding: 0.06rem 0.1rem;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassRow[data-opportunity-priority='best'] b,
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassRow[data-opportunity-priority='best'] strong {
+        font-size: 0.44rem;
+        line-height: 1;
+    }
+}
+
+@media (max-height: 520px) and (orientation: landscape) {
+    .frame[data-mobile-camera-mode='true'] .boardStatusTopLeftDock {
+        top: 4.85rem;
+        left: max(0.32rem, env(safe-area-inset-left, 0px));
+        width: auto;
+        max-width: min(9.2rem, 19vw);
+    }
+
+    .frame[data-mobile-camera-mode='true'] .boardStatusTopLeftDock > .traitModeCue {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0.02rem;
+        min-height: 0;
+        padding: 0.18rem 0.28rem;
+        overflow: hidden;
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 11%, transparent);
+        border-radius: var(--ui-radius-sm);
+        background: color-mix(in srgb, var(--theme-void) 58%, transparent);
+        box-shadow: none;
+        backdrop-filter: blur(5px) saturate(1.02);
+        opacity: 0.72;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .boardStatusTopLeftDock > .traitModeCue span {
+        font-size: 0.42rem;
+        line-height: 1;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .boardStatusTopLeftDock > .traitModeCue strong {
+        overflow: hidden;
+        font-size: 0.58rem;
+        line-height: 1.02;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .boardStatusTopLeftDock > .traitModeCue small,
+    .frame[data-mobile-camera-mode='true'] .boardStatusTopLeftDock > .traitModeCue .traitModeCueBeatPips {
+        display: none !important;
+    }
+}
+
+/* UI-CLEANUP-100: keep mobile play focused on cards; secondary labels should not fight the board. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .frame[data-mobile-camera-mode='true'] .boardCanvasApplication {
+        transform: translateY(-12dvh);
+        transform-origin: center center;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityCompass {
+        bottom: calc(env(safe-area-inset-bottom, 0px) + 2.46rem);
+        max-width: min(34vw, 6.8rem);
+        min-height: 1.32rem;
+        padding: 0.06rem 0.1rem;
+        opacity: 0.52;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassRow[data-opportunity-priority='best'] {
+        min-height: 1.22rem;
+        padding: 0.04rem 0.08rem;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassRow[data-opportunity-priority='best'] b,
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassRow[data-opportunity-priority='best'] strong {
+        font-size: 0.4rem;
+        line-height: 1;
+    }
+}
+
+@media (max-height: 520px) and (orientation: landscape) {
+    .frame[data-mobile-camera-mode='true'] .boardStatusTopLeftDock {
+        display: none !important;
+    }
+}
+
+/* UI-CLEANUP-103-final: newest mobile board composition wins after older phone cue rules. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .frame[data-mobile-camera-mode='true'] .boardCanvasApplication {
+        transform: translateY(-15dvh) scale(1.06);
+        transform-origin: center 36%;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityCompass {
+        right: 0;
+        bottom: calc(env(safe-area-inset-bottom, 0px) + 2.72rem);
+        left: 0;
+        width: fit-content;
+        max-width: min(56vw, 11rem);
+        min-height: 1.5rem;
+        margin-inline: auto;
+        padding: 0.06rem 0.14rem;
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 8%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 70%, transparent);
+        box-shadow:
+            0 4px 10px color-mix(in srgb, var(--theme-shadow) 14%, transparent),
+            inset 0 1px 0 color-mix(in srgb, white 3%, transparent);
+        opacity: 0.64;
+        transform: none;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassRow[data-opportunity-priority='best'] {
+        grid-template-columns: minmax(0, 1fr);
+        min-height: 1.28rem;
+        padding: 0.04rem 0.1rem;
+        text-align: center;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassPriority,
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassImpact,
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassBeatPips,
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassRow[data-opportunity-priority='best'] small,
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassRow[data-opportunity-priority='best'] em {
+        display: none !important;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassRow[data-opportunity-priority='best'] b,
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassRow[data-opportunity-priority='best'] strong {
+        justify-self: center;
+        max-width: 100%;
+        overflow: hidden;
+        font-size: 0.46rem;
+        line-height: 1;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+}
+
+@media (max-height: 520px) and (orientation: landscape) {
+    .frame[data-mobile-camera-mode='true'] .boardCanvasApplication {
+        transform: translateY(-2dvh) scale(1.03);
+        transform-origin: center center;
+    }
+}
+
+/* UI-CLEANUP-104: keep mobile opportunity feedback dock-adjacent and out of the card field. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .frame[data-mobile-camera-mode='true'] .boardCanvasApplication {
+        transform: translateY(-11dvh) scale(1.02);
+        transform-origin: center 34%;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .stage::after {
+        opacity: 0.06 !important;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityCompass {
+        right: 0;
+        bottom: calc(env(safe-area-inset-bottom, 0px) + 2.98rem);
+        left: 0;
+        width: fit-content;
+        max-width: min(46vw, 9.6rem);
+        min-height: 1.55rem;
+        margin-inline: auto;
+        padding: 0.04rem 0.12rem;
+        overflow: hidden;
+        border-color: color-mix(in srgb, var(--theme-text-muted) 10%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 78%, transparent);
+        box-shadow:
+            0 3px 8px color-mix(in srgb, var(--theme-shadow) 12%, transparent),
+            inset 0 1px 0 color-mix(in srgb, white 3%, transparent);
+        opacity: 0.78;
+        transform: none;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassRow[data-opportunity-priority='best'] {
+        grid-template-columns: minmax(0, 1fr);
+        min-height: 1.38rem;
+        padding: 0.04rem 0.1rem;
+        text-align: center;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassRow[data-opportunity-priority='best'] b,
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassRow[data-opportunity-priority='best'] strong {
+        max-width: 100%;
+        overflow: hidden;
+        font-size: 0.44rem;
+        line-height: 1;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+}
+
+@media (max-height: 520px) and (orientation: landscape) {
+    .frame[data-mobile-camera-mode='true'] .boardCanvasApplication {
+        transform: translateY(-1dvh) scale(1.01);
+        transform-origin: center center;
+    }
+}
+
+/* UI-CLEANUP-106: keep combo hints as dock-adjacent chips instead of center-board labels. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .frame[data-mobile-camera-mode='true'] .boardCanvasApplication {
+        transform: translateY(-9dvh) scale(1.01);
+        transform-origin: center 34%;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityCompass {
+        right: auto;
+        bottom: calc(env(safe-area-inset-bottom, 0px) + 2.56rem);
+        left: max(0.48rem, env(safe-area-inset-left, 0px));
+        width: auto;
+        max-width: min(38vw, 7.8rem);
+        min-height: 1.5rem;
+        margin-inline: 0;
+        padding: 0.02rem 0.1rem;
+        border-color: color-mix(in srgb, var(--theme-text-muted) 7%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 84%, transparent);
+        box-shadow: none;
+        opacity: 0.74;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassRow[data-opportunity-priority='best'] {
+        min-height: 1.4rem;
+        padding: 0.02rem 0.04rem;
+        text-align: left;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassRow[data-opportunity-priority='best'] b,
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassRow[data-opportunity-priority='best'] strong {
+        justify-self: start;
+        font-size: 0.4rem;
+        line-height: 1;
+    }
+}
+
+/* UI-CLEANUP-113: center the mobile card cluster and make the opportunity chip a real dock hint. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .frame[data-mobile-camera-mode='true'] .boardCanvasApplication {
+        transform: translateY(-3.5dvh) scale(1.01);
+        transform-origin: center 42%;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityCompass {
+        bottom: calc(env(safe-area-inset-bottom, 0px) + 2.42rem);
+        left: max(0.36rem, env(safe-area-inset-left, 0px));
+        max-width: min(44vw, 8.6rem);
+        min-height: 1.34rem;
+        padding: 0.02rem 0.08rem;
+        opacity: 0.86;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassRow[data-opportunity-priority='best'] {
+        min-height: 1.24rem;
+        padding: 0.02rem 0.04rem;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassRow[data-opportunity-priority='best'] b,
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassRow[data-opportunity-priority='best'] strong {
+        max-width: 100%;
+        font-size: 0.42rem;
+        line-height: 1;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+}
+
+@media (max-height: 520px) and (orientation: landscape) {
+    .frame[data-mobile-camera-mode='true'] .boardCanvasApplication {
+        transform: translateY(-0.5dvh) scale(1.01);
+        transform-origin: center center;
+    }
+}
+
+/* UI-CLEANUP-114: bottom opportunity hint should be readable without becoming another HUD panel. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .frame[data-mobile-camera-mode='true'] .opportunityCompass {
+        bottom: calc(env(safe-area-inset-bottom, 0px) + 2.48rem);
+        max-width: min(52vw, 10rem);
+        min-height: 1.56rem;
+        border-color: color-mix(in srgb, var(--theme-cyan-bright) 18%, var(--theme-text-muted) 8%);
+        background:
+            linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 10%, transparent), transparent 60%),
+            color-mix(in srgb, var(--theme-void) 88%, transparent);
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassRow[data-opportunity-priority='best'] {
+        min-height: 1.44rem;
+        gap: 0.04rem;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassRow[data-opportunity-priority='best'] b,
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassRow[data-opportunity-priority='best'] strong {
+        font-size: 0.46rem;
+    }
+}
+
+/* UI-CLEANUP-119: phone playfield should use the center of the screen, not float above it. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .frame[data-mobile-camera-mode='true'] .boardCanvasApplication {
+        transform: translateY(2dvh) scale(1.04);
+        transform-origin: center 48%;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .stage::after {
+        inset: 0.54rem;
+        opacity: 0.08 !important;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityCompass {
+        bottom: calc(env(safe-area-inset-bottom, 0px) + 2.54rem);
+        left: max(0.38rem, env(safe-area-inset-left, 0px));
+        max-width: min(50vw, 9.8rem);
+        min-height: 1.48rem;
+        padding: 0.04rem 0.1rem;
+        border-color: color-mix(in srgb, var(--theme-cyan-bright) 14%, var(--theme-text-muted) 7%);
+        background:
+            linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent), transparent 58%),
+            color-mix(in srgb, var(--theme-void) 88%, transparent);
+        box-shadow:
+            0 4px 10px color-mix(in srgb, var(--theme-shadow) 12%, transparent),
+            inset 0 1px 0 color-mix(in srgb, white 3%, transparent);
+        opacity: 0.86;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassRow[data-opportunity-priority='best'] {
+        min-height: 1.34rem;
+        padding: 0.02rem 0.06rem;
+    }
+
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassRow[data-opportunity-priority='best'] b,
+    .frame[data-mobile-camera-mode='true'] .opportunityCompassRow[data-opportunity-priority='best'] strong {
+        font-size: 0.44rem;
+        line-height: 1;
     }
 }

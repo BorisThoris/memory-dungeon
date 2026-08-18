@@ -1,0 +1,21 @@
+- generic [ref=e2] [box=0,0,1440,960]:
+  - generic [ref=e3] [box=0,0,1440,960]:
+    - link "Skip to main content" [ref=e4] [cursor=pointer] [box=-1,-1,1,1]:
+      - /url: "#app-main"
+    - main [ref=e5] [box=0,0,1440,960]:
+      - generic [ref=e775] [box=0,0,1440,960]:
+        - heading "Level 1" [level=1] [ref=e776] [box=-1,-1,1,1]
+        - generic [ref=e778] [box=0,0,1440,960]:
+          - generic [box=0,0,1440,130]:
+            - group "Run stats" [ref=e779] [box=16,16,1408,114]
+            - status [ref=e815] [box=720,72,1,1]
+          - generic [ref=e816] [box=16,767,256,106]:
+            - generic [ref=e817] [box=23,774,243,44]
+            - generic [ref=e822] [box=23,823,243,44]
+          - generic [ref=e825] [box=0,0,1440,960]:
+            - application "Memory tile board. Use arrow keys or controller direction controls to move focus; Enter, Space, or controller confirm selects." [ref=e828] [box=0,0,1440,960]
+            - complementary [box=1184,811,240,53]
+          - complementary "Game actions" [ref=e833] [box=16,732,288,216]:
+            - toolbar "Game controls" [ref=e834] [box=16,732,196,43]
+            - 'toolbar "Board powers. Tool stack: 2 tools live. Route cue: oo. Route + Recall. First: Set route before matching. Then: Match new adjacency. Keep: Keep trait route live. Tool crescendo: Cashout cue: =+. Cash route. Cashout beat. 3 beats." [ref=e1083] [box=16,778,288,169]'
+  - region "Memory Dungeon tips" [box=240,924,960,0]

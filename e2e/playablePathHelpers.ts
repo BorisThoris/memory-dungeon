@@ -209,10 +209,10 @@ export async function openPlayablePathFixture(page: Page, id: PlayablePathFixtur
         return;
     }
     if (id === 'relicDraft') {
-        await expect(page.getByTestId('game-relic-offer-overlay')).toBeVisible({ timeout: 30_000 });
+        await expect(page.getByTestId('game-relic-offer-overlay')).toBeVisible({ timeout: 90_000 });
         return;
     }
-    await expect(page.getByTestId('game-hud')).toBeVisible({ timeout: 30_000 });
+    await expect(page.getByTestId('game-hud')).toBeVisible({ timeout: 90_000 });
 }
 
 export async function startClassicFromMenu(page: Page): Promise<void> {

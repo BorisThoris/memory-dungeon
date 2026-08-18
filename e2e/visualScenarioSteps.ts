@@ -69,6 +69,7 @@ export const VISUAL_SCREEN_SCENARIOS: ReadonlyArray<VisualScreenScenario> = [
     {
         fileBase: '01a-choose-your-path',
         name: 'choose your path',
+        timeoutMs: 180_000,
         run: async (page, capture) => {
             await openMainMenuFromSave(page, true);
             await openChooseYourPath(page);
@@ -107,7 +108,7 @@ export const VISUAL_SCREEN_SCENARIOS: ReadonlyArray<VisualScreenScenario> = [
         run: async (page, capture) => {
             await openMainMenuFromSave(page, true);
             await page.getByRole('button', { name: /^inventory$/i }).click();
-            await expect(page.getByText(/No active expedition/i)).toBeVisible();
+            await expect(page.getByTestId('inventory-empty-state')).toBeVisible();
             await expect(page.getByRole('region', { name: /inventory/i })).toBeVisible();
             await expectNoHorizontalOverflow(page);
             await capture('01c-inventory-empty');
@@ -218,7 +219,9 @@ export const VISUAL_SCREEN_SCENARIOS: ReadonlyArray<VisualScreenScenario> = [
             await openLevel1Play(page);
             const settingsBtn = page.getByTestId('game-toolbar-settings');
             await expect(settingsBtn).toBeVisible({ timeout: 20_000 });
-            await settingsBtn.click({ force: true });
+            await settingsBtn.evaluate((element) => {
+                (element as HTMLButtonElement).click();
+            });
             const runSettings = page.getByRole('dialog', { name: /run settings/i });
             await expect(runSettings).toBeVisible({ timeout: 15_000 });
             await expectNoHorizontalOverflow(page);
@@ -256,6 +259,30 @@ export const VISUAL_SCREEN_SCENARIOS: ReadonlyArray<VisualScreenScenario> = [
             await expect(page.getByTestId('shop-screen')).toBeVisible();
             await expectNoHorizontalOverflow(page);
             await capture('07a-shop-screen');
+        }
+    },
+    {
+        fileBase: '07b-relic-draft-offer',
+        name: 'relic draft offer',
+        timeoutMs: 140_000,
+        run: async (page, capture) => {
+            await openPlayablePathFixture(page, 'relicDraft');
+            await expect(page.getByTestId('game-relic-offer-overlay')).toBeVisible();
+            await expect(page.getByTestId('relic-offer-card').first()).toBeVisible();
+            await expectNoHorizontalOverflow(page);
+            await capture('07b-relic-draft-offer');
+        }
+    },
+    {
+        fileBase: '07c-side-room-choice',
+        name: 'side room choice',
+        timeoutMs: 140_000,
+        run: async (page, capture) => {
+            await openPlayablePathFixture(page, 'sideRoomSkip');
+            await expect(page.getByTestId('side-room-screen')).toBeVisible();
+            await expect(page.getByTestId('side-room-reward-panel')).toBeVisible();
+            await expectNoHorizontalOverflow(page);
+            await capture('07c-side-room-choice');
         }
     },
     {

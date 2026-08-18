@@ -1,0 +1,116 @@
+- generic [ref=f1e2] [box=0,0,1440,960]:
+  - generic [ref=f1e3] [box=0,0,1440,960]:
+    - link "Skip to main content" [ref=f1e4] [cursor=pointer] [box=-1,-1,1,1]:
+      - /url: "#app-main"
+    - main [ref=f1e5] [box=0,0,1440,960]:
+      - generic [ref=f1e2894] [box=0,0,1440,960]:
+        - heading "Level 1" [level=1] [ref=f1e2895] [box=-1,-1,1,1]
+        - generic [ref=f1e2897] [box=0,0,1440,960]:
+          - generic [box=0,0,1440,100]:
+            - group "Run stats" [ref=f1e2898] [box=16,16,1408,84]:
+              - generic [ref=f1e2899] [box=16,16,1408,84]:
+                - generic [ref=f1e2900] [box=16,16,1408,84]:
+                  - generic [ref=f1e2901] [box=16,16,270,84]:
+                    - generic "Read the board, find the exit, and preserve optional objective value. Use assists only when they save more value than they forfeit." [ref=f1e2903] [box=16,18,45,80]
+                    - generic "Lives carry across floors; clean clears, routes, shops, rests, and shrines can restore them." [ref=f1e2906] [box=64,16,106,84]
+                    - generic "Temporary run currency for sustain. Guard tokens absorb mismatch damage before lives are lost." [ref=f1e2925] [box=172,16,114,84]
+                  - generic [ref=f1e2940] [box=560,16,320,53]:
+                    - generic [ref=f1e2941] [box=703,21,34,12]: Score
+                    - generic [ref=f1e2942] [box=708,32,24,31]: "0"
+                - group "Run context" [ref=f1e2943] [box=829,33,46,35]:
+                  - generic "Info" [ref=f1e2944] [cursor=pointer] [box=829,33,46,35]
+            - status [ref=f1e2945] [box=720,57,1,1]
+          - generic [ref=f1e2946] [box=16,786,208,88]:
+            - generic [ref=f1e2947] [box=23,792,195,44]:
+              - generic [ref=f1e2948] [box=29,800,30,30]: G
+              - generic [ref=f1e2949] [box=66,798,110,32]:
+                - generic [ref=f1e2950] [box=66,798,110,13]: Depth 1 / Lane 0
+                - strong [ref=f1e2951] [box=66,811,110,19]: Threshold Archive
+            - strong [ref=f1e2953] [box=29,845,182,16]: Boss in 5
+          - generic [ref=f1e2955] [box=0,0,1440,960]:
+            - application "Memory tile board. Use arrow keys or controller direction controls to move focus; Enter, Space, or controller confirm selects." [ref=f1e2968] [box=0,0,1440,960]:
+              - generic [ref=f1e2969] [box=0,0,1440,960]:
+                - 'status "Board chain opportunity. Best play. Do next: cashout. Match lit route for reward. Cash out. Cashout shot: Match lit route for reward. Cashout beat: 5 beats: Match lit route for reward. Match lit route for reward. Start x3 loop. Start chain: 3 matches to x3. 1 match to reward. One-away cashout. 1 route ready. 4 cards lit. Reward hot. Next reward x2 +1 shard in 1 match. Echo + Mirror: recall focus." [ref=f1e2970] [box=6,5,200,66]':
+                  - generic "Chain role summary." [ref=f1e2990] [box=7,19,3,39]
+                  - 'generic "Primary trait lane action. Recall: 2. 3-beat Set memory." [ref=f1e3013] [box=213,25,14,26]':
+                    - generic [box=220,30,0,8]: Next lane
+                    - generic [ref=f1e3014] [box=224,28,65,11]: Set memory
+                    - emphasis [box=220,40,0,8]: Recall x2
+                  - 'generic "Primary combo shot. Cash: Cashout lane. 5-beat hit now. Pulse: Cash now." [ref=f1e3039] [box=229,25,14,26]':
+                    - generic [box=236,30,0,8]: Best shot
+                    - generic [ref=f1e3040] [box=240,28,58,11]: Cash
+                    - emphasis [ref=f1e3041] [box=236,40,62,8]: Cashout lane
+                    - strong [ref=f1e3048] [box=302,30,48,8]: Cash now
+                  - 'generic "Card action priority. Cash now: 4" [ref=f1e3057] [box=246,30,10,17]':
+                    - generic [ref=f1e3058] [box=251,34,32,8]: Priority
+                    - generic "Action priority summary. 1 lane. cashout." [ref=f1e3059] [box=285,32,8,12]
+                    - generic "Card action priority row. Cash now. Cashout. 4." [ref=f1e3066] [box=295,32,8,12]
+                  - generic [box=258,32,0,12]: Match lit route for reward
+                  - 'generic "Chain milestone. Start chain: 3 matches to x3." [ref=f1e3142] [box=260,25,14,26]':
+                    - generic [ref=f1e3143] [box=267,29,5,8]: Start chain
+                    - generic [box=276,28,0,9]: 3 matches to x3
+                  - progressbar "Reward urgency meter. One-away cashout." [ref=f1e3154] [box=277,26,14,25]:
+                    - generic [ref=f1e3155] [box=284,29,8,10]: One-away cashout
+                  - progressbar "Chain reward meter. Next reward x2 +1 shard in 1 match. Cash in now." [ref=f1e3162] [box=292,20,16,36]:
+                    - generic [ref=f1e3163] [box=300,23,38,11]: Payoff
+                    - generic [box=342,24,0,9]: Next reward x2 +1 shard in 1 match
+                    - emphasis [ref=f1e3164] [box=300,36,42,7]: Cash in now
+                  - status "Chain hot band. Reward hot. Next reward x2 +1 shard in 1 match. One-away cashout." [ref=f1e3173] [box=310,6,11,64]:
+                    - generic [box=316,10,0,8]: Hot lane
+                    - generic [box=319,9,0,10]: Reward hot
+                    - emphasis [ref=f1e3174] [box=316,20,3,8]: Next reward x2 +1 shard in 1 match
+                    - generic [ref=f1e3175] [box=316,28,3,31]: One-away cashout
+                  - progressbar "Chain momentum meter. 1 match to reward." [ref=f1e3179] [box=323,27,14,23]:
+                    - generic [box=330,30,0,9]: 1 match to reward
+                - 'status "Trait mode. Stack live. Next reward: Next reward x2 +1 shard in 1 match. One-away cashout." [box=6,79,161,63]':
+                  - generic [box=15,86,142,8]: Trait mode
+                  - strong [box=15,96,142,13]: Stack live
+                  - generic [box=15,110,142,10]: Next reward x2 +1 shard in 1 match
+                  - generic [box=15,124,142,10]: One-away cashout
+                - 'group "Board opportunity compass. Best play. Route cashout. Combo route: 1 route ready. Cash out: Match lit route for reward / Echo + Mirror: recall focus / Start x3 loop / 1 match to reward / One-away cashout / Next reward x2 +1 shard in 1 match. Trait stack surge. Trait stack: 4 combo cards lit. Study: 02 (mirror) / 01 (echo) / 01 (echo) / 02 (mirror) / Echo + Mirror: recall focus / Next reward x2 +1 shard in 1 match / Offered for Conduit Cartographer / Sealed Catalyst: Echo + Mirror: recall focus. Opportunity lane map. Cash Cashout x1. Cash now. Route cashout. Trait Study x1. Study traits. Trait stack surge." [ref=f1e3189] [box=236,874,236,74]':
+                  - 'generic "Opportunity summary. 2 plays. Best action: Cash out." [ref=f1e3190] [box=236,874,55,15]':
+                    - generic [ref=f1e3192] [box=241,877,31,9]: 2 plays
+                  - 'generic "Best play. Route cashout. Combo route: 1 route ready. Cash out: Match lit route for reward / Echo + Mirror: recall focus / Start x3 loop / 1 match to reward / One-away cashout / Next reward x2 +1 shard in 1 match" [ref=f1e3199] [box=236,898,84,50]':
+                    - generic [ref=f1e3200] [box=241,902,34,13]: Best
+                    - generic [ref=f1e3201] [box=241,916,75,13]: Route cashout
+                    - strong [ref=f1e3209] [box=241,933,75,12]: 1 route ready
+            - complementary [box=1224,793,200,71]:
+              - generic [box=1233,800,182,40]: Make your first match
+              - strong [box=1233,843,182,14]: Flip a marked tile
+          - complementary "Game actions" [ref=f1e2959] [box=16,816,212,132]:
+            - toolbar "Game controls" [ref=f1e2960] [box=16,816,185,39]:
+              - button "Fit board" [ref=f1e2961] [cursor=pointer] [box=20,819,31,31]:
+                - generic [box=76,794,65,18]: Fit board
+              - button "Run settings (toolbar)" [ref=f1e2962] [cursor=pointer] [box=56,819,31,31]:
+                - generic [box=77,794,62,18]: Settings
+              - button "Open codex" [ref=f1e2963] [cursor=pointer] [box=93,819,31,31]:
+                - generic [box=85,794,47,18]: Codex
+              - button "Open inventory" [ref=f1e2964] [cursor=pointer] [box=129,819,31,31]:
+                - generic [box=74,794,69,18]: Inventory
+              - button "Return to main menu" [ref=f1e2965] [cursor=pointer] [box=166,819,31,31]:
+                - generic [box=73,794,70,18]: Main menu
+            - 'toolbar "Board powers. Tool stack: 2 tools live. Route cue: oo. Route + Recall. First: Set route before matching. Then: Match new adjacency. Keep: Keep trait route live. Tool crescendo: Cashout cue: =+. Cash route. Cashout beat. 3 beats." [ref=f1e3211] [box=16,858,212,90]':
+              - 'button "Shuffle hidden tiles. Power payoff: Combo reroll. Impact cue: Pair search. Charges: 1." [ref=f1e3212] [cursor=pointer] [box=20,868,31,31]':
+                - generic [box=7,847,58,18]: Shuffle
+                - generic [box=33,882,17,17]: "1"
+              - 'group "Row shuffle. Power payoff: Combo prime. Impact cue: Route prime. Route link prime available. Charges 1." [ref=f1e3213] [box=56,861,45,45]':
+                - generic "1" [ref=f1e3214] [cursor=pointer] [box=56,861,45,45]:
+                  - generic [box=38,840,82,18]: Shuffle row
+                  - generic [box=78,876,17,17]: "1"
+                  - generic [box=59,856,39,12]: Prime
+              - 'button "Swap two hidden tiles. Power payoff: Combo prime. Impact cue: Route prime. Route link prime available. Row/swap charges: 1. Arm swap, then tap two hidden tiles. Swap two hidden tiles (uses 1 row/swap charge)." [ref=f1e3215] [cursor=pointer] [box=107,868,31,31]':
+                - generic [box=101,847,42,18]: Swap
+                - generic [box=120,882,17,17]: "1"
+                - generic [box=103,863,39,12]: Prime
+              - button "Pin mode - tap tiles to mark" [ref=f1e3216] [cursor=pointer] [box=143,868,31,31]:
+                - generic [box=106,836,32,18]: Pin
+              - 'button "Destroy a hidden pair. Power payoff: Recharge tool. Impact cue: Recharge tools. No destroy charge available. Charges: 0. Arm then tap a tile. Assist used: Perfect Memory locked." [disabled] [ref=f1e3217] [box=180,868,31,31]':
+                - generic [box=166,847,59,18]: Destroy
+                - generic [box=193,882,17,17]: "0"
+              - 'button "Peek one hidden tile. Power payoff: Safe reveal. Impact cue: Recall route. Recall setup action available. Charges: 1. Arm peek then tap. Assist used: Perfect Memory locked." [ref=f1e3218] [cursor=pointer] [box=20,912,31,31]':
+                - generic [box=16,891,40,18]: Peek
+                - generic [box=33,925,17,17]: "1"
+              - 'button "Remove one safe stray singleton. Power payoff: Recharge tool. Impact cue: Recharge tools. No stray remove charge available. Charges: 0. Arm then tap a valid singleton. Assist used: Perfect Memory locked." [disabled] [ref=f1e3219] [box=56,912,31,31]':
+                - generic [box=50,891,45,18]: Stray
+                - generic [box=69,925,17,17]: "0"
+  - region "Memory Dungeon tips" [box=240,924,960,0]

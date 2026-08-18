@@ -45,7 +45,12 @@
 }
 
 .profileSummaryCard,
-.saveTrustCard {
+.saveTrustCard,
+.profileSummaryRow,
+.saveTrustRow {
+    min-width: 0;
+    display: grid;
+    gap: 0.18rem;
     padding: var(--ui-card-pad-md);
     border-radius: var(--ui-radius-md);
     border: 1px solid var(--theme-divider-hairline);
@@ -53,16 +58,29 @@
 }
 
 .profileSummaryCard strong,
-.saveTrustCard strong {
+.saveTrustCard strong,
+.profileSummaryRow strong,
+.saveTrustRow strong {
     display: block;
     margin-bottom: var(--theme-space-2xs);
 }
 
 .profileSummaryCard span,
-.saveTrustCard span {
+.saveTrustCard span,
+.profileSummaryRow span,
+.saveTrustRow span {
     display: block;
     color: var(--theme-text-muted);
     font-size: var(--ui-font-caption);
+    line-height: 1.3;
+}
+
+.profileSummaryRow em,
+.saveTrustRow em {
+    display: block;
+    color: color-mix(in srgb, var(--theme-text-subtle) 88%, white);
+    font-size: 0.72rem;
+    font-style: normal;
     line-height: 1.3;
 }
 
@@ -137,7 +155,7 @@
     --settings-section-gap: calc(var(--theme-space-lg) + var(--theme-space-2xs));
     --settings-section-pad: var(--ui-card-pad-lg);
     --settings-field-pad: var(--ui-card-pad-md);
-    --settings-footer-pad-top: var(--theme-space-xl);
+    --settings-footer-pad-top: var(--theme-space-md);
 }
 
 .fitMeasureOuter {
@@ -197,7 +215,8 @@
 }
 
 .shell:not(.stackedShell) .contentScroll {
-    flex: 1 1 auto;
+    flex: 0 1 auto;
+    max-height: 100%;
     min-height: 0;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
@@ -433,6 +452,43 @@
 .contentHeader {
     display: grid;
     gap: var(--settings-header-gap);
+}
+
+.shell[data-settings-layout='desktop'][data-settings-density='compact'] .contentPane {
+    width: min(100%, 66rem);
+    margin-inline-end: auto;
+}
+
+.shell[data-settings-layout='desktop'][data-settings-density='compact'] .contentHeader {
+    grid-template-columns: minmax(0, 1fr) minmax(14.5rem, 17.5rem);
+    align-items: start;
+    column-gap: var(--theme-space-lg);
+    row-gap: var(--theme-space-2xs);
+}
+
+.shell[data-settings-layout='desktop'][data-settings-density='compact'] .contentHeader > :not(.controlCenterStrip) {
+    grid-column: 1;
+}
+
+.shell[data-settings-layout='desktop'][data-settings-density='compact'] .controlCenterStrip {
+    grid-column: 2;
+    grid-row: 1 / span 3;
+    grid-template-columns: 1fr;
+    margin-top: 0;
+    align-self: start;
+}
+
+.shell[data-settings-layout='desktop'][data-settings-density='compact'] .subsectionNav {
+    width: min(100%, 42rem);
+}
+
+.shell[data-settings-layout='desktop'][data-settings-density='compact'] .contentScroll {
+    width: min(100%, 44rem);
+    gap: var(--theme-space-md);
+}
+
+.shell[data-settings-layout='desktop'][data-settings-density='compact'] .footer {
+    width: min(100%, 24rem);
 }
 
 .headerCopy {
@@ -757,6 +813,21 @@
     background: linear-gradient(180deg, rgba(7, 8, 12, 0), rgba(7, 8, 12, 0.94) 40%);
 }
 
+.shell:not(.stackedShell) .footer {
+    position: relative;
+    bottom: auto;
+    margin-top: 0;
+    padding-top: 0.3rem;
+    border-top-color: transparent;
+    background: transparent;
+}
+
+.shell:not(.shellModal):not(.stackedShell) .footer {
+    align-self: flex-start;
+    padding-top: 0.12rem;
+    padding-bottom: 0;
+}
+
 .shellModal .footer {
     border-top-color: color-mix(in srgb, var(--theme-gold-bright) 10%, transparent);
     background:
@@ -766,24 +837,147 @@
 
 .footerActions {
     margin-inline: auto 0;
-    width: min(32rem, 100%);
+    width: min(28rem, 100%);
+}
+
+.saveState {
+    min-width: 0;
+    display: grid;
+    gap: 0.06rem;
+    align-content: center;
+    min-height: var(--ui-touch-target-min);
+    padding: 0.38rem 0.48rem;
+    border-radius: var(--ui-radius-md);
+    border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 14%, transparent);
+    background: color-mix(in srgb, var(--theme-void) 24%, transparent);
+    color: var(--theme-text-muted);
+}
+
+.saveState strong,
+.saveState span {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.saveState strong {
+    color: var(--theme-gold-bright);
+    font-family: var(--theme-display-font);
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    line-height: 1;
+    text-transform: uppercase;
+}
+
+.saveState span {
+    font-size: 0.7rem;
+    line-height: 1.16;
+}
+
+.saveState[data-dirty='true'] {
+    border-color: color-mix(in srgb, var(--theme-danger, #ff6b6b) 22%, transparent);
+    color: color-mix(in srgb, var(--theme-danger, #ff6b6b) 74%, white);
+}
+
+.saveState[data-dirty='true'] strong {
+    color: color-mix(in srgb, var(--theme-danger, #ff6b6b) 82%, white);
+}
+
+.shell:not(.shellModal):not(.stackedShell) .footerActions {
+    align-items: stretch;
+    flex-wrap: nowrap;
+    gap: 0.34rem;
+    width: min(22rem, 100%);
+    margin-inline: 0 auto;
+    padding: 0.32rem;
+}
+
+.shell:not(.shellModal):not(.stackedShell) .footerActions > div:first-child {
+    flex: 1 1 11rem;
+}
+
+.shell:not(.shellModal):not(.stackedShell) .footerActions [data-action-group='secondary'] {
+    flex: 0 0 8.6rem;
+    grid-template-columns: 1fr;
+}
+
+.shell:not(.shellModal):not(.stackedShell) .footerActions [data-action-group='primary']:empty {
+    display: none;
+}
+
+.shell:not(.shellModal):not(.stackedShell) .footerActions :global(button),
+.shell:not(.shellModal):not(.stackedShell) .saveState {
+    min-height: 2.36rem;
+}
+
+.shell:not(.shellModal):not(.stackedShell) .saveState {
+    padding: 0.28rem 0.42rem;
+}
+
+.shell:not(.shellModal):not(.stackedShell) .saveState span {
+    font-size: 0.64rem;
+}
+
+/* UI-CLEANUP-085: wide in-run settings should keep actions attached to the controls, not stranded bottom-right. */
+.shellModal:not(.stackedShell)[data-settings-layout='desktop'] .footer {
+    align-self: flex-start;
+    width: min(100%, 28rem);
+    margin-top: 0.18rem;
+    padding-top: 0;
+    padding-bottom: 0;
+    border-top: 0;
+    background: transparent;
+}
+
+.shellModal:not(.stackedShell)[data-settings-layout='desktop'] .footerActions {
+    align-items: stretch;
+    flex-wrap: nowrap;
+    gap: 0.34rem;
+    width: min(24rem, 100%);
+    margin-inline: 0 auto;
+    padding: 0.28rem;
+}
+
+.shellModal:not(.stackedShell)[data-settings-layout='desktop'] .footerActions > div:first-child {
+    flex: 1 1 11rem;
+}
+
+.shellModal:not(.stackedShell)[data-settings-layout='desktop'] .footerActions [data-action-group='secondary'] {
+    flex: 0 0 8.6rem;
+    grid-template-columns: 1fr;
+}
+
+.shellModal:not(.stackedShell)[data-settings-layout='desktop'] .footerActions [data-action-group='primary']:empty {
+    display: none;
+}
+
+.shellModal:not(.stackedShell)[data-settings-layout='desktop'] .footerActions :global(button),
+.shellModal:not(.stackedShell)[data-settings-layout='desktop'] .saveState {
+    min-height: 2.28rem;
+}
+
+.shellModal:not(.stackedShell)[data-settings-layout='desktop'] .saveState {
+    padding: 0.26rem 0.4rem;
+}
+
+.shellModal:not(.stackedShell)[data-settings-layout='desktop'] .saveState span {
+    font-size: 0.64rem;
 }
 
 .stackedShell .fitViewport {
     align-items: stretch;
     justify-content: flex-start;
-    padding-block: max(4px, var(--theme-space-2xs));
+    padding-block: 4px;
     box-sizing: border-box;
 
-    --settings-sidebar-gap: var(--theme-space-sm);
-    --settings-sidebar-pad: 0.7rem;
-    --settings-content-gap: var(--theme-space-sm);
-    --settings-content-pad: 0.7rem;
+    --settings-sidebar-gap: 0.4rem;
+    --settings-sidebar-pad: 0.52rem;
+    --settings-content-gap: 0.48rem;
+    --settings-content-pad: 0.56rem;
     --settings-header-gap: 0.15rem;
-    --settings-section-gap: 0.55rem;
-    --settings-section-pad: 0.7rem;
-    --settings-field-pad: 0.6rem;
-    --settings-footer-pad-top: 0.55rem;
+    --settings-section-gap: 0.42rem;
+    --settings-section-pad: 0.56rem;
+    --settings-field-pad: 0.48rem;
+    --settings-footer-pad-top: 0.4rem;
 }
 
 .stackedShell .fitMeasureOuter {
@@ -799,10 +993,19 @@
     max-height: 100%;
 }
 
+.stackedShell.shellModal:not(.shortLandscapeShell) .fitMeasureOuter,
+.stackedShell.shellModal:not(.shortLandscapeShell) .fitZoomInner {
+    flex: 0 1 auto;
+}
+
 .stackedShell.shellModal .panel.panelModal {
     flex: 1 1 auto;
     max-height: min(calc(100dvh - 16px), calc(100svh - 16px));
     overflow: hidden;
+}
+
+.stackedShell.shellModal:not(.shortLandscapeShell) .panel.panelModal {
+    flex: 0 1 auto;
 }
 
 .stackedShell .frame {
@@ -815,10 +1018,16 @@
     min-height: 0;
 }
 
+.stackedShell.shellModal:not(.shortLandscapeShell) .frame {
+    flex: 0 1 auto;
+}
+
 .stackedShell .sidebar {
+    min-width: 0;
+    overflow: hidden;
     border-right: none;
     border-bottom: 1px solid var(--theme-divider-hairline);
-    padding-bottom: 0.55rem;
+    padding-bottom: 0.44rem;
     background:
         linear-gradient(180deg, var(--theme-backdrop-body-rim), transparent 18%),
         linear-gradient(
@@ -829,8 +1038,18 @@
 }
 
 .stackedShell .categoryNav {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 0.35rem;
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 0.22rem;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow: visible;
+    padding-bottom: 0;
+}
+
+.stackedShell .categoryNav::-webkit-scrollbar {
+    display: none;
 }
 
 .stackedShell .sidebarHeader {
@@ -845,25 +1064,223 @@
     font-size: clamp(0.98rem, 2.6vw, 1.12rem);
 }
 
+.stackedShell .contentHeader > :first-child {
+    display: none;
+}
+
+.stackedShell .headerCopy {
+    margin-top: 0;
+    font-size: 0.76rem;
+    line-height: 1.28;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+}
+
 .stackedShell .categoryButton {
-    min-height: 2.2rem;
-    padding: 0.42rem 0.5rem;
+    width: 100%;
+    min-width: 0;
+    min-height: max(1.9rem, var(--ui-touch-target-min));
+    padding: 0.34rem 0.2rem;
+    text-align: center;
 }
 
 .stackedShell .categoryLabel {
-    font-size: 0.7rem;
+    font-size: 0;
+    line-height: 1;
+}
+
+.stackedShell .categoryLabel::before {
+    content: attr(data-compact-label);
+    font-size: 0.62rem;
 }
 
 .stackedShell .categoryNote {
     display: none;
 }
 
+.stackedShell .controlCenterStrip {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.22rem;
+    margin-top: 0.06rem;
+    overflow: visible;
+    padding-bottom: 0;
+}
+
+.stackedShell .controlCenterStrip > :nth-child(2),
+.stackedShell .controlCenterStrip > :nth-child(3) {
+    display: none;
+}
+
+.stackedShell .controlCenterStrip > :last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+}
+
+.stackedShell .controlCenterRow {
+    min-width: 0;
+    padding: 0.28rem 0.38rem;
+}
+
+.stackedShell .controlCenterRow span {
+    font-size: 0.64rem;
+}
+
+.stackedShell .controlCenterRow strong {
+    font-size: 0.74rem;
+}
+
+.stackedShell.shellModal .sidebar {
+    padding-bottom: 0.42rem;
+}
+
+.stackedShell.shellModal .sidebarHeader {
+    gap: 0.1rem;
+}
+
+.stackedShell.shellModal .categoryNav {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 0.22rem;
+    overflow: visible;
+    padding-bottom: 0;
+}
+
+.stackedShell.shellModal .categoryNav::-webkit-scrollbar {
+    display: none;
+}
+
+.stackedShell.shellModal .categoryButton {
+    width: 100%;
+    min-width: 0;
+    min-height: max(2rem, var(--ui-touch-target-min));
+    padding: 0.36rem 0.2rem;
+}
+
+.stackedShell.shellModal .contentTitle {
+    font-size: clamp(0.92rem, 2.4vw, 1.04rem);
+}
+
+.stackedShell.shellModal .headerCopy {
+    -webkit-line-clamp: 1;
+    font-size: 0.72rem;
+}
+
+.stackedShell.shellModal .controlCenterStrip {
+    grid-template-columns: 1fr;
+}
+
+.stackedShell.shellModal .controlCenterStrip > [data-settings-control-row]:not([data-settings-control-row='live_controls']) {
+    display: none;
+}
+
+.stackedShell.shellModal .controlCenterRow {
+    padding: 0.3rem 0.42rem;
+}
+
+.stackedShell.shellModal .subsectionNav {
+    gap: 0.26rem;
+}
+
+.stackedShell.shellModal .subsectionButton {
+    min-width: 5rem;
+    padding: 0.34rem 0.56rem;
+}
+
+@media (max-width: 420px) {
+    .stackedShell.shellModal .categoryNav {
+        gap: 0.18rem;
+    }
+
+    .stackedShell.shellModal .categoryButton {
+        padding: 0.32rem 0.12rem;
+    }
+}
+
+@media (max-width: 360px) {
+    .stackedShell .categoryNav {
+        gap: 0.14rem;
+    }
+
+    .stackedShell .categoryLabel::before,
+    .stackedShell .subsectionButton::before {
+        font-size: 0.56rem;
+    }
+
+    .stackedShell .controlCenterStrip {
+        grid-template-columns: 1fr;
+    }
+
+    .stackedShell .controlCenterStrip > :last-child:nth-child(odd) {
+        grid-column: auto;
+    }
+}
+
+.stackedShell .subsectionNav {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(3.35rem, 1fr));
+    gap: 0.22rem;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow: visible;
+    padding-bottom: 0;
+}
+
+.stackedShell .subsectionNav::-webkit-scrollbar {
+    display: none;
+}
+
+.stackedShell .subsectionButton {
+    min-width: 0;
+    min-height: max(1.9rem, var(--ui-touch-target-min));
+    padding: 0.34rem 0.24rem;
+    font-size: 0;
+    line-height: 1;
+}
+
+.stackedShell .subsectionButton::before {
+    content: attr(data-compact-label);
+    font-size: 0.62rem;
+}
+
 .stackedShell .footerActions {
     width: 100%;
 }
 
+.stackedShell .footerActions[data-action-placement='dock'] {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.12fr);
+    align-items: stretch;
+    gap: 0.34rem;
+    padding: 0.32rem;
+}
+
+.stackedShell .footerActions[data-action-placement='dock'] > div:first-child {
+    order: initial;
+    width: auto !important;
+    padding-top: 0;
+    border-top: 0;
+}
+
+.stackedShell .footerActions[data-action-placement='dock'] [data-action-group='secondary'] {
+    display: contents;
+}
+
+.stackedShell .footerActions[data-action-placement='dock'] [data-action-group='primary']:empty {
+    display: none;
+}
+
 .stackedShell .footerActions :global(button) {
     width: 100%;
+    min-height: 2.68rem;
+    padding-block: 0.5rem;
+}
+
+.stackedShell .saveState {
+    min-height: 2.68rem;
+    padding: 0.36rem 0.44rem;
 }
 
 .stackedShell .contentPane {
@@ -878,14 +1295,59 @@
     min-height: 0;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
-    padding-bottom: 0.4rem;
+    padding-bottom: 0.28rem;
 }
 
 .stackedShell .footer {
-    padding-top: 0.42rem;
+    padding-top: 0.32rem;
     background:
         linear-gradient(180deg, rgba(7, 8, 12, 0), rgba(7, 8, 12, 0.96) 32%),
         color-mix(in srgb, var(--theme-void) 68%, transparent);
+}
+
+.stackedShell .section {
+    gap: 0.36rem;
+    padding: 0.46rem;
+    border-radius: var(--ui-radius-md);
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 12%, transparent);
+    background:
+        linear-gradient(180deg, rgba(255, 243, 217, 0.025), transparent 40%),
+        color-mix(in srgb, var(--theme-void) 24%, transparent);
+    box-shadow: inset 0 1px 0 color-mix(in srgb, white 3%, transparent);
+}
+
+.stackedShell .fieldCard,
+.stackedShell .toggleRow {
+    gap: 0.28rem;
+    padding: 0.42rem;
+    border-radius: calc(var(--ui-radius-md) - 0.08rem);
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 12%, transparent);
+    background: color-mix(in srgb, var(--theme-void) 32%, transparent);
+    box-shadow: inset 0 1px 0 color-mix(in srgb, white 3%, transparent);
+}
+
+.stackedShell .fieldText {
+    gap: 0.08rem;
+}
+
+.stackedShell .fieldText strong {
+    font-size: 0.84rem;
+}
+
+.stackedShell .fieldText span {
+    font-size: 0.73rem;
+    line-height: 1.25;
+}
+
+.stackedShell .segmented {
+    gap: 0.38rem;
+}
+
+.stackedShell .segmentButton,
+.stackedShell .segmentButtonDisabled {
+    min-height: max(2rem, var(--ui-touch-target-min));
+    padding: 0.4rem 0.58rem;
+    font-size: 0.62rem;
 }
 
 .shortLandscapeShell .fitViewport {
@@ -1007,6 +1469,15 @@
         color-mix(in srgb, var(--theme-void) 68%, transparent);
 }
 
+.stackedShell.shellModal .contentScroll {
+    flex: 0 1 auto;
+    max-height: 100%;
+}
+
+.stackedShell.shellModal .footer {
+    margin-top: 0;
+}
+
 .shortLandscapeShell .subsectionNav {
     gap: 0.3rem;
 }
@@ -1014,6 +1485,11 @@
 .shortLandscapeShell .subsectionButton {
     min-height: 1.8rem;
     padding: 0.28rem 0.48rem;
+    font-size: 0;
+}
+
+.shortLandscapeShell .subsectionButton::before {
+    content: attr(data-compact-label);
     font-size: 0.6rem;
 }
 
@@ -1026,6 +1502,12 @@
 }
 
 .shortLandscapeShell .categoryLabel {
+    font-size: 0;
+    line-height: 1;
+}
+
+.shortLandscapeShell .categoryLabel::before {
+    content: attr(data-compact-label);
     font-size: 0.62rem;
 }
 
@@ -1101,6 +1583,19 @@
     gap: 0.3rem;
 }
 
+.shortLandscapeShell .saveState {
+    min-height: 1.8rem;
+    padding: 0.28rem 0.45rem;
+}
+
+.shortLandscapeShell .saveState strong {
+    font-size: 0.62rem;
+}
+
+.shortLandscapeShell .saveState span {
+    font-size: 0.62rem;
+}
+
 .shortLandscapeShell .footerActions :global(button) {
     min-height: 1.8rem;
     padding: 0.34rem 0.65rem;
@@ -1162,32 +1657,230 @@
     }
 
     .stackedShell .categoryNav {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.45rem;
-        grid-template-columns: none;
+        display: grid;
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+        gap: 0.18rem;
     }
 
     .stackedShell .categoryButton {
-        flex: 1 1 calc(50% - 0.45rem);
+        width: 100%;
+        min-width: 0;
         min-height: var(--ui-touch-target-min);
-        padding: 0.75rem 0.82rem;
+        padding: 0.34rem 0.12rem;
     }
 
     .stackedShell .categoryNote {
         display: none;
     }
 
-    .stackedShell .controlCenterStrip {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+    .stackedShell .categoryLabel {
+        font-size: 0;
     }
 
-    .stackedShell .controlCenterRow {
-        padding: 0.5rem;
+    .stackedShell .categoryLabel::before {
+        font-size: 0.58rem;
     }
 
     .toggleRow {
         align-items: flex-start;
+    }
+}
+
+/* UI-CLEANUP-014: phone settings page is a control panel, not nested documentation cards. */
+@media (max-width: 560px) and (orientation: portrait) {
+    .stackedShell:not(.shellModal) .fitViewport {
+        --settings-sidebar-gap: 0.28rem;
+        --settings-sidebar-pad: 0.42rem;
+        --settings-content-gap: 0.34rem;
+        --settings-content-pad: 0.42rem;
+        --settings-header-gap: 0.08rem;
+        --settings-section-gap: 0.28rem;
+        --settings-section-pad: 0.38rem;
+        --settings-field-pad: 0.34rem;
+        --settings-footer-pad-top: 0.26rem;
+        padding-block: 2px;
+    }
+
+    .stackedShell:not(.shellModal) .panel {
+        border-radius: var(--ui-radius-md);
+    }
+
+    .stackedShell:not(.shellModal) .sidebar {
+        gap: 0.3rem;
+        padding-bottom: 0.34rem;
+        background:
+            linear-gradient(180deg, color-mix(in srgb, var(--theme-gold-bright) 5%, transparent), transparent 54%),
+            color-mix(in srgb, var(--theme-void) 42%, transparent);
+    }
+
+    .stackedShell:not(.shellModal) .sidebarHeader {
+        gap: 0.04rem;
+    }
+
+    .stackedShell:not(.shellModal) .shellTitle {
+        font-size: 0.96rem;
+        line-height: 1.02;
+    }
+
+    .stackedShell:not(.shellModal) .categoryNav {
+        gap: 0.12rem;
+    }
+
+    .stackedShell:not(.shellModal) .categoryButton {
+        min-height: var(--ui-touch-target-min);
+        padding: 0.28rem 0.08rem;
+        border-radius: var(--ui-radius-sm);
+        background: color-mix(in srgb, var(--theme-surface-control) 74%, transparent);
+        box-shadow: none;
+    }
+
+    .stackedShell:not(.shellModal) .categoryButtonActive {
+        background:
+            linear-gradient(180deg, color-mix(in srgb, var(--theme-gold-bright) 12%, transparent), transparent 62%),
+            color-mix(in srgb, var(--theme-surface-control) 92%, transparent);
+    }
+
+    .stackedShell:not(.shellModal) .categoryLabel::before {
+        font-size: 0.54rem;
+        letter-spacing: 0.02em;
+    }
+
+    .stackedShell:not(.shellModal) .contentPane {
+        gap: 0.3rem;
+        background: color-mix(in srgb, var(--theme-void) 22%, transparent);
+    }
+
+    .stackedShell:not(.shellModal) .contentHeader {
+        gap: 0.08rem;
+    }
+
+    .stackedShell:not(.shellModal) .contentTitle {
+        font-size: 0.96rem;
+        line-height: 1.02;
+    }
+
+    .stackedShell:not(.shellModal) .headerCopy {
+        display: none;
+    }
+
+    .stackedShell:not(.shellModal) .controlCenterStrip {
+        display: flex;
+        gap: 0.18rem;
+        margin-top: 0;
+        overflow: hidden;
+    }
+
+    .stackedShell:not(.shellModal) .controlCenterRow {
+        flex: 1 1 0;
+        min-height: 1.6rem;
+        padding: 0.18rem 0.28rem;
+        border-radius: var(--ui-radius-sm);
+        background: color-mix(in srgb, var(--theme-surface-control) 52%, transparent);
+        box-shadow: none;
+    }
+
+    .stackedShell:not(.shellModal) .controlCenterRow span {
+        font-size: 0.52rem;
+        line-height: 1;
+    }
+
+    .stackedShell:not(.shellModal) .controlCenterRow strong {
+        overflow: hidden;
+        font-size: 0.62rem;
+        line-height: 1.05;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .stackedShell:not(.shellModal) .subsectionNav {
+        gap: 0.14rem;
+    }
+
+    .stackedShell:not(.shellModal) .subsectionButton {
+        min-height: var(--ui-touch-target-min);
+        padding: 0.28rem 0.12rem;
+        border-radius: var(--ui-radius-sm);
+        background: color-mix(in srgb, var(--theme-surface-control) 68%, transparent);
+        box-shadow: none;
+    }
+
+    .stackedShell:not(.shellModal) .subsectionButtonActive {
+        background:
+            linear-gradient(180deg, color-mix(in srgb, var(--theme-gold-bright) 10%, transparent), transparent 62%),
+            color-mix(in srgb, var(--theme-surface-control) 88%, transparent);
+    }
+
+    .stackedShell:not(.shellModal) .subsectionButton::before {
+        font-size: 0.56rem;
+        letter-spacing: 0.02em;
+    }
+
+    .stackedShell:not(.shellModal) .section {
+        gap: 0.24rem;
+        padding: 0.36rem;
+        border-radius: var(--ui-radius-sm);
+        background: color-mix(in srgb, var(--theme-surface-glass) 44%, transparent);
+        box-shadow: none;
+    }
+
+    .stackedShell:not(.shellModal) .sectionHeading {
+        font-size: 0.94rem;
+        line-height: 1;
+    }
+
+    .stackedShell:not(.shellModal) .fieldCard,
+    .stackedShell:not(.shellModal) .toggleRow {
+        gap: 0.2rem;
+        padding: 0.32rem;
+        border-radius: var(--ui-radius-sm);
+        background: color-mix(in srgb, var(--theme-void) 18%, transparent);
+        box-shadow: none;
+    }
+
+    .stackedShell:not(.shellModal) .fieldText {
+        gap: 0.04rem;
+    }
+
+    .stackedShell:not(.shellModal) .fieldText strong {
+        font-size: 0.76rem;
+        line-height: 1.05;
+    }
+
+    .stackedShell:not(.shellModal) .fieldText span {
+        display: none;
+    }
+
+    .stackedShell:not(.shellModal) .segmented {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(4.4rem, 1fr));
+        gap: 0.2rem;
+    }
+
+    .stackedShell:not(.shellModal) .segmentButton,
+    .stackedShell:not(.shellModal) .segmentButtonDisabled {
+        min-height: var(--ui-touch-target-min);
+        padding: 0.34rem 0.42rem;
+        border-radius: var(--ui-radius-sm);
+        font-size: 0.54rem;
+        letter-spacing: 0.04em;
+    }
+
+    .stackedShell:not(.shellModal) .footer {
+        padding-top: 0.22rem;
+    }
+
+    .stackedShell:not(.shellModal) .footerActions[data-action-placement='dock'] {
+        gap: 0.18rem;
+        padding: 0.22rem;
+    }
+
+    .stackedShell:not(.shellModal) .footerActions :global(button),
+    .stackedShell:not(.shellModal) .saveState {
+        min-height: 2.3rem;
+    }
+
+    .stackedShell:not(.shellModal) .saveState {
+        padding: 0.28rem 0.36rem;
     }
 }
 
@@ -1227,4 +1920,758 @@
     flex-wrap: wrap;
     gap: var(--theme-space-md);
     margin-top: var(--theme-space-sm);
+}
+
+/* UI-CLEANUP-067: phone settings is a full control surface, not a short floating slab. */
+@media (max-width: 560px) and (orientation: portrait) {
+    .stackedShell:not(.shellModal) {
+        padding: 0.5rem;
+    }
+
+    .stackedShell:not(.shellModal) .fitViewport {
+        align-items: stretch;
+        justify-content: stretch;
+        padding-block: 0;
+    }
+
+    .stackedShell:not(.shellModal) .fitMeasureOuter,
+    .stackedShell:not(.shellModal) .fitZoomInner,
+    .stackedShell:not(.shellModal) .panel {
+        display: flex;
+        flex: 1 1 auto;
+        flex-direction: column;
+        min-height: 0;
+        height: 100%;
+    }
+
+    .stackedShell:not(.shellModal) .frame {
+        flex: 1 1 auto;
+        min-height: 0;
+        height: 100%;
+        grid-template-rows: auto minmax(0, 1fr);
+    }
+
+    .stackedShell:not(.shellModal) .contentPane {
+        flex: 1 1 auto;
+        min-height: 0;
+    }
+
+    .stackedShell:not(.shellModal) .contentScroll {
+        flex: 1 1 auto;
+        min-height: 0;
+        overflow-y: auto;
+        padding-bottom: 0.42rem;
+    }
+
+    .stackedShell:not(.shellModal) .footer {
+        flex: 0 0 auto;
+        padding-top: 0.28rem;
+        background:
+            linear-gradient(180deg, rgba(7, 8, 12, 0), rgba(7, 8, 12, 0.92) 36%),
+            color-mix(in srgb, var(--theme-void) 70%, transparent);
+    }
+
+    .stackedShell:not(.shellModal) .section {
+        background: color-mix(in srgb, var(--theme-surface-glass) 38%, transparent);
+    }
+}
+
+/* UI-CLEANUP-069: phone settings keeps actions attached to controls instead of stranding them at the shell bottom. */
+@media (max-width: 560px) and (orientation: portrait) {
+    .stackedShell:not(.shellModal) .fitViewport {
+        align-items: flex-start;
+        overflow: visible;
+    }
+
+    .stackedShell:not(.shellModal) .fitMeasureOuter,
+    .stackedShell:not(.shellModal) .fitZoomInner,
+    .stackedShell:not(.shellModal) .panel {
+        flex: 0 0 auto;
+        height: auto;
+    }
+
+    .stackedShell:not(.shellModal) .frame {
+        flex: 0 0 auto;
+        height: auto;
+        overflow: hidden;
+    }
+
+    .stackedShell:not(.shellModal) .contentPane {
+        flex: 0 0 auto;
+    }
+
+    .stackedShell:not(.shellModal) .contentScroll {
+        flex: 0 1 auto;
+        max-height: calc(100dvh - 18.8rem);
+        padding-bottom: 0.22rem;
+    }
+
+    .stackedShell:not(.shellModal) .footer {
+        margin-top: 0;
+        padding-top: 0.2rem;
+        background: transparent;
+    }
+}
+
+/* UI-CLEANUP-072: in-run phone settings should be a compact control sheet, not a tall framed settings page. */
+@media (max-width: 560px) and (orientation: portrait) {
+    .stackedShell.shellModal {
+        padding:
+            max(0.42rem, env(safe-area-inset-top, 0px))
+            max(0.42rem, env(safe-area-inset-right, 0px))
+            max(0.42rem, env(safe-area-inset-bottom, 0px))
+            max(0.42rem, env(safe-area-inset-left, 0px));
+    }
+
+    .stackedShell.shellModal .fitViewport {
+        align-items: flex-start;
+        justify-content: center;
+        overflow: visible;
+        padding-block: 0;
+    }
+
+    .stackedShell.shellModal .fitMeasureOuter,
+    .stackedShell.shellModal .fitZoomInner,
+    .stackedShell.shellModal .panel {
+        flex: 0 0 auto;
+        min-height: 0;
+        height: auto;
+    }
+
+    .stackedShell.shellModal .panel.panelModal {
+        max-height: calc(100dvh - 0.84rem);
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 20%, transparent);
+        box-shadow:
+            0 0 0 1px color-mix(in srgb, black 30%, transparent),
+            0 16px 34px color-mix(in srgb, black 42%, transparent);
+    }
+
+    .stackedShell.shellModal .frame {
+        grid-template-rows: auto minmax(0, 1fr);
+        min-height: 0;
+        height: auto;
+        overflow: hidden;
+    }
+
+    .stackedShell.shellModal .sidebar {
+        gap: 0.24rem;
+        padding: 0.44rem 0.48rem 0.32rem;
+    }
+
+    .stackedShell.shellModal .sidebarHeader {
+        gap: 0.02rem;
+    }
+
+    .stackedShell.shellModal .sidebarHeader p {
+        display: none;
+    }
+
+    .stackedShell.shellModal .shellTitle {
+        font-size: clamp(0.96rem, 4.7vw, 1.12rem);
+        line-height: 1;
+    }
+
+    .stackedShell.shellModal .categoryNav {
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+        gap: 0.08rem;
+    }
+
+    .stackedShell.shellModal .categoryButton {
+        min-height: 2.42rem;
+        padding: 0.18rem 0.08rem;
+        border-radius: var(--ui-radius-sm);
+        background: color-mix(in srgb, var(--theme-void) 35%, transparent);
+        box-shadow: none;
+    }
+
+    .stackedShell.shellModal .categoryLabel {
+        font-size: 0;
+        line-height: 1;
+    }
+
+    .stackedShell.shellModal .categoryLabel::before {
+        content: attr(data-compact-label);
+        font-size: 0.48rem;
+        letter-spacing: 0.02em;
+    }
+
+    .stackedShell.shellModal .categoryNote,
+    .stackedShell.shellModal .headerCopy,
+    .stackedShell.shellModal .controlCenterStrip {
+        display: none;
+    }
+
+    .stackedShell.shellModal .contentPane {
+        gap: 0.26rem;
+        padding: 0.34rem 0.48rem 0;
+        overflow: hidden;
+    }
+
+    .stackedShell.shellModal .contentHeader {
+        display: flex;
+        align-items: baseline;
+        gap: 0.32rem;
+        min-height: 0;
+    }
+
+    .stackedShell.shellModal .contentTitle {
+        font-size: clamp(0.86rem, 4.2vw, 1rem);
+        line-height: 1;
+    }
+
+    .stackedShell.shellModal .subsectionNav {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 0.1rem;
+    }
+
+    .stackedShell.shellModal .subsectionButton {
+        min-height: 2.42rem;
+        padding: 0.22rem 0.08rem;
+        border-radius: var(--ui-radius-sm);
+    }
+
+    .stackedShell.shellModal .subsectionButton::before {
+        font-size: 0.52rem;
+        letter-spacing: 0.02em;
+    }
+
+    .stackedShell.shellModal .contentScroll {
+        flex: 0 1 auto;
+        max-height: calc(100dvh - 18rem);
+        gap: 0.2rem;
+        padding-bottom: 0.18rem;
+    }
+
+    .stackedShell.shellModal .section {
+        gap: 0.22rem;
+        padding: 0.32rem;
+        border-radius: var(--ui-radius-sm);
+        background: color-mix(in srgb, var(--theme-void) 20%, transparent);
+        box-shadow: none;
+    }
+
+    .stackedShell.shellModal .sectionHeading {
+        font-size: 0.92rem;
+        line-height: 1;
+        letter-spacing: 0.03em;
+    }
+
+    .stackedShell.shellModal .fieldCard,
+    .stackedShell.shellModal .toggleRow {
+        gap: 0.2rem;
+        padding: 0.3rem;
+        border-radius: var(--ui-radius-sm);
+        background: color-mix(in srgb, var(--theme-void) 24%, transparent);
+        box-shadow: none;
+    }
+
+    .stackedShell.shellModal .fieldText {
+        gap: 0.04rem;
+    }
+
+    .stackedShell.shellModal .fieldText strong {
+        font-size: 0.74rem;
+        line-height: 1.05;
+    }
+
+    .stackedShell.shellModal .fieldText span {
+        display: none;
+    }
+
+    .stackedShell.shellModal .segmented {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(4.25rem, 1fr));
+        gap: 0.18rem;
+    }
+
+    .stackedShell.shellModal .segmentButton,
+    .stackedShell.shellModal .segmentButtonDisabled {
+        min-height: 2.5rem;
+        padding: 0.3rem 0.34rem;
+        border-radius: var(--ui-radius-sm);
+        font-size: 0.54rem;
+        letter-spacing: 0.04em;
+    }
+
+    .stackedShell.shellModal .footer {
+        margin-top: 0;
+        padding: 0.2rem 0.48rem 0.42rem;
+        background: transparent;
+    }
+
+    .stackedShell.shellModal .footerActions[data-action-placement='dock'] {
+        gap: 0.18rem;
+        padding: 0.22rem;
+    }
+
+    .stackedShell.shellModal .footerActions :global(button),
+    .stackedShell.shellModal .saveState {
+        min-height: 2.5rem;
+    }
+
+    .stackedShell.shellModal .saveState {
+        padding: 0.28rem 0.34rem;
+    }
+}
+
+/* UI-CLEANUP-099: short-landscape run settings must scroll above the action dock instead of clipping behind it. */
+@media (max-height: 520px) and (orientation: landscape) {
+    .shortLandscapeShell.shellModal {
+        padding:
+            max(0.48rem, env(safe-area-inset-top, 0px))
+            max(0.5rem, env(safe-area-inset-right, 0px))
+            max(0.48rem, env(safe-area-inset-bottom, 0px))
+            max(0.5rem, env(safe-area-inset-left, 0px));
+    }
+
+    .shortLandscapeShell.shellModal .fitViewport,
+    .shortLandscapeShell.shellModal .fitMeasureOuter,
+    .shortLandscapeShell.shellModal .fitZoomInner {
+        display: flex;
+        flex: 1 1 auto;
+        flex-direction: column;
+        min-height: 0;
+    }
+
+    .shortLandscapeShell.shellModal .panel.panelModal {
+        display: flex;
+        flex: 0 0 auto;
+        flex-direction: column;
+        min-height: 0;
+        height: auto;
+        max-height: calc(100dvh - 0.96rem);
+        padding: 0.42rem;
+        overflow: hidden;
+    }
+
+    .shortLandscapeShell.shellModal .panel {
+        flex: 0 0 auto !important;
+        height: auto !important;
+        max-height: calc(100dvh - 0.96rem) !important;
+    }
+
+    .shortLandscapeShell.shellModal .frame {
+        display: grid;
+        grid-template-rows: auto minmax(0, auto);
+        flex: 0 0 auto;
+        min-height: 0;
+        height: auto !important;
+        overflow: hidden;
+    }
+
+    .shortLandscapeShell.shellModal .sidebar {
+        gap: 0.18rem;
+        padding: 0.3rem 0.36rem 0.2rem;
+    }
+
+    .shortLandscapeShell.shellModal .shellTitle {
+        font-size: clamp(1.02rem, 4.1vw, 1.28rem);
+        line-height: 1;
+    }
+
+    .shortLandscapeShell.shellModal .categoryNav {
+        gap: 0.14rem;
+        margin-inline: 0;
+        padding-inline: 0;
+        scrollbar-width: none;
+    }
+
+    .shortLandscapeShell.shellModal .categoryNav::-webkit-scrollbar {
+        display: none;
+    }
+
+    .shortLandscapeShell.shellModal .categoryButton {
+        min-width: min(5.05rem, 18vw);
+        min-height: var(--ui-touch-target-min, 44px);
+        padding: 0.24rem 0.34rem;
+        border-radius: var(--ui-radius-sm);
+    }
+
+    .shortLandscapeShell.shellModal .categoryLabel::before {
+        font-size: 0.54rem;
+    }
+
+    .shortLandscapeShell.shellModal .contentPane {
+        display: grid;
+        grid-template-rows: auto auto minmax(0, auto) auto;
+        gap: 0.18rem;
+        min-height: 0;
+        padding: 0.18rem 0.36rem 0.28rem;
+        overflow: hidden;
+    }
+
+    .shortLandscapeShell.shellModal .contentHeader {
+        gap: 0.2rem;
+        min-height: 0;
+    }
+
+    .shortLandscapeShell.shellModal .contentTitle {
+        font-size: 0.94rem;
+        line-height: 1;
+    }
+
+    .shortLandscapeShell.shellModal .controlCenterStrip {
+        display: none;
+    }
+
+    .shortLandscapeShell.shellModal .subsectionNav {
+        gap: 0.14rem;
+    }
+
+    .shortLandscapeShell.shellModal .subsectionButton {
+        min-height: 1.72rem;
+        padding: 0.2rem 0.36rem;
+    }
+
+    .shortLandscapeShell.shellModal .contentScroll {
+        min-height: 0;
+        max-height: calc(100dvh - 14.2rem);
+        padding-bottom: 0.3rem;
+        overflow-y: auto;
+    }
+
+    .shortLandscapeShell.shellModal .section {
+        gap: 0.2rem;
+        padding: 0.3rem;
+        border-radius: var(--ui-radius-sm);
+    }
+
+    .shortLandscapeShell.shellModal .sectionHeading {
+        font-size: 0.78rem;
+        line-height: 1;
+    }
+
+    .shortLandscapeShell.shellModal .boardPresentationPair {
+        gap: 0.28rem;
+    }
+
+    .shortLandscapeShell.shellModal .fieldCard,
+    .shortLandscapeShell.shellModal .toggleRow {
+        gap: 0.18rem;
+        padding: 0.28rem;
+        border-radius: var(--ui-radius-sm);
+    }
+
+    .shortLandscapeShell.shellModal .fieldText strong {
+        font-size: 0.68rem;
+        line-height: 1;
+    }
+
+    .shortLandscapeShell.shellModal .fieldText span {
+        display: none;
+    }
+
+    .shortLandscapeShell.shellModal .segmented {
+        gap: 0.12rem;
+    }
+
+    .shortLandscapeShell.shellModal .segmentButton,
+    .shortLandscapeShell.shellModal .segmentButtonDisabled {
+        min-height: var(--ui-touch-target-min, 44px);
+        padding: 0.24rem 0.28rem;
+        font-size: 0.5rem;
+        letter-spacing: 0.02em;
+    }
+
+    .shortLandscapeShell.shellModal .footer {
+        margin-top: 0;
+        padding: 0;
+        background: transparent;
+    }
+
+    .shortLandscapeShell.shellModal .footerActions[data-action-placement='dock'] {
+        gap: 0.18rem;
+        padding: 0.2rem;
+    }
+
+    .shortLandscapeShell.shellModal .footerActions :global(button),
+    .shortLandscapeShell.shellModal .saveState {
+        min-height: var(--ui-touch-target-min, 44px);
+    }
+}
+
+/* UI-CLEANUP-108: phone utility settings are compact controls, not nested plaques. */
+@media (max-width: 560px) and (orientation: portrait) {
+    .stackedShell .panel {
+        border-color: color-mix(in srgb, var(--theme-text-muted) 10%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 76%, var(--theme-panel-solid) 24%);
+        box-shadow: 0 12px 28px color-mix(in srgb, var(--theme-shadow) 28%, transparent);
+    }
+
+    .stackedShell .frame {
+        background: transparent;
+    }
+
+    .stackedShell .sidebar {
+        gap: 0.18rem;
+        padding: 0.34rem 0.42rem 0.24rem;
+        border-bottom-color: color-mix(in srgb, var(--theme-text-muted) 8%, transparent);
+    }
+
+    .stackedShell .sidebarHeader {
+        gap: 0.02rem;
+    }
+
+    .stackedShell .sidebarEyebrow {
+        font-size: 0.46rem;
+        letter-spacing: 0.22em;
+    }
+
+    .stackedShell .shellTitle {
+        font-size: clamp(1.02rem, 5vw, 1.24rem);
+        line-height: 0.98;
+    }
+
+    .stackedShell .categoryNav {
+        gap: 0.08rem;
+    }
+
+    .stackedShell .categoryButton {
+        min-height: 2.08rem;
+        padding: 0.12rem 0.08rem;
+        border-color: color-mix(in srgb, var(--theme-text-muted) 10%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 48%, transparent);
+        box-shadow: none;
+    }
+
+    .stackedShell .categoryLabel::before {
+        font-size: 0.46rem;
+        letter-spacing: 0.01em;
+    }
+
+    .stackedShell .contentPane {
+        gap: 0.18rem;
+        padding: 0.28rem 0.42rem 0;
+    }
+
+    .stackedShell .contentHeader {
+        min-height: 0;
+    }
+
+    .stackedShell .contentTitle {
+        font-size: clamp(0.9rem, 4.4vw, 1.08rem);
+        line-height: 1;
+    }
+
+    .stackedShell .controlCenterStrip {
+        padding: 0;
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+    }
+
+    .stackedShell .subsectionNav {
+        gap: 0.08rem;
+    }
+
+    .stackedShell .subsectionButton {
+        min-height: 2.02rem;
+        padding: 0.14rem 0.08rem;
+        border-color: color-mix(in srgb, var(--theme-text-muted) 10%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 42%, transparent);
+        box-shadow: none;
+    }
+
+    .stackedShell .subsectionButton::before {
+        font-size: 0.48rem;
+        letter-spacing: 0.01em;
+    }
+
+    .stackedShell .contentScroll {
+        gap: 0.12rem;
+        padding-bottom: 0.14rem;
+    }
+
+    .stackedShell .section {
+        gap: 0.16rem;
+        padding: 0.24rem;
+        border-color: color-mix(in srgb, var(--theme-text-muted) 8%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 32%, transparent);
+        box-shadow: none;
+    }
+
+    .stackedShell .sectionHeading {
+        font-size: 0.82rem;
+        letter-spacing: 0.02em;
+    }
+
+    .stackedShell .fieldCard,
+    .stackedShell .toggleRow {
+        padding: 0.24rem;
+        border-color: color-mix(in srgb, var(--theme-text-muted) 8%, transparent);
+        background: transparent;
+        box-shadow: none;
+    }
+
+    .stackedShell .segmented {
+        gap: 0.12rem;
+    }
+
+    .stackedShell .segmentButton,
+    .stackedShell .segmentButtonDisabled {
+        min-height: 2.18rem;
+        padding: 0.22rem 0.24rem;
+        font-size: 0.5rem;
+        letter-spacing: 0.01em;
+    }
+
+    .stackedShell .footer {
+        padding: 0.16rem 0.42rem 0.34rem;
+    }
+
+    .stackedShell .footerActions[data-action-placement='dock'] {
+        gap: 0.12rem;
+        padding: 0.16rem;
+        border-color: color-mix(in srgb, var(--theme-text-muted) 8%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 48%, transparent);
+        box-shadow: none;
+    }
+
+    .stackedShell .footerActions :global(button),
+    .stackedShell .saveState {
+        min-height: 2.28rem;
+    }
+}
+
+/* UI-CLEANUP-112: standard Settings should feel like a compact utility panel, not a two-page plaque. */
+@media (min-width: 761px) {
+    .shell:not(.stackedShell):not(.shellModal) {
+        padding: clamp(0.72rem, 1.6vw, 1.1rem);
+    }
+
+    .shell:not(.stackedShell):not(.shellModal) .fitMeasureOuter {
+        width: min(1120px, 100%);
+    }
+
+    .shell:not(.stackedShell):not(.shellModal) .panel {
+        border-color: color-mix(in srgb, var(--theme-text-muted) 10%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 74%, var(--theme-panel-solid) 26%);
+        box-shadow: 0 14px 30px color-mix(in srgb, var(--theme-shadow) 24%, transparent);
+    }
+
+    .shell:not(.stackedShell):not(.shellModal) .frame {
+        grid-template-columns: minmax(12rem, 0.28fr) minmax(0, 1fr);
+        background: transparent;
+    }
+
+    .shell:not(.stackedShell):not(.shellModal) .sidebar {
+        gap: 0.5rem;
+        padding: 1rem;
+        border-right-color: color-mix(in srgb, var(--theme-text-muted) 8%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 26%, transparent);
+    }
+
+    .shell:not(.stackedShell):not(.shellModal) .sidebarHeader {
+        gap: 0.12rem;
+    }
+
+    .shell:not(.stackedShell):not(.shellModal) .sidebarEyebrow {
+        font-size: 0.5rem;
+        letter-spacing: 0.28em;
+    }
+
+    .shell:not(.stackedShell):not(.shellModal) .shellTitle {
+        font-size: clamp(1.5rem, 2.5vw, 2rem);
+        line-height: 0.98;
+    }
+
+    .shell:not(.stackedShell):not(.shellModal) .categoryNav {
+        gap: 0.42rem;
+    }
+
+    .shell:not(.stackedShell):not(.shellModal) .categoryButton {
+        min-height: 3.28rem;
+        padding: 0.54rem 0.66rem;
+        border-color: color-mix(in srgb, var(--theme-text-muted) 10%, transparent);
+        border-radius: var(--ui-radius-sm);
+        background: color-mix(in srgb, var(--theme-void) 42%, transparent);
+        box-shadow: none;
+    }
+
+    .shell:not(.stackedShell):not(.shellModal) .categoryLabel {
+        font-size: 0.82rem;
+        line-height: 1;
+    }
+
+    .shell:not(.stackedShell):not(.shellModal) .categoryNote {
+        font-size: 0.58rem;
+        line-height: 1.14;
+    }
+
+    .shell:not(.stackedShell):not(.shellModal) .contentPane {
+        gap: 0.7rem;
+        padding: 1rem 1.1rem 0.9rem;
+    }
+
+    .shell:not(.stackedShell):not(.shellModal) .contentHeader {
+        gap: 0.22rem;
+    }
+
+    .shell:not(.stackedShell):not(.shellModal) .contentTitle {
+        font-size: clamp(1.5rem, 2.4vw, 1.96rem);
+        line-height: 1;
+    }
+
+    .shell:not(.stackedShell):not(.shellModal) .headerCopy {
+        font-size: 0.74rem;
+        line-height: 1.16;
+    }
+
+    .shell:not(.stackedShell):not(.shellModal) .controlCenterStrip {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 0.32rem;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+    }
+
+    .shell:not(.stackedShell):not(.shellModal) .controlCenterRow {
+        min-height: 2.62rem;
+        padding: 0.38rem 0.52rem;
+        border-color: color-mix(in srgb, var(--theme-text-muted) 10%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 38%, transparent);
+        box-shadow: none;
+    }
+
+    .shell:not(.stackedShell):not(.shellModal) .subsectionNav {
+        gap: 0.28rem;
+    }
+
+    .shell:not(.stackedShell):not(.shellModal) .subsectionButton {
+        min-height: 2.2rem;
+        padding: 0.34rem 0.5rem;
+        border-color: color-mix(in srgb, var(--theme-text-muted) 10%, transparent);
+        border-radius: var(--ui-radius-sm);
+        background: color-mix(in srgb, var(--theme-void) 42%, transparent);
+        box-shadow: none;
+    }
+
+    .shell:not(.stackedShell):not(.shellModal) .section {
+        gap: 0.48rem;
+        padding: 0.64rem;
+        border-color: color-mix(in srgb, var(--theme-text-muted) 9%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 28%, transparent);
+        box-shadow: none;
+    }
+
+    .shell:not(.stackedShell):not(.shellModal) .sectionHeading {
+        font-size: 1rem;
+        letter-spacing: 0.12em;
+    }
+
+    .shell:not(.stackedShell):not(.shellModal) .fieldCard,
+    .shell:not(.stackedShell):not(.shellModal) .toggleRow {
+        padding: 0.52rem;
+        border-color: color-mix(in srgb, var(--theme-text-muted) 9%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 22%, transparent);
+        box-shadow: none;
+    }
+
+    .shell:not(.stackedShell):not(.shellModal) .footerActions {
+        padding: 0.22rem;
+        border-color: color-mix(in srgb, var(--theme-text-muted) 8%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 46%, transparent);
+        box-shadow: none;
+    }
 }

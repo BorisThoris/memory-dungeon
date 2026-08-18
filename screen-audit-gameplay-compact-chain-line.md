@@ -1,0 +1,9 @@
+- generic [ref=f1e2] [box=0,0,1600,980]:
+  - generic [ref=f1e3] [box=0,0,1600,980]:
+    - link "Skip to main content" [ref=f1e4] [cursor=pointer] [box=-1,-1,1,1]:
+      - /url: "#app-main"
+    - main [ref=f1e5] [box=0,0,1600,980]:
+      - generic [ref=f1e2894] [box=0,0,1600,980]:
+        - heading "Level 1" [level=1] [ref=f1e2895] [box=-1,-1,1,1]
+        - generic [ref=f1e2897] [box=0,0,1600,980]
+  - region "Memory Dungeon tips" [box=320,944,960,0]

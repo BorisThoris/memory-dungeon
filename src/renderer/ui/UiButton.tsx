@@ -1,4 +1,5 @@
 import type { ButtonHTMLAttributes, ReactNode } from 'react';
+import { cx } from './classNames';
 import styles from './UiButton.module.css';
 
 export type UiButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger' | 'debug';
@@ -21,7 +22,9 @@ const UiButton = ({
     ...rest
 }: UiButtonProps) => (
     <button
-        className={`${styles.root} ${styles[size]} ${styles[variant]} ${fullWidth ? styles.fullWidth : ''} ${className}`.trim()}
+        className={cx(styles.root, styles[size], styles[variant], fullWidth && styles.fullWidth, className)}
+        data-ui-size={size}
+        data-ui-variant={variant}
         type={type}
         {...rest}
     >

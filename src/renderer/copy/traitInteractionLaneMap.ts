@@ -188,12 +188,20 @@ export const traitInteractionLaneRoleIdMapAttr = (laneMap: readonly TraitInterac
 
 export const formatTraitInteractionLaneMapLabel = (
     label: string,
-    laneMap: readonly TraitInteractionLaneMapEntry[]
+    laneMap: readonly TraitInteractionLaneMapEntry[],
+    options?: {
+        includeCueBadge?: boolean;
+    }
 ): string => {
+    const includeCueBadge = options?.includeCueBadge ?? true;
     const rowCopy = laneMap
         .map(
             (lane) =>
-                `${lane.label} ${getTraitInteractionLaneCueBadge(lane).label} cue ${getTraitInteractionLaneCueBadge(lane).glyph}. ${getTraitInteractionLaneRole(lane)} x${lane.count}. ${getTraitInteractionLaneAction(lane.id)}. ${trimTerminalPunctuation(lane.cue)}`
+                `${lane.label} ${
+                    includeCueBadge
+                        ? `${getTraitInteractionLaneCueBadge(lane).label} cue ${getTraitInteractionLaneCueBadge(lane).glyph}. `
+                        : ''
+                }${getTraitInteractionLaneRole(lane)} x${lane.count}. ${getTraitInteractionLaneAction(lane.id)}. ${trimTerminalPunctuation(lane.cue)}`
         )
         .join('. ');
 

@@ -5296,7 +5296,7 @@ describe('GameScreen (OVR-014)', () => {
         );
 
         expect(getByTestId('game-relic-offer-overlay')).toBeTruthy();
-        expect(getByText('Relic draft · tier 1')).toBeTruthy();
+        expect(getByText('Choose a relic - tier 1')).toBeTruthy();
         expect(getByText('Pick 1 of 2 this visit')).toBeTruthy();
         expect(getByText(/Featured-objective favor/)).toBeTruthy();
         expect(getByText(/Scholar contract/)).toBeTruthy();
@@ -5650,6 +5650,15 @@ describe('GameScreen (OVR-014)', () => {
         expect(screen.getByTestId('floor-clear-cashout-strip')).toHaveTextContent('Next chase');
         expect(screen.getByTestId('floor-clear-cashout-strip')).toHaveTextContent('claim pickups');
         expect(screen.getByTestId('floor-clear-cashout-strip').querySelector('[data-cashout-tone="missed"]')).toHaveTextContent('1 pickup left');
+        expect(screen.getByTestId('floor-clear-cashout-strip').querySelector('[data-cashout-id="cashout"]')).toHaveAttribute(
+            'data-cashout-display-value',
+            '3 paid'
+        );
+        expect(
+            screen.getByTestId('floor-clear-cashout-strip').querySelector(
+                '[data-cashout-id="cashout"] [data-cashout-value-kind="compact"]'
+            )
+        ).toHaveTextContent('3 paid');
         expect(screen.getByTestId('floor-clear-cashout-strip').getAttribute('aria-label')).toContain(
             'Floor clear cashout read. Cashout: trait route + objective + 1 pickup - +1 combo shard.'
         );

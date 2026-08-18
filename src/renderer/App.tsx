@@ -36,6 +36,8 @@ export const APP_MAIN_LANDMARK_ID = 'app-main';
 const GameScreen = lazy(() => import('./components/GameScreen'));
 const DevBlueprintExplorer = import.meta.env.DEV ? lazy(() => import('./dev/BlueprintExplorer')) : null;
 
+const preloadGameScreen = (): Promise<unknown> => import('./components/GameScreen');
+
 const focusAppMainLandmark = (): void => {
     document.getElementById(APP_MAIN_LANDMARK_ID)?.focus({ preventScroll: true });
 };
@@ -198,6 +200,9 @@ const App = () => {
                 const fixture = createPlayablePathFixture(id, {
                     bestScore: useAppStore.getState().saveData.bestScore
                 });
+                if (fixture.run && fixture.view === 'playing') {
+                    await preloadGameScreen();
+                }
                 useAppStore.setState({
                     view: fixture.view,
                     run: fixture.run,

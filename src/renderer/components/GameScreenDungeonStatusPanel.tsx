@@ -143,7 +143,7 @@ export const GameScreenDungeonStatusPanel = ({
                 {panel.bossText ? <span>{panel.bossText}</span> : null}
             </div>
             {panel.objectiveText ? (
-                <div className={styles.dungeonStatusObjective}>
+                <div className={styles.dungeonStatusObjective} data-testid="dungeon-status-objective">
                     <span>{panel.objectiveText}</span>
                     {panel.objectiveDetail ? <small>{panel.objectiveDetail}</small> : null}
                 </div>

@@ -1,0 +1,9 @@
+- generic [ref=f15e2] [box=0,0,1440,900]:
+  - generic [ref=f15e3] [box=0,0,1440,900]:
+    - link "Skip to main content" [ref=f15e4] [cursor=pointer] [box=-1,-1,1,1]:
+      - /url: "#app-main"
+    - main [ref=f15e5] [box=0,0,1440,900]:
+      - region "Inventory" [ref=f15e704] [box=0,0,1440,900]:
+        - generic [ref=f15e705] [box=22,18,1397,133]
+        - generic [ref=f15e712] [box=140,167,1150,277]
+  - region "Memory Dungeon tips" [box=240,864,960,0]

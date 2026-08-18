@@ -58,6 +58,166 @@ test.describe('Gameplay readability hardening', () => {
         await expectBoardKeepsPriority(page);
     });
 
+    test('mobile hazard fixture compresses chapter and dungeon status chrome above the board', async ({ page }) => {
+        test.setTimeout(90_000);
+        await page.setViewportSize({ width: 390, height: 844 });
+        await openPlayablePathFixture(page, 'activeRunWithHazards');
+        await expectGameplayReady(page);
+
+        const chapterBanner = page.getByTestId('endless-chapter-banner');
+        const dungeonStatus = page.getByTestId('dungeon-status-panel');
+        const runStrip = page.getByTestId('dungeon-run-strip');
+        const traitCue = page.getByTestId('trait-mode-cue');
+
+        await expect(chapterBanner).toBeVisible();
+        await expect(dungeonStatus).toBeVisible();
+        await expect(runStrip).toBeVisible();
+        await expect(traitCue).toBeVisible();
+        await expectNoHorizontalOverflow(page);
+
+        const layout = await page.evaluate(() => {
+            const rect = (selector: string) => {
+                const element = document.querySelector(selector);
+                if (!element) {
+                    return null;
+                }
+                const box = element.getBoundingClientRect();
+                return {
+                    bottom: box.bottom,
+                    height: box.height,
+                    top: box.top
+                };
+            };
+
+            const display = (selector: string) => {
+                const element = document.querySelector(selector);
+                return element ? getComputedStyle(element).display : null;
+            };
+
+            const frame = document.querySelector('[data-testid="tile-board-frame"]');
+            return {
+                banner: rect('[data-testid="endless-chapter-banner"]'),
+                frameHasDungeonStatus: frame?.getAttribute('data-has-dungeon-status-panel'),
+                hintDisplay: display('[data-testid="endless-chapter-hint"]'),
+                objectiveDetailDisplay: display('[data-testid="dungeon-status-objective"] small'),
+                panel: rect('[data-testid="dungeon-status-panel"]'),
+                runStrip: rect('[data-testid="dungeon-run-strip"]'),
+                signalsDisplay: display('[data-testid="endless-chapter-signals"]'),
+                traitCue: rect('[data-testid="trait-mode-cue"]')
+            };
+        });
+
+        expect(layout.frameHasDungeonStatus).toBe('true');
+        expect(layout.hintDisplay).toBe('none');
+        expect(layout.signalsDisplay).toBe('none');
+        expect(layout.objectiveDetailDisplay).toBe('none');
+        expect(layout.banner?.height ?? 0).toBeLessThanOrEqual(64);
+        expect(layout.panel?.height ?? 0).toBeLessThanOrEqual(96);
+        expect(layout.runStrip?.height ?? 0).toBeLessThanOrEqual(42);
+        expect(layout.traitCue?.top ?? 0).toBeGreaterThanOrEqual((layout.panel?.bottom ?? 0) + 4);
+    });
+
+    test('compact mobile overlay consolidates board cues into one readable dock', async ({ page }) => {
+        test.setTimeout(90_000);
+        await page.setViewportSize({ width: 390, height: 844 });
+        await openPlayablePathFixture(page, 'activeRunWithTraitRouteSetup');
+        await expectGameplayReady(page);
+        await expect(page.getByTestId('board-opportunity-compass')).toBeVisible();
+        await expect(page.getByTestId('chain-opportunity-chip')).toBeHidden();
+
+        const layout = await page.evaluate(() => {
+            const readRect = (selector: string) => {
+                const element = document.querySelector(selector);
+                if (!element) {
+                    return null;
+                }
+                const rect = element.getBoundingClientRect();
+                return {
+                    top: rect.top,
+                    right: rect.right,
+                    bottom: rect.bottom,
+                    left: rect.left,
+                    width: rect.width,
+                    height: rect.height
+                };
+            };
+
+            const display = (selector: string) => {
+                const element = document.querySelector(selector);
+                return element instanceof HTMLElement ? getComputedStyle(element).display : null;
+            };
+
+            return {
+                actionDock: readRect('[data-testid="game-action-dock"]'),
+                bottomRightDockDisplay: display('[data-testid="board-status-bottom-right"]'),
+                chainDisplay: display('[data-testid="chain-opportunity-chip"]'),
+                compass: readRect('[data-testid="board-opportunity-compass"]'),
+                pickupDisplay: display('[data-testid="pickup-opportunity-chip"]'),
+                viewportWidth: window.innerWidth
+            };
+        });
+
+        expect(layout.compass).toBeTruthy();
+        expect(layout.actionDock).toBeTruthy();
+        expect(layout.chainDisplay).toBeNull();
+        expect([null, 'none']).toContain(layout.pickupDisplay);
+        expect([null, 'none']).toContain(layout.bottomRightDockDisplay);
+        expect(layout.compass!.bottom).toBeLessThanOrEqual(layout.actionDock!.top - 4);
+        expect(layout.compass!.right).toBeLessThanOrEqual(layout.viewportWidth + 1);
+        expect(layout.compass!.height).toBeGreaterThanOrEqual(24);
+        expect(layout.compass!.height).toBeLessThanOrEqual(34);
+        expect(layout.compass!.width).toBeLessThanOrEqual(205);
+    });
+
+    test('mobile action dock prioritizes gameplay powers before utility chrome', async ({ page }) => {
+        test.setTimeout(90_000);
+        await page.setViewportSize({ width: 390, height: 844 });
+        await openPlayablePathFixture(page, 'activeRunWithHazards');
+        await expectGameplayReady(page);
+
+        const controls = page.getByTestId('game-controls-toolbar');
+        const powers = page.getByTestId('game-power-toolbar');
+        const shuffle = page.getByTestId('game-power-shuffle');
+        const payoff = page.getByTestId('tool-payoff-stack');
+
+        await expect(controls).toBeVisible();
+        await expect(powers).toBeVisible();
+        await expect(shuffle).toBeVisible();
+        await expect(payoff).toBeAttached();
+        await expect(payoff).toBeHidden();
+
+        const layout = await page.evaluate(() => {
+            const rect = (selector: string) => {
+                const element = document.querySelector(selector);
+                if (!element) {
+                    return null;
+                }
+                const box = element.getBoundingClientRect();
+                return {
+                    left: box.left,
+                    right: box.right,
+                    width: box.width
+                };
+            };
+
+            const display = (selector: string) => {
+                const element = document.querySelector(selector);
+                return element instanceof HTMLElement ? getComputedStyle(element).display : null;
+            };
+
+            return {
+                controls: rect('[data-testid="game-controls-toolbar"]'),
+                payoffDisplay: display('[data-testid="tool-payoff-stack"]'),
+                powers: rect('[data-testid="game-power-toolbar"]'),
+                shuffle: rect('[data-testid="game-power-shuffle"]')
+            };
+        });
+
+        expect(layout.powers?.left ?? Number.POSITIVE_INFINITY).toBeLessThan(layout.controls?.left ?? Number.NEGATIVE_INFINITY);
+        expect(layout.shuffle?.left ?? Number.POSITIVE_INFINITY).toBeLessThan(layout.controls?.left ?? Number.NEGATIVE_INFINITY);
+        expect(layout.payoffDisplay).toBe('none');
+    });
+
     test('mobile floor clear keeps payoff stack and route choices readable', async ({ page }) => {
         test.setTimeout(120_000);
         await page.setViewportSize({ width: 390, height: 844 });
@@ -131,7 +291,7 @@ test.describe('Gameplay readability hardening', () => {
             'Pickup cashout'
         );
         await expect(page.getByTestId('board-opportunity-pickup')).toContainText('Pickup cashout');
-        await expect(page.getByTestId('board-opportunity-pickup')).toContainText('Shard spark pickup');
+        await expect(page.getByTestId('board-opportunity-pickup')).toHaveAccessibleName(/Shard spark pickup/i);
         await expectLocatorFullyInWindowViewport(page, page.getByTestId('board-opportunity-pickup'), 8);
     });
 
@@ -178,13 +338,15 @@ test.describe('Gameplay readability hardening', () => {
         await expect(frame).toHaveAttribute('data-opportunity-best-detail', /Use swap to connect route/);
         await expect(page.getByTestId('trait-mode-cue')).toContainText('Trait mode');
         await expect(page.getByTestId('trait-mode-cue')).toContainText('Prime route');
-        await expect(page.getByTestId('trait-mode-cue')).toContainText('Swap Sealed with Filler');
+        await expect(page.getByTestId('trait-mode-cue')).toContainText('Use swap to connect route');
+        await expect(page.getByTestId('trait-mode-cue')).toHaveAccessibleName(/Swap Sealed with Filler/i);
         await expectLocatorFullyInWindowViewport(page, page.getByTestId('trait-mode-cue'), 8);
         await expect(page.getByTestId('chain-opportunity-chip')).toContainText('Use swap');
         await expect(page.getByTestId('chain-opportunity-beat')).toContainText('Prime beat');
         await expect(page.getByTestId('chain-opportunity-beat')).toContainText('Use swap');
         await expect(page.getByTestId('chain-opportunity-beat')).toHaveAttribute('data-chain-beat-tier', 'setup');
-        await expect(page.getByTestId('chain-opportunity-beat')).toHaveAccessibleName(
+        await expect(page.getByTestId('chain-opportunity-beat')).toHaveAttribute(
+            'aria-label',
             'Prime beat: Prime route. 2 beats. Use swap.'
         );
         await expectLocatorFullyInWindowViewport(page, page.getByTestId('chain-opportunity-beat'), 8);
@@ -196,8 +358,12 @@ test.describe('Gameplay readability hardening', () => {
             'data-chain-next-action-tone',
             'setup'
         );
-        await expect(page.getByTestId('chain-opportunity-next-action')).toContainText('Do next: prime route');
+        await expect(page.getByTestId('chain-opportunity-next-action')).toContainText('Prime');
         await expect(page.getByTestId('chain-opportunity-next-action')).toContainText('Swap Sealed with Filler');
+        await expect(page.getByTestId('chain-opportunity-next-action')).toHaveAttribute(
+            'aria-label',
+            /Next chain action\. Prime\..*Swap Sealed with Filler/i
+        );
         await expect(page.getByTestId('chain-opportunity-shot-map')).toHaveAttribute(
             'data-chain-shot-map-primary',
             'route-setup'
@@ -243,7 +409,7 @@ test.describe('Gameplay readability hardening', () => {
         await expect(page.getByTestId('chain-opportunity-meter')).toContainText('Swap Sealed with Filler');
         await expect(page.getByTestId('chain-opportunity-meter')).toHaveAttribute(
             'aria-label',
-            /Chain board: 2 prime targets.*Swap Sealed with Filler/i
+            /Chain board: Prime x2\..*Swap Sealed with Filler/i
         );
         await expect(page.getByTestId('board-opportunity-chain')).toContainText('Use swap');
         await expect(page.getByTestId('board-opportunity-chain')).toContainText('Stack prime');

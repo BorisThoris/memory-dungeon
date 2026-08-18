@@ -1,0 +1,9 @@
+- generic [ref=f1e2] [box=0,0,1440,960]:
+  - generic [ref=f1e3] [box=0,0,1440,960]:
+    - link "Skip to main content" [ref=f1e4] [cursor=pointer] [box=-1,-1,1,1]:
+      - /url: "#app-main"
+    - main [ref=f1e5] [box=0,0,1440,960]:
+      - generic [ref=f1e431] [box=0,0,1440,960]:
+        - generic [ref=f1e432] [box=0,0,1440,960]
+        - dialog "Abandon run?" [ref=f1e838] [box=380,402,680,156]
+  - region "Memory Dungeon tips" [box=240,924,960,0]

@@ -37,6 +37,23 @@ describe('CollectionScreen REG-093 reward gallery', () => {
     it('surfaces owned, in-progress, and missing local reward rows', () => {
         render(<CollectionScreen />);
 
+        expect(screen.getByTestId('collection-section-rail')).toHaveTextContent('Achievements');
+        expect(screen.getByTestId('collection-section-rail')).toHaveTextContent('Signals');
+        expect(screen.getByTestId('collection-section-rail')).toHaveTextContent('Rewards');
+        expect(screen.getByTestId('collection-section-rail')).toHaveTextContent('Symbols');
+        expect(screen.getByText('Saved progress: rewards, records, relics, and tile sets.')).toBeInTheDocument();
+        expect(screen.getByRole('link', { name: 'Signals' })).toHaveAttribute('href', '#collection-reward-signals');
+        expect(screen.getByRole('link', { name: 'Signals' })).toHaveAttribute('data-compact-label', 'Signal');
+        expect(screen.getByRole('link', { name: 'Achievements' })).toHaveAttribute('data-compact-label', 'Achieve');
+        expect(screen.getByRole('link', { name: 'Meta upgrades' })).toHaveAttribute('data-compact-label', 'Upgrades');
+        expect(screen.getByRole('link', { name: 'Rewards' })).toHaveAttribute('href', '#collection-reward-gallery');
+        expect(screen.getByRole('link', { name: 'Rewards' })).toHaveAttribute('data-compact-label', 'Reward');
+        const perfectMemoryCard = screen.getByText('Perfect Memory').closest('div');
+        expect(perfectMemoryCard).toHaveTextContent(
+            'Clear a level with zero mismatches and no disallowed powers that run. Pins are allowed.'
+        );
+        expect(perfectMemoryCard).not.toHaveTextContent('shuffle (full-board or row/region)');
+
         const gallery = screen.getByTestId('collection-reward-gallery');
         expect(gallery).toHaveTextContent(/Achievement gallery/);
         expect(gallery).toHaveTextContent(/Cosmetic gallery/);
@@ -60,7 +77,8 @@ describe('CollectionScreen REG-093 reward gallery', () => {
         );
 
         const metaBoard = screen.getByTestId('collection-meta-progression-board');
-        expect(metaBoard).toHaveTextContent(/Initiate tier - 3 honor marks to next profile level/i);
+        expect(metaBoard).toHaveTextContent(/Initiate tier: 3 honor marks to next level/i);
+        expect(metaBoard).not.toHaveTextContent(/Initiate tier -\s*3 honor/i);
         expect(metaBoard).toHaveTextContent(/Progression focus/i);
         expect(metaBoard).toHaveTextContent(/Next: Week of Archives/i);
         expect(metaBoard).toHaveTextContent(/Adept tier at profile level 3/i);

@@ -1,0 +1,17 @@
+- generic [ref=e2] [box=0,0,1440,960]:
+  - generic [ref=e3] [box=0,0,1440,960]:
+    - link "Skip to main content" [ref=e4] [cursor=pointer] [box=-1,-1,1,1]:
+      - /url: "#app-main"
+    - main [ref=e5] [box=0,0,1440,960]:
+      - region "Choose Your Path" [ref=e62] [box=0,0,1440,960]:
+        - generic [ref=e66] [box=230,18,980,932]:
+          - generic [ref=e68] [box=230,18,592,186]:
+            - generic [ref=e69] [box=230,18,592,32]
+            - paragraph [ref=e76] [box=230,54,592,13]: Start a run
+            - heading "Choose Your Path" [level=1] [ref=e77] [box=230,79,592,107]
+            - paragraph [ref=e78] [box=230,189,592,14]: Start the recommended run now, or browse the full mode library when you want a different rule set.
+          - generic [ref=e79] [box=253,222,935,728]:
+            - region "Recommended run" [ref=e80] [box=253,222,592,457]
+            - region "Browse modes" [ref=e152] [box=253,688,935,227]
+            - paragraph [ref=e770] [box=253,925,523,25]
+  - region "Memory Dungeon tips" [box=240,924,960,0]

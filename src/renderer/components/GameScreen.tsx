@@ -61,7 +61,6 @@ import { useViewportSize } from '../hooks/useViewportSize';
 import {
     buildRelicDraftBonusFootnoteLines,
     getRelicOfferSubtitle,
-    getRelicOfferTitle,
     relicDraftProgressLine,
     relicEffectLabels
 } from '../copy/relicDraftOffer';
@@ -908,6 +907,7 @@ const RiskWagerSignalRowsView = ({
 type FloorClearCashoutTone = 'chain' | 'missed' | 'reward';
 type FloorClearCashoutRow = {
     detail: string;
+    displayValue: string;
     id: 'cashout' | 'missed' | 'next';
     label: string;
     tone: FloorClearCashoutTone;
@@ -1145,6 +1145,7 @@ const getFloorClearCashoutRows = (run: RunState): FloorClearCashoutRow[] => {
             : bestStreak >= 3
               ? `x${bestStreak} chain`
               : `+${result.scoreGained.toLocaleString()} score`;
+    const cashoutDisplayValue = rewardStack.length > 1 ? `${rewardStack.length} paid` : cashoutValue;
     const cashoutDetail = [
         traitPaid
             ? result.traitRouteObjectiveReward ?? 'Trait route cashout paid.'
@@ -1171,6 +1172,7 @@ const getFloorClearCashoutRows = (run: RunState): FloorClearCashoutRow[] => {
     return [
         {
             detail: cashoutDetail || 'Main score banked.',
+            displayValue: cashoutDisplayValue,
             id: 'cashout',
             label: 'Cashout',
             tone: 'reward',
@@ -1182,6 +1184,7 @@ const getFloorClearCashoutRows = (run: RunState): FloorClearCashoutRow[] => {
                 : result.perfect
                   ? 'No miss tax; tempo stayed clean.'
                   : 'Misses broke chain pressure.',
+            displayValue: missedValue,
             id: 'missed',
             label: missedPickups > 0 || !result.perfect ? 'Missed value' : 'Clean read',
             tone: missedPickups > 0 || !result.perfect ? 'missed' : 'reward',
@@ -1191,6 +1194,7 @@ const getFloorClearCashoutRows = (run: RunState): FloorClearCashoutRow[] => {
             detail: missedPickups > 0
                 ? 'Prioritize marked reward pairs before ending the floor.'
                 : chainTarget.actionHint,
+            displayValue: nextValue,
             id: 'next',
             label: 'Next chase',
             tone: missedPickups === 0 ? 'chain' : 'reward',
@@ -2739,7 +2743,9 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                     : boardFloaterPayload.impactCue.label,
                 matchPayoffLaneMapLabel(boardFloaterPayload.payoffLaneMap),
                 boardFloaterTraitLaneMap.length > 0
-                    ? formatTraitInteractionLaneMapLabel('Match trait interaction lanes', boardFloaterTraitLaneMap)
+                    ? formatTraitInteractionLaneMapLabel('Match trait interaction lanes', boardFloaterTraitLaneMap, {
+                          includeCueBadge: false
+                      })
                     : undefined,
                 boardFloaterPayload.crescendo
                     ? `${boardFloaterPayload.crescendo.label}: ${boardFloaterPayload.crescendo.detail}`
@@ -3202,6 +3208,8 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         document.addEventListener('keydown', onKeyDown, true);
         return () => document.removeEventListener('keydown', onKeyDown, true);
     }, [shortcutsHelpStateRef, suppressStatusOverlays]);
+
+    const gameplayToolbarSuppressed = suppressStatusOverlays || Boolean(run.relicOffer);
 
     useEffect(() => {
         const floorClearedModalBlocksToasts =
@@ -4418,6 +4426,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                 debugPeekActive={run.debugPeekActive}
                                 dimmedTileIds={focusDimmedTileIds}
                                 guidedTargetTileIds={onboardingBoardTargetIds}
+                                hasDungeonStatusPanel={activeDungeonPanel != null}
                                 chainContext={{
                                     armedPerkId: armedRewardPerkCue?.id ?? null,
                                     armedPerkDetail: armedRewardPerkCue?.readinessDetail ?? null,
@@ -5433,7 +5442,8 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                         <span
                                             aria-label={formatTraitInteractionLaneMapLabel(
                                                 'Match trait interaction lanes',
-                                                boardFloaterTraitLaneMap
+                                                boardFloaterTraitLaneMap,
+                                                { includeCueBadge: false }
                                             )}
                                             className={styles.boardFloaterTraitLaneMap}
                                             data-match-trait-lane-actions={boardFloaterTraitLaneActionMapAttr}
@@ -6013,49 +6023,51 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                 </aside>
                             ) : null}
                         </div>
-                        <GameLeftToolbar
-                            applyFlashPairPower={applyFlashPairPower}
-                            boardPinMode={boardPinMode}
-                            cameraViewportMode={cameraViewportMode}
-                            canRegionShuffleRow={canRegionShuffleRowForRun}
-                            destroyDisabled={destroyDisabled}
-                            destroyPairArmed={destroyPairArmed}
-                            flashPairDisabled={flashPairDisabled}
-                            flashPairTitle={flashPairTitle}
-                            maxPinnedTiles={MAX_PINNED_TILES}
-                            onRequestAbandonRun={handleRequestAbandonRun}
-                            onViewportReset={handleToolbarViewportReset}
-                            openCodexFromPlaying={openCodexFromPlaying}
-                            openInventoryFromPlaying={openInventoryFromPlaying}
-                            openSettingsPlaying={openSettingsPlayingMode}
-                            peekModeArmed={peekModeArmed}
-                            regionShuffleDisabled={regionShuffleDisabled}
-                            regionShuffleTitle={regionShuffleTitle}
-                            rulesHintNudge={rulesHintNudge}
-                            rulesHintsExpanded={rulesHintsExpanded}
-                            run={run}
-                            setRulesHintsExpanded={setRulesHintsExpanded}
-                            debugFlags={toolbarDebugFlags}
-                            showBoardPowerBar={showBoardPowerBar}
-                            showFlashPairPower={showFlashPairPower}
-                            showForgivenessHint={showForgivenessHint}
-                            shuffleBoard={shuffleBoard}
-                            shuffleDisabled={shuffleDisabled}
-                            shuffleRegionRow={shuffleRegionRow}
-                            shuffleTitle={shuffleTitle}
-                            tileBoardRef={tileBoardRef}
-                            tileSwapArmed={tileSwapArmed}
-                            tileSwapDisabled={tileSwapDisabled}
-                            tileSwapFirstTileId={tileSwapFirstTileId}
-                            tileSwapTitle={tileSwapTitle}
-                            toggleBoardPinMode={toggleBoardPinMode}
-                            toggleDestroyPairArmed={toggleDestroyPairArmed}
-                            togglePeekMode={togglePeekMode}
-                            toggleTileSwapArmed={toggleTileSwapArmed}
-                            toggleStrayArm={toggleStrayArm}
-                            triggerDebugReveal={triggerDebugReveal}
-                            undoResolvingFlip={undoResolvingFlip}
-                        />
+                        {!gameplayToolbarSuppressed ? (
+                            <GameLeftToolbar
+                                applyFlashPairPower={applyFlashPairPower}
+                                boardPinMode={boardPinMode}
+                                cameraViewportMode={cameraViewportMode}
+                                canRegionShuffleRow={canRegionShuffleRowForRun}
+                                destroyDisabled={destroyDisabled}
+                                destroyPairArmed={destroyPairArmed}
+                                flashPairDisabled={flashPairDisabled}
+                                flashPairTitle={flashPairTitle}
+                                maxPinnedTiles={MAX_PINNED_TILES}
+                                onRequestAbandonRun={handleRequestAbandonRun}
+                                onViewportReset={handleToolbarViewportReset}
+                                openCodexFromPlaying={openCodexFromPlaying}
+                                openInventoryFromPlaying={openInventoryFromPlaying}
+                                openSettingsPlaying={openSettingsPlayingMode}
+                                peekModeArmed={peekModeArmed}
+                                regionShuffleDisabled={regionShuffleDisabled}
+                                regionShuffleTitle={regionShuffleTitle}
+                                rulesHintNudge={rulesHintNudge}
+                                rulesHintsExpanded={rulesHintsExpanded}
+                                run={run}
+                                setRulesHintsExpanded={setRulesHintsExpanded}
+                                debugFlags={toolbarDebugFlags}
+                                showBoardPowerBar={showBoardPowerBar}
+                                showFlashPairPower={showFlashPairPower}
+                                showForgivenessHint={showForgivenessHint}
+                                shuffleBoard={shuffleBoard}
+                                shuffleDisabled={shuffleDisabled}
+                                shuffleRegionRow={shuffleRegionRow}
+                                shuffleTitle={shuffleTitle}
+                                tileBoardRef={tileBoardRef}
+                                tileSwapArmed={tileSwapArmed}
+                                tileSwapDisabled={tileSwapDisabled}
+                                tileSwapFirstTileId={tileSwapFirstTileId}
+                                tileSwapTitle={tileSwapTitle}
+                                toggleBoardPinMode={toggleBoardPinMode}
+                                toggleDestroyPairArmed={toggleDestroyPairArmed}
+                                togglePeekMode={togglePeekMode}
+                                toggleTileSwapArmed={toggleTileSwapArmed}
+                                toggleStrayArm={toggleStrayArm}
+                                triggerDebugReveal={triggerDebugReveal}
+                                undoResolvingFlip={undoResolvingFlip}
+                            />
+                        ) : null}
                     </div>
                 </div>
                 </div>
@@ -6130,7 +6142,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                 {!suppressStatusOverlays && !abandonRunConfirmOpen && run.status === 'paused' && (
                     <OverlayModal
                         actions={[
-                            { label: 'Resume', onClick: resume, variant: 'primary' },
+                            { label: 'Resume', onClick: resume, variant: 'secondary' },
                             {
                                 label: 'Retreat',
                                 onClick: () => {
@@ -6143,7 +6155,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                         headerPlateTone="pause"
                         onEscape={resume}
                         ornamentalHeaderPlate
-                        subtitle="Game is paused. The board, memorize phase, and debug timers stay frozen until you resume or retreat. Press P to resume."
+                        subtitle="The descent is held in place until you resume or retreat."
                         testId="game-pause-overlay"
                         title="Run paused"
                     />
@@ -6159,7 +6171,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                             run.relicOffer.picksRemaining
                         )}
                         testId="game-relic-offer-overlay"
-                        title={getRelicOfferTitle(run.relicOffer.tier)}
+                        title={`Choose a relic - tier ${run.relicOffer.tier}`}
                     >
                         {relicDraftProgressText ? (
                             <p className={styles.relicDraftProgress}>{relicDraftProgressText}</p>
@@ -6300,9 +6312,24 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                     data-testid="floor-clear-cashout-strip"
                                 >
                                     {floorClearCashoutRows.map((row) => (
-                                        <span data-cashout-tone={row.tone} key={row.id}>
+                                        <span
+                                            data-cashout-display-value={row.displayValue}
+                                            data-cashout-id={row.id}
+                                            data-cashout-tone={row.tone}
+                                            data-cashout-value={row.value}
+                                            key={row.id}
+                                        >
                                             <small>{row.label}</small>
-                                            <strong>{row.value}</strong>
+                                            <strong className={styles.floorClearCashoutFullValue} data-cashout-value-kind="full">
+                                                {row.value}
+                                            </strong>
+                                            <strong
+                                                aria-hidden="true"
+                                                className={styles.floorClearCashoutCompactValue}
+                                                data-cashout-value-kind="compact"
+                                            >
+                                                {row.displayValue}
+                                            </strong>
                                             <em>{row.detail}</em>
                                         </span>
                                     ))}
@@ -6383,36 +6410,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                     })}
                                 </div>
                             ) : null}
-                            {floorClearCausalityRows.length > 0 ? (
-                                <div
-                                    aria-label={floorClearCausalityRowsLabel}
-                                    className={styles.floorClearCausalityGrid}
-                                    data-testid="floor-clear-causality-grid"
-                                >
-                                    {floorClearCausalityRows.map((row) => (
-                                        <p
-                                            className={styles.modalNote}
-                                            data-causality-group={row.group}
-                                            data-mechanic-tokens={row.tokens.join(' ')}
-                                            key={row.id}
-                                        >
-                                            <strong>{row.label}:</strong> {row.detail}
-                                        </p>
-                                    ))}
-                                </div>
-                            ) : null}
-                            {clearLifeBonusLabel ? <p className={styles.modalNote}>{clearLifeBonusLabel}</p> : null}
-                            <p className={styles.modalNote}>{FLOOR_CLEAR_LIFE_CARRYOVER_NOTE}</p>
-                            {featuredObjectiveResultLine ? <p className={styles.modalNote}>{featuredObjectiveResultLine}</p> : null}
-                            {featuredObjectiveFailureLine ? <p className={styles.modalNote}>{featuredObjectiveFailureLine}</p> : null}
-                            {featuredObjectiveStreakLine ? <p className={styles.modalNote}>{featuredObjectiveStreakLine}</p> : null}
-                            {endlessRiskWagerOutcomeLine ? <p className={styles.modalNote}>{endlessRiskWagerOutcomeLine}</p> : null}
-                            {favorGainLine ? <p className={styles.modalNote}>{favorGainLine}</p> : null}
-                            {favorBankedLine ? <p className={styles.modalNote}>{favorBankedLine}</p> : null}
-                            {firstClearOnboardingLine ? <p className={styles.modalNote}>{firstClearOnboardingLine}</p> : null}
-                            {objectiveBonusLine ? <p className={styles.modalNote}>{objectiveBonusLine}</p> : null}
-                            {traitRouteObjectiveLine ? <p className={styles.modalNote}>{traitRouteObjectiveLine}</p> : null}
-                            {bonusTagsLine ? <p className={styles.modalNote}>{bonusTagsLine}</p> : null}
                             {nextFloorSignalRows.length > 0 ? (
                                 <div
                                     aria-label={nextFloorSignalRowsLabel}
@@ -6449,11 +6446,44 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                     })}
                                 </div>
                             ) : null}
-                            {currentDungeonNode ? (
-                                <p className={styles.modalNote}>
-                                    Cleared node: {currentDungeonNode.label}. Choose a connected room to shape the next board.
-                                </p>
-                            ) : null}
+                            <details className={styles.floorClearReceiptDetails} data-testid="floor-clear-receipt-details">
+                                <summary className={styles.floorClearReceiptSummary}>Run receipt</summary>
+                                {floorClearCausalityRows.length > 0 ? (
+                                    <div
+                                        aria-label={floorClearCausalityRowsLabel}
+                                        className={styles.floorClearCausalityGrid}
+                                        data-testid="floor-clear-causality-grid"
+                                    >
+                                        {floorClearCausalityRows.map((row) => (
+                                            <p
+                                                className={styles.modalNote}
+                                                data-causality-group={row.group}
+                                                data-mechanic-tokens={row.tokens.join(' ')}
+                                                key={row.id}
+                                            >
+                                                <strong>{row.label}:</strong> {row.detail}
+                                            </p>
+                                        ))}
+                                    </div>
+                                ) : null}
+                                {clearLifeBonusLabel ? <p className={styles.modalNote}>{clearLifeBonusLabel}</p> : null}
+                                <p className={styles.modalNote}>{FLOOR_CLEAR_LIFE_CARRYOVER_NOTE}</p>
+                                {featuredObjectiveResultLine ? <p className={styles.modalNote}>{featuredObjectiveResultLine}</p> : null}
+                                {featuredObjectiveFailureLine ? <p className={styles.modalNote}>{featuredObjectiveFailureLine}</p> : null}
+                                {featuredObjectiveStreakLine ? <p className={styles.modalNote}>{featuredObjectiveStreakLine}</p> : null}
+                                {endlessRiskWagerOutcomeLine ? <p className={styles.modalNote}>{endlessRiskWagerOutcomeLine}</p> : null}
+                                {favorGainLine ? <p className={styles.modalNote}>{favorGainLine}</p> : null}
+                                {favorBankedLine ? <p className={styles.modalNote}>{favorBankedLine}</p> : null}
+                                {firstClearOnboardingLine ? <p className={styles.modalNote}>{firstClearOnboardingLine}</p> : null}
+                                {objectiveBonusLine ? <p className={styles.modalNote}>{objectiveBonusLine}</p> : null}
+                                {traitRouteObjectiveLine ? <p className={styles.modalNote}>{traitRouteObjectiveLine}</p> : null}
+                                {bonusTagsLine ? <p className={styles.modalNote}>{bonusTagsLine}</p> : null}
+                                {currentDungeonNode ? (
+                                    <p className={styles.modalNote}>
+                                        Cleared node: {currentDungeonNode.label}. Choose a connected room to shape the next board.
+                                    </p>
+                                ) : null}
+                            </details>
                         </div>
                         {pendingRouteLine && pendingRouteSignalLabels && pendingRouteImpactCue && pendingRouteActionCue && run.pendingRouteCardPlan ? (
                             <div
@@ -6577,7 +6607,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                             </p>
                         ) : null}
                         {run.shopOffers.length > 0 ? (
-                            <p className={styles.modalNote}>
+                            <p className={styles.modalNote} data-testid="floor-clear-vendor-note">
                                 Vendor alcove available: {run.shopOffers.length} services, {run.shopGold} shop gold.
                             </p>
                         ) : null}
@@ -7140,7 +7170,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                 )}
                             </div>
                         ) : null}
-                        <div className={styles.modalStats}>
+                        <div className={styles.modalStats} data-floor-clear-stats="true" data-testid="floor-clear-stats">
                             <StatTile
                                 density="minimal"
                                 label="Rating"

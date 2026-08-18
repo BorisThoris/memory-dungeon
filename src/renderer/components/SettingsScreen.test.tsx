@@ -44,7 +44,22 @@ describe('SettingsScreen', () => {
         const shell = screen.getByTestId('settings-modal-shell');
         expect(shell).toHaveAttribute('data-settings-layout', 'wide-short');
         expect(screen.getByTestId('settings-shell-footer')).toHaveTextContent('Back');
-        expect(screen.getByTestId('settings-shell-footer')).toHaveTextContent('Save');
+        expect(screen.getByTestId('settings-save-state')).toHaveTextContent('Saved');
+        expect(screen.queryByRole('button', { name: 'Save' })).not.toBeInTheDocument();
+    });
+
+    it('shows the save action only after settings become dirty', async () => {
+        const user = userEvent.setup();
+        render(<SettingsScreen presentation="page" />);
+
+        expect(screen.getByTestId('settings-save-state')).toHaveTextContent('Saved');
+        expect(screen.queryByRole('button', { name: 'Save' })).not.toBeInTheDocument();
+
+        await user.click(screen.getByRole('button', { name: /accessibility/i }));
+        await user.click(screen.getByRole('checkbox', { name: /reduce motion/i }));
+
+        expect(screen.getByTestId('settings-save-state')).toHaveTextContent('Unsaved');
+        expect(screen.getByRole('button', { name: 'Save' })).toBeInTheDocument();
     });
 
     it('REG-032 explains local save scope, profile summary, and destructive reset boundaries', async () => {
@@ -92,5 +107,27 @@ describe('SettingsScreen', () => {
         expect(strip).toHaveTextContent(/Live controls/);
         expect(strip).toHaveTextContent(/saved preferences/);
         expect(strip).toHaveTextContent(/Reference placeholders/);
+    });
+
+    it('uses readable compact labels for gameplay subsection tabs', () => {
+        render(<SettingsScreen presentation="page" />);
+
+        expect(screen.getByRole('button', { name: /^gameplay reference$/i })).toHaveAttribute(
+            'data-compact-label',
+            'Guide'
+        );
+    });
+
+    it('REG-101 compacts desktop settings chrome for lighter categories', async () => {
+        const user = userEvent.setup();
+        render(<SettingsScreen presentation="page" />);
+
+        const shell = screen.getByText('Settings').closest('section');
+        expect(shell).not.toBeNull();
+        expect(shell).toHaveAttribute('data-settings-density', 'expanded');
+
+        await user.click(screen.getByRole('button', { name: /audio/i }));
+
+        expect(shell).toHaveAttribute('data-settings-density', 'compact');
     });
 });

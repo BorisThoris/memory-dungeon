@@ -620,6 +620,47 @@ const shopOfferImpactCue = (
     return { label: 'Buy burst', value: payoffBurst.value, tone: 'payoff' };
 };
 
+const shopOfferActionLabel = (offer: RunShopOfferState, impactCue: ShopOfferImpactCue): string => {
+    if (impactCue.tone === 'claimed' || offer.purchased) {
+        return 'Claimed';
+    }
+    if (impactCue.tone === 'blocked') {
+        return 'Blocked';
+    }
+    if (impactCue.tone === 'route') {
+        return 'Buy route';
+    }
+    if (impactCue.tone === 'setup') {
+        return 'Buy combo';
+    }
+    if (impactCue.tone === 'safety') {
+        return offer.itemId === 'heal_life' ? 'Buy life' : 'Buy shield';
+    }
+    if (impactCue.tone === 'control') {
+        return 'Buy control';
+    }
+    if (impactCue.tone === 'scout') {
+        return 'Buy reveal';
+    }
+    return 'Buy payoff';
+};
+
+const shopOfferActionBadge = (offer: RunShopOfferState, shopGold: number, impactCue: ShopOfferImpactCue): string => {
+    if (impactCue.tone === 'claimed' || offer.purchased) {
+        return 'Claimed';
+    }
+    if (impactCue.tone === 'blocked') {
+        if (offerStatus(offer, shopGold) === 'insufficient') {
+            return 'Need gold';
+        }
+        if (/life.*full|full/i.test(offer.unavailableReason ?? '')) {
+            return 'Full';
+        }
+        return 'Unavailable';
+    }
+    return `${offer.cost}g`;
+};
+
 const shopOfferHeatCue = (
     offer: RunShopOfferState,
     payoffBurst: ShopOfferPayoffBurst,
@@ -1247,7 +1288,7 @@ const ShopScreen = () => {
                     </div>
                 ) : null}
 
-                <div className={styles.stockGrid} aria-label="Vendor stock" role="list">
+                <div className={styles.stockGrid} aria-label="Vendor stock" data-testid="shop-stock-grid" role="list">
                     {run.shopOffers.map((offer) => {
                         const status = offerStatus(offer, run.shopGold);
                         const disabled = status !== 'available';
@@ -1278,6 +1319,8 @@ const ShopScreen = () => {
                         const recommendationScreenCue = recommendationCopy
                             ? shopOfferRecommendationScreenCue(impactCue.tone)
                             : null;
+                        const visibleActionLabel = shopOfferActionLabel(offer, impactCue);
+                        const visibleActionBadge = shopOfferActionBadge(offer, run.shopGold, impactCue);
                         const signalChipsLabel = formatShopRowsLabel(`${offer.label} offer signals`, signalChips);
                         const payoffRowsLabel = formatShopRowsLabel(`${offer.label} payoff`, payoffRows);
                         const fitRowsLabel = formatShopRowsLabel(`${offer.label} board fit`, fitRows);
@@ -1475,7 +1518,9 @@ const ShopScreen = () => {
                                         recommendationCopy
                                     )}
                                     className={styles.stockAction}
+                                    data-shop-action-badge={visibleActionBadge}
                                     data-shop-action-cue={impactCue.label}
+                                    data-shop-action-label={visibleActionLabel}
                                     data-shop-action-tone={impactCue.tone}
                                     data-testid={`shop-offer-${offer.itemId}-action`}
                                     disabled={disabled}
@@ -1486,9 +1531,9 @@ const ShopScreen = () => {
                                     }}
                                     type="button"
                                 >
-                                    <span>{offer.purchased ? 'Claimed' : `Spend ${offer.cost}g`}</span>
+                                    <span>{visibleActionLabel}</span>
                                     <small>{`${buyPlan.first} -> ${buyPlan.keep}`}</small>
-                                    <strong>{impactCue.label}</strong>
+                                    <strong>{visibleActionBadge}</strong>
                                 </button>
                             </article>
                         );
@@ -1500,6 +1545,7 @@ const ShopScreen = () => {
                         actions={[
                             {
                                 label: inFloorShop ? 'Back to board' : 'Back to floor summary',
+                                compactLabel: 'Back',
                                 description: footerBackDescription,
                                 onClick: onBack,
                                 variant: 'secondary'
@@ -1510,11 +1556,13 @@ const ShopScreen = () => {
                                     : run.pendingRouteCardPlan
                                     ? `Continue to ${routeTypeLabel(run.pendingRouteCardPlan.routeType)} floor`
                                     : 'Continue',
+                                compactLabel: 'Continue',
                                 description: footerContinueDescription,
                                 onClick: onContinue,
                                 variant: 'primary'
                             }
                         ]}
+                        actionClassName={styles.footerActionButton}
                         className={styles.footerActions}
                         leading={
                             <button

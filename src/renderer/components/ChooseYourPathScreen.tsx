@@ -36,6 +36,9 @@ import {
 } from '../audio/uiSfx';
 import { useAppStore } from '../store/useAppStore';
 import OverlayModal from './OverlayModal';
+import FeedbackBeatPips from './FeedbackBeatPips';
+import MetaScreenHeader from './MetaScreenHeader';
+import MetaSearchField from './MetaSearchField';
 import metaStyles from './MetaScreen.module.css';
 import styles from './ChooseYourPathScreen.module.css';
 
@@ -57,6 +60,41 @@ interface ModeLoopCue {
     headline: string;
     tone: ModeLoopCueTone;
 }
+
+const MOBILE_MODE_COPY: Partial<Record<string, { launch?: string; tile?: string }>> = {
+    classic: {
+        launch: 'Routes, shops, relics, and rising pair counts.',
+        tile: 'Routes, shops, relics, and rising pair counts.'
+    },
+    daily: {
+        tile: 'Shared seed, daily mutators, midnight UTC reset.'
+    },
+    dungeon_showcase: {
+        launch: 'Patrols, locks, traps, shops, and bosses.',
+        tile: 'Patrols, locks, traps, shops, and bosses.'
+    },
+    endless: {
+        tile: 'Locked while long-form rewards and fatigue are tuned.'
+    },
+    gauntlet: {
+        tile: 'Timed 5, 10, or 15 minute pressure runs.'
+    },
+    wild: {
+        tile: 'Dense power lab with jokers, sticky fingers, and pickups.'
+    },
+    practice: {
+        tile: 'Low-pressure lab for powers, tiles, and routes.'
+    },
+    scholar: {
+        tile: 'No shuffle, swap, or destroy. Prove the read.'
+    },
+    pin_vow: {
+        tile: 'Only ten pins across the run. Every mark matters.'
+    },
+    meditation: {
+        tile: 'Calmer pacing with focused mutator study.'
+    }
+};
 
 type ModeChoiceLaneId = 'chain' | 'reward' | 'pressure' | 'practice' | 'locked';
 
@@ -456,7 +494,7 @@ function cardsPerPageFromWidth(widthPx: number): number {
         return 1;
     }
     if (widthPx < 640) {
-        return 2;
+        return 3;
     }
     if (widthPx < 1100) {
         return 4;
@@ -768,6 +806,7 @@ const ChooseYourPathScreen = () => {
         def: RunModeDefinition,
         placement: 'launch' | 'tile' | 'detail'
     ): ReactElement => {
+        const compactLaunchSummary = placement === 'launch' && pathTouchCompact && !isShortLandscapeShell;
         const signals = getModeChoiceSignals(def);
         const signalText = modeChoiceSignalAria(signals);
         const laneMap = buildModeChoiceLaneMap(signals);
@@ -779,6 +818,7 @@ const ChooseYourPathScreen = () => {
             <span
                 aria-label={`${def.title} ${placement} signals. ${signalText}`}
                 className={`${styles.modeSignalStrip} ${styles[`modeSignalStrip_${placement}`]}`}
+                data-layout={compactLaunchSummary ? 'summary-only' : 'full'}
                 data-mode-lane-actions={modeChoiceLaneActionMapAttr(laneMap)}
                 data-mode-lane-map={laneMapAttr}
                 data-mode-lane-role-ids={laneRoleIdMapAttr}
@@ -860,15 +900,16 @@ const ChooseYourPathScreen = () => {
                                 <strong>{modeChoiceLaneRole(primaryModeLane)}</strong>
                                 <b>{modeChoiceLaneAction(primaryModeLane)}</b>
                                 <em>{primaryModeLane.cue}</em>
-                                <span aria-hidden="true" className={styles.modePrimaryLaneBeatPips}>
-                                    {Array.from({ length: modeChoiceLaneBeatCount(primaryModeLane) }, (_, beatIndex) => (
-                                        <s
-                                            data-mode-primary-lane-beat={beatIndex + 1}
-                                            data-mode-primary-lane-beat-focus={beatIndex === 0 ? 'primary' : 'support'}
-                                            key={beatIndex}
-                                        />
-                                    ))}
-                                </span>
+                                <FeedbackBeatPips
+                                    className={styles.modePrimaryLaneBeatPips}
+                                    count={modeChoiceLaneBeatCount(primaryModeLane)}
+                                    itemProps={(beatIndex) => ({
+                                        'data-mode-primary-lane-beat': beatIndex + 1,
+                                        'data-mode-primary-lane-beat-focus': beatIndex === 0 ? 'primary' : 'support'
+                                    })}
+                                    itemTag="s"
+                                    keyPrefix={`${def.id}-primary-lane`}
+                                />
                             </i>
                         ) : null}
                         {laneMap.map((lane) => (
@@ -903,15 +944,15 @@ const ChooseYourPathScreen = () => {
                             <small>{signal.label}</small>
                             <strong>{signal.value}</strong>
                             <b>{modeChoiceSignalAction(signal)}</b>
-                            <span aria-hidden="true" className={styles.modeSignalBeatPips}>
-                                {Array.from({ length: beatCount }, (_, beatIndex) => (
-                                    <i
-                                        data-mode-signal-beat={beatIndex + 1}
-                                        data-mode-signal-beat-focus={beatIndex === 0 ? 'primary' : 'support'}
-                                        key={beatIndex}
-                                    />
-                                ))}
-                            </span>
+                            <FeedbackBeatPips
+                                className={styles.modeSignalBeatPips}
+                                count={beatCount}
+                                itemProps={(beatIndex) => ({
+                                    'data-mode-signal-beat': beatIndex + 1,
+                                    'data-mode-signal-beat-focus': beatIndex === 0 ? 'primary' : 'support'
+                                })}
+                                keyPrefix={`${def.id}-${signal.tone}`}
+                            />
                         </span>
                     );
                 })}
@@ -943,14 +984,24 @@ const ChooseYourPathScreen = () => {
         const startActionCue = getModeLoopCue(def);
         const summary =
             freshClassicLaunch
-                ? 'Start with a guided first room: match the marked pair, clear the floor, then choose what the next room changes.'
+                ? pathTouchCompact
+                    ? 'Guided first room: match, clear, choose the next route.'
+                    : 'Start with a guided first room: match the marked pair, clear the floor, then choose what the next room changes.'
                 : def.id === 'classic'
-                  ? 'A clean dungeon descent with procedural floors, route choices, shops, and relic milestones.'
-                : def.shortDescription;
+                  ? pathTouchCompact
+                      ? MOBILE_MODE_COPY.classic?.launch ?? def.shortDescription
+                      : 'A clean dungeon descent with procedural floors, route choices, shops, and relic milestones.'
+                  : pathTouchCompact
+                    ? MOBILE_MODE_COPY[def.id]?.launch ?? def.shortDescription
+                    : def.shortDescription;
 
         return (
             <section aria-label="Recommended run" className={styles.launchSection} data-testid="choose-path-launcher">
-                <div className={styles.launchPanel}>
+                <div
+                    className={styles.launchPanel}
+                    data-library-open={browseOpen ? 'true' : 'false'}
+                    data-testid="choose-path-launch-panel"
+                >
                     <span className={styles.launchPoster} aria-hidden="true">
                         <img alt="" src={poster} />
                     </span>
@@ -961,7 +1012,9 @@ const ChooseYourPathScreen = () => {
                         <ScreenTitle as="h2" className={styles.launchModeTitle} role="screenMd">
                             {def.title}
                         </ScreenTitle>
-                        <p className={styles.launchSummary}>{summary}</p>
+                        <p className={styles.launchSummary} data-testid="choose-path-launch-summary">
+                            {summary}
+                        </p>
                         {renderModeLoopCue(def, 'launch')}
                         {renderModeSignalStrip(def, 'launch')}
                         {freshClassicLaunch ? (
@@ -978,7 +1031,7 @@ const ChooseYourPathScreen = () => {
                                 size={pathTouchCompact ? 'md' : 'lg'}
                                 type="button"
                                 variant="primary"
-                                aria-label={`Start ${def.title}. ${signalText}.`}
+                                aria-label={`Start run: ${def.title}. ${signalText}.`}
                                 data-start-action-cue={startActionCue.headline}
                                 data-start-action-tone={startActionCue.tone}
                                 onClick={() => runModeAction(def)}
@@ -1006,12 +1059,26 @@ const ChooseYourPathScreen = () => {
         );
     };
 
+    const renderLibraryFilterField = (inputClassName: string): ReactElement => (
+        <MetaSearchField
+            ref={librarySearchInputRef}
+            id="choose-path-mode-filter"
+            inputClassName={inputClassName}
+            label="Filter modes"
+            labelClassName={styles.libraryFilterLabel}
+            onChange={setLibraryQuery}
+            placeholder="Search by name or description..."
+            value={libraryQuery}
+        />
+    );
+
     const renderLibraryModeTile = (def: RunModeDefinition): ReactElement => {
         const poster = resolveModePosterUrl(def.posterKey);
         const variant = cardVariantClass(def);
         const groupLabel = RUN_MODE_GROUP_LABEL[def.group];
         const isSelected = def.id === selectedMode?.id;
         const signalText = modeChoiceSignalAria(getModeChoiceSignals(def));
+        const tileDescription = pathTouchCompact ? MOBILE_MODE_COPY[def.id]?.tile ?? def.shortDescription : def.shortDescription;
         return (
             <button
                 aria-label={`${def.title}. ${signalText}. Open details.`}
@@ -1039,7 +1106,7 @@ const ChooseYourPathScreen = () => {
                     {def.availability === 'locked' ? <span className={styles.libraryTileState}>Locked</span> : null}
                     <span className={`${styles.cardTitle} ${styles.libraryTileTitle}`}>{def.title}</span>
                     {renderModeSignalStrip(def, 'tile')}
-                    <p className={`${styles.cardBody} ${styles.libraryTileBody}`}>{def.shortDescription}</p>
+                    <p className={`${styles.cardBody} ${styles.libraryTileBody}`}>{tileDescription}</p>
                 </span>
             </button>
         );
@@ -1086,6 +1153,7 @@ const ChooseYourPathScreen = () => {
         <section
             aria-label="Choose Your Path"
             className={`${metaStyles.shell} ${styles.pathShell} ${pathTouchCompact ? styles.compactPathShell : ''} ${isShortLandscapeShell ? styles.shortTouchLandscapeShell : ''}`.trim()}
+            data-testid="choose-path-screen"
             role="region"
         >
             <div
@@ -1105,8 +1173,10 @@ const ChooseYourPathScreen = () => {
                 <div ref={pathFitMeasureRef} className={styles.pathFitMeasureOuter}>
                     <div className={styles.pathFitZoomInner} style={{ zoom: pathShellFitZoom }}>
                         <div className={styles.pathFitStack}>
-                            <header className={`${metaStyles.header} ${styles.pathStackHeader}`}>
-                                <div className={`${metaStyles.headerText} ${styles.pathHeaderText}`}>
+                            <MetaScreenHeader
+                                eyebrow="Start a run"
+                                className={styles.pathStackHeader}
+                                pretitle={
                                     <div className={styles.pathHeaderTopRow}>
                                         <button
                                             className={styles.pathBackButton}
@@ -1132,16 +1202,15 @@ const ChooseYourPathScreen = () => {
                                             <span>Settings</span>
                                         </button>
                                     </div>
-                                    <Eyebrow tone="menu">Start a run</Eyebrow>
-                                    <ScreenTitle as="h1" className={styles.pathTitle} role="display">
-                                        Choose Your Path
-                                    </ScreenTitle>
-                                    <p className={`${metaStyles.subtitle} ${styles.pathSubtitle}`}>
-                                        Start the recommended run now, or browse the full mode library when you want a
-                                        different rule set.
-                                    </p>
-                                </div>
-                            </header>
+                                }
+                                subtitle="Recommended. Browse modes for different rules."
+                                subtitleClassName={styles.pathSubtitle}
+                                textClassName={styles.pathHeaderText}
+                                title="Choose Your Path"
+                                titleAs="h1"
+                                titleClassName={styles.pathTitle}
+                                titleRole="display"
+                            />
 
                             <div className={`${metaStyles.body} ${styles.pathBody}`}>
                                 {launchMode ? renderLaunchPanel(launchMode) : null}
@@ -1164,19 +1233,9 @@ const ChooseYourPathScreen = () => {
                                                         <span className={styles.librarySearchLeadIcon} aria-hidden>
                                                             <LibrarySearchMagnifierIcon className={styles.librarySearchIconGlyph} />
                                                         </span>
-                                                        <label className={styles.libraryFilterLabel} htmlFor="choose-path-mode-filter">
-                                                            Filter modes
-                                                        </label>
-                                                        <input
-                                                            ref={librarySearchInputRef}
-                                                            autoComplete="off"
-                                                            className={`${styles.libraryFilterInput} ${styles.libraryFilterInputInset}`}
-                                                            id="choose-path-mode-filter"
-                                                            onChange={(e) => setLibraryQuery(e.target.value)}
-                                                            placeholder="Search by name or description…"
-                                                            type="search"
-                                                            value={libraryQuery}
-                                                        />
+                                                        {renderLibraryFilterField(
+                                                            `${styles.libraryFilterInput} ${styles.libraryFilterInputInset}`
+                                                        )}
                                                     </div>
                                                 </div>
                                             </div>
@@ -1213,19 +1272,7 @@ const ChooseYourPathScreen = () => {
                                                     </button>
                                                     {librarySearchOpen ? (
                                                         <div className={styles.librarySearchExpand} id="choose-path-library-search-panel">
-                                                            <label className={styles.libraryFilterLabel} htmlFor="choose-path-mode-filter">
-                                                                Filter modes
-                                                            </label>
-                                                            <input
-                                                                ref={librarySearchInputRef}
-                                                                autoComplete="off"
-                                                                className={styles.libraryFilterInput}
-                                                                id="choose-path-mode-filter"
-                                                                onChange={(e) => setLibraryQuery(e.target.value)}
-                                                                placeholder="Search by name or description…"
-                                                                type="search"
-                                                                value={libraryQuery}
-                                                            />
+                                                            {renderLibraryFilterField(styles.libraryFilterInput)}
                                                         </div>
                                                     ) : null}
                                                 </div>
@@ -1260,6 +1307,7 @@ const ChooseYourPathScreen = () => {
                                                     ref={libraryScrollerRef}
                                                     aria-label="More modes library, swipe or drag sideways to browse pages, or use arrow keys when this region is focused"
                                                     className={styles.libraryScroller}
+                                                    data-testid="choose-path-library-scroller"
                                                     onKeyDownCapture={onLibraryScrollerKeyDownCapture}
                                                     onPointerDownCapture={onLibraryDragPointerDown}
                                                     onScroll={onLibraryScroll}
@@ -1335,6 +1383,7 @@ const ChooseYourPathScreen = () => {
                     {libraryDetailMode.startContract ? (
                         <p
                             className={styles.libraryDetailIdentity}
+                            data-library-detail-note="start"
                             data-start-contract-testid={libraryDetailMode.startContract.testId}
                             data-testid="choose-path-start-contract"
                         >
@@ -1342,19 +1391,27 @@ const ChooseYourPathScreen = () => {
                         </p>
                     ) : null}
                     {libraryDetailMode.identityTag ? (
-                        <p className={styles.libraryDetailIdentity}>{libraryDetailMode.identityTag}</p>
+                        <p className={styles.libraryDetailIdentity} data-library-detail-note="identity">
+                            {libraryDetailMode.identityTag}
+                        </p>
                     ) : null}
                     {libraryDetailMode.promise ? (
-                        <p className={styles.libraryDetailPromise}>{libraryDetailMode.promise}</p>
+                        <p className={styles.libraryDetailPromise} data-library-detail-note="promise">
+                            {libraryDetailMode.promise}
+                        </p>
                     ) : null}
                     {libraryDetailMode.eligibilityNote ? (
-                        <p className={styles.libraryDetailMuted}>{libraryDetailMode.eligibilityNote}</p>
+                        <p className={styles.libraryDetailMuted} data-library-detail-note="eligibility">
+                            {libraryDetailMode.eligibilityNote}
+                        </p>
                     ) : null}
                     {libraryDetailMode.availabilityDetail ? (
-                        <p className={styles.libraryDetailIdentity}>{libraryDetailMode.availabilityDetail}</p>
+                        <p className={styles.libraryDetailIdentity} data-library-detail-note="availability">
+                            {libraryDetailMode.availabilityDetail}
+                        </p>
                     ) : null}
                     {challengeGateRows.find((row) => row.modeId === libraryDetailMode.id) ? (
-                        <p className={styles.libraryDetailIdentity}>
+                        <p className={styles.libraryDetailIdentity} data-library-detail-note="gate">
                             Gate: {challengeGateRows.find((row) => row.modeId === libraryDetailMode.id)?.entryCondition} ·{' '}
                             {challengeGateRows.find((row) => row.modeId === libraryDetailMode.id)?.progress.current}/
                             {challengeGateRows.find((row) => row.modeId === libraryDetailMode.id)?.progress.target} ·{' '}
@@ -1364,7 +1421,7 @@ const ChooseYourPathScreen = () => {
                         </p>
                     ) : null}
                     {libraryDetailMode.availability !== 'available' ? (
-                        <p className={styles.libraryDetailMuted}>
+                        <p className={styles.libraryDetailMuted} data-library-detail-note="locked">
                             This mode is intentionally locked for v1. Classic Run is the playable escalating local
                             descent; this card reserves a future ultra-long ruleset after balance, relic cadence, and
                             route/shop pacing are final.

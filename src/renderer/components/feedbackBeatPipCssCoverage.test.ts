@@ -689,6 +689,10 @@ const findVisibleStateSelectorGaps = (): VisibleStateSelectorGap[] => {
         'data-chain-next-action-tier': ['now', 'prime', 'route', 'tap'],
         'data-chain-opportunity-next-action': ['cashout', 'follow-up', 'match-route', 'prime-route'],
         'data-chain-opportunity-reward-urgency-tier': ['later', 'next', 'soon'],
+        'data-chain-reward-cue-id': ['cashout-crown', 'heal-lane', 'prime-cross', 'protect-lane'],
+        'data-chain-reward-lane-cue-id': ['cashout-crown', 'heal-lane', 'prime-cross', 'protect-lane'],
+        'data-chain-reward-ladder-cue-id': ['cashout-crown', 'heal-lane', 'prime-cross', 'protect-lane'],
+        'data-chain-reward-primary-lane-cue-id': ['cashout-crown', 'heal-lane', 'prime-cross', 'protect-lane'],
         'data-chain-reward-urgency': ['later', 'next', 'soon'],
         'data-chain-reward-urgency-screen-cue': ['burst', 'pulse', 'tick'],
         'data-chain-reward-urgency-tier': ['later', 'next', 'soon'],
@@ -754,13 +758,32 @@ const findVisibleStateSelectorGaps = (): VisibleStateSelectorGap[] => {
         'data-risk-wager-signal-beat-tone': ['armed', 'objective', 'reward', 'risk'],
         'data-impact-level': ['high', 'low', 'medium'],
         'data-burst-tier': ['chain', 'combo', 'reward', 'risk', 'trait'],
+        'data-hud-action-impact-cue-id': [
+            'cashout-crown',
+            'linked-route',
+            'payoff-stack',
+            'prime-cross',
+            'protect-lane',
+            'recover-lane',
+            'risk-lane',
+            'surge-burst'
+        ],
         'data-impact-screen-cue': ['burst', 'guard', 'pulse', 'recover', 'risk'],
         'data-hud-action-impact-beats': ['2', '3', '4'],
         'data-hud-action-impact-screen-cue': ['burst', 'guard', 'pulse', 'recover', 'risk'],
+        'data-hud-action-lane-cue-id': ['cashout-crown', 'linked-route', 'payoff-stack', 'perk-armed-bar', 'recover-lane'],
         'data-hud-action-stack-beats': ['2', '3', '4'],
         'data-hud-action-lane-beats': ['2', '3', '4'],
         'data-hud-action-lane-focus': ['primary', 'support'],
         'data-hud-action-lane-screen-cue': ['burst', 'guard', 'pulse', 'recover'],
+        'data-hud-action-lane-summary-primary-cue-id': [
+            'cashout-crown',
+            'linked-route',
+            'payoff-stack',
+            'perk-armed-bar',
+            'recover-lane'
+        ],
+        'data-hud-action-primary-lane-cue-id': ['cashout-crown', 'linked-route', 'payoff-stack', 'perk-armed-bar', 'recover-lane'],
         'data-hud-action-primary-lane-beats': ['2', '3', '4'],
         'data-hud-action-primary-lane-screen-cue': ['burst', 'guard', 'pulse', 'recover'],
         'data-hazard-opportunity-action': ['avoid', 'claim', 'inspect', 'weigh'],
@@ -3566,6 +3589,22 @@ describe('feedback beat pip CSS coverage', () => {
             cssText,
             'heal reward lanes should keep a recovery-shaped beat'
         ).toMatch(/data-chain-reward-lane='heal'[\s\S]*?\.hudChainRewardLaneBeatPips i[\s\S]*?animation-duration:\s*0\.96s/);
+        expect(
+            cssText,
+            'cashout reward lanes should tint their cue badges gold'
+        ).toMatch(/data-chain-reward-lane-cue-id='cashout-crown'[\s\S]*?strong[\s\S]*?var\(--theme-gold-bright\) 92%/);
+        expect(
+            cssText,
+            'prime reward lanes should tint their cue badges violet'
+        ).toMatch(/data-chain-reward-lane-cue-id='prime-cross'[\s\S]*?strong[\s\S]*?var\(--theme-violet-bright\) 88%/);
+        expect(
+            cssText,
+            'guard reward lanes should tint their cue badges cyan'
+        ).toMatch(/data-chain-reward-lane-cue-id='protect-lane'[\s\S]*?strong[\s\S]*?var\(--theme-cyan-bright\) 90%/);
+        expect(
+            cssText,
+            'heal reward lanes should tint their cue badges green'
+        ).toMatch(/data-chain-reward-lane-cue-id='heal-lane'[\s\S]*?strong[\s\S]*?var\(--theme-success\) 88%/);
     });
 
     it('keeps HUD chain reward ladder urgency beats visually distinct', () => {
@@ -3585,6 +3624,95 @@ describe('feedback beat pip CSS coverage', () => {
             cssText,
             'later reward ladder entries should stay slower and quieter'
         ).toMatch(/data-chain-reward-ladder-urgency='later'[\s\S]*?\.hudChainRewardBeatPips i[\s\S]*?animation-duration:\s*1\.34s/);
+        expect(
+            cssText,
+            'cashout ladder cues should tint their cue badges gold'
+        ).toMatch(/data-chain-reward-ladder-cue-id='cashout-crown'[\s\S]*?strong[\s\S]*?var\(--theme-gold-bright\) 92%/);
+        expect(
+            cssText,
+            'prime ladder cues should tint their cue badges violet'
+        ).toMatch(/data-chain-reward-ladder-cue-id='prime-cross'[\s\S]*?strong[\s\S]*?var\(--theme-violet-bright\) 88%/);
+        expect(
+            cssText,
+            'guard ladder cues should tint their cue badges cyan'
+        ).toMatch(/data-chain-reward-ladder-cue-id='protect-lane'[\s\S]*?strong[\s\S]*?var\(--theme-cyan-bright\) 90%/);
+        expect(
+            cssText,
+            'heal ladder cues should tint their cue badges green'
+        ).toMatch(/data-chain-reward-ladder-cue-id='heal-lane'[\s\S]*?strong[\s\S]*?var\(--theme-success\) 88%/);
+    });
+
+    it('keeps HUD recent action lane cue badges visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'cash recent-action lanes should tint their cue badges gold'
+        ).toMatch(/data-hud-action-lane-cue-id='cashout-crown'[\s\S]*?strong[\s\S]*?var\(--theme-gold-bright\) 92%/);
+        expect(
+            cssText,
+            'route recent-action lanes should tint their cue badges violet'
+        ).toMatch(/data-hud-action-lane-cue-id='linked-route'[\s\S]*?strong[\s\S]*?var\(--theme-violet-bright\) 88%/);
+        expect(
+            cssText,
+            'chain recent-action lanes should tint their cue badges cyan'
+        ).toMatch(/data-hud-action-lane-cue-id='payoff-stack'[\s\S]*?strong[\s\S]*?var\(--theme-cyan-bright\) 90%/);
+        expect(
+            cssText,
+            'utility recent-action lanes should tint their cue badges green'
+        ).toMatch(/data-hud-action-lane-cue-id='perk-armed-bar'[\s\S]*?strong[\s\S]*?var\(--theme-success\) 88%/);
+        expect(
+            cssText,
+            'recover recent-action lanes should tint their cue badges danger'
+        ).toMatch(/data-hud-action-lane-cue-id='recover-lane'[\s\S]*?strong[\s\S]*?var\(--theme-danger\) 84%/);
+    });
+
+    it('keeps HUD recent action impact cue badges visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'cashout recent-action impact cues should tint their cue badges gold'
+        ).toMatch(/data-hud-action-impact-cue-id='cashout-crown'[\s\S]*?strong[\s\S]*?var\(--theme-gold-bright\) 92%/);
+        expect(
+            cssText,
+            'prime recent-action impact cues should tint their cue badges violet'
+        ).toMatch(/data-hud-action-impact-cue-id='prime-cross'[\s\S]*?strong[\s\S]*?var\(--theme-violet-bright\) 88%/);
+        expect(
+            cssText,
+            'stack recent-action impact cues should tint their cue badges cyan'
+        ).toMatch(/data-hud-action-impact-cue-id='payoff-stack'[\s\S]*?strong[\s\S]*?var\(--theme-cyan-bright\) 90%/);
+        expect(
+            cssText,
+            'recover recent-action impact cues should tint their cue badges danger'
+        ).toMatch(/data-hud-action-impact-cue-id='recover-lane'[\s\S]*?strong[\s\S]*?var\(--theme-danger\) 84%/);
+    });
+
+    it('keeps HUD chain reward forecast cue badges visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'cashout forecast cues should tint their cue badges gold'
+        ).toMatch(/data-chain-reward-cue-id='cashout-crown'[\s\S]*?strong[\s\S]*?var\(--theme-gold-bright\) 92%/);
+        expect(
+            cssText,
+            'prime forecast cues should tint their cue badges violet'
+        ).toMatch(/data-chain-reward-cue-id='prime-cross'[\s\S]*?strong[\s\S]*?var\(--theme-violet-bright\) 88%/);
+        expect(
+            cssText,
+            'guard forecast cues should tint their cue badges cyan'
+        ).toMatch(/data-chain-reward-cue-id='protect-lane'[\s\S]*?strong[\s\S]*?var\(--theme-cyan-bright\) 90%/);
+        expect(
+            cssText,
+            'heal forecast cues should tint their cue badges green'
+        ).toMatch(/data-chain-reward-cue-id='heal-lane'[\s\S]*?strong[\s\S]*?var\(--theme-success\) 88%/);
     });
 
     it('keeps chain reward ladder summary action beats visually distinct', () => {
@@ -3761,11 +3889,11 @@ describe('feedback beat pip CSS coverage', () => {
     });
 
     it('keeps stateful chain cue feedback paired with readable semantics', () => {
-        const tileBoardSource = readComponentSourceFiles()
-            .find(({ fileName }) => fileName === 'TileBoard.tsx')
+        const progressionCueSource = readComponentSourceFiles()
+            .find(({ fileName }) => fileName === 'TileBoardChainOpportunityProgressionCues.tsx')
             ?.text;
-        const targetPlanTag = tileBoardSource?.match(/<span[^<>]*data-testid="chain-opportunity-target-plan"[^<>]*>/s)?.[0];
-        const surgeTag = tileBoardSource?.match(/<span[^<>]*data-testid="chain-opportunity-surge"[^<>]*>/s)?.[0];
+        const targetPlanTag = progressionCueSource?.match(/<span[^<>]*data-testid="chain-opportunity-target-plan"[^<>]*>/s)?.[0];
+        const surgeTag = progressionCueSource?.match(/<span[^<>]*data-testid="chain-opportunity-surge"[^<>]*>/s)?.[0];
 
         expect(targetPlanTag, 'chain target plan should keep a stable test id for feedback coverage').toBeDefined();
         expect(targetPlanTag, 'chain target plan should expose its action and plan text to assistive tech').toContain('aria-label=');

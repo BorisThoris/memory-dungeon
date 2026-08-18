@@ -32,7 +32,7 @@ import {
     uiSfxGainFromSettings
 } from '../audio/uiSfx';
 import { useAppStore } from '../store/useAppStore';
-import { Eyebrow, OverlayActionDock, Panel, ScreenTitle, UiButton } from '../ui';
+import { cx, Eyebrow, OverlayActionDock, Panel, ScreenTitle, UiButton, type OverlayAction } from '../ui';
 import { pairProximityUiStrings } from '../ui/strings/pairProximityUi';
 import packageJson from '../../../package.json';
 import { GAMEPLAY_VISUAL_CSS_VARS } from './gameplayVisualConfig';
@@ -50,6 +50,30 @@ import styles from './SettingsScreen.module.css';
 interface SettingsScreenProps {
     presentation?: 'page' | 'modal';
 }
+
+const SETTINGS_CATEGORY_COMPACT_LABEL: Record<SettingsCategory, string> = {
+    accessibility: 'Access',
+    about: 'About',
+    audio: 'Audio',
+    controls: 'Input',
+    gameplay: 'Game',
+    video: 'Video'
+};
+
+const SETTINGS_SUBSECTION_COMPACT_LABEL: Record<SettingsSubsection, string> = {
+    accessibility: 'Access',
+    assist: 'Assist',
+    board: 'Board',
+    build: 'Build',
+    display: 'Display',
+    graphics: 'Graphics',
+    input: 'Input',
+    reference: 'Guide',
+    reset: 'Reset',
+    timing: 'Timing',
+    tuning: 'Tuning',
+    volume: 'Volume'
+};
 
 const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
     const {
@@ -102,6 +126,7 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
     const footerButtonSize = stackedSettingsShell ? 'sm' : 'md';
     const activeCategoryMeta = SETTINGS_CATEGORIES.find((item) => item.id === activeCategory) ?? SETTINGS_CATEGORIES[0];
     const subsectionOptions = SETTINGS_SUBSECTIONS[activeCategory];
+    const desktopSettingsDensity = stackedSettingsShell ? 'stacked' : activeCategory === 'gameplay' ? 'expanded' : 'compact';
     /** Wide-short (e.g. 1280×720): one subsection at a time so the right column scroll region stays usable with full Gameplay subsections. */
     const subsectionOneAtATime = subsectionOptions.length > 1;
     const showSubsectionNav = subsectionOneAtATime && subsectionOptions.length > 1;
@@ -178,6 +203,22 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
         setDraft(next);
         void updateSettings(next);
     };
+    const footerActions: OverlayAction[] = [
+        {
+            label: 'Back',
+            onClick: handleBack,
+            variant: 'secondary'
+        },
+        ...(isDirty
+            ? [
+                  {
+                      label: 'Save',
+                      onClick: handleSave,
+                      variant: 'primary' as const
+                  }
+              ]
+            : [])
+    ];
 
     return (
         <>
@@ -196,7 +237,15 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
         <section
             aria-labelledby={isModal ? titleId : undefined}
             aria-modal={isModal ? 'true' : undefined}
-            className={`${styles.shell} ${isModal ? styles.shellModal : ''} ${stackedSettingsShell ? styles.stackedShell : ''} ${wideShortDesktopShell ? styles.wideShortShell : ''} ${shortLandscapeStackedShell ? styles.shortLandscapeShell : ''}`.trim()}
+            className={cx(
+                styles.shell,
+                isModal && styles.shellModal,
+                stackedSettingsShell && styles.stackedShell,
+                wideShortDesktopShell && styles.wideShortShell,
+                shortLandscapeStackedShell && styles.shortLandscapeShell
+            )}
+            data-settings-category={activeCategory}
+            data-settings-density={desktopSettingsDensity}
             data-settings-layout={
                 shortLandscapeStackedShell ? 'short-stacked' : wideShortDesktopShell ? 'wide-short' : stackedSettingsShell ? 'stacked' : 'desktop'
             }
@@ -214,7 +263,7 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                         style={{ zoom: 1 }}
                     >
                         <Panel
-                            className={`${styles.panel} ${isModal ? styles.panelModal : ''}`.trim()}
+                            className={cx(styles.panel, isModal && styles.panelModal)}
                             data-testid="settings-shell-panel"
                             padding="none"
                             variant="strong"
@@ -233,11 +282,15 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                         </ScreenTitle>
                                     </div>
 
-                                    <nav className={styles.categoryNav}>
+                                    <nav className={styles.categoryNav} data-testid="settings-category-nav">
                                         {SETTINGS_CATEGORIES.map((category) => (
                                             <button
+                                                aria-label={category.label}
                                                 aria-pressed={activeCategory === category.id}
-                                                className={`${styles.categoryButton} ${activeCategory === category.id ? styles.categoryButtonActive : ''}`.trim()}
+                                                className={cx(
+                                                    styles.categoryButton,
+                                                    activeCategory === category.id && styles.categoryButtonActive
+                                                )}
                                                 key={category.id}
                                                 onClick={() => {
                                                     playUiClick();
@@ -245,7 +298,12 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                                 }}
                                                 type="button"
                                             >
-                                                <span className={styles.categoryLabel}>{category.label}</span>
+                                                <span
+                                                    className={styles.categoryLabel}
+                                                    data-compact-label={SETTINGS_CATEGORY_COMPACT_LABEL[category.id]}
+                                                >
+                                                    {category.label}
+                                                </span>
                                                 <span className={styles.categoryNote}>{category.note}</span>
                                             </button>
                                         ))}
@@ -265,7 +323,11 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                         <p className={styles.headerCopy}>{activeCategoryMeta.note}</p>
                                         <div className={styles.controlCenterStrip} data-testid="settings-control-center-strip">
                                             {controlCenterRows.map((row) => (
-                                                <span className={styles.controlCenterRow} key={row.id}>
+                                                <span
+                                                    className={styles.controlCenterRow}
+                                                    data-settings-control-row={row.id}
+                                                    key={row.id}
+                                                >
                                                     <span>{row.label}</span>
                                                     <strong>{row.value}</strong>
                                                 </span>
@@ -282,8 +344,13 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                         >
                                             {subsectionOptions.map((option) => (
                                                 <button
+                                                    aria-label={option.label}
                                                     aria-pressed={activeSubsection === option.id}
-                                                    className={`${styles.subsectionButton} ${activeSubsection === option.id ? styles.subsectionButtonActive : ''}`.trim()}
+                                                    className={cx(
+                                                        styles.subsectionButton,
+                                                        activeSubsection === option.id && styles.subsectionButtonActive
+                                                    )}
+                                                    data-compact-label={SETTINGS_SUBSECTION_COMPACT_LABEL[option.id]}
                                                     key={option.id}
                                                     onClick={() => {
                                                         playUiClick();
@@ -297,7 +364,7 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                         </div>
                                     ) : null}
 
-                                    <div className={styles.contentScroll}>
+                                    <div className={styles.contentScroll} data-testid="settings-content-scroll">
                                         {activeCategory === 'gameplay' && showSubsection('board') ? (
                                             <SettingsSection title="Board Presentation">
                                                 <div className={styles.boardPresentationPair}>
@@ -414,9 +481,8 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                                 <p className={styles.headerCopy}>
                                                     Primary control is pointer or touch: tap a hidden tile to flip it. When
                                                     only one tile is face-up, the next tap attempts a match. Board powers
-                                                    use the left rail. Press P to pause or resume; pause freezes timers.
-                                                    Settings opened from a run opens the modal shell without ending the
-                                                    descent.
+                                                    use the left rail. Run settings open as a modal shell without ending the
+                                                    descent or advancing floor timers.
                                                 </p>
                                             </SettingsSection>
                                         ) : null}
@@ -627,20 +693,18 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
 
                                     <footer className={styles.footer} data-testid="settings-shell-footer">
                                         <OverlayActionDock
-                                            actions={[
-                                                {
-                                                    label: 'Back',
-                                                    onClick: handleBack,
-                                                    variant: 'secondary'
-                                                },
-                                                {
-                                                    disabled: !isDirty,
-                                                    label: 'Save',
-                                                    onClick: handleSave,
-                                                    variant: 'primary'
-                                                }
-                                            ]}
+                                            actions={footerActions}
                                             className={styles.footerActions}
+                                            leading={
+                                                <div
+                                                    className={styles.saveState}
+                                                    data-dirty={isDirty ? 'true' : 'false'}
+                                                    data-testid="settings-save-state"
+                                                >
+                                                    <strong>{isDirty ? 'Unsaved' : 'Saved'}</strong>
+                                                    <span>{isDirty ? 'Save to apply changes.' : 'No pending changes.'}</span>
+                                                </div>
+                                            }
                                             placement="dock"
                                             size={footerButtonSize}
                                             testId="settings-action-dock"

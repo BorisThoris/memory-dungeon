@@ -1,0 +1,17 @@
+- generic [ref=f1e2] [box=0,0,1440,960]:
+  - generic [ref=f1e3] [box=0,0,1440,960]:
+    - link "Skip to main content" [ref=f1e4] [cursor=pointer] [box=-1,-1,1,1]:
+      - /url: "#app-main"
+    - main [ref=f1e5] [box=0,0,1440,960]:
+      - region "Profile" [ref=f1e1450] [box=0,0,1440,960]:
+        - generic [ref=f1e1451] [box=22,18,1397,133]:
+          - generic [ref=f1e1452] [box=22,18,368,127]
+          - generic [ref=f1e1456] [box=1296,18,122,46]
+        - generic [ref=f1e1459] [box=140,167,1160,776]:
+          - generic [ref=f1e1460] [box=140,167,1150,587]
+          - generic [ref=f1e1537] [box=140,765,1150,462]
+          - generic [ref=f1e1557] [box=140,1239,1150,160]
+          - group [ref=f1e1570] [box=140,1409,1150,40]
+          - generic [ref=f1e1572] [box=140,1461,1150,239]
+          - paragraph [ref=f1e1604] [box=140,1711,1150,29]: Single local profile on this device. Steam/cloud sync is not required for v1. Export/share strings contain local progress summaries only; no account or PII is required.
+  - region "Memory Dungeon tips" [box=240,924,960,0]

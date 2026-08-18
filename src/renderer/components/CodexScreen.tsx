@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import {
     ACHIEVEMENTS,
@@ -15,18 +15,22 @@ import { getCodexKnowledgeBaseRows } from '../../shared/codex-knowledge-base';
 import { getCodexRewardSignal } from '../../shared/meta-reward-signals';
 import { getTileTraitCodexRows, getTileTraitInteractionCodexRows } from '../../shared/tile-trait-codex';
 import { getUiStateCopy } from '../../shared/ui-state-copy';
-import { Eyebrow, MetaFrame, Panel, ScreenTitle, UiButton } from '../ui';
+import { cx, MetaFrame, Panel, UiButton } from '../ui';
 import {
     playUiBackSfx,
     playUiClickSfx,
     resumeUiSfxContext,
     uiSfxGainFromSettings
 } from '../audio/uiSfx';
+import { VIEWPORT_MOBILE_MAX } from '../breakpoints';
+import { useViewportSize } from '../hooks/useViewportSize';
 import { useAppStore } from '../store/useAppStore';
 import inRunFramedPanel from '../ui/metaInRunFramedPanel.module.css';
+import MetaScreenHeader from './MetaScreenHeader';
+import MetaSearchField from './MetaSearchField';
+import MetaSectionRail from './MetaSectionRail';
 import metaStyles from './MetaScreen.module.css';
 import { getMetaSubscreenLayout } from './metaStackedShellLayout';
-import { handleMetaBodyTocLinkClick } from './metaScreenTocNav';
 import {
     buildCodexBuildRows,
     buildCodexModeRows,
@@ -41,6 +45,8 @@ import {
 } from './codexScreenModel';
 import styles from './CodexScreen.module.css';
 
+const CODEX_HEADER_SUBTITLE = `Read-only reference v${ENCYCLOPEDIA_VERSION} for cards, traits, rewards, and run rules.`;
+
 interface CodexScreenProps {
     /** When true, shell title is `h2` so `GameScreen`'s level `h1` stays the sole document `h1`. */
     stackedOnGameplay?: boolean;
@@ -48,6 +54,87 @@ interface CodexScreenProps {
 
 const formatCodexRewardSignalLabel = (signal: { body: string; cta: string; title: string }): string =>
     `Codex reward signal. ${signal.title}. ${signal.body} Next: ${signal.cta}.`;
+
+const CODEX_SECTION_COMPACT_LABELS: Record<(typeof CODEX_TOC)[number]['label'], string> = {
+    Achievements: 'Achieve',
+    Builds: 'Build',
+    Contracts: 'Vows',
+    Core: 'Core',
+    Featured: 'Runs',
+    Modes: 'Modes',
+    Mutators: 'Mods',
+    Pickups: 'Pickups',
+    Powers: 'Powers',
+    Relics: 'Relics',
+    Scoring: 'Score',
+    Settings: 'Assist',
+    Traits: 'Traits'
+};
+
+const CODEX_SECTION_RAIL_ITEMS: ReadonlyArray<{
+    compactLabel: string;
+    href: string;
+    kind: (typeof CODEX_TOC)[number]['kind'];
+    label: string;
+}> = CODEX_TOC.map((item) => ({
+    compactLabel: CODEX_SECTION_COMPACT_LABELS[item.label],
+    href: item.href,
+    kind: item.kind,
+    label: item.label
+}));
+
+type CodexTopicRow = {
+    description: string;
+    id: string;
+    title: string;
+};
+
+type CodexTopicPanelConfig = {
+    dataTestId?: string;
+    id: string;
+    open?: boolean;
+    rows: readonly CodexTopicRow[];
+    show: boolean;
+    title: ReactNode;
+};
+
+const formatCodexDisplayText = (value: string): string =>
+    value
+        .replace(/\*\*([^*]+)\*\*/g, '$1')
+        .replace(/`([^`]+)`/g, '$1');
+
+const renderCodexTopicPanel = (
+    { dataTestId, id, open = true, rows, show, title }: CodexTopicPanelConfig,
+    panelClassName: string | undefined
+): ReactNode => {
+    if (!show) {
+        return null;
+    }
+
+    const panel = (
+        <Panel className={panelClassName} key={id} padding="lg" variant="default">
+            <details className={cx(styles.sectionFold, metaStyles.sectionAnchor)} id={id} open={open}>
+                <summary className={cx(styles.groupTitle, styles.foldSummary)}>{title}</summary>
+                <div className={styles.group}>
+                    {rows.map((topic) => (
+                        <div className={styles.entry} key={topic.id}>
+                            <strong>{topic.title}</strong>
+                            <p>{formatCodexDisplayText(topic.description)}</p>
+                        </div>
+                    ))}
+                </div>
+            </details>
+        </Panel>
+    );
+
+    return dataTestId ? (
+        <MetaFrame data-testid={dataTestId} key={id}>
+            {panel}
+        </MetaFrame>
+    ) : (
+        panel
+    );
+};
 
 const CodexScreen = ({ stackedOnGameplay = false }: CodexScreenProps) => {
     const { closeSubscreen, saveData, settings } = useAppStore(
@@ -61,6 +148,7 @@ const CodexScreen = ({ stackedOnGameplay = false }: CodexScreenProps) => {
         stackedOnGameplay,
         { panel: inRunFramedPanel.inRunPanel, hero: inRunFramedPanel.inRunHeroPanel }
     );
+    const { width } = useViewportSize();
     const bodyScrollRef = useRef<HTMLDivElement | null>(null);
     const [filterQuery, setFilterQuery] = useState('');
     const [debouncedFilterQuery, setDebouncedFilterQuery] = useState('');
@@ -134,40 +222,169 @@ const CodexScreen = ({ stackedOnGameplay = false }: CodexScreenProps) => {
     const showGuidePanel = (count: number): boolean => tabAllows('guide') && showWhenFiltered(count);
     const showTablePanel = (count: number): boolean => tabAllows('table') && showWhenFiltered(count);
     const filterEmptyCopy = getUiStateCopy('codex_filter_empty');
+    const deferReferenceMeta = width <= VIEWPORT_MOBILE_MAX;
+    const showReferenceMeta = !(stackedOnGameplay && width <= VIEWPORT_MOBILE_MAX);
+    const collapseMobileSections = width <= VIEWPORT_MOBILE_MAX && !debouncedFilterQuery.trim();
+    const isSectionOpenByDefault = (index: number): boolean => !collapseMobileSections || index === 0;
+    const referenceMetaBlock = (
+        <>
+            <MetaFrame className={styles.knowledgeSummaryFrame} data-testid="codex-knowledge-base-summary">
+                <Panel className={heroPanelClassName} padding="md" variant="strong">
+                    <div className={styles.knowledgeBaseGrid}>
+                        {knowledgeRows.map((row) => (
+                            <div className={styles.knowledgeBaseCard} key={row.id}>
+                                <strong>{row.title}</strong>
+                                <span>{row.count}</span>
+                                <p>{row.action}</p>
+                            </div>
+                        ))}
+                    </div>
+                </Panel>
+            </MetaFrame>
+
+            <MetaFrame
+                aria-label={formatCodexRewardSignalLabel(codexRewardSignal)}
+                className={styles.rewardSignalFrame}
+                data-testid="codex-reward-signal"
+            >
+                <Panel
+                    className={cx(panelClassName, styles.rewardSignalPanel)}
+                    padding="md"
+                    variant="default"
+                >
+                    <strong className={styles.rewardSignalTitle}>{codexRewardSignal.title}</strong>
+                    <p className={metaStyles.subtitle}>{codexRewardSignal.body}</p>
+                    <p className={cx(metaStyles.subtitle, styles.rewardSignalCta)}>{codexRewardSignal.cta}</p>
+                </Panel>
+            </MetaFrame>
+        </>
+    );
+    const guideSections: CodexTopicPanelConfig[] = [
+        {
+            dataTestId: 'codex-meta-frame-core',
+            id: 'codex-core',
+            rows: coreFiltered,
+            show: showGuidePanel(coreFiltered.length),
+            title: 'Core systems'
+        },
+        {
+            id: 'codex-powers',
+            rows: powersFiltered,
+            show: showGuidePanel(powersFiltered.length),
+            title: 'Powers & tools'
+        },
+        {
+            id: 'codex-scoring',
+            rows: scoringFiltered,
+            show: showGuidePanel(scoringFiltered.length),
+            title: 'Scoring & survival'
+        },
+        {
+            id: 'codex-settings',
+            rows: settingsFiltered,
+            show: showGuidePanel(settingsFiltered.length),
+            title: 'Settings & assists'
+        },
+        {
+            id: 'codex-pickups',
+            rows: pickupsFiltered,
+            show: showGuidePanel(pickupsFiltered.length),
+            title: 'Pickups & board'
+        },
+        {
+            id: 'codex-traits',
+            rows: traitsFiltered,
+            show: showGuidePanel(traitsFiltered.length),
+            title: 'Traits & interactions'
+        },
+        {
+            id: 'codex-contracts',
+            rows: contractsFiltered,
+            show: showGuidePanel(contractsFiltered.length),
+            title: 'Contracts & vows'
+        },
+        {
+            id: 'codex-featured-runs',
+            rows: featuredFiltered,
+            show: showGuidePanel(featuredFiltered.length),
+            title: 'Featured runs'
+        },
+        {
+            id: 'codex-builds',
+            rows: buildRowsFiltered,
+            show: showGuidePanel(buildRowsFiltered.length),
+            title: 'Build archetypes'
+        },
+        {
+            id: 'codex-modes',
+            rows: filteredModes,
+            show: showGuidePanel(filteredModes.length),
+            title: 'Game modes'
+        }
+    ];
+    const tableSections: CodexTopicPanelConfig[] = [
+        {
+            id: 'codex-achievements',
+            rows: filteredAchievements,
+            show: showTablePanel(filteredAchievements.length),
+            title: 'Achievements'
+        },
+        {
+            id: 'codex-relics',
+            rows: filteredRelics,
+            show: showTablePanel(filteredRelics.length),
+            title: 'Relics'
+        },
+        {
+            id: 'codex-mutators',
+            rows: filteredMutators,
+            show: showTablePanel(filteredMutators.length),
+            title: 'Mutators'
+        }
+    ];
+    let visibleSectionIndex = 0;
+    const renderResponsiveCodexTopicPanel = (section: CodexTopicPanelConfig): ReactNode => {
+        const open = isSectionOpenByDefault(visibleSectionIndex);
+        if (section.show) {
+            visibleSectionIndex += 1;
+        }
+        return renderCodexTopicPanel({ ...section, open }, panelClassName);
+    };
 
     return (
         <section
             aria-label="Codex"
-            className={[metaStyles.shell, shellStageClass, stackedOnGameplay && styles.codexInRunShell]
-                .filter(Boolean)
-                .join(' ')}
+            className={cx(metaStyles.shell, shellStageClass, stackedOnGameplay && styles.codexInRunShell)}
             data-codex-context={stackedOnGameplay ? 'in-run-desk' : 'menu'}
+            data-codex-filter-state={debouncedFilterQuery.trim() ? 'filtered' : 'unfiltered'}
             data-testid="codex-screen"
             role="region"
         >
-            <header className={metaStyles.header}>
-                <div className={metaStyles.headerText}>
-                    <Eyebrow tone="menu">Reference</Eyebrow>
-                    <ScreenTitle as={titleLevel} role="display">
-                        Codex
-                    </ScreenTitle>
-                    <p className={metaStyles.subtitle}>
-                        Read-only mechanics encyclopedia (v{ENCYCLOPEDIA_VERSION}): achievements, relics, mutators, modes,
-                        powers, scoring, settings assists, pickups, and board rules. Does not change gameplay.
-                    </p>
-                </div>
-                <UiButton
-                    size="md"
-                    variant="secondary"
-                    onClick={() => {
-                        playUiBack();
-                        closeSubscreen();
-                    }}
-                    type="button"
-                >
-                    Back
-                </UiButton>
-            </header>
+            <MetaScreenHeader
+                action={
+                    <UiButton
+                        className={metaStyles.compactHeaderAction}
+                        size="md"
+                        variant="secondary"
+                        onClick={() => {
+                            playUiBack();
+                            closeSubscreen();
+                        }}
+                        type="button"
+                    >
+                        Back
+                    </UiButton>
+                }
+                className={cx(styles.screenHeader, metaStyles.denseDesktopHeader)}
+                compact
+                eyebrow="Reference"
+                subtitle={CODEX_HEADER_SUBTITLE}
+                subtitleClassName={styles.screenSubtitle}
+                title="Codex"
+                titleAs={titleLevel}
+                titleClassName={styles.screenTitle}
+                titleRole="display"
+            />
 
             <div ref={bodyScrollRef} className={metaStyles.body}>
                 <div className={styles.tabRail} role="tablist" aria-label="Codex browse">
@@ -196,52 +413,26 @@ const CodexScreen = ({ stackedOnGameplay = false }: CodexScreenProps) => {
                     ))}
                 </div>
 
-                <nav aria-label="Codex sections" className={metaStyles.inPageToc}>
-                    {CODEX_TOC.filter((item) => tocVisible(codexTab, item.kind)).map((item) => (
-                        <a
-                            href={item.href}
-                            key={item.href}
-                            onClick={(e) => handleMetaBodyTocLinkClick(bodyScrollRef, e)}
-                        >
-                            {item.label}
-                        </a>
-                    ))}
-                </nav>
+                <MetaSectionRail
+                    ariaLabel="Codex sections"
+                    bodyScrollRef={bodyScrollRef}
+                    className={cx(styles.sectionRail, metaStyles.denseDesktopRail)}
+                    compact
+                    dataTestId="codex-section-rail"
+                    items={CODEX_SECTION_RAIL_ITEMS.filter((item) => tocVisible(codexTab, item.kind))}
+                />
 
-                <MetaFrame data-testid="codex-knowledge-base-summary">
-                    <Panel className={heroPanelClassName} padding="md" variant="strong">
-                        <div className={styles.knowledgeBaseGrid}>
-                            {knowledgeRows.map((row) => (
-                                <div className={styles.knowledgeBaseCard} key={row.id}>
-                                    <strong>{row.title}</strong>
-                                    <span>{row.count}</span>
-                                    <p>{row.action}</p>
-                                </div>
-                            ))}
-                        </div>
-                    </Panel>
-                </MetaFrame>
+                {!deferReferenceMeta && showReferenceMeta ? referenceMetaBlock : null}
 
-                <MetaFrame aria-label={formatCodexRewardSignalLabel(codexRewardSignal)} data-testid="codex-reward-signal">
-                    <Panel className={panelClassName} padding="md" variant="default">
-                        <strong>{codexRewardSignal.title}</strong>
-                        <p className={metaStyles.subtitle}>{codexRewardSignal.body}</p>
-                        <p className={metaStyles.subtitle}>{codexRewardSignal.cta}</p>
-                    </Panel>
-                </MetaFrame>
-
-                <div className={styles.filterRow}>
-                    <label className={styles.filterLabel} htmlFor="codex-filter-query">
-                        Filter topics
-                    </label>
-                    <input
-                        aria-controls="codex-main-column"
-                        autoComplete="off"
-                        className={styles.filterInput}
+                <div className={styles.filterRow} data-testid="codex-filter-row">
+                    <MetaSearchField
+                        ariaControls="codex-main-column"
                         id="codex-filter-query"
-                        onChange={(e) => setFilterQuery(e.target.value)}
+                        inputClassName={styles.filterInput}
+                        label="Filter topics"
+                        labelClassName={styles.filterLabel}
+                        onChange={setFilterQuery}
                         placeholder="Filter by keyword…"
-                        type="search"
                         value={filterQuery}
                     />
                 </div>
@@ -252,291 +443,16 @@ const CodexScreen = ({ stackedOnGameplay = false }: CodexScreenProps) => {
                     </p>
                 ) : null}
 
-                <div id="codex-main-column">
-                    {showGuidePanel(coreFiltered.length) ? (
-                        <MetaFrame data-testid="codex-meta-frame-core">
-                            <Panel className={panelClassName} padding="lg" variant="default">
-                                <details
-                                    className={`${styles.sectionFold} ${metaStyles.sectionAnchor}`}
-                                    id="codex-core"
-                                    open
-                                >
-                                    <summary className={`${styles.groupTitle} ${styles.foldSummary}`}>
-                                        Core systems
-                                    </summary>
-                                    <div className={styles.group}>
-                                        {coreFiltered.map((topic) => (
-                                            <div className={styles.entry} key={topic.id}>
-                                                <strong>{topic.title}</strong>
-                                                <p>{topic.description}</p>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </details>
-                            </Panel>
-                        </MetaFrame>
-                    ) : null}
-
-                    {showGuidePanel(powersFiltered.length) ? (
-                        <Panel className={panelClassName} padding="lg" variant="default">
-                            <details
-                                className={`${styles.sectionFold} ${metaStyles.sectionAnchor}`}
-                                id="codex-powers"
-                                open
-                            >
-                                <summary className={`${styles.groupTitle} ${styles.foldSummary}`}>
-                                    Powers &amp; tools
-                                </summary>
-                                <div className={styles.group}>
-                                    {powersFiltered.map((topic) => (
-                                        <div className={styles.entry} key={topic.id}>
-                                            <strong>{topic.title}</strong>
-                                            <p>{topic.description}</p>
-                                        </div>
-                                    ))}
-                                </div>
-                            </details>
-                        </Panel>
-                    ) : null}
-
-                    {showGuidePanel(scoringFiltered.length) ? (
-                        <Panel className={panelClassName} padding="lg" variant="default">
-                            <details
-                                className={`${styles.sectionFold} ${metaStyles.sectionAnchor}`}
-                                id="codex-scoring"
-                                open
-                            >
-                                <summary className={`${styles.groupTitle} ${styles.foldSummary}`}>
-                                    Scoring &amp; survival
-                                </summary>
-                                <div className={styles.group}>
-                                    {scoringFiltered.map((topic) => (
-                                        <div className={styles.entry} key={topic.id}>
-                                            <strong>{topic.title}</strong>
-                                            <p>{topic.description}</p>
-                                        </div>
-                                    ))}
-                                </div>
-                            </details>
-                        </Panel>
-                    ) : null}
-
-                    {showGuidePanel(settingsFiltered.length) ? (
-                        <Panel className={panelClassName} padding="lg" variant="default">
-                            <details
-                                className={`${styles.sectionFold} ${metaStyles.sectionAnchor}`}
-                                id="codex-settings"
-                                open
-                            >
-                                <summary className={`${styles.groupTitle} ${styles.foldSummary}`}>
-                                    Settings &amp; assists
-                                </summary>
-                                <div className={styles.group}>
-                                    {settingsFiltered.map((topic) => (
-                                        <div className={styles.entry} key={topic.id}>
-                                            <strong>{topic.title}</strong>
-                                            <p>{topic.description}</p>
-                                        </div>
-                                    ))}
-                                </div>
-                            </details>
-                        </Panel>
-                    ) : null}
-
-                    {showGuidePanel(pickupsFiltered.length) ? (
-                        <Panel className={panelClassName} padding="lg" variant="default">
-                            <details
-                                className={`${styles.sectionFold} ${metaStyles.sectionAnchor}`}
-                                id="codex-pickups"
-                                open
-                            >
-                                <summary className={`${styles.groupTitle} ${styles.foldSummary}`}>
-                                    Pickups &amp; board
-                                </summary>
-                                <div className={styles.group}>
-                                    {pickupsFiltered.map((topic) => (
-                                        <div className={styles.entry} key={topic.id}>
-                                            <strong>{topic.title}</strong>
-                                            <p>{topic.description}</p>
-                                        </div>
-                                    ))}
-                                </div>
-                            </details>
-                        </Panel>
-                    ) : null}
-
-                    {showGuidePanel(traitsFiltered.length) ? (
-                        <Panel className={panelClassName} padding="lg" variant="default">
-                            <details
-                                className={`${styles.sectionFold} ${metaStyles.sectionAnchor}`}
-                                id="codex-traits"
-                                open
-                            >
-                                <summary className={`${styles.groupTitle} ${styles.foldSummary}`}>
-                                    Traits &amp; interactions
-                                </summary>
-                                <div className={styles.group}>
-                                    {traitsFiltered.map((topic) => (
-                                        <div className={styles.entry} key={topic.id}>
-                                            <strong>{topic.title}</strong>
-                                            <p>{topic.description}</p>
-                                        </div>
-                                    ))}
-                                </div>
-                            </details>
-                        </Panel>
-                    ) : null}
-
-                    {showGuidePanel(contractsFiltered.length) ? (
-                        <Panel className={panelClassName} padding="lg" variant="default">
-                            <details
-                                className={`${styles.sectionFold} ${metaStyles.sectionAnchor}`}
-                                id="codex-contracts"
-                                open
-                            >
-                                <summary className={`${styles.groupTitle} ${styles.foldSummary}`}>
-                                    Contracts &amp; vows
-                                </summary>
-                                <div className={styles.group}>
-                                    {contractsFiltered.map((topic) => (
-                                        <div className={styles.entry} key={topic.id}>
-                                            <strong>{topic.title}</strong>
-                                            <p>{topic.description}</p>
-                                        </div>
-                                    ))}
-                                </div>
-                            </details>
-                        </Panel>
-                    ) : null}
-
-                    {showGuidePanel(featuredFiltered.length) ? (
-                        <Panel className={panelClassName} padding="lg" variant="default">
-                            <details
-                                className={`${styles.sectionFold} ${metaStyles.sectionAnchor}`}
-                                id="codex-featured-runs"
-                                open
-                            >
-                                <summary className={`${styles.groupTitle} ${styles.foldSummary}`}>
-                                    Featured runs
-                                </summary>
-                                <div className={styles.group}>
-                                    {featuredFiltered.map((topic) => (
-                                        <div className={styles.entry} key={topic.id}>
-                                            <strong>{topic.title}</strong>
-                                            <p>{topic.description}</p>
-                                        </div>
-                                    ))}
-                                </div>
-                            </details>
-                        </Panel>
-                    ) : null}
-
-                    {showGuidePanel(buildRowsFiltered.length) ? (
-                        <Panel className={panelClassName} padding="lg" variant="default">
-                            <details
-                                className={`${styles.sectionFold} ${metaStyles.sectionAnchor}`}
-                                id="codex-builds"
-                                open
-                            >
-                                <summary className={`${styles.groupTitle} ${styles.foldSummary}`}>
-                                    Build archetypes
-                                </summary>
-                                <div className={styles.group}>
-                                    {buildRowsFiltered.map((row) => (
-                                        <div className={styles.entry} key={row.id}>
-                                            <strong>{row.title}</strong>
-                                            <p>{row.description}</p>
-                                        </div>
-                                    ))}
-                                </div>
-                            </details>
-                        </Panel>
-                    ) : null}
-
-                    {showGuidePanel(filteredModes.length) ? (
-                        <Panel className={panelClassName} padding="lg" variant="default">
-                            <details
-                                className={`${styles.sectionFold} ${metaStyles.sectionAnchor}`}
-                                id="codex-modes"
-                                open
-                            >
-                                <summary className={`${styles.groupTitle} ${styles.foldSummary}`}>
-                                    Game modes
-                                </summary>
-                                <div className={styles.group}>
-                                    {filteredModes.map((m) => (
-                                        <div className={styles.entry} key={m.id}>
-                                            <strong>{m.title}</strong>
-                                            <p>{m.description}</p>
-                                        </div>
-                                    ))}
-                                </div>
-                            </details>
-                        </Panel>
-                    ) : null}
-
-                    {showTablePanel(filteredAchievements.length) ? (
-                        <Panel className={panelClassName} padding="lg" variant="default">
-                            <details
-                                className={`${styles.sectionFold} ${metaStyles.sectionAnchor}`}
-                                id="codex-achievements"
-                                open
-                            >
-                                <summary className={`${styles.groupTitle} ${styles.foldSummary}`}>
-                                    Achievements
-                                </summary>
-                                <div className={styles.group}>
-                                    {filteredAchievements.map((a) => (
-                                        <div className={styles.entry} key={a.id}>
-                                            <strong>{a.title}</strong>
-                                            <p>{a.description}</p>
-                                        </div>
-                                    ))}
-                                </div>
-                            </details>
-                        </Panel>
-                    ) : null}
-
-                    {showTablePanel(filteredRelics.length) ? (
-                        <Panel className={panelClassName} padding="lg" variant="default">
-                            <details
-                                className={`${styles.sectionFold} ${metaStyles.sectionAnchor}`}
-                                id="codex-relics"
-                                open
-                            >
-                                <summary className={`${styles.groupTitle} ${styles.foldSummary}`}>Relics</summary>
-                                <div className={styles.group}>
-                                    {filteredRelics.map((r) => (
-                                        <div className={styles.entry} key={r.id}>
-                                            <strong>{r.title}</strong>
-                                            <p>{r.description}</p>
-                                        </div>
-                                    ))}
-                                </div>
-                            </details>
-                        </Panel>
-                    ) : null}
-
-                    {showTablePanel(filteredMutators.length) ? (
-                        <Panel className={panelClassName} padding="lg" variant="default">
-                            <details
-                                className={`${styles.sectionFold} ${metaStyles.sectionAnchor}`}
-                                id="codex-mutators"
-                                open
-                            >
-                                <summary className={`${styles.groupTitle} ${styles.foldSummary}`}>Mutators</summary>
-                                <div className={styles.group}>
-                                    {filteredMutators.map((m) => (
-                                        <div className={styles.entry} key={m.id}>
-                                            <strong>{m.title}</strong>
-                                            <p>{m.description}</p>
-                                        </div>
-                                    ))}
-                                </div>
-                            </details>
-                        </Panel>
-                    ) : null}
+                <div
+                    className={cx(styles.contentColumn, metaStyles.metaLongList)}
+                    data-testid="codex-main-column"
+                    id="codex-main-column"
+                >
+                    {guideSections.map(renderResponsiveCodexTopicPanel)}
+                    {tableSections.map(renderResponsiveCodexTopicPanel)}
                 </div>
+
+                {deferReferenceMeta && showReferenceMeta ? referenceMetaBlock : null}
             </div>
         </section>
     );

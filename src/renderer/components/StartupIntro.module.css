@@ -124,6 +124,63 @@
     outline-offset: 2px;
 }
 
+.skipCta {
+    position: absolute;
+    right: clamp(0.9rem, 2.6vw, 1.8rem);
+    bottom: clamp(0.9rem, 2.8vw, 1.8rem);
+    z-index: 10;
+    min-width: 7.25rem;
+    min-height: var(--ui-touch-target-min);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.08rem;
+    align-content: center;
+    padding: 0.42rem 0.72rem;
+    border: 1px solid color-mix(in srgb, var(--theme-border-strong) 80%, transparent);
+    border-radius: var(--ui-radius-sm);
+    background:
+        linear-gradient(180deg, color-mix(in srgb, var(--theme-gold-bright) 14%, transparent), transparent 64%),
+        color-mix(in srgb, var(--theme-panel-solid) 92%, transparent);
+    box-shadow:
+        0 14px 32px color-mix(in srgb, var(--theme-shadow) 46%, transparent),
+        inset 0 1px 0 color-mix(in srgb, var(--theme-text) 8%, transparent);
+    color: var(--theme-text);
+    font-family: var(--theme-display-font);
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-align: left;
+    text-transform: uppercase;
+    cursor: pointer;
+    pointer-events: auto;
+    touch-action: manipulation;
+}
+
+.skipCta span,
+.skipCta small {
+    overflow: hidden;
+    line-height: 1;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.skipCta span {
+    color: color-mix(in srgb, var(--theme-gold-bright) 86%, white);
+    font-size: 0.78rem;
+}
+
+.skipCta small {
+    color: var(--theme-text-muted);
+    font-size: 0.5rem;
+    font-family: var(--theme-ui-font);
+    font-weight: 800;
+    letter-spacing: 0.04em;
+}
+
+.skipCta:focus-visible {
+    outline: 2px solid var(--theme-border-cyan);
+    outline-offset: 2px;
+}
+
 :global([data-reduce-motion='true']) .motionCta {
     display: none;
 }
@@ -296,12 +353,32 @@
 
 @media (max-width: 560px) {
     .overlay {
-        padding-top: 4.4rem;
-        padding-bottom: 1rem;
+        padding: 1rem 0.9rem;
+    }
+
+    .stage {
+        justify-content: center;
     }
 
     .sceneFrame {
+        width: min(100%, 21.5rem);
         min-height: min(240px, 32dvh);
+        align-self: center;
+    }
+
+    .skipCta {
+        right: max(1.1rem, env(safe-area-inset-right, 0px));
+        bottom: max(1.1rem, env(safe-area-inset-bottom, 0px));
+        min-width: 6.6rem;
+        padding: 0.38rem 0.6rem;
+    }
+
+    .skipCta span {
+        font-size: 0.72rem;
+    }
+
+    .skipCta small {
+        font-size: 0.46rem;
     }
 }
 

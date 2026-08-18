@@ -21,10 +21,12 @@ const CARD_FACE_INSET = 0.016;
 const CARD_FACE_HEIGHT = CARD_HEIGHT - CARD_FACE_INSET * 2;
 const HOVER_GOLD_RIM_STRIP = 0.0036;
 
-const BOARD_READABILITY_PIP_GEOMETRY = new CircleGeometry(0.043, 20);
-const BOARD_READABILITY_LARGE_PIP_GEOMETRY = new CircleGeometry(0.057, 22);
-const BOARD_READABILITY_BAR_GEOMETRY = new PlaneGeometry(0.2, 0.032, 1, 1);
-const BOARD_READABILITY_SHORT_BAR_GEOMETRY = new PlaneGeometry(0.13, 0.03, 1, 1);
+const READABILITY_MARKER_OPACITY_MULTIPLIER = 0.76;
+
+const BOARD_READABILITY_PIP_GEOMETRY = new CircleGeometry(0.031, 18);
+const BOARD_READABILITY_LARGE_PIP_GEOMETRY = new CircleGeometry(0.041, 20);
+const BOARD_READABILITY_BAR_GEOMETRY = new PlaneGeometry(0.15, 0.024, 1, 1);
+const BOARD_READABILITY_SHORT_BAR_GEOMETRY = new PlaneGeometry(0.095, 0.022, 1, 1);
 const BOARD_READABILITY_BOSS_MARK_GEOMETRY = new PlaneGeometry(0.25, 0.064, 1, 1);
 const BOARD_READABILITY_GLYPH_PLATE_GEOMETRY = new PlaneGeometry(0.19, 0.14, 1, 1);
 const BOARD_READABILITY_SELECTED_RAIL_GEOMETRY = new PlaneGeometry(0.018, CARD_FACE_HEIGHT * 0.74, 1, 1);
@@ -32,13 +34,13 @@ const BOARD_READABILITY_DISABLED_SLASH_GEOMETRY = new PlaneGeometry(0.46, 0.024,
 const BOARD_READABILITY_ENEMY_OCCUPIED_GEOMETRY = new PlaneGeometry(0.22, 0.06, 1, 1);
 const BOARD_READABILITY_STATE_RAIL_GEOMETRY = new PlaneGeometry(0.26, 0.026, 1, 1);
 const BOARD_READABILITY_STATE_NOTCH_GEOMETRY = new PlaneGeometry(0.04, 0.13, 1, 1);
-const BOARD_READABILITY_TRAIT_COMBO_GEOMETRY = new PlaneGeometry(0.36, 0.045, 1, 1);
-const BOARD_READABILITY_REWARD_HOT_GEOMETRY = new PlaneGeometry(0.19, 0.055, 1, 1);
-const BOARD_READABILITY_PERK_ARMED_GEOMETRY = new PlaneGeometry(0.28, 0.04, 1, 1);
-const BOARD_READABILITY_FOLLOWUP_GEOMETRY = new PlaneGeometry(0.24, 0.038, 1, 1);
-const BOARD_READABILITY_ROUTE_GLYPH_PLATE_GEOMETRY = new PlaneGeometry(0.32, 0.2, 1, 1);
-const BOARD_READABILITY_ROUTE_GLYPH_BAR_GEOMETRY = new PlaneGeometry(0.22, 0.026, 1, 1);
-const BOARD_READABILITY_ROUTE_GLYPH_SHORT_BAR_GEOMETRY = new PlaneGeometry(0.12, 0.026, 1, 1);
+const BOARD_READABILITY_TRAIT_COMBO_GEOMETRY = new PlaneGeometry(0.25, 0.034, 1, 1);
+const BOARD_READABILITY_REWARD_HOT_GEOMETRY = new PlaneGeometry(0.135, 0.04, 1, 1);
+const BOARD_READABILITY_PERK_ARMED_GEOMETRY = new PlaneGeometry(0.2, 0.03, 1, 1);
+const BOARD_READABILITY_FOLLOWUP_GEOMETRY = new PlaneGeometry(0.17, 0.03, 1, 1);
+const BOARD_READABILITY_ROUTE_GLYPH_PLATE_GEOMETRY = new PlaneGeometry(0.24, 0.15, 1, 1);
+const BOARD_READABILITY_ROUTE_GLYPH_BAR_GEOMETRY = new PlaneGeometry(0.16, 0.022, 1, 1);
+const BOARD_READABILITY_ROUTE_GLYPH_SHORT_BAR_GEOMETRY = new PlaneGeometry(0.085, 0.022, 1, 1);
 const NON_PICKABLE_RAIL_GEOMETRY = new PlaneGeometry(CARD_WIDTH, HOVER_GOLD_RIM_STRIP, 1, 1);
 
 interface TileBoardReadabilityMarkersProps {
@@ -98,7 +100,7 @@ const ReadabilityMaterialMesh = ({
             color={color}
             depthTest
             depthWrite={false}
-            opacity={opacity}
+            opacity={Math.min(0.82, opacity * READABILITY_MARKER_OPACITY_MULTIPLIER)}
             side={DoubleSide}
             toneMapped={false}
             transparent
@@ -176,6 +178,531 @@ const SignalCapRow = ({
         renderOrder={renderOrder}
         supportColor={supportColor}
     />
+);
+
+interface TraitRewardHotBackMarkerProps {
+    tileId: string;
+    traitReadabilityOpacity: number;
+    traitReadabilityScale: number;
+}
+
+const TraitRewardHotBackMarker = ({
+    tileId,
+    traitReadabilityOpacity,
+    traitReadabilityScale
+}: TraitRewardHotBackMarkerProps) => (
+    <group position={[CARD_WIDTH * 0.31, -CARD_HEIGHT * 0.305, 0.00067]} scale={[traitReadabilityScale, traitReadabilityScale, 1]}>
+        <ReadabilityMaterialMesh
+            color="#3b2605"
+            geometry={BOARD_READABILITY_REWARD_HOT_GEOMETRY}
+            opacity={Math.max(0.88, traitReadabilityOpacity - 0.08)}
+            renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 5}
+        />
+        <ReadabilityMaterialMesh
+            color="#ffe48a"
+            geometry={BOARD_READABILITY_SHORT_BAR_GEOMETRY}
+            opacity={Math.max(0.94, traitReadabilityOpacity)}
+            position={[0, 0.001, 0.00005]}
+            renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 6}
+            scale={[0.74, 1, 1]}
+        />
+        <ReadabilityMaterialMesh
+            color="#fff7c4"
+            geometry={BOARD_READABILITY_PIP_GEOMETRY}
+            opacity={0.98}
+            position={[-0.086, 0.001, 0.00007]}
+            renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 7}
+            scale={[0.72, 0.72, 1]}
+        />
+        <ReadabilityMaterialMesh
+            color="#fff7c4"
+            geometry={BOARD_READABILITY_PIP_GEOMETRY}
+            opacity={0.98}
+            position={[0.086, 0.001, 0.00007]}
+            renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 7}
+            scale={[0.72, 0.72, 1]}
+        />
+        <ReadabilityMaterialMesh
+            color="#fff7c4"
+            geometry={BOARD_READABILITY_SHORT_BAR_GEOMETRY}
+            opacity={0.9}
+            position={[0, 0.035, 0.00008]}
+            renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 8}
+            rotation={[0, 0, Math.PI / 2]}
+            scale={[0.62, 0.86, 1]}
+        />
+        <ReadabilityMaterialMesh
+            color="#ffe48a"
+            geometry={BOARD_READABILITY_SHORT_BAR_GEOMETRY}
+            opacity={0.88}
+            position={[0, 0.058, 0.00009]}
+            renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 8}
+            scale={[0.54, 0.72, 1]}
+        />
+        <SignalCapRow
+            color="#fff7c4"
+            count={2}
+            keyPrefix={`trait-reward-hot-${tileId}`}
+            opacity={0.9}
+            positionY={0.05}
+            renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 10}
+            supportColor="#ffe48a"
+        />
+        <BeatPipRow
+            color="#ffe48a"
+            count={4}
+            keyPrefix={`trait-reward-hot-${tileId}`}
+            opacity={0.96}
+            positionY={-0.046}
+            renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 9}
+            supportColor="#fff7c4"
+        />
+    </group>
+);
+
+interface TraitComboSurgeBackMarkerProps {
+    tileId: string;
+    traitReadabilityOpacity: number;
+    traitReadabilityScale: number;
+}
+
+const TraitComboSurgeBackMarker = ({
+    tileId,
+    traitReadabilityOpacity,
+    traitReadabilityScale
+}: TraitComboSurgeBackMarkerProps) => (
+    <group position={[-CARD_WIDTH * 0.31, -CARD_HEIGHT * 0.305, 0.00069]} scale={[traitReadabilityScale, traitReadabilityScale, 1]}>
+        <ReadabilityMaterialMesh
+            color="#3b2605"
+            geometry={BOARD_READABILITY_REWARD_HOT_GEOMETRY}
+            opacity={Math.max(0.82, traitReadabilityOpacity - 0.1)}
+            renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 5}
+        />
+        <ReadabilityMaterialMesh
+            color="#ffd166"
+            geometry={BOARD_READABILITY_SHORT_BAR_GEOMETRY}
+            opacity={0.96}
+            position={[0, 0.001, 0.00005]}
+            renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 6}
+            scale={[0.78, 1, 1]}
+        />
+        <ReadabilityMaterialMesh
+            color="#5ee0c8"
+            geometry={BOARD_READABILITY_PIP_GEOMETRY}
+            opacity={0.94}
+            position={[-0.086, 0.001, 0.00007]}
+            renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 7}
+            scale={[0.66, 0.66, 1]}
+        />
+        <ReadabilityMaterialMesh
+            color="#fff7c4"
+            geometry={BOARD_READABILITY_PIP_GEOMETRY}
+            opacity={0.96}
+            position={[0.086, 0.001, 0.00007]}
+            renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 7}
+            scale={[0.66, 0.66, 1]}
+        />
+        <ReadabilityMaterialMesh
+            color="#ffd166"
+            geometry={BOARD_READABILITY_SHORT_BAR_GEOMETRY}
+            opacity={0.88}
+            position={[0, 0.058, 0.00008]}
+            renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 8}
+            scale={[0.54, 0.72, 1]}
+        />
+        <SignalCapRow
+            color="#5ee0c8"
+            count={2}
+            keyPrefix={`trait-combo-surge-${tileId}`}
+            opacity={0.88}
+            positionY={0.05}
+            renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 9}
+            supportColor="#fff7c4"
+        />
+        <BeatPipRow
+            color="#ffd166"
+            count={4}
+            keyPrefix={`trait-combo-surge-${tileId}`}
+            opacity={0.92}
+            positionY={-0.046}
+            renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 8}
+            supportColor="#fff7c4"
+        />
+    </group>
+);
+
+interface TraitRouteTargetBackMarkerProps {
+    tileId: string;
+    traitReadabilityOpacity: number;
+    traitReadabilityScale: number;
+}
+
+const TraitRouteTargetBackMarker = ({
+    tileId,
+    traitReadabilityOpacity,
+    traitReadabilityScale
+}: TraitRouteTargetBackMarkerProps) => (
+    <group position={[0, CARD_HEIGHT * 0.305, 0.00062]} scale={[traitReadabilityScale, traitReadabilityScale, 1]}>
+        <ReadabilityMaterialMesh
+            color="#142733"
+            geometry={BOARD_READABILITY_TRAIT_COMBO_GEOMETRY}
+            opacity={Math.max(0.86, traitReadabilityOpacity)}
+            renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 2}
+        />
+        <ReadabilityMaterialMesh
+            color="#5dd6ff"
+            geometry={BOARD_READABILITY_BAR_GEOMETRY}
+            opacity={0.94}
+            position={[0, 0.001, 0.00004]}
+            renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 3}
+        />
+        <ReadabilityMaterialMesh
+            color="#d9f7ff"
+            geometry={BOARD_READABILITY_SHORT_BAR_GEOMETRY}
+            opacity={0.88}
+            position={[0, 0.058, 0.00005]}
+            renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 4}
+            scale={[0.54, 0.72, 1]}
+        />
+        <ReadabilityMaterialMesh
+            color="#d9f7ff"
+            geometry={BOARD_READABILITY_SHORT_BAR_GEOMETRY}
+            opacity={0.9}
+            position={[-0.074, 0.035, 0.00006]}
+            renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 4}
+            rotation={[0, 0, Math.PI / 2.8]}
+        />
+        <ReadabilityMaterialMesh
+            color="#d9f7ff"
+            geometry={BOARD_READABILITY_SHORT_BAR_GEOMETRY}
+            opacity={0.9}
+            position={[0.074, 0.035, 0.00006]}
+            renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 4}
+            rotation={[0, 0, -Math.PI / 2.8]}
+        />
+        <SignalCapRow
+            color="#5dd6ff"
+            count={2}
+            keyPrefix={`trait-route-target-${tileId}`}
+            opacity={0.9}
+            positionY={0.05}
+            renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 5}
+            supportColor="#ffe48a"
+        />
+        <BeatPipRow
+            color="#5dd6ff"
+            count={2}
+            keyPrefix={`trait-route-target-${tileId}`}
+            opacity={0.94}
+            positionY={-0.046}
+            renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 5}
+            supportColor="#ffe48a"
+        />
+    </group>
+);
+
+interface FaceUpTraitPreviewMarkerProps {
+    faceUpTraitPreviewAccentColor: string;
+    faceUpTraitPreviewBeatCount: number;
+    faceUpTraitPreviewTone: 'cashout' | 'ready' | 'surge';
+    tileId: string;
+}
+
+const FaceUpTraitPreviewMarker = ({
+    faceUpTraitPreviewAccentColor,
+    faceUpTraitPreviewBeatCount,
+    faceUpTraitPreviewTone,
+    tileId
+}: FaceUpTraitPreviewMarkerProps) => (
+    <group position={[-CARD_WIDTH * 0.24, CARD_HEIGHT * 0.39, 0.00074]}>
+        <ReadabilityMaterialMesh
+            color={faceUpTraitPreviewAccentColor}
+            geometry={BOARD_READABILITY_TRAIT_COMBO_GEOMETRY}
+            opacity={faceUpTraitPreviewTone === 'cashout' ? 0.98 : faceUpTraitPreviewTone === 'surge' ? 0.92 : 0.86}
+            renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder}
+            scale={
+                faceUpTraitPreviewTone === 'cashout'
+                    ? [0.86, 0.94, 1]
+                    : faceUpTraitPreviewTone === 'surge'
+                      ? [0.8, 0.88, 1]
+                      : [0.72, 0.82, 1]
+            }
+        />
+        <ReadabilityMaterialMesh
+            color={faceUpTraitPreviewAccentColor}
+            geometry={BOARD_READABILITY_STATE_RAIL_GEOMETRY}
+            opacity={faceUpTraitPreviewTone === 'cashout' ? 0.94 : 0.88}
+            position={[0, 0.033, 0.00004]}
+            renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 1}
+            scale={[0.78, 0.68, 1]}
+        />
+        <ReadabilityMaterialMesh
+            color={faceUpTraitPreviewAccentColor}
+            geometry={BOARD_READABILITY_SHORT_BAR_GEOMETRY}
+            opacity={faceUpTraitPreviewTone === 'cashout' ? 0.98 : 0.9}
+            position={[0, 0.06, 0.00005]}
+            renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 1}
+            scale={[0.56, 0.74, 1]}
+        />
+        <SignalCapRow
+            color={faceUpTraitPreviewAccentColor}
+            count={2}
+            keyPrefix={`face-up-trait-preview-${tileId}`}
+            opacity={faceUpTraitPreviewTone === 'cashout' ? 0.96 : 0.88}
+            positionY={0.052}
+            renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 2}
+            supportColor="#fff7c4"
+        />
+        <ReadabilityMaterialMesh
+            color="#100d14"
+            geometry={BOARD_READABILITY_PIP_GEOMETRY}
+            opacity={0.72}
+            position={[0, 0.001, 0.00005]}
+            renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 1}
+            scale={[0.46, 0.46, 1]}
+        />
+        {Array.from({ length: faceUpTraitPreviewBeatCount }, (_, index) => (
+            <ReadabilityMaterialMesh
+                color={index === 0 ? '#f7f1c2' : '#fff7c4'}
+                geometry={BOARD_READABILITY_PIP_GEOMETRY}
+                key={`face-up-trait-preview-${tileId}-${index}`}
+                opacity={index === 0 ? 0.98 : 0.82}
+                position={[(index - (faceUpTraitPreviewBeatCount - 1) / 2) * 0.082, -0.032, 0.00006 + index * 0.00001]}
+                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 1}
+                scale={index === 0 ? [0.64, 0.64, 1] : [0.5, 0.5, 1]}
+            />
+        ))}
+    </group>
+);
+
+interface PerkArmedBackMarkerProps {
+    tileId: string;
+    traitReadabilityOpacity: number;
+    traitReadabilityScale: number;
+}
+
+const PerkArmedBackMarker = ({ tileId, traitReadabilityOpacity, traitReadabilityScale }: PerkArmedBackMarkerProps) => (
+    <group position={[0, CARD_HEIGHT * 0.305, 0.0007]} scale={[traitReadabilityScale, traitReadabilityScale, 1]}>
+        <ReadabilityMaterialMesh
+            color="#3b2605"
+            geometry={BOARD_READABILITY_PERK_ARMED_GEOMETRY}
+            opacity={Math.max(0.82, traitReadabilityOpacity - 0.08)}
+            renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 6}
+        />
+        <ReadabilityMaterialMesh
+            color="#ffe48a"
+            geometry={BOARD_READABILITY_SHORT_BAR_GEOMETRY}
+            opacity={0.96}
+            position={[0, 0.001, 0.00005]}
+            renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 7}
+            scale={[0.72, 1, 1]}
+        />
+        <BeatPipRow
+            color="#ffe48a"
+            count={2}
+            keyPrefix={`trait-perk-${tileId}`}
+            opacity={0.94}
+            positionY={-0.046}
+            renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 8}
+            supportColor="#8de6ff"
+        />
+    </group>
+);
+
+interface SelectedTraitFollowupBackMarkerProps {
+    tileId: string;
+    traitReadabilityOpacity: number;
+    traitReadabilityScale: number;
+}
+
+const SelectedTraitFollowupBackMarker = ({
+    tileId,
+    traitReadabilityOpacity,
+    traitReadabilityScale
+}: SelectedTraitFollowupBackMarkerProps) => (
+    <group position={[CARD_WIDTH * 0.31, CARD_HEIGHT * 0.305, 0.00071]} scale={[traitReadabilityScale, traitReadabilityScale, 1]}>
+        <ReadabilityMaterialMesh
+            color="#120c04"
+            geometry={BOARD_READABILITY_FOLLOWUP_GEOMETRY}
+            opacity={Math.max(0.84, traitReadabilityOpacity - 0.08)}
+            renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 6}
+            rotation={[0, 0, Math.PI / 2]}
+        />
+        <ReadabilityMaterialMesh
+            color="#fff7c4"
+            geometry={BOARD_READABILITY_SHORT_BAR_GEOMETRY}
+            opacity={0.98}
+            position={[0, 0.001, 0.00005]}
+            renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 7}
+            rotation={[0, 0, Math.PI / 2]}
+            scale={[0.72, 1, 1]}
+        />
+        <SignalCapRow
+            color="#fff7c4"
+            count={2}
+            keyPrefix={`trait-followup-${tileId}`}
+            opacity={0.88}
+            positionY={0.05}
+            renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 8}
+            supportColor="#8de6ff"
+        />
+        <BeatPipRow
+            color="#fff7c4"
+            count={3}
+            keyPrefix={`trait-followup-${tileId}`}
+            opacity={0.96}
+            positionY={-0.046}
+            renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 8}
+            supportColor="#8de6ff"
+        />
+    </group>
+);
+
+interface TraitRoutePayoffLaneBackMarkerProps {
+    tileId: string;
+    traitReadabilityOpacity: number;
+    traitReadabilityScale: number;
+}
+
+const TraitRoutePayoffLaneBackMarker = ({
+    tileId,
+    traitReadabilityOpacity,
+    traitReadabilityScale
+}: TraitRoutePayoffLaneBackMarkerProps) => (
+    <group position={[0, -CARD_HEIGHT * 0.305, 0.00072]} scale={[traitReadabilityScale, traitReadabilityScale, 1]}>
+        <ReadabilityMaterialMesh
+            color="#120c04"
+            geometry={BOARD_READABILITY_TRAIT_COMBO_GEOMETRY}
+            opacity={Math.max(0.82, traitReadabilityOpacity - 0.08)}
+            renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 8}
+            scale={[1.08, 1.16, 1]}
+        />
+        <ReadabilityMaterialMesh
+            color="#ffe48a"
+            geometry={BOARD_READABILITY_BAR_GEOMETRY}
+            opacity={0.94}
+            position={[-0.075, 0.001, 0.00004]}
+            renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 9}
+            rotation={[0, 0, Math.PI / 2]}
+            scale={[0.72, 0.78, 1]}
+        />
+        <ReadabilityMaterialMesh
+            color="#5ee0c8"
+            geometry={BOARD_READABILITY_BAR_GEOMETRY}
+            opacity={0.9}
+            position={[0.075, 0.001, 0.00005]}
+            renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 9}
+            rotation={[0, 0, Math.PI / 2]}
+            scale={[0.72, 0.78, 1]}
+        />
+        <SignalCapRow
+            color="#ffe48a"
+            count={3}
+            keyPrefix={`trait-payoff-stack-${tileId}`}
+            opacity={0.9}
+            positionY={0.052}
+            renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 11}
+            supportColor="#fff7c4"
+        />
+        <BeatPipRow
+            color="#ffe48a"
+            count={3}
+            keyPrefix={`trait-route-${tileId}`}
+            opacity={0.9}
+            positionY={-0.048}
+            renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 10}
+            supportColor="#5ee0c8"
+        />
+    </group>
+);
+
+interface TraitPayoffStackBackMarkerProps {
+    tileId: string;
+    traitReadabilityOpacity: number;
+    traitReadabilityScale: number;
+}
+
+const TraitPayoffStackBackMarker = ({
+    tileId,
+    traitReadabilityOpacity,
+    traitReadabilityScale
+}: TraitPayoffStackBackMarkerProps) => (
+    <group position={[0, -CARD_HEIGHT * 0.305, 0.00076]} scale={[traitReadabilityScale, traitReadabilityScale, 1]}>
+        <ReadabilityMaterialMesh
+            color="#332409"
+            geometry={BOARD_READABILITY_TRAIT_COMBO_GEOMETRY}
+            opacity={Math.max(0.74, traitReadabilityOpacity - 0.16)}
+            renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 8}
+            scale={[1.18, 1.28, 1]}
+        />
+        <ReadabilityMaterialMesh
+            color="#fff7c4"
+            geometry={BOARD_READABILITY_BAR_GEOMETRY}
+            opacity={Math.max(0.96, traitReadabilityOpacity)}
+            renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 10}
+            scale={[0.72, 0.9, 1]}
+        />
+        <ReadabilityMaterialMesh
+            color="#ffe48a"
+            geometry={BOARD_READABILITY_LARGE_PIP_GEOMETRY}
+            opacity={0.98}
+            position={[0, 0.001, 0.00006]}
+            renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 11}
+            scale={[0.72, 0.72, 1]}
+        />
+        <ReadabilityMaterialMesh
+            color="#5ee0c8"
+            geometry={BOARD_READABILITY_SHORT_BAR_GEOMETRY}
+            opacity={0.96}
+            position={[-0.055, 0.04, 0.00008]}
+            renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 12}
+            rotation={[0, 0, Math.PI / 4]}
+            scale={[0.7, 0.86, 1]}
+        />
+        <ReadabilityMaterialMesh
+            color="#5ee0c8"
+            geometry={BOARD_READABILITY_SHORT_BAR_GEOMETRY}
+            opacity={0.96}
+            position={[0.055, 0.04, 0.00009]}
+            renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 12}
+            rotation={[0, 0, -Math.PI / 4]}
+            scale={[0.7, 0.86, 1]}
+        />
+        <ReadabilityMaterialMesh
+            color="#ffe48a"
+            geometry={BOARD_READABILITY_SHORT_BAR_GEOMETRY}
+            opacity={0.9}
+            position={[0, 0.088, 0.0001]}
+            renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 12}
+            scale={[0.5, 0.72, 1]}
+        />
+        <SignalCapRow
+            color="#ffe48a"
+            count={3}
+            keyPrefix={`trait-payoff-stack-${tileId}`}
+            opacity={0.9}
+            positionY={0.05}
+            renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 13}
+            supportColor="#fff7c4"
+        />
+        <BeatPipRow
+            color="#ffe48a"
+            count={5}
+            keyPrefix={`trait-payoff-${tileId}`}
+            opacity={0.98}
+            positionY={-0.047}
+            renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 13}
+            supportColor="#5ee0c8"
+        />
+        <ReadabilityMaterialMesh
+            color="#fff7c4"
+            geometry={BOARD_READABILITY_SHORT_BAR_GEOMETRY}
+            opacity={0.92}
+            position={[0, -0.089, 0.0001]}
+            renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 14}
+            scale={[0.54, 0.72, 1]}
+        />
+    </group>
 );
 
 export const TileBoardReadabilityMarkers = ({
@@ -260,12 +787,12 @@ export const TileBoardReadabilityMarkers = ({
     const traitRouteBeatCount = getTraitRouteReadabilityBeatCount(traitRouteBeatTier);
     const traitReadabilityScale =
         traitRouteReadabilityIntensity === 'stack'
-            ? 1.14
+            ? 0.92
             : traitRouteReadabilityIntensity === 'cashout'
-              ? 1.08
+              ? 0.88
               : traitRouteReadabilityIntensity === 'surge'
-                ? 1.04
-                : 1;
+                ? 0.84
+                : 0.8;
     const traitReadabilityOpacity =
         traitRouteReadabilityIntensity === 'stack'
             ? 1
@@ -332,6 +859,8 @@ export const TileBoardReadabilityMarkers = ({
               : tile.tileTraitKind
                 ? tileTraitColor(tile.tileTraitKind)
                 : '#f7f1c2';
+    const faceReadabilityEdgeOpacity = isResolvedTrap ? 0.22 : isBossCard ? 0.38 : 0.3;
+    const faceReadabilityPipOpacity = isResolvedTrap ? 0.58 : 0.72;
 
     return (
         <>
@@ -1181,403 +1710,53 @@ export const TileBoardReadabilityMarkers = ({
                         </group>
                     ) : null}
                     {isTraitRewardHotBack ? (
-                        <group
-                            position={[CARD_WIDTH * 0.31, -CARD_HEIGHT * 0.305, 0.00067]}
-                            scale={[traitReadabilityScale, traitReadabilityScale, 1]}
-                        >
-                            <ReadabilityMaterialMesh
-                                color="#3b2605"
-                                geometry={BOARD_READABILITY_REWARD_HOT_GEOMETRY}
-                                opacity={Math.max(0.88, traitReadabilityOpacity - 0.08)}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 5}
-                            />
-                            <ReadabilityMaterialMesh
-                                color="#ffe48a"
-                                geometry={BOARD_READABILITY_SHORT_BAR_GEOMETRY}
-                                opacity={Math.max(0.94, traitReadabilityOpacity)}
-                                position={[0, 0.001, 0.00005]}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 6}
-                                scale={[0.74, 1, 1]}
-                            />
-                            <ReadabilityMaterialMesh
-                                color="#fff7c4"
-                                geometry={BOARD_READABILITY_PIP_GEOMETRY}
-                                opacity={0.98}
-                                position={[-0.086, 0.001, 0.00007]}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 7}
-                                scale={[0.72, 0.72, 1]}
-                            />
-                            <ReadabilityMaterialMesh
-                                color="#fff7c4"
-                                geometry={BOARD_READABILITY_PIP_GEOMETRY}
-                                opacity={0.98}
-                                position={[0.086, 0.001, 0.00007]}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 7}
-                                scale={[0.72, 0.72, 1]}
-                            />
-                            <ReadabilityMaterialMesh
-                                color="#fff7c4"
-                                geometry={BOARD_READABILITY_SHORT_BAR_GEOMETRY}
-                                opacity={0.9}
-                                position={[0, 0.035, 0.00008]}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 8}
-                                rotation={[0, 0, Math.PI / 2]}
-                                scale={[0.62, 0.86, 1]}
-                            />
-                            <ReadabilityMaterialMesh
-                                color="#ffe48a"
-                                geometry={BOARD_READABILITY_SHORT_BAR_GEOMETRY}
-                                opacity={0.88}
-                                position={[0, 0.058, 0.00009]}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 8}
-                                scale={[0.54, 0.72, 1]}
-                            />
-                            <SignalCapRow
-                                color="#fff7c4"
-                                count={2}
-                                keyPrefix={`trait-reward-hot-${tile.id}`}
-                                opacity={0.9}
-                                positionY={0.05}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 10}
-                                supportColor="#ffe48a"
-                            />
-                            <BeatPipRow
-                                color="#ffe48a"
-                                count={4}
-                                keyPrefix={`trait-reward-hot-${tile.id}`}
-                                opacity={0.96}
-                                positionY={-0.046}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 9}
-                                supportColor="#fff7c4"
-                            />
-                        </group>
+                        <TraitRewardHotBackMarker
+                            tileId={tile.id}
+                            traitReadabilityOpacity={traitReadabilityOpacity}
+                            traitReadabilityScale={traitReadabilityScale}
+                        />
                     ) : null}
                     {isTraitComboSurgeBack ? (
-                        <group
-                            position={[-CARD_WIDTH * 0.31, -CARD_HEIGHT * 0.305, 0.00069]}
-                            scale={[traitReadabilityScale, traitReadabilityScale, 1]}
-                        >
-                            <ReadabilityMaterialMesh
-                                color="#3b2605"
-                                geometry={BOARD_READABILITY_REWARD_HOT_GEOMETRY}
-                                opacity={Math.max(0.82, traitReadabilityOpacity - 0.1)}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 5}
-                            />
-                            <ReadabilityMaterialMesh
-                                color="#ffd166"
-                                geometry={BOARD_READABILITY_SHORT_BAR_GEOMETRY}
-                                opacity={0.96}
-                                position={[0, 0.001, 0.00005]}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 6}
-                                scale={[0.78, 1, 1]}
-                            />
-                            <ReadabilityMaterialMesh
-                                color="#5ee0c8"
-                                geometry={BOARD_READABILITY_PIP_GEOMETRY}
-                                opacity={0.94}
-                                position={[-0.086, 0.001, 0.00007]}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 7}
-                                scale={[0.66, 0.66, 1]}
-                            />
-                            <ReadabilityMaterialMesh
-                                color="#fff7c4"
-                                geometry={BOARD_READABILITY_PIP_GEOMETRY}
-                                opacity={0.96}
-                                position={[0.086, 0.001, 0.00007]}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 7}
-                                scale={[0.66, 0.66, 1]}
-                            />
-                            <ReadabilityMaterialMesh
-                                color="#ffd166"
-                                geometry={BOARD_READABILITY_SHORT_BAR_GEOMETRY}
-                                opacity={0.88}
-                                position={[0, 0.058, 0.00008]}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 8}
-                                scale={[0.54, 0.72, 1]}
-                            />
-                            <SignalCapRow
-                                color="#5ee0c8"
-                                count={2}
-                                keyPrefix={`trait-combo-surge-${tile.id}`}
-                                opacity={0.88}
-                                positionY={0.05}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 9}
-                                supportColor="#fff7c4"
-                            />
-                            <BeatPipRow
-                                color="#ffd166"
-                                count={4}
-                                keyPrefix={`trait-combo-surge-${tile.id}`}
-                                opacity={0.92}
-                                positionY={-0.046}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 8}
-                                supportColor="#fff7c4"
-                            />
-                        </group>
+                        <TraitComboSurgeBackMarker
+                            tileId={tile.id}
+                            traitReadabilityOpacity={traitReadabilityOpacity}
+                            traitReadabilityScale={traitReadabilityScale}
+                        />
                     ) : null}
                     {isPerkArmedBack ? (
-                        <group
-                            position={[0, CARD_HEIGHT * 0.305, 0.0007]}
-                            scale={[traitReadabilityScale, traitReadabilityScale, 1]}
-                        >
-                            <ReadabilityMaterialMesh
-                                color="#3b2605"
-                                geometry={BOARD_READABILITY_PERK_ARMED_GEOMETRY}
-                                opacity={Math.max(0.82, traitReadabilityOpacity - 0.08)}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 6}
-                            />
-                            <ReadabilityMaterialMesh
-                                color="#ffe48a"
-                                geometry={BOARD_READABILITY_SHORT_BAR_GEOMETRY}
-                                opacity={0.96}
-                                position={[0, 0.001, 0.00005]}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 7}
-                                scale={[0.72, 1, 1]}
-                            />
-                            <BeatPipRow
-                                color="#ffe48a"
-                                count={2}
-                                keyPrefix={`trait-perk-${tile.id}`}
-                                opacity={0.94}
-                                positionY={-0.046}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 8}
-                                supportColor="#8de6ff"
-                            />
-                        </group>
+                        <PerkArmedBackMarker
+                            tileId={tile.id}
+                            traitReadabilityOpacity={traitReadabilityOpacity}
+                            traitReadabilityScale={traitReadabilityScale}
+                        />
                     ) : null}
                     {isSelectedTraitFollowupBack ? (
-                        <group
-                            position={[CARD_WIDTH * 0.31, CARD_HEIGHT * 0.305, 0.00071]}
-                            scale={[traitReadabilityScale, traitReadabilityScale, 1]}
-                        >
-                            <ReadabilityMaterialMesh
-                                color="#120c04"
-                                geometry={BOARD_READABILITY_FOLLOWUP_GEOMETRY}
-                                opacity={Math.max(0.84, traitReadabilityOpacity - 0.08)}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 6}
-                                rotation={[0, 0, Math.PI / 2]}
-                            />
-                            <ReadabilityMaterialMesh
-                                color="#fff7c4"
-                                geometry={BOARD_READABILITY_SHORT_BAR_GEOMETRY}
-                                opacity={0.98}
-                                position={[0, 0.001, 0.00005]}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 7}
-                                rotation={[0, 0, Math.PI / 2]}
-                                scale={[0.72, 1, 1]}
-                            />
-                            <SignalCapRow
-                                color="#fff7c4"
-                                count={2}
-                                keyPrefix={`trait-followup-${tile.id}`}
-                                opacity={0.88}
-                                positionY={0.05}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 8}
-                                supportColor="#8de6ff"
-                            />
-                            <BeatPipRow
-                                color="#fff7c4"
-                                count={3}
-                                keyPrefix={`trait-followup-${tile.id}`}
-                                opacity={0.96}
-                                positionY={-0.046}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 8}
-                                supportColor="#8de6ff"
-                            />
-                        </group>
+                        <SelectedTraitFollowupBackMarker
+                            tileId={tile.id}
+                            traitReadabilityOpacity={traitReadabilityOpacity}
+                            traitReadabilityScale={traitReadabilityScale}
+                        />
                     ) : null}
                     {isTraitRoutePayoffLaneBack ? (
-                        <group
-                            position={[0, -CARD_HEIGHT * 0.305, 0.00072]}
-                            scale={[traitReadabilityScale, traitReadabilityScale, 1]}
-                        >
-                            <ReadabilityMaterialMesh
-                                color="#120c04"
-                                geometry={BOARD_READABILITY_TRAIT_COMBO_GEOMETRY}
-                                opacity={Math.max(0.82, traitReadabilityOpacity - 0.08)}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 8}
-                                scale={[1.08, 1.16, 1]}
-                            />
-                            <ReadabilityMaterialMesh
-                                color="#ffe48a"
-                                geometry={BOARD_READABILITY_BAR_GEOMETRY}
-                                opacity={0.94}
-                                position={[-0.075, 0.001, 0.00004]}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 9}
-                                rotation={[0, 0, Math.PI / 2]}
-                                scale={[0.72, 0.78, 1]}
-                            />
-                            <ReadabilityMaterialMesh
-                                color="#5ee0c8"
-                                geometry={BOARD_READABILITY_BAR_GEOMETRY}
-                                opacity={0.9}
-                                position={[0.075, 0.001, 0.00005]}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 9}
-                                rotation={[0, 0, Math.PI / 2]}
-                                scale={[0.72, 0.78, 1]}
-                            />
-                            <SignalCapRow
-                                color="#ffe48a"
-                                count={3}
-                                keyPrefix={`trait-payoff-stack-${tile.id}`}
-                                opacity={0.9}
-                                positionY={0.052}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 11}
-                                supportColor="#fff7c4"
-                            />
-                            <BeatPipRow
-                                color="#ffe48a"
-                                count={3}
-                                keyPrefix={`trait-route-${tile.id}`}
-                                opacity={0.9}
-                                positionY={-0.048}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 10}
-                                supportColor="#5ee0c8"
-                            />
-                        </group>
+                        <TraitRoutePayoffLaneBackMarker
+                            tileId={tile.id}
+                            traitReadabilityOpacity={traitReadabilityOpacity}
+                            traitReadabilityScale={traitReadabilityScale}
+                        />
                     ) : null}
                     {isTraitPayoffStackBack ? (
-                        <group
-                            position={[0, -CARD_HEIGHT * 0.305, 0.00076]}
-                            scale={[traitReadabilityScale, traitReadabilityScale, 1]}
-                        >
-                            <ReadabilityMaterialMesh
-                                color="#332409"
-                                geometry={BOARD_READABILITY_TRAIT_COMBO_GEOMETRY}
-                                opacity={Math.max(0.74, traitReadabilityOpacity - 0.16)}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 8}
-                                scale={[1.18, 1.28, 1]}
-                            />
-                            <ReadabilityMaterialMesh
-                                color="#fff7c4"
-                                geometry={BOARD_READABILITY_BAR_GEOMETRY}
-                                opacity={Math.max(0.96, traitReadabilityOpacity)}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 10}
-                                scale={[0.72, 0.9, 1]}
-                            />
-                            <ReadabilityMaterialMesh
-                                color="#ffe48a"
-                                geometry={BOARD_READABILITY_LARGE_PIP_GEOMETRY}
-                                opacity={0.98}
-                                position={[0, 0.001, 0.00006]}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 11}
-                                scale={[0.72, 0.72, 1]}
-                            />
-                            <ReadabilityMaterialMesh
-                                color="#5ee0c8"
-                                geometry={BOARD_READABILITY_SHORT_BAR_GEOMETRY}
-                                opacity={0.96}
-                                position={[-0.055, 0.04, 0.00008]}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 12}
-                                rotation={[0, 0, Math.PI / 4]}
-                                scale={[0.7, 0.86, 1]}
-                            />
-                            <ReadabilityMaterialMesh
-                                color="#5ee0c8"
-                                geometry={BOARD_READABILITY_SHORT_BAR_GEOMETRY}
-                                opacity={0.96}
-                                position={[0.055, 0.04, 0.00009]}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 12}
-                                rotation={[0, 0, -Math.PI / 4]}
-                                scale={[0.7, 0.86, 1]}
-                            />
-                            <ReadabilityMaterialMesh
-                                color="#ffe48a"
-                                geometry={BOARD_READABILITY_SHORT_BAR_GEOMETRY}
-                                opacity={0.9}
-                                position={[0, 0.088, 0.0001]}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 12}
-                                scale={[0.5, 0.72, 1]}
-                            />
-                            <SignalCapRow
-                                color="#ffe48a"
-                                count={3}
-                                keyPrefix={`trait-payoff-stack-${tile.id}`}
-                                opacity={0.9}
-                                positionY={0.05}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 13}
-                                supportColor="#fff7c4"
-                            />
-                            <BeatPipRow
-                                color="#ffe48a"
-                                count={5}
-                                keyPrefix={`trait-payoff-${tile.id}`}
-                                opacity={0.98}
-                                positionY={-0.047}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 13}
-                                supportColor="#5ee0c8"
-                            />
-                            <ReadabilityMaterialMesh
-                                color="#fff7c4"
-                                geometry={BOARD_READABILITY_SHORT_BAR_GEOMETRY}
-                                opacity={0.92}
-                                position={[0, -0.089, 0.0001]}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 14}
-                                scale={[0.54, 0.72, 1]}
-                            />
-                        </group>
+                        <TraitPayoffStackBackMarker
+                            tileId={tile.id}
+                            traitReadabilityOpacity={traitReadabilityOpacity}
+                            traitReadabilityScale={traitReadabilityScale}
+                        />
                     ) : null}
                     {isTraitRouteTargetBack ? (
-                        <group
-                            position={[0, CARD_HEIGHT * 0.305, 0.00062]}
-                            scale={[traitReadabilityScale, traitReadabilityScale, 1]}
-                        >
-                            <ReadabilityMaterialMesh
-                                color="#142733"
-                                geometry={BOARD_READABILITY_TRAIT_COMBO_GEOMETRY}
-                                opacity={Math.max(0.86, traitReadabilityOpacity)}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 2}
-                            />
-                            <ReadabilityMaterialMesh
-                                color="#5dd6ff"
-                                geometry={BOARD_READABILITY_BAR_GEOMETRY}
-                                opacity={0.94}
-                                position={[0, 0.001, 0.00004]}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 3}
-                            />
-                            <ReadabilityMaterialMesh
-                                color="#d9f7ff"
-                                geometry={BOARD_READABILITY_SHORT_BAR_GEOMETRY}
-                                opacity={0.88}
-                                position={[0, 0.058, 0.00005]}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 4}
-                                scale={[0.54, 0.72, 1]}
-                            />
-                            <ReadabilityMaterialMesh
-                                color="#d9f7ff"
-                                geometry={BOARD_READABILITY_SHORT_BAR_GEOMETRY}
-                                opacity={0.9}
-                                position={[-0.074, 0.035, 0.00006]}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 4}
-                                rotation={[0, 0, Math.PI / 2.8]}
-                            />
-                            <ReadabilityMaterialMesh
-                                color="#d9f7ff"
-                                geometry={BOARD_READABILITY_SHORT_BAR_GEOMETRY}
-                                opacity={0.9}
-                                position={[0.074, 0.035, 0.00006]}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 4}
-                                rotation={[0, 0, -Math.PI / 2.8]}
-                            />
-                            <SignalCapRow
-                                color="#5dd6ff"
-                                count={2}
-                                keyPrefix={`trait-route-target-${tile.id}`}
-                                opacity={0.9}
-                                positionY={0.05}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 5}
-                                supportColor="#ffe48a"
-                            />
-                            <BeatPipRow
-                                color="#5dd6ff"
-                                count={2}
-                                keyPrefix={`trait-route-target-${tile.id}`}
-                                opacity={0.94}
-                                positionY={-0.046}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 5}
-                                supportColor="#ffe48a"
-                            />
-                        </group>
+                        <TraitRouteTargetBackMarker
+                            tileId={tile.id}
+                            traitReadabilityOpacity={traitReadabilityOpacity}
+                            traitReadabilityScale={traitReadabilityScale}
+                        />
                     ) : null}
                     {objectiveBackAccent ? (
                         <group position={[CARD_WIDTH * 0.36, 0, 0.00058]}>
@@ -1695,81 +1874,25 @@ export const TileBoardReadabilityMarkers = ({
                     <ReadabilityMaterialMesh
                         color={faceReadabilityAccentColor}
                         geometry={matchedEdgeGeometry}
-                        opacity={isResolvedTrap ? 0.46 : isBossCard ? 0.7 : 0.62}
+                        opacity={faceReadabilityEdgeOpacity}
                         renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveRing.renderOrder}
-                        scale={[0.93, 0.93, 1]}
+                        scale={[0.78, 0.78, 1]}
                     />
                     <ReadabilityMaterialMesh
                         color={faceReadabilityAccentColor}
                         geometry={BOARD_READABILITY_PIP_GEOMETRY}
-                        opacity={isResolvedTrap ? 0.78 : 0.96}
+                        opacity={faceReadabilityPipOpacity}
                         position={[CARD_WIDTH * 0.35, CARD_HEIGHT * 0.39, 0.00072]}
                         renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder}
+                        scale={[0.72, 0.72, 1]}
                     />
                     {hasFaceUpTraitPreview && tile.tileTraitKind ? (
-                        <group position={[-CARD_WIDTH * 0.24, CARD_HEIGHT * 0.39, 0.00074]}>
-                            <ReadabilityMaterialMesh
-                                color={faceUpTraitPreviewAccentColor}
-                                geometry={BOARD_READABILITY_TRAIT_COMBO_GEOMETRY}
-                                opacity={faceUpTraitPreviewTone === 'cashout' ? 0.98 : faceUpTraitPreviewTone === 'surge' ? 0.92 : 0.86}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder}
-                                scale={
-                                    faceUpTraitPreviewTone === 'cashout'
-                                        ? [0.86, 0.94, 1]
-                                        : faceUpTraitPreviewTone === 'surge'
-                                          ? [0.8, 0.88, 1]
-                                          : [0.72, 0.82, 1]
-                                }
-                            />
-                            <ReadabilityMaterialMesh
-                                color={faceUpTraitPreviewAccentColor}
-                                geometry={BOARD_READABILITY_STATE_RAIL_GEOMETRY}
-                                opacity={faceUpTraitPreviewTone === 'cashout' ? 0.94 : 0.88}
-                                position={[0, 0.033, 0.00004]}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 1}
-                                scale={[0.78, 0.68, 1]}
-                            />
-                            <ReadabilityMaterialMesh
-                                color={faceUpTraitPreviewAccentColor}
-                                geometry={BOARD_READABILITY_SHORT_BAR_GEOMETRY}
-                                opacity={faceUpTraitPreviewTone === 'cashout' ? 0.98 : 0.9}
-                                position={[0, 0.06, 0.00005]}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 1}
-                                scale={[0.56, 0.74, 1]}
-                            />
-                            <SignalCapRow
-                                color={faceUpTraitPreviewAccentColor}
-                                count={2}
-                                keyPrefix={`face-up-trait-preview-${tile.id}`}
-                                opacity={faceUpTraitPreviewTone === 'cashout' ? 0.96 : 0.88}
-                                positionY={0.052}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 2}
-                                supportColor="#fff7c4"
-                            />
-                            <ReadabilityMaterialMesh
-                                color="#100d14"
-                                geometry={BOARD_READABILITY_PIP_GEOMETRY}
-                                opacity={0.72}
-                                position={[0.0, 0.001, 0.00005]}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 1}
-                                scale={[0.46, 0.46, 1]}
-                            />
-                            {Array.from({ length: faceUpTraitPreviewBeatCount }, (_, index) => (
-                                <ReadabilityMaterialMesh
-                                    color={index === 0 ? '#f7f1c2' : '#fff7c4'}
-                                    geometry={BOARD_READABILITY_PIP_GEOMETRY}
-                                    opacity={index === 0 ? 0.98 : 0.82}
-                                    position={[
-                                        (index - (faceUpTraitPreviewBeatCount - 1) / 2) * 0.082,
-                                        -0.032,
-                                        0.00006 + index * 0.00001
-                                    ]}
-                                    renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 1}
-                                    scale={index === 0 ? [0.64, 0.64, 1] : [0.5, 0.5, 1]}
-                                    key={`face-up-trait-preview-${tile.id}-${index}`}
-                                />
-                            ))}
-                        </group>
+                        <FaceUpTraitPreviewMarker
+                            faceUpTraitPreviewAccentColor={faceUpTraitPreviewAccentColor}
+                            faceUpTraitPreviewBeatCount={faceUpTraitPreviewBeatCount}
+                            faceUpTraitPreviewTone={faceUpTraitPreviewTone}
+                            tileId={tile.id}
+                        />
                     ) : null}
                     {isTrapCard ? (
                         <ReadabilityMaterialMesh

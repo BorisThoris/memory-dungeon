@@ -713,6 +713,7 @@
 }
 
 .body {
+    order: 19;
     margin: 0;
     font-size: var(--ui-font-body-sm);
     line-height: 1.45;
@@ -720,6 +721,7 @@
 }
 
 .reason {
+    order: 1;
     align-self: flex-start;
     padding: 0.13rem 0.36rem;
     border: 1px solid color-mix(in srgb, var(--theme-amber) 42%, transparent);
@@ -732,8 +734,9 @@
 }
 
 .pickAction {
+    order: 2;
     display: grid;
-    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr) auto;
     align-items: center;
     gap: 0.16rem 0.42rem;
     min-width: 0;
@@ -756,6 +759,8 @@
 }
 
 .pickAction small {
+    grid-column: 2;
+    grid-row: 1;
     color: color-mix(in srgb, var(--theme-text-muted) 86%, white);
     font-size: var(--ui-font-caption);
     font-weight: 950;
@@ -764,6 +769,8 @@
 }
 
 .pickAction strong {
+    grid-column: 1;
+    grid-row: 1;
     color: color-mix(in srgb, var(--theme-cyan-bright) 90%, white);
     font-size: var(--ui-font-body-sm);
     font-weight: 950;
@@ -812,6 +819,7 @@
 }
 
 .pickPlan {
+    order: 4;
     display: flex;
     flex-wrap: wrap;
     gap: 0.14rem;
@@ -822,17 +830,16 @@
 .pickPlan span {
     min-width: 0;
     max-width: 100%;
-    overflow: hidden;
     padding: 0.1rem 0.34rem;
     border: 1px solid color-mix(in srgb, var(--theme-cyan-bright) 30%, transparent);
-    border-radius: 999px;
+    border-radius: var(--ui-radius-sm);
     background: color-mix(in srgb, var(--theme-panel-solid) 54%, transparent);
     color: color-mix(in srgb, var(--theme-text-muted) 90%, white);
     font-size: var(--ui-font-caption);
     font-weight: 890;
-    line-height: 1;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    line-height: 1.14;
+    overflow-wrap: anywhere;
+    white-space: normal;
 }
 
 .pickPlan[data-pick-plan-tone='stack'] span,
@@ -864,8 +871,9 @@
 }
 
 .engineRecipe {
+    order: 13;
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 0.18rem;
     margin-top: -0.08rem;
     padding: 0.34rem;
@@ -889,10 +897,6 @@
 .engineRecipe small,
 .engineRecipe strong {
     min-width: 0;
-    overflow: hidden;
-    line-height: 1;
-    text-overflow: ellipsis;
-    white-space: nowrap;
 }
 
 .engineRecipe small {
@@ -906,6 +910,8 @@
     color: color-mix(in srgb, var(--theme-cyan-bright) 86%, white);
     font-size: var(--ui-font-caption);
     font-weight: 950;
+    line-height: 1.12;
+    overflow-wrap: anywhere;
 }
 
 .engineRecipe span[data-engine-recipe-tone='stack'],
@@ -925,6 +931,7 @@
 }
 
 .recommendation {
+    order: 7;
     display: inline-flex;
     align-self: flex-start;
     align-items: center;
@@ -956,6 +963,7 @@
 }
 
 .choiceHeat {
+    order: 5;
     display: grid;
     gap: 0.06rem;
     max-width: 100%;
@@ -1031,8 +1039,9 @@
 }
 
 .choiceCrescendo {
+    order: 6;
     display: grid;
-    grid-template-columns: auto minmax(2.6rem, 0.42fr) minmax(0, 1fr);
+    grid-template-columns: auto minmax(2.6rem, 0.42fr) auto;
     align-items: center;
     gap: 0.2rem;
     max-width: 100%;
@@ -1077,10 +1086,16 @@
 }
 
 .choiceCrescendo em {
+    grid-column: 1 / -1;
     color: color-mix(in srgb, var(--theme-text-muted) 92%, white);
     font-size: var(--ui-font-caption);
     font-style: normal;
     font-weight: 780;
+    line-height: 1.12;
+    overflow: visible;
+    overflow-wrap: anywhere;
+    text-overflow: clip;
+    white-space: normal;
 }
 
 .choiceCrescendo b {
@@ -1151,8 +1166,9 @@
 }
 
 .payoffBurst {
+    order: 14;
     display: inline-grid;
-    grid-template-columns: auto auto;
+    grid-template-columns: minmax(0, 1fr);
     align-items: center;
     align-self: flex-start;
     gap: 0.22rem;
@@ -1188,6 +1204,11 @@
 .payoffBurst strong {
     color: color-mix(in srgb, var(--theme-text) 94%, white);
     font-weight: 950;
+    line-height: 1.12;
+    overflow: visible;
+    overflow-wrap: anywhere;
+    text-overflow: clip;
+    white-space: normal;
 }
 
 .payoffBurst[data-relic-payoff-tier='stack'] {
@@ -1207,8 +1228,9 @@
 }
 
 .nextFloorCue {
+    order: 15;
     display: inline-grid;
-    grid-template-columns: auto minmax(0, auto);
+    grid-template-columns: minmax(0, 1fr);
     align-items: center;
     align-self: flex-start;
     gap: 0.22rem;
@@ -1242,6 +1264,11 @@
 .nextFloorCue strong {
     color: color-mix(in srgb, var(--theme-text) 94%, white);
     font-weight: 950;
+    line-height: 1.12;
+    overflow: visible;
+    overflow-wrap: anywhere;
+    text-overflow: clip;
+    white-space: normal;
 }
 
 .nextFloorCue[data-relic-next-floor-tone='stack'] {
@@ -1266,6 +1293,7 @@
 }
 
 .boardMomentCue {
+    order: 16;
     justify-self: start;
     display: grid;
     gap: 0.06rem;
@@ -1297,7 +1325,11 @@
     color: color-mix(in srgb, var(--theme-cyan-bright) 84%, white);
     font-size: var(--ui-font-caption);
     font-weight: 950;
-    line-height: 1.1;
+    line-height: 1.12;
+    overflow: visible;
+    overflow-wrap: anywhere;
+    text-overflow: clip;
+    white-space: normal;
 }
 
 .boardMomentCue[data-board-moment-tone='chain'],
@@ -1323,6 +1355,7 @@
 }
 
 .pickPulse {
+    order: 3;
     display: grid;
     gap: 0.07rem;
     max-width: 100%;
@@ -1357,7 +1390,10 @@
     font-size: var(--ui-font-caption);
     font-weight: 950;
     line-height: 1.12;
-    white-space: nowrap;
+    overflow: visible;
+    overflow-wrap: anywhere;
+    text-overflow: clip;
+    white-space: normal;
 }
 
 .pickPulse em {
@@ -1413,6 +1449,7 @@
 }
 
 .archetypes {
+    order: 17;
     align-self: flex-start;
     margin-top: -0.12rem;
     padding: 0.1rem 0.34rem;
@@ -1425,6 +1462,7 @@
 }
 
 .impactChips {
+    order: 9;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
@@ -1509,6 +1547,7 @@
 }
 
 .buildPulse {
+    order: 8;
     display: grid;
     gap: 0.06rem;
     margin-top: -0.06rem;
@@ -1550,8 +1589,9 @@
 }
 
 .buildFitSignals {
+    order: 10;
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 7.5rem), 1fr));
     gap: 0.22rem;
 }
 
@@ -1579,14 +1619,13 @@
 }
 
 .buildFitSignals strong {
-    overflow: hidden;
     color: color-mix(in srgb, var(--theme-text) 90%, white);
     font-size: var(--ui-font-caption);
     font-weight: 930;
     letter-spacing: 0;
-    line-height: 1.05;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    line-height: 1.12;
+    overflow-wrap: anywhere;
+    white-space: normal;
 }
 
 .buildFitSignals b {
@@ -1665,6 +1704,7 @@
 }
 
 .comboRoutes {
+    order: 11;
     display: grid;
     gap: 0.26rem;
 }
@@ -1722,7 +1762,8 @@
     color: color-mix(in srgb, var(--theme-cyan-bright) 86%, white);
     font-size: var(--ui-font-caption);
     font-weight: 930;
-    line-height: 1;
+    line-height: 1.12;
+    overflow-wrap: anywhere;
 }
 
 .comboRoutes b i {
@@ -1797,6 +1838,7 @@
 }
 
 .buildPlanRows {
+    order: 12;
     display: grid;
     gap: 0.24rem;
 }
@@ -1834,6 +1876,10 @@
     font-size: var(--ui-font-caption);
     font-weight: 850;
     line-height: 1.2;
+    overflow: visible;
+    overflow-wrap: anywhere;
+    text-overflow: clip;
+    white-space: normal;
 }
 
 .buildPlanRows em {
@@ -1845,6 +1891,7 @@
 }
 
 .impact {
+    order: 18;
     display: block;
     margin-top: -0.1rem;
     font-size: var(--ui-font-caption);
@@ -1974,36 +2021,5393 @@
 
     .grid {
         grid-template-columns: 1fr;
-        gap: 0.5rem;
-        margin-top: 0.25rem;
+        gap: 0.38rem;
+        margin-top: 0.18rem;
     }
 
     .payoffEngineStrip {
-        grid-template-columns: 1fr;
+        gap: 0.16rem;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        margin-bottom: 0.24rem;
+        padding: 0.26rem;
+    }
+
+    .payoffEngineStrip span {
+        padding: 0.2rem 0.24rem;
+    }
+
+    .payoffEngineStrip small {
+        font-size: 0.5rem;
+    }
+
+    .payoffEngineStrip strong {
+        font-size: 0.58rem;
+        line-height: 1.08;
+    }
+
+    .payoffEngineBeatPips {
+        display: none;
+    }
+
+    .draftLaneMap {
+        gap: 0.18rem;
+        margin-bottom: 0.24rem;
+        padding: 0.22rem;
+    }
+
+    .draftLaneMap > span:not(.draftLanePrimaryCue) {
+        display: none;
+    }
+
+    .draftLanePrimaryCue {
+        gap: 0.12rem 0.22rem;
+        grid-template-columns: auto minmax(0, 1fr);
+        padding: 0.24rem 0.32rem;
+    }
+
+    .draftLaneMap .draftLanePrimaryCue strong {
+        font-size: 0.68rem;
+    }
+
+    .draftLaneMap .draftLanePrimaryCue b {
+        font-size: 0.72rem;
+    }
+
+    .draftLaneMap .draftLanePrimaryCue em {
+        display: none;
+    }
+
+    .draftLanePrimaryBeatPips {
+        display: none;
     }
 
     .card {
-        min-height: 5.85rem;
-        gap: 0.32rem;
-        padding: 0.58rem 0.64rem 0.68rem;
+        min-height: 5.1rem;
+        gap: 0.18rem;
+        padding: 0.42rem 0.48rem 0.5rem;
     }
 
     .body {
-        font-size: 0.82rem;
-        line-height: 1.35;
+        display: -webkit-box;
+        overflow: hidden;
+        font-size: 0.74rem;
+        line-height: 1.24;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
     }
 
     .reason,
     .archetypes,
     .impact,
     .impactChips span {
-        font-size: 0.68rem;
+        font-size: 0.62rem;
+    }
+
+    .reason {
+        padding: 0.1rem 0.24rem;
+    }
+
+    .pickAction,
+    .boardMomentCue,
+    .pickPulse {
+        padding: 0.2rem 0.3rem;
+    }
+
+    .pickAction {
+        gap: 0.08rem 0.28rem;
+    }
+
+    .pickAction small {
+        padding: 0.06rem 0.22rem;
+        border: 1px solid color-mix(in srgb, currentColor 28%, transparent);
+        border-radius: var(--ui-radius-pill);
+        background: color-mix(in srgb, var(--theme-panel-solid) 46%, transparent);
+        font-size: 0.52rem;
+    }
+
+    .pickAction strong {
+        font-size: 0.88rem;
+    }
+
+    .pickAction em,
+    .pickPulse em {
+        display: none;
+    }
+
+    .pickPlan {
+        display: none;
+    }
+
+    .pickPulse,
+    .impactChips {
+        display: none;
+    }
+
+    .choiceCrescendo {
+        display: none;
+    }
+
+    .choiceHeat,
+    .payoffBurst,
+    .nextFloorCue,
+    .archetypes,
+    .engineRecipe,
+    .boardMomentCue,
+    .impact {
+        display: none;
+    }
+
+    .recommendation {
+        padding: 0.1rem 0.24rem;
+    }
+
+    .impactChips {
+        gap: 0.16rem;
+    }
+
+    .impactChips span {
+        min-height: 0.98rem;
+        padding: 0.06rem 0.22rem;
+    }
+
+    .buildPulse,
+    .comboRoutes > span,
+    .buildPlanRows > span {
+        padding: 0.2rem 0.28rem;
+    }
+
+    .buildPulse strong {
+        font-size: 0.7rem;
+    }
+
+    .buildPulse small {
+        font-size: 0.6rem;
+        line-height: 1.08;
+    }
+
+    .comboRoutes,
+    .buildPlanRows {
+        gap: 0.18rem;
+    }
+
+    .comboRoutes,
+    .buildPlanRows,
+    .buildFitSignals {
+        display: none;
     }
 
     .serviceRow {
-        grid-template-columns: 1fr;
-        gap: 0.38rem;
-        margin-top: 0.5rem;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.24rem;
+        margin-top: 0.34rem;
+        padding: 0.28rem;
+    }
+
+    .serviceButton:first-child:last-child {
+        grid-column: 1 / -1;
+    }
+
+    .serviceButton {
+        gap: 0.08rem;
+        min-height: 3.15rem;
+        padding: 0.34rem 0.42rem;
+    }
+
+    .serviceLabel {
+        overflow: hidden;
+        font-size: 0.68rem;
+        line-height: 1.05;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .serviceSignalRow {
+        gap: 0.14rem;
+    }
+
+    .serviceCost,
+    .serviceEffect {
+        min-height: 1rem;
+        padding: 0.06rem 0.24rem;
+        font-size: 0.58rem;
+    }
+
+    .serviceButton .serviceCue {
+        display: none;
+    }
+}
+
+@media (max-height: 720px), (max-width: 760px) {
+    .panelRoot {
+        max-width: 100%;
+    }
+
+    .grid {
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 12.5rem), 1fr));
+        gap: 0.42rem;
+        margin-top: 0.2rem;
+    }
+
+    .payoffEngineStrip {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        gap: 0.18rem;
+        margin-bottom: 0.28rem;
+        padding: 0.28rem;
+        border-radius: var(--ui-radius-md);
+        box-shadow: inset 0 1px 0 color-mix(in srgb, white 6%, transparent);
+    }
+
+    .payoffEngineStrip span {
+        min-height: 2rem;
+        padding: 0.22rem 0.3rem;
+    }
+
+    .payoffEngineStrip span:nth-of-type(2) {
+        display: none;
+    }
+
+    .payoffEngineStrip small {
+        font-size: 0.52rem;
+    }
+
+    .payoffEngineStrip strong {
+        font-size: 0.62rem;
+        line-height: 1.08;
+    }
+
+    .payoffEngineBeatPips {
+        display: none;
+    }
+
+    .draftLaneMap {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0.18rem;
+        margin-bottom: 0.28rem;
+        padding: 0.24rem;
+        border-radius: var(--ui-radius-md);
+    }
+
+    .draftLaneMap > span:not(.draftLanePrimaryCue) {
+        display: none;
+    }
+
+    .draftLanePrimaryCue {
+        grid-template-columns: auto minmax(0, 1fr) auto;
+        padding: 0.26rem 0.36rem;
+        border-radius: var(--ui-radius-sm);
+    }
+
+    .draftLaneMap .draftLanePrimaryCue strong {
+        font-size: 0.66rem;
+    }
+
+    .draftLaneMap .draftLanePrimaryCue b {
+        font-size: 0.68rem;
+    }
+
+    .draftLaneMap .draftLanePrimaryCue em,
+    .draftLanePrimaryBeatPips {
+        display: none;
+    }
+
+    .card {
+        min-height: 0;
+        gap: 0.22rem;
+        padding: 0.48rem 0.54rem 0.56rem;
+        border-radius: var(--ui-radius-md);
+        box-shadow:
+            inset 0 1px 0 color-mix(in srgb, rgba(255, 255, 255, 0.045) 80%, transparent),
+            0 1px 12px color-mix(in srgb, var(--theme-shadow) 40%, transparent);
+    }
+
+    .card:hover:not(:active),
+    .card:active {
+        transform: none;
+    }
+
+    .runeStrip {
+        height: 0.22rem;
+    }
+
+    .reason,
+    .recommendation,
+    .archetypes {
+        display: none;
+    }
+
+    .pickAction {
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 0.08rem 0.28rem;
+        padding: 0.24rem 0.34rem;
+    }
+
+    .pickAction small {
+        padding: 0.05rem 0.2rem;
+        border: 1px solid color-mix(in srgb, currentColor 28%, transparent);
+        border-radius: var(--ui-radius-pill);
+        background: color-mix(in srgb, var(--theme-panel-solid) 46%, transparent);
+        font-size: 0.52rem;
+    }
+
+    .pickAction strong {
+        font-size: 0.82rem;
+    }
+
+    .pickAction em {
+        display: none;
+    }
+
+    .pickPlan {
+        display: flex;
+        gap: 0.12rem;
+        margin-top: 0;
+        overflow: hidden;
+    }
+
+    .pickPlan span {
+        flex: 1 1 0;
+        min-width: 0;
+        padding: 0.08rem 0.18rem;
+        font-size: 0.54rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .choiceHeat,
+    .payoffBurst,
+    .nextFloorCue {
+        display: inline-grid;
+        align-self: stretch;
+        max-width: 100%;
+        margin-top: 0;
+        padding: 0.13rem 0.28rem;
+        border-radius: var(--ui-radius-sm);
+    }
+
+    .choiceHeat {
+        order: 5;
+        grid-template-columns: auto minmax(0, 1fr);
+        align-items: center;
+        gap: 0.12rem 0.24rem;
+    }
+
+    .choiceHeat em {
+        display: none;
+    }
+
+    .choiceHeat small,
+    .choiceHeat strong,
+    .payoffBurst small,
+    .payoffBurst strong,
+    .nextFloorCue small,
+    .nextFloorCue strong {
+        font-size: 0.56rem;
+        line-height: 1.05;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .payoffBurst,
+    .nextFloorCue {
+        grid-template-columns: auto minmax(0, 1fr);
+        gap: 0.18rem;
+    }
+
+    .pickPulse,
+    .choiceCrescendo,
+    .boardMomentCue,
+    .engineRecipe,
+    .buildPulse,
+    .buildFitSignals,
+    .comboRoutes,
+    .buildPlanRows,
+    .impact {
+        display: none;
+    }
+
+    .impactChips {
+        gap: 0.14rem;
+        margin-top: 0;
+        overflow: hidden;
+    }
+
+    .impactChips span {
+        min-height: 1rem;
+        max-width: 100%;
+        padding: 0.06rem 0.2rem;
+        font-size: 0.56rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .impactChipBeatPips {
+        display: none;
+    }
+
+    .body {
+        display: -webkit-box;
+        overflow: hidden;
+        font-size: 0.66rem;
+        line-height: 1.18;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+    }
+
+    .serviceRow {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.24rem;
+        margin-top: 0.34rem;
+        padding: 0.28rem;
+    }
+
+    .serviceButton {
+        min-height: var(--ui-touch-target-min);
+        gap: 0.08rem;
+        padding: 0.32rem 0.38rem;
+    }
+
+    .serviceLabel,
+    .serviceCost,
+    .serviceEffect {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .serviceLabel {
+        font-size: 0.66rem;
+        line-height: 1.05;
+    }
+
+    .serviceCost,
+    .serviceEffect {
+        min-height: 1rem;
+        padding: 0.06rem 0.22rem;
+        font-size: 0.56rem;
+    }
+
+    .serviceButton .serviceCue {
+        display: none;
+    }
+}
+
+@media (max-height: 520px) and (orientation: landscape) {
+    .grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.32rem;
+    }
+
+    .card {
+        gap: 0.16rem;
+        padding: 0.38rem 0.42rem 0.44rem;
+    }
+
+    .pickPlan,
+    .body,
+    .impactChips,
+    .serviceRow {
+        display: none;
+    }
+
+    .choiceHeat,
+    .nextFloorCue {
+        display: none;
+    }
+
+    .payoffBurst {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+/* UI-CLEANUP-006: make relic drafts a choice surface first; keep deep signals accessible, not always visible. */
+@media (max-width: 760px), (max-height: 640px) {
+    .panelRoot {
+        display: grid;
+        grid-template-rows: auto minmax(0, 1fr) auto;
+        min-height: 0;
+    }
+
+    .payoffEngineStrip {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        margin-bottom: 0.22rem;
+        padding: 0.22rem;
+    }
+
+    .payoffEngineStrip span {
+        min-height: 0;
+        padding: 0.18rem 0.28rem;
+    }
+
+    .payoffEngineStrip span:nth-of-type(3) {
+        display: none;
+    }
+
+    .draftLaneMap {
+        margin-bottom: 0.22rem;
+        padding: 0.18rem;
+    }
+
+    .draftLanePrimaryCue {
+        min-height: 0;
+        padding: 0.2rem 0.32rem;
+    }
+
+    .draftLaneMap .draftLanePrimaryCue small,
+    .draftLaneMap .draftLanePrimaryCue em,
+    .draftLanePrimaryBeatPips {
+        display: none;
+    }
+
+    .grid {
+        align-content: start;
+        gap: 0.32rem;
+        overflow: auto;
+        padding-bottom: 0.08rem;
+    }
+
+    .card {
+        gap: 0.16rem;
+        padding: 0.4rem 0.46rem 0.46rem;
+    }
+
+    .pickAction {
+        min-height: var(--ui-touch-target-min);
+        padding: 0.24rem 0.34rem;
+    }
+
+    .choiceHeat,
+    .choiceCrescendo,
+    .payoffBurst,
+    .nextFloorCue,
+    .boardMomentCue,
+    .buildPulse,
+    .buildFitSignals,
+    .comboRoutes,
+    .buildPlanRows,
+    .engineRecipe,
+    .impactChips,
+    .pickPlan,
+    .pickPulse {
+        display: none;
+    }
+}
+
+@media (max-height: 520px) and (orientation: landscape) {
+    .panelRoot {
+        grid-template-rows: minmax(0, 1fr);
+    }
+
+    .payoffEngineStrip,
+    .draftLaneMap {
+        display: none;
+    }
+
+    .grid {
+        max-height: min(52dvh, 12.6rem);
+        overflow: auto;
+    }
+
+    .card {
+        min-height: 0;
+        padding: 0.34rem 0.38rem;
+    }
+
+    .serviceRow {
+        display: none;
+    }
+}
+
+@media (max-width: 430px) {
+    .pickPlan,
+    .pickPulse,
+    .impactChips,
+    .choiceCrescendo,
+    .choiceHeat,
+    .payoffBurst,
+    .nextFloorCue,
+    .archetypes,
+    .engineRecipe,
+    .boardMomentCue,
+    .impact,
+    .comboRoutes,
+    .buildPlanRows,
+    .buildFitSignals {
+        display: none;
+    }
+
+    .serviceRow {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+/* UI-CLEANUP-024: phone relic draft rows should feel like a fast reward choice. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .panelRoot {
+        max-width: 100%;
+        padding-bottom: 0;
+    }
+
+    .grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0.28rem;
+        max-height: min(54dvh, 21rem);
+        padding: 0.02rem 0.02rem 0.08rem;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        scrollbar-width: none;
+    }
+
+    .grid::-webkit-scrollbar {
+        display: none;
+    }
+
+    .card {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0.12rem;
+        min-height: 4.35rem;
+        padding: 0.5rem 0.56rem;
+        border-radius: var(--ui-radius-md);
+        background:
+            linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 5%, transparent), transparent 72%),
+            color-mix(in srgb, var(--theme-void) 42%, transparent);
+        box-shadow: inset 0 1px 0 color-mix(in srgb, var(--theme-text) 4%, transparent);
+    }
+
+    .card[data-relic-choice-locked='true'] {
+        opacity: 0.76;
+    }
+
+    .runeStrip {
+        height: 0.14rem;
+        opacity: 0.7;
+    }
+
+    .pickAction {
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: center;
+        min-height: 1.85rem;
+        padding: 0.22rem 0.34rem;
+        border-radius: var(--ui-radius-sm);
+        background: color-mix(in srgb, var(--theme-surface-control) 50%, transparent);
+        box-shadow: none;
+    }
+
+    .pickAction small {
+        justify-self: end;
+        min-height: 1rem;
+        padding: 0.08rem 0.26rem;
+        border-radius: var(--ui-radius-pill);
+        font-size: 0.48rem;
+    }
+
+    .pickAction strong {
+        font-size: 0.84rem;
+        line-height: 1.05;
+    }
+
+    .pickAction em {
+        display: none;
+    }
+
+    .body {
+        display: -webkit-box;
+        order: 3;
+        overflow: hidden;
+        color: color-mix(in srgb, var(--theme-text-muted) 94%, white);
+        font-size: 0.72rem;
+        line-height: 1.22;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+    }
+
+    .serviceRow {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.18rem;
+        margin-top: 0.28rem;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+    }
+
+    .serviceButton {
+        justify-items: center;
+        min-height: var(--ui-touch-target-min);
+        padding: 0.34rem 0.24rem;
+        border-radius: var(--ui-radius-sm);
+        text-align: center;
+    }
+
+    .serviceLabel {
+        max-width: 100%;
+        overflow: hidden;
+        font-size: 0.58rem;
+        line-height: 1.05;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .serviceCost {
+        min-height: 1rem;
+        padding: 0.08rem 0.22rem;
+        font-size: 0.5rem;
+    }
+
+    .serviceEffect,
+    .serviceButton .serviceCue,
+    .serviceCue {
+        display: none;
+    }
+}
+
+/* UI-CLEANUP-034: final phone reward picker pass - compact decisions over telemetry. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .panelRoot {
+        max-width: 100%;
+        padding-bottom: 0;
+    }
+
+    .payoffEngineStrip,
+    .draftLaneMap,
+    .reason,
+    .recommendation,
+    .archetypes,
+    .impact,
+    .impactChips,
+    .choiceHeat,
+    .choiceCrescendo,
+    .payoffBurst,
+    .nextFloorCue,
+    .boardMomentCue,
+    .pickPlan,
+    .pickPulse,
+    .engineRecipe,
+    .buildPulse,
+    .buildFitSignals,
+    .comboRoutes,
+    .buildPlanRows {
+        display: none !important;
+    }
+
+    .grid {
+        gap: 0.24rem;
+        max-height: min(52dvh, 22rem);
+        margin-top: 0;
+        padding: 0.02rem 0.02rem 0.06rem;
+        overflow-x: hidden;
+        overflow-y: auto;
+        scrollbar-width: none;
+    }
+
+    .grid::-webkit-scrollbar {
+        display: none;
+    }
+
+    .card {
+        gap: 0.1rem;
+        min-height: 3.74rem;
+        padding: 0.42rem 0.46rem;
+        border-radius: var(--ui-radius-sm);
+        border-color: color-mix(in srgb, var(--theme-cyan-bright) 16%, var(--theme-gold-bright) 8%);
+        background: color-mix(in srgb, var(--theme-void) 48%, transparent);
+        box-shadow: none;
+    }
+
+    .card[data-relic-choice-locked='true'] {
+        opacity: 0.74;
+    }
+
+    .runeStrip {
+        height: 0.12rem;
+        opacity: 0.7;
+    }
+
+    .pickAction {
+        grid-template-columns: minmax(0, 1fr) auto;
+        min-height: 1.54rem;
+        gap: 0.06rem 0.18rem;
+        padding: 0.18rem 0.24rem;
+        border-radius: var(--ui-radius-sm);
+        background: color-mix(in srgb, var(--theme-surface-control) 42%, transparent);
+        box-shadow: none;
+    }
+
+    .pickAction small {
+        justify-self: end;
+        min-width: 1.78rem;
+        min-height: 0.88rem;
+        padding: 0.06rem 0.16rem;
+        font-size: 0.42rem;
+        line-height: 1;
+    }
+
+    .pickAction strong {
+        min-width: 0;
+        overflow: hidden;
+        font-size: 0.78rem;
+        line-height: 1.05;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .pickAction em {
+        display: none;
+    }
+
+    .body {
+        display: -webkit-box;
+        overflow: hidden;
+        color: color-mix(in srgb, var(--theme-text-muted) 94%, white);
+        font-size: 0.66rem;
+        line-height: 1.16;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+    }
+
+    .serviceRow {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.1rem;
+        margin-top: 0.18rem;
+        padding: 0.16rem 0 0;
+        border: 0;
+        border-top: 1px solid color-mix(in srgb, var(--theme-gold-bright) 10%, transparent);
+        background: transparent;
+        box-shadow: none;
+    }
+
+    .serviceButton {
+        min-height: 2.26rem;
+        gap: 0.06rem;
+        padding: 0.26rem 0.18rem;
+        border-radius: var(--ui-radius-sm);
+        border-color: color-mix(in srgb, var(--theme-amber) 14%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 32%, transparent);
+        box-shadow: none;
+    }
+
+    .serviceLabel {
+        overflow: hidden;
+        font-size: 0.54rem;
+        line-height: 1.05;
+        text-align: center;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .serviceSignalRow {
+        justify-content: center;
+    }
+
+    .serviceCost {
+        min-height: 0.84rem;
+        padding: 0.04rem 0.16rem;
+        font-size: 0.44rem;
+        line-height: 1;
+    }
+
+    .serviceEffect,
+    .serviceButton .serviceCue,
+    .serviceCue,
+    .serviceDetail {
+        display: none !important;
+    }
+}
+
+/* UI-CLEANUP-008: phone relic drafts are a choice menu, not a telemetry wall. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .panelRoot {
+        max-width: min(100%, 27rem);
+    }
+
+    .payoffEngineStrip,
+    .draftLaneMap {
+        display: none;
+    }
+
+    .grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0.34rem;
+        margin-top: 0;
+        max-height: min(58dvh, 31rem);
+        padding: 0.02rem 0.04rem 0.18rem;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        scrollbar-width: thin;
+    }
+
+    .card {
+        gap: 0.16rem;
+        min-height: var(--ui-touch-target-min);
+        padding: 0.4rem 0.46rem 0.42rem;
+        border-radius: var(--ui-radius-sm);
+        box-shadow:
+            inset 0 1px 0 color-mix(in srgb, rgba(255, 255, 255, 0.04) 80%, transparent),
+            0 1px 10px color-mix(in srgb, var(--theme-shadow) 34%, transparent);
+    }
+
+    .runeStrip {
+        height: 0.18rem;
+    }
+
+    .pickAction {
+        min-height: 0;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 0.08rem 0.26rem;
+        padding: 0.2rem 0.3rem;
+        border-radius: var(--ui-radius-sm);
+    }
+
+    .pickAction small {
+        padding: 0.04rem 0.18rem;
+        font-size: 0.5rem;
+    }
+
+    .pickAction strong {
+        font-size: 0.8rem;
+        line-height: 1.05;
+    }
+
+    .body {
+        display: -webkit-box;
+        order: 3;
+        overflow: hidden;
+        margin-top: 0.02rem;
+        color: color-mix(in srgb, var(--theme-text-muted) 92%, white);
+        font-size: 0.68rem;
+        line-height: 1.18;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+    }
+
+    .reason,
+    .recommendation,
+    .archetypes,
+    .impact,
+    .impactChips,
+    .choiceHeat,
+    .choiceCrescendo,
+    .payoffBurst,
+    .nextFloorCue,
+    .boardMomentCue,
+    .pickPlan,
+    .pickPulse,
+    .engineRecipe,
+    .buildPulse,
+    .buildFitSignals,
+    .comboRoutes,
+    .buildPlanRows {
+        display: none;
+    }
+
+    .serviceRow {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.18rem;
+        margin-top: 0.28rem;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+    }
+
+    .serviceButton {
+        min-height: 2.34rem;
+        padding: 0.26rem 0.3rem;
+        border-radius: var(--ui-radius-sm);
+    }
+
+    .serviceLabel {
+        font-size: 0.58rem;
+        line-height: 1;
+    }
+
+    .serviceSignalRow {
+        gap: 0.1rem;
+    }
+
+    .serviceCost,
+    .serviceEffect {
+        min-height: 0.9rem;
+        padding: 0.04rem 0.18rem;
+        font-size: 0.5rem;
+        line-height: 0.9rem;
+    }
+}
+
+@media (max-width: 380px) and (orientation: portrait) {
+    .grid {
+        max-height: min(56dvh, 28rem);
+    }
+
+    .serviceRow {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+/* UI-CLEANUP-009: relic draft phone footer is a service bar, not three tiny cards. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .serviceRow {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.14rem;
+        margin-top: 0.22rem;
+    }
+
+    .serviceButton {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: center;
+        min-height: 2rem;
+        gap: 0.08rem;
+        padding: 0.2rem 0.24rem;
+    }
+
+    .serviceLabel {
+        overflow: hidden;
+        font-size: 0.54rem;
+        line-height: 1;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .serviceSignalRow {
+        display: contents;
+    }
+
+    .serviceCost {
+        min-height: 0;
+        height: auto;
+        padding: 0.04rem 0.14rem;
+        font-size: 0.48rem;
+        line-height: 1;
+    }
+
+    .serviceEffect,
+    .serviceButton .serviceCue {
+        display: none !important;
+    }
+}
+
+/* UI-CLEANUP-016: phone relic drafts are a fast pick list, not a compact codex page. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .panelRoot {
+        max-width: min(100%, 24rem);
+    }
+
+    .grid {
+        gap: 0.24rem;
+        max-height: min(50dvh, 25rem);
+        padding: 0.01rem 0.02rem 0.12rem;
+    }
+
+    .card {
+        gap: 0.12rem;
+        padding: 0.3rem 0.36rem 0.32rem;
+        border-width: 1px;
+        border-radius: var(--ui-radius-sm);
+        box-shadow:
+            inset 0 1px 0 color-mix(in srgb, rgba(255, 255, 255, 0.035) 80%, transparent),
+            0 1px 6px color-mix(in srgb, var(--theme-shadow) 26%, transparent);
+    }
+
+    .runeStrip {
+        height: 0.12rem;
+    }
+
+    .pickAction {
+        min-height: 1.5rem;
+        gap: 0.06rem 0.22rem;
+        padding: 0.16rem 0.26rem;
+    }
+
+    .pickAction small {
+        padding: 0.03rem 0.16rem;
+        font-size: 0.45rem;
+    }
+
+    .pickAction strong {
+        font-size: 0.72rem;
+        line-height: 1;
+    }
+
+    .body {
+        margin-top: 0;
+        font-size: 0.6rem;
+        line-height: 1.12;
+        -webkit-line-clamp: 1;
+    }
+
+    .serviceRow {
+        gap: 0.1rem;
+        margin-top: 0.16rem;
+    }
+
+    .serviceButton {
+        min-height: 1.72rem;
+        gap: 0.04rem;
+        padding: 0.16rem 0.2rem;
+    }
+
+    .serviceLabel {
+        font-size: 0.49rem;
+    }
+
+    .serviceCost {
+        padding: 0.03rem 0.12rem;
+        font-size: 0.42rem;
+    }
+}
+
+/* UI-CLEANUP-020: phone relic drafts should be a readable pick screen, not a compressed receipt. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .panelRoot {
+        max-width: min(100%, 23.5rem);
+    }
+
+    .grid {
+        gap: 0.34rem;
+        max-height: min(62dvh, 32rem);
+        padding: 0.02rem 0.04rem 0.18rem;
+    }
+
+    .card {
+        gap: 0.18rem;
+        padding: 0.42rem 0.48rem 0.46rem;
+        border-radius: var(--ui-radius-sm);
+        box-shadow:
+            inset 0 1px 0 color-mix(in srgb, rgba(255, 255, 255, 0.045) 80%, transparent),
+            0 2px 10px color-mix(in srgb, var(--theme-shadow) 30%, transparent);
+    }
+
+    .runeStrip {
+        height: 0.14rem;
+    }
+
+    .pickAction {
+        min-height: 2.12rem;
+        gap: 0.08rem 0.32rem;
+        padding: 0.24rem 0.34rem;
+    }
+
+    .pickAction small {
+        align-self: center;
+        padding: 0.04rem 0.18rem;
+        font-size: 0.48rem;
+    }
+
+    .pickAction strong {
+        font-size: 0.82rem;
+        line-height: 1.05;
+    }
+
+    .body {
+        display: -webkit-box;
+        overflow: hidden;
+        margin-top: 0;
+        font-size: 0.66rem;
+        line-height: 1.2;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+    }
+
+    .serviceRow {
+        gap: 0.16rem;
+        margin-top: 0.28rem;
+    }
+
+    .serviceButton {
+        min-height: 2.08rem;
+        gap: 0.06rem;
+        padding: 0.2rem 0.24rem;
+    }
+
+    .serviceLabel {
+        font-size: 0.52rem;
+    }
+
+    .serviceCost {
+        padding: 0.04rem 0.14rem;
+        font-size: 0.46rem;
+    }
+}
+
+/* UI-CLEANUP-022: phone reward picks get one clear decision cue plus one outcome line. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .panelRoot {
+        max-width: min(100%, 22.25rem);
+    }
+
+    .payoffEngineStrip,
+    .draftLaneMap {
+        display: none;
+    }
+
+    .grid {
+        gap: 0.26rem;
+        max-height: none;
+        padding: 0;
+    }
+
+    .card {
+        min-height: 5.45rem;
+        gap: 0.16rem;
         padding: 0.42rem;
+        border-radius: var(--ui-radius-md);
+        background:
+            linear-gradient(180deg, color-mix(in srgb, var(--theme-gold-bright) 4%, transparent), transparent 58%),
+            color-mix(in srgb, var(--theme-void) 91%, var(--theme-smoke));
+    }
+
+    .card_rare {
+        border-width: 1px;
+    }
+
+    .runeStrip {
+        height: 0.12rem;
+        opacity: 0.82;
+    }
+
+    .pickAction {
+        min-height: 2.25rem;
+        padding: 0.26rem 0.34rem;
+        border-radius: var(--ui-radius-md);
+        background: color-mix(in srgb, var(--theme-surface-control) 78%, transparent);
+        box-shadow: inset 0 1px 0 color-mix(in srgb, white 7%, transparent);
+    }
+
+    .pickAction small {
+        justify-self: end;
+        min-width: 2.4rem;
+        padding: 0.1rem 0.24rem;
+        text-align: center;
+        font-size: 0.5rem;
+    }
+
+    .pickAction strong {
+        font-size: 0.9rem;
+        line-height: 1.08;
+    }
+
+    .body {
+        -webkit-line-clamp: 2;
+        color: color-mix(in srgb, var(--theme-text) 90%, white);
+        font-size: 0.72rem;
+        line-height: 1.25;
+    }
+
+    .serviceRow {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.12rem;
+        margin-top: 0.24rem;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+    }
+
+    .serviceButton {
+        min-height: 2.25rem;
+        gap: 0.08rem;
+        padding: 0.22rem 0.2rem;
+        border-radius: var(--ui-radius-sm);
+        text-align: center;
+    }
+
+    .serviceLabel,
+    .serviceEffect {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .serviceLabel {
+        font-size: 0.56rem;
+        line-height: 1.05;
+    }
+
+    .serviceSignalRow {
+        justify-content: center;
+        gap: 0.08rem;
+    }
+
+    .serviceCost {
+        display: inline-flex;
+        padding: 0.04rem 0.14rem;
+        font-size: 0.46rem;
+    }
+
+    .serviceEffect {
+        display: none;
+    }
+}
+
+/* UI-CLEANUP-024B: final cascade pass for phone reward choice rows. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .panelRoot {
+        max-width: 100%;
+        padding-bottom: 0;
+    }
+
+    .grid {
+        gap: 0.28rem;
+        max-height: min(54dvh, 21rem);
+        padding: 0.02rem 0.02rem 0.08rem;
+        scrollbar-width: none;
+    }
+
+    .grid::-webkit-scrollbar {
+        display: none;
+    }
+
+    .card {
+        gap: 0.12rem;
+        min-height: 4.35rem;
+        padding: 0.5rem 0.56rem;
+        border-radius: var(--ui-radius-md);
+        background:
+            linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 5%, transparent), transparent 72%),
+            color-mix(in srgb, var(--theme-void) 42%, transparent);
+        box-shadow: inset 0 1px 0 color-mix(in srgb, var(--theme-text) 4%, transparent);
+    }
+
+    .card[data-relic-choice-locked='true'] {
+        opacity: 0.76;
+    }
+
+    .pickAction {
+        min-height: 1.85rem;
+        padding: 0.22rem 0.34rem;
+        border-radius: var(--ui-radius-sm);
+        background: color-mix(in srgb, var(--theme-surface-control) 50%, transparent);
+        box-shadow: none;
+    }
+
+    .pickAction small {
+        min-width: 2.1rem;
+        min-height: 1rem;
+        padding: 0.08rem 0.24rem;
+        border-radius: var(--ui-radius-pill);
+        font-size: 0.48rem;
+    }
+
+    .pickAction strong {
+        font-size: 0.84rem;
+        line-height: 1.05;
+    }
+
+    .pickAction em,
+    .serviceEffect,
+    .serviceCue {
+        display: none;
+    }
+
+    .body {
+        color: color-mix(in srgb, var(--theme-text-muted) 94%, white);
+        font-size: 0.72rem;
+        line-height: 1.22;
+    }
+
+    .serviceRow {
+        gap: 0.18rem;
+        margin-top: 0.28rem;
+    }
+
+    .serviceButton {
+        min-height: var(--ui-touch-target-min);
+        padding: 0.34rem 0.24rem;
+    }
+
+    .serviceLabel {
+        font-size: 0.58rem;
+    }
+
+    .serviceCost {
+        min-height: 1rem;
+        padding: 0.08rem 0.22rem;
+        font-size: 0.5rem;
+    }
+}
+
+/* UI-CLEANUP-026: desktop reward picks are a choice board, not a telemetry dashboard. */
+@media (min-width: 761px) {
+    .panelRoot {
+        max-width: min(100%, 64rem);
+    }
+
+    .payoffEngineStrip,
+    .draftLaneMap {
+        display: none;
+    }
+
+    .grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        align-items: stretch;
+        gap: 0.7rem;
+        margin-top: 0.58rem;
+        overflow: visible;
+    }
+
+    .card {
+        min-height: 0;
+        max-height: min(58dvh, 29rem);
+        gap: 0.34rem;
+        padding: 0.7rem;
+        overflow: hidden;
+        border-radius: var(--ui-radius-md);
+        box-shadow:
+            inset 0 1px 0 color-mix(in srgb, rgba(255, 255, 255, 0.055) 80%, transparent),
+            0 2px 14px color-mix(in srgb, var(--theme-shadow) 42%, transparent);
+    }
+
+    .card:hover:not(:active) {
+        transform: none;
+    }
+
+    .runeStrip {
+        height: 0.22rem;
+    }
+
+    .reason,
+    .recommendation,
+    .archetypes,
+    .impact,
+    .impactChips,
+    .choiceHeat,
+    .choiceCrescendo,
+    .payoffBurst,
+    .nextFloorCue,
+    .boardMomentCue,
+    .pickPlan,
+    .pickPulse,
+    .engineRecipe,
+    .buildPulse,
+    .buildFitSignals,
+    .comboRoutes,
+    .buildPlanRows {
+        display: none;
+    }
+
+    .pickAction {
+        min-height: 3.12rem;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 0.12rem 0.42rem;
+        padding: 0.44rem 0.52rem;
+        border-radius: var(--ui-radius-md);
+        background:
+            linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 12%, transparent), transparent 76%),
+            color-mix(in srgb, var(--theme-surface-control) 64%, transparent);
+    }
+
+    .pickAction small {
+        justify-self: end;
+        min-width: 3.1rem;
+        padding: 0.12rem 0.34rem;
+        border: 1px solid color-mix(in srgb, currentColor 28%, transparent);
+        border-radius: var(--ui-radius-pill);
+        background: color-mix(in srgb, var(--theme-panel-solid) 48%, transparent);
+        text-align: center;
+        font-size: 0.56rem;
+        line-height: 1;
+    }
+
+    .pickAction strong {
+        font-size: 0.95rem;
+        line-height: 1.08;
+    }
+
+    .pickAction em {
+        display: none;
+    }
+
+    .body {
+        display: -webkit-box;
+        order: 3;
+        overflow: hidden;
+        color: color-mix(in srgb, var(--theme-text-muted) 94%, white);
+        font-size: 0.82rem;
+        line-height: 1.28;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+    }
+
+    .serviceRow {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.42rem;
+        margin-top: 0.72rem;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+    }
+
+    .serviceButton {
+        min-height: 3.05rem;
+        gap: 0.1rem;
+        padding: 0.44rem 0.5rem;
+        border-radius: var(--ui-radius-md);
+    }
+
+    .serviceLabel,
+    .serviceEffect,
+    .serviceCost {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .serviceLabel {
+        font-size: 0.72rem;
+        line-height: 1.08;
+    }
+
+    .serviceSignalRow {
+        gap: 0.12rem;
+    }
+
+    .serviceCost,
+    .serviceEffect {
+        min-height: 1rem;
+        padding: 0.08rem 0.24rem;
+        font-size: 0.55rem;
+    }
+
+    .serviceButton .serviceCue,
+    .serviceCue {
+        display: none;
+    }
+}
+
+/* UI-CLEANUP-028: relic drafts should read as three decisions, not a dense systems report. */
+@media (min-width: 761px) {
+    .panelRoot {
+        max-width: min(100%, 60rem);
+    }
+
+    .grid {
+        gap: 0.68rem;
+        margin-top: 0.42rem;
+    }
+
+    .card {
+        gap: 0.34rem;
+        min-height: 7.15rem;
+        padding: 0.72rem;
+        border-radius: var(--ui-radius-sm);
+    }
+
+    .runeStrip {
+        height: 0.16rem;
+        opacity: 0.74;
+    }
+
+    .pickAction {
+        min-height: 3.35rem;
+        gap: 0.08rem 0.3rem;
+        padding: 0.48rem 0.52rem;
+        border-radius: var(--ui-radius-sm);
+        background: color-mix(in srgb, var(--theme-surface-control) 58%, transparent);
+        box-shadow: inset 0 1px 0 color-mix(in srgb, white 5%, transparent);
+    }
+
+    .pickAction small {
+        min-width: 2.5rem;
+        padding: 0.1rem 0.28rem;
+        font-size: 0.5rem;
+    }
+
+    .pickAction strong {
+        font-size: 1rem;
+        line-height: 1.22;
+    }
+
+    .body {
+        font-size: 0.82rem;
+        line-height: 1.3;
+        -webkit-line-clamp: 2;
+    }
+
+    .serviceRow {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.28rem;
+        margin-top: 0.46rem;
+        opacity: 0.72;
+    }
+
+    .serviceRow:hover,
+    .serviceRow:focus-within {
+        opacity: 1;
+    }
+
+    .serviceButton {
+        min-height: 2.3rem;
+        padding: 0.28rem 0.42rem;
+        border-radius: var(--ui-radius-sm);
+        border-color: color-mix(in srgb, var(--theme-amber) 16%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 30%, transparent);
+        box-shadow: none;
+    }
+
+    .serviceLabel {
+        font-size: 0.62rem;
+    }
+
+    .serviceCost {
+        min-height: 0.86rem;
+        padding: 0.04rem 0.18rem;
+        font-size: 0.48rem;
+    }
+
+    .serviceEffect {
+        display: none;
+    }
+}
+
+@media (max-width: 760px) and (orientation: portrait) {
+    .panelRoot {
+        align-self: start;
+        max-width: 100%;
+    }
+
+    .grid {
+        max-height: min(58dvh, 24rem);
+        gap: 0.42rem;
+        padding: 0.04rem 0.02rem 0.12rem;
+        align-self: start;
+    }
+
+    .card {
+        min-height: 4.8rem;
+        gap: 0.18rem;
+        padding: 0.54rem 0.58rem 0.6rem;
+        border-radius: var(--ui-radius-sm);
+        border-color: color-mix(in srgb, var(--theme-cyan-bright) 26%, var(--theme-gold-bright) 12%);
+        background:
+            linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 7%, transparent), transparent 72%),
+            linear-gradient(180deg, color-mix(in srgb, var(--theme-text) 3%, transparent), transparent 58%),
+            color-mix(in srgb, var(--theme-void) 54%, transparent);
+        box-shadow:
+            inset 0 1px 0 color-mix(in srgb, white 5%, transparent),
+            0 0 0 1px color-mix(in srgb, var(--theme-shadow) 24%, transparent);
+    }
+
+    .runeStrip {
+        height: 0.22rem;
+        opacity: 0.88;
+    }
+
+    .pickAction {
+        grid-template-columns: minmax(0, 1fr) auto;
+        min-height: 2.02rem;
+        gap: 0.08rem 0.3rem;
+        padding: 0.3rem 0.36rem;
+        border-radius: var(--ui-radius-sm);
+        background:
+            linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 9%, transparent), transparent 72%),
+            color-mix(in srgb, var(--theme-surface-control) 54%, transparent);
+        box-shadow: inset 0 1px 0 color-mix(in srgb, white 5%, transparent);
+    }
+
+    .pickAction small {
+        justify-self: end;
+        min-width: 2.36rem;
+        min-height: 1.08rem;
+        padding: 0.1rem 0.24rem;
+        border: 1px solid color-mix(in srgb, currentColor 34%, transparent);
+        border-radius: var(--ui-radius-sm);
+        font-size: 0.5rem;
+        line-height: 1;
+        text-align: center;
+    }
+
+    .pickAction strong {
+        min-width: 0;
+        overflow: hidden;
+        font-size: 0.94rem;
+        line-height: 1.12;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .body {
+        color: color-mix(in srgb, var(--theme-text-muted) 94%, white);
+        font-size: 0.76rem;
+        line-height: 1.26;
+        -webkit-line-clamp: 2;
+    }
+
+    .serviceRow {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.16rem;
+        margin-top: 0.3rem;
+        padding-top: 0.3rem;
+        border-top: 1px solid color-mix(in srgb, var(--theme-gold-bright) 10%, transparent);
+        align-self: start;
+        opacity: 1;
+    }
+
+    .serviceButton {
+        align-self: start;
+        height: auto;
+        min-height: 2.85rem;
+        gap: 0.1rem;
+        padding: 0.36rem 0.26rem;
+        border-radius: var(--ui-radius-sm);
+        background:
+            linear-gradient(180deg, color-mix(in srgb, var(--theme-text) 3%, transparent), transparent 62%),
+            color-mix(in srgb, var(--theme-void) 42%, transparent);
+        box-shadow: inset 0 1px 0 color-mix(in srgb, white 4%, transparent);
+    }
+
+    .serviceLabel {
+        display: block;
+        overflow: hidden;
+        font-size: 0.62rem;
+        line-height: 1.08;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .serviceCost {
+        min-height: 1rem;
+        padding: 0.07rem 0.2rem;
+        font-size: 0.5rem;
+        line-height: 1;
+    }
+
+    .serviceEffect,
+    .serviceButton .serviceCue,
+    .serviceCue {
+        display: none;
+    }
+}
+
+/* UI-CLEANUP-065: phone relic drafts should read as three strong picks plus quiet services. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .panelRoot {
+        max-width: min(100%, 22rem);
+    }
+
+    .grid {
+        gap: 0.32rem;
+        max-height: min(58dvh, 23rem);
+        padding: 0.02rem;
+    }
+
+    .card {
+        min-height: 4.55rem;
+        gap: 0.2rem;
+        padding: 0.56rem 0.62rem;
+        border-left: 3px solid color-mix(in srgb, var(--theme-cyan-bright) 56%, transparent);
+        background:
+            linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 7%, transparent), transparent 58%),
+            color-mix(in srgb, var(--theme-surface-control) 66%, transparent);
+        box-shadow: inset 0 1px 0 color-mix(in srgb, white 5%, transparent);
+    }
+
+    .card_common,
+    .card_uncommon,
+    .card_rare {
+        border-color: color-mix(in srgb, var(--theme-text-muted) 18%, transparent);
+    }
+
+    .card_uncommon {
+        border-left-color: color-mix(in srgb, var(--theme-cyan-bright) 62%, white 5%);
+    }
+
+    .card_rare {
+        border-left-color: color-mix(in srgb, var(--theme-gold-bright) 78%, white 6%);
+        background:
+            linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 11%, transparent), transparent 62%),
+            color-mix(in srgb, var(--theme-surface-control) 72%, transparent);
+    }
+
+    .runeStrip {
+        height: 0.16rem;
+        opacity: 0.62;
+    }
+
+    .pickAction {
+        min-height: 2.22rem;
+        padding: 0.32rem 0.4rem;
+        background: color-mix(in srgb, var(--theme-void) 28%, transparent);
+    }
+
+    .pickAction strong {
+        color: color-mix(in srgb, var(--theme-text) 94%, white);
+        font-size: 0.96rem;
+        line-height: 1.08;
+    }
+
+    .pickAction small {
+        min-width: 2.5rem;
+        min-height: 1rem;
+        color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
+        font-size: 0.48rem;
+    }
+
+    .body {
+        color: color-mix(in srgb, var(--theme-text-muted) 90%, white);
+        font-size: 0.68rem;
+        line-height: 1.2;
+    }
+
+    .serviceRow {
+        gap: 0.18rem;
+        margin-top: 0.34rem;
+        padding-top: 0.34rem;
+        border-top-color: color-mix(in srgb, var(--theme-gold-bright) 9%, transparent);
+    }
+
+    .serviceButton {
+        min-height: 2.55rem;
+        padding: 0.3rem 0.24rem;
+        border-color: color-mix(in srgb, var(--theme-text-muted) 12%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 34%, transparent);
+    }
+
+    .serviceLabel {
+        color: color-mix(in srgb, var(--theme-text) 86%, white);
+        font-size: 0.58rem;
+    }
+
+    .serviceCost {
+        min-height: 0.92rem;
+        color: color-mix(in srgb, var(--theme-gold-bright) 84%, white);
+        font-size: 0.46rem;
+    }
+}
+
+/* UI-CLEANUP-067: phone relic draft owns the available overlay height. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .panelRoot {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        max-width: none;
+        min-height: 0;
+        height: 100%;
+        padding-bottom: 0;
+    }
+
+    .grid {
+        flex: 1 1 auto;
+        min-height: 0;
+        max-height: none;
+        gap: 0.38rem;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        scrollbar-width: none;
+    }
+
+    .grid::-webkit-scrollbar {
+        display: none;
+    }
+
+    .card {
+        min-height: 5.45rem;
+        padding: 0.7rem 0.76rem;
+        border-radius: var(--ui-radius-md);
+    }
+
+    .pickAction {
+        min-height: 2.46rem;
+        padding: 0.38rem 0.48rem;
+    }
+
+    .pickAction strong {
+        font-size: 1.03rem;
+        white-space: normal;
+    }
+
+    .body {
+        font-size: 0.78rem;
+        line-height: 1.26;
+    }
+
+    .serviceRow {
+        flex: 0 0 auto;
+        gap: 0.2rem;
+        margin-top: 0.42rem;
+        padding-top: 0.4rem;
+    }
+
+    .serviceButton {
+        min-height: 2.7rem;
+    }
+}
+
+/* UI-CLEANUP-070: phone relic drafts are compact decision modals, not full-height empty sheets. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .panelRoot {
+        display: flex;
+        flex-direction: column;
+        width: min(100%, 23rem);
+        max-width: none;
+        height: auto;
+        max-height: calc(100dvh - 1.5rem);
+        min-height: 0;
+        gap: 0.4rem;
+        padding-bottom: 0;
+        overflow: hidden;
+    }
+
+    .grid {
+        flex: 0 1 auto;
+        grid-auto-rows: max-content;
+        max-height: calc(100dvh - 13rem);
+        min-height: 0;
+        gap: 0.34rem;
+        padding: 0.02rem 0.04rem 0.08rem;
+        overflow-x: hidden;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        scrollbar-width: none;
+    }
+
+    .grid::-webkit-scrollbar {
+        display: none;
+    }
+
+    .card {
+        min-height: 4.35rem;
+        gap: 0.16rem;
+        padding: 0.58rem 0.66rem;
+        border-radius: var(--ui-radius-sm);
+    }
+
+    .pickAction {
+        min-height: 2.02rem;
+        padding: 0.3rem 0.42rem;
+    }
+
+    .pickAction strong {
+        overflow: hidden;
+        font-size: 0.94rem;
+        line-height: 1.08;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .body {
+        max-height: 1.66rem;
+        font-size: 0.68rem;
+        line-height: 1.18;
+        -webkit-line-clamp: 2;
+    }
+
+    .serviceRow {
+        flex: 0 0 auto;
+        gap: 0.18rem;
+        margin-top: 0;
+        padding-top: 0.32rem;
+    }
+
+    .serviceButton {
+        min-height: 40px;
+        padding: 0.3rem 0.22rem;
+    }
+}
+
+/* UI-CLEANUP-071: phone relic draft should be a fast reward sheet, not a tiny telemetry panel. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .panelRoot {
+        width: min(100%, 23.5rem);
+        gap: 0.3rem;
+    }
+
+    .grid {
+        gap: 0.2rem;
+        max-height: calc(100dvh - 11.6rem);
+        padding: 0;
+    }
+
+    .card {
+        min-height: 3.68rem;
+        gap: 0.1rem;
+        padding: 0.42rem 0.48rem;
+        border-color: color-mix(in srgb, var(--theme-text-muted) 12%, transparent);
+        background:
+            linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 6%, transparent), transparent 72%),
+            color-mix(in srgb, var(--theme-void) 34%, transparent);
+        box-shadow: none;
+    }
+
+    .card[aria-checked='true'],
+    .card:focus-visible {
+        border-color: color-mix(in srgb, var(--theme-cyan-bright) 62%, var(--theme-gold-bright) 16%);
+        box-shadow:
+            0 0 0 1px color-mix(in srgb, var(--theme-cyan-bright) 32%, transparent),
+            0 0 1rem color-mix(in srgb, var(--theme-cyan-bright) 18%, transparent);
+    }
+
+    .pickAction {
+        min-height: 1.78rem;
+        padding: 0.2rem 0.28rem;
+        border-color: color-mix(in srgb, var(--theme-text-muted) 16%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 42%, transparent);
+    }
+
+    .pickAction strong {
+        font-size: 0.82rem;
+        line-height: 1.04;
+    }
+
+    .pickAction small {
+        min-width: 2.2rem;
+        min-height: 0.92rem;
+        font-size: 0.42rem;
+    }
+
+    .body {
+        max-height: 1.36rem;
+        color: color-mix(in srgb, var(--theme-text-muted) 82%, white);
+        font-size: 0.62rem;
+        line-height: 1.1;
+    }
+
+    .serviceRow {
+        gap: 0.14rem;
+        padding-top: 0.26rem;
+    }
+
+    .serviceButton {
+        min-height: 40px;
+        padding: 0.24rem 0.18rem;
+        border-color: color-mix(in srgb, var(--theme-text-muted) 10%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 30%, transparent);
+        box-shadow: none;
+    }
+
+    .serviceLabel {
+        font-size: 0.52rem;
+        line-height: 1.02;
+    }
+
+    .serviceCost {
+        min-height: 0.84rem;
+        font-size: 0.4rem;
+    }
+}
+
+/* UI-CLEANUP-078: phone relic choices need one visible payoff cue, not just title + clipped body. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .panelRoot {
+        width: min(100%, 23.75rem);
+    }
+
+    .grid {
+        gap: 0.26rem;
+        max-height: min(56dvh, 28rem);
+    }
+
+    .card {
+        min-height: 5.35rem;
+        gap: 0.14rem;
+        padding: 0.46rem 0.5rem 0.5rem;
+        border-color: color-mix(in srgb, var(--theme-cyan-bright) 18%, var(--theme-gold-bright) 12%);
+        background:
+            linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 7%, transparent), transparent 62%),
+            color-mix(in srgb, var(--theme-void) 42%, transparent);
+    }
+
+    .pickAction {
+        min-height: 1.82rem;
+        padding: 0.2rem 0.3rem;
+        border-color: color-mix(in srgb, var(--theme-cyan-bright) 28%, transparent);
+        background: color-mix(in srgb, var(--theme-surface-control) 54%, transparent);
+    }
+
+    .pickAction strong {
+        font-size: 0.84rem;
+    }
+
+    .pickAction small {
+        min-width: 2.24rem;
+        min-height: 0.9rem;
+        font-size: 0.42rem;
+    }
+
+    .pickPulse {
+        order: 3;
+        display: grid !important;
+        grid-template-columns: auto minmax(0, 1fr);
+        align-items: center;
+        gap: 0.08rem 0.28rem;
+        margin: 0;
+        padding: 0.18rem 0.28rem;
+        border-radius: var(--ui-radius-sm);
+        animation: none !important;
+    }
+
+    .pickPulse small,
+    .pickPulse strong {
+        overflow: hidden;
+        line-height: 1.04;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .pickPulse small {
+        color: color-mix(in srgb, var(--theme-gold-bright) 84%, white);
+        font-size: 0.48rem;
+    }
+
+    .pickPulse strong {
+        color: color-mix(in srgb, var(--theme-text) 92%, white);
+        font-size: 0.6rem;
+        font-weight: 930;
+    }
+
+    .pickPulse em {
+        display: none;
+    }
+
+    .impactChips {
+        order: 4;
+        display: flex !important;
+        flex-wrap: nowrap;
+        gap: 0.12rem;
+        max-width: 100%;
+        margin: 0;
+        overflow: hidden;
+    }
+
+    .impactChips span {
+        min-height: 0.98rem;
+        max-width: 50%;
+        padding: 0.06rem 0.2rem;
+        font-size: 0.5rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .impactChips span:nth-child(n + 3) {
+        display: none;
+    }
+
+    .impactChipBeatPips {
+        display: none;
+    }
+
+    .body {
+        order: 5;
+        max-height: 1.42rem;
+        font-size: 0.62rem;
+        line-height: 1.12;
+        -webkit-line-clamp: 2;
+    }
+
+    .serviceRow {
+        margin-top: 0.24rem;
+    }
+}
+
+@media (max-width: 760px) and (max-height: 700px) and (orientation: portrait) {
+    .grid {
+        max-height: min(42dvh, 18rem);
+        overflow-y: auto;
+    }
+
+    .card {
+        min-height: 4.85rem;
+        padding-block: 0.38rem;
+    }
+
+    .body {
+        max-height: 0.78rem;
+        -webkit-line-clamp: 1;
+    }
+
+    .serviceRow {
+        margin-top: 0.18rem;
+    }
+}
+
+/* UI-CLEANUP-081: reward draft choices should read as picks, not stacked diagnostics. */
+@media (min-width: 761px) {
+    .panelRoot {
+        max-width: min(100%, 56rem);
+    }
+
+    .grid {
+        gap: 0.58rem;
+    }
+
+    .card {
+        min-height: 6.25rem;
+        padding: 0.62rem;
+    }
+
+    .pickAction {
+        min-height: 2.72rem;
+        padding: 0.38rem 0.46rem;
+    }
+
+    .pickAction strong {
+        font-size: 0.92rem;
+        line-height: 1.12;
+    }
+
+    .body {
+        -webkit-line-clamp: 2;
+        font-size: 0.76rem;
+        line-height: 1.22;
+    }
+
+    .serviceRow {
+        max-width: 38rem;
+        margin-inline: auto;
+        opacity: 0.58;
+    }
+}
+
+@media (max-width: 760px) and (orientation: portrait) {
+    .panelRoot {
+        width: min(100%, 23rem);
+    }
+
+    .grid {
+        gap: 0.34rem;
+        max-height: min(60dvh, 31rem);
+    }
+
+    .card {
+        min-height: 4.48rem;
+        gap: 0.16rem;
+        padding: 0.48rem 0.52rem;
+        border-radius: var(--ui-radius-sm);
+    }
+
+    .pickAction {
+        grid-template-columns: minmax(0, 1fr) auto;
+        min-height: 1.96rem;
+        padding: 0.26rem 0.32rem;
+    }
+
+    .pickAction small {
+        min-width: 2.06rem;
+        min-height: 0.82rem;
+        padding: 0.08rem 0.18rem;
+        font-size: 0.38rem;
+    }
+
+    .pickAction strong {
+        font-size: 0.86rem;
+        line-height: 1.06;
+    }
+
+    .pickPulse {
+        grid-template-columns: minmax(0, 1fr);
+        min-height: 1.1rem;
+        padding: 0.16rem 0.26rem;
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 16%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 32%, transparent);
+    }
+
+    .pickPulse small,
+    .impactChips,
+    .impactChipBeatPips {
+        display: none !important;
+    }
+
+    .pickPulse strong {
+        font-size: 0.6rem;
+        line-height: 1.04;
+    }
+
+    .body {
+        max-height: 1.5rem;
+        font-size: 0.64rem;
+        line-height: 1.16;
+    }
+
+    .serviceRow {
+        gap: 0.2rem;
+        margin-top: 0.08rem;
+        padding-top: 0.2rem;
+        border-top-color: color-mix(in srgb, var(--theme-gold-bright) 7%, transparent);
+    }
+
+    .serviceButton {
+        min-height: 2.34rem;
+        padding: 0.2rem 0.16rem;
+        opacity: 0.72;
+    }
+
+    .serviceLabel {
+        font-size: 0.5rem;
+    }
+}
+
+/* UI-CLEANUP-083: current relic draft pass; choice cards should feel like rewards, not debug rows. */
+@media (min-width: 761px) {
+    .panelRoot {
+        max-width: min(100%, 60rem);
+    }
+
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.72rem;
+        align-items: stretch;
+    }
+
+    .card {
+        min-height: 8.1rem;
+        gap: 0.38rem;
+        padding: 0.82rem 0.86rem 0.9rem;
+        border-radius: calc(var(--ui-radius-md) + 0.04rem);
+        background:
+            radial-gradient(ellipse 90% 80% at 12% 0%, color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent), transparent 70%),
+            color-mix(in srgb, var(--theme-void) 84%, var(--theme-panel-solid) 16%);
+    }
+
+    .runeStrip {
+        height: 0.2rem;
+        opacity: 0.8;
+    }
+
+    .pickAction {
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 0.24rem 0.52rem;
+        min-height: 3.45rem;
+        padding: 0;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+    }
+
+    .pickAction small {
+        align-self: start;
+        min-width: 3.05rem;
+        padding: 0.18rem 0.34rem;
+        border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 30%, transparent);
+        border-radius: var(--ui-radius-pill);
+        background: color-mix(in srgb, var(--theme-gold-deep) 18%, transparent);
+        color: color-mix(in srgb, var(--theme-gold-bright) 86%, white);
+        font-size: 0.5rem;
+        text-align: center;
+    }
+
+    .pickAction strong {
+        font-size: 1rem;
+        line-height: 1.08;
+    }
+
+    .pickAction em {
+        display: -webkit-box;
+        max-height: 2.1rem;
+        overflow: hidden;
+        color: color-mix(in srgb, var(--theme-text) 92%, white);
+        font-size: 0.72rem;
+        line-height: 1.18;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+    }
+
+    .pickPulse,
+    .impactChips,
+    .impactChipBeatPips {
+        display: none !important;
+    }
+
+    .body {
+        display: -webkit-box;
+        max-height: 2.15rem;
+        overflow: hidden;
+        color: color-mix(in srgb, var(--theme-text-muted) 94%, white);
+        font-size: 0.74rem;
+        line-height: 1.24;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+    }
+
+    .serviceRow {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.42rem;
+        max-width: 42rem;
+        margin-top: 0.6rem;
+        padding-top: 0.55rem;
+        opacity: 0.86;
+    }
+
+    .serviceButton {
+        min-height: 2.85rem;
+        padding: 0.38rem 0.52rem;
+        border-radius: var(--ui-radius-sm);
+    }
+
+    .serviceLabel,
+    .serviceCost,
+    .serviceEffect {
+        font-size: 0.62rem;
+    }
+
+    .serviceCue,
+    .serviceDetail {
+        display: none !important;
+    }
+}
+
+@media (max-width: 760px) and (orientation: portrait) {
+    .panelRoot {
+        width: min(100%, 23.4rem);
+    }
+
+    .grid {
+        gap: 0.44rem;
+        max-height: min(66dvh, 33rem);
+        padding-inline: 0.02rem;
+    }
+
+    .card {
+        min-height: 5.32rem;
+        gap: 0.2rem;
+        padding: 0.56rem 0.64rem;
+        border-radius: var(--ui-radius-md);
+        background:
+            radial-gradient(ellipse 80% 78% at 12% 0%, color-mix(in srgb, var(--theme-cyan-bright) 9%, transparent), transparent 70%),
+            color-mix(in srgb, var(--theme-void) 86%, var(--theme-panel-solid) 14%);
+    }
+
+    .runeStrip {
+        height: 0.18rem;
+        opacity: 0.76;
+    }
+
+    .pickAction {
+        grid-template-columns: minmax(0, 1fr) auto;
+        min-height: 2.38rem;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+    }
+
+    .pickAction small {
+        min-width: 3rem;
+        min-height: 1.18rem;
+        padding: 0.18rem 0.34rem;
+        border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 28%, transparent);
+        border-radius: var(--ui-radius-pill);
+        background: color-mix(in srgb, var(--theme-gold-deep) 18%, transparent);
+        color: color-mix(in srgb, var(--theme-gold-bright) 86%, white);
+        font-size: 0.48rem;
+        text-align: center;
+    }
+
+    .pickAction strong {
+        font-size: 0.98rem;
+        line-height: 1.08;
+    }
+
+    .pickAction em {
+        display: -webkit-box;
+        max-height: 0.78rem;
+        overflow: hidden;
+        font-size: 0.66rem;
+        line-height: 1.15;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+    }
+
+    .pickPulse {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        min-height: 0.34rem;
+        padding: 0;
+        border-radius: var(--ui-radius-pill);
+    }
+
+    .pickPulse small,
+    .pickPulse strong,
+    .pickPulse em {
+        display: none;
+    }
+
+    .impactChips {
+        display: flex !important;
+        flex-wrap: nowrap;
+        gap: 0.18rem;
+        min-height: 1.2rem;
+        overflow: hidden;
+    }
+
+    .impactChips span {
+        min-height: 1.08rem;
+        padding: 0.12rem 0.28rem;
+        font-size: 0.48rem;
+        white-space: nowrap;
+    }
+
+    .impactChips span:nth-child(n + 3),
+    .impactChipBeatPips {
+        display: none !important;
+    }
+
+    .body {
+        display: none;
+    }
+
+    .serviceRow {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.26rem;
+        margin-top: 0.24rem;
+        padding-top: 0.28rem;
+    }
+
+    .serviceButton {
+        min-height: 2.65rem;
+        padding: 0.28rem 0.18rem;
+        border-radius: var(--ui-radius-sm);
+    }
+
+    .serviceLabel {
+        font-size: 0.56rem;
+        line-height: 1.05;
+    }
+
+    .serviceSignalRow {
+        justify-content: center;
+    }
+
+    .serviceCost,
+    .serviceEffect {
+        font-size: 0.5rem;
+    }
+
+    .serviceCue,
+    .serviceDetail {
+        display: none !important;
+    }
+}
+
+@media (max-width: 760px) and (max-height: 700px) and (orientation: portrait) {
+    .grid {
+        gap: 0.28rem;
+        max-height: min(54dvh, 22rem);
+    }
+
+    .card {
+        min-height: 4.28rem;
+        gap: 0.12rem;
+        padding: 0.42rem 0.48rem;
+    }
+
+    .runeStrip {
+        height: 0.12rem;
+    }
+
+    .pickAction {
+        min-height: 1.62rem;
+        gap: 0.12rem 0.28rem;
+    }
+
+    .pickAction small {
+        min-width: 2.42rem;
+        min-height: 0.92rem;
+        padding: 0.12rem 0.24rem;
+        font-size: 0.4rem;
+    }
+
+    .pickAction strong {
+        font-size: 0.82rem;
+    }
+
+    .pickAction em {
+        display: none;
+    }
+
+    .pickPulse {
+        min-height: 0.24rem;
+        padding: 0;
+    }
+
+    .impactChips {
+        min-height: 0.94rem;
+    }
+
+    .impactChips span {
+        min-height: 0.88rem;
+        padding: 0.08rem 0.22rem;
+        font-size: 0.42rem;
+    }
+
+    .body {
+        max-height: 0.76rem;
+        font-size: 0.56rem;
+        line-height: 1.12;
+        -webkit-line-clamp: 1;
+    }
+
+    .serviceRow {
+        gap: 0.18rem;
+        margin-top: 0.16rem;
+        padding-top: 0.2rem;
+    }
+
+    .serviceButton {
+        min-height: 2.5rem;
+        padding: 0.2rem 0.12rem;
+    }
+
+    .serviceLabel {
+        font-size: 0.48rem;
+    }
+
+    .serviceCost,
+    .serviceEffect {
+        font-size: 0.44rem;
+    }
+}
+
+/* UI-CLEANUP-084: compact relic offer copy should never collide with the action pill. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .pickAction strong,
+    .pickAction em {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .pickAction strong {
+        max-width: min(14rem, calc(100vw - 8.7rem));
+    }
+
+    .pickAction em {
+        display: block;
+        max-width: min(13rem, calc(100vw - 9rem));
+        max-height: 1rem;
+    }
+}
+
+/* UI-CLEANUP-086: mobile relic drafts should read as three decisive reward picks. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .panelRoot {
+        width: min(100%, 23.75rem);
+    }
+
+    .grid {
+        gap: 0.5rem;
+        max-height: min(62dvh, 31.5rem);
+        padding: 0.02rem;
+    }
+
+    .card {
+        min-height: 6.05rem;
+        gap: 0.28rem;
+        padding: 0.68rem 0.72rem;
+        border-radius: var(--ui-radius-sm);
+        background:
+            radial-gradient(ellipse 90% 90% at 8% 0%, color-mix(in srgb, var(--theme-gold-bright) 11%, transparent), transparent 64%),
+            linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 7%, transparent), transparent 44%),
+            color-mix(in srgb, var(--theme-void) 88%, var(--theme-panel-solid) 12%);
+    }
+
+    .card:focus-visible,
+    .card:hover {
+        transform: translateY(-1px);
+    }
+
+    .runeStrip {
+        height: 0.2rem;
+        opacity: 0.86;
+    }
+
+    .pickAction {
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: start;
+        min-height: 2.7rem;
+        gap: 0.12rem 0.5rem;
+    }
+
+    .pickAction small {
+        align-self: start;
+        min-width: 3.35rem;
+        min-height: 1.22rem;
+        padding: 0.2rem 0.4rem;
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 38%, transparent);
+        background: color-mix(in srgb, var(--theme-gold-deep) 24%, transparent);
+        font-size: 0.5rem;
+    }
+
+    .pickAction strong {
+        max-width: min(14.8rem, calc(100vw - 8.4rem));
+        color: color-mix(in srgb, var(--theme-text) 96%, white);
+        font-size: 1.05rem;
+        line-height: 1.05;
+    }
+
+    .pickAction em {
+        display: -webkit-box;
+        max-width: min(14.5rem, calc(100vw - 8.7rem));
+        max-height: 1.6rem;
+        color: color-mix(in srgb, var(--theme-text-muted) 94%, white);
+        font-size: 0.68rem;
+        line-height: 1.16;
+        white-space: normal;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+    }
+
+    .impactChips {
+        gap: 0.2rem;
+        min-height: 1.16rem;
+    }
+
+    .impactChips span {
+        min-height: 1.06rem;
+        max-width: 48%;
+        padding: 0.12rem 0.3rem;
+        font-size: 0.5rem;
+    }
+
+    .body {
+        display: none !important;
+    }
+
+    .serviceRow {
+        gap: 0.22rem;
+        margin-top: 0.18rem;
+        padding-top: 0.24rem;
+        opacity: 0.8;
+    }
+
+    .serviceButton {
+        min-height: 2.5rem;
+        padding: 0.24rem 0.16rem;
+    }
+}
+
+/* UI-CLEANUP-087: make the reward name the primary choice, with action/effect as support. */
+.rewardHeader {
+    display: none;
+}
+
+@media (min-width: 761px) {
+    .rewardHeader {
+        order: 2;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: start;
+        gap: 0.42rem;
+        min-width: 0;
+    }
+
+    .rewardHeader strong {
+        min-width: 0;
+        overflow: hidden;
+        color: color-mix(in srgb, var(--theme-text) 98%, white);
+        font-size: 1.08rem;
+        font-weight: 950;
+        line-height: 1.05;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .rewardHeader small {
+        align-self: start;
+        min-width: 3.1rem;
+        padding: 0.18rem 0.36rem;
+        border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 34%, transparent);
+        border-radius: var(--ui-radius-pill);
+        background: color-mix(in srgb, var(--theme-gold-deep) 22%, transparent);
+        color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
+        font-size: 0.52rem;
+        font-weight: 950;
+        line-height: 1;
+        text-align: center;
+        text-transform: uppercase;
+    }
+
+    .pickAction {
+        order: 3;
+        min-height: 2.1rem;
+        padding-left: 0.58rem;
+        border-left: 2px solid color-mix(in srgb, var(--theme-cyan-bright) 42%, transparent);
+    }
+
+    .pickAction small {
+        display: none;
+    }
+}
+
+@media (max-width: 760px) and (orientation: portrait) {
+    .rewardHeader {
+        order: 2;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: start;
+        gap: 0.34rem;
+        min-width: 0;
+    }
+
+    .rewardHeader strong {
+        display: -webkit-box;
+        min-width: 0;
+        max-height: 2.2rem;
+        overflow: hidden;
+        color: color-mix(in srgb, var(--theme-text) 98%, white);
+        font-size: 1.08rem;
+        font-weight: 950;
+        line-height: 1.05;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+    }
+
+    .rewardHeader small {
+        align-self: start;
+        min-width: 3.1rem;
+        padding: 0.2rem 0.38rem;
+        border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 38%, transparent);
+        border-radius: var(--ui-radius-pill);
+        background: color-mix(in srgb, var(--theme-gold-deep) 25%, transparent);
+        color: color-mix(in srgb, var(--theme-gold-bright) 90%, white);
+        font-size: 0.5rem;
+        font-weight: 950;
+        line-height: 1;
+        text-align: center;
+        text-transform: uppercase;
+    }
+
+    .pickAction {
+        order: 3;
+        grid-template-columns: minmax(0, 1fr);
+        min-height: 1.9rem;
+        gap: 0.08rem;
+        padding-left: 0.5rem;
+        border-left: 2px solid color-mix(in srgb, var(--theme-cyan-bright) 36%, transparent);
+    }
+
+    .pickAction small {
+        display: none;
+    }
+
+    .pickAction strong {
+        max-width: 100%;
+        color: color-mix(in srgb, var(--theme-cyan-bright) 90%, white);
+        font-size: 0.72rem;
+        line-height: 1.05;
+        text-transform: uppercase;
+    }
+
+    .pickAction em {
+        max-width: 100%;
+        max-height: 1.5rem;
+        color: color-mix(in srgb, var(--theme-text-muted) 95%, white);
+        font-size: 0.72rem;
+        line-height: 1.12;
+        -webkit-line-clamp: 2;
+    }
+
+    .pickPulse {
+        display: none !important;
+    }
+
+    .impactChips {
+        order: 4;
+        min-height: 0;
+    }
+
+    .serviceRow {
+        opacity: 0.64;
+    }
+}
+
+/* UI-CLEANUP-089: mobile relic drafts should feel like punchy rewards, not a telemetry panel. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .panelRoot {
+        width: min(calc(100vw - 1rem), 24rem);
+        max-height: min(76dvh, 38rem);
+        overflow: hidden;
+    }
+
+    .grid {
+        gap: 0.42rem;
+        box-sizing: border-box;
+        width: calc(100% - 1.35rem);
+        max-height: min(56dvh, 28rem);
+        margin-inline: auto;
+        overflow-y: auto;
+        padding: 0.02rem;
+        scrollbar-width: none;
+    }
+
+    .grid::-webkit-scrollbar {
+        display: none;
+    }
+
+    .card {
+        box-sizing: border-box;
+        width: 100%;
+        max-width: 100%;
+        justify-self: stretch;
+        min-height: 5.45rem;
+        gap: 0.18rem;
+        padding: 0.58rem 0.68rem;
+        overflow: hidden;
+    }
+
+    .runeStrip {
+        height: 0.16rem;
+        opacity: 0.78;
+    }
+
+    .rewardHeader {
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 0.28rem;
+    }
+
+    .rewardHeader strong {
+        max-height: 1.3rem;
+        font-size: 1.02rem;
+        line-height: 1.08;
+        -webkit-line-clamp: 1;
+    }
+
+    .rewardHeader small {
+        min-width: 2.5rem;
+        padding: 0.14rem 0.28rem;
+        font-size: 0.45rem;
+    }
+
+    .pickAction {
+        min-height: 1.58rem;
+        gap: 0.04rem;
+        padding-left: 0.42rem;
+    }
+
+    .pickAction strong {
+        font-size: 0.68rem;
+        line-height: 1;
+    }
+
+    .pickAction em {
+        display: -webkit-box;
+        max-height: 1.7rem;
+        overflow: hidden;
+        font-size: 0.66rem;
+        line-height: 1.16;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+    }
+
+    .impactChips {
+        gap: 0.14rem;
+        max-height: 1.26rem;
+        overflow: hidden;
+    }
+
+    .impactChips span {
+        min-height: 0.96rem;
+        max-width: 9.5rem;
+        padding: 0.1rem 0.26rem;
+        font-size: 0.45rem;
+    }
+
+    .impactChips span:nth-child(n + 3),
+    .pickPlan,
+    .engineRecipe {
+        display: none !important;
+    }
+
+    .serviceRow {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.28rem;
+        margin-top: 0.32rem;
+        opacity: 0.72;
+    }
+
+    .serviceButton {
+        min-height: 1.86rem;
+        padding: 0.18rem 0.22rem;
+        overflow: hidden;
+    }
+
+    .serviceButton strong,
+    .serviceButton span,
+    .serviceButton small {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .serviceEffect,
+    .serviceCue {
+        display: none !important;
+    }
+}
+
+/* UI-CLEANUP-092: reward drafts should read as choice cards, not dense telemetry rows. */
+@media (min-width: 761px) {
+    .panelRoot {
+        max-width: min(100%, 64rem);
+    }
+
+    .grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.7rem;
+        margin-top: 0.46rem;
+    }
+
+    .card {
+        min-height: 8.7rem;
+        padding: 0.86rem 0.92rem;
+        gap: 0.38rem;
+        overflow: hidden;
+    }
+
+    .rewardHeader strong {
+        font-size: 1.16rem;
+        line-height: 1.08;
+    }
+
+    .pickAction {
+        min-height: 2.25rem;
+        padding-left: 0.62rem;
+    }
+
+    .pickAction strong {
+        display: -webkit-box;
+        max-width: 100%;
+        overflow: hidden;
+        font-size: 0.92rem;
+        line-height: 1.08;
+        text-transform: uppercase;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+    }
+
+    .pickAction em {
+        display: -webkit-box;
+        max-width: 100%;
+        max-height: 2.15rem;
+        overflow: hidden;
+        font-size: 0.76rem;
+        line-height: 1.22;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+    }
+
+    .serviceRow {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        width: min(100%, 42rem);
+        margin: 0.7rem auto 0;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+    }
+
+    .serviceButton {
+        min-height: 2.9rem;
+        padding: 0.45rem 0.56rem;
+        border-radius: var(--ui-radius-sm);
+    }
+}
+
+@media (max-width: 760px) and (orientation: portrait) {
+    .panelRoot {
+        box-sizing: border-box;
+        width: 100%;
+        max-height: min(70dvh, 36rem);
+        min-width: 0;
+        overflow: hidden;
+    }
+
+    .grid {
+        box-sizing: border-box;
+        width: 100%;
+        max-height: min(49dvh, 26.5rem);
+        gap: 0.34rem;
+        margin-inline: 0;
+        padding: 0;
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+
+    .card {
+        width: 100%;
+        min-height: 6rem;
+        gap: 0.22rem;
+        padding: 0.62rem 0.66rem;
+        border-radius: var(--ui-radius-sm);
+    }
+
+    .runeStrip {
+        height: 0.18rem;
+    }
+
+    .rewardHeader {
+        gap: 0.24rem;
+    }
+
+    .rewardHeader strong {
+        max-height: 2.18rem;
+        font-size: 1.08rem;
+        line-height: 1.04;
+        -webkit-line-clamp: 2;
+    }
+
+    .rewardHeader small {
+        min-width: 2.65rem;
+        min-height: 1.1rem;
+        padding: 0.16rem 0.3rem;
+        font-size: 0.48rem;
+    }
+
+    .pickAction {
+        min-height: 2rem;
+        padding-left: 0.44rem;
+        border-left-width: 2px;
+    }
+
+    .pickAction strong {
+        font-size: 0.76rem;
+        line-height: 1.06;
+    }
+
+    .pickAction em {
+        max-height: 1.85rem;
+        font-size: 0.68rem;
+        line-height: 1.18;
+    }
+
+    .impactChips,
+    .choiceHeat,
+    .choiceCrescendo,
+    .payoffBurst,
+    .nextFloorCue,
+    .boardMomentCue,
+    .comboRoutes,
+    .buildPlanRows,
+    .buildFitSignals {
+        display: none !important;
+    }
+
+    .serviceRow {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        box-sizing: border-box;
+        width: 100%;
+        gap: 0.24rem;
+        margin: 0.36rem 0 0;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+        opacity: 0.88;
+    }
+
+    .serviceButton {
+        min-width: 0;
+        min-height: 2.5rem;
+        padding: 0.28rem 0.22rem;
+        border-radius: var(--ui-radius-sm);
+    }
+
+    .serviceLabel,
+    .serviceButton span {
+        min-width: 0;
+        overflow: hidden;
+        font-size: 0.58rem;
+        line-height: 1;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .serviceCost {
+        min-height: 0.92rem;
+        padding: 0.04rem 0.22rem;
+        font-size: 0.48rem;
+    }
+
+    .serviceDetail,
+    .serviceEffect,
+    .serviceCue {
+        display: none !important;
+    }
+}
+
+/* UI-CLEANUP-093: current perk/relic picker pass - reward cards first, diagnostics hidden. */
+@media (max-width: 760px) {
+    .panelRoot {
+        width: 100%;
+        max-height: min(74dvh, 38rem);
+        padding: 0;
+        overflow: hidden;
+    }
+
+    .payoffEngineStrip,
+    .draftLaneMap {
+        display: none !important;
+    }
+
+    .grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 0.42rem;
+        width: 100%;
+        max-height: min(56dvh, 29rem);
+        padding: 0.02rem 0;
+        overflow-x: hidden;
+        overflow-y: auto;
+        scrollbar-width: none;
+    }
+
+    .grid::-webkit-scrollbar {
+        display: none;
+    }
+
+    .card {
+        position: relative;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: start;
+        gap: 0.28rem 0.42rem;
+        width: 100%;
+        min-height: 5.15rem;
+        max-height: 7.2rem;
+        padding: 0.62rem 0.66rem;
+        overflow: hidden;
+        border-radius: var(--ui-radius-sm);
+        text-align: left;
+    }
+
+    .runeStrip,
+    .reason,
+    .archetypes,
+    .choiceHeat,
+    .choiceCrescendo,
+    .payoffBurst,
+    .nextFloorCue,
+    .boardMomentCue,
+    .pickPulse,
+    .pickPlan,
+    .engineRecipe,
+    .recommendation,
+    .buildPulse,
+    .buildFitSignals,
+    .comboRoutes,
+    .buildPlanRows,
+    .impactChips,
+    .impact,
+    .body {
+        display: none !important;
+    }
+
+    .rewardHeader {
+        display: grid;
+        grid-column: 1 / -1;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: start;
+        gap: 0.34rem;
+        min-width: 0;
+    }
+
+    .rewardHeader strong {
+        display: -webkit-box;
+        max-width: 100%;
+        max-height: 2.25rem;
+        overflow: hidden;
+        color: color-mix(in srgb, var(--theme-text) 96%, white);
+        font-size: 1.12rem;
+        line-height: 1.03;
+        text-overflow: ellipsis;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+    }
+
+    .rewardHeader small {
+        align-self: start;
+        min-width: 2.7rem;
+        max-width: 4.5rem;
+        min-height: 1.2rem;
+        padding: 0.16rem 0.32rem;
+        overflow: hidden;
+        border-radius: var(--ui-radius-pill);
+        font-size: 0.48rem;
+        line-height: 1;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .pickAction {
+        grid-column: 1 / -1;
+        display: grid;
+        min-height: 2.1rem;
+        gap: 0.08rem;
+        padding: 0.38rem 0.44rem;
+        border-left: 2px solid color-mix(in srgb, var(--theme-gold-bright) 42%, transparent);
+        border-radius: var(--ui-radius-sm);
+        background: color-mix(in srgb, var(--theme-void) 42%, transparent);
+    }
+
+    .pickAction small {
+        display: none !important;
+    }
+
+    .pickAction strong {
+        display: -webkit-box;
+        max-width: 100%;
+        max-height: 1.74rem;
+        overflow: hidden;
+        color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
+        font-size: 0.78rem;
+        line-height: 1.08;
+        text-transform: uppercase;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+    }
+
+    .pickAction em {
+        display: -webkit-box;
+        max-width: 100%;
+        max-height: 1.72rem;
+        overflow: hidden;
+        color: color-mix(in srgb, var(--theme-text-muted) 88%, white);
+        font-size: 0.66rem;
+        font-style: normal;
+        line-height: 1.16;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+    }
+
+    .serviceRow {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.24rem;
+        width: 100%;
+        margin-top: 0.42rem;
+        padding: 0;
+        overflow: hidden;
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+    }
+
+    .serviceButton {
+        min-width: 0;
+        min-height: max(2.6rem, var(--ui-touch-target-min, 44px));
+        padding: 0.24rem 0.22rem;
+        overflow: hidden;
+        border-radius: var(--ui-radius-sm);
+    }
+
+    .serviceButton span,
+    .serviceButton strong,
+    .serviceButton small {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+}
+
+@media (min-width: 761px) {
+    .card {
+        overflow: hidden;
+    }
+
+    .card .body,
+    .card .impact,
+    .card .pickAction em {
+        overflow-wrap: anywhere;
+    }
+}
+
+/* UI-CLEANUP-094: tablet portrait needs readable reward decisions, not desktop-width columns squeezed into thirds. */
+@media (min-width: 761px) and (max-width: 980px) and (orientation: portrait) {
+    .panelRoot {
+        width: min(100%, 47rem);
+        max-height: min(72dvh, 48rem);
+        overflow: hidden;
+    }
+
+    .payoffEngineStrip,
+    .draftLaneMap {
+        display: none !important;
+    }
+
+    .grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 0.58rem;
+        max-height: min(50dvh, 34rem);
+        overflow-x: hidden;
+        overflow-y: auto;
+        scrollbar-width: none;
+    }
+
+    .grid::-webkit-scrollbar {
+        display: none;
+    }
+
+    .card {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 0.32rem 0.7rem;
+        min-height: 6.2rem;
+        max-height: none;
+        padding: 0.74rem 0.86rem;
+    }
+
+    .rewardHeader {
+        grid-column: 1 / -1;
+    }
+
+    .rewardHeader strong {
+        max-height: 2.3rem;
+        font-size: 1.18rem;
+        line-height: 1.06;
+        -webkit-line-clamp: 2;
+    }
+
+    .pickAction {
+        grid-column: 1 / -1;
+        min-height: 2.75rem;
+        padding: 0.48rem 0.62rem;
+    }
+
+    .pickAction strong {
+        max-height: 2.7rem;
+        font-size: 0.92rem;
+        line-height: 1.12;
+        -webkit-line-clamp: 3;
+    }
+
+    .pickAction em {
+        max-height: 2.05rem;
+        font-size: 0.76rem;
+        line-height: 1.24;
+        -webkit-line-clamp: 2;
+    }
+
+    .body,
+    .impact,
+    .impactChips,
+    .choiceHeat,
+    .choiceCrescendo,
+    .payoffBurst,
+    .nextFloorCue,
+    .boardMomentCue,
+    .pickPulse,
+    .pickPlan,
+    .engineRecipe,
+    .recommendation,
+    .buildPulse,
+    .buildFitSignals,
+    .comboRoutes,
+    .buildPlanRows {
+        display: none !important;
+    }
+
+    .serviceRow {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.42rem;
+        width: 100%;
+        margin-top: 0.64rem;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+    }
+
+    .serviceButton {
+        min-height: 3rem;
+        overflow: hidden;
+        border-radius: var(--ui-radius-sm);
+    }
+
+    .serviceEffect,
+    .serviceCue {
+        display: none !important;
+    }
+}
+
+/* UI-CLEANUP-095: short landscape reward drafts should use readable rows, not clipped desktop cards. */
+@media (max-height: 520px) and (orientation: landscape) {
+    .panelRoot {
+        width: min(calc(100vw - 2rem), 49rem);
+        max-height: min(82dvh, 21rem);
+        overflow: hidden;
+    }
+
+    .payoffEngineStrip,
+    .draftLaneMap {
+        display: none !important;
+    }
+
+    .grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 0.3rem;
+        max-height: min(58dvh, 13.9rem);
+        overflow-x: hidden;
+        overflow-y: auto;
+        scrollbar-width: none;
+    }
+
+    .grid::-webkit-scrollbar {
+        display: none;
+    }
+
+    .card {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 0.08rem 0.48rem;
+        min-height: 3.42rem;
+        max-height: 3.78rem;
+        padding: 0.34rem 0.52rem;
+        overflow: hidden;
+    }
+
+    .rewardHeader {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 0.42rem;
+    }
+
+    .rewardHeader strong {
+        display: -webkit-box;
+        max-height: 1.18rem;
+        overflow: hidden;
+        font-size: 0.92rem;
+        line-height: 1.08;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+    }
+
+    .rewardHeader small {
+        display: none !important;
+    }
+
+    .pickAction {
+        grid-column: 1 / -1;
+        min-height: 1.35rem;
+        padding: 0.18rem 0.34rem;
+        overflow: hidden;
+    }
+
+    .pickAction small {
+        display: none !important;
+    }
+
+    .pickAction strong {
+        display: -webkit-box;
+        max-height: 1.1rem;
+        overflow: hidden;
+        font-size: 0.62rem;
+        line-height: 1.1;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+    }
+
+    .pickAction em {
+        display: none !important;
+    }
+
+    .body,
+    .impact,
+    .impactChips,
+    .choiceHeat,
+    .choiceCrescendo,
+    .payoffBurst,
+    .nextFloorCue,
+    .boardMomentCue,
+    .pickPulse,
+    .pickPlan,
+    .engineRecipe,
+    .recommendation,
+    .buildPulse,
+    .buildFitSignals,
+    .comboRoutes,
+    .buildPlanRows {
+        display: none !important;
+    }
+
+    .serviceRow {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.24rem;
+        margin-top: 0.24rem;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+    }
+
+    .serviceButton {
+        min-height: 2rem;
+        padding: 0.16rem 0.24rem;
+        overflow: hidden;
+        border-radius: var(--ui-radius-sm);
+    }
+
+    .serviceButton span,
+    .serviceButton strong,
+    .serviceButton small {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .serviceEffect,
+    .serviceCue {
+        display: none !important;
+    }
+}
+
+/* UI-CLEANUP-096-final: final short-landscape cascade with fixed pick row sizing. */
+@media (max-height: 520px) and (orientation: landscape) {
+    .panelRoot {
+        width: min(calc(100vw - 1.1rem), 50rem);
+        max-height: calc(100dvh - 1rem);
+    }
+
+    .grid {
+        box-sizing: border-box;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 8px;
+        width: calc(100% - 28px);
+        max-height: none;
+        overflow: visible;
+        padding-right: 2px;
+    }
+
+    .card {
+        box-sizing: border-box;
+        gap: 6px;
+        min-width: 0;
+        min-height: 118px;
+        max-height: 124px;
+        padding: 9px 10px;
+    }
+
+    .rewardHeader {
+        display: block;
+        padding-right: 68px;
+        min-width: 0;
+    }
+
+    .rewardHeader strong {
+        max-height: 18px;
+        font-size: 15px;
+        line-height: 1.08;
+    }
+
+    .rewardHeader small {
+        display: inline-flex !important;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        top: 27px;
+        right: 28px;
+        min-width: 40px;
+        max-width: 44px;
+        min-height: 18px;
+        padding: 2px 6px;
+        overflow: hidden;
+        font-size: 7px;
+        line-height: 1;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .pickAction {
+        min-height: 48px;
+        padding: 7px 8px;
+    }
+
+    .pickAction strong {
+        max-height: 24px;
+        font-size: 11px;
+        line-height: 1.1;
+        -webkit-line-clamp: 2;
+    }
+
+    .pickAction em {
+        display: -webkit-box !important;
+        max-height: 20px;
+        overflow: hidden;
+        font-size: 9px;
+        line-height: 1.1;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+    }
+
+    .serviceRow {
+        gap: 8px;
+        margin-top: 8px;
+    }
+
+    .serviceButton {
+        min-height: 36px;
+        padding: 4px 6px;
+    }
+}
+
+/* UI-CLEANUP-098: cramped perk choice is a decision tray, not a telemetry report. */
+@media (max-height: 520px) and (orientation: landscape) {
+    .panelRoot {
+        width: min(calc(100vw - 0.9rem), 47rem);
+        max-height: calc(100dvh - 0.72rem);
+        padding: 9px 10px 8px;
+        overflow: hidden;
+    }
+
+    .payoffEngineStrip,
+    .draftLaneMap,
+    .draftLanePrimaryCue,
+    .choiceMeta,
+    .choiceTags,
+    .body,
+    .impact,
+    .impactChips,
+    .choiceHeat,
+    .choiceCrescendo,
+    .payoffBurst,
+    .nextFloorCue,
+    .boardMomentCue,
+    .pickPulse,
+    .pickPlan,
+    .engineRecipe,
+    .recommendation,
+    .buildPulse,
+    .buildFitSignals,
+    .comboRoutes,
+    .buildPlanRows {
+        display: none !important;
+    }
+
+    .grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 7px;
+        width: 100%;
+        padding: 0;
+    }
+
+    .card {
+        min-height: 104px;
+        max-height: 112px;
+        padding: 8px 9px;
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 14%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 72%, transparent);
+        box-shadow: none;
+    }
+
+    .rewardHeader {
+        min-height: 22px;
+        padding-right: 50px;
+    }
+
+    .rewardHeader strong {
+        max-height: 17px;
+        font-size: 13px;
+        line-height: 1.08;
+        letter-spacing: 0;
+    }
+
+    .rewardHeader small {
+        top: 8px;
+        right: 9px;
+        min-width: 34px;
+        max-width: 38px;
+        min-height: 16px;
+        padding: 2px 5px;
+        font-size: 7px;
+    }
+
+    .pickAction {
+        display: grid;
+        align-content: center;
+        gap: 2px;
+        min-height: 42px;
+        padding: 6px 7px;
+        border-radius: var(--ui-radius-sm);
+    }
+
+    .pickAction strong {
+        max-height: 22px;
+        font-size: 10px;
+        line-height: 1.08;
+        -webkit-line-clamp: 2;
+    }
+
+    .pickAction em {
+        display: none !important;
+    }
+
+    .serviceRow {
+        gap: 7px;
+        margin-top: 7px;
+    }
+
+    .serviceButton {
+        min-height: 32px;
+        padding: 4px 6px;
+        border-radius: var(--ui-radius-sm);
+    }
+
+    .serviceButton span,
+    .serviceButton small,
+    .serviceEffect,
+    .serviceCue {
+        display: none !important;
+    }
+
+    .serviceButton .serviceLabel,
+    .serviceButton .serviceCost {
+        display: block !important;
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .serviceSignalRow {
+        display: block !important;
+        min-width: 0;
+    }
+
+    .serviceButton strong {
+        font-size: 10px;
+        line-height: 1;
+    }
+
+    .serviceLabel {
+        color: color-mix(in srgb, var(--theme-text) 88%, white);
+        font-size: 10px;
+        font-weight: 850;
+        line-height: 1;
+    }
+
+    .serviceCost {
+        margin-top: 2px;
+        color: color-mix(in srgb, var(--theme-gold-bright) 84%, white);
+        font-size: 8px;
+        font-weight: 900;
+        line-height: 1;
+    }
+}
+
+/* UI-CLEANUP-100: reward picks should feel like chunky decisions with readable consequences. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .panelRoot {
+        box-sizing: border-box;
+        display: grid;
+        grid-template-rows: minmax(0, 1fr) auto;
+        width: 100%;
+        max-width: none;
+        min-height: 0;
+        padding: 0;
+        overflow: hidden;
+    }
+
+    .payoffEngineStrip,
+    .draftLaneMap,
+    .draftLanePrimaryCue,
+    .choiceMeta,
+    .choiceTags,
+    .body,
+    .impact,
+    .impactChips,
+    .choiceHeat,
+    .choiceCrescendo,
+    .payoffBurst,
+    .nextFloorCue,
+    .boardMomentCue,
+    .pickPulse,
+    .pickPlan,
+    .engineRecipe,
+    .recommendation,
+    .buildPulse,
+    .buildFitSignals,
+    .comboRoutes,
+    .buildPlanRows {
+        display: none !important;
+    }
+
+    .grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0.52rem;
+        width: 100%;
+        max-height: min(66dvh, 31rem);
+        padding: 0;
+        overflow-x: hidden;
+        overflow-y: auto;
+        scrollbar-width: none;
+    }
+
+    .grid::-webkit-scrollbar {
+        display: none;
+    }
+
+    .card {
+        box-sizing: border-box;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: auto minmax(0, 1fr);
+        gap: 0.44rem;
+        min-height: 8.1rem;
+        max-height: 9.1rem;
+        padding: 0.78rem 0.86rem;
+        overflow: hidden;
+        border-radius: var(--ui-radius-md);
+        background:
+            linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 10%, transparent), transparent 46%),
+            color-mix(in srgb, var(--theme-void) 78%, transparent);
+        box-shadow:
+            inset 0 1px 0 color-mix(in srgb, white 6%, transparent),
+            0 12px 24px color-mix(in srgb, var(--theme-shadow) 20%, transparent);
+    }
+
+    .rewardHeader {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 0.5rem;
+        align-items: center;
+        min-width: 0;
+        min-height: 1.65rem;
+        padding: 0;
+    }
+
+    .rewardHeader strong {
+        display: -webkit-box;
+        max-height: 2.35rem;
+        overflow: hidden;
+        color: color-mix(in srgb, var(--theme-text) 96%, white);
+        font-size: 1.06rem;
+        line-height: 1.08;
+        letter-spacing: 0;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+    }
+
+    .rewardHeader small {
+        display: inline-flex !important;
+        align-items: center;
+        justify-content: center;
+        min-width: 3rem;
+        max-width: 3.3rem;
+        min-height: 1.42rem;
+        padding: 0.18rem 0.38rem;
+        overflow: hidden;
+        border-radius: var(--ui-radius-pill);
+        border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 34%, transparent);
+        background: color-mix(in srgb, var(--theme-gold-bright) 12%, transparent);
+        color: color-mix(in srgb, var(--theme-gold-bright) 92%, white);
+        font-size: 0.56rem;
+        font-weight: 950;
+        line-height: 1;
+        text-overflow: ellipsis;
+        text-transform: uppercase;
+        white-space: nowrap;
+    }
+
+    .pickAction {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        align-content: center;
+        gap: 0.26rem;
+        min-height: 4.1rem;
+        padding: 0.58rem 0.66rem;
+        overflow: hidden;
+        border-radius: var(--ui-radius-sm);
+        background:
+            linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent), transparent 72%),
+            color-mix(in srgb, var(--theme-surface-control) 54%, transparent);
+    }
+
+    .pickAction small {
+        display: none !important;
+    }
+
+    .pickAction strong {
+        display: -webkit-box;
+        max-height: 2rem;
+        overflow: hidden;
+        font-size: 0.86rem;
+        line-height: 1.12;
+        letter-spacing: 0;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+    }
+
+    .pickAction em {
+        display: -webkit-box !important;
+        max-height: 2.1rem;
+        overflow: hidden;
+        color: color-mix(in srgb, var(--theme-text-muted) 90%, white);
+        font-size: 0.68rem;
+        font-style: normal;
+        font-weight: 750;
+        line-height: 1.2;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+    }
+
+    .serviceRow {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.42rem;
+        margin-top: 0.62rem;
+    }
+
+    .serviceButton {
+        min-height: 2.55rem;
+        padding: 0.34rem 0.42rem;
+        border-radius: var(--ui-radius-sm);
+        background: color-mix(in srgb, var(--theme-void) 54%, transparent);
+    }
+
+    .serviceEffect,
+    .serviceCue {
+        display: none !important;
+    }
+
+    .serviceButton span,
+    .serviceButton small,
+    .serviceButton strong {
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+}
+
+@media (max-height: 520px) and (orientation: landscape) {
+    .panelRoot {
+        box-sizing: border-box;
+        display: grid;
+        grid-template-rows: minmax(0, 1fr) auto;
+        width: 100%;
+        max-width: none;
+        max-height: none;
+        padding: 0;
+        overflow: hidden;
+    }
+
+    .payoffEngineStrip,
+    .draftLaneMap,
+    .draftLanePrimaryCue,
+    .choiceMeta,
+    .choiceTags,
+    .body,
+    .impact,
+    .impactChips,
+    .choiceHeat,
+    .choiceCrescendo,
+    .payoffBurst,
+    .nextFloorCue,
+    .boardMomentCue,
+    .pickPulse,
+    .pickPlan,
+    .engineRecipe,
+    .recommendation,
+    .buildPulse,
+    .buildFitSignals,
+    .comboRoutes,
+    .buildPlanRows {
+        display: none !important;
+    }
+
+    .grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.58rem;
+        width: 100%;
+        max-height: none;
+        padding: 0;
+        overflow: visible;
+    }
+
+    .card {
+        box-sizing: border-box;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: auto minmax(0, 1fr);
+        gap: 0.42rem;
+        min-height: 8.2rem;
+        max-height: 8.95rem;
+        padding: 0.74rem 0.78rem;
+        overflow: hidden;
+        border-radius: var(--ui-radius-md);
+        background:
+            linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 10%, transparent), transparent 50%),
+            color-mix(in srgb, var(--theme-void) 76%, transparent);
+        box-shadow: inset 0 1px 0 color-mix(in srgb, white 6%, transparent);
+    }
+
+    .rewardHeader {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 0.42rem;
+        align-items: center;
+        min-width: 0;
+        min-height: 1.45rem;
+        padding: 0;
+    }
+
+    .rewardHeader strong {
+        display: -webkit-box;
+        max-height: 2rem;
+        overflow: hidden;
+        font-size: 0.98rem;
+        line-height: 1.08;
+        letter-spacing: 0;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+    }
+
+    .rewardHeader small {
+        display: inline-flex !important;
+        position: static;
+        align-items: center;
+        justify-content: center;
+        min-width: 2.55rem;
+        max-width: 2.8rem;
+        min-height: 1.1rem;
+        padding: 0.12rem 0.28rem;
+        overflow: hidden;
+        border-radius: var(--ui-radius-pill);
+        font-size: 0.48rem;
+        line-height: 1;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .pickAction {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        align-content: center;
+        gap: 0.22rem;
+        min-height: 4.28rem;
+        padding: 0.48rem 0.56rem;
+        overflow: hidden;
+        border-radius: var(--ui-radius-sm);
+    }
+
+    .pickAction small {
+        display: none !important;
+    }
+
+    .pickAction strong {
+        display: -webkit-box;
+        max-height: 1.92rem;
+        overflow: hidden;
+        font-size: 0.78rem;
+        line-height: 1.12;
+        letter-spacing: 0;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+    }
+
+    .pickAction em {
+        display: -webkit-box !important;
+        max-height: 2.05rem;
+        overflow: hidden;
+        color: color-mix(in srgb, var(--theme-text-muted) 88%, white);
+        font-size: 0.62rem;
+        font-style: normal;
+        font-weight: 750;
+        line-height: 1.12;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+    }
+
+    .serviceRow {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.58rem;
+        margin-top: 0.54rem;
+    }
+
+    .serviceButton {
+        min-height: 2.3rem;
+        padding: 0.28rem 0.42rem;
+        border-radius: var(--ui-radius-sm);
+    }
+
+    .serviceEffect,
+    .serviceCue,
+    .serviceButton span {
+        display: none !important;
+    }
+
+    .serviceButton strong,
+    .serviceButton small {
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+}
+
+/* UI-CLEANUP-101: final mobile draft shape - reward choice rows, not oversized telemetry cards. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .panelRoot {
+        grid-template-rows: minmax(0, 1fr) auto;
+    }
+
+    .grid {
+        gap: 0.42rem;
+        max-height: min(55dvh, 27.5rem);
+    }
+
+    .card {
+        grid-template-columns: minmax(0, 1fr) auto;
+        grid-template-rows: auto auto;
+        gap: 0.34rem 0.58rem;
+        min-height: 6.6rem;
+        max-height: 7.35rem;
+        padding: 0.62rem 0.72rem;
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 18%, transparent);
+        box-shadow:
+            inset 0 1px 0 color-mix(in srgb, white 5%, transparent),
+            0 8px 18px color-mix(in srgb, var(--theme-shadow) 16%, transparent);
+    }
+
+    .rewardHeader {
+        display: contents;
+    }
+
+    .rewardHeader strong {
+        align-self: center;
+        max-height: 1.95rem;
+        font-size: 1rem;
+        line-height: 1.04;
+        -webkit-line-clamp: 2;
+    }
+
+    .rewardHeader small {
+        align-self: center;
+        min-width: 2.7rem;
+        max-width: 3rem;
+        min-height: 1.32rem;
+        padding: 0.14rem 0.34rem;
+        font-size: 0.52rem;
+    }
+
+    .pickAction {
+        grid-column: 1 / -1;
+        min-height: 3.08rem;
+        padding: 0.48rem 0.58rem;
+    }
+
+    .pickAction strong {
+        max-height: 1.58rem;
+        font-size: 0.82rem;
+        line-height: 1.08;
+    }
+
+    .pickAction em {
+        max-height: 1.48rem;
+        font-size: 0.64rem;
+        line-height: 1.16;
+    }
+
+    .serviceRow {
+        gap: 0.36rem;
+        margin-top: 0.5rem;
+        padding-top: 0.08rem;
+    }
+
+    .serviceButton {
+        min-height: var(--ui-touch-target-min, 44px);
+        padding: 0.3rem 0.36rem;
+    }
+}
+
+@media (max-height: 520px) and (orientation: landscape) {
+    .card {
+        min-height: 7.25rem;
+        max-height: 7.8rem;
+        padding: 0.62rem 0.68rem;
+    }
+
+    .pickAction {
+        min-height: 3.42rem;
+        padding: 0.4rem 0.48rem;
+    }
+
+    .pickAction em {
+        max-height: 1.38rem;
+        -webkit-line-clamp: 2;
+    }
+
+    .serviceRow {
+        margin-top: 0.42rem;
+    }
+}
+
+/* UI-CLEANUP-103: relic draft should read as a fast reward picker, not a bordered debug receipt. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .panelRoot {
+        gap: 0.5rem;
+    }
+
+    .grid {
+        gap: 0.5rem;
+        max-height: none;
+        overflow: visible;
+    }
+
+    .card {
+        grid-template-columns: minmax(0, 1fr) auto;
+        grid-template-rows: auto auto;
+        min-height: 6.15rem;
+        max-height: 7rem;
+        padding: 0.56rem 0.64rem;
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 28%, var(--theme-cyan-bright) 8%);
+        border-radius: var(--ui-radius-sm);
+        background:
+            linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 13%, transparent), transparent 56%),
+            color-mix(in srgb, var(--theme-void) 72%, transparent);
+        box-shadow:
+            inset 0 1px 0 color-mix(in srgb, white 7%, transparent),
+            0 6px 14px color-mix(in srgb, var(--theme-shadow) 14%, transparent);
+    }
+
+    .card::before,
+    .card::after,
+    .runeStrip {
+        opacity: 0.28;
+    }
+
+    .rewardHeader strong {
+        max-height: 1.55rem;
+        font-size: 0.96rem;
+        line-height: 1.02;
+        -webkit-line-clamp: 1;
+    }
+
+    .rewardHeader small {
+        min-width: 2.5rem;
+        max-width: 2.75rem;
+        min-height: 1.12rem;
+        padding: 0.1rem 0.28rem;
+        font-size: 0.48rem;
+    }
+
+    .pickAction {
+        min-height: 3.18rem;
+        padding: 0.42rem 0.52rem;
+        border-left: 2px solid color-mix(in srgb, var(--theme-cyan-bright) 34%, var(--theme-gold-bright) 12%);
+        background: color-mix(in srgb, var(--theme-surface-control) 38%, transparent);
+        box-shadow: none;
+    }
+
+    .pickAction strong {
+        max-height: 1.18rem;
+        font-size: 0.78rem;
+        line-height: 1.04;
+        -webkit-line-clamp: 1;
+    }
+
+    .pickAction em {
+        max-height: 1.36rem;
+        font-size: 0.58rem;
+        line-height: 1.12;
+        -webkit-line-clamp: 2;
+    }
+
+    .serviceRow {
+        gap: 0.28rem;
+        margin-top: 0.42rem;
+        padding-top: 0;
+    }
+
+    .serviceButton {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 2.35rem;
+        padding: 0.24rem 0.28rem;
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 16%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 46%, transparent);
+        text-align: center;
+    }
+
+    .serviceSignalRow,
+    .serviceCost {
+        display: none !important;
+    }
+
+    .serviceLabel {
+        font-size: 0.58rem;
+        line-height: 1;
+        text-transform: uppercase;
+    }
+}
+
+@media (max-height: 520px) and (orientation: landscape) {
+    .grid {
+        gap: 0.44rem;
+    }
+
+    .card {
+        min-height: 6.35rem;
+        max-height: 6.8rem;
+        padding: 0.5rem 0.56rem;
+        border-radius: var(--ui-radius-sm);
+    }
+
+    .rewardHeader strong {
+        max-height: 1.14rem;
+        font-size: 0.86rem;
+        -webkit-line-clamp: 1;
+    }
+
+    .rewardHeader small {
+        min-width: 2.25rem;
+        max-width: 2.55rem;
+        min-height: 1rem;
+        font-size: 0.44rem;
+    }
+
+    .pickAction {
+        min-height: 2.9rem;
+        padding: 0.34rem 0.42rem;
+    }
+
+    .pickAction strong {
+        max-height: 1.55rem;
+        font-size: 0.68rem;
+    }
+
+    .pickAction em {
+        max-height: 1rem;
+        font-size: 0.54rem;
+        -webkit-line-clamp: 1;
+    }
+
+    .serviceButton {
+        min-height: 2rem;
+    }
+}
+
+/* UI-CLEANUP-104: reward choice should feel like a clean perk tray, not stacked debug receipts. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .panelRoot {
+        gap: 0.38rem;
+    }
+
+    .payoffEngineStrip,
+    .draftLaneMap {
+        display: none !important;
+    }
+
+    .grid {
+        display: grid;
+        gap: 0.36rem;
+        max-height: none;
+        overflow: visible;
+    }
+
+    .card {
+        position: relative;
+        grid-template-columns: minmax(0, 1fr) auto;
+        grid-template-rows: auto minmax(0, 1fr);
+        min-height: 6.42rem;
+        max-height: 6.72rem;
+        padding: 0.64rem 0.68rem 0.58rem;
+        overflow: hidden;
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 22%, transparent);
+        background:
+            linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 10%, transparent), transparent 52%),
+            color-mix(in srgb, var(--theme-void) 82%, transparent);
+        box-shadow:
+            inset 0 1px 0 color-mix(in srgb, white 6%, transparent),
+            0 6px 16px color-mix(in srgb, var(--theme-shadow) 18%, transparent);
+    }
+
+    .card::before,
+    .card::after,
+    .runeStrip,
+    .reason,
+    .pickAction small,
+    .pickPlan,
+    .engineRecipe,
+    .recommendation,
+    .choiceHeat,
+    .choiceCrescendo,
+    .payoffBurst,
+    .nextFloorCue,
+    .boardMomentCue,
+    .archetypes,
+    .pickPulse,
+    .impactChips,
+    .buildPulse,
+    .buildFitSignals,
+    .comboRoutes,
+    .buildPlanRows,
+    .impact,
+    .body {
+        display: none !important;
+    }
+
+    .rewardHeader {
+        display: contents;
+    }
+
+    .rewardHeader strong {
+        display: -webkit-box;
+        align-self: start;
+        max-height: 2.12rem;
+        min-width: 0;
+        overflow: hidden;
+        color: color-mix(in srgb, var(--theme-text) 94%, white);
+        font-size: 1.02rem;
+        line-height: 1.08;
+        text-overflow: ellipsis;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+    }
+
+    .rewardHeader small {
+        align-self: start;
+        min-width: 2.45rem;
+        max-width: 2.65rem;
+        min-height: 1.18rem;
+        padding: 0.1rem 0.28rem;
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 34%, transparent);
+        background: color-mix(in srgb, var(--theme-gold-bright) 9%, var(--theme-void) 72%);
+        color: color-mix(in srgb, var(--theme-gold-bright) 86%, white);
+        font-size: 0.48rem;
+        line-height: 1;
+    }
+
+    .pickAction {
+        grid-column: 1 / -1;
+        display: grid;
+        align-self: end;
+        gap: 0.12rem;
+        min-height: 2.66rem;
+        padding: 0.4rem 0.46rem;
+        border: 0;
+        border-left: 2px solid color-mix(in srgb, var(--theme-cyan-bright) 36%, var(--theme-gold-bright) 12%);
+        border-radius: var(--ui-radius-xs);
+        background: color-mix(in srgb, var(--theme-surface-control) 22%, transparent);
+        box-shadow: none;
+    }
+
+    .pickAction strong,
+    .pickAction em {
+        display: -webkit-box;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        -webkit-box-orient: vertical;
+    }
+
+    .pickAction strong {
+        max-height: 1.08rem;
+        font-size: 0.76rem;
+        line-height: 1.02;
+        -webkit-line-clamp: 1;
+    }
+
+    .pickAction em {
+        max-height: 1.28rem;
+        color: color-mix(in srgb, var(--theme-text-muted) 90%, white);
+        font-size: 0.58rem;
+        line-height: 1.08;
+        -webkit-line-clamp: 2;
+    }
+
+    .serviceRow {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.24rem;
+        margin-top: 0.16rem;
+        padding-top: 0;
+    }
+
+    .serviceButton {
+        min-width: 0;
+        min-height: 2.12rem;
+        padding: 0.18rem 0.22rem;
+        overflow: hidden;
+        border-color: color-mix(in srgb, var(--theme-text-muted) 12%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 52%, transparent);
+        box-shadow: none;
+    }
+
+    .serviceLabel {
+        max-width: 100%;
+        overflow: hidden;
+        font-size: 0.52rem;
+        line-height: 1;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+}
+
+@media (max-height: 520px) and (orientation: landscape) {
+    .payoffEngineStrip,
+    .draftLaneMap,
+    .pickPlan,
+    .engineRecipe,
+    .choiceHeat,
+    .choiceCrescendo,
+    .payoffBurst,
+    .nextFloorCue,
+    .boardMomentCue,
+    .pickPulse,
+    .impactChips,
+    .buildPulse,
+    .buildFitSignals,
+    .comboRoutes,
+    .buildPlanRows,
+    .impact,
+    .body {
+        display: none !important;
+    }
+
+    .card {
+        min-height: 5.65rem;
+        max-height: 6.05rem;
+    }
+}
+
+/* UI-CLEANUP-106: final phone perk picker pass - dense, flat, tappable choices. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .panelRoot {
+        gap: 0.22rem;
+    }
+
+    .grid {
+        gap: 0.26rem;
+    }
+
+    .card {
+        grid-template-columns: minmax(0, 1fr) auto;
+        min-height: 6rem;
+        max-height: 6.1rem;
+        padding: 0.52rem 0.58rem 0.5rem 0.68rem;
+        border: 1px solid color-mix(in srgb, var(--theme-text-muted) 13%, transparent);
+        border-left: 3px solid color-mix(in srgb, var(--theme-gold-bright) 54%, var(--theme-cyan-bright) 16%);
+        border-radius: var(--ui-radius-xs);
+        background:
+            linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 8%, transparent), transparent 40%),
+            color-mix(in srgb, var(--theme-void) 74%, var(--theme-panel-solid) 26%);
+        box-shadow: none;
+    }
+
+    .card:focus-visible {
+        outline: 2px solid color-mix(in srgb, var(--theme-cyan-bright) 58%, white 10%);
+        outline-offset: 1px;
+    }
+
+    .rewardHeader strong {
+        max-height: 1.86rem;
+        font-size: 0.94rem;
+        line-height: 1.02;
+    }
+
+    .rewardHeader small {
+        min-width: 2.2rem;
+        max-width: 2.45rem;
+        min-height: 1.02rem;
+        padding: 0.08rem 0.18rem;
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 24%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 66%, transparent);
+        font-size: 0.42rem;
+    }
+
+    .pickAction {
+        min-height: 2.46rem;
+        padding: 0.34rem 0.42rem;
+        border-left-width: 2px;
+        background: color-mix(in srgb, var(--theme-surface-control) 14%, transparent);
+    }
+
+    .pickAction strong {
+        max-height: 1rem;
+        font-size: 0.68rem;
+        line-height: 1;
+    }
+
+    .pickAction em {
+        max-height: 1.22rem;
+        font-size: 0.52rem;
+        line-height: 1.08;
+    }
+
+    .serviceRow {
+        gap: 0.18rem;
+        margin-top: 0.02rem;
+    }
+
+    .serviceButton {
+        min-height: 1.68rem;
+        padding: 0.1rem 0.14rem;
+        border-color: color-mix(in srgb, var(--theme-text-muted) 9%, transparent);
+        border-radius: var(--ui-radius-xs);
+        background: color-mix(in srgb, var(--theme-void) 66%, transparent);
+    }
+
+    .serviceLabel {
+        font-size: 0.46rem;
+        letter-spacing: 0;
+    }
+}
+
+/* UI-CLEANUP-107: one compact perk list with separators instead of chunky cards. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .grid {
+        gap: 0;
+        overflow: hidden;
+        border: 1px solid color-mix(in srgb, var(--theme-text-muted) 10%, transparent);
+        border-radius: var(--ui-radius-sm);
+        background: color-mix(in srgb, var(--theme-void) 78%, var(--theme-panel-solid) 22%);
+        box-shadow:
+            0 12px 28px color-mix(in srgb, var(--theme-shadow) 28%, transparent),
+            inset 0 1px 0 color-mix(in srgb, white 3%, transparent);
+    }
+
+    .card {
+        min-height: 6rem;
+        max-height: 6rem;
+        padding: 0.54rem 0.6rem 0.48rem 0.72rem;
+        border: 0;
+        border-left: 3px solid color-mix(in srgb, var(--theme-gold-bright) 48%, var(--theme-cyan-bright) 16%);
+        border-radius: 0;
+        background:
+            linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 8%, transparent), transparent 44%),
+            transparent;
+    }
+
+    .card:not(:last-child) {
+        border-bottom: 1px solid color-mix(in srgb, var(--theme-text-muted) 10%, transparent);
+    }
+
+    .card:nth-child(2) {
+        border-left-color: color-mix(in srgb, var(--theme-violet-bright) 46%, var(--theme-gold-bright) 12%);
+    }
+
+    .card:nth-child(3) {
+        border-left-color: color-mix(in srgb, var(--theme-cyan-bright) 46%, var(--theme-gold-bright) 12%);
+    }
+
+    .card:hover,
+    .card:focus-visible {
+        background:
+            linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 12%, transparent), transparent 48%),
+            color-mix(in srgb, var(--theme-surface-control) 10%, transparent);
+    }
+
+    .rewardHeader small {
+        border: 0;
+        background: transparent;
+        color: color-mix(in srgb, var(--theme-gold-bright) 78%, var(--theme-text) 22%);
+    }
+
+    .pickAction {
+        min-height: 2.34rem;
+        padding: 0.28rem 0.38rem;
+        border-left-color: color-mix(in srgb, var(--theme-text-muted) 22%, transparent);
+        background: transparent;
+    }
+
+    .serviceRow {
+        gap: 0;
+        overflow: hidden;
+        border: 1px solid color-mix(in srgb, var(--theme-text-muted) 8%, transparent);
+        border-top: 0;
+        border-radius: 0 0 var(--ui-radius-sm) var(--ui-radius-sm);
+        background: color-mix(in srgb, var(--theme-void) 74%, transparent);
+    }
+
+    .serviceButton {
+        min-height: 1.54rem;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+    }
+
+    .serviceButton + .serviceButton {
+        border-left: 1px solid color-mix(in srgb, var(--theme-text-muted) 7%, transparent);
+    }
+
+    .serviceButton:disabled {
+        opacity: 0.52;
+    }
+}
+
+/* UI-CLEANUP-113: reward choices need to feel like a playable pick list, not oversized debug rows. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .panelRoot {
+        gap: 0.18rem;
+        max-width: min(100%, 23.6rem);
+    }
+
+    .grid {
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 18%, var(--theme-text-muted) 6%);
+        background:
+            linear-gradient(180deg, color-mix(in srgb, var(--theme-gold-bright) 8%, transparent), transparent 34%),
+            color-mix(in srgb, var(--theme-void) 80%, var(--theme-panel-solid) 20%);
+    }
+
+    .card {
+        grid-template-columns: minmax(0, 1fr) minmax(4.6rem, 5.1rem);
+        min-height: 5.15rem;
+        max-height: 5.25rem;
+        padding: 0.42rem 0.5rem 0.38rem 0.62rem;
+        border-left-width: 0.22rem;
+    }
+
+    .rewardHeader {
+        min-width: 0;
+        gap: 0.14rem;
+    }
+
+    .rewardHeader strong {
+        display: -webkit-box;
+        max-height: 1.86rem;
+        overflow: hidden;
+        font-size: 0.9rem;
+        line-height: 1.03;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+    }
+
+    .rewardHeader small {
+        justify-self: start;
+        min-width: 0;
+        max-width: 4.2rem;
+        min-height: 0;
+        padding: 0;
+        overflow: hidden;
+        color: color-mix(in srgb, var(--theme-gold-bright) 90%, white 4%);
+        font-size: 0.48rem;
+        line-height: 1;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .pickAction {
+        align-self: stretch;
+        min-height: 0;
+        max-height: 4.25rem;
+        padding: 0.18rem 0 0.18rem 0.42rem;
+        overflow: hidden;
+        border-left: 1px solid color-mix(in srgb, var(--theme-cyan-bright) 26%, transparent);
+    }
+
+    .pickAction strong {
+        display: -webkit-box;
+        max-height: 1.22rem;
+        overflow: hidden;
+        color: color-mix(in srgb, var(--theme-cyan-bright) 84%, white 6%);
+        font-size: 0.64rem;
+        line-height: 1.04;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+    }
+
+    .pickAction em {
+        display: -webkit-box;
+        max-height: 2.14rem;
+        overflow: hidden;
+        color: color-mix(in srgb, var(--theme-text-muted) 86%, white);
+        font-size: 0.54rem;
+        line-height: 1.16;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+    }
+
+    .serviceRow {
+        min-height: 1.84rem;
+    }
+
+    .serviceButton {
+        min-height: 1.84rem;
+        padding: 0.18rem 0.22rem;
+    }
+
+    .serviceLabel {
+        color: color-mix(in srgb, var(--theme-text-muted) 86%, white);
+        font-size: 0.52rem;
+        line-height: 1;
+    }
+}
+
+@media (max-height: 520px) and (orientation: landscape) {
+    .panelRoot {
+        max-width: min(100%, 50rem);
+    }
+
+    .grid {
+        gap: 0.34rem;
+    }
+
+    .card {
+        min-height: 5.75rem;
+        max-height: 6.15rem;
+        padding: 0.48rem 0.54rem;
+    }
+
+    .rewardHeader strong {
+        max-height: 1.4rem;
+        font-size: 0.88rem;
+        line-height: 1.06;
+    }
+
+    .rewardHeader small {
+        max-width: 3.4rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .pickAction {
+        min-height: 2.36rem;
+        padding: 0.28rem 0.4rem;
+    }
+
+    .pickAction strong,
+    .pickAction em {
+        display: -webkit-box;
+        overflow: hidden;
+        -webkit-box-orient: vertical;
+    }
+
+    .pickAction strong {
+        max-height: 1.15rem;
+        font-size: 0.62rem;
+        -webkit-line-clamp: 1;
+    }
+
+    .pickAction em {
+        max-height: 1.54rem;
+        font-size: 0.52rem;
+        line-height: 1.12;
+        -webkit-line-clamp: 2;
+    }
+}
+
+/* UI-CLEANUP-114: make the compact picker feel intentional: strong action token, quiet detail copy. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .card {
+        grid-template-columns: minmax(0, 1fr) minmax(4.95rem, 5.45rem);
+        min-height: 5.35rem;
+        max-height: 5.45rem;
+        background:
+            linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 10%, transparent), transparent 42%),
+            linear-gradient(180deg, color-mix(in srgb, white 2%, transparent), transparent 48%),
+            transparent;
+    }
+
+    .pickAction {
+        gap: 0.14rem;
+        padding-left: 0.46rem;
+        border-left-color: color-mix(in srgb, var(--theme-cyan-bright) 34%, var(--theme-gold-bright) 8%);
+    }
+
+    .pickAction strong {
+        width: fit-content;
+        max-width: 100%;
+        padding: 0.12rem 0.26rem;
+        border: 1px solid color-mix(in srgb, var(--theme-cyan-bright) 28%, transparent);
+        border-radius: var(--ui-radius-xs);
+        background: color-mix(in srgb, var(--theme-cyan-bright) 10%, transparent);
+        font-size: 0.58rem;
+        text-transform: uppercase;
+    }
+
+    .pickAction em {
+        max-height: 1.88rem;
+        color: color-mix(in srgb, var(--theme-text-muted) 80%, white);
+        font-size: 0.52rem;
+        line-height: 1.18;
+        -webkit-line-clamp: 2;
+    }
+}
+
+@media (max-height: 520px) and (orientation: landscape) {
+    .pickAction strong {
+        width: fit-content;
+        max-width: 100%;
+        padding: 0.1rem 0.22rem;
+        border: 1px solid color-mix(in srgb, var(--theme-cyan-bright) 22%, transparent);
+        border-radius: var(--ui-radius-xs);
+        background: color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent);
+        text-transform: uppercase;
+    }
+
+    .pickAction em {
+        color: color-mix(in srgb, var(--theme-text-muted) 82%, white);
+    }
+}
+
+/* UI-CLEANUP-116: perk choices should read as active reward buttons, not empty receipt rows. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .panelRoot {
+        width: min(100%, 22.6rem);
+        gap: 0.12rem;
+        padding-bottom: 0;
+    }
+
+    .grid {
+        gap: 0;
+        overflow: hidden;
+        border-radius: var(--ui-radius-sm);
+        background:
+            linear-gradient(180deg, color-mix(in srgb, var(--theme-gold-bright) 6%, transparent), transparent 30%),
+            color-mix(in srgb, var(--theme-void) 86%, var(--theme-panel-solid) 14%);
+        box-shadow: 0 10px 28px color-mix(in srgb, var(--theme-shadow) 28%, transparent);
+    }
+
+    .card {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(5.55rem, 6rem);
+        align-items: center;
+        min-height: 5.25rem;
+        max-height: 5.55rem;
+        padding: 0.46rem 0.5rem 0.46rem 0.62rem;
+        border-left-width: 0.26rem;
+        border-radius: 0;
+        background:
+            linear-gradient(90deg, color-mix(in srgb, currentColor 7%, transparent), transparent 46%),
+            color-mix(in srgb, var(--theme-panel-solid) 18%, transparent);
+    }
+
+    .card + .card {
+        border-top: 1px solid color-mix(in srgb, var(--theme-text-muted) 12%, transparent);
+    }
+
+    .rewardHeader {
+        align-self: center;
+        gap: 0.22rem;
+    }
+
+    .rewardHeader strong {
+        max-height: 2.08rem;
+        font-size: 0.98rem;
+        line-height: 1.06;
+    }
+
+    .rewardHeader small {
+        display: none;
+    }
+
+    .pickAction {
+        align-self: stretch;
+        display: grid;
+        align-content: center;
+        justify-content: stretch;
+        gap: 0.2rem;
+        max-height: none;
+        padding: 0.42rem 0.48rem;
+        border: 1px solid color-mix(in srgb, var(--theme-cyan-bright) 24%, var(--theme-text-muted) 10%);
+        border-radius: var(--ui-radius-xs);
+        background:
+            linear-gradient(180deg, color-mix(in srgb, var(--theme-cyan-bright) 9%, transparent), transparent 62%),
+            color-mix(in srgb, var(--theme-void) 64%, transparent);
+    }
+
+    .pickAction strong {
+        width: auto;
+        max-height: 1.28rem;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        font-size: 0.68rem;
+        line-height: 1;
+    }
+
+    .pickAction em {
+        max-height: 2.4rem;
+        font-size: 0.61rem;
+        line-height: 1.2;
+        -webkit-line-clamp: 3;
+    }
+
+    .serviceRow {
+        min-height: 2.5rem;
+        margin-top: 0.02rem;
+        border-color: color-mix(in srgb, var(--theme-text-muted) 9%, transparent);
+        border-radius: 0 0 var(--ui-radius-sm) var(--ui-radius-sm);
+        background: color-mix(in srgb, var(--theme-void) 88%, transparent);
+    }
+
+    .serviceButton {
+        min-height: 2.5rem;
+    }
+
+    .serviceLabel {
+        font-size: 0.55rem;
+    }
+}
+
+/* UI-CLEANUP-119: reward picker is a decision list; remove nested receipt boxes and clamp copy. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .panelRoot {
+        width: min(100%, 23rem);
+        gap: 0.18rem;
+    }
+
+    .grid {
+        gap: 0;
+        border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 18%, var(--theme-text-muted) 10%);
+        border-radius: calc(var(--ui-radius-md) + 0.1rem);
+        background:
+            linear-gradient(180deg, color-mix(in srgb, var(--theme-gold-bright) 7%, transparent), transparent 32%),
+            color-mix(in srgb, var(--theme-void) 88%, var(--theme-panel-solid) 12%);
+        box-shadow:
+            0 14px 32px color-mix(in srgb, var(--theme-shadow) 34%, transparent),
+            inset 0 1px 0 color-mix(in srgb, white 5%, transparent);
+    }
+
+    .runeStrip,
+    .reason,
+    .choiceHeat,
+    .choiceCrescendo,
+    .pickPlan,
+    .engineRecipe,
+    .recommendation,
+    .payoffBurst,
+    .nextFloorCue,
+    .boardMomentCue,
+    .pickPulse,
+    .comboRoutes,
+    .buildFitSignals,
+    .buildPlanRows,
+    .impactChips,
+    .choiceMeta,
+    .choiceTags {
+        display: none !important;
+    }
+
+    .card {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0.22rem;
+        min-height: 5.25rem;
+        max-height: 5.45rem;
+        padding: 0.58rem 0.6rem 0.54rem 0.72rem;
+        overflow: hidden;
+        border: 0;
+        border-left: 0.22rem solid currentColor;
+        border-radius: 0;
+        background:
+            linear-gradient(90deg, color-mix(in srgb, currentColor 8%, transparent), transparent 52%),
+            color-mix(in srgb, var(--theme-panel-solid) 12%, transparent);
+        box-shadow: none;
+    }
+
+    .card + .card {
+        border-top: 1px solid color-mix(in srgb, var(--theme-text-muted) 12%, transparent);
+    }
+
+    .rewardHeader {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: center;
+        gap: 0.44rem;
+        min-width: 0;
+    }
+
+    .rewardHeader strong {
+        display: block;
+        max-height: 1.24rem;
+        overflow: hidden;
+        color: color-mix(in srgb, var(--theme-text) 96%, white);
+        font-size: 0.92rem;
+        line-height: 1.06;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .rewardHeader small {
+        display: inline-grid;
+        place-items: center;
+        min-width: 2.66rem;
+        max-width: 3.2rem;
+        min-height: 1.1rem;
+        padding: 0.08rem 0.26rem;
+        overflow: hidden;
+        border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 30%, transparent);
+        border-radius: var(--ui-radius-xs);
+        background: color-mix(in srgb, var(--theme-gold-bright) 10%, transparent);
+        color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
+        font-size: 0.5rem;
+        font-weight: 950;
+        line-height: 1;
+        text-overflow: ellipsis;
+        text-transform: uppercase;
+        white-space: nowrap;
+    }
+
+    .pickAction {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr);
+        grid-template-areas:
+            'chip effect'
+            'chip detail';
+        align-items: center;
+        gap: 0.04rem 0.4rem;
+        min-height: 0;
+        max-height: 2.62rem;
+        padding: 0;
+        overflow: hidden;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+    }
+
+    .pickAction small {
+        grid-area: chip;
+        display: inline-grid;
+        place-items: center;
+        min-width: 2.62rem;
+        min-height: 1.34rem;
+        padding: 0.1rem 0.3rem;
+        overflow: hidden;
+        border: 1px solid color-mix(in srgb, var(--theme-cyan-bright) 32%, transparent);
+        border-radius: var(--ui-radius-xs);
+        background: color-mix(in srgb, var(--theme-cyan-bright) 9%, transparent);
+        color: color-mix(in srgb, var(--theme-cyan-bright) 84%, white);
+        font-size: 0.5rem;
+        font-weight: 950;
+        line-height: 1;
+        text-overflow: ellipsis;
+        text-transform: uppercase;
+        white-space: nowrap;
+    }
+
+    .pickAction strong {
+        grid-area: effect;
+        display: block;
+        max-height: 0.78rem;
+        width: auto;
+        max-width: 100%;
+        padding: 0;
+        overflow: hidden;
+        border: 0;
+        background: transparent;
+        color: color-mix(in srgb, var(--theme-cyan-bright) 82%, white);
+        font-size: 0.62rem;
+        line-height: 1.08;
+        text-overflow: ellipsis;
+        text-transform: uppercase;
+        white-space: nowrap;
+    }
+
+    .pickAction em {
+        grid-area: detail;
+        display: -webkit-box;
+        max-height: 1.42rem;
+        overflow: hidden;
+        color: color-mix(in srgb, var(--theme-text-muted) 83%, white);
+        font-size: 0.56rem;
+        font-style: normal;
+        font-weight: 820;
+        line-height: 1.12;
+        overflow-wrap: anywhere;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        text-overflow: clip;
+        white-space: normal;
+    }
+
+    .serviceRow {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0;
+        min-height: 2.06rem;
+        margin-top: 0.14rem;
+        padding: 0;
+        overflow: hidden;
+        border-color: color-mix(in srgb, var(--theme-text-muted) 12%, transparent);
+        border-radius: var(--ui-radius-sm);
+        background: color-mix(in srgb, var(--theme-void) 86%, transparent);
+        box-shadow: none;
+    }
+
+    .serviceButton {
+        min-height: 2.06rem;
+        padding: 0.26rem 0.24rem;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        text-align: center;
+    }
+
+    .serviceButton + .serviceButton {
+        border-left: 1px solid color-mix(in srgb, var(--theme-text-muted) 10%, transparent);
+    }
+
+    .serviceLabel {
+        overflow: hidden;
+        color: color-mix(in srgb, var(--theme-text-muted) 86%, white);
+        font-size: 0.5rem;
+        line-height: 1.05;
+        text-overflow: ellipsis;
+        text-transform: uppercase;
+        white-space: nowrap;
+    }
+
+    .serviceDetail,
+    .serviceSignalRow,
+    .serviceCue {
+        display: none !important;
+    }
+}
+
+@media (max-height: 520px) and (orientation: landscape) {
+    .choiceHeat,
+    .choiceCrescendo,
+    .pickPlan,
+    .engineRecipe,
+    .recommendation,
+    .payoffBurst,
+    .nextFloorCue,
+    .boardMomentCue,
+    .pickPulse,
+    .comboRoutes,
+    .buildFitSignals,
+    .buildPlanRows,
+    .impactChips,
+    .choiceMeta,
+    .choiceTags {
+        display: none !important;
+    }
+
+    .grid {
+        gap: 0.3rem;
+    }
+
+    .card {
+        min-height: 5.88rem;
+        max-height: 6.15rem;
+        padding: 0.42rem 0.48rem;
+        overflow: hidden;
+    }
+
+    .rewardHeader {
+        grid-template-columns: minmax(0, 1fr) auto;
+    }
+
+    .rewardHeader strong {
+        max-height: 1.02rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .pickAction {
+        min-height: 1.92rem;
+        max-height: 2.02rem;
+        padding: 0.22rem 0.28rem;
+        overflow: hidden;
     }
 }

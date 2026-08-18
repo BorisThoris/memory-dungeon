@@ -339,6 +339,9 @@ describe('GameplayHudBar', () => {
         expect(
             screen.getByTestId('hud-recent-action-impact').querySelector('[data-hud-action-impact-cue="Reward cashout"]')
         ).toHaveAttribute('data-hud-action-impact-screen-cue', 'burst');
+        expect(
+            screen.getByTestId('hud-recent-action-impact').querySelector('[data-hud-action-impact-cue="Reward cashout"]')
+        ).toHaveAttribute('data-hud-action-impact-cue-id', 'cashout-crown');
         expect(screen.getByTestId('hud-recent-action').getAttribute('aria-label')).toContain(
             'Impact cue: Reward cashout.'
         );
@@ -356,6 +359,10 @@ describe('GameplayHudBar', () => {
         expect(screen.getByTestId('hud-recent-action-impact')).toHaveTextContent('Pickup cashout');
         expect(screen.getByTestId('hud-recent-action-impact')).toHaveAttribute('data-impact-cue', 'Pickup cashout');
         expect(screen.getByTestId('hud-recent-action-impact').querySelector('[data-hud-action-impact-cue="Pickup cashout"]')).toHaveTextContent('Pickup cashout');
+        expect(screen.getByTestId('hud-recent-action-impact').querySelector('[data-hud-action-impact-cue="Pickup cashout"]')).toHaveAttribute(
+            'data-hud-action-impact-cue-id',
+            'cashout-crown'
+        );
 
         rerender(
             <GameplayHudBar
@@ -373,6 +380,10 @@ describe('GameplayHudBar', () => {
             [...screen.getByTestId('hud-recent-action-impact').querySelectorAll('[data-action-feedback-detail="reward"]')]
                 .map((detail) => detail.textContent)
         ).toContain('Cashout armed');
+        expect(screen.getByTestId('hud-recent-action-impact').querySelector('[data-hud-action-impact-cue="Cashout armed"]')).toHaveAttribute(
+            'data-hud-action-impact-cue-id',
+            'prime-cross'
+        );
         expect(screen.getByTestId('hud-recent-action').getAttribute('aria-label')).toContain(
             'Impact cue: Cashout armed.'
         );
@@ -412,6 +423,10 @@ describe('GameplayHudBar', () => {
             'data-hud-action-impact-screen-cue',
             'burst'
         );
+        expect(screen.getByTestId('hud-recent-action-impact').querySelector('[data-hud-action-impact-cue="Trait surge"]')).toHaveAttribute(
+            'data-hud-action-impact-cue-id',
+            'surge-burst'
+        );
         expect(
             screen.getByTestId('hud-recent-action-impact').querySelector('[data-hud-action-impact-beat="1"]')
         ).toHaveAttribute('data-hud-action-impact-beat-focus', 'primary');
@@ -433,6 +448,10 @@ describe('GameplayHudBar', () => {
         expect(screen.getByTestId('hud-recent-action-impact')).toHaveAttribute('data-impact-cue', 'Payoff stack');
         expect(screen.getByTestId('hud-recent-action-impact')).toHaveAttribute('data-burst-tier', 'reward');
         expect(screen.getByTestId('hud-recent-action-impact').querySelector('[data-hud-action-impact-cue="Payoff stack"]')).toHaveTextContent('Payoff stack');
+        expect(screen.getByTestId('hud-recent-action-impact').querySelector('[data-hud-action-impact-cue="Payoff stack"]')).toHaveAttribute(
+            'data-hud-action-impact-cue-id',
+            'payoff-stack'
+        );
 
         rerender(
             <GameplayHudBar
@@ -465,6 +484,9 @@ describe('GameplayHudBar', () => {
             screen.getByTestId('hud-recent-action-impact').querySelector('[data-hud-action-impact-cue="Stack cashout"]')
         ).toHaveAttribute('data-hud-action-impact-screen-cue', 'burst');
         expect(
+            screen.getByTestId('hud-recent-action-impact').querySelector('[data-hud-action-impact-cue="Stack cashout"]')
+        ).toHaveAttribute('data-hud-action-impact-cue-id', 'payoff-stack');
+        expect(
             screen.getByTestId('hud-recent-action-impact').querySelectorAll('[data-hud-action-impact-beat]')
         ).toHaveLength(4);
         expect(
@@ -485,7 +507,7 @@ describe('GameplayHudBar', () => {
         expect(screen.getByTestId('hud-recent-action-impact').querySelector('[data-action-feedback-detail="chain"]')).toHaveTextContent('Chain x5');
         expect(screen.getByTestId('hud-recent-action-impact').querySelector('[data-action-feedback-detail="reward"]')).toHaveTextContent('Shard cashout');
         expect(screen.getByTestId('hud-recent-action-lane-map')).toHaveAccessibleName(
-            'Lane map. Cash: 2. Collect. Route: 1. Route next. Chain: 1. Keep streak.'
+            'Lane map. Cash. Cashout cue =+. 2 lanes. Collect. Route. Route cue oo. 1 lane. Route next. Chain. Stack cue **. 1 lane. Keep streak.'
         );
         const recentActionLaneMapSummary = screen.getByTestId('hud-recent-action-lane-map-summary');
         expect(recentActionLaneMapSummary).toHaveTextContent('Lanes');
@@ -493,7 +515,10 @@ describe('GameplayHudBar', () => {
         expect(recentActionLaneMapSummary).toHaveAttribute('data-hud-action-lane-summary-primary', 'cash');
         expect(recentActionLaneMapSummary).toHaveAttribute('data-hud-action-lane-summary-primary-action', 'Collect');
         expect(recentActionLaneMapSummary).toHaveAttribute('data-hud-action-lane-summary-primary-audio', 'hud-action-cash');
+        expect(recentActionLaneMapSummary).toHaveAttribute('data-hud-action-lane-summary-primary-cue-id', 'cashout-crown');
         expect(recentActionLaneMapSummary).toHaveAttribute('data-hud-action-lane-summary-primary-screen-cue', 'burst');
+        expect(recentActionLaneMapSummary).toHaveTextContent('=+');
+        expect(recentActionLaneMapSummary).toHaveTextContent('Cash Collect');
         expect(recentActionLaneMapSummary.querySelectorAll('[data-hud-action-lane-map-summary-beat]')).toHaveLength(4);
         expect(
             recentActionLaneMapSummary.querySelector('[data-hud-action-lane-map-summary-beat="1"]')
@@ -518,6 +543,10 @@ describe('GameplayHudBar', () => {
             'Collect'
         );
         expect(screen.getByTestId('hud-recent-action-lane-map')).toHaveAttribute(
+            'data-hud-action-primary-lane-cue-id',
+            'cashout-crown'
+        );
+        expect(screen.getByTestId('hud-recent-action-lane-map')).toHaveAttribute(
             'data-hud-action-primary-lane-audio',
             'hud-action-cash'
         );
@@ -527,12 +556,16 @@ describe('GameplayHudBar', () => {
             'burst'
         );
         expect(screen.getByTestId('hud-recent-action-primary-lane')).toHaveAccessibleName(
-            'Primary recent action lane. Cash: Collect. 4 beats.'
+            'Primary recent action lane. Cash. Cashout cue =+. Collect. 2 lanes. 4 beats.'
         );
         expect(screen.getByTestId('hud-recent-action-primary-lane')).toHaveAttribute('data-hud-action-primary-lane', 'cash');
         expect(screen.getByTestId('hud-recent-action-primary-lane')).toHaveAttribute(
             'data-hud-action-primary-lane-action',
             'Collect'
+        );
+        expect(screen.getByTestId('hud-recent-action-primary-lane')).toHaveAttribute(
+            'data-hud-action-primary-lane-cue-id',
+            'cashout-crown'
         );
         expect(screen.getByTestId('hud-recent-action-primary-lane')).toHaveAttribute(
             'data-hud-action-primary-lane-audio',
@@ -543,6 +576,7 @@ describe('GameplayHudBar', () => {
             'burst'
         );
         expect(screen.getByTestId('hud-recent-action-primary-lane')).toHaveTextContent('Next lane');
+        expect(screen.getByTestId('hud-recent-action-primary-lane')).toHaveTextContent('=+');
         expect(screen.getByTestId('hud-recent-action-primary-lane').querySelectorAll('[data-hud-action-primary-lane-beat]')).toHaveLength(4);
         expect(
             screen.getByTestId('hud-recent-action-primary-lane').querySelector('[data-hud-action-primary-lane-beat="1"]')
@@ -553,6 +587,9 @@ describe('GameplayHudBar', () => {
         expect(
             screen.getByTestId('hud-recent-action-lane-map').querySelector('[data-hud-action-lane="cash"]')
         ).toHaveAttribute('data-hud-action-lane-action', 'Collect');
+        expect(
+            screen.getByTestId('hud-recent-action-lane-map').querySelector('[data-hud-action-lane="cash"]')
+        ).toHaveAttribute('data-hud-action-lane-cue-id', 'cashout-crown');
         expect(
             screen.getByTestId('hud-recent-action-lane-map').querySelector('[data-hud-action-lane="cash"]')
         ).toHaveAttribute('data-hud-action-lane-focus', 'primary');
@@ -576,6 +613,9 @@ describe('GameplayHudBar', () => {
         ).toHaveTextContent('Route next');
         expect(
             screen.getByTestId('hud-recent-action-lane-map').querySelector('[data-hud-action-lane="route"]')
+        ).toHaveAttribute('data-hud-action-lane-cue-id', 'linked-route');
+        expect(
+            screen.getByTestId('hud-recent-action-lane-map').querySelector('[data-hud-action-lane="route"]')
         ).toHaveAttribute('data-hud-action-lane-action', 'Route next');
         expect(
             screen.getByTestId('hud-recent-action-lane-map').querySelector('[data-hud-action-lane="route"]')
@@ -586,6 +626,9 @@ describe('GameplayHudBar', () => {
         expect(
             screen.getByTestId('hud-recent-action-lane-map').querySelector('[data-hud-action-lane="chain"]')
         ).toHaveAttribute('data-hud-action-lane-action', 'Keep streak');
+        expect(
+            screen.getByTestId('hud-recent-action-lane-map').querySelector('[data-hud-action-lane="chain"]')
+        ).toHaveAttribute('data-hud-action-lane-cue-id', 'payoff-stack');
         expect(screen.getByTestId('hud-recent-action-stack-summary')).toHaveAttribute(
             'data-hud-action-stack-summary',
             'combo'
@@ -630,7 +673,7 @@ describe('GameplayHudBar', () => {
         );
         expect(screen.getByTestId('hud-recent-action').getAttribute('aria-label')).toContain('Stack: 4x combo.');
         expect(screen.getByTestId('hud-recent-action').getAttribute('aria-label')).toContain(
-            'Lane map. Cash: 2. Collect. Route: 1. Route next. Chain: 1. Keep streak.'
+            'Lane map. Cash. Cashout cue =+. 2 lanes. Collect. Route. Route cue oo. 1 lane. Route next. Chain. Stack cue **. 1 lane. Keep streak.'
         );
         expect(screen.getByTestId('hud-recent-action').getAttribute('aria-label')).toContain(
             'Stack cashout: Cash now. Chain x5 + Shard cashout + Pickup + Route paid. First: cash out safest payoff.'
@@ -699,6 +742,9 @@ describe('GameplayHudBar', () => {
         expect(
             screen.getByTestId('hud-recent-action-impact').querySelector('[data-hud-action-impact-cue="Prime cashout"]')
         ).toHaveTextContent('Prime cashout');
+        expect(
+            screen.getByTestId('hud-recent-action-impact').querySelector('[data-hud-action-impact-cue="Prime cashout"]')
+        ).toHaveAttribute('data-hud-action-impact-cue-id', 'prime-cross');
         expect(screen.getByTestId('hud-recent-action').getAttribute('aria-label')).toContain(
             'Impact cue: Prime cashout.'
         );
@@ -721,6 +767,9 @@ describe('GameplayHudBar', () => {
         expect(
             screen.getByTestId('hud-recent-action-impact').querySelector('[data-hud-action-impact-cue="Recovery lane"]')
         ).toHaveAttribute('data-hud-action-impact-screen-cue', 'recover');
+        expect(
+            screen.getByTestId('hud-recent-action-impact').querySelector('[data-hud-action-impact-cue="Recovery lane"]')
+        ).toHaveAttribute('data-hud-action-impact-cue-id', 'recover-lane');
         expect(screen.getByTestId('hud-recent-action-impact').querySelector('[data-hud-action-stack="risk"]')).toHaveTextContent('4x risk');
         expect(screen.getByTestId('hud-recent-action-stack-summary')).toHaveTextContent(
             'Risk stack: Recover Chain x6 + Chain break + Lost reward + Next chase'
@@ -776,6 +825,9 @@ describe('GameplayHudBar', () => {
         expect(
             screen.getByTestId('hud-recent-action-impact').querySelector('[data-hud-action-impact-cue="Keep streak"]')
         ).toHaveAttribute('data-hud-action-impact-screen-cue', 'guard');
+        expect(
+            screen.getByTestId('hud-recent-action-impact').querySelector('[data-hud-action-impact-cue="Keep streak"]')
+        ).toHaveAttribute('data-hud-action-impact-cue-id', 'protect-lane');
         expect(screen.getByTestId('hud-recent-action-lane-map')).toHaveAttribute('data-hud-action-primary-lane', 'chain');
         expect(screen.getByTestId('hud-recent-action-primary-lane')).toHaveAttribute(
             'data-hud-action-primary-lane-screen-cue',
@@ -926,7 +978,7 @@ describe('GameplayHudBar', () => {
             'reward:Prime cashout:0/2>guard:Prime cashout:2/4>heal:Prime cashout:6/8'
         );
         expect(screen.getByTestId('hud-chain-reward-ladder')).toHaveAccessibleName(
-            'Chain reward ladder. Prime: Prime cashout: x8 +1 shard. 0/2. 2 matches left. Prime: Prime cashout: x8 +1 guard. 2/4. 2 matches left. Prime: Prime cashout: x8 +1 life. 6/8. 2 matches left.'
+            'Chain reward ladder. Prime: Prime cue x|. Prime cashout: x8 +1 shard. 0/2. 2 matches left. Prime: Protect cue []. Prime cashout: x8 +1 guard. 2/4. 2 matches left. Prime: Heal cue +!. Prime cashout: x8 +1 life. 6/8. 2 matches left.'
         );
         expect(screen.getByTestId('hud-chain-reward-ladder')).toHaveTextContent('Prime cashout');
         expect(screen.getByTestId('hud-chain-reward-ladder')).toHaveTextContent('0/2');
@@ -940,6 +992,9 @@ describe('GameplayHudBar', () => {
         ).toHaveAttribute('data-chain-reward-ladder-action', 'Prime cashout');
         expect(
             screen.getByTestId('hud-chain-reward-ladder').querySelector('[data-chain-reward-ladder-tone="reward"]')
+        ).toHaveAttribute('data-chain-reward-ladder-cue-id', 'prime-cross');
+        expect(
+            screen.getByTestId('hud-chain-reward-ladder').querySelector('[data-chain-reward-ladder-tone="reward"]')
         ).toHaveAttribute('data-chain-reward-ladder-audio', 'chain-reward-stack');
         expect(
             screen.getByTestId('hud-chain-reward-ladder').querySelector('[data-chain-reward-ladder-tone="reward"]')
@@ -950,6 +1005,14 @@ describe('GameplayHudBar', () => {
         expect(
             screen.getByTestId('hud-chain-reward-ladder').querySelector('[data-chain-reward-ladder-tone="reward"]')
         ).toHaveAttribute('data-chain-reward-ladder-beats', '3');
+        expect(screen.getByTestId('hud-chain-reward-lane-map')).toHaveAttribute(
+            'data-chain-reward-primary-lane-cue-id',
+            'prime-cross'
+        );
+        expect(
+            screen.getByTestId('hud-chain-reward-lane-map').querySelector('[data-chain-reward-lane="reward"]')
+        ).toHaveAttribute('data-chain-reward-lane-cue-id', 'prime-cross');
+        expect(screen.getByTestId('hud-chain-reward-lane-map')).toHaveTextContent('x|');
         expect(
             screen
                 .getByTestId('hud-chain-reward-ladder')
@@ -960,6 +1023,7 @@ describe('GameplayHudBar', () => {
         expect(screen.getByTestId('hud-chain-reward-forecast')).toHaveTextContent('Prime cashout');
         expect(screen.getByTestId('hud-chain-reward-forecast')).toHaveTextContent('Triple prime');
         expect(screen.getByTestId('hud-chain-reward-forecast')).toHaveTextContent('3x stack');
+        expect(screen.getByTestId('hud-chain-reward-forecast')).toHaveTextContent('x|');
         expect(
             screen.getByTestId('hud-chain-reward-forecast').querySelector('[data-chain-reward-tone="reward"]')
         ).toHaveAttribute('data-chain-reward-stack-size', '3');
@@ -975,6 +1039,10 @@ describe('GameplayHudBar', () => {
         expect(screen.getByTestId('hud-chain-reward-forecast').querySelector('[data-chain-reward-tone="reward"]')).toHaveAttribute(
             'data-chain-reward-arcade-cue',
             'Triple prime'
+        );
+        expect(screen.getByTestId('hud-chain-reward-forecast').querySelector('[data-chain-reward-tone="reward"]')).toHaveAttribute(
+            'data-chain-reward-cue-id',
+            'prime-cross'
         );
         expect(screen.getByTestId('hud-chain-reward-forecast').querySelector('[data-chain-reward-tone="reward"]')).toHaveAttribute(
             'data-chain-reward-stack-size',
@@ -995,7 +1063,7 @@ describe('GameplayHudBar', () => {
         expect(screen.queryByTestId('hud-chain-reward-hot')).toBeNull();
         expect(screen.queryByTestId('hud-chain-stacked-payoff')).toBeNull();
         expect(screen.getByTestId('hud-chain-reward-forecast')).toHaveAccessibleName(
-            /Chain reward forecast.*Prime: Soon: Prime cashout: Triple prime: x8 \+1 shard: 3x stack: 2 matches/i
+            /Chain reward forecast.*Prime: Soon: Prime cue x\|: Prime cashout: Triple prime: x8 \+1 shard: 3x stack: 2 matches/i
         );
         expect(screen.getByTestId('hud-combo-shards')).toHaveTextContent('x8 +1 shard');
         expect(screen.getByTestId('hud-combo-shards')).toHaveTextContent('3 shards = +1 life');
@@ -1280,6 +1348,9 @@ describe('GameplayHudBar', () => {
         expect(screen.getByTestId('hud-chain-reward-pips').querySelectorAll('[data-pip-filled="true"]')).toHaveLength(1);
         expect(screen.getByTestId('hud-chain-reward-forecast')).toHaveTextContent('x4 +1 guard');
         expect(screen.getByTestId('hud-chain-reward-forecast')).toHaveTextContent('x8 +1 life');
+        expect(screen.getByTestId('hud-chain-reward-forecast')).toHaveTextContent('=+');
+        expect(screen.getByTestId('hud-chain-reward-forecast')).toHaveTextContent('[]');
+        expect(screen.getByTestId('hud-chain-reward-forecast')).toHaveTextContent('+!');
         expect(screen.getByTestId('hud-chain-reward-ladder')).toHaveAttribute(
             'data-chain-reward-ladder',
             'reward:1/2>guard:3/4>heal:3/8'
@@ -1289,8 +1360,11 @@ describe('GameplayHudBar', () => {
             'reward:Cash next:1/2>guard:Cash next:3/4>heal:Hold streak:3/8'
         );
         expect(screen.getByTestId('hud-chain-reward-ladder')).toHaveAccessibleName(
-            'Chain reward ladder. Hit now: Cash next: x4 +1 shard. 1/2. 1 match left. Hit now: Cash next: x4 +1 guard. 3/4. 1 match left. Hold streak: x8 +1 life. 3/8. 5 matches left.'
+            'Chain reward ladder. Hit now: Cashout cue =+. Cash next: x4 +1 shard. 1/2. 1 match left. Hit now: Protect cue []. Cash next: x4 +1 guard. 3/4. 1 match left. Hold streak: Heal cue +!. x8 +1 life. 3/8. 5 matches left.'
         );
+        expect(screen.getByTestId('hud-chain-reward-ladder')).toHaveTextContent('=+');
+        expect(screen.getByTestId('hud-chain-reward-ladder')).toHaveTextContent('[]');
+        expect(screen.getByTestId('hud-chain-reward-ladder')).toHaveTextContent('+!');
         expect(screen.getByTestId('hud-chain-reward-ladder')).toHaveTextContent('Cash next');
         expect(screen.getByTestId('hud-chain-reward-ladder')).toHaveTextContent('1/2');
         expect(screen.getByTestId('hud-chain-reward-ladder')).toHaveTextContent('3/4');
@@ -1299,11 +1373,17 @@ describe('GameplayHudBar', () => {
             screen.getByTestId('hud-chain-reward-ladder').querySelector('[data-chain-reward-ladder-tone="reward"]')
         ).toHaveAttribute('data-chain-reward-ladder-urgency', 'next');
         expect(
+            screen.getByTestId('hud-chain-reward-ladder').querySelector('[data-chain-reward-ladder-tone="reward"]')
+        ).toHaveAttribute('data-chain-reward-ladder-cue-id', 'cashout-crown');
+        expect(
             screen.getByTestId('hud-chain-reward-ladder').querySelector('[data-chain-reward-ladder-tone="guard"]')
         ).toHaveAttribute('data-chain-reward-ladder-total', '4');
         expect(
             screen.getByTestId('hud-chain-reward-ladder').querySelector('[data-chain-reward-ladder-tone="guard"]')
         ).toHaveAttribute('data-chain-reward-ladder-action', 'Cash next');
+        expect(
+            screen.getByTestId('hud-chain-reward-ladder').querySelector('[data-chain-reward-ladder-tone="guard"]')
+        ).toHaveAttribute('data-chain-reward-ladder-cue-id', 'protect-lane');
         expect(screen.getByTestId('hud-chain-reward-forecast')).toHaveTextContent('Hold streak');
         expect(screen.getByTestId('hud-chain-reward-forecast')).toHaveTextContent('Hold streak');
         expect(screen.getByTestId('hud-chain-reward-forecast')).toHaveTextContent('Double cashout');
@@ -1340,6 +1420,10 @@ describe('GameplayHudBar', () => {
             'Double cashout'
         );
         expect(screen.getByTestId('hud-chain-reward-lane-map')).toHaveAttribute(
+            'data-chain-reward-primary-lane-cue-id',
+            'cashout-crown'
+        );
+        expect(screen.getByTestId('hud-chain-reward-lane-map')).toHaveAttribute(
             'data-chain-reward-primary-lane-screen-cue',
             'burst'
         );
@@ -1363,13 +1447,16 @@ describe('GameplayHudBar', () => {
         expect(screen.getByTestId('hud-chain-reward-lane-map')).toHaveTextContent('Shard');
         expect(screen.getByTestId('hud-chain-reward-lane-map')).toHaveTextContent('Guard');
         expect(screen.getByTestId('hud-chain-reward-lane-map')).toHaveTextContent('Heal');
+        expect(screen.getByTestId('hud-chain-reward-lane-map')).toHaveTextContent('=+');
+        expect(screen.getByTestId('hud-chain-reward-lane-map')).toHaveTextContent('[]');
+        expect(screen.getByTestId('hud-chain-reward-lane-map')).toHaveTextContent('+!');
         expect(screen.getByTestId('hud-chain-reward-lane-map')).toHaveTextContent('Cash next');
         expect(screen.getByTestId('hud-chain-reward-lane-map')).toHaveTextContent('Hold streak');
         expect(screen.getByTestId('hud-chain-reward-lane-map')).toHaveAccessibleName(
-            'Chain reward lane map. Shard Cashout x1. Cash next. Double cashout. Guard Cashout x1. Cash next. Double cashout. Heal Heal x1. Hold streak. Combo chase.'
+            'Chain reward lane map. Shard Cashout cue =+. Cashout x1. Cash next. Double cashout. Guard Protect cue []. Cashout x1. Cash next. Double cashout. Heal Heal cue +!. Heal x1. Hold streak. Combo chase.'
         );
         expect(screen.getByTestId('hud-chain-reward-primary-lane')).toHaveAccessibleName(
-            'Primary chain reward lane. Shard: Cash next. Double cashout. 4 beats.'
+            'Primary chain reward lane. Shard. Cashout cue =+. Cashout. Cash next. Double cashout. 4 beats.'
         );
         expect(screen.getByTestId('hud-chain-reward-primary-lane')).toHaveAttribute('data-chain-reward-primary-lane', 'reward');
         expect(screen.getByTestId('hud-chain-reward-primary-lane')).toHaveAttribute(
@@ -1384,11 +1471,18 @@ describe('GameplayHudBar', () => {
             'data-chain-reward-primary-lane-screen-cue',
             'burst'
         );
+        expect(screen.getByTestId('hud-chain-reward-primary-lane')).toHaveAttribute(
+            'data-chain-reward-primary-lane-cue-id',
+            'cashout-crown'
+        );
         expect(screen.getByTestId('hud-chain-reward-primary-lane')).toHaveTextContent('Cash lane');
         expect(screen.getByTestId('hud-chain-reward-primary-lane').querySelectorAll('[data-chain-reward-primary-lane-beat]')).toHaveLength(4);
         expect(
             screen.getByTestId('hud-chain-reward-lane-map').querySelector('[data-chain-reward-lane="reward"]')
         ).toHaveAttribute('data-chain-reward-lane-action', 'Cash next');
+        expect(
+            screen.getByTestId('hud-chain-reward-lane-map').querySelector('[data-chain-reward-lane="reward"]')
+        ).toHaveAttribute('data-chain-reward-lane-cue-id', 'cashout-crown');
         expect(
             screen.getByTestId('hud-chain-reward-lane-map').querySelector('[data-chain-reward-lane="reward"]')
         ).toHaveAttribute('data-chain-reward-lane-beats', '4');
@@ -1402,10 +1496,16 @@ describe('GameplayHudBar', () => {
             screen.getByTestId('hud-chain-reward-lane-map').querySelector('[data-chain-reward-lane="heal"]')
         ).toHaveAttribute('data-chain-reward-lane-action', 'Hold streak');
         expect(
+            screen.getByTestId('hud-chain-reward-lane-map').querySelector('[data-chain-reward-lane="guard"]')
+        ).toHaveAttribute('data-chain-reward-lane-cue-id', 'protect-lane');
+        expect(
+            screen.getByTestId('hud-chain-reward-lane-map').querySelector('[data-chain-reward-lane="heal"]')
+        ).toHaveAttribute('data-chain-reward-lane-cue-id', 'heal-lane');
+        expect(
             screen.getByTestId('hud-chain-reward-lane-map').querySelector('[data-chain-reward-lane="heal"]')
         ).toHaveAttribute('data-chain-reward-lane-beats', '3');
         expect(screen.getByTestId('hud-chain-reward-forecast')).toHaveAccessibleName(
-            /Chain reward forecast.*Hit now: Next: Cash next: Double cashout: x4 \+1 shard: 2x stack: 1 match.*Hit now: Next: Cash next: Double cashout: x4 \+1 guard: 2x stack: 1 match.*Hold streak: Later: Hold streak: Combo chase: x8 \+1 life: 5 matches/i
+            /Chain reward forecast.*Hit now: Next: Cashout cue =\+: Cash next: Double cashout: x4 \+1 shard: 2x stack: 1 match.*Hit now: Next: Protect cue \[\]: Cash next: Double cashout: x4 \+1 guard: 2x stack: 1 match.*Hold streak: Later: Heal cue \+!: Hold streak: Combo chase: x8 \+1 life: 5 matches/i
         );
         expect(screen.getByTestId('hud-chain-reward-forecast').querySelector('[data-chain-reward-tone="reward"]')).toHaveTextContent('Next');
         expect(screen.getByTestId('hud-chain-reward-forecast').querySelector('[data-chain-reward-tone="reward"]')).toHaveTextContent('Hit now');
@@ -1420,12 +1520,20 @@ describe('GameplayHudBar', () => {
             'data-chain-reward-arcade-cue',
             'Double cashout'
         );
+        expect(screen.getByTestId('hud-chain-reward-forecast').querySelector('[data-chain-reward-tone="reward"]')).toHaveAttribute(
+            'data-chain-reward-cue-id',
+            'cashout-crown'
+        );
         expect(screen.getByTestId('hud-chain-reward-forecast').querySelector('[data-chain-reward-tone="reward"]')).toHaveAttribute('data-chain-reward-distance', '1');
         expect(screen.getByTestId('hud-chain-reward-forecast').querySelector('[data-chain-reward-tone="guard"]')).toHaveTextContent('Next');
         expect(screen.getByTestId('hud-chain-reward-forecast').querySelector('[data-chain-reward-tone="guard"]')).toHaveTextContent('Hit now');
         expect(screen.getByTestId('hud-chain-reward-forecast').querySelector('[data-chain-reward-tone="guard"]')).toHaveTextContent('x4 +1 guard');
         expect(screen.getByTestId('hud-chain-reward-forecast').querySelector('[data-chain-reward-tone="guard"]')).toHaveTextContent('1 match');
         expect(screen.getByTestId('hud-chain-reward-forecast').querySelector('[data-chain-reward-tone="guard"]')).toHaveAttribute('data-chain-reward-urgency', 'next');
+        expect(screen.getByTestId('hud-chain-reward-forecast').querySelector('[data-chain-reward-tone="guard"]')).toHaveAttribute(
+            'data-chain-reward-cue-id',
+            'protect-lane'
+        );
         expect(screen.getByTestId('hud-chain-reward-forecast').querySelector('[data-chain-reward-tone="heal"]')).toHaveTextContent('x8 +1 life');
         expect(screen.getByTestId('hud-chain-reward-forecast').querySelector('[data-chain-reward-tone="heal"]')).toHaveTextContent('Hold streak');
         expect(screen.getByTestId('hud-chain-reward-forecast').querySelector('[data-chain-reward-tone="heal"]')).toHaveTextContent('5 matches');
@@ -1433,6 +1541,10 @@ describe('GameplayHudBar', () => {
         expect(screen.getByTestId('hud-chain-reward-forecast').querySelector('[data-chain-reward-tone="heal"]')).toHaveAttribute(
             'data-chain-reward-lane-action',
             'Hold streak'
+        );
+        expect(screen.getByTestId('hud-chain-reward-forecast').querySelector('[data-chain-reward-tone="heal"]')).toHaveAttribute(
+            'data-chain-reward-cue-id',
+            'heal-lane'
         );
         expect(screen.getByTestId('hud-chain-reward-lead')).toHaveTextContent('Next');
         expect(screen.getByTestId('hud-chain-reward-lead')).toHaveTextContent('Hit now');
@@ -1829,7 +1941,7 @@ describe('GameplayHudBar', () => {
         expect(perkStrip).toHaveTextContent('Prime spent');
         expect(perkStrip).toHaveTextContent('Free route link');
         expect(perkStrip).toHaveTextContent('First prime move');
-        expect(perkStrip).toHaveTextContent('Use Swap or row shuffle to connect trait routes.');
+        expect(perkStrip).toHaveTextContent('Use Swap or row shuffle to link traits.');
         expect(perkStrip).toHaveTextContent('Chain reward');
         expect(perkStrip).toHaveTextContent('Trait cash');
         expect(perkStrip).toHaveTextContent('Trait cashout armed');
@@ -1876,7 +1988,7 @@ describe('GameplayHudBar', () => {
             rewardPerkLaneMapSummary.querySelector('[data-reward-perk-lane-map-summary-beat="1"]')
         ).toHaveAttribute('data-reward-perk-lane-map-summary-beat-screen-cue', 'recover');
         expect(screen.getByTestId('hud-reward-perk-lane-map')).toHaveAccessibleName(
-            'Reward perk lane map. Route prime Prime cue x|. Route x1. Re-prime perk. Use Swap or row shuffle to connect trait routes. Chain reward Perk cue +!. Cashout x1. Cash perk. Keep the clean chain alive; cash a trait match at x3+ for a tool.'
+            'Reward perk lane map. Route prime Prime cue x|. Route x1. Re-prime perk. Use Swap or row shuffle to link traits. Chain reward Perk cue +!. Cashout x1. Cash perk. Keep the clean chain alive; cash a trait match at x3+ for a tool.'
         );
         expect(screen.getByTestId('hud-reward-perk-lane-map')).toHaveTextContent('x|');
         expect(screen.getByTestId('hud-reward-perk-lane-map')).toHaveTextContent('+!');

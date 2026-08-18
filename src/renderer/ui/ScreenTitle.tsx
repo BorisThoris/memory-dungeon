@@ -1,4 +1,5 @@
 import { createElement, type HTMLAttributes, type ReactNode } from 'react';
+import { cx } from './classNames';
 import styles from './ScreenTitle.module.css';
 
 /**
@@ -45,7 +46,7 @@ const ScreenTitle = ({ children, role, as, className = '', ...rest }: ScreenTitl
     return createElement(
         Tag,
         {
-            className: `${styles.root} ${roleClass[role]} ${className}`.trim(),
+            className: cx(styles.root, roleClass[role], className),
             ...rest
         },
         children

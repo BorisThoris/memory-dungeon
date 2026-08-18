@@ -163,7 +163,8 @@ describe('RelicDraftOfferPanel', () => {
         expect(cards[0]).toHaveTextContent('More row/swap charges');
         expect(cards[0]).toHaveTextContent('Use Drift matches');
         expect(cards[0]).toHaveTextContent('Choice heat');
-        expect(cards[0]).toHaveTextContent('Pick action');
+        expect(cards[0]).not.toHaveTextContent('Pick action');
+        expect(cards[0]).toHaveTextContent('Lock');
         expect(cards[0]).toHaveTextContent('Stack x2');
         expect(cards[0]).toHaveTextContent('Feed The Saboteur');
         expect(cards[0]).toHaveTextContent('Hot stack');
@@ -186,6 +187,10 @@ describe('RelicDraftOfferPanel', () => {
         expect(cards[0]).toHaveAttribute('data-relic-choice-crescendo-tier', 'stack');
         expect(cards[0]).toHaveAttribute('data-relic-pick-action', 'Stack x2');
         expect(cards[0]).toHaveAttribute('data-relic-pick-action-tone', 'stack');
+        expect(cards[0]?.querySelector('[data-testid="relic-pick-action"]')).toHaveAttribute(
+            'data-visible-pick-action-label',
+            'Lock'
+        );
         expect(cards[0]).toHaveAttribute('data-relic-pick-plan-first', 'First: Stack x2');
         expect(cards[0]).toHaveAttribute('data-relic-pick-plan-then', 'Then: disarm x2 lane');
         expect(cards[0]).toHaveAttribute('data-relic-pick-plan-keep', 'Keep: disarm x2 lane');
@@ -243,6 +248,10 @@ describe('RelicDraftOfferPanel', () => {
         expect(cards[1]).toHaveAttribute('data-relic-choice-crescendo-tier', 'prime');
         expect(cards[1]).toHaveAttribute('data-relic-pick-action', 'Open route');
         expect(cards[1]).toHaveAttribute('data-relic-pick-action-tone', 'route');
+        expect(cards[1]?.querySelector('[data-testid="relic-pick-action"]')).toHaveAttribute(
+            'data-visible-pick-action-label',
+            'Take'
+        );
         expect(cards[1]).toHaveAttribute('data-relic-pick-plan-first', 'First: Open route');
         expect(cards[1]).toHaveAttribute(
             'data-relic-pick-plan-then',
@@ -278,6 +287,10 @@ describe('RelicDraftOfferPanel', () => {
         expect(cards[2]).toHaveAttribute('data-relic-choice-crescendo-tier', 'cashout');
         expect(cards[2]).toHaveAttribute('data-relic-pick-action', 'Keep chain');
         expect(cards[2]).toHaveAttribute('data-relic-pick-action-tone', 'chain');
+        expect(cards[2]?.querySelector('[data-testid="relic-pick-action"]')).toHaveAttribute(
+            'data-visible-pick-action-label',
+            'Lock'
+        );
         expect(cards[2]).toHaveAttribute('data-relic-pick-plan-first', 'First: Keep chain');
         expect(cards[2]).toHaveAttribute(
             'data-relic-pick-plan-then',

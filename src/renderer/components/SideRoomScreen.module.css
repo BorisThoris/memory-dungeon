@@ -15,11 +15,493 @@
     color: var(--theme-text);
 }
 
+/* UI-CLEANUP-010: final phone choice sheet pass. The reward chooser should read as
+   title -> choices -> compact commands, not nested telemetry panels. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .overlay {
+        align-items: center;
+        padding:
+            max(0.62rem, env(safe-area-inset-top, 0px))
+            max(0.56rem, env(safe-area-inset-right, 0px))
+            max(0.56rem, env(safe-area-inset-bottom, 0px))
+            max(0.56rem, env(safe-area-inset-left, 0px));
+    }
+
+    .shell {
+        width: min(100%, 24rem);
+        max-height: calc(100dvh - 1.2rem);
+        gap: 0.42rem;
+        padding: 0.58rem;
+        border-radius: var(--ui-radius-md);
+        background:
+            linear-gradient(180deg, color-mix(in srgb, var(--theme-gold-bright) 4%, transparent), transparent 18%),
+            color-mix(in srgb, var(--theme-panel-solid) 92%, var(--theme-void) 8%);
+    }
+
+    .scrollBody {
+        overflow: hidden;
+    }
+
+    .header {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0.28rem;
+        min-height: 0;
+    }
+
+    .eyebrow,
+    .header p,
+    .payoffEngineStrip,
+    .rewardFeedbackList,
+    .rewardBurstStrip,
+    .boardMomentCue,
+    .primaryActionSignals,
+    .choiceLaneMap,
+    .choiceBeatCue,
+    .choiceBeatPips,
+    .choiceSupportDetails,
+    .choiceSupportRail,
+    .traitBuildTags,
+    .choiceRow p,
+    .choiceRow .traitBuildReason {
+        display: none !important;
+    }
+
+    .header h2 {
+        overflow: hidden;
+        margin: 0;
+        color: color-mix(in srgb, var(--theme-rune) 96%, white);
+        font-size: clamp(1rem, 5.2vw, 1.22rem);
+        line-height: 1.06;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .rewardPanel,
+    .rewardPanel[data-has-choices='true'] {
+        gap: 0;
+        margin: 0;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+    }
+
+    .choiceList {
+        gap: 0.28rem;
+        max-height: min(48dvh, 25rem);
+        margin: 0;
+        padding: 0.02rem 0.02rem 0.06rem;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        scrollbar-width: thin;
+    }
+
+    .choiceRow {
+        position: relative;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 0.12rem 0.48rem;
+        min-height: 3.15rem;
+        padding: 0.42rem 0.5rem;
+        border: 1px solid color-mix(in srgb, var(--theme-text-muted) 16%, transparent);
+        border-left: 3px solid color-mix(in srgb, var(--theme-cyan-bright) 48%, transparent);
+        border-radius: var(--ui-radius-sm);
+        background:
+            linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 5%, transparent), transparent 42%),
+            color-mix(in srgb, var(--theme-surface-control) 72%, transparent);
+        box-shadow: none;
+    }
+
+    .choiceRow[data-choice-primary='true'] {
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 34%, transparent);
+        border-left-color: color-mix(in srgb, var(--theme-gold-bright) 74%, white 6%);
+        background:
+            linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 8%, transparent), transparent 46%),
+            color-mix(in srgb, var(--theme-surface-control) 78%, transparent);
+        box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-gold-bright) 9%, transparent);
+    }
+
+    .choiceRow > strong {
+        grid-column: 1 / -1;
+        overflow: hidden;
+        font-size: 0.84rem;
+        line-height: 1.05;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .choiceCueGrid {
+        display: contents;
+    }
+
+    .choiceHeatCue,
+    .choicePayoffStack,
+    .choiceImpactBurst {
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+        animation: none;
+    }
+
+    .choiceHeatCue {
+        grid-column: 1;
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr);
+        align-items: center;
+        gap: 0.24rem;
+        min-width: 0;
+        padding: 0;
+    }
+
+    .choiceHeatCue small,
+    .choicePayoffStack small {
+        display: inline;
+        color: color-mix(in srgb, var(--theme-gold-bright) 78%, white);
+        font-size: 0.54rem;
+        font-weight: 950;
+        line-height: 1;
+        text-transform: uppercase;
+        white-space: nowrap;
+    }
+
+    .choiceHeatCue strong {
+        overflow: hidden;
+        color: color-mix(in srgb, var(--theme-text) 94%, white);
+        font-size: 0.66rem;
+        line-height: 1.08;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .choiceHeatCue em,
+    .choicePayoffSequence,
+    .choicePayoffStack b {
+        display: none !important;
+    }
+
+    .choicePayoffStack {
+        grid-column: 1;
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr);
+        align-items: center;
+        gap: 0.24rem;
+        min-height: 0;
+        max-width: 100%;
+        padding: 0;
+    }
+
+    .choicePayoffStack strong,
+    .choicePayoffStack em {
+        overflow: hidden;
+        color: color-mix(in srgb, var(--theme-text-muted) 92%, white);
+        font-size: 0.58rem;
+        line-height: 1.08;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .choiceImpactBurst {
+        grid-column: 2;
+        grid-row: 2 / 4;
+        align-self: center;
+        justify-self: end;
+        max-width: 6.25rem;
+        min-height: 0;
+        padding: 0.14rem 0.36rem;
+        border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 30%, transparent);
+        border-radius: 999px;
+        background: color-mix(in srgb, var(--theme-gold-bright) 8%, transparent);
+    }
+
+    .choiceImpactBurst small {
+        display: none;
+    }
+
+    .choiceImpactBurst strong {
+        display: block;
+        overflow: hidden;
+        max-width: 100%;
+        color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
+        font-size: 0.56rem;
+        line-height: 1;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .actions {
+        margin: 0;
+        padding: 0;
+        border-top: 1px solid color-mix(in srgb, var(--theme-gold-bright) 12%, transparent);
+    }
+
+    .actionDock {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.16rem;
+        padding: 0.28rem 0 0;
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+    }
+
+    .actionDock [data-action-group='primary'],
+    .actionDock [data-action-group='secondary'] {
+        display: contents;
+    }
+
+    .actionDockButton {
+        min-height: 2.06rem;
+        padding: 0.22rem 0.24rem !important;
+        border-radius: var(--ui-radius-sm) !important;
+    }
+
+    .actionDock :global([data-compact-label])::before {
+        display: block;
+        overflow: hidden;
+        font-size: clamp(0.62rem, 3.3vw, 0.78rem);
+        line-height: 1.02;
+        text-overflow: ellipsis;
+    }
+
+    .actionDock button small {
+        display: none !important;
+    }
+}
+
+@media (max-width: 360px) and (orientation: portrait) {
+    .choiceList {
+        max-height: min(44dvh, 22rem);
+    }
+
+    .choiceRow {
+        grid-template-columns: minmax(0, 1fr);
+        min-height: 0;
+    }
+
+    .choiceImpactBurst {
+        grid-column: 1;
+        grid-row: auto;
+        justify-self: start;
+        max-width: 100%;
+    }
+
+    .actionDock [data-action-group='primary'],
+    .actionDock [data-action-group='secondary'] {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+/* UI-CLEANUP-044: reward choice phone pass - restore choice hierarchy without bringing back telemetry walls. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .overlay {
+        align-items: flex-start;
+        padding-top: max(4.25rem, env(safe-area-inset-top, 0px));
+        padding-inline: max(0.64rem, env(safe-area-inset-left, 0px)) max(0.64rem, env(safe-area-inset-right, 0px));
+    }
+
+    .shell {
+        width: min(100%, 23rem);
+        max-height: calc(100dvh - 5.2rem);
+        gap: 0.52rem;
+        padding: 0.68rem;
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 34%, transparent);
+        background:
+            radial-gradient(ellipse 90% 52% at 50% 0%, color-mix(in srgb, var(--theme-gold-bright) 10%, transparent), transparent 62%),
+            color-mix(in srgb, var(--theme-panel-solid) 94%, var(--theme-void) 6%);
+    }
+
+    .scrollBody {
+        overflow: hidden;
+    }
+
+    .header {
+        gap: 0.12rem;
+    }
+
+    .header h2 {
+        font-size: clamp(0.92rem, 4.4vw, 1.08rem);
+        line-height: 1.04;
+    }
+
+    .rewardPanel,
+    .rewardPanel[data-has-choices='true'] {
+        gap: 0.5rem;
+        padding: 0.34rem;
+        border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 18%, transparent);
+        border-radius: var(--ui-radius-md);
+        background:
+            linear-gradient(180deg, color-mix(in srgb, var(--theme-gold-bright) 6%, transparent), transparent 34%),
+            color-mix(in srgb, var(--theme-void) 52%, transparent);
+    }
+
+    .rewardPanel[data-has-choices='true'] > strong,
+    .rewardText,
+    .choiceSupportDetails,
+    .choiceBeatCue,
+    .choiceBeatPips,
+    .choiceSupportRail,
+    .choicePayoffSequence,
+    .choicePayoffStack b {
+        display: none !important;
+    }
+
+    .choiceList {
+        gap: 0.42rem;
+        max-height: min(64dvh, 31rem);
+        padding: 0;
+        overflow-y: auto;
+        scrollbar-width: none;
+    }
+
+    .choiceList::-webkit-scrollbar {
+        display: none;
+    }
+
+    .choiceRow {
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 0.28rem 0.44rem;
+        min-height: 3.7rem;
+        padding: 0.54rem 0.6rem;
+        border: 1px solid color-mix(in srgb, var(--theme-text-muted) 16%, transparent);
+        border-left: 3px solid color-mix(in srgb, var(--theme-cyan-bright) 46%, transparent);
+        border-radius: var(--ui-radius-md);
+        background:
+            linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 6%, transparent), transparent 48%),
+            color-mix(in srgb, var(--theme-surface-control) 76%, transparent);
+    }
+
+    .choiceRow[data-choice-primary='true'] {
+        min-height: 5.7rem;
+        padding: 0.64rem;
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 42%, transparent);
+        border-left-color: color-mix(in srgb, var(--theme-gold-bright) 84%, white 6%);
+        background:
+            linear-gradient(135deg, color-mix(in srgb, var(--theme-gold-bright) 12%, transparent), transparent 46%),
+            color-mix(in srgb, var(--theme-surface-control) 84%, transparent);
+        box-shadow:
+            0 10px 24px color-mix(in srgb, var(--theme-shadow) 20%, transparent),
+            inset 0 0 0 1px color-mix(in srgb, var(--theme-gold-bright) 12%, transparent);
+    }
+
+    .choiceRow > strong {
+        grid-column: 1 / -1;
+        min-width: 0;
+        font-size: 0.86rem;
+        line-height: 1.05;
+    }
+
+    .choiceRow[data-choice-primary='true'] > strong {
+        font-size: 1rem;
+    }
+
+    .choiceCueGrid {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 0.2rem 0.42rem;
+        align-items: center;
+        min-width: 0;
+    }
+
+    .choiceHeatCue,
+    .choiceImpactBurst,
+    .choicePayoffStack {
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+        animation: none;
+    }
+
+    .choiceHeatCue {
+        grid-column: 1;
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr);
+        gap: 0.28rem;
+        min-width: 0;
+        padding: 0;
+    }
+
+    .choiceHeatCue small,
+    .choicePayoffStack small {
+        color: color-mix(in srgb, var(--theme-gold-bright) 74%, white);
+        font-size: 0.54rem;
+        font-weight: 950;
+        line-height: 1;
+    }
+
+    .choiceHeatCue strong,
+    .choicePayoffStack strong,
+    .choicePayoffStack em {
+        min-width: 0;
+        overflow: hidden;
+        color: color-mix(in srgb, var(--theme-text) 92%, white);
+        font-size: 0.66rem;
+        line-height: 1.08;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .choiceHeatCue em,
+    .choiceRow:not([data-choice-primary='true']) .choicePayoffStack,
+    .choiceRow:not([data-choice-primary='true']) .choicePayoffStack * {
+        display: none !important;
+    }
+
+    .choiceRow[data-choice-primary='true'] .choicePayoffStack {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr);
+        gap: 0.26rem;
+        min-width: 0;
+        padding: 0;
+    }
+
+    .choiceImpactBurst {
+        grid-column: 2;
+        justify-self: end;
+        max-width: 7rem;
+        padding: 0.18rem 0.42rem;
+        border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 30%, transparent);
+        border-radius: 999px;
+        background: color-mix(in srgb, var(--theme-gold-bright) 10%, transparent);
+    }
+
+    .choiceImpactBurst small {
+        display: none !important;
+    }
+
+    .choiceImpactBurst strong {
+        display: block;
+        overflow: hidden;
+        max-width: 100%;
+        color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
+        font-size: 0.58rem;
+        line-height: 1;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .actions {
+        border-top: 0;
+    }
+
+    .actionDock {
+        padding: 0;
+    }
+
+    .actionDockButton {
+        min-height: 2.08rem;
+    }
+}
+
 .shell {
+    display: flex;
+    flex-direction: column;
     width: min(680px, 100%);
     box-sizing: border-box;
     max-height: min(calc(100dvh - 2rem), calc(100svh - 2rem));
-    overflow-y: auto;
+    overflow: hidden;
     border: var(--gameplay-overlay-border, var(--theme-overlay-plate-border, 1px solid color-mix(in srgb, var(--theme-gold-bright) 28%, transparent)));
     border-radius: calc(var(--theme-overlay-plate-radius, var(--ui-radius-lg)) + 0.08rem);
     background:
@@ -27,6 +509,13 @@
         var(--gameplay-overlay-surface, var(--theme-surface-glass-strong));
     box-shadow: var(--gameplay-overlay-shadow, var(--theme-overlay-plate-shadow, var(--theme-elevation-polished)));
     padding: clamp(18px, 4vw, 28px);
+}
+
+.scrollBody {
+    display: grid;
+    min-height: 0;
+    overflow-y: auto;
+    padding-right: 2px;
 }
 
 .eyebrow {
@@ -209,6 +698,122 @@
 
 .rewardPanel strong {
     color: var(--theme-text);
+}
+
+.rewardPanel[data-has-choices='true'] {
+    grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+    gap: 8px 10px;
+    padding: 10px;
+}
+
+.rewardPanel[data-has-choices='true'] > .rewardBurstStrip,
+.rewardPanel[data-has-choices='true'] > .rewardFeedbackList,
+.rewardPanel[data-has-choices='true'] > .choiceList {
+    grid-column: 1 / -1;
+}
+
+.rewardPanel[data-has-choices='true'] > strong,
+.rewardPanel[data-has-choices='true'] > .rewardText {
+    display: none;
+}
+
+.rewardPanel[data-has-choices='true'] > .boardMomentCue {
+    grid-column: 1;
+    align-self: stretch;
+    padding: 6px 8px;
+}
+
+.rewardPanel[data-has-choices='true'] > .boardMomentCue strong {
+    font-size: 0.82rem;
+}
+
+.rewardPanel[data-has-choices='true'] > .primaryActionSignals {
+    grid-column: 2;
+    align-self: start;
+    gap: 4px;
+}
+
+.rewardPanel[data-has-choices='true'] > .primaryActionSignals span {
+    min-height: 0;
+    padding: 6px 8px;
+}
+
+.rewardPanel[data-has-choices='true'] > .primaryActionSignals small {
+    font-size: 0.58rem;
+}
+
+.rewardPanel[data-has-choices='true'] > .primaryActionSignals strong {
+    font-size: 0.76rem;
+}
+
+.rewardPanel[data-has-choices='true'] > .rewardBurstStrip {
+    display: none;
+}
+
+.rewardPanel[data-has-choices='true'] > .rewardFeedbackList {
+    margin-top: 0;
+}
+
+.rewardPanel[data-has-choices='true'] > .rewardFeedbackList li {
+    padding: 3px 7px;
+    font-size: 0.76rem;
+}
+
+.rewardPanel[data-has-choices='true'] .choiceList {
+    gap: 6px;
+    margin-top: 0;
+}
+
+.rewardPanel[data-has-choices='true'] .choiceLaneMap {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+}
+
+.rewardPanel[data-has-choices='true'] .choiceLaneMap > span:not(.choiceLaneMapSummary):not(.choiceLanePrimaryCue) {
+    display: none;
+}
+
+.rewardPanel[data-has-choices='true'] .choiceLaneMap .choiceLaneMapSummary,
+.rewardPanel[data-has-choices='true'] .choiceLaneMap .choiceLanePrimaryCue {
+    grid-column: auto;
+    min-height: 0;
+}
+
+.rewardPanel[data-has-choices='true'] .choiceLaneMap .choiceLaneMapSummary {
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 0.08rem 0.32rem;
+    padding: 0.34rem 0.42rem;
+}
+
+.rewardPanel[data-has-choices='true'] .choiceLaneMap .choiceLaneMapSummary b,
+.rewardPanel[data-has-choices='true'] .choiceLaneMapSummaryBeatPips {
+    display: none;
+}
+
+.rewardPanel[data-has-choices='true'] .choiceLaneMap .choiceLaneMapSummary strong {
+    font-size: 0.68rem;
+    line-height: 1.08;
+}
+
+.rewardPanel[data-has-choices='true'] .choiceLaneMap .choiceLanePrimaryCue {
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 0.08rem 0.32rem;
+    padding: 0.34rem 0.42rem;
+}
+
+.rewardPanel[data-has-choices='true'] .choiceLaneMap .choiceLanePrimaryCue strong {
+    justify-self: end;
+    text-align: right;
+}
+
+.rewardPanel[data-has-choices='true'] .choiceLaneMap .choiceLanePrimaryCue b,
+.rewardPanel[data-has-choices='true'] .choiceLaneMap .choiceLanePrimaryCue em {
+    grid-column: 1 / -1;
+    justify-self: start;
+    text-align: left;
+}
+
+.rewardPanel[data-has-choices='true'] .choiceLaneMap .choiceLanePrimaryBeatPips {
+    display: none;
 }
 
 .boardMomentCue {
@@ -963,6 +1568,19 @@
     background: var(--theme-surface-control);
 }
 
+.choiceRow > strong {
+    color: color-mix(in srgb, var(--theme-text) 96%, white);
+    font-size: 1rem;
+    line-height: 1.12;
+}
+
+.choiceRow[data-choice-primary='true'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 32%, var(--theme-accent-blue, #78c7ff) 20%);
+    box-shadow:
+        inset 0 1px 0 color-mix(in srgb, white 8%, transparent),
+        0 0 0.72rem color-mix(in srgb, var(--theme-gold-bright) 9%, transparent);
+}
+
 .choiceRow[data-choice-reward-impact-screen-cue='burst'] {
     box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-success, #8edb9b) 14%, transparent);
 }
@@ -1060,6 +1678,13 @@
 
 .choiceHeatCue[data-choice-heat-tier='risk'] strong {
     color: color-mix(in srgb, var(--theme-warning, #f2bc6b) 88%, white);
+}
+
+.choiceCueGrid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+    align-items: start;
 }
 
 .choiceBeatCue {
@@ -1337,6 +1962,11 @@
     color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
 }
 
+.choiceCueGrid > .choicePayoffStack {
+    grid-column: 1 / -1;
+    justify-self: stretch;
+}
+
 .choicePayoffSequence {
     display: grid;
     grid-column: 1 / -1;
@@ -1464,6 +2094,80 @@
     width: 0.2rem;
     height: 0.2rem;
     opacity: 0.94;
+}
+
+.choiceSupportRail {
+    display: grid;
+    gap: 6px;
+    padding: 8px;
+    border-top: 1px solid color-mix(in srgb, var(--theme-text-muted) 14%, transparent);
+}
+
+.choiceSupportDetails {
+    overflow: hidden;
+    margin-top: 2px;
+    border: 1px solid color-mix(in srgb, var(--theme-text-muted) 18%, transparent);
+    border-radius: var(--ui-radius-sm);
+    background: color-mix(in srgb, var(--theme-surface-control) 58%, transparent);
+}
+
+.choiceSupportDetails[open] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 26%, transparent);
+    box-shadow: inset 0 1px 0 color-mix(in srgb, white 6%, transparent);
+}
+
+.choiceSupportSummary {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.18rem 0.5rem;
+    min-width: 0;
+    padding: 0.4rem 0.55rem;
+    cursor: pointer;
+    list-style: none;
+}
+
+.choiceSupportSummary::-webkit-details-marker {
+    display: none;
+}
+
+.choiceSupportSummary::after {
+    content: '+';
+    color: color-mix(in srgb, var(--theme-gold-bright) 82%, white);
+    font-size: 0.82rem;
+    font-weight: 900;
+    line-height: 1;
+}
+
+.choiceSupportDetails[open] .choiceSupportSummary::after {
+    content: '-';
+}
+
+.choiceSupportSummary small,
+.choiceSupportSummary strong {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.choiceSupportSummary small {
+    color: color-mix(in srgb, var(--theme-text-muted) 84%, white);
+    font-size: 0.56rem;
+    font-weight: 900;
+    line-height: 1;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.choiceSupportSummary strong {
+    color: color-mix(in srgb, var(--theme-cyan-bright) 84%, white);
+    font-size: 0.68rem;
+    font-weight: 900;
+    line-height: 1.18;
+}
+
+.choiceSupportDetails[open] .choiceSupportSummary {
+    border-bottom: 1px solid color-mix(in srgb, var(--theme-text-muted) 14%, transparent);
 }
 
 .choicePayoffRows {
@@ -1797,30 +2501,68 @@
 }
 
 .actions {
-    position: sticky;
-    bottom: 0;
-    margin-top: 22px;
-    padding-top: 10px;
+    position: static;
+    margin-top: 18px;
+    padding-top: 12px;
+    border-top: 1px solid color-mix(in srgb, var(--theme-gold-bright) 12%, transparent);
+}
+
+.actionDock {
     background:
-        linear-gradient(to bottom, transparent, var(--gameplay-overlay-surface, var(--theme-surface-glass-strong)) 28%),
-        var(--gameplay-overlay-surface, var(--theme-surface-glass-strong));
+        linear-gradient(180deg, color-mix(in srgb, var(--theme-gold-bright) 6%, transparent), transparent 58%),
+        color-mix(in srgb, var(--theme-surface-control) 86%, transparent);
+    gap: 0.42rem;
+    padding: 0.42rem;
+}
+
+.actionDockButton {
+    min-height: 2.7rem;
+    padding-block: 0.5rem !important;
+}
+
+.actionDock button small {
+    display: none;
 }
 
 @media (max-width: 760px) {
     .overlay {
         align-items: flex-end;
         padding:
-            max(0.9rem, env(safe-area-inset-top, 0px))
-            max(0.9rem, env(safe-area-inset-right, 0px))
-            max(0.9rem, env(safe-area-inset-bottom, 0px))
-            max(0.9rem, env(safe-area-inset-left, 0px));
+            max(0.72rem, env(safe-area-inset-top, 0px))
+            max(0.72rem, env(safe-area-inset-right, 0px))
+            max(0.72rem, env(safe-area-inset-bottom, 0px))
+            max(0.72rem, env(safe-area-inset-left, 0px));
     }
 
     .shell {
         max-height: min(calc(100dvh - 0.8rem), calc(100svh - 0.8rem));
-        overflow-y: auto;
         border-bottom-left-radius: max(var(--ui-radius-lg), env(safe-area-inset-bottom, 0px));
         border-bottom-right-radius: max(var(--ui-radius-lg), env(safe-area-inset-bottom, 0px));
+        padding: 0.72rem;
+    }
+
+    .header {
+        gap: 0.34rem;
+    }
+
+    .header h2 {
+        font-size: clamp(1.16rem, 6.8vw, 1.54rem);
+        line-height: 1.04;
+    }
+
+    .header p,
+    .rewardText {
+        display: -webkit-box;
+        overflow: hidden;
+        font-size: 0.78rem;
+        line-height: 1.3;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+    }
+
+    .actions {
+        margin-top: 0.72rem;
+        padding-top: 0.54rem;
     }
 
     .actions :global(button) {
@@ -1828,6 +2570,3116 @@
     }
 
     .payoffEngineStrip {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.28rem;
+        margin-top: 0.5rem;
+        padding: 0.38rem;
+    }
+
+    .payoffEngineStrip span {
+        padding: 0.3rem 0.36rem;
+    }
+
+    .payoffEngineStrip span:nth-child(2) {
+        display: none;
+    }
+
+    .payoffEngineStrip span:last-of-type {
+        grid-column: auto;
+    }
+
+    .payoffEngineStrip small {
+        font-size: 0.54rem;
+    }
+
+    .payoffEngineStrip strong {
+        font-size: 0.74rem;
+    }
+
+    .payoffEngineBeatPips {
+        width: min(3.4rem, 100%);
+    }
+
+    .rewardPanel {
+        margin-top: 0.54rem;
+        gap: 0.42rem;
+        padding: 0.72rem;
+    }
+
+    .rewardPanel[data-has-choices='true'] {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0.28rem;
+        padding: 0.5rem;
+    }
+
+    .rewardPanel[data-has-choices='true'] > .boardMomentCue,
+    .rewardPanel[data-has-choices='true'] > .primaryActionSignals {
+        grid-column: 1 / -1;
+    }
+
+    .rewardPanel[data-has-choices='true'] > strong,
+    .rewardPanel[data-has-choices='true'] > .rewardText,
+    .rewardPanel[data-has-choices='true'] > .rewardBurstStrip {
+        display: none;
+    }
+
+    .boardMomentCue {
+        grid-column: 1 / -1;
+        padding: 0.34rem 0.42rem;
+    }
+
+    .boardMomentCue strong {
+        font-size: 0.82rem;
+    }
+
+    .primaryActionSignals {
+        grid-column: 1 / -1;
+        gap: 0.28rem;
+    }
+
+    .primaryActionSignals span {
+        min-height: 0;
+        padding: 0.34rem 0.42rem;
+    }
+
+    .primaryActionSignals small {
+        font-size: 0.56rem;
+    }
+
+    .primaryActionSignals strong {
+        font-size: 0.76rem;
+    }
+
+    .rewardBurstStrip {
+        gap: 0.28rem;
+    }
+
+    .rewardBurstStrip span {
+        min-height: 0;
+        padding: 0.34rem 0.42rem;
+    }
+
+    .rewardBurstStrip b,
+    .rewardBurstBeatPips {
+        display: none;
+    }
+
+    .rewardFeedbackList {
+        gap: 0.28rem;
+    }
+
+    .rewardFeedbackList li {
+        padding: 0.22rem 0.46rem;
+        font-size: 0.74rem;
+    }
+
+    .choiceList {
+        gap: 0.32rem;
+        margin-top: 0.34rem;
+    }
+
+    .choiceRow {
+        gap: 0.24rem;
+        padding: 0.42rem;
+    }
+
+    .choiceRow > strong {
+        font-size: 0.9rem;
+        line-height: 1.08;
+    }
+
+    .choiceCueGrid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.22rem;
+        align-items: stretch;
+    }
+
+    .choiceHeatCue {
+        padding: 0.28rem 0.32rem;
+    }
+
+    .choiceHeatCue small {
+        font-size: 0.5rem;
+    }
+
+    .choiceHeatCue em {
+        display: none;
+    }
+
+    .choiceHeatCue strong {
+        font-size: 0.62rem;
+    }
+
+    .choiceBeatCue {
+        display: none;
+    }
+
+    .choiceBeatPips {
+        display: none;
+    }
+
+    .choiceImpactBurst {
+        grid-template-columns: minmax(0, 1fr);
+        justify-self: stretch;
+        border-radius: var(--ui-radius-sm);
+        min-height: 0;
+        padding: 0.28rem 0.32rem;
+    }
+
+    .choiceImpactBurst small {
+        display: none;
+    }
+
+    .choiceImpactBurst strong {
+        font-size: 0.62rem;
+        line-height: 1.12;
+        overflow-wrap: anywhere;
+        white-space: normal;
+    }
+
+    .choicePayoffStack {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0.12rem;
+        min-height: 0;
+        padding: 0.28rem 0.32rem;
+    }
+
+    .choicePayoffStack small {
+        display: none;
+    }
+
+    .choicePayoffStack strong,
+    .choicePayoffStack em {
+        font-size: 0.58rem;
+        line-height: 1.08;
+        white-space: normal;
+    }
+
+    .choicePayoffStack em {
+        justify-self: start;
+        max-width: 100%;
+    }
+
+    .choicePayoffStack {
+        align-items: start;
+    }
+
+    .choiceCueGrid > .choicePayoffStack {
+        grid-column: auto;
+    }
+
+    .choicePayoffStack b,
+    .choicePayoffSequence,
+    .choiceSupportRail {
+        display: none;
+    }
+
+    .choiceSupportDetails {
+        display: none;
+    }
+
+    .traitBuildTags {
+        gap: 0.28rem;
+    }
+
+    .traitBuildTags span {
+        padding: 0.24rem 0.42rem;
+        font-size: 0.68rem;
+    }
+
+    .choiceRow .traitBuildReason,
+    .choiceRow p {
+        font-size: 0.72rem;
+        line-height: 1.24;
+    }
+
+    .choiceRow .traitBuildReason {
+        display: none;
+    }
+
+    .choiceRow p {
+        display: none;
+    }
+
+    .choiceLaneMap {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.28rem;
+    }
+
+    .choiceLaneMap .choiceLaneMapSummary {
+        grid-column: 1 / -1;
+        min-height: 0;
+        padding: 0.34rem 0.42rem;
+        grid-template-columns: auto minmax(0, 1fr);
+        gap: 0.08rem 0.32rem;
+    }
+
+    .choiceLaneMap .choiceLanePrimaryCue {
+        display: none;
+    }
+
+    .rewardPanel[data-has-choices='true'] .choiceLaneMap {
+        display: none;
+    }
+
+    .rewardPanel[data-has-choices='true'] .choiceLaneMap > span:not(.choiceLaneMapSummary):not(.choiceLanePrimaryCue) {
+        display: none;
+    }
+
+    .choiceLaneMap .choiceLaneMapSummary b,
+    .choiceLaneMapSummaryBeatPips,
+    .choiceLaneMap > span:not(.choiceLaneMapSummary):not(.choiceLanePrimaryCue) em,
+    .choiceLaneMap > span:not(.choiceLaneMapSummary):not(.choiceLanePrimaryCue) .choiceLaneBeatPips {
+        display: none;
+    }
+
+    .choiceLaneMap > span:not(.choiceLaneMapSummary):not(.choiceLanePrimaryCue) {
+        min-height: 0;
+        padding: 0.34rem 0.42rem;
+        grid-template-columns: auto minmax(0, 1fr);
+        align-items: start;
+        gap: 0.08rem 0.28rem;
+    }
+
+    .choiceLaneMap > span:not(.choiceLaneMapSummary):not(.choiceLanePrimaryCue) small,
+    .choiceLaneMap .choiceLaneMapSummary small {
+        font-size: 0.52rem;
+    }
+
+    .choiceLaneMap > span:not(.choiceLaneMapSummary):not(.choiceLanePrimaryCue) strong {
+        display: none;
+    }
+
+    .choiceLaneMap > span:not(.choiceLaneMapSummary):not(.choiceLanePrimaryCue) b,
+    .choiceLaneMap .choiceLaneMapSummary strong {
+        font-size: 0.62rem;
+        line-height: 1.06;
+    }
+
+    .actionDock {
+        padding: 0.36rem;
+        gap: 0.34rem;
+    }
+
+    .actionDock [data-action-group='secondary'] {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.34rem;
+    }
+
+    .actionDock[data-secondary-count='3'] [data-action-group='secondary'] {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .actionDock [data-action-group='primary'] {
+        gap: 0.34rem;
+    }
+
+    .actionDockButton {
+        min-height: 2.8rem;
+        padding-block: 0.46rem;
+    }
+
+    .actionDock :global([data-compact-label])::before {
+        font-size: 0.78rem;
+        line-height: 1.02;
+    }
+
+    .actionDock button small {
+        display: none;
+    }
+}
+
+@media (max-width: 760px) {
+    .shell {
+        gap: 0.42rem;
+        padding: 0.58rem;
+    }
+
+    .scrollBody {
+        padding-right: 0;
+    }
+
+    .payoffEngineStrip {
+        grid-template-columns: minmax(0, 1fr);
+        border-color: color-mix(in srgb, var(--theme-text-muted) 14%, transparent);
+        background: color-mix(in srgb, var(--theme-surface-control) 62%, transparent);
+    }
+
+    .payoffEngineStrip span:first-child {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr);
+        align-items: center;
+        gap: 0.34rem;
+    }
+
+    .payoffEngineStrip span:last-of-type,
+    .payoffEngineBeatPips {
+        display: none;
+    }
+
+    .rewardPanel[data-has-choices='true'] {
+        border-color: color-mix(in srgb, var(--theme-text-muted) 14%, transparent);
+        background: color-mix(in srgb, var(--theme-surface-glass) 64%, transparent);
+        box-shadow: none;
+    }
+
+    .rewardPanel[data-has-choices='true'] > .boardMomentCue,
+    .rewardPanel[data-has-choices='true'] > .primaryActionSignals {
+        display: none;
+    }
+
+    .choiceList {
+        gap: 0.42rem;
+        margin-top: 0;
+    }
+
+    .choiceRow {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0.3rem;
+        padding: 0.58rem;
+        border-radius: var(--ui-radius-sm);
+        border-left: 3px solid color-mix(in srgb, var(--theme-cyan-bright) 46%, transparent);
+        background: color-mix(in srgb, var(--theme-surface-control) 72%, transparent);
+        box-shadow: none;
+    }
+
+    .choiceRow[data-choice-primary='true'] {
+        border-left-color: color-mix(in srgb, var(--theme-gold-bright) 72%, white 8%);
+        box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-gold-bright) 18%, transparent);
+    }
+
+    .choiceRow > strong {
+        font-size: 0.95rem;
+        line-height: 1.1;
+    }
+
+    .choiceCueGrid {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: center;
+        gap: 0.22rem 0.46rem;
+    }
+
+    .choiceHeatCue,
+    .choiceImpactBurst,
+    .choicePayoffStack {
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+        animation: none;
+    }
+
+    .choiceHeatCue {
+        grid-column: 1;
+        grid-template-columns: auto minmax(0, 1fr);
+        align-items: center;
+        gap: 0.34rem;
+        padding: 0;
+    }
+
+    .choiceHeatCue small,
+    .choicePayoffStack small {
+        color: color-mix(in srgb, var(--theme-text-muted) 82%, white);
+        font-size: 0.58rem;
+    }
+
+    .choiceHeatCue strong {
+        color: color-mix(in srgb, var(--theme-text) 92%, white);
+        font-size: 0.78rem;
+        white-space: normal;
+    }
+
+    .choiceHeatCue em {
+        display: none;
+    }
+
+    .choiceImpactBurst {
+        grid-column: 2;
+        justify-self: end;
+        padding: 0.16rem 0.42rem;
+        border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 28%, transparent);
+        border-radius: 999px;
+        background: color-mix(in srgb, var(--theme-gold-bright) 8%, transparent);
+    }
+
+    .choiceImpactBurst strong {
+        font-size: 0.62rem;
+        line-height: 1;
+        white-space: nowrap;
+    }
+
+    .choicePayoffStack {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr);
+        gap: 0.22rem;
+        justify-self: stretch;
+        padding: 0;
+    }
+
+    .choicePayoffStack strong,
+    .choicePayoffStack em {
+        color: color-mix(in srgb, var(--theme-text-muted) 94%, white);
+        font-size: 0.68rem;
+        line-height: 1.18;
+    }
+
+    .choiceSupportDetails {
+        display: block;
+        margin: 0;
+        border: 0;
+        background: transparent;
+    }
+
+    .choiceSupportDetails[open] {
+        border: 0;
+        box-shadow: none;
+    }
+
+    .choiceSupportSummary {
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 0.32rem;
+        padding: 0;
+    }
+
+    .choiceSupportSummary small {
+        display: none;
+    }
+
+    .choiceSupportSummary strong {
+        color: color-mix(in srgb, var(--theme-text-muted) 86%, white);
+        font-size: 0.66rem;
+        line-height: 1.12;
+    }
+
+    .choiceSupportSummary::after {
+        font-size: 0.68rem;
+    }
+
+    .choiceSupportRail {
+        gap: 0.36rem;
+        margin-top: 0.36rem;
+        padding: 0.42rem 0 0;
+        border-top-color: color-mix(in srgb, var(--theme-text-muted) 12%, transparent);
+    }
+
+    .choiceSignalChips span,
+    .choicePayoffRows span,
+    .choiceBuildRoutes > span,
+    .traitBuildTags span {
+        border-radius: var(--ui-radius-sm);
+        box-shadow: none;
+    }
+
+    .traitBuildTags {
+        overflow: hidden;
+        max-height: 1.55rem;
+    }
+
+    .traitBuildTags span:nth-child(n + 3) {
+        display: none;
+    }
+}
+
+@media (min-width: 761px) {
+    .shell {
+        width: min(760px, 100%);
+        max-height: min(calc(100dvh - 2rem), 900px);
+        padding: 1.05rem;
+    }
+
+    .scrollBody {
+        padding-right: 0;
+    }
+
+    .header {
+        gap: 0.46rem;
+    }
+
+    .header h2 {
+        font-size: clamp(1.48rem, 2.4vw, 2rem);
+    }
+
+    .header p {
+        font-size: 0.92rem;
+        line-height: 1.42;
+    }
+
+    .payoffEngineStrip {
+        grid-template-columns: minmax(0, 1fr);
+        margin-top: 0.72rem;
+        padding: 0.36rem;
+        border-color: color-mix(in srgb, var(--theme-text-muted) 14%, transparent);
+        background: color-mix(in srgb, var(--theme-surface-control) 62%, transparent);
+        box-shadow: none;
+    }
+
+    .payoffEngineStrip span:first-child {
+        grid-template-columns: auto minmax(0, 1fr);
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.32rem 0.46rem;
+    }
+
+    .payoffEngineStrip span:nth-child(2),
+    .payoffEngineStrip span:last-of-type,
+    .payoffEngineBeatPips {
+        display: none;
+    }
+
+    .rewardPanel[data-has-choices='true'] {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0.5rem;
+        margin-top: 0.72rem;
+        padding: 0.62rem;
+        border-color: color-mix(in srgb, var(--theme-text-muted) 14%, transparent);
+        background: color-mix(in srgb, var(--theme-surface-glass) 64%, transparent);
+        box-shadow: none;
+    }
+
+    .rewardPanel[data-has-choices='true'] > .boardMomentCue,
+    .rewardPanel[data-has-choices='true'] > .primaryActionSignals,
+    .rewardPanel[data-has-choices='true'] > strong,
+    .rewardPanel[data-has-choices='true'] > .rewardText,
+    .rewardPanel[data-has-choices='true'] > .rewardBurstStrip,
+    .rewardPanel[data-has-choices='true'] > .rewardFeedbackList,
+    .rewardPanel[data-has-choices='true'] .choiceLaneMap {
+        display: none;
+    }
+
+    .choiceList {
+        gap: 0.48rem;
+        margin-top: 0;
+    }
+
+    .choiceRow {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0.34rem;
+        padding: 0.66rem 0.72rem;
+        border-radius: var(--ui-radius-sm);
+        border-left: 3px solid color-mix(in srgb, var(--theme-cyan-bright) 46%, transparent);
+        background: color-mix(in srgb, var(--theme-surface-control) 72%, transparent);
+        box-shadow: none;
+    }
+
+    .choiceRow[data-choice-primary='true'] {
+        border-left-color: color-mix(in srgb, var(--theme-gold-bright) 72%, white 8%);
+        box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-gold-bright) 18%, transparent);
+    }
+
+    .choiceCueGrid {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: center;
+        gap: 0.22rem 0.7rem;
+    }
+
+    .choiceBeatCue,
+    .choiceBeatPips,
+    .choicePayoffSequence {
+        display: none;
+    }
+
+    .choiceHeatCue,
+    .choiceImpactBurst,
+    .choicePayoffStack {
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+        animation: none;
+    }
+
+    .choiceHeatCue {
+        grid-column: 1;
+        grid-template-columns: auto minmax(0, 1fr);
+        align-items: center;
+        gap: 0.42rem;
+        padding: 0;
+    }
+
+    .choiceHeatCue small,
+    .choicePayoffStack small {
+        color: color-mix(in srgb, var(--theme-text-muted) 82%, white);
+        font-size: 0.62rem;
+    }
+
+    .choiceHeatCue strong {
+        color: color-mix(in srgb, var(--theme-text) 92%, white);
+        font-size: 0.82rem;
+        white-space: normal;
+    }
+
+    .choiceHeatCue em {
+        display: none;
+    }
+
+    .choiceImpactBurst {
+        grid-column: 2;
+        justify-self: end;
+        padding: 0.18rem 0.5rem;
+        border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 28%, transparent);
+        border-radius: 999px;
+        background: color-mix(in srgb, var(--theme-gold-bright) 8%, transparent);
+    }
+
+    .choiceImpactBurst strong {
+        font-size: 0.68rem;
+        line-height: 1;
+        white-space: nowrap;
+    }
+
+    .choicePayoffStack {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr);
+        gap: 0.28rem;
+        justify-self: stretch;
+        padding: 0;
+    }
+
+    .choicePayoffStack strong,
+    .choicePayoffStack em {
+        color: color-mix(in srgb, var(--theme-text-muted) 94%, white);
+        font-size: 0.72rem;
+        line-height: 1.18;
+    }
+
+    .choicePayoffStack b {
+        display: none;
+    }
+
+    .choiceSupportDetails {
+        display: block;
+        margin: 0;
+        border: 0;
+        background: transparent;
+    }
+
+    .choiceSupportSummary {
+        grid-template-columns: minmax(0, 1fr) auto;
+        padding: 0;
+    }
+
+    .choiceSupportSummary small {
+        display: none;
+    }
+
+    .choiceSupportSummary strong {
+        color: color-mix(in srgb, var(--theme-text-muted) 86%, white);
+        font-size: 0.68rem;
+    }
+
+    .choiceSupportRail {
+        gap: 0.4rem;
+        margin-top: 0.42rem;
+        padding: 0.48rem 0 0;
+    }
+
+    .traitBuildTags {
+        overflow: hidden;
+        max-height: 1.7rem;
+    }
+
+    .traitBuildTags span:nth-child(n + 3) {
+        display: none;
+    }
+
+    .choiceRow .traitBuildReason,
+    .choiceRow p {
+        display: none;
+    }
+
+    .actions {
+        margin-top: 0.72rem;
+        padding-top: 0.72rem;
+    }
+}
+
+/* UI-CLEANUP-002: interlude choices should read like choices, not system telemetry. */
+@media (max-width: 760px) {
+    .choicePayoffStack {
+        display: none;
+    }
+}
+
+@media (min-width: 761px) {
+    .header p,
+    .payoffEngineStrip,
+    .choicePayoffStack,
+    .choiceSupportDetails {
+        display: none;
+    }
+
+    .rewardPanel[data-has-choices='true'] {
+        padding: 0.72rem;
+    }
+
+    .choiceList {
+        gap: 0.42rem;
+    }
+
+    .choiceRow {
+        gap: 0.26rem;
+        padding: 0.72rem 0.78rem;
+    }
+
+    .choiceCueGrid {
+        grid-template-columns: minmax(0, 1fr) max-content;
+    }
+
+    .choiceHeatCue small {
+        display: none;
+    }
+
+    .choiceHeatCue strong {
+        font-size: 0.78rem;
+    }
+
+    .choiceImpactBurst {
+        max-width: 14rem;
+    }
+}
+
+/* UI-CLEANUP-003: phone interludes should present decisions, not a cue dashboard. */
+@media (max-width: 760px) {
+    .overlay {
+        align-items: flex-start;
+        padding:
+            max(clamp(4rem, 14vh, 6.25rem), env(safe-area-inset-top, 0px))
+            max(0.56rem, env(safe-area-inset-right, 0px))
+            max(0.56rem, env(safe-area-inset-bottom, 0px))
+            max(0.56rem, env(safe-area-inset-left, 0px));
+    }
+
+    .shell {
+        gap: 0.28rem;
+        max-height: calc(100dvh - 1.12rem);
+        padding: 0.48rem;
+        border-radius: var(--ui-radius-md);
+    }
+
+    .header {
+        gap: 0.24rem;
+    }
+
+    .eyebrow,
+    .header p,
+    .payoffEngineStrip {
+        display: none;
+    }
+
+    .header h2 {
+        font-size: 1.1rem;
+        line-height: 1;
+    }
+
+    .rewardPanel,
+    .rewardPanel[data-has-choices='true'] {
+        gap: 0.28rem;
+        margin-top: 0;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+    }
+
+    .rewardPanel[data-has-choices='true'] > .boardMomentCue,
+    .rewardPanel[data-has-choices='true'] > .primaryActionSignals,
+    .rewardPanel[data-has-choices='true'] > strong,
+    .rewardPanel[data-has-choices='true'] > .rewardText,
+    .rewardPanel[data-has-choices='true'] > .rewardBurstStrip,
+    .rewardPanel[data-has-choices='true'] .choiceLaneMap {
+        display: none;
+    }
+
+    .choiceList {
+        gap: 0.24rem;
+        max-height: min(56dvh, 30rem);
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        padding-right: 0.02rem;
+    }
+
+    .choiceRow {
+        gap: 0.14rem;
+        min-height: var(--ui-touch-target-min);
+        padding: 0.34rem 0.4rem;
+        border-left-width: 2px;
+    }
+
+    .choiceRow > strong {
+        overflow: hidden;
+        font-size: 0.82rem;
+        line-height: 1.05;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .choiceCueGrid {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 0.72fr) auto;
+        gap: 0.14rem 0.26rem;
+    }
+
+    .choiceHeatCue {
+        grid-column: 1;
+        gap: 0.2rem;
+    }
+
+    .choiceHeatCue small,
+    .choicePayoffStack small,
+    .choiceBeatCue,
+    .choiceBeatPips,
+    .choicePayoffSequence,
+    .choiceSupportDetails,
+    .traitBuildTags,
+    .choiceRow p,
+    .choiceRow .traitBuildReason {
+        display: none;
+    }
+
+    .choiceHeatCue strong {
+        display: -webkit-box;
+        overflow: hidden;
+        font-size: 0.68rem;
+        line-height: 1.12;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+    }
+
+    .choiceImpactBurst {
+        grid-column: 3;
+        align-self: center;
+        max-width: 6.6rem;
+        padding: 0.12rem 0.3rem;
+    }
+
+    .choiceImpactBurst strong {
+        overflow: visible;
+        max-width: 100%;
+        font-size: 0.56rem;
+        line-height: 1.08;
+        overflow-wrap: anywhere;
+        text-overflow: ellipsis;
+        white-space: normal;
+    }
+
+    .choicePayoffStack {
+        grid-column: 2;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        align-self: center;
+        gap: 0;
+        min-height: 0;
+    }
+
+    .choicePayoffStack strong,
+    .choicePayoffStack em {
+        overflow: hidden;
+        font-size: 0.58rem;
+        line-height: 1.08;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .choicePayoffStack b {
+        display: none;
+    }
+
+    .actionDock {
+        gap: 0.18rem;
+        padding: 0.22rem 0 0;
+    }
+
+    .actionDock [data-action-group='secondary'] {
+        gap: 0.18rem;
+    }
+
+    .actionDockButton {
+        min-height: 2.22rem;
+        padding-block: 0.28rem;
+    }
+}
+
+/* UI-CLEANUP-011: keep the phone reward chooser's final hierarchy at the end of the cascade. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .overlay {
+        align-items: center;
+        padding:
+            max(0.62rem, env(safe-area-inset-top, 0px))
+            max(0.56rem, env(safe-area-inset-right, 0px))
+            max(0.56rem, env(safe-area-inset-bottom, 0px))
+            max(0.56rem, env(safe-area-inset-left, 0px));
+    }
+
+    .shell {
+        width: min(100%, 24rem);
+        max-height: calc(100dvh - 1.2rem);
+        gap: 0.42rem;
+        padding: 0.58rem;
+    }
+
+    .eyebrow,
+    .header p,
+    .payoffEngineStrip,
+    .rewardFeedbackList,
+    .rewardBurstStrip,
+    .boardMomentCue,
+    .primaryActionSignals,
+    .choiceLaneMap,
+    .choiceBeatCue,
+    .choiceBeatPips,
+    .choiceSupportDetails,
+    .choiceSupportRail,
+    .traitBuildTags,
+    .choiceRow p,
+    .choiceRow .traitBuildReason {
+        display: none !important;
+    }
+
+    .choiceList {
+        gap: 0.28rem;
+        max-height: min(48dvh, 25rem);
+        margin: 0;
+        overflow-y: auto;
+    }
+
+    .choiceRow {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 0.12rem 0.48rem;
+        min-height: 3.15rem;
+        padding: 0.42rem 0.5rem;
+        border-radius: var(--ui-radius-sm);
+    }
+
+    .choiceCueGrid {
+        display: contents;
+    }
+
+    .choiceImpactBurst {
+        grid-column: 2;
+        grid-row: 2 / 4;
+        align-self: center;
+        justify-self: end;
+        max-width: 6.25rem;
+        white-space: nowrap;
+    }
+
+    .actionDock {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.16rem;
+        padding: 0.28rem 0 0;
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+    }
+
+    .actionDock [data-action-group='primary'],
+    .actionDock [data-action-group='secondary'] {
+        display: contents;
+    }
+
+    .actionDockButton {
+        min-height: 2.06rem;
+        padding: 0.22rem 0.24rem !important;
+        border-radius: var(--ui-radius-sm) !important;
+    }
+}
+
+/* UI-CLEANUP-013: phone side-room choices should read as the reward, not four loud footer cards. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .shell {
+        gap: 0.32rem;
+        padding: 0.5rem;
+    }
+
+    .header h2 {
+        font-size: clamp(1.04rem, 5.8vw, 1.32rem);
+        line-height: 1;
+    }
+
+    .rewardPanel[data-has-choices='true'] {
+        gap: 0.22rem;
+        padding: 0.38rem;
+    }
+
+    .choiceList {
+        gap: 0.2rem;
+        max-height: min(52dvh, 25rem);
+    }
+
+    .choiceRow {
+        grid-template-columns: minmax(0, 1fr) minmax(4.8rem, auto);
+        gap: 0.1rem 0.34rem;
+        min-height: 2.7rem;
+        padding: 0.32rem 0.42rem;
+        background:
+            linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 5%, transparent), transparent 48%),
+            color-mix(in srgb, var(--theme-surface-control) 80%, transparent);
+    }
+
+    .choiceRow[data-choice-primary='true'] {
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 54%, var(--theme-border-strong));
+        background:
+            linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 12%, transparent), transparent 54%),
+            color-mix(in srgb, var(--theme-surface-control) 88%, transparent);
+    }
+
+    .choiceRow > strong {
+        font-size: 0.78rem;
+        line-height: 1;
+    }
+
+    .choiceHeatCue strong,
+    .choicePayoffStack strong,
+    .choicePayoffStack em {
+        font-size: 0.54rem;
+        line-height: 1.05;
+    }
+
+    .choiceImpactBurst {
+        max-width: 5.7rem;
+        padding: 0.1rem 0.24rem;
+        border-radius: var(--ui-radius-pill);
+    }
+
+    .choiceImpactBurst strong {
+        font-size: 0.5rem;
+        line-height: 1.04;
+    }
+
+    .actionDock {
+        gap: 0.12rem;
+        padding-top: 0.22rem;
+    }
+
+    .actionDockButton {
+        min-height: 1.84rem;
+        padding: 0.16rem 0.2rem !important;
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 20%, var(--theme-border-soft)) !important;
+        background:
+            linear-gradient(180deg, color-mix(in srgb, var(--theme-text) 4%, transparent), transparent 54%),
+            color-mix(in srgb, var(--theme-surface-control) 82%, transparent) !important;
+        box-shadow: inset 0 1px 0 color-mix(in srgb, var(--theme-text) 5%, transparent) !important;
+        font-family: var(--theme-ui-font) !important;
+        font-weight: 820 !important;
+        text-transform: none !important;
+    }
+
+    .actionDockButton[aria-pressed='true'],
+    .actionDockButton[data-active='true'],
+    .actionDockButton[data-selected='true'] {
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 42%, var(--theme-border-strong)) !important;
+        background:
+            linear-gradient(180deg, color-mix(in srgb, var(--theme-gold-bright) 10%, transparent), transparent 62%),
+            color-mix(in srgb, var(--theme-surface-control) 92%, transparent) !important;
+        color: color-mix(in srgb, var(--theme-gold-bright) 82%, white) !important;
+    }
+
+    .actionDockButton :global(span),
+    .actionDockButton {
+        font-size: 0.72rem;
+        line-height: 1;
+        letter-spacing: 0;
+        text-transform: none !important;
+    }
+
+    .actionDock :global([data-compact-label])::before {
+        display: block;
+        overflow: hidden;
+        font-family: var(--theme-ui-font);
+        font-size: 0.64rem;
+        font-weight: 760;
+        line-height: 1;
+        text-overflow: ellipsis;
+        text-transform: none !important;
+        white-space: nowrap;
+    }
+}
+
+/* UI-CLEANUP-022: final phone reward sheet simplification after screenshot pass. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .overlay {
+        padding:
+            max(0.72rem, env(safe-area-inset-top, 0px))
+            max(0.62rem, env(safe-area-inset-right, 0px))
+            max(0.62rem, env(safe-area-inset-bottom, 0px))
+            max(0.62rem, env(safe-area-inset-left, 0px));
+    }
+
+    .shell {
+        width: min(100%, 22.75rem);
+        gap: 0.28rem;
+        padding: 0.54rem;
+        border-radius: var(--ui-radius-lg);
+    }
+
+    .header h2 {
+        color: color-mix(in srgb, var(--theme-gold-bright) 86%, white);
+        font-family: var(--ui-font-body-family);
+        font-size: 0.9rem;
+        font-weight: 950;
+        line-height: 1.08;
+        text-transform: uppercase;
+    }
+
+    .rewardPanel[data-has-choices='true'] {
+        gap: 0.2rem;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+    }
+
+    .choiceList {
+        gap: 0.24rem;
+        max-height: none;
+        padding: 0;
+    }
+
+    .choiceRow {
+        grid-template-columns: minmax(0, 1fr) minmax(4.6rem, auto);
+        gap: 0.1rem 0.34rem;
+        min-height: 3.4rem;
+        padding: 0.4rem 0.46rem;
+        border-left-width: 3px;
+        border-radius: var(--ui-radius-md);
+        background:
+            linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 5%, transparent), transparent 44%),
+            color-mix(in srgb, var(--theme-surface-control) 78%, transparent);
+    }
+
+    .choiceRow[data-choice-primary='true'] {
+        background:
+            linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 9%, transparent), transparent 52%),
+            color-mix(in srgb, var(--theme-surface-control) 86%, transparent);
+    }
+
+    .choiceRow > strong {
+        color: color-mix(in srgb, var(--theme-text) 96%, white);
+        font-size: 0.84rem;
+        font-weight: 920;
+        line-height: 1.08;
+    }
+
+    .choiceHeatCue small,
+    .choicePayoffStack small {
+        display: none !important;
+    }
+
+    .choiceHeatCue,
+    .choicePayoffStack {
+        display: none !important;
+    }
+
+    .choiceHeatCue strong {
+        color: color-mix(in srgb, var(--theme-text-muted) 92%, white);
+        font-size: 0.62rem;
+        font-weight: 800;
+    }
+
+    .choicePayoffStack strong,
+    .choicePayoffStack em {
+        color: color-mix(in srgb, var(--theme-text-muted) 92%, white);
+        font-size: 0.6rem;
+        font-weight: 820;
+    }
+
+    .choiceImpactBurst {
+        max-width: 5.5rem;
+        padding: 0.12rem 0.3rem;
+        background: color-mix(in srgb, var(--theme-gold-bright) 7%, transparent);
+    }
+
+    .choiceImpactBurst strong {
+        font-size: 0.54rem;
+        line-height: 1.05;
+    }
+
+    .choiceRow p {
+        grid-column: 1;
+        display: -webkit-box !important;
+        overflow: hidden;
+        margin: 0;
+        color: color-mix(in srgb, var(--theme-text-muted) 92%, white);
+        font-size: 0.64rem;
+        font-weight: 720;
+        line-height: 1.16;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+    }
+
+    .actionDock {
+        gap: 0.14rem;
+        padding-top: 0.24rem;
+    }
+
+    .actionDockButton {
+        min-height: 2.5rem;
+    }
+}
+
+/* UI-CLEANUP-036: phone reward picker is a tappable choice sheet, not a duplicate command dashboard. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .overlay {
+        align-items: flex-end;
+        justify-content: center;
+        padding:
+            max(0.54rem, env(safe-area-inset-top, 0px))
+            max(0.5rem, env(safe-area-inset-right, 0px))
+            max(0.5rem, env(safe-area-inset-bottom, 0px))
+            max(0.5rem, env(safe-area-inset-left, 0px));
+    }
+
+    .shell[data-has-choices='true'] {
+        width: min(100%, 23.5rem);
+        max-height: min(calc(100dvh - 1rem), 34rem);
+        gap: 0.18rem;
+        padding: 0.44rem;
+        border-radius: var(--ui-radius-lg) var(--ui-radius-lg) var(--ui-radius-md) var(--ui-radius-md);
+        background:
+            linear-gradient(180deg, color-mix(in srgb, var(--theme-gold-bright) 5%, transparent), transparent 7rem),
+            color-mix(in srgb, var(--theme-panel-solid) 93%, var(--theme-void) 7%);
+    }
+
+    .shell[data-has-choices='true'] .scrollBody {
+        overflow: visible;
+    }
+
+    .shell[data-has-choices='true'] .header {
+        gap: 0;
+    }
+
+    .shell[data-has-choices='true'] .header h2 {
+        color: color-mix(in srgb, var(--theme-gold-bright) 84%, white);
+        font-size: 0.78rem;
+        letter-spacing: 0.035em;
+        line-height: 1;
+    }
+
+    .shell[data-has-choices='true'] .rewardPanel[data-has-choices='true'] {
+        gap: 0.14rem;
+    }
+
+    .shell[data-has-choices='true'] .choiceList {
+        gap: 0.14rem;
+        max-height: min(46dvh, 23rem);
+        padding-right: 0;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        scrollbar-width: none;
+    }
+
+    .shell[data-has-choices='true'] .choiceList::-webkit-scrollbar {
+        display: none;
+    }
+
+    .shell[data-has-choices='true'] .choiceRow {
+        cursor: pointer;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 0.06rem 0.28rem;
+        min-height: 2.72rem;
+        padding: 0.28rem 0.34rem;
+        border-left-width: 2px;
+        border-radius: calc(var(--ui-radius-sm) + 0.04rem);
+        background:
+            linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 4%, transparent), transparent 48%),
+            color-mix(in srgb, var(--theme-surface-control) 70%, transparent);
+        box-shadow: inset 0 1px 0 color-mix(in srgb, var(--theme-text) 4%, transparent);
+    }
+
+    .shell[data-has-choices='true'] .choiceRow::after {
+        content: '>';
+        grid-column: 2;
+        grid-row: 1 / 3;
+        align-self: center;
+        justify-self: end;
+        color: color-mix(in srgb, var(--theme-gold-bright) 62%, transparent);
+        font-size: 0.88rem;
+        font-weight: 900;
+        line-height: 1;
+    }
+
+    .shell[data-has-choices='true'] .choiceRow:focus-visible {
+        outline: 2px solid color-mix(in srgb, var(--theme-gold-bright) 78%, transparent);
+        outline-offset: 2px;
+    }
+
+    .shell[data-has-choices='true'] .choiceRow[data-choice-primary='true'] {
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 38%, var(--theme-border-soft));
+        border-left-color: color-mix(in srgb, var(--theme-gold-bright) 72%, white 6%);
+        background:
+            linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 8%, transparent), transparent 52%),
+            color-mix(in srgb, var(--theme-surface-control) 80%, transparent);
+    }
+
+    .shell[data-has-choices='true'] .choiceRow > strong {
+        font-size: 0.78rem;
+        line-height: 1.04;
+        white-space: normal;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+    }
+
+    .shell[data-has-choices='true'] .choiceRow p {
+        display: -webkit-box !important;
+        grid-column: 1;
+        max-height: 1.54rem;
+        font-size: 0.58rem;
+        line-height: 1.16;
+        -webkit-line-clamp: 2;
+    }
+
+    .shell[data-has-choices='true'] .choiceImpactBurst {
+        display: none !important;
+    }
+
+    .shell[data-has-choices='true'] .actions {
+        padding-top: 0.16rem;
+        border-top: 1px solid color-mix(in srgb, var(--theme-gold-bright) 10%, transparent);
+    }
+
+    .shell[data-has-choices='true'] .actionDock {
+        grid-template-columns: minmax(0, 1fr);
+        padding-top: 0;
+    }
+
+    .shell[data-has-choices='true'] .actionDock [data-action-group='primary'],
+    .shell[data-has-choices='true'] .actionDock [data-action-group='secondary'] .actionDockButton:not(:first-child) {
+        display: none !important;
+    }
+
+    .shell[data-has-choices='true'] .actionDockButton:first-child {
+        min-height: 1.74rem;
+        padding: 0.12rem 0.2rem !important;
+        opacity: 0.82;
+    }
+
+    .shell[data-has-choices='true'] .actionDock :global([data-compact-label])::before {
+        font-size: 0.58rem;
+    }
+}
+
+/* UI-CLEANUP-038: reward choice should feel like a focused picker, not a bottom receipt. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .overlay:has(.shell[data-has-choices='true']) {
+        align-items: center;
+        padding:
+            max(0.64rem, env(safe-area-inset-top, 0px))
+            max(0.58rem, env(safe-area-inset-right, 0px))
+            max(0.58rem, env(safe-area-inset-bottom, 0px))
+            max(0.58rem, env(safe-area-inset-left, 0px));
+    }
+
+    .shell[data-has-choices='true'] {
+        width: min(100%, 22.75rem);
+        max-height: min(calc(100dvh - 1.3rem), 28rem);
+        gap: 0.32rem;
+        padding: 0.58rem;
+        border-radius: var(--ui-radius-md);
+        background:
+            linear-gradient(180deg, color-mix(in srgb, var(--theme-gold-bright) 6%, transparent), transparent 5.8rem),
+            color-mix(in srgb, var(--theme-panel-solid) 94%, var(--theme-void) 6%);
+    }
+
+    .shell[data-has-choices='true'] .header {
+        gap: 0.1rem;
+    }
+
+    .shell[data-has-choices='true'] .header h2 {
+        overflow: hidden;
+        color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
+        font-size: 0.92rem;
+        letter-spacing: 0;
+        line-height: 1.08;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .shell[data-has-choices='true'] .rewardPanel[data-has-choices='true'] {
+        gap: 0.28rem;
+    }
+
+    .shell[data-has-choices='true'] .choiceList {
+        gap: 0.22rem;
+        max-height: min(47dvh, 18rem);
+        padding: 0.02rem;
+        overflow-y: auto;
+        scrollbar-width: thin;
+    }
+
+    .shell[data-has-choices='true'] .choiceRow {
+        grid-template-columns: minmax(0, 1fr) auto auto;
+        gap: 0.12rem 0.36rem;
+        min-height: 3rem;
+        padding: 0.4rem 0.48rem;
+        border-left-width: 3px;
+        border-radius: var(--ui-radius-sm);
+    }
+
+    .shell[data-has-choices='true'] .choiceRow::after {
+        grid-column: 3;
+        grid-row: 1;
+        font-size: 0.78rem;
+    }
+
+    .shell[data-has-choices='true'] .choiceRow > strong {
+        font-size: 0.82rem;
+        line-height: 1.06;
+        -webkit-line-clamp: 1;
+    }
+
+    .shell[data-has-choices='true'] .choiceRow p {
+        display: none !important;
+    }
+
+    .shell[data-has-choices='true'] .choiceImpactBurst {
+        display: grid !important;
+        place-items: center;
+        grid-column: 2;
+        grid-row: 1;
+        align-self: center;
+        min-width: 3.2rem;
+        max-width: 3.8rem;
+        min-height: 1.26rem;
+        padding: 0.14rem 0.34rem;
+        border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 20%, transparent);
+        border-radius: 999px;
+        background: color-mix(in srgb, var(--theme-gold-bright) 7%, transparent);
+    }
+
+    .shell[data-has-choices='true'] .choiceImpactBurst::before {
+        content: 'Reward';
+        color: color-mix(in srgb, var(--theme-gold-bright) 84%, white);
+        font-size: 0.52rem;
+        font-weight: 920;
+        line-height: 1;
+        text-transform: uppercase;
+    }
+
+    .shell[data-has-choices='true'] .choiceRow[data-choice-primary='true'] .choiceImpactBurst::before {
+        content: 'Best';
+    }
+
+    .shell[data-has-choices='true'] .choiceImpactBurst strong {
+        display: none;
+        overflow: hidden;
+        color: color-mix(in srgb, var(--theme-gold-bright) 84%, white);
+        font-size: 0.54rem;
+        line-height: 1;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .shell[data-has-choices='true'] .actions {
+        padding-top: 0.2rem;
+    }
+
+    .shell[data-has-choices='true'] .actionDockButton:first-child {
+        min-height: 1.92rem;
+    }
+}
+
+/* UI-CLEANUP-045: final cascade for phone reward choices - featured reward card, compact alternates, no fake arrows. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .overlay:has(.shell[data-has-choices='true']) {
+        align-items: flex-start;
+        justify-content: flex-start;
+        padding-top: max(4.1rem, env(safe-area-inset-top, 0px));
+    }
+
+    .overlay {
+        align-items: flex-start;
+        justify-content: flex-start;
+        padding-top: max(4.1rem, env(safe-area-inset-top, 0px));
+    }
+
+    .shell[data-has-choices='true'] {
+        width: min(100%, 23rem);
+        max-height: calc(100dvh - 5rem);
+        gap: 0.5rem;
+        padding: 0.68rem;
+        border-radius: var(--ui-radius-md);
+    }
+
+    .shell[data-has-choices='true'] .header h2 {
+        font-size: clamp(0.92rem, 4.4vw, 1.08rem);
+        line-height: 1.04;
+    }
+
+    .shell[data-has-choices='true'] .rewardPanel {
+        gap: 0.5rem;
+        padding: 0.34rem;
+        border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 18%, transparent);
+        border-radius: var(--ui-radius-md);
+        background:
+            linear-gradient(180deg, color-mix(in srgb, var(--theme-gold-bright) 6%, transparent), transparent 36%),
+            color-mix(in srgb, var(--theme-void) 52%, transparent);
+    }
+
+    .shell[data-has-choices='true'] .choiceList {
+        gap: 0.42rem;
+        max-height: min(64dvh, 31rem);
+        padding: 0;
+        scrollbar-width: none;
+    }
+
+    .shell[data-has-choices='true'] .choiceList::-webkit-scrollbar {
+        display: none;
+    }
+
+    .shell[data-has-choices='true'] .choiceRow {
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 0.24rem 0.44rem;
+        min-height: 3.68rem;
+        padding: 0.54rem 0.6rem;
+        border: 1px solid color-mix(in srgb, var(--theme-text-muted) 16%, transparent);
+        border-left: 3px solid color-mix(in srgb, var(--theme-cyan-bright) 46%, transparent);
+        border-radius: var(--ui-radius-md);
+        background:
+            linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 6%, transparent), transparent 48%),
+            color-mix(in srgb, var(--theme-surface-control) 76%, transparent);
+    }
+
+    .shell[data-has-choices='true'] .choiceRow::after {
+        content: none;
+    }
+
+    .shell[data-has-choices='true'] .choiceRow[data-choice-primary='true'] {
+        min-height: 5.75rem;
+        padding: 0.64rem;
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 42%, transparent);
+        border-left-color: color-mix(in srgb, var(--theme-gold-bright) 84%, white 6%);
+        background:
+            linear-gradient(135deg, color-mix(in srgb, var(--theme-gold-bright) 12%, transparent), transparent 46%),
+            color-mix(in srgb, var(--theme-surface-control) 84%, transparent);
+        box-shadow:
+            0 10px 24px color-mix(in srgb, var(--theme-shadow) 20%, transparent),
+            inset 0 0 0 1px color-mix(in srgb, var(--theme-gold-bright) 12%, transparent);
+    }
+
+    .shell[data-has-choices='true'] .choiceRow > strong {
+        grid-column: 1 / -1;
+        font-size: 0.86rem;
+        line-height: 1.05;
+    }
+
+    .shell[data-has-choices='true'] .choiceRow[data-choice-primary='true'] > strong {
+        font-size: 1rem;
+    }
+
+    .shell[data-has-choices='true'] .choiceCueGrid {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 0.2rem 0.42rem;
+        align-items: center;
+    }
+
+    .shell[data-has-choices='true'] .choiceHeatCue {
+        grid-column: 1;
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr);
+        gap: 0.28rem;
+        padding: 0;
+    }
+
+    .shell[data-has-choices='true'] .choiceHeatCue small,
+    .shell[data-has-choices='true'] .choicePayoffStack small {
+        color: color-mix(in srgb, var(--theme-gold-bright) 74%, white);
+        font-size: 0.54rem;
+        font-weight: 950;
+        line-height: 1;
+    }
+
+    .shell[data-has-choices='true'] .choiceHeatCue strong,
+    .shell[data-has-choices='true'] .choicePayoffStack strong,
+    .shell[data-has-choices='true'] .choicePayoffStack em {
+        overflow: hidden;
+        color: color-mix(in srgb, var(--theme-text) 92%, white);
+        font-size: 0.66rem;
+        line-height: 1.08;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .shell[data-has-choices='true'] .choiceHeatCue em,
+    .shell[data-has-choices='true'] .choiceSupportDetails,
+    .shell[data-has-choices='true'] .choiceBeatCue,
+    .shell[data-has-choices='true'] .choiceBeatPips,
+    .shell[data-has-choices='true'] .choiceSupportRail,
+    .shell[data-has-choices='true'] .choiceRow:not([data-choice-primary='true']) .choicePayoffStack {
+        display: none !important;
+    }
+
+    .shell[data-has-choices='true'] .choiceRow[data-choice-primary='true'] .choicePayoffStack {
+        grid-column: 1 / -1;
+        display: grid !important;
+        grid-template-columns: auto minmax(0, 1fr);
+        gap: 0.26rem;
+        min-width: 0;
+        padding: 0;
+    }
+
+    .shell[data-has-choices='true'] .choiceImpactBurst {
+        display: block !important;
+        grid-column: 2;
+        grid-row: 2;
+        justify-self: end;
+        min-width: 0;
+        max-width: 7rem;
+        min-height: 0;
+        padding: 0.18rem 0.42rem;
+    }
+
+    .shell[data-has-choices='true'] .choiceImpactBurst::before {
+        content: 'Reward';
+        color: color-mix(in srgb, var(--theme-gold-bright) 84%, white);
+        font-size: 0.54rem;
+        font-weight: 920;
+        line-height: 1;
+        text-transform: uppercase;
+    }
+
+    .shell[data-has-choices='true'] .choiceRow[data-choice-primary='true'] .choiceImpactBurst::before {
+        content: 'Best';
+    }
+
+    .shell[data-has-choices='true'] .choiceImpactBurst strong {
+        display: none;
+        max-width: 100%;
+        font-size: 0.58rem;
+    }
+
+    .shell[data-has-choices='true'] .actions {
+        padding-top: 0;
+    }
+
+    .shell[data-has-choices='true'] .actionDockButton:first-child {
+        min-height: 2.08rem;
+    }
+}
+
+/* UI-CLEANUP-048: reward choices should expose the effect, not three empty decorated rows. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .shell[data-has-choices='true'] {
+        gap: 0.44rem;
+        padding: 0.58rem;
+    }
+
+    .shell[data-has-choices='true'] .rewardPanel {
+        padding: 0.26rem;
+        background: color-mix(in srgb, var(--theme-void) 62%, transparent);
+    }
+
+    .shell[data-has-choices='true'] .choiceList {
+        gap: 0.34rem;
+        max-height: min(66dvh, 33rem);
+    }
+
+    .shell[data-has-choices='true'] .choiceRow {
+        gap: 0.18rem 0.36rem;
+        min-height: 3.25rem;
+        padding: 0.46rem 0.54rem;
+        border-left-width: 2px;
+        box-shadow: none;
+    }
+
+    .shell[data-has-choices='true'] .choiceRow[data-choice-primary='true'] {
+        min-height: 3.25rem;
+        padding: 0.54rem;
+        box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-gold-bright) 10%, transparent);
+    }
+
+    .shell[data-has-choices='true'] .choiceRow > strong,
+    .shell[data-has-choices='true'] .choiceRow[data-choice-primary='true'] > strong {
+        font-size: 0.88rem;
+        line-height: 1.05;
+    }
+
+    .shell[data-has-choices='true'] .choiceRow p {
+        display: -webkit-box !important;
+        grid-column: 1 / -1;
+        margin: 0;
+        overflow: hidden;
+        color: color-mix(in srgb, var(--theme-text-muted) 86%, white);
+        font-size: 0.66rem;
+        font-weight: 760;
+        line-height: 1.16;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+    }
+
+    .shell[data-has-choices='true'] .choiceRow:not([data-choice-primary='true']) p {
+        -webkit-line-clamp: 2;
+    }
+
+    .shell[data-has-choices='true'] .choiceCueGrid {
+        display: none !important;
+    }
+
+    .shell[data-has-choices='true'] .choiceHeatCue {
+        display: flex;
+        min-width: 0;
+        gap: 0.28rem;
+        align-items: baseline;
+    }
+
+    .shell[data-has-choices='true'] .choiceHeatCue small,
+    .shell[data-has-choices='true'] .choicePayoffStack small {
+        font-size: 0.5rem;
+    }
+
+    .shell[data-has-choices='true'] .choiceHeatCue strong,
+    .shell[data-has-choices='true'] .choicePayoffStack strong,
+    .shell[data-has-choices='true'] .choicePayoffStack em {
+        font-size: 0.61rem;
+    }
+
+    .shell[data-has-choices='true'] .choiceImpactBurst {
+        display: none !important;
+    }
+
+    .shell[data-has-choices='true'] .choiceRow[data-choice-primary='true'] .choicePayoffStack {
+        gap: 0.18rem;
+    }
+
+    .shell[data-has-choices='true'] .actions {
+        padding-top: 0.08rem;
+    }
+
+    .shell[data-has-choices='true'] .actionDockButton:first-child {
+        min-height: 1.92rem;
+    }
+}
+
+/* UI-CLEANUP-051: phone perk picker should read as a centered picker, not a tiny receipt pinned to the top. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .overlay:has(.shell[data-has-choices='true']) {
+        align-items: center;
+        justify-content: center;
+        padding:
+            max(0.72rem, env(safe-area-inset-top, 0px))
+            max(0.64rem, env(safe-area-inset-right, 0px))
+            max(0.72rem, env(safe-area-inset-bottom, 0px))
+            max(0.64rem, env(safe-area-inset-left, 0px));
+    }
+
+    .shell[data-has-choices='true'] {
+        width: min(100%, 22.25rem);
+        max-height: calc(100dvh - 1.45rem);
+        gap: 0.38rem;
+        padding: 0.58rem;
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 28%, transparent);
+        background:
+            linear-gradient(180deg, color-mix(in srgb, var(--theme-gold-bright) 5%, transparent), transparent 5rem),
+            color-mix(in srgb, var(--theme-panel-solid) 95%, var(--theme-void) 5%);
+        box-shadow: 0 18px 44px color-mix(in srgb, var(--theme-shadow) 38%, transparent);
+    }
+
+    .shell[data-has-choices='true'] .header {
+        gap: 0;
+    }
+
+    .shell[data-has-choices='true'] .header h2 {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem;
+        font-size: clamp(0.94rem, 4.5vw, 1.08rem);
+        line-height: 1.04;
+    }
+
+    .shell[data-has-choices='true'] .header h2::after {
+        content: 'Pick one';
+        flex: 0 0 auto;
+        padding: 0.16rem 0.38rem;
+        border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 24%, transparent);
+        border-radius: var(--ui-radius-pill);
+        color: color-mix(in srgb, var(--theme-gold-bright) 82%, white);
+        font-family: var(--theme-body-font);
+        font-size: 0.54rem;
+        font-weight: 900;
+        letter-spacing: 0;
+        line-height: 1;
+        text-transform: uppercase;
+    }
+
+    .shell[data-has-choices='true'] .rewardPanel {
+        gap: 0.28rem;
+        padding: 0;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+    }
+
+    .shell[data-has-choices='true'] .choiceList {
+        gap: 0.36rem;
+        max-height: min(58dvh, 25rem);
+        padding: 0.02rem;
+    }
+
+    .shell[data-has-choices='true'] .choiceRow {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0.22rem;
+        min-height: 3.66rem;
+        padding: 0.56rem 0.62rem;
+        border-radius: var(--ui-radius-sm);
+        border-color: color-mix(in srgb, var(--theme-text-muted) 14%, transparent);
+        border-left-width: 3px;
+        background:
+            linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 5%, transparent), transparent 55%),
+            color-mix(in srgb, var(--theme-surface-control) 78%, transparent);
+    }
+
+    .shell[data-has-choices='true'] .choiceRow[data-choice-primary='true'] {
+        min-height: 3.66rem;
+        padding: 0.56rem 0.62rem;
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 38%, transparent);
+        border-left-color: color-mix(in srgb, var(--theme-gold-bright) 78%, white 5%);
+        background:
+            linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 9%, transparent), transparent 56%),
+            color-mix(in srgb, var(--theme-surface-control) 83%, transparent);
+        box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-gold-bright) 10%, transparent);
+    }
+
+    .shell[data-has-choices='true'] .choiceRow > strong,
+    .shell[data-has-choices='true'] .choiceRow[data-choice-primary='true'] > strong {
+        overflow: hidden;
+        font-size: 0.88rem;
+        line-height: 1.08;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .shell[data-has-choices='true'] .choiceRow p,
+    .shell[data-has-choices='true'] .choiceRow:not([data-choice-primary='true']) p {
+        color: color-mix(in srgb, var(--theme-text-muted) 88%, white);
+        font-size: 0.66rem;
+        font-weight: 760;
+        line-height: 1.18;
+        -webkit-line-clamp: 2;
+    }
+
+    .shell[data-has-choices='true'] .actions {
+        padding-top: 0.04rem;
+    }
+
+    .shell[data-has-choices='true'] .actionDockButton:first-child {
+        min-height: 1.84rem;
+        border-radius: var(--ui-radius-sm) !important;
+    }
+}
+
+/* UI-CLEANUP-055: perk choices are the action surface. Keep cards readable and remove the detached duplicate picker row. */
+.shell[data-has-choices='true'] {
+    width: min(820px, calc(100vw - 2rem));
+    padding: clamp(1rem, 2.4vw, 1.35rem);
+}
+
+.shell[data-has-choices='true'] .header {
+    gap: 0.28rem;
+}
+
+.shell[data-has-choices='true'] .header h2 {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    font-size: clamp(1.34rem, 2.2vw, 1.78rem);
+    line-height: 1.02;
+}
+
+.shell[data-has-choices='true'] .rewardPanel[data-has-choices='true'] {
+    gap: 0.72rem;
+    padding: 0.78rem;
+    border-radius: var(--ui-radius-md);
+    background:
+        linear-gradient(180deg, color-mix(in srgb, var(--theme-gold-bright) 5%, transparent), transparent 36%),
+        color-mix(in srgb, var(--theme-void) 46%, transparent);
+}
+
+.shell[data-has-choices='true'] .choiceList {
+    gap: 0.54rem;
+    max-height: min(54dvh, 26rem);
+    overflow-y: auto;
+    scrollbar-width: thin;
+}
+
+.shell[data-has-choices='true'] .choiceRow {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.26rem 0.7rem;
+    min-height: 4.3rem;
+    padding: 0.76rem 0.92rem;
+    cursor: pointer;
+}
+
+.shell[data-has-choices='true'] .choiceRow::after {
+    content: 'Choose';
+    grid-column: 2;
+    grid-row: 1;
+    align-self: start;
+    padding: 0.18rem 0.48rem;
+    border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 24%, transparent);
+    border-radius: var(--ui-radius-pill);
+    color: color-mix(in srgb, var(--theme-gold-bright) 82%, white);
+    font-size: 0.56rem;
+    font-weight: 920;
+    line-height: 1;
+    text-transform: uppercase;
+}
+
+.shell[data-has-choices='true'] .choiceRow[data-choice-primary='true']::after {
+    content: 'Best';
+}
+
+.shell[data-has-choices='true'] .choiceRow > strong {
+    min-width: 0;
+    overflow: hidden;
+    font-size: 1rem;
+    line-height: 1.06;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.shell[data-has-choices='true'] .choiceRow p {
+    display: -webkit-box;
+    grid-column: 1 / -1;
+    margin: 0;
+    overflow: hidden;
+    color: color-mix(in srgb, var(--theme-text-muted) 90%, white);
+    font-size: 0.74rem;
+    font-weight: 760;
+    line-height: 1.22;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+
+.shell[data-has-choices='true'] .choiceCueGrid,
+.shell[data-has-choices='true'] .choiceSupportDetails,
+.shell[data-has-choices='true'] .traitBuildTags,
+.shell[data-has-choices='true'] .traitBuildReason {
+    display: none !important;
+}
+
+.shell[data-has-choices='true'] .actions {
+    margin-top: 0;
+    padding-top: 0.1rem;
+    border-top: 1px solid color-mix(in srgb, var(--theme-gold-bright) 12%, transparent);
+}
+
+.shell[data-has-choices='true'] .actionDock {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: stretch;
+    width: min(14rem, 100%);
+    padding: 0.18rem 0 0;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+}
+
+.shell[data-has-choices='true'] .actionDock [data-action-group='primary'],
+.shell[data-has-choices='true'] .actionDock [data-action-group='secondary'] .actionDockButton:not(:first-child) {
+    display: none !important;
+}
+
+.shell[data-has-choices='true'] .actionDock [data-action-group='secondary'] {
+    width: 100%;
+}
+
+.shell[data-has-choices='true'] .actionDockButton:first-child {
+    width: 100%;
+    min-height: 2.32rem;
+    opacity: 0.86;
+}
+
+@media (max-width: 760px) and (orientation: portrait) {
+    .overlay:has(.shell[data-has-choices='true']) {
+        padding:
+            max(0.86rem, env(safe-area-inset-top, 0px))
+            max(0.72rem, env(safe-area-inset-right, 0px))
+            max(0.86rem, env(safe-area-inset-bottom, 0px))
+            max(0.72rem, env(safe-area-inset-left, 0px));
+    }
+
+    .shell[data-has-choices='true'] {
+        width: min(100%, 23.5rem);
+        max-height: calc(100dvh - 1.72rem);
+        gap: 0.52rem;
+        padding: 0.78rem;
+    }
+
+    .shell[data-has-choices='true'] .header h2 {
+        display: block;
+        font-size: clamp(1rem, 5vw, 1.18rem);
+        white-space: normal;
+    }
+
+    .shell[data-has-choices='true'] .header h2::after {
+        display: none;
+    }
+
+    .shell[data-has-choices='true'] .rewardPanel {
+        padding: 0;
+        background: transparent;
+    }
+
+    .shell[data-has-choices='true'] .choiceList {
+        gap: 0.48rem;
+        max-height: min(62dvh, 29rem);
+    }
+
+    .shell[data-has-choices='true'] .choiceRow,
+    .shell[data-has-choices='true'] .choiceRow[data-choice-primary='true'] {
+        min-height: 4.22rem;
+        padding: 0.68rem 0.72rem;
+    }
+
+    .shell[data-has-choices='true'] .choiceRow::after {
+        padding: 0.16rem 0.4rem;
+        font-size: 0.52rem;
+    }
+
+    .shell[data-has-choices='true'] .choiceRow > strong,
+    .shell[data-has-choices='true'] .choiceRow[data-choice-primary='true'] > strong {
+        font-size: 0.96rem;
+        white-space: normal;
+    }
+
+    .shell[data-has-choices='true'] .choiceRow p,
+    .shell[data-has-choices='true'] .choiceRow:not([data-choice-primary='true']) p {
+        font-size: 0.72rem;
+        line-height: 1.2;
+    }
+
+    .shell[data-has-choices='true'] .actionDock {
+        width: 100%;
+    }
+}
+
+/* UI-CLEANUP-057: reward choices should feel like decisions, not a telemetry list with badges. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .shell[data-has-choices='true'] {
+        width: min(100%, 22.6rem);
+        gap: 0.46rem;
+        padding: 0.72rem;
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 24%, transparent);
+        background:
+            linear-gradient(180deg, color-mix(in srgb, var(--theme-gold-bright) 5%, transparent), transparent 34%),
+            color-mix(in srgb, var(--theme-void) 88%, transparent);
+    }
+
+    .shell[data-has-choices='true'] .header {
+        padding-inline: 0.08rem;
+    }
+
+    .shell[data-has-choices='true'] .header h2 {
+        font-size: clamp(0.92rem, 4.5vw, 1.08rem);
+        letter-spacing: 0;
+    }
+
+    .shell[data-has-choices='true'] .choiceList {
+        gap: 0.4rem;
+        max-height: min(58dvh, 25rem);
+        padding: 0.02rem;
+    }
+
+    .shell[data-has-choices='true'] .choiceRow,
+    .shell[data-has-choices='true'] .choiceRow[data-choice-primary='true'] {
+        grid-template-columns: minmax(0, 1fr);
+        min-height: 3.86rem;
+        padding: 0.62rem 0.72rem 0.58rem 0.82rem;
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 13%, transparent);
+        background:
+            linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 7%, transparent), transparent 48%),
+            color-mix(in srgb, var(--theme-void) 70%, transparent);
+        box-shadow:
+            inset 3px 0 0 color-mix(in srgb, var(--theme-gold-bright) 34%, transparent),
+            inset 0 1px 0 color-mix(in srgb, var(--theme-text) 5%, transparent);
+    }
+
+    .shell[data-has-choices='true'] .choiceRow[data-choice-primary='true'] {
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 38%, transparent);
+        background:
+            linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 10%, transparent), transparent 58%),
+            color-mix(in srgb, var(--theme-void) 72%, transparent);
+    }
+
+    .shell[data-has-choices='true'] .choiceRow::after {
+        display: none;
+    }
+
+    .shell[data-has-choices='true'] .choiceRow > strong,
+    .shell[data-has-choices='true'] .choiceRow[data-choice-primary='true'] > strong {
+        font-size: 0.9rem;
+        line-height: 1.08;
+    }
+
+    .shell[data-has-choices='true'] .choiceRow p,
+    .shell[data-has-choices='true'] .choiceRow:not([data-choice-primary='true']) p {
+        color: color-mix(in srgb, var(--theme-text-muted) 82%, white);
+        font-size: 0.67rem;
+        font-weight: 720;
+        line-height: 1.18;
+        -webkit-line-clamp: 2;
+    }
+
+    .shell[data-has-choices='true'] .actions {
+        padding-top: 0.04rem;
+        border-top-color: color-mix(in srgb, var(--theme-gold-bright) 8%, transparent);
+    }
+
+    .shell[data-has-choices='true'] .actionDockButton:first-child {
+        min-height: 2.18rem;
+        opacity: 0.76;
+    }
+}
+
+/* UI-CLEANUP-059: final phone perk picker pass - one compact decision sheet, no competing telemetry layers. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .overlay:has(.shell[data-has-choices='true']) {
+        align-items: center;
+        justify-content: center;
+        padding:
+            max(0.72rem, env(safe-area-inset-top, 0px))
+            max(0.72rem, env(safe-area-inset-right, 0px))
+            max(0.72rem, env(safe-area-inset-bottom, 0px))
+            max(0.72rem, env(safe-area-inset-left, 0px));
+    }
+
+    .shell[data-has-choices='true'] {
+        width: min(100%, 23rem);
+        max-height: min(calc(100dvh - 1.44rem), 31rem);
+        gap: 0.34rem;
+        padding: 0.6rem;
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 22%, transparent);
+        border-radius: var(--ui-radius-md);
+        background: color-mix(in srgb, var(--theme-panel-solid) 88%, var(--theme-void) 12%);
+        box-shadow: 0 16px 34px color-mix(in srgb, var(--theme-shadow) 34%, transparent);
+        transform: translateY(-5dvh);
+    }
+
+    .shell[data-has-choices='true'] .scrollBody {
+        min-height: 0;
+        overflow: hidden;
+    }
+
+    .shell[data-has-choices='true'] .header {
+        min-height: 0;
+        padding: 0 0.1rem;
+    }
+
+    .shell[data-has-choices='true'] .header h2 {
+        display: block;
+        margin: 0;
+        overflow: hidden;
+        color: color-mix(in srgb, var(--theme-gold-bright) 82%, white);
+        font-size: clamp(0.9rem, 4.25vw, 1.02rem);
+        line-height: 1.06;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .shell[data-has-choices='true'] .header h2::after,
+    .shell[data-has-choices='true'] .eyebrow,
+    .shell[data-has-choices='true'] .header p,
+    .shell[data-has-choices='true'] .payoffEngineStrip,
+    .shell[data-has-choices='true'] .rewardFeedbackList,
+    .shell[data-has-choices='true'] .rewardBurstStrip,
+    .shell[data-has-choices='true'] .boardMomentCue,
+    .shell[data-has-choices='true'] .primaryActionSignals,
+    .shell[data-has-choices='true'] .choiceLaneMap,
+    .shell[data-has-choices='true'] .choiceCueGrid,
+    .shell[data-has-choices='true'] .choiceImpactBurst,
+    .shell[data-has-choices='true'] .choiceHeatCue,
+    .shell[data-has-choices='true'] .choicePayoffStack,
+    .shell[data-has-choices='true'] .choiceBeatCue,
+    .shell[data-has-choices='true'] .choiceBeatPips,
+    .shell[data-has-choices='true'] .choiceSupportDetails,
+    .shell[data-has-choices='true'] .choiceSupportRail,
+    .shell[data-has-choices='true'] .traitBuildTags,
+    .shell[data-has-choices='true'] .traitBuildReason {
+        display: none !important;
+    }
+
+    .shell[data-has-choices='true'] .rewardPanel,
+    .shell[data-has-choices='true'] .rewardPanel[data-has-choices='true'] {
+        gap: 0.28rem;
+        margin: 0;
+        padding: 0.28rem;
+        border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 12%, transparent);
+        border-radius: var(--ui-radius-sm);
+        background: color-mix(in srgb, var(--theme-void) 42%, transparent);
+        box-shadow: none;
+    }
+
+    .shell[data-has-choices='true'] .choiceList {
+        gap: 0.16rem;
+        max-height: min(58dvh, 21rem);
+        padding: 0;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        scrollbar-width: none;
+    }
+
+    .shell[data-has-choices='true'] .choiceList::-webkit-scrollbar {
+        display: none;
+    }
+
+    .shell[data-has-choices='true'] .choiceRow,
+    .shell[data-has-choices='true'] .choiceRow[data-choice-primary='true'] {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0.16rem;
+        min-height: 3.18rem;
+        padding: 0.44rem 0.56rem;
+        border: 1px solid color-mix(in srgb, var(--theme-text-muted) 13%, transparent);
+        border-left: 2px solid color-mix(in srgb, var(--theme-gold-bright) 42%, transparent);
+        border-radius: var(--ui-radius-sm);
+        background: color-mix(in srgb, var(--theme-surface-control) 58%, transparent);
+        box-shadow: none;
+    }
+
+    .shell[data-has-choices='true'] .choiceRow[data-choice-primary='true'] {
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 30%, transparent);
+        background:
+            linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 6%, transparent), transparent 50%),
+            color-mix(in srgb, var(--theme-surface-control) 66%, transparent);
+    }
+
+    .shell[data-has-choices='true'] .choiceRow::after {
+        content: none;
+    }
+
+    .shell[data-has-choices='true'] .choiceRow > strong,
+    .shell[data-has-choices='true'] .choiceRow[data-choice-primary='true'] > strong {
+        min-width: 0;
+        overflow: hidden;
+        color: color-mix(in srgb, var(--theme-text) 92%, white);
+        font-size: 0.78rem;
+        line-height: 1.08;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .shell[data-has-choices='true'] .choiceRow p,
+    .shell[data-has-choices='true'] .choiceRow:not([data-choice-primary='true']) p {
+        display: -webkit-box !important;
+        grid-column: 1;
+        max-height: 1.52rem;
+        margin: 0;
+        overflow: hidden;
+        color: color-mix(in srgb, var(--theme-text-muted) 82%, white);
+        font-size: 0.59rem;
+        font-weight: 720;
+        line-height: 1.18;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+    }
+
+    .shell[data-has-choices='true'] .actions {
+        padding-top: 0.14rem;
+        border-top: 1px solid color-mix(in srgb, var(--theme-gold-bright) 8%, transparent);
+    }
+
+    .shell[data-has-choices='true'] .actionDock {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        width: 100%;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+    }
+
+    .shell[data-has-choices='true'] .actionDock [data-action-group='primary'],
+    .shell[data-has-choices='true'] .actionDock [data-action-group='secondary'] .actionDockButton:not(:first-child) {
+        display: none !important;
+    }
+
+    .shell[data-has-choices='true'] .actionDockButton:first-child {
+        width: 100%;
+        min-height: 1.86rem;
+        padding: 0.14rem 0.28rem !important;
+        opacity: 0.78;
+    }
+
+    .shell[data-has-choices='true'] .actionDock :global([data-compact-label])::before {
+        font-size: 0.58rem;
+    }
+}
+
+/* UI-CLEANUP-060: phone reward picker uses the reward cards as actions; the footer is only a quiet escape rail. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .shell[data-has-choices='true'] {
+        width: min(100%, 23.25rem);
+        max-height: min(calc(100dvh - 1.6rem), 32rem);
+        padding: 0.64rem;
+    }
+
+    .shell[data-has-choices='true'] .choiceList {
+        gap: 0.22rem;
+        max-height: min(62dvh, 22rem);
+    }
+
+    .shell[data-has-choices='true'] .choiceRow,
+    .shell[data-has-choices='true'] .choiceRow[data-choice-primary='true'] {
+        min-height: 3.48rem;
+        padding: 0.52rem 0.62rem;
+    }
+
+    .shell[data-has-choices='true'] .choiceRow > strong,
+    .shell[data-has-choices='true'] .choiceRow[data-choice-primary='true'] > strong {
+        font-size: 0.86rem;
+        line-height: 1.08;
+    }
+
+    .shell[data-has-choices='true'] .choiceRow p,
+    .shell[data-has-choices='true'] .choiceRow:not([data-choice-primary='true']) p {
+        max-height: 1.72rem;
+        font-size: 0.64rem;
+        line-height: 1.24;
+    }
+
+    .shell[data-has-choices='true'] .actions {
+        padding-top: 0.18rem;
+    }
+
+    .shell[data-has-choices='true'] .actionDock {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        justify-content: stretch;
+    }
+
+    .shell[data-has-choices='true'] .actionDock [data-action-group='primary'] {
+        display: none !important;
+    }
+
+    .shell[data-has-choices='true'] .actionDock [data-action-group='secondary'] {
+        display: grid;
         grid-template-columns: 1fr;
+        width: 100%;
+        gap: 0;
+    }
+
+    .shell[data-has-choices='true'] .actionDock [data-action-group='secondary'] .actionDockButton:not(:first-child) {
+        display: none !important;
+    }
+
+    .shell[data-has-choices='true'] .actionDockButton:first-child {
+        min-height: 2.22rem;
+        padding: 0.22rem 0.55rem !important;
+        border-color: color-mix(in srgb, var(--theme-text-muted) 18%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 48%, transparent);
+        opacity: 0.9;
+    }
+
+    .shell[data-has-choices='true'] .actionDockButton:first-child :global(span),
+    .shell[data-has-choices='true'] .actionDock :global([data-compact-label])::before {
+        overflow: hidden;
+        max-width: 100%;
+        font-size: 0.68rem;
+        line-height: 1;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+}
+
+/* UI-CLEANUP-065: phone perk picker needs tappable choices with one clear recommended read. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .overlay:has(.shell[data-has-choices='true']) {
+        align-items: center;
+        justify-content: center;
+        padding:
+            max(0.8rem, env(safe-area-inset-top, 0px))
+            max(0.74rem, env(safe-area-inset-right, 0px))
+            max(0.8rem, env(safe-area-inset-bottom, 0px))
+            max(0.74rem, env(safe-area-inset-left, 0px));
+    }
+
+    .shell[data-has-choices='true'] {
+        width: min(100%, 22.9rem);
+        max-height: min(calc(100dvh - 1.6rem), 31.4rem);
+        gap: 0.38rem;
+        padding: 0.7rem;
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 26%, transparent);
+        background:
+            linear-gradient(180deg, color-mix(in srgb, var(--theme-gold-bright) 5%, transparent), transparent 30%),
+            color-mix(in srgb, var(--theme-panel-solid) 92%, var(--theme-void) 8%);
+        box-shadow:
+            0 18px 38px color-mix(in srgb, var(--theme-shadow) 34%, transparent),
+            inset 0 1px 0 color-mix(in srgb, white 5%, transparent);
+        transform: none;
+    }
+
+    .shell[data-has-choices='true'] .header {
+        padding: 0;
+    }
+
+    .shell[data-has-choices='true'] .header h2 {
+        color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
+        font-size: clamp(0.96rem, 4.65vw, 1.12rem);
+        font-weight: 950;
+        letter-spacing: 0.01em;
+    }
+
+    .shell[data-has-choices='true'] .rewardPanel,
+    .shell[data-has-choices='true'] .rewardPanel[data-has-choices='true'] {
+        gap: 0.28rem;
+        padding: 0;
+        border: 0;
+        background: transparent;
+    }
+
+    .shell[data-has-choices='true'] .choiceList {
+        gap: 0.28rem;
+        max-height: min(62dvh, 22.25rem);
+        padding: 0.02rem;
+    }
+
+    .shell[data-has-choices='true'] .choiceRow,
+    .shell[data-has-choices='true'] .choiceRow[data-choice-primary='true'] {
+        min-height: 4.02rem;
+        gap: 0.18rem;
+        padding: 0.58rem 0.66rem;
+        border-color: color-mix(in srgb, var(--theme-text-muted) 17%, transparent);
+        border-left-width: 3px;
+        background:
+            linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 7%, transparent), transparent 58%),
+            color-mix(in srgb, var(--theme-surface-control) 70%, transparent);
+        box-shadow: inset 0 1px 0 color-mix(in srgb, white 5%, transparent);
+    }
+
+    .shell[data-has-choices='true'] .choiceRow[data-choice-primary='true'] {
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 38%, transparent);
+        border-left-color: color-mix(in srgb, var(--theme-gold-bright) 80%, white 6%);
+        background:
+            linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 12%, transparent), transparent 62%),
+            color-mix(in srgb, var(--theme-surface-control) 78%, transparent);
+    }
+
+    .shell[data-has-choices='true'] .choiceRow > strong,
+    .shell[data-has-choices='true'] .choiceRow[data-choice-primary='true'] > strong {
+        font-size: 0.9rem;
+        line-height: 1.08;
+        white-space: normal;
+    }
+
+    .shell[data-has-choices='true'] .choiceRow p,
+    .shell[data-has-choices='true'] .choiceRow:not([data-choice-primary='true']) p {
+        max-height: 1.86rem;
+        color: color-mix(in srgb, var(--theme-text-muted) 92%, white);
+        font-size: 0.67rem;
+        line-height: 1.18;
+        -webkit-line-clamp: 2;
+    }
+
+    .shell[data-has-choices='true'] .actions {
+        padding-top: 0.08rem;
+        border-top: 0;
+    }
+
+    .shell[data-has-choices='true'] .actionDockButton:first-child {
+        min-height: 2.08rem;
+        padding: 0.2rem 0.5rem !important;
+        border-color: color-mix(in srgb, var(--theme-text-muted) 16%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 42%, transparent);
+        opacity: 0.78;
+    }
+}
+
+/* UI-CLEANUP-067: mobile reward choices are full-screen decision surfaces, not floating cards. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .overlay:has(.shell[data-has-choices='true']) {
+        align-items: stretch;
+        justify-content: stretch;
+        padding:
+            max(0.7rem, env(safe-area-inset-top, 0px))
+            max(0.66rem, env(safe-area-inset-right, 0px))
+            max(0.7rem, env(safe-area-inset-bottom, 0px))
+            max(0.66rem, env(safe-area-inset-left, 0px));
+    }
+
+    .shell[data-has-choices='true'] {
+        width: 100%;
+        max-width: none;
+        height: 100%;
+        max-height: none;
+        gap: 0.54rem;
+        padding: 0.72rem;
+        border-radius: var(--ui-radius-md);
+        background:
+            linear-gradient(180deg, color-mix(in srgb, var(--theme-gold-bright) 6%, transparent), transparent 24%),
+            color-mix(in srgb, var(--theme-panel-solid) 90%, var(--theme-void) 10%);
+        box-shadow:
+            inset 0 1px 0 color-mix(in srgb, white 5%, transparent),
+            0 18px 44px color-mix(in srgb, var(--theme-shadow) 38%, transparent);
+    }
+
+    .shell[data-has-choices='true'] .scrollBody {
+        display: flex;
+        flex: 1 1 auto;
+        flex-direction: column;
+        min-height: 0;
+        overflow: hidden;
+    }
+
+    .shell[data-has-choices='true'] .header h2 {
+        color: color-mix(in srgb, var(--theme-rune) 96%, white);
+        font-size: clamp(1.08rem, 5vw, 1.28rem);
+        line-height: 1.08;
+        white-space: normal;
+    }
+
+    .shell[data-has-choices='true'] .rewardPanel,
+    .shell[data-has-choices='true'] .rewardPanel[data-has-choices='true'] {
+        display: flex;
+        flex: 1 1 auto;
+        flex-direction: column;
+        min-height: 0;
+    }
+
+    .shell[data-has-choices='true'] .choiceList {
+        flex: 1 1 auto;
+        max-height: none;
+        gap: 0.38rem;
+        padding: 0.02rem 0.02rem 0.16rem;
+        align-content: start;
+        align-items: start;
+    }
+
+    .shell[data-has-choices='true'] .choiceRow,
+    .shell[data-has-choices='true'] .choiceRow[data-choice-primary='true'] {
+        min-height: 4.7rem;
+        align-content: start;
+        padding: 0.72rem 0.78rem;
+        border-radius: var(--ui-radius-md);
+    }
+
+    .shell[data-has-choices='true'] .choiceRow > strong,
+    .shell[data-has-choices='true'] .choiceRow[data-choice-primary='true'] > strong {
+        font-size: 1rem;
+        line-height: 1.08;
+    }
+
+    .shell[data-has-choices='true'] .choiceRow p,
+    .shell[data-has-choices='true'] .choiceRow:not([data-choice-primary='true']) p {
+        max-height: 2.4rem;
+        font-size: 0.78rem;
+        line-height: 1.28;
+        -webkit-line-clamp: 2;
+    }
+
+    .shell[data-has-choices='true'] .actions {
+        flex: 0 0 auto;
+        padding-top: 0.22rem;
+        border-top: 1px solid color-mix(in srgb, var(--theme-gold-bright) 10%, transparent);
+    }
+
+    .shell[data-has-choices='true'] .actionDockButton:first-child {
+        min-height: 2.32rem;
+    }
+}
+
+/* UI-CLEANUP-068: short landscape reward choices need a real scrollport above the escape rail. */
+@media (max-height: 520px) and (orientation: landscape) {
+    .overlay:has(.shell[data-has-choices='true']) {
+        align-items: center;
+        justify-content: center;
+        padding:
+            max(0.5rem, env(safe-area-inset-top, 0px))
+            max(1.5rem, env(safe-area-inset-right, 0px))
+            max(0.5rem, env(safe-area-inset-bottom, 0px))
+            max(1.5rem, env(safe-area-inset-left, 0px));
+    }
+
+    .shell[data-has-choices='true'] {
+        display: flex;
+        flex-direction: column;
+        width: min(100%, 49.5rem);
+        max-width: none;
+        height: auto;
+        max-height: calc(100dvh - 1rem);
+        gap: 0.42rem;
+        padding: 0.62rem 0.72rem 0.56rem;
+        overflow: hidden;
+    }
+
+    .shell[data-has-choices='true'] .scrollBody {
+        display: flex;
+        flex: 0 1 auto;
+        flex-direction: column;
+        min-height: 0;
+        overflow: hidden;
+    }
+
+    .shell[data-has-choices='true'] .header {
+        flex: 0 0 auto;
+        min-height: 0;
+        padding: 0.08rem 0.08rem 0;
+    }
+
+    .shell[data-has-choices='true'] .header h2 {
+        overflow: hidden;
+        font-size: clamp(0.98rem, 2.5vw, 1.16rem);
+        line-height: 1.12;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .shell[data-has-choices='true'] .eyebrow,
+    .shell[data-has-choices='true'] .header p,
+    .shell[data-has-choices='true'] .payoffEngineStrip,
+    .shell[data-has-choices='true'] .rewardFeedbackList,
+    .shell[data-has-choices='true'] .rewardBurstStrip,
+    .shell[data-has-choices='true'] .boardMomentCue,
+    .shell[data-has-choices='true'] .primaryActionSignals,
+    .shell[data-has-choices='true'] .choiceLaneMap,
+    .shell[data-has-choices='true'] .choiceCueGrid,
+    .shell[data-has-choices='true'] .choiceImpactBurst,
+    .shell[data-has-choices='true'] .choiceHeatCue,
+    .shell[data-has-choices='true'] .choicePayoffStack,
+    .shell[data-has-choices='true'] .choiceBeatCue,
+    .shell[data-has-choices='true'] .choiceBeatPips,
+    .shell[data-has-choices='true'] .choiceSupportDetails,
+    .shell[data-has-choices='true'] .choiceSupportRail,
+    .shell[data-has-choices='true'] .traitBuildTags,
+    .shell[data-has-choices='true'] .traitBuildReason {
+        display: none !important;
+    }
+
+    .shell[data-has-choices='true'] .rewardPanel,
+    .shell[data-has-choices='true'] .rewardPanel[data-has-choices='true'] {
+        display: flex;
+        flex: 0 1 auto;
+        flex-direction: column;
+        min-height: 0;
+        gap: 0.22rem;
+        margin: 0;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+    }
+
+    .shell[data-has-choices='true'] .choiceList {
+        flex: 0 1 auto;
+        align-content: start;
+        align-items: start;
+        grid-auto-rows: max-content;
+        max-height: calc(100dvh - 8.35rem);
+        min-height: 0;
+        gap: 0.34rem;
+        padding: 0.02rem 0.08rem 0.08rem 0.02rem;
+        overflow-x: hidden;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        scrollbar-width: thin;
+    }
+
+    .shell[data-has-choices='true'] .choiceRow,
+    .shell[data-has-choices='true'] .choiceRow[data-choice-primary='true'] {
+        width: 100%;
+        min-height: 3.42rem;
+        gap: 0.16rem;
+        padding: 0.5rem 0.72rem;
+        border-radius: var(--ui-radius-sm);
+    }
+
+    .shell[data-has-choices='true'] .choiceRow::after {
+        top: 0.48rem;
+        right: 0.54rem;
+        padding: 0.12rem 0.36rem;
+        font-size: 0.48rem;
+    }
+
+    .shell[data-has-choices='true'] .choiceRow > strong,
+    .shell[data-has-choices='true'] .choiceRow[data-choice-primary='true'] > strong {
+        min-width: 0;
+        overflow: hidden;
+        font-size: 0.82rem;
+        line-height: 1.08;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .shell[data-has-choices='true'] .choiceRow p,
+    .shell[data-has-choices='true'] .choiceRow:not([data-choice-primary='true']) p {
+        display: -webkit-box !important;
+        max-height: 1.38rem;
+        overflow: hidden;
+        font-size: 0.62rem;
+        line-height: 1.14;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+    }
+
+    .shell[data-has-choices='true'] .actions {
+        flex: 0 0 auto;
+        padding-top: 0.12rem;
+        border-top: 1px solid color-mix(in srgb, var(--theme-gold-bright) 10%, transparent);
+    }
+
+    .shell[data-has-choices='true'] .actionDock {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        width: min(14rem, 100%);
+        padding: 0;
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+    }
+
+    .shell[data-has-choices='true'] .actionDockButton:first-child {
+        min-height: 2rem;
+        padding: 0.18rem 0.48rem !important;
+    }
+}
+
+/* UI-CLEANUP-068B: phone perk choices stay compact; empty space should not separate decisions from the escape rail. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .overlay:has(.shell[data-has-choices='true']) {
+        align-items: center;
+        justify-content: center;
+        padding:
+            max(0.72rem, env(safe-area-inset-top, 0px))
+            max(0.66rem, env(safe-area-inset-right, 0px))
+            max(0.72rem, env(safe-area-inset-bottom, 0px))
+            max(0.66rem, env(safe-area-inset-left, 0px));
+    }
+
+    .shell[data-has-choices='true'] {
+        width: min(100%, 23rem);
+        max-width: none;
+        height: auto;
+        max-height: calc(100dvh - 1.44rem);
+        gap: 0.44rem;
+        padding: 0.72rem;
+        overflow: hidden;
+    }
+
+    .shell[data-has-choices='true'] .scrollBody {
+        display: flex;
+        flex: 0 1 auto;
+        flex-direction: column;
+        min-height: 0;
+        overflow: hidden;
+    }
+
+    .shell[data-has-choices='true'] .header h2 {
+        font-size: clamp(1.02rem, 5vw, 1.22rem);
+        line-height: 1.08;
+    }
+
+    .shell[data-has-choices='true'] .rewardPanel,
+    .shell[data-has-choices='true'] .rewardPanel[data-has-choices='true'] {
+        flex: 0 1 auto;
+        min-height: 0;
+    }
+
+    .shell[data-has-choices='true'] .choiceList {
+        flex: 0 1 auto;
+        grid-auto-rows: max-content;
+        max-height: calc(100dvh - 8.75rem);
+        min-height: 0;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+    }
+
+    .shell[data-has-choices='true'] .choiceRow,
+    .shell[data-has-choices='true'] .choiceRow[data-choice-primary='true'] {
+        min-height: 4.22rem;
+        padding: 0.62rem 0.72rem;
+    }
+
+    .shell[data-has-choices='true'] .choiceRow > strong,
+    .shell[data-has-choices='true'] .choiceRow[data-choice-primary='true'] > strong {
+        font-size: 0.94rem;
+        line-height: 1.08;
+    }
+
+    .shell[data-has-choices='true'] .choiceRow p,
+    .shell[data-has-choices='true'] .choiceRow:not([data-choice-primary='true']) p {
+        max-height: 1.75rem;
+        font-size: 0.68rem;
+        line-height: 1.22;
+    }
+
+    .shell[data-has-choices='true'] .actions {
+        flex: 0 0 auto;
+        padding-top: 0.14rem;
+    }
+
+    .shell[data-has-choices='true'] .actionDockButton:first-child {
+        min-height: 2.18rem;
+        padding: 0.2rem 0.5rem !important;
+    }
+}
+
+/* UI-CLEANUP-077: reward/perk decisions should live in the player's thumb/eye zone, not centered in dead space. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .overlay:has(.shell[data-has-choices='true']) {
+        align-items: flex-start;
+        justify-content: center;
+        padding:
+            max(5.65rem, env(safe-area-inset-top, 0px))
+            max(0.58rem, env(safe-area-inset-right, 0px))
+            max(0.62rem, env(safe-area-inset-bottom, 0px))
+            max(0.58rem, env(safe-area-inset-left, 0px));
+    }
+
+    .shell[data-has-choices='true'] {
+        width: min(100%, 23.25rem);
+        max-height: calc(100dvh - 6.3rem);
+        gap: 0.34rem;
+        padding: 0.66rem;
+        border-radius: var(--ui-radius-md);
+    }
+
+    .shell[data-has-choices='true'] .header h2 {
+        font-size: clamp(1rem, 4.55vw, 1.18rem);
+        line-height: 1.08;
+    }
+
+    .shell[data-has-choices='true'] .choiceList {
+        gap: 0.22rem;
+        max-height: calc(100dvh - 12.3rem);
+        padding: 0;
+    }
+
+    .shell[data-has-choices='true'] .choiceRow,
+    .shell[data-has-choices='true'] .choiceRow[data-choice-primary='true'] {
+        min-height: 3.64rem;
+        gap: 0.14rem;
+        padding: 0.5rem 0.62rem;
+        border-radius: var(--ui-radius-sm);
+    }
+
+    .shell[data-has-choices='true'] .choiceRow > strong,
+    .shell[data-has-choices='true'] .choiceRow[data-choice-primary='true'] > strong {
+        font-size: 0.86rem;
+        line-height: 1.08;
+    }
+
+    .shell[data-has-choices='true'] .choiceRow p,
+    .shell[data-has-choices='true'] .choiceRow:not([data-choice-primary='true']) p {
+        max-height: 1.42rem;
+        font-size: 0.62rem;
+        line-height: 1.16;
+        -webkit-line-clamp: 2;
+    }
+
+    .shell[data-has-choices='true'] .actions {
+        padding-top: 0.08rem;
+    }
+
+    .shell[data-has-choices='true'] .actionDockButton:first-child {
+        min-height: 2rem;
+        padding: 0.16rem 0.48rem !important;
+    }
+}
+
+/* UI-CLEANUP-100: portrait side-room rewards should read as a choice board, not a tiny receipt. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .overlay:has(.shell[data-has-choices='true']) {
+        align-items: center;
+        justify-content: center;
+        padding:
+            max(0.72rem, env(safe-area-inset-top, 0px))
+            max(0.58rem, env(safe-area-inset-right, 0px))
+            max(0.72rem, env(safe-area-inset-bottom, 0px))
+            max(0.58rem, env(safe-area-inset-left, 0px));
+    }
+
+    .shell[data-has-choices='true'] {
+        width: min(calc(100vw - 1.16rem), 24rem);
+        min-height: min(24rem, calc(100dvh - 1.44rem));
+        max-height: calc(100dvh - 1.44rem);
+        gap: 0.58rem;
+        padding: 0.82rem;
+        overflow: hidden;
+        border-radius: var(--ui-radius-md);
+        background:
+            radial-gradient(ellipse 120% 60% at 50% 0%, color-mix(in srgb, var(--theme-gold-bright) 8%, transparent), transparent 64%),
+            color-mix(in srgb, var(--theme-panel-solid) 92%, var(--theme-void) 8%);
+        box-shadow:
+            0 18px 44px color-mix(in srgb, var(--theme-shadow) 42%, transparent),
+            inset 0 1px 0 color-mix(in srgb, white 5%, transparent);
+    }
+
+    .shell[data-has-choices='true'] .scrollBody {
+        display: flex;
+        flex: 1 1 auto;
+        flex-direction: column;
+        min-height: 0;
+        overflow: hidden;
+    }
+
+    .shell[data-has-choices='true'] .header {
+        padding: 0;
+    }
+
+    .shell[data-has-choices='true'] .header h2 {
+        color: color-mix(in srgb, var(--theme-gold-bright) 90%, white);
+        font-size: clamp(1.08rem, 5vw, 1.28rem);
+        line-height: 1.08;
+        letter-spacing: 0;
+    }
+
+    .shell[data-has-choices='true'] .rewardPanel,
+    .shell[data-has-choices='true'] .rewardPanel[data-has-choices='true'] {
+        display: flex;
+        flex: 1 1 auto;
+        flex-direction: column;
+        min-height: 0;
+        gap: 0.46rem;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+    }
+
+    .shell[data-has-choices='true'] .choiceList {
+        flex: 1 1 auto;
+        grid-auto-rows: max-content;
+        gap: 0.46rem;
+        max-height: none;
+        min-height: 0;
+        padding: 0.02rem;
+        overflow-x: hidden;
+        overflow-y: auto;
+        scrollbar-width: none;
+    }
+
+    .shell[data-has-choices='true'] .choiceList::-webkit-scrollbar {
+        display: none;
+    }
+
+    .shell[data-has-choices='true'] .choiceRow,
+    .shell[data-has-choices='true'] .choiceRow[data-choice-primary='true'] {
+        min-height: 5.15rem;
+        gap: 0.28rem;
+        padding: 0.76rem 0.82rem;
+        overflow: hidden;
+        border-radius: var(--ui-radius-md);
+        background:
+            linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent), transparent 64%),
+            color-mix(in srgb, var(--theme-surface-control) 70%, transparent);
+        box-shadow: inset 0 1px 0 color-mix(in srgb, white 5%, transparent);
+    }
+
+    .shell[data-has-choices='true'] .choiceRow[data-choice-primary='true'] {
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 44%, transparent);
+        background:
+            linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 13%, transparent), transparent 62%),
+            color-mix(in srgb, var(--theme-surface-control) 78%, transparent);
+    }
+
+    .shell[data-has-choices='true'] .choiceRow > strong,
+    .shell[data-has-choices='true'] .choiceRow[data-choice-primary='true'] > strong {
+        display: -webkit-box;
+        max-height: 2.2rem;
+        overflow: hidden;
+        font-size: 1rem;
+        line-height: 1.1;
+        white-space: normal;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+    }
+
+    .shell[data-has-choices='true'] .choiceRow p,
+    .shell[data-has-choices='true'] .choiceRow:not([data-choice-primary='true']) p {
+        display: -webkit-box !important;
+        max-height: 2.4rem;
+        overflow: hidden;
+        color: color-mix(in srgb, var(--theme-text-muted) 92%, white);
+        font-size: 0.75rem;
+        line-height: 1.22;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+    }
+
+    .shell[data-has-choices='true'] .actions {
+        flex: 0 0 auto;
+        padding-top: 0.16rem;
+        border-top: 1px solid color-mix(in srgb, var(--theme-gold-bright) 10%, transparent);
+    }
+
+    .shell[data-has-choices='true'] .actionDockButton:first-child {
+        min-height: 2.5rem;
+        padding: 0.24rem 0.56rem !important;
+        opacity: 0.86;
+    }
+}
+
+/* UI-CLEANUP-116: current phone side-room pass - higher compact choice sheet with less title weight. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .overlay:has(.shell[data-has-choices='true']) {
+        align-items: flex-start;
+        justify-content: center;
+        padding:
+            max(8.6rem, env(safe-area-inset-top, 0px))
+            max(0.58rem, env(safe-area-inset-right, 0px))
+            max(0.72rem, env(safe-area-inset-bottom, 0px))
+            max(0.58rem, env(safe-area-inset-left, 0px));
+    }
+
+    .shell[data-has-choices='true'] {
+        width: min(calc(100vw - 1.16rem), 23.5rem);
+        min-height: min(21.8rem, calc(100dvh - 9.3rem));
+        max-height: min(22.6rem, calc(100dvh - 9.3rem));
+        gap: 0.36rem;
+        padding: 0.62rem;
+        border-radius: var(--ui-radius-sm);
+        background: color-mix(in srgb, var(--theme-panel-solid) 82%, var(--theme-void) 18%);
+        box-shadow:
+            0 10px 28px color-mix(in srgb, var(--theme-shadow) 32%, transparent),
+            inset 0 1px 0 color-mix(in srgb, white 4%, transparent);
+    }
+
+    .shell[data-has-choices='true'] .header h2 {
+        font-size: clamp(0.96rem, 4.55vw, 1.12rem);
+        line-height: 1.02;
+    }
+
+    .shell[data-has-choices='true'] .rewardPanel,
+    .shell[data-has-choices='true'] .rewardPanel[data-has-choices='true'] {
+        gap: 0.28rem;
+    }
+
+    .shell[data-has-choices='true'] .choiceList {
+        gap: 0.28rem;
+    }
+
+    .shell[data-has-choices='true'] .choiceRow,
+    .shell[data-has-choices='true'] .choiceRow[data-choice-primary='true'] {
+        min-height: 4.9rem;
+        gap: 0.2rem;
+        padding: 0.58rem 0.68rem;
+        border-radius: var(--ui-radius-sm);
+    }
+
+    .shell[data-has-choices='true'] .choiceRow > strong,
+    .shell[data-has-choices='true'] .choiceRow[data-choice-primary='true'] > strong {
+        max-height: 1.92rem;
+        font-size: 0.92rem;
+        line-height: 1.08;
+    }
+
+    .shell[data-has-choices='true'] .choiceRow p,
+    .shell[data-has-choices='true'] .choiceRow:not([data-choice-primary='true']) p {
+        max-height: 2.12rem;
+        font-size: 0.68rem;
+        line-height: 1.18;
+    }
+
+    .shell[data-has-choices='true'] .actions {
+        padding-top: 0.08rem;
+    }
+
+    .shell[data-has-choices='true'] .actionDockButton:first-child {
+        min-height: 2.54rem;
+        padding: 0.24rem 0.52rem !important;
     }
 }

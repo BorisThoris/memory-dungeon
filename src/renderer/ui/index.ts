@@ -1,4 +1,5 @@
 export { default as AccentBanner } from './AccentBanner';
+export { cx } from './classNames';
 export { default as Eyebrow } from './Eyebrow';
 export { default as MetaFrame } from './MetaFrame';
 export type { MetaFrameProps, MetaFrameTag } from './MetaFrame';

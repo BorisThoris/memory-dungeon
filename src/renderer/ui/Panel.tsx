@@ -1,4 +1,5 @@
 import { createElement, type HTMLAttributes, type ReactNode } from 'react';
+import { cx } from './classNames';
 import styles from './Panel.module.css';
 
 export type PanelVariant = 'default' | 'strong' | 'muted' | 'accent';
@@ -35,7 +36,14 @@ const Panel = ({
     createElement(
         Tag,
         {
-            className: `${styles.root} ${styles[variant]} ${paddingClass[padding]} ${maxViewportHeight ? styles.maxHeightViewport : ''} ${scrollable ? styles.overflowAuto : ''} ${className}`.trim(),
+            className: cx(
+                styles.root,
+                styles[variant],
+                paddingClass[padding],
+                maxViewportHeight && styles.maxHeightViewport,
+                scrollable && styles.overflowAuto,
+                className
+            ),
             ...rest
         },
         children

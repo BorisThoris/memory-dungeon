@@ -10,13 +10,14 @@ export const perfectMemoryInventoryHint = (
     achievementsEnabled: boolean,
     powersUsedThisRun: boolean
 ): string => {
+    const compactRules = 'Perfect Memory: no misses, no rescue powers; pins ok.';
     if (!achievementsEnabled) {
-        return `${PERFECT_MEMORY_BASE_RULES} Achievements are off for this run - Perfect Memory is not tracked.`;
+        return `${compactRules} Achievements are off, so it is not tracked.`;
     }
     if (powersUsedThisRun) {
-        return `${PERFECT_MEMORY_BASE_RULES} A disallowed power was already used - Perfect Memory will not unlock this run.`;
+        return `${compactRules} A disallowed power was already used.`;
     }
-    return `${PERFECT_MEMORY_BASE_RULES} Avoid those powers through the end of the run to stay eligible.`;
+    return compactRules;
 };
 
 /** HUD pill: hidden when achievements are off for this run. */

@@ -36,6 +36,7 @@ import { useViewportSize } from '../hooks/useViewportSize';
 import { usePlatformTiltField } from '../platformTilt/usePlatformTiltField';
 import { Eyebrow, Panel, ScreenTitle, StatTile, UiButton } from '../ui';
 import { useAppStore } from '../store/useAppStore';
+import FeedbackBeatPips from './FeedbackBeatPips';
 import MainMenuBackground from './MainMenuBackground';
 import styles from './GameOverScreen.module.css';
 
@@ -203,6 +204,29 @@ const runMomentumRecapRows = (
     ];
 };
 
+const compactMomentumRecapDetail = (row: ReturnType<typeof runMomentumRecapRows>[number]): string => {
+    switch (row.id) {
+        case 'pickup':
+            return row.value.includes('/') ? 'Findable pairs claimed.' : 'No pickup route ended.';
+        case 'next-focus':
+            if (row.value === 'Claim pickups') {
+                return 'Claim visible reward pairs.';
+            }
+            if (row.value === 'Rebuild chain') {
+                return 'Reach x4 before side rewards.';
+            }
+            if (row.value === 'Reduce pressure') {
+                return 'Use guard, peek, or control.';
+            }
+            if (row.value === 'Draft engine') {
+                return 'Draft a route-changing tool.';
+            }
+            return 'Push greedier routes.';
+        default:
+            return row.detail;
+    }
+};
+
 const formatGameOverFeedbackRowsLabel = (
     label: string,
     rows: readonly { actionHint?: string; detail?: string; label?: string; title?: string; value: string }[]
@@ -223,6 +247,7 @@ const formatGameOverFeedbackRowsLabel = (
 const GameOverScreen = ({ run }: GameOverScreenProps) => {
     const shellRef = useRef<HTMLElement | null>(null);
     const { height, width } = useViewportSize();
+    const isMobileViewport = width <= 760;
     const { goToMenu, restartRun, runStartSaveData, saveData, settings } = useAppStore(
         useShallow((state) => ({
             goToMenu: state.goToMenu,
@@ -268,6 +293,7 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
     const flipCount = run.flipHistory?.length ?? 0;
     const journalEntry = buildRunJournalEntry(run);
     const nextRunRows = getGameOverNextRunRows(run, saveData, runStartSaveData ?? undefined);
+    const mobileSnapshotNextRows = nextRunRows.filter((row) => row.id === 'chain_target' || row.id === 'next_goal');
     const metaItems = [
         ...(summary.activeMutators?.map((id) => ({ kind: 'mutator' as const, label: mutatorLabel(id) })) ?? []),
         ...(summary.relicIds?.map((id) => ({ kind: 'relic' as const, label: relicLabel(id) })) ?? [])
@@ -323,9 +349,51 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
     const mainMenuActionCue =
         nextRunRows.find((row) => row.id === 'next_goal')?.actionHint ??
         nextRunRows.find((row) => row.id === 'build_recap')?.actionHint;
+    const mobileOutcomeHeading = isMobileViewport ? 'Next actions' : gameOverScreenCopy.heroEyebrow;
+    const gameOverActions = [
+        {
+            id: 'play-again',
+            ariaLabel: gameOverScreenCopy.playAgainAriaLabel,
+            mobileAriaLabel: 'Mobile Play Again - start a new run after this expedition',
+            cue: playAgainActionCue,
+            label: gameOverScreenCopy.playAgainLabel,
+            onClick: restartRun,
+            variant: 'primary'
+        },
+        {
+            id: 'main-menu',
+            ariaLabel: gameOverScreenCopy.mainMenuAriaLabel,
+            mobileAriaLabel: 'Mobile return to the main menu',
+            cue: mainMenuActionCue,
+            label: gameOverScreenCopy.mainMenuLabel,
+            onClick: () => {
+                resumeUiSfxContext();
+                playUiBackSfx(uiGain);
+                goToMenu();
+            },
+            variant: 'secondary'
+        }
+    ] as const;
+    const renderActionButton = (action: (typeof gameOverActions)[number], placement: 'desktop' | 'mobile') => (
+        <UiButton
+            fullWidth
+            aria-label={placement === 'mobile' ? action.mobileAriaLabel : action.ariaLabel}
+            className={placement === 'desktop' ? styles.desktopActionButton : undefined}
+            data-next-run-button-cue={action.cue}
+            key={`${placement}:${action.id}`}
+            size="lg"
+            variant={action.variant}
+            onClick={action.onClick}
+        >
+            <span className={styles.actionButtonContent}>
+                <span>{action.label}</span>
+                {action.cue ? <small>{action.cue}</small> : null}
+            </span>
+        </UiButton>
+    );
 
     return (
-        <section className={styles.shell} ref={shellRef}>
+        <section className={styles.shell} data-testid="game-over-screen" ref={shellRef}>
             <MainMenuBackground
                 fieldTiltRef={fieldTiltRef}
                 graphicsQuality={settings.graphicsQuality}
@@ -350,52 +418,11 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                 >
                     {politeRunSummaryText}
                 </p>
-                <section
-                    aria-label="Run result and next actions"
-                    className={styles.mobileActionDock}
-                    data-testid="game-over-above-fold-summary"
-                >
-                    <div className={styles.mobileOutcomeCopy}>
-                        <strong>{summary.totalScore.toLocaleString()} score</strong>
-                        <span>Floor {summary.highestLevel} / {summary.levelsCleared} clears / {summary.bestStreak} streak</span>
-                    </div>
-                    <UiButton
-                        fullWidth
-                        aria-label="Mobile Play Again - start a new run after this expedition"
-                        data-next-run-button-cue={playAgainActionCue}
-                        size="lg"
-                        variant="primary"
-                        onClick={restartRun}
-                    >
-                        <span className={styles.actionButtonContent}>
-                            <span>{gameOverScreenCopy.playAgainLabel}</span>
-                            {playAgainActionCue ? <small>{playAgainActionCue}</small> : null}
-                        </span>
-                    </UiButton>
-                    <UiButton
-                        fullWidth
-                        aria-label="Mobile return to the main menu"
-                        data-next-run-button-cue={mainMenuActionCue}
-                        size="lg"
-                        variant="secondary"
-                        onClick={() => {
-                            resumeUiSfxContext();
-                            playUiBackSfx(uiGain);
-                            goToMenu();
-                        }}
-                    >
-                        <span className={styles.actionButtonContent}>
-                            <span>{gameOverScreenCopy.mainMenuLabel}</span>
-                            {mainMenuActionCue ? <small>{mainMenuActionCue}</small> : null}
-                        </span>
-                    </UiButton>
-                </section>
-
                 <div className={styles.layout}>
-                    <Panel className={styles.heroPanel} padding="lg" variant="strong">
+                    <Panel className={styles.heroPanel} data-testid="game-over-hero-panel" padding="lg" variant="strong">
                         <div className={styles.heroLockup}>
                             <img alt="" className={styles.brandCrest} src={UI_ART.brandCrest} />
-                            <Eyebrow>{gameOverScreenCopy.heroEyebrow}</Eyebrow>
+                            {!isMobileViewport ? <Eyebrow>{gameOverScreenCopy.heroEyebrow}</Eyebrow> : null}
                             <ScreenTitle as="h1" role="screenLg">
                                 {gameOverScreenCopy.heroTitle}
                             </ScreenTitle>
@@ -407,6 +434,19 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                             <span className={styles.scoreHeroLabel}>{gameOverScreenCopy.scoreLabel}</span>
                             <span className={styles.scoreHeroValue}>{summary.totalScore.toLocaleString()}</span>
                         </div>
+                        <section
+                            aria-label="Run result and next actions"
+                            className={styles.mobileActionDock}
+                            data-testid="game-over-above-fold-summary"
+                        >
+                            <div className={styles.mobileOutcomeCopy}>
+                                <strong>{mobileOutcomeHeading}</strong>
+                                <span>
+                                    Floor {summary.highestLevel} / {summary.levelsCleared} clears / best chain x{summary.bestStreak}
+                                </span>
+                            </div>
+                            {gameOverActions.map((action) => renderActionButton(action, 'mobile'))}
+                        </section>
                         <div
                             aria-label={outcomeSignalsLabel}
                             className={styles.outcomeSignalStrip}
@@ -471,15 +511,16 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                                             <strong>{getRunPayoffLaneRole(primaryPayoffLane)}</strong>
                                             <b>{primaryPayoffLane.action}</b>
                                             <em>{primaryPayoffLane.cue}</em>
-                                            <span aria-hidden="true" className={styles.payoffPrimaryLaneBeatPips}>
-                                                {Array.from({ length: getRunPayoffLaneBeatCount(primaryPayoffLane) }, (_, index) => (
-                                                    <s
-                                                        data-payoff-primary-lane-beat={index + 1}
-                                                        data-payoff-primary-lane-beat-focus={index === 0 ? 'primary' : 'support'}
-                                                        key={index}
-                                                    />
-                                                ))}
-                                            </span>
+                                            <FeedbackBeatPips
+                                                className={styles.payoffPrimaryLaneBeatPips}
+                                                count={getRunPayoffLaneBeatCount(primaryPayoffLane)}
+                                                itemProps={(index) => ({
+                                                    'data-payoff-primary-lane-beat': index + 1,
+                                                    'data-payoff-primary-lane-beat-focus': index === 0 ? 'primary' : 'support'
+                                                })}
+                                                itemTag="s"
+                                                keyPrefix={`payoff-primary-lane-${primaryPayoffLane.id}`}
+                                            />
                                         </i>
                                     ) : null}
                                     {payoffLaneMap.map((lane) => (
@@ -500,15 +541,16 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                                             <em>
                                                 x{lane.count} / {lane.cue}
                                             </em>
-                                            <span aria-hidden="true" className={styles.payoffLaneBeatPips}>
-                                                {Array.from({ length: getRunPayoffLaneBeatCount(lane) }, (_, index) => (
-                                                    <s
-                                                        data-payoff-lane-beat={index + 1}
-                                                        data-payoff-lane-beat-focus={index === 0 ? 'primary' : 'support'}
-                                                        key={index}
-                                                    />
-                                                ))}
-                                            </span>
+                                            <FeedbackBeatPips
+                                                className={styles.payoffLaneBeatPips}
+                                                count={getRunPayoffLaneBeatCount(lane)}
+                                                itemProps={(index) => ({
+                                                    'data-payoff-lane-beat': index + 1,
+                                                    'data-payoff-lane-beat-focus': index === 0 ? 'primary' : 'support'
+                                                })}
+                                                itemTag="s"
+                                                keyPrefix={`payoff-lane-${lane.id}`}
+                                            />
                                         </i>
                                     ))}
                                 </span>
@@ -537,16 +579,15 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                                 >
                                     <small>{payoffCrescendoSignal.label}</small>
                                     <b>{payoffCrescendoSignal.detail}</b>
-                                    <strong>
-                                        {Array.from({ length: payoffCrescendoSignal.beatCount }, (_, index) => (
-                                            <i
-                                                aria-hidden="true"
-                                                data-payoff-crescendo-beat={index + 1}
-                                                data-payoff-crescendo-beat-focus={index === 0 ? 'primary' : 'support'}
-                                                key={index}
-                                            />
-                                        ))}
-                                    </strong>
+                                    <FeedbackBeatPips
+                                        containerTag="strong"
+                                        count={payoffCrescendoSignal.beatCount}
+                                        itemProps={(index) => ({
+                                            'data-payoff-crescendo-beat': index + 1,
+                                            'data-payoff-crescendo-beat-focus': index === 0 ? 'primary' : 'support'
+                                        })}
+                                        keyPrefix={`payoff-crescendo-${payoffCrescendoSignal.tier}`}
+                                    />
                                 </span>
                             ) : null}
                             {payoffStackPlan ? (
@@ -579,15 +620,15 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                                     <small>{row.label}</small>
                                     <strong>{row.value}</strong>
                                     <i>{row.action}</i>
-                                    <span aria-hidden="true" className={styles.payoffBurstBeatPips}>
-                                        {Array.from({ length: getRunPayoffSignalBeatCount(row) }, (_, index) => (
-                                            <i
-                                                data-payoff-burst-beat={index + 1}
-                                                data-payoff-burst-beat-focus={index === 0 ? 'primary' : 'support'}
-                                                key={index}
-                                            />
-                                        ))}
-                                    </span>
+                                    <FeedbackBeatPips
+                                        className={styles.payoffBurstBeatPips}
+                                        count={getRunPayoffSignalBeatCount(row)}
+                                        itemProps={(index) => ({
+                                            'data-payoff-burst-beat': index + 1,
+                                            'data-payoff-burst-beat-focus': index === 0 ? 'primary' : 'support'
+                                        })}
+                                        keyPrefix={`payoff-burst-${row.id}`}
+                                    />
                                     {row.nextCue ? <em>{row.nextCue}</em> : null}
                                 </span>
                             ))}
@@ -598,10 +639,15 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                             data-testid="game-over-momentum-recap"
                         >
                             {momentumRecapRows.map((row) => (
-                                <span data-momentum-recap-tone={row.tone} key={row.id}>
+                                <span
+                                    data-momentum-recap-empty={row.id === 'chain' && summary.bestStreak <= 0 ? 'true' : undefined}
+                                    data-momentum-recap-id={row.id}
+                                    data-momentum-recap-tone={row.tone}
+                                    key={row.id}
+                                >
                                     <small>{row.label}</small>
                                     <strong>{row.value}</strong>
-                                    <em>{row.detail}</em>
+                                    <em>{isMobileViewport ? compactMomentumRecapDetail(row) : row.detail}</em>
                                 </span>
                             ))}
                         </div>
@@ -622,7 +668,7 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                             </div>
                         ) : null}
 
-                        <div className={styles.summaryGrid}>
+                        <div className={styles.summaryGrid} data-testid="game-over-summary-grid">
                             <StatTile
                                 density="minimal"
                                 label={gameOverScreenCopy.statLabels.highestFloor}
@@ -658,7 +704,7 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                     </Panel>
 
                     <aside className={styles.sideRail}>
-                        <Panel className={styles.actionPanel} padding="lg" variant="default">
+                        <Panel className={styles.actionPanel} data-testid="game-over-action-dock" padding="lg" variant="default">
                             <div className={styles.actionHeader}>
                                 <img alt="" className={styles.actionSeal} src={UI_ART.menuSeal} />
                                 <div>
@@ -667,38 +713,7 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                                 </div>
                             </div>
                             <div className={styles.actionButtons}>
-                                <UiButton
-                                    fullWidth
-                                    aria-label={gameOverScreenCopy.playAgainAriaLabel}
-                                    data-next-run-button-cue={playAgainActionCue}
-                                    size="lg"
-                                    variant="primary"
-                                    className={styles.desktopActionButton}
-                                    onClick={restartRun}
-                                >
-                                    <span className={styles.actionButtonContent}>
-                                        <span>{gameOverScreenCopy.playAgainLabel}</span>
-                                        {playAgainActionCue ? <small>{playAgainActionCue}</small> : null}
-                                    </span>
-                                </UiButton>
-                                <UiButton
-                                    fullWidth
-                                    aria-label={gameOverScreenCopy.mainMenuAriaLabel}
-                                    data-next-run-button-cue={mainMenuActionCue}
-                                    size="lg"
-                                    variant="secondary"
-                                    className={styles.desktopActionButton}
-                                    onClick={() => {
-                                        resumeUiSfxContext();
-                                        playUiBackSfx(uiGain);
-                                        goToMenu();
-                                    }}
-                                >
-                                    <span className={styles.actionButtonContent}>
-                                        <span>{gameOverScreenCopy.mainMenuLabel}</span>
-                                        {mainMenuActionCue ? <small>{mainMenuActionCue}</small> : null}
-                                    </span>
-                                </UiButton>
+                                {gameOverActions.map((action) => renderActionButton(action, 'desktop'))}
                             </div>
                             <div
                                 aria-label={nextRunRowsLabel}
@@ -721,7 +736,7 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                             </div>
                         </Panel>
 
-                        <Panel className={styles.actionPanel} padding="lg" variant="muted">
+                        <Panel className={styles.actionPanel} data-testid="game-over-run-snapshot" padding="lg" variant="muted">
                             <span className={styles.panelKicker}>{gameOverScreenCopy.runSnapshotKicker}</span>
                             <strong className={styles.panelHeading} data-testid="game-over-mode-heading">
                                 {runModeHeading(summary)}
@@ -744,12 +759,30 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                                 data-testid="game-over-dungeon-journal"
                             >
                                 {dungeonJournalRows.map((row) => (
-                                        <div className={styles.journalRow} key={row.id}>
-                                            <strong>{row.label}</strong>
+                                    <div className={styles.journalRow} key={row.id}>
+                                        <strong>{row.label}</strong>
+                                        <span>{row.value}</span>
+                                    </div>
+                                ))}
+                            </div>
+                            {isMobileViewport && mobileSnapshotNextRows.length > 0 ? (
+                                <div
+                                    aria-label={formatGameOverFeedbackRowsLabel(
+                                        'Mobile run snapshot next loop',
+                                        mobileSnapshotNextRows
+                                    )}
+                                    className={styles.snapshotNextLoop}
+                                    data-testid="game-over-snapshot-next-loop"
+                                >
+                                    {mobileSnapshotNextRows.map((row) => (
+                                        <div data-snapshot-next-loop-row={row.id} key={row.id}>
+                                            <strong>{row.title}</strong>
                                             <span>{row.value}</span>
+                                            <small>{row.actionHint}</small>
                                         </div>
                                     ))}
-                            </div>
+                                </div>
+                            ) : null}
                         </Panel>
                     </aside>
                 </div>

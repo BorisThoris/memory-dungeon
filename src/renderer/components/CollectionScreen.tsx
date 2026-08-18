@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { ACHIEVEMENT_BY_ID } from '../../shared/achievements';
-import type { RelicId } from '../../shared/contracts';
+import type { AchievementId, RelicId } from '../../shared/contracts';
 import {
     COSMETIC_CATALOG,
     cosmeticUnlockTag,
@@ -53,11 +53,35 @@ import {
     getRunPayoffSignalBeatCount,
     getRunPayoffSignals
 } from '../copy/runPayoffSignals';
-import { Eyebrow, MetaFrame, Panel, ScreenTitle, UiButton } from '../ui';
+import { MetaFrame, Panel, UiButton } from '../ui';
 import { useAppStore } from '../store/useAppStore';
+import MetaScreenHeader from './MetaScreenHeader';
+import MetaSectionRail from './MetaSectionRail';
 import metaStyles from './MetaScreen.module.css';
-import { handleMetaBodyTocLinkClick } from './metaScreenTocNav';
 import styles from './CollectionScreen.module.css';
+
+const COLLECTION_SECTION_RAIL_ITEMS = [
+    { href: '#collection-reward-signals', label: 'Signals', compactLabel: 'Signal' },
+    { href: '#collection-meta-upgrades', label: 'Meta upgrades', compactLabel: 'Upgrades' },
+    { href: '#collection-reward-gallery', label: 'Rewards', compactLabel: 'Reward' },
+    { href: '#collection-achievements', label: 'Achievements', compactLabel: 'Achieve' },
+    { href: '#collection-honors', label: 'Honors', compactLabel: 'Honor' },
+    { href: '#collection-cosmetics', label: 'Cosmetics', compactLabel: 'Looks' },
+    { href: '#collection-relics', label: 'Relics', compactLabel: 'Relic' },
+    { href: '#collection-bests', label: 'Bests', compactLabel: 'Scores' },
+    { href: '#collection-daily', label: 'Daily' },
+    { href: '#collection-symbols', label: 'Symbols', compactLabel: 'Tiles' }
+] as const;
+
+const COLLECTION_HEADER_SUBTITLE = 'Saved progress: rewards, records, relics, and tile sets.';
+
+const COLLECTION_ACHIEVEMENT_SUMMARY: Partial<Record<AchievementId, string>> = {
+    ACH_PERFECT_CLEAR:
+        'Clear a level with zero mismatches and no disallowed powers that run. Pins are allowed.'
+};
+
+const getCollectionAchievementDescription = (id: AchievementId, description: string): string =>
+    COLLECTION_ACHIEVEMENT_SUMMARY[id] ?? description;
 
 const formatProgressionImpactLabel = (
     label: string,
@@ -139,53 +163,39 @@ const CollectionScreen = () => {
 
     return (
         <section aria-label="Collection" className={`${metaStyles.shell} ${metaStyles.shellMetaStage}`} role="region">
-            <header className={metaStyles.header}>
-                <div className={metaStyles.headerText}>
-                    <Eyebrow tone="menu">Archive</Eyebrow>
-                    <ScreenTitle as="h1" role="display">
-                        Collection
-                    </ScreenTitle>
-                    <p className={metaStyles.subtitle}>
-                        Read-only progress from your save: achievements, relic picks, bests, dailies, and the symbol sets
-                        used on the board.
-                    </p>
-                </div>
-                <UiButton size="md" variant="secondary" onClick={handleBack} type="button">
-                    Back
-                </UiButton>
-            </header>
+            <MetaScreenHeader
+                action={
+                    <UiButton
+                        className={metaStyles.compactHeaderAction}
+                        size="md"
+                        variant="secondary"
+                        onClick={handleBack}
+                        type="button"
+                    >
+                        Back
+                    </UiButton>
+                }
+                className={[styles.screenHeader, metaStyles.denseDesktopHeader].join(' ')}
+                compact
+                eyebrow="Archive"
+                subtitle={COLLECTION_HEADER_SUBTITLE}
+                subtitleClassName={styles.screenSubtitle}
+                title="Collection"
+                titleAs="h1"
+                titleClassName={styles.screenTitle}
+                titleRole="display"
+            />
 
-            <div ref={bodyScrollRef} className={metaStyles.body} data-testid="meta-screen-body">
-                <nav aria-label="Collection sections" className={metaStyles.inPageToc}>
-                    <a href="#collection-achievements" onClick={(e) => handleMetaBodyTocLinkClick(bodyScrollRef, e)}>
-                        Achievements
-                    </a>
-                    <a href="#collection-honors" onClick={(e) => handleMetaBodyTocLinkClick(bodyScrollRef, e)}>
-                        Honors
-                    </a>
-                    <a href="#collection-cosmetics" onClick={(e) => handleMetaBodyTocLinkClick(bodyScrollRef, e)}>
-                        Cosmetics
-                    </a>
-                    <a href="#collection-gallery" onClick={(e) => handleMetaBodyTocLinkClick(bodyScrollRef, e)}>
-                        Gallery
-                    </a>
-                    <a href="#collection-meta-upgrades" onClick={(e) => handleMetaBodyTocLinkClick(bodyScrollRef, e)}>
-                        Meta upgrades
-                    </a>
-                    <a href="#collection-relics" onClick={(e) => handleMetaBodyTocLinkClick(bodyScrollRef, e)}>
-                        Relics
-                    </a>
-                    <a href="#collection-bests" onClick={(e) => handleMetaBodyTocLinkClick(bodyScrollRef, e)}>
-                        Bests
-                    </a>
-                    <a href="#collection-daily" onClick={(e) => handleMetaBodyTocLinkClick(bodyScrollRef, e)}>
-                        Daily
-                    </a>
-                    <a href="#collection-symbols" onClick={(e) => handleMetaBodyTocLinkClick(bodyScrollRef, e)}>
-                        Symbols
-                    </a>
-                </nav>
-                <MetaFrame data-testid="collection-meta-frame-achievements">
+            <div ref={bodyScrollRef} className={`${metaStyles.body} ${styles.body}`.trim()} data-testid="meta-screen-body">
+                <MetaSectionRail
+                    ariaLabel="Collection sections"
+                    bodyScrollRef={bodyScrollRef}
+                    className={[styles.sectionRail, metaStyles.denseDesktopRail].join(' ')}
+                    compact
+                    dataTestId="collection-section-rail"
+                    items={COLLECTION_SECTION_RAIL_ITEMS}
+                />
+                <MetaFrame className={styles.achievementsFrame} data-testid="collection-meta-frame-achievements">
                     <Panel padding="lg" variant="strong">
                         <div className={`${styles.section} ${metaStyles.sectionAnchor}`} id="collection-achievements">
                             <h2 className={styles.sectionTitle}>Achievements</h2>
@@ -199,7 +209,9 @@ const CollectionScreen = () => {
                                             key={id}
                                         >
                                             <strong>{def.title}</strong>
-                                            <p className={metaStyles.subtitle}>{def.description}</p>
+                                            <p className={metaStyles.subtitle}>
+                                                {getCollectionAchievementDescription(id, def.description)}
+                                            </p>
                                             <span className={styles.symbolMeta}>{unlocked ? 'Unlocked' : 'Locked'}</span>
                                         </div>
                                     );
@@ -209,11 +221,11 @@ const CollectionScreen = () => {
                     </Panel>
                 </MetaFrame>
 
-                <MetaFrame data-testid="collection-meta-frame-honors">
+                <MetaFrame className={styles.honorsFrame} data-testid="collection-meta-frame-honors">
                     <Panel padding="lg" variant="default">
                         <div className={`${styles.section} ${metaStyles.sectionAnchor}`} id="collection-honors">
                             <h2 className={styles.sectionTitle}>Honors</h2>
-                            <p className={metaStyles.subtitle}>
+                            <p className={`${metaStyles.subtitle} ${styles.sectionLead} ${styles.sectionLeadOptional}`}>
                                 Local archive titles — no Steam slot required. Earned from dailies, no-powers floors,
                                 score, relic picks, and gauntlet clears.
                             </p>
@@ -237,27 +249,30 @@ const CollectionScreen = () => {
                     </Panel>
                 </MetaFrame>
 
-                <MetaFrame data-testid="collection-meta-frame-reward-signals">
+                <MetaFrame className={styles.rewardSignalsFrame} data-testid="collection-meta-frame-reward-signals">
                     <Panel padding="lg" variant="default">
-                        <div className={styles.section}>
+                        <div className={`${styles.section} ${metaStyles.sectionAnchor}`} id="collection-reward-signals">
                             <h2 className={styles.sectionTitle}>Reward signals</h2>
-                            <p className={metaStyles.subtitle}>
+                            <p
+                                className={`${metaStyles.subtitle} ${styles.sectionLead} ${styles.sectionLeadOptional}`}
+                                data-testid="collection-reward-signals-lead"
+                            >
                                 Runs feed durable local progress: next goal, recent reward, and missing discovery are shown here.
                             </p>
                             <div
                                 aria-label={rewardSignalsLabel}
-                                className={metaStyles.archiveCatalogGrid}
+                                className={`${metaStyles.archiveCatalogGrid} ${styles.overviewGrid}`}
                                 data-testid="collection-reward-signals"
                             >
                                 {rewardSignals.map((signal) => (
                                     <div
                                         aria-label={`${signal.title}. ${signal.body} Next: ${signal.cta}.`}
-                                        className={metaStyles.archiveCatalogRow}
+                                        className={`${metaStyles.archiveCatalogRow} ${styles.overviewRow}`}
                                         key={signal.id}
                                     >
                                         <p className={metaStyles.archiveCatalogRowTitle}>{signal.title}</p>
-                                        <p className={metaStyles.subtitle}>{signal.body}</p>
-                                        <span className={styles.symbolMeta}>{signal.cta}</span>
+                                        <p className={`${metaStyles.subtitle} ${styles.overviewBody}`}>{signal.body}</p>
+                                        <span className={`${styles.symbolMeta} ${styles.overviewNext}`}>{signal.cta}</span>
                                     </div>
                                 ))}
                             </div>
@@ -265,11 +280,11 @@ const CollectionScreen = () => {
                     </Panel>
                 </MetaFrame>
 
-                <MetaFrame data-testid="collection-meta-frame-reward-gallery">
+                <MetaFrame className={styles.rewardGalleryFrame} data-testid="collection-meta-frame-reward-gallery">
                     <Panel padding="lg" variant="default">
                         <div className={`${styles.section} ${metaStyles.sectionAnchor}`} id="collection-reward-gallery">
                             <h2 className={styles.sectionTitle}>Reward gallery</h2>
-                            <p className={metaStyles.subtitle}>
+                            <p className={`${metaStyles.subtitle} ${styles.sectionLead} ${styles.sectionLeadOptional}`}>
                                 Final hub gallery rows show owned, in-progress, and missing rewards from the local save.
                             </p>
                             <div
@@ -303,11 +318,11 @@ const CollectionScreen = () => {
                     </Panel>
                 </MetaFrame>
 
-                <MetaFrame data-testid="collection-meta-frame-cosmetics">
+                <MetaFrame className={styles.cosmeticsFrame} data-testid="collection-meta-frame-cosmetics">
                     <Panel padding="lg" variant="default">
                         <div className={`${styles.section} ${metaStyles.sectionAnchor}`} id="collection-cosmetics">
                             <h2 className={styles.sectionTitle}>Cosmetics</h2>
-                            <p className={metaStyles.subtitle}>
+                            <p className={`${metaStyles.subtitle} ${styles.sectionLead} ${styles.sectionLeadOptional}`}>
                                 Cosmetic slots are visual-only. Owned/equipped state uses local unlock tags; no gameplay power is attached.
                             </p>
                             <div className={`${styles.grid} ${metaStyles.metaLongList}`}>
@@ -333,34 +348,40 @@ const CollectionScreen = () => {
                     </Panel>
                 </MetaFrame>
 
-                <MetaFrame data-testid="collection-meta-frame-meta-upgrades">
+                <MetaFrame className={styles.metaUpgradesFrame} data-testid="collection-meta-frame-meta-upgrades">
                     <Panel padding="lg" variant="default">
                         <div className={`${styles.section} ${metaStyles.sectionAnchor}`} id="collection-meta-upgrades">
                             <h2 className={styles.sectionTitle}>Permanent upgrades and cosmetic track</h2>
-                            <p className={metaStyles.subtitle}>
+                            <p
+                                className={`${metaStyles.subtitle} ${styles.sectionLead} ${styles.sectionLeadOptional}`}
+                                data-testid="collection-meta-upgrades-lead"
+                            >
                                 Permanent rows are local save milestones only. Gameplay-affecting upgrades are capped and earned from play; cosmetic track rows stay visual-only.
                             </p>
-                            <div className={metaStyles.archiveCatalogGrid} data-testid="collection-meta-progression-board">
-                                <div className={metaStyles.archiveCatalogRow}>
+                            <div
+                                className={`${metaStyles.archiveCatalogGrid} ${styles.overviewGrid}`}
+                                data-testid="collection-meta-progression-board"
+                            >
+                                <div className={`${metaStyles.archiveCatalogRow} ${styles.overviewRow}`}>
                                     <p className={metaStyles.archiveCatalogRowTitle}>Profile level {metaProgressionBoard.level}</p>
                                     <span>
-                                        {metaProgressionFeedback.difficultyTierLabel} - {metaProgressionFeedback.honorMarksToNextLevel} honor mark
-                                        {metaProgressionFeedback.honorMarksToNextLevel === 1 ? '' : 's'} to next profile level
+                                        {metaProgressionFeedback.difficultyTierLabel}: {metaProgressionFeedback.honorMarksToNextLevel} honor mark
+                                        {metaProgressionFeedback.honorMarksToNextLevel === 1 ? '' : 's'} to next level
                                     </span>
                                 </div>
-                                <div className={metaStyles.archiveCatalogRow}>
+                                <div className={`${metaStyles.archiveCatalogRow} ${styles.overviewRow}`}>
                                     <p className={metaStyles.archiveCatalogRowTitle}>Next reward</p>
                                     <span>{metaProgressionBoard.nextReward ? `${metaProgressionBoard.nextReward.title} · ${metaProgressionBoard.nextReward.source}` : 'All visible rewards owned'}</span>
                                 </div>
-                                <div className={metaStyles.archiveCatalogRow}>
+                                <div className={`${metaStyles.archiveCatalogRow} ${styles.overviewRow}`}>
                                     <p className={metaStyles.archiveCatalogRowTitle}>Progression focus</p>
                                     <span>{metaProgressionFeedback.motivationCopy}</span>
                                 </div>
-                                <div className={metaStyles.archiveCatalogRow}>
+                                <div className={`${metaStyles.archiveCatalogRow} ${styles.overviewRow}`}>
                                     <p className={metaStyles.archiveCatalogRowTitle}>Next tier milestone</p>
                                     <span>{metaProgressionFeedback.nextMilestoneCopy}</span>
                                 </div>
-                                <div className={metaStyles.archiveCatalogRow}>
+                                <div className={`${metaStyles.archiveCatalogRow} ${styles.overviewRow}`}>
                                     <p className={metaStyles.archiveCatalogRowTitle}>Long-term goal</p>
                                     <span>{metaProgressionBoard.longTermGoal ? `${metaProgressionBoard.longTermGoal.title} · ${metaProgressionBoard.longTermGoal.gate}` : 'No open local goals'}</span>
                                 </div>
@@ -417,11 +438,11 @@ const CollectionScreen = () => {
                     </Panel>
                 </MetaFrame>
 
-                <MetaFrame data-testid="collection-meta-frame-relics">
+                <MetaFrame className={styles.secondaryArchiveFrame} data-testid="collection-meta-frame-relics">
                     <Panel padding="lg" variant="default">
                         <div className={`${styles.section} ${metaStyles.sectionAnchor}`} id="collection-relics">
                             <h2 className={styles.sectionTitle}>Relic catalog</h2>
-                            <p className={metaStyles.subtitle}>
+                            <p className={`${metaStyles.subtitle} ${styles.sectionLead} ${styles.sectionLeadOptional}`}>
                                 Tier tint reflects how often each relic has been picked across runs (cosmetic only).
                             </p>
                             <div className={`${styles.grid} ${metaStyles.metaLongList}`}>
@@ -443,7 +464,7 @@ const CollectionScreen = () => {
                     </Panel>
                 </MetaFrame>
 
-                <Panel padding="lg" variant="default">
+                <Panel className={`${styles.secondaryArchiveFrame} ${styles.secondaryArchivePreviewFrame}`} padding="lg" variant="default">
                     <div className={`${styles.section} ${metaStyles.sectionAnchor}`} id="collection-bests">
                         <h2 className={styles.sectionTitle}>Bests and last run</h2>
                         <div className={styles.statRow}>
@@ -712,7 +733,7 @@ const CollectionScreen = () => {
                     </div>
                 </Panel>
 
-                <Panel padding="lg" variant="default">
+                <Panel className={`${styles.secondaryArchiveFrame} ${styles.secondaryArchivePreviewFrame}`} padding="lg" variant="default">
                     <div className={`${styles.section} ${metaStyles.sectionAnchor}`} id="collection-daily">
                         <h2 className={styles.sectionTitle}>Daily stats</h2>
                         <div className={styles.statRow}>
@@ -742,7 +763,7 @@ const CollectionScreen = () => {
                     </div>
                 </Panel>
 
-                <Panel padding="lg" variant="default">
+                <Panel className={`${styles.secondaryArchiveFrame} ${styles.secondaryArchivePreviewFrame}`} padding="lg" variant="default">
                     <div className={`${styles.section} ${metaStyles.sectionAnchor}`} id="collection-symbols">
                         <h2 className={styles.sectionTitle}>Symbol gallery</h2>
                         <p className={metaStyles.subtitle}>

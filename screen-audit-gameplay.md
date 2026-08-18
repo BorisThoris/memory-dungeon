@@ -1,0 +1,7 @@
+- generic [ref=e2] [box=0,0,1440,960]:
+  - generic [ref=e3] [box=0,0,1440,960]:
+    - link "Skip to main content" [ref=e4] [cursor=pointer] [box=-1,-1,1,1]:
+      - /url: "#app-main"
+    - main [ref=e5] [box=0,0,1440,960]:
+      - status [ref=e772] [box=0,0,1440,22]: Loading run...
+  - region "Memory Dungeon tips" [box=240,924,960,0]

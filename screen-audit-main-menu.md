@@ -1,0 +1,16 @@
+- generic [ref=e2] [box=0,0,1440,960]:
+  - generic [ref=e3] [box=0,0,1440,960]:
+    - link "Skip to main content" [ref=e4] [cursor=pointer] [box=-1,-1,1,1]:
+      - /url: "#app-main"
+    - main [ref=e5] [box=0,0,1440,960]:
+      - main [ref=e19] [box=594,3,252,212]:
+        - generic [ref=e20] [box=643,7,154,80]:
+          - paragraph [ref=e21] [box=704,31,31,3]: Seeker of Shards
+          - heading "Memory Dungeon" [level=1] [ref=e22] [box=671,36,99,35]
+          - paragraph [ref=e60] [box=688,81,64,4]: Test your mind. Conquer the depths.
+        - generic [ref=e24] [box=685,92,69,95]:
+          - group "Primary actions" [ref=e27] [box=689,105,62,78]
+          - img [box=684,91,69,95]
+        - group [ref=e54] [box=674,195,91,13]:
+          - generic "How To Play Read, match, and protect the streak Open" [ref=e55] [cursor=pointer] [box=674,195,91,11]
+  - region "Memory Dungeon tips" [box=240,924,960,0]

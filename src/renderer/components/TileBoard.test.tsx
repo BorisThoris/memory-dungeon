@@ -3769,6 +3769,39 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('board-opportunity-tool')).toHaveAttribute('data-opportunity-action-id', 'tool');
     });
 
+    it('collapses active-power guidance in mobile camera mode', async () => {
+        renderBoard({
+            board: {
+                ...board,
+                tiles: [
+                    { id: 's1', pairKey: 'sealed', symbol: 'S', label: 'Sealed', state: 'hidden', tileTraitKind: 'sealed' },
+                    { id: 'f1', pairKey: 'filler', symbol: 'F', label: 'Filler', state: 'hidden' },
+                    { id: 'x1', pairKey: 'origin', symbol: 'O', label: 'Origin', state: 'hidden' },
+                    { id: 'h1', pairKey: 'heavy', symbol: 'H', label: 'Heavy', state: 'hidden', tileTraitKind: 'heavy' }
+                ]
+            },
+            debugPeekActive: false,
+            interactive: true,
+            mobileCameraMode: true,
+            onTileSelect: vi.fn(),
+            previewActive: false,
+            reduceMotion: false,
+            tileSwapEligibleTileIds: new Set(['s1']),
+            tileSwapFirstTileId: 'x1',
+            tileSwapPowerVisualActive: true
+        });
+
+        fireEvent.focus(screen.getByTestId('tile-board-application'));
+
+        await waitFor(() => expect(screen.getByTestId('trait-preview-chip')).toHaveTextContent('Swap preview'));
+        expect(screen.getByTestId('active-power-board-chip')).toHaveTextContent('Swap armed');
+        expect(screen.getByTestId('active-power-board-chip')).toHaveTextContent('Place target');
+        expect(screen.getByTestId('active-power-board-chip')).not.toHaveTextContent('First: Pick target');
+        expect(screen.getByTestId('active-power-board-chip')).not.toHaveTextContent('Then: Preview route payoff');
+        expect(screen.getByTestId('active-power-board-chip').querySelectorAll('[data-active-power-beat]')).toHaveLength(0);
+        expect(screen.getByTestId('active-power-board-chip').querySelectorAll('[data-active-power-step-beat]')).toHaveLength(0);
+    });
+
     it('shows active board command chips for armed recall and control powers', () => {
         const { rerender } = renderBoard({
             board,
@@ -4253,6 +4286,34 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('board-opportunity-chain')).toHaveAttribute('data-opportunity-tone', 'setup');
     });
 
+    it('uses the bottom opportunity compass as the mobile trait-route surface', () => {
+        renderBoard({
+            board: {
+                ...board,
+                tiles: [
+                    { id: 's1', pairKey: 'sealed', symbol: 'S', label: 'Sealed', state: 'hidden', tileTraitKind: 'sealed' },
+                    { id: 'f1', pairKey: 'filler', symbol: 'F', label: 'Filler', state: 'hidden' },
+                    { id: 'x1', pairKey: 'origin', symbol: 'O', label: 'Origin', state: 'hidden' },
+                    { id: 'h1', pairKey: 'heavy', symbol: 'H', label: 'Heavy', state: 'hidden', tileTraitKind: 'heavy' }
+                ]
+            },
+            debugPeekActive: false,
+            interactive: true,
+            mobileCameraMode: true,
+            onTileSelect: vi.fn(),
+            previewActive: false,
+            reduceMotion: false,
+            traitRouteHintText: 'Swap Sealed with Filler: Sealed + Heavy: score surge',
+            traitRouteTargetTileIds: ['s1', 'f1']
+        });
+
+        expect(screen.queryByTestId('chain-opportunity-chip')).toBeNull();
+        expect(screen.getByTestId('board-opportunity-compass')).toHaveTextContent('1 play');
+        expect(screen.getByTestId('board-opportunity-chain')).toHaveTextContent('Route prime');
+        expect(screen.getByTestId('board-opportunity-chain')).toHaveTextContent('Use swap');
+        expect(screen.getByTestId('board-opportunity-chain')).toHaveAttribute('data-opportunity-action-id', 'tool');
+    });
+
     it('plays a procedural chain opportunity beat when a prime route appears', async () => {
         const createOscillator = vi.fn(() => ({
             type: 'sine' as OscillatorType,
@@ -4543,6 +4604,39 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('trait-preview-chip')).toHaveAccessibleName(
             /Pickup reward preview.*Claim.*Shard spark pickup: \+1 combo shard/i
         );
+    });
+
+    it('collapses pickup guidance in mobile camera mode', async () => {
+        const pickupBoard: BoardState = {
+            ...board,
+            tiles: [
+                { id: 'a1', pairKey: 'A', symbol: 'A', label: 'A', state: 'hidden', findableKind: 'shard_spark' },
+                { id: 'a2', pairKey: 'A', symbol: 'A', label: 'A', state: 'hidden', findableKind: 'shard_spark' },
+                { id: 'b1', pairKey: 'B', symbol: 'B', label: 'B', state: 'hidden' },
+                { id: 'b2', pairKey: 'B', symbol: 'B', label: 'B', state: 'hidden' }
+            ]
+        };
+
+        renderBoard({
+            board: pickupBoard,
+            debugPeekActive: false,
+            interactive: true,
+            mobileCameraMode: true,
+            onTileSelect: vi.fn(),
+            previewActive: true,
+            reduceMotion: false
+        });
+
+        fireEvent.focus(screen.getByTestId('tile-board-application'));
+        await waitFor(() => {
+            expect(screen.getByTestId('pickup-opportunity-chip')).toHaveTextContent('Claim before exit');
+        });
+        expect(screen.getByTestId('pickup-opportunity-chip')).toHaveTextContent('Pickup rewards');
+        expect(screen.getByTestId('pickup-opportunity-chip')).toHaveTextContent('1 reward');
+        expect(screen.getByTestId('pickup-opportunity-chip')).not.toHaveTextContent('Bank pickup reward');
+        expect(screen.queryByTestId('pickup-opportunity-sequence')).toBeNull();
+        expect(screen.getByTestId('pickup-opportunity-chip').querySelectorAll('[data-pickup-chip-beat]')).toHaveLength(0);
+        expect(screen.queryByTestId('board-opportunity-primary-lane')).toBeNull();
     });
 
     it('promotes pickup opportunities as stack setup when the next chain cashout is one match away', () => {
@@ -5092,6 +5186,37 @@ describe('TileBoard touch and click controls', () => {
         expect(frame).toHaveAttribute('data-dungeon-mobile-board-primary', 'true');
         expect(frame).toHaveAttribute('data-dungeon-touch-target-min', String(DNG065_MOBILE_BOARD_PRIORITY.minTouchTargetPx));
         expect(screen.getByTestId('tile-board-application')).toHaveAttribute('aria-label', DNG065_BOARD_APPLICATION_LABEL);
+    });
+
+    it('collapses trait-mode feedback into a tighter mobile summary strip', async () => {
+        renderBoard({
+            board: {
+                ...board,
+                tiles: [
+                    { ...board.tiles[0]!, pairKey: 'echo', tileTraitKind: 'echo' },
+                    { ...board.tiles[1]!, pairKey: 'sealed', tileTraitKind: 'sealed' },
+                    board.tiles[2]!,
+                    board.tiles[3]!
+                ]
+            },
+            chainContext: { comboShards: 1, currentStreak: 4, lives: 4 },
+            debugPeekActive: false,
+            interactive: true,
+            mobileCameraMode: true,
+            onTileSelect: vi.fn(),
+            previewActive: false,
+            reduceMotion: false
+        });
+
+        fireEvent.focus(screen.getByTestId('tile-board-application'));
+
+        await waitFor(() => expect(screen.getByTestId('trait-preview-chip')).toHaveTextContent('Trait combo'));
+        expect(screen.getByTestId('trait-mode-cue')).toHaveTextContent('Trait mode');
+        expect(screen.getByTestId('trait-mode-cue')).toHaveTextContent('Stack live');
+        expect(screen.getByTestId('trait-mode-cue')).toHaveTextContent('Next reward');
+        expect(screen.getByTestId('trait-mode-cue')).not.toHaveTextContent('One-away cashout');
+        expect(screen.getByTestId('trait-mode-cue').querySelectorAll('[data-trait-mode-beat]')).toHaveLength(0);
+        expect(screen.queryByTestId('board-opportunity-primary-lane')).toBeNull();
     });
 
     it('keeps dungeon encounter markers above objective chrome without covering card center text', () => {

@@ -1,10 +1,12 @@
 import { render, screen } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { RunState } from '../../shared/contracts';
 import { createNewRun, createRunSummary, finishMemorizePhase } from '../../shared/game-core';
 import { createDefaultSaveData } from '../../shared/save-data';
 import { getGameOverNextRunRows } from '../../shared/game-over-next-run';
 import GameOverScreen from './GameOverScreen';
+
+const viewportSnapshot = { width: 1280, height: 800 };
 
 const uiSfxMocks = vi.hoisted(() => ({
     playGameOverOpenSfx: vi.fn(),
@@ -15,7 +17,7 @@ const uiSfxMocks = vi.hoisted(() => ({
 
 vi.mock('./MainMenuBackground', () => ({ default: () => null }));
 vi.mock('../hooks/useViewportSize', () => ({
-    useViewportSize: () => ({ width: 1280, height: 800 })
+    useViewportSize: () => viewportSnapshot
 }));
 vi.mock('../platformTilt/usePlatformTiltField', () => ({
     usePlatformTiltField: () => ({ tiltRef: { current: null } })
@@ -45,6 +47,11 @@ const gameOverRunFixture = (): RunState => {
 };
 
 describe('GameOverScreen (REF-031)', () => {
+    beforeEach(() => {
+        viewportSnapshot.width = 1280;
+        viewportSnapshot.height = 800;
+    });
+
     it('exposes a single page title and polite run summary for assistive tech', () => {
         render(<GameOverScreen run={gameOverRunFixture()} />);
 
@@ -85,10 +92,27 @@ describe('GameOverScreen (REF-031)', () => {
         render(<GameOverScreen run={gameOverRunFixture()} />);
 
         const topSummary = screen.getByTestId('game-over-above-fold-summary');
-        expect(topSummary).toHaveTextContent('score');
+        expect(topSummary).toHaveTextContent('Run complete');
+        expect(topSummary).toHaveTextContent('best chain');
         expect(topSummary).toHaveTextContent('Play Again');
         expect(topSummary).toHaveTextContent('Main Menu');
+        expect(topSummary).not.toHaveTextContent(/^0 score$/i);
         expect(screen.getByText(/Journal/)).toBeInTheDocument();
+    });
+
+    it('REG-134 avoids repeating the completion eyebrow in the mobile hero stack', () => {
+        viewportSnapshot.width = 390;
+        viewportSnapshot.height = 844;
+
+        render(<GameOverScreen run={gameOverRunFixture()} />);
+
+        expect(screen.getByTestId('game-over-above-fold-summary')).toHaveTextContent('Next actions');
+        expect(screen.queryAllByText(/Run complete/i)).toHaveLength(0);
+        expect(screen.getByTestId('game-over-snapshot-next-loop')).toHaveTextContent('Chain target');
+        expect(screen.getByTestId('game-over-snapshot-next-loop')).toHaveTextContent('Next goal');
+        expect(screen.getByTestId('game-over-snapshot-next-loop')).toHaveAccessibleName(
+            /Mobile run snapshot next loop.*Chain target/i
+        );
     });
 
     it('REG-096 surfaces next-run loop reasons from local summary data', () => {

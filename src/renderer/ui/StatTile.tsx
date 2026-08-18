@@ -1,4 +1,5 @@
 import type { HTMLAttributes, ReactNode } from 'react';
+import { cx } from './classNames';
 import styles from './StatTile.module.css';
 
 export type StatTileDensity = 'default' | 'compact' | 'dense' | 'modalChild' | 'minimal';
@@ -24,13 +25,19 @@ const StatTile = ({
     ...rest
 }: StatTileProps) => (
     <article
-        className={`${styles.root} ${density === 'compact' ? styles.compact : ''} ${density === 'dense' ? styles.dense : ''} ${density === 'modalChild' ? styles.modalChild : ''} ${density === 'minimal' ? styles.minimal : ''} ${valueFirst ? styles.valueFirst : ''} ${className}`.trim()}
+        className={cx(
+            styles.root,
+            density === 'compact' && styles.compact,
+            density === 'dense' && styles.dense,
+            density === 'modalChild' && styles.modalChild,
+            density === 'minimal' && styles.minimal,
+            valueFirst && styles.valueFirst,
+            className
+        )}
         {...rest}
     >
         <span className={styles.label}>{label}</span>
-        <strong
-            className={`${styles.value} ${valueAccent ? styles.valueAccent : ''} ${valueLg ? styles.valueLg : ''}`.trim()}
-        >
+        <strong className={cx(styles.value, valueAccent && styles.valueAccent, valueLg && styles.valueLg)}>
             {value}
         </strong>
     </article>

@@ -69,7 +69,8 @@ describe('StartupIntro', () => {
         await flushIntroPreload();
 
         expect(screen.getByRole('dialog', { name: /startup relic intro/i })).toBeInTheDocument();
-        expect(screen.getByRole('img', { name: /obsidian relic sigil/i })).toBeInTheDocument();
+        expect(screen.getByRole('img', { name: /memory dungeon crest/i })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: /enter memory dungeon/i })).toBeInTheDocument();
 
         act(() => {
             vi.advanceTimersByTime(4199);
@@ -188,7 +189,7 @@ describe('StartupIntro', () => {
         await flushIntroPreload();
 
         expect(mockPreloadStartupCriticalAssets).toHaveBeenCalledTimes(1);
-        expect(screen.getByRole('img', { name: /obsidian relic sigil/i })).toBeInTheDocument();
+        expect(screen.getByRole('img', { name: /memory dungeon crest/i })).toBeInTheDocument();
     });
 });
 

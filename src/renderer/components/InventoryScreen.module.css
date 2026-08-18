@@ -22,6 +22,471 @@
     max-width: 42rem;
 }
 
+/* UI-CLEANUP-023: phone in-run inventory should read as one compact sheet, not nested archive chrome. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .inRunInventoryShell .screenHeader {
+        gap: 0.3rem;
+        padding-bottom: 0.18rem;
+        border-bottom-color: color-mix(in srgb, var(--theme-gold-bright) 14%, transparent);
+    }
+
+    .inRunInventoryShell .screenHeader :global([class*='headerText']) {
+        padding: 0;
+        border: 0;
+        background: transparent;
+    }
+
+    .inRunInventoryShell .screenHeader :global([class*='headerText']) > :first-child,
+    .inRunInventoryShell .screenHeader :global([class*='eyebrow']),
+    .inRunInventoryShell .screenSubtitle {
+        display: none;
+    }
+
+    .inRunInventoryShell .screenHeader .screenTitle.screenTitle {
+        font-size: clamp(1.18rem, 6vw, 1.42rem);
+        letter-spacing: 0;
+    }
+
+    .inRunInventoryShell .screenHeader :global(button),
+    .inRunInventoryShell .screenHeader > :global(button) {
+        min-height: 1.78rem;
+        border-radius: var(--ui-radius-pill);
+    }
+
+    .inRunInventoryShell .body {
+        gap: 0.28rem;
+        padding-right: 0.18rem;
+    }
+
+    .inRunInventoryShell .sectionRail {
+        --meta-compact-rail-gap: 0.16rem;
+        --meta-compact-rail-link-font-size: 0.48rem;
+        --meta-compact-rail-link-min-height: 1.2rem;
+        --meta-compact-rail-link-padding-inline: 0.28rem;
+        padding-bottom: 0.1rem;
+        mask-image: none;
+    }
+
+    .inRunInventoryShell .loadoutBoard,
+    .inRunInventoryShell .loadoutSection {
+        gap: 0.36rem;
+    }
+
+    .inRunInventoryShell .sectionTitle {
+        margin-bottom: 0.18rem;
+        padding-bottom: 0;
+        border-bottom: 0;
+        color: color-mix(in srgb, var(--theme-text-muted) 88%, white);
+        font-size: 0.58rem;
+        font-weight: 920;
+        letter-spacing: 0.08em;
+        line-height: 1;
+        text-transform: uppercase;
+    }
+
+    .inRunInventoryShell .runSnapshotPanel,
+    .inRunInventoryShell [data-testid='inventory-meta-frame-build'] :global([class*='panel']),
+    .inRunInventoryShell [data-testid='inventory-meta-frame-consumables'] :global([class*='panel']),
+    .inRunInventoryShell [data-testid='inventory-meta-frame-relics'] :global([class*='panel']),
+    .inRunInventoryShell [data-testid='inventory-meta-frame-mutators'] :global([class*='panel']) {
+        --ui-density-panel-pad-lg: 0.42rem;
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 16%, transparent);
+        background: color-mix(in srgb, var(--theme-surface-glass) 52%, transparent);
+        box-shadow: none;
+    }
+
+    .inRunInventoryShell [data-testid='inventory-meta-frame-run'] :global([class*='panel']) {
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 28%, transparent);
+    }
+
+    .inRunInventoryShell [data-testid='inventory-reward-signal'],
+    .inRunInventoryShell .cosmeticNote,
+    .inRunInventoryShell .payoffEngineSignal small,
+    .inRunInventoryShell .payoffEngineSignal b,
+    .inRunInventoryShell .payoffEngineSignalBeatPips,
+    .inRunInventoryShell .runLoopSignalRows b,
+    .inRunInventoryShell .runLoopSignalRows i,
+    .inRunInventoryShell .runLoopSignalRows em {
+        display: none;
+    }
+
+    .inRunInventoryShell .payoffEngineSignal {
+        grid-template-columns: minmax(0, 1fr) auto;
+        min-height: 1.86rem;
+        padding: 0.3rem 0.42rem;
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 24%, transparent);
+        background:
+            linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 10%, transparent), transparent 70%),
+            color-mix(in srgb, var(--theme-void) 34%, transparent);
+    }
+
+    .inRunInventoryShell .payoffEngineSignal strong {
+        font-size: 0.78rem;
+        line-height: 1;
+    }
+
+    .inRunInventoryShell .payoffEngineSignal span {
+        justify-self: end;
+        max-width: 9.4rem;
+        color: color-mix(in srgb, var(--theme-text-muted) 92%, white);
+        font-size: 0.58rem;
+        font-weight: 820;
+        line-height: 1.05;
+        text-align: right;
+        white-space: nowrap;
+    }
+
+    .inRunInventoryShell .runLoopSignalRows {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.16rem;
+    }
+
+    .inRunInventoryShell .runLoopSignalRows span,
+    .inRunInventoryShell .prepCard,
+    .inRunInventoryShell .runSummaryGrid .kvRow {
+        border-color: color-mix(in srgb, var(--theme-text-muted) 14%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 28%, transparent);
+        box-shadow: none;
+    }
+
+    .inRunInventoryShell .runLoopSignalRows span {
+        min-height: 2.18rem;
+        padding: 0.24rem 0.32rem;
+    }
+
+    .inRunInventoryShell .runLoopSignalRows small {
+        font-size: 0.5rem;
+        letter-spacing: 0.06em;
+    }
+
+    .inRunInventoryShell .runLoopSignalRows strong {
+        font-size: 0.68rem;
+        line-height: 1.05;
+    }
+
+    .inRunInventoryShell .prepGrid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.14rem;
+    }
+
+    .inRunInventoryShell .prepCard {
+        min-height: 2.08rem;
+        padding: 0.26rem 0.3rem;
+    }
+
+    .inRunInventoryShell .prepCard strong {
+        font-size: 0.6rem;
+    }
+
+    .inRunInventoryShell .prepCard span {
+        font-size: 0.54rem;
+    }
+
+    .inRunInventoryShell .prepCard p {
+        display: none;
+    }
+
+    .inRunInventoryShell .runSummaryGrid {
+        gap: 0.14rem;
+    }
+
+    .inRunInventoryShell .runSummaryGrid .kvRow {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.18rem;
+        padding: 0.28rem 0.34rem;
+        font-size: 0.58rem;
+    }
+
+    .inRunInventoryShell .runSummaryGrid .kvRow span {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .inRunInventoryShell .runSummaryGrid .kvRow strong {
+        display: block;
+        margin: 0.04rem 0 0;
+        overflow: hidden;
+        color: var(--theme-text);
+        font-size: 0.66rem;
+        line-height: 1.05;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .inRunInventoryShell .runHint {
+        display: -webkit-box;
+        overflow: hidden;
+        color: color-mix(in srgb, var(--theme-text-muted) 88%, white);
+        font-size: 0.58rem;
+        line-height: 1.18;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+    }
+
+    .inRunInventoryShell [data-testid='inventory-meta-frame-consumables'] {
+        --ui-density-panel-pad-lg: 0.38rem;
+    }
+
+    .inRunInventoryShell
+        [data-testid='inventory-meta-frame-consumables']
+        :global([class*='archiveCatalogGrid']) {
+        gap: 0.16rem;
+    }
+
+    .inRunInventoryShell
+        [data-testid='inventory-meta-frame-consumables']
+        :global([class*='archiveCatalogRow']) {
+        grid-template-columns: minmax(0, 1fr) auto;
+        min-height: 2.42rem;
+        padding: 0.32rem 0.38rem;
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 14%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 30%, transparent);
+    }
+
+    .inRunInventoryShell
+        [data-testid='inventory-meta-frame-consumables']
+        :global([class*='archiveCatalogRowTitle']) {
+        font-size: 0.68rem;
+        line-height: 1.08;
+    }
+
+    .inRunInventoryShell [data-testid='inventory-meta-frame-consumables'] .inventoryActionCue {
+        min-height: 1.22rem;
+        max-width: 6.7rem;
+        margin: 0;
+        padding: 0.12rem 0.26rem;
+        border-radius: var(--ui-radius-pill);
+        background: color-mix(in srgb, var(--theme-surface-control) 72%, transparent);
+        box-shadow: none;
+    }
+
+    .inRunInventoryShell [data-testid='inventory-meta-frame-consumables'] .inventoryActionCue strong {
+        max-width: 5.7rem;
+        font-size: 0.56rem;
+    }
+}
+
+.emptyStatePanel {
+    width: min(100%, 60rem);
+    margin-inline: auto;
+}
+
+.emptyStateBody {
+    justify-content: flex-start;
+    padding-block: min(8vh, 3.2rem);
+}
+
+.emptyStateDeck {
+    display: grid;
+    gap: 0.95rem;
+    width: min(100%, 54rem);
+    margin-inline: auto;
+}
+
+.emptyStateHero {
+    display: grid;
+    gap: 0.34rem;
+    max-width: 40rem;
+}
+
+.emptyStateHero > small {
+    color: color-mix(in srgb, var(--theme-gold-bright) 86%, white);
+    font-size: 0.62rem;
+    font-weight: 920;
+    letter-spacing: 0.12em;
+    line-height: 1;
+    text-transform: uppercase;
+}
+
+.emptyStateHero > strong {
+    color: var(--theme-rune);
+    font-family: var(--ui-font-display-family);
+    font-size: clamp(1.12rem, 1.7vw, 1.42rem);
+    line-height: 1.08;
+}
+
+.emptyStateActionCue {
+    display: inline-grid;
+    grid-template-columns: auto auto minmax(0, 1fr);
+    align-items: center;
+    gap: 0.3rem 0.42rem;
+    width: fit-content;
+    max-width: 100%;
+    padding: 0.34rem 0.52rem;
+    border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 24%, transparent);
+    border-radius: var(--ui-radius-md);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 10%, transparent), transparent 58%),
+        color-mix(in srgb, var(--theme-surface-control) 82%, transparent);
+    box-shadow: var(--theme-elevation-soft);
+}
+
+.emptyStateActionCue small,
+.emptyStateActionButton,
+.emptyStateActionCue em {
+    min-width: 0;
+}
+
+.emptyStateActionCue small {
+    color: color-mix(in srgb, var(--theme-text-subtle) 86%, white);
+    font-size: 0.56rem;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    line-height: 1;
+    text-transform: uppercase;
+}
+
+.emptyStateActionButton {
+    min-height: 1.78rem !important;
+    padding: 0.28rem 0.56rem !important;
+    font-size: 0.64rem !important;
+}
+
+.emptyStateActionCue em {
+    color: var(--theme-text-muted);
+    font-size: 0.78rem;
+    font-style: normal;
+    line-height: 1.24;
+}
+
+.emptyStatePreviewGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+    gap: 0.65rem;
+}
+
+.emptyStatePreviewCard {
+    display: grid;
+    gap: 0.22rem;
+    min-width: 0;
+    padding: 0.68rem 0.78rem;
+    border-radius: var(--ui-radius-md);
+    border: 1px solid color-mix(in srgb, var(--theme-cyan-bright) 18%, transparent);
+    background:
+        linear-gradient(180deg, color-mix(in srgb, var(--theme-text) 3%, transparent), transparent 54%),
+        color-mix(in srgb, var(--theme-surface-glass) 88%, transparent);
+    box-shadow: var(--theme-elevation-soft);
+}
+
+.emptyStatePreviewCard small {
+    color: color-mix(in srgb, var(--theme-text-subtle) 84%, white);
+    font-size: 0.56rem;
+    font-weight: 920;
+    letter-spacing: 0.09em;
+    line-height: 1;
+    text-transform: uppercase;
+}
+
+.emptyStatePreviewCard strong {
+    color: color-mix(in srgb, var(--theme-text) 92%, white);
+    font-size: 0.9rem;
+    font-weight: 860;
+    line-height: 1.12;
+}
+
+.emptyStatePreviewCard span {
+    color: var(--theme-text-muted);
+    font-size: 0.78rem;
+    line-height: 1.34;
+}
+
+@media (min-width: 900px) and (min-height: 720px) {
+    .emptyStateBody {
+        padding-top: clamp(1rem, 3.2vh, 2rem);
+    }
+
+    .emptyStateFrame {
+        width: min(62rem, 100%);
+        margin-inline: auto;
+    }
+
+    .emptyStatePanel {
+        width: 100%;
+    }
+
+    .emptyStateDeck {
+        grid-template-columns: minmax(18rem, 0.92fr) minmax(24rem, 1.08fr);
+        align-items: center;
+        gap: clamp(1.2rem, 2.2vw, 2rem);
+        width: 100%;
+        min-height: clamp(17rem, 34vh, 21rem);
+    }
+
+    .emptyStateHero {
+        max-width: 30rem;
+    }
+
+    .emptyStateHero > strong {
+        font-size: clamp(1.42rem, 2vw, 1.82rem);
+    }
+
+    .emptyStatePreviewGrid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0.52rem;
+    }
+
+    .emptyStatePreviewCard {
+        grid-template-columns: minmax(5.5rem, 0.46fr) minmax(0, 1fr);
+        align-items: center;
+        gap: 0.16rem 0.6rem;
+        padding: 0.58rem 0.72rem;
+    }
+
+    .emptyStatePreviewCard small {
+        grid-row: 1 / span 2;
+        align-self: center;
+    }
+
+    .emptyStatePreviewCard span {
+        font-size: 0.76rem;
+    }
+}
+
+.screenHeader {
+    --meta-compact-header-title-size: clamp(1.88rem, 8.8vw, 2.44rem);
+    --meta-compact-header-copy-max-width: 18rem;
+    --meta-compact-header-copy-size: 0.68rem;
+    --meta-compact-header-copy-line-height: 1.24;
+    --meta-compact-header-action-min-height: 1.9rem;
+    --meta-compact-header-action-padding-inline: 0.82rem;
+}
+
+.screenHeader .screenTitle.screenTitle {
+    overflow: hidden;
+    max-width: var(--meta-compact-header-title-max-width, 100%);
+    font-size: var(--meta-compact-header-title-size, clamp(1.88rem, 8.8vw, 2.44rem));
+    line-height: 0.94;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.screenSubtitle {
+    text-wrap: pretty;
+}
+
+.body {
+    gap: var(--theme-space-sm);
+}
+
+.runSnapshotPanel {
+    --ui-density-panel-pad-lg: var(--ui-card-pad-md);
+}
+
+.runHint {
+    margin: 0;
+}
+
+.sectionRail {
+    --meta-compact-rail-gap: 0.18rem;
+    --meta-compact-rail-link-font-size: 0.5rem;
+    --meta-compact-rail-link-min-height: 1.64rem;
+    --meta-compact-rail-link-padding-block: 0.08rem;
+    --meta-compact-rail-link-padding-inline: 0.34rem;
+}
+
 .sectionTitle {
     margin: 0 0 var(--theme-space-sm);
     padding-bottom: var(--theme-space-xs);
@@ -1041,20 +1506,2469 @@
 }
 
 @media (max-width: 760px) {
+    .screenHeader {
+        --meta-compact-header-title-size: clamp(1.52rem, 6.9vw, 1.84rem);
+        --meta-compact-header-copy-max-width: 100%;
+        --meta-compact-header-copy-size: 0.6rem;
+        --meta-compact-header-copy-line-height: 1.12;
+        --meta-compact-header-action-min-height: 1.72rem;
+        --meta-compact-header-action-padding-inline: 0.64rem;
+    }
+
+    .screenSubtitle {
+        display: -webkit-box;
+        overflow: hidden;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+    }
+
+    .sectionRail {
+        --meta-compact-rail-gap: 0.12rem;
+        --meta-compact-rail-link-font-size: 0.42rem;
+        --meta-compact-rail-link-min-height: 1.42rem;
+        --meta-compact-rail-link-padding-block: 0.06rem;
+        --meta-compact-rail-link-padding-inline: 0.24rem;
+        padding-right: 0.18rem;
+        scroll-padding-right: 0.18rem;
+    }
+
+    .emptyStatePanel,
+    .emptyStateDeck {
+        width: 100%;
+    }
+
+    .emptyStateBody {
+        justify-content: flex-start;
+        padding-block: 0.12rem 0.52rem;
+    }
+
+    .emptyStatePanel {
+        --ui-density-panel-pad-lg: 0.5rem;
+    }
+
+    .emptyStateDeck {
+        gap: 0.46rem;
+    }
+
+    .emptyStateHero {
+        gap: 0.16rem;
+    }
+
+    .emptyStateHero > small {
+        font-size: 0.54rem;
+    }
+
+    .emptyStateHero > strong {
+        font-size: 0.98rem;
+    }
+
+    .emptyState {
+        display: -webkit-box;
+        overflow: hidden;
+        font-size: 0.74rem;
+        line-height: 1.22;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+    }
+
+    .emptyStateActionCue {
+        gap: 0.18rem 0.3rem;
+        width: 100%;
+        padding: 0.22rem 0.34rem;
+    }
+
+    .emptyStateActionCue small {
+        display: none;
+    }
+
+    .emptyStateActionButton {
+        font-size: 0.66rem;
+    }
+
+    .emptyStateActionCue em {
+        overflow: hidden;
+        font-size: 0.68rem;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .emptyStatePreviewGrid {
+        gap: 0.24rem;
+    }
+
+    .emptyStatePreviewCard {
+        grid-template-columns: auto minmax(0, 1fr);
+        align-items: baseline;
+        gap: 0.08rem 0.32rem;
+        padding: 0.42rem 0.5rem;
+    }
+
+    .emptyStatePreviewCard small {
+        font-size: 0.52rem;
+    }
+
+    .emptyStatePreviewCard strong {
+        min-width: 0;
+        font-size: 0.78rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .emptyStatePreviewCard span {
+        grid-column: 1 / -1;
+        display: -webkit-box;
+        overflow: hidden;
+        font-size: 0.68rem;
+        line-height: 1.14;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+    }
+
     .list {
         font-size: 0.86rem;
+    }
+
+    .body {
+        gap: 0.4rem;
+    }
+
+    .runSnapshotPanel {
+        --ui-density-panel-pad-lg: 0.74rem;
     }
 
     .empty {
         font-size: 0.88rem;
     }
 
+    .sectionTitle {
+        margin-bottom: 0.28rem;
+        padding-bottom: 0.18rem;
+        font-size: 0.9rem;
+    }
+
+    .inRunInventoryShell .loadoutBoard,
+    .inRunInventoryShell .loadoutSection {
+        gap: 0.36rem;
+    }
+
     .kvRow {
-        gap: 0.28rem 0.75rem;
-        font-size: 0.84rem;
+        gap: 0.22rem 0.56rem;
+        font-size: 0.8rem;
+        padding: 0.38rem 0.48rem;
     }
 
     .payoffEngineSignal {
         grid-template-columns: 1fr;
+        gap: 0.16rem;
+        padding: 0.42rem 0.5rem;
+    }
+
+    .payoffEngineSignal small {
+        font-size: 0.56rem;
+    }
+
+    .payoffEngineSignal strong {
+        font-size: 0.8rem;
+    }
+
+    .payoffEngineSignal span {
+        font-size: 0.68rem;
+    }
+
+    .payoffEngineSignal b {
+        font-size: 0.64rem;
+    }
+
+    .runLoopSignalRows {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.18rem;
+    }
+
+    .runLoopSignalRows span {
+        padding: 0.3rem 0.36rem;
+    }
+
+    .runLoopSignalRows small {
+        font-size: 0.56rem;
+    }
+
+    .runLoopSignalRows strong {
+        font-size: 0.8rem;
+    }
+
+    .runLoopSignalRows b {
+        font-size: 0.66rem;
+    }
+
+    .runLoopSignalRows em {
+        display: none;
+    }
+
+    .prepGrid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.18rem;
+    }
+
+    .prepCard {
+        gap: 0.14rem;
+        padding: 0.42rem 0.44rem;
+    }
+
+    .prepCard p {
+        display: none;
+    }
+
+    .prepCard strong {
+        font-size: 0.74rem;
+        line-height: 1.08;
+    }
+
+    .prepCard span {
+        font-size: 0.66rem;
+        line-height: 1.14;
+    }
+
+    .kv {
+        gap: 0.22rem;
+    }
+
+    .kvRow {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .inRunInventoryShell .runSummaryGrid .kvRow:nth-child(n + 2) {
+        display: none;
+    }
+
+    .kvRow span {
+        display: grid;
+        gap: 0.04rem;
+        align-content: start;
+        font-size: 0.68rem;
+        line-height: 1.12;
+    }
+
+    .kvRow strong {
+        margin-left: 0;
+        font-size: 0.76rem;
+    }
+
+    .runHint {
+        display: -webkit-box;
+        overflow: hidden;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        font-size: 0.72rem;
+        line-height: 1.18;
+    }
+
+    .cosmeticNote {
+        display: -webkit-box;
+        overflow: hidden;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+        font-size: 0.72rem;
+        line-height: 1.16;
+    }
+
+    .inRunInventoryShell .screenHeader {
+        --meta-compact-header-title-size: clamp(1.44rem, 6.4vw, 1.72rem);
+        --meta-compact-header-copy-max-width: 14rem;
+        --meta-compact-header-copy-size: 0.56rem;
+        --meta-compact-header-copy-line-height: 1.08;
+        --meta-compact-header-action-min-height: 1.64rem;
+        --meta-compact-header-action-padding-inline: 0.56rem;
+    }
+
+    .inRunInventoryShell .screenSubtitle {
+        -webkit-line-clamp: 2;
+    }
+
+    .inRunInventoryShell .sectionRail {
+        --meta-compact-rail-gap: 0.1rem;
+        --meta-compact-rail-link-font-size: 0.4rem;
+        --meta-compact-rail-link-min-height: 1.36rem;
+        --meta-compact-rail-link-padding-inline: 0.2rem;
+    }
+
+    .inRunInventoryShell .body {
+        gap: 0.3rem;
+    }
+}
+
+@media (max-width: 560px) {
+    .screenHeader {
+        grid-template-columns: minmax(0, 1fr) auto;
+        --meta-compact-header-title-size: clamp(1.24rem, 6.2vw, 1.58rem);
+        --meta-compact-header-copy-max-width: 13.5rem;
+        --meta-compact-header-copy-size: 0.54rem;
+        --meta-compact-header-copy-line-height: 1.06;
+    }
+
+    .screenHeader :global(button),
+    .screenHeader > :global(button) {
+        justify-self: end;
+    }
+
+    .inRunInventoryShell .screenHeader {
+        --meta-compact-header-title-size: clamp(1.08rem, 5.4vw, 1.34rem);
+        --meta-compact-header-copy-max-width: 12.5rem;
+    }
+
+    .screenSubtitle {
+        -webkit-line-clamp: 1;
+    }
+
+    .sectionRail {
+        --meta-compact-rail-gap: 0.12rem;
+        --meta-compact-rail-link-font-size: 0.42rem;
+        --meta-compact-rail-link-min-height: 1.42rem;
+        --meta-compact-rail-link-padding-inline: 0.24rem;
+    }
+
+    .sectionTitle {
+        margin-bottom: 0.24rem;
+        padding-bottom: 0.16rem;
+        font-size: 0.88rem;
+    }
+
+    .runLoopSignalRows small,
+    .rewardPerkSignalRows small,
+    .loadoutImpactSignals small {
+        font-size: 0.54rem;
+    }
+
+    .runLoopSignalRows strong,
+    .rewardPerkSignalRows strong,
+    .loadoutImpactSignals strong {
+        font-size: 0.74rem;
+    }
+
+    .runLoopSignalRows b,
+    .rewardPerkSignalRows b,
+    .loadoutImpactSignals b {
+        font-size: 0.5rem;
+    }
+
+    .runLoopSignalRows i {
+        display: none;
+    }
+}
+
+/* UI-CLEANUP-009: in-run inventory should scan as a compact status sheet on phones. */
+@media (max-width: 760px) {
+    .inRunInventoryShell .screenHeader {
+        align-items: center;
+        gap: 0.34rem;
+        padding-bottom: 0.18rem;
+    }
+
+    .inRunInventoryShell .screenHeader .screenTitle.screenTitle {
+        font-size: clamp(1.18rem, 5.8vw, 1.46rem);
+        line-height: 0.96;
+    }
+
+    .inRunInventoryShell .screenSubtitle {
+        display: none;
+    }
+
+    .inRunInventoryShell .screenHeader :global(button),
+    .inRunInventoryShell .screenHeader > :global(button) {
+        min-height: 1.82rem;
+        padding-inline: 0.74rem;
+    }
+
+    .inRunInventoryShell .body {
+        gap: 0.24rem;
+    }
+
+    .inRunInventoryShell .sectionRail {
+        --meta-compact-rail-link-min-height: 1.18rem;
+        --meta-compact-rail-link-padding-block: 0.04rem;
+    }
+
+    .inRunInventoryShell .runSnapshotPanel {
+        --ui-density-panel-pad-lg: 0.44rem;
+    }
+
+    .inRunInventoryShell .sectionTitle,
+    .inRunInventoryShell [data-testid='inventory-reward-signal'] {
+        display: none;
+    }
+
+    .inRunInventoryShell .payoffEngineSignal {
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: center;
+        gap: 0.08rem 0.32rem;
+        padding: 0.28rem 0.36rem;
+        border-radius: var(--ui-radius-sm);
+    }
+
+    .inRunInventoryShell .payoffEngineSignal small,
+    .inRunInventoryShell .payoffEngineSignal b,
+    .inRunInventoryShell .payoffEngineSignalBeatPips {
+        display: none;
+    }
+
+    .inRunInventoryShell .payoffEngineSignal strong,
+    .inRunInventoryShell .payoffEngineSignal span {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .inRunInventoryShell .payoffEngineSignal strong {
+        font-size: 0.76rem;
+    }
+
+    .inRunInventoryShell .payoffEngineSignal span {
+        justify-self: end;
+        max-width: 9.4rem;
+        font-size: 0.58rem;
+    }
+
+    .inRunInventoryShell .runLoopSignalRows {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .inRunInventoryShell .runLoopSignalRows span {
+        min-height: 2.44rem;
+        padding: 0.22rem 0.26rem;
+    }
+
+    .inRunInventoryShell .runLoopSignalRows b,
+    .inRunInventoryShell .runLoopSignalBeatPips {
+        display: none;
+    }
+
+    .inRunInventoryShell .runLoopSignalRows small {
+        overflow: hidden;
+        font-size: 0.5rem;
+        line-height: 1;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .inRunInventoryShell .runLoopSignalRows strong {
+        overflow: hidden;
+        font-size: 0.7rem;
+        line-height: 1.08;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .inRunInventoryShell .prepGrid {
+        gap: 0.14rem;
+    }
+
+    .inRunInventoryShell .prepCard {
+        min-height: 2.6rem;
+        padding: 0.34rem 0.36rem;
+    }
+
+    .inRunInventoryShell .runSummaryGrid .kvRow {
+        padding: 0.28rem 0.36rem;
+    }
+
+    .inRunInventoryShell .runHint,
+    .inRunInventoryShell .cosmeticNote {
+        display: none;
+    }
+
+    .inRunInventoryShell .rewardPerkLaneMap {
+        display: grid;
+        gap: 0.16rem;
+        padding: 0.3rem;
+        border-radius: var(--ui-radius-sm);
+    }
+
+    .inRunInventoryShell .rewardPerkLaneMap > span:not(.rewardPerkPrimaryLaneCue) {
+        display: none;
+    }
+
+    .inRunInventoryShell .rewardPerkPrimaryLaneCue {
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 0.08rem 0.32rem;
+        min-height: 2.32rem;
+        padding: 0.28rem 0.4rem;
+        border-radius: var(--ui-radius-sm);
+    }
+
+    .inRunInventoryShell .rewardPerkLaneMap .rewardPerkPrimaryLaneCue strong {
+        grid-column: 2;
+        grid-row: 1 / span 2;
+        align-self: center;
+        justify-self: end;
+        overflow: hidden;
+        max-width: 5.8rem;
+        font-size: 0.6rem;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .inRunInventoryShell .rewardPerkLaneMap .rewardPerkPrimaryLaneCue small,
+    .inRunInventoryShell .rewardPerkLaneMap .rewardPerkPrimaryLaneCue b,
+    .inRunInventoryShell .rewardPerkLaneMap .rewardPerkPrimaryLaneCue em {
+        grid-column: 1;
+        justify-self: start;
+        max-width: 100%;
+        text-align: left;
+    }
+
+    .inRunInventoryShell .rewardPerkLaneMap .rewardPerkPrimaryLaneCue small {
+        font-size: 0.5rem;
+    }
+
+    .inRunInventoryShell .rewardPerkLaneMap .rewardPerkPrimaryLaneCue b {
+        font-size: 0.64rem;
+    }
+
+    .inRunInventoryShell .rewardPerkLaneMap .rewardPerkPrimaryLaneCue em,
+    .inRunInventoryShell .rewardPerkPrimaryLaneBeatPips,
+    .inRunInventoryShell .rewardPerkSignalBeatPips {
+        display: none;
+    }
+
+    .inRunInventoryShell .rewardPerkSignalRows {
+        gap: 0.16rem;
+    }
+
+    .inRunInventoryShell .rewardPerkSignalRows span {
+        min-height: 2rem;
+        padding: 0.24rem 0.32rem;
+    }
+
+    .inRunInventoryShell .rewardPerkSignalRows b {
+        display: none;
+    }
+}
+
+@media (max-width: 380px) {
+    .inRunInventoryShell .runLoopSignalRows {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+/* UI-CLEANUP-010: phone in-run inventory should expose build status, not repeat every perk telemetry row. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .inRunInventoryShell [data-testid='inventory-meta-frame-build'] {
+        --ui-density-panel-pad-lg: 0.42rem;
+    }
+
+    .inRunInventoryShell [data-testid='inventory-meta-frame-build'] :global([data-testid='inventory-reward-perks']) {
+        gap: 0.22rem;
+    }
+
+    .inRunInventoryShell
+        [data-testid='inventory-meta-frame-build']
+        :global([data-testid='inventory-reward-perks'])
+        :global([class*='archiveCatalogRow']) {
+        display: none;
+    }
+
+    .inRunInventoryShell .rewardPerkLaneMap {
+        margin-top: 0;
+        padding: 0.22rem;
+    }
+
+    .inRunInventoryShell .rewardPerkPrimaryLaneCue {
+        min-height: 1.92rem;
+        padding: 0.2rem 0.32rem;
+    }
+
+    .inRunInventoryShell .rewardPerkLaneMap .rewardPerkPrimaryLaneCue small {
+        font-size: 0.48rem;
+    }
+
+    .inRunInventoryShell .rewardPerkLaneMap .rewardPerkPrimaryLaneCue b {
+        font-size: 0.6rem;
+    }
+
+    .inRunInventoryShell .rewardPerkLaneMap .rewardPerkPrimaryLaneCue strong {
+        max-width: 4.8rem;
+        font-size: 0.54rem;
+    }
+
+    .inRunInventoryShell [data-testid='inventory-meta-frame-consumables'] {
+        --ui-density-panel-pad-lg: 0.36rem;
+    }
+
+    .inRunInventoryShell
+        [data-testid='inventory-meta-frame-consumables']
+        :global([class*='archiveCatalogGrid']) {
+        gap: 0.18rem;
+    }
+
+    .inRunInventoryShell
+        [data-testid='inventory-meta-frame-consumables']
+        :global([class*='archiveCatalogRow']) {
+        gap: 0.16rem;
+        min-height: 0;
+        padding: 0.34rem 0.4rem;
+    }
+
+    .inRunInventoryShell
+        [data-testid='inventory-meta-frame-consumables']
+        :global([class*='archiveCatalogRowTitle']) {
+        overflow: hidden;
+        font-size: 0.76rem;
+        line-height: 1.05;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .inRunInventoryShell
+        [data-testid='inventory-meta-frame-consumables']
+        :global([class*='subtitle']),
+    .inRunInventoryShell [data-testid='inventory-meta-frame-consumables'] .inventoryRowNote,
+    .inRunInventoryShell [data-testid='inventory-meta-frame-consumables'] .inventoryActionCue em {
+        display: none;
+    }
+
+    .inRunInventoryShell [data-testid='inventory-meta-frame-consumables'] .inventoryActionCue {
+        min-height: 1.38rem;
+        padding: 0.16rem 0.26rem;
+    }
+
+    .inRunInventoryShell [data-testid='inventory-meta-frame-consumables'] .inventoryActionCue small {
+        font-size: 0.48rem;
+    }
+
+    .inRunInventoryShell [data-testid='inventory-meta-frame-consumables'] .inventoryActionCue strong {
+        font-size: 0.6rem;
+        line-height: 1;
+    }
+}
+
+/* UI-CLEANUP-017: phone in-run inventory is a run sheet, not a full archive overlay. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .inRunInventoryShell {
+        --meta-compact-header-title-size: clamp(0.98rem, 4.8vw, 1.2rem);
+        --meta-compact-header-copy-max-width: 9rem;
+        --meta-compact-header-action-min-height: 1.64rem;
+        --meta-compact-header-action-padding-inline: 0.56rem;
+    }
+
+    .inRunInventoryShell .screenHeader {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: center;
+        gap: 0.22rem;
+        padding-bottom: 0.08rem;
+    }
+
+    .inRunInventoryShell .screenHeader :global([class*='headerText']) {
+        gap: 0.08rem;
+        padding: 0.22rem 0.34rem;
+        border-radius: var(--ui-radius-sm);
+        background: color-mix(in srgb, var(--theme-void) 34%, transparent);
+    }
+
+    .inRunInventoryShell .screenHeader :global([class*='eyebrow']) {
+        font-size: 0.44rem;
+        line-height: 1;
+    }
+
+    .inRunInventoryShell .screenHeader .screenTitle.screenTitle {
+        font-size: clamp(1rem, 4.9vw, 1.18rem);
+        line-height: 1;
+    }
+
+    .inRunInventoryShell .screenHeader :global(button),
+    .inRunInventoryShell .screenHeader > :global(button) {
+        min-height: 1.64rem;
+        padding-inline: 0.58rem;
+        font-size: 0.58rem;
+    }
+
+    .inRunInventoryShell .body {
+        gap: 0.18rem;
+    }
+
+    .inRunInventoryShell .sectionRail {
+        --meta-compact-rail-gap: 0.08rem;
+        --meta-compact-rail-link-font-size: 0.36rem;
+        --meta-compact-rail-link-min-height: 0.92rem;
+        --meta-compact-rail-min-height: 1.28rem;
+        --meta-compact-rail-padding-bottom: 0.06rem;
+        --meta-compact-rail-link-padding-block: 0.02rem;
+        --meta-compact-rail-link-padding-inline: 0.18rem;
+    }
+
+    .inRunInventoryShell .runSnapshotPanel {
+        --ui-density-panel-pad-lg: 0.32rem;
+    }
+
+    .inRunInventoryShell .payoffEngineSignal {
+        min-height: 1.38rem;
+        padding: 0.18rem 0.28rem;
+        border-radius: var(--ui-radius-sm);
+        box-shadow: none;
+    }
+
+    .inRunInventoryShell .payoffEngineSignal strong {
+        font-size: 0.7rem;
+    }
+
+    .inRunInventoryShell .payoffEngineSignal span {
+        max-width: 8.2rem;
+        font-size: 0.52rem;
+    }
+
+    .inRunInventoryShell .runLoopSignalRows {
+        gap: 0.12rem;
+    }
+
+    .inRunInventoryShell .runLoopSignalRows span {
+        min-height: 2rem;
+        padding: 0.18rem 0.22rem;
+        border-radius: var(--ui-radius-sm);
+    }
+
+    .inRunInventoryShell .runLoopSignalRows small {
+        font-size: 0.44rem;
+    }
+
+    .inRunInventoryShell .runLoopSignalRows strong {
+        font-size: 0.62rem;
+    }
+
+    .inRunInventoryShell .prepGrid {
+        gap: 0.1rem;
+    }
+
+    .inRunInventoryShell .prepCard {
+        min-height: 2.2rem;
+        padding: 0.24rem 0.28rem;
+        border-radius: var(--ui-radius-sm);
+        box-shadow: none;
+    }
+
+    .inRunInventoryShell .prepCard strong {
+        overflow: hidden;
+        font-size: 0.64rem;
+        line-height: 1;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .inRunInventoryShell .prepCard span {
+        overflow: hidden;
+        font-size: 0.56rem;
+        line-height: 1.05;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .inRunInventoryShell .runSummaryGrid {
+        gap: 0.1rem;
+    }
+
+    .inRunInventoryShell .runSummaryGrid .kvRow {
+        padding: 0.2rem 0.28rem;
+        border-radius: var(--ui-radius-sm);
+    }
+
+    .inRunInventoryShell .runSummaryGrid .kvRow strong {
+        font-size: 0.62rem;
+    }
+
+    .inRunInventoryShell [data-testid='inventory-meta-frame-build'],
+    .inRunInventoryShell [data-testid='inventory-meta-frame-consumables'],
+    .inRunInventoryShell [data-testid='inventory-meta-frame-relics'],
+    .inRunInventoryShell [data-testid='inventory-meta-frame-mutators'] {
+        --ui-density-panel-pad-lg: 0.3rem;
+    }
+
+    .inRunInventoryShell [data-testid='inventory-meta-frame-build'] .empty,
+    .inRunInventoryShell [data-testid='inventory-meta-frame-relics'] .empty,
+    .inRunInventoryShell [data-testid='inventory-meta-frame-mutators'] .empty {
+        margin: 0;
+        padding: 0.34rem 0.4rem;
+        border-radius: var(--ui-radius-sm);
+        font-size: 0.7rem;
+        line-height: 1.16;
+    }
+
+    .inRunInventoryShell
+        [data-testid='inventory-meta-frame-consumables']
+        :global([class*='archiveCatalogGrid']) {
+        gap: 0.12rem;
+    }
+
+    .inRunInventoryShell
+        [data-testid='inventory-meta-frame-consumables']
+        :global([class*='archiveCatalogRow']) {
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: center;
+        gap: 0.12rem 0.22rem;
+        min-height: 2.36rem;
+        padding: 0.24rem 0.3rem;
+        border-radius: var(--ui-radius-sm);
+    }
+
+    .inRunInventoryShell
+        [data-testid='inventory-meta-frame-consumables']
+        :global([class*='archiveCatalogRowTitle']) {
+        font-size: 0.66rem;
+    }
+
+    .inRunInventoryShell [data-testid='inventory-meta-frame-consumables'] .inventoryActionCue {
+        min-height: 1.06rem;
+        padding: 0.1rem 0.2rem;
+        border-radius: var(--ui-radius-sm);
+    }
+
+    .inRunInventoryShell [data-testid='inventory-meta-frame-consumables'] .inventoryActionCue small {
+        display: none;
+    }
+
+    .inRunInventoryShell [data-testid='inventory-meta-frame-consumables'] .inventoryActionCue strong {
+        max-width: 6rem;
+        overflow: hidden;
+        font-size: 0.52rem;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+}
+
+/* UI-CLEANUP-023B: final phone cascade pass for the in-run inventory sheet. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .inRunInventoryShell .screenHeader {
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 0.34rem;
+        padding-bottom: 0.18rem;
+        border-bottom-color: color-mix(in srgb, var(--theme-gold-bright) 14%, transparent);
+    }
+
+    .inRunInventoryShell .screenHeader :global([class*='headerText']) {
+        gap: 0;
+        padding: 0;
+        border-radius: 0;
+        background: transparent;
+    }
+
+    .inRunInventoryShell .screenHeader :global([class*='eyebrow']),
+    .inRunInventoryShell .screenSubtitle {
+        display: none;
+    }
+
+    .inRunInventoryShell .screenHeader .screenTitle.screenTitle {
+        font-size: clamp(1.08rem, 5.5vw, 1.32rem);
+        line-height: 1;
+        letter-spacing: 0;
+    }
+
+    .inRunInventoryShell .screenHeader :global(button),
+    .inRunInventoryShell .screenHeader > :global(button) {
+        min-height: 1.78rem;
+        padding-inline: 0.78rem;
+        border-radius: var(--ui-radius-pill);
+    }
+
+    .inRunInventoryShell .body {
+        gap: 0.28rem;
+        padding-right: 0.18rem;
+    }
+
+    .inRunInventoryShell .sectionRail {
+        --meta-compact-rail-gap: 0.16rem;
+        --meta-compact-rail-link-font-size: 0.48rem;
+        --meta-compact-rail-link-min-height: 1.2rem;
+        --meta-compact-rail-link-padding-inline: 0.28rem;
+        padding-bottom: 0.1rem;
+        mask-image: none;
+    }
+
+    .inRunInventoryShell .loadoutBoard,
+    .inRunInventoryShell .loadoutSection {
+        gap: 0.36rem;
+    }
+
+    .inRunInventoryShell .sectionTitle {
+        margin-bottom: 0.18rem;
+        padding-bottom: 0;
+        border-bottom: 0;
+        color: color-mix(in srgb, var(--theme-text-muted) 88%, white);
+        font-size: 0.58rem;
+        font-weight: 920;
+        letter-spacing: 0.08em;
+        line-height: 1;
+        text-transform: uppercase;
+    }
+
+    .inRunInventoryShell .runSnapshotPanel,
+    .inRunInventoryShell [data-testid='inventory-meta-frame-build'] :global([class*='panel']),
+    .inRunInventoryShell [data-testid='inventory-meta-frame-consumables'] :global([class*='panel']),
+    .inRunInventoryShell [data-testid='inventory-meta-frame-relics'] :global([class*='panel']),
+    .inRunInventoryShell [data-testid='inventory-meta-frame-mutators'] :global([class*='panel']) {
+        --ui-density-panel-pad-lg: 0.42rem;
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 14%, transparent);
+        background: color-mix(in srgb, var(--theme-surface-glass) 46%, transparent);
+        box-shadow: none;
+    }
+
+    .inRunInventoryShell [data-testid='inventory-meta-frame-run'] :global([class*='panel']) {
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 24%, transparent);
+    }
+
+    .inRunInventoryShell [data-testid='inventory-reward-signal'],
+    .inRunInventoryShell .cosmeticNote,
+    .inRunInventoryShell .payoffEngineSignal small,
+    .inRunInventoryShell .payoffEngineSignal b,
+    .inRunInventoryShell .payoffEngineSignalBeatPips,
+    .inRunInventoryShell .runLoopSignalRows b,
+    .inRunInventoryShell .runLoopSignalRows i,
+    .inRunInventoryShell .runLoopSignalRows em {
+        display: none;
+    }
+
+    .inRunInventoryShell .payoffEngineSignal {
+        grid-template-columns: minmax(0, 1fr) auto;
+        min-height: 1.86rem;
+        padding: 0.3rem 0.42rem;
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 22%, transparent);
+        background:
+            linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 10%, transparent), transparent 70%),
+            color-mix(in srgb, var(--theme-void) 34%, transparent);
+        box-shadow: none;
+    }
+
+    .inRunInventoryShell .payoffEngineSignal strong {
+        font-size: 0.78rem;
+        line-height: 1;
+    }
+
+    .inRunInventoryShell .payoffEngineSignal span {
+        justify-self: end;
+        max-width: 9.4rem;
+        color: color-mix(in srgb, var(--theme-text-muted) 92%, white);
+        font-size: 0.58rem;
+        font-weight: 820;
+        line-height: 1.05;
+        text-align: right;
+        white-space: nowrap;
+    }
+
+    .inRunInventoryShell .runLoopSignalRows {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.16rem;
+    }
+
+    .inRunInventoryShell .runLoopSignalRows span,
+    .inRunInventoryShell .prepCard,
+    .inRunInventoryShell .runSummaryGrid .kvRow {
+        border-color: color-mix(in srgb, var(--theme-text-muted) 14%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 28%, transparent);
+        box-shadow: none;
+    }
+
+    .inRunInventoryShell .runLoopSignalRows span {
+        min-height: 2.18rem;
+        padding: 0.24rem 0.32rem;
+    }
+
+    .inRunInventoryShell .runLoopSignalRows small {
+        font-size: 0.5rem;
+        letter-spacing: 0.06em;
+    }
+
+    .inRunInventoryShell .runLoopSignalRows strong {
+        font-size: 0.68rem;
+        line-height: 1.05;
+    }
+
+    .inRunInventoryShell .prepGrid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.14rem;
+    }
+
+    .inRunInventoryShell .prepCard {
+        min-height: 2.08rem;
+        padding: 0.26rem 0.3rem;
+    }
+
+    .inRunInventoryShell .prepCard strong {
+        font-size: 0.6rem;
+    }
+
+    .inRunInventoryShell .prepCard span {
+        font-size: 0.54rem;
+    }
+
+    .inRunInventoryShell .prepCard p {
+        display: none;
+    }
+
+    .inRunInventoryShell .runSummaryGrid {
+        gap: 0.14rem;
+    }
+
+    .inRunInventoryShell .runSummaryGrid .kvRow {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.18rem;
+        padding: 0.28rem 0.34rem;
+        font-size: 0.58rem;
+    }
+
+    .inRunInventoryShell .runSummaryGrid .kvRow span {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .inRunInventoryShell .runSummaryGrid .kvRow strong {
+        display: block;
+        margin: 0.04rem 0 0;
+        overflow: hidden;
+        color: var(--theme-text);
+        font-size: 0.66rem;
+        line-height: 1.05;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .inRunInventoryShell .runHint {
+        display: none;
+    }
+
+    .inRunInventoryShell [data-testid='inventory-meta-frame-consumables'] {
+        --ui-density-panel-pad-lg: 0.38rem;
+    }
+
+    .inRunInventoryShell
+        [data-testid='inventory-meta-frame-consumables']
+        :global([class*='archiveCatalogGrid']) {
+        gap: 0.16rem;
+    }
+
+    .inRunInventoryShell
+        [data-testid='inventory-meta-frame-consumables']
+        :global([class*='archiveCatalogRow']) {
+        grid-template-columns: minmax(0, 1fr) auto;
+        min-height: 2.42rem;
+        padding: 0.32rem 0.38rem;
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 14%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 30%, transparent);
+    }
+
+    .inRunInventoryShell
+        [data-testid='inventory-meta-frame-consumables']
+        :global([class*='archiveCatalogRowTitle']) {
+        font-size: 0.68rem;
+        line-height: 1.08;
+    }
+
+    .inRunInventoryShell [data-testid='inventory-meta-frame-consumables'] .inventoryActionCue {
+        min-height: 1.22rem;
+        max-width: 6.7rem;
+        margin: 0;
+        padding: 0.12rem 0.26rem;
+        border-radius: var(--ui-radius-pill);
+        background: color-mix(in srgb, var(--theme-surface-control) 72%, transparent);
+        box-shadow: none;
+    }
+
+    .inRunInventoryShell [data-testid='inventory-meta-frame-consumables'] .inventoryActionCue strong {
+        max-width: 5.7rem;
+        font-size: 0.56rem;
+    }
+}
+
+/* UI-CLEANUP-031: empty inventory CTA should meet the same phone control floor as other meta actions. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .emptyStateActionButton {
+        min-height: 2.04rem !important;
+        padding: 0.36rem 0.66rem !important;
+    }
+}
+
+/* UI-CLEANUP-033: active phone inventory should read as one tool sheet, not nested framed receipts. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .inRunInventoryShell {
+        --theme-meta-frame-outset: 0;
+        --theme-meta-frame-drop: none;
+    }
+
+    .inRunInventoryShell :global([data-meta-frame='true'] [class*='cornice']) {
+        display: none;
+    }
+
+    .inRunInventoryShell .body {
+        gap: 0.36rem;
+        padding-right: 0.12rem;
+    }
+
+    .inRunInventoryShell .sectionRail {
+        --meta-compact-rail-gap: 0.22rem;
+        --meta-compact-rail-link-font-size: 0.56rem;
+        --meta-compact-rail-link-min-height: 2.02rem;
+        --meta-compact-rail-min-height: 2.3rem;
+        --meta-compact-rail-link-padding-block: 0.12rem;
+        --meta-compact-rail-link-padding-inline: 0.5rem;
+        padding-bottom: 0.18rem;
+    }
+
+    .inRunInventoryShell .sectionRail a {
+        min-width: 3.55rem;
+    }
+
+    .inRunInventoryShell .runSnapshotPanel,
+    .inRunInventoryShell [data-testid='inventory-meta-frame-build'] :global([class*='panel']),
+    .inRunInventoryShell [data-testid='inventory-meta-frame-consumables'] :global([class*='panel']),
+    .inRunInventoryShell [data-testid='inventory-meta-frame-relics'] :global([class*='panel']),
+    .inRunInventoryShell [data-testid='inventory-meta-frame-mutators'] :global([class*='panel']) {
+        --ui-density-panel-pad-lg: 0.42rem;
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 10%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 24%, transparent);
+        box-shadow: none;
+    }
+
+    .inRunInventoryShell [data-testid='inventory-meta-frame-run'] :global([class*='panel']) {
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 16%, transparent);
+    }
+
+    .inRunInventoryShell [data-testid='inventory-meta-frame-build'] :global([class*='panel']) {
+        padding-block: 0.3rem;
+    }
+
+    .inRunInventoryShell [data-testid='inventory-meta-frame-consumables'] {
+        --ui-density-panel-pad-lg: 0.38rem;
+    }
+
+    .inRunInventoryShell
+        [data-testid='inventory-meta-frame-consumables']
+        :global([class*='archiveCatalogGrid']) {
+        display: grid;
+        align-items: start;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.16rem;
+    }
+
+    .inRunInventoryShell
+        [data-testid='inventory-meta-frame-consumables']
+        :global([class*='archiveCatalogRow']) {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        align-self: start;
+        align-content: center;
+        box-sizing: border-box;
+        gap: 0.1rem;
+        min-height: 3.12rem;
+        padding: 0.22rem 0.34rem;
+        border-color: color-mix(in srgb, var(--theme-text-muted) 12%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 38%, transparent);
+        box-shadow: none;
+    }
+
+    .inRunInventoryShell
+        [data-testid='inventory-meta-frame-consumables']
+        :global([class*='archiveCatalogRowTitle']) {
+        display: block;
+        min-height: 0;
+        height: auto;
+        overflow: hidden;
+        font-size: 0.66rem;
+        line-height: 1.08;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .inRunInventoryShell
+        [data-testid='inventory-meta-frame-consumables']
+        :global([class*='subtitle']),
+    .inRunInventoryShell [data-testid='inventory-meta-frame-consumables'] .inventoryActionCue small,
+    .inRunInventoryShell [data-testid='inventory-meta-frame-consumables'] .inventoryRowNote,
+    .inRunInventoryShell [data-testid='inventory-meta-frame-consumables'] .inventoryActionCue em {
+        display: none !important;
+    }
+
+    .inRunInventoryShell [data-testid='inventory-meta-frame-consumables'] .inventoryActionCue {
+        justify-self: start;
+        display: inline-flex;
+        min-height: 1.08rem;
+        max-width: 100%;
+        margin: 0;
+        padding: 0.08rem 0.22rem;
+        border-color: color-mix(in srgb, var(--theme-cyan-bright) 18%, transparent);
+        background: color-mix(in srgb, var(--theme-surface-control) 48%, transparent);
+    }
+
+    .inRunInventoryShell [data-testid='inventory-meta-frame-consumables'] .inventoryActionCue strong {
+        max-width: 6.8rem;
+        overflow: hidden;
+        font-size: 0.52rem;
+        line-height: 1;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+}
+
+/* UI-CLEANUP-039: active inventory consumables should scan as a loadout ledger, not repeated restock cards. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .inRunInventoryShell [data-testid='inventory-meta-frame-consumables'] {
+        --ui-density-panel-pad-lg: 0.32rem;
+    }
+
+    .inRunInventoryShell
+        [data-testid='inventory-meta-frame-consumables']
+        :global([class*='archiveCatalogGrid']) {
+        gap: 0.12rem;
+    }
+
+    .inRunInventoryShell
+        [data-testid='inventory-meta-frame-consumables']
+        :global([class*='archiveCatalogRow']) {
+        position: relative;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 0.06rem 0.22rem;
+        min-height: 2.44rem;
+        padding: 0.2rem 0.32rem;
+        border-color: color-mix(in srgb, var(--theme-text-muted) 9%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 30%, transparent);
+    }
+
+    .inRunInventoryShell
+        [data-testid='inventory-meta-frame-consumables']
+        :global([class*='archiveCatalogRow'])[data-inventory-row-available='true'] {
+        min-height: 2.56rem;
+        border-color: color-mix(in srgb, var(--theme-cyan-bright) 16%, transparent);
+        background:
+            linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 4%, transparent), transparent 52%),
+            color-mix(in srgb, var(--theme-void) 36%, transparent);
+    }
+
+    .inRunInventoryShell
+        [data-testid='inventory-meta-frame-consumables']
+        :global([class*='archiveCatalogRow'])[data-inventory-row-available='false'] {
+        min-height: 2.06rem;
+        opacity: 0.58;
+    }
+
+    .inRunInventoryShell
+        [data-testid='inventory-meta-frame-consumables']
+        :global([class*='archiveCatalogRow'])[data-inventory-row-available='false']::after {
+        content: 'Empty';
+        align-self: center;
+        justify-self: end;
+        padding: 0.08rem 0.24rem;
+        border: 1px solid color-mix(in srgb, var(--theme-text-muted) 14%, transparent);
+        border-radius: 999px;
+        color: color-mix(in srgb, var(--theme-text-muted) 78%, white);
+        font-size: 0.46rem;
+        font-weight: 900;
+        line-height: 1;
+        text-transform: uppercase;
+    }
+
+    .inRunInventoryShell
+        [data-testid='inventory-meta-frame-consumables']
+        :global([class*='archiveCatalogRow'])[data-inventory-row-kind='loadout']::after {
+        content: none;
+    }
+
+    .inRunInventoryShell
+        [data-testid='inventory-meta-frame-consumables']
+        :global([class*='archiveCatalogRowTitle']) {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.18rem;
+        align-self: center;
+        font-size: 0.62rem;
+    }
+
+    .inRunInventoryShell [data-testid='inventory-meta-frame-consumables'] .inventoryItemLabel {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .inRunInventoryShell [data-testid='inventory-meta-frame-consumables'] .inventoryItemFullLabel {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+    }
+
+    .inRunInventoryShell [data-testid='inventory-meta-frame-consumables'] .inventoryItemQuantity {
+        flex: 0 0 auto;
+        padding: 0.04rem 0.18rem;
+        border: 1px solid color-mix(in srgb, var(--theme-text-muted) 12%, transparent);
+        border-radius: 999px;
+        color: color-mix(in srgb, var(--theme-text-muted) 86%, white);
+        font-size: 0.48rem;
+        font-weight: 900;
+        line-height: 1;
+    }
+
+    .inRunInventoryShell
+        [data-testid='inventory-meta-frame-consumables']
+        :global([class*='archiveCatalogRow'])[data-inventory-row-available='false']
+        .inventoryActionCue {
+        display: none !important;
+    }
+
+    .inRunInventoryShell [data-testid='inventory-meta-frame-consumables'] .inventoryActionCue {
+        align-self: center;
+        justify-self: end;
+        min-height: 1.02rem;
+        max-width: 4.4rem;
+        padding: 0.08rem 0.24rem;
+    }
+
+    .inRunInventoryShell [data-testid='inventory-meta-frame-consumables'] .inventoryActionCue strong {
+        max-width: 3.8rem;
+        font-size: 0.5rem;
+    }
+}
+
+/* UI-CLEANUP-064: phone empty inventory should be a clear launcher, not a framed receipt stack. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .emptyStateBody {
+        gap: 0.2rem;
+    }
+
+    .emptyStateFrame :global(svg),
+    .emptyStateFrame :global([class*='cornice']) {
+        display: none !important;
+    }
+
+    .emptyStateFrame :global([data-meta-framed='true']) {
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 12%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 42%, transparent);
+        box-shadow: inset 0 1px 0 color-mix(in srgb, var(--theme-text) 4%, transparent);
+    }
+
+    .emptyStatePanel {
+        --ui-density-panel-pad-lg: 0.52rem;
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 13%, transparent);
+        background: color-mix(in srgb, var(--theme-panel-solid) 50%, transparent);
+        box-shadow: none;
+    }
+
+    .emptyStateDeck {
+        gap: 0.34rem;
+    }
+
+    .emptyStateHero {
+        gap: 0.28rem;
+    }
+
+    .emptyStateHero > small {
+        font-size: 0.52rem;
+        line-height: 1;
+    }
+
+    .emptyStateHero > strong {
+        font-size: clamp(1rem, 5.2vw, 1.22rem);
+        line-height: 1;
+    }
+
+    .emptyState {
+        max-width: 100%;
+        font-size: 0.82rem;
+        line-height: 1.28;
+    }
+
+    .emptyStateActionCue {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0.22rem;
+        padding: 0.4rem;
+    }
+
+    .emptyStateActionCue small,
+    .emptyStateActionCue em {
+        display: none;
+    }
+
+    .emptyStateActionButton {
+        width: 100%;
+        min-height: 2.72rem;
+        font-size: 0.82rem;
+    }
+
+    .emptyStatePreviewGrid {
+        gap: 0.16rem;
+    }
+
+    .emptyStatePreviewCard {
+        min-height: 2.34rem;
+        padding: 0.3rem 0.42rem;
+        border-color: color-mix(in srgb, var(--theme-text-muted) 10%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 32%, transparent);
+        box-shadow: none;
+    }
+
+    .emptyStatePreviewCard small {
+        font-size: 0.48rem;
+    }
+
+    .emptyStatePreviewCard strong {
+        font-size: 0.72rem;
+        line-height: 1;
+    }
+
+    .emptyStatePreviewCard span {
+        font-size: 0.6rem;
+        line-height: 1.1;
+    }
+}
+
+/* UI-CLEANUP-066: active phone Inventory should read as a compact loadout sheet. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .inRunInventoryShell {
+        --theme-meta-frame-outset: 0;
+        --theme-meta-frame-drop: none;
+    }
+
+    .inRunInventoryShell :global([data-meta-framed='true']) {
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 7%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 24%, transparent);
+        box-shadow: none;
+    }
+
+    .inRunInventoryShell :global([data-meta-frame='true'] svg),
+    .inRunInventoryShell :global([class*='cornice']) {
+        display: none !important;
+    }
+
+    .inRunInventoryShell .body {
+        gap: 0.26rem;
+        padding-right: 0;
+    }
+
+    .inRunInventoryShell .sectionRail {
+        display: grid;
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+        --meta-compact-rail-gap: 0.12rem;
+        --meta-compact-rail-link-font-size: 0.44rem;
+        --meta-compact-rail-link-min-height: 2rem;
+        --meta-compact-rail-min-height: 2.08rem;
+        --meta-compact-rail-link-padding-inline: 0.04rem;
+        overflow: visible;
+        padding-bottom: 0.08rem;
+    }
+
+    .inRunInventoryShell .sectionRail a {
+        width: 100%;
+        min-width: 0;
+        border-color: color-mix(in srgb, var(--theme-text-muted) 11%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 30%, transparent);
+    }
+
+    .inRunInventoryShell .sectionRail a > span {
+        overflow: hidden;
+        max-width: 100%;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .inRunInventoryShell .sectionRail a:nth-child(n + 7) {
+        display: none;
+    }
+
+    .inRunInventoryShell .runSnapshotPanel,
+    .inRunInventoryShell [data-testid='inventory-meta-frame-run'] :global([class*='panel']),
+    .inRunInventoryShell [data-testid='inventory-meta-frame-build'] :global([class*='panel']),
+    .inRunInventoryShell [data-testid='inventory-meta-frame-consumables'] :global([class*='panel']) {
+        --ui-density-panel-pad-lg: 0.34rem;
+        border-color: color-mix(in srgb, var(--theme-text-muted) 9%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 24%, transparent);
+        box-shadow: none;
+    }
+
+    .inRunInventoryShell .payoffEngineSignal {
+        margin-top: 0.34rem;
+        min-height: 1.8rem;
+        padding: 0.22rem 0.4rem;
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 14%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 32%, transparent);
+    }
+
+    .inRunInventoryShell .payoffEngineSignal small,
+    .inRunInventoryShell .payoffEngineSignal b,
+    .inRunInventoryShell .payoffEngineSignalBeatPips {
+        display: none !important;
+    }
+
+    .inRunInventoryShell [data-testid='inventory-payoff-engine'] small,
+    .inRunInventoryShell [data-testid='inventory-payoff-engine'] b,
+    .inRunInventoryShell [data-testid='inventory-payoff-engine'] .payoffEngineSignalBeatPips {
+        display: none !important;
+    }
+
+    [data-testid='inventory-payoff-engine'] small,
+    [data-testid='inventory-payoff-engine'] b,
+    [data-testid='inventory-payoff-engine'] .payoffEngineSignalBeatPips {
+        display: none !important;
+        visibility: hidden !important;
+        width: 0 !important;
+        max-width: 0 !important;
+        height: 0 !important;
+        max-height: 0 !important;
+        overflow: hidden !important;
+    }
+
+    [data-testid='inventory-payoff-engine'] {
+        grid-template-columns: minmax(0, 1fr) auto !important;
+        gap: 0.12rem 0.4rem !important;
+    }
+
+    [data-testid='inventory-payoff-engine'] strong {
+        grid-column: 1;
+    }
+
+    [data-testid='inventory-payoff-engine'] span {
+        grid-column: 2;
+        justify-self: end;
+    }
+
+    .inRunInventoryShell .runLoopSignals {
+        gap: 0.1rem;
+    }
+
+    .inRunInventoryShell .prepStrip {
+        gap: 0.1rem;
+    }
+
+    .inRunInventoryShell
+        [data-testid='inventory-meta-frame-consumables']
+        :global([class*='archiveCatalogGrid']) {
+        gap: 0.08rem;
+    }
+
+    .inRunInventoryShell
+        [data-testid='inventory-meta-frame-consumables']
+        :global([class*='archiveCatalogRow']) {
+        min-height: 2.18rem;
+        padding: 0.16rem 0.28rem;
+        border-color: color-mix(in srgb, var(--theme-text-muted) 7%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 24%, transparent);
+    }
+
+    .inRunInventoryShell
+        [data-testid='inventory-meta-frame-consumables']
+        :global([class*='archiveCatalogRow'])[data-inventory-row-available='true'] {
+        min-height: 2.34rem;
+        border-color: color-mix(in srgb, var(--theme-cyan-bright) 12%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 30%, transparent);
+    }
+
+    .inRunInventoryShell
+        [data-testid='inventory-meta-frame-consumables']
+        :global([class*='archiveCatalogRow'])[data-inventory-row-available='false'] {
+        min-height: 1.94rem;
+        opacity: 0.48;
+    }
+
+    .inRunInventoryShell
+        [data-testid='inventory-meta-frame-consumables']
+        :global([class*='archiveCatalogRowTitle']) {
+        font-size: 0.6rem;
+    }
+
+    .inRunInventoryShell [data-testid='inventory-meta-frame-consumables'] .inventoryActionCue {
+        min-height: 0.96rem;
+        max-width: 4.1rem;
+        padding: 0.06rem 0.2rem;
+        border-color: color-mix(in srgb, var(--theme-cyan-bright) 12%, transparent);
+        background: color-mix(in srgb, var(--theme-surface-control) 36%, transparent);
+    }
+
+    .inRunInventoryShell [data-testid='inventory-meta-frame-consumables'] .inventoryActionCue strong {
+        max-width: 3.55rem;
+        font-size: 0.48rem;
+    }
+
+    .emptyState {
+        display: -webkit-box;
+        overflow: hidden;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+    }
+}
+
+/* UI-CLEANUP-080: desktop in-run Inventory should be a scan sheet, not nested framed cards. */
+@media (min-width: 761px) {
+    .inRunInventoryShell {
+        --theme-meta-frame-outset: 0;
+        --theme-meta-frame-drop: none;
+    }
+
+    .inRunInventoryShell :global([data-meta-framed='true']) {
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 9%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 24%, transparent);
+        box-shadow: none;
+    }
+
+    .inRunInventoryShell :global([data-meta-frame='true'] svg),
+    .inRunInventoryShell :global([class*='cornice']) {
+        display: none !important;
+    }
+
+    .inRunInventoryShell .screenHeader {
+        align-items: center;
+        padding-bottom: 0.42rem;
+    }
+
+    .inRunInventoryShell .screenHeader :global([class*='headerText']) {
+        padding: 0;
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+    }
+
+    .inRunInventoryShell .screenHeader .screenTitle.screenTitle {
+        font-size: clamp(1.72rem, 3vw, 2.18rem);
+        line-height: 0.98;
+    }
+
+    .inRunInventoryShell .screenSubtitle {
+        display: none;
+    }
+
+    .inRunInventoryShell .body {
+        gap: 0.42rem;
+    }
+
+    .inRunInventoryShell .sectionRail {
+        --meta-compact-rail-gap: 0.22rem;
+        --meta-compact-rail-link-font-size: 0.48rem;
+        --meta-compact-rail-link-min-height: 1.72rem;
+        --meta-compact-rail-link-padding-inline: 0.42rem;
+        padding-bottom: 0.12rem;
+    }
+
+    .inRunInventoryShell [data-testid='inventory-meta-frame-run'] :global([class*='panel']),
+    .inRunInventoryShell [data-testid='inventory-meta-frame-build'] :global([class*='panel']),
+    .inRunInventoryShell [data-testid='inventory-meta-frame-consumables'] :global([class*='panel']),
+    .inRunInventoryShell [data-testid='inventory-meta-frame-relics'] :global([class*='panel']),
+    .inRunInventoryShell [data-testid='inventory-meta-frame-mutators'] :global([class*='panel']) {
+        --ui-density-panel-pad-lg: 0.62rem;
+        border-color: color-mix(in srgb, var(--theme-text-muted) 10%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 22%, transparent);
+        box-shadow: none;
+    }
+
+    .inRunInventoryShell .sectionTitle {
+        margin-bottom: 0.28rem;
+        padding-bottom: 0;
+        border-bottom: 0;
+        font-size: 0.72rem;
+        letter-spacing: 0.08em;
+        line-height: 1;
+        text-transform: uppercase;
+    }
+
+    .inRunInventoryShell [data-testid='inventory-reward-signal'],
+    .inRunInventoryShell .cosmeticNote,
+    .inRunInventoryShell .payoffEngineSignal small,
+    .inRunInventoryShell .payoffEngineSignal b,
+    .inRunInventoryShell .payoffEngineSignalBeatPips,
+    .inRunInventoryShell .runLoopSignalRows i,
+    .inRunInventoryShell .runLoopSignalRows em,
+    .inRunInventoryShell .prepCard p {
+        display: none !important;
+    }
+
+    .inRunInventoryShell .payoffEngineSignal {
+        grid-template-columns: minmax(0, 0.72fr) minmax(0, 1fr);
+        min-height: 2.36rem;
+        padding: 0.38rem 0.52rem;
+        border-color: color-mix(in srgb, var(--theme-cyan-bright) 18%, var(--theme-gold-bright) 12%);
+        background: color-mix(in srgb, var(--theme-void) 30%, transparent);
+        box-shadow: none;
+    }
+
+    .inRunInventoryShell .payoffEngineSignal strong {
+        font-size: 0.86rem;
+    }
+
+    .inRunInventoryShell .payoffEngineSignal span {
+        font-size: 0.68rem;
+        line-height: 1.08;
+        white-space: nowrap;
+    }
+
+    .inRunInventoryShell .runLoopSignalRows {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 0.22rem;
+    }
+
+    .inRunInventoryShell .runLoopSignalRows span {
+        min-height: 2.7rem;
+        padding: 0.32rem 0.38rem;
+        background: color-mix(in srgb, var(--theme-void) 28%, transparent);
+        box-shadow: none;
+    }
+
+    .inRunInventoryShell .runLoopSignalRows small {
+        font-size: 0.5rem;
+    }
+
+    .inRunInventoryShell .runLoopSignalRows strong {
+        font-size: 0.68rem;
+    }
+
+    .inRunInventoryShell .runLoopSignalRows b {
+        font-size: 0.58rem;
+    }
+
+    .inRunInventoryShell .prepGrid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.22rem;
+    }
+
+    .inRunInventoryShell .prepCard {
+        min-height: 3.05rem;
+        padding: 0.4rem 0.46rem;
+        background: color-mix(in srgb, var(--theme-void) 26%, transparent);
+        box-shadow: none;
+    }
+
+    .inRunInventoryShell .prepCard strong {
+        font-size: 0.72rem;
+        line-height: 1.1;
+    }
+
+    .inRunInventoryShell .prepCard span {
+        font-size: 0.68rem;
+        line-height: 1.1;
+    }
+
+    .inRunInventoryShell .runSummaryGrid {
+        display: none;
+    }
+
+    .inRunInventoryShell .runHint {
+        display: -webkit-box;
+        overflow: hidden;
+        margin-top: -0.08rem;
+        font-size: 0.68rem;
+        line-height: 1.16;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+    }
+
+    .inRunInventoryShell
+        [data-testid='inventory-meta-frame-consumables']
+        :global([class*='archiveCatalogGrid']) {
+        gap: 0.22rem;
+    }
+
+    .inRunInventoryShell
+        [data-testid='inventory-meta-frame-consumables']
+        :global([class*='archiveCatalogRow']) {
+        display: grid;
+        grid-template-columns: minmax(0, 0.72fr) minmax(0, 1fr);
+        align-items: center;
+        gap: 0.18rem 0.42rem;
+        min-height: 3.1rem;
+        padding: 0.38rem 0.52rem;
+        background: color-mix(in srgb, var(--theme-void) 24%, transparent);
+        box-shadow: none;
+    }
+
+    .inRunInventoryShell
+        [data-testid='inventory-meta-frame-consumables']
+        :global([class*='archiveCatalogRowTitle']) {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.22rem;
+        min-width: 0;
+        margin: 0;
+        font-size: 0.72rem;
+        line-height: 1.05;
+    }
+
+    .inRunInventoryShell [data-testid='inventory-meta-frame-consumables'] .inventoryItemFullLabel {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+    }
+
+    .inRunInventoryShell [data-testid='inventory-meta-frame-consumables'] .inventoryItemLabel {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .inRunInventoryShell [data-testid='inventory-meta-frame-consumables'] .inventoryItemQuantity {
+        flex: 0 0 auto;
+        padding: 0.06rem 0.22rem;
+        border: 1px solid color-mix(in srgb, var(--theme-text-muted) 12%, transparent);
+        border-radius: 999px;
+        color: color-mix(in srgb, var(--theme-text-muted) 86%, white);
+        font-size: 0.54rem;
+        font-weight: 900;
+        line-height: 1;
+    }
+
+    .inRunInventoryShell [data-testid='inventory-meta-frame-consumables'] .inventoryActionCue {
+        display: inline-flex;
+        justify-self: start;
+        min-height: 1.34rem;
+        margin: 0;
+        padding: 0.12rem 0.34rem;
+        background: color-mix(in srgb, var(--theme-surface-control) 42%, transparent);
+        box-shadow: none;
+    }
+
+    .inRunInventoryShell [data-testid='inventory-meta-frame-consumables'] .inventoryActionCue small,
+    .inRunInventoryShell [data-testid='inventory-meta-frame-consumables'] .inventoryActionCue em,
+    .inRunInventoryShell [data-testid='inventory-meta-frame-consumables'] :global([class*='subtitle']),
+    .inRunInventoryShell [data-testid='inventory-meta-frame-consumables'] .inventoryRowNote {
+        display: none !important;
+    }
+
+    .inRunInventoryShell [data-testid='inventory-meta-frame-consumables'] .inventoryActionCue strong {
+        max-width: 8rem;
+        overflow: hidden;
+        font-size: 0.62rem;
+        line-height: 1;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .inRunInventoryShell
+        [data-testid='inventory-meta-frame-consumables']
+        :global([class*='archiveCatalogRow'])[data-inventory-row-available='false']
+        .inventoryActionCue {
+        display: none !important;
+    }
+}
+
+/* UI-CLEANUP-084: active Inventory should prioritize actionable rows over telemetry stacks. */
+@media (min-width: 761px) {
+    .inRunInventoryShell .body {
+        gap: 0.28rem;
+    }
+
+    .inRunInventoryShell [data-testid='inventory-meta-frame-run'] :global([class*='panel']),
+    .inRunInventoryShell [data-testid='inventory-meta-frame-build'] :global([class*='panel']),
+    .inRunInventoryShell [data-testid='inventory-meta-frame-consumables'] :global([class*='panel']) {
+        --ui-density-panel-pad-lg: 0.46rem;
+    }
+
+    .inRunInventoryShell .sectionTitle {
+        margin-bottom: 0.18rem;
+        font-size: 0.62rem;
+    }
+
+    .inRunInventoryShell .payoffEngineSignal {
+        min-height: 1.86rem;
+        padding: 0.26rem 0.44rem;
+    }
+
+    .inRunInventoryShell .payoffEngineSignal strong {
+        font-size: 0.78rem;
+    }
+
+    .inRunInventoryShell .runLoopSignalRows {
+        gap: 0.14rem;
+    }
+
+    .inRunInventoryShell .runLoopSignalRows span {
+        min-height: 1.54rem;
+        padding: 0.22rem 0.3rem;
+    }
+
+    .inRunInventoryShell .runLoopSignalRows b,
+    .inRunInventoryShell .runLoopSignalBeatPips,
+    .inRunInventoryShell .runHint {
+        display: none !important;
+    }
+
+    .inRunInventoryShell .prepGrid {
+        gap: 0.14rem;
+    }
+
+    .inRunInventoryShell .prepCard {
+        min-height: 2.22rem;
+        padding: 0.28rem 0.36rem;
+    }
+
+    .inRunInventoryShell .prepCard span {
+        font-size: 0.6rem;
+    }
+
+    .inRunInventoryShell [data-testid='inventory-meta-frame-build'] :global([class*='archiveCatalogGrid']) {
+        gap: 0.22rem;
+    }
+
+    .inRunInventoryShell [data-testid='inventory-build-identity'],
+    .inRunInventoryShell [data-testid='inventory-starting-loadout'] {
+        display: none !important;
+    }
+
+    .inRunInventoryShell .rewardPerkLaneMap {
+        display: grid;
+        gap: 0.18rem;
+        padding: 0.28rem;
+        border-radius: var(--ui-radius-sm);
+        background: color-mix(in srgb, var(--theme-void) 22%, transparent);
+    }
+
+    .inRunInventoryShell .rewardPerkLaneMap > span:not(.rewardPerkPrimaryLaneCue) {
+        display: none !important;
+    }
+
+    .inRunInventoryShell .rewardPerkPrimaryLaneCue {
+        grid-template-columns: minmax(0, 1fr) auto;
+        min-height: 1.92rem;
+        padding: 0.24rem 0.36rem;
+        border-radius: var(--ui-radius-sm);
+    }
+
+    .inRunInventoryShell .rewardPerkLaneMap .rewardPerkPrimaryLaneCue small,
+    .inRunInventoryShell .rewardPerkLaneMap .rewardPerkPrimaryLaneCue em,
+    .inRunInventoryShell .rewardPerkPrimaryLaneBeatPips,
+    .inRunInventoryShell .rewardPerkSignalBeatPips {
+        display: none !important;
+    }
+
+    .inRunInventoryShell .rewardPerkLaneMap .rewardPerkPrimaryLaneCue b {
+        overflow: hidden;
+        color: var(--theme-text);
+        font-size: 0.7rem;
+        line-height: 1;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .inRunInventoryShell .rewardPerkLaneMap .rewardPerkPrimaryLaneCue strong {
+        align-self: center;
+        justify-self: end;
+        max-width: 8rem;
+        overflow: hidden;
+        font-size: 0.62rem;
+        line-height: 1;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .inRunInventoryShell .rewardPerkSignalRows {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 0.12rem;
+    }
+
+    .inRunInventoryShell .rewardPerkSignalRows span {
+        min-height: 1.72rem;
+        padding: 0.18rem 0.24rem;
+    }
+
+    .inRunInventoryShell .rewardPerkSignalRows small,
+    .inRunInventoryShell .rewardPerkSignalRows b {
+        display: none !important;
+    }
+
+    .inRunInventoryShell .rewardPerkSignalRows strong {
+        font-size: 0.58rem;
+        line-height: 1;
+    }
+
+    .inRunInventoryShell
+        [data-testid='inventory-meta-frame-consumables']
+        :global([class*='archiveCatalogGrid']) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.14rem;
+    }
+
+    .inRunInventoryShell
+        [data-testid='inventory-meta-frame-consumables']
+        :global([class*='archiveCatalogRow']) {
+        min-height: 2.36rem;
+        padding: 0.24rem 0.38rem;
+    }
+}
+
+@media (max-width: 760px) and (orientation: portrait) {
+    .inRunInventoryShell .body {
+        gap: 0.2rem;
+    }
+
+    .inRunInventoryShell [data-testid='inventory-meta-frame-run'] :global([class*='panel']),
+    .inRunInventoryShell [data-testid='inventory-meta-frame-build'] :global([class*='panel']),
+    .inRunInventoryShell [data-testid='inventory-meta-frame-consumables'] :global([class*='panel']) {
+        --ui-density-panel-pad-lg: 0.26rem;
+    }
+
+    .inRunInventoryShell .payoffEngineSignal {
+        margin-top: 0;
+        min-height: 1.56rem;
+        padding: 0.16rem 0.32rem;
+    }
+
+    .inRunInventoryShell .payoffEngineSignal strong {
+        font-size: 0.68rem;
+    }
+
+    .inRunInventoryShell .payoffEngineSignal span {
+        max-width: 8rem;
+        font-size: 0.5rem;
+    }
+
+    .inRunInventoryShell .runLoopSignalRows {
+        gap: 0.1rem;
+    }
+
+    .inRunInventoryShell .runLoopSignalRows span {
+        min-height: 1.54rem;
+        padding: 0.16rem 0.24rem;
+    }
+
+    .inRunInventoryShell .runLoopSignalRows small {
+        font-size: 0.44rem;
+    }
+
+    .inRunInventoryShell .runLoopSignalRows strong {
+        font-size: 0.6rem;
+    }
+
+    .inRunInventoryShell .prepGrid {
+        gap: 0.1rem;
+    }
+
+    .inRunInventoryShell .prepCard {
+        min-height: 1.92rem;
+        padding: 0.18rem 0.24rem;
+    }
+
+    .inRunInventoryShell .prepCard strong {
+        font-size: 0.56rem;
+    }
+
+    .inRunInventoryShell .prepCard span {
+        font-size: 0.5rem;
+    }
+
+    .inRunInventoryShell [data-testid='inventory-build-identity'],
+    .inRunInventoryShell [data-testid='inventory-starting-loadout'] {
+        display: none !important;
+    }
+
+    .inRunInventoryShell [data-testid='inventory-meta-frame-build'] {
+        margin-top: 0.32rem;
+    }
+
+    .inRunInventoryShell [data-testid='inventory-meta-frame-build'] .empty {
+        display: none;
+    }
+
+    .inRunInventoryShell .rewardPerkLaneMap {
+        gap: 0.08rem;
+        padding: 0.12rem;
+    }
+
+    .inRunInventoryShell .rewardPerkPrimaryLaneCue {
+        min-height: 1.54rem;
+        padding: 0.16rem 0.28rem;
+    }
+
+    .inRunInventoryShell .rewardPerkLaneMap .rewardPerkPrimaryLaneCue small,
+    .inRunInventoryShell .rewardPerkLaneMap .rewardPerkPrimaryLaneCue em,
+    .inRunInventoryShell .rewardPerkPrimaryLaneBeatPips {
+        display: none !important;
+    }
+
+    .inRunInventoryShell .rewardPerkLaneMap .rewardPerkPrimaryLaneCue b {
+        overflow: hidden;
+        font-size: 0.58rem;
+        line-height: 1;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .inRunInventoryShell .rewardPerkLaneMap .rewardPerkPrimaryLaneCue strong {
+        max-width: 4.5rem;
+        font-size: 0.48rem;
+    }
+
+    .inRunInventoryShell .rewardPerkSignalRows {
+        display: none;
+    }
+
+    .inRunInventoryShell [data-testid='inventory-reward-perks'] {
+        gap: 0.08rem;
+    }
+
+    .inRunInventoryShell [data-testid='inventory-reward-perks'] > :global([class*='archiveCatalogRow']) {
+        min-height: 2.08rem;
+        padding: 0.28rem 0.36rem;
+    }
+
+    .inRunInventoryShell [data-testid='inventory-reward-perks'] > :global([class*='archiveCatalogRow']) :global([class*='subtitle']) {
+        display: none !important;
+    }
+
+    .inRunInventoryShell
+        [data-testid='inventory-reward-perks']
+        > :global([class*='archiveCatalogRow'])
+        p:not(:global([class*='archiveCatalogRowTitle'])) {
+        display: none !important;
+    }
+
+    .inRunInventoryShell [data-testid='inventory-meta-frame-relics'],
+    .inRunInventoryShell [data-testid='inventory-meta-frame-mutators'] {
+        margin-top: 0.26rem;
+    }
+
+    .inRunInventoryShell [data-testid='inventory-meta-frame-relics'] :global([class*='panel']),
+    .inRunInventoryShell [data-testid='inventory-meta-frame-mutators'] :global([class*='panel']) {
+        --ui-density-panel-pad-lg: 0.22rem;
+        border-color: color-mix(in srgb, var(--theme-text-muted) 10%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 24%, transparent);
+        box-shadow: none;
+    }
+
+    .inRunInventoryShell [data-testid='inventory-meta-frame-relics'] .loadoutSection,
+    .inRunInventoryShell [data-testid='inventory-meta-frame-mutators'] .loadoutSection {
+        gap: 0;
+    }
+
+    .inRunInventoryShell [data-testid='inventory-meta-frame-relics'] .empty,
+    .inRunInventoryShell [data-testid='inventory-meta-frame-mutators'] .empty,
+    .inRunInventoryShell [data-testid='inventory-meta-frame-relics'] :global([class*='archiveCatalogGrid']),
+    .inRunInventoryShell [data-testid='inventory-meta-frame-mutators'] :global([class*='archiveCatalogGrid']) {
+        display: none !important;
+    }
+
+    .inRunInventoryShell :global([class*='panel']):has(#inventory-charges),
+    .inRunInventoryShell :global([class*='panel']):has(#inventory-contract),
+    .inRunInventoryShell [data-testid='inventory-meta-frame-economy'] {
+        display: none !important;
+    }
+
+    .inRunInventoryShell .lowerDetailPanel {
+        display: none !important;
+    }
+
+    .inRunInventoryShell
+        [data-testid='inventory-meta-frame-consumables']
+        :global([class*='archiveCatalogGrid']) {
+        gap: 0.06rem;
+    }
+
+    .inRunInventoryShell
+        [data-testid='inventory-meta-frame-consumables']
+        :global([class*='archiveCatalogRow']) {
+        min-height: 1.82rem;
+        padding: 0.12rem 0.24rem;
+    }
+
+    .inRunInventoryShell
+        [data-testid='inventory-meta-frame-consumables']
+        :global([class*='archiveCatalogRow'])[data-inventory-row-available='true'] {
+        min-height: 2.04rem;
+    }
+
+    .inRunInventoryShell
+        [data-testid='inventory-meta-frame-consumables']
+        :global([class*='archiveCatalogRowTitle']) {
+        font-size: 0.56rem;
+    }
+}
+
+/* UI-CLEANUP-105: phone in-run Inventory should read as an actionable kit, not a tall telemetry frame. */
+@media (max-width: 760px) and (orientation: portrait) {
+    :global([class*='modalInnerDesk']):has(.inRunInventoryShell) {
+        flex: 0 1 auto !important;
+        max-height: min(92dvh, 45rem) !important;
+        margin-block: auto;
+    }
+
+    .inRunInventoryShell.inRunInventoryShell {
+        align-self: center;
+        flex: 0 1 auto !important;
+        max-height: min(92dvh, 45rem) !important;
+        padding: 0.62rem 0.72rem 0.72rem;
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 14%, transparent);
+        background:
+            linear-gradient(180deg, color-mix(in srgb, var(--theme-gold-bright) 4%, transparent), transparent 24%),
+            color-mix(in srgb, var(--theme-panel-solid) 76%, var(--theme-void) 24%);
+        box-shadow:
+            0 12px 32px color-mix(in srgb, var(--theme-shadow) 30%, transparent),
+            inset 0 1px 0 color-mix(in srgb, white 4%, transparent);
+    }
+
+    .inRunInventoryShell :global([data-meta-framed='true']) {
+        border-color: color-mix(in srgb, var(--theme-text-muted) 8%, transparent);
+        background: transparent;
+        box-shadow: none;
+    }
+
+    .inRunInventoryShell :global([data-meta-frame='true'] svg),
+    .inRunInventoryShell :global([class*='cornice']) {
+        display: none !important;
+    }
+
+    .inRunInventoryShell .screenHeader {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: center;
+        gap: 0.4rem;
+        padding-bottom: 0.36rem;
+    }
+
+    .inRunInventoryShell .screenHeader .screenTitle.screenTitle {
+        font-size: clamp(1.36rem, 7vw, 1.7rem);
+        line-height: 0.98;
+    }
+
+    .inRunInventoryShell .screenHeader :global(button),
+    .inRunInventoryShell .screenHeader > :global(button) {
+        min-height: 2.1rem;
+        padding-inline: 1rem;
+    }
+
+    .inRunInventoryShell .body {
+        flex: 0 1 auto;
+        gap: 0.16rem;
+        max-height: calc(92dvh - 5.4rem);
+        padding-right: 0;
+        scrollbar-gutter: auto;
+    }
+
+    .inRunInventoryShell .sectionRail {
+        display: grid;
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+        gap: 0.08rem;
+        padding-bottom: 0.1rem;
+        --meta-compact-rail-link-min-height: 2rem;
+        --meta-compact-rail-link-font-size: 0.44rem;
+        --meta-compact-rail-link-padding-inline: 0.12rem;
+    }
+
+    .inRunInventoryShell .sectionRail a:nth-child(n + 7) {
+        display: none !important;
+    }
+
+    .inRunInventoryShell .loadoutBoard,
+    .inRunInventoryShell .loadoutSection {
+        gap: 0.16rem;
+    }
+
+    .inRunInventoryShell .sectionTitle {
+        margin-bottom: 0.08rem;
+        font-size: 0.56rem;
+        letter-spacing: 0.08em;
+    }
+
+    .inRunInventoryShell [data-testid='inventory-meta-frame-run'] :global([class*='panel']),
+    .inRunInventoryShell [data-testid='inventory-meta-frame-build'] :global([class*='panel']),
+    .inRunInventoryShell [data-testid='inventory-meta-frame-consumables'] :global([class*='panel']),
+    .inRunInventoryShell [data-testid='inventory-meta-frame-relics'] :global([class*='panel']),
+    .inRunInventoryShell [data-testid='inventory-meta-frame-mutators'] :global([class*='panel']) {
+        --ui-density-panel-pad-lg: 0.22rem;
+        border-color: color-mix(in srgb, var(--theme-text-muted) 8%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 16%, transparent);
+        box-shadow: none;
+    }
+
+    .inRunInventoryShell .payoffEngineSignal {
+        grid-template-columns: minmax(0, 1fr) auto;
+        min-height: 1.5rem;
+        padding: 0.14rem 0.28rem;
+        border-color: color-mix(in srgb, var(--theme-cyan-bright) 18%, var(--theme-gold-bright) 10%);
+        background: color-mix(in srgb, var(--theme-void) 26%, transparent);
+    }
+
+    .inRunInventoryShell .payoffEngineSignal strong {
+        font-size: 0.66rem;
+    }
+
+    .inRunInventoryShell .payoffEngineSignal span {
+        max-width: 7.5rem;
+        overflow: hidden;
+        font-size: 0.46rem;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .inRunInventoryShell .runLoopSignalRows {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.08rem;
+    }
+
+    .inRunInventoryShell .runLoopSignalRows span {
+        min-height: 1.42rem;
+        padding: 0.12rem 0.22rem;
+    }
+
+    .inRunInventoryShell .runLoopSignalRows small {
+        font-size: 0.4rem;
+    }
+
+    .inRunInventoryShell .runLoopSignalRows strong {
+        font-size: 0.56rem;
+    }
+
+    .inRunInventoryShell .prepGrid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.08rem;
+    }
+
+    .inRunInventoryShell .prepCard {
+        min-height: 1.62rem;
+        padding: 0.14rem 0.2rem;
+    }
+
+    .inRunInventoryShell .prepCard strong,
+    .inRunInventoryShell .prepCard span {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .inRunInventoryShell .prepCard strong {
+        font-size: 0.52rem;
+    }
+
+    .inRunInventoryShell .prepCard span {
+        font-size: 0.46rem;
+    }
+
+    .inRunInventoryShell .runSummaryGrid {
+        display: grid;
+        gap: 0.08rem;
+    }
+
+    .inRunInventoryShell .runSummaryGrid .kvRow:nth-child(n + 2) {
+        display: none !important;
+    }
+
+    .inRunInventoryShell .runSummaryGrid .kvRow {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        min-height: 2.02rem;
+        padding: 0.18rem 0.24rem;
+    }
+
+    .inRunInventoryShell .runSummaryGrid .kvRow span {
+        font-size: 0.46rem;
+    }
+
+    .inRunInventoryShell .runSummaryGrid .kvRow strong {
+        font-size: 0.62rem;
+    }
+
+    .inRunInventoryShell .runHint {
+        display: -webkit-box;
+        max-height: 2rem;
+        overflow: hidden;
+        margin-top: 0;
+        font-size: 0.52rem;
+        line-height: 1.12;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+    }
+
+    .inRunInventoryShell [data-testid='inventory-meta-frame-build'] {
+        margin-top: 0.08rem;
+    }
+
+    .inRunInventoryShell [data-testid='inventory-meta-frame-build'] :global([class*='archiveCatalogGrid']) {
+        gap: 0.08rem;
+    }
+
+    .inRunInventoryShell [data-testid='inventory-trait-builds'] {
+        display: none !important;
+    }
+
+    .inRunInventoryShell [data-testid='inventory-reward-perks'] > :global([class*='archiveCatalogRow']) {
+        min-height: 1.76rem;
+        padding: 0.18rem 0.28rem;
+    }
+
+    .inRunInventoryShell .rewardPerkLaneMap {
+        padding: 0.1rem;
+    }
+
+    .inRunInventoryShell .rewardPerkPrimaryLaneCue {
+        min-height: 1.42rem;
+        padding: 0.12rem 0.24rem;
+    }
+
+    .inRunInventoryShell [data-testid='inventory-meta-frame-consumables'] {
+        margin-top: 0.08rem;
+    }
+
+    .inRunInventoryShell
+        [data-testid='inventory-meta-frame-consumables']
+        :global([class*='archiveCatalogGrid']) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.08rem;
+    }
+
+    .inRunInventoryShell
+        [data-testid='inventory-meta-frame-consumables']
+        :global([class*='archiveCatalogRow']) {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: center;
+        gap: 0.08rem;
+        min-height: 1.86rem;
+        padding: 0.14rem 0.22rem;
+    }
+
+    .inRunInventoryShell
+        [data-testid='inventory-meta-frame-consumables']
+        :global([class*='archiveCatalogRow'])[data-inventory-row-available='true'] {
+        min-height: 1.96rem;
+    }
+
+    .inRunInventoryShell
+        [data-testid='inventory-meta-frame-consumables']
+        :global([class*='archiveCatalogRowTitle']) {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.14rem;
+        min-width: 0;
+        margin: 0;
+        font-size: 0.54rem;
+        line-height: 1;
+    }
+
+    .inRunInventoryShell [data-testid='inventory-meta-frame-consumables'] .inventoryItemLabel {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .inRunInventoryShell [data-testid='inventory-meta-frame-consumables'] .inventoryItemQuantity {
+        flex: 0 0 auto;
+        font-size: 0.42rem;
+    }
+
+    .inRunInventoryShell [data-testid='inventory-meta-frame-consumables'] .inventoryActionCue {
+        min-height: 1rem;
+        padding: 0.08rem 0.22rem;
+    }
+
+    .inRunInventoryShell [data-testid='inventory-meta-frame-consumables'] .inventoryActionCue strong {
+        max-width: 3.6rem;
+        overflow: hidden;
+        font-size: 0.44rem;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 }

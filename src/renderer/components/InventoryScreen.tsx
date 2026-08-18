@@ -3,14 +3,15 @@ import { useShallow } from 'zustand/react/shallow';
 import { MUTATOR_CATALOG, RELIC_CATALOG } from '../../shared/game-catalog';
 import { getRelicDecisionImpactCopy } from '../../shared/relics';
 import { getUiStateCopy } from '../../shared/ui-state-copy';
-import { playUiBackSfx, resumeUiSfxContext, uiSfxGainFromSettings } from '../audio/uiSfx';
+import { playUiBackSfx, playUiConfirmSfx, resumeUiSfxContext, uiSfxGainFromSettings } from '../audio/uiSfx';
 import { inventoryScreenCopy } from '../copy/inventoryScreen';
-import { Eyebrow, MetaFrame, Panel, ScreenTitle, UiButton } from '../ui';
+import { cx, MetaFrame, Panel, UiButton } from '../ui';
 import { useAppStore } from '../store/useAppStore';
 import inRunFramedPanel from '../ui/metaInRunFramedPanel.module.css';
+import MetaScreenHeader from './MetaScreenHeader';
+import MetaSectionRail from './MetaSectionRail';
 import metaStyles from './MetaScreen.module.css';
 import { getMetaSubscreenLayout } from './metaStackedShellLayout';
-import { handleMetaBodyTocLinkClick } from './metaScreenTocNav';
 import { createInventoryScreenModel, modeTitle } from './inventoryScreenModel';
 import styles from './InventoryScreen.module.css';
 
@@ -18,6 +19,60 @@ interface InventoryScreenProps {
     /** When true, shell title is `h2` so `GameScreen`'s level `h1` stays the sole document `h1`. */
     stackedOnGameplay?: boolean;
 }
+
+const INVENTORY_SECTION_RAIL_ITEMS = [
+    { compactLabel: 'Run', href: '#inventory-run', label: 'Run' },
+    { compactLabel: 'Build', href: '#inventory-build', label: 'Build' },
+    { compactLabel: 'Items', href: '#inventory-consumables', label: 'Consumables' },
+    { compactLabel: 'Relics', href: '#inventory-relics', label: 'Relics' },
+    { compactLabel: 'Muts', href: '#inventory-mutators', label: 'Mutators' },
+    { compactLabel: 'Charge', href: '#inventory-charges', label: 'Charges' },
+    { compactLabel: 'Gold', href: '#inventory-economy', label: 'Economy' },
+    { compactLabel: 'Vow', href: '#inventory-contract', label: 'Contract' }
+] as const;
+
+const COMPACT_INVENTORY_LABELS: Record<string, string> = {
+    combo_shard: 'Combo',
+    contract_loadout: 'Contract',
+    destroy_charge: 'Destroy',
+    flash_pair_charge: 'Flash',
+    gambit_token: 'Gambit',
+    guard_token: 'Guard',
+    iron_key: 'Dungeon key',
+    master_key: 'Master key',
+    mutator_loadout: 'Mutators',
+    peek_charge: 'Peek',
+    region_shuffle_charge: 'Row/swap',
+    relic_loadout: 'Relics',
+    shuffle_charge: 'Shuffle',
+    stray_remove_charge: 'Stray',
+    undo_charge: 'Undo',
+    wild_match_token: 'Wild'
+};
+
+const compactInventoryLabel = (id: string, fallback: string): string => COMPACT_INVENTORY_LABELS[id] ?? fallback;
+
+const COMPACT_INVENTORY_ACTION_LABELS: Record<string, string> = {
+    combo_shard: 'Burst',
+    contract_loadout: 'Plan',
+    destroy_charge: 'Save',
+    flash_pair_charge: 'Find',
+    gambit_token: 'Rescue',
+    guard_token: 'Shield',
+    iron_key: 'Open',
+    master_key: 'Bypass',
+    mutator_loadout: 'Rule',
+    peek_charge: 'Confirm',
+    region_shuffle_charge: 'Setup',
+    relic_loadout: 'Engine',
+    shuffle_charge: 'Route',
+    stray_remove_charge: 'Clean',
+    undo_charge: 'Recover',
+    wild_match_token: 'Bridge'
+};
+
+const compactInventoryActionLabel = (id: string, fallback: string): string =>
+    COMPACT_INVENTORY_ACTION_LABELS[id] ?? fallback;
 
 const formatInventorySignalLabel = (
     label: string,
@@ -375,9 +430,10 @@ const rewardPerkSignalScreenCue = (signal: RewardPerkSignalId): 'pulse' | 'burst
 
 const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) => {
     const bodyScrollRef = useRef<HTMLDivElement | null>(null);
-    const { closeSubscreen, run, saveData, settings } = useAppStore(
+    const { closeSubscreen, openModeSelect, run, saveData, settings } = useAppStore(
         useShallow((state) => ({
             closeSubscreen: state.closeSubscreen,
+            openModeSelect: state.openModeSelect,
             run: state.run,
             saveData: state.saveData,
             settings: state.settings
@@ -388,36 +444,104 @@ const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) =>
         stackedOnGameplay,
         { panel: inRunFramedPanel.inRunPanel, hero: inRunFramedPanel.inRunHeroPanel }
     );
-    const shellClassName = `${metaStyles.shell} ${shellStageClass} ${stackedOnGameplay ? styles.inRunInventoryShell : ''}`.trim();
+    const shellClassName = cx(metaStyles.shell, shellStageClass, stackedOnGameplay && styles.inRunInventoryShell);
     const uiGain = uiSfxGainFromSettings(settings.masterVolume, settings.sfxVolume);
     const handleBack = (): void => {
         resumeUiSfxContext();
         playUiBackSfx(uiGain);
         closeSubscreen();
     };
+    const handleChoosePath = (): void => {
+        resumeUiSfxContext();
+        playUiConfirmSfx(uiGain);
+        openModeSelect();
+    };
 
     if (!run) {
         const emptyState = getUiStateCopy('inventory_no_run');
+        const emptyActionCue = {
+            detail: 'Pick a mode to start a run',
+            label: 'Choose path'
+        };
+        const emptyPreviewRows = [
+            {
+                id: 'relics',
+                label: 'Relics',
+                title: 'Milestone drafts',
+                detail: 'Claimed relics stack here once a descent starts.'
+            },
+            {
+                id: 'mutators',
+                label: 'Mutators',
+                title: 'Run pressure',
+                detail: 'Daily, wild, and later-floor modifiers show up here.'
+            },
+            {
+                id: 'charges',
+                label: 'Charges',
+                title: 'Tool bank',
+                detail: 'Shuffle, peek, destroy, and shard counts stay visible here.'
+            }
+        ] as const;
         return (
-            <section aria-label="Inventory" className={shellClassName} role="region">
-                <header className={metaStyles.header}>
-                    <div className={metaStyles.headerText}>
-                        <Eyebrow tone="menu">Expedition</Eyebrow>
-                        <ScreenTitle as={titleLevel} role="display">
-                            Inventory
-                        </ScreenTitle>
-                        <p className={metaStyles.subtitle}>No active expedition. Start a run from the main menu.</p>
-                    </div>
-                    <UiButton size="md" variant="secondary" onClick={handleBack} type="button">
-                        Back
-                    </UiButton>
-                </header>
-                <div ref={bodyScrollRef} className={metaStyles.body}>
-                    <MetaFrame data-testid="inventory-meta-frame-empty">
-                        <Panel className={panelClassName} padding="lg" variant="default">
-                            <p className={styles.emptyState}>
-                                {emptyState.message} {emptyState.actionLabel}.
-                            </p>
+            <section aria-label="Inventory" className={shellClassName} data-testid="inventory-screen" role="region">
+                <MetaScreenHeader
+                    action={
+                        <UiButton
+                            className={metaStyles.compactHeaderAction}
+                            size="md"
+                            variant="secondary"
+                            onClick={handleBack}
+                            type="button"
+                        >
+                            Back
+                        </UiButton>
+                    }
+                    className={styles.screenHeader}
+                    compact
+                    eyebrow="Expedition"
+                    subtitle="No active expedition. Start a run from the main menu."
+                    subtitleClassName={styles.screenSubtitle}
+                    title="Inventory"
+                    titleAs={titleLevel}
+                    titleClassName={styles.screenTitle}
+                    titleRole="display"
+                />
+                <div
+                    ref={bodyScrollRef}
+                    className={cx(metaStyles.body, styles.body, styles.emptyStateBody)}
+                    data-testid="inventory-empty-body"
+                >
+                    <MetaFrame className={styles.emptyStateFrame} data-testid="inventory-meta-frame-empty">
+                        <Panel className={cx(panelClassName, styles.emptyStatePanel)} padding="lg" variant="default">
+                            <div className={styles.emptyStateDeck} data-testid="inventory-empty-state">
+                                <div className={styles.emptyStateHero}>
+                                    <small>{emptyState.actionLabel}</small>
+                                    <strong>{emptyState.title}</strong>
+                                    <p className={styles.emptyState}>{emptyState.body}</p>
+                                    <span className={styles.emptyStateActionCue} data-testid="inventory-empty-action-cue">
+                                        <small>Next</small>
+                                        <UiButton
+                                            className={styles.emptyStateActionButton}
+                                            onClick={handleChoosePath}
+                                            size="sm"
+                                            variant="primary"
+                                        >
+                                            {emptyActionCue.label}
+                                        </UiButton>
+                                        <em>{emptyActionCue.detail}</em>
+                                    </span>
+                                </div>
+                                <div className={styles.emptyStatePreviewGrid} aria-label="Inventory preview lanes">
+                                    {emptyPreviewRows.map((row) => (
+                                        <div className={styles.emptyStatePreviewCard} key={row.id}>
+                                            <small>{row.label}</small>
+                                            <strong>{row.title}</strong>
+                                            <span>{row.detail}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
                         </Panel>
                     </MetaFrame>
                 </div>
@@ -472,50 +596,42 @@ const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) =>
     const payoffEngineScreenCue = inventoryPayoffEngineScreenCue(payoffEngineSignal.tone);
 
     return (
-        <section aria-label="Inventory" className={shellClassName} role="region">
-            <header className={metaStyles.header}>
-                <div className={metaStyles.headerText}>
-                    <Eyebrow tone="menu">Active run</Eyebrow>
-                    <ScreenTitle as={titleLevel} role="display">
-                        Inventory
-                    </ScreenTitle>
-                    <p className={metaStyles.subtitle}>Read-only snapshot of this descent (charges, relics, mutators).</p>
-                </div>
-                <UiButton size="md" variant="secondary" onClick={handleBack} type="button">
-                    Back
-                </UiButton>
-            </header>
+        <section aria-label="Inventory" className={shellClassName} data-testid="inventory-screen" role="region">
+            <MetaScreenHeader
+                action={
+                    <UiButton
+                        className={metaStyles.compactHeaderAction}
+                        size="md"
+                        variant="secondary"
+                        onClick={handleBack}
+                        type="button"
+                    >
+                        Back
+                    </UiButton>
+                }
+                className={styles.screenHeader}
+                compact
+                eyebrow="Active run"
+                subtitle="Read-only snapshot of this descent (charges, relics, mutators)."
+                subtitleClassName={styles.screenSubtitle}
+                title="Inventory"
+                titleAs={titleLevel}
+                titleClassName={styles.screenTitle}
+                titleRole="display"
+            />
 
-            <div ref={bodyScrollRef} className={metaStyles.body}>
-                <nav aria-label="Inventory sections" className={metaStyles.inPageToc}>
-                    <a href="#inventory-run" onClick={(e) => handleMetaBodyTocLinkClick(bodyScrollRef, e)}>
-                        Run
-                    </a>
-                    <a href="#inventory-build" onClick={(e) => handleMetaBodyTocLinkClick(bodyScrollRef, e)}>
-                        Build
-                    </a>
-                    <a href="#inventory-consumables" onClick={(e) => handleMetaBodyTocLinkClick(bodyScrollRef, e)}>
-                        Consumables
-                    </a>
-                    <a href="#inventory-relics" onClick={(e) => handleMetaBodyTocLinkClick(bodyScrollRef, e)}>
-                        Relics
-                    </a>
-                    <a href="#inventory-mutators" onClick={(e) => handleMetaBodyTocLinkClick(bodyScrollRef, e)}>
-                        Mutators
-                    </a>
-                    <a href="#inventory-charges" onClick={(e) => handleMetaBodyTocLinkClick(bodyScrollRef, e)}>
-                        Charges
-                    </a>
-                    <a href="#inventory-economy" onClick={(e) => handleMetaBodyTocLinkClick(bodyScrollRef, e)}>
-                        Economy
-                    </a>
-                    <a href="#inventory-contract" onClick={(e) => handleMetaBodyTocLinkClick(bodyScrollRef, e)}>
-                        Contract
-                    </a>
-                </nav>
+            <div ref={bodyScrollRef} className={cx(metaStyles.body, styles.body)}>
+                <MetaSectionRail
+                    ariaLabel="Inventory sections"
+                    bodyScrollRef={bodyScrollRef}
+                    className={styles.sectionRail}
+                    compact
+                    dataTestId="inventory-section-rail"
+                    items={INVENTORY_SECTION_RAIL_ITEMS}
+                />
                 <MetaFrame data-testid="inventory-meta-frame-run">
-                    <Panel className={heroPanelClassName} padding="lg" variant="strong">
-                        <div className={`${styles.loadoutBoard} ${metaStyles.sectionAnchor}`} id="inventory-run">
+                    <Panel className={cx(heroPanelClassName, styles.runSnapshotPanel)} padding="lg" variant="strong">
+                        <div className={cx(styles.loadoutBoard, metaStyles.sectionAnchor)} id="inventory-run">
                             <h2 className={styles.sectionTitle}>Run snapshot</h2>
                             <div className={metaStyles.archiveCatalogGrid} data-testid="inventory-reward-signal">
                                 <div className={metaStyles.archiveCatalogRow}>
@@ -588,7 +704,7 @@ const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) =>
                                     </div>
                                 ))}
                             </div>
-                            <div className={styles.kv}>
+                            <div className={cx(styles.kv, styles.runSummaryGrid)} data-testid="inventory-run-summary-grid">
                                 <div className={styles.kvRow}>
                                     <span>
                                         Mode<strong>{modeTitle(run.gameMode)}</strong>
@@ -630,7 +746,7 @@ const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) =>
                                     </span>
                                 </div>
                             </div>
-                            <p className={metaStyles.subtitle}>
+                            <p className={cx(metaStyles.subtitle, styles.runHint)}>
                                 {inventoryScreenCopy.perfectMemoryPowersHint(
                                     run.achievementsEnabled,
                                     run.powersUsedThisRun
@@ -649,7 +765,7 @@ const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) =>
 
                 <MetaFrame data-testid="inventory-meta-frame-build">
                     <Panel className={panelClassName} padding="lg" variant="default">
-                        <div className={`${styles.loadoutSection} ${metaStyles.sectionAnchor}`} id="inventory-build">
+                        <div className={cx(styles.loadoutSection, metaStyles.sectionAnchor)} id="inventory-build">
                             <h2 className={styles.sectionTitle}>Build identity</h2>
                             {buildProfile.primary ? (
                                 <>
@@ -886,13 +1002,28 @@ const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) =>
 
                 <MetaFrame data-testid="inventory-meta-frame-consumables">
                     <Panel className={panelClassName} padding="lg" variant="default">
-                        <div className={`${styles.loadoutSection} ${metaStyles.sectionAnchor}`} id="inventory-consumables">
+                        <div className={cx(styles.loadoutSection, metaStyles.sectionAnchor)} id="inventory-consumables">
                             <h2 className={styles.sectionTitle}>Run consumables and loadout</h2>
                             <div className={metaStyles.archiveCatalogGrid}>
                                 {inventoryRows.map((row) => (
-                                    <div className={metaStyles.archiveCatalogRow} key={row.slotId}>
-                                        <p className={metaStyles.archiveCatalogRowTitle}>
-                                            {row.label}: {row.quantityLabel}
+                                    <div
+                                        className={metaStyles.archiveCatalogRow}
+                                        data-inventory-row-available={row.available || row.kind === 'loadout' ? 'true' : 'false'}
+                                        data-inventory-row-kind={row.kind}
+                                        data-inventory-row-tone={row.actionCue.tone}
+                                        key={row.slotId}
+                                    >
+                                        <p
+                                            aria-label={`${row.label}: ${row.quantityLabel}`}
+                                            className={metaStyles.archiveCatalogRowTitle}
+                                        >
+                                            <span aria-hidden="true" className={styles.inventoryItemFullLabel}>
+                                                {row.label}: {row.quantityLabel}
+                                            </span>
+                                            <span className={styles.inventoryItemLabel}>
+                                                {compactInventoryLabel(row.id, row.label)}
+                                            </span>
+                                            <span className={styles.inventoryItemQuantity}>{row.quantityLabel}</span>
                                         </p>
                                         <span
                                             aria-label={`${row.label} action cue. ${row.actionCue.label}: ${row.actionCue.detail}`}
@@ -901,7 +1032,10 @@ const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) =>
                                             data-inventory-action-tone={row.actionCue.tone}
                                         >
                                             <small>Action</small>
-                                            <strong>{row.actionCue.label}</strong>
+                                            <span aria-hidden="true" className={styles.inventoryItemFullLabel}>
+                                                {row.actionCue.label}
+                                            </span>
+                                            <strong>{compactInventoryActionLabel(row.id, row.actionCue.label)}</strong>
                                             <em>{row.actionCue.detail}</em>
                                         </span>
                                         <p className={metaStyles.subtitle}>
@@ -921,7 +1055,7 @@ const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) =>
 
                 <MetaFrame data-testid="inventory-meta-frame-relics">
                     <Panel className={panelClassName} padding="lg" variant="default">
-                        <div className={`${styles.loadoutSection} ${metaStyles.sectionAnchor}`} id="inventory-relics">
+                        <div className={cx(styles.loadoutSection, metaStyles.sectionAnchor)} id="inventory-relics">
                             <h2 className={styles.sectionTitle}>Relics</h2>
                             {run.relicIds.length > 0 ? (
                                 <div className={metaStyles.archiveCatalogGrid}>
@@ -949,7 +1083,7 @@ const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) =>
 
                 <MetaFrame data-testid="inventory-meta-frame-mutators">
                     <Panel className={panelClassName} padding="lg" variant="default">
-                        <div className={`${styles.loadoutSection} ${metaStyles.sectionAnchor}`} id="inventory-mutators">
+                        <div className={cx(styles.loadoutSection, metaStyles.sectionAnchor)} id="inventory-mutators">
                             <h2 className={styles.sectionTitle}>Mutators</h2>
                             {run.activeMutators.length > 0 ? (
                                 <div className={metaStyles.archiveCatalogGrid}>
@@ -972,9 +1106,9 @@ const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) =>
                     </Panel>
                 </MetaFrame>
 
-                <Panel className={panelClassName} padding="lg" variant="default">
+                <Panel className={cx(panelClassName, styles.lowerDetailPanel)} padding="lg" variant="default">
                     <div
-                        className={`${styles.loadoutSection} ${metaStyles.sectionAnchor}`}
+                        className={cx(styles.loadoutSection, metaStyles.sectionAnchor)}
                         data-testid="inventory-charges-panel"
                         id="inventory-charges"
                     >
@@ -1018,8 +1152,8 @@ const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) =>
                     </div>
                 </Panel>
 
-                <Panel className={panelClassName} padding="lg" variant="default">
-                    <div className={`${styles.loadoutSection} ${metaStyles.sectionAnchor}`} id="inventory-contract">
+                <Panel className={cx(panelClassName, styles.lowerDetailPanel)} padding="lg" variant="default">
+                    <div className={cx(styles.loadoutSection, metaStyles.sectionAnchor)} id="inventory-contract">
                         <h2 className={styles.sectionTitle}>Contract flags</h2>
                         {contract ? (
                             <ul className={styles.list}>
@@ -1034,8 +1168,8 @@ const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) =>
                 </Panel>
 
                 <MetaFrame data-testid="inventory-meta-frame-economy">
-                    <Panel className={panelClassName} padding="lg" variant="default">
-                        <div className={`${styles.loadoutSection} ${metaStyles.sectionAnchor}`} id="inventory-economy">
+                    <Panel className={cx(panelClassName, styles.lowerDetailPanel)} padding="lg" variant="default">
+                        <div className={cx(styles.loadoutSection, metaStyles.sectionAnchor)} id="inventory-economy">
                             <h2 className={styles.sectionTitle}>Run economy</h2>
                             <div className={metaStyles.archiveCatalogGrid}>
                                 {economyRows.map((row) => (

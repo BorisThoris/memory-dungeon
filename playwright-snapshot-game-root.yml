@@ -1,0 +1,37 @@
+- generic [ref=e2] [box=0,0,390,844]:
+  - generic [ref=e3] [box=0,0,390,844]:
+    - link "Skip to main content" [ref=e4] [cursor=pointer] [box=-1,-1,1,1]:
+      - /url: "#app-main"
+    - main [ref=e5] [box=0,0,390,844]:
+      - main [ref=e19] [box=69,1,252,144]:
+        - generic [ref=e20] [box=69,1,252,30]:
+          - paragraph [ref=e21] [box=69,11,31,3]: Seeker of Shards
+          - heading "Memory Dungeon" [level=1] [ref=e22] [box=69,15,92,7]
+          - paragraph [ref=e23] [box=69,28,49,3]: Test your mind. Conquer the depths.
+        - generic [ref=e25] [box=69,33,69,94]:
+          - group "Primary actions" [ref=e29] [box=72,43,64,80]:
+            - button "Play" [ref=e30] [cursor=pointer] [box=72,43,64,10]:
+              - generic [ref=e32] [box=76,46,9,3]: Play
+            - button "Dungeon Showcase" [ref=e33] [cursor=pointer] [box=72,54,64,9]:
+              - generic [ref=e35] [box=76,57,35,3]: Dungeon Showcase
+            - generic [ref=e36] [box=72,64,64,49]:
+              - button "Collection" [ref=e37] [cursor=pointer] [box=72,64,64,9]:
+                - generic [ref=e39] [box=76,67,21,3]: Collection
+              - button "Profile" [ref=e40] [cursor=pointer] [box=72,74,64,9]:
+                - generic [ref=e42] [box=76,77,13,3]: Profile
+              - button "Inventory" [ref=e43] [cursor=pointer] [box=72,84,64,9]:
+                - generic [ref=e45] [box=76,87,19,3]: Inventory
+              - button "Codex" [ref=e46] [cursor=pointer] [box=72,94,64,9]:
+                - generic [ref=e48] [box=76,97,11,3]: Codex
+              - button "Settings" [ref=e49] [cursor=pointer] [box=72,104,64,9]:
+                - generic [ref=e51] [box=76,107,16,3]: Settings
+            - button "Exit Game" [ref=e52] [cursor=pointer] [box=72,114,64,9]:
+              - generic [ref=e54] [box=76,117,17,3]: Exit Game
+          - img [box=68,32,69,94]
+        - group [ref=e56] [box=148,132,93,9]:
+          - generic "How To Play Read, match, and protect the streak Open" [ref=e57] [cursor=pointer] [box=148,132,93,7]:
+            - generic [ref=e58] [box=148,132,63,7]:
+              - paragraph [ref=e59] [box=148,132,63,3]: How To Play
+              - strong [ref=e60] [box=148,136,63,3]: Read, match, and protect the streak
+            - generic [ref=e61] [box=230,132,12,6]: Open
+  - region "Memory Dungeon tips" [box=8,740,374,0]

@@ -375,6 +375,13 @@ const getRelicDraftPickAction = ({
     };
 };
 
+const visibleRelicPickActionLabel = (pickAction: RelicDraftPickAction): 'Take' | 'Lock' => {
+    if (pickAction.tone === 'stack' || pickAction.tone === 'cashout' || pickAction.tone === 'chain') {
+        return 'Lock';
+    }
+    return 'Take';
+};
+
 const getRelicDraftChoiceHeat = ({
     boardMoment,
     primaryBuildCount,
@@ -1331,6 +1338,7 @@ const RelicDraftOfferPanel = ({
                         rarity: row.rarity,
                         traitBuildLabel: traitBuildRows[0]?.label
                     });
+                    const visiblePickActionLabel = visibleRelicPickActionLabel(pickAction);
                     const choiceHeat = getRelicDraftChoiceHeat({
                         boardMoment,
                         primaryBuildCount,
@@ -1416,13 +1424,18 @@ const RelicDraftOfferPanel = ({
                         >
                             <span aria-hidden className={styles.runeStrip} />
                             {reason ? <span className={styles.reason}>{reason}</span> : null}
+                            <span className={styles.rewardHeader}>
+                                <strong>{relicTitle}</strong>
+                                <small>{visiblePickActionLabel}</small>
+                            </span>
                             <span
                                 aria-label={pickActionAria}
                                 className={styles.pickAction}
                                 data-pick-action-tone={pickAction.tone}
+                                data-visible-pick-action-label={visiblePickActionLabel}
                                 data-testid="relic-pick-action"
                             >
-                                <small>{pickAction.label}</small>
+                                <small>{visiblePickActionLabel}</small>
                                 <strong>{pickAction.value}</strong>
                                 <em>{pickAction.detail}</em>
                             </span>

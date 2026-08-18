@@ -66,14 +66,14 @@
     container-type: size;
     container-name: path-shell;
 
-    --path-stack-gap: calc(var(--theme-space-md) + var(--theme-space-2xs));
-    --path-card-grid-gap: calc(var(--theme-space-sm) + var(--theme-space-2xs));
+    --path-stack-gap: var(--theme-space-md);
+    --path-card-grid-gap: var(--theme-space-sm);
     --path-card-inner-gap: var(--theme-space-sm);
     --path-card-pad-block: var(--theme-space-lg);
     --path-card-pad-inline: calc(var(--theme-space-lg) + var(--theme-space-2xs));
-    --path-card-body-wrap-gap: var(--theme-space-sm);
-    --path-stack-header-gap: var(--theme-space-md);
-    --path-hero-card-min-height: 13.25rem;
+    --path-card-body-wrap-gap: calc(var(--theme-space-sm) - var(--theme-space-2xs));
+    --path-stack-header-gap: var(--theme-space-sm);
+    --path-hero-card-min-height: 12.1rem;
 }
 
 .pathFitMeasureOuter {
@@ -118,14 +118,14 @@
 
 .pathSubtitle {
     margin: 0;
-    font-size: 0.82rem;
-    line-height: 1.38;
+    font-size: 0.8rem;
+    line-height: 1.34;
     color: color-mix(in srgb, var(--theme-text-muted) 88%, var(--theme-text) 12%);
 }
 
 .pathTitle {
     max-width: min(760px, 100%);
-    font-size: clamp(2.35rem, 5.8vw, 4.65rem);
+    font-size: clamp(2.2rem, 5vw, 4rem);
 }
 
 .discoveryStrip {
@@ -181,6 +181,12 @@
     font-size: 0.72rem;
     line-height: 1.4;
     color: var(--theme-text-muted);
+}
+
+@media (min-width: 900px) {
+    .pathFooterNote {
+        display: none;
+    }
 }
 
 .pathStackHeader .pathBackButton {
@@ -242,7 +248,7 @@
     overscroll-behavior: contain;
     display: flex;
     flex-direction: column;
-    gap: calc(var(--theme-space-sm) + var(--theme-space-2xs));
+    gap: var(--theme-space-sm);
 }
 
 .heroSection,
@@ -256,7 +262,7 @@
 /* More modes: uniform compact tiles (fixed height); hero uses full-width thirds. */
 .librarySection {
     --library-tile-max-width: 100%;
-    --library-tile-height: 184px;
+    --library-tile-height: 176px;
 }
 
 .sectionEyebrow {
@@ -270,7 +276,7 @@
 .launchPanel {
     position: relative;
     overflow: hidden;
-    min-height: clamp(14.5rem, 32vh, 18rem);
+    min-height: clamp(12.6rem, 28vh, 15.6rem);
     display: grid;
     align-items: end;
     border-radius: var(--ui-radius-lg);
@@ -308,10 +314,10 @@
 .launchContent {
     position: relative;
     z-index: 1;
-    width: min(32rem, 100%);
+    width: min(31rem, 100%);
     display: grid;
-    gap: 0.5rem;
-    padding: clamp(0.9rem, 2vw, 1.2rem);
+    gap: 0.4rem;
+    padding: clamp(0.78rem, 1.65vw, 1rem);
 }
 
 .launchEyebrow {
@@ -320,16 +326,16 @@
 
 .launchModeTitle {
     margin: 0;
-    font-size: clamp(1.65rem, 3.2vw, 2.35rem);
+    font-size: clamp(1.52rem, 2.9vw, 2.1rem);
 }
 
 .launchSummary {
     margin: 0;
-    max-width: 30rem;
+    max-width: 28rem;
     color: color-mix(in srgb, var(--theme-text-muted) 76%, var(--theme-text) 24%);
-    font-size: 0.98rem;
+    font-size: 0.9rem;
     font-weight: 500;
-    line-height: 1.42;
+    line-height: 1.34;
     text-wrap: balance;
 }
 
@@ -853,7 +859,7 @@
 }
 
 .modeSignalStrip_tile {
-    max-height: 3.1rem;
+    max-height: 4rem;
     overflow: hidden;
 }
 
@@ -876,6 +882,10 @@
     display: none;
 }
 
+.modeSignalStrip_tile [data-mode-signal-action]:nth-of-type(n+4) {
+    display: none;
+}
+
 .modeSignalStrip_tile small {
     font-size: 0.5rem;
 }
@@ -891,10 +901,10 @@
 .modeLoopCue {
     display: grid;
     grid-template-columns: auto minmax(0, 1fr);
-    gap: 0.2rem 0.48rem;
+    gap: 0.16rem 0.42rem;
     width: min(32rem, 100%);
     box-sizing: border-box;
-    padding: 0.58rem 0.68rem;
+    padding: 0.46rem 0.56rem;
     border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 28%, transparent);
     border-radius: var(--ui-radius-md);
     background:
@@ -914,11 +924,11 @@
 
 .modeLoopCue small {
     align-self: center;
-    padding: 0.16rem 0.34rem;
+    padding: 0.14rem 0.28rem;
     border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 34%, transparent);
     border-radius: 999px;
     color: color-mix(in srgb, var(--theme-gold-bright) 82%, white);
-    font-size: 0.56rem;
+    font-size: 0.52rem;
     font-weight: 900;
     line-height: 1;
     text-transform: uppercase;
@@ -928,18 +938,18 @@
 .modeLoopCue strong {
     align-self: center;
     color: color-mix(in srgb, var(--theme-text) 88%, var(--theme-gold-bright) 12%);
-    font-size: 0.88rem;
+    font-size: 0.8rem;
     font-weight: 900;
-    line-height: 1.08;
+    line-height: 1.04;
     white-space: nowrap;
 }
 
 .modeLoopCue span {
     grid-column: 1 / -1;
     color: color-mix(in srgb, var(--theme-text-muted) 82%, var(--theme-text) 18%);
-    font-size: 0.74rem;
+    font-size: 0.68rem;
     font-weight: 650;
-    line-height: 1.32;
+    line-height: 1.22;
 }
 
 .modeLoopCue[data-loop-cue-tone='chain'] {
@@ -996,38 +1006,38 @@
 
 .launchFirstRunBeats {
     display: grid;
-    gap: 0.35rem;
-    margin: 0.15rem 0 0;
+    gap: 0.28rem;
+    margin: 0.08rem 0 0;
     padding: 0;
     list-style: none;
     color: var(--theme-text);
-    font-size: 0.88rem;
+    font-size: 0.82rem;
     font-weight: 700;
-    line-height: 1.25;
+    line-height: 1.18;
 }
 
 .launchFirstRunBeats li {
     display: flex;
-    gap: 0.45rem;
+    gap: 0.36rem;
     align-items: center;
 }
 
 .launchFirstRunBeats li::before {
     content: '';
-    flex: 0 0 0.42rem;
-    width: 0.42rem;
-    height: 0.42rem;
+    flex: 0 0 0.34rem;
+    width: 0.34rem;
+    height: 0.34rem;
     border-radius: 999px;
     background: var(--theme-gold-bright);
-    box-shadow: 0 0 0 0.18rem color-mix(in srgb, var(--theme-gold-bright) 18%, transparent);
+    box-shadow: 0 0 0 0.14rem color-mix(in srgb, var(--theme-gold-bright) 18%, transparent);
 }
 
 .launchActions {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--theme-space-sm);
+    gap: 0.52rem;
     align-items: center;
-    margin-top: 0.35rem;
+    margin-top: 0.18rem;
 }
 
 .launchPrimaryButton {
@@ -1083,9 +1093,9 @@
 .launchButtonContent small {
     max-width: min(17rem, 100%);
     color: color-mix(in srgb, currentColor 72%, var(--theme-text-muted));
-    font-size: 0.64rem;
+    font-size: 0.6rem;
     font-weight: 750;
-    line-height: 1.14;
+    line-height: 1.08;
     overflow-wrap: anywhere;
 }
 
@@ -1255,22 +1265,39 @@
 }
 
 .libraryDot {
-    width: 0.42rem;
-    height: 0.42rem;
+    position: relative;
+    display: inline-grid;
+    place-items: center;
+    width: var(--ui-touch-target-min, 44px);
+    height: var(--ui-touch-target-min, 44px);
     padding: 0;
     border: none;
     border-radius: 999px;
-    background: color-mix(in srgb, var(--theme-text-subtle) 38%, transparent);
+    background: transparent;
     cursor: pointer;
     transition:
         background 120ms ease,
         transform 120ms ease;
 }
 
+.libraryDot::before {
+    content: '';
+    display: block;
+    width: 0.42rem;
+    height: 0.42rem;
+    border-radius: inherit;
+    background: color-mix(in srgb, var(--theme-text-subtle) 38%, transparent);
+}
+
 .libraryDot:hover,
 .libraryDot:focus-visible {
-    background: color-mix(in srgb, var(--theme-gold-bright) 50%, transparent);
+    background: color-mix(in srgb, var(--theme-gold-bright) 8%, transparent);
     outline: none;
+}
+
+.libraryDot:hover::before,
+.libraryDot:focus-visible::before {
+    background: color-mix(in srgb, var(--theme-gold-bright) 50%, transparent);
 }
 
 .libraryDot:focus-visible {
@@ -1278,8 +1305,11 @@
 }
 
 .libraryDotActive {
-    background: color-mix(in srgb, var(--theme-gold-bright) 74%, var(--theme-text-subtle) 26%);
     transform: scale(1.12);
+}
+
+.libraryDotActive::before {
+    background: color-mix(in srgb, var(--theme-gold-bright) 74%, var(--theme-text-subtle) 26%);
 }
 
 /* Edge fades over the tray; scrollbar strip stays visible below the fade area. */
@@ -1288,6 +1318,10 @@
 
     position: relative;
     border-radius: var(--ui-radius-lg);
+}
+
+.libraryScroller {
+    min-height: 180px;
 }
 
 .libraryScrollerWrap::before,
@@ -1317,8 +1351,8 @@
     display: flex;
     flex-direction: row;
     width: 100%;
-    min-height: 214px;
-    max-height: 244px;
+    min-height: 198px;
+    max-height: 226px;
     overflow-x: auto;
     overflow-y: hidden;
     scroll-snap-type: x mandatory;
@@ -1436,10 +1470,44 @@
 .libraryTileBody {
     display: -webkit-box;
     -webkit-box-orient: vertical;
-    -webkit-line-clamp: 3;
+    -webkit-line-clamp: 2;
     overflow: hidden;
     margin: 0;
     line-height: 1.32;
+}
+
+.modeSignalStrip_launch .modeLaneMap > i:not(.modeLaneMapSummary):not(.modePrimaryLaneCue) {
+    display: none;
+}
+
+.modeSignalStrip_tile .modeLaneMap > i:not(.modeLaneMapSummary) {
+    display: none;
+}
+
+.modeSignalStrip_launch [data-mode-signal-action] b,
+.modeSignalStrip_launch .modeSignalBeatPips,
+.modeSignalStrip_tile [data-mode-signal-action] b,
+.modeSignalStrip_tile .modeSignalBeatPips {
+    display: none;
+}
+
+.modeSignalStrip_launch [data-mode-signal-action],
+.modeSignalStrip_tile [data-mode-signal-action] {
+    gap: 0.08rem;
+    min-height: 0;
+    padding-block: 0.14rem;
+}
+
+.modeSignalStrip_tile [data-mode-signal-action] small,
+.modeSignalStrip_tile [data-mode-signal-action] strong {
+    line-height: 1.05;
+}
+
+.modeSignalStrip_tile [data-mode-signal-action] strong {
+    overflow: visible;
+    text-overflow: clip;
+    white-space: normal;
+    overflow-wrap: anywhere;
 }
 
 .libraryCardCell .card.libraryTileCard .cardBodyWrap {
@@ -1501,6 +1569,100 @@
     flex-wrap: wrap;
     gap: var(--theme-space-sm);
     margin-top: var(--theme-space-sm);
+}
+
+@media (max-width: 760px) {
+    .libraryDetailDescription {
+        display: -webkit-box;
+        overflow: hidden;
+        margin-bottom: 0.48rem;
+        font-size: 0.82rem;
+        line-height: 1.32;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+    }
+
+    .libraryDetailSignals,
+    .modeSignalStrip_detail,
+    .modeLoopCue_detail {
+        margin-bottom: 0.38rem;
+    }
+
+    .libraryDetailPromise,
+    .libraryDetailIdentity,
+    .libraryDetailMuted {
+        margin-bottom: 0.38rem;
+        padding: 0.36rem 0.48rem;
+        font-size: 0.7rem;
+        line-height: 1.22;
+    }
+
+    [data-library-detail-note='identity'],
+    [data-library-detail-note='promise'],
+    [data-library-detail-note='availability'],
+    [data-library-detail-note='locked'] {
+        display: none;
+    }
+}
+
+/* UI-CLEANUP-010: phone mode details are a launch decision sheet, not a telemetry appendix. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .libraryDetailDescription {
+        margin-bottom: 0.3rem;
+        font-size: 0.74rem;
+        line-height: 1.2;
+        -webkit-line-clamp: 2;
+    }
+
+    .libraryDetailSignals {
+        display: none;
+    }
+
+    .modeLoopCue_detail {
+        margin-bottom: 0.28rem;
+        padding: 0.34rem 0.44rem;
+        border-radius: var(--ui-radius-sm);
+    }
+
+    .modeLoopCue_detail :global(strong),
+    .modeLoopCue_detail :global(b) {
+        font-size: 0.7rem;
+        line-height: 1.08;
+    }
+
+    .modeLoopCue_detail :global(p),
+    .modeLoopCue_detail :global(em) {
+        display: -webkit-box;
+        overflow: hidden;
+        font-size: 0.62rem;
+        line-height: 1.14;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+    }
+
+    .libraryDetailIdentity,
+    .libraryDetailMuted,
+    .libraryDetailPromise {
+        margin-bottom: 0.24rem;
+        padding: 0.26rem 0.36rem;
+        border-radius: var(--ui-radius-sm);
+        font-size: 0.62rem;
+        line-height: 1.14;
+    }
+
+    [data-library-detail-note='gate'] {
+        display: -webkit-box;
+        overflow: hidden;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+    }
+
+    [data-library-detail-note='start'] {
+        display: -webkit-box;
+        overflow: hidden;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+    }
 }
 
 .libraryCardCell .card.libraryTileCard .cardPoster {
@@ -1714,13 +1876,13 @@
 }
 
 .compactPathShell .pathFitViewport {
-    --path-stack-gap: var(--theme-space-sm);
+    --path-stack-gap: 0.42rem;
     --path-card-grid-gap: var(--theme-space-sm);
     --path-card-inner-gap: var(--theme-space-sm);
     --path-card-pad-block: 0.86rem;
     --path-card-pad-inline: 0.82rem;
     --path-card-body-wrap-gap: 0.45rem;
-    --path-stack-header-gap: var(--theme-space-sm);
+    --path-stack-header-gap: 0.34rem;
     --path-hero-card-min-height: 13.75rem;
 }
 
@@ -1730,17 +1892,33 @@
 }
 
 .compactPathShell .pathHeaderText {
-    gap: 0.18rem;
+    gap: 0.14rem;
+}
+
+.compactPathShell .pathHeaderTopRow {
+    gap: 0.22rem 0.44rem;
+    margin-bottom: 0;
+}
+
+.compactPathShell .pathBackButton {
+    min-height: var(--ui-touch-target-min, 44px);
+    padding: 0.2rem 0.34rem 0.2rem 0.12rem;
+    font-size: 0.58rem;
 }
 
 .compactPathShell .pathTitle {
-    font-size: clamp(2.15rem, 10.2vw, 2.85rem);
-    line-height: 0.94;
+    font-size: clamp(1.58rem, 7.3vw, 1.96rem);
+    line-height: 1.2;
 }
 
 .compactPathShell .pathSubtitle {
-    font-size: 0.78rem;
-    line-height: 1.34;
+    max-width: 24rem;
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    font-size: 0.62rem;
+    line-height: 1.14;
 }
 
 .compactPathShell .discoveryStrip {
@@ -1772,37 +1950,136 @@
 }
 
 .compactPathShell .launchPanel {
-    min-height: 15.25rem;
+    min-height: 11.8rem;
+}
+
+.compactPathShell .launchPanel[data-library-open='true'] {
+    min-height: 8.35rem;
 }
 
 .compactPathShell .launchContent {
     width: 100%;
-    padding: 0.95rem;
+    gap: 0.24rem;
+    padding: 0.62rem;
+}
+
+.compactPathShell .launchPanel[data-library-open='true'] .launchContent {
+    gap: 0.14rem;
+    padding: 0.44rem 0.5rem;
 }
 
 .compactPathShell .launchModeTitle {
-    font-size: clamp(1.45rem, 7vw, 1.9rem);
+    font-size: clamp(1.22rem, 5.7vw, 1.56rem);
 }
 
 .compactPathShell .launchSummary {
-    font-size: 0.88rem;
-    line-height: 1.36;
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    font-size: 0.72rem;
+    line-height: 1.18;
+}
+
+.compactPathShell .launchPanel[data-library-open='true'] .launchSummary {
+    -webkit-line-clamp: 1;
+    font-size: 0.64rem;
+    line-height: 1.08;
 }
 
 .compactPathShell .launchFirstRunBeats {
-    font-size: 0.8rem;
+    padding-left: 0.92rem;
+    gap: 0.16rem;
+    font-size: 0.68rem;
 }
 
 .compactPathShell .launchActions {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 0.5rem;
+    gap: 0.3rem;
+}
+
+.compactPathShell .launchPanel[data-library-open='true'] .launchActions {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.22rem;
+}
+
+.compactPathShell .launchPanel[data-library-open='true'] .launchButtonContent small {
+    display: none;
+}
+
+.compactPathShell .launchPanel[data-library-open='true'] .launchPrimaryButton,
+.compactPathShell .launchPanel[data-library-open='true'] .launchSecondaryButton {
+    min-height: var(--ui-touch-target-min, 44px);
+}
+
+.compactPathShell .modeLoopCue_launch {
+    display: none;
+}
+
+.compactPathShell .modeSignalStrip_launch {
+    gap: 0.24rem;
+}
+
+.compactPathShell .modeSignalStrip_launch .modeLaneMap {
+    gap: 0.22rem;
+}
+
+.compactPathShell .modeSignalStrip_launch .modeLaneMap .modePrimaryLaneCue {
+    display: none;
+}
+
+.compactPathShell .modeSignalStrip_launch .modeLaneMap .modeLaneMapSummary {
+    min-height: 1.7rem;
+    padding: 0.22rem 0.34rem;
+}
+
+.compactPathShell .modeSignalStrip_launch .modeLaneMap .modeLaneMapSummary b {
+    font-size: 0.5rem;
+}
+
+.compactPathShell .modeSignalStrip_launch [data-mode-signal-action] {
+    gap: 0.06rem;
+    padding: 0.12rem 0.3rem;
+}
+
+.compactPathShell .modeSignalStrip_launch [data-mode-signal-action] small {
+    font-size: 0.5rem;
+}
+
+.compactPathShell .modeSignalStrip_launch [data-mode-signal-action] strong {
+    font-size: 0.62rem;
+}
+
+.compactPathShell .modeSignalStrip_launch[data-layout='summary-only'] {
+    gap: 0.18rem;
+}
+
+.compactPathShell .modeSignalStrip_launch[data-layout='summary-only'] .modeLaneMap .modeLaneMapSummary {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    min-height: 1.55rem;
+}
+
+.compactPathShell .modeSignalStrip_launch[data-layout='summary-only'] .modeLaneMap .modeLaneMapSummary small,
+.compactPathShell .modeSignalStrip_launch[data-layout='summary-only'] .modeLaneMap .modeLaneMapSummary .modeLaneMapSummaryBeatPips,
+.compactPathShell .modeSignalStrip_launch[data-layout='summary-only'] [data-mode-signal-action] {
+    display: none;
+}
+
+.compactPathShell .modeSignalStrip_launch[data-layout='summary-only'] .modeLaneMap .modeLaneMapSummary strong {
+    font-size: 0.62rem;
+}
+
+.compactPathShell .modeSignalStrip_launch[data-layout='summary-only'] .modeLaneMap .modeLaneMapSummary b {
+    justify-self: end;
+    text-align: right;
 }
 
 .compactPathShell .launchPrimaryButton,
 .compactPathShell .launchSecondaryButton {
     width: 100%;
     min-width: 0;
+    min-height: var(--ui-touch-target-min, 44px);
 }
 
 .compactPathShell .cardGrid {
@@ -1851,22 +2128,81 @@
 }
 
 .compactPathShell .librarySection {
+    gap: 0.18rem;
     --library-tile-max-width: 100%;
-    --library-tile-height: 180px;
+    --library-tile-height: 128px;
+}
+
+.compactPathShell .sectionEyebrow {
+    margin-bottom: 0;
+}
+
+.compactPathShell .libraryToolbar {
+    gap: 0.24rem 0.42rem;
+}
+
+.compactPathShell .librarySearchIconBtn {
+    min-width: var(--ui-touch-target-min, 44px);
+    min-height: var(--ui-touch-target-min, 44px);
+    padding: 0.35rem;
+}
+
+.compactPathShell .libraryDotsWrap {
+    flex: 0 0 auto;
+    gap: 0.22rem;
+    opacity: 0.72;
+}
+
+.compactPathShell .libraryDot {
+    width: var(--ui-touch-target-min, 44px);
+    height: var(--ui-touch-target-min, 44px);
+}
+
+.compactPathShell .libraryDot::before {
+    width: 0.32rem;
+    height: 0.32rem;
 }
 
 .compactPathShell .libraryScroller {
-    min-height: 184px;
-    max-height: 228px;
+    min-height: 128px;
+    max-height: 142px;
 }
 
 .compactPathShell .libraryPage {
-    gap: var(--theme-space-xs);
-    padding: var(--theme-space-xs) var(--theme-space-xs) var(--theme-space-2xs);
+    gap: 0.22rem;
+    padding: 0.12rem 0.18rem;
 }
 
 .compactPathShell .libraryCardCell .card.libraryTileCard {
-    padding: 0.5rem;
+    padding: 0.38rem;
+}
+
+.compactPathShell .libraryCardCell .card.libraryTileCard .cardBodyWrap {
+    gap: 0.18rem;
+}
+
+.compactPathShell .libraryCardCell .cardTitle {
+    font-size: 0.82rem;
+    line-height: 1.08;
+}
+
+.compactPathShell .modeSignalStrip_tile {
+    display: none;
+}
+
+.compactPathShell .libraryCardCell .cardBody {
+    display: -webkit-box;
+    flex: 0 1 auto;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    font-size: 0.7rem;
+    line-height: 1.22;
+    -webkit-line-clamp: 2;
+}
+
+.compactPathShell .pathFooterNote {
+    font-size: 0.64rem;
+    line-height: 1.26;
 }
 
 .shortTouchLandscapeShell .pathFitViewport {
@@ -2239,5 +2575,1012 @@
     .cardFooter {
         padding-top: 0.28rem;
         font-size: 0.78rem;
+    }
+}
+
+/* UI-CLEANUP-037: phone Choose Path should scan as launch + mode picker, not compressed brochure copy. */
+@media (max-width: 760px) and (orientation: portrait) {
+    :global([data-testid='choose-path-screen']) .pathHeaderTopRow {
+        min-height: 1.62rem;
+    }
+
+    :global([data-testid='choose-path-screen']) .pathTitle {
+        font-size: clamp(1.36rem, 6.4vw, 1.68rem);
+        line-height: 1.02;
+    }
+
+    :global([data-testid='choose-path-screen']) .pathSubtitle {
+        display: none;
+    }
+
+    :global([data-testid='choose-path-screen']) .launchPanel[data-library-open='true'] {
+        min-height: 6.55rem;
+    }
+
+    :global([data-testid='choose-path-screen']) .launchPanel[data-library-open='true'] .launchContent {
+        gap: 0.1rem;
+        padding: 0.38rem 0.46rem;
+    }
+
+    :global([data-testid='choose-path-screen']) .launchPanel[data-library-open='true'] .launchEyebrow,
+    :global([data-testid='choose-path-screen']) .launchPanel[data-library-open='true'] .launchSummary,
+    :global([data-testid='choose-path-screen']) .launchPanel[data-library-open='true'] .launchFirstRunBeats {
+        display: none;
+    }
+
+    :global([data-testid='choose-path-screen']) .launchPanel[data-library-open='true'] .launchModeTitle {
+        font-size: clamp(1.16rem, 5.3vw, 1.4rem);
+        line-height: 1.04;
+    }
+
+    :global([data-testid='choose-path-screen']) .launchPanel[data-library-open='true'] .modeSignalStrip_launch {
+        margin-top: 0.06rem;
+    }
+
+    :global([data-testid='choose-path-screen']) .launchPanel[data-library-open='true'] .modeSignalStrip_launch .modeLaneMap .modeLaneMapSummary {
+        min-height: 1.38rem;
+        padding: 0.16rem 0.3rem;
+    }
+
+    :global([data-testid='choose-path-screen']) .launchPanel[data-library-open='true'] .launchActions {
+        gap: 0.16rem;
+        margin-top: 0.12rem;
+    }
+
+    :global([data-testid='choose-path-screen']) .launchPanel[data-library-open='true'] .launchPrimaryButton,
+    :global([data-testid='choose-path-screen']) .launchPanel[data-library-open='true'] .launchSecondaryButton {
+        min-height: 2.48rem;
+    }
+
+    :global([data-testid='choose-path-screen']) .sectionEyebrow {
+        font-size: 0.58rem;
+    }
+
+    :global([data-testid='choose-path-screen']) .libraryToolbar {
+        margin-top: 0;
+        min-height: 1.94rem;
+    }
+
+    :global([data-testid='choose-path-screen']) .librarySearchIconBtn,
+    :global([data-testid='choose-path-screen']) .libraryDot {
+        width: 2rem;
+        height: 2rem;
+        min-width: 2rem;
+        min-height: 2rem;
+    }
+
+    :global([data-testid='choose-path-screen']) .libraryScroller {
+        min-height: 112px;
+        max-height: 118px;
+    }
+
+    :global([data-testid='choose-path-screen']) .libraryPage {
+        padding: 0.08rem 0.14rem;
+    }
+
+    :global([data-testid='choose-path-screen']) .libraryCardCell .card.libraryTileCard {
+        min-height: 0;
+        padding: 0.34rem;
+    }
+
+    :global([data-testid='choose-path-screen']) .libraryCardCell .card.libraryTileCard .cardBodyWrap {
+        gap: 0.16rem;
+    }
+
+    :global([data-testid='choose-path-screen']) .libraryTileKicker,
+    :global([data-testid='choose-path-screen']) .libraryTileState {
+        font-size: 0.48rem;
+        line-height: 1;
+    }
+
+    :global([data-testid='choose-path-screen']) .libraryCardCell .cardTitle {
+        font-size: 0.78rem;
+        line-height: 1.04;
+    }
+
+    :global([data-testid='choose-path-screen']) .libraryCardCell .cardBody {
+        display: none;
+    }
+
+    :global([data-testid='choose-path-screen']) .pathFooterNote {
+        display: -webkit-box;
+        overflow: hidden;
+        max-width: 100%;
+        font-size: 0.54rem;
+        line-height: 1.1;
+        opacity: 0.72;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+    }
+}
+
+/* UI-CLEANUP-049: phone mode picker should show usable choices, not empty poster boxes and page dots. */
+@media (max-width: 760px) and (orientation: portrait) {
+    :global([data-testid='choose-path-screen']) .librarySection {
+        gap: 0.14rem;
+        --library-tile-height: 3.52rem;
+    }
+
+    :global([data-testid='choose-path-screen']) .sectionEyebrow {
+        display: none;
+    }
+
+    :global([data-testid='choose-path-screen']) .libraryToolbar {
+        min-height: 0;
+        margin: 0;
+    }
+
+    :global([data-testid='choose-path-screen']) .libraryDotsWrap {
+        display: none;
+    }
+
+    :global([data-testid='choose-path-screen']) .librarySearchIconBtn {
+        width: 2.1rem;
+        height: 2.1rem;
+        min-width: 2.1rem;
+        min-height: 2.1rem;
+        padding: 0.28rem;
+        border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 12%, transparent);
+        background: color-mix(in srgb, var(--theme-panel-solid) 54%, transparent);
+    }
+
+    :global([data-testid='choose-path-screen']) .libraryScrollerWrap::before,
+    :global([data-testid='choose-path-screen']) .libraryScrollerWrap::after {
+        display: none;
+    }
+
+    :global([data-testid='choose-path-screen']) .libraryScroller {
+        min-height: 11.35rem;
+        max-height: 11.35rem;
+        border-radius: var(--ui-radius-md);
+        background: color-mix(in srgb, var(--theme-panel-solid) 70%, transparent);
+        box-shadow: inset 0 1px 0 color-mix(in srgb, white 4%, transparent);
+    }
+
+    :global([data-testid='choose-path-screen']) .libraryPage {
+        grid-template-columns: 1fr !important;
+        gap: 0.22rem;
+        padding: 0.24rem;
+        align-content: start;
+    }
+
+    :global([data-testid='choose-path-screen']) .libraryCardCell .card.libraryTileCard {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        min-height: var(--library-tile-height);
+        max-height: var(--library-tile-height);
+        height: var(--library-tile-height);
+        padding: 0.42rem 0.5rem;
+        border-radius: var(--ui-radius-sm);
+        background:
+            linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 6%, transparent), transparent 48%),
+            color-mix(in srgb, var(--theme-surface-control) 78%, transparent);
+        box-shadow: none;
+    }
+
+    :global([data-testid='choose-path-screen']) .libraryCardCell .card.libraryTileCard[data-selected-mode='true'] {
+        background:
+            linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 10%, transparent), transparent 52%),
+            color-mix(in srgb, var(--theme-surface-control) 84%, transparent);
+    }
+
+    :global([data-testid='choose-path-screen']) .libraryCardCell .card.libraryTileCard .cardPoster {
+        opacity: 0.08;
+    }
+
+    :global([data-testid='choose-path-screen']) .libraryCardCell .card.libraryTileCard .cardBodyWrap {
+        gap: 0.12rem;
+        justify-content: center;
+    }
+
+    :global([data-testid='choose-path-screen']) .libraryTileKicker,
+    :global([data-testid='choose-path-screen']) .libraryTileState {
+        display: none;
+    }
+
+    :global([data-testid='choose-path-screen']) .libraryCardCell .cardTitle {
+        display: block;
+        overflow: hidden;
+        color: color-mix(in srgb, var(--theme-text) 92%, white);
+        font-size: 0.78rem;
+        line-height: 1.02;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    :global([data-testid='choose-path-screen']) .libraryCardCell .cardBody {
+        display: -webkit-box !important;
+        flex: 0 0 auto;
+        margin: 0;
+        overflow: hidden;
+        color: color-mix(in srgb, var(--theme-text-muted) 86%, white);
+        font-size: 0.62rem;
+        font-weight: 720;
+        line-height: 1.12;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+    }
+
+    :global([data-testid='choose-path-screen']) .pathFooterNote {
+        max-width: 100%;
+        font-size: 0.58rem;
+        line-height: 1.14;
+        opacity: 0.82;
+        -webkit-line-clamp: 2;
+    }
+}
+
+/* UI-CLEANUP-060: final phone launcher pass keeps the mode picker dense without shrinking actions below touch size. */
+@media (max-width: 760px) and (orientation: portrait) {
+    :global([data-testid='choose-path-screen']) .launchPanel[data-library-open='true'] {
+        min-height: 7.4rem;
+    }
+
+    :global([data-testid='choose-path-screen']) .launchPanel[data-library-open='true'] .launchContent {
+        gap: 0.16rem;
+        padding: 0.44rem 0.5rem 0.5rem;
+    }
+
+    :global([data-testid='choose-path-screen']) .launchPanel[data-library-open='true'] .launchModeTitle {
+        overflow: hidden;
+        max-width: 100%;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    :global([data-testid='choose-path-screen']) .launchPanel[data-library-open='true'] .modeSignalStrip_launch {
+        max-height: 1.76rem;
+        overflow: hidden;
+    }
+
+    :global([data-testid='choose-path-screen']) .launchPanel[data-library-open='true'] .launchActions {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.24rem;
+        align-items: stretch;
+        margin-top: 0.14rem;
+    }
+
+    :global([data-testid='choose-path-screen']) .launchPanel[data-library-open='true'] .launchPrimaryButton,
+    :global([data-testid='choose-path-screen']) .launchPanel[data-library-open='true'] .launchSecondaryButton {
+        width: 100%;
+        min-width: 0;
+        min-height: 2.75rem !important;
+        padding-block: 0.34rem !important;
+        line-height: 1.05;
+    }
+
+    :global([data-testid='choose-path-screen']) .launchPanel[data-library-open='true'] .launchButtonContent {
+        gap: 0.08rem;
+    }
+
+    :global([data-testid='choose-path-screen']) .launchPanel[data-library-open='true'] .launchButtonContent small {
+        display: none;
+    }
+}
+
+/* UI-CLEANUP-065: phone Choose Path keeps launch action compact and removes the orphan search tile. */
+@media (max-width: 760px) and (orientation: portrait) {
+    :global([data-testid='choose-path-screen']) .launchPanel[data-library-open='true'] {
+        min-height: 6.8rem;
+    }
+
+    :global([data-testid='choose-path-screen']) .launchPanel[data-library-open='true'] .launchContent {
+        gap: 0.12rem;
+        padding: 0.36rem 0.48rem 0.42rem;
+    }
+
+    :global([data-testid='choose-path-screen']) .launchPanel[data-library-open='true'] .launchActions {
+        gap: 0.18rem;
+        margin-top: 0.1rem;
+    }
+
+    :global([data-testid='choose-path-screen']) .launchPanel[data-library-open='true'] .launchPrimaryButton,
+    :global([data-testid='choose-path-screen']) .launchPanel[data-library-open='true'] .launchSecondaryButton {
+        min-height: 2.48rem !important;
+        padding-block: 0.28rem !important;
+    }
+
+    :global([data-testid='choose-path-screen']) .libraryToolbar {
+        display: none;
+    }
+
+    :global([data-testid='choose-path-screen']) .libraryScroller {
+        min-height: 10.95rem;
+        max-height: 10.95rem;
+    }
+}
+
+/* UI-CLEANUP-075: desktop path select should scan as launcher + choices, not a mode telemetry wall. */
+@media (min-width: 900px) and (min-height: 700px) {
+    :global([data-testid='choose-path-screen']) .pathFitMeasureOuter {
+        width: min(980px, calc(100% - 2rem));
+    }
+
+    :global([data-testid='choose-path-screen']) .pathFitStack {
+        gap: 0.66rem;
+    }
+
+    :global([data-testid='choose-path-screen']) .pathStackHeader {
+        gap: 0.38rem;
+    }
+
+    :global([data-testid='choose-path-screen']) .pathHeaderText {
+        gap: 0.16rem;
+        max-width: min(620px, 100%);
+    }
+
+    :global([data-testid='choose-path-screen']) .pathTitle {
+        max-width: min(620px, 100%);
+        font-size: clamp(2.45rem, 4.25vw, 3.28rem);
+        line-height: 1;
+    }
+
+    :global([data-testid='choose-path-screen']) .pathSubtitle {
+        max-width: 34rem;
+        font-size: 0.72rem;
+        line-height: 1.2;
+    }
+
+    :global([data-testid='choose-path-screen']) .pathBody {
+        gap: 0.5rem;
+    }
+
+    :global([data-testid='choose-path-screen']) .launchSection {
+        width: min(690px, 100%);
+    }
+
+    :global([data-testid='choose-path-screen']) .launchPanel {
+        min-height: 10.45rem;
+        border-radius: calc(var(--ui-radius-lg) - 0.08rem);
+    }
+
+    :global([data-testid='choose-path-screen']) .launchPoster {
+        opacity: 0.34;
+    }
+
+    :global([data-testid='choose-path-screen']) .launchContent {
+        width: min(29rem, 100%);
+        gap: 0.28rem;
+        padding: 0.72rem 0.8rem 0.78rem;
+    }
+
+    :global([data-testid='choose-path-screen']) .launchModeTitle {
+        overflow: hidden;
+        font-size: clamp(1.58rem, 2.35vw, 1.95rem);
+        line-height: 1;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    :global([data-testid='choose-path-screen']) .launchSummary {
+        display: -webkit-box;
+        overflow: hidden;
+        max-width: 27rem;
+        font-size: 0.78rem;
+        line-height: 1.22;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+    }
+
+    :global([data-testid='choose-path-screen']) .modeLoopCue_launch {
+        width: min(26.5rem, 100%);
+        gap: 0.1rem 0.34rem;
+        padding: 0.32rem 0.42rem;
+        border-radius: var(--ui-radius-sm);
+    }
+
+    :global([data-testid='choose-path-screen']) .modeLoopCue_launch small {
+        padding: 0.1rem 0.24rem;
+        font-size: 0.48rem;
+    }
+
+    :global([data-testid='choose-path-screen']) .modeLoopCue_launch strong {
+        font-size: 0.72rem;
+    }
+
+    :global([data-testid='choose-path-screen']) .modeLoopCue_launch span {
+        display: -webkit-box;
+        overflow: hidden;
+        font-size: 0.62rem;
+        line-height: 1.14;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+    }
+
+    :global([data-testid='choose-path-screen']) .modeSignalStrip_launch,
+    :global([data-testid='choose-path-screen']) .modeSignalStrip_tile {
+        max-height: none;
+        overflow: visible;
+    }
+
+    :global([data-testid='choose-path-screen']) .modeSignalStrip_launch {
+        max-width: 26.5rem;
+    }
+
+    :global([data-testid='choose-path-screen']) .modeSignalStrip_launch [data-mode-signal-action],
+    :global([data-testid='choose-path-screen']) .modeSignalStrip_tile [data-mode-signal-action],
+    :global([data-testid='choose-path-screen']) .modeSignalStrip_launch .modeLaneMap .modePrimaryLaneCue {
+        display: none;
+    }
+
+    :global([data-testid='choose-path-screen']) .modeSignalStrip_launch .modeLaneMap,
+    :global([data-testid='choose-path-screen']) .modeSignalStrip_tile .modeLaneMap {
+        display: block;
+        flex: 1 1 100%;
+    }
+
+    :global([data-testid='choose-path-screen']) .modeSignalStrip_launch .modeLaneMap .modeLaneMapSummary,
+    :global([data-testid='choose-path-screen']) .modeSignalStrip_tile .modeLaneMap .modeLaneMapSummary {
+        display: grid;
+        grid-template-columns: auto auto minmax(0, 1fr);
+        min-height: 1.72rem;
+        padding: 0.22rem 0.36rem;
+    }
+
+    :global([data-testid='choose-path-screen']) .modeSignalStrip_launch .modeLaneMap .modeLaneMapSummaryBeatPips,
+    :global([data-testid='choose-path-screen']) .modeSignalStrip_tile .modeLaneMap .modeLaneMapSummaryBeatPips {
+        display: none;
+    }
+
+    :global([data-testid='choose-path-screen']) .modeSignalStrip_launch .modeLaneMap .modeLaneMapSummary small,
+    :global([data-testid='choose-path-screen']) .modeSignalStrip_tile .modeLaneMap .modeLaneMapSummary small {
+        font-size: 0.48rem;
+    }
+
+    :global([data-testid='choose-path-screen']) .modeSignalStrip_launch .modeLaneMap .modeLaneMapSummary strong,
+    :global([data-testid='choose-path-screen']) .modeSignalStrip_tile .modeLaneMap .modeLaneMapSummary strong {
+        font-size: 0.58rem;
+    }
+
+    :global([data-testid='choose-path-screen']) .modeSignalStrip_launch .modeLaneMap .modeLaneMapSummary b,
+    :global([data-testid='choose-path-screen']) .modeSignalStrip_tile .modeLaneMap .modeLaneMapSummary b {
+        overflow: hidden;
+        font-size: 0.5rem;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    :global([data-testid='choose-path-screen']) .launchActions {
+        gap: 0.38rem;
+        margin-top: 0.1rem;
+    }
+
+    :global([data-testid='choose-path-screen']) .launchPrimaryButton,
+    :global([data-testid='choose-path-screen']) .launchSecondaryButton {
+        min-height: 2.55rem !important;
+        padding-block: 0.38rem !important;
+    }
+
+    :global([data-testid='choose-path-screen']) .launchButtonContent {
+        gap: 0.06rem;
+    }
+
+    :global([data-testid='choose-path-screen']) .launchButtonContent small {
+        display: none;
+    }
+
+    :global([data-testid='choose-path-screen']) .librarySection {
+        gap: 0.34rem;
+        --library-tile-height: 138px;
+    }
+
+    :global([data-testid='choose-path-screen']) .libraryToolbar {
+        min-height: 1.9rem;
+    }
+
+    :global([data-testid='choose-path-screen']) .libraryScroller {
+        min-height: 156px;
+        max-height: 174px;
+        border-radius: var(--ui-radius-md);
+    }
+
+    :global([data-testid='choose-path-screen']) .libraryPage {
+        gap: 0.46rem;
+        padding: 0.42rem 0.56rem 0.46rem;
+    }
+
+    :global([data-testid='choose-path-screen']) .libraryCardCell .card.libraryTileCard {
+        padding: 0.5rem 0.56rem;
+        border-radius: var(--ui-radius-sm);
+    }
+
+    :global([data-testid='choose-path-screen']) .libraryCardCell .card.libraryTileCard .cardPoster {
+        opacity: 0.16;
+    }
+
+    :global([data-testid='choose-path-screen']) .libraryCardCell .card.libraryTileCard .cardBodyWrap {
+        gap: 0.18rem;
+    }
+
+    :global([data-testid='choose-path-screen']) .libraryTileKicker,
+    :global([data-testid='choose-path-screen']) .libraryTileState {
+        font-size: 0.5rem;
+        line-height: 1;
+    }
+
+    :global([data-testid='choose-path-screen']) .libraryCardCell .cardTitle {
+        font-size: 0.86rem;
+        line-height: 1.04;
+    }
+
+    :global([data-testid='choose-path-screen']) .libraryCardCell .cardBody {
+        display: -webkit-box;
+        overflow: hidden;
+        font-size: 0.64rem;
+        line-height: 1.14;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+    }
+}
+
+/* UI-CLEANUP-090: path select should read as a launcher, not nested framed telemetry. */
+@media (min-width: 900px) and (min-height: 700px) {
+    :global([data-testid='choose-path-screen']) .pathFitStack {
+        gap: 0;
+    }
+
+    :global([data-testid='choose-path-screen']) .launchModeTitle {
+        overflow: visible;
+        line-height: 1.08;
+        white-space: normal;
+    }
+
+    :global([data-testid='choose-path-screen']) .modeLoopCue_launch span {
+        display: -webkit-box;
+        min-height: 1.28rem;
+        overflow: hidden;
+        line-height: 1.16;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+    }
+
+    :global([data-testid='choose-path-screen']) .launchPanel {
+        min-height: 0;
+    }
+
+    :global([data-testid='choose-path-screen']) .librarySection {
+        margin-top: -0.22rem;
+    }
+}
+
+@media (max-width: 760px) and (orientation: portrait) {
+    :global([data-testid='choose-path-screen']) .pathFitStack {
+        gap: 0.46rem;
+    }
+
+    :global([data-testid='choose-path-screen']) .pathStackHeader {
+        gap: 0.18rem;
+    }
+
+    :global([data-testid='choose-path-screen']) .launchPanel[data-library-open='true'] {
+        min-height: 5.95rem;
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 22%, transparent);
+        border-radius: var(--ui-radius-md);
+        background: color-mix(in srgb, var(--theme-void) 72%, transparent);
+        box-shadow:
+            inset 0 1px 0 color-mix(in srgb, white 5%, transparent),
+            0 8px 18px color-mix(in srgb, var(--theme-shadow) 18%, transparent);
+    }
+
+    :global([data-testid='choose-path-screen']) .launchPanel[data-library-open='true'] .launchContent {
+        gap: 0.1rem;
+        padding: 0.32rem 0.42rem 0.4rem;
+    }
+
+    :global([data-testid='choose-path-screen']) .launchPanel[data-library-open='true'] .launchModeTitle {
+        font-size: clamp(1.08rem, 5vw, 1.3rem);
+    }
+
+    :global([data-testid='choose-path-screen']) .launchPanel[data-library-open='true'] .modeSignalStrip_launch {
+        max-height: 1.42rem;
+        opacity: 0.86;
+    }
+
+    :global([data-testid='choose-path-screen']) .launchPanel[data-library-open='true'] .modeSignalStrip_launch .modeLaneMap .modeLaneMapSummary {
+        min-height: 1.24rem;
+        padding: 0.12rem 0.24rem;
+    }
+
+    :global([data-testid='choose-path-screen']) .launchPanel[data-library-open='true'] .launchActions {
+        grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+        gap: 0.16rem;
+        margin-top: 0.04rem;
+    }
+
+    :global([data-testid='choose-path-screen']) .launchPanel[data-library-open='true'] .launchPrimaryButton,
+    :global([data-testid='choose-path-screen']) .launchPanel[data-library-open='true'] .launchSecondaryButton {
+        min-height: var(--ui-touch-target-min, 44px) !important;
+        padding-block: 0.28rem !important;
+    }
+
+    :global([data-testid='choose-path-screen']) .launchPanel[data-library-open='true'] .launchSecondaryButton {
+        opacity: 0.72;
+    }
+
+    :global([data-testid='choose-path-screen']) .libraryScroller {
+        min-height: 10.45rem;
+        max-height: 10.45rem;
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+    }
+
+    :global([data-testid='choose-path-screen']) .libraryPage {
+        gap: 0.18rem;
+        padding: 0;
+    }
+
+    :global([data-testid='choose-path-screen']) .libraryCardCell .card.libraryTileCard {
+        min-height: 3.25rem;
+        max-height: 3.25rem;
+        height: 3.25rem;
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 18%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 58%, transparent);
+    }
+
+    :global([data-testid='choose-path-screen']) .pathFooterNote {
+        display: none;
+    }
+}
+
+/* UI-CLEANUP-096-final: final cascade for choose-path readability. */
+@media (min-width: 761px) {
+    :global([data-testid='choose-path-screen']) .launchSection {
+        width: min(760px, 100%);
+    }
+
+    :global([data-testid='choose-path-screen']) .launchPanel {
+        min-height: 0;
+        border-radius: var(--ui-radius-md);
+    }
+
+    :global([data-testid='choose-path-screen']) .launchContent {
+        width: min(30rem, 100%);
+        gap: 0.34rem;
+        padding: 0.78rem 0.9rem 0.86rem;
+    }
+
+    :global([data-testid='choose-path-screen']) .launchModeTitle {
+        font-size: clamp(1.58rem, 2.4vw, 2rem);
+        line-height: 1.04;
+    }
+
+    :global([data-testid='choose-path-screen']) .launchSummary {
+        max-width: 28rem;
+        font-size: 0.78rem;
+        line-height: 1.24;
+    }
+
+    :global([data-testid='choose-path-screen']) .modeLoopCue_launch {
+        display: none;
+    }
+
+    :global([data-testid='choose-path-screen']) .modeSignalStrip_launch,
+    :global([data-testid='choose-path-screen']) .modeSignalStrip_tile {
+        display: block;
+        max-width: 100%;
+        max-height: none;
+        overflow: visible;
+    }
+
+    :global([data-testid='choose-path-screen']) .modeSignalStrip_launch [data-mode-signal-action],
+    :global([data-testid='choose-path-screen']) .modeSignalStrip_tile [data-mode-signal-action],
+    :global([data-testid='choose-path-screen']) .modeSignalStrip_launch .modeLaneMap .modePrimaryLaneCue,
+    :global([data-testid='choose-path-screen']) .modeSignalStrip_tile .modeLaneMap .modePrimaryLaneCue,
+    :global([data-testid='choose-path-screen']) .modeSignalStrip_launch .modeLaneMap > i:not(.modeLaneMapSummary),
+    :global([data-testid='choose-path-screen']) .modeSignalStrip_tile .modeLaneMap > i:not(.modeLaneMapSummary) {
+        display: none;
+    }
+
+    :global([data-testid='choose-path-screen']) .modeSignalStrip_launch .modeLaneMap,
+    :global([data-testid='choose-path-screen']) .modeSignalStrip_tile .modeLaneMap {
+        display: block;
+        width: 100%;
+        padding: 0;
+    }
+
+    :global([data-testid='choose-path-screen']) .modeSignalStrip_launch .modeLaneMap .modeLaneMapSummary,
+    :global([data-testid='choose-path-screen']) .modeSignalStrip_tile .modeLaneMap .modeLaneMapSummary {
+        display: grid;
+        grid-template-columns: auto auto minmax(0, 1fr);
+        min-height: 1.5rem;
+        padding: 0.18rem 0.36rem;
+        border-radius: var(--ui-radius-sm);
+        background: color-mix(in srgb, var(--theme-void) 54%, transparent);
+        box-shadow: none;
+    }
+
+    :global([data-testid='choose-path-screen']) .modeSignalStrip_launch .modeLaneMap .modeLaneMapSummaryBeatPips,
+    :global([data-testid='choose-path-screen']) .modeSignalStrip_tile .modeLaneMap .modeLaneMapSummaryBeatPips {
+        display: none;
+    }
+
+    :global([data-testid='choose-path-screen']) .modeSignalStrip_launch .modeLaneMap .modeLaneMapSummary small,
+    :global([data-testid='choose-path-screen']) .modeSignalStrip_tile .modeLaneMap .modeLaneMapSummary small {
+        font-size: 0.48rem;
+    }
+
+    :global([data-testid='choose-path-screen']) .modeSignalStrip_launch .modeLaneMap .modeLaneMapSummary strong,
+    :global([data-testid='choose-path-screen']) .modeSignalStrip_tile .modeLaneMap .modeLaneMapSummary strong {
+        font-size: 0.58rem;
+    }
+
+    :global([data-testid='choose-path-screen']) .modeSignalStrip_launch .modeLaneMap .modeLaneMapSummary b,
+    :global([data-testid='choose-path-screen']) .modeSignalStrip_tile .modeLaneMap .modeLaneMapSummary b {
+        overflow: hidden;
+        font-size: 0.5rem;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    :global([data-testid='choose-path-screen']) .launchActions {
+        gap: 0.44rem;
+        margin-top: 0.12rem;
+    }
+
+    :global([data-testid='choose-path-screen']) .launchPrimaryButton,
+    :global([data-testid='choose-path-screen']) .launchSecondaryButton {
+        min-height: var(--ui-touch-target-min, 44px) !important;
+        padding-block: 0.36rem !important;
+    }
+
+    :global([data-testid='choose-path-screen']) .launchButtonContent small {
+        display: none;
+    }
+
+    :global([data-testid='choose-path-screen']) .librarySection {
+        gap: 0.32rem;
+        --library-tile-height: 132px;
+    }
+
+    :global([data-testid='choose-path-screen']) .libraryScroller {
+        min-height: 150px;
+        max-height: 168px;
+        border-radius: var(--ui-radius-md);
+    }
+
+    :global([data-testid='choose-path-screen']) .libraryPage {
+        gap: 0.44rem;
+        padding: 0.42rem 0.56rem;
+    }
+
+    :global([data-testid='choose-path-screen']) .libraryCardCell .card.libraryTileCard {
+        padding: 0.48rem 0.54rem;
+        border-radius: var(--ui-radius-sm);
+    }
+
+    :global([data-testid='choose-path-screen']) .libraryCardCell .card.libraryTileCard .cardBodyWrap {
+        gap: 0.16rem;
+    }
+
+    :global([data-testid='choose-path-screen']) .libraryTileKicker,
+    :global([data-testid='choose-path-screen']) .libraryTileState {
+        font-size: 0.49rem;
+        line-height: 1;
+    }
+
+    :global([data-testid='choose-path-screen']) .libraryCardCell .cardTitle {
+        font-size: 0.86rem;
+        line-height: 1.04;
+    }
+
+    :global([data-testid='choose-path-screen']) .libraryCardCell .cardBody {
+        display: -webkit-box;
+        overflow: hidden;
+        font-size: 0.64rem;
+        line-height: 1.16;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+    }
+}
+
+@media (max-width: 760px) {
+    :global([data-testid='choose-path-screen']) .modeSignalStrip_tile {
+        display: none;
+    }
+
+    :global([data-testid='choose-path-screen']) .modeSignalStrip_launch .modeLaneMap .modePrimaryLaneCue,
+    :global([data-testid='choose-path-screen']) .modeSignalStrip_launch [data-mode-signal-action],
+    :global([data-testid='choose-path-screen']) .modeSignalStrip_launch .modeLaneMap > i:not(.modeLaneMapSummary) {
+        display: none;
+    }
+
+    :global([data-testid='choose-path-screen']) .modeSignalStrip_launch .modeLaneMap .modeLaneMapSummary {
+        grid-template-columns: auto minmax(0, 1fr);
+        min-height: 1.22rem;
+        padding: 0.12rem 0.24rem;
+    }
+
+    :global([data-testid='choose-path-screen']) .modeSignalStrip_launch .modeLaneMap .modeLaneMapSummary small,
+    :global([data-testid='choose-path-screen']) .modeSignalStrip_launch .modeLaneMap .modeLaneMapSummaryBeatPips {
+        display: none;
+    }
+}
+
+/* UI-CLEANUP-116: mobile path select should be a compact mode picker, not a poster page. */
+@media (max-width: 760px) and (orientation: portrait) {
+    :global([data-testid='choose-path-screen']) .pathFitStack {
+        gap: 0.34rem;
+    }
+
+    :global([data-testid='choose-path-screen']) .pathStackHeader {
+        gap: 0.1rem;
+    }
+
+    :global([data-testid='choose-path-screen']) .pathHeaderTopRow {
+        margin-bottom: 0;
+    }
+
+    :global([data-testid='choose-path-screen']) .pathHeaderText {
+        gap: 0.12rem;
+    }
+
+    :global([data-testid='choose-path-screen']) .pathTitle {
+        max-width: 100%;
+        overflow: hidden;
+        font-size: clamp(1.42rem, 6.6vw, 1.78rem);
+        line-height: 1.02;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    :global([data-testid='choose-path-screen']) .pathSubtitle {
+        display: none;
+    }
+
+    :global([data-testid='choose-path-screen']) .launchPanel {
+        min-height: 0;
+        border-radius: var(--ui-radius-md);
+        box-shadow: none;
+    }
+
+    :global([data-testid='choose-path-screen']) .launchPanel[data-library-open='true'] {
+        min-height: 5.22rem;
+    }
+
+    :global([data-testid='choose-path-screen']) .launchContent,
+    :global([data-testid='choose-path-screen']) .launchPanel[data-library-open='true'] .launchContent {
+        gap: 0.08rem;
+        padding: 0.26rem 0.36rem 0.34rem;
+    }
+
+    :global([data-testid='choose-path-screen']) .launchModeTitle,
+    :global([data-testid='choose-path-screen']) .launchPanel[data-library-open='true'] .launchModeTitle {
+        font-size: clamp(0.98rem, 4.6vw, 1.18rem);
+        line-height: 1.04;
+    }
+
+    :global([data-testid='choose-path-screen']) .launchSummary {
+        display: -webkit-box;
+        max-height: 1.36rem;
+        overflow: hidden;
+        font-size: 0.6rem;
+        line-height: 1.12;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+    }
+
+    :global([data-testid='choose-path-screen']) .modeSignalStrip_launch {
+        display: none !important;
+    }
+
+    :global([data-testid='choose-path-screen']) .launchActions,
+    :global([data-testid='choose-path-screen']) .launchPanel[data-library-open='true'] .launchActions {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 0.82fr);
+        gap: 0.12rem;
+        margin-top: 0.08rem;
+    }
+
+    :global([data-testid='choose-path-screen']) .launchPrimaryButton,
+    :global([data-testid='choose-path-screen']) .launchSecondaryButton,
+    :global([data-testid='choose-path-screen']) .launchPanel[data-library-open='true'] .launchPrimaryButton,
+    :global([data-testid='choose-path-screen']) .launchPanel[data-library-open='true'] .launchSecondaryButton {
+        min-height: var(--ui-touch-target-min, 44px) !important;
+        padding-block: 0.22rem !important;
+    }
+
+    :global([data-testid='choose-path-screen']) .launchButtonContent small {
+        display: none;
+    }
+
+    :global([data-testid='choose-path-screen']) .librarySection {
+        margin-top: 0;
+        gap: 0.18rem;
+    }
+
+    :global([data-testid='choose-path-screen']) .libraryToolbar {
+        min-height: 1.88rem;
+    }
+
+    :global([data-testid='choose-path-screen']) .libraryScroller {
+        min-height: 9.75rem;
+        max-height: 9.75rem;
+    }
+
+    :global([data-testid='choose-path-screen']) .libraryCardCell .card.libraryTileCard {
+        min-height: 3.02rem;
+        max-height: 3.02rem;
+        height: 3.02rem;
+    }
+
+    :global([data-testid='choose-path-screen']) .libraryCardCell .cardTitle {
+        font-size: 0.78rem;
+    }
+
+    :global([data-testid='choose-path-screen']) .libraryCardCell .cardBody {
+        font-size: 0.56rem;
+        line-height: 1.12;
+        -webkit-line-clamp: 2;
+    }
+}
+
+@media (max-height: 520px) and (orientation: landscape) {
+    :global([data-testid='choose-path-screen']) .pathFitStack {
+        gap: 0.18rem;
+    }
+
+    :global([data-testid='choose-path-screen']) .pathStackHeader {
+        gap: 0.1rem;
+    }
+
+    :global([data-testid='choose-path-screen']) .pathTitle {
+        font-size: clamp(1.25rem, 3.8vw, 1.7rem);
+        line-height: 1;
+    }
+
+    :global([data-testid='choose-path-screen']) .pathSubtitle,
+    :global([data-testid='choose-path-screen']) .pathFooterNote {
+        display: none;
+    }
+
+    :global([data-testid='choose-path-screen']) .launchSection {
+        width: min(560px, 62vw);
+    }
+
+    :global([data-testid='choose-path-screen']) .launchContent {
+        gap: 0.14rem;
+        padding: 0.42rem 0.54rem 0.48rem;
+    }
+
+    :global([data-testid='choose-path-screen']) .launchModeTitle {
+        font-size: clamp(1.08rem, 2.7vw, 1.42rem);
+    }
+
+    :global([data-testid='choose-path-screen']) .launchSummary {
+        max-height: 1.45rem;
+        overflow: hidden;
+        font-size: 0.62rem;
+        line-height: 1.12;
+    }
+
+    :global([data-testid='choose-path-screen']) .modeSignalStrip_launch {
+        display: none !important;
+    }
+
+    :global([data-testid='choose-path-screen']) .launchActions {
+        gap: 0.16rem;
+        margin-top: 0.04rem;
+    }
+
+    :global([data-testid='choose-path-screen']) .launchPrimaryButton,
+    :global([data-testid='choose-path-screen']) .launchSecondaryButton {
+        min-height: var(--ui-touch-target-min, 44px) !important;
+        padding-block: 0.22rem !important;
+    }
+
+    :global([data-testid='choose-path-screen']) .librarySection {
+        --library-tile-height: 94px;
+        gap: 0.18rem;
+    }
+
+    :global([data-testid='choose-path-screen']) .libraryScroller {
+        min-height: 116px;
+        max-height: 124px;
+    }
+
+    :global([data-testid='choose-path-screen']) .libraryPage {
+        gap: 0.28rem;
+        padding: 0.3rem 0.38rem;
     }
 }

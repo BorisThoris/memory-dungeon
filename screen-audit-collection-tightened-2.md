@@ -1,0 +1,22 @@
+- generic [ref=f1e2] [box=0,0,1440,960]:
+  - generic [ref=f1e3] [box=0,0,1440,960]:
+    - link "Skip to main content" [ref=f1e4] [cursor=pointer] [box=-1,-1,1,1]:
+      - /url: "#app-main"
+    - main [ref=f1e5] [box=0,0,1440,960]:
+      - region "Collection" [ref=f1e897] [box=0,0,1440,960]:
+        - generic [ref=f1e898] [box=22,18,1397,152]:
+          - generic [ref=f1e899] [box=22,18,562,145]
+          - button "Back" [ref=f1e903] [cursor=pointer] [box=1377,18,41,46]
+        - generic [ref=f1e904] [box=140,186,1160,757]:
+          - navigation "Collection sections" [ref=f1e905] [box=140,186,1150,42]
+          - generic [ref=f1e915] [box=140,239,1150,450]
+          - generic [ref=f1e949] [box=140,700,1150,407]
+          - generic [ref=f1e988] [box=140,1118,1150,402]
+          - generic [ref=f1e1007] [box=140,1531,1150,726]
+          - generic [ref=f1e1059] [box=140,2269,1150,726]
+          - generic [ref=f1e1091] [box=140,3007,1150,1230]
+          - generic [ref=f1e1161] [box=140,4248,1150,726]
+          - generic [ref=f1e1233] [box=164,5010,1102,100]
+          - generic [ref=f1e1242] [box=164,5070,1102,681]
+          - generic [ref=f1e1270] [box=164,5129,1102,659]
+  - region "Memory Dungeon tips" [box=240,924,960,0]

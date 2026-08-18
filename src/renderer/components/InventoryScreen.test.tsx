@@ -1,4 +1,5 @@
 import { render, screen, within } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { MAX_GUARD_TOKENS } from '../../shared/contracts';
 import { createNewRun } from '../../shared/game-core';
@@ -9,7 +10,8 @@ vi.mock('zustand/react/shallow', () => ({
 }));
 
 const closeSubscreen = vi.fn();
-let currentRun = {
+const openModeSelect = vi.fn();
+let currentRun: ReturnType<typeof createNewRun> | null = {
     ...createNewRun(0),
     dungeonKeys: { iron: 1, treasure: 0 },
     dungeonMasterKeys: 1,
@@ -17,6 +19,8 @@ let currentRun = {
 };
 
 beforeEach(() => {
+    closeSubscreen.mockClear();
+    openModeSelect.mockClear();
     currentRun = {
         ...createNewRun(0),
         dungeonKeys: { iron: 1, treasure: 0 },
@@ -30,6 +34,7 @@ vi.mock('../store/useAppStore', () => ({
         (selector: (state: unknown) => unknown) =>
             selector({
                 closeSubscreen,
+                openModeSelect,
                 run: currentRun,
                 settings: { masterVolume: 0, sfxVolume: 0 },
                 saveData: { unlocks: [] }
@@ -42,17 +47,41 @@ vi.mock('../store/useAppStore', () => ({
 
 vi.mock('../audio/uiSfx', () => ({
     playUiBackSfx: vi.fn(),
+    playUiConfirmSfx: vi.fn(),
     resumeUiSfxContext: vi.fn(),
     uiSfxGainFromSettings: () => 0
 }));
 
 describe('InventoryScreen REG-079 run inventory model', () => {
+    it('renders a structured empty state when no expedition is active', async () => {
+        const user = userEvent.setup();
+        currentRun = null;
+        render(<InventoryScreen />);
+
+        expect(screen.getByTestId('inventory-empty-state')).toHaveTextContent('No active expedition');
+        expect(screen.getByTestId('inventory-empty-state')).toHaveTextContent('Start a run to see relics, mutators, charges, and route tools.');
+        expect(screen.getByTestId('inventory-empty-state')).toHaveTextContent('Start a run');
+        expect(screen.getByTestId('inventory-empty-state')).toHaveTextContent('Choose path');
+        expect(screen.getByTestId('inventory-empty-state')).toHaveTextContent('Pick a mode to start a run');
+        expect(screen.getByTestId('inventory-empty-state')).not.toHaveTextContent('Start a run from Choose Your Path');
+        expect(screen.getByTestId('inventory-empty-state')).toHaveTextContent('Milestone drafts');
+        expect(screen.getByTestId('inventory-empty-state')).toHaveTextContent('Run pressure');
+        expect(screen.getByTestId('inventory-empty-state')).toHaveTextContent('Tool bank');
+
+        await user.click(screen.getByRole('button', { name: /^choose path$/i }));
+
+        expect(openModeSelect).toHaveBeenCalledTimes(1);
+    });
+
     it('shows active relic archetype as the run build identity', () => {
         render(<InventoryScreen />);
 
         expect(screen.getByTestId('inventory-build-identity')).toHaveTextContent('The Seer');
         expect(screen.getByTestId('inventory-build-identity')).toHaveTextContent('peek, pin, read');
         expect(screen.getByTestId('inventory-build-identity')).toHaveTextContent('Scrying Spark');
+        expect(screen.getByRole('link', { name: 'Consumables' })).toHaveAttribute('data-compact-label', 'Items');
+        expect(screen.getByRole('link', { name: 'Mutators' })).toHaveAttribute('data-compact-label', 'Muts');
+        expect(screen.getByRole('link', { name: 'Contract' })).toHaveAttribute('data-compact-label', 'Vow');
     });
 
     it('summarizes the active arcade reward loop in the run snapshot', () => {
@@ -130,6 +159,9 @@ describe('InventoryScreen REG-079 run inventory model', () => {
         expect(payoffEngine).toHaveAccessibleName(
             /Inventory payoff engine.*Super stack: Push reward stack.*4 payoffs live.*Chain \+ Pickup \+ Burst \+ Trait route.*Push x6 reward/i
         );
+        const runFrame = screen.getByTestId('inventory-meta-frame-run');
+        expect(runFrame).toHaveTextContent('Perfect Memory: no misses, no rescue powers; pins ok.');
+        expect(runFrame).not.toHaveTextContent('shuffle (full-board or row/region)');
     });
 
     it('keeps old completed trait routes concrete when the exact reward text is missing', () => {

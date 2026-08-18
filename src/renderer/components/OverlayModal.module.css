@@ -253,6 +253,13 @@
     --overlay-accent-soft: color-mix(in srgb, rgba(87, 220, 255, 1) 14%, transparent);
 }
 
+.backdrop.modalTonePause {
+    background:
+        radial-gradient(circle at 50% 12%, color-mix(in srgb, rgba(87, 220, 255, 0.16) 60%, transparent), transparent 34%),
+        linear-gradient(180deg, rgba(6, 10, 16, 0.72), rgba(4, 7, 12, 0.84)),
+        var(--gameplay-overlay-scrim-bg, var(--theme-modal-scrim-bg, var(--theme-scrim-dialog)));
+}
+
 .modalToneRelic {
     --overlay-accent: color-mix(in srgb, #8c62df 52%, transparent);
     --overlay-accent-soft: color-mix(in srgb, #8c62df 16%, transparent);
@@ -325,6 +332,37 @@
         gap: 0.85rem;
         padding: max(0.85rem, calc(var(--theme-modal-plate-padding) - 0.15rem));
     }
+
+    .modal[data-testid='game-relic-offer-overlay'] {
+        width: min(100%, 980px);
+        gap: 0.44rem;
+        padding: 0.62rem;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .headerPlateFrame {
+        margin-bottom: 0;
+        --theme-meta-frame-outset: -0.14rem;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .headerPlateWell {
+        padding: 0.34rem 0.52rem;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .title {
+        font-size: clamp(1.12rem, 4.2vh, 1.55rem);
+        line-height: 0.98;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .subtitle {
+        margin-top: 0.2rem;
+        font-size: 0.68rem;
+        line-height: 1.18;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .body {
+        margin-top: 0.28rem;
+        gap: 0.32rem;
+    }
 }
 
 @media (max-width: 760px) {
@@ -335,6 +373,28 @@
             max(0.9rem, env(safe-area-inset-right, 0px))
             max(0.9rem, env(safe-area-inset-bottom, 0px))
             max(0.9rem, env(safe-area-inset-left, 0px));
+    }
+
+    .backdrop.modalTonePause {
+        align-items: center;
+        backdrop-filter: blur(18px) saturate(118%) brightness(0.78);
+        background:
+            radial-gradient(circle at 50% 10%, color-mix(in srgb, rgba(87, 220, 255, 0.18) 64%, transparent), transparent 30%),
+            linear-gradient(180deg, rgba(4, 7, 12, 0.78), rgba(3, 5, 10, 0.9)),
+            var(--gameplay-overlay-scrim-bg, var(--theme-modal-scrim-bg, var(--theme-scrim-dialog)));
+    }
+
+    .backdrop.modalToneSuccess {
+        align-items: flex-start;
+    }
+
+    .backdrop.modalToneRelic {
+        align-items: center;
+        backdrop-filter: blur(18px) saturate(112%) brightness(0.68);
+        background:
+            radial-gradient(ellipse 72% 42% at 50% 48%, color-mix(in srgb, #8c62df 18%, transparent), transparent 66%),
+            linear-gradient(180deg, rgba(2, 3, 7, 0.72), rgba(2, 3, 7, 0.9)),
+            var(--gameplay-overlay-scrim-bg, var(--theme-modal-scrim-bg, var(--theme-scrim-dialog)));
     }
 
     .modal {
@@ -379,11 +439,59 @@
     .actions {
         position: sticky;
         bottom: 0;
+        grid-column: 1 / -1;
+        justify-self: stretch;
+        align-self: stretch;
+        width: 100%;
+        min-width: 0;
+    }
+
+    .modal[data-action-placement='rail'] .actions,
+    .modal[data-action-placement='dock'] .actions {
+        align-self: stretch;
+        justify-self: stretch;
+    }
+
+    .modal[data-action-placement='rail'] .actions :global([data-testid='overlay-modal-actions']),
+    .modal[data-action-placement='dock'] .actions :global([data-testid='overlay-modal-actions']) {
+        width: 100%;
+        max-width: 100%;
     }
 
     .modalAction {
         min-width: 0;
         flex: 1 1 auto;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] {
+        width: min(100%, 27.5rem);
+        max-height: min(calc(100dvh - 1.75rem), 34rem);
+        gap: 0.34rem;
+        padding: 0.66rem;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .headerPlateFrame {
+        margin-bottom: 0;
+        --theme-meta-frame-outset: -0.13rem;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .headerPlateWell {
+        padding: 0.36rem 0.52rem;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .title {
+        font-size: clamp(1.28rem, 7vw, 1.68rem);
+        line-height: 1.08;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .subtitle {
+        display: none;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .body {
+        margin-top: 0.26rem;
+        gap: 0.28rem;
+        overflow-x: hidden;
     }
 }
 
@@ -411,8 +519,1427 @@
         var(--theme-modal-plate-enter-ease, cubic-bezier(0.22, 1, 0.36, 1)) both;
 }
 
+/* UI-CLEANUP-024: relic choice is a bottom sheet on phones, not a tiny centered plaque. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .backdrop.modalToneRelic {
+        align-items: center;
+        justify-content: center;
+        padding:
+            max(0.72rem, env(safe-area-inset-top, 0px))
+            max(0.72rem, env(safe-area-inset-right, 0px))
+            max(0.72rem, env(safe-area-inset-bottom, 0px))
+            max(0.72rem, env(safe-area-inset-left, 0px));
+        background:
+            radial-gradient(ellipse 86% 58% at 50% 50%, color-mix(in srgb, #8c62df 17%, transparent), transparent 68%),
+            linear-gradient(180deg, rgba(2, 3, 7, 0.66), rgba(2, 3, 7, 0.88)),
+            var(--gameplay-overlay-scrim-bg, var(--theme-modal-scrim-bg, var(--theme-scrim-dialog)));
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] {
+        width: min(100%, 29rem);
+        min-height: 0;
+        max-height: min(calc(100dvh - 1.45rem), 40rem);
+        gap: 0.34rem;
+        padding: 0.68rem;
+        border-radius: var(--ui-radius-lg);
+        box-shadow:
+            0 22px 60px color-mix(in srgb, var(--theme-shadow) 58%, transparent),
+            0 0 0 1px color-mix(in srgb, var(--theme-gold-bright) 16%, transparent);
+    }
+
+    .modal[data-testid='game-relic-offer-overlay']::before {
+        opacity: 0.32;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay']::after {
+        inset: 0.28rem;
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 16%, transparent);
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .headerPlateFrame {
+        margin-bottom: 0;
+        --theme-meta-frame-outset: 0;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .headerPlateWell {
+        padding: 0.22rem 0.44rem;
+        border-radius: var(--ui-radius-sm);
+        background: color-mix(in srgb, var(--theme-void) 34%, transparent);
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .title {
+        font-size: clamp(1rem, 5vw, 1.18rem);
+        line-height: 1.05;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .body {
+        margin-top: 0.22rem;
+        gap: 0.32rem;
+        align-content: start;
+        align-items: start;
+    }
+}
+
 :global([data-reduce-motion='true']) .backdrop,
 :global([data-reduce-motion='true']) .modal {
     backdrop-filter: none;
     animation: none;
+}
+
+/* UI-CLEANUP-034: phone relic reward picker is a bottom sheet, not a centered tiny plaque with dead space. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .backdrop.modalToneRelic {
+        align-items: flex-end;
+        justify-content: center;
+        padding:
+            max(0.46rem, env(safe-area-inset-top, 0px))
+            max(0.5rem, env(safe-area-inset-right, 0px))
+            max(0.5rem, env(safe-area-inset-bottom, 0px))
+            max(0.5rem, env(safe-area-inset-left, 0px));
+        background:
+            radial-gradient(ellipse 92% 38% at 50% 100%, color-mix(in srgb, #8c62df 16%, transparent), transparent 70%),
+            linear-gradient(180deg, rgba(2, 3, 7, 0.58), rgba(2, 3, 7, 0.88)),
+            var(--gameplay-overlay-scrim-bg, var(--theme-modal-scrim-bg, var(--theme-scrim-dialog)));
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] {
+        align-self: flex-end;
+        width: min(100%, 25rem);
+        max-height: min(calc(100dvh - 1rem), calc(100svh - 1rem));
+        margin-top: 0;
+        gap: 0.22rem;
+        padding: 0.5rem;
+        border-radius: calc(var(--ui-radius-lg) + 0.08rem) calc(var(--ui-radius-lg) + 0.08rem)
+            var(--ui-radius-md) var(--ui-radius-md);
+        box-shadow:
+            0 -18px 44px color-mix(in srgb, var(--theme-shadow) 52%, transparent),
+            0 0 0 1px color-mix(in srgb, var(--theme-violet-bright) 18%, transparent);
+    }
+
+    .modal[data-testid='game-relic-offer-overlay']::after {
+        inset: 0.2rem;
+        border-color: color-mix(in srgb, var(--theme-violet-bright) 16%, var(--theme-gold-bright) 10%);
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .headerPlateFrame {
+        --theme-meta-frame-outset: 0;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .headerPlateWell,
+    .modal[data-testid='game-relic-offer-overlay'] .headerQuietBand {
+        padding: 0.16rem 0.36rem;
+        border-radius: var(--ui-radius-sm);
+        background: color-mix(in srgb, var(--theme-void) 34%, transparent);
+        box-shadow: none;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .title {
+        font-family: var(--ui-font-body-family);
+        font-size: 0.78rem;
+        font-weight: 950;
+        line-height: 1.05;
+        text-transform: uppercase;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .body {
+        margin-top: 0.08rem;
+        gap: 0.2rem;
+    }
+}
+
+/* UI-CLEANUP-047: phone relic draft uses an upper choice sheet, matching side-room reward placement. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .backdrop:has(.modal[data-testid='game-relic-offer-overlay']),
+    .backdrop.modalToneRelic {
+        align-items: flex-start;
+        justify-content: flex-start;
+        padding:
+            max(4.1rem, env(safe-area-inset-top, 0px))
+            max(0.58rem, env(safe-area-inset-right, 0px))
+            max(0.58rem, env(safe-area-inset-bottom, 0px))
+            max(0.58rem, env(safe-area-inset-left, 0px));
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] {
+        position: absolute;
+        top: max(4.1rem, env(safe-area-inset-top, 0px));
+        right: auto;
+        left: 50%;
+        align-self: flex-start;
+        width: min(calc(100% - 1.16rem), 23.5rem);
+        max-width: 23.5rem;
+        max-height: calc(100dvh - 5rem);
+        margin-inline: auto;
+        transform: translateX(-50%);
+        border-radius: var(--ui-radius-md);
+        box-shadow:
+            0 18px 44px color-mix(in srgb, var(--theme-shadow) 48%, transparent),
+            0 0 0 1px color-mix(in srgb, var(--theme-violet-bright) 14%, transparent);
+    }
+}
+
+/* UI-CLEANUP-004: rail actions must collapse into the modal footer on phones. */
+@media (max-width: 760px) {
+    .modal[data-action-placement='rail'] {
+        grid-template-columns: minmax(0, 1fr) !important;
+        grid-template-rows: minmax(0, 1fr) auto !important;
+    }
+
+    .modal[data-action-placement='rail'] .actions {
+        grid-column: 1 / -1 !important;
+        grid-row: 2 !important;
+        align-self: stretch !important;
+        justify-self: stretch !important;
+        width: 100% !important;
+        min-width: 0 !important;
+    }
+
+    .modal[data-action-placement='rail'] .actions :global([data-testid='overlay-modal-actions']) {
+        position: static !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        transform: none !important;
+    }
+
+    .actions[data-testid='overlay-modal-actions'][data-action-placement='dock'] {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 0.42rem !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        overflow: hidden !important;
+    }
+
+    .actions[data-testid='overlay-modal-actions'][data-action-placement='dock'] > [data-action-group] {
+        flex: none !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+    }
+}
+
+/* UI-CLEANUP-005: phone overlays should read like game menus, not title posters. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .modal {
+        gap: 0.42rem;
+    }
+
+    .headerPlateFrame {
+        --theme-meta-frame-outset: -0.12rem;
+        margin-bottom: 0;
+    }
+
+    .headerPlateWell,
+    .headerQuietBand {
+        padding: 0.34rem 0.5rem;
+        border-radius: var(--ui-radius-sm);
+    }
+
+    .title {
+        overflow-wrap: anywhere;
+        font-size: clamp(1.24rem, 7vw, 1.72rem);
+        line-height: 0.94;
+        letter-spacing: 0;
+    }
+
+    .subtitle {
+        display: -webkit-box;
+        overflow: hidden;
+        margin-top: 0.24rem;
+        font-size: 0.7rem;
+        line-height: 1.18;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+    }
+
+    .body {
+        margin-top: 0.34rem;
+        gap: 0.38rem;
+    }
+
+    .backdrop.modalToneSuccess .modal {
+        max-height: min(calc(100dvh - 1.4rem), calc(100svh - 1.4rem));
+    }
+
+    .backdrop.modalToneSuccess .subtitle {
+        display: none;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .title {
+        font-size: clamp(1.18rem, 6.4vw, 1.54rem);
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .subtitle {
+        -webkit-line-clamp: 1;
+    }
+}
+
+/* UI-CLEANUP-016: phone relic drafts should not spend first-view height on a poster title. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .modal[data-testid='game-relic-offer-overlay'] {
+        align-self: flex-start;
+        gap: 0.3rem;
+        margin-top: max(0.65rem, env(safe-area-inset-top, 0px));
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .headerPlateFrame {
+        --theme-meta-frame-outset: -0.08rem;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .headerPlateWell,
+    .modal[data-testid='game-relic-offer-overlay'] .headerQuietBand {
+        padding: 0.24rem 0.42rem;
+        border-radius: var(--ui-radius-sm);
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .title {
+        font-size: clamp(0.98rem, 5.6vw, 1.28rem);
+        line-height: 0.96;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .subtitle {
+        display: none;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .body {
+        margin-top: 0.22rem;
+        gap: 0.28rem;
+    }
+}
+
+@media (max-width: 760px) and (max-height: 700px) and (orientation: portrait) {
+    .backdrop:has(.modal[data-testid='game-relic-offer-overlay']),
+    .backdrop.modalToneRelic {
+        padding:
+            max(3.9rem, env(safe-area-inset-top, 0px))
+            max(0.38rem, env(safe-area-inset-right, 0px))
+            max(0.44rem, env(safe-area-inset-bottom, 0px))
+            max(0.38rem, env(safe-area-inset-left, 0px));
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] {
+        max-height: calc(100dvh - 4.4rem);
+        gap: 0.18rem;
+        padding: 0.44rem;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .headerPlateWell,
+    .modal[data-testid='game-relic-offer-overlay'] .headerQuietBand {
+        padding: 0.12rem 0.26rem;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .title {
+        font-size: 0.88rem;
+        line-height: 1;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .body {
+        gap: 0.16rem;
+    }
+}
+
+/* UI-CLEANUP-020: relic choices need readable decision space, not a tiny poster receipt. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .modal[data-testid='game-relic-offer-overlay'] {
+        width: min(100%, 23.5rem);
+        gap: 0.38rem;
+        margin-top: max(0.95rem, env(safe-area-inset-top, 0px));
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .headerPlateFrame {
+        --theme-meta-frame-outset: 0;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .headerPlateWell,
+    .modal[data-testid='game-relic-offer-overlay'] .headerQuietBand {
+        padding: 0.18rem 0.34rem;
+        border-radius: var(--ui-radius-sm);
+        background:
+            linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 8%, transparent), transparent 72%),
+            color-mix(in srgb, var(--theme-surface-control) 58%, transparent);
+        box-shadow: none;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .title {
+        font-size: clamp(0.88rem, 4.8vw, 1.06rem);
+        line-height: 1;
+        letter-spacing: 0.02em;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .body {
+        margin-top: 0.16rem;
+        gap: 0.34rem;
+    }
+}
+
+/* UI-CLEANUP-022: phone relic picks should read like rewards, not a nested debug dashboard. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .modal[data-testid='game-relic-offer-overlay'] {
+        width: min(100%, 22.25rem);
+        max-height: min(calc(100dvh - 1.25rem), calc(100svh - 1.25rem));
+        gap: 0.28rem;
+        margin-top: max(0.5rem, env(safe-area-inset-top, 0px));
+        padding: 0.54rem;
+        border-radius: var(--ui-radius-lg);
+    }
+
+    .modal[data-testid='game-relic-offer-overlay']::after {
+        inset: 0.22rem;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .headerPlateWell,
+    .modal[data-testid='game-relic-offer-overlay'] .headerQuietBand {
+        padding: 0.16rem 0.34rem;
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 18%, transparent);
+        background: color-mix(in srgb, var(--theme-surface-control) 64%, transparent);
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .title {
+        font-family: var(--ui-font-body-family);
+        font-size: 0.82rem;
+        font-weight: 950;
+        line-height: 1.05;
+        text-transform: uppercase;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .body {
+        margin-top: 0.08rem;
+        gap: 0.24rem;
+    }
+}
+
+/* UI-CLEANUP-024C: final phone relic sheet placement after earlier relic overrides. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .backdrop.modalToneRelic {
+        align-items: center;
+        justify-content: center;
+        padding:
+            max(0.72rem, env(safe-area-inset-top, 0px))
+            max(0.72rem, env(safe-area-inset-right, 0px))
+            max(0.72rem, env(safe-area-inset-bottom, 0px))
+            max(0.72rem, env(safe-area-inset-left, 0px));
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] {
+        align-self: center;
+        width: min(100%, 28rem);
+        max-height: min(calc(100dvh - 1.25rem), 29.5rem);
+        margin-top: 0;
+        gap: 0.26rem;
+        padding: 0.54rem;
+        border-radius: var(--ui-radius-lg);
+        border-bottom-left-radius: max(var(--ui-radius-lg), env(safe-area-inset-bottom, 0px));
+        border-bottom-right-radius: max(var(--ui-radius-lg), env(safe-area-inset-bottom, 0px));
+        box-shadow:
+            0 -18px 54px color-mix(in srgb, var(--theme-shadow) 54%, transparent),
+            0 0 0 1px color-mix(in srgb, var(--theme-gold-bright) 16%, transparent);
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .headerPlateWell,
+    .modal[data-testid='game-relic-offer-overlay'] .headerQuietBand {
+        padding: 0.18rem 0.36rem;
+        border-radius: var(--ui-radius-sm);
+        background: color-mix(in srgb, var(--theme-void) 34%, transparent);
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .title {
+        font-size: clamp(0.92rem, 4.6vw, 1.1rem);
+    }
+}
+
+/* UI-CLEANUP-028: relic drafts are a compact choice surface, not a poster modal. */
+@media (min-width: 761px) {
+    .modal[data-testid='game-relic-offer-overlay'] {
+        width: min(62rem, calc(100vw - 3rem));
+        max-height: min(82dvh, 42rem);
+        gap: 0.55rem;
+        padding: 0.82rem;
+        border-radius: var(--ui-radius-lg);
+        box-shadow:
+            0 22px 58px color-mix(in srgb, var(--theme-shadow) 56%, transparent),
+            0 0 0 1px color-mix(in srgb, var(--theme-gold-bright) 12%, transparent);
+    }
+
+    .modal[data-testid='game-relic-offer-overlay']::before {
+        opacity: 0.28;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay']::after {
+        inset: 0.24rem;
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 12%, transparent);
+        box-shadow: none;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .headerPlateFrame {
+        --theme-meta-frame-outset: 0;
+        margin-bottom: 0;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .headerPlateWell,
+    .modal[data-testid='game-relic-offer-overlay'] .headerQuietBand {
+        padding: 0.28rem 0.48rem;
+        border-radius: var(--ui-radius-sm);
+        background: color-mix(in srgb, var(--theme-surface-control) 52%, transparent);
+        box-shadow: none;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .title {
+        font-family: var(--ui-font-body-family);
+        font-size: 0.98rem;
+        font-weight: 950;
+        line-height: 1.12;
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .subtitle {
+        display: none;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .body {
+        margin-top: 0;
+        gap: 0.34rem;
+    }
+}
+
+@media (max-width: 760px) and (orientation: portrait) {
+    .modal[data-testid='game-relic-offer-overlay'] {
+        width: min(100%, 27rem);
+        max-height: min(calc(100dvh - 0.9rem), 32rem);
+        gap: 0.16rem;
+        padding: 0.42rem;
+        border-radius: var(--ui-radius-md);
+        box-shadow:
+            0 16px 46px color-mix(in srgb, var(--theme-shadow) 58%, transparent),
+            0 0 0 1px color-mix(in srgb, var(--theme-gold-bright) 10%, transparent);
+    }
+
+    .modal[data-testid='game-relic-offer-overlay']::before {
+        opacity: 0.18;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay']::after {
+        content: none;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .headerPlateWell,
+    .modal[data-testid='game-relic-offer-overlay'] .headerQuietBand {
+        padding: 0.12rem 0.28rem;
+        border-radius: var(--ui-radius-sm);
+        border-color: transparent;
+        background: transparent;
+        box-shadow: none;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .headerPlateFrame {
+        --theme-meta-frame-outset: 0;
+        margin: 0;
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .headerPlateFrame :global([class*='cornice']) {
+        display: none;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .title {
+        font-family: var(--ui-font-body-family);
+        font-size: 0.78rem;
+        font-weight: 950;
+        line-height: 1.08;
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .subtitle {
+        display: none;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .body {
+        margin-top: 0.02rem;
+        gap: 0.16rem;
+    }
+}
+
+/* UI-CLEANUP-034B: final phone relic sheet placement after older relic cascade blocks. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .backdrop.modalToneRelic {
+        align-items: flex-end;
+        justify-content: center;
+        padding:
+            max(0.46rem, env(safe-area-inset-top, 0px))
+            max(0.5rem, env(safe-area-inset-right, 0px))
+            max(0.5rem, env(safe-area-inset-bottom, 0px))
+            max(0.5rem, env(safe-area-inset-left, 0px));
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] {
+        align-self: flex-end;
+        width: min(100%, 25rem);
+        max-height: min(calc(100dvh - 1rem), calc(100svh - 1rem));
+        margin-top: 0;
+        gap: 0.2rem;
+        padding: 0.5rem;
+        border-radius: calc(var(--ui-radius-lg) + 0.08rem) calc(var(--ui-radius-lg) + 0.08rem)
+            var(--ui-radius-md) var(--ui-radius-md);
+        box-shadow:
+            0 -18px 44px color-mix(in srgb, var(--theme-shadow) 52%, transparent),
+            0 0 0 1px color-mix(in srgb, var(--theme-violet-bright) 18%, transparent);
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .body {
+        margin-top: 0.08rem;
+        gap: 0.2rem;
+    }
+}
+
+/* UI-CLEANUP-083: relic draft shell should frame the choice board, not compress it into a plaque. */
+@media (min-width: 761px) {
+    .modal[data-testid='game-relic-offer-overlay'] {
+        width: min(68rem, calc(100vw - 3rem));
+        max-height: min(82dvh, 46rem);
+        gap: 0.5rem;
+        padding: 0.78rem 0.9rem 0.95rem;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .headerPlateFrame {
+        margin-bottom: 0;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .headerPlateWell,
+    .modal[data-testid='game-relic-offer-overlay'] .headerQuietBand {
+        padding: 0.28rem 0.54rem;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .title {
+        font-size: clamp(1rem, 1.4vw, 1.2rem);
+        line-height: 1.04;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .body {
+        gap: 0.36rem;
+    }
+}
+
+@media (max-width: 760px) and (orientation: portrait) {
+    .backdrop:has(.modal[data-testid='game-relic-offer-overlay']),
+    .backdrop.modalToneRelic {
+        padding:
+            max(4.7rem, env(safe-area-inset-top, 0px))
+            max(0.42rem, env(safe-area-inset-right, 0px))
+            max(0.5rem, env(safe-area-inset-bottom, 0px))
+            max(0.42rem, env(safe-area-inset-left, 0px));
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] {
+        width: min(100%, 24rem);
+        max-height: calc(100dvh - 5.25rem);
+        padding: 0.64rem;
+        border-radius: calc(var(--ui-radius-md) + 0.06rem);
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .headerPlateWell,
+    .modal[data-testid='game-relic-offer-overlay'] .headerQuietBand {
+        padding: 0.2rem 0.34rem;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .title {
+        font-size: clamp(0.94rem, 4.2vw, 1.08rem);
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .body {
+        gap: 0.28rem;
+    }
+}
+
+/* UI-CLEANUP-054: final phone interlude sheet placement after route/relic visual audit. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .backdrop.modalToneSuccess,
+    .backdrop.modalToneRelic {
+        align-items: center;
+        justify-content: center;
+        padding:
+            max(0.72rem, env(safe-area-inset-top, 0px))
+            max(0.58rem, env(safe-area-inset-right, 0px))
+            max(0.72rem, env(safe-area-inset-bottom, 0px))
+            max(0.58rem, env(safe-area-inset-left, 0px));
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] {
+        position: relative !important;
+        inset: auto !important;
+        align-self: center;
+        width: min(100%, 23.5rem);
+        max-height: min(calc(100dvh - 1.45rem), calc(100svh - 1.45rem));
+        margin: 0;
+        gap: 0.18rem;
+        padding: 0.52rem;
+        border-radius: var(--ui-radius-md);
+        transform: none !important;
+        box-shadow:
+            0 16px 46px color-mix(in srgb, var(--theme-shadow) 48%, transparent),
+            0 0 0 1px color-mix(in srgb, var(--theme-gold-bright) 14%, transparent);
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .body {
+        margin-top: 0.06rem;
+        gap: 0.18rem;
+    }
+}
+
+/* UI-CLEANUP-059: phone relic drafts use the same top-third decision-sheet placement as perk picks. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .backdrop:has(.modal[data-testid='game-relic-offer-overlay']),
+    .backdrop.modalToneRelic {
+        align-items: center;
+        justify-content: center;
+        padding:
+            max(0.72rem, env(safe-area-inset-top, 0px))
+            max(0.56rem, env(safe-area-inset-right, 0px))
+            max(0.72rem, env(safe-area-inset-bottom, 0px))
+            max(0.56rem, env(safe-area-inset-left, 0px));
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] {
+        align-self: center;
+        width: min(100%, 23.4rem);
+        max-height: min(calc(100dvh - 1.44rem), calc(100svh - 1.44rem));
+        padding: 0.62rem;
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 22%, transparent);
+        background: color-mix(in srgb, var(--theme-panel-solid) 88%, var(--theme-void) 12%);
+        box-shadow: 0 16px 34px color-mix(in srgb, var(--theme-shadow) 34%, transparent);
+        transform: translateY(-3dvh) !important;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay']::before,
+    .modal[data-testid='game-relic-offer-overlay']::after {
+        opacity: 0.34;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .headerPlateWell,
+    .modal[data-testid='game-relic-offer-overlay'] .headerQuietBand {
+        padding: 0.28rem 0.42rem;
+        border-radius: var(--ui-radius-sm);
+        background: color-mix(in srgb, var(--theme-void) 44%, transparent);
+        box-shadow: none;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .title {
+        font-size: clamp(0.92rem, 4.1vw, 1.08rem);
+        line-height: 1;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .body {
+        margin-top: 0.04rem;
+        gap: 0.18rem;
+    }
+}
+
+/* UI-CLEANUP-067: relic draft is a viewport-owned reward screen on phones. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .backdrop:has(.modal[data-testid='game-relic-offer-overlay']),
+    .backdrop.modalToneRelic {
+        align-items: stretch;
+        justify-content: stretch;
+        padding:
+            max(0.7rem, env(safe-area-inset-top, 0px))
+            max(0.66rem, env(safe-area-inset-right, 0px))
+            max(0.7rem, env(safe-area-inset-bottom, 0px))
+            max(0.66rem, env(safe-area-inset-left, 0px));
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] {
+        align-self: stretch;
+        width: 100%;
+        max-width: none;
+        height: 100%;
+        max-height: none;
+        gap: 0.42rem;
+        margin: 0;
+        padding: 0.68rem;
+        border-radius: var(--ui-radius-md);
+        transform: none !important;
+        background:
+            linear-gradient(180deg, color-mix(in srgb, var(--theme-violet-bright) 6%, transparent), transparent 24%),
+            color-mix(in srgb, var(--theme-panel-solid) 90%, var(--theme-void) 10%);
+        box-shadow:
+            inset 0 1px 0 color-mix(in srgb, white 5%, transparent),
+            0 18px 44px color-mix(in srgb, var(--theme-shadow) 38%, transparent);
+    }
+
+    .modal[data-testid='game-relic-offer-overlay']::before {
+        opacity: 0.24;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay']::after {
+        content: none;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .headerPlateFrame,
+    .modal[data-testid='game-relic-offer-overlay'] .headerPlateWell,
+    .modal[data-testid='game-relic-offer-overlay'] .headerQuietBand {
+        background: transparent;
+        border: 0;
+        box-shadow: none;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .headerPlateWell,
+    .modal[data-testid='game-relic-offer-overlay'] .headerQuietBand {
+        padding: 0 0.08rem;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .title {
+        color: color-mix(in srgb, var(--theme-rune) 96%, white);
+        font-family: var(--ui-font-body-family);
+        font-size: clamp(1rem, 4.8vw, 1.22rem);
+        font-weight: 950;
+        line-height: 1.08;
+        text-transform: uppercase;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .body {
+        display: flex;
+        flex: 1 1 auto;
+        flex-direction: column;
+        min-height: 0;
+        margin-top: 0;
+        gap: 0.3rem;
+        overflow: hidden;
+    }
+}
+
+/* UI-CLEANUP-070: phone relic drafts should shrink-wrap choices and services like other reward pickers. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .backdrop:has(.modal[data-testid='game-relic-offer-overlay']),
+    .backdrop.modalToneRelic {
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-end;
+        padding:
+            max(0.72rem, env(safe-area-inset-top, 0px))
+            max(0.58rem, env(safe-area-inset-right, 0px))
+            max(0.72rem, env(safe-area-inset-bottom, 0px))
+            max(0.58rem, env(safe-area-inset-left, 0px));
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] {
+        align-self: center;
+        width: min(100%, 23rem);
+        max-width: none;
+        height: auto;
+        min-height: min(19.2rem, calc(100dvh - 1.44rem));
+        max-height: calc(100dvh - 1.44rem);
+        gap: 0.32rem;
+        margin: 0;
+        padding: 0.62rem;
+        border-radius: var(--ui-radius-md);
+        transform: none !important;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .body {
+        display: flex;
+        flex: 0 1 auto;
+        flex-direction: column;
+        min-height: 0;
+        margin-top: 0;
+        gap: 0.28rem;
+        overflow: hidden;
+    }
+}
+
+/* UI-CLEANUP-077: relic draft is a reward decision, so keep it in the upper play zone instead of the bottom void. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .backdrop:has(.modal[data-testid='game-relic-offer-overlay']),
+    .backdrop.modalToneRelic {
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        padding:
+            max(5.65rem, env(safe-area-inset-top, 0px))
+            max(0.58rem, env(safe-area-inset-right, 0px))
+            max(0.62rem, env(safe-area-inset-bottom, 0px))
+            max(0.58rem, env(safe-area-inset-left, 0px));
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] {
+        align-self: center;
+        width: min(100%, 23.25rem);
+        min-height: 0;
+        max-height: calc(100dvh - 6.3rem);
+        gap: 0.24rem;
+        padding: 0.58rem;
+        border-radius: var(--ui-radius-md);
+        transform: none !important;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .headerPlateWell,
+    .modal[data-testid='game-relic-offer-overlay'] .headerQuietBand {
+        padding: 0.12rem 0.24rem;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .title {
+        font-size: clamp(0.86rem, 4.15vw, 1rem);
+        line-height: 1.06;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .body {
+        gap: 0.2rem;
+    }
+}
+
+/* UI-CLEANUP-087: center relic rewards again now that cards carry their own hierarchy. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .backdrop:has(.modal[data-testid='game-relic-offer-overlay']),
+    .backdrop.modalToneRelic {
+        align-items: center;
+        justify-content: center;
+        padding:
+            max(0.74rem, env(safe-area-inset-top, 0px))
+            max(0.58rem, env(safe-area-inset-right, 0px))
+            max(0.74rem, env(safe-area-inset-bottom, 0px))
+            max(0.58rem, env(safe-area-inset-left, 0px));
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] {
+        width: min(100%, 24rem);
+        max-height: min(calc(100dvh - 1.48rem), calc(100svh - 1.48rem));
+        margin: 0;
+        gap: 0.24rem;
+        padding: 0.62rem;
+        transform: none !important;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .body {
+        margin-top: 0.04rem;
+        gap: 0.24rem;
+    }
+}
+
+/* UI-CLEANUP-092: relic drafts are round rewards, so keep them high and readable instead of floating in empty space. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .backdrop:has(.modal[data-testid='game-relic-offer-overlay']),
+    .backdrop.modalToneRelic {
+        align-items: center;
+        justify-content: flex-start;
+        padding:
+            max(3.9rem, env(safe-area-inset-top, 0px))
+            max(0.5rem, env(safe-area-inset-right, 0px))
+            max(0.64rem, env(safe-area-inset-bottom, 0px))
+            max(0.5rem, env(safe-area-inset-left, 0px));
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] {
+        box-sizing: border-box;
+        width: min(calc(100vw - 1rem), 24.5rem);
+        max-height: calc(100dvh - 4.55rem);
+        padding: 0.54rem;
+        overflow: hidden;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .headerPlateWell,
+    .modal[data-testid='game-relic-offer-overlay'] .headerQuietBand {
+        padding: 0.1rem 0.22rem;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .title {
+        font-size: clamp(0.92rem, 4vw, 1.02rem);
+        line-height: 1.02;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .body {
+        box-sizing: border-box;
+        width: 100%;
+        min-width: 0;
+        gap: 0.26rem;
+        overflow: hidden;
+    }
+}
+
+/* UI-CLEANUP-100: relic rewards need a confident choice board, not a tiny modal floating in dead space. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .backdrop:has(.modal[data-testid='game-relic-offer-overlay']),
+    .backdrop.modalToneRelic {
+        align-items: center;
+        justify-content: flex-start;
+        padding:
+            max(3.35rem, env(safe-area-inset-top, 0px))
+            max(0.5rem, env(safe-area-inset-right, 0px))
+            max(0.6rem, env(safe-area-inset-bottom, 0px))
+            max(0.5rem, env(safe-area-inset-left, 0px));
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] {
+        box-sizing: border-box;
+        width: min(calc(100vw - 1rem), 24.5rem);
+        max-height: min(calc(100dvh - 1.2rem), calc(100svh - 1.2rem));
+        padding: 0.68rem;
+        gap: 0.34rem;
+        overflow: hidden;
+        border-radius: var(--ui-radius-md);
+        background:
+            radial-gradient(ellipse 120% 56% at 50% 0%, color-mix(in srgb, var(--theme-violet-bright) 8%, transparent), transparent 62%),
+            color-mix(in srgb, var(--theme-panel-solid) 90%, var(--theme-void) 10%);
+        box-shadow:
+            0 18px 46px color-mix(in srgb, var(--theme-shadow) 48%, transparent),
+            inset 0 1px 0 color-mix(in srgb, white 5%, transparent);
+        transform: none !important;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .headerPlateWell,
+    .modal[data-testid='game-relic-offer-overlay'] .headerQuietBand {
+        padding: 0.18rem 0.34rem;
+        background: color-mix(in srgb, var(--theme-void) 40%, transparent);
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 18%, transparent);
+        box-shadow: none;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .title {
+        font-size: clamp(0.95rem, 4.2vw, 1.12rem);
+        line-height: 1.05;
+        letter-spacing: 0;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .body {
+        box-sizing: border-box;
+        width: 100%;
+        min-width: 0;
+        margin-top: 0;
+        gap: 0.42rem;
+        overflow: hidden;
+    }
+}
+
+@media (max-height: 520px) and (orientation: landscape) {
+    .modal[data-testid='game-relic-offer-overlay'] {
+        box-sizing: border-box;
+        width: min(calc(100vw - 1rem), 52rem);
+        max-height: calc(100dvh - 1rem);
+        padding: 0.62rem 0.72rem 0.68rem;
+        gap: 0.34rem;
+        overflow: hidden;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .headerPlateFrame {
+        --theme-meta-frame-outset: -0.08rem;
+        margin-bottom: 0;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .headerPlateWell,
+    .modal[data-testid='game-relic-offer-overlay'] .headerQuietBand {
+        padding: 0.18rem 0.42rem;
+        background: color-mix(in srgb, var(--theme-void) 38%, transparent);
+        box-shadow: none;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .title {
+        font-size: clamp(0.8rem, 3.1vh, 0.96rem);
+        line-height: 1.02;
+        letter-spacing: 0;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .subtitle {
+        display: none;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .body {
+        margin-top: 0;
+        gap: 0.32rem;
+        overflow: hidden;
+    }
+}
+
+/* UI-CLEANUP-103: final relic draft wrapper - compact top sheet with no ornamental receipt frame. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .backdrop:has(.modal[data-testid='game-relic-offer-overlay']),
+    .backdrop.modalToneRelic {
+        justify-content: center;
+        padding:
+            max(0.9rem, env(safe-area-inset-top, 0px))
+            max(0.5rem, env(safe-area-inset-right, 0px))
+            max(0.9rem, env(safe-area-inset-bottom, 0px))
+            max(0.5rem, env(safe-area-inset-left, 0px));
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] {
+        width: min(calc(100vw - 1rem), 24rem);
+        max-height: calc(100dvh - 1.8rem);
+        gap: 0.28rem;
+        padding: 0.56rem;
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 18%, transparent);
+        border-radius: var(--ui-radius-sm);
+        background: color-mix(in srgb, var(--theme-panel-solid) 84%, var(--theme-void) 16%);
+        box-shadow:
+            0 12px 32px color-mix(in srgb, var(--theme-shadow) 34%, transparent),
+            inset 0 1px 0 color-mix(in srgb, white 4%, transparent);
+    }
+
+    .modal[data-testid='game-relic-offer-overlay']::before,
+    .modal[data-testid='game-relic-offer-overlay']::after {
+        opacity: 0.08;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .headerPlateFrame {
+        margin-bottom: 0;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .headerPlateWell,
+    .modal[data-testid='game-relic-offer-overlay'] .headerQuietBand {
+        padding: 0.1rem 0.24rem;
+        border: 0;
+        background: color-mix(in srgb, var(--theme-void) 48%, transparent);
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .title {
+        overflow: hidden;
+        font-size: 0.88rem;
+        line-height: 1;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .subtitle {
+        display: none;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .body {
+        gap: 0.32rem;
+    }
+}
+
+@media (max-height: 520px) and (orientation: landscape) {
+    .modal[data-testid='game-relic-offer-overlay'] {
+        width: min(calc(100vw - 1.25rem), 50rem);
+        max-height: calc(100dvh - 1.25rem);
+        gap: 0.24rem;
+        padding: 0.46rem 0.54rem 0.52rem;
+        border-radius: var(--ui-radius-sm);
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .headerPlateFrame {
+        display: none;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .body {
+        gap: 0.24rem;
+    }
+}
+
+/* UI-CLEANUP-104: final relic overlay wrapper - flatter, calmer, and height-owned. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .backdrop:has(.modal[data-testid='game-relic-offer-overlay']),
+    .backdrop.modalToneRelic {
+        align-items: center;
+        justify-content: center;
+        padding:
+            max(0.7rem, env(safe-area-inset-top, 0px))
+            max(0.46rem, env(safe-area-inset-right, 0px))
+            max(0.7rem, env(safe-area-inset-bottom, 0px))
+            max(0.46rem, env(safe-area-inset-left, 0px));
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] {
+        width: min(calc(100vw - 0.92rem), 23.75rem);
+        max-height: calc(100dvh - 1.4rem);
+        gap: 0.24rem;
+        padding: 0.46rem;
+        overflow: hidden;
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 14%, transparent);
+        border-radius: var(--ui-radius-sm);
+        background:
+            linear-gradient(180deg, color-mix(in srgb, var(--theme-gold-bright) 4%, transparent), transparent 24%),
+            color-mix(in srgb, var(--theme-panel-solid) 88%, var(--theme-void) 12%);
+        box-shadow:
+            0 14px 34px color-mix(in srgb, var(--theme-shadow) 34%, transparent),
+            inset 0 1px 0 color-mix(in srgb, white 4%, transparent);
+    }
+
+    .modal[data-testid='game-relic-offer-overlay']::before,
+    .modal[data-testid='game-relic-offer-overlay']::after {
+        display: none;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .headerPlateFrame {
+        margin-bottom: 0;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .headerPlateWell,
+    .modal[data-testid='game-relic-offer-overlay'] .headerQuietBand {
+        min-height: 1.34rem;
+        padding: 0.08rem 0.18rem;
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .title {
+        overflow: hidden;
+        font-size: 0.82rem;
+        line-height: 1;
+        text-align: center;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .subtitle {
+        display: none !important;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .body {
+        gap: 0.26rem;
+        overflow: hidden;
+    }
+}
+
+@media (max-height: 520px) and (orientation: landscape) {
+    .modal[data-testid='game-relic-offer-overlay'] {
+        width: min(calc(100vw - 1rem), 48rem);
+        max-height: calc(100dvh - 1rem);
+        padding: 0.38rem 0.46rem;
+    }
+}
+
+/* UI-CLEANUP-106: perk drafts are a quick decision sheet, not a framed poster. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .backdrop:has(.modal[data-testid='game-relic-offer-overlay']),
+    .backdrop.modalToneRelic {
+        padding:
+            max(0.9rem, env(safe-area-inset-top, 0px))
+            max(0.42rem, env(safe-area-inset-right, 0px))
+            max(0.9rem, env(safe-area-inset-bottom, 0px))
+            max(0.42rem, env(safe-area-inset-left, 0px));
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] {
+        width: min(calc(100vw - 0.84rem), 23.25rem);
+        max-height: calc(100dvh - 1.8rem);
+        gap: 0.18rem;
+        padding: 0.34rem;
+        border-color: color-mix(in srgb, var(--theme-text-muted) 10%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 82%, var(--theme-panel-solid) 18%);
+        box-shadow: 0 12px 28px color-mix(in srgb, var(--theme-shadow) 36%, transparent);
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .headerPlateFrame {
+        margin-bottom: -0.02rem;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .headerPlateWell,
+    .modal[data-testid='game-relic-offer-overlay'] .headerQuietBand {
+        min-height: 1.12rem;
+        padding: 0.02rem 0.12rem;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .title {
+        color: color-mix(in srgb, var(--theme-gold-bright) 74%, var(--theme-text) 26%);
+        font-size: 0.68rem;
+        font-weight: 900;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .body {
+        gap: 0.18rem;
+    }
+}
+
+/* UI-CLEANUP-107: let the perk list be the surface; remove the extra modal box. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .modal[data-testid='game-relic-offer-overlay'] {
+        padding: 0.26rem;
+        border-color: transparent;
+        background: transparent;
+        box-shadow: none;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .headerPlateWell,
+    .modal[data-testid='game-relic-offer-overlay'] .headerQuietBand {
+        min-height: 1rem;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .title {
+        color: color-mix(in srgb, var(--theme-text-muted) 82%, var(--theme-gold-bright) 18%);
+        font-size: 0.64rem;
+    }
+}
+
+/* UI-CLEANUP-113: keep reward drafts compact, centered, and free of dead modal chrome. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .backdrop:has(.modal[data-testid='game-relic-offer-overlay']),
+    .backdrop.modalToneRelic {
+        align-items: center;
+        justify-content: center;
+        padding:
+            max(0.65rem, env(safe-area-inset-top, 0px))
+            max(0.48rem, env(safe-area-inset-right, 0px))
+            max(0.65rem, env(safe-area-inset-bottom, 0px))
+            max(0.48rem, env(safe-area-inset-left, 0px));
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] {
+        width: min(calc(100vw - 0.96rem), 23.75rem);
+        max-height: min(72dvh, 33.5rem);
+        gap: 0.16rem;
+        padding: 0;
+        overflow: visible;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .headerPlateFrame {
+        margin: 0 0 0.24rem;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .headerPlateWell,
+    .modal[data-testid='game-relic-offer-overlay'] .headerQuietBand {
+        justify-content: center;
+        min-height: 1.04rem;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .title {
+        max-width: 100%;
+        overflow: hidden;
+        color: color-mix(in srgb, var(--theme-gold-bright) 78%, white 6%);
+        font-size: 0.66rem;
+        line-height: 1;
+        text-overflow: ellipsis;
+        text-shadow: 0 1px 0 color-mix(in srgb, var(--theme-void) 82%, transparent);
+        white-space: nowrap;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .body {
+        gap: 0.16rem;
+        overflow: visible;
+    }
+}
+
+@media (max-height: 520px) and (orientation: landscape) {
+    .modal[data-testid='game-relic-offer-overlay'] {
+        width: min(calc(100vw - 2rem), 50rem);
+        max-height: calc(100dvh - 1.3rem);
+        padding: 0.34rem 0.5rem;
+        overflow: hidden;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .body {
+        overflow: hidden;
+    }
+}
+
+/* UI-CLEANUP-116: current reward and floor-clear sheets use one compact decision surface. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .backdrop:has(.modal[data-testid='game-relic-offer-overlay']),
+    .backdrop.modalToneRelic {
+        align-items: center;
+        justify-content: flex-start;
+        padding:
+            max(7.55rem, env(safe-area-inset-top, 0px))
+            max(0.5rem, env(safe-area-inset-right, 0px))
+            max(0.7rem, env(safe-area-inset-bottom, 0px))
+            max(0.5rem, env(safe-area-inset-left, 0px));
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] {
+        width: min(calc(100vw - 1rem), 23.5rem);
+        max-height: min(31.5rem, calc(100dvh - 8.25rem));
+        padding: 0 0 0.55rem;
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .headerPlateFrame {
+        margin: 0 0 0.28rem;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .headerPlateWell,
+    .modal[data-testid='game-relic-offer-overlay'] .headerQuietBand {
+        min-height: 1rem;
+        padding: 0;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .title {
+        color: color-mix(in srgb, var(--theme-gold-bright) 76%, var(--theme-text) 24%);
+        font-size: 0.66rem;
+        letter-spacing: 0;
+    }
+
+    .modal[data-testid='game-relic-offer-overlay'] .body {
+        gap: 0.12rem;
+        overflow: visible;
+    }
+
+    .backdrop.modalToneSuccess {
+        align-items: center;
+        justify-content: center;
+        padding:
+            max(0.7rem, env(safe-area-inset-top, 0px))
+            max(0.58rem, env(safe-area-inset-right, 0px))
+            max(0.7rem, env(safe-area-inset-bottom, 0px))
+            max(0.58rem, env(safe-area-inset-left, 0px));
+    }
+
+    .backdrop.modalToneSuccess .modal {
+        width: min(calc(100vw - 1.16rem), 23.25rem);
+        max-height: calc(100dvh - 1.4rem);
+        gap: 0.26rem;
+        padding: 0.44rem;
+        border-radius: var(--ui-radius-sm);
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 14%, transparent);
+        background: color-mix(in srgb, var(--theme-panel-solid) 74%, var(--theme-void) 26%);
+        box-shadow:
+            0 10px 26px color-mix(in srgb, var(--theme-shadow) 32%, transparent),
+            inset 0 1px 0 color-mix(in srgb, white 4%, transparent);
+    }
+
+    .backdrop.modalToneSuccess .modal::before {
+        opacity: 0.16;
+    }
+
+    .backdrop.modalToneSuccess .modal::after {
+        display: none;
+    }
+
+    .backdrop.modalToneSuccess .mainColumn {
+        gap: 0.18rem;
+    }
+
+    .backdrop.modalToneSuccess .headerPlateFrame {
+        margin-bottom: 0;
+    }
+
+    .backdrop.modalToneSuccess .headerPlateWell,
+    .backdrop.modalToneSuccess .headerQuietBand {
+        min-height: 1.38rem;
+        margin: 0;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+    }
+
+    .backdrop.modalToneSuccess .title {
+        overflow: hidden;
+        font-size: clamp(1rem, 5.8vw, 1.34rem);
+        line-height: 1;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .backdrop.modalToneSuccess .body {
+        gap: 0.24rem;
+    }
+
+    .backdrop.modalToneSuccess .actions {
+        gap: 0.28rem;
+    }
+
+    .backdrop.modalToneSuccess .modalAction {
+        min-height: 2.64rem;
+        padding: 0.46rem 0.56rem;
+        border-radius: var(--ui-radius-sm);
+        font-size: 0.72rem;
+        line-height: 1.08;
+    }
 }

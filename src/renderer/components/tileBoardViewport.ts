@@ -47,7 +47,9 @@ const BOARD_CAMERA_FIT_ZOOM = 1;
 const MOBILE_CAMERA_MIN_ZOOM = 0.01;
 const MOBILE_CAMERA_MAX_ZOOM = 2.8;
 /** REG-001: phone camera mode is board-first; fit the board between fixed HUD/dock chrome before pinch zoom. */
-export const MOBILE_CAMERA_FIT_MARGIN = 0.76;
+export const MOBILE_CAMERA_FIT_MARGIN = 0.92;
+/** Short landscape has very little vertical space after HUD and dock chrome, so leave more board breathing room. */
+export const SHORT_LANDSCAPE_MOBILE_CAMERA_FIT_MARGIN = 0.72;
 export const COMPACT_BOARD_FIT_MARGIN = 0.72;
 /** REG-002: desktop stage should feel dense and board-forward without the mobile bleed margin. */
 export const DESKTOP_STAGE_FIT_MARGIN = 0.94;

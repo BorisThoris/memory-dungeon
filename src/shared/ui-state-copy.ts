@@ -27,7 +27,7 @@ export const UI_STATE_COPY_ROWS: readonly UiStateCopyRow[] = [
         id: 'inventory_no_run',
         kind: 'empty',
         title: 'No active expedition',
-        body: 'Loadout appears here once a descent is in progress. Return to the hub, pick a mode, and jump in to see relics, mutators, and charges.',
+        body: 'Start a run to see relics, mutators, charges, and route tools.',
         actionLabel: 'Start a run',
         action: 'Start a run from Choose Your Path',
         localOnly: true,

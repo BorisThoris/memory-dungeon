@@ -328,11 +328,13 @@ describe('ShopScreen', () => {
         expect(screen.getByTestId('shop-offer-trait_routing_kit-buy-plan')).toHaveAccessibleName(
             'Buy plan. First: Not enough shop gold. Then: Find shop gold. Keep: Map Conduit Cartographer.'
         );
-        expect(screen.getByTestId('shop-offer-trait_routing_kit-action')).toHaveTextContent('Spend 3g');
+        expect(screen.getByTestId('shop-offer-trait_routing_kit-action')).toHaveTextContent('Blocked');
+        expect(screen.getByTestId('shop-offer-trait_routing_kit-action')).toHaveTextContent('Need gold');
         expect(screen.getByTestId('shop-offer-trait_routing_kit-action')).toHaveTextContent(
             'Not enough shop gold -> Map Conduit Cartographer'
         );
-        expect(screen.getByTestId('shop-offer-trait_routing_kit-action')).toHaveTextContent('Blocked');
+        expect(screen.getByTestId('shop-offer-trait_routing_kit-action')).toHaveAttribute('data-shop-action-label', 'Blocked');
+        expect(screen.getByTestId('shop-offer-trait_routing_kit-action')).toHaveAttribute('data-shop-action-badge', 'Need gold');
         expect(screen.getByTestId('shop-offer-trait_routing_kit-action')).toHaveAttribute(
             'data-shop-action-cue',
             'Blocked'
@@ -442,9 +444,11 @@ describe('ShopScreen', () => {
         expect(screen.getByTestId('shop-offer-master_key-buy-plan')).toHaveAccessibleName(
             'Buy plan. First: opens any lock. Then: enter any locked route. Keep: enter any locked route.'
         );
-        expect(screen.getByTestId('shop-offer-master_key-action')).toHaveTextContent('Spend 2g');
-        expect(screen.getByTestId('shop-offer-master_key-action')).toHaveTextContent('opens any lock -> enter any locked route');
         expect(screen.getByTestId('shop-offer-master_key-action')).toHaveTextContent('Buy route');
+        expect(screen.getByTestId('shop-offer-master_key-action')).toHaveTextContent('2g');
+        expect(screen.getByTestId('shop-offer-master_key-action')).toHaveTextContent('opens any lock -> enter any locked route');
+        expect(screen.getByTestId('shop-offer-master_key-action')).toHaveAttribute('data-shop-action-label', 'Buy route');
+        expect(screen.getByTestId('shop-offer-master_key-action')).toHaveAttribute('data-shop-action-badge', '2g');
         expect(screen.getByTestId('shop-offer-master_key-action')).toHaveAttribute('data-shop-action-cue', 'Buy route');
         expect(screen.getByTestId('shop-offer-master_key-action')).toHaveAttribute('data-shop-action-tone', 'route');
         expect(screen.getByTestId('shop-offer-master_key-fit')).toHaveTextContent('Route fit');

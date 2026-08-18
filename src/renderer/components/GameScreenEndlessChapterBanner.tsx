@@ -146,11 +146,15 @@ export const GameScreenEndlessChapterBanner = ({
             data-testid="endless-chapter-banner"
         >
             <strong className={styles.endlessChapterTitle}>{archetype.title}</strong>
-            <span className={styles.endlessChapterHint}>{floorIdentity?.teachingSentence ?? archetype.hint}</span>
+            <span className={styles.endlessChapterHint} data-testid="endless-chapter-hint">
+                {floorIdentity?.teachingSentence ?? archetype.hint}
+            </span>
             <span className={styles.endlessChapterRisk}>
                 {archetype.theme}: {floorIdentity?.counterplaySentence ?? archetype.riskProfile}
             </span>
-            <span className={styles.endlessChapterObjective}>Objective: {featuredObjectiveLabel}</span>
+            <span className={styles.endlessChapterObjective} data-testid="endless-chapter-objective">
+                Objective: {featuredObjectiveLabel}
+            </span>
             <span
                 aria-label={`Chapter action cue. ${actionCue.label}: ${actionCue.value}.`}
                 className={styles.endlessChapterActionCue}

@@ -1,6 +1,6 @@
 .section {
     display: grid;
-    gap: 0.85rem;
+    gap: 0.72rem;
 }
 
 .sectionTitle {
@@ -11,36 +11,150 @@
     font-weight: 650;
 }
 
+.rewardSignalsFrame,
+.metaUpgradesFrame,
+.rewardGalleryFrame,
+.achievementsFrame,
+.honorsFrame,
+.cosmeticsFrame,
+.secondaryArchiveFrame {
+}
+
+.secondaryArchivePreviewFrame {
+}
+
+.sectionRail {
+    --meta-compact-rail-gap: 0.18rem;
+    --meta-compact-rail-link-font-size: 0.5rem;
+    --meta-compact-rail-link-min-height: 1.64rem;
+    --meta-compact-rail-link-padding-block: 0.08rem;
+    --meta-compact-rail-link-padding-inline: 0.34rem;
+}
+
+.screenHeader {
+    --meta-compact-header-title-size: clamp(2.18rem, 10vw, 3rem);
+    --meta-compact-header-copy-max-width: 30rem;
+    --meta-compact-header-copy-size: 0.74rem;
+    --meta-compact-header-copy-line-height: 1.26;
+    --meta-compact-header-action-min-width: 5rem;
+    --meta-compact-header-action-padding-inline: 0.84rem;
+}
+
+.screenTitle {
+    max-width: min(100%, 12ch);
+    line-height: 1.04;
+    padding-block: 0.06em;
+}
+
+.screenSubtitle {
+    max-width: 34rem;
+}
+
+.body {
+    gap: var(--theme-space-sm);
+}
+
+.sectionLead {
+    margin: 0;
+}
+
+.overviewGrid {
+    gap: 0.44rem;
+}
+
+.overviewRow {
+    gap: 0.14rem;
+    padding: 0.6rem 0.74rem;
+}
+
+.overviewBody {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+}
+
+.overviewNext {
+    color: color-mix(in srgb, var(--theme-gold-bright) 78%, white);
+    font-weight: 700;
+}
+
 .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 0.65rem;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 0.58rem;
 }
 
 .achievementCard {
-    padding: 0.85rem 1rem;
+    display: grid;
+    align-content: start;
+    gap: 0.28rem;
+    min-width: 0;
+    padding: 0.68rem 0.78rem;
     border-radius: var(--ui-radius-md);
     border: 1px solid var(--theme-card-border-polished);
     background: var(--theme-surface-glass);
     box-shadow: var(--theme-elevation-soft);
 }
 
+.achievementCard strong {
+    display: -webkit-box;
+    overflow: hidden;
+    margin: 0;
+    font-size: 0.98rem;
+    line-height: 1.15;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+
+.achievementCard :global(p) {
+    display: -webkit-box;
+    overflow: hidden;
+    margin: 0;
+    font-size: 0.8rem;
+    line-height: 1.35;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 5;
+}
+
 .galleryGrid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-    gap: 0.65rem;
+    grid-template-columns: repeat(auto-fit, minmax(176px, 1fr));
+    gap: 0.58rem;
 }
 
 .galleryCard {
     display: grid;
-    gap: 0.28rem;
-    padding: 0.85rem 1rem;
+    align-content: start;
+    gap: 0.24rem;
+    min-width: 0;
+    padding: 0.68rem 0.78rem;
     border-radius: var(--ui-radius-md);
     border: 1px solid color-mix(in srgb, var(--theme-gold) 26%, var(--theme-divider-hairline));
     background:
         radial-gradient(circle at top left, color-mix(in srgb, var(--theme-gold) 7%, transparent), transparent 52%),
         var(--theme-surface-glass);
     box-shadow: var(--theme-elevation-soft);
+}
+
+.galleryCard strong {
+    display: -webkit-box;
+    overflow: hidden;
+    margin: 0;
+    font-size: 0.96rem;
+    line-height: 1.14;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+
+.galleryCard :global(p) {
+    display: -webkit-box;
+    overflow: hidden;
+    margin: 0;
+    font-size: 0.78rem;
+    line-height: 1.32;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
 }
 
 .galleryCard[data-status='owned'] {
@@ -260,6 +374,68 @@
     margin: 0 0 0.35rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
+}
+
+@media (min-width: 1100px) {
+    .screenHeader {
+        --meta-dense-header-copy-max-width: 26rem;
+        --meta-dense-header-title-size: clamp(2.32rem, 5.8vw, 3.48rem);
+        --meta-dense-header-title-line-height: 1.04;
+        --meta-dense-header-subtitle-max-width: 28rem;
+        --meta-dense-header-subtitle-size: 0.7rem;
+        --meta-dense-header-subtitle-line-height: 1.16;
+        --meta-dense-header-action-min-width: 4.5rem;
+        --meta-dense-header-action-min-height: 2.25rem;
+        --meta-dense-header-action-padding-inline: 0.72rem;
+    }
+
+    .body {
+        gap: 0.42rem;
+    }
+
+    .sectionRail {
+        --meta-dense-rail-gap: 0.14rem;
+        --meta-dense-rail-link-font-size: 0.56rem;
+        --meta-dense-rail-link-min-height: 2.22rem;
+        --meta-dense-rail-link-padding-block: 0.12rem;
+        --meta-dense-rail-link-padding-inline: 0.44rem;
+    }
+
+    .section {
+        gap: 0.6rem;
+    }
+
+    .sectionTitle {
+        margin-bottom: 0;
+        padding-bottom: 0.22rem;
+        font-size: 0.98rem;
+    }
+
+    .grid,
+    .galleryGrid,
+    .progressionImpactGrid,
+    .dailyArchiveGrid {
+        gap: 0.5rem;
+    }
+
+    .achievementCard,
+    .galleryCard,
+    .progressionImpactCard,
+    .dailyArchiveCard {
+        padding: 0.6rem 0.68rem;
+    }
+
+    .achievementCard strong,
+    .galleryCard strong {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 760px) {
+    .sectionRail {
+        padding-inline-end: 0.4rem;
+        scroll-padding-inline: 0.1rem;
+    }
 }
 
 .statRow {
@@ -1014,16 +1190,257 @@
 }
 
 @media (max-width: 760px) {
+    .body {
+        gap: 0.32rem;
+        --theme-meta-frame-outset: -0.18rem;
+        --theme-meta-frame-drop: 0 0 5px color-mix(in srgb, var(--theme-glow-gold) 28%, transparent);
+    }
+
     .section {
-        gap: var(--theme-space-sm);
+        gap: 0.34rem;
+        scroll-margin-top: 2.8rem;
+    }
+
+    .sectionTitle {
+        margin-bottom: 0;
+        padding-bottom: 0.16rem;
+        font-size: 0.82rem;
+        line-height: 1.08;
+    }
+
+    .sectionRail {
+        order: -7;
+        position: static;
+        z-index: auto;
+        flex-wrap: nowrap;
+        gap: 0.12rem;
+        max-width: 100%;
+        overflow: hidden;
+        padding-bottom: 0.24rem;
+        background: transparent;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        --meta-compact-rail-gap: 0.12rem;
+        --meta-compact-rail-link-font-size: 0.42rem;
+        --meta-compact-rail-link-min-height: 1.3rem;
+        --meta-compact-rail-link-padding-block: 0.04rem;
+        --meta-compact-rail-link-padding-inline: 0.2rem;
+    }
+
+    .sectionRail a {
+        flex: 1 1 0;
+        min-width: 0;
+        max-width: 3.85rem;
+        letter-spacing: 0.02em;
+    }
+
+    .sectionRail a span {
+        overflow: hidden;
+        max-width: 100%;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .sectionRail a:nth-child(n + 7) {
+        display: none;
+    }
+
+    .rewardSignalsFrame {
+        order: -6;
+    }
+
+    .metaUpgradesFrame {
+        order: -5;
+    }
+
+    .rewardGalleryFrame {
+        order: -4;
+    }
+
+    .achievementsFrame {
+        order: -3;
+    }
+
+    .honorsFrame {
+        order: -2;
+    }
+
+    .cosmeticsFrame {
+        order: -1;
     }
 
     .grid {
         grid-template-columns: 1fr;
     }
 
+    .galleryGrid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.28rem;
+    }
+
+    .screenHeader {
+        padding-bottom: 0.22rem;
+        --meta-compact-header-title-size: clamp(1.28rem, 6.2vw, 1.58rem);
+        --meta-compact-header-copy-max-width: 13.6rem;
+        --meta-compact-header-copy-size: 0.54rem;
+        --meta-compact-header-copy-line-height: 1.04;
+        --meta-compact-header-action-min-width: 3.95rem;
+        --meta-compact-header-action-min-height: 1.64rem;
+        --meta-compact-header-action-padding-inline: 0.54rem;
+    }
+
+    .screenHeader .screenTitle {
+        max-width: min(13rem, 100%);
+        font-size: clamp(1.28rem, 6.2vw, 1.58rem) !important;
+        line-height: 0.96;
+    }
+
+    .screenSubtitle {
+        display: -webkit-box;
+        overflow: hidden;
+        max-width: 13.6rem;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+    }
+
+    .sectionLeadOptional {
+        display: none;
+    }
+
     .achievementCard {
-        padding: var(--ui-card-pad-md);
+        gap: 0.16rem;
+        padding: 0.46rem 0.56rem;
+    }
+
+    .achievementCard strong {
+        font-size: 0.88rem;
+    }
+
+    .achievementCard :global(p) {
+        font-size: 0.74rem;
+        line-height: 1.24;
+        -webkit-line-clamp: 3;
+    }
+
+    .galleryCard {
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: center;
+        gap: 0.1rem 0.24rem;
+        padding: 0.34rem 0.4rem;
+    }
+
+    .galleryCard strong {
+        grid-column: 1 / -1;
+        min-width: 0;
+        font-size: 0.72rem;
+        line-height: 1.05;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .galleryCard :global(p) {
+        display: none;
+    }
+
+    .galleryBadge {
+        grid-column: 1;
+        padding: 0.06rem 0.26rem;
+        font-size: 0.44rem;
+    }
+
+    .galleryImpactCue {
+        display: none;
+    }
+
+    .galleryCard > .symbolMeta {
+        grid-column: 2;
+        grid-row: 2;
+        margin-top: 0;
+        text-align: right;
+        white-space: nowrap;
+    }
+
+    .galleryCard > .symbolMeta:last-child {
+        display: none;
+    }
+
+    .progressionImpactGrid {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+    }
+
+    .progressionImpactCard {
+        padding: 0.66rem 0.76rem;
+    }
+
+    .overviewGrid {
+        gap: 0.18rem;
+    }
+
+    .overviewRow {
+        gap: 0.06rem;
+        padding: 0.28rem 0.38rem;
+    }
+
+    .rewardSignalsFrame .overviewRow {
+        grid-template-columns: 1fr;
+        align-items: start;
+        gap: 0.08rem;
+    }
+
+    .overviewBody {
+        -webkit-line-clamp: 1;
+        font-size: 0.68rem;
+        line-height: 1.14;
+    }
+
+    .rewardSignalsFrame .overviewBody {
+        display: none;
+    }
+
+    .overviewNext {
+        min-width: 0;
+        overflow: hidden;
+        font-size: 0.54rem;
+        line-height: 1.08;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .rewardSignalsFrame .overviewNext {
+        display: -webkit-box;
+        font-size: 0.6rem;
+        line-height: 1.12;
+        white-space: normal;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+    }
+
+    .rewardSignalsFrame,
+    .metaUpgradesFrame,
+    .rewardGalleryFrame {
+        --ui-density-panel-pad-lg: 0.36rem;
+    }
+
+    .rewardSignalsFrame :global(svg),
+    .metaUpgradesFrame :global(svg),
+    .rewardGalleryFrame :global(svg) {
+        opacity: 0.72;
+    }
+
+    .metaUpgradesFrame .overviewGrid > :nth-child(n + 3),
+    .metaUpgradesFrame .progressionImpactGrid,
+    .metaUpgradesFrame .grid {
+        display: none;
+    }
+
+    .symbolMeta {
+        font-size: 0.64rem;
+        line-height: 1.22;
+    }
+
+    .achievementLocked {
+        opacity: 0.68;
     }
 
     .symbolGrid {
@@ -1037,5 +1454,1904 @@
 
     .statRow {
         gap: 0.65rem 1rem;
+    }
+}
+
+/* UI-CLEANUP-010: Collection phone archive should scan like a compact index, not a wall of framed receipts. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .body {
+        gap: 0.28rem;
+    }
+
+    .rewardSignalsFrame .section,
+    .metaUpgradesFrame .section,
+    .rewardGalleryFrame .section,
+    .achievementsFrame .section {
+        gap: 0.26rem;
+    }
+
+    .rewardSignalsFrame .sectionTitle,
+    .metaUpgradesFrame .sectionTitle,
+    .rewardGalleryFrame .sectionTitle,
+    .achievementsFrame .sectionTitle {
+        padding-bottom: 0.1rem;
+        font-size: 0.72rem;
+        letter-spacing: 0.01em;
+    }
+
+    .rewardSignalsFrame .overviewGrid {
+        gap: 0.14rem;
+    }
+
+    .rewardSignalsFrame .overviewRow {
+        min-height: 2.1rem;
+        padding: 0.24rem 0.34rem;
+    }
+
+    .metaUpgradesFrame .overviewGrid {
+        gap: 0.16rem;
+    }
+
+    .metaUpgradesFrame .overviewRow {
+        grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.28fr);
+        align-items: baseline;
+        gap: 0.28rem;
+        min-height: 2.08rem;
+        padding: 0.24rem 0.34rem;
+    }
+
+    .metaUpgradesFrame .overviewRow > span {
+        min-width: 0;
+        overflow: hidden;
+        font-size: 0.68rem;
+        line-height: 1.12;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .galleryGrid {
+        gap: 0.22rem;
+    }
+
+    .galleryCard {
+        min-height: 2.62rem;
+        padding: 0.28rem 0.34rem;
+    }
+
+    .galleryBadge {
+        max-width: 4.4rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .galleryCard strong {
+        font-size: 0.68rem;
+    }
+
+    .achievementsFrame {
+        --ui-density-panel-pad-lg: 0.46rem;
+    }
+
+    .achievementsFrame :global(svg) {
+        opacity: 0.7;
+    }
+
+    .achievementsFrame .grid {
+        gap: 0.28rem;
+    }
+
+    .achievementsFrame .achievementCard {
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: center;
+        gap: 0.06rem 0.28rem;
+        min-height: 2.52rem;
+        padding: 0.34rem 0.46rem;
+    }
+
+    .achievementsFrame .achievementCard strong {
+        grid-column: 1;
+        font-size: 0.76rem;
+        line-height: 1.05;
+        -webkit-line-clamp: 1;
+    }
+
+    .achievementsFrame .achievementCard :global(p) {
+        display: none;
+    }
+
+    .achievementsFrame .achievementCard .symbolMeta {
+        grid-column: 2;
+        grid-row: 1;
+        margin-top: 0;
+        font-size: 0.5rem;
+        white-space: nowrap;
+    }
+}
+
+/* UI-CLEANUP-012: phone archive gallery should read as reward rows, not cramped tiles. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .rewardGalleryFrame .section {
+        gap: 0.24rem;
+    }
+
+    .galleryGrid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0.22rem;
+    }
+
+    .galleryCard {
+        grid-template-columns: auto minmax(0, 1fr) auto;
+        align-items: center;
+        gap: 0.08rem 0.34rem;
+        min-height: 0;
+        padding: 0.34rem 0.42rem;
+        border-radius: var(--ui-radius-sm);
+    }
+
+    .galleryBadge {
+        grid-column: 1;
+        grid-row: 1;
+        max-width: 5.4rem;
+        padding: 0.06rem 0.28rem;
+        font-size: 0.44rem;
+    }
+
+    .galleryCard strong {
+        grid-column: 2;
+        grid-row: 1;
+        overflow: hidden;
+        font-size: 0.76rem;
+        line-height: 1.05;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .galleryImpactCue {
+        grid-column: 1 / 3;
+        grid-row: 2;
+        display: inline-grid;
+        grid-template-columns: auto minmax(0, 1fr);
+        justify-self: start;
+        gap: 0.18rem;
+        max-width: 100%;
+        padding: 0;
+        border: 0;
+        background: transparent;
+    }
+
+    .galleryImpactCue small {
+        font-size: 0.46rem;
+    }
+
+    .galleryImpactCue b {
+        overflow: hidden;
+        font-size: 0.58rem;
+        line-height: 1.08;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .galleryCard > .symbolMeta {
+        grid-column: 3;
+        grid-row: 1 / 3;
+        align-self: center;
+        margin: 0;
+        font-size: 0.56rem;
+        text-align: right;
+        white-space: nowrap;
+    }
+
+    .galleryCard > .symbolMeta:last-child {
+        display: none;
+    }
+
+    .achievementsFrame .grid {
+        gap: 0.22rem;
+    }
+
+    .achievementsFrame .achievementCard {
+        min-height: 2.22rem;
+        padding: 0.28rem 0.4rem;
+    }
+}
+
+/* UI-CLEANUP-023: collection mobile audit - reduce receipt chrome and stop reward text chop. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .body {
+        gap: 0.22rem;
+    }
+
+    .sectionRail {
+        overflow-x: auto;
+        overflow-y: hidden;
+        padding-bottom: 0.2rem;
+        scrollbar-width: none;
+        -webkit-overflow-scrolling: touch;
+        --meta-compact-rail-gap: 0.24rem;
+        --meta-compact-rail-link-font-size: 0.58rem;
+        --meta-compact-rail-link-min-height: 2.02rem;
+        --meta-compact-rail-min-height: 2.28rem;
+        --meta-compact-rail-padding-bottom: 0.2rem;
+        --meta-compact-rail-link-padding-block: 0.12rem;
+        --meta-compact-rail-link-padding-inline: 0.5rem;
+    }
+
+    .sectionRail::-webkit-scrollbar {
+        display: none;
+    }
+
+    .sectionRail a {
+        flex: 0 0 auto;
+        min-width: 4.15rem;
+        max-width: none;
+    }
+
+    .rewardSignalsFrame,
+    .metaUpgradesFrame,
+    .rewardGalleryFrame,
+    .achievementsFrame {
+        --theme-meta-frame-outset: -0.08rem;
+        --theme-meta-frame-drop: 0 0 3px color-mix(in srgb, var(--theme-glow-gold) 18%, transparent);
+    }
+
+    .rewardSignalsFrame :global([data-meta-framed='true']),
+    .metaUpgradesFrame :global([data-meta-framed='true']),
+    .rewardGalleryFrame :global([data-meta-framed='true']),
+    .achievementsFrame :global([data-meta-framed='true']) {
+        background: color-mix(in srgb, var(--theme-surface-control) 78%, transparent);
+    }
+
+    .rewardSignalsFrame .sectionTitle,
+    .metaUpgradesFrame .sectionTitle,
+    .rewardGalleryFrame .sectionTitle,
+    .achievementsFrame .sectionTitle {
+        border-bottom-color: color-mix(in srgb, var(--theme-gold-bright) 18%, transparent);
+        color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
+        font-size: 0.74rem;
+        font-weight: 900;
+        text-transform: uppercase;
+    }
+
+    .galleryCard {
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 0.1rem 0.32rem;
+        min-height: 3.35rem;
+        padding: 0.34rem 0.42rem;
+    }
+
+    .galleryBadge {
+        grid-column: 1;
+        grid-row: 1;
+        max-width: 6rem;
+    }
+
+    .galleryCard strong {
+        grid-column: 1;
+        grid-row: 2;
+        font-size: 0.78rem;
+    }
+
+    .galleryImpactCue {
+        grid-column: 1 / -1;
+        grid-row: 3;
+        min-width: 0;
+    }
+
+    .galleryImpactCue b {
+        display: -webkit-box;
+        overflow: hidden;
+        font-size: 0.6rem;
+        line-height: 1.1;
+        text-overflow: clip;
+        white-space: normal;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+    }
+
+    .galleryCard > .symbolMeta {
+        grid-column: 2;
+        grid-row: 1 / 3;
+        align-self: center;
+        padding-left: 0.24rem;
+        border-left: 1px solid color-mix(in srgb, var(--theme-gold-bright) 14%, transparent);
+    }
+}
+
+/* UI-CLEANUP-040: collection reward gallery should scan as compact archive rows on phones. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .rewardGalleryFrame .section {
+        gap: 0.18rem;
+    }
+
+    .galleryGrid {
+        gap: 0.14rem;
+    }
+
+    .galleryCard {
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: center;
+        gap: 0.08rem 0.28rem;
+        min-height: 2.46rem;
+        padding: 0.26rem 0.36rem;
+        border-radius: var(--ui-radius-sm);
+        background: color-mix(in srgb, var(--theme-void) 42%, transparent);
+    }
+
+    .galleryBadge {
+        grid-column: 1;
+        grid-row: 1;
+        max-width: 5.2rem;
+        padding: 0.05rem 0.24rem;
+        font-size: 0.42rem;
+        line-height: 1;
+    }
+
+    .galleryCard strong {
+        grid-column: 1;
+        grid-row: 2;
+        overflow: hidden;
+        font-size: 0.72rem;
+        line-height: 1.02;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .galleryImpactCue {
+        grid-column: 2;
+        grid-row: 1;
+        align-self: center;
+        justify-self: end;
+        display: inline-grid;
+        place-items: center;
+        min-width: 3.1rem;
+        max-width: 3.8rem;
+        min-height: 1.08rem;
+        padding: 0.08rem 0.24rem;
+        border: 1px solid color-mix(in srgb, var(--theme-cyan-bright) 14%, transparent);
+        border-radius: 999px;
+        background: color-mix(in srgb, var(--theme-cyan-bright) 5%, transparent);
+    }
+
+    .galleryImpactCue small {
+        overflow: hidden;
+        color: color-mix(in srgb, var(--theme-cyan-bright) 74%, white);
+        font-size: 0.46rem;
+        font-weight: 900;
+        line-height: 1;
+        text-overflow: ellipsis;
+        text-transform: uppercase;
+        white-space: nowrap;
+    }
+
+    .galleryImpactCue b {
+        display: none;
+    }
+
+    .galleryCard > .symbolMeta {
+        grid-column: 2;
+        grid-row: 2;
+        align-self: center;
+        justify-self: end;
+        margin: 0;
+        padding-left: 0;
+        border-left: 0;
+        color: color-mix(in srgb, var(--theme-text-muted) 82%, white);
+        font-size: 0.5rem;
+        line-height: 1;
+        text-align: right;
+        white-space: nowrap;
+    }
+
+    .galleryCard > .symbolMeta:last-child {
+        display: none;
+    }
+}
+
+/* UI-CLEANUP-053: phone collection sections should not expose a half-clipped tab. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .sectionRail {
+        display: grid;
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+        gap: 0.08rem;
+        min-height: 0;
+        margin-bottom: 0.82rem;
+        overflow: visible;
+        padding-bottom: 0.04rem;
+        --meta-compact-rail-gap: 0.08rem;
+        --meta-compact-rail-link-font-size: 0.36rem;
+        --meta-compact-rail-link-min-height: 1.08rem;
+        --meta-compact-rail-min-height: 0;
+        --meta-compact-rail-padding-bottom: 0.04rem;
+        --meta-compact-rail-link-padding-block: 0;
+        --meta-compact-rail-link-padding-inline: 0.02rem;
+    }
+
+    .sectionRail a {
+        width: 100%;
+        min-width: 0;
+        max-width: none;
+    }
+
+    .sectionRail a:nth-child(n + 7) {
+        display: none;
+    }
+
+    .rewardSignalsFrame {
+        margin-top: 0.22rem;
+    }
+}
+
+/* UI-CLEANUP-058: phone Collection should open as a compact archive console, not stacked framed logs. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .body {
+        gap: 0.16rem;
+        --theme-meta-frame-outset: -0.04rem;
+        --theme-meta-frame-drop: none;
+    }
+
+    .screenHeader {
+        padding-bottom: 0.12rem;
+        --meta-compact-header-title-size: clamp(1.18rem, 5.8vw, 1.46rem);
+        --meta-compact-header-copy-size: 0.5rem;
+        --meta-compact-header-copy-line-height: 1;
+        --meta-compact-header-action-min-width: 3.55rem;
+        --meta-compact-header-action-min-height: 1.48rem;
+        --meta-compact-header-action-padding-inline: 0.46rem;
+    }
+
+    .screenHeader .screenTitle {
+        font-size: clamp(1.18rem, 5.8vw, 1.46rem) !important;
+        line-height: 0.98;
+    }
+
+    .screenSubtitle {
+        max-width: 12.4rem;
+        color: color-mix(in srgb, var(--theme-text-muted) 76%, white);
+    }
+
+    .sectionRail {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.08rem 0.1rem;
+        margin-bottom: 0.34rem;
+        --meta-compact-rail-link-font-size: 0.5rem;
+        --meta-compact-rail-link-min-height: 1.02rem;
+        --meta-compact-rail-link-padding-inline: 0.12rem;
+    }
+
+    .sectionRail a {
+        min-height: 1.02rem;
+        border-radius: var(--ui-radius-sm);
+    }
+
+    .rewardSignalsFrame,
+    .metaUpgradesFrame,
+    .rewardGalleryFrame,
+    .achievementsFrame {
+        --ui-density-panel-pad-lg: 0.28rem;
+        --theme-meta-frame-outset: -0.04rem;
+        --theme-meta-frame-drop: none;
+    }
+
+    .rewardSignalsFrame :global(svg),
+    .metaUpgradesFrame :global(svg),
+    .rewardGalleryFrame :global(svg),
+    .achievementsFrame :global(svg),
+    .honorsFrame :global(svg),
+    .cosmeticsFrame :global(svg) {
+        display: none;
+    }
+
+    .rewardSignalsFrame :global([data-meta-framed='true']),
+    .metaUpgradesFrame :global([data-meta-framed='true']),
+    .rewardGalleryFrame :global([data-meta-framed='true']),
+    .achievementsFrame :global([data-meta-framed='true']) {
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 8%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 44%, transparent);
+        box-shadow: inset 0 1px 0 color-mix(in srgb, var(--theme-text) 4%, transparent);
+    }
+
+    .rewardSignalsFrame {
+        margin-top: 0.42rem;
+    }
+
+    .honorsFrame {
+        order: 1;
+        margin-top: 0.9rem;
+    }
+
+    .cosmeticsFrame {
+        order: 2;
+    }
+
+    .secondaryArchiveFrame {
+        order: 3;
+        margin-top: 0.9rem;
+    }
+
+    .secondaryArchiveFrame + .secondaryArchiveFrame {
+        margin-top: 0.28rem;
+    }
+
+    .secondaryArchiveFrame :global(svg) {
+        display: none;
+    }
+
+    .secondaryArchiveFrame:global([data-meta-framed='true']),
+    .secondaryArchiveFrame :global([data-meta-framed='true']) {
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 8%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 40%, transparent);
+        box-shadow: inset 0 1px 0 color-mix(in srgb, var(--theme-text) 4%, transparent);
+    }
+
+    .secondaryArchiveFrame .section {
+        gap: 0.18rem;
+    }
+
+    .secondaryArchiveFrame .sectionTitle {
+        padding-bottom: 0.08rem;
+        border-bottom-color: color-mix(in srgb, var(--theme-gold-bright) 7%, transparent);
+        color: color-mix(in srgb, var(--theme-gold-bright) 78%, white);
+        font-size: 0.62rem;
+        line-height: 1;
+    }
+
+    .rewardSignalsFrame .section,
+    .metaUpgradesFrame .section,
+    .rewardGalleryFrame .section,
+    .achievementsFrame .section {
+        gap: 0.14rem;
+    }
+
+    .rewardSignalsFrame .sectionTitle,
+    .metaUpgradesFrame .sectionTitle,
+    .rewardGalleryFrame .sectionTitle,
+    .achievementsFrame .sectionTitle {
+        padding-bottom: 0.08rem;
+        border-bottom-color: color-mix(in srgb, var(--theme-gold-bright) 7%, transparent);
+        color: color-mix(in srgb, var(--theme-gold-bright) 78%, white);
+        font-size: 0.62rem;
+        line-height: 1;
+    }
+
+    .overviewGrid {
+        gap: 0.12rem;
+    }
+
+    .overviewRow {
+        min-height: 2.08rem;
+        padding: 0.22rem 0.34rem;
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 7%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 38%, transparent);
+    }
+
+    .overviewNext {
+        font-size: 0.52rem;
+        line-height: 1.08;
+    }
+
+    .metaUpgradesFrame .overviewRow {
+        grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);
+        min-height: 1.76rem;
+        align-items: center;
+    }
+
+    .metaUpgradesFrame .overviewRow > span {
+        font-size: 0.54rem;
+        line-height: 1.08;
+    }
+
+    .galleryGrid {
+        gap: 0.1rem;
+    }
+
+    .galleryCard {
+        min-height: 2.04rem;
+        padding: 0.2rem 0.34rem;
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 7%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 34%, transparent);
+    }
+
+    .galleryBadge {
+        max-width: 5.1rem;
+        padding: 0.04rem 0.22rem;
+        font-size: 0.38rem;
+    }
+
+    .galleryCard strong {
+        font-size: 0.66rem;
+        line-height: 1;
+    }
+
+    .galleryImpactCue {
+        min-width: 2.82rem;
+        min-height: 0.92rem;
+        padding: 0.04rem 0.18rem;
+        border-color: color-mix(in srgb, var(--theme-cyan-bright) 10%, transparent);
+        background: color-mix(in srgb, var(--theme-cyan-bright) 3%, transparent);
+    }
+
+    .galleryImpactCue small {
+        font-size: 0.4rem;
+    }
+
+    .galleryCard > .symbolMeta {
+        font-size: 0.46rem;
+    }
+
+    .achievementsFrame .grid {
+        max-height: 5.1rem;
+        overflow: hidden;
+    }
+
+    .achievementsFrame .achievementCard {
+        min-height: 1.92rem;
+        padding: 0.22rem 0.34rem;
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 7%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 34%, transparent);
+    }
+
+    .achievementsFrame .achievementCard strong {
+        font-size: 0.66rem;
+        line-height: 1;
+    }
+
+    .achievementsFrame .achievementCard .symbolMeta {
+        font-size: 0.42rem;
+    }
+}
+
+/* UI-CLEANUP-064: phone Collection should scan as archive rows, not stacked framed receipts. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .rewardSignalsFrame :global(svg),
+    .metaUpgradesFrame :global(svg),
+    .rewardGalleryFrame :global(svg),
+    .achievementsFrame :global(svg),
+    .honorsFrame :global(svg),
+    .cosmeticsFrame :global(svg),
+    .secondaryArchiveFrame :global(svg),
+    .rewardSignalsFrame :global([class*='cornice']),
+    .metaUpgradesFrame :global([class*='cornice']),
+    .rewardGalleryFrame :global([class*='cornice']),
+    .achievementsFrame :global([class*='cornice']) {
+        display: none !important;
+    }
+
+    .rewardSignalsFrame :global([data-meta-framed='true']),
+    .metaUpgradesFrame :global([data-meta-framed='true']),
+    .rewardGalleryFrame :global([data-meta-framed='true']),
+    .achievementsFrame :global([data-meta-framed='true']) {
+        padding: 0.38rem !important;
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 9%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 34%, transparent);
+        box-shadow: none;
+    }
+
+    .sectionTitle {
+        font-size: 0.68rem;
+        line-height: 1;
+    }
+
+    .overviewRow,
+    .galleryCard,
+    .achievementCard {
+        border-color: color-mix(in srgb, var(--theme-text-muted) 10%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 30%, transparent);
+        box-shadow: none;
+    }
+
+    .overviewRow {
+        min-height: 2.34rem;
+        padding: 0.3rem 0.42rem;
+    }
+
+    .overviewRow strong,
+    .galleryCard strong,
+    .achievementCard strong {
+        font-size: 0.74rem;
+        line-height: 1.05;
+    }
+
+    .overviewNext,
+    .galleryCard > .symbolMeta,
+    .achievementCard .symbolMeta {
+        font-size: 0.54rem;
+        line-height: 1.12;
+    }
+
+    .galleryGrid {
+        gap: 0.14rem;
+    }
+
+    .galleryCard {
+        min-height: 2.28rem;
+        padding: 0.28rem 0.4rem;
+    }
+
+    .galleryImpactCue {
+        min-height: 1rem;
+        min-width: 3rem;
+    }
+
+    .achievementsFrame .grid {
+        max-height: 7rem;
+    }
+}
+
+/* UI-CLEANUP-066: phone Collection should be a readable archive index, not tiny receipt tabs. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .body {
+        gap: 0.18rem;
+    }
+
+    .sectionRail {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-auto-rows: 1rem;
+        gap: 0.12rem;
+        margin-bottom: 0.38rem;
+        --meta-compact-rail-link-font-size: 0.46rem;
+        --meta-compact-rail-link-min-height: 1rem;
+        --meta-compact-rail-min-height: 2.12rem;
+        --meta-compact-rail-link-padding-inline: 0.12rem;
+        overflow: visible;
+    }
+
+    .sectionRail a {
+        min-height: 1rem;
+        border-color: color-mix(in srgb, var(--theme-text-muted) 12%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 32%, transparent);
+    }
+
+    .sectionRail a > span {
+        display: none !important;
+    }
+
+    .sectionRail a::before {
+        content: attr(data-compact-label);
+        display: block;
+        overflow: hidden;
+        max-width: 100%;
+        color: inherit;
+        font-size: 0.46rem;
+        line-height: 1;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .rewardSignalsFrame,
+    .metaUpgradesFrame,
+    .rewardGalleryFrame,
+    .achievementsFrame {
+        --ui-density-panel-pad-lg: 0.32rem;
+    }
+
+    .rewardSignalsFrame :global([data-meta-framed='true']),
+    .metaUpgradesFrame :global([data-meta-framed='true']),
+    .rewardGalleryFrame :global([data-meta-framed='true']),
+    .achievementsFrame :global([data-meta-framed='true']) {
+        padding: 0.34rem !important;
+        border-color: color-mix(in srgb, var(--theme-text-muted) 8%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 26%, transparent);
+    }
+
+    .rewardSignalsFrame {
+        margin-top: 0.74rem;
+    }
+
+    .rewardSignalsFrame .sectionTitle {
+        display: none;
+    }
+
+    .sectionTitle {
+        padding-bottom: 0.08rem;
+        border-bottom-color: color-mix(in srgb, var(--theme-gold-bright) 9%, transparent);
+        font-size: 0.66rem;
+    }
+
+    .overviewRow {
+        min-height: 2.12rem;
+        padding: 0.24rem 0.38rem;
+    }
+
+    .overviewRow strong,
+    .galleryCard strong,
+    .achievementCard strong {
+        font-size: 0.72rem;
+    }
+
+    .overviewNext {
+        color: color-mix(in srgb, var(--theme-text-muted) 88%, white);
+        font-size: 0.53rem;
+    }
+
+    .galleryGrid {
+        gap: 0.1rem;
+        max-height: 10.1rem;
+        overflow: hidden;
+    }
+
+    .galleryCard {
+        min-height: 2.12rem;
+        padding: 0.24rem 0.36rem;
+    }
+
+    .galleryBadge {
+        max-width: 5rem;
+        font-size: 0.38rem;
+    }
+
+    .galleryImpactCue {
+        min-width: 2.82rem;
+        min-height: 0.92rem;
+    }
+
+    .achievementsFrame .grid {
+        max-height: 4.3rem;
+    }
+
+    .achievementsFrame .achievementCard {
+        min-height: 1.84rem;
+        padding: 0.2rem 0.32rem;
+    }
+
+    .honorsFrame,
+    .cosmeticsFrame,
+    .secondaryArchiveFrame {
+        margin-top: 1.4rem;
+    }
+}
+
+/* UI-CLEANUP-071: Collection should read as a compact archive, not stacked framed receipts. */
+@media (min-width: 1100px) {
+    .screenHeader {
+        --meta-dense-header-title-size: clamp(2.35rem, 4.6vw, 3.2rem);
+        --meta-dense-header-title-line-height: 1.08;
+        --meta-dense-header-subtitle-size: 0.68rem;
+        --meta-dense-header-padding-bottom: 0.18rem;
+        --meta-dense-header-text-gap: 0.12rem;
+    }
+
+    .body {
+        width: min(1080px, 100%);
+        gap: 0.42rem;
+    }
+
+    .sectionRail {
+        --meta-dense-rail-gap: 0.12rem;
+        --meta-dense-rail-padding-bottom: 0.2rem;
+        --meta-dense-rail-link-font-size: 0.52rem;
+        --meta-dense-rail-link-padding-inline: 0.42rem;
+    }
+
+    .achievementsFrame,
+    .honorsFrame,
+    .rewardSignalsFrame,
+    .rewardGalleryFrame,
+    .metaUpgradesFrame,
+    .cosmeticsFrame,
+    .secondaryArchiveFrame {
+        --theme-meta-frame-outset: -0.08rem;
+        --theme-meta-frame-drop: none;
+        --ui-density-panel-pad-lg: 0.74rem;
+    }
+
+    .achievementsFrame :global([data-meta-framed='true']),
+    .honorsFrame :global([data-meta-framed='true']),
+    .rewardSignalsFrame :global([data-meta-framed='true']),
+    .rewardGalleryFrame :global([data-meta-framed='true']),
+    .metaUpgradesFrame :global([data-meta-framed='true']),
+    .cosmeticsFrame :global([data-meta-framed='true']) {
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 18%, transparent);
+        background: color-mix(in srgb, var(--theme-panel-solid) 36%, transparent);
+        box-shadow: inset 0 1px 0 color-mix(in srgb, white 5%, transparent);
+    }
+
+    .section {
+        gap: 0.5rem;
+    }
+
+    .sectionTitle {
+        padding-bottom: 0.42rem;
+        font-size: 0.92rem;
+    }
+
+    .grid {
+        grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+        gap: 0.44rem;
+    }
+
+    .achievementCard,
+    .overviewRow,
+    .galleryCard {
+        padding: 0.52rem 0.62rem;
+        border-color: color-mix(in srgb, var(--theme-text-muted) 14%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 28%, transparent);
+        box-shadow: none;
+    }
+
+    .achievementCard strong,
+    .overviewRow strong,
+    .galleryCard strong {
+        font-size: 0.88rem;
+    }
+
+    .achievementCard :global(p),
+    .overviewBody,
+    .galleryCard :global(p) {
+        font-size: 0.72rem;
+        line-height: 1.26;
+    }
+}
+
+@media (max-width: 760px) and (orientation: portrait) {
+    .screenHeader {
+        --meta-compact-header-title-size: clamp(1.06rem, 5.1vw, 1.32rem);
+        --meta-compact-header-copy-size: 0.48rem;
+        --meta-compact-header-action-min-height: 1.42rem;
+    }
+
+    .screenSubtitle {
+        opacity: 0.76;
+    }
+
+    .body {
+        gap: 0.12rem;
+    }
+
+    .sectionRail {
+        margin-bottom: 0.24rem;
+        --meta-compact-rail-min-height: 2rem;
+    }
+
+    .rewardSignalsFrame {
+        margin-top: 0.48rem;
+    }
+
+    .rewardSignalsFrame,
+    .metaUpgradesFrame,
+    .rewardGalleryFrame,
+    .achievementsFrame,
+    .honorsFrame,
+    .cosmeticsFrame,
+    .secondaryArchiveFrame {
+        --theme-meta-frame-outset: 0;
+        --theme-meta-frame-drop: none;
+    }
+
+    .rewardSignalsFrame :global([data-meta-framed='true']),
+    .metaUpgradesFrame :global([data-meta-framed='true']),
+    .rewardGalleryFrame :global([data-meta-framed='true']),
+    .achievementsFrame :global([data-meta-framed='true']),
+    .honorsFrame :global([data-meta-framed='true']),
+    .cosmeticsFrame :global([data-meta-framed='true']) {
+        padding: 0.28rem !important;
+        border-color: color-mix(in srgb, var(--theme-text-muted) 7%, transparent);
+        background: transparent;
+        box-shadow: none;
+    }
+
+    .overviewRow,
+    .galleryCard,
+    .achievementCard {
+        min-height: 1.88rem;
+        padding: 0.2rem 0.3rem;
+        border-color: color-mix(in srgb, var(--theme-text-muted) 8%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 22%, transparent);
+    }
+
+    .overviewRow strong,
+    .galleryCard strong,
+    .achievementCard strong {
+        font-size: 0.68rem;
+        line-height: 1.02;
+    }
+
+    .overviewNext,
+    .galleryCard > .symbolMeta,
+    .achievementCard .symbolMeta {
+        font-size: 0.48rem;
+    }
+
+    .galleryGrid {
+        max-height: 8.8rem;
+    }
+
+    .galleryCard {
+        min-height: 1.92rem;
+    }
+
+    .galleryBadge,
+    .galleryImpactCue {
+        transform: scale(0.92);
+        transform-origin: right center;
+    }
+
+    .achievementsFrame .grid {
+        max-height: 3.7rem;
+    }
+
+    .honorsFrame,
+    .cosmeticsFrame,
+    .secondaryArchiveFrame {
+        margin-top: 0.52rem;
+    }
+
+    .honorsFrame .section,
+    .cosmeticsFrame .section,
+    .secondaryArchiveFrame .section {
+        gap: 0.14rem;
+    }
+
+    .honorsFrame .sectionLead,
+    .cosmeticsFrame .sectionLead,
+    .secondaryArchiveFrame .sectionLead,
+    .honorsFrame .achievementCard :global(p),
+    .cosmeticsFrame .achievementCard :global(p),
+    .secondaryArchiveFrame .achievementCard :global(p) {
+        display: none;
+    }
+
+    .honorsFrame .grid,
+    .cosmeticsFrame .grid,
+    .secondaryArchiveFrame .grid {
+        max-height: 4.1rem;
+        overflow: hidden;
+    }
+}
+
+/* UI-CLEANUP-076: phone Collection is an archive dashboard first; long catalogs become previews. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .body {
+        gap: 0.1rem;
+    }
+
+    .sectionRail {
+        margin-bottom: 0.16rem;
+    }
+
+    .rewardSignalsFrame {
+        margin-top: 0.3rem;
+    }
+
+    .rewardSignalsFrame :global([data-meta-framed='true']),
+    .metaUpgradesFrame :global([data-meta-framed='true']),
+    .rewardGalleryFrame :global([data-meta-framed='true']),
+    .achievementsFrame :global([data-meta-framed='true']),
+    .honorsFrame :global([data-meta-framed='true']),
+    .cosmeticsFrame :global([data-meta-framed='true']) {
+        padding: 0.24rem !important;
+    }
+
+    .rewardSignalsFrame .overviewGrid,
+    .metaUpgradesFrame .overviewGrid {
+        gap: 0.08rem;
+    }
+
+    .rewardSignalsFrame .overviewRow,
+    .metaUpgradesFrame .overviewRow {
+        min-height: 1.74rem;
+        padding: 0.18rem 0.28rem;
+    }
+
+    .metaUpgradesFrame .overviewRow:nth-child(n + 3),
+    .metaUpgradesFrame .progressionImpactGrid,
+    .metaUpgradesFrame .grid {
+        display: none;
+    }
+
+    .rewardGalleryFrame .section {
+        gap: 0.1rem;
+    }
+
+    .rewardGalleryFrame .galleryGrid {
+        gap: 0.08rem;
+        max-height: none;
+    }
+
+    .rewardGalleryFrame .galleryCard {
+        min-height: 1.72rem;
+        padding: 0.18rem 0.3rem;
+    }
+
+    .rewardGalleryFrame .galleryCard:nth-child(n + 4) {
+        display: none;
+    }
+
+    .rewardGalleryFrame .galleryBadge {
+        max-width: 4.7rem;
+        padding: 0.04rem 0.2rem;
+    }
+
+    .rewardGalleryFrame .galleryImpactCue {
+        display: none;
+    }
+
+    .achievementsFrame,
+    .honorsFrame,
+    .cosmeticsFrame,
+    .secondaryArchiveFrame {
+        margin-top: 0.28rem;
+    }
+
+    .achievementsFrame .section,
+    .honorsFrame .section,
+    .cosmeticsFrame .section,
+    .secondaryArchiveFrame .section {
+        gap: 0.08rem;
+    }
+
+    .achievementsFrame .sectionTitle,
+    .honorsFrame .sectionTitle,
+    .cosmeticsFrame .sectionTitle,
+    .secondaryArchiveFrame .sectionTitle {
+        margin: 0;
+        padding-bottom: 0.06rem;
+        font-size: 0.58rem;
+    }
+
+    .achievementsFrame .grid,
+    .honorsFrame .grid,
+    .cosmeticsFrame .grid,
+    .secondaryArchiveFrame .grid {
+        gap: 0.08rem;
+        max-height: none;
+        overflow: visible;
+    }
+
+    .achievementsFrame .achievementCard,
+    .honorsFrame .achievementCard,
+    .cosmeticsFrame .achievementCard,
+    .secondaryArchiveFrame .achievementCard {
+        min-height: 1.5rem;
+        padding: 0.18rem 0.28rem;
+    }
+
+    .achievementsFrame .achievementCard:nth-child(n + 2),
+    .honorsFrame .achievementCard:nth-child(n + 2),
+    .cosmeticsFrame .achievementCard:nth-child(n + 2),
+    .secondaryArchiveFrame .achievementCard:nth-child(n + 2) {
+        display: none;
+    }
+
+    .achievementsFrame .achievementCard :global(p),
+    .honorsFrame .achievementCard :global(p),
+    .cosmeticsFrame .achievementCard :global(p),
+    .secondaryArchiveFrame .achievementCard :global(p),
+    .achievementsFrame .achievementCard .symbolMeta:nth-of-type(n + 2),
+    .honorsFrame .achievementCard .symbolMeta:nth-of-type(n + 2),
+    .cosmeticsFrame .achievementCard .symbolMeta:nth-of-type(n + 2),
+    .secondaryArchiveFrame .achievementCard .symbolMeta:nth-of-type(n + 2) {
+        display: none;
+    }
+
+    .secondaryArchivePreviewFrame {
+        padding: 0.22rem 0.28rem !important;
+        border-color: color-mix(in srgb, var(--theme-text-muted) 8%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 24%, transparent);
+        box-shadow: none;
+    }
+
+    .secondaryArchivePreviewFrame .section {
+        gap: 0;
+    }
+
+    .secondaryArchivePreviewFrame .section > :not(.sectionTitle) {
+        display: none;
+    }
+
+    .secondaryArchivePreviewFrame .sectionTitle {
+        min-height: 1.24rem;
+        display: flex;
+        align-items: center;
+        padding: 0;
+        border: 0;
+    }
+}
+
+/* UI-CLEANUP-102: Collection should read as a clean archive dashboard, not stacked tiny receipt rows. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .screenHeader {
+        --meta-compact-header-title-size: clamp(1.28rem, 6vw, 1.58rem);
+        --meta-compact-header-copy-size: 0.52rem;
+        --meta-compact-header-action-min-height: 1.7rem;
+        --meta-compact-header-action-min-width: 3.85rem;
+    }
+
+    .screenTitle {
+        max-width: 9.2ch;
+    }
+
+    .body {
+        gap: 0.2rem;
+    }
+
+    .sectionRail {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-auto-rows: 1.16rem;
+        gap: 0.12rem;
+        margin-bottom: 0.46rem;
+        --meta-compact-rail-link-font-size: 0.5rem;
+        --meta-compact-rail-link-min-height: 1.16rem;
+    }
+
+    .rewardSignalsFrame :global([data-meta-framed='true']),
+    .metaUpgradesFrame :global([data-meta-framed='true']),
+    .rewardGalleryFrame :global([data-meta-framed='true']),
+    .achievementsFrame :global([data-meta-framed='true']),
+    .honorsFrame :global([data-meta-framed='true']),
+    .cosmeticsFrame :global([data-meta-framed='true']) {
+        padding: 0.38rem !important;
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 10%, transparent);
+        border-radius: var(--ui-radius-md);
+        background:
+            linear-gradient(180deg, color-mix(in srgb, var(--theme-gold-bright) 4%, transparent), transparent 44%),
+            color-mix(in srgb, var(--theme-void) 34%, transparent);
+    }
+
+    .rewardSignalsFrame {
+        margin-top: 0.42rem;
+    }
+
+    .rewardSignalsFrame .section,
+    .metaUpgradesFrame .section,
+    .rewardGalleryFrame .section,
+    .achievementsFrame .section {
+        gap: 0.18rem;
+    }
+
+    .sectionTitle {
+        color: color-mix(in srgb, var(--theme-gold-bright) 84%, white);
+        font-size: 0.66rem;
+        letter-spacing: 0.06em;
+    }
+
+    .rewardSignalsFrame .sectionTitle,
+    .metaUpgradesFrame .sectionTitle {
+        display: none;
+    }
+
+    .rewardSignalsFrame .overviewGrid,
+    .metaUpgradesFrame .overviewGrid {
+        gap: 0.16rem;
+    }
+
+    .rewardSignalsFrame .overviewRow,
+    .metaUpgradesFrame .overviewRow {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: center;
+        gap: 0.12rem 0.42rem;
+        min-height: 2.5rem;
+        padding: 0.42rem 0.5rem;
+        border-color: color-mix(in srgb, var(--theme-text-muted) 12%, transparent);
+        border-radius: var(--ui-radius-sm);
+        background: color-mix(in srgb, var(--theme-void) 42%, transparent);
+    }
+
+    .rewardSignalsFrame .overviewRow:first-child {
+        grid-template-columns: minmax(0, 1fr);
+        min-height: 3.05rem;
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 22%, transparent);
+        background:
+            linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 8%, transparent), transparent 68%),
+            color-mix(in srgb, var(--theme-void) 46%, transparent);
+    }
+
+    .overviewRow > p:first-child {
+        display: block;
+        grid-column: 1;
+        margin: 0;
+        overflow: hidden;
+        color: color-mix(in srgb, var(--theme-text) 94%, white);
+        font-size: 0.88rem;
+        font-weight: 900;
+        line-height: 1.08;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .overviewBody {
+        display: -webkit-box !important;
+        grid-column: 1 / -1;
+        max-height: 2rem;
+        overflow: hidden;
+        color: color-mix(in srgb, var(--theme-text-muted) 86%, white);
+        font-size: 0.62rem;
+        line-height: 1.16;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+    }
+
+    .rewardSignalsFrame .overviewRow:not(:first-child) .overviewBody,
+    .metaUpgradesFrame .overviewRow .overviewBody {
+        display: none !important;
+    }
+
+    .overviewNext {
+        display: -webkit-box;
+        grid-column: 2;
+        grid-row: 1;
+        justify-self: end;
+        max-width: 8.1rem;
+        max-height: 2.18rem;
+        padding: 0.1rem 0.34rem;
+        overflow: hidden;
+        border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 16%, transparent);
+        border-radius: var(--ui-radius-pill);
+        background: color-mix(in srgb, var(--theme-gold-bright) 7%, transparent);
+        color: color-mix(in srgb, var(--theme-gold-bright) 82%, white);
+        font-size: 0.52rem;
+        font-weight: 900;
+        line-height: 1.05;
+        text-align: center;
+        text-transform: none;
+        white-space: normal;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+    }
+
+    .rewardSignalsFrame .overviewRow:first-child .overviewNext {
+        grid-column: 1;
+        grid-row: auto;
+        justify-self: start;
+        max-width: 100%;
+        max-height: none;
+        -webkit-line-clamp: 2;
+    }
+
+    .rewardGalleryFrame .sectionTitle,
+    .achievementsFrame .sectionTitle,
+    .honorsFrame .sectionTitle,
+    .cosmeticsFrame .sectionTitle,
+    .secondaryArchiveFrame .sectionTitle {
+        min-height: 1.1rem;
+    }
+
+    .rewardGalleryFrame .galleryGrid {
+        display: grid;
+        gap: 0.14rem;
+        max-height: none;
+    }
+
+    .rewardGalleryFrame .galleryCard {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: center;
+        gap: 0.1rem 0.42rem;
+        min-height: 2.3rem;
+        padding: 0.34rem 0.46rem;
+        border-radius: var(--ui-radius-sm);
+    }
+
+    .rewardGalleryFrame .galleryCard strong {
+        grid-column: 1;
+        font-size: 0.78rem;
+        line-height: 1.05;
+    }
+
+    .rewardGalleryFrame .galleryBadge {
+        grid-column: 2;
+        grid-row: 1;
+        max-width: 5rem;
+        justify-self: end;
+    }
+
+    .rewardGalleryFrame .galleryCard > .symbolMeta {
+        display: block;
+        grid-column: 1;
+        margin: 0;
+        color: color-mix(in srgb, var(--theme-text-muted) 82%, white);
+        font-size: 0.52rem;
+        line-height: 1.08;
+    }
+
+    .rewardGalleryFrame .galleryCard > .symbolMeta:last-child,
+    .rewardGalleryFrame .galleryCard :global(p),
+    .rewardGalleryFrame .galleryImpactCue {
+        display: none !important;
+    }
+
+    .achievementsFrame .achievementCard,
+    .honorsFrame .achievementCard,
+    .cosmeticsFrame .achievementCard {
+        min-height: 1.82rem;
+        padding: 0.26rem 0.36rem;
+    }
+
+    .achievementsFrame .achievementCard strong,
+    .honorsFrame .achievementCard strong,
+    .cosmeticsFrame .achievementCard strong {
+        font-size: 0.72rem;
+    }
+
+    .secondaryArchivePreviewFrame {
+        border-radius: var(--ui-radius-md);
+    }
+}
+
+/* UI-CLEANUP-105: Collection phone rail should be one scan row, with less receipt chrome above the fold. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .screenHeader {
+        --meta-compact-header-title-size: clamp(1.18rem, 5.5vw, 1.48rem);
+        --meta-compact-header-copy-size: 0.5rem;
+        --meta-compact-header-action-min-height: 1.64rem;
+    }
+
+    .body {
+        gap: 0.16rem;
+    }
+
+    .sectionRail {
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+        grid-auto-rows: 1.72rem;
+        gap: 0.06rem;
+        margin-bottom: 0.24rem;
+        --meta-compact-rail-link-font-size: 0.42rem;
+        --meta-compact-rail-link-min-height: 1.72rem;
+        --meta-compact-rail-link-padding-inline: 0.08rem;
+    }
+
+    .sectionRail a:nth-child(n + 7) {
+        display: none !important;
+    }
+
+    .rewardSignalsFrame {
+        margin-top: 0.22rem;
+    }
+
+    .rewardSignalsFrame :global([data-meta-framed='true']),
+    .metaUpgradesFrame :global([data-meta-framed='true']),
+    .rewardGalleryFrame :global([data-meta-framed='true']) {
+        padding: 0.28rem !important;
+        border-color: color-mix(in srgb, var(--theme-text-muted) 8%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 22%, transparent);
+        box-shadow: none;
+    }
+
+    .rewardSignalsFrame .overviewGrid,
+    .metaUpgradesFrame .overviewGrid,
+    .rewardGalleryFrame .galleryGrid {
+        gap: 0.1rem;
+    }
+
+    .rewardSignalsFrame .overviewRow,
+    .metaUpgradesFrame .overviewRow {
+        min-height: 2.12rem;
+        padding: 0.3rem 0.38rem;
+        box-shadow: none;
+    }
+
+    .rewardSignalsFrame .overviewRow:first-child {
+        min-height: 2.72rem;
+    }
+
+    .overviewRow > p:first-child {
+        font-size: 0.78rem;
+    }
+
+    .overviewBody {
+        font-size: 0.58rem;
+        line-height: 1.12;
+    }
+
+    .overviewNext {
+        max-width: 7.2rem;
+        padding: 0.08rem 0.28rem;
+        font-size: 0.48rem;
+    }
+
+    .rewardGalleryFrame .galleryCard {
+        min-height: 2.06rem;
+        padding: 0.28rem 0.38rem;
+        box-shadow: none;
+    }
+
+    .rewardGalleryFrame .galleryCard strong {
+        font-size: 0.72rem;
+    }
+
+    .achievementsFrame,
+    .honorsFrame,
+    .cosmeticsFrame,
+    .secondaryArchiveFrame {
+        margin-top: 0.2rem;
+    }
+}
+
+/* UI-CLEANUP-116: Collection mobile should be a readable archive dashboard, not a fully-squeezed catalog wall. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .screenHeader {
+        --meta-compact-header-title-size: clamp(1.34rem, 6.2vw, 1.72rem);
+        --meta-compact-header-copy-size: 0.54rem;
+        --meta-compact-header-copy-line-height: 1.12;
+        --meta-compact-header-action-min-height: 1.9rem;
+    }
+
+    .screenHeader .screenTitle,
+    .screenTitle {
+        max-width: 9.4ch;
+        line-height: 1.02;
+    }
+
+    .screenSubtitle {
+        max-width: 18rem;
+        opacity: 0.82;
+    }
+
+    .body {
+        gap: 0.28rem;
+    }
+
+    .sectionRail {
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+        grid-auto-rows: 1.92rem;
+        gap: 0.08rem;
+        margin-bottom: 0.18rem;
+        --meta-compact-rail-link-font-size: 0.43rem;
+        --meta-compact-rail-link-min-height: 1.92rem;
+        --meta-compact-rail-link-padding-inline: 0.08rem;
+    }
+
+    .sectionRail a:nth-child(n + 7) {
+        display: none !important;
+    }
+
+    .rewardSignalsFrame,
+    .metaUpgradesFrame,
+    .rewardGalleryFrame,
+    .achievementsFrame,
+    .honorsFrame,
+    .cosmeticsFrame,
+    .secondaryArchiveFrame {
+        margin-top: 0;
+    }
+
+    .rewardSignalsFrame :global([data-meta-framed='true']),
+    .metaUpgradesFrame :global([data-meta-framed='true']),
+    .rewardGalleryFrame :global([data-meta-framed='true']),
+    .achievementsFrame :global([data-meta-framed='true']),
+    .honorsFrame :global([data-meta-framed='true']),
+    .cosmeticsFrame :global([data-meta-framed='true']),
+    .secondaryArchiveFrame :global([data-meta-framed='true']) {
+        padding: 0.36rem !important;
+        border-color: color-mix(in srgb, var(--theme-text-muted) 10%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 34%, transparent);
+        box-shadow: none;
+    }
+
+    .section {
+        gap: 0.34rem;
+    }
+
+    .sectionTitle {
+        min-height: 1.18rem;
+        padding-bottom: 0.22rem;
+        color: color-mix(in srgb, var(--theme-gold-bright) 86%, white);
+        font-size: 0.76rem;
+        line-height: 1;
+    }
+
+    .rewardSignalsFrame .sectionTitle {
+        display: none;
+    }
+
+    .rewardSignalsFrame .overviewGrid,
+    .metaUpgradesFrame .overviewGrid,
+    .rewardGalleryFrame .galleryGrid {
+        gap: 0.18rem;
+    }
+
+    .rewardSignalsFrame .overviewRow,
+    .metaUpgradesFrame .overviewRow {
+        min-height: 2.82rem;
+        padding: 0.46rem 0.54rem;
+        border-color: color-mix(in srgb, var(--theme-text-muted) 12%, transparent);
+        border-radius: var(--ui-radius-sm);
+        background: color-mix(in srgb, var(--theme-void) 42%, transparent);
+    }
+
+    .rewardSignalsFrame .overviewRow:first-child {
+        min-height: 3.35rem;
+    }
+
+    .overviewRow > p:first-child {
+        font-size: 0.86rem;
+        line-height: 1.06;
+    }
+
+    .overviewBody {
+        max-height: 2.2rem;
+        font-size: 0.62rem;
+        line-height: 1.16;
+    }
+
+    .overviewNext {
+        max-width: 8.8rem;
+        font-size: 0.52rem;
+        line-height: 1.08;
+    }
+
+    .rewardGalleryFrame .galleryGrid,
+    .achievementsFrame .grid,
+    .honorsFrame .grid,
+    .cosmeticsFrame .grid,
+    .secondaryArchiveFrame .grid {
+        max-height: none;
+        overflow: visible;
+    }
+
+    .rewardGalleryFrame .galleryCard,
+    .achievementsFrame .achievementCard,
+    .honorsFrame .achievementCard,
+    .cosmeticsFrame .achievementCard,
+    .secondaryArchiveFrame .achievementCard {
+        min-height: 2.52rem;
+        padding: 0.42rem 0.5rem;
+        border-radius: var(--ui-radius-sm);
+        background: color-mix(in srgb, var(--theme-void) 36%, transparent);
+    }
+
+    .rewardGalleryFrame .galleryCard strong,
+    .achievementsFrame .achievementCard strong,
+    .honorsFrame .achievementCard strong,
+    .cosmeticsFrame .achievementCard strong,
+    .secondaryArchiveFrame .achievementCard strong {
+        font-size: 0.82rem;
+        line-height: 1.08;
+    }
+
+    .secondaryArchivePreviewFrame,
+    .runPayoffStrip {
+        display: none !important;
+    }
+}
+
+@media (max-height: 520px) and (orientation: landscape) {
+    .screenHeader {
+        --meta-compact-header-title-size: clamp(1.55rem, 4.8vw, 2.15rem);
+        --meta-compact-header-copy-size: 0.56rem;
+        --meta-compact-header-copy-line-height: 1.12;
+        --meta-compact-header-action-min-height: 1.9rem;
+        padding-bottom: 0.18rem;
+    }
+
+    .screenHeader .screenTitle,
+    .screenTitle {
+        max-width: 12ch;
+        line-height: 1;
+    }
+
+    .screenSubtitle {
+        display: none;
+    }
+
+    .body {
+        width: min(100%, calc(100vw - 1.5rem));
+        gap: 0.18rem;
+    }
+
+    .sectionRail {
+        --meta-compact-rail-gap: 0.12rem;
+        --meta-compact-rail-link-font-size: 0.5rem;
+        --meta-compact-rail-link-min-height: 1.8rem;
+        --meta-compact-rail-link-padding-inline: 0.38rem;
+    }
+
+    .achievementsFrame,
+    .honorsFrame,
+    .rewardSignalsFrame,
+    .rewardGalleryFrame,
+    .metaUpgradesFrame,
+    .cosmeticsFrame,
+    .secondaryArchiveFrame {
+        --theme-meta-frame-drop: none;
+        --ui-density-panel-pad-lg: 0.5rem;
+    }
+
+    .section {
+        gap: 0.38rem;
+    }
+
+    .sectionTitle {
+        padding-bottom: 0.26rem;
+        font-size: 0.82rem;
+        line-height: 1;
+    }
+
+    .grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 0.36rem;
+    }
+
+    .achievementCard,
+    .overviewRow,
+    .galleryCard {
+        min-height: 4.25rem;
+        padding: 0.48rem 0.56rem;
+        box-shadow: none;
+    }
+
+    .achievementCard strong,
+    .overviewRow > p:first-child,
+    .galleryCard strong {
+        font-size: 0.76rem;
+        line-height: 1.08;
+    }
+
+    .achievementCard :global(p),
+    .overviewBody,
+    .galleryCard :global(p) {
+        font-size: 0.62rem;
+        line-height: 1.18;
+        -webkit-line-clamp: 3;
+    }
+}
+
+/* UI-CLEANUP-117: final Collection header lock for phone captures. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .screenHeader {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: start;
+        gap: 0.48rem;
+    }
+
+    .screenHeader :global(h1),
+    .screenHeader :global(h2),
+    .screenHeader .screenTitle,
+    .screenTitle {
+        max-width: none !important;
+        overflow: visible !important;
+        font-size: clamp(1.42rem, 6vw, 1.68rem) !important;
+        line-height: 1.02 !important;
+        text-overflow: clip !important;
+        white-space: nowrap !important;
+    }
+
+    .screenHeader :global(button) {
+        min-width: 4.25rem !important;
+        min-height: 2rem !important;
+        padding-inline: 0.62rem !important;
+    }
+}
+
+@media (max-height: 520px) and (orientation: landscape) {
+    .screenHeader {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: start;
+        gap: 0.5rem;
+        padding-bottom: 0.16rem;
+    }
+
+    .screenHeader :global(h1),
+    .screenHeader :global(h2),
+    .screenHeader .screenTitle,
+    .screenTitle {
+        max-width: none !important;
+        overflow: visible !important;
+        font-size: clamp(1.75rem, 4.7vw, 2.35rem) !important;
+        line-height: 1 !important;
+        text-overflow: clip !important;
+        white-space: nowrap !important;
+    }
+
+    .screenHeader :global(p) {
+        display: none !important;
+    }
+
+    .screenHeader :global(button) {
+        min-width: 3.2rem !important;
+        min-height: 1.9rem !important;
+        padding-inline: 0.42rem !important;
+    }
+}
+
+/* UI-CLEANUP-118: collection tabs should scan as controls, not hairline labels. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .sectionRail {
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+        grid-auto-rows: 2.05rem;
+        gap: 0.1rem;
+        margin-bottom: 0.22rem;
+        --meta-compact-rail-link-font-size: 0.5rem;
+        --meta-compact-rail-link-min-height: 2.05rem;
+        --meta-compact-rail-link-padding-inline: 0.05rem;
+    }
+
+    .sectionRail a {
+        overflow: hidden;
+        border-color: color-mix(in srgb, var(--theme-text-muted) 13%, transparent);
+        background:
+            linear-gradient(180deg, color-mix(in srgb, white 2%, transparent), transparent 62%),
+            color-mix(in srgb, var(--theme-void) 70%, transparent);
+        color: color-mix(in srgb, var(--theme-text-muted) 88%, white);
+        box-shadow: none;
+    }
+
+    .sectionRail a:first-child,
+    .sectionRail a:focus-visible {
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 30%, transparent);
+        background:
+            linear-gradient(180deg, color-mix(in srgb, var(--theme-gold-bright) 10%, transparent), transparent 68%),
+            color-mix(in srgb, var(--theme-void) 58%, transparent);
+        color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
+    }
+
+    .sectionRail a > span,
+    .sectionRail a span {
+        max-width: 100%;
+        overflow: hidden;
+        font-weight: 900;
+        line-height: 1;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+}
+
+@media (max-height: 520px) and (orientation: landscape) {
+    .sectionRail {
+        --meta-compact-rail-link-font-size: 0.56rem;
+        --meta-compact-rail-link-min-height: 1.95rem;
+        --meta-compact-rail-gap: 0.14rem;
+    }
+
+    .sectionRail a {
+        color: color-mix(in srgb, var(--theme-text-muted) 86%, white);
+        box-shadow: none;
+    }
+}
+
+/* UI-CLEANUP-119: phone archive tabs need readable controls, not six squeezed labels. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .sectionRail {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-auto-rows: 1.9rem;
+        gap: 0.14rem;
+        margin-bottom: 0.28rem;
+        overflow: visible;
+        --meta-compact-rail-link-font-size: 0.58rem;
+        --meta-compact-rail-link-min-height: 1.9rem;
+        --meta-compact-rail-link-padding-inline: 0.22rem;
+    }
+
+    .sectionRail a:nth-child(n + 7) {
+        display: none !important;
+    }
+
+    .sectionRail a {
+        display: grid;
+        place-items: center;
+        min-width: 0;
+        min-height: 1.9rem;
+        padding-inline: 0.22rem;
+        overflow: hidden;
+        border-color: color-mix(in srgb, var(--theme-text-muted) 15%, transparent);
+        border-radius: var(--ui-radius-sm);
+        background:
+            linear-gradient(180deg, color-mix(in srgb, white 2%, transparent), transparent 58%),
+            color-mix(in srgb, var(--theme-void) 76%, transparent);
+        box-shadow: none;
+    }
+
+    .sectionRail a:first-child,
+    .sectionRail a:focus-visible {
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 34%, transparent);
+        background:
+            linear-gradient(180deg, color-mix(in srgb, var(--theme-gold-bright) 11%, transparent), transparent 68%),
+            color-mix(in srgb, var(--theme-void) 62%, transparent);
+    }
+
+    .sectionRail a > span,
+    .sectionRail a span {
+        max-width: 100%;
+        overflow: hidden;
+        font-size: 0.58rem;
+        font-weight: 900;
+        line-height: 1;
+        text-align: center;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 }

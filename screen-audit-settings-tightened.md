@@ -1,0 +1,15 @@
+- generic [ref=f1e2] [box=0,0,1440,960]:
+  - generic [ref=f1e3] [box=0,0,1440,960]:
+    - link "Skip to main content" [ref=f1e4] [cursor=pointer] [box=-1,-1,1,1]:
+      - /url: "#app-main"
+    - main [ref=f1e5] [box=0,0,1440,960]:
+      - generic [ref=f1e1610] [box=23,19,1395,923]:
+        - complementary [ref=f1e1611] [box=23,19,300,923]:
+          - generic [ref=f1e1612] [box=46,42,253,61]
+          - navigation [ref=f1e1615] [box=46,119,253,515]
+        - generic [ref=f1e1634] [box=323,19,1095,923]:
+          - generic [ref=f1e1635] [box=346,42,1048,199]
+          - group "Gameplay sections" [ref=f1e1652] [box=346,257,1048,36]
+          - generic [ref=f1e1658] [box=346,309,1048,372]
+          - generic [ref=f1e1678] [box=882,714,512,65]
+  - region "Memory Dungeon tips" [box=240,924,960,0]

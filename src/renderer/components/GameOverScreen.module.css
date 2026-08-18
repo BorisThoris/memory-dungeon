@@ -72,6 +72,12 @@
     gap: clamp(0.85rem, 2vw, var(--ui-shell-screen-gap));
 }
 
+.sideRail {
+    display: grid;
+    align-content: start;
+    gap: 0.72rem;
+}
+
 .heroPanel,
 .actionPanel {
     transform:
@@ -1017,16 +1023,16 @@
 }
 
 .panelCopy {
-    margin: 0.8rem 0 0;
+    margin: 0.58rem 0 0;
     color: var(--theme-text-muted);
-    line-height: 1.45;
+    line-height: 1.34;
 }
 
 .actionButtons {
     display: grid;
-    gap: 0.55rem;
-    margin-top: 0.85rem;
-    padding: 0.45rem;
+    gap: 0.42rem;
+    margin-top: 0.68rem;
+    padding: 0.38rem;
     border-radius: calc(var(--ui-radius-lg) - 0.08rem);
     border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 16%, transparent);
     background:
@@ -1049,24 +1055,24 @@
 .actionButtonContent small {
     max-width: min(22rem, 100%);
     color: color-mix(in srgb, currentColor 76%, var(--theme-text-muted));
-    font-size: 0.64rem;
+    font-size: 0.6rem;
     font-weight: 750;
-    line-height: 1.16;
+    line-height: 1.12;
     overflow-wrap: anywhere;
 }
 
 .nextRunLoop,
 .nextRunGrid {
-    margin-top: 1rem;
+    margin-top: 0.72rem;
     display: grid;
-    gap: 0.55rem;
+    gap: 0.42rem;
 }
 
 .nextRunRow,
 .nextRunCard {
     display: grid;
-    gap: 0.16rem;
-    padding: 0.52rem 0.62rem;
+    gap: 0.12rem;
+    padding: 0.44rem 0.54rem;
     border-radius: var(--ui-radius-md);
     border: 1px solid color-mix(in srgb, var(--theme-gold) 18%, transparent);
     background: var(--theme-surface-glass);
@@ -1088,10 +1094,10 @@
 }
 
 .nextRunCard p {
-    margin: 0.16rem 0 0;
+    margin: 0.1rem 0 0;
     color: var(--theme-text-subtle);
-    font-size: 0.76rem;
-    line-height: 1.36;
+    font-size: 0.72rem;
+    line-height: 1.28;
 }
 
 .nextRunActionCue {
@@ -1101,13 +1107,13 @@
     width: fit-content;
     max-width: 100%;
     min-height: 1.28rem;
-    margin-top: 0.1rem;
-    padding: 0.12rem 0.38rem;
+    margin-top: 0.06rem;
+    padding: 0.1rem 0.32rem;
     border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 30%, transparent);
     border-radius: 999px;
     background: color-mix(in srgb, var(--theme-gold-deep) 12%, transparent);
     color: color-mix(in srgb, var(--theme-gold-bright) 82%, white);
-    font-size: 0.62rem;
+    font-size: 0.58rem;
     font-weight: 850;
     line-height: 1.12;
     overflow-wrap: anywhere;
@@ -1135,14 +1141,14 @@
 
 .journalRows {
     display: grid;
-    gap: 0.42rem;
-    margin-top: 0.78rem;
+    gap: 0.32rem;
+    margin-top: 0.56rem;
 }
 
 .journalRow {
     display: grid;
     gap: 0.12rem;
-    padding: 0.48rem 0.56rem;
+    padding: 0.4rem 0.5rem;
     border: 1px solid color-mix(in srgb, var(--theme-rune) 18%, transparent);
     border-radius: var(--ui-radius-sm);
     background: var(--theme-surface-control);
@@ -1161,12 +1167,161 @@
     line-height: 1.28;
 }
 
+.snapshotNextLoop {
+    display: none;
+}
+
+@media (min-width: 1100px) {
+    .layout {
+        grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.76fr);
+        gap: clamp(0.72rem, 1.7vw, 0.92rem);
+    }
+
+    .actionPanel {
+        --ui-density-panel-pad-lg: 0.86rem;
+    }
+
+    .outcomeSignalStrip {
+        margin-top: 0.62rem;
+    }
+
+    .payoffBurstStrip {
+        margin-top: 0.48rem;
+        gap: 0.34rem;
+    }
+
+    .payoffBurstStrip span[data-payoff-lane-map] {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        flex: 1 1 100%;
+        min-height: 0;
+        padding: 0.42rem 0.52rem;
+        border-radius: var(--ui-radius-md);
+    }
+
+    .payoffBurstStrip span[data-payoff-lane-map] > i[data-payoff-lane] {
+        display: none;
+    }
+
+    .payoffPrimaryLaneCue {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr) auto;
+        align-items: center;
+        gap: 0.1rem 0.46rem;
+        min-height: 0;
+        padding: 0;
+    }
+
+    .payoffPrimaryLaneCue small {
+        grid-column: 1;
+    }
+
+    .payoffPrimaryLaneCue strong {
+        grid-column: 2;
+    }
+
+    .payoffPrimaryLaneCue b {
+        grid-column: 3;
+        justify-self: end;
+    }
+
+    .payoffPrimaryLaneCue em,
+    .payoffPrimaryLaneBeatPips,
+    .payoffBurstStrip span[data-payoff-crescendo-tier],
+    .payoffBurstStrip span[data-payoff-sequence-tone],
+    .payoffBurstStrip span[data-payoff-burst-action] em,
+    .payoffBurstBeatPips {
+        display: none;
+    }
+
+    .payoffBurstStrip span[data-payoff-burst-action] {
+        min-height: 0;
+        padding: 0.28rem 0.42rem;
+        border-radius: var(--ui-radius-md);
+    }
+
+    .payoffBurstStrip span[data-payoff-burst-action] i {
+        font-size: 0.54rem;
+        line-height: 1.08;
+    }
+
+    .momentumRecapGrid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.34rem;
+    }
+
+    .momentumRecapGrid span {
+        min-height: 0;
+        padding: 0.36rem 0.46rem;
+    }
+
+    .momentumRecapGrid em {
+        display: -webkit-box;
+        overflow: hidden;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+    }
+
+    .nextRunGrid {
+        gap: 0.34rem;
+        margin-top: 0.54rem;
+    }
+
+    .nextRunCard {
+        padding: 0.36rem 0.46rem;
+    }
+
+    .nextRunCard p {
+        display: -webkit-box;
+        overflow: hidden;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+    }
+
+    .nextRunCard[data-next-run-row='local_share'],
+    .nextRunCard[data-next-run-row='next_goal'] {
+        display: none;
+    }
+
+    .actionPanel:hover .nextRunCard[data-next-run-row='local_share'],
+    .actionPanel:focus-within .nextRunCard[data-next-run-row='local_share'],
+    .actionPanel:hover .nextRunCard[data-next-run-row='next_goal'],
+    .actionPanel:focus-within .nextRunCard[data-next-run-row='next_goal'] {
+        display: grid;
+    }
+
+    .summaryGrid {
+        gap: 0.42rem;
+    }
+}
+
 .mobileActionDock {
     display: none;
 }
 
-.aboveFoldSummary {
-    display: none;
+.mobileOutcomeCopy {
+    display: grid;
+    gap: 0.12rem;
+    min-width: 0;
+}
+
+.mobileOutcomeCopy strong,
+.mobileOutcomeCopy span {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.mobileOutcomeCopy strong {
+    color: color-mix(in srgb, var(--theme-gold-bright) 90%, white);
+    font-size: 0.96rem;
+    font-weight: 900;
+    line-height: 1.04;
+}
+
+.mobileOutcomeCopy span {
+    color: color-mix(in srgb, var(--theme-text-muted) 94%, white);
+    font-size: 0.7rem;
+    line-height: 1.18;
 }
 
 .achievementPanel,
@@ -1268,10 +1423,63 @@
 
 @media (max-width: 760px) {
     .foreground {
-        gap: 0.55rem;
+        gap: 0.46rem;
         padding-block:
             max(0.42rem, env(safe-area-inset-top, 0px))
             max(0.56rem, env(safe-area-inset-bottom, 0px));
+    }
+
+    .mobileActionDock {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        align-items: start;
+        gap: 0.22rem;
+        margin-top: 0.2rem;
+        padding: 0.28rem;
+        border-radius: calc(var(--ui-radius-lg) - 0.12rem);
+        border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 18%, transparent);
+        background:
+            linear-gradient(180deg, rgba(7, 8, 12, 0), rgba(7, 8, 12, 0.82) 34%),
+            color-mix(in srgb, var(--theme-surface-control) 90%, transparent);
+        box-shadow:
+            inset 0 1px 0 color-mix(in srgb, rgba(255, 255, 255, 0.04) 80%, transparent),
+            inset 0 0 0 1px color-mix(in srgb, var(--theme-shadow) 8%, transparent);
+    }
+
+    .mobileOutcomeCopy {
+        display: none;
+    }
+
+    .mobileActionDock :global(button) {
+        width: 100%;
+        min-height: 2.24rem;
+        padding: 0.38rem 0.54rem;
+    }
+
+    .mobileActionDock .actionButtonContent {
+        justify-items: center;
+        text-align: center;
+    }
+
+    .mobileActionDock .actionButtonContent span {
+        font-size: 0.82rem;
+        line-height: 1.04;
+    }
+
+    .mobileActionDock .actionButtonContent small {
+        display: none;
+    }
+
+    .mobileOutcomeCopy strong {
+        font-size: 0.76rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        line-height: 1;
+    }
+
+    .mobileOutcomeCopy span {
+        font-size: 0.62rem;
+        line-height: 1.08;
     }
 
     .layout {
@@ -1282,12 +1490,27 @@
     .actionPanel,
     .achievementPanel,
     .detailsPanel {
-        padding: 0.7rem;
+        padding: 0.62rem;
         transform: none;
     }
 
+    .heroPanel {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: start;
+        column-gap: 0.55rem;
+    }
+
     .heroLockup {
-        gap: 0.34rem;
+        gap: 0.12rem;
+        min-width: 0;
+    }
+
+    .heroLockup :global(h1) {
+        font-size: clamp(1.46rem, 6.2vw, 1.78rem);
+        line-height: 1.08;
+        padding-block: 0.03em;
+        overflow-wrap: normal;
     }
 
     .brandCrest,
@@ -1298,11 +1521,140 @@
     }
 
     .scoreHero {
-        margin-top: 0.15rem;
+        justify-self: end;
+        align-items: end;
+        margin-top: 0;
+        text-align: right;
+    }
+
+    .scoreHeroLabel {
+        display: none;
     }
 
     .scoreHeroValue {
-        font-size: clamp(1.82rem, 9.5vw, 2.35rem);
+        font-size: clamp(1.32rem, 6vw, 1.62rem);
+    }
+
+    .outcomeSignalStrip {
+        grid-column: 1 / -1;
+        order: 3;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.22rem;
+        margin-top: 0.18rem;
+    }
+
+    .outcomeSignalStrip span {
+        min-height: 0;
+        padding: 0.22rem 0.3rem;
+    }
+
+    .outcomeSignalStrip span[data-outcome-signal='score'] {
+        display: none;
+    }
+
+    .outcomeSignalStrip span[data-outcome-signal='pressure'] {
+        display: none;
+    }
+
+    .outcomeSignalStrip span[data-outcome-signal='build'] {
+        display: none;
+    }
+
+    .outcomeSignalStrip small {
+        font-size: 0.52rem;
+    }
+
+    .outcomeSignalStrip strong {
+        font-size: 0.74rem;
+    }
+
+    .payoffBurstStrip {
+        grid-column: 1 / -1;
+        order: 5;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.18rem;
+        margin-top: 0.2rem;
+    }
+
+    .payoffBurstStrip span[data-payoff-lane-map],
+    .payoffBurstStrip span[data-payoff-crescendo-tier],
+    .payoffBurstStrip span[data-payoff-sequence-tone] {
+        display: none;
+    }
+
+    .payoffBurstStrip span[data-payoff-burst-action] ~ span[data-payoff-burst-action] ~ span[data-payoff-burst-action] {
+        display: none;
+    }
+
+    .payoffBurstStrip span {
+        min-height: 0;
+        gap: 0.1rem 0.18rem;
+        padding: 0.24rem 0.3rem;
+        border-radius: var(--ui-radius-md);
+    }
+
+    .payoffBurstStrip small,
+    .payoffBurstStrip em,
+    .payoffBurstBeatPips {
+        display: none;
+    }
+
+    .payoffBurstStrip b {
+        padding: 0;
+        background: none;
+        font-size: 0.48rem;
+    }
+
+    .payoffBurstStrip strong {
+        font-size: 0.72rem;
+    }
+
+    .payoffBurstStrip i {
+        font-size: 0.44rem;
+        line-height: 1.08;
+        white-space: normal;
+    }
+
+    .momentumRecapGrid {
+        grid-column: 1 / -1;
+        order: 4;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.22rem;
+        margin-top: 0.2rem;
+    }
+
+    .momentumRecapGrid span {
+        min-height: 0;
+        padding: 0.24rem 0.3rem;
+    }
+
+    .momentumRecapGrid span[data-momentum-recap-tone='risk'] {
+        display: none;
+    }
+
+    .momentumRecapGrid span[data-momentum-recap-tone='build'] {
+        display: none;
+    }
+
+    .momentumRecapGrid span[data-momentum-recap-empty='true'] {
+        display: none;
+    }
+
+    .momentumRecapGrid small {
+        font-size: 0.5rem;
+    }
+
+    .momentumRecapGrid strong {
+        font-size: 0.76rem;
+    }
+
+    .momentumRecapGrid em {
+        display: -webkit-box;
+        font-size: 0.58rem;
+        line-height: 1.12;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
     }
 
     .copy,
@@ -1310,6 +1662,10 @@
     .achievementItem span {
         font-size: 0.88rem;
         line-height: 1.42;
+    }
+
+    .copy {
+        display: none;
     }
 
     .metaStrip {
@@ -1322,20 +1678,19 @@
     }
 
     .summaryGrid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 0.42rem;
-        margin-top: 0.55rem;
+        display: none;
     }
 
     .sideRail {
-        gap: 0.55rem;
+        gap: 0.42rem;
     }
 
     .actionPanel:first-child {
-        order: -1;
-        position: sticky;
-        top: max(0.35rem, env(safe-area-inset-top, 0px));
-        z-index: 2;
+        display: none;
+    }
+
+    .actionPanel:last-child {
+        padding: 0.48rem;
     }
 
     .actionHeader {
@@ -1349,7 +1704,116 @@
 
     .actionButtons {
         grid-template-columns: repeat(2, minmax(0, 1fr));
-        margin-top: 0.62rem;
+        margin-top: 0.48rem;
+    }
+
+    .actionPanel:last-child .panelCopy {
+        display: none;
+    }
+
+    .actionPanel:last-child .panelKicker {
+        font-size: 0.54rem;
+        letter-spacing: 0.14em;
+    }
+
+    .actionPanel:last-child .panelHeading {
+        margin-top: 0.1rem;
+        font-size: 0.9rem;
+        line-height: 1.08;
+    }
+
+    .journalRows {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0.2rem;
+        margin-top: 0.28rem;
+    }
+
+    .journalRow:nth-child(n + 2) {
+        display: none;
+    }
+
+    .journalRow {
+        gap: 0.04rem;
+        min-width: 0;
+        padding: 0.24rem 0.3rem;
+    }
+
+    .journalRow strong {
+        overflow: hidden;
+        font-size: 0.54rem;
+        line-height: 1;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .journalRow span {
+        display: -webkit-box;
+        overflow: hidden;
+        font-size: 0.64rem;
+        line-height: 1.12;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+    }
+
+    .snapshotNextLoop {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0.22rem;
+        margin-top: 0.34rem;
+    }
+
+    .snapshotNextLoop > div {
+        display: grid;
+        gap: 0.1rem;
+        min-width: 0;
+        padding: 0.34rem 0.38rem;
+        border: 1px solid color-mix(in srgb, var(--theme-cyan-bright) 26%, transparent);
+        border-radius: var(--ui-radius-sm);
+        background:
+            linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent), transparent 76%),
+            var(--theme-surface-control);
+    }
+
+    .snapshotNextLoop > div[data-snapshot-next-loop-row='next_goal'] {
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 28%, transparent);
+        background:
+            linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 8%, transparent), transparent 76%),
+            var(--theme-surface-control);
+    }
+
+    .snapshotNextLoop strong,
+    .snapshotNextLoop span,
+    .snapshotNextLoop small {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .snapshotNextLoop strong {
+        color: color-mix(in srgb, var(--theme-text) 94%, white);
+        font-size: 0.58rem;
+        font-weight: 920;
+        line-height: 1;
+        text-transform: uppercase;
+        white-space: nowrap;
+    }
+
+    .snapshotNextLoop span {
+        color: color-mix(in srgb, var(--theme-gold-bright) 84%, white);
+        font-size: 0.68rem;
+        font-weight: 900;
+        line-height: 1.04;
+        white-space: nowrap;
+    }
+
+    .snapshotNextLoop small {
+        display: -webkit-box;
+        color: color-mix(in srgb, var(--theme-text-muted) 92%, white);
+        font-size: 0.56rem;
+        font-weight: 760;
+        line-height: 1.1;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
     }
 
     .ghostSteps {
@@ -1358,12 +1822,755 @@
 }
 
 @media (max-width: 430px) {
-    .summaryGrid {
-        grid-template-columns: 1fr;
+    .actionButtons {
+        gap: var(--theme-space-sm);
+    }
+
+    .mobileOutcomeCopy span {
+        display: none;
+    }
+
+    .payoffBurstStrip {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+/* UI-CLEANUP-047: phone game-over should show the restart decision and next-run hook, not risk telemetry. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .momentumRecapGrid span[data-momentum-recap-id='pressure'],
+    .momentumRecapGrid span[data-momentum-recap-tone='risk'],
+    .payoffBurstStrip span[data-payoff-burst-action='Reduce risk'],
+    .payoffBurstStrip span[data-payoff-burst-tone='risk'] {
+        display: none !important;
+    }
+
+    .payoffBurstStrip span[data-payoff-burst-tone='chain'],
+    .payoffBurstStrip span[data-payoff-burst-tone='reward'],
+    .payoffBurstStrip span[data-payoff-burst-tone='build'] {
+        display: inline-grid !important;
+    }
+
+    .payoffBurstStrip {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        max-height: 5.4rem;
+        overflow: hidden;
+    }
+
+    .momentumRecapGrid {
+        max-height: 7.2rem;
+        overflow: hidden;
+    }
+
+    .actionPanel:last-child {
+        padding: 0.42rem;
+    }
+
+    .snapshotNextLoop > div {
+        padding: 0.28rem 0.34rem;
+    }
+}
+
+/* UI-CLEANUP-058: phone game-over should feel like a restart console, not two heavy receipt cards. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .foreground {
+        gap: 0.34rem;
+        padding-block:
+            max(0.38rem, env(safe-area-inset-top, 0px))
+            max(0.48rem, env(safe-area-inset-bottom, 0px));
+    }
+
+    .layout {
+        gap: 0.42rem;
+    }
+
+    .heroPanel,
+    .actionPanel,
+    .achievementPanel,
+    .detailsPanel {
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 11%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 48%, transparent);
+        box-shadow: inset 0 1px 0 color-mix(in srgb, var(--theme-text) 4%, transparent);
+    }
+
+    .heroPanel {
+        padding: 0.52rem 0.56rem 0.58rem;
+        column-gap: 0.42rem;
+        border-radius: var(--ui-radius-md);
+    }
+
+    .heroLockup :global(h1) {
+        font-size: clamp(1.26rem, 5.5vw, 1.56rem);
+        line-height: 1.16;
+    }
+
+    .scoreHeroValue {
+        font-size: clamp(1.12rem, 5.2vw, 1.42rem);
+    }
+
+    .mobileActionDock {
+        gap: 0.16rem;
+        margin-top: 0.16rem;
+        padding: 0.18rem;
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 10%, transparent);
+        border-radius: var(--ui-radius-sm);
+        background: color-mix(in srgb, var(--theme-void) 42%, transparent);
+        box-shadow: none;
+    }
+
+    .mobileActionDock :global(button) {
+        min-height: 2.04rem;
+        padding: 0.3rem 0.42rem;
+    }
+
+    .mobileActionDock .actionButtonContent span {
+        font-size: 0.76rem;
+    }
+
+    .outcomeSignalStrip,
+    .momentumRecapGrid,
+    .payoffBurstStrip {
+        gap: 0.14rem;
+        margin-top: 0.14rem;
+    }
+
+    .outcomeSignalStrip span,
+    .momentumRecapGrid span,
+    .payoffBurstStrip span {
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 8%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 34%, transparent);
+        box-shadow: none;
+    }
+
+    .outcomeSignalStrip span {
+        padding: 0.16rem 0.24rem;
+    }
+
+    .outcomeSignalStrip small {
+        font-size: 0.46rem;
+    }
+
+    .outcomeSignalStrip strong {
+        font-size: 0.66rem;
+    }
+
+    .momentumRecapGrid span {
+        padding: 0.18rem 0.26rem;
+    }
+
+    .momentumRecapGrid small {
+        font-size: 0.46rem;
+    }
+
+    .momentumRecapGrid strong {
+        font-size: 0.68rem;
+    }
+
+    .momentumRecapGrid em {
+        font-size: 0.52rem;
+    }
+
+    .payoffBurstStrip {
+        max-height: 4.8rem;
+    }
+
+    .payoffBurstStrip span {
+        padding: 0.18rem 0.26rem;
+    }
+
+    .payoffBurstStrip b {
+        font-size: 0.44rem;
+    }
+
+    .payoffBurstStrip strong {
+        font-size: 0.64rem;
+    }
+
+    .payoffBurstStrip i {
+        font-size: 0.4rem;
+    }
+
+    .sideRail {
+        gap: 0.32rem;
+    }
+
+    .actionPanel:last-child {
+        padding: 0.38rem;
+        border-radius: var(--ui-radius-md);
+        background: color-mix(in srgb, var(--theme-void) 38%, transparent);
+    }
+
+    .actionPanel:last-child .panelKicker {
+        color: color-mix(in srgb, var(--theme-text-muted) 82%, white);
+        font-size: 0.48rem;
+        letter-spacing: 0.12em;
+    }
+
+    .actionPanel:last-child .panelHeading {
+        margin-top: 0.08rem;
+        font-size: 0.82rem;
+    }
+
+    .journalRows {
+        margin-top: 0.22rem;
+    }
+
+    .journalRow {
+        padding: 0.2rem 0.28rem;
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 8%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 32%, transparent);
+    }
+
+    .journalRow strong {
+        font-size: 0.48rem;
+    }
+
+    .journalRow span {
+        font-size: 0.58rem;
+    }
+
+    .snapshotNextLoop {
+        gap: 0.16rem;
+        margin-top: 0.24rem;
+    }
+
+    .snapshotNextLoop > div,
+    .snapshotNextLoop > div[data-snapshot-next-loop-row='next_goal'] {
+        padding: 0.24rem 0.3rem;
+        border-color: color-mix(in srgb, var(--theme-cyan-bright) 10%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 32%, transparent);
+    }
+
+    .snapshotNextLoop span {
+        font-size: 0.62rem;
+    }
+
+    .snapshotNextLoop small {
+        font-size: 0.52rem;
+        -webkit-line-clamp: 2;
+    }
+}
+
+/* UI-CLEANUP-073: phone game-over should sit like a centered restart console, not cling to the top edge. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .foreground {
+        justify-content: center;
+        gap: 0.28rem;
+        padding-block:
+            max(1.15rem, env(safe-area-inset-top, 0px))
+            max(1.15rem, env(safe-area-inset-bottom, 0px));
+    }
+
+    .layout {
+        width: 100%;
+        max-width: 23.25rem;
+        margin: 0 auto;
+    }
+
+    .heroPanel,
+    .actionPanel {
+        border-color: color-mix(in srgb, var(--theme-text-muted) 10%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 42%, transparent);
+        box-shadow: none;
+    }
+
+    .heroPanel {
+        padding: 0.46rem 0.5rem 0.5rem;
+    }
+
+    .mobileActionDock {
+        margin-top: 0.12rem;
+    }
+
+    .actionPanel:last-child {
+        padding: 0.34rem;
+    }
+
+    .journalRow,
+    .snapshotNextLoop > div,
+    .snapshotNextLoop > div[data-snapshot-next-loop-row='next_goal'] {
+        border-color: color-mix(in srgb, var(--theme-text-muted) 8%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 26%, transparent);
+    }
+}
+
+/* UI-CLEANUP-082: desktop game-over is a restart decision, not a full receipt dashboard. */
+@media (min-width: 1100px) {
+    .foreground {
+        width: min(1120px, 100%);
+        gap: 0.62rem;
+        padding-block: max(1.05rem, env(safe-area-inset-top, 0px)) max(0.82rem, env(safe-area-inset-bottom, 0px));
+    }
+
+    .layout {
+        grid-template-columns: minmax(0, 1fr) minmax(310px, 0.66fr);
+        gap: 0.68rem;
+    }
+
+    .heroPanel,
+    .actionPanel {
+        transform: none;
+    }
+
+    .heroPanel {
+        padding: 1rem 1.12rem !important;
+    }
+
+    .actionPanel {
+        padding: 0.86rem 0.92rem !important;
+    }
+
+    .heroLockup {
+        gap: 0.32rem;
+    }
+
+    .brandCrest,
+    .divider,
+    .copy,
+    .metaStrip,
+    .summaryGrid,
+    .note {
+        display: none !important;
+    }
+
+    .heroLockup :global(h1) {
+        max-width: 100%;
+        font-size: clamp(2.35rem, 4.15vw, 3.28rem);
+        line-height: 1.02;
+    }
+
+    .scoreHero {
+        margin-top: 0.24rem;
+    }
+
+    .scoreHeroValue {
+        font-size: clamp(2rem, 4.1vw, 2.6rem);
+    }
+
+    .outcomeSignalStrip {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 0.32rem;
+        margin-top: 0.48rem;
+    }
+
+    .outcomeSignalStrip span {
+        min-height: 2.42rem;
+        padding: 0.28rem 0.38rem;
+    }
+
+    .outcomeSignalStrip small {
+        font-size: 0.48rem;
+    }
+
+    .outcomeSignalStrip strong {
+        font-size: 0.82rem;
+    }
+
+    .outcomeSignalStrip span[data-outcome-signal='score'] {
+        display: none;
+    }
+
+    .payoffBurstStrip {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.28rem;
+        margin-top: 0.42rem;
+        max-height: 6.8rem;
+        overflow: hidden;
+    }
+
+    .payoffBurstStrip span[data-payoff-lane-map],
+    .payoffBurstStrip span[data-payoff-crescendo-tier],
+    .payoffBurstStrip span[data-payoff-sequence-tone],
+    .payoffBurstStrip em,
+    .payoffBurstBeatPips {
+        display: none !important;
+    }
+
+    .payoffBurstStrip span[data-payoff-burst-stack-tone],
+    .payoffBurstStrip span[data-payoff-burst-action] {
+        display: inline-grid;
+        min-height: 2.18rem;
+        padding: 0.28rem 0.38rem;
+        border-radius: var(--ui-radius-sm);
+        box-shadow: none;
+    }
+
+    .payoffBurstStrip span[data-payoff-burst-action]:nth-of-type(n + 5) {
+        display: none;
+    }
+
+    .payoffBurstStrip b {
+        padding: 0;
+        border: 0;
+        background: none;
+        font-size: 0.46rem;
+    }
+
+    .payoffBurstStrip small {
+        font-size: 0.48rem;
+    }
+
+    .payoffBurstStrip strong {
+        font-size: 0.72rem;
+    }
+
+    .payoffBurstStrip i {
+        font-size: 0.46rem;
+        white-space: nowrap;
+    }
+
+    .momentumRecapGrid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.3rem;
+        margin-top: 0.42rem;
+    }
+
+    .momentumRecapGrid span {
+        min-height: 2.82rem;
+        padding: 0.32rem 0.4rem;
+    }
+
+    .momentumRecapGrid span[data-momentum-recap-id='pressure'],
+    .momentumRecapGrid span[data-momentum-recap-id='build'] {
+        display: none;
+    }
+
+    .momentumRecapGrid small {
+        font-size: 0.48rem;
+    }
+
+    .momentumRecapGrid strong {
+        font-size: 0.78rem;
+    }
+
+    .momentumRecapGrid em {
+        display: -webkit-box;
+        font-size: 0.58rem;
+        line-height: 1.1;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+    }
+
+    .actionHeader {
+        gap: 0.54rem;
+    }
+
+    .actionSeal {
+        width: 2.15rem;
+        height: 2.15rem;
+    }
+
+    .panelKicker {
+        font-size: 0.56rem;
+    }
+
+    .panelHeading {
+        font-size: 1.02rem;
+        line-height: 1.06;
     }
 
     .actionButtons {
-        gap: var(--theme-space-sm);
+        gap: 0.38rem;
+        margin-top: 0.58rem;
+    }
+
+    .desktopActionButton {
+        min-height: 2.58rem !important;
+        padding-block: 0.38rem !important;
+    }
+
+    .actionButtonContent span {
+        font-size: 0.78rem;
+    }
+
+    .actionButtonContent small {
+        display: none;
+    }
+
+    .nextRunGrid {
+        gap: 0.28rem;
+        margin-top: 0.5rem;
+    }
+
+    .nextRunCard {
+        padding: 0.34rem 0.42rem;
+    }
+
+    .nextRunCard strong {
+        font-size: 0.74rem;
+    }
+
+    .nextRunCard span,
+    .nextRunCard small {
+        font-size: 0.62rem;
+    }
+
+    .nextRunCard p {
+        display: none;
+    }
+
+    .sideRail {
+        gap: 0.54rem;
+    }
+
+    .sideRail .actionPanel:last-child {
+        max-height: 15.5rem;
+        overflow: hidden;
+    }
+
+    .sideRail .actionPanel:last-child .panelCopy {
+        display: none;
+    }
+
+    .journalRows {
+        gap: 0.28rem;
+        margin-top: 0.42rem;
+    }
+
+    .journalRow {
+        padding: 0.34rem 0.42rem;
+    }
+
+    .journalRow:nth-child(n + 3) {
+        display: none;
+    }
+
+    .journalRow strong {
+        font-size: 0.56rem;
+    }
+
+    .journalRow span {
+        display: -webkit-box;
+        overflow: hidden;
+        font-size: 0.66rem;
+        line-height: 1.12;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+    }
+}
+
+/* UI-CLEANUP-087: short landscape game-over is a restart console, not a scrolling receipt. */
+@media (max-height: 520px) and (orientation: landscape) {
+    .foreground {
+        width: min(100%, 980px);
+        gap: 0.34rem;
+        padding:
+            max(0.42rem, env(safe-area-inset-top, 0px))
+            max(0.58rem, env(safe-area-inset-right, 0px))
+            max(0.42rem, env(safe-area-inset-bottom, 0px))
+            max(0.58rem, env(safe-area-inset-left, 0px));
+        overflow-y: auto;
+    }
+
+    .layout {
+        grid-template-columns: minmax(0, 1fr) minmax(15rem, 0.62fr);
+        gap: 0.42rem;
+        align-items: start;
+    }
+
+    .heroPanel,
+    .actionPanel {
+        padding: 0.52rem 0.58rem !important;
+        border-radius: var(--ui-radius-md);
+        box-shadow: none;
+        transform: none;
+    }
+
+    .brandCrest,
+    .divider,
+    .copy,
+    .metaStrip,
+    .summaryGrid,
+    .note,
+    .achievementPanel,
+    .detailsPanel,
+    .mobileOutcomeCopy {
+        display: none !important;
+    }
+
+    .heroLockup {
+        gap: 0.16rem;
+    }
+
+    .heroLockup :global(h1) {
+        max-width: 100%;
+        font-size: clamp(1.42rem, 6.2vh, 1.9rem);
+        line-height: 0.98;
+    }
+
+    .scoreHero {
+        margin-top: 0.08rem;
+    }
+
+    .scoreHeroLabel {
+        font-size: 0.48rem;
+    }
+
+    .scoreHeroValue {
+        font-size: clamp(1.18rem, 5.6vh, 1.62rem);
+    }
+
+    .mobileActionDock {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.16rem;
+        margin-top: 0.16rem;
+        padding: 0.18rem;
+        border-radius: var(--ui-radius-sm);
+        box-shadow: none;
+    }
+
+    .mobileActionDock :global(button) {
+        min-height: 2rem;
+        padding: 0.24rem 0.36rem;
+    }
+
+    .mobileActionDock .actionButtonContent span {
+        font-size: 0.7rem;
+    }
+
+    .actionButtonContent small {
+        display: none !important;
+    }
+
+    .outcomeSignalStrip,
+    .payoffBurstStrip,
+    .momentumRecapGrid {
+        gap: 0.16rem;
+        margin-top: 0.2rem;
+    }
+
+    .outcomeSignalStrip {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .outcomeSignalStrip span[data-outcome-signal='score'],
+    .outcomeSignalStrip span[data-outcome-signal='pressure'] {
+        display: none;
+    }
+
+    .outcomeSignalStrip span,
+    .payoffBurstStrip span,
+    .momentumRecapGrid span {
+        min-height: 0;
+        padding: 0.18rem 0.26rem;
+        border-radius: var(--ui-radius-sm);
+        box-shadow: none;
+    }
+
+    .outcomeSignalStrip small,
+    .momentumRecapGrid small,
+    .payoffBurstStrip small,
+    .payoffBurstStrip em,
+    .payoffBurstBeatPips {
+        display: none !important;
+    }
+
+    .outcomeSignalStrip strong,
+    .momentumRecapGrid strong,
+    .payoffBurstStrip strong {
+        font-size: 0.62rem;
+        line-height: 1;
+    }
+
+    .payoffBurstStrip {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        max-height: 3.8rem;
+        overflow: hidden;
+    }
+
+    .payoffBurstStrip span[data-payoff-lane-map],
+    .payoffBurstStrip span[data-payoff-crescendo-tier],
+    .payoffBurstStrip span[data-payoff-sequence-tone],
+    .payoffBurstStrip span[data-payoff-burst-tone='risk'] {
+        display: none !important;
+    }
+
+    .payoffBurstStrip b,
+    .payoffBurstStrip i {
+        font-size: 0.46rem;
+        line-height: 1;
+    }
+
+    .momentumRecapGrid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        max-height: 4.2rem;
+        overflow: hidden;
+    }
+
+    .momentumRecapGrid span[data-momentum-recap-tone='risk'],
+    .momentumRecapGrid span[data-momentum-recap-id='pressure'],
+    .momentumRecapGrid span[data-momentum-recap-id='build'] {
+        display: none !important;
+    }
+
+    .momentumRecapGrid em {
+        display: none;
+    }
+
+    .sideRail {
+        gap: 0.32rem;
+    }
+
+    .sideRail .actionPanel:first-child {
+        display: block;
+        max-height: 9rem;
+        overflow: hidden;
+    }
+
+    .sideRail .actionPanel:first-child .actionButtons {
+        display: none !important;
+    }
+
+    .sideRail .actionPanel:last-child {
+        display: none !important;
+        max-height: 9rem;
+        overflow: hidden;
+    }
+
+    .actionHeader,
+    .actionSeal,
+    .panelKicker,
+    .panelCopy {
+        display: none !important;
+    }
+
+    .panelHeading {
+        margin: 0;
+        font-size: 0.86rem;
+        line-height: 1;
+    }
+
+    .journalRows {
+        gap: 0.18rem;
+        margin-top: 0.26rem;
+    }
+
+    .journalRow {
+        padding: 0.2rem 0.28rem;
+    }
+
+    .journalRow:nth-child(n + 2) {
+        display: none;
+    }
+
+    .nextRunGrid {
+        gap: 0.18rem;
+        margin-top: 0;
+    }
+
+    .nextRunCard {
+        padding: 0.28rem 0.34rem;
+    }
+
+    .nextRunCard:nth-child(n + 3) {
+        display: none !important;
+    }
+
+    .nextRunCard small,
+    .nextRunCard p,
+    .snapshotNextLoop {
+        display: none !important;
     }
 }
 
@@ -1378,4 +2585,633 @@
     clip: rect(0, 0, 0, 0);
     white-space: nowrap;
     border: 0;
+}
+
+/* UI-CLEANUP-100: short-landscape game over is a restart console, not a two-column receipt. */
+@media (max-height: 520px) and (orientation: landscape) {
+    .foreground {
+        justify-content: center;
+        width: min(calc(100vw - 1rem), 52rem);
+        padding:
+            max(0.42rem, env(safe-area-inset-top, 0px))
+            max(0.5rem, env(safe-area-inset-right, 0px))
+            max(0.42rem, env(safe-area-inset-bottom, 0px))
+            max(0.5rem, env(safe-area-inset-left, 0px));
+        overflow: hidden;
+    }
+
+    .layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0;
+        width: 100%;
+    }
+
+    .sideRail {
+        display: none !important;
+    }
+
+    .heroPanel {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(4.6rem, 0.18fr) minmax(15rem, 0.72fr);
+        grid-template-areas:
+            "title score actions"
+            "signals signals signals"
+            "momentum momentum momentum";
+        align-items: center;
+        gap: 0.46rem 0.58rem;
+        max-height: calc(100dvh - 1rem);
+        padding: 0.72rem 0.8rem !important;
+        overflow: hidden;
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 20%, transparent);
+        background:
+            linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 7%, transparent), transparent 44%),
+            color-mix(in srgb, var(--theme-panel-solid) 76%, var(--theme-void) 24%);
+    }
+
+    .heroLockup {
+        grid-area: title;
+        min-width: 0;
+        gap: 0.12rem;
+    }
+
+    .heroLockup :global(h1) {
+        max-width: 100%;
+        overflow: hidden;
+        font-size: clamp(1.42rem, 6vh, 1.95rem);
+        line-height: 0.98;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .scoreHero {
+        grid-area: score;
+        justify-self: center;
+        min-width: 0;
+        margin-top: 0;
+        align-items: center;
+    }
+
+    .scoreHeroLabel {
+        font-size: 0.46rem;
+        letter-spacing: 0.12em;
+    }
+
+    .scoreHeroValue {
+        font-size: clamp(1.18rem, 5.8vh, 1.7rem);
+    }
+
+    .mobileActionDock {
+        grid-area: actions;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.36rem;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+    }
+
+    .mobileActionDock :global(button) {
+        min-height: 2.38rem;
+        padding: 0.34rem 0.48rem;
+        overflow: hidden;
+    }
+
+    .mobileActionDock .actionButtonContent span {
+        overflow: hidden;
+        font-size: 0.76rem;
+        line-height: 1;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .outcomeSignalStrip {
+        grid-area: signals;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.34rem;
+        margin-top: 0;
+    }
+
+    .outcomeSignalStrip span {
+        min-height: 2.05rem;
+        padding: 0.26rem 0.4rem;
+        overflow: hidden;
+        border-radius: var(--ui-radius-sm);
+        box-shadow: none;
+    }
+
+    .outcomeSignalStrip span[data-outcome-signal='score'],
+    .outcomeSignalStrip span[data-outcome-signal='pressure'] {
+        display: none !important;
+    }
+
+    .outcomeSignalStrip small {
+        display: block !important;
+        overflow: hidden;
+        font-size: 0.46rem;
+        line-height: 1;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .outcomeSignalStrip strong {
+        overflow: hidden;
+        font-size: 0.74rem;
+        line-height: 1.05;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .payoffBurstStrip {
+        display: none !important;
+    }
+
+    .momentumRecapGrid {
+        grid-area: momentum;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.34rem;
+        max-height: none;
+        margin-top: 0;
+        overflow: hidden;
+    }
+
+    .momentumRecapGrid span {
+        display: grid;
+        min-height: 2.28rem;
+        padding: 0.28rem 0.4rem;
+        overflow: hidden;
+        border-radius: var(--ui-radius-sm);
+        box-shadow: none;
+    }
+
+    .momentumRecapGrid span[data-momentum-recap-id='pressure'],
+    .momentumRecapGrid span[data-momentum-recap-id='build'] {
+        display: none !important;
+    }
+
+    .momentumRecapGrid small {
+        display: none !important;
+    }
+
+    .momentumRecapGrid strong {
+        overflow: hidden;
+        font-size: 0.78rem;
+        line-height: 1.04;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .momentumRecapGrid em {
+        display: -webkit-box;
+        max-height: 1.4rem;
+        overflow: hidden;
+        font-size: 0.58rem;
+        font-style: normal;
+        font-weight: 750;
+        line-height: 1.12;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+    }
+}
+
+/* UI-CLEANUP-105: portrait game over is a restart console with one compact recap, not a receipt stack. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .foreground {
+        justify-content: center;
+        padding:
+            max(1.1rem, env(safe-area-inset-top, 0px))
+            max(0.66rem, env(safe-area-inset-right, 0px))
+            max(1.1rem, env(safe-area-inset-bottom, 0px))
+            max(0.66rem, env(safe-area-inset-left, 0px));
+    }
+
+    .layout {
+        gap: 0.42rem;
+        width: min(100%, 23.5rem);
+    }
+
+    .heroPanel,
+    .sideRail .actionPanel {
+        border-color: color-mix(in srgb, var(--theme-text-muted) 9%, transparent);
+        background:
+            linear-gradient(180deg, color-mix(in srgb, var(--theme-gold-bright) 4%, transparent), transparent 26%),
+            color-mix(in srgb, var(--theme-panel-solid) 74%, var(--theme-void) 26%);
+        box-shadow:
+            0 12px 30px color-mix(in srgb, var(--theme-shadow) 28%, transparent),
+            inset 0 1px 0 color-mix(in srgb, white 4%, transparent);
+    }
+
+    .heroPanel {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: start;
+        gap: 0.26rem 0.44rem;
+        max-height: none;
+        padding: 0.62rem 0.68rem !important;
+    }
+
+    .brandCrest,
+    .divider,
+    .copy,
+    .metaStrip,
+    .summaryGrid,
+    .note,
+    .mobileOutcomeCopy {
+        display: none !important;
+    }
+
+    .heroLockup {
+        grid-column: 1;
+        min-width: 0;
+        gap: 0;
+    }
+
+    .heroLockup :global(h1) {
+        max-width: 100%;
+        overflow: hidden;
+        font-size: clamp(1.3rem, 7vw, 1.62rem);
+        line-height: 0.98;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .scoreHero {
+        grid-column: 2;
+        align-self: center;
+        min-width: 0;
+        margin: 0;
+    }
+
+    .scoreHeroLabel {
+        display: none;
+    }
+
+    .scoreHeroValue {
+        font-size: clamp(1.08rem, 6vw, 1.42rem);
+        line-height: 1;
+    }
+
+    .mobileActionDock {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.22rem;
+        margin: 0.1rem 0 0;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+    }
+
+    .mobileActionDock :global(button) {
+        min-height: 2.36rem;
+        padding: 0.32rem 0.38rem;
+    }
+
+    .mobileActionDock .actionButtonContent span {
+        overflow: hidden;
+        font-size: 0.74rem;
+        line-height: 1;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .outcomeSignalStrip {
+        grid-column: 1 / -1;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.14rem;
+        margin-top: 0.1rem;
+    }
+
+    .outcomeSignalStrip span[data-outcome-signal='score'],
+    .outcomeSignalStrip span[data-outcome-signal='pressure'],
+    .outcomeSignalStrip span[data-outcome-signal='build'] {
+        display: none !important;
+    }
+
+    .outcomeSignalStrip span {
+        min-height: 1.84rem;
+        padding: 0.2rem 0.28rem;
+        border-color: color-mix(in srgb, var(--theme-text-muted) 9%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 28%, transparent);
+        box-shadow: none;
+    }
+
+    .outcomeSignalStrip small {
+        display: block !important;
+        overflow: hidden;
+        font-size: 0.42rem;
+        line-height: 1;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .outcomeSignalStrip strong {
+        overflow: hidden;
+        font-size: 0.66rem;
+        line-height: 1;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .payoffBurstStrip {
+        grid-column: 1 / -1;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.14rem;
+        max-height: 4rem;
+        margin-top: 0.1rem;
+        overflow: hidden;
+    }
+
+    .payoffBurstStrip span[data-payoff-lane-map],
+    .payoffBurstStrip span[data-payoff-burst-stack-tone],
+    .payoffBurstStrip span[data-payoff-crescendo-tier],
+    .payoffBurstStrip span[data-payoff-sequence-tone],
+    .payoffBurstStrip span[data-payoff-burst-tone='risk'] {
+        display: none !important;
+    }
+
+    .payoffBurstStrip span[data-payoff-burst-action] {
+        display: inline-grid !important;
+        min-height: 1.76rem;
+        padding: 0.18rem 0.26rem;
+        border-color: color-mix(in srgb, var(--theme-text-muted) 9%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 24%, transparent);
+        box-shadow: none;
+    }
+
+    .payoffBurstStrip span[data-payoff-burst-tone='risk'] {
+        display: none !important;
+    }
+
+    .payoffBurstStrip small,
+    .payoffBurstStrip em,
+    .payoffBurstBeatPips {
+        display: none !important;
+    }
+
+    .payoffBurstStrip b,
+    .payoffBurstStrip i,
+    .payoffBurstStrip strong {
+        overflow: hidden;
+        line-height: 1;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .payoffBurstStrip b,
+    .payoffBurstStrip i {
+        font-size: 0.44rem;
+    }
+
+    .payoffBurstStrip strong {
+        font-size: 0.6rem;
+    }
+
+    .momentumRecapGrid {
+        grid-column: 1 / -1;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.14rem;
+        max-height: 3.8rem;
+        margin-top: 0.1rem;
+        overflow: hidden;
+    }
+
+    .momentumRecapGrid span {
+        min-height: 1.78rem;
+        padding: 0.2rem 0.28rem;
+        border-color: color-mix(in srgb, var(--theme-text-muted) 9%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 24%, transparent);
+        box-shadow: none;
+    }
+
+    .momentumRecapGrid span[data-momentum-recap-id='pressure'],
+    .momentumRecapGrid span[data-momentum-recap-id='build'],
+    .momentumRecapGrid span[data-momentum-recap-tone='risk'] {
+        display: none !important;
+    }
+
+    .momentumRecapGrid small {
+        display: none !important;
+    }
+
+    .momentumRecapGrid strong {
+        overflow: hidden;
+        font-size: 0.64rem;
+        line-height: 1;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .momentumRecapGrid em {
+        display: -webkit-box;
+        max-height: 1.12rem;
+        overflow: hidden;
+        font-size: 0.48rem;
+        font-style: normal;
+        line-height: 1.08;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+    }
+
+    .sideRail {
+        gap: 0.32rem;
+    }
+
+    .sideRail .actionPanel:first-child {
+        display: none !important;
+    }
+
+    .sideRail .actionPanel:last-child {
+        display: block !important;
+        max-height: 12.8rem;
+        padding: 0.52rem 0.62rem !important;
+        overflow: hidden;
+    }
+
+    .panelKicker,
+    .panelCopy,
+    .actionHeader,
+    .actionSeal {
+        display: none !important;
+    }
+
+    .panelHeading {
+        margin: 0;
+        font-size: 0.88rem;
+        line-height: 1;
+    }
+
+    .journalRows {
+        gap: 0.16rem;
+        margin-top: 0.32rem;
+    }
+
+    .journalRow {
+        padding: 0.2rem 0.28rem;
+        box-shadow: none;
+    }
+
+    .journalRow:nth-child(n + 2) {
+        display: none !important;
+    }
+
+    .snapshotNextLoop {
+        display: grid !important;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0.16rem;
+        margin-top: 0.24rem;
+    }
+
+    .snapshotNextLoop > * {
+        min-height: 2.1rem;
+        padding: 0.22rem 0.3rem;
+        overflow: hidden;
+        border-color: color-mix(in srgb, var(--theme-text-muted) 9%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 26%, transparent);
+        box-shadow: none;
+    }
+
+    .snapshotNextLoop strong,
+    .snapshotNextLoop span,
+    .snapshotNextLoop small {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .snapshotNextLoop small {
+        display: block;
+        max-height: 1.12rem;
+        font-size: 0.48rem;
+        line-height: 1.08;
+    }
+}
+
+/* UI-CLEANUP-116: current phone result pass - one restart console, not a stacked receipt wall. */
+@media (max-width: 760px) and (orientation: portrait) {
+    .foreground {
+        justify-content: flex-start;
+        padding:
+            max(8.2rem, env(safe-area-inset-top, 0px))
+            max(0.66rem, env(safe-area-inset-right, 0px))
+            max(0.86rem, env(safe-area-inset-bottom, 0px))
+            max(0.66rem, env(safe-area-inset-left, 0px));
+    }
+
+    .layout {
+        gap: 0.28rem;
+        width: min(100%, 23.25rem);
+    }
+
+    .heroPanel,
+    .sideRail .actionPanel {
+        border-color: color-mix(in srgb, var(--theme-text-muted) 8%, transparent);
+        background: color-mix(in srgb, var(--theme-panel-solid) 66%, var(--theme-void) 34%);
+        box-shadow:
+            0 8px 24px color-mix(in srgb, var(--theme-shadow) 26%, transparent),
+            inset 0 1px 0 color-mix(in srgb, white 3%, transparent);
+    }
+
+    .heroPanel {
+        gap: 0.2rem 0.36rem;
+        padding: 0.48rem 0.54rem !important;
+    }
+
+    .heroLockup :global(h1) {
+        font-size: clamp(1.08rem, 5.8vw, 1.36rem);
+        line-height: 1.18;
+    }
+
+    .scoreHeroValue {
+        font-size: clamp(0.95rem, 4.8vw, 1.18rem);
+    }
+
+    .mobileActionDock {
+        gap: 0.18rem;
+        margin-top: 0.04rem;
+    }
+
+    .mobileActionDock :global(button) {
+        min-height: 2.24rem;
+        padding: 0.28rem 0.34rem;
+    }
+
+    .outcomeSignalStrip,
+    .payoffBurstStrip,
+    .momentumRecapGrid {
+        gap: 0.1rem;
+        margin-top: 0.04rem;
+    }
+
+    .outcomeSignalStrip span,
+    .payoffBurstStrip span[data-payoff-burst-action],
+    .momentumRecapGrid span {
+        min-height: 1.58rem;
+        padding: 0.16rem 0.22rem;
+        border-color: color-mix(in srgb, var(--theme-text-muted) 7%, transparent);
+        background: color-mix(in srgb, var(--theme-void) 18%, transparent);
+    }
+
+    .outcomeSignalStrip strong,
+    .momentumRecapGrid strong {
+        font-size: 0.58rem;
+    }
+
+    .payoffBurstStrip {
+        max-height: 3.35rem;
+    }
+
+    .payoffBurstStrip strong {
+        font-size: 0.54rem;
+    }
+
+    .momentumRecapGrid {
+        max-height: 3.35rem;
+    }
+
+    .momentumRecapGrid em {
+        max-height: 1rem;
+        font-size: 0.44rem;
+    }
+
+    .sideRail {
+        gap: 0.24rem;
+    }
+
+    .sideRail .actionPanel:last-child {
+        max-height: 11.25rem;
+        padding: 0.44rem 0.52rem !important;
+    }
+
+    .panelHeading {
+        font-size: 0.78rem;
+    }
+
+    .journalRows {
+        margin-top: 0.24rem;
+    }
+
+    .journalRow {
+        padding: 0.16rem 0.24rem;
+    }
+
+    .snapshotNextLoop {
+        gap: 0.12rem;
+        margin-top: 0.18rem;
+    }
+
+    .snapshotNextLoop > * {
+        min-height: 1.82rem;
+        padding: 0.18rem 0.26rem;
+    }
+
+    .snapshotNextLoop small {
+        max-height: 1rem;
+        font-size: 0.44rem;
+    }
 }

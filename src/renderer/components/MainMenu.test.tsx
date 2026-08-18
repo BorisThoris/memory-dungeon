@@ -1,12 +1,13 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { createDefaultSaveData } from '../../shared/save-data';
 import MainMenu from './MainMenu';
 
 vi.mock('./MainMenuBackground', () => ({ default: () => null }));
+const mockViewportSize = vi.fn(() => ({ width: 640, height: 390 }));
 vi.mock('../hooks/useViewportSize', () => ({
-    useViewportSize: () => ({ width: 640, height: 390 })
+    useViewportSize: () => mockViewportSize()
 }));
 vi.mock('../hooks/useFitShellZoom', () => ({
     useFitShellZoom: () => ({ fitZoom: 1 })
@@ -38,6 +39,10 @@ vi.mock('../store/useAppStore', () => ({
 }));
 
 describe('MainMenu REG-009 mobile landscape density', () => {
+    beforeEach(() => {
+        mockViewportSize.mockReturnValue({ width: 640, height: 390 });
+    });
+
     it('keeps Play dominant and secondary actions in a compact group', async () => {
         const user = userEvent.setup();
         const onOpenProfile = vi.fn();
@@ -63,10 +68,34 @@ describe('MainMenu REG-009 mobile landscape density', () => {
         expect(screen.getByRole('button', { name: 'Collection' })).toBeInTheDocument();
         expect(screen.getByRole('button', { name: 'Profile' })).toBeInTheDocument();
         expect(screen.getByRole('button', { name: 'Settings' })).toBeInTheDocument();
+        expect(screen.getByTestId('main-menu-secondary-actions')).toHaveAttribute('data-layout', 'dense-grid');
         await user.click(screen.getByRole('button', { name: 'Dungeon Showcase' }));
         expect(onStartDungeonShowcase).toHaveBeenCalledTimes(1);
         await user.click(screen.getByRole('button', { name: 'Profile' }));
         expect(onOpenProfile).toHaveBeenCalledTimes(1);
+    });
+
+    it('uses a denser two-column utility grid on phone portrait', () => {
+        mockViewportSize.mockReturnValue({ width: 390, height: 844 });
+
+        render(
+            <MainMenu
+                onDismissHowToPlay={async () => undefined}
+                onOpenCodex={vi.fn()}
+                onOpenCollection={vi.fn()}
+                onOpenInventory={vi.fn()}
+                onOpenProfile={vi.fn()}
+                onOpenSettings={vi.fn()}
+                onPlay={vi.fn()}
+                onStartDungeonShowcase={vi.fn()}
+                reduceMotion
+                saveData={createDefaultSaveData()}
+                showHowToPlay={false}
+            />
+        );
+
+        expect(screen.getByTestId('main-menu-secondary-actions')).toHaveAttribute('data-layout', 'dense-grid');
+        expect(screen.getByRole('button', { name: 'Exit Game' })).toBeInTheDocument();
     });
 
     it('REG-098 surfaces skippable first-run help center beats', () => {
@@ -88,6 +117,6 @@ describe('MainMenu REG-009 mobile landscape density', () => {
 
         const help = screen.getByTestId('main-menu-help-center');
         expect(help).toHaveTextContent(/Flip and match/);
-        expect(screen.getByText(/Skippable help center/i)).toBeInTheDocument();
+        expect(screen.getByText(/Quick prompts continue inside Play/i)).toBeInTheDocument();
     });
 });

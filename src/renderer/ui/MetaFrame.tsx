@@ -11,6 +11,7 @@ import {
     useRef,
     useState
 } from 'react';
+import { cx } from './classNames';
 import styles from './MetaFrame.module.css';
 
 export type MetaFrameTag = 'div' | 'section';
@@ -192,7 +193,7 @@ const MetaFrame = ({ as: Tag = 'div', children, className = '', ...rest }: MetaF
         Tag,
         {
             ...rest,
-            className: `${styles.root} ${className}`.trim(),
+            className: cx(styles.root, className),
             'data-meta-frame': 'true',
             ref: rootRef as never
         },

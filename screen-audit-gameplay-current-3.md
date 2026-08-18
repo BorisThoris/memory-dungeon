@@ -1,0 +1,13 @@
+- generic [ref=f1e2] [box=0,0,1440,960]:
+  - generic [ref=f1e3] [box=0,0,1440,960]:
+    - link "Skip to main content" [ref=f1e4] [cursor=pointer] [box=-1,-1,1,1]:
+      - /url: "#app-main"
+    - main [ref=f1e5] [box=0,0,1440,960]:
+      - generic [ref=f1e2894] [box=0,0,1440,960]:
+        - heading "Level 1" [level=1] [ref=f1e2895] [box=-1,-1,1,1]
+        - generic [ref=f1e2897] [box=0,0,1440,960]:
+          - generic [box=0,0,1440,115]
+          - generic [ref=f1e2946] [box=16,767,256,106]
+          - generic [ref=f1e2955] [box=0,0,1440,960]
+          - complementary "Game actions" [ref=f1e2959] [box=16,793,288,154]
+  - region "Memory Dungeon tips" [box=240,924,960,0]

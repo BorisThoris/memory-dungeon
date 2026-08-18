@@ -1,0 +1,10 @@
+- generic [ref=f1e2] [box=0,0,1440,960]:
+  - generic [ref=f1e3] [box=0,0,1440,960]:
+    - link "Skip to main content" [ref=f1e4] [cursor=pointer] [box=-1,-1,1,1]:
+      - /url: "#app-main"
+    - main [ref=f1e5] [box=0,0,1440,960]:
+      - region "Choose Your Path" [ref=f1e2524] [box=0,0,1440,960]:
+        - generic [ref=f1e2528] [box=230,18,980,1025]:
+          - generic [ref=f1e2530] [box=230,18,730,160]
+          - generic [ref=f1e2541] [box=230,199,980,844]
+  - region "Memory Dungeon tips" [box=240,924,960,0]

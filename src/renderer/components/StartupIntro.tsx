@@ -19,7 +19,7 @@ import {
     type Group,
     type PointLight
 } from 'three';
-import relicSvgUrl from '../../../docs/wip-assets/card-sources/VECFINAL.svg?url';
+import relicSvgUrl from '../assets/ui/brand-crest.svg?url';
 import type { GraphicsQualityPreset } from '../../shared/contracts';
 import { preloadStartupCriticalAssets } from '../assets/preloadStartupAssets';
 import { preloadCardRankOpentypeFont } from '../cardFace/opentypeCardRankFont';
@@ -50,6 +50,8 @@ interface StartupIntroProps {
     onComplete: () => void;
     reduceMotion: boolean;
 }
+
+const E2E_FREEZE_STARTUP_INTRO_KEY = 'memory-dungeon-e2e-freeze-intro';
 
 type IntroRenderMode = 'three' | 'fallback';
 type IntroPhase = 'enter' | 'idle' | 'exit';
@@ -540,6 +542,11 @@ const StartupIntro = ({ graphicsQuality, onComplete, reduceMotion }: StartupIntr
             strength: 1
         });
     const [touchPrimary, setTouchPrimary] = useState(false);
+    const [freezeForE2E] = useState(() =>
+        import.meta.env.DEV &&
+        typeof window !== 'undefined' &&
+        window.localStorage.getItem(E2E_FREEZE_STARTUP_INTRO_KEY) === 'true'
+    );
     const completedRef = useRef(false);
     const exitStartedRef = useRef(false);
     const assetsReadyRef = useRef(false);
@@ -596,11 +603,14 @@ const StartupIntro = ({ graphicsQuality, onComplete, reduceMotion }: StartupIntr
         if (!assetsReadyRef.current) {
             return;
         }
+        if (freezeForE2E && !skipRequestedRef.current) {
+            return;
+        }
         const elapsed = performance.now() - introStartMsRef.current;
         if (skipRequestedRef.current || elapsed >= autoExitDelay) {
             beginExit();
         }
-    }, [autoExitDelay, beginExit]);
+    }, [autoExitDelay, beginExit, freezeForE2E]);
 
     const requestSkip = useCallback(() => {
         skipRequestedRef.current = true;
@@ -681,6 +691,9 @@ const StartupIntro = ({ graphicsQuality, onComplete, reduceMotion }: StartupIntr
 
     useEffect(() => {
         introStartMsRef.current = performance.now();
+        if (freezeForE2E) {
+            return () => {};
+        }
         timeGateTimeoutRef.current = window.setTimeout(() => {
             tryBeginExitWhenReady();
         }, autoExitDelay);
@@ -691,7 +704,7 @@ const StartupIntro = ({ graphicsQuality, onComplete, reduceMotion }: StartupIntr
                 timeGateTimeoutRef.current = null;
             }
         };
-    }, [autoExitDelay, tryBeginExitWhenReady]);
+    }, [autoExitDelay, freezeForE2E, tryBeginExitWhenReady]);
 
     useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent): void => {
@@ -823,7 +836,7 @@ const StartupIntro = ({ graphicsQuality, onComplete, reduceMotion }: StartupIntr
             <div aria-hidden="true" className={styles.edgeNoise} />
 
             <div className={styles.stage}>
-                <div className={styles.sceneFrame} ref={sceneFrameRef}>
+                <div className={styles.sceneFrame} data-testid="startup-intro-scene-frame" ref={sceneFrameRef}>
                     {renderMode === 'three' ? (
                         <div className={styles.canvasViewport}>
                             <RelicIntroScene
@@ -838,11 +851,27 @@ const StartupIntro = ({ graphicsQuality, onComplete, reduceMotion }: StartupIntr
                     ) : (
                         <div className={styles.fallbackFrame}>
                             <div aria-hidden="true" className={styles.fallbackAura} />
-                            <img alt="Obsidian relic sigil" className={styles.fallbackImage} src={relicSvgUrl} />
+                            <img alt="Memory Dungeon crest" className={styles.fallbackImage} src={relicSvgUrl} />
                         </div>
                     )}
                 </div>
             </div>
+            <button
+                aria-label="Enter Memory Dungeon"
+                className={styles.skipCta}
+                data-testid="intro-skip-cta"
+                onClick={(event) => {
+                    event.stopPropagation();
+                    requestSkip();
+                }}
+                onPointerDown={(event) => {
+                    event.stopPropagation();
+                }}
+                type="button"
+            >
+                <span>Enter</span>
+                <small>{touchPrimary ? 'Tap anywhere' : 'Click anywhere'}</small>
+            </button>
             {showIntroMotionCta ? (
                 <button
                     aria-label={introMotionLabels.ariaLabel}

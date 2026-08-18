@@ -205,7 +205,9 @@
 }
 
 .heroTitle {
-    max-width: 8ch;
+    max-width: min(100%, 10ch);
+    line-height: 1.08;
+    padding-block: 0.12em;
 }
 
 .divider {
@@ -288,12 +290,12 @@
  * Slim on pointer-first layouts; touch / narrow shells restore targets below.
  */
 .shell .ctaButton {
-    min-height: 2.2rem !important;
-    padding: 0.4rem 0.85rem !important;
+    min-height: 3.1rem !important;
+    padding: 0.72rem 0.95rem !important;
 }
 
 .shell .ctaButtonPlay {
-    min-height: 3rem !important;
+    min-height: 3.65rem !important;
 }
 
 .ctaButtonShowcase {
@@ -325,6 +327,11 @@
     grid-template-columns: minmax(0, 1fr);
     gap: var(--menu-action-stack-gap);
     width: 100%;
+}
+
+.secondaryActionGrid[data-layout='dense-grid'] {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-rows: 1fr;
 }
 
 .ctaContent {
@@ -404,6 +411,18 @@
     text-transform: uppercase;
 }
 
+.helpSummaryCloseLabel {
+    display: none;
+}
+
+.helpDisclosure[open] .helpSummaryOpenLabel {
+    display: none;
+}
+
+.helpDisclosure[open] .helpSummaryCloseLabel {
+    display: inline;
+}
+
 .helpDisclosure[open] .helpSummaryAction {
     color: var(--theme-gold-bright);
 }
@@ -415,9 +434,15 @@
 }
 
 .howToGrid p {
+    display: grid;
+    gap: 0.12rem;
     margin: 0;
     color: var(--theme-text-muted);
     line-height: 1.45;
+}
+
+.howToGrid p span {
+    min-width: 0;
 }
 
 .compactShell .fitViewport {
@@ -425,21 +450,21 @@
 }
 
 .touchCompactShell .fitViewport {
-    --menu-content-gap: var(--theme-space-md);
-    --menu-content-pad-block-start: var(--theme-space-md);
+    --menu-content-gap: var(--theme-space-sm);
+    --menu-content-pad-block-start: var(--theme-space-xs);
     --menu-content-pad-inline: var(--ui-shell-screen-pad-inline);
-    --menu-content-pad-block-end: var(--theme-space-lg);
+    --menu-content-pad-block-end: var(--theme-space-md);
     --menu-meta-row-gap: var(--theme-space-sm);
     --menu-meta-card-pad-block: var(--theme-space-sm);
     --menu-meta-card-pad-inline: var(--theme-space-md);
-    --menu-layout-gap: var(--theme-space-md);
-    --menu-hero-gap: var(--theme-space-md);
+    --menu-layout-gap: var(--theme-space-sm);
+    --menu-hero-gap: 0.42rem;
     --menu-hero-pad-block: 0;
-    --menu-brand-gap: var(--theme-space-xs);
+    --menu-brand-gap: 0.22rem;
     --menu-brand-pad-block: 0;
-    --menu-action-stack-gap: var(--theme-space-sm);
+    --menu-action-stack-gap: 0.42rem;
     --menu-bottom-cards-gap: var(--theme-space-sm);
-    --menu-support-gap: var(--theme-space-sm);
+    --menu-support-gap: 0.48rem;
     --menu-support-pad-block-start: 0;
     --menu-mode-grid-gap: var(--theme-space-sm);
     --menu-mode-grid-mt: var(--theme-space-sm);
@@ -455,85 +480,175 @@
 }
 
 .touchCompactShell .heroColumn {
-    align-items: stretch;
+    align-items: center;
     justify-content: flex-start;
     padding: 0;
-    gap: var(--theme-space-md);
+    gap: 0.56rem;
+}
+
+.touchCompactContentBalanced,
+.touchCompactLayoutBalanced,
+.touchCompactHeroBalanced {
+    min-height: 100%;
+}
+
+.touchCompactMeasureBalanced {
+    flex: 1 1 auto;
+    min-height: 100%;
+}
+
+.touchCompactShell .touchCompactHeroBalanced {
+    justify-content: center;
+    padding-block: 0 clamp(2.4rem, 12vh, 5rem);
 }
 
 .touchCompactShell .brandLockup {
     width: 100%;
-    align-items: flex-start;
-    text-align: left;
+    align-items: center;
+    text-align: center;
     padding: 0;
 }
 
 .touchCompactShell .brandCrest {
-    width: clamp(3.2rem, 14vw, 4.4rem);
+    width: clamp(2.6rem, 10vw, 3.5rem);
 }
 
 .touchCompactShell .heroTitle {
     max-width: none;
-    font-size: clamp(2.2rem, 12vw, 3.8rem);
+    font-size: clamp(1.82rem, 9.8vw, 2.9rem);
+    line-height: 1.02;
 }
 
 .touchCompactShell .divider {
-    width: min(100%, 13rem);
+    width: min(100%, 9.25rem);
 }
 
 .touchCompactShell .tagline {
     max-width: none;
-    font-size: 0.82rem;
-    line-height: 1.35;
+    font-size: 0.68rem;
+    line-height: 1.18;
+}
+
+.touchCompactShell .ctaMetaFrameWrap {
+    width: min(100%, 21rem);
+    align-self: center;
 }
 
 .touchCompactShell .ctaBandSeal {
-    width: 1.95rem;
-    height: 1.95rem;
+    width: 1.68rem;
+    height: 1.68rem;
 }
 
 .touchCompactShell .ctaIllustratedBand {
-    gap: var(--theme-space-sm);
+    gap: 0.4rem;
     margin-bottom: 0;
 }
 
 .touchCompactShell .ctaBandFlourish {
-    max-height: 0.42rem;
+    max-height: 0.34rem;
     opacity: 0.62;
 }
 
 .touchCompactShell .actionStack {
     width: 100%;
-    padding-bottom: 0.35rem;
+    padding-bottom: 0.2rem;
+}
+
+.touchCompactShell .ctaTitle {
+    font-size: 0.74rem;
+    letter-spacing: 0.075em;
+}
+
+.touchCompactShell .ctaButtonPlay .ctaTitle {
+    font-size: 0.84rem;
+}
+
+.touchCompactShell .secondaryActionGrid[data-layout='dense-grid'] {
+    gap: 0.38rem;
 }
 
 .touchCompactShell .supportPanel {
-    padding: var(--ui-card-pad-md);
+    width: 100%;
+    padding: 0.72rem;
     transform: none;
 }
 
+.touchCompactShell .supportHeading {
+    font-size: 0.9rem;
+    line-height: 1;
+}
+
+.touchCompactShell .helpDisclosure summary {
+    min-height: 2rem;
+    gap: 0.48rem;
+}
+
+.touchCompactShell .helpSummaryAction {
+    padding: 0.22rem 0.48rem;
+    font-size: 0.56rem;
+}
+
 .touchCompactShell .howToGrid {
-    margin: 0.65rem 0 0.85rem;
-    gap: 0.45rem;
+    margin: 0.52rem 0 0.7rem;
+    gap: 0.36rem;
+}
+
+.touchCompactShell .howToGrid p {
+    grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.28fr);
+    align-items: center;
+    gap: 0.28rem;
+    padding: 0.28rem 0.38rem;
+    border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 13%, transparent);
+    border-radius: var(--ui-radius-sm);
+    background: color-mix(in srgb, var(--theme-void) 42%, transparent);
+    font-size: 0.66rem;
+    line-height: 1.14;
+}
+
+.touchCompactShell .howToGrid p strong,
+.touchCompactShell .howToGrid p span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.touchCompactShell .howToGrid p strong {
+    color: color-mix(in srgb, var(--theme-rune) 92%, white);
+    white-space: nowrap;
+}
+
+.touchCompactShell .howToGrid p span {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
 }
 
 .shortTouchLandscapeShell .fitViewport {
-    --menu-content-pad-block-start: var(--theme-space-sm);
-    --menu-content-pad-block-end: var(--theme-space-sm);
+    --menu-content-gap: 0.34rem;
+    --menu-content-pad-block-start: 0.34rem;
+    --menu-content-pad-block-end: 0.34rem;
+    --menu-layout-gap: 0.38rem;
+    --menu-hero-gap: 0.3rem;
+    --menu-brand-gap: 0.08rem;
+    --menu-brand-pad-block: 0;
+    --menu-action-stack-gap: 0.28rem;
 }
 
 .shortTouchLandscapeShell .heroColumn {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: flex-start;
+    gap: 0.34rem;
+    padding: 0;
 }
 
 .shortTouchLandscapeShell .heroTitle {
-    font-size: clamp(2rem, 8vw, 3rem);
+    font-size: clamp(1.52rem, 5.7vw, 2.18rem);
+    line-height: 0.98;
 }
 
 .shortTouchLandscapeShell .brandCrest {
-    width: 2.6rem;
+    display: none;
 }
 
 .shortTouchLandscapeShell .tagline {
@@ -545,6 +660,51 @@
 }
 
 .shortTouchLandscapeShell .ctaTitle {
+    font-size: 0.7rem;
+    letter-spacing: 0.045em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.shortTouchLandscapeShell .brandLockup {
+    align-items: center;
+    padding: 0;
+    gap: 0.1rem;
+}
+
+.shortTouchLandscapeShell .heroEyebrow,
+.shortTouchLandscapeShell .divider {
+    display: none;
+}
+
+.shortTouchLandscapeShell .ctaMetaFrameWrap {
+    width: min(100%, 34rem);
+}
+
+.shortTouchLandscapeShell .ctaPanel {
+    gap: 0.28rem;
+    padding: 0.46rem !important;
+}
+
+.shortTouchLandscapeShell .actionStack {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: stretch;
+    gap: 0.28rem;
+    padding-bottom: 0;
+}
+
+.shortTouchLandscapeShell .secondaryActionGrid[data-layout='dense-grid'] {
+    display: contents;
+}
+
+.shell.shortTouchLandscapeShell .ctaButton,
+.shell.shortTouchLandscapeShell .ctaButtonPlay {
+    min-height: var(--ui-touch-target-min) !important;
+    padding: 0.36rem 0.52rem !important;
+}
+
+.shortTouchLandscapeShell .ctaButtonPlay .ctaTitle {
     font-size: 0.78rem;
 }
 
@@ -657,6 +817,10 @@
     padding: 0.82rem;
 }
 
+.ultraCompactPhoneShell .touchCompactHeroBalanced {
+    padding-block: clamp(1.3rem, 6vh, 2.25rem) clamp(1.8rem, 10vh, 3.1rem);
+}
+
 :global([data-reduce-motion='true']) .supportPanel {
     transform: none;
 }
@@ -683,13 +847,130 @@
 
 @media (max-width: 430px), (max-height: 620px) {
     .fitViewport {
-        --menu-brand-gap: var(--theme-space-xs);
-        --menu-brand-pad-block: var(--theme-space-md) var(--theme-space-xl) var(--theme-space-md);
-        --menu-action-stack-gap: var(--theme-space-md);
+        --menu-brand-gap: 0.22rem;
+        --menu-brand-pad-block: 0;
+        --menu-action-stack-gap: 0.42rem;
     }
 
     .ctaTitle {
-        font-size: 0.84rem;
+        font-size: 0.76rem;
+    }
+}
+
+/* UI-CLEANUP-010: phone hub should be a launcher, not a tall stack of framed panels. */
+@media (max-width: 430px) and (orientation: portrait) {
+    .fitViewport {
+        --menu-content-gap: 0.56rem;
+        --menu-content-pad-block-start: 0.56rem;
+        --menu-content-pad-inline: 0.62rem;
+        --menu-content-pad-block-end: 0.62rem;
+        --menu-hero-gap: 0.42rem;
+        --menu-brand-gap: 0.14rem;
+        --menu-action-stack-gap: 0.34rem;
+    }
+
+    .heroColumn {
+        gap: 0.44rem;
+        padding: 0;
+    }
+
+    .brandCrest {
+        width: 2.45rem;
+    }
+
+    .heroEyebrow {
+        font-size: 0.58rem;
+    }
+
+    .heroTitle {
+        font-size: clamp(2.05rem, 11vw, 2.72rem);
+        line-height: 0.96;
+    }
+
+    .divider {
+        width: min(100%, 8.4rem);
+    }
+
+    .tagline {
+        display: none;
+    }
+
+    .ctaMetaFrameWrap {
+        width: min(100%, 20rem);
+    }
+
+    .ctaPanel {
+        padding: 0.54rem !important;
+    }
+
+    .ctaIllustratedBand {
+        display: none;
+    }
+
+    .secondaryActionGrid[data-layout='dense-grid'] {
+        gap: 0.3rem;
+    }
+
+    .shell .ctaButton,
+    .shell.touchCompactShell .ctaButton,
+    .shell.ultraCompactPhoneShell .ctaButton {
+        min-height: 2.75rem !important;
+        padding: 0.44rem 0.72rem !important;
+    }
+
+    .shell .ctaButtonPlay,
+    .shell.touchCompactShell .ctaButtonPlay,
+    .shell.ultraCompactPhoneShell .ctaButtonPlay {
+        min-height: 2.88rem !important;
+    }
+
+    .ctaTitle,
+    .touchCompactShell .ctaTitle {
+        overflow: hidden;
+        font-size: 0.68rem;
+        line-height: 1;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .shell .ctaButtonPlay .ctaTitle,
+    .touchCompactShell .ctaButtonPlay .ctaTitle {
+        font-size: 0.76rem;
+    }
+
+    .supportPanel,
+    .touchCompactShell .supportPanel,
+    .ultraCompactPhoneShell .supportPanel {
+        width: min(100%, 20rem);
+        padding: 0.48rem 0.58rem;
+        border-radius: var(--ui-radius-sm);
+    }
+
+    .helpDisclosure {
+        gap: 0;
+    }
+
+    .helpDisclosure summary {
+        min-height: 1.8rem;
+        gap: 0.42rem;
+    }
+
+    .supportHeading,
+    .touchCompactShell .supportHeading {
+        overflow: hidden;
+        font-size: 0.76rem;
+        line-height: 1;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .helpSummaryAction {
+        padding: 0.14rem 0.38rem;
+        font-size: 0.5rem;
+    }
+
+    .howToGrid {
+        margin: 0.36rem 0 0.42rem;
     }
 }
 
@@ -773,4 +1054,694 @@
         gap: 0.48rem;
     }
 
+}
+
+/* UI-CLEANUP-046: phone menu overflow guard for runtime scaling differences. */
+@media (max-width: 430px) and (orientation: portrait) {
+    .fitViewport {
+        --menu-content-pad-inline: 0.72rem;
+        --menu-action-stack-gap: 0.28rem;
+        overflow: hidden;
+    }
+
+    .heroColumn,
+    .actionColumn,
+    .ctaMetaFrameWrap,
+    .supportPanel {
+        max-width: 100%;
+        min-width: 0;
+    }
+
+    .heroTitle {
+        max-width: 100%;
+        overflow: hidden;
+        font-size: clamp(1.92rem, 10.4vw, 2.46rem);
+        line-height: 0.94;
+        text-wrap: balance;
+    }
+
+    .ctaMetaFrameWrap,
+    .supportPanel,
+    .touchCompactShell .supportPanel,
+    .ultraCompactPhoneShell .supportPanel {
+        width: min(100%, 19.35rem);
+    }
+
+    .shell .ctaButton,
+    .shell.touchCompactShell .ctaButton,
+    .shell.ultraCompactPhoneShell .ctaButton {
+        min-height: 2.48rem !important;
+        padding: 0.38rem 0.64rem !important;
+    }
+
+    .shell .ctaButtonPlay,
+    .shell.touchCompactShell .ctaButtonPlay,
+    .shell.ultraCompactPhoneShell .ctaButtonPlay {
+        min-height: 2.62rem !important;
+    }
+
+    .ctaTitle,
+    .touchCompactShell .ctaTitle,
+    .shell .ctaButtonPlay .ctaTitle,
+    .touchCompactShell .ctaButtonPlay .ctaTitle {
+        overflow: hidden;
+        font-size: 0.66rem;
+        line-height: 1;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .supportHeading,
+    .touchCompactShell .supportHeading {
+        overflow: hidden;
+        max-width: 100%;
+        font-size: 0.72rem;
+        line-height: 1;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+}
+
+/* UI-CLEANUP-048: flatten the phone hub chrome so controls stop feeling stacked on top of each other. */
+@media (max-width: 430px) and (orientation: portrait) {
+    .fitViewport {
+        --menu-content-gap: 0.48rem;
+        --menu-content-pad-block-start: 0.78rem;
+        --menu-content-pad-inline: 0.76rem;
+        --menu-action-stack-gap: 0.36rem;
+    }
+
+    .heroColumn {
+        gap: 0.5rem;
+    }
+
+    .brandLockup,
+    .touchCompactShell .brandLockup,
+    .ultraCompactPhoneShell .brandLockup {
+        gap: 0.08rem;
+        padding: 0.52rem 0 0;
+    }
+
+    .brandCrest {
+        display: none;
+    }
+
+    .heroEyebrow {
+        display: none;
+    }
+
+    .heroTitle,
+    .touchCompactShell .heroTitle,
+    .ultraCompactPhoneShell .heroTitle {
+        font-size: clamp(1.48rem, 7.8vw, 1.82rem);
+        line-height: 0.98;
+        padding-block: 0.04em;
+    }
+
+    .divider {
+        display: none;
+    }
+
+    .ctaMetaFrameWrap,
+    .supportPanel,
+    .touchCompactShell .supportPanel,
+    .ultraCompactPhoneShell .supportPanel {
+        width: min(100%, 18.85rem);
+    }
+
+    .ctaMetaFrameWrap {
+        filter: drop-shadow(0 10px 22px color-mix(in srgb, var(--theme-shadow) 28%, transparent));
+    }
+
+    .ctaPanel {
+        padding: 0.44rem !important;
+    }
+
+    .secondaryActionGrid[data-layout='dense-grid'] {
+        gap: 0.36rem;
+    }
+
+    .shell .ctaButton,
+    .shell.touchCompactShell .ctaButton,
+    .shell.ultraCompactPhoneShell .ctaButton {
+        min-height: 2.36rem !important;
+        padding: 0.34rem 0.58rem !important;
+    }
+
+    .shell .ctaButtonPlay,
+    .shell.touchCompactShell .ctaButtonPlay,
+    .shell.ultraCompactPhoneShell .ctaButtonPlay {
+        min-height: 2.48rem !important;
+    }
+
+    .ctaTitle,
+    .touchCompactShell .ctaTitle,
+    .shell .ctaButtonPlay .ctaTitle,
+    .touchCompactShell .ctaButtonPlay .ctaTitle {
+        font-size: 0.64rem;
+    }
+
+    .supportPanel,
+    .touchCompactShell .supportPanel,
+    .ultraCompactPhoneShell .supportPanel {
+        padding: 0.42rem 0.5rem;
+    }
+
+    .helpDisclosure summary {
+        min-height: 1.64rem;
+    }
+}
+
+/* UI-CLEANUP-051: final phone launcher polish - keep the title clear of the action sheet. */
+@media (max-width: 430px) and (orientation: portrait) {
+    .fitViewport {
+        --menu-content-pad-block-start: 1.05rem;
+        --menu-action-stack-gap: 0.3rem;
+    }
+
+    .heroColumn {
+        gap: 1.08rem;
+    }
+
+    .brandLockup,
+    .touchCompactShell .brandLockup,
+    .ultraCompactPhoneShell .brandLockup {
+        padding-top: 0.46rem;
+    }
+
+    .heroTitle,
+    .touchCompactShell .heroTitle,
+    .ultraCompactPhoneShell .heroTitle {
+        font-size: clamp(1.38rem, 7vw, 1.66rem);
+        line-height: 1;
+    }
+
+    .ctaMetaFrameWrap {
+        filter: drop-shadow(0 8px 18px color-mix(in srgb, var(--theme-shadow) 24%, transparent));
+    }
+
+    .ctaPanel {
+        padding: 0.38rem !important;
+    }
+
+    .secondaryActionGrid[data-layout='dense-grid'] {
+        gap: 0.28rem;
+    }
+
+    .shell .ctaButton,
+    .shell.touchCompactShell .ctaButton,
+    .shell.ultraCompactPhoneShell .ctaButton {
+        min-height: 2.24rem !important;
+        padding: 0.28rem 0.52rem !important;
+    }
+
+    .shell .ctaButtonPlay,
+    .shell.touchCompactShell .ctaButtonPlay,
+    .shell.ultraCompactPhoneShell .ctaButtonPlay {
+        min-height: 2.34rem !important;
+    }
+
+    .ctaTitle,
+    .touchCompactShell .ctaTitle,
+    .shell .ctaButtonPlay .ctaTitle,
+    .touchCompactShell .ctaButtonPlay .ctaTitle {
+        font-size: 0.61rem;
+        line-height: 1;
+    }
+}
+
+/* UI-CLEANUP-057: give the phone launcher breathing room without growing the action sheet. */
+@media (max-width: 430px) and (orientation: portrait) {
+    .fitViewport {
+        --menu-content-pad-block-start: 1rem;
+        --menu-action-stack-gap: 0.42rem;
+    }
+
+    .heroColumn {
+        gap: 1.2rem;
+    }
+
+    .heroTitle,
+    .touchCompactShell .heroTitle,
+    .ultraCompactPhoneShell .heroTitle {
+        font-size: clamp(1.32rem, 6.65vw, 1.58rem);
+        line-height: 1.02;
+    }
+
+    .ctaMetaFrameWrap,
+    .supportPanel,
+    .touchCompactShell .supportPanel,
+    .ultraCompactPhoneShell .supportPanel {
+        width: min(100%, 18.2rem);
+    }
+
+    .ctaPanel {
+        padding: 0.34rem !important;
+    }
+
+    .secondaryActionGrid[data-layout='dense-grid'] {
+        gap: 0.24rem;
+    }
+
+    .shell .ctaButton,
+    .shell.touchCompactShell .ctaButton,
+    .shell.ultraCompactPhoneShell .ctaButton {
+        min-height: 2.16rem !important;
+        padding: 0.24rem 0.48rem !important;
+    }
+
+    .shell .ctaButtonPlay,
+    .shell.touchCompactShell .ctaButtonPlay,
+    .shell.ultraCompactPhoneShell .ctaButtonPlay {
+        min-height: 2.26rem !important;
+    }
+}
+
+/* UI-CLEANUP-059: phone launcher stays compact, but every menu action remains touch-safe. */
+@media (max-width: 430px) and (orientation: portrait) {
+    .shell .ctaButton,
+    .shell.touchCompactShell .ctaButton,
+    .shell.ultraCompactPhoneShell .ctaButton {
+        min-height: 2.76rem !important;
+        padding-block: 0.34rem !important;
+    }
+
+    .shell .ctaButtonPlay,
+    .shell.touchCompactShell .ctaButtonPlay,
+    .shell.ultraCompactPhoneShell .ctaButtonPlay {
+        min-height: 2.86rem !important;
+    }
+}
+
+/* UI-CLEANUP-065: phone launcher should feel like a clean menu, not a framed control slab. */
+@media (max-width: 430px) and (orientation: portrait) {
+    .fitViewport {
+        --menu-content-pad-block-start: 1.2rem;
+        --menu-content-pad-inline: 0.95rem;
+        --menu-content-gap: 0.62rem;
+        --menu-action-stack-gap: 0.3rem;
+    }
+
+    .heroColumn {
+        justify-content: flex-start;
+        gap: 0.9rem;
+        padding-top: 0;
+    }
+
+    .brandLockup,
+    .touchCompactShell .brandLockup,
+    .ultraCompactPhoneShell .brandLockup {
+        padding-top: 0.32rem;
+    }
+
+    .heroTitle,
+    .touchCompactShell .heroTitle,
+    .ultraCompactPhoneShell .heroTitle {
+        font-size: clamp(1.55rem, 7.6vw, 1.9rem);
+        line-height: 1.04;
+        text-shadow: 0 2px 14px color-mix(in srgb, var(--theme-shadow) 68%, transparent);
+    }
+
+    .tagline,
+    .ctaIllustratedBand,
+    .ctaBandSeal,
+    .ctaBandFlourish {
+        display: none;
+    }
+
+    .ctaMetaFrameWrap,
+    .touchCompactShell .ctaMetaFrameWrap,
+    .ultraCompactPhoneShell .ctaMetaFrameWrap {
+        width: min(100%, 18.8rem);
+        filter: none;
+    }
+
+    .ctaMetaFrameWrap :global([data-meta-framed='true']) {
+        padding: 0 !important;
+        border: 0 !important;
+        background: transparent !important;
+        box-shadow: none !important;
+    }
+
+    .ctaMetaFrameWrap :global(svg),
+    .ctaMetaFrameWrap :global([class*='cornice']) {
+        display: none !important;
+    }
+
+    .ctaPanel {
+        padding: 0 !important;
+        background: transparent;
+        box-shadow: none;
+    }
+
+    .actionStack {
+        gap: 0.42rem;
+    }
+
+    .secondaryActionGrid[data-layout='dense-grid'] {
+        gap: 0.28rem;
+    }
+
+    .shell .ctaButton,
+    .shell.touchCompactShell .ctaButton,
+    .shell.ultraCompactPhoneShell .ctaButton {
+        min-height: 2.48rem !important;
+        padding: 0.34rem 0.62rem !important;
+        border-radius: var(--ui-radius-sm) !important;
+        background: color-mix(in srgb, var(--theme-void) 58%, transparent);
+        box-shadow: inset 0 1px 0 color-mix(in srgb, white 5%, transparent);
+    }
+
+    .shell .ctaButtonPlay,
+    .shell.touchCompactShell .ctaButtonPlay,
+    .shell.ultraCompactPhoneShell .ctaButtonPlay {
+        min-height: 3.05rem !important;
+        background:
+            linear-gradient(90deg, color-mix(in srgb, var(--theme-ember) 34%, transparent), transparent 72%),
+            color-mix(in srgb, var(--theme-gold-deep) 72%, var(--theme-void) 28%);
+        box-shadow:
+            inset 0 1px 0 color-mix(in srgb, white 9%, transparent),
+            0 8px 18px color-mix(in srgb, var(--theme-shadow) 24%, transparent);
+    }
+
+    .ctaTitle,
+    .touchCompactShell .ctaTitle,
+    .shell .ctaButtonPlay .ctaTitle,
+    .touchCompactShell .ctaButtonPlay .ctaTitle {
+        font-size: 0.68rem;
+        line-height: 1.02;
+    }
+
+    .shell .ctaButtonPlay .ctaTitle,
+    .touchCompactShell .ctaButtonPlay .ctaTitle {
+        font-size: 0.78rem;
+    }
+}
+
+/* UI-CLEANUP-078: phone expanded help is a compact quick-start drawer, not a text wall. */
+@media (max-width: 430px) and (orientation: portrait) {
+    .supportPanel,
+    .touchCompactShell .supportPanel,
+    .ultraCompactPhoneShell .supportPanel {
+        padding: 0.42rem 0.48rem;
+        max-height: 14.2rem;
+        overflow: hidden;
+    }
+
+    .helpDisclosure {
+        gap: 0.22rem;
+    }
+
+    .helpDisclosure[open] .emptyState {
+        display: none;
+    }
+
+    .helpDisclosure summary {
+        min-height: 1.56rem;
+    }
+
+    .supportHeading,
+    .touchCompactShell .supportHeading {
+        font-size: 0.68rem;
+    }
+
+    .helpSummaryAction {
+        min-width: 2.8rem;
+        padding: 0.13rem 0.34rem;
+        text-align: center;
+        font-size: 0.48rem;
+    }
+
+    .helpDisclosure[open] .howToGrid,
+    .touchCompactShell .helpDisclosure[open] .howToGrid {
+        margin: 0.12rem 0 0.26rem;
+        gap: 0.18rem;
+    }
+
+    .helpDisclosure[open] .howToGrid p,
+    .touchCompactShell .helpDisclosure[open] .howToGrid p {
+        grid-template-columns: minmax(0, 0.68fr) minmax(0, 1.32fr);
+        gap: 0.22rem;
+        min-height: 1.72rem;
+        padding: 0.24rem 0.32rem;
+        font-size: 0.58rem;
+        line-height: 1.1;
+    }
+
+    .helpDisclosure[open] .howToGrid p span,
+    .touchCompactShell .helpDisclosure[open] .howToGrid p span {
+        -webkit-line-clamp: 1;
+    }
+
+    .helpDisclosure[open] :global(button) {
+        min-height: 2rem !important;
+        padding-block: 0.16rem !important;
+        font-size: 0.6rem !important;
+    }
+}
+
+/* UI-CLEANUP-093: current phone menu pass - touch-safe rows without top-edge crowding. */
+@media (max-width: 430px) and (orientation: portrait) {
+    .fitViewport {
+        --menu-content-pad-block-start: max(0.72rem, env(safe-area-inset-top, 0px));
+        --menu-content-pad-inline: 1rem;
+        --menu-action-stack-gap: 0.34rem;
+    }
+
+    .heroColumn {
+        gap: 0.82rem;
+    }
+
+    .brandLockup,
+    .touchCompactShell .brandLockup,
+    .ultraCompactPhoneShell .brandLockup {
+        padding-top: 0;
+    }
+
+    .heroTitle,
+    .touchCompactShell .heroTitle,
+    .ultraCompactPhoneShell .heroTitle {
+        max-width: 100%;
+        overflow: hidden;
+        font-size: clamp(1.48rem, 7vw, 1.72rem);
+        line-height: 1.04;
+        text-align: center;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .ctaMetaFrameWrap,
+    .supportPanel,
+    .touchCompactShell .supportPanel,
+    .ultraCompactPhoneShell .supportPanel {
+        width: min(100%, 19.25rem);
+    }
+
+    .actionStack {
+        gap: 0.36rem;
+    }
+
+    .secondaryActionGrid[data-layout='dense-grid'] {
+        gap: 0.28rem;
+    }
+
+    .shell .ctaButton,
+    .shell.touchCompactShell .ctaButton,
+    .shell.ultraCompactPhoneShell .ctaButton {
+        min-height: var(--ui-touch-target-min, 44px) !important;
+        padding: 0.34rem 0.58rem !important;
+        overflow: hidden;
+    }
+
+    .shell .ctaButtonPlay,
+    .shell.touchCompactShell .ctaButtonPlay,
+    .shell.ultraCompactPhoneShell .ctaButtonPlay {
+        min-height: calc(var(--ui-touch-target-min, 44px) + 0.14rem) !important;
+    }
+
+    .ctaTitle,
+    .touchCompactShell .ctaTitle,
+    .shell .ctaButtonPlay .ctaTitle,
+    .touchCompactShell .ctaButtonPlay .ctaTitle {
+        display: block;
+        max-width: 100%;
+        overflow: hidden;
+        line-height: 1.04;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .supportPanel,
+    .touchCompactShell .supportPanel,
+    .ultraCompactPhoneShell .supportPanel {
+        max-height: 12.5rem;
+        overflow: hidden;
+    }
+}
+
+/* UI-CLEANUP-098: phone landscape menu keeps the title inside the viewport and avoids framed-panel crowding. */
+@media (max-height: 520px) and (orientation: landscape) {
+    .shortTouchLandscapeShell .fitViewport {
+        --menu-content-gap: 0.28rem;
+        --menu-content-pad-block-start: max(0.42rem, env(safe-area-inset-top, 0px));
+        --menu-content-pad-block-end: max(0.32rem, env(safe-area-inset-bottom, 0px));
+        --menu-content-pad-inline: max(0.74rem, env(safe-area-inset-left, 0px));
+        --menu-hero-gap: 0.28rem;
+        justify-content: flex-start;
+    }
+
+    .shortTouchLandscapeShell .content {
+        padding-top: var(--menu-content-pad-block-start) !important;
+        padding-bottom: var(--menu-content-pad-block-end) !important;
+    }
+
+    .shortTouchLandscapeShell .heroColumn {
+        gap: 0.3rem;
+    }
+
+    .shortTouchLandscapeShell .brandLockup {
+        min-height: 1.9rem;
+        padding-top: 0;
+    }
+
+    .shortTouchLandscapeShell .heroTitle {
+        max-width: min(100%, 22rem);
+        overflow: visible;
+        font-size: clamp(1.3rem, 4.55vw, 1.72rem);
+        line-height: 1.04;
+        text-overflow: clip;
+        white-space: nowrap;
+    }
+
+    .shortTouchLandscapeShell .ctaMetaFrameWrap {
+        width: min(calc(100vw - 12rem), 30rem);
+        min-width: 27rem;
+        filter: none;
+    }
+
+    .shortTouchLandscapeShell .ctaMetaFrameWrap :global([data-meta-framed='true']) {
+        padding: 0.18rem !important;
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 22%, transparent) !important;
+        background: color-mix(in srgb, var(--theme-void) 44%, transparent) !important;
+        box-shadow: none !important;
+    }
+
+    .shortTouchLandscapeShell .ctaMetaFrameWrap :global(svg),
+    .shortTouchLandscapeShell .ctaMetaFrameWrap :global([class*='cornice']) {
+        opacity: 0.34 !important;
+    }
+
+    .shortTouchLandscapeShell .ctaPanel {
+        padding: 0.22rem !important;
+        background: transparent;
+        box-shadow: none;
+    }
+
+    .shortTouchLandscapeShell .actionStack {
+        gap: 0.22rem;
+    }
+
+    .shortTouchLandscapeShell .secondaryActionGrid[data-layout='dense-grid'] {
+        display: contents;
+    }
+
+    .shell.shortTouchLandscapeShell .ctaButton,
+    .shell.shortTouchLandscapeShell .ctaButtonPlay {
+        min-height: var(--ui-touch-target-min, 44px) !important;
+        padding: 0.3rem 0.46rem !important;
+        overflow: hidden;
+        border-radius: var(--ui-radius-sm) !important;
+    }
+
+    .shortTouchLandscapeShell .ctaTitle,
+    .shortTouchLandscapeShell .ctaButtonPlay .ctaTitle {
+        display: block;
+        max-width: 100%;
+        overflow: hidden;
+        font-size: 0.63rem;
+        line-height: 1;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .shortTouchLandscapeShell .ctaButtonPlay .ctaTitle {
+        font-size: 0.7rem;
+    }
+
+    .shortTouchLandscapeShell .supportPanel {
+        width: min(calc(100vw - 1.1rem), 41rem);
+        max-height: 3.05rem;
+        padding: 0.36rem 0.48rem;
+        overflow: hidden;
+        border-radius: var(--ui-radius-sm);
+        background: color-mix(in srgb, var(--theme-void) 64%, transparent);
+        box-shadow: none;
+    }
+
+    .shortTouchLandscapeShell .helpDisclosure {
+        gap: 0.2rem;
+    }
+
+    .shortTouchLandscapeShell .helpDisclosure summary {
+        min-height: 1.52rem;
+    }
+
+    .shortTouchLandscapeShell .supportHeading {
+        display: block;
+        max-width: 100%;
+        overflow: hidden;
+        font-size: 0.66rem;
+        line-height: 1.05;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .shortTouchLandscapeShell .helpSummaryAction {
+        min-width: 2.6rem;
+        padding: 0.12rem 0.34rem;
+        font-size: 0.48rem;
+    }
+
+    .shortTouchLandscapeShell .helpDisclosure[open] .howToGrid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.2rem;
+        margin-top: 0.18rem;
+    }
+
+    .shortTouchLandscapeShell .helpDisclosure[open] .howToGrid p {
+        min-height: 2.1rem;
+        padding: 0.24rem 0.32rem;
+    }
+}
+
+/* UI-CLEANUP-114: short landscape launcher should not pin the title to the top glass edge. */
+@media (max-height: 520px) and (orientation: landscape) {
+    .shortTouchLandscapeShell .fitViewport {
+        --menu-content-pad-block-start: max(0.72rem, env(safe-area-inset-top, 0px));
+    }
+
+    .shortTouchLandscapeShell .heroColumn {
+        gap: 0.38rem;
+    }
+
+    .shortTouchLandscapeShell .brandLockup {
+        min-height: 2.15rem;
+    }
+
+    .shortTouchLandscapeShell .heroTitle {
+        font-size: clamp(1.22rem, 4.15vw, 1.6rem);
+    }
+}
+
+/* UI-CLEANUP-115: the first-run help menu should not collapse against the phone safe-area edge. */
+@media (max-width: 430px) and (orientation: portrait) {
+    .heroColumn:has(.supportPanel) {
+        padding-top: clamp(4rem, 12dvh, 6rem);
+    }
+
+    .heroColumn:has(.supportPanel) .brandLockup,
+    .touchCompactShell .heroColumn:has(.supportPanel) .brandLockup,
+    .ultraCompactPhoneShell .heroColumn:has(.supportPanel) .brandLockup {
+        padding-top: 0;
+    }
 }

@@ -1,6 +1,9 @@
 import styles from './GameScreen.module.css';
 import { getStackCashoutLaneCount, type VisualHudAnnouncementDetail } from './gameScreenFeedback';
 import type { MatchScorePop, MatchScorePopCrescendo } from '../store/matchScorePop';
+import GameScreenActionFeedbackDetails from './GameScreenActionFeedbackDetails';
+import GameScreenActionFeedbackHeader from './GameScreenActionFeedbackHeader';
+import GameScreenActionFeedbackLaneMap from './GameScreenActionFeedbackLaneMap';
 
 interface GameScreenActionFeedbackRailProps {
     burstTier?: 'none' | 'chain' | 'reward' | 'combo' | 'risk' | 'trait';
@@ -798,7 +801,16 @@ export const GameScreenActionFeedbackRail = ({
     const tempoAudioCue = actionFeedbackTempoAudioCue(tempoCue);
     const tempoScreenCue = actionFeedbackTempoScreenCue(tempoCue);
     const laneMap = actionFeedbackLaneMap(details);
-    const primaryLane = laneMap?.[0] ?? null;
+    const decoratedLaneMap =
+        laneMap?.map((lane) => ({
+            ...lane,
+            audioCue: actionFeedbackLaneAudioCue(lane),
+            beatCount: actionFeedbackLaneBeatCount(lane),
+            role: actionFeedbackLaneRole(lane),
+            roleId: actionFeedbackLaneRoleId(lane) ?? 'cashout',
+            screenCue: actionFeedbackLaneScreenCue(lane)
+        })) ?? [];
+    const primaryLane = decoratedLaneMap[0] ?? null;
     return (
         <div
             aria-hidden="true"
@@ -839,234 +851,37 @@ export const GameScreenActionFeedbackRail = ({
             data-testid="action-feedback-rail"
             data-tone={tone}
         >
-            <span className={styles.actionFeedbackHeader}>
-                <span>{label}</span>
-                {signal ? (
-                    <span className={styles.actionFeedbackSignal} data-action-feedback-signal={signal.tone}>
-                        {signal.label}
-                    </span>
-                ) : null}
-                {stackLabel ? (
-                    <span className={styles.actionFeedbackStackBadge} data-action-feedback-stack={burstTier}>
-                        {stackLabel}
-                    </span>
-                ) : null}
-                {payoffIntensity.id !== 'none' ? (
-                    <span
-                        aria-label={`Action feedback payoff intensity. ${payoffIntensity.count} ${payoffIntensity.label}. ${payoffIntensity.action}. ${payoffBeatCount} beats.`}
-                        className={styles.actionFeedbackPayoffIntensity}
-                        data-action-feedback-payoff-action={payoffIntensity.action}
-                        data-action-feedback-payoff-audio={payoffAudioCue}
-                        data-action-feedback-payoff-beats={payoffBeatCount}
-                        data-action-feedback-payoff-intensity={payoffIntensity.id}
-                        data-action-feedback-payoff-screen-cue={payoffScreenCue}
-                        data-testid="action-feedback-payoff-intensity"
-                    >
-                        <small>{payoffIntensity.count}</small>
-                        <strong>{payoffIntensity.label}</strong>
-                        <span aria-hidden="true" className={styles.actionFeedbackPayoffPips}>
-                            {Array.from({ length: payoffBeatCount }, (_, beatIndex) => (
-                                <i
-                                    data-action-feedback-payoff-beat={beatIndex + 1}
-                                    data-action-feedback-payoff-beat-focus={beatIndex === 0 ? 'primary' : 'support'}
-                                    key={beatIndex}
-                                />
-                            ))}
-                        </span>
-                        <em>{payoffIntensity.action}</em>
-                    </span>
-                ) : null}
-                {displayedCrescendo ? (
-                    <span
-                        aria-label={`Action feedback crescendo. ${displayedCrescendo.label}. ${displayedCrescendo.detail}. ${displayedCrescendo.beatCount} beats.`}
-                        className={styles.actionFeedbackCrescendo}
-                        data-action-feedback-crescendo-action={displayedCrescendo.detail}
-                        data-action-feedback-crescendo-audio={displayedCrescendo.audioCue}
-                        data-action-feedback-crescendo-cue={displayedCrescendo.screenCue}
-                        data-action-feedback-crescendo-screen-cue={displayedCrescendo.screenCue}
-                        data-action-feedback-crescendo-tier={displayedCrescendo.tier}
-                        data-action-feedback-crescendo-tone={actionFeedbackCrescendoTone(displayedCrescendo)}
-                        data-testid="action-feedback-crescendo"
-                    >
-                        <small>{displayedCrescendo.beatCount} beat</small>
-                        <span aria-hidden="true" className={styles.actionFeedbackCrescendoPips}>
-                            {Array.from({ length: displayedCrescendo.beatCount }, (_, beatIndex) => (
-                                <i
-                                    data-action-feedback-crescendo-beat={beatIndex + 1}
-                                    data-action-feedback-crescendo-beat-focus={beatIndex === 0 ? 'primary' : 'support'}
-                                    key={beatIndex}
-                                />
-                            ))}
-                        </span>
-                        <strong>{displayedCrescendo.label}</strong>
-                        <em>{displayedCrescendo.detail}</em>
-                    </span>
-                ) : null}
-                <span
-                    aria-label={`Action feedback impact. ${impactCue.label}. ${impactAction}.`}
-                    className={styles.actionFeedbackImpactCue}
-                    data-action-feedback-impact-action={impactAction}
-                    data-action-feedback-impact-audio={impactAudioCue}
-                    data-action-feedback-impact-screen-cue={impactScreenCue}
-                    data-action-feedback-impact-tone={impactCue.tone}
-                    data-testid="action-feedback-impact-cue"
-                >
-                    {impactCue.label}
-                    <em>{impactAction}</em>
-                </span>
-                <span
-                    aria-label={`Action feedback tempo. ${tempoCue.label}: ${tempoCue.value}. ${tempoBeat.label}. ${tempoBeat.beatCount} beats.`}
-                    className={styles.actionFeedbackTempoCue}
-                    data-action-feedback-tempo-action={tempoCue.value}
-                    data-action-feedback-tempo-audio={tempoAudioCue}
-                    data-action-feedback-tempo-beats={tempoBeat.beatCount}
-                    data-action-feedback-tempo-cadence={tempoBeat.cadence}
-                    data-action-feedback-tempo-label={tempoBeat.label}
-                    data-action-feedback-tempo-screen-cue={tempoScreenCue}
-                    data-action-feedback-tempo-tone={tempoCue.tone}
-                    data-testid="action-feedback-tempo-cue"
-                >
-                    <small>{tempoCue.label}</small>
-                    <strong>{tempoCue.value}</strong>
-                    <span aria-hidden="true" className={styles.actionFeedbackTempoPips}>
-                        {Array.from({ length: tempoBeat.beatCount }, (_, beatIndex) => (
-                            <i
-                                data-action-feedback-tempo-beat={beatIndex + 1}
-                                data-action-feedback-tempo-beat-focus={beatIndex === 0 ? 'primary' : 'support'}
-                                key={beatIndex}
-                            />
-                        ))}
-                    </span>
-                    <em>{tempoBeat.label}</em>
-                </span>
-            </span>
+            <GameScreenActionFeedbackHeader
+                burstTier={burstTier}
+                crescendoTone={displayedCrescendo ? actionFeedbackCrescendoTone(displayedCrescendo) : 'score'}
+                displayedCrescendo={displayedCrescendo}
+                impactAction={impactAction}
+                impactAudioCue={impactAudioCue}
+                impactCue={impactCue}
+                impactScreenCue={impactScreenCue}
+                label={label}
+                payoffAudioCue={payoffAudioCue}
+                payoffBeatCount={payoffBeatCount}
+                payoffIntensity={payoffIntensity}
+                payoffScreenCue={payoffScreenCue}
+                signal={signal ?? null}
+                stackLabel={stackLabel}
+                tempoAudioCue={tempoAudioCue}
+                tempoBeat={tempoBeat}
+                tempoCue={tempoCue}
+                tempoScreenCue={tempoScreenCue}
+            />
             <strong>{message}</strong>
-            {details.length > 0 ? (
-                <span className={styles.actionFeedbackDetails} data-testid="action-feedback-details">
-                    {details.map((detail) => (
-                        <span
-                            data-action-feedback-detail={detail.tone}
-                            data-action-feedback-detail-kind={actionFeedbackDetailKind(detail.label)}
-                            key={`${detail.tone}:${detail.label}`}
-                        >
-                            {detail.label}
-                        </span>
-                    ))}
-                </span>
-            ) : null}
-            {laneMap ? (
-                <span
-                    aria-label={actionFeedbackLaneMapLabel(laneMap)}
-                    className={styles.actionFeedbackLaneMap}
-                    data-action-feedback-lane-actions={actionFeedbackLaneActionMapAttr(laneMap)}
-                    data-action-feedback-lane-map={actionFeedbackLaneMapAttr(laneMap)}
-                    data-action-feedback-lane-roles={actionFeedbackLaneRoleMapAttr(laneMap)}
-                    data-action-feedback-lane-role-ids={actionFeedbackLaneRoleIdMapAttr(laneMap)}
-                    data-action-feedback-primary-lane={primaryLane?.id ?? 'none'}
-                    data-action-feedback-primary-lane-action={primaryLane?.action ?? 'none'}
-                    data-action-feedback-primary-lane-audio={primaryLane ? actionFeedbackLaneAudioCue(primaryLane) : 'none'}
-                    data-action-feedback-primary-lane-beats={primaryLane ? actionFeedbackLaneBeatCount(primaryLane) : 0}
-                    data-action-feedback-primary-lane-cue={primaryLane?.cue ?? 'none'}
-                    data-action-feedback-primary-lane-role={primaryLane ? actionFeedbackLaneRole(primaryLane) : 'none'}
-                    data-action-feedback-primary-lane-role-id={actionFeedbackLaneRoleId(primaryLane) ?? 'none'}
-                    data-action-feedback-primary-lane-screen-cue={primaryLane ? actionFeedbackLaneScreenCue(primaryLane) : 'none'}
-                    data-testid="action-feedback-lane-map"
-                >
-                    <span
-                        aria-label={`Action feedback lane summary. ${laneMap.length} ${
-                            laneMap.length === 1 ? 'lane' : 'lanes'
-                        }. ${primaryLane ? `${actionFeedbackLaneRole(primaryLane)} ${primaryLane.label}` : 'No primary lane'}.`}
-                        className={styles.actionFeedbackLaneMapSummary}
-                        data-action-feedback-lane-count={laneMap.length}
-                        data-action-feedback-lane-summary-primary={primaryLane?.id ?? 'none'}
-                        data-action-feedback-lane-summary-primary-action={primaryLane?.action ?? 'none'}
-                        data-action-feedback-lane-summary-primary-audio={primaryLane ? actionFeedbackLaneAudioCue(primaryLane) : 'none'}
-                        data-action-feedback-lane-summary-primary-role={primaryLane ? actionFeedbackLaneRole(primaryLane) : 'none'}
-                        data-action-feedback-lane-summary-primary-role-id={actionFeedbackLaneRoleId(primaryLane) ?? 'none'}
-                        data-action-feedback-lane-summary-primary-screen-cue={
-                            primaryLane ? actionFeedbackLaneScreenCue(primaryLane) : 'none'
-                        }
-                        data-testid="action-feedback-lane-map-summary"
-                    >
-                        <small>Lanes</small>
-                        <b>
-                            {laneMap.length} {laneMap.length === 1 ? 'lane' : 'lanes'}
-                        </b>
-                        <span aria-hidden="true" className={styles.actionFeedbackLaneMapSummaryBeatPips}>
-                            {Array.from({ length: Math.max(2, Math.min(5, laneMap.length + 1)) }, (_, beatIndex) => (
-                                <i
-                                    data-action-feedback-lane-map-summary-beat={beatIndex + 1}
-                                    data-action-feedback-lane-map-summary-beat-focus={beatIndex === 0 ? 'primary' : 'support'}
-                                    data-action-feedback-lane-map-summary-beat-primary={primaryLane?.id ?? 'none'}
-                                    data-action-feedback-lane-map-summary-beat-role-id={actionFeedbackLaneRoleId(primaryLane) ?? 'none'}
-                                    data-action-feedback-lane-map-summary-beat-screen-cue={
-                                        primaryLane ? actionFeedbackLaneScreenCue(primaryLane) : 'none'
-                                    }
-                                    key={beatIndex}
-                                />
-                            ))}
-                        </span>
-                    </span>
-                    {primaryLane ? (
-                        <span
-                            aria-label={`Primary feedback lane. ${actionFeedbackLaneRole(primaryLane)} ${primaryLane.label}: ${primaryLane.action}. ${primaryLane.cue}. ${actionFeedbackLaneBeatCount(primaryLane)} beats.`}
-                            className={styles.actionFeedbackPrimaryLaneCue}
-                            data-action-feedback-primary-lane={primaryLane.id}
-                            data-action-feedback-primary-lane-action={primaryLane.action}
-                            data-action-feedback-primary-lane-audio={actionFeedbackLaneAudioCue(primaryLane)}
-                            data-action-feedback-primary-lane-beats={actionFeedbackLaneBeatCount(primaryLane)}
-                            data-action-feedback-primary-lane-cue={primaryLane.cue}
-                            data-action-feedback-primary-lane-role={actionFeedbackLaneRole(primaryLane)}
-                            data-action-feedback-primary-lane-role-id={actionFeedbackLaneRoleId(primaryLane) ?? 'none'}
-                            data-action-feedback-primary-lane-screen-cue={actionFeedbackLaneScreenCue(primaryLane)}
-                            data-testid="action-feedback-primary-lane"
-                        >
-                            <small>Next chase</small>
-                            <b>{actionFeedbackLaneRole(primaryLane)}</b>
-                            <strong>{primaryLane.action}</strong>
-                            <em>{primaryLane.cue}</em>
-                            <span aria-hidden="true" className={styles.actionFeedbackPrimaryLaneBeatPips}>
-                                {Array.from({ length: actionFeedbackLaneBeatCount(primaryLane) }, (_, beatIndex) => (
-                                    <i
-                                        data-action-feedback-primary-lane-beat={beatIndex + 1}
-                                        data-action-feedback-primary-lane-beat-focus={beatIndex === 0 ? 'primary' : 'support'}
-                                        key={beatIndex}
-                                    />
-                                ))}
-                            </span>
-                        </span>
-                    ) : null}
-                    {laneMap.map((lane) => (
-                        <span
-                            data-action-feedback-lane={lane.id}
-                            data-action-feedback-lane-action={lane.action}
-                            data-action-feedback-lane-audio={actionFeedbackLaneAudioCue(lane)}
-                            data-action-feedback-lane-beats={actionFeedbackLaneBeatCount(lane)}
-                            data-action-feedback-lane-count={lane.count}
-                            data-action-feedback-lane-role={actionFeedbackLaneRole(lane)}
-                            data-action-feedback-lane-role-id={actionFeedbackLaneRoleId(lane) ?? 'none'}
-                            data-action-feedback-lane-screen-cue={actionFeedbackLaneScreenCue(lane)}
-                            key={lane.id}
-                        >
-                            <small>{lane.label}</small>
-                            <b>{actionFeedbackLaneRole(lane)}</b>
-                            <strong>{lane.action}</strong>
-                            <em>
-                                x{lane.count} / {lane.cue}
-                            </em>
-                            <span aria-hidden="true" className={styles.actionFeedbackLaneBeatPips}>
-                                {Array.from({ length: actionFeedbackLaneBeatCount(lane) }, (_, beatIndex) => (
-                                    <i
-                                        data-action-feedback-lane-beat={beatIndex + 1}
-                                        data-action-feedback-lane-beat-focus={beatIndex === 0 ? 'primary' : 'support'}
-                                        key={beatIndex}
-                                    />
-                                ))}
-                            </span>
-                        </span>
-                    ))}
-                </span>
-            ) : null}
+            <GameScreenActionFeedbackDetails details={details} getDetailKind={actionFeedbackDetailKind} />
+            <GameScreenActionFeedbackLaneMap
+                laneActionMapAttr={actionFeedbackLaneActionMapAttr(laneMap)}
+                laneMapAttr={actionFeedbackLaneMapAttr(laneMap)}
+                laneMapLabel={actionFeedbackLaneMapLabel(laneMap)}
+                laneRoleIdMapAttr={actionFeedbackLaneRoleIdMapAttr(laneMap)}
+                laneRoleMapAttr={actionFeedbackLaneRoleMapAttr(laneMap)}
+                lanes={decoratedLaneMap}
+                primaryLane={primaryLane}
+            />
             {stackRead ? (
                 <span
                     aria-label={`${stackRead.label}: ${stackRead.action}. ${stackRead.value}. ${stackRead.nextCue}`}

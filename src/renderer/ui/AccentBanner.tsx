@@ -1,4 +1,5 @@
 import type { HTMLAttributes, ReactNode } from 'react';
+import { cx } from './classNames';
 import styles from './AccentBanner.module.css';
 
 interface AccentBannerProps extends HTMLAttributes<HTMLParagraphElement> {
@@ -7,7 +8,7 @@ interface AccentBannerProps extends HTMLAttributes<HTMLParagraphElement> {
 }
 
 const AccentBanner = ({ children, compact = false, className = '', ...rest }: AccentBannerProps) => (
-    <p className={`${styles.root} ${compact ? styles.compact : ''} ${className}`.trim()} {...rest}>
+    <p className={cx(styles.root, compact && styles.compact, className)} {...rest}>
         {children}
     </p>
 );

@@ -1,0 +1,17 @@
+- generic [ref=f1e2] [box=0,0,1440,960]:
+  - generic [ref=f1e3] [box=0,0,1440,960]:
+    - link "Skip to main content" [ref=f1e4] [cursor=pointer] [box=-1,-1,1,1]:
+      - /url: "#app-main"
+    - main [ref=f1e5] [box=0,0,1440,960]:
+      - region "Codex" [ref=f1e1948] [box=0,0,1440,960]:
+        - generic [ref=f1e1949] [box=22,18,1397,171]:
+          - generic [ref=f1e1950] [box=22,18,414,164]
+          - button "Back" [ref=f1e1954] [cursor=pointer] [box=1377,18,41,46]
+        - generic [ref=f1e1955] [box=140,204,1160,738]:
+          - tablist "Codex browse" [ref=f1e1956] [box=140,204,1150,41]
+          - navigation "Codex sections" [ref=f1e1960] [box=140,256,1150,42]
+          - generic [ref=f1e1974] [box=140,310,1150,122]
+          - 'generic "Codex reward signal. Learn toward: Week of Archives. Clear seven Daily Challenge floors. No online account required. Next: Use Guides for rules, Tables for relics/mutators/achievements.." [ref=f1e1994] [box=140,442,1150,77]'
+          - generic [ref=f1e2000] [box=140,531,1150,34]
+          - generic [ref=f1e2003] [box=140,587,1150,12141]
+  - region "Memory Dungeon tips" [box=240,924,960,0]

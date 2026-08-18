@@ -75,6 +75,9 @@ describe('ChooseYourPathScreen REG-010 discoverability', () => {
         const launcher = screen.getByTestId('choose-path-launcher');
         expect(launcher).toHaveTextContent(/Classic Run/);
         expect(launcher).toHaveTextContent(/guided first room/i);
+        expect(screen.getByTestId('choose-path-launch-summary')).toHaveTextContent(
+            'Guided first room: match, clear, choose the next route.'
+        );
         const firstRunBeats = screen.getByTestId('choose-path-first-run-beats');
         expect(firstRunBeats).toHaveTextContent(/Match the marked pair/i);
         expect(firstRunBeats).toHaveTextContent(/Clear the room/i);
@@ -88,6 +91,7 @@ describe('ChooseYourPathScreen REG-010 discoverability', () => {
         );
         expect(screen.getByTestId('choose-path-mode-signals-classic')).toHaveTextContent(/Shops \+ relics/i);
         expect(screen.getByTestId('choose-path-mode-signals-classic')).toHaveTextContent(/Route choices/i);
+        expect(screen.getByTestId('choose-path-mode-signals-classic')).toHaveAttribute('data-layout', 'summary-only');
         expect(screen.getByTestId('choose-path-mode-signals-classic')).toHaveAttribute(
             'data-mode-lane-map',
             'chain:1>reward:1>pressure:1'
@@ -254,7 +258,7 @@ describe('ChooseYourPathScreen REG-010 discoverability', () => {
         expect(classicPrimaryLane).toHaveTextContent('Launch loop');
         expect(classicPrimaryLane).toHaveTextContent('Build');
         expect(classicPrimaryLane.querySelectorAll('[data-mode-primary-lane-beat]')).toHaveLength(4);
-        const startButton = screen.getByRole('button', { name: /Start Classic Run.*Payoff: Shops \+ relics/i });
+        const startButton = screen.getByRole('button', { name: /Start run: Classic Run.*Payoff: Shops \+ relics/i });
         expect(startButton).toBeInTheDocument();
         expect(startButton).toHaveTextContent(/Chain into route rewards/i);
         expect(startButton).toHaveAttribute('data-start-action-cue', 'Chain into route rewards');
@@ -271,7 +275,10 @@ describe('ChooseYourPathScreen REG-010 discoverability', () => {
 
         const library = screen.getByTestId('choose-path-more-modes');
         expect(library).toHaveTextContent(/Dungeon Showcase/);
+        expect(library).toHaveTextContent(/Patrols, locks, traps, shops, and bosses/i);
         expect(library).toHaveTextContent(/Daily Challenge/);
+        expect(library).toHaveTextContent(/Timed 5, 10, or 15 minute pressure runs\./);
+        expect(library).toHaveTextContent(/No shuffle, swap, or destroy\. Prove the read\./);
         expect(library).toHaveTextContent(/Endless Mode/);
         expect(library).toHaveTextContent(/Locked/);
         expect(library).toHaveTextContent(/Dungeon systems/);
@@ -366,7 +373,7 @@ describe('ChooseYourPathScreen REG-010 discoverability', () => {
         const user = userEvent.setup();
         render(<ChooseYourPathScreen />);
 
-        await user.click(screen.getByRole('button', { name: /Start Classic Run/i }));
+        await user.click(screen.getByRole('button', { name: /Start run: Classic Run/i }));
 
         expect(storeSpies.startRun).toHaveBeenCalledTimes(1);
         expect(storeSpies.startDungeonShowcaseRun).not.toHaveBeenCalled();

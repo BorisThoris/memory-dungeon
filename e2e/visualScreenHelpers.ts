@@ -12,6 +12,7 @@ import { readMemorizeSnapshot, type MemorizePairPositions } from './memorizeSnap
 import { dismissStartupIntro } from './startupIntroHelpers';
 
 const MATCH_SETTLE_MS = 950;
+const E2E_FREEZE_STARTUP_INTRO_KEY = 'memory-dungeon-e2e-freeze-intro';
 
 type PairClickSettlement = 'floor_cleared' | 'four_hidden' | 'two_hidden';
 
@@ -412,12 +413,21 @@ export async function writeHudLayoutDiagnostics(page: Page, outDir: string): Pro
  * Navigation completes first so React can mount the overlay; the locator wait catches visibility
  * without racing a parallel `goto` completion.
  */
-export async function gotoWithSaveExpectStartupIntroVisible(page: Page, saveJson: string): Promise<void> {
+export async function gotoWithSaveExpectStartupIntroVisible(
+    page: Page,
+    saveJson: string,
+    options?: { freeze?: boolean }
+): Promise<void> {
     await page.addInitScript(
-        ([key, json]) => {
+        ([key, json, freezeKey, freeze]) => {
             localStorage.setItem(key, json);
+            if (freeze) {
+                localStorage.setItem(freezeKey, 'true');
+            } else {
+                localStorage.removeItem(freezeKey);
+            }
         },
-        [STORAGE_KEY, saveJson]
+        [STORAGE_KEY, saveJson, E2E_FREEZE_STARTUP_INTRO_KEY, options?.freeze === true]
     );
     const intro = page.getByRole('dialog', { name: /startup relic intro/i });
     await page.goto('/', { waitUntil: 'load', timeout: 90_000 });
@@ -445,7 +455,7 @@ export async function startClassicRunFromModeSelect(page: Page): Promise<void> {
         if (await search.isVisible().catch(() => false)) {
             await search.fill('Classic Run');
         }
-        const classicTile = page.getByRole('button', { name: /^Classic Run\. Open details\.$/i });
+        const classicTile = page.getByRole('button', { name: /^Classic Run\..*Open details\.$/i });
         await expect(classicTile).toBeVisible({ timeout: 15_000 });
         await classicTile.click({ force: true });
         const modal = page.getByTestId('library-mode-detail-modal');

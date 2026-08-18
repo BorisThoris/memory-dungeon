@@ -173,8 +173,8 @@ describe('route side-room rules', () => {
             rewardImpactCue: 'Best fit',
             rewardImpactKind: 'build',
             traitBuildLabels: expect.arrayContaining(['Drift Routing']),
-            rewardPerkNextCue: 'Use Swap or row shuffle to connect trait routes.',
-            nextCue: 'Use Swap or row shuffle to connect trait routes.'
+            rewardPerkNextCue: 'Use Swap or row shuffle to link traits.',
+            nextCue: 'Use Swap or row shuffle to link traits.'
         });
     });
 
@@ -199,7 +199,7 @@ describe('route side-room rules', () => {
                     rewardImpactBeats: 4,
                     rewardImpactCue: 'Reward burst',
                     rewardImpactKind: 'resource',
-                    nextCue: 'Keep the iron key for the next locked entrance.'
+                    nextCue: 'Keep iron key for the next lock.'
                 })
             ])
         );

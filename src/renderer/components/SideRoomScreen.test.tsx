@@ -129,6 +129,9 @@ describe('SideRoomScreen', () => {
         if (signaledChoice) {
             expect(screen.getByTestId(`side-room-choice-${signaledChoice.id}-impact`)).toBeInTheDocument();
             expect(screen.getByTestId(`side-room-choice-${signaledChoice.id}-heat`)).toBeInTheDocument();
+            expect(screen.getByTestId(`side-room-choice-${signaledChoice.id}-support-details`)).toHaveTextContent(
+                'Support details'
+            );
             expect(screen.getByTestId(`side-room-choice-${signaledChoice.id}-signals`)).toBeInTheDocument();
             expect(screen.getByTestId(`side-room-choice-${signaledChoice.id}-payoffs`)).toBeInTheDocument();
         }
@@ -259,7 +262,7 @@ describe('SideRoomScreen', () => {
                             rewardImpactCue: 'Best fit',
                             rewardImpactDetail: 'Offered for Drift Routing: Drift + Volatile: routing burst',
                             rewardImpactKind: 'build',
-                            rewardPerkNextCue: 'Use Swap or row shuffle to connect trait routes.'
+                            rewardPerkNextCue: 'Use Swap or row shuffle to link traits.'
                         },
                         {
                             id: 'choice-key-insurance',
@@ -268,9 +271,9 @@ describe('SideRoomScreen', () => {
                             primary: false,
                             rewardImpactBeats: 4,
                             rewardImpactCue: 'Reward burst',
-                            rewardImpactDetail: 'Keep the iron key for the next locked entrance.',
+                            rewardImpactDetail: 'Keep iron key for the next lock.',
                             rewardImpactKind: 'resource',
-                            nextCue: 'Keep the iron key for the next locked entrance.'
+                            nextCue: 'Keep iron key for the next lock.'
                         }
                     ],
                     payload: { kind: 'bonus_reward', instanceId: 'choice-trait-toolkit' }
@@ -348,7 +351,7 @@ describe('SideRoomScreen', () => {
         expect(laneMap).toHaveTextContent('Unlock');
         expect(laneMap).toHaveTextContent('Bank');
         expect(laneMap).toHaveTextContent('Bank unlock');
-        expect(laneMap).toHaveTextContent('x1 / Keep the iron key for the next locked entrance.');
+        expect(laneMap).toHaveTextContent('x1 / Keep iron key for the next lock.');
         expect(laneMap.querySelector('[data-choice-lane="build"]')).toHaveAttribute(
             'data-choice-lane-action',
             'Pick build'
@@ -370,7 +373,7 @@ describe('SideRoomScreen', () => {
             laneMap.querySelector('[data-choice-lane="unlock"]')?.querySelectorAll('[data-choice-lane-beat]')
         ).toHaveLength(3);
         expect(laneMap).toHaveAccessibleName(
-            'Side room choice lanes. Build: Prime x1. Pick build. Drift Routing. Unlock: Bank x1. Bank unlock. Keep the iron key for the next locked entrance.'
+            'Side room choice lanes. Build: Prime x1. Pick build. Drift Routing. Unlock: Bank x1. Bank unlock. Keep iron key for the next lock.'
         );
         expect(screen.getByTestId('side-room-choice-choice-trait-toolkit')).toHaveAttribute(
             'data-choice-recommendation',
@@ -497,7 +500,7 @@ describe('SideRoomScreen', () => {
         expect(screen.getByTestId('side-room-choice-choice-trait-toolkit-payoff-stack')).toHaveTextContent('3 payoffs');
         expect(screen.getByTestId('side-room-choice-choice-trait-toolkit-payoff-stack')).toHaveTextContent('Reward + Route + Next');
         expect(screen.getByTestId('side-room-choice-choice-trait-toolkit-payoff-stack')).toHaveTextContent(
-            'Use Swap or row shuffle to connect trait routes.'
+            'Use Swap or row shuffle to link traits.'
         );
         expect(screen.getByTestId('side-room-choice-choice-trait-toolkit-payoff-stack')).toHaveAttribute(
             'data-choice-payoff-stack-first',
@@ -509,13 +512,13 @@ describe('SideRoomScreen', () => {
         );
         expect(screen.getByTestId('side-room-choice-choice-trait-toolkit-payoff-stack')).toHaveAttribute(
             'data-choice-payoff-stack-keep',
-            'Use Swap or row shuffle to connect trait routes.'
+            'Use Swap or row shuffle to link traits.'
         );
         expect(screen.getByTestId('side-room-choice-choice-trait-toolkit-payoff-stack')).toHaveTextContent('First');
         expect(screen.getByTestId('side-room-choice-choice-trait-toolkit-payoff-stack')).toHaveTextContent('Then');
         expect(screen.getByTestId('side-room-choice-choice-trait-toolkit-payoff-stack')).toHaveTextContent('Keep');
         expect(screen.getByTestId('side-room-choice-choice-trait-toolkit-payoff-stack')).toHaveAccessibleName(
-            'Super stack: 3 payoffs. Reward + Route + Next. First: +1 row/swap charge. Then: Offered for Drift Routing: Drift + Volatile: routing burst. Keep: Use Swap or row shuffle to connect trait routes. Next: Use Swap or row shuffle to connect trait routes.'
+            'Super stack: 3 payoffs. Reward + Route + Next. First: +1 row/swap charge. Then: Offered for Drift Routing: Drift + Volatile: routing burst. Keep: Use Swap or row shuffle to link traits. Next: Use Swap or row shuffle to link traits.'
         );
         expect(screen.getByTestId('side-room-choice-choice-trait-toolkit-signals')).toHaveTextContent('Best fit');
         expect(screen.getByTestId('side-room-choice-choice-trait-toolkit-signals')).toHaveTextContent('Gain');
@@ -571,10 +574,10 @@ describe('SideRoomScreen', () => {
         expect(screen.getByTestId('side-room-choice-choice-trait-toolkit-payoffs')).toHaveTextContent('Offered for Drift Routing');
         expect(screen.getByTestId('side-room-choice-choice-trait-toolkit-payoffs')).toHaveTextContent('Next');
         expect(screen.getByTestId('side-room-choice-choice-trait-toolkit-payoffs')).toHaveTextContent(
-            'Use Swap or row shuffle to connect trait routes.'
+            'Use Swap or row shuffle to link traits.'
         );
         expect(screen.getByTestId('side-room-choice-choice-trait-toolkit-payoffs').getAttribute('aria-label')).toContain(
-            'Trait toolkit payoff. Reward: +1 row/swap charge. Prime: Offered for Drift Routing: Drift + Volatile: routing burst. Next: Use Swap or row shuffle to connect trait routes.'
+            'Trait toolkit payoff. Reward: +1 row/swap charge. Prime: Offered for Drift Routing: Drift + Volatile: routing burst. Next: Use Swap or row shuffle to link traits.'
         );
         const traitToolkitPayoffs = screen.getByTestId('side-room-choice-choice-trait-toolkit-payoffs');
         expect(traitToolkitPayoffs.querySelector('[data-choice-payoff-id="reward"]')).toHaveAttribute(
@@ -620,7 +623,7 @@ describe('SideRoomScreen', () => {
         expect(screen.getByRole('button', { name: /Trait toolkit\. Choice heat: Hot route\. Offered for Drift Routing.*Best fit: Drift Routing\. Super stack: 3 payoffs\. Reward \+ Route \+ Next\. First: \+1 row\/swap charge\. Then: Offered for Drift Routing.*Keep: Use Swap or row shuffle.*Next: Use Swap or row shuffle.*Recommended: Offered for Drift Routing.*Reward: \+1 row\/swap charge.*Route primes: Drift Routing \/ Conduit Cartographer.*Next cue: Use Swap or row shuffle/i })).toBeInTheDocument();
         expect(screen.getByTestId('side-room-action-dock')).toHaveTextContent('Trait toolkit');
         expect(screen.getByTestId('side-room-action-dock')).toHaveTextContent(
-            'Best fit: +1 row/swap charge -> Use Swap or row shuffle to connect trait routes.'
+            'Best fit: +1 row/swap charge -> Use Swap or row shuffle to link traits.'
         );
         expect(
             screen
@@ -659,7 +662,7 @@ describe('SideRoomScreen', () => {
         );
         expect(screen.getByTestId('side-room-choice-choice-key-insurance-impact')).toHaveTextContent('Reward burst');
         expect(screen.getByTestId('side-room-choice-choice-key-insurance-impact')).toHaveTextContent(
-            'Keep the iron key for the next locked entrance.'
+            'Keep iron key for the next lock.'
         );
         expect(screen.getByTestId('side-room-choice-choice-key-insurance-impact')).toHaveAttribute(
             'data-choice-impact-screen-cue',
@@ -668,7 +671,7 @@ describe('SideRoomScreen', () => {
         expect(screen.getByTestId('side-room-choice-choice-key-insurance-payoff-stack')).toHaveTextContent('2 payoffs');
         expect(screen.getByTestId('side-room-choice-choice-key-insurance-payoff-stack')).toHaveTextContent('Reward + Next');
         expect(screen.getByTestId('side-room-choice-choice-key-insurance-payoff-stack')).toHaveTextContent(
-            'Keep the iron key for the next locked entrance.'
+            'Keep iron key for the next lock.'
         );
         expect(screen.getByTestId('side-room-choice-choice-key-insurance-payoff-stack')).toHaveAttribute(
             'data-choice-payoff-stack-first',
@@ -676,20 +679,20 @@ describe('SideRoomScreen', () => {
         );
         expect(screen.getByTestId('side-room-choice-choice-key-insurance-payoff-stack')).toHaveAttribute(
             'data-choice-payoff-stack-then',
-            'Keep the iron key for the next locked entrance.'
+            'Keep iron key for the next lock.'
         );
         expect(screen.getByTestId('side-room-choice-choice-key-insurance-payoff-stack')).toHaveAttribute(
             'data-choice-payoff-stack-keep',
-            'Keep the iron key for the next locked entrance.'
+            'Keep iron key for the next lock.'
         );
         expect(screen.getByTestId('side-room-choice-choice-key-insurance-payoffs')).toHaveTextContent('Next');
         expect(screen.getByTestId('side-room-choice-choice-key-insurance-payoffs')).toHaveTextContent(
-            'Keep the iron key for the next locked entrance.'
+            'Keep iron key for the next lock.'
         );
-        expect(screen.getByRole('button', { name: /Key insurance\. Choice heat: Live payoff\. Reward \+ Next\. Reward burst: Keep the iron key for the next locked entrance.*Payoff stack: 2 payoffs\. Reward \+ Next\. First: \+1 dungeon key\. Then: Keep the iron key.*Keep: Keep the iron key.*Next cue: Keep the iron key/i })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: /Key insurance\. Choice heat: Live payoff\. Reward \+ Next\. Reward burst: Keep iron key for the next lock.*Payoff stack: 2 payoffs\. Reward \+ Next\. First: \+1 dungeon key\. Then: Keep iron key.*Keep: Keep iron key.*Next cue: Keep iron key/i })).toBeInTheDocument();
         expect(screen.getByTestId('side-room-action-dock')).toHaveTextContent('Key insurance');
         expect(screen.getByTestId('side-room-action-dock')).toHaveTextContent(
-            'Reward burst: +1 dungeon key -> Keep the iron key for the next locked entrance.'
+            'Reward burst: +1 dungeon key -> Keep iron key for the next lock.'
         );
     });
 

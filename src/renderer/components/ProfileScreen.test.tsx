@@ -50,10 +50,20 @@ describe('ProfileScreen', () => {
 
         expect(screen.getByRole('heading', { name: 'Profile' })).toBeInTheDocument();
         expect(screen.getByTestId('profile-screen-body')).toBeInTheDocument();
+        expect(screen.getByTestId('profile-section-rail')).toHaveTextContent('Overview');
+        expect(screen.getByTestId('profile-section-rail')).toHaveTextContent('Trust');
+        expect(screen.getByRole('link', { name: 'Overview' })).toHaveAttribute('data-compact-label', 'Overview');
+        expect(screen.getByRole('link', { name: 'Signals' })).toHaveAttribute('data-compact-label', 'Signals');
         expect(screen.getByTestId('profile-summary-grid')).toBeInTheDocument();
         expect(screen.getByTestId('profile-progression-brief')).toBeInTheDocument();
         expect(screen.getAllByText(/initiate tier/i).length).toBeGreaterThanOrEqual(1);
-        expect(screen.getByText(/next: week of archives/i)).toBeInTheDocument();
+        expect(screen.getByTestId('profile-progression-brief').querySelector('strong')).toHaveTextContent(
+            'Next: Week of Archives (0/7)'
+        );
+        expect(screen.getByTestId('profile-progression-brief').querySelector('strong')).toHaveAttribute(
+            'data-full-progression-copy',
+            'Next: Week of Archives (0/7 from Daily archive completions).'
+        );
         expect(screen.getByText(/adept tier at profile level 3/i)).toBeInTheDocument();
         expect(screen.getByTestId('profile-milestone-rail')).toBeInTheDocument();
         expect(screen.getByTestId('profile-progression-impact-grid')).toHaveTextContent('Relic draft');

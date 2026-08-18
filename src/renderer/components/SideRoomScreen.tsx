@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, type KeyboardEvent, type MouseEvent } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import type { RouteNodeType, RouteSideRoomState, TileTraitKind } from '../../shared/contracts';
 import { getTraitBuildRewardRows } from '../../shared/trait-build-rewards';
@@ -11,6 +11,7 @@ import {
 import { useModalFocusTrap } from '../hooks/useModalFocusTrap';
 import { useAppStore } from '../store/useAppStore';
 import { OverlayActionDock } from '../ui';
+import FeedbackBeatPips from './FeedbackBeatPips';
 import { GAMEPLAY_VISUAL_CSS_VARS } from './gameplayVisualConfig';
 import { getInventoryPayoffEngineSignal } from './inventoryScreenModel';
 import styles from './SideRoomScreen.module.css';
@@ -949,6 +950,14 @@ const sideRoomChoiceLaneScreenCue = (
 
 const trimTerminalPunctuation = (value: string): string => value.trim().replace(/[.!?]+$/, '');
 
+const compactChoiceActionLabel = (label: string, maxWords = 2): string => {
+    if (/^key insurance$/i.test(label.trim())) {
+        return 'Key cover';
+    }
+    const words = label.trim().split(/\s+/).filter(Boolean);
+    return words.length > maxWords ? words.slice(0, maxWords).join(' ') : label;
+};
+
 const choiceActionAriaLabel = (choice: NonNullable<RouteSideRoomState['choices']>[number]): string => {
     const payoffRows = choicePayoffRows(choice);
     const impactBurst = choiceImpactBurst(choice, payoffRows);
@@ -988,6 +997,14 @@ const formatSideRoomSignalLabel = (
     const rowCopy = rows.map((row) => `${row.label}${row.value ? `: ${row.value}` : ''}`).join('. ');
     return rowCopy ? `${label}. ${rowCopy}.` : label;
 };
+
+const formatSideRoomSupportSummary = (
+    sections: readonly { count: number; label: string; pluralLabel?: string }[]
+): string =>
+    sections
+        .filter((section) => section.count > 0)
+        .map((section) => `${section.count} ${section.count === 1 ? section.label : section.pluralLabel ?? `${section.label}s`}`)
+        .join(' • ');
 
 const SideRoomScreen = () => {
     const rootRef = useRef<HTMLElement | null>(null);
@@ -1049,6 +1066,28 @@ const SideRoomScreen = () => {
     const choiceLaneRoleMapAttr = sideRoomChoiceLaneRoleMapAttr(choiceLaneMap);
     const choiceLaneRoleIdMapAttr = sideRoomChoiceLaneRoleIdMapAttr(choiceLaneMap);
     const choiceLaneMapAccessibleLabel = sideRoomChoiceLaneMapLabel(choiceLaneMap);
+    const claimChoice = (choiceId: string): void => {
+        resumeUiSfxContext();
+        playUiConfirmSfx(uiGain);
+        claimSideRoomChoice(choiceId);
+    };
+    const handleChoiceClick = (event: MouseEvent<HTMLDivElement>, choiceId: string): void => {
+        if ((event.target as HTMLElement).closest('details, summary')) {
+            return;
+        }
+        claimChoice(choiceId);
+    };
+    const handleChoiceKeyDown = (event: KeyboardEvent<HTMLDivElement>, choiceId: string): void => {
+        if (event.key !== 'Enter' && event.key !== ' ') {
+            return;
+        }
+        if ((event.target as HTMLElement).closest('details, summary')) {
+            return;
+        }
+        event.preventDefault();
+        claimChoice(choiceId);
+    };
+    const hasChoices = sideRoom.choices && sideRoom.choices.length > 0;
 
     return (
         <section
@@ -1064,136 +1103,141 @@ const SideRoomScreen = () => {
             style={GAMEPLAY_VISUAL_CSS_VARS}
             tabIndex={-1}
         >
-            <div className={styles.shell}>
-                <header className={styles.header}>
-                    <span className={styles.eyebrow}>
-                        {routeLabel(sideRoom.routeType)} / Floor {sideRoom.floor}
-                    </span>
-                    <h2>{sideRoom.title}</h2>
-                    <p>{sideRoom.body}</p>
-                </header>
-
-                <div
-                    aria-label={payoffEngineSignalLabel}
-                    className={styles.payoffEngineStrip}
-                    data-side-room-payoff-engine-action={payoffEngineActionCue}
-                    data-side-room-payoff-engine-audio={payoffEngineAudioCueValue}
-                    data-side-room-payoff-engine-beats={payoffEngineBeats}
-                    data-side-room-payoff-engine-screen-cue={payoffEngineScreenCueValue}
-                    data-side-room-payoff-engine-tone={payoffEngineSignal.tone}
-                    data-testid="side-room-payoff-engine"
-                >
-                    <span>
-                        <small>{payoffEngineSignal.label}</small>
-                        <strong>{payoffEngineSignal.value}</strong>
-                        <span aria-hidden="true" className={styles.payoffEngineBeatPips}>
-                            {Array.from({ length: payoffEngineBeats }, (_, index) => (
-                                <i
-                                    data-side-room-payoff-engine-beat
-                                    data-side-room-payoff-engine-beat-focus={index === 0 ? 'primary' : 'support'}
-                                    key={index}
-                                />
-                            ))}
+            <div className={styles.shell} data-has-choices={hasChoices ? 'true' : 'false'}>
+                <div className={styles.scrollBody}>
+                    <header className={styles.header}>
+                        <span className={styles.eyebrow}>
+                            {routeLabel(sideRoom.routeType)} / Floor {sideRoom.floor}
                         </span>
-                    </span>
-                    <span>
-                        <small>Live payoffs</small>
-                        <strong>{payoffEngineSignal.detail}</strong>
-                    </span>
-                    <span>
-                        <small>Next reward should help</small>
-                        <strong>{payoffEngineSignal.nextCue}</strong>
-                    </span>
-                </div>
+                        <h2>{sideRoom.title}</h2>
+                        <p>{sideRoom.body}</p>
+                    </header>
 
-                <div className={styles.rewardPanel} data-testid="side-room-reward-panel">
-                    <strong>{sideRoom.primaryLabel}</strong>
-                    <p className={styles.rewardText}>{sideRoom.primaryDetail}</p>
-                    <span
-                        aria-label={`${boardMoment.label}: ${boardMoment.value}.`}
-                        className={styles.boardMomentCue}
-                        data-board-moment-tone={boardMoment.tone}
-                        data-testid="side-room-board-moment"
-                    >
-                        <small>{boardMoment.label}</small>
-                        <strong>{boardMoment.value}</strong>
-                    </span>
                     <div
-                        aria-label={actionSignalsLabel}
-                        className={styles.primaryActionSignals}
-                        data-testid="side-room-primary-action-signals"
+                        aria-label={payoffEngineSignalLabel}
+                        className={styles.payoffEngineStrip}
+                        data-side-room-payoff-engine-action={payoffEngineActionCue}
+                        data-side-room-payoff-engine-audio={payoffEngineAudioCueValue}
+                        data-side-room-payoff-engine-beats={payoffEngineBeats}
+                        data-side-room-payoff-engine-screen-cue={payoffEngineScreenCueValue}
+                        data-side-room-payoff-engine-tone={payoffEngineSignal.tone}
+                        data-testid="side-room-payoff-engine"
                     >
-                        {actionSignals.map((signal) => {
-                            const beatCount = primaryActionSignalBeatCount(signal);
-                            return (
-                                <span
-                                    data-primary-action-audio={primaryActionSignalAudioCue(signal)}
-                                    data-primary-action-beats={beatCount}
-                                    data-primary-action-screen-cue={primaryActionSignalScreenCue(signal)}
-                                    data-primary-action-tone={signal.tone}
-                                    key={signal.id}
-                                >
-                                    <small>{signal.label}</small>
-                                    <strong>{signal.value}</strong>
-                                    <span aria-hidden="true" className={styles.primaryActionBeatPips}>
-                                        {Array.from({ length: beatCount }, (_, beatIndex) => (
-                                            <i
-                                                data-primary-action-beat={beatIndex + 1}
-                                                data-primary-action-beat-focus={beatIndex === 0 ? 'primary' : 'support'}
-                                                key={beatIndex}
-                                            />
-                                        ))}
-                                    </span>
-                                </span>
-                            );
-                        })}
+                        <span>
+                            <small>{payoffEngineSignal.label}</small>
+                            <strong>{payoffEngineSignal.value}</strong>
+                            <span aria-hidden="true" className={styles.payoffEngineBeatPips}>
+                                {Array.from({ length: payoffEngineBeats }, (_, index) => (
+                                    <i
+                                        data-side-room-payoff-engine-beat
+                                        data-side-room-payoff-engine-beat-focus={index === 0 ? 'primary' : 'support'}
+                                        key={index}
+                                    />
+                                ))}
+                            </span>
+                        </span>
+                        <span>
+                            <small>Live payoffs</small>
+                            <strong>{payoffEngineSignal.detail}</strong>
+                        </span>
+                        <span>
+                            <small>Next reward should help</small>
+                            <strong>{payoffEngineSignal.nextCue}</strong>
+                        </span>
                     </div>
-                    {rewardSummary.length > 0 ? (
+
+                    <div
+                        className={styles.rewardPanel}
+                        data-has-choices={sideRoom.choices && sideRoom.choices.length > 0 ? 'true' : 'false'}
+                        data-testid="side-room-reward-panel"
+                    >
+                        <strong>{sideRoom.primaryLabel}</strong>
+                        <p className={styles.rewardText}>{sideRoom.primaryDetail}</p>
+                        <span
+                            aria-label={`${boardMoment.label}: ${boardMoment.value}.`}
+                            className={styles.boardMomentCue}
+                            data-board-moment-tone={boardMoment.tone}
+                            data-testid="side-room-board-moment"
+                        >
+                            <small>{boardMoment.label}</small>
+                            <strong>{boardMoment.value}</strong>
+                        </span>
                         <div
-                            aria-label={rewardSummaryLabel}
-                            className={styles.rewardBurstStrip}
-                            data-testid="side-room-reward-burst-strip"
+                            aria-label={actionSignalsLabel}
+                            className={styles.primaryActionSignals}
+                            data-testid="side-room-primary-action-signals"
                         >
-                            {rewardSummary.map((row) => (
-                                <span
-                                    data-reward-burst-action={rewardBurstAction(row)}
-                                    data-reward-burst-audio={rewardBurstAudioCue(row)}
-                                    data-reward-burst-beats={rewardBurstBeatCount(row)}
-                                    data-reward-burst-screen-cue={rewardBurstScreenCue(row)}
-                                    data-reward-burst-tone={row.tone}
-                                    key={row.label}
-                                >
-                                    <small>{row.label}</small>
-                                    <strong>{row.value}</strong>
-                                    <b>{rewardBurstAction(row)}</b>
-                                    <span aria-hidden="true" className={styles.rewardBurstBeatPips}>
-                                        {Array.from({ length: rewardBurstBeatCount(row) }, (_, index) => (
-                                            <i
-                                                data-reward-burst-beat
-                                                data-reward-burst-beat-focus={index === 0 ? 'primary' : 'support'}
-                                                key={index}
-                                            />
-                                        ))}
+                            {actionSignals.map((signal) => {
+                                const beatCount = primaryActionSignalBeatCount(signal);
+                                return (
+                                    <span
+                                        data-primary-action-audio={primaryActionSignalAudioCue(signal)}
+                                        data-primary-action-beats={beatCount}
+                                        data-primary-action-screen-cue={primaryActionSignalScreenCue(signal)}
+                                        data-primary-action-tone={signal.tone}
+                                        key={signal.id}
+                                    >
+                                        <small>{signal.label}</small>
+                                        <strong>{signal.value}</strong>
+                                        <span aria-hidden="true" className={styles.primaryActionBeatPips}>
+                                            {Array.from({ length: beatCount }, (_, beatIndex) => (
+                                                <i
+                                                    data-primary-action-beat={beatIndex + 1}
+                                                    data-primary-action-beat-focus={beatIndex === 0 ? 'primary' : 'support'}
+                                                    key={beatIndex}
+                                                />
+                                            ))}
+                                        </span>
                                     </span>
-                                </span>
-                            ))}
+                                );
+                            })}
                         </div>
-                    ) : null}
-                    {rewardSegments.length > 1 ? (
-                        <ul
-                            aria-label={rewardBreakdownLabel}
-                            className={styles.rewardFeedbackList}
-                            data-testid="side-room-reward-feedback"
-                        >
-                            {rewardSegments.map((segment, index) => (
-                                <li data-reward-feedback-kind={segment.kind} key={`${segment.kind}:${index}:${segment.label}`}>
-                                    {segment.label}
-                                </li>
-                            ))}
-                        </ul>
-                    ) : null}
-                    {sideRoom.choices && sideRoom.choices.length > 0 ? (
-                        <div className={styles.choiceList}>
+                        {rewardSummary.length > 0 ? (
+                            <div
+                                aria-label={rewardSummaryLabel}
+                                className={styles.rewardBurstStrip}
+                                data-testid="side-room-reward-burst-strip"
+                            >
+                                {rewardSummary.map((row) => (
+                                    <span
+                                        data-reward-burst-action={rewardBurstAction(row)}
+                                        data-reward-burst-audio={rewardBurstAudioCue(row)}
+                                        data-reward-burst-beats={rewardBurstBeatCount(row)}
+                                        data-reward-burst-screen-cue={rewardBurstScreenCue(row)}
+                                        data-reward-burst-tone={row.tone}
+                                        key={row.label}
+                                    >
+                                        <small>{row.label}</small>
+                                        <strong>{row.value}</strong>
+                                        <b>{rewardBurstAction(row)}</b>
+                                        <span aria-hidden="true" className={styles.rewardBurstBeatPips}>
+                                            {Array.from({ length: rewardBurstBeatCount(row) }, (_, index) => (
+                                                <i
+                                                    data-reward-burst-beat
+                                                    data-reward-burst-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                    key={index}
+                                                />
+                                            ))}
+                                        </span>
+                                    </span>
+                                ))}
+                            </div>
+                        ) : null}
+                        {rewardSegments.length > 1 ? (
+                            <ul
+                                aria-label={rewardBreakdownLabel}
+                                className={styles.rewardFeedbackList}
+                                data-testid="side-room-reward-feedback"
+                            >
+                                {rewardSegments.map((segment, index) => (
+                                    <li data-reward-feedback-kind={segment.kind} key={`${segment.kind}:${index}:${segment.label}`}>
+                                        {segment.label}
+                                    </li>
+                                ))}
+                            </ul>
+                        ) : null}
+                        {sideRoom.choices && sideRoom.choices.length > 0 ? (
+                            <div className={styles.choiceList}>
                             {choiceLaneMap.length > 1 ? (
                                 <div
                                     aria-label={choiceLaneMapAccessibleLabel}
@@ -1358,8 +1402,14 @@ const SideRoomScreen = () => {
                                     `${choice.label} payoff`,
                                     payoffRows
                                 );
+                                const supportSummary = formatSideRoomSupportSummary([
+                                    { count: signalChips.length, label: 'signal' },
+                                    { count: buildRoutes.length, label: 'route' },
+                                    { count: payoffRows.length, label: 'payoff' }
+                                ]);
                                 return (
                                     <div
+                                        aria-label={`Choose ${choice.label}: ${choice.detail}`}
                                         className={styles.choiceRow}
                                         data-choice-id={choice.id}
                                         data-choice-primary={choice.primary ? 'true' : 'false'}
@@ -1378,100 +1428,205 @@ const SideRoomScreen = () => {
                                         data-choice-recommendation={choice.traitBuildReason ? 'best-fit' : 'standard'}
                                         data-testid={`side-room-choice-${choice.id}`}
                                         key={choice.id}
+                                        onClick={(event) => handleChoiceClick(event, choice.id)}
+                                        onKeyDown={(event) => handleChoiceKeyDown(event, choice.id)}
+                                        role="button"
+                                        tabIndex={0}
                                     >
                                         <strong>{choice.label}</strong>
-                                        <span
-                                            aria-label={`${heatCue.label}: ${heatCue.value}. ${heatCue.detail}.`}
-                                            className={styles.choiceHeatCue}
-                                            data-choice-heat-tier={heatCue.tier}
-                                            data-testid={`side-room-choice-${choice.id}-heat`}
-                                        >
-                                            <small>{heatCue.label}</small>
-                                            <strong>{heatCue.value}</strong>
-                                            <em>{heatCue.detail}</em>
-                                        </span>
-                                        <span
-                                            aria-label={beatCueLabel}
-                                            className={styles.choiceBeatCue}
-                                            data-choice-beat-screen-cue={beatScreenCue}
-                                            data-choice-beat-tier={beatCue.tier}
-                                            data-testid={`side-room-choice-${choice.id}-beat`}
-                                        >
-                                            <small>{beatCue.label}</small>
-                                            <span aria-hidden="true" className={styles.choiceBeatPips}>
-                                                {Array.from({ length: beatCue.beatCount }, (_, beatIndex) => (
-                                                    <i key={beatIndex} />
-                                                ))}
-                                            </span>
-                                            <strong>{beatCue.action}</strong>
-                                            <em>{beatCue.detail}</em>
-                                        </span>
-                                        <span
-                                            aria-label={`${impactBurst.label}: ${impactBurst.value}.`}
-                                            className={styles.choiceImpactBurst}
-                                            data-choice-impact-screen-cue={impactScreenCue}
-                                            data-choice-impact-tone={impactBurst.tone}
-                                            data-testid={`side-room-choice-${choice.id}-impact`}
-                                        >
-                                            <small>{impactBurst.label}</small>
-                                            <strong>{impactBurst.value}</strong>
-                                        </span>
-                                        {payoffStack ? (
+                                        <div className={styles.choiceCueGrid}>
                                             <span
-                                                aria-label={`${payoffStack.label}: ${payoffStack.value}. ${payoffStack.detail}. First: ${trimTerminalPunctuation(payoffStack.sequence.first)}. Then: ${trimTerminalPunctuation(payoffStack.sequence.then)}. Keep: ${trimTerminalPunctuation(payoffStack.sequence.keep)}. Next: ${trimTerminalPunctuation(payoffStack.nextCue)}.`}
-                                                className={styles.choicePayoffStack}
-                                                data-choice-payoff-stack-first={payoffStack.sequence.first}
-                                                data-choice-payoff-stack-keep={payoffStack.sequence.keep}
-                                                data-choice-payoff-stack-tone={payoffStack.tone}
-                                                data-choice-payoff-stack-then={payoffStack.sequence.then}
-                                                data-testid={`side-room-choice-${choice.id}-payoff-stack`}
+                                                aria-label={`${heatCue.label}: ${heatCue.value}. ${heatCue.detail}.`}
+                                                className={styles.choiceHeatCue}
+                                                data-choice-heat-tier={heatCue.tier}
+                                                data-testid={`side-room-choice-${choice.id}-heat`}
                                             >
-                                                <small>{payoffStack.label}</small>
-                                                <strong>{payoffStack.value}</strong>
-                                                <em>{payoffStack.detail}</em>
-                                                <b>{payoffStack.nextCue}</b>
-                                                <span className={styles.choicePayoffSequence}>
-                                                    <i>First</i>
-                                                    <strong>{payoffStack.sequence.first}</strong>
-                                                    <i>Then</i>
-                                                    <strong>{payoffStack.sequence.then}</strong>
-                                                    <i>Keep</i>
-                                                    <strong>{payoffStack.sequence.keep}</strong>
-                                                </span>
+                                                <small>{heatCue.label}</small>
+                                                <strong>{heatCue.value}</strong>
+                                                <em>{heatCue.detail}</em>
                                             </span>
-                                        ) : null}
-                                        {signalChips.length > 0 ? (
-                                            <div
-                                                aria-label={choiceSignalsLabel}
-                                                className={styles.choiceSignalChips}
-                                                data-testid={`side-room-choice-${choice.id}-signals`}
+                                            <span
+                                                aria-label={beatCueLabel}
+                                                className={styles.choiceBeatCue}
+                                                data-choice-beat-screen-cue={beatScreenCue}
+                                                data-choice-beat-tier={beatCue.tier}
+                                                data-testid={`side-room-choice-${choice.id}-beat`}
                                             >
-                                                {signalChips.map((chip) => {
-                                                    const beatCount = choiceSignalBeatCount(chip);
-                                                    return (
-                                                        <span
-                                                            data-choice-signal-action={choiceSignalAction(chip)}
-                                                            data-choice-signal-audio={choiceSignalAudioCue(chip)}
-                                                            data-choice-signal-beats={beatCount}
-                                                            data-choice-signal-screen-cue={choiceSignalScreenCue(chip)}
-                                                            data-choice-signal-tone={chip.tone}
-                                                            key={`${choice.id}:${chip.label}`}
+                                                <small>{beatCue.label}</small>
+                                                <span aria-hidden="true" className={styles.choiceBeatPips}>
+                                                    {Array.from({ length: beatCue.beatCount }, (_, beatIndex) => (
+                                                        <i key={beatIndex} />
+                                                    ))}
+                                                </span>
+                                                <strong>{beatCue.action}</strong>
+                                                <em>{beatCue.detail}</em>
+                                            </span>
+                                            <span
+                                                aria-label={`${impactBurst.label}: ${impactBurst.value}.`}
+                                                className={styles.choiceImpactBurst}
+                                                data-choice-impact-screen-cue={impactScreenCue}
+                                                data-choice-impact-tone={impactBurst.tone}
+                                                data-testid={`side-room-choice-${choice.id}-impact`}
+                                            >
+                                                <small>{impactBurst.label}</small>
+                                                <strong>{impactBurst.value}</strong>
+                                            </span>
+                                            {payoffStack ? (
+                                                <span
+                                                    aria-label={`${payoffStack.label}: ${payoffStack.value}. ${payoffStack.detail}. First: ${trimTerminalPunctuation(payoffStack.sequence.first)}. Then: ${trimTerminalPunctuation(payoffStack.sequence.then)}. Keep: ${trimTerminalPunctuation(payoffStack.sequence.keep)}. Next: ${trimTerminalPunctuation(payoffStack.nextCue)}.`}
+                                                    className={styles.choicePayoffStack}
+                                                    data-choice-payoff-stack-first={payoffStack.sequence.first}
+                                                    data-choice-payoff-stack-keep={payoffStack.sequence.keep}
+                                                    data-choice-payoff-stack-tone={payoffStack.tone}
+                                                    data-choice-payoff-stack-then={payoffStack.sequence.then}
+                                                    data-testid={`side-room-choice-${choice.id}-payoff-stack`}
+                                                >
+                                                    <small>{payoffStack.label}</small>
+                                                    <strong>{payoffStack.value}</strong>
+                                                    <em>{payoffStack.detail}</em>
+                                                    <b>{payoffStack.nextCue}</b>
+                                                    <span className={styles.choicePayoffSequence}>
+                                                        <i>First</i>
+                                                        <strong>{payoffStack.sequence.first}</strong>
+                                                        <i>Then</i>
+                                                        <strong>{payoffStack.sequence.then}</strong>
+                                                        <i>Keep</i>
+                                                        <strong>{payoffStack.sequence.keep}</strong>
+                                                    </span>
+                                                </span>
+                                            ) : null}
+                                        </div>
+                                        {signalChips.length > 0 || buildRoutes.length > 0 || payoffRows.length > 0 ? (
+                                            <details
+                                                className={styles.choiceSupportDetails}
+                                                data-testid={`side-room-choice-${choice.id}-support-details`}
+                                            >
+                                                <summary
+                                                    aria-label={`${choice.label} support details. ${supportSummary.replace(/ • /g, '. ')}.`}
+                                                    className={styles.choiceSupportSummary}
+                                                >
+                                                    <small>Support details</small>
+                                                    <strong>{supportSummary}</strong>
+                                                </summary>
+                                                <div
+                                                    className={styles.choiceSupportRail}
+                                                    data-testid={`side-room-choice-${choice.id}-support-rail`}
+                                                >
+                                                    {signalChips.length > 0 ? (
+                                                        <div
+                                                            aria-label={choiceSignalsLabel}
+                                                            className={styles.choiceSignalChips}
+                                                            data-testid={`side-room-choice-${choice.id}-signals`}
                                                         >
-                                                            {chip.label}
-                                                            <b>{choiceSignalAction(chip)}</b>
-                                                            <span aria-hidden="true" className={styles.choiceSignalBeatPips}>
-                                                                {Array.from({ length: beatCount }, (_, beatIndex) => (
-                                                                    <i
-                                                                        data-choice-signal-beat={beatIndex + 1}
-                                                                        data-choice-signal-beat-focus={beatIndex === 0 ? 'primary' : 'support'}
-                                                                        key={beatIndex}
-                                                                    />
-                                                                ))}
-                                                            </span>
-                                                        </span>
-                                                    );
-                                                })}
-                                            </div>
+                                                            {signalChips.map((chip) => {
+                                                                const beatCount = choiceSignalBeatCount(chip);
+                                                                return (
+                                                                    <span
+                                                                        data-choice-signal-action={choiceSignalAction(chip)}
+                                                                        data-choice-signal-audio={choiceSignalAudioCue(chip)}
+                                                                        data-choice-signal-beats={beatCount}
+                                                                        data-choice-signal-screen-cue={choiceSignalScreenCue(chip)}
+                                                                        data-choice-signal-tone={chip.tone}
+                                                                        key={`${choice.id}:${chip.label}`}
+                                                                    >
+                                                                        {chip.label}
+                                                                        <b>{choiceSignalAction(chip)}</b>
+                                                                        <FeedbackBeatPips
+                                                                            className={styles.choiceSignalBeatPips}
+                                                                            count={beatCount}
+                                                                            itemProps={(beatIndex) => ({
+                                                                                'data-choice-signal-beat': beatIndex + 1,
+                                                                                'data-choice-signal-beat-focus':
+                                                                                    beatIndex === 0 ? 'primary' : 'support'
+                                                                            })}
+                                                                            keyPrefix={`${choice.id}-${chip.tone}`}
+                                                                        />
+                                                                    </span>
+                                                                );
+                                                            })}
+                                                        </div>
+                                                    ) : null}
+                                                    {buildRoutes.length > 0 ? (
+                                                        <div
+                                                            aria-label={buildRouteLabel}
+                                                            className={styles.choiceBuildRoutes}
+                                                            data-choice-build-route-count={buildRoutes.length}
+                                                            data-testid={`side-room-choice-${choice.id}-build-routes`}
+                                                        >
+                                                            {buildRoutes.map((route) => (
+                                                                <span
+                                                                    data-choice-build-route-beats={route.beatCount}
+                                                                    data-choice-build-route-id={route.id}
+                                                                    data-choice-build-route-tone={route.tone}
+                                                                    data-choice-build-trait-count={route.traitKinds.length}
+                                                                    key={route.id}
+                                                                >
+                                                                    <small>{route.label}</small>
+                                                                    <strong>
+                                                                        {route.traitKinds.map((traitKind, index) => (
+                                                                            <b data-choice-build-route-trait={traitKind} key={traitKind}>
+                                                                                {sideRoomTraitKindLabel(traitKind)}
+                                                                                {index < route.traitKinds.length - 1 ? (
+                                                                                    <i aria-hidden="true">+</i>
+                                                                                ) : null}
+                                                                            </b>
+                                                                        ))}
+                                                                    </strong>
+                                                                    <em>{route.payoff}</em>
+                                                                    <span aria-hidden="true" className={styles.choiceBuildRouteBeatPips}>
+                                                                        {Array.from({ length: route.beatCount }, (_, beatIndex) => (
+                                                                            <i
+                                                                                data-choice-build-route-beat={beatIndex + 1}
+                                                                                data-choice-build-route-beat-focus={
+                                                                                    beatIndex === 0 ? 'primary' : 'support'
+                                                                                }
+                                                                                key={beatIndex}
+                                                                            />
+                                                                        ))}
+                                                                    </span>
+                                                                </span>
+                                                            ))}
+                                                        </div>
+                                                    ) : null}
+                                                    {payoffRows.length > 0 ? (
+                                                        <div
+                                                            aria-label={choicePayoffsLabel}
+                                                            className={styles.choicePayoffRows}
+                                                            data-testid={`side-room-choice-${choice.id}-payoffs`}
+                                                        >
+                                                            {payoffRows.map((row) => {
+                                                                const beatCount = choicePayoffBeatCount(row);
+                                                                return (
+                                                                    <span
+                                                                        data-choice-payoff-action={choicePayoffAction(row)}
+                                                                        data-choice-payoff-audio={choicePayoffAudioCue(row)}
+                                                                        data-choice-payoff-beats={beatCount}
+                                                                        data-choice-payoff-id={row.id}
+                                                                        data-choice-payoff-screen-cue={choicePayoffScreenCue(row)}
+                                                                        data-choice-payoff-tone={row.tone}
+                                                                        key={row.id}
+                                                                    >
+                                                                        <small>{row.label}</small>
+                                                                        <strong>{row.value}</strong>
+                                                                        <b>{choicePayoffAction(row)}</b>
+                                                                        <span aria-hidden="true" className={styles.choicePayoffBeatPips}>
+                                                                            {Array.from({ length: beatCount }, (_, beatIndex) => (
+                                                                                <i
+                                                                                    data-choice-payoff-beat={beatIndex + 1}
+                                                                                    data-choice-payoff-beat-focus={
+                                                                                        beatIndex === 0 ? 'primary' : 'support'
+                                                                                    }
+                                                                                    key={beatIndex}
+                                                                                />
+                                                                            ))}
+                                                                        </span>
+                                                                    </span>
+                                                                );
+                                                            })}
+                                                        </div>
+                                                    ) : null}
+                                                </div>
+                                            </details>
                                         ) : null}
                                         {choice.traitBuildLabels && choice.traitBuildLabels.length > 0 ? (
                                             <div className={styles.traitBuildTags} aria-label="Trait build archetypes">
@@ -1480,88 +1635,16 @@ const SideRoomScreen = () => {
                                                 ))}
                                             </div>
                                         ) : null}
-                                        {buildRoutes.length > 0 ? (
-                                            <div
-                                                aria-label={buildRouteLabel}
-                                                className={styles.choiceBuildRoutes}
-                                                data-choice-build-route-count={buildRoutes.length}
-                                                data-testid={`side-room-choice-${choice.id}-build-routes`}
-                                            >
-                                                {buildRoutes.map((route) => (
-                                                    <span
-                                                        data-choice-build-route-beats={route.beatCount}
-                                                        data-choice-build-route-id={route.id}
-                                                        data-choice-build-route-tone={route.tone}
-                                                        data-choice-build-trait-count={route.traitKinds.length}
-                                                        key={route.id}
-                                                    >
-                                                        <small>{route.label}</small>
-                                                        <strong>
-                                                            {route.traitKinds.map((traitKind, index) => (
-                                                                <b data-choice-build-route-trait={traitKind} key={traitKind}>
-                                                                    {sideRoomTraitKindLabel(traitKind)}
-                                                                    {index < route.traitKinds.length - 1 ? <i aria-hidden="true">+</i> : null}
-                                                                </b>
-                                                            ))}
-                                                        </strong>
-                                                        <em>{route.payoff}</em>
-                                                        <span aria-hidden="true" className={styles.choiceBuildRouteBeatPips}>
-                                                            {Array.from({ length: route.beatCount }, (_, beatIndex) => (
-                                                                <i
-                                                                    data-choice-build-route-beat={beatIndex + 1}
-                                                                    data-choice-build-route-beat-focus={beatIndex === 0 ? 'primary' : 'support'}
-                                                                    key={beatIndex}
-                                                                />
-                                                            ))}
-                                                        </span>
-                                                    </span>
-                                                ))}
-                                            </div>
-                                        ) : null}
                                         {choice.traitBuildReason ? (
                                             <p className={styles.traitBuildReason}>{choice.traitBuildReason}</p>
-                                        ) : null}
-                                        {payoffRows.length > 0 ? (
-                                            <div
-                                                aria-label={choicePayoffsLabel}
-                                                className={styles.choicePayoffRows}
-                                                data-testid={`side-room-choice-${choice.id}-payoffs`}
-                                            >
-                                                {payoffRows.map((row) => {
-                                                    const beatCount = choicePayoffBeatCount(row);
-                                                    return (
-                                                        <span
-                                                            data-choice-payoff-action={choicePayoffAction(row)}
-                                                            data-choice-payoff-audio={choicePayoffAudioCue(row)}
-                                                            data-choice-payoff-beats={beatCount}
-                                                            data-choice-payoff-id={row.id}
-                                                            data-choice-payoff-screen-cue={choicePayoffScreenCue(row)}
-                                                            data-choice-payoff-tone={row.tone}
-                                                            key={row.id}
-                                                        >
-                                                            <small>{row.label}</small>
-                                                            <strong>{row.value}</strong>
-                                                            <b>{choicePayoffAction(row)}</b>
-                                                            <span aria-hidden="true" className={styles.choicePayoffBeatPips}>
-                                                                {Array.from({ length: beatCount }, (_, beatIndex) => (
-                                                                    <i
-                                                                        data-choice-payoff-beat={beatIndex + 1}
-                                                                        data-choice-payoff-beat-focus={beatIndex === 0 ? 'primary' : 'support'}
-                                                                        key={beatIndex}
-                                                                    />
-                                                                ))}
-                                                            </span>
-                                                        </span>
-                                                    );
-                                                })}
-                                            </div>
                                         ) : null}
                                         <p>{choice.detail}</p>
                                     </div>
                                 );
                             })}
-                        </div>
-                    ) : null}
+                            </div>
+                        ) : null}
+                    </div>
                 </div>
 
                 <footer className={styles.actions}>
@@ -1571,6 +1654,7 @@ const SideRoomScreen = () => {
                                 ? [
                                       {
                                           label: sideRoom.skipLabel,
+                                          compactLabel: compactChoiceActionLabel(sideRoom.skipLabel),
                                           onClick: () => {
                                               resumeUiSfxContext();
                                               playUiBackSfx(uiGain);
@@ -1581,20 +1665,22 @@ const SideRoomScreen = () => {
                                   ]
                                 : []),
                             ...(sideRoom.choices && sideRoom.choices.length > 0
-                                ? sideRoom.choices.map((choice) => ({
+                                  ? sideRoom.choices.map((choice) => ({
                                       label: choice.label,
+                                      compactLabel: choice.primary ? choice.label : compactChoiceActionLabel(choice.label),
                                       description: choiceActionDescription(choice),
                                       ariaLabel: choiceActionAriaLabel(choice),
                                       onClick: () => {
                                           resumeUiSfxContext();
                                           playUiConfirmSfx(uiGain);
-                                          claimSideRoomChoice(choice.id);
+                                          claimChoice(choice.id);
                                       },
                                       variant: choice.primary ? ('primary' as const) : ('secondary' as const)
                                   }))
                                 : [
                                   {
                                       label: sideRoom.primaryLabel,
+                                      compactLabel: compactChoiceActionLabel(sideRoom.primaryLabel),
                                       description: boardMoment.value,
                                       ariaLabel: sideRoom.primaryLabel,
                                       onClick: () => {
@@ -1606,6 +1692,8 @@ const SideRoomScreen = () => {
                                       }
                                   ])
                         ]}
+                        actionClassName={styles.actionDockButton}
+                        className={styles.actionDock}
                         placement="dock"
                         testId="side-room-action-dock"
                     />

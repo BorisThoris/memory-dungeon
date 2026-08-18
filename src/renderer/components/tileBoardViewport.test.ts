@@ -9,6 +9,7 @@ import {
     getGestureCentroid,
     getGestureDistance,
     MOBILE_CAMERA_FIT_MARGIN,
+    SHORT_LANDSCAPE_MOBILE_CAMERA_FIT_MARGIN,
     resolveAnchoredBoardViewport,
     resolveDraggedBoardViewport,
     resolvePinchBoardViewport,
@@ -68,6 +69,27 @@ describe('tileBoardViewport', () => {
 
         expect(MOBILE_CAMERA_FIT_MARGIN).toBeLessThan(1);
         expect(zoom).toBeCloseTo((360 * MOBILE_CAMERA_FIT_MARGIN) / 360, 5);
+    });
+
+    it('keeps short landscape mobile camera more conservative than phone portrait', () => {
+        const portraitZoom = getBoardFitZoom({
+            boardHeight: 640,
+            boardWidth: 360,
+            margin: MOBILE_CAMERA_FIT_MARGIN,
+            viewportHeight: 740,
+            viewportWidth: 360
+        });
+        const shortLandscapeZoom = getBoardFitZoom({
+            boardHeight: 640,
+            boardWidth: 360,
+            margin: SHORT_LANDSCAPE_MOBILE_CAMERA_FIT_MARGIN,
+            viewportHeight: 300,
+            viewportWidth: 760
+        });
+
+        expect(SHORT_LANDSCAPE_MOBILE_CAMERA_FIT_MARGIN).toBeLessThan(MOBILE_CAMERA_FIT_MARGIN);
+        expect(shortLandscapeZoom).toBeLessThan(portraitZoom);
+        expect(shortLandscapeZoom).toBeCloseTo((300 * SHORT_LANDSCAPE_MOBILE_CAMERA_FIT_MARGIN) / 640, 5);
     });
 
     it('REG-002 keeps desktop stage dense without using the mobile bleed margin', () => {

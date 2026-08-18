@@ -1,0 +1,262 @@
+- dialog "Vendor alcove" [ref=f15e149] [box=0,0,390,844]:
+  - generic [ref=f15e150] [box=9,4,372,831]:
+    - generic [ref=f15e151] [box=21,16,349,185]:
+      - generic [ref=f15e152] [box=21,16,349,102]:
+        - generic [ref=f15e153] [box=21,16,349,14]: Floor 1 clear
+        - heading "Vendor alcove" [level=2] [ref=f15e154] [box=21,34,349,35]
+        - paragraph [ref=f15e155] [box=21,72,349,45]: Spend temporary shop gold before the next floor. Unspent gold expires when the run ends.
+      - generic "20 shop gold" [ref=f15e156] [box=21,129,349,62]:
+        - generic [ref=f15e157] [box=35,141,320,14]: Gold
+        - strong [ref=f15e158] [box=35,157,320,23]: 20g
+    - 'generic "Shop payoff engine. Prime payoff: Choose buy. 1 payoff primed. Trait route. Start x3 loop." [ref=f15e159] [box=21,210,349,152]':
+      - generic [ref=f15e160] [box=30,219,331,38]:
+        - generic [ref=f15e161] [box=38,225,315,9]: Prime payoff
+        - strong [ref=f15e162] [box=38,236,315,14]: 1 payoff primed
+      - generic [ref=f15e163] [box=30,262,331,38]:
+        - generic [ref=f15e164] [box=38,269,315,9]: Live payoffs
+        - strong [ref=f15e165] [box=38,279,315,14]: Trait route
+      - generic [ref=f15e166] [box=30,306,331,38]:
+        - generic [ref=f15e167] [box=38,312,315,9]: Next buy should help
+        - strong [ref=f15e168] [box=38,323,315,14]: Start x3 loop
+    - 'generic "Shop offer lanes. Route: Open x1. Open route. Open its locked route. Setup: Prime x1. Prime buy. Pull traits together. Control: Stack x2. Buy control. Light a hidden pair. Blocked: Bank x1. Earn gold. Life already full." [box=21,370,349,0]':
+      - generic "Shop offer lane summary. 4 lanes. Open Route." [ref=f15e172] [box=21,370,349,39]:
+        - generic [ref=f15e173] [box=30,373,32,9]: Lanes
+        - strong [ref=f15e174] [box=68,372,42,12]: 4 lanes
+        - generic [ref=f15e175] [box=30,374,331,11]: Open Route
+      - 'generic "Primary shop lane. Open Route: Open route. Open its locked route. 4 beats." [ref=f15e182] [box=21,415,349,48]':
+        - generic [ref=f15e183] [box=30,418,219,9]: Best buy lane
+        - strong [ref=f15e184] [box=256,417,30,12]: Open
+        - generic [ref=f15e185] [box=30,419,219,12]: Open route
+        - emphasis [ref=f15e186] [box=256,418,105,13]: Open its locked route
+      - generic [ref=f15e192] [box=21,469,171,48]:
+        - generic [ref=f15e193] [box=30,472,112,9]: Route
+        - strong [ref=f15e194] [box=149,469,35,15]: Open
+        - generic [ref=f15e195] [box=30,473,153,10]: Open route
+        - emphasis [ref=f15e196] [box=30,474,153,13]: x1 / Open its locked route
+      - generic [ref=f15e202] [box=198,469,171,48]:
+        - generic [ref=f15e203] [box=207,472,108,9]: Setup
+        - strong [ref=f15e204] [box=321,469,39,15]: Prime
+        - generic [ref=f15e205] [box=207,473,153,10]: Prime buy
+        - emphasis [ref=f15e206] [box=207,474,153,13]: x1 / Pull traits together
+      - generic [ref=f15e210] [box=21,523,171,48]:
+        - generic [ref=f15e211] [box=30,526,111,9]: Control
+        - strong [ref=f15e212] [box=147,523,36,15]: Stack
+        - generic [ref=f15e213] [box=30,527,153,10]: Buy control
+        - emphasis [ref=f15e214] [box=30,528,153,13]: x2 / Light a hidden pair
+      - generic [ref=f15e220] [box=198,523,171,48]:
+        - generic [ref=f15e221] [box=207,526,114,9]: Blocked
+        - strong [ref=f15e222] [box=327,523,33,15]: Bank
+        - generic [ref=f15e223] [box=207,527,153,10]: Earn gold
+        - emphasis [ref=f15e224] [box=207,528,153,13]: x1 / Life already full.
+    - list "Vendor stock" [ref=f15e229] [box=21,379,349,2528]:
+      - listitem [ref=f15e230] [box=21,379,349,473]:
+        - generic [ref=f15e231] [box=33,391,324,17]:
+          - generic [ref=f15e232] [box=33,393,73,14]: consumable
+          - generic [ref=f15e233] [box=268,391,89,17]: Life already full.
+        - heading "Mend a life" [level=3] [ref=f15e234] [box=33,417,324,16]
+        - 'generic "Shop heat: Blocked. Life already full.." [ref=f15e235] [box=33,440,324,54]':
+          - generic [ref=f15e236] [box=42,447,306,9]: Shop heat
+          - strong [ref=f15e237] [box=42,457,306,14]: Blocked
+          - emphasis [ref=f15e238] [box=42,473,306,13]: Life already full.
+        - 'generic "Shop impact cue: Blocked: Life already full.." [ref=f15e239] [box=33,499,324,29]':
+          - generic [ref=f15e240] [box=41,505,71,16]: Blocked
+          - strong [ref=f15e241] [box=116,505,233,16]: Life already full.
+        - 'generic "Blocked: Life already full.." [ref=f15e242] [box=33,533,204,23]':
+          - generic [ref=f15e243] [box=41,536,71,16]: Blocked
+          - strong [ref=f15e244] [box=115,536,114,16]: Life already full.
+        - 'generic "Board moment: Absorb one miss." [ref=f15e245] [box=33,561,324,38]':
+          - generic [ref=f15e246] [box=41,568,308,9]: Board moment
+          - strong [ref=f15e247] [box=41,578,308,14]: Absorb one miss
+        - 'generic "Blocked cue: Life already full.." [ref=f15e248] [box=33,604,324,38]':
+          - generic [ref=f15e249] [box=41,611,308,9]: Blocked cue
+          - strong [ref=f15e250] [box=41,621,308,14]: Life already full.
+        - 'generic "Mend a life payoff. Payoff: +1 life buffer. Next move: survive one more miss. Blocked: Life already full.." [ref=f15e251] [box=33,648,324,85]':
+          - generic [ref=f15e252] [box=33,648,105,85]:
+            - generic [ref=f15e253] [box=40,654,92,11]: Payoff
+            - strong [ref=f15e254] [box=40,666,92,16]: +1 life buffer
+            - generic [ref=f15e255] [box=40,683,92,11]: Claim payoff
+          - generic [ref=f15e261] [box=142,648,105,85]:
+            - generic [ref=f15e262] [box=149,654,92,9]: Next move
+            - strong [ref=f15e263] [box=149,664,92,28]: survive one more miss
+            - generic [ref=f15e264] [box=149,693,92,9]: Bank next
+          - generic [ref=f15e269] [box=251,648,105,85]:
+            - generic [ref=f15e270] [box=258,654,92,14]: Blocked
+            - strong [ref=f15e271] [box=258,669,92,18]: Life already full.
+            - generic [ref=f15e272] [box=258,688,92,13]: Earn gold
+        - paragraph [ref=f15e276] [box=33,738,324,18]: Restore 1 life now, capped by max lives.
+        - 'button "Spend 2g on Mend a life. Shop heat: Blocked. Life already full.. Impact cue: Blocked: Life already full.. Buy plan: First: Life already full.. Then: Find shop gold. Keep: Absorb one miss. Blocked: Life already full.. Board moment: Absorb one miss. Blocked cue: Life already full.. Payoff: +1 life buffer. Next move: survive one more miss. Blocked: Life already full.. Fit: Run fit: Extra safety. Restore 1 life now, capped by max lives." [disabled] [ref=f15e277] [box=33,763,324,76]':
+          - generic [ref=f15e278] [box=45,773,293,14]: Spend 2g
+          - generic [ref=f15e279] [box=45,789,300,18]: Life already full. -> Absorb one miss
+          - strong [ref=f15e280] [box=45,809,293,21]: Blocked
+      - listitem [ref=f15e281] [box=21,862,349,473]:
+        - generic [ref=f15e282] [box=33,874,324,17]:
+          - generic [ref=f15e283] [box=33,876,45,14]: service
+          - generic [ref=f15e284] [box=344,874,13,17]: 2g
+        - heading "Peek charge" [level=3] [ref=f15e285] [box=33,899,324,16]
+        - 'generic "Shop heat: Hot buy. +1 safe reveal." [ref=f15e286] [box=33,922,324,54]':
+          - generic [ref=f15e287] [box=42,930,306,9]: Shop heat
+          - strong [ref=f15e288] [box=42,940,306,14]: Hot buy
+          - emphasis [ref=f15e289] [box=42,956,306,13]: +1 safe reveal
+        - 'generic "Shop impact cue: Pair scout: Light a hidden pair." [ref=f15e290] [box=33,981,324,29]':
+          - generic [ref=f15e291] [box=41,988,90,16]: Pair scout
+          - strong [ref=f15e292] [box=135,988,213,16]: Light a hidden pair
+        - 'generic "Best buy: +1 safe reveal." [ref=f15e293] [box=33,1016,188,23]':
+          - generic [ref=f15e294] [box=41,1019,73,16]: Best buy
+          - strong [ref=f15e295] [box=117,1019,96,16]: +1 safe reveal
+        - 'generic "Board moment: Light a hidden pair." [ref=f15e296] [box=33,1044,324,38]':
+          - generic [ref=f15e297] [box=41,1050,308,9]: Board moment
+          - strong [ref=f15e298] [box=41,1061,308,14]: Light a hidden pair
+        - 'generic "Buy cue: Buy then light a hidden pair." [ref=f15e299] [box=33,1087,324,38]':
+          - generic [ref=f15e300] [box=41,1094,308,9]: Buy cue
+          - strong [ref=f15e301] [box=41,1104,308,14]: Buy then light a hidden pair
+        - 'generic "Peek charge payoff. Payoff: +1 safe reveal. Next move: confirm a chain pair. Cost: 2g." [ref=f15e302] [box=33,1131,324,85]':
+          - generic [ref=f15e303] [box=33,1131,105,85]:
+            - generic [ref=f15e304] [box=40,1137,92,11]: Payoff
+            - strong [ref=f15e305] [box=40,1149,92,16]: +1 safe reveal
+            - generic [ref=f15e306] [box=40,1166,92,11]: Claim payoff
+          - generic [ref=f15e312] [box=142,1131,105,85]:
+            - generic [ref=f15e313] [box=149,1137,92,9]: Next move
+            - strong [ref=f15e314] [box=149,1147,92,28]: confirm a chain pair
+            - generic [ref=f15e315] [box=149,1176,92,9]: Bank next
+          - generic [ref=f15e320] [box=251,1131,105,85]:
+            - generic [ref=f15e321] [box=258,1137,92,15]: Cost
+            - strong [ref=f15e322] [box=258,1153,92,19]: 2g
+            - generic [ref=f15e323] [box=258,1173,92,14]: Pay cost
+        - paragraph [ref=f15e326] [box=33,1221,324,18]: Add 1 peek charge for this run.
+        - 'button "Spend 2g on Peek charge. Shop heat: Hot buy. +1 safe reveal. Impact cue: Pair scout: Light a hidden pair. Buy plan: First: +1 safe reveal. Then: confirm a chain pair. Keep: confirm a chain pair. Best buy: +1 safe reveal. Board moment: Light a hidden pair. Buy cue: Buy then light a hidden pair. Payoff: +1 safe reveal. Next move: confirm a chain pair. Cost: 2g. Add 1 peek charge for this run." [active] [ref=f15e327] [cursor=pointer] [box=33,1246,324,76]':
+          - generic [ref=f15e328] [box=45,1255,293,14]: Spend 2g
+          - generic [ref=f15e329] [box=45,1272,300,18]: +1 safe reveal -> confirm a chain pair
+          - strong [ref=f15e330] [box=45,1291,293,21]: Pair scout
+      - listitem [ref=f15e331] [box=21,1345,349,572]:
+        - generic [ref=f15e332] [box=33,1357,324,17]:
+          - generic [ref=f15e333] [box=33,1359,45,14]: service
+          - generic [ref=f15e334] [box=344,1357,13,17]: 2g
+        - heading "Row/swap charge" [level=3] [ref=f15e335] [box=33,1382,324,16]
+        - 'generic "Shop heat: Hot buy. +1 route-link charge." [ref=f15e336] [box=33,1405,324,54]':
+          - generic [ref=f15e337] [box=42,1412,306,9]: Shop heat
+          - strong [ref=f15e338] [box=42,1423,306,14]: Hot buy
+          - emphasis [ref=f15e339] [box=42,1439,306,13]: +1 route-link charge
+        - 'generic "Shop impact cue: Prime combo: Pull traits together." [ref=f15e340] [box=33,1464,324,29]':
+          - generic [ref=f15e341] [box=41,1471,108,16]: Prime combo
+          - strong [ref=f15e342] [box=153,1471,196,16]: Pull traits together
+        - 'generic "Best buy: +1 route-link charge." [ref=f15e343] [box=33,1499,233,23]':
+          - generic [ref=f15e344] [box=41,1502,73,16]: Best buy
+          - strong [ref=f15e345] [box=117,1502,142,16]: +1 route-link charge
+        - 'generic "Board moment: Pull traits together." [ref=f15e346] [box=33,1527,324,38]':
+          - generic [ref=f15e347] [box=41,1533,308,9]: Board moment
+          - strong [ref=f15e348] [box=41,1544,308,14]: Pull traits together
+        - 'generic "Buy cue: Buy then pull traits together." [ref=f15e349] [box=33,1570,324,38]':
+          - generic [ref=f15e350] [box=41,1577,308,9]: Buy cue
+          - strong [ref=f15e351] [box=41,1587,308,14]: Buy then pull traits together
+        - 'generic "Row/swap charge payoff. Payoff: +1 route-link charge. Next move: move traits into combo range. Cost: 2g. Use: link trait cards." [ref=f15e352] [box=33,1613,324,166]':
+          - generic [ref=f15e353] [box=33,1613,105,91]:
+            - generic [ref=f15e354] [box=40,1620,92,9]: Payoff
+            - strong [ref=f15e355] [box=40,1630,92,28]: +1 route-link charge
+            - generic [ref=f15e356] [box=40,1659,92,9]: Claim payoff
+          - generic [ref=f15e362] [box=142,1613,105,91]:
+            - generic [ref=f15e363] [box=149,1620,92,11]: Next move
+            - strong [ref=f15e364] [box=149,1632,92,29]: move traits into combo range
+            - generic [ref=f15e365] [box=149,1662,92,10]: Bank next
+          - generic [ref=f15e370] [box=251,1613,105,91]:
+            - generic [ref=f15e371] [box=258,1620,92,16]: Cost
+            - strong [ref=f15e372] [box=258,1637,92,21]: 2g
+            - generic [ref=f15e373] [box=258,1659,92,16]: Pay cost
+          - generic [ref=f15e376] [box=33,1709,105,71]:
+            - generic [ref=f15e377] [box=40,1715,92,9]: Use
+            - strong [ref=f15e378] [box=40,1725,92,14]: link trait cards
+            - generic [ref=f15e379] [box=40,1740,92,9]: Prime route
+        - paragraph [ref=f15e384] [box=33,1785,324,18]: Add 1 row shuffle or tile swap charge for trait routing.
+        - 'button "Spend 2g on Row/swap charge. Shop heat: Hot buy. +1 route-link charge. Impact cue: Prime combo: Pull traits together. Buy plan: First: +1 route-link charge. Then: link trait cards. Keep: move traits into combo range. Best buy: +1 route-link charge. Board moment: Pull traits together. Buy cue: Buy then pull traits together. Payoff: +1 route-link charge. Next move: move traits into combo range. Cost: 2g. Use: link trait cards. Add 1 row shuffle or tile swap charge for trait routing." [ref=f15e385] [cursor=pointer] [box=33,1810,324,94]':
+          - generic [ref=f15e386] [box=45,1820,293,14]: Spend 2g
+          - generic [ref=f15e387] [box=45,1836,300,36]: +1 route-link charge -> move traits into combo range
+          - strong [ref=f15e388] [box=45,1873,293,21]: Prime combo
+      - listitem [ref=f15e389] [box=21,1927,349,473]:
+        - generic [ref=f15e390] [box=33,1939,324,17]:
+          - generic [ref=f15e391] [box=33,1941,45,14]: service
+          - generic [ref=f15e392] [box=344,1939,13,17]: 3g
+        - heading "Destroy charge" [level=3] [ref=f15e393] [box=33,1964,324,16]
+        - 'generic "Shop heat: Hot buy. +1 pair control." [ref=f15e394] [box=33,1987,324,54]':
+          - generic [ref=f15e395] [box=42,1994,306,9]: Shop heat
+          - strong [ref=f15e396] [box=42,2005,306,14]: Hot buy
+          - emphasis [ref=f15e397] [box=42,2020,306,13]: +1 pair control
+        - 'generic "Shop impact cue: Clear blocker: Erase a blocker." [ref=f15e398] [box=33,2046,324,29]':
+          - generic [ref=f15e399] [box=41,2053,123,16]: Clear blocker
+          - strong [ref=f15e400] [box=168,2053,181,16]: Erase a blocker
+        - 'generic "Best buy: +1 pair control." [ref=f15e401] [box=33,2081,194,23]':
+          - generic [ref=f15e402] [box=41,2084,73,16]: Best buy
+          - strong [ref=f15e403] [box=117,2084,102,16]: +1 pair control
+        - 'generic "Board moment: Erase a blocker." [ref=f15e404] [box=33,2109,324,38]':
+          - generic [ref=f15e405] [box=41,2115,308,9]: Board moment
+          - strong [ref=f15e406] [box=41,2126,308,14]: Erase a blocker
+        - 'generic "Buy cue: Buy then erase a blocker." [ref=f15e407] [box=33,2152,324,38]':
+          - generic [ref=f15e408] [box=41,2159,308,9]: Buy cue
+          - strong [ref=f15e409] [box=41,2169,308,14]: Buy then erase a blocker
+        - 'generic "Destroy charge payoff. Payoff: +1 pair control. Next move: clear one chain blocker. Cost: 3g." [ref=f15e410] [box=33,2195,324,85]':
+          - generic [ref=f15e411] [box=33,2195,105,85]:
+            - generic [ref=f15e412] [box=40,2202,92,11]: Payoff
+            - strong [ref=f15e413] [box=40,2214,92,16]: +1 pair control
+            - generic [ref=f15e414] [box=40,2231,92,11]: Claim payoff
+          - generic [ref=f15e420] [box=142,2195,105,85]:
+            - generic [ref=f15e421] [box=149,2202,92,9]: Next move
+            - strong [ref=f15e422] [box=149,2212,92,28]: clear one chain blocker
+            - generic [ref=f15e423] [box=149,2241,92,9]: Bank next
+          - generic [ref=f15e428] [box=251,2195,105,85]:
+            - generic [ref=f15e429] [box=258,2202,92,15]: Cost
+            - strong [ref=f15e430] [box=258,2218,92,19]: 3g
+            - generic [ref=f15e431] [box=258,2238,92,14]: Pay cost
+        - paragraph [ref=f15e434] [box=33,2286,324,18]: Add 1 destroy charge to the uncapped run bank.
+        - 'button "Spend 3g on Destroy charge. Shop heat: Hot buy. +1 pair control. Impact cue: Clear blocker: Erase a blocker. Buy plan: First: +1 pair control. Then: clear one chain blocker. Keep: clear one chain blocker. Best buy: +1 pair control. Board moment: Erase a blocker. Buy cue: Buy then erase a blocker. Payoff: +1 pair control. Next move: clear one chain blocker. Cost: 3g. Add 1 destroy charge to the uncapped run bank." [ref=f15e435] [cursor=pointer] [box=33,2311,324,76]':
+          - generic [ref=f15e436] [box=45,2320,293,14]: Spend 3g
+          - generic [ref=f15e437] [box=45,2336,300,18]: +1 pair control -> clear one chain blocker
+          - strong [ref=f15e438] [box=45,2356,293,21]: Clear blocker
+      - listitem [ref=f15e439] [box=21,2409,349,497]:
+        - generic [ref=f15e440] [box=33,2422,324,17]:
+          - generic [ref=f15e441] [box=33,2424,73,14]: consumable
+          - generic [ref=f15e442] [box=344,2422,13,17]: 2g
+        - heading "Iron key" [level=3] [ref=f15e443] [box=33,2447,324,16]
+        - 'generic "Shop heat: Hot buy. opens iron key locks." [ref=f15e444] [box=33,2470,324,54]':
+          - generic [ref=f15e445] [box=42,2477,306,9]: Shop heat
+          - strong [ref=f15e446] [box=42,2488,306,14]: Hot buy
+          - emphasis [ref=f15e447] [box=42,2503,306,13]: opens iron key locks
+        - 'generic "Shop impact cue: Buy route: Open its locked route." [ref=f15e448] [box=33,2529,324,29]':
+          - generic [ref=f15e449] [box=41,2536,86,16]: Buy route
+          - strong [ref=f15e450] [box=132,2536,217,16]: Open its locked route
+        - 'generic "Best buy: opens iron key locks." [ref=f15e451] [box=33,2563,234,23]':
+          - generic [ref=f15e452] [box=41,2567,73,16]: Best buy
+          - strong [ref=f15e453] [box=117,2567,142,16]: opens iron key locks
+        - 'generic "Board moment: Open its locked route." [ref=f15e454] [box=33,2592,324,38]':
+          - generic [ref=f15e455] [box=41,2598,308,9]: Board moment
+          - strong [ref=f15e456] [box=41,2609,308,14]: Open its locked route
+        - 'generic "Buy cue: Buy then open its locked route." [ref=f15e457] [box=33,2635,324,38]':
+          - generic [ref=f15e458] [box=41,2641,308,9]: Buy cue
+          - strong [ref=f15e459] [box=41,2652,308,14]: Buy then open its locked route
+        - 'generic "Iron key payoff. Payoff: opens iron key locks. Next move: open its locked route. Cost: 2g." [ref=f15e460] [box=33,2678,324,91]':
+          - generic [ref=f15e461] [box=33,2678,105,91]:
+            - generic [ref=f15e462] [box=40,2684,92,9]: Payoff
+            - strong [ref=f15e463] [box=40,2695,92,28]: opens iron key locks
+            - generic [ref=f15e464] [box=40,2724,92,9]: Claim payoff
+          - generic [ref=f15e470] [box=142,2678,105,91]:
+            - generic [ref=f15e471] [box=149,2684,92,11]: Next move
+            - strong [ref=f15e472] [box=149,2697,92,29]: open its locked route
+            - generic [ref=f15e473] [box=149,2727,92,10]: Bank next
+          - generic [ref=f15e478] [box=251,2678,105,91]:
+            - generic [ref=f15e479] [box=258,2684,92,16]: Cost
+            - strong [ref=f15e480] [box=258,2702,92,21]: 2g
+            - generic [ref=f15e481] [box=258,2724,92,16]: Pay cost
+        - paragraph [ref=f15e484] [box=33,2775,324,18]: Adds one run-local key for locked exit doors and caches.
+        - 'button "Spend 2g on Iron key. Shop heat: Hot buy. opens iron key locks. Impact cue: Buy route: Open its locked route. Buy plan: First: opens iron key locks. Then: open its locked route. Keep: open its locked route. Best buy: opens iron key locks. Board moment: Open its locked route. Buy cue: Buy then open its locked route. Payoff: opens iron key locks. Next move: open its locked route. Cost: 2g. Adds one run-local key for locked exit doors and caches." [ref=f15e485] [cursor=pointer] [box=33,2800,324,94]':
+          - generic [ref=f15e486] [box=45,2810,293,14]: Spend 2g
+          - generic [ref=f15e487] [box=45,2826,300,36]: opens iron key locks -> open its locked route
+          - strong [ref=f15e488] [box=45,2864,293,21]: Buy route
+    - generic [ref=f15e490] [box=21,598,349,226]:
+      - button "Reroll stock 1g" [ref=f15e492] [cursor=pointer] [box=28,756,333,59]:
+        - generic [ref=f15e493] [box=41,766,307,22]: Reroll stock
+        - generic [ref=f15e494] [box=41,790,307,16]: 1g
+      - button "Back to floor summary Review the route, rewards, and gold before leaving." [ref=f15e496] [cursor=pointer] [box=28,679,333,66]:
+        - generic [ref=f15e497] [box=46,691,298,41]:
+          - generic [ref=f15e498] [box=46,691,298,12]: Back to floor summary
+          - generic [ref=f15e499] [box=46,705,298,27]: Review the route, rewards, and gold before leaving.
+      - button "Continue Next floor starts with start x3 loop." [ref=f15e501] [cursor=pointer] [box=28,605,333,66]:
+        - generic [ref=f15e502] [box=46,618,298,41]:
+          - generic [ref=f15e503] [box=46,618,298,12]: Continue
+          - generic [ref=f15e504] [box=46,632,298,27]: Next floor starts with start x3 loop.
