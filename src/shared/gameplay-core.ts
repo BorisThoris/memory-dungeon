@@ -20,7 +20,6 @@ import {
     GAMEPLAY_BONUS_REWARD_IDS,
     GAMEPLAY_BONUS_REWARD_RULES,
     GAMEPLAY_CORE_SCHEMA_VERSION,
-    GAMEPLAY_REWARD_PERK_IDS,
     createGameplayDefinitionCommand,
     gameplayCommandSchema,
     gameplayEventSchema,
@@ -43,7 +42,6 @@ import {
 } from './gameplay-effect-transition';
 import { runNonNegativeInteger } from './run-number-guards';
 import { runStringArray } from './run-array-guards';
-import { gainRelicFavor } from './relic-favor-rules';
 import { acceptEndlessRiskWager } from './risk-wager-rules';
 import { normalizeSessionStats } from './session-stats-rules';
 import { purchaseShopOffer } from './shop-rules';

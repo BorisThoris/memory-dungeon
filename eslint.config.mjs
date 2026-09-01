@@ -116,5 +116,35 @@ export default tseslint.config(
             '@typescript-eslint/consistent-type-imports': 'off',
             '@typescript-eslint/no-misused-promises': 'off'
         }
+    },
+    {
+        // src/shared is the pure gameplay domain and imports React nowhere. The
+        // react-hooks rules only produced false positives there: useRunInventoryItem
+        // is a domain transition, not a React hook, so rules-of-hooks flagged every
+        // call site.
+        files: ['src/shared/**/*.ts'],
+        rules: {
+            'react-hooks/rules-of-hooks': 'off',
+            'react-hooks/exhaustive-deps': 'off'
+        }
+    },
+    {
+        // The codebase already marks deliberately-unused bindings with a leading
+        // underscore (destructured rest-omits, kept-for-signature parameters); honour
+        // that convention instead of reporting each one.
+        files: ['src/**/*.{ts,tsx}', 'packages/notifications/src/**/*.{ts,tsx}'],
+        rules: {
+            '@typescript-eslint/no-unused-vars': [
+                'error',
+                {
+                    args: 'after-used',
+                    argsIgnorePattern: '^_',
+                    varsIgnorePattern: '^_',
+                    caughtErrorsIgnorePattern: '^_',
+                    destructuredArrayIgnorePattern: '^_',
+                    ignoreRestSiblings: true
+                }
+            ]
+        }
     }
 );
