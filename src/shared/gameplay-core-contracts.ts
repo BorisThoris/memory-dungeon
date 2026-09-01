@@ -1218,6 +1218,14 @@ export const gameplayPauseTimerSnapshotSchema = z
 
 export type GameplayPauseTimerSnapshot = z.infer<typeof gameplayPauseTimerSnapshotSchema>;
 
+const gameplayFeedbackObjectiveSnapshotSchema = z
+    .object({
+        label: z.string().min(1).max(160),
+        progress: z.number().int().nonnegative(),
+        required: z.number().int().nonnegative()
+    })
+    .strict();
+
 /**
  * Presentation facts stamped onto board.turn_resolved so the renderer can project
  * feedback from the event alone instead of re-deriving it from board snapshots.
@@ -1239,7 +1247,23 @@ export const boardTurnAnnouncementFactsSchema = z
         findablesClaimedBefore: z.number().int().nonnegative(),
         findablesClaimedAfter: z.number().int().nonnegative(),
         findablesTotalBefore: z.number().int().nonnegative(),
-        findablesTotalAfter: z.number().int().nonnegative()
+        findablesTotalAfter: z.number().int().nonnegative(),
+        // Defaulted so events already in a run's journal still parse: the journal is
+        // replayed by the determinism gates, and a required new field would invalidate
+        // every historic event.
+        hazardTilesBefore: z.number().int().nonnegative().default(0),
+        hazardTilesAfter: z.number().int().nonnegative().default(0),
+        scoutsBefore: z.number().int().nonnegative().default(0),
+        scoutsAfter: z.number().int().nonnegative().default(0),
+        mimicCacheBefore: z.number().int().nonnegative().default(0),
+        mimicCacheAfter: z.number().int().nonnegative().default(0),
+        routeSpecialsBefore: z.number().int().nonnegative().default(0),
+        routeSpecialsAfter: z.number().int().nonnegative().default(0),
+        safeHazardWardsUsedBefore: z.number().int().nonnegative().default(0),
+        safeHazardWardsUsedAfter: z.number().int().nonnegative().default(0),
+        matchedTraitKinds: z.array(z.string().min(1).max(40)).default([]),
+        objectiveBefore: gameplayFeedbackObjectiveSnapshotSchema.nullable().default(null),
+        objectiveAfter: gameplayFeedbackObjectiveSnapshotSchema.nullable().default(null)
     })
     .strict();
 

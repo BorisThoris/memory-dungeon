@@ -1,4 +1,9 @@
-import type { RouteCardKind, RouteSpecialKind, RunState } from './contracts';
+import type { RouteCardKind, RouteSpecialKind, TileTraitKind, RunState } from './contracts';
+import { TILE_TRAIT_COUNT_KINDS } from './session-stats-rules';
+import {
+    getGameplayFeedbackObjectiveSnapshot,
+    type GameplayFeedbackObjectiveSnapshot
+} from './gameplay-feedback-facts';
 import { getMatchFloaterAnchorTileIds, getMismatchFloaterAnchorTileIds } from './turn-resolution';
 import { runNonNegativeInteger } from './run-number-guards';
 import { normalizeSessionStats } from './session-stats-rules';
@@ -34,6 +39,20 @@ export interface BoardTurnAnnouncementFacts {
     findablesClaimedAfter: number;
     findablesTotalBefore: number;
     findablesTotalAfter: number;
+    hazardTilesBefore: number;
+    hazardTilesAfter: number;
+    scoutsBefore: number;
+    scoutsAfter: number;
+    mimicCacheBefore: number;
+    mimicCacheAfter: number;
+    routeSpecialsBefore: number;
+    routeSpecialsAfter: number;
+    safeHazardWardsUsedBefore: number;
+    safeHazardWardsUsedAfter: number;
+    /** Trait kinds actually involved in this turn, resolved here so the renderer never diffs trait counts. */
+    matchedTraitKinds: TileTraitKind[];
+    objectiveBefore: GameplayFeedbackObjectiveSnapshot | null;
+    objectiveAfter: GameplayFeedbackObjectiveSnapshot | null;
 }
 
 const firstTileValue = <T>(
@@ -50,6 +69,10 @@ const firstTileValue = <T>(
     }
     return null;
 };
+
+/** Route-special tiles still present on the board, so the announcer never counts them itself. */
+const routeSpecialCount = (run: RunState): number =>
+    (run.board?.tiles ?? []).filter((tile) => tile.routeSpecialKind != null).length;
 
 export const getBoardTurnAnnouncementFacts = (
     run: RunState,
@@ -93,6 +116,23 @@ export const getBoardTurnAnnouncementFacts = (
         findablesClaimedBefore: runNonNegativeInteger(run.findablesClaimedThisFloor),
         findablesClaimedAfter: runNonNegativeInteger(nextRun.findablesClaimedThisFloor),
         findablesTotalBefore: runNonNegativeInteger(run.findablesTotalThisFloor),
-        findablesTotalAfter: runNonNegativeInteger(nextRun.findablesTotalThisFloor)
+        findablesTotalAfter: runNonNegativeInteger(nextRun.findablesTotalThisFloor),
+        hazardTilesBefore: runNonNegativeInteger(run.hazardTileTriggersThisFloor),
+        hazardTilesAfter: runNonNegativeInteger(nextRun.hazardTileTriggersThisFloor),
+        scoutsBefore: runNonNegativeInteger(run.lanternWardScoutsThisFloor),
+        scoutsAfter: runNonNegativeInteger(nextRun.lanternWardScoutsThisFloor),
+        mimicCacheBefore: runNonNegativeInteger(run.mimicCacheClaimsThisFloor),
+        mimicCacheAfter: runNonNegativeInteger(nextRun.mimicCacheClaimsThisFloor),
+        routeSpecialsBefore: routeSpecialCount(run),
+        routeSpecialsAfter: routeSpecialCount(nextRun),
+        safeHazardWardsUsedBefore: runNonNegativeInteger(run.safeHazardWardsUsedThisFloor),
+        safeHazardWardsUsedAfter: runNonNegativeInteger(nextRun.safeHazardWardsUsedThisFloor),
+        matchedTraitKinds: TILE_TRAIT_COUNT_KINDS.filter((kind) =>
+            flippedTileIds.some(
+                (tileId) => run.board?.tiles.find((tile) => tile.id === tileId)?.tileTraitKind === kind
+            )
+        ),
+        objectiveBefore: getGameplayFeedbackObjectiveSnapshot(run),
+        objectiveAfter: getGameplayFeedbackObjectiveSnapshot(nextRun)
     };
 };

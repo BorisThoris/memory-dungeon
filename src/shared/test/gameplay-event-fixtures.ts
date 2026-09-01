@@ -17,7 +17,20 @@ const DEFAULT_ANNOUNCEMENT: BoardTurnAnnouncementFacts = {
     findablesClaimedBefore: 0,
     findablesClaimedAfter: 0,
     findablesTotalBefore: 0,
-    findablesTotalAfter: 0
+    findablesTotalAfter: 0,
+    hazardTilesBefore: 0,
+    hazardTilesAfter: 0,
+    scoutsBefore: 0,
+    scoutsAfter: 0,
+    mimicCacheBefore: 0,
+    mimicCacheAfter: 0,
+    routeSpecialsBefore: 0,
+    routeSpecialsAfter: 0,
+    safeHazardWardsUsedBefore: 0,
+    safeHazardWardsUsedAfter: 0,
+    matchedTraitKinds: [],
+    objectiveBefore: null,
+    objectiveAfter: null
 };
 
 export interface BoardTurnResolvedEventFixtureOverrides {
