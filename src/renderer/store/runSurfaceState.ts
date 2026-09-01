@@ -22,9 +22,7 @@ import { appendGameplayJournal } from '../../shared/gameplay-journal';
 import { finalizeLevel } from '../../shared/game';
 import {
     applyDestroyPair,
-    armRegionShuffleRow,
     collectDestroyEligibleTileIds,
-    toggleStrayRemoveArmed
 } from '../../shared/board-powers';
 import {
     applyEnemyHazardClick,
@@ -36,11 +34,14 @@ import {
     type MatchScorePop,
     type MismatchScorePop
 } from './matchScorePop';
+import { runNonNegativeInteger } from '../../shared/run-number-guards';
 
 export interface RunSurfaceState {
     boardPinMode: boolean;
     destroyPairArmed: boolean;
     peekModeArmed: boolean;
+    strayRemoveArmed: boolean;
+    regionShuffleRowArmed: number | null;
     tileSwapArmed: boolean;
     tileSwapFirstTileId: string | null;
     dungeonExitPromptOpen: boolean;
@@ -53,7 +54,16 @@ type RunSurfaceToggleResult =
     | { kind: 'ignored' }
     | {
           kind: 'applied';
-          patch: Pick<RunSurfaceState, 'boardPinMode' | 'destroyPairArmed' | 'peekModeArmed' | 'tileSwapArmed' | 'tileSwapFirstTileId'> & {
+          patch: Pick<
+        RunSurfaceState,
+        | 'boardPinMode'
+        | 'destroyPairArmed'
+        | 'peekModeArmed'
+        | 'strayRemoveArmed'
+        | 'regionShuffleRowArmed'
+        | 'tileSwapArmed'
+        | 'tileSwapFirstTileId'
+    > & {
               run?: RunState;
           };
           playArmSfx: boolean;
@@ -122,6 +132,8 @@ export const createRunSurfaceReset = (): RunSurfaceState => ({
     boardPinMode: false,
     destroyPairArmed: false,
     peekModeArmed: false,
+    strayRemoveArmed: false,
+    regionShuffleRowArmed: null,
     tileSwapArmed: false,
     tileSwapFirstTileId: null,
     dungeonExitPromptOpen: false,
@@ -153,6 +165,8 @@ export const createBoardPinModeToggleResult = ({
             boardPinMode: next,
             destroyPairArmed: false,
             peekModeArmed: false,
+            strayRemoveArmed: false,
+            regionShuffleRowArmed: null,
             tileSwapArmed: false,
             tileSwapFirstTileId: null
         },
@@ -191,6 +205,8 @@ export const createDestroyPairArmedToggleResult = ({
             boardPinMode: false,
             destroyPairArmed: next,
             peekModeArmed: false,
+            strayRemoveArmed: false,
+            regionShuffleRowArmed: null,
             tileSwapArmed: false,
             tileSwapFirstTileId: null
         },
@@ -226,7 +242,7 @@ export const createPeekModeToggleResult = ({
     }
 
     const next = !peekModeArmed;
-    const nextRun = run.strayRemoveArmed ? { ...run, strayRemoveArmed: false } : run;
+    const nextRun = run;
 
     return {
         kind: 'applied',
@@ -234,6 +250,8 @@ export const createPeekModeToggleResult = ({
             boardPinMode: false,
             destroyPairArmed: false,
             peekModeArmed: next,
+            strayRemoveArmed: false,
+            regionShuffleRowArmed: null,
             tileSwapArmed: false,
             tileSwapFirstTileId: null,
             run: nextRun
@@ -279,6 +297,8 @@ export const createTileSwapToggleResult = ({
             boardPinMode: false,
             destroyPairArmed: false,
             peekModeArmed: false,
+            strayRemoveArmed: false,
+            regionShuffleRowArmed: null,
             tileSwapArmed: next,
             tileSwapFirstTileId: null
         },
@@ -288,25 +308,28 @@ export const createTileSwapToggleResult = ({
 
 export const createStrayArmToggleResult = ({
     run,
+    strayRemoveArmed,
     view
 }: {
     run: RunState | null;
+    strayRemoveArmed: boolean;
     view: ViewState;
 }): RunSurfaceRunPatchResult => {
     if (!run || view !== 'playing' || run.status !== 'playing') {
         return { kind: 'ignored' };
     }
 
-    const wasArmed = run.strayRemoveArmed;
-    const nextRun = toggleStrayRemoveArmed(run);
-    if (nextRun === run) {
+    // Legality rule preserved from the removed toggleStrayRemoveArmed transition:
+    // arming requires a charge, disarming is always allowed.
+    const nextArmed = !strayRemoveArmed;
+    if (nextArmed && runNonNegativeInteger(run.strayRemoveCharges) <= 0) {
         return { kind: 'ignored' };
     }
 
     return {
         kind: 'applied',
-        patch: createRunWithArmedModesClearedPatch(nextRun),
-        playArmSfx: nextRun.strayRemoveArmed && !wasArmed
+        patch: { ...createRunWithArmedModesClearedPatch(run), strayRemoveArmed: nextArmed },
+        playArmSfx: nextArmed
     };
 };
 
@@ -348,14 +371,11 @@ export const createRegionShuffleArmSurfaceResult = ({
         return { kind: 'ignored' };
     }
 
-    const nextRun = armRegionShuffleRow(run, row);
-    return nextRun === run
-        ? { kind: 'ignored' }
-        : {
-              kind: 'applied',
-              patch: createRunWithArmedModesClearedPatch(nextRun),
-              playArmSfx: false
-          };
+    return {
+        kind: 'applied',
+        patch: { ...createRunWithArmedModesClearedPatch(run), regionShuffleRowArmed: row },
+        playArmSfx: false
+    };
 };
 
 export const createRegionShuffleSurfaceResult = ({
@@ -499,6 +519,7 @@ export const createArmedBoardPowerPressResult = ({
     enemyContacted,
     peekModeArmed,
     run,
+    strayRemoveArmed = false,
     tileSwapArmed = false,
     tileSwapFirstTileId = null,
     tileId
@@ -508,13 +529,14 @@ export const createArmedBoardPowerPressResult = ({
     enemyContacted: boolean;
     peekModeArmed: boolean;
     run: RunState;
+    strayRemoveArmed?: boolean;
     tileSwapArmed?: boolean;
     tileSwapFirstTileId?: string | null;
     tileId: string;
 }): ArmedBoardPowerPressResult => {
     const canApplyAfterContact = !enemyContacted || canContinueSinglePowerAfterContact;
 
-    if (canApplyAfterContact && run.strayRemoveArmed) {
+    if (canApplyAfterContact && strayRemoveArmed) {
         const command = createGameplayStrayRemoveCommand(
             `stray-remove:${run.runSeed}:${run.board?.level ?? 0}:${run.strayRemoveCharges}:${tileId}`,
             tileId
@@ -714,48 +736,85 @@ export const createGambitThirdPickPressResult = (
 
 export const clearRunSurfaceArmedModes = (): Pick<
     RunSurfaceState,
-    'boardPinMode' | 'destroyPairArmed' | 'peekModeArmed' | 'tileSwapArmed' | 'tileSwapFirstTileId'
+    | 'boardPinMode'
+    | 'destroyPairArmed'
+    | 'peekModeArmed'
+    | 'strayRemoveArmed'
+    | 'regionShuffleRowArmed'
+    | 'tileSwapArmed'
+    | 'tileSwapFirstTileId'
 > => ({
     boardPinMode: false,
     destroyPairArmed: false,
     peekModeArmed: false,
+    strayRemoveArmed: false,
+    regionShuffleRowArmed: null,
     tileSwapArmed: false,
     tileSwapFirstTileId: null
 });
 
 export const createRunWithPeekDisarmedPatch = (
     run: RunState
-): Pick<RunSurfaceState, 'peekModeArmed' | 'tileSwapArmed' | 'tileSwapFirstTileId'> & { run: RunState } => ({
+): Pick<RunSurfaceState, 'peekModeArmed' | 'strayRemoveArmed' | 'tileSwapArmed' | 'tileSwapFirstTileId'> & {
+    run: RunState;
+} => ({
     run,
     peekModeArmed: false,
+    strayRemoveArmed: false,
     tileSwapArmed: false,
     tileSwapFirstTileId: null
 });
 
 export const createRunWithBoardPowersDisarmedPatch = (
     run: RunState
-): Pick<RunSurfaceState, 'destroyPairArmed' | 'peekModeArmed' | 'tileSwapArmed' | 'tileSwapFirstTileId'> & { run: RunState } => ({
+): Pick<
+    RunSurfaceState,
+    'destroyPairArmed' | 'peekModeArmed' | 'strayRemoveArmed' | 'tileSwapArmed' | 'tileSwapFirstTileId'
+> & { run: RunState } => ({
     run,
     destroyPairArmed: false,
     peekModeArmed: false,
+    strayRemoveArmed: false,
     tileSwapArmed: false,
     tileSwapFirstTileId: null
 });
 
 export const createRunWithArmedModesClearedPatch = (
     run: RunState
-): Pick<RunSurfaceState, 'boardPinMode' | 'destroyPairArmed' | 'peekModeArmed' | 'tileSwapArmed' | 'tileSwapFirstTileId'> & {
+): Pick<
+        RunSurfaceState,
+        | 'boardPinMode'
+        | 'destroyPairArmed'
+        | 'peekModeArmed'
+        | 'strayRemoveArmed'
+        | 'regionShuffleRowArmed'
+        | 'tileSwapArmed'
+        | 'tileSwapFirstTileId'
+    > & {
     run: RunState;
 } => ({
     run,
     ...clearRunSurfaceArmedModes()
 });
 
+/**
+ * Also carries the per-floor disarm that used to live in floor-clear-transition.ts.
+ * Arming is renderer surface state now, so the rules layer can no longer reset it;
+ * this is the floor-advance path, so the reset belongs here.
+ */
 export const createRunWithBoardInteractionClearedPatch = (
     run: RunState
 ): Pick<
     RunSurfaceState,
-    'boardPinMode' | 'destroyPairArmed' | 'matchScorePop' | 'mismatchScorePop' | 'peekModeArmed' | 'tileSwapArmed' | 'tileSwapFirstTileId'
+    | 'boardPinMode'
+    | 'destroyPairArmed'
+    | 'matchScorePop'
+    | 'mismatchScorePop'
+    | 'peekModeArmed'
+    | 'strayRemoveArmed'
+    | 'regionShuffleRowArmed'
+    | 'tileSwapArmed'
+    | 'tileSwapFirstTileId'
 > & { run: RunState } => ({
     run,
     ...clearRunSurfaceArmedModes(),

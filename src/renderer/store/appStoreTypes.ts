@@ -39,6 +39,7 @@ export interface AppState {
     destroyPairArmed: boolean;
     peekModeArmed: boolean;
     strayRemoveArmed: boolean;
+    regionShuffleRowArmed: number | null;
     tileSwapArmed: boolean;
     tileSwapFirstTileId: string | null;
     dungeonExitPromptOpen: boolean;
@@ -88,6 +89,7 @@ export interface AppState {
     toggleTileSwapArmed: () => void;
     undoResolvingFlip: () => void;
     toggleStrayArm: () => void;
+    armRegionShuffleRowPick: (row: number | null) => void;
     shuffleBoard: () => void;
     shuffleRegionRow: (row: number) => void;
     notifyMemorizeBoardReady: (boardKey: string) => void;

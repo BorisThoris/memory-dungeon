@@ -654,8 +654,8 @@ export const useAppStore = create<AppState>((set, get) => ({
     },
 
     toggleStrayArm: () => {
-        const { run, view } = get();
-        const result = createStrayArmToggleResult({ run, view });
+        const { run, strayRemoveArmed, view } = get();
+        const result = createStrayArmToggleResult({ run, strayRemoveArmed, view });
         if (result.kind === 'ignored') {
             return;
         }
@@ -675,7 +675,7 @@ export const useAppStore = create<AppState>((set, get) => ({
         set(result.patch);
     },
 
-    armRegionShuffleRowPick: (row) => {
+    armRegionShuffleRowPick: (row: number | null) => {
         const { run, view } = get();
         const result = createRegionShuffleArmSurfaceResult({ row, run, view });
         if (result.kind === 'ignored') {
