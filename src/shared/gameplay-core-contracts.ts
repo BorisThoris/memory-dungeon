@@ -1504,6 +1504,12 @@ export const gameplayCommandSchema = z.discriminatedUnion('type', [
             targetTileId: z.string().min(1).max(160),
             advanceHazards: z.boolean().default(false)
         })
+        .strict(),
+    z
+        .object({
+            ...commandBase,
+            type: z.literal('shop.reroll')
+        })
         .strict()
 ]);
 
@@ -2141,6 +2147,16 @@ export const gameplayEventSchema = z.discriminatedUnion('type', [
             hitsBefore: z.number().int().nonnegative(),
             hitsAfter: z.number().int().nonnegative()
         })
+        .strict(),
+    z
+        .object({
+            ...eventBase,
+            type: z.literal('shop.stock_rerolled'),
+            goldBefore: z.number().int().nonnegative(),
+            goldAfter: z.number().int().nonnegative(),
+            rerollsBefore: z.number().int().nonnegative(),
+            rerollsAfter: z.number().int().nonnegative()
+        })
         .strict()
 ]);
 
@@ -2457,4 +2473,11 @@ export const createGameplayEnemyHazardContactCommand = (
         type: 'enemy_hazard.contact',
         targetTileId,
         advanceHazards
+    });
+
+export const createGameplayShopRerollCommand = (commandId: string): GameplayCommand =>
+    gameplayCommandSchema.parse({
+        schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
+        commandId,
+        type: 'shop.reroll'
     });

@@ -6,6 +6,7 @@ import type {
     SaveData,
     SubscreenReturnView
 } from '../../shared/contracts';
+import { expireGauntletThroughGameplayCore } from '../../shared/gameplay-core-adapters';
 import { isGauntletExpired } from '../../shared/game-core';
 import { trackEvent } from '../../shared/telemetry';
 import { executeRunStartRequest } from './runStartExecutor';
@@ -101,6 +102,7 @@ import {
 } from '../audio/gameSfx';
 import {
     playPauseOpenSfx,
+    playUiConfirmSfx,
     playPauseResumeSfx,
     playRunStartSfx,
     resumeUiSfxContext
@@ -553,7 +555,10 @@ export const useAppStore = create<AppState>((set, get) => ({
         }
 
         if (isGauntletExpired(run)) {
-            applyResolvedRun({ ...run, status: 'gameOver', lives: 0 });
+            // Through the command, not a direct mutation: an expiry that ends the run has
+            // to appear in the journal, or a replay of this run never ends.
+            const expiry = expireGauntletThroughGameplayCore(run, Date.now());
+            applyResolvedRun(expiry.accepted ? expiry.run : { ...run, status: 'gameOver', lives: 0 });
             return;
         }
 
@@ -791,6 +796,10 @@ export const useAppStore = create<AppState>((set, get) => ({
             return;
         }
         set(result.patch);
+        // A completed purchase is a confirmed player action and owes an audible ack;
+        // the shop surface reports it through the accepted result, not a feedback field.
+        void resumeUiSfxContext();
+        playUiConfirmSfx(sfxGainFromStore());
     },
 
     rerollShopOffers: () => {
@@ -804,6 +813,8 @@ export const useAppStore = create<AppState>((set, get) => ({
             return;
         }
         set(result.patch);
+        void resumeUiSfxContext();
+        playUiConfirmSfx(sfxGainFromStore());
     },
 
     continueToNextLevel: () => {

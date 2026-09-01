@@ -372,7 +372,7 @@ export const deactivateDebugRevealThroughGameplayCore = (
 export const expireGauntletThroughGameplayCore = (
     run: RunState,
     observedAtMs: number,
-    commandId: string
+    commandId = `gauntlet-expire:${run.runSeed}:${run.gauntletDeadlineMs ?? 'none'}:${observedAtMs}`
 ): GameplayRunTransitionAdapterResult =>
     reduceThroughGameplayCore(run, createGameplayGauntletExpireCommand(commandId, observedAtMs));
 

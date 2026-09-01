@@ -1,6 +1,6 @@
 import type { RunState, ViewState } from '../../shared/contracts';
 import type { GameplayEvent } from '../../shared/gameplay-core-contracts';
-import { createGameplayShopPurchaseCommand } from '../../shared/gameplay-core-contracts';
+import { createGameplayShopRerollCommand, createGameplayShopPurchaseCommand } from '../../shared/gameplay-core-contracts';
 import { reduceGameplayCommand } from '../../shared/gameplay-core';
 import { appendGameplayJournal } from '../../shared/gameplay-journal';
 import {
@@ -153,10 +153,17 @@ export const createShopRerollSurfaceResult = ({
         return { kind: 'ignored' };
     }
 
-    return {
-        kind: 'applied',
-        patch: {
-            run: rerollShopOffers(run)
-        }
-    };
+    // Through the command, matching the purchase path: a reroll spends gold and replaces
+    // the stock, so it belongs in the journal like any other shop mutation.
+    const command = createGameplayShopRerollCommand(
+        `shop-reroll:${run.runSeed}:${run.board?.level ?? 0}:${run.shopRerolls}`
+    );
+    const result = reduceGameplayCommand(run, command);
+    return !result.accepted
+        ? { kind: 'ignored' }
+        : {
+              kind: 'applied',
+              patch: { run: appendGameplayJournal(result.run, [command], result.events) },
+              events: result.events
+          };
 };

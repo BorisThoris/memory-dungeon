@@ -12,6 +12,7 @@ import { maxPinnedTilesForRun, togglePinnedTile } from './board-power-state';
 import type { TileTraitInteractionTag } from './tile-trait-rules';
 import { createFlipTileTransition } from './flip-tile-transition';
 import { applyEnemyHazardClick } from './dungeon-enemy-hazard-rules';
+import { rerollShopOffers } from './shop-rules';
 import { getBoardTurnAnnouncementFacts } from './board-turn-event-facts';
 import { finishMemorizePhase } from './memorize-phase-rules';
 import { computeRelicOfferPickBudget, openRelicOffer } from './relic-offer-open-rules';
@@ -1818,6 +1819,32 @@ const applyEnemyHazardContactCommand = (
     return { run: nextRun, command, events, accepted: true };
 };
 
+const applyShopRerollCommand = (
+    run: RunState,
+    command: Extract<GameplayCommand, { type: 'shop.reroll' }>
+): GameplayCommandResult => {
+    const nextRun = rerollShopOffers(run);
+    if (nextRun === run) {
+        return rejectedResult(run, command.commandId, 'Shop stock cannot be rerolled right now.', command);
+    }
+    const events: GameplayEvent[] = [];
+    const writeRerollEvent = makeEventWriter(command.commandId, SHOP_SOURCE, events);
+    writeRerollEvent({
+        type: 'shop.stock_rerolled',
+        goldBefore: runNonNegativeInteger(run.shopGold),
+        goldAfter: runNonNegativeInteger(nextRun.shopGold),
+        rerollsBefore: runNonNegativeInteger(run.shopRerolls),
+        rerollsAfter: runNonNegativeInteger(nextRun.shopRerolls)
+    });
+    writeRerollEvent({
+        type: 'feedback.requested',
+        cue: 'shop.stock.rerolled',
+        message: 'Shop stock rerolled.',
+        tone: 'information'
+    });
+    return { run: nextRun, command, events, accepted: true };
+};
+
 export const reduceGameplayCommand = (run: RunState, input: unknown): GameplayCommandResult => {
     const parsed = gameplayCommandSchema.safeParse(input);
     if (!parsed.success) {
@@ -1916,6 +1943,9 @@ export const reduceGameplayCommand = (run: RunState, input: unknown): GameplayCo
     }
     if (command.type === 'enemy_hazard.contact') {
         return applyEnemyHazardContactCommand(run, command);
+    }
+    if (command.type === 'shop.reroll') {
+        return applyShopRerollCommand(run, command);
     }
     if (command.type === 'wild_match.consume') {
         return applyWildMatchConsumeCommand(run, command);
