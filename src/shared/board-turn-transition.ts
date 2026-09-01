@@ -29,6 +29,7 @@ import { addTileTraitCountStats, normalizeSessionStats } from './session-stats-r
 import { runFilteredStringArrayOrNull, runStringArray } from './run-array-guards';
 import { runNonNegativeInteger } from './run-number-guards';
 import { gainRelicFavor } from './relic-favor-rules';
+import type { TileTraitInteractionTag } from './tile-trait-rules';
 import { applyTraitRouteObjectiveProgress } from './trait-route-objectives';
 
 const GAMBIT_FAIL_EXTRA_TRIES = 1;
@@ -73,6 +74,13 @@ export interface BoardTurnTransitionDependencies {
 export interface BoardTurnExecutionContext {
     commandId: string;
     events: GameplayEvent[];
+    /**
+     * Collects the trait interaction tags produced while resolving the turn. The
+     * transition returns only a RunState, and the tags are not persisted on it, so
+     * without this the board.turn_resolved event could not report which synergies
+     * actually fired - and the build-strategy simulation asserts on exactly that.
+     */
+    traitInteractionTags?: TileTraitInteractionTag[];
 }
 
 const flippedTileIdsForRun = (run: RunState): string[] | null =>
@@ -217,6 +225,7 @@ export const createResolveBoardTurnTransition = ({
                 routeCardReward,
                 run
             });
+            execution?.traitInteractionTags?.push(...traitReward.interactionTags);
             const traitRouteObjective = applyTraitRouteObjectiveProgress(run, traitReward.interactionTags);
             const lives = survivalReward.lives;
             const routeFavor = gainRelicFavor(run, routeCardReward.relicFavor + dungeonReward.relicFavor + traitReward.relicFavorGain);
@@ -514,6 +523,7 @@ export const createResolveBoardTurnTransition = ({
                 routeCardReward,
                 run
             });
+            execution?.traitInteractionTags?.push(...traitReward.interactionTags);
             const traitRouteObjective = applyTraitRouteObjectiveProgress(run, traitReward.interactionTags);
             const lives = survivalReward.lives;
             const routeFavor = gainRelicFavor(run, routeCardReward.relicFavor + dungeonReward.relicFavor + traitReward.relicFavorGain);

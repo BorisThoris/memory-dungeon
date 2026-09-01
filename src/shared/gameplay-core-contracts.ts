@@ -1203,6 +1203,21 @@ const commandBase = {
     commandId: z.string().min(1).max(160)
 };
 
+/**
+ * Timer values captured at the moment a run is paused, so resume can restore them
+ * without trusting wall-clock arithmetic across the pause boundary. Null means the
+ * corresponding timer was not running.
+ */
+export const gameplayPauseTimerSnapshotSchema = z
+    .object({
+        memorizeRemainingMs: z.number().int().nonnegative().nullable(),
+        resolveRemainingMs: z.number().int().nonnegative().nullable(),
+        debugRevealRemainingMs: z.number().int().nonnegative().nullable()
+    })
+    .strict();
+
+export type GameplayPauseTimerSnapshot = z.infer<typeof gameplayPauseTimerSnapshotSchema>;
+
 export const gameplayCommandSchema = z.discriminatedUnion('type', [
     z
         .object({
@@ -1370,6 +1385,46 @@ export const gameplayCommandSchema = z.discriminatedUnion('type', [
             type: z.literal('wild_match.consume'),
             wildTileId: z.string().min(1).max(160),
             pairedTileId: z.string().min(1).max(160)
+        })
+        .strict(),
+    z
+        .object({
+            ...commandBase,
+            type: z.literal('board.tile_flip'),
+            targetTileId: z.string().min(1).max(160)
+        })
+        .strict(),
+    z
+        .object({
+            ...commandBase,
+            type: z.literal('memorize.complete')
+        })
+        .strict(),
+    z
+        .object({
+            ...commandBase,
+            type: z.literal('run.pause'),
+            pausedAtMs: z.number().int().nonnegative(),
+            timerSnapshot: gameplayPauseTimerSnapshotSchema
+        })
+        .strict(),
+    z
+        .object({
+            ...commandBase,
+            type: z.literal('run.resume'),
+            resumedAtMs: z.number().int().nonnegative()
+        })
+        .strict(),
+    z
+        .object({
+            ...commandBase,
+            type: z.literal('run.progression_repair')
+        })
+        .strict(),
+    z
+        .object({
+            ...commandBase,
+            type: z.literal('relic.offer_open')
         })
         .strict()
 ]);
@@ -1821,7 +1876,14 @@ export const gameplayEventSchema = z.discriminatedUnion('type', [
             triesBefore: z.number().int().nonnegative(),
             triesAfter: z.number().int().nonnegative(),
             matchesBefore: z.number().int().nonnegative(),
-            matchesAfter: z.number().int().nonnegative()
+            matchesAfter: z.number().int().nonnegative(),
+            comboShardsBefore: z.number().int().nonnegative().default(0),
+            comboShardsAfter: z.number().int().nonnegative().default(0),
+            currentStreakAfter: z.number().int().nonnegative().default(0),
+            findablesClaimedAfter: z.number().int().nonnegative().default(0),
+            findablesTotalAfter: z.number().int().nonnegative().default(0),
+            matchedFindableKind: z.string().min(1).max(60).nullable().default(null),
+            traitInteractionTags: z.array(z.string().min(1).max(120)).default([])
         })
         .strict(),
     z
@@ -2127,4 +2189,54 @@ export const createGameplayWildMatchConsumeCommand = (
         type: 'wild_match.consume',
         wildTileId,
         pairedTileId
+    });
+
+export const createGameplayTileFlipCommand = (commandId: string, targetTileId: string): GameplayCommand =>
+    gameplayCommandSchema.parse({
+        schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
+        commandId,
+        type: 'board.tile_flip',
+        targetTileId
+    });
+
+export const createGameplayMemorizeCompleteCommand = (commandId: string): GameplayCommand =>
+    gameplayCommandSchema.parse({
+        schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
+        commandId,
+        type: 'memorize.complete'
+    });
+
+export const createGameplayPauseCommand = (
+    commandId: string,
+    pausedAtMs: number,
+    timerSnapshot: GameplayPauseTimerSnapshot
+): GameplayCommand =>
+    gameplayCommandSchema.parse({
+        schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
+        commandId,
+        type: 'run.pause',
+        pausedAtMs,
+        timerSnapshot
+    });
+
+export const createGameplayResumeCommand = (commandId: string, resumedAtMs: number): GameplayCommand =>
+    gameplayCommandSchema.parse({
+        schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
+        commandId,
+        type: 'run.resume',
+        resumedAtMs
+    });
+
+export const createGameplayProgressionRepairCommand = (commandId: string): GameplayCommand =>
+    gameplayCommandSchema.parse({
+        schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
+        commandId,
+        type: 'run.progression_repair'
+    });
+
+export const createGameplayRelicOfferOpenCommand = (commandId: string): GameplayCommand =>
+    gameplayCommandSchema.parse({
+        schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
+        commandId,
+        type: 'relic.offer_open'
     });

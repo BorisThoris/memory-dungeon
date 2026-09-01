@@ -9,6 +9,12 @@ import {
     cancelResolvingWithUndo
 } from './board-power-actions';
 import { maxPinnedTilesForRun, togglePinnedTile } from './board-power-state';
+import type { TileTraitInteractionTag } from './tile-trait-rules';
+import { createFlipTileTransition } from './flip-tile-transition';
+import { finishMemorizePhase } from './memorize-phase-rules';
+import { openRelicOffer } from './relic-offer-open-rules';
+import { createRunProgressionRepairTransition } from './run-progression-repair';
+import { pauseRun, resumeRun } from './run-timer-rules';
 import { MAX_LIVES, type BonusRewardId, type FindableKind, type RunState } from './contracts';
 import {
     GAMEPLAY_BONUS_REWARD_IDS,
@@ -91,6 +97,10 @@ const REGION_SHUFFLE_SOURCE: GameplaySource = { kind: 'power', id: 'region_shuff
 const TILE_SWAP_SOURCE: GameplaySource = { kind: 'power', id: 'tile_swap' };
 const FLASH_PAIR_SOURCE: GameplaySource = { kind: 'power', id: 'flash_pair' };
 const UNDO_RESOLVE_SOURCE: GameplaySource = { kind: 'power', id: 'undo_resolve' };
+const TILE_FLIP_SOURCE: GameplaySource = { kind: 'system', id: 'tile_flip' };
+const MEMORIZE_SOURCE: GameplaySource = { kind: 'system', id: 'memorize' };
+const RUN_TIMER_SOURCE: GameplaySource = { kind: 'system', id: 'run_timer' };
+const PROGRESSION_REPAIR_SOURCE: GameplaySource = { kind: 'system', id: 'progression_repair' };
 const SHOP_SOURCE: GameplaySource = { kind: 'shop', id: 'run_shop' };
 const DUNGEON_EXIT_SOURCE: GameplaySource = { kind: 'system', id: 'dungeon_exit' };
 const SCORE_PARASITE_SOURCE: GameplaySource = { kind: 'system', id: 'score_parasite' };
@@ -1366,7 +1376,15 @@ const applyBoardTurnResolveCommand = (
         resolveFindableMatchReward: resolveBoardTurnFindableReward,
         consumeWildMatch: consumeBoardTurnWildMatch
     });
-    const nextRun = resolveTurn(run, command.encorePairKeys, { commandId: command.commandId, events });
+    // Collected through the execution context: the transition returns only a RunState
+    // and does not persist the tags, so this is the only way the resolved-turn event can
+    // report which trait synergies actually fired.
+    const traitInteractionTags: TileTraitInteractionTag[] = [];
+    const nextRun = resolveTurn(run, command.encorePairKeys, {
+        commandId: command.commandId,
+        events,
+        traitInteractionTags
+    });
     if (nextRun === run) {
         return rejectedResult(run, command.commandId, 'Board turn produced no transition.', command);
     }
@@ -1398,7 +1416,14 @@ const applyBoardTurnResolveCommand = (
         triesBefore: statsBefore.tries,
         triesAfter: statsAfter.tries,
         matchesBefore: statsBefore.matchesFound,
-        matchesAfter: statsAfter.matchesFound
+        matchesAfter: statsAfter.matchesFound,
+        comboShardsBefore: statsBefore.comboShards,
+        comboShardsAfter: statsAfter.comboShards,
+        currentStreakAfter: statsAfter.currentStreak,
+        findablesClaimedAfter: runNonNegativeInteger(nextRun.findablesClaimedThisFloor),
+        findablesTotalAfter: runNonNegativeInteger(nextRun.findablesTotalThisFloor),
+        matchedFindableKind: matchedSourceTile?.findableKind ?? null,
+        traitInteractionTags: [...traitInteractionTags]
     });
     return { run: nextRun, command, events, accepted: true };
 };
@@ -1452,6 +1477,78 @@ const applyWildMatchConsumeCommand = (
         tone: 'reward'
     });
     return { run: consumed.run, command, events, accepted: true };
+};
+
+const applyTileFlipCommand = (
+    run: RunState,
+    command: Extract<GameplayCommand, { type: 'board.tile_flip' }>
+): GameplayCommandResult => {
+    // Built locally from the core's own finalizeLevel, matching how board.turn_resolve
+    // wires its transition, so gameplay-core never has to import the game.ts barrel.
+    const flipTileThroughCore = createFlipTileTransition({ finalizeLevel: finalizeLevelThroughCore });
+    const nextRun = flipTileThroughCore(run, command.targetTileId);
+    if (nextRun === run) {
+        return rejectedResult(run, command.commandId, 'Tile flip is not legal for the current run.', command);
+    }
+    return { run: nextRun, command, events: [], accepted: true };
+};
+
+const applyMemorizeCompleteCommand = (
+    run: RunState,
+    command: Extract<GameplayCommand, { type: 'memorize.complete' }>
+): GameplayCommandResult => {
+    if (run.status !== 'memorize') {
+        return rejectedResult(run, command.commandId, 'Run is not in the memorize phase.', command);
+    }
+    const nextRun = finishMemorizePhase(run);
+    if (nextRun === run) {
+        return rejectedResult(run, command.commandId, 'Memorize phase could not be completed.', command);
+    }
+    return { run: nextRun, command, events: [], accepted: true };
+};
+
+const applyPauseCommand = (
+    run: RunState,
+    command: Extract<GameplayCommand, { type: 'run.pause' }>
+): GameplayCommandResult => {
+    const nextRun = pauseRun(run);
+    if (nextRun === run) {
+        return rejectedResult(run, command.commandId, 'Run cannot be paused from its current status.', command);
+    }
+    return { run: nextRun, command, events: [], accepted: true };
+};
+
+const applyResumeCommand = (
+    run: RunState,
+    command: Extract<GameplayCommand, { type: 'run.resume' }>
+): GameplayCommandResult => {
+    const nextRun = resumeRun(run);
+    if (nextRun === run) {
+        return rejectedResult(run, command.commandId, 'Run cannot be resumed from its current status.', command);
+    }
+    return { run: nextRun, command, events: [], accepted: true };
+};
+
+const applyProgressionRepairCommand = (
+    run: RunState,
+    command: Extract<GameplayCommand, { type: 'run.progression_repair' }>
+): GameplayCommandResult => {
+    const transition = createRunProgressionRepairTransition(run);
+    if (!transition.repaired) {
+        return rejectedResult(run, command.commandId, 'Run progression needed no repair.', command);
+    }
+    return { run: transition.run, command, events: [], accepted: true };
+};
+
+const applyRelicOfferOpenCommand = (
+    run: RunState,
+    command: Extract<GameplayCommand, { type: 'relic.offer_open' }>
+): GameplayCommandResult => {
+    const nextRun = openRelicOffer(run);
+    if (nextRun === run) {
+        return rejectedResult(run, command.commandId, 'Relic offer cannot be opened for the current run.', command);
+    }
+    return { run: nextRun, command, events: [], accepted: true };
 };
 
 export const reduceGameplayCommand = (run: RunState, input: unknown): GameplayCommandResult => {
@@ -1522,6 +1619,24 @@ export const reduceGameplayCommand = (run: RunState, input: unknown): GameplayCo
     }
     if (command.type === 'board.turn_resolve') {
         return applyBoardTurnResolveCommand(run, command);
+    }
+    if (command.type === 'board.tile_flip') {
+        return applyTileFlipCommand(run, command);
+    }
+    if (command.type === 'memorize.complete') {
+        return applyMemorizeCompleteCommand(run, command);
+    }
+    if (command.type === 'run.pause') {
+        return applyPauseCommand(run, command);
+    }
+    if (command.type === 'run.resume') {
+        return applyResumeCommand(run, command);
+    }
+    if (command.type === 'run.progression_repair') {
+        return applyProgressionRepairCommand(run, command);
+    }
+    if (command.type === 'relic.offer_open') {
+        return applyRelicOfferOpenCommand(run, command);
     }
     if (command.type === 'wild_match.consume') {
         return applyWildMatchConsumeCommand(run, command);
