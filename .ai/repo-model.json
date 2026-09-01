@@ -10803,8 +10803,8 @@
     {
       "path": "src/shared/gameplay-core.ts",
       "category": "source",
-      "bytes": 88741,
-      "sha256": "3540c6ee3a03ec954a132340d0267dd65d0d8743e65e1f71aa37b20604ece54b"
+      "bytes": 88888,
+      "sha256": "2167b0064b47fd0f0bd9dad876c5bfcee6011479a9b4f9a29643375e2d8f25aa"
     },
     {
       "path": "src/shared/gameplay-effect-transition.test.ts",
@@ -27708,7 +27708,7 @@
       "path": "src/shared/gameplay-core.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 2017,
+      "lineCount": 2019,
       "imports": [
         "file:src/shared/board-inspection.ts",
         "file:src/shared/board-power-actions.ts",
@@ -52341,16 +52341,16 @@
       "name": "reduceGameplayCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core.ts",
-      "line": 1883,
-      "endLine": 2001
+      "line": 1885,
+      "endLine": 2003
     },
     {
       "id": "symbol:src/shared/gameplay-core.ts#replayGameplayCommands",
       "name": "replayGameplayCommands",
       "kind": "value",
       "file": "src/shared/gameplay-core.ts",
-      "line": 2003,
-      "endLine": 2016
+      "line": 2005,
+      "endLine": 2018
     },
     {
       "id": "symbol:src/shared/gameplay-effect-transition.ts#applyGameplayDefinitionTransition",
@@ -61977,7 +61977,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 1575
+          "line": 1577
         },
         {
           "path": "src/shared/board-power-actions.ts",
