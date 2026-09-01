@@ -726,9 +726,22 @@
     max-width: 30rem;
 }
 
+/*
+ * On a library tile the strip clips, so it has to reserve the height it clips to. It was
+ * laying out 36px tall around an 86px lane map, and the description that follows it in
+ * flow started inside the overflowing lanes - "Launch loop / Chain" painted straight over
+ * the first line of the card's own copy.
+ */
 .modeSignalStrip_tile {
+    flex: 0 0 auto;
+    height: 3.1rem;
     max-height: 3.1rem;
     overflow: hidden;
+}
+
+.modeSignalStrip_tile > * {
+    min-height: 0;
+    max-height: 100%;
 }
 
 .modeSignalStrip_tile span {
