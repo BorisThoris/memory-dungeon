@@ -72,7 +72,6 @@ import {
 import { applyRelicImmediate } from './relic-immediate-rules';
 import { resolveTileTraitEffects } from './tile-trait-rules';
 import { purchaseShopOffer } from './shop-rules';
-import { createDungeonExitActivationTransition } from './dungeon-exit-rules';
 import { createNewRun } from './game';
 import { EXIT_PAIR_KEY, WILD_PAIR_KEY } from './tile-identity';
 import { createPlayablePathFixture } from './playable-path-fixtures';

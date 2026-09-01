@@ -9,7 +9,7 @@
     "contentItemCount": 57,
     "mechanicCount": 130,
     "stateFieldCount": 144,
-    "relationshipCount": 10129
+    "relationshipCount": 10128
   },
   "inventory": [
     {
@@ -9543,8 +9543,8 @@
     {
       "path": "src/renderer/store/runSurfaceState.ts",
       "category": "source",
-      "bytes": 24911,
-      "sha256": "5df7559ab9153f9f3d016b155eeec69a983d1e4222278971c74c94502fffb7b7"
+      "bytes": 25031,
+      "sha256": "7fccf106ebfcc39a8877a175a54b0fca307784ea20fb47da34595221c3d30a9d"
     },
     {
       "path": "src/renderer/store/runTimerController.test.ts",
@@ -9615,8 +9615,8 @@
     {
       "path": "src/renderer/store/shopSurfaceState.ts",
       "category": "source",
-      "bytes": 4949,
-      "sha256": "80d8b2ac854469acdba68cfae9d7d9863173ce91657950b0708dbf02bca1e8e6"
+      "bytes": 4885,
+      "sha256": "f847f212b34b5b37f4bca1c0f9e9270218063ce7d98bc96fb6525b3db4cf31fe"
     },
     {
       "path": "src/renderer/store/sideRoomActionController.test.ts",
@@ -10797,14 +10797,14 @@
     {
       "path": "src/shared/gameplay-core.test.ts",
       "category": "test",
-      "bytes": 81545,
-      "sha256": "9e366f39be69afcf0b0d1edf3f12ff2b3d78a969de70bd2a9e212b81ce48ffaf"
+      "bytes": 81889,
+      "sha256": "dc2defb8061fc618393762edd9b01cc67925980ed39ea38f669dcb264883679b"
     },
     {
       "path": "src/shared/gameplay-core.ts",
       "category": "source",
-      "bytes": 87567,
-      "sha256": "548d0bbd74115d1df8baf32b31f2e9a1e5f277de81fcae5ffceae6492832cc07"
+      "bytes": 88155,
+      "sha256": "1b655bdb480eb8118ee7821c2d080f1f032252b376ad87e9d548ec28f8e08b4e"
     },
     {
       "path": "src/shared/gameplay-effect-transition.test.ts",
@@ -10839,8 +10839,8 @@
     {
       "path": "src/shared/gameplay-interaction-graph-data.json",
       "category": "source",
-      "bytes": 181815,
-      "sha256": "f73c167ad7960b1e06a198bb6339e885fb710635e87b92946c4c9faab3814924"
+      "bytes": 224425,
+      "sha256": "4d5aa8913fb8e6687a55230be0db04ab732aed56cffcf7c69febe9d5fdda2e2d"
     },
     {
       "path": "src/shared/gameplay-interaction-graph.test.ts",
@@ -22862,14 +22862,13 @@
       "path": "src/renderer/store/runSurfaceState.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 831,
+      "lineCount": 833,
       "imports": [
         "file:src/renderer/store/matchScorePop.ts",
         "file:src/shared/board-powers.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/dungeon-board-status.ts",
         "file:src/shared/dungeon-exit-rules.ts",
-        "file:src/shared/game.ts",
         "file:src/shared/gameplay-core-contracts.ts",
         "file:src/shared/gameplay-core.ts",
         "file:src/shared/gameplay-journal.ts",
@@ -23100,15 +23099,14 @@
       "path": "src/renderer/store/shopSurfaceState.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 170,
+      "lineCount": 167,
       "imports": [
         "file:src/renderer/store/navigationModel.ts",
         "file:src/renderer/store/runSurfaceState.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/gameplay-core-contracts.ts",
         "file:src/shared/gameplay-core.ts",
-        "file:src/shared/gameplay-journal.ts",
-        "file:src/shared/shop-rules.ts"
+        "file:src/shared/gameplay-journal.ts"
       ],
       "exports": [
         "symbol:src/renderer/store/shopSurfaceState.ts#canOpenLevelCompleteShopSurface",
@@ -25940,7 +25938,6 @@
       ],
       "testedBy": [
         "file:src/shared/dungeon-exit-rules.test.ts",
-        "file:src/shared/gameplay-core.test.ts",
         "file:src/shared/gameplay-property-invariants.test.ts"
       ]
     },
@@ -27682,13 +27679,12 @@
       "path": "src/shared/gameplay-core.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 1813,
+      "lineCount": 1818,
       "imports": [
         "file:src/shared/board-power-actions.ts",
         "file:src/shared/board-power-state.ts",
         "file:src/shared/bonus-rewards.ts",
         "file:src/shared/contracts.ts",
-        "file:src/shared/dungeon-exit-rules.ts",
         "file:src/shared/game.ts",
         "file:src/shared/gameplay-core-adapters.ts",
         "file:src/shared/gameplay-core-contracts.ts",
@@ -27712,7 +27708,7 @@
       "path": "src/shared/gameplay-core.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1998,
+      "lineCount": 2006,
       "imports": [
         "file:src/shared/board-inspection.ts",
         "file:src/shared/board-power-actions.ts",
@@ -27875,7 +27871,7 @@
       "path": "src/shared/gameplay-interaction-graph-data.json",
       "layer": "shared",
       "role": "production",
-      "lineCount": 2217,
+      "lineCount": 8275,
       "imports": [],
       "exports": [],
       "testedBy": []
@@ -42384,192 +42380,192 @@
       "name": "canPauseRunSurface",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 144,
-      "endLine": 145
+      "line": 143,
+      "endLine": 144
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#clearRunSurfaceArmedModes",
       "name": "clearRunSurfaceArmedModes",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 737,
-      "endLine": 754
+      "line": 739,
+      "endLine": 756
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createArmedBoardPowerPressResult",
       "name": "createArmedBoardPowerPressResult",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 516,
-      "endLine": 623
+      "line": 518,
+      "endLine": 625
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createBoardPinModeToggleResult",
       "name": "createBoardPinModeToggleResult",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 147,
-      "endLine": 175
+      "line": 146,
+      "endLine": 174
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createBoardPowerContactPolicy",
       "name": "createBoardPowerContactPolicy",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 492,
-      "endLine": 514
+      "line": 494,
+      "endLine": 516
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createDestroyPairArmedToggleResult",
       "name": "createDestroyPairArmedToggleResult",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 177,
-      "endLine": 215
+      "line": 176,
+      "endLine": 214
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createDungeonExitActivationSurfaceResult",
       "name": "createDungeonExitActivationSurfaceResult",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 461,
-      "endLine": 490
+      "line": 460,
+      "endLine": 492
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createFlashPairSurfaceResult",
       "name": "createFlashPairSurfaceResult",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 411,
-      "endLine": 434
+      "line": 410,
+      "endLine": 433
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createGambitThirdPickPressResult",
       "name": "createGambitThirdPickPressResult",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 666,
-      "endLine": 735
+      "line": 668,
+      "endLine": 737
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createOrdinaryTileFlipResult",
       "name": "createOrdinaryTileFlipResult",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 625,
-      "endLine": 664
+      "line": 627,
+      "endLine": 666
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createPausedRunSurfacePatch",
       "name": "createPausedRunSurfacePatch",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 824,
-      "endLine": 830
+      "line": 826,
+      "endLine": 832
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createPeekModeToggleResult",
       "name": "createPeekModeToggleResult",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 217,
-      "endLine": 261
+      "line": 216,
+      "endLine": 260
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createRegionShuffleArmSurfaceResult",
       "name": "createRegionShuffleArmSurfaceResult",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 361,
-      "endLine": 379
+      "line": 360,
+      "endLine": 378
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createRegionShuffleSurfaceResult",
       "name": "createRegionShuffleSurfaceResult",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 381,
-      "endLine": 409
+      "line": 380,
+      "endLine": 408
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createRunSurfaceReset",
       "name": "createRunSurfaceReset",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 131,
-      "endLine": 142
+      "line": 130,
+      "endLine": 141
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createRunWithArmedModesClearedPatch",
       "name": "createRunWithArmedModesClearedPatch",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 782,
-      "endLine": 798
+      "line": 784,
+      "endLine": 800
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createRunWithBoardInteractionClearedPatch",
       "name": "createRunWithBoardInteractionClearedPatch",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 805,
-      "endLine": 822
+      "line": 807,
+      "endLine": 824
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createRunWithBoardPowersDisarmedPatch",
       "name": "createRunWithBoardPowersDisarmedPatch",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 768,
-      "endLine": 780
+      "line": 770,
+      "endLine": 782
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createRunWithPeekDisarmedPatch",
       "name": "createRunWithPeekDisarmedPatch",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 756,
-      "endLine": 766
+      "line": 758,
+      "endLine": 768
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createShuffleBoardSurfaceResult",
       "name": "createShuffleBoardSurfaceResult",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 336,
-      "endLine": 359
+      "line": 335,
+      "endLine": 358
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createStrayArmToggleResult",
       "name": "createStrayArmToggleResult",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 309,
-      "endLine": 334
+      "line": 308,
+      "endLine": 333
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createTileSwapToggleResult",
       "name": "createTileSwapToggleResult",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 263,
-      "endLine": 307
+      "line": 262,
+      "endLine": 306
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createUndoResolvingSurfaceResult",
       "name": "createUndoResolvingSurfaceResult",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 436,
-      "endLine": 459
+      "line": 435,
+      "endLine": 458
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#RunSurfaceState",
       "name": "RunSurfaceState",
       "kind": "interface",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 39,
-      "endLine": 51
+      "line": 38,
+      "endLine": 50
     },
     {
       "id": "symbol:src/renderer/store/runTimerController.ts#createRunTimerController",
@@ -42712,80 +42708,80 @@
       "name": "canOpenLevelCompleteShopSurface",
       "kind": "value",
       "file": "src/renderer/store/shopSurfaceState.ts",
-      "line": 53,
-      "endLine": 62
+      "line": 50,
+      "endLine": 59
     },
     {
       "id": "symbol:src/renderer/store/shopSurfaceState.ts#canUseShopSurface",
       "name": "canUseShopSurface",
       "kind": "value",
       "file": "src/renderer/store/shopSurfaceState.ts",
-      "line": 64,
-      "endLine": 77
+      "line": 61,
+      "endLine": 74
     },
     {
       "id": "symbol:src/renderer/store/shopSurfaceState.ts#createLevelCompleteShopOpenSurfacePatch",
       "name": "createLevelCompleteShopOpenSurfacePatch",
       "kind": "value",
       "file": "src/renderer/store/shopSurfaceState.ts",
-      "line": 79,
-      "endLine": 84
+      "line": 76,
+      "endLine": 81
     },
     {
       "id": "symbol:src/renderer/store/shopSurfaceState.ts#createShopCloseSurfacePatch",
       "name": "createShopCloseSurfacePatch",
       "kind": "value",
       "file": "src/renderer/store/shopSurfaceState.ts",
-      "line": 86,
-      "endLine": 93
+      "line": 83,
+      "endLine": 90
     },
     {
       "id": "symbol:src/renderer/store/shopSurfaceState.ts#createShopCloseSurfaceResult",
       "name": "createShopCloseSurfaceResult",
       "kind": "value",
       "file": "src/renderer/store/shopSurfaceState.ts",
-      "line": 99,
-      "endLine": 112
+      "line": 96,
+      "endLine": 109
     },
     {
       "id": "symbol:src/renderer/store/shopSurfaceState.ts#createShopPurchaseSurfaceResult",
       "name": "createShopPurchaseSurfaceResult",
       "kind": "value",
       "file": "src/renderer/store/shopSurfaceState.ts",
-      "line": 114,
-      "endLine": 141
+      "line": 111,
+      "endLine": 138
     },
     {
       "id": "symbol:src/renderer/store/shopSurfaceState.ts#createShopRerollSurfaceResult",
       "name": "createShopRerollSurfaceResult",
       "kind": "value",
       "file": "src/renderer/store/shopSurfaceState.ts",
-      "line": 143,
-      "endLine": 169
+      "line": 140,
+      "endLine": 166
     },
     {
       "id": "symbol:src/renderer/store/shopSurfaceState.ts#createShopReturnModeResetPatch",
       "name": "createShopReturnModeResetPatch",
       "kind": "value",
       "file": "src/renderer/store/shopSurfaceState.ts",
-      "line": 95,
-      "endLine": 97
+      "line": 92,
+      "endLine": 94
     },
     {
       "id": "symbol:src/renderer/store/shopSurfaceState.ts#ShopOpenSurfacePatch",
       "name": "ShopOpenSurfacePatch",
       "kind": "interface",
       "file": "src/renderer/store/shopSurfaceState.ts",
-      "line": 24,
-      "endLine": 27
+      "line": 21,
+      "endLine": 24
     },
     {
       "id": "symbol:src/renderer/store/shopSurfaceState.ts#shouldResumeShopRunOnClose",
       "name": "shouldResumeShopRunOnClose",
       "kind": "value",
       "file": "src/renderer/store/shopSurfaceState.ts",
-      "line": 48,
-      "endLine": 51
+      "line": 45,
+      "endLine": 48
     },
     {
       "id": "symbol:src/renderer/store/sideRoomActionController.ts#createSideRoomActionController",
@@ -52344,16 +52340,16 @@
       "name": "reduceGameplayCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core.ts",
-      "line": 1864,
-      "endLine": 1982
+      "line": 1872,
+      "endLine": 1990
     },
     {
       "id": "symbol:src/shared/gameplay-core.ts#replayGameplayCommands",
       "name": "replayGameplayCommands",
       "kind": "value",
       "file": "src/shared/gameplay-core.ts",
-      "line": 1984,
-      "endLine": 1997
+      "line": 1992,
+      "endLine": 2005
     },
     {
       "id": "symbol:src/shared/gameplay-effect-transition.ts#applyGameplayDefinitionTransition",
@@ -61980,7 +61976,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 1556
+          "line": 1564
         },
         {
           "path": "src/shared/board-power-actions.ts",
@@ -63422,7 +63418,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 124
+          "line": 123
         }
       ],
       "enables": [
@@ -63470,7 +63466,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 252
+          "line": 251
         }
       ],
       "enables": [
@@ -63523,7 +63519,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 252
+          "line": 251
         }
       ],
       "enables": [
@@ -64282,7 +64278,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 947
+          "line": 955
         },
         {
           "path": "src/shared/tile-trait-rules.ts",
@@ -64292,7 +64288,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 783
+          "line": 782
         },
         {
           "path": "src/shared/tile-trait-rules.test.ts",
@@ -65359,7 +65355,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 304
+          "line": 303
         },
         {
           "path": "src/shared/gameplay-core-simulation.test.ts",
@@ -66662,7 +66658,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 1662
+          "line": 1661
         }
       ],
       "enables": [
@@ -67999,7 +67995,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 124
+          "line": 123
         }
       ],
       "enables": [
@@ -71385,6 +71381,27 @@
       "source": "mechanic:feedback.gameplay_hud",
       "target": "file:src/renderer/components/gameScreenFeedback.ts",
       "kind": "displays"
+    },
+    {
+      "id": "displays:mechanic:feedback.gameplay_hud->mechanic:inventory.flash_pair_charge:flash pair charge availability",
+      "source": "mechanic:feedback.gameplay_hud",
+      "target": "mechanic:inventory.flash_pair_charge",
+      "kind": "displays",
+      "label": "flash pair charge availability"
+    },
+    {
+      "id": "displays:mechanic:feedback.gameplay_hud->mechanic:lock.iron_key:matching and master key counts",
+      "source": "mechanic:feedback.gameplay_hud",
+      "target": "mechanic:lock.iron_key",
+      "kind": "displays",
+      "label": "matching and master key counts"
+    },
+    {
+      "id": "displays:mechanic:feedback.gameplay_hud->mechanic:lock.typed_key:typed lock key requirement",
+      "source": "mechanic:feedback.gameplay_hud",
+      "target": "mechanic:lock.typed_key",
+      "kind": "displays",
+      "label": "typed lock key requirement"
     },
     {
       "id": "displays:mechanic:findable.score_glint->mechanic:feedback.gameplay_hud:shows score source",
@@ -105242,12 +105259,6 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/store/runSurfaceState.ts->src/shared/game.ts",
-      "source": "file:src/renderer/store/runSurfaceState.ts",
-      "target": "file:src/shared/game.ts",
-      "kind": "imports"
-    },
-    {
       "id": "imports:src/renderer/store/runSurfaceState.ts->src/shared/gameplay-core-contracts.ts",
       "source": "file:src/renderer/store/runSurfaceState.ts",
       "target": "file:src/shared/gameplay-core-contracts.ts",
@@ -105527,12 +105538,6 @@
       "id": "imports:src/renderer/store/shopSurfaceState.ts->src/shared/gameplay-journal.ts",
       "source": "file:src/renderer/store/shopSurfaceState.ts",
       "target": "file:src/shared/gameplay-journal.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/store/shopSurfaceState.ts->src/shared/shop-rules.ts",
-      "source": "file:src/renderer/store/shopSurfaceState.ts",
-      "target": "file:src/shared/shop-rules.ts",
       "kind": "imports"
     },
     {
@@ -109967,12 +109972,6 @@
       "id": "imports:src/shared/gameplay-core.test.ts->src/shared/contracts.ts",
       "source": "file:src/shared/gameplay-core.test.ts",
       "target": "file:src/shared/contracts.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/gameplay-core.test.ts->src/shared/dungeon-exit-rules.ts",
-      "source": "file:src/shared/gameplay-core.test.ts",
-      "target": "file:src/shared/dungeon-exit-rules.ts",
       "kind": "imports"
     },
     {
@@ -125181,12 +125180,6 @@
       "id": "tested_by:src/shared/dungeon-exit-rules.ts->file:src/shared/dungeon-exit-rules.test.ts",
       "source": "file:src/shared/dungeon-exit-rules.ts",
       "target": "file:src/shared/dungeon-exit-rules.test.ts",
-      "kind": "tested_by"
-    },
-    {
-      "id": "tested_by:src/shared/dungeon-exit-rules.ts->file:src/shared/gameplay-core.test.ts",
-      "source": "file:src/shared/dungeon-exit-rules.ts",
-      "target": "file:src/shared/gameplay-core.test.ts",
       "kind": "tested_by"
     },
     {
