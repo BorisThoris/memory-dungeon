@@ -685,14 +685,14 @@ const applyDungeonExitActivateCommand = (
               : 'Dungeon exit activated without spending a key.',
         tone: 'information'
     });
-    // Activating the exit clears the floor. The legacy activateDungeonExit transition
-    // finalizes the level here (createActivateDungeonExit wraps exactly this transition
-    // in finalizeLevel); without it the command path left the run in 'playing' with no
-    // lastLevelResult, diverging from the direct path it must reproduce.
-    const finalizedRun = finalizeLevelThroughCore(nextRun, transition.board, {
-        commandId: command.commandId,
-        events
-    });
+    // Activating the exit clears the floor only when nothing is left on the board. The
+    // legacy activateDungeonExit wraps this transition in finalizeLevel, and without it
+    // the command path left a solved board in 'playing' with no lastLevelResult. But
+    // activating an exit while pairs remain must not fabricate a floor clear, so the
+    // finalize is conditional on the board actually being complete.
+    const finalizedRun = isBoardComplete(transition.board)
+        ? finalizeLevelThroughCore(nextRun, transition.board, { commandId: command.commandId, events })
+        : nextRun;
     return { run: finalizedRun, command, events, accepted: true };
 };
 
