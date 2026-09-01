@@ -117,6 +117,12 @@ const messageFor = (
  * Converts gameplay truth into renderer concerns. Invalid persisted entries are ignored,
  * and presentation is deduplicated by the core-owned event id.
  */
+/**
+ * The resolved-turn event, named once here so the floor-clear feedback model and its
+ * test share the shape with the store rather than each re-deriving the Extract.
+ */
+export type BoardTurnResolvedEvent = Extract<GameplayEvent, { type: 'board.turn_resolved' }>;
+
 export const projectGameplayFeedback = (value: unknown): GameplayFeedbackPresentation[] => {
     const events = parseEvents(value);
     const presentations = events.flatMap((event) => {

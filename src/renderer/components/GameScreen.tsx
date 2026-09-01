@@ -2551,15 +2551,17 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             : run.activeMutators.length > 0 && run.board?.matchedPairs === 0
               ? `New pressure: ${run.activeMutators.map((id) => MUTATOR_CATALOG[id]?.title ?? id).join(', ')}.`
               : null);
-    const { boardPinMode, destroyPairArmed, peekModeArmed, tileSwapArmed, tileSwapFirstTileId } = useAppStore(
-        useShallow((state) => ({
-            boardPinMode: state.boardPinMode,
-            destroyPairArmed: state.destroyPairArmed,
-            peekModeArmed: state.peekModeArmed,
-            tileSwapArmed: state.tileSwapArmed,
-            tileSwapFirstTileId: state.tileSwapFirstTileId
-        }))
-    );
+    const { boardPinMode, destroyPairArmed, peekModeArmed, strayRemoveArmed, tileSwapArmed, tileSwapFirstTileId } =
+        useAppStore(
+            useShallow((state) => ({
+                boardPinMode: state.boardPinMode,
+                destroyPairArmed: state.destroyPairArmed,
+                peekModeArmed: state.peekModeArmed,
+                strayRemoveArmed: state.strayRemoveArmed,
+                tileSwapArmed: state.tileSwapArmed,
+                tileSwapFirstTileId: state.tileSwapFirstTileId
+            }))
+        );
     const { persistenceWriteNotice, clearPersistenceWriteNotice } = useAppStore(
         useShallow((state) => ({
             persistenceWriteNotice: state.persistenceWriteNotice,
@@ -3975,6 +3977,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         mergedPeekTileIds,
         peekModeArmed,
         run,
+        strayRemoveArmed,
         tileSwapPowerVisualActive
     });
 
@@ -5711,6 +5714,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                             openInventoryFromPlaying={openInventoryFromPlaying}
                             openSettingsPlaying={openSettingsPlayingMode}
                             peekModeArmed={peekModeArmed}
+                            strayRemoveArmed={strayRemoveArmed}
                             regionShuffleDisabled={regionShuffleDisabled}
                             regionShuffleTitle={regionShuffleTitle}
                             rulesHintNudge={rulesHintNudge}
