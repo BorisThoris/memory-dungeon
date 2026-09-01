@@ -17,6 +17,32 @@ import { normalizeSessionStats } from './session-stats-rules';
  * toasts or live-region announcements need in order to describe a turn belongs here, so
  * the projector can stay a pure function of the event.
  */
+/**
+ * Per-kind hazard-tile firings for this turn.
+ *
+ * The announcer needs the exact kind - and, for fragile and fuse caches, whether the
+ * cache broke - to pick its copy. A single aggregate count can only ever name one
+ * hazard, so a turn that fires two says the wrong thing about one of them.
+ */
+export interface BoardTurnHazardKindFacts {
+    shuffleSnareBefore: number;
+    shuffleSnareAfter: number;
+    cascadeCacheBefore: number;
+    cascadeCacheAfter: number;
+    mirrorDecoyBefore: number;
+    mirrorDecoyAfter: number;
+    fragileCacheClaimBefore: number;
+    fragileCacheClaimAfter: number;
+    fragileCacheBreakBefore: number;
+    fragileCacheBreakAfter: number;
+    tollCacheBefore: number;
+    tollCacheAfter: number;
+    fuseCacheBefore: number;
+    fuseCacheAfter: number;
+    fuseCacheExpiredBefore: number;
+    fuseCacheExpiredAfter: number;
+}
+
 export interface BoardTurnAnnouncementFacts {
     /**
      * Which tiles the floater anchors to. Not simply the flipped ids: a gambit resolves
@@ -41,16 +67,38 @@ export interface BoardTurnAnnouncementFacts {
     findablesTotalAfter: number;
     hazardTilesBefore: number;
     hazardTilesAfter: number;
+    hazardKinds: BoardTurnHazardKindFacts;
     scoutsBefore: number;
     scoutsAfter: number;
+    omenScoutsBefore: number;
+    omenScoutsAfter: number;
     mimicCacheBefore: number;
     mimicCacheAfter: number;
+    mimicCacheBitesBefore: number;
+    mimicCacheBitesAfter: number;
+    mimicCacheGuardBitesBefore: number;
+    mimicCacheGuardBitesAfter: number;
     routeSpecialsBefore: number;
     routeSpecialsAfter: number;
     safeHazardWardsUsedBefore: number;
     safeHazardWardsUsedAfter: number;
     /** Trait kinds actually involved in this turn, resolved here so the renderer never diffs trait counts. */
     matchedTraitKinds: TileTraitKind[];
+    shopGoldBefore: number;
+    shopGoldAfter: number;
+    shuffleChargesBefore: number;
+    shuffleChargesAfter: number;
+    regionShuffleChargesBefore: number;
+    regionShuffleChargesAfter: number;
+    stickyBlockIndexBefore: number | null;
+    stickyBlockIndexAfter: number | null;
+    matchedPairsBefore: number;
+    matchedPairsAfter: number;
+    pairTotal: number;
+    mismatchesBefore: number;
+    mismatchesAfter: number;
+    volatileTraitShufflesBefore: number;
+    volatileTraitShufflesAfter: number;
     objectiveBefore: GameplayFeedbackObjectiveSnapshot | null;
     objectiveAfter: GameplayFeedbackObjectiveSnapshot | null;
 }
@@ -119,10 +167,34 @@ export const getBoardTurnAnnouncementFacts = (
         findablesTotalAfter: runNonNegativeInteger(after.findablesTotalThisFloor),
         hazardTilesBefore: runNonNegativeInteger(before.hazardTileTriggersThisFloor),
         hazardTilesAfter: runNonNegativeInteger(after.hazardTileTriggersThisFloor),
+        hazardKinds: {
+            shuffleSnareBefore: runNonNegativeInteger(before.hazardShuffleSnaresThisFloor),
+            shuffleSnareAfter: runNonNegativeInteger(after.hazardShuffleSnaresThisFloor),
+            cascadeCacheBefore: runNonNegativeInteger(before.hazardCascadeCachesThisFloor),
+            cascadeCacheAfter: runNonNegativeInteger(after.hazardCascadeCachesThisFloor),
+            mirrorDecoyBefore: runNonNegativeInteger(before.hazardMirrorDecoysThisFloor),
+            mirrorDecoyAfter: runNonNegativeInteger(after.hazardMirrorDecoysThisFloor),
+            fragileCacheClaimBefore: runNonNegativeInteger(before.hazardFragileCacheClaimsThisFloor),
+            fragileCacheClaimAfter: runNonNegativeInteger(after.hazardFragileCacheClaimsThisFloor),
+            fragileCacheBreakBefore: runNonNegativeInteger(before.hazardFragileCacheBreaksThisFloor),
+            fragileCacheBreakAfter: runNonNegativeInteger(after.hazardFragileCacheBreaksThisFloor),
+            tollCacheBefore: runNonNegativeInteger(before.hazardTollCachesThisFloor),
+            tollCacheAfter: runNonNegativeInteger(after.hazardTollCachesThisFloor),
+            fuseCacheBefore: runNonNegativeInteger(before.hazardFuseCachesThisFloor),
+            fuseCacheAfter: runNonNegativeInteger(after.hazardFuseCachesThisFloor),
+            fuseCacheExpiredBefore: runNonNegativeInteger(before.hazardFuseCacheExpiredClaimsThisFloor),
+            fuseCacheExpiredAfter: runNonNegativeInteger(after.hazardFuseCacheExpiredClaimsThisFloor)
+        },
         scoutsBefore: runNonNegativeInteger(before.lanternWardScoutsThisFloor),
         scoutsAfter: runNonNegativeInteger(after.lanternWardScoutsThisFloor),
+        omenScoutsBefore: runNonNegativeInteger(before.omenSealScoutsThisFloor),
+        omenScoutsAfter: runNonNegativeInteger(after.omenSealScoutsThisFloor),
         mimicCacheBefore: runNonNegativeInteger(before.mimicCacheClaimsThisFloor),
         mimicCacheAfter: runNonNegativeInteger(after.mimicCacheClaimsThisFloor),
+        mimicCacheBitesBefore: runNonNegativeInteger(before.mimicCacheBitesThisFloor),
+        mimicCacheBitesAfter: runNonNegativeInteger(after.mimicCacheBitesThisFloor),
+        mimicCacheGuardBitesBefore: runNonNegativeInteger(before.mimicCacheGuardBitesThisFloor),
+        mimicCacheGuardBitesAfter: runNonNegativeInteger(after.mimicCacheGuardBitesThisFloor),
         routeSpecialsBefore: routeSpecialCount(before),
         routeSpecialsAfter: routeSpecialCount(after),
         safeHazardWardsUsedBefore: runNonNegativeInteger(before.safeHazardWardsUsedThisFloor),
@@ -132,6 +204,21 @@ export const getBoardTurnAnnouncementFacts = (
                 (tileId) => before.board?.tiles.find((tile) => tile.id === tileId)?.tileTraitKind === kind
             )
         ),
+        shopGoldBefore: runNonNegativeInteger(before.shopGold),
+        shopGoldAfter: runNonNegativeInteger(after.shopGold),
+        shuffleChargesBefore: runNonNegativeInteger(before.shuffleCharges),
+        shuffleChargesAfter: runNonNegativeInteger(after.shuffleCharges),
+        regionShuffleChargesBefore: runNonNegativeInteger(before.regionShuffleCharges),
+        regionShuffleChargesAfter: runNonNegativeInteger(after.regionShuffleCharges),
+        stickyBlockIndexBefore: before.stickyBlockIndex ?? null,
+        stickyBlockIndexAfter: after.stickyBlockIndex ?? null,
+        matchedPairsBefore: runNonNegativeInteger(before.board?.matchedPairs),
+        matchedPairsAfter: runNonNegativeInteger(after.board?.matchedPairs),
+        pairTotal: runNonNegativeInteger(after.board?.pairCount ?? before.board?.pairCount),
+        mismatchesBefore: statsBefore.mismatches,
+        mismatchesAfter: statsAfter.mismatches,
+        volatileTraitShufflesBefore: runNonNegativeInteger(statsBefore.volatileTraitShuffles),
+        volatileTraitShufflesAfter: runNonNegativeInteger(statsAfter.volatileTraitShuffles),
         objectiveBefore: getGameplayFeedbackObjectiveSnapshot(before),
         objectiveAfter: getGameplayFeedbackObjectiveSnapshot(after)
     };

@@ -116,13 +116,12 @@ export const getHudActionFeedbackProfile = (
 export const countTileTraitTotal = (counts: Partial<Record<TileTraitKind, number>> | undefined): number =>
     TILE_TRAIT_COUNT_KINDS.reduce((sum, kind) => sum + (counts?.[kind] ?? 0), 0);
 
-export const changedTileTraitLabels = (
-    previous: Partial<Record<TileTraitKind, number>> | undefined,
-    next: Partial<Record<TileTraitKind, number>> | undefined
-): string[] =>
-    TILE_TRAIT_COUNT_KINDS.filter((kind) => (next?.[kind] ?? 0) > (previous?.[kind] ?? 0)).map(
-        (kind) => TILE_TRAIT_COPY[kind].label
-    );
+/**
+ * Labels for the trait kinds a turn actually involved. Takes the kinds the core
+ * reported on the event rather than diffing two count maps across renders.
+ */
+export const tileTraitKindLabels = (kinds: readonly string[]): string[] =>
+    TILE_TRAIT_COUNT_KINDS.filter((kind) => kinds.includes(kind)).map((kind) => TILE_TRAIT_COPY[kind].label);
 
 export const joinReadableList = (items: readonly string[]): string =>
     items.length <= 1 ? items[0] ?? '' : `${items.slice(0, -1).join(', ')} and ${items.at(-1)}`;

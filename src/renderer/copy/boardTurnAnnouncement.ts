@@ -14,21 +14,67 @@ const chainRewardAnnouncementLine = (streak: number, comboShards: number, lives:
 
 /**
  * Hazard-tile live copy for the hazards this turn actually fired, taken from the event's
- * before/after counts instead of a per-floor snapshot ref.
+ * per-kind before/after counts instead of a per-floor snapshot ref.
+ *
+ * Each kind is checked independently, so a turn that trips two hazards announces both in
+ * HAZARD_TILE_KINDS order. Fragile and fuse caches carry a second, break-specific line:
+ * a fragile cache can both claim and break in one turn, and a fuse cache claimed after
+ * its fuse ran out reads differently from one claimed in time.
  */
 export const hazardTileAnnouncementLines = (
     turnEvent: BoardTurnResolvedEvent,
     { reduceMotion }: { reduceMotion: boolean }
 ): string[] => {
-    if (turnEvent.announcement.hazardTilesAfter <= turnEvent.announcement.hazardTilesBefore) {
+    const { hazardTilesBefore, hazardTilesAfter, hazardKinds } = turnEvent.announcement;
+    if (hazardTilesAfter <= hazardTilesBefore) {
         return [];
     }
+    const fired = (before: number, after: number): boolean => after > before;
     return HAZARD_TILE_KINDS.flatMap((kind) => {
         const liveCopy = getHazardTileLiveCopy(kind);
-        const line = reduceMotion ? liveCopy.reducedMotionLiveAnnouncement : liveCopy.liveAnnouncement;
-        return line ? [line] : [];
-    }).slice(0, 1);
+        const normalLine = reduceMotion ? liveCopy.reducedMotionLiveAnnouncement : liveCopy.liveAnnouncement;
+        const breakLine = reduceMotion
+            ? liveCopy.reducedMotionBreakLiveAnnouncement ?? liveCopy.reducedMotionLiveAnnouncement
+            : liveCopy.breakLiveAnnouncement ?? liveCopy.liveAnnouncement;
+        switch (kind) {
+            case 'shuffle_snare':
+                return fired(hazardKinds.shuffleSnareBefore, hazardKinds.shuffleSnareAfter) ? [normalLine] : [];
+            case 'cascade_cache':
+                return fired(hazardKinds.cascadeCacheBefore, hazardKinds.cascadeCacheAfter) ? [normalLine] : [];
+            case 'mirror_decoy':
+                return fired(hazardKinds.mirrorDecoyBefore, hazardKinds.mirrorDecoyAfter) ? [normalLine] : [];
+            case 'fragile_cache':
+                return [
+                    ...(fired(hazardKinds.fragileCacheClaimBefore, hazardKinds.fragileCacheClaimAfter)
+                        ? [normalLine]
+                        : []),
+                    ...(fired(hazardKinds.fragileCacheBreakBefore, hazardKinds.fragileCacheBreakAfter)
+                        ? [breakLine]
+                        : [])
+                ];
+            case 'toll_cache':
+                return fired(hazardKinds.tollCacheBefore, hazardKinds.tollCacheAfter) ? [normalLine] : [];
+            default:
+                if (!fired(hazardKinds.fuseCacheBefore, hazardKinds.fuseCacheAfter)) {
+                    return [];
+                }
+                return [
+                    fired(hazardKinds.fuseCacheExpiredBefore, hazardKinds.fuseCacheExpiredAfter)
+                        ? breakLine
+                        : normalLine
+                ];
+        }
+    }).filter((line): line is string => typeof line === 'string' && line.length > 0);
 };
+
+/**
+ * The volatile trait reshuffling hidden cards. Reported from the event so the announcer
+ * never has to diff a run-stats counter it also renders.
+ */
+export const volatileShuffleAnnouncementLine = (turnEvent: BoardTurnResolvedEvent): string | null =>
+    turnEvent.announcement.volatileTraitShufflesAfter > turnEvent.announcement.volatileTraitShufflesBefore
+        ? 'Volatile trait shuffled hidden cards.'
+        : null;
 
 /**
  * Chain-milestone announcement for a turn that crossed a threshold, derived from the
@@ -50,6 +96,18 @@ export const chainMilestoneAnnouncement = (turnEvent: BoardTurnResolvedEvent): s
     return milestone
         ? `${milestone.label}: ${milestone.target}. ${milestone.value}.${rewardLine}`
         : `Chain times ${crossed} - keep the chain for bigger match payouts.${rewardLine}`;
+};
+
+/**
+ * A meaningful chain ending. Reported from the same before/after pair as the milestone,
+ * so a turn that ends a chain of 3 or more says so exactly once.
+ */
+export const chainBreakAnnouncement = (turnEvent: BoardTurnResolvedEvent): string | null => {
+    const { currentStreakBefore, currentStreakAfter } = turnEvent.announcement;
+    if (currentStreakBefore < 3 || currentStreakAfter >= currentStreakBefore) {
+        return null;
+    }
+    return `Chain x${currentStreakBefore} broken - recover with a remembered pair.`;
 };
 
 export interface BoardTurnAnnouncement {
@@ -107,8 +165,19 @@ const counterAnnouncementLines = (turnEvent: BoardTurnResolvedEvent): string[] =
     if (scoutsAfter > scoutsBefore) {
         lines.push('Lantern Ward scouted a hidden threat.');
     }
-    if (mimicCacheAfter > mimicCacheBefore) {
-        lines.push('Mimic Cache claimed.');
+    if (turnEvent.announcement.omenScoutsAfter > turnEvent.announcement.omenScoutsBefore) {
+        lines.push('Omen Seal revealed hidden danger.');
+    }
+    // A bite and a claim are mutually exclusive readings of the same cache, and a bite
+    // the guard absorbed reads differently from one that cost a life.
+    if (turnEvent.announcement.mimicCacheBitesAfter > turnEvent.announcement.mimicCacheBitesBefore) {
+        lines.push(
+            turnEvent.announcement.mimicCacheGuardBitesAfter > turnEvent.announcement.mimicCacheGuardBitesBefore
+                ? 'Mimic Cache bit. Guard absorbed the hit.'
+                : 'Mimic Cache bit. Life lost; reduced loot claimed.'
+        );
+    } else if (mimicCacheAfter > mimicCacheBefore) {
+        lines.push('Mimic Cache controlled. Full loot claimed.');
     }
     if (routeSpecialsAfter < routeSpecialsBefore) {
         lines.push('Route special resolved.');
@@ -140,6 +209,7 @@ export const buildBoardTurnAnnouncement = (
 ): BoardTurnAnnouncementResult | null => {
     const lines = [
         chainMilestoneAnnouncement(turnEvent),
+        chainBreakAnnouncement(turnEvent),
         ...hazardTileAnnouncementLines(turnEvent, { reduceMotion }),
         ...counterAnnouncementLines(turnEvent),
         getBoardTurnPickupAnnouncement(turnEvent)?.text ?? null

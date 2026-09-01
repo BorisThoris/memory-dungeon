@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2421,
+    "trackedFileCount": 2422,
     "codeFileCount": 917,
-    "exportedSymbolCount": 3484,
+    "exportedSymbolCount": 3487,
     "contentItemCount": 57,
     "mechanicCount": 130,
     "stateFieldCount": 144,
-    "relationshipCount": 10129
+    "relationshipCount": 10134
   },
   "inventory": [
     {
@@ -3581,6 +3581,12 @@
       "category": "test",
       "bytes": 5022,
       "sha256": "d21ed19ff55cddd9ad6ec7ac6af305e52ee674e76e2c2f8bc75c22e1e4378e8c"
+    },
+    {
+      "path": "e2e/dom-audit.spec.ts",
+      "category": "test",
+      "bytes": 3103,
+      "sha256": "3c275771f9ce8245c277da3911904a4bdb2d5c8e61e3f757b8c11eaa58eca2e3"
     },
     {
       "path": "e2e/dungeon-board-3d-value.spec.ts",
@@ -7467,8 +7473,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 372863,
-      "sha256": "c84a3a14c9492aa717d4889f41ad9180eecbf01007c5bedc30c8c94bbab0a3c5"
+      "bytes": 371003,
+      "sha256": "d299e783f4bcdadd61f0a58481fa2b90b45cf4534520b5bbd4c0e74116caad02"
     },
     {
       "path": "src/renderer/components/GameScreenActionFeedbackRail.test.tsx",
@@ -8751,8 +8757,8 @@
     {
       "path": "src/renderer/copy/boardTurnAnnouncement.ts",
       "category": "source",
-      "bytes": 6266,
-      "sha256": "21e7a2527b45c3e8a65f13cf0aae52fd9dc8f301df0395accde70375d7020968"
+      "bytes": 10110,
+      "sha256": "625b114ead1068b7b97cf0bc114413cfd2ae042ff4889458e9de7583018339a1"
     },
     {
       "path": "src/renderer/copy/chainMilestoneFeedback.test.ts",
@@ -8817,8 +8823,8 @@
     {
       "path": "src/renderer/copy/hudActionFeedback.ts",
       "category": "source",
-      "bytes": 5485,
-      "sha256": "2bf0895045d05e92b35c552e3558752e94a2612ad1d2c8bbdf1275b50611989d"
+      "bytes": 5504,
+      "sha256": "99d2d5f0ea4c50371b3315d17b81b7b01a3596a10a728ffea1b596a6ec99feaf"
     },
     {
       "path": "src/renderer/copy/inventoryScreen.ts",
@@ -9111,14 +9117,14 @@
     {
       "path": "src/renderer/hooks/useHudPoliteLiveAnnouncement.test.ts",
       "category": "test",
-      "bytes": 48827,
-      "sha256": "cb725fa2f0a097e07aedf3e1db4b2b710b72d8dc3f77bdb2382af505484dc789"
+      "bytes": 55173,
+      "sha256": "1727130c912e8804d83e06f83f5c2d0d6970e93d34c60e908759fdccce8a0aaf"
     },
     {
       "path": "src/renderer/hooks/useHudPoliteLiveAnnouncement.ts",
       "category": "source",
-      "bytes": 43795,
-      "sha256": "7beabd495eb169e66ca27a057579c3aeed9d4c262508f7e85408a055d338c7ca"
+      "bytes": 28456,
+      "sha256": "42ffc5963090dc9f21cc66024d596866e886946550b16c7e6cc5df76b74609bd"
     },
     {
       "path": "src/renderer/hooks/useLatestRef.ts",
@@ -10029,8 +10035,8 @@
     {
       "path": "src/shared/board-turn-event-facts.ts",
       "category": "source",
-      "bytes": 6747,
-      "sha256": "0c5baf2c2b7e61674e3e29ced64c407e8ed5448fe8707a62f614ec9f17571bbc"
+      "bytes": 11541,
+      "sha256": "021280d1453147266ebc515525ba84329145d50b4e7ea3c9f7a48b654638b78f"
     },
     {
       "path": "src/shared/board-turn-feedback-boundary.test.ts",
@@ -10767,8 +10773,8 @@
     {
       "path": "src/shared/gameplay-core-contracts.ts",
       "category": "source",
-      "bytes": 87220,
-      "sha256": "337fc8c2881ce75fdefdd208a72bc91c160721f6f27d9761d7fc47ea99a1e3b3"
+      "bytes": 90072,
+      "sha256": "7b611c582b96493fac7c66ada5e8f6235fa52a32a41ee234c2284f7edb48bf7d"
     },
     {
       "path": "src/shared/gameplay-core-playthrough-solver.test.ts",
@@ -12057,8 +12063,8 @@
     {
       "path": "src/shared/test/gameplay-event-fixtures.ts",
       "category": "source",
-      "bytes": 3794,
-      "sha256": "2d9936f78bdbf57964228b72be1e035d97fda777e17bafe36135c797186e9fb6"
+      "bytes": 4927,
+      "sha256": "952703032b51353de505b635133023010604a9e81562bc7495a0b7a621dc2d8d"
     },
     {
       "path": "src/shared/tile-flip-command-transition.ts",
@@ -16822,7 +16828,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 6843,
+      "lineCount": 6815,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -20679,7 +20685,7 @@
       "path": "src/renderer/copy/boardTurnAnnouncement.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 153,
+      "lineCount": 223,
       "imports": [
         "file:src/renderer/copy/chainMilestoneFeedback.ts",
         "file:src/renderer/copy/chainMomentum.ts",
@@ -20692,9 +20698,11 @@
         "symbol:src/renderer/copy/boardTurnAnnouncement.ts#BoardTurnAnnouncementResult",
         "symbol:src/renderer/copy/boardTurnAnnouncement.ts#buildBoardTurnAnnouncement",
         "symbol:src/renderer/copy/boardTurnAnnouncement.ts#CHAIN_MILESTONE_THRESHOLDS",
+        "symbol:src/renderer/copy/boardTurnAnnouncement.ts#chainBreakAnnouncement",
         "symbol:src/renderer/copy/boardTurnAnnouncement.ts#chainMilestoneAnnouncement",
         "symbol:src/renderer/copy/boardTurnAnnouncement.ts#getBoardTurnPickupAnnouncement",
-        "symbol:src/renderer/copy/boardTurnAnnouncement.ts#hazardTileAnnouncementLines"
+        "symbol:src/renderer/copy/boardTurnAnnouncement.ts#hazardTileAnnouncementLines",
+        "symbol:src/renderer/copy/boardTurnAnnouncement.ts#volatileShuffleAnnouncementLine"
       ],
       "testedBy": []
     },
@@ -20858,7 +20866,7 @@
       "path": "src/renderer/copy/hudActionFeedback.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 143,
+      "lineCount": 142,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/findables.ts",
@@ -20866,7 +20874,6 @@
         "file:src/shared/tile-trait-rules.ts"
       ],
       "exports": [
-        "symbol:src/renderer/copy/hudActionFeedback.ts#changedTileTraitLabels",
         "symbol:src/renderer/copy/hudActionFeedback.ts#countTileTraitTotal",
         "symbol:src/renderer/copy/hudActionFeedback.ts#formatHudActionFeedbackText",
         "symbol:src/renderer/copy/hudActionFeedback.ts#GAUNTLET_WARN_SECS",
@@ -20876,7 +20883,8 @@
         "symbol:src/renderer/copy/hudActionFeedback.ts#getHudActionFeedbackProfile",
         "symbol:src/renderer/copy/hudActionFeedback.ts#joinReadableList",
         "symbol:src/renderer/copy/hudActionFeedback.ts#pluralize",
-        "symbol:src/renderer/copy/hudActionFeedback.ts#resourceDeltaCopy"
+        "symbol:src/renderer/copy/hudActionFeedback.ts#resourceDeltaCopy",
+        "symbol:src/renderer/copy/hudActionFeedback.ts#tileTraitKindLabels"
       ],
       "testedBy": [
         "file:src/renderer/hooks/useHudPoliteLiveAnnouncement.test.ts"
@@ -21577,12 +21585,13 @@
       "path": "src/renderer/hooks/useHudPoliteLiveAnnouncement.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 1293,
+      "lineCount": 1462,
       "imports": [
         "file:src/renderer/copy/gameplayHints.ts",
         "file:src/renderer/copy/hudActionFeedback.ts",
         "file:src/renderer/hooks/useHudPoliteLiveAnnouncement.ts",
         "file:src/renderer/store/gameplayFeedbackAdapter.ts",
+        "file:src/shared/board-turn-event-facts.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/test/gameplay-event-fixtures.ts"
       ],
@@ -21594,7 +21603,7 @@
       "path": "src/renderer/hooks/useHudPoliteLiveAnnouncement.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 1069,
+      "lineCount": 689,
       "imports": [
         "file:src/renderer/copy/boardTurnAnnouncement.ts",
         "file:src/renderer/copy/chainMilestoneFeedback.ts",
@@ -24260,7 +24269,7 @@
       "path": "src/shared/board-turn-event-facts.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 139,
+      "lineCount": 226,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/gameplay-feedback-facts.ts",
@@ -24270,9 +24279,11 @@
       ],
       "exports": [
         "symbol:src/shared/board-turn-event-facts.ts#BoardTurnAnnouncementFacts",
+        "symbol:src/shared/board-turn-event-facts.ts#BoardTurnHazardKindFacts",
         "symbol:src/shared/board-turn-event-facts.ts#getBoardTurnAnnouncementFacts"
       ],
       "testedBy": [
+        "file:src/renderer/hooks/useHudPoliteLiveAnnouncement.test.ts",
         "file:src/renderer/store/matchScorePop.test.ts"
       ]
     },
@@ -27485,7 +27496,7 @@
       "path": "src/shared/gameplay-core-contracts.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 2488,
+      "lineCount": 2531,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/run-inventory-contracts.ts"
@@ -32133,7 +32144,7 @@
       "path": "src/shared/test/gameplay-event-fixtures.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 121,
+      "lineCount": 160,
       "imports": [
         "file:src/shared/board-turn-event-facts.ts",
         "file:src/shared/gameplay-core-contracts.ts"
@@ -35397,8 +35408,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 6842,
-      "endLine": 6842
+      "line": 6814,
+      "endLine": 6814
     },
     {
       "id": "symbol:src/renderer/components/GameScreenActionFeedbackRail.tsx#GameScreenActionFeedbackRail",
@@ -40125,24 +40136,24 @@
       "name": "BoardTurnAnnouncement",
       "kind": "interface",
       "file": "src/renderer/copy/boardTurnAnnouncement.ts",
-      "line": 55,
-      "endLine": 59
+      "line": 113,
+      "endLine": 117
     },
     {
       "id": "symbol:src/renderer/copy/boardTurnAnnouncement.ts#BoardTurnAnnouncementResult",
       "name": "BoardTurnAnnouncementResult",
       "kind": "interface",
       "file": "src/renderer/copy/boardTurnAnnouncement.ts",
-      "line": 122,
-      "endLine": 126
+      "line": 191,
+      "endLine": 195
     },
     {
       "id": "symbol:src/renderer/copy/boardTurnAnnouncement.ts#buildBoardTurnAnnouncement",
       "name": "buildBoardTurnAnnouncement",
       "kind": "value",
       "file": "src/renderer/copy/boardTurnAnnouncement.ts",
-      "line": 137,
-      "endLine": 152
+      "line": 206,
+      "endLine": 222
     },
     {
       "id": "symbol:src/renderer/copy/boardTurnAnnouncement.ts#CHAIN_MILESTONE_THRESHOLDS",
@@ -40153,28 +40164,44 @@
       "endLine": 8
     },
     {
+      "id": "symbol:src/renderer/copy/boardTurnAnnouncement.ts#chainBreakAnnouncement",
+      "name": "chainBreakAnnouncement",
+      "kind": "value",
+      "file": "src/renderer/copy/boardTurnAnnouncement.ts",
+      "line": 105,
+      "endLine": 111
+    },
+    {
       "id": "symbol:src/renderer/copy/boardTurnAnnouncement.ts#chainMilestoneAnnouncement",
       "name": "chainMilestoneAnnouncement",
       "kind": "value",
       "file": "src/renderer/copy/boardTurnAnnouncement.ts",
-      "line": 37,
-      "endLine": 53
+      "line": 83,
+      "endLine": 99
     },
     {
       "id": "symbol:src/renderer/copy/boardTurnAnnouncement.ts#getBoardTurnPickupAnnouncement",
       "name": "getBoardTurnPickupAnnouncement",
       "kind": "value",
       "file": "src/renderer/copy/boardTurnAnnouncement.ts",
-      "line": 73,
-      "endLine": 87
+      "line": 131,
+      "endLine": 145
     },
     {
       "id": "symbol:src/renderer/copy/boardTurnAnnouncement.ts#hazardTileAnnouncementLines",
       "name": "hazardTileAnnouncementLines",
       "kind": "value",
       "file": "src/renderer/copy/boardTurnAnnouncement.ts",
-      "line": 19,
-      "endLine": 31
+      "line": 24,
+      "endLine": 68
+    },
+    {
+      "id": "symbol:src/renderer/copy/boardTurnAnnouncement.ts#volatileShuffleAnnouncementLine",
+      "name": "volatileShuffleAnnouncementLine",
+      "kind": "value",
+      "file": "src/renderer/copy/boardTurnAnnouncement.ts",
+      "line": 74,
+      "endLine": 77
     },
     {
       "id": "symbol:src/renderer/copy/chainMilestoneFeedback.ts#ChainMilestoneFeedback",
@@ -40361,14 +40388,6 @@
       "endLine": 3
     },
     {
-      "id": "symbol:src/renderer/copy/hudActionFeedback.ts#changedTileTraitLabels",
-      "name": "changedTileTraitLabels",
-      "kind": "value",
-      "file": "src/renderer/copy/hudActionFeedback.ts",
-      "line": 119,
-      "endLine": 125
-    },
-    {
       "id": "symbol:src/renderer/copy/hudActionFeedback.ts#countTileTraitTotal",
       "name": "countTileTraitTotal",
       "kind": "value",
@@ -40429,24 +40448,32 @@
       "name": "joinReadableList",
       "kind": "value",
       "file": "src/renderer/copy/hudActionFeedback.ts",
-      "line": 127,
-      "endLine": 128
+      "line": 126,
+      "endLine": 127
     },
     {
       "id": "symbol:src/renderer/copy/hudActionFeedback.ts#pluralize",
       "name": "pluralize",
       "kind": "value",
       "file": "src/renderer/copy/hudActionFeedback.ts",
-      "line": 130,
-      "endLine": 131
+      "line": 129,
+      "endLine": 130
     },
     {
       "id": "symbol:src/renderer/copy/hudActionFeedback.ts#resourceDeltaCopy",
       "name": "resourceDeltaCopy",
       "kind": "value",
       "file": "src/renderer/copy/hudActionFeedback.ts",
-      "line": 133,
-      "endLine": 142
+      "line": 132,
+      "endLine": 141
+    },
+    {
+      "id": "symbol:src/renderer/copy/hudActionFeedback.ts#tileTraitKindLabels",
+      "name": "tileTraitKindLabels",
+      "kind": "value",
+      "file": "src/renderer/copy/hudActionFeedback.ts",
+      "line": 123,
+      "endLine": 124
     },
     {
       "id": "symbol:src/renderer/copy/inventoryScreen.ts#inventoryScreenCopy",
@@ -41213,8 +41240,8 @@
       "name": "useHudPoliteLiveAnnouncement",
       "kind": "value",
       "file": "src/renderer/hooks/useHudPoliteLiveAnnouncement.ts",
-      "line": 159,
-      "endLine": 1068
+      "line": 129,
+      "endLine": 688
     },
     {
       "id": "symbol:src/renderer/hooks/useLatestRef.ts#useLatestRef",
@@ -44469,16 +44496,24 @@
       "name": "BoardTurnAnnouncementFacts",
       "kind": "interface",
       "file": "src/shared/board-turn-event-facts.ts",
-      "line": 20,
-      "endLine": 56
+      "line": 46,
+      "endLine": 104
+    },
+    {
+      "id": "symbol:src/shared/board-turn-event-facts.ts#BoardTurnHazardKindFacts",
+      "name": "BoardTurnHazardKindFacts",
+      "kind": "interface",
+      "file": "src/shared/board-turn-event-facts.ts",
+      "line": 27,
+      "endLine": 44
     },
     {
       "id": "symbol:src/shared/board-turn-event-facts.ts#getBoardTurnAnnouncementFacts",
       "name": "getBoardTurnAnnouncementFacts",
       "kind": "value",
       "file": "src/shared/board-turn-event-facts.ts",
-      "line": 77,
-      "endLine": 138
+      "line": 125,
+      "endLine": 225
     },
     {
       "id": "symbol:src/shared/board-turn-transition.ts#BoardTurnExecutionContext",
@@ -51621,8 +51656,8 @@
       "name": "boardTurnAnnouncementFactsSchema",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1233,
-      "endLine": 1268
+      "line": 1254,
+      "endLine": 1311
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#COMBO_SHARD_ENGINE_DEFINITIONS",
@@ -51645,272 +51680,272 @@
       "name": "createGameplayBoardTurnResolveCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2365,
-      "endLine": 2374
+      "line": 2408,
+      "endLine": 2417
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayDebugRevealActivateCommand",
       "name": "createGameplayDebugRevealActivateCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2447,
-      "endLine": 2456
+      "line": 2490,
+      "endLine": 2499
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayDebugRevealDeactivateCommand",
       "name": "createGameplayDebugRevealDeactivateCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2458,
-      "endLine": 2467
+      "line": 2501,
+      "endLine": 2510
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayDefinitionCommand",
       "name": "createGameplayDefinitionCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2175,
-      "endLine": 2192
+      "line": 2218,
+      "endLine": 2235
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayDestroyPairCommand",
       "name": "createGameplayDestroyPairCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2218,
-      "endLine": 2224
+      "line": 2261,
+      "endLine": 2267
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayDungeonExitActivateCommand",
       "name": "createGameplayDungeonExitActivateCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2291,
-      "endLine": 2300
+      "line": 2334,
+      "endLine": 2343
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayEnemyHazardContactCommand",
       "name": "createGameplayEnemyHazardContactCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2469,
-      "endLine": 2480
+      "line": 2512,
+      "endLine": 2523
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayFlashPairCommand",
       "name": "createGameplayFlashPairCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2269,
-      "endLine": 2274
+      "line": 2312,
+      "endLine": 2317
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayFloorAdvanceCommand",
       "name": "createGameplayFloorAdvanceCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2316,
-      "endLine": 2321
+      "line": 2359,
+      "endLine": 2364
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayGambitCommitCommand",
       "name": "createGameplayGambitCommitCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2233,
-      "endLine": 2239
+      "line": 2276,
+      "endLine": 2282
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayGauntletExpireCommand",
       "name": "createGameplayGauntletExpireCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2439,
-      "endLine": 2445
+      "line": 2482,
+      "endLine": 2488
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayHazardBanishCommand",
       "name": "createGameplayHazardBanishCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2309,
-      "endLine": 2314
+      "line": 2352,
+      "endLine": 2357
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayMemorizeCompleteCommand",
       "name": "createGameplayMemorizeCompleteCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2397,
-      "endLine": 2402
+      "line": 2440,
+      "endLine": 2445
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayParasiteAdvanceCommand",
       "name": "createGameplayParasiteAdvanceCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2302,
-      "endLine": 2307
+      "line": 2345,
+      "endLine": 2350
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayPauseCommand",
       "name": "createGameplayPauseCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2404,
-      "endLine": 2415
+      "line": 2447,
+      "endLine": 2458
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayPeekCommand",
       "name": "createGameplayPeekCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2194,
-      "endLine": 2200
+      "line": 2237,
+      "endLine": 2243
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayPinToggleCommand",
       "name": "createGameplayPinToggleCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2202,
-      "endLine": 2208
+      "line": 2245,
+      "endLine": 2251
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayProgressionRepairCommand",
       "name": "createGameplayProgressionRepairCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2425,
-      "endLine": 2430
+      "line": 2468,
+      "endLine": 2473
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayRegionShuffleCommand",
       "name": "createGameplayRegionShuffleCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2248,
-      "endLine": 2254
+      "line": 2291,
+      "endLine": 2297
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayRelicOfferOpenCommand",
       "name": "createGameplayRelicOfferOpenCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2432,
-      "endLine": 2437
+      "line": 2475,
+      "endLine": 2480
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayRelicOfferServiceCommand",
       "name": "createGameplayRelicOfferServiceCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2352,
-      "endLine": 2363
+      "line": 2395,
+      "endLine": 2406
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayRelicPickCommand",
       "name": "createGameplayRelicPickCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2344,
-      "endLine": 2350
+      "line": 2387,
+      "endLine": 2393
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayResumeCommand",
       "name": "createGameplayResumeCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2417,
-      "endLine": 2423
+      "line": 2460,
+      "endLine": 2466
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayRiskWagerAcceptCommand",
       "name": "createGameplayRiskWagerAcceptCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2226,
-      "endLine": 2231
+      "line": 2269,
+      "endLine": 2274
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayRouteChooseCommand",
       "name": "createGameplayRouteChooseCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2323,
-      "endLine": 2329
+      "line": 2366,
+      "endLine": 2372
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayShopPurchaseCommand",
       "name": "createGameplayShopPurchaseCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2283,
-      "endLine": 2289
+      "line": 2326,
+      "endLine": 2332
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayShopRerollCommand",
       "name": "createGameplayShopRerollCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2482,
-      "endLine": 2487
+      "line": 2525,
+      "endLine": 2530
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayShuffleCommand",
       "name": "createGameplayShuffleCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2241,
-      "endLine": 2246
+      "line": 2284,
+      "endLine": 2289
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplaySideRoomResolveCommand",
       "name": "createGameplaySideRoomResolveCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2331,
-      "endLine": 2342
+      "line": 2374,
+      "endLine": 2385
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayStrayRemoveCommand",
       "name": "createGameplayStrayRemoveCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2210,
-      "endLine": 2216
+      "line": 2253,
+      "endLine": 2259
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayTileFlipCommand",
       "name": "createGameplayTileFlipCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2389,
-      "endLine": 2395
+      "line": 2432,
+      "endLine": 2438
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayTileSwapCommand",
       "name": "createGameplayTileSwapCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2256,
-      "endLine": 2267
+      "line": 2299,
+      "endLine": 2310
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayUndoResolveCommand",
       "name": "createGameplayUndoResolveCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2276,
-      "endLine": 2281
+      "line": 2319,
+      "endLine": 2324
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayWildMatchConsumeCommand",
       "name": "createGameplayWildMatchConsumeCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2376,
-      "endLine": 2387
+      "line": 2419,
+      "endLine": 2430
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GAMEPLAY_BONUS_REWARD_IDS",
@@ -52005,16 +52040,16 @@
       "name": "GameplayCommand",
       "kind": "type",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2167,
-      "endLine": 2167
+      "line": 2210,
+      "endLine": 2210
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#gameplayCommandSchema",
       "name": "gameplayCommandSchema",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1270,
-      "endLine": 1514
+      "line": 1313,
+      "endLine": 1557
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GameplayCondition",
@@ -52069,16 +52104,16 @@
       "name": "GameplayEvent",
       "kind": "type",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2168,
-      "endLine": 2168
+      "line": 2211,
+      "endLine": 2211
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#gameplayEventSchema",
       "name": "gameplayEventSchema",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1524,
-      "endLine": 2165
+      "line": 1567,
+      "endLine": 2208
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GameplayFacts",
@@ -52133,8 +52168,8 @@
       "name": "getGameplayContentDefinition",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2172,
-      "endLine": 2173
+      "line": 2215,
+      "endLine": 2216
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#LOCKSMITH_DEFINITIONS",
@@ -59653,16 +59688,16 @@
       "name": "BoardTurnResolvedEventFixtureOverrides",
       "kind": "interface",
       "file": "src/shared/test/gameplay-event-fixtures.ts",
-      "line": 36,
-      "endLine": 59
+      "line": 75,
+      "endLine": 98
     },
     {
       "id": "symbol:src/shared/test/gameplay-event-fixtures.ts#createBoardTurnResolvedEventFixture",
       "name": "createBoardTurnResolvedEventFixture",
       "kind": "value",
       "file": "src/shared/test/gameplay-event-fixtures.ts",
-      "line": 69,
-      "endLine": 120
+      "line": 108,
+      "endLine": 159
     },
     {
       "id": "symbol:src/shared/tile-flip-command-transition.ts#createApplyTileFlip",
@@ -63006,7 +63041,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 3836
+          "line": 3829
         }
       ],
       "tests": [
@@ -77758,6 +77793,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/copy/boardTurnAnnouncement.ts->symbol:src/renderer/copy/boardTurnAnnouncement.ts#chainBreakAnnouncement",
+      "source": "file:src/renderer/copy/boardTurnAnnouncement.ts",
+      "target": "symbol:src/renderer/copy/boardTurnAnnouncement.ts#chainBreakAnnouncement",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/copy/boardTurnAnnouncement.ts->symbol:src/renderer/copy/boardTurnAnnouncement.ts#chainMilestoneAnnouncement",
       "source": "file:src/renderer/copy/boardTurnAnnouncement.ts",
       "target": "symbol:src/renderer/copy/boardTurnAnnouncement.ts#chainMilestoneAnnouncement",
@@ -77773,6 +77814,12 @@
       "id": "exports:src/renderer/copy/boardTurnAnnouncement.ts->symbol:src/renderer/copy/boardTurnAnnouncement.ts#hazardTileAnnouncementLines",
       "source": "file:src/renderer/copy/boardTurnAnnouncement.ts",
       "target": "symbol:src/renderer/copy/boardTurnAnnouncement.ts#hazardTileAnnouncementLines",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/copy/boardTurnAnnouncement.ts->symbol:src/renderer/copy/boardTurnAnnouncement.ts#volatileShuffleAnnouncementLine",
+      "source": "file:src/renderer/copy/boardTurnAnnouncement.ts",
+      "target": "symbol:src/renderer/copy/boardTurnAnnouncement.ts#volatileShuffleAnnouncementLine",
       "kind": "exports"
     },
     {
@@ -77914,12 +77961,6 @@
       "kind": "exports"
     },
     {
-      "id": "exports:src/renderer/copy/hudActionFeedback.ts->symbol:src/renderer/copy/hudActionFeedback.ts#changedTileTraitLabels",
-      "source": "file:src/renderer/copy/hudActionFeedback.ts",
-      "target": "symbol:src/renderer/copy/hudActionFeedback.ts#changedTileTraitLabels",
-      "kind": "exports"
-    },
-    {
       "id": "exports:src/renderer/copy/hudActionFeedback.ts->symbol:src/renderer/copy/hudActionFeedback.ts#countTileTraitTotal",
       "source": "file:src/renderer/copy/hudActionFeedback.ts",
       "target": "symbol:src/renderer/copy/hudActionFeedback.ts#countTileTraitTotal",
@@ -77977,6 +78018,12 @@
       "id": "exports:src/renderer/copy/hudActionFeedback.ts->symbol:src/renderer/copy/hudActionFeedback.ts#resourceDeltaCopy",
       "source": "file:src/renderer/copy/hudActionFeedback.ts",
       "target": "symbol:src/renderer/copy/hudActionFeedback.ts#resourceDeltaCopy",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/copy/hudActionFeedback.ts->symbol:src/renderer/copy/hudActionFeedback.ts#tileTraitKindLabels",
+      "source": "file:src/renderer/copy/hudActionFeedback.ts",
+      "target": "symbol:src/renderer/copy/hudActionFeedback.ts#tileTraitKindLabels",
       "kind": "exports"
     },
     {
@@ -80995,6 +81042,12 @@
       "id": "exports:src/shared/board-turn-event-facts.ts->symbol:src/shared/board-turn-event-facts.ts#BoardTurnAnnouncementFacts",
       "source": "file:src/shared/board-turn-event-facts.ts",
       "target": "symbol:src/shared/board-turn-event-facts.ts#BoardTurnAnnouncementFacts",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/board-turn-event-facts.ts->symbol:src/shared/board-turn-event-facts.ts#BoardTurnHazardKindFacts",
+      "source": "file:src/shared/board-turn-event-facts.ts",
+      "target": "symbol:src/shared/board-turn-event-facts.ts#BoardTurnHazardKindFacts",
       "kind": "exports"
     },
     {
@@ -103880,6 +103933,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/hooks/useHudPoliteLiveAnnouncement.test.ts->src/shared/board-turn-event-facts.ts",
+      "source": "file:src/renderer/hooks/useHudPoliteLiveAnnouncement.test.ts",
+      "target": "file:src/shared/board-turn-event-facts.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/hooks/useHudPoliteLiveAnnouncement.test.ts->src/shared/contracts.ts",
       "source": "file:src/renderer/hooks/useHudPoliteLiveAnnouncement.test.ts",
       "target": "file:src/shared/contracts.ts",
@@ -123729,6 +123788,12 @@
       "id": "tested_by:src/shared/board-tile-generation-rules.ts->file:src/shared/dungeon-showcase-run-rules.test.ts",
       "source": "file:src/shared/board-tile-generation-rules.ts",
       "target": "file:src/shared/dungeon-showcase-run-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/board-turn-event-facts.ts->file:src/renderer/hooks/useHudPoliteLiveAnnouncement.test.ts",
+      "source": "file:src/shared/board-turn-event-facts.ts",
+      "target": "file:src/renderer/hooks/useHudPoliteLiveAnnouncement.test.ts",
       "kind": "tested_by"
     },
     {

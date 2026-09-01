@@ -1,17 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import type { TileTraitKind } from '../../shared/contracts';
-import { getHazardTileLiveCopy, HAZARD_TILE_KINDS } from '../../shared/hazard-tiles';
 import { runNonNegativeInteger, runNonNegativeIntegerWithFallback } from '../../shared/run-number-guards';
-import { buildBoardTurnAnnouncement } from '../copy/boardTurnAnnouncement';
+import { buildBoardTurnAnnouncement, volatileShuffleAnnouncementLine } from '../copy/boardTurnAnnouncement';
 import type { BoardTurnResolvedEvent } from '../store/gameplayFeedbackAdapter';
-import { getChainMilestoneFeedback } from '../copy/chainMilestoneFeedback';
-import { getChainRewardForecastCues, getChainRewardUrgencyCopy } from '../copy/chainMomentum';
 import { GAMBIT_OPPORTUNITY_HINT_LINE } from '../copy/gameplayHints';
 import type { GameplayFeedbackPresentation } from '../store/gameplayFeedbackAdapter';
 import {
     GAUNTLET_WARN_SECS,
-    changedTileTraitLabels,
-    countTileTraitTotal,
+    tileTraitKindLabels,
     gauntletMessageForThreshold,
     joinReadableList,
     pluralize,
@@ -26,11 +21,6 @@ const POLITE_HUD_THROTTLE_MS = 400;
 type HudAnnouncePriority = 'info' | 'error';
 
 const PRIORITY_RANK: Record<HudAnnouncePriority, number> = { error: 2, info: 1 };
-
-const chainRewardAnnouncementLine = (streak: number, comboShards: number, lives: number): string => {
-    const cue = getChainRewardForecastCues(streak, comboShards, lives)[0];
-    return cue ? ` Next reward: ${getChainRewardUrgencyCopy(cue)}: ${cue.label} in ${cue.distanceLabel}.` : '';
-};
 
 const payoffIntensityAnnouncementLine = ({
     chainMatchStreak,
@@ -83,12 +73,6 @@ interface HudPoliteLiveAnnouncementInput {
     boardLevel: number | null;
     /** Latest resolved turn, the source of truth for pickup announcements. */
     boardTurnEvent?: BoardTurnResolvedEvent | null;
-    matchedPairs: number;
-    pairCount: number;
-    mismatches: number;
-    tileTraitMatches?: Partial<Record<TileTraitKind, number>>;
-    tileTraitMismatches?: Partial<Record<TileTraitKind, number>>;
-    volatileTraitShuffles?: number;
     objectiveProgress?: number;
     objectiveRequired?: number;
     objectiveLabel?: string | null;
@@ -98,36 +82,13 @@ interface HudPoliteLiveAnnouncementInput {
     recallMistakesThisFloor?: number;
     recallBonusScoreThisFloor?: number;
     forgottenTileCountThisFloor?: number;
-    /** Current consecutive-match streak (run stats). */
-    chainMatchStreak: number;
     /** When false, chain milestone announcements are suppressed (e.g. memorize or menus). */
-    chainAnnounceActive: boolean;
     /** Gambit third-flip window (two tiles face-up, mismatch resolving). */
     gambitThirdPickActive: boolean;
     /** Flipped tile ids when Gambit is offered (length 2); used for dedupe keys. */
     gambitOpportunityFlippedIds: readonly string[] | null;
     /** Motion setting for hazard effect announcement copy. */
     reduceMotion?: boolean;
-    hazardTileTriggersThisFloor?: number;
-    hazardShuffleSnaresThisFloor?: number;
-    hazardCascadeCachesThisFloor?: number;
-    hazardMirrorDecoysThisFloor?: number;
-    hazardFragileCacheClaimsThisFloor?: number;
-    hazardFragileCacheBreaksThisFloor?: number;
-    hazardTollCachesThisFloor?: number;
-    hazardFuseCachesThisFloor?: number;
-    hazardFuseCacheExpiredClaimsThisFloor?: number;
-    lanternWardScoutsThisFloor?: number;
-    omenSealScoutsThisFloor?: number;
-    mimicCacheClaimsThisFloor?: number;
-    mimicCacheBitesThisFloor?: number;
-    mimicCacheGuardBitesThisFloor?: number;
-    anchorSealUsesThisFloor?: number;
-    loadedGatewayPlansThisFloor?: number;
-    catalystAltarUpgradesThisFloor?: number;
-    parasiteVesselConversionsThisFloor?: number;
-    pinLatticeRewardsThisFloor?: number;
-    safeHazardWardsUsedThisFloor?: number;
     dungeonEnemiesDefeatedThisFloor?: number;
     enemyHazardHitsThisFloor?: number;
     enemyHazardsDefeatedThisFloor?: number;
@@ -154,7 +115,6 @@ const normalizeRecallFocusForAnnouncement = (focus: number, max: number): { focu
  * Batches concurrent announcements on `requestAnimationFrame`, dedupes by key, prefers higher priority,
  * and throttles display cadence so screen readers get summaries, not chatter.
  */
-const CHAIN_MILESTONE_THRESHOLDS = [3, 6, 10] as const;
 
 export const useHudPoliteLiveAnnouncement = ({
     boardTurnEvent = null,
@@ -172,12 +132,6 @@ export const useHudPoliteLiveAnnouncement = ({
     regionShuffleCharges = 0,
     stickyBlockIndex = null,
     boardLevel,
-    matchedPairs,
-    pairCount,
-    mismatches,
-    tileTraitMatches,
-    tileTraitMismatches,
-    volatileTraitShuffles = 0,
     objectiveProgress = 0,
     objectiveRequired = 0,
     objectiveLabel = null,
@@ -187,31 +141,9 @@ export const useHudPoliteLiveAnnouncement = ({
     recallMistakesThisFloor = 0,
     recallBonusScoreThisFloor = 0,
     forgottenTileCountThisFloor = 0,
-    chainMatchStreak,
-    chainAnnounceActive,
     gambitThirdPickActive,
     gambitOpportunityFlippedIds,
     reduceMotion = false,
-    hazardTileTriggersThisFloor = 0,
-    hazardShuffleSnaresThisFloor = 0,
-    hazardCascadeCachesThisFloor = 0,
-    hazardMirrorDecoysThisFloor = 0,
-    hazardFragileCacheClaimsThisFloor = 0,
-    hazardFragileCacheBreaksThisFloor = 0,
-    hazardTollCachesThisFloor = 0,
-    hazardFuseCachesThisFloor = 0,
-    hazardFuseCacheExpiredClaimsThisFloor = 0,
-    lanternWardScoutsThisFloor = 0,
-    omenSealScoutsThisFloor = 0,
-    mimicCacheClaimsThisFloor = 0,
-    mimicCacheBitesThisFloor = 0,
-    mimicCacheGuardBitesThisFloor = 0,
-    anchorSealUsesThisFloor = 0,
-    loadedGatewayPlansThisFloor = 0,
-    catalystAltarUpgradesThisFloor = 0,
-    parasiteVesselConversionsThisFloor = 0,
-    pinLatticeRewardsThisFloor = 0,
-    safeHazardWardsUsedThisFloor = 0,
     dungeonEnemiesDefeatedThisFloor = 0,
     enemyHazardHitsThisFloor = 0,
     enemyHazardsDefeatedThisFloor = 0
@@ -234,12 +166,6 @@ export const useHudPoliteLiveAnnouncement = ({
         shuffleCharges: number;
         regionShuffleCharges: number;
         stickyBlockIndex: number | null;
-        matchedPairs: number;
-        pairCount: number;
-        mismatches: number;
-        tileTraitMatches: Partial<Record<TileTraitKind, number>> | undefined;
-        tileTraitMismatches: Partial<Record<TileTraitKind, number>> | undefined;
-        volatileTraitShuffles: number;
         objectiveProgress: number;
         objectiveRequired: number;
         objectiveLabel: string | null;
@@ -253,35 +179,16 @@ export const useHudPoliteLiveAnnouncement = ({
         enemyHazardsDefeated: number;
     } | null>(null);
     const announcedGameplayFeedbackEventIdRef = useRef<string | null>(null);
-    const newGameplayFeedback =
-        gameplayFeedback && gameplayFeedback.eventId !== announcedGameplayFeedbackEventIdRef.current
-            ? gameplayFeedback
-            : null;
-    const chainSnapRef = useRef<{ level: number | null; streak: number } | null>(null);
-    const hazardSnapRef = useRef<{
-        level: number;
-        total: number;
-        shuffleSnare: number;
-        cascadeCache: number;
-        mirrorDecoy: number;
-        fragileCacheClaim: number;
-        fragileCacheBreak: number;
-        tollCache: number;
-        fuseCache: number;
-        fuseCacheExpired: number;
-    } | null>(null);
-    const lanternSnapRef = useRef<{ level: number; scouts: number } | null>(null);
-    const omenSnapRef = useRef<{ level: number; scouts: number } | null>(null);
-    const mimicSnapRef = useRef<{ level: number; claims: number; bites: number; guardBites: number } | null>(null);
-    const routeSpecialSnapRef = useRef<{
-        level: number;
-        anchor: number;
-        gateway: number;
-        catalyst: number;
-        parasite: number;
-        pin: number;
-    } | null>(null);
-    const safeWardSnapRef = useRef<{ level: number; wardsUsed: number } | null>(null);
+    // Read inside the effects rather than during render: whether a feedback event has
+    // already been spoken is not a rendering concern, and a render-time read of the ref
+    // returns whatever the last committed effect left there.
+    const unannouncedGameplayFeedback = useCallback(
+        (): GameplayFeedbackPresentation | null =>
+            gameplayFeedback && gameplayFeedback.eventId !== announcedGameplayFeedbackEventIdRef.current
+                ? gameplayFeedback
+                : null,
+        [gameplayFeedback]
+    );
     const { focus: normalizedRecallFocusValue, max: normalizedRecallFocusMax } = normalizeRecallFocusForAnnouncement(
         recallFocus,
         recallFocusMax
@@ -479,7 +386,7 @@ export const useHudPoliteLiveAnnouncement = ({
     // findable was claimed, and the event id makes the dedupe key unique per turn, so a
     // re-render cannot re-announce and two identical pickups on different turns both are.
     useEffect(() => {
-        if (!boardTurnEvent || newGameplayFeedback?.source.kind === 'findable') {
+        if (!boardTurnEvent || unannouncedGameplayFeedback()?.source.kind === 'findable') {
             return;
         }
         const announcement = buildBoardTurnAnnouncement(boardTurnEvent, { reduceMotion });
@@ -490,9 +397,10 @@ export const useHudPoliteLiveAnnouncement = ({
             dedupeKey: announcement.dedupeKey,
             priority: announcement.priority
         });
-    }, [boardTurnEvent, newGameplayFeedback, queuePoliteAnnouncement, reduceMotion]);
+    }, [boardTurnEvent, queuePoliteAnnouncement, reduceMotion, unannouncedGameplayFeedback]);
 
     useEffect(() => {
+        const newGameplayFeedback = unannouncedGameplayFeedback();
         if (boardLevel === null) {
             actionSnapRef.current = null;
             if (newGameplayFeedback) {
@@ -514,12 +422,6 @@ export const useHudPoliteLiveAnnouncement = ({
             shuffleCharges,
             regionShuffleCharges,
             stickyBlockIndex,
-            matchedPairs,
-            pairCount,
-            mismatches,
-            tileTraitMatches,
-            tileTraitMismatches,
-            volatileTraitShuffles,
             objectiveProgress,
             objectiveRequired,
             objectiveLabel,
@@ -554,11 +456,15 @@ export const useHudPoliteLiveAnnouncement = ({
         const shuffleChargeDelta = shuffleCharges - snap.shuffleCharges;
         const regionShuffleChargeDelta = regionShuffleCharges - snap.regionShuffleCharges;
         const stasisLocked = stickyBlockIndex !== null && snap.stickyBlockIndex !== stickyBlockIndex;
-        const matchDelta = matchedPairs - snap.matchedPairs;
-        const mismatchDelta = mismatches - snap.mismatches;
-        const traitMatchLabels = changedTileTraitLabels(snap.tileTraitMatches, tileTraitMatches);
-        const traitMismatchLabels = changedTileTraitLabels(snap.tileTraitMismatches, tileTraitMismatches);
-        const volatileTraitShuffleDelta = volatileTraitShuffles - snap.volatileTraitShuffles;
+        // Turn outcomes come from the resolved-turn event, not from diffing this render
+        // against the previous one. The core already decided what the turn did; inferring
+        // it here could disagree, and did whenever a render was skipped or coalesced.
+        const turnFacts = boardTurnEvent?.announcement ?? null;
+        const matchDelta = turnFacts ? turnFacts.matchedPairsAfter - turnFacts.matchedPairsBefore : 0;
+        const mismatchDelta = turnFacts ? turnFacts.mismatchesAfter - turnFacts.mismatchesBefore : 0;
+        const traitLabels = tileTraitKindLabels(turnFacts?.matchedTraitKinds ?? []);
+        const traitMatchLabels = matchDelta > 0 ? traitLabels : [];
+        const traitMismatchLabels = mismatchDelta > 0 ? traitLabels : [];
         const objectiveDelta = objectiveProgress - snap.objectiveProgress;
         const recallMatchDelta = recallMatchesThisFloor - snap.recallMatches;
         const recallMistakeDelta = recallMistakesThisFloor - snap.recallMistakes;
@@ -608,8 +514,8 @@ export const useHudPoliteLiveAnnouncement = ({
         }
 
         if (matchDelta > 0) {
-            const pairTotal = Math.max(pairCount, matchedPairs, snap.pairCount);
-            lines.push(`Match resolved. ${matchedPairs}/${pairTotal} pairs cleared.`);
+            const pairTotal = Math.max(turnFacts?.pairTotal ?? 0, turnFacts?.matchedPairsAfter ?? 0);
+            lines.push(`Match resolved. ${turnFacts?.matchedPairsAfter ?? 0}/${pairTotal} pairs cleared.`);
             if (traitMatchLabels.length > 0) {
                 lines.push(
                     traitMatchLabels.length >= 2
@@ -663,8 +569,9 @@ export const useHudPoliteLiveAnnouncement = ({
             );
         }
 
-        if (volatileTraitShuffleDelta > 0) {
-            lines.push('Volatile trait shuffled hidden cards.');
+        const volatileShuffleLine = boardTurnEvent ? volatileShuffleAnnouncementLine(boardTurnEvent) : null;
+        if (volatileShuffleLine) {
+            lines.push(volatileShuffleLine);
         }
 
         if (
@@ -694,7 +601,7 @@ export const useHudPoliteLiveAnnouncement = ({
 
         if (matchDelta > 0) {
             const payoffIntensityLine = payoffIntensityAnnouncementLine({
-                chainMatchStreak,
+                chainMatchStreak: turnFacts?.currentStreakAfter ?? 0,
                 comboShardDelta: shardDelta,
                 guardTokenDelta: guardDelta,
                 lifeDelta,
@@ -708,7 +615,7 @@ export const useHudPoliteLiveAnnouncement = ({
 
         if (lines.length > 0) {
             queuePoliteAnnouncement(lines.join(' '), {
-                dedupeKey: `action:${boardLevel}:${matchedPairs}:${mismatches}:${lives}:${guardTokens}:${comboShards}:${shopGold}:${shuffleCharges}:${regionShuffleCharges}:${stickyBlockIndex ?? 'none'}:${objectiveProgress}:${normalizedRecallFocusValue}:${normalizedRecallFocusMax}:${recallMatchesThisFloor}:${recallMistakesThisFloor}:${forgottenTileCountThisFloor}:${dungeonEnemiesDefeatedThisFloor}:${enemyHazardHitsThisFloor}:${enemyHazardsDefeatedThisFloor}:${countTileTraitTotal(tileTraitMatches)}:${countTileTraitTotal(tileTraitMismatches)}:${volatileTraitShuffles}:${newGameplayFeedback?.eventId ?? 'legacy'}`,
+                dedupeKey: `action:${boardLevel}:${lives}:${guardTokens}:${comboShards}:${shopGold}:${shuffleCharges}:${regionShuffleCharges}:${stickyBlockIndex ?? 'none'}:${objectiveProgress}:${normalizedRecallFocusValue}:${normalizedRecallFocusMax}:${recallMatchesThisFloor}:${recallMistakesThisFloor}:${forgottenTileCountThisFloor}:${dungeonEnemiesDefeatedThisFloor}:${enemyHazardHitsThisFloor}:${enemyHazardsDefeatedThisFloor}:${boardTurnEvent?.eventId ?? 'no-turn'}:${newGameplayFeedback?.eventId ?? 'legacy'}`,
                 priority:
                     lifeDelta < 0 || enemyHazardHitDelta > 0 || newGameplayFeedback?.priority === 'error'
                         ? 'error'
@@ -722,18 +629,14 @@ export const useHudPoliteLiveAnnouncement = ({
         }
     }, [
         boardLevel,
-        chainMatchStreak,
         comboShards,
         dungeonEnemiesDefeatedThisFloor,
         guardTokens,
         lives,
-        matchedPairs,
-        mismatches,
-        newGameplayFeedback,
+        unannouncedGameplayFeedback,
         objectiveLabel,
         objectiveProgress,
         objectiveRequired,
-        pairCount,
         queuePoliteAnnouncement,
         regionShuffleCharges,
         forgottenTileCountThisFloor,
@@ -747,301 +650,15 @@ export const useHudPoliteLiveAnnouncement = ({
         shuffleCharges,
         shopGold,
         stickyBlockIndex,
-        tileTraitMatches,
-        tileTraitMismatches,
-        volatileTraitShuffles
+        boardTurnEvent
     ]);
 
-    useEffect(() => {
-        if (!chainAnnounceActive || boardLevel === null) {
-            return;
-        }
 
-        const snap = chainSnapRef.current;
-        if (snap === null || snap.level !== boardLevel) {
-            chainSnapRef.current = { level: boardLevel, streak: chainMatchStreak };
-            return;
-        }
 
-        const prev = snap.streak;
-        if (chainMatchStreak > prev) {
-            for (const m of CHAIN_MILESTONE_THRESHOLDS) {
-                if (prev < m && chainMatchStreak >= m) {
-                    const milestone = getChainMilestoneFeedback(prev, chainMatchStreak);
-                    const rewardLine = chainRewardAnnouncementLine(chainMatchStreak, comboShards, lives);
-                    queuePoliteAnnouncement(
-                        milestone
-                            ? `${milestone.label}: ${milestone.target}. ${milestone.value}.${rewardLine}`
-                            : `Chain times ${m} - keep the chain for bigger match payouts.${rewardLine}`,
-                        { dedupeKey: `chain:${boardLevel}:${m}`, priority: 'info' }
-                    );
-                    break;
-                }
-            }
-        } else if (prev >= 3 && chainMatchStreak < prev) {
-            queuePoliteAnnouncement(
-                `Chain x${prev} broken - recover with a remembered pair.`,
-                { dedupeKey: `chain-break:${boardLevel}:${prev}`, priority: 'info' }
-            );
-        }
 
-        chainSnapRef.current = { level: boardLevel, streak: chainMatchStreak };
-    }, [boardLevel, chainAnnounceActive, chainMatchStreak, comboShards, lives, queuePoliteAnnouncement]);
 
-    useEffect(() => {
-        if (boardLevel === null) {
-            hazardSnapRef.current = null;
-            return;
-        }
 
-        const nextSnap = {
-            level: boardLevel,
-            total: hazardTileTriggersThisFloor,
-            shuffleSnare: hazardShuffleSnaresThisFloor,
-            cascadeCache: hazardCascadeCachesThisFloor,
-            mirrorDecoy: hazardMirrorDecoysThisFloor,
-            fragileCacheClaim: hazardFragileCacheClaimsThisFloor,
-            fragileCacheBreak: hazardFragileCacheBreaksThisFloor,
-            tollCache: hazardTollCachesThisFloor,
-            fuseCache: hazardFuseCachesThisFloor,
-            fuseCacheExpired: hazardFuseCacheExpiredClaimsThisFloor
-        };
-        const snap = hazardSnapRef.current;
 
-        if (snap === null || snap.level !== boardLevel || hazardTileTriggersThisFloor < snap.total) {
-            hazardSnapRef.current = nextSnap;
-            return;
-        }
-
-        const firedKinds = HAZARD_TILE_KINDS.filter((kind) => {
-            if (kind === 'shuffle_snare') return hazardShuffleSnaresThisFloor > snap.shuffleSnare;
-            if (kind === 'cascade_cache') return hazardCascadeCachesThisFloor > snap.cascadeCache;
-            if (kind === 'mirror_decoy') return hazardMirrorDecoysThisFloor > snap.mirrorDecoy;
-            if (kind === 'fragile_cache') {
-                return hazardFragileCacheClaimsThisFloor > snap.fragileCacheClaim || hazardFragileCacheBreaksThisFloor > snap.fragileCacheBreak;
-            }
-            if (kind === 'toll_cache') return hazardTollCachesThisFloor > snap.tollCache;
-            return hazardFuseCachesThisFloor > snap.fuseCache;
-        });
-
-        if (firedKinds.length > 0) {
-            const copy = firedKinds.flatMap((kind) => {
-                const liveCopy = getHazardTileLiveCopy(kind);
-                if (kind !== 'fragile_cache') {
-                    if (kind === 'fuse_cache' && hazardFuseCacheExpiredClaimsThisFloor > snap.fuseCacheExpired) {
-                        return [
-                            reduceMotion
-                                ? liveCopy.reducedMotionBreakLiveAnnouncement ?? liveCopy.reducedMotionLiveAnnouncement
-                                : liveCopy.breakLiveAnnouncement ?? liveCopy.liveAnnouncement
-                        ];
-                    }
-                    return [reduceMotion ? liveCopy.reducedMotionLiveAnnouncement : liveCopy.liveAnnouncement];
-                }
-                const parts: string[] = [];
-                if (hazardFragileCacheClaimsThisFloor > snap.fragileCacheClaim) {
-                    parts.push(reduceMotion ? liveCopy.reducedMotionLiveAnnouncement : liveCopy.liveAnnouncement);
-                }
-                if (hazardFragileCacheBreaksThisFloor > snap.fragileCacheBreak) {
-                    parts.push(
-                        reduceMotion
-                            ? liveCopy.reducedMotionBreakLiveAnnouncement ?? liveCopy.reducedMotionLiveAnnouncement
-                            : liveCopy.breakLiveAnnouncement ?? liveCopy.liveAnnouncement
-                    );
-                }
-                return parts;
-            }).join(' ');
-            queuePoliteAnnouncement(copy, {
-                dedupeKey: `hazard:${boardLevel}:${hazardTileTriggersThisFloor}`,
-                priority: 'info'
-            });
-        }
-
-        hazardSnapRef.current = nextSnap;
-    }, [
-        boardLevel,
-        hazardCascadeCachesThisFloor,
-        hazardFragileCacheBreaksThisFloor,
-        hazardFragileCacheClaimsThisFloor,
-        hazardFuseCacheExpiredClaimsThisFloor,
-        hazardFuseCachesThisFloor,
-        hazardMirrorDecoysThisFloor,
-        hazardShuffleSnaresThisFloor,
-        hazardTileTriggersThisFloor,
-        hazardTollCachesThisFloor,
-        queuePoliteAnnouncement,
-        reduceMotion
-    ]);
-
-    useEffect(() => {
-        if (boardLevel === null) {
-            lanternSnapRef.current = null;
-            return;
-        }
-
-        const snap = lanternSnapRef.current;
-        const nextSnap = { level: boardLevel, scouts: lanternWardScoutsThisFloor };
-        if (snap === null || snap.level !== boardLevel || lanternWardScoutsThisFloor < snap.scouts) {
-            lanternSnapRef.current = nextSnap;
-            return;
-        }
-
-        if (lanternWardScoutsThisFloor > snap.scouts) {
-            queuePoliteAnnouncement('Lantern Ward scouted a hidden threat.', {
-                dedupeKey: `lantern:${boardLevel}:${lanternWardScoutsThisFloor}`,
-                priority: 'info'
-            });
-        }
-
-        lanternSnapRef.current = nextSnap;
-    }, [boardLevel, lanternWardScoutsThisFloor, queuePoliteAnnouncement]);
-
-    useEffect(() => {
-        if (boardLevel === null) {
-            omenSnapRef.current = null;
-            return;
-        }
-
-        const snap = omenSnapRef.current;
-        const nextSnap = { level: boardLevel, scouts: omenSealScoutsThisFloor };
-        if (snap === null || snap.level !== boardLevel || omenSealScoutsThisFloor < snap.scouts) {
-            omenSnapRef.current = nextSnap;
-            return;
-        }
-
-        if (omenSealScoutsThisFloor > snap.scouts) {
-            queuePoliteAnnouncement('Omen Seal revealed hidden danger.', {
-                dedupeKey: `omen:${boardLevel}:${omenSealScoutsThisFloor}`,
-                priority: 'info'
-            });
-        }
-
-        omenSnapRef.current = nextSnap;
-    }, [boardLevel, omenSealScoutsThisFloor, queuePoliteAnnouncement]);
-
-    useEffect(() => {
-        if (boardLevel === null) {
-            mimicSnapRef.current = null;
-            return;
-        }
-
-        const snap = mimicSnapRef.current;
-        const nextSnap = {
-            level: boardLevel,
-            claims: mimicCacheClaimsThisFloor,
-            bites: mimicCacheBitesThisFloor,
-            guardBites: mimicCacheGuardBitesThisFloor
-        };
-        if (
-            snap === null ||
-            snap.level !== boardLevel ||
-            mimicCacheClaimsThisFloor < snap.claims ||
-            mimicCacheBitesThisFloor < snap.bites ||
-            mimicCacheGuardBitesThisFloor < snap.guardBites
-        ) {
-            mimicSnapRef.current = nextSnap;
-            return;
-        }
-
-        if (mimicCacheBitesThisFloor > snap.bites) {
-            const guardBlocked = mimicCacheGuardBitesThisFloor > snap.guardBites;
-            queuePoliteAnnouncement(
-                guardBlocked
-                    ? 'Mimic Cache bit. Guard absorbed the hit.'
-                    : 'Mimic Cache bit. Life lost; reduced loot claimed.',
-                {
-                    dedupeKey: `mimic:bite:${boardLevel}:${mimicCacheBitesThisFloor}`,
-                    priority: 'error'
-                }
-            );
-        } else if (mimicCacheClaimsThisFloor > snap.claims) {
-            queuePoliteAnnouncement('Mimic Cache controlled. Full loot claimed.', {
-                dedupeKey: `mimic:claim:${boardLevel}:${mimicCacheClaimsThisFloor}`,
-                priority: 'info'
-            });
-        }
-
-        mimicSnapRef.current = nextSnap;
-    }, [
-        boardLevel,
-        mimicCacheBitesThisFloor,
-        mimicCacheClaimsThisFloor,
-        mimicCacheGuardBitesThisFloor,
-        queuePoliteAnnouncement
-    ]);
-
-    useEffect(() => {
-        if (boardLevel === null) {
-            routeSpecialSnapRef.current = null;
-            return;
-        }
-        const snap = routeSpecialSnapRef.current;
-        const nextSnap = {
-            level: boardLevel,
-            anchor: anchorSealUsesThisFloor,
-            gateway: loadedGatewayPlansThisFloor,
-            catalyst: catalystAltarUpgradesThisFloor,
-            parasite: parasiteVesselConversionsThisFloor,
-            pin: pinLatticeRewardsThisFloor
-        };
-        if (
-            snap === null ||
-            snap.level !== boardLevel ||
-            anchorSealUsesThisFloor < snap.anchor ||
-            loadedGatewayPlansThisFloor < snap.gateway ||
-            catalystAltarUpgradesThisFloor < snap.catalyst ||
-            parasiteVesselConversionsThisFloor < snap.parasite ||
-            pinLatticeRewardsThisFloor < snap.pin
-        ) {
-            routeSpecialSnapRef.current = nextSnap;
-            return;
-        }
-        const announcements: [boolean, string, string][] = [
-            [anchorSealUsesThisFloor > snap.anchor, 'anchor', 'Anchor Seal froze rotating pressure.'],
-            [loadedGatewayPlansThisFloor > snap.gateway, 'gateway', 'Loaded Gateway prepared the next route.'],
-            [catalystAltarUpgradesThisFloor > snap.catalyst, 'catalyst', 'Catalyst Altar converted a shard into reward.'],
-            [parasiteVesselConversionsThisFloor > snap.parasite, 'parasite', 'Parasite Vessel reduced pressure.'],
-            [pinLatticeRewardsThisFloor > snap.pin, 'pin', 'Pin Lattice rewarded deliberate planning.']
-        ];
-        const nextAnnouncement = announcements.find(([changed]) => changed);
-        if (nextAnnouncement) {
-            queuePoliteAnnouncement(nextAnnouncement[2], {
-                dedupeKey: `route-special:${nextAnnouncement[1]}:${boardLevel}`,
-                priority: 'info'
-            });
-        }
-        routeSpecialSnapRef.current = nextSnap;
-    }, [
-        anchorSealUsesThisFloor,
-        boardLevel,
-        catalystAltarUpgradesThisFloor,
-        loadedGatewayPlansThisFloor,
-        parasiteVesselConversionsThisFloor,
-        pinLatticeRewardsThisFloor,
-        queuePoliteAnnouncement
-    ]);
-
-    useEffect(() => {
-        if (boardLevel === null) {
-            safeWardSnapRef.current = null;
-            return;
-        }
-
-        const snap = safeWardSnapRef.current;
-        const nextSnap = { level: boardLevel, wardsUsed: safeHazardWardsUsedThisFloor };
-        if (snap === null || snap.level !== boardLevel || safeHazardWardsUsedThisFloor < snap.wardsUsed) {
-            safeWardSnapRef.current = nextSnap;
-            return;
-        }
-
-        if (safeHazardWardsUsedThisFloor > snap.wardsUsed) {
-            queuePoliteAnnouncement('Guard Cache ward blocked a hazard.', {
-                dedupeKey: `safeWard:${boardLevel}:${safeHazardWardsUsedThisFloor}`,
-                priority: 'info'
-            });
-        }
-
-        safeWardSnapRef.current = nextSnap;
-    }, [boardLevel, queuePoliteAnnouncement, safeHazardWardsUsedThisFloor]);
 
     useEffect(() => {
         if (

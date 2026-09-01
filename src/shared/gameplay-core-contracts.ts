@@ -1230,6 +1230,27 @@ const gameplayFeedbackObjectiveSnapshotSchema = z
  * Presentation facts stamped onto board.turn_resolved so the renderer can project
  * feedback from the event alone instead of re-deriving it from board snapshots.
  */
+const boardTurnHazardKindFactsSchema = z
+    .object({
+        shuffleSnareBefore: z.number().int().nonnegative().default(0),
+        shuffleSnareAfter: z.number().int().nonnegative().default(0),
+        cascadeCacheBefore: z.number().int().nonnegative().default(0),
+        cascadeCacheAfter: z.number().int().nonnegative().default(0),
+        mirrorDecoyBefore: z.number().int().nonnegative().default(0),
+        mirrorDecoyAfter: z.number().int().nonnegative().default(0),
+        fragileCacheClaimBefore: z.number().int().nonnegative().default(0),
+        fragileCacheClaimAfter: z.number().int().nonnegative().default(0),
+        fragileCacheBreakBefore: z.number().int().nonnegative().default(0),
+        fragileCacheBreakAfter: z.number().int().nonnegative().default(0),
+        tollCacheBefore: z.number().int().nonnegative().default(0),
+        tollCacheAfter: z.number().int().nonnegative().default(0),
+        fuseCacheBefore: z.number().int().nonnegative().default(0),
+        fuseCacheAfter: z.number().int().nonnegative().default(0),
+        fuseCacheExpiredBefore: z.number().int().nonnegative().default(0),
+        fuseCacheExpiredAfter: z.number().int().nonnegative().default(0)
+    })
+    .strict();
+
 export const boardTurnAnnouncementFactsSchema = z
     .object({
         anchorTileIds: z.array(z.string().min(1).max(160)).max(3),
@@ -1253,15 +1274,37 @@ export const boardTurnAnnouncementFactsSchema = z
         // every historic event.
         hazardTilesBefore: z.number().int().nonnegative().default(0),
         hazardTilesAfter: z.number().int().nonnegative().default(0),
+        hazardKinds: boardTurnHazardKindFactsSchema.default(() => boardTurnHazardKindFactsSchema.parse({})),
         scoutsBefore: z.number().int().nonnegative().default(0),
         scoutsAfter: z.number().int().nonnegative().default(0),
+        omenScoutsBefore: z.number().int().nonnegative().default(0),
+        omenScoutsAfter: z.number().int().nonnegative().default(0),
         mimicCacheBefore: z.number().int().nonnegative().default(0),
         mimicCacheAfter: z.number().int().nonnegative().default(0),
+        mimicCacheBitesBefore: z.number().int().nonnegative().default(0),
+        mimicCacheBitesAfter: z.number().int().nonnegative().default(0),
+        mimicCacheGuardBitesBefore: z.number().int().nonnegative().default(0),
+        mimicCacheGuardBitesAfter: z.number().int().nonnegative().default(0),
         routeSpecialsBefore: z.number().int().nonnegative().default(0),
         routeSpecialsAfter: z.number().int().nonnegative().default(0),
         safeHazardWardsUsedBefore: z.number().int().nonnegative().default(0),
         safeHazardWardsUsedAfter: z.number().int().nonnegative().default(0),
         matchedTraitKinds: z.array(z.string().min(1).max(40)).default([]),
+        shopGoldBefore: z.number().int().nonnegative().default(0),
+        shopGoldAfter: z.number().int().nonnegative().default(0),
+        shuffleChargesBefore: z.number().int().nonnegative().default(0),
+        shuffleChargesAfter: z.number().int().nonnegative().default(0),
+        regionShuffleChargesBefore: z.number().int().nonnegative().default(0),
+        regionShuffleChargesAfter: z.number().int().nonnegative().default(0),
+        stickyBlockIndexBefore: z.number().int().nullable().default(null),
+        stickyBlockIndexAfter: z.number().int().nullable().default(null),
+        matchedPairsBefore: z.number().int().nonnegative().default(0),
+        matchedPairsAfter: z.number().int().nonnegative().default(0),
+        pairTotal: z.number().int().nonnegative().default(0),
+        mismatchesBefore: z.number().int().nonnegative().default(0),
+        mismatchesAfter: z.number().int().nonnegative().default(0),
+        volatileTraitShufflesBefore: z.number().int().nonnegative().default(0),
+        volatileTraitShufflesAfter: z.number().int().nonnegative().default(0),
         objectiveBefore: gameplayFeedbackObjectiveSnapshotSchema.nullable().default(null),
         objectiveAfter: gameplayFeedbackObjectiveSnapshotSchema.nullable().default(null)
     })

@@ -3,6 +3,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import type { Tile } from '../../shared/contracts';
 import { GAMBIT_OPPORTUNITY_HINT_LINE } from '../copy/gameplayHints';
 import { getHudActionFeedbackProfile } from '../copy/hudActionFeedback';
+import type { BoardTurnAnnouncementFacts } from '../../shared/board-turn-event-facts';
 import type { BoardTurnResolvedEvent, GameplayFeedbackPresentation } from '../store/gameplayFeedbackAdapter';
 import { createBoardTurnResolvedEventFixture } from '../../shared/test/gameplay-event-fixtures';
 import { formatHudActionFeedbackText, useHudPoliteLiveAnnouncement } from './useHudPoliteLiveAnnouncement';
@@ -82,6 +83,70 @@ const base = {
     enemyHazardHitsThisFloor: 0,
     enemyHazardsDefeatedThisFloor: 0
 };
+
+/**
+ * A resolved match turn. Pair progress, traits, and mismatches are read off the event now,
+ * so tests drive them the same way the core reports them rather than through HUD props.
+ */
+const matchTurn = (
+    commandId: string,
+    announcement: Partial<BoardTurnAnnouncementFacts> = {}
+): BoardTurnResolvedEvent =>
+    createBoardTurnResolvedEventFixture({
+        commandId,
+        announcement: { matchedPairsBefore: 0, matchedPairsAfter: 1, pairTotal: 4, ...announcement }
+    }) as BoardTurnResolvedEvent;
+
+/**
+ * A resolved turn with no pair progress. The scout, cache and ward channels announce on
+ * their own before/after pairs, so they are asserted without a match summary in the way.
+ */
+const counterTurn = (
+    commandId: string,
+    announcement: Partial<BoardTurnAnnouncementFacts> = {}
+): BoardTurnResolvedEvent =>
+    createBoardTurnResolvedEventFixture({
+        commandId,
+        announcement: { currentStreakBefore: 0, currentStreakAfter: 0, ...announcement }
+    }) as BoardTurnResolvedEvent;
+
+/** A resolved turn that missed. */
+const mismatchTurn = (
+    commandId: string,
+    announcement: Partial<BoardTurnAnnouncementFacts> = {}
+): BoardTurnResolvedEvent =>
+    createBoardTurnResolvedEventFixture({
+        commandId,
+        outcome: 'mismatch',
+        matchesAfter: 0,
+        announcement: {
+            mismatchesBefore: 0,
+            mismatchesAfter: 1,
+            currentStreakBefore: 0,
+            currentStreakAfter: 0,
+            ...announcement
+        }
+    }) as BoardTurnResolvedEvent;
+
+/** No hazard kind fired; override only the one a test is about. */
+const HAZARD_KINDS_QUIET = {
+    shuffleSnareBefore: 0,
+    shuffleSnareAfter: 0,
+    cascadeCacheBefore: 0,
+    cascadeCacheAfter: 0,
+    mirrorDecoyBefore: 0,
+    mirrorDecoyAfter: 0,
+    fragileCacheClaimBefore: 0,
+    fragileCacheClaimAfter: 0,
+    fragileCacheBreakBefore: 0,
+    fragileCacheBreakAfter: 0,
+    tollCacheBefore: 0,
+    tollCacheAfter: 0,
+    fuseCacheBefore: 0,
+    fuseCacheAfter: 0,
+    fuseCacheExpiredBefore: 0,
+    fuseCacheExpiredAfter: 0
+} as const;
 
 const flushRaf = async (): Promise<void> => {
     await act(async () => {
@@ -256,20 +321,25 @@ describe('useHudPoliteLiveAnnouncement', () => {
     });
 
     it('announces match chain milestones with arcade payoff copy while playing', async () => {
+        // The streak crossing is reported by the turn event, not inferred from a remembered
+        // previous render, so one resolved turn announces the milestone exactly once.
+        const milestoneEvent = createBoardTurnResolvedEventFixture({
+            commandId: 'chain-milestone',
+            announcement: { level: 3, currentStreakBefore: 2, currentStreakAfter: 3 }
+        });
+
         const { result, rerender } = renderHook(
-            (p: { streak: number; shards?: number }) =>
+            (p: { turnEvent: BoardTurnResolvedEvent | null }) =>
                 useHudPoliteLiveAnnouncement({
                     ...base,
                     boardLevel: 3,
-                    chainAnnounceActive: true,
-                    comboShards: p.shards ?? base.comboShards,
-                    chainMatchStreak: p.streak
+                    boardTurnEvent: p.turnEvent
                 }),
-            { initialProps: { streak: 2, shards: 0 } }
+            { initialProps: { turnEvent: null as BoardTurnResolvedEvent | null } }
         );
 
         await act(async () => {
-            rerender({ streak: 3, shards: 0 });
+            rerender({ turnEvent: milestoneEvent as BoardTurnResolvedEvent });
         });
         await flushRaf();
 
@@ -280,22 +350,32 @@ describe('useHudPoliteLiveAnnouncement', () => {
     });
 
     it('announces surge chain milestones with the next reward target', async () => {
+        const surgeEvent = createBoardTurnResolvedEventFixture({
+            commandId: 'chain-surge',
+            announcement: {
+                level: 3,
+                currentStreakBefore: 5,
+                currentStreakAfter: 6,
+                comboShardsBefore: 1,
+                comboShardsAfter: 1
+            }
+        });
+
         const { result, rerender } = renderHook(
-            (p: { streak: number; shards: number }) =>
+            (p: { turnEvent: BoardTurnResolvedEvent | null }) =>
                 useHudPoliteLiveAnnouncement({
                     ...base,
                     boardLevel: 3,
-                    chainAnnounceActive: true,
-                    comboShards: p.shards,
-                    chainMatchStreak: p.streak
+                    comboShards: 1,
+                    boardTurnEvent: p.turnEvent
                 }),
-            { initialProps: { streak: 5, shards: 1 } }
+            { initialProps: { turnEvent: null as BoardTurnResolvedEvent | null } }
         );
 
         await flushRaf();
 
         await act(async () => {
-            rerender({ streak: 6, shards: 1 });
+            rerender({ turnEvent: surgeEvent as BoardTurnResolvedEvent });
         });
         await flushRaf();
 
@@ -305,19 +385,24 @@ describe('useHudPoliteLiveAnnouncement', () => {
     });
 
     it('announces when a meaningful match chain breaks', async () => {
+        const breakEvent = createBoardTurnResolvedEventFixture({
+            commandId: 'chain-break',
+            outcome: 'mismatch',
+            announcement: { level: 3, currentStreakBefore: 5, currentStreakAfter: 0 }
+        });
+
         const { result, rerender } = renderHook(
-            (p: { streak: number }) =>
+            (p: { turnEvent: BoardTurnResolvedEvent | null }) =>
                 useHudPoliteLiveAnnouncement({
                     ...base,
                     boardLevel: 3,
-                    chainAnnounceActive: true,
-                    chainMatchStreak: p.streak
+                    boardTurnEvent: p.turnEvent
                 }),
-            { initialProps: { streak: 5 } }
+            { initialProps: { turnEvent: null as BoardTurnResolvedEvent | null } }
         );
 
         await act(async () => {
-            rerender({ streak: 0 });
+            rerender({ turnEvent: breakEvent as BoardTurnResolvedEvent });
         });
         await flushRaf();
 
@@ -353,22 +438,21 @@ describe('useHudPoliteLiveAnnouncement', () => {
 
     it('announces match, objective, and resource deltas as one readable action summary', async () => {
         const { result, rerender } = renderHook(
-            (p: { pairs: number; shards: number; progress: number }) =>
+            (p: { turnEvent: BoardTurnResolvedEvent | null; shards: number; progress: number }) =>
                 useHudPoliteLiveAnnouncement({
                     ...base,
                     boardLevel: 2,
-                    pairCount: 4,
-                    matchedPairs: p.pairs,
+                    boardTurnEvent: p.turnEvent,
                     comboShards: p.shards,
                     objectiveProgress: p.progress,
                     objectiveRequired: 2,
                     objectiveLabel: 'Disarm traps'
                 }),
-            { initialProps: { pairs: 0, shards: 0, progress: 0 } }
+            { initialProps: { turnEvent: null as BoardTurnResolvedEvent | null, shards: 0, progress: 0 } }
         );
 
         await act(async () => {
-            rerender({ pairs: 1, shards: 1, progress: 1 });
+            rerender({ turnEvent: matchTurn('summary-turn'), shards: 1, progress: 1 });
         });
         await flushRaf();
 
@@ -411,36 +495,36 @@ describe('useHudPoliteLiveAnnouncement', () => {
 
     it('summarizes stacked reward cashouts in the live-region action summary', async () => {
         const { result, rerender } = renderHook(
-            (p: { pairs: number; shards: number; guards: number; gold: number; echoMatches: number; stasisMatches: number }) =>
+            (p: { turnEvent: BoardTurnResolvedEvent | null; shards: number; guards: number; gold: number }) =>
                 useHudPoliteLiveAnnouncement({
                     ...base,
                     boardLevel: 2,
-                    pairCount: 4,
-                    matchedPairs: p.pairs,
-                    chainMatchStreak: 4,
+                    boardTurnEvent: p.turnEvent,
                     comboShards: p.shards,
                     guardTokens: p.guards,
-                    shopGold: p.gold,
-                    tileTraitMatches: {
-                        ...base.tileTraitMatches,
-                        echo: p.echoMatches,
-                        stasis: p.stasisMatches
-                    }
+                    shopGold: p.gold
                 }),
             {
                 initialProps: {
-                    pairs: 0,
+                    turnEvent: null as BoardTurnResolvedEvent | null,
                     shards: 0,
                     guards: 0,
-                    gold: 0,
-                    echoMatches: 0,
-                    stasisMatches: 0
+                    gold: 0
                 }
             }
         );
 
         await act(async () => {
-            rerender({ pairs: 1, shards: 1, guards: 1, gold: 2, echoMatches: 1, stasisMatches: 1 });
+            rerender({
+                turnEvent: matchTurn('cashout-turn', {
+                    currentStreakBefore: 3,
+                    currentStreakAfter: 4,
+                    matchedTraitKinds: ['echo', 'stasis']
+                }),
+                shards: 1,
+                guards: 1,
+                gold: 2
+            });
         });
         await flushRaf();
 
@@ -451,19 +535,17 @@ describe('useHudPoliteLiveAnnouncement', () => {
 
     it('announces matched tile trait effects with the resolved match', async () => {
         const { result, rerender } = renderHook(
-            (p: { pairs: number; echoMatches: number }) =>
+            (p: { turnEvent: BoardTurnResolvedEvent | null }) =>
                 useHudPoliteLiveAnnouncement({
                     ...base,
                     boardLevel: 2,
-                    pairCount: 4,
-                    matchedPairs: p.pairs,
-                    tileTraitMatches: { ...base.tileTraitMatches, echo: p.echoMatches }
+                    boardTurnEvent: p.turnEvent
                 }),
-            { initialProps: { pairs: 0, echoMatches: 0 } }
+            { initialProps: { turnEvent: null as BoardTurnResolvedEvent | null } }
         );
 
         await act(async () => {
-            rerender({ pairs: 1, echoMatches: 1 });
+            rerender({ turnEvent: matchTurn('echo-turn', { matchedTraitKinds: ['echo'] }) });
         });
         await flushRaf();
 
@@ -472,26 +554,18 @@ describe('useHudPoliteLiveAnnouncement', () => {
 
     it('announces trait-driven shuffle charges and stasis locks with the resolved match', async () => {
         const { result, rerender } = renderHook(
-            (p: { pairs: number; driftMatches: number; stasisMatches: number; rowCharges: number; fullCharges: number; sticky: number | null }) =>
+            (p: { turnEvent: BoardTurnResolvedEvent | null; rowCharges: number; fullCharges: number; sticky: number | null }) =>
                 useHudPoliteLiveAnnouncement({
                     ...base,
                     boardLevel: 2,
-                    pairCount: 4,
-                    matchedPairs: p.pairs,
-                    tileTraitMatches: {
-                        ...base.tileTraitMatches,
-                        drift: p.driftMatches,
-                        stasis: p.stasisMatches
-                    },
+                    boardTurnEvent: p.turnEvent,
                     regionShuffleCharges: p.rowCharges,
                     shuffleCharges: p.fullCharges,
                     stickyBlockIndex: p.sticky
                 }),
             {
                 initialProps: {
-                    pairs: 0,
-                    driftMatches: 0,
-                    stasisMatches: 0,
+                    turnEvent: null as BoardTurnResolvedEvent | null,
                     rowCharges: 0,
                     fullCharges: 0,
                     sticky: null as number | null
@@ -500,7 +574,12 @@ describe('useHudPoliteLiveAnnouncement', () => {
         );
 
         await act(async () => {
-            rerender({ pairs: 1, driftMatches: 1, stasisMatches: 1, rowCharges: 1, fullCharges: 1, sticky: 3 });
+            rerender({
+                turnEvent: matchTurn('drift-turn', { matchedTraitKinds: ['drift', 'stasis'] }),
+                rowCharges: 1,
+                fullCharges: 1,
+                sticky: 3
+            });
         });
         await flushRaf();
 
@@ -511,19 +590,23 @@ describe('useHudPoliteLiveAnnouncement', () => {
 
     it('announces tile trait mismatch penalties and volatile shuffles', async () => {
         const { result, rerender } = renderHook(
-            (p: { mismatches: number; mirrorMisses: number; shuffles: number }) =>
+            (p: { turnEvent: BoardTurnResolvedEvent | null }) =>
                 useHudPoliteLiveAnnouncement({
                     ...base,
                     boardLevel: 2,
-                    mismatches: p.mismatches,
-                    tileTraitMismatches: { ...base.tileTraitMismatches, mirror: p.mirrorMisses },
-                    volatileTraitShuffles: p.shuffles
+                    boardTurnEvent: p.turnEvent
                 }),
-            { initialProps: { mismatches: 0, mirrorMisses: 0, shuffles: 0 } }
+            { initialProps: { turnEvent: null as BoardTurnResolvedEvent | null } }
         );
 
         await act(async () => {
-            rerender({ mismatches: 1, mirrorMisses: 1, shuffles: 1 });
+            rerender({
+                turnEvent: mismatchTurn('mirror-miss-turn', {
+                    matchedTraitKinds: ['mirror'],
+                    volatileTraitShufflesBefore: 0,
+                    volatileTraitShufflesAfter: 1
+                })
+            });
         });
         await flushRaf();
 
@@ -534,22 +617,21 @@ describe('useHudPoliteLiveAnnouncement', () => {
 
     it('announces multi-trait mismatch penalties as a trait surge', async () => {
         const { result, rerender } = renderHook(
-            (p: { mismatches: number; mirrorMisses: number; volatileMisses: number }) =>
+            (p: { turnEvent: BoardTurnResolvedEvent | null }) =>
                 useHudPoliteLiveAnnouncement({
                     ...base,
                     boardLevel: 2,
-                    mismatches: p.mismatches,
-                    tileTraitMismatches: {
-                        ...base.tileTraitMismatches,
-                        mirror: p.mirrorMisses,
-                        volatile: p.volatileMisses
-                    }
+                    boardTurnEvent: p.turnEvent
                 }),
-            { initialProps: { mismatches: 0, mirrorMisses: 0, volatileMisses: 0 } }
+            { initialProps: { turnEvent: null as BoardTurnResolvedEvent | null } }
         );
 
         await act(async () => {
-            rerender({ mismatches: 1, mirrorMisses: 1, volatileMisses: 1 });
+            rerender({
+                turnEvent: mismatchTurn('multi-trait-miss-turn', {
+                    matchedTraitKinds: ['volatile', 'mirror']
+                })
+            });
         });
         await flushRaf();
 
@@ -560,22 +642,28 @@ describe('useHudPoliteLiveAnnouncement', () => {
 
     it('announces recall focus and memory score when a remembered match resolves', async () => {
         const { result, rerender } = renderHook(
-            (p: { pairs: number; recallFocus: number; recallMatches: number; recallBonus: number; forgotten?: number }) =>
+            (p: { turnEvent: BoardTurnResolvedEvent | null; recallFocus: number; recallMatches: number; recallBonus: number; forgotten?: number }) =>
                 useHudPoliteLiveAnnouncement({
                     ...base,
                     boardLevel: 2,
-                    pairCount: 4,
-                    matchedPairs: p.pairs,
+                    boardTurnEvent: p.turnEvent,
                     recallFocus: p.recallFocus,
                     recallMatchesThisFloor: p.recallMatches,
                     recallBonusScoreThisFloor: p.recallBonus,
                     forgottenTileCountThisFloor: p.forgotten ?? 0
                 }),
-            { initialProps: { pairs: 0, recallFocus: 1, recallMatches: 0, recallBonus: 0 } }
+            {
+                initialProps: {
+                    turnEvent: null as BoardTurnResolvedEvent | null,
+                    recallFocus: 1,
+                    recallMatches: 0,
+                    recallBonus: 0
+                }
+            }
         );
 
         await act(async () => {
-            rerender({ pairs: 1, recallFocus: 2, recallMatches: 1, recallBonus: 8 });
+            rerender({ turnEvent: matchTurn('recall-turn'), recallFocus: 2, recallMatches: 1, recallBonus: 8 });
         });
         await flushRaf();
 
@@ -586,21 +674,27 @@ describe('useHudPoliteLiveAnnouncement', () => {
 
     it('announces normalized recall focus when stale run data exceeds the cap', async () => {
         const { result, rerender } = renderHook(
-            (p: { pairs: number; recallFocus: number; recallMatches: number; recallBonus: number }) =>
+            (p: { turnEvent: BoardTurnResolvedEvent | null; recallFocus: number; recallMatches: number; recallBonus: number }) =>
                 useHudPoliteLiveAnnouncement({
                     ...base,
                     boardLevel: 2,
-                    pairCount: 4,
-                    matchedPairs: p.pairs,
+                    boardTurnEvent: p.turnEvent,
                     recallFocus: p.recallFocus,
                     recallMatchesThisFloor: p.recallMatches,
                     recallBonusScoreThisFloor: p.recallBonus
                 }),
-            { initialProps: { pairs: 0, recallFocus: 99, recallMatches: 0, recallBonus: 0 } }
+            {
+                initialProps: {
+                    turnEvent: null as BoardTurnResolvedEvent | null,
+                    recallFocus: 99,
+                    recallMatches: 0,
+                    recallBonus: 0
+                }
+            }
         );
 
         await act(async () => {
-            rerender({ pairs: 1, recallFocus: 99, recallMatches: 1, recallBonus: 8 });
+            rerender({ turnEvent: matchTurn('recall-cap-turn'), recallFocus: 99, recallMatches: 1, recallBonus: 8 });
         });
         await flushRaf();
 
@@ -611,12 +705,11 @@ describe('useHudPoliteLiveAnnouncement', () => {
 
     it('announces normalized recall focus when stale run data has malformed caps', async () => {
         const { result, rerender } = renderHook(
-            (p: { pairs: number; recallFocus: number; recallFocusMax: number; recallMatches: number; recallBonus: number }) =>
+            (p: { turnEvent: BoardTurnResolvedEvent | null; recallFocus: number; recallFocusMax: number; recallMatches: number; recallBonus: number }) =>
                 useHudPoliteLiveAnnouncement({
                     ...base,
                     boardLevel: 2,
-                    pairCount: 4,
-                    matchedPairs: p.pairs,
+                    boardTurnEvent: p.turnEvent,
                     recallFocus: p.recallFocus,
                     recallFocusMax: p.recallFocusMax,
                     recallMatchesThisFloor: p.recallMatches,
@@ -624,7 +717,7 @@ describe('useHudPoliteLiveAnnouncement', () => {
                 }),
             {
                 initialProps: {
-                    pairs: 0,
+                    turnEvent: null as BoardTurnResolvedEvent | null,
                     recallFocus: Number.NaN,
                     recallFocusMax: Number.POSITIVE_INFINITY,
                     recallMatches: 0,
@@ -635,7 +728,7 @@ describe('useHudPoliteLiveAnnouncement', () => {
 
         await act(async () => {
             rerender({
-                pairs: 1,
+                turnEvent: matchTurn('recall-malformed-turn'),
                 recallFocus: 2.9,
                 recallFocusMax: Number.POSITIVE_INFINITY,
                 recallMatches: 1,
@@ -651,22 +744,35 @@ describe('useHudPoliteLiveAnnouncement', () => {
 
     it('announces when a later match stabilizes forgotten tile memory', async () => {
         const { result, rerender } = renderHook(
-            (p: { pairs: number; recallFocus: number; recallMatches: number; recallBonus: number; forgotten: number }) =>
+            (p: { turnEvent: BoardTurnResolvedEvent | null; recallFocus: number; recallMatches: number; recallBonus: number; forgotten: number }) =>
                 useHudPoliteLiveAnnouncement({
                     ...base,
                     boardLevel: 2,
-                    pairCount: 4,
-                    matchedPairs: p.pairs,
+                    boardTurnEvent: p.turnEvent,
                     recallFocus: p.recallFocus,
                     recallMatchesThisFloor: p.recallMatches,
                     recallBonusScoreThisFloor: p.recallBonus,
                     forgottenTileCountThisFloor: p.forgotten
                 }),
-            { initialProps: { pairs: 0, recallFocus: 0, recallMatches: 0, recallBonus: 0, forgotten: 2 } }
+            {
+                initialProps: {
+                    turnEvent: null as BoardTurnResolvedEvent | null,
+                    recallFocus: 0,
+                    recallMatches: 0,
+                    recallBonus: 0,
+                    forgotten: 2
+                }
+            }
         );
 
         await act(async () => {
-            rerender({ pairs: 1, recallFocus: 1, recallMatches: 1, recallBonus: 0, forgotten: 1 });
+            rerender({
+                turnEvent: matchTurn('recall-stabilize-turn'),
+                recallFocus: 1,
+                recallMatches: 1,
+                recallBonus: 0,
+                forgotten: 1
+            });
         });
         await flushRaf();
 
@@ -677,20 +783,32 @@ describe('useHudPoliteLiveAnnouncement', () => {
 
     it('announces recall breakage when a miss marks remembered tiles unstable', async () => {
         const { result, rerender } = renderHook(
-            (p: { mismatches: number; recallFocus: number; recallMistakes: number; forgotten: number }) =>
+            (p: { turnEvent: BoardTurnResolvedEvent | null; recallFocus: number; recallMistakes: number; forgotten: number }) =>
                 useHudPoliteLiveAnnouncement({
                     ...base,
                     boardLevel: 2,
-                    mismatches: p.mismatches,
+                    boardTurnEvent: p.turnEvent,
                     recallFocus: p.recallFocus,
                     recallMistakesThisFloor: p.recallMistakes,
                     forgottenTileCountThisFloor: p.forgotten
                 }),
-            { initialProps: { mismatches: 0, recallFocus: 1, recallMistakes: 0, forgotten: 0 } }
+            {
+                initialProps: {
+                    turnEvent: null as BoardTurnResolvedEvent | null,
+                    recallFocus: 1,
+                    recallMistakes: 0,
+                    forgotten: 0
+                }
+            }
         );
 
         await act(async () => {
-            rerender({ mismatches: 1, recallFocus: 0, recallMistakes: 1, forgotten: 2 });
+            rerender({
+                turnEvent: mismatchTurn('recall-break-turn'),
+                recallFocus: 0,
+                recallMistakes: 1,
+                forgotten: 2
+            });
         });
         await flushRaf();
 
@@ -701,18 +819,18 @@ describe('useHudPoliteLiveAnnouncement', () => {
 
     it('announces life loss before generic mismatch feedback', async () => {
         const { result, rerender } = renderHook(
-            (p: { lives: number; mismatches: number }) =>
+            (p: { lives: number; turnEvent: BoardTurnResolvedEvent | null }) =>
                 useHudPoliteLiveAnnouncement({
                     ...base,
                     boardLevel: 2,
                     lives: p.lives,
-                    mismatches: p.mismatches
+                    boardTurnEvent: p.turnEvent
                 }),
-            { initialProps: { lives: 3, mismatches: 0 } }
+            { initialProps: { lives: 3, turnEvent: null as BoardTurnResolvedEvent | null } }
         );
 
         await act(async () => {
-            rerender({ lives: 2, mismatches: 1 });
+            rerender({ lives: 2, turnEvent: mismatchTurn('life-loss-turn', { livesBefore: 3, livesAfter: 2 }) });
         });
         await flushRaf();
 
@@ -722,18 +840,21 @@ describe('useHudPoliteLiveAnnouncement', () => {
 
     it('announces guard-token mismatch absorption', async () => {
         const { result, rerender } = renderHook(
-            (p: { guards: number; mismatches: number }) =>
+            (p: { guards: number; turnEvent: BoardTurnResolvedEvent | null }) =>
                 useHudPoliteLiveAnnouncement({
                     ...base,
                     boardLevel: 2,
                     guardTokens: p.guards,
-                    mismatches: p.mismatches
+                    boardTurnEvent: p.turnEvent
                 }),
-            { initialProps: { guards: 1, mismatches: 0 } }
+            { initialProps: { guards: 1, turnEvent: null as BoardTurnResolvedEvent | null } }
         );
 
         await act(async () => {
-            rerender({ guards: 0, mismatches: 1 });
+            rerender({
+                guards: 0,
+                turnEvent: mismatchTurn('guard-absorb-turn', { guardTokensBefore: 1, guardTokensAfter: 0 })
+            });
         });
         await flushRaf();
 
@@ -763,19 +884,18 @@ describe('useHudPoliteLiveAnnouncement', () => {
 
     it('announces moving enemy defeats with match feedback', async () => {
         const { result, rerender } = renderHook(
-            (p: { pairs: number; defeated: number }) =>
+            (p: { turnEvent: BoardTurnResolvedEvent | null; defeated: number }) =>
                 useHudPoliteLiveAnnouncement({
                     ...base,
                     boardLevel: 2,
-                    pairCount: 4,
-                    matchedPairs: p.pairs,
+                    boardTurnEvent: p.turnEvent,
                     enemyHazardsDefeatedThisFloor: p.defeated
                 }),
-            { initialProps: { pairs: 0, defeated: 0 } }
+            { initialProps: { turnEvent: null as BoardTurnResolvedEvent | null, defeated: 0 } }
         );
 
         await act(async () => {
-            rerender({ pairs: 1, defeated: 1 });
+            rerender({ turnEvent: matchTurn('enemy-defeat-turn'), defeated: 1 });
         });
         await flushRaf();
 
@@ -786,19 +906,18 @@ describe('useHudPoliteLiveAnnouncement', () => {
 
     it('announces dungeon enemy card defeats with match feedback', async () => {
         const { result, rerender } = renderHook(
-            (p: { pairs: number; defeated: number }) =>
+            (p: { turnEvent: BoardTurnResolvedEvent | null; defeated: number }) =>
                 useHudPoliteLiveAnnouncement({
                     ...base,
                     boardLevel: 2,
-                    pairCount: 4,
-                    matchedPairs: p.pairs,
+                    boardTurnEvent: p.turnEvent,
                     dungeonEnemiesDefeatedThisFloor: p.defeated
                 }),
-            { initialProps: { pairs: 0, defeated: 0 } }
+            { initialProps: { turnEvent: null as BoardTurnResolvedEvent | null, defeated: 0 } }
         );
 
         await act(async () => {
-            rerender({ pairs: 1, defeated: 1 });
+            rerender({ turnEvent: matchTurn('dungeon-defeat-turn'), defeated: 1 });
         });
         await flushRaf();
 
@@ -851,36 +970,46 @@ describe('useHudPoliteLiveAnnouncement', () => {
     });
 
     it('announces hazard tile trigger deltas in a stable order', async () => {
+        // Every hazard kind reports its own before/after pair on the turn event, so a
+        // turn that trips several announces all of them in HAZARD_TILE_KINDS order.
+        const hazardEvent = createBoardTurnResolvedEventFixture({
+            commandId: 'hazard-sweep',
+            announcement: {
+                hazardTilesBefore: 0,
+                hazardTilesAfter: 7,
+                hazardKinds: {
+                    shuffleSnareBefore: 0,
+                    shuffleSnareAfter: 1,
+                    cascadeCacheBefore: 0,
+                    cascadeCacheAfter: 1,
+                    mirrorDecoyBefore: 0,
+                    mirrorDecoyAfter: 1,
+                    fragileCacheClaimBefore: 0,
+                    fragileCacheClaimAfter: 1,
+                    fragileCacheBreakBefore: 0,
+                    fragileCacheBreakAfter: 1,
+                    tollCacheBefore: 0,
+                    tollCacheAfter: 1,
+                    fuseCacheBefore: 0,
+                    fuseCacheAfter: 1,
+                    fuseCacheExpiredBefore: 0,
+                    fuseCacheExpiredAfter: 0
+                }
+            }
+        }) as BoardTurnResolvedEvent;
+
         const { result, rerender } = renderHook(
-            (p: {
-                total: number;
-                snare: number;
-                cascade: number;
-                mirror: number;
-                fragileClaim: number;
-                fragileBreak: number;
-                toll: number;
-                fuse: number;
-                fuseExpired: number;
-            }) =>
+            (p: { turnEvent: BoardTurnResolvedEvent | null }) =>
                 useHudPoliteLiveAnnouncement({
                     ...base,
                     scoreParasiteActive: false,
-                    hazardTileTriggersThisFloor: p.total,
-                    hazardShuffleSnaresThisFloor: p.snare,
-                    hazardCascadeCachesThisFloor: p.cascade,
-                    hazardMirrorDecoysThisFloor: p.mirror,
-                    hazardFragileCacheClaimsThisFloor: p.fragileClaim,
-                    hazardFragileCacheBreaksThisFloor: p.fragileBreak,
-                    hazardTollCachesThisFloor: p.toll,
-                    hazardFuseCachesThisFloor: p.fuse,
-                    hazardFuseCacheExpiredClaimsThisFloor: p.fuseExpired
+                    boardTurnEvent: p.turnEvent
                 }),
-            { initialProps: { total: 0, snare: 0, cascade: 0, mirror: 0, fragileClaim: 0, fragileBreak: 0, toll: 0, fuse: 0, fuseExpired: 0 } }
+            { initialProps: { turnEvent: null as BoardTurnResolvedEvent | null } }
         );
 
         await act(async () => {
-            rerender({ total: 7, snare: 1, cascade: 1, mirror: 1, fragileClaim: 1, fragileBreak: 1, toll: 1, fuse: 1, fuseExpired: 0 });
+            rerender({ turnEvent: hazardEvent });
         });
         await flushRaf();
 
@@ -890,20 +1019,31 @@ describe('useHudPoliteLiveAnnouncement', () => {
     });
 
     it('announces late Fuse Cache claims with expired-fuse copy', async () => {
+        const fuseEvent = createBoardTurnResolvedEventFixture({
+            commandId: 'fuse-late',
+            announcement: {
+                hazardTilesBefore: 0,
+                hazardTilesAfter: 1,
+                hazardKinds: {
+                    ...HAZARD_KINDS_QUIET,
+                    fuseCacheAfter: 1,
+                    fuseCacheExpiredAfter: 1
+                }
+            }
+        }) as BoardTurnResolvedEvent;
+
         const { result, rerender } = renderHook(
-            (p: { total: number; fuse: number; fuseExpired: number }) =>
+            (p: { turnEvent: BoardTurnResolvedEvent | null }) =>
                 useHudPoliteLiveAnnouncement({
                     ...base,
                     scoreParasiteActive: false,
-                    hazardTileTriggersThisFloor: p.total,
-                    hazardFuseCachesThisFloor: p.fuse,
-                    hazardFuseCacheExpiredClaimsThisFloor: p.fuseExpired
+                    boardTurnEvent: p.turnEvent
                 }),
-            { initialProps: { total: 0, fuse: 0, fuseExpired: 0 } }
+            { initialProps: { turnEvent: null as BoardTurnResolvedEvent | null } }
         );
 
         await act(async () => {
-            rerender({ total: 1, fuse: 1, fuseExpired: 1 });
+            rerender({ turnEvent: fuseEvent });
         });
         await flushRaf();
 
@@ -911,20 +1051,28 @@ describe('useHudPoliteLiveAnnouncement', () => {
     });
 
     it('uses reduced-motion copy for hazard tile trigger announcements', async () => {
+        const snareEvent = createBoardTurnResolvedEventFixture({
+            commandId: 'snare-reduced-motion',
+            announcement: {
+                hazardTilesBefore: 0,
+                hazardTilesAfter: 1,
+                hazardKinds: { ...HAZARD_KINDS_QUIET, shuffleSnareAfter: 1 }
+            }
+        }) as BoardTurnResolvedEvent;
+
         const { result, rerender } = renderHook(
-            (p: { total: number; snare: number }) =>
+            (p: { turnEvent: BoardTurnResolvedEvent | null }) =>
                 useHudPoliteLiveAnnouncement({
                     ...base,
                     scoreParasiteActive: false,
                     reduceMotion: true,
-                    hazardTileTriggersThisFloor: p.total,
-                    hazardShuffleSnaresThisFloor: p.snare
+                    boardTurnEvent: p.turnEvent
                 }),
-            { initialProps: { total: 0, snare: 0 } }
+            { initialProps: { turnEvent: null as BoardTurnResolvedEvent | null } }
         );
 
         await act(async () => {
-            rerender({ total: 1, snare: 1 });
+            rerender({ turnEvent: snareEvent });
         });
         await flushRaf();
 
@@ -935,17 +1083,19 @@ describe('useHudPoliteLiveAnnouncement', () => {
 
     it('announces lantern ward scout deltas', async () => {
         const { result, rerender } = renderHook(
-            (p: { scouts: number }) =>
+            (p: { turnEvent: BoardTurnResolvedEvent | null }) =>
                 useHudPoliteLiveAnnouncement({
                     ...base,
                     scoreParasiteActive: false,
-                    lanternWardScoutsThisFloor: p.scouts
+                    boardTurnEvent: p.turnEvent
                 }),
-            { initialProps: { scouts: 0 } }
+            { initialProps: { turnEvent: null as BoardTurnResolvedEvent | null } }
         );
 
         await act(async () => {
-            rerender({ scouts: 1 });
+            rerender({
+                turnEvent: counterTurn('lantern-scout', { scoutsBefore: 0, scoutsAfter: 1 })
+            });
         });
         await flushRaf();
 
@@ -954,17 +1104,19 @@ describe('useHudPoliteLiveAnnouncement', () => {
 
     it('announces omen seal scout deltas', async () => {
         const { result, rerender } = renderHook(
-            (p: { scouts: number }) =>
+            (p: { turnEvent: BoardTurnResolvedEvent | null }) =>
                 useHudPoliteLiveAnnouncement({
                     ...base,
                     scoreParasiteActive: false,
-                    omenSealScoutsThisFloor: p.scouts
+                    boardTurnEvent: p.turnEvent
                 }),
-            { initialProps: { scouts: 0 } }
+            { initialProps: { turnEvent: null as BoardTurnResolvedEvent | null } }
         );
 
         await act(async () => {
-            rerender({ scouts: 1 });
+            rerender({
+                turnEvent: counterTurn('omen-scout', { omenScoutsBefore: 0, omenScoutsAfter: 1 })
+            });
         });
         await flushRaf();
 
@@ -973,17 +1125,19 @@ describe('useHudPoliteLiveAnnouncement', () => {
 
     it('announces controlled mimic cache claims', async () => {
         const { result, rerender } = renderHook(
-            (p: { claims: number }) =>
+            (p: { turnEvent: BoardTurnResolvedEvent | null }) =>
                 useHudPoliteLiveAnnouncement({
                     ...base,
                     scoreParasiteActive: false,
-                    mimicCacheClaimsThisFloor: p.claims
+                    boardTurnEvent: p.turnEvent
                 }),
-            { initialProps: { claims: 0 } }
+            { initialProps: { turnEvent: null as BoardTurnResolvedEvent | null } }
         );
 
         await act(async () => {
-            rerender({ claims: 1 });
+            rerender({
+                turnEvent: counterTurn('mimic-claim', { mimicCacheBefore: 0, mimicCacheAfter: 1 })
+            });
         });
         await flushRaf();
 
@@ -992,19 +1146,26 @@ describe('useHudPoliteLiveAnnouncement', () => {
 
     it('announces mimic cache guard bites before generic life bites', async () => {
         const { result, rerender } = renderHook(
-            (p: { bites: number; guardBites: number }) =>
+            (p: { turnEvent: BoardTurnResolvedEvent | null }) =>
                 useHudPoliteLiveAnnouncement({
                     ...base,
                     scoreParasiteActive: false,
-                    mimicCacheClaimsThisFloor: p.bites,
-                    mimicCacheBitesThisFloor: p.bites,
-                    mimicCacheGuardBitesThisFloor: p.guardBites
+                    boardTurnEvent: p.turnEvent
                 }),
-            { initialProps: { bites: 0, guardBites: 0 } }
+            { initialProps: { turnEvent: null as BoardTurnResolvedEvent | null } }
         );
 
         await act(async () => {
-            rerender({ bites: 1, guardBites: 1 });
+            rerender({
+                turnEvent: counterTurn('mimic-guard-bite', {
+                    mimicCacheBefore: 0,
+                    mimicCacheAfter: 1,
+                    mimicCacheBitesBefore: 0,
+                    mimicCacheBitesAfter: 1,
+                    mimicCacheGuardBitesBefore: 0,
+                    mimicCacheGuardBitesAfter: 1
+                })
+            });
         });
         await flushRaf();
 
@@ -1013,41 +1174,49 @@ describe('useHudPoliteLiveAnnouncement', () => {
 
     it('announces Guard Cache ward blocks', async () => {
         const { result, rerender } = renderHook(
-            (p: { wardsUsed: number }) =>
+            (p: { turnEvent: BoardTurnResolvedEvent | null }) =>
                 useHudPoliteLiveAnnouncement({
                     ...base,
                     scoreParasiteActive: false,
-                    safeHazardWardsUsedThisFloor: p.wardsUsed
+                    boardTurnEvent: p.turnEvent
                 }),
-            { initialProps: { wardsUsed: 0 } }
+            { initialProps: { turnEvent: null as BoardTurnResolvedEvent | null } }
         );
 
         await act(async () => {
-            rerender({ wardsUsed: 1 });
+            rerender({
+                turnEvent: counterTurn('ward-block', {
+                    safeHazardWardsUsedBefore: 0,
+                    safeHazardWardsUsedAfter: 1
+                })
+            });
         });
         await flushRaf();
 
         expect(result.current.message).toBe('Guard Cache ward blocked a hazard.');
     });
 
-    it('does not announce existing hazard counters on first render or reset', async () => {
+    it('stays silent when a turn fires no hazard tile', async () => {
+        // The counters this used to watch were per-floor totals, so a floor that started
+        // with a hazard already recorded announced it again on the first render. Keyed on
+        // the event's own before/after pair, a turn with no hazard says nothing.
         const { result, rerender } = renderHook(
-            (p: { level: number; total: number; cascade: number }) =>
+            (p: { turnEvent: BoardTurnResolvedEvent | null }) =>
                 useHudPoliteLiveAnnouncement({
                     ...base,
                     scoreParasiteActive: false,
-                    boardLevel: p.level,
-                    hazardTileTriggersThisFloor: p.total,
-                    hazardCascadeCachesThisFloor: p.cascade
+                    boardTurnEvent: p.turnEvent
                 }),
-            { initialProps: { level: 1, total: 1, cascade: 1 } }
+            { initialProps: { turnEvent: null as BoardTurnResolvedEvent | null } }
         );
 
         await flushRaf();
         expect(result.current.message).toBe('');
 
         await act(async () => {
-            rerender({ level: 2, total: 0, cascade: 0 });
+            rerender({
+                turnEvent: counterTurn('quiet-turn', { hazardTilesBefore: 4, hazardTilesAfter: 4 })
+            });
         });
         await flushRaf();
 
