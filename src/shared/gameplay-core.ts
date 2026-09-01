@@ -683,7 +683,15 @@ const applyDungeonExitActivateCommand = (
               : 'Dungeon exit activated without spending a key.',
         tone: 'information'
     });
-    return { run: nextRun, command, events, accepted: true };
+    // Activating the exit clears the floor. The legacy activateDungeonExit transition
+    // finalizes the level here (createActivateDungeonExit wraps exactly this transition
+    // in finalizeLevel); without it the command path left the run in 'playing' with no
+    // lastLevelResult, diverging from the direct path it must reproduce.
+    const finalizedRun = finalizeLevelThroughCore(nextRun, transition.board, {
+        commandId: command.commandId,
+        events
+    });
+    return { run: finalizedRun, command, events, accepted: true };
 };
 
 const applyParasiteAdvanceCommand = (
