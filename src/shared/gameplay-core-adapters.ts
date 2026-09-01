@@ -4,8 +4,14 @@ import {
     createGameplayBoardTurnResolveCommand,
     createGameplayFloorAdvanceCommand,
     createGameplayWildMatchConsumeCommand,
+    createGameplayTileFlipCommand,
+    createGameplayMemorizeCompleteCommand,
+    createGameplayPauseCommand,
+    createGameplayResumeCommand,
+    createGameplayProgressionRepairCommand,
     type GameplayCommand,
-    type GameplayEvent
+    type GameplayEvent,
+    type GameplayPauseTimerSnapshot
 } from './gameplay-core-contracts';
 import { reduceGameplayCommand } from './gameplay-core';
 import type { FloorClearExecutionContext } from './floor-clear-transition';
@@ -15,6 +21,7 @@ import {
 } from './slayer-floor-clear-transition';
 import { appendGameplayJournal } from './gameplay-journal';
 import { applyRelicImmediate } from './relic-immediate-rules';
+import { disableDebugPeek, enableDebugPeek } from './run-timer-rules';
 
 export interface GameplayRelicImmediateAdapterResult {
     run: RunState;
@@ -277,5 +284,112 @@ export const advanceFloorThroughGameplayCore = (
         command,
         events: result.events,
         run: result.accepted ? appendGameplayJournal(result.run, [command], result.events) : run
+    };
+};
+
+export interface GameplayRunTransitionAdapterResult {
+    run: RunState;
+    accepted: boolean;
+    commands: GameplayCommand[];
+    events: GameplayEvent[];
+}
+
+const reduceThroughGameplayCore = (
+    run: RunState,
+    command: GameplayCommand
+): GameplayRunTransitionAdapterResult => {
+    const result = reduceGameplayCommand(run, command);
+    return {
+        accepted: result.accepted,
+        commands: [command],
+        events: result.events,
+        run: result.accepted ? appendGameplayJournal(result.run, [command], result.events) : run
+    };
+};
+
+/**
+ * Tile presses are rejected rather than thrown on: an illegal flip (already matched,
+ * wrong phase, third flip without gambit) is ordinary player input, not a bug, and the
+ * press surface uses `accepted` to decide whether to play the flip SFX.
+ */
+export const applyTileFlipThroughGameplayCore = (
+    run: RunState,
+    tileId: string,
+    commandId = `tile-flip:${run.runSeed}:${run.board?.level ?? 0}:${tileId}`
+): GameplayRunTransitionAdapterResult =>
+    reduceThroughGameplayCore(run, createGameplayTileFlipCommand(commandId, tileId));
+
+export const completeMemorizePhaseThroughGameplayCore = (
+    run: RunState,
+    commandId: string
+): GameplayRunTransitionAdapterResult =>
+    reduceThroughGameplayCore(run, createGameplayMemorizeCompleteCommand(commandId));
+
+export const pauseRunThroughGameplayCore = (
+    run: RunState,
+    pausedAtMs: number,
+    timerSnapshot: GameplayPauseTimerSnapshot,
+    commandId: string
+): GameplayRunTransitionAdapterResult =>
+    reduceThroughGameplayCore(run, createGameplayPauseCommand(commandId, pausedAtMs, timerSnapshot));
+
+export const resumeRunThroughGameplayCore = (
+    run: RunState,
+    resumedAtMs: number,
+    commandId: string
+): GameplayRunTransitionAdapterResult =>
+    reduceThroughGameplayCore(run, createGameplayResumeCommand(commandId, resumedAtMs));
+
+export const repairRunProgressionThroughGameplayCore = (
+    run: RunState,
+    commandId: string
+): GameplayRunTransitionAdapterResult =>
+    reduceThroughGameplayCore(run, createGameplayProgressionRepairCommand(commandId));
+
+/**
+ * Debug reveal is a dev-only affordance with no command variant: it mutates
+ * `debugPeekActive` and the reveal timer only, and must never enter the command
+ * journal, which is replayed for determinism gates.
+ */
+export const activateDebugRevealThroughGameplayCore = (
+    run: RunState,
+    disableAchievementsOnDebug: boolean,
+    _commandId: string
+): GameplayRunTransitionAdapterResult => {
+    const nextRun = enableDebugPeek(run, disableAchievementsOnDebug);
+    return { run: nextRun, accepted: nextRun !== run, commands: [], events: [] };
+};
+
+export const deactivateDebugRevealThroughGameplayCore = (
+    run: RunState,
+    _reason: 'timer_elapsed' | 'resume_expired' | 'phase_ended',
+    _commandId: string
+): GameplayRunTransitionAdapterResult => {
+    const nextRun = disableDebugPeek(run);
+    return { run: nextRun, accepted: nextRun !== run, commands: [], events: [] };
+};
+
+/**
+ * Gauntlet expiry is a clock verdict, not a player command: the deadline is checked
+ * against `observedAtMs` and the run ends. `accepted` is false while time remains, so
+ * the polling watcher can keep running without producing a transition.
+ */
+export const expireGauntletThroughGameplayCore = (
+    run: RunState,
+    observedAtMs: number,
+    _commandId: string
+): GameplayRunTransitionAdapterResult => {
+    const deadlineMs = run.gauntletDeadlineMs;
+    if (run.gameMode !== 'gauntlet' || deadlineMs === null || deadlineMs === undefined) {
+        return { run, accepted: false, commands: [], events: [] };
+    }
+    if (run.status === 'gameOver' || observedAtMs < deadlineMs) {
+        return { run, accepted: false, commands: [], events: [] };
+    }
+    return {
+        run: { ...run, status: 'gameOver', lives: 0 },
+        accepted: true,
+        commands: [],
+        events: []
     };
 };

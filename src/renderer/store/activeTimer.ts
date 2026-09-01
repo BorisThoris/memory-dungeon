@@ -21,11 +21,20 @@ export const createActiveTimer = (duration: number, onElapsed: () => void): Acti
     };
 };
 
-export const getActiveTimerRemainingMs = (timer: ActiveTimer | null, fallback: number | null): number | null => {
+/**
+ * `observedAtMs` lets a caller measure several timers against one instant. Pausing
+ * reads the memorize, resolve and debug-reveal timers together, and sampling
+ * `Date.now()` separately per timer would let them drift apart mid-snapshot.
+ */
+export const getActiveTimerRemainingMs = (
+    timer: ActiveTimer | null,
+    fallback: number | null,
+    observedAtMs: number = Date.now()
+): number | null => {
     if (!timer) {
         return fallback;
     }
 
-    const remaining = timer.deadline - Date.now();
+    const remaining = timer.deadline - observedAtMs;
     return Number.isFinite(remaining) ? Math.max(remaining, 0) : fallback;
 };
