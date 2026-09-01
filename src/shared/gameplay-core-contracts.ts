@@ -1397,7 +1397,7 @@ export const gameplayCommandSchema = z.discriminatedUnion('type', [
     z
         .object({
             ...commandBase,
-            type: z.literal('memorize.complete')
+            type: z.literal('phase.memorize_complete')
         })
         .strict(),
     z
@@ -1425,6 +1425,27 @@ export const gameplayCommandSchema = z.discriminatedUnion('type', [
         .object({
             ...commandBase,
             type: z.literal('relic.offer_open')
+        })
+        .strict(),
+    z
+        .object({
+            ...commandBase,
+            type: z.literal('run.gauntlet_expire'),
+            observedAtMs: z.number().int().nonnegative()
+        })
+        .strict(),
+    z
+        .object({
+            ...commandBase,
+            type: z.literal('debug.reveal_activate'),
+            disableAchievementsOnDebug: z.boolean()
+        })
+        .strict(),
+    z
+        .object({
+            ...commandBase,
+            type: z.literal('debug.reveal_deactivate'),
+            reason: z.enum(['timer_elapsed', 'resume_expired', 'phase_ended'])
         })
         .strict()
 ]);
@@ -1978,6 +1999,77 @@ export const gameplayEventSchema = z.discriminatedUnion('type', [
             type: z.literal('command.rejected'),
             reason: z.string().min(1).max(500)
         })
+        .strict(),
+    z
+        .object({
+            ...eventBase,
+            type: z.literal('board.tile_flipped'),
+            tileId: z.string().min(1).max(160),
+            outcome: z.enum(['flipped', 'exit_revealed', 'shop_revealed', 'room_resolved']),
+            flippedCountAfter: z.number().int().nonnegative(),
+            statusAfter: z.enum(['memorize', 'playing', 'resolving', 'paused', 'levelComplete', 'gameOver'])
+        })
+        .strict(),
+    z
+        .object({
+            ...eventBase,
+            type: z.literal('phase.memorize_completed'),
+            statusAfter: z.enum(['memorize', 'playing', 'resolving', 'paused', 'levelComplete', 'gameOver'])
+        })
+        .strict(),
+    z
+        .object({
+            ...eventBase,
+            type: z.literal('run.paused'),
+            statusBefore: z.enum(['memorize', 'playing', 'resolving', 'paused', 'levelComplete', 'gameOver']),
+            timerSnapshot: gameplayPauseTimerSnapshotSchema
+        })
+        .strict(),
+    z
+        .object({
+            ...eventBase,
+            type: z.literal('run.resumed'),
+            statusAfter: z.enum(['memorize', 'playing', 'resolving', 'paused', 'levelComplete', 'gameOver']),
+            outcome: z.enum(['resumed', 'game_over']).default('resumed')
+        })
+        .strict(),
+    z
+        .object({
+            ...eventBase,
+            type: z.literal('run.progression_repaired')
+        })
+        .strict(),
+    z
+        .object({
+            ...eventBase,
+            type: z.literal('run.gauntlet_expired'),
+            observedAtMs: z.number().int().nonnegative(),
+            deadlineMs: z.number().int().nonnegative(),
+            overdueMs: z.number().int().nonnegative()
+        })
+        .strict(),
+    z
+        .object({
+            ...eventBase,
+            type: z.literal('relic.offer_opened'),
+            outcome: z.enum(['opened']),
+            pickBudget: z.number().int().nonnegative()
+        })
+        .strict(),
+    z
+        .object({
+            ...eventBase,
+            type: z.literal('debug.reveal_activated'),
+            outcome: z.enum(['activated']),
+            disableAchievementsOnDebug: z.boolean()
+        })
+        .strict(),
+    z
+        .object({
+            ...eventBase,
+            type: z.literal('debug.reveal_deactivated'),
+            reason: z.enum(['timer_elapsed', 'resume_expired', 'phase_ended'])
+        })
         .strict()
 ]);
 
@@ -2215,7 +2307,7 @@ export const createGameplayMemorizeCompleteCommand = (commandId: string): Gamepl
     gameplayCommandSchema.parse({
         schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
         commandId,
-        type: 'memorize.complete'
+        type: 'phase.memorize_complete'
     });
 
 export const createGameplayPauseCommand = (
@@ -2251,4 +2343,34 @@ export const createGameplayRelicOfferOpenCommand = (commandId: string): Gameplay
         schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
         commandId,
         type: 'relic.offer_open'
+    });
+
+export const createGameplayGauntletExpireCommand = (commandId: string, observedAtMs: number): GameplayCommand =>
+    gameplayCommandSchema.parse({
+        schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
+        commandId,
+        type: 'run.gauntlet_expire',
+        observedAtMs
+    });
+
+export const createGameplayDebugRevealActivateCommand = (
+    commandId: string,
+    disableAchievementsOnDebug: boolean
+): GameplayCommand =>
+    gameplayCommandSchema.parse({
+        schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
+        commandId,
+        type: 'debug.reveal_activate',
+        disableAchievementsOnDebug
+    });
+
+export const createGameplayDebugRevealDeactivateCommand = (
+    commandId: string,
+    reason: 'timer_elapsed' | 'resume_expired' | 'phase_ended'
+): GameplayCommand =>
+    gameplayCommandSchema.parse({
+        schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
+        commandId,
+        type: 'debug.reveal_deactivate',
+        reason
     });

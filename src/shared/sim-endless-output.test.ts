@@ -176,7 +176,6 @@ describe('sim-endless CSV output', () => {
                 lockedCacheRoomFloors: 0,
                 objectiveKinds: 1,
                 playableCheckedFloors: 0,
-                coreReplayCheckedFloors: 0,
                 playableFailureDetails: [
                     'floor=7|reason=exit_attempted|status=playing|turns=12|lastPair=__exit__|lastTiles=exit|activeStaleHazards=0|undefeatedStaleHazards=0|archetype=trap_hall|objective=defeat_boss'
                 ],

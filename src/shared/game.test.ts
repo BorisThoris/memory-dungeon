@@ -3085,7 +3085,7 @@ describe('REG-017 route choices', () => {
         const base = finishMemorizePhase(
             createNewRun(0, { echoFeedbackEnabled: false, runSeed: 17_216, initialStrayRemoveCharges: 1 })
         );
-        const run: RunState = { ...base, board, status: 'playing', strayRemoveArmed: true };
+        const run: RunState = { ...base, board, status: 'playing' };
         const keystone = run.board!.tiles.find((tile) => tile.routeSpecialKind === 'keystone_pair')!;
 
         expect(tileIsStrayEligiblePreview(board, keystone.id)).toBe(false);
@@ -3100,8 +3100,8 @@ describe('REG-017 route choices', () => {
         const omenBoard = routeBoard('mystery', 4, 'normal', { activeMutators: ['glass_floor'] });
         const finalWard = finalWardBoard.tiles.find((tile) => tile.routeSpecialKind === 'final_ward')!;
         const omen = omenBoard.tiles.find((tile) => tile.routeSpecialKind === 'omen_seal')!;
-        const finalWardRun: RunState = { ...base, board: finalWardBoard, status: 'playing', strayRemoveArmed: true };
-        const omenRun: RunState = { ...base, board: omenBoard, status: 'playing', strayRemoveArmed: true };
+        const finalWardRun: RunState = { ...base, board: finalWardBoard, status: 'playing' };
+        const omenRun: RunState = { ...base, board: omenBoard, status: 'playing' };
 
         expect(tileIsStrayEligiblePreview(finalWardBoard, finalWard.id)).toBe(false);
         expect(applyStrayRemove(finalWardRun, finalWard.id)).toBe(finalWardRun);
@@ -4987,7 +4987,6 @@ describe('dungeon cards', () => {
         expect(opened.status).toBe('playing');
         expect(opened.shopGold).toBe(3);
         expect(opened.shopOffers.length).toBeGreaterThan(0);
-        expect(opened.dungeonShopVisitedThisFloor).toBe(true);
         expect(opened.board!.dungeonShopVisited).toBe(true);
         const rerolled = rerollShopOffers({ ...opened, shopGold: 10 });
         const reopened = revealDungeonShop(rerolled, 'manual-shop');
@@ -5317,8 +5316,6 @@ describe('dungeon cards', () => {
             pinnedTileIds: ['a1'],
             peekRevealedTileIds: ['a2'],
             flashPairRevealedTileIds: ['a1'],
-            strayRemoveArmed: true,
-            regionShuffleRowArmed: 0,
             stickyBlockIndex: 1,
             board: {
                 ...baseRun.board!,
@@ -5349,8 +5346,8 @@ describe('dungeon cards', () => {
         expect(cleared.pinnedTileIds).toEqual([]);
         expect(cleared.peekRevealedTileIds).toEqual([]);
         expect(cleared.flashPairRevealedTileIds).toEqual([]);
-        expect(cleared.strayRemoveArmed).toBe(false);
-        expect(cleared.regionShuffleRowArmed).toBeNull();
+        // Board-power arming is renderer surface state now; the per-floor disarm lives in
+        // createRunWithBoardInteractionClearedPatch and is covered by runSurfaceState.test.ts.
         expect(cleared.stickyBlockIndex).toBeNull();
         expect(cleared.board!.enemyHazards![0]).toMatchObject({ state: 'defeated', hp: 0 });
         expect(cleared.enemyHazardsDefeatedThisFloor).toBe(1);
@@ -7627,14 +7624,12 @@ describe('board powers', () => {
             const run = {
                 ...createRun([createTile('a1', 'A', 'A'), createTile('a2', 'A', 'A')]),
                 status: 'playing' as const,
-                strayRemoveArmed: true,
                 strayRemoveCharges: 1
             };
 
             const after = applyStrayRemove(run, 'a1');
 
             expect(after).toBe(run);
-            expect(after.strayRemoveArmed).toBe(true);
             expect(after.strayRemoveCharges).toBe(1);
         });
 
@@ -7644,7 +7639,6 @@ describe('board powers', () => {
             const run = {
                 ...createRun(tiles, { board }),
                 status: 'playing' as const,
-                strayRemoveArmed: true,
                 strayRemoveCharges: 1
             };
 
@@ -7652,7 +7646,6 @@ describe('board powers', () => {
 
             expect(after).not.toBe(run);
             expect(after.board!.tiles.find((tile) => tile.id === 'w1')?.state).toBe('removed');
-            expect(after.strayRemoveArmed).toBe(false);
             expect(after.strayRemoveCharges).toBe(0);
             expect(after.powersUsedThisRun).toBe(true);
             expect(inspectBoardFairness(after.board!).issues).toEqual([]);
@@ -8166,14 +8159,12 @@ describe('wildTileId bookkeeping', () => {
         const board = run.board!;
         const wild = board.tiles.find((t) => t.pairKey === WILD_PAIR_KEY);
         expect(wild).toBeDefined();
-        expect(run.wildTileId).toBe(wild!.id);
         expect(getWildTileIdFromBoard(board)).toBe(wild!.id);
     });
 
     it('leaves wildTileId null when no wild tile is on the board', () => {
         const run = createNewRun(0, { gameMode: 'endless' });
         expect(run.board).not.toBeNull();
-        expect(run.wildTileId).toBeNull();
         expect(getWildTileIdFromBoard(run.board!)).toBeNull();
     });
 
@@ -8208,7 +8199,7 @@ describe('wildTileId bookkeeping', () => {
 
     it('keeps wildTileId aligned with the board after advanceToNextLevel', () => {
         const start = finishMemorizePhase(createWildRun(0));
-        expect(start.wildTileId).not.toBeNull();
+        expect(getWildTileIdFromBoard(start.board!)).not.toBeNull();
         const b = start.board!;
         const cleared = {
             ...start,
@@ -8232,9 +8223,8 @@ describe('wildTileId bookkeeping', () => {
         };
         const next = advanceToNextLevel(cleared);
         expect(next.board).not.toBeNull();
-        expect(next.wildTileId).toBe(getWildTileIdFromBoard(next.board!));
         expect(next.wildMatchesRemaining).toBe(1);
-        expect(next.wildTileId).not.toBeNull();
+        expect(getWildTileIdFromBoard(next.board!)).not.toBeNull();
     });
 });
 

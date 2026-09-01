@@ -219,10 +219,6 @@ describe('shopSurfaceState', () => {
             expect.objectContaining({ type: 'shop.stock_rerolled' }),
             expect.objectContaining({ type: 'feedback.requested', cue: 'shop.stock.rerolled' })
         ]);
-        expect(result.feedback).toMatchObject({
-            audioCategory: 'shop-reroll',
-            cue: 'shop.stock.rerolled'
-        });
         expect(createShopRerollSurfaceResult({
             run: result.patch.run,
             shopReturnMode: 'summary',

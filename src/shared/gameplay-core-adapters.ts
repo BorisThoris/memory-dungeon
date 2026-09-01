@@ -9,6 +9,9 @@ import {
     createGameplayPauseCommand,
     createGameplayResumeCommand,
     createGameplayProgressionRepairCommand,
+    createGameplayGauntletExpireCommand,
+    createGameplayDebugRevealActivateCommand,
+    createGameplayDebugRevealDeactivateCommand,
     type GameplayCommand,
     type GameplayEvent,
     type GameplayPauseTimerSnapshot
@@ -21,7 +24,6 @@ import {
 } from './slayer-floor-clear-transition';
 import { appendGameplayJournal } from './gameplay-journal';
 import { applyRelicImmediate } from './relic-immediate-rules';
-import { disableDebugPeek, enableDebugPeek } from './run-timer-rules';
 
 export interface GameplayRelicImmediateAdapterResult {
     run: RunState;
@@ -346,50 +348,27 @@ export const repairRunProgressionThroughGameplayCore = (
 ): GameplayRunTransitionAdapterResult =>
     reduceThroughGameplayCore(run, createGameplayProgressionRepairCommand(commandId));
 
-/**
- * Debug reveal is a dev-only affordance with no command variant: it mutates
- * `debugPeekActive` and the reveal timer only, and must never enter the command
- * journal, which is replayed for determinism gates.
- */
 export const activateDebugRevealThroughGameplayCore = (
     run: RunState,
     disableAchievementsOnDebug: boolean,
-    _commandId: string
-): GameplayRunTransitionAdapterResult => {
-    const nextRun = enableDebugPeek(run, disableAchievementsOnDebug);
-    return { run: nextRun, accepted: nextRun !== run, commands: [], events: [] };
-};
+    commandId: string
+): GameplayRunTransitionAdapterResult =>
+    reduceThroughGameplayCore(run, createGameplayDebugRevealActivateCommand(commandId, disableAchievementsOnDebug));
 
 export const deactivateDebugRevealThroughGameplayCore = (
     run: RunState,
-    _reason: 'timer_elapsed' | 'resume_expired' | 'phase_ended',
-    _commandId: string
-): GameplayRunTransitionAdapterResult => {
-    const nextRun = disableDebugPeek(run);
-    return { run: nextRun, accepted: nextRun !== run, commands: [], events: [] };
-};
+    reason: 'timer_elapsed' | 'resume_expired' | 'phase_ended',
+    commandId: string
+): GameplayRunTransitionAdapterResult =>
+    reduceThroughGameplayCore(run, createGameplayDebugRevealDeactivateCommand(commandId, reason));
 
 /**
- * Gauntlet expiry is a clock verdict, not a player command: the deadline is checked
- * against `observedAtMs` and the run ends. `accepted` is false while time remains, so
- * the polling watcher can keep running without producing a transition.
+ * Rejected rather than thrown on while time remains: the gauntlet watcher polls every
+ * 300ms, so `accepted: false` is the normal case and only the firing tick transitions.
  */
 export const expireGauntletThroughGameplayCore = (
     run: RunState,
     observedAtMs: number,
-    _commandId: string
-): GameplayRunTransitionAdapterResult => {
-    const deadlineMs = run.gauntletDeadlineMs;
-    if (run.gameMode !== 'gauntlet' || deadlineMs === null || deadlineMs === undefined) {
-        return { run, accepted: false, commands: [], events: [] };
-    }
-    if (run.status === 'gameOver' || observedAtMs < deadlineMs) {
-        return { run, accepted: false, commands: [], events: [] };
-    }
-    return {
-        run: { ...run, status: 'gameOver', lives: 0 },
-        accepted: true,
-        commands: [],
-        events: []
-    };
-};
+    commandId: string
+): GameplayRunTransitionAdapterResult =>
+    reduceThroughGameplayCore(run, createGameplayGauntletExpireCommand(commandId, observedAtMs));

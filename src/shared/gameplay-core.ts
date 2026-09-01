@@ -12,9 +12,9 @@ import { maxPinnedTilesForRun, togglePinnedTile } from './board-power-state';
 import type { TileTraitInteractionTag } from './tile-trait-rules';
 import { createFlipTileTransition } from './flip-tile-transition';
 import { finishMemorizePhase } from './memorize-phase-rules';
-import { openRelicOffer } from './relic-offer-open-rules';
+import { computeRelicOfferPickBudget, openRelicOffer } from './relic-offer-open-rules';
 import { createRunProgressionRepairTransition } from './run-progression-repair';
-import { pauseRun, resumeRun } from './run-timer-rules';
+import { disableDebugPeek, enableDebugPeek, pauseRun, resumeRun } from './run-timer-rules';
 import { MAX_LIVES, type BonusRewardId, type FindableKind, type RunState } from './contracts';
 import {
     GAMEPLAY_BONUS_REWARD_IDS,
@@ -52,7 +52,7 @@ import { getDungeonExitStatus } from './dungeon-board-status';
 import { advanceScoreParasiteFloor } from './score-parasite-rules';
 import { hasMutator } from './mutators';
 import { tilesArePairMatch } from './scoring-rules';
-import { WILD_PAIR_KEY } from './tile-identity';
+import { EXIT_PAIR_KEY, ROOM_PAIR_KEY, SHOP_PAIR_KEY, WILD_PAIR_KEY } from './tile-identity';
 import { isBoardComplete } from './board-inspection';
 import { rotateRunShiftingSpotlight } from './shifting-spotlight-rules';
 import { resolveHazardBanisherFloorStart } from './hazard-banisher-rules';
@@ -109,6 +109,7 @@ const FLOOR_ADVANCE_SOURCE: GameplaySource = { kind: 'system', id: 'floor_advanc
 const ROUTE_CHOICE_SOURCE: GameplaySource = { kind: 'system', id: 'route_choice' };
 const SIDE_ROOM_SOURCE: GameplaySource = { kind: 'system', id: 'route_side_room' };
 const RELIC_OFFER_SOURCE: GameplaySource = { kind: 'system', id: 'relic_offer' };
+const DEBUG_REVEAL_SOURCE: GameplaySource = { kind: 'system', id: 'debug_reveal' };
 const WILD_JOKER_SOURCE: GameplaySource = { kind: 'system', id: 'wild_joker' };
 const BOARD_TURN_SOURCE: GameplaySource = { kind: 'system', id: 'board_turn' };
 const finalizeLevelThroughCore = createFinalizeLevelTransition({
@@ -1479,6 +1480,24 @@ const applyWildMatchConsumeCommand = (
     return { run: consumed.run, command, events, accepted: true };
 };
 
+const tileFlipOutcome = (
+    run: RunState,
+    nextRun: RunState,
+    tileId: string
+): 'flipped' | 'exit_revealed' | 'shop_revealed' | 'room_resolved' => {
+    const tile = run.board?.tiles.find((candidate) => candidate.id === tileId);
+    if (tile?.pairKey === EXIT_PAIR_KEY) {
+        return 'exit_revealed';
+    }
+    if (tile?.pairKey === SHOP_PAIR_KEY) {
+        return 'shop_revealed';
+    }
+    if (tile?.pairKey === ROOM_PAIR_KEY) {
+        return 'room_resolved';
+    }
+    return 'flipped';
+};
+
 const applyTileFlipCommand = (
     run: RunState,
     command: Extract<GameplayCommand, { type: 'board.tile_flip' }>
@@ -1490,12 +1509,20 @@ const applyTileFlipCommand = (
     if (nextRun === run) {
         return rejectedResult(run, command.commandId, 'Tile flip is not legal for the current run.', command);
     }
-    return { run: nextRun, command, events: [], accepted: true };
+    const events: GameplayEvent[] = [];
+    makeEventWriter(command.commandId, TILE_FLIP_SOURCE, events)({
+        type: 'board.tile_flipped',
+        tileId: command.targetTileId,
+        outcome: tileFlipOutcome(run, nextRun, command.targetTileId),
+        flippedCountAfter: runStringArray(nextRun.board?.flippedTileIds).length,
+        statusAfter: nextRun.status
+    });
+    return { run: nextRun, command, events, accepted: true };
 };
 
 const applyMemorizeCompleteCommand = (
     run: RunState,
-    command: Extract<GameplayCommand, { type: 'memorize.complete' }>
+    command: Extract<GameplayCommand, { type: 'phase.memorize_complete' }>
 ): GameplayCommandResult => {
     if (run.status !== 'memorize') {
         return rejectedResult(run, command.commandId, 'Run is not in the memorize phase.', command);
@@ -1504,18 +1531,48 @@ const applyMemorizeCompleteCommand = (
     if (nextRun === run) {
         return rejectedResult(run, command.commandId, 'Memorize phase could not be completed.', command);
     }
-    return { run: nextRun, command, events: [], accepted: true };
+    const events: GameplayEvent[] = [];
+    const writeMemorizeEvent = makeEventWriter(command.commandId, MEMORIZE_SOURCE, events);
+    writeMemorizeEvent({ type: 'phase.memorize_completed', statusAfter: nextRun.status });
+    writeMemorizeEvent({
+        type: 'feedback.requested',
+        cue: 'phase.memorize.completed',
+        message: 'Memorize phase over. Find the pairs.',
+        tone: 'information'
+    });
+    return { run: nextRun, command, events, accepted: true };
 };
 
 const applyPauseCommand = (
     run: RunState,
     command: Extract<GameplayCommand, { type: 'run.pause' }>
 ): GameplayCommandResult => {
-    const nextRun = pauseRun(run);
-    if (nextRun === run) {
+    const paused = pauseRun(run);
+    if (paused === run) {
         return rejectedResult(run, command.commandId, 'Run cannot be paused from its current status.', command);
     }
-    return { run: nextRun, command, events: [], accepted: true };
+    // The snapshot carries the timer values the caller actually measured at
+    // command.pausedAtMs. pauseRun only freezes the status, so without applying the
+    // snapshot the run would resume from stale remaining times.
+    const nextRun: RunState = {
+        ...paused,
+        timerState: {
+            ...paused.timerState,
+            memorizeRemainingMs: command.timerSnapshot.memorizeRemainingMs,
+            resolveRemainingMs: command.timerSnapshot.resolveRemainingMs,
+            debugRevealRemainingMs: command.timerSnapshot.debugRevealRemainingMs
+        }
+    };
+    const events: GameplayEvent[] = [];
+    const writeEvent = makeEventWriter(command.commandId, RUN_TIMER_SOURCE, events);
+    writeEvent({ type: 'run.paused', statusBefore: run.status, timerSnapshot: command.timerSnapshot });
+    writeEvent({
+        type: 'feedback.requested',
+        cue: 'run.paused',
+        message: 'Run paused. Timers are frozen until you resume.',
+        tone: 'information'
+    });
+    return { run: nextRun, command, events, accepted: true };
 };
 
 const applyResumeCommand = (
@@ -1526,7 +1583,20 @@ const applyResumeCommand = (
     if (nextRun === run) {
         return rejectedResult(run, command.commandId, 'Run cannot be resumed from its current status.', command);
     }
-    return { run: nextRun, command, events: [], accepted: true };
+    const events: GameplayEvent[] = [];
+    const writeResumeEvent = makeEventWriter(command.commandId, RUN_TIMER_SOURCE, events);
+    writeResumeEvent({
+        type: 'run.resumed',
+        statusAfter: nextRun.status,
+        outcome: nextRun.status === 'gameOver' ? 'game_over' : 'resumed'
+    });
+    writeResumeEvent({
+        type: 'feedback.requested',
+        cue: 'run.resumed',
+        message: 'Run resumed.',
+        tone: 'information'
+    });
+    return { run: nextRun, command, events, accepted: true };
 };
 
 const applyProgressionRepairCommand = (
@@ -1537,7 +1607,9 @@ const applyProgressionRepairCommand = (
     if (!transition.repaired) {
         return rejectedResult(run, command.commandId, 'Run progression needed no repair.', command);
     }
-    return { run: transition.run, command, events: [], accepted: true };
+    const events: GameplayEvent[] = [];
+    makeEventWriter(command.commandId, PROGRESSION_REPAIR_SOURCE, events)({ type: 'run.progression_repaired' });
+    return { run: transition.run, command, events, accepted: true };
 };
 
 const applyRelicOfferOpenCommand = (
@@ -1548,7 +1620,95 @@ const applyRelicOfferOpenCommand = (
     if (nextRun === run) {
         return rejectedResult(run, command.commandId, 'Relic offer cannot be opened for the current run.', command);
     }
-    return { run: nextRun, command, events: [], accepted: true };
+    const events: GameplayEvent[] = [];
+    const writeOfferEvent = makeEventWriter(command.commandId, RELIC_OFFER_SOURCE, events);
+    writeOfferEvent({
+        type: 'relic.offer_opened',
+        outcome: 'opened',
+        pickBudget: computeRelicOfferPickBudget(nextRun)
+    });
+    writeOfferEvent({
+        type: 'feedback.requested',
+        cue: 'relic.offer.opened',
+        message: 'Relic offer open. Choose your reward.',
+        tone: 'reward'
+    });
+    return { run: nextRun, command, events, accepted: true };
+};
+
+const applyGauntletExpireCommand = (
+    run: RunState,
+    command: Extract<GameplayCommand, { type: 'run.gauntlet_expire' }>
+): GameplayCommandResult => {
+    const deadlineMs = run.gauntletDeadlineMs;
+    if (run.gameMode !== 'gauntlet' || deadlineMs === null || deadlineMs === undefined) {
+        return rejectedResult(run, command.commandId, 'Run is not a gauntlet with a deadline.', command);
+    }
+    if (run.status === 'gameOver') {
+        return rejectedResult(run, command.commandId, 'Gauntlet run has already ended.', command);
+    }
+    if (command.observedAtMs < deadlineMs) {
+        return rejectedResult(run, command.commandId, 'Gauntlet deadline has not elapsed yet.', command);
+    }
+    const events: GameplayEvent[] = [];
+    const writeExpiryEvent = makeEventWriter(command.commandId, RUN_TIMER_SOURCE, events);
+    writeExpiryEvent({
+        type: 'run.gauntlet_expired',
+        observedAtMs: command.observedAtMs,
+        deadlineMs,
+        overdueMs: command.observedAtMs - deadlineMs
+    });
+    writeExpiryEvent({
+        type: 'feedback.requested',
+        cue: 'mode.gauntlet.expired',
+        message: 'Gauntlet time is up.',
+        tone: 'warning'
+    });
+    return { run: { ...run, status: 'gameOver', lives: 0 }, command, events, accepted: true };
+};
+
+const applyDebugRevealActivateCommand = (
+    run: RunState,
+    command: Extract<GameplayCommand, { type: 'debug.reveal_activate' }>
+): GameplayCommandResult => {
+    const nextRun = enableDebugPeek(run, command.disableAchievementsOnDebug);
+    if (nextRun === run) {
+        return rejectedResult(run, command.commandId, 'Debug reveal is already active.', command);
+    }
+    const events: GameplayEvent[] = [];
+    const writeActivateEvent = makeEventWriter(command.commandId, DEBUG_REVEAL_SOURCE, events);
+    writeActivateEvent({
+        type: 'debug.reveal_activated',
+        outcome: 'activated',
+        disableAchievementsOnDebug: command.disableAchievementsOnDebug
+    });
+    writeActivateEvent({
+        type: 'feedback.requested',
+        cue: 'debug.reveal.activated',
+        message: 'Debug reveal active.',
+        tone: 'information'
+    });
+    return { run: nextRun, command, events, accepted: true };
+};
+
+const applyDebugRevealDeactivateCommand = (
+    run: RunState,
+    command: Extract<GameplayCommand, { type: 'debug.reveal_deactivate' }>
+): GameplayCommandResult => {
+    const nextRun = disableDebugPeek(run);
+    if (nextRun === run) {
+        return rejectedResult(run, command.commandId, 'Debug reveal is not active.', command);
+    }
+    const events: GameplayEvent[] = [];
+    const writeDeactivateEvent = makeEventWriter(command.commandId, DEBUG_REVEAL_SOURCE, events);
+    writeDeactivateEvent({ type: 'debug.reveal_deactivated', reason: command.reason });
+    writeDeactivateEvent({
+        type: 'feedback.requested',
+        cue: `debug.reveal.${command.reason}`,
+        message: 'Debug reveal ended.',
+        tone: 'information'
+    });
+    return { run: nextRun, command, events, accepted: true };
 };
 
 export const reduceGameplayCommand = (run: RunState, input: unknown): GameplayCommandResult => {
@@ -1623,7 +1783,7 @@ export const reduceGameplayCommand = (run: RunState, input: unknown): GameplayCo
     if (command.type === 'board.tile_flip') {
         return applyTileFlipCommand(run, command);
     }
-    if (command.type === 'memorize.complete') {
+    if (command.type === 'phase.memorize_complete') {
         return applyMemorizeCompleteCommand(run, command);
     }
     if (command.type === 'run.pause') {
@@ -1637,6 +1797,15 @@ export const reduceGameplayCommand = (run: RunState, input: unknown): GameplayCo
     }
     if (command.type === 'relic.offer_open') {
         return applyRelicOfferOpenCommand(run, command);
+    }
+    if (command.type === 'run.gauntlet_expire') {
+        return applyGauntletExpireCommand(run, command);
+    }
+    if (command.type === 'debug.reveal_activate') {
+        return applyDebugRevealActivateCommand(run, command);
+    }
+    if (command.type === 'debug.reveal_deactivate') {
+        return applyDebugRevealDeactivateCommand(run, command);
     }
     if (command.type === 'wild_match.consume') {
         return applyWildMatchConsumeCommand(run, command);

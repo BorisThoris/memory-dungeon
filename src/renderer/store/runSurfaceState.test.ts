@@ -497,7 +497,6 @@ describe('run surface state helpers', () => {
         const shuffled = createRegionShuffleSurfaceResult({ row: 0, run: activeRun, view: 'playing' });
         expect(shuffled.kind).toBe('applied');
         if (shuffled.kind === 'applied') {
-            expect(shuffled.patch.regionShuffleRowArmed).toBeNull();
             expect(shuffled.patch.run.shuffleNonce).toBe(activeRun.shuffleNonce + 1);
             expect(shuffled.patch.run.gameplayCommandJournal).toEqual([
                 expect.objectContaining({ type: 'board.region_shuffle', rowIndex: 0 })
@@ -521,7 +520,6 @@ describe('run surface state helpers', () => {
                 destroyPairArmed: false,
                 peekModeArmed: false,
                 run: activeRun,
-                strayRemoveArmed: false,
                 tileSwapArmed: false,
                 view: 'playing'
             })
@@ -544,7 +542,6 @@ describe('run surface state helpers', () => {
                 destroyPairArmed: false,
                 peekModeArmed: false,
                 run: { ...activeRun, regionShuffleCharges: 0 },
-                strayRemoveArmed: false,
                 tileSwapArmed: false,
                 view: 'playing'
             })
