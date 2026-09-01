@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import type { TileTraitKind } from '../../shared/contracts';
 import { getHazardTileLiveCopy, HAZARD_TILE_KINDS } from '../../shared/hazard-tiles';
 import { runNonNegativeInteger, runNonNegativeIntegerWithFallback } from '../../shared/run-number-guards';
-import { getBoardTurnPickupAnnouncement } from '../copy/boardTurnAnnouncement';
+import { buildBoardTurnAnnouncement } from '../copy/boardTurnAnnouncement';
 import type { BoardTurnResolvedEvent } from '../store/gameplayFeedbackAdapter';
 import { getChainMilestoneFeedback } from '../copy/chainMilestoneFeedback';
 import { getChainRewardForecastCues, getChainRewardUrgencyCopy } from '../copy/chainMomentum';
@@ -482,15 +482,15 @@ export const useHudPoliteLiveAnnouncement = ({
         if (!boardTurnEvent || newGameplayFeedback?.source.kind === 'findable') {
             return;
         }
-        const announcement = getBoardTurnPickupAnnouncement(boardTurnEvent);
+        const announcement = buildBoardTurnAnnouncement(boardTurnEvent, { reduceMotion });
         if (!announcement) {
             return;
         }
-        queuePoliteAnnouncement(announcement.text, {
+        queuePoliteAnnouncement(announcement.lines.join(' '), {
             dedupeKey: announcement.dedupeKey,
             priority: announcement.priority
         });
-    }, [boardTurnEvent, newGameplayFeedback, queuePoliteAnnouncement]);
+    }, [boardTurnEvent, newGameplayFeedback, queuePoliteAnnouncement, reduceMotion]);
 
     useEffect(() => {
         if (boardLevel === null) {

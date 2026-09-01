@@ -75,12 +75,12 @@ const routeSpecialCount = (run: RunState): number =>
     (run.board?.tiles ?? []).filter((tile) => tile.routeSpecialKind != null).length;
 
 export const getBoardTurnAnnouncementFacts = (
-    run: RunState,
-    nextRun: RunState
+    before: RunState,
+    after: RunState
 ): BoardTurnAnnouncementFacts => {
-    const statsBefore = normalizeSessionStats(run.stats);
-    const statsAfter = normalizeSessionStats(nextRun.stats);
-    const flippedTileIds = Array.isArray(run.board?.flippedTileIds) ? run.board.flippedTileIds : [];
+    const statsBefore = normalizeSessionStats(before.stats);
+    const statsAfter = normalizeSessionStats(after.stats);
+    const flippedTileIds = Array.isArray(before.board?.flippedTileIds) ? before.board.flippedTileIds : [];
     // Derived here rather than passed in, so callers cannot describe a turn as a match
     // when the stats say otherwise.
     const outcome: 'match' | 'mismatch' =
@@ -90,8 +90,8 @@ export const getBoardTurnAnnouncementFacts = (
     // mismatch anchor would put the floater on the odd tile out.
     const anchor =
         outcome === 'match'
-            ? getMatchFloaterAnchorTileIds(run)
-            : getMismatchFloaterAnchorTileIds(run);
+            ? getMatchFloaterAnchorTileIds(before)
+            : getMismatchFloaterAnchorTileIds(before);
     return {
         anchorTileIds: anchor
             ? [
@@ -100,39 +100,39 @@ export const getBoardTurnAnnouncementFacts = (
                   ...('tileIdC' in anchor && typeof anchor.tileIdC === 'string' ? [anchor.tileIdC] : [])
               ]
             : [...flippedTileIds],
-        level: runNonNegativeInteger(run.board?.level),
+        level: runNonNegativeInteger(before.board?.level),
         // Read from the PRE-turn board: a matched tile can be removed from the resolved
         // board, and the route kind is what the player just interacted with.
-        routeSpecialKind: firstTileValue(run, flippedTileIds, (tile) => tile.routeSpecialKind ?? null),
-        routeCardKind: firstTileValue(run, flippedTileIds, (tile) => tile.routeCardKind ?? null),
+        routeSpecialKind: firstTileValue(before, flippedTileIds, (tile) => tile.routeSpecialKind ?? null),
+        routeCardKind: firstTileValue(before, flippedTileIds, (tile) => tile.routeCardKind ?? null),
         currentStreakBefore: statsBefore.currentStreak,
         currentStreakAfter: statsAfter.currentStreak,
         comboShardsBefore: statsBefore.comboShards,
         comboShardsAfter: statsAfter.comboShards,
         guardTokensBefore: runNonNegativeInteger(statsBefore.guardTokens),
         guardTokensAfter: runNonNegativeInteger(statsAfter.guardTokens),
-        livesBefore: runNonNegativeInteger(run.lives),
-        livesAfter: runNonNegativeInteger(nextRun.lives),
-        findablesClaimedBefore: runNonNegativeInteger(run.findablesClaimedThisFloor),
-        findablesClaimedAfter: runNonNegativeInteger(nextRun.findablesClaimedThisFloor),
-        findablesTotalBefore: runNonNegativeInteger(run.findablesTotalThisFloor),
-        findablesTotalAfter: runNonNegativeInteger(nextRun.findablesTotalThisFloor),
-        hazardTilesBefore: runNonNegativeInteger(run.hazardTileTriggersThisFloor),
-        hazardTilesAfter: runNonNegativeInteger(nextRun.hazardTileTriggersThisFloor),
-        scoutsBefore: runNonNegativeInteger(run.lanternWardScoutsThisFloor),
-        scoutsAfter: runNonNegativeInteger(nextRun.lanternWardScoutsThisFloor),
-        mimicCacheBefore: runNonNegativeInteger(run.mimicCacheClaimsThisFloor),
-        mimicCacheAfter: runNonNegativeInteger(nextRun.mimicCacheClaimsThisFloor),
-        routeSpecialsBefore: routeSpecialCount(run),
-        routeSpecialsAfter: routeSpecialCount(nextRun),
-        safeHazardWardsUsedBefore: runNonNegativeInteger(run.safeHazardWardsUsedThisFloor),
-        safeHazardWardsUsedAfter: runNonNegativeInteger(nextRun.safeHazardWardsUsedThisFloor),
+        livesBefore: runNonNegativeInteger(before.lives),
+        livesAfter: runNonNegativeInteger(after.lives),
+        findablesClaimedBefore: runNonNegativeInteger(before.findablesClaimedThisFloor),
+        findablesClaimedAfter: runNonNegativeInteger(after.findablesClaimedThisFloor),
+        findablesTotalBefore: runNonNegativeInteger(before.findablesTotalThisFloor),
+        findablesTotalAfter: runNonNegativeInteger(after.findablesTotalThisFloor),
+        hazardTilesBefore: runNonNegativeInteger(before.hazardTileTriggersThisFloor),
+        hazardTilesAfter: runNonNegativeInteger(after.hazardTileTriggersThisFloor),
+        scoutsBefore: runNonNegativeInteger(before.lanternWardScoutsThisFloor),
+        scoutsAfter: runNonNegativeInteger(after.lanternWardScoutsThisFloor),
+        mimicCacheBefore: runNonNegativeInteger(before.mimicCacheClaimsThisFloor),
+        mimicCacheAfter: runNonNegativeInteger(after.mimicCacheClaimsThisFloor),
+        routeSpecialsBefore: routeSpecialCount(before),
+        routeSpecialsAfter: routeSpecialCount(after),
+        safeHazardWardsUsedBefore: runNonNegativeInteger(before.safeHazardWardsUsedThisFloor),
+        safeHazardWardsUsedAfter: runNonNegativeInteger(after.safeHazardWardsUsedThisFloor),
         matchedTraitKinds: TILE_TRAIT_COUNT_KINDS.filter((kind) =>
             flippedTileIds.some(
-                (tileId) => run.board?.tiles.find((tile) => tile.id === tileId)?.tileTraitKind === kind
+                (tileId) => before.board?.tiles.find((tile) => tile.id === tileId)?.tileTraitKind === kind
             )
         ),
-        objectiveBefore: getGameplayFeedbackObjectiveSnapshot(run),
-        objectiveAfter: getGameplayFeedbackObjectiveSnapshot(nextRun)
+        objectiveBefore: getGameplayFeedbackObjectiveSnapshot(before),
+        objectiveAfter: getGameplayFeedbackObjectiveSnapshot(after)
     };
 };
