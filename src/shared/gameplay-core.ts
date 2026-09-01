@@ -11,6 +11,7 @@ import {
 import { maxPinnedTilesForRun, togglePinnedTile } from './board-power-state';
 import type { TileTraitInteractionTag } from './tile-trait-rules';
 import { createFlipTileTransition } from './flip-tile-transition';
+import { applyEnemyHazardClick } from './dungeon-enemy-hazard-rules';
 import { getBoardTurnAnnouncementFacts } from './board-turn-event-facts';
 import { finishMemorizePhase } from './memorize-phase-rules';
 import { computeRelicOfferPickBudget, openRelicOffer } from './relic-offer-open-rules';
@@ -113,6 +114,7 @@ const ROUTE_CHOICE_SOURCE: GameplaySource = { kind: 'system', id: 'route_choice'
 const SIDE_ROOM_SOURCE: GameplaySource = { kind: 'system', id: 'route_side_room' };
 const RELIC_OFFER_SOURCE: GameplaySource = { kind: 'system', id: 'relic_offer' };
 const DEBUG_REVEAL_SOURCE: GameplaySource = { kind: 'system', id: 'debug_reveal' };
+const ENEMY_HAZARD_SOURCE: GameplaySource = { kind: 'system', id: 'enemy_hazard' };
 const WILD_JOKER_SOURCE: GameplaySource = { kind: 'system', id: 'wild_joker' };
 const BOARD_TURN_SOURCE: GameplaySource = { kind: 'system', id: 'board_turn' };
 const finalizeLevelThroughCore = createFinalizeLevelTransition({
@@ -1787,6 +1789,35 @@ const applyDebugRevealDeactivateCommand = (
     return { run: nextRun, command, events, accepted: true };
 };
 
+const applyEnemyHazardContactCommand = (
+    run: RunState,
+    command: Extract<GameplayCommand, { type: 'enemy_hazard.contact' }>
+): GameplayCommandResult => {
+    const nextRun = applyEnemyHazardClick(run, command.targetTileId, {
+        advanceHazards: command.advanceHazards
+    });
+    if (nextRun === run) {
+        return rejectedResult(run, command.commandId, 'No enemy hazard contact at the pressed tile.', command);
+    }
+    const events: GameplayEvent[] = [];
+    const writeContactEvent = makeEventWriter(command.commandId, ENEMY_HAZARD_SOURCE, events);
+    writeContactEvent({
+        type: 'enemy_hazard.contacted',
+        targetTileId: command.targetTileId,
+        livesBefore: runNonNegativeInteger(run.lives),
+        livesAfter: runNonNegativeInteger(nextRun.lives),
+        hitsBefore: runNonNegativeInteger(run.enemyHazardHitsThisFloor),
+        hitsAfter: runNonNegativeInteger(nextRun.enemyHazardHitsThisFloor)
+    });
+    writeContactEvent({
+        type: 'feedback.requested',
+        cue: 'enemy_hazard.contacted',
+        message: 'An enemy struck as you reached for that card.',
+        tone: 'warning'
+    });
+    return { run: nextRun, command, events, accepted: true };
+};
+
 export const reduceGameplayCommand = (run: RunState, input: unknown): GameplayCommandResult => {
     const parsed = gameplayCommandSchema.safeParse(input);
     if (!parsed.success) {
@@ -1882,6 +1913,9 @@ export const reduceGameplayCommand = (run: RunState, input: unknown): GameplayCo
     }
     if (command.type === 'debug.reveal_deactivate') {
         return applyDebugRevealDeactivateCommand(run, command);
+    }
+    if (command.type === 'enemy_hazard.contact') {
+        return applyEnemyHazardContactCommand(run, command);
     }
     if (command.type === 'wild_match.consume') {
         return applyWildMatchConsumeCommand(run, command);

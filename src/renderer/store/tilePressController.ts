@@ -1,5 +1,4 @@
 import type { RunState, ViewState } from '../../shared/contracts';
-import { applyEnemyHazardClick } from '../../shared/turn-resolution';
 import { createGameplayPinToggleCommand } from '../../shared/gameplay-core-contracts';
 import { reduceGameplayCommand } from '../../shared/gameplay-core';
 import { appendGameplayJournal } from '../../shared/gameplay-journal';
@@ -10,6 +9,7 @@ import {
 } from './matchScorePop';
 import { createDungeonTilePressSurfaceResult } from './dungeonPressSurfaceState';
 import { projectGameplayFeedback } from './gameplayFeedbackAdapter';
+import { applyEnemyHazardContactThroughGameplayCore } from '../../shared/gameplay-core-adapters';
 import {
     clearRunSurfaceArmedModes,
     createArmedBoardPowerPressResult,
@@ -81,8 +81,16 @@ export const createPlayingTilePressSurfaceResult = ({
     let actionRun = run;
     let pressedTile = actionRun.board?.tiles.find((tile) => tile.id === tileId) ?? null;
     const flippedBefore = actionRun.board?.flippedTileIds.length ?? 0;
-    const hazardRun = applyEnemyHazardClick(actionRun, tileId, { advanceHazards: flippedBefore === 0 });
-    const enemyContacted = hazardRun !== actionRun;
+    // Routed through the command so a hazard contact is journalled like every other
+    // mutation. It was the last direct transition on the press path, which meant a hit
+    // that cost a life left no trace in the replayable command journal.
+    const hazardContact = applyEnemyHazardContactThroughGameplayCore(
+        actionRun,
+        tileId,
+        flippedBefore === 0
+    );
+    const hazardRun = hazardContact.run;
+    const enemyContacted = hazardContact.accepted;
 
     if (enemyContacted) {
         audio.push({ kind: 'resolveContact', fromRun: run, toRun: hazardRun });

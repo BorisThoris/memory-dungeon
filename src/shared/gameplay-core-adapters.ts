@@ -12,6 +12,7 @@ import {
     createGameplayGauntletExpireCommand,
     createGameplayDebugRevealActivateCommand,
     createGameplayDebugRevealDeactivateCommand,
+    createGameplayEnemyHazardContactCommand,
     type GameplayCommand,
     type GameplayEvent,
     type GameplayPauseTimerSnapshot
@@ -374,3 +375,14 @@ export const expireGauntletThroughGameplayCore = (
     commandId: string
 ): GameplayRunTransitionAdapterResult =>
     reduceThroughGameplayCore(run, createGameplayGauntletExpireCommand(commandId, observedAtMs));
+
+export const applyEnemyHazardContactThroughGameplayCore = (
+    run: RunState,
+    tileId: string,
+    advanceHazards: boolean,
+    commandId = `enemy-hazard-contact:${run.runSeed}:${run.board?.level ?? 0}:${tileId}`
+): GameplayRunTransitionAdapterResult =>
+    reduceThroughGameplayCore(
+        run,
+        createGameplayEnemyHazardContactCommand(commandId, tileId, advanceHazards)
+    );

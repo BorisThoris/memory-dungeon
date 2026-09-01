@@ -1496,6 +1496,14 @@ export const gameplayCommandSchema = z.discriminatedUnion('type', [
             type: z.literal('debug.reveal_deactivate'),
             reason: z.enum(['timer_elapsed', 'resume_expired', 'phase_ended'])
         })
+        .strict(),
+    z
+        .object({
+            ...commandBase,
+            type: z.literal('enemy_hazard.contact'),
+            targetTileId: z.string().min(1).max(160),
+            advanceHazards: z.boolean().default(false)
+        })
         .strict()
 ]);
 
@@ -2122,6 +2130,17 @@ export const gameplayEventSchema = z.discriminatedUnion('type', [
             type: z.literal('debug.reveal_deactivated'),
             reason: z.enum(['timer_elapsed', 'resume_expired', 'phase_ended'])
         })
+        .strict(),
+    z
+        .object({
+            ...eventBase,
+            type: z.literal('enemy_hazard.contacted'),
+            targetTileId: z.string().min(1).max(160),
+            livesBefore: z.number().int().nonnegative(),
+            livesAfter: z.number().int().nonnegative(),
+            hitsBefore: z.number().int().nonnegative(),
+            hitsAfter: z.number().int().nonnegative()
+        })
         .strict()
 ]);
 
@@ -2425,4 +2444,17 @@ export const createGameplayDebugRevealDeactivateCommand = (
         commandId,
         type: 'debug.reveal_deactivate',
         reason
+    });
+
+export const createGameplayEnemyHazardContactCommand = (
+    commandId: string,
+    targetTileId: string,
+    advanceHazards: boolean
+): GameplayCommand =>
+    gameplayCommandSchema.parse({
+        schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
+        commandId,
+        type: 'enemy_hazard.contact',
+        targetTileId,
+        advanceHazards
     });
