@@ -5,7 +5,7 @@
     "name": "memory-dungeon",
     "trackedFileCount": 2421,
     "codeFileCount": 917,
-    "exportedSymbolCount": 3482,
+    "exportedSymbolCount": 3484,
     "contentItemCount": 57,
     "mechanicCount": 130,
     "stateFieldCount": 144,
@@ -9363,8 +9363,8 @@
     {
       "path": "src/renderer/store/levelCompleteSurfaceState.ts",
       "category": "source",
-      "bytes": 4766,
-      "sha256": "0a31b81394baebd8bfe805daa143de2639c3d9879bfae3877c8ec3be767455fa"
+      "bytes": 5309,
+      "sha256": "cf02f7570a101dc88eed52d1f1fc30fcb4411ec334fb4a95e881185007deca59"
     },
     {
       "path": "src/renderer/store/matchScorePop.test.ts",
@@ -10761,14 +10761,14 @@
     {
       "path": "src/shared/gameplay-core-adapters.ts",
       "category": "source",
-      "bytes": 14254,
-      "sha256": "440b788f86692212621108052b31daa22aaf0a30bb07347350d794653b311f25"
+      "bytes": 14953,
+      "sha256": "90dc72e58bcb7b0ad77d7d1d184e54efbf481502cec1972c512356338e670717"
     },
     {
       "path": "src/shared/gameplay-core-contracts.ts",
       "category": "source",
-      "bytes": 86867,
-      "sha256": "eebf70891dc8267b7257c4d5a0a6d180d53a3499ec11c4c8f3235f52e25c599f"
+      "bytes": 87220,
+      "sha256": "337fc8c2881ce75fdefdd208a72bc91c160721f6f27d9761d7fc47ea99a1e3b3"
     },
     {
       "path": "src/shared/gameplay-core-playthrough-solver.test.ts",
@@ -10803,8 +10803,8 @@
     {
       "path": "src/shared/gameplay-core.ts",
       "category": "source",
-      "bytes": 86624,
-      "sha256": "cbda32d33529ee9684871fd7506fbf920ac01078677861644530707e7cb5dbc5"
+      "bytes": 87567,
+      "sha256": "548d0bbd74115d1df8baf32b31f2e9a1e5f277de81fcae5ffceae6492832cc07"
     },
     {
       "path": "src/shared/gameplay-effect-transition.test.ts",
@@ -11787,8 +11787,8 @@
     {
       "path": "src/shared/run-progression-repair.ts",
       "category": "source",
-      "bytes": 1232,
-      "sha256": "7c107654136b465f19fa11d35410a3bc882759f770df8877bf712f9a0b6162c9"
+      "bytes": 2887,
+      "sha256": "d504f6e7c2e659b44a1c75c369d04752920c528aeb6590282f149a41708cafb6"
     },
     {
       "path": "src/shared/run-record-guards.test.ts",
@@ -22271,14 +22271,12 @@
       "path": "src/renderer/store/levelCompleteSurfaceState.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 168,
+      "lineCount": 175,
       "imports": [
         "file:src/renderer/store/runSurfaceState.ts",
         "file:src/shared/contracts.ts",
-        "file:src/shared/game-core.ts",
         "file:src/shared/gameplay-core-adapters.ts",
-        "file:src/shared/relics.ts",
-        "file:src/shared/run-progression-repair.ts"
+        "file:src/shared/relics.ts"
       ],
       "exports": [
         "symbol:src/renderer/store/levelCompleteSurfaceState.ts#createLevelCompleteContinuationSurfaceResult",
@@ -27445,7 +27443,7 @@
       "path": "src/shared/gameplay-core-adapters.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 389,
+      "lineCount": 399,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/floor-clear-transition.ts",
@@ -27473,6 +27471,7 @@
         "symbol:src/shared/gameplay-core-adapters.ts#GameplaySlayerFloorClearAdapterResult",
         "symbol:src/shared/gameplay-core-adapters.ts#GameplaySlayerFloorClearInput",
         "symbol:src/shared/gameplay-core-adapters.ts#GameplayWildMatchAdapterResult",
+        "symbol:src/shared/gameplay-core-adapters.ts#openRelicOfferThroughGameplayCore",
         "symbol:src/shared/gameplay-core-adapters.ts#pauseRunThroughGameplayCore",
         "symbol:src/shared/gameplay-core-adapters.ts#repairRunProgressionThroughGameplayCore",
         "symbol:src/shared/gameplay-core-adapters.ts#resolveBoardTurnThroughGameplayCore",
@@ -27489,7 +27488,7 @@
       "path": "src/shared/gameplay-core-contracts.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 2484,
+      "lineCount": 2488,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/run-inventory-contracts.ts"
@@ -27713,7 +27712,7 @@
       "path": "src/shared/gameplay-core.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1982,
+      "lineCount": 1998,
       "imports": [
         "file:src/shared/board-inspection.ts",
         "file:src/shared/board-power-actions.ts",
@@ -31143,7 +31142,7 @@
       "path": "src/shared/run-progression-repair.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 33,
+      "lineCount": 66,
       "imports": [
         "file:src/shared/board-inspection.ts",
         "file:src/shared/contracts.ts",
@@ -31152,6 +31151,7 @@
       "exports": [
         "symbol:src/shared/run-progression-repair.ts#createRunProgressionRepairTransition",
         "symbol:src/shared/run-progression-repair.ts#repairRunProgressionSoftlocks",
+        "symbol:src/shared/run-progression-repair.ts#RunProgressionRepairKind",
         "symbol:src/shared/run-progression-repair.ts#RunProgressionRepairTransition"
       ],
       "testedBy": [
@@ -41721,7 +41721,7 @@
       "kind": "value",
       "file": "src/renderer/store/levelCompleteSurfaceState.ts",
       "line": 91,
-      "endLine": 163
+      "endLine": 170
     },
     {
       "id": "symbol:src/renderer/store/levelCompleteSurfaceState.ts#LevelCompleteContinuationSurfaceResult",
@@ -41736,8 +41736,8 @@
       "name": "shouldPrepareMemorizeTimerForContinuation",
       "kind": "value",
       "file": "src/renderer/store/levelCompleteSurfaceState.ts",
-      "line": 165,
-      "endLine": 167
+      "line": 172,
+      "endLine": 174
     },
     {
       "id": "symbol:src/renderer/store/matchScorePop.ts#BOARD_FLOATER_POP_CLEAR",
@@ -51424,184 +51424,192 @@
       "name": "activateDebugRevealThroughGameplayCore",
       "kind": "value",
       "file": "src/shared/gameplay-core-adapters.ts",
-      "line": 354,
-      "endLine": 359
+      "line": 358,
+      "endLine": 363
     },
     {
       "id": "symbol:src/shared/gameplay-core-adapters.ts#advanceFloorThroughGameplayCore",
       "name": "advanceFloorThroughGameplayCore",
       "kind": "value",
       "file": "src/shared/gameplay-core-adapters.ts",
-      "line": 281,
-      "endLine": 293
+      "line": 285,
+      "endLine": 297
     },
     {
       "id": "symbol:src/shared/gameplay-core-adapters.ts#applyEnemyHazardContactThroughGameplayCore",
       "name": "applyEnemyHazardContactThroughGameplayCore",
       "kind": "value",
       "file": "src/shared/gameplay-core-adapters.ts",
-      "line": 379,
-      "endLine": 388
+      "line": 383,
+      "endLine": 392
     },
     {
       "id": "symbol:src/shared/gameplay-core-adapters.ts#applyRelicImmediateThroughGameplayCore",
       "name": "applyRelicImmediateThroughGameplayCore",
       "kind": "value",
       "file": "src/shared/gameplay-core-adapters.ts",
-      "line": 104,
-      "endLine": 123
+      "line": 105,
+      "endLine": 124
     },
     {
       "id": "symbol:src/shared/gameplay-core-adapters.ts#applyTileFlipThroughGameplayCore",
       "name": "applyTileFlipThroughGameplayCore",
       "kind": "value",
       "file": "src/shared/gameplay-core-adapters.ts",
-      "line": 320,
-      "endLine": 325
+      "line": 324,
+      "endLine": 329
     },
     {
       "id": "symbol:src/shared/gameplay-core-adapters.ts#completeMemorizePhaseThroughGameplayCore",
       "name": "completeMemorizePhaseThroughGameplayCore",
       "kind": "value",
       "file": "src/shared/gameplay-core-adapters.ts",
-      "line": 327,
-      "endLine": 331
+      "line": 331,
+      "endLine": 335
     },
     {
       "id": "symbol:src/shared/gameplay-core-adapters.ts#consumeWildMatchThroughGameplayCore",
       "name": "consumeWildMatchThroughGameplayCore",
       "kind": "value",
       "file": "src/shared/gameplay-core-adapters.ts",
-      "line": 266,
-      "endLine": 278
+      "line": 270,
+      "endLine": 282
     },
     {
       "id": "symbol:src/shared/gameplay-core-adapters.ts#deactivateDebugRevealThroughGameplayCore",
       "name": "deactivateDebugRevealThroughGameplayCore",
       "kind": "value",
       "file": "src/shared/gameplay-core-adapters.ts",
-      "line": 361,
-      "endLine": 366
+      "line": 365,
+      "endLine": 370
     },
     {
       "id": "symbol:src/shared/gameplay-core-adapters.ts#expireGauntletThroughGameplayCore",
       "name": "expireGauntletThroughGameplayCore",
       "kind": "value",
       "file": "src/shared/gameplay-core-adapters.ts",
-      "line": 372,
-      "endLine": 377
+      "line": 376,
+      "endLine": 381
     },
     {
       "id": "symbol:src/shared/gameplay-core-adapters.ts#GameplayBoardTurnAdapterResult",
       "name": "GameplayBoardTurnAdapterResult",
       "kind": "interface",
       "file": "src/shared/gameplay-core-adapters.ts",
-      "line": 67,
-      "endLine": 72
+      "line": 68,
+      "endLine": 73
     },
     {
       "id": "symbol:src/shared/gameplay-core-adapters.ts#GameplayFloorAdvanceAdapterResult",
       "name": "GameplayFloorAdvanceAdapterResult",
       "kind": "interface",
       "file": "src/shared/gameplay-core-adapters.ts",
-      "line": 74,
-      "endLine": 79
+      "line": 75,
+      "endLine": 80
     },
     {
       "id": "symbol:src/shared/gameplay-core-adapters.ts#GameplayMatchRewardAdapterResult",
       "name": "GameplayMatchRewardAdapterResult",
       "kind": "interface",
       "file": "src/shared/gameplay-core-adapters.ts",
-      "line": 35,
-      "endLine": 43
+      "line": 36,
+      "endLine": 44
     },
     {
       "id": "symbol:src/shared/gameplay-core-adapters.ts#GameplayRelicImmediateAdapterResult",
       "name": "GameplayRelicImmediateAdapterResult",
       "kind": "interface",
       "file": "src/shared/gameplay-core-adapters.ts",
-      "line": 29,
-      "endLine": 33
+      "line": 30,
+      "endLine": 34
     },
     {
       "id": "symbol:src/shared/gameplay-core-adapters.ts#GameplayRunTransitionAdapterResult",
       "name": "GameplayRunTransitionAdapterResult",
       "kind": "interface",
       "file": "src/shared/gameplay-core-adapters.ts",
-      "line": 295,
-      "endLine": 300
+      "line": 299,
+      "endLine": 304
     },
     {
       "id": "symbol:src/shared/gameplay-core-adapters.ts#GameplaySlayerFloorClearAdapterResult",
       "name": "GameplaySlayerFloorClearAdapterResult",
       "kind": "interface",
       "file": "src/shared/gameplay-core-adapters.ts",
-      "line": 52,
-      "endLine": 59
+      "line": 53,
+      "endLine": 60
     },
     {
       "id": "symbol:src/shared/gameplay-core-adapters.ts#GameplaySlayerFloorClearInput",
       "name": "GameplaySlayerFloorClearInput",
       "kind": "interface",
       "file": "src/shared/gameplay-core-adapters.ts",
-      "line": 45,
-      "endLine": 50
+      "line": 46,
+      "endLine": 51
     },
     {
       "id": "symbol:src/shared/gameplay-core-adapters.ts#GameplayWildMatchAdapterResult",
       "name": "GameplayWildMatchAdapterResult",
       "kind": "interface",
       "file": "src/shared/gameplay-core-adapters.ts",
-      "line": 61,
-      "endLine": 65
+      "line": 62,
+      "endLine": 66
+    },
+    {
+      "id": "symbol:src/shared/gameplay-core-adapters.ts#openRelicOfferThroughGameplayCore",
+      "name": "openRelicOfferThroughGameplayCore",
+      "kind": "value",
+      "file": "src/shared/gameplay-core-adapters.ts",
+      "line": 394,
+      "endLine": 398
     },
     {
       "id": "symbol:src/shared/gameplay-core-adapters.ts#pauseRunThroughGameplayCore",
       "name": "pauseRunThroughGameplayCore",
       "kind": "value",
       "file": "src/shared/gameplay-core-adapters.ts",
-      "line": 333,
-      "endLine": 339
+      "line": 337,
+      "endLine": 343
     },
     {
       "id": "symbol:src/shared/gameplay-core-adapters.ts#repairRunProgressionThroughGameplayCore",
       "name": "repairRunProgressionThroughGameplayCore",
       "kind": "value",
       "file": "src/shared/gameplay-core-adapters.ts",
-      "line": 348,
-      "endLine": 352
+      "line": 352,
+      "endLine": 356
     },
     {
       "id": "symbol:src/shared/gameplay-core-adapters.ts#resolveBoardTurnThroughGameplayCore",
       "name": "resolveBoardTurnThroughGameplayCore",
       "kind": "value",
       "file": "src/shared/gameplay-core-adapters.ts",
-      "line": 191,
-      "endLine": 206
+      "line": 192,
+      "endLine": 210
     },
     {
       "id": "symbol:src/shared/gameplay-core-adapters.ts#resolveFindableMatchRewardThroughGameplayCore",
       "name": "resolveFindableMatchRewardThroughGameplayCore",
       "kind": "value",
       "file": "src/shared/gameplay-core-adapters.ts",
-      "line": 130,
-      "endLine": 184
+      "line": 131,
+      "endLine": 185
     },
     {
       "id": "symbol:src/shared/gameplay-core-adapters.ts#resolveSlayerFloorClearThroughGameplayCore",
       "name": "resolveSlayerFloorClearThroughGameplayCore",
       "kind": "value",
       "file": "src/shared/gameplay-core-adapters.ts",
-      "line": 212,
-      "endLine": 263
+      "line": 216,
+      "endLine": 267
     },
     {
       "id": "symbol:src/shared/gameplay-core-adapters.ts#resumeRunThroughGameplayCore",
       "name": "resumeRunThroughGameplayCore",
       "kind": "value",
       "file": "src/shared/gameplay-core-adapters.ts",
-      "line": 341,
-      "endLine": 346
+      "line": 345,
+      "endLine": 350
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#BOARD_TACTICIAN_DEFINITIONS",
@@ -51640,272 +51648,272 @@
       "name": "createGameplayBoardTurnResolveCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2361,
-      "endLine": 2370
+      "line": 2365,
+      "endLine": 2374
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayDebugRevealActivateCommand",
       "name": "createGameplayDebugRevealActivateCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2443,
-      "endLine": 2452
+      "line": 2447,
+      "endLine": 2456
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayDebugRevealDeactivateCommand",
       "name": "createGameplayDebugRevealDeactivateCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2454,
-      "endLine": 2463
+      "line": 2458,
+      "endLine": 2467
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayDefinitionCommand",
       "name": "createGameplayDefinitionCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2171,
-      "endLine": 2188
+      "line": 2175,
+      "endLine": 2192
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayDestroyPairCommand",
       "name": "createGameplayDestroyPairCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2214,
-      "endLine": 2220
+      "line": 2218,
+      "endLine": 2224
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayDungeonExitActivateCommand",
       "name": "createGameplayDungeonExitActivateCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2287,
-      "endLine": 2296
+      "line": 2291,
+      "endLine": 2300
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayEnemyHazardContactCommand",
       "name": "createGameplayEnemyHazardContactCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2465,
-      "endLine": 2476
+      "line": 2469,
+      "endLine": 2480
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayFlashPairCommand",
       "name": "createGameplayFlashPairCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2265,
-      "endLine": 2270
+      "line": 2269,
+      "endLine": 2274
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayFloorAdvanceCommand",
       "name": "createGameplayFloorAdvanceCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2312,
-      "endLine": 2317
+      "line": 2316,
+      "endLine": 2321
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayGambitCommitCommand",
       "name": "createGameplayGambitCommitCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2229,
-      "endLine": 2235
+      "line": 2233,
+      "endLine": 2239
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayGauntletExpireCommand",
       "name": "createGameplayGauntletExpireCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2435,
-      "endLine": 2441
+      "line": 2439,
+      "endLine": 2445
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayHazardBanishCommand",
       "name": "createGameplayHazardBanishCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2305,
-      "endLine": 2310
+      "line": 2309,
+      "endLine": 2314
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayMemorizeCompleteCommand",
       "name": "createGameplayMemorizeCompleteCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2393,
-      "endLine": 2398
+      "line": 2397,
+      "endLine": 2402
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayParasiteAdvanceCommand",
       "name": "createGameplayParasiteAdvanceCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2298,
-      "endLine": 2303
+      "line": 2302,
+      "endLine": 2307
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayPauseCommand",
       "name": "createGameplayPauseCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2400,
-      "endLine": 2411
+      "line": 2404,
+      "endLine": 2415
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayPeekCommand",
       "name": "createGameplayPeekCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2190,
-      "endLine": 2196
+      "line": 2194,
+      "endLine": 2200
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayPinToggleCommand",
       "name": "createGameplayPinToggleCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2198,
-      "endLine": 2204
+      "line": 2202,
+      "endLine": 2208
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayProgressionRepairCommand",
       "name": "createGameplayProgressionRepairCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2421,
-      "endLine": 2426
+      "line": 2425,
+      "endLine": 2430
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayRegionShuffleCommand",
       "name": "createGameplayRegionShuffleCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2244,
-      "endLine": 2250
+      "line": 2248,
+      "endLine": 2254
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayRelicOfferOpenCommand",
       "name": "createGameplayRelicOfferOpenCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2428,
-      "endLine": 2433
+      "line": 2432,
+      "endLine": 2437
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayRelicOfferServiceCommand",
       "name": "createGameplayRelicOfferServiceCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2348,
-      "endLine": 2359
+      "line": 2352,
+      "endLine": 2363
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayRelicPickCommand",
       "name": "createGameplayRelicPickCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2340,
-      "endLine": 2346
+      "line": 2344,
+      "endLine": 2350
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayResumeCommand",
       "name": "createGameplayResumeCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2413,
-      "endLine": 2419
+      "line": 2417,
+      "endLine": 2423
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayRiskWagerAcceptCommand",
       "name": "createGameplayRiskWagerAcceptCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2222,
-      "endLine": 2227
+      "line": 2226,
+      "endLine": 2231
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayRouteChooseCommand",
       "name": "createGameplayRouteChooseCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2319,
-      "endLine": 2325
+      "line": 2323,
+      "endLine": 2329
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayShopPurchaseCommand",
       "name": "createGameplayShopPurchaseCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2279,
-      "endLine": 2285
+      "line": 2283,
+      "endLine": 2289
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayShopRerollCommand",
       "name": "createGameplayShopRerollCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2478,
-      "endLine": 2483
+      "line": 2482,
+      "endLine": 2487
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayShuffleCommand",
       "name": "createGameplayShuffleCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2237,
-      "endLine": 2242
+      "line": 2241,
+      "endLine": 2246
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplaySideRoomResolveCommand",
       "name": "createGameplaySideRoomResolveCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2327,
-      "endLine": 2338
+      "line": 2331,
+      "endLine": 2342
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayStrayRemoveCommand",
       "name": "createGameplayStrayRemoveCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2206,
-      "endLine": 2212
+      "line": 2210,
+      "endLine": 2216
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayTileFlipCommand",
       "name": "createGameplayTileFlipCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2385,
-      "endLine": 2391
+      "line": 2389,
+      "endLine": 2395
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayTileSwapCommand",
       "name": "createGameplayTileSwapCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2252,
-      "endLine": 2263
+      "line": 2256,
+      "endLine": 2267
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayUndoResolveCommand",
       "name": "createGameplayUndoResolveCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2272,
-      "endLine": 2277
+      "line": 2276,
+      "endLine": 2281
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayWildMatchConsumeCommand",
       "name": "createGameplayWildMatchConsumeCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2372,
-      "endLine": 2383
+      "line": 2376,
+      "endLine": 2387
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GAMEPLAY_BONUS_REWARD_IDS",
@@ -52000,8 +52008,8 @@
       "name": "GameplayCommand",
       "kind": "type",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2163,
-      "endLine": 2163
+      "line": 2167,
+      "endLine": 2167
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#gameplayCommandSchema",
@@ -52064,8 +52072,8 @@
       "name": "GameplayEvent",
       "kind": "type",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2164,
-      "endLine": 2164
+      "line": 2168,
+      "endLine": 2168
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#gameplayEventSchema",
@@ -52073,7 +52081,7 @@
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
       "line": 1524,
-      "endLine": 2161
+      "endLine": 2165
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GameplayFacts",
@@ -52128,8 +52136,8 @@
       "name": "getGameplayContentDefinition",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 2168,
-      "endLine": 2169
+      "line": 2172,
+      "endLine": 2173
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#LOCKSMITH_DEFINITIONS",
@@ -52336,16 +52344,16 @@
       "name": "reduceGameplayCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core.ts",
-      "line": 1848,
-      "endLine": 1966
+      "line": 1864,
+      "endLine": 1982
     },
     {
       "id": "symbol:src/shared/gameplay-core.ts#replayGameplayCommands",
       "name": "replayGameplayCommands",
       "kind": "value",
       "file": "src/shared/gameplay-core.ts",
-      "line": 1968,
-      "endLine": 1981
+      "line": 1984,
+      "endLine": 1997
     },
     {
       "id": "symbol:src/shared/gameplay-effect-transition.ts#applyGameplayDefinitionTransition",
@@ -58128,8 +58136,8 @@
       "name": "createRunProgressionRepairTransition",
       "kind": "value",
       "file": "src/shared/run-progression-repair.ts",
-      "line": 29,
-      "endLine": 32
+      "line": 35,
+      "endLine": 65
     },
     {
       "id": "symbol:src/shared/run-progression-repair.ts#repairRunProgressionSoftlocks",
@@ -58140,12 +58148,20 @@
       "endLine": 17
     },
     {
+      "id": "symbol:src/shared/run-progression-repair.ts#RunProgressionRepairKind",
+      "name": "RunProgressionRepairKind",
+      "kind": "type",
+      "file": "src/shared/run-progression-repair.ts",
+      "line": 19,
+      "endLine": 19
+    },
+    {
       "id": "symbol:src/shared/run-progression-repair.ts#RunProgressionRepairTransition",
       "name": "RunProgressionRepairTransition",
       "kind": "interface",
       "file": "src/shared/run-progression-repair.ts",
-      "line": 19,
-      "endLine": 22
+      "line": 21,
+      "endLine": 28
     },
     {
       "id": "symbol:src/shared/run-record-guards.ts#isRunRecord",
@@ -61802,7 +61818,7 @@
         },
         {
           "path": "src/shared/gameplay-core-adapters.ts",
-          "line": 23
+          "line": 24
         },
         {
           "path": "src/shared/dungeon-boss-clear-rules.ts",
@@ -61964,7 +61980,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 1544
+          "line": 1556
         },
         {
           "path": "src/shared/board-power-actions.ts",
@@ -86274,6 +86290,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/gameplay-core-adapters.ts->symbol:src/shared/gameplay-core-adapters.ts#openRelicOfferThroughGameplayCore",
+      "source": "file:src/shared/gameplay-core-adapters.ts",
+      "target": "symbol:src/shared/gameplay-core-adapters.ts#openRelicOfferThroughGameplayCore",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/gameplay-core-adapters.ts->symbol:src/shared/gameplay-core-adapters.ts#pauseRunThroughGameplayCore",
       "source": "file:src/shared/gameplay-core-adapters.ts",
       "target": "symbol:src/shared/gameplay-core-adapters.ts#pauseRunThroughGameplayCore",
@@ -91209,6 +91231,12 @@
       "id": "exports:src/shared/run-progression-repair.ts->symbol:src/shared/run-progression-repair.ts#repairRunProgressionSoftlocks",
       "source": "file:src/shared/run-progression-repair.ts",
       "target": "symbol:src/shared/run-progression-repair.ts#repairRunProgressionSoftlocks",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/run-progression-repair.ts->symbol:src/shared/run-progression-repair.ts#RunProgressionRepairKind",
+      "source": "file:src/shared/run-progression-repair.ts",
+      "target": "symbol:src/shared/run-progression-repair.ts#RunProgressionRepairKind",
       "kind": "exports"
     },
     {
@@ -104452,12 +104480,6 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/store/levelCompleteSurfaceState.ts->src/shared/game-core.ts",
-      "source": "file:src/renderer/store/levelCompleteSurfaceState.ts",
-      "target": "file:src/shared/game-core.ts",
-      "kind": "imports"
-    },
-    {
       "id": "imports:src/renderer/store/levelCompleteSurfaceState.ts->src/shared/gameplay-core-adapters.ts",
       "source": "file:src/renderer/store/levelCompleteSurfaceState.ts",
       "target": "file:src/shared/gameplay-core-adapters.ts",
@@ -104467,12 +104489,6 @@
       "id": "imports:src/renderer/store/levelCompleteSurfaceState.ts->src/shared/relics.ts",
       "source": "file:src/renderer/store/levelCompleteSurfaceState.ts",
       "target": "file:src/shared/relics.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/store/levelCompleteSurfaceState.ts->src/shared/run-progression-repair.ts",
-      "source": "file:src/renderer/store/levelCompleteSurfaceState.ts",
-      "target": "file:src/shared/run-progression-repair.ts",
       "kind": "imports"
     },
     {

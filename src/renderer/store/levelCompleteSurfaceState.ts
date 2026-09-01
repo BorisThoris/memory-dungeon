@@ -1,8 +1,8 @@
 import type { RunState } from '../../shared/contracts';
-import { openRelicOffer } from '../../shared/game-core';
+import { openRelicOfferThroughGameplayCore } from '../../shared/gameplay-core-adapters';
 import { advanceFloorThroughGameplayCore } from '../../shared/gameplay-core-adapters';
 import { needsRelicPick } from '../../shared/relics';
-import { repairRunProgressionSoftlocks } from '../../shared/run-progression-repair';
+import { repairRunProgressionThroughGameplayCore } from '../../shared/gameplay-core-adapters';
 import { createRunWithBoardInteractionClearedPatch, type RunSurfaceState } from './runSurfaceState';
 
 export type LevelCompleteContinuationSurfaceResult =
@@ -92,7 +92,10 @@ export const createLevelCompleteContinuationSurfaceResult = (
     run: RunState,
     { includeSummaryShop }: LevelCompleteContinuationSurfaceOptions
 ): LevelCompleteContinuationSurfaceResult => {
-    run = repairRunProgressionSoftlocks(run);
+    // Through the command like the resolution controller's repair, so a floor-clear
+    // repair is journalled rather than silently mutating the run.
+    const repair = repairRunProgressionThroughGameplayCore(run);
+    run = repair.accepted ? repair.run : run;
 
     if (run.sideRoom) {
         return {
@@ -118,7 +121,11 @@ export const createLevelCompleteContinuationSurfaceResult = (
     let nextRun = run;
 
     if (needsRelicPick(nextRun) && !nextRun.relicOffer) {
-        const offerRun = openRelicOffer(nextRun);
+        // Through the command so the offer appears in the journal: which relics were
+        // presented is part of what happened in the run, and a replay that skips the
+        // offer diverges from the moment the player picks.
+        const offer = openRelicOfferThroughGameplayCore(nextRun);
+        const offerRun = offer.run;
         if (offerRun.relicOffer) {
             return {
                 kind: 'relicOffer',
