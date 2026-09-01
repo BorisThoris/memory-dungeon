@@ -1982,6 +1982,8 @@ export const gameplayEventSchema = z.discriminatedUnion('type', [
                 .enum(['shard_spark', 'score_glint', 'ward_spark', 'scout_glint'])
                 .nullable()
                 .default(null),
+            matchedRouteKind: z.string().min(1).max(80).nullable().default(null),
+            floaterTileIds: z.array(z.string().min(1).max(160)).max(3).default([]),
             traitInteractionTags: z.array(z.string().min(1).max(120)).default([])
         })
         .strict(),
@@ -2102,7 +2104,9 @@ export const gameplayEventSchema = z.discriminatedUnion('type', [
     z
         .object({
             ...eventBase,
-            type: z.literal('run.progression_repaired')
+            type: z.literal('run.progression_repaired'),
+            repairKinds: z.array(z.enum(['exit_lock', 'exit_metadata', 'enemy_hazard'])).default([]),
+            enemyHazardIdsDefeated: z.array(z.string().min(1).max(160)).default([])
         })
         .strict(),
     z

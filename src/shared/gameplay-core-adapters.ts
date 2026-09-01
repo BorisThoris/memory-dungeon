@@ -191,14 +191,17 @@ export const resolveFindableMatchRewardThroughGameplayCore = (
 export const resolveBoardTurnThroughGameplayCore = (
     run: RunState,
     encorePairKeys: readonly string[],
-    commandId = `board-turn-resolve:${run.runSeed}:${run.board?.level ?? 0}:${
+    commandId = `board-turn:${run.runSeed}:${run.board?.level ?? 0}:${
         (Array.isArray(run.board?.flippedTileIds) ? run.board.flippedTileIds : []).join('+') || 'none'
     }`
 ): GameplayBoardTurnAdapterResult => {
     const command = createGameplayBoardTurnResolveCommand(commandId, encorePairKeys);
     const result = reduceGameplayCommand(run, command);
     return {
-        run: result.run,
+        // Journalled like every other accepted command. Turn resolution is the single
+        // most consequential mutation in a run - score, lives, matches, findables - and
+        // it was the one leaving no journal entry, so a replay skipped every turn.
+        run: result.accepted ? appendGameplayJournal(result.run, [command], result.events) : result.run,
         command,
         events: result.accepted ? result.events : [],
         migrated: result.accepted

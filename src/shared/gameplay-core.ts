@@ -1415,6 +1415,7 @@ const applyBoardTurnResolveCommand = (
     const outcome = flippedTileIds.length === 3
         ? isMatch ? 'gambit_match' : 'gambit_mismatch'
         : isMatch ? 'match' : 'mismatch';
+    const announcementFacts = getBoardTurnAnnouncementFacts(run, nextRun);
     const writeEvent = makeEventWriter(command.commandId, BOARD_TURN_SOURCE, events);
     writeEvent({
         type: 'board.turn_resolved',
@@ -1439,8 +1440,19 @@ const applyBoardTurnResolveCommand = (
         findablesClaimedAfter: runNonNegativeInteger(nextRun.findablesClaimedThisFloor),
         findablesTotalBefore: runNonNegativeInteger(run.findablesTotalThisFloor),
         findablesTotalAfter: runNonNegativeInteger(nextRun.findablesTotalThisFloor),
-        announcement: getBoardTurnAnnouncementFacts(run, nextRun),
-        matchedFindableKind: matchedSourceTile?.findableKind ?? null,
+        announcement: announcementFacts,
+        // Read from the PRE-turn board: resolving a match consumes the findable and
+        // clears findableKind on the resolved tile, so the post-turn tile always reported
+        // null and pickup reward copy never appeared on the floater.
+        matchedFindableKind:
+            (matchedSourceTile
+                ? run.board?.tiles.find((tile) => tile.id === matchedSourceTile.id)?.findableKind
+                : null) ?? null,
+        // Promoted onto the event itself, not just the announcement facts: the route kind
+        // and the floater anchors describe what happened, so consumers should not have to
+        // reach into presentation facts for them.
+        matchedRouteKind: announcementFacts.routeSpecialKind ?? announcementFacts.routeCardKind ?? null,
+        floaterTileIds: [...announcementFacts.anchorTileIds],
         traitInteractionTags: [...traitInteractionTags]
     });
     return { run: nextRun, command, events, accepted: true };
@@ -1679,12 +1691,16 @@ const applyProgressionRepairCommand = (
     }
     const events: GameplayEvent[] = [];
     const writeRepairEvent = makeEventWriter(command.commandId, PROGRESSION_REPAIR_SOURCE, events);
-    writeRepairEvent({ type: 'run.progression_repaired' });
+    writeRepairEvent({
+        type: 'run.progression_repaired',
+        repairKinds: transition.repairKinds,
+        enemyHazardIdsDefeated: transition.enemyHazardIdsDefeated
+    });
     // Repairing a stale boss clears defeated-enemy counters, which are feedback-critical,
     // so the repair owes the player typed presentation like any other accepted command.
     writeRepairEvent({
         type: 'feedback.requested',
-        cue: 'run.progression.repaired',
+        cue: 'safety.progression.repaired',
         message: 'The floor settled. A stale encounter was cleared.',
         tone: 'information'
     });
