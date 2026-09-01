@@ -14,7 +14,7 @@ import { pickFloorScheduleEntry } from '../src/shared/floor-mutator-schedule';
 import { buildBoard } from '../src/shared/board-generation';
 import { getEffectivePrimaryExitLock, inspectBoardFairness } from '../src/shared/board-inspection';
 import { activeEnemyHazardsForBoard } from '../src/shared/enemy-hazard-board-rules';
-import { solveRunByExhaustingPlayablePairsWithTrace } from '../src/shared/playthrough-solver';
+import { solveRunThroughGameplayCoreWithTrace } from '../src/shared/gameplay-core-playthrough-solver';
 import { createGeneratedBoardSolverRun } from '../src/shared/softlock-generator-contract';
 import { inspectDungeonBoardTopology, inspectDungeonRunMapTopology } from '../src/shared/dungeon-topology';
 import { advanceToNextLevel } from '../src/shared/next-floor-transition-rules';
@@ -58,6 +58,7 @@ export interface EndlessSimulationHealthReport {
         lockedCacheRoomFloors: number;
         objectiveKinds: number;
         playableCheckedFloors: number;
+        coreReplayCheckedFloors: number;
         playableFailureDetails: string[];
         playableIssueFloors: number;
         playableIssueReasons: string[];
@@ -112,6 +113,10 @@ export const buildEndlessSimulationCsv = ({
     const playableIssueCounts: Record<string, number> = {};
     const playableFailureDetails: string[] = [];
     let playableCheckedFloors = 0;
+    let coreReplayCheckedFloors = 0;
+    let coreReplayIssueFloors = 0;
+    let coreReplayRejectedCommandFloors = 0;
+    let coreReplayInvariantViolationFloors = 0;
     let playableLockedExitFloors = 0;
     let lockedCacheRoomFloors = 0;
     let typedLockedCacheRoomFloors = 0;
@@ -185,9 +190,22 @@ export const buildEndlessSimulationCsv = ({
             if (effectiveExitLock.lockKind !== 'none') {
                 playableLockedExitFloors += 1;
             }
-            const trace = solveRunByExhaustingPlayablePairsWithTrace(
+            // Solved through the command path rather than direct transitions, so the
+            // endless gate exercises the same reducer the game runs and can report
+            // whether the command journal replays deterministically.
+            const trace = solveRunThroughGameplayCoreWithTrace(
                 createGeneratedBoardSolverRun(board, safeRunSeed, rulesVersion)
             );
+            coreReplayCheckedFloors += 1;
+            if (!trace.replayVerified || !trace.replayDeterministic) {
+                coreReplayIssueFloors += 1;
+            }
+            if (trace.rejectedCommandIds.length > 0) {
+                coreReplayRejectedCommandFloors += 1;
+            }
+            if (trace.invariantViolations.length > 0) {
+                coreReplayInvariantViolationFloors += 1;
+            }
             const activeStaleHazards =
                 trace.run.status === 'levelComplete' ? activeEnemyHazardsForBoard(trace.run.board).length : 0;
             const undefeatedStaleHazards =
@@ -315,6 +333,10 @@ export const buildEndlessSimulationCsv = ({
             .sort(([a], [b]) => a.localeCompare(b))
             .map(([k, v]) => `topologyIssue,${k},${v}`),
         `playableMetric,checkedFloors,${playableCheckedFloors}`,
+        `coreReplayMetric,checkedFloors,${coreReplayCheckedFloors}`,
+        `coreReplayMetric,issueFloors,${coreReplayIssueFloors}`,
+        `coreReplayMetric,rejectedCommandFloors,${coreReplayRejectedCommandFloors}`,
+        `coreReplayMetric,invariantViolationFloors,${coreReplayInvariantViolationFloors}`,
         `playableMetric,lockedExitFloors,${playableLockedExitFloors}`,
         `dungeonMetric,lockedCacheRoomFloors,${lockedCacheRoomFloors}`,
         `dungeonMetric,typedLockedCacheRoomFloors,${typedLockedCacheRoomFloors}`,
@@ -381,6 +403,7 @@ const readEndlessSimulationMetrics = (input: EndlessSimulationCsvInput): Endless
         lockedCacheRoomFloors: counts.dungeonMetric?.lockedCacheRoomFloors ?? 0,
         objectiveKinds,
         playableCheckedFloors: counts.playableMetric?.checkedFloors ?? 0,
+        coreReplayCheckedFloors: counts.coreReplayMetric?.checkedFloors ?? 0,
         playableFailureDetails,
         playableIssueFloors: counts.playableIssue?.floorWithIssue ?? 0,
         playableIssueReasons,

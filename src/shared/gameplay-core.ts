@@ -15,7 +15,7 @@ import { finishMemorizePhase } from './memorize-phase-rules';
 import { computeRelicOfferPickBudget, openRelicOffer } from './relic-offer-open-rules';
 import { createRunProgressionRepairTransition } from './run-progression-repair';
 import { disableDebugPeek, enableDebugPeek, pauseRun, resumeRun } from './run-timer-rules';
-import { MAX_LIVES, type BonusRewardId, type FindableKind, type RunState } from './contracts';
+import { MAX_LIVES, type BonusRewardId, type DungeonKeyKind, type FindableKind, type RunState } from './contracts';
 import {
     GAMEPLAY_BONUS_REWARD_IDS,
     GAMEPLAY_BONUS_REWARD_RULES,
@@ -50,6 +50,10 @@ import { getDungeonExitStatus } from './dungeon-board-status';
 import { advanceScoreParasiteFloor } from './score-parasite-rules';
 import { hasMutator } from './mutators';
 import { tilesArePairMatch } from './scoring-rules';
+import {
+    GAMEPLAY_FEEDBACK_CRITICAL_FIELDS,
+    getGameplayFeedbackCriticalSnapshot
+} from './gameplay-feedback-facts';
 import { EXIT_PAIR_KEY, ROOM_PAIR_KEY, SHOP_PAIR_KEY, WILD_PAIR_KEY } from './tile-identity';
 import { isBoardComplete } from './board-inspection';
 import { rotateRunShiftingSpotlight } from './shifting-spotlight-rules';
@@ -1515,14 +1519,67 @@ const applyTileFlipCommand = (
     if (nextRun === run) {
         return rejectedResult(run, command.commandId, 'Tile flip is not legal for the current run.', command);
     }
+    const outcome = tileFlipOutcome(run, nextRun, command.targetTileId);
     const events: GameplayEvent[] = [];
-    makeEventWriter(command.commandId, TILE_FLIP_SOURCE, events)({
+    const writeFlipEvent = makeEventWriter(command.commandId, TILE_FLIP_SOURCE, events);
+    writeFlipEvent({
         type: 'board.tile_flipped',
         tileId: command.targetTileId,
-        outcome: tileFlipOutcome(run, nextRun, command.targetTileId),
+        outcome,
         flippedCountAfter: runStringArray(nextRun.board?.flippedTileIds).length,
         statusAfter: nextRun.status
     });
+    // Revealing an exit, vendor or room changes feedback-critical dungeon state, so the
+    // flip owes the player typed presentation - inspectGameplayFeedbackCompleteness
+    // rejects an accepted command that moves a critical field silently. An ordinary
+    // face-up flip changes none of them and stays quiet.
+    if (outcome === 'room_resolved') {
+        // A locked cache opened by flipping it spends a key; report which kind, so the
+        // locksmith build scorer and the key-economy audits can see the spend. Derived by
+        // diffing the key purses rather than trusting the tile, because the transition
+        // decides which key it actually consumed.
+        const cacheTile = run.board?.tiles.find((candidate) => candidate.id === command.targetTileId);
+        if (cacheTile?.dungeonCardKind === 'room' && cacheTile.dungeonCardEffectId === 'room_locked_cache') {
+            const spentKeyKind = (Object.keys(run.dungeonKeys ?? {}) as DungeonKeyKind[]).find(
+                (kind) =>
+                    runNonNegativeInteger(nextRun.dungeonKeys?.[kind]) <
+                    runNonNegativeInteger(run.dungeonKeys?.[kind])
+            );
+            const spentMasterKey =
+                runNonNegativeInteger(nextRun.dungeonMasterKeys) < runNonNegativeInteger(run.dungeonMasterKeys);
+            writeFlipEvent({
+                type: 'dungeon.locked_cache_opened',
+                tileId: command.targetTileId,
+                spend: spentMasterKey ? 'master_key' : spentKeyKind ? 'key' : 'none',
+                keyKind: spentMasterKey ? null : (spentKeyKind ?? null)
+            });
+        }
+    }
+    // A flip can move score, lives, guard tokens or objective progress - revealing a
+    // findable, tripping a hazard, completing an objective - and any accepted command
+    // that moves a feedback-critical field owes the player typed presentation, or
+    // inspectGameplayFeedbackCompleteness rejects it. Emit exactly when something
+    // changed rather than on every flip, so ordinary face-ups stay quiet.
+    const criticalBefore = getGameplayFeedbackCriticalSnapshot(run);
+    const criticalAfter = getGameplayFeedbackCriticalSnapshot(nextRun);
+    const changedCriticalField = GAMEPLAY_FEEDBACK_CRITICAL_FIELDS.some(
+        (field) => JSON.stringify(criticalBefore[field]) !== JSON.stringify(criticalAfter[field])
+    );
+    if (outcome !== 'flipped' || changedCriticalField) {
+        writeFlipEvent({
+            type: 'feedback.requested',
+            cue: `board.tile.${outcome}`,
+            message:
+                outcome === 'exit_revealed'
+                    ? 'Exit revealed.'
+                    : outcome === 'shop_revealed'
+                      ? 'Vendor revealed.'
+                      : outcome === 'room_resolved'
+                        ? 'Room revealed.'
+                        : 'Tile revealed.',
+            tone: 'information'
+        });
+    }
     return { run: nextRun, command, events, accepted: true };
 };
 
@@ -1614,7 +1671,16 @@ const applyProgressionRepairCommand = (
         return rejectedResult(run, command.commandId, 'Run progression needed no repair.', command);
     }
     const events: GameplayEvent[] = [];
-    makeEventWriter(command.commandId, PROGRESSION_REPAIR_SOURCE, events)({ type: 'run.progression_repaired' });
+    const writeRepairEvent = makeEventWriter(command.commandId, PROGRESSION_REPAIR_SOURCE, events);
+    writeRepairEvent({ type: 'run.progression_repaired' });
+    // Repairing a stale boss clears defeated-enemy counters, which are feedback-critical,
+    // so the repair owes the player typed presentation like any other accepted command.
+    writeRepairEvent({
+        type: 'feedback.requested',
+        cue: 'run.progression.repaired',
+        message: 'The floor settled. A stale encounter was cleared.',
+        tone: 'information'
+    });
     return { run: transition.run, command, events, accepted: true };
 };
 
