@@ -38,6 +38,8 @@ type TilePressPatch = Partial<{
     peekModeArmed: boolean;
     run: RunState;
     shopReturnMode: 'floor' | 'summary' | null;
+    strayRemoveArmed: boolean;
+    regionShuffleRowArmed: number | null;
     tileSwapArmed: boolean;
     tileSwapFirstTileId: string | null;
     view: ViewState;
@@ -181,7 +183,15 @@ export const createPlayingTilePressSurfaceResult = ({
         }
         if (armedPowerPressResult.kind === 'strayApplied') {
             audio.push({ kind: 'strayPower' });
-            return { kind: 'patch', patch: { run: armedPowerPressResult.run }, audio, resolveDelayMs: null };
+            // Stray remove is single-use, so it disarms once it fires. That used to happen
+            // inside applyStrayRemove when the flag lived on RunState; arming is surface
+            // state now, so the disarm belongs in the patch.
+            return {
+                kind: 'patch',
+                patch: { run: armedPowerPressResult.run, strayRemoveArmed: false },
+                audio,
+                resolveDelayMs: null
+            };
         }
         if (armedPowerPressResult.kind === 'peekApplied') {
             if (projectGameplayFeedback(armedPowerPressResult.events).some((feedback) => feedback.audioCategory === 'peek')) {

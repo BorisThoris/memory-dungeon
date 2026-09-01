@@ -31,10 +31,16 @@ export const executePauseRun = (deps: PauseResumeExecutorDeps): void => {
         return;
     }
 
+    // Serialize BEFORE clearing. freezeRun reads the live browser timers to work out how
+    // much of the memorize/resolve window is actually left; clearing first nulls those
+    // refs, so the snapshot silently fell back to the stale stored value and the run
+    // resumed with the full window instead of the remaining one.
+    const pausedPatch = createPausedRunSurfacePatch(run, deps.freezeRun);
+
     deps.clearAllTimers();
     deps.resumeUiSfxContext();
     deps.playPauseOpenSfx();
-    deps.setState(createPausedRunSurfacePatch(run, deps.freezeRun));
+    deps.setState(pausedPatch);
 };
 
 export const executeResumeRun = (deps: PauseResumeExecutorDeps): void => {

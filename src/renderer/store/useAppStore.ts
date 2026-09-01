@@ -496,6 +496,7 @@ export const useAppStore = create<AppState>((set, get) => ({
             boardPinMode,
             destroyPairArmed,
             peekModeArmed,
+            strayRemoveArmed,
             tileSwapArmed,
             tileSwapFirstTileId
         } = get();
@@ -562,6 +563,7 @@ export const useAppStore = create<AppState>((set, get) => ({
                 destroyPairArmed,
                 peekModeArmed,
                 run,
+                strayRemoveArmed,
                 tileSwapArmed,
                 tileSwapFirstTileId,
                 tileId
