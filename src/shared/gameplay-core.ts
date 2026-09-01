@@ -1436,7 +1436,7 @@ const applyBoardTurnResolveCommand = (
         findablesClaimedAfter: runNonNegativeInteger(nextRun.findablesClaimedThisFloor),
         findablesTotalBefore: runNonNegativeInteger(run.findablesTotalThisFloor),
         findablesTotalAfter: runNonNegativeInteger(nextRun.findablesTotalThisFloor),
-        announcement: getBoardTurnAnnouncementFacts(run, nextRun, flippedTileIds, outcome),
+        announcement: getBoardTurnAnnouncementFacts(run, nextRun),
         matchedFindableKind: matchedSourceTile?.findableKind ?? null,
         traitInteractionTags: [...traitInteractionTags]
     });

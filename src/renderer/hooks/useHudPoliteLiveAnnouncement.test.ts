@@ -3,7 +3,8 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import type { Tile } from '../../shared/contracts';
 import { GAMBIT_OPPORTUNITY_HINT_LINE } from '../copy/gameplayHints';
 import { getHudActionFeedbackProfile } from '../copy/hudActionFeedback';
-import type { GameplayFeedbackPresentation } from '../store/gameplayFeedbackAdapter';
+import type { BoardTurnResolvedEvent, GameplayFeedbackPresentation } from '../store/gameplayFeedbackAdapter';
+import { createBoardTurnResolvedEventFixture } from '../../shared/test/gameplay-event-fixtures';
 import { formatHudActionFeedbackText, useHudPoliteLiveAnnouncement } from './useHudPoliteLiveAnnouncement';
 
 const base = {
@@ -324,28 +325,26 @@ describe('useHudPoliteLiveAnnouncement', () => {
     });
 
     it('announces pickup claims with reward-specific copy', async () => {
-        const beforeTiles: Tile[] = [
-            { id: 'a1', pairKey: 'A', symbol: 'A', label: 'A', state: 'hidden', findableKind: 'shard_spark' },
-            { id: 'a2', pairKey: 'A', symbol: 'A', label: 'A', state: 'hidden', findableKind: 'shard_spark' }
-        ];
-        const afterTiles: Tile[] = [
-            { id: 'a1', pairKey: 'A', symbol: 'A', label: 'A', state: 'matched' },
-            { id: 'a2', pairKey: 'A', symbol: 'A', label: 'A', state: 'matched' }
-        ];
+        // Driven by the resolved-turn event rather than a tile diff: the core reports the
+        // claimed findable, so the announcer no longer infers it from board snapshots.
+        const pickupEvent = createBoardTurnResolvedEventFixture({
+            commandId: 'pickup-turn',
+            matchedFindableKind: 'shard_spark',
+            announcement: { findablesClaimedBefore: 0, findablesClaimedAfter: 1 }
+        });
 
         const { result, rerender } = renderHook(
-            (p: { tiles: Tile[]; claimed: number }) =>
+            (p: { turnEvent: BoardTurnResolvedEvent | null }) =>
                 useHudPoliteLiveAnnouncement({
                     ...base,
                     boardLevel: 2,
-                    boardTiles: p.tiles,
-                    findablesClaimedThisFloor: p.claimed
+                    boardTurnEvent: p.turnEvent
                 }),
-            { initialProps: { tiles: beforeTiles, claimed: 0 } }
+            { initialProps: { turnEvent: null as BoardTurnResolvedEvent | null } }
         );
 
         await act(async () => {
-            rerender({ tiles: afterTiles, claimed: 1 });
+            rerender({ turnEvent: pickupEvent as BoardTurnResolvedEvent });
         });
         await flushRaf();
 

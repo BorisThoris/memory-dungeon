@@ -53,17 +53,20 @@ const firstTileValue = <T>(
 
 export const getBoardTurnAnnouncementFacts = (
     run: RunState,
-    nextRun: RunState,
-    flippedTileIds: readonly string[] = [],
-    outcome: 'match' | 'mismatch' | 'gambit_match' | 'gambit_mismatch' = 'match'
+    nextRun: RunState
 ): BoardTurnAnnouncementFacts => {
     const statsBefore = normalizeSessionStats(run.stats);
     const statsAfter = normalizeSessionStats(nextRun.stats);
+    const flippedTileIds = Array.isArray(run.board?.flippedTileIds) ? run.board.flippedTileIds : [];
+    // Derived here rather than passed in, so callers cannot describe a turn as a match
+    // when the stats say otherwise.
+    const outcome: 'match' | 'mismatch' =
+        statsAfter.matchesFound > statsBefore.matchesFound ? 'match' : 'mismatch';
     // Selected by outcome, not by falling through: a gambit match resolves three tiles
     // and only the match anchor knows which two actually paired. Falling back to the
     // mismatch anchor would put the floater on the odd tile out.
     const anchor =
-        outcome === 'match' || outcome === 'gambit_match'
+        outcome === 'match'
             ? getMatchFloaterAnchorTileIds(run)
             : getMismatchFloaterAnchorTileIds(run);
     return {

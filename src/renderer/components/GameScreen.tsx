@@ -56,7 +56,6 @@ import { useDistractionChannelTick } from '../hooks/useDistractionChannelTick';
 import { useEffectiveReducedMotion } from '../hooks/useEffectiveReducedMotion';
 import { useLatestRef } from '../hooks/useLatestRef';
 import {
-    detectClaimedFindableKind,
     formatHudActionFeedbackText,
     getFindableToastText,
     useHudPoliteLiveAnnouncement
@@ -74,6 +73,10 @@ import { GAMEPLAY_SHORTCUT_ROWS } from '../keyboard/gameplayShortcuts';
 import { usePlatformTiltField } from '../platformTilt/usePlatformTiltField';
 import { StatTile } from '../ui';
 import { useAppStore } from '../store/useAppStore';
+import {
+    getLatestBoardTurnResolvedEvent,
+    type BoardTurnResolvedEvent
+} from '../store/gameplayFeedbackAdapter';
 import { getLatestGameplayFeedback } from '../store/gameplayFeedbackAdapter';
 import GameLeftToolbar from './GameLeftToolbar';
 import { GameScreenActionFeedbackRail } from './GameScreenActionFeedbackRail';
@@ -1303,23 +1306,24 @@ const getFloorClearPayoffStackSignal = (
     };
 };
 
-type PickupStackToastState = Pick<RunState, 'findablesClaimedThisFloor' | 'findablesTotalThisFloor' | 'lives'> & {
-    comboShards: number;
-    currentStreak: number;
-};
-
-const getPickupStackToastText = (
-    pickupState: PickupStackToastState,
-    claimedKind: Parameters<typeof getFindableToastText>[0]
-): string => {
+/**
+ * Pickup toast copy, projected from the resolved-turn event. The claimed kind, the
+ * pickup counters and the chain state all come from what the core reported, so the toast
+ * cannot disagree with the rules the way a board-snapshot diff could.
+ */
+const getPickupStackToastText = (turnEvent: BoardTurnResolvedEvent): string | null => {
+    const claimedKind = turnEvent.matchedFindableKind;
+    if (claimedKind == null) {
+        return null;
+    }
     const baseText = getFindableToastText(claimedKind);
     const nextReward = getChainRewardForecastCues(
-        runNonNegativeInteger(pickupState.currentStreak),
-        runNonNegativeInteger(pickupState.comboShards),
-        runNonNegativeInteger(pickupState.lives)
+        runNonNegativeInteger(turnEvent.announcement.currentStreakAfter),
+        runNonNegativeInteger(turnEvent.announcement.comboShardsAfter),
+        runNonNegativeInteger(turnEvent.announcement.livesAfter)
     )[0];
-    const pickupClaimed = runNonNegativeInteger(pickupState.findablesClaimedThisFloor);
-    const pickupTotal = runNonNegativeInteger(pickupState.findablesTotalThisFloor);
+    const pickupClaimed = runNonNegativeInteger(turnEvent.findablesClaimedAfter);
+    const pickupTotal = runNonNegativeInteger(turnEvent.findablesTotalAfter);
     const pickupProgress =
         pickupTotal > 0
             ? `Pickups ${pickupClaimed}/${pickupTotal}.`
@@ -2983,12 +2987,14 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             boardFloaterMismatchRecoveryCrescendo.beatCount
         );
     }, [boardFloaterMismatchRecoveryCrescendo, boardFloaterPayload, shuffleSfxGain]);
+    // Single source of truth for "what just happened on the board": the typed event the
+    // core emitted, rather than a diff of the previous render's tiles.
+    const gameplayEventJournal = run.gameplayEventJournal;
+    const typedBoardTurnEvent = useMemo(
+        () => getLatestBoardTurnResolvedEvent({ gameplayEventJournal }),
+        [gameplayEventJournal]
+    );
     const seenAchievementToastIdsRef = useRef<Set<string>>(new Set());
-    const pickupToastSnapshotRef = useRef<{
-        level: number;
-        claimed: number;
-        tiles: NonNullable<RunState['board']>['tiles'];
-    } | null>(null);
     /** OVR-014: queue unlock toasts while the floor-cleared dialog is up; `continueToNextLevel` clears `newlyUnlockedAchievements` before the next paint. */
     const pendingAchievementToastIdsRef = useRef<AchievementId[]>([]);
     /** FX-015: WebGL bloom is medium+ when the toggle is on; add a light CSS rim only on High to avoid doubling cost on phones at Medium. */
@@ -3238,56 +3244,28 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     ]);
 
     useEffect(() => {
-        if (!run.board) {
-            pickupToastSnapshotRef.current = null;
+        if (!typedBoardTurnEvent) {
             return;
         }
-
-        const nextSnapshot = {
-            level: run.board.level,
-            claimed: run.findablesClaimedThisFloor,
-            tiles: run.board.tiles
-        };
-        const previousSnapshot = pickupToastSnapshotRef.current;
-
-        if (
-            previousSnapshot &&
-            previousSnapshot.level === run.board.level &&
-            run.findablesClaimedThisFloor > previousSnapshot.claimed
-        ) {
-            const claimedKind = detectClaimedFindableKind(previousSnapshot.tiles, run.board.tiles);
-            if (claimedKind != null) {
-                const { showInfo } = useNotificationStore.getState();
-                const infoDuration = reduceMotion ? 2200 : 3200;
-                showInfo(
-                    getPickupStackToastText(
-                        {
-                            comboShards: run.stats.comboShards,
-                            currentStreak: run.stats.currentStreak,
-                            findablesClaimedThisFloor: run.findablesClaimedThisFloor,
-                            findablesTotalThisFloor: run.findablesTotalThisFloor,
-                            lives: run.lives
-                        },
-                        claimedKind
-                    ),
-                    infoDuration,
-                    {
-                    stackKey: `pickup:${run.board.level}:${run.findablesClaimedThisFloor}`
-                    }
-                );
-            }
+        if (typedBoardTurnEvent.matchedFindableKind == null) {
+            return;
         }
-
-        pickupToastSnapshotRef.current = nextSnapshot;
-    }, [
-        run.board,
-        run.findablesClaimedThisFloor,
-        run.findablesTotalThisFloor,
-        run.lives,
-        run.stats.comboShards,
-        run.stats.currentStreak,
-        reduceMotion
-    ]);
+        if (typedBoardTurnEvent.findablesClaimedAfter <= typedBoardTurnEvent.findablesClaimedBefore) {
+            return;
+        }
+        const toastText = getPickupStackToastText(typedBoardTurnEvent);
+        if (toastText == null) {
+            return;
+        }
+        const { showInfo } = useNotificationStore.getState();
+        showInfo(
+            toastText,
+            reduceMotion ? 2200 : 3200,
+            // Keyed on the event id so one resolved turn toasts once, no matter how many
+            // times the component re-renders.
+            { stackKey: `pickup:${typedBoardTurnEvent.eventId}` }
+        );
+    }, [typedBoardTurnEvent, reduceMotion]);
 
     /** Persist `powersFtueSeen` once the player leaves tutorial floors (pair markers no longer needed). */
     useEffect(() => {
@@ -3819,10 +3797,9 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         priority: politeHudAnnouncementPriority,
         queuePoliteAnnouncement
     } = useHudPoliteLiveAnnouncement({
+        boardTurnEvent: typedBoardTurnEvent,
         gameplayFeedback: typedGameplayFeedback,
         boardLevel: run.board?.level ?? null,
-        boardTiles: run.board?.tiles ?? [],
-        findablesClaimedThisFloor: run.findablesClaimedThisFloor,
         gauntletActive,
         gauntletRemainingMs,
         lives: run.lives,

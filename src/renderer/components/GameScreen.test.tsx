@@ -5,6 +5,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { BoardState, RunState, Tile } from '../../shared/contracts';
 import { EXIT_PAIR_KEY, ROOM_PAIR_KEY, SHOP_PAIR_KEY } from '../../shared/dungeon-rules';
 import { createNewRun, finishMemorizePhase } from '../../shared/game-core';
+import { createBoardTurnResolvedEventFixture } from '../../shared/test/gameplay-event-fixtures';
 import { applyEnemyHazardClick } from '../../shared/turn-resolution';
 import { getPlayableOnboardingStep } from '../../shared/playable-onboarding';
 import { createDungeonRunMapState, revealDungeonChoices, selectDungeonNode } from '../../shared/run-map';
@@ -153,7 +154,6 @@ vi.mock('../hooks/useDistractionChannelTick', () => ({
     useDistractionChannelTick: () => 0
 }));
 vi.mock('../hooks/useHudPoliteLiveAnnouncement', () => ({
-    detectClaimedFindableKind: () => hudAnnouncementMock.claimedFindableKind,
     formatHudActionFeedbackText: hudAnnouncementMock.formatHudActionFeedbackText,
     getFindableToastText: hudAnnouncementMock.getFindableToastText,
     useHudPoliteLiveAnnouncement: () => ({
@@ -528,9 +528,29 @@ describe('GameScreen (OVR-014)', () => {
                 currentStreak: 3
             }
         } as RunState;
+        // The toast now projects the resolved-turn event rather than diffing board tiles,
+        // so the claim is expressed as a journalled event.
+        const claimEvent = createBoardTurnResolvedEventFixture({
+            commandId: 'pickup-claim',
+            matchedFindableKind: 'shard_spark',
+            findablesClaimedBefore: 0,
+            findablesClaimedAfter: 1,
+            findablesTotalBefore: 2,
+            findablesTotalAfter: 2,
+            announcement: {
+                comboShardsAfter: 1,
+                currentStreakAfter: 3,
+                livesAfter: 4,
+                findablesClaimedBefore: 0,
+                findablesClaimedAfter: 1,
+                findablesTotalBefore: 2,
+                findablesTotalAfter: 2
+            }
+        });
         const claimedRun = {
             ...initialRun,
             findablesClaimedThisFloor: 1,
+            gameplayEventJournal: [claimEvent],
             board: {
                 ...initialRun.board!,
                 tiles: [...initialRun.board!.tiles]
@@ -557,7 +577,7 @@ describe('GameScreen (OVR-014)', () => {
         await waitFor(() => {
             const pickupToast = useNotificationStore
                 .getState()
-                .notifications.find((notification) => notification.stackKey === 'pickup:1:1');
+                .notifications.find((notification) => notification.stackKey === `pickup:${claimEvent.eventId}`);
             expect(pickupToast?.message).toBe(
                 'Stack prime: Shard spark +1 combo shard. Double cashout: x4 +1 shard in 1 match. Pickups 1/2.'
             );

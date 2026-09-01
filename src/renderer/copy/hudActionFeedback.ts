@@ -1,4 +1,4 @@
-import type { FindableKind, Tile, TileTraitKind } from '../../shared/contracts';
+import type { FindableKind, TileTraitKind } from '../../shared/contracts';
 import { getFindableKindLabel, getFindableRewardCopy } from '../../shared/findables';
 import { TILE_TRAIT_COUNT_KINDS } from '../../shared/session-stats-rules';
 import { TILE_TRAIT_COPY } from '../../shared/tile-trait-rules';
@@ -16,32 +16,6 @@ export const gauntletMessageForThreshold = (secs: number): string => {
         return 'Gauntlet: thirty seconds or less remaining.';
     }
     return 'Gauntlet: one minute or less remaining.';
-};
-
-export const detectClaimedFindableKind = (
-    previousTiles: readonly Tile[],
-    nextTiles: readonly Tile[]
-): FindableKind | null => {
-    const previousKinds = new Map<string, FindableKind>();
-    for (const tile of previousTiles) {
-        if (tile.findableKind != null) {
-            previousKinds.set(tile.pairKey, tile.findableKind);
-        }
-    }
-    for (const [pairKey, kind] of previousKinds) {
-        const nextPairTiles = nextTiles.filter((tile) => tile.pairKey === pairKey);
-        if (
-            nextPairTiles.length > 0 &&
-            nextPairTiles.every(
-                (tile) =>
-                    (tile.state === 'matched' || tile.state === 'removed') &&
-                    tile.findableKind == null
-            )
-        ) {
-            return kind;
-        }
-    }
-    return null;
 };
 
 export const getFindableAnnouncementText = (kind: FindableKind): string =>

@@ -110,7 +110,7 @@ const turnEventFor = (
         traitInteractionTags: run.board
             ? formatSourceTraitTags(run, outcome.includes('mismatch') ? 'mismatch' : 'match')
             : [],
-        announcement: getBoardTurnAnnouncementFacts(run, next, run.board?.flippedTileIds ?? [], outcome)
+        announcement: getBoardTurnAnnouncementFacts(run, next)
     }) as BoardTurnResolvedEvent;
 };
 

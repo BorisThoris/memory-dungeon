@@ -37,6 +37,11 @@ export interface BoardTurnResolvedEventFixtureOverrides {
     triesAfter?: number;
     matchesBefore?: number;
     matchesAfter?: number;
+    findablesClaimedBefore?: number;
+    findablesClaimedAfter?: number;
+    findablesTotalBefore?: number;
+    findablesTotalAfter?: number;
+    matchedFindableKind?: 'shard_spark' | 'score_glint' | 'ward_spark' | 'scout_glint' | null;
     announcement?: Partial<BoardTurnAnnouncementFacts>;
 }
 
@@ -65,6 +70,11 @@ export const createBoardTurnResolvedEventFixture = ({
     triesAfter = 0,
     matchesBefore = 0,
     matchesAfter = 1,
+    findablesClaimedBefore = 0,
+    findablesClaimedAfter = 0,
+    findablesTotalBefore = 0,
+    findablesTotalAfter = 0,
+    matchedFindableKind = null,
     announcement
 }: BoardTurnResolvedEventFixtureOverrides): GameplayEvent =>
     gameplayEventSchema.parse({
@@ -88,5 +98,10 @@ export const createBoardTurnResolvedEventFixture = ({
         triesAfter,
         matchesBefore,
         matchesAfter,
+        findablesClaimedBefore,
+        findablesClaimedAfter,
+        findablesTotalBefore,
+        findablesTotalAfter,
+        matchedFindableKind,
         announcement: { ...DEFAULT_ANNOUNCEMENT, ...announcement }
     });

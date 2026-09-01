@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import type { Tile, TileTraitKind } from '../../shared/contracts';
+import type { TileTraitKind } from '../../shared/contracts';
 import { getHazardTileLiveCopy, HAZARD_TILE_KINDS } from '../../shared/hazard-tiles';
 import { runNonNegativeInteger, runNonNegativeIntegerWithFallback } from '../../shared/run-number-guards';
+import { getBoardTurnPickupAnnouncement } from '../copy/boardTurnAnnouncement';
+import type { BoardTurnResolvedEvent } from '../store/gameplayFeedbackAdapter';
 import { getChainMilestoneFeedback } from '../copy/chainMilestoneFeedback';
 import { getChainRewardForecastCues, getChainRewardUrgencyCopy } from '../copy/chainMomentum';
 import { GAMBIT_OPPORTUNITY_HINT_LINE } from '../copy/gameplayHints';
@@ -10,19 +12,13 @@ import {
     GAUNTLET_WARN_SECS,
     changedTileTraitLabels,
     countTileTraitTotal,
-    detectClaimedFindableKind,
     gauntletMessageForThreshold,
-    getFindableAnnouncementText,
     joinReadableList,
     pluralize,
     resourceDeltaCopy
 } from '../copy/hudActionFeedback';
 
-export {
-    detectClaimedFindableKind,
-    formatHudActionFeedbackText,
-    getFindableToastText
-} from '../copy/hudActionFeedback';
+export { formatHudActionFeedbackText, getFindableToastText } from '../copy/hudActionFeedback';
 
 /** Min interval between polite live-region updates (anti-spam for screen readers). */
 const POLITE_HUD_THROTTLE_MS = 400;
@@ -85,14 +81,14 @@ interface HudPoliteLiveAnnouncementInput {
     regionShuffleCharges?: number;
     stickyBlockIndex?: number | null;
     boardLevel: number | null;
-    boardTiles: readonly Tile[];
+    /** Latest resolved turn, the source of truth for pickup announcements. */
+    boardTurnEvent?: BoardTurnResolvedEvent | null;
     matchedPairs: number;
     pairCount: number;
     mismatches: number;
     tileTraitMatches?: Partial<Record<TileTraitKind, number>>;
     tileTraitMismatches?: Partial<Record<TileTraitKind, number>>;
     volatileTraitShuffles?: number;
-    findablesClaimedThisFloor: number;
     objectiveProgress?: number;
     objectiveRequired?: number;
     objectiveLabel?: string | null;
@@ -161,6 +157,7 @@ const normalizeRecallFocusForAnnouncement = (focus: number, max: number): { focu
 const CHAIN_MILESTONE_THRESHOLDS = [3, 6, 10] as const;
 
 export const useHudPoliteLiveAnnouncement = ({
+    boardTurnEvent = null,
     gameplayFeedback = null,
     gauntletRemainingMs,
     gauntletActive,
@@ -175,14 +172,12 @@ export const useHudPoliteLiveAnnouncement = ({
     regionShuffleCharges = 0,
     stickyBlockIndex = null,
     boardLevel,
-    boardTiles,
     matchedPairs,
     pairCount,
     mismatches,
     tileTraitMatches,
     tileTraitMismatches,
     volatileTraitShuffles = 0,
-    findablesClaimedThisFloor,
     objectiveProgress = 0,
     objectiveRequired = 0,
     objectiveLabel = null,
@@ -229,11 +224,6 @@ export const useHudPoliteLiveAnnouncement = ({
         parasiteFloors: number;
         lives: number;
         ward: number;
-    } | null>(null);
-    const pickupSnapRef = useRef<{
-        level: number;
-        claimed: number;
-        tiles: readonly Tile[];
     } | null>(null);
     const actionSnapRef = useRef<{
         level: number;
@@ -484,40 +474,23 @@ export const useHudPoliteLiveAnnouncement = ({
         parasiteSnapRef.current = nextSnap;
     }, [boardLevel, lives, parasiteFloors, parasiteWardRemaining, queuePoliteAnnouncement, scoreParasiteActive]);
 
+    // Pickups are announced from the resolved-turn event rather than by diffing the
+    // previous board's tiles against the current ones. The core already reports which
+    // findable was claimed, and the event id makes the dedupe key unique per turn, so a
+    // re-render cannot re-announce and two identical pickups on different turns both are.
     useEffect(() => {
-        if (boardLevel === null) {
-            pickupSnapRef.current = null;
+        if (!boardTurnEvent || newGameplayFeedback?.source.kind === 'findable') {
             return;
         }
-
-        const snap = pickupSnapRef.current;
-        const nextSnap = {
-            level: boardLevel,
-            claimed: findablesClaimedThisFloor,
-            tiles: boardTiles
-        };
-
-        if (snap === null || boardLevel < snap.level) {
-            pickupSnapRef.current = nextSnap;
+        const announcement = getBoardTurnPickupAnnouncement(boardTurnEvent);
+        if (!announcement) {
             return;
         }
-
-        if (
-            boardLevel === snap.level &&
-            findablesClaimedThisFloor > snap.claimed &&
-            newGameplayFeedback?.source.kind !== 'findable'
-        ) {
-            const claimedKind = detectClaimedFindableKind(snap.tiles, boardTiles);
-            if (claimedKind != null) {
-                queuePoliteAnnouncement(getFindableAnnouncementText(claimedKind), {
-                    dedupeKey: `pickup:${claimedKind}`,
-                    priority: 'info'
-                });
-            }
-        }
-
-        pickupSnapRef.current = nextSnap;
-    }, [boardLevel, boardTiles, findablesClaimedThisFloor, newGameplayFeedback, queuePoliteAnnouncement]);
+        queuePoliteAnnouncement(announcement.text, {
+            dedupeKey: announcement.dedupeKey,
+            priority: announcement.priority
+        });
+    }, [boardTurnEvent, newGameplayFeedback, queuePoliteAnnouncement]);
 
     useEffect(() => {
         if (boardLevel === null) {
