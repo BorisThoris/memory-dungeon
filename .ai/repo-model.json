@@ -9,7 +9,7 @@
     "contentItemCount": 57,
     "mechanicCount": 130,
     "stateFieldCount": 144,
-    "relationshipCount": 10128
+    "relationshipCount": 10129
   },
   "inventory": [
     {
@@ -10803,8 +10803,8 @@
     {
       "path": "src/shared/gameplay-core.ts",
       "category": "source",
-      "bytes": 88155,
-      "sha256": "1b655bdb480eb8118ee7821c2d080f1f032252b376ad87e9d548ec28f8e08b4e"
+      "bytes": 88741,
+      "sha256": "3540c6ee3a03ec954a132340d0267dd65d0d8743e65e1f71aa37b20604ece54b"
     },
     {
       "path": "src/shared/gameplay-effect-transition.test.ts",
@@ -27708,7 +27708,7 @@
       "path": "src/shared/gameplay-core.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 2006,
+      "lineCount": 2017,
       "imports": [
         "file:src/shared/board-inspection.ts",
         "file:src/shared/board-power-actions.ts",
@@ -27733,6 +27733,7 @@
         "file:src/shared/relics.ts",
         "file:src/shared/risk-wager-rules.ts",
         "file:src/shared/route-rules.ts",
+        "file:src/shared/route-side-room-rules.ts",
         "file:src/shared/run-array-guards.ts",
         "file:src/shared/run-events.ts",
         "file:src/shared/run-inventory.ts",
@@ -52324,32 +52325,32 @@
       "name": "GameplayCommandResult",
       "kind": "interface",
       "file": "src/shared/gameplay-core.ts",
-      "line": 79,
-      "endLine": 84
+      "line": 80,
+      "endLine": 85
     },
     {
       "id": "symbol:src/shared/gameplay-core.ts#GameplayReplayResult",
       "name": "GameplayReplayResult",
       "kind": "interface",
       "file": "src/shared/gameplay-core.ts",
-      "line": 86,
-      "endLine": 91
+      "line": 87,
+      "endLine": 92
     },
     {
       "id": "symbol:src/shared/gameplay-core.ts#reduceGameplayCommand",
       "name": "reduceGameplayCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core.ts",
-      "line": 1872,
-      "endLine": 1990
+      "line": 1883,
+      "endLine": 2001
     },
     {
       "id": "symbol:src/shared/gameplay-core.ts#replayGameplayCommands",
       "name": "replayGameplayCommands",
       "kind": "value",
       "file": "src/shared/gameplay-core.ts",
-      "line": 1992,
-      "endLine": 2005
+      "line": 2003,
+      "endLine": 2016
     },
     {
       "id": "symbol:src/shared/gameplay-effect-transition.ts#applyGameplayDefinitionTransition",
@@ -61976,7 +61977,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 1564
+          "line": 1575
         },
         {
           "path": "src/shared/board-power-actions.ts",
@@ -62179,7 +62180,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 202
+          "line": 203
         },
         {
           "path": "src/shared/gameplay-core-adapters.ts",
@@ -62236,7 +62237,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 64
+          "line": 16
         },
         {
           "path": "src/shared/risk-wager-rules.ts",
@@ -62300,7 +62301,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 366
+          "line": 367
         },
         {
           "path": "src/shared/relics.ts",
@@ -62505,7 +62506,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 23
+          "line": 24
         },
         {
           "path": "src/shared/gameplay-core-adapters.ts",
@@ -62719,7 +62720,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 51
+          "line": 52
         },
         {
           "path": "src/renderer/store/runSurfaceState.ts",
@@ -63043,7 +63044,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 53
+          "line": 54
         },
         {
           "path": "src/shared/next-floor-transition-rules.ts",
@@ -63152,7 +63153,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 37
+          "line": 38
         }
       ],
       "tests": [
@@ -63392,7 +63393,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 37
+          "line": 38
         },
         {
           "path": "src/shared/turn-mismatch-rules.ts",
@@ -63448,7 +63449,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 37
+          "line": 38
         },
         {
           "path": "src/shared/turn-match-economy-rules.ts",
@@ -63885,7 +63886,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 55
+          "line": 56
         },
         {
           "path": "src/shared/next-floor-transition-rules.ts",
@@ -64222,7 +64223,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 48
+          "line": 49
         },
         {
           "path": "src/shared/game.ts",
@@ -64278,7 +64279,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 955
+          "line": 966
         },
         {
           "path": "src/shared/tile-trait-rules.ts",
@@ -65129,7 +65130,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 55
+          "line": 56
         },
         {
           "path": "src/shared/gameplay-core-adapters.ts",
@@ -65188,7 +65189,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 18
+          "line": 19
         },
         {
           "path": "src/renderer/store/relicOfferSurfaceState.ts",
@@ -65254,7 +65255,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 64
+          "line": 16
         },
         {
           "path": "src/renderer/store/sideRoomSurfaceState.ts",
@@ -65333,7 +65334,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 19
+          "line": 20
         },
         {
           "path": "src/shared/gameplay-core-adapters.ts",
@@ -66300,7 +66301,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 21
+          "line": 22
         }
       ],
       "tests": [
@@ -66387,7 +66388,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 21
+          "line": 22
         }
       ],
       "tests": [
@@ -66429,7 +66430,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 21
+          "line": 22
         }
       ],
       "tests": [
@@ -66471,7 +66472,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 64
+          "line": 65
         }
       ],
       "tests": [
@@ -66690,7 +66691,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 362
+          "line": 363
         }
       ],
       "tests": [
@@ -66732,7 +66733,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 21
+          "line": 22
         }
       ],
       "tests": [
@@ -66776,7 +66777,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 21
+          "line": 22
         },
         {
           "path": "src/shared/route-side-room-rules.ts",
@@ -66946,7 +66947,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 64
+          "line": 16
         },
         {
           "path": "src/renderer/store/levelCompleteContinuationExecutor.ts",
@@ -67152,7 +67153,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 21
+          "line": 22
         },
         {
           "path": "src/shared/next-floor-transition-rules.ts",
@@ -67486,7 +67487,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 366
+          "line": 367
         },
         {
           "path": "src/shared/route-choice-outcome-rules.ts",
@@ -67521,7 +67522,7 @@
       "evidence": [
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 23
+          "line": 24
         },
         {
           "path": "src/shared/gameplay-core-simulation.ts",
@@ -67985,7 +67986,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 46
+          "line": 47
         }
       ],
       "tests": [
@@ -110194,6 +110195,12 @@
       "id": "imports:src/shared/gameplay-core.ts->src/shared/route-rules.ts",
       "source": "file:src/shared/gameplay-core.ts",
       "target": "file:src/shared/route-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/gameplay-core.ts->src/shared/route-side-room-rules.ts",
+      "source": "file:src/shared/gameplay-core.ts",
+      "target": "file:src/shared/route-side-room-rules.ts",
       "kind": "imports"
     },
     {

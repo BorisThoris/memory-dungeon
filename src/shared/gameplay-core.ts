@@ -13,6 +13,7 @@ import type { TileTraitInteractionTag } from './tile-trait-rules';
 import { createFlipTileTransition } from './flip-tile-transition';
 import { applyEnemyHazardClick } from './dungeon-enemy-hazard-rules';
 import { rerollShopOffers } from './shop-rules';
+import { openRouteSideRoom } from './route-side-room-rules';
 import { getBoardTurnAnnouncementFacts } from './board-turn-event-facts';
 import { finishMemorizePhase } from './memorize-phase-rules';
 import { computeRelicOfferPickBudget, openRelicOffer } from './relic-offer-open-rules';
@@ -913,6 +914,16 @@ const applyRouteChooseCommand = (
     command: Extract<GameplayCommand, { type: 'route.choose' }>
 ): GameplayCommandResult => {
     const outcome = applyRouteChoiceOutcome(run, command.choiceId);
+    // Choosing a route opens its side room. Doing it here, inside the command, keeps the
+    // interlude replayable: opening it afterwards on the resolved run - as the renderer
+    // and the build simulation both did - mutates state the journal never records, so a
+    // replay of the same commands lands on a run with no side room.
+    if (outcome.applied && !outcome.run.sideRoom) {
+        const opened = openRouteSideRoom(outcome.run);
+        if (opened.sideRoom) {
+            outcome.run = opened;
+        }
+    }
     if (!outcome.applied || !outcome.routeType || !outcome.outcomeKind || !outcome.summaryText) {
         return rejectedResult(
             run,
