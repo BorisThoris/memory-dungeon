@@ -7317,8 +7317,8 @@
     {
       "path": "src/renderer/components/ChooseYourPathScreen.module.css",
       "category": "source",
-      "bytes": 54602,
-      "sha256": "bd5cfa717d72ee4ab25f1058aeb34232278c40bbaff6fefe05d1441432dc2c96"
+      "bytes": 55032,
+      "sha256": "6f590c9a85271830392c902d6f44b8d8f9dda9b4e31d05ff5c1a6b21210e8558"
     },
     {
       "path": "src/renderer/components/ChooseYourPathScreen.test.tsx",
