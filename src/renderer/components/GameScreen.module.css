@@ -17307,3 +17307,30 @@
 .shell .hudContextRegion:not([open]) > *:not(summary) {
     display: none;
 }
+
+/*
+ * Floating board overlays clear the measured chrome.
+ *
+ * Each of these is absolutely positioned against the stage by a different component, and
+ * each had picked its own offset without knowing how tall the HUD deck or the action dock
+ * had grown. At 1440x900 that put the action-feedback rail directly over the score module
+ * at a higher z-index, and the dungeon run strip inside the action dock. The clearances
+ * come from useGameplayChromeClearance, which measures both bars; the fallbacks match
+ * their previous hard-coded offsets so a shell without the hook still lays out.
+ */
+.shell .actionFeedbackRail {
+    /*
+     * Below the HUD deck and below the chain-opportunity chip. The chip is wide enough to
+     * reach the centre of the stage, so a rail level with it would sit on top of the chip's
+     * reward ladder.
+     */
+    top: calc(
+        var(--gameplay-hud-top-clearance, 0px) + var(--gameplay-board-chip-height, 0px) +
+            var(--ui-space-sm)
+    );
+}
+
+.shell:not([data-mobile-camera-mode='true']) .dungeonRunStrip,
+.shell:not([data-mobile-camera-mode='true']) .playableOnboardingPrompt {
+    bottom: calc(var(--gameplay-dock-bottom-clearance, 5.3rem) + var(--ui-space-sm));
+}

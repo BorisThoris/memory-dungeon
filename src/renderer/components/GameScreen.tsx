@@ -16,6 +16,7 @@ import { getPrimaryRewardPerkReadinessRow } from '../../shared/bonus-rewards';
 import { getFloorClearCausalityRows } from '../../shared/level-result-presentation';
 import { getFloorIdentityContract } from '../../shared/boss-encounters';
 import { getPlayableOnboardingStep, type OnboardingStepId } from '../../shared/playable-onboarding';
+import { useGameplayChromeClearance } from '../hooks/useGameplayChromeClearance';
 import { formatLevelResultObjectiveLine } from '../../shared/secondary-objectives';
 import { runFilteredArray, runFilteredStringArray } from '../../shared/run-array-guards';
 import { runNonNegativeInteger } from '../../shared/run-number-guards';
@@ -110,6 +111,7 @@ import {
 import { GAMEPLAY_VISUAL_CSS_VARS } from './gameplayVisualConfig';
 import { REG104_DATA_SHELL } from '../gameplay/regPhase4PlayContract';
 import styles from './GameScreen.module.css';
+import boardStyles from './TileBoard.module.css';
 import {
     getDungeonCombatLogRows,
     getVisualHudAnnouncementFollowup,
@@ -3281,6 +3283,14 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         !reduceMotion &&
         run.status === 'playing';
     const distractionTick = useDistractionChannelTick(distractionHudOn);
+    // Publishes how much room the HUD deck and the action dock actually take, so the
+    // floating board overlays position against measured chrome instead of each guessing.
+    useGameplayChromeClearance({
+        boardChipClassName: boardStyles.chainOpportunityChip,
+        dockClassName: styles.actionDock,
+        hudClassName: styles.hudRow,
+        shellRef
+    });
     const { tiltRef: gameFieldTiltRef } = usePlatformTiltField({
         enabled: true,
         reduceMotion,
@@ -3788,9 +3798,12 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         void resumeAudioContext();
         playCountdownPressureSfx(shuffleSfxGain);
     }, [gauntletActive, gauntletRemainingMs, run.status, shuffleSfxGain]);
+    // Passed as just the journal, which is all the projector reads. Handing it the whole
+    // run made the memo's real dependency the run object, so it recomputed on every state
+    // change and the compiler could not preserve the memoization at all.
     const typedGameplayFeedback = useMemo(
-        () => getLatestGameplayFeedback(run),
-        [run.gameplayEventJournal]
+        () => getLatestGameplayFeedback({ gameplayEventJournal }),
+        [gameplayEventJournal]
     );
     const {
         message: politeHudAnnouncement,

@@ -583,13 +583,38 @@
 
 .chainOpportunityChip {
     position: absolute;
-    top: var(--ui-space-xs);
+    /*
+     * Below the HUD deck, not under it. The chip used to pin to the very top of the stage,
+     * which put it almost exactly on the floor/lives/shards rail. The clearance is measured
+     * by useGameplayChromeClearance; the fallback is the old offset.
+     */
+    top: calc(var(--gameplay-hud-top-clearance, 0px) + var(--ui-space-xs));
     left: var(--ui-space-xs);
     z-index: 5;
     display: inline-flex;
     align-items: center;
     gap: 0.28rem;
-    max-width: min(20rem, calc(100% - 1rem));
+    /*
+     * Contains its own content, in both axes, and stays chip-sized.
+     *
+     * Its children need roughly 90rem laid out in one row. With the old 20rem cap and no
+     * wrapping they overflowed unclipped across the board - fragments landing on the
+     * action-feedback rail mid-board and out at the right edge of the stage. Letting them
+     * wrap inside a 52rem cap contained them but turned the chip into an 841x280 panel
+     * covering a quarter of the play area and two cards.
+     *
+     * So: wrap, and clip to a chip. What gets clipped is the reward ladder and the
+     * hold-strike lanes, both of which the player already reads in the HUD stat rail
+     * ("Prime cashout x2 +1 shard / 2 matches left") and in the opportunity compass at the
+     * bottom of the stage. Nothing here was legible where it used to land.
+     */
+    flex-wrap: wrap;
+    max-width: min(26rem, calc(100% - 1rem));
+    max-height: 5.2rem;
+    overflow: hidden;
+    /* Fades the clip line so a truncated lane reads as "more below" rather than as a
+       row sliced in half. */
+    mask-image: linear-gradient(to bottom, #000 calc(100% - 0.7rem), transparent);
     min-height: 1.64rem;
     padding: 0.24rem 0.42rem;
     border: 1px solid color-mix(in srgb, var(--theme-cyan-bright) 44%, var(--theme-gold-bright) 20%);
@@ -7311,7 +7336,12 @@
 .traitModeCue {
     position: absolute;
     left: var(--ui-space-xs);
-    top: calc(var(--ui-space-xs) + 4.6rem);
+    /* Below the chip, whose height is measured onto the shell; the 4.6rem fallback is the
+       old constant, which was only correct while the chip was at its shortest. */
+    top: calc(
+        var(--gameplay-hud-top-clearance, 0px) + var(--ui-space-xs) +
+            var(--gameplay-board-chip-height, 4.6rem) + var(--ui-space-2xs)
+    );
     z-index: 5;
     display: grid;
     gap: 0.08rem;
