@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2422,
-    "codeFileCount": 917,
-    "exportedSymbolCount": 3487,
+    "trackedFileCount": 2423,
+    "codeFileCount": 918,
+    "exportedSymbolCount": 3488,
     "contentItemCount": 57,
     "mechanicCount": 130,
     "stateFieldCount": 144,
-    "relationshipCount": 10134
+    "relationshipCount": 10132
   },
   "inventory": [
     {
@@ -3583,12 +3583,6 @@
       "sha256": "d21ed19ff55cddd9ad6ec7ac6af305e52ee674e76e2c2f8bc75c22e1e4378e8c"
     },
     {
-      "path": "e2e/dom-audit.spec.ts",
-      "category": "test",
-      "bytes": 3103,
-      "sha256": "3c275771f9ce8245c277da3911904a4bdb2d5c8e61e3f757b8c11eaa58eca2e3"
-    },
-    {
       "path": "e2e/dungeon-board-3d-value.spec.ts",
       "category": "test",
       "bytes": 7115,
@@ -3605,6 +3599,12 @@
       "category": "test",
       "bytes": 6989,
       "sha256": "c909914f3fad76248356595b51717d4c0889d1b85fe7e584ff91403b57ed0163"
+    },
+    {
+      "path": "e2e/gameplay-hud-layout.spec.ts",
+      "category": "test",
+      "bytes": 6726,
+      "sha256": "6ff5add39a3c1180f107a76d3c2d9b27817e723c2a4ba907e2ac017d61a27349"
     },
     {
       "path": "e2e/gameplay-readability.spec.ts",
@@ -7461,8 +7461,8 @@
     {
       "path": "src/renderer/components/GameScreen.module.css",
       "category": "source",
-      "bytes": 602224,
-      "sha256": "056118cd366b66bf1a9a55b4551ab2fe7b52b497dbecfa3fea1d75f57e7a72b7"
+      "bytes": 606338,
+      "sha256": "58d1e7bc6a749f4b0bac77b7e2187373655e7e36d0495f00a36a304e14cd3dba"
     },
     {
       "path": "src/renderer/components/GameScreen.test.tsx",
@@ -7473,8 +7473,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 371003,
-      "sha256": "d299e783f4bcdadd61f0a58481fa2b90b45cf4534520b5bbd4c0e74116caad02"
+      "bytes": 371782,
+      "sha256": "f260fba1749da3f56c4763c8c4bc4cd7dd9d070b34da5fdeb95a5d5c5de0159a"
     },
     {
       "path": "src/renderer/components/GameScreenActionFeedbackRail.test.tsx",
@@ -7905,8 +7905,8 @@
     {
       "path": "src/renderer/components/TileBoard.module.css",
       "category": "source",
-      "bytes": 305156,
-      "sha256": "691b35cf2ab1c5c161397f00a9dd5fab5a6947ff9fea6080eb23fc50a10cdf43"
+      "bytes": 306886,
+      "sha256": "d9e670c7b4a00996da51c7ce0976b0b3b6ff0e72131eeeb107a94209aaa1918f"
     },
     {
       "path": "src/renderer/components/TileBoard.test.tsx",
@@ -9115,6 +9115,12 @@
       "sha256": "035283080ec5323716d9a0d4bbebb6bd077b66fd885dd9f701c2579421fde7be"
     },
     {
+      "path": "src/renderer/hooks/useGameplayChromeClearance.ts",
+      "category": "source",
+      "bytes": 4535,
+      "sha256": "586cd9d06ad457e9ddebc990a985c1eedea723482f9081a9c428e3ff8879c1be"
+    },
+    {
       "path": "src/renderer/hooks/useHudPoliteLiveAnnouncement.test.ts",
       "category": "test",
       "bytes": 55173,
@@ -9123,8 +9129,8 @@
     {
       "path": "src/renderer/hooks/useHudPoliteLiveAnnouncement.ts",
       "category": "source",
-      "bytes": 28456,
-      "sha256": "42ffc5963090dc9f21cc66024d596866e886946550b16c7e6cc5df76b74609bd"
+      "bytes": 28292,
+      "sha256": "b09034096266c140eec16473b3b51f67599a6237371e00cb2f83e2ba1feb1f87"
     },
     {
       "path": "src/renderer/hooks/useLatestRef.ts",
@@ -16828,7 +16834,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 6815,
+      "lineCount": 6828,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -16861,6 +16867,7 @@
         "file:src/renderer/gameplay/stickyFingersBlockedTileId.ts",
         "file:src/renderer/hooks/useDistractionChannelTick.ts",
         "file:src/renderer/hooks/useEffectiveReducedMotion.ts",
+        "file:src/renderer/hooks/useGameplayChromeClearance.ts",
         "file:src/renderer/hooks/useHudPoliteLiveAnnouncement.ts",
         "file:src/renderer/hooks/useLatestRef.ts",
         "file:src/renderer/hooks/useViewportSize.ts",
@@ -21581,6 +21588,18 @@
       ]
     },
     {
+      "id": "file:src/renderer/hooks/useGameplayChromeClearance.ts",
+      "path": "src/renderer/hooks/useGameplayChromeClearance.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 102,
+      "imports": [],
+      "exports": [
+        "symbol:src/renderer/hooks/useGameplayChromeClearance.ts#useGameplayChromeClearance"
+      ],
+      "testedBy": []
+    },
+    {
       "id": "file:src/renderer/hooks/useHudPoliteLiveAnnouncement.test.ts",
       "path": "src/renderer/hooks/useHudPoliteLiveAnnouncement.test.ts",
       "layer": "renderer",
@@ -21603,16 +21622,12 @@
       "path": "src/renderer/hooks/useHudPoliteLiveAnnouncement.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 689,
+      "lineCount": 686,
       "imports": [
         "file:src/renderer/copy/boardTurnAnnouncement.ts",
-        "file:src/renderer/copy/chainMilestoneFeedback.ts",
-        "file:src/renderer/copy/chainMomentum.ts",
         "file:src/renderer/copy/gameplayHints.ts",
         "file:src/renderer/copy/hudActionFeedback.ts",
         "file:src/renderer/store/gameplayFeedbackAdapter.ts",
-        "file:src/shared/contracts.ts",
-        "file:src/shared/hazard-tiles.ts",
         "file:src/shared/run-number-guards.ts"
       ],
       "exports": [
@@ -35408,8 +35423,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 6814,
-      "endLine": 6814
+      "line": 6827,
+      "endLine": 6827
     },
     {
       "id": "symbol:src/renderer/components/GameScreenActionFeedbackRail.tsx#GameScreenActionFeedbackRail",
@@ -41220,28 +41235,36 @@
       "endLine": 185
     },
     {
+      "id": "symbol:src/renderer/hooks/useGameplayChromeClearance.ts#useGameplayChromeClearance",
+      "name": "useGameplayChromeClearance",
+      "kind": "value",
+      "file": "src/renderer/hooks/useGameplayChromeClearance.ts",
+      "line": 19,
+      "endLine": 101
+    },
+    {
       "id": "symbol:src/renderer/hooks/useHudPoliteLiveAnnouncement.ts#formatHudActionFeedbackText",
       "name": "formatHudActionFeedbackText",
       "kind": "ExportSpecifier",
       "file": "src/renderer/hooks/useHudPoliteLiveAnnouncement.ts",
-      "line": 21,
-      "endLine": 21
+      "line": 16,
+      "endLine": 16
     },
     {
       "id": "symbol:src/renderer/hooks/useHudPoliteLiveAnnouncement.ts#getFindableToastText",
       "name": "getFindableToastText",
       "kind": "ExportSpecifier",
       "file": "src/renderer/hooks/useHudPoliteLiveAnnouncement.ts",
-      "line": 21,
-      "endLine": 21
+      "line": 16,
+      "endLine": 16
     },
     {
       "id": "symbol:src/renderer/hooks/useHudPoliteLiveAnnouncement.ts#useHudPoliteLiveAnnouncement",
       "name": "useHudPoliteLiveAnnouncement",
       "kind": "value",
       "file": "src/renderer/hooks/useHudPoliteLiveAnnouncement.ts",
-      "line": 129,
-      "endLine": 688
+      "line": 119,
+      "endLine": 685
     },
     {
       "id": "symbol:src/renderer/hooks/useLatestRef.ts#useLatestRef",
@@ -62803,7 +62826,7 @@
         },
         {
           "path": "src/renderer/hooks/useHudPoliteLiveAnnouncement.ts",
-          "line": 6
+          "line": 4
         }
       ],
       "tests": [
@@ -63041,7 +63064,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 3829
+          "line": 3842
         }
       ],
       "tests": [
@@ -78582,6 +78605,12 @@
       "id": "exports:src/renderer/hooks/useFitShellZoom.ts->symbol:src/renderer/hooks/useFitShellZoom.ts#useFitShellZoom",
       "source": "file:src/renderer/hooks/useFitShellZoom.ts",
       "target": "symbol:src/renderer/hooks/useFitShellZoom.ts#useFitShellZoom",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/hooks/useGameplayChromeClearance.ts->symbol:src/renderer/hooks/useGameplayChromeClearance.ts#useGameplayChromeClearance",
+      "source": "file:src/renderer/hooks/useGameplayChromeClearance.ts",
+      "target": "symbol:src/renderer/hooks/useGameplayChromeClearance.ts#useGameplayChromeClearance",
       "kind": "exports"
     },
     {
@@ -99163,6 +99192,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/hooks/useGameplayChromeClearance.ts",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "file:src/renderer/hooks/useGameplayChromeClearance.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/hooks/useHudPoliteLiveAnnouncement.ts",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "file:src/renderer/hooks/useHudPoliteLiveAnnouncement.ts",
@@ -103957,18 +103992,6 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/hooks/useHudPoliteLiveAnnouncement.ts->src/renderer/copy/chainMilestoneFeedback.ts",
-      "source": "file:src/renderer/hooks/useHudPoliteLiveAnnouncement.ts",
-      "target": "file:src/renderer/copy/chainMilestoneFeedback.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/hooks/useHudPoliteLiveAnnouncement.ts->src/renderer/copy/chainMomentum.ts",
-      "source": "file:src/renderer/hooks/useHudPoliteLiveAnnouncement.ts",
-      "target": "file:src/renderer/copy/chainMomentum.ts",
-      "kind": "imports"
-    },
-    {
       "id": "imports:src/renderer/hooks/useHudPoliteLiveAnnouncement.ts->src/renderer/copy/gameplayHints.ts",
       "source": "file:src/renderer/hooks/useHudPoliteLiveAnnouncement.ts",
       "target": "file:src/renderer/copy/gameplayHints.ts",
@@ -103984,18 +104007,6 @@
       "id": "imports:src/renderer/hooks/useHudPoliteLiveAnnouncement.ts->src/renderer/store/gameplayFeedbackAdapter.ts",
       "source": "file:src/renderer/hooks/useHudPoliteLiveAnnouncement.ts",
       "target": "file:src/renderer/store/gameplayFeedbackAdapter.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/hooks/useHudPoliteLiveAnnouncement.ts->src/shared/contracts.ts",
-      "source": "file:src/renderer/hooks/useHudPoliteLiveAnnouncement.ts",
-      "target": "file:src/shared/contracts.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/hooks/useHudPoliteLiveAnnouncement.ts->src/shared/hazard-tiles.ts",
-      "source": "file:src/renderer/hooks/useHudPoliteLiveAnnouncement.ts",
-      "target": "file:src/shared/hazard-tiles.ts",
       "kind": "imports"
     },
     {

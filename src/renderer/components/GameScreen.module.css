@@ -17334,3 +17334,47 @@
 .shell:not([data-mobile-camera-mode='true']) .playableOnboardingPrompt {
     bottom: calc(var(--gameplay-dock-bottom-clearance, 5.3rem) + var(--ui-space-sm));
 }
+
+/*
+ * Legibility floor for the readouts the player must read at a glance.
+ *
+ * The HUD's type scale is authored between 0.42rem and 0.74rem, which at a 16px root is
+ * 6.7px to 11.8px, and a late desktop pass shrinks several of these further still - the
+ * lives label rendered at 8.96px and "2 matches left" at 6.72px on a 1440x900 window.
+ * That is not legible at a desk, let alone on a Steam Deck at arm's length or in a store
+ * trailer frame.
+ *
+ * This raises only the lanes a player has to read to make a decision - floor, lives,
+ * shards, score, the reward cue, and the phase line - to 12px. The rest of the HUD stays
+ * as authored: raising it wholesale would overflow panels that were sized around 7px
+ * text, and the honest fix for those is less copy, not smaller type.
+ *
+ * Specificity matches the desktop pass it overrides; being later in the file is what wins.
+ */
+.shell .hudDeck .statKey,
+.shell .hudDeck .floorLabel,
+.shell .hudDeck .statSubline {
+    font-size: 0.75rem;
+}
+
+/*
+ * The prime-cashout pill is deliberately left as authored. It is a nowrap three-column
+ * pill sized around 8px type inside a 147px column: at 12px "Prime cashout x2 +1 shard"
+ * truncates to "Prime cashout x2...", losing the reward it exists to name, and letting it
+ * wrap collapses its columns on top of each other. It cannot be made legible by type size
+ * alone - it needs less copy, and the same forecast is already spoken by the trait-mode
+ * cue and the opportunity compass.
+ */
+
+.shell .actionFeedbackHeader,
+.shell .dungeonRunCurrent,
+.shell .hudContextSummary {
+    font-size: 0.75rem;
+}
+
+/* The text in these lanes lives in a child with its own size, so the parent rule above
+   does not reach it. */
+.shell .actionFeedbackHeader > span:first-child,
+.shell .dungeonRunCurrent span:not(.dungeonRunGlyph) {
+    font-size: 0.75rem;
+}
