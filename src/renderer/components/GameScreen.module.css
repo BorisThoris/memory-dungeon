@@ -17286,3 +17286,24 @@
         animation: none;
     }
 }
+
+/*
+ * A closed disclosure must not lay out its contents.
+ *
+ * The UA hides a closed `details`' non-summary children with `display: none`, but any
+ * author rule that sets `display` on those children overrides it - and
+ * `.hudStripRightInnerColumn` sets `display: grid`. The result was the entire right-hand
+ * stat rail laying out roughly 1100px of panels behind the board canvas while collapsed:
+ * eighteen panels below the fold, and dozens of labels squeezed into a zero-width grid
+ * column until their text reflowed down to 7px. None of it was ever visible to the
+ * player, and all of it was styled and measured on every frame.
+ *
+ * Specificity here has to clear `.shell:not([data-mobile-camera-mode='true'])
+ * .hudContextSecondaryStrip .hudStripRightInnerColumn`, hence the `.shell .hudDeck`
+ * prefix on the first selector; the second covers mobile camera mode, where that rule
+ * does not apply.
+ */
+.shell .hudDeck .hudContextRegion:not([open]) > *:not(summary),
+.shell .hudContextRegion:not([open]) > *:not(summary) {
+    display: none;
+}
