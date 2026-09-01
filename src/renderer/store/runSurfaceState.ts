@@ -19,7 +19,6 @@ import {
 import { getDungeonExitStatus } from '../../shared/dungeon-board-status';
 import { reduceGameplayCommand } from '../../shared/gameplay-core';
 import { appendGameplayJournal } from '../../shared/gameplay-journal';
-import { finalizeLevel } from '../../shared/game';
 import {
     applyDestroyPair,
     collectDestroyEligibleTileIds,
@@ -483,7 +482,10 @@ export const createDungeonExitActivationSurfaceResult = ({
         ? { kind: 'ignored' }
         : {
               kind: 'applied',
-              patch: { run: journaledRun.board ? finalizeLevel(journaledRun, journaledRun.board) : journaledRun },
+              // The dungeon.exit_activate command finalizes the floor itself now, matching
+              // the legacy activateDungeonExit it replaces. Finalizing again here counted
+              // one cleared floor twice in levelsCleared.
+              patch: { run: journaledRun },
               playArmSfx: false,
               events: result.events
           };

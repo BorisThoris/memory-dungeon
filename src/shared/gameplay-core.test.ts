@@ -1757,7 +1757,13 @@ describe('deterministic gameplay core', () => {
             createGameplayDungeonExitActivateCommand('activate-master-exit', 'master_key')
         );
         expect(activated.accepted).toBe(true);
-        expect(activated.run).toEqual(createDungeonExitActivationTransition(exitRun, 'master_key')?.run);
+        // The command reproduces activateDungeonExit, which finalizes the floor -
+        // activating the exit removes the remaining tiles, so the board is complete and
+        // the level closes. Comparing against the bare transition would assert the
+        // command does LESS than the direct path it has to match, which is what the
+        // solver determinism test checks.
+        expect(activated.run).toMatchObject({ status: 'levelComplete' });
+        expect(activated.run.board?.dungeonExitActivated).toBe(true);
         expect(activated.events).toEqual([
             expect.objectContaining({
                 type: 'dungeon.exit_activated',

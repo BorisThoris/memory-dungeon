@@ -3,9 +3,6 @@ import type { GameplayEvent } from '../../shared/gameplay-core-contracts';
 import { createGameplayShopRerollCommand, createGameplayShopPurchaseCommand } from '../../shared/gameplay-core-contracts';
 import { reduceGameplayCommand } from '../../shared/gameplay-core';
 import { appendGameplayJournal } from '../../shared/gameplay-journal';
-import {
-    rerollShopOffers
-} from '../../shared/shop-rules';
 import type { StoreNavigationTransition } from './navigationModel';
 import type { RunSurfaceState } from './runSurfaceState';
 

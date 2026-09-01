@@ -694,9 +694,17 @@ const applyDungeonExitActivateCommand = (
     // the command path left a solved board in 'playing' with no lastLevelResult. But
     // activating an exit while pairs remain must not fabricate a floor clear, so the
     // finalize is conditional on the board actually being complete.
-    const finalizedRun = isBoardComplete(transition.board)
-        ? finalizeLevelThroughCore(nextRun, transition.board, { commandId: command.commandId, events })
-        : nextRun;
+    // Activating the exit clears the floor - the transition removes the remaining tiles -
+    // so this always finalizes, exactly as the legacy activateDungeonExit does
+    // (createActivateDungeonExit wraps this same transition in finalizeLevel). The
+    // isBoardComplete guard is kept as an explicit statement of that invariant rather
+    // than an assumption.
+    // ...but never twice. If the turn that opened the exit already cleared the floor,
+    // finalizing again increments levelsCleared a second time for one floor.
+    const finalizedRun =
+        isBoardComplete(transition.board) && nextRun.status !== 'levelComplete'
+            ? finalizeLevelThroughCore(nextRun, transition.board, { commandId: command.commandId, events })
+            : nextRun;
     return { run: finalizedRun, command, events, accepted: true };
 };
 
