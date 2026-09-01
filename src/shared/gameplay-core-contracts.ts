@@ -1684,6 +1684,15 @@ export const gameplayEventSchema = z.discriminatedUnion('type', [
     z
         .object({
             ...eventBase,
+            type: z.literal('dungeon.locked_cache_opened'),
+            tileId: z.string().min(1).max(160),
+            spend: z.enum(['none', 'key', 'master_key']),
+            keyKind: z.enum(['iron', 'treasure', 'shrine', 'boss', 'trap']).nullable()
+        })
+        .strict(),
+    z
+        .object({
+            ...eventBase,
             type: z.literal('dungeon.exit_activated'),
             exitTileId: z.string().min(1).max(160),
             spend: z.enum(['none', 'key', 'master_key']),
@@ -1882,7 +1891,10 @@ export const gameplayEventSchema = z.discriminatedUnion('type', [
             currentStreakAfter: z.number().int().nonnegative().default(0),
             findablesClaimedAfter: z.number().int().nonnegative().default(0),
             findablesTotalAfter: z.number().int().nonnegative().default(0),
-            matchedFindableKind: z.string().min(1).max(60).nullable().default(null),
+            matchedFindableKind: z
+                .enum(['shard_spark', 'score_glint', 'ward_spark', 'scout_glint'])
+                .nullable()
+                .default(null),
             traitInteractionTags: z.array(z.string().min(1).max(120)).default([])
         })
         .strict(),
