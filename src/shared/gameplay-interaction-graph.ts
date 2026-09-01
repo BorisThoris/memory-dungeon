@@ -357,7 +357,26 @@ export const auditGameplayInteractionGraph = (
                 )
         )
         .map((mechanic) => mechanic.id);
-    const playerVisibleWrites = new Set<string>(Object.values(GAMEPLAY_FEEDBACK_CRITICAL_FIELD_SOURCES));
+    // GAMEPLAY_FEEDBACK_CRITICAL_FIELD_SOURCES is the right source of truth for fields
+    // that owe critical feedback, but it is narrower than the set of writes a player can
+    // see: switching to it alone silently dropped 11 entries (score, routeChoices,
+    // relicOffer, lastLevelResult, feedbackLines, sessionStats, nextFloor, triesDelta,
+    // interactionTags, achievementProgress, bossTrophyCacheOutcome), so the HUD audit
+    // stopped covering them and passed vacuously. Union both.
+    const playerVisibleWrites = new Set<string>([
+        ...Object.values(GAMEPLAY_FEEDBACK_CRITICAL_FIELD_SOURCES),
+        'achievementProgress',
+        'bossTrophyCacheOutcome',
+        'feedbackLines',
+        'interactionTags',
+        'lastLevelResult',
+        'nextFloor',
+        'relicOffer',
+        'routeChoices',
+        'score',
+        'sessionStats',
+        'triesDelta'
+    ]);
     const playerVisibleWriteWithoutHudIds = graph.mechanics
         .filter((mechanic) => mechanic.writes.some((write) => playerVisibleWrites.has(write)))
         .filter(
