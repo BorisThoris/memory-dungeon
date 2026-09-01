@@ -1218,6 +1218,31 @@ export const gameplayPauseTimerSnapshotSchema = z
 
 export type GameplayPauseTimerSnapshot = z.infer<typeof gameplayPauseTimerSnapshotSchema>;
 
+/**
+ * Presentation facts stamped onto board.turn_resolved so the renderer can project
+ * feedback from the event alone instead of re-deriving it from board snapshots.
+ */
+export const boardTurnAnnouncementFactsSchema = z
+    .object({
+        anchorTileIds: z.array(z.string().min(1).max(160)).max(3),
+        level: z.number().int().nonnegative(),
+        routeSpecialKind: z.string().min(1).max(80).nullable(),
+        routeCardKind: z.string().min(1).max(80).nullable(),
+        currentStreakBefore: z.number().int().nonnegative(),
+        currentStreakAfter: z.number().int().nonnegative(),
+        comboShardsBefore: z.number().int().nonnegative(),
+        comboShardsAfter: z.number().int().nonnegative(),
+        guardTokensBefore: z.number().int().nonnegative(),
+        guardTokensAfter: z.number().int().nonnegative(),
+        livesBefore: z.number().int().nonnegative(),
+        livesAfter: z.number().int().nonnegative(),
+        findablesClaimedBefore: z.number().int().nonnegative(),
+        findablesClaimedAfter: z.number().int().nonnegative(),
+        findablesTotalBefore: z.number().int().nonnegative(),
+        findablesTotalAfter: z.number().int().nonnegative()
+    })
+    .strict();
+
 export const gameplayCommandSchema = z.discriminatedUnion('type', [
     z
         .object({
@@ -1910,8 +1935,11 @@ export const gameplayEventSchema = z.discriminatedUnion('type', [
             comboShardsBefore: z.number().int().nonnegative().default(0),
             comboShardsAfter: z.number().int().nonnegative().default(0),
             currentStreakAfter: z.number().int().nonnegative().default(0),
+            findablesClaimedBefore: z.number().int().nonnegative().default(0),
             findablesClaimedAfter: z.number().int().nonnegative().default(0),
+            findablesTotalBefore: z.number().int().nonnegative().default(0),
             findablesTotalAfter: z.number().int().nonnegative().default(0),
+            announcement: boardTurnAnnouncementFactsSchema,
             matchedFindableKind: z
                 .enum(['shard_spark', 'score_glint', 'ward_spark', 'scout_glint'])
                 .nullable()

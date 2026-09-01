@@ -1,12 +1,11 @@
-import type { RunState } from '../../shared/contracts';
-import { getMatchFloaterAnchorTileIds, getMismatchFloaterAnchorTileIds } from '../../shared/turn-resolution';
 import { routeSpecialLabel, routeSpecialRewardLine } from '../../shared/route-world';
-import { formatTileTraitInteractionTags, resolveTileTraitEffects } from '../../shared/tile-trait-rules';
+import { formatTileTraitInteractionTags } from '../../shared/tile-trait-rules';
 import { getFindableKindLabel, getFindableRewardCopy } from '../../shared/findables';
+import type { BoardTurnAnnouncementFacts } from '../../shared/board-turn-event-facts';
+import type { BoardTurnResolvedEvent } from './gameplayFeedbackAdapter';
 import { runArray } from '../../shared/run-array-guards';
 import { runNonNegativeInteger } from '../../shared/run-number-guards';
 import { getChainMilestoneFeedback, type ChainMilestoneFeedback } from '../copy/chainMilestoneFeedback';
-import { detectClaimedFindableKind } from '../copy/hudActionFeedback';
 import { getChainRewardForecastCues, getChainRewardUrgencyCopy, type ChainRewardForecastCue } from '../copy/chainMomentum';
 
 export type MatchScorePop = {
@@ -142,33 +141,6 @@ export const BOARD_FLOATER_POP_CLEAR = {
     mismatchScorePop: null as MismatchScorePop | null
 };
 
-const getTilesByIds = (run: RunState, tileIds: readonly string[]) =>
-    tileIds
-        .map((tileId) => run.board?.tiles.find((tile) => tile.id === tileId))
-        .filter((tile): tile is NonNullable<RunState['board']>['tiles'][number] => tile != null);
-
-const resolveTraitInteractionTexts = (
-    run: RunState,
-    tileIds: readonly string[],
-    source: 'match' | 'mismatch'
-): string[] => {
-    if (!run.board) {
-        return [];
-    }
-    const sourceTiles = getTilesByIds(run, tileIds);
-    if (sourceTiles.length === 0) {
-        return [];
-    }
-    return formatTileTraitInteractionTags(
-        resolveTileTraitEffects({
-            run,
-            board: run.board,
-            sourceTiles,
-            source
-        }).interactionTags
-    );
-};
-
 const nextRewardPayoffLabel = (cue: ChainRewardForecastCue): string => {
     if (cue.tone === 'guard') {
         return `${cue.actionLabel} guard`;
@@ -189,19 +161,13 @@ const isRewardPerkInteractionText = (text: string): boolean => text.startsWith('
 const isRewardPerkOnlyTraitBurst = (traitInteractionTexts: readonly string[]): boolean =>
     traitInteractionTexts.length > 0 && traitInteractionTexts.every(isRewardPerkInteractionText);
 
-const buildChainRewardText = (before: RunState, after: RunState, chainDepth: number): string | undefined => {
+const buildChainRewardText = (facts: BoardTurnAnnouncementFacts, chainDepth: number): string | undefined => {
     if (chainDepth < 3) {
         return undefined;
     }
-    const comboShardGain = Math.max(
-        0,
-        runNonNegativeInteger(after.stats.comboShards) - runNonNegativeInteger(before.stats.comboShards)
-    );
-    const guardGain = Math.max(
-        0,
-        runNonNegativeInteger(after.stats.guardTokens) - runNonNegativeInteger(before.stats.guardTokens)
-    );
-    const lifeGain = Math.max(0, runNonNegativeInteger(after.lives) - runNonNegativeInteger(before.lives));
+    const comboShardGain = Math.max(0, facts.comboShardsAfter - facts.comboShardsBefore);
+    const guardGain = Math.max(0, facts.guardTokensAfter - facts.guardTokensBefore);
+    const lifeGain = Math.max(0, facts.livesAfter - facts.livesBefore);
     const parts = [
         comboShardGain > 0 ? formatGain(comboShardGain, 'combo shard') : null,
         guardGain > 0 ? formatGain(guardGain, 'guard token') : null,
@@ -811,40 +777,36 @@ export const buildMatchScorePopCrescendo = ({
  * Pure payload for the floating +score floater after a successful match resolve.
  */
 export function buildMatchScorePopPayload(
-    run: RunState | null,
-    next: RunState,
+    turnEvent: BoardTurnResolvedEvent,
     keyNonce?: string
 ): MatchScorePop | null {
-    if (!run?.board) {
+    if (turnEvent.outcome !== 'match' && turnEvent.outcome !== 'gambit_match') {
         return null;
     }
-    const anchor = getMatchFloaterAnchorTileIds(run);
-    if (!anchor) {
+    if (turnEvent.matchesAfter <= turnEvent.matchesBefore) {
         return null;
     }
-    if (next.stats.matchesFound <= run.stats.matchesFound) {
-        return null;
-    }
-    const amount = next.stats.totalScore - run.stats.totalScore;
+    const amount = turnEvent.totalScoreAfter - turnEvent.totalScoreBefore;
     if (!Number.isFinite(amount) || amount <= 0) {
         return null;
     }
-    const { tileIdA, tileIdB } = anchor;
-    const routeKind =
-        run.board.tiles.find((tile) => tile.id === tileIdA)?.routeSpecialKind ??
-        run.board.tiles.find((tile) => tile.id === tileIdB)?.routeSpecialKind ??
-        run.board.tiles.find((tile) => tile.id === tileIdA)?.routeCardKind ??
-        run.board.tiles.find((tile) => tile.id === tileIdB)?.routeCardKind ??
-        null;
+    // Narrowed once here to the route union the copy helpers take.
+    const facts = turnEvent.announcement as BoardTurnAnnouncementFacts;
+    // Anchors come from the facts, not the raw flip list: a gambit resolves three tiles
+    // and the floater belongs on the pair that actually matched.
+    const [tileIdA, tileIdB] = facts.anchorTileIds;
+    if (!tileIdA || !tileIdB) {
+        return null;
+    }
+    const routeKind = facts.routeSpecialKind ?? facts.routeCardKind ?? null;
     const routeRewardText = routeKind ? `${routeSpecialLabel(routeKind)} ${routeSpecialRewardLine(routeKind)}` : undefined;
-    const claimedFindableKind = next.board ? detectClaimedFindableKind(run.board.tiles, next.board.tiles) : null;
-    const pickupRewardText = claimedFindableKind
-        ? `${getFindableKindLabel(claimedFindableKind)} ${getFindableRewardCopy(claimedFindableKind)}`
+    const pickupRewardText = turnEvent.matchedFindableKind
+        ? `${getFindableKindLabel(turnEvent.matchedFindableKind)} ${getFindableRewardCopy(turnEvent.matchedFindableKind)}`
         : undefined;
-    const traitInteractionTexts = resolveTraitInteractionTexts(run, [tileIdA, tileIdB], 'match');
-    const chainDepth = matchScoreChainDepth(next.stats.currentStreak);
-    const chainRewardText = buildChainRewardText(run, next, chainDepth);
-    const chainMilestone = getMatchScorePopChainMilestone(run.stats.currentStreak, chainDepth);
+    const traitInteractionTexts = formatTileTraitInteractionTags(turnEvent.traitInteractionTags);
+    const chainDepth = matchScoreChainDepth(facts.currentStreakAfter);
+    const chainRewardText = buildChainRewardText(facts, chainDepth);
+    const chainMilestone = getMatchScorePopChainMilestone(facts.currentStreakBefore, chainDepth);
     const feedbackProfile = pickupRewardText || chainRewardText
         ? { feedbackHeadline: 'Reward' as const, feedbackIntensity: 'high' as const }
         : getMatchScorePopFeedbackProfile(chainDepth, traitInteractionTexts.length);
@@ -854,10 +816,12 @@ export function buildMatchScorePopPayload(
         hasRouteReward: Boolean(routeRewardText),
         traitInteractionCount: traitInteractionTexts.length
     });
-    const nonce = keyNonce ?? `${Date.now()}`;
-    const key = `${run.board.level}-${nonce}-${tileIdA}-${tileIdB}`;
+    // Keyed off the event id rather than a clock read: the projector must be a pure
+    // function of the event so the same turn always produces the same payload.
+    const nonce = keyNonce ?? turnEvent.eventId;
+    const key = `${facts.level}-${nonce}-${tileIdA}-${tileIdB}`;
     const chainRewardForecastCues =
-        chainDepth >= 3 ? getChainRewardForecastCues(chainDepth, next.stats.comboShards, next.lives) : [];
+        chainDepth >= 3 ? getChainRewardForecastCues(chainDepth, facts.comboShardsAfter, facts.livesAfter) : [];
     const rewardBurst = buildMatchScorePopRewardBurst({
         chainDepth,
         chainMilestone,
@@ -962,32 +926,24 @@ export function buildMatchScorePopPayload(
  * Pure payload for the floating miss floater after a mismatch resolve.
  */
 export function buildMismatchScorePopPayload(
-    run: RunState | null,
-    next: RunState,
+    turnEvent: BoardTurnResolvedEvent,
     keyNonce?: string
 ): MismatchScorePop | null {
-    if (!run?.board) {
+    if (turnEvent.outcome !== 'mismatch' && turnEvent.outcome !== 'gambit_mismatch') {
         return null;
     }
-    const anchor = getMismatchFloaterAnchorTileIds(run);
-    if (!anchor) {
+    const [tileIdA, tileIdB, tileIdC] = turnEvent.flippedTileIds;
+    if (!tileIdA || !tileIdB) {
         return null;
     }
-    if (next.stats.mismatches <= run.stats.mismatches) {
-        return null;
-    }
-    const nonce = keyNonce ?? `${Date.now()}`;
-    const { tileIdA, tileIdB, tileIdC } = anchor;
+    const facts = turnEvent.announcement;
+    const nonce = keyNonce ?? turnEvent.eventId;
     const key = tileIdC
-        ? `miss-${run.board.level}-${nonce}-${tileIdA}-${tileIdB}-${tileIdC}`
-        : `miss-${run.board.level}-${nonce}-${tileIdA}-${tileIdB}`;
-    const traitInteractionTexts = resolveTraitInteractionTexts(
-        run,
-        tileIdC ? [tileIdA, tileIdB, tileIdC] : [tileIdA, tileIdB],
-        'mismatch'
-    );
-    const previousStreak = runNonNegativeInteger(run.stats.currentStreak);
-    const nextStreak = runNonNegativeInteger(next.stats.currentStreak);
+        ? `miss-${facts.level}-${nonce}-${tileIdA}-${tileIdB}-${tileIdC}`
+        : `miss-${facts.level}-${nonce}-${tileIdA}-${tileIdB}`;
+    const traitInteractionTexts = formatTileTraitInteractionTags(turnEvent.traitInteractionTags);
+    const previousStreak = facts.currentStreakBefore;
+    const nextStreak = facts.currentStreakAfter;
     const brokenChainDepth = previousStreak > 1 && nextStreak < previousStreak ? previousStreak : 0;
     const payload: MismatchScorePop = { tileIdA, tileIdB, key };
     if (tileIdC !== undefined) {
@@ -997,8 +953,8 @@ export function buildMismatchScorePopPayload(
         payload.brokenChainDepth = brokenChainDepth;
         const brokenChainRewardCue = getChainRewardForecastCues(
             brokenChainDepth,
-            run.stats.comboShards,
-            run.lives
+            facts.comboShardsBefore,
+            facts.livesBefore
         )[0];
         if (brokenChainRewardCue) {
             payload.brokenChainRewardCue = brokenChainRewardCue;

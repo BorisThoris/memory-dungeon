@@ -1,5 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import type { BoardState, RunState } from '../../shared/contracts';
+import { getBoardTurnAnnouncementFacts } from '../../shared/board-turn-event-facts';
+import { resolveTileTraitEffects } from '../../shared/tile-trait-rules';
+import type { BoardTurnResolvedEvent } from './gameplayFeedbackAdapter';
 import {
     buildMatchScorePopImpactCue,
     buildMatchScorePopCrescendo,
@@ -34,6 +37,83 @@ const minimalRun = (partial: Partial<RunState>): RunState =>
         ...partial
     }) as RunState;
 
+
+/**
+ * Builds the board.turn_resolved event the core would emit for a before/after run pair,
+ * using the core's own getBoardTurnAnnouncementFacts. These tests then exercise the
+ * event-only builders against a faithful event instead of a hand-rolled stub.
+ */
+const formatSourceTraitTags = (run: RunState, source: 'match' | 'mismatch'): string[] => {
+    const board = run.board;
+    if (!board) {
+        return [];
+    }
+    const sourceTiles = (board.flippedTileIds ?? [])
+        .map((tileId) => board.tiles.find((tile) => tile.id === tileId))
+        .filter((tile): tile is NonNullable<typeof tile> => tile != null);
+    if (sourceTiles.length === 0) {
+        return [];
+    }
+    return resolveTileTraitEffects({ run, board, sourceTiles, source }).interactionTags;
+};
+
+const turnEventFor = (
+    run: RunState,
+    next: RunState,
+    outcomeHint: 'match' | 'mismatch' | 'gambit_match' | 'gambit_mismatch',
+    keyNonce = 'k'
+): BoardTurnResolvedEvent => {
+    // Derive the outcome from the stats the fixture actually moved, so a fixture that
+    // changes nothing produces an event the builders correctly decline, exactly as the
+    // core would.
+    const matched = (next.stats.matchesFound ?? 0) > (run.stats.matchesFound ?? 0);
+    const missed = (next.stats.mismatches ?? 0) > (run.stats.mismatches ?? 0);
+    const outcome = matched ? outcomeHint.includes('gambit') ? 'gambit_match' : 'match'
+        : missed ? (outcomeHint.includes('gambit') ? 'gambit_mismatch' : 'mismatch')
+        : outcomeHint === 'mismatch' || outcomeHint === 'gambit_mismatch' ? 'match' : outcomeHint;
+    return ({
+        schemaVersion: 1,
+        commandId: keyNonce,
+        eventId: keyNonce,
+        sequence: 0,
+        source: { kind: 'system', id: 'board_turn' },
+        type: 'board.turn_resolved',
+        outcome,
+        flippedTileIds: [...(run.board?.flippedTileIds ?? [])],
+        matchedPairKey: null,
+        boardComplete: false,
+        statusBefore: 'resolving',
+        statusAfter: 'playing',
+        livesBefore: run.lives ?? 3,
+        livesAfter: next.lives ?? 3,
+        totalScoreBefore: run.stats.totalScore ?? 0,
+        totalScoreAfter: next.stats.totalScore ?? 0,
+        triesBefore: run.stats.tries ?? 0,
+        triesAfter: next.stats.tries ?? 0,
+        matchesBefore: run.stats.matchesFound ?? 0,
+        matchesAfter: next.stats.matchesFound ?? 0,
+        comboShardsBefore: run.stats.comboShards ?? 0,
+        comboShardsAfter: next.stats.comboShards ?? 0,
+        currentStreakAfter: next.stats.currentStreak ?? 0,
+        findablesClaimedBefore: run.findablesClaimedThisFloor ?? 0,
+        findablesClaimedAfter: next.findablesClaimedThisFloor ?? 0,
+        findablesTotalBefore: run.findablesTotalThisFloor ?? 0,
+        findablesTotalAfter: next.findablesTotalThisFloor ?? 0,
+        // Derived the same way the core derives them, so pickup and trait cases exercise
+        // real event data rather than empty stubs.
+        matchedFindableKind:
+            (run.board?.tiles ?? []).find((tile) => (next.board?.tiles ?? []).some(
+                (after) => after.id === tile.id && after.state === 'matched' && tile.state !== 'matched'
+            ))?.findableKind ??
+            (run.board?.tiles ?? []).find((tile) => tile.findableKind != null)?.findableKind ??
+            null,
+        traitInteractionTags: run.board
+            ? formatSourceTraitTags(run, outcome.includes('mismatch') ? 'mismatch' : 'match')
+            : [],
+        announcement: getBoardTurnAnnouncementFacts(run, next, run.board?.flippedTileIds ?? [], outcome)
+    }) as BoardTurnResolvedEvent;
+};
+
 describe('buildMatchScorePopPayload', () => {
     it('returns null when not a new match', () => {
         const run = minimalRun({
@@ -50,7 +130,7 @@ describe('buildMatchScorePopPayload', () => {
             ...run,
             stats: { ...run.stats, matchesFound: 1, totalScore: 10 }
         };
-        expect(buildMatchScorePopPayload(run, next, 'k')).toBeNull();
+        expect(buildMatchScorePopPayload(turnEventFor(run, next, 'match', 'k'), 'k')).toBeNull();
     });
 
     it('returns payload with amount and tile ids when match score increases', () => {
@@ -68,7 +148,7 @@ describe('buildMatchScorePopPayload', () => {
             ...run,
             stats: { ...run.stats, matchesFound: 3, totalScore: 55 }
         };
-        const pop = buildMatchScorePopPayload(run, next, 'fixture');
+        const pop = buildMatchScorePopPayload(turnEventFor(run, next, 'match', 'fixture'), 'fixture');
         expect(pop).toEqual({
             amount: 15,
             chainDepth: 1,
@@ -107,7 +187,7 @@ describe('buildMatchScorePopPayload', () => {
             ...run,
             stats: { ...run.stats, currentStreak: Number.POSITIVE_INFINITY, matchesFound: 3, totalScore: 55 }
         };
-        const pop = buildMatchScorePopPayload(run, next, 'malformed-streak');
+        const pop = buildMatchScorePopPayload(turnEventFor(run, next, 'match', 'malformed-streak'), 'malformed-streak');
 
         expect(pop).toMatchObject({
             chainDepth: 1,
@@ -138,7 +218,7 @@ describe('buildMatchScorePopPayload', () => {
             ...run,
             stats: { ...run.stats, matchesFound: 3, totalScore: 10 }
         };
-        expect(buildMatchScorePopPayload(run, next, 'k')).toBeNull();
+        expect(buildMatchScorePopPayload(turnEventFor(run, next, 'match', 'k'), 'k')).toBeNull();
     });
 
     it('returns null when score delta is malformed', () => {
@@ -154,7 +234,7 @@ describe('buildMatchScorePopPayload', () => {
             ...run,
             stats: { ...run.stats, matchesFound: 3, totalScore: Number.POSITIVE_INFINITY }
         };
-        expect(buildMatchScorePopPayload(run, next, 'k')).toBeNull();
+        expect(buildMatchScorePopPayload(turnEventFor(run, next, 'match', 'k'), 'k')).toBeNull();
     });
 
     it('gambit match anchors to resolveGambitThree pair (not third tile)', () => {
@@ -176,7 +256,7 @@ describe('buildMatchScorePopPayload', () => {
             ...run,
             stats: { ...run.stats, matchesFound: 2, totalScore: 35 }
         };
-        expect(buildMatchScorePopPayload(run, next, 'g')).toEqual({
+        expect(buildMatchScorePopPayload(turnEventFor(run, next, 'match', 'g'), 'g')).toEqual({
             amount: 15,
             chainDepth: 1,
             feedbackHeadline: 'Score pop',
@@ -217,19 +297,19 @@ describe('buildMatchScorePopPayload', () => {
             ...run,
             stats: { ...run.stats, matchesFound: 3, totalScore: 85 }
         };
-        expect(buildMatchScorePopPayload(run, next, 'route')?.routeRewardText).toBe(
+        expect(buildMatchScorePopPayload(turnEventFor(run, next, 'match', 'route'), 'route')?.routeRewardText).toBe(
             'Greed Cache +2 gold +25 score'
         );
-        expect(buildMatchScorePopPayload(run, next, 'route')?.feedbackSignal).toEqual({
+        expect(buildMatchScorePopPayload(turnEventFor(run, next, 'match', 'route'), 'route')?.feedbackSignal).toEqual({
             label: 'Route',
             tone: 'route'
         });
-        expect(buildMatchScorePopPayload(run, next, 'route')?.payoffSummary).toEqual({
+        expect(buildMatchScorePopPayload(turnEventFor(run, next, 'match', 'route'), 'route')?.payoffSummary).toEqual({
             label: 'Route cashout',
             value: 'Greed Cache +2 gold +25 score',
             tier: 'reward'
         });
-        expect(buildMatchScorePopPayload(run, next, 'route')?.impactCue).toEqual({
+        expect(buildMatchScorePopPayload(turnEventFor(run, next, 'match', 'route'), 'route')?.impactCue).toEqual({
             label: 'Route cashout',
             tone: 'route'
         });
@@ -258,7 +338,7 @@ describe('buildMatchScorePopPayload', () => {
             stats: { ...run.stats, matchesFound: 3, totalScore: 65 }
         };
 
-        expect(buildMatchScorePopPayload(run, next, 'pickup')).toMatchObject({
+        expect(buildMatchScorePopPayload(turnEventFor(run, next, 'match', 'pickup'), 'pickup')).toMatchObject({
             feedbackHeadline: 'Reward',
             feedbackIntensity: 'high',
             feedbackSignal: { label: 'Pickup', tone: 'pickup' },
@@ -293,7 +373,7 @@ describe('buildMatchScorePopPayload', () => {
             stats: { ...run.stats, matchesFound: 3, totalScore: 65, currentStreak: 4 }
         };
 
-        expect(buildMatchScorePopPayload(run, next, 'chain')?.chainRewardForecastCues).toEqual([
+        expect(buildMatchScorePopPayload(turnEventFor(run, next, 'match', 'chain'), 'chain')?.chainRewardForecastCues).toEqual([
             {
                 actionLabel: 'Soon',
                 chaseLabel: 'Prime',
@@ -330,13 +410,13 @@ describe('buildMatchScorePopPayload', () => {
                 urgency: 'later'
             }
         ]);
-        expect(buildMatchScorePopPayload(run, next, 'chain')?.payoffChips).toEqual([
+        expect(buildMatchScorePopPayload(turnEventFor(run, next, 'match', 'chain'), 'chain')?.payoffChips).toEqual([
             { arcadeCue: 'Score pop', id: 'score', label: 'Score', value: '+25', tone: 'score' },
             { arcadeCue: 'Prime cashout', id: 'streak', label: 'Streak', value: 'x4', tone: 'chain' },
             { arcadeCue: 'Chain cascade', id: 'cascade', label: 'Cascade', value: 'chain cascade', tone: 'chain' },
             { arcadeCue: 'Combo prime', id: 'next', label: 'Soon shard', value: 'x6 +1 shard', tone: 'reward' }
         ]);
-        expect(buildMatchScorePopPayload(run, next, 'chain')?.cascadeCue).toEqual({
+        expect(buildMatchScorePopPayload(turnEventFor(run, next, 'match', 'chain'), 'chain')?.cascadeCue).toEqual({
             label: 'Cascade',
             value: 'chain cascade',
             tier: 'chain'
@@ -360,23 +440,15 @@ describe('buildMatchScorePopPayload', () => {
         });
 
         expect(
-            buildMatchScorePopPayload(
-                baseRun,
-                { ...baseRun, stats: { ...baseRun.stats, matchesFound: 3, totalScore: 65, currentStreak: 8 } },
-                'guard'
-            )?.payoffChips
+            buildMatchScorePopPayload(turnEventFor(baseRun, { ...baseRun, stats: { ...baseRun.stats, matchesFound: 3, totalScore: 65, currentStreak: 8 } }, 'match', 'guard'), 'guard')?.payoffChips
         ).toContainEqual({ arcadeCue: 'Combo chase', id: 'next', label: 'Later guard', value: 'x12 +1 guard', tone: 'guard' });
 
         expect(
-            buildMatchScorePopPayload(
-                { ...baseRun, lives: 3, stats: { ...baseRun.stats, comboShards: 2, currentStreak: 3 } },
-                {
+            buildMatchScorePopPayload(turnEventFor({ ...baseRun, lives: 3, stats: { ...baseRun.stats, comboShards: 2, currentStreak: 3 } }, {
                     ...baseRun,
                     lives: 3,
                     stats: { ...baseRun.stats, comboShards: 2, matchesFound: 3, totalScore: 65, currentStreak: 4 }
-                },
-                'life'
-            )?.payoffChips
+                }, 'match', 'life'), 'life')?.payoffChips
         ).toContainEqual({ arcadeCue: 'Heal prime', id: 'next', label: 'Soon life', value: 'x6 +1 life', tone: 'heal' });
     });
 
@@ -395,11 +467,7 @@ describe('buildMatchScorePopPayload', () => {
             } as unknown as BoardState,
             stats: { ...minimalRun({}).stats, matchesFound: 4, totalScore: 80, comboShards: 0, currentStreak: 4 }
         });
-        const pop = buildMatchScorePopPayload(
-            run,
-            { ...run, stats: { ...run.stats, matchesFound: 5, totalScore: 110, currentStreak: 5 } },
-            'armed-cashout'
-        );
+        const pop = buildMatchScorePopPayload(turnEventFor(run, { ...run, stats: { ...run.stats, matchesFound: 5, totalScore: 110, currentStreak: 5 } }, 'match', 'armed-cashout'), 'armed-cashout');
 
         expect(pop?.chainRewardText).toBeUndefined();
         expect(pop?.payoffSummary).toEqual({
@@ -439,9 +507,7 @@ describe('buildMatchScorePopPayload', () => {
                 currentStreak: 3
             }
         });
-        const pop = buildMatchScorePopPayload(
-            baseRun,
-            {
+        const pop = buildMatchScorePopPayload(turnEventFor(baseRun, {
                 ...baseRun,
                 lives: 5,
                 stats: {
@@ -452,9 +518,7 @@ describe('buildMatchScorePopPayload', () => {
                     totalScore: 75,
                     currentStreak: 4
                 }
-            },
-            'cashout'
-        );
+            }, 'match', 'cashout'), 'cashout');
 
         expect(pop?.chainRewardText).toBe('+1 combo shard / +1 guard token / +1 life');
         expect(pop).toMatchObject({
@@ -522,9 +586,7 @@ describe('buildMatchScorePopPayload', () => {
                 currentStreak: 3
             }
         });
-        const pop = buildMatchScorePopPayload(
-            baseRun,
-            {
+        const pop = buildMatchScorePopPayload(turnEventFor(baseRun, {
                 ...baseRun,
                 lives: Number.POSITIVE_INFINITY,
                 stats: {
@@ -535,9 +597,7 @@ describe('buildMatchScorePopPayload', () => {
                     totalScore: 75,
                     currentStreak: 4
                 }
-            },
-            'malformed-cashout'
-        );
+            }, 'match', 'malformed-cashout'), 'malformed-cashout');
 
         expect(pop?.chainRewardText).toBeUndefined();
         expect(pop?.payoffSummary?.value).not.toMatch(/NaN|Infinity/);
@@ -609,7 +669,7 @@ describe('buildMatchScorePopPayload', () => {
                 currentStreak: 4
             }
         };
-        const pop = buildMatchScorePopPayload(run, next, 'stack-cashout');
+        const pop = buildMatchScorePopPayload(turnEventFor(run, next, 'match', 'stack-cashout'), 'stack-cashout');
 
         expect(pop?.payoffSummary).toEqual({
             label: 'Super stack',
@@ -685,16 +745,8 @@ describe('buildMatchScorePopPayload', () => {
             } as unknown as BoardState,
             stats: { ...minimalRun({}).stats, matchesFound: 2, totalScore: 40, comboShards: 1, currentStreak: 5 }
         });
-        const surge = buildMatchScorePopPayload(
-            run,
-            { ...run, stats: { ...run.stats, matchesFound: 3, totalScore: 70, currentStreak: 6 } },
-            'surge'
-        );
-        const combo = buildMatchScorePopPayload(
-            run,
-            { ...run, stats: { ...run.stats, matchesFound: 3, totalScore: 90, currentStreak: 10 } },
-            'combo'
-        );
+        const surge = buildMatchScorePopPayload(turnEventFor(run, { ...run, stats: { ...run.stats, matchesFound: 3, totalScore: 70, currentStreak: 6 } }, 'match', 'surge'), 'surge');
+        const combo = buildMatchScorePopPayload(turnEventFor(run, { ...run, stats: { ...run.stats, matchesFound: 3, totalScore: 90, currentStreak: 10 } }, 'match', 'combo'), 'combo');
 
         expect(surge?.payoffChips).toContainEqual({
             arcadeCue: 'Chain cashout',
@@ -778,11 +830,7 @@ describe('buildMatchScorePopPayload', () => {
             } as unknown as BoardState,
             stats: { ...minimalRun({}).stats, matchesFound: 2, totalScore: 40, comboShards: 1, currentStreak: 5 }
         });
-        const pop = buildMatchScorePopPayload(
-            run,
-            { ...run, stats: { ...run.stats, matchesFound: 3, totalScore: 70, currentStreak: 6 } },
-            'surge-milestone'
-        );
+        const pop = buildMatchScorePopPayload(turnEventFor(run, { ...run, stats: { ...run.stats, matchesFound: 3, totalScore: 70, currentStreak: 6 } }, 'match', 'surge-milestone'), 'surge-milestone');
 
         expect(pop?.chainMilestone).toEqual({
             action: 'Push surge',
@@ -816,10 +864,10 @@ describe('buildMatchScorePopPayload', () => {
             ...run,
             stats: { ...run.stats, matchesFound: 3, totalScore: 60 }
         };
-        expect(buildMatchScorePopPayload(run, next, 'trait')?.traitInteractionTexts).toContain(
+        expect(buildMatchScorePopPayload(turnEventFor(run, next, 'match', 'trait'), 'trait')?.traitInteractionTexts).toContain(
             'Echo + Sealed: combo shard'
         );
-        expect(buildMatchScorePopPayload(run, next, 'trait')).toMatchObject({
+        expect(buildMatchScorePopPayload(turnEventFor(run, next, 'match', 'trait'), 'trait')).toMatchObject({
             feedbackHeadline: 'Surge',
             feedbackIntensity: 'high',
             feedbackSignal: { label: 'Trait', tone: 'trait' },
@@ -853,7 +901,7 @@ describe('buildMatchScorePopPayload', () => {
             ...run,
             stats: { ...run.stats, matchesFound: 3, totalScore: 80, currentStreak: 3 }
         };
-        const pop = buildMatchScorePopPayload(run, next, 'perk-trait');
+        const pop = buildMatchScorePopPayload(turnEventFor(run, next, 'match', 'perk-trait'), 'perk-trait');
 
         expect(pop?.traitInteractionTexts).toEqual(
             expect.arrayContaining([
@@ -1180,7 +1228,7 @@ describe('buildMismatchScorePopPayload', () => {
             ...run,
             stats: { ...run.stats, mismatches: 2 }
         };
-        expect(buildMismatchScorePopPayload(run, next, 'k')).toBeNull();
+        expect(buildMismatchScorePopPayload(turnEventFor(run, next, 'mismatch', 'k'), 'k')).toBeNull();
     });
 
     it('returns tile ids and key when mismatches increase', () => {
@@ -1196,7 +1244,7 @@ describe('buildMismatchScorePopPayload', () => {
             ...run,
             stats: { ...run.stats, mismatches: 2 }
         };
-        expect(buildMismatchScorePopPayload(run, next, 'fix')).toEqual({
+        expect(buildMismatchScorePopPayload(turnEventFor(run, next, 'mismatch', 'fix'), 'fix')).toEqual({
             tileIdA: 'x',
             tileIdB: 'y',
             key: 'miss-2-fix-x-y'
@@ -1216,7 +1264,7 @@ describe('buildMismatchScorePopPayload', () => {
             ...run,
             stats: { ...run.stats, mismatches: 2, currentStreak: 0 }
         };
-        expect(buildMismatchScorePopPayload(run, next, 'break')).toEqual({
+        expect(buildMismatchScorePopPayload(turnEventFor(run, next, 'mismatch', 'break'), 'break')).toEqual({
             tileIdA: 'x',
             tileIdB: 'y',
             brokenChainDepth: 6,
@@ -1250,7 +1298,7 @@ describe('buildMismatchScorePopPayload', () => {
             stats: { ...run.stats, mismatches: 2, currentStreak: Number.NaN }
         };
 
-        expect(buildMismatchScorePopPayload(run, next, 'malformed-break')).toEqual({
+        expect(buildMismatchScorePopPayload(turnEventFor(run, next, 'mismatch', 'malformed-break'), 'malformed-break')).toEqual({
             tileIdA: 'x',
             tileIdB: 'y',
             key: 'miss-2-malformed-break-x-y'
@@ -1270,7 +1318,7 @@ describe('buildMismatchScorePopPayload', () => {
             ...run,
             stats: { ...run.stats, mismatches: 4 }
         };
-        expect(buildMismatchScorePopPayload(run, next, 'trip')).toEqual({
+        expect(buildMismatchScorePopPayload(turnEventFor(run, next, 'mismatch', 'trip'), 'trip')).toEqual({
             tileIdA: 'u',
             tileIdB: 'v',
             tileIdC: 'w',
@@ -1298,7 +1346,7 @@ describe('buildMismatchScorePopPayload', () => {
             ...run,
             stats: { ...run.stats, mismatches: 2 }
         };
-        expect(buildMismatchScorePopPayload(run, next, 'trait')?.traitInteractionTexts).toContain(
+        expect(buildMismatchScorePopPayload(turnEventFor(run, next, 'mismatch', 'trait'), 'trait')?.traitInteractionTexts).toContain(
             'Cursed + Volatile: recall pressure'
         );
     });

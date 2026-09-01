@@ -190,7 +190,9 @@ export const resolveFindableMatchRewardThroughGameplayCore = (
 export const resolveBoardTurnThroughGameplayCore = (
     run: RunState,
     encorePairKeys: readonly string[],
-    commandId: string
+    commandId = `board-turn-resolve:${run.runSeed}:${run.board?.level ?? 0}:${
+        (Array.isArray(run.board?.flippedTileIds) ? run.board.flippedTileIds : []).join('+') || 'none'
+    }`
 ): GameplayBoardTurnAdapterResult => {
     const command = createGameplayBoardTurnResolveCommand(commandId, encorePairKeys);
     const result = reduceGameplayCommand(run, command);

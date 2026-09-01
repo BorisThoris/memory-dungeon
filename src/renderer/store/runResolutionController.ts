@@ -9,7 +9,7 @@ import type {
 } from '../../shared/contracts';
 import { createValidatedGameOverRunSummary } from '../../shared/run-summary-rules';
 import { mergeHonorUnlockTags } from '../../shared/honorUnlocks';
-import { runArrayCount, runStringArray } from '../../shared/run-array-guards';
+import { runArrayCount } from '../../shared/run-array-guards';
 import {
     mergeBestFloorNoPowers,
     mergeDailyComplete,
@@ -214,22 +214,16 @@ export const createRunResolutionController = ({
     const applyResolveBoardTurn = (run: RunState): void => {
         const { saveData } = getState();
         const encore = saveData.playerStats?.encorePairKeysLastRun ?? [];
-        const resolution = resolveBoardTurnThroughGameplayCore(
-            run,
-            encore,
-            `board-turn-resolve:${run.runSeed}:${run.board?.level ?? 0}:${runStringArray(run.board?.flippedTileIds).join('+') || 'none'}`
-        );
+        const resolution = resolveBoardTurnThroughGameplayCore(run, encore);
         const next = resolution.run;
         const event = [...resolution.events].reverse().find(
             (item): item is Extract<GameplayEvent, { type: 'board.turn_resolved' }> =>
                 item.type === 'board.turn_resolved'
         ) ?? null;
-        // The builders anchor the floater to the tiles flipped in the PRE-turn run and
-        // diff its stats against the post-turn run, so they take (run, next). Passing the
-        // resolved event instead made both bail on `!run?.board` and return null on every
-        // turn, silently removing match and mismatch floaters from the game.
-        const pop = event ? buildMatchScorePopPayload(run, next) : null;
-        const missPop = event ? buildMismatchScorePopPayload(run, next) : null;
+        // Projected from the typed event alone. The renderer does not re-derive what
+        // happened by diffing board snapshots; the core already decided, and said so.
+        const pop = event ? buildMatchScorePopPayload(event) : null;
+        const missPop = event ? buildMismatchScorePopPayload(event) : null;
         if (pop) {
             setState({ ...BOARD_FLOATER_POP_CLEAR, matchScorePop: pop });
         } else if (missPop) {

@@ -11,6 +11,7 @@ import {
 import { maxPinnedTilesForRun, togglePinnedTile } from './board-power-state';
 import type { TileTraitInteractionTag } from './tile-trait-rules';
 import { createFlipTileTransition } from './flip-tile-transition';
+import { getBoardTurnAnnouncementFacts } from './board-turn-event-facts';
 import { finishMemorizePhase } from './memorize-phase-rules';
 import { computeRelicOfferPickBudget, openRelicOffer } from './relic-offer-open-rules';
 import { createRunProgressionRepairTransition } from './run-progression-repair';
@@ -1431,8 +1432,11 @@ const applyBoardTurnResolveCommand = (
         comboShardsBefore: statsBefore.comboShards,
         comboShardsAfter: statsAfter.comboShards,
         currentStreakAfter: statsAfter.currentStreak,
+        findablesClaimedBefore: runNonNegativeInteger(run.findablesClaimedThisFloor),
         findablesClaimedAfter: runNonNegativeInteger(nextRun.findablesClaimedThisFloor),
+        findablesTotalBefore: runNonNegativeInteger(run.findablesTotalThisFloor),
         findablesTotalAfter: runNonNegativeInteger(nextRun.findablesTotalThisFloor),
+        announcement: getBoardTurnAnnouncementFacts(run, nextRun, flippedTileIds, outcome),
         matchedFindableKind: matchedSourceTile?.findableKind ?? null,
         traitInteractionTags: [...traitInteractionTags]
     });

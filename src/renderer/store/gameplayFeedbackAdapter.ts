@@ -123,6 +123,25 @@ const messageFor = (
  */
 export type BoardTurnResolvedEvent = Extract<GameplayEvent, { type: 'board.turn_resolved' }>;
 
+/**
+ * The most recent resolved turn on a run's event journal, or null before any turn has
+ * resolved. Surfaces should read the turn from here rather than diffing board state.
+ */
+export const getLatestBoardTurnResolvedEvent = ({
+    gameplayEventJournal
+}: {
+    gameplayEventJournal?: unknown;
+}): BoardTurnResolvedEvent | null => {
+    const events = Array.isArray(gameplayEventJournal) ? gameplayEventJournal : [];
+    for (let index = events.length - 1; index >= 0; index -= 1) {
+        const event = events[index] as GameplayEvent | undefined;
+        if (event && event.type === 'board.turn_resolved') {
+            return event;
+        }
+    }
+    return null;
+};
+
 export const projectGameplayFeedback = (value: unknown): GameplayFeedbackPresentation[] => {
     const events = parseEvents(value);
     const presentations = events.flatMap((event) => {

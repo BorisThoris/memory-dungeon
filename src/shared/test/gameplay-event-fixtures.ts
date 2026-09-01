@@ -1,4 +1,24 @@
 import { gameplayEventSchema, type GameplayEvent } from '../gameplay-core-contracts';
+import type { BoardTurnAnnouncementFacts } from '../board-turn-event-facts';
+
+const DEFAULT_ANNOUNCEMENT: BoardTurnAnnouncementFacts = {
+    anchorTileIds: ['tile-a', 'tile-b'],
+    level: 1,
+    routeSpecialKind: null,
+    routeCardKind: null,
+    currentStreakBefore: 0,
+    currentStreakAfter: 1,
+    comboShardsBefore: 0,
+    comboShardsAfter: 0,
+    guardTokensBefore: 0,
+    guardTokensAfter: 0,
+    livesBefore: 3,
+    livesAfter: 3,
+    findablesClaimedBefore: 0,
+    findablesClaimedAfter: 0,
+    findablesTotalBefore: 0,
+    findablesTotalAfter: 0
+};
 
 export interface BoardTurnResolvedEventFixtureOverrides {
     commandId: string;
@@ -17,6 +37,7 @@ export interface BoardTurnResolvedEventFixtureOverrides {
     triesAfter?: number;
     matchesBefore?: number;
     matchesAfter?: number;
+    announcement?: Partial<BoardTurnAnnouncementFacts>;
 }
 
 /**
@@ -43,7 +64,8 @@ export const createBoardTurnResolvedEventFixture = ({
     triesBefore = 0,
     triesAfter = 0,
     matchesBefore = 0,
-    matchesAfter = 1
+    matchesAfter = 1,
+    announcement
 }: BoardTurnResolvedEventFixtureOverrides): GameplayEvent =>
     gameplayEventSchema.parse({
         schemaVersion: 1,
@@ -65,5 +87,6 @@ export const createBoardTurnResolvedEventFixture = ({
         triesBefore,
         triesAfter,
         matchesBefore,
-        matchesAfter
+        matchesAfter,
+        announcement: { ...DEFAULT_ANNOUNCEMENT, ...announcement }
     });
