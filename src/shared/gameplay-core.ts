@@ -1434,7 +1434,9 @@ const applyBoardTurnResolveCommand = (
     const outcome = flippedTileIds.length === 3
         ? isMatch ? 'gambit_match' : 'gambit_mismatch'
         : isMatch ? 'match' : 'mismatch';
-    const announcementFacts = getBoardTurnAnnouncementFacts(run, nextRun);
+    // Resolved once; the route kind and floater anchors below are read back off it.
+    const resolved = { announcement: getBoardTurnAnnouncementFacts(run, nextRun) };
+    const announcementFacts = resolved.announcement;
     const writeEvent = makeEventWriter(command.commandId, BOARD_TURN_SOURCE, events);
     writeEvent({
         type: 'board.turn_resolved',
@@ -1459,7 +1461,6 @@ const applyBoardTurnResolveCommand = (
         findablesClaimedAfter: runNonNegativeInteger(nextRun.findablesClaimedThisFloor),
         findablesTotalBefore: runNonNegativeInteger(run.findablesTotalThisFloor),
         findablesTotalAfter: runNonNegativeInteger(nextRun.findablesTotalThisFloor),
-        announcement: announcementFacts,
         // Read from the PRE-turn board: resolving a match consumes the findable and
         // clears findableKind on the resolved tile, so the post-turn tile always reported
         // null and pickup reward copy never appeared on the floater.
@@ -1472,6 +1473,7 @@ const applyBoardTurnResolveCommand = (
         // reach into presentation facts for them.
         matchedRouteKind: announcementFacts.routeSpecialKind ?? announcementFacts.routeCardKind ?? null,
         floaterTileIds: [...announcementFacts.anchorTileIds],
+        announcement: announcementFacts,
         traitInteractionTags: [...traitInteractionTags]
     });
     return { run: nextRun, command, events, accepted: true };
