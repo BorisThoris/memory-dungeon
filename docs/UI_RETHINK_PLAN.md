@@ -87,10 +87,20 @@ elements with text = "text leaves"; leaves whose computed size is under 12px = "
 The HUD row is the 06-28 measurement; the rest are set from the artboards and will be adjusted
 once, downward only, after the first implementation pass.
 
-## 2. Choose Your Path
+## 2. Choose Your Path (built)
 
-**Owner files:** `src/renderer/components/ChooseYourPathScreen.tsx` (1,380 lines),
-`ChooseYourPathScreen.module.css` (2,084), `src/shared/run-mode-catalog.ts` (mode roster).
+Rebuilt green-field: `ChooseYourPathScreen.tsx` 1,380 → ~430 lines, its stylesheet 2,084 →
+~330. Header row, eyebrow, display title, one-line subtitle; the recommended run as a
+poster panel with one sentence, three first-run beats, Start run + Browse modes; the
+library as a search box and a grid of cards that each carry a group label, a title and one
+description, with locked modes visible, dimmed and tagged "In the full game". The detail
+modal keeps the mode's promise, eligibility, start contract, local gate row and the gauntlet
+duration presets; the meditation setup modal is unchanged. The pace / payoff / pressure lane
+data and every strip that rendered it are gone, and the tile's accessible name is the title
+again, so the e2e harness's locators match.
+
+**Owner files:** `src/renderer/components/ChooseYourPathScreen.tsx`,
+`ChooseYourPathScreen.module.css`, `src/shared/run-mode-catalog.ts` (mode roster).
 
 **Restore target:** `86f8ebd9` — header row (Back / Settings), eyebrow "Start a run", display
 title, one-line subtitle, launch panel (poster, "Recommended", mode title, summary, three

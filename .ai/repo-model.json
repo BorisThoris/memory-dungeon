@@ -9,7 +9,7 @@
     "contentItemCount": 57,
     "mechanicCount": 130,
     "stateFieldCount": 144,
-    "relationshipCount": 10067
+    "relationshipCount": 10062
   },
   "inventory": [
     {
@@ -2313,8 +2313,8 @@
     {
       "path": "docs/UI_RETHINK_PLAN.md",
       "category": "documentation",
-      "bytes": 19822,
-      "sha256": "1debd2f61d6e780e302ac28ad2c36b6ef4fe8223de58348ffe80a9aebe403264"
+      "bytes": 20577,
+      "sha256": "69946075fe62b76e2b559497758354638af5b76762cc393a8cb942aaf7dc8777"
     },
     {
       "path": "docs/UI_TASKS/README.md",
@@ -4791,8 +4791,8 @@
     {
       "path": "src/renderer/App.test.tsx",
       "category": "test",
-      "bytes": 31760,
-      "sha256": "1aab2bf7b82a3855cfff4d0a501c032c79f6cf3b28fa08aff46bac8deaa465d0"
+      "bytes": 31754,
+      "sha256": "da0e11ff1d024ea26d1e37945dd68beb045746ed8cd9cf4b2f49d2ef19fba2e6"
     },
     {
       "path": "src/renderer/App.tsx",
@@ -7329,20 +7329,20 @@
     {
       "path": "src/renderer/components/ChooseYourPathScreen.module.css",
       "category": "source",
-      "bytes": 55032,
-      "sha256": "6f590c9a85271830392c902d6f44b8d8f9dda9b4e31d05ff5c1a6b21210e8558"
+      "bytes": 9388,
+      "sha256": "c383c9295316eeedae8a31b388d39d4d6d7ecdd24b318c67126647470cc718c6"
     },
     {
       "path": "src/renderer/components/ChooseYourPathScreen.test.tsx",
       "category": "test",
-      "bytes": 18915,
-      "sha256": "a87754a367387a3b3e582336cbe34fdf8c3cd5fa50adf4b956b749326fc0b415"
+      "bytes": 6142,
+      "sha256": "1aee0352bc1c7d528e6b63d24b7d4cc6711568b5638916f7b6c2a0aa4dc3e0e5"
     },
     {
       "path": "src/renderer/components/ChooseYourPathScreen.tsx",
       "category": "source",
-      "bytes": 65200,
-      "sha256": "8c5f7a46472e7f297ffeef7ba36aaf8d24e93b2c25a877f7db88f62e02212144"
+      "bytes": 21623,
+      "sha256": "17416b1ea769435e70d72e25515f87b9aee700bd8a3f383dad37d87178286379"
     },
     {
       "path": "src/renderer/components/chooseYourPathScreenModel.ts",
@@ -16372,7 +16372,7 @@
       "path": "src/renderer/components/ChooseYourPathScreen.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 367,
+      "lineCount": 131,
       "imports": [
         "file:src/renderer/components/ChooseYourPathScreen.tsx",
         "file:src/renderer/components/chooseYourPathScreenModel.ts",
@@ -16386,18 +16386,13 @@
       "path": "src/renderer/components/ChooseYourPathScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 1381,
+      "lineCount": 495,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/assets/ui/modeArt.ts",
         "file:src/renderer/audio/uiSfx.ts",
-        "file:src/renderer/breakpoints.ts",
         "file:src/renderer/components/chooseYourPathScreenModel.ts",
         "file:src/renderer/components/OverlayModal.tsx",
-        "file:src/renderer/hooks/hubShellFit.ts",
-        "file:src/renderer/hooks/useDragScroll.ts",
-        "file:src/renderer/hooks/useFitShellZoom.ts",
-        "file:src/renderer/hooks/useViewportSize.ts",
         "file:src/renderer/store/useAppStore.ts",
         "file:src/renderer/ui/index.ts",
         "file:src/shared/challenge-progression.ts",
@@ -35060,8 +35055,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/ChooseYourPathScreen.tsx",
-      "line": 1380,
-      "endLine": 1380
+      "line": 494,
+      "endLine": 494
     },
     {
       "id": "symbol:src/renderer/components/chooseYourPathScreenModel.ts#buildMeditationPickMutatorRows",
@@ -97955,12 +97950,6 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/ChooseYourPathScreen.tsx->src/renderer/breakpoints.ts",
-      "source": "file:src/renderer/components/ChooseYourPathScreen.tsx",
-      "target": "file:src/renderer/breakpoints.ts",
-      "kind": "imports"
-    },
-    {
       "id": "imports:src/renderer/components/ChooseYourPathScreen.tsx->src/renderer/components/chooseYourPathScreenModel.ts",
       "source": "file:src/renderer/components/ChooseYourPathScreen.tsx",
       "target": "file:src/renderer/components/chooseYourPathScreenModel.ts",
@@ -97970,30 +97959,6 @@
       "id": "imports:src/renderer/components/ChooseYourPathScreen.tsx->src/renderer/components/OverlayModal.tsx",
       "source": "file:src/renderer/components/ChooseYourPathScreen.tsx",
       "target": "file:src/renderer/components/OverlayModal.tsx",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/ChooseYourPathScreen.tsx->src/renderer/hooks/hubShellFit.ts",
-      "source": "file:src/renderer/components/ChooseYourPathScreen.tsx",
-      "target": "file:src/renderer/hooks/hubShellFit.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/ChooseYourPathScreen.tsx->src/renderer/hooks/useDragScroll.ts",
-      "source": "file:src/renderer/components/ChooseYourPathScreen.tsx",
-      "target": "file:src/renderer/hooks/useDragScroll.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/ChooseYourPathScreen.tsx->src/renderer/hooks/useFitShellZoom.ts",
-      "source": "file:src/renderer/components/ChooseYourPathScreen.tsx",
-      "target": "file:src/renderer/hooks/useFitShellZoom.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/ChooseYourPathScreen.tsx->src/renderer/hooks/useViewportSize.ts",
-      "source": "file:src/renderer/components/ChooseYourPathScreen.tsx",
-      "target": "file:src/renderer/hooks/useViewportSize.ts",
       "kind": "imports"
     },
     {
