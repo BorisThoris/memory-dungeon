@@ -47,14 +47,14 @@ test.describe('Expanded playable navigation contract', () => {
         await page.getByRole('button', { name: /^back$/i }).click();
         await expect(mainMenuPlayButton(page)).toBeVisible();
 
+        // Profile states the profile and nothing else: Settings is reached from the menu, once.
         await page.getByRole('button', { name: /^profile$/i }).click();
-        await expect(page.getByRole('region', { name: /profile/i })).toBeVisible();
+        const profile = page.getByRole('region', { name: /profile/i });
+        await expect(profile).toBeVisible();
         await expect(page.getByTestId('profile-summary-grid')).toBeVisible();
-        await page.getByRole('region', { name: /profile/i }).getByRole('button', { name: /^settings$/i }).click();
-        await expect(page.getByRole('heading', { name: /^settings$/i })).toBeVisible();
-        await page.getByRole('button', { name: /^back$/i }).click();
-        await expect(page.getByRole('region', { name: /profile/i })).toBeVisible();
-        await page.getByRole('region', { name: /profile/i }).getByRole('button', { name: /^back$/i }).click();
+        await expect(page.getByTestId('profile-milestone-rail')).toBeVisible();
+        await expect(profile.getByRole('button', { name: /^settings$/i })).toHaveCount(0);
+        await profile.getByRole('button', { name: /^back$/i }).click();
         await expect(mainMenuPlayButton(page)).toBeVisible();
     });
 
@@ -141,14 +141,21 @@ test.describe('Expanded playable navigation contract', () => {
         await expect(mainMenuPlayButton(page)).toBeVisible({ timeout: 15_000 });
 
         await page.getByRole('button', { name: /^collection$/i }).click();
-        await expect(page.getByRole('region', { name: /collection/i })).toBeVisible();
-        await expect(page.getByText(/Last run:/i)).toBeVisible();
-        await page.getByRole('region', { name: /collection/i }).getByRole('button', { name: /^back$/i }).click();
+        const collection = page.getByRole('region', { name: /collection/i });
+        await expect(collection).toBeVisible();
+        // The archive states each row once: one rail, one grid, an earned count per section.
+        await expect(page.getByTestId('collection-tab-achievements')).toHaveAttribute('aria-selected', 'true');
+        await expect(page.getByTestId('collection-entries')).toBeVisible();
+        await expect(collection).toContainText(/honor marks?/i);
+        await collection.getByRole('button', { name: /^back$/i }).click();
         await expect(mainMenuPlayButton(page)).toBeVisible();
 
         await page.getByRole('button', { name: /^profile$/i }).click();
         await expect(page.getByRole('region', { name: /profile/i })).toBeVisible();
-        await expect(page.getByTestId('profile-summary-grid')).toBeVisible();
+        const summary = page.getByTestId('profile-summary-grid');
+        await expect(summary).toBeVisible();
+        // The run that just finished set the best score, and the summary reads it back.
+        await expect(summary).toContainText('4,242');
         await expect(page.getByTestId('profile-objective-board')).toBeVisible();
     });
 
