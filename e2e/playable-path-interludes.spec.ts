@@ -32,22 +32,16 @@ test.describe('Expanded playable interludes and post-run loop', () => {
         const floorClear = page.getByRole('dialog', { name: /floor cleared/i });
         await expect(floorClear).toBeVisible();
         await expect(page.getByTestId('floor-clear-result-stack')).toHaveAttribute('data-route-choice-required', 'true');
-        await expect(page.getByTestId('floor-clear-payoff-stack')).toBeVisible();
-        await expect(page.getByTestId('floor-clear-payoff-stack')).toHaveAttribute(
-            'data-floor-payoff-stack-tone',
-            /combo|reward|setup|missed/
-        );
-        await expect(page.getByTestId('floor-clear-payoff-stack')).toContainText(/Floor payoff stack/i);
-        await expect(page.getByTestId('floor-clear-payoff-stack')).toContainText(/lanes paid|setup clear|value left open/i);
+        await expect(page.getByTestId('floor-clear-score')).toBeVisible();
+        await expect(page.getByTestId('floor-clear-stats')).toContainText(/Rating/);
         await expect(page.getByTestId('route-choice-panel')).toBeVisible();
         await expect(page.getByTestId('route-choice-panel')).toHaveAttribute('data-decision-state', 'required');
         await expect(page.getByTestId('route-choice-safe')).toContainText(/safe/i);
-        await expect(page.getByTestId('route-choice-safe-impact-cue')).toContainText(/Safe route/i);
-        await expect(page.getByTestId('route-choice-safe')).toHaveAttribute('data-route-impact-cue', 'Safe route');
         await expect(page.getByTestId('route-choice-greed')).toContainText(/greed/i);
-        await expect(page.getByTestId('route-choice-greed-impact-cue')).toContainText(/Greed route/i);
         await expect(page.getByTestId('route-choice-mystery')).toContainText(/mystery/i);
-        await expect(page.getByTestId('route-choice-mystery-impact-cue')).toContainText(/Mystery route/i);
+        // The dialog carries the result and the door choice only; no coaching strips.
+        await expect(page.getByTestId('floor-clear-payoff-stack')).toHaveCount(0);
+        await expect(floorClear.getByRole('button', { name: /^continue$/i })).toHaveCount(0);
     });
 
     for (const route of routeChoices) {

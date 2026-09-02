@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2420,
-    "codeFileCount": 912,
-    "exportedSymbolCount": 3484,
+    "trackedFileCount": 2419,
+    "codeFileCount": 910,
+    "exportedSymbolCount": 3469,
     "contentItemCount": 57,
     "mechanicCount": 130,
     "stateFieldCount": 144,
-    "relationshipCount": 10062
+    "relationshipCount": 10022
   },
   "inventory": [
     {
@@ -3615,8 +3615,8 @@
     {
       "path": "e2e/gameplay-readability.spec.ts",
       "category": "test",
-      "bytes": 24418,
-      "sha256": "b276d3ae8397fc1a2a6a7c03fc67952d5f91da6b9b7f94c71e5163654b211b26"
+      "bytes": 23104,
+      "sha256": "8f97fc8a77374ba5ba50bea6fee68f78d08bbf28d839c2be35cadfdc7bfe5e43"
     },
     {
       "path": "e2e/gameplay-visual-audit.spec.ts",
@@ -3669,8 +3669,8 @@
     {
       "path": "e2e/playable-path-interludes.spec.ts",
       "category": "test",
-      "bytes": 17742,
-      "sha256": "eefcc0f642d7acaf2d9de6a15b999953c93e4321bb2421f889b726e34045e426"
+      "bytes": 17248,
+      "sha256": "371c38e1a2b6738b53e6220486d50a57161df154f54befd3fde0d821d8e1a056"
     },
     {
       "path": "e2e/playable-path-mode-matrix.spec.ts",
@@ -7405,6 +7405,24 @@
       "sha256": "7bafaf608d04f60400254f5dd7b99e44dfc1645f4de65af4d17bac4ac7946862"
     },
     {
+      "path": "src/renderer/components/FloorClearDialog.module.css",
+      "category": "source",
+      "bytes": 6599,
+      "sha256": "7668dc7899819997217ea3c0493058e1b14ec4c402a9f8ebf7f66eac3f5293e4"
+    },
+    {
+      "path": "src/renderer/components/FloorClearDialog.test.tsx",
+      "category": "test",
+      "bytes": 6000,
+      "sha256": "2e95c179eb85660a7909a673a4f116d29b1c7d9fa1ec452e8263520b0464a188"
+    },
+    {
+      "path": "src/renderer/components/FloorClearDialog.tsx",
+      "category": "source",
+      "bytes": 10249,
+      "sha256": "a1fdf8a02d4eb79cb4faf2cdf34b905638a9483a95c85deb800888706d9435b6"
+    },
+    {
       "path": "src/renderer/components/GameOverScreen.module.css",
       "category": "source",
       "bytes": 39590,
@@ -7449,20 +7467,20 @@
     {
       "path": "src/renderer/components/GameScreen.module.css",
       "category": "source",
-      "bytes": 597512,
-      "sha256": "2b4ff0985a1007fdf0a2cef17b2a28e879e76ce5ac082e913b8ce419dbc7b6c8"
+      "bytes": 513781,
+      "sha256": "24be6208e8408027f6accaca95c2dcec9a25f67e1be3f4648599f07a3288c571"
     },
     {
       "path": "src/renderer/components/GameScreen.test.tsx",
       "category": "test",
-      "bytes": 183676,
-      "sha256": "495615cb9def2bc117855d9af6fe6932a8f6ca78f4c9e9f78cce1390b05f6259"
+      "bytes": 121268,
+      "sha256": "b32348607ecf49ee08ef01fbbc926f8491ac704142733bed15b5a72e18d4efae"
     },
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 358493,
-      "sha256": "57a18ba9825582a369c7b6b29d74f59011f88776949e967e070c2f67b2d11d9d"
+      "bytes": 242531,
+      "sha256": "8339156913b2f6bf2495fc47aa03d9b26dae327f18b90dbbdf2f255b29ba3558"
     },
     {
       "path": "src/renderer/components/gameScreenBoardFeedbackModel.test.ts",
@@ -7523,18 +7541,6 @@
       "category": "source",
       "bytes": 27416,
       "sha256": "8e8bcfc65300348b04f7ed55b2ccb96cf3a5d992faf9c663a74db97a3bcf3a7c"
-    },
-    {
-      "path": "src/renderer/components/gameScreenFloorClearFeedbackModel.test.ts",
-      "category": "test",
-      "bytes": 5500,
-      "sha256": "a3b557d9cbd15cc824151486a72c57f48916aae6ecd6748944cb19e5b7d458f2"
-    },
-    {
-      "path": "src/renderer/components/gameScreenFloorClearFeedbackModel.ts",
-      "category": "source",
-      "bytes": 19033,
-      "sha256": "b879fbb3b7f20221c70c8e180f02507773f813a87ea93024261dbb67dfbcd8d1"
     },
     {
       "path": "src/renderer/components/gameScreenRouteChoiceModel.test.ts",
@@ -7689,8 +7695,8 @@
     {
       "path": "src/renderer/components/OverlayModal.tsx",
       "category": "source",
-      "bytes": 9428,
-      "sha256": "6096b015dd7cd3739d90129ff259ed6d8da865e3c47bb342c62535bd27b34782"
+      "bytes": 9435,
+      "sha256": "36fcd5fb5af132238814299b0946abc601a28bffa6be6f32042ad40d52dec898"
     },
     {
       "path": "src/renderer/components/PairProximityHintPlane.tsx",
@@ -8681,18 +8687,6 @@
       "category": "source",
       "bytes": 18018,
       "sha256": "22e971811b23a4e606ede60b796e89297e1f029f5b30d4dad4a4322df2ef2ab5"
-    },
-    {
-      "path": "src/renderer/components/useGameScreenFloorClearProjection.test.ts",
-      "category": "test",
-      "bytes": 3526,
-      "sha256": "a8f9f97e3e0ee0b9be50c21eaa0b98efd823ff757290e4b282f6465526edf73f"
-    },
-    {
-      "path": "src/renderer/components/useGameScreenFloorClearProjection.ts",
-      "category": "source",
-      "bytes": 14982,
-      "sha256": "9e4aa67f549b210dbb4dd3c3d731bd0ae635a16e95bf01e39a5c70b6d91fb02f"
     },
     {
       "path": "src/renderer/components/useGameScreenPowerTileHints.ts",
@@ -16557,6 +16551,41 @@
       "testedBy": []
     },
     {
+      "id": "file:src/renderer/components/FloorClearDialog.test.tsx",
+      "path": "src/renderer/components/FloorClearDialog.test.tsx",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 140,
+      "imports": [
+        "file:src/renderer/components/FloorClearDialog.tsx",
+        "file:src/shared/contracts.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/FloorClearDialog.tsx",
+      "path": "src/renderer/components/FloorClearDialog.tsx",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 230,
+      "imports": [
+        "file:src/renderer/components/OverlayModal.tsx",
+        "file:src/shared/contracts.ts",
+        "file:src/shared/run-number-guards.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/FloorClearDialog.tsx#default",
+        "symbol:src/renderer/components/FloorClearDialog.tsx#FloorClearDialogProps",
+        "symbol:src/renderer/components/FloorClearDialog.tsx#FloorClearRouteOption",
+        "symbol:src/renderer/components/FloorClearDialog.tsx#FloorClearSelectedRoute",
+        "symbol:src/renderer/components/FloorClearDialog.tsx#FloorClearWager"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/FloorClearDialog.test.tsx"
+      ]
+    },
+    {
       "id": "file:src/renderer/components/GameOverScreen.test.tsx",
       "path": "src/renderer/components/GameOverScreen.test.tsx",
       "layer": "renderer",
@@ -16686,7 +16715,7 @@
       "path": "src/renderer/components/GameScreen.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 3695,
+      "lineCount": 2915,
       "imports": [
         "file:src/renderer/components/GameScreen.tsx",
         "file:src/renderer/components/gameScreenFeedback.ts",
@@ -16710,12 +16739,13 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 6616,
+      "lineCount": 4492,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/breakpoints.ts",
+        "file:src/renderer/components/FloorClearDialog.tsx",
         "file:src/renderer/components/gameplayVisualConfig.ts",
         "file:src/renderer/components/GameScreenDungeonStatusPanel.tsx",
         "file:src/renderer/components/GameScreenEndlessChapterBanner.tsx",
@@ -16751,20 +16781,16 @@
         "file:src/renderer/store/gameplayFeedbackAdapter.ts",
         "file:src/renderer/store/matchScorePop.ts",
         "file:src/renderer/store/useAppStore.ts",
-        "file:src/renderer/ui/index.ts",
         "file:src/shared/achievements.ts",
         "file:src/shared/board-powers.ts",
         "file:src/shared/bonus-rewards.ts",
         "file:src/shared/boss-encounters.ts",
         "file:src/shared/cameraViewportMode.ts",
-        "file:src/shared/chain-targets.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/dungeon-rules.ts",
         "file:src/shared/floor-mutator-schedule.ts",
         "file:src/shared/focusDimmedTileIds.ts",
-        "file:src/shared/level-result-presentation.ts",
         "file:src/shared/mechanics-encyclopedia.ts",
-        "file:src/shared/memory-recall-feedback.ts",
         "file:src/shared/objective-rules.ts",
         "file:src/shared/playable-onboarding.ts",
         "file:src/shared/route-rules.ts",
@@ -17048,61 +17074,6 @@
       ],
       "testedBy": [
         "file:src/renderer/components/GameScreen.test.tsx"
-      ]
-    },
-    {
-      "id": "file:src/renderer/components/gameScreenFloorClearFeedbackModel.test.ts",
-      "path": "src/renderer/components/gameScreenFloorClearFeedbackModel.test.ts",
-      "layer": "renderer",
-      "role": "test",
-      "lineCount": 133,
-      "imports": [
-        "file:src/renderer/components/gameScreenFloorClearFeedbackModel.ts",
-        "file:src/renderer/store/gameplayFeedbackAdapter.ts",
-        "file:src/shared/contracts.ts"
-      ],
-      "exports": [],
-      "testedBy": []
-    },
-    {
-      "id": "file:src/renderer/components/gameScreenFloorClearFeedbackModel.ts",
-      "path": "src/renderer/components/gameScreenFloorClearFeedbackModel.ts",
-      "layer": "renderer",
-      "role": "production",
-      "lineCount": 566,
-      "imports": [
-        "file:src/renderer/components/gameScreenDecisionSignals.tsx",
-        "file:src/renderer/copy/chainMomentum.ts",
-        "file:src/renderer/hooks/useHudPoliteLiveAnnouncement.ts",
-        "file:src/renderer/store/gameplayFeedbackAdapter.ts",
-        "file:src/shared/chain-targets.ts",
-        "file:src/shared/contracts.ts",
-        "file:src/shared/run-number-guards.ts"
-      ],
-      "exports": [
-        "symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#countFavorBonusPicksBanked",
-        "symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#featuredObjectiveFailReason",
-        "symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#FloorClearObjectiveSignalRow",
-        "symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#formatBonusTagsLine",
-        "symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#getFloorClearActionSequenceCue",
-        "symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#getFloorClearCarryForwardCue",
-        "symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#getFloorClearCashoutRows",
-        "symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#getFloorClearObjectiveSignalAudioCue",
-        "symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#getFloorClearObjectiveSignalBeatCount",
-        "symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#getFloorClearObjectiveSignalScreenCue",
-        "symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#getFloorClearPayoffStackAction",
-        "symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#getFloorClearPayoffStackAudioCue",
-        "symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#getFloorClearPayoffStackBeatCount",
-        "symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#getFloorClearPayoffStackScreenCue",
-        "symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#getFloorClearPayoffStackSignal",
-        "symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#getNextFloorSignalAudioCue",
-        "symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#getNextFloorSignalBeatCount",
-        "symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#getNextFloorSignalScreenCue",
-        "symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#getPickupStackToastText",
-        "symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#NextFloorSignalRow"
-      ],
-      "testedBy": [
-        "file:src/renderer/components/gameScreenFloorClearFeedbackModel.test.ts"
       ]
     },
     {
@@ -17473,7 +17444,8 @@
         "file:src/shared/overlay-decision-policy.ts"
       ],
       "exports": [
-        "symbol:src/renderer/components/OverlayModal.tsx#default"
+        "symbol:src/renderer/components/OverlayModal.tsx#default",
+        "symbol:src/renderer/components/OverlayModal.tsx#ModalAction"
       ],
       "testedBy": [
         "file:src/renderer/components/OverlayModal.test.tsx"
@@ -20388,45 +20360,6 @@
       ]
     },
     {
-      "id": "file:src/renderer/components/useGameScreenFloorClearProjection.test.ts",
-      "path": "src/renderer/components/useGameScreenFloorClearProjection.test.ts",
-      "layer": "renderer",
-      "role": "test",
-      "lineCount": 95,
-      "imports": [
-        "file:src/renderer/components/useGameScreenFloorClearProjection.ts",
-        "file:src/shared/contracts.ts",
-        "file:src/shared/game-core.ts"
-      ],
-      "exports": [],
-      "testedBy": []
-    },
-    {
-      "id": "file:src/renderer/components/useGameScreenFloorClearProjection.ts",
-      "path": "src/renderer/components/useGameScreenFloorClearProjection.ts",
-      "layer": "renderer",
-      "role": "production",
-      "lineCount": 304,
-      "imports": [
-        "file:src/renderer/components/gameScreenDecisionSignals.tsx",
-        "file:src/renderer/components/gameScreenFloorClearFeedbackModel.ts",
-        "file:src/shared/boss-encounters.ts",
-        "file:src/shared/contracts.ts",
-        "file:src/shared/floor-mutator-schedule.ts",
-        "file:src/shared/level-result-presentation.ts",
-        "file:src/shared/objective-rules.ts",
-        "file:src/shared/route-rules.ts",
-        "file:src/shared/run-number-guards.ts",
-        "file:src/shared/secondary-objectives.ts"
-      ],
-      "exports": [
-        "symbol:src/renderer/components/useGameScreenFloorClearProjection.ts#useGameScreenFloorClearProjection"
-      ],
-      "testedBy": [
-        "file:src/renderer/components/useGameScreenFloorClearProjection.test.ts"
-      ]
-    },
-    {
       "id": "file:src/renderer/components/useGameScreenPowerTileHints.ts",
       "path": "src/renderer/components/useGameScreenPowerTileHints.ts",
       "layer": "renderer",
@@ -22005,7 +21938,6 @@
         "symbol:src/renderer/store/gameplayFeedbackAdapter.ts#projectGameplayFeedback"
       ],
       "testedBy": [
-        "file:src/renderer/components/gameScreenFloorClearFeedbackModel.test.ts",
         "file:src/renderer/hooks/useHudPoliteLiveAnnouncement.test.ts",
         "file:src/renderer/store/gameplayFeedbackAdapter.test.ts",
         "file:src/renderer/store/matchScorePop.test.ts"
@@ -24830,10 +24762,10 @@
         "file:src/renderer/cardFace/resolveCardIllustrationUrl.test.ts",
         "file:src/renderer/components/codexScreenModel.test.ts",
         "file:src/renderer/components/CollectionScreen.test.tsx",
+        "file:src/renderer/components/FloorClearDialog.test.tsx",
         "file:src/renderer/components/GameOverScreen.test.tsx",
         "file:src/renderer/components/GameScreen.test.tsx",
         "file:src/renderer/components/gameScreenDecisionSignals.test.tsx",
-        "file:src/renderer/components/gameScreenFloorClearFeedbackModel.test.ts",
         "file:src/renderer/components/InventoryScreen.test.tsx",
         "file:src/renderer/components/inventoryScreenModel.test.ts",
         "file:src/renderer/components/MainMenuBackground.test.tsx",
@@ -24866,7 +24798,6 @@
         "file:src/renderer/components/tileResolvingSelection.test.ts",
         "file:src/renderer/components/tileShatter.test.ts",
         "file:src/renderer/components/tileTextures.test.ts",
-        "file:src/renderer/components/useGameScreenFloorClearProjection.test.ts",
         "file:src/renderer/components/useGameScreenTraitRouteTargets.test.tsx",
         "file:src/renderer/copy/relicDraftOffer.test.ts",
         "file:src/renderer/copy/runPayoffSignals.test.ts",
@@ -26927,7 +26858,6 @@
         "file:src/renderer/components/RunShell.test.tsx",
         "file:src/renderer/components/ShopScreen.test.tsx",
         "file:src/renderer/components/SideRoomScreen.test.tsx",
-        "file:src/renderer/components/useGameScreenFloorClearProjection.test.ts",
         "file:src/renderer/store/dungeonPressSurfaceState.test.ts",
         "file:src/renderer/store/levelCompleteContinuationExecutor.test.ts",
         "file:src/renderer/store/levelCompleteSurfaceState.test.ts",
@@ -35163,6 +35093,46 @@
       "endLine": 753
     },
     {
+      "id": "symbol:src/renderer/components/FloorClearDialog.tsx#default",
+      "name": "default",
+      "kind": "ExportAssignment",
+      "file": "src/renderer/components/FloorClearDialog.tsx",
+      "line": 229,
+      "endLine": 229
+    },
+    {
+      "id": "symbol:src/renderer/components/FloorClearDialog.tsx#FloorClearDialogProps",
+      "name": "FloorClearDialogProps",
+      "kind": "interface",
+      "file": "src/renderer/components/FloorClearDialog.tsx",
+      "line": 42,
+      "endLine": 58
+    },
+    {
+      "id": "symbol:src/renderer/components/FloorClearDialog.tsx#FloorClearRouteOption",
+      "name": "FloorClearRouteOption",
+      "kind": "interface",
+      "file": "src/renderer/components/FloorClearDialog.tsx",
+      "line": 13,
+      "endLine": 27
+    },
+    {
+      "id": "symbol:src/renderer/components/FloorClearDialog.tsx#FloorClearSelectedRoute",
+      "name": "FloorClearSelectedRoute",
+      "kind": "interface",
+      "file": "src/renderer/components/FloorClearDialog.tsx",
+      "line": 29,
+      "endLine": 33
+    },
+    {
+      "id": "symbol:src/renderer/components/FloorClearDialog.tsx#FloorClearWager",
+      "name": "FloorClearWager",
+      "kind": "interface",
+      "file": "src/renderer/components/FloorClearDialog.tsx",
+      "line": 35,
+      "endLine": 40
+    },
+    {
       "id": "symbol:src/renderer/components/GameOverScreen.tsx#default",
       "name": "default",
       "kind": "ExportAssignment",
@@ -35239,8 +35209,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 6615,
-      "endLine": 6615
+      "line": 4491,
+      "endLine": 4491
     },
     {
       "id": "symbol:src/renderer/components/gameScreenBoardFeedbackModel.ts#getBoardMatchPayoffStackAction",
@@ -36139,166 +36109,6 @@
       "endLine": 3
     },
     {
-      "id": "symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#countFavorBonusPicksBanked",
-      "name": "countFavorBonusPicksBanked",
-      "kind": "value",
-      "file": "src/renderer/components/gameScreenFloorClearFeedbackModel.ts",
-      "line": 559,
-      "endLine": 565
-    },
-    {
-      "id": "symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#featuredObjectiveFailReason",
-      "name": "featuredObjectiveFailReason",
-      "kind": "value",
-      "file": "src/renderer/components/gameScreenFloorClearFeedbackModel.ts",
-      "line": 539,
-      "endLine": 557
-    },
-    {
-      "id": "symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#FloorClearObjectiveSignalRow",
-      "name": "FloorClearObjectiveSignalRow",
-      "kind": "type",
-      "file": "src/renderer/components/gameScreenFloorClearFeedbackModel.ts",
-      "line": 45,
-      "endLine": 50
-    },
-    {
-      "id": "symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#formatBonusTagsLine",
-      "name": "formatBonusTagsLine",
-      "kind": "value",
-      "file": "src/renderer/components/gameScreenFloorClearFeedbackModel.ts",
-      "line": 532,
-      "endLine": 537
-    },
-    {
-      "id": "symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#getFloorClearActionSequenceCue",
-      "name": "getFloorClearActionSequenceCue",
-      "kind": "value",
-      "file": "src/renderer/components/gameScreenFloorClearFeedbackModel.ts",
-      "line": 457,
-      "endLine": 514
-    },
-    {
-      "id": "symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#getFloorClearCarryForwardCue",
-      "name": "getFloorClearCarryForwardCue",
-      "kind": "value",
-      "file": "src/renderer/components/gameScreenFloorClearFeedbackModel.ts",
-      "line": 404,
-      "endLine": 455
-    },
-    {
-      "id": "symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#getFloorClearCashoutRows",
-      "name": "getFloorClearCashoutRows",
-      "kind": "value",
-      "file": "src/renderer/components/gameScreenFloorClearFeedbackModel.ts",
-      "line": 228,
-      "endLine": 309
-    },
-    {
-      "id": "symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#getFloorClearObjectiveSignalAudioCue",
-      "name": "getFloorClearObjectiveSignalAudioCue",
-      "kind": "value",
-      "file": "src/renderer/components/gameScreenFloorClearFeedbackModel.ts",
-      "line": 123,
-      "endLine": 139
-    },
-    {
-      "id": "symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#getFloorClearObjectiveSignalBeatCount",
-      "name": "getFloorClearObjectiveSignalBeatCount",
-      "kind": "value",
-      "file": "src/renderer/components/gameScreenFloorClearFeedbackModel.ts",
-      "line": 113,
-      "endLine": 121
-    },
-    {
-      "id": "symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#getFloorClearObjectiveSignalScreenCue",
-      "name": "getFloorClearObjectiveSignalScreenCue",
-      "kind": "value",
-      "file": "src/renderer/components/gameScreenFloorClearFeedbackModel.ts",
-      "line": 141,
-      "endLine": 157
-    },
-    {
-      "id": "symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#getFloorClearPayoffStackAction",
-      "name": "getFloorClearPayoffStackAction",
-      "kind": "value",
-      "file": "src/renderer/components/gameScreenFloorClearFeedbackModel.ts",
-      "line": 65,
-      "endLine": 78
-    },
-    {
-      "id": "symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#getFloorClearPayoffStackAudioCue",
-      "name": "getFloorClearPayoffStackAudioCue",
-      "kind": "value",
-      "file": "src/renderer/components/gameScreenFloorClearFeedbackModel.ts",
-      "line": 80,
-      "endLine": 96
-    },
-    {
-      "id": "symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#getFloorClearPayoffStackBeatCount",
-      "name": "getFloorClearPayoffStackBeatCount",
-      "kind": "value",
-      "file": "src/renderer/components/gameScreenFloorClearFeedbackModel.ts",
-      "line": 52,
-      "endLine": 63
-    },
-    {
-      "id": "symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#getFloorClearPayoffStackScreenCue",
-      "name": "getFloorClearPayoffStackScreenCue",
-      "kind": "value",
-      "file": "src/renderer/components/gameScreenFloorClearFeedbackModel.ts",
-      "line": 98,
-      "endLine": 111
-    },
-    {
-      "id": "symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#getFloorClearPayoffStackSignal",
-      "name": "getFloorClearPayoffStackSignal",
-      "kind": "value",
-      "file": "src/renderer/components/gameScreenFloorClearFeedbackModel.ts",
-      "line": 311,
-      "endLine": 369
-    },
-    {
-      "id": "symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#getNextFloorSignalAudioCue",
-      "name": "getNextFloorSignalAudioCue",
-      "kind": "value",
-      "file": "src/renderer/components/gameScreenFloorClearFeedbackModel.ts",
-      "line": 177,
-      "endLine": 193
-    },
-    {
-      "id": "symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#getNextFloorSignalBeatCount",
-      "name": "getNextFloorSignalBeatCount",
-      "kind": "value",
-      "file": "src/renderer/components/gameScreenFloorClearFeedbackModel.ts",
-      "line": 167,
-      "endLine": 175
-    },
-    {
-      "id": "symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#getNextFloorSignalScreenCue",
-      "name": "getNextFloorSignalScreenCue",
-      "kind": "value",
-      "file": "src/renderer/components/gameScreenFloorClearFeedbackModel.ts",
-      "line": 195,
-      "endLine": 208
-    },
-    {
-      "id": "symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#getPickupStackToastText",
-      "name": "getPickupStackToastText",
-      "kind": "value",
-      "file": "src/renderer/components/gameScreenFloorClearFeedbackModel.ts",
-      "line": 371,
-      "endLine": 402
-    },
-    {
-      "id": "symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#NextFloorSignalRow",
-      "name": "NextFloorSignalRow",
-      "kind": "type",
-      "file": "src/renderer/components/gameScreenFloorClearFeedbackModel.ts",
-      "line": 159,
-      "endLine": 165
-    },
-    {
       "id": "symbol:src/renderer/components/gameScreenRouteChoiceModel.ts#getRouteChoiceActionCue",
       "name": "getRouteChoiceActionCue",
       "kind": "value",
@@ -36585,6 +36395,14 @@
       "file": "src/renderer/components/OverlayModal.tsx",
       "line": 271,
       "endLine": 271
+    },
+    {
+      "id": "symbol:src/renderer/components/OverlayModal.tsx#ModalAction",
+      "name": "ModalAction",
+      "kind": "interface",
+      "file": "src/renderer/components/OverlayModal.tsx",
+      "line": 10,
+      "endLine": 15
     },
     {
       "id": "symbol:src/renderer/components/PairProximityHintPlane.tsx#PairProximityHintPlane",
@@ -39905,14 +39723,6 @@
       "file": "src/renderer/components/useGameScreenBoardFloaterProjection.ts",
       "line": 48,
       "endLine": 380
-    },
-    {
-      "id": "symbol:src/renderer/components/useGameScreenFloorClearProjection.ts#useGameScreenFloorClearProjection",
-      "name": "useGameScreenFloorClearProjection",
-      "kind": "value",
-      "file": "src/renderer/components/useGameScreenFloorClearProjection.ts",
-      "line": 35,
-      "endLine": 303
     },
     {
       "id": "symbol:src/renderer/components/useGameScreenPowerTileHints.ts#useGameScreenPowerTileHints",
@@ -61636,7 +61446,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 16
+          "line": 14
         }
       ],
       "tests": [
@@ -62872,7 +62682,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 3710
+          "line": 2483
         }
       ],
       "tests": [
@@ -63956,7 +63766,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 16
+          "line": 14
         }
       ],
       "tests": [
@@ -64048,7 +63858,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 15
+          "line": 14
         }
       ],
       "tests": [
@@ -73904,6 +73714,36 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/FloorClearDialog.tsx->symbol:src/renderer/components/FloorClearDialog.tsx#default",
+      "source": "file:src/renderer/components/FloorClearDialog.tsx",
+      "target": "symbol:src/renderer/components/FloorClearDialog.tsx#default",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/FloorClearDialog.tsx->symbol:src/renderer/components/FloorClearDialog.tsx#FloorClearDialogProps",
+      "source": "file:src/renderer/components/FloorClearDialog.tsx",
+      "target": "symbol:src/renderer/components/FloorClearDialog.tsx#FloorClearDialogProps",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/FloorClearDialog.tsx->symbol:src/renderer/components/FloorClearDialog.tsx#FloorClearRouteOption",
+      "source": "file:src/renderer/components/FloorClearDialog.tsx",
+      "target": "symbol:src/renderer/components/FloorClearDialog.tsx#FloorClearRouteOption",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/FloorClearDialog.tsx->symbol:src/renderer/components/FloorClearDialog.tsx#FloorClearSelectedRoute",
+      "source": "file:src/renderer/components/FloorClearDialog.tsx",
+      "target": "symbol:src/renderer/components/FloorClearDialog.tsx#FloorClearSelectedRoute",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/FloorClearDialog.tsx->symbol:src/renderer/components/FloorClearDialog.tsx#FloorClearWager",
+      "source": "file:src/renderer/components/FloorClearDialog.tsx",
+      "target": "symbol:src/renderer/components/FloorClearDialog.tsx#FloorClearWager",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/GameOverScreen.tsx->symbol:src/renderer/components/GameOverScreen.tsx#default",
       "source": "file:src/renderer/components/GameOverScreen.tsx",
       "target": "symbol:src/renderer/components/GameOverScreen.tsx#default",
@@ -74636,126 +74476,6 @@
       "kind": "exports"
     },
     {
-      "id": "exports:src/renderer/components/gameScreenFloorClearFeedbackModel.ts->symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#countFavorBonusPicksBanked",
-      "source": "file:src/renderer/components/gameScreenFloorClearFeedbackModel.ts",
-      "target": "symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#countFavorBonusPicksBanked",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/components/gameScreenFloorClearFeedbackModel.ts->symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#featuredObjectiveFailReason",
-      "source": "file:src/renderer/components/gameScreenFloorClearFeedbackModel.ts",
-      "target": "symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#featuredObjectiveFailReason",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/components/gameScreenFloorClearFeedbackModel.ts->symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#FloorClearObjectiveSignalRow",
-      "source": "file:src/renderer/components/gameScreenFloorClearFeedbackModel.ts",
-      "target": "symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#FloorClearObjectiveSignalRow",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/components/gameScreenFloorClearFeedbackModel.ts->symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#formatBonusTagsLine",
-      "source": "file:src/renderer/components/gameScreenFloorClearFeedbackModel.ts",
-      "target": "symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#formatBonusTagsLine",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/components/gameScreenFloorClearFeedbackModel.ts->symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#getFloorClearActionSequenceCue",
-      "source": "file:src/renderer/components/gameScreenFloorClearFeedbackModel.ts",
-      "target": "symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#getFloorClearActionSequenceCue",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/components/gameScreenFloorClearFeedbackModel.ts->symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#getFloorClearCarryForwardCue",
-      "source": "file:src/renderer/components/gameScreenFloorClearFeedbackModel.ts",
-      "target": "symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#getFloorClearCarryForwardCue",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/components/gameScreenFloorClearFeedbackModel.ts->symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#getFloorClearCashoutRows",
-      "source": "file:src/renderer/components/gameScreenFloorClearFeedbackModel.ts",
-      "target": "symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#getFloorClearCashoutRows",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/components/gameScreenFloorClearFeedbackModel.ts->symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#getFloorClearObjectiveSignalAudioCue",
-      "source": "file:src/renderer/components/gameScreenFloorClearFeedbackModel.ts",
-      "target": "symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#getFloorClearObjectiveSignalAudioCue",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/components/gameScreenFloorClearFeedbackModel.ts->symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#getFloorClearObjectiveSignalBeatCount",
-      "source": "file:src/renderer/components/gameScreenFloorClearFeedbackModel.ts",
-      "target": "symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#getFloorClearObjectiveSignalBeatCount",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/components/gameScreenFloorClearFeedbackModel.ts->symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#getFloorClearObjectiveSignalScreenCue",
-      "source": "file:src/renderer/components/gameScreenFloorClearFeedbackModel.ts",
-      "target": "symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#getFloorClearObjectiveSignalScreenCue",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/components/gameScreenFloorClearFeedbackModel.ts->symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#getFloorClearPayoffStackAction",
-      "source": "file:src/renderer/components/gameScreenFloorClearFeedbackModel.ts",
-      "target": "symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#getFloorClearPayoffStackAction",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/components/gameScreenFloorClearFeedbackModel.ts->symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#getFloorClearPayoffStackAudioCue",
-      "source": "file:src/renderer/components/gameScreenFloorClearFeedbackModel.ts",
-      "target": "symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#getFloorClearPayoffStackAudioCue",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/components/gameScreenFloorClearFeedbackModel.ts->symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#getFloorClearPayoffStackBeatCount",
-      "source": "file:src/renderer/components/gameScreenFloorClearFeedbackModel.ts",
-      "target": "symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#getFloorClearPayoffStackBeatCount",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/components/gameScreenFloorClearFeedbackModel.ts->symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#getFloorClearPayoffStackScreenCue",
-      "source": "file:src/renderer/components/gameScreenFloorClearFeedbackModel.ts",
-      "target": "symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#getFloorClearPayoffStackScreenCue",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/components/gameScreenFloorClearFeedbackModel.ts->symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#getFloorClearPayoffStackSignal",
-      "source": "file:src/renderer/components/gameScreenFloorClearFeedbackModel.ts",
-      "target": "symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#getFloorClearPayoffStackSignal",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/components/gameScreenFloorClearFeedbackModel.ts->symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#getNextFloorSignalAudioCue",
-      "source": "file:src/renderer/components/gameScreenFloorClearFeedbackModel.ts",
-      "target": "symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#getNextFloorSignalAudioCue",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/components/gameScreenFloorClearFeedbackModel.ts->symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#getNextFloorSignalBeatCount",
-      "source": "file:src/renderer/components/gameScreenFloorClearFeedbackModel.ts",
-      "target": "symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#getNextFloorSignalBeatCount",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/components/gameScreenFloorClearFeedbackModel.ts->symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#getNextFloorSignalScreenCue",
-      "source": "file:src/renderer/components/gameScreenFloorClearFeedbackModel.ts",
-      "target": "symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#getNextFloorSignalScreenCue",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/components/gameScreenFloorClearFeedbackModel.ts->symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#getPickupStackToastText",
-      "source": "file:src/renderer/components/gameScreenFloorClearFeedbackModel.ts",
-      "target": "symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#getPickupStackToastText",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/components/gameScreenFloorClearFeedbackModel.ts->symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#NextFloorSignalRow",
-      "source": "file:src/renderer/components/gameScreenFloorClearFeedbackModel.ts",
-      "target": "symbol:src/renderer/components/gameScreenFloorClearFeedbackModel.ts#NextFloorSignalRow",
-      "kind": "exports"
-    },
-    {
       "id": "exports:src/renderer/components/gameScreenRouteChoiceModel.ts->symbol:src/renderer/components/gameScreenRouteChoiceModel.ts#getRouteChoiceActionCue",
       "source": "file:src/renderer/components/gameScreenRouteChoiceModel.ts",
       "target": "symbol:src/renderer/components/gameScreenRouteChoiceModel.ts#getRouteChoiceActionCue",
@@ -74969,6 +74689,12 @@
       "id": "exports:src/renderer/components/OverlayModal.tsx->symbol:src/renderer/components/OverlayModal.tsx#default",
       "source": "file:src/renderer/components/OverlayModal.tsx",
       "target": "symbol:src/renderer/components/OverlayModal.tsx#default",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/OverlayModal.tsx->symbol:src/renderer/components/OverlayModal.tsx#ModalAction",
+      "source": "file:src/renderer/components/OverlayModal.tsx",
+      "target": "symbol:src/renderer/components/OverlayModal.tsx#ModalAction",
       "kind": "exports"
     },
     {
@@ -77459,12 +77185,6 @@
       "id": "exports:src/renderer/components/useGameScreenBoardFloaterProjection.ts->symbol:src/renderer/components/useGameScreenBoardFloaterProjection.ts#useGameScreenBoardFloaterProjection",
       "source": "file:src/renderer/components/useGameScreenBoardFloaterProjection.ts",
       "target": "symbol:src/renderer/components/useGameScreenBoardFloaterProjection.ts#useGameScreenBoardFloaterProjection",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/components/useGameScreenFloorClearProjection.ts->symbol:src/renderer/components/useGameScreenFloorClearProjection.ts#useGameScreenFloorClearProjection",
-      "source": "file:src/renderer/components/useGameScreenFloorClearProjection.ts",
-      "target": "symbol:src/renderer/components/useGameScreenFloorClearProjection.ts#useGameScreenFloorClearProjection",
       "kind": "exports"
     },
     {
@@ -98220,6 +97940,36 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/FloorClearDialog.test.tsx->src/renderer/components/FloorClearDialog.tsx",
+      "source": "file:src/renderer/components/FloorClearDialog.test.tsx",
+      "target": "file:src/renderer/components/FloorClearDialog.tsx",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/FloorClearDialog.test.tsx->src/shared/contracts.ts",
+      "source": "file:src/renderer/components/FloorClearDialog.test.tsx",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/FloorClearDialog.tsx->src/renderer/components/OverlayModal.tsx",
+      "source": "file:src/renderer/components/FloorClearDialog.tsx",
+      "target": "file:src/renderer/components/OverlayModal.tsx",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/FloorClearDialog.tsx->src/shared/contracts.ts",
+      "source": "file:src/renderer/components/FloorClearDialog.tsx",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/FloorClearDialog.tsx->src/shared/run-number-guards.ts",
+      "source": "file:src/renderer/components/FloorClearDialog.tsx",
+      "target": "file:src/shared/run-number-guards.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/GameOverScreen.test.tsx->src/renderer/components/GameOverScreen.tsx",
       "source": "file:src/renderer/components/GameOverScreen.test.tsx",
       "target": "file:src/renderer/components/GameOverScreen.tsx",
@@ -98502,6 +98252,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/components/FloorClearDialog.tsx",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "file:src/renderer/components/FloorClearDialog.tsx",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/components/gameplayVisualConfig.ts",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "file:src/renderer/components/gameplayVisualConfig.ts",
@@ -98712,12 +98468,6 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/ui/index.ts",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "file:src/renderer/ui/index.ts",
-      "kind": "imports"
-    },
-    {
       "id": "imports:src/renderer/components/GameScreen.tsx->src/shared/achievements.ts",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "file:src/shared/achievements.ts",
@@ -98748,12 +98498,6 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/GameScreen.tsx->src/shared/chain-targets.ts",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "file:src/shared/chain-targets.ts",
-      "kind": "imports"
-    },
-    {
       "id": "imports:src/renderer/components/GameScreen.tsx->src/shared/contracts.ts",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "file:src/shared/contracts.ts",
@@ -98778,21 +98522,9 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/GameScreen.tsx->src/shared/level-result-presentation.ts",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "file:src/shared/level-result-presentation.ts",
-      "kind": "imports"
-    },
-    {
       "id": "imports:src/renderer/components/GameScreen.tsx->src/shared/mechanics-encyclopedia.ts",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "file:src/shared/mechanics-encyclopedia.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/GameScreen.tsx->src/shared/memory-recall-feedback.ts",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "file:src/shared/memory-recall-feedback.ts",
       "kind": "imports"
     },
     {
@@ -99039,66 +98771,6 @@
       "id": "imports:src/renderer/components/gameScreenFeedback.ts->src/shared/contracts.ts",
       "source": "file:src/renderer/components/gameScreenFeedback.ts",
       "target": "file:src/shared/contracts.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/gameScreenFloorClearFeedbackModel.test.ts->src/renderer/components/gameScreenFloorClearFeedbackModel.ts",
-      "source": "file:src/renderer/components/gameScreenFloorClearFeedbackModel.test.ts",
-      "target": "file:src/renderer/components/gameScreenFloorClearFeedbackModel.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/gameScreenFloorClearFeedbackModel.test.ts->src/renderer/store/gameplayFeedbackAdapter.ts",
-      "source": "file:src/renderer/components/gameScreenFloorClearFeedbackModel.test.ts",
-      "target": "file:src/renderer/store/gameplayFeedbackAdapter.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/gameScreenFloorClearFeedbackModel.test.ts->src/shared/contracts.ts",
-      "source": "file:src/renderer/components/gameScreenFloorClearFeedbackModel.test.ts",
-      "target": "file:src/shared/contracts.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/gameScreenFloorClearFeedbackModel.ts->src/renderer/components/gameScreenDecisionSignals.tsx",
-      "source": "file:src/renderer/components/gameScreenFloorClearFeedbackModel.ts",
-      "target": "file:src/renderer/components/gameScreenDecisionSignals.tsx",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/gameScreenFloorClearFeedbackModel.ts->src/renderer/copy/chainMomentum.ts",
-      "source": "file:src/renderer/components/gameScreenFloorClearFeedbackModel.ts",
-      "target": "file:src/renderer/copy/chainMomentum.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/gameScreenFloorClearFeedbackModel.ts->src/renderer/hooks/useHudPoliteLiveAnnouncement.ts",
-      "source": "file:src/renderer/components/gameScreenFloorClearFeedbackModel.ts",
-      "target": "file:src/renderer/hooks/useHudPoliteLiveAnnouncement.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/gameScreenFloorClearFeedbackModel.ts->src/renderer/store/gameplayFeedbackAdapter.ts",
-      "source": "file:src/renderer/components/gameScreenFloorClearFeedbackModel.ts",
-      "target": "file:src/renderer/store/gameplayFeedbackAdapter.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/gameScreenFloorClearFeedbackModel.ts->src/shared/chain-targets.ts",
-      "source": "file:src/renderer/components/gameScreenFloorClearFeedbackModel.ts",
-      "target": "file:src/shared/chain-targets.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/gameScreenFloorClearFeedbackModel.ts->src/shared/contracts.ts",
-      "source": "file:src/renderer/components/gameScreenFloorClearFeedbackModel.ts",
-      "target": "file:src/shared/contracts.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/gameScreenFloorClearFeedbackModel.ts->src/shared/run-number-guards.ts",
-      "source": "file:src/renderer/components/gameScreenFloorClearFeedbackModel.ts",
-      "target": "file:src/shared/run-number-guards.ts",
       "kind": "imports"
     },
     {
@@ -102837,84 +102509,6 @@
       "id": "imports:src/renderer/components/useGameScreenBoardFloaterProjection.ts->src/renderer/store/matchScorePop.ts",
       "source": "file:src/renderer/components/useGameScreenBoardFloaterProjection.ts",
       "target": "file:src/renderer/store/matchScorePop.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/useGameScreenFloorClearProjection.test.ts->src/renderer/components/useGameScreenFloorClearProjection.ts",
-      "source": "file:src/renderer/components/useGameScreenFloorClearProjection.test.ts",
-      "target": "file:src/renderer/components/useGameScreenFloorClearProjection.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/useGameScreenFloorClearProjection.test.ts->src/shared/contracts.ts",
-      "source": "file:src/renderer/components/useGameScreenFloorClearProjection.test.ts",
-      "target": "file:src/shared/contracts.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/useGameScreenFloorClearProjection.test.ts->src/shared/game-core.ts",
-      "source": "file:src/renderer/components/useGameScreenFloorClearProjection.test.ts",
-      "target": "file:src/shared/game-core.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/useGameScreenFloorClearProjection.ts->src/renderer/components/gameScreenDecisionSignals.tsx",
-      "source": "file:src/renderer/components/useGameScreenFloorClearProjection.ts",
-      "target": "file:src/renderer/components/gameScreenDecisionSignals.tsx",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/useGameScreenFloorClearProjection.ts->src/renderer/components/gameScreenFloorClearFeedbackModel.ts",
-      "source": "file:src/renderer/components/useGameScreenFloorClearProjection.ts",
-      "target": "file:src/renderer/components/gameScreenFloorClearFeedbackModel.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/useGameScreenFloorClearProjection.ts->src/shared/boss-encounters.ts",
-      "source": "file:src/renderer/components/useGameScreenFloorClearProjection.ts",
-      "target": "file:src/shared/boss-encounters.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/useGameScreenFloorClearProjection.ts->src/shared/contracts.ts",
-      "source": "file:src/renderer/components/useGameScreenFloorClearProjection.ts",
-      "target": "file:src/shared/contracts.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/useGameScreenFloorClearProjection.ts->src/shared/floor-mutator-schedule.ts",
-      "source": "file:src/renderer/components/useGameScreenFloorClearProjection.ts",
-      "target": "file:src/shared/floor-mutator-schedule.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/useGameScreenFloorClearProjection.ts->src/shared/level-result-presentation.ts",
-      "source": "file:src/renderer/components/useGameScreenFloorClearProjection.ts",
-      "target": "file:src/shared/level-result-presentation.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/useGameScreenFloorClearProjection.ts->src/shared/objective-rules.ts",
-      "source": "file:src/renderer/components/useGameScreenFloorClearProjection.ts",
-      "target": "file:src/shared/objective-rules.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/useGameScreenFloorClearProjection.ts->src/shared/route-rules.ts",
-      "source": "file:src/renderer/components/useGameScreenFloorClearProjection.ts",
-      "target": "file:src/shared/route-rules.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/useGameScreenFloorClearProjection.ts->src/shared/run-number-guards.ts",
-      "source": "file:src/renderer/components/useGameScreenFloorClearProjection.ts",
-      "target": "file:src/shared/run-number-guards.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/useGameScreenFloorClearProjection.ts->src/shared/secondary-objectives.ts",
-      "source": "file:src/renderer/components/useGameScreenFloorClearProjection.ts",
-      "target": "file:src/shared/secondary-objectives.ts",
       "kind": "imports"
     },
     {
@@ -121648,6 +121242,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/components/FloorClearDialog.tsx->file:src/renderer/components/FloorClearDialog.test.tsx",
+      "source": "file:src/renderer/components/FloorClearDialog.tsx",
+      "target": "file:src/renderer/components/FloorClearDialog.test.tsx",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/components/GameOverScreen.tsx->file:src/renderer/components/GameOverScreen.test.tsx",
       "source": "file:src/renderer/components/GameOverScreen.tsx",
       "target": "file:src/renderer/components/GameOverScreen.test.tsx",
@@ -121753,12 +121353,6 @@
       "id": "tested_by:src/renderer/components/gameScreenFeedback.ts->file:src/renderer/components/GameScreen.test.tsx",
       "source": "file:src/renderer/components/gameScreenFeedback.ts",
       "target": "file:src/renderer/components/GameScreen.test.tsx",
-      "kind": "tested_by"
-    },
-    {
-      "id": "tested_by:src/renderer/components/gameScreenFloorClearFeedbackModel.ts->file:src/renderer/components/gameScreenFloorClearFeedbackModel.test.ts",
-      "source": "file:src/renderer/components/gameScreenFloorClearFeedbackModel.ts",
-      "target": "file:src/renderer/components/gameScreenFloorClearFeedbackModel.test.ts",
       "kind": "tested_by"
     },
     {
@@ -122284,12 +121878,6 @@
       "kind": "tested_by"
     },
     {
-      "id": "tested_by:src/renderer/components/useGameScreenFloorClearProjection.ts->file:src/renderer/components/useGameScreenFloorClearProjection.test.ts",
-      "source": "file:src/renderer/components/useGameScreenFloorClearProjection.ts",
-      "target": "file:src/renderer/components/useGameScreenFloorClearProjection.test.ts",
-      "kind": "tested_by"
-    },
-    {
       "id": "tested_by:src/renderer/components/useGameScreenTraitRouteTargets.ts->file:src/renderer/components/useGameScreenTraitRouteTargets.test.tsx",
       "source": "file:src/renderer/components/useGameScreenTraitRouteTargets.ts",
       "target": "file:src/renderer/components/useGameScreenTraitRouteTargets.test.tsx",
@@ -122617,12 +122205,6 @@
       "id": "tested_by:src/renderer/store/dungeonPressSurfaceState.ts->file:src/renderer/store/dungeonPressSurfaceState.test.ts",
       "source": "file:src/renderer/store/dungeonPressSurfaceState.ts",
       "target": "file:src/renderer/store/dungeonPressSurfaceState.test.ts",
-      "kind": "tested_by"
-    },
-    {
-      "id": "tested_by:src/renderer/store/gameplayFeedbackAdapter.ts->file:src/renderer/components/gameScreenFloorClearFeedbackModel.test.ts",
-      "source": "file:src/renderer/store/gameplayFeedbackAdapter.ts",
-      "target": "file:src/renderer/components/gameScreenFloorClearFeedbackModel.test.ts",
       "kind": "tested_by"
     },
     {
@@ -123400,6 +122982,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/contracts.ts->file:src/renderer/components/FloorClearDialog.test.tsx",
+      "source": "file:src/shared/contracts.ts",
+      "target": "file:src/renderer/components/FloorClearDialog.test.tsx",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/contracts.ts->file:src/renderer/components/GameOverScreen.test.tsx",
       "source": "file:src/shared/contracts.ts",
       "target": "file:src/renderer/components/GameOverScreen.test.tsx",
@@ -123415,12 +123003,6 @@
       "id": "tested_by:src/shared/contracts.ts->file:src/renderer/components/gameScreenDecisionSignals.test.tsx",
       "source": "file:src/shared/contracts.ts",
       "target": "file:src/renderer/components/gameScreenDecisionSignals.test.tsx",
-      "kind": "tested_by"
-    },
-    {
-      "id": "tested_by:src/shared/contracts.ts->file:src/renderer/components/gameScreenFloorClearFeedbackModel.test.ts",
-      "source": "file:src/shared/contracts.ts",
-      "target": "file:src/renderer/components/gameScreenFloorClearFeedbackModel.test.ts",
       "kind": "tested_by"
     },
     {
@@ -123613,12 +123195,6 @@
       "id": "tested_by:src/shared/contracts.ts->file:src/renderer/components/tileTextures.test.ts",
       "source": "file:src/shared/contracts.ts",
       "target": "file:src/renderer/components/tileTextures.test.ts",
-      "kind": "tested_by"
-    },
-    {
-      "id": "tested_by:src/shared/contracts.ts->file:src/renderer/components/useGameScreenFloorClearProjection.test.ts",
-      "source": "file:src/shared/contracts.ts",
-      "target": "file:src/renderer/components/useGameScreenFloorClearProjection.test.ts",
       "kind": "tested_by"
     },
     {
@@ -124987,12 +124563,6 @@
       "id": "tested_by:src/shared/game-core.ts->file:src/renderer/components/SideRoomScreen.test.tsx",
       "source": "file:src/shared/game-core.ts",
       "target": "file:src/renderer/components/SideRoomScreen.test.tsx",
-      "kind": "tested_by"
-    },
-    {
-      "id": "tested_by:src/shared/game-core.ts->file:src/renderer/components/useGameScreenFloorClearProjection.test.ts",
-      "source": "file:src/shared/game-core.ts",
-      "target": "file:src/renderer/components/useGameScreenFloorClearProjection.test.ts",
       "kind": "tested_by"
     },
     {

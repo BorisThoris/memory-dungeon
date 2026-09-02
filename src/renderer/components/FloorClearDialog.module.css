@@ -1,0 +1,294 @@
+/*
+ * Floor cleared. Score, four stats, one row of doors, one wager line. Type floor 12px,
+ * every door at least 44px tall, one statement of each fact.
+ */
+
+.body {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* ---- score ------------------------------------------------------------------------- */
+
+.score {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-areas:
+        'label total'
+        'value total';
+    column-gap: 1rem;
+    align-items: baseline;
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid color-mix(in srgb, var(--theme-gold-bright) 28%, transparent);
+}
+
+.scoreLabel {
+    grid-area: label;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--theme-gold-bright) 64%, var(--theme-text-subtle) 36%);
+}
+
+.scoreValue {
+    grid-area: value;
+    font-family: var(--theme-display-font);
+    font-size: clamp(2.4rem, 6vw, 3.4rem);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: 0.02em;
+    color: var(--theme-gold-bright);
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.55);
+}
+
+.scoreTotal {
+    grid-area: total;
+    justify-self: end;
+    align-self: end;
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--theme-text-muted);
+}
+
+/* ---- stats ------------------------------------------------------------------------- */
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.5rem;
+    margin: 0;
+}
+
+.stat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    padding: 0.55rem 0.7rem;
+    border-radius: var(--ui-radius-sm);
+    background: rgba(255, 243, 217, 0.045);
+    box-shadow: inset 0 1px 0 var(--theme-hud-chrome-inset);
+}
+
+.stat dt {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--theme-text-subtle);
+}
+
+.stat dd {
+    margin: 0;
+    font-family: var(--theme-display-font);
+    font-size: 1.45rem;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--theme-text);
+}
+
+/* ---- notes ------------------------------------------------------------------------- */
+
+.notes {
+    display: grid;
+    gap: 0.3rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.92rem;
+    font-weight: 600;
+    line-height: 1.35;
+    color: var(--theme-text);
+}
+
+.notes li[data-tone='reward'] {
+    color: var(--theme-gold-bright);
+}
+
+/* ---- doors ------------------------------------------------------------------------- */
+
+.routes {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.routesTitle {
+    margin: 0;
+    font-family: var(--theme-display-font);
+    font-size: 1.1rem;
+    font-weight: 650;
+    letter-spacing: 0.04em;
+    color: var(--theme-text);
+}
+
+.routesIntro {
+    margin: 0;
+    font-size: 0.88rem;
+    line-height: 1.4;
+    color: var(--theme-text-muted);
+}
+
+.doors {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.55rem;
+}
+
+.door {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.3rem;
+    min-height: 44px;
+    padding: 0.8rem 0.85rem 0.85rem;
+    border-radius: var(--ui-radius-lg);
+    border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 22%, var(--theme-card-border-muted));
+    background:
+        linear-gradient(180deg, rgba(255, 243, 217, 0.06), transparent 40%),
+        rgba(8, 10, 16, 0.78);
+    color: var(--theme-text);
+    font-family: var(--theme-body-font);
+    text-align: left;
+    cursor: pointer;
+    transition:
+        border-color 140ms ease,
+        transform 140ms ease;
+}
+
+.door:hover:not(:disabled),
+.door:focus-visible {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 52%, transparent);
+    transform: translateY(-2px);
+    outline: none;
+}
+
+.door:focus-visible {
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--theme-cyan-bright) 55%, transparent);
+}
+
+.door:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.door[data-route-type='safe'] .doorGlyph {
+    color: var(--theme-cyan-bright);
+}
+
+.door[data-route-type='greed'] .doorGlyph {
+    color: var(--theme-gold-bright);
+}
+
+.door[data-route-type='mystery'] .doorGlyph {
+    color: color-mix(in srgb, var(--theme-text) 60%, #c08cff 40%);
+}
+
+.doorGlyph {
+    font-size: 1.5rem;
+    line-height: 1;
+}
+
+.doorTitle {
+    font-family: var(--theme-display-font);
+    font-size: 1.05rem;
+    font-weight: 650;
+    letter-spacing: 0.03em;
+    line-height: 1.15;
+}
+
+.doorRoom {
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--theme-text-subtle);
+}
+
+.doorReward {
+    font-size: 0.88rem;
+    font-weight: 500;
+    line-height: 1.35;
+    color: var(--theme-text);
+}
+
+.doorRisk {
+    margin-top: auto;
+    font-size: 0.8rem;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--theme-text-muted);
+}
+
+.doorRisk[data-tone='locked'] {
+    color: var(--theme-danger, #e07a7a);
+}
+
+.selected {
+    margin: 0;
+    padding: 0.7rem 0.85rem;
+    border-radius: var(--ui-radius-sm);
+    border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 28%, transparent);
+    background: rgba(255, 243, 217, 0.045);
+    font-size: 0.92rem;
+    line-height: 1.4;
+    color: var(--theme-text);
+}
+
+/* ---- wager ------------------------------------------------------------------------- */
+
+.wager {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.6rem;
+    padding: 0.6rem 0.85rem;
+    border-radius: var(--ui-radius-sm);
+    border: 1px dashed color-mix(in srgb, var(--theme-gold-bright) 40%, transparent);
+}
+
+.wagerLine {
+    flex: 1 1 18rem;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    color: var(--theme-text);
+}
+
+.wagerButton {
+    min-height: 44px;
+    padding: 0 1rem;
+    border-radius: var(--ui-radius-pill);
+    border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 55%, transparent);
+    background: transparent;
+    color: var(--theme-gold-bright);
+    font-family: var(--theme-display-font);
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+
+.wagerButton:hover,
+.wagerButton:focus-visible {
+    background: color-mix(in srgb, var(--theme-gold-bright) 14%, transparent);
+    outline: none;
+}
+
+@media (max-width: 640px) {
+    .stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .doors {
+        grid-template-columns: 1fr;
+    }
+
+    .score {
+        grid-template-areas:
+            'label label'
+            'value total';
+    }
+}

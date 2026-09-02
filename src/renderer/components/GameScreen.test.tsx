@@ -259,7 +259,7 @@ describe('GameScreen (OVR-014)', () => {
         expect(achievementNotifications()).toBe(1);
     });
 
-    it('explains that lives carry across floors on the floor-cleared modal', () => {
+    it('shows the floor score and the four stats on the floor-cleared dialog', () => {
         render(
             <PlatformTiltProvider>
                 <NotificationHost>
@@ -268,8 +268,17 @@ describe('GameScreen (OVR-014)', () => {
             </PlatformTiltProvider>
         );
 
-        expect(screen.getByText(/Lives carry across the run/i)).toBeInTheDocument();
-        expect(screen.getByText(/Clean clears, safe routes, shops, rests, and shrines can restore them/i)).toBeInTheDocument();
+        const dialog = screen.getByRole('dialog', { name: /floor cleared/i });
+        expect(dialog).toHaveTextContent('Floor 1');
+        expect(screen.getByTestId('floor-clear-score')).toHaveTextContent('+120');
+        const stats = screen.getByTestId('floor-clear-stats');
+        expect(stats).toHaveTextContent(/Rating\s*S/);
+        expect(stats).toHaveTextContent(/Best streak\s*2/);
+        expect(stats).toHaveTextContent(/Misses\s*0/);
+        expect(stats).toHaveTextContent(/Lives\s*5/);
+        // The coaching strips are gone: the dialog states the result and the route choice only.
+        expect(dialog).not.toHaveTextContent(/Lives carry across the run|payoff stack|Carry forward|Next floor loop/i);
+        expect(screen.getByRole('button', { name: /^continue$/i })).toBeInTheDocument();
     });
 
     it('normalizes malformed floor-clear counters before rendering overlay copy', () => {
@@ -312,29 +321,14 @@ describe('GameScreen (OVR-014)', () => {
             </PlatformTiltProvider>
         );
 
-        expect(screen.getByText(/Level 0 cleared\. Score \+0\./i)).toBeInTheDocument();
+        expect(screen.getByRole('dialog', { name: /floor cleared/i })).toHaveTextContent('Floor 0');
         expect(screen.getByTestId('floor-clear-result-stack')).not.toHaveTextContent(/NaN|Infinity/);
-        expect(screen.getByTestId('floor-clear-momentum-strip')).toHaveTextContent('Score pop+0');
-        expect(screen.getByTestId('floor-clear-objective-strip')).toHaveTextContent('Objective paid+0 score');
-        expect(screen.getByTestId('floor-clear-objective-strip')).toHaveTextContent('Objective streakx0');
+        expect(screen.getByTestId('floor-clear-score')).toHaveTextContent('+0');
+        expect(screen.getByTestId('floor-clear-stats')).toHaveTextContent(/Misses\s*0/);
+        expect(screen.getByTestId('floor-clear-notes')).toHaveTextContent('Flip par: Complete');
+        expect(screen.getByTestId('floor-clear-notes')).toHaveTextContent('Risk wager lost: -0 streak');
     });
 
-    it('surfaces first-clear onboarding completion copy after completion is durable', () => {
-        const saveData = { ...createDefaultSaveData(), onboardingDismissed: true };
-        act(() => {
-            useAppStore.setState({ saveData, settings: saveData.settings });
-        });
-
-        render(
-            <PlatformTiltProvider>
-                <NotificationHost>
-                    <GameScreen achievements={[]} run={levelCompleteRunFixture()} />
-                </NotificationHost>
-            </PlatformTiltProvider>
-        );
-
-        expect(screen.getByText(/First-run guide complete/i)).toBeInTheDocument();
-    });
 
 
 
@@ -2126,7 +2120,7 @@ describe('GameScreen (OVR-014)', () => {
             }
         };
 
-        const { getByText, rerender } = render(
+        render(
             <PlatformTiltProvider>
                 <NotificationHost>
                     <GameScreen achievements={[]} run={run} />
@@ -2134,616 +2128,21 @@ describe('GameScreen (OVR-014)', () => {
             </PlatformTiltProvider>
         );
 
-        expect(getByText(/Flip par: Complete/)).toBeTruthy();
-        expect(screen.getByTestId('floor-clear-momentum-strip')).toHaveTextContent('Score pop');
-        expect(screen.getByTestId('floor-clear-momentum-strip')).toHaveTextContent('+120');
-        expect(screen.getByTestId('floor-clear-momentum-strip')).toHaveTextContent('Rating');
-        expect(screen.getByTestId('floor-clear-momentum-strip')).toHaveTextContent('S++');
-        expect(screen.getByTestId('floor-clear-momentum-strip')).toHaveTextContent('Best chain');
-        expect(screen.getByTestId('floor-clear-momentum-strip')).toHaveTextContent('x2');
-        expect(screen.getByTestId('floor-clear-momentum-strip')).toHaveTextContent('Pickups');
-        expect(screen.getByTestId('floor-clear-momentum-strip')).toHaveTextContent('1/2');
-        expect(screen.getByTestId('floor-clear-momentum-strip')).toHaveTextContent('Shards');
-        expect(screen.getByTestId('floor-clear-momentum-strip')).toHaveTextContent('Favor');
-        expect(screen.getByTestId('floor-clear-momentum-strip')).toHaveTextContent('+1 pick banked');
-        expect(screen.getByTestId('floor-clear-momentum-strip').getAttribute('aria-label')).toContain(
-            'Floor clear momentum signals. Score pop: +120. Rating: S++. Best chain: x2.'
-        );
-        expect(screen.getByTestId('floor-clear-payoff-stack')).toHaveAttribute('data-floor-payoff-stack-tone', 'super');
-        expect(screen.getByTestId('floor-clear-payoff-stack')).toHaveAttribute('data-floor-payoff-stack-action', 'Rebuild stack');
-        expect(screen.getByTestId('floor-clear-payoff-stack')).toHaveAttribute('data-floor-payoff-stack-audio', 'floor-stack-super');
-        expect(screen.getByTestId('floor-clear-payoff-stack')).toHaveAttribute('data-floor-payoff-stack-beats', '5');
-        expect(screen.getByTestId('floor-clear-payoff-stack')).toHaveAttribute('data-floor-payoff-stack-screen-cue', 'super');
-        expect(screen.getByTestId('floor-clear-payoff-stack')).toHaveTextContent('Super stack');
-        expect(screen.getByTestId('floor-clear-payoff-stack')).toHaveTextContent('5 payoffs paid');
-        expect(screen.getByTestId('floor-clear-payoff-stack')).toHaveTextContent('Rebuild stack');
-        expect(screen.getByTestId('floor-clear-payoff-stack')).toHaveTextContent('Trait route + Objective + Pickup + Shard + Relic pick');
-        expect(screen.getByTestId('floor-clear-payoff-stack').querySelectorAll('[data-floor-payoff-stack-beat]')).toHaveLength(5);
-        expect(
-            screen.getByTestId('floor-clear-payoff-stack').querySelector('[data-floor-payoff-stack-beat="1"]')
-        ).toHaveAttribute('data-floor-payoff-stack-beat-focus', 'primary');
-        expect(
-            screen.getByTestId('floor-clear-payoff-stack').querySelector('[data-floor-payoff-stack-beat="2"]')
-        ).toHaveAttribute('data-floor-payoff-stack-beat-focus', 'support');
-        expect(screen.getByTestId('floor-clear-payoff-stack')).toHaveAccessibleName(
-            'Super stack: 5 payoffs paid. Rebuild stack. 5 beats. Trait route + Objective + Pickup + Shard + Relic pick paid on the clear; open the next floor by rebuilding the super-stack route.'
-        );
-        expect(screen.getByTestId('floor-clear-cashout-strip')).toHaveTextContent('Cashout');
-        expect(screen.getByTestId('floor-clear-cashout-strip')).toHaveTextContent('trait route + objective + 1 pickup');
-        expect(screen.getByTestId('floor-clear-cashout-strip')).toHaveTextContent('+1 combo shard');
-        expect(screen.getByTestId('floor-clear-cashout-strip')).toHaveTextContent('Missed value');
-        expect(screen.getByTestId('floor-clear-cashout-strip')).toHaveTextContent('1 pickup left');
-        expect(screen.getByTestId('floor-clear-cashout-strip')).toHaveTextContent('Visible reward pairs were left on the board.');
-        expect(screen.getByTestId('floor-clear-cashout-strip')).toHaveTextContent('Next chase');
-        expect(screen.getByTestId('floor-clear-cashout-strip')).toHaveTextContent('claim pickups');
-        expect(screen.getByTestId('floor-clear-cashout-strip').querySelector('[data-cashout-tone="missed"]')).toHaveTextContent('1 pickup left');
-        expect(screen.getByTestId('floor-clear-cashout-strip').getAttribute('aria-label')).toContain(
-            'Floor clear cashout read. Cashout: trait route + objective + 1 pickup - +1 combo shard.'
-        );
-        expect(screen.getByTestId('floor-clear-cashout-strip').getAttribute('aria-label')).toContain(
-            'Next chase: claim pickups - Prioritize marked reward pairs before ending the floor.'
-        );
-        expect(screen.getByTestId('floor-clear-carry-forward')).toHaveTextContent('Carry forward');
-        expect(screen.getByTestId('floor-clear-carry-forward')).toHaveTextContent('+1 relic pick banked');
-        expect(screen.getByTestId('floor-clear-carry-forward')).toHaveTextContent('Spend it at the next milestone draft.');
-        expect(screen.getByTestId('floor-clear-carry-forward')).toHaveAttribute('data-carry-forward-tone', 'reward');
-        expect(screen.getByTestId('floor-clear-carry-forward')).toHaveAccessibleName(
-            'Carry forward: +1 relic pick banked. Spend it at the next milestone draft.'
-        );
-        expect(screen.getByTestId('floor-clear-action-sequence')).toHaveTextContent('Next floor loop');
-        expect(screen.getByTestId('floor-clear-action-sequence')).toHaveTextContent('Choose route card');
-        expect(screen.getByTestId('floor-clear-action-sequence')).toHaveTextContent('Spend banked relic pick');
-        expect(screen.getByTestId('floor-clear-action-sequence')).toHaveTextContent('Claim pickups early');
-        expect(screen.getByTestId('floor-clear-action-sequence')).toHaveAttribute('data-floor-clear-sequence-tone', 'route');
-        expect(screen.getByTestId('floor-clear-action-sequence')).toHaveAttribute('data-floor-clear-sequence-first', 'Choose route card');
-        expect(screen.getByTestId('floor-clear-action-sequence')).toHaveAttribute('data-floor-clear-sequence-then', 'Spend banked relic pick');
-        expect(screen.getByTestId('floor-clear-action-sequence')).toHaveAttribute('data-floor-clear-sequence-keep', 'Claim pickups early');
-        expect(screen.getByTestId('floor-clear-action-sequence')).toHaveAccessibleName(
-            'Next floor loop. First: Choose route card. Then: Spend banked relic pick. Keep: Claim pickups early.'
-        );
-        expect(screen.getByTestId('floor-clear-objective-strip')).toHaveTextContent('Objective paid');
-        expect(screen.getByTestId('floor-clear-objective-strip')).toHaveTextContent('+30 score');
-        expect(screen.getByTestId('floor-clear-objective-strip')).toHaveTextContent('Objective streak');
-        expect(screen.getByTestId('floor-clear-objective-strip')).toHaveTextContent('x2 +10');
-        expect(screen.getByTestId('floor-clear-objective-strip')).toHaveTextContent('Trait route paid');
-        expect(screen.getByTestId('floor-clear-objective-strip')).toHaveTextContent('+1 combo shard');
-        expect(screen.getByTestId('floor-clear-objective-strip').querySelector('[data-objective-tone="reward"]')).toHaveTextContent('Objective paid');
-        expect(screen.getByTestId('floor-clear-objective-strip').querySelector('[data-objective-tone="trait"]')).toHaveTextContent('Trait route paid');
-        expect(screen.getByTestId('floor-clear-objective-strip').querySelector('[data-objective-tone="reward"]')).toHaveAttribute('data-objective-beats', '4');
-        expect(screen.getByTestId('floor-clear-objective-strip').querySelector('[data-objective-tone="reward"]')).toHaveAttribute('data-objective-audio', 'floor-objective-reward');
-        expect(screen.getByTestId('floor-clear-objective-strip').querySelector('[data-objective-tone="reward"]')).toHaveAttribute('data-objective-screen-cue', 'burst');
-        expect(screen.getByTestId('floor-clear-objective-strip').querySelector('[data-objective-tone="reward"]')?.querySelectorAll('[data-objective-beat]')).toHaveLength(4);
-        expect(
-            screen.getByTestId('floor-clear-objective-strip').querySelector('[data-objective-tone="reward"] [data-objective-beat="1"]')
-        ).toHaveAttribute('data-objective-beat-focus', 'primary');
-        expect(
-            screen.getByTestId('floor-clear-objective-strip').querySelector('[data-objective-tone="reward"] [data-objective-beat="2"]')
-        ).toHaveAttribute('data-objective-beat-focus', 'support');
-        expect(screen.getByTestId('floor-clear-objective-strip').querySelector('[data-objective-tone="momentum"]')).toHaveAttribute('data-objective-beats', '3');
-        expect(screen.getByTestId('floor-clear-objective-strip').querySelector('[data-objective-tone="momentum"]')).toHaveAttribute('data-objective-audio', 'floor-objective-momentum');
-        expect(screen.getByTestId('floor-clear-objective-strip').querySelector('[data-objective-tone="momentum"]')).toHaveAttribute('data-objective-screen-cue', 'pulse');
-        expect(screen.getByTestId('floor-clear-objective-strip').querySelector('[data-objective-tone="trait"]')).toHaveAttribute('data-objective-beats', '4');
-        expect(screen.getByTestId('floor-clear-objective-strip').querySelector('[data-objective-tone="trait"]')).toHaveAttribute('data-objective-audio', 'floor-objective-trait');
-        expect(screen.getByTestId('floor-clear-objective-strip').querySelector('[data-objective-tone="trait"]')).toHaveAttribute('data-objective-screen-cue', 'trait');
-        expect(screen.getByTestId('floor-clear-objective-strip').getAttribute('aria-label')).toContain(
-            'Floor clear objective signals. Objective paid: +30 score. Objective streak: x2 +10. Trait route paid: +1 combo shard.'
-        );
-        const cleanChainRun: RunState = {
-            ...run,
-            findablesClaimedThisFloor: 2,
-            findablesTotalThisFloor: 2,
-            stats: {
-                ...run.stats,
-                currentStreak: 7,
-                bestStreak: 7
-            }
-        };
-        rerender(
-            <PlatformTiltProvider>
-                <NotificationHost>
-                    <GameScreen achievements={[]} run={cleanChainRun} />
-                </NotificationHost>
-            </PlatformTiltProvider>
-        );
-        expect(screen.getByTestId('floor-clear-payoff-stack')).toHaveTextContent('Chain cashout');
-        expect(screen.getByTestId('floor-clear-payoff-stack')).toHaveTextContent('Trait route + Objective + Pickup + Chain cashout + Shard + Relic pick');
-        expect(screen.getByTestId('floor-clear-payoff-stack')).toHaveAttribute('data-floor-payoff-stack-action', 'Rebuild stack');
-        expect(screen.getByTestId('floor-clear-payoff-stack')).toHaveAttribute('data-floor-payoff-stack-audio', 'floor-stack-super');
-        expect(screen.getByTestId('floor-clear-payoff-stack')).toHaveAttribute('data-floor-payoff-stack-beats', '5');
-        expect(screen.getByTestId('floor-clear-payoff-stack')).toHaveAttribute('data-floor-payoff-stack-screen-cue', 'super');
-        expect(screen.getByTestId('floor-clear-payoff-stack').querySelectorAll('[data-floor-payoff-stack-beat]')).toHaveLength(5);
-        expect(
-            screen.getByTestId('floor-clear-payoff-stack').querySelector('[data-floor-payoff-stack-beat="1"]')
-        ).toHaveAttribute('data-floor-payoff-stack-beat-focus', 'primary');
-        expect(screen.getByTestId('floor-clear-cashout-strip')).toHaveTextContent('chain x6 +1 shard');
-        expect(screen.getByTestId('floor-clear-cashout-strip')).toHaveTextContent('Chain cashout: x6 +1 shard.');
-        expect(screen.getByTestId('floor-clear-cashout-strip')).toHaveTextContent('Break into x10');
-        expect(screen.getByTestId('floor-clear-cashout-strip').getAttribute('aria-label')).toContain(
-            'Next chase: Break into x10 - Prioritize visible pairs and use peek/shuffle before the chain drops.'
-        );
-        expect(screen.getByTestId('floor-clear-action-sequence')).toHaveTextContent('Break into x10');
-        expect(screen.getByTestId('floor-clear-action-sequence')).toHaveAttribute('data-floor-clear-sequence-keep', 'Break into x10');
-        expect(getByText('Trait routes: Complete (+1 combo shard)')).toBeTruthy();
-        expect(getByText('Objective streak: x2 (+10)')).toBeTruthy();
-        expect(getByText('Favor gained: +1')).toBeTruthy();
-        expect(getByText(/Extra relic pick banked/)).toBeTruthy();
-        expect(screen.getByTestId('floor-clear-next-signal-strip')).toHaveTextContent('Floor');
-        expect(screen.getByTestId('floor-clear-next-signal-strip')).toHaveTextContent('Speed Trial');
-        expect(screen.getByTestId('floor-clear-next-signal-strip')).toHaveTextContent('Objective');
-        expect(screen.getByTestId('floor-clear-next-signal-strip')).toHaveTextContent('Lantern Academy');
-        expect(screen.getByTestId('floor-clear-next-signal-strip')).toHaveTextContent('Pressure');
-        expect(screen.getByTestId('floor-clear-next-signal-strip')).toHaveTextContent('speed check');
-        expect(screen.getByTestId('floor-clear-next-signal-strip')).toHaveTextContent('Counterplay');
-        expect(screen.getByTestId('floor-clear-next-signal-strip').querySelector('[data-next-tone="reward"]')).toHaveAttribute(
-            'data-next-beats',
-            '4'
-        );
-        expect(screen.getByTestId('floor-clear-next-signal-strip').querySelector('[data-next-tone="reward"]')).toHaveAttribute(
-            'data-next-audio',
-            'next-floor-reward'
-        );
-        expect(screen.getByTestId('floor-clear-next-signal-strip').querySelector('[data-next-tone="reward"]')).toHaveAttribute(
-            'data-next-screen-cue',
-            'burst'
-        );
-        expect(
-            screen.getByTestId('floor-clear-next-signal-strip').querySelector('[data-next-tone="reward"]')?.querySelectorAll('[data-next-beat]')
-        ).toHaveLength(4);
-        expect(
-            screen.getByTestId('floor-clear-next-signal-strip').querySelector('[data-next-tone="reward"] [data-next-beat="1"]')
-        ).toHaveAttribute('data-next-beat-focus', 'primary');
-        expect(
-            screen.getByTestId('floor-clear-next-signal-strip').querySelector('[data-next-tone="reward"] [data-next-beat="2"]')
-        ).toHaveAttribute('data-next-beat-focus', 'support');
-        expect(screen.getByTestId('floor-clear-next-signal-strip').querySelector('[data-next-tone="pressure"]')).toHaveAttribute(
-            'data-next-beats',
-            '3'
-        );
-        expect(screen.getByTestId('floor-clear-next-signal-strip').querySelector('[data-next-tone="pressure"]')).toHaveAttribute(
-            'data-next-audio',
-            'next-floor-pressure'
-        );
-        expect(screen.getByTestId('floor-clear-next-signal-strip').querySelector('[data-next-tone="pressure"]')).toHaveAttribute(
-            'data-next-screen-cue',
-            'guard'
-        );
-        expect(
-            screen.getByTestId('floor-clear-next-signal-strip').querySelector('[data-next-tone="pressure"] [data-next-beat="1"]')
-        ).toHaveAttribute('data-next-beat-focus', 'primary');
-        expect(
-            screen.getByTestId('floor-clear-next-signal-strip').querySelector('[data-next-tone="pressure"] [data-next-beat="2"]')
-        ).toHaveAttribute('data-next-beat-focus', 'support');
-        expect(screen.getByTestId('floor-clear-next-signal-strip').querySelector('[data-next-tone="counterplay"]')).toHaveAttribute(
-            'data-next-beats',
-            '4'
-        );
-        expect(screen.getByTestId('floor-clear-next-signal-strip').querySelector('[data-next-tone="counterplay"]')).toHaveAttribute(
-            'data-next-audio',
-            'next-floor-counterplay'
-        );
-        expect(screen.getByTestId('floor-clear-next-signal-strip').querySelector('[data-next-tone="counterplay"]')).toHaveAttribute(
-            'data-next-screen-cue',
-            'burst'
-        );
-        expect(
-            screen.getByTestId('floor-clear-next-signal-strip').querySelector('[data-next-tone="counterplay"] [data-next-beat="1"]')
-        ).toHaveAttribute('data-next-beat-focus', 'primary');
-        expect(
-            screen.getByTestId('floor-clear-next-signal-strip').querySelector('[data-next-tone="counterplay"] [data-next-beat="2"]')
-        ).toHaveAttribute('data-next-beat-focus', 'support');
-        expect(screen.getByTestId('floor-clear-next-signal-strip').getAttribute('aria-label')).toContain(
-            'Next floor preview signals. Floor: Speed Trial'
-        );
-        expect(screen.getByTestId('floor-clear-next-signal-strip').getAttribute('aria-label')).toContain(
-            'Objective: Flip par - Featured payout target.'
-        );
-        expect(screen.getByTestId('floor-clear-causality-grid')).toHaveTextContent('Baseline descent');
-        expect(screen.getByTestId('floor-clear-causality-grid')).toHaveTextContent('score, objective value, and assist discipline');
-        expect(screen.getByTestId('floor-clear-causality-grid')).toHaveTextContent(
-            'The corridor remembers the clean pairs first'
-        );
-        expect(screen.getByTestId('floor-clear-causality-grid').getAttribute('aria-label')).toContain(
-            'Baseline descent - Baseline descent resolved; score, objective value, and assist discipline remain the main read.'
-        );
-        expect(screen.getByTestId('floor-clear-result-stack')).toHaveAttribute('data-route-choice-required', 'true');
-        expect(screen.getByTestId('route-choice-panel')).toHaveTextContent('Choose the next room');
+        expect(screen.getByTestId('floor-clear-score')).toHaveTextContent('+120');
+        expect(screen.getByTestId('floor-clear-stats')).toHaveTextContent(/Rating\s*S\+\+/);
+        const notes = screen.getByTestId('floor-clear-notes');
+        expect(notes).toHaveTextContent('Perfect floor bonus: +1 Life');
+        expect(notes).toHaveTextContent('Flip par: Complete (+30 score)');
+        expect(notes).toHaveTextContent('+1 Favor');
+        // Route choice is the one decision on the screen: three doors, no Continue until one is picked.
         expect(screen.getByTestId('route-choice-panel')).toHaveAttribute('data-decision-state', 'required');
-        expect(screen.getByTestId('route-choice-required-copy')).toHaveTextContent('Choose the next room type');
-        expect(screen.getByTestId('route-choice-recommendation')).toHaveAttribute('data-route-recommendation-route', 'safe');
-        expect(screen.getByTestId('route-choice-recommendation')).toHaveAttribute('data-route-recommendation-action', 'Stabilize route');
-        expect(screen.getByTestId('route-choice-recommendation')).toHaveAttribute('data-route-recommendation-audio', 'route-guard-beat');
-        expect(screen.getByTestId('route-choice-recommendation')).toHaveAttribute('data-route-recommendation-beats', '2');
-        expect(screen.getByTestId('route-choice-recommendation')).toHaveAttribute('data-route-recommendation-payoff', 'steady clear');
-        expect(screen.getByTestId('route-choice-recommendation')).toHaveAttribute('data-route-recommendation-screen-cue', 'guard');
-        expect(screen.getByTestId('route-choice-recommendation')).toHaveAttribute('data-route-recommendation-tone', 'memory');
-        expect(screen.getByTestId('route-choice-recommendation')).toHaveTextContent('Recommended route');
-        expect(screen.getByTestId('route-choice-recommendation')).toHaveTextContent('Safe passage');
-        expect(screen.getByTestId('route-choice-recommendation')).toHaveTextContent('Stabilize route');
-        expect(screen.getByTestId('route-choice-recommendation')).toHaveTextContent('steady clear');
-        expect(screen.getByTestId('route-choice-recommendation').querySelectorAll('[data-route-recommendation-beat]')).toHaveLength(2);
-        expect(
-            screen.getByTestId('route-choice-recommendation').querySelector('[data-route-recommendation-beat="1"]')
-        ).toHaveAttribute('data-route-recommendation-beat-focus', 'primary');
-        expect(
-            screen.getByTestId('route-choice-recommendation').querySelector('[data-route-recommendation-beat="2"]')
-        ).toHaveAttribute('data-route-recommendation-beat-focus', 'support');
-        expect(screen.getByTestId('route-choice-recommendation')).toHaveAccessibleName(
-            'Recommended route. Safe passage. Stabilize route. Safe route fits the current recall state. 2 beats. Primary payoff: steady clear.'
-        );
-        expect(
-            screen.getByTestId('route-choice-safe-beat-cue').querySelector('[data-route-beat-pip="1"]')
-        ).toHaveAttribute('data-route-beat-pip-focus', 'primary');
-        expect(
-            screen.getByTestId('route-choice-safe-beat-cue').querySelector('[data-route-beat-pip="2"]')
-        ).toHaveAttribute('data-route-beat-pip-focus', 'support');
-        expect(
-            screen.getByTestId('route-choice-safe-beat-cue').querySelector('[data-route-beat-pip="1"]')
-        ).toHaveAttribute('data-route-beat-pip-focus', 'primary');
-        expect(
-            screen.getByTestId('route-choice-safe-beat-cue').querySelector('[data-route-beat-pip="2"]')
-        ).toHaveAttribute('data-route-beat-pip-focus', 'support');
-        expect(
-            screen.getByTestId('route-choice-safe-signals').querySelector(
-                '[data-route-signal="reward"] [data-route-choice-signal-beat="1"]'
-            )
-        ).toHaveAttribute('data-route-choice-signal-beat-focus', 'primary');
-        expect(
-            screen.getByTestId('route-choice-safe-signals').querySelector(
-                '[data-route-signal="reward"] [data-route-choice-signal-beat="2"]'
-            )
-        ).toHaveAttribute('data-route-choice-signal-beat-focus', 'support');
-        expect(screen.getByTestId('route-memory-read-panel')).toHaveAttribute('data-pressure', 'strained');
-        expect(screen.getByTestId('route-memory-read-panel')).toHaveTextContent('Focus 2/3 - locked');
-        expect(screen.getByTestId('route-memory-read-panel')).toHaveTextContent('Bonus +28');
-        expect(screen.getByTestId('route-memory-read-panel')).toHaveTextContent('1 learned clue');
-        expect(screen.getByTestId('route-memory-read-panel')).toHaveTextContent('1 recall lapse');
-        expect(screen.getByTestId('route-choice-safe')).toHaveTextContent('Reward: Balanced score and survival path.');
-        expect(screen.getByTestId('route-choice-safe')).toHaveTextContent('Risk: Stable path.');
-        expect(screen.getByTestId('route-choice-safe')).toHaveTextContent('Recommended first route');
-        expect(screen.getByTestId('route-choice-safe')).toHaveAttribute('data-route-impact-cue', 'Safe route');
-        expect(screen.getByTestId('route-choice-safe')).toHaveAttribute('data-route-impact-cue-tone', 'memory');
-        expect(screen.getByTestId('route-choice-safe')).toHaveAttribute('data-route-next-action', 'Stabilize route');
-        expect(screen.getByTestId('route-choice-safe')).toHaveAttribute('data-route-next-action-tone', 'memory');
-        expect(screen.getByTestId('route-choice-safe')).toHaveAttribute('data-route-beat-action', 'Stabilize route');
-        expect(screen.getByTestId('route-choice-safe')).toHaveAttribute('data-route-beat-audio', 'route-guard-beat');
-        expect(screen.getByTestId('route-choice-safe')).toHaveAttribute('data-route-beat-cue', 'Guard beat');
-        expect(screen.getByTestId('route-choice-safe')).toHaveAttribute('data-route-beat-screen-cue', 'guard');
-        expect(screen.getByTestId('route-choice-safe')).toHaveAttribute('data-route-beat-tier', 'guard');
-        expect(screen.getByTestId('route-choice-safe')).toHaveAttribute('data-route-beat-count', '2');
-        expect(screen.getByTestId('route-choice-safe-beat-cue')).toHaveAttribute('data-route-beat-action', 'Stabilize route');
-        expect(screen.getByTestId('route-choice-safe-beat-cue')).toHaveAttribute('data-route-beat-audio', 'route-guard-beat');
-        expect(screen.getByTestId('route-choice-safe-beat-cue')).toHaveAttribute('data-route-beat-screen-cue', 'guard');
-        expect(screen.getByTestId('route-choice-safe-beat-cue')).toHaveTextContent('Guard beat');
-        expect(screen.getByTestId('route-choice-safe-beat-cue')).toHaveTextContent('Stabilize route');
-        expect(screen.getByTestId('route-choice-safe-beat-cue').querySelectorAll('i')).toHaveLength(2);
-        expect(screen.getByTestId('route-choice-safe-impact-cue')).toHaveTextContent('Safe route');
-        expect(screen.getByTestId('route-choice-safe-impact-cue')).toHaveTextContent('Shield next floor');
-        expect(screen.getByTestId('route-choice-safe-impact-cue')).toHaveAccessibleName(
-            'Route impact cue: Safe route: Shield next floor.'
-        );
-        expect(screen.getByTestId('route-choice-safe-action-cue')).toHaveTextContent('Do next');
-        expect(screen.getByTestId('route-choice-safe-action-cue')).toHaveTextContent('Stabilize route');
-        expect(screen.getByTestId('route-choice-safe-action-cue')).toHaveTextContent('Safe route fits the current recall state.');
-        expect(screen.getByTestId('route-choice-safe-action-cue')).toHaveAttribute('data-route-action-tone', 'memory');
-        expect(screen.getByTestId('route-choice-safe-action-cue')).toHaveAccessibleName(
-            'Do next: Stabilize route. Safe route fits the current recall state.'
-        );
-        expect(screen.getByTestId('route-choice-safe-signals')).toHaveTextContent('Stable reward');
-        expect(screen.getByTestId('route-choice-safe-signals')).toHaveTextContent('Low risk');
-        expect(screen.getByTestId('route-choice-safe-signals').querySelector('[data-route-signal="reward"]')).toHaveAttribute(
-            'data-route-signal-beats',
-            '4'
-        );
-        expect(
-            screen.getByTestId('route-choice-safe-signals').querySelector('[data-route-signal="reward"]')?.querySelectorAll('[data-route-choice-signal-beat]')
-        ).toHaveLength(4);
-        expect(screen.getByTestId('route-choice-safe-signals').querySelector('[data-route-signal="reward"]')).toHaveAttribute(
-            'data-route-signal-audio',
-            'route-signal-reward'
-        );
-        expect(screen.getByTestId('route-choice-safe-signals').querySelector('[data-route-signal="reward"]')).toHaveAttribute(
-            'data-route-signal-screen-cue',
-            'burst'
-        );
-        expect(screen.getByTestId('route-choice-safe-signals').querySelector('[data-route-signal="risk"]')).toHaveAttribute(
-            'data-route-signal-beats',
-            '3'
-        );
-        expect(screen.getByTestId('route-choice-safe-signals').querySelector('[data-route-signal="risk"]')).toHaveAttribute(
-            'data-route-signal-audio',
-            'route-signal-risk'
-        );
-        expect(screen.getByTestId('route-choice-safe-signals').querySelector('[data-route-signal="risk"]')).toHaveAttribute(
-            'data-route-signal-screen-cue',
-            'risk'
-        );
-        expect(screen.getByTestId('route-choice-safe-signals')).toHaveAttribute(
-            'aria-label',
-            'Route choice safe signals. Reward: Stable reward. Risk: Low risk.'
-        );
-        expect(screen.getByTestId('route-choice-safe-payoffs')).toHaveTextContent('Payoff');
-        expect(screen.getByTestId('route-choice-safe-payoffs')).toHaveTextContent('steady clear');
-        expect(screen.getByTestId('route-choice-safe-payoffs')).toHaveTextContent('low pressure');
-        expect(screen.getByTestId('route-choice-safe-payoffs')).toHaveTextContent('ward support');
-        expect(screen.getByTestId('route-choice-safe-payoffs')).toHaveTextContent('Safe route fits the current recall state.');
-        expect(screen.getByTestId('route-choice-safe')).toHaveAttribute('data-route-primary-payoff', 'steady clear');
-        expect(screen.getByTestId('route-choice-safe')).toHaveAttribute('data-route-primary-payoff-audio', 'route-payoff-reward');
-        expect(screen.getByTestId('route-choice-safe')).toHaveAttribute('data-route-primary-payoff-id', 'reward');
-        expect(screen.getByTestId('route-choice-safe')).toHaveAttribute('data-route-primary-payoff-screen-cue', 'burst');
-        expect(screen.getByTestId('route-choice-safe')).toHaveAttribute('data-route-primary-payoff-tone', 'reward');
-        expect(screen.getByTestId('route-choice-safe')).toHaveAttribute('data-route-primary-payoff-beats', '4');
-        expect(screen.getByTestId('route-choice-safe-payoffs')).toHaveAttribute('data-route-primary-payoff', 'steady clear');
-        expect(screen.getByTestId('route-choice-safe-payoffs')).toHaveAttribute('data-route-primary-payoff-audio', 'route-payoff-reward');
-        expect(screen.getByTestId('route-choice-safe-payoffs')).toHaveAttribute('data-route-primary-payoff-id', 'reward');
-        expect(screen.getByTestId('route-choice-safe-payoffs')).toHaveAttribute('data-route-primary-payoff-screen-cue', 'burst');
-        expect(screen.getByTestId('route-choice-safe-payoffs')).toHaveAttribute('data-route-primary-payoff-tone', 'reward');
-        expect(screen.getByTestId('route-choice-safe-primary-payoff')).toHaveAccessibleName(
-            'Primary route payoff. Payoff: steady clear. 4 beats.'
-        );
-        expect(screen.getByTestId('route-choice-safe-primary-payoff')).toHaveAttribute('data-route-primary-payoff-id', 'reward');
-        expect(screen.getByTestId('route-choice-safe-primary-payoff')).toHaveAttribute(
-            'data-route-primary-payoff-audio',
-            'route-payoff-reward'
-        );
-        expect(screen.getByTestId('route-choice-safe-primary-payoff')).toHaveAttribute(
-            'data-route-primary-payoff-screen-cue',
-            'burst'
-        );
-        expect(screen.getByTestId('route-choice-safe-primary-payoff')).toHaveAttribute('data-route-primary-payoff-tone', 'reward');
-        expect(screen.getByTestId('route-choice-safe-primary-payoff')).toHaveAttribute('data-route-primary-payoff-beats', '4');
-        expect(screen.getByTestId('route-choice-safe-primary-payoff')).toHaveTextContent('Primary payoff');
-        expect(screen.getByTestId('route-choice-safe-primary-payoff')).toHaveTextContent('steady clear');
-        expect(screen.getByTestId('route-choice-safe-primary-payoff').querySelectorAll('[data-route-primary-payoff-beat]')).toHaveLength(4);
-        expect(
-            screen.getByTestId('route-choice-safe-primary-payoff').querySelector('[data-route-primary-payoff-beat="1"]')
-        ).toHaveAttribute('data-route-primary-payoff-beat-focus', 'primary');
-        expect(
-            screen.getByTestId('route-choice-safe-primary-payoff').querySelector('[data-route-primary-payoff-beat="2"]')
-        ).toHaveAttribute('data-route-primary-payoff-beat-focus', 'support');
-        expect(screen.getByTestId('route-choice-safe-payoffs').getAttribute('aria-label')).toContain(
-            'Route choice safe payoffs. Payoff: steady clear. Risk: low pressure. Next: ward support. Recall: Safe route fits the current recall state.'
-        );
-        expect(screen.getByTestId('route-choice-safe-payoffs').querySelector('[data-route-payoff-id="reward"]')).toHaveAttribute(
-            'data-route-payoff-beats',
-            '4'
-        );
-        expect(screen.getByTestId('route-choice-safe-payoffs').querySelector('[data-route-payoff-id="reward"]')).toHaveAttribute(
-            'data-route-payoff-audio',
-            'route-payoff-reward'
-        );
-        expect(screen.getByTestId('route-choice-safe-payoffs').querySelector('[data-route-payoff-id="reward"]')).toHaveAttribute(
-            'data-route-payoff-screen-cue',
-            'burst'
-        );
-        expect(
-            screen.getByTestId('route-choice-safe-payoffs').querySelector('[data-route-payoff-id="reward"]')?.querySelectorAll('[data-route-payoff-beat]')
-        ).toHaveLength(4);
-        expect(
-            screen.getByTestId('route-choice-safe-payoffs').querySelector('[data-route-payoff-id="reward"] [data-route-payoff-beat="1"]')
-        ).toHaveAttribute('data-route-payoff-beat-focus', 'primary');
-        expect(
-            screen.getByTestId('route-choice-safe-payoffs').querySelector('[data-route-payoff-id="reward"] [data-route-payoff-beat="2"]')
-        ).toHaveAttribute('data-route-payoff-beat-focus', 'support');
-        expect(screen.getByTestId('route-choice-safe-payoffs').querySelector('[data-route-payoff-id="next"]')).toHaveTextContent('ward support');
-        expect(screen.getByTestId('route-choice-safe-payoffs').querySelector('[data-route-payoff-id="next"]')).toHaveAttribute(
-            'data-route-payoff-beats',
-            '2'
-        );
-        expect(screen.getByTestId('route-choice-safe-payoffs').querySelector('[data-route-payoff-id="next"]')).toHaveAttribute(
-            'data-route-payoff-audio',
-            'route-payoff-route'
-        );
-        expect(screen.getByTestId('route-choice-safe-payoffs').querySelector('[data-route-payoff-id="next"]')).toHaveAttribute(
-            'data-route-payoff-screen-cue',
-            'pulse'
-        );
-        expect(screen.getByTestId('route-choice-safe-payoffs').querySelector('[data-route-payoff-id="memory"]')).toHaveTextContent('Safe route fits');
-        expect(screen.getByTestId('route-choice-safe-payoffs').querySelector('[data-route-payoff-id="memory"]')).toHaveAttribute(
-            'data-route-payoff-beats',
-            '2'
-        );
-        expect(screen.getByTestId('route-choice-safe-decision-stack')).toHaveTextContent('Route safety');
-        expect(screen.getByTestId('route-choice-safe-decision-stack')).toHaveTextContent('Stable reward + Safe route fits the current recall state');
-        expect(screen.getByTestId('route-choice-safe-decision-stack')).toHaveTextContent('First: stabilize with ward support');
-        expect(screen.getByTestId('route-choice-safe-decision-stack')).toHaveAttribute('data-route-decision-stack-tone', 'memory');
-        expect(screen.getByTestId('route-choice-safe-decision-stack')).toHaveAccessibleName(
-            'Route safety: Stable reward + Safe route fits the current recall state. First: stabilize with ward support.'
-        );
-        expect(screen.getByTestId('route-choice-safe')).toHaveAttribute(
-            'data-route-recipe',
-            'Stabilize route -> steady clear -> Safe route fits the current recall state. -> stabilize with ward support'
-        );
-        expect(screen.getByTestId('route-choice-safe-recipe')).toHaveTextContent('First');
-        expect(screen.getByTestId('route-choice-safe-recipe')).toHaveTextContent('Stabilize route');
-        expect(screen.getByTestId('route-choice-safe-recipe')).toHaveTextContent('Payoff');
-        expect(screen.getByTestId('route-choice-safe-recipe')).toHaveTextContent('steady clear');
-        expect(screen.getByTestId('route-choice-safe-recipe')).toHaveTextContent('Recall');
-        expect(screen.getByTestId('route-choice-safe-recipe')).toHaveTextContent('Safe route fits the current recall state.');
-        expect(screen.getByTestId('route-choice-safe-recipe')).toHaveTextContent('Keep');
-        expect(screen.getByTestId('route-choice-safe-recipe')).toHaveTextContent('stabilize with ward support');
-        expect(screen.getByTestId('route-choice-safe-recipe')).toHaveAccessibleName(
-            'Route recipe safe. First: Stabilize route. Payoff: steady clear. Recall: Safe route fits the current recall state. Keep: stabilize with ward support.'
-        );
-        expect(screen.getByTestId('route-choice-safe')).toHaveTextContent('Memory: Use this when the last room left forgotten tiles or broken focus.');
-        expect(screen.getByTestId('route-choice-safe')).toHaveTextContent(
-            'Recall: Safe route fits the current recall state.'
-        );
-        expect(screen.getByTestId('route-choice-safe')).toHaveTextContent(
-            'Atmosphere: A steadier corridor keeps its marks close to the wall.'
-        );
-        expect(screen.getByTestId('route-choice-greed')).toHaveAttribute('data-route-type', 'greed');
-        expect(screen.getByTestId('route-choice-greed')).toHaveAttribute('data-route-impact-cue', 'Greed route');
-        expect(screen.getByTestId('route-choice-greed')).toHaveAttribute('data-route-impact-cue-tone', 'risk');
-        expect(screen.getByTestId('route-choice-greed')).toHaveAttribute('data-route-next-action', 'Cash greed');
-        expect(screen.getByTestId('route-choice-greed')).toHaveAttribute('data-route-next-action-tone', 'risk');
-        expect(screen.getByTestId('route-choice-greed')).toHaveAttribute('data-route-beat-action', 'Cash greed');
-        expect(screen.getByTestId('route-choice-greed')).toHaveAttribute('data-route-beat-audio', 'route-cashout-beat');
-        expect(screen.getByTestId('route-choice-greed')).toHaveAttribute('data-route-beat-cue', 'Cashout beat');
-        expect(screen.getByTestId('route-choice-greed')).toHaveAttribute('data-route-beat-screen-cue', 'super');
-        expect(screen.getByTestId('route-choice-greed')).toHaveAttribute('data-route-beat-tier', 'cashout');
-        expect(screen.getByTestId('route-choice-greed')).toHaveAttribute('data-route-beat-count', '5');
-        expect(screen.getByTestId('route-choice-greed-beat-cue')).toHaveAttribute('data-route-beat-action', 'Cash greed');
-        expect(screen.getByTestId('route-choice-greed-beat-cue')).toHaveAttribute('data-route-beat-audio', 'route-cashout-beat');
-        expect(screen.getByTestId('route-choice-greed-beat-cue')).toHaveAttribute('data-route-beat-screen-cue', 'super');
-        expect(screen.getByTestId('route-choice-greed-beat-cue')).toHaveTextContent('Cashout beat');
-        expect(screen.getByTestId('route-choice-greed-beat-cue')).toHaveTextContent('Cash greed');
-        expect(screen.getByTestId('route-choice-greed-beat-cue').querySelectorAll('i')).toHaveLength(5);
-        expect(screen.getByTestId('route-choice-greed-impact-cue')).toHaveTextContent('Pressure cashout');
-        expect(screen.getByTestId('route-choice-greed-action-cue')).toHaveTextContent('Do next');
-        expect(screen.getByTestId('route-choice-greed-action-cue')).toHaveTextContent('Cash greed');
-        expect(screen.getByTestId('route-choice-greed-action-cue')).toHaveTextContent('Repair recall before taking pressure cashout');
-        expect(screen.getByTestId('route-choice-greed-action-cue')).toHaveAttribute('data-route-action-tone', 'risk');
-        expect(screen.getByTestId('route-choice-greed')).toHaveTextContent('Mnemonic Sentinel: Sentinel pressure and greed anchors.');
-        expect(screen.getByTestId('route-choice-greed')).toHaveTextContent('High reward, higher danger');
-        expect(screen.getByTestId('route-choice-greed-signals')).toHaveTextContent('High reward');
-        expect(screen.getByTestId('route-choice-greed-signals')).toHaveTextContent('High risk');
-        expect(screen.getByTestId('route-choice-greed-signals').querySelector('[data-route-signal="reward"]')).toHaveAttribute(
-            'data-route-signal-beats',
-            '4'
-        );
-        expect(screen.getByTestId('route-choice-greed-signals').querySelector('[data-route-signal="risk"]')).toHaveAttribute(
-            'data-route-signal-beats',
-            '3'
-        );
-        expect(screen.getByTestId('route-choice-greed-signals')).toHaveAttribute(
-            'aria-label',
-            'Route choice greed signals. Reward: High reward. Risk: High risk.'
-        );
-        expect(screen.getByTestId('route-choice-greed-payoffs')).toHaveTextContent('bonus value');
-        expect(screen.getByTestId('route-choice-greed-payoffs')).toHaveTextContent('high pressure');
-        expect(screen.getByTestId('route-choice-greed-payoffs')).toHaveTextContent('richer caches');
-        expect(screen.getByTestId('route-choice-greed-payoffs')).toHaveTextContent('Greed is unsafe until forgotten markers are repaired.');
-        expect(screen.getByTestId('route-choice-greed-payoffs').getAttribute('aria-label')).toContain(
-            'Route choice greed payoffs. Payoff: bonus value. Risk: high pressure. Next: richer caches. Recall: Greed is unsafe until forgotten markers are repaired.'
-        );
-        expect(screen.getByTestId('route-choice-greed-payoffs').querySelector('[data-route-payoff-id="reward"]')).toHaveAttribute(
-            'data-route-payoff-beats',
-            '4'
-        );
-        expect(screen.getByTestId('route-choice-greed-payoffs').querySelector('[data-route-payoff-id="next"]')).toHaveTextContent('richer caches');
-        expect(screen.getByTestId('route-choice-greed-payoffs').querySelector('[data-route-payoff-id="next"]')).toHaveAttribute(
-            'data-route-payoff-beats',
-            '3'
-        );
-        expect(screen.getByTestId('route-choice-greed-payoffs').querySelector('[data-route-payoff-id="risk"]')).toHaveTextContent('high pressure');
-        expect(screen.getByTestId('route-choice-greed-payoffs').querySelector('[data-route-payoff-id="risk"]')).toHaveAttribute(
-            'data-route-payoff-beats',
-            '3'
-        );
-        expect(screen.getByTestId('route-choice-greed-payoffs').querySelector('[data-route-payoff-id="risk"]')).toHaveAttribute(
-            'data-route-payoff-audio',
-            'route-payoff-risk'
-        );
-        expect(screen.getByTestId('route-choice-greed-payoffs').querySelector('[data-route-payoff-id="risk"]')).toHaveAttribute(
-            'data-route-payoff-screen-cue',
-            'risk'
-        );
-        expect(screen.getByTestId('route-choice-greed-decision-stack')).toHaveTextContent('Route gamble');
-        expect(screen.getByTestId('route-choice-greed-decision-stack')).toHaveTextContent('High reward + Greed is unsafe until forgotten markers are repaired');
-        expect(screen.getByTestId('route-choice-greed-decision-stack')).toHaveTextContent('First: confirm recall before bonus value');
-        expect(screen.getByTestId('route-choice-greed-decision-stack')).toHaveAttribute('data-route-decision-stack-tone', 'risk');
-        expect(screen.getByTestId('route-choice-greed')).toHaveAttribute(
-            'data-route-recipe',
-            'Cash greed -> bonus value -> Greed is unsafe until forgotten markers are repaired. -> confirm recall before bonus value'
-        );
-        expect(screen.getByTestId('route-choice-greed-recipe')).toHaveTextContent('Cash greed');
-        expect(screen.getByTestId('route-choice-greed-recipe')).toHaveTextContent('bonus value');
-        expect(screen.getByTestId('route-choice-greed-recipe')).toHaveTextContent('Greed is unsafe until forgotten markers are repaired.');
-        expect(screen.getByTestId('route-choice-greed-recipe')).toHaveTextContent('confirm recall before bonus value');
-        expect(screen.getByTestId('route-choice-greed')).toHaveTextContent('Memory: Take only if you can remember enemy, trap, and symbol positions under pressure.');
-        expect(screen.getByTestId('route-choice-greed')).toHaveTextContent(
-            'Recall: Greed is unsafe until forgotten markers are repaired.'
-        );
-        expect(screen.getByTestId('route-choice-greed')).toHaveTextContent(
-            'Atmosphere: The louder stair promises value, but every card remembers the noise.'
-        );
-        expect(screen.getByTestId('route-choice-mystery')).toHaveTextContent('Changes the next board');
-        expect(screen.getByTestId('route-choice-mystery')).toHaveAttribute('data-route-impact-cue', 'Mystery route');
-        expect(screen.getByTestId('route-choice-mystery')).toHaveAttribute('data-route-impact-cue-tone', 'build');
-        expect(screen.getByTestId('route-choice-mystery')).toHaveAttribute('data-route-next-action', 'Prime mystery');
-        expect(screen.getByTestId('route-choice-mystery')).toHaveAttribute('data-route-next-action-tone', 'build');
-        expect(screen.getByTestId('route-choice-mystery')).toHaveAttribute('data-route-beat-action', 'Prime mystery');
-        expect(screen.getByTestId('route-choice-mystery')).toHaveAttribute('data-route-beat-audio', 'route-prime-beat');
-        expect(screen.getByTestId('route-choice-mystery')).toHaveAttribute('data-route-beat-cue', 'Prime beat');
-        expect(screen.getByTestId('route-choice-mystery')).toHaveAttribute('data-route-beat-screen-cue', 'pulse');
-        expect(screen.getByTestId('route-choice-mystery')).toHaveAttribute('data-route-beat-tier', 'prime');
-        expect(screen.getByTestId('route-choice-mystery')).toHaveAttribute('data-route-beat-count', '3');
-        expect(screen.getByTestId('route-choice-mystery-beat-cue')).toHaveAttribute('data-route-beat-action', 'Prime mystery');
-        expect(screen.getByTestId('route-choice-mystery-beat-cue')).toHaveAttribute('data-route-beat-audio', 'route-prime-beat');
-        expect(screen.getByTestId('route-choice-mystery-beat-cue')).toHaveAttribute('data-route-beat-screen-cue', 'pulse');
-        expect(screen.getByTestId('route-choice-mystery-beat-cue')).toHaveTextContent('Prime beat');
-        expect(screen.getByTestId('route-choice-mystery-beat-cue')).toHaveTextContent('Prime mystery');
-        expect(screen.getByTestId('route-choice-mystery-beat-cue').querySelectorAll('i')).toHaveLength(3);
-        expect(screen.getByTestId('route-choice-mystery-impact-cue')).toHaveTextContent('Board remix');
-        expect(screen.getByTestId('route-choice-mystery-action-cue')).toHaveTextContent('Do next');
-        expect(screen.getByTestId('route-choice-mystery-action-cue')).toHaveTextContent('Prime mystery');
-        expect(screen.getByTestId('route-choice-mystery-action-cue')).toHaveTextContent('Mystery has a remembered clue to anchor the unknown.');
-        expect(screen.getByTestId('route-choice-mystery-action-cue')).toHaveAttribute('data-route-action-tone', 'build');
-        expect(screen.getByTestId('route-choice-mystery-signals')).toHaveTextContent('Board change');
-        expect(screen.getByTestId('route-choice-mystery-signals')).toHaveTextContent('Unknown risk');
-        expect(screen.getByTestId('route-choice-mystery-signals').querySelector('[data-route-signal="reward"]')).toHaveAttribute(
-            'data-route-signal-beats',
-            '4'
-        );
-        expect(screen.getByTestId('route-choice-mystery-signals').querySelector('[data-route-signal="risk"]')).toHaveAttribute(
-            'data-route-signal-beats',
-            '3'
-        );
-        expect(screen.getByTestId('route-choice-mystery-signals')).toHaveAttribute(
-            'aria-label',
-            'Route choice mystery signals. Reward: Board change. Risk: Unknown risk.'
-        );
-        expect(screen.getByTestId('route-choice-mystery-payoffs')).toHaveTextContent('board twist');
-        expect(screen.getByTestId('route-choice-mystery-payoffs')).toHaveTextContent('unknown');
-        expect(screen.getByTestId('route-choice-mystery-payoffs')).toHaveTextContent('changed board');
-        expect(screen.getByTestId('route-choice-mystery-payoffs')).toHaveTextContent('Mystery has a remembered clue to anchor the unknown.');
-        expect(screen.getByTestId('route-choice-mystery-payoffs').getAttribute('aria-label')).toContain(
-            'Route choice mystery payoffs. Payoff: board twist. Risk: unknown. Next: changed board. Recall: Mystery has a remembered clue to anchor the unknown.'
-        );
-        expect(screen.getByTestId('route-choice-mystery-payoffs').querySelector('[data-route-payoff-id="next"]')).toHaveTextContent('changed board');
-        expect(screen.getByTestId('route-choice-mystery-payoffs').querySelector('[data-route-payoff-id="next"]')).toHaveAttribute(
-            'data-route-payoff-beats',
-            '3'
-        );
-        expect(screen.getByTestId('route-choice-mystery-payoffs').querySelector('[data-route-payoff-id="reward"]')).toHaveTextContent('board twist');
-        expect(screen.getByTestId('route-choice-mystery-payoffs').querySelector('[data-route-payoff-id="reward"]')).toHaveAttribute(
-            'data-route-payoff-beats',
-            '3'
-        );
-        expect(screen.getByTestId('route-choice-mystery-payoffs').querySelector('[data-route-payoff-id="reward"]')).toHaveAttribute(
-            'data-route-payoff-audio',
-            'route-payoff-build'
-        );
-        expect(screen.getByTestId('route-choice-mystery-payoffs').querySelector('[data-route-payoff-id="reward"]')).toHaveAttribute(
-            'data-route-payoff-screen-cue',
-            'build'
-        );
-        expect(screen.getByTestId('route-choice-mystery-decision-stack')).toHaveTextContent('Route mystery');
-        expect(screen.getByTestId('route-choice-mystery-decision-stack')).toHaveTextContent('Board change + Mystery has a remembered clue to anchor the unknown');
-        expect(screen.getByTestId('route-choice-mystery-decision-stack')).toHaveTextContent('First: anchor clue before changed board');
-        expect(screen.getByTestId('route-choice-mystery-decision-stack')).toHaveAttribute('data-route-decision-stack-tone', 'build');
-        expect(screen.getByTestId('route-choice-mystery')).toHaveAttribute(
-            'data-route-recipe',
-            'Prime mystery -> board twist -> Mystery has a remembered clue to anchor the unknown. -> anchor clue before changed board'
-        );
-        expect(screen.getByTestId('route-choice-mystery-recipe')).toHaveTextContent('Prime mystery');
-        expect(screen.getByTestId('route-choice-mystery-recipe')).toHaveTextContent('board twist');
-        expect(screen.getByTestId('route-choice-mystery-recipe')).toHaveTextContent('Mystery has a remembered clue to anchor the unknown.');
-        expect(screen.getByTestId('route-choice-mystery-recipe')).toHaveTextContent('anchor clue before changed board');
-        expect(screen.getByTestId('route-choice-mystery')).toHaveTextContent(
-            'Recall: Mystery has a remembered clue to anchor the unknown.'
-        );
-        expect(screen.getByTestId('route-choice-mystery')).toHaveTextContent(
-            'Atmosphere: The unindexed door offers a clue first and an answer later.'
-        );
-        expect(screen.getByRole('button', { name: /Safe passage.*Route action: Stabilize route: Safe route fits.*Route safety: Stable reward.*First: stabilize with ward support.*Recall: Safe route fits/i })).toBeTruthy();
-        expect(screen.getByRole('button', { name: /Greedy route.*Route action: Cash greed: Repair recall before taking pressure cashout.*Route gamble: High reward.*First: confirm recall before bonus value.*Recall: Greed is unsafe/i })).toBeTruthy();
-        expect(screen.getByRole('button', { name: /Mystery route.*Route action: Prime mystery: Mystery has a remembered clue.*Route mystery: Board change.*First: anchor clue before changed board.*Recall: Mystery has a remembered clue/i })).toBeTruthy();
-        expect(screen.queryByRole('button', { name: /^Continue$/i })).toBeNull();
-        expect(screen.queryByTestId('endless-risk-wager-panel')).toBeNull();
+        expect(screen.getByTestId('route-choice-safe')).toBeEnabled();
+        expect(screen.getByTestId('route-choice-greed')).toBeEnabled();
+        expect(screen.getByTestId('route-choice-mystery')).toBeEnabled();
+        expect(screen.queryByRole('button', { name: /^continue$/i })).toBeNull();
         expect(screen.queryByRole('button', { name: /visit shop/i })).toBeNull();
-        expect(screen.queryByTestId('shop-offer-panel')).toBeNull();
-        expect(screen.getByText(/Vendor alcove available: 1 services, 5 shop gold/)).toBeTruthy();
+        expect(screen.queryByTestId('floor-clear-payoff-stack')).toBeNull();
+        expect(screen.queryByTestId('floor-clear-momentum-strip')).toBeNull();
     });
 
     it('ignores malformed route choice payloads in the floor-clear result', () => {
@@ -2810,65 +2209,9 @@ describe('GameScreen (OVR-014)', () => {
         );
 
         expect(screen.queryByTestId('route-choice-panel')).toBeNull();
-        expect(screen.getByText(/Greedy route selected: next floor adds richer caches and extra reward-risk pressure/i)).toBeTruthy();
         expect(screen.getByTestId('route-selected-note')).toHaveAttribute('data-route-type', 'greed');
-        expect(screen.getByTestId('route-selected-note')).toHaveAttribute('data-route-impact-cue', 'Greed route');
-        expect(screen.getByTestId('route-selected-note')).toHaveAttribute('data-route-impact-cue-audio', 'route-payoff-risk');
-        expect(screen.getByTestId('route-selected-note')).toHaveAttribute('data-route-impact-cue-beats', '3');
-        expect(screen.getByTestId('route-selected-note')).toHaveAttribute('data-route-impact-cue-screen-cue', 'risk');
-        expect(screen.getByTestId('route-selected-note')).toHaveAttribute('data-route-impact-cue-tone', 'risk');
-        expect(screen.getByTestId('route-selected-note')).toHaveAttribute('data-route-action-cue', 'Opening tactic');
-        expect(screen.getByTestId('route-selected-note')).toHaveAttribute('data-route-action-cue-audio', 'route-payoff-risk');
-        expect(screen.getByTestId('route-selected-note')).toHaveAttribute('data-route-action-cue-beats', '3');
-        expect(screen.getByTestId('route-selected-note')).toHaveAttribute('data-route-action-cue-screen-cue', 'risk');
-        expect(screen.getByTestId('route-selected-note')).toHaveAttribute('data-route-action-cue-tone', 'risk');
-        expect(screen.getByTestId('route-selected-impact-cue')).toHaveTextContent('Greed route');
-        expect(screen.getByTestId('route-selected-impact-cue')).toHaveTextContent('Risk cashout locked');
-        expect(screen.getByTestId('route-selected-impact-cue')).toHaveAttribute('data-route-impact-cue-beats', '3');
-        expect(screen.getByTestId('route-selected-impact-cue')).toHaveAttribute('data-route-impact-cue-audio', 'route-payoff-risk');
-        expect(screen.getByTestId('route-selected-impact-cue')).toHaveAttribute('data-route-impact-cue-screen-cue', 'risk');
-        expect(screen.getByTestId('route-selected-impact-cue').querySelectorAll('[data-route-impact-cue-beat]')).toHaveLength(3);
-        expect(screen.getByTestId('route-selected-impact-cue')).toHaveAccessibleName(
-            'Selected route impact cue: Greed route: Risk cashout locked.'
-        );
-        expect(screen.getByTestId('route-selected-action-cue')).toHaveTextContent('Opening tactic');
-        expect(screen.getByTestId('route-selected-action-cue')).toHaveTextContent('Verify before cashout');
-        expect(screen.getByTestId('route-selected-action-cue')).toHaveTextContent('Confirm recall before chasing richer caches.');
-        expect(screen.getByTestId('route-selected-action-cue')).toHaveAttribute('data-route-action-cue-beats', '3');
-        expect(screen.getByTestId('route-selected-action-cue')).toHaveAttribute('data-route-action-cue-audio', 'route-payoff-risk');
-        expect(screen.getByTestId('route-selected-action-cue')).toHaveAttribute('data-route-action-cue-screen-cue', 'risk');
-        expect(screen.getByTestId('route-selected-action-cue').querySelectorAll('[data-route-action-cue-beat]')).toHaveLength(3);
-        expect(screen.getByTestId('route-selected-action-cue')).toHaveAccessibleName(
-            'Selected route action cue: Opening tactic: Verify before cashout. Confirm recall before chasing richer caches.'
-        );
-        expect(screen.getByTestId('route-selected-note')).toHaveTextContent('High reward');
-        expect(screen.getByTestId('route-selected-note')).toHaveTextContent('High risk');
-        expect(screen.getByTestId('route-selected-note').querySelector('[data-route-signal="reward"]')).toHaveAttribute(
-            'data-route-signal-beats',
-            '4'
-        );
-        expect(
-            screen.getByTestId('route-selected-note').querySelector('[data-route-signal="reward"]')?.querySelectorAll('[data-route-signal-beat]')
-        ).toHaveLength(4);
-        expect(screen.getByTestId('route-selected-note').querySelector('[data-route-signal="reward"]')).toHaveAttribute(
-            'data-route-signal-audio',
-            'route-signal-reward'
-        );
-        expect(screen.getByTestId('route-selected-note').querySelector('[data-route-signal="reward"]')).toHaveAttribute(
-            'data-route-signal-screen-cue',
-            'burst'
-        );
-        expect(screen.getByTestId('route-selected-note').querySelector('[data-route-signal="risk"]')).toHaveAttribute(
-            'data-route-signal-beats',
-            '3'
-        );
-        expect(screen.getByTestId('route-selected-note').querySelector('[data-route-signal="risk"]')).toHaveAttribute(
-            'data-route-signal-audio',
-            'route-signal-risk'
-        );
-        expect(screen.getByTestId('route-selected-note').querySelector('[data-route-signal="risk"]')).toHaveAttribute(
-            'data-route-signal-screen-cue',
-            'risk'
+        expect(screen.getByTestId('route-selected-note')).toHaveTextContent(
+            'Greedy route selected. The next floor adds richer caches and extra reward-risk pressure.'
         );
         expect(screen.getByRole('button', { name: /continue to greedy route floor/i })).toBeTruthy();
     });
@@ -2932,7 +2275,7 @@ describe('GameScreen (OVR-014)', () => {
         );
 
         expect(screen.queryByTestId('route-choice-panel')).toBeNull();
-        expect(screen.getByText(/Safe route selected: next floor adds defensive ward support/i)).toBeTruthy();
+        expect(screen.getByTestId('route-selected-note')).toHaveTextContent('Safe route selected. The next floor adds defensive ward support.');
         expect(screen.queryByText(/Dungeon node armed:/i)).toBeNull();
     });
 
@@ -3442,65 +2785,10 @@ describe('GameScreen (OVR-014)', () => {
             </PlatformTiltProvider>
         );
 
-        expect(getByTestId('endless-risk-wager-panel')).toBeTruthy();
-        expect(getByTestId('endless-risk-wager-primary-cue')).toHaveAttribute('data-risk-wager-primary-action', 'Arm wager');
-        expect(getByTestId('endless-risk-wager-primary-cue')).toHaveAttribute('data-risk-wager-primary-audio', 'risk-wager-offer');
-        expect(getByTestId('endless-risk-wager-primary-cue')).toHaveAttribute('data-risk-wager-primary-beats', '3');
-        expect(getByTestId('endless-risk-wager-primary-cue')).toHaveAttribute('data-risk-wager-primary-payoff', '+2 Favor');
-        expect(getByTestId('endless-risk-wager-primary-cue')).toHaveAttribute('data-risk-wager-primary-risk', 'x2 streak');
-        expect(getByTestId('endless-risk-wager-primary-cue')).toHaveAttribute('data-risk-wager-primary-screen-cue', 'risk');
-        expect(getByTestId('endless-risk-wager-primary-cue')).toHaveAttribute('data-risk-wager-primary-tone', 'offer');
-        expect(getByTestId('endless-risk-wager-primary-cue')).toHaveAccessibleName(
-            'Wager available. Arm wager. Payoff +2 Favor. Risk x2 streak. 3 beats.'
+        expect(getByTestId('endless-risk-wager-panel')).toHaveAttribute('data-armed', 'false');
+        expect(getByTestId('endless-risk-wager-panel')).toHaveTextContent(
+            'Stake your x2 objective streak on the next floor for +2 Favor.'
         );
-        expect(getByTestId('endless-risk-wager-primary-cue')).toHaveTextContent('Wager available');
-        expect(getByTestId('endless-risk-wager-primary-cue')).toHaveTextContent('Arm wager');
-        expect(getByTestId('endless-risk-wager-primary-cue').querySelectorAll('[data-risk-wager-primary-beat]')).toHaveLength(3);
-        expect(
-            getByTestId('endless-risk-wager-primary-cue').querySelector('[data-risk-wager-primary-beat="1"]')
-        ).toHaveAttribute('data-risk-wager-primary-beat-focus', 'primary');
-        expect(
-            getByTestId('endless-risk-wager-primary-cue').querySelector('[data-risk-wager-primary-beat="2"]')
-        ).toHaveAttribute('data-risk-wager-primary-beat-focus', 'support');
-        expect(getByTestId('endless-risk-wager-signals')).toHaveTextContent('x2 streak');
-        expect(getByTestId('endless-risk-wager-signals')).toHaveTextContent('+2 Favor');
-        expect(getByTestId('endless-risk-wager-signals')).toHaveTextContent('Next objective');
-        expect(
-            getByTestId('endless-risk-wager-signals').querySelector('[data-risk-wager-signal-tone="risk"]')
-        ).toHaveAttribute('data-risk-wager-signal-beats', '3');
-        expect(
-            getByTestId('endless-risk-wager-signals').querySelector('[data-risk-wager-signal-tone="risk"]')
-        ).toHaveAttribute('data-risk-wager-signal-audio', 'risk-wager-signal-risk');
-        expect(
-            getByTestId('endless-risk-wager-signals').querySelector('[data-risk-wager-signal-tone="risk"]')
-        ).toHaveAttribute('data-risk-wager-signal-screen-cue', 'risk');
-        expect(
-            getByTestId('endless-risk-wager-signals').querySelector('[data-risk-wager-signal-tone="reward"]')
-        ).toHaveAttribute('data-risk-wager-signal-audio', 'risk-wager-signal-reward');
-        expect(
-            getByTestId('endless-risk-wager-signals').querySelector('[data-risk-wager-signal-tone="reward"]')
-        ).toHaveAttribute('data-risk-wager-signal-screen-cue', 'burst');
-        expect(
-            getByTestId('endless-risk-wager-signals').querySelector('[data-risk-wager-signal-tone="objective"]')
-        ).toHaveAttribute('data-risk-wager-signal-audio', 'risk-wager-signal-objective');
-        expect(
-            getByTestId('endless-risk-wager-signals').querySelector('[data-risk-wager-signal-tone="objective"]')
-        ).toHaveAttribute('data-risk-wager-signal-screen-cue', 'objective');
-        expect(
-            getByTestId('endless-risk-wager-signals')
-                .querySelector('[data-risk-wager-signal-tone="reward"]')
-                ?.querySelectorAll('[data-risk-wager-signal-beat]')
-        ).toHaveLength(4);
-        expect(
-            getByTestId('endless-risk-wager-signals')
-                .querySelector('[data-risk-wager-signal-tone="reward"]')
-                ?.querySelector('[data-risk-wager-signal-beat="1"]')
-        ).toHaveAttribute('data-risk-wager-signal-beat-focus', 'primary');
-        expect(
-            getByTestId('endless-risk-wager-signals')
-                .querySelector('[data-risk-wager-signal-tone="reward"]')
-                ?.querySelector('[data-risk-wager-signal-beat="2"]')
-        ).toHaveAttribute('data-risk-wager-signal-beat-focus', 'support');
         fireEvent.click(
             getByRole('button', {
                 name: /Arm wager\. Stake: x2 streak\. Payoff: \+2 Favor\. Trigger: Next objective.*miss it and the streak breaks/i
@@ -3587,7 +2875,7 @@ describe('GameScreen (OVR-014)', () => {
             }
         };
 
-        const { getByText, rerender } = render(
+        const { rerender } = render(
             <PlatformTiltProvider>
                 <NotificationHost>
                     <GameScreen achievements={[]} run={armedRun} />
@@ -3595,61 +2883,11 @@ describe('GameScreen (OVR-014)', () => {
             </PlatformTiltProvider>
         );
 
-        expect(getByText('Risk wager armed')).toBeTruthy();
-        expect(getByText(/Next featured objective: \+2 Favor/)).toBeTruthy();
-        expect(screen.getByTestId('endless-risk-wager-primary-cue')).toHaveAttribute(
-            'data-risk-wager-primary-action',
-            'Protect streak'
+        expect(screen.getByTestId('endless-risk-wager-panel')).toHaveAttribute('data-armed', 'true');
+        expect(screen.getByTestId('endless-risk-wager-panel')).toHaveTextContent(
+            'Risk wager armed. The next objective pays +2 Favor; a miss breaks the x2 streak.'
         );
-        expect(screen.getByTestId('endless-risk-wager-primary-cue')).toHaveAttribute(
-            'data-risk-wager-primary-audio',
-            'risk-wager-armed'
-        );
-        expect(screen.getByTestId('endless-risk-wager-primary-cue')).toHaveAttribute('data-risk-wager-primary-beats', '4');
-        expect(screen.getByTestId('endless-risk-wager-primary-cue')).toHaveAttribute(
-            'data-risk-wager-primary-screen-cue',
-            'burst'
-        );
-        expect(screen.getByTestId('endless-risk-wager-primary-cue')).toHaveAttribute('data-risk-wager-primary-tone', 'armed');
-        expect(screen.getByTestId('endless-risk-wager-primary-cue')).toHaveAccessibleName(
-            'Wager armed. Protect streak. Payoff +2 Favor. Risk x2 streak. 4 beats.'
-        );
-        expect(screen.getByTestId('endless-risk-wager-primary-cue')).toHaveTextContent('Protect streak');
-        expect(screen.getByTestId('endless-risk-wager-primary-cue').querySelectorAll('[data-risk-wager-primary-beat]')).toHaveLength(4);
-        expect(screen.getByTestId('endless-risk-wager-signals')).toHaveTextContent('Armed');
-        expect(screen.getByTestId('endless-risk-wager-signals')).toHaveTextContent('x2 streak');
-        expect(screen.getByTestId('endless-risk-wager-signals')).toHaveTextContent('+2 Favor');
-        expect(
-            screen.getByTestId('endless-risk-wager-signals').querySelector('[data-risk-wager-signal-tone="armed"]')
-        ).toHaveAttribute('data-risk-wager-signal-beats', '3');
-        expect(
-            screen.getByTestId('endless-risk-wager-signals').querySelector('[data-risk-wager-signal-tone="armed"]')
-        ).toHaveAttribute('data-risk-wager-signal-audio', 'risk-wager-signal-armed');
-        expect(
-            screen.getByTestId('endless-risk-wager-signals').querySelector('[data-risk-wager-signal-tone="armed"]')
-        ).toHaveAttribute('data-risk-wager-signal-screen-cue', 'armed');
-        expect(
-            screen
-                .getByTestId('endless-risk-wager-signals')
-                .querySelector('[data-risk-wager-signal-tone="objective"]')
-                ?.querySelectorAll('[data-risk-wager-signal-beat]')
-        ).toHaveLength(2);
-        expect(
-            screen
-                .getByTestId('endless-risk-wager-signals')
-                .querySelector('[data-risk-wager-signal-tone="armed"]')
-                ?.querySelector('[data-risk-wager-signal-beat="1"]')
-        ).toHaveAttribute('data-risk-wager-signal-beat-focus', 'primary');
-        expect(
-            screen
-                .getByTestId('endless-risk-wager-signals')
-                .querySelector('[data-risk-wager-signal-tone="armed"]')
-                ?.querySelector('[data-risk-wager-signal-beat="2"]')
-        ).toHaveAttribute('data-risk-wager-signal-beat-focus', 'support');
-        expect(screen.getByTestId('endless-risk-wager-signals')).toHaveAttribute(
-            'aria-label',
-            'Risk wager decision signals. Armed: x2 streak. Payoff: +2 Favor. Trigger: Next objective.'
-        );
+        expect(screen.queryByRole('button', { name: /arm wager/i })).toBeNull();
 
         rerender(
             <PlatformTiltProvider>
@@ -3659,17 +2897,8 @@ describe('GameScreen (OVR-014)', () => {
             </PlatformTiltProvider>
         );
 
-        expect(getByText('Risk wager won: +2 Favor')).toBeTruthy();
-        expect(getByText('Favor gained: +3')).toBeTruthy();
-        expect(screen.getByTestId('floor-clear-objective-strip')).toHaveTextContent('Wager paid');
-        expect(screen.getByTestId('floor-clear-objective-strip')).toHaveTextContent('+2 Favor');
-        expect(screen.getByTestId('floor-clear-objective-strip').querySelector('[data-objective-tone="reward"]')).toHaveTextContent('Objective paid');
-        expect(screen.getByTestId('floor-clear-objective-strip').querySelectorAll('[data-objective-tone="reward"]')).toHaveLength(2);
-        expect(
-            Array.from(screen.getByTestId('floor-clear-objective-strip').querySelectorAll('[data-objective-tone="reward"]')).every(
-                (element) => element.getAttribute('data-objective-beats') === '4'
-            )
-        ).toBe(true);
+        expect(screen.getByTestId('floor-clear-notes')).toHaveTextContent('Risk wager won: +2 Favor');
+        expect(screen.getByTestId('floor-clear-notes')).toHaveTextContent('+3 Favor');
 
         rerender(
             <PlatformTiltProvider>
@@ -3679,16 +2908,7 @@ describe('GameScreen (OVR-014)', () => {
             </PlatformTiltProvider>
         );
 
-        expect(screen.getByTestId('floor-clear-objective-strip')).toHaveTextContent('Objective missed');
-        expect(screen.getByTestId('floor-clear-objective-strip')).toHaveTextContent('Payout lost');
-        expect(screen.getByTestId('floor-clear-objective-strip')).toHaveTextContent('Wager lost');
-        expect(screen.getByTestId('floor-clear-objective-strip')).toHaveTextContent('-2 streak');
-        expect(screen.getByTestId('floor-clear-objective-strip').querySelector('[data-objective-tone="risk"]')).toHaveTextContent('Objective missed');
-        expect(screen.getByTestId('floor-clear-objective-strip').querySelectorAll('[data-objective-tone="risk"]')).toHaveLength(2);
-        expect(
-            Array.from(screen.getByTestId('floor-clear-objective-strip').querySelectorAll('[data-objective-tone="risk"]')).every(
-                (element) => element.getAttribute('data-objective-beats') === '3'
-            )
-        ).toBe(true);
+        expect(screen.getByTestId('floor-clear-notes')).toHaveTextContent('Flip par: Missed');
+        expect(screen.getByTestId('floor-clear-notes')).toHaveTextContent('Risk wager lost: -2 streak');
     });
 });

@@ -58,37 +58,23 @@ test.describe('Gameplay readability hardening', () => {
         await expectBoardKeepsPriority(page);
     });
 
-    test('mobile floor clear keeps payoff stack and route choices readable', async ({ page }) => {
+    test('mobile floor clear keeps the score and all three doors readable', async ({ page }) => {
         test.setTimeout(120_000);
         await page.setViewportSize({ width: 390, height: 844 });
         await openPlayablePathFixture(page, 'floorClearWithRouteChoices');
 
         await expect(page.getByRole('dialog', { name: /floor cleared/i })).toBeVisible();
-        await expect(page.getByTestId('floor-clear-payoff-stack')).toBeVisible();
-        await expect(page.getByTestId('floor-clear-payoff-stack')).toContainText(/Floor payoff stack/i);
+        await expect(page.getByTestId('floor-clear-score')).toBeVisible();
+        await expectLocatorFullyInWindowViewport(page, page.getByTestId('floor-clear-stats'), 8);
         await expect(page.getByTestId('route-choice-panel')).toBeVisible();
-        await expectLocatorFullyInWindowViewport(page, page.getByTestId('floor-clear-payoff-stack'), 8);
         await expectLocatorStartsWithinWindowViewport(page, page.getByTestId('route-choice-panel'), 8);
-        await expect(page.getByTestId('route-choice-safe')).toBeVisible();
-        await expect(page.getByTestId('route-choice-safe')).toHaveAttribute(
-            'data-route-next-action',
-            'Stabilize route'
-        );
-        await expect(page.getByTestId('route-choice-safe-action-cue')).toContainText('Do next');
-        await expect(page.getByTestId('route-choice-safe-action-cue')).toContainText('Stabilize route');
-        await expect(page.getByTestId('route-choice-safe')).toHaveAttribute('data-route-beat-tier', 'guard');
-        await expect(page.getByTestId('route-choice-safe-beat-cue')).toContainText('Guard beat');
-        await expect(page.getByTestId('route-choice-greed')).toHaveAttribute('data-route-next-action', 'Cash greed');
-        await expect(page.getByTestId('route-choice-greed-action-cue')).toContainText('Cash greed');
-        await expect(page.getByTestId('route-choice-greed')).toHaveAttribute('data-route-beat-tier', 'cashout');
-        await expect(page.getByTestId('route-choice-greed-beat-cue')).toContainText('Cashout beat');
-        await expect(page.getByTestId('route-choice-mystery')).toHaveAttribute(
-            'data-route-next-action',
-            'Prime mystery'
-        );
-        await expect(page.getByTestId('route-choice-mystery-action-cue')).toContainText('Prime mystery');
-        await expect(page.getByTestId('route-choice-mystery')).toHaveAttribute('data-route-beat-tier', 'prime');
-        await expect(page.getByTestId('route-choice-mystery-beat-cue')).toContainText('Prime beat');
+        for (const route of ['safe', 'greed', 'mystery'] as const) {
+            const door = page.getByTestId(`route-choice-${route}`);
+            await door.scrollIntoViewIfNeeded();
+            await expect(door).toBeVisible();
+            const box = await door.boundingBox();
+            expect(box?.height ?? 0).toBeGreaterThanOrEqual(44);
+        }
         await expectNoHorizontalOverflow(page);
     });
 

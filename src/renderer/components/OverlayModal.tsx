@@ -7,7 +7,7 @@ import { MetaFrame, OverlayActionDock, ScreenTitle } from '../ui';
 import type { OverlayActionPlacement } from '../ui';
 import styles from './OverlayModal.module.css';
 
-interface ModalAction {
+export interface ModalAction {
     label: string;
     onClick: () => void;
     variant?: 'primary' | 'secondary' | 'danger';
