@@ -66,9 +66,14 @@ describe('SideRoomScreen', () => {
 
         expect(screen.getByRole('dialog', { name: /route side room/i })).toBeInTheDocument();
         expect(screen.getByText(/Mystery route \/ Floor 2/)).toBeInTheDocument();
+        // Each choice is one control that carries its own effect, not a row plus a button
+        // in a dock repeating it.
         for (const choice of event.options) {
-            expect(screen.getByRole('button', { name: choice.label })).toBeInTheDocument();
-            expect(screen.getAllByText(choice.detail).length).toBeGreaterThan(0);
+            const control = screen.getByTestId(`side-room-choice-${choice.id}`);
+            expect(control.tagName).toBe('BUTTON');
+            expect(control).toHaveTextContent(choice.label);
+            expect(control).toHaveTextContent(choice.detail);
+            expect(screen.getAllByText(choice.detail)).toHaveLength(1);
         }
     });
 
@@ -193,7 +198,7 @@ describe('SideRoomScreen', () => {
         const choice = event.options.find((option) => option.effect === 'gain_iron_key') ?? event.options[0]!;
 
         render(<SideRoomScreen />);
-        fireEvent.click(screen.getByRole('button', { name: choice.label }));
+        fireEvent.click(screen.getByTestId(`side-room-choice-${choice.id}`));
 
         expect(uiSfxMocks.playUiConfirmSfx).toHaveBeenCalled();
         expect(useAppStore.getState().run?.sideRoom).toBeNull();

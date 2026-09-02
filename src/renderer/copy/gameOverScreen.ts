@@ -6,7 +6,7 @@ export const gameOverScreenCopy = {
     heroTitle: 'Expedition Over',
     scoreLabel: 'Score',
     floorCaption: (highestLevel: number) =>
-        `Floor ${highestLevel} reached before the archive sealed - details below.`,
+        `Floor ${highestLevel} reached before the archive sealed.`,
     politeRunSummary: (totalScore: number, highestLevel: number) =>
         `Expedition complete. Final score ${totalScore.toLocaleString()}. Highest floor ${highestLevel}.`,
     achievementsNoteOn: 'Achievements counted for this run.',

@@ -88,7 +88,9 @@ describe('GameOverScreen (REF-031)', () => {
         expect(topSummary).toHaveTextContent('score');
         expect(topSummary).toHaveTextContent('Play Again');
         expect(topSummary).toHaveTextContent('Main Menu');
-        expect(screen.getByText(/Journal/)).toBeInTheDocument();
+        // The journal id, share string and flip-timeline drawer were telemetry, not a result.
+        expect(screen.queryByText(/Journal/)).toBeNull();
+        expect(screen.queryByTestId('game-over-detail-drawer')).toBeNull();
     });
 
     it('REG-096 surfaces next-run loop reasons from local summary data', () => {
@@ -97,10 +99,15 @@ describe('GameOverScreen (REF-031)', () => {
         expect(rows.every((row) => row.localOnly)).toBe(true);
 
         render(<GameOverScreen run={gameOverRunFixture()} />);
-        expect(screen.getByTestId('game-over-next-run-loop')).toHaveTextContent(/Classic/);
-        expect(screen.getByTestId('game-over-next-run-loop')).toHaveTextContent(/Next goal/);
-        expect(screen.getByTestId('game-over-dungeon-journal')).toHaveTextContent(/Dungeon node/);
-        expect(screen.getByTestId('game-over-dungeon-journal')).toHaveTextContent(/Dungeon rewards/);
+        // The rail shows only what changes the next run. The mode is named once, in the
+        // eyebrow; the build recap restated the relic and mutator chips; the share string
+        // and the dungeon journal were telemetry.
+        const loop = screen.getByTestId('game-over-next-run-loop');
+        expect(loop).toHaveTextContent(/Chain target/);
+        expect(loop).toHaveTextContent(/Next goal/);
+        expect(loop).not.toHaveTextContent(/Run it back|Build recap|Local share/);
+        expect(screen.getByTestId('game-over-mode-heading')).toHaveTextContent(/Classic/);
+        expect(screen.queryByTestId('game-over-dungeon-journal')).toBeNull();
     });
 
     it('PPI-006 preserves contract mode identity in game-over summary', () => {
@@ -130,6 +137,5 @@ describe('GameOverScreen (REF-031)', () => {
 
         expect(screen.getByTestId('game-over-mode-heading')).toHaveTextContent(/Scholar contract/i);
         expect(screen.getByTestId('game-over-mode-identity')).toHaveTextContent(/no full-board shuffle/i);
-        expect(screen.getByTestId('game-over-next-run-loop')).toHaveTextContent(/Scholar Contract/i);
     });
 });

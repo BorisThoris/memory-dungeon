@@ -106,13 +106,30 @@
     margin-top: 10px;
 }
 
+/* Each choice is the control that takes it, so it carries a button's affordances. */
 .choiceRow {
     display: grid;
     gap: 4px;
+    min-height: 44px;
     padding: 10px;
     border: 1px solid color-mix(in srgb, var(--theme-card-border-polished) 84%, transparent);
     border-radius: var(--ui-radius-md);
     background: var(--theme-surface-control);
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
+.choiceRow[data-choice-primary='true'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 52%, transparent);
+    background: color-mix(in srgb, var(--theme-gold-deep) 22%, var(--theme-surface-control));
+}
+
+.choiceRow:hover,
+.choiceRow:focus-visible {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 70%, transparent);
+    background: color-mix(in srgb, var(--theme-gold-deep) 30%, var(--theme-surface-control));
 }
 
 .choiceRow p {
@@ -180,12 +197,10 @@
         gap: 0.5rem;
     }
 
-    .header p {
-        display: -webkit-box;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 2;
-        overflow: hidden;
-    }
+    /*
+      * The room's prose reads in full: the dock below no longer repeats every choice as a
+      * second row of buttons, so the two lines this used to clip are paid for.
+      */
 
     /* The reward feedback repeats the choice cards below it; the cards are the decision. */
     .rewardFeedbackList,

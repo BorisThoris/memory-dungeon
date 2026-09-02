@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2415,
+    "trackedFileCount": 2414,
     "codeFileCount": 900,
     "exportedSymbolCount": 3383,
     "contentItemCount": 57,
     "mechanicCount": 130,
     "stateFieldCount": 144,
-    "relationshipCount": 9847
+    "relationshipCount": 9845
   },
   "inventory": [
     {
@@ -3669,8 +3669,8 @@
     {
       "path": "e2e/playable-path-interludes.spec.ts",
       "category": "test",
-      "bytes": 14202,
-      "sha256": "aabc0d31b475a242f1fdeca0e6f5bca617e23132e7b64aedc470e3a831ae8132"
+      "bytes": 14255,
+      "sha256": "6f1de5a708804e5859acb0f7cf4b287d228446338271834c0b7782559a8a26b5"
     },
     {
       "path": "e2e/playable-path-mode-matrix.spec.ts",
@@ -3713,12 +3713,6 @@
       "category": "test",
       "bytes": 858,
       "sha256": "6724f2eabbfddec83e96635b4a14fec7568cc23cd211f8133f248914f3fe4645"
-    },
-    {
-      "path": "e2e/retry-loop-capture.tmp.spec.ts",
-      "category": "test",
-      "bytes": 2709,
-      "sha256": "5a049471c25534b7f42a972085bd96c0826bd3260207328039265debcccaa77b"
     },
     {
       "path": "e2e/scholar-contract.spec.ts",
@@ -7425,8 +7419,8 @@
     {
       "path": "src/renderer/components/FloorClearDialog.module.css",
       "category": "source",
-      "bytes": 6920,
-      "sha256": "c8d5e7400526632658a87a58b1766d4f733931b38f65ccbef974c072e9bac858"
+      "bytes": 7437,
+      "sha256": "bb17b81ab299bc1aade2fa07d6a9692eeb17aab9a63d3e88d05f032df27cd2c1"
     },
     {
       "path": "src/renderer/components/FloorClearDialog.test.tsx",
@@ -7443,20 +7437,20 @@
     {
       "path": "src/renderer/components/GameOverScreen.module.css",
       "category": "source",
-      "bytes": 12693,
-      "sha256": "9fbacac7cc03f3493f348069c67b23ce7a61548fe64e346e277b517b0fba9776"
+      "bytes": 12532,
+      "sha256": "d090526e305b2cacabdb438536a0d48e9735b15a6a6e3dd28cabd80fded5f98d"
     },
     {
       "path": "src/renderer/components/GameOverScreen.test.tsx",
       "category": "test",
-      "bytes": 5850,
-      "sha256": "f6ffb5a20e3480ae482c5615bec6146122721370e5762fcf1688540e72e5a229"
+      "bytes": 6185,
+      "sha256": "10f65df9404ac7d7bb140b8897720fe30b3b16af417272182f1c85fe46bf992a"
     },
     {
       "path": "src/renderer/components/GameOverScreen.tsx",
       "category": "source",
-      "bytes": 19984,
-      "sha256": "2e0dfbd80a2f144a7c89de70aab474d9a51b15c2dfe683fce461632f2ac06fed"
+      "bytes": 17611,
+      "sha256": "ec5884d93efb99d3df4bfaa99b417f2ab8c0cac58afe36abfab172fca6669cf3"
     },
     {
       "path": "src/renderer/components/gameplayHudMutatorLabels.ts",
@@ -7683,8 +7677,8 @@
     {
       "path": "src/renderer/components/RelicDraftOffer.module.css",
       "category": "source",
-      "bytes": 4947,
-      "sha256": "b8bdcb93f60004e7018c24b2ce42c1207791aee969ecef238d06e7082388ce37"
+      "bytes": 5028,
+      "sha256": "4463dc1be149a940989cd82086b8eb44f3ac4d886e5b14a26675d0479b1ef182"
     },
     {
       "path": "src/renderer/components/RelicDraftOfferPanel.test.tsx",
@@ -7785,20 +7779,20 @@
     {
       "path": "src/renderer/components/SideRoomScreen.module.css",
       "category": "source",
-      "bytes": 5606,
-      "sha256": "2ff6d9be01988f5b531828eaf4faba65ae252ab3c3ae2410f76e4a929684a2aa"
+      "bytes": 6278,
+      "sha256": "87c85275dcee86b2a85538eef332e8b705f2a5ea642868a2374f6fce03dcf0d6"
     },
     {
       "path": "src/renderer/components/SideRoomScreen.test.tsx",
       "category": "test",
-      "bytes": 8237,
-      "sha256": "cb0dcec13ce150ecd657e69f2563cf4823166655c3fa89cb4e3ee190ab10417e"
+      "bytes": 8518,
+      "sha256": "1c07e49083ddada7f4e47dd4dfd691e2fc68128a3e6c94df219cc769eff57c97"
     },
     {
       "path": "src/renderer/components/SideRoomScreen.tsx",
       "category": "source",
-      "bytes": 8747,
-      "sha256": "941acb034bf59633f7d40950888f6b1969fd96bdbdaeb9bdefc4490de4e72ca1"
+      "bytes": 9684,
+      "sha256": "2ee9839db96c1e6e65d52439e33feaae51f1443273e240a779b34e5c4b930426"
     },
     {
       "path": "src/renderer/components/StartupIntro.module.css",
@@ -8727,8 +8721,8 @@
     {
       "path": "src/renderer/copy/gameOverScreen.ts",
       "category": "source",
-      "bytes": 2950,
-      "sha256": "0271e5e7ee4394c28d9594e7f8b74402a72778433af7133546560b407b895d44"
+      "bytes": 2934,
+      "sha256": "2c936218613db4ae1f40ecaa3fe737ed77b2b10dc819b04006a1b9b973a05651"
     },
     {
       "path": "src/renderer/copy/gameplayEventAnnouncement.test.ts",
@@ -16559,7 +16553,7 @@
       "path": "src/renderer/components/GameOverScreen.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 136,
+      "lineCount": 142,
       "imports": [
         "file:src/renderer/components/GameOverScreen.tsx",
         "file:src/shared/contracts.ts",
@@ -16575,7 +16569,7 @@
       "path": "src/renderer/components/GameOverScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 408,
+      "lineCount": 371,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/uiSfx.ts",
@@ -16589,10 +16583,8 @@
         "file:src/shared/achievements.ts",
         "file:src/shared/content-lock-state.ts",
         "file:src/shared/contracts.ts",
-        "file:src/shared/daily-archive.ts",
         "file:src/shared/game-catalog.ts",
-        "file:src/shared/game-over-next-run.ts",
-        "file:src/shared/run-history.ts"
+        "file:src/shared/game-over-next-run.ts"
       ],
       "exports": [
         "symbol:src/renderer/components/GameOverScreen.tsx#default"
@@ -17428,7 +17420,7 @@
       "path": "src/renderer/components/SideRoomScreen.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 202,
+      "lineCount": 207,
       "imports": [
         "file:src/renderer/components/SideRoomScreen.tsx",
         "file:src/renderer/store/useAppStore.ts",
@@ -17444,7 +17436,7 @@
       "path": "src/renderer/components/SideRoomScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 201,
+      "lineCount": 215,
       "imports": [
         "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/components/gameplayVisualConfig.ts",
@@ -34825,8 +34817,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameOverScreen.tsx",
-      "line": 407,
-      "endLine": 407
+      "line": 370,
+      "endLine": 370
     },
     {
       "id": "symbol:src/renderer/components/gameplayHudMutatorLabels.ts#MUTATOR_HUD_LABELS",
@@ -35369,8 +35361,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/SideRoomScreen.tsx",
-      "line": 200,
-      "endLine": 200
+      "line": 214,
+      "endLine": 214
     },
     {
       "id": "symbol:src/renderer/components/StartupIntro.tsx#default",
@@ -96500,12 +96492,6 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/GameOverScreen.tsx->src/shared/daily-archive.ts",
-      "source": "file:src/renderer/components/GameOverScreen.tsx",
-      "target": "file:src/shared/daily-archive.ts",
-      "kind": "imports"
-    },
-    {
       "id": "imports:src/renderer/components/GameOverScreen.tsx->src/shared/game-catalog.ts",
       "source": "file:src/renderer/components/GameOverScreen.tsx",
       "target": "file:src/shared/game-catalog.ts",
@@ -96515,12 +96501,6 @@
       "id": "imports:src/renderer/components/GameOverScreen.tsx->src/shared/game-over-next-run.ts",
       "source": "file:src/renderer/components/GameOverScreen.tsx",
       "target": "file:src/shared/game-over-next-run.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/GameOverScreen.tsx->src/shared/run-history.ts",
-      "source": "file:src/renderer/components/GameOverScreen.tsx",
-      "target": "file:src/shared/run-history.ts",
       "kind": "imports"
     },
     {

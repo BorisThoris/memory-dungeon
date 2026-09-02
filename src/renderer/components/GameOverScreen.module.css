@@ -550,12 +550,12 @@
     outline: none;
 }
 
-/* The run-loop rows clamp instead of growing the page. */
+/*
+ * The rail carries two rows now, not five, so each reads in full. It used to clamp because
+ * "Run it back", "Build recap" and the share string were stacked above these.
+ */
 .nextRunCard p {
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    overflow: hidden;
+    margin: 0;
 }
 
 .nextRunGrid {
@@ -597,9 +597,3 @@
     }
 }
 
-/* Short screens: the hero keeps the score and the actions; the ledger waits for the desktop. */
-@media (max-height: 860px) {
-    .nextRunCard p {
-        -webkit-line-clamp: 1;
-    }
-}

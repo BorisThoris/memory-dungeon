@@ -124,13 +124,23 @@ const SideRoomScreen = () => {
                     ) : null}
                     {sideRoom.choices && sideRoom.choices.length > 0 ? (
                         <div className={styles.choiceList}>
+                            {/*
+                              * Each choice is the button that takes it. The list used to state every
+                              * option and then a dock restated all of them underneath as buttons.
+                              */}
                             {sideRoom.choices.map((choice) => (
-                                <div
+                                <button
                                     className={styles.choiceRow}
                                     data-choice-id={choice.id}
                                     data-choice-primary={choice.primary ? 'true' : 'false'}
                                     data-testid={`side-room-choice-${choice.id}`}
                                     key={choice.id}
+                                    onClick={() => {
+                                        resumeUiSfxContext();
+                                        playUiConfirmSfx(uiGain);
+                                        claimSideRoomChoice(choice.id);
+                                    }}
+                                    type="button"
                                 >
                                     <strong>{choice.label}</strong>
                                     {choice.traitBuildLabels && choice.traitBuildLabels.length > 0 ? (
@@ -144,7 +154,7 @@ const SideRoomScreen = () => {
                                         <p className={styles.traitBuildReason}>{choice.traitBuildReason}</p>
                                     ) : null}
                                     <p>{choice.detail}</p>
-                                </div>
+                                </button>
                             ))}
                         </div>
                     ) : null}
@@ -153,7 +163,9 @@ const SideRoomScreen = () => {
                 <footer className={styles.actions}>
                     <OverlayActionDock
                         actions={[
-                            ...(sideRoom.choices || sideRoom.skipLabel !== sideRoom.primaryLabel
+                            // The choices are their own buttons above; the dock carries only the
+                            // way out, and the single claim when a room has no choices to make.
+                            ...(sideRoom.choices && sideRoom.choices.length > 0
                                 ? [
                                       {
                                           label: sideRoom.skipLabel,
@@ -165,18 +177,20 @@ const SideRoomScreen = () => {
                                           variant: 'secondary' as const
                                       }
                                   ]
-                                : []),
-                            ...(sideRoom.choices && sideRoom.choices.length > 0
-                                ? sideRoom.choices.map((choice) => ({
-                                      label: choice.label,
-                                      onClick: () => {
-                                          resumeUiSfxContext();
-                                          playUiConfirmSfx(uiGain);
-                                          claimSideRoomChoice(choice.id);
-                                      },
-                                      variant: choice.primary ? ('primary' as const) : ('secondary' as const)
-                                  }))
                                 : [
+                                      ...(sideRoom.skipLabel !== sideRoom.primaryLabel
+                                          ? [
+                                                {
+                                                    label: sideRoom.skipLabel,
+                                                    onClick: () => {
+                                                        resumeUiSfxContext();
+                                                        playUiBackSfx(uiGain);
+                                                        skipSideRoom();
+                                                    },
+                                                    variant: 'secondary' as const
+                                                }
+                                            ]
+                                          : []),
                                       {
                                           label: sideRoom.primaryLabel,
                                           onClick: () => {
