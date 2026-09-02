@@ -3,7 +3,7 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2416,
+    "trackedFileCount": 2415,
     "codeFileCount": 900,
     "exportedSymbolCount": 3395,
     "contentItemCount": 57,
@@ -3785,12 +3785,6 @@
       "category": "test",
       "bytes": 8981,
       "sha256": "4dda48d57aff2ea7abc604b29221034e337d6426e8887eebb1a72d61334f1b61"
-    },
-    {
-      "path": "e2e/ui-audit.tmp.spec.ts",
-      "category": "test",
-      "bytes": 6568,
-      "sha256": "877581d3c89915d9ad462c7e4089ac364dc8304211797ed688c9ed313e755a90"
     },
     {
       "path": "e2e/ui-design-reference.spec.ts",
@@ -7743,8 +7737,8 @@
     {
       "path": "src/renderer/components/SettingsScreen.module.css",
       "category": "source",
-      "bytes": 31892,
-      "sha256": "367d9e047e3c3f1f2b7a82027cabb1b946aefe7b1a8c7926f0df5c8e77ee4720"
+      "bytes": 32045,
+      "sha256": "ecdbc4a326b357ea3b2d7089a9b1eda47d943140ffc9740360a0697f03cd2a4a"
     },
     {
       "path": "src/renderer/components/SettingsScreen.test.tsx",

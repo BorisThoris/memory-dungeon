@@ -1224,7 +1224,10 @@
 }
 
 @media (max-width: 720px), (max-height: 700px) {
-    .categoryNav {
+    /* Beat the stacked/short-landscape variants, which set their own display. */
+    .categoryNav,
+    .stackedShell .categoryNav,
+    .shortLandscapeShell .categoryNav {
         display: none;
     }
 
