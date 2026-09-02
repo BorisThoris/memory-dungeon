@@ -256,11 +256,12 @@ test.describe('Mobile layout (renderer)', () => {
         const hud = page.getByTestId('game-hud');
         await expect(hud).toBeVisible();
         await expectGameplayHudWingsVisible(page);
-        const layout = await hud.evaluate((el) => {
+        // The bar stacks stats, feedback line and dock; the stats themselves stay one horizontal row.
+        const layout = await hud.getByRole('group', { name: /run stats/i }).evaluate((el) => {
             const s = getComputedStyle(el);
             return { display: s.display, flexDirection: s.flexDirection };
         });
-        expect(layout.display, 'HUD row uses flex layout').toMatch(/flex/);
+        expect(layout.display, 'HUD stats use flex layout').toMatch(/flex/);
         expect(layout.flexDirection).toBe('row');
     });
 

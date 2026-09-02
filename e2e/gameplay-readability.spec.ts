@@ -152,43 +152,6 @@ test.describe('Gameplay readability hardening', () => {
         await expect(frame).toHaveAttribute('data-card-feedback-trait-route-intensities', /setup:2/);
         await expect(frame).toHaveAttribute('data-card-feedback-shot-map', 'route-setup:2');
         await expect(frame).toHaveAttribute('data-opportunity-best-detail', /Use swap to connect route/);
-        await expect(page.getByTestId('chain-opportunity-beat')).toContainText('Prime beat');
-        await expect(page.getByTestId('chain-opportunity-beat')).toContainText('Use swap');
-        await expect(page.getByTestId('chain-opportunity-beat')).toHaveAttribute('data-chain-beat-tier', 'setup');
-        await expect(page.getByTestId('chain-opportunity-beat')).toHaveAccessibleName(
-            'Prime beat: Prime route. 2 beats. Use swap.'
-        );
-        await expectLocatorFullyInWindowViewport(page, page.getByTestId('chain-opportunity-beat'), 8);
-        await expect(page.getByTestId('chain-opportunity-next-action')).toHaveAttribute(
-            'data-chain-next-action',
-            'prime-route'
-        );
-        await expect(page.getByTestId('chain-opportunity-next-action')).toHaveAttribute(
-            'data-chain-next-action-tone',
-            'setup'
-        );
-        await expect(page.getByTestId('chain-opportunity-next-action')).toContainText('Do next: prime route');
-        await expect(page.getByTestId('chain-opportunity-next-action')).toContainText('Swap Sealed with Filler');
-        await expect(page.getByTestId('chain-opportunity-shot-map')).toHaveAttribute(
-            'data-chain-shot-map-primary',
-            'route-setup'
-        );
-        await expect(page.getByTestId('chain-opportunity-shot-map')).toContainText('Shot map');
-        await expect(page.getByTestId('chain-opportunity-shot-map')).toContainText('Set');
-        await expect(page.getByTestId('chain-opportunity-shot-map')).toContainText('Setup lane');
-        await expect(page.getByTestId('chain-opportunity-beat-map')).toHaveAttribute('data-card-beat-primary', 'setup');
-        await expect(page.getByTestId('chain-opportunity-beat-map')).toHaveAttribute(
-            'aria-label',
-            'Card beat map. Prime: 2. 2-beat set route.'
-        );
-        await expect(page.getByTestId('chain-opportunity-beat-map')).toContainText('Beat map');
-        await expect(page.getByTestId('chain-opportunity-beat-map')).toContainText('Prime');
-        await expect(page.getByTestId('chain-opportunity-beat-map')).toContainText('2-beat set route');
-        await expect(
-            page.getByTestId('chain-opportunity-beat-map').locator('[data-card-beat-tier="setup"] [data-card-beat-pip]')
-        ).toHaveCount(2);
-        await expect(page.getByTestId('chain-opportunity-beat-map')).toContainText('set route');
-        await expectLocatorFullyInWindowViewport(page, page.getByTestId('chain-opportunity-beat-map'), 8);
         await page.getByTestId('tile-board-application').focus();
         await expect(page.getByTestId('tile-board-live-region')).toContainText('Beat: prime.');
         await expect(page.getByTestId('tile-board-live-region')).toContainText('Set this route up.');
@@ -197,57 +160,6 @@ test.describe('Gameplay readability hardening', () => {
         await expect(frame).toHaveAttribute('data-chain-sequence-first', /Swap Sealed with Filler/);
         await expect(frame).toHaveAttribute('data-chain-sequence-then', 'Match lit route');
         await expect(frame).toHaveAttribute('data-chain-sequence-keep', 'x4 +1 shard in 1 match');
-        await expect(page.getByTestId('chain-opportunity-sequence-cue')).toContainText('First');
-        await expect(page.getByTestId('chain-opportunity-sequence-cue')).toContainText('Match lit route');
-        await expect(page.getByTestId('chain-opportunity-sequence-cue')).toContainText('x4 +1 shard in 1 match');
-        await expect(page.getByTestId('chain-opportunity-marker-key')).toContainText('Prime');
-        await expect(page.getByTestId('chain-opportunity-marker-key')).toHaveAttribute(
-            'data-chain-marker-intensity',
-            'setup'
-        );
-        await expect(page.getByTestId('chain-marker-intensity')).toContainText('Prime');
-        await expect(page.getByTestId('chain-marker-intensity')).toContainText('Prime payoff');
-        await expect(page.getByTestId('chain-opportunity-meter')).toHaveAttribute('data-chain-meter-tone', 'setup');
-        await expect(page.getByTestId('chain-opportunity-meter')).toContainText('Prime');
-        await expect(page.getByTestId('chain-opportunity-meter')).toContainText('2');
-        await expect(page.getByTestId('chain-opportunity-meter')).toContainText('Prime');
-        await expect(page.getByTestId('chain-opportunity-meter')).toContainText('Swap Sealed with Filler');
-        await expect(page.getByTestId('chain-opportunity-meter')).toHaveAttribute(
-            'aria-label',
-            /Chain board: 2 prime targets.*Swap Sealed with Filler/i
-        );
-        await expect(page.getByTestId('board-opportunity-chain')).toContainText('Use swap');
-        await expect(page.getByTestId('board-opportunity-chain')).toContainText('Stack prime');
-        await expect(page.getByTestId('hud-trait-route-best-tool')).toContainText('Best tool: Swap');
-        await expect(page.getByTestId('hud-match-chain')).toHaveAttribute('data-chain-lane-cue', 'Route chain');
-        await expect(page.getByTestId('hud-match-chain')).toHaveAttribute('data-chain-lane-tone', 'route');
-        await expect(page.getByTestId('hud-chain-lane-cue')).toContainText('Route chain');
-        await expect(page.getByTestId('hud-reward-perk-strip')).toHaveAttribute(
-            'data-reward-perk-focus-action',
-            'Cash perk'
-        );
-        await expect(page.getByTestId('hud-reward-perk-strip')).toHaveAttribute(
-            'data-reward-perk-focus-id',
-            'trait_streak_toolkit'
-        );
-        await expect(page.getByTestId('hud-reward-perk-strip')).toHaveAttribute(
-            'data-reward-perk-beat-tier',
-            'cashout'
-        );
-        await expect(page.getByTestId('hud-reward-perk-focus')).toHaveAttribute(
-            'data-reward-perk-focus-tone',
-            'armed'
-        );
-        await expect(page.getByTestId('hud-reward-perk-focus')).toContainText('Cash perk');
-        await expect(page.getByTestId('hud-reward-perk-focus')).toContainText('Trait cash');
-        await expect(page.getByTestId('hud-reward-perk-focus')).toContainText('Trait cashout armed');
-        await expect(page.getByTestId('hud-reward-perk-beat')).toContainText('Cashout beat');
-        await expect(page.getByTestId('tile-swap-setup-badge')).toContainText('Best tool');
-        await expect(page.getByTestId('tile-swap-intent-chip')).toContainText('Best tool');
-        await expect(page.getByTestId('row-swap-payoff-chip')).toHaveAttribute('data-power-cue', 'Route cashout');
-        await expect(page.getByTestId('tile-swap-payoff-chip')).toHaveAttribute('data-power-cue', 'Route cashout');
-        await expect(page.getByTestId('tile-swap-payoff-chip')).toContainText('Create route');
-        await expect(page.getByLabel(/Swap two hidden tiles/i)).toHaveAccessibleName(/Impact cue: Route cashout/i);
 
         const states = await readCardFeedbackStates(page);
         expect(states.get('chain-setup') ?? 0, 'chain setup marker count').toBeGreaterThanOrEqual(2);

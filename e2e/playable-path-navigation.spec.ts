@@ -103,8 +103,12 @@ test.describe('Expanded playable navigation contract', () => {
         await expectGameplayReady(page);
 
         await page.getByTestId('game-toolbar-main-menu').click({ force: true });
+        await expect(page.getByTestId('game-pause-overlay')).toBeVisible();
+        await page.getByTestId('game-pause-overlay').getByRole('button', { name: /^retreat$/i }).click();
         await expect(page.getByRole('dialog', { name: /abandon run/i })).toBeVisible();
         await page.getByRole('dialog', { name: /abandon run/i }).getByRole('button', { name: /^cancel$/i }).click();
+        await expect(page.getByRole('dialog', { name: /abandon run/i })).toBeHidden();
+        await page.getByTestId('game-pause-overlay').getByRole('button', { name: /^resume$/i }).click();
         await expectGameplayReady(page);
     });
 

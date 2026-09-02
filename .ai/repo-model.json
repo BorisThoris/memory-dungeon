@@ -3615,8 +3615,8 @@
     {
       "path": "e2e/gameplay-readability.spec.ts",
       "category": "test",
-      "bytes": 21904,
-      "sha256": "04a2e3740c9e6f573ac5eeb719157d6f64adca5f9ecf2b860ebbdcfc730339a6"
+      "bytes": 15684,
+      "sha256": "b7ac8e53eb5fe3858be74facbcfd1d4c07351535c765908f7c67cfd7a274abfb"
     },
     {
       "path": "e2e/gameplay-visual-audit.spec.ts",
@@ -3645,8 +3645,8 @@
     {
       "path": "e2e/mobile-layout.spec.ts",
       "category": "test",
-      "bytes": 39934,
-      "sha256": "4fb029e2d250b35c4c4b7acf667c401c7ca7d9d379c99a8663ebd49f703ba73e"
+      "bytes": 40081,
+      "sha256": "ebbeb8ea2f4a0a58b73ba72f788de476ac57394c08c4ababd6b839a4141f89e4"
     },
     {
       "path": "e2e/mobileTouchHelpers.ts",
@@ -3681,8 +3681,8 @@
     {
       "path": "e2e/playable-path-navigation.spec.ts",
       "category": "test",
-      "bytes": 10341,
-      "sha256": "2b76e94a8a677d244aa9b7c8ecb01e4684b06f3b459cec713ed0ab47e217e9b7"
+      "bytes": 10715,
+      "sha256": "99e592b9c905999146efdca4de56ef3c91c5ecc071c0531d3adafbb3398f66d4"
     },
     {
       "path": "e2e/playablePathHelpers.ts",
