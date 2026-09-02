@@ -3,7 +3,7 @@ import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { forwardRef, useImperativeHandle } from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { BoardState, RunState, Tile } from '../../shared/contracts';
-import { EXIT_PAIR_KEY, ROOM_PAIR_KEY, SHOP_PAIR_KEY } from '../../shared/dungeon-rules';
+import { EXIT_PAIR_KEY } from '../../shared/dungeon-rules';
 import { createNewRun, finishMemorizePhase } from '../../shared/game-core';
 import { createBoardTurnResolvedEventFixture } from '../../shared/test/gameplay-event-fixtures';
 import { createDungeonRunMapState, revealDungeonChoices, selectDungeonNode } from '../../shared/run-map';
@@ -228,7 +228,6 @@ describe('GameScreen (OVR-014)', () => {
         });
     });
 
-
     it('defers achievement toasts while the floor-cleared modal is visible, then emits after leaving levelComplete', () => {
         const runFixture = levelCompleteRunFixture();
 
@@ -328,10 +327,6 @@ describe('GameScreen (OVR-014)', () => {
         expect(screen.getByTestId('floor-clear-notes')).toHaveTextContent('Flip par: Complete');
         expect(screen.getByTestId('floor-clear-notes')).toHaveTextContent('Risk wager lost: -0 streak');
     });
-
-
-
-
 
     it('queues a polite next-tool announcement when a swap can create a trait route', async () => {
         const baseRun = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false }));
@@ -455,13 +450,6 @@ describe('GameScreen (OVR-014)', () => {
             );
         });
     });
-
-
-
-
-
-
-
 
     it('classifies visible action feedback into arcade signal chips', () => {
         expect(getVisualHudAnnouncementSignal('Chain times five - keep the chain.', 'info')).toEqual({
@@ -1162,8 +1150,6 @@ describe('GameScreen (OVR-014)', () => {
         expect(screen.getByText(GAMBIT_KEYBOARD_HELP_TIP)).toBeTruthy();
     });
 
-
-
     it('renders setup forecast chips with explicit arcade cue metadata', async () => {
         vi.useFakeTimers();
         try {
@@ -1470,7 +1456,6 @@ describe('GameScreen (OVR-014)', () => {
         );
     });
 
-
     it('renders perk pop payoff chips as distinct match floater activations', () => {
         const base = createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'puzzle' });
         const playing = finishMemorizePhase(base);
@@ -1587,8 +1572,6 @@ describe('GameScreen (OVR-014)', () => {
         );
     });
 
-
-
     it('marks plain chain-break mismatch floaters separately from lost rewards', () => {
         vi.useFakeTimers();
         const base = createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'puzzle' });
@@ -1626,8 +1609,6 @@ describe('GameScreen (OVR-014)', () => {
             vi.useRealTimers();
         }
     });
-
-
 
     it('positions gambit mismatch floater at centroid of three tile rects (tileIdC)', () => {
         const origBound = HTMLElement.prototype.getBoundingClientRect;
@@ -2332,77 +2313,6 @@ describe('GameScreen (OVR-014)', () => {
         expect(screen.getByTestId('route-choice-mystery')).toHaveTextContent('Approach: Mystery route');
     });
 
-    it('shows an in-board route card banner while route cards are unclaimed', () => {
-        const baseRun = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false }));
-        const run: RunState = {
-            ...baseRun,
-            board: {
-                ...baseRun.board!,
-                tiles: baseRun.board!.tiles.map((tile, index) =>
-                    index < 2 ? { ...tile, routeCardKind: 'greed_cache' as const } : tile
-                )
-            }
-        };
-
-        render(
-            <PlatformTiltProvider>
-                <NotificationHost>
-                    <GameScreen achievements={[]} run={run} />
-                </NotificationHost>
-            </PlatformTiltProvider>
-        );
-
-        expect(screen.getByTestId('route-card-board-banner')).toHaveTextContent('Greed Cache');
-        expect(screen.getByTestId('route-card-board-banner')).toHaveTextContent('+2 gold +25 score');
-        expect(screen.getByTestId('route-card-board-banner-signals')).toHaveTextContent('Payout');
-        expect(screen.getByTestId('route-card-board-banner-signals')).toHaveTextContent('Gold score');
-        expect(screen.getByTestId('route-card-board-banner-signals')).toHaveTextContent('Lost if destroyed');
-        expect(screen.getByTestId('route-card-board-banner-signals').querySelector('[data-route-card-signal-tone="reward"]')).toHaveAttribute(
-            'data-route-card-signal-beats',
-            '4'
-        );
-        expect(screen.getByTestId('route-card-board-banner-signals').querySelector('[data-route-card-signal-tone="reward"]')).toHaveAttribute(
-            'data-route-card-signal-audio',
-            'route-card-reward'
-        );
-        expect(screen.getByTestId('route-card-board-banner-signals').querySelector('[data-route-card-signal-tone="reward"]')).toHaveAttribute(
-            'data-route-card-signal-screen-cue',
-            'burst'
-        );
-        expect(
-            screen
-                .getByTestId('route-card-board-banner-signals')
-                .querySelector('[data-route-card-signal-tone="reward"]')
-                ?.querySelectorAll('[data-route-card-signal-beat]')
-        ).toHaveLength(4);
-        expect(
-            screen
-                .getByTestId('route-card-board-banner-signals')
-                .querySelector('[data-route-card-signal-tone="reward"] [data-route-card-signal-beat="1"]')
-        ).toHaveAttribute('data-route-card-signal-beat-focus', 'primary');
-        expect(
-            screen
-                .getByTestId('route-card-board-banner-signals')
-                .querySelector('[data-route-card-signal-tone="reward"] [data-route-card-signal-beat="2"]')
-        ).toHaveAttribute('data-route-card-signal-beat-focus', 'support');
-        expect(screen.getByTestId('route-card-board-banner-signals').querySelector('[data-route-card-signal-tone="risk"]')).toHaveAttribute(
-            'data-route-card-signal-beats',
-            '3'
-        );
-        expect(screen.getByTestId('route-card-board-banner-signals').querySelector('[data-route-card-signal-tone="risk"]')).toHaveAttribute(
-            'data-route-card-signal-audio',
-            'route-card-risk'
-        );
-        expect(screen.getByTestId('route-card-board-banner-signals').querySelector('[data-route-card-signal-tone="risk"]')).toHaveAttribute(
-            'data-route-card-signal-screen-cue',
-            'risk'
-        );
-        expect(screen.getByTestId('route-card-board-banner-signals')).toHaveAttribute(
-            'aria-label',
-            'Route card payoff signals. Role: Payout. Payoff: Gold score. Risk: Lost if destroyed.'
-        );
-    });
-
     it('shows payoff and cost signals while the Gambit third flip is active', () => {
         const baseRun = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false }));
         const flippedTiles = baseRun.board!.tiles.map((tile, index) =>
@@ -2489,7 +2399,6 @@ describe('GameScreen (OVR-014)', () => {
             'Gambit opportunity signals. Window: Third flip. Payoff: Recover pair. Cost: No perfect.'
         );
     });
-
 
     it('shows a free proceed action for terminal key-lock fallback exits', () => {
         const baseRun = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless' }));
@@ -2591,162 +2500,6 @@ describe('GameScreen (OVR-014)', () => {
         expect(screen.queryByRole('button', { name: 'Proceed' })).toBeNull();
         expect(screen.queryByRole('button', { name: 'Use key' })).toBeNull();
         expect(screen.getByRole('button', { name: 'Stay' })).toBeEnabled();
-    });
-
-    it('renders crowded dungeon status chips in priority order with one alert', () => {
-        const baseRun = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless' }));
-        const exitTile: Tile = {
-            id: 'exit',
-            pairKey: EXIT_PAIR_KEY,
-            state: 'flipped',
-            symbol: '^',
-            label: 'Locked Exit',
-            dungeonCardKind: 'exit',
-            dungeonCardState: 'revealed',
-            dungeonCardEffectId: 'exit_safe',
-            dungeonExitLockKind: 'iron'
-        };
-        const bossTile: Tile = {
-            id: 'boss-a',
-            pairKey: 'boss',
-            state: 'hidden',
-            symbol: 'B',
-            label: 'Trap Warden',
-            dungeonCardKind: 'enemy',
-            dungeonCardState: 'revealed',
-            dungeonBossId: 'trap_warden',
-            dungeonCardHp: 2,
-            dungeonCardMaxHp: 4
-        };
-        const trapTile: Tile = {
-            id: 'trap-a',
-            pairKey: 'trap',
-            state: 'hidden',
-            symbol: '!',
-            label: 'Alarm Trap',
-            dungeonCardKind: 'trap',
-            dungeonCardState: 'revealed',
-            dungeonCardEffectId: 'trap_alarm'
-        };
-        const enemyTile: Tile = {
-            id: 'enemy-a',
-            pairKey: 'enemy',
-            state: 'hidden',
-            symbol: 'E',
-            label: 'Awake Sentry',
-            dungeonCardKind: 'enemy',
-            dungeonCardState: 'revealed'
-        };
-        const roomTile: Tile = {
-            id: 'room',
-            pairKey: ROOM_PAIR_KEY,
-            state: 'hidden',
-            symbol: 'R',
-            label: 'Campfire',
-            dungeonCardKind: 'room',
-            dungeonCardState: 'hidden',
-            dungeonCardEffectId: 'room_campfire'
-        };
-        const shopTile: Tile = {
-            id: 'shop',
-            pairKey: SHOP_PAIR_KEY,
-            state: 'hidden',
-            symbol: 'S',
-            label: 'Vendor',
-            dungeonCardKind: 'shop',
-            dungeonCardState: 'hidden'
-        };
-        const run: RunState = {
-            ...baseRun,
-            dungeonKeys: {},
-            dungeonMasterKeys: 0,
-            board: {
-                ...baseRun.board!,
-                tiles: [
-                    exitTile,
-                    bossTile,
-                    { ...bossTile, id: 'boss-b' },
-                    trapTile,
-                    { ...trapTile, id: 'trap-b' },
-                    enemyTile,
-                    { ...enemyTile, id: 'enemy-b' },
-                    roomTile,
-                    shopTile
-                ],
-                dungeonBossId: 'trap_warden',
-                dungeonObjectiveId: 'defeat_boss',
-                dungeonExitTileId: 'exit',
-                dungeonExitLockKind: 'iron',
-                enemyHazards: [
-                    {
-                        id: 'patrol',
-                        kind: 'sentinel',
-                        label: 'Moving Patrol',
-                        currentTileId: 'room',
-                        nextTileId: 'shop',
-                        pattern: 'patrol',
-                        state: 'revealed',
-                        damage: 1,
-                        hp: 1,
-                        maxHp: 1
-                    }
-                ]
-            }
-        };
-
-        render(
-            <PlatformTiltProvider>
-                <NotificationHost>
-                    <GameScreen achievements={[]} run={run} />
-                </NotificationHost>
-            </PlatformTiltProvider>
-        );
-
-        const panel = screen.getByTestId('dungeon-status-panel');
-        const chipLabels = Array.from(panel.querySelectorAll('[data-priority]')).map((chip) =>
-            chip.textContent?.replace(/\s+/g, ' ').trim()
-        );
-
-        expect(chipLabels).toEqual([
-            'Traps1',
-            'Patrols1/1',
-            'Boss2/4 HP',
-            'Enemies2',
-            'ExitClear pairs to open',
-            'Keys0 keys'
-        ]);
-        expect(panel).toHaveTextContent(/armed trap/i);
-        expect(panel).not.toHaveTextContent(/moving enemy/);
-        expect(panel).not.toHaveTextContent('Room available');
-        expect(panel).not.toHaveTextContent('Shop available');
-    });
-
-
-    it('hides the dungeon status panel on plain boards', () => {
-        const baseRun = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'puzzle' }));
-        const run: RunState = {
-            ...baseRun,
-            board: {
-                ...baseRun.board!,
-                tiles: baseRun.board!.tiles.map((tile) => ({
-                    ...tile,
-                    dungeonCardKind: undefined,
-                    dungeonCardState: undefined,
-                    dungeonCardEffectId: undefined
-                })),
-                dungeonObjectiveId: 'find_exit'
-            }
-        };
-
-        render(
-            <PlatformTiltProvider>
-                <NotificationHost>
-                    <GameScreen achievements={[]} run={run} />
-                </NotificationHost>
-            </PlatformTiltProvider>
-        );
-
-        expect(screen.queryByTestId('dungeon-status-panel')).toBeNull();
     });
 
     it('shows and arms an endless risk wager when the cleared streak is eligible', () => {

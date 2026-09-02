@@ -45,7 +45,6 @@ test.describe('Gameplay readability hardening', () => {
         await openPlayablePathFixture(page, 'activeRunWithHazards');
         await expectGameplayReady(page);
 
-        await page.getByText(/^Info$/i).click({ force: true });
         await expectLocatorFullyInWindowViewport(page, page.getByTestId('game-hud'), 8);
 
         const powerButton = page.getByTestId('game-action-dock').getByRole('button').first();
@@ -110,15 +109,6 @@ test.describe('Gameplay readability hardening', () => {
 
         const frame = page.getByTestId('tile-board-frame');
         await expect(frame).toHaveAttribute('data-pickup-opportunity-count', '1');
-        await expect(page.getByTestId('pickup-opportunity-chip')).toContainText('Pickup rewards');
-        await expect(page.getByTestId('pickup-opportunity-chip')).toContainText('Claim before exit');
-        await expect(page.getByTestId('board-opportunity-pickup')).toHaveAttribute(
-            'data-opportunity-impact-cue',
-            'Pickup cashout'
-        );
-        await expect(page.getByTestId('board-opportunity-pickup')).toContainText('Pickup cashout');
-        await expect(page.getByTestId('board-opportunity-pickup')).toContainText('Shard spark pickup');
-        await expectLocatorFullyInWindowViewport(page, page.getByTestId('board-opportunity-pickup'), 8);
     });
 
     test('trait-route setup fixture makes the swap action obvious', async ({ page }) => {
@@ -162,11 +152,6 @@ test.describe('Gameplay readability hardening', () => {
         await expect(frame).toHaveAttribute('data-card-feedback-trait-route-intensities', /setup:2/);
         await expect(frame).toHaveAttribute('data-card-feedback-shot-map', 'route-setup:2');
         await expect(frame).toHaveAttribute('data-opportunity-best-detail', /Use swap to connect route/);
-        await expect(page.getByTestId('trait-mode-cue')).toContainText('Trait mode');
-        await expect(page.getByTestId('trait-mode-cue')).toContainText('Prime route');
-        await expect(page.getByTestId('trait-mode-cue')).toContainText('Swap Sealed with Filler');
-        await expectLocatorFullyInWindowViewport(page, page.getByTestId('trait-mode-cue'), 8);
-        await expect(page.getByTestId('chain-opportunity-chip')).toContainText('Use swap');
         await expect(page.getByTestId('chain-opportunity-beat')).toContainText('Prime beat');
         await expect(page.getByTestId('chain-opportunity-beat')).toContainText('Use swap');
         await expect(page.getByTestId('chain-opportunity-beat')).toHaveAttribute('data-chain-beat-tier', 'setup');

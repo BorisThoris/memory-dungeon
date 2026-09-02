@@ -142,9 +142,8 @@ async function readFirstHiddenSlot(page: Page): Promise<{ column: number; row: n
 }
 
 async function expectGameplayHudWingsVisible(page: Page): Promise<void> {
-    await expect(page.getByTestId('hud-wing-left')).toBeVisible();
-    await expect(page.getByTestId('hud-wing-center')).toBeVisible();
-    await expect(page.getByTestId('hud-wing-right')).toBeVisible();
+    await expect(page.getByTestId('hud-score')).toBeVisible();
+    await expect(page.getByTestId('game-action-dock')).toBeVisible();
 }
 
 async function expectCoreGameplayChromeFits(page: Page): Promise<void> {

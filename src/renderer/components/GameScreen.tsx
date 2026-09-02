@@ -5,9 +5,7 @@ import {
     MAX_PINNED_TILES,
     RECALL_FOCUS_MAX,
     type AchievementId,
-    type RouteCardKind,
     type RouteNodeType,
-    type RouteSpecialKind,
     type RunState
 } from '../../shared/contracts';
 import { computeFocusDimmedTileIds } from '../../shared/focusDimmedTileIds';
@@ -73,7 +71,6 @@ import {
     type BoardTurnResolvedEvent
 } from '../store/gameplayFeedbackAdapter';
 import { getLatestGameplayFeedback } from '../store/gameplayFeedbackAdapter';
-import { GameScreenDungeonStatusPanel } from './GameScreenDungeonStatusPanel';
 import { GameScreenEndlessChapterBanner } from './GameScreenEndlessChapterBanner';
 import RunShell, { type RunShellTool } from './RunShell';
 import { RUN_SHELL_GLYPHS } from './runShellGlyphs';
@@ -107,9 +104,6 @@ import { GAMEPLAY_VISUAL_CSS_VARS } from './gameplayVisualConfig';
 import { REG104_DATA_SHELL } from '../gameplay/regPhase4PlayContract';
 import styles from './GameScreen.module.css';
 import boardStyles from './TileBoard.module.css';
-import {
-    getDungeonCombatLogRows
-} from './gameScreenFeedback';
 import {
     MATCH_SCORE_FLOAT_FALLBACK_MARGIN_MS,
     matchScoreFloatDurationMs
@@ -153,7 +147,6 @@ import {
     traitInteractionLaneMapAttr,
     type TraitInteractionLaneMapEntry
 } from '../copy/traitInteractionLaneMap';
-import { routeSpecialLabel, routeSpecialRewardLine } from '../../shared/route-world';
 
 /** OVR-007 / HUD-020: decoy readout for `distraction_channel` — not gameplay state; hidden when reduce motion or assist toggle is off. */
 const DISTRACTION_CHANNEL_LABEL = 'Chaff';
@@ -392,64 +385,6 @@ const getMismatchRecoveryLaneScreenCue = (
     return 'pulse';
 };
 
-const getBoardMatchPayoffStackBeatCount = (stack: { laneCount: number; tone: string }): 2 | 3 | 4 | 5 => {
-    if (stack.laneCount >= 4 || stack.tone === 'combo') {
-        return 5;
-    }
-    if (stack.laneCount >= 2 || stack.tone === 'reward' || stack.tone === 'chain') {
-        return 4;
-    }
-    if (stack.tone === 'score') {
-        return 3;
-    }
-    return 2;
-};
-
-const getBoardMatchPayoffStackAction = (
-    stack: { laneCount: number; tone: string }
-): 'Cash stack' | 'Claim payoff' | 'Hold chain' | 'Prime next' => {
-    if (stack.laneCount >= 2 || stack.tone === 'combo' || stack.tone === 'reward') {
-        return 'Cash stack';
-    }
-    if (stack.tone === 'chain') {
-        return 'Hold chain';
-    }
-    if (stack.tone === 'score') {
-        return 'Claim payoff';
-    }
-    return 'Prime next';
-};
-
-const getBoardMatchPayoffStackAudioCue = (
-    stack: { laneCount: number; tone: string }
-): 'match-stack-super' | 'match-stack-cashout' | 'match-stack-chain' | 'match-stack-prime' => {
-    if (stack.laneCount >= 4 || stack.tone === 'combo') {
-        return 'match-stack-super';
-    }
-    if (stack.laneCount >= 2 || stack.tone === 'reward') {
-        return 'match-stack-cashout';
-    }
-    if (stack.tone === 'chain') {
-        return 'match-stack-chain';
-    }
-    return 'match-stack-prime';
-};
-
-const getBoardMatchPayoffStackScreenCue = (
-    stack: { laneCount: number; tone: string }
-): 'super' | 'burst' | 'chain' | 'pulse' => {
-    if (stack.laneCount >= 4 || stack.tone === 'combo') {
-        return 'super';
-    }
-    if (stack.laneCount >= 2 || stack.tone === 'reward') {
-        return 'burst';
-    }
-    if (stack.tone === 'chain') {
-        return 'chain';
-    }
-    return 'pulse';
-};
-
 /** PLAY-009: pair-index rings on face-down DOM tiles only for very early floors + until FTUE flag clears after tutorial floors. */
 const TUTORIAL_PAIR_MARKER_MAX_LEVEL = 2;
 
@@ -463,135 +398,6 @@ const routeTypeLabel = (routeType: NonNullable<RunState['pendingRouteCardPlan']>
         default:
             return 'Mystery route';
     }
-};
-
-const routeSpecialDisplayLabel = (kind: RouteSpecialKind | RouteCardKind): string =>
-    routeSpecialLabel(kind as RouteSpecialKind);
-
-const routeSpecialDisplayRewardLine = (kind: RouteSpecialKind | RouteCardKind): string =>
-    `Match the ${routeSpecialLabel(kind as RouteSpecialKind)} pair for ${routeSpecialRewardLine(kind as RouteSpecialKind)}.`;
-
-type RouteSpecialSignalRow = {
-    label: string;
-    tone: 'build' | 'control' | 'risk' | 'reward' | 'safety';
-    value: string;
-};
-
-const routeSpecialSignalRows = (
-    kind: RouteSpecialKind | RouteCardKind
-): RouteSpecialSignalRow[] => {
-    switch (kind) {
-        case 'safe_ward':
-        case 'guard_cache':
-        case 'final_ward':
-        case 'lantern_ward':
-            return [
-                { label: 'Role', value: 'Protection', tone: 'safety' },
-                { label: 'Payoff', value: 'Guard bank', tone: 'safety' },
-                { label: 'Play', value: 'Match before exit', tone: 'control' }
-            ];
-        case 'greed_cache':
-        case 'elite_cache':
-        case 'greed_toll':
-        case 'fragile_cache':
-            return [
-                { label: 'Role', value: 'Payout', tone: 'reward' },
-                { label: 'Payoff', value: 'Gold score', tone: 'reward' },
-                { label: 'Risk', value: 'Lost if destroyed', tone: 'risk' }
-            ];
-        case 'mimic_cache':
-            return [
-                { label: 'Role', value: 'Trap loot', tone: 'risk' },
-                { label: 'Payoff', value: 'Scout first', tone: 'control' },
-                { label: 'Risk', value: 'Blind bite', tone: 'risk' }
-            ];
-        case 'mystery_veil':
-        case 'loaded_gateway':
-        case 'secret_door':
-            return [
-                { label: 'Role', value: 'Discovery', tone: 'build' },
-                { label: 'Payoff', value: 'Route value', tone: 'reward' },
-                { label: 'Play', value: 'Reveal safely', tone: 'control' }
-            ];
-        case 'anchor_seal':
-        case 'pin_lattice':
-            return [
-                { label: 'Role', value: 'Board control', tone: 'control' },
-                { label: 'Payoff', value: 'Prime turn', tone: 'build' },
-                { label: 'Play', value: 'Plan the pair', tone: 'control' }
-            ];
-        case 'catalyst_altar':
-        case 'omen_seal':
-            return [
-                { label: 'Role', value: 'Combo fuel', tone: 'build' },
-                { label: 'Payoff', value: 'Shard spike', tone: 'reward' },
-                { label: 'Play', value: 'Chain into it', tone: 'build' }
-            ];
-        case 'parasite_vessel':
-            return [
-                { label: 'Role', value: 'Pressure cashout', tone: 'risk' },
-                { label: 'Payoff', value: 'Favor swing', tone: 'reward' },
-                { label: 'Play', value: 'Use pressure', tone: 'control' }
-            ];
-        case 'keystone_pair':
-            return [
-                { label: 'Role', value: 'Boss payoff', tone: 'reward' },
-                { label: 'Payoff', value: 'Favor score', tone: 'reward' },
-                { label: 'Play', value: 'Secure route', tone: 'control' }
-            ];
-        default:
-            return [
-                { label: 'Role', value: 'Special pair', tone: 'build' },
-                { label: 'Payoff', value: 'Match reward', tone: 'reward' },
-                { label: 'Play', value: 'Find both cards', tone: 'control' }
-            ];
-    }
-};
-
-const getRouteSpecialSignalBeatCount = (row: RouteSpecialSignalRow): 2 | 3 | 4 => {
-    if (row.tone === 'reward') {
-        return 4;
-    }
-    if (row.tone === 'risk' || row.tone === 'build') {
-        return 3;
-    }
-    return 2;
-};
-
-const getRouteSpecialSignalAudioCue = (
-    row: RouteSpecialSignalRow
-): 'route-card-reward' | 'route-card-risk' | 'route-card-build' | 'route-card-guard' | 'route-card-control' => {
-    if (row.tone === 'reward') {
-        return 'route-card-reward';
-    }
-    if (row.tone === 'risk') {
-        return 'route-card-risk';
-    }
-    if (row.tone === 'build') {
-        return 'route-card-build';
-    }
-    if (row.tone === 'safety') {
-        return 'route-card-guard';
-    }
-    return 'route-card-control';
-};
-
-const getRouteSpecialSignalScreenCue = (
-    row: RouteSpecialSignalRow
-): 'burst' | 'risk' | 'build' | 'guard' | 'control' => {
-    if (row.tone === 'reward') {
-        return 'burst';
-    }
-    if (row.tone === 'risk') {
-        return 'risk';
-    }
-    if (row.tone === 'build') {
-        return 'build';
-    }
-    if (row.tone === 'safety') {
-        return 'guard';
-    }
-    return 'control';
 };
 
 const dungeonExitLockLabel = (lockKind: ReturnType<typeof getDungeonExitStatus>['lockKind']): string => {
@@ -1735,9 +1541,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                       'Chase next safe match'
               }
             : null;
-    const boardMatchPayoffStackFill = boardMatchPayoffStackCue
-        ? Math.round(Math.min(100, (getBoardMatchPayoffStackBeatCount(boardMatchPayoffStackCue) / 5) * 100))
-        : 0;
     const boardFloaterJackpotCue =
         boardFloaterPayload?.kind === 'match' ? getMatchFloaterJackpotCue(boardFloaterPayload) : null;
     const boardFloaterPrimaryPayoffLane =
@@ -2328,37 +2131,12 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         ? `${routeTypeLabel(dungeonExitStatus.routeType)} beyond this door.`
         : 'This stair leaves the current floor.';
     const dungeonExitLockLine = dungeonExitPromptLockLine(dungeonExitStatus, run);
-    const activeRouteTiles = run.board?.tiles ?? [];
-    const activeRouteSpecialKinds = activeRouteTiles
-        .filter(
-            (tile) => (tile.routeSpecialKind || tile.routeCardKind) && tile.state !== 'matched' && tile.state !== 'removed'
-        )
-        .map((tile) => tile.routeSpecialKind ?? tile.routeCardKind!);
-    const activeRouteSpecialKind = activeRouteSpecialKinds[0] ?? null;
-    const activeRoutePairCount = new Set(
-        activeRouteTiles
-            .filter(
-                (tile) =>
-                    (tile.routeSpecialKind || tile.routeCardKind) && tile.state !== 'matched' && tile.state !== 'removed'
-            )
-            .map((tile) => tile.pairKey)
-    ).size;
-    const activeRouteBannerLine =
-        activeRouteSpecialKind && activeRoutePairCount > 0 && run.status !== 'levelComplete'
-            ? `${routeSpecialDisplayLabel(activeRouteSpecialKind)} in play: ${routeSpecialDisplayRewardLine(activeRouteSpecialKind)}`
-            : null;
-    const activeRouteSignalRows = activeRouteSpecialKind ? routeSpecialSignalRows(activeRouteSpecialKind) : [];
-    const activeRouteSignalRowsLabel = formatGameplaySignalRowsLabel(
-        'Route card payoff signals',
-        activeRouteSignalRows
-    );
     const dungeonPresentation = getDungeonBoardPresentation(run);
     const activeDungeonPanel = run.status !== 'levelComplete' && dungeonPresentation.visible ? dungeonPresentation : null;
     const activeDungeonObjectiveStatus = activeDungeonPanel ? getDungeonObjectiveStatus(run) : null;
     const traitRouteObjectiveStatus = getTraitRouteObjectiveStatus(run);
     const liveObjectiveStatus = activeDungeonObjectiveStatus ?? traitRouteObjectiveStatus;
     const armedRewardPerkCue = getPrimaryRewardPerkReadinessRow(run);
-    const dungeonCombatLogRows = activeDungeonPanel ? getDungeonCombatLogRows(run) : [];
     const nextFloorPreview =
         endlessChapterActive && run.lastLevelResult
             ? pickFloorScheduleEntry(run.runSeed, run.runRulesVersion, run.lastLevelResult.level + 1, run.gameMode)
@@ -2879,136 +2657,9 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                     : 'none'
                             }
                             data-match-payoff-stack={boardMatchPayoffStackCue?.tone ?? 'none'}
-                            data-match-payoff-stack-action={
-                                boardMatchPayoffStackCue ? getBoardMatchPayoffStackAction(boardMatchPayoffStackCue) : 'none'
-                            }
-                            data-match-payoff-stack-beats={
-                                boardMatchPayoffStackCue ? getBoardMatchPayoffStackBeatCount(boardMatchPayoffStackCue) : 0
-                            }
-                            data-match-payoff-stack-audio={
-                                boardMatchPayoffStackCue ? getBoardMatchPayoffStackAudioCue(boardMatchPayoffStackCue) : 'none'
-                            }
-                            data-match-payoff-stack-first-cue={boardMatchPayoffStackCue?.firstCue ?? 'none'}
-                            data-match-payoff-stack-lanes={boardMatchPayoffStackCue?.laneCount ?? 0}
-                            data-match-payoff-stack-screen-cue={
-                                boardMatchPayoffStackCue ? getBoardMatchPayoffStackScreenCue(boardMatchPayoffStackCue) : 'none'
-                            }
-                            data-match-payoff-stack-sequence-first={
-                                boardMatchPayoffStackCue?.sequenceFirstCue ?? 'none'
-                            }
-                            data-match-payoff-stack-sequence-keep={boardMatchPayoffStackCue?.sequenceKeepCue ?? 'none'}
-                            data-match-payoff-stack-sequence-then={boardMatchPayoffStackCue?.nextCue ?? 'none'}
-                            data-match-payoff-stack-summary={boardMatchPayoffStackCue?.value ?? 'none'}
                             style={{ '--gameplay-workshop-table-image': `url(${UI_ART.gameplayWorkshopTable})` } as CSSProperties}
                         >
                             <div className={styles.boardGlow} aria-hidden="true" />
-                            {activeRouteBannerLine ? (
-                                <div className={styles.routeCardBanner} data-testid="route-card-board-banner">
-                                    <strong>{routeSpecialDisplayLabel(activeRouteSpecialKind!)}</strong>
-                                    <span>{routeSpecialDisplayRewardLine(activeRouteSpecialKind!)}</span>
-                                    <div
-                                        className={styles.routeCardBannerSignals}
-                                        data-testid="route-card-board-banner-signals"
-                                        aria-label={activeRouteSignalRowsLabel}
-                                    >
-                                        {activeRouteSignalRows.map((row) => {
-                                            const beatCount = getRouteSpecialSignalBeatCount(row);
-                                            return (
-                                                <span
-                                                    data-route-card-signal-audio={getRouteSpecialSignalAudioCue(row)}
-                                                    data-route-card-signal-beats={beatCount}
-                                                    data-route-card-signal-screen-cue={getRouteSpecialSignalScreenCue(row)}
-                                                    data-route-card-signal-tone={row.tone}
-                                                    key={`${row.label}:${row.value}`}
-                                                >
-                                                    <small>{row.label}</small>
-                                                    <b>{row.value}</b>
-                                                    <span aria-hidden="true" className={styles.routeCardBannerBeatPips}>
-                                                        {Array.from({ length: beatCount }, (_, index) => (
-                                                            <i
-                                                                data-route-card-signal-beat={index + 1}
-                                                                data-route-card-signal-beat-focus={
-                                                                    index === 0 ? 'primary' : 'support'
-                                                                }
-                                                                key={index}
-                                                            />
-                                                        ))}
-                                                    </span>
-                                                </span>
-                                            );
-                                        })}
-                                    </div>
-                                </div>
-                            ) : null}
-                            {activeDungeonPanel ? (
-                                <GameScreenDungeonStatusPanel
-                                    combatLogRows={dungeonCombatLogRows}
-                                    panel={activeDungeonPanel}
-                                />
-                            ) : null}
-                            {boardMatchPayoffStackCue ? (
-                                <div
-                                    aria-label={`Last match payoff stack. ${boardMatchPayoffStackCue.label}: ${boardMatchPayoffStackCue.value}. ${getBoardMatchPayoffStackAction(
-                                        boardMatchPayoffStackCue
-                                    )}. ${getBoardMatchPayoffStackBeatCount(boardMatchPayoffStackCue)} beats. ${boardMatchPayoffStackCue.firstCue}.${
-                                        boardMatchPayoffStackCue.nextCue ? ` ${boardMatchPayoffStackCue.nextCue}.` : ''
-                                    } Sequence: first ${boardMatchPayoffStackCue.sequenceFirstCue}; then ${
-                                        boardMatchPayoffStackCue.nextCue ?? 'lock payoff route'
-                                    }; keep ${boardMatchPayoffStackCue.sequenceKeepCue}.`}
-                                    className={styles.boardMatchPayoffStackCue}
-                                    data-match-payoff-stack-action={getBoardMatchPayoffStackAction(boardMatchPayoffStackCue)}
-                                    data-match-payoff-stack-audio={getBoardMatchPayoffStackAudioCue(boardMatchPayoffStackCue)}
-                                    data-match-payoff-stack-beats={getBoardMatchPayoffStackBeatCount(boardMatchPayoffStackCue)}
-                                    data-match-payoff-stack-fill={boardMatchPayoffStackFill}
-                                    data-match-payoff-stack-keep={boardMatchPayoffStackCue.sequenceKeepCue}
-                                    data-match-payoff-stack-screen-cue={getBoardMatchPayoffStackScreenCue(boardMatchPayoffStackCue)}
-                                    data-match-payoff-stack-sequence-first={boardMatchPayoffStackCue.sequenceFirstCue}
-                                    data-match-payoff-stack-sequence-then={
-                                        boardMatchPayoffStackCue.nextCue ?? 'Lock payoff route'
-                                    }
-                                    data-match-payoff-stack-tone={boardMatchPayoffStackCue.tone}
-                                    style={
-                                        {
-                                            '--match-payoff-stack-fill': `${boardMatchPayoffStackFill}%`
-                                        } as CSSProperties
-                                    }
-                                    data-testid="board-match-payoff-stack-cue"
-                                    role="status"
-                                >
-                                    <small>{boardMatchPayoffStackCue.label}</small>
-                                    <strong>{boardMatchPayoffStackCue.value}</strong>
-                                    <b>{getBoardMatchPayoffStackAction(boardMatchPayoffStackCue)}</b>
-                                    <span aria-hidden="true" className={styles.boardMatchPayoffStackMeter} />
-                                    <span aria-hidden="true" className={styles.boardMatchPayoffStackBeatPips}>
-                                        {Array.from({ length: getBoardMatchPayoffStackBeatCount(boardMatchPayoffStackCue) }, (_, index) => (
-                                            <i
-                                                data-match-payoff-stack-beat={index + 1}
-                                                data-match-payoff-stack-beat-focus={index === 0 ? 'primary' : 'support'}
-                                                key={index}
-                                            />
-                                        ))}
-                                    </span>
-                                    <span>{boardMatchPayoffStackCue.firstCue}</span>
-                                    {boardMatchPayoffStackCue.nextCue ? <em>{boardMatchPayoffStackCue.nextCue}</em> : null}
-                                    <div
-                                        className={styles.boardMatchPayoffStackSequence}
-                                        data-testid="board-match-payoff-stack-sequence"
-                                    >
-                                        <span data-match-payoff-stack-step="first">
-                                            <small>First</small>
-                                            <b>{boardMatchPayoffStackCue.sequenceFirstCue}</b>
-                                        </span>
-                                        <span data-match-payoff-stack-step="then">
-                                            <small>Then</small>
-                                            <b>{boardMatchPayoffStackCue.nextCue ?? 'Lock payoff route'}</b>
-                                        </span>
-                                        <span data-match-payoff-stack-step="keep">
-                                            <small>Keep</small>
-                                            <b>{boardMatchPayoffStackCue.sequenceKeepCue}</b>
-                                        </span>
-                                    </div>
-                                </div>
-                            ) : null}
                             <MemoTileBoard
                                 ref={tileBoardRef}
                                 allowGambitThirdFlip={allowGambitThirdFlip}

@@ -47,7 +47,6 @@ import {
 import { isNarrowShortLandscapeForMenuStack, VIEWPORT_MOBILE_MAX } from '../breakpoints';
 import { useCoarsePointer } from '../hooks/useCoarsePointer';
 import { useViewportSize } from '../hooks/useViewportSize';
-import { getMotionPermissionButtonLabels, shouldOfferDeviceMotionPermission } from '../platformTilt/platformTiltPermissionUi';
 import { usePlatformTiltField } from '../platformTilt/usePlatformTiltField';
 import styles from './TileBoard.module.css';
 import { playChainOpportunityBeatSfx, playShuffleSfx, resumeAudioContext } from '../audio/gameSfx';
@@ -972,7 +971,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
     const [lastResolutionFeedback, setLastResolutionFeedback] = useState('');
     const previousResolvedTrapTileCountRef = useRef<number | null>(null);
 
-    const { tiltRef: fieldTiltRef, motionParallaxSuppressed, permission, requestMotionPermission } = usePlatformTiltField({
+    const { tiltRef: fieldTiltRef, motionParallaxSuppressed } = usePlatformTiltField({
         enabled: true,
         reduceMotion,
         surfaceRef: frameRef,
@@ -2644,29 +2643,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                 value: 'Cashout ready'
             }
           : null;
-    const activePowerBoardChipLabel = activePowerBoardChip
-        ? formatBoardFeedbackLabel('Active board power', [
-              activePowerBoardChip.label,
-              activePowerBoardChip.detail,
-              `First ${activePowerBoardChip.first}`,
-              `Then ${activePowerBoardChip.then}`
-          ])
-        : undefined;
-    const boardPickupOpportunityLabel = formatBoardFeedbackLabel('Board pickup opportunity', [
-        boardPickupOpportunity.valueLabel,
-        boardPickupOpportunity.target,
-        boardPickupOpportunity.sequenceCue
-            ? `Sequence: First ${boardPickupOpportunity.sequenceCue.first}. Then ${boardPickupOpportunity.sequenceCue.then}. Keep ${boardPickupOpportunity.sequenceCue.keep}`
-            : null,
-        boardPickupOpportunity.stackCue,
-        boardPickupOpportunity.stackDetail,
-        ...boardPickupOpportunity.examples
-    ]);
     const boardPickupOpportunityFocus = boardPickupOpportunity.sequenceCue?.tone ?? 'none';
-    const boardPickupOpportunityMeterFill =
-        boardPickupOpportunityFocus === 'cashout'
-            ? 100
-            : Math.min(100, Math.round((boardPickupOpportunity.count / 3) * 100));
     const focusedPreviewChipLabel = focusedPreviewChip
         ? formatBoardFeedbackLabel(
               `${focusedPreviewChip.eyebrow} ${
@@ -3583,13 +3560,6 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         syncSelectionSuppressed
     ]);
 
-    const showMotionChip = shouldOfferDeviceMotionPermission({
-        motionParallaxSuppressed,
-        permission,
-        touchPrimary
-    });
-    const motionChipLabels = getMotionPermissionButtonLabels(permission, 'board');
-
     const sceneErrorFallback = (
         <div className={styles.webglSceneError} data-testid="tile-board-scene-error" role="alert">
             Board graphics encountered an error. Try reloading the page.
@@ -3985,159 +3955,6 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                 </Canvas>
                             </div>
                         </TileBoardErrorBoundary>
-                        {showMotionChip ? (
-                            <button
-                                aria-label={motionChipLabels.ariaLabel}
-                                className={styles.motionChip}
-                                onClick={(event) => {
-                                    event.stopPropagation();
-                                    void requestMotionPermission();
-                                }}
-                                onPointerDown={(event) => {
-                                    event.stopPropagation();
-                                }}
-                                type="button"
-                            >
-                                {motionChipLabels.buttonText}
-                            </button>
-                        ) : null}
-                        {activePowerBoardChip ? (
-                            <div
-                                aria-label={activePowerBoardChipLabel}
-                                className={styles.activePowerBoardChip}
-                                data-active-power-beats={activePowerBoardChip.beats}
-                                data-active-power-first={activePowerBoardChip.first}
-                                data-active-power-then={activePowerBoardChip.then}
-                                data-active-power-meter-fill={Math.round((activePowerBoardChip.beats / 4) * 100)}
-                                data-active-power-tone={activePowerBoardChip.tone}
-                                data-testid="active-power-board-chip"
-                                role="status"
-                            >
-                                <span>{activePowerBoardChip.label}</span>
-                                <strong>{activePowerBoardChip.detail}</strong>
-                                <span
-                                    aria-hidden="true"
-                                    className={styles.activePowerBoardChipMeter}
-                                    data-active-power-meter-fill={Math.round((activePowerBoardChip.beats / 4) * 100)}
-                                >
-                                    <i
-                                        className={styles.activePowerBoardChipMeterFill}
-                                        style={{
-                                            '--active-power-meter-fill': `${Math.round((activePowerBoardChip.beats / 4) * 100)}%`
-                                        } as CSSProperties}
-                                    />
-                                </span>
-                                <span aria-hidden="true" className={styles.activePowerBoardChipBeatPips}>
-                                    {Array.from({ length: activePowerBoardChip.beats }, (_, index) => (
-                                        <i
-                                            data-active-power-beat={index + 1}
-                                            data-active-power-beat-focus={index === 0 ? 'primary' : 'support'}
-                                            key={index}
-                                        />
-                                    ))}
-                                </span>
-                                <small data-active-power-step="first">
-                                    First: {activePowerBoardChip.first}
-                                    <span aria-hidden="true" className={styles.activePowerBoardStepBeatPips}>
-                                        {Array.from({ length: 2 }, (_, index) => (
-                                            <i
-                                                data-active-power-step-beat={index + 1}
-                                                data-active-power-step-beat-focus={index === 0 ? 'primary' : 'support'}
-                                                key={`active-power-step-first-${index + 1}`}
-                                            />
-                                        ))}
-                                    </span>
-                                </small>
-                                <small data-active-power-step="then">
-                                    Then: {activePowerBoardChip.then}
-                                    <span aria-hidden="true" className={styles.activePowerBoardStepBeatPips}>
-                                        {Array.from({ length: 2 }, (_, index) => (
-                                            <i
-                                                data-active-power-step-beat={index + 1}
-                                                data-active-power-step-beat-focus={index === 0 ? 'primary' : 'support'}
-                                                key={`active-power-step-then-${index + 1}`}
-                                            />
-                                        ))}
-                                    </span>
-                                </small>
-                            </div>
-                        ) : null}
-                        {boardPickupOpportunity.count > 0 ? (
-                            <div
-                                aria-label={boardPickupOpportunityLabel}
-                                className={styles.pickupOpportunityChip}
-                                data-pickup-opportunity-focus={boardPickupOpportunityFocus}
-                                data-pickup-meter-fill={boardPickupOpportunityMeterFill}
-                                data-testid="pickup-opportunity-chip"
-                                role="status"
-                            >
-                                <span>Pickup rewards</span>
-                                <strong>{boardPickupOpportunity.valueLabel}</strong>
-                                {boardPickupOpportunity.target ? <b>{boardPickupOpportunity.target}</b> : null}
-                                <span
-                                    aria-hidden="true"
-                                    className={styles.pickupOpportunityMeter}
-                                    data-pickup-meter-fill={boardPickupOpportunityMeterFill}
-                                >
-                                    <i
-                                        className={styles.pickupOpportunityMeterFill}
-                                        style={{ '--pickup-meter-fill': `${boardPickupOpportunityMeterFill}%` } as CSSProperties}
-                                    />
-                                </span>
-                                <span aria-hidden="true" className={styles.pickupOpportunityChipBeatPips}>
-                                    {Array.from(
-                                        {
-                                            length:
-                                                boardPickupOpportunityFocus === 'cashout'
-                                                    ? 4
-                                                    : boardPickupOpportunity.count > 1
-                                                      ? 3
-                                                      : 2
-                                        },
-                                        (_, index) => (
-                                            <i
-                                                data-pickup-chip-beat={index + 1}
-                                                data-pickup-chip-beat-focus={index === 0 ? 'primary' : 'support'}
-                                                key={index}
-                                            />
-                                        )
-                                    )}
-                                </span>
-                                {boardPickupOpportunity.stackCue ? (
-                                    <em>{boardPickupOpportunity.stackCue}</em>
-                                ) : null}
-                                {boardPickupOpportunity.stackDetail ? (
-                                    <i>{boardPickupOpportunity.stackDetail}</i>
-                                ) : null}
-                                {boardPickupOpportunity.sequenceCue ? (
-                                    <span
-                                        aria-label={`Pickup sequence. First: ${boardPickupOpportunity.sequenceCue.first}. Then: ${boardPickupOpportunity.sequenceCue.then}. Keep: ${boardPickupOpportunity.sequenceCue.keep}.`}
-                                        className={styles.pickupOpportunitySequence}
-                                        data-pickup-sequence-tone={boardPickupOpportunity.sequenceCue.tone}
-                                        data-testid="pickup-opportunity-sequence"
-                                    >
-                                        <small>First</small>
-                                        <b>{boardPickupOpportunity.sequenceCue.first}</b>
-                                        <small>Then</small>
-                                        <b>{boardPickupOpportunity.sequenceCue.then}</b>
-                                        <small>Keep</small>
-                                        <b>{boardPickupOpportunity.sequenceCue.keep}</b>
-                                        <span aria-hidden="true" className={styles.pickupOpportunitySequenceBeatPips}>
-                                            {Array.from({ length: 3 }, (_, index) => (
-                                                <i
-                                                    data-pickup-sequence-beat={index + 1}
-                                                    data-pickup-sequence-beat-focus={index === 0 ? 'primary' : 'support'}
-                                                    key={index}
-                                                />
-                                            ))}
-                                        </span>
-                                    </span>
-                                ) : null}
-                                {boardPickupOpportunity.examples.length > 0 ? (
-                                    <small>{boardPickupOpportunity.examples.join(' / ')}</small>
-                                ) : null}
-                            </div>
-                        ) : null}
                         {focusedPreviewChip ? (() => {
                             const beatCount = getFocusedPreviewBeatCount(focusedPreviewChip);
                             const previewDensity =

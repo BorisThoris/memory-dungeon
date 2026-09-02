@@ -1121,7 +1121,6 @@
 .floorClearNextBeatPips i:nth-child(2),
 .dungeonMapRoomSignalBeatPips i:nth-child(2),
 .dungeonMapRoomBeatPips i:nth-child(2),
-.dungeonStatusForecastBeatPips i:nth-child(2),
 .hudChainRewardBeatPips i:nth-child(2),
 .hudRewardPerkBeatPips i:nth-child(2),
 .hudRecentActionBeatPips i:nth-child(2),
@@ -1132,7 +1131,6 @@
 .boardFloaterCascadeBeatPips i:nth-child(2),
 .boardFloaterRewardBurstBeatPips i:nth-child(2),
 .dungeonMapRoomPayoffBeatPips i:nth-child(2),
-.routeCardBannerBeatPips i:nth-child(2),
 .hudObjectiveSignalBeatPips i:nth-child(2),
 .toolCrescendoPips i:nth-child(2),
 .powerPayoffBeatPips i:nth-child(2) {
@@ -1148,7 +1146,6 @@
 .floorClearNextBeatPips i:nth-child(3),
 .dungeonMapRoomSignalBeatPips i:nth-child(3),
 .dungeonMapRoomBeatPips i:nth-child(3),
-.dungeonStatusForecastBeatPips i:nth-child(3),
 .hudChainRewardBeatPips i:nth-child(3),
 .hudRewardPerkBeatPips i:nth-child(3),
 .hudRecentActionBeatPips i:nth-child(3),
@@ -1159,7 +1156,6 @@
 .boardFloaterCascadeBeatPips i:nth-child(3),
 .boardFloaterRewardBurstBeatPips i:nth-child(3),
 .dungeonMapRoomPayoffBeatPips i:nth-child(3),
-.routeCardBannerBeatPips i:nth-child(3),
 .hudObjectiveSignalBeatPips i:nth-child(3),
 .toolCrescendoPips i:nth-child(3),
 .powerPayoffBeatPips i:nth-child(3) {
@@ -1175,7 +1171,6 @@
 .floorClearNextBeatPips i:nth-child(4),
 .dungeonMapRoomSignalBeatPips i:nth-child(4),
 .dungeonMapRoomBeatPips i:nth-child(4),
-.dungeonStatusForecastBeatPips i:nth-child(4),
 .hudChainRewardBeatPips i:nth-child(4),
 .hudRewardPerkBeatPips i:nth-child(4),
 .hudRecentActionBeatPips i:nth-child(4),
@@ -1186,7 +1181,6 @@
 .boardFloaterCascadeBeatPips i:nth-child(4),
 .boardFloaterRewardBurstBeatPips i:nth-child(4),
 .dungeonMapRoomPayoffBeatPips i:nth-child(4),
-.routeCardBannerBeatPips i:nth-child(4),
 .hudObjectiveSignalBeatPips i:nth-child(4),
 .toolCrescendoPips i:nth-child(4),
 .powerPayoffBeatPips i:nth-child(4) {
@@ -1362,737 +1356,10 @@
     }
 }
 
-.routeCardBanner {
-    position: absolute;
-    z-index: 8;
-    left: 50%;
-    top: 0.6rem;
-    display: grid;
-    gap: 0.06rem;
-    min-width: min(24rem, calc(100% - 2rem));
-    max-width: calc(100% - 2rem);
-    padding: 0.42rem 0.65rem;
-    border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 48%, var(--theme-border-strong));
-    border-radius: 8px;
-    background:
-        radial-gradient(ellipse 100% 120% at 50% 0%, color-mix(in srgb, var(--theme-gold-bright) 12%, transparent), transparent 60%),
-        color-mix(in srgb, var(--theme-void) 82%, var(--theme-gold-deep));
-    color: var(--theme-text);
-    box-shadow:
-        0 12px 28px rgba(0, 0, 0, 0.32),
-        inset 0 1px 0 color-mix(in srgb, var(--theme-text) 6%, transparent);
-    text-align: center;
-    transform: translateX(-50%);
-    pointer-events: none;
-}
-
-.routeCardBanner strong {
-    font-size: 0.74rem;
-    letter-spacing: 0;
-}
-
-.routeCardBanner span {
-    font-size: 0.66rem;
-    color: var(--theme-text-muted);
-}
-
-.routeCardBannerSignals {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 0.24rem;
-    margin-top: 0.22rem;
-}
-
-.routeCardBannerSignals > span {
-    display: grid;
-    gap: 0.04rem;
-    min-width: 0;
-    min-height: 2rem;
-    align-content: center;
-    padding: 0.22rem 0.3rem;
-    border: 1px solid color-mix(in srgb, var(--theme-text-muted) 18%, transparent);
-    border-radius: 8px;
-    background: color-mix(in srgb, var(--theme-panel-solid) 54%, transparent);
-}
-
-.routeCardBannerSignals small {
-    overflow: hidden;
-    color: color-mix(in srgb, var(--theme-text-muted) 86%, white);
-    font-size: 0.48rem;
-    font-weight: 900;
-    line-height: 1;
-    text-overflow: ellipsis;
-    text-transform: uppercase;
-    white-space: nowrap;
-}
-
-.routeCardBannerSignals b {
-    overflow: hidden;
-    color: color-mix(in srgb, var(--theme-text) 88%, white);
-    font-size: 0.58rem;
-    font-weight: 900;
-    letter-spacing: 0;
-    line-height: 1.05;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.routeCardBannerBeatPips {
-    display: flex;
-    gap: 0.08rem;
-    align-items: center;
-    justify-content: center;
-    min-height: 0.18rem;
-}
-
-.routeCardBannerBeatPips i {
-    width: 0.26rem;
-    height: 0.11rem;
-    border-radius: 999px;
-    background: color-mix(in srgb, var(--theme-text-muted) 52%, transparent);
-    box-shadow: 0 0 0.2rem color-mix(in srgb, var(--theme-text-muted) 18%, transparent);
-    animation: gameplayBeatPipPulse 0.92s ease-in-out infinite;
-    transform-origin: center;
-}
-
-.routeCardBannerBeatPips i[data-route-card-signal-beat-focus='primary'] {
-    width: 0.42rem;
-    height: 0.15rem;
-    filter: saturate(1.28) brightness(1.14);
-    transform: translateY(-0.01rem) scaleX(1.1);
-}
-
-.routeCardBannerBeatPips i[data-route-card-signal-beat-focus='support'] {
-    opacity: 0.72;
-}
-
-.routeCardBannerSignals > span[data-route-card-signal-tone='reward'] {
-    border-color: color-mix(in srgb, var(--theme-gold-bright) 34%, transparent);
-    background: color-mix(in srgb, var(--theme-gold-deep) 15%, transparent);
-}
-
-.routeCardBannerSignals > span[data-route-card-signal-tone='reward'] b {
-    color: color-mix(in srgb, var(--theme-gold-bright) 84%, white);
-}
-
-.routeCardBannerSignals > span[data-route-card-signal-tone='reward'] .routeCardBannerBeatPips i {
-    background: color-mix(in srgb, var(--theme-gold-bright) 84%, white);
-    box-shadow: 0 0 0.3rem color-mix(in srgb, var(--theme-gold-bright) 34%, transparent);
-}
-
-.routeCardBannerSignals > span[data-route-card-signal-screen-cue='burst'] {
-    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-gold-bright) 18%, transparent);
-}
-
-.routeCardBannerSignals > span[data-route-card-signal-tone='safety'] {
-    border-color: color-mix(in srgb, var(--theme-cyan-bright) 32%, transparent);
-    background: color-mix(in srgb, var(--theme-cyan-bright) 10%, transparent);
-}
-
-.routeCardBannerSignals > span[data-route-card-signal-tone='safety'] b,
-.routeCardBannerSignals > span[data-route-card-signal-tone='control'] b {
-    color: color-mix(in srgb, var(--theme-cyan-bright) 80%, white);
-}
-
-.routeCardBannerSignals > span[data-route-card-signal-tone='safety'] .routeCardBannerBeatPips i,
-.routeCardBannerSignals > span[data-route-card-signal-tone='control'] .routeCardBannerBeatPips i {
-    background: color-mix(in srgb, var(--theme-cyan-bright) 78%, white);
-    box-shadow: 0 0 0.28rem color-mix(in srgb, var(--theme-cyan-bright) 28%, transparent);
-}
-
-.routeCardBannerSignals > span[data-route-card-signal-screen-cue='guard'],
-.routeCardBannerSignals > span[data-route-card-signal-screen-cue='control'] {
-    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-cyan-bright) 16%, transparent);
-}
-
-.routeCardBannerSignals > span[data-route-card-signal-tone='control'] {
-    border-color: color-mix(in srgb, var(--theme-cyan-bright) 26%, transparent);
-    background: color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent);
-}
-
-.routeCardBannerSignals > span[data-route-card-signal-tone='build'] {
-    border-color: color-mix(in srgb, var(--theme-violet-bright) 32%, transparent);
-    background: color-mix(in srgb, var(--theme-violet-bright) 10%, transparent);
-}
-
-.routeCardBannerSignals > span[data-route-card-signal-tone='build'] b {
-    color: color-mix(in srgb, var(--theme-violet-bright) 78%, white);
-}
-
-.routeCardBannerSignals > span[data-route-card-signal-tone='build'] .routeCardBannerBeatPips i {
-    background: color-mix(in srgb, var(--theme-violet-bright) 78%, white);
-    box-shadow: 0 0 0.28rem color-mix(in srgb, var(--theme-violet-bright) 30%, transparent);
-}
-
-.routeCardBannerSignals > span[data-route-card-signal-screen-cue='build'] {
-    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-violet-bright) 18%, transparent);
-}
-
-.routeCardBannerSignals > span[data-route-card-signal-tone='risk'] {
-    border-color: color-mix(in srgb, var(--theme-danger) 34%, transparent);
-    background: color-mix(in srgb, var(--theme-danger) 10%, transparent);
-}
-
-.routeCardBannerSignals > span[data-route-card-signal-tone='risk'] b {
-    color: color-mix(in srgb, var(--theme-danger) 74%, white);
-}
-
-.routeCardBannerSignals > span[data-route-card-signal-tone='risk'] .routeCardBannerBeatPips i {
-    background: color-mix(in srgb, var(--theme-danger) 76%, white);
-    box-shadow: 0 0 0.28rem color-mix(in srgb, var(--theme-danger) 30%, transparent);
-}
-
-.routeCardBannerSignals > span[data-route-card-signal-screen-cue='risk'] {
-    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-danger) 18%, transparent);
-}
-
-.boardMatchPayoffStackCue {
-    position: absolute;
-    z-index: 8;
-    right: max(0.7rem, env(safe-area-inset-right));
-    top: 0.72rem;
-    display: grid;
-    grid-template-columns: auto minmax(0, 1fr);
-    align-items: center;
-    gap: 0.1rem 0.38rem;
-    max-width: min(22rem, calc(100% - 1.4rem));
-    padding: 0.34rem 0.48rem;
-    border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 34%, var(--theme-border-strong));
-    border-radius: 8px;
-    background:
-        radial-gradient(ellipse 125% 160% at 20% 0%, color-mix(in srgb, var(--theme-gold-bright) 13%, transparent), transparent 62%),
-        color-mix(in srgb, var(--theme-void) 78%, transparent);
-    box-shadow:
-        0 10px 22px color-mix(in srgb, var(--theme-shadow) 30%, transparent),
-        inset 0 1px 0 color-mix(in srgb, var(--theme-text) 5%, transparent);
-    color: var(--theme-text);
-    pointer-events: none;
-}
-
-.boardMatchPayoffStackCue small,
-.boardMatchPayoffStackCue b,
-.boardMatchPayoffStackCue span,
-.boardMatchPayoffStackCue em {
-    overflow: hidden;
-    font-size: 0.54rem;
-    font-weight: 950;
-    line-height: 1;
-    text-overflow: ellipsis;
-    text-transform: uppercase;
-    white-space: nowrap;
-}
-
-.boardMatchPayoffStackCue small {
-    color: color-mix(in srgb, var(--theme-gold-bright) 84%, white);
-}
-
-.boardMatchPayoffStackCue > b {
-    min-width: 0;
-    padding: 0.13rem 0.28rem;
-    border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 34%, transparent);
-    border-radius: 999px;
-    background: color-mix(in srgb, var(--theme-gold-bright) 11%, transparent);
-    color: color-mix(in srgb, var(--theme-gold-bright) 86%, white);
-    font-style: normal;
-}
-
-.boardMatchPayoffStackMeter {
-    display: block;
-    grid-column: 1 / -1;
-    width: 100%;
-    min-width: 4.6rem;
-    height: 0.12rem;
-    border-radius: 999px;
-    background:
-        linear-gradient(
-            90deg,
-            currentColor var(--match-payoff-stack-fill, 0%),
-            color-mix(in srgb, currentColor 16%, transparent) 0
-        );
-    box-shadow:
-        inset 0 0 0 1px color-mix(in srgb, currentColor 10%, transparent),
-        0 0 0.18rem color-mix(in srgb, currentColor 16%, transparent);
-    opacity: 0.9;
-}
-
-.boardMatchPayoffStackCue strong {
-    grid-column: 1 / -1;
-    overflow: hidden;
-    color: color-mix(in srgb, var(--theme-text) 92%, white);
-    font-size: 0.68rem;
-    font-weight: 950;
-    letter-spacing: 0;
-    line-height: 1.12;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.boardMatchPayoffStackCue span,
-.boardMatchPayoffStackCue em {
-    min-width: 0;
-    padding: 0.13rem 0.28rem;
-    border: 1px solid color-mix(in srgb, var(--theme-cyan-bright) 28%, transparent);
-    border-radius: 999px;
-    background: color-mix(in srgb, var(--theme-cyan-bright) 9%, transparent);
-    color: color-mix(in srgb, var(--theme-cyan-bright) 82%, white);
-}
-
-.boardMatchPayoffStackCue em {
-    border-color: color-mix(in srgb, var(--theme-gold-bright) 30%, transparent);
-    background: color-mix(in srgb, var(--theme-gold-bright) 10%, transparent);
-    color: color-mix(in srgb, var(--theme-gold-bright) 82%, white);
-    font-style: normal;
-}
-
-.boardMatchPayoffStackCue .boardMatchPayoffStackBeatPips {
-    display: grid;
-    grid-auto-columns: minmax(0.22rem, 1fr);
-    grid-auto-flow: column;
-    gap: 0.06rem;
-    align-items: center;
-    min-width: 3.4rem;
-    height: 0.24rem;
-    padding: 0;
-    border: 0;
-    border-radius: 0;
-    background: transparent;
-}
-
-.boardMatchPayoffStackBeatPips i {
-    display: block;
-    height: 0.18rem;
-    border-radius: 999px;
-    background: currentColor;
-    animation: gameplayBeatPipPulse 0.86s ease-in-out infinite;
-    color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
-    box-shadow: 0 0 9px color-mix(in srgb, var(--theme-gold-bright) 32%, transparent);
-    opacity: 0.88;
-}
-
-.boardMatchPayoffStackBeatPips i[data-match-payoff-stack-beat-focus='primary'] {
-    min-width: 0.36rem;
-    opacity: 1;
-    box-shadow:
-        0 0 12px color-mix(in srgb, var(--theme-gold-bright) 52%, transparent),
-        0 0 0 1px color-mix(in srgb, white 18%, transparent);
-}
-
-.boardMatchPayoffStackBeatPips i[data-match-payoff-stack-beat-focus='support'] {
-    opacity: 0.76;
-}
-
-.boardMatchPayoffStackBeatPips i:nth-child(2) {
-    animation-delay: 0.07s;
-}
-
-.boardMatchPayoffStackBeatPips i:nth-child(3) {
-    animation-delay: 0.14s;
-}
-
-.boardMatchPayoffStackBeatPips i:nth-child(4) {
-    animation-delay: 0.21s;
-}
-
-.boardMatchPayoffStackBeatPips i:nth-child(5) {
-    animation-delay: 0.28s;
-}
-
-.boardMatchPayoffStackSequence {
-    grid-column: 1 / -1;
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 0.2rem;
-    min-width: 0;
-    margin-top: 0.12rem;
-}
-
-.boardMatchPayoffStackSequence > span {
-    display: grid;
-    gap: 0.08rem;
-    min-width: 0;
-    padding: 0.18rem 0.26rem;
-    border: 1px solid color-mix(in srgb, var(--theme-cyan-bright) 24%, transparent);
-    border-radius: 6px;
-    background:
-        linear-gradient(180deg, color-mix(in srgb, white 5%, transparent), transparent),
-        color-mix(in srgb, var(--theme-cyan-bright) 7%, var(--theme-void) 28%);
-}
-
-.boardMatchPayoffStackSequence > span[data-match-payoff-stack-step='then'] {
-    border-color: color-mix(in srgb, var(--theme-gold-bright) 30%, transparent);
-    background: color-mix(in srgb, var(--theme-gold-bright) 9%, var(--theme-void) 28%);
-}
-
-.boardMatchPayoffStackSequence > span[data-match-payoff-stack-step='keep'] {
-    border-color: color-mix(in srgb, var(--theme-success) 28%, transparent);
-    background: color-mix(in srgb, var(--theme-success) 8%, var(--theme-void) 30%);
-}
-
-.boardMatchPayoffStackSequence small,
-.boardMatchPayoffStackSequence b {
-    min-width: 0;
-    overflow: hidden;
-    line-height: 1;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.boardMatchPayoffStackSequence small {
-    color: color-mix(in srgb, currentColor 62%, white);
-    font-size: 0.48rem;
-    font-weight: 960;
-    text-transform: uppercase;
-}
-
-.boardMatchPayoffStackSequence b {
-    color: color-mix(in srgb, var(--theme-text) 90%, white);
-    font-size: 0.56rem;
-    font-weight: 950;
-}
-
-.boardMatchPayoffStackCue[data-match-payoff-stack-tone='combo'] {
-    border-color: color-mix(in srgb, var(--theme-success) 34%, var(--theme-gold-bright));
-}
-
-.boardMatchPayoffStackCue[data-match-payoff-stack-screen-cue='super'] {
-    animation: payoffChipPulse 1.24s ease-in-out infinite;
-}
-
-.boardMatchPayoffStackCue[data-match-payoff-stack-tone='chain'] {
-    border-color: color-mix(in srgb, var(--theme-cyan-bright) 38%, var(--theme-border-strong));
-}
-
-.boardMatchPayoffStackCue[data-match-payoff-stack-screen-cue='chain'] {
-    animation: matchScoreFloaterPulse 1.34s ease-in-out infinite;
-}
-
-.boardMatchPayoffStackCue[data-match-payoff-stack-tone='reward'] {
-    border-color: color-mix(in srgb, var(--theme-gold-bright) 54%, var(--theme-cyan-bright) 22%);
-    background:
-        radial-gradient(ellipse 125% 160% at 20% 0%, color-mix(in srgb, var(--theme-gold-bright) 18%, transparent), transparent 62%),
-        radial-gradient(ellipse 100% 130% at 88% 12%, color-mix(in srgb, var(--theme-cyan-bright) 9%, transparent), transparent 58%),
-        color-mix(in srgb, var(--theme-void) 76%, transparent);
-    box-shadow:
-        0 12px 26px color-mix(in srgb, var(--theme-shadow) 32%, transparent),
-        0 0 20px color-mix(in srgb, var(--theme-gold-bright) 10%, transparent),
-        inset 0 1px 0 color-mix(in srgb, var(--theme-text) 7%, transparent);
-}
-
-.boardMatchPayoffStackCue[data-match-payoff-stack-screen-cue='burst'] {
-    animation: payoffChipPulse 1.34s ease-in-out infinite;
-}
-
-.boardMatchPayoffStackCue[data-match-payoff-stack-tone='score'] {
-    border-color: color-mix(in srgb, var(--theme-text-muted) 30%, var(--theme-border-strong));
-    opacity: 0.86;
-}
-
-@media (max-width: 760px), (max-height: 680px) {
-    .boardMatchPayoffStackCue {
-        left: max(0.5rem, env(safe-area-inset-left));
-        right: max(0.5rem, env(safe-area-inset-right));
-        top: 0.54rem;
-        max-width: none;
-    }
-
-    .boardMatchPayoffStackSequence {
-        grid-template-columns: 1fr;
-    }
-}
-
 .dungeonCardBanner {
     top: 4rem;
     border-color: color-mix(in srgb, var(--theme-cyan) 34%, var(--theme-border-strong));
     background: color-mix(in srgb, var(--theme-void) 78%, var(--theme-cyan));
-}
-
-.dungeonStatusPanel {
-    position: absolute;
-    z-index: 8;
-    left: 50%;
-    top: 3.55rem;
-    display: grid;
-    gap: 0.32rem;
-    width: min(36rem, calc(100% - 2rem));
-    padding: 0.5rem 0.65rem;
-    border: 1px solid color-mix(in srgb, var(--theme-cyan) 42%, var(--theme-border-strong));
-    border-radius: 8px;
-    background:
-        radial-gradient(ellipse 110% 120% at 50% 0%, color-mix(in srgb, var(--theme-cyan-bright) 12%, transparent), transparent 62%),
-        linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 58%),
-        color-mix(in srgb, var(--theme-void) 86%, var(--theme-cyan));
-    color: var(--theme-text);
-    box-shadow:
-        0 14px 32px rgba(0, 0, 0, 0.34),
-        0 0 24px color-mix(in srgb, var(--theme-glow-cyan-soft) 14%, transparent),
-        inset 0 1px 0 color-mix(in srgb, var(--theme-text) 5%, transparent);
-    transform: translateX(-50%);
-    pointer-events: none;
-}
-
-.dungeonStatusHeader {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.6rem;
-    min-width: 0;
-}
-
-.dungeonStatusHeader strong {
-    font-size: 0.74rem;
-    letter-spacing: 0;
-}
-
-.dungeonStatusHeader span {
-    overflow: hidden;
-    color: color-mix(in srgb, var(--theme-cyan-bright) 82%, white);
-    font-size: 0.66rem;
-    font-weight: 800;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.dungeonStatusObjective {
-    display: grid;
-    gap: 0.08rem;
-}
-
-.dungeonStatusObjective span {
-    color: var(--theme-text);
-    font-size: 0.68rem;
-    font-weight: 800;
-}
-
-.dungeonStatusObjective small {
-    color: var(--theme-text-muted);
-    font-size: 0.62rem;
-    line-height: 1.22;
-}
-
-.dungeonStatusChips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.25rem;
-}
-
-.dungeonStatusChip {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.24rem;
-    min-height: 1.38rem;
-    padding: 0.18rem 0.38rem;
-    border: 1px solid color-mix(in srgb, var(--theme-cyan) 22%, transparent);
-    border-radius: 7px;
-    background:
-        linear-gradient(180deg, color-mix(in srgb, var(--theme-text) 3%, transparent), transparent),
-        color-mix(in srgb, var(--theme-panel-solid) 56%, transparent);
-    color: var(--theme-text-muted);
-    font-size: 0.6rem;
-    line-height: 1.1;
-}
-
-.dungeonStatusChip > span {
-    font-weight: 700;
-}
-
-.dungeonStatusChip > strong {
-    color: var(--theme-text);
-    font-size: 0.62rem;
-    letter-spacing: 0;
-}
-
-.dungeonStatusChip[data-tone='danger'] {
-    border-color: color-mix(in srgb, var(--theme-danger) 48%, transparent);
-    background: color-mix(in srgb, var(--theme-danger) 18%, var(--theme-panel-solid));
-}
-
-.dungeonStatusChip[data-tone='warning'] {
-    border-color: color-mix(in srgb, var(--theme-gold-bright) 42%, transparent);
-}
-
-.dungeonStatusChip[data-tone='success'] {
-    border-color: color-mix(in srgb, var(--theme-success) 44%, transparent);
-}
-
-.dungeonStatusChip[data-tone='info'] {
-    border-color: color-mix(in srgb, var(--theme-cyan-bright) 38%, transparent);
-}
-
-.dungeonStatusForecast {
-    display: grid;
-    gap: 0.28rem;
-    padding: 0.34rem 0.42rem;
-    border: 1px solid color-mix(in srgb, var(--theme-danger) 26%, transparent);
-    border-radius: 8px;
-    background: color-mix(in srgb, var(--theme-danger) 8%, var(--theme-panel-solid));
-}
-
-.dungeonStatusForecast > span:first-child {
-    color: color-mix(in srgb, var(--theme-text-muted) 68%, var(--theme-danger));
-    font-size: 0.62rem;
-    font-weight: 760;
-    line-height: 1.25;
-}
-
-.dungeonStatusForecastActionCue {
-    display: inline-flex;
-    align-items: center;
-    justify-self: start;
-    gap: 0.22rem;
-    max-width: 100%;
-    min-height: 1.35rem;
-    padding: 0.12rem 0.38rem;
-    border: 1px solid color-mix(in srgb, var(--theme-cyan-bright) 34%, transparent);
-    border-radius: 999px;
-    background: color-mix(in srgb, var(--theme-cyan-bright) 10%, transparent);
-    color: color-mix(in srgb, var(--theme-cyan-bright) 82%, white);
-}
-
-.dungeonStatusForecastActionCue small,
-.dungeonStatusForecastActionCue b {
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.dungeonStatusForecastActionCue small {
-    color: color-mix(in srgb, currentColor 72%, var(--theme-text-muted));
-    font-size: 0.48rem;
-    font-weight: 920;
-    line-height: 1;
-    text-transform: uppercase;
-}
-
-.dungeonStatusForecastActionCue b {
-    color: currentColor;
-    font-size: 0.58rem;
-    font-weight: 920;
-    line-height: 1.05;
-}
-
-.dungeonStatusForecastBeatPips {
-    display: grid;
-    grid-auto-columns: minmax(0.28rem, 1fr);
-    grid-auto-flow: column;
-    gap: 0.08rem;
-    width: min(3.4rem, 100%);
-}
-
-.dungeonStatusForecastBeatPips i {
-    height: 0.14rem;
-    border-radius: 999px;
-    background: currentColor;
-    box-shadow: 0 0 0.28rem color-mix(in srgb, currentColor 20%, transparent);
-    animation: gameplayBeatPipPulse 0.92s ease-in-out infinite;
-    transform-origin: center;
-}
-
-.dungeonStatusForecastActionCue[data-forecast-action-tone='risk'] {
-    border-color: color-mix(in srgb, var(--theme-danger) 38%, transparent);
-    background: color-mix(in srgb, var(--theme-danger) 11%, transparent);
-    color: color-mix(in srgb, var(--theme-danger) 76%, white);
-}
-
-.dungeonStatusForecastActionCue[data-forecast-action-tone='defense'] {
-    border-color: color-mix(in srgb, var(--theme-success) 34%, transparent);
-    background: color-mix(in srgb, var(--theme-success) 10%, transparent);
-    color: color-mix(in srgb, var(--theme-success) 80%, white);
-}
-
-.dungeonStatusForecastActionCue[data-forecast-action-screen-cue='risk'] {
-    box-shadow: 0 0 0.72rem color-mix(in srgb, var(--theme-danger) 15%, transparent);
-}
-
-.dungeonStatusForecastActionCue[data-forecast-action-screen-cue='guard'] {
-    box-shadow: 0 0 0.66rem color-mix(in srgb, var(--theme-success) 14%, transparent);
-}
-
-.dungeonStatusForecastActionCue[data-forecast-action-screen-cue='pulse'] {
-    box-shadow: 0 0 0.56rem color-mix(in srgb, var(--theme-cyan-bright) 12%, transparent);
-}
-
-.dungeonStatusForecastSignals {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 0.24rem;
-}
-
-.dungeonStatusForecastSignals > span {
-    display: grid;
-    gap: 0.04rem;
-    min-width: 0;
-    min-height: 1.85rem;
-    align-content: center;
-    padding: 0.2rem 0.3rem;
-    border: 1px solid color-mix(in srgb, var(--theme-text-muted) 18%, transparent);
-    border-radius: 8px;
-    background: color-mix(in srgb, var(--theme-panel-solid) 58%, transparent);
-}
-
-.dungeonStatusForecastSignals .dungeonStatusForecastBeatPips {
-    color: color-mix(in srgb, var(--theme-cyan-bright) 72%, white);
-}
-
-.dungeonStatusForecastSignals small {
-    overflow: hidden;
-    color: color-mix(in srgb, var(--theme-text-muted) 84%, white);
-    font-size: 0.48rem;
-    font-weight: 900;
-    line-height: 1;
-    text-overflow: ellipsis;
-    text-transform: uppercase;
-    white-space: nowrap;
-}
-
-.dungeonStatusForecastSignals b {
-    overflow: hidden;
-    color: color-mix(in srgb, var(--theme-text) 88%, white);
-    font-size: 0.58rem;
-    font-weight: 900;
-    letter-spacing: 0;
-    line-height: 1.05;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.dungeonStatusForecastSignals > span[data-forecast-signal-tone='risk'] {
-    border-color: color-mix(in srgb, var(--theme-danger) 34%, transparent);
-    background: color-mix(in srgb, var(--theme-danger) 10%, transparent);
-}
-
-.dungeonStatusForecastSignals > span[data-forecast-signal-tone='risk'] b {
-    color: color-mix(in srgb, var(--theme-danger) 74%, white);
-}
-
-.dungeonStatusForecastSignals > span[data-forecast-signal-tone='risk'] .dungeonStatusForecastBeatPips {
-    color: color-mix(in srgb, var(--theme-danger) 68%, white);
-}
-
-.dungeonStatusForecastSignals > span[data-forecast-signal-screen-cue='risk'] {
-    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-danger) 18%, transparent);
-}
-
-.dungeonStatusForecastSignals > span[data-forecast-signal-tone='defense'],
-.dungeonStatusForecastSignals > span[data-forecast-signal-tone='action'] {
-    border-color: color-mix(in srgb, var(--theme-cyan-bright) 30%, transparent);
-    background: color-mix(in srgb, var(--theme-cyan-bright) 9%, transparent);
-}
-
-.dungeonStatusForecastSignals > span[data-forecast-signal-tone='defense'] b,
-.dungeonStatusForecastSignals > span[data-forecast-signal-tone='action'] b {
-    color: color-mix(in srgb, var(--theme-cyan-bright) 80%, white);
-}
-
-.dungeonStatusForecastSignals > span[data-forecast-signal-screen-cue='guard'],
-.dungeonStatusForecastSignals > span[data-forecast-signal-screen-cue='pulse'] {
-    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-cyan-bright) 16%, transparent);
-}
-
-.dungeonStatusAlert {
-    color: color-mix(in srgb, var(--theme-text-muted) 72%, var(--theme-cyan-bright));
-    font-size: 0.62rem;
-    line-height: 1.25;
 }
 
 .dungeonCombatLog {
@@ -4397,7 +3664,7 @@
 
 @keyframes hudRewardPulse {
     0%,
-    100% {
+100% {
         filter: saturate(1);
         transform: translateY(0) scale(1);
     }
@@ -4409,7 +3676,7 @@
 
 @keyframes gameplayBeatPipPulse {
     0%,
-    100% {
+100% {
         opacity: 0.58;
         transform: scaleX(0.72);
     }
@@ -4431,7 +3698,7 @@
 
 @keyframes payoffChipPulse {
     0%,
-    100% {
+100% {
         filter: saturate(1);
         transform: translateY(0) scale(1);
     }
@@ -7038,72 +6305,69 @@
 
 @media (prefers-reduced-motion: reduce) {
     .actionFeedbackRail[data-burst-tier='chain'],
-    .actionFeedbackRail[data-burst-tier='reward'],
-    .actionFeedbackRail[data-burst-tier='combo'],
-    .actionFeedbackRail[data-burst-tier='trait'],
-    .actionFeedbackPayoffPips i,
-    .actionFeedbackCrescendoPips i,
-    .actionFeedbackLaneBeatPips i,
-    .actionFeedbackPrimaryLaneBeatPips i,
-    .boardFloaterRecoveryLaneBeatPips i,
-    .boardFloaterRecoveryPrimaryLaneBeatPips i,
-    .hudChainPill,
-    .hudChainLaneCue[data-chain-lane-tone='stack'],
-    .hudChainRewardHotBadge,
-    .hudChainStackedPayoffBadge,
-    .hudRewardPerkRows > span[data-reward-perk-readiness='armed'],
-    .hudChainRewardForecast > span[data-chain-reward-urgency='next'],
-    .boardFloaterRewardForecast > span[data-chain-reward-urgency='next'],
-    .boardFloaterChainMilestone::before,
-    .hudFindableProgressPill[data-findable-state='live'],
-    .gambitOpportunityBeatPips i,
-    .endlessChapterBeatPips i,
-    .endlessRiskWagerPrimaryBeatPips i,
-    .endlessRiskWagerBeatPips i,
-    .floorClearPayoffStackBeatPips i,
-    .floorClearObjectiveBeatPips i,
-    .floorClearNextBeatPips i,
-    .dungeonMapRoomSignalBeatPips i,
-    .dungeonMapRoomBeatPips i,
-    .dungeonStatusForecastBeatPips i,
-    .hudChainRewardBeatPips i,
-    .hudChainRewardLaneBeatPips i,
-    .hudChainRewardPrimaryLaneBeatPips i,
-    .hudRewardPerkPrimaryBeatPips i,
-    .hudRewardPerkBeatPips i,
-    .hudRecentActionBeatPips i,
-    .hudFeedbackPrimaryCauseBeatPips i,
-    .hudRecentActionLaneBeatPips u,
-    .hudRecentActionPrimaryLaneBeatPips u,
-    .hudTraitRouteLaneMapSummaryBeatPips i,
-    .hudTraitRouteBeatPips i,
-    .onboardingPromptBeatPips i,
-    .boardMatchPayoffStackBeatPips i,
-    .boardFloaterImpactBeatPips i,
-    .boardFloaterChainMilestoneBeatPips i,
-    .boardFloaterCascadeBeatPips i,
-    .boardFloaterRewardBurstBeatPips i,
-    .hudObjectiveSignalBeatPips i,
-    .hudEndlessRiskWagerBeatPips i,
-    .hudObjectiveSignals > span[data-objective-signal-screen-cue='burst'],
-    .powerPayoffChip[data-power-cue='Stack cashout'],
-    .powerPayoffChip[data-power-cue='Pair spark'],
-    .powerPayoffChip[data-power-next='Cash now'],
-    .powerPayoffChip[data-power-cue='Risk clear'],
-    .powerPayoffChip[data-power-cue='Space clear'],
-    .powerPayoffBeatPips i,
-    .toolCrescendoPips i,
-    .routeSelectedBeatPips i,
-    .routeSelectedSignalBeatPips i,
-    .dungeonMapChoiceRecommendationBeatPips i,
-    .dungeonMapRoomPrimaryPayoffBeatPips i,
-    .dungeonMapRoomPayoffBeatPips i,
-    .routeCardBannerBeatPips i,
-    .routeSelectedNote[data-route-type='greed'] .routeSelectedImpactCue,
-    .routeSelectedNote[data-route-type='mystery'] .routeSelectedImpactCue,
-    .dungeonMapRoomButton[data-route-type='safe'] .dungeonMapRoomImpactCue,
-    .dungeonMapRoomButton[data-route-type='greed'] .dungeonMapRoomImpactCue,
-    .dungeonMapRoomButton[data-route-type='mystery'] .dungeonMapRoomImpactCue {
+.actionFeedbackRail[data-burst-tier='reward'],
+.actionFeedbackRail[data-burst-tier='combo'],
+.actionFeedbackRail[data-burst-tier='trait'],
+.actionFeedbackPayoffPips i,
+.actionFeedbackCrescendoPips i,
+.actionFeedbackLaneBeatPips i,
+.actionFeedbackPrimaryLaneBeatPips i,
+.boardFloaterRecoveryLaneBeatPips i,
+.boardFloaterRecoveryPrimaryLaneBeatPips i,
+.hudChainPill,
+.hudChainLaneCue[data-chain-lane-tone='stack'],
+.hudChainRewardHotBadge,
+.hudChainStackedPayoffBadge,
+.hudRewardPerkRows > span[data-reward-perk-readiness='armed'],
+.hudChainRewardForecast > span[data-chain-reward-urgency='next'],
+.boardFloaterRewardForecast > span[data-chain-reward-urgency='next'],
+.boardFloaterChainMilestone::before,
+.hudFindableProgressPill[data-findable-state='live'],
+.gambitOpportunityBeatPips i,
+.endlessChapterBeatPips i,
+.endlessRiskWagerPrimaryBeatPips i,
+.endlessRiskWagerBeatPips i,
+.floorClearPayoffStackBeatPips i,
+.floorClearObjectiveBeatPips i,
+.floorClearNextBeatPips i,
+.dungeonMapRoomSignalBeatPips i,
+.dungeonMapRoomBeatPips i,
+.hudChainRewardBeatPips i,
+.hudChainRewardLaneBeatPips i,
+.hudChainRewardPrimaryLaneBeatPips i,
+.hudRewardPerkPrimaryBeatPips i,
+.hudRewardPerkBeatPips i,
+.hudRecentActionBeatPips i,
+.hudFeedbackPrimaryCauseBeatPips i,
+.hudRecentActionLaneBeatPips u,
+.hudRecentActionPrimaryLaneBeatPips u,
+.hudTraitRouteLaneMapSummaryBeatPips i,
+.hudTraitRouteBeatPips i,
+.onboardingPromptBeatPips i,
+.boardFloaterImpactBeatPips i,
+.boardFloaterChainMilestoneBeatPips i,
+.boardFloaterCascadeBeatPips i,
+.boardFloaterRewardBurstBeatPips i,
+.hudObjectiveSignalBeatPips i,
+.hudEndlessRiskWagerBeatPips i,
+.hudObjectiveSignals > span[data-objective-signal-screen-cue='burst'],
+.powerPayoffChip[data-power-cue='Stack cashout'],
+.powerPayoffChip[data-power-cue='Pair spark'],
+.powerPayoffChip[data-power-next='Cash now'],
+.powerPayoffChip[data-power-cue='Risk clear'],
+.powerPayoffChip[data-power-cue='Space clear'],
+.powerPayoffBeatPips i,
+.toolCrescendoPips i,
+.routeSelectedBeatPips i,
+.routeSelectedSignalBeatPips i,
+.dungeonMapChoiceRecommendationBeatPips i,
+.dungeonMapRoomPrimaryPayoffBeatPips i,
+.dungeonMapRoomPayoffBeatPips i,
+.routeSelectedNote[data-route-type='greed'] .routeSelectedImpactCue,
+.routeSelectedNote[data-route-type='mystery'] .routeSelectedImpactCue,
+.dungeonMapRoomButton[data-route-type='safe'] .dungeonMapRoomImpactCue,
+.dungeonMapRoomButton[data-route-type='greed'] .dungeonMapRoomImpactCue,
+.dungeonMapRoomButton[data-route-type='mystery'] .dungeonMapRoomImpactCue {
         animation: none;
     }
 }
@@ -7145,7 +6409,6 @@
 :global([data-reduce-motion='true']) .floorClearNextBeatPips i,
 :global([data-reduce-motion='true']) .dungeonMapRoomSignalBeatPips i,
 :global([data-reduce-motion='true']) .dungeonMapRoomBeatPips i,
-:global([data-reduce-motion='true']) .dungeonStatusForecastBeatPips i,
 :global([data-reduce-motion='true']) .hudChainRewardBeatPips i,
 :global([data-reduce-motion='true']) .hudChainRewardHotBandBeatPips i,
 :global([data-reduce-motion='true']) .hudChainComboSurgeBandBeatPips i,
@@ -7164,7 +6427,6 @@
 :global([data-reduce-motion='true']) .hudTraitRouteLaneMapSummaryBeatPips i,
 :global([data-reduce-motion='true']) .hudTraitRouteBeatPips i,
 :global([data-reduce-motion='true']) .onboardingPromptBeatPips i,
-:global([data-reduce-motion='true']) .boardMatchPayoffStackBeatPips i,
 :global([data-reduce-motion='true']) .boardFloaterImpactBeatPips i,
 :global([data-reduce-motion='true']) .boardFloaterChainMilestoneBeatPips i,
 :global([data-reduce-motion='true']) .boardFloaterCascadeBeatPips i,
@@ -7199,7 +6461,6 @@
 :global([data-reduce-motion='true']) .dungeonMapChoiceRecommendationBeatPips i,
 :global([data-reduce-motion='true']) .dungeonMapRoomPrimaryPayoffBeatPips i,
 :global([data-reduce-motion='true']) .dungeonMapRoomPayoffBeatPips i,
-:global([data-reduce-motion='true']) .routeCardBannerBeatPips i,
 :global([data-reduce-motion='true']) .routeSelectedNote[data-route-type='greed'] .routeSelectedImpactCue,
 :global([data-reduce-motion='true']) .routeSelectedNote[data-route-type='mystery'] .routeSelectedImpactCue,
 :global([data-reduce-motion='true']) .dungeonMapRoomButton[data-route-type='safe'] .dungeonMapRoomImpactCue,
@@ -8691,7 +7952,7 @@
 
 @keyframes boardBreath {
     0%,
-    100% {
+100% {
         transform: scale(1);
     }
     50% {
@@ -9508,8 +8769,8 @@
     }
 
     .shell[data-mobile-camera-mode='true'] .hudStripLeftModule,
-    .shell[data-mobile-camera-mode='true'] .hudStripRightModule,
-    .shell[data-mobile-camera-mode='true'] .hudStripScoreModule {
+.shell[data-mobile-camera-mode='true'] .hudStripRightModule,
+.shell[data-mobile-camera-mode='true'] .hudStripScoreModule {
         justify-content: center;
         max-width: 100%;
     }
@@ -9528,7 +8789,7 @@
     }
 
     .hudSegment,
-    .statPillCompact {
+.statPillCompact {
         min-height: 3.55rem;
         padding: 0.38rem 0.58rem 0.46rem;
     }
@@ -9542,7 +8803,7 @@
     }
 
     .lifeHeartActive,
-    .lifeHeartInactive {
+.lifeHeartInactive {
         font-size: 0.9rem;
     }
 
@@ -9559,7 +8820,9 @@
     }
 }
 
-/* HUD-014: ≤520px + mobile camera — stack right-wing blocks, hide inline dividers, allow mild horizontal scroll for dense mutators. */
+/* HUD-014: ≤520px + mobile camera — stack right-wing blocks,
+hide inline dividers,
+allow mild horizontal scroll for dense mutators. */
 @media (max-width: 520px) {
     .shell[data-mobile-camera-mode='true'] .hudDeck .hudStripRightModule {
         flex-direction: column;
@@ -9610,15 +8873,15 @@
     }
 
     .mobileActionDock .actionDockGroup,
-    .mobileActionDock .actionDockRules {
+.mobileActionDock .actionDockRules {
         flex-wrap: wrap;
         justify-content: center;
         min-width: 0;
     }
 
     .mobileActionDock .actionDockGroup + .actionDockGroup,
-    .mobileActionDock .actionDockRules + .actionDockGroup,
-    .mobileActionDock .actionDockGroup + .actionDockRules {
+.mobileActionDock .actionDockRules + .actionDockGroup,
+.mobileActionDock .actionDockGroup + .actionDockRules {
         margin-left: 0;
         padding-left: 0.18rem;
     }
@@ -9653,7 +8916,8 @@
     color: color-mix(in srgb, var(--theme-text-muted) 92%, transparent);
 }
 
-/* Match score floater: between board canvas and distraction HUD, under pause/relic modals.
+/* Match score floater: between board canvas and distraction HUD,
+under pause/relic modals.
    `--match-score-float-ms` is set inline from TS (`matchScoreFloaterTiming.ts`). */
 .matchScoreFloater {
     position: absolute;
@@ -9794,7 +9058,8 @@
     background-size: 230% 100%, 100% 100%, 100% 100%;
 }
 
-/* Mismatch floater: same motion stack / z-order as `.matchScoreFloater`, subdued cool palette. */
+/* Mismatch floater: same motion stack / z-order as `.matchScoreFloater`,
+subdued cool palette. */
 .mismatchScoreFloater {
     position: absolute;
     z-index: 5;
@@ -13310,7 +12575,6 @@
 }
 
 .dungeonRunStrip,
-.routeCardBanner,
 .routeSelectedNote,
 .modalNote {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 24%, var(--theme-border-strong));
@@ -13586,7 +12850,8 @@
 }
 
 /* UIL-001: gameplay HTML layer v2. The board is the full-screen canvas; HUD chrome is a set of
-   independent islands above it, not one central dashboard box. */
+   independent islands above it,
+not one central dashboard box. */
 .shell:not([data-mobile-camera-mode='true']) [data-html-ui-layer='gameplay-chrome-v2'] {
     --gameplay-html-edge-pad: clamp(0.55rem, 1.15vw, 1rem);
     --gameplay-island-surface:
@@ -14624,7 +13889,7 @@
 
 @keyframes mismatchRecoveryBeatPulse {
     0%,
-    100% {
+100% {
         opacity: 0.64;
         transform: scale(0.82);
     }
@@ -14637,14 +13902,14 @@
 
 @media (prefers-reduced-motion: reduce) {
     .boardFloaterRecoveryBurst,
-    .boardFloaterRecoveryCrescendo i,
-    .boardFloaterPayoffSummaryBeatPips i,
-    .boardFloaterPrimaryPayoffLaneBeatPips i,
-    .boardFloaterPayoffLaneBeatPips i,
-    .boardFloaterPayoffLadderBeatPips i,
-    .boardFloaterRewardBeatPips i,
-    .boardFloaterTraitLaneBeatPips i,
-    .boardFloaterRecoveryLaneBeatPips i {
+.boardFloaterRecoveryCrescendo i,
+.boardFloaterPayoffSummaryBeatPips i,
+.boardFloaterPrimaryPayoffLaneBeatPips i,
+.boardFloaterPayoffLaneBeatPips i,
+.boardFloaterPayoffLadderBeatPips i,
+.boardFloaterRewardBeatPips i,
+.boardFloaterTraitLaneBeatPips i,
+.boardFloaterRecoveryLaneBeatPips i {
         animation: none;
     }
 }
@@ -14654,17 +13919,22 @@
  * disclosures in this shell hit it - the HUD's right stat rail and the action dock's
  * power-teaching panel.
  *
- * The UA hides a closed `details`' non-summary children with `display: none`, but any
+ * The UA hides a closed `details`' non-summary children with `display: none`,
+but any
  * author rule that sets `display` on those children overrides it - and
  * `.hudStripRightInnerColumn` sets `display: grid`. The result was the entire right-hand
  * stat rail laying out roughly 1100px of panels behind the board canvas while collapsed:
- * eighteen panels below the fold, and dozens of labels squeezed into a zero-width grid
+ * eighteen panels below the fold,
+and dozens of labels squeezed into a zero-width grid
  * column until their text reflowed down to 7px. None of it was ever visible to the
- * player, and all of it was styled and measured on every frame.
+ * player,
+and all of it was styled and measured on every frame.
  *
  * Specificity here has to clear `.shell:not([data-mobile-camera-mode='true'])
- * .hudContextSecondaryStrip .hudStripRightInnerColumn`, hence the `.shell .hudDeck`
- * prefix on the first selector; the second covers mobile camera mode, where that rule
+ * .hudContextSecondaryStrip .hudStripRightInnerColumn`,
+hence the `.shell .hudDeck`
+ * prefix on the first selector; the second covers mobile camera mode,
+where that rule
  * does not apply.
  */
 .shell .hudDeck .hudContextRegion:not([open]) > *:not(summary),
@@ -14677,11 +13947,14 @@
 /*
  * Floating board overlays clear the measured chrome.
  *
- * Each of these is absolutely positioned against the stage by a different component, and
+ * Each of these is absolutely positioned against the stage by a different component,
+and
  * each had picked its own offset without knowing how tall the HUD deck or the action dock
  * had grown. At 1440x900 that put the action-feedback rail directly over the score module
- * at a higher z-index, and the dungeon run strip inside the action dock. The clearances
- * come from useGameplayChromeClearance, which measures both bars; the fallbacks match
+ * at a higher z-index,
+and the dungeon run strip inside the action dock. The clearances
+ * come from useGameplayChromeClearance,
+which measures both bars; the fallbacks match
  * their previous hard-coded offsets so a shell without the hook still lays out.
  */
 .shell .actionFeedbackRail {
@@ -14704,16 +13977,25 @@
 /*
  * Legibility floor for the readouts the player must read at a glance.
  *
- * The HUD's type scale is authored between 0.42rem and 0.74rem, which at a 16px root is
- * 6.7px to 11.8px, and a late desktop pass shrinks several of these further still - the
+ * The HUD's type scale is authored between 0.42rem and 0.74rem,
+which at a 16px root is
+ * 6.7px to 11.8px,
+and a late desktop pass shrinks several of these further still - the
  * lives label rendered at 8.96px and "2 matches left" at 6.72px on a 1440x900 window.
- * That is not legible at a desk, let alone on a Steam Deck at arm's length or in a store
+ * That is not legible at a desk,
+let alone on a Steam Deck at arm's length or in a store
  * trailer frame.
  *
- * This raises only the lanes a player has to read to make a decision - floor, lives,
- * shards, score, the reward cue, and the phase line - to 12px. The rest of the HUD stays
+ * This raises only the lanes a player has to read to make a decision - floor,
+lives,
+* shards,
+score,
+the reward cue,
+and the phase line - to 12px. The rest of the HUD stays
  * as authored: raising it wholesale would overflow panels that were sized around 7px
- * text, and the honest fix for those is less copy, not smaller type.
+ * text,
+and the honest fix for those is less copy,
+not smaller type.
  *
  * Specificity matches the desktop pass it overrides; being later in the file is what wins.
  */
@@ -14726,9 +14008,12 @@
 /*
  * The prime-cashout pill is deliberately left as authored. It is a nowrap three-column
  * pill sized around 8px type inside a 147px column: at 12px "Prime cashout x2 +1 shard"
- * truncates to "Prime cashout x2...", losing the reward it exists to name, and letting it
+ * truncates to "Prime cashout x2...",
+losing the reward it exists to name,
+and letting it
  * wrap collapses its columns on top of each other. It cannot be made legible by type size
- * alone - it needs less copy, and the same forecast is already spoken by the trait-mode
+ * alone - it needs less copy,
+and the same forecast is already spoken by the trait-mode
  * cue and the opportunity compass.
  */
 
@@ -14738,7 +14023,8 @@
     font-size: 0.75rem;
 }
 
-/* The text in these lanes lives in a child with its own size, so the parent rule above
+/* The text in these lanes lives in a child with its own size,
+so the parent rule above
    does not reach it. */
 .shell .actionFeedbackHeader > span:first-child,
 .shell .dungeonRunCurrent span:not(.dungeonRunGlyph) {

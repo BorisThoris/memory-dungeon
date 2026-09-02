@@ -169,7 +169,7 @@ test.describe('Expanded playable interludes and post-run loop', () => {
         await expect(page.getByTestId('game-over-next-run-loop')).toContainText(/Chain target/i);
         await expect(page.getByTestId('game-over-next-run-loop')).toContainText(/Start x3 loop|Push x6 reward|Break into x10|Hold x10 pressure/i);
         await expect(page.getByTestId('game-over-next-run-loop').locator('[data-next-run-row="run_it_back"]')).toContainText(
-            /Play Again restarts/i
+            /Run it back/i
         );
 
         await page.getByRole('button', { name: /play again.*start a new run/i }).first().click();
@@ -191,11 +191,10 @@ test.describe('Expanded playable interludes and post-run loop', () => {
         await expect(page.getByRole('region', { name: /choose your path/i })).toBeVisible();
         await startClassicRunFromModeSelect(page);
         await expectGameplayReady(page);
-        await expect(page.getByTestId('playable-onboarding-prompt')).toBeVisible({ timeout: 30_000 });
+        await expect(page.getByTestId('run-shell-line')).toBeVisible({ timeout: 30_000 });
         const pairs = await waitLevel1PlayReady(page);
         await completeLevel1Play(page, pairs);
         await expect(page.getByRole('dialog', { name: /floor cleared/i })).toBeVisible({ timeout: 30_000 });
-        await expect(page.getByText(/First-run guide complete/i)).toBeVisible();
         await expect
             .poll(
                 async () =>

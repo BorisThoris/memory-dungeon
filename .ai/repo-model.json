@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2416,
-    "codeFileCount": 906,
-    "exportedSymbolCount": 3458,
+    "trackedFileCount": 2415,
+    "codeFileCount": 905,
+    "exportedSymbolCount": 3457,
     "contentItemCount": 57,
     "mechanicCount": 130,
     "stateFieldCount": 144,
-    "relationshipCount": 9974
+    "relationshipCount": 9967
   },
   "inventory": [
     {
@@ -3615,8 +3615,8 @@
     {
       "path": "e2e/gameplay-readability.spec.ts",
       "category": "test",
-      "bytes": 23104,
-      "sha256": "8f97fc8a77374ba5ba50bea6fee68f78d08bbf28d839c2be35cadfdc7bfe5e43"
+      "bytes": 21904,
+      "sha256": "04a2e3740c9e6f573ac5eeb719157d6f64adca5f9ecf2b860ebbdcfc730339a6"
     },
     {
       "path": "e2e/gameplay-visual-audit.spec.ts",
@@ -3645,8 +3645,8 @@
     {
       "path": "e2e/mobile-layout.spec.ts",
       "category": "test",
-      "bytes": 40005,
-      "sha256": "4128d788af905d0e75528d7e8f0315ac0034598f1c41445c3d3918faaab25046"
+      "bytes": 39934,
+      "sha256": "4fb029e2d250b35c4c4b7acf667c401c7ca7d9d379c99a8663ebd49f703ba73e"
     },
     {
       "path": "e2e/mobileTouchHelpers.ts",
@@ -3657,8 +3657,8 @@
     {
       "path": "e2e/navigation-flow.spec.ts",
       "category": "test",
-      "bytes": 5806,
-      "sha256": "163a1860f244227898a79c703610c7ddbd61af427aea464817e4a0f4f019144d"
+      "bytes": 5636,
+      "sha256": "4d9b1f0e2c14a57dd0b94ab0c78fd8f2db8254264555df1da606c92ca8f7f52c"
     },
     {
       "path": "e2e/overlay-smoke.spec.ts",
@@ -3669,8 +3669,8 @@
     {
       "path": "e2e/playable-path-interludes.spec.ts",
       "category": "test",
-      "bytes": 14303,
-      "sha256": "42cd2ea27b75b16278a5eac266a7bbda793f340cb590407b823a056b34f9cd8a"
+      "bytes": 14202,
+      "sha256": "aabc0d31b475a242f1fdeca0e6f5bca617e23132e7b64aedc470e3a831ae8132"
     },
     {
       "path": "e2e/playable-path-mode-matrix.spec.ts",
@@ -3681,8 +3681,8 @@
     {
       "path": "e2e/playable-path-navigation.spec.ts",
       "category": "test",
-      "bytes": 10560,
-      "sha256": "7a2ac53de68ee1cabfadc7371bbbff913776896446d5714560805278563499f4"
+      "bytes": 10341,
+      "sha256": "2b76e94a8a677d244aa9b7c8ecb01e4684b06f3b459cec713ed0ab47e217e9b7"
     },
     {
       "path": "e2e/playablePathHelpers.ts",
@@ -3843,8 +3843,8 @@
     {
       "path": "e2e/visualScreenHelpers.ts",
       "category": "test",
-      "bytes": 31461,
-      "sha256": "d358bd67467085eb82012a7254cffd70ca55b5fe480b71a74decd45a38f976a0"
+      "bytes": 31440,
+      "sha256": "5a59634797fa365d3ca873d495c54343f37db585a4b1e143ba33d27cdaaf8139"
     },
     {
       "path": "e2e/visualScreenScenarios.ts",
@@ -6945,14 +6945,14 @@
     {
       "path": "src/renderer/audio/audioInteractionCoverage.test.ts",
       "category": "test",
-      "bytes": 11692,
-      "sha256": "40d5160d014aef0f2bd15f04547d8943b21d85f878f988e0695a524481bf2a36"
+      "bytes": 11662,
+      "sha256": "5c0888c88985e8c7d065dea5f6eb8e06f82886c65b5ab893f628409e87291497"
     },
     {
       "path": "src/renderer/audio/audioInteractionCoverage.ts",
       "category": "source",
-      "bytes": 21888,
-      "sha256": "7b8c72d39535460f8e588e680d89a0b44f527fe3de241545705723645324ad65"
+      "bytes": 21857,
+      "sha256": "6c74d937eda0cc4753b31b3415fde6d62bae9f6ae8c05b57c8ad3a75c1a343c9"
     },
     {
       "path": "src/renderer/audio/audioManifestBoundary.test.ts",
@@ -7473,20 +7473,20 @@
     {
       "path": "src/renderer/components/GameScreen.module.css",
       "category": "source",
-      "bytes": 514371,
-      "sha256": "a56a98162a4d5053b8196c1e45c2bc585a8b0807e18db654eb1be2dfc60d3f54"
+      "bytes": 489849,
+      "sha256": "b4e7e526bc58042082ce35b6d33acb3d70ad81007f7f25948be825934ad10e3c"
     },
     {
       "path": "src/renderer/components/GameScreen.test.tsx",
       "category": "test",
-      "bytes": 121331,
-      "sha256": "1ddcb749bcbc6c3b993efb520c1d7104f51012979a20ec494369308ffa3cd46f"
+      "bytes": 112439,
+      "sha256": "a473c7b5f4ac0dadc445364ed499b21744f8524e21ca10778c632a9e2b3e432a"
     },
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 243221,
-      "sha256": "90c68f7bd6b20c7b855fd4591cb18160ee93a7351bb09ce831f2eb232ef05c25"
+      "bytes": 225131,
+      "sha256": "55e2728acd54a5001500bfa79d05a247224427b9cdb1beb9cf1754e29cd631cb"
     },
     {
       "path": "src/renderer/components/gameScreenBoardFeedbackModel.test.ts",
@@ -7529,12 +7529,6 @@
       "category": "source",
       "bytes": 17639,
       "sha256": "48b762bc343ba5dabcf2d271400987e1351164de152f329134e7c55e2824f01d"
-    },
-    {
-      "path": "src/renderer/components/GameScreenDungeonStatusPanel.tsx",
-      "category": "source",
-      "bytes": 9828,
-      "sha256": "a2783d6bf8a2496dbc5950b1a2fd3aac3f01a2d61981dca091d61e577143fcac"
     },
     {
       "path": "src/renderer/components/GameScreenEndlessChapterBanner.tsx",
@@ -7755,8 +7749,8 @@
     {
       "path": "src/renderer/components/RunShell.module.css",
       "category": "source",
-      "bytes": 6982,
-      "sha256": "ebc481512ca9c59b1fa419ddc5b7a245d3c251839e78ffae1f0e911713a3d282"
+      "bytes": 7803,
+      "sha256": "c94e205fc6a66f4802c23f517a2c0da889efb23877c58a8b606ee1dfe7807a17"
     },
     {
       "path": "src/renderer/components/RunShell.test.tsx",
@@ -7911,20 +7905,20 @@
     {
       "path": "src/renderer/components/TileBoard.module.css",
       "category": "source",
-      "bytes": 88587,
-      "sha256": "d18e9508fda74bf2353cd0b1498f018910cf855adfb4ea443d3ec8d17ca7ada5"
+      "bytes": 74095,
+      "sha256": "0533cdd75b26fb08a938f2d62bc6934288fc874d1cd3408274e3e06fa3cfc013"
     },
     {
       "path": "src/renderer/components/TileBoard.test.tsx",
       "category": "test",
-      "bytes": 56102,
-      "sha256": "8f8c9209424056cd1cab4663a2a779b797bd1ec37017bf4dffd08875a76127ad"
+      "bytes": 52300,
+      "sha256": "489ebf725e3dad2b9ca1e755c15c389ad5dd6655d8bea5fba318e553ffc53488"
     },
     {
       "path": "src/renderer/components/TileBoard.tsx",
       "category": "source",
-      "bytes": 192661,
-      "sha256": "a1f49fb9d909087cd8b865410599b6d8c6e03a098a81a569b3f016e74a6137ab"
+      "bytes": 181066,
+      "sha256": "e927ececf8c2e3007453ef7b6959a10dcf056f0b5aa523d64dc6863892b2b11d"
     },
     {
       "path": "src/renderer/components/tileBoardCanvasContext.test.ts",
@@ -16690,7 +16684,7 @@
       "path": "src/renderer/components/GameScreen.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 2915,
+      "lineCount": 2668,
       "imports": [
         "file:src/renderer/components/GameScreen.tsx",
         "file:src/renderer/components/gameScreenFeedback.ts",
@@ -16714,7 +16708,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 4508,
+      "lineCount": 4159,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -16722,9 +16716,7 @@
         "file:src/renderer/breakpoints.ts",
         "file:src/renderer/components/FloorClearDialog.tsx",
         "file:src/renderer/components/gameplayVisualConfig.ts",
-        "file:src/renderer/components/GameScreenDungeonStatusPanel.tsx",
         "file:src/renderer/components/GameScreenEndlessChapterBanner.tsx",
-        "file:src/renderer/components/gameScreenFeedback.ts",
         "file:src/renderer/components/gameScreenStoreSelectors.ts",
         "file:src/renderer/components/MainMenuBackground.tsx",
         "file:src/renderer/components/matchScoreFloaterTiming.ts",
@@ -16768,7 +16760,6 @@
         "file:src/shared/objective-rules.ts",
         "file:src/shared/playable-onboarding.ts",
         "file:src/shared/route-rules.ts",
-        "file:src/shared/route-world.ts",
         "file:src/shared/run-array-guards.ts",
         "file:src/shared/run-map.ts",
         "file:src/shared/run-number-guards.ts",
@@ -16996,21 +16987,6 @@
       "testedBy": [
         "file:src/renderer/components/gameScreenDecisionSignals.test.tsx"
       ]
-    },
-    {
-      "id": "file:src/renderer/components/GameScreenDungeonStatusPanel.tsx",
-      "path": "src/renderer/components/GameScreenDungeonStatusPanel.tsx",
-      "layer": "renderer",
-      "role": "production",
-      "lineCount": 235,
-      "imports": [
-        "file:src/renderer/components/gameScreenFeedback.ts",
-        "file:src/shared/dungeon-board-status.ts"
-      ],
-      "exports": [
-        "symbol:src/renderer/components/GameScreenDungeonStatusPanel.tsx#GameScreenDungeonStatusPanel"
-      ],
-      "testedBy": []
     },
     {
       "id": "file:src/renderer/components/GameScreenEndlessChapterBanner.tsx",
@@ -17943,7 +17919,7 @@
       "path": "src/renderer/components/TileBoard.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 1414,
+      "lineCount": 1337,
       "imports": [
         "file:src/renderer/components/TileBoard.tsx",
         "file:src/renderer/components/tileBoardStageLayers.ts",
@@ -17959,7 +17935,7 @@
       "path": "src/renderer/components/TileBoard.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 4312,
+      "lineCount": 4129,
       "imports": [
         "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/breakpoints.ts",
@@ -17986,7 +17962,6 @@
         "file:src/renderer/gameplay/regPhase4PlayContract.ts",
         "file:src/renderer/hooks/useCoarsePointer.ts",
         "file:src/renderer/hooks/useViewportSize.ts",
-        "file:src/renderer/platformTilt/platformTiltPermissionUi.ts",
         "file:src/renderer/platformTilt/usePlatformTiltField.ts",
         "file:src/shared/chain-targets.ts",
         "file:src/shared/contracts.ts",
@@ -35095,8 +35070,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 4507,
-      "endLine": 4507
+      "line": 4158,
+      "endLine": 4158
     },
     {
       "id": "symbol:src/renderer/components/gameScreenBoardFeedbackModel.ts#getBoardMatchPayoffStackAction",
@@ -35915,14 +35890,6 @@
       "endLine": 30
     },
     {
-      "id": "symbol:src/renderer/components/GameScreenDungeonStatusPanel.tsx#GameScreenDungeonStatusPanel",
-      "name": "GameScreenDungeonStatusPanel",
-      "kind": "value",
-      "file": "src/renderer/components/GameScreenDungeonStatusPanel.tsx",
-      "line": 123,
-      "endLine": 234
-    },
-    {
       "id": "symbol:src/renderer/components/GameScreenEndlessChapterBanner.tsx#GameScreenEndlessChapterBanner",
       "name": "GameScreenEndlessChapterBanner",
       "kind": "value",
@@ -36655,24 +36622,24 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/TileBoard.tsx",
-      "line": 4311,
-      "endLine": 4311
+      "line": 4128,
+      "endLine": 4128
     },
     {
       "id": "symbol:src/renderer/components/TileBoard.tsx#TileBoardClientRect",
       "name": "TileBoardClientRect",
       "kind": "type",
       "file": "src/renderer/components/TileBoard.tsx",
-      "line": 529,
-      "endLine": 536
+      "line": 528,
+      "endLine": 535
     },
     {
       "id": "symbol:src/renderer/components/TileBoard.tsx#TileBoardHandle",
       "name": "TileBoardHandle",
       "kind": "type",
       "file": "src/renderer/components/TileBoard.tsx",
-      "line": 538,
-      "endLine": 542
+      "line": 537,
+      "endLine": 541
     },
     {
       "id": "symbol:src/renderer/components/tileBoardCanvasContext.ts#getTileBoardCanvasContextConfig",
@@ -61244,7 +61211,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 15
+          "line": 13
         }
       ],
       "tests": [
@@ -62480,7 +62447,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 2483
+          "line": 2261
         }
       ],
       "tests": [
@@ -63564,7 +63531,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 15
+          "line": 13
         }
       ],
       "tests": [
@@ -63656,7 +63623,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 15
+          "line": 13
         }
       ],
       "tests": [
@@ -74211,12 +74178,6 @@
       "id": "exports:src/renderer/components/gameScreenDecisionSignals.tsx->symbol:src/renderer/components/gameScreenDecisionSignals.tsx#TUTORIAL_PAIR_MARKER_MAX_LEVEL",
       "source": "file:src/renderer/components/gameScreenDecisionSignals.tsx",
       "target": "symbol:src/renderer/components/gameScreenDecisionSignals.tsx#TUTORIAL_PAIR_MARKER_MAX_LEVEL",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/components/GameScreenDungeonStatusPanel.tsx->symbol:src/renderer/components/GameScreenDungeonStatusPanel.tsx#GameScreenDungeonStatusPanel",
-      "source": "file:src/renderer/components/GameScreenDungeonStatusPanel.tsx",
-      "target": "symbol:src/renderer/components/GameScreenDungeonStatusPanel.tsx#GameScreenDungeonStatusPanel",
       "kind": "exports"
     },
     {
@@ -97954,21 +97915,9 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/components/GameScreenDungeonStatusPanel.tsx",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "file:src/renderer/components/GameScreenDungeonStatusPanel.tsx",
-      "kind": "imports"
-    },
-    {
       "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/components/GameScreenEndlessChapterBanner.tsx",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "file:src/renderer/components/GameScreenEndlessChapterBanner.tsx",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/components/gameScreenFeedback.ts",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "file:src/renderer/components/gameScreenFeedback.ts",
       "kind": "imports"
     },
     {
@@ -98230,12 +98179,6 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/GameScreen.tsx->src/shared/route-world.ts",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "file:src/shared/route-world.ts",
-      "kind": "imports"
-    },
-    {
       "id": "imports:src/renderer/components/GameScreen.tsx->src/shared/run-array-guards.ts",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "file:src/shared/run-array-guards.ts",
@@ -98425,18 +98368,6 @@
       "id": "imports:src/renderer/components/gameScreenDecisionSignals.tsx->src/shared/route-world.ts",
       "source": "file:src/renderer/components/gameScreenDecisionSignals.tsx",
       "target": "file:src/shared/route-world.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/GameScreenDungeonStatusPanel.tsx->src/renderer/components/gameScreenFeedback.ts",
-      "source": "file:src/renderer/components/GameScreenDungeonStatusPanel.tsx",
-      "target": "file:src/renderer/components/gameScreenFeedback.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/GameScreenDungeonStatusPanel.tsx->src/shared/dungeon-board-status.ts",
-      "source": "file:src/renderer/components/GameScreenDungeonStatusPanel.tsx",
-      "target": "file:src/shared/dungeon-board-status.ts",
       "kind": "imports"
     },
     {
@@ -99913,12 +99844,6 @@
       "id": "imports:src/renderer/components/TileBoard.tsx->src/renderer/hooks/useViewportSize.ts",
       "source": "file:src/renderer/components/TileBoard.tsx",
       "target": "file:src/renderer/hooks/useViewportSize.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/TileBoard.tsx->src/renderer/platformTilt/platformTiltPermissionUi.ts",
-      "source": "file:src/renderer/components/TileBoard.tsx",
-      "target": "file:src/renderer/platformTilt/platformTiltPermissionUi.ts",
       "kind": "imports"
     },
     {

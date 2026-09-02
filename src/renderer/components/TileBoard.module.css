@@ -250,7 +250,7 @@
 
 @keyframes boardOpportunityPulse {
     0%,
-    100% {
+100% {
         filter: saturate(1);
         transform: translateY(0) scale(1);
     }
@@ -263,7 +263,7 @@
 
 @keyframes chainOpportunityBeatPulse {
     0%,
-    100% {
+100% {
         opacity: 0.64;
         transform: scale(0.82);
     }
@@ -286,7 +286,7 @@
 
 @keyframes boardOpportunityPrimePulse {
     0%,
-    100% {
+100% {
         filter: saturate(1);
         transform: translateY(0) scale(1);
     }
@@ -322,7 +322,8 @@
     aspect-ratio: auto;
 }
 
-/* During shuffle, block board gestures so pan/zoom does not fight the deal. */
+/* During shuffle,
+block board gestures so pan/zoom does not fight the deal. */
 .frameShuffleAnimating {
     pointer-events: none;
 }
@@ -575,40 +576,40 @@
     }
 
     .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityRecipe,
-    .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityShotMap,
-    .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityBeatMap,
-    .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityCadenceMap,
-    .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityTraitLaneMap,
-    .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityTraitLaneBeatMap,
-    .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityMarkerKey,
-    .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityMeter,
-    .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityRewardLadder,
-    .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityLines,
-    .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityExamples,
-    .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityTargetPlan,
-    .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunitySequenceCue,
-    .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunitySurge,
-    .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityFollowup,
-    .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityArmedPerk,
-    .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityRewardUrgency,
-    .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityRewardCue,
-    .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityPayoffBurst,
-    .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityMomentum {
+.chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityShotMap,
+.chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityBeatMap,
+.chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityCadenceMap,
+.chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityTraitLaneMap,
+.chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityTraitLaneBeatMap,
+.chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityMarkerKey,
+.chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityMeter,
+.chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityRewardLadder,
+.chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityLines,
+.chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityExamples,
+.chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityTargetPlan,
+.chainOpportunityChip:not(:hover, :focus-within) .chainOpportunitySequenceCue,
+.chainOpportunityChip:not(:hover, :focus-within) .chainOpportunitySurge,
+.chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityFollowup,
+.chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityArmedPerk,
+.chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityRewardUrgency,
+.chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityRewardCue,
+.chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityPayoffBurst,
+.chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityMomentum {
         display: none;
     }
 
     .frame[data-chain-opportunity-next-action='cashout'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityRewardLadder,
-    .frame[data-chain-opportunity-next-action='cashout'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityMeter,
-    .frame[data-chain-opportunity-next-action='cashout'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityRewardUrgency,
-    .frame[data-chain-opportunity-next-action='cashout'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityPayoffBurst,
-    .frame[data-chain-opportunity-next-action='cashout'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityMomentum,
-    .frame[data-chain-opportunity-next-action='cashout'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityLines,
-    .frame[data-chain-opportunity-next-action='ready'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityRewardLadder,
-    .frame[data-chain-opportunity-next-action='ready'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityMeter,
-    .frame[data-chain-opportunity-next-action='ready'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityRewardUrgency,
-    .frame[data-chain-opportunity-next-action='ready'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityPayoffBurst,
-    .frame[data-chain-opportunity-next-action='ready'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityMomentum,
-    .frame[data-chain-opportunity-next-action='ready'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityLines {
+.frame[data-chain-opportunity-next-action='cashout'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityMeter,
+.frame[data-chain-opportunity-next-action='cashout'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityRewardUrgency,
+.frame[data-chain-opportunity-next-action='cashout'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityPayoffBurst,
+.frame[data-chain-opportunity-next-action='cashout'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityMomentum,
+.frame[data-chain-opportunity-next-action='cashout'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityLines,
+.frame[data-chain-opportunity-next-action='ready'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityRewardLadder,
+.frame[data-chain-opportunity-next-action='ready'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityMeter,
+.frame[data-chain-opportunity-next-action='ready'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityRewardUrgency,
+.frame[data-chain-opportunity-next-action='ready'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityPayoffBurst,
+.frame[data-chain-opportunity-next-action='ready'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityMomentum,
+.frame[data-chain-opportunity-next-action='ready'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityLines {
         display: inline-grid;
     }
 
@@ -617,124 +618,6 @@
         min-height: 0;
         padding-block: 0.11rem;
     }
-}
-
-.activePowerBoardChip {
-    position: absolute;
-    top: var(--ui-space-xs);
-    right: var(--ui-space-xs);
-    z-index: 5;
-    display: grid;
-    gap: 0.08rem;
-    max-width: min(13rem, calc(100% - 1rem));
-    min-height: 2.4rem;
-    padding: 0.38rem 0.56rem;
-    border: 1px solid color-mix(in srgb, var(--theme-cyan-bright) 38%, transparent);
-    border-radius: 0.42rem;
-    background:
-        radial-gradient(ellipse 100% 150% at 50% 0%, color-mix(in srgb, var(--theme-cyan-bright) 12%, transparent), transparent 68%),
-        linear-gradient(135deg, rgba(14, 21, 28, 0.88), rgba(13, 24, 31, 0.86)),
-        var(--theme-panel-solid);
-    box-shadow:
-        0 10px 28px rgba(0, 0, 0, 0.28),
-        0 0 16px color-mix(in srgb, var(--theme-cyan-bright) 18%, transparent);
-    color: var(--theme-text);
-    pointer-events: none;
-}
-
-.activePowerBoardChip span {
-    color: color-mix(in srgb, var(--theme-text-muted) 88%, white);
-    font-size: 0.58rem;
-    font-weight: 850;
-    line-height: 1;
-    text-transform: uppercase;
-}
-
-.activePowerBoardChip strong {
-    color: color-mix(in srgb, var(--theme-cyan-bright) 84%, white);
-    font-size: clamp(0.74rem, 1.45vmin, 0.9rem);
-    font-weight: 920;
-    line-height: 1.1;
-}
-
-.activePowerBoardChipMeter {
-    grid-column: 1 / -1;
-    display: block;
-    height: 0.22rem;
-    overflow: hidden;
-    border: 1px solid color-mix(in srgb, var(--theme-cyan-bright) 20%, transparent);
-    border-radius: 999px;
-    background:
-        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 10%, transparent), transparent 84%),
-        color-mix(in srgb, var(--theme-void) 30%, transparent);
-}
-
-.activePowerBoardChipMeterFill {
-    display: block;
-    width: var(--active-power-meter-fill, 0%);
-    height: 100%;
-    border-radius: inherit;
-    background: linear-gradient(
-        90deg,
-        color-mix(in srgb, var(--theme-cyan-bright) 82%, white),
-        color-mix(in srgb, var(--theme-gold-bright) 72%, white)
-    );
-    box-shadow: 0 0 0.34rem color-mix(in srgb, var(--theme-cyan-bright) 22%, transparent);
-    transition: width 140ms ease-out;
-}
-
-.activePowerBoardChipBeatPips {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.08rem;
-    min-width: 0;
-}
-
-.activePowerBoardChipBeatPips i {
-    display: block;
-    width: 0.18rem;
-    height: 0.18rem;
-    border-radius: 999px;
-    animation: boardOpportunityPulse 1.08s ease-in-out infinite;
-    background: color-mix(in srgb, var(--theme-cyan-bright) 84%, white);
-    box-shadow: 0 0 0.4rem color-mix(in srgb, var(--theme-cyan-bright) 28%, transparent);
-}
-
-.activePowerBoardChipBeatPips i[data-active-power-beat-focus='primary'] {
-    width: 0.3rem;
-    box-shadow:
-        0 0 0.48rem color-mix(in srgb, currentColor 42%, transparent),
-        0 0 0 1px color-mix(in srgb, white 16%, transparent);
-}
-
-.activePowerBoardChipBeatPips i[data-active-power-beat-focus='support'] {
-    opacity: 0.7;
-}
-
-.activePowerBoardChip[data-active-power-tone='control'] .activePowerBoardChipBeatPips i {
-    background: color-mix(in srgb, var(--theme-ember) 82%, white);
-    box-shadow: 0 0 0.4rem color-mix(in srgb, var(--theme-ember) 26%, transparent);
-}
-
-.activePowerBoardChip[data-active-power-tone='recall'] .activePowerBoardChipBeatPips i {
-    background: color-mix(in srgb, var(--theme-violet-bright) 82%, white);
-    box-shadow: 0 0 0.4rem color-mix(in srgb, var(--theme-violet-bright) 26%, transparent);
-}
-
-.activePowerBoardChip small {
-    min-width: 0;
-    overflow: hidden;
-    padding: 0.08rem 0.28rem;
-    border: 1px solid color-mix(in srgb, var(--theme-cyan-bright) 24%, transparent);
-    border-radius: 999px;
-    background: color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent);
-    color: color-mix(in srgb, var(--theme-text-muted) 86%, white);
-    font-size: 0.5rem;
-    font-weight: 880;
-    line-height: 1;
-    text-overflow: ellipsis;
-    text-transform: uppercase;
-    white-space: nowrap;
 }
 
 .activePowerBoardStepBeatPips {
@@ -765,288 +648,6 @@
     opacity: 0.64;
 }
 
-.activePowerBoardChip small[data-active-power-step='then'] {
-    color: color-mix(in srgb, var(--theme-cyan-bright) 82%, white);
-}
-
-.activePowerBoardChip[data-active-power-tone='control'] {
-    border-color: color-mix(in srgb, var(--theme-ember) 38%, transparent);
-    background:
-        radial-gradient(ellipse 100% 150% at 50% 0%, color-mix(in srgb, var(--theme-ember) 12%, transparent), transparent 68%),
-        linear-gradient(135deg, rgba(24, 17, 14, 0.9), rgba(18, 15, 20, 0.86)),
-        var(--theme-panel-solid);
-}
-
-.activePowerBoardChip[data-active-power-tone='control'] strong {
-    color: color-mix(in srgb, var(--theme-ember) 84%, white);
-}
-
-.activePowerBoardChip[data-active-power-tone='control'] small {
-    border-color: color-mix(in srgb, var(--theme-ember) 30%, transparent);
-    background: color-mix(in srgb, var(--theme-ember) 9%, transparent);
-}
-
-.activePowerBoardChip[data-active-power-tone='recall'] {
-    border-color: color-mix(in srgb, var(--theme-violet-bright) 38%, transparent);
-    background:
-        radial-gradient(ellipse 100% 150% at 50% 0%, color-mix(in srgb, var(--theme-violet-bright) 12%, transparent), transparent 68%),
-        linear-gradient(135deg, rgba(18, 16, 28, 0.9), rgba(13, 22, 30, 0.84)),
-        var(--theme-panel-solid);
-}
-
-.activePowerBoardChip[data-active-power-tone='recall'] strong {
-    color: color-mix(in srgb, var(--theme-violet-bright) 84%, white);
-}
-
-.activePowerBoardChip[data-active-power-tone='recall'] small {
-    border-color: color-mix(in srgb, var(--theme-violet-bright) 30%, transparent);
-    background: color-mix(in srgb, var(--theme-violet-bright) 9%, transparent);
-}
-
-.pickupOpportunityChip {
-    position: absolute;
-    right: var(--ui-space-xs);
-    bottom: var(--ui-space-xs);
-    z-index: 5;
-    display: grid;
-    gap: 0.08rem;
-    max-width: min(16rem, calc(100% - 1rem));
-    padding: 0.4rem 0.56rem;
-    border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 48%, transparent);
-    border-radius: 0.42rem;
-    background:
-        linear-gradient(110deg, transparent 0 34%, color-mix(in srgb, var(--theme-gold-bright) 9%, transparent) 45%, transparent 58%),
-        radial-gradient(ellipse 100% 150% at 50% 0%, color-mix(in srgb, var(--theme-gold-bright) 16%, transparent), transparent 68%),
-        linear-gradient(135deg, rgba(28, 23, 13, 0.9), rgba(16, 24, 24, 0.84)),
-        var(--theme-panel-solid);
-    background-size: 220% 100%, auto, auto, auto;
-    box-shadow:
-        0 10px 28px rgba(0, 0, 0, 0.3),
-        0 0 18px color-mix(in srgb, var(--theme-glow-gold) 24%, transparent);
-    color: var(--theme-text);
-    animation: boardOpportunityShimmer 2.5s ease-in-out infinite;
-    pointer-events: none;
-}
-
-.pickupOpportunityChip[data-pickup-opportunity-focus='cashout'] {
-    border-color: color-mix(in srgb, var(--theme-gold-bright) 72%, var(--theme-cyan-bright) 18%);
-    background:
-        linear-gradient(110deg, transparent 0 30%, color-mix(in srgb, var(--theme-gold-bright) 18%, transparent) 45%, transparent 60%),
-        radial-gradient(ellipse 110% 170% at 50% 0%, color-mix(in srgb, var(--theme-gold-bright) 27%, transparent), transparent 66%),
-        linear-gradient(135deg, rgba(36, 27, 10, 0.94), rgba(12, 28, 29, 0.88)),
-        var(--theme-panel-solid);
-    box-shadow:
-        0 12px 32px rgba(0, 0, 0, 0.34),
-        0 0 0 1px color-mix(in srgb, var(--theme-gold-bright) 16%, transparent),
-        0 0 1.4rem color-mix(in srgb, var(--theme-glow-gold) 34%, transparent);
-}
-
-.pickupOpportunityChip[data-pickup-opportunity-focus='cashout'] span,
-.pickupOpportunityChip[data-pickup-opportunity-focus='cashout'] strong {
-    color: color-mix(in srgb, var(--theme-gold-bright) 96%, white);
-}
-
-.pickupOpportunityChip[data-pickup-opportunity-focus='cashout'] b,
-.pickupOpportunityChip[data-pickup-opportunity-focus='cashout'] em {
-    border-color: color-mix(in srgb, var(--theme-gold-bright) 48%, var(--theme-success) 20%);
-    background: color-mix(in srgb, var(--theme-gold-bright) 16%, transparent);
-    color: color-mix(in srgb, var(--theme-gold-bright) 92%, white);
-}
-
-.pickupOpportunityChip[data-pickup-opportunity-focus='cashout'] i {
-    border-color: color-mix(in srgb, var(--theme-cyan-bright) 38%, var(--theme-gold-bright) 18%);
-    background: color-mix(in srgb, var(--theme-cyan-bright) 13%, transparent);
-    color: color-mix(in srgb, var(--theme-cyan-bright) 88%, white);
-}
-
-.pickupOpportunityChip span {
-    color: color-mix(in srgb, var(--theme-gold-bright) 82%, white);
-    font-size: 0.58rem;
-    font-weight: 880;
-    line-height: 1;
-    text-transform: uppercase;
-}
-
-.pickupOpportunityChip strong {
-    color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
-    font-size: clamp(0.78rem, 1.5vmin, 0.94rem);
-    font-weight: 930;
-    line-height: 1.06;
-}
-
-.pickupOpportunityMeter {
-    display: block;
-    grid-column: 1 / -1;
-    height: 0.22rem;
-    overflow: hidden;
-    border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 22%, transparent);
-    border-radius: 999px;
-    background:
-        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 10%, transparent), transparent 84%),
-        color-mix(in srgb, var(--theme-void) 30%, transparent);
-}
-
-.pickupOpportunityMeterFill {
-    display: block;
-    width: var(--pickup-meter-fill, 0%);
-    height: 100%;
-    border-radius: inherit;
-    background: linear-gradient(
-        90deg,
-        color-mix(in srgb, var(--theme-gold-bright) 82%, white),
-        color-mix(in srgb, var(--theme-success) 74%, white)
-    );
-    box-shadow: 0 0 0.34rem color-mix(in srgb, var(--theme-gold-bright) 22%, transparent);
-    transition: width 140ms ease-out;
-}
-
-.pickupOpportunityChipBeatPips {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.05rem;
-    margin-left: 0.08rem;
-}
-
-.pickupOpportunityChipBeatPips i {
-    display: block;
-    width: 0.12rem;
-    height: 0.12rem;
-    border-radius: 999px;
-    animation: boardOpportunityPulse 1.08s ease-in-out infinite;
-    background: color-mix(in srgb, var(--theme-gold-bright) 80%, white);
-    box-shadow: 0 0 0.18rem color-mix(in srgb, var(--theme-gold-bright) 22%, transparent);
-}
-
-.pickupOpportunityChipBeatPips i[data-pickup-chip-beat-focus='primary'] {
-    width: 0.22rem;
-    box-shadow:
-        0 0 0.26rem color-mix(in srgb, currentColor 28%, transparent),
-        0 0 0 1px color-mix(in srgb, white 12%, transparent);
-}
-
-.pickupOpportunityChipBeatPips i[data-pickup-chip-beat-focus='support'] {
-    opacity: 0.66;
-}
-
-.pickupOpportunityChip b {
-    justify-self: start;
-    padding: 0.1rem 0.34rem;
-    border: 1px solid color-mix(in srgb, var(--theme-success) 34%, var(--theme-gold-bright) 18%);
-    border-radius: 999px;
-    background: color-mix(in srgb, var(--theme-success) 11%, transparent);
-    color: color-mix(in srgb, var(--theme-success) 78%, white);
-    font-size: 0.54rem;
-    font-weight: 940;
-    line-height: 1;
-    text-transform: uppercase;
-}
-
-.pickupOpportunityChip em,
-.pickupOpportunityChip i {
-    justify-self: start;
-    overflow: hidden;
-    max-width: 100%;
-    padding: 0.1rem 0.34rem;
-    border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 34%, var(--theme-cyan-bright) 18%);
-    border-radius: 999px;
-    background: color-mix(in srgb, var(--theme-gold-bright) 12%, transparent);
-    color: color-mix(in srgb, var(--theme-gold-bright) 86%, white);
-    font-size: 0.52rem;
-    font-style: normal;
-    font-weight: 940;
-    line-height: 1;
-    text-overflow: ellipsis;
-    text-transform: uppercase;
-    white-space: nowrap;
-}
-
-.pickupOpportunityChip i {
-    border-color: color-mix(in srgb, var(--theme-cyan-bright) 28%, transparent);
-    background: color-mix(in srgb, var(--theme-cyan-bright) 9%, transparent);
-    color: color-mix(in srgb, var(--theme-cyan-bright) 82%, white);
-    font-size: 0.49rem;
-}
-
-.pickupOpportunityChip small {
-    overflow: hidden;
-    color: color-mix(in srgb, var(--theme-text) 88%, var(--theme-gold-bright));
-    font-size: clamp(0.62rem, 1.25vmin, 0.72rem);
-    font-weight: 760;
-    line-height: 1.12;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.pickupOpportunitySequence {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 0.12rem;
-    min-width: 0;
-    padding: 0.16rem;
-    border: 1px solid color-mix(in srgb, var(--theme-cyan-bright) 30%, var(--theme-gold-bright) 18%);
-    border-radius: 7px;
-    background: color-mix(in srgb, var(--theme-panel-solid) 62%, transparent);
-}
-
-.pickupOpportunitySequenceBeatPips {
-    display: flex;
-    grid-column: 1 / -1;
-    align-items: center;
-    gap: 0.08rem;
-    min-height: 0.18rem;
-}
-
-.pickupOpportunitySequenceBeatPips i {
-    width: 0.2rem;
-    height: 0.2rem;
-    border-radius: 999px;
-    background: color-mix(in srgb, var(--theme-cyan-bright) 78%, white);
-    box-shadow: 0 0 0.34rem color-mix(in srgb, var(--theme-cyan-bright) 28%, transparent);
-    animation: boardFeedbackBeatPulse 0.78s ease-in-out infinite;
-}
-
-.pickupOpportunitySequenceBeatPips i[data-pickup-sequence-beat-focus='primary'] {
-    width: 0.34rem;
-    background: color-mix(in srgb, var(--theme-success) 88%, white);
-    box-shadow:
-        0 0 0.46rem color-mix(in srgb, var(--theme-success) 38%, transparent),
-        0 0 0 1px color-mix(in srgb, white 16%, transparent);
-}
-
-.pickupOpportunitySequenceBeatPips i[data-pickup-sequence-beat-focus='support'] {
-    opacity: 0.72;
-}
-
-.pickupOpportunitySequence small,
-.pickupOpportunitySequence b {
-    min-width: 0;
-    overflow: hidden;
-    padding: 0;
-    border: 0;
-    border-radius: 0;
-    background: transparent;
-    line-height: 1.05;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.pickupOpportunitySequence small {
-    color: color-mix(in srgb, var(--theme-text-muted) 82%, white);
-    font-size: 0.46rem;
-    font-weight: 920;
-}
-
-.pickupOpportunitySequence b {
-    color: color-mix(in srgb, var(--theme-cyan-bright) 82%, white);
-    font-size: 0.52rem;
-    font-weight: 900;
-    text-transform: none;
-}
-
-.pickupOpportunitySequence[data-pickup-sequence-tone='reward'] b {
-    color: color-mix(in srgb, var(--theme-success) 78%, white);
-}
-
 @media (hover: hover) and (pointer: fine) {
     .opportunityCompass {
         left: calc(var(--gameplay-html-edge-pad, 0.75rem) + min(18rem, 23vw) + 0.75rem);
@@ -1058,14 +659,14 @@
     }
 
     .opportunityCompass:not(:hover, :focus-within) .opportunityPayoffStack,
-    .opportunityCompass:not(:hover, :focus-within) .opportunityLaneMap,
-    .opportunityCompass:not(:hover, :focus-within) .opportunityCompassRow:not([data-opportunity-priority='best']) {
+.opportunityCompass:not(:hover, :focus-within) .opportunityLaneMap,
+.opportunityCompass:not(:hover, :focus-within) .opportunityCompassRow:not([data-opportunity-priority='best']) {
         display: none;
     }
 
     .opportunityCompass[data-opportunity-compass-hot='cashout']:not(:hover, :focus-within) .opportunityPayoffStack,
-    .opportunityCompass[data-opportunity-compass-hot='ready']:not(:hover, :focus-within) .opportunityPayoffStack,
-    .opportunityCompass[data-opportunity-compass-surge='true']:not(:hover, :focus-within) .opportunityPayoffStack {
+.opportunityCompass[data-opportunity-compass-hot='ready']:not(:hover, :focus-within) .opportunityPayoffStack,
+.opportunityCompass[data-opportunity-compass-surge='true']:not(:hover, :focus-within) .opportunityPayoffStack {
         display: grid;
     }
 
@@ -2145,15 +1746,11 @@
     animation: none;
 }
 
-:global([data-reduce-motion='true']) .pickupOpportunityChip,
 :global([data-reduce-motion='true']) .opportunityLaneBeatPips i,
 :global([data-reduce-motion='true']) .opportunityLaneMapSummaryBeatPips i,
 :global([data-reduce-motion='true']) .opportunityPrimaryLaneBeatPips i,
-:global([data-reduce-motion='true']) .activePowerBoardChipBeatPips i,
 :global([data-reduce-motion='true']) .activePowerBoardStepBeatPips i,
 :global([data-reduce-motion='true']) .trapResolutionBeatPips i,
-:global([data-reduce-motion='true']) .pickupOpportunityChipBeatPips i,
-:global([data-reduce-motion='true']) .pickupOpportunitySequenceBeatPips i,
 :global([data-reduce-motion='true']) .traitPreviewActionBeatPips i,
 :global([data-reduce-motion='true']) .traitPreviewCashoutBeatPips i,
 :global([data-reduce-motion='true']) .traitPreviewLineBeatPips i,
@@ -2217,7 +1814,7 @@
     }
 
     .opportunityPayoffStack u,
-    .opportunityPayoffStack b {
+.opportunityPayoffStack b {
         display: none;
     }
 
@@ -2334,7 +1931,7 @@
 
 /*
  * Premium card-back gather / release motion. Cards stay compact and aligned so the effect reads as preparation,
- * not a decorative carousel.
+* not a decorative carousel.
  */
 .prestageCard {
     --card-w: min(30vw, 12rem);

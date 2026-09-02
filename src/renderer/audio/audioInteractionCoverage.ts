@@ -262,7 +262,7 @@ export const AUDIO_INTERACTION_COVERAGE: readonly AudioInteractionCoverageRow[] 
         domain: 'gameplay',
         interaction: 'Chapter banner and dungeon combat forecast expose compact next-action cues with beats, audio roles, and screen cues',
         cue: 'none',
-        callsite: 'GameScreenEndlessChapterBanner / GameScreenDungeonStatusPanel status action cue data attributes',
+        callsite: 'GameScreenEndlessChapterBanner status action cue data attributes',
         semanticMoment: 'pressure',
         decision: 'procedural_only',
         cooldownPolicy: 'semantic status cues stay visual/readability-only and share downstream resolve, route, or combat feedback audio',

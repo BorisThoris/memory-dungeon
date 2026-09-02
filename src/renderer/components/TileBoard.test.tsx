@@ -704,79 +704,6 @@ describe('TileBoard touch and click controls', () => {
         }
     });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    it('shows active board command chips for armed recall and control powers', () => {
-        const { rerender } = renderBoard({
-            board,
-            debugPeekActive: false,
-            interactive: true,
-            onTileSelect: vi.fn(),
-            peekPowerVisualActive: true,
-            previewActive: false,
-            reduceMotion: false
-        });
-
-        expect(screen.getByTestId('active-power-board-chip')).toHaveTextContent('Peek armed');
-        expect(screen.getByTestId('active-power-board-chip')).toHaveTextContent('Tap hidden tile');
-        expect(screen.getByTestId('active-power-board-chip')).toHaveTextContent('First: Reveal one');
-        expect(screen.getByTestId('active-power-board-chip')).toHaveTextContent('Then: Lock memory route');
-        expect(screen.getByTestId('active-power-board-chip')).toHaveAttribute('data-active-power-tone', 'recall');
-        expect(screen.getByTestId('active-power-board-chip')).toHaveAttribute('data-active-power-beats', '3');
-        expect(screen.getByTestId('active-power-board-chip')).toHaveAttribute('data-active-power-meter-fill', '75');
-        expect(screen.getByTestId('active-power-board-chip')).toHaveAttribute('data-active-power-first', 'Reveal one');
-        expect(screen.getByTestId('active-power-board-chip')).toHaveAttribute('data-active-power-then', 'Lock memory route');
-        expect(screen.getByTestId('active-power-board-chip').querySelectorAll('[data-active-power-beat]')).toHaveLength(3);
-        expect(screen.getByTestId('active-power-board-chip').querySelectorAll('[data-active-power-step-beat]')).toHaveLength(4);
-        expect(screen.getByTestId('active-power-board-chip')).toHaveAccessibleName(
-            /Active board power.*Peek armed.*Tap hidden tile.*First Reveal one.*Then Lock memory route/i
-        );
-
-        rerender(
-            <PlatformTiltProvider>
-                <TileBoard
-                    board={board}
-                    debugPeekActive={false}
-                    destroyPowerVisualActive
-                    interactive
-                    mobileCameraMode={false}
-                    onTileSelect={vi.fn()}
-                    previewActive={false}
-                    reduceMotion={false}
-                    viewportResetToken={0}
-                />
-            </PlatformTiltProvider>
-        );
-
-        expect(screen.getByTestId('active-power-board-chip')).toHaveTextContent('Destroy armed');
-        expect(screen.getByTestId('active-power-board-chip')).toHaveTextContent('Tap hidden pair');
-        expect(screen.getByTestId('active-power-board-chip')).toHaveTextContent('First: Mark pair');
-        expect(screen.getByTestId('active-power-board-chip')).toHaveTextContent('Then: Clear blocker');
-        expect(screen.getByTestId('active-power-board-chip')).toHaveAttribute('data-active-power-tone', 'control');
-        expect(screen.getByTestId('active-power-board-chip')).toHaveAttribute('data-active-power-beats', '3');
-        expect(screen.getByTestId('active-power-board-chip')).toHaveAttribute('data-active-power-meter-fill', '75');
-        expect(screen.getByTestId('active-power-board-chip')).toHaveAttribute('data-active-power-first', 'Mark pair');
-        expect(screen.getByTestId('active-power-board-chip')).toHaveAttribute('data-active-power-then', 'Clear blocker');
-        expect(screen.getByTestId('active-power-board-chip').querySelectorAll('[data-active-power-beat]')).toHaveLength(3);
-        expect(screen.getByTestId('active-power-board-chip').querySelectorAll('[data-active-power-step-beat]')).toHaveLength(4);
-        expect(screen.getByTestId('active-power-board-chip')).toHaveAccessibleName(
-            /Active board power.*Destroy armed.*Tap hidden pair.*First Mark pair.*Then Clear blocker/i
-        );
-    });
-
-
     it('plays a procedural chain opportunity beat when a prime route appears', async () => {
         const createOscillator = vi.fn(() => ({
             type: 'sine' as OscillatorType,
@@ -827,7 +754,6 @@ describe('TileBoard touch and click controls', () => {
         );
     });
 
-
     it('announces decoy trap language for face-up decoy tiles', async () => {
         const decoyBoard: BoardState = {
             ...board,
@@ -853,8 +779,6 @@ describe('TileBoard touch and click controls', () => {
             expect(screen.getByText(/Focus: Decoy trap tile, row 1, column 1/i)).toBeInTheDocument();
         });
     });
-
-
 
     it('announces route card details for route-stamped cards', async () => {
         const routeBoard: BoardState = {
@@ -1037,7 +961,6 @@ describe('TileBoard touch and click controls', () => {
             expect(screen.getByText(/Revealed by peek/i)).toBeInTheDocument();
         });
     });
-
 
     it('announces moving enemy patrol occupancy and next-target telegraphs', async () => {
         const enemyBoard: BoardState = {

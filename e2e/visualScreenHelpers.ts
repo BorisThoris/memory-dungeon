@@ -365,7 +365,7 @@ export async function writeHudLayoutDiagnostics(page: Page, outDir: string): Pro
     const hud = page.getByTestId('game-hud');
     await hud.screenshot({ path: join(outDir, 'hud-element.png') });
 
-    const testIds = ['game-hud', 'hud-wing-left', 'hud-wing-center', 'hud-wing-right'] as const;
+    const testIds = ['game-hud', 'hud-score', 'game-action-dock'] as const;
     const elements: HudLayoutMetricsEntry[] = [];
     for (const id of testIds) {
         const loc = page.getByTestId(id);

@@ -65,13 +65,10 @@ test.describe('Expanded playable navigation contract', () => {
         test.setTimeout(90_000);
         await openModeLibrary(page);
 
-        await page.getByRole('button', { name: /search modes/i }).click();
         await page.getByLabel(/filter modes/i).fill('scholar');
         await expect(page.getByRole('button', { name: /^Scholar\. Open details\.$/i })).toBeVisible();
         await expect(page.getByRole('button', { name: /^Wild Run\. Open details\.$/i })).toHaveCount(0);
         await page.getByLabel(/filter modes/i).fill('');
-        await page.getByRole('button', { name: /close search/i }).click();
-        await expect(page.getByLabel(/filter modes/i)).toBeHidden();
 
         await page.getByRole('button', { name: /^Endless Mode\. Open details\.$/i }).click({ force: true });
         const detail = page.getByTestId('library-mode-detail-modal');

@@ -9,12 +9,11 @@ import {
     waitLevel1PlayReady
 } from './visualScreenHelpers';
 
-/** HUD-018 / QA-003: `GameplayHudBar` exposes `game-hud` plus `hud-wing-left|center|right`. If the HUD splits, migrate these assertions + `mobile-layout.spec.ts` together. */
+/** The in-run shell is one bar: stats group, feedback line, action dock. */
 async function expectGameplayHudWithWings(page: Page): Promise<void> {
     await expect(page.getByTestId('game-hud')).toBeVisible();
-    await expect(page.getByTestId('hud-wing-left')).toBeVisible();
-    await expect(page.getByTestId('hud-wing-center')).toBeVisible();
-    await expect(page.getByTestId('hud-wing-right')).toBeVisible();
+    await expect(page.getByTestId('hud-score')).toBeVisible();
+    await expect(page.getByTestId('game-action-dock')).toBeVisible();
 }
 
 test.describe('Navigation shells', () => {
