@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2417,
-    "codeFileCount": 901,
-    "exportedSymbolCount": 3396,
+    "trackedFileCount": 2416,
+    "codeFileCount": 900,
+    "exportedSymbolCount": 3395,
     "contentItemCount": 57,
     "mechanicCount": 130,
     "stateFieldCount": 144,
-    "relationshipCount": 9866
+    "relationshipCount": 9862
   },
   "inventory": [
     {
@@ -6963,14 +6963,14 @@
     {
       "path": "src/renderer/audio/audioInteractionCoverage.test.ts",
       "category": "test",
-      "bytes": 11662,
-      "sha256": "5c0888c88985e8c7d065dea5f6eb8e06f82886c65b5ab893f628409e87291497"
+      "bytes": 11655,
+      "sha256": "df40f8680e6cfd266afb1d508c205798b192ddf4c99ee0185c253a24a8be2d65"
     },
     {
       "path": "src/renderer/audio/audioInteractionCoverage.ts",
       "category": "source",
-      "bytes": 21857,
-      "sha256": "6c74d937eda0cc4753b31b3415fde6d62bae9f6ae8c05b57c8ad3a75c1a343c9"
+      "bytes": 21838,
+      "sha256": "2358f29d112643c7608896495f1444211c288e5bd1f4ac01dd8590c93c433d1b"
     },
     {
       "path": "src/renderer/audio/audioManifestBoundary.test.ts",
@@ -7377,8 +7377,8 @@
     {
       "path": "src/renderer/components/CodexScreen.module.css",
       "category": "source",
-      "bytes": 2066,
-      "sha256": "4a8631b7936ecb1aea7eb6967837422d7bde57b86df5100ab7bcc0455ed3c3ac"
+      "bytes": 2153,
+      "sha256": "da90caed0fb4ebad5ea1340c2c91ad3aadba31103ad1a9a04909c2c59cdc22f7"
     },
     {
       "path": "src/renderer/components/CodexScreen.test.tsx",
@@ -7407,8 +7407,8 @@
     {
       "path": "src/renderer/components/CollectionScreen.module.css",
       "category": "source",
-      "bytes": 1763,
-      "sha256": "7ae4901759f5f3b76ea081fdf7f35040f28afa0aeb95dc51535ae3f10f54b21a"
+      "bytes": 1850,
+      "sha256": "a97bf610231bb3dc42e251e063e4e84c63aa6282bc8853afba7a6ed98e8f5f9e"
     },
     {
       "path": "src/renderer/components/CollectionScreen.test.tsx",
@@ -7491,26 +7491,20 @@
     {
       "path": "src/renderer/components/GameScreen.module.css",
       "category": "source",
-      "bytes": 489883,
-      "sha256": "bdec8e3248469e0311b0b38c7a7d0609ab9b6ce45a14dbe0b6c4d757d1775bec"
+      "bytes": 481315,
+      "sha256": "10262be11c451a2f78134cde6dd7c9d855590d13e950105fd89d8280f3eb1d61"
     },
     {
       "path": "src/renderer/components/GameScreen.test.tsx",
       "category": "test",
-      "bytes": 112439,
-      "sha256": "a473c7b5f4ac0dadc445364ed499b21744f8524e21ca10778c632a9e2b3e432a"
+      "bytes": 107714,
+      "sha256": "4c7eb57a2c03bcf591a6236948a1aba9318f8c3bc70eca34b696caf9cd75d9e8"
     },
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 225131,
-      "sha256": "55e2728acd54a5001500bfa79d05a247224427b9cdb1beb9cf1754e29cd631cb"
-    },
-    {
-      "path": "src/renderer/components/GameScreenEndlessChapterBanner.tsx",
-      "category": "source",
-      "bytes": 8026,
-      "sha256": "033b3e85029af379f55cccd95b0919e4dbf07bcecdee9df8d2af816c6a6c102e"
+      "bytes": 223840,
+      "sha256": "daf89e64e81f9727e4305c7f28fcc59ffc9801103785ffde23e44785836879de"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -7749,8 +7743,8 @@
     {
       "path": "src/renderer/components/SettingsScreen.module.css",
       "category": "source",
-      "bytes": 30792,
-      "sha256": "fc620af743aec5887b21daea862f51acd5a11a6e2b78c10e1dd0529f224b2f9c"
+      "bytes": 31892,
+      "sha256": "367d9e047e3c3f1f2b7a82027cabb1b946aefe7b1a8c7926f0df5c8e77ee4720"
     },
     {
       "path": "src/renderer/components/SettingsScreen.test.tsx",
@@ -7761,8 +7755,8 @@
     {
       "path": "src/renderer/components/SettingsScreen.tsx",
       "category": "source",
-      "bytes": 43830,
-      "sha256": "40fc224d0b65b82a6d0776406365b6a71aac6f549cb6c8c9949676f143370167"
+      "bytes": 45176,
+      "sha256": "13d87a1ad7e26d4fec62c1f03711b545c506635c667a6c44abb907c2ca0626f1"
     },
     {
       "path": "src/renderer/components/ShopScreen.module.css",
@@ -16693,7 +16687,7 @@
       "path": "src/renderer/components/GameScreen.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 2668,
+      "lineCount": 2584,
       "imports": [
         "file:src/renderer/components/GameScreen.tsx",
         "file:src/renderer/components/gameScreenFeedback.ts",
@@ -16717,7 +16711,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 4159,
+      "lineCount": 4134,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -16725,7 +16719,6 @@
         "file:src/renderer/breakpoints.ts",
         "file:src/renderer/components/FloorClearDialog.tsx",
         "file:src/renderer/components/gameplayVisualConfig.ts",
-        "file:src/renderer/components/GameScreenEndlessChapterBanner.tsx",
         "file:src/renderer/components/gameScreenStoreSelectors.ts",
         "file:src/renderer/components/MainMenuBackground.tsx",
         "file:src/renderer/components/matchScoreFloaterTiming.ts",
@@ -16781,21 +16774,6 @@
       "testedBy": [
         "file:src/renderer/components/GameScreen.test.tsx"
       ]
-    },
-    {
-      "id": "file:src/renderer/components/GameScreenEndlessChapterBanner.tsx",
-      "path": "src/renderer/components/GameScreenEndlessChapterBanner.tsx",
-      "layer": "renderer",
-      "role": "production",
-      "lineCount": 205,
-      "imports": [
-        "file:src/shared/boss-encounters.ts",
-        "file:src/shared/floor-mutator-schedule.ts"
-      ],
-      "exports": [
-        "symbol:src/renderer/components/GameScreenEndlessChapterBanner.tsx#GameScreenEndlessChapterBanner"
-      ],
-      "testedBy": []
     },
     {
       "id": "file:src/renderer/components/gameScreenFeedback.ts",
@@ -17352,7 +17330,7 @@
       "path": "src/renderer/components/SettingsScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 692,
+      "lineCount": 712,
       "imports": [
         "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/breakpoints.ts",
@@ -34940,16 +34918,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 4158,
-      "endLine": 4158
-    },
-    {
-      "id": "symbol:src/renderer/components/GameScreenEndlessChapterBanner.tsx#GameScreenEndlessChapterBanner",
-      "name": "GameScreenEndlessChapterBanner",
-      "kind": "value",
-      "file": "src/renderer/components/GameScreenEndlessChapterBanner.tsx",
-      "line": 126,
-      "endLine": 204
+      "line": 4133,
+      "endLine": 4133
     },
     {
       "id": "symbol:src/renderer/components/gameScreenFeedback.ts#DungeonCombatLogRow",
@@ -35340,8 +35310,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/SettingsScreen.tsx",
-      "line": 691,
-      "endLine": 691
+      "line": 711,
+      "endLine": 711
     },
     {
       "id": "symbol:src/renderer/components/ShopScreen.tsx#default",
@@ -61821,7 +61791,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 2261
+          "line": 2249
         }
       ],
       "tests": [
@@ -72946,12 +72916,6 @@
       "id": "exports:src/renderer/components/GameScreen.tsx->symbol:src/renderer/components/GameScreen.tsx#default",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "symbol:src/renderer/components/GameScreen.tsx#default",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/components/GameScreenEndlessChapterBanner.tsx->symbol:src/renderer/components/GameScreenEndlessChapterBanner.tsx#GameScreenEndlessChapterBanner",
-      "source": "file:src/renderer/components/GameScreenEndlessChapterBanner.tsx",
-      "target": "symbol:src/renderer/components/GameScreenEndlessChapterBanner.tsx#GameScreenEndlessChapterBanner",
       "kind": "exports"
     },
     {
@@ -96899,12 +96863,6 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/components/GameScreenEndlessChapterBanner.tsx",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "file:src/renderer/components/GameScreenEndlessChapterBanner.tsx",
-      "kind": "imports"
-    },
-    {
       "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/components/gameScreenStoreSelectors.ts",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "file:src/renderer/components/gameScreenStoreSelectors.ts",
@@ -97190,18 +97148,6 @@
       "id": "imports:src/renderer/components/GameScreen.tsx->src/shared/trait-route-objectives.ts",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "file:src/shared/trait-route-objectives.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/GameScreenEndlessChapterBanner.tsx->src/shared/boss-encounters.ts",
-      "source": "file:src/renderer/components/GameScreenEndlessChapterBanner.tsx",
-      "target": "file:src/shared/boss-encounters.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/GameScreenEndlessChapterBanner.tsx->src/shared/floor-mutator-schedule.ts",
-      "source": "file:src/renderer/components/GameScreenEndlessChapterBanner.tsx",
-      "target": "file:src/shared/floor-mutator-schedule.ts",
       "kind": "imports"
     },
     {

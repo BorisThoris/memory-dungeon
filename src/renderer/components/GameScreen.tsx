@@ -40,7 +40,6 @@ import { isNarrowShortLandscapeForMenuStack } from '../breakpoints';
 import { deriveCameraViewportMode, latchPhoneWidthForMobileCamera } from '../../shared/cameraViewportMode';
 import {
     getFeaturedObjectiveLabel,
-    getFloorArchetypeDefinition,
     getFloorChapterIdentity,
     pickFloorScheduleEntry,
     usesEndlessFloorSchedule
@@ -71,7 +70,6 @@ import {
     type BoardTurnResolvedEvent
 } from '../store/gameplayFeedbackAdapter';
 import { getLatestGameplayFeedback } from '../store/gameplayFeedbackAdapter';
-import { GameScreenEndlessChapterBanner } from './GameScreenEndlessChapterBanner';
 import RunShell, { type RunShellTool } from './RunShell';
 import { RUN_SHELL_GLYPHS } from './runShellGlyphs';
 import MainMenuBackground from './MainMenuBackground';
@@ -2007,16 +2005,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const clearLifeBonusLabel = run.lastLevelResult ? getClearLifeBonusLabel(run.lastLevelResult) : null;
     const endlessChapterActive =
         run.gameMode === 'endless' && usesEndlessFloorSchedule(run.gameMode, run.runRulesVersion);
-    const currentArchetype = getFloorArchetypeDefinition(run.board?.floorArchetypeId ?? null);
-    const currentFeaturedObjectiveLabel = getFeaturedObjectiveLabel(run.board?.featuredObjectiveId ?? null);
-    const currentFloorIdentity = run.board
-        ? getFloorIdentityContract({
-              floorTag: run.board.floorTag ?? 'normal',
-              floorArchetypeId: run.board.floorArchetypeId,
-              mutators: run.activeMutators,
-              featuredObjectiveLabel: currentFeaturedObjectiveLabel
-          })
-        : null;
     const favorGained = runNonNegativeInteger(run.lastLevelResult?.relicFavorGained);
     const featuredObjectiveResultLine = run.lastLevelResult ? formatLevelResultObjectiveLine(run.lastLevelResult) : null;
     const wagerSuretyActive = run.relicIds.includes('wager_surety');
@@ -2348,12 +2336,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     if (!run.board) {
         return null;
     }
-
-    const showEndlessChapterBanner =
-        endlessChapterActive &&
-        currentArchetype &&
-        currentFeaturedObjectiveLabel &&
-        (run.status === 'memorize' || (run.status === 'playing' && run.board.matchedPairs === 0));
     const shuffleDisabled = !canShuffleBoard(run);
     const tileSwapTitle = run.activeContract?.noShuffle
         ? 'Scholar contract: tile swap disabled'
@@ -2623,13 +2605,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                             </div>
                         ) : null}
 
-                        {showEndlessChapterBanner ? (
-                            <GameScreenEndlessChapterBanner
-                                archetype={currentArchetype}
-                                featuredObjectiveLabel={currentFeaturedObjectiveLabel}
-                                floorIdentity={currentFloorIdentity}
-                            />
-                        ) : null}
 
 
                         <div

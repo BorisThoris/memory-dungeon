@@ -69,7 +69,8 @@
 .cardBody {
     display: -webkit-box;
     -webkit-box-orient: vertical;
-    -webkit-line-clamp: 4;
+    /* Three lines is what a base-height card fits; a fourth would be cut mid-line. */
+    -webkit-line-clamp: 3;
     overflow: hidden;
     margin: 0;
     font-size: 0.86rem;

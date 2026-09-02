@@ -608,254 +608,6 @@
     box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-danger) 18%, transparent);
 }
 
-.endlessChapterBanner {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    gap: 0.28rem 0.62rem;
-    width: fit-content;
-    max-width: min(100%, 78rem);
-    margin-inline: auto;
-    padding: 0.3rem 0.62rem 0.34rem;
-    border-radius: var(--ui-radius-pill);
-    border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 18%, transparent);
-    background:
-        radial-gradient(ellipse 120% 160% at 50% 0%, color-mix(in srgb, var(--theme-cyan-bright) 7%, transparent), transparent 58%),
-        linear-gradient(180deg, rgba(255, 243, 217, 0.045), transparent 56%),
-        color-mix(in srgb, var(--theme-panel-solid) 82%, transparent);
-    color: color-mix(in srgb, var(--theme-text) 86%, var(--theme-gold-bright) 14%);
-    box-shadow:
-        0 12px 26px color-mix(in srgb, var(--theme-shadow) 24%, transparent),
-        inset 0 1px 0 color-mix(in srgb, var(--theme-text) 5%, transparent);
-}
-
-.endlessChapterTitle {
-    font-size: 0.75rem;
-    font-weight: 800;
-    letter-spacing: 0.03em;
-    color: var(--theme-gold-bright);
-}
-
-.endlessChapterHint {
-    font-size: 0.75rem;
-    line-height: 1.35;
-    color: var(--theme-text-muted);
-}
-
-.endlessChapterObjective {
-    margin-left: 0;
-    font-size: 0.75rem;
-    font-weight: 700;
-    color: color-mix(in srgb, var(--theme-rune) 88%, white);
-}
-
-.endlessChapterRisk,
-.endlessChapterMutators {
-    display: none;
-    flex-basis: auto;
-    font-size: 0.75rem;
-    font-weight: 650;
-    color: color-mix(in srgb, var(--theme-cyan-bright) 76%, white);
-}
-
-.endlessChapterActionCue {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.22rem;
-    max-width: 18rem;
-    min-height: 1.46rem;
-    padding: 0.13rem 0.42rem;
-    border: 1px solid color-mix(in srgb, var(--theme-cyan-bright) 34%, transparent);
-    border-radius: 999px;
-    background:
-        radial-gradient(ellipse 100% 160% at 50% 0%, color-mix(in srgb, var(--theme-cyan-bright) 12%, transparent), transparent 72%),
-        color-mix(in srgb, var(--theme-panel-solid) 62%, transparent);
-    color: color-mix(in srgb, var(--theme-cyan-bright) 84%, white);
-}
-
-.endlessChapterActionCue small,
-.endlessChapterActionCue b {
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.endlessChapterActionCue small {
-    color: color-mix(in srgb, currentColor 72%, var(--theme-text-muted));
-    font-size: 0.75rem;
-    font-weight: 940;
-    line-height: 1;
-    text-transform: uppercase;
-}
-
-.endlessChapterActionCue b {
-    color: currentColor;
-    font-size: 0.75rem;
-    font-weight: 940;
-    line-height: 1.05;
-}
-
-.endlessChapterBeatPips {
-    display: grid;
-    grid-auto-columns: minmax(0.28rem, 1fr);
-    grid-auto-flow: column;
-    gap: 0.08rem;
-    width: min(3.4rem, 100%);
-    color: currentColor;
-}
-
-.endlessChapterBeatPips i {
-    height: 0.14rem;
-    border-radius: 999px;
-    background: currentColor;
-    box-shadow: 0 0 0.28rem color-mix(in srgb, currentColor 20%, transparent);
-    animation: gameplayBeatPipPulse 0.92s ease-in-out infinite;
-    transform-origin: center;
-}
-
-.endlessChapterBeatPips i[data-chapter-action-beat-focus='primary'],
-.endlessChapterBeatPips i[data-chapter-signal-beat-focus='primary'] {
-    min-width: 0.42rem;
-    height: 0.18rem;
-    filter: saturate(1.28) brightness(1.14);
-    transform: translateY(-0.01rem) scaleX(1.12);
-}
-
-.endlessChapterBeatPips i[data-chapter-action-beat-focus='support'],
-.endlessChapterBeatPips i[data-chapter-signal-beat-focus='support'] {
-    opacity: 0.72;
-}
-
-.endlessChapterActionCue[data-chapter-action-tone='reward'],
-.endlessChapterActionCue[data-chapter-action-tone='objective'] {
-    border-color: color-mix(in srgb, var(--theme-gold-bright) 36%, transparent);
-    background: color-mix(in srgb, var(--theme-gold-deep) 14%, transparent);
-    color: color-mix(in srgb, var(--theme-gold-bright) 86%, white);
-}
-
-.endlessChapterActionCue[data-chapter-action-tone='pressure'] {
-    border-color: color-mix(in srgb, var(--theme-danger) 34%, transparent);
-    background: color-mix(in srgb, var(--theme-danger) 10%, transparent);
-    color: color-mix(in srgb, var(--theme-danger) 76%, white);
-}
-
-.endlessChapterActionCue[data-chapter-action-screen-cue='burst'] {
-    box-shadow: 0 0 0.72rem color-mix(in srgb, var(--theme-gold-bright) 16%, transparent);
-}
-
-.endlessChapterActionCue[data-chapter-action-screen-cue='guard'],
-.endlessChapterActionCue[data-chapter-action-screen-cue='risk'] {
-    box-shadow: 0 0 0.7rem color-mix(in srgb, var(--theme-danger) 14%, transparent);
-}
-
-.endlessChapterActionCue[data-chapter-action-screen-cue='pulse'],
-.endlessChapterActionCue[data-chapter-action-screen-cue='snap'] {
-    box-shadow: 0 0 0.58rem color-mix(in srgb, var(--theme-cyan-bright) 12%, transparent);
-}
-
-.endlessChapterSignals {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.22rem;
-    align-items: center;
-    justify-content: center;
-}
-
-.endlessChapterSignals > span {
-    display: grid;
-    grid-template-columns: auto auto;
-    gap: 0.18rem;
-    align-items: baseline;
-    max-width: 13rem;
-    min-height: 1.35rem;
-    padding: 0.12rem 0.36rem;
-    border: 1px solid color-mix(in srgb, var(--theme-text-muted) 18%, transparent);
-    border-radius: 999px;
-    background: color-mix(in srgb, var(--theme-panel-solid) 58%, transparent);
-}
-
-.endlessChapterSignals .endlessChapterBeatPips {
-    grid-column: 1 / -1;
-    color: color-mix(in srgb, var(--theme-cyan-bright) 72%, white);
-}
-
-.endlessChapterSignals small {
-    overflow: hidden;
-    color: color-mix(in srgb, var(--theme-text-muted) 84%, white);
-    font-size: 0.75rem;
-    font-weight: 900;
-    line-height: 1;
-    text-overflow: ellipsis;
-    text-transform: uppercase;
-    white-space: nowrap;
-}
-
-.endlessChapterSignals b {
-    overflow: hidden;
-    color: color-mix(in srgb, var(--theme-text) 88%, white);
-    font-size: 0.75rem;
-    font-weight: 900;
-    letter-spacing: 0;
-    line-height: 1.05;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.endlessChapterSignals > span[data-chapter-signal-tone='pressure'] {
-    border-color: color-mix(in srgb, var(--theme-danger) 32%, transparent);
-    background: color-mix(in srgb, var(--theme-danger) 9%, transparent);
-}
-
-.endlessChapterSignals > span[data-chapter-signal-tone='pressure'] b {
-    color: color-mix(in srgb, var(--theme-danger) 72%, white);
-}
-
-.endlessChapterSignals > span[data-chapter-signal-tone='pressure'] .endlessChapterBeatPips {
-    color: color-mix(in srgb, var(--theme-danger) 66%, white);
-}
-
-.endlessChapterSignals > span[data-chapter-signal-screen-cue='guard'] {
-    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-danger) 18%, transparent);
-}
-
-.endlessChapterSignals > span[data-chapter-signal-tone='reward'],
-.endlessChapterSignals > span[data-chapter-signal-tone='objective'] {
-    border-color: color-mix(in srgb, var(--theme-gold-bright) 32%, transparent);
-    background: color-mix(in srgb, var(--theme-gold-deep) 13%, transparent);
-}
-
-.endlessChapterSignals > span[data-chapter-signal-tone='reward'] b,
-.endlessChapterSignals > span[data-chapter-signal-tone='objective'] b {
-    color: color-mix(in srgb, var(--theme-gold-bright) 82%, white);
-}
-
-.endlessChapterSignals > span[data-chapter-signal-tone='reward'] .endlessChapterBeatPips,
-.endlessChapterSignals > span[data-chapter-signal-tone='objective'] .endlessChapterBeatPips {
-    color: color-mix(in srgb, var(--theme-gold-bright) 72%, white);
-}
-
-.endlessChapterSignals > span[data-chapter-signal-screen-cue='burst'] {
-    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-gold-bright) 18%, transparent);
-}
-
-.endlessChapterSignals > span[data-chapter-signal-tone='counter'],
-.endlessChapterSignals > span[data-chapter-signal-tone='safe'] {
-    border-color: color-mix(in srgb, var(--theme-cyan-bright) 30%, transparent);
-    background: color-mix(in srgb, var(--theme-cyan-bright) 9%, transparent);
-}
-
-.endlessChapterSignals > span[data-chapter-signal-tone='counter'] b,
-.endlessChapterSignals > span[data-chapter-signal-tone='safe'] b {
-    color: color-mix(in srgb, var(--theme-cyan-bright) 80%, white);
-}
-
-.endlessChapterSignals > span[data-chapter-signal-screen-cue='pulse'],
-.endlessChapterSignals > span[data-chapter-signal-screen-cue='snap'] {
-    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-cyan-bright) 16%, transparent);
-}
-
 .endlessRiskWagerPrimaryCue {
     display: grid;
     grid-template-areas:
@@ -1115,7 +867,6 @@
 .routeSelectedBeatPips i:nth-child(2),
 .routeSelectedSignalBeatPips i:nth-child(2),
 .gambitOpportunityBeatPips i:nth-child(2),
-.endlessChapterBeatPips i:nth-child(2),
 .endlessRiskWagerBeatPips i:nth-child(2),
 .floorClearObjectiveBeatPips i:nth-child(2),
 .floorClearNextBeatPips i:nth-child(2),
@@ -1140,7 +891,6 @@
 .routeSelectedBeatPips i:nth-child(3),
 .routeSelectedSignalBeatPips i:nth-child(3),
 .gambitOpportunityBeatPips i:nth-child(3),
-.endlessChapterBeatPips i:nth-child(3),
 .endlessRiskWagerBeatPips i:nth-child(3),
 .floorClearObjectiveBeatPips i:nth-child(3),
 .floorClearNextBeatPips i:nth-child(3),
@@ -1165,7 +915,6 @@
 .routeSelectedBeatPips i:nth-child(4),
 .routeSelectedSignalBeatPips i:nth-child(4),
 .gambitOpportunityBeatPips i:nth-child(4),
-.endlessChapterBeatPips i:nth-child(4),
 .endlessRiskWagerBeatPips i:nth-child(4),
 .floorClearObjectiveBeatPips i:nth-child(4),
 .floorClearNextBeatPips i:nth-child(4),
@@ -6324,7 +6073,6 @@
 .boardFloaterChainMilestone::before,
 .hudFindableProgressPill[data-findable-state='live'],
 .gambitOpportunityBeatPips i,
-.endlessChapterBeatPips i,
 .endlessRiskWagerPrimaryBeatPips i,
 .endlessRiskWagerBeatPips i,
 .floorClearPayoffStackBeatPips i,
@@ -6400,7 +6148,6 @@
 :global([data-reduce-motion='true']) .hudChainStackedPayoffBadge,
 :global([data-reduce-motion='true']) .hudRewardPerkRows > span[data-reward-perk-readiness='armed'],
 :global([data-reduce-motion='true']) .gambitOpportunityBeatPips i,
-:global([data-reduce-motion='true']) .endlessChapterBeatPips i,
 :global([data-reduce-motion='true']) .endlessRiskWagerPrimaryBeatPips i,
 :global([data-reduce-motion='true']) .endlessRiskWagerBeatPips i,
 :global([data-reduce-motion='true']) .hudEndlessRiskWagerBeatPips i,

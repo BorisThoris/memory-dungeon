@@ -249,6 +249,26 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                             </button>
                                         ))}
                                     </nav>
+
+                                    {/* Phones get the same choice as one menu row instead of six stacked cards. */}
+                                    <label className={styles.categoryMenu}>
+                                        <span className={styles.srOnly}>Settings category</span>
+                                        <select
+                                            className={styles.categorySelect}
+                                            data-testid="settings-category-menu"
+                                            onChange={(event) => {
+                                                playUiClick();
+                                                setActiveCategory(event.target.value as typeof activeCategory);
+                                            }}
+                                            value={activeCategory}
+                                        >
+                                            {SETTINGS_CATEGORIES.map((category) => (
+                                                <option key={category.id} value={category.id}>
+                                                    {category.label}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </label>
                                 </aside>
 
                                 <div className={styles.contentPane}>

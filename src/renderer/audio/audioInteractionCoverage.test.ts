@@ -140,7 +140,7 @@ describe('REG-037 audio interaction coverage', () => {
             semanticMoment: 'pressure'
         });
         expect(gameplay.find((row) => row.id === 'gameplay_status_action_cues')?.callsite).toMatch(
-            /GameScreenEndlessChapterBanner/i
+            /RunShell objective line/i
         );
         expect(gameplay.find((row) => row.id === 'gameplay_status_action_cues')?.mixRole).toMatch(
             /reward.*pressure.*guard.*pulse.*snap/i
