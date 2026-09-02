@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2419,
-    "codeFileCount": 910,
-    "exportedSymbolCount": 3469,
+    "trackedFileCount": 2418,
+    "codeFileCount": 908,
+    "exportedSymbolCount": 3464,
     "contentItemCount": 57,
     "mechanicCount": 130,
     "stateFieldCount": 144,
-    "relationshipCount": 10011
+    "relationshipCount": 9995
   },
   "inventory": [
     {
@@ -2313,8 +2313,8 @@
     {
       "path": "docs/UI_RETHINK_PLAN.md",
       "category": "documentation",
-      "bytes": 20577,
-      "sha256": "69946075fe62b76e2b559497758354638af5b76762cc393a8cb942aaf7dc8777"
+      "bytes": 21260,
+      "sha256": "1a65e0c73e4712afa2fa5ee7451a8e30a495176eaed1d9658e65e68b75ab1512"
     },
     {
       "path": "docs/UI_TASKS/README.md",
@@ -3669,8 +3669,8 @@
     {
       "path": "e2e/playable-path-interludes.spec.ts",
       "category": "test",
-      "bytes": 14687,
-      "sha256": "6b6049ecd6f68379a6b91e00804fb47a28ba17c5e77912b6156041cb337218e2"
+      "bytes": 14342,
+      "sha256": "59e80dc3f8875fc7dbf670c1e96c452ae3d861cb9cd93df0730c69fc4dd017a0"
     },
     {
       "path": "e2e/playable-path-mode-matrix.spec.ts",
@@ -3681,8 +3681,8 @@
     {
       "path": "e2e/playable-path-navigation.spec.ts",
       "category": "test",
-      "bytes": 10966,
-      "sha256": "46d05cd1f73af1b8a257d5ff269d163b19294abe1ca057a71b43bf45b13f5b11"
+      "bytes": 10875,
+      "sha256": "7e77a6d2bfb7c27396b66e97e0c49e0ff17323411e7559e446aace920826ded3"
     },
     {
       "path": "e2e/playablePathHelpers.ts",
@@ -3707,6 +3707,12 @@
       "category": "test",
       "bytes": 6465,
       "sha256": "6b0943350c2dd57078509da45be16eef1de8b3098a15b76cdd7b3c3418dc887a"
+    },
+    {
+      "path": "e2e/retry-loop-capture.tmp.spec.ts",
+      "category": "test",
+      "bytes": 2709,
+      "sha256": "5a049471c25534b7f42a972085bd96c0826bd3260207328039265debcccaa77b"
     },
     {
       "path": "e2e/scholar-contract.spec.ts",
@@ -7467,8 +7473,8 @@
     {
       "path": "src/renderer/components/GameScreen.module.css",
       "category": "source",
-      "bytes": 513781,
-      "sha256": "24be6208e8408027f6accaca95c2dcec9a25f67e1be3f4648599f07a3288c571"
+      "bytes": 514371,
+      "sha256": "a56a98162a4d5053b8196c1e45c2bc585a8b0807e18db654eb1be2dfc60d3f54"
     },
     {
       "path": "src/renderer/components/GameScreen.test.tsx",
@@ -7479,8 +7485,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 242278,
-      "sha256": "752be43d78751639bf379a1d3c08c07c4d0f7e856df75e8f115f8be5ac57d68b"
+      "bytes": 243221,
+      "sha256": "90c68f7bd6b20c7b855fd4591cb18160ee93a7351bb09ce831f2eb232ef05c25"
     },
     {
       "path": "src/renderer/components/gameScreenBoardFeedbackModel.test.ts",
@@ -7563,20 +7569,20 @@
     {
       "path": "src/renderer/components/InventoryScreen.module.css",
       "category": "source",
-      "bytes": 32295,
-      "sha256": "e5d96b476f74b63c224f3b9b1cda1c1f760b99e4d79c9b9d7d0496e97d1a888a"
+      "bytes": 3133,
+      "sha256": "7a2ecb46ce87c38e02fd2570f7f41af3c1d703a7646b0958a4a05d2670dea6bd"
     },
     {
       "path": "src/renderer/components/InventoryScreen.test.tsx",
       "category": "test",
-      "bytes": 27585,
-      "sha256": "0287d67d12336d400a9ca92d91e102b8083620561d5543119555f1639ae551db"
+      "bytes": 4007,
+      "sha256": "2a2671c59e4bb1528309e98e270849d6d00d3f641c638f7e579d81c2a5c27f5e"
     },
     {
       "path": "src/renderer/components/InventoryScreen.tsx",
       "category": "source",
-      "bytes": 53785,
-      "sha256": "243f94e67c3c330b973d1da1aa545508ad8eee8e35787265499731e93b21ddb4"
+      "bytes": 10128,
+      "sha256": "fdd35dd1f6bed1f9de06e507cc935cb946ce2d433ff78f80e516906539aa9ec1"
     },
     {
       "path": "src/renderer/components/inventoryScreenModel.test.ts",
@@ -7785,20 +7791,20 @@
     {
       "path": "src/renderer/components/SettingsScreen.module.css",
       "category": "source",
-      "bytes": 31574,
-      "sha256": "83d4bab4609dbb526e61a76174a91d35f013886590a21d49cd15e074897a896e"
+      "bytes": 30790,
+      "sha256": "ed607938dc9a59b6cf9efa8395b13cf9dd8724cae3439a9a47bc60d902f710dc"
     },
     {
       "path": "src/renderer/components/SettingsScreen.test.tsx",
       "category": "test",
-      "bytes": 4448,
-      "sha256": "438b1053a25cbcfbd4c750c2f13e613cb2e0036639e333a82104e6bc6eea773a"
+      "bytes": 4460,
+      "sha256": "0759847b162bee02b85b6dd41de623ae412cd0620441af829cf822b3c1d22c04"
     },
     {
       "path": "src/renderer/components/SettingsScreen.tsx",
       "category": "source",
-      "bytes": 44596,
-      "sha256": "cd5b4c5203cdcfb853375c4c5295f63cc2727d662df1917f412073da41209218"
+      "bytes": 43830,
+      "sha256": "40fc224d0b65b82a6d0776406365b6a71aac6f549cb6c8c9949676f143370167"
     },
     {
       "path": "src/renderer/components/ShopScreen.module.css",
@@ -7845,8 +7851,8 @@
     {
       "path": "src/renderer/components/SideRoomScreen.tsx",
       "category": "source",
-      "bytes": 8622,
-      "sha256": "e489c5376c231ba9581fda3f4256299bc1219b4ace1977dc4b97a0e72bbf8dcb"
+      "bytes": 8747,
+      "sha256": "941acb034bf59633f7d40950888f6b1969fd96bdbdaeb9bdefc4490de4e72ca1"
     },
     {
       "path": "src/renderer/components/StartupIntro.module.css",
@@ -9700,7 +9706,7 @@
       "path": "src/renderer/styles/theme.ts",
       "category": "source",
       "bytes": 26914,
-      "sha256": "45ce84f4177ea5bff657cd7e43a95e1b63d8f59046a89f5941a49a436d7427eb"
+      "sha256": "eb02d37cfb6f9074bff8274179a36dfe0517ab2759414c308c1b63a058340aec"
     },
     {
       "path": "src/renderer/styles/theme.wcag.test.ts",
@@ -11903,18 +11909,6 @@
       "category": "source",
       "bytes": 3803,
       "sha256": "0dbfaff9b033747fed8e6ba2b2e2df3809f2c50568e5a229637a0a25ed8e86e3"
-    },
-    {
-      "path": "src/shared/settings-control-center.test.ts",
-      "category": "test",
-      "bytes": 1314,
-      "sha256": "eab884e93e532c537d05a002e0d2d3b71a76ae5bb6781904d3833672bc198e9c"
-    },
-    {
-      "path": "src/shared/settings-control-center.ts",
-      "category": "source",
-      "bytes": 2359,
-      "sha256": "c1f81c456bfbbf947e66b54eca8f7f84a542a7d6597a377dc50e3ca57360932d"
     },
     {
       "path": "src/shared/settings-control-model.test.ts",
@@ -16734,7 +16728,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 4489,
+      "lineCount": 4508,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -17132,10 +17126,9 @@
       "path": "src/renderer/components/InventoryScreen.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 490,
+      "lineCount": 100,
       "imports": [
         "file:src/renderer/components/InventoryScreen.tsx",
-        "file:src/shared/contracts.ts",
         "file:src/shared/game-core.ts"
       ],
       "exports": [],
@@ -17146,13 +17139,11 @@
       "path": "src/renderer/components/InventoryScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 986,
+      "lineCount": 200,
       "imports": [
         "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/components/inventoryScreenModel.ts",
-        "file:src/renderer/components/metaScreenTocNav.ts",
         "file:src/renderer/components/metaStackedShellLayout.ts",
-        "file:src/renderer/copy/inventoryScreen.ts",
         "file:src/renderer/store/useAppStore.ts",
         "file:src/renderer/ui/index.ts",
         "file:src/shared/game-catalog.ts",
@@ -17643,7 +17634,7 @@
       "path": "src/renderer/components/SettingsScreen.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 97,
+      "lineCount": 96,
       "imports": [
         "file:src/renderer/components/SettingsScreen.tsx",
         "file:src/renderer/store/useAppStore.ts",
@@ -17657,7 +17648,7 @@
       "path": "src/renderer/components/SettingsScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 702,
+      "lineCount": 692,
       "imports": [
         "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/breakpoints.ts",
@@ -17676,7 +17667,6 @@
         "file:src/shared/premium-economy-policy.ts",
         "file:src/shared/profile-summary.ts",
         "file:src/shared/save-data.ts",
-        "file:src/shared/settings-control-center.ts",
         "file:src/shared/settings-control-model.ts"
       ],
       "exports": [
@@ -17781,7 +17771,7 @@
       "path": "src/renderer/components/SideRoomScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 200,
+      "lineCount": 201,
       "imports": [
         "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/components/gameplayVisualConfig.ts",
@@ -24755,7 +24745,6 @@
         "file:src/renderer/components/GameOverScreen.test.tsx",
         "file:src/renderer/components/GameScreen.test.tsx",
         "file:src/renderer/components/gameScreenDecisionSignals.test.tsx",
-        "file:src/renderer/components/InventoryScreen.test.tsx",
         "file:src/renderer/components/inventoryScreenModel.test.ts",
         "file:src/renderer/components/MainMenuBackground.test.tsx",
         "file:src/renderer/components/ProfileScreen.test.tsx",
@@ -31197,8 +31186,7 @@
         "file:src/shared/run-mode-catalog.test.ts",
         "file:src/shared/run-settings-rules.test.ts",
         "file:src/shared/run-summary-rules.test.ts",
-        "file:src/shared/save-data.test.ts",
-        "file:src/shared/settings-control-center.test.ts"
+        "file:src/shared/save-data.test.ts"
       ]
     },
     {
@@ -31419,40 +31407,6 @@
       "testedBy": [
         "file:src/shared/gameplay-core.test.ts",
         "file:src/shared/session-stats-rules.test.ts"
-      ]
-    },
-    {
-      "id": "file:src/shared/settings-control-center.test.ts",
-      "path": "src/shared/settings-control-center.test.ts",
-      "layer": "shared",
-      "role": "test",
-      "lineCount": 28,
-      "imports": [
-        "file:src/shared/save-data.ts",
-        "file:src/shared/settings-control-center.ts"
-      ],
-      "exports": [],
-      "testedBy": []
-    },
-    {
-      "id": "file:src/shared/settings-control-center.ts",
-      "path": "src/shared/settings-control-center.ts",
-      "layer": "shared",
-      "role": "production",
-      "lineCount": 73,
-      "imports": [
-        "file:src/shared/contracts.ts",
-        "file:src/shared/save-data.ts"
-      ],
-      "exports": [
-        "symbol:src/shared/settings-control-center.ts#getLiveSettingsControlCount",
-        "symbol:src/shared/settings-control-center.ts#getSettingsControlCenterRows",
-        "symbol:src/shared/settings-control-center.ts#LIVE_SETTINGS_CONTROL_KEYS",
-        "symbol:src/shared/settings-control-center.ts#SettingsControlCenterRow",
-        "symbol:src/shared/settings-control-center.ts#SettingsControlCenterRowId"
-      ],
-      "testedBy": [
-        "file:src/shared/settings-control-center.test.ts"
       ]
     },
     {
@@ -35198,8 +35152,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 4488,
-      "endLine": 4488
+      "line": 4507,
+      "endLine": 4507
     },
     {
       "id": "symbol:src/renderer/components/gameScreenBoardFeedbackModel.ts#getBoardMatchPayoffStackAction",
@@ -36222,8 +36176,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/InventoryScreen.tsx",
-      "line": 985,
-      "endLine": 985
+      "line": 199,
+      "endLine": 199
     },
     {
       "id": "symbol:src/renderer/components/inventoryScreenModel.ts#createInventoryQuantityMap",
@@ -36534,8 +36488,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/SettingsScreen.tsx",
-      "line": 701,
-      "endLine": 701
+      "line": 691,
+      "endLine": 691
     },
     {
       "id": "symbol:src/renderer/components/ShopScreen.tsx#default",
@@ -36614,8 +36568,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/SideRoomScreen.tsx",
-      "line": 199,
-      "endLine": 199
+      "line": 200,
+      "endLine": 200
     },
     {
       "id": "symbol:src/renderer/components/StartupIntro.tsx#default",
@@ -58498,46 +58452,6 @@
       "endLine": 16
     },
     {
-      "id": "symbol:src/shared/settings-control-center.ts#getLiveSettingsControlCount",
-      "name": "getLiveSettingsControlCount",
-      "kind": "value",
-      "file": "src/shared/settings-control-center.ts",
-      "line": 39,
-      "endLine": 41
-    },
-    {
-      "id": "symbol:src/shared/settings-control-center.ts#getSettingsControlCenterRows",
-      "name": "getSettingsControlCenterRows",
-      "kind": "value",
-      "file": "src/shared/settings-control-center.ts",
-      "line": 43,
-      "endLine": 72
-    },
-    {
-      "id": "symbol:src/shared/settings-control-center.ts#LIVE_SETTINGS_CONTROL_KEYS",
-      "name": "LIVE_SETTINGS_CONTROL_KEYS",
-      "kind": "value",
-      "file": "src/shared/settings-control-center.ts",
-      "line": 18,
-      "endLine": 37
-    },
-    {
-      "id": "symbol:src/shared/settings-control-center.ts#SettingsControlCenterRow",
-      "name": "SettingsControlCenterRow",
-      "kind": "interface",
-      "file": "src/shared/settings-control-center.ts",
-      "line": 10,
-      "endLine": 16
-    },
-    {
-      "id": "symbol:src/shared/settings-control-center.ts#SettingsControlCenterRowId",
-      "name": "SettingsControlCenterRowId",
-      "kind": "type",
-      "file": "src/shared/settings-control-center.ts",
-      "line": 4,
-      "endLine": 8
-    },
-    {
       "id": "symbol:src/shared/settings-control-model.ts#getReferenceOnlySettingsRows",
       "name": "getReferenceOnlySettingsRows",
       "kind": "value",
@@ -61435,7 +61349,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 14
+          "line": 15
         }
       ],
       "tests": [
@@ -62671,7 +62585,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 2481
+          "line": 2483
         }
       ],
       "tests": [
@@ -63755,7 +63669,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 14
+          "line": 15
         }
       ],
       "tests": [
@@ -63847,7 +63761,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 14
+          "line": 15
         }
       ],
       "tests": [
@@ -91265,36 +91179,6 @@
       "kind": "exports"
     },
     {
-      "id": "exports:src/shared/settings-control-center.ts->symbol:src/shared/settings-control-center.ts#getLiveSettingsControlCount",
-      "source": "file:src/shared/settings-control-center.ts",
-      "target": "symbol:src/shared/settings-control-center.ts#getLiveSettingsControlCount",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/settings-control-center.ts->symbol:src/shared/settings-control-center.ts#getSettingsControlCenterRows",
-      "source": "file:src/shared/settings-control-center.ts",
-      "target": "symbol:src/shared/settings-control-center.ts#getSettingsControlCenterRows",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/settings-control-center.ts->symbol:src/shared/settings-control-center.ts#LIVE_SETTINGS_CONTROL_KEYS",
-      "source": "file:src/shared/settings-control-center.ts",
-      "target": "symbol:src/shared/settings-control-center.ts#LIVE_SETTINGS_CONTROL_KEYS",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/settings-control-center.ts->symbol:src/shared/settings-control-center.ts#SettingsControlCenterRow",
-      "source": "file:src/shared/settings-control-center.ts",
-      "target": "symbol:src/shared/settings-control-center.ts#SettingsControlCenterRow",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/settings-control-center.ts->symbol:src/shared/settings-control-center.ts#SettingsControlCenterRowId",
-      "source": "file:src/shared/settings-control-center.ts",
-      "target": "symbol:src/shared/settings-control-center.ts#SettingsControlCenterRowId",
-      "kind": "exports"
-    },
-    {
       "id": "exports:src/shared/settings-control-model.ts->symbol:src/shared/settings-control-model.ts#getReferenceOnlySettingsRows",
       "source": "file:src/shared/settings-control-model.ts",
       "target": "symbol:src/shared/settings-control-model.ts#getReferenceOnlySettingsRows",
@@ -98763,12 +98647,6 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/InventoryScreen.test.tsx->src/shared/contracts.ts",
-      "source": "file:src/renderer/components/InventoryScreen.test.tsx",
-      "target": "file:src/shared/contracts.ts",
-      "kind": "imports"
-    },
-    {
       "id": "imports:src/renderer/components/InventoryScreen.test.tsx->src/shared/game-core.ts",
       "source": "file:src/renderer/components/InventoryScreen.test.tsx",
       "target": "file:src/shared/game-core.ts",
@@ -98787,21 +98665,9 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/InventoryScreen.tsx->src/renderer/components/metaScreenTocNav.ts",
-      "source": "file:src/renderer/components/InventoryScreen.tsx",
-      "target": "file:src/renderer/components/metaScreenTocNav.ts",
-      "kind": "imports"
-    },
-    {
       "id": "imports:src/renderer/components/InventoryScreen.tsx->src/renderer/components/metaStackedShellLayout.ts",
       "source": "file:src/renderer/components/InventoryScreen.tsx",
       "target": "file:src/renderer/components/metaStackedShellLayout.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/InventoryScreen.tsx->src/renderer/copy/inventoryScreen.ts",
-      "source": "file:src/renderer/components/InventoryScreen.tsx",
-      "target": "file:src/renderer/copy/inventoryScreen.ts",
       "kind": "imports"
     },
     {
@@ -99564,12 +99430,6 @@
       "id": "imports:src/renderer/components/SettingsScreen.tsx->src/shared/save-data.ts",
       "source": "file:src/renderer/components/SettingsScreen.tsx",
       "target": "file:src/shared/save-data.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/SettingsScreen.tsx->src/shared/settings-control-center.ts",
-      "source": "file:src/renderer/components/SettingsScreen.tsx",
-      "target": "file:src/shared/settings-control-center.ts",
       "kind": "imports"
     },
     {
@@ -113133,30 +112993,6 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/shared/settings-control-center.test.ts->src/shared/save-data.ts",
-      "source": "file:src/shared/settings-control-center.test.ts",
-      "target": "file:src/shared/save-data.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/settings-control-center.test.ts->src/shared/settings-control-center.ts",
-      "source": "file:src/shared/settings-control-center.test.ts",
-      "target": "file:src/shared/settings-control-center.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/settings-control-center.ts->src/shared/contracts.ts",
-      "source": "file:src/shared/settings-control-center.ts",
-      "target": "file:src/shared/contracts.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/settings-control-center.ts->src/shared/save-data.ts",
-      "source": "file:src/shared/settings-control-center.ts",
-      "target": "file:src/shared/save-data.ts",
-      "kind": "imports"
-    },
-    {
       "id": "imports:src/shared/settings-control-model.test.ts->src/shared/settings-control-model.ts",
       "source": "file:src/shared/settings-control-model.test.ts",
       "target": "file:src/shared/settings-control-model.ts",
@@ -122929,12 +122765,6 @@
       "kind": "tested_by"
     },
     {
-      "id": "tested_by:src/shared/contracts.ts->file:src/renderer/components/InventoryScreen.test.tsx",
-      "source": "file:src/shared/contracts.ts",
-      "target": "file:src/renderer/components/InventoryScreen.test.tsx",
-      "kind": "tested_by"
-    },
-    {
       "id": "tested_by:src/shared/contracts.ts->file:src/renderer/components/inventoryScreenModel.test.ts",
       "source": "file:src/shared/contracts.ts",
       "target": "file:src/renderer/components/inventoryScreenModel.test.ts",
@@ -126379,12 +126209,6 @@
       "kind": "tested_by"
     },
     {
-      "id": "tested_by:src/shared/save-data.ts->file:src/shared/settings-control-center.test.ts",
-      "source": "file:src/shared/save-data.ts",
-      "target": "file:src/shared/settings-control-center.test.ts",
-      "kind": "tested_by"
-    },
-    {
       "id": "tested_by:src/shared/score-parasite-rules.ts->file:src/shared/score-parasite-rules.test.ts",
       "source": "file:src/shared/score-parasite-rules.ts",
       "target": "file:src/shared/score-parasite-rules.test.ts",
@@ -126430,12 +126254,6 @@
       "id": "tested_by:src/shared/session-stats-rules.ts->file:src/shared/session-stats-rules.test.ts",
       "source": "file:src/shared/session-stats-rules.ts",
       "target": "file:src/shared/session-stats-rules.test.ts",
-      "kind": "tested_by"
-    },
-    {
-      "id": "tested_by:src/shared/settings-control-center.ts->file:src/shared/settings-control-center.test.ts",
-      "source": "file:src/shared/settings-control-center.ts",
-      "target": "file:src/shared/settings-control-center.test.ts",
       "kind": "tested_by"
     },
     {

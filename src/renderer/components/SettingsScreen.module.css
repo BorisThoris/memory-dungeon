@@ -441,41 +441,10 @@
     line-height: 1.45;
 }
 
-.controlCenterStrip {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 0.4rem;
-    margin-top: var(--theme-space-sm);
-}
 
-.controlCenterRow {
-    min-width: 0;
-    display: grid;
-    gap: 0.12rem;
-    padding: 0.48rem 0.58rem;
-    border-radius: var(--ui-radius-md);
-    border: 1px solid color-mix(in srgb, var(--theme-gold) 24%, transparent);
-    background: var(--theme-surface-glass);
-    box-shadow: var(--theme-elevation-soft);
-    overflow-wrap: anywhere;
-}
 
-.controlCenterRow strong,
-.controlCenterRow span {
-    display: block;
-}
 
-.controlCenterRow span {
-    color: var(--theme-text-muted);
-    font-size: 0.72rem;
-    line-height: 1.25;
-}
 
-.controlCenterRow strong {
-    color: var(--theme-rune);
-    font-size: 0.84rem;
-    line-height: 1.2;
-}
 
 .subsectionNav {
     display: grid;

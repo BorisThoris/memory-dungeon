@@ -81,6 +81,7 @@ const SideRoomScreen = () => {
     const sideRoom = run.sideRoom;
     const nodeKindStamp = sideRoomNodeKindStamp(sideRoom);
     const rewardSegments = rewardFeedbackSegments(sideRoom);
+    const hasChoices = Boolean(sideRoom.choices && sideRoom.choices.length > 0);
 
     return (
         <section
@@ -106,8 +107,8 @@ const SideRoomScreen = () => {
                 </header>
 
                 <div className={styles.rewardPanel} data-testid="side-room-reward-panel">
-                    <strong>{sideRoom.primaryLabel}</strong>
-                    <p className={styles.rewardText}>{sideRoom.primaryDetail}</p>
+                    {hasChoices ? null : <strong>{sideRoom.primaryLabel}</strong>}
+                    {hasChoices ? null : <p className={styles.rewardText}>{sideRoom.primaryDetail}</p>}
                     {rewardSegments.length > 1 ? (
                         <ul
                             aria-label="Reward feedback breakdown"

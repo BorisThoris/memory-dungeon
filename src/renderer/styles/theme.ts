@@ -340,7 +340,7 @@ export const RENDERER_THEME = {
         '--ui-font-eyebrow': '0.72rem',
         '--ui-font-display-family': "'Cinzel', 'Palatino Linotype', 'Book Antiqua', Georgia, serif",
         '--ui-font-body-family': "'Source Sans 3', 'Trebuchet MS', 'Segoe UI', sans-serif",
-        '--ui-font-label': '0.62rem',
+        '--ui-font-label': '0.75rem',
         '--ui-font-body': '0.95rem',
         '--ui-font-body-sm': '0.82rem',
         '--ui-font-stat': '1.28rem',

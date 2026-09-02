@@ -147,10 +147,7 @@ test.describe('Expanded playable interludes and post-run loop', () => {
         await expectGameplayReady(page);
 
         await openInventoryFromToolbar(page);
-        await expect(page.getByTestId('inventory-meta-frame-build')).toBeVisible();
-        await expect(page.getByTestId('inventory-meta-frame-build')).not.toContainText(/first relic still ahead/i);
-        await expect(page.getByTestId('inventory-run-loop-signals')).toContainText(/Chain loop/i);
-        await expect(page.getByTestId('inventory-run-loop-signals')).toContainText(/Start x3 loop|Push x6 reward|Break into x10|Hold x10 pressure/i);
+        await expect(page.getByTestId('inventory-run-line')).toContainText(/Floor \d+ · .* · Score/);
         await expect(page.getByTestId('inventory-meta-frame-relics')).toBeVisible();
         await expect(page.getByTestId('inventory-meta-frame-relics')).not.toContainText(/no relic/i);
         await page.getByRole('region', { name: /inventory/i }).getByRole('button', { name: /^back$/i }).click();

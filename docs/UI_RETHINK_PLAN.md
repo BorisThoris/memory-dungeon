@@ -151,6 +151,10 @@ sits under the bar's translucent tail. Phase 2 passes a top/bottom inset to `Til
 
 ## 4. The retry loop: floor clear, relic draft, shop, side room, game over
 
+**Status: built.** Floor clear is the new `FloorClearDialog` (score, four stats, notes, three doors,
+wager line). Relic draft is three cards plus the service row. Shop, side room and game over are the
+06-28 shape with every label at 12px or above and the side room's duplicated primary block removed.
+
 These five are where the bombardment multiplied hardest (§0.1: 6–7.5× in tsx). Each is a
 delete-then-rebuild against its 06-28 skeleton plus the artboard.
 
@@ -193,6 +197,11 @@ Again + Main Menu, run snapshot, journal, achievements, detail drawer. **Delete:
 *(research: what run-summary content drives retry is cited in §7.)*
 
 ## 5. Never-bombarded screens: Inventory, Codex, Settings, Pause
+
+**Status: Inventory, Settings and Pause built; Codex unchanged.** Inventory is one header line plus
+Relics, Mutators and Charges. Settings lost the developer control-center strip. Pause is one line and
+three stats under the actions. The global `--ui-font-label` token moved from 0.62rem to 0.75rem, which
+is the 12px floor for every eyebrow and stat label the meta screens share.
 
 Inventory grew 438 → 985 but kept its sections; Codex and Settings are untouched since 06-28.
 For these the work is design, not deletion:

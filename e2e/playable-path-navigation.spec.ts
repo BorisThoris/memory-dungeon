@@ -45,7 +45,7 @@ test.describe('Expanded playable navigation contract', () => {
 
         await page.getByRole('button', { name: /^settings$/i }).click();
         await expect(page.getByRole('heading', { name: /^settings$/i })).toBeVisible();
-        await expect(page.getByTestId('settings-control-center-strip')).toBeVisible();
+        await expect(page.getByTestId('settings-shell-panel')).toBeVisible();
         await page.getByRole('button', { name: /^back$/i }).click();
         await expect(mainMenuPlayButton(page)).toBeVisible();
 
@@ -119,9 +119,8 @@ test.describe('Expanded playable navigation contract', () => {
         await page.getByTestId('game-toolbar-inventory').click({ force: true });
         await expect(page.getByRole('region', { name: /inventory/i })).toBeVisible();
         await expect(page.getByTestId('inventory-meta-frame-run')).toContainText(/Run snapshot/i);
-        await expect(page.getByTestId('inventory-meta-frame-build')).toBeVisible();
         await expect(page.getByTestId('inventory-meta-frame-mutators')).toContainText(/Wide recall|mutator/i);
-        await expect(page.getByTestId('inventory-meta-frame-economy')).toBeVisible();
+        await expect(page.getByTestId('inventory-charges-panel')).toContainText(/Guard tokens/);
         await page.getByRole('region', { name: /inventory/i }).getByRole('button', { name: /^back$/i }).click();
         await expectGameplayReady(page);
 
@@ -134,7 +133,7 @@ test.describe('Expanded playable navigation contract', () => {
 
         await page.getByTestId('game-toolbar-settings').click({ force: true });
         await expect(page.getByRole('dialog', { name: /run settings/i })).toBeVisible();
-        await expect(page.getByTestId('settings-control-center-strip')).toBeVisible();
+        await expect(page.getByTestId('settings-shell-panel')).toBeVisible();
         await expect(page.getByTestId('settings-shell-footer')).toBeVisible();
         await page.getByRole('dialog', { name: /run settings/i }).getByRole('button', { name: /^back$/i }).click();
         await expectGameplayReady(page);

@@ -1,5 +1,6 @@
 import { ACHIEVEMENTS } from '../../shared/achievements';
 import {
+    MAX_LIVES,
     ENDLESS_RISK_WAGER_BONUS_FAVOR,
     MAX_PINNED_TILES,
     RECALL_FOCUS_MAX,
@@ -2248,8 +2249,9 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                   routeType: choice.routeType,
                   label: row?.choiceLabel ?? choice.label,
                   room: row?.nodeLabel ?? '',
-                  approachLabel: row?.approachLabel,
-                  glyph: row?.glyph ?? FLOOR_CLEAR_ROUTE_GLYPHS[choice.routeType],
+                  // The approach matters only when rooms converge on one gate ("Keeper Chamber via Safe passage").
+                  approachLabel: row?.approachLabel && /\bvia\b/u.test(row.nodeLabel) ? row.approachLabel : undefined,
+                  glyph: FLOOR_CLEAR_ROUTE_GLYPHS[choice.routeType],
                   reward: row?.reward ?? choice.rewardPreview ?? choice.detail,
                   risk: row?.risk ?? choice.riskPreview ?? 'No extra risk.',
                   available: availability.available,
@@ -4350,10 +4352,27 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                         headerPlateTone="pause"
                         onEscape={resume}
                         ornamentalHeaderPlate
-                        subtitle="Game is paused. The board, memorize phase, and debug timers stay frozen until you resume or retreat. Press P to resume."
+                        subtitle="The board and its timers stay frozen. Press P to resume."
                         testId="game-pause-overlay"
                         title="Run paused"
-                    />
+                    >
+                        <dl aria-label="Run so far" className={styles.pauseStats}>
+                            <div>
+                                <dt>Floor</dt>
+                                <dd>{run.board?.level ?? run.stats.highestLevel}</dd>
+                            </div>
+                            <div>
+                                <dt>Score</dt>
+                                <dd>{runNonNegativeInteger(run.stats.totalScore).toLocaleString()}</dd>
+                            </div>
+                            <div>
+                                <dt>Lives</dt>
+                                <dd>
+                                    {run.lives} / {MAX_LIVES}
+                                </dd>
+                            </div>
+                        </dl>
+                    </OverlayModal>
                 )}
 
                 {!suppressStatusOverlays && run.relicOffer ? (

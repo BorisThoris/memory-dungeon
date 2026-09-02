@@ -85,12 +85,11 @@ describe('SettingsScreen', () => {
         expect(policy).not.toHaveTextContent(/buy gems|microtransaction|premium currency/i);
     });
 
-    it('REG-092 surfaces settings as a searchable control center with persistence mapping', () => {
+    it('opens on the settings themselves, with no developer control-center strip', () => {
         render(<SettingsScreen presentation="page" />);
 
-        const strip = screen.getByTestId('settings-control-center-strip');
-        expect(strip).toHaveTextContent(/Live controls/);
-        expect(strip).toHaveTextContent(/saved preferences/);
-        expect(strip).toHaveTextContent(/Reference placeholders/);
+        expect(screen.queryByTestId('settings-control-center-strip')).toBeNull();
+        expect(screen.getByTestId('settings-shell-panel')).toBeInTheDocument();
+        expect(screen.queryByText(/Live controls|Reference placeholders|Profile trust|Mobile reachability/)).toBeNull();
     });
 });
