@@ -111,9 +111,8 @@ describe('desktop app flow', () => {
 
         expect(await findGameplayBoardStage()).toBeInTheDocument();
         expect(screen.getByRole('group', { name: /run stats/i })).toBeInTheDocument();
-        expect(screen.getByTestId('hud-trait-route-panel')).toHaveTextContent('Trait routes');
+        expect(screen.getByTestId('hud-score')).toHaveTextContent(/score/i);
         expect(screen.getByText(/^shards$/i)).toBeInTheDocument();
-        expect(screen.getByRole('button', { name: /rule tips/i })).toBeInTheDocument();
     }, 45_000);
 
     it('turns off the app-level ambient grid while the menu or game Pixi background is active', async () => {
@@ -578,7 +577,8 @@ describe('desktop app flow', () => {
             await chooseClassicRun(user);
             expect(await findGameplayBoardStage()).toBeInTheDocument();
 
-            await user.click(screen.getByRole('button', { name: /settings/i }));
+            await user.click(await screen.findByRole('button', { name: /pause and open the run menu/i }));
+            await user.click(await screen.findByRole('button', { name: /^settings$/i }));
 
             const dialog = await screen.findByRole('dialog', { name: /run settings/i });
             expect(dialog).toBeInTheDocument();
@@ -641,6 +641,7 @@ describe('desktop app flow', () => {
         await dismissStartupIntro(user);
         await chooseClassicRun(user);
 
+        await user.click(await screen.findByRole('button', { name: /pause and open the run menu/i }));
         expect(await screen.findByRole('button', { name: /fit board/i })).toBeInTheDocument();
     });
 
@@ -652,6 +653,7 @@ describe('desktop app flow', () => {
         await dismissStartupIntro(user);
         await chooseClassicRun(user);
 
+        await user.click(await screen.findByRole('button', { name: /pause and open the run menu/i }));
         expect(await screen.findByRole('button', { name: /fit board/i })).toBeInTheDocument();
     });
 
@@ -733,18 +735,20 @@ describe('desktop app flow', () => {
         });
     });
 
-    it('opens Inventory and Codex from the in-run toolbar and returns to playing', async () => {
+    it('opens Inventory and Codex from the run menu and returns to playing', async () => {
         const user = userEvent.setup();
         renderApp();
         await dismissStartupIntro(user);
         await chooseClassicRun(user);
 
-        await user.click(await screen.findByTestId('game-toolbar-inventory', undefined, { timeout: 20_000 }));
+        await user.click(await screen.findByRole('button', { name: /pause and open the run menu/i }));
+        await user.click(await screen.findByRole('button', { name: /^inventory$/i }));
         expect(await screen.findByRole('region', { name: /inventory/i })).toBeInTheDocument();
         await user.click(screen.getByRole('button', { name: /^back$/i }));
         expect(await findGameplayBoardStage()).toBeInTheDocument();
 
-        await user.click(await screen.findByTestId('game-toolbar-codex', undefined, { timeout: 20_000 }));
+        await user.click(await screen.findByRole('button', { name: /pause and open the run menu/i }));
+        await user.click(await screen.findByRole('button', { name: /^codex$/i }));
         expect(await screen.findByRole('region', { name: /codex/i })).toBeInTheDocument();
         await user.click(screen.getByRole('button', { name: /^back$/i }));
         expect(await findGameplayBoardStage()).toBeInTheDocument();

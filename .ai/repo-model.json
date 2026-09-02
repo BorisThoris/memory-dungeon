@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2423,
-    "codeFileCount": 918,
-    "exportedSymbolCount": 3488,
+    "trackedFileCount": 2420,
+    "codeFileCount": 912,
+    "exportedSymbolCount": 3484,
     "contentItemCount": 57,
     "mechanicCount": 130,
     "stateFieldCount": 144,
-    "relationshipCount": 10132
+    "relationshipCount": 10067
   },
   "inventory": [
     {
@@ -2311,6 +2311,12 @@
       "sha256": "1cae13fdbf3f60379ecb0ca209cd8408c20be4d10663c084cce37f8ef4740391"
     },
     {
+      "path": "docs/UI_RETHINK_PLAN.md",
+      "category": "documentation",
+      "bytes": 19822,
+      "sha256": "1debd2f61d6e780e302ac28ad2c36b6ef4fe8223de58348ffe80a9aebe403264"
+    },
+    {
       "path": "docs/UI_TASKS/README.md",
       "category": "documentation",
       "bytes": 656,
@@ -3775,6 +3781,12 @@
       "sha256": "7b68b879423113b420032df1edd238d649d8000537d518b61892f7eee45c0f3a"
     },
     {
+      "path": "e2e/ui-redesign-capture.spec.ts",
+      "category": "test",
+      "bytes": 647,
+      "sha256": "fbf36843bb6f4f36ae7d71061e0eb061b783f7ad4466c2bffd8618e9b78193ed"
+    },
+    {
       "path": "e2e/ui-screenshots.spec.ts",
       "category": "test",
       "bytes": 1767,
@@ -4023,8 +4035,8 @@
     {
       "path": "playwright.config.ts",
       "category": "configuration",
-      "bytes": 1674,
-      "sha256": "ee498ce039f7ede5ecbece1ccf3b05ca7c3f0160337246eeb0cba80497b07033"
+      "bytes": 1939,
+      "sha256": "2e52bcb871362d413cdb47abdda16726af5cd6555491761d7ea1e9ba821da93a"
     },
     {
       "path": "public/favicon.svg",
@@ -4575,8 +4587,8 @@
     {
       "path": "scripts/system-diagrams.mjs",
       "category": "script",
-      "bytes": 54734,
-      "sha256": "0c3f50f00ffe2c0601b121ed1bc76389fad5d8004d5df70db9ca70120385724e"
+      "bytes": 54716,
+      "sha256": "e9766ced102fa800b33677d1e5102123a694547727729efd4b6049d7cc4c62c8"
     },
     {
       "path": "scripts/vite-dev-blueprint-api.mjs",
@@ -4779,8 +4791,8 @@
     {
       "path": "src/renderer/App.test.tsx",
       "category": "test",
-      "bytes": 31392,
-      "sha256": "7955924bb6bda104b1e7ee931fea20280b0b16329b4b56f4df43f1dbc41347b4"
+      "bytes": 31760,
+      "sha256": "1aab2bf7b82a3855cfff4d0a501c032c79f6cf3b28fa08aff46bac8deaa465d0"
     },
     {
       "path": "src/renderer/App.tsx",
@@ -6927,14 +6939,14 @@
     {
       "path": "src/renderer/audio/audioInteractionCoverage.test.ts",
       "category": "test",
-      "bytes": 11705,
-      "sha256": "ef700fab966deb599636bcb7f1e53c25663721fe4b56a72f54e4f21008e8a344"
+      "bytes": 11692,
+      "sha256": "40d5160d014aef0f2bd15f04547d8943b21d85f878f988e0695a524481bf2a36"
     },
     {
       "path": "src/renderer/audio/audioInteractionCoverage.ts",
       "category": "source",
-      "bytes": 21927,
-      "sha256": "e5f14ce5f37d52bee4512c45da8816a10dccfd23de7c4bf232c4623c8b131cf0"
+      "bytes": 21888,
+      "sha256": "7b8c72d39535460f8e588e680d89a0b44f527fe3de241545705723645324ad65"
     },
     {
       "path": "src/renderer/audio/audioManifestBoundary.test.ts",
@@ -7393,18 +7405,6 @@
       "sha256": "7bafaf608d04f60400254f5dd7b99e44dfc1645f4de65af4d17bac4ac7946862"
     },
     {
-      "path": "src/renderer/components/GameLeftToolbar.test.tsx",
-      "category": "test",
-      "bytes": 3592,
-      "sha256": "a83da34ceedc9f8af07834bf6b1fbc46ec00c0af613778d6403b2cfa467bfe86"
-    },
-    {
-      "path": "src/renderer/components/GameLeftToolbar.tsx",
-      "category": "source",
-      "bytes": 39537,
-      "sha256": "2ada49b439d5ec2829ec8f7ed01189d5e055c0e86a9047b2c4f9dbfb959e1dbf"
-    },
-    {
       "path": "src/renderer/components/GameOverScreen.module.css",
       "category": "source",
       "bytes": 39590,
@@ -7421,18 +7421,6 @@
       "category": "source",
       "bytes": 43410,
       "sha256": "4654956e100ced80bd48e4f9d56aba1514eee15a4b52352466441cc9f357e2f9"
-    },
-    {
-      "path": "src/renderer/components/GameplayHudBar.test.tsx",
-      "category": "test",
-      "bytes": 86701,
-      "sha256": "232b09278600b51819f333005c01a17fd758f4d64d785dd555bb7da17beb53a6"
-    },
-    {
-      "path": "src/renderer/components/GameplayHudBar.tsx",
-      "category": "source",
-      "bytes": 204910,
-      "sha256": "5251ae0fbd65812b3da8f1468becabf2de1ec112b4c348555d439cc705d33a33"
     },
     {
       "path": "src/renderer/components/gameplayHudMutatorLabels.ts",
@@ -7467,26 +7455,14 @@
     {
       "path": "src/renderer/components/GameScreen.test.tsx",
       "category": "test",
-      "bytes": 357694,
-      "sha256": "3296dc188b8e3b79d3ce07bcc95ad6b90b4cb3bd188df55e50abfe10ef7791c4"
+      "bytes": 183676,
+      "sha256": "495615cb9def2bc117855d9af6fe6932a8f6ca78f4c9e9f78cce1390b05f6259"
     },
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 371782,
-      "sha256": "f260fba1749da3f56c4763c8c4bc4cd7dd9d070b34da5fdeb95a5d5c5de0159a"
-    },
-    {
-      "path": "src/renderer/components/GameScreenActionFeedbackRail.test.tsx",
-      "category": "test",
-      "bytes": 2201,
-      "sha256": "c6f7906983a72a9cd5b3db760e85b3c9ec91a5248dabc1dd5c8b387d54a88d9f"
-    },
-    {
-      "path": "src/renderer/components/GameScreenActionFeedbackRail.tsx",
-      "category": "source",
-      "bytes": 43451,
-      "sha256": "05d48d9b09e0d9c4614d81ad93ba564d42bab6bed370d0d2848e33c93d608b8b"
+      "bytes": 358493,
+      "sha256": "57a18ba9825582a369c7b6b29d74f59011f88776949e967e070c2f67b2d11d9d"
     },
     {
       "path": "src/renderer/components/gameScreenBoardFeedbackModel.test.ts",
@@ -7529,12 +7505,6 @@
       "category": "source",
       "bytes": 17639,
       "sha256": "48b762bc343ba5dabcf2d271400987e1351164de152f329134e7c55e2824f01d"
-    },
-    {
-      "path": "src/renderer/components/GameScreenDungeonRunStrip.tsx",
-      "category": "source",
-      "bytes": 1527,
-      "sha256": "04686b21c850bfee10a863345870e4cf2308cbfd3942264bcb9dc3b6f83d2035"
     },
     {
       "path": "src/renderer/components/GameScreenDungeonStatusPanel.tsx",
@@ -7769,6 +7739,30 @@
       "category": "source",
       "bytes": 69395,
       "sha256": "723405031176976481708beb6b91b29820ec05cfd3bd49864a4c8c7b8e56521a"
+    },
+    {
+      "path": "src/renderer/components/RunShell.module.css",
+      "category": "source",
+      "bytes": 6982,
+      "sha256": "ebc481512ca9c59b1fa419ddc5b7a245d3c251839e78ffae1f0e911713a3d282"
+    },
+    {
+      "path": "src/renderer/components/RunShell.test.tsx",
+      "category": "test",
+      "bytes": 3655,
+      "sha256": "ae65429558ea230b356442655130661c2926e35eab83b99dd6964a032e708094"
+    },
+    {
+      "path": "src/renderer/components/RunShell.tsx",
+      "category": "source",
+      "bytes": 8141,
+      "sha256": "0a7bcd6db3de1cc3b3a088694d25cf7b741fffb5665932d88bfbe3984d27c642"
+    },
+    {
+      "path": "src/renderer/components/runShellGlyphs.tsx",
+      "category": "source",
+      "bytes": 487,
+      "sha256": "b496a016ad34932bb28027b3d391bd16ad32fec74b9d2f314ecc7762e98eb58e"
     },
     {
       "path": "src/renderer/components/SettingsControls.tsx",
@@ -8727,8 +8721,8 @@
     {
       "path": "src/renderer/components/useTileBoardSceneResources.ts",
       "category": "source",
-      "bytes": 2737,
-      "sha256": "766213eb7cf7b17bfd28266e07ae98973475a1838b891d1142deaf142d4bffc2"
+      "bytes": 2797,
+      "sha256": "a36ddd42daa9dc886a0670061f0d0be65ebe7bcbded54819bca4275c0c302ecd"
     },
     {
       "path": "src/renderer/components/useTileBoardSharedCardSvgAssets.ts",
@@ -8965,18 +8959,6 @@
       "sha256": "9539dfcfade11b08cc6cbf3d59ae17e5ff61cface5591d5c4c9163ebf9973d0c"
     },
     {
-      "path": "src/renderer/dev/hudFixtures.test.tsx",
-      "category": "test",
-      "bytes": 748,
-      "sha256": "49896cd682d3b29c9d67b55826e3eab819ca8d42baa9a4b94dc664c535d5012a"
-    },
-    {
-      "path": "src/renderer/dev/hudFixtures.ts",
-      "category": "source",
-      "bytes": 3210,
-      "sha256": "f98ec557f6c10058d6d7192c1827ab90eadd2fb803ae275f410dcdf07ed5079f"
-    },
-    {
       "path": "src/renderer/dev/illustrationRegressionPairKeys.test.ts",
       "category": "test",
       "bytes": 648,
@@ -9016,7 +8998,7 @@
       "path": "src/renderer/gameplay/regPhase4PlayContract.ts",
       "category": "source",
       "bytes": 2443,
-      "sha256": "6e3eb065407218d534cbdb1b5f1f319255a96951dbecd833b383712ceb16d89f"
+      "sha256": "c9a569dd14b87372954150c9bf72b0d1430aa3a234683f1c964e037c7e347ee4"
     },
     {
       "path": "src/renderer/gameplay/stickyFingersBlockedTileId.test.ts",
@@ -10851,8 +10833,8 @@
     {
       "path": "src/shared/gameplay-interaction-graph-data.json",
       "category": "source",
-      "bytes": 224425,
-      "sha256": "4d5aa8913fb8e6687a55230be0db04ab732aed56cffcf7c69febe9d5fdda2e2d"
+      "bytes": 224341,
+      "sha256": "aec2b7bb61ca1f55b04b1444470693cdf9eb69205a5a2272d5319a0eac500c1e"
     },
     {
       "path": "src/shared/gameplay-interaction-graph.test.ts",
@@ -10863,8 +10845,8 @@
     {
       "path": "src/shared/gameplay-interaction-graph.ts",
       "category": "source",
-      "bytes": 15246,
-      "sha256": "e6a30597778a2c86050becc810b1fd8eea7ea410e3a6e0db3197bd6b435bc2f5"
+      "bytes": 15275,
+      "sha256": "e49cae08b92760d97fb840a30524d7a7df10778293a6a58f00720ee21bbd4ec9"
     },
     {
       "path": "src/shared/gameplay-journal.test.ts",
@@ -15013,7 +14995,7 @@
       "path": "src/renderer/App.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 794,
+      "lineCount": 798,
       "imports": [
         "file:src/renderer/App.tsx",
         "file:src/renderer/desktop-client.ts",
@@ -16580,48 +16562,6 @@
       "testedBy": []
     },
     {
-      "id": "file:src/renderer/components/GameLeftToolbar.test.tsx",
-      "path": "src/renderer/components/GameLeftToolbar.test.tsx",
-      "layer": "renderer",
-      "role": "test",
-      "lineCount": 94,
-      "imports": [
-        "file:src/renderer/components/GameLeftToolbar.tsx",
-        "file:src/renderer/components/TileBoard.tsx",
-        "file:src/shared/contracts.ts",
-        "file:src/shared/game-core.ts",
-        "file:src/shared/save-data.ts"
-      ],
-      "exports": [],
-      "testedBy": []
-    },
-    {
-      "id": "file:src/renderer/components/GameLeftToolbar.tsx",
-      "path": "src/renderer/components/GameLeftToolbar.tsx",
-      "layer": "renderer",
-      "role": "production",
-      "lineCount": 844,
-      "imports": [
-        "file:src/renderer/a11y/toolbarRoving.ts",
-        "file:src/renderer/assets/ui/icons/index.ts",
-        "file:src/renderer/audio/uiSfx.ts",
-        "file:src/renderer/components/TileBoard.tsx",
-        "file:src/renderer/copy/chainMomentum.ts",
-        "file:src/renderer/gameplay/regPhase4PlayContract.ts",
-        "file:src/renderer/store/useAppStore.ts",
-        "file:src/renderer/ui/index.ts",
-        "file:src/shared/contracts.ts",
-        "file:src/shared/power-verbs.ts",
-        "file:src/shared/trait-opportunities.ts"
-      ],
-      "exports": [
-        "symbol:src/renderer/components/GameLeftToolbar.tsx#default"
-      ],
-      "testedBy": [
-        "file:src/renderer/components/GameLeftToolbar.test.tsx"
-      ]
-    },
-    {
       "id": "file:src/renderer/components/GameOverScreen.test.tsx",
       "path": "src/renderer/components/GameOverScreen.test.tsx",
       "layer": "renderer",
@@ -16669,63 +16609,6 @@
       ],
       "testedBy": [
         "file:src/renderer/components/GameOverScreen.test.tsx"
-      ]
-    },
-    {
-      "id": "file:src/renderer/components/GameplayHudBar.test.tsx",
-      "path": "src/renderer/components/GameplayHudBar.test.tsx",
-      "layer": "renderer",
-      "role": "test",
-      "lineCount": 1596,
-      "imports": [
-        "file:src/renderer/components/GameplayHudBar.tsx",
-        "file:src/shared/builtin-puzzles.ts",
-        "file:src/shared/contracts.ts",
-        "file:src/shared/game-core.ts"
-      ],
-      "exports": [],
-      "testedBy": []
-    },
-    {
-      "id": "file:src/renderer/components/GameplayHudBar.tsx",
-      "path": "src/renderer/components/GameplayHudBar.tsx",
-      "layer": "renderer",
-      "role": "production",
-      "lineCount": 3382,
-      "imports": [
-        "file:src/renderer/components/gameplayHudMutatorLabels.ts",
-        "file:src/renderer/components/gameScreenFeedback.ts",
-        "file:src/renderer/copy/chainMomentum.ts",
-        "file:src/renderer/copy/hudActionFeedback.ts",
-        "file:src/renderer/copy/perfectMemory.ts",
-        "file:src/renderer/copy/traitInteractionLaneMap.ts",
-        "file:src/renderer/gameplay/regPhase4PlayContract.ts",
-        "file:src/shared/bonus-rewards.ts",
-        "file:src/shared/boss-encounters.ts",
-        "file:src/shared/builtin-puzzles.ts",
-        "file:src/shared/contracts.ts",
-        "file:src/shared/difficulty-profile.ts",
-        "file:src/shared/dungeon-boss-rules.ts",
-        "file:src/shared/findables.ts",
-        "file:src/shared/floor-mutator-schedule.ts",
-        "file:src/shared/hazard-tiles.ts",
-        "file:src/shared/long-run-feedback.ts",
-        "file:src/shared/relic-favor-rules.ts",
-        "file:src/shared/relics.ts",
-        "file:src/shared/run-economy.ts",
-        "file:src/shared/run-number-guards.ts",
-        "file:src/shared/secondary-objectives.ts",
-        "file:src/shared/shop-rules.ts",
-        "file:src/shared/trait-opportunities.ts",
-        "file:src/shared/trait-route-objectives.ts"
-      ],
-      "exports": [
-        "symbol:src/renderer/components/GameplayHudBar.tsx#default",
-        "symbol:src/renderer/components/GameplayHudBar.tsx#GameplayHudBarProps"
-      ],
-      "testedBy": [
-        "file:src/renderer/components/GameplayHudBar.test.tsx",
-        "file:src/renderer/dev/hudFixtures.test.tsx"
       ]
     },
     {
@@ -16808,7 +16691,7 @@
       "path": "src/renderer/components/GameScreen.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 6652,
+      "lineCount": 3695,
       "imports": [
         "file:src/renderer/components/GameScreen.tsx",
         "file:src/renderer/components/gameScreenFeedback.ts",
@@ -16820,11 +16703,9 @@
         "file:src/shared/contracts.ts",
         "file:src/shared/dungeon-rules.ts",
         "file:src/shared/game-core.ts",
-        "file:src/shared/playable-onboarding.ts",
         "file:src/shared/run-map.ts",
         "file:src/shared/save-data.ts",
-        "file:src/shared/test/gameplay-event-fixtures.ts",
-        "file:src/shared/turn-resolution.ts"
+        "file:src/shared/test/gameplay-event-fixtures.ts"
       ],
       "exports": [],
       "testedBy": []
@@ -16834,17 +16715,13 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 6828,
+      "lineCount": 6616,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/breakpoints.ts",
-        "file:src/renderer/components/GameLeftToolbar.tsx",
-        "file:src/renderer/components/GameplayHudBar.tsx",
         "file:src/renderer/components/gameplayVisualConfig.ts",
-        "file:src/renderer/components/GameScreenActionFeedbackRail.tsx",
-        "file:src/renderer/components/GameScreenDungeonRunStrip.tsx",
         "file:src/renderer/components/GameScreenDungeonStatusPanel.tsx",
         "file:src/renderer/components/GameScreenEndlessChapterBanner.tsx",
         "file:src/renderer/components/gameScreenFeedback.ts",
@@ -16854,6 +16731,8 @@
         "file:src/renderer/components/matchScoreFloaterTiming.ts",
         "file:src/renderer/components/OverlayModal.tsx",
         "file:src/renderer/components/RelicDraftOfferPanel.tsx",
+        "file:src/renderer/components/RunShell.tsx",
+        "file:src/renderer/components/runShellGlyphs.tsx",
         "file:src/renderer/components/TileBoard.tsx",
         "file:src/renderer/components/useGameScreenPowerTileHints.ts",
         "file:src/renderer/components/useGameScreenTraitRouteTargets.ts",
@@ -16906,36 +16785,6 @@
       ],
       "testedBy": [
         "file:src/renderer/components/GameScreen.test.tsx"
-      ]
-    },
-    {
-      "id": "file:src/renderer/components/GameScreenActionFeedbackRail.test.tsx",
-      "path": "src/renderer/components/GameScreenActionFeedbackRail.test.tsx",
-      "layer": "renderer",
-      "role": "test",
-      "lineCount": 52,
-      "imports": [
-        "file:src/renderer/components/GameScreenActionFeedbackRail.tsx"
-      ],
-      "exports": [],
-      "testedBy": []
-    },
-    {
-      "id": "file:src/renderer/components/GameScreenActionFeedbackRail.tsx",
-      "path": "src/renderer/components/GameScreenActionFeedbackRail.tsx",
-      "layer": "renderer",
-      "role": "production",
-      "lineCount": 1033,
-      "imports": [
-        "file:src/renderer/components/gameScreenFeedback.ts",
-        "file:src/renderer/store/matchScorePop.ts",
-        "file:src/shared/run-array-guards.ts"
-      ],
-      "exports": [
-        "symbol:src/renderer/components/GameScreenActionFeedbackRail.tsx#GameScreenActionFeedbackRail"
-      ],
-      "testedBy": [
-        "file:src/renderer/components/GameScreenActionFeedbackRail.test.tsx"
       ]
     },
     {
@@ -17152,20 +17001,6 @@
       "testedBy": [
         "file:src/renderer/components/gameScreenDecisionSignals.test.tsx"
       ]
-    },
-    {
-      "id": "file:src/renderer/components/GameScreenDungeonRunStrip.tsx",
-      "path": "src/renderer/components/GameScreenDungeonRunStrip.tsx",
-      "layer": "renderer",
-      "role": "production",
-      "lineCount": 42,
-      "imports": [
-        "file:src/shared/run-map.ts"
-      ],
-      "exports": [
-        "symbol:src/renderer/components/GameScreenDungeonRunStrip.tsx#GameScreenDungeonRunStrip"
-      ],
-      "testedBy": []
     },
     {
       "id": "file:src/renderer/components/GameScreenDungeonStatusPanel.tsx",
@@ -17759,6 +17594,56 @@
       ]
     },
     {
+      "id": "file:src/renderer/components/RunShell.test.tsx",
+      "path": "src/renderer/components/RunShell.test.tsx",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 76,
+      "imports": [
+        "file:src/renderer/components/RunShell.tsx",
+        "file:src/shared/contracts.ts",
+        "file:src/shared/game-core.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/RunShell.tsx",
+      "path": "src/renderer/components/RunShell.tsx",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 197,
+      "imports": [
+        "file:src/renderer/ui/gameplayIcons.tsx",
+        "file:src/shared/contracts.ts",
+        "file:src/shared/gameplay-feedback-facts.ts",
+        "file:src/shared/mechanics-encyclopedia.ts",
+        "file:src/shared/run-number-guards.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/RunShell.tsx#default",
+        "symbol:src/renderer/components/RunShell.tsx#RunShellProps",
+        "symbol:src/renderer/components/RunShell.tsx#RunShellTool"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/RunShell.test.tsx"
+      ]
+    },
+    {
+      "id": "file:src/renderer/components/runShellGlyphs.tsx",
+      "path": "src/renderer/components/runShellGlyphs.tsx",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 19,
+      "imports": [
+        "file:src/renderer/ui/gameplayIcons.tsx"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/runShellGlyphs.tsx#RUN_SHELL_GLYPHS"
+      ],
+      "testedBy": []
+    },
+    {
       "id": "file:src/renderer/components/SettingsControls.tsx",
       "path": "src/renderer/components/SettingsControls.tsx",
       "layer": "renderer",
@@ -18185,7 +18070,6 @@
         "symbol:src/renderer/components/TileBoard.tsx#TileBoardHandle"
       ],
       "testedBy": [
-        "file:src/renderer/components/GameLeftToolbar.test.tsx",
         "file:src/renderer/components/TileBoard.test.tsx"
       ]
     },
@@ -20612,7 +20496,7 @@
       "path": "src/renderer/components/useTileBoardSceneResources.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 80,
+      "lineCount": 82,
       "imports": [
         "file:src/renderer/cardFace/opentypeCardRankFont.ts",
         "file:src/renderer/components/boardRuneFieldMaterial.ts",
@@ -21249,39 +21133,6 @@
       "imports": [],
       "exports": [],
       "testedBy": []
-    },
-    {
-      "id": "file:src/renderer/dev/hudFixtures.test.tsx",
-      "path": "src/renderer/dev/hudFixtures.test.tsx",
-      "layer": "renderer",
-      "role": "test",
-      "lineCount": 20,
-      "imports": [
-        "file:src/renderer/components/GameplayHudBar.tsx",
-        "file:src/renderer/dev/hudFixtures.ts"
-      ],
-      "exports": [],
-      "testedBy": []
-    },
-    {
-      "id": "file:src/renderer/dev/hudFixtures.ts",
-      "path": "src/renderer/dev/hudFixtures.ts",
-      "layer": "renderer",
-      "role": "production",
-      "lineCount": 89,
-      "imports": [
-        "file:src/renderer/components/GameplayHudBar.tsx",
-        "file:src/shared/contracts.ts",
-        "file:src/shared/game-core.ts"
-      ],
-      "exports": [
-        "symbol:src/renderer/dev/hudFixtures.ts#GAMEPLAY_HUD_FIXTURE_IDS",
-        "symbol:src/renderer/dev/hudFixtures.ts#GameplayHudBarFixtureId",
-        "symbol:src/renderer/dev/hudFixtures.ts#gameplayHudBarFixturePropsById"
-      ],
-      "testedBy": [
-        "file:src/renderer/dev/hudFixtures.test.tsx"
-      ]
     },
     {
       "id": "file:src/renderer/dev/illustrationRegressionPairKeys.test.ts",
@@ -24594,7 +24445,6 @@
         "symbol:src/shared/builtin-puzzles.ts#listBuiltinPuzzleIds"
       ],
       "testedBy": [
-        "file:src/renderer/components/GameplayHudBar.test.tsx",
         "file:src/renderer/store/runStartState.test.ts",
         "file:src/shared/puzzle-import.test.ts",
         "file:src/shared/save-data.test.ts",
@@ -24985,9 +24835,7 @@
         "file:src/renderer/cardFace/resolveCardIllustrationUrl.test.ts",
         "file:src/renderer/components/codexScreenModel.test.ts",
         "file:src/renderer/components/CollectionScreen.test.tsx",
-        "file:src/renderer/components/GameLeftToolbar.test.tsx",
         "file:src/renderer/components/GameOverScreen.test.tsx",
-        "file:src/renderer/components/GameplayHudBar.test.tsx",
         "file:src/renderer/components/GameScreen.test.tsx",
         "file:src/renderer/components/gameScreenDecisionSignals.test.tsx",
         "file:src/renderer/components/gameScreenFloorClearFeedbackModel.test.ts",
@@ -24996,6 +24844,7 @@
         "file:src/renderer/components/MainMenuBackground.test.tsx",
         "file:src/renderer/components/ProfileScreen.test.tsx",
         "file:src/renderer/components/RelicDraftOfferPanel.test.tsx",
+        "file:src/renderer/components/RunShell.test.tsx",
         "file:src/renderer/components/ShopScreen.test.tsx",
         "file:src/renderer/components/TileBoard.test.tsx",
         "file:src/renderer/components/tileBoardCardTint.test.ts",
@@ -27075,13 +26924,12 @@
       ],
       "testedBy": [
         "file:src/renderer/App.test.tsx",
-        "file:src/renderer/components/GameLeftToolbar.test.tsx",
         "file:src/renderer/components/GameOverScreen.test.tsx",
-        "file:src/renderer/components/GameplayHudBar.test.tsx",
         "file:src/renderer/components/GameScreen.test.tsx",
         "file:src/renderer/components/InventoryScreen.test.tsx",
         "file:src/renderer/components/inventoryScreenModel.test.ts",
         "file:src/renderer/components/PlayableOnboardingHarness.test.tsx",
+        "file:src/renderer/components/RunShell.test.tsx",
         "file:src/renderer/components/ShopScreen.test.tsx",
         "file:src/renderer/components/SideRoomScreen.test.tsx",
         "file:src/renderer/components/useGameScreenFloorClearProjection.test.ts",
@@ -29403,7 +29251,6 @@
         "symbol:src/shared/playable-onboarding.ts#PlayableOnboardingPrompt"
       ],
       "testedBy": [
-        "file:src/renderer/components/GameScreen.test.tsx",
         "file:src/renderer/components/PlayableOnboardingHarness.test.tsx",
         "file:src/shared/playable-onboarding.test.ts"
       ]
@@ -31394,7 +31241,6 @@
         "file:src/renderer/App.test.tsx",
         "file:src/renderer/components/CodexScreen.test.tsx",
         "file:src/renderer/components/CollectionScreen.test.tsx",
-        "file:src/renderer/components/GameLeftToolbar.test.tsx",
         "file:src/renderer/components/GameOverScreen.test.tsx",
         "file:src/renderer/components/GameScreen.test.tsx",
         "file:src/renderer/components/inventoryScreenModel.test.ts",
@@ -32978,7 +32824,6 @@
         "symbol:src/shared/turn-resolution.ts#tilesArePairMatch"
       ],
       "testedBy": [
-        "file:src/renderer/components/GameScreen.test.tsx",
         "file:src/shared/balance-notes-drift.test.ts",
         "file:src/shared/game.test.ts",
         "file:src/shared/gameplay-property-invariants.test.ts",
@@ -35323,36 +35168,12 @@
       "endLine": 753
     },
     {
-      "id": "symbol:src/renderer/components/GameLeftToolbar.tsx#default",
-      "name": "default",
-      "kind": "ExportAssignment",
-      "file": "src/renderer/components/GameLeftToolbar.tsx",
-      "line": 843,
-      "endLine": 843
-    },
-    {
       "id": "symbol:src/renderer/components/GameOverScreen.tsx#default",
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameOverScreen.tsx",
       "line": 810,
       "endLine": 810
-    },
-    {
-      "id": "symbol:src/renderer/components/GameplayHudBar.tsx#default",
-      "name": "default",
-      "kind": "ExportAssignment",
-      "file": "src/renderer/components/GameplayHudBar.tsx",
-      "line": 3381,
-      "endLine": 3381
-    },
-    {
-      "id": "symbol:src/renderer/components/GameplayHudBar.tsx#GameplayHudBarProps",
-      "name": "GameplayHudBarProps",
-      "kind": "interface",
-      "file": "src/renderer/components/GameplayHudBar.tsx",
-      "line": 333,
-      "endLine": 344
     },
     {
       "id": "symbol:src/renderer/components/gameplayHudMutatorLabels.ts#MUTATOR_HUD_LABELS",
@@ -35423,16 +35244,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 6827,
-      "endLine": 6827
-    },
-    {
-      "id": "symbol:src/renderer/components/GameScreenActionFeedbackRail.tsx#GameScreenActionFeedbackRail",
-      "name": "GameScreenActionFeedbackRail",
-      "kind": "value",
-      "file": "src/renderer/components/GameScreenActionFeedbackRail.tsx",
-      "line": 753,
-      "endLine": 1032
+      "line": 6615,
+      "endLine": 6615
     },
     {
       "id": "symbol:src/renderer/components/gameScreenBoardFeedbackModel.ts#getBoardMatchPayoffStackAction",
@@ -36251,14 +36064,6 @@
       "endLine": 30
     },
     {
-      "id": "symbol:src/renderer/components/GameScreenDungeonRunStrip.tsx#GameScreenDungeonRunStrip",
-      "name": "GameScreenDungeonRunStrip",
-      "kind": "value",
-      "file": "src/renderer/components/GameScreenDungeonRunStrip.tsx",
-      "line": 10,
-      "endLine": 41
-    },
-    {
       "id": "symbol:src/renderer/components/GameScreenDungeonStatusPanel.tsx#GameScreenDungeonStatusPanel",
       "name": "GameScreenDungeonStatusPanel",
       "kind": "value",
@@ -36809,6 +36614,38 @@
       "file": "src/renderer/components/RelicDraftOfferPanel.tsx",
       "line": 1679,
       "endLine": 1679
+    },
+    {
+      "id": "symbol:src/renderer/components/RunShell.tsx#default",
+      "name": "default",
+      "kind": "ExportAssignment",
+      "file": "src/renderer/components/RunShell.tsx",
+      "line": 196,
+      "endLine": 196
+    },
+    {
+      "id": "symbol:src/renderer/components/RunShell.tsx#RunShellProps",
+      "name": "RunShellProps",
+      "kind": "interface",
+      "file": "src/renderer/components/RunShell.tsx",
+      "line": 29,
+      "endLine": 42
+    },
+    {
+      "id": "symbol:src/renderer/components/RunShell.tsx#RunShellTool",
+      "name": "RunShellTool",
+      "kind": "interface",
+      "file": "src/renderer/components/RunShell.tsx",
+      "line": 18,
+      "endLine": 27
+    },
+    {
+      "id": "symbol:src/renderer/components/runShellGlyphs.tsx#RUN_SHELL_GLYPHS",
+      "name": "RUN_SHELL_GLYPHS",
+      "kind": "value",
+      "file": "src/renderer/components/runShellGlyphs.tsx",
+      "line": 11,
+      "endLine": 18
     },
     {
       "id": "symbol:src/renderer/components/SettingsControls.tsx#PlaceholderControl",
@@ -40120,7 +39957,7 @@
       "kind": "value",
       "file": "src/renderer/components/useTileBoardSceneResources.ts",
       "line": 33,
-      "endLine": 79
+      "endLine": 81
     },
     {
       "id": "symbol:src/renderer/components/useTileBoardSharedCardSvgAssets.ts#useTileBoardSharedCardSvgAssets",
@@ -41017,30 +40854,6 @@
       "file": "src/renderer/dev/clipboard.ts",
       "line": 16,
       "endLine": 30
-    },
-    {
-      "id": "symbol:src/renderer/dev/hudFixtures.ts#GAMEPLAY_HUD_FIXTURE_IDS",
-      "name": "GAMEPLAY_HUD_FIXTURE_IDS",
-      "kind": "value",
-      "file": "src/renderer/dev/hudFixtures.ts",
-      "line": 88,
-      "endLine": 88
-    },
-    {
-      "id": "symbol:src/renderer/dev/hudFixtures.ts#GameplayHudBarFixtureId",
-      "name": "GameplayHudBarFixtureId",
-      "kind": "type",
-      "file": "src/renderer/dev/hudFixtures.ts",
-      "line": 5,
-      "endLine": 5
-    },
-    {
-      "id": "symbol:src/renderer/dev/hudFixtures.ts#gameplayHudBarFixturePropsById",
-      "name": "gameplayHudBarFixturePropsById",
-      "kind": "value",
-      "file": "src/renderer/dev/hudFixtures.ts",
-      "line": 81,
-      "endLine": 86
     },
     {
       "id": "symbol:src/renderer/dev/illustrationRegressionPairKeys.ts#ILLUSTRATION_REGRESSION_PAIR_KEYS",
@@ -61828,7 +61641,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 17
+          "line": 16
         }
       ],
       "tests": [
@@ -62817,8 +62630,8 @@
       "role": "readability_gate",
       "evidence": [
         {
-          "path": "src/renderer/components/GameplayHudBar.tsx",
-          "line": 23
+          "path": "src/renderer/components/RunShell.tsx",
+          "line": 4
         },
         {
           "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -62831,8 +62644,8 @@
       ],
       "tests": [
         {
-          "path": "src/renderer/components/GameplayHudBar.test.tsx",
-          "line": 6
+          "path": "src/renderer/components/RunShell.test.tsx",
+          "line": 8
         },
         {
           "path": "src/renderer/components/GameScreen.test.tsx",
@@ -63064,7 +62877,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 3842
+          "line": 3710
         }
       ],
       "tests": [
@@ -63266,7 +63079,7 @@
           "line": 4
         },
         {
-          "path": "src/renderer/components/GameplayHudBar.tsx",
+          "path": "src/renderer/components/RunShell.tsx",
           "line": 2
         }
       ],
@@ -63620,8 +63433,8 @@
           "line": 10
         },
         {
-          "path": "src/renderer/components/GameplayHudBar.tsx",
-          "line": 4
+          "path": "src/renderer/components/RunShell.tsx",
+          "line": 5
         }
       ],
       "tests": [
@@ -63760,8 +63573,8 @@
           "line": 1
         },
         {
-          "path": "src/renderer/components/GameplayHudBar.tsx",
-          "line": 26
+          "path": "src/renderer/components/RunShell.tsx",
+          "line": 1
         }
       ],
       "tests": [
@@ -64148,7 +63961,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 17
+          "line": 16
         }
       ],
       "tests": [
@@ -64240,7 +64053,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 16
+          "line": 15
         }
       ],
       "tests": [
@@ -67670,8 +67483,8 @@
           "line": 1
         },
         {
-          "path": "src/renderer/components/GameplayHudBar.tsx",
-          "line": 17
+          "path": "src/renderer/components/RunShell.tsx",
+          "line": 1
         }
       ],
       "tests": [
@@ -67711,8 +67524,8 @@
           "line": 1
         },
         {
-          "path": "src/renderer/components/GameplayHudBar.tsx",
-          "line": 17
+          "path": "src/renderer/components/RunShell.tsx",
+          "line": 1
         }
       ],
       "tests": [
@@ -67754,8 +67567,8 @@
           "line": 1
         },
         {
-          "path": "src/renderer/components/GameplayHudBar.tsx",
-          "line": 17
+          "path": "src/renderer/components/RunShell.tsx",
+          "line": 1
         }
       ],
       "tests": [
@@ -67797,8 +67610,8 @@
           "line": 6
         },
         {
-          "path": "src/renderer/components/GameplayHudBar.tsx",
-          "line": 17
+          "path": "src/renderer/components/RunShell.tsx",
+          "line": 1
         }
       ],
       "tests": [
@@ -67833,8 +67646,8 @@
           "line": 10
         },
         {
-          "path": "src/renderer/components/GameplayHudBar.tsx",
-          "line": 17
+          "path": "src/renderer/components/RunShell.tsx",
+          "line": 1
         }
       ],
       "tests": [
@@ -67873,8 +67686,8 @@
           "line": 1
         },
         {
-          "path": "src/renderer/components/GameplayHudBar.tsx",
-          "line": 17
+          "path": "src/renderer/components/RunShell.tsx",
+          "line": 1
         }
       ],
       "tests": [
@@ -67913,8 +67726,8 @@
           "line": 3
         },
         {
-          "path": "src/renderer/components/GameplayHudBar.tsx",
-          "line": 17
+          "path": "src/renderer/components/RunShell.tsx",
+          "line": 1
         }
       ],
       "tests": [
@@ -67956,8 +67769,8 @@
           "line": 1
         },
         {
-          "path": "src/renderer/components/GameplayHudBar.tsx",
-          "line": 17
+          "path": "src/renderer/components/RunShell.tsx",
+          "line": 1
         }
       ],
       "tests": [
@@ -68000,8 +67813,8 @@
           "line": 21
         },
         {
-          "path": "src/renderer/components/GameplayHudBar.tsx",
-          "line": 17
+          "path": "src/renderer/components/RunShell.tsx",
+          "line": 1
         }
       ],
       "tests": [
@@ -71430,12 +71243,6 @@
       "label": "shows selected key spend and route activation"
     },
     {
-      "id": "displays:mechanic:feedback.gameplay_hud->file:src/renderer/components/GameplayHudBar.tsx",
-      "source": "mechanic:feedback.gameplay_hud",
-      "target": "file:src/renderer/components/GameplayHudBar.tsx",
-      "kind": "displays"
-    },
-    {
       "id": "displays:mechanic:feedback.gameplay_hud->file:src/renderer/components/gameScreenFeedback.ts",
       "source": "mechanic:feedback.gameplay_hud",
       "target": "file:src/renderer/components/gameScreenFeedback.ts",
@@ -71512,12 +71319,6 @@
       "label": "shows current shard bank"
     },
     {
-      "id": "displays:mechanic:inventory.contract_loadout->file:src/renderer/components/GameplayHudBar.tsx",
-      "source": "mechanic:inventory.contract_loadout",
-      "target": "file:src/renderer/components/GameplayHudBar.tsx",
-      "kind": "displays"
-    },
-    {
       "id": "displays:mechanic:inventory.contract_loadout->mechanic:feedback.gameplay_hud:shows locked restrictions beside affected powers",
       "source": "mechanic:inventory.contract_loadout",
       "target": "mechanic:feedback.gameplay_hud",
@@ -71553,12 +71354,6 @@
       "label": "shows key-ring quantity"
     },
     {
-      "id": "displays:mechanic:inventory.mutator_loadout->file:src/renderer/components/GameplayHudBar.tsx",
-      "source": "mechanic:inventory.mutator_loadout",
-      "target": "file:src/renderer/components/GameplayHudBar.tsx",
-      "kind": "displays"
-    },
-    {
       "id": "displays:mechanic:inventory.mutator_loadout->mechanic:feedback.gameplay_hud:shows current floor pressure chips",
       "source": "mechanic:inventory.mutator_loadout",
       "target": "mechanic:feedback.gameplay_hud",
@@ -71578,12 +71373,6 @@
       "target": "mechanic:feedback.gameplay_hud",
       "kind": "displays",
       "label": "shows remaining targeted control"
-    },
-    {
-      "id": "displays:mechanic:inventory.relic_loadout->file:src/renderer/components/GameplayHudBar.tsx",
-      "source": "mechanic:inventory.relic_loadout",
-      "target": "file:src/renderer/components/GameplayHudBar.tsx",
-      "kind": "displays"
     },
     {
       "id": "displays:mechanic:inventory.relic_loadout->mechanic:feedback.gameplay_hud:shows owned relic slots without duplicating state",
@@ -72048,65 +71837,11 @@
       "label": "shows purchase cost and gained key"
     },
     {
-      "id": "displays:mechanic:trait.conduit->file:src/renderer/components/GameplayHudBar.tsx",
-      "source": "mechanic:trait.conduit",
-      "target": "file:src/renderer/components/GameplayHudBar.tsx",
-      "kind": "displays"
-    },
-    {
-      "id": "displays:mechanic:trait.cursed->file:src/renderer/components/GameplayHudBar.tsx",
-      "source": "mechanic:trait.cursed",
-      "target": "file:src/renderer/components/GameplayHudBar.tsx",
-      "kind": "displays"
-    },
-    {
-      "id": "displays:mechanic:trait.drift->file:src/renderer/components/GameplayHudBar.tsx",
-      "source": "mechanic:trait.drift",
-      "target": "file:src/renderer/components/GameplayHudBar.tsx",
-      "kind": "displays"
-    },
-    {
-      "id": "displays:mechanic:trait.echo->file:src/renderer/components/GameplayHudBar.tsx",
-      "source": "mechanic:trait.echo",
-      "target": "file:src/renderer/components/GameplayHudBar.tsx",
-      "kind": "displays"
-    },
-    {
-      "id": "displays:mechanic:trait.heavy->file:src/renderer/components/GameplayHudBar.tsx",
-      "source": "mechanic:trait.heavy",
-      "target": "file:src/renderer/components/GameplayHudBar.tsx",
-      "kind": "displays"
-    },
-    {
-      "id": "displays:mechanic:trait.mirror->file:src/renderer/components/GameplayHudBar.tsx",
-      "source": "mechanic:trait.mirror",
-      "target": "file:src/renderer/components/GameplayHudBar.tsx",
-      "kind": "displays"
-    },
-    {
-      "id": "displays:mechanic:trait.sealed->file:src/renderer/components/GameplayHudBar.tsx",
-      "source": "mechanic:trait.sealed",
-      "target": "file:src/renderer/components/GameplayHudBar.tsx",
-      "kind": "displays"
-    },
-    {
-      "id": "displays:mechanic:trait.stasis->file:src/renderer/components/GameplayHudBar.tsx",
-      "source": "mechanic:trait.stasis",
-      "target": "file:src/renderer/components/GameplayHudBar.tsx",
-      "kind": "displays"
-    },
-    {
       "id": "displays:mechanic:trait.volatile_heavy_guard->mechanic:feedback.gameplay_hud:shows guard spark cause",
       "source": "mechanic:trait.volatile_heavy_guard",
       "target": "mechanic:feedback.gameplay_hud",
       "kind": "displays",
       "label": "shows guard spark cause"
-    },
-    {
-      "id": "displays:mechanic:trait.volatile->file:src/renderer/components/GameplayHudBar.tsx",
-      "source": "mechanic:trait.volatile",
-      "target": "file:src/renderer/components/GameplayHudBar.tsx",
-      "kind": "displays"
     },
     {
       "id": "enables:mechanic:board.wild_joker_tile->mechanic:power.wild_match:pairs with one flipped non-wild tile",
@@ -74174,27 +73909,9 @@
       "kind": "exports"
     },
     {
-      "id": "exports:src/renderer/components/GameLeftToolbar.tsx->symbol:src/renderer/components/GameLeftToolbar.tsx#default",
-      "source": "file:src/renderer/components/GameLeftToolbar.tsx",
-      "target": "symbol:src/renderer/components/GameLeftToolbar.tsx#default",
-      "kind": "exports"
-    },
-    {
       "id": "exports:src/renderer/components/GameOverScreen.tsx->symbol:src/renderer/components/GameOverScreen.tsx#default",
       "source": "file:src/renderer/components/GameOverScreen.tsx",
       "target": "symbol:src/renderer/components/GameOverScreen.tsx#default",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/components/GameplayHudBar.tsx->symbol:src/renderer/components/GameplayHudBar.tsx#default",
-      "source": "file:src/renderer/components/GameplayHudBar.tsx",
-      "target": "symbol:src/renderer/components/GameplayHudBar.tsx#default",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/components/GameplayHudBar.tsx->symbol:src/renderer/components/GameplayHudBar.tsx#GameplayHudBarProps",
-      "source": "file:src/renderer/components/GameplayHudBar.tsx",
-      "target": "symbol:src/renderer/components/GameplayHudBar.tsx#GameplayHudBarProps",
       "kind": "exports"
     },
     {
@@ -74249,12 +73966,6 @@
       "id": "exports:src/renderer/components/GameScreen.tsx->symbol:src/renderer/components/GameScreen.tsx#default",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "symbol:src/renderer/components/GameScreen.tsx#default",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/components/GameScreenActionFeedbackRail.tsx->symbol:src/renderer/components/GameScreenActionFeedbackRail.tsx#GameScreenActionFeedbackRail",
-      "source": "file:src/renderer/components/GameScreenActionFeedbackRail.tsx",
-      "target": "symbol:src/renderer/components/GameScreenActionFeedbackRail.tsx#GameScreenActionFeedbackRail",
       "kind": "exports"
     },
     {
@@ -74870,12 +74581,6 @@
       "kind": "exports"
     },
     {
-      "id": "exports:src/renderer/components/GameScreenDungeonRunStrip.tsx->symbol:src/renderer/components/GameScreenDungeonRunStrip.tsx#GameScreenDungeonRunStrip",
-      "source": "file:src/renderer/components/GameScreenDungeonRunStrip.tsx",
-      "target": "symbol:src/renderer/components/GameScreenDungeonRunStrip.tsx#GameScreenDungeonRunStrip",
-      "kind": "exports"
-    },
-    {
       "id": "exports:src/renderer/components/GameScreenDungeonStatusPanel.tsx->symbol:src/renderer/components/GameScreenDungeonStatusPanel.tsx#GameScreenDungeonStatusPanel",
       "source": "file:src/renderer/components/GameScreenDungeonStatusPanel.tsx",
       "target": "symbol:src/renderer/components/GameScreenDungeonStatusPanel.tsx#GameScreenDungeonStatusPanel",
@@ -75287,6 +74992,30 @@
       "id": "exports:src/renderer/components/RelicDraftOfferPanel.tsx->symbol:src/renderer/components/RelicDraftOfferPanel.tsx#default",
       "source": "file:src/renderer/components/RelicDraftOfferPanel.tsx",
       "target": "symbol:src/renderer/components/RelicDraftOfferPanel.tsx#default",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/RunShell.tsx->symbol:src/renderer/components/RunShell.tsx#default",
+      "source": "file:src/renderer/components/RunShell.tsx",
+      "target": "symbol:src/renderer/components/RunShell.tsx#default",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/RunShell.tsx->symbol:src/renderer/components/RunShell.tsx#RunShellProps",
+      "source": "file:src/renderer/components/RunShell.tsx",
+      "target": "symbol:src/renderer/components/RunShell.tsx#RunShellProps",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/RunShell.tsx->symbol:src/renderer/components/RunShell.tsx#RunShellTool",
+      "source": "file:src/renderer/components/RunShell.tsx",
+      "target": "symbol:src/renderer/components/RunShell.tsx#RunShellTool",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/runShellGlyphs.tsx->symbol:src/renderer/components/runShellGlyphs.tsx#RUN_SHELL_GLYPHS",
+      "source": "file:src/renderer/components/runShellGlyphs.tsx",
+      "target": "symbol:src/renderer/components/runShellGlyphs.tsx#RUN_SHELL_GLYPHS",
       "kind": "exports"
     },
     {
@@ -78443,24 +78172,6 @@
       "id": "exports:src/renderer/dev/clipboard.ts->symbol:src/renderer/dev/clipboard.ts#copyDevTextToClipboard",
       "source": "file:src/renderer/dev/clipboard.ts",
       "target": "symbol:src/renderer/dev/clipboard.ts#copyDevTextToClipboard",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/dev/hudFixtures.ts->symbol:src/renderer/dev/hudFixtures.ts#GAMEPLAY_HUD_FIXTURE_IDS",
-      "source": "file:src/renderer/dev/hudFixtures.ts",
-      "target": "symbol:src/renderer/dev/hudFixtures.ts#GAMEPLAY_HUD_FIXTURE_IDS",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/dev/hudFixtures.ts->symbol:src/renderer/dev/hudFixtures.ts#GameplayHudBarFixtureId",
-      "source": "file:src/renderer/dev/hudFixtures.ts",
-      "target": "symbol:src/renderer/dev/hudFixtures.ts#GameplayHudBarFixtureId",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/dev/hudFixtures.ts->symbol:src/renderer/dev/hudFixtures.ts#gameplayHudBarFixturePropsById",
-      "source": "file:src/renderer/dev/hudFixtures.ts",
-      "target": "symbol:src/renderer/dev/hudFixtures.ts#gameplayHudBarFixturePropsById",
       "kind": "exports"
     },
     {
@@ -94566,6 +94277,12 @@
       "kind": "implemented_by"
     },
     {
+      "id": "implemented_by:mechanic:feedback.gameplay_hud->file:src/renderer/components/RunShell.tsx",
+      "source": "mechanic:feedback.gameplay_hud",
+      "target": "file:src/renderer/components/RunShell.tsx",
+      "kind": "implemented_by"
+    },
+    {
       "id": "implemented_by:mechanic:feedback.gameplay_hud->file:src/renderer/hooks/useHudPoliteLiveAnnouncement.ts",
       "source": "mechanic:feedback.gameplay_hud",
       "target": "file:src/renderer/hooks/useHudPoliteLiveAnnouncement.ts",
@@ -94758,6 +94475,12 @@
       "kind": "implemented_by"
     },
     {
+      "id": "implemented_by:mechanic:inventory.contract_loadout->file:src/renderer/components/RunShell.tsx",
+      "source": "mechanic:inventory.contract_loadout",
+      "target": "file:src/renderer/components/RunShell.tsx",
+      "kind": "implemented_by"
+    },
+    {
       "id": "implemented_by:mechanic:inventory.contract_loadout->file:src/shared/board-power-actions.ts",
       "source": "mechanic:inventory.contract_loadout",
       "target": "file:src/shared/board-power-actions.ts",
@@ -94920,6 +94643,12 @@
       "kind": "implemented_by"
     },
     {
+      "id": "implemented_by:mechanic:inventory.mutator_loadout->file:src/renderer/components/RunShell.tsx",
+      "source": "mechanic:inventory.mutator_loadout",
+      "target": "file:src/renderer/components/RunShell.tsx",
+      "kind": "implemented_by"
+    },
+    {
       "id": "implemented_by:mechanic:inventory.mutator_loadout->file:src/shared/floor-mutator-schedule.ts",
       "source": "mechanic:inventory.mutator_loadout",
       "target": "file:src/shared/floor-mutator-schedule.ts",
@@ -94977,6 +94706,12 @@
       "id": "implemented_by:mechanic:inventory.region_shuffle_charge->file:src/shared/run-inventory.ts",
       "source": "mechanic:inventory.region_shuffle_charge",
       "target": "file:src/shared/run-inventory.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:inventory.relic_loadout->file:src/renderer/components/RunShell.tsx",
+      "source": "mechanic:inventory.relic_loadout",
+      "target": "file:src/renderer/components/RunShell.tsx",
       "kind": "implemented_by"
     },
     {
@@ -96678,6 +96413,12 @@
       "kind": "implemented_by"
     },
     {
+      "id": "implemented_by:mechanic:trait.conduit->file:src/renderer/components/RunShell.tsx",
+      "source": "mechanic:trait.conduit",
+      "target": "file:src/renderer/components/RunShell.tsx",
+      "kind": "implemented_by"
+    },
+    {
       "id": "implemented_by:mechanic:trait.conduit->file:src/shared/tile-trait-rules.ts",
       "source": "mechanic:trait.conduit",
       "target": "file:src/shared/tile-trait-rules.ts",
@@ -96687,6 +96428,12 @@
       "id": "implemented_by:mechanic:trait.conduit->file:src/shared/trait-opportunities.ts",
       "source": "mechanic:trait.conduit",
       "target": "file:src/shared/trait-opportunities.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:trait.cursed->file:src/renderer/components/RunShell.tsx",
+      "source": "mechanic:trait.cursed",
+      "target": "file:src/renderer/components/RunShell.tsx",
       "kind": "implemented_by"
     },
     {
@@ -96702,6 +96449,12 @@
       "kind": "implemented_by"
     },
     {
+      "id": "implemented_by:mechanic:trait.drift->file:src/renderer/components/RunShell.tsx",
+      "source": "mechanic:trait.drift",
+      "target": "file:src/renderer/components/RunShell.tsx",
+      "kind": "implemented_by"
+    },
+    {
       "id": "implemented_by:mechanic:trait.drift->file:src/shared/board-power-actions.ts",
       "source": "mechanic:trait.drift",
       "target": "file:src/shared/board-power-actions.ts",
@@ -96711,6 +96464,12 @@
       "id": "implemented_by:mechanic:trait.drift->file:src/shared/tile-trait-rules.ts",
       "source": "mechanic:trait.drift",
       "target": "file:src/shared/tile-trait-rules.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:trait.echo->file:src/renderer/components/RunShell.tsx",
+      "source": "mechanic:trait.echo",
+      "target": "file:src/renderer/components/RunShell.tsx",
       "kind": "implemented_by"
     },
     {
@@ -96726,6 +96485,12 @@
       "kind": "implemented_by"
     },
     {
+      "id": "implemented_by:mechanic:trait.heavy->file:src/renderer/components/RunShell.tsx",
+      "source": "mechanic:trait.heavy",
+      "target": "file:src/renderer/components/RunShell.tsx",
+      "kind": "implemented_by"
+    },
+    {
       "id": "implemented_by:mechanic:trait.heavy->file:src/shared/balance-simulation.ts",
       "source": "mechanic:trait.heavy",
       "target": "file:src/shared/balance-simulation.ts",
@@ -96735,6 +96500,12 @@
       "id": "implemented_by:mechanic:trait.heavy->file:src/shared/tile-trait-rules.ts",
       "source": "mechanic:trait.heavy",
       "target": "file:src/shared/tile-trait-rules.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:trait.mirror->file:src/renderer/components/RunShell.tsx",
+      "source": "mechanic:trait.mirror",
+      "target": "file:src/renderer/components/RunShell.tsx",
       "kind": "implemented_by"
     },
     {
@@ -96750,6 +96521,12 @@
       "kind": "implemented_by"
     },
     {
+      "id": "implemented_by:mechanic:trait.sealed->file:src/renderer/components/RunShell.tsx",
+      "source": "mechanic:trait.sealed",
+      "target": "file:src/renderer/components/RunShell.tsx",
+      "kind": "implemented_by"
+    },
+    {
       "id": "implemented_by:mechanic:trait.sealed->file:src/shared/tile-trait-rules.ts",
       "source": "mechanic:trait.sealed",
       "target": "file:src/shared/tile-trait-rules.ts",
@@ -96759,6 +96536,12 @@
       "id": "implemented_by:mechanic:trait.sealed->file:src/shared/trait-route-objectives.ts",
       "source": "mechanic:trait.sealed",
       "target": "file:src/shared/trait-route-objectives.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:trait.stasis->file:src/renderer/components/RunShell.tsx",
+      "source": "mechanic:trait.stasis",
+      "target": "file:src/renderer/components/RunShell.tsx",
       "kind": "implemented_by"
     },
     {
@@ -96789,6 +96572,12 @@
       "id": "implemented_by:mechanic:trait.volatile_heavy_guard->file:src/shared/tile-trait-rules.ts",
       "source": "mechanic:trait.volatile_heavy_guard",
       "target": "file:src/shared/tile-trait-rules.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:trait.volatile->file:src/renderer/components/RunShell.tsx",
+      "source": "mechanic:trait.volatile",
+      "target": "file:src/renderer/components/RunShell.tsx",
       "kind": "implemented_by"
     },
     {
@@ -98466,102 +98255,6 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/GameLeftToolbar.test.tsx->src/renderer/components/GameLeftToolbar.tsx",
-      "source": "file:src/renderer/components/GameLeftToolbar.test.tsx",
-      "target": "file:src/renderer/components/GameLeftToolbar.tsx",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/GameLeftToolbar.test.tsx->src/renderer/components/TileBoard.tsx",
-      "source": "file:src/renderer/components/GameLeftToolbar.test.tsx",
-      "target": "file:src/renderer/components/TileBoard.tsx",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/GameLeftToolbar.test.tsx->src/shared/contracts.ts",
-      "source": "file:src/renderer/components/GameLeftToolbar.test.tsx",
-      "target": "file:src/shared/contracts.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/GameLeftToolbar.test.tsx->src/shared/game-core.ts",
-      "source": "file:src/renderer/components/GameLeftToolbar.test.tsx",
-      "target": "file:src/shared/game-core.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/GameLeftToolbar.test.tsx->src/shared/save-data.ts",
-      "source": "file:src/renderer/components/GameLeftToolbar.test.tsx",
-      "target": "file:src/shared/save-data.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/GameLeftToolbar.tsx->src/renderer/a11y/toolbarRoving.ts",
-      "source": "file:src/renderer/components/GameLeftToolbar.tsx",
-      "target": "file:src/renderer/a11y/toolbarRoving.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/GameLeftToolbar.tsx->src/renderer/assets/ui/icons/index.ts",
-      "source": "file:src/renderer/components/GameLeftToolbar.tsx",
-      "target": "file:src/renderer/assets/ui/icons/index.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/GameLeftToolbar.tsx->src/renderer/audio/uiSfx.ts",
-      "source": "file:src/renderer/components/GameLeftToolbar.tsx",
-      "target": "file:src/renderer/audio/uiSfx.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/GameLeftToolbar.tsx->src/renderer/components/TileBoard.tsx",
-      "source": "file:src/renderer/components/GameLeftToolbar.tsx",
-      "target": "file:src/renderer/components/TileBoard.tsx",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/GameLeftToolbar.tsx->src/renderer/copy/chainMomentum.ts",
-      "source": "file:src/renderer/components/GameLeftToolbar.tsx",
-      "target": "file:src/renderer/copy/chainMomentum.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/GameLeftToolbar.tsx->src/renderer/gameplay/regPhase4PlayContract.ts",
-      "source": "file:src/renderer/components/GameLeftToolbar.tsx",
-      "target": "file:src/renderer/gameplay/regPhase4PlayContract.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/GameLeftToolbar.tsx->src/renderer/store/useAppStore.ts",
-      "source": "file:src/renderer/components/GameLeftToolbar.tsx",
-      "target": "file:src/renderer/store/useAppStore.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/GameLeftToolbar.tsx->src/renderer/ui/index.ts",
-      "source": "file:src/renderer/components/GameLeftToolbar.tsx",
-      "target": "file:src/renderer/ui/index.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/GameLeftToolbar.tsx->src/shared/contracts.ts",
-      "source": "file:src/renderer/components/GameLeftToolbar.tsx",
-      "target": "file:src/shared/contracts.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/GameLeftToolbar.tsx->src/shared/power-verbs.ts",
-      "source": "file:src/renderer/components/GameLeftToolbar.tsx",
-      "target": "file:src/shared/power-verbs.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/GameLeftToolbar.tsx->src/shared/trait-opportunities.ts",
-      "source": "file:src/renderer/components/GameLeftToolbar.tsx",
-      "target": "file:src/shared/trait-opportunities.ts",
-      "kind": "imports"
-    },
-    {
       "id": "imports:src/renderer/components/GameOverScreen.test.tsx->src/renderer/components/GameOverScreen.tsx",
       "source": "file:src/renderer/components/GameOverScreen.test.tsx",
       "target": "file:src/renderer/components/GameOverScreen.tsx",
@@ -98706,180 +98399,6 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/GameplayHudBar.test.tsx->src/renderer/components/GameplayHudBar.tsx",
-      "source": "file:src/renderer/components/GameplayHudBar.test.tsx",
-      "target": "file:src/renderer/components/GameplayHudBar.tsx",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/GameplayHudBar.test.tsx->src/shared/builtin-puzzles.ts",
-      "source": "file:src/renderer/components/GameplayHudBar.test.tsx",
-      "target": "file:src/shared/builtin-puzzles.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/GameplayHudBar.test.tsx->src/shared/contracts.ts",
-      "source": "file:src/renderer/components/GameplayHudBar.test.tsx",
-      "target": "file:src/shared/contracts.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/GameplayHudBar.test.tsx->src/shared/game-core.ts",
-      "source": "file:src/renderer/components/GameplayHudBar.test.tsx",
-      "target": "file:src/shared/game-core.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/GameplayHudBar.tsx->src/renderer/components/gameplayHudMutatorLabels.ts",
-      "source": "file:src/renderer/components/GameplayHudBar.tsx",
-      "target": "file:src/renderer/components/gameplayHudMutatorLabels.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/GameplayHudBar.tsx->src/renderer/components/gameScreenFeedback.ts",
-      "source": "file:src/renderer/components/GameplayHudBar.tsx",
-      "target": "file:src/renderer/components/gameScreenFeedback.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/GameplayHudBar.tsx->src/renderer/copy/chainMomentum.ts",
-      "source": "file:src/renderer/components/GameplayHudBar.tsx",
-      "target": "file:src/renderer/copy/chainMomentum.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/GameplayHudBar.tsx->src/renderer/copy/hudActionFeedback.ts",
-      "source": "file:src/renderer/components/GameplayHudBar.tsx",
-      "target": "file:src/renderer/copy/hudActionFeedback.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/GameplayHudBar.tsx->src/renderer/copy/perfectMemory.ts",
-      "source": "file:src/renderer/components/GameplayHudBar.tsx",
-      "target": "file:src/renderer/copy/perfectMemory.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/GameplayHudBar.tsx->src/renderer/copy/traitInteractionLaneMap.ts",
-      "source": "file:src/renderer/components/GameplayHudBar.tsx",
-      "target": "file:src/renderer/copy/traitInteractionLaneMap.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/GameplayHudBar.tsx->src/renderer/gameplay/regPhase4PlayContract.ts",
-      "source": "file:src/renderer/components/GameplayHudBar.tsx",
-      "target": "file:src/renderer/gameplay/regPhase4PlayContract.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/GameplayHudBar.tsx->src/shared/bonus-rewards.ts",
-      "source": "file:src/renderer/components/GameplayHudBar.tsx",
-      "target": "file:src/shared/bonus-rewards.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/GameplayHudBar.tsx->src/shared/boss-encounters.ts",
-      "source": "file:src/renderer/components/GameplayHudBar.tsx",
-      "target": "file:src/shared/boss-encounters.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/GameplayHudBar.tsx->src/shared/builtin-puzzles.ts",
-      "source": "file:src/renderer/components/GameplayHudBar.tsx",
-      "target": "file:src/shared/builtin-puzzles.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/GameplayHudBar.tsx->src/shared/contracts.ts",
-      "source": "file:src/renderer/components/GameplayHudBar.tsx",
-      "target": "file:src/shared/contracts.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/GameplayHudBar.tsx->src/shared/difficulty-profile.ts",
-      "source": "file:src/renderer/components/GameplayHudBar.tsx",
-      "target": "file:src/shared/difficulty-profile.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/GameplayHudBar.tsx->src/shared/dungeon-boss-rules.ts",
-      "source": "file:src/renderer/components/GameplayHudBar.tsx",
-      "target": "file:src/shared/dungeon-boss-rules.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/GameplayHudBar.tsx->src/shared/findables.ts",
-      "source": "file:src/renderer/components/GameplayHudBar.tsx",
-      "target": "file:src/shared/findables.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/GameplayHudBar.tsx->src/shared/floor-mutator-schedule.ts",
-      "source": "file:src/renderer/components/GameplayHudBar.tsx",
-      "target": "file:src/shared/floor-mutator-schedule.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/GameplayHudBar.tsx->src/shared/hazard-tiles.ts",
-      "source": "file:src/renderer/components/GameplayHudBar.tsx",
-      "target": "file:src/shared/hazard-tiles.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/GameplayHudBar.tsx->src/shared/long-run-feedback.ts",
-      "source": "file:src/renderer/components/GameplayHudBar.tsx",
-      "target": "file:src/shared/long-run-feedback.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/GameplayHudBar.tsx->src/shared/relic-favor-rules.ts",
-      "source": "file:src/renderer/components/GameplayHudBar.tsx",
-      "target": "file:src/shared/relic-favor-rules.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/GameplayHudBar.tsx->src/shared/relics.ts",
-      "source": "file:src/renderer/components/GameplayHudBar.tsx",
-      "target": "file:src/shared/relics.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/GameplayHudBar.tsx->src/shared/run-economy.ts",
-      "source": "file:src/renderer/components/GameplayHudBar.tsx",
-      "target": "file:src/shared/run-economy.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/GameplayHudBar.tsx->src/shared/run-number-guards.ts",
-      "source": "file:src/renderer/components/GameplayHudBar.tsx",
-      "target": "file:src/shared/run-number-guards.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/GameplayHudBar.tsx->src/shared/secondary-objectives.ts",
-      "source": "file:src/renderer/components/GameplayHudBar.tsx",
-      "target": "file:src/shared/secondary-objectives.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/GameplayHudBar.tsx->src/shared/shop-rules.ts",
-      "source": "file:src/renderer/components/GameplayHudBar.tsx",
-      "target": "file:src/shared/shop-rules.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/GameplayHudBar.tsx->src/shared/trait-opportunities.ts",
-      "source": "file:src/renderer/components/GameplayHudBar.tsx",
-      "target": "file:src/shared/trait-opportunities.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/GameplayHudBar.tsx->src/shared/trait-route-objectives.ts",
-      "source": "file:src/renderer/components/GameplayHudBar.tsx",
-      "target": "file:src/shared/trait-route-objectives.ts",
-      "kind": "imports"
-    },
-    {
       "id": "imports:src/renderer/components/gameplayHudMutatorLabels.ts->src/shared/contracts.ts",
       "source": "file:src/renderer/components/gameplayHudMutatorLabels.ts",
       "target": "file:src/shared/contracts.ts",
@@ -98976,12 +98495,6 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/GameScreen.test.tsx->src/shared/playable-onboarding.ts",
-      "source": "file:src/renderer/components/GameScreen.test.tsx",
-      "target": "file:src/shared/playable-onboarding.ts",
-      "kind": "imports"
-    },
-    {
       "id": "imports:src/renderer/components/GameScreen.test.tsx->src/shared/run-map.ts",
       "source": "file:src/renderer/components/GameScreen.test.tsx",
       "target": "file:src/shared/run-map.ts",
@@ -98997,12 +98510,6 @@
       "id": "imports:src/renderer/components/GameScreen.test.tsx->src/shared/test/gameplay-event-fixtures.ts",
       "source": "file:src/renderer/components/GameScreen.test.tsx",
       "target": "file:src/shared/test/gameplay-event-fixtures.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/GameScreen.test.tsx->src/shared/turn-resolution.ts",
-      "source": "file:src/renderer/components/GameScreen.test.tsx",
-      "target": "file:src/shared/turn-resolution.ts",
       "kind": "imports"
     },
     {
@@ -99030,33 +98537,9 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/components/GameLeftToolbar.tsx",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "file:src/renderer/components/GameLeftToolbar.tsx",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/components/GameplayHudBar.tsx",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "file:src/renderer/components/GameplayHudBar.tsx",
-      "kind": "imports"
-    },
-    {
       "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/components/gameplayVisualConfig.ts",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "file:src/renderer/components/gameplayVisualConfig.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/components/GameScreenActionFeedbackRail.tsx",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "file:src/renderer/components/GameScreenActionFeedbackRail.tsx",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/components/GameScreenDungeonRunStrip.tsx",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "file:src/renderer/components/GameScreenDungeonRunStrip.tsx",
       "kind": "imports"
     },
     {
@@ -99111,6 +98594,18 @@
       "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/components/RelicDraftOfferPanel.tsx",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "file:src/renderer/components/RelicDraftOfferPanel.tsx",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/components/RunShell.tsx",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "file:src/renderer/components/RunShell.tsx",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/components/runShellGlyphs.tsx",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "file:src/renderer/components/runShellGlyphs.tsx",
       "kind": "imports"
     },
     {
@@ -99390,30 +98885,6 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/GameScreenActionFeedbackRail.test.tsx->src/renderer/components/GameScreenActionFeedbackRail.tsx",
-      "source": "file:src/renderer/components/GameScreenActionFeedbackRail.test.tsx",
-      "target": "file:src/renderer/components/GameScreenActionFeedbackRail.tsx",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/GameScreenActionFeedbackRail.tsx->src/renderer/components/gameScreenFeedback.ts",
-      "source": "file:src/renderer/components/GameScreenActionFeedbackRail.tsx",
-      "target": "file:src/renderer/components/gameScreenFeedback.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/GameScreenActionFeedbackRail.tsx->src/renderer/store/matchScorePop.ts",
-      "source": "file:src/renderer/components/GameScreenActionFeedbackRail.tsx",
-      "target": "file:src/renderer/store/matchScorePop.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/GameScreenActionFeedbackRail.tsx->src/shared/run-array-guards.ts",
-      "source": "file:src/renderer/components/GameScreenActionFeedbackRail.tsx",
-      "target": "file:src/shared/run-array-guards.ts",
-      "kind": "imports"
-    },
-    {
       "id": "imports:src/renderer/components/gameScreenBoardFeedbackModel.test.ts->src/renderer/components/gameScreenBoardFeedbackModel.ts",
       "source": "file:src/renderer/components/gameScreenBoardFeedbackModel.test.ts",
       "target": "file:src/renderer/components/gameScreenBoardFeedbackModel.ts",
@@ -99573,12 +99044,6 @@
       "id": "imports:src/renderer/components/gameScreenDecisionSignals.tsx->src/shared/route-world.ts",
       "source": "file:src/renderer/components/gameScreenDecisionSignals.tsx",
       "target": "file:src/shared/route-world.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/GameScreenDungeonRunStrip.tsx->src/shared/run-map.ts",
-      "source": "file:src/renderer/components/GameScreenDungeonRunStrip.tsx",
-      "target": "file:src/shared/run-map.ts",
       "kind": "imports"
     },
     {
@@ -100329,6 +99794,60 @@
       "id": "imports:src/renderer/components/RelicDraftOfferPanel.tsx->src/shared/trait-build-rewards.ts",
       "source": "file:src/renderer/components/RelicDraftOfferPanel.tsx",
       "target": "file:src/shared/trait-build-rewards.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/RunShell.test.tsx->src/renderer/components/RunShell.tsx",
+      "source": "file:src/renderer/components/RunShell.test.tsx",
+      "target": "file:src/renderer/components/RunShell.tsx",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/RunShell.test.tsx->src/shared/contracts.ts",
+      "source": "file:src/renderer/components/RunShell.test.tsx",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/RunShell.test.tsx->src/shared/game-core.ts",
+      "source": "file:src/renderer/components/RunShell.test.tsx",
+      "target": "file:src/shared/game-core.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/RunShell.tsx->src/renderer/ui/gameplayIcons.tsx",
+      "source": "file:src/renderer/components/RunShell.tsx",
+      "target": "file:src/renderer/ui/gameplayIcons.tsx",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/RunShell.tsx->src/shared/contracts.ts",
+      "source": "file:src/renderer/components/RunShell.tsx",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/RunShell.tsx->src/shared/gameplay-feedback-facts.ts",
+      "source": "file:src/renderer/components/RunShell.tsx",
+      "target": "file:src/shared/gameplay-feedback-facts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/RunShell.tsx->src/shared/mechanics-encyclopedia.ts",
+      "source": "file:src/renderer/components/RunShell.tsx",
+      "target": "file:src/shared/mechanics-encyclopedia.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/RunShell.tsx->src/shared/run-number-guards.ts",
+      "source": "file:src/renderer/components/RunShell.tsx",
+      "target": "file:src/shared/run-number-guards.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/runShellGlyphs.tsx->src/renderer/ui/gameplayIcons.tsx",
+      "source": "file:src/renderer/components/runShellGlyphs.tsx",
+      "target": "file:src/renderer/ui/gameplayIcons.tsx",
       "kind": "imports"
     },
     {
@@ -103827,36 +103346,6 @@
       "id": "imports:src/renderer/dev/clipboard.test.ts->src/renderer/dev/clipboard.ts",
       "source": "file:src/renderer/dev/clipboard.test.ts",
       "target": "file:src/renderer/dev/clipboard.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/dev/hudFixtures.test.tsx->src/renderer/components/GameplayHudBar.tsx",
-      "source": "file:src/renderer/dev/hudFixtures.test.tsx",
-      "target": "file:src/renderer/components/GameplayHudBar.tsx",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/dev/hudFixtures.test.tsx->src/renderer/dev/hudFixtures.ts",
-      "source": "file:src/renderer/dev/hudFixtures.test.tsx",
-      "target": "file:src/renderer/dev/hudFixtures.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/dev/hudFixtures.ts->src/renderer/components/GameplayHudBar.tsx",
-      "source": "file:src/renderer/dev/hudFixtures.ts",
-      "target": "file:src/renderer/components/GameplayHudBar.tsx",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/dev/hudFixtures.ts->src/shared/contracts.ts",
-      "source": "file:src/renderer/dev/hudFixtures.ts",
-      "target": "file:src/shared/contracts.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/dev/hudFixtures.ts->src/shared/game-core.ts",
-      "source": "file:src/renderer/dev/hudFixtures.ts",
-      "target": "file:src/shared/game-core.ts",
       "kind": "imports"
     },
     {
@@ -119790,15 +119279,15 @@
       "kind": "tested_by"
     },
     {
-      "id": "tested_by:mechanic:feedback.gameplay_hud->file:src/renderer/components/GameplayHudBar.test.tsx",
-      "source": "mechanic:feedback.gameplay_hud",
-      "target": "file:src/renderer/components/GameplayHudBar.test.tsx",
-      "kind": "tested_by"
-    },
-    {
       "id": "tested_by:mechanic:feedback.gameplay_hud->file:src/renderer/components/GameScreen.test.tsx",
       "source": "mechanic:feedback.gameplay_hud",
       "target": "file:src/renderer/components/GameScreen.test.tsx",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:feedback.gameplay_hud->file:src/renderer/components/RunShell.test.tsx",
+      "source": "mechanic:feedback.gameplay_hud",
+      "target": "file:src/renderer/components/RunShell.test.tsx",
       "kind": "tested_by"
     },
     {
@@ -122194,27 +121683,9 @@
       "kind": "tested_by"
     },
     {
-      "id": "tested_by:src/renderer/components/GameLeftToolbar.tsx->file:src/renderer/components/GameLeftToolbar.test.tsx",
-      "source": "file:src/renderer/components/GameLeftToolbar.tsx",
-      "target": "file:src/renderer/components/GameLeftToolbar.test.tsx",
-      "kind": "tested_by"
-    },
-    {
       "id": "tested_by:src/renderer/components/GameOverScreen.tsx->file:src/renderer/components/GameOverScreen.test.tsx",
       "source": "file:src/renderer/components/GameOverScreen.tsx",
       "target": "file:src/renderer/components/GameOverScreen.test.tsx",
-      "kind": "tested_by"
-    },
-    {
-      "id": "tested_by:src/renderer/components/GameplayHudBar.tsx->file:src/renderer/components/GameplayHudBar.test.tsx",
-      "source": "file:src/renderer/components/GameplayHudBar.tsx",
-      "target": "file:src/renderer/components/GameplayHudBar.test.tsx",
-      "kind": "tested_by"
-    },
-    {
-      "id": "tested_by:src/renderer/components/GameplayHudBar.tsx->file:src/renderer/dev/hudFixtures.test.tsx",
-      "source": "file:src/renderer/components/GameplayHudBar.tsx",
-      "target": "file:src/renderer/dev/hudFixtures.test.tsx",
       "kind": "tested_by"
     },
     {
@@ -122293,12 +121764,6 @@
       "id": "tested_by:src/renderer/components/GameScreen.tsx->file:src/renderer/components/GameScreen.test.tsx",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "file:src/renderer/components/GameScreen.test.tsx",
-      "kind": "tested_by"
-    },
-    {
-      "id": "tested_by:src/renderer/components/GameScreenActionFeedbackRail.tsx->file:src/renderer/components/GameScreenActionFeedbackRail.test.tsx",
-      "source": "file:src/renderer/components/GameScreenActionFeedbackRail.tsx",
-      "target": "file:src/renderer/components/GameScreenActionFeedbackRail.test.tsx",
       "kind": "tested_by"
     },
     {
@@ -122410,6 +121875,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/components/RunShell.tsx->file:src/renderer/components/RunShell.test.tsx",
+      "source": "file:src/renderer/components/RunShell.tsx",
+      "target": "file:src/renderer/components/RunShell.test.tsx",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/components/SettingsScreen.tsx->file:src/renderer/components/SettingsScreen.test.tsx",
       "source": "file:src/renderer/components/SettingsScreen.tsx",
       "target": "file:src/renderer/components/SettingsScreen.test.tsx",
@@ -122461,12 +121932,6 @@
       "id": "tested_by:src/renderer/components/startupIntroContract.ts->file:src/renderer/components/startupIntroContract.test.ts",
       "source": "file:src/renderer/components/startupIntroContract.ts",
       "target": "file:src/renderer/components/startupIntroContract.test.ts",
-      "kind": "tested_by"
-    },
-    {
-      "id": "tested_by:src/renderer/components/TileBoard.tsx->file:src/renderer/components/GameLeftToolbar.test.tsx",
-      "source": "file:src/renderer/components/TileBoard.tsx",
-      "target": "file:src/renderer/components/GameLeftToolbar.test.tsx",
       "kind": "tested_by"
     },
     {
@@ -122995,12 +122460,6 @@
       "id": "tested_by:src/renderer/dev/clipboard.ts->file:src/renderer/dev/clipboard.test.ts",
       "source": "file:src/renderer/dev/clipboard.ts",
       "target": "file:src/renderer/dev/clipboard.test.ts",
-      "kind": "tested_by"
-    },
-    {
-      "id": "tested_by:src/renderer/dev/hudFixtures.ts->file:src/renderer/dev/hudFixtures.test.tsx",
-      "source": "file:src/renderer/dev/hudFixtures.ts",
-      "target": "file:src/renderer/dev/hudFixtures.test.tsx",
       "kind": "tested_by"
     },
     {
@@ -123868,12 +123327,6 @@
       "kind": "tested_by"
     },
     {
-      "id": "tested_by:src/shared/builtin-puzzles.ts->file:src/renderer/components/GameplayHudBar.test.tsx",
-      "source": "file:src/shared/builtin-puzzles.ts",
-      "target": "file:src/renderer/components/GameplayHudBar.test.tsx",
-      "kind": "tested_by"
-    },
-    {
       "id": "tested_by:src/shared/builtin-puzzles.ts->file:src/renderer/store/runStartState.test.ts",
       "source": "file:src/shared/builtin-puzzles.ts",
       "target": "file:src/renderer/store/runStartState.test.ts",
@@ -123982,21 +123435,9 @@
       "kind": "tested_by"
     },
     {
-      "id": "tested_by:src/shared/contracts.ts->file:src/renderer/components/GameLeftToolbar.test.tsx",
-      "source": "file:src/shared/contracts.ts",
-      "target": "file:src/renderer/components/GameLeftToolbar.test.tsx",
-      "kind": "tested_by"
-    },
-    {
       "id": "tested_by:src/shared/contracts.ts->file:src/renderer/components/GameOverScreen.test.tsx",
       "source": "file:src/shared/contracts.ts",
       "target": "file:src/renderer/components/GameOverScreen.test.tsx",
-      "kind": "tested_by"
-    },
-    {
-      "id": "tested_by:src/shared/contracts.ts->file:src/renderer/components/GameplayHudBar.test.tsx",
-      "source": "file:src/shared/contracts.ts",
-      "target": "file:src/renderer/components/GameplayHudBar.test.tsx",
       "kind": "tested_by"
     },
     {
@@ -124045,6 +123486,12 @@
       "id": "tested_by:src/shared/contracts.ts->file:src/renderer/components/RelicDraftOfferPanel.test.tsx",
       "source": "file:src/shared/contracts.ts",
       "target": "file:src/renderer/components/RelicDraftOfferPanel.test.tsx",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/contracts.ts->file:src/renderer/components/RunShell.test.tsx",
+      "source": "file:src/shared/contracts.ts",
+      "target": "file:src/renderer/components/RunShell.test.tsx",
       "kind": "tested_by"
     },
     {
@@ -125530,21 +124977,9 @@
       "kind": "tested_by"
     },
     {
-      "id": "tested_by:src/shared/game-core.ts->file:src/renderer/components/GameLeftToolbar.test.tsx",
-      "source": "file:src/shared/game-core.ts",
-      "target": "file:src/renderer/components/GameLeftToolbar.test.tsx",
-      "kind": "tested_by"
-    },
-    {
       "id": "tested_by:src/shared/game-core.ts->file:src/renderer/components/GameOverScreen.test.tsx",
       "source": "file:src/shared/game-core.ts",
       "target": "file:src/renderer/components/GameOverScreen.test.tsx",
-      "kind": "tested_by"
-    },
-    {
-      "id": "tested_by:src/shared/game-core.ts->file:src/renderer/components/GameplayHudBar.test.tsx",
-      "source": "file:src/shared/game-core.ts",
-      "target": "file:src/renderer/components/GameplayHudBar.test.tsx",
       "kind": "tested_by"
     },
     {
@@ -125569,6 +125004,12 @@
       "id": "tested_by:src/shared/game-core.ts->file:src/renderer/components/PlayableOnboardingHarness.test.tsx",
       "source": "file:src/shared/game-core.ts",
       "target": "file:src/renderer/components/PlayableOnboardingHarness.test.tsx",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/game-core.ts->file:src/renderer/components/RunShell.test.tsx",
+      "source": "file:src/shared/game-core.ts",
+      "target": "file:src/renderer/components/RunShell.test.tsx",
       "kind": "tested_by"
     },
     {
@@ -126508,12 +125949,6 @@
       "kind": "tested_by"
     },
     {
-      "id": "tested_by:src/shared/playable-onboarding.ts->file:src/renderer/components/GameScreen.test.tsx",
-      "source": "file:src/shared/playable-onboarding.ts",
-      "target": "file:src/renderer/components/GameScreen.test.tsx",
-      "kind": "tested_by"
-    },
-    {
       "id": "tested_by:src/shared/playable-onboarding.ts->file:src/renderer/components/PlayableOnboardingHarness.test.tsx",
       "source": "file:src/shared/playable-onboarding.ts",
       "target": "file:src/renderer/components/PlayableOnboardingHarness.test.tsx",
@@ -127225,12 +126660,6 @@
       "id": "tested_by:src/shared/save-data.ts->file:src/renderer/components/CollectionScreen.test.tsx",
       "source": "file:src/shared/save-data.ts",
       "target": "file:src/renderer/components/CollectionScreen.test.tsx",
-      "kind": "tested_by"
-    },
-    {
-      "id": "tested_by:src/shared/save-data.ts->file:src/renderer/components/GameLeftToolbar.test.tsx",
-      "source": "file:src/shared/save-data.ts",
-      "target": "file:src/renderer/components/GameLeftToolbar.test.tsx",
       "kind": "tested_by"
     },
     {
@@ -128101,12 +127530,6 @@
       "id": "tested_by:src/shared/turn-mismatch-rules.ts->file:src/shared/turn-mismatch-rules.test.ts",
       "source": "file:src/shared/turn-mismatch-rules.ts",
       "target": "file:src/shared/turn-mismatch-rules.test.ts",
-      "kind": "tested_by"
-    },
-    {
-      "id": "tested_by:src/shared/turn-resolution.ts->file:src/renderer/components/GameScreen.test.tsx",
-      "source": "file:src/shared/turn-resolution.ts",
-      "target": "file:src/renderer/components/GameScreen.test.tsx",
       "kind": "tested_by"
     },
     {

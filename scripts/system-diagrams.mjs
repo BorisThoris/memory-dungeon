@@ -215,7 +215,7 @@ const buildGameplayDiagram = (repoRoot) => {
             node('input', 'Player Input', 'interaction', 'renderer', 'Flip, inspect, match, shuffle, swap, and consume powers.', evidence(repoRoot, ['src/renderer/App.tsx', 'src/renderer/components'])),
             node('rules', 'Shared Rules', 'domain', 'shared', 'Pure rules resolve matches, hazards, traits, enemies, and resources.', evidence(repoRoot, ['src/shared/game.ts', 'src/shared/tile-trait-rules.ts'])),
             node('board_powers', 'Board Powers', 'domain', 'shared', 'Peek, shuffle, region shuffle, and swap modify board state under legality rules.', evidence(repoRoot, ['src/shared/board-power-actions.ts', 'src/shared/board-power-availability.ts'])),
-            node('feedback', 'HUD Feedback', 'ui', 'renderer', 'Gameplay HUD exposes route, trait, resource, and action state.', evidence(repoRoot, ['src/renderer/components/GameplayHudBar.tsx'])),
+            node('feedback', 'HUD Feedback', 'ui', 'renderer', 'Gameplay HUD exposes route, trait, resource, and action state.', evidence(repoRoot, ['src/renderer/components/RunShell.tsx'])),
             node('progression', 'Run Progression', 'domain', 'shared', 'Room completion advances route, rewards, shops, elites, and bosses.', evidence(repoRoot, ['src/shared/run-map.ts', 'src/shared/bonus-rewards.ts']))
         ],
         edges: [
@@ -440,7 +440,7 @@ const buildTraitDiagram = (repoRoot) => {
         'src/shared/tile-trait-rules.test.ts',
         'src/shared/board-power-actions.ts',
         'src/shared/balance-simulation.ts',
-        'src/renderer/components/GameplayHudBar.tsx'
+        'src/renderer/components/RunShell.tsx'
     ]);
     return {
         id: 'trait-systems',
@@ -451,7 +451,7 @@ const buildTraitDiagram = (repoRoot) => {
             node('trait_generation', 'Trait Generation', 'domain', 'shared', 'Board generation seeds route-visible trait opportunities.', evidence(repoRoot, ['src/shared/board-generation.ts', 'src/shared/board-tile-generation-rules.ts'])),
             node('trait_actions', 'Trait Actions', 'domain', 'shared', 'Matches and board powers create, move, reveal, or block trait opportunities.', evidence(repoRoot, ['src/shared/board-power-actions.ts', 'src/shared/game.ts'])),
             node('trait_rewards', 'Trait Rewards', 'economy', 'shared', 'Rewards and shops let players build toward trait routes.', evidence(repoRoot, ['src/shared/bonus-rewards.ts', 'src/shared/shop-rules.ts'])),
-            node('trait_feedback', 'Trait Feedback', 'ui', 'renderer', 'HUD and tile faces make combo routes readable immediately.', evidence(repoRoot, ['src/renderer/components/GameplayHudBar.tsx', 'src/renderer/cardFace']))
+            node('trait_feedback', 'Trait Feedback', 'ui', 'renderer', 'HUD and tile faces make combo routes readable immediately.', evidence(repoRoot, ['src/renderer/components/RunShell.tsx', 'src/renderer/cardFace']))
         ],
         edges: [
             edge('trait_catalog', 'trait_generation', 'informs placement'),

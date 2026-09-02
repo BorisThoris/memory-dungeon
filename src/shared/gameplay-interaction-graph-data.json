@@ -9,7 +9,7 @@
       "evidence": [
         "src/shared/tile-trait-rules.ts",
         "src/shared/tile-trait-rules.test.ts",
-        "src/renderer/components/GameplayHudBar.tsx"
+        "src/renderer/components/RunShell.tsx"
       ],
       "reads": [
         "tileTraitKind",
@@ -41,7 +41,7 @@
       "evidence": [
         "src/shared/tile-trait-rules.ts",
         "src/shared/turn-mismatch-rules.ts",
-        "src/renderer/components/GameplayHudBar.tsx"
+        "src/renderer/components/RunShell.tsx"
       ],
       "reads": [
         "tileTraitKind",
@@ -78,7 +78,7 @@
       "evidence": [
         "src/shared/tile-trait-rules.ts",
         "src/shared/tile-trait-codex.ts",
-        "src/renderer/components/GameplayHudBar.tsx"
+        "src/renderer/components/RunShell.tsx"
       ],
       "reads": [
         "tileTraitKind",
@@ -111,7 +111,7 @@
       "evidence": [
         "src/shared/tile-trait-rules.ts",
         "src/shared/trait-build-rewards.ts",
-        "src/renderer/components/GameplayHudBar.tsx"
+        "src/renderer/components/RunShell.tsx"
       ],
       "reads": [
         "tileTraitKind",
@@ -148,7 +148,7 @@
       "evidence": [
         "src/shared/tile-trait-rules.ts",
         "src/shared/trait-route-objectives.ts",
-        "src/renderer/components/GameplayHudBar.tsx"
+        "src/renderer/components/RunShell.tsx"
       ],
       "reads": [
         "tileTraitKind",
@@ -184,7 +184,7 @@
       "evidence": [
         "src/shared/tile-trait-rules.ts",
         "src/shared/balance-simulation.ts",
-        "src/renderer/components/GameplayHudBar.tsx"
+        "src/renderer/components/RunShell.tsx"
       ],
       "reads": [
         "tileTraitKind",
@@ -217,7 +217,7 @@
       "evidence": [
         "src/shared/tile-trait-rules.ts",
         "src/shared/board-power-actions.ts",
-        "src/renderer/components/GameplayHudBar.tsx"
+        "src/renderer/components/RunShell.tsx"
       ],
       "reads": [
         "tileTraitKind",
@@ -254,7 +254,7 @@
       "evidence": [
         "src/shared/tile-trait-rules.ts",
         "src/shared/trait-opportunities.ts",
-        "src/renderer/components/GameplayHudBar.tsx"
+        "src/renderer/components/RunShell.tsx"
       ],
       "reads": [
         "tileTraitKind",
@@ -290,7 +290,7 @@
       "evidence": [
         "src/shared/tile-trait-rules.ts",
         "src/shared/trait-build-rewards.ts",
-        "src/renderer/components/GameplayHudBar.tsx"
+        "src/renderer/components/RunShell.tsx"
       ],
       "reads": [
         "tileTraitKind",
@@ -1028,7 +1028,7 @@
       "kind": "feedback",
       "role": "readability_gate",
       "evidence": [
-        "src/renderer/components/GameplayHudBar.tsx",
+        "src/renderer/components/RunShell.tsx",
         "src/renderer/components/gameScreenFeedback.ts",
         "src/renderer/hooks/useHudPoliteLiveAnnouncement.ts"
       ],
@@ -1064,7 +1064,7 @@
         "player-visible-state"
       ],
       "tests": [
-        "src/renderer/components/GameplayHudBar.test.tsx",
+        "src/renderer/components/RunShell.test.tsx",
         "src/renderer/components/GameScreen.test.tsx",
         "src/renderer/hooks/useHudPoliteLiveAnnouncement.test.ts"
       ]
@@ -4874,7 +4874,7 @@
         "src/shared/run-inventory.ts",
         "src/shared/relics.ts",
         "src/shared/relic-offer-rules.ts",
-        "src/renderer/components/GameplayHudBar.tsx"
+        "src/renderer/components/RunShell.tsx"
       ],
       "reads": [
         "relicIds",
@@ -4916,7 +4916,7 @@
         "src/shared/mutators.ts",
         "src/shared/floor-mutator-schedule.ts",
         "src/shared/next-floor-transition-rules.ts",
-        "src/renderer/components/GameplayHudBar.tsx"
+        "src/renderer/components/RunShell.tsx"
       ],
       "reads": [
         "activeMutators",
@@ -4954,7 +4954,7 @@
         "src/shared/run-creation-rules.ts",
         "src/shared/board-power-availability.ts",
         "src/shared/board-power-actions.ts",
-        "src/renderer/components/GameplayHudBar.tsx"
+        "src/renderer/components/RunShell.tsx"
       ],
       "reads": [
         "activeContract",

@@ -111,21 +111,33 @@ visual harness's tile locator; restoring the label restores the harness.
 **Tests that go:** any spec asserting the lane strips. **Acceptance:** the visual scenario
 `choose your path` in `e2e/visualScenarioSteps.ts`, plus the §1.1 budget probe.
 
-## 3. In-run HUD
+## 3. In-run shell (built)
 
-Already at the 06-28 baseline after the revert (§0.2). Remaining work is refinement, not
-removal:
+The June baseline was rejected as "still completely ass" — it was the same boxed web-panel
+HUD with fewer boxes. The in-run HTML layer was rebuilt green-field as
+`src/renderer/components/RunShell.tsx` + `RunShell.module.css` and mounted in `GameScreen`
+in place of `GameplayHudBar`, `GameScreenDungeonRunStrip`, `GameScreenActionFeedbackRail`,
+the two onboarding asides and `GameLeftToolbar`'s dock. Direction: *engraved* — nothing
+boxed over the board (F1, F2 in §7).
 
-- Action feedback becomes a single line under the score pill (artboard `Hud`), not a rail
-  drawn over the top card row. Owner: `GameScreen.module.css` `.actionFeedbackRail`.
-- The first-run prompt ("Make your first match") stays bottom-right and is the *only*
-  coaching surface; it is gated on `onboardingDismissed` and disappears after the first clear.
-  Owner: `src/shared/playable-onboarding.ts`, `GameScreen.tsx` around the
-  `playable-onboarding-prompt` block.
-- The dungeon run strip (room card, bottom-left) keeps its 06-28 content: depth/lane, room
-  name, boss countdown, one line.
-- Alternate B on the canvas (diegetic, no top band) is the research-dependent option; not
-  scheduled unless §7 supports it.
+- **One bar** across the top, set into a gradient backplate that fades into the void colour
+  (F6): FLOOR · LIVES · SCORE · SHARDS as Cinzel numerals (25–42 px) with 12 px small-caps
+  labels; GUARDS, the gauntlet CLOCK and the active MUTATOR appear only when non-zero.
+- **One line** under the numerals, inside the bar: the last action's feedback, else the
+  first-run instruction (until the first clear), else the standing objective. It is the
+  only coaching surface.
+- **One dock** along the bottom: large labelled glyph tiles (≥ 58 px) for the board powers
+  that currently have charges or are armed, a divider, and MENU. Nav to Inventory / Codex /
+  Settings moved onto the pause dialog, where Resume and Retreat already were.
+- Kept for the harness and screen readers: `Level N` srOnly heading, `group "Run stats"`,
+  `toolbar "Game controls"`, the polite live region, `data-reg-gameplay-shell`.
+
+Measured at 1440×900, playing phase: **12 chrome panels** (4 stats, 7 dock tiles, the bar),
+against 28 before the September revert and 14 at 06-28; **0 sub-12px** leaves. The 806-test
+renderer suite lost 20 specs that asserted the deleted rails, floaters and onboarding asides.
+
+Known gap: the 3D board still fits itself to the full viewport, so the top card row's edge
+sits under the bar's translucent tail. Phase 2 passes a top/bottom inset to `TileBoard`'s fit.
 
 ## 4. The retry loop: floor clear, relic draft, shop, side room, game over
 
@@ -209,5 +221,45 @@ full gate (`yarn typecheck && yarn test && yarn lint`) green.
 
 ## 7. Research findings
 
-Pending — the deep-research report is running. This section will carry the cited findings,
-their confidence, and which §2–§6 decisions each one supports or contradicts.
+Deep-research run of 2026-09-02: 5 search angles, 21 sources fetched, 98 claims extracted,
+25 adversarially verified (3 votes each), 19 confirmed, 6 refuted, 8 findings after merge.
+Full record: `tmp/ui-redesign/research.json` (not committed; regenerate from the workflow).
+
+### 7.1 What survived, and what it decides here
+
+| # | Finding | Confidence | Decides |
+|---|---|---|---|
+| F1 | **Slay the Spire scrapped its click-to-open per-enemy text panel** (needed a click per enemy, bad for spectators, "paragraphs… overload… unnecessary") for the *intent* system: one always-visible icon per enemy conveying only the attack-vs-defend decision, deliberately avoiding "too many numbers on the screen". First-hand developer account (Mega Crit, Ars Technica War Stories, 2019). | high, 3–0 | §3: the run shell shows four numbers and one line, never a panel of prose. §4.1: route choice is one icon + one line per door. |
+| F2 | **Inscryption designed its core act as "only diegetic objects to represent the game state: no UI"**, admits the rulebook is "a crutch, but not the entire solution", and made sigil icons depict a *metaphor* ("a skunk is stinky") after literal symbols failed in playtests. (Mullins, GDC 2022 post-mortem slides.) | high, 3–0 | §3: the bar is set into the table edge, not boxed. §5 Codex: entries exist as the on-demand crutch; the board never explains itself. Tile trait glyphs should be metaphors, not abbreviations. |
+| F3 | **Balatro's demo went from round-limited to content-limited** before Next Fest 2023 and was "clearly" better received; the tutorial was "totally revamped" in the same pre-release month. (LocalThunk timeline; Steam announcement.) The "because of feedback" link is inferred. | medium, 3–0 / 2–1 | Confirms `STEAM_DEMO_CYCLE.md` §4: cap breadth, never length. §2: locked modes stay visible. §3: expect to rework first-run coaching late, from playtests. |
+| F4 | **Valve's Steam Deck Verified gate**: text readable at 30 cm, hard minimum 9 px character height at 1280×800, 12 px recommended; default controller config must reach all content; glyphs must match the active device. (partner.steamgames.com/doc/steamhardware/compat.) | high, 3–0 | §1 principle 5's 12 px floor is Valve's *recommendation*, i.e. the minimum a demo should ship. §6 phase 6: controller pass is a Verified requirement, not polish. |
+| F5 | **Xbox XAG 101**: default body text ≥ 18 px rendered height at 1080p on PC (26 px console), measured descender-to-ascender; text and glyphs scalable to 200%; text inside glyphs must itself meet the minimum. Best practice, not certification. | high, 3–0 | §1.1 budgets set 0 sub-12px; the bar's numerals are 25–42 px and labels 12 px — labels are the weak point and should move to 14 px once the dock is measured. |
+| F6 | **XAG 102**: 4.5:1 contrast for standard text, 3:1 for large; HUD text over gameplay must be measured against the *lowest-contrast area behind it*, with a backplate or opacity control recommended. | high, 3–0 | §3: the bar and dock carry a gradient backplate into the void colour precisely so the numerals never sit on a bright card face. Add a contrast assertion to the budget probe. |
+| F7 | **Game Accessibility Guidelines**: readable default font size is Basic-tier (28 px floor at 1080p, borrowed from 10-foot TV guidance, framed as a minimum to exceed); adjustable size is Advanced-tier. Formatting: mixed case, left-aligned, 1.5 line spacing, ~70 chars/line for long text. | high, 3–0 | §5 Codex/Settings: entry copy is mixed case, left-aligned, one line per row. The shell's small-caps labels are acceptable only because they are labels, not reading text. |
+| F8 | "Legible font is one of the biggest issues we have for accessibility in the game industry" — EA's accessibility lead, GDC Summer 2020. Expert testimony, not survey data. | medium, 3–0 | Why the 7 px bombardment text was a ship-blocker, not a taste dispute. |
+
+### 7.2 What did not survive
+
+- Nothing verified for **Hades, Dead Cells, Monster Train, Peglin, Luck be a Landlord** — no
+  cross-game inventory of panel counts or word counts exists in this evidence set. The
+  canvas's density choices rest on F1/F2 and this repo's own measurements, not on a survey.
+- **No evidence either way** that persistent coaching panels are ignored or harmful beyond the
+  Slay the Spire and Inscryption accounts. §3's "one line, gone after the first clear" is a
+  design call consistent with F1/F2, not a proven outcome.
+- **Nothing on Electron/WebGL shell architecture or controller-navigation libraries** (Q5).
+  §6 phase 6 has to be worked from Valve's requirement (F4) and first principles.
+- **No run-summary / retry-rate evidence** (Q4). The game-over artboard's "what ended it" line
+  is judgment.
+- Refuted and not to be cited: the Game Developer "Balatro signposting" claims (Four Fingers
+  card teaching the hook, "extended low-calorie tutorial", deliberate unfamiliar starting deck),
+  and a GAG claim about interactive tutorials and on-demand reminders. They read as plausible;
+  the sources did not support them.
+
+### 7.3 What changed in the plan because of §7
+
+- §1 principle 5 now cites F4/F5 rather than asserting 12 px as taste.
+- §1.1 gains a contrast row (F6): every text element in the shell measured ≥ 4.5:1 against the
+  darkest and the brightest board state.
+- §3's in-run shell was rebuilt as one bar + one line + one dock (F1, F2) — see task #36 and
+  `src/renderer/components/RunShell.tsx`.
+- §6 phase 6 is promoted from "polish" to a Steam Deck Verified requirement (F4).

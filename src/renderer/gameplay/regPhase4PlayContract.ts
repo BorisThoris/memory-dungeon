@@ -17,14 +17,14 @@ export const REG104_DATA_SHELL = 'data-reg-gameplay-shell';
 export const REG105_DATA_DAIS = 'data-reg-board-dais';
 export const REG105_DATA_STAGEVIEW = 'data-reg-stage-viewport';
 
-/** REG-106: HUD information architecture — primary / secondary / deferred regions (GameplayHudBar / details). */
+/** REG-106: HUD information architecture — primary / secondary / deferred regions (RunShell bar / line / dock). */
 export const REG106_HUD_IA = {
     primary: ['score', 'floor', 'lives', 'streak', 'ward_bounty'] as const,
     secondary: ['objective', 'mutators', 'run_meta'] as const,
     detailsDrawer: ['guard', 'combo', 'distraction', 'forgiveness'] as const
 } as const;
 
-/** REG-107: where power-verb teaching rows surface (GameLeftToolbar). */
+/** REG-107: where power-verb teaching rows surface (RunShell dock). */
 export const REG107_POWER_TEACHING_ANCHOR = 'gameplay-power-teaching-rail' as const;
 
 /**

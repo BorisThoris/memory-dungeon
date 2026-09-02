@@ -387,7 +387,7 @@ export const auditGameplayInteractionGraph = (
                         (edge.source === mechanic.id && edge.target === 'feedback.gameplay_hud') ||
                         (edge.target === mechanic.id && edge.source === 'feedback.gameplay_hud')
                 ) &&
-                !mechanic.evidence.some((path) => path.includes('GameplayHudBar') || path.includes('gameScreenFeedback'))
+                !mechanic.evidence.some((path) => path.includes('GameplayHudBar') || path.includes('RunShell') || path.includes('gameScreenFeedback'))
         )
         .map((mechanic) => mechanic.id);
     const shopCounterplayWithoutPriorityGuardIds = graph.mechanics

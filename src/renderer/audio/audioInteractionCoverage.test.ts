@@ -127,7 +127,7 @@ describe('REG-037 audio interaction coverage', () => {
             semanticMoment: 'reward'
         });
         expect(gameplay.find((row) => row.id === 'primary_feedback_lane_cues')?.callsite).toMatch(
-            /TileBoard trait interaction lanes.*GameScreen.*GameplayHudBar/i
+            /TileBoard trait interaction lanes.*GameScreen.*RunShell/i
         );
         expect(gameplay.find((row) => row.id === 'primary_feedback_lane_cues')?.mixRole).toMatch(
             /action verb.*beat count.*audio role.*screen cue/i
@@ -146,7 +146,7 @@ describe('REG-037 audio interaction coverage', () => {
             /reward.*pressure.*guard.*pulse.*snap/i
         );
         expect(gameplay.find((row) => row.id === 'board_power')?.semanticMoment).toBe('arm');
-        expect(gameplay.find((row) => row.id === 'board_power')?.callsite).toMatch(/GameLeftToolbar/i);
+        expect(gameplay.find((row) => row.id === 'board_power')?.callsite).toMatch(/RunShell/i);
         expect(gameplay.find((row) => row.id === 'board_power')?.mixRole).toMatch(/tool crescendo/i);
         expect(gameplay.find((row) => row.id === 'resolve_mismatch')?.mixRole).toMatch(/fail/i);
         expect(gameplay.find((row) => row.id === 'chain_break_miss')).toMatchObject({

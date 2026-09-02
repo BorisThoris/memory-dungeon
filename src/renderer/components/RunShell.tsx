@@ -1,0 +1,196 @@
+import { memo, type ReactElement } from 'react';
+import type { RunState } from '../../shared/contracts';
+import { runNonNegativeInteger } from '../../shared/run-number-guards';
+import { getGameplayFeedbackObjectiveSnapshot } from '../../shared/gameplay-feedback-facts';
+import { MUTATOR_CATALOG } from '../../shared/mechanics-encyclopedia';
+import { GameplayMenuIcon } from '../ui/gameplayIcons';
+import styles from './RunShell.module.css';
+
+/**
+ * The HTML layer over the 3D board during a run.
+ *
+ * One bar across the top carries the four numbers a player reads mid-run; one dock along
+ * the bottom carries the tools they can actually use right now; one line between them says
+ * what just happened or what to do first. Nothing else is drawn over the board. The
+ * previous layer stacked up to 28 panels here; this one is budgeted at 8.
+ */
+
+export interface RunShellTool {
+    id: string;
+    label: string;
+    glyph: ReactElement;
+    charges?: number;
+    armed?: boolean;
+    disabled?: boolean;
+    title?: string;
+    onClick: () => void;
+}
+
+export interface RunShellProps {
+    run: RunState;
+    /** Precomputed from the host clock, or null when the gauntlet is off. */
+    gauntletRemainingMs: number | null;
+    /** The one line under the bar. Feedback wins over the standing objective. */
+    feedback?: string | null;
+    feedbackPriority?: 'info' | 'error';
+    /** First-run instruction, shown only until the first clear. */
+    onboardingLine?: string | null;
+    /** Screen-reader status line, unchanged from the previous HUD's contract. */
+    politeAnnouncement?: string;
+    tools: readonly RunShellTool[];
+    onPause: () => void;
+}
+
+const formatTimer = (ms: number): string => {
+    const total = Math.max(0, Math.ceil(ms / 1000));
+    const minutes = Math.floor(total / 60);
+    const seconds = total % 60;
+    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+};
+
+const Stat = ({
+    label,
+    children,
+    primary = false,
+    testId
+}: {
+    label: string;
+    children: ReactElement | string;
+    primary?: boolean;
+    testId: string;
+}): ReactElement => (
+    <div className={`${styles.stat} ${primary ? styles.statPrimary : ''}`.trim()} data-testid={testId}>
+        <span className={styles.label}>{label}</span>
+        <span className={`${styles.value} ${primary ? styles.valuePrimary : ''}`.trim()}>{children}</span>
+    </div>
+);
+
+const RunShell = ({
+    run,
+    gauntletRemainingMs,
+    feedback,
+    feedbackPriority = 'info',
+    onboardingLine,
+    politeAnnouncement,
+    tools,
+    onPause
+}: RunShellProps): ReactElement => {
+    const maxLives = Math.max(run.lives, 5);
+    const objective = getGameplayFeedbackObjectiveSnapshot(run);
+    const mutatorTitles = run.activeMutators.map((id) => MUTATOR_CATALOG[id]?.title ?? id);
+    const line = feedback ?? onboardingLine ?? (objective ? `${objective.label}: ${objective.progress}/${objective.required}` : null);
+    const lineTone = feedback ? feedbackPriority : onboardingLine ? 'info' : 'objective';
+    const visibleTools = tools.filter((tool) => tool.charges === undefined || tool.charges > 0 || tool.armed);
+
+    return (
+        <div className={styles.shell} data-testid="run-shell">
+            <header className={styles.bar} data-testid="game-hud">
+                <div className={styles.stats} role="group" aria-label="Run stats">
+                <Stat label="Floor" testId="hud-floor">
+                    {String(run.board?.level ?? 1)}
+                </Stat>
+                <Stat label="Lives" testId="hud-lives">
+                    <span className={styles.hearts} aria-label={`${run.lives} of ${maxLives} lives`}>
+                        {Array.from({ length: maxLives }, (_, index) => (
+                            <span
+                                aria-hidden="true"
+                                className={index < run.lives ? styles.heart : styles.heartLost}
+                                key={index}
+                            >
+                                &#9829;
+                            </span>
+                        ))}
+                    </span>
+                </Stat>
+                <Stat label="Score" primary testId="hud-score">
+                    {runNonNegativeInteger(run.stats.totalScore).toLocaleString()}
+                </Stat>
+                <Stat label="Shards" testId="hud-combo-shards">
+                    {String(run.stats.comboShards)}
+                </Stat>
+                {run.stats.guardTokens > 0 ? (
+                    <Stat label="Guards" testId="hud-guards">
+                        {String(run.stats.guardTokens)}
+                    </Stat>
+                ) : null}
+                {gauntletRemainingMs !== null ? (
+                    <Stat label="Clock" testId="hud-gauntlet-timer">
+                        <span
+                            className={`${styles.timer} ${gauntletRemainingMs <= 30_000 ? styles.timerLow : ''}`.trim()}
+                            role="timer"
+                        >
+                            {formatTimer(gauntletRemainingMs)}
+                        </span>
+                    </Stat>
+                ) : null}
+                {mutatorTitles.length > 0 ? (
+                    <Stat label="Mutator" testId="hud-mutators">
+                        <span style={{ fontSize: '0.95rem', letterSpacing: '0.04em' }}>{mutatorTitles.join(' · ')}</span>
+                    </Stat>
+                ) : null}
+                </div>
+            {line ? (
+                <p
+                    className={`${styles.feedback} ${lineTone === 'error' ? styles.feedbackError : ''} ${lineTone === 'objective' ? styles.feedbackObjective : ''}`.trim()}
+                    data-testid="run-shell-line"
+                    data-run-shell-line-tone={lineTone}
+                    role="status"
+                >
+                    {line}
+                </p>
+            ) : null}
+            </header>
+
+            <div className={styles.dock} data-testid="game-action-dock" role="toolbar" aria-label="Game controls">
+                {visibleTools.map((tool) => (
+                    <button
+                        aria-label={tool.title ?? tool.label}
+                        aria-pressed={tool.armed !== undefined ? tool.armed : undefined}
+                        className={`${styles.tool} ${tool.armed ? styles.toolArmed : ''}`.trim()}
+                        data-testid={`tool-${tool.id}`}
+                        disabled={tool.disabled}
+                        key={tool.id}
+                        onClick={tool.onClick}
+                        title={tool.title}
+                        type="button"
+                    >
+                        <span className={styles.toolGlyph}>{tool.glyph}</span>
+                        <span className={styles.toolLabel}>{tool.label}</span>
+                        {tool.charges !== undefined && tool.charges > 0 ? (
+                            <span aria-hidden="true" className={styles.toolCount}>
+                                {tool.charges}
+                            </span>
+                        ) : null}
+                    </button>
+                ))}
+                {visibleTools.length > 0 ? <span aria-hidden="true" className={styles.dockDivider} /> : null}
+                <button
+                    aria-label="Pause and open the run menu"
+                    className={styles.tool}
+                    data-testid="game-toolbar-main-menu"
+                    onClick={onPause}
+                    title="Pause (P / Esc)"
+                    type="button"
+                >
+                    <span className={styles.toolGlyph}>
+                        <GameplayMenuIcon />
+                    </span>
+                    <span className={styles.toolLabel}>Menu</span>
+                </button>
+            </div>
+
+            <div
+                aria-atomic="true"
+                aria-live="polite"
+                className={styles.srOnly}
+                data-testid="hud-polite-live-region"
+                role="status"
+            >
+                {politeAnnouncement}
+            </div>
+        </div>
+    );
+};
+
+
+export default memo(RunShell);

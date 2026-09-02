@@ -7,15 +7,14 @@ import {
     type RouteCardKind,
     type RouteNodeType,
     type RouteSpecialKind,
-    type RunState,
-    type Settings
+    type RunState
 } from '../../shared/contracts';
 import { computeFocusDimmedTileIds } from '../../shared/focusDimmedTileIds';
 import { getChainTargetFeedback } from '../../shared/chain-targets';
 import { getPrimaryRewardPerkReadinessRow } from '../../shared/bonus-rewards';
 import { getFloorClearCausalityRows } from '../../shared/level-result-presentation';
 import { getFloorIdentityContract } from '../../shared/boss-encounters';
-import { getPlayableOnboardingStep, type OnboardingStepId } from '../../shared/playable-onboarding';
+import { getPlayableOnboardingStep } from '../../shared/playable-onboarding';
 import { useGameplayChromeClearance } from '../hooks/useGameplayChromeClearance';
 import { formatLevelResultObjectiveLine } from '../../shared/secondary-objectives';
 import { runFilteredArray, runFilteredStringArray } from '../../shared/run-array-guards';
@@ -26,8 +25,6 @@ import {
 import { getRouteChoiceAvailability, routeChoicesForResult } from '../../shared/route-rules';
 import { getTraitRouteObjectiveStatus } from '../../shared/trait-route-objectives';
 import {
-    canRegionShuffle,
-    canRegionShuffleRow,
     canShuffleBoard
 } from '../../shared/board-powers';
 import {
@@ -79,12 +76,10 @@ import {
     type BoardTurnResolvedEvent
 } from '../store/gameplayFeedbackAdapter';
 import { getLatestGameplayFeedback } from '../store/gameplayFeedbackAdapter';
-import GameLeftToolbar from './GameLeftToolbar';
-import { GameScreenActionFeedbackRail } from './GameScreenActionFeedbackRail';
-import { GameScreenDungeonRunStrip } from './GameScreenDungeonRunStrip';
 import { GameScreenDungeonStatusPanel } from './GameScreenDungeonStatusPanel';
 import { GameScreenEndlessChapterBanner } from './GameScreenEndlessChapterBanner';
-import GameplayHudBar from './GameplayHudBar';
+import RunShell, { type RunShellTool } from './RunShell';
+import { RUN_SHELL_GLYPHS } from './runShellGlyphs';
 import MainMenuBackground from './MainMenuBackground';
 import OverlayModal from './OverlayModal';
 import RelicDraftOfferPanel from './RelicDraftOfferPanel';
@@ -93,7 +88,6 @@ import { getInventoryPayoffEngineSignal } from './inventoryScreenModel';
 import TileBoard, { type TileBoardHandle } from './TileBoard';
 
 const MemoTileBoard = memo(TileBoard);
-const MemoGameplayHudBar = memo(GameplayHudBar);
 import {
     playCountdownPressureSfx,
     playMismatchRecoveryCrescendoSfx,
@@ -113,10 +107,7 @@ import { REG104_DATA_SHELL } from '../gameplay/regPhase4PlayContract';
 import styles from './GameScreen.module.css';
 import boardStyles from './TileBoard.module.css';
 import {
-    getDungeonCombatLogRows,
-    getVisualHudAnnouncementFollowup,
-    getVisualHudAnnouncementImpact,
-    getVisualHudAnnouncementSignal
+    getDungeonCombatLogRows
 } from './gameScreenFeedback';
 import {
     MATCH_SCORE_FLOAT_FALLBACK_MARGIN_MS,
@@ -676,76 +667,10 @@ const getFirstRouteChoiceTeachingLabel = (routeType: NonNullable<RunState['pendi
     return 'Changes the next board';
 };
 
-type OnboardingPromptSignalTone = 'action' | 'chain' | 'recovery' | 'reward' | 'route';
-type OnboardingPromptSignalRow = { label: string; tone: OnboardingPromptSignalTone; value: string };
 
-const getOnboardingPromptSignalBeatCount = (row: OnboardingPromptSignalRow): 2 | 3 | 4 => {
-    if (row.tone === 'reward' || row.tone === 'route') {
-        return 4;
-    }
-    if (row.tone === 'chain' || row.tone === 'recovery') {
-        return 3;
-    }
-    return 2;
-};
 
-const getOnboardingPromptSignalAudioCue = (
-    row: OnboardingPromptSignalRow
-): 'onboarding-action' | 'onboarding-chain' | 'onboarding-recovery' | 'onboarding-reward' | 'onboarding-route' => {
-    if (row.tone === 'reward') {
-        return 'onboarding-reward';
-    }
-    if (row.tone === 'route') {
-        return 'onboarding-route';
-    }
-    if (row.tone === 'chain') {
-        return 'onboarding-chain';
-    }
-    if (row.tone === 'recovery') {
-        return 'onboarding-recovery';
-    }
-    return 'onboarding-action';
-};
 
-const getOnboardingPromptSignalScreenCue = (
-    row: OnboardingPromptSignalRow
-): 'action' | 'burst' | 'chain' | 'recover' | 'route' => {
-    if (row.tone === 'reward') {
-        return 'burst';
-    }
-    if (row.tone === 'route') {
-        return 'route';
-    }
-    if (row.tone === 'chain') {
-        return 'chain';
-    }
-    if (row.tone === 'recovery') {
-        return 'recover';
-    }
-    return 'action';
-};
 
-const getOnboardingPromptSignals = (id: OnboardingStepId | 'room_goal'): OnboardingPromptSignalRow[] => {
-    if (id === 'first_match') {
-        return [
-            { label: 'Action', value: 'Flip pair', tone: 'action' },
-            { label: 'Reward', value: 'Score pop', tone: 'reward' },
-            { label: 'Chain', value: 'Start streak', tone: 'chain' }
-        ];
-    }
-    if (id === 'recovery') {
-        return [
-            { label: 'Recovery', value: 'Rebuild', tone: 'recovery' },
-            { label: 'Chain', value: 'Keep clean', tone: 'chain' },
-            { label: 'Tools', value: 'Save rescues', tone: 'action' }
-        ];
-    }
-    return [
-        { label: 'Goal', value: 'Clear pairs', tone: 'action' },
-        { label: 'Reward', value: 'Route choice', tone: 'route' },
-        { label: 'Chain', value: 'Clean finish', tone: 'chain' }
-    ];
-};
 
 const GAMBIT_SIGNAL_ROWS = [
     { label: 'Window', value: 'Third flip' },
@@ -2445,9 +2370,9 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     }, [width]);
     const isPhoneViewport = phoneViewportLatched;
     const compactTouchChrome = isPhoneViewport || isNarrowShortLandscapeForMenuStack(width, height);
+    const [, setRulesHintsExpanded] = useState(false);
     const [viewportResetToken, setViewportResetToken] = useState(0);
     const [gauntletNowMs, setGauntletNowMs] = useState(() => Date.now());
-    const [rulesHintsExpanded, setRulesHintsExpanded] = useState(false);
     const [abandonRunConfirmOpen, setAbandonRunConfirmOpen] = useState(false);
     const [shortcutsHelpOpen, setShortcutsHelpOpen] = useState(false);
     useEffect(() => {
@@ -2490,13 +2415,11 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             pickRelic: state.pickRelic,
             resume: state.resume,
             shuffleBoard: state.shuffleBoard,
-            shuffleRegionRow: state.shuffleRegionRow,
             toggleBoardPinMode: state.toggleBoardPinMode,
             toggleDestroyPairArmed: state.toggleDestroyPairArmed,
             togglePeekMode: state.togglePeekMode,
             toggleTileSwapArmed: state.toggleTileSwapArmed,
             toggleStrayArm: state.toggleStrayArm,
-            triggerDebugReveal: state.triggerDebugReveal,
             undoResolvingFlip: state.undoResolvingFlip
         }))
     );
@@ -2510,10 +2433,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         distractionChannelEnabled: settingsDistractionChannelEnabled,
         graphicsQuality: settingsGraphicsQuality,
         pairProximityHintsEnabled: settingsPairProximityHintsEnabled,
-        tileFocusAssist: settingsTileFocusAssist,
-        debugAllowBoardReveal: debugAllowBoardReveal,
-        debugDisableAchievementsOnDebug: debugDisableAchievementsOnDebug,
-        debugShowDebugTools: debugShowDebugTools
+        tileFocusAssist: settingsTileFocusAssist
     } = useGameScreenBoardVisualSettings();
     const showTutorialPairMarkers = useMemo(
         () =>
@@ -2526,37 +2446,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     );
     const onboardingStep = getPlayableOnboardingStep(run, saveData);
     const onboardingBoardTargetIds = useMemo(() => onboardingStep?.targetTileIds ?? [], [onboardingStep]);
-    const onboardingPromptSignals = onboardingStep ? getOnboardingPromptSignals(onboardingStep.id) : [];
-    const firstRunRoomGoalSignals = getOnboardingPromptSignals('room_goal');
-    const onboardingPromptSignalsLabel = formatGameplaySignalRowsLabel(
-        'Onboarding action and reward signals',
-        onboardingPromptSignals
-    );
-    const firstRunRoomGoalSignalsLabel = formatGameplaySignalRowsLabel(
-        'Room goal reward signals',
-        firstRunRoomGoalSignals
-    );
-    const firstRunRoomGoalPrompt =
-        !saveData.onboardingDismissed &&
-        !onboardingStep &&
-        run.status === 'playing' &&
-        run.board &&
-        run.board.level === 1 &&
-        run.board.matchedPairs >= 2 &&
-        run.board.matchedPairs < run.board.pairCount
-            ? {
-                  title: 'Room goal',
-                  prompt: 'Clear the remaining pairs',
-                  detail: 'Each clean pair moves the room toward its exit. Clearing the floor opens the first route choice.'
-              }
-            : null;
-    const rulesHintNudge =
-        onboardingStep?.prompt ??
-        (showTutorialPairMarkers
-            ? 'First run: match identical symbols. Pair markers fade after floor 2.'
-            : run.activeMutators.length > 0 && run.board?.matchedPairs === 0
-              ? `New pressure: ${run.activeMutators.map((id) => MUTATOR_CATALOG[id]?.title ?? id).join(', ')}.`
-              : null);
     const { boardPinMode, destroyPairArmed, peekModeArmed, strayRemoveArmed, tileSwapArmed, tileSwapFirstTileId } =
         useAppStore(
             useShallow((state) => ({
@@ -3002,14 +2891,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     /** FX-015: WebGL bloom is medium+ when the toggle is on; add a light CSS rim only on High to avoid doubling cost on phones at Medium. */
     const boardStageCssBloomClass =
         settingsBoardBloomEnabled && settingsGraphicsQuality === 'high' ? styles.boardStageCssBloom : '';
-    const toolbarDebugFlags = useMemo(
-        (): Settings['debugFlags'] => ({
-            allowBoardReveal: debugAllowBoardReveal,
-            disableAchievementsOnDebug: debugDisableAchievementsOnDebug,
-            showDebugTools: debugShowDebugTools
-        }),
-        [debugAllowBoardReveal, debugDisableAchievementsOnDebug, debugShowDebugTools]
-    );
     const {
         applyFlashPairPower,
         acceptEndlessRiskWager,
@@ -3028,13 +2909,11 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         pickRelic,
         resume,
         shuffleBoard,
-        shuffleRegionRow,
         toggleBoardPinMode,
         toggleDestroyPairArmed,
         togglePeekMode,
         toggleTileSwapArmed,
         toggleStrayArm,
-        triggerDebugReveal,
         undoResolvingFlip
     } = gameScreenActions;
 
@@ -3057,23 +2936,12 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         playUiClickSfx(uiGain);
     }, [uiGain]);
 
-    const handleToolbarViewportReset = useCallback((): void => {
-        setViewportResetToken((current) => current + 1);
-    }, []);
 
     const openSettingsPlayingMode = useCallback((): void => {
         openSettings('playing');
     }, [openSettings]);
 
-    const canRegionShuffleRowForRun = useCallback(
-        (row: number): boolean => canRegionShuffleRow(run, row),
-        [run]
-    );
 
-    const handleRequestAbandonRun = useCallback((): void => {
-        playMenuOpen();
-        setAbandonRunConfirmOpen(true);
-    }, [playMenuOpen]);
     const pauseShortcutStateRef = useLatestRef({
         abandonRunConfirmOpen,
         lastLevelResult: run.lastLevelResult,
@@ -3648,7 +3516,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             memoryRecallFeedback.upgrades
         ]
     );
-    const currentDungeonRoom = dungeonMapPresentation.current;
     const visibleDungeonMapNodes = dungeonMapPresentation.nodes.filter(
         (node) => node.status === 'current' || node.status === 'cleared' || node.status === 'revealed' || node.status === 'skipped'
     );
@@ -3784,6 +3651,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
 
     const gauntletRemainingMs =
         run.gauntletDeadlineMs !== null ? Math.max(0, run.gauntletDeadlineMs - gauntletNowMs) : null;
+
     const gauntletActive = run.gameMode === 'gauntlet' && run.gauntletDeadlineMs !== null;
     useEffect(() => {
         if (!gauntletActive || run.status !== 'playing' || gauntletRemainingMs === null) {
@@ -3848,23 +3716,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const visualHudAnnouncement = actionFeedbackAnnouncement
         ? formatHudActionFeedbackText(actionFeedbackAnnouncement)
         : '';
-    const visualHudAnnouncementLabel = actionFeedbackPriority === 'error' ? 'Critical' : 'Action result';
-    const visualHudAnnouncementSignal = getVisualHudAnnouncementSignal(
-        actionFeedbackAnnouncement,
-        actionFeedbackPriority
-    );
-    const visualHudAnnouncementImpact = getVisualHudAnnouncementImpact(
-        actionFeedbackAnnouncement,
-        actionFeedbackPriority
-    );
-    const remainingPairCount = Math.max(0, (run.board?.pairCount ?? 0) - (run.board?.matchedPairs ?? 0));
-    const visualHudAnnouncementFollowup = getVisualHudAnnouncementFollowup({
-        announcement: actionFeedbackAnnouncement,
-        priority: actionFeedbackPriority,
-        runStatus: run.status,
-        remainingPairCount,
-        lives: run.lives
-    });
 
     const { hint: traitSwapRouteHint, tileIds: traitRouteTargetTileIds } = useGameScreenTraitRouteTargets(run);
     const handleTileSelect = useCallback((tileId: string): void => {
@@ -3952,19 +3803,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         currentArchetype &&
         currentFeaturedObjectiveLabel &&
         (run.status === 'memorize' || (run.status === 'playing' && run.board.matchedPairs === 0));
-    const showBoardPowerBar = run.status === 'playing';
     const shuffleDisabled = !canShuffleBoard(run);
-    const regionShuffleDisabled = !canRegionShuffle(run);
-    const regionShuffleTitle = run.activeContract?.noShuffle
-        ? 'Scholar contract: row shuffle disabled'
-        : regionShuffleDisabled
-          ? run.regionShuffleCharges < 1 &&
-              !(run.regionShuffleFreeThisFloor && run.relicIds.includes('region_shuffle_free_first'))
-            ? 'No row/swap charges'
-            : run.board.flippedTileIds.length > 0
-              ? 'Finish the current flip first'
-              : 'Need at least one hidden pair on the board'
-          : 'Shuffle hidden tiles within one row (uses 1 row/swap charge)';
     const tileSwapTitle = run.activeContract?.noShuffle
         ? 'Scholar contract: tile swap disabled'
         : run.board.flippedTileIds.length > 0
@@ -4009,6 +3848,84 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
               ? styles.boardStageBreathing
               : '';
     const destroyDisabled = run.destroyPairCharges < 1 && !destroyPairArmed;
+
+    const runShellTools: RunShellTool[] = [
+            {
+                id: 'shuffle',
+                label: 'Shuffle',
+                glyph: RUN_SHELL_GLYPHS.shuffle,
+                charges: run.shuffleCharges,
+                disabled: shuffleDisabled,
+                title: shuffleTitle,
+                onClick: shuffleBoard
+            },
+            {
+                id: 'swap',
+                label: 'Swap',
+                glyph: RUN_SHELL_GLYPHS.shuffle,
+                charges: run.regionShuffleCharges,
+                armed: tileSwapArmed,
+                disabled: tileSwapDisabled,
+                title: tileSwapTitle,
+                onClick: toggleTileSwapArmed
+            },
+            {
+                id: 'pin',
+                label: 'Pin',
+                glyph: RUN_SHELL_GLYPHS.pin,
+                armed: boardPinMode,
+                title: `Pin up to ${MAX_PINNED_TILES} tiles`,
+                onClick: toggleBoardPinMode
+            },
+            {
+                id: 'destroy',
+                label: 'Destroy',
+                glyph: RUN_SHELL_GLYPHS.destroy,
+                charges: run.destroyPairCharges,
+                armed: destroyPairArmed,
+                disabled: destroyDisabled,
+                title: 'Destroy a pair',
+                onClick: toggleDestroyPairArmed
+            },
+            {
+                id: 'peek',
+                label: 'Peek',
+                glyph: RUN_SHELL_GLYPHS.peek,
+                charges: run.peekCharges,
+                armed: peekModeArmed,
+                title: 'Peek at a hidden tile',
+                onClick: togglePeekMode
+            },
+            ...(showFlashPairPower
+                ? [
+                      {
+                          id: 'flash',
+                          label: 'Flash',
+                          glyph: RUN_SHELL_GLYPHS.peek,
+                          charges: run.flashPairCharges,
+                          disabled: flashPairDisabled,
+                          title: flashPairTitle,
+                          onClick: applyFlashPairPower
+                      }
+                  ]
+                : []),
+            {
+                id: 'stray',
+                label: 'Stray',
+                glyph: RUN_SHELL_GLYPHS.stray,
+                armed: strayRemoveArmed,
+                title: 'Remove a stray tile',
+                onClick: toggleStrayArm
+            },
+            {
+                id: 'undo',
+                label: 'Undo',
+                glyph: RUN_SHELL_GLYPHS.undo,
+                title: 'Undo the last flip',
+                onClick: undoResolvingFlip
+            }
+        ];
+
     /*
      * A11Y-006 — backdrop inert behind OverlayModal surfaces (pause, relic, floor clear, abandon):
      * - Native `inert` is supported in Chromium (Electron) and current Safari/Firefox; very old browsers
@@ -4073,13 +3990,15 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                         className={`${styles.mainGameColumn} ${cameraViewportMode ? styles.mobileCameraMainColumn : ''}`.trim()}
                         data-html-ui-layer="gameplay-chrome-v2"
                     >
-                        <MemoGameplayHudBar
-                            cameraViewportMode={cameraViewportMode}
+                        <RunShell
+                            feedback={visualHudAnnouncement}
+                            feedbackPriority={actionFeedbackPriority}
                             gauntletRemainingMs={gauntletRemainingMs}
-                            politeHudAnnouncement={politeHudAnnouncement}
-                            politeHudAnnouncementPriority={politeHudAnnouncementPriority}
-                            reduceMotion={reduceMotion}
+                            onboardingLine={onboardingStep && run.status === 'playing' ? onboardingStep.prompt : null}
+                            onPause={pause}
+                            politeAnnouncement={politeHudAnnouncement}
                             run={run}
+                            tools={runShellTools}
                         />
 
                         {gambitThirdPickActive ? (
@@ -4161,13 +4080,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                             />
                         ) : null}
 
-                        {currentDungeonRoom ? (
-                            <GameScreenDungeonRunStrip
-                                bossDistance={dungeonMapPresentation.bossDistance}
-                                currentRoom={currentDungeonRoom}
-                                visibleNodes={visibleDungeonMapNodes}
-                            />
-                        ) : null}
 
                         <div
                             ref={boardStageRef}
@@ -4259,23 +4171,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                 <GameScreenDungeonStatusPanel
                                     combatLogRows={dungeonCombatLogRows}
                                     panel={activeDungeonPanel}
-                                />
-                            ) : null}
-                            {visualHudAnnouncement ? (
-                                <GameScreenActionFeedbackRail
-                                    burstTier={visualHudAnnouncementImpact.burstTier}
-                                    crescendo={
-                                        boardFloaterPayload?.kind === 'match'
-                                            ? boardFloaterPayload.crescendo ?? null
-                                            : null
-                                    }
-                                    details={visualHudAnnouncementImpact.details}
-                                    followup={visualHudAnnouncementFollowup}
-                                    intensity={visualHudAnnouncementImpact.level}
-                                    label={visualHudAnnouncementLabel}
-                                    message={visualHudAnnouncement}
-                                    signal={visualHudAnnouncementSignal}
-                                    tone={actionFeedbackPriority}
                                 />
                             ) : null}
                             {boardMatchPayoffStackCue ? (
@@ -5585,125 +5480,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                     </div>
                                 </div>
                             ) : null}
-                            {onboardingStep && run.status === 'playing' ? (
-                                <aside className={styles.playableOnboardingPrompt} data-testid="playable-onboarding-prompt">
-                                    <span className={styles.playableOnboardingStep}>{onboardingStep.title}</span>
-                                    <strong>{onboardingStep.prompt}</strong>
-                                    <p>{onboardingStep.detail}</p>
-                                    <div
-                                        className={styles.onboardingPromptSignals}
-                                        data-testid="playable-onboarding-signals"
-                                        aria-label={onboardingPromptSignalsLabel}
-                                    >
-                                        {onboardingPromptSignals.map((row) => {
-                                            const beatCount = getOnboardingPromptSignalBeatCount(row);
-                                            return (
-                                                <span
-                                                    data-onboarding-signal-audio={getOnboardingPromptSignalAudioCue(row)}
-                                                    data-onboarding-signal-beats={beatCount}
-                                                    data-onboarding-signal-screen-cue={getOnboardingPromptSignalScreenCue(row)}
-                                                    data-onboarding-signal-tone={row.tone}
-                                                    key={`${row.label}:${row.value}`}
-                                                >
-                                                    <small>{row.label}</small>
-                                                    <b>{row.value}</b>
-                                                    <span aria-hidden="true" className={styles.onboardingPromptBeatPips}>
-                                                        {Array.from({ length: beatCount }, (_, index) => (
-                                                            <i
-                                                                data-onboarding-signal-beat={index + 1}
-                                                                data-onboarding-signal-beat-focus={index === 0 ? 'primary' : 'support'}
-                                                                key={index}
-                                                            />
-                                                        ))}
-                                                    </span>
-                                                </span>
-                                            );
-                                        })}
-                                    </div>
-                                </aside>
-                            ) : null}
-                            {firstRunRoomGoalPrompt ? (
-                                <aside className={styles.playableOnboardingPrompt} data-testid="first-run-room-goal-prompt">
-                                    <span className={styles.playableOnboardingStep}>{firstRunRoomGoalPrompt.title}</span>
-                                    <strong>{firstRunRoomGoalPrompt.prompt}</strong>
-                                    <p>{firstRunRoomGoalPrompt.detail}</p>
-                                    <div
-                                        className={styles.onboardingPromptSignals}
-                                        data-testid="first-run-room-goal-signals"
-                                        aria-label={firstRunRoomGoalSignalsLabel}
-                                    >
-                                        {firstRunRoomGoalSignals.map((row) => {
-                                            const beatCount = getOnboardingPromptSignalBeatCount(row);
-                                            return (
-                                                <span
-                                                    data-onboarding-signal-audio={getOnboardingPromptSignalAudioCue(row)}
-                                                    data-onboarding-signal-beats={beatCount}
-                                                    data-onboarding-signal-screen-cue={getOnboardingPromptSignalScreenCue(row)}
-                                                    data-onboarding-signal-tone={row.tone}
-                                                    key={`${row.label}:${row.value}`}
-                                                >
-                                                    <small>{row.label}</small>
-                                                    <b>{row.value}</b>
-                                                    <span aria-hidden="true" className={styles.onboardingPromptBeatPips}>
-                                                        {Array.from({ length: beatCount }, (_, index) => (
-                                                            <i
-                                                                data-onboarding-signal-beat={index + 1}
-                                                                data-onboarding-signal-beat-focus={index === 0 ? 'primary' : 'support'}
-                                                                key={index}
-                                                            />
-                                                        ))}
-                                                    </span>
-                                                </span>
-                                            );
-                                        })}
-                                    </div>
-                                </aside>
-                            ) : null}
                         </div>
-                        <GameLeftToolbar
-                            applyFlashPairPower={applyFlashPairPower}
-                            boardPinMode={boardPinMode}
-                            cameraViewportMode={cameraViewportMode}
-                            canRegionShuffleRow={canRegionShuffleRowForRun}
-                            destroyDisabled={destroyDisabled}
-                            destroyPairArmed={destroyPairArmed}
-                            flashPairDisabled={flashPairDisabled}
-                            flashPairTitle={flashPairTitle}
-                            maxPinnedTiles={MAX_PINNED_TILES}
-                            onRequestAbandonRun={handleRequestAbandonRun}
-                            onViewportReset={handleToolbarViewportReset}
-                            openCodexFromPlaying={openCodexFromPlaying}
-                            openInventoryFromPlaying={openInventoryFromPlaying}
-                            openSettingsPlaying={openSettingsPlayingMode}
-                            peekModeArmed={peekModeArmed}
-                            strayRemoveArmed={strayRemoveArmed}
-                            regionShuffleDisabled={regionShuffleDisabled}
-                            regionShuffleTitle={regionShuffleTitle}
-                            rulesHintNudge={rulesHintNudge}
-                            rulesHintsExpanded={rulesHintsExpanded}
-                            run={run}
-                            setRulesHintsExpanded={setRulesHintsExpanded}
-                            debugFlags={toolbarDebugFlags}
-                            showBoardPowerBar={showBoardPowerBar}
-                            showFlashPairPower={showFlashPairPower}
-                            showForgivenessHint={showForgivenessHint}
-                            shuffleBoard={shuffleBoard}
-                            shuffleDisabled={shuffleDisabled}
-                            shuffleRegionRow={shuffleRegionRow}
-                            shuffleTitle={shuffleTitle}
-                            tileBoardRef={tileBoardRef}
-                            tileSwapArmed={tileSwapArmed}
-                            tileSwapDisabled={tileSwapDisabled}
-                            tileSwapFirstTileId={tileSwapFirstTileId}
-                            tileSwapTitle={tileSwapTitle}
-                            toggleBoardPinMode={toggleBoardPinMode}
-                            toggleDestroyPairArmed={toggleDestroyPairArmed}
-                            togglePeekMode={togglePeekMode}
-                            toggleTileSwapArmed={toggleTileSwapArmed}
-                            toggleStrayArm={toggleStrayArm}
-                            triggerDebugReveal={triggerDebugReveal}
-                            undoResolvingFlip={undoResolvingFlip}
-                        />
                     </div>
                 </div>
                 </div>
@@ -5779,6 +5556,17 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                     <OverlayModal
                         actions={[
                             { label: 'Resume', onClick: resume, variant: 'primary' },
+                            {
+                                label: 'Fit board',
+                                onClick: () => {
+                                    setViewportResetToken((token) => token + 1);
+                                    resume();
+                                },
+                                variant: 'secondary'
+                            },
+                            { label: 'Inventory', onClick: openInventoryFromPlaying, variant: 'secondary' },
+                            { label: 'Codex', onClick: openCodexFromPlaying, variant: 'secondary' },
+                            { label: 'Settings', onClick: openSettingsPlayingMode, variant: 'secondary' },
                             {
                                 label: 'Retreat',
                                 onClick: () => {
