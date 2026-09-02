@@ -172,3 +172,31 @@
         width: 100%;
     }
 }
+
+/* Short screens: the room fits without scrolling. */
+@media (max-height: 900px) {
+    .shell {
+        padding: clamp(10px, 2.4vw, 16px);
+        gap: 0.5rem;
+    }
+
+    .header p {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
+    }
+
+    /* The reward feedback repeats the choice cards below it; the cards are the decision. */
+    .rewardFeedbackList,
+    .traitBuildReason {
+        display: none;
+    }
+
+    .choiceRow p {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
+    }
+}

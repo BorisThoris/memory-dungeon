@@ -42,7 +42,8 @@
     width: min(64rem, 100%);
     margin: 0 auto;
     padding: 1.4rem clamp(1.2rem, 4vw, 2.4rem) 1.2rem;
-    overflow-y: auto;
+    /* No scrollbar: the browse grid pages and the launch panel shrinks on short screens. */
+    overflow: hidden;
     flex: 1 1 auto;
     min-height: 0;
 }
@@ -195,6 +196,8 @@
     display: flex;
     flex-direction: column;
     gap: 0.6rem;
+    flex: 1 1 auto;
+    min-height: 0;
 }
 
 .browseHead {
@@ -233,7 +236,7 @@
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    min-height: 9.5rem;
+    height: 100%;
     padding: 0;
     border-radius: var(--ui-radius-lg);
     border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 16%, var(--theme-card-border-muted));
@@ -428,5 +431,31 @@
 
     .search input {
         width: 100%;
+    }
+}
+
+/* Short screens: the poster shrinks so the mode grid keeps its own space. */
+@media (max-height: 780px) {
+    .launch {
+        min-height: 0;
+    }
+
+    .launchSummary,
+    .beats {
+        display: none;
+    }
+}
+
+@media (max-width: 560px) {
+    .launch {
+        min-height: 0;
+    }
+
+    .beats {
+        display: none;
+    }
+
+    .subtitle {
+        display: none;
     }
 }

@@ -41,7 +41,7 @@ const FittedGrid = <T,>({
     testId
 }: FittedGridProps<T>) => {
     const frameRef = useRef<HTMLDivElement | null>(null);
-    const [capacity, setCapacity] = useState<number | null>(null);
+    const [frameFit, setFrame] = useState<{ columns: number; height: number; rows: number } | null>(null);
     // The page is stored with the signature it belongs to, so a filter or section change shows
     // page one without an effect and without ever painting the previous page.
     const [pageState, setPageState] = useState({ page: 0, signature: '' });
@@ -57,7 +57,7 @@ const FittedGrid = <T,>({
         }
         const columns = Math.max(1, Math.floor((width + gap) / (minColumnWidth + gap)));
         const rows = Math.max(1, Math.floor((height + gap) / (rowHeight + gap)));
-        setCapacity(columns * rows);
+        setFrame({ columns, height, rows });
     }, [gap, minColumnWidth, rowHeight]);
 
     useEffect(() => {
@@ -75,7 +75,7 @@ const FittedGrid = <T,>({
     const page = pageState.signature === resetSignature ? pageState.page : 0;
     const goToPage = (next: number): void => setPageState({ page: next, signature: resetSignature });
 
-    const pageSize = capacity ?? FALLBACK_PAGE_SIZE;
+    const pageSize = frameFit ? frameFit.columns * frameFit.rows : FALLBACK_PAGE_SIZE;
     const pageCount = Math.max(1, Math.ceil(items.length / pageSize));
     const safePage = Math.min(page, pageCount - 1);
     const visible = useMemo(
@@ -87,6 +87,16 @@ const FittedGrid = <T,>({
         return <div className={styles.empty}>{emptyState}</div>;
     }
 
+    /*
+     * Grow the rows to use the space a short page leaves behind, capped so three cards do not
+     * become three billboards. Without this a five-card section sits in the top third.
+     */
+    const usedRows = frameFit ? Math.max(1, Math.ceil(visible.length / frameFit.columns)) : 1;
+    const grownRowHeight =
+        frameFit && usedRows < frameFit.rows
+            ? Math.min(rowHeight * 1.6, Math.floor((frameFit.height - gap * (usedRows - 1)) / usedRows))
+            : rowHeight;
+
     return (
         <div className={styles.root}>
             <div className={styles.frame} ref={frameRef}>
@@ -96,7 +106,7 @@ const FittedGrid = <T,>({
                     data-testid={testId}
                     style={{
                         gap: `${gap}px`,
-                        gridAutoRows: `${rowHeight}px`,
+                        gridAutoRows: `${Math.max(rowHeight, grownRowHeight)}px`,
                         gridTemplateColumns: `repeat(auto-fill, minmax(${minColumnWidth}px, 1fr))`
                     }}
                 >

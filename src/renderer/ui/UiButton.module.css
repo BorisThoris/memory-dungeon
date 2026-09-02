@@ -67,7 +67,7 @@
 .sm {
     min-height: var(--ui-touch-target-min);
     padding: var(--ui-button-pad-sm);
-    font-size: 0.7rem;
+    font-size: 0.75rem;
 }
 
 .md {

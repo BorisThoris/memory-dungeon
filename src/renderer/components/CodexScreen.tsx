@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import {
     ACHIEVEMENTS,
@@ -15,11 +15,9 @@ import { getTileTraitCodexRows, getTileTraitInteractionCodexRows } from '../../s
 import { getActiveContentLock, isDemoBuild } from '../../shared/content-lock-state';
 import { RELIC_POOL } from '../../shared/relics';
 import { getUiStateCopy } from '../../shared/ui-state-copy';
-import { Eyebrow, ScreenTitle, UiButton } from '../ui';
+import { FittedGrid, MetaShell, SectionRail } from '../ui';
 import { playUiBackSfx, playUiClickSfx, resumeUiSfxContext, uiSfxGainFromSettings } from '../audio/uiSfx';
 import { useAppStore } from '../store/useAppStore';
-import metaStyles from './MetaScreen.module.css';
-import { getMetaSubscreenLayout } from './metaStackedShellLayout';
 import {
     buildCodexBuildRows,
     buildCodexModeRows,
@@ -62,11 +60,6 @@ const CodexScreen = ({ stackedOnGameplay = false }: CodexScreenProps) => {
             settings: state.settings
         }))
     );
-    const { shellStageClass, titleLevel } = getMetaSubscreenLayout(stackedOnGameplay, {
-        panel: '',
-        hero: ''
-    });
-    const bodyScrollRef = useRef<HTMLDivElement | null>(null);
     const [filterQuery, setFilterQuery] = useState('');
     const [debouncedFilterQuery, setDebouncedFilterQuery] = useState('');
     const [activeSectionId, setActiveSectionId] = useState('core');
@@ -105,82 +98,54 @@ const CodexScreen = ({ stackedOnGameplay = false }: CodexScreenProps) => {
     }, []);
 
     const filtering = debouncedFilterQuery.trim().length > 0;
+    const activeSection = sections.find((candidate) => candidate.id === activeSectionId) ?? sections[0]!;
     const visible = useMemo(() => {
         if (filtering) {
             return sections.flatMap((section) =>
                 filterTopics(section.entries, debouncedFilterQuery).map((entry) => ({ entry, section }))
             );
         }
-        const section = sections.find((candidate) => candidate.id === activeSectionId) ?? sections[0]!;
-        return section.entries.map((entry) => ({ entry, section }));
-    }, [activeSectionId, debouncedFilterQuery, filtering, sections]);
+        return activeSection.entries.map((entry) => ({ entry, section: activeSection }));
+    }, [activeSection, debouncedFilterQuery, filtering, sections]);
     const filterEmptyCopy = getUiStateCopy('codex_filter_empty');
 
     return (
-        <section
-            aria-label="Codex"
-            className={[metaStyles.shell, shellStageClass, stackedOnGameplay && styles.codexInRunShell]
-                .filter(Boolean)
-                .join(' ')}
-            data-codex-context={stackedOnGameplay ? 'in-run-desk' : 'menu'}
-            data-testid="codex-screen"
-            role="region"
-        >
-            <header className={metaStyles.header}>
-                <div className={metaStyles.headerText}>
-                    <Eyebrow tone="menu">Reference</Eyebrow>
-                    <ScreenTitle as={titleLevel} role="display">
-                        Codex
-                    </ScreenTitle>
-                    <p className={metaStyles.subtitle}>
-                        Everything the dungeon can put in front of you, in the words the run uses. Version{' '}
-                        {ENCYCLOPEDIA_VERSION}; reading it changes nothing.
-                    </p>
-                    {isDemoBuild() ? (
-                        <p className={metaStyles.subtitle} data-testid="codex-demo-cap">
-                            Demo build: {getActiveContentLock().relicPool?.length ?? RELIC_POOL.length} of {RELIC_POOL.length}{' '}
-                            relics and the first act of mutators are in play. The full game adds the rest.
-                        </p>
-                    ) : null}
-                </div>
-                <UiButton
-                    size="md"
-                    variant="secondary"
-                    onClick={() => {
-                        resumeUiSfxContext();
-                        playUiBackSfx(uiGain);
-                        closeSubscreen();
-                    }}
-                    type="button"
-                >
-                    Back
-                </UiButton>
-            </header>
-
-            <div ref={bodyScrollRef} className={`${metaStyles.body} ${styles.body}`}>
-                <div className={styles.toolbar}>
-                    <div aria-label="Codex sections" className={styles.tabRail} role="tablist">
-                        {sections.map((section) => (
-                            <button
-                                aria-controls="codex-entries"
-                                aria-selected={!filtering && section.id === activeSectionId}
-                                className={styles.tabButton}
-                                id={`codex-tab-${section.id}`}
-                                key={section.id}
-                                onClick={() => {
-                                    playUiClick();
-                                    setActiveSectionId(section.id);
-                                    setFilterQuery('');
-                                }}
-                                role="tab"
-                                tabIndex={section.id === activeSectionId ? 0 : -1}
-                                type="button"
-                            >
-                                {section.label}
-                                <span className={styles.tabCount}>{section.entries.length}</span>
-                            </button>
-                        ))}
-                    </div>
+        <MetaShell
+            className={stackedOnGameplay ? styles.codexInRunShell : undefined}
+            eyebrow="Reference"
+            label="Codex"
+            onBack={() => {
+                resumeUiSfxContext();
+                playUiBackSfx(uiGain);
+                closeSubscreen();
+            }}
+            regionProps={{ 'data-codex-context': stackedOnGameplay ? 'in-run-desk' : 'menu' }}
+            stackedOnGameplay={stackedOnGameplay}
+            subtitle={
+                isDemoBuild()
+                    ? `Demo build: ${getActiveContentLock().relicPool?.length ?? RELIC_POOL.length} of ${RELIC_POOL.length} relics and Act I mutators are in play.`
+                    : `Everything the dungeon can put in front of you, in the words the run uses. Version ${ENCYCLOPEDIA_VERSION}.`
+            }
+            testId="codex-screen"
+            title="Codex"
+            toolbar={
+                <>
+                    <SectionRail
+                        activeId={activeSectionId}
+                        controls="codex-entries"
+                        idPrefix="codex-tab"
+                        label="Codex sections"
+                        onSelect={(id) => {
+                            playUiClick();
+                            setActiveSectionId(id);
+                            setFilterQuery('');
+                        }}
+                        options={sections.map((section) => ({
+                            badge: String(section.entries.length),
+                            id: section.id,
+                            label: section.label
+                        }))}
+                    />
                     <label className={styles.filter}>
                         <span className={styles.srOnly}>Filter topics</span>
                         <input
@@ -194,32 +159,28 @@ const CodexScreen = ({ stackedOnGameplay = false }: CodexScreenProps) => {
                             value={filterQuery}
                         />
                     </label>
-                </div>
-
-                {visible.length === 0 ? (
-                    <p className={styles.filterEmpty}>
-                        {filterEmptyCopy.message} {filterEmptyCopy.actionLabel}.
-                    </p>
-                ) : (
-                    <ul
-                        aria-labelledby={filtering ? undefined : `codex-tab-${activeSectionId}`}
-                        aria-label={filtering ? `Entries matching “${debouncedFilterQuery.trim()}”` : undefined}
-                        className={styles.grid}
-                        data-testid="codex-entries"
-                        id="codex-entries"
-                        role="tabpanel"
-                    >
-                        {visible.map(({ entry, section }) => (
-                            <li className={styles.card} data-section={section.id} key={`${section.id}:${entry.id}`}>
-                                <span className={styles.cardKicker}>{section.kicker}</span>
-                                <strong className={styles.cardTitle}>{entry.title}</strong>
-                                <p className={styles.cardBody}>{entry.description}</p>
-                            </li>
-                        ))}
-                    </ul>
+                </>
+            }
+        >
+            <FittedGrid
+                ariaLabel={filtering ? `Entries matching ${debouncedFilterQuery.trim()}` : activeSection.label}
+                emptyState={`${filterEmptyCopy.message} ${filterEmptyCopy.actionLabel}.`}
+                items={visible}
+                itemNoun="entries"
+                keyForItem={({ entry, section }) => `${section.id}:${entry.id}`}
+                minColumnWidth={250}
+                renderItem={({ entry, section }) => (
+                    <article className={styles.card} data-section={section.id}>
+                        <span className={styles.cardKicker}>{section.kicker}</span>
+                        <strong className={styles.cardTitle}>{entry.title}</strong>
+                        <p className={styles.cardBody}>{entry.description}</p>
+                    </article>
                 )}
-            </div>
-        </section>
+                resetKey={filtering ? `filter:${debouncedFilterQuery}` : `section:${activeSectionId}`}
+                rowHeight={146}
+                testId="codex-entries"
+            />
+        </MetaShell>
     );
 };
 

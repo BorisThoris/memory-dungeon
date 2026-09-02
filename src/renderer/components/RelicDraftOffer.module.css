@@ -202,10 +202,31 @@
 
 @media (max-width: 720px) {
     .grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.35rem;
     }
 
     .card {
         min-height: 44px;
+        padding: 0.55rem 0.5rem;
+        gap: 0.3rem;
+    }
+
+    .title {
+        font-size: 0.95rem;
+    }
+
+    .effect,
+    .impact {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+        overflow: hidden;
+        font-size: 0.8rem;
+    }
+
+    .build,
+    .tag {
+        display: none;
     }
 }

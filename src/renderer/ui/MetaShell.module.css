@@ -1,0 +1,96 @@
+/*
+ * The meta screen frame: header, toolbar, content. The shell owns the viewport and the content
+ * area clips — screens page or collapse instead of scrolling.
+ */
+
+.shell {
+    flex: 1 1 auto;
+    min-height: 0;
+    width: 100%;
+    max-height: min(100dvh, 100svh);
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    padding: var(--ui-shell-screen-pad-safe);
+    overflow: hidden;
+}
+
+.header {
+    flex: 0 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    width: min(1200px, 100%);
+    margin: 0 auto;
+}
+
+.headerText {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    min-width: 0;
+}
+
+.title {
+    font-size: clamp(2rem, 4.4vw, 3.2rem);
+    line-height: 1.05;
+}
+
+.subtitle {
+    margin: 0;
+    max-width: 56rem;
+    color: var(--theme-text-muted);
+    font-size: 0.92rem;
+    line-height: 1.4;
+}
+
+.toolbar {
+    flex: 0 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    width: min(1200px, 100%);
+    margin: 0 auto;
+}
+
+.content {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    width: min(1200px, 100%);
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+@media (max-height: 700px) {
+    .shell {
+        gap: 0.55rem;
+    }
+
+    .title {
+        font-size: clamp(1.5rem, 3.4vw, 2.1rem);
+    }
+
+    .subtitle {
+        display: none;
+    }
+}
+
+@media (max-width: 560px) {
+    .header {
+        gap: 0.5rem;
+    }
+
+    .title {
+        font-size: clamp(1.6rem, 8vw, 2.2rem);
+    }
+
+    .subtitle {
+        display: none;
+    }
+}

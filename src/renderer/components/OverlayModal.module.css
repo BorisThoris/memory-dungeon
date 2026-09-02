@@ -280,8 +280,8 @@
     flex: 1;
     display: grid;
     gap: 0.72rem;
-    overflow-x: hidden;
-    overflow-y: auto;
+    /* No scrollbar: dialogs are built to fit, and their content clamps on short screens. */
+    overflow: hidden;
     overscroll-behavior: contain;
     -webkit-overflow-scrolling: touch;
     min-height: 0;

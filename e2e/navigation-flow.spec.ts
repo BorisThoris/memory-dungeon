@@ -50,7 +50,7 @@ test.describe('Navigation shells', () => {
         await openMainMenuFromSave(page, true);
         await page.getByRole('button', { name: /^collection$/i }).click();
         await expect(page.getByRole('region', { name: /collection/i })).toBeVisible();
-        await expect(page.getByTestId('collection-meta-frame-achievements')).toBeVisible();
+        await expect(page.getByTestId('collection-entries')).toBeVisible();
         await page.getByRole('button', { name: /^back$/i }).click();
         await expect(page.getByRole('button', { name: /^play$/i })).toBeVisible();
     });

@@ -81,7 +81,7 @@
 
 .subPanel h3 {
     margin: 0 0 0.35rem 0;
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 0.04em;
     opacity: 0.75;
@@ -93,7 +93,7 @@
     background: #0a0b0d;
     border: 1px solid #2a2f3a;
     border-radius: 4px;
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     max-height: 8rem;
     overflow: auto;
     white-space: pre-wrap;
@@ -122,7 +122,7 @@
 
 .finding p {
     margin: 0.25rem 0 0;
-    font-size: 0.72rem;
+    font-size: 0.75rem;
     opacity: 0.82;
 }
 
@@ -171,7 +171,7 @@
     color: #e6e6e6;
     border-radius: 4px;
     cursor: pointer;
-    font-size: 0.68rem;
+    font-size: 0.75rem;
 }
 
 .inlineBtn:hover {

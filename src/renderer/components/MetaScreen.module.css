@@ -64,10 +64,8 @@
     gap: max(var(--theme-space-md), calc(var(--ui-shell-screen-gap) * 0.78));
     width: min(1200px, 100%);
     margin: 0 auto;
-    overflow-x: hidden;
-    overflow-y: auto;
-    overscroll-behavior: contain;
-    -webkit-overflow-scrolling: touch;
+    /* No scrollbars: screens fit the shell or page their content (see ui/FittedGrid). */
+    overflow: hidden;
 }
 
 @media (max-height: 720px) {

@@ -17,7 +17,7 @@ import {
     resumeUiSfxContext,
     uiSfxGainFromSettings
 } from '../audio/uiSfx';
-import { Eyebrow, ScreenTitle, UiButton } from '../ui';
+import { FittedGrid, Eyebrow, ScreenTitle, UiButton } from '../ui';
 import { useAppStore } from '../store/useAppStore';
 import { buildMeditationPickMutatorRows } from './chooseYourPathScreenModel';
 import OverlayModal from './OverlayModal';
@@ -355,13 +355,18 @@ const ChooseYourPathScreen = (): ReactElement => {
                                 />
                             </label>
                         </div>
-                        {visibleModes.length === 0 ? (
-                            <p className={styles.empty} role="status">
-                                No modes match this search.
-                            </p>
-                        ) : (
-                            <div className={styles.grid}>{visibleModes.map(renderCard)}</div>
-                        )}
+                        <FittedGrid
+                            ariaLabel="Modes"
+                            emptyState="No modes match this search."
+                            items={visibleModes}
+                            itemNoun="modes"
+                            keyForItem={(def) => def.id}
+                            minColumnWidth={260}
+                            renderItem={(def) => renderCard(def)}
+                            resetKey={query}
+                            rowHeight={152}
+                            testId="choose-path-mode-grid"
+                        />
                     </section>
                 ) : null}
 

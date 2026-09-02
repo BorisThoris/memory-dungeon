@@ -7,71 +7,6 @@
     background: transparent;
 }
 
-.body {
-    display: flex;
-    flex-direction: column;
-    gap: 0.9rem;
-}
-
-.toolbar {
-    display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
-}
-
-.tabRail {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.35rem;
-}
-
-.tabButton {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    min-height: 44px;
-    padding: 0 0.9rem;
-    border-radius: var(--ui-radius-pill);
-    border: 1px solid var(--theme-border);
-    background: transparent;
-    color: var(--theme-text-muted);
-    font-family: var(--theme-display-font);
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition:
-        border-color 120ms ease,
-        background-color 120ms ease,
-        color 120ms ease;
-}
-
-.tabButton:hover,
-.tabButton:focus-visible {
-    color: var(--theme-text);
-    border-color: color-mix(in srgb, var(--theme-gold-bright) 40%, transparent);
-    outline: none;
-}
-
-.tabButton:focus-visible {
-    box-shadow: 0 0 0 2px color-mix(in srgb, var(--theme-cyan-bright) 55%, transparent);
-}
-
-.tabButton[aria-selected='true'] {
-    border-color: color-mix(in srgb, var(--theme-gold-bright) 40%, transparent);
-    background: color-mix(in srgb, var(--theme-gold-bright) 12%, transparent);
-    color: var(--theme-gold-bright);
-}
-
-.tabCount {
-    font-family: var(--theme-body-font);
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0;
-    color: var(--theme-text-subtle);
-}
-
 .filter {
     display: block;
     max-width: 24rem;
@@ -101,20 +36,11 @@
     color: var(--theme-text-muted);
 }
 
-.grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
-    gap: 0.6rem;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-}
-
 .card {
     display: flex;
     flex-direction: column;
     gap: 0.35rem;
-    min-height: 8rem;
+    height: 100%;
     padding: 0.85rem 0.95rem;
     border-radius: var(--ui-radius-lg);
     border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 16%, var(--theme-card-border-muted));
@@ -141,6 +67,10 @@
 }
 
 .cardBody {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+    overflow: hidden;
     margin: 0;
     font-size: 0.86rem;
     line-height: 1.4;

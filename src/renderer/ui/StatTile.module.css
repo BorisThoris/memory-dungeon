@@ -52,7 +52,7 @@
 }
 
 .dense .label {
-    font-size: 0.62rem;
+    font-size: 0.75rem;
     letter-spacing: 0.1em;
 }
 
@@ -69,7 +69,7 @@
 }
 
 .modalChild .label {
-    font-size: 0.68rem;
+    font-size: 0.75rem;
     margin-top: 0.2rem;
 }
 
@@ -97,7 +97,7 @@
 }
 
 .minimal .label {
-    font-size: 0.62rem;
+    font-size: 0.75rem;
     letter-spacing: 0.14em;
 }
 

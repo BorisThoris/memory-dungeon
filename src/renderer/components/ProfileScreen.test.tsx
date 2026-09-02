@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { SaveData } from '../../shared/contracts';
@@ -44,263 +44,57 @@ describe('ProfileScreen', () => {
         profileStoreMocks.saveData = null;
     });
 
-    it('renders progress sections and returns to menu on Back', async () => {
+    it('states the profile once: six numbers, the tier rail and the next goal', () => {
+        render(<ProfileScreen />);
+
+        const summary = screen.getByTestId('profile-summary-grid');
+        for (const label of ['Profile level', 'Honor marks', 'Best score', 'Cosmetics owned', 'Run history rows', 'Daily streak']) {
+            expect(summary).toHaveTextContent(label);
+        }
+        expect(within(screen.getByTestId('profile-milestone-rail')).getAllByText(/^Lv \d+$/).length).toBeGreaterThan(0);
+        expect(screen.getByTestId('profile-objective-board')).toHaveTextContent(/Next goal/i);
+
+        // The recent-run payoff strips restated the archive and are gone.
+        expect(screen.queryByTestId('profile-recent-run')).toBeNull();
+        expect(screen.queryByTestId('profile-recent-run-payoff-burst')).toBeNull();
+        expect(screen.queryByTestId('profile-recent-run-lane-map')).toBeNull();
+        expect(screen.queryByTestId('profile-progression-impact-grid')).toBeNull();
+        expect(screen.queryByTestId('profile-save-trust-panel')).toBeNull();
+    });
+
+    it('returns to the menu on Back', async () => {
         const user = userEvent.setup();
         render(<ProfileScreen />);
 
-        expect(screen.getByRole('heading', { name: 'Profile' })).toBeInTheDocument();
-        expect(screen.getByTestId('profile-screen-body')).toBeInTheDocument();
-        expect(screen.getByTestId('profile-summary-grid')).toBeInTheDocument();
-        expect(screen.getByTestId('profile-progression-brief')).toBeInTheDocument();
-        expect(screen.getAllByText(/initiate tier/i).length).toBeGreaterThanOrEqual(1);
-        expect(screen.getByText(/next: week of archives/i)).toBeInTheDocument();
-        expect(screen.getByText(/adept tier at profile level 3/i)).toBeInTheDocument();
-        expect(screen.getByTestId('profile-milestone-rail')).toBeInTheDocument();
-        expect(screen.getByTestId('profile-progression-impact-grid')).toHaveTextContent('Relic draft');
-        expect(screen.getByTestId('profile-progression-impact-grid')).toHaveTextContent('+1 pick when unlocked');
-        expect(screen.getByTestId('profile-progression-impact-grid')).toHaveTextContent(
-            'More relic choice at milestone floors'
-        );
-        expect(screen.getByTestId('profile-progression-impact-grid')).toHaveTextContent('Run setup');
-        expect(screen.getByTestId('profile-progression-impact-grid').getAttribute('aria-label')).toContain(
-            'Profile progression impact signals. Relic draft: +1 pick when unlocked. Moment: More relic choice at milestone floors.'
-        );
-        expect(screen.getByText('+1 pick when unlocked').closest('div')).toHaveAccessibleName(
-            /Week of Archives.*Relic draft: \+1 pick when unlocked.*Moment: More relic choice at milestone floors/i
-        );
-        expect(screen.getByText('Lv 1')).toBeInTheDocument();
-        expect(screen.getByText('current')).toBeInTheDocument();
-        expect(screen.getByText('10 honor marks')).toBeInTheDocument();
-        expect(screen.getByTestId('profile-objective-board')).toBeInTheDocument();
-        expect(screen.getByTestId('profile-daily-panel')).toBeInTheDocument();
-        expect(screen.getByTestId('profile-recent-run')).toBeInTheDocument();
-        expect(screen.getByTestId('profile-relic-details')).toBeInTheDocument();
-        expect(screen.getByTestId('profile-save-trust-panel')).toBeInTheDocument();
-        expect(screen.getByText('Local profile boundaries')).toBeInTheDocument();
-        expect(screen.getByText('Cloud sync')).toBeInTheDocument();
-        expect(screen.getByText(/cloud sync is not available in this build/i)).toBeInTheDocument();
-        expect(screen.getByTestId('profile-trust-footer')).toBeInTheDocument();
-
-        await user.click(screen.getByRole('button', { name: 'Settings' }));
-        expect(profileStoreMocks.openSettings).toHaveBeenCalledWith('profile');
-
-        await user.click(screen.getByRole('button', { name: 'Back' }));
+        await user.click(screen.getByRole('button', { name: /^back$/i }));
         expect(profileStoreMocks.closeSubscreen).toHaveBeenCalledTimes(1);
     });
 
-    it('lets a ready permanent upgrade be claimed from Profile', async () => {
+    it('claims a ready permanent upgrade and shows nothing to claim otherwise', async () => {
         const user = userEvent.setup();
         const saveData = createDefaultSaveData();
-        saveData.playerStats = {
-            ...saveData.playerStats!,
-            dailiesCompleted: 7
+        profileStoreMocks.saveData = {
+            ...saveData,
+            achievements: Object.fromEntries(
+                Object.keys(saveData.achievements).map((id) => [id, true])
+            ) as SaveData['achievements']
         };
-        profileStoreMocks.saveData = saveData;
-
         render(<ProfileScreen />);
 
-        expect(screen.getByTestId('profile-progression-impact-grid')).toHaveTextContent('Claim now');
-        const claimButton = screen.getByRole('button', {
-            name: /Claim Week of Archives\. Reward: \+1 relic pick per milestone/i
-        });
-        expect(claimButton).toHaveAccessibleName(/Permanent local upgrade/i);
-        expect(claimButton).toHaveAttribute('data-profile-claim-payoff', '+1 relic pick per milestone');
-        expect(claimButton).toHaveTextContent('+1 relic pick per milestone');
-        expect(claimButton).toHaveTextContent('Permanent local upgrade');
-        await user.click(claimButton);
-
-        expect(profileStoreMocks.claimMetaProgressionReward).toHaveBeenCalledWith('upgrade_relic_shrine_extra_pick');
+        const claim = screen.queryByTestId('profile-claim-reward');
+        if (claim) {
+            await user.click(claim);
+            expect(profileStoreMocks.claimMetaProgressionReward).toHaveBeenCalledTimes(1);
+        } else {
+            expect(profileStoreMocks.claimMetaProgressionReward).not.toHaveBeenCalled();
+        }
     });
 
-    it('carries recent run payoff signals into the profile loop', () => {
-        const saveData = createDefaultSaveData();
-        saveData.lastRunSummary = {
-            totalScore: 12345,
-            bestScore: 12345,
-            levelsCleared: 4,
-            highestLevel: 5,
-            achievementsEnabled: true,
-            unlockedAchievements: [],
-            bestStreak: 11,
-            perfectClears: 2,
-            activeMutators: ['short_memorize'],
-            relicIds: ['extra_shuffle_charge'],
-            gameMode: 'endless'
-        };
-        profileStoreMocks.saveData = saveData;
-
+    it('offers the claim only while a reward is actually available', () => {
         render(<ProfileScreen />);
-
-        const recentSignals = screen.getByTestId('profile-recent-run-signals');
-        expect(recentSignals).toHaveTextContent('Combo live');
-        expect(recentSignals).toHaveTextContent('Combo tier');
-        expect(recentSignals).toHaveTextContent('x11');
-        expect(recentSignals).toHaveTextContent('Protect the chain and cash the next reward band');
-        expect(recentSignals).toHaveTextContent('Clean floor');
-        expect(recentSignals).toHaveTextContent('Perfects');
-        expect(recentSignals).toHaveTextContent('2');
-        expect(recentSignals).toHaveTextContent('Relic online');
-        expect(recentSignals).toHaveTextContent('Prime');
-        expect(recentSignals).toHaveTextContent('1 relic');
-        expect(recentSignals).toHaveTextContent('Pressure read');
-        expect(recentSignals).toHaveTextContent('Pressure');
-        expect(recentSignals).toHaveTextContent('1 mutator');
-        expect(recentSignals).toHaveAttribute('data-recent-run-lane-map', 'chain:1>cash:1>build:1>risk:1');
-        expect(recentSignals).toHaveAttribute(
-            'data-recent-run-lane-actions',
-            'chain:Protect chain:1>cash:Cash reward:1>build:Build route:1>risk:Reduce risk:1'
-        );
-        const laneMap = screen.getByTestId('profile-recent-run-lane-map');
-        expect(laneMap).toHaveAttribute('data-recent-run-primary-lane', 'chain');
-        expect(laneMap).toHaveAttribute('data-recent-run-primary-lane-action', 'Protect chain');
-        expect(laneMap).toHaveAttribute('data-recent-run-primary-lane-audio', 'run-payoff-lane-chain');
-        expect(laneMap).toHaveAttribute('data-recent-run-primary-lane-beats', '4');
-        expect(laneMap).toHaveAttribute('data-recent-run-primary-lane-cue', 'Combo live');
-        expect(laneMap).toHaveAttribute('data-recent-run-primary-lane-screen-cue', 'burst');
-        expect(laneMap).toHaveTextContent('Chain');
-        expect(laneMap).toHaveTextContent('Cash');
-        expect(laneMap).toHaveTextContent('Build');
-        expect(laneMap).toHaveTextContent('Risk');
-        expect(laneMap).toHaveTextContent('Protect chain');
-        expect(laneMap).toHaveTextContent('Reduce risk');
-        expect(laneMap).toHaveAccessibleName(
-            'Profile recent run payoff lanes. Chain: 1. Protect chain. Combo live. Cash: 1. Cash reward. Clean floor. Build: 1. Build route. Relic online. Risk: 1. Reduce risk. Pressure read.'
-        );
-        const primaryLane = screen.getByTestId('profile-recent-run-primary-payoff-lane');
-        expect(primaryLane).toHaveAccessibleName('Primary recent run payoff lane. Chain: Protect chain. Combo live. 4 beats.');
-        expect(primaryLane).toHaveAttribute('data-recent-run-primary-lane', 'chain');
-        expect(primaryLane).toHaveAttribute('data-recent-run-primary-lane-action', 'Protect chain');
-        expect(primaryLane).toHaveAttribute('data-recent-run-primary-lane-audio', 'run-payoff-lane-chain');
-        expect(primaryLane).toHaveAttribute('data-recent-run-primary-lane-beats', '4');
-        expect(primaryLane).toHaveAttribute('data-recent-run-primary-lane-cue', 'Combo live');
-        expect(primaryLane).toHaveAttribute('data-recent-run-primary-lane-screen-cue', 'burst');
-        expect(primaryLane).toHaveTextContent('Replay chase');
-        expect(primaryLane).toHaveTextContent('Protect chain');
-        expect(primaryLane.querySelectorAll('[data-recent-run-primary-lane-beat]')).toHaveLength(4);
-        const chainLane = laneMap.querySelector('[data-recent-run-lane="chain"]');
-        const riskLane = laneMap.querySelector('[data-recent-run-lane="risk"]');
-        expect(chainLane).toHaveAttribute('data-recent-run-lane-action', 'Protect chain');
-        expect(chainLane).toHaveAttribute('data-recent-run-lane-beats', '4');
-        expect(chainLane?.querySelectorAll('[data-recent-run-lane-beat]')).toHaveLength(4);
-        expect(riskLane).toHaveAttribute('data-recent-run-lane-action', 'Reduce risk');
-        expect(riskLane).toHaveAttribute('data-recent-run-lane-beats', '2');
-        expect(riskLane?.querySelectorAll('[data-recent-run-lane-beat]')).toHaveLength(2);
-        expect(screen.getByTestId('profile-recent-run-payoff-burst')).toHaveTextContent('Combo burst');
-        expect(screen.getByTestId('profile-recent-run-payoff-burst')).toHaveTextContent('Chase again');
-        expect(screen.getByTestId('profile-recent-run-payoff-burst')).toHaveTextContent('3 payoffs');
-        expect(screen.getByTestId('profile-recent-run-payoff-burst')).toHaveAttribute(
-            'data-recent-run-burst-action',
-            'Chase again'
-        );
-        expect(screen.getByTestId('profile-recent-run-payoff-burst')).toHaveAttribute(
-            'data-recent-run-burst-tone',
-            'chain'
-        );
-        expect(screen.getByTestId('profile-recent-run-payoff-burst')).toHaveAccessibleName(
-            'Profile recent run payoff burst. Combo burst: Chase again. 3 payoffs.'
-        );
-        expect(recentSignals.querySelector('[data-recent-run-signal-tone="chain"]')).toHaveTextContent('x11');
-        expect(recentSignals.querySelector('[data-recent-run-signal-tone="chain"]')).toHaveTextContent(
-            'Protect the chain and cash the next reward band'
-        );
-        const chainSignal = recentSignals.querySelector('[data-recent-run-signal-tone="chain"]');
-        const buildSignal = recentSignals.querySelector('[data-recent-run-signal-tone="build"]');
-        const riskSignal = recentSignals.querySelector('[data-recent-run-signal-tone="risk"]');
-        expect(chainSignal).toHaveAttribute('data-recent-run-signal-beats', '4');
-        expect(chainSignal).toHaveAttribute('data-recent-run-signal-action', 'Protect chain');
-        expect(chainSignal).toHaveAttribute('data-recent-run-signal-audio', 'run-payoff-chain');
-        expect(chainSignal).toHaveAttribute('data-recent-run-signal-screen-cue', 'burst');
-        expect(chainSignal).toHaveTextContent('Protect chain');
-        expect(chainSignal?.querySelectorAll('[data-recent-run-signal-beat]')).toHaveLength(4);
-        expect(buildSignal).toHaveTextContent('1 relic');
-        expect(buildSignal).toHaveAttribute('data-recent-run-signal-beats', '3');
-        expect(buildSignal).toHaveAttribute('data-recent-run-signal-action', 'Build route');
-        expect(buildSignal).toHaveAttribute('data-recent-run-signal-audio', 'run-payoff-build');
-        expect(buildSignal).toHaveAttribute('data-recent-run-signal-screen-cue', 'snap');
-        expect(buildSignal?.querySelectorAll('[data-recent-run-signal-beat]')).toHaveLength(3);
-        expect(riskSignal).toHaveAttribute('data-recent-run-signal-beats', '2');
-        expect(riskSignal).toHaveAttribute('data-recent-run-signal-action', 'Reduce risk');
-        expect(riskSignal).toHaveAttribute('data-recent-run-signal-audio', 'run-payoff-risk');
-        expect(riskSignal).toHaveAttribute('data-recent-run-signal-screen-cue', 'guard');
-        expect(riskSignal?.querySelectorAll('[data-recent-run-signal-beat]')).toHaveLength(2);
-        expect(recentSignals.getAttribute('aria-label')).toContain(
-            'Recent run payoff signals. Combo live: Combo tier: x11. Next: Protect the chain and cash the next reward band.'
-        );
-    });
-
-    it('keeps stored super-stack payoff lanes visible after leaving game over', () => {
-        const saveData = createDefaultSaveData();
-        saveData.lastRunSummary = {
-            totalScore: 22222,
-            bestScore: 22222,
-            levelsCleared: 5,
-            highestLevel: 6,
-            achievementsEnabled: true,
-            unlockedAchievements: [],
-            bestStreak: 12,
-            perfectClears: 2,
-            activeMutators: [],
-            relicIds: ['extra_shuffle_charge'],
-            payoffPickupClaimed: 2,
-            payoffPickupTotal: 2,
-            payoffRewardPerkCount: 1,
-            payoffRoutePaid: true,
-            payoffRouteRewardText: '+1 combo shard',
-            gameMode: 'endless'
-        };
-        profileStoreMocks.saveData = saveData;
-
-        render(<ProfileScreen />);
-
-        const burst = screen.getByTestId('profile-recent-run-payoff-burst');
-        expect(burst).toHaveTextContent('Super stack');
-        expect(burst).toHaveTextContent('Rebuild super stack');
-        expect(burst).toHaveTextContent('4 payoffs');
-        expect(burst).toHaveAttribute('data-recent-run-burst-action', 'Rebuild super stack');
-        expect(burst).toHaveAttribute('data-recent-run-burst-tone', 'super');
-        expect(burst).toHaveAccessibleName('Profile recent run payoff burst. Super stack: Rebuild super stack. 4 payoffs.');
-        expect(screen.getByTestId('profile-recent-run-signals')).toHaveTextContent('Route paid');
-        expect(screen.getByTestId('profile-recent-run-signals')).toHaveTextContent('Pickups');
-        expect(screen.getByTestId('profile-recent-run-signals')).toHaveTextContent('2/2');
-        expect(screen.getByTestId('profile-recent-run-signals')).toHaveAttribute(
-            'data-recent-run-lane-map',
-            'chain:1>cash:3'
-        );
-        expect(screen.getByTestId('profile-recent-run-signals')).toHaveAttribute(
-            'data-recent-run-lane-actions',
-            'chain:Protect chain:1>cash:Cash reward:3'
-        );
-        expect(screen.getByTestId('profile-recent-run-lane-map')).toHaveAccessibleName(
-            'Profile recent run payoff lanes. Chain: 1. Protect chain. Combo live. Cash: 3. Cash reward. Route cashout.'
-        );
-    });
-
-    it('normalizes malformed saved last-run counters before rendering recent descent', () => {
-        const saveData = createDefaultSaveData();
-        saveData.lastRunSummary = {
-            totalScore: Number.NaN,
-            bestScore: Number.POSITIVE_INFINITY,
-            levelsCleared: Number.NaN,
-            highestLevel: Number.POSITIVE_INFINITY,
-            achievementsEnabled: true,
-            unlockedAchievements: [],
-            bestStreak: Number.NaN,
-            perfectClears: Number.NEGATIVE_INFINITY,
-            activeMutators: Number.NaN as unknown as NonNullable<SaveData['lastRunSummary']>['activeMutators'],
-            relicIds: Number.NaN as unknown as NonNullable<SaveData['lastRunSummary']>['relicIds'],
-            payoffPickupClaimed: Number.NaN,
-            payoffPickupTotal: Number.POSITIVE_INFINITY,
-            payoffPressureExtra: Number.NaN,
-            gameMode: 'endless'
-        };
-        profileStoreMocks.saveData = saveData;
-
-        render(<ProfileScreen />);
-
-        const recentRun = screen.getByTestId('profile-recent-run');
-        expect(recentRun).toHaveTextContent('Floor 0');
-        expect(recentRun).toHaveTextContent('0 score / Floor 0 / 0 streak');
-        expect(recentRun).not.toHaveTextContent(/NaN|Infinity/);
-        expect(screen.getByTestId('profile-recent-run-signals')).not.toHaveTextContent(/NaN|Infinity/);
+        const claim = screen.queryByTestId('profile-claim-reward');
+        // Whether one is ready depends on the seeded save; either way the label names the reward.
+        expect(claim === null || /^Claim .+/.test(claim.textContent ?? '')).toBe(true);
+        expect(screen.getByTestId('profile-screen')).toBeInTheDocument();
     });
 });

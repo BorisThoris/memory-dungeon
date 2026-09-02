@@ -362,7 +362,7 @@
     border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 28%, transparent);
     background: color-mix(in srgb, var(--theme-panel-solid) 94%, var(--theme-void));
     color: var(--theme-rune);
-    font-size: 0.64rem;
+    font-size: 0.75rem;
     font-weight: 750;
     letter-spacing: 0.04em;
     white-space: nowrap;
@@ -395,7 +395,7 @@
         linear-gradient(180deg, rgba(255, 243, 217, 0.05), transparent 48%),
         color-mix(in srgb, var(--theme-void) 34%, var(--theme-hud-accent-fill) 66%);
     color: var(--theme-text-muted);
-    font-size: 0.64rem;
+    font-size: 0.75rem;
     font-weight: 700;
     letter-spacing: 0.06em;
     text-transform: uppercase;
@@ -423,14 +423,14 @@
     border: 1px solid color-mix(in srgb, var(--theme-cyan) 22%, transparent);
     background: color-mix(in srgb, var(--theme-void) 72%, transparent);
     color: var(--theme-text-muted);
-    font-size: 0.66rem;
+    font-size: 0.75rem;
     line-height: 1.25;
     text-align: left;
 }
 
 .mobileCameraLeftToolbar .ruleDisclosureNudge {
     width: min(8.75rem, calc(100dvi - 4.2rem));
-    font-size: 0.6rem;
+    font-size: 0.75rem;
 }
 
 .gameplayOnboardingPrompt {
@@ -482,7 +482,7 @@
     border-radius: var(--ui-radius-md, 10px);
     background: var(--theme-panel-alt);
     border: 1px solid var(--theme-border-strong);
-    font-size: 0.72rem;
+    font-size: 0.75rem;
     line-height: 1.35;
     color: var(--theme-text-muted);
 }
@@ -495,7 +495,7 @@
     border-radius: var(--ui-radius-md, 10px);
     border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 28%, var(--theme-border-strong));
     background: color-mix(in srgb, var(--theme-panel-alt) 88%, var(--theme-gold-deep) 12%);
-    font-size: 0.72rem;
+    font-size: 0.75rem;
     line-height: 1.35;
     color: color-mix(in srgb, var(--theme-text-muted) 70%, var(--theme-gold-bright) 30%);
 }
@@ -521,7 +521,7 @@
 .gambitOpportunitySignals small {
     overflow: hidden;
     color: color-mix(in srgb, var(--theme-text-muted) 84%, white);
-    font-size: 0.48rem;
+    font-size: 0.75rem;
     font-weight: 900;
     line-height: 1;
     text-overflow: ellipsis;
@@ -532,7 +532,7 @@
 .gambitOpportunitySignals b {
     overflow: hidden;
     color: color-mix(in srgb, var(--theme-text) 88%, white);
-    font-size: 0.58rem;
+    font-size: 0.75rem;
     font-weight: 900;
     letter-spacing: 0;
     line-height: 1.05;
@@ -631,21 +631,21 @@
 }
 
 .endlessChapterTitle {
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     font-weight: 800;
     letter-spacing: 0.03em;
     color: var(--theme-gold-bright);
 }
 
 .endlessChapterHint {
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     line-height: 1.35;
     color: var(--theme-text-muted);
 }
 
 .endlessChapterObjective {
     margin-left: 0;
-    font-size: 0.66rem;
+    font-size: 0.75rem;
     font-weight: 700;
     color: color-mix(in srgb, var(--theme-rune) 88%, white);
 }
@@ -654,7 +654,7 @@
 .endlessChapterMutators {
     display: none;
     flex-basis: auto;
-    font-size: 0.68rem;
+    font-size: 0.75rem;
     font-weight: 650;
     color: color-mix(in srgb, var(--theme-cyan-bright) 76%, white);
 }
@@ -684,7 +684,7 @@
 
 .endlessChapterActionCue small {
     color: color-mix(in srgb, currentColor 72%, var(--theme-text-muted));
-    font-size: 0.48rem;
+    font-size: 0.75rem;
     font-weight: 940;
     line-height: 1;
     text-transform: uppercase;
@@ -692,7 +692,7 @@
 
 .endlessChapterActionCue b {
     color: currentColor;
-    font-size: 0.6rem;
+    font-size: 0.75rem;
     font-weight: 940;
     line-height: 1.05;
 }
@@ -784,7 +784,7 @@
 .endlessChapterSignals small {
     overflow: hidden;
     color: color-mix(in srgb, var(--theme-text-muted) 84%, white);
-    font-size: 0.48rem;
+    font-size: 0.75rem;
     font-weight: 900;
     line-height: 1;
     text-overflow: ellipsis;
@@ -795,7 +795,7 @@
 .endlessChapterSignals b {
     overflow: hidden;
     color: color-mix(in srgb, var(--theme-text) 88%, white);
-    font-size: 0.58rem;
+    font-size: 0.75rem;
     font-weight: 900;
     letter-spacing: 0;
     line-height: 1.05;
@@ -890,7 +890,7 @@
 .endlessRiskWagerPrimaryCue small {
     grid-area: label;
     color: color-mix(in srgb, var(--theme-text-muted) 86%, white);
-    font-size: 0.5rem;
+    font-size: 0.75rem;
     font-weight: 920;
     letter-spacing: 0;
     text-transform: uppercase;
@@ -899,7 +899,7 @@
 .endlessRiskWagerPrimaryCue b {
     grid-area: action;
     color: color-mix(in srgb, var(--theme-gold-bright) 90%, white);
-    font-size: 0.68rem;
+    font-size: 0.75rem;
     font-weight: 950;
 }
 
@@ -907,7 +907,7 @@
     grid-area: payoff;
     justify-self: end;
     color: color-mix(in srgb, var(--theme-gold-bright) 86%, white);
-    font-size: 0.62rem;
+    font-size: 0.75rem;
     font-style: normal;
     font-weight: 900;
 }
@@ -915,7 +915,7 @@
 .endlessRiskWagerPrimaryCue strong {
     grid-area: risk;
     color: color-mix(in srgb, var(--theme-danger) 74%, white);
-    font-size: 0.58rem;
+    font-size: 0.75rem;
     font-weight: 900;
 }
 
@@ -1006,7 +1006,7 @@
 .endlessRiskWagerSignals small {
     overflow: hidden;
     color: color-mix(in srgb, var(--theme-text-muted) 84%, white);
-    font-size: 0.48rem;
+    font-size: 0.75rem;
     font-weight: 900;
     line-height: 1;
     text-overflow: ellipsis;
@@ -1017,7 +1017,7 @@
 .endlessRiskWagerSignals b {
     overflow: hidden;
     color: color-mix(in srgb, var(--theme-text) 88%, white);
-    font-size: 0.62rem;
+    font-size: 0.75rem;
     font-weight: 900;
     letter-spacing: 0;
     line-height: 1.05;
@@ -1263,7 +1263,7 @@
 .dungeonRunCurrent span:not(.dungeonRunGlyph) {
     display: block;
     color: var(--theme-text-subtle);
-    font-size: 0.58rem;
+    font-size: 0.75rem;
     font-weight: 800;
     letter-spacing: 0.1em;
     text-transform: uppercase;
@@ -1300,7 +1300,7 @@
     border-radius: 50%;
     border: 1px solid color-mix(in srgb, var(--theme-text-muted) 34%, transparent);
     color: color-mix(in srgb, var(--theme-text-muted) 88%, white);
-    font-size: 0.68rem;
+    font-size: 0.75rem;
     font-weight: 900;
 }
 
@@ -1338,14 +1338,14 @@
 
 .dungeonRunIntel strong {
     color: var(--theme-cyan-bright);
-    font-size: 0.72rem;
+    font-size: 0.75rem;
     text-transform: uppercase;
 }
 
 .dungeonRunIntel span {
     overflow: hidden;
     color: var(--theme-text-muted);
-    font-size: 0.68rem;
+    font-size: 0.75rem;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
@@ -1381,7 +1381,7 @@
 .dungeonCombatLogRow strong {
     overflow: hidden;
     color: var(--theme-text);
-    font-size: 0.62rem;
+    font-size: 0.75rem;
     line-height: 1.12;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -1391,7 +1391,7 @@
     display: block;
     overflow: hidden;
     color: var(--theme-text-muted);
-    font-size: 0.58rem;
+    font-size: 0.75rem;
     line-height: 1.18;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -1530,7 +1530,7 @@
 
 .actionFeedbackHeader > span:first-child {
     color: color-mix(in srgb, var(--theme-gold-bright) 86%, white);
-    font-size: 0.56rem;
+    font-size: 0.75rem;
     font-weight: 900;
     letter-spacing: 0.08em;
     line-height: 1;
@@ -1545,7 +1545,7 @@
     border-radius: 999px;
     background: color-mix(in srgb, var(--theme-panel-solid) 42%, transparent);
     color: color-mix(in srgb, var(--theme-text-muted) 86%, white);
-    font-size: 0.54rem;
+    font-size: 0.75rem;
     font-weight: 950;
     letter-spacing: 0;
     line-height: 1;
@@ -1588,7 +1588,7 @@
         linear-gradient(110deg, color-mix(in srgb, white 8%, transparent), transparent 58%),
         color-mix(in srgb, var(--theme-gold-deep) 20%, transparent);
     color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
-    font-size: 0.54rem;
+    font-size: 0.75rem;
     font-weight: 950;
     letter-spacing: 0;
     line-height: 1;
@@ -1641,19 +1641,19 @@
     height: 0.72rem;
     border: 1px solid currentColor;
     border-radius: 0.24rem;
-    font-size: 0.48rem;
+    font-size: 0.75rem;
     font-weight: 980;
 }
 
 .actionFeedbackPayoffIntensity strong {
-    font-size: 0.54rem;
+    font-size: 0.75rem;
     font-weight: 950;
     text-transform: uppercase;
 }
 
 .actionFeedbackPayoffIntensity em {
     color: color-mix(in srgb, currentColor 78%, var(--theme-text-muted));
-    font-size: 0.48rem;
+    font-size: 0.75rem;
     font-style: normal;
     font-weight: 900;
     text-transform: uppercase;
@@ -1793,21 +1793,21 @@
     border: 1px solid currentColor;
     border-radius: 999px;
     color: currentColor;
-    font-size: 0.46rem;
+    font-size: 0.75rem;
     font-weight: 980;
     text-transform: uppercase;
 }
 
 .actionFeedbackCrescendo strong {
     color: currentColor;
-    font-size: 0.52rem;
+    font-size: 0.75rem;
     font-weight: 980;
     text-transform: uppercase;
 }
 
 .actionFeedbackCrescendo em {
     color: color-mix(in srgb, currentColor 76%, var(--theme-text-muted));
-    font-size: 0.48rem;
+    font-size: 0.75rem;
     font-style: normal;
     font-weight: 900;
 }
@@ -1852,7 +1852,7 @@
     border-radius: 999px;
     background: color-mix(in srgb, var(--theme-panel-solid) 48%, transparent);
     color: color-mix(in srgb, var(--theme-text-muted) 88%, white);
-    font-size: 0.54rem;
+    font-size: 0.75rem;
     font-weight: 950;
     letter-spacing: 0;
     line-height: 1;
@@ -1863,7 +1863,7 @@
     min-width: 0;
     overflow: hidden;
     color: color-mix(in srgb, currentColor 72%, white);
-    font-size: 0.48rem;
+    font-size: 0.75rem;
     font-style: normal;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -1937,20 +1937,20 @@
 
 .actionFeedbackTempoCue small {
     color: color-mix(in srgb, currentColor 72%, var(--theme-text-muted));
-    font-size: 0.5rem;
+    font-size: 0.75rem;
     font-weight: 950;
     text-transform: uppercase;
 }
 
 .actionFeedbackTempoCue strong {
     color: currentColor;
-    font-size: 0.56rem;
+    font-size: 0.75rem;
     font-weight: 950;
 }
 
 .actionFeedbackTempoCue em {
     color: color-mix(in srgb, currentColor 76%, var(--theme-text-muted));
-    font-size: 0.46rem;
+    font-size: 0.75rem;
     font-style: normal;
     font-weight: 920;
     text-transform: uppercase;
@@ -2050,7 +2050,7 @@
     overflow: hidden;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
-    font-size: clamp(0.68rem, 1.15vw, 0.82rem);
+    font-size: clamp(0.75rem, 1.15vw, 0.82rem);
     font-weight: 800;
     letter-spacing: 0;
     line-height: 1.2;
@@ -2073,7 +2073,7 @@
     border-radius: 999px;
     background: color-mix(in srgb, var(--theme-panel-solid) 46%, transparent);
     color: color-mix(in srgb, var(--theme-text-muted) 82%, white);
-    font-size: 0.54rem;
+    font-size: 0.75rem;
     font-weight: 950;
     letter-spacing: 0;
     line-height: 1;
@@ -2137,7 +2137,7 @@
         linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 12%, transparent), color-mix(in srgb, var(--theme-gold-bright) 8%, transparent)),
         color-mix(in srgb, var(--theme-panel-solid) 42%, transparent);
     color: color-mix(in srgb, var(--theme-cyan-bright) 84%, white);
-    font-size: 0.49rem;
+    font-size: 0.75rem;
     font-weight: 940;
     line-height: 1;
     text-transform: uppercase;
@@ -2155,13 +2155,13 @@
 
 .actionFeedbackLaneMapSummary small {
     color: color-mix(in srgb, var(--theme-text-muted) 88%, white);
-    font-size: 0.42rem;
+    font-size: 0.75rem;
     font-weight: 920;
 }
 
 .actionFeedbackLaneMapSummary b {
     color: currentColor;
-    font-size: 0.48rem;
+    font-size: 0.75rem;
     font-weight: 980;
 }
 
@@ -2227,7 +2227,7 @@
     min-width: 0;
     overflow: hidden;
     color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
-    font-size: 0.58rem;
+    font-size: 0.75rem;
     font-weight: 980;
     line-height: 1;
     text-overflow: ellipsis;
@@ -2312,14 +2312,14 @@
 
 .actionFeedbackLaneMap small {
     color: color-mix(in srgb, var(--theme-text) 88%, white);
-    font-size: 0.5rem;
+    font-size: 0.75rem;
     font-weight: 980;
     text-transform: uppercase;
 }
 
 .actionFeedbackLaneMap b {
     color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
-    font-size: 0.5rem;
+    font-size: 0.75rem;
     font-weight: 980;
 }
 
@@ -2327,7 +2327,7 @@
     grid-column: 1 / -1;
     max-width: 6rem;
     color: color-mix(in srgb, var(--theme-text-muted) 88%, white);
-    font-size: 0.46rem;
+    font-size: 0.75rem;
     font-style: normal;
     font-weight: 880;
     text-transform: uppercase;
@@ -2444,7 +2444,7 @@
 .actionFeedbackStackSummary em {
     min-width: 0;
     overflow: hidden;
-    font-size: 0.54rem;
+    font-size: 0.75rem;
     line-height: 1;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -2537,14 +2537,14 @@
 
 .actionFeedbackSequenceCue small {
     color: color-mix(in srgb, var(--theme-text-muted) 84%, white);
-    font-size: 0.48rem;
+    font-size: 0.75rem;
     font-weight: 940;
     text-transform: uppercase;
 }
 
 .actionFeedbackSequenceCue b {
     color: color-mix(in srgb, var(--theme-text) 90%, white);
-    font-size: 0.55rem;
+    font-size: 0.75rem;
     font-weight: 930;
 }
 
@@ -2584,7 +2584,7 @@
     display: -webkit-box;
     overflow: hidden;
     color: color-mix(in srgb, var(--theme-text-muted) 78%, var(--theme-cyan-bright));
-    font-size: 0.62rem;
+    font-size: 0.75rem;
     font-weight: 750;
     letter-spacing: 0;
     line-height: 1.18;
@@ -2632,7 +2632,7 @@
 .powerTeachingRow {
     display: grid;
     gap: 0.06rem;
-    font-size: 0.66rem;
+    font-size: 0.75rem;
     color: var(--theme-text-muted);
 }
 
@@ -2647,7 +2647,7 @@
     border: 1px solid var(--theme-border-cyan);
     background: var(--theme-hud-accent-fill);
     color: var(--theme-text);
-    font-size: 0.68rem;
+    font-size: 0.75rem;
     font-weight: 600;
     cursor: pointer;
 }
@@ -2967,7 +2967,7 @@
     border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 8%, transparent);
     background: color-mix(in srgb, var(--theme-void) 24%, transparent);
     color: color-mix(in srgb, var(--theme-text-muted) 78%, transparent);
-    font-size: 0.58rem;
+    font-size: 0.75rem;
     font-weight: 800;
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -3108,7 +3108,7 @@
 .hudFeedbackPrimaryCause small {
     grid-area: label;
     color: color-mix(in srgb, var(--theme-text-muted) 86%, white);
-    font-size: 0.5rem;
+    font-size: 0.75rem;
     font-weight: 920;
     letter-spacing: 0;
     text-transform: uppercase;
@@ -3117,14 +3117,14 @@
 .hudFeedbackPrimaryCause b {
     grid-area: action;
     color: color-mix(in srgb, var(--theme-gold-bright) 90%, white);
-    font-size: 0.62rem;
+    font-size: 0.75rem;
     font-weight: 940;
 }
 
 .hudFeedbackPrimaryCause em {
     grid-area: kind;
     color: color-mix(in srgb, var(--theme-cyan-bright) 84%, white);
-    font-size: 0.5rem;
+    font-size: 0.75rem;
     font-style: normal;
     font-weight: 900;
     text-transform: uppercase;
@@ -3133,7 +3133,7 @@
 .hudFeedbackPrimaryCause strong {
     grid-area: summary;
     color: color-mix(in srgb, var(--theme-text) 92%, white);
-    font-size: 0.58rem;
+    font-size: 0.75rem;
     font-weight: 820;
 }
 
@@ -3254,7 +3254,7 @@
     overflow: hidden;
     color: color-mix(in srgb, var(--theme-rune) 86%, var(--theme-cyan-bright));
     font-family: var(--ui-font-body-family);
-    font-size: 0.72rem;
+    font-size: 0.75rem;
     font-weight: 800;
     line-height: 1.16;
     text-overflow: ellipsis;
@@ -3323,7 +3323,7 @@
 }
 
 .hudDeck .hudContextSecondaryStrip .hudMetaSegment .mutatorChip {
-    font-size: 0.55rem;
+    font-size: 0.75rem;
     padding: 0.08rem 0.28rem;
 }
 
@@ -3436,7 +3436,7 @@
 }
 
 .floorLabel {
-    font-size: 0.58rem;
+    font-size: 0.75rem;
     font-weight: 700;
     letter-spacing: 0.14em;
     text-transform: uppercase;
@@ -3463,7 +3463,7 @@
     border: 1px solid color-mix(in srgb, var(--theme-violet) 45%, transparent);
     background: color-mix(in srgb, var(--theme-violet) 22%, transparent);
     color: var(--theme-violet-bright);
-    font-size: 0.52rem;
+    font-size: 0.75rem;
     font-weight: 800;
     letter-spacing: 0.12em;
     text-transform: uppercase;
@@ -3548,7 +3548,7 @@
         linear-gradient(180deg, rgba(255, 243, 217, 0.06), transparent 52%),
         color-mix(in srgb, var(--theme-panel) 88%, var(--theme-stone) 12%);
     color: var(--theme-text-muted);
-    font-size: 0.58rem;
+    font-size: 0.75rem;
     font-weight: 700;
     font-variant-numeric: tabular-nums;
     cursor: pointer;
@@ -3766,7 +3766,7 @@
     border-radius: var(--ui-radius-pill);
     background: color-mix(in srgb, var(--theme-gold) 10%, transparent);
     color: color-mix(in srgb, var(--theme-gold-bright) 82%, white);
-    font-size: 0.54rem;
+    font-size: 0.75rem;
     font-weight: 920;
     line-height: 1;
     text-transform: uppercase;
@@ -3841,7 +3841,7 @@
     gap: 0.1rem;
     min-width: 0;
     color: color-mix(in srgb, var(--theme-text-muted) 84%, white);
-    font-size: 0.48rem;
+    font-size: 0.75rem;
     font-weight: 840;
     line-height: 1.08;
     text-transform: none;
@@ -3877,7 +3877,7 @@
         linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 12%, transparent), transparent 72%),
         color-mix(in srgb, var(--theme-void) 30%, transparent);
     color: color-mix(in srgb, var(--theme-cyan-bright) 84%, white);
-    font-size: 0.5rem;
+    font-size: 0.75rem;
     font-weight: 960;
     letter-spacing: 0;
     line-height: 1;
@@ -4022,7 +4022,7 @@
     min-width: 0;
     overflow: hidden;
     color: color-mix(in srgb, var(--theme-gold-bright) 78%, white);
-    font-size: 0.48rem;
+    font-size: 0.75rem;
     font-weight: 920;
     line-height: 1;
     text-overflow: ellipsis;
@@ -4047,7 +4047,7 @@
     box-shadow:
         0 0 0 1px color-mix(in srgb, var(--theme-gold-bright) 14%, transparent),
         0 0 0.8rem color-mix(in srgb, var(--theme-gold-bright) 15%, transparent);
-    font-size: 0.48rem;
+    font-size: 0.75rem;
     font-weight: 960;
     line-height: 1;
     text-transform: uppercase;
@@ -4126,7 +4126,7 @@
         0 0 0 1px color-mix(in srgb, var(--theme-gold-bright) 14%, transparent),
         0 0 1rem color-mix(in srgb, var(--theme-gold-bright) 17%, transparent);
     color: color-mix(in srgb, var(--theme-gold-bright) 90%, white);
-    font-size: 0.48rem;
+    font-size: 0.75rem;
     font-weight: 980;
     line-height: 1;
     text-transform: uppercase;
@@ -4159,7 +4159,7 @@
 .hudChainRewardHotBand em {
     grid-column: 1 / -1;
     color: color-mix(in srgb, var(--theme-text-muted) 88%, white);
-    font-size: 0.46rem;
+    font-size: 0.75rem;
     font-style: normal;
     font-weight: 880;
 }
@@ -4167,7 +4167,7 @@
 .hudChainRewardHotBand i {
     grid-column: 1 / -1;
     color: color-mix(in srgb, var(--theme-cyan-bright) 78%, white);
-    font-size: 0.46rem;
+    font-size: 0.75rem;
     font-style: normal;
     font-weight: 840;
 }
@@ -4229,7 +4229,7 @@
         0 0 0 1px color-mix(in srgb, var(--theme-violet-bright) 12%, transparent),
         0 0 1rem color-mix(in srgb, var(--theme-violet-bright) 14%, transparent);
     color: color-mix(in srgb, var(--theme-violet-bright) 90%, white);
-    font-size: 0.48rem;
+    font-size: 0.75rem;
     font-weight: 980;
     line-height: 1;
     text-transform: uppercase;
@@ -4262,7 +4262,7 @@
 .hudChainComboSurgeBand em {
     grid-column: 1 / -1;
     color: color-mix(in srgb, var(--theme-cyan-bright) 84%, white);
-    font-size: 0.46rem;
+    font-size: 0.75rem;
     font-style: normal;
     font-weight: 880;
 }
@@ -4270,7 +4270,7 @@
 .hudChainComboSurgeBand i {
     grid-column: 1 / -1;
     color: color-mix(in srgb, var(--theme-gold-bright) 82%, white);
-    font-size: 0.46rem;
+    font-size: 0.75rem;
     font-style: normal;
     font-weight: 840;
 }
@@ -4339,7 +4339,7 @@
         0 0 0 1px color-mix(in srgb, var(--theme-gold-bright) 16%, transparent),
         0 0 1rem color-mix(in srgb, var(--theme-gold-bright) 18%, transparent);
     color: color-mix(in srgb, var(--theme-gold-bright) 90%, white);
-    font-size: 0.49rem;
+    font-size: 0.75rem;
     font-weight: 980;
     line-height: 1;
     text-transform: uppercase;
@@ -4448,7 +4448,7 @@
         linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 12%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent)),
         color-mix(in srgb, var(--theme-void) 42%, transparent);
     color: color-mix(in srgb, var(--theme-gold-bright) 86%, white);
-    font-size: 0.49rem;
+    font-size: 0.75rem;
     font-weight: 940;
     line-height: 1;
     text-transform: uppercase;
@@ -4486,13 +4486,13 @@
 
 .hudChainRewardForecastSummary small {
     color: color-mix(in srgb, var(--theme-text-muted) 88%, white);
-    font-size: 0.42rem;
+    font-size: 0.75rem;
     font-weight: 920;
 }
 
 .hudChainRewardForecastSummary b {
     color: currentColor;
-    font-size: 0.48rem;
+    font-size: 0.75rem;
     font-weight: 980;
 }
 
@@ -4534,7 +4534,7 @@
     border-radius: var(--ui-radius-pill);
     background: color-mix(in srgb, var(--theme-gold) 8%, transparent);
     color: color-mix(in srgb, var(--theme-gold-bright) 78%, white);
-    font-size: 0.49rem;
+    font-size: 0.75rem;
     font-weight: 900;
     letter-spacing: 0;
     line-height: 1;
@@ -4548,7 +4548,7 @@
 .boardFloaterRewardForecast small,
 .boardFloaterRewardForecast u {
     color: color-mix(in srgb, currentColor 62%, white);
-    font-size: 0.43rem;
+    font-size: 0.75rem;
     font-weight: 940;
     line-height: 1;
     opacity: 0.9;
@@ -4571,7 +4571,7 @@
     border-radius: 999px;
     background: color-mix(in srgb, currentColor 10%, transparent);
     color: color-mix(in srgb, currentColor 84%, white);
-    font-size: 0.42rem;
+    font-size: 0.75rem;
     font-weight: 980;
     line-height: 1;
     text-transform: uppercase;
@@ -4585,7 +4585,7 @@
 .hudChainRewardForecast em,
 .boardFloaterRewardForecast em {
     color: color-mix(in srgb, currentColor 62%, white);
-    font-size: 0.42rem;
+    font-size: 0.75rem;
     font-style: normal;
     font-weight: 900;
     line-height: 1;
@@ -4596,7 +4596,7 @@
 .boardFloaterRewardForecast i {
     overflow: hidden;
     color: color-mix(in srgb, var(--theme-cyan-bright) 82%, white);
-    font-size: 0.52rem;
+    font-size: 0.75rem;
     font-style: normal;
     font-weight: 900;
     line-height: 1;
@@ -4613,7 +4613,7 @@
     border-radius: 999px;
     background: color-mix(in srgb, var(--theme-gold-bright) 16%, transparent);
     color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
-    font-size: 0.48rem;
+    font-size: 0.75rem;
     font-weight: 980;
     line-height: 1;
     text-overflow: ellipsis;
@@ -4698,7 +4698,7 @@
 }
 
 .hudChainRewardForecast > span[data-chain-reward-lane-map] .hudChainRewardPrimaryLaneCue strong {
-    font-size: 0.58rem;
+    font-size: 0.75rem;
 }
 
 .hudChainRewardForecast > span[data-chain-reward-lane-map] .hudChainRewardPrimaryLaneCue[data-chain-reward-primary-lane-screen-cue='burst'] {
@@ -4741,14 +4741,14 @@
     border-radius: 50%;
     background: color-mix(in srgb, currentColor 12%, transparent);
     color: color-mix(in srgb, currentColor 86%, white);
-    font-size: 0.54rem;
+    font-size: 0.75rem;
     font-weight: 980;
 }
 
 .hudChainRewardForecast > span[data-chain-reward-lane-map] em {
     grid-column: 1 / -1;
     color: color-mix(in srgb, currentColor 68%, white);
-    font-size: 0.43rem;
+    font-size: 0.75rem;
     font-style: normal;
     font-weight: 920;
     text-transform: uppercase;
@@ -4756,7 +4756,7 @@
 
 .hudChainRewardForecast > span[data-chain-reward-lane-map] strong {
     color: color-mix(in srgb, var(--theme-cyan-bright) 82%, white);
-    font-size: 0.43rem;
+    font-size: 0.75rem;
     font-weight: 980;
     text-transform: uppercase;
 }
@@ -4844,27 +4844,27 @@
 
 .hudChainRewardForecast > span[data-chain-reward-ladder] small {
     color: color-mix(in srgb, currentColor 70%, white);
-    font-size: 0.42rem;
+    font-size: 0.75rem;
     font-weight: 950;
     text-transform: uppercase;
 }
 
 .hudChainRewardForecast > span[data-chain-reward-ladder] b {
     color: color-mix(in srgb, currentColor 88%, white);
-    font-size: 0.5rem;
+    font-size: 0.75rem;
     font-weight: 980;
 }
 
 .hudChainRewardForecast > span[data-chain-reward-ladder] strong {
     color: color-mix(in srgb, var(--theme-cyan-bright) 84%, white);
-    font-size: 0.43rem;
+    font-size: 0.75rem;
     font-weight: 980;
     text-transform: uppercase;
 }
 
 .hudChainRewardForecast > span[data-chain-reward-ladder] em {
     color: color-mix(in srgb, currentColor 78%, white);
-    font-size: 0.48rem;
+    font-size: 0.75rem;
     font-style: normal;
     font-weight: 980;
     justify-self: end;
@@ -4873,7 +4873,7 @@
 .hudChainRewardForecast > span[data-chain-reward-ladder] i {
     grid-column: 1 / -1;
     color: color-mix(in srgb, currentColor 66%, white);
-    font-size: 0.42rem;
+    font-size: 0.75rem;
     font-style: normal;
     font-weight: 900;
 }
@@ -5032,7 +5032,7 @@
     border-radius: var(--ui-radius-pill);
     background: color-mix(in srgb, var(--theme-gold) 10%, transparent);
     color: color-mix(in srgb, var(--theme-gold-bright) 82%, white);
-    font-size: 0.52rem;
+    font-size: 0.75rem;
     font-weight: 880;
     line-height: 1;
     white-space: nowrap;
@@ -5073,20 +5073,20 @@
 
 .hudPickupStackCue small {
     color: color-mix(in srgb, var(--theme-gold-bright) 80%, white);
-    font-size: 0.5rem;
+    font-size: 0.75rem;
     font-weight: 900;
     text-transform: uppercase;
 }
 
 .hudPickupStackCue strong {
     color: var(--theme-text);
-    font-size: 0.64rem;
+    font-size: 0.75rem;
     font-weight: 920;
 }
 
 .hudPickupStackCue em {
     color: color-mix(in srgb, var(--theme-cyan-bright) 74%, var(--theme-text-muted));
-    font-size: 0.54rem;
+    font-size: 0.75rem;
     font-style: normal;
     font-weight: 820;
 }
@@ -5167,7 +5167,7 @@
 .hudRewardPerkPrimaryCue small {
     grid-area: label;
     color: color-mix(in srgb, var(--theme-text-muted) 88%, white);
-    font-size: 0.48rem;
+    font-size: 0.75rem;
     font-weight: 980;
     text-transform: uppercase;
 }
@@ -5175,14 +5175,14 @@
 .hudRewardPerkPrimaryCue strong {
     grid-area: action;
     color: color-mix(in srgb, var(--theme-gold-bright) 92%, white);
-    font-size: 0.62rem;
+    font-size: 0.75rem;
     font-weight: 980;
 }
 
 .hudRewardPerkPrimaryCue em {
     grid-area: payoff;
     color: color-mix(in srgb, var(--theme-cyan-bright) 86%, white);
-    font-size: 0.52rem;
+    font-size: 0.75rem;
     font-style: normal;
     font-weight: 920;
 }
@@ -5190,7 +5190,7 @@
 .hudRewardPerkPrimaryCue b {
     grid-area: lane;
     color: color-mix(in srgb, var(--theme-text-muted) 88%, white);
-    font-size: 0.48rem;
+    font-size: 0.75rem;
     font-weight: 900;
     text-transform: uppercase;
 }
@@ -5296,21 +5296,21 @@
 
 .hudRewardPerkFocus small {
     color: color-mix(in srgb, var(--theme-text-muted) 86%, white);
-    font-size: 0.48rem;
+    font-size: 0.75rem;
     font-weight: 960;
     text-transform: uppercase;
 }
 
 .hudRewardPerkFocus strong {
     color: color-mix(in srgb, var(--theme-cyan-bright) 86%, white);
-    font-size: 0.58rem;
+    font-size: 0.75rem;
     font-weight: 960;
 }
 
 .hudRewardPerkFocus em {
     grid-column: 1 / -1;
     color: color-mix(in srgb, var(--theme-gold-bright) 82%, white);
-    font-size: 0.52rem;
+    font-size: 0.75rem;
     font-style: normal;
     font-weight: 900;
 }
@@ -5318,7 +5318,7 @@
 .hudRewardPerkFocus b {
     grid-column: 1 / -1;
     color: color-mix(in srgb, var(--theme-text-muted) 92%, white);
-    font-size: 0.5rem;
+    font-size: 0.75rem;
     font-weight: 760;
     line-height: 1.08;
 }
@@ -5340,7 +5340,7 @@
     min-width: 0;
     overflow: hidden;
     color: color-mix(in srgb, var(--theme-text-muted) 86%, white);
-    font-size: 0.46rem;
+    font-size: 0.75rem;
     font-weight: 960;
     line-height: 1;
     text-overflow: ellipsis;
@@ -5473,7 +5473,7 @@
         linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 11%, transparent), color-mix(in srgb, var(--theme-gold-bright) 8%, transparent)),
         color-mix(in srgb, var(--theme-panel-solid) 42%, transparent);
     color: color-mix(in srgb, var(--theme-cyan-bright) 84%, white);
-    font-size: 0.49rem;
+    font-size: 0.75rem;
     font-weight: 940;
     line-height: 1;
     text-transform: uppercase;
@@ -5491,13 +5491,13 @@
 
 .hudRewardPerkLaneMapSummary small {
     color: color-mix(in srgb, var(--theme-text-muted) 88%, white);
-    font-size: 0.42rem;
+    font-size: 0.75rem;
     font-weight: 920;
 }
 
 .hudRewardPerkLaneMapSummary b {
     color: currentColor;
-    font-size: 0.48rem;
+    font-size: 0.75rem;
     font-weight: 980;
 }
 
@@ -5556,7 +5556,7 @@
 
 .hudRewardPerkLaneMap small {
     color: color-mix(in srgb, var(--theme-text-muted) 86%, white);
-    font-size: 0.48rem;
+    font-size: 0.75rem;
     font-weight: 900;
     text-transform: uppercase;
 }
@@ -5569,21 +5569,21 @@
     border-radius: 50%;
     background: color-mix(in srgb, var(--theme-text) 12%, transparent);
     color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
-    font-size: 0.56rem;
+    font-size: 0.75rem;
     font-weight: 950;
 }
 
 .hudRewardPerkLaneMap b {
     grid-column: 1 / -1;
     color: color-mix(in srgb, var(--theme-text) 92%, white);
-    font-size: 0.52rem;
+    font-size: 0.75rem;
     font-weight: 920;
 }
 
 .hudRewardPerkLaneMap em {
     grid-column: 1 / -1;
     color: color-mix(in srgb, var(--theme-text-muted) 90%, white);
-    font-size: 0.5rem;
+    font-size: 0.75rem;
     font-style: normal;
     font-weight: 780;
 }
@@ -5622,7 +5622,7 @@
 
 .hudRewardPerkRows small {
     color: var(--theme-text-subtle);
-    font-size: 0.48rem;
+    font-size: 0.75rem;
     font-weight: 900;
     line-height: 1;
     text-transform: uppercase;
@@ -5642,7 +5642,7 @@
 
 .hudRewardPerkRows i {
     color: color-mix(in srgb, var(--theme-text-muted) 90%, white);
-    font-size: 0.48rem;
+    font-size: 0.75rem;
     font-style: normal;
     font-weight: 820;
     line-height: 1;
@@ -5650,14 +5650,14 @@
 
 .hudRewardPerkRows strong {
     color: color-mix(in srgb, var(--theme-cyan-bright) 84%, white);
-    font-size: 0.56rem;
+    font-size: 0.75rem;
     font-weight: 920;
     line-height: 1;
 }
 
 .hudRewardPerkRows em {
     color: color-mix(in srgb, var(--theme-gold-bright) 80%, white);
-    font-size: 0.5rem;
+    font-size: 0.75rem;
     font-style: normal;
     font-weight: 860;
     line-height: 1;
@@ -5665,7 +5665,7 @@
 
 .hudRewardPerkRows b {
     color: color-mix(in srgb, var(--theme-text-muted) 92%, white);
-    font-size: 0.5rem;
+    font-size: 0.75rem;
     font-weight: 760;
     line-height: 1.12;
 }
@@ -5716,7 +5716,7 @@
     border-radius: var(--ui-radius-pill);
     background: color-mix(in srgb, var(--theme-panel-solid) 46%, transparent);
     color: color-mix(in srgb, var(--theme-text-muted) 84%, white);
-    font-size: 0.5rem;
+    font-size: 0.75rem;
     font-weight: 930;
     letter-spacing: 0;
     line-height: 1;
@@ -5888,7 +5888,7 @@
         linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 12%, transparent), color-mix(in srgb, var(--theme-gold-bright) 8%, transparent)),
         color-mix(in srgb, var(--theme-panel-solid) 42%, transparent);
     color: color-mix(in srgb, var(--theme-cyan-bright) 84%, white);
-    font-size: 0.49rem;
+    font-size: 0.75rem;
     font-weight: 940;
     line-height: 1;
     text-transform: uppercase;
@@ -5906,13 +5906,13 @@
 
 .hudRecentActionLaneMapSummary small {
     color: color-mix(in srgb, var(--theme-text-muted) 88%, white);
-    font-size: 0.42rem;
+    font-size: 0.75rem;
     font-weight: 920;
 }
 
 .hudRecentActionLaneMapSummary b {
     color: currentColor;
-    font-size: 0.48rem;
+    font-size: 0.75rem;
     font-weight: 980;
 }
 
@@ -5948,7 +5948,7 @@
     align-self: center;
     padding-inline: 0.12rem 0.2rem;
     color: color-mix(in srgb, var(--theme-text-muted) 84%, white);
-    font-size: 0.46rem;
+    font-size: 0.75rem;
     font-weight: 940;
     line-height: 1;
     text-transform: uppercase;
@@ -6037,7 +6037,7 @@
 .hudRecentActionImpact > span[data-hud-action-lane-map] strong {
     grid-area: label;
     color: color-mix(in srgb, var(--theme-text) 88%, white);
-    font-size: 0.52rem;
+    font-size: 0.75rem;
     font-weight: 940;
     text-transform: uppercase;
 }
@@ -6045,7 +6045,7 @@
 .hudRecentActionImpact > span[data-hud-action-lane-map] em {
     grid-area: count;
     color: color-mix(in srgb, var(--theme-cyan-bright) 86%, white);
-    font-size: 0.58rem;
+    font-size: 0.75rem;
     font-style: normal;
     font-weight: 980;
 }
@@ -6053,7 +6053,7 @@
 .hudRecentActionImpact > span[data-hud-action-lane-map] i {
     grid-area: action;
     color: color-mix(in srgb, var(--theme-text-muted) 84%, white);
-    font-size: 0.43rem;
+    font-size: 0.75rem;
     font-style: normal;
     font-weight: 840;
     text-transform: uppercase;
@@ -6150,7 +6150,7 @@
     border-radius: 999px;
     background: color-mix(in srgb, var(--theme-gold-bright) 10%, transparent);
     color: color-mix(in srgb, var(--theme-gold-bright) 86%, white);
-    font-size: 0.55rem;
+    font-size: 0.75rem;
     font-weight: 940;
     line-height: 1;
     text-overflow: ellipsis;
@@ -6165,7 +6165,7 @@
     gap: 0.1rem;
     min-width: 0;
     color: color-mix(in srgb, var(--theme-text-muted) 92%, white);
-    font-size: 0.58rem;
+    font-size: 0.75rem;
     font-style: normal;
     font-weight: 760;
     line-height: 1.08;
@@ -6488,7 +6488,7 @@
 }
 
 .statKey {
-    font-size: 0.58rem;
+    font-size: 0.75rem;
     font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;
@@ -6516,7 +6516,7 @@
 .statSubline {
     margin-top: 0.16rem;
     color: var(--theme-text-subtle);
-    font-size: 0.66rem;
+    font-size: 0.75rem;
     letter-spacing: 0.08em;
     text-transform: uppercase;
 }
@@ -6545,7 +6545,7 @@
 .hudObjectiveSignals small {
     overflow: hidden;
     color: color-mix(in srgb, var(--theme-text-muted) 84%, white);
-    font-size: 0.44rem;
+    font-size: 0.75rem;
     font-weight: 900;
     line-height: 1;
     text-overflow: ellipsis;
@@ -6556,7 +6556,7 @@
 .hudObjectiveSignals b {
     overflow: hidden;
     color: color-mix(in srgb, var(--theme-text) 88%, white);
-    font-size: 0.5rem;
+    font-size: 0.75rem;
     font-weight: 900;
     letter-spacing: 0;
     line-height: 1.05;
@@ -6719,7 +6719,7 @@
 }
 
 .hudParasiteLabel {
-    font-size: 0.48rem;
+    font-size: 0.75rem;
     font-weight: 700;
     letter-spacing: 0.14em;
     text-transform: uppercase;
@@ -6756,7 +6756,7 @@
 }
 
 .hudParasiteCaption {
-    font-size: 0.62rem;
+    font-size: 0.75rem;
     color: var(--theme-text-subtle);
     letter-spacing: 0.05em;
 }
@@ -6764,7 +6764,7 @@
 .hudParasiteWard {
     display: block;
     margin-top: 0.18rem;
-    font-size: 0.58rem;
+    font-size: 0.75rem;
     font-weight: 750;
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -6833,7 +6833,7 @@
 
 .distractionHudLabel {
     font-family: var(--ui-font-display-family);
-    font-size: 0.46rem;
+    font-size: 0.75rem;
     font-weight: 800;
     letter-spacing: 0.18em;
     text-transform: uppercase;
@@ -6865,7 +6865,7 @@
     flex-direction: row;
     align-items: center;
     gap: 0.32rem;
-    font-size: 0.58rem;
+    font-size: 0.75rem;
     font-weight: 700;
     letter-spacing: 0.04em;
     text-transform: uppercase;
@@ -7023,7 +7023,7 @@
     border: 1px solid var(--theme-hud-accent-line);
     background: linear-gradient(90deg, var(--theme-hud-accent-fill), var(--theme-panel-solid));
     color: var(--theme-text-subtle);
-    font-size: 0.68rem;
+    font-size: 0.75rem;
     font-weight: 600;
     letter-spacing: 0.02em;
     line-height: 1.3;
@@ -7033,7 +7033,7 @@
 }
 
 .shell[data-mobile-camera-mode='true'] .ruleHint {
-    font-size: 0.74rem;
+    font-size: 0.75rem;
     line-height: 1.35;
     padding: 0.4rem 0.85rem 0.44rem;
     border-color: var(--theme-border-cyan);
@@ -7130,7 +7130,7 @@
     height: var(--gameplay-rail-badge-size, 1rem);
     padding: 0 0.2rem;
     border-radius: 999px;
-    font-size: 0.56rem;
+    font-size: 0.75rem;
     font-weight: 700;
     line-height: var(--gameplay-rail-badge-size, 1rem);
     text-align: center;
@@ -7182,7 +7182,7 @@
         linear-gradient(180deg, color-mix(in srgb, var(--theme-cyan-bright) 14%, transparent), transparent),
         color-mix(in srgb, var(--theme-panel-solid) 92%, var(--theme-void));
     color: color-mix(in srgb, var(--theme-cyan-bright) 84%, white);
-    font-size: 0.48rem;
+    font-size: 0.75rem;
     font-weight: 850;
     letter-spacing: 0.04em;
     line-height: 1;
@@ -7239,7 +7239,7 @@
 
 .toolPayoffStack small {
     color: color-mix(in srgb, var(--theme-text-muted) 86%, white);
-    font-size: 0.5rem;
+    font-size: 0.75rem;
     font-weight: 950;
     letter-spacing: 0.04em;
     line-height: 1;
@@ -7249,7 +7249,7 @@
 
 .toolPayoffStack strong {
     color: color-mix(in srgb, var(--theme-gold-bright) 84%, white);
-    font-size: 0.62rem;
+    font-size: 0.75rem;
     font-weight: 950;
     line-height: 1;
     white-space: nowrap;
@@ -7258,7 +7258,7 @@
 .toolPayoffStack b,
 .toolPayoffStack em {
     grid-column: 1 / -1;
-    font-size: 0.56rem;
+    font-size: 0.75rem;
     line-height: 1.12;
 }
 
@@ -7325,13 +7325,13 @@
 
 .toolCrescendo small {
     color: currentColor;
-    font-size: 0.44rem;
+    font-size: 0.75rem;
     font-weight: 980;
 }
 
 .toolCrescendo em {
     color: color-mix(in srgb, currentColor 82%, white);
-    font-size: 0.48rem;
+    font-size: 0.75rem;
     font-style: normal;
     font-weight: 940;
     text-transform: uppercase;
@@ -7339,7 +7339,7 @@
 
 .toolCrescendo b {
     color: color-mix(in srgb, currentColor 76%, white);
-    font-size: 0.44rem;
+    font-size: 0.75rem;
     font-weight: 980;
     text-transform: uppercase;
 }
@@ -7412,7 +7412,7 @@
 
 .toolPayoffSequence small {
     color: color-mix(in srgb, var(--theme-text-muted) 82%, white);
-    font-size: 0.45rem;
+    font-size: 0.75rem;
     font-weight: 940;
     letter-spacing: 0.04em;
     text-transform: uppercase;
@@ -7420,7 +7420,7 @@
 
 .toolPayoffSequence em {
     color: color-mix(in srgb, var(--theme-text) 84%, white);
-    font-size: 0.52rem;
+    font-size: 0.75rem;
     font-style: normal;
     font-weight: 830;
 }
@@ -7478,7 +7478,7 @@
         linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 12%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent)),
         color-mix(in srgb, var(--theme-panel-solid) 94%, var(--theme-void));
     color: color-mix(in srgb, var(--theme-gold-bright) 84%, white);
-    font-size: 0.43rem;
+    font-size: 0.75rem;
     font-weight: 950;
     letter-spacing: 0;
     line-height: 1;
@@ -7509,14 +7509,14 @@
 
 .powerPayoffChip small {
     color: color-mix(in srgb, currentColor 72%, white);
-    font-size: 0.39rem;
+    font-size: 0.75rem;
     font-weight: 850;
     line-height: 1;
 }
 
 .powerPayoffChip em {
     color: color-mix(in srgb, currentColor 62%, white);
-    font-size: 0.36rem;
+    font-size: 0.75rem;
     font-style: normal;
     font-weight: 950;
     line-height: 1;
@@ -7524,7 +7524,7 @@
 
 .powerPayoffChip b {
     color: color-mix(in srgb, currentColor 74%, white);
-    font-size: 0.34rem;
+    font-size: 0.75rem;
     font-weight: 980;
     line-height: 1;
     text-transform: uppercase;
@@ -7652,7 +7652,7 @@
     border-radius: var(--ui-radius-pill);
     background: color-mix(in srgb, var(--theme-panel-solid) 90%, var(--theme-void));
     color: color-mix(in srgb, var(--theme-text-muted) 88%, white);
-    font-size: 0.46rem;
+    font-size: 0.75rem;
     font-weight: 900;
     letter-spacing: 0.02em;
     line-height: 1;
@@ -7700,7 +7700,7 @@
     border-radius: var(--ui-radius-pill);
     background: color-mix(in srgb, var(--theme-panel-solid) 92%, var(--theme-void));
     color: color-mix(in srgb, var(--theme-cyan-bright) 78%, white);
-    font-size: 0.44rem;
+    font-size: 0.75rem;
     font-weight: 900;
     letter-spacing: 0;
     line-height: 1;
@@ -7773,7 +7773,7 @@
     background: color-mix(in srgb, var(--theme-panel-solid) 94%, var(--theme-void));
     box-shadow: 0 8px 20px color-mix(in srgb, var(--theme-shadow) 35%, transparent);
     color: var(--theme-rune);
-    font-size: 0.62rem;
+    font-size: 0.75rem;
     font-weight: 700;
     letter-spacing: 0.04em;
     line-height: 1;
@@ -8075,7 +8075,7 @@
 .mobileCameraHud .floorLabel,
 .mobileCameraHud .statKey,
 .mobileCameraHud .hudParasiteLabel {
-    font-size: 0.52rem;
+    font-size: 0.75rem;
 }
 
 .mobileCameraHud .floorValue {
@@ -8093,11 +8093,11 @@
 .mobileCameraHud .statSubline,
 .mobileCameraHud .hudParasiteCaption {
     margin-top: 0.08rem;
-    font-size: 0.58rem;
+    font-size: 0.75rem;
 }
 
 .mobileCameraHud .hudParasiteWard {
-    font-size: 0.52rem;
+    font-size: 0.75rem;
     margin-top: 0.1rem;
 }
 
@@ -8143,15 +8143,15 @@
 .mobileCameraHud .mutatorChip {
     max-width: 6.6rem;
     padding: 0.1rem 0.32rem;
-    font-size: 0.56rem;
+    font-size: 0.75rem;
 }
 
 .mobileCameraHud .hudContextRegion .hudMetaSegment .statVal {
-    font-size: clamp(0.72rem, 3.6vw, 0.84rem);
+    font-size: clamp(0.75rem, 3.6vw, 0.84rem);
 }
 
 .mobileCameraHud .hudContextRegion .statPillCompact .statVal {
-    font-size: clamp(0.66rem, 3.2vw, 0.78rem);
+    font-size: clamp(0.75rem, 3.2vw, 0.78rem);
 }
 
 .mobileCameraHud .hudContextRegion .mutatorChip {
@@ -8398,7 +8398,7 @@
 .onboardingPromptSignals small {
     overflow: hidden;
     color: color-mix(in srgb, var(--theme-text-muted) 86%, white);
-    font-size: 0.48rem;
+    font-size: 0.75rem;
     font-weight: 900;
     line-height: 1;
     text-overflow: ellipsis;
@@ -8409,7 +8409,7 @@
 .onboardingPromptSignals b {
     overflow: hidden;
     color: color-mix(in srgb, var(--theme-text) 88%, white);
-    font-size: 0.58rem;
+    font-size: 0.75rem;
     font-weight: 900;
     letter-spacing: 0;
     line-height: 1.05;
@@ -8549,14 +8549,14 @@
 }
 
 .toastTitle {
-    font-size: 0.68rem;
+    font-size: 0.75rem;
     font-weight: 700;
     color: var(--theme-cyan-bright);
     letter-spacing: 0.04em;
 }
 
 .toastDesc {
-    font-size: 0.65rem;
+    font-size: 0.75rem;
     color: var(--theme-text-muted);
     line-height: 1.3;
 }
@@ -8647,7 +8647,7 @@
 .mobileCameraShell .ftueBanner {
     padding: 0.34rem 0.48rem;
     gap: 0.35rem 0.5rem;
-    font-size: 0.66rem;
+    font-size: 0.75rem;
 }
 
 .mobileCameraShell .endlessChapterBanner {
@@ -8700,7 +8700,7 @@
     .ruleHint {
         max-width: calc(100% - 0.7rem);
         padding: 0.32rem 0.55rem 0.36rem;
-        font-size: 0.63rem;
+        font-size: 0.75rem;
     }
 
     .mobileCameraShell {
@@ -8748,7 +8748,7 @@
     }
 
     .shell[data-mobile-camera-mode='true'] .ruleHint {
-        font-size: 0.7rem;
+        font-size: 0.75rem;
         padding: 0.36rem 0.65rem 0.4rem;
     }
 
@@ -9161,7 +9161,7 @@ subdued cool palette. */
     border-radius: 999px;
     background: color-mix(in srgb, var(--theme-void) 58%, transparent);
     color: color-mix(in srgb, var(--theme-text-muted) 88%, white);
-    font-size: 0.46em;
+    font-size: 0.75em;
     font-weight: 950;
     letter-spacing: 0.04em;
     line-height: 1;
@@ -9223,7 +9223,7 @@ subdued cool palette. */
         linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 10%, transparent), transparent 72%),
         color-mix(in srgb, var(--theme-void) 54%, transparent);
     color: color-mix(in srgb, var(--theme-cyan-bright) 84%, white);
-    font-size: 0.5em;
+    font-size: 0.75em;
     font-weight: 980;
     letter-spacing: 0;
     line-height: 1;
@@ -9353,7 +9353,7 @@ subdued cool palette. */
     box-shadow:
         0 0 0 1px color-mix(in srgb, var(--theme-gold-bright) 16%, transparent),
         0 0 1rem color-mix(in srgb, var(--theme-gold-bright) 20%, transparent);
-    font-size: 0.54em;
+    font-size: 0.75em;
     font-weight: 980;
     line-height: 1;
     text-transform: uppercase;
@@ -9468,7 +9468,7 @@ subdued cool palette. */
         linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 10%, transparent), color-mix(in srgb, var(--theme-gold-bright) 8%, transparent)),
         color-mix(in srgb, var(--theme-void) 56%, transparent);
     color: color-mix(in srgb, var(--theme-cyan-bright) 84%, white);
-    font-size: 0.5em;
+    font-size: 0.75em;
     font-weight: 980;
     line-height: 1;
     text-transform: uppercase;
@@ -9567,7 +9567,7 @@ subdued cool palette. */
     border-radius: 999px;
     background: color-mix(in srgb, var(--theme-void) 42%, transparent);
     color: color-mix(in srgb, var(--theme-rune) 92%, white);
-    font-size: 0.72em;
+    font-size: 0.75em;
     line-height: 1.1;
     letter-spacing: 0.03em;
 }
@@ -9582,7 +9582,7 @@ subdued cool palette. */
     border-radius: 999px;
     background: color-mix(in srgb, var(--theme-gold) 12%, var(--theme-void) 36%);
     color: color-mix(in srgb, var(--theme-gold-bright) 82%, white);
-    font-size: 0.58em;
+    font-size: 0.75em;
     font-weight: 900;
     letter-spacing: 0.04em;
     line-height: 1.1;
@@ -9668,7 +9668,7 @@ subdued cool palette. */
         0 0 0 1px color-mix(in srgb, var(--theme-cyan-bright) 12%, transparent),
         0 0 1rem color-mix(in srgb, var(--theme-cyan-bright) 16%, transparent);
     color: color-mix(in srgb, var(--theme-cyan-bright) 84%, white);
-    font-size: 0.52rem;
+    font-size: 0.75rem;
     font-weight: 950;
     line-height: 1;
     text-transform: uppercase;
@@ -9707,12 +9707,12 @@ subdued cool palette. */
 
 .boardFloaterChainMilestone b {
     color: color-mix(in srgb, var(--theme-gold-bright) 86%, white);
-    font-size: 0.74rem;
+    font-size: 0.75rem;
 }
 
 .boardFloaterChainMilestone strong {
     color: color-mix(in srgb, var(--theme-cyan-bright) 86%, white);
-    font-size: 0.58rem;
+    font-size: 0.75rem;
 }
 
 .boardFloaterChainMilestone em {
@@ -9842,14 +9842,14 @@ subdued cool palette. */
 
 .boardFloaterCascadeCue small {
     color: color-mix(in srgb, var(--theme-cyan-bright) 82%, white);
-    font-size: 0.54rem;
+    font-size: 0.75rem;
     font-weight: 950;
     text-transform: uppercase;
 }
 
 .boardFloaterCascadeCue b {
     color: color-mix(in srgb, var(--theme-text) 92%, white);
-    font-size: 0.66rem;
+    font-size: 0.75rem;
     font-weight: 960;
 }
 
@@ -9926,7 +9926,7 @@ subdued cool palette. */
 }
 
 .boardFloaterRewardBurst small {
-    font-size: 0.54rem;
+    font-size: 0.75rem;
     font-weight: 940;
     line-height: 1;
     text-transform: uppercase;
@@ -9934,7 +9934,7 @@ subdued cool palette. */
 
 .boardFloaterRewardBurst b {
     color: color-mix(in srgb, var(--theme-text) 92%, white);
-    font-size: 0.62rem;
+    font-size: 0.75rem;
     font-weight: 960;
     letter-spacing: 0;
     line-height: 1;
@@ -9965,7 +9965,7 @@ subdued cool palette. */
     border-radius: 999px;
     background: color-mix(in srgb, var(--theme-gold-bright) 13%, transparent);
     color: color-mix(in srgb, var(--theme-gold-bright) 90%, white);
-    font-size: 0.54rem;
+    font-size: 0.75rem;
     font-weight: 960;
     line-height: 1;
     text-decoration: none;
@@ -10059,7 +10059,7 @@ subdued cool palette. */
 
 .boardFloaterPayoffSummary small {
     color: color-mix(in srgb, currentColor 64%, white);
-    font-size: 0.5rem;
+    font-size: 0.75rem;
     font-weight: 940;
     line-height: 1;
     text-transform: uppercase;
@@ -10067,7 +10067,7 @@ subdued cool palette. */
 
 .boardFloaterPayoffSummary b {
     color: color-mix(in srgb, var(--theme-text) 92%, white);
-    font-size: 0.6rem;
+    font-size: 0.75rem;
     font-weight: 940;
     letter-spacing: 0;
     line-height: 1;
@@ -10175,7 +10175,7 @@ subdued cool palette. */
         linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 12%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent)),
         color-mix(in srgb, var(--theme-void) 58%, transparent);
     color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
-    font-size: 0.49rem;
+    font-size: 0.75rem;
     font-weight: 940;
     line-height: 1;
     text-transform: uppercase;
@@ -10193,13 +10193,13 @@ subdued cool palette. */
 
 .boardFloaterPayoffLaneMapSummary small {
     color: color-mix(in srgb, var(--theme-text-muted) 88%, white);
-    font-size: 0.42rem;
+    font-size: 0.75rem;
     font-weight: 920;
 }
 
 .boardFloaterPayoffLaneMapSummary b {
     color: currentColor;
-    font-size: 0.48rem;
+    font-size: 0.75rem;
     font-weight: 980;
 }
 
@@ -10266,7 +10266,7 @@ subdued cool palette. */
     grid-column: auto;
     max-width: 8rem;
     color: color-mix(in srgb, var(--theme-gold-bright) 92%, white);
-    font-size: 0.56rem;
+    font-size: 0.75rem;
 }
 
 .boardFloaterPayoffLaneMap > span[data-match-payoff-primary-lane-screen-cue='burst'] {
@@ -10361,14 +10361,14 @@ subdued cool palette. */
 
 .boardFloaterPayoffLaneMap small {
     color: color-mix(in srgb, var(--theme-text) 88%, white);
-    font-size: 0.5rem;
+    font-size: 0.75rem;
     font-weight: 980;
     text-transform: uppercase;
 }
 
 .boardFloaterPayoffLaneMap b {
     color: color-mix(in srgb, var(--theme-gold-bright) 90%, white);
-    font-size: 0.5rem;
+    font-size: 0.75rem;
     font-weight: 980;
 }
 
@@ -10376,7 +10376,7 @@ subdued cool palette. */
     grid-column: 1 / -1;
     max-width: 6.4rem;
     color: color-mix(in srgb, var(--theme-text-muted) 88%, white);
-    font-size: 0.44rem;
+    font-size: 0.75rem;
     font-style: normal;
     font-weight: 900;
     text-transform: uppercase;
@@ -10386,7 +10386,7 @@ subdued cool palette. */
     grid-column: 1 / -1;
     max-width: 6.4rem;
     color: color-mix(in srgb, var(--theme-gold-bright) 82%, white);
-    font-size: 0.42rem;
+    font-size: 0.75rem;
     font-weight: 940;
     text-transform: uppercase;
 }
@@ -10583,7 +10583,7 @@ subdued cool palette. */
         linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 12%, transparent), color-mix(in srgb, var(--theme-gold-bright) 8%, transparent)),
         color-mix(in srgb, var(--theme-void) 58%, transparent);
     color: color-mix(in srgb, var(--theme-cyan-bright) 84%, white);
-    font-size: 0.49rem;
+    font-size: 0.75rem;
     font-weight: 940;
     line-height: 1;
     text-transform: uppercase;
@@ -10601,13 +10601,13 @@ subdued cool palette. */
 
 .boardFloaterPayoffLadderSummary small {
     color: color-mix(in srgb, var(--theme-text-muted) 88%, white);
-    font-size: 0.42rem;
+    font-size: 0.75rem;
     font-weight: 920;
 }
 
 .boardFloaterPayoffLadderSummary b {
     color: currentColor;
-    font-size: 0.48rem;
+    font-size: 0.75rem;
     font-weight: 980;
 }
 
@@ -10650,14 +10650,14 @@ subdued cool palette. */
 
 .boardFloaterPayoffLadder small {
     color: color-mix(in srgb, var(--theme-text-muted) 84%, white);
-    font-size: 0.48rem;
+    font-size: 0.75rem;
     font-weight: 960;
     text-transform: uppercase;
 }
 
 .boardFloaterPayoffLadder b {
     color: color-mix(in srgb, var(--theme-text) 92%, white);
-    font-size: 0.56rem;
+    font-size: 0.75rem;
     font-weight: 940;
     letter-spacing: 0;
 }
@@ -10681,7 +10681,7 @@ subdued cool palette. */
     border-radius: 999px;
     background: color-mix(in srgb, var(--theme-gold-bright) 11%, transparent);
     color: color-mix(in srgb, var(--theme-gold-bright) 86%, white);
-    font-size: 0.48rem;
+    font-size: 0.75rem;
     font-style: normal;
     font-weight: 920;
     line-height: 1;
@@ -10800,7 +10800,7 @@ subdued cool palette. */
         linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 12%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent)),
         color-mix(in srgb, var(--theme-void) 58%, transparent);
     color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
-    font-size: 0.49rem;
+    font-size: 0.75rem;
     font-weight: 940;
     line-height: 1;
     text-transform: uppercase;
@@ -10818,13 +10818,13 @@ subdued cool palette. */
 
 .boardFloaterRewardForecastSummary small {
     color: color-mix(in srgb, var(--theme-text-muted) 88%, white);
-    font-size: 0.42rem;
+    font-size: 0.75rem;
     font-weight: 920;
 }
 
 .boardFloaterRewardForecastSummary b {
     color: currentColor;
-    font-size: 0.48rem;
+    font-size: 0.75rem;
     font-weight: 980;
 }
 
@@ -10866,7 +10866,7 @@ subdued cool palette. */
     border-radius: 999px;
     background: color-mix(in srgb, var(--theme-gold) 12%, transparent);
     color: color-mix(in srgb, var(--theme-gold-bright) 86%, white);
-    font-size: 0.54rem;
+    font-size: 0.75rem;
     font-weight: 940;
     letter-spacing: 0;
     line-height: 1;
@@ -10897,7 +10897,7 @@ subdued cool palette. */
     border-radius: 999px;
     background: color-mix(in srgb, currentColor 16%, transparent);
     color: color-mix(in srgb, currentColor 86%, white);
-    font-size: 0.48rem;
+    font-size: 0.75rem;
     font-weight: 980;
     line-height: 1;
 }
@@ -10932,7 +10932,7 @@ subdued cool palette. */
         linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 14%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent)),
         color-mix(in srgb, currentColor 10%, transparent);
     color: color-mix(in srgb, currentColor 88%, white);
-    font-size: 0.47rem;
+    font-size: 0.75rem;
     font-weight: 950;
     letter-spacing: 0.02em;
     text-transform: uppercase;
@@ -11105,7 +11105,7 @@ subdued cool palette. */
     border-radius: 999px;
     background: color-mix(in srgb, var(--theme-gold-bright) 13%, transparent);
     color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
-    font-size: 0.46rem;
+    font-size: 0.75rem;
     font-style: normal;
     font-weight: 960;
     line-height: 1;
@@ -11114,7 +11114,7 @@ subdued cool palette. */
 
 .boardFloaterPayoffChips small {
     color: color-mix(in srgb, var(--theme-text-muted) 84%, white);
-    font-size: 0.48rem;
+    font-size: 0.75rem;
     font-weight: 920;
     line-height: 1;
     text-transform: uppercase;
@@ -11122,7 +11122,7 @@ subdued cool palette. */
 
 .boardFloaterPayoffChips b {
     color: color-mix(in srgb, var(--theme-text) 90%, white);
-    font-size: 0.58rem;
+    font-size: 0.75rem;
     font-weight: 930;
     letter-spacing: 0;
     line-height: 1.05;
@@ -11286,7 +11286,7 @@ subdued cool palette. */
         linear-gradient(90deg, color-mix(in srgb, var(--theme-violet-bright) 12%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent)),
         color-mix(in srgb, var(--theme-void) 66%, transparent);
     color: color-mix(in srgb, var(--theme-violet-bright) 88%, white);
-    font-size: 0.49rem;
+    font-size: 0.75rem;
     font-weight: 940;
     line-height: 1;
     text-transform: uppercase;
@@ -11304,13 +11304,13 @@ subdued cool palette. */
 
 .boardFloaterTraitLaneMapSummary small {
     color: color-mix(in srgb, var(--theme-text-muted) 88%, white);
-    font-size: 0.42rem;
+    font-size: 0.75rem;
     font-weight: 920;
 }
 
 .boardFloaterTraitLaneMapSummary b {
     color: currentColor;
-    font-size: 0.48rem;
+    font-size: 0.75rem;
     font-weight: 980;
 }
 
@@ -11505,21 +11505,21 @@ subdued cool palette. */
 
 .boardFloaterTraitLaneMap small {
     color: color-mix(in srgb, var(--theme-text-muted) 86%, white);
-    font-size: 0.48rem;
+    font-size: 0.75rem;
     font-weight: 980;
     text-transform: uppercase;
 }
 
 .boardFloaterTraitLaneMap b {
     color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
-    font-size: 0.52rem;
+    font-size: 0.75rem;
     font-weight: 980;
 }
 
 .boardFloaterTraitLaneMap strong {
     grid-column: 1 / -1;
     color: color-mix(in srgb, var(--theme-gold-bright) 84%, white);
-    font-size: 0.44rem;
+    font-size: 0.75rem;
     font-weight: 940;
     text-transform: uppercase;
 }
@@ -11527,7 +11527,7 @@ subdued cool palette. */
 .boardFloaterTraitLaneMap em {
     grid-column: 1 / -1;
     color: color-mix(in srgb, currentColor 84%, white);
-    font-size: 0.56rem;
+    font-size: 0.75rem;
     font-style: normal;
     font-weight: 900;
 }
@@ -11619,7 +11619,7 @@ subdued cool palette. */
     border: 1px solid color-mix(in srgb, currentColor 42%, transparent);
     border-radius: 999px;
     background: color-mix(in srgb, var(--theme-void) 64%, transparent);
-    font-size: clamp(0.62rem, 1.45vi, 0.78rem);
+    font-size: clamp(0.75rem, 1.45vi, 0.78rem);
     line-height: 1.2;
     letter-spacing: 0.02em;
     text-transform: none;
@@ -11633,7 +11633,7 @@ subdued cool palette. */
     border-radius: 999px;
     background: color-mix(in srgb, var(--theme-cyan-bright) 10%, var(--theme-void));
     color: color-mix(in srgb, var(--theme-cyan-bright) 86%, white);
-    font-size: clamp(0.6rem, 1.35vi, 0.74rem);
+    font-size: clamp(0.75rem, 1.35vi, 0.74rem);
     font-weight: 900;
     letter-spacing: 0;
     line-height: 1.16;
@@ -11670,7 +11670,7 @@ subdued cool palette. */
 
 .boardFloaterNextAction em {
     color: color-mix(in srgb, currentColor 86%, white);
-    font-size: 0.5rem;
+    font-size: 0.75rem;
     font-style: normal;
     font-weight: 980;
     letter-spacing: 0;
@@ -11683,7 +11683,7 @@ subdued cool palette. */
     border-radius: 999px;
     background: color-mix(in srgb, currentColor 12%, transparent);
     color: color-mix(in srgb, currentColor 78%, white);
-    font-size: 0.52rem;
+    font-size: 0.75rem;
     font-weight: 980;
     line-height: 1;
     text-transform: uppercase;
@@ -11691,7 +11691,7 @@ subdued cool palette. */
 
 .boardFloaterNextAction b {
     color: color-mix(in srgb, var(--theme-text) 92%, white);
-    font-size: 0.66rem;
+    font-size: 0.75rem;
     font-weight: 960;
     letter-spacing: 0;
     line-height: 1;
@@ -11745,7 +11745,7 @@ subdued cool palette. */
 }
 
 .boardFloaterRecoveryBurst small {
-    font-size: 0.54rem;
+    font-size: 0.75rem;
     font-weight: 940;
     line-height: 1;
     text-transform: uppercase;
@@ -11753,7 +11753,7 @@ subdued cool palette. */
 
 .boardFloaterRecoveryBurst b {
     color: color-mix(in srgb, var(--theme-text) 92%, white);
-    font-size: 0.64rem;
+    font-size: 0.75rem;
     font-weight: 960;
     letter-spacing: 0;
     line-height: 1;
@@ -11818,7 +11818,7 @@ subdued cool palette. */
 }
 
 .boardFloaterRecoveryCrescendo small {
-    font-size: 0.52rem;
+    font-size: 0.75rem;
     font-weight: 960;
     text-transform: uppercase;
 }
@@ -11858,7 +11858,7 @@ subdued cool palette. */
 
 .boardFloaterRecoveryCrescendo em {
     color: color-mix(in srgb, var(--theme-text) 90%, white);
-    font-size: 0.56rem;
+    font-size: 0.75rem;
     font-style: normal;
     font-weight: 820;
 }
@@ -11948,14 +11948,14 @@ subdued cool palette. */
 }
 
 .boardFloaterRecoverySequence small {
-    font-size: 0.48rem;
+    font-size: 0.75rem;
     font-weight: 950;
     text-transform: uppercase;
 }
 
 .boardFloaterRecoverySequence b {
     color: color-mix(in srgb, var(--theme-text) 92%, white);
-    font-size: 0.56rem;
+    font-size: 0.75rem;
     font-weight: 940;
     letter-spacing: 0;
 }
@@ -12142,14 +12142,14 @@ subdued cool palette. */
 
 .boardFloaterRecoveryLaneMap small {
     color: color-mix(in srgb, var(--theme-text) 88%, white);
-    font-size: 0.5rem;
+    font-size: 0.75rem;
     font-weight: 980;
     text-transform: uppercase;
 }
 
 .boardFloaterRecoveryLaneMap b {
     color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
-    font-size: 0.5rem;
+    font-size: 0.75rem;
     font-weight: 980;
 }
 
@@ -12157,7 +12157,7 @@ subdued cool palette. */
     grid-column: 1 / -1;
     max-width: 6.4rem;
     color: color-mix(in srgb, var(--theme-text-muted) 88%, white);
-    font-size: 0.44rem;
+    font-size: 0.75rem;
     font-style: normal;
     font-weight: 900;
     text-transform: uppercase;
@@ -12167,7 +12167,7 @@ subdued cool palette. */
     grid-column: 1 / -1;
     max-width: 6.4rem;
     color: color-mix(in srgb, var(--theme-gold-bright) 82%, white);
-    font-size: 0.42rem;
+    font-size: 0.75rem;
     font-weight: 940;
     text-transform: uppercase;
 }
@@ -12322,7 +12322,7 @@ subdued cool palette. */
     padding: 0.08rem 0.24rem;
     border-radius: 999px;
     background: color-mix(in srgb, currentColor 12%, transparent);
-    font-size: 0.48rem;
+    font-size: 0.75rem;
     font-style: normal;
     font-weight: 960;
     letter-spacing: 0.02em;
@@ -12332,7 +12332,7 @@ subdued cool palette. */
 
 .boardFloaterRecoveryStack b {
     color: color-mix(in srgb, var(--theme-text) 92%, white);
-    font-size: 0.58rem;
+    font-size: 0.75rem;
     font-weight: 960;
     letter-spacing: 0;
     line-height: 1;
@@ -12341,7 +12341,7 @@ subdued cool palette. */
 .boardFloaterRecoveryStack em {
     grid-column: 1 / -1;
     color: color-mix(in srgb, var(--theme-text-muted) 86%, white);
-    font-size: 0.54rem;
+    font-size: 0.75rem;
     font-style: normal;
     font-weight: 820;
     letter-spacing: 0;
@@ -12410,7 +12410,7 @@ subdued cool palette. */
 
 .boardFloaterRecoveryChips em {
     color: color-mix(in srgb, var(--theme-gold-bright) 76%, white);
-    font-size: 0.46rem;
+    font-size: 0.75rem;
     font-style: normal;
     font-weight: 950;
     letter-spacing: 0;
@@ -12420,7 +12420,7 @@ subdued cool palette. */
 
 .boardFloaterRecoveryChips small {
     color: color-mix(in srgb, var(--theme-text-muted) 84%, white);
-    font-size: 0.48rem;
+    font-size: 0.75rem;
     font-weight: 920;
     line-height: 1;
     text-transform: uppercase;
@@ -12428,7 +12428,7 @@ subdued cool palette. */
 
 .boardFloaterRecoveryChips b {
     color: color-mix(in srgb, var(--theme-text) 90%, white);
-    font-size: 0.58rem;
+    font-size: 0.75rem;
     font-weight: 930;
     letter-spacing: 0;
     line-height: 1.05;
@@ -13168,7 +13168,7 @@ not one central dashboard box. */
 
 .shell:not([data-mobile-camera-mode='true']) .floorLabel,
 .shell:not([data-mobile-camera-mode='true']) .statKey {
-    font-size: 0.56rem;
+    font-size: 0.75rem;
 }
 
 .shell:not([data-mobile-camera-mode='true']) .floorValue {
@@ -13220,7 +13220,7 @@ not one central dashboard box. */
         linear-gradient(180deg, color-mix(in srgb, var(--theme-text) 4%, transparent), transparent 52%),
         color-mix(in srgb, var(--theme-void) 58%, transparent);
     color: color-mix(in srgb, var(--theme-text-muted) 86%, var(--theme-cyan-bright));
-    font-size: 0.58rem;
+    font-size: 0.75rem;
     font-weight: 900;
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -13395,7 +13395,7 @@ not one central dashboard box. */
 .hudTraitOpportunityRows small {
     overflow: hidden;
     color: color-mix(in srgb, var(--theme-text-muted) 86%, var(--theme-gold-bright));
-    font-size: 0.57rem;
+    font-size: 0.75rem;
     font-weight: 800;
     line-height: 1.12;
     text-overflow: ellipsis;
@@ -13407,7 +13407,7 @@ not one central dashboard box. */
     max-width: 12.5rem;
     overflow: hidden;
     color: color-mix(in srgb, var(--theme-text-muted) 92%, var(--theme-cyan-bright));
-    font-size: 0.66rem;
+    font-size: 0.75rem;
     line-height: 1.15;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -13421,7 +13421,7 @@ not one central dashboard box. */
     border-radius: var(--ui-radius-pill);
     background: color-mix(in srgb, var(--theme-gold-bright) 12%, var(--theme-panel-solid));
     color: color-mix(in srgb, var(--theme-gold-bright) 82%, white);
-    font-size: 0.54rem;
+    font-size: 0.75rem;
     font-weight: 950;
     line-height: 1;
     overflow: hidden;
@@ -13442,7 +13442,7 @@ not one central dashboard box. */
     border-radius: var(--ui-radius-pill);
     background: color-mix(in srgb, var(--theme-violet-bright) 12%, var(--theme-panel-solid));
     color: color-mix(in srgb, var(--theme-violet-bright) 78%, white);
-    font-size: 0.55rem;
+    font-size: 0.75rem;
     font-weight: 900;
     line-height: 1;
     overflow: hidden;
@@ -13549,7 +13549,7 @@ not one central dashboard box. */
 
 .hudTraitRouteStackCue span {
     color: color-mix(in srgb, var(--theme-gold-bright) 84%, white);
-    font-size: 0.5rem;
+    font-size: 0.75rem;
     font-weight: 940;
     line-height: 1;
     text-transform: uppercase;
@@ -13557,7 +13557,7 @@ not one central dashboard box. */
 
 .hudTraitRouteStackCue strong {
     color: var(--theme-text);
-    font-size: 0.58rem;
+    font-size: 0.75rem;
     font-weight: 920;
     line-height: 1;
 }
@@ -13565,7 +13565,7 @@ not one central dashboard box. */
 .hudTraitRouteStackCue em {
     grid-column: 1 / -1;
     color: color-mix(in srgb, var(--theme-cyan-bright) 74%, var(--theme-text-muted));
-    font-size: 0.54rem;
+    font-size: 0.75rem;
     font-style: normal;
     font-weight: 820;
     line-height: 1.1;
@@ -13591,13 +13591,13 @@ not one central dashboard box. */
 .hudTraitRouteDetails small {
     min-width: 0;
     overflow-wrap: anywhere;
-    font-size: 0.74rem;
+    font-size: 0.75rem;
     line-height: 1.25;
 }
 
 .hudTraitRouteLaneMapLabel {
     color: color-mix(in srgb, var(--theme-text-muted) 86%, white);
-    font-size: 0.5rem;
+    font-size: 0.75rem;
     font-weight: 920;
     letter-spacing: 0;
     text-transform: uppercase;
@@ -13623,7 +13623,7 @@ not one central dashboard box. */
         linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 11%, transparent), color-mix(in srgb, var(--theme-gold-bright) 8%, transparent)),
         color-mix(in srgb, var(--theme-panel-solid) 42%, transparent);
     color: color-mix(in srgb, var(--theme-cyan-bright) 84%, white);
-    font-size: 0.49rem;
+    font-size: 0.75rem;
     font-weight: 940;
     line-height: 1;
     text-transform: uppercase;
@@ -13642,19 +13642,19 @@ not one central dashboard box. */
 
 .hudTraitRouteLaneMapSummary small {
     color: color-mix(in srgb, var(--theme-text-muted) 88%, white);
-    font-size: 0.42rem;
+    font-size: 0.75rem;
     font-weight: 920;
 }
 
 .hudTraitRouteLaneMapSummary b {
     color: currentColor;
-    font-size: 0.48rem;
+    font-size: 0.75rem;
     font-weight: 980;
 }
 
 .hudTraitRouteLaneMapSummaryLead {
     color: color-mix(in srgb, var(--theme-gold-bright) 84%, white);
-    font-size: 0.44rem;
+    font-size: 0.75rem;
     font-weight: 920;
 }
 
@@ -13713,7 +13713,7 @@ not one central dashboard box. */
 
 .hudTraitRouteLaneMap small {
     color: color-mix(in srgb, var(--theme-text-muted) 84%, white);
-    font-size: 0.48rem;
+    font-size: 0.75rem;
     font-weight: 900;
     text-transform: uppercase;
 }
@@ -13726,14 +13726,14 @@ not one central dashboard box. */
     border-radius: 50%;
     background: color-mix(in srgb, var(--theme-text) 12%, transparent);
     color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
-    font-size: 0.54rem;
+    font-size: 0.75rem;
     font-weight: 950;
 }
 
 .hudTraitRouteLaneMap em {
     grid-column: 1 / -1;
     color: color-mix(in srgb, var(--theme-text-muted) 88%, white);
-    font-size: 0.5rem;
+    font-size: 0.75rem;
     font-style: normal;
     font-weight: 780;
 }

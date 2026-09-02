@@ -24,7 +24,7 @@
     --crn-radius: 999px;
     --crn-padding-y: 0.38rem;
     --crn-padding-x: 0.85rem;
-    --crn-message-font-size: 0.68rem;
+    --crn-message-font-size: 0.75rem;
     --crn-message-line-height: 1.35;
     --crn-shadow: 0 8px 28px color-mix(in srgb, var(--theme-shadow) 35%, transparent);
     --crn-success-bg: color-mix(in srgb, var(--theme-gold) 42%, var(--theme-smoke-deep));
@@ -110,7 +110,7 @@
     min-width: 0;
     --crn-padding-y: 0.5rem;
     --crn-padding-x: 0.95rem;
-    --crn-message-font-size: clamp(0.72rem, 2vw, 0.82rem);
+    --crn-message-font-size: clamp(0.75rem, 2vw, 0.82rem);
     --crn-text: color-mix(in srgb, var(--theme-text) 82%, var(--theme-gold-bright));
     border-color: color-mix(in srgb, var(--theme-gold-bright) 48%, var(--theme-border-strong));
     box-shadow:

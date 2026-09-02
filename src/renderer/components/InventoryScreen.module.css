@@ -154,5 +154,24 @@
 @media (max-width: 860px) {
     .columns {
         grid-template-columns: 1fr;
+        overflow: hidden;
+    }
+
+    /* Two short columns of charges instead of one tall list. */
+    .charges {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .chargeRow {
+        min-height: 2.2rem;
+        padding: 0.35rem 0.6rem;
+    }
+
+    .cards {
+        grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+    }
+
+    .cardMuted {
+        display: none;
     }
 }

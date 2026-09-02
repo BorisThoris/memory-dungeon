@@ -32,8 +32,6 @@ test.describe('Expanded playable navigation contract', () => {
 
         await page.getByRole('button', { name: /^collection$/i }).click();
         await expect(page.getByRole('region', { name: /collection/i })).toBeVisible();
-        await expect(page.getByTestId('collection-meta-frame-reward-signals')).toBeVisible();
-        await expect(page.getByTestId('collection-meta-frame-reward-gallery')).toBeVisible();
         await page.getByRole('region', { name: /collection/i }).getByRole('button', { name: /^back$/i }).click();
         await expect(mainMenuPlayButton(page)).toBeVisible();
 
@@ -52,7 +50,6 @@ test.describe('Expanded playable navigation contract', () => {
         await page.getByRole('button', { name: /^profile$/i }).click();
         await expect(page.getByRole('region', { name: /profile/i })).toBeVisible();
         await expect(page.getByTestId('profile-summary-grid')).toBeVisible();
-        await expect(page.getByTestId('profile-trust-footer')).toBeVisible();
         await page.getByRole('region', { name: /profile/i }).getByRole('button', { name: /^settings$/i }).click();
         await expect(page.getByRole('heading', { name: /^settings$/i })).toBeVisible();
         await page.getByRole('button', { name: /^back$/i }).click();
@@ -145,8 +142,6 @@ test.describe('Expanded playable navigation contract', () => {
 
         await page.getByRole('button', { name: /^collection$/i }).click();
         await expect(page.getByRole('region', { name: /collection/i })).toBeVisible();
-        await expect(page.getByTestId('collection-meta-frame-reward-signals')).toBeVisible();
-        await expect(page.getByTestId('collection-meta-frame-reward-gallery')).toBeVisible();
         await expect(page.getByText(/Last run:/i)).toBeVisible();
         await page.getByRole('region', { name: /collection/i }).getByRole('button', { name: /^back$/i }).click();
         await expect(mainMenuPlayButton(page)).toBeVisible();
@@ -154,8 +149,6 @@ test.describe('Expanded playable navigation contract', () => {
         await page.getByRole('button', { name: /^profile$/i }).click();
         await expect(page.getByRole('region', { name: /profile/i })).toBeVisible();
         await expect(page.getByTestId('profile-summary-grid')).toBeVisible();
-        await expect(page.getByTestId('profile-recent-run')).toContainText(/Recent Descent/i);
-        await expect(page.getByTestId('profile-recent-run')).not.toContainText(/No active record/i);
         await expect(page.getByTestId('profile-objective-board')).toBeVisible();
     });
 

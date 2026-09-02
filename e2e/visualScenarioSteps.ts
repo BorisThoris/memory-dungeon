@@ -144,7 +144,7 @@ export const VISUAL_SCREEN_SCENARIOS: ReadonlyArray<VisualScreenScenario> = [
             await openMainMenuFromSave(page, true);
             await page.getByRole('button', { name: /^profile$/i }).click();
             await expect(page.getByRole('region', { name: /profile/i })).toBeVisible();
-            await expect(page.getByTestId('profile-screen-body')).toBeVisible();
+            await expect(page.getByTestId('profile-summary-grid')).toBeVisible();
             await expectNoHorizontalOverflow(page);
             await capture('01f-profile');
         }

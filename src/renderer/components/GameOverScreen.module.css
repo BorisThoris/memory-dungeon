@@ -49,8 +49,8 @@
     z-index: 1;
     flex: 1 1 auto;
     min-height: 0;
-    overflow-x: hidden;
-    overflow-y: auto;
+    /* No scrollbar: the layout fits the viewport and long lists clamp. */
+    overflow: hidden;
     overscroll-behavior: contain;
     -webkit-overflow-scrolling: touch;
     display: flex;
@@ -494,7 +494,7 @@
 
 @media (max-width: 430px) {
     .summaryGrid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     .actionButtons {
@@ -548,4 +548,58 @@
 .wishlistLink:focus-visible {
     background: color-mix(in srgb, var(--theme-gold-bright) 14%, transparent);
     outline: none;
+}
+
+/* The run-loop rows clamp instead of growing the page. */
+.nextRunCard p {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+}
+
+.nextRunGrid {
+    min-height: 0;
+    overflow: hidden;
+}
+
+@media (max-height: 820px) {
+    .nextRunGrid > *:nth-child(n + 4) {
+        display: none;
+    }
+}
+
+@media (max-width: 560px) {
+    .layout {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0.5rem;
+    }
+
+    /* Phones show the two rows that change what the player does next; the rest is the archive. */
+    .nextRunGrid > *:nth-child(n + 3) {
+        display: none;
+    }
+
+    .heroPanel,
+    .actionPanel {
+        padding: 0.7rem 0.8rem;
+    }
+
+    /* The archive panels are the desktop read; a phone shows the score and the next move. */
+    .note,
+    .achievementPanel,
+    .detailsPanel {
+        display: none;
+    }
+
+    .summaryGrid {
+        gap: 0.35rem;
+    }
+}
+
+/* Short screens: the hero keeps the score and the actions; the ledger waits for the desktop. */
+@media (max-height: 860px) {
+    .nextRunCard p {
+        -webkit-line-clamp: 1;
+    }
 }

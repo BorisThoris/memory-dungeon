@@ -87,7 +87,7 @@
         0 12px 32px rgba(0, 0, 0, 0.34),
         0 0 24px color-mix(in srgb, var(--theme-ember, #f08a5d) 20%, transparent);
     color: var(--theme-text, #f5ead4);
-    font-size: clamp(0.72rem, 1.5vmin, 0.86rem);
+    font-size: clamp(0.75rem, 1.5vmin, 0.86rem);
     font-weight: 720;
     line-height: 1.25;
     pointer-events: none;
@@ -138,7 +138,7 @@
 .trapResolutionSignals small {
     overflow: hidden;
     color: color-mix(in srgb, var(--theme-text-muted, #dccfad) 84%, white);
-    font-size: 0.48rem;
+    font-size: 0.75rem;
     font-weight: 900;
     line-height: 1;
     text-overflow: ellipsis;
@@ -149,7 +149,7 @@
 .trapResolutionSignals b {
     overflow: hidden;
     color: color-mix(in srgb, var(--theme-text, #f5ead4) 88%, white);
-    font-size: 0.58rem;
+    font-size: 0.75rem;
     font-weight: 900;
     letter-spacing: 0;
     line-height: 1.05;
@@ -555,7 +555,7 @@ block board gestures so pan/zoom does not fight the deal. */
     border: 1px solid var(--theme-border-strong);
     background: var(--theme-panel-solid);
     color: var(--theme-text);
-    font-size: 0.68rem;
+    font-size: 0.75rem;
     font-weight: 600;
     letter-spacing: 0.04em;
     text-transform: uppercase;
@@ -888,7 +888,7 @@ block board gestures so pan/zoom does not fight the deal. */
         linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 12%, transparent), color-mix(in srgb, var(--theme-gold-bright) 8%, transparent)),
         color-mix(in srgb, var(--theme-void) 42%, transparent);
     color: color-mix(in srgb, var(--theme-cyan-bright) 88%, white);
-    font-size: 0.54rem;
+    font-size: 0.75rem;
     font-weight: 940;
     line-height: 1;
     text-transform: uppercase;
@@ -906,13 +906,13 @@ block board gestures so pan/zoom does not fight the deal. */
 
 .opportunityLaneMapSummary small {
     color: color-mix(in srgb, var(--theme-text-muted) 88%, white);
-    font-size: 0.48rem;
+    font-size: 0.75rem;
     font-weight: 920;
 }
 
 .opportunityLaneMapSummary b {
     color: currentColor;
-    font-size: 0.56rem;
+    font-size: 0.75rem;
     font-weight: 980;
 }
 
@@ -1037,7 +1037,7 @@ block board gestures so pan/zoom does not fight the deal. */
 
 .opportunityLaneMap small {
     color: color-mix(in srgb, var(--theme-text-muted) 92%, white);
-    font-size: 0.48rem;
+    font-size: 0.75rem;
     font-weight: 950;
     text-transform: uppercase;
 }
@@ -1050,20 +1050,20 @@ block board gestures so pan/zoom does not fight the deal. */
     border-radius: 50%;
     background: color-mix(in srgb, var(--theme-text) 13%, transparent);
     color: color-mix(in srgb, var(--theme-text) 96%, white);
-    font-size: 0.58rem;
+    font-size: 0.75rem;
     font-weight: 980;
 }
 
 .opportunityLaneMap strong {
     color: color-mix(in srgb, var(--theme-text) 94%, white);
-    font-size: 0.52rem;
+    font-size: 0.75rem;
     font-weight: 940;
 }
 
 .opportunityLaneMap em {
     grid-column: 1 / -1;
     color: color-mix(in srgb, var(--theme-cyan-bright) 82%, white);
-    font-size: 0.5rem;
+    font-size: 0.75rem;
     font-style: normal;
     font-weight: 900;
     text-transform: uppercase;
@@ -1246,7 +1246,7 @@ block board gestures so pan/zoom does not fight the deal. */
 
 .traitPreviewSummary strong {
     color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
-    font-size: 0.46rem;
+    font-size: 0.75rem;
     font-weight: 940;
     text-transform: uppercase;
     white-space: nowrap;
@@ -1290,21 +1290,21 @@ block board gestures so pan/zoom does not fight the deal. */
 
 .traitPreviewSummary small {
     color: color-mix(in srgb, var(--theme-text-muted) 88%, white);
-    font-size: 0.46rem;
+    font-size: 0.75rem;
     font-weight: 920;
     text-transform: uppercase;
 }
 
 .traitPreviewSummary b {
     color: color-mix(in srgb, var(--theme-border-cyan) 84%, white);
-    font-size: 0.56rem;
+    font-size: 0.75rem;
     font-weight: 950;
     text-transform: uppercase;
 }
 
 .traitPreviewSummary em {
     color: color-mix(in srgb, var(--theme-text-muted) 86%, white);
-    font-size: 0.48rem;
+    font-size: 0.75rem;
     font-style: normal;
     font-weight: 820;
     text-transform: uppercase;
@@ -1378,7 +1378,7 @@ block board gestures so pan/zoom does not fight the deal. */
 
 .traitPreviewEyebrow {
     color: color-mix(in srgb, var(--theme-text-muted) 88%, transparent);
-    font-size: 0.62rem;
+    font-size: 0.75rem;
     font-weight: 740;
     line-height: 1;
     text-transform: uppercase;
@@ -1392,7 +1392,7 @@ block board gestures so pan/zoom does not fight the deal. */
     border-radius: 999px;
     background: color-mix(in srgb, var(--theme-border-cyan) 10%, transparent);
     color: color-mix(in srgb, var(--theme-border-cyan) 82%, white);
-    font-size: 0.56rem;
+    font-size: 0.75rem;
     font-weight: 920;
     line-height: 1;
     text-transform: uppercase;
@@ -1474,7 +1474,7 @@ block board gestures so pan/zoom does not fight the deal. */
     border-radius: 999px;
     background: color-mix(in srgb, var(--theme-gold-bright) 10%, var(--theme-border-cyan) 7%);
     color: color-mix(in srgb, var(--theme-gold-bright) 84%, white);
-    font-size: 0.58rem;
+    font-size: 0.75rem;
     font-weight: 950;
     line-height: 1;
     overflow-wrap: anywhere;
@@ -1630,7 +1630,7 @@ block board gestures so pan/zoom does not fight the deal. */
         radial-gradient(circle at 20% 0%, color-mix(in srgb, var(--theme-gold-bright) 18%, transparent), transparent 68%),
         color-mix(in srgb, var(--theme-gold-bright) 12%, transparent);
     color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
-    font-size: 0.58rem;
+    font-size: 0.75rem;
     font-weight: 900;
     line-height: 1.08;
     overflow-wrap: anywhere;
@@ -1671,7 +1671,7 @@ block board gestures so pan/zoom does not fight the deal. */
     max-width: 100%;
     overflow-wrap: anywhere;
     color: var(--theme-text);
-    font-size: clamp(0.68rem, 1.35vmin, 0.78rem);
+    font-size: clamp(0.75rem, 1.35vmin, 0.78rem);
     font-weight: 720;
     line-height: 1.2;
 }

@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2413,
-    "codeFileCount": 899,
-    "exportedSymbolCount": 3386,
+    "trackedFileCount": 2417,
+    "codeFileCount": 901,
+    "exportedSymbolCount": 3396,
     "contentItemCount": 57,
     "mechanicCount": 130,
     "stateFieldCount": 144,
-    "relationshipCount": 9868
+    "relationshipCount": 9866
   },
   "inventory": [
     {
@@ -3657,8 +3657,8 @@
     {
       "path": "e2e/navigation-flow.spec.ts",
       "category": "test",
-      "bytes": 5636,
-      "sha256": "4d9b1f0e2c14a57dd0b94ab0c78fd8f2db8254264555df1da606c92ca8f7f52c"
+      "bytes": 5620,
+      "sha256": "36146b133ee7518367119afa72ce0d6f665047a44f063013dd1706020c03ed35"
     },
     {
       "path": "e2e/overlay-smoke.spec.ts",
@@ -3681,8 +3681,8 @@
     {
       "path": "e2e/playable-path-navigation.spec.ts",
       "category": "test",
-      "bytes": 10715,
-      "sha256": "99e592b9c905999146efdca4de56ef3c91c5ecc071c0531d3adafbb3398f66d4"
+      "bytes": 10065,
+      "sha256": "714eff3551336706f2a34a31829e950bfdfdf931e030dba7302fc169333df6e3"
     },
     {
       "path": "e2e/playablePathHelpers.ts",
@@ -3849,8 +3849,8 @@
     {
       "path": "e2e/visualScenarioSteps.ts",
       "category": "test",
-      "bytes": 11708,
-      "sha256": "8400fcdde3a86980fb9b3eb0c24ec3ecbd5d66b99f2f705a5b12a19b56ea9eaf"
+      "bytes": 11709,
+      "sha256": "5c9e5f12707e1f3a5ec7f416ca276e450489dc9902eb07332513707929b144e9"
     },
     {
       "path": "e2e/visualScreenHelpers.ts",
@@ -7353,8 +7353,8 @@
     {
       "path": "src/renderer/components/ChooseYourPathScreen.module.css",
       "category": "source",
-      "bytes": 9388,
-      "sha256": "c383c9295316eeedae8a31b388d39d4d6d7ecdd24b318c67126647470cc718c6"
+      "bytes": 9893,
+      "sha256": "72d5c4290286513952d87762dc82a9330b31c744067710d6b0214172fb2d1eac"
     },
     {
       "path": "src/renderer/components/ChooseYourPathScreen.test.tsx",
@@ -7365,8 +7365,8 @@
     {
       "path": "src/renderer/components/ChooseYourPathScreen.tsx",
       "category": "source",
-      "bytes": 21623,
-      "sha256": "17416b1ea769435e70d72e25515f87b9aee700bd8a3f383dad37d87178286379"
+      "bytes": 21857,
+      "sha256": "3ad3c9185fce496fc868fba531867c5185a7ce4d7b723dd60869586308cc3252"
     },
     {
       "path": "src/renderer/components/chooseYourPathScreenModel.ts",
@@ -7377,20 +7377,20 @@
     {
       "path": "src/renderer/components/CodexScreen.module.css",
       "category": "source",
-      "bytes": 3606,
-      "sha256": "6d3ddcc04064f618f0d14872ea9ba4eac4d1d14162e3289869667f547ac4308a"
+      "bytes": 2066,
+      "sha256": "4a8631b7936ecb1aea7eb6967837422d7bde57b86df5100ab7bcc0455ed3c3ac"
     },
     {
       "path": "src/renderer/components/CodexScreen.test.tsx",
       "category": "test",
-      "bytes": 3645,
-      "sha256": "81c46c1f14b9bd31248dad8ba4a648abcdde05666d56c490d56872d21d5f80d4"
+      "bytes": 4503,
+      "sha256": "e7457b91b4239c04dd91f43f13f5382ff993e69e0ba3a3b030556eb99b0826a9"
     },
     {
       "path": "src/renderer/components/CodexScreen.tsx",
       "category": "source",
-      "bytes": 10341,
-      "sha256": "f5a72cf1027ee9b468eeeefede862766c33b92475198c9486741a73c3c4ef330"
+      "bytes": 8339,
+      "sha256": "b6fdad768394c0decb64e6d12f316b058d3fa5f584e26275ceb405d586abe829"
     },
     {
       "path": "src/renderer/components/codexScreenModel.test.ts",
@@ -7407,20 +7407,20 @@
     {
       "path": "src/renderer/components/CollectionScreen.module.css",
       "category": "source",
-      "bytes": 28879,
-      "sha256": "8b686c5a7e4e3a357adf80a798563cdf4274c85d313d0eb8a38e9a25a44920e3"
+      "bytes": 1763,
+      "sha256": "7ae4901759f5f3b76ea081fdf7f35040f28afa0aeb95dc51535ae3f10f54b21a"
     },
     {
       "path": "src/renderer/components/CollectionScreen.test.tsx",
       "category": "test",
-      "bytes": 23687,
-      "sha256": "af583ecfe5c9e8f7a0b4d791e3dec4370f5727afe2b65de3f57ff6342ba578fd"
+      "bytes": 4345,
+      "sha256": "9510eb8647037c31077310872bda7f8e37b9b032635c81ab564b19df3ce85b0b"
     },
     {
       "path": "src/renderer/components/CollectionScreen.tsx",
       "category": "source",
-      "bytes": 48590,
-      "sha256": "9be92f772febc660e8d1dd7e488a9f30d27543eda19b2bdfe009699b483b4273"
+      "bytes": 7702,
+      "sha256": "e5f07e38b711bfb9450c948d13051391a7623bb47e995c865237f9bb7b4a2b27"
     },
     {
       "path": "src/renderer/components/feedbackBeatPipCssCoverage.test.ts",
@@ -7431,8 +7431,8 @@
     {
       "path": "src/renderer/components/FloorClearDialog.module.css",
       "category": "source",
-      "bytes": 6599,
-      "sha256": "7668dc7899819997217ea3c0493058e1b14ec4c402a9f8ebf7f66eac3f5293e4"
+      "bytes": 6920,
+      "sha256": "c8d5e7400526632658a87a58b1766d4f733931b38f65ccbef974c072e9bac858"
     },
     {
       "path": "src/renderer/components/FloorClearDialog.test.tsx",
@@ -7449,8 +7449,8 @@
     {
       "path": "src/renderer/components/GameOverScreen.module.css",
       "category": "source",
-      "bytes": 11497,
-      "sha256": "2d73d8f5e6b55349befbfaf9a1a61a78df456edcd2896c1aff37e11eb7a95dd9"
+      "bytes": 12693,
+      "sha256": "9fbacac7cc03f3493f348069c67b23ce7a61548fe64e346e277b517b0fba9776"
     },
     {
       "path": "src/renderer/components/GameOverScreen.test.tsx",
@@ -7491,8 +7491,8 @@
     {
       "path": "src/renderer/components/GameScreen.module.css",
       "category": "source",
-      "bytes": 489849,
-      "sha256": "b4e7e526bc58042082ce35b6d33acb3d70ad81007f7f25948be825934ad10e3c"
+      "bytes": 489883,
+      "sha256": "bdec8e3248469e0311b0b38c7a7d0609ab9b6ce45a14dbe0b6c4d757d1775bec"
     },
     {
       "path": "src/renderer/components/GameScreen.test.tsx",
@@ -7527,8 +7527,8 @@
     {
       "path": "src/renderer/components/InventoryScreen.module.css",
       "category": "source",
-      "bytes": 3133,
-      "sha256": "7a2ecb46ce87c38e02fd2570f7f41af3c1d703a7646b0958a4a05d2670dea6bd"
+      "bytes": 3526,
+      "sha256": "a8bffc3fe01a30353026cc80930c98c471292dd3291775970ff254570da206f3"
     },
     {
       "path": "src/renderer/components/InventoryScreen.test.tsx",
@@ -7558,7 +7558,7 @@
       "path": "src/renderer/components/MainMenu.module.css",
       "category": "source",
       "bytes": 21713,
-      "sha256": "0a0d64c044fbfcf6bd75cd8a3f2ba1e1d2a140b819eb73f20b8dc068d20a3e1f"
+      "sha256": "f7d121bd0a3e92ddc89b9a93311581aeaa3ec64cf34691218e0e58566c89c3a5"
     },
     {
       "path": "src/renderer/components/MainMenu.test.tsx",
@@ -7617,8 +7617,8 @@
     {
       "path": "src/renderer/components/MetaScreen.module.css",
       "category": "source",
-      "bytes": 10119,
-      "sha256": "7ecc716c0c1bb3b9fcd8f36884ef3dd8b8e867bbba340bd0dae195d0c30064d1"
+      "bytes": 10112,
+      "sha256": "8889f0fc8d53d16c56aa8a217c56fdb4bfb8194efc9ae2e87d9e97561787a017"
     },
     {
       "path": "src/renderer/components/metaScreenTocNav.test.ts",
@@ -7647,8 +7647,8 @@
     {
       "path": "src/renderer/components/OverlayModal.module.css",
       "category": "source",
-      "bytes": 14061,
-      "sha256": "2ca83bfccd374b274374ec9016ee4077d1a567583a918df1cf77a8bb3d440223"
+      "bytes": 14130,
+      "sha256": "3bd092648af59b847150dbdb2dfd7be85a4881c15547db1b177ec5772fd03714"
     },
     {
       "path": "src/renderer/components/OverlayModal.test.tsx",
@@ -7677,26 +7677,26 @@
     {
       "path": "src/renderer/components/ProfileScreen.module.css",
       "category": "source",
-      "bytes": 25759,
-      "sha256": "8636e050c39887d18d15d4b8c86253cfb121104c970a7375e8756bf1e539e604"
+      "bytes": 2635,
+      "sha256": "3e499b535decf46fe8decfec9fe821e15d5d0672c63543b7b1f21fa236d5a3b6"
     },
     {
       "path": "src/renderer/components/ProfileScreen.test.tsx",
       "category": "test",
-      "bytes": 17238,
-      "sha256": "eea0b90d6c42392ac5e457313ecc3dd68ff074575564c31cce089ebf5bd4a81a"
+      "bytes": 4225,
+      "sha256": "60bf0a054d95b4913dadc9ed75c2583a437bf063135f3c2a3e5c8b4c8c0c84d4"
     },
     {
       "path": "src/renderer/components/ProfileScreen.tsx",
       "category": "source",
-      "bytes": 26768,
-      "sha256": "902695dd22d7c5f8a9a825ad8db587c206f5de9fe72f5254b7136caed7b2c10f"
+      "bytes": 4643,
+      "sha256": "f3454581e93396a8b513363c82af7268bac22f5ff3eed3a9bfe90ded2c7300fc"
     },
     {
       "path": "src/renderer/components/RelicDraftOffer.module.css",
       "category": "source",
-      "bytes": 4562,
-      "sha256": "8f6d1bd839ff523e516cd859a6dc7397c067d820617d28cc4c7cbe916fe0347a"
+      "bytes": 4947,
+      "sha256": "b8bdcb93f60004e7018c24b2ce42c1207791aee969ecef238d06e7082388ce37"
     },
     {
       "path": "src/renderer/components/RelicDraftOfferPanel.test.tsx",
@@ -7749,8 +7749,8 @@
     {
       "path": "src/renderer/components/SettingsScreen.module.css",
       "category": "source",
-      "bytes": 30791,
-      "sha256": "1545093e0bfe864f4d402cd600fe74249d2b1a93cb269ca72c40b7579a8e9e1a"
+      "bytes": 30792,
+      "sha256": "fc620af743aec5887b21daea862f51acd5a11a6e2b78c10e1dd0529f224b2f9c"
     },
     {
       "path": "src/renderer/components/SettingsScreen.test.tsx",
@@ -7767,8 +7767,8 @@
     {
       "path": "src/renderer/components/ShopScreen.module.css",
       "category": "source",
-      "bytes": 6452,
-      "sha256": "d65c72358ecf17573c905b16c3042e9f4902549cb962cfd3c1a48630aa60c4d2"
+      "bytes": 6843,
+      "sha256": "efdab46c8d935f4a9dfb5f066fe51aeef663df2782900fd2c29c0e138e7bee90"
     },
     {
       "path": "src/renderer/components/ShopScreen.test.tsx",
@@ -7797,8 +7797,8 @@
     {
       "path": "src/renderer/components/SideRoomScreen.module.css",
       "category": "source",
-      "bytes": 4966,
-      "sha256": "765ae481fc9f88db005957b0ab9206f3c98b647e4aa200b8e7a728a1ba21f785"
+      "bytes": 5606,
+      "sha256": "2ff6d9be01988f5b531828eaf4faba65ae252ab3c3ae2410f76e4a929684a2aa"
     },
     {
       "path": "src/renderer/components/SideRoomScreen.test.tsx",
@@ -7869,8 +7869,8 @@
     {
       "path": "src/renderer/components/TileBoard.module.css",
       "category": "source",
-      "bytes": 74095,
-      "sha256": "0533cdd75b26fb08a938f2d62bc6934288fc874d1cd3408274e3e06fa3cfc013"
+      "bytes": 74096,
+      "sha256": "470aaf4a80b84fe5da1005ce8d9ffa22b29759b84914559ee4237e9ce9f3917c"
     },
     {
       "path": "src/renderer/components/TileBoard.test.tsx",
@@ -8859,8 +8859,8 @@
     {
       "path": "src/renderer/dev/BlueprintExplorer.module.css",
       "category": "source",
-      "bytes": 3422,
-      "sha256": "156c72b52519cbec3a5c4cb61388f0a475c987c8a5a64c969d50ff931fbd7718"
+      "bytes": 3424,
+      "sha256": "99dd2d3e2c0a9f71acf23719d37e0f8643f6a9d3889cd94772f8d135989fd164"
     },
     {
       "path": "src/renderer/dev/BlueprintExplorer.tsx",
@@ -9640,7 +9640,7 @@
       "path": "src/renderer/styles/notificationsGame.css",
       "category": "source",
       "bytes": 4797,
-      "sha256": "bba6b33c46b404e892b3b4a87dbd0d5816304a1db209df9a73da2d34f7d4474e"
+      "sha256": "8b56d89d03bbdfd9cc00761b686bbdab186dc2a16adb523da96b86da4b394c5a"
     },
     {
       "path": "src/renderer/styles/theme.parity.test.ts",
@@ -9699,8 +9699,8 @@
     {
       "path": "src/renderer/ui/FittedGrid.tsx",
       "category": "source",
-      "bytes": 5245,
-      "sha256": "a87a25dce6adb09b13c20c78805856d8a7ae09059241257b86fa312db1030385"
+      "bytes": 5849,
+      "sha256": "45b639b973e8604a7d82234700a6984fea31898eba9336de11c78fa0f601b578"
     },
     {
       "path": "src/renderer/ui/gameplayIcons.tsx",
@@ -9711,8 +9711,8 @@
     {
       "path": "src/renderer/ui/index.ts",
       "category": "source",
-      "bytes": 1220,
-      "sha256": "26c986a2a242114800805d6ed6b083cab80dc17e765a9d8024eaf68c73ebb487"
+      "bytes": 1453,
+      "sha256": "cfc53a7867728f9b8d94b120c0316eaaa1b5ce8e15e955dbfb30d8233e75af15"
     },
     {
       "path": "src/renderer/ui/MetaFrame.module.css",
@@ -9731,6 +9731,18 @@
       "category": "source",
       "bytes": 782,
       "sha256": "2cd3775639670907c366b2a5a260e605ce0ddf13891735bd49e36d4e49e33ec9"
+    },
+    {
+      "path": "src/renderer/ui/MetaShell.module.css",
+      "category": "source",
+      "bytes": 1647,
+      "sha256": "fe2f1c93cb0788666ea310fb6ae65cdcb9653dfc3efbc017284b2b4d8b3cd215"
+    },
+    {
+      "path": "src/renderer/ui/MetaShell.tsx",
+      "category": "source",
+      "bytes": 2367,
+      "sha256": "55cafde6dff6a41ecf595ec43ba5c17484469d48a3c85046b0731f30fac9810b"
     },
     {
       "path": "src/renderer/ui/OverlayActionDock.module.css",
@@ -9769,10 +9781,22 @@
       "sha256": "f17f8d4ee229348fb5367c7b5b36bc8beb149820a58e48243271b9fcf5ecf6d8"
     },
     {
+      "path": "src/renderer/ui/SectionRail.module.css",
+      "category": "source",
+      "bytes": 2536,
+      "sha256": "2c8a4f3f53148dd38f26bc1d6ded24b28d7e46460debaf73468fa61d1d437c8e"
+    },
+    {
+      "path": "src/renderer/ui/SectionRail.tsx",
+      "category": "source",
+      "bytes": 2401,
+      "sha256": "58aa3978991b725071b4c671c1ea5a44088449b8e3a1ba9315c554e4aabe452e"
+    },
+    {
       "path": "src/renderer/ui/StatTile.module.css",
       "category": "source",
       "bytes": 2149,
-      "sha256": "d339430fca06e68017bf67aa59abdd050244a86c5e9ab1bc87b5233968da803a"
+      "sha256": "eef375366fabeef3a11eeb230bac94c811190047726e08ce6588c48e7b5813b0"
     },
     {
       "path": "src/renderer/ui/StatTile.tsx",
@@ -9795,8 +9819,8 @@
     {
       "path": "src/renderer/ui/UiButton.module.css",
       "category": "source",
-      "bytes": 6167,
-      "sha256": "a0bcaa42509793176eff70fa107d2b1fe83e7ed6b4a81b21ad5c2f60fa851a27"
+      "bytes": 6168,
+      "sha256": "0c8a46009e3a5b9253e4b38374ed7772fe2e8be195c26e340a11138c2221d54b"
     },
     {
       "path": "src/renderer/ui/UiButton.tsx",
@@ -9807,8 +9831,8 @@
     {
       "path": "src/renderer/viewportMatrix.ts",
       "category": "source",
-      "bytes": 11241,
-      "sha256": "8f085db46c421794668bdee49ec71ab3630c383016c0675741f0ac0ee5035bdb"
+      "bytes": 11234,
+      "sha256": "2b71a3f9250cfbd26ec7f744923a7a37784cbfacd9eaf44e822324514e110bf3"
     },
     {
       "path": "src/shared/__snapshots__/mechanics-catalog-appendix-builder.test.ts.snap",
@@ -16346,7 +16370,7 @@
       "path": "src/renderer/components/ChooseYourPathScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 495,
+      "lineCount": 500,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/assets/ui/modeArt.ts",
@@ -16387,7 +16411,7 @@
       "path": "src/renderer/components/CodexScreen.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 88,
+      "lineCount": 100,
       "imports": [
         "file:src/renderer/components/CodexScreen.tsx",
         "file:src/shared/save-data.ts"
@@ -16400,11 +16424,10 @@
       "path": "src/renderer/components/CodexScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 227,
+      "lineCount": 188,
       "imports": [
         "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/components/codexScreenModel.ts",
-        "file:src/renderer/components/metaStackedShellLayout.ts",
         "file:src/renderer/store/useAppStore.ts",
         "file:src/renderer/ui/index.ts",
         "file:src/shared/content-lock-state.ts",
@@ -16465,7 +16488,7 @@
       "path": "src/renderer/components/CollectionScreen.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 414,
+      "lineCount": 112,
       "imports": [
         "file:src/renderer/components/CollectionScreen.tsx",
         "file:src/shared/contracts.ts",
@@ -16479,24 +16502,17 @@
       "path": "src/renderer/components/CollectionScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 754,
+      "lineCount": 169,
       "imports": [
         "file:src/renderer/audio/uiSfx.ts",
-        "file:src/renderer/components/metaScreenTocNav.ts",
-        "file:src/renderer/copy/runPayoffSignals.ts",
         "file:src/renderer/store/useAppStore.ts",
         "file:src/renderer/ui/index.ts",
         "file:src/shared/achievements.ts",
-        "file:src/shared/collection-reward-gallery.ts",
         "file:src/shared/cosmetics.ts",
-        "file:src/shared/daily-archive.ts",
         "file:src/shared/game-catalog.ts",
         "file:src/shared/honorUnlocks.ts",
         "file:src/shared/meta-progression.ts",
-        "file:src/shared/meta-reward-signals.ts",
-        "file:src/shared/run-number-guards.ts",
-        "file:src/shared/save-data.ts",
-        "file:src/shared/tile-symbol-catalog.ts"
+        "file:src/shared/save-data.ts"
       ],
       "exports": [
         "symbol:src/renderer/components/CollectionScreen.tsx#default"
@@ -17167,7 +17183,7 @@
       "path": "src/renderer/components/ProfileScreen.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 307,
+      "lineCount": 101,
       "imports": [
         "file:src/renderer/components/ProfileScreen.tsx",
         "file:src/shared/contracts.ts",
@@ -17181,24 +17197,15 @@
       "path": "src/renderer/components/ProfileScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 437,
+      "lineCount": 101,
       "imports": [
-        "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/uiSfx.ts",
-        "file:src/renderer/copy/runPayoffSignals.ts",
         "file:src/renderer/store/useAppStore.ts",
         "file:src/renderer/ui/index.ts",
-        "file:src/shared/cosmetics.ts",
-        "file:src/shared/daily-archive.ts",
-        "file:src/shared/game-catalog.ts",
         "file:src/shared/honorUnlocks.ts",
         "file:src/shared/meta-progression.ts",
-        "file:src/shared/meta-reward-signals.ts",
         "file:src/shared/objective-board.ts",
-        "file:src/shared/profile-summary.ts",
-        "file:src/shared/run-number-guards.ts",
-        "file:src/shared/save-data.ts",
-        "file:src/shared/utc-countdown.ts"
+        "file:src/shared/profile-summary.ts"
       ],
       "exports": [
         "symbol:src/renderer/components/ProfileScreen.tsx#default"
@@ -22890,7 +22897,7 @@
       "path": "src/renderer/ui/FittedGrid.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 139,
+      "lineCount": 149,
       "imports": [],
       "exports": [
         "symbol:src/renderer/ui/FittedGrid.tsx#default",
@@ -22926,16 +22933,18 @@
       "path": "src/renderer/ui/index.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 30,
+      "lineCount": 34,
       "imports": [
         "file:src/renderer/ui/AccentBanner.tsx",
         "file:src/renderer/ui/Eyebrow.tsx",
         "file:src/renderer/ui/FittedGrid.tsx",
         "file:src/renderer/ui/gameplayIcons.tsx",
         "file:src/renderer/ui/MetaFrame.tsx",
+        "file:src/renderer/ui/MetaShell.tsx",
         "file:src/renderer/ui/OverlayActionDock.tsx",
         "file:src/renderer/ui/Panel.tsx",
         "file:src/renderer/ui/ScreenTitle.tsx",
+        "file:src/renderer/ui/SectionRail.tsx",
         "file:src/renderer/ui/StatTile.tsx",
         "file:src/renderer/ui/UiButton.tsx"
       ],
@@ -22959,6 +22968,8 @@
         "symbol:src/renderer/ui/index.ts#MetaFrame",
         "symbol:src/renderer/ui/index.ts#MetaFrameProps",
         "symbol:src/renderer/ui/index.ts#MetaFrameTag",
+        "symbol:src/renderer/ui/index.ts#MetaShell",
+        "symbol:src/renderer/ui/index.ts#MetaShellProps",
         "symbol:src/renderer/ui/index.ts#OverlayAction",
         "symbol:src/renderer/ui/index.ts#OverlayActionDock",
         "symbol:src/renderer/ui/index.ts#OverlayActionPlacement",
@@ -22967,6 +22978,9 @@
         "symbol:src/renderer/ui/index.ts#ScreenTitle",
         "symbol:src/renderer/ui/index.ts#ScreenTitleRole",
         "symbol:src/renderer/ui/index.ts#ScreenTitleTag",
+        "symbol:src/renderer/ui/index.ts#SectionRail",
+        "symbol:src/renderer/ui/index.ts#SectionRailOption",
+        "symbol:src/renderer/ui/index.ts#SectionRailProps",
         "symbol:src/renderer/ui/index.ts#StatTile",
         "symbol:src/renderer/ui/index.ts#UiButton",
         "symbol:src/renderer/ui/index.ts#UiButtonProps",
@@ -22986,6 +23000,23 @@
         "symbol:src/renderer/ui/MetaFrame.tsx#default",
         "symbol:src/renderer/ui/MetaFrame.tsx#MetaFrameProps",
         "symbol:src/renderer/ui/MetaFrame.tsx#MetaFrameTag"
+      ],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/ui/MetaShell.tsx",
+      "path": "src/renderer/ui/MetaShell.tsx",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 74,
+      "imports": [
+        "file:src/renderer/ui/Eyebrow.tsx",
+        "file:src/renderer/ui/ScreenTitle.tsx",
+        "file:src/renderer/ui/UiButton.tsx"
+      ],
+      "exports": [
+        "symbol:src/renderer/ui/MetaShell.tsx#default",
+        "symbol:src/renderer/ui/MetaShell.tsx#MetaShellProps"
       ],
       "testedBy": []
     },
@@ -23031,6 +23062,20 @@
         "symbol:src/renderer/ui/ScreenTitle.tsx#default",
         "symbol:src/renderer/ui/ScreenTitle.tsx#ScreenTitleRole",
         "symbol:src/renderer/ui/ScreenTitle.tsx#ScreenTitleTag"
+      ],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/ui/SectionRail.tsx",
+      "path": "src/renderer/ui/SectionRail.tsx",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 68,
+      "imports": [],
+      "exports": [
+        "symbol:src/renderer/ui/SectionRail.tsx#default",
+        "symbol:src/renderer/ui/SectionRail.tsx#SectionRailOption",
+        "symbol:src/renderer/ui/SectionRail.tsx#SectionRailProps"
       ],
       "testedBy": []
     },
@@ -34671,8 +34716,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/ChooseYourPathScreen.tsx",
-      "line": 494,
-      "endLine": 494
+      "line": 499,
+      "endLine": 499
     },
     {
       "id": "symbol:src/renderer/components/chooseYourPathScreenModel.ts#buildMeditationPickMutatorRows",
@@ -34687,8 +34732,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/CodexScreen.tsx",
-      "line": 226,
-      "endLine": 226
+      "line": 187,
+      "endLine": 187
     },
     {
       "id": "symbol:src/renderer/components/codexScreenModel.ts#buildCodexBuildRows",
@@ -34775,8 +34820,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/CollectionScreen.tsx",
-      "line": 753,
-      "endLine": 753
+      "line": 168,
+      "endLine": 168
     },
     {
       "id": "symbol:src/renderer/components/FloorClearDialog.tsx#default",
@@ -35167,8 +35212,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/ProfileScreen.tsx",
-      "line": 436,
-      "endLine": 436
+      "line": 100,
+      "endLine": 100
     },
     {
       "id": "symbol:src/renderer/components/RelicDraftOfferPanel.tsx#default",
@@ -41359,8 +41404,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/ui/FittedGrid.tsx",
-      "line": 138,
-      "endLine": 138
+      "line": 148,
+      "endLine": 148
     },
     {
       "id": "symbol:src/renderer/ui/FittedGrid.tsx#FittedGridProps",
@@ -41495,104 +41540,104 @@
       "name": "FittedGridProps",
       "kind": "ExportSpecifier",
       "file": "src/renderer/ui/index.ts",
-      "line": 13,
-      "endLine": 13
+      "line": 17,
+      "endLine": 17
     },
     {
       "id": "symbol:src/renderer/ui/index.ts#GameplayDestroyIcon",
       "name": "GameplayDestroyIcon",
       "kind": "ExportSpecifier",
       "file": "src/renderer/ui/index.ts",
-      "line": 17,
-      "endLine": 17
+      "line": 21,
+      "endLine": 21
     },
     {
       "id": "symbol:src/renderer/ui/index.ts#GameplayFitBoardIcon",
       "name": "GameplayFitBoardIcon",
       "kind": "ExportSpecifier",
       "file": "src/renderer/ui/index.ts",
-      "line": 18,
-      "endLine": 18
+      "line": 22,
+      "endLine": 22
     },
     {
       "id": "symbol:src/renderer/ui/index.ts#GameplayIconProps",
       "name": "GameplayIconProps",
       "kind": "ExportSpecifier",
       "file": "src/renderer/ui/index.ts",
-      "line": 29,
-      "endLine": 29
+      "line": 33,
+      "endLine": 33
     },
     {
       "id": "symbol:src/renderer/ui/index.ts#GameplayMenuIcon",
       "name": "GameplayMenuIcon",
       "kind": "ExportSpecifier",
       "file": "src/renderer/ui/index.ts",
-      "line": 19,
-      "endLine": 19
+      "line": 23,
+      "endLine": 23
     },
     {
       "id": "symbol:src/renderer/ui/index.ts#GameplayPauseIcon",
       "name": "GameplayPauseIcon",
       "kind": "ExportSpecifier",
       "file": "src/renderer/ui/index.ts",
-      "line": 23,
-      "endLine": 23
+      "line": 27,
+      "endLine": 27
     },
     {
       "id": "symbol:src/renderer/ui/index.ts#GameplayPeekIcon",
       "name": "GameplayPeekIcon",
       "kind": "ExportSpecifier",
       "file": "src/renderer/ui/index.ts",
-      "line": 20,
-      "endLine": 20
+      "line": 24,
+      "endLine": 24
     },
     {
       "id": "symbol:src/renderer/ui/index.ts#GameplayPinIcon",
       "name": "GameplayPinIcon",
       "kind": "ExportSpecifier",
       "file": "src/renderer/ui/index.ts",
-      "line": 21,
-      "endLine": 21
+      "line": 25,
+      "endLine": 25
     },
     {
       "id": "symbol:src/renderer/ui/index.ts#GameplayPlayIcon",
       "name": "GameplayPlayIcon",
       "kind": "ExportSpecifier",
       "file": "src/renderer/ui/index.ts",
-      "line": 22,
-      "endLine": 22
+      "line": 26,
+      "endLine": 26
     },
     {
       "id": "symbol:src/renderer/ui/index.ts#GameplaySettingsIcon",
       "name": "GameplaySettingsIcon",
       "kind": "ExportSpecifier",
       "file": "src/renderer/ui/index.ts",
-      "line": 24,
-      "endLine": 24
+      "line": 28,
+      "endLine": 28
     },
     {
       "id": "symbol:src/renderer/ui/index.ts#GameplayShuffleIcon",
       "name": "GameplayShuffleIcon",
       "kind": "ExportSpecifier",
       "file": "src/renderer/ui/index.ts",
-      "line": 25,
-      "endLine": 25
+      "line": 29,
+      "endLine": 29
     },
     {
       "id": "symbol:src/renderer/ui/index.ts#GameplayStrayIcon",
       "name": "GameplayStrayIcon",
       "kind": "ExportSpecifier",
       "file": "src/renderer/ui/index.ts",
-      "line": 26,
-      "endLine": 26
+      "line": 30,
+      "endLine": 30
     },
     {
       "id": "symbol:src/renderer/ui/index.ts#GameplayUndoIcon",
       "name": "GameplayUndoIcon",
       "kind": "ExportSpecifier",
       "file": "src/renderer/ui/index.ts",
-      "line": 27,
-      "endLine": 27
+      "line": 31,
+      "endLine": 31
     },
     {
       "id": "symbol:src/renderer/ui/index.ts#MetaFrame",
@@ -41619,28 +41664,44 @@
       "endLine": 4
     },
     {
+      "id": "symbol:src/renderer/ui/index.ts#MetaShell",
+      "name": "MetaShell",
+      "kind": "ExportSpecifier",
+      "file": "src/renderer/ui/index.ts",
+      "line": 13,
+      "endLine": 13
+    },
+    {
+      "id": "symbol:src/renderer/ui/index.ts#MetaShellProps",
+      "name": "MetaShellProps",
+      "kind": "ExportSpecifier",
+      "file": "src/renderer/ui/index.ts",
+      "line": 16,
+      "endLine": 16
+    },
+    {
       "id": "symbol:src/renderer/ui/index.ts#OverlayAction",
       "name": "OverlayAction",
       "kind": "ExportSpecifier",
       "file": "src/renderer/ui/index.ts",
-      "line": 15,
-      "endLine": 15
+      "line": 19,
+      "endLine": 19
     },
     {
       "id": "symbol:src/renderer/ui/index.ts#OverlayActionDock",
       "name": "OverlayActionDock",
       "kind": "ExportSpecifier",
       "file": "src/renderer/ui/index.ts",
-      "line": 14,
-      "endLine": 14
+      "line": 18,
+      "endLine": 18
     },
     {
       "id": "symbol:src/renderer/ui/index.ts#OverlayActionPlacement",
       "name": "OverlayActionPlacement",
       "kind": "ExportSpecifier",
       "file": "src/renderer/ui/index.ts",
-      "line": 15,
-      "endLine": 15
+      "line": 19,
+      "endLine": 19
     },
     {
       "id": "symbol:src/renderer/ui/index.ts#Panel",
@@ -41681,6 +41742,30 @@
       "file": "src/renderer/ui/index.ts",
       "line": 8,
       "endLine": 8
+    },
+    {
+      "id": "symbol:src/renderer/ui/index.ts#SectionRail",
+      "name": "SectionRail",
+      "kind": "ExportSpecifier",
+      "file": "src/renderer/ui/index.ts",
+      "line": 14,
+      "endLine": 14
+    },
+    {
+      "id": "symbol:src/renderer/ui/index.ts#SectionRailOption",
+      "name": "SectionRailOption",
+      "kind": "ExportSpecifier",
+      "file": "src/renderer/ui/index.ts",
+      "line": 15,
+      "endLine": 15
+    },
+    {
+      "id": "symbol:src/renderer/ui/index.ts#SectionRailProps",
+      "name": "SectionRailProps",
+      "kind": "ExportSpecifier",
+      "file": "src/renderer/ui/index.ts",
+      "line": 15,
+      "endLine": 15
     },
     {
       "id": "symbol:src/renderer/ui/index.ts#StatTile",
@@ -41745,6 +41830,22 @@
       "file": "src/renderer/ui/MetaFrame.tsx",
       "line": 16,
       "endLine": 16
+    },
+    {
+      "id": "symbol:src/renderer/ui/MetaShell.tsx#default",
+      "name": "default",
+      "kind": "ExportAssignment",
+      "file": "src/renderer/ui/MetaShell.tsx",
+      "line": 73,
+      "endLine": 73
+    },
+    {
+      "id": "symbol:src/renderer/ui/MetaShell.tsx#MetaShellProps",
+      "name": "MetaShellProps",
+      "kind": "interface",
+      "file": "src/renderer/ui/MetaShell.tsx",
+      "line": 13,
+      "endLine": 31
     },
     {
       "id": "symbol:src/renderer/ui/OverlayActionDock.tsx#default",
@@ -41825,6 +41926,30 @@
       "file": "src/renderer/ui/ScreenTitle.tsx",
       "line": 16,
       "endLine": 16
+    },
+    {
+      "id": "symbol:src/renderer/ui/SectionRail.tsx#default",
+      "name": "default",
+      "kind": "ExportAssignment",
+      "file": "src/renderer/ui/SectionRail.tsx",
+      "line": 67,
+      "endLine": 67
+    },
+    {
+      "id": "symbol:src/renderer/ui/SectionRail.tsx#SectionRailOption",
+      "name": "SectionRailOption",
+      "kind": "interface",
+      "file": "src/renderer/ui/SectionRail.tsx",
+      "line": 9,
+      "endLine": 14
+    },
+    {
+      "id": "symbol:src/renderer/ui/SectionRail.tsx#SectionRailProps",
+      "name": "SectionRailProps",
+      "kind": "interface",
+      "file": "src/renderer/ui/SectionRail.tsx",
+      "line": 16,
+      "endLine": 25
     },
     {
       "id": "symbol:src/renderer/ui/StatTile.tsx#default",
@@ -77864,6 +77989,18 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/ui/index.ts->symbol:src/renderer/ui/index.ts#MetaShell",
+      "source": "file:src/renderer/ui/index.ts",
+      "target": "symbol:src/renderer/ui/index.ts#MetaShell",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/ui/index.ts->symbol:src/renderer/ui/index.ts#MetaShellProps",
+      "source": "file:src/renderer/ui/index.ts",
+      "target": "symbol:src/renderer/ui/index.ts#MetaShellProps",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/ui/index.ts->symbol:src/renderer/ui/index.ts#OverlayAction",
       "source": "file:src/renderer/ui/index.ts",
       "target": "symbol:src/renderer/ui/index.ts#OverlayAction",
@@ -77912,6 +78049,24 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/ui/index.ts->symbol:src/renderer/ui/index.ts#SectionRail",
+      "source": "file:src/renderer/ui/index.ts",
+      "target": "symbol:src/renderer/ui/index.ts#SectionRail",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/ui/index.ts->symbol:src/renderer/ui/index.ts#SectionRailOption",
+      "source": "file:src/renderer/ui/index.ts",
+      "target": "symbol:src/renderer/ui/index.ts#SectionRailOption",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/ui/index.ts->symbol:src/renderer/ui/index.ts#SectionRailProps",
+      "source": "file:src/renderer/ui/index.ts",
+      "target": "symbol:src/renderer/ui/index.ts#SectionRailProps",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/ui/index.ts->symbol:src/renderer/ui/index.ts#StatTile",
       "source": "file:src/renderer/ui/index.ts",
       "target": "symbol:src/renderer/ui/index.ts#StatTile",
@@ -77957,6 +78112,18 @@
       "id": "exports:src/renderer/ui/MetaFrame.tsx->symbol:src/renderer/ui/MetaFrame.tsx#MetaFrameTag",
       "source": "file:src/renderer/ui/MetaFrame.tsx",
       "target": "symbol:src/renderer/ui/MetaFrame.tsx#MetaFrameTag",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/ui/MetaShell.tsx->symbol:src/renderer/ui/MetaShell.tsx#default",
+      "source": "file:src/renderer/ui/MetaShell.tsx",
+      "target": "symbol:src/renderer/ui/MetaShell.tsx#default",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/ui/MetaShell.tsx->symbol:src/renderer/ui/MetaShell.tsx#MetaShellProps",
+      "source": "file:src/renderer/ui/MetaShell.tsx",
+      "target": "symbol:src/renderer/ui/MetaShell.tsx#MetaShellProps",
       "kind": "exports"
     },
     {
@@ -78017,6 +78184,24 @@
       "id": "exports:src/renderer/ui/ScreenTitle.tsx->symbol:src/renderer/ui/ScreenTitle.tsx#ScreenTitleTag",
       "source": "file:src/renderer/ui/ScreenTitle.tsx",
       "target": "symbol:src/renderer/ui/ScreenTitle.tsx#ScreenTitleTag",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/ui/SectionRail.tsx->symbol:src/renderer/ui/SectionRail.tsx#default",
+      "source": "file:src/renderer/ui/SectionRail.tsx",
+      "target": "symbol:src/renderer/ui/SectionRail.tsx#default",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/ui/SectionRail.tsx->symbol:src/renderer/ui/SectionRail.tsx#SectionRailOption",
+      "source": "file:src/renderer/ui/SectionRail.tsx",
+      "target": "symbol:src/renderer/ui/SectionRail.tsx#SectionRailOption",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/ui/SectionRail.tsx->symbol:src/renderer/ui/SectionRail.tsx#SectionRailProps",
+      "source": "file:src/renderer/ui/SectionRail.tsx",
+      "target": "symbol:src/renderer/ui/SectionRail.tsx#SectionRailProps",
       "kind": "exports"
     },
     {
@@ -96264,12 +96449,6 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/CodexScreen.tsx->src/renderer/components/metaStackedShellLayout.ts",
-      "source": "file:src/renderer/components/CodexScreen.tsx",
-      "target": "file:src/renderer/components/metaStackedShellLayout.ts",
-      "kind": "imports"
-    },
-    {
       "id": "imports:src/renderer/components/CodexScreen.tsx->src/renderer/store/useAppStore.ts",
       "source": "file:src/renderer/components/CodexScreen.tsx",
       "target": "file:src/renderer/store/useAppStore.ts",
@@ -96366,18 +96545,6 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/CollectionScreen.tsx->src/renderer/components/metaScreenTocNav.ts",
-      "source": "file:src/renderer/components/CollectionScreen.tsx",
-      "target": "file:src/renderer/components/metaScreenTocNav.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/CollectionScreen.tsx->src/renderer/copy/runPayoffSignals.ts",
-      "source": "file:src/renderer/components/CollectionScreen.tsx",
-      "target": "file:src/renderer/copy/runPayoffSignals.ts",
-      "kind": "imports"
-    },
-    {
       "id": "imports:src/renderer/components/CollectionScreen.tsx->src/renderer/store/useAppStore.ts",
       "source": "file:src/renderer/components/CollectionScreen.tsx",
       "target": "file:src/renderer/store/useAppStore.ts",
@@ -96396,21 +96563,9 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/CollectionScreen.tsx->src/shared/collection-reward-gallery.ts",
-      "source": "file:src/renderer/components/CollectionScreen.tsx",
-      "target": "file:src/shared/collection-reward-gallery.ts",
-      "kind": "imports"
-    },
-    {
       "id": "imports:src/renderer/components/CollectionScreen.tsx->src/shared/cosmetics.ts",
       "source": "file:src/renderer/components/CollectionScreen.tsx",
       "target": "file:src/shared/cosmetics.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/CollectionScreen.tsx->src/shared/daily-archive.ts",
-      "source": "file:src/renderer/components/CollectionScreen.tsx",
-      "target": "file:src/shared/daily-archive.ts",
       "kind": "imports"
     },
     {
@@ -96432,27 +96587,9 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/CollectionScreen.tsx->src/shared/meta-reward-signals.ts",
-      "source": "file:src/renderer/components/CollectionScreen.tsx",
-      "target": "file:src/shared/meta-reward-signals.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/CollectionScreen.tsx->src/shared/run-number-guards.ts",
-      "source": "file:src/renderer/components/CollectionScreen.tsx",
-      "target": "file:src/shared/run-number-guards.ts",
-      "kind": "imports"
-    },
-    {
       "id": "imports:src/renderer/components/CollectionScreen.tsx->src/shared/save-data.ts",
       "source": "file:src/renderer/components/CollectionScreen.tsx",
       "target": "file:src/shared/save-data.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/CollectionScreen.tsx->src/shared/tile-symbol-catalog.ts",
-      "source": "file:src/renderer/components/CollectionScreen.tsx",
-      "target": "file:src/shared/tile-symbol-catalog.ts",
       "kind": "imports"
     },
     {
@@ -97542,21 +97679,9 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/ProfileScreen.tsx->src/renderer/assets/ui/index.ts",
-      "source": "file:src/renderer/components/ProfileScreen.tsx",
-      "target": "file:src/renderer/assets/ui/index.ts",
-      "kind": "imports"
-    },
-    {
       "id": "imports:src/renderer/components/ProfileScreen.tsx->src/renderer/audio/uiSfx.ts",
       "source": "file:src/renderer/components/ProfileScreen.tsx",
       "target": "file:src/renderer/audio/uiSfx.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/ProfileScreen.tsx->src/renderer/copy/runPayoffSignals.ts",
-      "source": "file:src/renderer/components/ProfileScreen.tsx",
-      "target": "file:src/renderer/copy/runPayoffSignals.ts",
       "kind": "imports"
     },
     {
@@ -97572,24 +97697,6 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/ProfileScreen.tsx->src/shared/cosmetics.ts",
-      "source": "file:src/renderer/components/ProfileScreen.tsx",
-      "target": "file:src/shared/cosmetics.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/ProfileScreen.tsx->src/shared/daily-archive.ts",
-      "source": "file:src/renderer/components/ProfileScreen.tsx",
-      "target": "file:src/shared/daily-archive.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/ProfileScreen.tsx->src/shared/game-catalog.ts",
-      "source": "file:src/renderer/components/ProfileScreen.tsx",
-      "target": "file:src/shared/game-catalog.ts",
-      "kind": "imports"
-    },
-    {
       "id": "imports:src/renderer/components/ProfileScreen.tsx->src/shared/honorUnlocks.ts",
       "source": "file:src/renderer/components/ProfileScreen.tsx",
       "target": "file:src/shared/honorUnlocks.ts",
@@ -97602,12 +97709,6 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/ProfileScreen.tsx->src/shared/meta-reward-signals.ts",
-      "source": "file:src/renderer/components/ProfileScreen.tsx",
-      "target": "file:src/shared/meta-reward-signals.ts",
-      "kind": "imports"
-    },
-    {
       "id": "imports:src/renderer/components/ProfileScreen.tsx->src/shared/objective-board.ts",
       "source": "file:src/renderer/components/ProfileScreen.tsx",
       "target": "file:src/shared/objective-board.ts",
@@ -97617,24 +97718,6 @@
       "id": "imports:src/renderer/components/ProfileScreen.tsx->src/shared/profile-summary.ts",
       "source": "file:src/renderer/components/ProfileScreen.tsx",
       "target": "file:src/shared/profile-summary.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/ProfileScreen.tsx->src/shared/run-number-guards.ts",
-      "source": "file:src/renderer/components/ProfileScreen.tsx",
-      "target": "file:src/shared/run-number-guards.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/ProfileScreen.tsx->src/shared/save-data.ts",
-      "source": "file:src/renderer/components/ProfileScreen.tsx",
-      "target": "file:src/shared/save-data.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/ProfileScreen.tsx->src/shared/utc-countdown.ts",
-      "source": "file:src/renderer/components/ProfileScreen.tsx",
-      "target": "file:src/shared/utc-countdown.ts",
       "kind": "imports"
     },
     {
@@ -103380,6 +103463,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/ui/index.ts->src/renderer/ui/MetaShell.tsx",
+      "source": "file:src/renderer/ui/index.ts",
+      "target": "file:src/renderer/ui/MetaShell.tsx",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/ui/index.ts->src/renderer/ui/OverlayActionDock.tsx",
       "source": "file:src/renderer/ui/index.ts",
       "target": "file:src/renderer/ui/OverlayActionDock.tsx",
@@ -103398,6 +103487,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/ui/index.ts->src/renderer/ui/SectionRail.tsx",
+      "source": "file:src/renderer/ui/index.ts",
+      "target": "file:src/renderer/ui/SectionRail.tsx",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/ui/index.ts->src/renderer/ui/StatTile.tsx",
       "source": "file:src/renderer/ui/index.ts",
       "target": "file:src/renderer/ui/StatTile.tsx",
@@ -103406,6 +103501,24 @@
     {
       "id": "imports:src/renderer/ui/index.ts->src/renderer/ui/UiButton.tsx",
       "source": "file:src/renderer/ui/index.ts",
+      "target": "file:src/renderer/ui/UiButton.tsx",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/ui/MetaShell.tsx->src/renderer/ui/Eyebrow.tsx",
+      "source": "file:src/renderer/ui/MetaShell.tsx",
+      "target": "file:src/renderer/ui/Eyebrow.tsx",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/ui/MetaShell.tsx->src/renderer/ui/ScreenTitle.tsx",
+      "source": "file:src/renderer/ui/MetaShell.tsx",
+      "target": "file:src/renderer/ui/ScreenTitle.tsx",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/ui/MetaShell.tsx->src/renderer/ui/UiButton.tsx",
+      "source": "file:src/renderer/ui/MetaShell.tsx",
       "target": "file:src/renderer/ui/UiButton.tsx",
       "kind": "imports"
     },

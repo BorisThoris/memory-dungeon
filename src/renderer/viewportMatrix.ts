@@ -138,7 +138,7 @@ export const RESPONSIVE_SCREEN_ROUTES: readonly ResponsiveScreenRoute[] = [
     {
         screen: 'collection',
         requiredViewportIds: ['phone_390x844', 'tablet_768x1024', 'desktop_1440x900'],
-        primaryActionSelector: '[data-testid="collection-reward-gallery"]',
+        primaryActionSelector: '[data-testid="collection-entries"]',
         rationale: 'Reward gallery and meta rows must collapse cleanly from desktop grids to phone stacks.',
         maxContentColumns: 3,
         mustAvoidHorizontalScroll: true

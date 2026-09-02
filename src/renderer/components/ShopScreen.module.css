@@ -100,7 +100,8 @@
 
 .stockGrid {
     min-height: 0;
-    overflow-y: auto;
+    overflow: hidden;
+    align-content: start;
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: clamp(0.58rem, 1vw, var(--theme-space-md));
@@ -247,5 +248,20 @@
 
     .footerActions .rerollButton {
         width: 100%;
+    }
+}
+
+/* Phones: two columns of shorter cards so the alcove fits without scrolling. */
+@media (max-width: 560px) {
+    .stockGrid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.4rem;
+    }
+
+    .stockCard p {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
     }
 }
