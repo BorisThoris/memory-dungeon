@@ -15,13 +15,31 @@ import {
 } from './content-lock';
 import { FULL_CONTENT_LOCK } from './content-lock-state';
 import { MUTATOR_IDS } from './contracts';
+import { getFloorArchetypeProgressionRows } from './floor-mutator-schedule';
 import { createNewRun } from './game-core';
-import { RELIC_POOL, rollRelicOptions } from './relics';
+import { RELIC_DRAFT, RELIC_POOL, rollRelicOptions } from './relics';
 import { RUN_MODE_CATALOG, getRunModeDefinition, runModesByGroup } from './run-mode-catalog';
 
 describe('content lock', () => {
     afterEach(() => {
         setActiveContentLock(FULL_CONTENT_LOCK);
+    });
+
+    it('keeps the written-out demo pools in step with the catalogs they came from', () => {
+        // content-lock.ts is a leaf module so the renderer entry cannot reorder the shared
+        // graph's import cycles; these assertions are what keeps the lists honest.
+        const common = RELIC_POOL.filter((id) => RELIC_DRAFT[id].rarity === 'common');
+        expect(getDemoRelicPool()).toEqual(expect.arrayContaining(common));
+        expect(getDemoRelicPool().every((id) => RELIC_POOL.includes(id))).toBe(true);
+
+        const actOne = new Set<string>();
+        for (const row of getFloorArchetypeProgressionRows()) {
+            if (row.cycleFloor <= 4) {
+                row.mutators.forEach((id) => actOne.add(id));
+            }
+        }
+        expect(new Set(getDemoMutatorPool())).toEqual(actOne);
+        expect(getDemoMutatorPool().every((id) => MUTATOR_IDS.includes(id))).toBe(true);
     });
 
     it('resolves the flavour from the environment and defaults to full', () => {

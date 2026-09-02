@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2409,
-    "codeFileCount": 898,
-    "exportedSymbolCount": 3379,
+    "trackedFileCount": 2413,
+    "codeFileCount": 899,
+    "exportedSymbolCount": 3386,
     "contentItemCount": 57,
     "mechanicCount": 130,
     "stateFieldCount": 144,
-    "relationshipCount": 9860
+    "relationshipCount": 9868
   },
   "inventory": [
     {
@@ -3709,6 +3709,12 @@
       "sha256": "6b0943350c2dd57078509da45be16eef1de8b3098a15b76cdd7b3c3418dc887a"
     },
     {
+      "path": "e2e/renderer-boot-smoke.spec.ts",
+      "category": "test",
+      "bytes": 858,
+      "sha256": "6724f2eabbfddec83e96635b4a14fec7568cc23cd211f8133f248914f3fe4645"
+    },
+    {
       "path": "e2e/retry-loop-capture.tmp.spec.ts",
       "category": "test",
       "bytes": 2709,
@@ -3779,6 +3785,12 @@
       "category": "test",
       "bytes": 8981,
       "sha256": "4dda48d57aff2ea7abc604b29221034e337d6426e8887eebb1a72d61334f1b61"
+    },
+    {
+      "path": "e2e/ui-audit.tmp.spec.ts",
+      "category": "test",
+      "bytes": 6568,
+      "sha256": "877581d3c89915d9ad462c7e4089ac364dc8304211797ed688c9ed313e755a90"
     },
     {
       "path": "e2e/ui-design-reference.spec.ts",
@@ -9679,6 +9691,18 @@
       "sha256": "393b55fea6771d8a700df20afd70e2cc5616a862ad7825425ce51d8a860717ab"
     },
     {
+      "path": "src/renderer/ui/FittedGrid.module.css",
+      "category": "source",
+      "bytes": 1671,
+      "sha256": "8032ca44e463dbbb6e1daeb29737b4517c3dccb687adde00b675757463dca04e"
+    },
+    {
+      "path": "src/renderer/ui/FittedGrid.tsx",
+      "category": "source",
+      "bytes": 5245,
+      "sha256": "a87a25dce6adb09b13c20c78805856d8a7ae09059241257b86fa312db1030385"
+    },
+    {
       "path": "src/renderer/ui/gameplayIcons.tsx",
       "category": "source",
       "bytes": 3719,
@@ -9687,8 +9711,8 @@
     {
       "path": "src/renderer/ui/index.ts",
       "category": "source",
-      "bytes": 1113,
-      "sha256": "0877caa5a6921c90629cb7187599e25098e1b0a89d70fe15681ab576e4d45765"
+      "bytes": 1220,
+      "sha256": "26c986a2a242114800805d6ed6b083cab80dc17e765a9d8024eaf68c73ebb487"
     },
     {
       "path": "src/renderer/ui/MetaFrame.module.css",
@@ -10107,14 +10131,14 @@
     {
       "path": "src/shared/content-lock.test.ts",
       "category": "test",
-      "bytes": 3945,
-      "sha256": "47db6b270ae8d8eb0eb54a1e3ceefa13ab1b125b44a2146a4f3f5420f8804c67"
+      "bytes": 4945,
+      "sha256": "0ea1cb4bf6c2ed6da22e6dd0d21307a81cfccc04e234f2c701836915d9c76473"
     },
     {
       "path": "src/shared/content-lock.ts",
       "category": "source",
-      "bytes": 3352,
-      "sha256": "5bf0236094da98be62851eab607a2b012275a99b6455ce524e4e282d7bce4f20"
+      "bytes": 3672,
+      "sha256": "0b51ba53347ab3f4909c8abbf7d2f460a7505b3490a8352640998eeebd18f436"
     },
     {
       "path": "src/shared/contracts.ts",
@@ -22862,6 +22886,19 @@
       "testedBy": []
     },
     {
+      "id": "file:src/renderer/ui/FittedGrid.tsx",
+      "path": "src/renderer/ui/FittedGrid.tsx",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 139,
+      "imports": [],
+      "exports": [
+        "symbol:src/renderer/ui/FittedGrid.tsx#default",
+        "symbol:src/renderer/ui/FittedGrid.tsx#FittedGridProps"
+      ],
+      "testedBy": []
+    },
+    {
       "id": "file:src/renderer/ui/gameplayIcons.tsx",
       "path": "src/renderer/ui/gameplayIcons.tsx",
       "layer": "renderer",
@@ -22889,10 +22926,11 @@
       "path": "src/renderer/ui/index.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 28,
+      "lineCount": 30,
       "imports": [
         "file:src/renderer/ui/AccentBanner.tsx",
         "file:src/renderer/ui/Eyebrow.tsx",
+        "file:src/renderer/ui/FittedGrid.tsx",
         "file:src/renderer/ui/gameplayIcons.tsx",
         "file:src/renderer/ui/MetaFrame.tsx",
         "file:src/renderer/ui/OverlayActionDock.tsx",
@@ -22904,6 +22942,8 @@
       "exports": [
         "symbol:src/renderer/ui/index.ts#AccentBanner",
         "symbol:src/renderer/ui/index.ts#Eyebrow",
+        "symbol:src/renderer/ui/index.ts#FittedGrid",
+        "symbol:src/renderer/ui/index.ts#FittedGridProps",
         "symbol:src/renderer/ui/index.ts#GameplayDestroyIcon",
         "symbol:src/renderer/ui/index.ts#GameplayFitBoardIcon",
         "symbol:src/renderer/ui/index.ts#GameplayIconProps",
@@ -24213,11 +24253,12 @@
       "path": "src/shared/content-lock.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 88,
+      "lineCount": 106,
       "imports": [
         "file:src/shared/content-lock-state.ts",
         "file:src/shared/content-lock.ts",
         "file:src/shared/contracts.ts",
+        "file:src/shared/floor-mutator-schedule.ts",
         "file:src/shared/game-core.ts",
         "file:src/shared/relics.ts",
         "file:src/shared/run-mode-catalog.ts"
@@ -24230,23 +24271,24 @@
       "path": "src/shared/content-lock.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 89,
+      "lineCount": 98,
       "imports": [
         "file:src/shared/content-lock-state.ts",
-        "file:src/shared/contracts.ts",
-        "file:src/shared/floor-mutator-schedule.ts",
-        "file:src/shared/relics.ts"
+        "file:src/shared/contracts.ts"
       ],
       "exports": [
         "symbol:src/shared/content-lock.ts#activateContentLockFromEnv",
         "symbol:src/shared/content-lock.ts#BuildFlavour",
         "symbol:src/shared/content-lock.ts#ContentLock",
         "symbol:src/shared/content-lock.ts#createContentLock",
+        "symbol:src/shared/content-lock.ts#DEMO_COMMON_RELIC_IDS",
         "symbol:src/shared/content-lock.ts#DEMO_MODE_IDS",
         "symbol:src/shared/content-lock.ts#DEMO_MUTATOR_CYCLE_FLOORS",
+        "symbol:src/shared/content-lock.ts#DEMO_MUTATOR_IDS",
         "symbol:src/shared/content-lock.ts#DEMO_POWER_RELIC_IDS",
         "symbol:src/shared/content-lock.ts#filterMutatorsByContentLock",
         "symbol:src/shared/content-lock.ts#filterRelicPoolByContentLock",
+        "symbol:src/shared/content-lock.ts#FULL_GAME_LEDGER",
         "symbol:src/shared/content-lock.ts#getActiveContentLock",
         "symbol:src/shared/content-lock.ts#getDemoMutatorPool",
         "symbol:src/shared/content-lock.ts#getDemoRelicPool",
@@ -26345,6 +26387,7 @@
       "testedBy": [
         "file:src/renderer/hooks/useDistractionChannelTick.integration.test.tsx",
         "file:src/shared/boss-encounters.test.ts",
+        "file:src/shared/content-lock.test.ts",
         "file:src/shared/floor-mutator-schedule.test.ts",
         "file:src/shared/long-run-depth.test.ts",
         "file:src/shared/relics.test.ts",
@@ -41312,6 +41355,22 @@
       "endLine": 20
     },
     {
+      "id": "symbol:src/renderer/ui/FittedGrid.tsx#default",
+      "name": "default",
+      "kind": "ExportAssignment",
+      "file": "src/renderer/ui/FittedGrid.tsx",
+      "line": 138,
+      "endLine": 138
+    },
+    {
+      "id": "symbol:src/renderer/ui/FittedGrid.tsx#FittedGridProps",
+      "name": "FittedGridProps",
+      "kind": "interface",
+      "file": "src/renderer/ui/FittedGrid.tsx",
+      "line": 10,
+      "endLine": 26
+    },
+    {
       "id": "symbol:src/renderer/ui/gameplayIcons.tsx#GameplayDestroyIcon",
       "name": "GameplayDestroyIcon",
       "kind": "function",
@@ -41424,100 +41483,116 @@
       "endLine": 2
     },
     {
+      "id": "symbol:src/renderer/ui/index.ts#FittedGrid",
+      "name": "FittedGrid",
+      "kind": "ExportSpecifier",
+      "file": "src/renderer/ui/index.ts",
+      "line": 12,
+      "endLine": 12
+    },
+    {
+      "id": "symbol:src/renderer/ui/index.ts#FittedGridProps",
+      "name": "FittedGridProps",
+      "kind": "ExportSpecifier",
+      "file": "src/renderer/ui/index.ts",
+      "line": 13,
+      "endLine": 13
+    },
+    {
       "id": "symbol:src/renderer/ui/index.ts#GameplayDestroyIcon",
       "name": "GameplayDestroyIcon",
-      "kind": "ExportSpecifier",
-      "file": "src/renderer/ui/index.ts",
-      "line": 15,
-      "endLine": 15
-    },
-    {
-      "id": "symbol:src/renderer/ui/index.ts#GameplayFitBoardIcon",
-      "name": "GameplayFitBoardIcon",
-      "kind": "ExportSpecifier",
-      "file": "src/renderer/ui/index.ts",
-      "line": 16,
-      "endLine": 16
-    },
-    {
-      "id": "symbol:src/renderer/ui/index.ts#GameplayIconProps",
-      "name": "GameplayIconProps",
-      "kind": "ExportSpecifier",
-      "file": "src/renderer/ui/index.ts",
-      "line": 27,
-      "endLine": 27
-    },
-    {
-      "id": "symbol:src/renderer/ui/index.ts#GameplayMenuIcon",
-      "name": "GameplayMenuIcon",
       "kind": "ExportSpecifier",
       "file": "src/renderer/ui/index.ts",
       "line": 17,
       "endLine": 17
     },
     {
-      "id": "symbol:src/renderer/ui/index.ts#GameplayPauseIcon",
-      "name": "GameplayPauseIcon",
-      "kind": "ExportSpecifier",
-      "file": "src/renderer/ui/index.ts",
-      "line": 21,
-      "endLine": 21
-    },
-    {
-      "id": "symbol:src/renderer/ui/index.ts#GameplayPeekIcon",
-      "name": "GameplayPeekIcon",
+      "id": "symbol:src/renderer/ui/index.ts#GameplayFitBoardIcon",
+      "name": "GameplayFitBoardIcon",
       "kind": "ExportSpecifier",
       "file": "src/renderer/ui/index.ts",
       "line": 18,
       "endLine": 18
     },
     {
-      "id": "symbol:src/renderer/ui/index.ts#GameplayPinIcon",
-      "name": "GameplayPinIcon",
+      "id": "symbol:src/renderer/ui/index.ts#GameplayIconProps",
+      "name": "GameplayIconProps",
+      "kind": "ExportSpecifier",
+      "file": "src/renderer/ui/index.ts",
+      "line": 29,
+      "endLine": 29
+    },
+    {
+      "id": "symbol:src/renderer/ui/index.ts#GameplayMenuIcon",
+      "name": "GameplayMenuIcon",
       "kind": "ExportSpecifier",
       "file": "src/renderer/ui/index.ts",
       "line": 19,
       "endLine": 19
     },
     {
-      "id": "symbol:src/renderer/ui/index.ts#GameplayPlayIcon",
-      "name": "GameplayPlayIcon",
-      "kind": "ExportSpecifier",
-      "file": "src/renderer/ui/index.ts",
-      "line": 20,
-      "endLine": 20
-    },
-    {
-      "id": "symbol:src/renderer/ui/index.ts#GameplaySettingsIcon",
-      "name": "GameplaySettingsIcon",
-      "kind": "ExportSpecifier",
-      "file": "src/renderer/ui/index.ts",
-      "line": 22,
-      "endLine": 22
-    },
-    {
-      "id": "symbol:src/renderer/ui/index.ts#GameplayShuffleIcon",
-      "name": "GameplayShuffleIcon",
+      "id": "symbol:src/renderer/ui/index.ts#GameplayPauseIcon",
+      "name": "GameplayPauseIcon",
       "kind": "ExportSpecifier",
       "file": "src/renderer/ui/index.ts",
       "line": 23,
       "endLine": 23
     },
     {
-      "id": "symbol:src/renderer/ui/index.ts#GameplayStrayIcon",
-      "name": "GameplayStrayIcon",
+      "id": "symbol:src/renderer/ui/index.ts#GameplayPeekIcon",
+      "name": "GameplayPeekIcon",
+      "kind": "ExportSpecifier",
+      "file": "src/renderer/ui/index.ts",
+      "line": 20,
+      "endLine": 20
+    },
+    {
+      "id": "symbol:src/renderer/ui/index.ts#GameplayPinIcon",
+      "name": "GameplayPinIcon",
+      "kind": "ExportSpecifier",
+      "file": "src/renderer/ui/index.ts",
+      "line": 21,
+      "endLine": 21
+    },
+    {
+      "id": "symbol:src/renderer/ui/index.ts#GameplayPlayIcon",
+      "name": "GameplayPlayIcon",
+      "kind": "ExportSpecifier",
+      "file": "src/renderer/ui/index.ts",
+      "line": 22,
+      "endLine": 22
+    },
+    {
+      "id": "symbol:src/renderer/ui/index.ts#GameplaySettingsIcon",
+      "name": "GameplaySettingsIcon",
       "kind": "ExportSpecifier",
       "file": "src/renderer/ui/index.ts",
       "line": 24,
       "endLine": 24
     },
     {
-      "id": "symbol:src/renderer/ui/index.ts#GameplayUndoIcon",
-      "name": "GameplayUndoIcon",
+      "id": "symbol:src/renderer/ui/index.ts#GameplayShuffleIcon",
+      "name": "GameplayShuffleIcon",
       "kind": "ExportSpecifier",
       "file": "src/renderer/ui/index.ts",
       "line": 25,
       "endLine": 25
+    },
+    {
+      "id": "symbol:src/renderer/ui/index.ts#GameplayStrayIcon",
+      "name": "GameplayStrayIcon",
+      "kind": "ExportSpecifier",
+      "file": "src/renderer/ui/index.ts",
+      "line": 26,
+      "endLine": 26
+    },
+    {
+      "id": "symbol:src/renderer/ui/index.ts#GameplayUndoIcon",
+      "name": "GameplayUndoIcon",
+      "kind": "ExportSpecifier",
+      "file": "src/renderer/ui/index.ts",
+      "line": 27,
+      "endLine": 27
     },
     {
       "id": "symbol:src/renderer/ui/index.ts#MetaFrame",
@@ -41548,24 +41623,24 @@
       "name": "OverlayAction",
       "kind": "ExportSpecifier",
       "file": "src/renderer/ui/index.ts",
-      "line": 13,
-      "endLine": 13
+      "line": 15,
+      "endLine": 15
     },
     {
       "id": "symbol:src/renderer/ui/index.ts#OverlayActionDock",
       "name": "OverlayActionDock",
       "kind": "ExportSpecifier",
       "file": "src/renderer/ui/index.ts",
-      "line": 12,
-      "endLine": 12
+      "line": 14,
+      "endLine": 14
     },
     {
       "id": "symbol:src/renderer/ui/index.ts#OverlayActionPlacement",
       "name": "OverlayActionPlacement",
       "kind": "ExportSpecifier",
       "file": "src/renderer/ui/index.ts",
-      "line": 13,
-      "endLine": 13
+      "line": 15,
+      "endLine": 15
     },
     {
       "id": "symbol:src/renderer/ui/index.ts#Panel",
@@ -43756,136 +43831,160 @@
       "name": "activateContentLockFromEnv",
       "kind": "value",
       "file": "src/shared/content-lock.ts",
-      "line": 84,
-      "endLine": 88
+      "line": 93,
+      "endLine": 97
     },
     {
       "id": "symbol:src/shared/content-lock.ts#BuildFlavour",
       "name": "BuildFlavour",
       "kind": "ExportSpecifier",
       "file": "src/shared/content-lock.ts",
-      "line": 25,
-      "endLine": 25
+      "line": 27,
+      "endLine": 27
     },
     {
       "id": "symbol:src/shared/content-lock.ts#ContentLock",
       "name": "ContentLock",
       "kind": "ExportSpecifier",
       "file": "src/shared/content-lock.ts",
-      "line": 25,
-      "endLine": 25
+      "line": 27,
+      "endLine": 27
     },
     {
       "id": "symbol:src/shared/content-lock.ts#createContentLock",
       "name": "createContentLock",
       "kind": "value",
       "file": "src/shared/content-lock.ts",
-      "line": 71,
-      "endLine": 81
+      "line": 80,
+      "endLine": 90
+    },
+    {
+      "id": "symbol:src/shared/content-lock.ts#DEMO_COMMON_RELIC_IDS",
+      "name": "DEMO_COMMON_RELIC_IDS",
+      "kind": "value",
+      "file": "src/shared/content-lock.ts",
+      "line": 41,
+      "endLine": 46
     },
     {
       "id": "symbol:src/shared/content-lock.ts#DEMO_MODE_IDS",
       "name": "DEMO_MODE_IDS",
       "kind": "value",
       "file": "src/shared/content-lock.ts",
-      "line": 36,
-      "endLine": 36
+      "line": 38,
+      "endLine": 38
     },
     {
       "id": "symbol:src/shared/content-lock.ts#DEMO_MUTATOR_CYCLE_FLOORS",
       "name": "DEMO_MUTATOR_CYCLE_FLOORS",
       "kind": "value",
       "file": "src/shared/content-lock.ts",
-      "line": 47,
-      "endLine": 47
+      "line": 57,
+      "endLine": 57
+    },
+    {
+      "id": "symbol:src/shared/content-lock.ts#DEMO_MUTATOR_IDS",
+      "name": "DEMO_MUTATOR_IDS",
+      "kind": "value",
+      "file": "src/shared/content-lock.ts",
+      "line": 60,
+      "endLine": 65
     },
     {
       "id": "symbol:src/shared/content-lock.ts#DEMO_POWER_RELIC_IDS",
       "name": "DEMO_POWER_RELIC_IDS",
       "kind": "value",
       "file": "src/shared/content-lock.ts",
-      "line": 39,
-      "endLine": 44
+      "line": 49,
+      "endLine": 54
     },
     {
       "id": "symbol:src/shared/content-lock.ts#filterMutatorsByContentLock",
       "name": "filterMutatorsByContentLock",
       "kind": "ExportSpecifier",
       "file": "src/shared/content-lock.ts",
-      "line": 27,
-      "endLine": 27
+      "line": 29,
+      "endLine": 29
     },
     {
       "id": "symbol:src/shared/content-lock.ts#filterRelicPoolByContentLock",
       "name": "filterRelicPoolByContentLock",
       "kind": "ExportSpecifier",
       "file": "src/shared/content-lock.ts",
-      "line": 28,
-      "endLine": 28
+      "line": 30,
+      "endLine": 30
+    },
+    {
+      "id": "symbol:src/shared/content-lock.ts#FULL_GAME_LEDGER",
+      "name": "FULL_GAME_LEDGER",
+      "kind": "value",
+      "file": "src/shared/content-lock.ts",
+      "line": 67,
+      "endLine": 72
     },
     {
       "id": "symbol:src/shared/content-lock.ts#getActiveContentLock",
       "name": "getActiveContentLock",
       "kind": "ExportSpecifier",
       "file": "src/shared/content-lock.ts",
-      "line": 29,
-      "endLine": 29
+      "line": 31,
+      "endLine": 31
     },
     {
       "id": "symbol:src/shared/content-lock.ts#getDemoMutatorPool",
       "name": "getDemoMutatorPool",
       "kind": "value",
       "file": "src/shared/content-lock.ts",
-      "line": 56,
-      "endLine": 64
+      "line": 76,
+      "endLine": 76
     },
     {
       "id": "symbol:src/shared/content-lock.ts#getDemoRelicPool",
       "name": "getDemoRelicPool",
       "kind": "value",
       "file": "src/shared/content-lock.ts",
-      "line": 66,
-      "endLine": 69
+      "line": 74,
+      "endLine": 74
     },
     {
       "id": "symbol:src/shared/content-lock.ts#getFullGameLedger",
       "name": "getFullGameLedger",
       "kind": "value",
       "file": "src/shared/content-lock.ts",
-      "line": 49,
-      "endLine": 54
+      "line": 78,
+      "endLine": 78
     },
     {
       "id": "symbol:src/shared/content-lock.ts#isDemoBuild",
       "name": "isDemoBuild",
       "kind": "ExportSpecifier",
       "file": "src/shared/content-lock.ts",
-      "line": 30,
-      "endLine": 30
+      "line": 32,
+      "endLine": 32
     },
     {
       "id": "symbol:src/shared/content-lock.ts#isModeAvailableInBuild",
       "name": "isModeAvailableInBuild",
       "kind": "ExportSpecifier",
       "file": "src/shared/content-lock.ts",
-      "line": 31,
-      "endLine": 31
+      "line": 33,
+      "endLine": 33
     },
     {
       "id": "symbol:src/shared/content-lock.ts#resolveBuildFlavour",
       "name": "resolveBuildFlavour",
       "kind": "ExportSpecifier",
       "file": "src/shared/content-lock.ts",
-      "line": 32,
-      "endLine": 32
+      "line": 34,
+      "endLine": 34
     },
     {
       "id": "symbol:src/shared/content-lock.ts#setActiveContentLock",
       "name": "setActiveContentLock",
       "kind": "ExportSpecifier",
       "file": "src/shared/content-lock.ts",
-      "line": 33,
-      "endLine": 33
+      "line": 35,
+      "endLine": 35
     },
     {
       "id": "symbol:src/shared/contracts.ts#AchievementId",
@@ -77567,6 +77666,18 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/ui/FittedGrid.tsx->symbol:src/renderer/ui/FittedGrid.tsx#default",
+      "source": "file:src/renderer/ui/FittedGrid.tsx",
+      "target": "symbol:src/renderer/ui/FittedGrid.tsx#default",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/ui/FittedGrid.tsx->symbol:src/renderer/ui/FittedGrid.tsx#FittedGridProps",
+      "source": "file:src/renderer/ui/FittedGrid.tsx",
+      "target": "symbol:src/renderer/ui/FittedGrid.tsx#FittedGridProps",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/ui/gameplayIcons.tsx->symbol:src/renderer/ui/gameplayIcons.tsx#GameplayDestroyIcon",
       "source": "file:src/renderer/ui/gameplayIcons.tsx",
       "target": "symbol:src/renderer/ui/gameplayIcons.tsx#GameplayDestroyIcon",
@@ -77648,6 +77759,18 @@
       "id": "exports:src/renderer/ui/index.ts->symbol:src/renderer/ui/index.ts#Eyebrow",
       "source": "file:src/renderer/ui/index.ts",
       "target": "symbol:src/renderer/ui/index.ts#Eyebrow",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/ui/index.ts->symbol:src/renderer/ui/index.ts#FittedGrid",
+      "source": "file:src/renderer/ui/index.ts",
+      "target": "symbol:src/renderer/ui/index.ts#FittedGrid",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/ui/index.ts->symbol:src/renderer/ui/index.ts#FittedGridProps",
+      "source": "file:src/renderer/ui/index.ts",
+      "target": "symbol:src/renderer/ui/index.ts#FittedGridProps",
       "kind": "exports"
     },
     {
@@ -79421,6 +79544,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/content-lock.ts->symbol:src/shared/content-lock.ts#DEMO_COMMON_RELIC_IDS",
+      "source": "file:src/shared/content-lock.ts",
+      "target": "symbol:src/shared/content-lock.ts#DEMO_COMMON_RELIC_IDS",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/content-lock.ts->symbol:src/shared/content-lock.ts#DEMO_MODE_IDS",
       "source": "file:src/shared/content-lock.ts",
       "target": "symbol:src/shared/content-lock.ts#DEMO_MODE_IDS",
@@ -79430,6 +79559,12 @@
       "id": "exports:src/shared/content-lock.ts->symbol:src/shared/content-lock.ts#DEMO_MUTATOR_CYCLE_FLOORS",
       "source": "file:src/shared/content-lock.ts",
       "target": "symbol:src/shared/content-lock.ts#DEMO_MUTATOR_CYCLE_FLOORS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/content-lock.ts->symbol:src/shared/content-lock.ts#DEMO_MUTATOR_IDS",
+      "source": "file:src/shared/content-lock.ts",
+      "target": "symbol:src/shared/content-lock.ts#DEMO_MUTATOR_IDS",
       "kind": "exports"
     },
     {
@@ -79448,6 +79583,12 @@
       "id": "exports:src/shared/content-lock.ts->symbol:src/shared/content-lock.ts#filterRelicPoolByContentLock",
       "source": "file:src/shared/content-lock.ts",
       "target": "symbol:src/shared/content-lock.ts#filterRelicPoolByContentLock",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/content-lock.ts->symbol:src/shared/content-lock.ts#FULL_GAME_LEDGER",
+      "source": "file:src/shared/content-lock.ts",
+      "target": "symbol:src/shared/content-lock.ts#FULL_GAME_LEDGER",
       "kind": "exports"
     },
     {
@@ -103221,6 +103362,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/ui/index.ts->src/renderer/ui/FittedGrid.tsx",
+      "source": "file:src/renderer/ui/index.ts",
+      "target": "file:src/renderer/ui/FittedGrid.tsx",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/ui/index.ts->src/renderer/ui/gameplayIcons.tsx",
       "source": "file:src/renderer/ui/index.ts",
       "target": "file:src/renderer/ui/gameplayIcons.tsx",
@@ -104643,6 +104790,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/content-lock.test.ts->src/shared/floor-mutator-schedule.ts",
+      "source": "file:src/shared/content-lock.test.ts",
+      "target": "file:src/shared/floor-mutator-schedule.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/content-lock.test.ts->src/shared/game-core.ts",
       "source": "file:src/shared/content-lock.test.ts",
       "target": "file:src/shared/game-core.ts",
@@ -104670,18 +104823,6 @@
       "id": "imports:src/shared/content-lock.ts->src/shared/contracts.ts",
       "source": "file:src/shared/content-lock.ts",
       "target": "file:src/shared/contracts.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/content-lock.ts->src/shared/floor-mutator-schedule.ts",
-      "source": "file:src/shared/content-lock.ts",
-      "target": "file:src/shared/floor-mutator-schedule.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/content-lock.ts->src/shared/relics.ts",
-      "source": "file:src/shared/content-lock.ts",
-      "target": "file:src/shared/relics.ts",
       "kind": "imports"
     },
     {
@@ -122404,6 +122545,12 @@
       "id": "tested_by:src/shared/floor-mutator-schedule.ts->file:src/shared/boss-encounters.test.ts",
       "source": "file:src/shared/floor-mutator-schedule.ts",
       "target": "file:src/shared/boss-encounters.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/floor-mutator-schedule.ts->file:src/shared/content-lock.test.ts",
+      "source": "file:src/shared/floor-mutator-schedule.ts",
+      "target": "file:src/shared/content-lock.test.ts",
       "kind": "tested_by"
     },
     {

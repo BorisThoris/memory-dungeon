@@ -1,0 +1,88 @@
+/*
+ * A grid that fits its frame and pages the overflow. Nothing here scrolls: the frame clips,
+ * the pager moves. Cards are at least 44px tall and the pager buttons are full targets.
+ */
+
+.root {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex: 1 1 auto;
+    min-height: 0;
+}
+
+.frame {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.grid {
+    display: grid;
+    align-content: start;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.cell {
+    display: flex;
+    min-height: 0;
+    min-width: 0;
+}
+
+.cell > * {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+}
+
+.empty {
+    display: flex;
+    align-items: center;
+    flex: 1 1 auto;
+    font-size: 0.92rem;
+    color: var(--theme-text-muted);
+}
+
+.pager {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.6rem;
+    flex: 0 0 auto;
+}
+
+.pageLabel {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--theme-text-muted);
+    font-variant-numeric: tabular-nums;
+}
+
+.pageButton {
+    min-height: 44px;
+    padding: 0 0.9rem;
+    border-radius: var(--ui-radius-pill);
+    border: 1px solid var(--theme-border);
+    background: transparent;
+    color: var(--theme-text);
+    font-family: var(--theme-display-font);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+
+.pageButton:hover:not(:disabled),
+.pageButton:focus-visible {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 46%, transparent);
+    color: var(--theme-gold-bright);
+    outline: none;
+}
+
+.pageButton:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}

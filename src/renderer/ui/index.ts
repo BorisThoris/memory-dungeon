@@ -9,6 +9,8 @@ export type { ScreenTitleRole, ScreenTitleTag } from './ScreenTitle';
 export { default as StatTile } from './StatTile';
 export { default as UiButton } from './UiButton';
 export type { UiButtonProps, UiButtonSize, UiButtonVariant } from './UiButton';
+export { default as FittedGrid } from './FittedGrid';
+export type { FittedGridProps } from './FittedGrid';
 export { default as OverlayActionDock } from './OverlayActionDock';
 export type { OverlayAction, OverlayActionPlacement } from './OverlayActionDock';
 export {
