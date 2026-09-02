@@ -100,7 +100,10 @@ description), footer note. Screenshot: `tmp/ui-redesign/0628/desktop/landscape/0
 **Delete:** the `Pace / Payoff / Pressure` lane data (`ChooseYourPathScreen.tsx` lines ~71–130
 at HEAD) and every strip that renders it — the "LANES … CHAIN LEADS" strip, the "LAUNCH LOOP"
 strip, the three-column grid, and the pace/payoff/pressure strips. The browse cards drop the
-same strips and get their description back (they clip at HEAD).
+same strips and get their description back (they clip at HEAD). The same lane text is
+interpolated into each tile's accessible name (`aria-label={`${def.title}. ${signalText}. Open
+details.`}` at HEAD, against `${def.title}. Open details.` at 06-28), which is what broke the
+visual harness's tile locator; restoring the label restores the harness.
 
 **Keep from HEAD:** locked modes rendered visible-and-disabled with an "In the full game" tag
 (this is the demo ledger pattern from `STEAM_DEMO_CYCLE.md` §4).
@@ -193,7 +196,7 @@ Ordered by what a demo player sees first.
 
 | Phase | Work | Gate |
 |---|---|---|
-| 0 | Commit the DOM-budget probe as `e2e/ui-budget.spec.ts` (from the scratchpad `ui-probe.spec.ts`), with §1.1 numbers as assertions marked `test.fixme` until each screen lands. Fix the visual scenario flake in `dismissStartupIntro` (Play is visible ~6 s after load with the injected save; the poll gives up first). | probe runs green on the HUD row |
+| 0 | Commit the DOM-budget probe as `e2e/ui-budget.spec.ts` (from the scratchpad `ui-probe.spec.ts`), with §1.1 numbers as assertions marked `test.fixme` until each screen lands. Repair the repo's own visual harness against HEAD: run as independent tests (`e2e/ui-redesign-capture.spec.ts`), 14 of 15 scenarios pass at `86f8ebd9` and only 4 of 15 pass at HEAD, every failure in `startClassicRunFromModeSelect` — the harness's locators for the recommended-run heading and the `Classic Run. Open details.` library tile no longer match what the bombarded Choose Your Path renders. Restoring the screen (§2) is most of the fix; the rest is the `dismissStartupIntro` poll, which gives up before Play becomes visible (~6 s after load with the injected save). | 15/15 visual scenarios pass at HEAD; probe green on the HUD row |
 | 1 | §2 Choose Your Path. | budget row + visual scenario |
 | 2 | §3 HUD refinements (feedback line, single coaching surface). | `gameplay-hud-layout.spec.ts` + budget |
 | 3 | §4.1 floor clear, §4.2 relic draft. | budget rows + `floor cleared modal` scenario |
