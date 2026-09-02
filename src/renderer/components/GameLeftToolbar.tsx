@@ -6,7 +6,6 @@ import {
     useEffect,
     useLayoutEffect,
     useRef,
-    type CSSProperties,
     type Dispatch,
     type RefObject,
     type SetStateAction
@@ -30,12 +29,6 @@ import { REG107_POWER_TEACHING_ANCHOR } from '../gameplay/regPhase4PlayContract'
 import type { TileBoardHandle } from './TileBoard';
 import styles from './GameScreen.module.css';
 
-const POWER_ROLE_TONE_BY_JOB = {
-    Recall: 'recall',
-    Search: 'search',
-    'Damage control': 'control',
-    Risk: 'risk'
-} as const;
 
 type PowerPayoffTone = 'combo' | 'control' | 'recall' | 'locked' | 'empty';
 type ToolPayoffStackTone = 'combo' | 'control' | 'recall' | 'locked' | 'empty';
@@ -58,66 +51,8 @@ type ToolCrescendo = {
     tier: 'none' | 'prime' | 'cashout' | 'stack';
 };
 
-const powerPayoffAction = (tone: PowerPayoffTone, impactCue: string, nextAction: string): string => {
-    if (tone === 'empty') {
-        return 'Recharge tools';
-    }
-    if (tone === 'locked') {
-        return 'Preview lock';
-    }
-    if (impactCue === 'Stack cashout' || nextAction === 'Cash now') {
-        return 'Cash now';
-    }
-    if (tone === 'combo') {
-        return 'Prime route';
-    }
-    if (tone === 'recall') {
-        return 'Reveal pair';
-    }
-    return 'Control board';
-};
 
-const powerPayoffAudioCue = (
-    tone: PowerPayoffTone,
-    impactCue: string,
-    nextAction: string
-): 'power-payoff-none' | 'power-payoff-locked' | 'power-payoff-cashout' | 'power-payoff-combo' | 'power-payoff-recall' | 'power-payoff-control' => {
-    if (tone === 'empty') {
-        return 'power-payoff-none';
-    }
-    if (tone === 'locked') {
-        return 'power-payoff-locked';
-    }
-    if (impactCue === 'Stack cashout' || nextAction === 'Cash now') {
-        return 'power-payoff-cashout';
-    }
-    if (tone === 'combo') {
-        return 'power-payoff-combo';
-    }
-    if (tone === 'recall') {
-        return 'power-payoff-recall';
-    }
-    return 'power-payoff-control';
-};
 
-const powerPayoffScreenCue = (tone: PowerPayoffTone, impactCue: string, nextAction: string): 'none' | 'locked' | 'burst' | 'snap' | 'pulse' | 'guard' => {
-    if (tone === 'empty') {
-        return 'none';
-    }
-    if (tone === 'locked') {
-        return 'locked';
-    }
-    if (impactCue === 'Stack cashout' || nextAction === 'Cash now') {
-        return 'burst';
-    }
-    if (tone === 'combo') {
-        return 'snap';
-    }
-    if (tone === 'recall') {
-        return 'pulse';
-    }
-    return 'guard';
-};
 
 const toolCrescendoAction = (crescendo: ToolCrescendo): 'Recharge tools' | 'Prime tool' | 'Cash route' | 'Stack cashout' => {
     if (crescendo.tier === 'stack') {
@@ -327,69 +262,6 @@ const GameLeftToolbar = memo(function GameLeftToolbar({
         const row = powerRow(id);
         return `${fallback}. ${row.cost} ${row.consequence} ${row.perfectMemoryCopy}`;
     };
-    const powerRoleChip = (id: (typeof powerTeachingRows)[number]['id'], shortLabel?: string) => {
-        const row = powerRow(id);
-        return (
-            <span
-                aria-hidden="true"
-                className={styles.powerRoleChip}
-                data-power-role={POWER_ROLE_TONE_BY_JOB[row.job]}
-            >
-                {shortLabel ?? row.job}
-            </span>
-        );
-    };
-    const powerPayoffBeatCount = (tone: PowerPayoffTone, impactCue: string, nextAction: string): 0 | 1 | 2 | 3 | 4 => {
-        if (tone === 'empty' || tone === 'locked') {
-            return 0;
-        }
-        if (impactCue === 'Stack cashout' || nextAction === 'Cash now') {
-            return 4;
-        }
-        if (tone === 'combo' || impactCue.includes('cashout') || impactCue === 'Pair spark') {
-            return 3;
-        }
-        if (tone === 'recall' || tone === 'control') {
-            return 2;
-        }
-        return 1;
-    };
-    const powerPayoffChip = (
-        testId: string,
-        label: string,
-        tone: PowerPayoffTone,
-        nextAction: string,
-        impactCue: string
-    ) => {
-        const beatCount = powerPayoffBeatCount(tone, impactCue, nextAction);
-        const action = powerPayoffAction(tone, impactCue, nextAction);
-        return (
-            <span
-                aria-hidden="true"
-                className={styles.powerPayoffChip}
-                data-power-action={action}
-                data-power-audio={powerPayoffAudioCue(tone, impactCue, nextAction)}
-                data-power-cue={impactCue}
-                data-power-next={nextAction}
-                data-power-payoff={tone}
-                data-power-payoff-beats={beatCount}
-                data-power-screen-cue={powerPayoffScreenCue(tone, impactCue, nextAction)}
-                data-testid={testId}
-            >
-                <strong>{label}</strong>
-                <small>{nextAction}</small>
-                <em>{impactCue}</em>
-                <b>{action}</b>
-                {beatCount > 0 ? (
-                    <span className={styles.powerPayoffBeatPips}>
-                        {Array.from({ length: beatCount }, (_, beatIndex) => (
-                            <i data-power-payoff-beat={beatIndex + 1} key={beatIndex} />
-                        ))}
-                    </span>
-                ) : null}
-            </span>
-        );
-    };
     const rowSwapFreeAvailable =
         !run.activeContract?.noShuffle &&
         run.regionShuffleFreeThisFloor &&
@@ -405,20 +277,6 @@ const GameLeftToolbar = memo(function GameLeftToolbar({
     const rowSwapSetupActive =
         !run.activeContract?.noShuffle &&
         (run.regionShuffleCharges > 0 || rowSwapFreeAvailable);
-    const rowShuffleRecommendationLabel =
-        rowSwapSetupActive && swapRouteRecommended ? 'Route prime' : null;
-    const tileSwapRecommendationLabel =
-        rowSwapSetupActive && swapRouteRecommended ? 'Best tool' : null;
-    const rowSwapIntentLabel = run.activeContract?.noShuffle
-        ? 'Locked'
-        : tileSwapRecommendationLabel
-          ? 'Best tool'
-          : rowSwapSetupActive
-          ? rowSwapFreeAvailable && run.regionShuffleCharges <= 0
-              ? 'Free link'
-              : 'Route link'
-          : 'No charge';
-    const rowSwapIntentTone = run.activeContract?.noShuffle ? 'locked' : rowSwapSetupActive ? 'combo' : 'empty';
     const rowSwapBadgeLabel = rowSwapFreeAvailable && run.regionShuffleCharges <= 0 ? 'Free' : run.regionShuffleCharges;
     const rowSwapIntentAria = run.activeContract?.noShuffle
         ? 'Route prime locked by contract.'
@@ -443,15 +301,6 @@ const GameLeftToolbar = memo(function GameLeftToolbar({
         : rowSwapSetupActive
           ? 'combo'
           : 'empty';
-    const rowSwapNextAction = run.activeContract?.noShuffle
-        ? 'Locked'
-        : swapRouteRecommended
-          ? swapRouteStacksChainReward
-              ? 'Stack route'
-              : 'Use swap'
-          : rowSwapSetupActive
-            ? 'Set route'
-            : 'Recharge';
     const rowSwapImpactCue = run.activeContract?.noShuffle
         ? 'Tools locked'
         : swapRouteStacksChainReward
@@ -463,24 +312,6 @@ const GameLeftToolbar = memo(function GameLeftToolbar({
                 ? 'Free prime'
                 : 'Route prime'
             : 'Recharge tools';
-    const tileSwapPayoffLabel = tileSwapArmed
-        ? tileSwapFirstTileId
-            ? 'Place payoff'
-            : 'Pick payoff'
-        : rowSwapPayoffLabel;
-    const tileSwapNextAction = run.activeContract?.noShuffle
-        ? 'Locked'
-        : tileSwapArmed
-          ? tileSwapFirstTileId
-              ? 'Place target'
-              : 'Pick first'
-          : swapRouteRecommended
-            ? swapRouteStacksChainReward
-                ? 'Create stack'
-                : 'Create route'
-            : rowSwapSetupActive
-              ? 'Set route'
-              : 'Recharge';
     const tileSwapImpactCue = tileSwapArmed ? (tileSwapFirstTileId ? 'Commit stack' : 'Pick stack') : rowSwapImpactCue;
     const shuffleImpactCue = run.shuffleCharges > 0 ? 'Pair search' : 'Recharge tools';
     const destroyImpactCue = run.destroyPairCharges > 0 ? (destroyPairArmed ? 'Risk clear' : 'Board control') : 'Recharge tools';
@@ -585,7 +416,6 @@ const GameLeftToolbar = memo(function GameLeftToolbar({
     const toolCrescendoActionCue = toolCrescendoAction(toolCrescendo);
     const toolCrescendoAudioCueValue = toolCrescendoAudioCue(toolCrescendo);
     const toolCrescendoScreenCueValue = toolCrescendoScreenCue(toolCrescendo);
-    const toolPayoffStackMeterFill = toolCrescendo.tier === 'none' ? 0 : Math.round((toolCrescendo.beats / 4) * 100);
     const toolPayoffStackLabel = `${toolPayoffStack.label}: ${toolPayoffStack.value}. ${toolPayoffStack.laneSummary}. First: ${toolPayoffStack.first}. Then: ${toolPayoffStack.then}. Keep: ${toolPayoffStack.keep}.`;
     const toolCrescendoLabel =
         toolCrescendo.tier === 'none'
@@ -723,59 +553,6 @@ const GameLeftToolbar = memo(function GameLeftToolbar({
                     ref={powersToolbarRef}
                     role="toolbar"
                 >
-                    <span
-                        aria-label={`${toolPayoffStackLabel} ${toolCrescendoLabel}`}
-                        className={styles.toolPayoffStack}
-                        data-tool-crescendo-action={toolCrescendoActionCue}
-                        data-tool-crescendo-audio={toolCrescendoAudioCueValue}
-                        data-tool-crescendo-beats={toolCrescendo.beats}
-                        data-tool-crescendo-cue={toolCrescendo.cue}
-                        data-tool-crescendo-screen-cue={toolCrescendoScreenCueValue}
-                        data-tool-crescendo-tier={toolCrescendo.tier}
-                        data-tool-payoff-meter-fill={toolPayoffStackMeterFill}
-                        data-tool-payoff-first={toolPayoffStack.first}
-                        data-tool-payoff-keep={toolPayoffStack.keep}
-                        data-tool-payoff-then={toolPayoffStack.then}
-                        data-tool-payoff-stack-tone={toolPayoffStack.tone}
-                        data-testid="tool-payoff-stack"
-                    >
-                        <small>{toolPayoffStack.label}</small>
-                        <strong>{toolPayoffStack.value}</strong>
-                        <b>{toolPayoffStack.laneSummary}</b>
-                        <span aria-hidden="true" className={styles.toolPayoffMeter} data-tool-payoff-meter-fill={toolPayoffStackMeterFill}>
-                            <i
-                                className={styles.toolPayoffMeterFill}
-                                style={{ '--tool-payoff-meter-fill': `${toolPayoffStackMeterFill}%` } as CSSProperties}
-                            />
-                        </span>
-                        {toolCrescendo.tier !== 'none' ? (
-                            <span
-                                className={styles.toolCrescendo}
-                                data-tool-crescendo-action={toolCrescendoActionCue}
-                                data-tool-crescendo-audio={toolCrescendoAudioCueValue}
-                                data-tool-crescendo-screen-cue={toolCrescendoScreenCueValue}
-                                data-tool-crescendo-tier={toolCrescendo.tier}
-                                data-testid="tool-crescendo"
-                            >
-                                <small>{toolCrescendo.beats} beat</small>
-                                <span aria-hidden="true" className={styles.toolCrescendoPips}>
-                                    {Array.from({ length: toolCrescendo.beats }, (_, beatIndex) => (
-                                        <i data-tool-crescendo-beat={beatIndex + 1} key={beatIndex} />
-                                    ))}
-                                </span>
-                                <em>{toolCrescendo.label}</em>
-                                <b>{toolCrescendoActionCue}</b>
-                            </span>
-                        ) : null}
-                        <span className={styles.toolPayoffSequence} data-testid="tool-payoff-sequence">
-                            <small>First</small>
-                            <em>{toolPayoffStack.first}</em>
-                            <small>Then</small>
-                            <em>{toolPayoffStack.then}</em>
-                            <small>Keep</small>
-                            <em>{toolPayoffStack.keep}</em>
-                        </span>
-                    </span>
                     <button
                         aria-label={`Shuffle hidden tiles. Power payoff: ${run.shuffleCharges > 0 ? 'Combo reroll' : DEPLETED_POWER_PAYOFF_LABEL}. Impact cue: ${shuffleImpactCue}. Charges: ${run.shuffleCharges}.`}
                         aria-pressed={false}
@@ -806,8 +583,6 @@ const GameLeftToolbar = memo(function GameLeftToolbar({
                         >
                             {run.shuffleCharges}
                         </span>
-                        {powerPayoffChip('shuffle-payoff-chip', run.shuffleCharges > 0 ? 'Combo reroll' : DEPLETED_POWER_PAYOFF_LABEL, run.shuffleCharges > 0 ? 'combo' : 'empty', run.shuffleCharges > 0 ? 'Find payoff' : 'Recharge', shuffleImpactCue)}
-                        {powerRoleChip('shuffle')}
                     </button>
                     <details
                         className={styles.regionShuffleCluster}
@@ -831,26 +606,6 @@ const GameLeftToolbar = memo(function GameLeftToolbar({
                             >
                                 {rowSwapBadgeLabel}
                             </span>
-                            {rowSwapSetupActive ? (
-                                <span
-                                    aria-hidden="true"
-                                    className={styles.powerSetupBadge}
-                                    data-power-recommendation={rowShuffleRecommendationLabel ? 'route-setup' : undefined}
-                                    data-testid="row-swap-setup-badge"
-                            >
-                                {rowShuffleRecommendationLabel ?? (rowSwapFreeAvailable && run.regionShuffleCharges <= 0 ? 'Free' : 'Prime')}
-                            </span>
-                        ) : null}
-                            {powerPayoffChip('row-swap-payoff-chip', rowSwapPayoffLabel, rowSwapPayoffTone, rowSwapNextAction, rowSwapImpactCue)}
-                            <span
-                                aria-hidden="true"
-                                className={styles.powerIntentChip}
-                                data-power-intent={rowSwapIntentTone}
-                                data-testid="row-swap-intent-chip"
-                            >
-                                {rowSwapIntentLabel}
-                            </span>
-                            {powerRoleChip('region_shuffle', 'Prime')}
                         </summary>
                         <div className={styles.regionShuffleRows}>
                             {run.board
@@ -909,32 +664,6 @@ const GameLeftToolbar = memo(function GameLeftToolbar({
                         >
                             {rowSwapBadgeLabel}
                         </span>
-                        {rowSwapSetupActive ? (
-                            <span
-                                aria-hidden="true"
-                                className={styles.powerSetupBadge}
-                                data-power-recommendation={tileSwapRecommendationLabel ? 'best-tool' : undefined}
-                                data-testid="tile-swap-setup-badge"
-                            >
-                                {tileSwapRecommendationLabel ?? (rowSwapFreeAvailable && run.regionShuffleCharges <= 0 ? 'Free' : 'Prime')}
-                            </span>
-                        ) : null}
-                        {powerPayoffChip('tile-swap-payoff-chip', tileSwapPayoffLabel, rowSwapPayoffTone, tileSwapNextAction, tileSwapImpactCue)}
-                        <span
-                            aria-hidden="true"
-                            className={styles.powerIntentChip}
-                            data-power-intent={rowSwapIntentTone}
-                            data-testid="tile-swap-intent-chip"
-                        >
-                            {rowSwapSetupActive
-                                ? tileSwapArmed
-                                    ? tileSwapFirstTileId
-                                        ? 'Place link'
-                                        : 'Pick link'
-                                    : rowSwapIntentLabel
-                                : rowSwapIntentLabel}
-                        </span>
-                        {powerRoleChip('tile_swap', tileSwapArmed ? (tileSwapFirstTileId ? 'Place' : 'Pick') : 'Prime')}
                     </button>
                     <button
                         aria-label={boardPinMode ? 'Exit pin mode' : 'Pin mode - tap tiles to mark'}
@@ -948,7 +677,6 @@ const GameLeftToolbar = memo(function GameLeftToolbar({
                         <span aria-hidden="true" className={styles.toolbarFlyoutLabel}>
                             Pin
                         </span>
-                        {powerRoleChip('pin', boardPinMode ? 'Pinning' : undefined)}
                     </button>
                     <button
                         aria-label={`Destroy a hidden pair. Power payoff: ${run.destroyPairCharges > 0 ? 'Risk clear' : DEPLETED_POWER_PAYOFF_LABEL}. Impact cue: ${destroyImpactCue}. ${destroyIntentAria} Charges: ${run.destroyPairCharges}. ${destroyPairArmed ? 'Tap a tile' : 'Arm then tap a tile'}. ${powerRow('destroy_pair').perfectMemoryCopy}`}
@@ -977,16 +705,6 @@ const GameLeftToolbar = memo(function GameLeftToolbar({
                         >
                             {run.destroyPairCharges}
                         </span>
-                        {powerPayoffChip('destroy-pair-payoff-chip', run.destroyPairCharges > 0 ? 'Risk clear' : DEPLETED_POWER_PAYOFF_LABEL, run.destroyPairCharges > 0 ? 'control' : 'empty', run.destroyPairCharges > 0 ? (destroyPairArmed ? 'Tap pair' : 'Arm tool') : 'Recharge', destroyImpactCue)}
-                        <span
-                            aria-hidden="true"
-                            className={styles.powerIntentChip}
-                            data-power-intent={run.destroyPairCharges > 0 ? 'control' : 'empty'}
-                            data-testid="destroy-pair-intent-chip"
-                        >
-                            {run.destroyPairCharges > 0 ? (destroyPairArmed ? 'Remove pair' : 'Cut risk') : 'No charge'}
-                        </span>
-                        {powerRoleChip('destroy_pair', destroyPairArmed ? 'Tap' : undefined)}
                     </button>
                     <button
                         aria-label={`Peek one hidden tile. Power payoff: ${run.peekCharges > 0 ? 'Safe reveal' : DEPLETED_POWER_PAYOFF_LABEL}. Impact cue: ${peekImpactCue}. ${peekIntentAria} Charges: ${run.peekCharges}. ${peekModeArmed ? 'Tap a tile' : 'Arm peek then tap'}. ${powerRow('peek').perfectMemoryCopy}`}
@@ -1015,16 +733,6 @@ const GameLeftToolbar = memo(function GameLeftToolbar({
                         >
                             {run.peekCharges}
                         </span>
-                        {powerPayoffChip('peek-payoff-chip', run.peekCharges > 0 ? 'Safe reveal' : DEPLETED_POWER_PAYOFF_LABEL, run.peekCharges > 0 ? 'recall' : 'empty', run.peekCharges > 0 ? (peekModeArmed ? 'Tap tile' : 'Arm peek') : 'Recharge', peekImpactCue)}
-                        <span
-                            aria-hidden="true"
-                            className={styles.powerIntentChip}
-                            data-power-intent={run.peekCharges > 0 ? 'recall' : 'empty'}
-                            data-testid="peek-intent-chip"
-                        >
-                            {run.peekCharges > 0 ? (peekModeArmed ? 'Reveal tile' : 'Recall setup') : 'No charge'}
-                        </span>
-                        {powerRoleChip('peek', peekModeArmed ? 'Tap' : undefined)}
                     </button>
                     {showFlashPairPower ? (
                         <button
@@ -1053,16 +761,6 @@ const GameLeftToolbar = memo(function GameLeftToolbar({
                             >
                                 {run.flashPairCharges}
                             </span>
-                            {powerPayoffChip('flash-pair-payoff-chip', run.flashPairCharges > 0 ? 'Pair spark' : DEPLETED_POWER_PAYOFF_LABEL, run.flashPairCharges > 0 ? 'recall' : 'empty', run.flashPairCharges > 0 ? 'Cash now' : 'Recharge', flashImpactCue)}
-                            <span
-                                aria-hidden="true"
-                                className={styles.powerIntentChip}
-                                data-power-intent={run.flashPairCharges > 0 ? 'recall' : 'empty'}
-                                data-testid="flash-pair-intent-chip"
-                            >
-                                {run.flashPairCharges > 0 ? 'Pair reveal' : 'No charge'}
-                            </span>
-                            {powerRoleChip('flash_pair')}
                         </button>
                     ) : null}
                     <button
@@ -1092,16 +790,6 @@ const GameLeftToolbar = memo(function GameLeftToolbar({
                         >
                             {run.strayRemoveCharges}
                         </span>
-                        {powerPayoffChip('stray-remove-payoff-chip', run.strayRemoveCharges > 0 ? 'Space clear' : DEPLETED_POWER_PAYOFF_LABEL, run.strayRemoveCharges > 0 ? 'control' : 'empty', run.strayRemoveCharges > 0 ? (strayRemoveArmed ? 'Tap stray' : 'Arm tool') : 'Recharge', strayImpactCue)}
-                        <span
-                            aria-hidden="true"
-                            className={styles.powerIntentChip}
-                            data-power-intent={run.strayRemoveCharges > 0 ? 'control' : 'empty'}
-                            data-testid="stray-remove-intent-chip"
-                        >
-                            {run.strayRemoveCharges > 0 ? (strayRemoveArmed ? 'Remove stray' : 'Clear stray') : 'No charge'}
-                        </span>
-                        {powerRoleChip('stray_remove', strayRemoveArmed ? 'Tap' : undefined)}
                     </button>
                     <details className={styles.powerTeachingDetails}>
                         <summary aria-label="Power roles" title="Power roles">
