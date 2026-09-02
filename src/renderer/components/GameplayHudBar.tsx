@@ -954,33 +954,7 @@ const hudPrimaryRewardBeatCount = (cue: ChainRewardForecastCue): 2 | 3 | 4 => {
     return 2;
 };
 
-const hudPrimaryRewardAudioCue = (
-    cue: ChainRewardForecastCue
-): 'reward-guard' | 'reward-heal' | 'reward-prime' | 'reward-shard' | 'reward-stack' => {
-    if ((cue.stackSize ?? 1) >= 2) {
-        return 'reward-stack';
-    }
-    if (cue.tone === 'guard') {
-        return 'reward-guard';
-    }
-    if (cue.tone === 'heal') {
-        return 'reward-heal';
-    }
-    if (cue.urgency === 'later') {
-        return 'reward-prime';
-    }
-    return 'reward-shard';
-};
 
-const hudPrimaryRewardScreenCue = (cue: ChainRewardForecastCue): HudScreenCue => {
-    if ((cue.stackSize ?? 1) >= 2 || cue.urgency === 'next') {
-        return 'burst';
-    }
-    if (cue.urgency === 'soon') {
-        return 'pulse';
-    }
-    return 'tick';
-};
 
 const hudEndlessRiskWagerBeatCount = (streakAtRisk: number): 3 | 4 => (streakAtRisk >= 3 ? 4 : 3);
 
@@ -1445,15 +1419,6 @@ const GameplayHudBar = ({
     const primaryResourceRewardBeatCount = primaryResourceRewardCue
         ? hudPrimaryRewardBeatCount(primaryResourceRewardCue)
         : 0;
-    const primaryResourceRewardAction = primaryResourceRewardCue
-        ? getChainRewardLaneAction(primaryResourceRewardCue.urgency)
-        : 'none';
-    const primaryResourceRewardAudioCue = primaryResourceRewardCue
-        ? hudPrimaryRewardAudioCue(primaryResourceRewardCue)
-        : 'reward-prime';
-    const primaryResourceRewardScreenCue = primaryResourceRewardCue
-        ? hudPrimaryRewardScreenCue(primaryResourceRewardCue)
-        : 'tick';
     const primaryRewardHot = primaryResourceRewardCue?.urgency === 'next';
     const nearestRewardDistance = primaryResourceRewardCue?.distance ?? null;
     const stackedChainRewardCues =
@@ -1566,14 +1531,6 @@ const GameplayHudBar = ({
     const pickupRewardPreviewRows = getFindableRows()
         .filter((row) => row.comboShards > 0 || row.score > 0 || row.safeHazardWards > 0)
         .slice(0, 3);
-    const primaryResourceRewardCueLabel = primaryResourceRewardCue
-        ? formatRewardPreviewLabel('Nearest chain reward', [
-              {
-                  ...primaryResourceRewardCue,
-                  rewardText: `${getChainRewardLaneAction(primaryResourceRewardCue.urgency)}: ${getChainRewardUrgencyCopy(primaryResourceRewardCue)}: ${primaryResourceRewardCue.label}`
-              }
-          ])
-        : undefined;
     const pickupRewardPreviewLabel = formatRewardPreviewLabel(
         `Pickup reward preview ${run.findablesClaimedThisFloor} of ${run.findablesTotalThisFloor}`,
         pickupRewardPreviewRows
@@ -1810,54 +1767,6 @@ const GameplayHudBar = ({
                             <span className={`${styles.statVal} ${styles.hudShardsValue}`}>{run.stats.comboShards}</span>
                             <span className={styles.statSubline}>Guards {run.stats.guardTokens}</span>
                             <span className={styles.statSubline}>3 shards = +1 life</span>
-                            {primaryResourceRewardCue ? (
-                                <span
-                                    aria-label={primaryResourceRewardCueLabel}
-                                    className={styles.hudPrimaryRewardCue}
-                                    data-primary-reward-action={primaryResourceRewardAction}
-                                    data-primary-reward-audio={primaryResourceRewardAudioCue}
-                                    data-primary-reward-beats={primaryResourceRewardBeatCount}
-                                    data-primary-reward-distance={primaryResourceRewardCue.distance}
-                                    data-primary-reward-progress={primaryChainRewardProgress?.label ?? 'none'}
-                                    data-primary-reward-urgency={primaryResourceRewardCue.urgency}
-                                    data-primary-reward-screen-cue={primaryResourceRewardScreenCue}
-                                    data-primary-reward-tone={primaryResourceRewardCue.tone}
-                                    data-testid="hud-primary-reward-cue"
-                                >
-                                    <span className={styles.hudPrimaryRewardAction}>
-                                        {primaryResourceRewardAction}
-                                    </span>
-                                    <span className={styles.hudPrimaryRewardLabel}>
-                                        {primaryResourceRewardCue.label}
-                                    </span>
-                                    {primaryChainRewardProgress ? (
-                                        <span
-                                            aria-hidden="true"
-                                            className={styles.hudPrimaryRewardProgress}
-                                            data-primary-reward-progress-filled={primaryChainRewardProgress.filled}
-                                            data-primary-reward-progress-total={primaryChainRewardProgress.total}
-                                        >
-                                            <span
-                                                className={styles.hudPrimaryRewardProgressFill}
-                                                style={hudMeterStyle(
-                                                    (primaryChainRewardProgress.filled /
-                                                        Math.max(1, primaryChainRewardProgress.total)) *
-                                                        100
-                                                )}
-                                            />
-                                            <b>{primaryChainRewardProgress.remainingLabel}</b>
-                                        </span>
-                                    ) : null}
-                                    <span aria-hidden="true" className={styles.hudPrimaryRewardBeatPips}>
-                                        {Array.from({ length: primaryResourceRewardBeatCount }, (_, beatIndex) => (
-                                            <i
-                                                data-primary-reward-beat={beatIndex + 1}
-                                                key={`${primaryResourceRewardCue.id}-primary-beat-${beatIndex + 1}`}
-                                            />
-                                        ))}
-                                    </span>
-                                </span>
-                            ) : null}
                         </div>
                     </div>
                     <div

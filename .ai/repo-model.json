@@ -7395,14 +7395,14 @@
     {
       "path": "src/renderer/components/GameLeftToolbar.test.tsx",
       "category": "test",
-      "bytes": 36041,
-      "sha256": "3546a40637ea5d9f85c6f53fde373c2a26182ebf535fe2e14c0d6b67ae68b8ef"
+      "bytes": 3592,
+      "sha256": "a83da34ceedc9f8af07834bf6b1fbc46ec00c0af613778d6403b2cfa467bfe86"
     },
     {
       "path": "src/renderer/components/GameLeftToolbar.tsx",
       "category": "source",
-      "bytes": 55468,
-      "sha256": "16bcc53a2308302a96016479fb043c016e70c9e88075a601c171ad22235addad"
+      "bytes": 39537,
+      "sha256": "2ada49b439d5ec2829ec8f7ed01189d5e055c0e86a9047b2c4f9dbfb959e1dbf"
     },
     {
       "path": "src/renderer/components/GameOverScreen.module.css",
@@ -7425,14 +7425,14 @@
     {
       "path": "src/renderer/components/GameplayHudBar.test.tsx",
       "category": "test",
-      "bytes": 118151,
-      "sha256": "38dc2bfa994fb02d5bedb328acf533d21e2efff1e340444e4bc4957073bce5a9"
+      "bytes": 86701,
+      "sha256": "232b09278600b51819f333005c01a17fd758f4d64d785dd555bb7da17beb53a6"
     },
     {
       "path": "src/renderer/components/GameplayHudBar.tsx",
       "category": "source",
-      "bytes": 210046,
-      "sha256": "bb45ffc8528a9c9fc492c771cf0aae0aa9f80976a6cd55e61d8f884e1317868d"
+      "bytes": 204910,
+      "sha256": "5251ae0fbd65812b3da8f1468becabf2de1ec112b4c348555d439cc705d33a33"
     },
     {
       "path": "src/renderer/components/gameplayHudMutatorLabels.ts",
@@ -7461,8 +7461,8 @@
     {
       "path": "src/renderer/components/GameScreen.module.css",
       "category": "source",
-      "bytes": 606338,
-      "sha256": "58d1e7bc6a749f4b0bac77b7e2187373655e7e36d0495f00a36a304e14cd3dba"
+      "bytes": 597512,
+      "sha256": "2b4ff0985a1007fdf0a2cef17b2a28e879e76ce5ac082e913b8ce419dbc7b6c8"
     },
     {
       "path": "src/renderer/components/GameScreen.test.tsx",
@@ -7905,20 +7905,20 @@
     {
       "path": "src/renderer/components/TileBoard.module.css",
       "category": "source",
-      "bytes": 306886,
-      "sha256": "d9e670c7b4a00996da51c7ce0976b0b3b6ff0e72131eeeb107a94209aaa1918f"
+      "bytes": 88587,
+      "sha256": "d18e9508fda74bf2353cd0b1498f018910cf855adfb4ea443d3ec8d17ca7ada5"
     },
     {
       "path": "src/renderer/components/TileBoard.test.tsx",
       "category": "test",
-      "bytes": 253110,
-      "sha256": "407f046c638c921b4d92378e4de3868d09fbab258a382bfadf5e2b213311c67d"
+      "bytes": 56102,
+      "sha256": "8f8c9209424056cd1cab4663a2a779b797bd1ec37017bf4dffd08875a76127ad"
     },
     {
       "path": "src/renderer/components/TileBoard.tsx",
       "category": "source",
-      "bytes": 347937,
-      "sha256": "743724a97872283508b320a5119ee24f682ce632f74ecdd2a850a671bd292ad5"
+      "bytes": 192661,
+      "sha256": "a1f49fb9d909087cd8b865410599b6d8c6e03a098a81a569b3f016e74a6137ab"
     },
     {
       "path": "src/renderer/components/tileBoardCanvasContext.test.ts",
@@ -16584,7 +16584,7 @@
       "path": "src/renderer/components/GameLeftToolbar.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 473,
+      "lineCount": 94,
       "imports": [
         "file:src/renderer/components/GameLeftToolbar.tsx",
         "file:src/renderer/components/TileBoard.tsx",
@@ -16600,7 +16600,7 @@
       "path": "src/renderer/components/GameLeftToolbar.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 1156,
+      "lineCount": 844,
       "imports": [
         "file:src/renderer/a11y/toolbarRoving.ts",
         "file:src/renderer/assets/ui/icons/index.ts",
@@ -16676,7 +16676,7 @@
       "path": "src/renderer/components/GameplayHudBar.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 2053,
+      "lineCount": 1596,
       "imports": [
         "file:src/renderer/components/GameplayHudBar.tsx",
         "file:src/shared/builtin-puzzles.ts",
@@ -16691,7 +16691,7 @@
       "path": "src/renderer/components/GameplayHudBar.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 3473,
+      "lineCount": 3382,
       "imports": [
         "file:src/renderer/components/gameplayHudMutatorLabels.ts",
         "file:src/renderer/components/gameScreenFeedback.ts",
@@ -18126,7 +18126,7 @@
       "path": "src/renderer/components/TileBoard.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 4155,
+      "lineCount": 1414,
       "imports": [
         "file:src/renderer/components/TileBoard.tsx",
         "file:src/renderer/components/tileBoardStageLayers.ts",
@@ -18142,7 +18142,7 @@
       "path": "src/renderer/components/TileBoard.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 6505,
+      "lineCount": 4312,
       "imports": [
         "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/breakpoints.ts",
@@ -35327,8 +35327,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameLeftToolbar.tsx",
-      "line": 1155,
-      "endLine": 1155
+      "line": 843,
+      "endLine": 843
     },
     {
       "id": "symbol:src/renderer/components/GameOverScreen.tsx#default",
@@ -35343,8 +35343,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameplayHudBar.tsx",
-      "line": 3472,
-      "endLine": 3472
+      "line": 3381,
+      "endLine": 3381
     },
     {
       "id": "symbol:src/renderer/components/GameplayHudBar.tsx#GameplayHudBarProps",
@@ -37119,24 +37119,24 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/TileBoard.tsx",
-      "line": 6504,
-      "endLine": 6504
+      "line": 4311,
+      "endLine": 4311
     },
     {
       "id": "symbol:src/renderer/components/TileBoard.tsx#TileBoardClientRect",
       "name": "TileBoardClientRect",
       "kind": "type",
       "file": "src/renderer/components/TileBoard.tsx",
-      "line": 581,
-      "endLine": 588
+      "line": 529,
+      "endLine": 536
     },
     {
       "id": "symbol:src/renderer/components/TileBoard.tsx#TileBoardHandle",
       "name": "TileBoardHandle",
       "kind": "type",
       "file": "src/renderer/components/TileBoard.tsx",
-      "line": 590,
-      "endLine": 594
+      "line": 538,
+      "endLine": 542
     },
     {
       "id": "symbol:src/renderer/components/tileBoardCanvasContext.ts#getTileBoardCanvasContextConfig",

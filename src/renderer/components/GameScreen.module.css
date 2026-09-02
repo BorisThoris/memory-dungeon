@@ -1456,7 +1456,6 @@
 .boardFloaterRewardBurstBeatPips i:nth-child(2),
 .dungeonMapRoomPayoffBeatPips i:nth-child(2),
 .routeCardBannerBeatPips i:nth-child(2),
-.hudPrimaryRewardBeatPips i:nth-child(2),
 .hudObjectiveSignalBeatPips i:nth-child(2),
 .toolCrescendoPips i:nth-child(2),
 .powerPayoffBeatPips i:nth-child(2) {
@@ -1484,7 +1483,6 @@
 .boardFloaterRewardBurstBeatPips i:nth-child(3),
 .dungeonMapRoomPayoffBeatPips i:nth-child(3),
 .routeCardBannerBeatPips i:nth-child(3),
-.hudPrimaryRewardBeatPips i:nth-child(3),
 .hudObjectiveSignalBeatPips i:nth-child(3),
 .toolCrescendoPips i:nth-child(3),
 .powerPayoffBeatPips i:nth-child(3) {
@@ -1512,7 +1510,6 @@
 .boardFloaterRewardBurstBeatPips i:nth-child(4),
 .dungeonMapRoomPayoffBeatPips i:nth-child(4),
 .routeCardBannerBeatPips i:nth-child(4),
-.hudPrimaryRewardBeatPips i:nth-child(4),
 .hudObjectiveSignalBeatPips i:nth-child(4),
 .toolCrescendoPips i:nth-child(4),
 .powerPayoffBeatPips i:nth-child(4) {
@@ -6466,138 +6463,6 @@
     color: color-mix(in srgb, var(--theme-text) 94%, white);
 }
 
-.hudPrimaryRewardCue {
-    display: inline-grid;
-    grid-template-columns: auto minmax(0, 1fr) auto;
-    align-items: center;
-    gap: 0.16rem;
-    width: fit-content;
-    max-width: 100%;
-    padding: 0.08rem 0.28rem;
-    border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 30%, transparent);
-    border-radius: var(--ui-radius-pill);
-    background: color-mix(in srgb, var(--theme-gold) 9%, transparent);
-    color: color-mix(in srgb, var(--theme-gold-bright) 82%, white);
-    font-size: 0.5rem;
-    font-weight: 920;
-    line-height: 1;
-    text-transform: uppercase;
-    white-space: nowrap;
-}
-
-.hudPrimaryRewardAction,
-.hudPrimaryRewardLabel,
-.hudPrimaryRewardProgress b {
-    min-width: 0;
-    overflow: hidden;
-    line-height: 1;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.hudPrimaryRewardAction {
-    padding: 0.08rem 0.22rem;
-    border-radius: var(--ui-radius-pill);
-    background: color-mix(in srgb, currentColor 13%, transparent);
-    color: color-mix(in srgb, currentColor 88%, white);
-    font-size: 0.45rem;
-    font-weight: 980;
-}
-
-.hudPrimaryRewardLabel {
-    color: color-mix(in srgb, currentColor 82%, white);
-}
-
-.hudPrimaryRewardProgress {
-    position: relative;
-    display: inline-grid;
-    grid-column: 1 / -1;
-    grid-template-columns: minmax(2.4rem, 1fr) auto;
-    align-items: center;
-    gap: 0.18rem;
-    min-width: 0;
-    padding-top: 0.03rem;
-}
-
-.hudPrimaryRewardProgress::before {
-    height: 0.16rem;
-    border-radius: var(--ui-radius-pill);
-    background: color-mix(in srgb, currentColor 18%, transparent);
-    content: '';
-}
-
-.hudPrimaryRewardProgressFill {
-    position: absolute;
-    left: 0;
-    width: var(--hud-meter-fill, 0%);
-    height: 0.16rem;
-    border-radius: var(--ui-radius-pill);
-    background: currentColor;
-    box-shadow: 0 0 0.32rem color-mix(in srgb, currentColor 28%, transparent);
-}
-
-.hudPrimaryRewardProgress b {
-    color: color-mix(in srgb, currentColor 76%, white);
-    font-size: 0.42rem;
-    font-weight: 920;
-}
-
-.hudPrimaryRewardBeatPips {
-    display: inline-flex;
-    grid-row: 1;
-    grid-column: 3;
-    flex: 0 0 auto;
-    align-items: center;
-    gap: 0.045rem;
-}
-
-.hudPrimaryRewardBeatPips i {
-    width: 0.16rem;
-    height: 0.16rem;
-    border-radius: 999px;
-    background: currentColor;
-    box-shadow: 0 0 0.24rem color-mix(in srgb, currentColor 28%, transparent);
-    animation: gameplayBeatPipPulse 0.92s ease-in-out infinite;
-    opacity: 0.62;
-    transform-origin: center;
-}
-
-.hudPrimaryRewardCue[data-primary-reward-beats='3'] .hudPrimaryRewardBeatPips i {
-    opacity: 0.78;
-}
-
-.hudPrimaryRewardCue[data-primary-reward-beats='4'] .hudPrimaryRewardBeatPips i {
-    width: 0.18rem;
-    height: 0.18rem;
-    opacity: 0.94;
-}
-
-.hudPrimaryRewardCue[data-primary-reward-tone='guard'] {
-    border-color: color-mix(in srgb, var(--theme-cyan-bright) 30%, transparent);
-    background: color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent);
-    color: color-mix(in srgb, var(--theme-cyan-bright) 80%, white);
-}
-
-.hudPrimaryRewardCue[data-primary-reward-tone='heal'] {
-    border-color: color-mix(in srgb, var(--theme-success) 32%, transparent);
-    background: color-mix(in srgb, var(--theme-success) 9%, transparent);
-    color: color-mix(in srgb, var(--theme-success) 82%, white);
-}
-
-.hudPrimaryRewardCue[data-primary-reward-urgency='next'] {
-    border-color: color-mix(in srgb, var(--theme-gold-bright) 56%, white 8%);
-    background:
-        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 18%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent)),
-        color-mix(in srgb, var(--theme-gold) 13%, transparent);
-    box-shadow:
-        0 0 0.7rem color-mix(in srgb, var(--theme-gold-bright) 16%, transparent),
-        inset 0 1px 0 color-mix(in srgb, white 8%, transparent);
-}
-
-.hudPrimaryRewardCue[data-primary-reward-urgency='soon'] {
-    border-color: color-mix(in srgb, var(--theme-cyan-bright) 36%, var(--theme-gold-bright) 22%);
-}
-
 .hudDailySegment {
     min-width: 6.5rem;
     align-items: center;
@@ -9577,10 +9442,7 @@
     .boardFloaterChainMilestoneBeatPips i,
     .boardFloaterCascadeBeatPips i,
     .boardFloaterRewardBurstBeatPips i,
-    .hudPrimaryRewardBeatPips i,
     .hudObjectiveSignalBeatPips i,
-    .hudPrimaryRewardCue[data-primary-reward-screen-cue='burst'],
-    .hudPrimaryRewardCue[data-primary-reward-screen-cue='pulse'],
     .hudEndlessRiskWagerBeatPips i,
     .hudObjectiveSignals > span[data-objective-signal-screen-cue='burst'],
     .powerPayoffChip[data-power-cue='Stack cashout'],
@@ -9677,7 +9539,6 @@
 :global([data-reduce-motion='true']) .boardFloaterPrimaryTraitLaneBeatPips i,
 :global([data-reduce-motion='true']) .boardFloaterTraitLaneBeatPips i,
 :global([data-reduce-motion='true']) .boardFloaterTraitLaneMapSummaryBeatPips i,
-:global([data-reduce-motion='true']) .hudPrimaryRewardBeatPips i,
 :global([data-reduce-motion='true']) .hudObjectiveSignalBeatPips i,
 :global([data-reduce-motion='true']) .matchScoreFloater[data-match-crescendo-tier='stack']::after,
 :global([data-reduce-motion='true']) .matchScoreFloater[data-match-crescendo-tier='super']::after,
@@ -9869,18 +9730,6 @@
         0 0 0.62rem color-mix(in srgb, var(--theme-danger) 16%, transparent);
 }
 
-.hudPrimaryRewardCue[data-primary-reward-screen-cue='burst'] {
-    animation: hudRewardPulse 1s ease-in-out infinite;
-    box-shadow:
-        0 0 0 1px color-mix(in srgb, var(--theme-gold-bright) 18%, transparent),
-        0 0 0.74rem color-mix(in srgb, var(--theme-gold-bright) 18%, transparent);
-}
-
-.hudPrimaryRewardCue[data-primary-reward-screen-cue='pulse'] {
-    animation: payoffChipPulse 1.7s ease-in-out infinite;
-}
-
-/* AST-004: ornament position/size paired with hud-segment-ornament.svg viewBox; narrow breakpoints only tweak segment min-width, not this layer. */
 .hudScoreSegment {
     flex: 1 1 14rem;
     min-width: 12rem;
@@ -17211,7 +17060,9 @@
 }
 
 /*
- * A closed disclosure must not lay out its contents.
+ * A closed disclosure must not lay out its contents. This is the general rule; two
+ * disclosures in this shell hit it - the HUD's right stat rail and the action dock's
+ * power-teaching panel.
  *
  * The UA hides a closed `details`' non-summary children with `display: none`, but any
  * author rule that sets `display` on those children overrides it - and
@@ -17227,7 +17078,9 @@
  * does not apply.
  */
 .shell .hudDeck .hudContextRegion:not([open]) > *:not(summary),
-.shell .hudContextRegion:not([open]) > *:not(summary) {
+.shell .hudContextRegion:not([open]) > *:not(summary),
+.shell .actionDock details:not([open]) > *:not(summary),
+.shell details:not([open]) > *:not(summary) {
     display: none;
 }
 
