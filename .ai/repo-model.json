@@ -5,11 +5,11 @@
     "name": "memory-dungeon",
     "trackedFileCount": 2415,
     "codeFileCount": 900,
-    "exportedSymbolCount": 3395,
+    "exportedSymbolCount": 3383,
     "contentItemCount": 57,
     "mechanicCount": 130,
     "stateFieldCount": 144,
-    "relationshipCount": 9862
+    "relationshipCount": 9847
   },
   "inventory": [
     {
@@ -3681,8 +3681,8 @@
     {
       "path": "e2e/playable-path-navigation.spec.ts",
       "category": "test",
-      "bytes": 10065,
-      "sha256": "714eff3551336706f2a34a31829e950bfdfdf931e030dba7302fc169333df6e3"
+      "bytes": 10428,
+      "sha256": "14f36a546c3edcde08b6ddf628bac2e3e8c18589deb91011c85f258199ea4996"
     },
     {
       "path": "e2e/playablePathHelpers.ts",
@@ -7485,20 +7485,20 @@
     {
       "path": "src/renderer/components/GameScreen.module.css",
       "category": "source",
-      "bytes": 481315,
-      "sha256": "10262be11c451a2f78134cde6dd7c9d855590d13e950105fd89d8280f3eb1d61"
+      "bytes": 45152,
+      "sha256": "519a020f02c31f5ff50de727c501121bada1f9405df57cc9ce79362902fbf243"
     },
     {
       "path": "src/renderer/components/GameScreen.test.tsx",
       "category": "test",
-      "bytes": 107714,
-      "sha256": "4c7eb57a2c03bcf591a6236948a1aba9318f8c3bc70eca34b696caf9cd75d9e8"
+      "bytes": 93274,
+      "sha256": "d5ce87a190c3a5c9df6a76283af92cd86c6568cc5557719a682f13625796b23a"
     },
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 223840,
-      "sha256": "daf89e64e81f9727e4305c7f28fcc59ffc9801103785ffde23e44785836879de"
+      "bytes": 94438,
+      "sha256": "b145ec33c504534edd6fe207b4cd5a9a1363d4baac607334b2bf1f94b6681d51"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -8763,26 +8763,26 @@
     {
       "path": "src/renderer/copy/matchScoreFloater.test.ts",
       "category": "test",
-      "bytes": 12484,
-      "sha256": "519c8262e18a36d492868cc9e6effb6cc641a62f0235d53ef33e3d4134fd2fbd"
+      "bytes": 2010,
+      "sha256": "fd5a7d9724b4b0069b965fefc77e1da178143e9bf1f16d926531f361a89485f3"
     },
     {
       "path": "src/renderer/copy/matchScoreFloater.ts",
       "category": "source",
-      "bytes": 3884,
-      "sha256": "82010e995aabcdeafc35de68793632524a43bbad290be967f78321a09f0099c8"
+      "bytes": 1117,
+      "sha256": "824963536fbafb02e2e11d7bf62f53268a41fd3a8e8503f442647f7a4497f9a3"
     },
     {
       "path": "src/renderer/copy/mismatchFloater.test.ts",
       "category": "test",
-      "bytes": 20247,
-      "sha256": "85c3982b5b531aec1ed580c603901cb346248393796a257cc82a27b2b9c041e3"
+      "bytes": 3034,
+      "sha256": "86b8e8a95bbc7b26c9aeb4836ab393ee09c7c2116288c3f108e2aaf4cdc892f7"
     },
     {
       "path": "src/renderer/copy/mismatchFloater.ts",
       "category": "source",
-      "bytes": 22455,
-      "sha256": "4f32df81fc08870ded1047df3ca30c53ea0ffbf1379cbb66d4134fc674bbf713"
+      "bytes": 3760,
+      "sha256": "d66567ee37393fc4a3d44e801b37c97c7d58613ee0cd365a4dc7844bd8e76150"
     },
     {
       "path": "src/renderer/copy/perfectMemory.ts",
@@ -8823,8 +8823,8 @@
     {
       "path": "src/renderer/copy/traitInteractionLaneMap.ts",
       "category": "source",
-      "bytes": 3903,
-      "sha256": "8577619323a554f21c647f736433e77357d20b65ce1b8119f4282f911cfd530b"
+      "bytes": 3896,
+      "sha256": "7cc7d3f591da2d667411f3017245df53cfeab127eec42c5457c6b0993373c7c9"
     },
     {
       "path": "src/renderer/desktop-client.test.ts",
@@ -16681,11 +16681,10 @@
       "path": "src/renderer/components/GameScreen.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 2584,
+      "lineCount": 2324,
       "imports": [
         "file:src/renderer/components/GameScreen.tsx",
         "file:src/renderer/components/gameScreenFeedback.ts",
-        "file:src/renderer/components/matchScoreFloaterTiming.ts",
         "file:src/renderer/copy/gameplayHints.ts",
         "file:src/renderer/platformTilt/PlatformTiltProvider.tsx",
         "file:src/renderer/store/matchScorePop.ts",
@@ -16705,7 +16704,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 4134,
+      "lineCount": 2061,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -16728,7 +16727,6 @@
         "file:src/renderer/copy/matchScoreFloater.ts",
         "file:src/renderer/copy/mismatchFloater.ts",
         "file:src/renderer/copy/relicDraftOffer.ts",
-        "file:src/renderer/copy/traitInteractionLaneMap.ts",
         "file:src/renderer/gameplay/regPhase4PlayContract.ts",
         "file:src/renderer/gameplay/stickyFingersBlockedTileId.ts",
         "file:src/renderer/hooks/useDistractionChannelTick.ts",
@@ -17030,7 +17028,6 @@
         "symbol:src/renderer/components/matchScoreFloaterTiming.ts#matchScoreFloatDurationMs"
       ],
       "testedBy": [
-        "file:src/renderer/components/GameScreen.test.tsx",
         "file:src/renderer/components/matchScoreFloaterTiming.test.ts"
       ]
     },
@@ -20345,7 +20342,7 @@
       "path": "src/renderer/copy/matchScoreFloater.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 280,
+      "lineCount": 47,
       "imports": [
         "file:src/renderer/copy/matchScoreFloater.ts"
       ],
@@ -20357,7 +20354,7 @@
       "path": "src/renderer/copy/matchScoreFloater.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 82,
+      "lineCount": 28,
       "imports": [
         "file:src/renderer/copy/chainMomentum.ts",
         "file:src/shared/run-number-guards.ts"
@@ -20375,7 +20372,7 @@
       "path": "src/renderer/copy/mismatchFloater.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 499,
+      "lineCount": 61,
       "imports": [
         "file:src/renderer/copy/mismatchFloater.ts"
       ],
@@ -20387,7 +20384,7 @@
       "path": "src/renderer/copy/mismatchFloater.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 581,
+      "lineCount": 109,
       "imports": [
         "file:src/shared/chain-targets.ts",
         "file:src/shared/run-number-guards.ts"
@@ -20395,19 +20392,8 @@
       "exports": [
         "symbol:src/renderer/copy/mismatchFloater.ts#mismatchFloaterLiveRegionText",
         "symbol:src/renderer/copy/mismatchFloater.ts#mismatchFloaterNextAction",
-        "symbol:src/renderer/copy/mismatchFloater.ts#mismatchFloaterRecoveryBurst",
-        "symbol:src/renderer/copy/mismatchFloater.ts#MismatchFloaterRecoveryChip",
-        "symbol:src/renderer/copy/mismatchFloater.ts#mismatchFloaterRecoveryChips",
-        "symbol:src/renderer/copy/mismatchFloater.ts#mismatchFloaterRecoveryCrescendo",
-        "symbol:src/renderer/copy/mismatchFloater.ts#mismatchFloaterRecoveryCrescendoLabel",
         "symbol:src/renderer/copy/mismatchFloater.ts#mismatchFloaterRecoveryHint",
-        "symbol:src/renderer/copy/mismatchFloater.ts#MismatchFloaterRecoveryLaneId",
-        "symbol:src/renderer/copy/mismatchFloater.ts#mismatchFloaterRecoveryLaneMap",
-        "symbol:src/renderer/copy/mismatchFloater.ts#MismatchFloaterRecoveryLaneMapEntry",
-        "symbol:src/renderer/copy/mismatchFloater.ts#mismatchFloaterRecoverySequence",
-        "symbol:src/renderer/copy/mismatchFloater.ts#mismatchFloaterRecoveryStack",
-        "symbol:src/renderer/copy/mismatchFloater.ts#mismatchFloaterSignal",
-        "symbol:src/renderer/copy/mismatchFloater.ts#mismatchFloaterVisualLabel"
+        "symbol:src/renderer/copy/mismatchFloater.ts#mismatchFloaterSignal"
       ],
       "testedBy": [
         "file:src/renderer/copy/mismatchFloater.test.ts"
@@ -20539,8 +20525,7 @@
         "symbol:src/renderer/copy/traitInteractionLaneMap.ts#TRAIT_INTERACTION_LANE_LABELS",
         "symbol:src/renderer/copy/traitInteractionLaneMap.ts#traitInteractionLaneActionMapAttr",
         "symbol:src/renderer/copy/traitInteractionLaneMap.ts#TraitInteractionLaneId",
-        "symbol:src/renderer/copy/traitInteractionLaneMap.ts#traitInteractionLaneMapAttr",
-        "symbol:src/renderer/copy/traitInteractionLaneMap.ts#TraitInteractionLaneMapEntry"
+        "symbol:src/renderer/copy/traitInteractionLaneMap.ts#traitInteractionLaneMapAttr"
       ],
       "testedBy": [
         "file:src/renderer/copy/traitInteractionLaneMap.test.ts"
@@ -34912,8 +34897,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 4133,
-      "endLine": 4133
+      "line": 2060,
+      "endLine": 2060
     },
     {
       "id": "symbol:src/renderer/components/gameScreenFeedback.ts#DungeonCombatLogRow",
@@ -38896,136 +38881,48 @@
       "name": "matchScoreFloaterChainCue",
       "kind": "value",
       "file": "src/renderer/copy/matchScoreFloater.ts",
-      "line": 7,
-      "endLine": 7
+      "line": 8,
+      "endLine": 8
     },
     {
       "id": "symbol:src/renderer/copy/matchScoreFloater.ts#matchScoreFloaterLiveRegionText",
       "name": "matchScoreFloaterLiveRegionText",
       "kind": "function",
       "file": "src/renderer/copy/matchScoreFloater.ts",
-      "line": 38,
-      "endLine": 81
+      "line": 17,
+      "endLine": 27
     },
     {
       "id": "symbol:src/renderer/copy/mismatchFloater.ts#mismatchFloaterLiveRegionText",
       "name": "mismatchFloaterLiveRegionText",
       "kind": "function",
       "file": "src/renderer/copy/mismatchFloater.ts",
-      "line": 59,
-      "endLine": 82
+      "line": 20,
+      "endLine": 24
     },
     {
       "id": "symbol:src/renderer/copy/mismatchFloater.ts#mismatchFloaterNextAction",
       "name": "mismatchFloaterNextAction",
       "kind": "function",
       "file": "src/renderer/copy/mismatchFloater.ts",
-      "line": 362,
-      "endLine": 400
-    },
-    {
-      "id": "symbol:src/renderer/copy/mismatchFloater.ts#mismatchFloaterRecoveryBurst",
-      "name": "mismatchFloaterRecoveryBurst",
-      "kind": "function",
-      "file": "src/renderer/copy/mismatchFloater.ts",
-      "line": 403,
-      "endLine": 437
-    },
-    {
-      "id": "symbol:src/renderer/copy/mismatchFloater.ts#MismatchFloaterRecoveryChip",
-      "name": "MismatchFloaterRecoveryChip",
-      "kind": "type",
-      "file": "src/renderer/copy/mismatchFloater.ts",
-      "line": 132,
-      "endLine": 139
-    },
-    {
-      "id": "symbol:src/renderer/copy/mismatchFloater.ts#mismatchFloaterRecoveryChips",
-      "name": "mismatchFloaterRecoveryChips",
-      "kind": "function",
-      "file": "src/renderer/copy/mismatchFloater.ts",
-      "line": 440,
-      "endLine": 531
-    },
-    {
-      "id": "symbol:src/renderer/copy/mismatchFloater.ts#mismatchFloaterRecoveryCrescendo",
-      "name": "mismatchFloaterRecoveryCrescendo",
-      "kind": "function",
-      "file": "src/renderer/copy/mismatchFloater.ts",
-      "line": 291,
-      "endLine": 352
-    },
-    {
-      "id": "symbol:src/renderer/copy/mismatchFloater.ts#mismatchFloaterRecoveryCrescendoLabel",
-      "name": "mismatchFloaterRecoveryCrescendoLabel",
-      "kind": "function",
-      "file": "src/renderer/copy/mismatchFloater.ts",
-      "line": 354,
-      "endLine": 359
+      "line": 71,
+      "endLine": 108
     },
     {
       "id": "symbol:src/renderer/copy/mismatchFloater.ts#mismatchFloaterRecoveryHint",
       "name": "mismatchFloaterRecoveryHint",
       "kind": "function",
       "file": "src/renderer/copy/mismatchFloater.ts",
-      "line": 96,
-      "endLine": 114
-    },
-    {
-      "id": "symbol:src/renderer/copy/mismatchFloater.ts#MismatchFloaterRecoveryLaneId",
-      "name": "MismatchFloaterRecoveryLaneId",
-      "kind": "type",
-      "file": "src/renderer/copy/mismatchFloater.ts",
-      "line": 141,
-      "endLine": 141
-    },
-    {
-      "id": "symbol:src/renderer/copy/mismatchFloater.ts#mismatchFloaterRecoveryLaneMap",
-      "name": "mismatchFloaterRecoveryLaneMap",
-      "kind": "function",
-      "file": "src/renderer/copy/mismatchFloater.ts",
-      "line": 562,
-      "endLine": 580
-    },
-    {
-      "id": "symbol:src/renderer/copy/mismatchFloater.ts#MismatchFloaterRecoveryLaneMapEntry",
-      "name": "MismatchFloaterRecoveryLaneMapEntry",
-      "kind": "type",
-      "file": "src/renderer/copy/mismatchFloater.ts",
-      "line": 143,
-      "endLine": 148
-    },
-    {
-      "id": "symbol:src/renderer/copy/mismatchFloater.ts#mismatchFloaterRecoverySequence",
-      "name": "mismatchFloaterRecoverySequence",
-      "kind": "function",
-      "file": "src/renderer/copy/mismatchFloater.ts",
-      "line": 247,
-      "endLine": 288
-    },
-    {
-      "id": "symbol:src/renderer/copy/mismatchFloater.ts#mismatchFloaterRecoveryStack",
-      "name": "mismatchFloaterRecoveryStack",
-      "kind": "function",
-      "file": "src/renderer/copy/mismatchFloater.ts",
-      "line": 201,
-      "endLine": 244
+      "line": 27,
+      "endLine": 45
     },
     {
       "id": "symbol:src/renderer/copy/mismatchFloater.ts#mismatchFloaterSignal",
       "name": "mismatchFloaterSignal",
       "kind": "function",
       "file": "src/renderer/copy/mismatchFloater.ts",
-      "line": 122,
-      "endLine": 130
-    },
-    {
-      "id": "symbol:src/renderer/copy/mismatchFloater.ts#mismatchFloaterVisualLabel",
-      "name": "mismatchFloaterVisualLabel",
-      "kind": "function",
-      "file": "src/renderer/copy/mismatchFloater.ts",
-      "line": 85,
-      "endLine": 93
+      "line": 53,
+      "endLine": 61
     },
     {
       "id": "symbol:src/renderer/copy/perfectMemory.ts#PERFECT_MEMORY_BASE_RULES",
@@ -39298,14 +39195,6 @@
       "file": "src/renderer/copy/traitInteractionLaneMap.ts",
       "line": 105,
       "endLine": 106
-    },
-    {
-      "id": "symbol:src/renderer/copy/traitInteractionLaneMap.ts#TraitInteractionLaneMapEntry",
-      "name": "TraitInteractionLaneMapEntry",
-      "kind": "interface",
-      "file": "src/renderer/copy/traitInteractionLaneMap.ts",
-      "line": 5,
-      "endLine": 10
     },
     {
       "id": "symbol:src/renderer/desktop-client.ts#desktopClient",
@@ -61785,7 +61674,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 2249
+          "line": 1283
         }
       ],
       "tests": [
@@ -75919,81 +75808,15 @@
       "kind": "exports"
     },
     {
-      "id": "exports:src/renderer/copy/mismatchFloater.ts->symbol:src/renderer/copy/mismatchFloater.ts#mismatchFloaterRecoveryBurst",
-      "source": "file:src/renderer/copy/mismatchFloater.ts",
-      "target": "symbol:src/renderer/copy/mismatchFloater.ts#mismatchFloaterRecoveryBurst",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/copy/mismatchFloater.ts->symbol:src/renderer/copy/mismatchFloater.ts#MismatchFloaterRecoveryChip",
-      "source": "file:src/renderer/copy/mismatchFloater.ts",
-      "target": "symbol:src/renderer/copy/mismatchFloater.ts#MismatchFloaterRecoveryChip",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/copy/mismatchFloater.ts->symbol:src/renderer/copy/mismatchFloater.ts#mismatchFloaterRecoveryChips",
-      "source": "file:src/renderer/copy/mismatchFloater.ts",
-      "target": "symbol:src/renderer/copy/mismatchFloater.ts#mismatchFloaterRecoveryChips",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/copy/mismatchFloater.ts->symbol:src/renderer/copy/mismatchFloater.ts#mismatchFloaterRecoveryCrescendo",
-      "source": "file:src/renderer/copy/mismatchFloater.ts",
-      "target": "symbol:src/renderer/copy/mismatchFloater.ts#mismatchFloaterRecoveryCrescendo",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/copy/mismatchFloater.ts->symbol:src/renderer/copy/mismatchFloater.ts#mismatchFloaterRecoveryCrescendoLabel",
-      "source": "file:src/renderer/copy/mismatchFloater.ts",
-      "target": "symbol:src/renderer/copy/mismatchFloater.ts#mismatchFloaterRecoveryCrescendoLabel",
-      "kind": "exports"
-    },
-    {
       "id": "exports:src/renderer/copy/mismatchFloater.ts->symbol:src/renderer/copy/mismatchFloater.ts#mismatchFloaterRecoveryHint",
       "source": "file:src/renderer/copy/mismatchFloater.ts",
       "target": "symbol:src/renderer/copy/mismatchFloater.ts#mismatchFloaterRecoveryHint",
       "kind": "exports"
     },
     {
-      "id": "exports:src/renderer/copy/mismatchFloater.ts->symbol:src/renderer/copy/mismatchFloater.ts#MismatchFloaterRecoveryLaneId",
-      "source": "file:src/renderer/copy/mismatchFloater.ts",
-      "target": "symbol:src/renderer/copy/mismatchFloater.ts#MismatchFloaterRecoveryLaneId",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/copy/mismatchFloater.ts->symbol:src/renderer/copy/mismatchFloater.ts#mismatchFloaterRecoveryLaneMap",
-      "source": "file:src/renderer/copy/mismatchFloater.ts",
-      "target": "symbol:src/renderer/copy/mismatchFloater.ts#mismatchFloaterRecoveryLaneMap",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/copy/mismatchFloater.ts->symbol:src/renderer/copy/mismatchFloater.ts#MismatchFloaterRecoveryLaneMapEntry",
-      "source": "file:src/renderer/copy/mismatchFloater.ts",
-      "target": "symbol:src/renderer/copy/mismatchFloater.ts#MismatchFloaterRecoveryLaneMapEntry",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/copy/mismatchFloater.ts->symbol:src/renderer/copy/mismatchFloater.ts#mismatchFloaterRecoverySequence",
-      "source": "file:src/renderer/copy/mismatchFloater.ts",
-      "target": "symbol:src/renderer/copy/mismatchFloater.ts#mismatchFloaterRecoverySequence",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/copy/mismatchFloater.ts->symbol:src/renderer/copy/mismatchFloater.ts#mismatchFloaterRecoveryStack",
-      "source": "file:src/renderer/copy/mismatchFloater.ts",
-      "target": "symbol:src/renderer/copy/mismatchFloater.ts#mismatchFloaterRecoveryStack",
-      "kind": "exports"
-    },
-    {
       "id": "exports:src/renderer/copy/mismatchFloater.ts->symbol:src/renderer/copy/mismatchFloater.ts#mismatchFloaterSignal",
       "source": "file:src/renderer/copy/mismatchFloater.ts",
       "target": "symbol:src/renderer/copy/mismatchFloater.ts#mismatchFloaterSignal",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/copy/mismatchFloater.ts->symbol:src/renderer/copy/mismatchFloater.ts#mismatchFloaterVisualLabel",
-      "source": "file:src/renderer/copy/mismatchFloater.ts",
-      "target": "symbol:src/renderer/copy/mismatchFloater.ts#mismatchFloaterVisualLabel",
       "kind": "exports"
     },
     {
@@ -76198,12 +76021,6 @@
       "id": "exports:src/renderer/copy/traitInteractionLaneMap.ts->symbol:src/renderer/copy/traitInteractionLaneMap.ts#traitInteractionLaneMapAttr",
       "source": "file:src/renderer/copy/traitInteractionLaneMap.ts",
       "target": "symbol:src/renderer/copy/traitInteractionLaneMap.ts#traitInteractionLaneMapAttr",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/copy/traitInteractionLaneMap.ts->symbol:src/renderer/copy/traitInteractionLaneMap.ts#TraitInteractionLaneMapEntry",
-      "source": "file:src/renderer/copy/traitInteractionLaneMap.ts",
-      "target": "symbol:src/renderer/copy/traitInteractionLaneMap.ts#TraitInteractionLaneMapEntry",
       "kind": "exports"
     },
     {
@@ -96755,12 +96572,6 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/GameScreen.test.tsx->src/renderer/components/matchScoreFloaterTiming.ts",
-      "source": "file:src/renderer/components/GameScreen.test.tsx",
-      "target": "file:src/renderer/components/matchScoreFloaterTiming.ts",
-      "kind": "imports"
-    },
-    {
       "id": "imports:src/renderer/components/GameScreen.test.tsx->src/renderer/copy/gameplayHints.ts",
       "source": "file:src/renderer/components/GameScreen.test.tsx",
       "target": "file:src/renderer/copy/gameplayHints.ts",
@@ -96944,12 +96755,6 @@
       "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/copy/relicDraftOffer.ts",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "file:src/renderer/copy/relicDraftOffer.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/copy/traitInteractionLaneMap.ts",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "file:src/renderer/copy/traitInteractionLaneMap.ts",
       "kind": "imports"
     },
     {
@@ -119592,12 +119397,6 @@
       "id": "tested_by:src/renderer/components/matchedCardRimFireMaterial.ts->file:src/renderer/components/tileBoardRimVisualState.test.ts",
       "source": "file:src/renderer/components/matchedCardRimFireMaterial.ts",
       "target": "file:src/renderer/components/tileBoardRimVisualState.test.ts",
-      "kind": "tested_by"
-    },
-    {
-      "id": "tested_by:src/renderer/components/matchScoreFloaterTiming.ts->file:src/renderer/components/GameScreen.test.tsx",
-      "source": "file:src/renderer/components/matchScoreFloaterTiming.ts",
-      "target": "file:src/renderer/components/GameScreen.test.tsx",
       "kind": "tested_by"
     },
     {

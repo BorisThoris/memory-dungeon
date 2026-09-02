@@ -2,7 +2,7 @@ import { runFilteredArray } from '../../shared/run-array-guards';
 
 export type TraitInteractionLaneId = 'shard' | 'guard' | 'tool' | 'risk' | 'block' | 'recall' | 'score';
 
-export interface TraitInteractionLaneMapEntry {
+interface TraitInteractionLaneMapEntry {
     id: TraitInteractionLaneId;
     label: 'Shard' | 'Guard' | 'Tool' | 'Risk' | 'Block' | 'Recall' | 'Score';
     count: number;

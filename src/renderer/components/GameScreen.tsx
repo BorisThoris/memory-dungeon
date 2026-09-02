@@ -109,42 +109,17 @@ import {
 import { getStickyBlockedTileId } from '../gameplay/stickyFingersBlockedTileId';
 import { useGameScreenPowerTileHints } from './useGameScreenPowerTileHints';
 import { useGameScreenTraitRouteTargets } from './useGameScreenTraitRouteTargets';
-import type { MatchScorePop, MatchScorePopPayoffChip, MatchScorePopPayoffLaneMapEntry, MismatchScorePop } from '../store/matchScorePop';
+import type { MatchScorePop, MatchScorePopPayoffChip, MismatchScorePop } from '../store/matchScorePop';
 
 import { MUTATOR_CATALOG } from '../../shared/mechanics-encyclopedia';
-import {
-    getChainRewardForecastCues,
-    getChainRewardLaneAction,
-    getChainRewardProgress,
-    getChainRewardStackLabel,
-    getChainRewardUrgencyCopy,
-    type ChainRewardForecastCue
-} from '../copy/chainMomentum';
+import { getChainRewardForecastCues, getChainRewardUrgencyCopy } from '../copy/chainMomentum';
 import { matchScoreFloaterChainCue, matchScoreFloaterLiveRegionText } from '../copy/matchScoreFloater';
 import {
     mismatchFloaterLiveRegionText,
     mismatchFloaterNextAction,
-    mismatchFloaterRecoveryBurst,
-    mismatchFloaterRecoveryChips,
-    mismatchFloaterRecoveryCrescendo,
-    mismatchFloaterRecoveryCrescendoLabel,
     mismatchFloaterRecoveryHint,
-    mismatchFloaterRecoveryLaneMap,
-    mismatchFloaterRecoverySequence,
-    mismatchFloaterRecoveryStack,
-    mismatchFloaterSignal,
-    mismatchFloaterVisualLabel,
-    type MismatchFloaterRecoveryChip,
-    type MismatchFloaterRecoveryLaneMapEntry
+    mismatchFloaterSignal
 } from '../copy/mismatchFloater';
-import {
-    buildTraitInteractionLaneMap,
-    formatTraitInteractionLaneMapLabel,
-    getTraitInteractionLaneAction,
-    traitInteractionLaneActionMapAttr,
-    traitInteractionLaneMapAttr,
-    type TraitInteractionLaneMapEntry
-} from '../copy/traitInteractionLaneMap';
 
 /** OVR-007 / HUD-020: decoy readout for `distraction_channel` — not gameplay state; hidden when reduce motion or assist toggle is off. */
 const DISTRACTION_CHANNEL_LABEL = 'Chaff';
@@ -161,39 +136,6 @@ interface GameScreenProps {
     run: RunState;
     suppressStatusOverlays?: boolean;
 }
-
-const matchPayoffLaneMapAttr = (laneMap: readonly MatchScorePopPayoffLaneMapEntry[]): string =>
-    laneMap.length > 0 ? laneMap.map((lane) => `${lane.id}:${lane.count}`).join('>') : 'none';
-
-const matchPayoffLaneAction = (
-    lane: MatchScorePopPayoffLaneMapEntry
-): 'Cash route' | 'Claim pickup' | 'Cash trait' | 'Cash chain' | 'Prime next' => {
-    if (lane.id === 'route') {
-        return 'Cash route';
-    }
-    if (lane.id === 'pickup') {
-        return 'Claim pickup';
-    }
-    if (lane.id === 'trait') {
-        return 'Cash trait';
-    }
-    if (lane.id === 'chain') {
-        return 'Cash chain';
-    }
-    return 'Prime next';
-};
-
-const matchPayoffLaneActionMapAttr = (laneMap: readonly MatchScorePopPayoffLaneMapEntry[]): string =>
-    laneMap.length > 0 ? laneMap.map((lane) => `${lane.id}:${matchPayoffLaneAction(lane)}:${lane.count}`).join('>') : 'none';
-
-const matchPayoffLaneMapLabel = (laneMap: readonly MatchScorePopPayoffLaneMapEntry[]): string => {
-    if (laneMap.length === 0) {
-        return '';
-    }
-    return `Match payoff lane map. ${laneMap
-        .map((lane) => `${lane.label}: ${lane.count}. ${matchPayoffLaneAction(lane)}. ${lane.cue}.`)
-        .join(' ')}`;
-};
 
 const MATCH_PAYOFF_CHIP_IDS: readonly MatchScorePopPayoffChip['id'][] = [
     'score',
@@ -218,9 +160,6 @@ const MATCH_PAYOFF_CHIP_TONES: readonly MatchScorePopPayoffChip['tone'][] = [
     'heal'
 ];
 
-const MATCH_PAYOFF_LANE_IDS: readonly MatchScorePopPayoffLaneMapEntry['id'][] = ['route', 'pickup', 'trait', 'chain', 'build'];
-const MATCH_PAYOFF_LANE_TONES: readonly MatchScorePopPayoffLaneMapEntry['tone'][] = ['route', 'pickup', 'trait', 'chain', 'reward'];
-
 const isMatchPayoffChip = (value: unknown): value is MatchScorePopPayoffChip => {
     if (value == null || typeof value !== 'object') {
         return false;
@@ -238,150 +177,7 @@ const isMatchPayoffChip = (value: unknown): value is MatchScorePopPayoffChip => 
 const matchPayoffChips = (value: unknown): MatchScorePopPayoffChip[] =>
     runFilteredArray(value, isMatchPayoffChip);
 
-const isMatchPayoffLane = (value: unknown): value is MatchScorePopPayoffLaneMapEntry => {
-    if (value == null || typeof value !== 'object') {
-        return false;
-    }
-    const lane = value as { count?: unknown; cue?: unknown; id?: unknown; label?: unknown; tone?: unknown };
-    return (
-        typeof lane.label === 'string' &&
-        typeof lane.cue === 'string' &&
-        typeof lane.count === 'number' &&
-        Number.isFinite(lane.count) &&
-        MATCH_PAYOFF_LANE_IDS.includes(lane.id as MatchScorePopPayoffLaneMapEntry['id']) &&
-        MATCH_PAYOFF_LANE_TONES.includes(lane.tone as MatchScorePopPayoffLaneMapEntry['tone'])
-    );
-};
-
-const matchPayoffLaneMap = (value: unknown): MatchScorePopPayoffLaneMapEntry[] =>
-    runFilteredArray(value, isMatchPayoffLane);
-
-const matchPayoffLadderLanes = (value: unknown): string[] => runFilteredStringArray(value);
-
-const MATCH_CHAIN_REWARD_TONES: readonly ChainRewardForecastCue['tone'][] = ['reward', 'guard', 'heal'];
-const MATCH_CHAIN_REWARD_URGENCIES: readonly ChainRewardForecastCue['urgency'][] = ['next', 'soon', 'later'];
-
-const isMatchChainRewardForecastCue = (value: unknown): value is ChainRewardForecastCue => {
-    if (value == null || typeof value !== 'object') {
-        return false;
-    }
-    const cue = value as {
-        actionLabel?: unknown;
-        chaseLabel?: unknown;
-        distance?: unknown;
-        distanceLabel?: unknown;
-        id?: unknown;
-        label?: unknown;
-        stackSize?: unknown;
-        targetStreak?: unknown;
-        tone?: unknown;
-        urgency?: unknown;
-    };
-    return (
-        typeof cue.actionLabel === 'string' &&
-        typeof cue.chaseLabel === 'string' &&
-        typeof cue.distance === 'number' &&
-        Number.isFinite(cue.distance) &&
-        typeof cue.distanceLabel === 'string' &&
-        typeof cue.id === 'string' &&
-        typeof cue.label === 'string' &&
-        typeof cue.targetStreak === 'number' &&
-        Number.isFinite(cue.targetStreak) &&
-        MATCH_CHAIN_REWARD_TONES.includes(cue.tone as ChainRewardForecastCue['tone']) &&
-        MATCH_CHAIN_REWARD_URGENCIES.includes(cue.urgency as ChainRewardForecastCue['urgency']) &&
-        (cue.stackSize == null || (typeof cue.stackSize === 'number' && Number.isFinite(cue.stackSize)))
-    );
-};
-
-const matchChainRewardForecastCues = (value: unknown): ChainRewardForecastCue[] =>
-    runFilteredArray(value, isMatchChainRewardForecastCue);
-
 const matchTraitInteractionTexts = (value: unknown): string[] => runFilteredStringArray(value);
-
-const mismatchRecoveryLaneMapAttr = (laneMap: readonly MismatchFloaterRecoveryLaneMapEntry[] | null): string =>
-    laneMap?.map((lane) => `${lane.id}:${lane.count}`).join('>') ?? 'none';
-
-const mismatchRecoveryLaneAction = (lane: MismatchFloaterRecoveryLaneMapEntry): string => {
-    switch (lane.id) {
-        case 'recover':
-            return lane.cue === 'Safe pair' ? 'Confirm pair' : 'Stabilize route';
-        case 'lost':
-            return 'Save cashout';
-        case 'chain':
-            return lane.count > 1 ? 'Rebuild chain' : 'Reset chain';
-        case 'tool':
-            return 'Trigger tool';
-        case 'risk':
-            return 'Route away';
-        default:
-            return 'Recover';
-    }
-};
-
-const mismatchRecoveryLaneActionMapAttr = (laneMap: readonly MismatchFloaterRecoveryLaneMapEntry[] | null): string =>
-    laneMap?.map((lane) => `${lane.id}:${mismatchRecoveryLaneAction(lane)}:${lane.count}`).join('>') ?? 'none';
-
-const mismatchRecoveryLaneMapLabel = (laneMap: readonly MismatchFloaterRecoveryLaneMapEntry[] | null): string =>
-    laneMap?.length
-        ? `Recovery lane map. ${laneMap
-              .map((lane) => `${lane.label}: ${lane.count}. ${mismatchRecoveryLaneAction(lane)}. ${lane.cue}.`)
-              .join(' ')}`
-        : '';
-
-const getMismatchRecoveryLaneBeatCount = (lane: MismatchFloaterRecoveryLaneMapEntry): 2 | 3 | 4 => {
-    if (lane.id === 'lost' || lane.id === 'risk' || lane.count > 1) {
-        return 4;
-    }
-    if (lane.id === 'chain' || lane.id === 'tool') {
-        return 3;
-    }
-    return 2;
-};
-
-const getPrimaryMismatchRecoveryLane = (
-    laneMap: readonly MismatchFloaterRecoveryLaneMapEntry[] | null
-): MismatchFloaterRecoveryLaneMapEntry | null =>
-    laneMap?.reduce<MismatchFloaterRecoveryLaneMapEntry | null>((primary, lane) => {
-        if (!primary || getMismatchRecoveryLaneBeatCount(lane) > getMismatchRecoveryLaneBeatCount(primary)) {
-            return lane;
-        }
-        return primary;
-    }, null) ?? null;
-
-const getMismatchRecoveryLaneAudioCue = (
-    lane: MismatchFloaterRecoveryLaneMapEntry
-): 'mismatch-recovery-safe' | 'mismatch-recovery-lost' | 'mismatch-recovery-chain' | 'mismatch-recovery-tool' | 'mismatch-recovery-risk' => {
-    switch (lane.id) {
-        case 'recover':
-            return 'mismatch-recovery-safe';
-        case 'lost':
-            return 'mismatch-recovery-lost';
-        case 'chain':
-            return 'mismatch-recovery-chain';
-        case 'tool':
-            return 'mismatch-recovery-tool';
-        default:
-            return 'mismatch-recovery-risk';
-    }
-};
-
-const getMismatchRecoveryLaneScreenCue = (
-    lane: MismatchFloaterRecoveryLaneMapEntry
-): 'recover' | 'risk' | 'chain' | 'tool' | 'pulse' => {
-    if (lane.id === 'lost' || lane.id === 'risk') {
-        return 'risk';
-    }
-    if (lane.id === 'chain') {
-        return 'chain';
-    }
-    if (lane.id === 'tool') {
-        return 'tool';
-    }
-    if (lane.id === 'recover') {
-        return 'recover';
-    }
-    return 'pulse';
-};
 
 /** PLAY-009: pair-index rings on face-down DOM tiles only for very early floors + until FTUE flag clears after tutorial floors. */
 const TUTORIAL_PAIR_MARKER_MAX_LEVEL = 2;
@@ -441,11 +237,6 @@ const getClearLifeBonusLabel = (result: NonNullable<RunState['lastLevelResult']>
 
     return null;
 };
-
-
-
-
-
 
 const GAMBIT_SIGNAL_ROWS = [
     { label: 'Window', value: 'Third flip' },
@@ -539,30 +330,8 @@ const getPickupStackToastText = (turnEvent: BoardTurnResolvedEvent): string | nu
     return pickupProgress ? `${baseText}. ${pickupProgress}` : baseText;
 };
 
-const actualMatchPayoffLaneCount = (
-    payoffSummary: NonNullable<MatchScorePop['payoffSummary']>,
-    payoffChips: readonly NonNullable<MatchScorePop['payoffChips']>[number][] = []
-): number => {
-    const summaryLaneCount = /^(\d+)\s+(?:payoffs|lanes)\b/.exec(payoffSummary.value)?.[1];
-    if (summaryLaneCount) {
-        return Number(summaryLaneCount);
-    }
-    const cashoutChipCount = payoffChips.filter((chip) =>
-        chip.id === 'route' || chip.id === 'pickup' || chip.id === 'trait' || chip.id === 'chainReward'
-    ).length;
-    return Math.max(cashoutChipCount, payoffSummary.tier === 'score' ? 0 : 1);
-};
-
 type MatchFloaterHeat = 'cashout' | 'prime' | 'score' | 'stack' | 'surge';
 type MismatchFloaterHeat = 'break' | 'lost-reward' | 'recover' | 'risk' | 'trait-surge';
-type MatchPayoffChip = NonNullable<MatchScorePop['payoffChips']>[number];
-type MatchFloaterJackpotCue = {
-    action: string;
-    beatCount: 3 | 4 | 5;
-    label: string;
-    tier: 'cashout' | 'stack' | 'super';
-    value: string;
-};
 
 const getMatchFloaterHeat = (payload: MatchScorePop): MatchFloaterHeat => {
     const impactLabel = payload.impactCue.label.toLowerCase();
@@ -594,373 +363,6 @@ const getMatchFloaterHeat = (payload: MatchScorePop): MatchFloaterHeat => {
     return 'score';
 };
 
-const getBoardFloaterImpactCueBeatCount = (payload: MatchScorePop): 2 | 3 | 4 | 5 => {
-    const cueLabel = payload.impactCue.label.toLowerCase();
-    const baseBeatCount =
-        cueLabel === 'super stack'
-            ? 5
-            : cueLabel === 'stack cashout' || cueLabel.includes('cashout')
-              ? 4
-              : payload.impactCue.tone === 'reward' ||
-                  payload.impactCue.tone === 'pickup' ||
-                  payload.impactCue.tone === 'route' ||
-                  payload.impactCue.tone === 'trait'
-                ? 4
-                : payload.impactCue.tone === 'combo' || payload.impactCue.tone === 'chain'
-                  ? 3
-                  : 2;
-    return Math.max(baseBeatCount, payload.crescendo?.beatCount ?? 0) as 2 | 3 | 4 | 5;
-};
-
-const getBoardFloaterImpactCueScreenCue = (payload: MatchScorePop): 'burst' | 'pulse' | 'route' | 'surge' => {
-    const cueLabel = payload.impactCue.label.toLowerCase();
-    if (cueLabel === 'super stack' || cueLabel.includes('stack') || cueLabel.includes('cashout')) {
-        return 'burst';
-    }
-    if (payload.impactCue.tone === 'trait' || payload.impactCue.tone === 'combo' || cueLabel.includes('surge')) {
-        return 'surge';
-    }
-    if (payload.impactCue.tone === 'route') {
-        return 'route';
-    }
-    return 'pulse';
-};
-
-const getBoardFloaterRewardBurstBeatCount = (
-    rewardBurst: NonNullable<MatchScorePop['rewardBurst']>
-): 3 | 4 | 5 => {
-    if (rewardBurst.tier === 'mega' || rewardBurst.label === 'Super stack') {
-        return 5;
-    }
-    if (rewardBurst.tier === 'stack') {
-        return 4;
-    }
-    return 3;
-};
-
-const getBoardFloaterRewardBurstAudioCue = (
-    rewardBurst: NonNullable<MatchScorePop['rewardBurst']>
-): 'reward-burst-hit' | 'reward-burst-stack' | 'reward-burst-super' => {
-    if (rewardBurst.tier === 'mega' || rewardBurst.label === 'Super stack') {
-        return 'reward-burst-super';
-    }
-    if (rewardBurst.tier === 'stack') {
-        return 'reward-burst-stack';
-    }
-    return 'reward-burst-hit';
-};
-
-const getBoardFloaterRewardBurstScreenCue = (
-    rewardBurst: NonNullable<MatchScorePop['rewardBurst']>
-): 'pulse' | 'burst' | 'super' => {
-    if (rewardBurst.tier === 'mega' || rewardBurst.label === 'Super stack') {
-        return 'super';
-    }
-    if (rewardBurst.tier === 'stack') {
-        return 'burst';
-    }
-    return 'pulse';
-};
-
-const getBoardFloaterCascadeBeatCount = (
-    cascadeCue: NonNullable<MatchScorePop['cascadeCue']>
-): 3 | 4 | 5 => {
-    if (cascadeCue.tier === 'combo') {
-        return 5;
-    }
-    if (cascadeCue.tier === 'reward') {
-        return 4;
-    }
-    return 3;
-};
-
-const getBoardFloaterPayoffSummaryBeatCount = (
-    payoffSummary: NonNullable<MatchScorePop['payoffSummary']>
-): 2 | 3 | 4 | 5 => {
-    if (payoffSummary.label === 'Super stack') {
-        return 5;
-    }
-    if (payoffSummary.label === 'Stack cashout' || payoffSummary.tier === 'reward') {
-        return 4;
-    }
-    if (payoffSummary.tier === 'combo' || payoffSummary.tier === 'chain') {
-        return 3;
-    }
-    return 2;
-};
-
-const getBoardFloaterPayoffSummaryAudioCue = (
-    payoffSummary: NonNullable<MatchScorePop['payoffSummary']>
-): 'payoff-summary-score' | 'payoff-summary-chain' | 'payoff-summary-cashout' | 'payoff-summary-stack' | 'payoff-summary-super' => {
-    if (payoffSummary.label === 'Super stack') {
-        return 'payoff-summary-super';
-    }
-    if (payoffSummary.label === 'Stack cashout') {
-        return 'payoff-summary-stack';
-    }
-    if (payoffSummary.tier === 'reward' || payoffSummary.label.includes('cashout')) {
-        return 'payoff-summary-cashout';
-    }
-    if (payoffSummary.tier === 'combo' || payoffSummary.tier === 'chain') {
-        return 'payoff-summary-chain';
-    }
-    return 'payoff-summary-score';
-};
-
-const getBoardFloaterPayoffSummaryScreenCue = (
-    payoffSummary: NonNullable<MatchScorePop['payoffSummary']>
-): 'tick' | 'pulse' | 'burst' | 'super' => {
-    if (payoffSummary.label === 'Super stack') {
-        return 'super';
-    }
-    if (payoffSummary.label === 'Stack cashout' || payoffSummary.tier === 'reward') {
-        return 'burst';
-    }
-    if (payoffSummary.tier === 'combo' || payoffSummary.tier === 'chain') {
-        return 'pulse';
-    }
-    return 'tick';
-};
-
-const getMatchFloaterJackpotCue = (payload: MatchScorePop): MatchFloaterJackpotCue | null => {
-    const summary = payload.payoffSummary;
-    const rewardBurst = payload.rewardBurst;
-    const payoffChips = matchPayoffChips(payload.payoffChips);
-    const laneCount = Math.max(matchPayoffLaneMap(payload.payoffLaneMap).length, summary ? actualMatchPayoffLaneCount(summary, payoffChips) : 0);
-    const impactLabel = payload.impactCue.label;
-    const impactLabelLower = impactLabel.toLowerCase();
-    const crescendo = payload.crescendo;
-
-    if (summary?.label === 'Super stack' || rewardBurst?.label === 'Super stack' || crescendo?.tier === 'super') {
-        return {
-            action: rewardBurst?.action ?? 'Cash super stack',
-            beatCount: 5,
-            label: 'Super stack',
-            tier: 'super',
-            value: summary?.value ?? rewardBurst?.value ?? `${Math.max(laneCount, 4)} payoff lanes`
-        };
-    }
-    if (summary?.label === 'Stack cashout' || rewardBurst?.tier === 'stack' || crescendo?.tier === 'stack' || laneCount >= 3) {
-        return {
-            action: rewardBurst?.action ?? 'Cash stack',
-            beatCount: Math.max(4, crescendo?.beatCount ?? 0) as 4 | 5,
-            label: 'Stack cashout',
-            tier: 'stack',
-            value: summary?.value ?? rewardBurst?.value ?? `${laneCount} payoff lanes`
-        };
-    }
-    if (
-        summary?.label === 'Route cashout' ||
-        summary?.label === 'Pickup cashout' ||
-        summary?.label === 'Trait cashout' ||
-        summary?.label === 'Chain cashout' ||
-        impactLabelLower.includes('cashout') ||
-        crescendo?.tier === 'cashout'
-    ) {
-        return {
-            action: rewardBurst?.action ?? 'Cash now',
-            beatCount: Math.max(3, crescendo?.beatCount ?? 0) as 3 | 4 | 5,
-            label: summary?.label ?? 'Cashout',
-            tier: 'cashout',
-            value: summary?.value ?? rewardBurst?.value ?? payload.routeRewardText ?? `+${runNonNegativeInteger(payload.amount).toLocaleString()}`
-        };
-    }
-    return null;
-};
-
-const getBoardFloaterJackpotAudioCue = (
-    cue: MatchFloaterJackpotCue
-): 'match-jackpot-cashout' | 'match-jackpot-stack' | 'match-jackpot-super' => {
-    if (cue.tier === 'super') {
-        return 'match-jackpot-super';
-    }
-    if (cue.tier === 'stack') {
-        return 'match-jackpot-stack';
-    }
-    return 'match-jackpot-cashout';
-};
-
-const getBoardFloaterJackpotScreenCue = (
-    cue: MatchFloaterJackpotCue
-): 'burst' | 'cashout' | 'super' => {
-    if (cue.tier === 'super') {
-        return 'super';
-    }
-    if (cue.tier === 'stack') {
-        return 'burst';
-    }
-    return 'cashout';
-};
-
-const getBoardFloaterPayoffLaneBeatCount = (
-    lane: MatchScorePopPayoffLaneMapEntry
-): 2 | 3 | 4 => {
-    if (lane.tone === 'reward' || lane.tone === 'pickup' || lane.tone === 'route') {
-        return lane.count > 1 ? 4 : 3;
-    }
-    if (lane.tone === 'trait' || lane.tone === 'chain') {
-        return 3;
-    }
-    return 2;
-};
-
-const getBoardFloaterPayoffLaneAudioCue = (
-    lane: MatchScorePopPayoffLaneMapEntry
-): 'match-payoff-route' | 'match-payoff-pickup' | 'match-payoff-trait' | 'match-payoff-chain' | 'match-payoff-reward' | 'match-payoff-prime' => {
-    if (lane.tone === 'route') {
-        return 'match-payoff-route';
-    }
-    if (lane.tone === 'pickup') {
-        return 'match-payoff-pickup';
-    }
-    if (lane.tone === 'trait') {
-        return 'match-payoff-trait';
-    }
-    if (lane.tone === 'chain') {
-        return 'match-payoff-chain';
-    }
-    if (lane.tone === 'reward') {
-        return 'match-payoff-reward';
-    }
-    return 'match-payoff-prime';
-};
-
-const getBoardFloaterPayoffLaneScreenCue = (
-    lane: MatchScorePopPayoffLaneMapEntry
-): 'burst' | 'route' | 'trait' | 'chain' | 'pulse' => {
-    if (lane.tone === 'route' || lane.tone === 'pickup' || lane.tone === 'reward' || lane.count > 1) {
-        return 'burst';
-    }
-    if (lane.tone === 'trait') {
-        return 'trait';
-    }
-    if (lane.tone === 'chain') {
-        return 'chain';
-    }
-    return 'pulse';
-};
-
-const getBoardFloaterPayoffLaneFocus = (
-    lane: MatchScorePopPayoffLaneMapEntry
-): 'cashout' | 'route' | 'pickup' | 'trait' | 'chain' | 'reward' => {
-    const action = matchPayoffLaneAction(lane).toLowerCase();
-    const cue = lane.cue.toLowerCase();
-
-    if (action.includes('cash') || cue.includes('cashout')) {
-        return 'cashout';
-    }
-
-    return lane.tone;
-};
-
-const getBoardFloaterTraitLaneAudioCue = (
-    lane: TraitInteractionLaneMapEntry
-): 'match-trait-shard' | 'match-trait-guard' | 'match-trait-risk' | 'match-trait-score' | 'match-trait-tool' | 'match-trait-block' | 'match-trait-recall' => {
-    if (lane.id === 'shard') {
-        return 'match-trait-shard';
-    }
-    if (lane.id === 'guard') {
-        return 'match-trait-guard';
-    }
-    if (lane.id === 'risk') {
-        return 'match-trait-risk';
-    }
-    if (lane.id === 'score') {
-        return 'match-trait-score';
-    }
-    if (lane.id === 'tool') {
-        return 'match-trait-tool';
-    }
-    if (lane.id === 'block') {
-        return 'match-trait-block';
-    }
-    return 'match-trait-recall';
-};
-
-const getBoardFloaterTraitLaneScreenCue = (
-    lane: TraitInteractionLaneMapEntry
-): 'burst' | 'guard' | 'risk' | 'control' | 'pulse' => {
-    if (lane.count > 1 || lane.id === 'shard' || lane.id === 'score') {
-        return 'burst';
-    }
-    if (lane.id === 'guard') {
-        return 'guard';
-    }
-    if (lane.id === 'risk') {
-        return 'risk';
-    }
-    if (lane.id === 'tool' || lane.id === 'block') {
-        return 'control';
-    }
-    return 'pulse';
-};
-
-const getBoardFloaterPayoffLadderBeatCount = (
-    ladder: NonNullable<MatchScorePop['payoffLadder']>
-): 3 | 4 | 5 => {
-    const laneCount = matchPayoffLadderLanes(ladder.lanes).length;
-    if (ladder.tone === 'combo' || laneCount >= 4) {
-        return 5;
-    }
-    if (ladder.tone === 'reward' || laneCount >= 2) {
-        return 4;
-    }
-    return 3;
-};
-
-const getBoardFloaterPayoffLadderAudioCue = (
-    ladder: NonNullable<MatchScorePop['payoffLadder']>
-): 'payoff-ladder-chain' | 'payoff-ladder-reward' | 'payoff-ladder-super' => {
-    const laneCount = matchPayoffLadderLanes(ladder.lanes).length;
-    if (ladder.tone === 'combo' || laneCount >= 4) {
-        return 'payoff-ladder-super';
-    }
-    if (ladder.tone === 'reward' || laneCount >= 2) {
-        return 'payoff-ladder-reward';
-    }
-    return 'payoff-ladder-chain';
-};
-
-const getBoardFloaterPayoffLadderScreenCue = (
-    ladder: NonNullable<MatchScorePop['payoffLadder']>
-): 'burst' | 'pulse' | 'super' => {
-    const laneCount = matchPayoffLadderLanes(ladder.lanes).length;
-    if (ladder.tone === 'combo' || laneCount >= 4) {
-        return 'super';
-    }
-    if (ladder.tone === 'reward' || laneCount >= 2) {
-        return 'burst';
-    }
-    return 'pulse';
-};
-
-const getBoardFloaterTraitLaneBeatCount = (
-    lane: TraitInteractionLaneMapEntry
-): 2 | 3 | 4 => {
-    if (lane.id === 'shard' || lane.id === 'guard') {
-        return lane.count > 1 ? 4 : 3;
-    }
-    if (lane.id === 'risk' || lane.id === 'block') {
-        return 3;
-    }
-    return 2;
-};
-
-const getBoardFloaterChainMilestoneBeatCount = (
-    milestone: NonNullable<MatchScorePop['chainMilestone']>
-): 3 | 4 | 5 => {
-    if (milestone.beatCount) {
-        return milestone.beatCount;
-    }
-    if (milestone.tone === 'combo') {
-        return 5;
-    }
-    if (milestone.tone === 'surge') {
-        return 4;
-    }
-    return 3;
-};
-
 const getMismatchFloaterHeat = (payload: MismatchScorePop): MismatchFloaterHeat => {
     const traitRiskCount = matchTraitInteractionTexts(payload.traitInteractionTexts).length;
     if (payload.brokenChainRewardCue) {
@@ -974,183 +376,6 @@ const getMismatchFloaterHeat = (payload: MismatchScorePop): MismatchFloaterHeat 
     }
     if (traitRiskCount > 0) {
         return 'risk';
-    }
-    return 'recover';
-};
-
-const getMatchPayoffChipBeatCount = (chip: MatchPayoffChip): 1 | 2 | 3 | 4 => {
-    const arcadeCue = chip.arcadeCue?.toLowerCase() ?? '';
-    if (arcadeCue.includes('one-away') || arcadeCue.includes('cashout') || chip.id === 'chainReward' || chip.id === 'next') {
-        return 4;
-    }
-    if (chip.id === 'pickup' || chip.id === 'route' || chip.id === 'trait' || chip.id === 'tier') {
-        return 3;
-    }
-    if (chip.id === 'streak' || chip.id === 'cascade') {
-        return 2;
-    }
-    return 1;
-};
-
-const getMatchPayoffChipAudioCue = (
-    chip: MatchPayoffChip
-):
-    | 'match-payoff-chain'
-    | 'match-payoff-guard'
-    | 'match-payoff-heal'
-    | 'match-payoff-pickup'
-    | 'match-payoff-reward'
-    | 'match-payoff-route'
-    | 'match-payoff-score'
-    | 'match-payoff-trait' => {
-    if (chip.tone === 'guard') {
-        return 'match-payoff-guard';
-    }
-    if (chip.tone === 'heal') {
-        return 'match-payoff-heal';
-    }
-    if (chip.tone === 'pickup') {
-        return 'match-payoff-pickup';
-    }
-    if (chip.tone === 'route') {
-        return 'match-payoff-route';
-    }
-    if (chip.tone === 'trait') {
-        return 'match-payoff-trait';
-    }
-    if (chip.tone === 'reward' || chip.id === 'next' || chip.id === 'chainReward') {
-        return 'match-payoff-reward';
-    }
-    if (chip.tone === 'chain' || chip.id === 'streak' || chip.id === 'cascade' || chip.id === 'tier') {
-        return 'match-payoff-chain';
-    }
-    return 'match-payoff-score';
-};
-
-const getMatchPayoffChipScreenCue = (
-    chip: MatchPayoffChip
-): 'burst' | 'chain' | 'guard' | 'heal' | 'pulse' | 'tick' | 'trait' => {
-    const arcadeCue = chip.arcadeCue?.toLowerCase() ?? '';
-    if (arcadeCue.includes('one-away') || arcadeCue.includes('cashout') || chip.id === 'next' || chip.id === 'chainReward') {
-        return 'burst';
-    }
-    if (chip.tone === 'guard') {
-        return 'guard';
-    }
-    if (chip.tone === 'heal') {
-        return 'heal';
-    }
-    if (chip.tone === 'trait') {
-        return 'trait';
-    }
-    if (chip.tone === 'pickup' || chip.tone === 'route' || chip.tone === 'reward') {
-        return 'burst';
-    }
-    if (chip.tone === 'chain') {
-        return 'chain';
-    }
-    return chip.id === 'score' ? 'tick' : 'pulse';
-};
-
-const getBoardFloaterRewardForecastBeatCount = (
-    cue: NonNullable<MatchScorePop['chainRewardForecastCues']>[number]
-): 2 | 3 | 4 => {
-    if (cue.urgency === 'next' || cue.distance <= 1 || (cue.stackSize ?? 1) >= 2) {
-        return 4;
-    }
-    if (cue.urgency === 'soon' || cue.distance <= 2) {
-        return 3;
-    }
-    return 2;
-};
-
-const getBoardFloaterRewardForecastAudioCue = (
-    cue: NonNullable<MatchScorePop['chainRewardForecastCues']>[number]
-): 'chain-reward-guard' | 'chain-reward-heal' | 'chain-reward-prime' | 'chain-reward-shard' | 'chain-reward-stack' => {
-    if ((cue.stackSize ?? 1) >= 2) {
-        return 'chain-reward-stack';
-    }
-    if (cue.tone === 'guard') {
-        return 'chain-reward-guard';
-    }
-    if (cue.tone === 'heal') {
-        return 'chain-reward-heal';
-    }
-    if (cue.urgency === 'later') {
-        return 'chain-reward-prime';
-    }
-    return 'chain-reward-shard';
-};
-
-const getBoardFloaterRewardForecastScreenCue = (
-    cue: NonNullable<MatchScorePop['chainRewardForecastCues']>[number]
-): 'burst' | 'pulse' | 'tick' => {
-    if ((cue.stackSize ?? 1) >= 2 || cue.urgency === 'next') {
-        return 'burst';
-    }
-    if (cue.urgency === 'soon') {
-        return 'pulse';
-    }
-    return 'tick';
-};
-
-const getMismatchRecoveryChipBeatCount = (chip: MismatchFloaterRecoveryChip): 1 | 2 | 3 | 4 => {
-    if (chip.arcadeCue === 'Lost cashout' || chip.urgency === 'one-away') {
-        return 4;
-    }
-    if (chip.tone === 'risk' || chip.tone === 'chain') {
-        return 3;
-    }
-    if (chip.tone === 'tool' || chip.tone === 'tempo') {
-        return 2;
-    }
-    return 1;
-};
-
-const getMismatchRecoveryChipAudioCue = (
-    chip: MismatchFloaterRecoveryChip
-):
-    | 'mismatch-chip-chain'
-    | 'mismatch-chip-lost'
-    | 'mismatch-chip-recover'
-    | 'mismatch-chip-risk'
-    | 'mismatch-chip-tempo'
-    | 'mismatch-chip-tool' => {
-    if (chip.arcadeCue === 'Lost cashout') {
-        return 'mismatch-chip-lost';
-    }
-    if (chip.tone === 'chain') {
-        return 'mismatch-chip-chain';
-    }
-    if (chip.tone === 'risk') {
-        return 'mismatch-chip-risk';
-    }
-    if (chip.tone === 'tool') {
-        return 'mismatch-chip-tool';
-    }
-    if (chip.tone === 'tempo') {
-        return 'mismatch-chip-tempo';
-    }
-    return 'mismatch-chip-recover';
-};
-
-const getMismatchRecoveryChipScreenCue = (
-    chip: MismatchFloaterRecoveryChip
-): 'chain' | 'lost' | 'recover' | 'risk' | 'tempo' | 'tool' => {
-    if (chip.arcadeCue === 'Lost cashout') {
-        return 'lost';
-    }
-    if (chip.tone === 'chain') {
-        return 'chain';
-    }
-    if (chip.tone === 'risk') {
-        return 'risk';
-    }
-    if (chip.tone === 'tool') {
-        return 'tool';
-    }
-    if (chip.tone === 'tempo') {
-        return 'tempo';
     }
     return 'recover';
 };
@@ -1287,74 +512,21 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         [matchScorePop, mismatchScorePop]
     );
     const boardFloaterDurationMs = matchScoreFloatDurationMs(reduceMotion, boardFloaterPayload);
-    const boardFloaterMatchPayoffChips = useMemo(
-        () => (boardFloaterPayload?.kind === 'match' ? matchPayoffChips(boardFloaterPayload.payoffChips) : []),
-        [boardFloaterPayload]
-    );
-    const boardFloaterMatchPayoffLaneMap = useMemo(
-        () => (boardFloaterPayload?.kind === 'match' ? matchPayoffLaneMap(boardFloaterPayload.payoffLaneMap) : []),
-        [boardFloaterPayload]
-    );
-    const boardFloaterMatchChainRewardForecastCues = useMemo(
-        () =>
-            boardFloaterPayload?.kind === 'match'
-                ? matchChainRewardForecastCues(boardFloaterPayload.chainRewardForecastCues)
-                : [],
-        [boardFloaterPayload]
-    );
-    const boardFloaterMatchPayoffLadder = useMemo(
-        () =>
-            boardFloaterPayload?.kind === 'match' && boardFloaterPayload.payoffLadder
-                ? {
-                      ...boardFloaterPayload.payoffLadder,
-                      lanes: matchPayoffLadderLanes(boardFloaterPayload.payoffLadder.lanes)
-                  }
-                : null,
-        [boardFloaterPayload]
-    );
-    const boardFloaterMatchTraitInteractionTexts = useMemo(
-        () =>
-            boardFloaterPayload?.kind === 'match'
-                ? matchTraitInteractionTexts(boardFloaterPayload.traitInteractionTexts)
-                : [],
-        [boardFloaterPayload]
-    );
-    const boardFloaterMismatchTraitInteractionTexts = useMemo(
-        () =>
-            boardFloaterPayload?.kind === 'miss'
-                ? matchTraitInteractionTexts(boardFloaterPayload.traitInteractionTexts)
-                : [],
-        [boardFloaterPayload]
-    );
     const boardFloaterDetailLines = useMemo(() => {
         if (!boardFloaterPayload) {
             return [];
         }
+        const traitTexts = matchTraitInteractionTexts(boardFloaterPayload.traitInteractionTexts);
         if (boardFloaterPayload.kind === 'match') {
             return [
                 boardFloaterPayload.pickupRewardText,
+                boardFloaterPayload.routeRewardText,
                 boardFloaterPayload.chainRewardText,
-                ...boardFloaterMatchTraitInteractionTexts
+                ...traitTexts
             ].filter((line): line is string => Boolean(line));
         }
-        return boardFloaterMismatchTraitInteractionTexts;
-    }, [boardFloaterMatchTraitInteractionTexts, boardFloaterMismatchTraitInteractionTexts, boardFloaterPayload]);
-    const boardFloaterTraitLaneMap = useMemo(
-        () =>
-            boardFloaterPayload?.kind === 'match'
-                ? buildTraitInteractionLaneMap(boardFloaterMatchTraitInteractionTexts)
-                : [],
-        [boardFloaterMatchTraitInteractionTexts, boardFloaterPayload]
-    );
-    const boardFloaterTraitLaneMapAttr = traitInteractionLaneMapAttr(boardFloaterTraitLaneMap);
-    const boardFloaterTraitLaneActionMapAttr = traitInteractionLaneActionMapAttr(boardFloaterTraitLaneMap);
-    const boardFloaterPrimaryTraitLane = boardFloaterTraitLaneMap[0] ?? null;
-    const boardFloaterTraitLaneMapSummaryFill = Math.min(100, (boardFloaterTraitLaneMap.length / 5) * 100);
-    const boardFloaterPrimaryTraitLaneFill = boardFloaterPrimaryTraitLane
-        ? Math.min(100, (getBoardFloaterTraitLaneBeatCount(boardFloaterPrimaryTraitLane) / 4) * 100)
-        : 0;
-    const boardFloaterChainCue =
-        boardFloaterPayload?.kind === 'match' ? matchScoreFloaterChainCue(boardFloaterPayload.chainDepth) : '';
+        return traitTexts;
+    }, [boardFloaterPayload]);
     const boardFloaterMismatchSignal =
         boardFloaterPayload?.kind === 'miss'
             ? mismatchFloaterSignal(boardFloaterDetailLines, {
@@ -1364,99 +536,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             : null;
     const boardFloaterMismatchRecovery =
         boardFloaterPayload?.kind === 'miss' ? mismatchFloaterRecoveryHint(boardFloaterDetailLines) : null;
-    const boardFloaterMismatchRecoveryCrescendo =
-        boardFloaterPayload?.kind === 'miss'
-            ? mismatchFloaterRecoveryCrescendo(boardFloaterDetailLines, {
-                  brokenChainDepth: boardFloaterPayload.brokenChainDepth,
-                  brokenChainRewardCue: boardFloaterPayload.brokenChainRewardCue
-              })
-            : null;
-    const boardFloaterMismatchRecoveryCrescendoLabel = boardFloaterMismatchRecoveryCrescendo
-        ? mismatchFloaterRecoveryCrescendoLabel('Mismatch recovery crescendo', boardFloaterMismatchRecoveryCrescendo)
-        : '';
-    const boardFloaterLiveText = useMemo(() => {
-        if (!boardFloaterPayload) {
-            return '';
-        }
-        if (boardFloaterPayload.kind === 'match') {
-            return matchScoreFloaterLiveRegionText(
-                boardFloaterPayload.amount,
-                boardFloaterDetailLines,
-                boardFloaterPayload.feedbackHeadline,
-                boardFloaterPayload.chainDepth,
-                boardFloaterMatchChainRewardForecastCues.map(
-                    (cue) =>
-                        `${getChainRewardLaneAction(cue.urgency)}: ${getChainRewardUrgencyCopy(cue)}: ${cue.distanceLabel} to ${cue.label}`
-                ),
-                boardFloaterPayload.rewardBurst
-                    ? `${boardFloaterPayload.rewardBurst.label}: ${boardFloaterPayload.rewardBurst.action}: ${boardFloaterPayload.rewardBurst.value}`
-                    : undefined,
-                boardFloaterPayload.cascadeCue
-                    ? `${boardFloaterPayload.cascadeCue.label}: ${boardFloaterPayload.cascadeCue.value}`
-                    : undefined,
-                boardFloaterPayload.payoffSummary
-                    ? `${boardFloaterPayload.payoffSummary.label}: ${boardFloaterPayload.payoffSummary.value}`
-                    : undefined,
-                boardFloaterMatchPayoffLadder
-                    ? `${boardFloaterPayload.impactCue.label}. First: ${boardFloaterMatchPayoffLadder.first}. Then: ${boardFloaterMatchPayoffLadder.then}. Keep: ${boardFloaterMatchPayoffLadder.keep}${
-                          boardFloaterMatchPayoffLadder.lanes.length > 0
-                              ? `. Lanes: ${boardFloaterMatchPayoffLadder.lanes.join(' to ')}`
-                              : ''
-                      }`
-                    : boardFloaterPayload.impactCue.label,
-                matchPayoffLaneMapLabel(boardFloaterMatchPayoffLaneMap),
-                boardFloaterTraitLaneMap.length > 0
-                    ? formatTraitInteractionLaneMapLabel('Match trait interaction lanes', boardFloaterTraitLaneMap)
-                    : undefined,
-                boardFloaterPayload.crescendo
-                    ? `${boardFloaterPayload.crescendo.label}: ${boardFloaterPayload.crescendo.detail}`
-                    : undefined,
-                boardFloaterPayload.chainMilestone
-                    ? `${boardFloaterPayload.chainMilestone.action}: ${boardFloaterPayload.chainMilestone.label}: ${boardFloaterPayload.chainMilestone.target}: ${boardFloaterPayload.chainMilestone.value}. ${boardFloaterPayload.chainMilestone.beatCount} beats.`
-                    : undefined
-            );
-        }
-        const mismatchContext = {
-            brokenChainDepth: boardFloaterPayload.brokenChainDepth,
-            brokenChainRewardCue: boardFloaterPayload.brokenChainRewardCue
-        };
-        return mismatchFloaterLiveRegionText(
-            boardFloaterDetailLines,
-            boardFloaterMismatchRecovery,
-            mismatchContext,
-            mismatchRecoveryLaneMapLabel(
-                mismatchFloaterRecoveryLaneMap(mismatchFloaterRecoveryChips(boardFloaterDetailLines, mismatchContext))
-            ),
-            boardFloaterMismatchRecoveryCrescendo
-                ? `${boardFloaterMismatchRecoveryCrescendo.label}: ${boardFloaterMismatchRecoveryCrescendo.detail}`
-                : undefined
-        );
-    }, [
-        boardFloaterDetailLines,
-        boardFloaterMatchChainRewardForecastCues,
-        boardFloaterMatchPayoffLadder,
-        boardFloaterMatchPayoffLaneMap,
-        boardFloaterMismatchRecovery,
-        boardFloaterMismatchRecoveryCrescendo,
-        boardFloaterPayload,
-        boardFloaterTraitLaneMap
-    ]);
-    const boardFloaterMismatchRecoveryBurst =
-        boardFloaterPayload?.kind === 'miss'
-            ? mismatchFloaterRecoveryBurst(boardFloaterDetailLines, {
-                  brokenChainDepth: boardFloaterPayload.brokenChainDepth,
-                  brokenChainRewardCue: boardFloaterPayload.brokenChainRewardCue
-              })
-            : null;
-    const boardFloaterMismatchRecoveryBurstFill = boardFloaterMismatchRecoveryCrescendo
-        ? Math.min(100, (boardFloaterMismatchRecoveryCrescendo.beatCount / 5) * 100)
-        : boardFloaterMismatchRecoveryBurst?.tier === 'break'
-          ? 100
-          : boardFloaterMismatchRecoveryBurst?.tier === 'risk'
-            ? 75
-            : boardFloaterMismatchRecoveryBurst?.tier === 'lost-reward'
-              ? 90
-              : 0;
     const boardFloaterMismatchNextAction =
         boardFloaterPayload?.kind === 'miss'
             ? mismatchFloaterNextAction(boardFloaterDetailLines, {
@@ -1464,39 +543,44 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                   brokenChainRewardCue: boardFloaterPayload.brokenChainRewardCue
               })
             : null;
-    const boardFloaterMismatchRecoveryChips =
-        boardFloaterPayload?.kind === 'miss'
-            ? mismatchFloaterRecoveryChips(boardFloaterDetailLines, {
-                  brokenChainDepth: boardFloaterPayload.brokenChainDepth,
-                  brokenChainRewardCue: boardFloaterPayload.brokenChainRewardCue
+    /**
+     * The floater says three things and no more: what happened, what it was worth, and the one
+     * reason worth naming. Everything else the board already shows or the HUD already holds.
+     */
+    const boardFloaterSignalLabel =
+        boardFloaterPayload?.kind === 'match'
+            ? boardFloaterPayload.feedbackSignal.label
+            : boardFloaterMismatchSignal?.label ?? '';
+    const boardFloaterSignalTone =
+        boardFloaterPayload?.kind === 'match'
+            ? boardFloaterPayload.feedbackSignal.tone
+            : boardFloaterMismatchSignal?.tone;
+    const boardFloaterChainCue =
+        boardFloaterPayload?.kind === 'match' ? matchScoreFloaterChainCue(boardFloaterPayload.chainDepth) : '';
+    const boardFloaterReason =
+        boardFloaterPayload?.kind === 'match'
+            ? boardFloaterDetailLines[0] ?? boardFloaterChainCue
+            : boardFloaterMismatchRecovery ?? boardFloaterDetailLines[0] ?? '';
+    const boardFloaterIntensity =
+        boardFloaterPayload?.kind === 'match'
+            ? boardFloaterPayload.feedbackIntensity
+            : boardFloaterDetailLines.length > 0
+              ? 'penalty'
+              : (boardFloaterPayload?.brokenChainDepth ?? 0) >= 3
+                ? 'break'
+                : 'miss';
+    const boardFloaterLiveText = useMemo(() => {
+        if (!boardFloaterPayload) {
+            return '';
+        }
+        return boardFloaterPayload.kind === 'match'
+            ? matchScoreFloaterLiveRegionText(boardFloaterPayload.amount, {
+                  chainDepth: boardFloaterPayload.chainDepth,
+                  headline: boardFloaterPayload.feedbackHeadline,
+                  reason: boardFloaterReason
               })
-            : [];
-    const boardFloaterMismatchRecoveryLaneMap =
-        boardFloaterPayload?.kind === 'miss'
-            ? mismatchFloaterRecoveryLaneMap(boardFloaterMismatchRecoveryChips)
-            : null;
-    const boardFloaterPrimaryMismatchRecoveryLane = getPrimaryMismatchRecoveryLane(boardFloaterMismatchRecoveryLaneMap);
-    const boardFloaterMismatchRecoveryLaneMapFill = Math.min(
-        100,
-        ((boardFloaterMismatchRecoveryLaneMap?.length ?? 0) / 4) * 100
-    );
-    const boardFloaterPrimaryMismatchRecoveryLaneFill = boardFloaterPrimaryMismatchRecoveryLane
-        ? Math.min(100, (getMismatchRecoveryLaneBeatCount(boardFloaterPrimaryMismatchRecoveryLane) / 4) * 100)
-        : 0;
-    const boardFloaterMismatchRecoveryStack =
-        boardFloaterPayload?.kind === 'miss'
-            ? mismatchFloaterRecoveryStack(boardFloaterDetailLines, {
-                  brokenChainDepth: boardFloaterPayload.brokenChainDepth,
-                  brokenChainRewardCue: boardFloaterPayload.brokenChainRewardCue
-              })
-            : null;
-    const boardFloaterMismatchRecoverySequence =
-        boardFloaterPayload?.kind === 'miss'
-            ? mismatchFloaterRecoverySequence(boardFloaterDetailLines, {
-                  brokenChainDepth: boardFloaterPayload.brokenChainDepth,
-                  brokenChainRewardCue: boardFloaterPayload.brokenChainRewardCue
-              })
-            : null;
+            : mismatchFloaterLiveRegionText(boardFloaterSignalLabel, boardFloaterReason);
+    }, [boardFloaterPayload, boardFloaterReason, boardFloaterSignalLabel]);
     const boardRecoveryContext =
         boardFloaterPayload?.kind === 'miss' && boardFloaterMismatchNextAction
             ? {
@@ -1506,56 +590,12 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                           : boardFloaterMismatchNextAction.tone === 'risk'
                             ? 'Stabilize'
                             : 'Recover',
-                  detail:
-                      boardFloaterMismatchRecoveryStack?.detail ??
-                      boardFloaterMismatchRecovery ??
-                      boardFloaterMismatchNextAction.value,
+                  detail: boardFloaterMismatchRecovery ?? boardFloaterMismatchNextAction.value,
                   impactCue: boardFloaterMismatchNextAction.arcadeCue,
                   tone: boardFloaterMismatchNextAction.tone,
                   value: boardFloaterMismatchNextAction.value
               }
             : null;
-    const boardMatchPayoffStackCue =
-        boardFloaterPayload?.kind === 'match' && boardFloaterPayload.payoffSummary
-            ? {
-                  label: boardFloaterPayload.payoffSummary.label,
-                  value: boardFloaterPayload.payoffSummary.value,
-                  tone: boardFloaterPayload.payoffSummary.tier,
-                  laneCount: actualMatchPayoffLaneCount(
-                      boardFloaterPayload.payoffSummary,
-                      boardFloaterMatchPayoffChips
-                  ),
-                  firstCue: boardFloaterMatchPayoffChips[0]?.arcadeCue ?? boardFloaterPayload.impactCue.label,
-                  sequenceFirstCue:
-                      boardFloaterMatchPayoffChips.find((chip) => chip.id !== 'score')?.arcadeCue ??
-                      boardFloaterPayload.impactCue.label,
-                  nextCue:
-                      boardFloaterMatchPayoffChips.find((chip) => chip.id === 'next')?.arcadeCue ??
-                      boardFloaterPayload.rewardBurst?.value ??
-                      null,
-                  sequenceKeepCue:
-                      boardFloaterMatchChainRewardForecastCues[0]?.chaseLabel ??
-                      boardFloaterMatchPayoffChips.find((chip) => chip.id === 'next')?.value ??
-                      'Chase next safe match'
-              }
-            : null;
-    const boardFloaterJackpotCue =
-        boardFloaterPayload?.kind === 'match' ? getMatchFloaterJackpotCue(boardFloaterPayload) : null;
-    const boardFloaterPrimaryPayoffLane =
-        boardFloaterPayload?.kind === 'match' ? boardFloaterMatchPayoffLaneMap[0] ?? null : null;
-    const boardFloaterChainMilestoneFill =
-        boardFloaterPayload?.kind === 'match' && boardFloaterPayload.chainMilestone
-            ? Math.round(
-                  Math.min(
-                      100,
-                      (getBoardFloaterChainMilestoneBeatCount(boardFloaterPayload.chainMilestone) / 5) * 100
-                  )
-              )
-            : 0;
-    const boardFloaterRewardBurstFill =
-        boardFloaterPayload?.kind === 'match' && boardFloaterPayload.rewardBurst
-            ? Math.round(Math.min(100, (getBoardFloaterRewardBurstBeatCount(boardFloaterPayload.rewardBurst) / 5) * 100))
-            : 0;
 
     const [boardFloaterPos, setBoardFloaterPos] = useState<{ x: number; y: number } | null>(null);
 
@@ -1656,27 +696,23 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         () => uiSfxGainFromSettings(settingsMasterVolume, settingsSfxVolume),
         [settingsMasterVolume, settingsSfxVolume]
     );
+    // A miss escalates in sound, not in stacked labels: the same heat the floater is tinted with
+    // picks the tone, and a deeper broken chain hits harder.
     useEffect(() => {
-        if (boardFloaterPayload?.kind !== 'miss' || !boardFloaterMismatchRecoveryCrescendo) {
+        if (boardFloaterPayload?.kind !== 'miss') {
             mismatchRecoveryCrescendoSfxSignatureRef.current = null;
             return;
         }
-        const signature = [
-            boardFloaterPayload.key,
-            boardFloaterMismatchRecoveryCrescendo.tier,
-            boardFloaterMismatchRecoveryCrescendo.beatCount
-        ].join(':');
+        const heat = getMismatchFloaterHeat(boardFloaterPayload);
+        const beatCount = Math.max(2, Math.min(5, 2 + runNonNegativeInteger(boardFloaterPayload.brokenChainDepth)));
+        const signature = [boardFloaterPayload.key, heat, beatCount].join(':');
         if (mismatchRecoveryCrescendoSfxSignatureRef.current === signature) {
             return;
         }
         mismatchRecoveryCrescendoSfxSignatureRef.current = signature;
         void resumeAudioContext();
-        playMismatchRecoveryCrescendoSfx(
-            shuffleSfxGain,
-            boardFloaterMismatchRecoveryCrescendo.tier,
-            boardFloaterMismatchRecoveryCrescendo.beatCount
-        );
-    }, [boardFloaterMismatchRecoveryCrescendo, boardFloaterPayload, shuffleSfxGain]);
+        playMismatchRecoveryCrescendoSfx(shuffleSfxGain, heat, beatCount);
+    }, [boardFloaterPayload, shuffleSfxGain]);
     // Single source of truth for "what just happened on the board": the typed event the
     // core emitted, rather than a diff of the previous render's tiles.
     const gameplayEventJournal = run.gameplayEventJournal;
@@ -1734,11 +770,9 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         playUiClickSfx(uiGain);
     }, [uiGain]);
 
-
     const openSettingsPlayingMode = useCallback((): void => {
         openSettings('playing');
     }, [openSettings]);
-
 
     const pauseShortcutStateRef = useLatestRef({
         abandonRunConfirmOpen,
@@ -2605,8 +1639,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                             </div>
                         ) : null}
 
-
-
                         <div
                             ref={boardStageRef}
                             data-testid="board-stage"
@@ -2631,7 +1663,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                     ? boardFloaterPayload.crescendo?.tier ?? 'none'
                                     : 'none'
                             }
-                            data-match-payoff-stack={boardMatchPayoffStackCue?.tone ?? 'none'}
                             style={{ '--gameplay-workshop-table-image': `url(${UI_ART.gameplayWorkshopTable})` } as CSSProperties}
                         >
                             <div className={styles.boardGlow} aria-hidden="true" />
@@ -2718,92 +1749,15 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                             ? 'match-score-floater'
                                             : 'mismatch-score-floater'
                                     }
-                                    data-feedback-intensity={
-                                        boardFloaterPayload.kind === 'match'
-                                            ? boardFloaterPayload.feedbackIntensity
-                                            : boardFloaterDetailLines.length > 0
-                                              ? 'penalty'
-                                              : (boardFloaterPayload.brokenChainDepth ?? 0) >= 3
-                                                ? 'break'
-                                              : 'miss'
-                                    }
+                                    data-feedback-intensity={boardFloaterIntensity}
                                     data-match-floater-heat={
                                         boardFloaterPayload.kind === 'match'
                                             ? getMatchFloaterHeat(boardFloaterPayload)
                                             : 'none'
                                     }
-                                    data-match-crescendo-audio={
-                                        boardFloaterPayload.kind === 'match'
-                                            ? boardFloaterPayload.crescendo?.audioCue ?? 'none'
-                                            : 'none'
-                                    }
-                                    data-match-crescendo-beats={
-                                        boardFloaterPayload.kind === 'match'
-                                            ? boardFloaterPayload.crescendo?.beatCount ?? 0
-                                            : 0
-                                    }
-                                    data-match-crescendo-cue={
-                                        boardFloaterPayload.kind === 'match'
-                                            ? boardFloaterPayload.crescendo?.screenCue ?? 'none'
-                                            : 'none'
-                                    }
-                                    data-match-crescendo-screen-cue={
-                                        boardFloaterPayload.kind === 'match'
-                                            ? boardFloaterPayload.crescendo?.screenCue ?? 'none'
-                                            : 'none'
-                                    }
-                                    data-match-crescendo-tier={
-                                        boardFloaterPayload.kind === 'match'
-                                            ? boardFloaterPayload.crescendo?.tier ?? 'none'
-                                            : 'none'
-                                    }
-                                    data-match-jackpot-beats={
-                                        boardFloaterPayload.kind === 'match' ? boardFloaterJackpotCue?.beatCount ?? 0 : 0
-                                    }
-                                    data-match-jackpot-audio={
-                                        boardFloaterPayload.kind === 'match' && boardFloaterJackpotCue
-                                            ? getBoardFloaterJackpotAudioCue(boardFloaterJackpotCue)
-                                            : 'none'
-                                    }
-                                    data-match-jackpot-screen-cue={
-                                        boardFloaterPayload.kind === 'match' && boardFloaterJackpotCue
-                                            ? getBoardFloaterJackpotScreenCue(boardFloaterJackpotCue)
-                                            : 'none'
-                                    }
-                                    data-match-jackpot-tier={
-                                        boardFloaterPayload.kind === 'match' ? boardFloaterJackpotCue?.tier ?? 'none' : 'none'
-                                    }
-                                    data-match-trait-lane-count={
-                                        boardFloaterPayload.kind === 'match' ? boardFloaterTraitLaneMap.length : 0
-                                    }
-                                    data-match-trait-lane-map={
-                                        boardFloaterPayload.kind === 'match'
-                                            ? boardFloaterTraitLaneMapAttr || 'none'
-                                            : 'none'
-                                    }
                                     data-mismatch-floater-heat={
                                         boardFloaterPayload.kind === 'miss'
                                             ? getMismatchFloaterHeat(boardFloaterPayload)
-                                            : 'none'
-                                    }
-                                    data-mismatch-recovery-crescendo-beats={
-                                        boardFloaterPayload.kind === 'miss'
-                                            ? boardFloaterMismatchRecoveryCrescendo?.beatCount ?? 0
-                                            : 0
-                                    }
-                                    data-mismatch-recovery-crescendo-cue={
-                                        boardFloaterPayload.kind === 'miss'
-                                            ? boardFloaterMismatchRecoveryCrescendo?.screenCue ?? 'none'
-                                            : 'none'
-                                    }
-                                    data-mismatch-recovery-crescendo-screen-cue={
-                                        boardFloaterPayload.kind === 'miss'
-                                            ? boardFloaterMismatchRecoveryCrescendo?.screenCue ?? 'none'
-                                            : 'none'
-                                    }
-                                    data-mismatch-recovery-crescendo-tier={
-                                        boardFloaterPayload.kind === 'miss'
-                                            ? boardFloaterMismatchRecoveryCrescendo?.tier ?? 'none'
                                             : 'none'
                                     }
                                     style={
@@ -2814,1053 +1768,26 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                         } as CSSProperties
                                     }
                                 >
-                                    {boardFloaterPayload.kind === 'match' ? (
-                                        <span
-                                            className={styles.boardFloaterSignal}
-                                            data-floater-signal={boardFloaterPayload.feedbackSignal.tone}
-                                        >
-                                            {boardFloaterPayload.feedbackSignal.label}
-                                        </span>
-                                    ) : (
-                                        <span
-                                            className={styles.boardFloaterSignal}
-                                            data-floater-signal={boardFloaterMismatchSignal?.tone}
-                                        >
-                                            {boardFloaterMismatchSignal?.label}
-                                        </span>
-                                    )}
-                                    {boardFloaterPayload.kind === 'match' && boardFloaterJackpotCue ? (
-                                        <span
-                                            aria-label={`${boardFloaterJackpotCue.label}: ${boardFloaterJackpotCue.action}: ${boardFloaterJackpotCue.value}. ${boardFloaterJackpotCue.beatCount} beats.`}
-                                            className={styles.boardFloaterJackpotCue}
-                                            data-match-jackpot-action={boardFloaterJackpotCue.action}
-                                            data-match-jackpot-audio={getBoardFloaterJackpotAudioCue(boardFloaterJackpotCue)}
-                                            data-match-jackpot-beats={boardFloaterJackpotCue.beatCount}
-                                            data-match-jackpot-screen-cue={getBoardFloaterJackpotScreenCue(boardFloaterJackpotCue)}
-                                            data-match-jackpot-tier={boardFloaterJackpotCue.tier}
-                                            data-testid="match-score-floater-jackpot"
-                                        >
-                                            <small>{boardFloaterJackpotCue.label}</small>
-                                            <b>{boardFloaterJackpotCue.action}</b>
-                                            <em>{boardFloaterJackpotCue.value}</em>
-                                            <span aria-hidden="true" className={styles.boardFloaterJackpotBeats}>
-                                                {Array.from({ length: boardFloaterJackpotCue.beatCount }, (_, index) => (
-                                                    <i
-                                                        data-match-jackpot-beat={index + 1}
-                                                        data-match-jackpot-beat-focus={index === 0 ? 'primary' : 'support'}
-                                                        key={`match-jackpot-beat-${index + 1}`}
-                                                    />
-                                                ))}
-                                            </span>
-                                        </span>
-                                    ) : null}
-                                    {boardFloaterPayload.kind === 'match' ? (
-                                        <span
-                                            aria-label={`Match impact cue: ${boardFloaterPayload.impactCue.label}`}
-                                            className={styles.boardFloaterImpactCue}
-                                            data-match-impact-cue-beats={getBoardFloaterImpactCueBeatCount(boardFloaterPayload)}
-                                            data-match-impact-cue-screen-cue={getBoardFloaterImpactCueScreenCue(boardFloaterPayload)}
-                                            data-match-impact-cue-tone={boardFloaterPayload.impactCue.tone}
-                                            data-testid="match-score-floater-impact-cue"
-                                        >
-                                            {boardFloaterPayload.impactCue.label}
-                                            <span aria-hidden="true" className={styles.boardFloaterImpactBeatPips}>
-                                                {Array.from(
-                                                    { length: getBoardFloaterImpactCueBeatCount(boardFloaterPayload) },
-                                                    (_, index) => (
-                                                        <i
-                                                            data-match-impact-cue-beat={index + 1}
-                                                            data-match-impact-cue-beat-focus={index === 0 ? 'primary' : 'support'}
-                                                            key={`match-impact-cue-beat-${index + 1}`}
-                                                        />
-                                                    )
-                                                )}
-                                            </span>
-                                        </span>
-                                    ) : null}
-                                    {boardFloaterPayload.kind === 'match' && boardFloaterPayload.crescendo ? (
-                                        <span
-                                            aria-label={`Match crescendo ${boardFloaterPayload.crescendo.label}: ${boardFloaterPayload.crescendo.detail}. ${boardFloaterPayload.crescendo.beatCount} beats.`}
-                                            className={styles.boardFloaterCrescendo}
-                                            data-match-crescendo-cue={boardFloaterPayload.crescendo.screenCue}
-                                            data-match-crescendo-screen-cue={boardFloaterPayload.crescendo.screenCue}
-                                            data-match-crescendo-tier={boardFloaterPayload.crescendo.tier}
-                                            data-testid="match-score-floater-crescendo"
-                                        >
-                                            <small>{boardFloaterPayload.crescendo.label}</small>
-                                            <span className={styles.boardFloaterCrescendoBeats}>
-                                                {Array.from({ length: boardFloaterPayload.crescendo.beatCount }, (_, index) => (
-                                                    <i
-                                                        aria-hidden
-                                                        data-match-crescendo-beat={index + 1}
-                                                        data-match-crescendo-beat-focus={index === 0 ? 'primary' : 'support'}
-                                                        key={`crescendo-beat-${index + 1}`}
-                                                    />
-                                                ))}
-                                            </span>
-                                            <b>{boardFloaterPayload.crescendo.detail}</b>
-                                        </span>
-                                    ) : null}
-                                    <span className={styles.boardFloaterMain}>
-                                        {boardFloaterPayload.kind === 'match'
-                                            ? boardFloaterPayload.feedbackHeadline
-                                            : mismatchFloaterVisualLabel(boardFloaterDetailLines, {
-                                                  brokenChainDepth: boardFloaterPayload.brokenChainDepth,
-                                                  brokenChainRewardCue: boardFloaterPayload.brokenChainRewardCue
-                                              })}
+                                    <span
+                                        className={styles.boardFloaterSignal}
+                                        data-floater-signal={boardFloaterSignalTone}
+                                    >
+                                        {boardFloaterSignalLabel}
                                     </span>
-                                    {boardFloaterPayload.kind === 'match' && boardFloaterPayload.cascadeCue ? (
-                                        <span
-                                            aria-label={`${boardFloaterPayload.cascadeCue.label}: ${boardFloaterPayload.cascadeCue.value}`}
-                                            className={styles.boardFloaterCascadeCue}
-                                            data-cascade-beats={getBoardFloaterCascadeBeatCount(boardFloaterPayload.cascadeCue)}
-                                            data-cascade-tier={boardFloaterPayload.cascadeCue.tier}
-                                            data-testid="match-score-floater-cascade"
-                                        >
-                                            <small>{boardFloaterPayload.cascadeCue.label}</small>
-                                            <b>{boardFloaterPayload.cascadeCue.value}</b>
-                                            <span aria-hidden="true" className={styles.boardFloaterCascadeBeatPips}>
-                                                {Array.from(
-                                                    { length: getBoardFloaterCascadeBeatCount(boardFloaterPayload.cascadeCue) },
-                                                    (_, index) => (
-                                                        <i
-                                                            data-cascade-beat={index + 1}
-                                                            data-cascade-beat-focus={index === 0 ? 'primary' : 'support'}
-                                                            key={`cascade-beat-${index + 1}`}
-                                                        />
-                                                    )
-                                                )}
-                                            </span>
-                                        </span>
-                                    ) : null}
-                                    {boardFloaterPayload.kind === 'match' && boardFloaterPayload.chainMilestone ? (
-                                        <span
-                                            aria-label={`Chain milestone ${boardFloaterPayload.chainMilestone.label}: ${boardFloaterPayload.chainMilestone.target}. Action: ${boardFloaterPayload.chainMilestone.action}. ${boardFloaterPayload.chainMilestone.value}. ${getBoardFloaterChainMilestoneBeatCount(boardFloaterPayload.chainMilestone)} beats.`}
-                                            className={styles.boardFloaterChainMilestone}
-                                            data-chain-milestone-action={boardFloaterPayload.chainMilestone.action}
-                                            data-chain-milestone-audio={boardFloaterPayload.chainMilestone.audioCue}
-                                            data-chain-milestone-beats={getBoardFloaterChainMilestoneBeatCount(boardFloaterPayload.chainMilestone)}
-                                            data-chain-milestone-fill={boardFloaterChainMilestoneFill}
-                                            data-chain-milestone-cue={boardFloaterPayload.chainMilestone.screenCue}
-                                            data-chain-milestone-screen-cue={boardFloaterPayload.chainMilestone.screenCue}
-                                            data-chain-milestone-target={boardFloaterPayload.chainMilestone.target}
-                                            data-chain-milestone-tone={boardFloaterPayload.chainMilestone.tone}
-                                            style={
-                                                {
-                                                    '--chain-milestone-fill': `${boardFloaterChainMilestoneFill}%`
-                                                } as CSSProperties
-                                            }
-                                            data-testid="match-score-floater-chain-milestone"
-                                        >
-                                            <small>{boardFloaterPayload.chainMilestone.label}</small>
-                                            <b>{boardFloaterPayload.chainMilestone.target}</b>
-                                            <strong>{boardFloaterPayload.chainMilestone.action}</strong>
-                                            <em>{boardFloaterPayload.chainMilestone.value}</em>
-                                            <span aria-hidden="true" className={styles.boardFloaterChainMilestoneMeter} />
-                                            <span aria-hidden="true" className={styles.boardFloaterChainMilestoneBeatPips}>
-                                                {Array.from(
-                                                    { length: getBoardFloaterChainMilestoneBeatCount(boardFloaterPayload.chainMilestone) },
-                                                    (_, index) => (
-                                                        <i
-                                                            data-chain-milestone-beat={index + 1}
-                                                            data-chain-milestone-beat-focus={index === 0 ? 'primary' : 'support'}
-                                                            key={`chain-milestone-beat-${index + 1}`}
-                                                        />
-                                                    )
-                                                )}
-                                            </span>
-                                        </span>
-                                    ) : null}
-                                    {boardFloaterPayload.kind === 'match' && boardFloaterPayload.rewardBurst ? (
-                                        <span
-                                            aria-label={`${boardFloaterPayload.rewardBurst.label}: ${boardFloaterPayload.rewardBurst.action}: ${boardFloaterPayload.rewardBurst.value}`}
-                                            className={styles.boardFloaterRewardBurst}
-                                            data-reward-burst-action={boardFloaterPayload.rewardBurst.action}
-                                            data-reward-burst-audio={getBoardFloaterRewardBurstAudioCue(boardFloaterPayload.rewardBurst)}
-                                            data-reward-burst-beats={getBoardFloaterRewardBurstBeatCount(boardFloaterPayload.rewardBurst)}
-                                            data-reward-burst-fill={boardFloaterRewardBurstFill}
-                                            data-reward-burst-label={boardFloaterPayload.rewardBurst.label}
-                                            data-reward-burst-screen-cue={getBoardFloaterRewardBurstScreenCue(boardFloaterPayload.rewardBurst)}
-                                            data-reward-burst-tier={boardFloaterPayload.rewardBurst.tier}
-                                            style={
-                                                {
-                                                    '--reward-burst-fill': `${boardFloaterRewardBurstFill}%`
-                                                } as CSSProperties
-                                            }
-                                            data-testid="match-score-floater-reward-burst"
-                                        >
-                                            <small>{boardFloaterPayload.rewardBurst.label}</small>
-                                            <u>{boardFloaterPayload.rewardBurst.action}</u>
-                                            <b>{boardFloaterPayload.rewardBurst.value}</b>
-                                            <span aria-hidden="true" className={styles.boardFloaterRewardBurstMeter} />
-                                            <span aria-hidden="true" className={styles.boardFloaterRewardBurstBeatPips}>
-                                                {Array.from(
-                                                    { length: getBoardFloaterRewardBurstBeatCount(boardFloaterPayload.rewardBurst) },
-                                                    (_, index) => (
-                                                        <i
-                                                            data-reward-burst-beat={index + 1}
-                                                            data-reward-burst-beat-focus={index === 0 ? 'primary' : 'support'}
-                                                            key={`reward-burst-beat-${index + 1}`}
-                                                        />
-                                                    )
-                                                )}
-                                            </span>
-                                        </span>
-                                    ) : null}
-                                    {boardFloaterPayload.kind === 'match' && boardFloaterPayload.payoffSummary ? (
-                                        <span
-                                            aria-label={`${boardFloaterPayload.payoffSummary.label}: ${boardFloaterPayload.payoffSummary.value}`}
-                                            className={styles.boardFloaterPayoffSummary}
-                                            data-payoff-summary-audio={getBoardFloaterPayoffSummaryAudioCue(boardFloaterPayload.payoffSummary)}
-                                            data-payoff-summary-beats={getBoardFloaterPayoffSummaryBeatCount(boardFloaterPayload.payoffSummary)}
-                                            data-payoff-summary-label={boardFloaterPayload.payoffSummary.label}
-                                            data-payoff-summary-focus={
-                                                boardFloaterPayload.payoffSummary.label === 'Super stack' ||
-                                                boardFloaterPayload.payoffSummary.label === 'Stack cashout'
-                                                    ? 'cashout'
-                                                    : boardFloaterPayload.payoffSummary.tier
-                                            }
-                                            data-payoff-summary-screen-cue={getBoardFloaterPayoffSummaryScreenCue(boardFloaterPayload.payoffSummary)}
-                                            data-payoff-summary-tier={boardFloaterPayload.payoffSummary.tier}
-                                            data-testid="match-score-floater-payoff-summary"
-                                        >
-                                            <small>{boardFloaterPayload.payoffSummary.label}</small>
-                                            <b>{boardFloaterPayload.payoffSummary.value}</b>
-                                            <span aria-hidden="true" className={styles.boardFloaterPayoffSummaryBeatPips}>
-                                                {Array.from(
-                                                    { length: getBoardFloaterPayoffSummaryBeatCount(boardFloaterPayload.payoffSummary) },
-                                                    (_, index) => (
-                                                        <i
-                                                            data-payoff-summary-beat={index + 1}
-                                                            data-payoff-summary-beat-focus={index === 0 ? 'primary' : 'support'}
-                                                            key={`payoff-summary-beat-${index + 1}`}
-                                                        />
-                                                    )
-                                                )}
-                                            </span>
-                                        </span>
-                                    ) : null}
-                                    {boardFloaterPayload.kind === 'match' && boardFloaterMatchPayoffLaneMap.length > 0 ? (
-                                        <span
-                                            aria-label={matchPayoffLaneMapLabel(boardFloaterMatchPayoffLaneMap)}
-                                            className={styles.boardFloaterPayoffLaneMap}
-                                            data-match-payoff-lane-primary={boardFloaterPrimaryPayoffLane?.id ?? 'none'}
-                                            data-match-payoff-lane-primary-action={
-                                                boardFloaterPrimaryPayoffLane
-                                                    ? matchPayoffLaneAction(boardFloaterPrimaryPayoffLane)
-                                                    : 'none'
-                                            }
-                                            data-match-payoff-lane-primary-audio={
-                                                boardFloaterPrimaryPayoffLane
-                                                    ? getBoardFloaterPayoffLaneAudioCue(boardFloaterPrimaryPayoffLane)
-                                                    : 'none'
-                                            }
-                                            data-match-payoff-lane-primary-focus={
-                                                boardFloaterPrimaryPayoffLane
-                                                    ? getBoardFloaterPayoffLaneFocus(boardFloaterPrimaryPayoffLane)
-                                                    : 'none'
-                                            }
-                                            data-match-payoff-lane-actions={matchPayoffLaneActionMapAttr(
-                                                boardFloaterMatchPayoffLaneMap
-                                            )}
-                                            data-match-payoff-lane-map={matchPayoffLaneMapAttr(boardFloaterMatchPayoffLaneMap)}
-                                            data-match-payoff-lane-primary-screen-cue={
-                                                boardFloaterPrimaryPayoffLane
-                                                    ? getBoardFloaterPayoffLaneScreenCue(boardFloaterPrimaryPayoffLane)
-                                                    : 'none'
-                                            }
-                                            data-testid="match-score-floater-payoff-lane-map"
-                                        >
-                                            <span
-                                                className={styles.boardFloaterPayoffLaneMapSummary}
-                                                data-match-payoff-lane-count={boardFloaterMatchPayoffLaneMap.length}
-                                                data-testid="match-score-floater-payoff-lane-map-summary"
-                                            >
-                                                <small>Lanes</small>
-                                                <b>
-                                                    {boardFloaterMatchPayoffLaneMap.length}{' '}
-                                                    {boardFloaterMatchPayoffLaneMap.length === 1 ? 'lane' : 'lanes'}
-                                                </b>
-                                                <span aria-hidden="true" className={styles.boardFloaterPayoffLaneMapSummaryBeatPips}>
-                                                    {Array.from(
-                                                        { length: Math.max(2, Math.min(5, boardFloaterMatchPayoffLaneMap.length + 1)) },
-                                                        (_, index) => (
-                                                            <i
-                                                                data-match-payoff-lane-map-summary-beat={index + 1}
-                                                                data-match-payoff-lane-map-summary-beat-focus={
-                                                                    index === 0 ? 'primary' : 'support'
-                                                                }
-                                                                key={`payoff-lane-map-summary-beat-${index + 1}`}
-                                                            />
-                                                        )
-                                                    )}
-                                                </span>
-                                            </span>
-                                            {boardFloaterPrimaryPayoffLane ? (
-                                                <span
-                                                    aria-label={`Primary paid lane. ${matchPayoffLaneAction(boardFloaterPrimaryPayoffLane)}: ${boardFloaterPrimaryPayoffLane.label}. ${boardFloaterPrimaryPayoffLane.cue}. ${getBoardFloaterPayoffLaneBeatCount(boardFloaterPrimaryPayoffLane)} beats.`}
-                                                    data-match-payoff-primary-lane={boardFloaterPrimaryPayoffLane.id}
-                                                    data-match-payoff-primary-lane-action={matchPayoffLaneAction(
-                                                        boardFloaterPrimaryPayoffLane
-                                                    )}
-                                                    data-match-payoff-primary-lane-audio={getBoardFloaterPayoffLaneAudioCue(
-                                                        boardFloaterPrimaryPayoffLane
-                                                    )}
-                                                    data-match-payoff-primary-lane-beats={getBoardFloaterPayoffLaneBeatCount(
-                                                        boardFloaterPrimaryPayoffLane
-                                                    )}
-                                                    data-match-payoff-primary-lane-focus={getBoardFloaterPayoffLaneFocus(
-                                                        boardFloaterPrimaryPayoffLane
-                                                    )}
-                                                    data-match-payoff-primary-lane-screen-cue={getBoardFloaterPayoffLaneScreenCue(
-                                                        boardFloaterPrimaryPayoffLane
-                                                    )}
-                                                    data-match-payoff-primary-lane-tone={boardFloaterPrimaryPayoffLane.tone}
-                                                    data-testid="match-score-floater-primary-payoff-lane"
-                                                >
-                                                    <small>Paid lane</small>
-                                                    <strong>{matchPayoffLaneAction(boardFloaterPrimaryPayoffLane)}</strong>
-                                                    <em>{boardFloaterPrimaryPayoffLane.cue}</em>
-                                                    <span aria-hidden="true" className={styles.boardFloaterPrimaryPayoffLaneBeatPips}>
-                                                        {Array.from(
-                                                            { length: getBoardFloaterPayoffLaneBeatCount(boardFloaterPrimaryPayoffLane) },
-                                                            (_, index) => (
-                                                                <i
-                                                                    data-match-payoff-primary-lane-beat={index + 1}
-                                                                    data-match-payoff-primary-lane-beat-focus={
-                                                                        index === 0 ? 'primary' : 'support'
-                                                                    }
-                                                                    key={`${boardFloaterPrimaryPayoffLane.id}-primary-payoff-lane-beat-${index + 1}`}
-                                                                />
-                                                            )
-                                                        )}
-                                                    </span>
-                                                </span>
-                                            ) : null}
-                                            {boardFloaterMatchPayoffLaneMap.map((lane) => (
-                                                <span
-                                                    data-match-payoff-lane={lane.id}
-                                                    data-match-payoff-lane-action={matchPayoffLaneAction(lane)}
-                                                    data-match-payoff-lane-audio={getBoardFloaterPayoffLaneAudioCue(lane)}
-                                                    data-match-payoff-lane-beats={getBoardFloaterPayoffLaneBeatCount(lane)}
-                                                    data-match-payoff-lane-count={lane.count}
-                                                    data-match-payoff-lane-screen-cue={getBoardFloaterPayoffLaneScreenCue(lane)}
-                                                    data-match-payoff-lane-tone={lane.tone}
-                                                    key={lane.id}
-                                                >
-                                                    <small>{lane.label}</small>
-                                                    {lane.count > 1 ? <b>x{lane.count}</b> : null}
-                                                    <em>{lane.cue}</em>
-                                                    <strong>{matchPayoffLaneAction(lane)}</strong>
-                                                    <span aria-hidden="true" className={styles.boardFloaterPayoffLaneBeatPips}>
-                                                        {Array.from({ length: getBoardFloaterPayoffLaneBeatCount(lane) }, (_, index) => (
-                                                            <i
-                                                                data-match-payoff-lane-beat={index + 1}
-                                                                data-match-payoff-lane-beat-focus={index === 0 ? 'primary' : 'support'}
-                                                                key={`${lane.id}-payoff-lane-beat-${index + 1}`}
-                                                            />
-                                                        ))}
-                                                    </span>
-                                                </span>
-                                            ))}
-                                        </span>
-                                    ) : null}
-                                    {boardFloaterPayload.kind === 'match' && boardFloaterMatchPayoffLadder ? (
-                                        <span
-                                            aria-label={`Match payoff ladder. First: ${boardFloaterMatchPayoffLadder.first}. Then: ${boardFloaterMatchPayoffLadder.then}. Keep: ${boardFloaterMatchPayoffLadder.keep}.${
-                                                boardFloaterMatchPayoffLadder.lanes.length > 0
-                                                    ? ` Lanes: ${boardFloaterMatchPayoffLadder.lanes.join(' to ')}.`
-                                                    : ''
-                                            }`}
-                                            className={styles.boardFloaterPayoffLadder}
-                                            data-match-payoff-ladder-audio={getBoardFloaterPayoffLadderAudioCue(
-                                                boardFloaterMatchPayoffLadder
-                                            )}
-                                            data-match-payoff-ladder-beats={getBoardFloaterPayoffLadderBeatCount(
-                                                boardFloaterMatchPayoffLadder
-                                            )}
-                                            data-match-payoff-ladder-lanes={
-                                                boardFloaterMatchPayoffLadder.lanes.length > 0
-                                                    ? boardFloaterMatchPayoffLadder.lanes.join('|')
-                                                    : undefined
-                                            }
-                                            data-match-payoff-ladder-screen-cue={getBoardFloaterPayoffLadderScreenCue(
-                                                boardFloaterMatchPayoffLadder
-                                            )}
-                                            data-match-payoff-ladder-tone={boardFloaterMatchPayoffLadder.tone}
-                                            data-testid="match-score-floater-payoff-ladder"
-                                        >
-                                            <span
-                                                className={styles.boardFloaterPayoffLadderSummary}
-                                                data-match-payoff-ladder-count={boardFloaterMatchPayoffLadder.lanes.length}
-                                                data-testid="match-score-floater-payoff-ladder-summary"
-                                            >
-                                                <small>Ladder</small>
-                                                <b>
-                                                    {boardFloaterMatchPayoffLadder.lanes.length > 0
-                                                        ? `${boardFloaterMatchPayoffLadder.lanes.length} lanes`
-                                                        : 'No lanes'}
-                                                </b>
-                                                <span aria-hidden="true" className={styles.boardFloaterPayoffLadderSummaryBeatPips}>
-                                                    {Array.from(
-                                                        { length: Math.max(2, Math.min(5, boardFloaterMatchPayoffLadder.lanes.length + 1)) },
-                                                        (_, index) => (
-                                                            <i
-                                                                data-match-payoff-ladder-summary-beat={index + 1}
-                                                                data-match-payoff-ladder-summary-beat-focus={
-                                                                    index === 0 ? 'primary' : 'support'
-                                                                }
-                                                                key={`payoff-ladder-summary-beat-${index + 1}`}
-                                                            />
-                                                        )
-                                                    )}
-                                                </span>
-                                            </span>
-                                            <small>First</small>
-                                            <b data-match-payoff-ladder-step="first">{boardFloaterMatchPayoffLadder.first}</b>
-                                            <small>Then</small>
-                                            <b data-match-payoff-ladder-step="then">{boardFloaterMatchPayoffLadder.then}</b>
-                                            <small>Keep</small>
-                                            <b data-match-payoff-ladder-step="keep">{boardFloaterMatchPayoffLadder.keep}</b>
-                                            {boardFloaterMatchPayoffLadder.lanes.length > 0 ? (
-                                                <span className={styles.boardFloaterPayoffLaneStrip}>
-                                                    {boardFloaterMatchPayoffLadder.lanes.map((lane, index) => (
-                                                        <i data-match-payoff-lane-index={index + 1} key={`${lane}-${index}`}>
-                                                            <span aria-hidden="true" className={styles.boardFloaterPayoffLaneIndexPips}>
-                                                                {Array.from(
-                                                                    { length: Math.min(3, index + 1) },
-                                                                    (_, pipIndex) => (
-                                                                        <em
-                                                                            data-match-payoff-lane-pip={pipIndex + 1}
-                                                                            data-match-payoff-lane-pip-focus={
-                                                                                pipIndex === 0 ? 'primary' : 'support'
-                                                                            }
-                                                                            key={`${lane}-${index}-pip-${pipIndex + 1}`}
-                                                                        />
-                                                                    )
-                                                                )}
-                                                            </span>
-                                                            {lane}
-                                                        </i>
-                                                    ))}
-                                                </span>
-                                            ) : null}
-                                            <span aria-hidden="true" className={styles.boardFloaterPayoffLadderBeatPips}>
-                                                {Array.from(
-                                                    {
-                                                        length: getBoardFloaterPayoffLadderBeatCount(
-                                                            boardFloaterMatchPayoffLadder
-                                                        )
-                                                    },
-                                                    (_, index) => (
-                                                        <i
-                                                            data-match-payoff-ladder-beat={index + 1}
-                                                            data-match-payoff-ladder-beat-focus={index === 0 ? 'primary' : 'support'}
-                                                            key={`payoff-ladder-beat-${index + 1}`}
-                                                        />
-                                                    )
-                                                )}
-                                            </span>
-                                        </span>
-                                    ) : null}
                                     {boardFloaterPayload.kind === 'match' ? (
-                                        <span className={styles.boardFloaterScore}>
-                                            {boardFloaterPayload.routeRewardText ??
-                                                `+${runNonNegativeInteger(boardFloaterPayload.amount).toLocaleString()}`}
+                                        <span
+                                            className={styles.boardFloaterAmount}
+                                            data-testid="match-score-floater-amount"
+                                        >
+                                            +{runNonNegativeInteger(boardFloaterPayload.amount).toLocaleString()}
                                         </span>
                                     ) : null}
-                                    {boardFloaterPayload.kind === 'match' && boardFloaterPayload.chainDepth >= 3 ? (
+                                    {boardFloaterReason ? (
                                         <span
-                                            className={styles.boardFloaterStreak}
-                                            data-chain-streak-depth={boardFloaterPayload.chainDepth}
+                                            className={styles.boardFloaterReason}
+                                            data-testid="board-floater-reason"
                                         >
-                                            <span className={styles.boardFloaterStreakPips} aria-hidden="true">
-                                                {Array.from(
-                                                    { length: Math.min(5, boardFloaterPayload.chainDepth) },
-                                                    (_, index) => (
-                                                        <i
-                                                            data-chain-streak-beat={index + 1}
-                                                            data-chain-streak-beat-focus={index === 0 ? 'primary' : 'support'}
-                                                            key={`board-streak-beat-${index + 1}`}
-                                                        />
-                                                )
-                                            )}
-                                        </span>
-                                            <span className={styles.boardFloaterStreakText}>x{boardFloaterPayload.chainDepth} streak</span>
-                                            {boardFloaterChainCue ? (
-                                                <span className={styles.boardFloaterStreakCue}>
-                                                    <span aria-hidden="true" className={styles.boardFloaterStreakCuePips}>
-                                                        {Array.from(
-                                                            { length: Math.min(5, Math.max(2, boardFloaterPayload.chainDepth)) },
-                                                            (_, index) => (
-                                                                <i
-                                                                    data-chain-streak-cue-beat={index + 1}
-                                                                    data-chain-streak-cue-beat-focus={
-                                                                        index === 0 ? 'primary' : 'support'
-                                                                    }
-                                                                    key={`board-streak-cue-beat-${index + 1}`}
-                                                                />
-                                                            )
-                                                        )}
-                                                    </span>
-                                                    {boardFloaterChainCue}
-                                                </span>
-                                            ) : null}
-                                        </span>
-                                    ) : null}
-                                    {boardFloaterPayload.kind === 'match' &&
-                                    boardFloaterMatchChainRewardForecastCues.length > 0 ? (
-                                        <span
-                                            aria-label={`Match score floater reward forecast. ${boardFloaterMatchChainRewardForecastCues
-                                                .slice(0, 3)
-                                                .map((cue) => {
-                                                    const stackLabel = getChainRewardStackLabel(cue);
-                                                    const progress = getChainRewardProgress(boardFloaterPayload.chainDepth, cue);
-
-                                                    return `${cue.chaseLabel}: ${cue.actionLabel}: ${getChainRewardLaneAction(cue.urgency)}: ${cue.label}: ${cue.distanceLabel}: ${getChainRewardUrgencyCopy(cue)}${
-                                                        progress ? `: ${progress.label}: ${progress.remainingLabel}` : ''
-                                                    }${stackLabel ? `: ${stackLabel}` : ''}`;
-                                                })
-                                                .join('. ')}.`}
-                                            className={styles.boardFloaterRewardForecast}
-                                            data-testid="match-score-floater-reward-forecast"
-                                        >
-                                            <span
-                                                className={styles.boardFloaterRewardForecastSummary}
-                                                data-chain-reward-forecast-count={boardFloaterMatchChainRewardForecastCues.slice(0, 3).length}
-                                                data-testid="match-score-floater-reward-forecast-summary"
-                                            >
-                                                <small>Forecast</small>
-                                                <b>
-                                                    {boardFloaterMatchChainRewardForecastCues.slice(0, 3).length}{' '}
-                                                    {boardFloaterMatchChainRewardForecastCues.slice(0, 3).length === 1 ? 'reward' : 'rewards'}
-                                                </b>
-                                                <span aria-hidden="true" className={styles.boardFloaterRewardForecastSummaryBeatPips}>
-                                                    {Array.from(
-                                                        { length: Math.max(2, Math.min(5, boardFloaterMatchChainRewardForecastCues.slice(0, 3).length + 1)) },
-                                                        (_, index) => (
-                                                            <i
-                                                                data-chain-reward-forecast-summary-beat={index + 1}
-                                                                data-chain-reward-forecast-summary-beat-focus={
-                                                                    index === 0 ? 'primary' : 'support'
-                                                                }
-                                                                key={`reward-forecast-summary-beat-${index + 1}`}
-                                                            />
-                                                        )
-                                                    )}
-                                                </span>
-                                            </span>
-                                            {boardFloaterMatchChainRewardForecastCues.slice(0, 3).map((cue) => {
-                                                const stackLabel = getChainRewardStackLabel(cue);
-                                                const progress = getChainRewardProgress(boardFloaterPayload.chainDepth, cue);
-                                                const beatCount = getBoardFloaterRewardForecastBeatCount(cue);
-                                                const progressFill = progress
-                                                    ? `${Math.max(0, Math.min(100, (progress.filled / progress.total) * 100))}%`
-                                                    : '0%';
-
-                                                return (
-                                                    <span
-                                                        data-chain-reward-arcade-cue={getChainRewardUrgencyCopy(cue)}
-                                                        data-chain-reward-audio={getBoardFloaterRewardForecastAudioCue(cue)}
-                                                        data-chain-reward-beats={beatCount}
-                                                        data-chain-reward-distance={cue.distance}
-                                                        data-chain-reward-progress-filled={progress?.filled ?? 0}
-                                                        data-chain-reward-progress-total={progress?.total ?? 0}
-                                                        data-chain-reward-lane-action={getChainRewardLaneAction(cue.urgency)}
-                                                        data-chain-reward-progress={progress?.label ?? 'none'}
-                                                        data-chain-reward-screen-cue={getBoardFloaterRewardForecastScreenCue(cue)}
-                                                        data-chain-reward-stack-size={cue.stackSize ?? 1}
-                                                        data-chain-reward-tone={cue.tone}
-                                                        data-chain-reward-urgency={cue.urgency}
-                                                        style={
-                                                            progress
-                                                                ? ({
-                                                                      '--chain-reward-progress-fill': progressFill
-                                                                  } as CSSProperties)
-                                                                : undefined
-                                                        }
-                                                        key={cue.id}
-                                                    >
-                                                        <strong>{cue.chaseLabel}</strong>
-                                                        <small>{cue.actionLabel}</small>
-                                                        <u>{getChainRewardLaneAction(cue.urgency)}</u>
-                                                        <b>{cue.label}</b>
-                                                        <em>{cue.distanceLabel}</em>
-                                                        <i>{getChainRewardUrgencyCopy(cue)}</i>
-                                                        {progress ? (
-                                                            <span className={styles.boardFloaterRewardProgress}>
-                                                                {progress.label}
-                                                            </span>
-                                                        ) : null}
-                                                        {stackLabel ? (
-                                                            <>
-                                                                <mark className={styles.boardFloaterRewardStackLabel}>{stackLabel}</mark>
-                                                                <span aria-hidden="true" className={styles.boardFloaterRewardStackPips}>
-                                                                    {Array.from({ length: cue.stackSize ?? 1 }, (_, index) => (
-                                                                        <i
-                                                                            data-chain-reward-stack-beat={index + 1}
-                                                                            data-chain-reward-stack-beat-focus={
-                                                                                index === 0 ? 'primary' : 'support'
-                                                                            }
-                                                                            key={`${cue.id}-board-reward-stack-${index + 1}`}
-                                                                        />
-                                                                    ))}
-                                                                </span>
-                                                            </>
-                                                        ) : null}
-                                                        <span aria-hidden="true" className={styles.boardFloaterRewardBeatPips}>
-                                                            {Array.from({ length: beatCount }, (_, index) => (
-                                                                <i
-                                                                    data-chain-reward-beat={index + 1}
-                                                                    data-chain-reward-beat-focus={index === 0 ? 'primary' : 'support'}
-                                                                    key={`${cue.id}-board-reward-beat-${index + 1}`}
-                                                                />
-                                                            ))}
-                                                        </span>
-                                                    </span>
-                                                );
-                                            })}
-                                        </span>
-                                    ) : null}
-                                    {boardFloaterPayload.kind === 'match' &&
-                                    boardFloaterMatchPayoffChips.length > 0 ? (
-                                        <span
-                                            aria-label={`Match score payoff chips. ${boardFloaterMatchPayoffChips
-                                                .map((chip) => `${chip.arcadeCue ? `${chip.arcadeCue}: ` : ''}${chip.label}: ${chip.value}`)
-                                                .join('. ')}.`}
-                                            className={styles.boardFloaterPayoffChips}
-                                            data-testid="match-score-floater-payoff-chips"
-                                        >
-                                            {boardFloaterMatchPayoffChips.map((chip) => (
-                                                <span
-                                                    data-match-payoff-arcade-cue={chip.arcadeCue ?? 'none'}
-                                                    data-match-payoff-arcade-screen-cue={getMatchPayoffChipScreenCue(chip)}
-                                                    data-match-payoff-audio={getMatchPayoffChipAudioCue(chip)}
-                                                    data-match-payoff-beats={getMatchPayoffChipBeatCount(chip)}
-                                                    data-match-payoff-id={chip.id}
-                                                    data-match-payoff-screen-cue={getMatchPayoffChipScreenCue(chip)}
-                                                    data-match-payoff-tone={chip.tone}
-                                                    key={chip.id}
-                                                >
-                                                    {chip.arcadeCue ? <em>{chip.arcadeCue}</em> : null}
-                                                    <small>{chip.label}</small>
-                                                    <b>{chip.value}</b>
-                                                    <span className={styles.boardFloaterChipBeats} aria-hidden="true">
-                                                        {Array.from({ length: getMatchPayoffChipBeatCount(chip) }, (_, index) => (
-                                                            <i
-                                                                data-match-payoff-chip-beat={index + 1}
-                                                                data-match-payoff-chip-beat-focus={index === 0 ? 'primary' : 'support'}
-                                                                key={`match-payoff-chip-beat-${chip.id}-${index + 1}`}
-                                                            />
-                                                        ))}
-                                                    </span>
-                                                </span>
-                                            ))}
-                                        </span>
-                                    ) : null}
-                                    {boardFloaterPayload.kind === 'match' && boardFloaterTraitLaneMap.length > 1 ? (
-                                        <span
-                                            aria-label={formatTraitInteractionLaneMapLabel(
-                                                'Match trait interaction lanes',
-                                                boardFloaterTraitLaneMap
-                                            )}
-                                            className={styles.boardFloaterTraitLaneMap}
-                                            data-match-trait-lane-actions={boardFloaterTraitLaneActionMapAttr}
-                                            data-match-trait-lane-map={boardFloaterTraitLaneMapAttr}
-                                            data-match-trait-primary-lane={boardFloaterPrimaryTraitLane?.id ?? 'none'}
-                                            data-match-trait-primary-lane-action={
-                                                boardFloaterPrimaryTraitLane
-                                                    ? getTraitInteractionLaneAction(boardFloaterPrimaryTraitLane.id)
-                                                    : 'none'
-                                            }
-                                            data-match-trait-primary-lane-audio={
-                                                boardFloaterPrimaryTraitLane
-                                                    ? getBoardFloaterTraitLaneAudioCue(boardFloaterPrimaryTraitLane)
-                                                    : 'none'
-                                            }
-                                            data-match-trait-primary-lane-beats={
-                                                boardFloaterPrimaryTraitLane
-                                                    ? getBoardFloaterTraitLaneBeatCount(boardFloaterPrimaryTraitLane)
-                                                    : 0
-                                            }
-                                            data-match-trait-primary-lane-cue={boardFloaterPrimaryTraitLane?.cue ?? 'none'}
-                                            data-match-trait-primary-lane-screen-cue={
-                                                boardFloaterPrimaryTraitLane
-                                                    ? getBoardFloaterTraitLaneScreenCue(boardFloaterPrimaryTraitLane)
-                                                    : 'none'
-                                            }
-                                            data-testid="match-score-floater-trait-lane-map"
-                                        >
-                                            <span
-                                                className={styles.boardFloaterTraitLaneMapSummary}
-                                                data-match-trait-lane-count={boardFloaterTraitLaneMap.length}
-                                                data-match-trait-lane-summary-fill={boardFloaterTraitLaneMapSummaryFill}
-                                                data-match-trait-lane-summary-total={Math.max(1, Math.min(5, boardFloaterTraitLaneMap.length))}
-                                                style={
-                                                    {
-                                                        '--trait-lane-summary-fill': `${boardFloaterTraitLaneMapSummaryFill}%`
-                                                    } as CSSProperties
-                                                }
-                                                data-testid="match-score-floater-trait-lane-map-summary"
-                                            >
-                                                <small>Traits</small>
-                                                <b>
-                                                    {boardFloaterTraitLaneMap.length}{' '}
-                                                    {boardFloaterTraitLaneMap.length === 1 ? 'lane' : 'lanes'}
-                                                </b>
-                                                <span aria-hidden="true" className={styles.boardFloaterTraitLaneMapSummaryBeatPips}>
-                                                    {Array.from(
-                                                        { length: Math.max(2, Math.min(5, boardFloaterTraitLaneMap.length + 1)) },
-                                                        (_, index) => (
-                                                            <i
-                                                                data-match-trait-lane-map-summary-beat={index + 1}
-                                                                data-match-trait-lane-map-summary-beat-focus={
-                                                                    index === 0 ? 'primary' : 'support'
-                                                                }
-                                                                key={`trait-lane-map-summary-beat-${index + 1}`}
-                                                            />
-                                                        )
-                                                )}
-                                                </span>
-                                                <span aria-hidden="true" className={styles.boardFloaterTraitLaneMapSummaryMeter} />
-                                            </span>
-                                            {boardFloaterPrimaryTraitLane ? (
-                                                <span
-                                                    aria-label={`Primary trait payoff lane. ${boardFloaterPrimaryTraitLane.label}: ${getTraitInteractionLaneAction(boardFloaterPrimaryTraitLane.id)}. ${boardFloaterPrimaryTraitLane.cue}. ${getBoardFloaterTraitLaneBeatCount(boardFloaterPrimaryTraitLane)} beats.`}
-                                                    className={styles.boardFloaterPrimaryTraitLane}
-                                                    data-match-trait-primary-lane={boardFloaterPrimaryTraitLane.id}
-                                                    data-match-trait-primary-lane-action={getTraitInteractionLaneAction(
-                                                        boardFloaterPrimaryTraitLane.id
-                                                    )}
-                                                    data-match-trait-primary-lane-audio={getBoardFloaterTraitLaneAudioCue(
-                                                        boardFloaterPrimaryTraitLane
-                                                    )}
-                                                    data-match-trait-primary-lane-beats={getBoardFloaterTraitLaneBeatCount(
-                                                        boardFloaterPrimaryTraitLane
-                                                    )}
-                                                    data-match-trait-primary-lane-cue={boardFloaterPrimaryTraitLane.cue}
-                                                    data-match-trait-primary-lane-screen-cue={getBoardFloaterTraitLaneScreenCue(
-                                                        boardFloaterPrimaryTraitLane
-                                                    )}
-                                                    data-match-trait-primary-lane-fill={boardFloaterPrimaryTraitLaneFill}
-                                                    style={
-                                                        {
-                                                            '--trait-lane-primary-fill': `${boardFloaterPrimaryTraitLaneFill}%`
-                                                        } as CSSProperties
-                                                    }
-                                                    data-testid="match-score-floater-primary-trait-lane"
-                                                >
-                                                    <small>Trait focus</small>
-                                                    <b>{boardFloaterPrimaryTraitLane.label}</b>
-                                                    <strong>{getTraitInteractionLaneAction(boardFloaterPrimaryTraitLane.id)}</strong>
-                                                    <em>{boardFloaterPrimaryTraitLane.cue}</em>
-                                                    <span aria-hidden="true" className={styles.boardFloaterPrimaryTraitLaneBeatPips}>
-                                                        {Array.from(
-                                                            { length: getBoardFloaterTraitLaneBeatCount(boardFloaterPrimaryTraitLane) },
-                                                            (_, beatIndex) => (
-                                                                <i
-                                                                    data-match-trait-primary-lane-beat={beatIndex + 1}
-                                                                    data-match-trait-primary-lane-beat-focus={
-                                                                        beatIndex === 0 ? 'primary' : 'support'
-                                                                    }
-                                                                    key={beatIndex}
-                                                                />
-                                                            )
-                                                        )}
-                                                    </span>
-                                                </span>
-                                            ) : null}
-                                            {boardFloaterTraitLaneMap.map((lane) => (
-                                                <span
-                                                    data-match-trait-lane={lane.id}
-                                                    data-match-trait-lane-action={getTraitInteractionLaneAction(lane.id)}
-                                                    data-match-trait-lane-audio={getBoardFloaterTraitLaneAudioCue(lane)}
-                                                    data-match-trait-lane-beats={getBoardFloaterTraitLaneBeatCount(lane)}
-                                                    data-match-trait-lane-count={lane.count}
-                                                    data-match-trait-lane-screen-cue={getBoardFloaterTraitLaneScreenCue(lane)}
-                                                    key={lane.id}
-                                                >
-                                                    <small>{lane.label}</small>
-                                                    {lane.count > 1 ? <b>x{lane.count}</b> : null}
-                                                    <strong>{getTraitInteractionLaneAction(lane.id)}</strong>
-                                                    <em>{lane.cue}</em>
-                                                    <span aria-hidden="true" className={styles.boardFloaterTraitLaneBeatPips}>
-                                                        {Array.from({ length: getBoardFloaterTraitLaneBeatCount(lane) }, (_, index) => (
-                                                            <i
-                                                                data-match-trait-lane-beat={index + 1}
-                                                                data-match-trait-lane-beat-focus={index === 0 ? 'primary' : 'support'}
-                                                                key={`${lane.id}-trait-lane-beat-${index + 1}`}
-                                                            />
-                                                        ))}
-                                                    </span>
-                                                </span>
-                                            ))}
-                                        </span>
-                                    ) : null}
-                                    {boardFloaterDetailLines.slice(0, 2).map((line) => (
-                                        <span className={styles.boardFloaterTraitLine} key={line}>
-                                            {line}
-                                        </span>
-                                    ))}
-                                    {boardFloaterPayload.kind === 'miss' && boardFloaterMismatchRecovery ? (
-                                        <span
-                                            className={styles.boardFloaterRecoveryHint}
-                                            data-testid="mismatch-score-floater-recovery"
-                                        >
-                                            {boardFloaterMismatchRecovery}
-                                        </span>
-                                    ) : null}
-                                    {boardFloaterPayload.kind === 'miss' && boardFloaterMismatchNextAction ? (
-                                        <span
-                                            aria-label={`${boardFloaterMismatchNextAction.arcadeCue}: ${boardFloaterMismatchNextAction.label}: ${boardFloaterMismatchNextAction.value}`}
-                                            className={styles.boardFloaterNextAction}
-                                            data-mismatch-next-action-cue={boardFloaterMismatchNextAction.arcadeCue}
-                                            data-mismatch-next-action={boardFloaterMismatchNextAction.tone}
-                                            data-testid="mismatch-score-floater-next-action"
-                                        >
-                                            <em>{boardFloaterMismatchNextAction.arcadeCue}</em>
-                                            <small>{boardFloaterMismatchNextAction.label}</small>
-                                            <b>{boardFloaterMismatchNextAction.value}</b>
-                                        </span>
-                                    ) : null}
-                                    {boardFloaterPayload.kind === 'miss' && boardFloaterMismatchRecoveryBurst ? (
-                                        <span
-                                            aria-label={`${boardFloaterMismatchRecoveryBurst.label}: ${boardFloaterMismatchRecoveryBurst.value}`}
-                                            className={styles.boardFloaterRecoveryBurst}
-                                            data-recovery-burst-tier={boardFloaterMismatchRecoveryBurst.tier}
-                                            data-recovery-burst-fill={boardFloaterMismatchRecoveryBurstFill}
-                                            style={
-                                                {
-                                                    '--recovery-burst-fill': `${boardFloaterMismatchRecoveryBurstFill}%`
-                                                } as CSSProperties
-                                            }
-                                            data-testid="mismatch-score-floater-recovery-burst"
-                                        >
-                                            <small>{boardFloaterMismatchRecoveryBurst.label}</small>
-                                            <b>{boardFloaterMismatchRecoveryBurst.value}</b>
-                                            <span aria-hidden="true" className={styles.boardFloaterRecoveryBurstMeter} />
-                                        </span>
-                                    ) : null}
-                                    {boardFloaterPayload.kind === 'miss' && boardFloaterMismatchRecoveryCrescendo ? (
-                                        <span
-                                            aria-label={boardFloaterMismatchRecoveryCrescendoLabel}
-                                            className={styles.boardFloaterRecoveryCrescendo}
-                                            data-mismatch-recovery-crescendo-screen-cue={
-                                                boardFloaterMismatchRecoveryCrescendo.screenCue
-                                            }
-                                            data-mismatch-recovery-crescendo-tier={
-                                                boardFloaterMismatchRecoveryCrescendo.tier
-                                            }
-                                            data-testid="mismatch-score-floater-recovery-crescendo"
-                                        >
-                                            <small>{boardFloaterMismatchRecoveryCrescendo.label}</small>
-                                            <strong>
-                                                {Array.from({ length: boardFloaterMismatchRecoveryCrescendo.beatCount }).map(
-                                                    (_, index) => (
-                                                        <i aria-hidden="true" key={`mismatch-recovery-beat-${index}`} />
-                                                    )
-                                                )}
-                                            </strong>
-                                            <em>{boardFloaterMismatchRecoveryCrescendo.detail}</em>
-                                        </span>
-                                    ) : null}
-                                    {boardFloaterPayload.kind === 'miss' && boardFloaterMismatchRecoveryStack ? (
-                                        <span
-                                            aria-label={`${boardFloaterMismatchRecoveryStack.label}: ${boardFloaterMismatchRecoveryStack.value}. ${boardFloaterMismatchRecoveryStack.detail}`}
-                                            className={styles.boardFloaterRecoveryStack}
-                                            data-mismatch-recovery-stack={boardFloaterMismatchRecoveryStack.tone}
-                                            data-testid="mismatch-score-floater-recovery-stack"
-                                        >
-                                            <small>{boardFloaterMismatchRecoveryStack.label}</small>
-                                            <b>{boardFloaterMismatchRecoveryStack.value}</b>
-                                            <em>{boardFloaterMismatchRecoveryStack.detail}</em>
-                                        </span>
-                                    ) : null}
-                                    {boardFloaterPayload.kind === 'miss' && boardFloaterMismatchRecoverySequence ? (
-                                        <span
-                                            aria-label={`${boardFloaterMismatchRecoverySequence.label}. First: ${boardFloaterMismatchRecoverySequence.first}. Then: ${boardFloaterMismatchRecoverySequence.then}. Keep: ${boardFloaterMismatchRecoverySequence.keep}.`}
-                                            className={styles.boardFloaterRecoverySequence}
-                                            data-mismatch-recovery-sequence={boardFloaterMismatchRecoverySequence.tone}
-                                            data-mismatch-sequence-first={boardFloaterMismatchRecoverySequence.first}
-                                            data-mismatch-sequence-keep={boardFloaterMismatchRecoverySequence.keep}
-                                            data-mismatch-sequence-then={boardFloaterMismatchRecoverySequence.then}
-                                            data-testid="mismatch-score-floater-recovery-sequence"
-                                        >
-                                            <small>First</small>
-                                            <b>{boardFloaterMismatchRecoverySequence.first}</b>
-                                            <small>Then</small>
-                                            <b>{boardFloaterMismatchRecoverySequence.then}</b>
-                                            <small>Keep</small>
-                                            <b>{boardFloaterMismatchRecoverySequence.keep}</b>
-                                        </span>
-                                    ) : null}
-                                    {boardFloaterPayload.kind === 'miss' && boardFloaterMismatchRecoveryLaneMap ? (
-                                        <span
-                                            aria-label={mismatchRecoveryLaneMapLabel(boardFloaterMismatchRecoveryLaneMap)}
-                                            className={styles.boardFloaterRecoveryLaneMap}
-                                            data-mismatch-recovery-lane-actions={mismatchRecoveryLaneActionMapAttr(
-                                                boardFloaterMismatchRecoveryLaneMap
-                                            )}
-                                            data-mismatch-recovery-lane-map-fill={boardFloaterMismatchRecoveryLaneMapFill}
-                                            data-mismatch-recovery-lane-map={mismatchRecoveryLaneMapAttr(boardFloaterMismatchRecoveryLaneMap)}
-                                            data-mismatch-recovery-primary-lane={boardFloaterPrimaryMismatchRecoveryLane?.id ?? 'none'}
-                                            data-mismatch-recovery-primary-lane-action={
-                                                boardFloaterPrimaryMismatchRecoveryLane
-                                                    ? mismatchRecoveryLaneAction(boardFloaterPrimaryMismatchRecoveryLane)
-                                                    : 'none'
-                                            }
-                                            data-mismatch-recovery-primary-lane-audio={
-                                                boardFloaterPrimaryMismatchRecoveryLane
-                                                    ? getMismatchRecoveryLaneAudioCue(boardFloaterPrimaryMismatchRecoveryLane)
-                                                    : 'none'
-                                            }
-                                            data-mismatch-recovery-primary-lane-beats={
-                                                boardFloaterPrimaryMismatchRecoveryLane
-                                                    ? getMismatchRecoveryLaneBeatCount(boardFloaterPrimaryMismatchRecoveryLane)
-                                                    : 0
-                                            }
-                                            data-mismatch-recovery-primary-lane-cue={boardFloaterPrimaryMismatchRecoveryLane?.cue ?? 'none'}
-                                            data-mismatch-recovery-primary-lane-screen-cue={
-                                                boardFloaterPrimaryMismatchRecoveryLane
-                                                    ? getMismatchRecoveryLaneScreenCue(boardFloaterPrimaryMismatchRecoveryLane)
-                                                    : 'none'
-                                            }
-                                            style={
-                                                {
-                                                    '--mismatch-recovery-lane-map-fill': `${boardFloaterMismatchRecoveryLaneMapFill}%`
-                                                } as CSSProperties
-                                            }
-                                            data-testid="mismatch-score-floater-recovery-lane-map"
-                                        >
-                                            <span aria-hidden="true" className={styles.boardFloaterRecoveryLaneMapMeter} />
-                                            {boardFloaterPrimaryMismatchRecoveryLane ? (
-                                                <span
-                                                    aria-label={`Primary recovery lane. ${boardFloaterPrimaryMismatchRecoveryLane.label}: ${mismatchRecoveryLaneAction(boardFloaterPrimaryMismatchRecoveryLane)}. ${boardFloaterPrimaryMismatchRecoveryLane.cue}. ${getMismatchRecoveryLaneBeatCount(boardFloaterPrimaryMismatchRecoveryLane)} beats.`}
-                                                    className={styles.boardFloaterRecoveryPrimaryLane}
-                                                    data-mismatch-recovery-primary-lane={boardFloaterPrimaryMismatchRecoveryLane.id}
-                                                    data-mismatch-recovery-primary-lane-action={mismatchRecoveryLaneAction(
-                                                        boardFloaterPrimaryMismatchRecoveryLane
-                                                    )}
-                                                    data-mismatch-recovery-primary-lane-audio={getMismatchRecoveryLaneAudioCue(
-                                                        boardFloaterPrimaryMismatchRecoveryLane
-                                                    )}
-                                                    data-mismatch-recovery-primary-lane-beats={getMismatchRecoveryLaneBeatCount(
-                                                        boardFloaterPrimaryMismatchRecoveryLane
-                                                    )}
-                                                    data-mismatch-recovery-primary-lane-cue={boardFloaterPrimaryMismatchRecoveryLane.cue}
-                                                    data-mismatch-recovery-primary-lane-screen-cue={getMismatchRecoveryLaneScreenCue(
-                                                        boardFloaterPrimaryMismatchRecoveryLane
-                                                    )}
-                                                    data-mismatch-recovery-primary-lane-fill={boardFloaterPrimaryMismatchRecoveryLaneFill}
-                                                    style={
-                                                        {
-                                                            '--mismatch-recovery-primary-lane-fill': `${boardFloaterPrimaryMismatchRecoveryLaneFill}%`
-                                                        } as CSSProperties
-                                                    }
-                                                    data-testid="mismatch-score-floater-primary-recovery-lane"
-                                                >
-                                                    <small>Recovery focus</small>
-                                                    <b>{boardFloaterPrimaryMismatchRecoveryLane.label}</b>
-                                                    <strong>
-                                                        {mismatchRecoveryLaneAction(boardFloaterPrimaryMismatchRecoveryLane)}
-                                                    </strong>
-                                                    <em>{boardFloaterPrimaryMismatchRecoveryLane.cue}</em>
-                                                    <span
-                                                        aria-hidden="true"
-                                                        className={styles.boardFloaterRecoveryPrimaryLaneBeatPips}
-                                                    >
-                                                        {Array.from(
-                                                            {
-                                                                length: getMismatchRecoveryLaneBeatCount(
-                                                                    boardFloaterPrimaryMismatchRecoveryLane
-                                                                )
-                                                            },
-                                                            (_, beatIndex) => (
-                                                                <i
-                                                                    data-mismatch-recovery-primary-lane-beat={beatIndex + 1}
-                                                                    key={beatIndex}
-                                                                />
-                                                            )
-                                                        )}
-                                                    </span>
-                                                </span>
-                                            ) : null}
-                                            {boardFloaterMismatchRecoveryLaneMap.map((lane) => (
-                                                <span
-                                                    data-mismatch-recovery-lane={lane.id}
-                                                    data-mismatch-recovery-lane-action={mismatchRecoveryLaneAction(lane)}
-                                                    data-mismatch-recovery-lane-audio={getMismatchRecoveryLaneAudioCue(lane)}
-                                                    data-mismatch-recovery-lane-beats={getMismatchRecoveryLaneBeatCount(lane)}
-                                                    data-mismatch-recovery-lane-count={lane.count}
-                                                    data-mismatch-recovery-lane-screen-cue={getMismatchRecoveryLaneScreenCue(lane)}
-                                                    key={lane.id}
-                                                >
-                                                    <small>{lane.label}</small>
-                                                    <b>{lane.count}</b>
-                                                    <strong>{mismatchRecoveryLaneAction(lane)}</strong>
-                                                    <em>{lane.cue}</em>
-                                                    <span
-                                                        aria-hidden="true"
-                                                        className={styles.boardFloaterRecoveryLaneBeatPips}
-                                                    >
-                                                        {Array.from(
-                                                            { length: getMismatchRecoveryLaneBeatCount(lane) },
-                                                            (_, beatIndex) => (
-                                                                <i
-                                                                    data-mismatch-recovery-lane-beat={beatIndex + 1}
-                                                                    key={beatIndex}
-                                                                />
-                                                            )
-                                                        )}
-                                                    </span>
-                                                </span>
-                                            ))}
-                                        </span>
-                                    ) : null}
-                                    {boardFloaterPayload.kind === 'miss' && boardFloaterMismatchRecoveryChips.length > 0 ? (
-                                        <span
-                                            className={styles.boardFloaterRecoveryChips}
-                                            data-testid="mismatch-score-floater-recovery-chips"
-                                        >
-                                            {boardFloaterMismatchRecoveryChips.map((chip) => {
-                                                const chipBeatCount = getMismatchRecoveryChipBeatCount(chip);
-                                                const chipFill = Math.min(100, (chipBeatCount / 4) * 100);
-
-                                                return (
-                                                    <span
-                                                        aria-label={`${chip.arcadeCue}: ${chip.label}: ${chip.value}`}
-                                                        data-mismatch-recovery-chip={chip.tone}
-                                                        data-mismatch-recovery-chip-audio={getMismatchRecoveryChipAudioCue(chip)}
-                                                        data-mismatch-recovery-chip-beats={chipBeatCount}
-                                                        data-mismatch-recovery-chip-fill={chipFill}
-                                                        data-mismatch-recovery-chip-cue={chip.arcadeCue}
-                                                        data-mismatch-recovery-chip-screen-cue={getMismatchRecoveryChipScreenCue(chip)}
-                                                        data-mismatch-recovery-urgency={chip.urgency ?? 'none'}
-                                                        key={chip.id}
-                                                        style={
-                                                            {
-                                                                '--mismatch-recovery-chip-fill': `${chipFill}%`
-                                                            } as CSSProperties
-                                                        }
-                                                    >
-                                                        <em>{chip.arcadeCue}</em>
-                                                        <small>{chip.label}</small>
-                                                        <b>{chip.value}</b>
-                                                        <span
-                                                            aria-hidden="true"
-                                                            className={styles.boardFloaterRecoveryChipMeter}
-                                                        />
-                                                        <span className={styles.boardFloaterChipBeats} aria-hidden="true">
-                                                            {Array.from({ length: chipBeatCount }, (_, index) => (
-                                                                <i
-                                                                    data-mismatch-recovery-chip-beat={index + 1}
-                                                                    key={`mismatch-recovery-chip-beat-${chip.id}-${index + 1}`}
-                                                                />
-                                                            ))}
-                                                        </span>
-                                                    </span>
-                                                );
-                                            })}
+                                            {boardFloaterReason}
                                         </span>
                                     ) : null}
                                 </div>

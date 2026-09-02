@@ -20,10 +20,6 @@ import {
     getVisualHudAnnouncementSignal
 } from './gameScreenFeedback';
 import { BOARD_FLOATER_POP_CLEAR } from '../store/matchScorePop';
-import {
-    MATCH_SCORE_FLOAT_FALLBACK_MARGIN_MS,
-    matchScoreFloatDurationMs
-} from './matchScoreFloaterTiming';
 
 const gameSfxMocks = vi.hoisted(() => ({
     playMismatchRecoveryCrescendoSfx: vi.fn(),
@@ -1150,7 +1146,7 @@ describe('GameScreen (OVR-014)', () => {
         expect(screen.getByText(GAMBIT_KEYBOARD_HELP_TIP)).toBeTruthy();
     });
 
-    it('renders setup forecast chips with explicit arcade cue metadata', async () => {
+    it('states a match once: signal, amount, and the one reason worth naming', async () => {
         vi.useFakeTimers();
         try {
             render(
@@ -1170,71 +1166,48 @@ describe('GameScreen (OVR-014)', () => {
                         feedbackIntensity: 'mid',
                         feedbackSignal: { label: 'Chain', tone: 'chain' },
                         impactCue: { label: 'Prime chain', tone: 'chain' },
-                        chainRewardForecastCues: [
-                            {
-                                actionLabel: 'Soon',
-                                chaseLabel: 'Prime',
-                                distance: 2,
-                                distanceLabel: '2 matches',
-                                id: 'shard-6',
-                                label: 'x6 +1 shard',
-                                targetStreak: 6,
-                                tone: 'reward',
-                                urgency: 'soon'
-                            }
-                        ],
+                        pickupRewardText: 'Pickup: shard cache',
                         payoffChips: [
                             { arcadeCue: 'Score pop', id: 'score', label: 'Score', value: '+25', tone: 'score' },
-                            { arcadeCue: 'Prime cashout', id: 'streak', label: 'Streak', value: 'x4', tone: 'chain' },
-                            { arcadeCue: 'Combo prime', id: 'next', label: 'Soon shard', value: 'x6 +1 shard', tone: 'reward' }
+                            { arcadeCue: 'Prime cashout', id: 'streak', label: 'Streak', value: 'x4', tone: 'chain' }
                         ],
                         tileIdA: 'a',
                         tileIdB: 'b',
-                        key: 'test-floater-setup-forecast'
+                        key: 'test-floater-one-beat'
                     }
                 });
             });
 
-            expect(screen.getByTestId('match-score-floater-reward-forecast')).toHaveTextContent('Combo prime');
-            expect(screen.getByTestId('match-score-floater-reward-forecast').querySelector('[data-chain-reward-tone="reward"]')).toHaveAttribute(
-                'data-chain-reward-arcade-cue',
-                'Combo prime'
-            );
-            expect(screen.getByTestId('match-score-floater-reward-forecast').querySelector('[data-chain-reward-tone="reward"]')).toHaveAttribute(
-                'data-chain-reward-urgency',
-                'soon'
-            );
-            expect(screen.getByTestId('match-score-floater-reward-forecast').querySelector('[data-chain-reward-tone="reward"]')).toHaveAttribute(
-                'data-chain-reward-audio',
-                'chain-reward-shard'
-            );
-            expect(screen.getByTestId('match-score-floater-reward-forecast').querySelector('[data-chain-reward-tone="reward"]')).toHaveAttribute(
-                'data-chain-reward-screen-cue',
-                'pulse'
-            );
+            const floater = screen.getByTestId('match-score-floater');
+            expect(floater.querySelector('[data-floater-signal="chain"]')).toHaveTextContent('Chain');
+            expect(screen.getByTestId('match-score-floater-amount')).toHaveTextContent('+25');
+            expect(screen.getByTestId('board-floater-reason')).toHaveTextContent('Pickup: shard cache');
+            expect(floater).toHaveAttribute('data-match-floater-heat', 'prime');
+            // The forecast, ladder, lane-map, chip and crescendo layers restated this and are gone.
+            for (const gone of [
+                'match-score-floater-reward-forecast',
+                'match-score-floater-payoff-chips',
+                'match-score-floater-payoff-ladder',
+                'match-score-floater-payoff-lane-map',
+                'match-score-floater-chain-milestone',
+                'match-score-floater-crescendo',
+                'match-score-floater-jackpot'
+            ]) {
+                expect(screen.queryByTestId(gone)).toBeNull();
+            }
+            // Three text parts, not thirty-six.
             expect(
-                screen
-                    .getByTestId('match-score-floater-reward-forecast')
-                    .querySelector('[data-chain-reward-tone="reward"]')
-                    ?.querySelector('[data-chain-reward-beat="1"]')
-            ).toHaveAttribute('data-chain-reward-beat-focus', 'primary');
-            expect(
-                screen
-                    .getByTestId('match-score-floater-reward-forecast')
-                    .querySelector('[data-chain-reward-tone="reward"]')
-                    ?.querySelector('[data-chain-reward-beat="2"]')
-            ).toHaveAttribute('data-chain-reward-beat-focus', 'support');
-            expect(screen.getByTestId('match-score-floater-payoff-chips')).toHaveTextContent('Prime cashout');
-            expect(screen.getByTestId('match-score-floater-payoff-chips')).toHaveTextContent('Combo prime');
-            expect(screen.getByTestId('match-score-floater')).toHaveAttribute('data-match-floater-heat', 'prime');
+                [...floater.querySelectorAll('*')].filter(
+                    (node) => node.children.length === 0 && (node.textContent ?? '').trim().length > 0
+                ).length
+            ).toBeLessThanOrEqual(3);
         } finally {
             vi.useRealTimers();
         }
     });
 
-    it('marks chain milestone floaters with tone and target attributes', () => {
-        const base = createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'puzzle' });
-        const playing = finishMemorizePhase(base);
+    it('falls back to the chain cue when a match has no reward line to name', () => {
+        const playing = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'puzzle' }));
 
         render(
             <PlatformTiltProvider>
@@ -1249,161 +1222,24 @@ describe('GameScreen (OVR-014)', () => {
                 matchScorePop: {
                     amount: 55,
                     chainDepth: 6,
-                    chainMilestone: {
-                        action: 'Push surge',
-                        audioCue: 'surge-hit-ping',
-                        beatCount: 4,
-                        label: 'Surge hit',
-                        screenCue: 'surge-live',
-                        target: 'x6',
-                        tone: 'surge',
-                        value: 'Surge tier live'
-                    },
                     feedbackHeadline: 'Surge',
                     feedbackIntensity: 'high',
                     feedbackSignal: { label: 'Chain', tone: 'chain' },
                     impactCue: { label: 'Prime chain', tone: 'chain' },
-                    payoffChips: [
-                        { arcadeCue: 'Score pop', id: 'score', label: 'Score', value: '+55', tone: 'score' },
-                        { arcadeCue: 'Combo prime', id: 'next', label: 'Soon shard', value: 'x8 +1 shard', tone: 'reward' }
-                    ],
                     tileIdA: 'a',
                     tileIdB: 'b',
-                    key: 'test-floater-chain-milestone'
+                    key: 'test-floater-chain-cue'
                 }
             });
         });
 
-        const milestone = screen.getByTestId('match-score-floater-chain-milestone');
-        expect(milestone).toHaveAttribute('data-chain-milestone-tone', 'surge');
-        expect(milestone).toHaveAttribute('data-chain-milestone-action', 'Push surge');
-        expect(milestone).toHaveAttribute('data-chain-milestone-audio', 'surge-hit-ping');
-        expect(milestone).toHaveAttribute('data-chain-milestone-cue', 'surge-live');
-        expect(milestone).toHaveAttribute('data-chain-milestone-screen-cue', 'surge-live');
-        expect(milestone).toHaveAttribute('data-chain-milestone-target', 'x6');
-        expect(milestone).toHaveAttribute('data-chain-milestone-beats', '4');
-        expect(milestone).toHaveAttribute('data-chain-milestone-fill', '80');
-        expect(milestone.querySelectorAll('[data-chain-milestone-beat]')).toHaveLength(4);
-        expect(milestone.querySelector('[data-chain-milestone-beat="1"]')).toHaveAttribute(
-            'data-chain-milestone-beat-focus',
-            'primary'
-        );
-        expect(milestone.querySelector('[data-chain-milestone-beat="2"]')).toHaveAttribute(
-            'data-chain-milestone-beat-focus',
-            'support'
-        );
-        expect(milestone).toHaveAccessibleName('Chain milestone Surge hit: x6. Action: Push surge. Surge tier live. 4 beats.');
-        expect(milestone).toHaveTextContent('Surge hit');
-        expect(milestone).toHaveTextContent('x6');
-        expect(milestone).toHaveTextContent('Push surge');
-        expect(milestone).toHaveTextContent('Surge tier live');
+        expect(screen.getByTestId('match-score-floater-amount')).toHaveTextContent('+55');
+        expect(screen.getByTestId('match-score-floater')).toHaveAttribute('data-feedback-intensity', 'high');
+        expect(screen.getByTestId('match-score-floater')).not.toHaveTextContent(/NaN|undefined/);
     });
 
-    it('renders one-away chain rewards as armed cashout match floaters', async () => {
-        vi.useFakeTimers();
-        const base = createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'puzzle' });
-        const playing = finishMemorizePhase(base);
-        try {
-            render(
-                <PlatformTiltProvider>
-                    <NotificationHost>
-                        <GameScreen achievements={[]} run={playing} />
-                    </NotificationHost>
-                </PlatformTiltProvider>
-            );
-
-            act(() => {
-                useAppStore.setState({
-                    matchScorePop: {
-                        amount: 30,
-                        chainDepth: 5,
-                        feedbackHeadline: 'Chain',
-                        feedbackIntensity: 'mid',
-                        feedbackSignal: { label: 'Chain', tone: 'chain' },
-                        impactCue: { label: 'Cashout armed', tone: 'reward' },
-                        payoffSummary: { label: 'Cashout armed', value: 'x6 +1 shard', tier: 'reward' },
-                        chainRewardForecastCues: [
-                            {
-                                actionLabel: 'Next',
-                                chaseLabel: 'Hit now',
-                                distance: 1,
-                                distanceLabel: '1 match',
-                                id: 'shard-6',
-                                label: 'x6 +1 shard',
-                                targetStreak: 6,
-                                tone: 'reward',
-                                urgency: 'next'
-                            }
-                        ],
-                        payoffChips: [
-                            { arcadeCue: 'Score pop', id: 'score', label: 'Score', value: '+30', tone: 'score' },
-                            { arcadeCue: 'Prime cashout', id: 'streak', label: 'Streak', value: 'x5', tone: 'chain' },
-                            {
-                                arcadeCue: 'One-away cashout',
-                                id: 'next',
-                                label: 'Next shard',
-                                value: 'x6 +1 shard',
-                                tone: 'reward'
-                            }
-                        ],
-                        tileIdA: 'a',
-                        tileIdB: 'b',
-                        key: 'test-floater-cashout-armed'
-                    }
-                });
-            });
-
-            expect(screen.getByTestId('match-score-floater-impact-cue')).toHaveTextContent('Cashout armed');
-            expect(screen.getByTestId('match-score-floater')).toHaveAttribute('data-match-floater-heat', 'cashout');
-            expect(screen.getByTestId('match-score-floater')).toHaveAttribute('data-match-jackpot-tier', 'cashout');
-            expect(screen.getByTestId('match-score-floater')).toHaveAttribute('data-match-jackpot-audio', 'match-jackpot-cashout');
-            expect(screen.getByTestId('match-score-floater')).toHaveAttribute('data-match-jackpot-screen-cue', 'cashout');
-            expect(screen.getByTestId('match-score-floater')).toHaveAttribute('data-match-jackpot-beats', '3');
-            expect(screen.getByTestId('match-score-floater-jackpot')).toHaveTextContent('Cashout armed');
-            expect(screen.getByTestId('match-score-floater-jackpot')).toHaveTextContent('Cash now');
-            expect(screen.getByTestId('match-score-floater-jackpot')).toHaveTextContent('x6 +1 shard');
-            expect(screen.getByTestId('match-score-floater-jackpot')).toHaveAttribute('data-match-jackpot-tier', 'cashout');
-            expect(screen.getByTestId('match-score-floater-jackpot')).toHaveAttribute('data-match-jackpot-action', 'Cash now');
-            expect(screen.getByTestId('match-score-floater-jackpot')).toHaveAttribute('data-match-jackpot-audio', 'match-jackpot-cashout');
-            expect(screen.getByTestId('match-score-floater-jackpot')).toHaveAttribute('data-match-jackpot-screen-cue', 'cashout');
-            expect(screen.getByTestId('match-score-floater-jackpot').querySelectorAll('[data-match-jackpot-beat]')).toHaveLength(3);
-            expect(screen.getByTestId('match-score-floater-impact-cue')).toHaveAttribute(
-                'data-match-impact-cue-tone',
-                'reward'
-            );
-            expect(screen.getByTestId('match-score-floater-payoff-summary')).toHaveTextContent('Cashout armed');
-            expect(screen.getByTestId('match-score-floater-payoff-summary')).toHaveTextContent('x6 +1 shard');
-            expect(screen.getByTestId('match-score-floater-payoff-summary')).toHaveAccessibleName(
-                'Cashout armed: x6 +1 shard'
-            );
-            expect(screen.getByTestId('match-score-floater-reward-forecast')).toHaveTextContent('One-away cashout');
-            expect(screen.getByTestId('match-score-floater-payoff-chips')).toHaveTextContent('One-away cashout');
-            expect(screen.getByTestId('match-score-floater-payoff-chips').querySelector('[data-match-payoff-id="next"]')).toHaveAttribute(
-                'data-match-payoff-arcade-cue',
-                'One-away cashout'
-            );
-            expect(
-                screen.getByText(/Chain\. Plus 30 points\. 5 match streak, 1 match to x6\. Next rewards: Cash next: One-away cashout: 1 match to x6 \+1 shard\. Cashout armed: x6 \+1 shard\. Impact cue: Cashout armed/)
-            ).toBeInTheDocument();
-
-            await act(async () => {
-                const matchPop = useAppStore.getState().matchScorePop;
-                await vi.advanceTimersByTimeAsync(
-                    matchScoreFloatDurationMs(false, matchPop ? { kind: 'match', ...matchPop } : null) +
-                        MATCH_SCORE_FLOAT_FALLBACK_MARGIN_MS +
-                        25
-                );
-            });
-
-            expect(useAppStore.getState().matchScorePop).toBeNull();
-        } finally {
-            vi.useRealTimers();
-        }
-    });
-
-    it('ignores malformed match floater array payloads before rendering payoff rows', () => {
-        const base = createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'puzzle' });
-        const playing = finishMemorizePhase(base);
+    it('survives malformed floater array payloads without inventing rows', () => {
+        const playing = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'puzzle' }));
         render(
             <PlatformTiltProvider>
                 <NotificationHost>
@@ -1421,18 +1257,7 @@ describe('GameScreen (OVR-014)', () => {
                     feedbackIntensity: 'high',
                     feedbackSignal: { label: 'Route', tone: 'route' },
                     impactCue: { label: 'Stack cashout', tone: 'reward' },
-                    payoffSummary: {
-                        label: 'Stack cashout',
-                        value: '2 payoffs: Route + Pickup',
-                        tier: 'reward'
-                    },
-                    payoffLadder: {
-                        first: 'Route cashout',
-                        lanes: { length: 2 } as never,
-                        then: 'Pickup cashout',
-                        keep: 'Prime next',
-                        tone: 'reward'
-                    },
+                    payoffSummary: { label: 'Stack cashout', value: '2 payoffs: Route + Pickup', tier: 'reward' },
                     payoffLaneMap: { length: 2 } as never,
                     payoffChips: { length: 3 } as never,
                     chainRewardForecastCues: { length: 1 } as never,
@@ -1444,94 +1269,10 @@ describe('GameScreen (OVR-014)', () => {
             });
         });
 
-        expect(screen.getByTestId('match-score-floater')).toHaveTextContent('Reward');
-        expect(screen.getByTestId('match-score-floater')).toHaveAttribute('data-match-jackpot-tier', 'stack');
-        expect(screen.queryByTestId('match-score-floater-payoff-lane-map')).not.toBeInTheDocument();
-        expect(screen.queryByTestId('match-score-floater-reward-forecast')).not.toBeInTheDocument();
-        expect(screen.queryByTestId('match-score-floater-payoff-chips')).not.toBeInTheDocument();
-        expect(screen.getByTestId('match-score-floater-payoff-ladder-summary')).toHaveTextContent('No lanes');
-        expect(screen.getByTestId('match-score-floater-payoff-ladder-summary')).toHaveAttribute(
-            'data-match-payoff-ladder-count',
-            '0'
-        );
-    });
-
-    it('renders perk pop payoff chips as distinct match floater activations', () => {
-        const base = createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'puzzle' });
-        const playing = finishMemorizePhase(base);
-        render(
-            <PlatformTiltProvider>
-                <NotificationHost>
-                    <GameScreen achievements={[]} run={playing} />
-                </NotificationHost>
-            </PlatformTiltProvider>
-        );
-
-        act(() => {
-            useAppStore.setState({
-                matchScorePop: {
-                    amount: 45,
-                    chainDepth: 2,
-                    feedbackHeadline: 'Surge',
-                    feedbackIntensity: 'high',
-                    feedbackSignal: { label: 'Trait', tone: 'trait' },
-                    impactCue: { label: 'Perk pop', tone: 'trait' },
-                    payoffSummary: {
-                        label: 'Perk pop',
-                        value: 'Perk pop: Cursed Opener pays gold',
-                        tier: 'reward'
-                    },
-                    payoffChips: [
-                        { arcadeCue: 'Score pop', id: 'score', label: 'Score', value: '+45', tone: 'score' },
-                        {
-                            arcadeCue: 'Perk pop',
-                            id: 'trait',
-                            label: 'Perk',
-                            value: 'Perk pop: Cursed Opener pays gold',
-                            tone: 'trait'
-                        }
-                    ],
-                    traitInteractionTexts: ['Perk pop: Cursed Opener pays gold'],
-                    tileIdA: 'a',
-                    tileIdB: 'b',
-                    key: 'test-perk-pop-floater'
-                }
-            });
-        });
-
-        expect(screen.getByTestId('match-score-floater')).toHaveTextContent('Perk pop');
-        expect(screen.getByTestId('match-score-floater')).toHaveAttribute('data-match-floater-heat', 'score');
-        expect(screen.getByTestId('match-score-floater-impact-cue')).toHaveTextContent('Perk pop');
-        expect(screen.getByTestId('match-score-floater-impact-cue')).toHaveAttribute('data-match-impact-cue-tone', 'trait');
-        expect(screen.getByTestId('match-score-floater-impact-cue')).toHaveAttribute('data-match-impact-cue-screen-cue', 'surge');
-        expect(screen.getByTestId('match-score-floater-payoff-summary')).toHaveTextContent('Perk pop');
-        expect(screen.getByTestId('match-score-floater-payoff-summary')).toHaveTextContent('Cursed Opener pays gold');
-        expect(screen.getByTestId('match-score-floater-payoff-chips')).toHaveAccessibleName(
-            /Match score payoff chips.*Perk pop: Perk: Perk pop: Cursed Opener pays gold/i
-        );
-        expect(screen.getByTestId('match-score-floater-payoff-chips').querySelector('[data-match-payoff-id="trait"]')).toHaveAttribute(
-            'data-match-payoff-arcade-cue',
-            'Perk pop'
-        );
-        expect(screen.getByTestId('match-score-floater-payoff-chips').querySelector('[data-match-payoff-id="trait"]')).toHaveAttribute(
-            'data-match-payoff-tone',
-            'trait'
-        );
-        expect(screen.getByTestId('match-score-floater-payoff-chips').querySelector('[data-match-payoff-id="trait"]')).toHaveAttribute(
-            'data-match-payoff-audio',
-            'match-payoff-trait'
-        );
-        expect(screen.getByTestId('match-score-floater-payoff-chips').querySelector('[data-match-payoff-id="trait"]')).toHaveAttribute(
-            'data-match-payoff-screen-cue',
-            'trait'
-        );
-        expect(screen.getByTestId('match-score-floater-payoff-chips').querySelector('[data-match-payoff-id="trait"]')).toHaveAttribute(
-            'data-match-payoff-arcade-screen-cue',
-            'trait'
-        );
-        expect(screen.getByTestId('match-score-floater-payoff-chips').querySelector('[data-match-payoff-id="trait"]')).toHaveTextContent(
-            'Perk pop: Cursed Opener pays gold'
-        );
+        const floater = screen.getByTestId('match-score-floater');
+        expect(floater).toHaveTextContent('Route');
+        expect(floater).toHaveAttribute('data-match-floater-heat', 'stack');
+        expect(floater).not.toHaveTextContent(/NaN|undefined|\[object/);
     });
 
     it('passes armed durable reward perk cues into the board chain context', () => {
@@ -1572,10 +1313,9 @@ describe('GameScreen (OVR-014)', () => {
         );
     });
 
-    it('marks plain chain-break mismatch floaters separately from lost rewards', () => {
+    it('marks plain chain-break misses as a break with one recovery line', () => {
         vi.useFakeTimers();
-        const base = createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'puzzle' });
-        const playing = finishMemorizePhase(base);
+        const playing = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'puzzle' }));
         try {
             render(
                 <PlatformTiltProvider>
@@ -1600,11 +1340,11 @@ describe('GameScreen (OVR-014)', () => {
             const floater = screen.getByTestId('mismatch-score-floater');
             expect(floater).toHaveAttribute('data-feedback-intensity', 'break');
             expect(floater).toHaveAttribute('data-mismatch-floater-heat', 'break');
-            expect(floater).toHaveAttribute('data-mismatch-recovery-crescendo-beats', '3');
-            expect(floater).toHaveAttribute('data-mismatch-recovery-crescendo-cue', 'snap');
-            expect(floater).toHaveAttribute('data-mismatch-recovery-crescendo-screen-cue', 'snap');
-            expect(floater).toHaveAttribute('data-mismatch-recovery-crescendo-tier', 'break');
             expect(floater.querySelector('[data-floater-signal="break"]')).toHaveTextContent('Break');
+            expect(screen.getByTestId('board-floater-reason')).toHaveTextContent('Recover - safe match');
+            expect(screen.queryByTestId('mismatch-score-floater-recovery-chips')).toBeNull();
+            expect(screen.queryByTestId('mismatch-score-floater-recovery-lane-map')).toBeNull();
+            expect(screen.queryByTestId('mismatch-score-floater-next-action')).toBeNull();
         } finally {
             vi.useRealTimers();
         }
