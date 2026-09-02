@@ -37,7 +37,12 @@ const createMockSteamAdapter = (): SteamAdapter => ({
     unlockAchievement: () => ({ ok: false, reason: 'not_connected' })
 });
 
-export const createSteamAdapter = (): SteamAdapter => {
+export interface SteamAdapterOptions {
+    /** Off in the demo flavour (Valve's recommendation); unlock calls then report `achievements_disabled`. */
+    achievementsEnabled?: boolean;
+}
+
+export const createSteamAdapter = ({ achievementsEnabled = true }: SteamAdapterOptions = {}): SteamAdapter => {
     try {
         const rawAppId = process.env.STEAM_APP_ID;
         const appId = parseSteamAppId(rawAppId);
@@ -53,6 +58,9 @@ export const createSteamAdapter = (): SteamAdapter => {
         return {
             isConnected: () => true,
             unlockAchievement: (achievementId): AchievementUnlockResult => {
+                if (!achievementsEnabled) {
+                    return { ok: false, reason: 'steam_rejected', detail: 'achievements_disabled' };
+                }
                 try {
                     const apiName = STEAM_ACHIEVEMENT_API_NAME[achievementId];
                     const activated = client.achievement.activate(apiName);

@@ -15,18 +15,25 @@ import {
 
 describe('scoring-rules', () => {
     it('calculates memorize duration and run modifiers', () => {
+        // Per-tile budget × default board: 4 tiles at floor 1, 8 at floor 3, 60 (capped) at floor 29.
         expect(getMemorizeDuration(1)).toBe(1300);
         expect(getMemorizeDuration(1.9)).toBe(1300);
-        expect(getMemorizeDuration(3)).toBe(1250);
-        expect(getMemorizeDuration(29)).toBe(600);
+        expect(getMemorizeDuration(3)).toBe(2408);
+        expect(getMemorizeDuration(29)).toBe(6000);
+        // A real board wins over the default size: a 10-tile floor 3 gets its own budget.
+        expect(getMemorizeDuration(3, 10)).toBe(3010);
         expect(getMemorizeDuration(Number.NaN)).toBe(1300);
         expect(getMemorizeDuration(Number.POSITIVE_INFINITY)).toBe(1300);
 
+        // Run modifiers apply on top of the real board's budget (the level-1 board carries a wild tile).
         const short = createNewRun(0, { activeMutators: ['short_memorize'] });
-        expect(getMemorizeDurationForRun(short, 1)).toBe(950);
+        const shortBase = getMemorizeDuration(1, short.board!.tiles.length);
+        expect(getMemorizeDurationForRun(short, 1)).toBe(shortBase - 350);
 
         const meditation = createNewRun(0, { gameMode: 'meditation' });
-        expect(getMemorizeDurationForRun(meditation, 1)).toBe(Math.floor(1300 * 1.55));
+        expect(getMemorizeDurationForRun(meditation, 1)).toBe(
+            Math.floor(getMemorizeDuration(1, meditation.board!.tiles.length) * 1.55)
+        );
     });
 
     it('ignores malformed relic ids when calculating run memorize duration', () => {
@@ -35,7 +42,7 @@ describe('scoring-rules', () => {
             relicIds: Number.NaN as unknown as RelicId[]
         };
 
-        expect(getMemorizeDurationForRun(run, 1)).toBe(950);
+        expect(getMemorizeDurationForRun(run, 1)).toBe(getMemorizeDuration(1, run.board!.tiles.length) - 350);
     });
 
     it('applies boss identity pressure to boss-floor memorize time', () => {
@@ -49,14 +56,15 @@ describe('scoring-rules', () => {
             board: base.board && { ...base.board, floorTag: 'boss' as const, dungeonBossId: 'spire_observer' as const }
         };
 
-        expect(getMemorizeDurationForRun(rush, 1)).toBe(getMemorizeDuration(1) - 120);
-        expect(getMemorizeDurationForRun(spire, 1)).toBe(getMemorizeDuration(1) + 80);
+        const bossBase = getMemorizeDuration(1, base.board!.tiles.length);
+        expect(getMemorizeDurationForRun(rush, 1)).toBe(bossBase - 120);
+        expect(getMemorizeDurationForRun(spire, 1)).toBe(bossBase + 80);
         expect(
             getMemorizeDurationForRun(
                 { ...base, board: base.board && { ...base.board, floorTag: 'normal' as const, dungeonBossId: 'rush_sentinel' } },
                 1
             )
-        ).toBe(getMemorizeDuration(1));
+        ).toBe(bossBase);
     });
 
     it('calculates ratings and score bonuses', () => {

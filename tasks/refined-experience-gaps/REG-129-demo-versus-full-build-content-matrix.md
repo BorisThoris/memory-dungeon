@@ -53,3 +53,7 @@ Engineering and QA can **name** a matrix, a gate, or an edge list; long-running 
 - `REG-120-mechanics-combinatoric-matrix-and-coverage.md`
 - `REG-147-local-trust-and-no-server-anticheat-posture.md`
 - `REG-052-leaderboards-trust-model-and-online-deferral.md`
+
+## Implementation
+
+The matrix lives in `docs/STEAM_DEMO_CYCLE.md` §4 and is enforced by `src/shared/content-lock.ts`: Classic only, reduced relic pool, Act I mutators, achievements off, run length uncapped. Test: `src/shared/content-lock.test.ts`.

@@ -1,3 +1,4 @@
+import { isModeAvailableInBuild } from './content-lock-state';
 /**
  * Product-facing run mode catalog for Choose Your Path (ordered, stable ids).
  * Kept separate from `GameMode` in contracts — entries may share an underlying mode with flags.
@@ -305,12 +306,23 @@ export const RUN_MODE_CATALOG: readonly RunModeDefinition[] = [
     }
 ] as const;
 
+/** A catalog mode as this build flavour ships it: locked modes stay visible and say why. */
+export const applyContentLockToRunMode = (mode: RunModeDefinition): RunModeDefinition =>
+    mode.availability === 'available' && !isModeAvailableInBuild(mode.id)
+        ? { ...mode, availability: 'locked', availabilityDetail: 'In the full game.' }
+        : mode;
+
+/** The catalog as the active build flavour ships it. Read modes through this, not RUN_MODE_CATALOG. */
+export function getRunModeCatalog(): readonly RunModeDefinition[] {
+    return RUN_MODE_CATALOG.map(applyContentLockToRunMode);
+}
+
 export function runModesByGroup(group: RunModeGroup): readonly RunModeDefinition[] {
-    return RUN_MODE_CATALOG.filter((def) => def.group === group);
+    return getRunModeCatalog().filter((def) => def.group === group);
 }
 
 export function getRunModeDefinition(id: string): RunModeDefinition | null {
-    return RUN_MODE_CATALOG.find((mode) => mode.id === id) ?? null;
+    return getRunModeCatalog().find((mode) => mode.id === id) ?? null;
 }
 
 /** Featured hero row on Choose Your Path. Order is fixed; Dungeon Showcase is first for portfolio demos. */
@@ -331,7 +343,7 @@ export function choosePathHeroModes(): readonly RunModeDefinition[] {
 
 /** All modes below the hero row (Gauntlet, puzzles, training), stable catalog order. */
 export function choosePathLibraryModes(): readonly RunModeDefinition[] {
-    return RUN_MODE_CATALOG.filter((m) => !CHOOSE_PATH_HERO_ID_SET.has(m.id));
+    return getRunModeCatalog().filter((m) => !CHOOSE_PATH_HERO_ID_SET.has(m.id));
 }
 
 export { getChallengeModeProgressionRows as getRunModeChallengeGateRows } from './challenge-progression';

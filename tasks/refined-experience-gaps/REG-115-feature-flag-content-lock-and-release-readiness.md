@@ -46,3 +46,7 @@ Relevant UI and data paths meet the **Choose Path or better** bar on phone and d
 - `REG-068-complete-product-definition-of-done.md`
 - `REG-119-bot-batch-plan-and-product-acceptance-report.md`
 - `REG-052-leaderboards-trust-model-and-online-deferral.md`
+
+## Implementation
+
+One content-lock module selects the build flavour (`VITE_BUILD_FLAVOUR` / `MEMORY_DUNGEON_BUILD_FLAVOUR`). See `src/shared/content-lock.ts` and REG-129.

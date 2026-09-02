@@ -28,6 +28,17 @@ export const DEBUG_REVEAL_MS = 1500;
 export const MEMORIZE_BASE_MS = 1300;
 export const MEMORIZE_STEP_MS = 50;
 export const MEMORIZE_MIN_MS = 600;
+/**
+ * Memorize budget per revealed tile. The window scales with the board (per-tile budget × tile
+ * count) and the difficulty curve lives in the per-tile budget, so a 42-tile floor is never
+ * handed the same 850ms a 10-tile floor gets. Floor 1 (4 tiles) stays at MEMORIZE_BASE_MS.
+ */
+export const MEMORIZE_PER_TILE_BASE_MS = 325;
+export const MEMORIZE_PER_TILE_STEP_MS = 12;
+export const MEMORIZE_PER_TILE_MIN_MS = 110;
+export const MEMORIZE_MAX_MS = 6000;
+/** Default pair count for a floor before encounter deltas: level + 1, capped by the symbol catalog. */
+export const DEFAULT_PAIR_COUNT_CAP = 30;
 /** Memorize time drops by MEMORIZE_STEP_MS once per this many levels (so pairs and timer do not spike together every floor). */
 export const MEMORIZE_DECAY_EVERY_N_LEVELS = 2;
 /** After a life is lost to a mismatch, this many ms are banked for the next level's memorize phase (capped). */

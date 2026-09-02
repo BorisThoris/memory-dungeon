@@ -5,7 +5,7 @@ import {
     type MetaProgressionDifficultyTier
 } from './meta-progression';
 import { runNonNegativeInteger } from './run-number-guards';
-import { RUN_MODE_CATALOG, type RunModeDefinition } from './run-mode-catalog';
+import { getRunModeCatalog, type RunModeDefinition } from './run-mode-catalog';
 
 export type ChallengeGateStatus = 'available' | 'locked' | 'deferred';
 export type ChallengeGateId =
@@ -132,7 +132,7 @@ const rowForMode = (save: SaveData, mode: RunModeDefinition): ChallengeModeGateR
 };
 
 export const getChallengeModeGateRows = (save: SaveData): ChallengeModeGateRow[] =>
-    RUN_MODE_CATALOG.map((mode) => rowForMode(save, mode));
+    getRunModeCatalog().map((mode) => rowForMode(save, mode));
 
 export const getChallengeModeGateRow = (
     save: SaveData,

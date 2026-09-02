@@ -6,6 +6,7 @@
  * Balance cross-check: `docs/BALANCE_NOTES.md` (Relic roster) — update when adding IDs or changing memorize /
  * charge numbers; `relicBalanceDoc.test.ts` guards key doc strings.
  */
+import { filterRelicPoolByContentLock } from './content-lock-state';
 import type {
     ContractFlags,
     MutatorId,
@@ -853,7 +854,7 @@ export const rollRelicOptions = (
     clearedFloor: number,
     pickRound: number = 0
 ): RelicId[] => {
-    const available = RELIC_POOL.filter((id) => isRelicDraftEligible(id, run));
+    const available = filterRelicPoolByContentLock(RELIC_POOL).filter((id) => isRelicDraftEligible(id, run));
     if (available.length <= DRAFT_OPTION_COUNT) {
         return available.slice(0, DRAFT_OPTION_COUNT);
     }

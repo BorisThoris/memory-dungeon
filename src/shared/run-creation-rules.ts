@@ -12,6 +12,7 @@ import {
     type Tile,
     type WeakerShuffleMode
 } from './contracts';
+import { filterMutatorsByContentLock } from './content-lock-state';
 import { createBonusRewardLedger, hasRewardPerk } from './bonus-rewards';
 import { applyRelicImmediateThroughGameplayCore } from './gameplay-core-adapters';
 import { getTraitRouteObjectiveSeed } from './trait-route-objectives';
@@ -83,7 +84,7 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
         activeMutators.length === 0
     ) {
         const entry = pickFloorScheduleEntry(runSeed, rulesVersion, 1, gameMode);
-        activeMutators = entry.mutators;
+        activeMutators = filterMutatorsByContentLock(entry.mutators);
         initialFloorTag = entry.floorTag;
         initialFloorArchetypeId = entry.floorArchetypeId;
         initialFeaturedObjectiveId = entry.featuredObjectiveId;

@@ -1,8 +1,13 @@
 import {
+    DEFAULT_PAIR_COUNT_CAP,
     MATCH_DELAY_MS,
     MEMORIZE_BASE_MS,
     MEMORIZE_DECAY_EVERY_N_LEVELS,
+    MEMORIZE_MAX_MS,
     MEMORIZE_MIN_MS,
+    MEMORIZE_PER_TILE_BASE_MS,
+    MEMORIZE_PER_TILE_MIN_MS,
+    MEMORIZE_PER_TILE_STEP_MS,
     MEMORIZE_STEP_MS,
     type Rating,
     type RunState,
@@ -37,14 +42,40 @@ export const getPresentationMutatorMatchPenalty = (run: RunState): number => {
     return penalty;
 };
 
-export const getMemorizeDuration = (level: number): number => {
+/**
+ * The pre-2026-09 curve: a total that decays with level regardless of board size. Kept so the
+ * simulations can compare the two shapes; gameplay uses {@link getMemorizeDuration}.
+ */
+export const getLegacyMemorizeDuration = (level: number): number => {
     const safeLevel = Math.max(1, runNonNegativeInteger(level));
     const decaySteps = Math.floor((safeLevel - 1) / MEMORIZE_DECAY_EVERY_N_LEVELS);
     return Math.max(MEMORIZE_MIN_MS, MEMORIZE_BASE_MS - MEMORIZE_STEP_MS * decaySteps);
 };
 
+/** Milliseconds of memorize time each revealed tile earns on a given floor. */
+export const getMemorizePerTileBudget = (level: number): number => {
+    const safeLevel = Math.max(1, runNonNegativeInteger(level));
+    return Math.max(MEMORIZE_PER_TILE_MIN_MS, MEMORIZE_PER_TILE_BASE_MS - MEMORIZE_PER_TILE_STEP_MS * (safeLevel - 1));
+};
+
+/** Tile count a floor builds before encounter deltas: (level + 1) pairs, capped by the symbol catalog. */
+export const getDefaultTileCount = (level: number): number => {
+    const safeLevel = Math.max(1, runNonNegativeInteger(level));
+    return Math.min(DEFAULT_PAIR_COUNT_CAP, Math.max(2, safeLevel + 1)) * 2;
+};
+
+/**
+ * Memorize window for a floor: per-tile budget × tiles, clamped to [MEMORIZE_MIN_MS, MEMORIZE_MAX_MS].
+ * Pass the real tile count when a board exists; the default board size is used otherwise.
+ */
+export const getMemorizeDuration = (level: number, tileCount?: number): number => {
+    const tiles = tileCount != null && runNonNegativeInteger(tileCount) > 0 ? runNonNegativeInteger(tileCount) : getDefaultTileCount(level);
+    const raw = getMemorizePerTileBudget(level) * tiles;
+    return Math.min(MEMORIZE_MAX_MS, Math.max(MEMORIZE_MIN_MS, Math.round(raw)));
+};
+
 export const getMemorizeDurationForRun = (run: RunState, level: number): number => {
-    let ms = getMemorizeDuration(level);
+    let ms = getMemorizeDuration(level, run.board?.tiles.length);
     if (hasMutator(run, 'short_memorize')) {
         ms = Math.max(MEMORIZE_MIN_MS, ms - 350);
     }

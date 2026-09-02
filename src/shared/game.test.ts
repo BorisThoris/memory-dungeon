@@ -6918,10 +6918,10 @@ describe('game rules', () => {
         expect(board.tiles).toHaveLength(10);
         expect(board.columns).toBeGreaterThanOrEqual(2);
         expect(getMemorizeDuration(1)).toBe(1300);
-        expect(getMemorizeDuration(2)).toBe(1300);
-        expect(getMemorizeDuration(3)).toBe(1250);
-        expect(getMemorizeDuration(20)).toBe(850);
-        expect(getMemorizeDuration(29)).toBe(600);
+        expect(getMemorizeDuration(2)).toBe(1878);
+        expect(getMemorizeDuration(3)).toBe(2408);
+        expect(getMemorizeDuration(20)).toBe(4620);
+        expect(getMemorizeDuration(29)).toBe(6000);
     });
 
     it('uses staged symbol bands by level when category_letters is off', () => {
@@ -7061,8 +7061,10 @@ describe('game rules', () => {
         const nextRun = advanceToNextLevel(finishedLevel);
         expect(nextRun.pendingMemorizeBonusMs).toBe(0);
         expect(nextRun.timerState.memorizeRemainingMs).toBe(
-            getMemorizeDurationForRun({ ...finishedLevel, activeMutators: nextRun.activeMutators }, nextRun.board!.level) +
-                bankedMs
+            getMemorizeDurationForRun(
+                { ...finishedLevel, activeMutators: nextRun.activeMutators, board: nextRun.board },
+                nextRun.board!.level
+            ) + bankedMs
         );
     });
 
@@ -7396,7 +7398,10 @@ describe('game rules', () => {
         expect(nextRun.stats.comboShards).toBe(2);
         expect(nextRun.stats.totalScore).toBe(300);
         expect(nextRun.timerState.memorizeRemainingMs).toBe(
-            getMemorizeDurationForRun({ ...finishedLevel, activeMutators: nextRun.activeMutators }, nextRun.board!.level)
+            getMemorizeDurationForRun(
+                { ...finishedLevel, activeMutators: nextRun.activeMutators, board: nextRun.board },
+                nextRun.board!.level
+            )
         );
         expect(nextRun.shuffleCharges).toBe(1);
         expect(nextRun.pinnedTileIds).toEqual([]);
@@ -8551,7 +8556,7 @@ describe('relic and mutator stacking', () => {
             activeMutators: ['short_memorize']
         });
         expect(getMemorizeDurationForRun(withRelic, 1)).toBe(getMemorizeDurationForRun(withoutRelic, 1) + 220);
-        expect(getMemorizeDurationForRun(withoutRelic, 1)).toBe(getMemorizeDuration(1) - 350);
+        expect(getMemorizeDurationForRun(withoutRelic, 1)).toBe(getMemorizeDuration(1, withoutRelic.board!.tiles.length) - 350);
     });
 
     it('stacks memorize_bonus_ms with short_memorize', () => {
@@ -8560,7 +8565,7 @@ describe('relic and mutator stacking', () => {
             activeMutators: ['short_memorize'],
             initialRelicIds: ['memorize_bonus_ms']
         });
-        expect(getMemorizeDurationForRun(run, 1)).toBe(getMemorizeDuration(1) - 350 + 280);
+        expect(getMemorizeDurationForRun(run, 1)).toBe(getMemorizeDuration(1, run.board!.tiles.length) - 350 + 280);
     });
 });
 

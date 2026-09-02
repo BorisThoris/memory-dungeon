@@ -1,6 +1,6 @@
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { app, BrowserWindow, dialog } from 'electron';
+import { app, BrowserWindow, shell, dialog } from 'electron';
 import type { DisplayMode } from '../shared/contracts';
 import { resolveDevServerUrl } from './dev-server-url';
 import { handleFatalStartupFailure, runMainProcessAction } from './fatal-startup';
@@ -11,6 +11,7 @@ import {
     RENDERER_SECURITY_WEB_PREFERENCES,
     rendererNavigationIsAllowed
 } from './renderer-security-policy';
+import { resolveBuildFlavour } from '../shared/content-lock-state';
 import { createSteamAdapter } from './steam';
 import { resolveStartupDisplayMode } from './startup-display-mode';
 
@@ -51,7 +52,13 @@ const createMainWindow = (displayMode: DisplayMode): BrowserWindow => {
             event.preventDefault();
         }
     });
-    window.webContents.setWindowOpenHandler(() => ({ action: 'deny' }));
+    window.webContents.setWindowOpenHandler(({ url }) => {
+        // The run-end wishlist link is the one outbound link; everything else stays denied.
+        if (url.startsWith('https://store.steampowered.com/')) {
+            void shell.openExternal(url);
+        }
+        return { action: 'deny' };
+    });
 
     if (devServerUrl) {
         window.webContents.openDevTools({ mode: 'detach' });
@@ -88,7 +95,9 @@ const ensureServicesAndIpc = (): void => {
         persistence = new PersistenceService();
     }
     if (!steamAdapter) {
-        steamAdapter = createSteamAdapter();
+        steamAdapter = createSteamAdapter({
+            achievementsEnabled: resolveBuildFlavour(process.env.MEMORY_DUNGEON_BUILD_FLAVOUR) !== 'demo'
+        });
     }
     if (!ipcHandlersRegistered && persistence && steamAdapter) {
         registerIpcHandlers(() => mainWindow, persistence, steamAdapter);

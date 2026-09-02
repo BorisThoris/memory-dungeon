@@ -253,6 +253,12 @@ many floors a demo player actually sees.
 
 ## 4. Demo vs full build content matrix
 
+**Implemented** in `src/shared/content-lock.ts` (builder) and `content-lock-state.ts` (active lock).
+The renderer activates it from `VITE_BUILD_FLAVOUR=demo`; the main process reads
+`MEMORY_DUNGEON_BUILD_FLAVOUR=demo` to turn Steam achievements off. `yarn package:win:demo` sets both
+and `scripts/write-steam-appid.mjs` refuses to ship the Spacewar app id. The run-end screen lists
+`getFullGameLedger()` and shows a wishlist link when `VITE_STEAM_STORE_URL` is set.
+
 The matrix `REG-129` was supposed to contain. Derived from §1.1 — cap breadth, never length.
 
 | Axis | Demo | Full | Rationale |

@@ -4,6 +4,7 @@ import {
     type FloorTag,
     type RunState
 } from './contracts';
+import { filterMutatorsByContentLock } from './content-lock-state';
 import {
     pickFloorScheduleEntry,
     usesEndlessFloorSchedule
@@ -76,7 +77,7 @@ export const advanceToNextLevel = (
     let nextCycleFloor: number | null = null;
     if (usesEndlessFloorSchedule(run.gameMode, run.runRulesVersion) && !run.wildMenuRun) {
         const entry = pickFloorScheduleEntry(run.runSeed, run.runRulesVersion, nextLevelNum, run.gameMode);
-        nextActiveMutators = entry.mutators;
+        nextActiveMutators = filterMutatorsByContentLock(entry.mutators);
         nextFloorTag = entry.floorTag;
         nextFloorArchetypeId = entry.floorArchetypeId;
         nextFeaturedObjectiveId = entry.featuredObjectiveId;

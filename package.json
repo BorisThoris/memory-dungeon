@@ -163,8 +163,9 @@
         "regenerate:illustration-regression": "cross-env UPDATE_ILLUSTRATION_FIXTURES=1 playwright test e2e/tile-card-face-illustration-regression.spec.ts --workers=1",
         "bake:procedural-set": "tsx scripts/bake-procedural-illustration-set.ts",
         "test:e2e:ui": "playwright test --ui",
-        "package:dir": "yarn build && electron-builder --dir",
-        "package:win": "yarn build && electron-builder --win nsis",
+        "package:dir": "node scripts/write-steam-appid.mjs && yarn build && electron-builder --dir",
+        "package:win": "node scripts/write-steam-appid.mjs && yarn build && electron-builder --win nsis",
+        "package:win:demo": "cross-env MEMORY_DUNGEON_BUILD_FLAVOUR=demo VITE_BUILD_FLAVOUR=demo node scripts/write-steam-appid.mjs && cross-env VITE_BUILD_FLAVOUR=demo yarn build && electron-builder --win nsis",
         "postinstall": "node scripts/postinstall.cjs"
     },
     "dependencies": {

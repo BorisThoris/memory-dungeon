@@ -1,3 +1,9 @@
+> **Status (2026-09):** superseded by the green-field UI rebuild recorded in `docs/UI_RETHINK_PLAN.md`.
+> The in-run shell is now one engraved bar, one feedback line and one dock with nothing boxed over the
+> board; the itemised gaps below describe the pre-rebuild HUD and are kept for history. The dead
+> GameScreen model island named in the follow-up task (board models, floater projection, route-choice
+> model, decision signals) has been deleted rather than wired up.
+
 # Current app vs end-product reference - screenshot audit
 
 This document compares Playwright captures of the live Vite renderer against the product stills `docs/ENDPRODUCTIMAGE.png` (gameplay / system breakdown) and `docs/ENDPRODUCTIMAGE2.png` (main menu, settings gameplay tab, mode selection). Use it for art, UI, and systems parity, not pixel-diff automation.

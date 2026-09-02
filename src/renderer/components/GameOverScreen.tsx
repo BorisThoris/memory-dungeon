@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useRef } from 'react';
 import { ACHIEVEMENTS } from '../../shared/achievements';
+import { getActiveContentLock } from '../../shared/content-lock-state';
 import { MUTATOR_CATALOG, RELIC_CATALOG } from '../../shared/game-catalog';
+import { getSteamStorePageUrl } from '../steamStorePage';
 import type { MutatorId, RelicId, RunState } from '../../shared/contracts';
 import { buildDailyResultsLoopRows } from '../../shared/daily-archive';
 import { getGameOverNextRunRows } from '../../shared/game-over-next-run';
@@ -115,6 +117,8 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
         [summary]
     );
     const uiGain = uiSfxGainFromSettings(settings.masterVolume, settings.sfxVolume);
+    const contentLock = getActiveContentLock();
+    const steamStoreUrl = getSteamStorePageUrl();
 
     useEffect(() => {
         resumeUiSfxContext();
@@ -310,6 +314,27 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                             </div>
                         </Panel>
 
+                        {contentLock.flavour === 'demo' ? (
+                            <Panel className={styles.actionPanel} padding="lg" variant="default" data-testid="game-over-demo-ledger">
+                                <span className={styles.panelKicker}>The full game adds</span>
+                                <ul className={styles.demoLedger}>
+                                    {contentLock.fullGameLedger.map((line) => (
+                                        <li key={line}>{line}</li>
+                                    ))}
+                                </ul>
+                                {steamStoreUrl ? (
+                                    <a
+                                        className={styles.wishlistLink}
+                                        data-testid="game-over-wishlist"
+                                        href={steamStoreUrl}
+                                        rel="noopener noreferrer"
+                                        target="_blank"
+                                    >
+                                        Wishlist on Steam
+                                    </a>
+                                ) : null}
+                            </Panel>
+                        ) : null}
                         <Panel className={styles.actionPanel} padding="lg" variant="muted">
                             <span className={styles.panelKicker}>{gameOverScreenCopy.runSnapshotKicker}</span>
                             <strong className={styles.panelHeading} data-testid="game-over-mode-heading">

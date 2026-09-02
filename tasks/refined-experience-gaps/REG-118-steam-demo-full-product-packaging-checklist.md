@@ -48,3 +48,7 @@ Relevant UI and data paths meet the **Choose Path or better** bar on phone and d
 - `REG-068-complete-product-definition-of-done.md`
 - `REG-119-bot-batch-plan-and-product-acceptance-report.md`
 - `REG-052-leaderboards-trust-model-and-online-deferral.md`
+
+## Implementation
+
+`scripts/write-steam-appid.mjs` writes `steam_appid.txt` from `STEAM_APP_ID` before every package script and refuses the Spacewar id 480. `yarn package:win:demo` packages the demo flavour. No shared cloud app id is configured (Valve: shared cloud does not sync against an unreleased base app).
