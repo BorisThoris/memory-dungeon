@@ -238,53 +238,11 @@ const getClearLifeBonusLabel = (result: NonNullable<RunState['lastLevelResult']>
     return null;
 };
 
-const GAMBIT_SIGNAL_ROWS = [
-    { label: 'Window', value: 'Third flip' },
-    { label: 'Payoff', value: 'Recover pair' },
-    { label: 'Cost', value: 'No perfect' }
-] as const;
 
-const getGambitSignalBeatCount = (signal: (typeof GAMBIT_SIGNAL_ROWS)[number]['label']): 2 | 3 | 4 => {
-    if (signal === 'Payoff') {
-        return 4;
-    }
-    if (signal === 'Cost') {
-        return 3;
-    }
-    return 2;
-};
 
-const getGambitSignalAudioCue = (
-    signal: (typeof GAMBIT_SIGNAL_ROWS)[number]['label']
-): 'gambit-window' | 'gambit-payoff' | 'gambit-cost' => {
-    if (signal === 'Payoff') {
-        return 'gambit-payoff';
-    }
-    if (signal === 'Cost') {
-        return 'gambit-cost';
-    }
-    return 'gambit-window';
-};
 
-const getGambitSignalScreenCue = (signal: (typeof GAMBIT_SIGNAL_ROWS)[number]['label']): 'window' | 'burst' | 'risk' => {
-    if (signal === 'Payoff') {
-        return 'burst';
-    }
-    if (signal === 'Cost') {
-        return 'risk';
-    }
-    return 'window';
-};
 
-const formatGameplaySignalRowsLabel = (
-    label: string,
-    rows: readonly { label: string; value: string }[]
-): string => {
-    const rowCopy = rows.map((row) => `${row.label}: ${row.value}`).join('. ');
-    return rowCopy ? `${label}. ${rowCopy}.` : label;
-};
 
-const GAMBIT_SIGNAL_ROWS_LABEL = formatGameplaySignalRowsLabel('Gambit opportunity signals', GAMBIT_SIGNAL_ROWS);
 
 type NextFloorSignalRow = {
     detail: string | null;
@@ -1575,67 +1533,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                 data-testid="gambit-opportunity-hint"
                                 role="status"
                             >
-                                <span>{GAMBIT_OPPORTUNITY_HINT_LINE}</span>
-                                <span
-                                    className={styles.gambitOpportunitySignals}
-                                    data-testid="gambit-opportunity-signals"
-                                    aria-label={GAMBIT_SIGNAL_ROWS_LABEL}
-                                >
-                                    <span
-                                        data-gambit-signal="window"
-                                        data-gambit-signal-audio={getGambitSignalAudioCue('Window')}
-                                        data-gambit-signal-beats={getGambitSignalBeatCount('Window')}
-                                        data-gambit-signal-screen-cue={getGambitSignalScreenCue('Window')}
-                                    >
-                                        <small>Window</small>
-                                        <b>Third flip</b>
-                                        <span aria-hidden="true" className={styles.gambitOpportunityBeatPips}>
-                                            {Array.from({ length: getGambitSignalBeatCount('Window') }, (_, index) => (
-                                                <i
-                                                    data-gambit-signal-beat={index + 1}
-                                                    data-gambit-signal-beat-focus={index === 0 ? 'primary' : 'support'}
-                                                    key={index}
-                                                />
-                                            ))}
-                                        </span>
-                                    </span>
-                                    <span
-                                        data-gambit-signal="payoff"
-                                        data-gambit-signal-audio={getGambitSignalAudioCue('Payoff')}
-                                        data-gambit-signal-beats={getGambitSignalBeatCount('Payoff')}
-                                        data-gambit-signal-screen-cue={getGambitSignalScreenCue('Payoff')}
-                                    >
-                                        <small>Payoff</small>
-                                        <b>Recover pair</b>
-                                        <span aria-hidden="true" className={styles.gambitOpportunityBeatPips}>
-                                            {Array.from({ length: getGambitSignalBeatCount('Payoff') }, (_, index) => (
-                                                <i
-                                                    data-gambit-signal-beat={index + 1}
-                                                    data-gambit-signal-beat-focus={index === 0 ? 'primary' : 'support'}
-                                                    key={index}
-                                                />
-                                            ))}
-                                        </span>
-                                    </span>
-                                    <span
-                                        data-gambit-signal="cost"
-                                        data-gambit-signal-audio={getGambitSignalAudioCue('Cost')}
-                                        data-gambit-signal-beats={getGambitSignalBeatCount('Cost')}
-                                        data-gambit-signal-screen-cue={getGambitSignalScreenCue('Cost')}
-                                    >
-                                        <small>Cost</small>
-                                        <b>No perfect</b>
-                                        <span aria-hidden="true" className={styles.gambitOpportunityBeatPips}>
-                                            {Array.from({ length: getGambitSignalBeatCount('Cost') }, (_, index) => (
-                                                <i
-                                                    data-gambit-signal-beat={index + 1}
-                                                    data-gambit-signal-beat-focus={index === 0 ? 'primary' : 'support'}
-                                                    key={index}
-                                                />
-                                            ))}
-                                        </span>
-                                    </span>
-                                </span>
+                                {GAMBIT_OPPORTUNITY_HINT_LINE}
                             </div>
                         ) : null}
 

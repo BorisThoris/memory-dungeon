@@ -262,13 +262,14 @@ const selectorHasDeclaration = (
 };
 
 describe('feedback beat pip CSS coverage', () => {
-    it('keeps beat pip indicators animated and reduced-motion safe', () => {
+    // Beat pips are no longer part of the feedback vocabulary: a match, a miss, a trap and a
+    // hover preview each state their value once, in words. The guard stays so that any pip row
+    // reintroduced later still animates and still honours reduced motion.
+    it('keeps any beat pip indicators animated and reduced-motion safe', () => {
         const cssFiles = readComponentCssFiles();
         const textByFile = new Map(cssFiles.map(({ fileName, text }) => [fileName, text]));
         const rules = findBeatPipRules();
         const rulesByClassName = new Map<string, BeatPipRule[]>();
-
-        expect(rules.length).toBeGreaterThan(0);
 
         for (const rule of rules) {
             rulesByClassName.set(rule.className, [...(rulesByClassName.get(rule.className) ?? []), rule]);

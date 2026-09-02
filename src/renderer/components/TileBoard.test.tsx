@@ -269,85 +269,11 @@ describe('TileBoard touch and click controls', () => {
                 'Trap resolved: Mimic Bounty. Trap effect paid; Chase next pair.'
             )
         );
-        expect(screen.getByTestId('trap-resolution-signals')).toHaveTextContent('1 trap');
-        expect(screen.getByTestId('trap-resolution-signals')).toHaveTextContent('Trap effect paid');
-        expect(screen.getByTestId('trap-resolution-signals')).toHaveTextContent('Next');
-        expect(screen.getByTestId('trap-resolution-signals')).toHaveTextContent('Chase next pair');
-        expect(screen.getByTestId('trap-resolution-signals').querySelector('[data-trap-resolution-signal="resolved"]')).toHaveAttribute(
-            'data-trap-resolution-beats',
-            '3'
-        );
-        expect(screen.getByTestId('trap-resolution-signals').querySelector('[data-trap-resolution-signal="resolved"]')).toHaveAttribute(
-            'data-trap-resolution-action',
-            'Confirm trap'
-        );
-        expect(screen.getByTestId('trap-resolution-signals').querySelector('[data-trap-resolution-signal="resolved"]')).toHaveAttribute(
-            'data-trap-resolution-audio',
-            'trap-resolved'
-        );
-        expect(screen.getByTestId('trap-resolution-signals').querySelector('[data-trap-resolution-signal="resolved"]')).toHaveAttribute(
-            'data-trap-resolution-screen-cue',
-            'snap'
-        );
-        expect(
-            screen
-                .getByTestId('trap-resolution-signals')
-                .querySelector('[data-trap-resolution-signal="resolved"]')
-                ?.querySelector('[data-trap-resolution-beat="1"]')
-        ).toHaveAttribute('data-trap-resolution-beat-focus', 'primary');
-        expect(
-            screen
-                .getByTestId('trap-resolution-signals')
-                .querySelector('[data-trap-resolution-signal="resolved"]')
-                ?.querySelector('[data-trap-resolution-beat="2"]')
-        ).toHaveAttribute('data-trap-resolution-beat-focus', 'support');
-        expect(
-            screen
-                .getByTestId('trap-resolution-signals')
-                .querySelector('[data-trap-resolution-signal="effect"]')
-                ?.querySelectorAll('[data-trap-resolution-beat]')
-        ).toHaveLength(4);
-        expect(screen.getByTestId('trap-resolution-signals').querySelector('[data-trap-resolution-signal="effect"]')).toHaveAttribute(
-            'data-trap-resolution-action',
-            'Resolve effect'
-        );
-        expect(screen.getByTestId('trap-resolution-signals').querySelector('[data-trap-resolution-signal="effect"]')).toHaveAttribute(
-            'data-trap-resolution-screen-cue',
-            'burst'
-        );
-        expect(
-            screen
-                .getByTestId('trap-resolution-signals')
-                .querySelector('[data-trap-resolution-signal="effect"]')
-                ?.querySelector('[data-trap-resolution-beat="1"]')
-        ).toHaveAttribute('data-trap-resolution-beat-focus', 'primary');
-        expect(screen.getByTestId('trap-resolution-signals').querySelector('[data-trap-resolution-signal="continue"]')).toHaveAttribute(
-            'data-trap-resolution-beats',
-            '2'
-        );
-        expect(screen.getByTestId('trap-resolution-signals').querySelector('[data-trap-resolution-signal="continue"]')).toHaveAttribute(
-            'data-trap-resolution-action',
-            'Chase next pair'
-        );
-        expect(screen.getByTestId('trap-resolution-signals').querySelector('[data-trap-resolution-signal="continue"]')).toHaveAttribute(
-            'data-trap-resolution-audio',
-            'trap-continue'
-        );
-        expect(screen.getByTestId('trap-resolution-signals')).toHaveAccessibleName(
-            /Trap resolution signals: 1 trap resolved\. Effect: Trap effect paid\. Next: Chase next pair/i
-        );
-        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute(
-            'data-dungeon-trap-resolution-message',
-            'Trap resolved: Mimic Bounty. Trap effect paid; Chase next pair.'
-        );
-        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute(
-            'data-dungeon-trap-resolution-effect',
-            'Trap effect paid'
-        );
-        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute(
-            'data-dungeon-trap-resolution-next',
-            'Chase next pair'
-        );
+        // The toast sentence already names the count, the effect and the next move; the three
+        // pip blocks that restated it are gone.
+        const toast = screen.getByTestId('trap-resolution-feedback');
+        expect(screen.queryByTestId('trap-resolution-signals')).toBeNull();
+        expect(toast.querySelectorAll('[data-trap-resolution-signal]')).toHaveLength(0);
     });
 
     it('drops a queued trap resolution toast when the trap count resets first', async () => {

@@ -7419,8 +7419,8 @@
     {
       "path": "src/renderer/components/feedbackBeatPipCssCoverage.test.ts",
       "category": "test",
-      "bytes": 11681,
-      "sha256": "7bafaf608d04f60400254f5dd7b99e44dfc1645f4de65af4d17bac4ac7946862"
+      "bytes": 11900,
+      "sha256": "a05b77347db8cc1d4541e5ac308d40a907c9dcabfbd7eee9c2bf1394ccfa7e08"
     },
     {
       "path": "src/renderer/components/FloorClearDialog.module.css",
@@ -7485,20 +7485,20 @@
     {
       "path": "src/renderer/components/GameScreen.module.css",
       "category": "source",
-      "bytes": 45152,
-      "sha256": "519a020f02c31f5ff50de727c501121bada1f9405df57cc9ce79362902fbf243"
+      "bytes": 40918,
+      "sha256": "c558bfd04c11ca1f06112a5bd41ff4c14e71b9db20fc732103847171287589bb"
     },
     {
       "path": "src/renderer/components/GameScreen.test.tsx",
       "category": "test",
-      "bytes": 93274,
-      "sha256": "d5ce87a190c3a5c9df6a76283af92cd86c6568cc5557719a682f13625796b23a"
+      "bytes": 90494,
+      "sha256": "be8cf9a559ffc62b087d5b01cce75146fbeac51de8e6428bcb085ba53bc347d0"
     },
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 94438,
-      "sha256": "b145ec33c504534edd6fe207b4cd5a9a1363d4baac607334b2bf1f94b6681d51"
+      "bytes": 88758,
+      "sha256": "44e953f6446d7e097839985ae80be5a29a07e684b65774b1469ff409cd403130"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -7857,20 +7857,20 @@
     {
       "path": "src/renderer/components/TileBoard.module.css",
       "category": "source",
-      "bytes": 74096,
-      "sha256": "470aaf4a80b84fe5da1005ce8d9ffa22b29759b84914559ee4237e9ce9f3917c"
+      "bytes": 33222,
+      "sha256": "3f390a2bb110a09c1e1ac026241d2040b3e65fec9fb5a0c5e269d6b9262dc7e1"
     },
     {
       "path": "src/renderer/components/TileBoard.test.tsx",
       "category": "test",
-      "bytes": 52300,
-      "sha256": "489ebf725e3dad2b9ca1e755c15c389ad5dd6655d8bea5fba318e553ffc53488"
+      "bytes": 48451,
+      "sha256": "850f73b495fbde7a509b10f8091b51078d13581aba5e2e99e7c91bd57d789b71"
     },
     {
       "path": "src/renderer/components/TileBoard.tsx",
       "category": "source",
-      "bytes": 181066,
-      "sha256": "e927ececf8c2e3007453ef7b6959a10dcf056f0b5aa523d64dc6863892b2b11d"
+      "bytes": 166289,
+      "sha256": "5fcaf850211513135b60235ae847db9c78874dab3613c21e021cc1f6bb114126"
     },
     {
       "path": "src/renderer/components/tileBoardCanvasContext.test.ts",
@@ -16514,7 +16514,7 @@
       "path": "src/renderer/components/feedbackBeatPipCssCoverage.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 337,
+      "lineCount": 338,
       "imports": [],
       "exports": [],
       "testedBy": []
@@ -16681,7 +16681,7 @@
       "path": "src/renderer/components/GameScreen.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 2324,
+      "lineCount": 2270,
       "imports": [
         "file:src/renderer/components/GameScreen.tsx",
         "file:src/renderer/components/gameScreenFeedback.ts",
@@ -16704,7 +16704,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 2061,
+      "lineCount": 1959,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -17630,7 +17630,7 @@
       "path": "src/renderer/components/TileBoard.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 1337,
+      "lineCount": 1263,
       "imports": [
         "file:src/renderer/components/TileBoard.tsx",
         "file:src/renderer/components/tileBoardStageLayers.ts",
@@ -17646,7 +17646,7 @@
       "path": "src/renderer/components/TileBoard.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 4129,
+      "lineCount": 3854,
       "imports": [
         "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/breakpoints.ts",
@@ -34897,8 +34897,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 2060,
-      "endLine": 2060
+      "line": 1958,
+      "endLine": 1958
     },
     {
       "id": "symbol:src/renderer/components/gameScreenFeedback.ts#DungeonCombatLogRow",
@@ -35513,24 +35513,24 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/TileBoard.tsx",
-      "line": 4128,
-      "endLine": 4128
+      "line": 3853,
+      "endLine": 3853
     },
     {
       "id": "symbol:src/renderer/components/TileBoard.tsx#TileBoardClientRect",
       "name": "TileBoardClientRect",
       "kind": "type",
       "file": "src/renderer/components/TileBoard.tsx",
-      "line": 528,
-      "endLine": 535
+      "line": 408,
+      "endLine": 415
     },
     {
       "id": "symbol:src/renderer/components/TileBoard.tsx#TileBoardHandle",
       "name": "TileBoardHandle",
       "kind": "type",
       "file": "src/renderer/components/TileBoard.tsx",
-      "line": 537,
-      "endLine": 541
+      "line": 417,
+      "endLine": 421
     },
     {
       "id": "symbol:src/renderer/components/tileBoardCanvasContext.ts#getTileBoardCanvasContextConfig",
@@ -61674,7 +61674,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1283
+          "line": 1241
         }
       ],
       "tests": [

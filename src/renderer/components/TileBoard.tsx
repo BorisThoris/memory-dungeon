@@ -233,49 +233,9 @@ const getFocusedPreviewScreenCue = ({
     return 'pulse';
 };
 
-const getTrapResolutionSignalBeatCount = (signal: 'continue' | 'effect' | 'resolved'): 2 | 3 | 4 => {
-    if (signal === 'effect') {
-        return 4;
-    }
-    if (signal === 'resolved') {
-        return 3;
-    }
-    return 2;
-};
 
-const getTrapResolutionSignalAction = (
-    signal: 'continue' | 'effect' | 'resolved'
-): 'Chase next pair' | 'Confirm trap' | 'Resolve effect' => {
-    if (signal === 'resolved') {
-        return 'Confirm trap';
-    }
-    if (signal === 'effect') {
-        return 'Resolve effect';
-    }
-    return 'Chase next pair';
-};
 
-const getTrapResolutionSignalAudioCue = (
-    signal: 'continue' | 'effect' | 'resolved'
-): 'trap-continue' | 'trap-effect' | 'trap-resolved' => {
-    if (signal === 'resolved') {
-        return 'trap-resolved';
-    }
-    if (signal === 'effect') {
-        return 'trap-effect';
-    }
-    return 'trap-continue';
-};
 
-const getTrapResolutionSignalScreenCue = (signal: 'continue' | 'effect' | 'resolved'): BoardFeedbackScreenCue => {
-    if (signal === 'effect') {
-        return 'burst';
-    }
-    if (signal === 'resolved') {
-        return 'snap';
-    }
-    return 'pulse';
-};
 
 const BOARD_OPPORTUNITY_LANE_ORDER: BoardOpportunityLaneId[] = ['cash', 'build', 'trait', 'pickup', 'perk', 'recover', 'risk', 'tool'];
 
@@ -361,89 +321,9 @@ const boardOpportunityLaneMapAttr = (laneMap: readonly BoardOpportunityLaneMapEn
 const boardOpportunityLaneActionMapAttr = (laneMap: readonly BoardOpportunityLaneMapEntry[]): string =>
     laneMap.length > 0 ? laneMap.map((lane) => `${lane.id}:${lane.action}:${lane.count}`).join('>') : 'none';
 
-const boardOpportunityLaneBeatCount = (lane: Pick<BoardOpportunityLaneMapEntry, 'count' | 'id'>): 2 | 3 | 4 => {
-    if (lane.id === 'cash' || lane.count > 1) {
-        return 4;
-    }
-    if (lane.id === 'build' || lane.id === 'pickup' || lane.id === 'perk') {
-        return 3;
-    }
-    return 2;
-};
 
-const boardOpportunityLaneAudioCue = (
-    lane: Pick<BoardOpportunityLaneMapEntry, 'id'>
-):
-    | 'board-opportunity-build'
-    | 'board-opportunity-cash'
-    | 'board-opportunity-perk'
-    | 'board-opportunity-pickup'
-    | 'board-opportunity-recover'
-    | 'board-opportunity-risk'
-    | 'board-opportunity-tool' => {
-    switch (lane.id) {
-        case 'cash':
-            return 'board-opportunity-cash';
-        case 'pickup':
-            return 'board-opportunity-pickup';
-        case 'perk':
-            return 'board-opportunity-perk';
-        case 'recover':
-            return 'board-opportunity-recover';
-        case 'risk':
-            return 'board-opportunity-risk';
-        case 'tool':
-            return 'board-opportunity-tool';
-        case 'trait':
-            return 'board-opportunity-build';
-        case 'build':
-        default:
-            return 'board-opportunity-build';
-    }
-};
 
-const boardOpportunityLaneScreenCue = (
-    lane: Pick<BoardOpportunityLaneMapEntry, 'id'>
-): 'burst' | 'guard' | 'pulse' | 'recover' | 'risk' => {
-    if (lane.id === 'cash' || lane.id === 'pickup') {
-        return 'burst';
-    }
-    if (lane.id === 'risk') {
-        return 'risk';
-    }
-    if (lane.id === 'recover') {
-        return 'recover';
-    }
-    if (lane.id === 'tool') {
-        return 'guard';
-    }
-    if (lane.id === 'trait') {
-        return 'pulse';
-    }
-    return 'pulse';
-};
 
-const boardOpportunityLaneFocus = (
-    lane: Pick<BoardOpportunityLaneMapEntry, 'id'>
-): 'build' | 'cashout' | 'recover' | 'reward' | 'risk' | 'tool' => {
-    switch (lane.id) {
-        case 'cash':
-            return 'cashout';
-        case 'pickup':
-        case 'perk':
-        case 'trait':
-            return 'reward';
-        case 'recover':
-            return 'recover';
-        case 'risk':
-            return 'risk';
-        case 'tool':
-            return 'tool';
-        case 'build':
-        default:
-            return 'build';
-    }
-};
 
 
 const boardChainRewardLadder = (
@@ -2490,7 +2370,6 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
     const boardPayoffStackLabelForRow = (row: BoardOpportunityCompassRow): string =>
         row.id === 'chain' ? 'Stack route' : row.label;
     const boardOpportunityLaneMapRows = boardOpportunityLaneMap(boardOpportunityCompassRows);
-    const primaryBoardOpportunityLane = boardOpportunityLaneMapRows[0] ?? null;
     const boardOpportunityLaneMapAttrValue = boardOpportunityLaneMapAttr(boardOpportunityLaneMapRows);
     const boardOpportunityLaneActionMapAttrValue = boardOpportunityLaneActionMapAttr(boardOpportunityLaneMapRows);
     const boardOpportunityLaneMapLiveText =
@@ -3727,21 +3606,6 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             data-opportunity-lane-map={boardOpportunityLaneMapAttrValue}
             data-opportunity-lane-count={boardOpportunityLaneMapRows.length}
             data-opportunity-lane-label={boardOpportunityLaneMapRows[0]?.label ?? 'none'}
-            data-opportunity-primary-lane={primaryBoardOpportunityLane?.id ?? 'none'}
-            data-opportunity-primary-lane-action={primaryBoardOpportunityLane?.action ?? 'none'}
-            data-opportunity-primary-lane-audio={
-                primaryBoardOpportunityLane ? boardOpportunityLaneAudioCue(primaryBoardOpportunityLane) : 'none'
-            }
-            data-opportunity-primary-lane-beats={
-                primaryBoardOpportunityLane ? boardOpportunityLaneBeatCount(primaryBoardOpportunityLane) : 0
-            }
-            data-opportunity-primary-lane-cue={primaryBoardOpportunityLane?.cue ?? 'none'}
-            data-opportunity-primary-lane-focus={
-                primaryBoardOpportunityLane ? boardOpportunityLaneFocus(primaryBoardOpportunityLane) : 'none'
-            }
-            data-opportunity-primary-lane-screen-cue={
-                primaryBoardOpportunityLane ? boardOpportunityLaneScreenCue(primaryBoardOpportunityLane) : 'none'
-            }
             data-card-feedback-visible-trait-preview-count={cardFeedbackVisibleTraitPreviewCount}
             data-dungeon-resolved-trap-count={resolvedTrapTileCount}
             data-dungeon-resolved-trap-slots={resolvedTrapSlotsAttr}
@@ -3780,71 +3644,6 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                         !
                     </span>
                     <span className={styles.trapResolutionCopy}>{trapResolutionMessage}</span>
-                    {trapResolutionDetails ? (
-                        <span
-                            className={styles.trapResolutionSignals}
-                            data-testid="trap-resolution-signals"
-                            aria-label={`Trap resolution signals: ${trapResolutionDetails.count === 1 ? '1 trap' : `${trapResolutionDetails.count} traps`} resolved. Effect: ${trapResolutionDetails.effect}. Next: ${trapResolutionDetails.next}.`}
-                        >
-                            <span
-                                data-trap-resolution-action={getTrapResolutionSignalAction('resolved')}
-                                data-trap-resolution-audio={getTrapResolutionSignalAudioCue('resolved')}
-                                data-trap-resolution-beats={getTrapResolutionSignalBeatCount('resolved')}
-                                data-trap-resolution-screen-cue={getTrapResolutionSignalScreenCue('resolved')}
-                                data-trap-resolution-signal="resolved"
-                            >
-                                <small>Resolved</small>
-                                <b>{trapResolutionDetails.count === 1 ? '1 trap' : `${trapResolutionDetails.count} traps`}</b>
-                                <span aria-hidden="true" className={styles.trapResolutionBeatPips}>
-                                    {Array.from({ length: getTrapResolutionSignalBeatCount('resolved') }, (_, index) => (
-                                        <i
-                                            data-trap-resolution-beat={index + 1}
-                                            data-trap-resolution-beat-focus={index === 0 ? 'primary' : 'support'}
-                                            key={index}
-                                        />
-                                    ))}
-                                </span>
-                            </span>
-                            <span
-                                data-trap-resolution-action={getTrapResolutionSignalAction('effect')}
-                                data-trap-resolution-audio={getTrapResolutionSignalAudioCue('effect')}
-                                data-trap-resolution-beats={getTrapResolutionSignalBeatCount('effect')}
-                                data-trap-resolution-screen-cue={getTrapResolutionSignalScreenCue('effect')}
-                                data-trap-resolution-signal="effect"
-                            >
-                                <small>Effect</small>
-                                <b>{trapResolutionDetails.effect}</b>
-                                <span aria-hidden="true" className={styles.trapResolutionBeatPips}>
-                                    {Array.from({ length: getTrapResolutionSignalBeatCount('effect') }, (_, index) => (
-                                        <i
-                                            data-trap-resolution-beat={index + 1}
-                                            data-trap-resolution-beat-focus={index === 0 ? 'primary' : 'support'}
-                                            key={index}
-                                        />
-                                    ))}
-                                </span>
-                            </span>
-                            <span
-                                data-trap-resolution-action={getTrapResolutionSignalAction('continue')}
-                                data-trap-resolution-audio={getTrapResolutionSignalAudioCue('continue')}
-                                data-trap-resolution-beats={getTrapResolutionSignalBeatCount('continue')}
-                                data-trap-resolution-screen-cue={getTrapResolutionSignalScreenCue('continue')}
-                                data-trap-resolution-signal="continue"
-                            >
-                                <small>Next</small>
-                                <b>{trapResolutionDetails.next}</b>
-                                <span aria-hidden="true" className={styles.trapResolutionBeatPips}>
-                                    {Array.from({ length: getTrapResolutionSignalBeatCount('continue') }, (_, index) => (
-                                        <i
-                                            data-trap-resolution-beat={index + 1}
-                                            data-trap-resolution-beat-focus={index === 0 ? 'primary' : 'support'}
-                                            key={index}
-                                        />
-                                    ))}
-                                </span>
-                            </span>
-                        </span>
-                    ) : null}
                 </div>
             ) : null}
             {!baselineWebGl ? (
@@ -4009,40 +3808,8 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         data-preview-summary-kind={focusedPreviewChip.kind}
                                         data-testid="trait-preview-summary"
                                     >
-                                        <small>Preview</small>
+                                        <small>{focusedPreviewChip.eyebrow}</small>
                                         <b>{traitPreviewSummaryLabel}</b>
-                                        {previewDensity > 0 ? (
-                                            <strong>
-                                                {focusedPreviewChip.kind === 'trait'
-                                                    ? `${previewDensity} ${previewDensity === 1 ? 'combo card' : 'combo cards'} lit`
-                                                    : `${previewDensity} ${previewDensity === 1 ? 'route' : 'routes'} lit`}
-                                            </strong>
-                                        ) : null}
-                                        <em>{beatCount} beats</em>
-                                        <span
-                                            aria-hidden="true"
-                                            className={styles.traitPreviewDensityMeter}
-                                            data-preview-meter-fill={traitPreviewMeterFill}
-                                        >
-                                            <i
-                                                className={styles.traitPreviewDensityMeterFill}
-                                                style={{ '--trait-preview-meter-fill': `${traitPreviewMeterFill}%` } as CSSProperties}
-                                            />
-                                        </span>
-                                        <span aria-hidden="true" className={styles.traitPreviewSummaryBeatPips}>
-                                            {Array.from({ length: Math.max(2, Math.min(5, beatCount)) }, (_, beatIndex) => (
-                                                <i
-                                                    data-preview-summary-beat={beatIndex + 1}
-                                                    data-preview-summary-beat-focus={
-                                                        beatIndex === 0 ? 'primary' : 'support'
-                                                    }
-                                                    key={`${focusedPreviewChip.kind}-summary-beat-${beatIndex + 1}`}
-                                                />
-                                            ))}
-                                        </span>
-                                    </span>
-                                    <span className={styles.traitPreviewEyebrow}>
-                                        {focusedPreviewChip.eyebrow}
                                     </span>
                                     <span className={styles.traitPreviewSignal}>
                                         {focusedPreviewChip.kind === 'pickup'
@@ -4050,67 +3817,25 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                             : focusedPreviewChip.kind === 'hazard'
                                               ? 'Risk'
                                               : 'Combo'}
+                                        {previewDensity > 0
+                                            ? focusedPreviewChip.kind === 'trait'
+                                                ? ` · ${previewDensity} ${previewDensity === 1 ? 'combo card' : 'combo cards'} lit`
+                                                : ` · ${previewDensity} ${previewDensity === 1 ? 'route' : 'routes'} lit`
+                                            : ''}
                                     </span>
-                                    <span aria-hidden="true" className={styles.traitPreviewSignalMeter}>
-                                        <i aria-hidden="true" className={styles.traitPreviewSignalMeterFill} />
-                                    </span>
-                                    <span aria-hidden="true" className={styles.traitPreviewBeatPips}>
-                                        {Array.from({ length: beatCount }, (_, beatIndex) => (
-                                            <i
-                                                data-preview-beat={beatIndex + 1}
-                                                data-preview-beat-focus={beatIndex === 0 ? 'primary' : 'support'}
-                                                key={beatIndex}
-                                            />
-                                        ))}
-                                    </span>
-                                    <b className={styles.traitPreviewAction}>
-                                        {focusedPreviewChip.action}
-                                        <span aria-hidden="true" className={styles.traitPreviewActionBeatPips}>
-                                            {Array.from({ length: beatCount }, (_, beatIndex) => (
-                                                <i
-                                                    data-preview-action-beat={beatIndex + 1}
-                                                    data-preview-action-beat-focus={beatIndex === 0 ? 'primary' : 'support'}
-                                                    key={`${focusedPreviewChip.action}-beat-${beatIndex + 1}`}
-                                                />
-                                            ))}
-                                        </span>
-                                    </b>
+                                    <b className={styles.traitPreviewAction}>{focusedPreviewChip.action}</b>
                                     {focusedPreviewChip.rewardHotText ? (
                                         <span className={styles.traitPreviewCashout}>
                                             Cashout / {focusedPreviewChip.rewardHotText}
-                                            <span aria-hidden="true" className={styles.traitPreviewCashoutBeatPips}>
-                                                {Array.from({ length: Math.max(2, beatCount - 1) }, (_, beatIndex) => (
-                                                    <i
-                                                        data-preview-cashout-beat={beatIndex + 1}
-                                                        data-preview-cashout-beat-focus={
-                                                            beatIndex === 0 ? 'primary' : 'support'
-                                                        }
-                                                        key={`${focusedPreviewChip.rewardHotText}-beat-${beatIndex + 1}`}
-                                                    />
-                                                ))}
-                                            </span>
                                         </span>
                                     ) : null}
                                     {focusedPreviewChip.lines.map((line, index) => (
                                         <span
                                             className={styles.traitPreviewLine}
                                             data-preview-line={index + 1}
-                                            data-preview-line-beats={index === 0 ? 3 : 2}
-                                            data-preview-line-focus={index === 0 ? 'primary' : 'support'}
                                             key={line}
                                         >
                                             {line}
-                                            <span aria-hidden="true" className={styles.traitPreviewLineBeatPips}>
-                                                {Array.from({ length: index === 0 ? 3 : 2 }, (_, beatIndex) => (
-                                                    <i
-                                                        data-preview-line-beat={beatIndex + 1}
-                                                        data-preview-line-beat-focus={
-                                                            beatIndex === 0 ? 'primary' : 'support'
-                                                        }
-                                                        key={`${line}-beat-${beatIndex + 1}`}
-                                                    />
-                                                ))}
-                                            </span>
                                         </span>
                                     ))}
                                 </div>

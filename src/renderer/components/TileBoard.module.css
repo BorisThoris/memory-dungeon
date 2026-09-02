@@ -115,127 +115,6 @@
     line-height: 1;
 }
 
-.trapResolutionSignals {
-    display: grid;
-    grid-column: 1 / -1;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 0.25rem;
-    width: 100%;
-}
-
-.trapResolutionSignals > span {
-    display: grid;
-    gap: 0.04rem;
-    min-width: 0;
-    min-height: 1.82rem;
-    align-content: center;
-    padding: 0.2rem 0.32rem;
-    border: 1px solid color-mix(in srgb, var(--theme-text-muted, #dccfad) 18%, transparent);
-    border-radius: 8px;
-    background: color-mix(in srgb, var(--theme-panel-solid, #17131d) 58%, transparent);
-}
-
-.trapResolutionSignals small {
-    overflow: hidden;
-    color: color-mix(in srgb, var(--theme-text-muted, #dccfad) 84%, white);
-    font-size: 0.75rem;
-    font-weight: 900;
-    line-height: 1;
-    text-overflow: ellipsis;
-    text-transform: uppercase;
-    white-space: nowrap;
-}
-
-.trapResolutionSignals b {
-    overflow: hidden;
-    color: color-mix(in srgb, var(--theme-text, #f5ead4) 88%, white);
-    font-size: 0.75rem;
-    font-weight: 900;
-    letter-spacing: 0;
-    line-height: 1.05;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.trapResolutionBeatPips {
-    display: flex;
-    gap: 0.08rem;
-    align-items: center;
-    min-height: 0.18rem;
-}
-
-.trapResolutionBeatPips i {
-    width: 0.24rem;
-    height: 0.1rem;
-    border-radius: 999px;
-    background: color-mix(in srgb, var(--theme-text-muted, #dccfad) 56%, transparent);
-    box-shadow: 0 0 0.2rem color-mix(in srgb, var(--theme-text-muted, #dccfad) 18%, transparent);
-    animation: chainOpportunityBeatPulse 0.86s ease-in-out infinite;
-    transform-origin: center;
-}
-
-.trapResolutionBeatPips i:nth-child(2),
-.trapResolutionBeatPips i:nth-child(3),
-.trapResolutionBeatPips i:nth-child(4),
-.trapResolutionBeatPips i[data-trap-resolution-beat-focus='primary'] {
-    width: 0.38rem;
-    opacity: 1;
-    box-shadow:
-        0 0 0.38rem color-mix(in srgb, currentColor 42%, transparent),
-        0 0 0 1px color-mix(in srgb, white 16%, transparent);
-}
-
-.trapResolutionSignals > span[data-trap-resolution-signal='resolved'] {
-    border-color: color-mix(in srgb, var(--theme-ember, #f08a5d) 44%, transparent);
-    background: color-mix(in srgb, var(--theme-ember, #f08a5d) 12%, transparent);
-}
-
-.trapResolutionSignals > span[data-trap-resolution-signal='resolved'] .trapResolutionBeatPips i {
-    background: color-mix(in srgb, var(--theme-ember, #f08a5d) 76%, white);
-    box-shadow: 0 0 0.28rem color-mix(in srgb, var(--theme-ember, #f08a5d) 30%, transparent);
-}
-
-.trapResolutionSignals > span[data-trap-resolution-signal='effect'] {
-    border-color: color-mix(in srgb, var(--theme-gold-bright, #f2d39d) 30%, transparent);
-    background: color-mix(in srgb, var(--theme-gold-bright, #f2d39d) 10%, transparent);
-}
-
-.trapResolutionSignals > span[data-trap-resolution-signal='effect'] .trapResolutionBeatPips i {
-    background: color-mix(in srgb, var(--theme-gold-bright, #f2d39d) 82%, white);
-    box-shadow: 0 0 0.3rem color-mix(in srgb, var(--theme-gold-bright, #f2d39d) 34%, transparent);
-}
-
-.trapResolutionSignals > span[data-trap-resolution-signal='continue'] {
-    border-color: color-mix(in srgb, var(--theme-cyan-bright, #8de6ff) 30%, transparent);
-    background: color-mix(in srgb, var(--theme-cyan-bright, #8de6ff) 9%, transparent);
-}
-
-.trapResolutionSignals > span[data-trap-resolution-signal='continue'] b {
-    color: color-mix(in srgb, var(--theme-cyan-bright, #8de6ff) 80%, white);
-}
-
-.trapResolutionSignals > span[data-trap-resolution-signal='continue'] .trapResolutionBeatPips i {
-    background: color-mix(in srgb, var(--theme-cyan-bright, #8de6ff) 78%, white);
-    box-shadow: 0 0 0.28rem color-mix(in srgb, var(--theme-cyan-bright, #8de6ff) 28%, transparent);
-}
-
-.trapResolutionSignals > span[data-trap-resolution-screen-cue='burst'] {
-    animation: boardOpportunityPulse 1.18s ease-in-out infinite;
-    box-shadow:
-        0 0 0 1px color-mix(in srgb, var(--theme-gold-bright, #f2d39d) 16%, transparent),
-        0 0 0.7rem color-mix(in srgb, var(--theme-gold-bright, #f2d39d) 16%, transparent);
-}
-
-.trapResolutionSignals > span[data-trap-resolution-screen-cue='snap'] {
-    box-shadow:
-        0 0 0 1px color-mix(in srgb, var(--theme-cyan-bright, #8de6ff) 16%, transparent),
-        0 0 0.58rem color-mix(in srgb, var(--theme-cyan-bright, #8de6ff) 18%, transparent);
-}
-
-.trapResolutionSignals > span[data-trap-resolution-screen-cue='pulse'] {
-    animation: boardOpportunityPrimePulse 1.6s ease-in-out infinite;
-}
-
 @keyframes trapResolutionToastIn {
     from {
         opacity: 0;
@@ -261,19 +140,6 @@
     }
 }
 
-@keyframes chainOpportunityBeatPulse {
-    0%,
-100% {
-        opacity: 0.64;
-        transform: scale(0.82);
-    }
-
-    44% {
-        opacity: 1;
-        transform: scale(1.12);
-    }
-}
-
 @keyframes boardOpportunityShimmer {
     0% {
         background-position: -120% 50%, center, center;
@@ -294,22 +160,6 @@
     50% {
         filter: saturate(1.18);
         transform: translateY(-1px) scale(1.012);
-    }
-}
-
-@keyframes boardOpportunitySweep {
-    0% {
-        background-position: -150% 50%, center, center;
-        filter: saturate(1);
-    }
-
-    55% {
-        filter: saturate(1.24);
-    }
-
-    100% {
-        background-position: 190% 50%, center, center;
-        filter: saturate(1);
     }
 }
 
@@ -541,656 +391,15 @@ block board gestures so pan/zoom does not fight the deal. */
     animation: boardOpportunityPrimePulse 1.3s ease-in-out infinite;
 }
 
-.stageMobileCamera {
-    inset: 0;
-}
-
-.motionChip {
-    position: absolute;
-    bottom: var(--ui-space-xs);
-    right: var(--ui-space-xs);
-    z-index: 5;
-    padding: 0.28rem var(--ui-space-sm);
-    border-radius: var(--ui-radius-pill);
-    border: 1px solid var(--theme-border-strong);
-    background: var(--theme-panel-solid);
-    color: var(--theme-text);
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    cursor: pointer;
-    pointer-events: auto;
-    touch-action: manipulation;
-    box-shadow: var(--theme-panel-shadow);
-}
-
-.motionChip:focus-visible {
-    outline: 2px solid var(--theme-border-cyan);
-    outline-offset: 2px;
-}
-
 @media (hover: hover) and (pointer: fine) {
     .chainOpportunityChip {
         pointer-events: auto;
-    }
-
-    .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityRecipe,
-.chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityShotMap,
-.chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityBeatMap,
-.chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityCadenceMap,
-.chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityTraitLaneMap,
-.chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityTraitLaneBeatMap,
-.chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityMarkerKey,
-.chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityMeter,
-.chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityRewardLadder,
-.chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityLines,
-.chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityExamples,
-.chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityTargetPlan,
-.chainOpportunityChip:not(:hover, :focus-within) .chainOpportunitySequenceCue,
-.chainOpportunityChip:not(:hover, :focus-within) .chainOpportunitySurge,
-.chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityFollowup,
-.chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityArmedPerk,
-.chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityRewardUrgency,
-.chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityRewardCue,
-.chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityPayoffBurst,
-.chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityMomentum {
-        display: none;
-    }
-
-    .frame[data-chain-opportunity-next-action='cashout'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityRewardLadder,
-.frame[data-chain-opportunity-next-action='cashout'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityMeter,
-.frame[data-chain-opportunity-next-action='cashout'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityRewardUrgency,
-.frame[data-chain-opportunity-next-action='cashout'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityPayoffBurst,
-.frame[data-chain-opportunity-next-action='cashout'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityMomentum,
-.frame[data-chain-opportunity-next-action='cashout'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityLines,
-.frame[data-chain-opportunity-next-action='ready'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityRewardLadder,
-.frame[data-chain-opportunity-next-action='ready'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityMeter,
-.frame[data-chain-opportunity-next-action='ready'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityRewardUrgency,
-.frame[data-chain-opportunity-next-action='ready'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityPayoffBurst,
-.frame[data-chain-opportunity-next-action='ready'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityMomentum,
-.frame[data-chain-opportunity-next-action='ready'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityLines {
-        display: inline-grid;
-    }
-
-    .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityArcadeCallout {
-        max-width: min(11rem, 30vi);
-        min-height: 0;
-        padding-block: 0.11rem;
-    }
-}
-
-.activePowerBoardStepBeatPips {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.04rem;
-    margin-left: 0.08rem;
-}
-
-.activePowerBoardStepBeatPips i {
-    display: block;
-    width: 0.1rem;
-    height: 0.1rem;
-    border-radius: 999px;
-    animation: boardOpportunityPulse 1.08s ease-in-out infinite;
-    background: color-mix(in srgb, currentColor 70%, white);
-    box-shadow: 0 0 0.14rem color-mix(in srgb, currentColor 18%, transparent);
-}
-
-.activePowerBoardStepBeatPips i[data-active-power-step-beat-focus='primary'] {
-    width: 0.2rem;
-    box-shadow:
-        0 0 0.24rem color-mix(in srgb, currentColor 28%, transparent),
-        0 0 0 1px color-mix(in srgb, white 12%, transparent);
-}
-
-.activePowerBoardStepBeatPips i[data-active-power-step-beat-focus='support'] {
-    opacity: 0.64;
-}
-
-@media (hover: hover) and (pointer: fine) {
-    .opportunityCompass {
-        left: calc(var(--gameplay-html-edge-pad, 0.75rem) + min(18rem, 23vw) + 0.75rem);
-        bottom: max(0.82rem, env(safe-area-inset-bottom, 0px));
-        justify-content: flex-start;
-        width: min(17rem, 24vw);
-        transform: none;
-        pointer-events: auto;
-    }
-
-    .opportunityCompass:not(:hover, :focus-within) .opportunityPayoffStack,
-.opportunityCompass:not(:hover, :focus-within) .opportunityLaneMap,
-.opportunityCompass:not(:hover, :focus-within) .opportunityCompassRow:not([data-opportunity-priority='best']) {
-        display: none;
-    }
-
-    .opportunityCompass[data-opportunity-compass-hot='cashout']:not(:hover, :focus-within) .opportunityPayoffStack,
-.opportunityCompass[data-opportunity-compass-hot='ready']:not(:hover, :focus-within) .opportunityPayoffStack,
-.opportunityCompass[data-opportunity-compass-surge='true']:not(:hover, :focus-within) .opportunityPayoffStack {
-        display: grid;
-    }
-
-    .opportunityCompass:not(:hover, :focus-within) .opportunityCompassRow {
-        flex: 0 1 auto;
-        max-width: min(17rem, 24vw);
-    }
-
-    .opportunityCompass:not(:hover, :focus-within) .opportunityCompassRow em {
-        max-width: min(10rem, 14vw);
-    }
-
-    .opportunityCompass[data-opportunity-compass-surge='true'] {
-        box-shadow:
-            0 0 0 1px color-mix(in srgb, var(--theme-gold-bright) 28%, transparent),
-            0 0 30px color-mix(in srgb, var(--theme-cyan-bright) 14%, transparent),
-            inset 0 1px 0 color-mix(in srgb, var(--theme-text) 8%, transparent);
-    }
-
-    .opportunityCompass[data-opportunity-compass-hot='cashout'] {
-        box-shadow:
-            0 0 0 1px color-mix(in srgb, var(--theme-gold-bright) 40%, transparent),
-            0 0 38px color-mix(in srgb, var(--theme-gold-bright) 18%, transparent),
-            inset 0 1px 0 color-mix(in srgb, var(--theme-text) 8%, transparent);
-    }
-
-    .opportunityCompass[data-opportunity-compass-hot='ready'] {
-        box-shadow:
-            0 0 0 1px color-mix(in srgb, var(--theme-cyan-bright) 34%, transparent),
-            0 0 34px color-mix(in srgb, var(--theme-cyan-bright) 16%, transparent),
-            inset 0 1px 0 color-mix(in srgb, var(--theme-text) 8%, transparent);
-    }
-
-    .opportunityCompass[data-opportunity-compass-hot='cashout'] .opportunityPayoffStack {
-        border-color: color-mix(in srgb, var(--theme-gold-bright) 52%, var(--theme-cyan-bright) 16%);
-        box-shadow:
-            0 0 18px color-mix(in srgb, var(--theme-gold-bright) 16%, transparent),
-            inset 0 1px 0 color-mix(in srgb, var(--theme-text) 8%, transparent);
-    }
-
-    .opportunityCompass[data-opportunity-compass-hot='ready'] .opportunityPayoffStack {
-        border-color: color-mix(in srgb, var(--theme-cyan-bright) 42%, var(--theme-gold-bright) 18%);
-        box-shadow:
-            0 0 16px color-mix(in srgb, var(--theme-cyan-bright) 14%, transparent),
-            inset 0 1px 0 color-mix(in srgb, var(--theme-text) 8%, transparent);
-    }
-
-    .opportunityCompass[data-opportunity-compass-surge='true'] .opportunityPayoffStack {
-        border-color: color-mix(in srgb, var(--theme-gold-bright) 46%, var(--theme-cyan-bright) 22%);
-        box-shadow:
-            0 0 18px color-mix(in srgb, var(--theme-gold-bright) 12%, transparent),
-            inset 0 1px 0 color-mix(in srgb, var(--theme-text) 8%, transparent);
-    }
-}
+    }}
 
 .frame[data-opportunity-payoff-crescendo-screen-cue='burst'],
 .frame[data-opportunity-payoff-crescendo-screen-cue='super'] {
     outline: 1px solid color-mix(in srgb, var(--theme-gold-bright) 16%, transparent);
     outline-offset: -1px;
-}
-
-.opportunityLaneMap {
-    display: flex;
-    flex: 1 0 100%;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 0.18rem;
-    min-width: 0;
-}
-
-.opportunityLaneMap > span {
-    display: grid;
-    grid-template-columns: auto auto minmax(0, 1fr);
-    align-items: center;
-    gap: 0.18rem;
-    min-width: 0;
-    max-width: 10.5rem;
-    padding: 0.14rem 0.34rem;
-    border: 1px solid color-mix(in srgb, var(--theme-border-strong) 42%, transparent);
-    border-radius: 999px;
-    background: color-mix(in srgb, var(--theme-panel-solid) 72%, transparent);
-    box-shadow:
-        0 8px 18px rgba(0, 0, 0, 0.2),
-        inset 0 1px 0 color-mix(in srgb, var(--theme-text) 6%, transparent);
-}
-
-.opportunityLaneMap > .opportunityPrimaryLane {
-    position: relative;
-    flex: 1 0 100%;
-    grid-template-columns: auto minmax(0, 1fr);
-    max-width: min(15rem, 100%);
-    padding: 0.28rem 0.46rem;
-    border-color: color-mix(in srgb, var(--theme-gold-bright) 44%, var(--theme-cyan-bright) 18%);
-    border-radius: var(--ui-radius-sm);
-    background:
-        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 13%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 9%, transparent)),
-        color-mix(in srgb, var(--theme-panel-solid) 76%, transparent);
-}
-
-.opportunityLaneMap > .opportunityPrimaryLane::after {
-    content: '';
-    position: absolute;
-    right: 0.46rem;
-    bottom: 0.16rem;
-    left: 0.46rem;
-    height: 0.11rem;
-    border-radius: 999px;
-    background: linear-gradient(
-        90deg,
-        color-mix(in srgb, var(--theme-gold-bright) 84%, white),
-        color-mix(in srgb, var(--theme-cyan-bright) 72%, white)
-    );
-    box-shadow: 0 0 0.18rem color-mix(in srgb, var(--theme-gold-bright) 18%, transparent);
-    transform-origin: left center;
-    transform: scaleX(var(--opportunity-primary-lane-meter-fill, 0));
-    transition: transform 140ms ease-out;
-    pointer-events: none;
-}
-
-.opportunityLaneMap > .opportunityPrimaryLane small {
-    color: color-mix(in srgb, var(--theme-gold-bright) 84%, white);
-}
-
-.opportunityLaneMap > .opportunityPrimaryLane b {
-    justify-self: end;
-}
-
-.opportunityLaneMap > .opportunityPrimaryLane[data-opportunity-primary-lane-screen-cue='burst'] {
-    border-color: color-mix(in srgb, var(--theme-gold-bright) 52%, var(--theme-cyan-bright) 18%);
-    background:
-        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 18%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent)),
-        color-mix(in srgb, var(--theme-panel-solid) 78%, transparent);
-}
-
-.opportunityLaneMap > .opportunityPrimaryLane[data-opportunity-primary-lane-screen-cue='burst'] strong,
-.opportunityLaneMap > .opportunityPrimaryLane[data-opportunity-primary-lane-screen-cue='burst'] .opportunityPrimaryLaneBeatPips i {
-    color: color-mix(in srgb, var(--theme-gold-bright) 90%, white);
-}
-
-.opportunityLaneMap > .opportunityPrimaryLane[data-opportunity-primary-lane-focus='cashout'] {
-    border-color: color-mix(in srgb, var(--theme-gold-bright) 76%, var(--theme-cyan-bright) 18%);
-    background:
-        radial-gradient(ellipse 100% 160% at 50% 0%, color-mix(in srgb, var(--theme-gold-bright) 28%, transparent), transparent 66%),
-        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 24%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 10%, transparent)),
-        color-mix(in srgb, var(--theme-panel-solid) 76%, transparent);
-    box-shadow:
-        inset 0 1px 0 color-mix(in srgb, white 14%, transparent),
-        0 0 0 1px color-mix(in srgb, var(--theme-gold-bright) 18%, transparent),
-        0 0 1rem color-mix(in srgb, var(--theme-gold-bright) 22%, transparent);
-}
-
-.opportunityLaneMap > .opportunityPrimaryLane[data-opportunity-primary-lane-focus='cashout'] small,
-.opportunityLaneMap > .opportunityPrimaryLane[data-opportunity-primary-lane-focus='cashout'] strong,
-.opportunityLaneMap > .opportunityPrimaryLane[data-opportunity-primary-lane-focus='cashout'] .opportunityPrimaryLaneBeatPips i {
-    color: color-mix(in srgb, var(--theme-gold-bright) 96%, white);
-}
-
-.opportunityLaneMap > .opportunityPrimaryLane[data-opportunity-primary-lane-focus='reward'] {
-    border-color: color-mix(in srgb, var(--theme-violet-bright) 44%, var(--theme-gold-bright) 24%);
-    background:
-        linear-gradient(90deg, color-mix(in srgb, var(--theme-violet-bright) 14%, transparent), color-mix(in srgb, var(--theme-gold-bright) 12%, transparent)),
-        color-mix(in srgb, var(--theme-panel-solid) 78%, transparent);
-}
-
-.opportunityLaneMap > .opportunityPrimaryLane[data-opportunity-primary-lane-focus='reward'] strong,
-.opportunityLaneMap > .opportunityPrimaryLane[data-opportunity-primary-lane-focus='reward'] .opportunityPrimaryLaneBeatPips i {
-    color: color-mix(in srgb, var(--theme-violet-bright) 82%, white);
-}
-
-.opportunityLaneMap > .opportunityPrimaryLane[data-opportunity-primary-lane-focus='risk'] {
-    border-color: color-mix(in srgb, var(--theme-danger) 58%, var(--theme-gold-bright) 14%);
-    background:
-        linear-gradient(90deg, color-mix(in srgb, var(--theme-danger) 17%, transparent), color-mix(in srgb, var(--theme-gold-bright) 7%, transparent)),
-        color-mix(in srgb, var(--theme-panel-solid) 78%, transparent);
-}
-
-.opportunityLaneMap > .opportunityPrimaryLane[data-opportunity-primary-lane-screen-cue='pulse'],
-.opportunityLaneMap > .opportunityPrimaryLane[data-opportunity-primary-lane-screen-cue='guard'] {
-    border-color: color-mix(in srgb, var(--theme-cyan-bright) 48%, var(--theme-gold-bright) 16%);
-}
-
-.opportunityLaneMap > .opportunityPrimaryLane[data-opportunity-primary-lane-screen-cue='pulse'] .opportunityPrimaryLaneBeatPips i,
-.opportunityLaneMap > .opportunityPrimaryLane[data-opportunity-primary-lane-screen-cue='guard'] .opportunityPrimaryLaneBeatPips i {
-    color: color-mix(in srgb, var(--theme-cyan-bright) 86%, white);
-}
-
-.opportunityLaneMap > .opportunityPrimaryLane[data-opportunity-primary-lane-screen-cue='risk'],
-.opportunityLaneMap > .opportunityPrimaryLane[data-opportunity-primary-lane-screen-cue='recover'] {
-    border-color: color-mix(in srgb, var(--theme-danger) 46%, transparent);
-    background: color-mix(in srgb, var(--theme-danger) 12%, var(--theme-panel-solid));
-}
-
-.opportunityLaneMap > .opportunityPrimaryLane[data-opportunity-primary-lane-screen-cue='risk']::after,
-.opportunityLaneMap > .opportunityPrimaryLane[data-opportunity-primary-lane-screen-cue='recover']::after {
-    background: linear-gradient(
-        90deg,
-        color-mix(in srgb, var(--theme-danger) 82%, white),
-        color-mix(in srgb, var(--theme-cyan-bright) 70%, white)
-    );
-}
-
-.opportunityLaneMap > .opportunityPrimaryLane[data-opportunity-primary-lane-screen-cue='risk'] strong,
-.opportunityLaneMap > .opportunityPrimaryLane[data-opportunity-primary-lane-screen-cue='recover'] strong,
-.opportunityLaneMap > .opportunityPrimaryLane[data-opportunity-primary-lane-screen-cue='risk'] .opportunityPrimaryLaneBeatPips i,
-.opportunityLaneMap > .opportunityPrimaryLane[data-opportunity-primary-lane-screen-cue='recover'] .opportunityPrimaryLaneBeatPips i {
-    color: color-mix(in srgb, var(--theme-danger) 78%, white);
-}
-
-.opportunityLaneMapSummary {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.12rem;
-    min-width: 0;
-    margin-right: 0.12rem;
-    padding: 0.16rem 0.36rem;
-    border: 1px solid color-mix(in srgb, var(--theme-cyan-bright) 38%, transparent);
-    border-radius: 0.34rem;
-    background:
-        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 12%, transparent), color-mix(in srgb, var(--theme-gold-bright) 8%, transparent)),
-        color-mix(in srgb, var(--theme-void) 42%, transparent);
-    color: color-mix(in srgb, var(--theme-cyan-bright) 88%, white);
-    font-size: 0.75rem;
-    font-weight: 940;
-    line-height: 1;
-    text-transform: uppercase;
-    white-space: nowrap;
-}
-
-.opportunityLaneMapSummary small,
-.opportunityLaneMapSummary b {
-    min-width: 0;
-    overflow: hidden;
-    line-height: 1;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.opportunityLaneMapSummary small {
-    color: color-mix(in srgb, var(--theme-text-muted) 88%, white);
-    font-size: 0.75rem;
-    font-weight: 920;
-}
-
-.opportunityLaneMapSummary b {
-    color: currentColor;
-    font-size: 0.75rem;
-    font-weight: 980;
-}
-
-.opportunityLaneMapSummaryBeatPips {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.04rem;
-    margin-left: 0.1rem;
-}
-
-.opportunityLaneMapSummaryBeatPips i {
-    display: block;
-    width: 0.1rem;
-    height: 0.1rem;
-    border-radius: 999px;
-    animation: boardOpportunityPulse 1.08s ease-in-out infinite;
-    background: color-mix(in srgb, currentColor 70%, white);
-    box-shadow: 0 0 0.14rem color-mix(in srgb, currentColor 18%, transparent);
-}
-
-.opportunityLaneMapSummaryBeatPips i[data-opportunity-lane-map-summary-beat-focus='primary'] {
-    width: 0.2rem;
-    box-shadow:
-        0 0 0.24rem color-mix(in srgb, currentColor 28%, transparent),
-        0 0 0 1px color-mix(in srgb, white 12%, transparent);
-}
-
-.opportunityLaneMapSummaryBeatPips i[data-opportunity-lane-map-summary-beat-focus='support'] {
-    opacity: 0.64;
-}
-
-.opportunityLaneMapMeter {
-    display: block;
-    width: 100%;
-    height: 0.18rem;
-    overflow: hidden;
-    border: 1px solid color-mix(in srgb, var(--theme-cyan-bright) 20%, transparent);
-    border-radius: 999px;
-    background:
-        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 12%, transparent), transparent 84%),
-        color-mix(in srgb, var(--theme-void) 30%, transparent);
-}
-
-.opportunityLaneMapMeterFill {
-    display: block;
-    width: var(--opportunity-lane-map-meter-fill, 0%);
-    height: 100%;
-    border-radius: inherit;
-    background: linear-gradient(
-        90deg,
-        color-mix(in srgb, var(--theme-cyan-bright) 82%, white),
-        color-mix(in srgb, var(--theme-gold-bright) 72%, white)
-    );
-    box-shadow: 0 0 0.24rem color-mix(in srgb, var(--theme-cyan-bright) 20%, transparent);
-    transition: width 140ms ease-out;
-}
-
-.opportunityLaneBeatPips,
-.opportunityPrimaryLaneBeatPips {
-    display: inline-flex;
-    grid-column: 1 / -1;
-    align-items: center;
-    gap: 0.07rem;
-}
-
-.opportunityLaneBeatPips i,
-.opportunityPrimaryLaneBeatPips i {
-    width: 0.2rem;
-    height: 0.2rem;
-    border-radius: 999px;
-    background: currentColor;
-    box-shadow: 0 0 0.28rem color-mix(in srgb, currentColor 28%, transparent);
-    animation: boardOpportunityPulse 0.86s ease-in-out infinite;
-    opacity: 0.72;
-}
-
-.opportunityPrimaryLaneBeatPips i {
-    width: 0.24rem;
-    height: 0.24rem;
-    color: color-mix(in srgb, var(--theme-gold-bright) 82%, white);
-}
-
-.opportunityLaneBeatPips i[data-opportunity-lane-beat-focus='primary'],
-.opportunityPrimaryLaneBeatPips i[data-opportunity-primary-lane-beat-focus='primary'] {
-    min-width: 0.34rem;
-    opacity: 1;
-    box-shadow:
-        0 0 0.42rem color-mix(in srgb, currentColor 46%, transparent),
-        0 0 0 1px color-mix(in srgb, white 18%, transparent);
-}
-
-.opportunityLaneBeatPips i[data-opportunity-lane-beat-focus='support'],
-.opportunityPrimaryLaneBeatPips i[data-opportunity-primary-lane-beat-focus='support'] {
-    opacity: 0.68;
-}
-
-.opportunityLaneBeatPips i:nth-child(2),
-.opportunityPrimaryLaneBeatPips i:nth-child(2) {
-    animation-delay: 0.07s;
-}
-
-.opportunityLaneBeatPips i:nth-child(3),
-.opportunityPrimaryLaneBeatPips i:nth-child(3) {
-    animation-delay: 0.14s;
-}
-
-.opportunityLaneBeatPips i:nth-child(4),
-.opportunityPrimaryLaneBeatPips i:nth-child(4) {
-    animation-delay: 0.21s;
-}
-
-.opportunityLaneMap small,
-.opportunityLaneMap b,
-.opportunityLaneMap strong,
-.opportunityLaneMap em {
-    min-width: 0;
-    overflow: hidden;
-    line-height: 1;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.opportunityLaneMap small {
-    color: color-mix(in srgb, var(--theme-text-muted) 92%, white);
-    font-size: 0.75rem;
-    font-weight: 950;
-    text-transform: uppercase;
-}
-
-.opportunityLaneMap b {
-    display: grid;
-    place-items: center;
-    width: 1.05rem;
-    height: 1.05rem;
-    border-radius: 50%;
-    background: color-mix(in srgb, var(--theme-text) 13%, transparent);
-    color: color-mix(in srgb, var(--theme-text) 96%, white);
-    font-size: 0.75rem;
-    font-weight: 980;
-}
-
-.opportunityLaneMap strong {
-    color: color-mix(in srgb, var(--theme-text) 94%, white);
-    font-size: 0.75rem;
-    font-weight: 940;
-}
-
-.opportunityLaneMap em {
-    grid-column: 1 / -1;
-    color: color-mix(in srgb, var(--theme-cyan-bright) 82%, white);
-    font-size: 0.75rem;
-    font-style: normal;
-    font-weight: 900;
-    text-transform: uppercase;
-}
-
-.opportunityLaneMap [data-opportunity-lane='cash'] {
-    border-color: color-mix(in srgb, var(--theme-gold-bright) 52%, var(--theme-success) 16%);
-    background: color-mix(in srgb, var(--theme-gold-bright) 14%, var(--theme-panel-solid) 72%);
-}
-
-.opportunityLaneMap [data-opportunity-lane] {
-    position: relative;
-}
-
-.opportunityLaneMap [data-opportunity-lane]::after {
-    content: '';
-    position: absolute;
-    right: 0.28rem;
-    bottom: 0.12rem;
-    left: 0.28rem;
-    height: 0.1rem;
-    border-radius: 999px;
-    background: linear-gradient(
-        90deg,
-        color-mix(in srgb, var(--theme-cyan-bright) 82%, white),
-        color-mix(in srgb, var(--theme-gold-bright) 72%, white)
-    );
-    box-shadow: 0 0 0.16rem color-mix(in srgb, var(--theme-cyan-bright) 18%, transparent);
-    transform-origin: left center;
-    transform: scaleX(var(--opportunity-lane-meter-fill, 0));
-    transition: transform 140ms ease-out;
-    pointer-events: none;
-}
-
-.opportunityLaneMap [data-opportunity-lane='cash'] b {
-    background: color-mix(in srgb, var(--theme-gold-bright) 28%, transparent);
-    color: color-mix(in srgb, var(--theme-gold-bright) 96%, white);
-}
-
-.opportunityLaneMap [data-opportunity-lane='cash']::after {
-    box-shadow: 0 0 0.2rem color-mix(in srgb, var(--theme-gold-bright) 18%, transparent);
-}
-
-.opportunityLaneMap [data-opportunity-lane='build'] {
-    border-color: color-mix(in srgb, var(--theme-cyan-bright) 46%, transparent);
-}
-
-.opportunityLaneMap [data-opportunity-lane='trait'] {
-    border-color: color-mix(in srgb, var(--theme-gold-bright) 44%, var(--theme-cyan-bright) 20%);
-    background: color-mix(in srgb, var(--theme-gold-bright) 10%, var(--theme-panel-solid) 74%);
-}
-
-.opportunityLaneMap [data-opportunity-lane='trait']::after {
-    background: linear-gradient(
-        90deg,
-        color-mix(in srgb, var(--theme-gold-bright) 82%, white),
-        color-mix(in srgb, var(--theme-cyan-bright) 70%, white)
-    );
-}
-
-.opportunityLaneMap [data-opportunity-lane='trait'] b {
-    background: color-mix(in srgb, var(--theme-gold-bright) 24%, transparent);
-    color: color-mix(in srgb, var(--theme-gold-bright) 94%, white);
-}
-
-.opportunityLaneMap [data-opportunity-lane='pickup'],
-.opportunityLaneMap [data-opportunity-lane='perk'] {
-    border-color: color-mix(in srgb, var(--theme-violet-bright) 38%, var(--theme-gold-bright) 20%);
-}
-
-.opportunityLaneMap [data-opportunity-lane='pickup']::after,
-.opportunityLaneMap [data-opportunity-lane='perk']::after {
-    background: linear-gradient(
-        90deg,
-        color-mix(in srgb, var(--theme-violet-bright) 82%, white),
-        color-mix(in srgb, var(--theme-gold-bright) 68%, white)
-    );
-}
-
-.opportunityLaneMap [data-opportunity-lane='risk'] {
-    border-color: color-mix(in srgb, var(--theme-danger) 44%, var(--theme-gold-bright) 12%);
-}
-
-.opportunityLaneMap [data-opportunity-lane='risk']::after {
-    background: linear-gradient(
-        90deg,
-        color-mix(in srgb, var(--theme-danger) 82%, white),
-        color-mix(in srgb, var(--theme-gold-bright) 68%, white)
-    );
-}
-
-.opportunityLaneMap [data-opportunity-lane='recover'] {
-    border-color: color-mix(in srgb, var(--theme-success) 44%, var(--theme-cyan-bright) 14%);
-}
-
-.opportunityLaneMap [data-opportunity-lane='recover']::after {
-    background: linear-gradient(
-        90deg,
-        color-mix(in srgb, var(--theme-success) 82%, white),
-        color-mix(in srgb, var(--theme-cyan-bright) 70%, white)
-    );
-}
-
-.opportunityLaneMap [data-opportunity-lane='tool'] {
-    border-color: color-mix(in srgb, var(--theme-text) 30%, var(--theme-cyan-bright) 20%);
-}
-
-.opportunityLaneMap [data-opportunity-lane='tool']::after {
-    background: linear-gradient(
-        90deg,
-        color-mix(in srgb, var(--theme-text) 84%, white),
-        color-mix(in srgb, var(--theme-cyan-bright) 72%, white)
-    );
-}
-
-.opportunityLaneMap [data-opportunity-lane-screen-cue='burst'] {
-    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-gold-bright) 20%, transparent);
-}
-
-.opportunityLaneMap [data-opportunity-lane-screen-cue='pulse'],
-.opportunityLaneMap [data-opportunity-lane-screen-cue='guard'] {
-    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-cyan-bright) 18%, transparent);
-}
-
-.opportunityLaneMap [data-opportunity-lane-screen-cue='risk'],
-.opportunityLaneMap [data-opportunity-lane-screen-cue='recover'] {
-    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-danger) 20%, transparent);
 }
 
 .traitPreviewChip {
@@ -1252,32 +461,6 @@ block board gestures so pan/zoom does not fight the deal. */
     white-space: nowrap;
 }
 
-.traitPreviewDensityMeter {
-    grid-column: 1 / -1;
-    display: block;
-    height: 0.2rem;
-    overflow: hidden;
-    border: 1px solid color-mix(in srgb, var(--theme-border-cyan) 24%, transparent);
-    border-radius: 999px;
-    background:
-        linear-gradient(90deg, color-mix(in srgb, var(--theme-border-cyan) 12%, transparent), transparent 84%),
-        color-mix(in srgb, var(--theme-void) 30%, transparent);
-}
-
-.traitPreviewDensityMeterFill {
-    display: block;
-    width: var(--trait-preview-meter-fill, 0%);
-    height: 100%;
-    border-radius: inherit;
-    background: linear-gradient(
-        90deg,
-        color-mix(in srgb, var(--theme-gold-bright) 82%, white),
-        color-mix(in srgb, var(--theme-border-cyan) 76%, white)
-    );
-    box-shadow: 0 0 0.28rem color-mix(in srgb, var(--theme-gold-bright) 20%, transparent);
-    transition: width 140ms ease-out;
-}
-
 .traitPreviewSummary small,
 .traitPreviewSummary b,
 .traitPreviewSummary em {
@@ -1310,34 +493,6 @@ block board gestures so pan/zoom does not fight the deal. */
     text-transform: uppercase;
 }
 
-.traitPreviewSummaryBeatPips {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.04rem;
-    margin-left: auto;
-}
-
-.traitPreviewSummaryBeatPips i {
-    display: block;
-    width: 0.08rem;
-    height: 0.08rem;
-    border-radius: 999px;
-    animation: chainOpportunityBeatPulse 0.86s ease-in-out infinite;
-    background: color-mix(in srgb, var(--theme-border-cyan) 72%, white);
-    box-shadow: 0 0 0.12rem color-mix(in srgb, var(--theme-border-cyan) 18%, transparent);
-}
-
-.traitPreviewSummaryBeatPips i[data-preview-summary-beat-focus='primary'] {
-    width: 0.18rem;
-    box-shadow:
-        0 0 0.18rem color-mix(in srgb, currentColor 24%, transparent),
-        0 0 0 1px color-mix(in srgb, white 12%, transparent);
-}
-
-.traitPreviewSummaryBeatPips i[data-preview-summary-beat-focus='support'] {
-    opacity: 0.68;
-}
-
 .traitPreviewChip[data-preview-kind='pickup'] {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 52%, transparent);
     background:
@@ -1352,7 +507,6 @@ block board gestures so pan/zoom does not fight the deal. */
     animation: boardOpportunityShimmer 2.5s ease-in-out infinite;
 }
 
-.traitPreviewChip[data-preview-kind='pickup'] .traitPreviewEyebrow,
 .traitPreviewChip[data-preview-kind='pickup'] .traitPreviewLine {
     color: color-mix(in srgb, var(--theme-gold-bright) 82%, white);
 }
@@ -1371,17 +525,8 @@ block board gestures so pan/zoom does not fight the deal. */
     animation: boardOpportunityShimmer 2.5s ease-in-out infinite;
 }
 
-.traitPreviewChip[data-preview-kind='hazard'] .traitPreviewEyebrow,
 .traitPreviewChip[data-preview-kind='hazard'] .traitPreviewLine {
     color: color-mix(in srgb, var(--theme-warning, #f2bc6b) 82%, white);
-}
-
-.traitPreviewEyebrow {
-    color: color-mix(in srgb, var(--theme-text-muted) 88%, transparent);
-    font-size: 0.75rem;
-    font-weight: 740;
-    line-height: 1;
-    text-transform: uppercase;
 }
 
 .traitPreviewSignal {
@@ -1396,71 +541,6 @@ block board gestures so pan/zoom does not fight the deal. */
     font-weight: 920;
     line-height: 1;
     text-transform: uppercase;
-}
-
-.traitPreviewSignalMeter {
-    display: block;
-    width: 100%;
-    height: 0.12rem;
-    overflow: hidden;
-    border: 1px solid color-mix(in srgb, var(--theme-border-cyan) 18%, transparent);
-    border-radius: 999px;
-    background:
-        linear-gradient(90deg, color-mix(in srgb, var(--theme-border-cyan) 10%, transparent), transparent 84%),
-        color-mix(in srgb, var(--theme-void) 28%, transparent);
-}
-
-.traitPreviewSignalMeterFill {
-    display: block;
-    width: var(--trait-preview-signal-fill, 0%);
-    height: 100%;
-    border-radius: inherit;
-    background: linear-gradient(
-        90deg,
-        color-mix(in srgb, var(--theme-border-cyan) 84%, white),
-        color-mix(in srgb, var(--theme-gold-bright) 72%, white)
-    );
-    box-shadow: 0 0 0.18rem color-mix(in srgb, var(--theme-border-cyan) 20%, transparent);
-    transition: width 140ms ease-out;
-}
-
-.traitPreviewBeatPips {
-    display: flex;
-    gap: 0.08rem;
-    align-items: center;
-    min-height: 0.18rem;
-}
-
-.traitPreviewBeatPips i {
-    width: 0.24rem;
-    height: 0.1rem;
-    border-radius: 999px;
-    animation: chainOpportunityBeatPulse 0.86s ease-in-out infinite;
-    background: color-mix(in srgb, var(--theme-border-cyan) 72%, white);
-    box-shadow: 0 0 0.22rem color-mix(in srgb, var(--theme-border-cyan) 24%, transparent);
-}
-
-.traitPreviewBeatPips i[data-preview-beat-focus='primary'] {
-    width: 0.42rem;
-    box-shadow:
-        0 0 0.38rem color-mix(in srgb, currentColor 46%, transparent),
-        0 0 0 1px color-mix(in srgb, white 18%, transparent);
-}
-
-.traitPreviewBeatPips i[data-preview-beat-focus='support'] {
-    opacity: 0.72;
-}
-
-.traitPreviewBeatPips i:nth-child(2) {
-    animation-delay: 0.07s;
-}
-
-.traitPreviewBeatPips i:nth-child(3) {
-    animation-delay: 0.14s;
-}
-
-.traitPreviewBeatPips i:nth-child(4) {
-    animation-delay: 0.21s;
 }
 
 .traitPreviewAction {
@@ -1481,52 +561,10 @@ block board gestures so pan/zoom does not fight the deal. */
     text-transform: uppercase;
 }
 
-.traitPreviewActionBeatPips {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.04rem;
-    margin-left: 0.08rem;
-}
-
-.traitPreviewActionBeatPips i {
-    display: block;
-    width: 0.1rem;
-    height: 0.1rem;
-    border-radius: 999px;
-    animation: chainOpportunityBeatPulse 0.86s ease-in-out infinite;
-    background: color-mix(in srgb, currentColor 72%, white);
-    box-shadow: 0 0 0.14rem color-mix(in srgb, currentColor 18%, transparent);
-}
-
-.traitPreviewActionBeatPips i[data-preview-action-beat-focus='primary'] {
-    width: 0.2rem;
-    box-shadow:
-        0 0 0.24rem color-mix(in srgb, currentColor 28%, transparent),
-        0 0 0 1px color-mix(in srgb, white 12%, transparent);
-}
-
-.traitPreviewActionBeatPips i[data-preview-action-beat-focus='support'] {
-    opacity: 0.64;
-}
-
 .traitPreviewChip[data-preview-kind='pickup'] .traitPreviewSignal {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 42%, transparent);
     background: color-mix(in srgb, var(--theme-gold-bright) 12%, transparent);
     color: color-mix(in srgb, var(--theme-gold-bright) 86%, white);
-}
-
-.traitPreviewChip[data-preview-kind='pickup'] .traitPreviewSignalMeterFill {
-    background: linear-gradient(
-        90deg,
-        color-mix(in srgb, var(--theme-gold-bright) 84%, white),
-        color-mix(in srgb, var(--theme-cyan-bright) 72%, white)
-    );
-}
-
-.traitPreviewChip[data-preview-kind='pickup'] .traitPreviewBeatPips i,
-.traitPreviewChip[data-preview-tone='cashout'] .traitPreviewBeatPips i {
-    background: color-mix(in srgb, var(--theme-gold-bright) 84%, white);
-    box-shadow: 0 0 0.3rem color-mix(in srgb, var(--theme-gold-bright) 34%, transparent);
 }
 
 .traitPreviewChip[data-preview-kind='hazard'] .traitPreviewSignal {
@@ -1535,39 +573,10 @@ block board gestures so pan/zoom does not fight the deal. */
     color: color-mix(in srgb, var(--theme-danger) 78%, white);
 }
 
-.traitPreviewChip[data-preview-kind='hazard'] .traitPreviewSignalMeterFill {
-    background: linear-gradient(
-        90deg,
-        color-mix(in srgb, var(--theme-danger) 84%, white),
-        color-mix(in srgb, var(--theme-gold-bright) 68%, white)
-    );
-}
-
-.traitPreviewChip[data-preview-kind='hazard'] .traitPreviewBeatPips i,
-.traitPreviewChip[data-preview-tone='hazard'] .traitPreviewBeatPips i {
-    background: color-mix(in srgb, var(--theme-danger) 76%, white);
-    box-shadow: 0 0 0.28rem color-mix(in srgb, var(--theme-danger) 30%, transparent);
-}
-
 .traitPreviewChip[data-preview-tone='setup'] .traitPreviewAction {
     border-color: color-mix(in srgb, var(--theme-border-cyan) 44%, transparent);
     background: color-mix(in srgb, var(--theme-border-cyan) 12%, transparent);
     color: color-mix(in srgb, var(--theme-border-cyan) 84%, white);
-}
-
-.traitPreviewChip[data-preview-tone='setup'] .traitPreviewBeatPips i,
-.traitPreviewChip[data-preview-tone='trait'] .traitPreviewBeatPips i {
-    background: color-mix(in srgb, var(--theme-border-cyan) 82%, white);
-    box-shadow: 0 0 0.28rem color-mix(in srgb, var(--theme-border-cyan) 30%, transparent);
-}
-
-.traitPreviewChip[data-preview-tone='setup'] .traitPreviewSignalMeterFill,
-.traitPreviewChip[data-preview-tone='trait'] .traitPreviewSignalMeterFill {
-    background: linear-gradient(
-        90deg,
-        color-mix(in srgb, var(--theme-border-cyan) 82%, white),
-        color-mix(in srgb, var(--theme-gold-bright) 68%, white)
-    );
 }
 
 .traitPreviewChip[data-preview-tone='pickup'] .traitPreviewAction,
@@ -1585,14 +594,6 @@ block board gestures so pan/zoom does not fight the deal. */
         radial-gradient(circle at 20% 0%, color-mix(in srgb, var(--theme-danger) 16%, transparent), transparent 68%),
         color-mix(in srgb, var(--theme-danger) 12%, transparent);
     color: color-mix(in srgb, var(--theme-danger) 78%, white);
-}
-
-.traitPreviewChip[data-preview-tone='hazard'] .traitPreviewSignalMeterFill {
-    background: linear-gradient(
-        90deg,
-        color-mix(in srgb, var(--theme-danger) 84%, white),
-        color-mix(in srgb, var(--theme-border-cyan) 72%, white)
-    );
 }
 
 .traitPreviewChip[data-preview-screen-cue='burst'] {
@@ -1636,34 +637,6 @@ block board gestures so pan/zoom does not fight the deal. */
     overflow-wrap: anywhere;
 }
 
-.traitPreviewCashoutBeatPips {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.04rem;
-    margin-left: 0.08rem;
-}
-
-.traitPreviewCashoutBeatPips i {
-    display: block;
-    width: 0.1rem;
-    height: 0.1rem;
-    border-radius: 999px;
-    animation: chainOpportunityBeatPulse 0.86s ease-in-out infinite;
-    background: color-mix(in srgb, currentColor 72%, white);
-    box-shadow: 0 0 0.14rem color-mix(in srgb, currentColor 18%, transparent);
-}
-
-.traitPreviewCashoutBeatPips i[data-preview-cashout-beat-focus='primary'] {
-    width: 0.2rem;
-    box-shadow:
-        0 0 0.24rem color-mix(in srgb, currentColor 28%, transparent),
-        0 0 0 1px color-mix(in srgb, white 12%, transparent);
-}
-
-.traitPreviewCashoutBeatPips i[data-preview-cashout-beat-focus='support'] {
-    opacity: 0.64;
-}
-
 .traitPreviewLine {
     display: inline-flex;
     align-items: center;
@@ -1674,34 +647,6 @@ block board gestures so pan/zoom does not fight the deal. */
     font-size: clamp(0.75rem, 1.35vmin, 0.78rem);
     font-weight: 720;
     line-height: 1.2;
-}
-
-.traitPreviewLineBeatPips {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.04rem;
-    margin-left: 0.08rem;
-}
-
-.traitPreviewLineBeatPips i {
-    display: block;
-    width: 0.1rem;
-    height: 0.1rem;
-    border-radius: 999px;
-    animation: chainOpportunityBeatPulse 0.86s ease-in-out infinite;
-    background: color-mix(in srgb, currentColor 72%, white);
-    box-shadow: 0 0 0.14rem color-mix(in srgb, currentColor 18%, transparent);
-}
-
-.traitPreviewLineBeatPips i[data-preview-line-beat-focus='primary'] {
-    width: 0.2rem;
-    box-shadow:
-        0 0 0.24rem color-mix(in srgb, currentColor 28%, transparent),
-        0 0 0 1px color-mix(in srgb, white 12%, transparent);
-}
-
-.traitPreviewLineBeatPips i[data-preview-line-beat-focus='support'] {
-    opacity: 0.64;
 }
 
 .traitPreviewLine[data-preview-line-focus='primary'] {
@@ -1738,24 +683,10 @@ block board gestures so pan/zoom does not fight the deal. */
     color: color-mix(in srgb, var(--theme-border-cyan) 88%, white);
 }
 
-:global([data-reduce-motion='true']) .motionChip {
-    display: none;
-}
-
 :global([data-reduce-motion='true']) .trapResolutionToast {
     animation: none;
 }
 
-:global([data-reduce-motion='true']) .opportunityLaneBeatPips i,
-:global([data-reduce-motion='true']) .opportunityLaneMapSummaryBeatPips i,
-:global([data-reduce-motion='true']) .opportunityPrimaryLaneBeatPips i,
-:global([data-reduce-motion='true']) .activePowerBoardStepBeatPips i,
-:global([data-reduce-motion='true']) .trapResolutionBeatPips i,
-:global([data-reduce-motion='true']) .traitPreviewActionBeatPips i,
-:global([data-reduce-motion='true']) .traitPreviewCashoutBeatPips i,
-:global([data-reduce-motion='true']) .traitPreviewLineBeatPips i,
-:global([data-reduce-motion='true']) .traitPreviewBeatPips i,
-:global([data-reduce-motion='true']) .traitPreviewSummaryBeatPips i,
 :global([data-reduce-motion='true']) .traitPreviewChip[data-preview-kind='hazard'],
 :global([data-reduce-motion='true']) .traitPreviewChip[data-preview-kind='pickup'],
 :global([data-reduce-motion='true']) .traitPreviewChip[data-preview-screen-cue='burst'] {
@@ -1772,70 +703,7 @@ block board gestures so pan/zoom does not fight the deal. */
         align-items: stretch;
         flex-direction: column;
         max-width: min(18rem, calc(100% - 1rem));
-    }
-
-    .chainOpportunityArcadeCallout {
-        grid-template-columns: 1fr;
-        max-width: 100%;
-    }
-
-    .chainOpportunityPrimaryShot {
-        grid-template-areas:
-            'label action'
-            'detail detail'
-            'pips cadence';
-        grid-template-columns: auto minmax(0, 1fr);
-        max-width: 100%;
-    }
-
-    .chainOpportunityShotMap {
-        grid-auto-flow: row;
-        grid-auto-columns: auto;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        max-width: 100%;
-    }
-
-    .chainOpportunityShotMap > small {
-        grid-column: 1 / -1;
-    }
-
-    .chainOpportunityRewardLadder {
-        display: none;
-    }
-
-    .opportunityCompass {
-        bottom: clamp(2.8rem, 7vmin, 3.35rem);
-        gap: 0.18rem;
-        width: min(24rem, calc(100% - 0.8rem));
-    }
-
-    .opportunityPayoffStack {
-        grid-template-columns: auto auto minmax(0, 1fr);
-    }
-
-    .opportunityPayoffStack u,
-.opportunityPayoffStack b {
-        display: none;
-    }
-
-    .opportunityLaneMap > span {
-        max-width: 7.2rem;
-        padding-inline: 0.28rem;
-    }
-
-    .opportunityLaneMap em {
-        display: none;
-    }
-
-    .opportunityCompassRow {
-        min-height: 2.45rem;
-        padding: 0.28rem 0.36rem;
-    }
-
-    .opportunityCompassRow em {
-        display: none;
-    }
-}
+    }}
 
 .scene {
     position: absolute;
@@ -1859,22 +727,12 @@ block board gestures so pan/zoom does not fight the deal. */
 @media (max-width: 760px) {
     .stage {
         inset: 0.3rem;
-    }
-
-    .stageMobileCamera {
-        inset: 0;
-    }
-}
+    }}
 
 @media (max-width: 430px) {
     .stage {
         inset: 0.2rem;
-    }
-
-    .stageMobileCamera {
-        inset: 0;
-    }
-}
+    }}
 
 .prestageOverlay {
     position: absolute;
@@ -2052,5 +910,4 @@ block board gestures so pan/zoom does not fight the deal. */
         filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.28));
         transform: translate3d(var(--stack-x), var(--stack-y), var(--stack-z))
             rotateX(44deg) rotateY(-24deg) rotateZ(calc(-5deg + var(--deck-i, 0) * 0.65deg));
-    }
-}
+    }}

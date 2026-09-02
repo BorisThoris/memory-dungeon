@@ -1994,66 +1994,12 @@ describe('GameScreen (OVR-014)', () => {
             </PlatformTiltProvider>
         );
 
-        expect(screen.getByTestId('gambit-opportunity-hint')).toHaveTextContent('one more flip is available');
-        expect(screen.getByTestId('gambit-opportunity-signals')).toHaveTextContent('Third flip');
-        expect(screen.getByTestId('gambit-opportunity-signals')).toHaveTextContent('Recover pair');
-        expect(screen.getByTestId('gambit-opportunity-signals')).toHaveTextContent('No perfect');
-        expect(screen.getByTestId('gambit-opportunity-signals').querySelector('[data-gambit-signal="window"]')).toHaveAttribute(
-            'data-gambit-signal-beats',
-            '2'
-        );
-        expect(screen.getByTestId('gambit-opportunity-signals').querySelector('[data-gambit-signal="window"]')).toHaveAttribute(
-            'data-gambit-signal-audio',
-            'gambit-window'
-        );
-        expect(screen.getByTestId('gambit-opportunity-signals').querySelector('[data-gambit-signal="window"]')).toHaveAttribute(
-            'data-gambit-signal-screen-cue',
-            'window'
-        );
-        expect(screen.getByTestId('gambit-opportunity-signals').querySelector('[data-gambit-signal="payoff"]')).toHaveAttribute(
-            'data-gambit-signal-beats',
-            '4'
-        );
-        expect(screen.getByTestId('gambit-opportunity-signals').querySelector('[data-gambit-signal="payoff"]')).toHaveAttribute(
-            'data-gambit-signal-audio',
-            'gambit-payoff'
-        );
-        expect(screen.getByTestId('gambit-opportunity-signals').querySelector('[data-gambit-signal="payoff"]')).toHaveAttribute(
-            'data-gambit-signal-screen-cue',
-            'burst'
-        );
-        expect(
-            screen
-                .getByTestId('gambit-opportunity-signals')
-                .querySelector('[data-gambit-signal="payoff"]')
-                ?.querySelectorAll('[data-gambit-signal-beat]')
-        ).toHaveLength(4);
-        expect(
-            screen
-                .getByTestId('gambit-opportunity-signals')
-                .querySelector('[data-gambit-signal="payoff"] [data-gambit-signal-beat="1"]')
-        ).toHaveAttribute('data-gambit-signal-beat-focus', 'primary');
-        expect(
-            screen
-                .getByTestId('gambit-opportunity-signals')
-                .querySelector('[data-gambit-signal="payoff"] [data-gambit-signal-beat="2"]')
-        ).toHaveAttribute('data-gambit-signal-beat-focus', 'support');
-        expect(screen.getByTestId('gambit-opportunity-signals').querySelector('[data-gambit-signal="cost"]')).toHaveAttribute(
-            'data-gambit-signal-beats',
-            '3'
-        );
-        expect(screen.getByTestId('gambit-opportunity-signals').querySelector('[data-gambit-signal="cost"]')).toHaveAttribute(
-            'data-gambit-signal-audio',
-            'gambit-cost'
-        );
-        expect(screen.getByTestId('gambit-opportunity-signals').querySelector('[data-gambit-signal="cost"]')).toHaveAttribute(
-            'data-gambit-signal-screen-cue',
-            'risk'
-        );
-        expect(screen.getByTestId('gambit-opportunity-signals')).toHaveAttribute(
-            'aria-label',
-            'Gambit opportunity signals. Window: Third flip. Payoff: Recover pair. Cost: No perfect.'
-        );
+        // The hint already says it: one line, no restatement in three pip blocks beside it.
+        const hint = screen.getByTestId('gambit-opportunity-hint');
+        expect(hint).toHaveTextContent('one more flip is available');
+        expect(hint).toHaveTextContent('locks Perfect Memory');
+        expect(screen.queryByTestId('gambit-opportunity-signals')).toBeNull();
+        expect(hint.querySelectorAll('*')).toHaveLength(0);
     });
 
     it('shows a free proceed action for terminal key-lock fallback exits', () => {
