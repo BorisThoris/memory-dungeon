@@ -3,7 +3,8 @@ import {
     expectGameplayReady,
     forceCurrentRunGameOverViaE2eHook,
     forceGameOverViaE2eHook,
-    openPlayablePathFixture
+    openPlayablePathFixture,
+    openRunMenuItem
 } from './playablePathHelpers';
 import {
     buildFreshProfileSaveJson,
@@ -229,7 +230,7 @@ async function openInventoryFromToolbar(page: Page): Promise<void> {
         if (await inventory.isVisible().catch(() => false)) {
             return;
         }
-        await page.getByTestId('game-toolbar-inventory').evaluate((el) => (el as HTMLButtonElement).click());
+        await openRunMenuItem(page, 'inventory');
         await expect(inventory).toBeVisible({ timeout: 5_000 });
     }).toPass({ timeout: 20_000 });
 }

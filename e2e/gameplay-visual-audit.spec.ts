@@ -18,7 +18,8 @@ import {
 } from './visualScreenHelpers';
 import {
     expectGameplayReady,
-    openPlayablePathFixture
+    openPlayablePathFixture,
+    openRunMenuItem
 } from './playablePathHelpers';
 
 type GridPosition = { col: number; row: number };
@@ -131,12 +132,12 @@ async function captureOverlayStates(page: Page, viewportId: string): Promise<voi
     await runSettings.getByRole('button', { name: /^back$/i }).click();
     await expect(runSettings).toBeHidden({ timeout: 15_000 });
 
-    await page.getByTestId('game-toolbar-inventory').click({ force: true });
+    await openRunMenuItem(page, 'inventory');
     await expect(page.getByRole('region', { name: /inventory/i })).toBeVisible({ timeout: 20_000 });
     await capture(page, viewportId, '07-in-run-inventory');
     await page.getByRole('button', { name: /^back$/i }).click();
 
-    await page.getByTestId('game-toolbar-codex').click({ force: true });
+    await openRunMenuItem(page, 'codex');
     await expect(page.getByRole('region', { name: /codex/i })).toBeVisible({ timeout: 20_000 });
     await capture(page, viewportId, '08-in-run-codex');
 

@@ -11,8 +11,6 @@ import {
     ENCYCLOPEDIA_SETTINGS_AND_ASSISTS_TOPICS,
     ENCYCLOPEDIA_VERSION
 } from '../../shared/game-catalog';
-import { getCodexKnowledgeBaseRows } from '../../shared/codex-knowledge-base';
-import { getCodexRewardSignal } from '../../shared/meta-reward-signals';
 import { getTileTraitCodexRows, getTileTraitInteractionCodexRows } from '../../shared/tile-trait-codex';
 import { getUiStateCopy } from '../../shared/ui-state-copy';
 import { Eyebrow, MetaFrame, Panel, ScreenTitle, UiButton } from '../ui';
@@ -46,18 +44,14 @@ interface CodexScreenProps {
     stackedOnGameplay?: boolean;
 }
 
-const formatCodexRewardSignalLabel = (signal: { body: string; cta: string; title: string }): string =>
-    `Codex reward signal. ${signal.title}. ${signal.body} Next: ${signal.cta}.`;
-
 const CodexScreen = ({ stackedOnGameplay = false }: CodexScreenProps) => {
-    const { closeSubscreen, saveData, settings } = useAppStore(
+    const { closeSubscreen, settings } = useAppStore(
         useShallow((state) => ({
             closeSubscreen: state.closeSubscreen,
-            saveData: state.saveData,
             settings: state.settings
         }))
     );
-    const { shellStageClass, panelClassName, heroPanelClassName, titleLevel } = getMetaSubscreenLayout(
+    const { shellStageClass, panelClassName, titleLevel } = getMetaSubscreenLayout(
         stackedOnGameplay,
         { panel: inRunFramedPanel.inRunPanel, hero: inRunFramedPanel.inRunHeroPanel }
     );
@@ -65,8 +59,6 @@ const CodexScreen = ({ stackedOnGameplay = false }: CodexScreenProps) => {
     const [filterQuery, setFilterQuery] = useState('');
     const [debouncedFilterQuery, setDebouncedFilterQuery] = useState('');
     const [codexTab, setCodexTab] = useState<CodexTab>('all');
-    const codexRewardSignal = getCodexRewardSignal(saveData);
-    const knowledgeRows = getCodexKnowledgeBaseRows();
     const uiGain = uiSfxGainFromSettings(settings.masterVolume, settings.sfxVolume);
     const playUiClick = (): void => {
         resumeUiSfxContext();
@@ -207,28 +199,6 @@ const CodexScreen = ({ stackedOnGameplay = false }: CodexScreenProps) => {
                         </a>
                     ))}
                 </nav>
-
-                <MetaFrame data-testid="codex-knowledge-base-summary">
-                    <Panel className={heroPanelClassName} padding="md" variant="strong">
-                        <div className={styles.knowledgeBaseGrid}>
-                            {knowledgeRows.map((row) => (
-                                <div className={styles.knowledgeBaseCard} key={row.id}>
-                                    <strong>{row.title}</strong>
-                                    <span>{row.count}</span>
-                                    <p>{row.action}</p>
-                                </div>
-                            ))}
-                        </div>
-                    </Panel>
-                </MetaFrame>
-
-                <MetaFrame aria-label={formatCodexRewardSignalLabel(codexRewardSignal)} data-testid="codex-reward-signal">
-                    <Panel className={panelClassName} padding="md" variant="default">
-                        <strong>{codexRewardSignal.title}</strong>
-                        <p className={metaStyles.subtitle}>{codexRewardSignal.body}</p>
-                        <p className={metaStyles.subtitle}>{codexRewardSignal.cta}</p>
-                    </Panel>
-                </MetaFrame>
 
                 <div className={styles.filterRow}>
                     <label className={styles.filterLabel} htmlFor="codex-filter-query">

@@ -198,7 +198,9 @@ Again + Main Menu, run snapshot, journal, achievements, detail drawer. **Delete:
 
 ## 5. Never-bombarded screens: Inventory, Codex, Settings, Pause
 
-**Status: Inventory, Settings and Pause built; Codex unchanged.** Inventory is one header line plus
+**Status: built.** Codex keeps its tab rail, TOC and filter but opens on the entries: the
+"knowledge-base summary" tiles (Guide depth 91, Table depth 35, Deep links, Filter recovery) and the
+reward-signal frame are gone. Inventory is one header line plus
 Relics, Mutators and Charges. Settings lost the developer control-center strip. Pause is one line and
 three stats under the actions. The global `--ui-font-label` token moved from 0.62rem to 0.75rem, which
 is the 12px floor for every eyebrow and stat label the meta screens share.

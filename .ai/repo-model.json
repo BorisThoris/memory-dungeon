@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2418,
-    "codeFileCount": 908,
-    "exportedSymbolCount": 3464,
+    "trackedFileCount": 2416,
+    "codeFileCount": 906,
+    "exportedSymbolCount": 3458,
     "contentItemCount": 57,
     "mechanicCount": 130,
     "stateFieldCount": 144,
-    "relationshipCount": 9995
+    "relationshipCount": 9974
   },
   "inventory": [
     {
@@ -2313,8 +2313,8 @@
     {
       "path": "docs/UI_RETHINK_PLAN.md",
       "category": "documentation",
-      "bytes": 21260,
-      "sha256": "1a65e0c73e4712afa2fa5ee7451a8e30a495176eaed1d9658e65e68b75ab1512"
+      "bytes": 21415,
+      "sha256": "faf068d630ed08f151df5ad73e51c484f99fae3df7823422563c67123a33fa5d"
     },
     {
       "path": "docs/UI_TASKS/README.md",
@@ -3621,8 +3621,8 @@
     {
       "path": "e2e/gameplay-visual-audit.spec.ts",
       "category": "test",
-      "bytes": 12570,
-      "sha256": "1de1e986f186903c6b1d8a2c75b680515f0940c86163b5df838c5fe76a0de0cd"
+      "bytes": 12529,
+      "sha256": "9950a6f0ae4ec8570428db8bec0f4998439895dceabc6cf93e5347282c87cad3"
     },
     {
       "path": "e2e/long-run-feedback-hud.spec.ts",
@@ -3657,8 +3657,8 @@
     {
       "path": "e2e/navigation-flow.spec.ts",
       "category": "test",
-      "bytes": 5929,
-      "sha256": "6d87fc78a1aa54fa881b87eb80c09cfcb3122704746c65d85f6686c372812706"
+      "bytes": 5806,
+      "sha256": "163a1860f244227898a79c703610c7ddbd61af427aea464817e4a0f4f019144d"
     },
     {
       "path": "e2e/overlay-smoke.spec.ts",
@@ -3669,8 +3669,8 @@
     {
       "path": "e2e/playable-path-interludes.spec.ts",
       "category": "test",
-      "bytes": 14342,
-      "sha256": "59e80dc3f8875fc7dbf670c1e96c452ae3d861cb9cd93df0730c69fc4dd017a0"
+      "bytes": 14303,
+      "sha256": "42cd2ea27b75b16278a5eac266a7bbda793f340cb590407b823a056b34f9cd8a"
     },
     {
       "path": "e2e/playable-path-mode-matrix.spec.ts",
@@ -3681,14 +3681,14 @@
     {
       "path": "e2e/playable-path-navigation.spec.ts",
       "category": "test",
-      "bytes": 10875,
-      "sha256": "7e77a6d2bfb7c27396b66e97e0c49e0ff17323411e7559e446aace920826ded3"
+      "bytes": 10560,
+      "sha256": "7a2ac53de68ee1cabfadc7371bbbff913776896446d5714560805278563499f4"
     },
     {
       "path": "e2e/playablePathHelpers.ts",
       "category": "test",
-      "bytes": 10189,
-      "sha256": "662ab669c4eb8250d5598a9133127daa938d915d8f02d6305d5e60df69607ff4"
+      "bytes": 10756,
+      "sha256": "0f497b2a76c49e20af0fe8eb5a759fc1f1c8ee47018758eb225fa0bcf555228e"
     },
     {
       "path": "e2e/pngDiff.ts",
@@ -3837,8 +3837,8 @@
     {
       "path": "e2e/visualScenarioSteps.ts",
       "category": "test",
-      "bytes": 11909,
-      "sha256": "b2e538a98037fce3e49103cb80c03cbb073c49dc63a34dc9333247bc03a0703e"
+      "bytes": 11708,
+      "sha256": "8400fcdde3a86980fb9b3eb0c24ec3ecbd5d66b99f2f705a5b12a19b56ea9eaf"
     },
     {
       "path": "e2e/visualScreenHelpers.ts",
@@ -7360,19 +7360,19 @@
       "path": "src/renderer/components/CodexScreen.module.css",
       "category": "source",
       "bytes": 5600,
-      "sha256": "928722d2707c9b3f7c056f1d0e5e2ab7c9b2da950e60ef9f6d7fd1dbf7fca7ff"
+      "sha256": "8bf6ae7bf0b73e1d045b9ed81cce75d974346314fd240e21d60418cad1aa0f27"
     },
     {
       "path": "src/renderer/components/CodexScreen.test.tsx",
       "category": "test",
-      "bytes": 2522,
-      "sha256": "133880aa7ac69cc77703a8ac66195fbc58946ac9078c1a47377383652bf7070e"
+      "bytes": 2403,
+      "sha256": "f50a8aa0e685fbb996c6f5fbf0bce7e2abf52d3dc6daef7ce01eefc2a91c5563"
     },
     {
       "path": "src/renderer/components/CodexScreen.tsx",
       "category": "source",
-      "bytes": 26766,
-      "sha256": "96ab0ff60e79e5f34c574cbfe96e6a870834d3669672987d96e3f4b1d891695f"
+      "bytes": 25018,
+      "sha256": "9d043aadfbc7e7ea0416bbb32c5ee3a16328e4f20b1f52b6d5a806e295e7bcdc"
     },
     {
       "path": "src/renderer/components/codexScreenModel.test.ts",
@@ -7659,8 +7659,8 @@
     {
       "path": "src/renderer/components/MetaScreen.module.css",
       "category": "source",
-      "bytes": 10118,
-      "sha256": "eb6afb20b745874a86fa0643d451024aefa26efb270757046d4cab810a45e840"
+      "bytes": 10119,
+      "sha256": "7ecc716c0c1bb3b9fcd8f36884ef3dd8b8e867bbba340bd0dae195d0c30064d1"
     },
     {
       "path": "src/renderer/components/metaScreenTocNav.test.ts",
@@ -7791,8 +7791,8 @@
     {
       "path": "src/renderer/components/SettingsScreen.module.css",
       "category": "source",
-      "bytes": 30790,
-      "sha256": "ed607938dc9a59b6cf9efa8395b13cf9dd8724cae3439a9a47bc60d902f710dc"
+      "bytes": 30791,
+      "sha256": "1545093e0bfe864f4d402cd600fe74249d2b1a93cb269ca72c40b7579a8e9e1a"
     },
     {
       "path": "src/renderer/components/SettingsScreen.test.tsx",
@@ -9706,7 +9706,7 @@
       "path": "src/renderer/styles/theme.ts",
       "category": "source",
       "bytes": 26914,
-      "sha256": "eb02d37cfb6f9074bff8274179a36dfe0517ab2759414c308c1b63a058340aec"
+      "sha256": "9ad28757608317cffab2ea4892cee04272743f21ddf5e01df2aa83f06f589549"
     },
     {
       "path": "src/renderer/styles/theme.wcag.test.ts",
@@ -9730,7 +9730,7 @@
       "path": "src/renderer/ui/Eyebrow.module.css",
       "category": "source",
       "bytes": 373,
-      "sha256": "159273356f8e9f369a81522200fa4651860dd097854514ef3d73ee1ac6873cd3"
+      "sha256": "17a651f0afb80d2fd2b1e6c1ed4d076429a7f3c6ab6e41943579dabfff09b9bb"
     },
     {
       "path": "src/renderer/ui/Eyebrow.tsx",
@@ -10133,18 +10133,6 @@
       "category": "test",
       "bytes": 2524,
       "sha256": "42e28f4369ece6971870280478cd87dda46a4a6454e9f6cd094b24ea1b11b361"
-    },
-    {
-      "path": "src/shared/codex-knowledge-base.test.ts",
-      "category": "test",
-      "bytes": 1424,
-      "sha256": "c86cd2f869e044ee4da1825a961b881567317a117d65602830184e4aa39d95a9"
-    },
-    {
-      "path": "src/shared/codex-knowledge-base.ts",
-      "category": "source",
-      "bytes": 5108,
-      "sha256": "969b7b2f5e8e3942a7b962428c4516c865f51c9fe308394ac5368c34feae4915"
     },
     {
       "path": "src/shared/collection-reward-gallery.test.ts",
@@ -16415,7 +16403,7 @@
       "path": "src/renderer/components/CodexScreen.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 62,
+      "lineCount": 57,
       "imports": [
         "file:src/renderer/components/CodexScreen.tsx",
         "file:src/shared/save-data.ts"
@@ -16428,7 +16416,7 @@
       "path": "src/renderer/components/CodexScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 546,
+      "lineCount": 516,
       "imports": [
         "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/components/codexScreenModel.ts",
@@ -16436,9 +16424,7 @@
         "file:src/renderer/components/metaStackedShellLayout.ts",
         "file:src/renderer/store/useAppStore.ts",
         "file:src/renderer/ui/index.ts",
-        "file:src/shared/codex-knowledge-base.ts",
         "file:src/shared/game-catalog.ts",
-        "file:src/shared/meta-reward-signals.ts",
         "file:src/shared/tile-trait-codex.ts",
         "file:src/shared/ui-state-copy.ts"
       ],
@@ -23470,7 +23456,6 @@
       ],
       "testedBy": [
         "file:src/shared/achievements.test.ts",
-        "file:src/shared/codex-knowledge-base.test.ts",
         "file:src/shared/mechanics-catalog-appendix-builder.test.ts"
       ]
     },
@@ -24472,46 +24457,6 @@
       "testedBy": []
     },
     {
-      "id": "file:src/shared/codex-knowledge-base.test.ts",
-      "path": "src/shared/codex-knowledge-base.test.ts",
-      "layer": "shared",
-      "role": "test",
-      "lineCount": 28,
-      "imports": [
-        "file:src/shared/achievements.ts",
-        "file:src/shared/codex-knowledge-base.ts",
-        "file:src/shared/contracts.ts",
-        "file:src/shared/relics.ts"
-      ],
-      "exports": [],
-      "testedBy": []
-    },
-    {
-      "id": "file:src/shared/codex-knowledge-base.ts",
-      "path": "src/shared/codex-knowledge-base.ts",
-      "layer": "shared",
-      "role": "production",
-      "lineCount": 147,
-      "imports": [
-        "file:src/shared/achievements.ts",
-        "file:src/shared/contracts.ts",
-        "file:src/shared/mechanics-encyclopedia.ts",
-        "file:src/shared/relics.ts",
-        "file:src/shared/tile-trait-codex.ts"
-      ],
-      "exports": [
-        "symbol:src/shared/codex-knowledge-base.ts#CodexKnowledgeBaseRow",
-        "symbol:src/shared/codex-knowledge-base.ts#codexKnowledgeHasLocalOnlyRows",
-        "symbol:src/shared/codex-knowledge-base.ts#CodexKnowledgeSectionId",
-        "symbol:src/shared/codex-knowledge-base.ts#CodexKnowledgeSectionRow",
-        "symbol:src/shared/codex-knowledge-base.ts#getCodexKnowledgeBaseRows",
-        "symbol:src/shared/codex-knowledge-base.ts#getCodexKnowledgeSectionRows"
-      ],
-      "testedBy": [
-        "file:src/shared/codex-knowledge-base.test.ts"
-      ]
-    },
-    {
       "id": "file:src/shared/collection-reward-gallery.test.ts",
       "path": "src/shared/collection-reward-gallery.test.ts",
       "layer": "shared",
@@ -24817,7 +24762,6 @@
         "file:src/shared/boss-encounters.test.ts",
         "file:src/shared/build-strategy-playthrough-simulation.test.ts",
         "file:src/shared/build-strategy-simulation.test.ts",
-        "file:src/shared/codex-knowledge-base.test.ts",
         "file:src/shared/combo-shard-rules.test.ts",
         "file:src/shared/difficulty-profile.test.ts",
         "file:src/shared/dungeon-blueprint-policy-rules.test.ts",
@@ -29908,7 +29852,6 @@
       ],
       "testedBy": [
         "file:src/renderer/components/codexScreenModel.test.ts",
-        "file:src/shared/codex-knowledge-base.test.ts",
         "file:src/shared/exploit-surface.test.ts",
         "file:src/shared/game-catalog.test.ts",
         "file:src/shared/game.test.ts",
@@ -34944,8 +34887,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/CodexScreen.tsx",
-      "line": 545,
-      "endLine": 545
+      "line": 515,
+      "endLine": 515
     },
     {
       "id": "symbol:src/renderer/components/codexScreenModel.ts#buildCodexBuildRows",
@@ -44834,54 +44777,6 @@
       "file": "src/shared/challenge-progression.ts",
       "line": 204,
       "endLine": 217
-    },
-    {
-      "id": "symbol:src/shared/codex-knowledge-base.ts#CodexKnowledgeBaseRow",
-      "name": "CodexKnowledgeBaseRow",
-      "kind": "interface",
-      "file": "src/shared/codex-knowledge-base.ts",
-      "line": 101,
-      "endLine": 107
-    },
-    {
-      "id": "symbol:src/shared/codex-knowledge-base.ts#codexKnowledgeHasLocalOnlyRows",
-      "name": "codexKnowledgeHasLocalOnlyRows",
-      "kind": "value",
-      "file": "src/shared/codex-knowledge-base.ts",
-      "line": 145,
-      "endLine": 146
-    },
-    {
-      "id": "symbol:src/shared/codex-knowledge-base.ts#CodexKnowledgeSectionId",
-      "name": "CodexKnowledgeSectionId",
-      "kind": "type",
-      "file": "src/shared/codex-knowledge-base.ts",
-      "line": 17,
-      "endLine": 23
-    },
-    {
-      "id": "symbol:src/shared/codex-knowledge-base.ts#CodexKnowledgeSectionRow",
-      "name": "CodexKnowledgeSectionRow",
-      "kind": "interface",
-      "file": "src/shared/codex-knowledge-base.ts",
-      "line": 25,
-      "endLine": 32
-    },
-    {
-      "id": "symbol:src/shared/codex-knowledge-base.ts#getCodexKnowledgeBaseRows",
-      "name": "getCodexKnowledgeBaseRows",
-      "kind": "value",
-      "file": "src/shared/codex-knowledge-base.ts",
-      "line": 109,
-      "endLine": 143
-    },
-    {
-      "id": "symbol:src/shared/codex-knowledge-base.ts#getCodexKnowledgeSectionRows",
-      "name": "getCodexKnowledgeSectionRows",
-      "kind": "value",
-      "file": "src/shared/codex-knowledge-base.ts",
-      "line": 34,
-      "endLine": 99
     },
     {
       "id": "symbol:src/shared/collection-reward-gallery.ts#CollectionRewardGalleryRow",
@@ -80967,42 +80862,6 @@
       "kind": "exports"
     },
     {
-      "id": "exports:src/shared/codex-knowledge-base.ts->symbol:src/shared/codex-knowledge-base.ts#CodexKnowledgeBaseRow",
-      "source": "file:src/shared/codex-knowledge-base.ts",
-      "target": "symbol:src/shared/codex-knowledge-base.ts#CodexKnowledgeBaseRow",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/codex-knowledge-base.ts->symbol:src/shared/codex-knowledge-base.ts#codexKnowledgeHasLocalOnlyRows",
-      "source": "file:src/shared/codex-knowledge-base.ts",
-      "target": "symbol:src/shared/codex-knowledge-base.ts#codexKnowledgeHasLocalOnlyRows",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/codex-knowledge-base.ts->symbol:src/shared/codex-knowledge-base.ts#CodexKnowledgeSectionId",
-      "source": "file:src/shared/codex-knowledge-base.ts",
-      "target": "symbol:src/shared/codex-knowledge-base.ts#CodexKnowledgeSectionId",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/codex-knowledge-base.ts->symbol:src/shared/codex-knowledge-base.ts#CodexKnowledgeSectionRow",
-      "source": "file:src/shared/codex-knowledge-base.ts",
-      "target": "symbol:src/shared/codex-knowledge-base.ts#CodexKnowledgeSectionRow",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/codex-knowledge-base.ts->symbol:src/shared/codex-knowledge-base.ts#getCodexKnowledgeBaseRows",
-      "source": "file:src/shared/codex-knowledge-base.ts",
-      "target": "symbol:src/shared/codex-knowledge-base.ts#getCodexKnowledgeBaseRows",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/codex-knowledge-base.ts->symbol:src/shared/codex-knowledge-base.ts#getCodexKnowledgeSectionRows",
-      "source": "file:src/shared/codex-knowledge-base.ts",
-      "target": "symbol:src/shared/codex-knowledge-base.ts#getCodexKnowledgeSectionRows",
-      "kind": "exports"
-    },
-    {
       "id": "exports:src/shared/collection-reward-gallery.ts->symbol:src/shared/collection-reward-gallery.ts#CollectionRewardGalleryRow",
       "source": "file:src/shared/collection-reward-gallery.ts",
       "target": "symbol:src/shared/collection-reward-gallery.ts#CollectionRewardGalleryRow",
@@ -97639,21 +97498,9 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/CodexScreen.tsx->src/shared/codex-knowledge-base.ts",
-      "source": "file:src/renderer/components/CodexScreen.tsx",
-      "target": "file:src/shared/codex-knowledge-base.ts",
-      "kind": "imports"
-    },
-    {
       "id": "imports:src/renderer/components/CodexScreen.tsx->src/shared/game-catalog.ts",
       "source": "file:src/renderer/components/CodexScreen.tsx",
       "target": "file:src/shared/game-catalog.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/CodexScreen.tsx->src/shared/meta-reward-signals.ts",
-      "source": "file:src/renderer/components/CodexScreen.tsx",
-      "target": "file:src/shared/meta-reward-signals.ts",
       "kind": "imports"
     },
     {
@@ -106312,60 +106159,6 @@
       "id": "imports:src/shared/challenge-progression.ts->src/shared/run-number-guards.ts",
       "source": "file:src/shared/challenge-progression.ts",
       "target": "file:src/shared/run-number-guards.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/codex-knowledge-base.test.ts->src/shared/achievements.ts",
-      "source": "file:src/shared/codex-knowledge-base.test.ts",
-      "target": "file:src/shared/achievements.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/codex-knowledge-base.test.ts->src/shared/codex-knowledge-base.ts",
-      "source": "file:src/shared/codex-knowledge-base.test.ts",
-      "target": "file:src/shared/codex-knowledge-base.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/codex-knowledge-base.test.ts->src/shared/contracts.ts",
-      "source": "file:src/shared/codex-knowledge-base.test.ts",
-      "target": "file:src/shared/contracts.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/codex-knowledge-base.test.ts->src/shared/relics.ts",
-      "source": "file:src/shared/codex-knowledge-base.test.ts",
-      "target": "file:src/shared/relics.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/codex-knowledge-base.ts->src/shared/achievements.ts",
-      "source": "file:src/shared/codex-knowledge-base.ts",
-      "target": "file:src/shared/achievements.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/codex-knowledge-base.ts->src/shared/contracts.ts",
-      "source": "file:src/shared/codex-knowledge-base.ts",
-      "target": "file:src/shared/contracts.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/codex-knowledge-base.ts->src/shared/mechanics-encyclopedia.ts",
-      "source": "file:src/shared/codex-knowledge-base.ts",
-      "target": "file:src/shared/mechanics-encyclopedia.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/codex-knowledge-base.ts->src/shared/relics.ts",
-      "source": "file:src/shared/codex-knowledge-base.ts",
-      "target": "file:src/shared/relics.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/codex-knowledge-base.ts->src/shared/tile-trait-codex.ts",
-      "source": "file:src/shared/codex-knowledge-base.ts",
-      "target": "file:src/shared/tile-trait-codex.ts",
       "kind": "imports"
     },
     {
@@ -122321,12 +122114,6 @@
       "kind": "tested_by"
     },
     {
-      "id": "tested_by:src/shared/achievements.ts->file:src/shared/codex-knowledge-base.test.ts",
-      "source": "file:src/shared/achievements.ts",
-      "target": "file:src/shared/codex-knowledge-base.test.ts",
-      "kind": "tested_by"
-    },
-    {
       "id": "tested_by:src/shared/achievements.ts->file:src/shared/mechanics-catalog-appendix-builder.test.ts",
       "source": "file:src/shared/achievements.ts",
       "target": "file:src/shared/mechanics-catalog-appendix-builder.test.ts",
@@ -122672,12 +122459,6 @@
       "id": "tested_by:src/shared/challenge-progression.ts->file:src/shared/challenge-progression.test.ts",
       "source": "file:src/shared/challenge-progression.ts",
       "target": "file:src/shared/challenge-progression.test.ts",
-      "kind": "tested_by"
-    },
-    {
-      "id": "tested_by:src/shared/codex-knowledge-base.ts->file:src/shared/codex-knowledge-base.test.ts",
-      "source": "file:src/shared/codex-knowledge-base.ts",
-      "target": "file:src/shared/codex-knowledge-base.test.ts",
       "kind": "tested_by"
     },
     {
@@ -123194,12 +122975,6 @@
       "id": "tested_by:src/shared/contracts.ts->file:src/shared/build-strategy-simulation.test.ts",
       "source": "file:src/shared/contracts.ts",
       "target": "file:src/shared/build-strategy-simulation.test.ts",
-      "kind": "tested_by"
-    },
-    {
-      "id": "tested_by:src/shared/contracts.ts->file:src/shared/codex-knowledge-base.test.ts",
-      "source": "file:src/shared/contracts.ts",
-      "target": "file:src/shared/codex-knowledge-base.test.ts",
       "kind": "tested_by"
     },
     {
@@ -125468,12 +125243,6 @@
       "id": "tested_by:src/shared/relics.ts->file:src/renderer/components/codexScreenModel.test.ts",
       "source": "file:src/shared/relics.ts",
       "target": "file:src/renderer/components/codexScreenModel.test.ts",
-      "kind": "tested_by"
-    },
-    {
-      "id": "tested_by:src/shared/relics.ts->file:src/shared/codex-knowledge-base.test.ts",
-      "source": "file:src/shared/relics.ts",
-      "target": "file:src/shared/codex-knowledge-base.test.ts",
       "kind": "tested_by"
     },
     {

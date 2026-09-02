@@ -24,18 +24,13 @@ vi.mock('../audio/uiSfx', () => ({
 }));
 
 describe('CodexScreen REG-095 knowledge base', () => {
-    it('surfaces knowledge-base summary and local-only deep-link recovery', () => {
+    it('opens on the tab rail and entries, with no knowledge-base or reward-signal frames', () => {
         render(<CodexScreen />);
 
-        const summary = screen.getByTestId('codex-knowledge-base-summary');
-        expect(summary).toHaveTextContent(/Guide depth/);
-        expect(summary).toHaveTextContent(/Table depth/);
-        expect(summary).toHaveTextContent(/Deep links/);
-        expect(summary).toHaveTextContent(/Filter recovery/);
-
-        expect(screen.getByTestId('codex-reward-signal')).toHaveAccessibleName(
-            /Codex reward signal.*Next:/i
-        );
+        expect(screen.queryByTestId('codex-knowledge-base-summary')).toBeNull();
+        expect(screen.queryByTestId('codex-reward-signal')).toBeNull();
+        expect(screen.getByRole('link', { name: 'Core' })).toBeInTheDocument();
+        expect(screen.getByLabelText(/filter topics/i)).toBeInTheDocument();
     });
 
     it('documents relic build archetypes as the player-facing build language', () => {

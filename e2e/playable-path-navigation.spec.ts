@@ -5,7 +5,8 @@ import {
     expectGameplayReady,
     openModeLibrary,
     openPlayablePathFixture,
-    startClassicFromMenu
+    startClassicFromMenu,
+    openRunMenuItem
 } from './playablePathHelpers';
 import {
     buildVisualSaveJson,
@@ -38,8 +39,7 @@ test.describe('Expanded playable navigation contract', () => {
 
         await page.getByRole('button', { name: /^codex$/i }).click();
         await expect(page.getByRole('region', { name: /codex/i })).toBeVisible();
-        await expect(page.getByTestId('codex-knowledge-base-summary')).toBeVisible();
-        await expect(page.getByTestId('codex-reward-signal')).toBeVisible();
+        await expect(page.getByTestId('codex-screen')).toBeVisible();
         await page.getByRole('region', { name: /codex/i }).getByRole('button', { name: /^back$/i }).click();
         await expect(mainMenuPlayButton(page)).toBeVisible();
 
@@ -100,7 +100,7 @@ test.describe('Expanded playable navigation contract', () => {
         await expect(page.getByTestId('game-pause-overlay')).toBeHidden();
         await expectGameplayReady(page);
 
-        await page.getByTestId('game-toolbar-settings').click({ force: true });
+        await openRunMenuItem(page, 'settings');
         await expect(page.getByRole('dialog', { name: /run settings/i })).toBeVisible();
         await page.getByRole('dialog', { name: /run settings/i }).getByRole('button', { name: /^back$/i }).click();
         await expectGameplayReady(page);
@@ -116,7 +116,7 @@ test.describe('Expanded playable navigation contract', () => {
         await openPlayablePathFixture(page, 'activeRunWithHazards');
         await expectGameplayReady(page);
 
-        await page.getByTestId('game-toolbar-inventory').click({ force: true });
+        await openRunMenuItem(page, 'inventory');
         await expect(page.getByRole('region', { name: /inventory/i })).toBeVisible();
         await expect(page.getByTestId('inventory-meta-frame-run')).toContainText(/Run snapshot/i);
         await expect(page.getByTestId('inventory-meta-frame-mutators')).toContainText(/Wide recall|mutator/i);
@@ -124,14 +124,13 @@ test.describe('Expanded playable navigation contract', () => {
         await page.getByRole('region', { name: /inventory/i }).getByRole('button', { name: /^back$/i }).click();
         await expectGameplayReady(page);
 
-        await page.getByTestId('game-toolbar-codex').click({ force: true });
+        await openRunMenuItem(page, 'codex');
         await expect(page.getByRole('region', { name: /codex/i })).toBeVisible();
-        await expect(page.getByTestId('codex-knowledge-base-summary')).toBeVisible();
-        await expect(page.getByTestId('codex-reward-signal')).toContainText(/guide|codex|mechanics/i);
+        await expect(page.getByTestId('codex-screen')).toBeVisible();
         await page.getByRole('region', { name: /codex/i }).getByRole('button', { name: /^back$/i }).click();
         await expectGameplayReady(page);
 
-        await page.getByTestId('game-toolbar-settings').click({ force: true });
+        await openRunMenuItem(page, 'settings');
         await expect(page.getByRole('dialog', { name: /run settings/i })).toBeVisible();
         await expect(page.getByTestId('settings-shell-panel')).toBeVisible();
         await expect(page.getByTestId('settings-shell-footer')).toBeVisible();

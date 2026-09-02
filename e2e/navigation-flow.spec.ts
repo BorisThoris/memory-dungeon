@@ -1,3 +1,4 @@
+import { openRunMenuItem } from './playablePathHelpers';
 import { expect, test, type Page } from '@playwright/test';
 import {
     ensureModeLibraryVisible,
@@ -67,7 +68,7 @@ test.describe('Navigation shells', () => {
         test.setTimeout(120_000);
         await openLevel1Play(page);
         await waitLevel1PlayReady(page);
-        await page.getByTestId('game-toolbar-inventory').evaluate((el) => (el as HTMLButtonElement).click());
+        await openRunMenuItem(page, 'inventory');
         await expect(page.getByRole('region', { name: /inventory/i })).toBeVisible();
         await page
             .getByRole('region', { name: /inventory/i })
@@ -75,7 +76,7 @@ test.describe('Navigation shells', () => {
             .evaluate((el) => (el as HTMLButtonElement).click());
         await expectGameplayHudWithWings(page);
 
-        await page.getByTestId('game-toolbar-codex').evaluate((el) => (el as HTMLButtonElement).click());
+        await openRunMenuItem(page, 'codex');
         await expect(page.getByRole('region', { name: /codex/i })).toBeVisible();
         await page
             .getByRole('region', { name: /codex/i })
@@ -90,7 +91,7 @@ test.describe('Navigation shells', () => {
         await waitLevel1PlayReady(page);
         const root = page.locator('[data-view]').first();
         await expect(root).toHaveAttribute('data-view', 'playing');
-        await page.getByTestId('game-toolbar-inventory').evaluate((el) => (el as HTMLButtonElement).click());
+        await openRunMenuItem(page, 'inventory');
         await expect(page.getByRole('region', { name: /inventory/i })).toBeVisible();
         await expect(root).toHaveAttribute('data-view', 'playing');
         await page

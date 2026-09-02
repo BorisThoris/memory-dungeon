@@ -461,7 +461,7 @@
     background: var(--theme-surface-control);
     color: var(--theme-text-muted);
     font-family: var(--theme-display-font);
-    font-size: 0.64rem;
+    font-size: 0.75rem;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     transition:
@@ -548,7 +548,7 @@
 
 .futurePill {
     flex: 0 0 auto;
-    font-size: 0.62rem;
+    font-size: 0.75rem;
     font-weight: 700;
     letter-spacing: 0.12em;
     text-transform: uppercase;
@@ -598,7 +598,7 @@
     background: var(--theme-surface-control);
     color: var(--theme-text-muted);
     font-family: var(--theme-display-font);
-    font-size: 0.72rem;
+    font-size: 0.75rem;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     transition:
@@ -983,7 +983,7 @@
 .shortLandscapeShell .subsectionButton {
     min-height: 1.8rem;
     padding: 0.28rem 0.48rem;
-    font-size: 0.6rem;
+    font-size: 0.75rem;
 }
 
 .shortLandscapeShell .sectionHeading {
@@ -995,7 +995,7 @@
 }
 
 .shortLandscapeShell .categoryLabel {
-    font-size: 0.62rem;
+    font-size: 0.75rem;
 }
 
 /* Horizontal rail: label-only chips (notes read as body copy below). Saves vertical space vs stacked label+note. */
@@ -1008,7 +1008,7 @@
 }
 
 .shortLandscapeShell .fieldText span {
-    font-size: 0.72rem;
+    font-size: 0.75rem;
     line-height: 1.25;
 }
 
@@ -1029,7 +1029,7 @@
 .shortLandscapeShell .segmentButtonDisabled {
     min-height: 2rem;
     padding: 0.38rem 0.55rem;
-    font-size: 0.62rem;
+    font-size: 0.75rem;
 }
 
 .shortLandscapeShell .toggleStack {
@@ -1073,7 +1073,7 @@
 .shortLandscapeShell .footerActions :global(button) {
     min-height: 1.8rem;
     padding: 0.34rem 0.65rem;
-    font-size: 0.62rem;
+    font-size: 0.75rem;
 }
 
 .wideShortShell .fitViewport {
@@ -1110,7 +1110,7 @@
 }
 
 .wideShortShell .categoryNote {
-    font-size: 0.72rem;
+    font-size: 0.75rem;
 }
 
 .wideShortShell .fieldText strong {

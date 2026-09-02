@@ -32,7 +32,7 @@
     margin: 0 0 var(--theme-space-xs);
     padding-bottom: var(--theme-space-xs);
     border-bottom: 1px solid var(--theme-divider-hairline);
-    font-size: 0.72rem;
+    font-size: 0.75rem;
     font-weight: 750;
     letter-spacing: 0.12em;
     text-transform: uppercase;
@@ -54,7 +54,7 @@
     border: 1px solid var(--theme-card-border-polished);
     background: var(--theme-surface-control);
     color: var(--theme-text-subtle);
-    font-size: 0.68rem;
+    font-size: 0.75rem;
     font-weight: 750;
     letter-spacing: 0.1em;
     text-transform: uppercase;
@@ -128,7 +128,7 @@
 .knowledgeBaseCard span,
 .knowledgeBaseCard em {
     color: var(--theme-text-muted);
-    font-size: 0.72rem;
+    font-size: 0.75rem;
     line-height: 1.25;
 }
 

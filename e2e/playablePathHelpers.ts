@@ -232,3 +232,13 @@ export async function closeVisibleModalByButton(page: Page, buttonName: RegExp):
 function escapeRegExp(value: string): string {
     return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
+
+/** The in-run shell has one menu button; Inventory, Codex and Settings open from the pause dialog. */
+export async function openRunMenuItem(page: Page, item: 'inventory' | 'codex' | 'settings'): Promise<void> {
+    await page.getByRole('button', { name: /pause and open the run menu/i }).click({ force: true });
+    await expect(page.getByTestId('game-pause-overlay')).toBeVisible({ timeout: 20_000 });
+    await page
+        .getByTestId('game-pause-overlay')
+        .getByRole('button', { name: new RegExp(`^${item}$`, 'i') })
+        .click({ force: true });
+}

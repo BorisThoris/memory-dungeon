@@ -14,7 +14,7 @@ import {
     waitLevel1PlayReady,
     waitLevel1VisualReady
 } from './visualScreenHelpers';
-import { openPlayablePathFixture } from './playablePathHelpers';
+import { openPlayablePathFixture, openRunMenuItem } from './playablePathHelpers';
 
 /**
  * QA-006 — Visual baseline scenarios for `yarn test:e2e:visual` (see `fileBase` / capture names).
@@ -119,7 +119,7 @@ export const VISUAL_SCREEN_SCENARIOS: ReadonlyArray<VisualScreenScenario> = [
         timeoutMs: 130_000,
         run: async (page, capture) => {
             await openLevel1Play(page);
-            await page.getByTestId('game-toolbar-inventory').click({ timeout: 20_000 });
+            await openRunMenuItem(page, 'inventory');
             await expect(page.getByRole('region', { name: /inventory/i })).toBeVisible({ timeout: 20_000 });
             await expectNoHorizontalOverflow(page);
             await capture('01d-inventory-active');
@@ -131,7 +131,7 @@ export const VISUAL_SCREEN_SCENARIOS: ReadonlyArray<VisualScreenScenario> = [
         timeoutMs: 130_000,
         run: async (page, capture) => {
             await openLevel1Play(page);
-            await page.getByTestId('game-toolbar-codex').click({ timeout: 20_000 });
+            await openRunMenuItem(page, 'codex');
             await expect(page.getByRole('region', { name: /codex/i })).toBeVisible({ timeout: 20_000 });
             await expectNoHorizontalOverflow(page);
             await capture('01e-codex');
@@ -216,9 +216,7 @@ export const VISUAL_SCREEN_SCENARIOS: ReadonlyArray<VisualScreenScenario> = [
         name: 'run settings modal (in-game)',
         run: async (page, capture) => {
             await openLevel1Play(page);
-            const settingsBtn = page.getByTestId('game-toolbar-settings');
-            await expect(settingsBtn).toBeVisible({ timeout: 20_000 });
-            await settingsBtn.click({ force: true });
+            await openRunMenuItem(page, 'settings');
             const runSettings = page.getByRole('dialog', { name: /run settings/i });
             await expect(runSettings).toBeVisible({ timeout: 15_000 });
             await expectNoHorizontalOverflow(page);

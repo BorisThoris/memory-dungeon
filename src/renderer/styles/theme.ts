@@ -337,7 +337,7 @@ export const RENDERER_THEME = {
         '--theme-space-3xl': 'var(--ui-space-3xl)',
 
         /* UI system: typography scale */
-        '--ui-font-eyebrow': '0.72rem',
+        '--ui-font-eyebrow': '0.75rem',
         '--ui-font-display-family': "'Cinzel', 'Palatino Linotype', 'Book Antiqua', Georgia, serif",
         '--ui-font-body-family': "'Source Sans 3', 'Trebuchet MS', 'Segoe UI', sans-serif",
         '--ui-font-label': '0.75rem',
