@@ -110,7 +110,8 @@ test.describe('Expanded playable interludes and post-run loop', () => {
         await expectStampedSideRoom(page, 'mystery', 'run_event', 'event', /forgotten names/i);
         await expect(page.getByTestId('side-room-choice-speak_name')).toContainText(/speak the name/i);
         await expect(page.getByTestId('side-room-choice-speak_name')).toContainText(/favor progress/i);
-        await page.getByTestId('side-room-action-dock').getByRole('button', { name: /speak the name/i }).click();
+        // The choice card is the control that takes it; the dock no longer repeats it.
+        await page.getByTestId('side-room-choice-speak_name').click();
         await expectGameplayReady(page);
         await expect(page.getByTestId('side-room-screen')).toBeHidden();
 
