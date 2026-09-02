@@ -17,6 +17,10 @@ const config: PlaywrightTestConfig = {
     reporter: 'list',
     use: {
         baseURL: 'http://127.0.0.1:5173',
+        /** Point at a system Chromium when the pinned browser build is not installed (remote runners). */
+        ...(process.env.PLAYWRIGHT_CHROMIUM_PATH
+            ? { launchOptions: { executablePath: process.env.PLAYWRIGHT_CHROMIUM_PATH } }
+            : {}),
         serviceWorkers: 'block',
         /** Keeps CI artifacts smaller than `trace: 'on'` while preserving traces for flaky retries. */
         trace: 'retain-on-failure',
