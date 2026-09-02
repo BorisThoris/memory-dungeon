@@ -59,10 +59,6 @@ test.describe('Expanded playable interludes and post-run loop', () => {
         await floorClear.getByRole('button', { name: /visit shop/i }).click();
         await expectShopDecisionUsable(page);
         await expect(page.getByTestId('shop-screen')).toHaveAttribute('data-shop-return-mode', 'summary');
-        await expect(page.locator('[data-testid$="-board-moment"]').first()).toContainText(/Board moment/i);
-        await expect(page.locator('[data-shop-board-moment-tone]').first()).toBeVisible();
-        await expect(page.locator('[data-testid$="-impact-cue"]').first()).toContainText(/Buy|Setup|Stabilize|Control|Scout|Blocked|Claimed/i);
-        await expect(page.locator('[data-shop-impact-cue-tone]').first()).toBeVisible();
         const purse = page.locator('[aria-label$="shop gold"]').first();
         const startingGold = parseShopGold(await purse.getAttribute('aria-label'));
         const firstAvailableOffer = page.locator('[role="listitem"][data-status="available"]').first();
@@ -80,7 +76,6 @@ test.describe('Expanded playable interludes and post-run loop', () => {
         await openPlayablePathFixture(page, 'floorClearWithShopLowGold');
         await page.getByRole('dialog', { name: /floor cleared/i }).getByRole('button', { name: /visit shop/i }).click();
         await expectShopDecisionUsable(page);
-        await expect(page.locator('[data-shop-board-moment-tone]').first()).toBeVisible();
         await expect(page.getByRole('listitem').filter({ hasText: /not enough shop gold/i }).first()).toBeVisible();
         await expect(page.locator('button').filter({ hasText: /^spend \d+g$/i }).first()).toBeDisabled();
 
@@ -106,14 +101,12 @@ test.describe('Expanded playable interludes and post-run loop', () => {
         test.setTimeout(180_000);
         await openPlayablePathFixture(page, 'sideRoomPrimary');
         await expectStampedSideRoom(page, 'safe', 'rest_shrine', 'rest', /safe/i);
-        await expect(page.getByTestId('side-room-board-moment')).toContainText(/Board moment/i);
         await page.getByTestId('side-room-action-dock').getByRole('button', { name: /^rest heal$/i }).click({ force: true });
         await expectGameplayReady(page);
         await expect(page.getByTestId('side-room-screen')).toBeHidden();
 
         await openPlayablePathFixture(page, 'sideRoomChoice');
         await expectStampedSideRoom(page, 'mystery', 'run_event', 'event', /forgotten names/i);
-        await expect(page.getByTestId('side-room-board-moment')).toContainText(/Choose next-floor leverage/i);
         await expect(page.getByTestId('side-room-choice-speak_name')).toContainText(/speak the name/i);
         await expect(page.getByTestId('side-room-choice-speak_name')).toContainText(/favor progress/i);
         await page.getByTestId('side-room-action-dock').getByRole('button', { name: /speak the name/i }).click();
@@ -124,17 +117,7 @@ test.describe('Expanded playable interludes and post-run loop', () => {
         await expectStampedSideRoom(page, 'greed', 'bonus_reward', 'treasure', /greed/i);
         const perkChoice = page.locator('[data-choice-id$="free_swap_floor"]');
         await expect(perkChoice).toContainText(/free swap discipline/i);
-        await expect(page.getByTestId('side-room-board-moment')).toContainText(/Pick a build lane|Choose next-floor leverage|Set up trait routes/i);
-        await expect(perkChoice).toContainText(/unlock cue|Unlock Free Route Link/i);
-        await expect(perkChoice).toHaveAttribute('data-choice-beat-tier', /stack|cashout|prime|risk/);
-        await expect(perkChoice).toHaveAttribute('data-choice-beat-count', /^[234]$/);
-        await expect(perkChoice.getByTestId(/side-room-choice-.*-beat/)).toContainText(/beat/i);
-        await expect(perkChoice.getByTestId(/side-room-choice-.*-beat/).locator('i')).not.toHaveCount(0);
-        await expect(perkChoice).toContainText(/use swap or row shuffle to connect trait routes/i);
-        await expect(perkChoice.getByTestId(/side-room-choice-.*-payoff-stack/)).toContainText(/Payoff stack|Super stack/i);
-        await expect(perkChoice.getByTestId(/side-room-choice-.*-payoff-stack/)).toContainText(/lanes|payoffs/i);
-        await expect(perkChoice.getByTestId(/side-room-choice-.*-payoff-stack/)).toContainText(/use swap|connect trait routes|next/i);
-        await expect(perkChoice.getByTestId(/side-room-choice-.*-payoffs/)).toContainText(/next/i);
+        await expect(perkChoice).toHaveAttribute('data-choice-primary', /true|false/);
         await page.getByTestId('side-room-action-dock').getByRole('button', { name: /leave it/i }).click();
         await expectGameplayReady(page);
         await expect(page.getByTestId('side-room-screen')).toBeHidden();
@@ -152,12 +135,9 @@ test.describe('Expanded playable interludes and post-run loop', () => {
         await openPlayablePathFixture(page, 'relicDraft');
         await expect(page.getByTestId('game-relic-offer-overlay')).toBeVisible();
         await expect(page.getByRole('group', { name: /relic choices/i })).toBeVisible();
-        await expect(page.getByTestId('relic-board-moment-cue').first()).toContainText(/Board moment/i);
-        await expect(page.locator('[data-board-moment-tone]').first()).toBeVisible();
-        await expect(page.getByTestId('relic-pick-pulse').first()).toContainText(/Pick pulse/i);
-        await expect(page.getByTestId('relic-pick-pulse').first()).toContainText(/Stack|Open|Keep chain alive|Cashout route|Mistake buffer|Anchor rare|New lane/i);
-        await expect(page.locator('[data-pick-pulse-tone]').first()).toBeVisible();
-        await expectLocatorFullyInWindowViewport(page, page.getByTestId('relic-pick-pulse').first(), 8);
+        await expect(page.getByTestId('relic-offer-card')).toHaveCount(3);
+        await expect(page.getByTestId('relic-offer-card').first()).toContainText(/common|uncommon|rare/i);
+        await expectLocatorFullyInWindowViewport(page, page.getByTestId('relic-offer-card').first(), 8);
         for (let pick = 0; pick < 3; pick += 1) {
             if (!(await page.getByTestId('game-relic-offer-overlay').isVisible().catch(() => false))) {
                 break;
@@ -178,9 +158,8 @@ test.describe('Expanded playable interludes and post-run loop', () => {
 
         await forceCurrentRunGameOverViaE2eHook(page);
         await expect(page.getByTestId('game-over-next-run-loop')).toBeVisible();
-        await expect(page.getByTestId('game-over-next-run-loop').locator('[data-next-run-row="chain_target"]')).toHaveAttribute(
-            'data-next-run-action-cue',
-            /Memorize one cluster|confirmed pairs|longer streak|reward threshold/i
+        await expect(page.getByTestId('game-over-next-run-loop').locator('[data-next-run-row="chain_target"]')).toContainText(
+            /Chain target/i
         );
         await expect(page.getByTestId('game-over-relic-chip').first()).toBeVisible();
     });
@@ -191,10 +170,6 @@ test.describe('Expanded playable interludes and post-run loop', () => {
         await expect(page.getByTestId('game-over-next-run-loop')).toBeVisible();
         await expect(page.getByTestId('game-over-next-run-loop')).toContainText(/Chain target/i);
         await expect(page.getByTestId('game-over-next-run-loop')).toContainText(/Start x3 loop|Push x6 reward|Break into x10|Hold x10 pressure/i);
-        await expect(page.getByTestId('game-over-next-run-loop').locator('[data-next-run-row="chain_target"]')).toHaveAttribute(
-            'data-next-run-action-cue',
-            /Memorize one cluster|confirmed pairs|longer streak|reward threshold/i
-        );
         await expect(page.getByTestId('game-over-next-run-loop').locator('[data-next-run-row="run_it_back"]')).toContainText(
             /Play Again restarts/i
         );

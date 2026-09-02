@@ -1861,8 +1861,8 @@ describe('GameScreen (OVR-014)', () => {
         expect(getByText(/Featured-objective favor/)).toBeTruthy();
         expect(getByText(/Scholar contract/)).toBeTruthy();
         expect(getByText(/Trait build: Conduit Cartographer/)).toBeTruthy();
-        expect(getByText(/The Saboteur \/ The Slayer: disarm, delete, reroute./)).toBeTruthy();
-        expect(getByText(/The Warden \/ The Conduit Cartographer: guard, absorb, stabilize./)).toBeTruthy();
+        // Each card carries one archetype chip; the full archetype line lives in the accessible name.
+        expect(screen.getAllByText(/^The (Warden|Saboteur|Slayer|Vaultbreaker|Gambit|Conduit Cartographer|Emergency Toolkit|Catalyst)$/).length).toBeGreaterThan(0);
         expect(gameSfxMocks.playRelicOfferOpenSfx).toHaveBeenCalledTimes(1);
     });
 

@@ -85,7 +85,6 @@ import FloorClearDialog, {
 import OverlayModal, { type ModalAction } from './OverlayModal';
 import RelicDraftOfferPanel from './RelicDraftOfferPanel';
 import { useGameScreenBoardVisualSettings } from './gameScreenStoreSelectors';
-import { getInventoryPayoffEngineSignal } from './inventoryScreenModel';
 import TileBoard, { type TileBoardHandle } from './TileBoard';
 
 const MemoTileBoard = memo(TileBoard);
@@ -1917,7 +1916,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
 
     const relicDraftProgressText = run.relicOffer ? relicDraftProgressLine(run.relicOffer) : null;
     const relicBonusFootnoteLines = run.relicOffer ? buildRelicDraftBonusFootnoteLines(run) : [];
-    const relicDraftPayoffEngineSignal = run.relicOffer ? getInventoryPayoffEngineSignal(run) : null;
     const previousRelicOfferOpenRef = useRef(false);
     const previousCountdownPressureSecondRef = useRef<number | null>(null);
     const announcedTraitRouteSetupKeyRef = useRef<string | null>(null);
@@ -4386,7 +4384,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                             onUseService={applyRelicOfferService}
                             onPick={pickRelic}
                             optionIds={run.relicOffer.options}
-                            payoffEngineSignal={relicDraftPayoffEngineSignal}
                             pickRound={run.relicOffer.pickRound}
                             reasonById={run.relicOffer.contextualOptionReasons}
                             serviceActions={run.relicOffer.services}

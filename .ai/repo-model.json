@@ -9,7 +9,7 @@
     "contentItemCount": 57,
     "mechanicCount": 130,
     "stateFieldCount": 144,
-    "relationshipCount": 10022
+    "relationshipCount": 10011
   },
   "inventory": [
     {
@@ -3669,8 +3669,8 @@
     {
       "path": "e2e/playable-path-interludes.spec.ts",
       "category": "test",
-      "bytes": 17248,
-      "sha256": "371c38e1a2b6738b53e6220486d50a57161df154f54befd3fde0d821d8e1a056"
+      "bytes": 14687,
+      "sha256": "6b6049ecd6f68379a6b91e00804fb47a28ba17c5e77912b6156041cb337218e2"
     },
     {
       "path": "e2e/playable-path-mode-matrix.spec.ts",
@@ -7425,20 +7425,20 @@
     {
       "path": "src/renderer/components/GameOverScreen.module.css",
       "category": "source",
-      "bytes": 39590,
-      "sha256": "9d6d0c8feee52c3060a7d4a1be2848724fb625ebbab3f7eda244165c0da9cb80"
+      "bytes": 10593,
+      "sha256": "efd5b746ceaba5a55d6270801e0049631a08b586dd8f67d97a0ed2271639f1c3"
     },
     {
       "path": "src/renderer/components/GameOverScreen.test.tsx",
       "category": "test",
-      "bytes": 26741,
-      "sha256": "4276fc7e51139aea5db022c1156e06bb702520a817bedb69294445f366913e22"
+      "bytes": 5850,
+      "sha256": "f6ffb5a20e3480ae482c5615bec6146122721370e5762fcf1688540e72e5a229"
     },
     {
       "path": "src/renderer/components/GameOverScreen.tsx",
       "category": "source",
-      "bytes": 43410,
-      "sha256": "4654956e100ced80bd48e4f9d56aba1514eee15a4b52352466441cc9f357e2f9"
+      "bytes": 18507,
+      "sha256": "1ea5793eb29124d24ebcbb6e76ccd5da643e294c3a56e9822a7c6ee0e00dfead"
     },
     {
       "path": "src/renderer/components/gameplayHudMutatorLabels.ts",
@@ -7473,14 +7473,14 @@
     {
       "path": "src/renderer/components/GameScreen.test.tsx",
       "category": "test",
-      "bytes": 121268,
-      "sha256": "b32348607ecf49ee08ef01fbbc926f8491ac704142733bed15b5a72e18d4efae"
+      "bytes": 121331,
+      "sha256": "1ddcb749bcbc6c3b993efb520c1d7104f51012979a20ec494369308ffa3cd46f"
     },
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 242531,
-      "sha256": "8339156913b2f6bf2495fc47aa03d9b26dae327f18b90dbbdf2f255b29ba3558"
+      "bytes": 242278,
+      "sha256": "752be43d78751639bf379a1d3c08c07c4d0f7e856df75e8f115f8be5ac57d68b"
     },
     {
       "path": "src/renderer/components/gameScreenBoardFeedbackModel.test.ts",
@@ -7731,20 +7731,20 @@
     {
       "path": "src/renderer/components/RelicDraftOffer.module.css",
       "category": "source",
-      "bytes": 65685,
-      "sha256": "fbe7c7e18e0ff06f805bbae7154eadff16ef6ad3f1e8d08e4eb314b2ba1109eb"
+      "bytes": 4562,
+      "sha256": "8f6d1bd839ff523e516cd859a6dc7397c067d820617d28cc4c7cbe916fe0347a"
     },
     {
       "path": "src/renderer/components/RelicDraftOfferPanel.test.tsx",
       "category": "test",
-      "bytes": 36888,
-      "sha256": "de9707112aef0b114c598905183d1a7a9534cfd77a4f7cdec9cc30eece6c4b7f"
+      "bytes": 7801,
+      "sha256": "515771624402acaa25c697d527a4227ff90513d7a68f68d57eb4fbe562952cab"
     },
     {
       "path": "src/renderer/components/RelicDraftOfferPanel.tsx",
       "category": "source",
-      "bytes": 69395,
-      "sha256": "723405031176976481708beb6b91b29820ec05cfd3bd49864a4c8c7b8e56521a"
+      "bytes": 10483,
+      "sha256": "46ae264d6c08094add39c6822df57dbbb144e551e0c828f3f425fc4f46a2888c"
     },
     {
       "path": "src/renderer/components/RunShell.module.css",
@@ -7803,20 +7803,20 @@
     {
       "path": "src/renderer/components/ShopScreen.module.css",
       "category": "source",
-      "bytes": 57179,
-      "sha256": "37c2bc50cd0502fef9d7f9bb3888c284af4bd6090910e270fe59e26a246dfdc2"
+      "bytes": 6452,
+      "sha256": "d65c72358ecf17573c905b16c3042e9f4902549cb962cfd3c1a48630aa60c4d2"
     },
     {
       "path": "src/renderer/components/ShopScreen.test.tsx",
       "category": "test",
-      "bytes": 34239,
-      "sha256": "8cfccb5635eb0d49119bfe465163e17f9bd28612f17c4437aa4b7a7eaeaa0504"
+      "bytes": 7159,
+      "sha256": "1adf1a975ad5aa18a5e8e0aac4aa4ac0d0b89b78088b56e9130a39684d334ca6"
     },
     {
       "path": "src/renderer/components/ShopScreen.tsx",
       "category": "source",
-      "bytes": 60683,
-      "sha256": "8dd9a9db1b5f69beb83775dca173df03cfaba2134dfa5568f376c40fde33e327"
+      "bytes": 10226,
+      "sha256": "830c9ced059501636610f373d40a543fc5ecfd51259aa31911a4f958624bd80a"
     },
     {
       "path": "src/renderer/components/shuffleFlipAnimation.test.ts",
@@ -7833,20 +7833,20 @@
     {
       "path": "src/renderer/components/SideRoomScreen.module.css",
       "category": "source",
-      "bytes": 58010,
-      "sha256": "ef7b9dba669fffdd8ee58bce0ea325e6f506b0b6feecd5b986fa73e2b33b1086"
+      "bytes": 4966,
+      "sha256": "765ae481fc9f88db005957b0ab9206f3c98b647e4aa200b8e7a728a1ba21f785"
     },
     {
       "path": "src/renderer/components/SideRoomScreen.test.tsx",
       "category": "test",
-      "bytes": 44066,
-      "sha256": "efd16cf8c1520690eb9361a23011360a538e691dd7f5c328ecd1dcee7c605776"
+      "bytes": 8237,
+      "sha256": "cb0dcec13ce150ecd657e69f2563cf4823166655c3fa89cb4e3ee190ab10417e"
     },
     {
       "path": "src/renderer/components/SideRoomScreen.tsx",
       "category": "source",
-      "bytes": 70438,
-      "sha256": "89345ef50726552aafc30e9281158592995289def636ccbd47e2b0b63a6b60b1"
+      "bytes": 8622,
+      "sha256": "e489c5376c231ba9581fda3f4256299bc1219b4ace1977dc4b97a0e72bbf8dcb"
     },
     {
       "path": "src/renderer/components/StartupIntro.module.css",
@@ -16590,7 +16590,7 @@
       "path": "src/renderer/components/GameOverScreen.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 476,
+      "lineCount": 136,
       "imports": [
         "file:src/renderer/components/GameOverScreen.tsx",
         "file:src/shared/contracts.ts",
@@ -16606,27 +16606,22 @@
       "path": "src/renderer/components/GameOverScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 811,
+      "lineCount": 383,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/components/MainMenuBackground.tsx",
         "file:src/renderer/copy/gameOverScreen.ts",
-        "file:src/renderer/copy/runPayoffSignals.ts",
-        "file:src/renderer/hooks/useEffectiveReducedMotion.ts",
         "file:src/renderer/hooks/useViewportSize.ts",
         "file:src/renderer/platformTilt/usePlatformTiltField.ts",
         "file:src/renderer/store/useAppStore.ts",
         "file:src/renderer/ui/index.ts",
         "file:src/shared/achievements.ts",
-        "file:src/shared/bonus-rewards.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/daily-archive.ts",
         "file:src/shared/game-catalog.ts",
         "file:src/shared/game-over-next-run.ts",
-        "file:src/shared/run-array-guards.ts",
-        "file:src/shared/run-history.ts",
-        "file:src/shared/run-number-guards.ts"
+        "file:src/shared/run-history.ts"
       ],
       "exports": [
         "symbol:src/renderer/components/GameOverScreen.tsx#default"
@@ -16739,7 +16734,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 4492,
+      "lineCount": 4489,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -16751,7 +16746,6 @@
         "file:src/renderer/components/GameScreenEndlessChapterBanner.tsx",
         "file:src/renderer/components/gameScreenFeedback.ts",
         "file:src/renderer/components/gameScreenStoreSelectors.ts",
-        "file:src/renderer/components/inventoryScreenModel.ts",
         "file:src/renderer/components/MainMenuBackground.tsx",
         "file:src/renderer/components/matchScoreFloaterTiming.ts",
         "file:src/renderer/components/OverlayModal.tsx",
@@ -17530,7 +17524,7 @@
       "path": "src/renderer/components/RelicDraftOfferPanel.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 583,
+      "lineCount": 182,
       "imports": [
         "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/components/RelicDraftOfferPanel.tsx",
@@ -17544,7 +17538,7 @@
       "path": "src/renderer/components/RelicDraftOfferPanel.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 1680,
+      "lineCount": 247,
       "imports": [
         "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/copy/relicDraftOffer.ts",
@@ -17697,7 +17691,7 @@
       "path": "src/renderer/components/ShopScreen.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 560,
+      "lineCount": 169,
       "imports": [
         "file:src/renderer/components/ShopScreen.tsx",
         "file:src/renderer/store/useAppStore.ts",
@@ -17714,17 +17708,15 @@
       "path": "src/renderer/components/ShopScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 1438,
+      "lineCount": 240,
       "imports": [
         "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/components/gameplayVisualConfig.ts",
-        "file:src/renderer/components/inventoryScreenModel.ts",
         "file:src/renderer/hooks/useModalFocusTrap.ts",
         "file:src/renderer/store/useAppStore.ts",
         "file:src/renderer/ui/index.ts",
         "file:src/shared/contracts.ts",
-        "file:src/shared/shop-rules.ts",
-        "file:src/shared/trait-build-rewards.ts"
+        "file:src/shared/shop-rules.ts"
       ],
       "exports": [
         "symbol:src/renderer/components/ShopScreen.tsx#default"
@@ -17773,7 +17765,7 @@
       "path": "src/renderer/components/SideRoomScreen.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 759,
+      "lineCount": 202,
       "imports": [
         "file:src/renderer/components/SideRoomScreen.tsx",
         "file:src/renderer/store/useAppStore.ts",
@@ -17789,17 +17781,14 @@
       "path": "src/renderer/components/SideRoomScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 1491,
+      "lineCount": 200,
       "imports": [
         "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/components/gameplayVisualConfig.ts",
-        "file:src/renderer/components/inventoryScreenModel.ts",
         "file:src/renderer/hooks/useModalFocusTrap.ts",
         "file:src/renderer/store/useAppStore.ts",
         "file:src/renderer/ui/index.ts",
-        "file:src/shared/contracts.ts",
-        "file:src/shared/run-array-guards.ts",
-        "file:src/shared/trait-build-rewards.ts"
+        "file:src/shared/contracts.ts"
       ],
       "exports": [
         "symbol:src/renderer/components/SideRoomScreen.tsx#default"
@@ -35137,8 +35126,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameOverScreen.tsx",
-      "line": 810,
-      "endLine": 810
+      "line": 382,
+      "endLine": 382
     },
     {
       "id": "symbol:src/renderer/components/gameplayHudMutatorLabels.ts#MUTATOR_HUD_LABELS",
@@ -35209,8 +35198,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 4491,
-      "endLine": 4491
+      "line": 4488,
+      "endLine": 4488
     },
     {
       "id": "symbol:src/renderer/components/gameScreenBoardFeedbackModel.ts#getBoardMatchPayoffStackAction",
@@ -36425,8 +36414,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/RelicDraftOfferPanel.tsx",
-      "line": 1679,
-      "endLine": 1679
+      "line": 246,
+      "endLine": 246
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#default",
@@ -36553,8 +36542,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/ShopScreen.tsx",
-      "line": 1437,
-      "endLine": 1437
+      "line": 239,
+      "endLine": 239
     },
     {
       "id": "symbol:src/renderer/components/shuffleFlipAnimation.ts#computeBoardEntranceMotionBudgetMs",
@@ -36625,8 +36614,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/SideRoomScreen.tsx",
-      "line": 1490,
-      "endLine": 1490
+      "line": 199,
+      "endLine": 199
     },
     {
       "id": "symbol:src/renderer/components/StartupIntro.tsx#default",
@@ -62682,7 +62671,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 2483
+          "line": 2481
         }
       ],
       "tests": [
@@ -67037,7 +67026,7 @@
         },
         {
           "path": "src/renderer/components/ShopScreen.tsx",
-          "line": 5
+          "line": 1
         }
       ],
       "tests": [
@@ -67080,7 +67069,7 @@
         },
         {
           "path": "src/renderer/components/ShopScreen.tsx",
-          "line": 5
+          "line": 1
         }
       ],
       "tests": [
@@ -98024,18 +98013,6 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/GameOverScreen.tsx->src/renderer/copy/runPayoffSignals.ts",
-      "source": "file:src/renderer/components/GameOverScreen.tsx",
-      "target": "file:src/renderer/copy/runPayoffSignals.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/GameOverScreen.tsx->src/renderer/hooks/useEffectiveReducedMotion.ts",
-      "source": "file:src/renderer/components/GameOverScreen.tsx",
-      "target": "file:src/renderer/hooks/useEffectiveReducedMotion.ts",
-      "kind": "imports"
-    },
-    {
       "id": "imports:src/renderer/components/GameOverScreen.tsx->src/renderer/hooks/useViewportSize.ts",
       "source": "file:src/renderer/components/GameOverScreen.tsx",
       "target": "file:src/renderer/hooks/useViewportSize.ts",
@@ -98066,12 +98043,6 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/GameOverScreen.tsx->src/shared/bonus-rewards.ts",
-      "source": "file:src/renderer/components/GameOverScreen.tsx",
-      "target": "file:src/shared/bonus-rewards.ts",
-      "kind": "imports"
-    },
-    {
       "id": "imports:src/renderer/components/GameOverScreen.tsx->src/shared/contracts.ts",
       "source": "file:src/renderer/components/GameOverScreen.tsx",
       "target": "file:src/shared/contracts.ts",
@@ -98096,21 +98067,9 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/GameOverScreen.tsx->src/shared/run-array-guards.ts",
-      "source": "file:src/renderer/components/GameOverScreen.tsx",
-      "target": "file:src/shared/run-array-guards.ts",
-      "kind": "imports"
-    },
-    {
       "id": "imports:src/renderer/components/GameOverScreen.tsx->src/shared/run-history.ts",
       "source": "file:src/renderer/components/GameOverScreen.tsx",
       "target": "file:src/shared/run-history.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/GameOverScreen.tsx->src/shared/run-number-guards.ts",
-      "source": "file:src/renderer/components/GameOverScreen.tsx",
-      "target": "file:src/shared/run-number-guards.ts",
       "kind": "imports"
     },
     {
@@ -98285,12 +98244,6 @@
       "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/components/gameScreenStoreSelectors.ts",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "file:src/renderer/components/gameScreenStoreSelectors.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/components/inventoryScreenModel.ts",
-      "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "file:src/renderer/components/inventoryScreenModel.ts",
       "kind": "imports"
     },
     {
@@ -99674,12 +99627,6 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/ShopScreen.tsx->src/renderer/components/inventoryScreenModel.ts",
-      "source": "file:src/renderer/components/ShopScreen.tsx",
-      "target": "file:src/renderer/components/inventoryScreenModel.ts",
-      "kind": "imports"
-    },
-    {
       "id": "imports:src/renderer/components/ShopScreen.tsx->src/renderer/hooks/useModalFocusTrap.ts",
       "source": "file:src/renderer/components/ShopScreen.tsx",
       "target": "file:src/renderer/hooks/useModalFocusTrap.ts",
@@ -99707,12 +99654,6 @@
       "id": "imports:src/renderer/components/ShopScreen.tsx->src/shared/shop-rules.ts",
       "source": "file:src/renderer/components/ShopScreen.tsx",
       "target": "file:src/shared/shop-rules.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/ShopScreen.tsx->src/shared/trait-build-rewards.ts",
-      "source": "file:src/renderer/components/ShopScreen.tsx",
-      "target": "file:src/shared/trait-build-rewards.ts",
       "kind": "imports"
     },
     {
@@ -99770,12 +99711,6 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/SideRoomScreen.tsx->src/renderer/components/inventoryScreenModel.ts",
-      "source": "file:src/renderer/components/SideRoomScreen.tsx",
-      "target": "file:src/renderer/components/inventoryScreenModel.ts",
-      "kind": "imports"
-    },
-    {
       "id": "imports:src/renderer/components/SideRoomScreen.tsx->src/renderer/hooks/useModalFocusTrap.ts",
       "source": "file:src/renderer/components/SideRoomScreen.tsx",
       "target": "file:src/renderer/hooks/useModalFocusTrap.ts",
@@ -99797,18 +99732,6 @@
       "id": "imports:src/renderer/components/SideRoomScreen.tsx->src/shared/contracts.ts",
       "source": "file:src/renderer/components/SideRoomScreen.tsx",
       "target": "file:src/shared/contracts.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/SideRoomScreen.tsx->src/shared/run-array-guards.ts",
-      "source": "file:src/renderer/components/SideRoomScreen.tsx",
-      "target": "file:src/shared/run-array-guards.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/SideRoomScreen.tsx->src/shared/trait-build-rewards.ts",
-      "source": "file:src/renderer/components/SideRoomScreen.tsx",
-      "target": "file:src/shared/trait-build-rewards.ts",
       "kind": "imports"
     },
     {
