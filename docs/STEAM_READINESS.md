@@ -23,7 +23,7 @@ file is only about whether the build clears a launch checklist.
 | Rich Presence | **Not implemented.** No status strings are published to Steam. | — |
 | Crash reporting | **Local.** Uncaught throws, unhandled rejections, renderer deaths and helper-process deaths write a bounded, redacted record beside the save; the ten newest are kept and the next launch reports how many are waiting. Nothing is sent anywhere — there is no backend and transmitting would need consent. | `src/main/crash-log.ts`, `src/main/crash-reporter.ts` |
 | Store page metadata | **Out of repository.** Tracked on the Partner site. | — |
-| Colour-blind safety | **Done for the four palettes that carry rules.** Trait, enemy-hazard, hazard-tile, trap-state and interaction-lane colours are each gated against protanopia, deuteranopia and tritanopia. | `src/shared/color-vision.ts`, `tile-trait-palette.test.ts`, `tileBoardThreatColors.test.ts` |
+| Colour-blind safety | **Done for the five palettes that carry rules, plus a non-colour channel for traits.** Each trait draws a distinct mark (shape and count) on its rail, listed in the Codex and spoken in the tile's accessible label. Trait, enemy-hazard, hazard-tile, trap-state and interaction-lane colours are each gated against protanopia, deuteranopia and tritanopia. | `src/shared/color-vision.ts`, `tile-trait-palette.test.ts`, `tileBoardThreatColors.test.ts` |
 
 ## Content
 
@@ -88,7 +88,8 @@ and is not what a colour-palette or crash-log pass should be dragging along.
 - **Crash telemetry.** Records are written locally and never leave the machine, so a crash is
   invisible until a player volunteers the file. Sending them needs a backend and a consent flow.
 - **Borderless on macOS.** Electron's `setSimpleFullScreen` is the route; untested here.
-- **A second channel for trait identity.** Trait colours are now measurably distinct under every
-  simulated vision, but on a hidden tile the colour is still the only per-trait signal — the
-  interaction lanes carry a pattern, traits do not. The board renders glyphs as geometry and has no
-  text layer, so this needs new marker shapes rather than a label.
+- **Legibility of the trait marks at final art scale.** Each trait now draws a distinct mark on
+  its rail (three shapes across three counts), measured to fit the rail and to contrast with it on
+  all nine colours, and captured on a running board to confirm it renders. Whether one, two and
+  three marks are countable at a glance on a 7-inch Deck screen is a judgement to make on real
+  hardware, not from a desktop capture.

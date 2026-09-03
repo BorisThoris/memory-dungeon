@@ -13,6 +13,7 @@ import {
 } from './tileBoardReadability';
 import { hazardTileColor } from './tileBoardThreatColors';
 import { getTileTraitInteractionPreviewLines, tileTraitColor } from '../../shared/tile-trait-rules';
+import { tileTraitMark, traitMarkOffsets } from '../../shared/tile-trait-marks';
 import type { TraitInteractionLaneId } from '../copy/traitInteractionLaneMap';
 
 const CARD_WIDTH = CARD_PLANE_WIDTH;
@@ -22,6 +23,10 @@ const CARD_FACE_HEIGHT = CARD_HEIGHT - CARD_FACE_INSET * 2;
 const HOVER_GOLD_RIM_STRIP = 0.0036;
 
 const BOARD_READABILITY_PIP_GEOMETRY = new CircleGeometry(0.043, 20);
+/** Trait marks are smaller than a lane pip so three of them still fit across the 0.26 rail. */
+const BOARD_READABILITY_TRAIT_MARK_PIP_GEOMETRY = new CircleGeometry(0.03, 16);
+const BOARD_READABILITY_TRAIT_MARK_BAR_GEOMETRY = new PlaneGeometry(0.05, 0.022, 1, 1);
+const TRAIT_MARK_SPACING = 0.075;
 const BOARD_READABILITY_LARGE_PIP_GEOMETRY = new CircleGeometry(0.057, 22);
 const BOARD_READABILITY_BAR_GEOMETRY = new PlaneGeometry(0.2, 0.032, 1, 1);
 const BOARD_READABILITY_SHORT_BAR_GEOMETRY = new PlaneGeometry(0.13, 0.03, 1, 1);
@@ -324,6 +329,7 @@ export const TileBoardReadabilityMarkers = ({
     const faceUpTraitPreviewTone = hasFaceUpTraitPreview
         ? getTraitPreviewReadabilityTone(faceUpTraitPreviewLines.length)
         : 'ready';
+    const traitMark = tile.tileTraitKind ? tileTraitMark(tile.tileTraitKind) : null;
     const faceUpTraitPreviewAccentColor =
         faceUpTraitPreviewTone === 'cashout'
             ? '#ffe48a'
@@ -843,23 +849,36 @@ export const TileBoardReadabilityMarkers = ({
                                     transparent
                                 />
                             </mesh>
-                            <mesh
-                                geometry={BOARD_READABILITY_PIP_GEOMETRY}
-                                position={[0, 0.034, 0.00004]}
-                                raycast={noopMeshRaycast}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder}
-                                rotation={[0, 0, Math.PI / 4]}
-                            >
-                                <meshBasicMaterial
-                                    color="#100d14"
-                                    depthTest
-                                    depthWrite={false}
-                                    opacity={0.78}
-                                    side={DoubleSide}
-                                    toneMapped={false}
-                                    transparent
-                                />
-                            </mesh>
+                            {/*
+                              * The trait's mark. Every trait used to draw this same rotated pip, so
+                              * hue was the only thing separating nine rules — and on a hidden tile
+                              * in a memory game a shape is the more memorable of the two anyway.
+                              * Shape and count come from `tile-trait-marks`; the Codex lists them.
+                              */}
+                            {traitMarkOffsets(traitMark?.count ?? 1, TRAIT_MARK_SPACING).map((offsetX, index) => (
+                                <mesh
+                                    geometry={
+                                        traitMark?.shape === 'bar'
+                                            ? BOARD_READABILITY_TRAIT_MARK_BAR_GEOMETRY
+                                            : BOARD_READABILITY_TRAIT_MARK_PIP_GEOMETRY
+                                    }
+                                    key={`trait-mark-${index}`}
+                                    position={[offsetX, 0.034, 0.00004]}
+                                    raycast={noopMeshRaycast}
+                                    renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder}
+                                    rotation={[0, 0, traitMark?.shape === 'diamond' ? Math.PI / 4 : 0]}
+                                >
+                                    <meshBasicMaterial
+                                        color="#100d14"
+                                        depthTest
+                                        depthWrite={false}
+                                        opacity={0.78}
+                                        side={DoubleSide}
+                                        toneMapped={false}
+                                        transparent
+                                    />
+                                </mesh>
+                            ))}
                         </group>
                     ) : null}
                     {traitLaneReadabilityColor && traitLaneReadabilityId ? (

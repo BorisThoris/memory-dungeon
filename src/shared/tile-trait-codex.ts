@@ -5,6 +5,7 @@ import {
     TILE_TRAIT_INTERACTION_TEXT,
     type TileTraitInteractionTag
 } from './tile-trait-rules';
+import { describeTraitMark, tileTraitMark } from './tile-trait-marks';
 
 export interface TileTraitCodexRow {
     id: string;
@@ -63,9 +64,11 @@ const INTERACTION_DESCRIPTIONS: Record<TileTraitInteractionTag, string> = {
 export const getTileTraitCodexRows = (): TileTraitCodexRow[] =>
     TRAIT_KIND_ORDER.map((kind) => {
         const copy = TILE_TRAIT_COPY[kind];
+        // The mark leads: it is what a player is looking at on a hidden tile, and the code is only
+        // learnable if the Codex says which shape belongs to which trait.
         return {
             id: `trait-${kind}`,
-            title: copy.label,
+            title: `${copy.label} · ${describeTraitMark(tileTraitMark(kind))}`,
             description: `Match: ${copy.match} Miss: ${copy.mismatch}`
         };
     });

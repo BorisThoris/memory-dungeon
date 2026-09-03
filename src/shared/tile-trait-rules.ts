@@ -32,6 +32,7 @@ export {
     type TileTraitInteractionTag
 } from './tile-trait-interaction-copy';
 import { formatTileTraitInteractionTags, type TileTraitInteractionTag } from './tile-trait-interaction-copy';
+import { describeTraitMark, tileTraitMark } from './tile-trait-marks';
 
 export const TILE_TRAIT_COPY: Record<TileTraitKind, { label: string; match: string; mismatch: string }> = {
     echo: {
@@ -610,7 +611,9 @@ export const getTileTraitText = (tile: Tile): string => {
         return '';
     }
     const copy = TILE_TRAIT_COPY[tile.tileTraitKind];
-    return ` Trait: ${copy.label}. ${copy.match} ${copy.mismatch}`;
+    // The mark is said out loud too: a screen reader gets the same second channel the board draws.
+    const mark = describeTraitMark(tileTraitMark(tile.tileTraitKind));
+    return ` Trait: ${copy.label} (${mark}). ${copy.match} ${copy.mismatch}`;
 };
 
 export const tileTraitKindsInTiles = (

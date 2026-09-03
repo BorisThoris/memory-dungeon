@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2438,
-    "codeFileCount": 919,
-    "exportedSymbolCount": 3461,
+    "trackedFileCount": 2440,
+    "codeFileCount": 921,
+    "exportedSymbolCount": 3468,
     "contentItemCount": 63,
     "mechanicCount": 136,
     "stateFieldCount": 144,
-    "relationshipCount": 10082
+    "relationshipCount": 10103
   },
   "inventory": [
     {
@@ -2283,8 +2283,8 @@
     {
       "path": "docs/STEAM_READINESS.md",
       "category": "documentation",
-      "bytes": 7806,
-      "sha256": "9c30ddd176ce3c32ac80cb17f62320ccd2dc0f70834988eb53f89a3584384a69"
+      "bytes": 8038,
+      "sha256": "1b571441cc5601d39098872e736b5aca05407a49faa9662868ef61350b3b8f57"
     },
     {
       "path": "docs/STRAY_TILE.md",
@@ -2314,7 +2314,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 36714,
-      "sha256": "80c3cb1d57e129b277ca9fafebfb11343e28164361432421c6662e770ad6a305"
+      "sha256": "2c235b15f41158caac2978b43f702fefc967e3d64f5f0d0110249f5acc04444f"
     },
     {
       "path": "docs/UI_RETHINK_PLAN.md",
@@ -8001,8 +8001,8 @@
     {
       "path": "src/renderer/components/tileBoardDomAccessibility.test.ts",
       "category": "test",
-      "bytes": 28103,
-      "sha256": "adf977114eee01acf24662081f57e347e0f8638bd46f04e546f0e964b93181c9"
+      "bytes": 28217,
+      "sha256": "32106c4806a5d7832874697af7b0ada2fe493760693f354476f5bc6732c23520"
     },
     {
       "path": "src/renderer/components/tileBoardDomAccessibility.ts",
@@ -8307,8 +8307,8 @@
     {
       "path": "src/renderer/components/TileBoardReadabilityMarkers.tsx",
       "category": "source",
-      "bytes": 99044,
-      "sha256": "0a252e70b062d63ba5af2ac7d15784d19e353599e1f9100afcdbd0286e1a7bd0"
+      "bytes": 100547,
+      "sha256": "0aef029531e77b44224913270b162bdad9824a5189b709a1fb79cdac2e38eac2"
     },
     {
       "path": "src/renderer/components/tileBoardRegistry.test.ts",
@@ -12213,20 +12213,32 @@
     {
       "path": "src/shared/tile-trait-codex.test.ts",
       "category": "test",
-      "bytes": 1284,
-      "sha256": "95d816b77514354324eb0b3a1f352845ecaf598a879b296566448f356f8729db"
+      "bytes": 1909,
+      "sha256": "cfb74f12d8122dd6965930708158a351c3cfc59136a25647f5ea4d45abf090c1"
     },
     {
       "path": "src/shared/tile-trait-codex.ts",
       "category": "source",
-      "bytes": 5178,
-      "sha256": "708c57a9d6019ce7affa9bc0ff608ad0379babf3b236b67bd81ebcefe8c7409f"
+      "bytes": 5474,
+      "sha256": "3566b470d52d939938da240514ac233dbceebed833e50d82328be01d40f5d17e"
     },
     {
       "path": "src/shared/tile-trait-interaction-copy.ts",
       "category": "source",
       "bytes": 4115,
       "sha256": "f86efedb7f3826b6fb36452894ac69d0e37a22308e4b96e7161999bc6fae93fe"
+    },
+    {
+      "path": "src/shared/tile-trait-marks.test.ts",
+      "category": "test",
+      "bytes": 2348,
+      "sha256": "e74e76af23991c790abe25d567b0fad81f0e37f7a0e43dfbe654f205d3be12e7"
+    },
+    {
+      "path": "src/shared/tile-trait-marks.ts",
+      "category": "source",
+      "bytes": 2720,
+      "sha256": "a43a0a99d048e436a23868887b2a8a6d80769c7d25acca9874ef2a7d682696f4"
     },
     {
       "path": "src/shared/tile-trait-palette.test.ts",
@@ -12243,8 +12255,8 @@
     {
       "path": "src/shared/tile-trait-rules.ts",
       "category": "source",
-      "bytes": 54871,
-      "sha256": "2fb2338a4c0c65a1117efcc0a0fd64fde0abd8d7f00198b958ae46609361ed7b"
+      "bytes": 55123,
+      "sha256": "7a9df8c3e781fdc9a8bf1d5e3623bf95579769b494e39e7613a597a8f91df25a"
     },
     {
       "path": "src/shared/trait-build-rewards.test.ts",
@@ -18153,7 +18165,7 @@
       "path": "src/renderer/components/tileBoardDomAccessibility.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 656,
+      "lineCount": 657,
       "imports": [
         "file:src/renderer/components/tileBoardDomAccessibility.ts",
         "file:src/shared/contracts.ts"
@@ -19064,7 +19076,7 @@
       "path": "src/renderer/components/TileBoardReadabilityMarkers.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 1871,
+      "lineCount": 1890,
       "imports": [
         "file:src/renderer/components/tileBoardPick.ts",
         "file:src/renderer/components/tileBoardReadability.ts",
@@ -19073,6 +19085,7 @@
         "file:src/renderer/components/tileShatter.ts",
         "file:src/renderer/copy/traitInteractionLaneMap.ts",
         "file:src/shared/contracts.ts",
+        "file:src/shared/tile-trait-marks.ts",
         "file:src/shared/tile-trait-rules.ts"
       ],
       "exports": [
@@ -25041,6 +25054,8 @@
         "file:src/shared/tile-floater-anchor-rules.test.ts",
         "file:src/shared/tile-state-rules.test.ts",
         "file:src/shared/tile-symbol-catalog.test.ts",
+        "file:src/shared/tile-trait-codex.test.ts",
+        "file:src/shared/tile-trait-marks.test.ts",
         "file:src/shared/tile-trait-palette.test.ts",
         "file:src/shared/tile-trait-rules.test.ts",
         "file:src/shared/trait-build-rewards.test.ts",
@@ -32304,9 +32319,11 @@
       "path": "src/shared/tile-trait-codex.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 26,
+      "lineCount": 36,
       "imports": [
+        "file:src/shared/contracts.ts",
         "file:src/shared/tile-trait-codex.ts",
+        "file:src/shared/tile-trait-marks.ts",
         "file:src/shared/tile-trait-rules.ts"
       ],
       "exports": [],
@@ -32317,9 +32334,10 @@
       "path": "src/shared/tile-trait-codex.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 79,
+      "lineCount": 82,
       "imports": [
         "file:src/shared/contracts.ts",
+        "file:src/shared/tile-trait-marks.ts",
         "file:src/shared/tile-trait-rules.ts"
       ],
       "exports": [
@@ -32345,6 +32363,43 @@
         "symbol:src/shared/tile-trait-interaction-copy.ts#TileTraitInteractionTag"
       ],
       "testedBy": []
+    },
+    {
+      "id": "file:src/shared/tile-trait-marks.test.ts",
+      "path": "src/shared/tile-trait-marks.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 56,
+      "imports": [
+        "file:src/shared/contracts.ts",
+        "file:src/shared/tile-trait-marks.ts",
+        "file:src/shared/tile-trait-rules.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/shared/tile-trait-marks.ts",
+      "path": "src/shared/tile-trait-marks.ts",
+      "layer": "shared",
+      "role": "production",
+      "lineCount": 61,
+      "imports": [
+        "file:src/shared/contracts.ts"
+      ],
+      "exports": [
+        "symbol:src/shared/tile-trait-marks.ts#describeTraitMark",
+        "symbol:src/shared/tile-trait-marks.ts#TILE_TRAIT_MARKS",
+        "symbol:src/shared/tile-trait-marks.ts#tileTraitMark",
+        "symbol:src/shared/tile-trait-marks.ts#TraitMarkCount",
+        "symbol:src/shared/tile-trait-marks.ts#traitMarkOffsets",
+        "symbol:src/shared/tile-trait-marks.ts#TraitMarkShape",
+        "symbol:src/shared/tile-trait-marks.ts#TraitMarkSignature"
+      ],
+      "testedBy": [
+        "file:src/shared/tile-trait-codex.test.ts",
+        "file:src/shared/tile-trait-marks.test.ts"
+      ]
     },
     {
       "id": "file:src/shared/tile-trait-palette.test.ts",
@@ -32382,7 +32437,7 @@
       "path": "src/shared/tile-trait-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1278,
+      "lineCount": 1281,
       "imports": [
         "file:src/shared/bonus-rewards.ts",
         "file:src/shared/contracts.ts",
@@ -32394,7 +32449,8 @@
         "file:src/shared/run-number-guards.ts",
         "file:src/shared/session-stats-rules.ts",
         "file:src/shared/tile-identity.ts",
-        "file:src/shared/tile-trait-interaction-copy.ts"
+        "file:src/shared/tile-trait-interaction-copy.ts",
+        "file:src/shared/tile-trait-marks.ts"
       ],
       "exports": [
         "symbol:src/shared/tile-trait-rules.ts#applyVolatileMismatchTrait",
@@ -32430,6 +32486,7 @@
         "file:src/renderer/store/useAppStore.test.ts",
         "file:src/shared/gameplay-core.test.ts",
         "file:src/shared/tile-trait-codex.test.ts",
+        "file:src/shared/tile-trait-marks.test.ts",
         "file:src/shared/tile-trait-palette.test.ts",
         "file:src/shared/tile-trait-rules.test.ts"
       ]
@@ -37701,8 +37758,8 @@
       "name": "TileBoardReadabilityMarkers",
       "kind": "value",
       "file": "src/renderer/components/TileBoardReadabilityMarkers.tsx",
-      "line": 181,
-      "endLine": 1870
+      "line": 186,
+      "endLine": 1889
     },
     {
       "id": "symbol:src/renderer/components/tileBoardRegistry.ts#createTileBoardItemRegistry",
@@ -59709,24 +59766,24 @@
       "name": "getTileTraitCodexRows",
       "kind": "value",
       "file": "src/shared/tile-trait-codex.ts",
-      "line": 63,
-      "endLine": 71
+      "line": 64,
+      "endLine": 74
     },
     {
       "id": "symbol:src/shared/tile-trait-codex.ts#getTileTraitInteractionCodexRows",
       "name": "getTileTraitInteractionCodexRows",
       "kind": "value",
       "file": "src/shared/tile-trait-codex.ts",
-      "line": 73,
-      "endLine": 78
+      "line": 76,
+      "endLine": 81
     },
     {
       "id": "symbol:src/shared/tile-trait-codex.ts#TileTraitCodexRow",
       "name": "TileTraitCodexRow",
       "kind": "interface",
       "file": "src/shared/tile-trait-codex.ts",
-      "line": 9,
-      "endLine": 13
+      "line": 10,
+      "endLine": 14
     },
     {
       "id": "symbol:src/shared/tile-trait-interaction-copy.ts#formatTileTraitInteractionTags",
@@ -59761,52 +59818,108 @@
       "endLine": 37
     },
     {
+      "id": "symbol:src/shared/tile-trait-marks.ts#describeTraitMark",
+      "name": "describeTraitMark",
+      "kind": "value",
+      "file": "src/shared/tile-trait-marks.ts",
+      "line": 48,
+      "endLine": 51
+    },
+    {
+      "id": "symbol:src/shared/tile-trait-marks.ts#TILE_TRAIT_MARKS",
+      "name": "TILE_TRAIT_MARKS",
+      "kind": "value",
+      "file": "src/shared/tile-trait-marks.ts",
+      "line": 33,
+      "endLine": 43
+    },
+    {
+      "id": "symbol:src/shared/tile-trait-marks.ts#tileTraitMark",
+      "name": "tileTraitMark",
+      "kind": "value",
+      "file": "src/shared/tile-trait-marks.ts",
+      "line": 45,
+      "endLine": 45
+    },
+    {
+      "id": "symbol:src/shared/tile-trait-marks.ts#TraitMarkCount",
+      "name": "TraitMarkCount",
+      "kind": "type",
+      "file": "src/shared/tile-trait-marks.ts",
+      "line": 19,
+      "endLine": 19
+    },
+    {
+      "id": "symbol:src/shared/tile-trait-marks.ts#traitMarkOffsets",
+      "name": "traitMarkOffsets",
+      "kind": "value",
+      "file": "src/shared/tile-trait-marks.ts",
+      "line": 57,
+      "endLine": 60
+    },
+    {
+      "id": "symbol:src/shared/tile-trait-marks.ts#TraitMarkShape",
+      "name": "TraitMarkShape",
+      "kind": "type",
+      "file": "src/shared/tile-trait-marks.ts",
+      "line": 18,
+      "endLine": 18
+    },
+    {
+      "id": "symbol:src/shared/tile-trait-marks.ts#TraitMarkSignature",
+      "name": "TraitMarkSignature",
+      "kind": "interface",
+      "file": "src/shared/tile-trait-marks.ts",
+      "line": 21,
+      "endLine": 24
+    },
+    {
       "id": "symbol:src/shared/tile-trait-rules.ts#applyVolatileMismatchTrait",
       "name": "applyVolatileMismatchTrait",
       "kind": "value",
       "file": "src/shared/tile-trait-rules.ts",
-      "line": 738,
-      "endLine": 779
+      "line": 741,
+      "endLine": 782
     },
     {
       "id": "symbol:src/shared/tile-trait-rules.ts#assignTileTraitsToGeneratedBoard",
       "name": "assignTileTraitsToGeneratedBoard",
       "kind": "value",
       "file": "src/shared/tile-trait-rules.ts",
-      "line": 630,
-      "endLine": 736
+      "line": 633,
+      "endLine": 739
     },
     {
       "id": "symbol:src/shared/tile-trait-rules.ts#calculateTileTraitMatchRewards",
       "name": "calculateTileTraitMatchRewards",
       "kind": "value",
       "file": "src/shared/tile-trait-rules.ts",
-      "line": 1237,
-      "endLine": 1258
+      "line": 1240,
+      "endLine": 1261
     },
     {
       "id": "symbol:src/shared/tile-trait-rules.ts#calculateTileTraitMismatchPenalty",
       "name": "calculateTileTraitMismatchPenalty",
       "kind": "value",
       "file": "src/shared/tile-trait-rules.ts",
-      "line": 1260,
-      "endLine": 1277
+      "line": 1263,
+      "endLine": 1280
     },
     {
       "id": "symbol:src/shared/tile-trait-rules.ts#countTraitComboOpportunityPairs",
       "name": "countTraitComboOpportunityPairs",
       "kind": "value",
       "file": "src/shared/tile-trait-rules.ts",
-      "line": 286,
-      "endLine": 301
+      "line": 287,
+      "endLine": 302
     },
     {
       "id": "symbol:src/shared/tile-trait-rules.ts#countTraitInteractionLines",
       "name": "countTraitInteractionLines",
       "kind": "value",
       "file": "src/shared/tile-trait-rules.ts",
-      "line": 330,
-      "endLine": 331
+      "line": 331,
+      "endLine": 332
     },
     {
       "id": "symbol:src/shared/tile-trait-rules.ts#formatTileTraitInteractionTags",
@@ -59821,80 +59934,80 @@
       "name": "getBoardTraitInteractionPreviewLines",
       "kind": "value",
       "file": "src/shared/tile-trait-rules.ts",
-      "line": 267,
-      "endLine": 284
+      "line": 268,
+      "endLine": 285
     },
     {
       "id": "symbol:src/shared/tile-trait-rules.ts#getRouteTraitForecastLine",
       "name": "getRouteTraitForecastLine",
       "kind": "value",
       "file": "src/shared/tile-trait-rules.ts",
-      "line": 589,
-      "endLine": 606
+      "line": 590,
+      "endLine": 607
     },
     {
       "id": "symbol:src/shared/tile-trait-rules.ts#getTileSwapTraitPreviewLines",
       "name": "getTileSwapTraitPreviewLines",
       "kind": "value",
       "file": "src/shared/tile-trait-rules.ts",
-      "line": 245,
-      "endLine": 265
+      "line": 246,
+      "endLine": 266
     },
     {
       "id": "symbol:src/shared/tile-trait-rules.ts#getTileTraitInteractionPreviewLines",
       "name": "getTileTraitInteractionPreviewLines",
       "kind": "value",
       "file": "src/shared/tile-trait-rules.ts",
-      "line": 198,
-      "endLine": 226
+      "line": 199,
+      "endLine": 227
     },
     {
       "id": "symbol:src/shared/tile-trait-rules.ts#getTileTraitText",
       "name": "getTileTraitText",
       "kind": "value",
       "file": "src/shared/tile-trait-rules.ts",
-      "line": 608,
-      "endLine": 614
+      "line": 609,
+      "endLine": 617
     },
     {
       "id": "symbol:src/shared/tile-trait-rules.ts#hasTraitBoardPowerInteractionOpportunity",
       "name": "hasTraitBoardPowerInteractionOpportunity",
       "kind": "value",
       "file": "src/shared/tile-trait-rules.ts",
-      "line": 345,
-      "endLine": 346
+      "line": 346,
+      "endLine": 347
     },
     {
       "id": "symbol:src/shared/tile-trait-rules.ts#hasTraitRewardInteractionFloor",
       "name": "hasTraitRewardInteractionFloor",
       "kind": "value",
       "file": "src/shared/tile-trait-rules.ts",
-      "line": 333,
-      "endLine": 343
+      "line": 334,
+      "endLine": 344
     },
     {
       "id": "symbol:src/shared/tile-trait-rules.ts#hasTraitSwapSetupOpportunity",
       "name": "hasTraitSwapSetupOpportunity",
       "kind": "value",
       "file": "src/shared/tile-trait-rules.ts",
-      "line": 303,
-      "endLine": 328
+      "line": 304,
+      "endLine": 329
     },
     {
       "id": "symbol:src/shared/tile-trait-rules.ts#resolveTileTraitEffects",
       "name": "resolveTileTraitEffects",
       "kind": "value",
       "file": "src/shared/tile-trait-rules.ts",
-      "line": 856,
-      "endLine": 1235
+      "line": 859,
+      "endLine": 1238
     },
     {
       "id": "symbol:src/shared/tile-trait-rules.ts#TILE_TRAIT_COPY",
       "name": "TILE_TRAIT_COPY",
       "kind": "value",
       "file": "src/shared/tile-trait-rules.ts",
-      "line": 36,
-      "endLine": 82
+      "line": 37,
+      "endLine": 83
     },
     {
       "id": "symbol:src/shared/tile-trait-rules.ts#TILE_TRAIT_INTERACTION_TAGS",
@@ -59917,32 +60030,32 @@
       "name": "TILE_TRAIT_MATCH_SCORE_BONUS",
       "kind": "value",
       "file": "src/shared/tile-trait-rules.ts",
-      "line": 84,
-      "endLine": 87
+      "line": 85,
+      "endLine": 88
     },
     {
       "id": "symbol:src/shared/tile-trait-rules.ts#tileTraitColor",
       "name": "tileTraitColor",
       "kind": "value",
       "file": "src/shared/tile-trait-rules.ts",
-      "line": 411,
-      "endLine": 411
+      "line": 412,
+      "endLine": 412
     },
     {
       "id": "symbol:src/shared/tile-trait-rules.ts#TileTraitEffectContext",
       "name": "TileTraitEffectContext",
       "kind": "interface",
       "file": "src/shared/tile-trait-rules.ts",
-      "line": 110,
-      "endLine": 119
+      "line": 111,
+      "endLine": 120
     },
     {
       "id": "symbol:src/shared/tile-trait-rules.ts#TileTraitEffectResult",
       "name": "TileTraitEffectResult",
       "kind": "interface",
       "file": "src/shared/tile-trait-rules.ts",
-      "line": 89,
-      "endLine": 108
+      "line": 90,
+      "endLine": 109
     },
     {
       "id": "symbol:src/shared/tile-trait-rules.ts#TileTraitInteractionTag",
@@ -59957,16 +60070,16 @@
       "name": "tileTraitKindsInTiles",
       "kind": "value",
       "file": "src/shared/tile-trait-rules.ts",
-      "line": 616,
-      "endLine": 628
+      "line": 619,
+      "endLine": 631
     },
     {
       "id": "symbol:src/shared/tile-trait-rules.ts#tileTraitPalette",
       "name": "tileTraitPalette",
       "kind": "value",
       "file": "src/shared/tile-trait-rules.ts",
-      "line": 409,
-      "endLine": 409
+      "line": 410,
+      "endLine": 410
     },
     {
       "id": "symbol:src/shared/trait-build-rewards.ts#getTraitBuildBoardHint",
@@ -61889,7 +62002,7 @@
         },
         {
           "path": "src/shared/tile-trait-rules.ts",
-          "line": 1105
+          "line": 1108
         }
       ],
       "tests": [
@@ -62241,7 +62354,7 @@
         },
         {
           "path": "src/shared/tile-trait-rules.ts",
-          "line": 443
+          "line": 444
         }
       ],
       "tests": [
@@ -64133,7 +64246,7 @@
         },
         {
           "path": "src/shared/tile-trait-rules.ts",
-          "line": 45
+          "line": 46
         }
       ],
       "tests": [
@@ -64166,7 +64279,7 @@
       "evidence": [
         {
           "path": "src/shared/tile-trait-rules.ts",
-          "line": 37
+          "line": 38
         },
         {
           "path": "src/shared/bonus-rewards.ts",
@@ -92658,6 +92771,48 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/tile-trait-marks.ts->symbol:src/shared/tile-trait-marks.ts#describeTraitMark",
+      "source": "file:src/shared/tile-trait-marks.ts",
+      "target": "symbol:src/shared/tile-trait-marks.ts#describeTraitMark",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/tile-trait-marks.ts->symbol:src/shared/tile-trait-marks.ts#TILE_TRAIT_MARKS",
+      "source": "file:src/shared/tile-trait-marks.ts",
+      "target": "symbol:src/shared/tile-trait-marks.ts#TILE_TRAIT_MARKS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/tile-trait-marks.ts->symbol:src/shared/tile-trait-marks.ts#tileTraitMark",
+      "source": "file:src/shared/tile-trait-marks.ts",
+      "target": "symbol:src/shared/tile-trait-marks.ts#tileTraitMark",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/tile-trait-marks.ts->symbol:src/shared/tile-trait-marks.ts#TraitMarkCount",
+      "source": "file:src/shared/tile-trait-marks.ts",
+      "target": "symbol:src/shared/tile-trait-marks.ts#TraitMarkCount",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/tile-trait-marks.ts->symbol:src/shared/tile-trait-marks.ts#traitMarkOffsets",
+      "source": "file:src/shared/tile-trait-marks.ts",
+      "target": "symbol:src/shared/tile-trait-marks.ts#traitMarkOffsets",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/tile-trait-marks.ts->symbol:src/shared/tile-trait-marks.ts#TraitMarkShape",
+      "source": "file:src/shared/tile-trait-marks.ts",
+      "target": "symbol:src/shared/tile-trait-marks.ts#TraitMarkShape",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/tile-trait-marks.ts->symbol:src/shared/tile-trait-marks.ts#TraitMarkSignature",
+      "source": "file:src/shared/tile-trait-marks.ts",
+      "target": "symbol:src/shared/tile-trait-marks.ts#TraitMarkSignature",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/tile-trait-rules.ts->symbol:src/shared/tile-trait-rules.ts#applyVolatileMismatchTrait",
       "source": "file:src/shared/tile-trait-rules.ts",
       "target": "symbol:src/shared/tile-trait-rules.ts#applyVolatileMismatchTrait",
@@ -101668,6 +101823,12 @@
       "id": "imports:src/renderer/components/TileBoardReadabilityMarkers.tsx->src/shared/contracts.ts",
       "source": "file:src/renderer/components/TileBoardReadabilityMarkers.tsx",
       "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/TileBoardReadabilityMarkers.tsx->src/shared/tile-trait-marks.ts",
+      "source": "file:src/renderer/components/TileBoardReadabilityMarkers.tsx",
+      "target": "file:src/shared/tile-trait-marks.ts",
       "kind": "imports"
     },
     {
@@ -114259,9 +114420,21 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/tile-trait-codex.test.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/tile-trait-codex.test.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/tile-trait-codex.test.ts->src/shared/tile-trait-codex.ts",
       "source": "file:src/shared/tile-trait-codex.test.ts",
       "target": "file:src/shared/tile-trait-codex.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/tile-trait-codex.test.ts->src/shared/tile-trait-marks.ts",
+      "source": "file:src/shared/tile-trait-codex.test.ts",
+      "target": "file:src/shared/tile-trait-marks.ts",
       "kind": "imports"
     },
     {
@@ -114277,9 +114450,39 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/tile-trait-codex.ts->src/shared/tile-trait-marks.ts",
+      "source": "file:src/shared/tile-trait-codex.ts",
+      "target": "file:src/shared/tile-trait-marks.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/tile-trait-codex.ts->src/shared/tile-trait-rules.ts",
       "source": "file:src/shared/tile-trait-codex.ts",
       "target": "file:src/shared/tile-trait-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/tile-trait-marks.test.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/tile-trait-marks.test.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/tile-trait-marks.test.ts->src/shared/tile-trait-marks.ts",
+      "source": "file:src/shared/tile-trait-marks.test.ts",
+      "target": "file:src/shared/tile-trait-marks.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/tile-trait-marks.test.ts->src/shared/tile-trait-rules.ts",
+      "source": "file:src/shared/tile-trait-marks.test.ts",
+      "target": "file:src/shared/tile-trait-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/tile-trait-marks.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/tile-trait-marks.ts",
+      "target": "file:src/shared/contracts.ts",
       "kind": "imports"
     },
     {
@@ -114400,6 +114603,12 @@
       "id": "imports:src/shared/tile-trait-rules.ts->src/shared/tile-trait-interaction-copy.ts",
       "source": "file:src/shared/tile-trait-rules.ts",
       "target": "file:src/shared/tile-trait-interaction-copy.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/tile-trait-rules.ts->src/shared/tile-trait-marks.ts",
+      "source": "file:src/shared/tile-trait-rules.ts",
+      "target": "file:src/shared/tile-trait-marks.ts",
       "kind": "imports"
     },
     {
@@ -124631,6 +124840,18 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/contracts.ts->file:src/shared/tile-trait-codex.test.ts",
+      "source": "file:src/shared/contracts.ts",
+      "target": "file:src/shared/tile-trait-codex.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/contracts.ts->file:src/shared/tile-trait-marks.test.ts",
+      "source": "file:src/shared/contracts.ts",
+      "target": "file:src/shared/tile-trait-marks.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/contracts.ts->file:src/shared/tile-trait-palette.test.ts",
       "source": "file:src/shared/contracts.ts",
       "target": "file:src/shared/tile-trait-palette.test.ts",
@@ -127577,6 +127798,18 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/tile-trait-marks.ts->file:src/shared/tile-trait-codex.test.ts",
+      "source": "file:src/shared/tile-trait-marks.ts",
+      "target": "file:src/shared/tile-trait-codex.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/tile-trait-marks.ts->file:src/shared/tile-trait-marks.test.ts",
+      "source": "file:src/shared/tile-trait-marks.ts",
+      "target": "file:src/shared/tile-trait-marks.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/tile-trait-rules.ts->file:src/renderer/components/tileBoardReadability.test.ts",
       "source": "file:src/shared/tile-trait-rules.ts",
       "target": "file:src/renderer/components/tileBoardReadability.test.ts",
@@ -127604,6 +127837,12 @@
       "id": "tested_by:src/shared/tile-trait-rules.ts->file:src/shared/tile-trait-codex.test.ts",
       "source": "file:src/shared/tile-trait-rules.ts",
       "target": "file:src/shared/tile-trait-codex.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/tile-trait-rules.ts->file:src/shared/tile-trait-marks.test.ts",
+      "source": "file:src/shared/tile-trait-rules.ts",
+      "target": "file:src/shared/tile-trait-marks.test.ts",
       "kind": "tested_by"
     },
     {

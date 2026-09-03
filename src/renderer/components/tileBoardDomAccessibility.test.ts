@@ -74,7 +74,8 @@ describe('tile board DOM accessibility helpers', () => {
         expect(label).toContain('Tile A, row 1, column 1');
         expect(label).toContain('Route card: Greed cache.');
         expect(label).toContain('Hazard tile:');
-        expect(label).toContain('Trait: Volatile.');
+        // The mark is spoken as well as drawn, so a screen-reader user gets the second channel too.
+        expect(label).toContain('Trait: Volatile (3 diamonds).');
         expect(label).toContain('Scouted by Omen Seal.');
         expect(label).toContain('Occupied by revealed moving enemy patrol Sentinel, 2/3 HP, 1 damage.');
         expect(getEnemyHazardText(labelledBoard, 'b1')).toContain('Next target of moving enemy patrol Sentinel');
