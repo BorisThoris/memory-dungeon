@@ -37,6 +37,7 @@ import { pairProximityUiStrings } from '../ui/strings/pairProximityUi';
 import packageJson from '../../../package.json';
 import { GAMEPLAY_VISUAL_CSS_VARS } from './gameplayVisualConfig';
 import OverlayModal from './OverlayModal';
+import { SETTINGS_FOOTER_HINT, SETTINGS_HINTS } from '../copy/settingsHints';
 import { PlaceholderControl, SegmentedControl, SettingsSection, SliderRow, ToggleRow } from './SettingsControls';
 import {
     DEFAULT_SUBSECTION_BY_CATEGORY,
@@ -317,7 +318,7 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                             <SettingsSection title="Board Presentation">
                                                 <div className={styles.boardPresentationPair}>
                                                     <SegmentedControl<BoardPresentationMode>
-                                                        hint="Choose the current live board framing mode."
+                                                        hint={SETTINGS_HINTS.boardPresentation}
                                                         label="Layout Style"
                                                         onChange={(next) => patchSettings('boardPresentation', next)}
                                                         options={[
@@ -328,7 +329,7 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                                         value={draft.boardPresentation}
                                                     />
                                                     <SegmentedControl<CameraViewportModePreference>
-                                                        hint="Auto follows phone / narrow-short-landscape breakpoints. Always or Never override."
+                                                        hint={SETTINGS_HINTS.cameraViewportModePreference}
                                                         label="Mobile Camera Shell"
                                                         onChange={(next) => patchSettings('cameraViewportModePreference', next)}
                                                         options={[
@@ -345,7 +346,7 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                         {activeCategory === 'gameplay' && showSubsection('timing') ? (
                                             <SettingsSection title="Run Timing">
                                                 <SliderRow
-                                                    hint="Controls mismatch and resolve pacing for new runs."
+                                                    hint={SETTINGS_HINTS.resolveDelayMultiplier}
                                                     label="Resolve Delay"
                                                     max={SETTINGS_NUMERIC_RANGES.resolveDelayMultiplier.max}
                                                     min={SETTINGS_NUMERIC_RANGES.resolveDelayMultiplier.min}
@@ -355,7 +356,7 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                                     valueLabel={`${draft.resolveDelayMultiplier.toFixed(2)}x`}
                                                 />
                                                 <SegmentedControl<WeakerShuffleMode>
-                                                    hint="Full shuffle preserves the original challenge. Rows only is the softer live option."
+                                                    hint={SETTINGS_HINTS.weakerShuffleMode}
                                                     label="Shuffle Strength"
                                                     onChange={(next) => patchSettings('weakerShuffleMode', next)}
                                                     options={[
@@ -372,13 +373,13 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                                 <div className={styles.toggleStack}>
                                                     <ToggleRow
                                                         checked={draft.tileFocusAssist}
-                                                        hint="Dims non-adjacent hidden tiles after the first pick on the fallback board."
+                                                        hint={SETTINGS_HINTS.tileFocusAssist}
                                                         label="Focus Assist"
                                                         onChange={(next) => patchSettings('tileFocusAssist', next)}
                                                     />
                                                     <ToggleRow
                                                         checked={draft.echoFeedbackEnabled}
-                                                        hint="Keeps mismatched faces visible a little longer."
+                                                        hint={SETTINGS_HINTS.echoFeedbackEnabled}
                                                         label="Echo Feedback"
                                                         onChange={(next) => patchSettings('echoFeedbackEnabled', next)}
                                                     />
@@ -390,13 +391,13 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                                     />
                                                     <ToggleRow
                                                         checked={draft.distractionChannelEnabled}
-                                                        hint="Enables the distraction mutator overlay when the daily includes it."
+                                                        hint={SETTINGS_HINTS.distractionChannelEnabled}
                                                         label="Distraction Channel"
                                                         onChange={(next) => patchSettings('distractionChannelEnabled', next)}
                                                     />
                                                     <ToggleRow
                                                         checked={draft.shuffleScoreTaxEnabled}
-                                                        hint="Applies the current live score penalty after each shuffle."
+                                                        hint={SETTINGS_HINTS.shuffleScorePenalty}
                                                         label="Shuffle Score Tax"
                                                         onChange={(next) => patchSettings('shuffleScoreTaxEnabled', next)}
                                                     />
@@ -458,7 +459,7 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                         {activeCategory === 'audio' && showSubsection('volume') ? (
                                             <SettingsSection title="Volume">
                                                 <SliderRow
-                                                    hint="Overall mix applied across the whole run."
+                                                    hint={SETTINGS_HINTS.masterVolume}
                                                     label="Master Volume"
                                                     max={SETTINGS_NUMERIC_RANGES.masterVolume.max}
                                                     min={SETTINGS_NUMERIC_RANGES.masterVolume.min}
@@ -468,7 +469,7 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                                     valueLabel={`${Math.round(draft.masterVolume * 100)}%`}
                                                 />
                                                 <SliderRow
-                                                    hint="Menu and ambient music level."
+                                                    hint={SETTINGS_HINTS.musicVolume}
                                                     label="Music"
                                                     max={SETTINGS_NUMERIC_RANGES.musicVolume.max}
                                                     min={SETTINGS_NUMERIC_RANGES.musicVolume.min}
@@ -478,7 +479,7 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                                     valueLabel={`${Math.round(draft.musicVolume * 100)}%`}
                                                 />
                                                 <SliderRow
-                                                    hint="Tile flips, rewards, and hit feedback."
+                                                    hint={SETTINGS_HINTS.sfxVolume}
                                                     label="SFX"
                                                     max={SETTINGS_NUMERIC_RANGES.sfxVolume.max}
                                                     min={SETTINGS_NUMERIC_RANGES.sfxVolume.min}
@@ -493,7 +494,7 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                         {activeCategory === 'video' && showSubsection('display') ? (
                                             <SettingsSection title="Display">
                                                 <SegmentedControl<DisplayMode>
-                                                    hint="Switch between current supported desktop display modes."
+                                                    hint={SETTINGS_HINTS.displayMode}
                                                     label="Window Mode"
                                                     onChange={(next) => patchSettings('displayMode', next)}
                                                     options={[
@@ -503,7 +504,7 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                                     value={draft.displayMode}
                                                 />
                                                 <SliderRow
-                                                    hint="Scales the renderer UI on desktop and tablet viewports."
+                                                    hint={SETTINGS_HINTS.uiScale}
                                                     label="UI Scale"
                                                     max={SETTINGS_NUMERIC_RANGES.uiScale.max}
                                                     min={SETTINGS_NUMERIC_RANGES.uiScale.min}
@@ -518,7 +519,7 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                         {activeCategory === 'video' && showSubsection('graphics') ? (
                                             <SettingsSection title="Graphics">
                                                 <SegmentedControl<GraphicsQualityPreset>
-                                                    hint="Low caps board pixel ratio and menu atmosphere resolution; high allows sharper WebGL. Bloom stays off unless you enable it below."
+                                                    hint={SETTINGS_HINTS.graphicsQuality}
                                                     label="Graphics quality"
                                                     onChange={(next) => patchSettings('graphicsQuality', next)}
                                                     options={[
@@ -532,13 +533,13 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                                     <ToggleRow
                                                         checked={draft.boardBloomEnabled}
                                                         disabled={draft.graphicsQuality === 'low'}
-                                                        hint="Soft board-stage glow. Disabled on Low quality for performance."
+                                                        hint={SETTINGS_HINTS.boardBloomEnabled}
                                                         label="Board bloom"
                                                         onChange={(next) => patchSettings('boardBloomEnabled', next)}
                                                     />
                                                 </div>
                                                 <SegmentedControl<BoardScreenSpaceAA>
-                                                    hint="Board WebGL edge smoothing. Auto follows the motion setting unless you override it."
+                                                    hint={SETTINGS_HINTS.boardScreenSpaceAA}
                                                     label="Board anti-aliasing"
                                                     onChange={(next) => patchSettings('boardScreenSpaceAA', next)}
                                                     options={[
@@ -557,19 +558,19 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                                 <div className={styles.toggleStack}>
                                                     <ToggleRow
                                                         checked={draft.reduceMotion}
-                                                        hint="Disables board breathing, tilt-heavy UI motion, and visual drift where possible."
+                                                        hint={SETTINGS_HINTS.reduceMotion}
                                                         label="Reduce Motion"
                                                         onChange={(next) => patchSettings('reduceMotion', next)}
                                                     />
                                                     <ToggleRow
                                                         checked={draft.tileFocusAssist}
-                                                        hint="Repeats the live focus assist toggle here for faster access."
+                                                        hint={SETTINGS_HINTS.tileFocusAssistRepeat}
                                                         label="Board Focus Assist"
                                                         onChange={(next) => patchSettings('tileFocusAssist', next)}
                                                     />
                                                 </div>
                                                 <PlaceholderControl
-                                                    hint="Tutorial hint visibility is presented here for layout fidelity only."
+                                                    hint={SETTINGS_HINTS.tutorialHints}
                                                     label="Tutorial Hints"
                                                     options={['Off', 'On']}
                                                 />
@@ -703,7 +704,7 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                         playUiBack();
                         setUnsavedBackOpen(false);
                     }}
-                    subtitle="Save your changes, discard them, or keep editing."
+                    subtitle={SETTINGS_FOOTER_HINT}
                     testId="settings-unsaved-back-modal"
                     title="Unsaved settings"
                 />

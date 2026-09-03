@@ -14,6 +14,7 @@ import { FittedGrid, OverlayActionDock } from '../ui';
 import { useAppStore } from '../store/useAppStore';
 import { GAMEPLAY_VISUAL_CSS_VARS } from './gameplayVisualConfig';
 import styles from './ShopScreen.module.css';
+import { SHOP_COPY } from '../copy/screenCopy';
 
 type OfferStatus = 'available' | 'claimed' | 'insufficient' | 'incompatible';
 
@@ -143,10 +144,10 @@ const ShopScreen = () => {
                         <h2>Vendor alcove</h2>
                         <p>
                             {inFloorShop
-                                ? 'Spend current shop gold, then return to the board. This vendor does not advance the floor.'
+                                ? SHOP_COPY.sideRoomSubtitle
                                 : run.pendingRouteCardPlan && pendingRouteCardKind
                                 ? routeWorldLine(run.pendingRouteCardPlan.routeType, routeCardLabel(pendingRouteCardKind))
-                                : 'Spend temporary shop gold before the next floor. Unspent gold expires when the run ends.'}
+                                : SHOP_COPY.subtitle}
                         </p>
                     </div>
                     <div className={styles.purse} aria-label={`${run.shopGold} shop gold`}>
@@ -162,7 +163,7 @@ const ShopScreen = () => {
                   */}
                 <FittedGrid
                     ariaLabel="Vendor stock"
-                    emptyState="The vendor has nothing left this visit."
+                    emptyState={SHOP_COPY.emptyState}
                     items={run.shopOffers}
                     itemNoun="offers"
                     keyForItem={(offer) => offer.id}

@@ -7,8 +7,9 @@ import { HARDCODED_COPY_BASELINE, findHardcodedCopy, scanComponentCopy } from '.
  * was anything stopping the next component from hardcoding a sentence, and any idea of how much
  * already was.
  *
- * The baseline ratchets down. It is not an assertion that 54 is acceptable; it is an assertion that
- * 55 would be worse and that nobody should reach that number by accident.
+ * The baseline ratcheted down to zero, so this is now a rule rather than a budget: a component may
+ * not carry a player-facing sentence at all. What is left to decide about localization is which
+ * languages to pay for, which is the state it should have been in all along.
  */
 describe('copy locality', () => {
     it('does not let components grow new player-facing prose', () => {
@@ -24,11 +25,9 @@ describe('copy locality', () => {
         ).toBeLessThanOrEqual(HARDCODED_COPY_BASELINE);
     });
 
-    it('keeps the baseline honest by failing if it drifts far below the real count', () => {
-        // A baseline left high after copy moves out stops catching regressions, so it has to be
-        // lowered when the number drops rather than left as slack.
-        const found = scanComponentCopy();
-        expect(HARDCODED_COPY_BASELINE - found.length).toBeLessThanOrEqual(5);
+    it('holds the baseline at zero rather than leaving slack behind', () => {
+        // A baseline left above the real count stops catching regressions.
+        expect(HARDCODED_COPY_BASELINE).toBe(0);
     });
 });
 
@@ -56,5 +55,27 @@ describe('the detector itself', () => {
 
     it('does not mistake an interpolated template for a fixed string', () => {
         expect(findHardcodedCopy('const s = `Floor ${level} of the endless cycle awaits`;', 'a.tsx')).toEqual([]);
+    });
+
+    it('leaves developer diagnostics alone', () => {
+        // A thrown message is read by whoever is debugging the build, never by a player; moving it
+        // into a copy module would put a developer's sentence in front of a translator.
+        for (const source of [
+            `throw new Error('Main menu background could not allocate a 2D drawing context.');`,
+            `console.warn('Steam achievement activation returned false for this run.');`
+        ]) {
+            expect(findHardcodedCopy(source, 'a.tsx')).toEqual([]);
+        }
+    });
+
+    it('reads a comment quoting the copy as documentation, not as a second copy', () => {
+        // A JSDoc line naming the string a prop renders explains the copy; asking someone to move
+        // it into a copy module would only delete the explanation.
+        const source = [
+            '/** Room the door leads to: "Keeper Chamber via Safe passage", when one is offered. */',
+            'const label = roomLabel;'
+        ].join('\n');
+
+        expect(findHardcodedCopy(source, 'a.tsx')).toEqual([]);
     });
 });

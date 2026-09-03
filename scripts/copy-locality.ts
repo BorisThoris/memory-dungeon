@@ -24,6 +24,13 @@ const NON_COPY_ATTRIBUTES =
 const LOOKS_LIKE_CODE = /^(?:[a-z]+[A-Z]|[\w-]+\.[\w-]+$|https?:|#|\.|\/|--|\d)/u;
 
 /**
+ * Diagnostics, not copy. A thrown Error or a console line is read by whoever is debugging the
+ * build, never by a player, so moving it into a copy module would put a developer's sentence in
+ * front of a translator.
+ */
+const DEVELOPER_DIAGNOSTIC = /(?:new (?:Error|TypeError|RangeError)\(|console\.(?:log|warn|error|info|debug)\(\s*)$/u;
+
+/**
  * Prose, roughly: several words, starting like a sentence, with a space and no code punctuation.
  * Two words is too loose (it catches labels like "Shop gold" that are legitimately inline).
  */
@@ -36,7 +43,16 @@ const isProse = (text: string): boolean => {
     return words.length >= 5 && /^[A-Z]/u.test(trimmed) && !/[{}<>|]/u.test(trimmed);
 };
 
-export const findHardcodedCopy = (source: string, file: string): HardcodedCopy[] => {
+/**
+ * Blanks comments before scanning, keeping offsets so the surrounding-context checks still line up.
+ * A JSDoc line quoting the string a prop renders is documentation of the copy, not a second copy of
+ * it, and asking someone to move it into a copy module would only delete the explanation.
+ */
+const withoutComments = (source: string): string =>
+    source.replace(/\/\*[\s\S]*?\*\/|\/\/[^\n]*/gu, (comment) => comment.replace(/[^\n]/gu, ' '));
+
+export const findHardcodedCopy = (rawSource: string, file: string): HardcodedCopy[] => {
+    const source = withoutComments(rawSource);
     const found: HardcodedCopy[] = [];
     // Single and double quoted literals, plus backtick templates with no interpolation.
     const literals = source.matchAll(/(['"`])((?:\\.|(?!\1)[^\\])*)\1/gu);
@@ -46,7 +62,7 @@ export const findHardcodedCopy = (source: string, file: string): HardcodedCopy[]
             continue;
         }
         const before = source.slice(Math.max(0, match.index - 40), match.index);
-        if (NON_COPY_ATTRIBUTES.test(before)) {
+        if (NON_COPY_ATTRIBUTES.test(before) || DEVELOPER_DIAGNOSTIC.test(before)) {
             continue;
         }
         found.push({ file, text: text.slice(0, 80) });
@@ -67,10 +83,12 @@ export const scanComponentCopy = (root = join(process.cwd(), 'src/renderer/compo
     listComponentFiles(root).flatMap((file) => findHardcodedCopy(readFileSync(file, 'utf8'), file));
 
 /**
- * What is hardcoded today. Lower it when copy moves into `src/renderer/copy/`; raising it should be
- * a decision written down here rather than a reflex.
+ * Every player-facing sentence now lives in `src/renderer/copy/`, so the baseline is zero and this
+ * is a rule rather than a ratchet. Raising it should be a decision written down here rather than a
+ * reflex: the point of the rule is that localization stays a translation budget instead of turning
+ * back into a refactor.
  */
-export const HARDCODED_COPY_BASELINE = 54;
+export const HARDCODED_COPY_BASELINE = 0;
 
 if (process.argv[1]?.endsWith('copy-locality.ts')) {
     const found = scanComponentCopy();

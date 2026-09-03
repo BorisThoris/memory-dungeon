@@ -15,6 +15,7 @@ import { Eyebrow, Panel, ScreenTitle, StatTile, UiButton } from '../ui';
 import { useAppStore } from '../store/useAppStore';
 import MainMenuBackground from './MainMenuBackground';
 import styles from './GameOverScreen.module.css';
+import { GAME_OVER_LABELS } from '../copy/screenCopy';
 
 interface GameOverScreenProps {
     run: RunState;
@@ -162,7 +163,7 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                     {politeRunSummaryText}
                 </p>
                 <section
-                    aria-label="Run result and next actions"
+                    aria-label={GAME_OVER_LABELS.region}
                     className={styles.mobileActionDock}
                     data-testid="game-over-above-fold-summary"
                 >
@@ -172,7 +173,7 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                     </div>
                     <UiButton
                         fullWidth
-                        aria-label="Mobile Play Again - start a new run after this expedition"
+                        aria-label={GAME_OVER_LABELS.playAgainMobile}
                         size="lg"
                         variant="primary"
                         onClick={restartRun}
@@ -181,7 +182,7 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                     </UiButton>
                     <UiButton
                         fullWidth
-                        aria-label="Mobile return to the main menu"
+                        aria-label={GAME_OVER_LABELS.returnToMenuMobile}
                         size="lg"
                         variant="secondary"
                         onClick={() => {

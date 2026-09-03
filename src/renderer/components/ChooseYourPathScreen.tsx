@@ -22,6 +22,7 @@ import { useAppStore } from '../store/useAppStore';
 import { buildMeditationPickMutatorRows } from './chooseYourPathScreenModel';
 import OverlayModal from './OverlayModal';
 import styles from './ChooseYourPathScreen.module.css';
+import { CHOOSE_YOUR_PATH_COPY } from '../copy/screenCopy';
 
 /**
  * Mode select. One recommended run a new player can start in one click, and a library of
@@ -37,9 +38,9 @@ const BackChevron = (): ReactElement => (
 
 const launchSummary = (def: RunModeDefinition, freshClassic: boolean): string =>
     freshClassic
-        ? 'Start with a guided first room: match the marked pair, clear the floor, then choose what the next room changes.'
+        ? CHOOSE_YOUR_PATH_COPY.guidedBlurb
         : def.id === 'classic'
-          ? 'A clean dungeon descent: procedural floors, route choices, shops, and relic milestones.'
+          ? CHOOSE_YOUR_PATH_COPY.dungeonBlurb
           : def.shortDescription;
 
 const ChooseYourPathScreen = (): ReactElement => {
@@ -357,7 +358,7 @@ const ChooseYourPathScreen = (): ReactElement => {
                         </div>
                         <FittedGrid
                             ariaLabel="Modes"
-                            emptyState="No modes match this search."
+                            emptyState={CHOOSE_YOUR_PATH_COPY.noSearchResults}
                             items={visibleModes}
                             itemNoun="modes"
                             keyForItem={(def) => def.id}
@@ -458,7 +459,7 @@ const ChooseYourPathScreen = (): ReactElement => {
                         playBack();
                         setMeditationOpen(false);
                     }}
-                    subtitle="Toggle mutators for a focused study run, or start calm with a clean ruleset."
+                    subtitle={CHOOSE_YOUR_PATH_COPY.mutatorsSubtitle}
                     title="Meditation setup"
                 >
                     <ul className={styles.mutatorList}>

@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2466,
-    "codeFileCount": 942,
-    "exportedSymbolCount": 3500,
+    "trackedFileCount": 2469,
+    "codeFileCount": 945,
+    "exportedSymbolCount": 3514,
     "contentItemCount": 63,
     "mechanicCount": 136,
     "stateFieldCount": 144,
-    "relationshipCount": 10222
+    "relationshipCount": 10242
   },
   "inventory": [
     {
@@ -2259,8 +2259,8 @@
     {
       "path": "docs/RELEASE_CHECKLIST.md",
       "category": "documentation",
-      "bytes": 3426,
-      "sha256": "78278db9c533cd081d349d6e703971f234ef06febbacc0d8851c049b96a31e5a"
+      "bytes": 3553,
+      "sha256": "c303419bd57a2d209a9724769d08f4258b1418f2ed9e72537d0dc6f54c2e9e5d"
     },
     {
       "path": "docs/RELIC_ROSTER.md",
@@ -2320,7 +2320,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 36714,
-      "sha256": "23ca4b73b7ac5f6c19f8c377f3cbfb5484036e0475c6009f6c7b105c68f8bdef"
+      "sha256": "84bfe12d3261cbedc84818e2f30da17d831efff1a8d02d0c9b8109c8af176fc5"
     },
     {
       "path": "docs/UI_RETHINK_PLAN.md",
@@ -4509,8 +4509,8 @@
     {
       "path": "scripts/copy-locality.ts",
       "category": "script",
-      "bytes": 3388,
-      "sha256": "0147ec28675c4c0d0975de58b129b10eee21f6105caaa9494be187a95daebad2"
+      "bytes": 4443,
+      "sha256": "807318626bccb6ee7a67444d2af618f53c1c8b9f59883e0bcef9ecae33bbe0be"
     },
     {
       "path": "scripts/extract-endproduct-wip-assets.mjs",
@@ -7467,8 +7467,8 @@
     {
       "path": "src/renderer/components/ChooseYourPathScreen.tsx",
       "category": "source",
-      "bytes": 21857,
-      "sha256": "3ad3c9185fce496fc868fba531867c5185a7ce4d7b723dd60869586308cc3252"
+      "bytes": 21754,
+      "sha256": "f80b9ba99c8ae2cc2800a6a897099213b07254dc8acec3e3ab682f631c72326f"
     },
     {
       "path": "src/renderer/components/chooseYourPathScreenModel.ts",
@@ -7563,8 +7563,8 @@
     {
       "path": "src/renderer/components/GameOverScreen.tsx",
       "category": "source",
-      "bytes": 17611,
-      "sha256": "ec5884d93efb99d3df4bfaa99b417f2ab8c0cac58afe36abfab172fca6669cf3"
+      "bytes": 17642,
+      "sha256": "1abcd92423ea6c902b653885ae1ba2374598593c0e4352ccf06713086a541633"
     },
     {
       "path": "src/renderer/components/gameplayHudMutatorLabels.ts",
@@ -7605,8 +7605,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 91243,
-      "sha256": "4b93191dc9f90ef9e6ade4684329467990dc820c8da68060d97ae4eeb0c02cfc"
+      "bytes": 90792,
+      "sha256": "3568f9d7d2a45c531673d8016bad39ee74842ba08d208996b8454188e9c6fe65"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -7827,8 +7827,8 @@
     {
       "path": "src/renderer/components/RunShell.tsx",
       "category": "source",
-      "bytes": 8141,
-      "sha256": "0a7bcd6db3de1cc3b3a088694d25cf7b741fffb5665932d88bfbe3984d27c642"
+      "bytes": 8194,
+      "sha256": "85eb0a21d251f766f1fce1bc9212959587e788404c9a6e8a1d0153cc030cad00"
     },
     {
       "path": "src/renderer/components/runShellGlyphs.tsx",
@@ -7863,8 +7863,8 @@
     {
       "path": "src/renderer/components/SettingsScreen.tsx",
       "category": "source",
-      "bytes": 45442,
-      "sha256": "a5eb7ff4382b7d9e8089e306398bf55dfdbdff4b874b4f20cc7586c326abf9be"
+      "bytes": 44879,
+      "sha256": "1893c262d27096699badc8a10b4808887080657ea3e07cf6586dc8aff374b007"
     },
     {
       "path": "src/renderer/components/ShopScreen.module.css",
@@ -7881,8 +7881,8 @@
     {
       "path": "src/renderer/components/ShopScreen.tsx",
       "category": "source",
-      "bytes": 10777,
-      "sha256": "90a6141943bb6251e8ddfaf4acaa350111033fe805d3e5c5ed84beabaec47428"
+      "bytes": 10668,
+      "sha256": "1058a446d40b3fc1c043dcb1227f244490f4e9530156736df20cd5366ff78cd6"
     },
     {
       "path": "src/renderer/components/shuffleFlipAnimation.test.ts",
@@ -8797,6 +8797,12 @@
       "sha256": "eea50648d73725279629ed2c6a21a2e7e9c6f449d5c30b726e8bff709e885e21"
     },
     {
+      "path": "src/renderer/copy/boardPowerCopy.ts",
+      "category": "source",
+      "bytes": 1889,
+      "sha256": "037b4539732e15d99af06f6594a36347816682092e13c254dbe67d1562313f75"
+    },
+    {
       "path": "src/renderer/copy/boardRouteCoaching.ts",
       "category": "source",
       "bytes": 1175,
@@ -8935,10 +8941,10 @@
       "sha256": "131b16deacb12ae12d120fbde8600512d8b3cf5685e05af4a6f9bd463e3ee596"
     },
     {
-      "path": "src/renderer/copy/rowShufflePower.ts",
+      "path": "src/renderer/copy/runDialogCopy.ts",
       "category": "source",
-      "bytes": 702,
-      "sha256": "399570ac8d8a6c2bfb02540659735403175bfa7e50225f8ad0de54d07d54b959"
+      "bytes": 2114,
+      "sha256": "b1f6e48226d8c9569ca19dfcf40adc094fdd6fcad42adeea8e834235cbf808e6"
     },
     {
       "path": "src/renderer/copy/runPayoffSignals.test.ts",
@@ -8957,6 +8963,18 @@
       "category": "source",
       "bytes": 721,
       "sha256": "d11fe653af59aaf79327dbae3822cd10b4cfae588103b5171d4ba3f649649d8d"
+    },
+    {
+      "path": "src/renderer/copy/screenCopy.ts",
+      "category": "source",
+      "bytes": 1416,
+      "sha256": "0d3dc1deabeb5299b91250800917e0ed921eea76209a39ad0eeebe264ad26c67"
+    },
+    {
+      "path": "src/renderer/copy/settingsHints.ts",
+      "category": "source",
+      "bytes": 2248,
+      "sha256": "b4a790dc9554370bb82518df8eade9e8c0c87adf8e650086d905ac0c0a371002"
     },
     {
       "path": "src/renderer/copy/traitInteractionLaneMap.test.ts",
@@ -10383,8 +10401,8 @@
     {
       "path": "src/shared/copy-locality.test.ts",
       "category": "test",
-      "bytes": 2778,
-      "sha256": "96d9f9783bdaadb04880c1abfee7e49aaccd7355a3f1e4e71805602636ad4825"
+      "bytes": 3778,
+      "sha256": "1c6760bd9ed007ec5d3ab99509bd297f29fff8bd5019e0fd5b0215c1ddc3051a"
     },
     {
       "path": "src/shared/copy-tone.test.ts",
@@ -11661,14 +11679,14 @@
     {
       "path": "src/shared/release-checklist.test.ts",
       "category": "test",
-      "bytes": 8385,
-      "sha256": "fdc0e1ec2b65a385187978882e53ad7e194d448ead59e75019dfad860996c05e"
+      "bytes": 8791,
+      "sha256": "49027a46a749f1cb4451152c9dd18f44e1a22f85d84a67dfa38b4cd4d9463224"
     },
     {
       "path": "src/shared/release-checklist.ts",
       "category": "source",
-      "bytes": 7928,
-      "sha256": "90eb9008b4ce72b0d8635642184064821fbb733fdfd06ad8d7f72f6fde663796"
+      "bytes": 8153,
+      "sha256": "1a3536c57b1954cb9f8d38246e6335f3541c6399af444d9d631ea07cc2ed9496"
     },
     {
       "path": "src/shared/relic-favor-rules.test.ts",
@@ -16838,13 +16856,14 @@
       "path": "src/renderer/components/ChooseYourPathScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 500,
+      "lineCount": 501,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/assets/ui/modeArt.ts",
         "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/components/chooseYourPathScreenModel.ts",
         "file:src/renderer/components/OverlayModal.tsx",
+        "file:src/renderer/copy/screenCopy.ts",
         "file:src/renderer/store/useAppStore.ts",
         "file:src/renderer/ui/index.ts",
         "file:src/shared/challenge-progression.ts",
@@ -17056,12 +17075,13 @@
       "path": "src/renderer/components/GameOverScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 371,
+      "lineCount": 372,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/components/MainMenuBackground.tsx",
         "file:src/renderer/copy/gameOverScreen.ts",
+        "file:src/renderer/copy/screenCopy.ts",
         "file:src/renderer/hooks/useViewportSize.ts",
         "file:src/renderer/platformTilt/usePlatformTiltField.ts",
         "file:src/renderer/steamStorePage.ts",
@@ -17183,7 +17203,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 2012,
+      "lineCount": 2024,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -17201,12 +17221,13 @@
         "file:src/renderer/components/TileBoard.tsx",
         "file:src/renderer/components/useGameScreenPowerTileHints.ts",
         "file:src/renderer/components/useGameScreenTraitRouteTargets.ts",
+        "file:src/renderer/copy/boardPowerCopy.ts",
         "file:src/renderer/copy/chainMomentum.ts",
         "file:src/renderer/copy/gameplayHints.ts",
         "file:src/renderer/copy/matchScoreFloater.ts",
         "file:src/renderer/copy/mismatchFloater.ts",
         "file:src/renderer/copy/relicDraftOffer.ts",
-        "file:src/renderer/copy/rowShufflePower.ts",
+        "file:src/renderer/copy/runDialogCopy.ts",
         "file:src/renderer/gameplay/regPhase4PlayContract.ts",
         "file:src/renderer/gameplay/stickyFingersBlockedTileId.ts",
         "file:src/renderer/hooks/useDistractionChannelTick.ts",
@@ -17734,8 +17755,9 @@
       "path": "src/renderer/components/RunShell.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 197,
+      "lineCount": 198,
       "imports": [
+        "file:src/renderer/copy/runDialogCopy.ts",
         "file:src/renderer/ui/gameplayIcons.tsx",
         "file:src/shared/contracts.ts",
         "file:src/shared/gameplay-feedback-facts.ts",
@@ -17818,7 +17840,7 @@
       "path": "src/renderer/components/SettingsScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 716,
+      "lineCount": 717,
       "imports": [
         "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/breakpoints.ts",
@@ -17826,6 +17848,7 @@
         "file:src/renderer/components/OverlayModal.tsx",
         "file:src/renderer/components/SettingsControls.tsx",
         "file:src/renderer/components/settingsNavigationModel.ts",
+        "file:src/renderer/copy/settingsHints.ts",
         "file:src/renderer/hooks/useModalFocusTrap.ts",
         "file:src/renderer/hooks/useViewportSize.ts",
         "file:src/renderer/store/backgroundPersistence.ts",
@@ -17868,10 +17891,11 @@
       "path": "src/renderer/components/ShopScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 251,
+      "lineCount": 252,
       "imports": [
         "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/components/gameplayVisualConfig.ts",
+        "file:src/renderer/copy/screenCopy.ts",
         "file:src/renderer/hooks/useModalFocusTrap.ts",
         "file:src/renderer/store/useAppStore.ts",
         "file:src/renderer/ui/index.ts",
@@ -20624,6 +20648,21 @@
       ]
     },
     {
+      "id": "file:src/renderer/copy/boardPowerCopy.ts",
+      "path": "src/renderer/copy/boardPowerCopy.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 44,
+      "imports": [],
+      "exports": [
+        "symbol:src/renderer/copy/boardPowerCopy.ts#BOARD_SHUFFLE_COPY",
+        "symbol:src/renderer/copy/boardPowerCopy.ts#FLASH_PAIR_COPY",
+        "symbol:src/renderer/copy/boardPowerCopy.ts#ROW_SHUFFLE_COPY",
+        "symbol:src/renderer/copy/boardPowerCopy.ts#TILE_SWAP_COPY"
+      ],
+      "testedBy": []
+    },
+    {
       "id": "file:src/renderer/copy/boardRouteCoaching.ts",
       "path": "src/renderer/copy/boardRouteCoaching.ts",
       "layer": "renderer",
@@ -20998,14 +21037,19 @@
       ]
     },
     {
-      "id": "file:src/renderer/copy/rowShufflePower.ts",
-      "path": "src/renderer/copy/rowShufflePower.ts",
+      "id": "file:src/renderer/copy/runDialogCopy.ts",
+      "path": "src/renderer/copy/runDialogCopy.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 17,
+      "lineCount": 43,
       "imports": [],
       "exports": [
-        "symbol:src/renderer/copy/rowShufflePower.ts#ROW_SHUFFLE_COPY"
+        "symbol:src/renderer/copy/runDialogCopy.ts#ABANDON_DIALOG_COPY",
+        "symbol:src/renderer/copy/runDialogCopy.ts#FLOOR_STATUS_COPY",
+        "symbol:src/renderer/copy/runDialogCopy.ts#PAUSE_DIALOG_COPY",
+        "symbol:src/renderer/copy/runDialogCopy.ts#ROUTE_CHOICE_COPY",
+        "symbol:src/renderer/copy/runDialogCopy.ts#RUN_SHELL_LABELS",
+        "symbol:src/renderer/copy/runDialogCopy.ts#SHORTCUTS_COPY"
       ],
       "testedBy": []
     },
@@ -21070,6 +21114,33 @@
         "file:src/renderer/components/MainMenuSaveFailureNotice.test.tsx",
         "file:src/shared/release-checklist.test.ts"
       ]
+    },
+    {
+      "id": "file:src/renderer/copy/screenCopy.ts",
+      "path": "src/renderer/copy/screenCopy.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 28,
+      "imports": [],
+      "exports": [
+        "symbol:src/renderer/copy/screenCopy.ts#CHOOSE_YOUR_PATH_COPY",
+        "symbol:src/renderer/copy/screenCopy.ts#GAME_OVER_LABELS",
+        "symbol:src/renderer/copy/screenCopy.ts#SHOP_COPY"
+      ],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/copy/settingsHints.ts",
+      "path": "src/renderer/copy/settingsHints.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 34,
+      "imports": [],
+      "exports": [
+        "symbol:src/renderer/copy/settingsHints.ts#SETTINGS_FOOTER_HINT",
+        "symbol:src/renderer/copy/settingsHints.ts#SETTINGS_HINTS"
+      ],
+      "testedBy": []
     },
     {
       "id": "file:src/renderer/copy/traitInteractionLaneMap.test.ts",
@@ -25460,7 +25531,7 @@
       "path": "src/shared/copy-locality.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 61,
+      "lineCount": 82,
       "imports": [],
       "exports": [],
       "testedBy": []
@@ -30222,7 +30293,7 @@
       "path": "src/shared/release-checklist.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 159,
+      "lineCount": 166,
       "imports": [
         "file:src/main/crash-log.ts",
         "file:src/main/save-recovery.ts",
@@ -30244,7 +30315,7 @@
       "path": "src/shared/release-checklist.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 207,
+      "lineCount": 214,
       "imports": [],
       "exports": [
         "symbol:src/shared/release-checklist.ts#RELEASE_CHECKLIST",
@@ -36056,8 +36127,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/ChooseYourPathScreen.tsx",
-      "line": 499,
-      "endLine": 499
+      "line": 500,
+      "endLine": 500
     },
     {
       "id": "symbol:src/renderer/components/chooseYourPathScreenModel.ts#buildMeditationPickMutatorRows",
@@ -36208,8 +36279,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameOverScreen.tsx",
-      "line": 370,
-      "endLine": 370
+      "line": 371,
+      "endLine": 371
     },
     {
       "id": "symbol:src/renderer/components/gameplayHudMutatorLabels.ts#MUTATOR_HUD_LABELS",
@@ -36280,8 +36351,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 2011,
-      "endLine": 2011
+      "line": 2023,
+      "endLine": 2023
     },
     {
       "id": "symbol:src/renderer/components/gameScreenFeedback.ts#DungeonCombatLogRow",
@@ -36560,24 +36631,24 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 196,
-      "endLine": 196
+      "line": 197,
+      "endLine": 197
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellProps",
       "name": "RunShellProps",
       "kind": "interface",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 29,
-      "endLine": 42
+      "line": 30,
+      "endLine": 43
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellTool",
       "name": "RunShellTool",
       "kind": "interface",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 18,
-      "endLine": 27
+      "line": 19,
+      "endLine": 28
     },
     {
       "id": "symbol:src/renderer/components/runShellGlyphs.tsx#RUN_SHELL_GLYPHS",
@@ -36672,16 +36743,16 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/SettingsScreen.tsx",
-      "line": 715,
-      "endLine": 715
+      "line": 716,
+      "endLine": 716
     },
     {
       "id": "symbol:src/renderer/components/ShopScreen.tsx#default",
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/ShopScreen.tsx",
-      "line": 250,
-      "endLine": 250
+      "line": 251,
+      "endLine": 251
     },
     {
       "id": "symbol:src/renderer/components/shuffleFlipAnimation.ts#computeBoardEntranceMotionBudgetMs",
@@ -39940,6 +40011,38 @@
       "endLine": 77
     },
     {
+      "id": "symbol:src/renderer/copy/boardPowerCopy.ts#BOARD_SHUFFLE_COPY",
+      "name": "BOARD_SHUFFLE_COPY",
+      "kind": "value",
+      "file": "src/renderer/copy/boardPowerCopy.ts",
+      "line": 37,
+      "endLine": 43
+    },
+    {
+      "id": "symbol:src/renderer/copy/boardPowerCopy.ts#FLASH_PAIR_COPY",
+      "name": "FLASH_PAIR_COPY",
+      "kind": "value",
+      "file": "src/renderer/copy/boardPowerCopy.ts",
+      "line": 30,
+      "endLine": 34
+    },
+    {
+      "id": "symbol:src/renderer/copy/boardPowerCopy.ts#ROW_SHUFFLE_COPY",
+      "name": "ROW_SHUFFLE_COPY",
+      "kind": "value",
+      "file": "src/renderer/copy/boardPowerCopy.ts",
+      "line": 8,
+      "endLine": 16
+    },
+    {
+      "id": "symbol:src/renderer/copy/boardPowerCopy.ts#TILE_SWAP_COPY",
+      "name": "TILE_SWAP_COPY",
+      "kind": "value",
+      "file": "src/renderer/copy/boardPowerCopy.ts",
+      "line": 19,
+      "endLine": 27
+    },
+    {
       "id": "symbol:src/renderer/copy/boardRouteCoaching.ts#BOARD_ROUTE_COACHING",
       "name": "BOARD_ROUTE_COACHING",
       "kind": "value",
@@ -40444,12 +40547,52 @@
       "endLine": 31
     },
     {
-      "id": "symbol:src/renderer/copy/rowShufflePower.ts#ROW_SHUFFLE_COPY",
-      "name": "ROW_SHUFFLE_COPY",
+      "id": "symbol:src/renderer/copy/runDialogCopy.ts#ABANDON_DIALOG_COPY",
+      "name": "ABANDON_DIALOG_COPY",
       "kind": "value",
-      "file": "src/renderer/copy/rowShufflePower.ts",
-      "line": 8,
-      "endLine": 16
+      "file": "src/renderer/copy/runDialogCopy.ts",
+      "line": 11,
+      "endLine": 13
+    },
+    {
+      "id": "symbol:src/renderer/copy/runDialogCopy.ts#FLOOR_STATUS_COPY",
+      "name": "FLOOR_STATUS_COPY",
+      "kind": "value",
+      "file": "src/renderer/copy/runDialogCopy.ts",
+      "line": 22,
+      "endLine": 26
+    },
+    {
+      "id": "symbol:src/renderer/copy/runDialogCopy.ts#PAUSE_DIALOG_COPY",
+      "name": "PAUSE_DIALOG_COPY",
+      "kind": "value",
+      "file": "src/renderer/copy/runDialogCopy.ts",
+      "line": 7,
+      "endLine": 9
+    },
+    {
+      "id": "symbol:src/renderer/copy/runDialogCopy.ts#ROUTE_CHOICE_COPY",
+      "name": "ROUTE_CHOICE_COPY",
+      "kind": "value",
+      "file": "src/renderer/copy/runDialogCopy.ts",
+      "line": 29,
+      "endLine": 37
+    },
+    {
+      "id": "symbol:src/renderer/copy/runDialogCopy.ts#RUN_SHELL_LABELS",
+      "name": "RUN_SHELL_LABELS",
+      "kind": "value",
+      "file": "src/renderer/copy/runDialogCopy.ts",
+      "line": 40,
+      "endLine": 42
+    },
+    {
+      "id": "symbol:src/renderer/copy/runDialogCopy.ts#SHORTCUTS_COPY",
+      "name": "SHORTCUTS_COPY",
+      "kind": "value",
+      "file": "src/renderer/copy/runDialogCopy.ts",
+      "line": 15,
+      "endLine": 19
     },
     {
       "id": "symbol:src/renderer/copy/runPayoffSignals.ts#formatRunPayoffBurstSignalLabel",
@@ -40586,6 +40729,46 @@
       "file": "src/renderer/copy/saveRecoveryNotice.ts",
       "line": 9,
       "endLine": 14
+    },
+    {
+      "id": "symbol:src/renderer/copy/screenCopy.ts#CHOOSE_YOUR_PATH_COPY",
+      "name": "CHOOSE_YOUR_PATH_COPY",
+      "kind": "value",
+      "file": "src/renderer/copy/screenCopy.ts",
+      "line": 8,
+      "endLine": 14
+    },
+    {
+      "id": "symbol:src/renderer/copy/screenCopy.ts#GAME_OVER_LABELS",
+      "name": "GAME_OVER_LABELS",
+      "kind": "value",
+      "file": "src/renderer/copy/screenCopy.ts",
+      "line": 16,
+      "endLine": 20
+    },
+    {
+      "id": "symbol:src/renderer/copy/screenCopy.ts#SHOP_COPY",
+      "name": "SHOP_COPY",
+      "kind": "value",
+      "file": "src/renderer/copy/screenCopy.ts",
+      "line": 22,
+      "endLine": 27
+    },
+    {
+      "id": "symbol:src/renderer/copy/settingsHints.ts#SETTINGS_FOOTER_HINT",
+      "name": "SETTINGS_FOOTER_HINT",
+      "kind": "value",
+      "file": "src/renderer/copy/settingsHints.ts",
+      "line": 33,
+      "endLine": 33
+    },
+    {
+      "id": "symbol:src/renderer/copy/settingsHints.ts#SETTINGS_HINTS",
+      "name": "SETTINGS_HINTS",
+      "kind": "value",
+      "file": "src/renderer/copy/settingsHints.ts",
+      "line": 8,
+      "endLine": 30
     },
     {
       "id": "symbol:src/renderer/copy/traitInteractionLaneMap.ts#buildTraitInteractionLaneMap",
@@ -55985,15 +56168,15 @@
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
       "line": 32,
-      "endLine": 159
+      "endLine": 166
     },
     {
       "id": "symbol:src/shared/release-checklist.ts#releaseChecklistByOwner",
       "name": "releaseChecklistByOwner",
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
-      "line": 165,
-      "endLine": 166
+      "line": 172,
+      "endLine": 173
     },
     {
       "id": "symbol:src/shared/release-checklist.ts#ReleaseChecklistItem",
@@ -56016,16 +56199,16 @@
       "name": "releaseChecklistSections",
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
-      "line": 161,
-      "endLine": 163
+      "line": 168,
+      "endLine": 170
     },
     {
       "id": "symbol:src/shared/release-checklist.ts#renderReleaseChecklistMarkdown",
       "name": "renderReleaseChecklistMarkdown",
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
-      "line": 180,
-      "endLine": 206
+      "line": 187,
+      "endLine": 213
     },
     {
       "id": "symbol:src/shared/relic-favor-rules.ts#gainRelicFavor",
@@ -63739,7 +63922,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1257
+          "line": 1269
         }
       ],
       "tests": [
@@ -78247,6 +78430,30 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/copy/boardPowerCopy.ts->symbol:src/renderer/copy/boardPowerCopy.ts#BOARD_SHUFFLE_COPY",
+      "source": "file:src/renderer/copy/boardPowerCopy.ts",
+      "target": "symbol:src/renderer/copy/boardPowerCopy.ts#BOARD_SHUFFLE_COPY",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/copy/boardPowerCopy.ts->symbol:src/renderer/copy/boardPowerCopy.ts#FLASH_PAIR_COPY",
+      "source": "file:src/renderer/copy/boardPowerCopy.ts",
+      "target": "symbol:src/renderer/copy/boardPowerCopy.ts#FLASH_PAIR_COPY",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/copy/boardPowerCopy.ts->symbol:src/renderer/copy/boardPowerCopy.ts#ROW_SHUFFLE_COPY",
+      "source": "file:src/renderer/copy/boardPowerCopy.ts",
+      "target": "symbol:src/renderer/copy/boardPowerCopy.ts#ROW_SHUFFLE_COPY",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/copy/boardPowerCopy.ts->symbol:src/renderer/copy/boardPowerCopy.ts#TILE_SWAP_COPY",
+      "source": "file:src/renderer/copy/boardPowerCopy.ts",
+      "target": "symbol:src/renderer/copy/boardPowerCopy.ts#TILE_SWAP_COPY",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/copy/boardRouteCoaching.ts->symbol:src/renderer/copy/boardRouteCoaching.ts#BOARD_ROUTE_COACHING",
       "source": "file:src/renderer/copy/boardRouteCoaching.ts",
       "target": "symbol:src/renderer/copy/boardRouteCoaching.ts#BOARD_ROUTE_COACHING",
@@ -78625,9 +78832,39 @@
       "kind": "exports"
     },
     {
-      "id": "exports:src/renderer/copy/rowShufflePower.ts->symbol:src/renderer/copy/rowShufflePower.ts#ROW_SHUFFLE_COPY",
-      "source": "file:src/renderer/copy/rowShufflePower.ts",
-      "target": "symbol:src/renderer/copy/rowShufflePower.ts#ROW_SHUFFLE_COPY",
+      "id": "exports:src/renderer/copy/runDialogCopy.ts->symbol:src/renderer/copy/runDialogCopy.ts#ABANDON_DIALOG_COPY",
+      "source": "file:src/renderer/copy/runDialogCopy.ts",
+      "target": "symbol:src/renderer/copy/runDialogCopy.ts#ABANDON_DIALOG_COPY",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/copy/runDialogCopy.ts->symbol:src/renderer/copy/runDialogCopy.ts#FLOOR_STATUS_COPY",
+      "source": "file:src/renderer/copy/runDialogCopy.ts",
+      "target": "symbol:src/renderer/copy/runDialogCopy.ts#FLOOR_STATUS_COPY",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/copy/runDialogCopy.ts->symbol:src/renderer/copy/runDialogCopy.ts#PAUSE_DIALOG_COPY",
+      "source": "file:src/renderer/copy/runDialogCopy.ts",
+      "target": "symbol:src/renderer/copy/runDialogCopy.ts#PAUSE_DIALOG_COPY",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/copy/runDialogCopy.ts->symbol:src/renderer/copy/runDialogCopy.ts#ROUTE_CHOICE_COPY",
+      "source": "file:src/renderer/copy/runDialogCopy.ts",
+      "target": "symbol:src/renderer/copy/runDialogCopy.ts#ROUTE_CHOICE_COPY",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/copy/runDialogCopy.ts->symbol:src/renderer/copy/runDialogCopy.ts#RUN_SHELL_LABELS",
+      "source": "file:src/renderer/copy/runDialogCopy.ts",
+      "target": "symbol:src/renderer/copy/runDialogCopy.ts#RUN_SHELL_LABELS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/copy/runDialogCopy.ts->symbol:src/renderer/copy/runDialogCopy.ts#SHORTCUTS_COPY",
+      "source": "file:src/renderer/copy/runDialogCopy.ts",
+      "target": "symbol:src/renderer/copy/runDialogCopy.ts#SHORTCUTS_COPY",
       "kind": "exports"
     },
     {
@@ -78730,6 +78967,36 @@
       "id": "exports:src/renderer/copy/saveRecoveryNotice.ts->symbol:src/renderer/copy/saveRecoveryNotice.ts#SAVE_RECOVERY_COPY",
       "source": "file:src/renderer/copy/saveRecoveryNotice.ts",
       "target": "symbol:src/renderer/copy/saveRecoveryNotice.ts#SAVE_RECOVERY_COPY",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/copy/screenCopy.ts->symbol:src/renderer/copy/screenCopy.ts#CHOOSE_YOUR_PATH_COPY",
+      "source": "file:src/renderer/copy/screenCopy.ts",
+      "target": "symbol:src/renderer/copy/screenCopy.ts#CHOOSE_YOUR_PATH_COPY",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/copy/screenCopy.ts->symbol:src/renderer/copy/screenCopy.ts#GAME_OVER_LABELS",
+      "source": "file:src/renderer/copy/screenCopy.ts",
+      "target": "symbol:src/renderer/copy/screenCopy.ts#GAME_OVER_LABELS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/copy/screenCopy.ts->symbol:src/renderer/copy/screenCopy.ts#SHOP_COPY",
+      "source": "file:src/renderer/copy/screenCopy.ts",
+      "target": "symbol:src/renderer/copy/screenCopy.ts#SHOP_COPY",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/copy/settingsHints.ts->symbol:src/renderer/copy/settingsHints.ts#SETTINGS_FOOTER_HINT",
+      "source": "file:src/renderer/copy/settingsHints.ts",
+      "target": "symbol:src/renderer/copy/settingsHints.ts#SETTINGS_FOOTER_HINT",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/copy/settingsHints.ts->symbol:src/renderer/copy/settingsHints.ts#SETTINGS_HINTS",
+      "source": "file:src/renderer/copy/settingsHints.ts",
+      "target": "symbol:src/renderer/copy/settingsHints.ts#SETTINGS_HINTS",
       "kind": "exports"
     },
     {
@@ -99572,6 +99839,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/ChooseYourPathScreen.tsx->src/renderer/copy/screenCopy.ts",
+      "source": "file:src/renderer/components/ChooseYourPathScreen.tsx",
+      "target": "file:src/renderer/copy/screenCopy.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/ChooseYourPathScreen.tsx->src/renderer/store/useAppStore.ts",
       "source": "file:src/renderer/components/ChooseYourPathScreen.tsx",
       "target": "file:src/renderer/store/useAppStore.ts",
@@ -99866,6 +100139,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/GameOverScreen.tsx->src/renderer/copy/screenCopy.ts",
+      "source": "file:src/renderer/components/GameOverScreen.tsx",
+      "target": "file:src/renderer/copy/screenCopy.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/GameOverScreen.tsx->src/renderer/hooks/useViewportSize.ts",
       "source": "file:src/renderer/components/GameOverScreen.tsx",
       "target": "file:src/renderer/hooks/useViewportSize.ts",
@@ -100130,6 +100409,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/copy/boardPowerCopy.ts",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "file:src/renderer/copy/boardPowerCopy.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/copy/chainMomentum.ts",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "file:src/renderer/copy/chainMomentum.ts",
@@ -100160,9 +100445,9 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/copy/rowShufflePower.ts",
+      "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/copy/runDialogCopy.ts",
       "source": "file:src/renderer/components/GameScreen.tsx",
-      "target": "file:src/renderer/copy/rowShufflePower.ts",
+      "target": "file:src/renderer/copy/runDialogCopy.ts",
       "kind": "imports"
     },
     {
@@ -100976,6 +101261,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/RunShell.tsx->src/renderer/copy/runDialogCopy.ts",
+      "source": "file:src/renderer/components/RunShell.tsx",
+      "target": "file:src/renderer/copy/runDialogCopy.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/RunShell.tsx->src/renderer/ui/gameplayIcons.tsx",
       "source": "file:src/renderer/components/RunShell.tsx",
       "target": "file:src/renderer/ui/gameplayIcons.tsx",
@@ -101069,6 +101360,12 @@
       "id": "imports:src/renderer/components/SettingsScreen.tsx->src/renderer/components/settingsNavigationModel.ts",
       "source": "file:src/renderer/components/SettingsScreen.tsx",
       "target": "file:src/renderer/components/settingsNavigationModel.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/SettingsScreen.tsx->src/renderer/copy/settingsHints.ts",
+      "source": "file:src/renderer/components/SettingsScreen.tsx",
+      "target": "file:src/renderer/copy/settingsHints.ts",
       "kind": "imports"
     },
     {
@@ -101189,6 +101486,12 @@
       "id": "imports:src/renderer/components/ShopScreen.tsx->src/renderer/components/gameplayVisualConfig.ts",
       "source": "file:src/renderer/components/ShopScreen.tsx",
       "target": "file:src/renderer/components/gameplayVisualConfig.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/ShopScreen.tsx->src/renderer/copy/screenCopy.ts",
+      "source": "file:src/renderer/components/ShopScreen.tsx",
+      "target": "file:src/renderer/copy/screenCopy.ts",
       "kind": "imports"
     },
     {

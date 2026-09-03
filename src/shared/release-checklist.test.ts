@@ -9,6 +9,7 @@ import { GAMEPAD_STICK_DEADZONE, readGamepadActions, STANDARD_GAMEPAD_BUTTONS } 
 import { MIN_WINDOW_HEIGHT, MIN_WINDOW_WIDTH, normalizeWindowState, resolveRestoredBounds } from '../main/window-bounds';
 import { CRASH_LOG_KEEP_COUNT, pruneCrashLogs, redactUserPaths } from '../main/crash-log';
 import { quarantineFileName, quarantineSaveFile } from '../main/save-recovery';
+import { HARDCODED_COPY_BASELINE, scanComponentCopy } from '../../scripts/copy-locality';
 import {
     findUnreachableMembers,
     readAppStateMembers,
@@ -56,6 +57,12 @@ const VERIFIERS: Record<string, () => void> = {
             Array.from({ length: CRASH_LOG_KEEP_COUNT + 5 }, (_unused, index) => `crash-2026-01-${index + 10}.log`)
         );
         expect(kept.length).toBe(5);
+    },
+    'copy-extracted': () => {
+        // Zero, not a baseline: a component may not carry a player-facing sentence at all, which is
+        // what keeps localization a translation budget rather than a refactor.
+        expect(HARDCODED_COPY_BASELINE).toBe(0);
+        expect(scanComponentCopy()).toEqual([]);
     },
     'store-reachability': () => {
         // The audit that would have caught a deleted toolbar taking a whole power with it.

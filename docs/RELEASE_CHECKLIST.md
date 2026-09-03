@@ -41,11 +41,12 @@ achievement on the Partner site or shoot a trailer.
 | Item | State | Owner | Where |
 |---|---|---|---|
 | Store page copy, capsule art and trailer | **not done** | a person | Valve reviews the page separately from the build, and it takes them days. |
+| Every player-facing sentence lives in a copy module, not inside a component | done | the repository | `scripts/copy-locality.ts` |
 
 ## Open decisions
 
 | Item | State | Owner | Where |
 |---|---|---|---|
-| Which languages, if any | **undecided** | a decision | Player-facing copy is gated into the copy modules, so this is a budget question rather than a refactor. |
+| Which languages, if any | **undecided** | a decision | Every player-facing sentence is already in a copy module, so this is purely a question of budget. |
 | Whether crash reports should ever leave the machine | **undecided** | a decision | Today they stay on disk. Sending them needs a backend and a consent flow. |
 | Whether to move Electron past 41 | **undecided** | a decision | A release-sized change on its own; the current line is patched and clean. |

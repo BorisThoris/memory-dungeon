@@ -136,9 +136,16 @@ export const RELEASE_CHECKLIST: readonly ReleaseChecklistItem[] = [
         section: 'Store'
     },
     {
+        evidence: 'scripts/copy-locality.ts',
+        id: 'copy-extracted',
+        label: 'Every player-facing sentence lives in a copy module, not inside a component',
+        owner: 'repo',
+        section: 'Store'
+    },
+    {
         id: 'localization',
         label: 'Which languages, if any',
-        note: 'Player-facing copy is gated into the copy modules, so this is a budget question rather than a refactor.',
+        note: 'Every player-facing sentence is already in a copy module, so this is purely a question of budget.',
         owner: 'decision',
         section: 'Open decisions'
     },

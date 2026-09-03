@@ -5,6 +5,7 @@ import { getGameplayFeedbackObjectiveSnapshot } from '../../shared/gameplay-feed
 import { MUTATOR_CATALOG } from '../../shared/mechanics-encyclopedia';
 import { GameplayMenuIcon } from '../ui/gameplayIcons';
 import styles from './RunShell.module.css';
+import { RUN_SHELL_LABELS } from '../copy/runDialogCopy';
 
 /**
  * The HTML layer over the 3D board during a run.
@@ -165,7 +166,7 @@ const RunShell = ({
                 ))}
                 {visibleTools.length > 0 ? <span aria-hidden="true" className={styles.dockDivider} /> : null}
                 <button
-                    aria-label="Pause and open the run menu"
+                    aria-label={RUN_SHELL_LABELS.pause}
                     className={styles.tool}
                     data-testid="game-toolbar-main-menu"
                     onClick={onPause}

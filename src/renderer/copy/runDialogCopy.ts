@@ -1,0 +1,42 @@
+/**
+ * The in-run dialogs and the board's own status lines.
+ *
+ * Abandon copy in particular is worth having in one place: it is the only screen in the game that
+ * destroys progress, so the sentence explaining that has to stay blunt through translation.
+ */
+export const PAUSE_DIALOG_COPY = {
+    subtitle: 'The board and its timers stay frozen. Press P to resume.'
+} as const;
+
+export const ABANDON_DIALOG_COPY = {
+    subtitle: 'You will lose this run and return to the main menu. This cannot be undone.'
+} as const;
+
+export const SHORTCUTS_COPY = {
+    /** Shown on touch, where the list is a reference rather than something to press. */
+    touch: 'These work while a run is active. Your keyboard still does everything it did.',
+    withKeyboard: 'These shortcuts work while a run is active and when focus is not in a text field.'
+} as const;
+
+/** Lines the board shows about the floor itself rather than about a power. */
+export const FLOOR_STATUS_COPY = {
+    cleanFloorBonus: 'Clean floor bonus: +1 Life',
+    noKeySource: 'No key source remains; clear the remaining pairs to force this exit open.',
+    perfectFloorBonus: 'Perfect floor bonus: +1 Life'
+} as const;
+
+/** The route step after a floor clears: what the three doors mean and which one moves on. */
+export const ROUTE_CHOICE_COPY = {
+    greedPreview: 'The next floor adds richer caches and extra reward-risk pressure.',
+    mysteryPreview: 'The next floor adds deterministic mystery veils.',
+    prompt: 'Choose the next room type. Safe protects the run, Greed trades danger for reward, and Mystery changes the next board.',
+    safePreview: 'The next floor adds defensive ward support.',
+    /** Shown once a route is locked, when the remaining actions are no longer the decision. */
+    settled: 'Pick one room to continue. Route choice is the active decision; other floor-clear actions resume after the route is locked.',
+    stair: 'This stair leaves the current floor.'
+} as const;
+
+/** Spoken by screen readers over the run shell's pause control. */
+export const RUN_SHELL_LABELS = {
+    pause: 'Pause and open the run menu'
+} as const;

@@ -36,7 +36,19 @@ import { useNotificationStore } from '@cross-repo-libs/notifications';
 import type { CSSProperties } from 'react';
 import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
-import { ROW_SHUFFLE_COPY } from '../copy/rowShufflePower';
+import {
+    ABANDON_DIALOG_COPY,
+    FLOOR_STATUS_COPY,
+    PAUSE_DIALOG_COPY,
+    ROUTE_CHOICE_COPY,
+    SHORTCUTS_COPY
+} from '../copy/runDialogCopy';
+import {
+    BOARD_SHUFFLE_COPY,
+    FLASH_PAIR_COPY,
+    ROW_SHUFFLE_COPY,
+    TILE_SWAP_COPY
+} from '../copy/boardPowerCopy';
 import { runPersistenceInBackground } from '../store/backgroundPersistence';
 import { UI_ART } from '../assets/ui';
 import { isNarrowShortLandscapeForMenuStack } from '../breakpoints';
@@ -213,7 +225,7 @@ const dungeonExitPromptTitle = (status: ReturnType<typeof getDungeonExitStatus>)
 
 const dungeonExitPromptLockLine = (status: ReturnType<typeof getDungeonExitStatus>, run: RunState): string => {
     if (status.keyFallbackPending) {
-        return 'No key source remains; clear the remaining pairs to force this exit open.';
+        return FLOOR_STATUS_COPY.noKeySource;
     }
     if (status.lockKind === 'lever') {
         return `${status.leverCount}/${status.requiredLeverCount} floor levers ready.`;
@@ -232,11 +244,11 @@ const getClearLifeBonusLabel = (result: NonNullable<RunState['lastLevelResult']>
     }
 
     if (result.clearLifeReason === 'perfect') {
-        return 'Perfect floor bonus: +1 Life';
+        return FLOOR_STATUS_COPY.perfectFloorBonus;
     }
 
     if (result.clearLifeReason === 'clean') {
-        return 'Clean floor bonus: +1 Life';
+        return FLOOR_STATUS_COPY.cleanFloorBonus;
     }
 
     return null;
@@ -1033,8 +1045,8 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const firstRouteChoiceRequired = routeChoiceRequired && run.lastLevelResult?.level === 1;
     const routeChoiceRequiredCopy =
         firstRouteChoiceRequired
-            ? 'Choose the next room type. Safe protects the run, Greed trades danger for reward, and Mystery changes the next board.'
-            : 'Pick one room to continue. Route choice is the active decision; other floor-clear actions resume after the route is locked.';
+            ? ROUTE_CHOICE_COPY.prompt
+            : ROUTE_CHOICE_COPY.settled;
     const dungeonRouteDecisionPresentation =
         routeChoiceRequired
             ? getDungeonRouteDecisionPresentation(run.dungeonRun, routeChoices)
@@ -1064,10 +1076,10 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
               label: routeTypeLabel(run.pendingRouteCardPlan.routeType),
               line:
                   run.pendingRouteCardPlan.routeType === 'safe'
-                      ? 'The next floor adds defensive ward support.'
+                      ? ROUTE_CHOICE_COPY.safePreview
                       : run.pendingRouteCardPlan.routeType === 'greed'
-                        ? 'The next floor adds richer caches and extra reward-risk pressure.'
-                        : 'The next floor adds deterministic mystery veils.'
+                        ? ROUTE_CHOICE_COPY.greedPreview
+                        : ROUTE_CHOICE_COPY.mysteryPreview
           }
         : null;
     const floorClearWager: FloorClearWager | null = acceptedEndlessRiskWager
@@ -1125,7 +1137,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const dungeonExitStatus = getDungeonExitStatus(run);
     const dungeonExitRouteLine = dungeonExitStatus.routeType
         ? `${routeTypeLabel(dungeonExitStatus.routeType)} beyond this door.`
-        : 'This stair leaves the current floor.';
+        : ROUTE_CHOICE_COPY.stair;
     const dungeonExitLockLine = dungeonExitPromptLockLine(dungeonExitStatus, run);
     const dungeonPresentation = getDungeonBoardPresentation(run);
     const activeDungeonPanel = run.status !== 'levelComplete' && dungeonPresentation.visible ? dungeonPresentation : null;
@@ -1365,21 +1377,21 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                 ? ROW_SHUFFLE_COPY.armed
                 : ROW_SHUFFLE_COPY.idle;
     const tileSwapTitle = run.activeContract?.noShuffle
-        ? 'Scholar contract: tile swap disabled'
+        ? TILE_SWAP_COPY.scholarContract
         : run.board.flippedTileIds.length > 0
-          ? 'Finish the current flip first'
+          ? TILE_SWAP_COPY.pendingFlip
           : hiddenTileCount < 2
-            ? 'Need two hidden tiles to swap'
+            ? TILE_SWAP_COPY.needTwoHidden
               : run.regionShuffleCharges < 1 &&
                   !(run.regionShuffleFreeThisFloor && run.relicIds.includes('region_shuffle_free_first'))
-                ? 'No row/swap charges'
+                ? TILE_SWAP_COPY.noCharges
               : tileSwapArmed
                 ? tileSwapFirstTileId
-                    ? 'Tap a second hidden tile to swap positions'
-                    : 'Tap the first hidden tile to move'
+                    ? TILE_SWAP_COPY.secondTile
+                    : TILE_SWAP_COPY.firstTile
                 : traitSwapHint
-                  ? `Swap two hidden tiles (uses 1 row/swap charge). ${traitSwapHint.text}`
-                  : 'Swap two hidden tiles (uses 1 row/swap charge)';
+                  ? `${TILE_SWAP_COPY.idle}. ${traitSwapHint.text}`
+                  : TILE_SWAP_COPY.idle;
     const showFlashPairPower = (run.practiceMode || run.wildMenuRun) && run.status === 'playing';
     const flashPairDisabled =
         !showFlashPairPower ||
@@ -1387,20 +1399,20 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         run.board.flippedTileIds.length > 0;
     const flashPairTitle =
         run.flashPairCharges < 1
-            ? 'No flash charges this floor'
+            ? FLASH_PAIR_COPY.noCharges
             : run.board.flippedTileIds.length > 0
-              ? 'Finish the current flip first'
-              : 'Briefly reveal a random hidden pair (practice / wild)';
+              ? FLASH_PAIR_COPY.pendingFlip
+              : FLASH_PAIR_COPY.idle;
     const shuffleTitle = run.activeContract?.noShuffle
-        ? 'Scholar contract: shuffle disabled'
+        ? BOARD_SHUFFLE_COPY.scholarContract
         : shuffleDisabled
           ? run.shuffleCharges < 1 &&
               !(run.freeShuffleThisFloor && run.relicIds.includes('first_shuffle_free_per_floor'))
-            ? 'No shuffle charges'
+            ? BOARD_SHUFFLE_COPY.noCharges
             : run.board.flippedTileIds.length > 0
-              ? 'Finish the current flip first'
-              : 'Need at least two hidden pairs to shuffle'
-          : 'Shuffle hidden tiles (1 charge this run)';
+              ? BOARD_SHUFFLE_COPY.pendingFlip
+              : BOARD_SHUFFLE_COPY.needTwoPairs
+          : BOARD_SHUFFLE_COPY.idle;
     const boardPresentationClass =
         settingsBoardPresentation === 'spaghetti'
             ? styles.boardStageSpaghetti
@@ -1848,7 +1860,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                         headerPlateTone="pause"
                         onEscape={resume}
                         ornamentalHeaderPlate
-                        subtitle="The board and its timers stay frozen. Press P to resume."
+                        subtitle={PAUSE_DIALOG_COPY.subtitle}
                         testId="game-pause-overlay"
                         title="Run paused"
                     >
@@ -1949,8 +1961,8 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                         ]}
                         subtitle={
                             gamepadConnected
-                                ? 'These work while a run is active. Your keyboard still does everything it did.'
-                                : 'These shortcuts work while a run is active and when focus is not in a text field.'
+                                ? SHORTCUTS_COPY.touch
+                                : SHORTCUTS_COPY.withKeyboard
                         }
                         testId="game-shortcuts-help-overlay"
                         title={gamepadConnected ? 'Controller shortcuts' : 'Keyboard shortcuts'}
@@ -1999,7 +2011,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                             setAbandonRunConfirmOpen(false);
                         }}
                         ornamentalHeaderPlate
-                        subtitle="You will lose this run and return to the main menu. This cannot be undone."
+                        subtitle={ABANDON_DIALOG_COPY.subtitle}
                         title="Abandon run?"
                     />
                 ) : null}
