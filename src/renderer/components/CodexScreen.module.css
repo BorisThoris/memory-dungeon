@@ -89,3 +89,55 @@
     white-space: nowrap;
     border: 0;
 }
+
+/* A card is the control that opens its entry. */
+.card {
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
+.card:hover,
+.card:focus-visible {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 44%, transparent);
+    background:
+        linear-gradient(180deg, rgba(255, 243, 217, 0.09), transparent 34%),
+        rgba(8, 10, 16, 0.82);
+}
+
+/* The opened entry: the whole text, in the space the grid was using. */
+.entry {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    max-width: 58rem;
+    padding: 1rem 1.1rem;
+    border-radius: var(--ui-radius-lg);
+    border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 22%, var(--theme-card-border-muted));
+    background:
+        linear-gradient(180deg, rgba(255, 243, 217, 0.05), transparent 34%),
+        rgba(8, 10, 16, 0.72);
+}
+
+.entryTitle {
+    font-family: var(--theme-display-font);
+    font-size: 1.35rem;
+    font-weight: 650;
+    letter-spacing: 0.02em;
+    line-height: 1.2;
+    color: var(--theme-text);
+}
+
+.entryBody {
+    margin: 0;
+    font-size: 0.95rem;
+    line-height: 1.55;
+    color: color-mix(in srgb, var(--theme-text-muted) 70%, var(--theme-text) 30%);
+}
+
+.entryBody strong {
+    color: var(--theme-text);
+    font-weight: 700;
+}

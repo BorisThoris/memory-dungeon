@@ -3,7 +3,7 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2414,
+    "trackedFileCount": 2415,
     "codeFileCount": 900,
     "exportedSymbolCount": 3383,
     "contentItemCount": 57,
@@ -3669,8 +3669,8 @@
     {
       "path": "e2e/playable-path-interludes.spec.ts",
       "category": "test",
-      "bytes": 14255,
-      "sha256": "6f1de5a708804e5859acb0f7cf4b287d228446338271834c0b7782559a8a26b5"
+      "bytes": 14300,
+      "sha256": "81a1a819624a96ee727394b16cb920801e4b39ceaebca5f72fa681601c01715f"
     },
     {
       "path": "e2e/playable-path-mode-matrix.spec.ts",
@@ -3785,6 +3785,12 @@
       "category": "test",
       "bytes": 2179,
       "sha256": "7b68b879423113b420032df1edd238d649d8000537d518b61892f7eee45c0f3a"
+    },
+    {
+      "path": "e2e/ui-fit-contract.spec.ts",
+      "category": "test",
+      "bytes": 9765,
+      "sha256": "aca4bce6ae0c5f14810decdd5bc3867340a5b7399a5abbb71315d84f230919c1"
     },
     {
       "path": "e2e/ui-redesign-capture.spec.ts",
@@ -7365,20 +7371,20 @@
     {
       "path": "src/renderer/components/CodexScreen.module.css",
       "category": "source",
-      "bytes": 2153,
-      "sha256": "da90caed0fb4ebad5ea1340c2c91ad3aadba31103ad1a9a04909c2c59cdc22f7"
+      "bytes": 3456,
+      "sha256": "b30a85ee1d95ddcbdb4118089faadc8446d23d6c092b1656f7fe37792a3695d0"
     },
     {
       "path": "src/renderer/components/CodexScreen.test.tsx",
       "category": "test",
-      "bytes": 4503,
-      "sha256": "e7457b91b4239c04dd91f43f13f5382ff993e69e0ba3a3b030556eb99b0826a9"
+      "bytes": 4999,
+      "sha256": "ed7fa08db0920562a4c15435f4ee74d3237834de65f81c7fd0dd1636f9f66101"
     },
     {
       "path": "src/renderer/components/CodexScreen.tsx",
       "category": "source",
-      "bytes": 8339,
-      "sha256": "b6fdad768394c0decb64e6d12f316b058d3fa5f584e26275ceb405d586abe829"
+      "bytes": 11874,
+      "sha256": "f08239e88f019d91d797b7de617edfcad9165050022d76a24264db479d645302"
     },
     {
       "path": "src/renderer/components/codexScreenModel.test.ts",
@@ -7419,8 +7425,8 @@
     {
       "path": "src/renderer/components/FloorClearDialog.module.css",
       "category": "source",
-      "bytes": 7437,
-      "sha256": "bb17b81ab299bc1aade2fa07d6a9692eeb17aab9a63d3e88d05f032df27cd2c1"
+      "bytes": 9265,
+      "sha256": "c7a270ce0c696f6d93580b3c14e5303b8f24d3ed0a5bb00038f2a38e839256a8"
     },
     {
       "path": "src/renderer/components/FloorClearDialog.test.tsx",
@@ -7437,8 +7443,8 @@
     {
       "path": "src/renderer/components/GameOverScreen.module.css",
       "category": "source",
-      "bytes": 12532,
-      "sha256": "d090526e305b2cacabdb438536a0d48e9735b15a6a6e3dd28cabd80fded5f98d"
+      "bytes": 13842,
+      "sha256": "4dcdf63c73322007be22d25d53199127868f36b7d85ab1b47849207d72d9dfef"
     },
     {
       "path": "src/renderer/components/GameOverScreen.test.tsx",
@@ -7629,8 +7635,8 @@
     {
       "path": "src/renderer/components/OverlayModal.module.css",
       "category": "source",
-      "bytes": 14130,
-      "sha256": "3bd092648af59b847150dbdb2dfd7be85a4881c15547db1b177ec5772fd03714"
+      "bytes": 14656,
+      "sha256": "313fda3c7aab1c29fb75bdcbdfb920ca66694c9955cf5212d617fa892959946c"
     },
     {
       "path": "src/renderer/components/OverlayModal.test.tsx",
@@ -7659,8 +7665,8 @@
     {
       "path": "src/renderer/components/ProfileScreen.module.css",
       "category": "source",
-      "bytes": 2635,
-      "sha256": "3e499b535decf46fe8decfec9fe821e15d5d0672c63543b7b1f21fa236d5a3b6"
+      "bytes": 3510,
+      "sha256": "b433a16515572b573a00d7e83a81f32d96fa9ed885e31093a2e31339dd7cf77d"
     },
     {
       "path": "src/renderer/components/ProfileScreen.test.tsx",
@@ -7779,8 +7785,8 @@
     {
       "path": "src/renderer/components/SideRoomScreen.module.css",
       "category": "source",
-      "bytes": 6278,
-      "sha256": "87c85275dcee86b2a85538eef332e8b705f2a5ea642868a2374f6fce03dcf0d6"
+      "bytes": 7008,
+      "sha256": "776ca0fbce979c8f366e7c6c926664cb253dab52675d3b1f43ac8b292daf6b96"
     },
     {
       "path": "src/renderer/components/SideRoomScreen.test.tsx",
@@ -11103,8 +11109,8 @@
     {
       "path": "src/shared/mechanics-encyclopedia.ts",
       "category": "source",
-      "bytes": 43878,
-      "sha256": "a2e6ed7815ef60f95db8d163b26f70bf7c512bd64d1a512739f2e324630c2330"
+      "bytes": 43974,
+      "sha256": "5fcf9114d4b744f9913d6fd395534edda7a85414878b1a1aa5ac3aa07930c105"
     },
     {
       "path": "src/shared/memorize-phase-rules.test.ts",
@@ -16393,7 +16399,7 @@
       "path": "src/renderer/components/CodexScreen.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 100,
+      "lineCount": 110,
       "imports": [
         "file:src/renderer/components/CodexScreen.tsx",
         "file:src/shared/save-data.ts"
@@ -16406,7 +16412,7 @@
       "path": "src/renderer/components/CodexScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 188,
+      "lineCount": 263,
       "imports": [
         "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/components/codexScreenModel.ts",
@@ -28285,7 +28291,7 @@
       "path": "src/shared/mechanics-encyclopedia.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 883,
+      "lineCount": 885,
       "imports": [
         "file:src/shared/contracts.ts"
       ],
@@ -34681,8 +34687,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/CodexScreen.tsx",
-      "line": 187,
-      "endLine": 187
+      "line": 262,
+      "endLine": 262
     },
     {
       "id": "symbol:src/renderer/components/codexScreenModel.ts#buildCodexBuildRows",
@@ -52442,7 +52448,7 @@
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
       "line": 290,
-      "endLine": 327
+      "endLine": 329
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#AchievementCodexEntry",
@@ -52457,8 +52463,8 @@
       "name": "CODEX_CORE_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 526,
-      "endLine": 574
+      "line": 528,
+      "endLine": 576
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#CodexCoreTopic",
@@ -52473,48 +52479,48 @@
       "name": "ENCYCLOPEDIA_CONTRACT_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 844,
-      "endLine": 862
+      "line": 846,
+      "endLine": 864
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_FEATURED_RUN_TOPICS",
       "name": "ENCYCLOPEDIA_FEATURED_RUN_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 865,
-      "endLine": 882
+      "line": 867,
+      "endLine": 884
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS",
       "name": "ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 773,
-      "endLine": 841
+      "line": 775,
+      "endLine": 843
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_POWER_TOPICS",
       "name": "ENCYCLOPEDIA_POWER_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 577,
-      "endLine": 638
+      "line": 579,
+      "endLine": 640
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS",
       "name": "ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 643,
-      "endLine": 722
+      "line": 645,
+      "endLine": 724
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_SETTINGS_AND_ASSISTS_TOPICS",
       "name": "ENCYCLOPEDIA_SETTINGS_AND_ASSISTS_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 727,
-      "endLine": 770
+      "line": 729,
+      "endLine": 772
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_VERSION",
@@ -52537,8 +52543,8 @@
       "name": "GAME_MODE_CODEX",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 494,
-      "endLine": 523
+      "line": 496,
+      "endLine": 525
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#GameModeCodexEntry",
@@ -52585,8 +52591,8 @@
       "name": "MUTATOR_CATALOG",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 422,
-      "endLine": 492
+      "line": 424,
+      "endLine": 494
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#MutatorDefinition",
@@ -52601,8 +52607,8 @@
       "name": "RELIC_CATALOG",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 332,
-      "endLine": 417
+      "line": 334,
+      "endLine": 419
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#RelicDefinition",

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import {
     ACHIEVEMENTS,
@@ -15,7 +15,7 @@ import { getTileTraitCodexRows, getTileTraitInteractionCodexRows } from '../../s
 import { getActiveContentLock, isDemoBuild } from '../../shared/content-lock-state';
 import { RELIC_POOL } from '../../shared/relics';
 import { getUiStateCopy } from '../../shared/ui-state-copy';
-import { FittedGrid, MetaShell, SectionRail } from '../ui';
+import { FittedGrid, MetaShell, SectionRail, UiButton } from '../ui';
 import { playUiBackSfx, playUiClickSfx, resumeUiSfxContext, uiSfxGainFromSettings } from '../audio/uiSfx';
 import { useAppStore } from '../store/useAppStore';
 import {
@@ -53,6 +53,38 @@ interface CodexSection {
 
 const sectionIdFromHref = (href: string): string => href.replace('#codex-', '');
 
+/** The encyclopedia writes emphasis as `**bold**`; a card shows the words, not the markers. */
+const plainText = (text: string): string => text.replace(/\*\*/gu, '');
+
+/**
+ * The card's line: the sentence an entry leads with, cut on a word boundary at what three
+ * lines of a card actually hold. It is a summary that opens into the whole entry, not the
+ * only copy there is with its end hidden.
+ */
+const CARD_SUMMARY_LIMIT = 96;
+
+const summarize = (description: string): string => {
+    const plain = plainText(description).trim();
+    const firstStop = plain.search(/[.!?](\s|$)/u);
+    const sentence = firstStop === -1 ? plain : plain.slice(0, firstStop + 1);
+    if (sentence.length <= CARD_SUMMARY_LIMIT) {
+        return sentence;
+    }
+    const cut = sentence.slice(0, CARD_SUMMARY_LIMIT);
+    const lastSpace = cut.lastIndexOf(' ');
+    return `${(lastSpace > 40 ? cut.slice(0, lastSpace) : cut).replace(/[,;:.]$/u, '')}\u2026`;
+};
+
+/** Renders `**bold**` runs as emphasis so the entry reads as written. */
+const renderEmphasis = (text: string): ReactNode[] =>
+    text.split(/(\*\*[^*]+\*\*)/gu).map((part, index) =>
+        part.startsWith('**') && part.endsWith('**') && part.length > 4 ? (
+            <strong key={`bold-${index}`}>{part.slice(2, -2)}</strong>
+        ) : (
+            part
+        )
+    );
+
 const CodexScreen = ({ stackedOnGameplay = false }: CodexScreenProps) => {
     const { closeSubscreen, settings } = useAppStore(
         useShallow((state) => ({
@@ -63,6 +95,7 @@ const CodexScreen = ({ stackedOnGameplay = false }: CodexScreenProps) => {
     const [filterQuery, setFilterQuery] = useState('');
     const [debouncedFilterQuery, setDebouncedFilterQuery] = useState('');
     const [activeSectionId, setActiveSectionId] = useState('core');
+    const [openEntryKey, setOpenEntryKey] = useState<string | null>(null);
     const uiGain = uiSfxGainFromSettings(settings.masterVolume, settings.sfxVolume);
     const playUiClick = (): void => {
         resumeUiSfxContext();
@@ -98,6 +131,11 @@ const CodexScreen = ({ stackedOnGameplay = false }: CodexScreenProps) => {
     }, []);
 
     const filtering = debouncedFilterQuery.trim().length > 0;
+    const openEntry = openEntryKey
+        ? sections
+              .flatMap((section) => section.entries.map((entry) => ({ entry, section })))
+              .find(({ entry, section }) => `${section.id}:${entry.id}` === openEntryKey) ?? null
+        : null;
     const activeSection = sections.find((candidate) => candidate.id === activeSectionId) ?? sections[0]!;
     const visible = useMemo(() => {
         if (filtering) {
@@ -139,6 +177,7 @@ const CodexScreen = ({ stackedOnGameplay = false }: CodexScreenProps) => {
                             playUiClick();
                             setActiveSectionId(id);
                             setFilterQuery('');
+                            setOpenEntryKey(null);
                         }}
                         options={sections.map((section) => ({
                             badge: String(section.entries.length),
@@ -153,7 +192,10 @@ const CodexScreen = ({ stackedOnGameplay = false }: CodexScreenProps) => {
                             autoComplete="off"
                             className={styles.filterInput}
                             id="codex-filter-query"
-                            onChange={(e) => setFilterQuery(e.target.value)}
+                            onChange={(e) => {
+                                setFilterQuery(e.target.value);
+                                setOpenEntryKey(null);
+                            }}
                             placeholder="Filter every section…"
                             type="search"
                             value={filterQuery}
@@ -162,24 +204,57 @@ const CodexScreen = ({ stackedOnGameplay = false }: CodexScreenProps) => {
                 </>
             }
         >
-            <FittedGrid
-                ariaLabel={filtering ? `Entries matching ${debouncedFilterQuery.trim()}` : activeSection.label}
-                emptyState={`${filterEmptyCopy.message} ${filterEmptyCopy.actionLabel}.`}
-                items={visible}
-                itemNoun="entries"
-                keyForItem={({ entry, section }) => `${section.id}:${entry.id}`}
-                minColumnWidth={250}
-                renderItem={({ entry, section }) => (
-                    <article className={styles.card} data-section={section.id}>
-                        <span className={styles.cardKicker}>{section.kicker}</span>
-                        <strong className={styles.cardTitle}>{entry.title}</strong>
-                        <p className={styles.cardBody}>{entry.description}</p>
-                    </article>
-                )}
-                resetKey={filtering ? `filter:${debouncedFilterQuery}` : `section:${activeSectionId}`}
-                rowHeight={146}
-                testId="codex-entries"
-            />
+            {openEntry ? (
+                /*
+                 * An entry runs to 888 characters. A card in a grid cannot hold that, and
+                 * clamping it to three lines hid the half that answers the question, so the
+                 * entry opens in place and reads in full.
+                 */
+                <article className={styles.entry} data-section={openEntry.section.id} data-testid="codex-entry">
+                    <span className={styles.cardKicker}>{openEntry.section.kicker}</span>
+                    <strong className={styles.entryTitle}>{openEntry.entry.title}</strong>
+                    <p className={styles.entryBody}>{renderEmphasis(openEntry.entry.description)}</p>
+                    <UiButton
+                        data-testid="codex-entry-back"
+                        onClick={() => {
+                            playUiClick();
+                            setOpenEntryKey(null);
+                        }}
+                        type="button"
+                        variant="secondary"
+                    >
+                        Back to {openEntry.section.label}
+                    </UiButton>
+                </article>
+            ) : (
+                <FittedGrid
+                    ariaLabel={filtering ? `Entries matching ${debouncedFilterQuery.trim()}` : activeSection.label}
+                    emptyState={`${filterEmptyCopy.message} ${filterEmptyCopy.actionLabel}.`}
+                    items={visible}
+                    itemNoun="entries"
+                    keyForItem={({ entry, section }) => `${section.id}:${entry.id}`}
+                    minColumnWidth={250}
+                    renderItem={({ entry, section }) => (
+                        <button
+                            className={styles.card}
+                            data-section={section.id}
+                            data-testid={`codex-card-${entry.id}`}
+                            onClick={() => {
+                                playUiClick();
+                                setOpenEntryKey(`${section.id}:${entry.id}`);
+                            }}
+                            type="button"
+                        >
+                            <span className={styles.cardKicker}>{section.kicker}</span>
+                            <strong className={styles.cardTitle}>{entry.title}</strong>
+                            <p className={styles.cardBody}>{summarize(entry.description)}</p>
+                        </button>
+                    )}
+                    resetKey={filtering ? `filter:${debouncedFilterQuery}` : `section:${activeSectionId}`}
+                    rowHeight={146}
+                    testId="codex-entries"
+                />
+            )}
         </MetaShell>
     );
 };

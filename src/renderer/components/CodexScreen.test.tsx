@@ -50,7 +50,17 @@ describe('CodexScreen', () => {
         // Eight archetypes, six cards to a page in jsdom: the rest are one page away, not scrolled to.
         const builds = screen.getByTestId('codex-entries');
         expect(builds).toHaveTextContent('The Conduit Cartographer');
-        expect(builds).toHaveTextContent(/peek, pin, read/i);
+        // The card carries the opening sentence; the rest of the entry is one click away
+        // rather than clamped out of sight.
+        const cartographer = within(builds).getByRole('button', { name: /The Conduit Cartographer/ });
+        act(() => {
+            cartographer.click();
+        });
+        expect(screen.getByTestId('codex-entry')).toHaveTextContent(/peek, pin, read/i);
+        act(() => {
+            screen.getByTestId('codex-entry-back').click();
+        });
+        expect(screen.getByTestId('codex-entries')).toBeInTheDocument();
         const pager = screen.getByTestId('codex-entries-pager');
         expect(pager).toHaveTextContent('of 8 entries');
         act(() => {

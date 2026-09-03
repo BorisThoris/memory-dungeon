@@ -306,8 +306,10 @@ export const ACHIEVEMENT_CATALOG: Record<AchievementId, AchievementCodexEntry> =
     ACH_PERFECT_CLEAR: {
         id: 'ACH_PERFECT_CLEAR',
         title: 'Perfect Memory',
-        description:
-            'Unlocks when your last cleared level had zero mismatches and you never used disallowed powers that run: shuffle (full-board or row/region), destroy pair, peek, undo resolve, gambit, stray remove, flash pair, or wild match. Pins are allowed.'
+        // One sentence, like every other achievement here. The full list of disallowed powers
+        // is rule detail and lives in the Codex entry for Perfect Memory, which is where a
+        // player goes to look a rule up; a card in a grid of twenty cannot hold it.
+        description: 'Clear a floor with zero mismatches and no powers that run. Pins are allowed.'
     },
     ACH_LAST_LIFE: {
         id: 'ACH_LAST_LIFE',

@@ -326,3 +326,80 @@
         font-size: 1.2rem;
     }
 }
+
+/*
+ * Short landscape: 375px of height and 800 of width. The doors are the decision and they
+ * need the width to read, so the dialog stays one column and the recap gives way: the
+ * score band states the outcome, and the rating, streak, miss and life tiles step aside
+ * because the run HUD behind this dialog already carries lives and the next floor restates
+ * the rest. Nothing here is clipped - it is chosen against.
+ */
+@media (max-height: 560px) and (min-width: 700px) {
+    .stats,
+    .notes {
+        display: none;
+    }
+
+    .doors {
+        gap: 0.4rem;
+    }
+
+    /*
+     * "Choose the next door" stays in the accessibility tree and steps out of the layout:
+     * three door buttons under a dialog titled "Floor cleared" do not need the sentence.
+     */
+    .routesTitle {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+    }
+}
+
+@media (max-height: 560px) {
+    .routesIntro {
+        display: none;
+    }
+
+    .score {
+        grid-template-areas: 'label value total';
+        align-items: baseline;
+        column-gap: 0.5rem;
+        padding-bottom: 0.4rem;
+    }
+
+    .scoreValue {
+        font-size: 1.8rem;
+    }
+
+    .stat {
+        padding: 0.35rem 0.5rem;
+    }
+
+    .stat dd {
+        font-size: 1.1rem;
+    }
+
+    .door {
+        gap: 0.15rem;
+        padding: 0.45rem 0.55rem 0.5rem;
+    }
+
+    /*
+     * The room's flavour name ("Recall Hall") restates the door in other words; on 375px of
+     * height the reward and the risk are what a choice is actually made on, so they keep the
+     * space and the flavour steps aside.
+     */
+    .doorRoom {
+        display: none;
+    }
+
+    .doorGlyph {
+        display: none;
+    }
+}

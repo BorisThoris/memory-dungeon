@@ -120,3 +120,42 @@
     text-transform: uppercase;
     color: color-mix(in srgb, var(--theme-gold-bright) 70%, var(--theme-text-subtle));
 }
+
+/*
+ * Short landscape. The six numbers go to one band and the tier rail tightens, so the next
+ * goal stays on the page instead of falling past the bottom edge. The "Current" and
+ * "Reached" notes step aside there: the tier's own border and fill already say it, while
+ * an upcoming tier keeps its note because the marks it needs are a number nothing else
+ * states.
+ */
+@media (max-height: 560px) {
+    .summary {
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+        gap: 0.35rem;
+    }
+
+    .summaryCell {
+        padding: 0.4rem 0.5rem;
+    }
+
+    .summaryCell dd {
+        font-size: 1.15rem;
+    }
+
+    .tiers {
+        gap: 0.35rem;
+    }
+
+    .tier {
+        padding: 0.4rem 0.55rem;
+    }
+
+    .tier[data-status='current'] .tierNote,
+    .tier[data-status='reached'] .tierNote {
+        display: none;
+    }
+
+    .footer {
+        gap: 0.5rem;
+    }
+}

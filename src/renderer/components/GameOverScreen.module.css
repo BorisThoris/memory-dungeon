@@ -597,3 +597,53 @@
     }
 }
 
+
+/*
+ * A phone held sideways: 375px of height, 800 of width. The width is there, so the result
+ * and the next move stay side by side rather than stacking into a page twice the window's
+ * height. The crest, the divider and the score's display size are what give way.
+ */
+@media (max-height: 560px) and (min-width: 700px) {
+    .layout {
+        grid-template-columns: minmax(0, 1.1fr) minmax(240px, 0.9fr);
+        gap: 0.6rem;
+    }
+
+    .brandCrest,
+    .divider {
+        display: none;
+    }
+
+    .heroPanel,
+    .actionPanel {
+        padding: 0.6rem 0.75rem;
+    }
+
+    .scoreHeroValue {
+        font-size: 2rem;
+    }
+
+    /* The achievement footnote is a status line, and the panel that lists real unlocks
+       carries the news itself. */
+    .note {
+        display: none;
+    }
+
+    /* Five numbers in one band rather than two rows: the height is what is scarce here. */
+    .summaryGrid {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 0.3rem;
+    }
+
+    .mobileActionDock {
+        display: none;
+    }
+
+    /*
+     * One row on 375px of height: the chain target is the thing to do differently next run.
+     * The profile's next goal is on the Profile screen, which is where it is acted on.
+     */
+    .nextRunGrid > *:nth-child(n + 2) {
+        display: none;
+    }
+}

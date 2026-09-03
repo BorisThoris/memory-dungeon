@@ -327,6 +327,31 @@
     }
 }
 
+/*
+ * A phone held sideways gives the plate 375px. The chrome around the body was taking a
+ * quarter of that in padding and gaps, so the screen inside had to hide things it needed
+ * to show; here the body gets that space back.
+ */
+@media (max-height: 560px) {
+    .modal {
+        max-height: calc(100dvh - 0.5rem);
+        gap: 0.5rem;
+        padding: 0.6rem 0.75rem;
+    }
+
+    .body {
+        gap: 0.5rem;
+    }
+
+    .actions {
+        gap: 0.4rem;
+    }
+
+    .headerQuietBand {
+        padding: 0.3rem 0.6rem;
+    }
+}
+
 @media (max-width: 760px) {
     .backdrop {
         align-items: flex-end;
