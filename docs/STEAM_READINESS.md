@@ -56,9 +56,13 @@ What was fixed, and why each mattered:
 
 The 30 that remain all sit under `eslint`, `vite`, `electron-builder`, `depcheck`, `concurrently`,
 `svgo` and `@vitejs/plugin-react` — build-time tools that never ship. Two runtime packages,
-`electron-store` and `pixi.js`, used to appear in that list and no longer do. Clearing the rest
-means bumping toolchain majors, which is worth doing on its own schedule rather than alongside
-gameplay work; the gate stays red until then, so the number cannot quietly grow back unnoticed.
+`electron-store` and `pixi.js`, used to appear in that list and no longer do.
+
+The gate now says which is which. It fails if **any** advisory reaches a runtime dependency, and
+separately if the build-only count grows past a recorded baseline of 30. Before, it failed on any
+advisory at all, so it failed permanently, so nobody ran it — which is how 64 accumulated behind a
+red light. Lower the baseline whenever a bump clears some; raising it should be a decision written
+down in `scripts/audit-summary.mjs` rather than a shrug.
 
 Electron itself is **not** on the newest major (44). Moving three majors is a release-sized change
 and is not what a colour-palette or crash-log pass should be dragging along.

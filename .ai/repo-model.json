@@ -2283,8 +2283,8 @@
     {
       "path": "docs/STEAM_READINESS.md",
       "category": "documentation",
-      "bytes": 7113,
-      "sha256": "1928e0932ab8470366eaf55e88e5e40fe95463cf5605c7817fb9a22070eb52f3"
+      "bytes": 7357,
+      "sha256": "9ed0d6a0ca9805ef7c5319659fb7473623fb464d15026cf99143b87886371c59"
     },
     {
       "path": "docs/STRAY_TILE.md",
@@ -4341,8 +4341,8 @@
     {
       "path": "scripts/audit-summary.mjs",
       "category": "script",
-      "bytes": 3542,
-      "sha256": "2230739de278fd447b7437dc506377268a51229ad1dda09cb76fce0b6fe78e4e"
+      "bytes": 6489,
+      "sha256": "724c619b96ffd884ca604184b42482a716c8fff9b2a4604ef4e7f0b55ebe87fb"
     },
     {
       "path": "scripts/bake-procedural-illustration-set-options.ts",
@@ -9939,8 +9939,8 @@
     {
       "path": "src/shared/audit-summary-script.test.ts",
       "category": "test",
-      "bytes": 4075,
-      "sha256": "5b10c4e50ccfdddffc08f8fe9ceb7b2ff9c02a1bb3491530804aacc0ebf8bb41"
+      "bytes": 8305,
+      "sha256": "466fbafe67aa1d9b96bb077f78025a39a688a04e121c141ae5c110ac5d4a5e18"
     },
     {
       "path": "src/shared/bake-procedural-illustration-set-script.test.ts",
@@ -23515,7 +23515,7 @@
       "path": "src/shared/audit-summary-script.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 99,
+      "lineCount": 195,
       "imports": [],
       "exports": [],
       "testedBy": []
