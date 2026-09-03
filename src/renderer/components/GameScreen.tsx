@@ -49,6 +49,7 @@ import {
     ROW_SHUFFLE_COPY,
     TILE_SWAP_COPY
 } from '../copy/boardPowerCopy';
+import { RUN_SHELL_TOOL_CATALOG, type RunShellToolId } from './runShellToolCatalog';
 import { runPersistenceInBackground } from '../store/backgroundPersistence';
 import { UI_ART } from '../assets/ui';
 import { isNarrowShortLandscapeForMenuStack } from '../breakpoints';
@@ -1421,10 +1422,18 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
               : '';
     const destroyDisabled = run.destroyPairCharges < 1 && !destroyPairArmed;
 
+    // Ids and labels come from the catalog rather than being retyped here, so a tool the catalog
+    // names but the dock forgets to build is a type error rather than a missing button.
+    const toolSpec = (id: RunShellToolId): Pick<RunShellTool, 'id' | 'label'> => {
+        const spec = RUN_SHELL_TOOL_CATALOG.find((candidate) => candidate.id === id);
+        if (!spec) {
+            throw new Error(`Run dock asked for a tool the catalog does not define: ${id}`);
+        }
+        return { id: spec.id, label: spec.label };
+    };
     const runShellTools: RunShellTool[] = [
             {
-                id: 'shuffle',
-                label: 'Shuffle',
+                ...toolSpec('shuffle'),
                 glyph: RUN_SHELL_GLYPHS.shuffle,
                 charges: run.shuffleCharges,
                 disabled: shuffleDisabled,
@@ -1432,8 +1441,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                 onClick: shuffleBoard
             },
             {
-                id: 'swap',
-                label: 'Swap',
+                ...toolSpec('swap'),
                 glyph: RUN_SHELL_GLYPHS.shuffle,
                 charges: run.regionShuffleCharges,
                 armed: tileSwapArmed,
@@ -1442,8 +1450,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                 onClick: toggleTileSwapArmed
             },
             {
-                id: 'row',
-                label: ROW_SHUFFLE_COPY.label,
+                ...toolSpec('row'),
                 glyph: RUN_SHELL_GLYPHS.shuffle,
                 charges: run.regionShuffleCharges,
                 armed: regionShuffleArmed,
@@ -1452,16 +1459,14 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                 onClick: toggleRegionShuffleArmed
             },
             {
-                id: 'pin',
-                label: 'Pin',
+                ...toolSpec('pin'),
                 glyph: RUN_SHELL_GLYPHS.pin,
                 armed: boardPinMode,
                 title: `Pin up to ${MAX_PINNED_TILES} tiles`,
                 onClick: toggleBoardPinMode
             },
             {
-                id: 'destroy',
-                label: 'Destroy',
+                ...toolSpec('destroy'),
                 glyph: RUN_SHELL_GLYPHS.destroy,
                 charges: run.destroyPairCharges,
                 armed: destroyPairArmed,
@@ -1470,8 +1475,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                 onClick: toggleDestroyPairArmed
             },
             {
-                id: 'peek',
-                label: 'Peek',
+                ...toolSpec('peek'),
                 glyph: RUN_SHELL_GLYPHS.peek,
                 charges: run.peekCharges,
                 armed: peekModeArmed,
@@ -1481,8 +1485,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             ...(showFlashPairPower
                 ? [
                       {
-                          id: 'flash',
-                          label: 'Flash',
+                          ...toolSpec('flash'),
                           glyph: RUN_SHELL_GLYPHS.peek,
                           charges: run.flashPairCharges,
                           disabled: flashPairDisabled,
@@ -1492,16 +1495,14 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                   ]
                 : []),
             {
-                id: 'stray',
-                label: 'Stray',
+                ...toolSpec('stray'),
                 glyph: RUN_SHELL_GLYPHS.stray,
                 armed: strayRemoveArmed,
                 title: 'Remove a stray tile',
                 onClick: toggleStrayArm
             },
             {
-                id: 'undo',
-                label: 'Undo',
+                ...toolSpec('undo'),
                 glyph: RUN_SHELL_GLYPHS.undo,
                 title: 'Undo the last flip',
                 onClick: undoResolvingFlip

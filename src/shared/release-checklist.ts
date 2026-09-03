@@ -31,6 +31,13 @@ export interface ReleaseChecklistItem {
 
 export const RELEASE_CHECKLIST: readonly ReleaseChecklistItem[] = [
     {
+        evidence: 'src/renderer/components/runShellToolCatalog.ts',
+        id: 'dock-tool-coverage',
+        label: 'Every board power a run can hold charges for has a tool that spends them',
+        owner: 'repo',
+        section: 'Input and display'
+    },
+    {
         evidence: 'src/shared/gamepad-input.ts',
         id: 'controller-support',
         label: 'Every screen is reachable on a controller, not just the board',

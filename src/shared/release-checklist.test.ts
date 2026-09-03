@@ -3,6 +3,8 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { RELEASE_CHECKLIST, releaseChecklistByOwner, renderReleaseChecklistMarkdown } from './release-checklist';
 import { ACHIEVEMENT_IDS } from './save-data';
+import { createNewRun } from './game';
+import { chargeFieldsWithATool } from '../renderer/components/runShellToolCatalog';
 import { STEAM_ACHIEVEMENT_API_NAME } from './steam-achievement-api-names';
 import { buildRichPresence, richPresencePairs } from './rich-presence';
 import { STEAM_CLOUD_RULES, SAVE_FILE_NAME } from './save-location';
@@ -39,6 +41,15 @@ const VERIFIERS: Record<string, () => void> = {
             'WinAppDataRoaming'
         ]);
         expect(STEAM_CLOUD_RULES.every((rule) => rule.pattern.includes(SAVE_FILE_NAME))).toBe(true);
+    },
+    'dock-tool-coverage': () => {
+        const run = createNewRun(0);
+        const covered = new Set<string>(chargeFieldsWithATool());
+
+        // Row shuffle accumulated charges with no button to spend them for a long time.
+        for (const field of Object.keys(run).filter((key) => key.endsWith('Charges'))) {
+            expect(covered.has(field), `${field} has no dock tool that spends it`).toBe(true);
+        }
     },
     'controller-support': () => {
         const pressed = new Set<number>([STANDARD_GAMEPAD_BUTTONS.a, STANDARD_GAMEPAD_BUTTONS.dpadUp]);

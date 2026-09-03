@@ -11,6 +11,7 @@ achievement on the Partner site or shoot a trailer.
 
 | Item | State | Owner | Where |
 |---|---|---|---|
+| Every board power a run can hold charges for has a tool that spends them | done | the repository | `src/renderer/components/runShellToolCatalog.ts` |
 | Every screen is reachable on a controller, not just the board | done | the repository | `src/shared/gamepad-input.ts` |
 | Window size and position survive a restart, clamped to a usable minimum | done | the repository | `src/main/window-bounds.ts` |
 | Traits carry a shape as well as a colour, so the board reads without colour vision | done | the repository | `src/shared/tile-trait-marks.ts` |

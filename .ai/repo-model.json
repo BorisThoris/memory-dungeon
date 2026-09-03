@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2470,
-    "codeFileCount": 945,
-    "exportedSymbolCount": 3507,
+    "trackedFileCount": 2472,
+    "codeFileCount": 947,
+    "exportedSymbolCount": 3513,
     "contentItemCount": 63,
     "mechanicCount": 136,
     "stateFieldCount": 144,
-    "relationshipCount": 10260
+    "relationshipCount": 10276
   },
   "inventory": [
     {
@@ -2259,8 +2259,8 @@
     {
       "path": "docs/RELEASE_CHECKLIST.md",
       "category": "documentation",
-      "bytes": 3887,
-      "sha256": "fa04c0a43ccfb6e05729953b4e5339b7ff2fcfd4fae4a92a69c422d87f29dcb1"
+      "bytes": 4039,
+      "sha256": "6a537c901159cd4ac53b553b888278b4f08b598eb52ebb0d347bf0015db566a4"
     },
     {
       "path": "docs/RELIC_ROSTER.md",
@@ -2320,7 +2320,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 36714,
-      "sha256": "12994d3b0d3c47caa2807eec004675a3836e76e2f8bccf5790cff29914c4d0c3"
+      "sha256": "19b42badf0a18fda8dc1b523da6e37c2470b1db6f945d3700baa2be2a7e66616"
     },
     {
       "path": "docs/UI_RETHINK_PLAN.md",
@@ -7599,8 +7599,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 90792,
-      "sha256": "3568f9d7d2a45c531673d8016bad39ee74842ba08d208996b8454188e9c6fe65"
+      "bytes": 91184,
+      "sha256": "5f62f4a4db8332573027fea91eba22aa77d33acf5777fe4af0cbe6d36a6c1341"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -7829,6 +7829,18 @@
       "category": "source",
       "bytes": 487,
       "sha256": "b496a016ad34932bb28027b3d391bd16ad32fec74b9d2f314ecc7762e98eb58e"
+    },
+    {
+      "path": "src/renderer/components/runShellToolCatalog.test.ts",
+      "category": "test",
+      "bytes": 3033,
+      "sha256": "6cb75c58159fa2fc05bc7897206f46212f26c0bda10342a875d3626503699b1e"
+    },
+    {
+      "path": "src/renderer/components/runShellToolCatalog.ts",
+      "category": "source",
+      "bytes": 2895,
+      "sha256": "6c196325d115351622128dfb71966d51e9b90953c70b32ba92151fa371fe4116"
     },
     {
       "path": "src/renderer/components/SettingsControls.tsx",
@@ -11679,14 +11691,14 @@
     {
       "path": "src/shared/release-checklist.test.ts",
       "category": "test",
-      "bytes": 10039,
-      "sha256": "37e1fb34292581c262e65761bfe2e0eeab0608ae9041ac4721b6fb21718b6fd2"
+      "bytes": 10590,
+      "sha256": "5a679a90b6b6c6b31fec4201322487f01f527cf6ab1d6f9d4f2eaa7ca19b71c8"
     },
     {
       "path": "src/shared/release-checklist.ts",
       "category": "source",
-      "bytes": 8701,
-      "sha256": "98b51063b4de3d9ddcb9cc3d72788e0b4fde3dcc3c47ee006ffdc6429105d2ca"
+      "bytes": 8967,
+      "sha256": "1d20bb133fa53227731f9c3f502a81590521122184e7fc79518a0a2f78579173"
     },
     {
       "path": "src/shared/relic-favor-rules.test.ts",
@@ -17183,7 +17195,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 2024,
+      "lineCount": 2025,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -17198,6 +17210,7 @@
         "file:src/renderer/components/RelicDraftOfferPanel.tsx",
         "file:src/renderer/components/RunShell.tsx",
         "file:src/renderer/components/runShellGlyphs.tsx",
+        "file:src/renderer/components/runShellToolCatalog.ts",
         "file:src/renderer/components/TileBoard.tsx",
         "file:src/renderer/components/useGameScreenPowerTileHints.ts",
         "file:src/renderer/components/useGameScreenTraitRouteTargets.ts",
@@ -17766,6 +17779,41 @@
         "symbol:src/renderer/components/runShellGlyphs.tsx#RUN_SHELL_GLYPHS"
       ],
       "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/runShellToolCatalog.test.ts",
+      "path": "src/renderer/components/runShellToolCatalog.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 65,
+      "imports": [
+        "file:src/renderer/components/runShellToolCatalog.ts",
+        "file:src/shared/game.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/runShellToolCatalog.ts",
+      "path": "src/renderer/components/runShellToolCatalog.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 57,
+      "imports": [
+        "file:src/shared/contracts.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/runShellToolCatalog.ts#chargeFieldsWithATool",
+        "symbol:src/renderer/components/runShellToolCatalog.ts#RUN_SHELL_TOOL_CATALOG",
+        "symbol:src/renderer/components/runShellToolCatalog.ts#RunPowerChargeField",
+        "symbol:src/renderer/components/runShellToolCatalog.ts#RunShellToolId",
+        "symbol:src/renderer/components/runShellToolCatalog.ts#runShellToolIds",
+        "symbol:src/renderer/components/runShellToolCatalog.ts#RunShellToolSpec"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/runShellToolCatalog.test.ts",
+        "file:src/shared/release-checklist.test.ts"
+      ]
     },
     {
       "id": "file:src/renderer/components/SettingsControls.tsx",
@@ -27792,6 +27840,7 @@
         "symbol:src/shared/game.ts#WILD_PAIR_KEY"
       ],
       "testedBy": [
+        "file:src/renderer/components/runShellToolCatalog.test.ts",
         "file:src/renderer/store/rowShuffleReachability.test.ts",
         "file:src/shared/dungeon-boss-clear-rules.test.ts",
         "file:src/shared/dungeon-exit-rules.test.ts",
@@ -27805,6 +27854,7 @@
         "file:src/shared/next-floor-run-state-rules.test.ts",
         "file:src/shared/p2-contracts.test.ts",
         "file:src/shared/playable-path-fixtures.test.ts",
+        "file:src/shared/release-checklist.test.ts",
         "file:src/shared/score-parasite-rules.test.ts",
         "file:src/shared/softlock-fairness.test.ts",
         "file:src/shared/tile-floater-anchor-rules.test.ts"
@@ -30298,12 +30348,14 @@
       "path": "src/shared/release-checklist.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 192,
+      "lineCount": 203,
       "imports": [
         "file:src/main/crash-log.ts",
         "file:src/main/save-recovery.ts",
         "file:src/main/window-bounds.ts",
+        "file:src/renderer/components/runShellToolCatalog.ts",
         "file:src/renderer/copy/saveRecoveryNotice.ts",
+        "file:src/shared/game.ts",
         "file:src/shared/gamepad-input.ts",
         "file:src/shared/release-checklist.ts",
         "file:src/shared/rich-presence.ts",
@@ -30320,7 +30372,7 @@
       "path": "src/shared/release-checklist.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 228,
+      "lineCount": 235,
       "imports": [],
       "exports": [
         "symbol:src/shared/release-checklist.ts#RELEASE_CHECKLIST",
@@ -36358,8 +36410,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 2023,
-      "endLine": 2023
+      "line": 2024,
+      "endLine": 2024
     },
     {
       "id": "symbol:src/renderer/components/gameScreenFeedback.ts#DungeonCombatLogRow",
@@ -36664,6 +36716,54 @@
       "file": "src/renderer/components/runShellGlyphs.tsx",
       "line": 11,
       "endLine": 18
+    },
+    {
+      "id": "symbol:src/renderer/components/runShellToolCatalog.ts#chargeFieldsWithATool",
+      "name": "chargeFieldsWithATool",
+      "kind": "value",
+      "file": "src/renderer/components/runShellToolCatalog.ts",
+      "line": 54,
+      "endLine": 56
+    },
+    {
+      "id": "symbol:src/renderer/components/runShellToolCatalog.ts#RUN_SHELL_TOOL_CATALOG",
+      "name": "RUN_SHELL_TOOL_CATALOG",
+      "kind": "value",
+      "file": "src/renderer/components/runShellToolCatalog.ts",
+      "line": 37,
+      "endLine": 49
+    },
+    {
+      "id": "symbol:src/renderer/components/runShellToolCatalog.ts#RunPowerChargeField",
+      "name": "RunPowerChargeField",
+      "kind": "type",
+      "file": "src/renderer/components/runShellToolCatalog.ts",
+      "line": 18,
+      "endLine": 26
+    },
+    {
+      "id": "symbol:src/renderer/components/runShellToolCatalog.ts#RunShellToolId",
+      "name": "RunShellToolId",
+      "kind": "type",
+      "file": "src/renderer/components/runShellToolCatalog.ts",
+      "line": 15,
+      "endLine": 15
+    },
+    {
+      "id": "symbol:src/renderer/components/runShellToolCatalog.ts#runShellToolIds",
+      "name": "runShellToolIds",
+      "kind": "value",
+      "file": "src/renderer/components/runShellToolCatalog.ts",
+      "line": 51,
+      "endLine": 51
+    },
+    {
+      "id": "symbol:src/renderer/components/runShellToolCatalog.ts#RunShellToolSpec",
+      "name": "RunShellToolSpec",
+      "kind": "interface",
+      "file": "src/renderer/components/runShellToolCatalog.ts",
+      "line": 28,
+      "endLine": 35
     },
     {
       "id": "symbol:src/renderer/components/SettingsControls.tsx#PlaceholderControl",
@@ -56143,15 +56243,15 @@
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
       "line": 32,
-      "endLine": 180
+      "endLine": 187
     },
     {
       "id": "symbol:src/shared/release-checklist.ts#releaseChecklistByOwner",
       "name": "releaseChecklistByOwner",
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
-      "line": 186,
-      "endLine": 187
+      "line": 193,
+      "endLine": 194
     },
     {
       "id": "symbol:src/shared/release-checklist.ts#ReleaseChecklistItem",
@@ -56174,16 +56274,16 @@
       "name": "releaseChecklistSections",
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
-      "line": 182,
-      "endLine": 184
+      "line": 189,
+      "endLine": 191
     },
     {
       "id": "symbol:src/shared/release-checklist.ts#renderReleaseChecklistMarkdown",
       "name": "renderReleaseChecklistMarkdown",
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
-      "line": 201,
-      "endLine": 227
+      "line": 208,
+      "endLine": 234
     },
     {
       "id": "symbol:src/shared/relic-favor-rules.ts#gainRelicFavor",
@@ -63889,7 +63989,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1269
+          "line": 1270
         }
       ],
       "tests": [
@@ -75868,6 +75968,42 @@
       "id": "exports:src/renderer/components/runShellGlyphs.tsx->symbol:src/renderer/components/runShellGlyphs.tsx#RUN_SHELL_GLYPHS",
       "source": "file:src/renderer/components/runShellGlyphs.tsx",
       "target": "symbol:src/renderer/components/runShellGlyphs.tsx#RUN_SHELL_GLYPHS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/runShellToolCatalog.ts->symbol:src/renderer/components/runShellToolCatalog.ts#chargeFieldsWithATool",
+      "source": "file:src/renderer/components/runShellToolCatalog.ts",
+      "target": "symbol:src/renderer/components/runShellToolCatalog.ts#chargeFieldsWithATool",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/runShellToolCatalog.ts->symbol:src/renderer/components/runShellToolCatalog.ts#RUN_SHELL_TOOL_CATALOG",
+      "source": "file:src/renderer/components/runShellToolCatalog.ts",
+      "target": "symbol:src/renderer/components/runShellToolCatalog.ts#RUN_SHELL_TOOL_CATALOG",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/runShellToolCatalog.ts->symbol:src/renderer/components/runShellToolCatalog.ts#RunPowerChargeField",
+      "source": "file:src/renderer/components/runShellToolCatalog.ts",
+      "target": "symbol:src/renderer/components/runShellToolCatalog.ts#RunPowerChargeField",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/runShellToolCatalog.ts->symbol:src/renderer/components/runShellToolCatalog.ts#RunShellToolId",
+      "source": "file:src/renderer/components/runShellToolCatalog.ts",
+      "target": "symbol:src/renderer/components/runShellToolCatalog.ts#RunShellToolId",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/runShellToolCatalog.ts->symbol:src/renderer/components/runShellToolCatalog.ts#runShellToolIds",
+      "source": "file:src/renderer/components/runShellToolCatalog.ts",
+      "target": "symbol:src/renderer/components/runShellToolCatalog.ts#runShellToolIds",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/runShellToolCatalog.ts->symbol:src/renderer/components/runShellToolCatalog.ts#RunShellToolSpec",
+      "source": "file:src/renderer/components/runShellToolCatalog.ts",
+      "target": "symbol:src/renderer/components/runShellToolCatalog.ts#RunShellToolSpec",
       "kind": "exports"
     },
     {
@@ -100310,6 +100446,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/components/runShellToolCatalog.ts",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "file:src/renderer/components/runShellToolCatalog.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/components/TileBoard.tsx",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "file:src/renderer/components/TileBoard.tsx",
@@ -101219,6 +101361,24 @@
       "id": "imports:src/renderer/components/runShellGlyphs.tsx->src/renderer/ui/gameplayIcons.tsx",
       "source": "file:src/renderer/components/runShellGlyphs.tsx",
       "target": "file:src/renderer/ui/gameplayIcons.tsx",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/runShellToolCatalog.test.ts->src/renderer/components/runShellToolCatalog.ts",
+      "source": "file:src/renderer/components/runShellToolCatalog.test.ts",
+      "target": "file:src/renderer/components/runShellToolCatalog.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/runShellToolCatalog.test.ts->src/shared/game.ts",
+      "source": "file:src/renderer/components/runShellToolCatalog.test.ts",
+      "target": "file:src/shared/game.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/runShellToolCatalog.ts->src/shared/contracts.ts",
+      "source": "file:src/renderer/components/runShellToolCatalog.ts",
+      "target": "file:src/shared/contracts.ts",
       "kind": "imports"
     },
     {
@@ -113540,9 +113700,21 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/release-checklist.test.ts->src/renderer/components/runShellToolCatalog.ts",
+      "source": "file:src/shared/release-checklist.test.ts",
+      "target": "file:src/renderer/components/runShellToolCatalog.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/release-checklist.test.ts->src/renderer/copy/saveRecoveryNotice.ts",
       "source": "file:src/shared/release-checklist.test.ts",
       "target": "file:src/renderer/copy/saveRecoveryNotice.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/release-checklist.test.ts->src/shared/game.ts",
+      "source": "file:src/shared/release-checklist.test.ts",
+      "target": "file:src/shared/game.ts",
       "kind": "imports"
     },
     {
@@ -123846,6 +124018,18 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/components/runShellToolCatalog.ts->file:src/renderer/components/runShellToolCatalog.test.ts",
+      "source": "file:src/renderer/components/runShellToolCatalog.ts",
+      "target": "file:src/renderer/components/runShellToolCatalog.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/runShellToolCatalog.ts->file:src/shared/release-checklist.test.ts",
+      "source": "file:src/renderer/components/runShellToolCatalog.ts",
+      "target": "file:src/shared/release-checklist.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/components/SettingsScreen.tsx->file:src/renderer/components/SettingsScreen.test.tsx",
       "source": "file:src/renderer/components/SettingsScreen.tsx",
       "target": "file:src/renderer/components/SettingsScreen.test.tsx",
@@ -127494,6 +127678,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/game.ts->file:src/renderer/components/runShellToolCatalog.test.ts",
+      "source": "file:src/shared/game.ts",
+      "target": "file:src/renderer/components/runShellToolCatalog.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/game.ts->file:src/renderer/store/rowShuffleReachability.test.ts",
       "source": "file:src/shared/game.ts",
       "target": "file:src/renderer/store/rowShuffleReachability.test.ts",
@@ -127569,6 +127759,12 @@
       "id": "tested_by:src/shared/game.ts->file:src/shared/playable-path-fixtures.test.ts",
       "source": "file:src/shared/game.ts",
       "target": "file:src/shared/playable-path-fixtures.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/game.ts->file:src/shared/release-checklist.test.ts",
+      "source": "file:src/shared/game.ts",
+      "target": "file:src/shared/release-checklist.test.ts",
       "kind": "tested_by"
     },
     {
