@@ -1,7 +1,7 @@
 {
   "$schema": "./scripts/project.meta.schema.json",
   "schemaVersion": 1,
-  "generatedAt": "2026-09-03T20:45:30.533Z",
+  "generatedAt": "2026-09-03T21:50:28.589Z",
   "generatedBy": "scripts/generate-project-meta.mjs",
   "identity": {
     "slug": "memory-dungeon",
@@ -186,7 +186,10 @@
       "package:win",
       "postinstall",
       "meta",
-      "meta:check"
+      "meta:check",
+      "shots",
+      "social",
+      "social:check"
     ]
   },
   "capture": {
@@ -194,54 +197,54 @@
     "waitAfterReadyMs": 2200
   },
   "media": {
-    "source": "portfolio-capture",
-    "directory": "C:/Users/Gaming PC/Desktop/Repos/portfolio/public/project-shots/memory-dungeon/latest",
-    "primary": "/project-shots/memory-dungeon/latest/card.jpg",
+    "source": "repo-local",
+    "directory": "C:/Users/Gaming PC/Desktop/Repos/memory-dungeon/project-media",
+    "primary": "project-media/card.jpg",
     "images": [
       {
         "profile": "card",
         "file": "card.jpg",
-        "path": "/project-shots/memory-dungeon/latest/card.jpg",
-        "bytes": 153615,
+        "path": "project-media/card.jpg",
+        "bytes": 92821,
         "width": 1600,
         "height": 900,
-        "capturedAt": "2026-08-27T12:09:51.356Z"
+        "capturedAt": "2026-09-03T21:34:21.086Z"
       },
       {
         "profile": "desktop",
         "file": "desktop.jpg",
-        "path": "/project-shots/memory-dungeon/latest/desktop.jpg",
-        "bytes": 143595,
+        "path": "project-media/desktop.jpg",
+        "bytes": 87687,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-08-27T12:10:00.960Z"
+        "capturedAt": "2026-09-03T21:34:27.437Z"
       },
       {
         "profile": "full",
         "file": "full.jpg",
-        "path": "/project-shots/memory-dungeon/latest/full.jpg",
-        "bytes": 114558,
+        "path": "project-media/full.jpg",
+        "bytes": 119718,
         "width": 1440,
         "height": 900,
-        "capturedAt": "2026-08-27T12:10:17.984Z"
-      },
-      {
-        "profile": "main",
-        "file": "main.png",
-        "path": "/project-shots/memory-dungeon/main.png",
-        "bytes": 1645171,
-        "width": 1249,
-        "height": 1225,
-        "capturedAt": "2026-05-18T12:09:34.715Z"
+        "capturedAt": "2026-09-03T21:34:39.070Z"
       },
       {
         "profile": "mobile",
         "file": "mobile.jpg",
-        "path": "/project-shots/memory-dungeon/latest/mobile.jpg",
-        "bytes": 35643,
+        "path": "project-media/mobile.jpg",
+        "bytes": 19031,
         "width": 430,
         "height": 932,
-        "capturedAt": "2026-08-27T12:10:09.070Z"
+        "capturedAt": "2026-09-03T21:34:32.128Z"
+      },
+      {
+        "profile": "og",
+        "file": "og.jpg",
+        "path": "project-media/og.jpg",
+        "bytes": 75936,
+        "width": 1200,
+        "height": 630,
+        "capturedAt": "2026-09-03T21:34:45.829Z"
       }
     ]
   },
@@ -303,20 +306,20 @@
     "devDependencyCount": 49
   },
   "metrics": {
-    "sourceFiles": 1061,
+    "sourceFiles": 1063,
     "testFiles": 420,
-    "sourceLines": 327655,
+    "sourceLines": 328116,
     "largestDirectories": [
       {
         "directory": "src",
         "files": 938
       },
       {
-        "directory": "e2e",
-        "files": 45
+        "directory": "scripts",
+        "files": 47
       },
       {
-        "directory": "scripts",
+        "directory": "e2e",
         "files": 45
       },
       {
@@ -344,10 +347,10 @@
   "analysisNotes": "Deep game project with renderer build, Electron path, visual/gameplay gates, assets, and stable local/deployed demo flow.",
   "git": {
     "branch": "codex/milestone-meter-feedback",
-    "head": "fecce82",
-    "lastCommitDate": "2026-09-03T23:44:07+03:00",
-    "lastCommitSubject": "Wire up the meta scripts",
-    "commitCount": 901,
+    "head": "b97368b",
+    "lastCommitDate": "2026-09-03T23:46:14+03:00",
+    "lastCommitSubject": "Refresh project metadata",
+    "commitCount": 902,
     "remote": "https://github.com/BorisThoris/memory-dungeon.git"
   },
   "readme": {
