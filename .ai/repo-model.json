@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2446,
-    "codeFileCount": 926,
-    "exportedSymbolCount": 3477,
+    "trackedFileCount": 2449,
+    "codeFileCount": 928,
+    "exportedSymbolCount": 3479,
     "contentItemCount": 63,
     "mechanicCount": 136,
     "stateFieldCount": 144,
-    "relationshipCount": 10143
+    "relationshipCount": 10146
   },
   "inventory": [
     {
@@ -2283,8 +2283,8 @@
     {
       "path": "docs/STEAM_READINESS.md",
       "category": "documentation",
-      "bytes": 9994,
-      "sha256": "e5eb9999e313e435249b1a6cb61448bcc469eee5655e97de9c4d9f25b4902a5e"
+      "bytes": 10125,
+      "sha256": "211bc1f7ce137831d2b80fda52dc388a8ba83a5369f2f819d2e5a7f7735e7eaf"
     },
     {
       "path": "docs/STRAY_TILE.md",
@@ -2314,7 +2314,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 36714,
-      "sha256": "e82e3b4c42ccd16ec80b33bb1a9f09d32d42fa170355067d24f0eec9c66db204"
+      "sha256": "9988be7441126c8cf32a718ba383521b811c10574ed902a252a6ac5d6f2c7133"
     },
     {
       "path": "docs/UI_RETHINK_PLAN.md",
@@ -3957,8 +3957,8 @@
     {
       "path": "package.json",
       "category": "configuration",
-      "bytes": 28101,
-      "sha256": "bffca34cde4eb9eee503d754bb9a7c6a52d0fbc1045dba89754cc15e59b8520a"
+      "bytes": 28164,
+      "sha256": "3bc5b68ee1e491f99582e61ad207080f588acd4ad17864068e80e96604bd4aa6"
     },
     {
       "path": "packages/notifications/package.json",
@@ -4499,6 +4499,12 @@
       "category": "script",
       "bytes": 1443,
       "sha256": "b509c7f7807f89f30ed16e3232b52da7661cae8a367b0fcc08001a24dc1f664b"
+    },
+    {
+      "path": "scripts/copy-locality.ts",
+      "category": "script",
+      "bytes": 3388,
+      "sha256": "0147ec28675c4c0d0975de58b129b10eee21f6105caaa9494be187a95daebad2"
     },
     {
       "path": "scripts/extract-endproduct-wip-assets.mjs",
@@ -7935,8 +7941,8 @@
     {
       "path": "src/renderer/components/TileBoard.tsx",
       "category": "source",
-      "bytes": 166588,
-      "sha256": "520735fb36354c7424bc6e9b05c1732139efeba92f6d53d014f9d1c4ecc0793d"
+      "bytes": 166509,
+      "sha256": "9c2c2fe75c0c239774293dad7cd2ec61cdc418441054afa50302715c83002079"
     },
     {
       "path": "src/renderer/components/tileBoardCanvasContext.test.ts",
@@ -8747,6 +8753,12 @@
       "category": "source",
       "bytes": 2927,
       "sha256": "eea50648d73725279629ed2c6a21a2e7e9c6f449d5c30b726e8bff709e885e21"
+    },
+    {
+      "path": "src/renderer/copy/boardRouteCoaching.ts",
+      "category": "source",
+      "bytes": 1175,
+      "sha256": "2b0906c01d1d4de589991ee5751bf4a4b55df4fb87840019bdbc7e34b3a01740"
     },
     {
       "path": "src/renderer/copy/boardTurnAnnouncement.ts",
@@ -10283,6 +10295,12 @@
       "category": "source",
       "bytes": 46063,
       "sha256": "6a577cfad07a3de09f5e72bb1bb99b6ce546e25163f3d430ece2e0ef3348303a"
+    },
+    {
+      "path": "src/shared/copy-locality.test.ts",
+      "category": "test",
+      "bytes": 2778,
+      "sha256": "96d9f9783bdaadb04880c1abfee7e49aaccd7355a3f1e4e71805602636ad4825"
     },
     {
       "path": "src/shared/copy-tone.test.ts",
@@ -17950,7 +17968,7 @@
       "path": "src/renderer/components/TileBoard.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 3857,
+      "lineCount": 3858,
       "imports": [
         "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/breakpoints.ts",
@@ -17970,6 +17988,7 @@
         "file:src/renderer/components/tileShatter.ts",
         "file:src/renderer/components/tileTextures.ts",
         "file:src/renderer/components/useTileBoardWebglContextRecovery.ts",
+        "file:src/renderer/copy/boardRouteCoaching.ts",
         "file:src/renderer/copy/chainMomentum.ts",
         "file:src/renderer/copy/chainOpportunityBeat.ts",
         "file:src/renderer/copy/traitInteractionLaneMap.ts",
@@ -20428,6 +20447,19 @@
       "testedBy": [
         "file:src/renderer/components/useTileBoardWebglContextRecovery.test.ts"
       ]
+    },
+    {
+      "id": "file:src/renderer/copy/boardRouteCoaching.ts",
+      "path": "src/renderer/copy/boardRouteCoaching.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 24,
+      "imports": [],
+      "exports": [
+        "symbol:src/renderer/copy/boardRouteCoaching.ts#BOARD_ROUTE_COACHING",
+        "symbol:src/renderer/copy/boardRouteCoaching.ts#BOARD_ROUTE_REWARD_LABEL"
+      ],
+      "testedBy": []
     },
     {
       "id": "file:src/renderer/copy/boardTurnAnnouncement.ts",
@@ -25149,6 +25181,16 @@
         "file:src/shared/turn-mismatch-rules.test.ts",
         "file:src/shared/version-gate.test.ts"
       ]
+    },
+    {
+      "id": "file:src/shared/copy-locality.test.ts",
+      "path": "src/shared/copy-locality.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 61,
+      "imports": [],
+      "exports": [],
+      "testedBy": []
     },
     {
       "id": "file:src/shared/copy-tone.test.ts",
@@ -36444,24 +36486,24 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/TileBoard.tsx",
-      "line": 3856,
-      "endLine": 3856
+      "line": 3857,
+      "endLine": 3857
     },
     {
       "id": "symbol:src/renderer/components/TileBoard.tsx#TileBoardClientRect",
       "name": "TileBoardClientRect",
       "kind": "type",
       "file": "src/renderer/components/TileBoard.tsx",
-      "line": 408,
-      "endLine": 415
+      "line": 409,
+      "endLine": 416
     },
     {
       "id": "symbol:src/renderer/components/TileBoard.tsx#TileBoardHandle",
       "name": "TileBoardHandle",
       "kind": "type",
       "file": "src/renderer/components/TileBoard.tsx",
-      "line": 417,
-      "endLine": 421
+      "line": 418,
+      "endLine": 422
     },
     {
       "id": "symbol:src/renderer/components/tileBoardCanvasContext.ts#getTileBoardCanvasContextConfig",
@@ -39486,6 +39528,22 @@
       "file": "src/renderer/components/useTileBoardWebglContextRecovery.ts",
       "line": 8,
       "endLine": 77
+    },
+    {
+      "id": "symbol:src/renderer/copy/boardRouteCoaching.ts#BOARD_ROUTE_COACHING",
+      "name": "BOARD_ROUTE_COACHING",
+      "kind": "value",
+      "file": "src/renderer/copy/boardRouteCoaching.ts",
+      "line": 13,
+      "endLine": 23
+    },
+    {
+      "id": "symbol:src/renderer/copy/boardRouteCoaching.ts#BOARD_ROUTE_REWARD_LABEL",
+      "name": "BOARD_ROUTE_REWARD_LABEL",
+      "kind": "value",
+      "file": "src/renderer/copy/boardRouteCoaching.ts",
+      "line": 11,
+      "endLine": 11
     },
     {
       "id": "symbol:src/renderer/copy/boardTurnAnnouncement.ts#BoardTurnAnnouncement",
@@ -77629,6 +77687,18 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/copy/boardRouteCoaching.ts->symbol:src/renderer/copy/boardRouteCoaching.ts#BOARD_ROUTE_COACHING",
+      "source": "file:src/renderer/copy/boardRouteCoaching.ts",
+      "target": "symbol:src/renderer/copy/boardRouteCoaching.ts#BOARD_ROUTE_COACHING",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/copy/boardRouteCoaching.ts->symbol:src/renderer/copy/boardRouteCoaching.ts#BOARD_ROUTE_REWARD_LABEL",
+      "source": "file:src/renderer/copy/boardRouteCoaching.ts",
+      "target": "symbol:src/renderer/copy/boardRouteCoaching.ts#BOARD_ROUTE_REWARD_LABEL",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/copy/boardTurnAnnouncement.ts->symbol:src/renderer/copy/boardTurnAnnouncement.ts#BoardTurnAnnouncement",
       "source": "file:src/renderer/copy/boardTurnAnnouncement.ts",
       "target": "symbol:src/renderer/copy/boardTurnAnnouncement.ts#BoardTurnAnnouncement",
@@ -100955,6 +101025,12 @@
       "id": "imports:src/renderer/components/TileBoard.tsx->src/renderer/components/useTileBoardWebglContextRecovery.ts",
       "source": "file:src/renderer/components/TileBoard.tsx",
       "target": "file:src/renderer/components/useTileBoardWebglContextRecovery.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/TileBoard.tsx->src/renderer/copy/boardRouteCoaching.ts",
+      "source": "file:src/renderer/components/TileBoard.tsx",
+      "target": "file:src/renderer/copy/boardRouteCoaching.ts",
       "kind": "imports"
     },
     {

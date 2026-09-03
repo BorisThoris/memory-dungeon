@@ -18,6 +18,7 @@ import { resolveAdaptiveBoardRenderQuality } from '../../shared/graphicsQuality'
 import { getFindableRewardText } from '../../shared/findables';
 import { getHazardTileBoardSummary, getHazardTileTelegraph } from '../../shared/hazard-tiles';
 import { getTileSwapTraitPreviewLines, getTileTraitInteractionPreviewLines } from '../../shared/tile-trait-rules';
+import { BOARD_ROUTE_COACHING, BOARD_ROUTE_REWARD_LABEL } from '../copy/boardRouteCoaching';
 import {
     getSelectedTraitFollowupTileIds,
     getTraitOpportunitySummary,
@@ -1715,7 +1716,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                 ? 'Prime route'
                 : null;
         const nextTarget = rewardHotLabel
-            ? 'Match lit route for reward'
+            ? BOARD_ROUTE_REWARD_LABEL
             : followupReady
               ? 'Tap marked follow-up'
               : chainReadyCount > 0
@@ -1756,9 +1757,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         const examples = chainReadyCount > 0
             ? [...readyExamples].slice(0, 2)
             : followupReady
-              ? ['Match the marked follow-up to resolve the trait route.']
+              ? [BOARD_ROUTE_COACHING.followUp]
             : streakCashoutReady
-              ? ['Any clean pair keeps the streak paying.']
+              ? [BOARD_ROUTE_COACHING.streak]
               : setupHint
                 ? [setupHint]
                 : [];
@@ -1788,7 +1789,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         const nextActionDetail =
             nextActionId === 'cashout'
                 ? rewardHotLabel
-                    ? nextTarget ?? rewardCue ?? 'Match lit route for reward'
+                    ? nextTarget ?? rewardCue ?? BOARD_ROUTE_REWARD_LABEL
                     : rewardCue ?? nextTarget ?? 'Any clean match pays'
                 : nextActionId === 'follow-up'
                   ? selectedFollowupLabel ?? nextTarget ?? 'Tap marked follow-up'
@@ -1963,8 +1964,8 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         }
         if (boardChainOpportunity.rewardHot) {
             return {
-                detail: boardChainOpportunity.rewardUrgencyLabel ?? boardChainOpportunity.nextTarget ?? 'Match lit route for reward',
-                nextReward: boardChainOpportunity.rewardCue ?? boardChainOpportunity.nextTarget ?? 'Match lit route for reward',
+                detail: boardChainOpportunity.rewardUrgencyLabel ?? boardChainOpportunity.nextTarget ?? BOARD_ROUTE_REWARD_LABEL,
+                nextReward: boardChainOpportunity.rewardCue ?? boardChainOpportunity.nextTarget ?? BOARD_ROUTE_REWARD_LABEL,
                 label: 'Trait mode',
                 tone: 'cashout',
                 value: /\btrait-payoff-stack:\d+/.test(cardFeedbackStatesAttr ?? '') ? 'Stack live' : 'Cashout live'
@@ -2179,7 +2180,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                     detail: [
                         boardChainOpportunity.selectedFollowupLabel,
                         boardChainOpportunity.nextTarget,
-                        boardChainOpportunity.examples[0] ?? 'Match a highlighted trait card to cash the route.',
+                        boardChainOpportunity.examples[0] ?? BOARD_ROUTE_COACHING.traitCard,
                         boardChainOpportunity.targetPlanLabel,
                         boardChainOpportunity.momentumLabel,
                         boardChainOpportunity.chaseLabel,
@@ -2238,7 +2239,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                         boardChainOpportunity.nextTarget,
                         boardChainOpportunity.setupStackCue,
                         boardChainOpportunity.setupStackDetail,
-                        boardChainOpportunity.setupHint ?? 'Use row/swap tools to connect the marked route cards.'
+                        boardChainOpportunity.setupHint ?? BOARD_ROUTE_COACHING.routeTools
                     ].filter(Boolean).join(' / '),
                     id: 'chain',
                     impactCue: boardChainOpportunity.setupStackCue ? 'Stack prime' : 'Route prime',
@@ -2305,7 +2306,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                     detail: [
                         boardChainOpportunity.armedPerkDetail,
                         boardChainOpportunity.armedPerkPayoff,
-                        'Resolve the matching trait route while the perk is armed.'
+                        BOARD_ROUTE_COACHING.perkArmed
                     ].filter(Boolean).join(' / '),
                     id: 'perk',
                     impactCue: 'Perk armed',
@@ -2322,7 +2323,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                         boardPickupOpportunity.target,
                         boardPickupOpportunity.stackCue,
                         boardPickupOpportunity.stackDetail,
-                        boardPickupOpportunity.examples[0] ?? 'Clear pickup-marked pairs before the floor ends.'
+                        boardPickupOpportunity.examples[0] ?? BOARD_ROUTE_COACHING.pickups
                     ].filter(Boolean).join(' / '),
                     id: 'pickup',
                     impactCue: boardPickupOpportunity.stackCue ? 'Stack prime' : 'Pickup cashout',
@@ -2433,7 +2434,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                           : tone === 'cashout'
                             ? {
                                   beatCount: 3,
-                                  detail: 'Three-beat cashout route is live',
+                                  detail: BOARD_ROUTE_COACHING.cashout,
                                   label: 'Cashout beat',
                                   screenCue: 'snap',
                                   tier: 'cashout'
@@ -2441,14 +2442,14 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                             : boardPayoffStackRows.length >= 3
                               ? {
                                     beatCount: 4,
-                                    detail: 'Four-beat stacked route is primed',
+                                    detail: BOARD_ROUTE_COACHING.stacked,
                                     label: 'Stack burst',
                                     screenCue: 'burst',
                                     tier: 'stack'
                                 }
                               : {
                                     beatCount: 2,
-                                    detail: 'Two-beat payoff route is primed',
+                                    detail: BOARD_ROUTE_COACHING.payoff,
                                     label: 'Prime beat',
                                     screenCue: 'pulse',
                                     tier: 'prime'
