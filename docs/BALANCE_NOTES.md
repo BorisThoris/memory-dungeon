@@ -1009,6 +1009,23 @@ Scheduled Endless drafts guarantee one contextual option when an eligible relic 
 
 Memorize modifiers (see `getMemorizeDurationForRun` in `game.ts`): **`+280ms`** with `memorize_bonus_ms`; **`+220ms`** when `memorize_under_short_memorize` and `short_memorize` mutator are both active.
 
+## Endless cycle reachability (`floor-mutator-schedule.ts`)
+
+The twelve-floor cycle is the only thing that schedules mutators in Endless, so a mutator absent
+from it is absent from the game. Two problems, both found by walking the schedule rather than
+reading it:
+
+- `generous_shrine` appeared in `MUTATOR_IDS`, had working rules in `relic-offer-open-rules.ts` and
+  `relic-offer-rules.ts` granting **+1 relic pick per milestone draft**, and had a Codex entry — and
+  no floor scheduled it. It had never reached a player. It now sits on floor 10.
+- Floors 3 and 10 were byte-for-byte identical (`treasure_gallery` / `scholar_style` /
+  `findables_floor`), so one cycle showed the same room twice. Floor 10 is now the shrine breather.
+
+`distraction_channel` remains deliberately occasional: a seeded roll on roughly a quarter of boss
+floors, so it is reachable but not guaranteed inside the first cycle. That is a design choice, and
+`floor-schedule-reachability.test.ts` encodes it as the one mutator allowed to miss cycle one —
+every other mutator must appear on every seed, and no two floors in a cycle may be identical.
+
 ## Board colour and colour vision (`color-vision.ts`)
 
 Five palettes on the board carry rules rather than decoration: tile traits, enemy hazards, hazard

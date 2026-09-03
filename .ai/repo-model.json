@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2440,
-    "codeFileCount": 921,
+    "trackedFileCount": 2441,
+    "codeFileCount": 922,
     "exportedSymbolCount": 3468,
     "contentItemCount": 63,
     "mechanicCount": 136,
     "stateFieldCount": 144,
-    "relationshipCount": 10103
+    "relationshipCount": 10107
   },
   "inventory": [
     {
@@ -279,8 +279,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 246576,
-      "sha256": "b906dcbb171890d912f8b7e1d8e1460c272689c0b92b9801fc7b2b9ff3560928"
+      "bytes": 247703,
+      "sha256": "1f662fdbbcef5d63829132b45ec2b0d1967e747fe6b32f1ae0a7b4a6b9c6406d"
     },
     {
       "path": "docs/BLUEPRINT_FRAMEWORK.md",
@@ -2314,7 +2314,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 36714,
-      "sha256": "2c235b15f41158caac2978b43f702fefc967e3d64f5f0d0110249f5acc04444f"
+      "sha256": "078886ba80d7e4bd15b3414ee18d5dbd6591399c846ec91a3dc13efaf8ff4a00"
     },
     {
       "path": "docs/UI_RETHINK_PLAN.md",
@@ -10773,8 +10773,14 @@
     {
       "path": "src/shared/floor-mutator-schedule.ts",
       "category": "source",
-      "bytes": 23951,
-      "sha256": "e4ae68df21f38b702ba22a709af5b21a68943df8e841b9e261ec8722c68f89b6"
+      "bytes": 24329,
+      "sha256": "f6df3283b67b9a4b3a929f2814e724d7566fffbeae42594d87e898f86aba7606"
+    },
+    {
+      "path": "src/shared/floor-schedule-reachability.test.ts",
+      "category": "test",
+      "bytes": 3209,
+      "sha256": "40e1d400503819fe0b19cafd7237ef23368d7bfa81fe05c9f2a259b7e437fc2f"
     },
     {
       "path": "src/shared/focusDimmedTileIds.test.ts",
@@ -24982,6 +24988,7 @@
         "file:src/shared/exploit-surface.test.ts",
         "file:src/shared/findables.test.ts",
         "file:src/shared/floor-mutator-schedule.test.ts",
+        "file:src/shared/floor-schedule-reachability.test.ts",
         "file:src/shared/focusDimmedTileIds.test.ts",
         "file:src/shared/gambit-match-rules.test.ts",
         "file:src/shared/game-catalog.test.ts",
@@ -26767,7 +26774,7 @@
       "path": "src/shared/floor-mutator-schedule.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 623,
+      "lineCount": 629,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/rng.ts",
@@ -26806,11 +26813,25 @@
         "file:src/shared/boss-encounters.test.ts",
         "file:src/shared/content-lock.test.ts",
         "file:src/shared/floor-mutator-schedule.test.ts",
+        "file:src/shared/floor-schedule-reachability.test.ts",
         "file:src/shared/long-run-depth.test.ts",
         "file:src/shared/relics.test.ts",
         "file:src/shared/softlock-fairness.test.ts",
         "file:src/shared/version-gate.test.ts"
       ]
+    },
+    {
+      "id": "file:src/shared/floor-schedule-reachability.test.ts",
+      "path": "src/shared/floor-schedule-reachability.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 71,
+      "imports": [
+        "file:src/shared/contracts.ts",
+        "file:src/shared/floor-mutator-schedule.ts"
+      ],
+      "exports": [],
+      "testedBy": []
     },
     {
       "id": "file:src/shared/focusDimmedTileIds.test.ts",
@@ -49230,56 +49251,56 @@
       "name": "getFeaturedObjectiveLabel",
       "kind": "value",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 551,
-      "endLine": 552
+      "line": 557,
+      "endLine": 558
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#getFloorArchetypeDefinition",
       "name": "getFloorArchetypeDefinition",
       "kind": "value",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 547,
-      "endLine": 549
+      "line": 553,
+      "endLine": 555
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#getFloorArchetypeProgressionReport",
       "name": "getFloorArchetypeProgressionReport",
       "kind": "value",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 503,
-      "endLine": 545
+      "line": 509,
+      "endLine": 551
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#getFloorArchetypeProgressionRows",
       "name": "getFloorArchetypeProgressionRows",
       "kind": "value",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 498,
-      "endLine": 501
+      "line": 504,
+      "endLine": 507
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#getFloorChapterIdentity",
       "name": "getFloorChapterIdentity",
       "kind": "value",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 554,
-      "endLine": 587
+      "line": 560,
+      "endLine": 593
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#pickFloorScheduleEntry",
       "name": "pickFloorScheduleEntry",
       "kind": "value",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 593,
-      "endLine": 619
+      "line": 599,
+      "endLine": 625
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#usesEndlessFloorSchedule",
       "name": "usesEndlessFloorSchedule",
       "kind": "value",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 621,
-      "endLine": 622
+      "line": 627,
+      "endLine": 628
     },
     {
       "id": "symbol:src/shared/focusDimmedTileIds.ts#computeFocusDimmedTileIds",
@@ -108810,6 +108831,18 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/floor-schedule-reachability.test.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/floor-schedule-reachability.test.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/floor-schedule-reachability.test.ts->src/shared/floor-mutator-schedule.ts",
+      "source": "file:src/shared/floor-schedule-reachability.test.ts",
+      "target": "file:src/shared/floor-mutator-schedule.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/focusDimmedTileIds.test.ts->src/shared/contracts.ts",
       "source": "file:src/shared/focusDimmedTileIds.test.ts",
       "target": "file:src/shared/contracts.ts",
@@ -124408,6 +124441,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/contracts.ts->file:src/shared/floor-schedule-reachability.test.ts",
+      "source": "file:src/shared/contracts.ts",
+      "target": "file:src/shared/floor-schedule-reachability.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/contracts.ts->file:src/shared/focusDimmedTileIds.test.ts",
       "source": "file:src/shared/contracts.ts",
       "target": "file:src/shared/focusDimmedTileIds.test.ts",
@@ -125287,6 +125326,12 @@
       "id": "tested_by:src/shared/floor-mutator-schedule.ts->file:src/shared/floor-mutator-schedule.test.ts",
       "source": "file:src/shared/floor-mutator-schedule.ts",
       "target": "file:src/shared/floor-mutator-schedule.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/floor-mutator-schedule.ts->file:src/shared/floor-schedule-reachability.test.ts",
+      "source": "file:src/shared/floor-mutator-schedule.ts",
+      "target": "file:src/shared/floor-schedule-reachability.test.ts",
       "kind": "tested_by"
     },
     {

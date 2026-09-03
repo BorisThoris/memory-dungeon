@@ -366,7 +366,13 @@ const ENDLESS_FLOOR_CYCLE: FloorScheduleEntry[] = [
     makeEntry(7, 'trap_hall', 'glass_witness', ['glass_floor', 'sticky_fingers'], 'boss'),
     makeEntry(8, 'script_room', 'flip_par', ['category_letters'], 'normal'),
     makeEntry(9, 'rush_recall', 'flip_par', ['short_memorize', 'wide_recall'], 'boss'),
-    makeEntry(10, 'treasure_gallery', 'scholar_style', ['findables_floor'], 'breather'),
+    /*
+     * Floor 10 used to be a byte-for-byte copy of floor 3, so one cycle repeated itself. It is now
+     * the shrine breather: `generous_shrine` had full mechanical support in the relic-offer rules
+     * and a Codex entry, but nothing scheduled it and no mode pooled it, so the +1 relic pick it
+     * grants had never once reached a player.
+     */
+    makeEntry(10, 'treasure_gallery', 'scholar_style', ['findables_floor', 'generous_shrine'], 'breather'),
     makeEntry(11, 'parasite_tithe', 'scholar_style', ['score_parasite'], 'normal'),
     makeEntry(12, 'spotlight_hunt', 'cursed_last', ['shifting_spotlight'], 'normal')
 ];
