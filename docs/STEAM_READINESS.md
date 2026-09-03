@@ -75,6 +75,18 @@ and is not what a colour-palette or crash-log pass should be dragging along.
 - `yarn test:e2e:controller` (`e2e/controller-navigation.spec.ts`) — a stubbed pad against the real screens: the focus ring
   walks the menu, A opens what it lands on, the board flips a tile and the ring can leave it again.
 - `yarn gate:gameplay` — includes a 1000-floor endless simulation and the balance profile bounds.
+- `src/shared/floor-schedule-reachability.test.ts` and `achievement-reachability.test.ts` — the
+  content census: every mutator, floor archetype, featured objective and relic must be reachable,
+  and no achievement threshold may exceed the content that exists. Both were written after finding
+  real unreachable content, twice each.
+
+**On e2e flakiness.** The Playwright suite is single-worker because each test drives a real WebGL
+board, and on a loaded machine individual specs time out during navigation and pass when re-run
+alone — observed here on `controller-navigation` and `gameplay-readability`, both green in
+isolation. The helpers already retry with 30-second `toPass` budgets, so this is machine load
+rather than a product defect, and the timeouts were deliberately **not** raised to suit one
+environment. CI sets `retries: 2`; a local run sets none, so a developer sees the flake and CI
+hides it, which is worth knowing before trusting a green CI badge.
 - `yarn gate:systems` — module graph, dungeon topology, simulation health, and a 16-seed x
   1000-floor softlock sweep.
 
