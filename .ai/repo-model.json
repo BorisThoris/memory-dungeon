@@ -2283,8 +2283,8 @@
     {
       "path": "docs/STEAM_READINESS.md",
       "category": "documentation",
-      "bytes": 5570,
-      "sha256": "922713ac40fca55e8c2124b5f994c7efb83e755e8bc283029931d64bf2f87199"
+      "bytes": 7113,
+      "sha256": "1928e0932ab8470366eaf55e88e5e40fe95463cf5605c7817fb9a22070eb52f3"
     },
     {
       "path": "docs/STRAY_TILE.md",
@@ -3951,8 +3951,8 @@
     {
       "path": "package.json",
       "category": "configuration",
-      "bytes": 27944,
-      "sha256": "1de34fff0ed12323a9fe2d5792a6ea83c5a0c79b97b732c904b40a5fafb4287e"
+      "bytes": 27948,
+      "sha256": "7c8bda032a7d718970d4d361a745d5a3d20d7602b6d84ede3487dd249b7492aa"
     },
     {
       "path": "packages/notifications/package.json",
@@ -14619,8 +14619,8 @@
     {
       "path": "yarn.lock",
       "category": "other",
-      "bytes": 312555,
-      "sha256": "b929895c96314a13cac2b7b63e93fdce527ed3697b4c3f8f2c4cff0dc6959295"
+      "bytes": 311961,
+      "sha256": "cf005e9cb4203c9cf55a23592b4e9b25810aa5e5abb606636765b5206cc207cd"
     }
   ],
   "files": [

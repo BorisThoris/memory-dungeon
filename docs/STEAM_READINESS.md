@@ -39,6 +39,30 @@ Counts a player can actually reach, not counts declared somewhere:
 | Wardens | 4 | all four reachable inside a single endless run |
 | Achievements | 20 | seven fall out of playing Classic; thirteen point at the rest of the game |
 
+## Dependency advisories
+
+`yarn gate:security` runs `yarn audit` through `scripts/audit-summary.mjs`. It reported **64**
+advisories; it now reports **30**, and none of the remaining ones reach a shipped build.
+
+What was fixed, and why each mattered:
+
+| Change | Why |
+|---|---|
+| electron 41.1.0 -> 41.10.7 | Two advisories patched in 41.2.1. Same major, so no API risk. |
+| `**/fast-uri` -> 3.1.7 | Six advisories via `electron-store > conf > ajv`, which validates the save file. 3.1.4 patches them and stays inside ajv's `^3.0.1`, so no major bump. |
+| `**/@xmldom/xmldom` -> 0.8.15 | Reached the renderer through `pixi.js`. Patch-level move inside 0.8.x. |
+| `axios` resolution 1.16.0 -> 1.20.0 | Nine advisories. The pin was added to fix an older one and had become the thing holding the fix back. |
+| wait-on 9.0.4 -> 9.1.0 | Dev-only; its newer range wants the patched axios. |
+
+The 30 that remain all sit under `eslint`, `vite`, `electron-builder`, `depcheck`, `concurrently`,
+`svgo` and `@vitejs/plugin-react` — build-time tools that never ship. Two runtime packages,
+`electron-store` and `pixi.js`, used to appear in that list and no longer do. Clearing the rest
+means bumping toolchain majors, which is worth doing on its own schedule rather than alongside
+gameplay work; the gate stays red until then, so the number cannot quietly grow back unnoticed.
+
+Electron itself is **not** on the newest major (44). Moving three majors is a release-sized change
+and is not what a colour-palette or crash-log pass should be dragging along.
+
 ## What the gates actually prove
 
 - `yarn test:e2e:ui-fit` (`e2e/ui-fit-contract.spec.ts`) — 22 surfaces x 6 viewports. Four failure modes:
