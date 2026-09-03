@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { openPlayablePathFixture, openRunMenuItem } from './playablePathHelpers';
+import { openModeDetail, openPlayablePathFixture, openRunMenuItem } from './playablePathHelpers';
 import {
     buildVisualSaveJson,
     gotoWithSave,
@@ -256,6 +256,52 @@ test.describe('UI fit contract', () => {
             );
         });
     }
+
+    // The vendor, the mode detail sheet and the showcase are surfaces a run passes through
+    // without a fixture of their own; they are held to the same contract.
+    test('the vendor fits every window', async ({ page }) => {
+        test.setTimeout(420_000);
+        await atEverySize(
+            page,
+            'shop',
+            async () => {
+                await openPlayablePathFixture(page, 'floorClearWithShop');
+            },
+            async () => {
+                const shop = page.getByTestId('shop-screen');
+                if (!(await shop.isVisible().catch(() => false))) {
+                    await page
+                        .getByRole('dialog', { name: /floor cleared/i })
+                        .getByRole('button', { name: /visit shop/i })
+                        .click({ force: true });
+                    await shop.waitFor({ state: 'visible', timeout: 20_000 });
+                }
+                await page.waitForTimeout(500);
+            }
+        );
+    });
+
+    test('the mode detail sheet fits every window', async ({ page }) => {
+        test.setTimeout(420_000);
+        const save = buildVisualSaveJson(true);
+        await atEverySize(page, 'mode detail', async () => {
+            await gotoWithSave(page, save);
+            await mainMenuPlayButton(page).waitFor({ state: 'visible', timeout: 30_000 });
+            await openModeDetail(page, 'Classic Run');
+            await page.waitForTimeout(500);
+        });
+    });
+
+    test('the dungeon showcase fits every window', async ({ page }) => {
+        test.setTimeout(420_000);
+        const save = buildVisualSaveJson(true);
+        await atEverySize(page, 'dungeon showcase', async () => {
+            await gotoWithSave(page, save);
+            await mainMenuPlayButton(page).waitFor({ state: 'visible', timeout: 30_000 });
+            await page.getByRole('button', { name: /^dungeon showcase$/i }).click();
+            await page.waitForTimeout(1200);
+        });
+    });
 
     for (const fixture of [
         'floorClearWithRouteChoices',

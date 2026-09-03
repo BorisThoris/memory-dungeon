@@ -251,17 +251,19 @@
     }
 }
 
-/* Phones: two columns of shorter cards so the alcove fits without scrolling. */
+/*
+ * Phones. Two cards across a 390px window leaves each about 170px, which cut every offer
+ * mid-sentence; what an offer does is the whole reason to spend on it, so the cards run one
+ * per row and read in full.
+ */
 @media (max-width: 560px) {
     .stockGrid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 0.4rem;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0.35rem;
     }
 
-    .stockCard p {
-        display: -webkit-box;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 2;
-        overflow: hidden;
+    .stockCard {
+        padding: 0.5rem 0.7rem;
+        gap: 0.25rem;
     }
 }

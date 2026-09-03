@@ -3789,8 +3789,8 @@
     {
       "path": "e2e/ui-fit-contract.spec.ts",
       "category": "test",
-      "bytes": 11011,
-      "sha256": "5c017304e184496b10d3febcc78ab796e59c45b39c6a864c77a3af16766b06e9"
+      "bytes": 13009,
+      "sha256": "e6053b0848a39df891e39da020226e9d78d71f8f1be594221a8fffb5d347de8f"
     },
     {
       "path": "e2e/ui-redesign-capture.spec.ts",
@@ -7755,8 +7755,8 @@
     {
       "path": "src/renderer/components/ShopScreen.module.css",
       "category": "source",
-      "bytes": 6843,
-      "sha256": "efdab46c8d935f4a9dfb5f066fe51aeef663df2782900fd2c29c0e138e7bee90"
+      "bytes": 6898,
+      "sha256": "1eafc6261c9342aa54cd6159eaeef05631931b8116c1ae606a75c7e2adfac911"
     },
     {
       "path": "src/renderer/components/ShopScreen.test.tsx",
@@ -7767,8 +7767,8 @@
     {
       "path": "src/renderer/components/ShopScreen.tsx",
       "category": "source",
-      "bytes": 10226,
-      "sha256": "830c9ced059501636610f373d40a543fc5ecfd51259aa31911a4f958624bd80a"
+      "bytes": 10777,
+      "sha256": "90a6141943bb6251e8ddfaf4acaa350111033fe805d3e5c5ed84beabaec47428"
     },
     {
       "path": "src/renderer/components/shuffleFlipAnimation.test.ts",
@@ -17369,7 +17369,7 @@
       "path": "src/renderer/components/ShopScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 240,
+      "lineCount": 251,
       "imports": [
         "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/components/gameplayVisualConfig.ts",
@@ -35295,8 +35295,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/ShopScreen.tsx",
-      "line": 239,
-      "endLine": 239
+      "line": 250,
+      "endLine": 250
     },
     {
       "id": "symbol:src/renderer/components/shuffleFlipAnimation.ts#computeBoardEntranceMotionBudgetMs",

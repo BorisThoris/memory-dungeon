@@ -10,7 +10,7 @@ import {
     uiSfxGainFromSettings
 } from '../audio/uiSfx';
 import { useModalFocusTrap } from '../hooks/useModalFocusTrap';
-import { OverlayActionDock } from '../ui';
+import { FittedGrid, OverlayActionDock } from '../ui';
 import { useAppStore } from '../store/useAppStore';
 import { GAMEPLAY_VISUAL_CSS_VARS } from './gameplayVisualConfig';
 import styles from './ShopScreen.module.css';
@@ -155,10 +155,20 @@ const ShopScreen = () => {
                     </div>
                 </header>
 
-                <div className={styles.stockGrid} aria-label="Vendor stock" role="list">
-                    {run.shopOffers.map((offer) => {
+                {/*
+                  * Five offers at a readable size are taller than a phone. They page rather
+                  * than shrink or clip: the same fitted grid the Codex and the Collection use,
+                  * so the vendor never grows a scrollbar and never cuts an offer mid-sentence.
+                  */}
+                <FittedGrid
+                    ariaLabel="Vendor stock"
+                    emptyState="The vendor has nothing left this visit."
+                    items={run.shopOffers}
+                    itemNoun="offers"
+                    keyForItem={(offer) => offer.id}
+                    minColumnWidth={230}
+                    renderItem={(offer) => {
                         const status = offerStatus(offer, run.shopGold);
-                        const disabled = status !== 'available';
                         return (
                             <article
                                 className={styles.stockCard}
@@ -166,8 +176,6 @@ const ShopScreen = () => {
                                 data-offer-item-id={offer.itemId}
                                 data-status={status}
                                 data-testid={`shop-offer-${offer.itemId}`}
-                                key={offer.id}
-                                role="listitem"
                             >
                                 <div className={styles.stockTopline}>
                                     <span className={styles.stockCategory}>{offer.category}</span>
@@ -177,7 +185,7 @@ const ShopScreen = () => {
                                 <p>{offer.description}</p>
                                 <button
                                     className={styles.stockAction}
-                                    disabled={disabled}
+                                    disabled={status !== 'available'}
                                     onClick={() => {
                                         resumeUiSfxContext();
                                         playUiClickSfx(uiGain);
@@ -189,8 +197,11 @@ const ShopScreen = () => {
                                 </button>
                             </article>
                         );
-                    })}
-                </div>
+                    }}
+                    resetKey={`shop:${run.shopOffers.length}`}
+                    rowHeight={158}
+                    testId="shop-stock"
+                />
 
                 <footer className={styles.footer}>
                     <OverlayActionDock
