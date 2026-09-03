@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2441,
-    "codeFileCount": 922,
+    "trackedFileCount": 2442,
+    "codeFileCount": 923,
     "exportedSymbolCount": 3468,
     "contentItemCount": 63,
     "mechanicCount": 136,
     "stateFieldCount": 144,
-    "relationshipCount": 10111
+    "relationshipCount": 10126
   },
   "inventory": [
     {
@@ -772,7 +772,7 @@
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
       "bytes": 472,
-      "sha256": "a38072aea9bdd022d9e1a166384078dfc456565b6131e329e152a828db76065c"
+      "sha256": "3e1caa5bad571b5c3bcb906088b2ed09ec0cf35f110fa0df03e955f25f40d08f"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -2314,7 +2314,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 36714,
-      "sha256": "b5ade533333de0bd74e667acd499d75f4f25188ca411531685b20c19d69c6641"
+      "sha256": "a344734aeb125960c2a6afa6fc030a8d7e2e8f543b97b2da0796569eb65b4896"
     },
     {
       "path": "docs/UI_RETHINK_PLAN.md",
@@ -9925,6 +9925,12 @@
       "sha256": "7053e5a758c66f00e3a67c198070ae07a17c04981f924100db45dc9845e874f3"
     },
     {
+      "path": "src/shared/achievement-reachability.test.ts",
+      "category": "test",
+      "bytes": 4686,
+      "sha256": "4a2291ba59f41b7e49bf392cefc3b63a2e01665275a6bb9424eba5b43e7a1caf"
+    },
+    {
       "path": "src/shared/achievements.test.ts",
       "category": "test",
       "bytes": 12009,
@@ -9933,8 +9939,8 @@
     {
       "path": "src/shared/achievements.ts",
       "category": "source",
-      "bytes": 4707,
-      "sha256": "eafe620ebb41c8b91e3428d49187ad37ee3e527130819680cd96d3797ed3753c"
+      "bytes": 5108,
+      "sha256": "5a56641ee7b8e487518030be8c7c326695efbd1afbbbd0b8382f133efcfac13b"
     },
     {
       "path": "src/shared/ai-repo-model.test.ts",
@@ -11235,8 +11241,8 @@
     {
       "path": "src/shared/mechanics-encyclopedia.ts",
       "category": "source",
-      "bytes": 47336,
-      "sha256": "eb4aac2d6a6bfdd49ddb04f3fd331c21360d80e34d52d0b9f31aae8d30580f08"
+      "bytes": 47345,
+      "sha256": "afbdce895fd39811ab84289940450900c9a413c0c51ae76776d07b737f2681ff"
     },
     {
       "path": "src/shared/memorize-phase-rules.test.ts",
@@ -23493,6 +23499,24 @@
       ]
     },
     {
+      "id": "file:src/shared/achievement-reachability.test.ts",
+      "path": "src/shared/achievement-reachability.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 95,
+      "imports": [
+        "file:src/shared/achievements.ts",
+        "file:src/shared/builtin-puzzles.ts",
+        "file:src/shared/contracts.ts",
+        "file:src/shared/floor-mutator-schedule.ts",
+        "file:src/shared/relics.ts",
+        "file:src/shared/run-creation-rules.ts",
+        "file:src/shared/save-data.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
       "id": "file:src/shared/achievements.test.ts",
       "path": "src/shared/achievements.test.ts",
       "layer": "shared",
@@ -23513,8 +23537,9 @@
       "path": "src/shared/achievements.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 119,
+      "lineCount": 128,
       "imports": [
+        "file:src/shared/builtin-puzzles.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/floor-mutator-schedule.ts",
         "file:src/shared/mechanics-encyclopedia.ts",
@@ -23535,6 +23560,7 @@
         "symbol:src/shared/achievements.ts#getAchievementProgressSummary"
       ],
       "testedBy": [
+        "file:src/shared/achievement-reachability.test.ts",
         "file:src/shared/achievements.test.ts",
         "file:src/shared/mechanics-catalog-appendix-builder.test.ts"
       ]
@@ -24417,6 +24443,7 @@
       ],
       "testedBy": [
         "file:src/renderer/store/runStartState.test.ts",
+        "file:src/shared/achievement-reachability.test.ts",
         "file:src/shared/puzzle-import.test.ts",
         "file:src/shared/save-data.test.ts",
         "file:src/shared/softlock-fairness.test.ts"
@@ -24948,6 +24975,7 @@
         "file:src/renderer/store/sideRoomSurfaceState.test.ts",
         "file:src/renderer/store/tilePressController.test.ts",
         "file:src/renderer/store/useAppStore.test.ts",
+        "file:src/shared/achievement-reachability.test.ts",
         "file:src/shared/achievements.test.ts",
         "file:src/shared/balance-simulation.test.ts",
         "file:src/shared/board-build-rules.test.ts",
@@ -26810,6 +26838,7 @@
       ],
       "testedBy": [
         "file:src/renderer/hooks/useDistractionChannelTick.integration.test.tsx",
+        "file:src/shared/achievement-reachability.test.ts",
         "file:src/shared/boss-encounters.test.ts",
         "file:src/shared/content-lock.test.ts",
         "file:src/shared/floor-mutator-schedule.test.ts",
@@ -30115,6 +30144,7 @@
       ],
       "testedBy": [
         "file:src/renderer/components/codexScreenModel.test.ts",
+        "file:src/shared/achievement-reachability.test.ts",
         "file:src/shared/achievements.test.ts",
         "file:src/shared/content-lock.test.ts",
         "file:src/shared/exploit-surface.test.ts",
@@ -30628,6 +30658,7 @@
         "file:src/renderer/store/playingTilePressResultApplier.test.ts",
         "file:src/renderer/store/shopCloseExecutor.test.ts",
         "file:src/renderer/store/tilePressAudioCues.test.ts",
+        "file:src/shared/achievement-reachability.test.ts",
         "file:src/shared/memorize-phase-rules.test.ts",
         "file:src/shared/relic-pick-advance-rules.test.ts",
         "file:src/shared/run-creation-rules.test.ts",
@@ -31379,6 +31410,7 @@
         "file:src/renderer/store/savePreferenceExecutor.test.ts",
         "file:src/renderer/store/savePreferenceSurfaceState.test.ts",
         "file:src/renderer/store/useAppStore.test.ts",
+        "file:src/shared/achievement-reachability.test.ts",
         "file:src/shared/achievements.test.ts",
         "file:src/shared/challenge-progression.test.ts",
         "file:src/shared/collection-reward-gallery.test.ts",
@@ -42871,64 +42903,64 @@
       "name": "ACHIEVEMENT_BY_ID",
       "kind": "value",
       "file": "src/shared/achievements.ts",
-      "line": 13,
-      "endLine": 13
+      "line": 14,
+      "endLine": 14
     },
     {
       "id": "symbol:src/shared/achievements.ts#AchievementDefinition",
       "name": "AchievementDefinition",
       "kind": "type",
       "file": "src/shared/achievements.ts",
-      "line": 10,
-      "endLine": 10
+      "line": 11,
+      "endLine": 11
     },
     {
       "id": "symbol:src/shared/achievements.ts#AchievementProgressRow",
       "name": "AchievementProgressRow",
       "kind": "interface",
       "file": "src/shared/achievements.ts",
-      "line": 17,
-      "endLine": 20
+      "line": 18,
+      "endLine": 21
     },
     {
       "id": "symbol:src/shared/achievements.ts#AchievementProgressSummary",
       "name": "AchievementProgressSummary",
       "kind": "interface",
       "file": "src/shared/achievements.ts",
-      "line": 22,
-      "endLine": 25
+      "line": 23,
+      "endLine": 26
     },
     {
       "id": "symbol:src/shared/achievements.ts#ACHIEVEMENTS",
       "name": "ACHIEVEMENTS",
       "kind": "value",
       "file": "src/shared/achievements.ts",
-      "line": 15,
-      "endLine": 15
+      "line": 16,
+      "endLine": 16
     },
     {
       "id": "symbol:src/shared/achievements.ts#evaluateAchievementUnlocks",
       "name": "evaluateAchievementUnlocks",
       "kind": "value",
       "file": "src/shared/achievements.ts",
-      "line": 40,
-      "endLine": 118
+      "line": 41,
+      "endLine": 127
     },
     {
       "id": "symbol:src/shared/achievements.ts#getAchievementProgressRows",
       "name": "getAchievementProgressRows",
       "kind": "value",
       "file": "src/shared/achievements.ts",
-      "line": 27,
-      "endLine": 30
+      "line": 28,
+      "endLine": 31
     },
     {
       "id": "symbol:src/shared/achievements.ts#getAchievementProgressSummary",
       "name": "getAchievementProgressSummary",
       "kind": "value",
       "file": "src/shared/achievements.ts",
-      "line": 32,
-      "endLine": 38
+      "line": 33,
+      "endLine": 39
     },
     {
       "id": "symbol:src/shared/balance-simulation.ts#assertBalanceSimulationWithinBaseline",
@@ -105793,6 +105825,48 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/achievement-reachability.test.ts->src/shared/achievements.ts",
+      "source": "file:src/shared/achievement-reachability.test.ts",
+      "target": "file:src/shared/achievements.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/achievement-reachability.test.ts->src/shared/builtin-puzzles.ts",
+      "source": "file:src/shared/achievement-reachability.test.ts",
+      "target": "file:src/shared/builtin-puzzles.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/achievement-reachability.test.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/achievement-reachability.test.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/achievement-reachability.test.ts->src/shared/floor-mutator-schedule.ts",
+      "source": "file:src/shared/achievement-reachability.test.ts",
+      "target": "file:src/shared/floor-mutator-schedule.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/achievement-reachability.test.ts->src/shared/relics.ts",
+      "source": "file:src/shared/achievement-reachability.test.ts",
+      "target": "file:src/shared/relics.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/achievement-reachability.test.ts->src/shared/run-creation-rules.ts",
+      "source": "file:src/shared/achievement-reachability.test.ts",
+      "target": "file:src/shared/run-creation-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/achievement-reachability.test.ts->src/shared/save-data.ts",
+      "source": "file:src/shared/achievement-reachability.test.ts",
+      "target": "file:src/shared/save-data.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/achievements.test.ts->src/shared/achievements.ts",
       "source": "file:src/shared/achievements.test.ts",
       "target": "file:src/shared/achievements.ts",
@@ -105820,6 +105894,12 @@
       "id": "imports:src/shared/achievements.test.ts->src/shared/save-data.ts",
       "source": "file:src/shared/achievements.test.ts",
       "target": "file:src/shared/save-data.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/achievements.ts->src/shared/builtin-puzzles.ts",
+      "source": "file:src/shared/achievements.ts",
+      "target": "file:src/shared/builtin-puzzles.ts",
       "kind": "imports"
     },
     {
@@ -123407,6 +123487,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/achievements.ts->file:src/shared/achievement-reachability.test.ts",
+      "source": "file:src/shared/achievements.ts",
+      "target": "file:src/shared/achievement-reachability.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/achievements.ts->file:src/shared/achievements.test.ts",
       "source": "file:src/shared/achievements.ts",
       "target": "file:src/shared/achievements.test.ts",
@@ -123722,6 +123808,12 @@
       "id": "tested_by:src/shared/builtin-puzzles.ts->file:src/renderer/store/runStartState.test.ts",
       "source": "file:src/shared/builtin-puzzles.ts",
       "target": "file:src/renderer/store/runStartState.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/builtin-puzzles.ts->file:src/shared/achievement-reachability.test.ts",
+      "source": "file:src/shared/builtin-puzzles.ts",
+      "target": "file:src/shared/achievement-reachability.test.ts",
       "kind": "tested_by"
     },
     {
@@ -124214,6 +124306,12 @@
       "id": "tested_by:src/shared/contracts.ts->file:src/renderer/store/useAppStore.test.ts",
       "source": "file:src/shared/contracts.ts",
       "target": "file:src/renderer/store/useAppStore.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/contracts.ts->file:src/shared/achievement-reachability.test.ts",
+      "source": "file:src/shared/contracts.ts",
+      "target": "file:src/shared/achievement-reachability.test.ts",
       "kind": "tested_by"
     },
     {
@@ -125324,6 +125422,12 @@
       "id": "tested_by:src/shared/floor-mutator-schedule.ts->file:src/renderer/hooks/useDistractionChannelTick.integration.test.tsx",
       "source": "file:src/shared/floor-mutator-schedule.ts",
       "target": "file:src/renderer/hooks/useDistractionChannelTick.integration.test.tsx",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/floor-mutator-schedule.ts->file:src/shared/achievement-reachability.test.ts",
+      "source": "file:src/shared/floor-mutator-schedule.ts",
+      "target": "file:src/shared/achievement-reachability.test.ts",
       "kind": "tested_by"
     },
     {
@@ -126623,6 +126727,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/relics.ts->file:src/shared/achievement-reachability.test.ts",
+      "source": "file:src/shared/relics.ts",
+      "target": "file:src/shared/achievement-reachability.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/relics.ts->file:src/shared/achievements.test.ts",
       "source": "file:src/shared/relics.ts",
       "target": "file:src/shared/achievements.test.ts",
@@ -126830,6 +126940,12 @@
       "id": "tested_by:src/shared/run-creation-rules.ts->file:src/renderer/store/tilePressAudioCues.test.ts",
       "source": "file:src/shared/run-creation-rules.ts",
       "target": "file:src/renderer/store/tilePressAudioCues.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/run-creation-rules.ts->file:src/shared/achievement-reachability.test.ts",
+      "source": "file:src/shared/run-creation-rules.ts",
+      "target": "file:src/shared/achievement-reachability.test.ts",
       "kind": "tested_by"
     },
     {
@@ -127244,6 +127360,12 @@
       "id": "tested_by:src/shared/save-data.ts->file:src/renderer/store/useAppStore.test.ts",
       "source": "file:src/shared/save-data.ts",
       "target": "file:src/renderer/store/useAppStore.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/save-data.ts->file:src/shared/achievement-reachability.test.ts",
+      "source": "file:src/shared/save-data.ts",
+      "target": "file:src/shared/achievement-reachability.test.ts",
       "kind": "tested_by"
     },
     {

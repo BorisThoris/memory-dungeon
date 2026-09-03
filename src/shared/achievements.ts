@@ -2,6 +2,7 @@ import type { AchievementId, RunState, SaveData } from './contracts';
 import { ACHIEVEMENT_CATALOG, type AchievementCodexEntry } from './mechanics-encyclopedia';
 import { runRecord } from './run-record-guards';
 import { runNonNegativeInteger } from './run-number-guards';
+import { BUILTIN_PUZZLE_IDS } from './builtin-puzzles';
 import { ENDLESS_CYCLE_FLOOR_COUNT } from './floor-mutator-schedule';
 import { STANDING_RULE_RELIC_IDS } from './relics';
 import { ACHIEVEMENT_IDS } from './save-data';
@@ -111,7 +112,15 @@ export const evaluateAchievementUnlocks = (run: RunState, saveData: SaveData): A
     );
     award('ACH_NO_POWERS_TEN', runNonNegativeInteger(saveData.playerStats?.bestFloorNoPowers) >= 10);
     award('ACH_GAUNTLET_RUN', run.gameMode === 'gauntlet' && stats.levelsCleared >= 3);
-    award('ACH_PUZZLE_SOLVER', Object.keys(saveData.playerStats?.puzzleCompletions ?? {}).length >= 5);
+    /*
+     * Every builtin puzzle, not an arbitrary five: the game ships three, so asking for five made
+     * this unearnable for anyone who has not imported puzzles of their own. The threshold is
+     * derived from the catalogue so shipping a fourth puzzle raises the bar automatically.
+     */
+    award(
+        'ACH_PUZZLE_SOLVER',
+        Object.keys(saveData.playerStats?.puzzleCompletions ?? {}).length >= BUILTIN_PUZZLE_IDS.length
+    );
     award('ACH_MEDITATION_HOUR', run.gameMode === 'meditation' && stats.levelsCleared >= 8);
 
     return unlocked;

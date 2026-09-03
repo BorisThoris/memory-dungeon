@@ -384,7 +384,7 @@ export const ACHIEVEMENT_CATALOG: Record<AchievementId, AchievementCodexEntry> =
     ACH_PUZZLE_SOLVER: {
         id: 'ACH_PUZZLE_SOLVER',
         title: 'Puzzle Solver',
-        description: 'Complete five Puzzle layouts.'
+        description: 'Complete every built-in Puzzle layout.'
     },
     ACH_MEDITATION_HOUR: {
         id: 'ACH_MEDITATION_HOUR',
