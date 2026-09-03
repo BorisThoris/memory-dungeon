@@ -1,6 +1,6 @@
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { app, BrowserWindow, shell, dialog } from 'electron';
+import { app, BrowserWindow, screen, shell, dialog } from 'electron';
 import type { DisplayMode } from '../shared/contracts';
 import { resolveDevServerUrl } from './dev-server-url';
 import { handleFatalStartupFailure, runMainProcessAction } from './fatal-startup';
@@ -14,6 +14,14 @@ import {
 import { resolveBuildFlavour } from '../shared/content-lock-state';
 import { createSteamAdapter } from './steam';
 import { resolveStartupDisplayMode } from './startup-display-mode';
+import {
+    captureWindowState,
+    DEFAULT_WINDOW_HEIGHT,
+    DEFAULT_WINDOW_WIDTH,
+    MIN_WINDOW_HEIGHT,
+    MIN_WINDOW_WIDTH,
+    resolveRestoredBounds
+} from './window-bounds';
 
 /** Single BrowserWindow; getter supports IPC after macOS close + activate without re-registering handlers. */
 let mainWindow: BrowserWindow | null = null;
@@ -21,12 +29,36 @@ let persistence: PersistenceService | null = null;
 let steamAdapter: ReturnType<typeof createSteamAdapter> | null = null;
 let ipcHandlersRegistered = false;
 
+/**
+ * Where to open. `resolveRestoredBounds` decides whether the stored placement still lands on a
+ * display that exists, so a monitor unplugged since last launch opens centred at the default size
+ * rather than off-screen.
+ */
+const resolveStartupBounds = (): { bounds: ReturnType<typeof resolveRestoredBounds>; maximized: boolean } => {
+    if (!persistence) {
+        return { bounds: null, maximized: false };
+    }
+    try {
+        const stored = persistence.getWindowState();
+        const displays = screen.getAllDisplays().map((display) => display.workArea);
+        return { bounds: resolveRestoredBounds(stored.bounds, displays), maximized: stored.maximized };
+    } catch (error) {
+        console.error('[startup] window state read failed', error);
+        return { bounds: null, maximized: false };
+    }
+};
+
 const createMainWindow = (displayMode: DisplayMode): BrowserWindow => {
+    const startup = resolveStartupBounds();
     const window = new BrowserWindow({
-        width: 1600,
-        height: 960,
-        minWidth: 1280,
-        minHeight: 720,
+        width: startup.bounds?.width ?? DEFAULT_WINDOW_WIDTH,
+        height: startup.bounds?.height ?? DEFAULT_WINDOW_HEIGHT,
+        ...(startup.bounds ? { x: startup.bounds.x, y: startup.bounds.y } : {}),
+        // The floor is a comfort limit, not a layout one: every screen is held to fitting far
+        // smaller than this by the fit contract, so the window stays resizable on a 1366x768
+        // laptop and inside the Steam Deck's 1280x800.
+        minWidth: MIN_WINDOW_WIDTH,
+        minHeight: MIN_WINDOW_HEIGHT,
         show: false,
         fullscreen: displayMode === 'fullscreen',
         backgroundColor: '#090d18',
@@ -39,7 +71,39 @@ const createMainWindow = (displayMode: DisplayMode): BrowserWindow => {
     });
 
     window.once('ready-to-show', () => {
+        if (startup.maximized && displayMode !== 'fullscreen') {
+            window.maximize();
+        }
         window.show();
+    });
+
+    /*
+     * Remember the placement as it changes, not only on close: a crash or a forced quit should
+     * still leave the window where the player put it. The writes are debounced because a drag
+     * fires these continuously.
+     */
+    let rememberTimer: NodeJS.Timeout | null = null;
+    const rememberPlacement = (): void => {
+        if (rememberTimer) {
+            clearTimeout(rememberTimer);
+        }
+        rememberTimer = setTimeout(() => {
+            rememberTimer = null;
+            if (!window.isDestroyed()) {
+                persistence?.saveWindowState(captureWindowState(window));
+            }
+        }, 400);
+    };
+    window.on('resize', rememberPlacement);
+    window.on('move', rememberPlacement);
+    window.on('maximize', rememberPlacement);
+    window.on('unmaximize', rememberPlacement);
+    window.on('close', () => {
+        if (rememberTimer) {
+            clearTimeout(rememberTimer);
+            rememberTimer = null;
+        }
+        persistence?.saveWindowState(captureWindowState(window));
     });
 
     const devServerUrl = resolveDevServerUrl(process.env.VITE_DEV_SERVER_URL, app.isPackaged);

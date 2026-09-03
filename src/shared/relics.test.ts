@@ -137,21 +137,27 @@ describe('effectiveRelicDraftWeight', () => {
 describe('rollRelicOptions', () => {
     it('keeps the explicit relic pool aligned with draft rows', () => {
         expect(RELIC_POOL).toEqual([
+            'bulwark_plate',
             'chapter_compass',
             'combo_shard_plus_step',
             'destroy_bank_plus_one',
+            'drift_appraiser',
+            'echo_relay',
             'extra_shuffle_charge',
             'first_shuffle_free_per_floor',
             'guard_token_plus_one',
             'memorize_bonus_ms',
             'memorize_under_short_memorize',
+            'opening_ledger',
             'parasite_ledger',
             'parasite_ward_once',
             'peek_charge_plus_one',
             'pin_cap_plus_one',
             'region_shuffle_free_first',
             'shrine_echo',
+            'stasis_broker',
             'stray_charge_plus_one',
+            'tithe_conduit',
             'wager_surety'
         ]);
         expect(Object.keys(RELIC_DRAFT).sort()).toEqual([...RELIC_POOL].sort());
@@ -661,7 +667,14 @@ describe('REG-078 relic offer services', () => {
         expect(rerolled.run.relicOffer?.options).toHaveLength(3);
         expect(applyRelicOfferService(rerolled.run, 'reroll_offer').applied).toBe(false);
 
-        const banned = applyRelicOfferService(openOfferRun(), 'ban_option', run.relicOffer!.options[1]);
+        /*
+         * Ban from the same offer the target was read off. `openOfferRun` builds on `createNewRun`,
+         * which seeds itself from `Math.random` before the fixed `runSeed` override lands, so two
+         * calls agree on the seed but not on everything the roll reads — asking a second run to ban
+         * the first run's option was a coin flip, and a wider relic pool made it come up tails.
+         * `applyRelicOfferService` is pure, so `run` is still an untouched offer here.
+         */
+        const banned = applyRelicOfferService(run, 'ban_option', run.relicOffer!.options[1]);
         expect(banned.applied).toBe(true);
         expect(banned.run.relicOffer?.bannedRelicIds).toContain(run.relicOffer!.options[1]);
         expect(banned.run.relicOffer?.options).not.toContain(run.relicOffer!.options[1]);

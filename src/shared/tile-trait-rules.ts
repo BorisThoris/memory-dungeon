@@ -1099,6 +1099,98 @@ export const resolveTileTraitEffects = ({
             result.interactionTags.push('warden-sigil:mirror-ward');
         }
 
+        /*
+         * Standing-rule relics. Each one turns a trait the board keeps dealing into a payout, so the
+         * same projected-run readback pattern as above applies: hand the core definition a run that
+         * already carries this turn's gains, then take the difference back out as a delta.
+         */
+        if (hasRunRelic(run, 'bulwark_plate') && hasTrait('heavy')) {
+            const projectedGuardTokens = Math.min(MAX_GUARD_TOKENS, guardTokens + result.guardTokenGain);
+            const projectedTotalScore = runNonNegativeInteger(stats.totalScore) + result.scoreBonus;
+            const projectedRun = {
+                ...run,
+                stats: {
+                    ...stats,
+                    currentLevelScore: runNonNegativeInteger(stats.currentLevelScore) + result.scoreBonus,
+                    guardTokens: projectedGuardTokens,
+                    totalScore: projectedTotalScore
+                }
+            };
+            const coreResult = applyCoreTraitDefinition('relic.bulwark_plate.heavy_match', 'bulwark-heavy', projectedRun);
+            const coreStats = normalizeSessionStats(coreResult.run.stats);
+            result.guardTokenGain += coreStats.guardTokens - projectedGuardTokens;
+            result.scoreBonus += coreStats.totalScore - projectedTotalScore;
+            result.interactionTags.push('bulwark-plate:heavy-guard');
+        }
+
+        if (hasRunRelic(run, 'tithe_conduit') && hasTrait('conduit')) {
+            const projectedShopGold = runNonNegativeInteger(run.shopGold) + result.shopGoldGain;
+            const projectedTotalScore = runNonNegativeInteger(stats.totalScore) + result.scoreBonus;
+            const projectedRun = {
+                ...run,
+                shopGold: projectedShopGold,
+                stats: {
+                    ...stats,
+                    currentLevelScore: runNonNegativeInteger(stats.currentLevelScore) + result.scoreBonus,
+                    totalScore: projectedTotalScore
+                }
+            };
+            const coreResult = applyCoreTraitDefinition('relic.tithe_conduit.conduit_match', 'tithe-conduit', projectedRun);
+            result.shopGoldGain += runNonNegativeInteger(coreResult.run.shopGold) - projectedShopGold;
+            result.scoreBonus += normalizeSessionStats(coreResult.run.stats).totalScore - projectedTotalScore;
+            result.interactionTags.push('tithe-conduit:conduit-gold');
+        }
+
+        if (hasRunRelic(run, 'stasis_broker') && hasTrait('stasis')) {
+            const projectedShuffleCharges = runNonNegativeInteger(run.shuffleCharges) + result.shuffleChargeGain;
+            const projectedRun = { ...run, shuffleCharges: projectedShuffleCharges };
+            const coreResult = applyCoreTraitDefinition('relic.stasis_broker.stasis_match', 'stasis-broker', projectedRun);
+            result.shuffleChargeGain += runNonNegativeInteger(coreResult.run.shuffleCharges) - projectedShuffleCharges;
+            result.interactionTags.push('stasis-broker:stasis-shuffle');
+        }
+
+        if (hasRunRelic(run, 'opening_ledger') && matchResolutionsThisFloor === 0) {
+            const projectedTotalScore = runNonNegativeInteger(stats.totalScore) + result.scoreBonus;
+            const projectedRun = {
+                ...run,
+                stats: {
+                    ...stats,
+                    currentLevelScore: runNonNegativeInteger(stats.currentLevelScore) + result.scoreBonus,
+                    totalScore: projectedTotalScore
+                }
+            };
+            const coreResult = applyCoreTraitDefinition('relic.opening_ledger.first_match', 'opening-ledger', projectedRun);
+            result.scoreBonus += normalizeSessionStats(coreResult.run.stats).totalScore - projectedTotalScore;
+            result.interactionTags.push('opening-ledger:first-match');
+        }
+
+        if (hasRunRelic(run, 'drift_appraiser') && hasTrait('drift') && adjacentTraitKinds.has('cursed')) {
+            const projectedShopGold = runNonNegativeInteger(run.shopGold) + result.shopGoldGain;
+            const projectedTotalScore = runNonNegativeInteger(stats.totalScore) + result.scoreBonus;
+            const projectedRun = {
+                ...run,
+                shopGold: projectedShopGold,
+                stats: {
+                    ...stats,
+                    currentLevelScore: runNonNegativeInteger(stats.currentLevelScore) + result.scoreBonus,
+                    totalScore: projectedTotalScore
+                }
+            };
+            const coreResult = applyCoreTraitDefinition('relic.drift_appraiser.cursed_drift', 'drift-appraiser', projectedRun);
+            result.shopGoldGain += runNonNegativeInteger(coreResult.run.shopGold) - projectedShopGold;
+            result.scoreBonus += normalizeSessionStats(coreResult.run.stats).totalScore - projectedTotalScore;
+            result.interactionTags.push('drift-appraiser:cursed-drift');
+        }
+
+        if (hasRunRelic(run, 'echo_relay') && hasTrait('echo') && adjacentTraitKinds.has('heavy')) {
+            const projectedFlashPairCharges = runNonNegativeInteger(run.flashPairCharges) + result.flashPairChargeGain;
+            const projectedRun = { ...run, flashPairCharges: projectedFlashPairCharges };
+            const coreResult = applyCoreTraitDefinition('relic.echo_relay.heavy_flash', 'echo-relay', projectedRun);
+            result.flashPairChargeGain +=
+                runNonNegativeInteger(coreResult.run.flashPairCharges) - projectedFlashPairCharges;
+            result.interactionTags.push('echo-relay:heavy-flash');
+        }
+
         return result;
     }
 

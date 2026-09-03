@@ -10,9 +10,21 @@ class ThrowingSaveRepository implements SaveRepository {
     }
 
     setSaveData(): void {
+        throw this.writeFailure();
+    }
+
+    getWindowState(): unknown {
+        return null;
+    }
+
+    setWindowState(): void {
+        throw this.writeFailure();
+    }
+
+    private writeFailure(): NodeJS.ErrnoException {
         const err = new Error('write failed') as NodeJS.ErrnoException;
         err.code = this.code;
-        throw err;
+        return err;
     }
 }
 

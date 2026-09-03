@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { buildBoard } from './board-generation';
-import { GAME_RULES_VERSION, type RelicId, type RunState } from './contracts';
+import { GAME_RULES_VERSION, MAX_GUARD_TOKENS, type RelicId, type RunState } from './contracts';
 import { flipTile, resolveBoardTurn } from './turn-resolution';
 import { makeBoard, makePair, makeRun, makeTile } from './test/game-fixtures';
 import { getTraitOpportunityHudModel, getTraitOpportunitySummary } from './trait-opportunities';
@@ -962,5 +962,171 @@ describe('tile trait rules', () => {
         expect(result.triggered).toBe(true);
         expect(result.board.tiles.slice(2).map((tile) => tile.id)).not.toEqual(board.tiles.slice(2).map((tile) => tile.id));
         expect(result.board.tiles.slice(2).map((tile) => tile.id).sort()).toEqual(board.tiles.slice(2).map((tile) => tile.id).sort());
+    });
+});
+
+describe('standing-rule relics', () => {
+    /**
+     * These relics pay on a condition the board keeps offering rather than once at pickup, so what
+     * matters is that a matched trait actually produces the payout in the live trait path — not
+     * just that the definition exists in the content table.
+     */
+    const traitBoard = () =>
+        makeBoard(
+            [
+                makeTile('h1', 'heavy', 'H', { tileTraitKind: 'heavy', state: 'flipped' }),
+                makeTile('h2', 'heavy', 'H', { tileTraitKind: 'heavy', state: 'flipped' }),
+                makeTile('c1', 'conduit', 'C', { tileTraitKind: 'conduit', state: 'flipped' }),
+                makeTile('c2', 'conduit', 'C', { tileTraitKind: 'conduit', state: 'flipped' })
+            ],
+            { columns: 2, rows: 2 }
+        );
+
+    const matchOn = (board: ReturnType<typeof traitBoard>, run: RunState, first: number, second: number) =>
+        resolveTileTraitEffects({
+            run,
+            board,
+            sourceTiles: [board.tiles[first]!, board.tiles[second]!],
+            source: 'match'
+        });
+
+    it('braces a Heavy match into guard while Bulwark Plate is held', () => {
+        const board = traitBoard();
+        const run = makeRun(board.tiles, { board, matchResolutionsThisFloor: 2, relicIds: ['bulwark_plate'] });
+        const without = makeRun(board.tiles, { board, matchResolutionsThisFloor: 2, relicIds: [] });
+
+        const held = matchOn(board, run, 0, 1);
+        expect(held.guardTokenGain).toBe(matchOn(board, without, 0, 1).guardTokenGain + 1);
+        expect(held.interactionTags).toContain('bulwark-plate:heavy-guard');
+    });
+
+    it('pays a Heavy match in score instead once guard is capped', () => {
+        const board = traitBoard();
+        const base = makeRun(board.tiles);
+        const run = makeRun(board.tiles, {
+            board,
+            matchResolutionsThisFloor: 2,
+            relicIds: ['bulwark_plate'],
+            stats: { ...base.stats, guardTokens: MAX_GUARD_TOKENS }
+        });
+        const without = makeRun(board.tiles, {
+            board,
+            matchResolutionsThisFloor: 2,
+            relicIds: [],
+            stats: { ...base.stats, guardTokens: MAX_GUARD_TOKENS }
+        });
+
+        const held = matchOn(board, run, 0, 1);
+        expect(held.guardTokenGain).toBe(0);
+        expect(held.scoreBonus).toBe(matchOn(board, without, 0, 1).scoreBonus + 18);
+    });
+
+    it('pays gold on every Conduit match while Tithe Conduit is held', () => {
+        const board = traitBoard();
+        const run = makeRun(board.tiles, { board, matchResolutionsThisFloor: 2, relicIds: ['tithe_conduit'] });
+        const without = makeRun(board.tiles, { board, matchResolutionsThisFloor: 2, relicIds: [] });
+
+        const held = matchOn(board, run, 2, 3);
+        expect(held.shopGoldGain).toBe(matchOn(board, without, 2, 3).shopGoldGain + 1);
+        expect(held.scoreBonus).toBe(matchOn(board, without, 2, 3).scoreBonus + 8);
+        expect(held.interactionTags).toContain('tithe-conduit:conduit-gold');
+    });
+
+    it('buys a shuffle charge from a Stasis match while Stasis Broker is held', () => {
+        const board = makeBoard(
+            [
+                makeTile('t1', 'stasis', 'T', { tileTraitKind: 'stasis', state: 'flipped' }),
+                makeTile('t2', 'stasis', 'T', { tileTraitKind: 'stasis', state: 'flipped' }),
+                makeTile('p1', 'plain', 'P'),
+                makeTile('p2', 'plain', 'P')
+            ],
+            { columns: 2, rows: 2 }
+        );
+        const run = makeRun(board.tiles, { board, matchResolutionsThisFloor: 2, relicIds: ['stasis_broker'] });
+        const without = makeRun(board.tiles, { board, matchResolutionsThisFloor: 2, relicIds: [] });
+
+        const held = matchOn(board, run, 0, 1);
+        expect(held.shuffleChargeGain).toBe(matchOn(board, without, 0, 1).shuffleChargeGain + 1);
+        expect(held.interactionTags).toContain('stasis-broker:stasis-shuffle');
+    });
+
+    it('pays Opening Ledger on the first match of a floor and not on later ones', () => {
+        const board = traitBoard();
+        const opener = makeRun(board.tiles, { board, matchResolutionsThisFloor: 0, relicIds: ['opening_ledger'] });
+        const later = makeRun(board.tiles, { board, matchResolutionsThisFloor: 1, relicIds: ['opening_ledger'] });
+        const baseline = makeRun(board.tiles, { board, matchResolutionsThisFloor: 0, relicIds: [] });
+
+        expect(matchOn(board, opener, 0, 1).scoreBonus).toBe(matchOn(board, baseline, 0, 1).scoreBonus + 25);
+        expect(matchOn(board, opener, 0, 1).interactionTags).toContain('opening-ledger:first-match');
+        expect(matchOn(board, later, 0, 1).interactionTags).not.toContain('opening-ledger:first-match');
+    });
+
+    it('appraises a Drift match only when a Cursed tile is adjacent', () => {
+        const board = makeBoard(
+            [
+                makeTile('d1', 'drift', 'D', { tileTraitKind: 'drift', state: 'flipped' }),
+                makeTile('d2', 'drift', 'D', { tileTraitKind: 'drift', state: 'flipped' }),
+                makeTile('k1', 'cursed', 'K', { tileTraitKind: 'cursed' }),
+                makeTile('k2', 'cursed', 'K', { tileTraitKind: 'cursed' })
+            ],
+            { columns: 2, rows: 2 }
+        );
+        const lonely = makeBoard(
+            [
+                makeTile('d1', 'drift', 'D', { tileTraitKind: 'drift', state: 'flipped' }),
+                makeTile('d2', 'drift', 'D', { tileTraitKind: 'drift', state: 'flipped' }),
+                makeTile('p1', 'plain', 'P'),
+                makeTile('p2', 'plain', 'P')
+            ],
+            { columns: 2, rows: 2 }
+        );
+        const held = makeRun(board.tiles, { board, matchResolutionsThisFloor: 2, relicIds: ['drift_appraiser'] });
+        const without = makeRun(board.tiles, { board, matchResolutionsThisFloor: 2, relicIds: [] });
+
+        const beside = matchOn(board, held, 0, 1);
+        expect(beside.shopGoldGain).toBe(matchOn(board, without, 0, 1).shopGoldGain + 2);
+        expect(beside.interactionTags).toContain('drift-appraiser:cursed-drift');
+
+        const alone = resolveTileTraitEffects({
+            run: makeRun(lonely.tiles, { board: lonely, matchResolutionsThisFloor: 2, relicIds: ['drift_appraiser'] }),
+            board: lonely,
+            sourceTiles: [lonely.tiles[0]!, lonely.tiles[1]!],
+            source: 'match'
+        });
+        expect(alone.interactionTags).not.toContain('drift-appraiser:cursed-drift');
+    });
+
+    it('relays an Echo match beside Heavy into a flash pair while Echo Relay is held', () => {
+        const board = makeBoard(
+            [
+                makeTile('e1', 'echo', 'E', { tileTraitKind: 'echo', state: 'flipped' }),
+                makeTile('e2', 'echo', 'E', { tileTraitKind: 'echo', state: 'flipped' }),
+                makeTile('h1', 'heavy', 'H', { tileTraitKind: 'heavy' }),
+                makeTile('h2', 'heavy', 'H', { tileTraitKind: 'heavy' })
+            ],
+            { columns: 2, rows: 2 }
+        );
+        const held = makeRun(board.tiles, { board, matchResolutionsThisFloor: 2, relicIds: ['echo_relay'] });
+        const without = makeRun(board.tiles, { board, matchResolutionsThisFloor: 2, relicIds: [] });
+
+        const relayed = matchOn(board, held, 0, 1);
+        expect(relayed.flashPairChargeGain).toBe(matchOn(board, without, 0, 1).flashPairChargeGain + 1);
+        expect(relayed.interactionTags).toContain('echo-relay:heavy-flash');
+    });
+
+    it('does nothing at all when the relic is not held', () => {
+        const board = traitBoard();
+        const run = makeRun(board.tiles, { board, matchResolutionsThisFloor: 2, relicIds: [] });
+        const tags = matchOn(board, run, 0, 1).interactionTags;
+        for (const tag of [
+            'bulwark-plate:heavy-guard',
+            'tithe-conduit:conduit-gold',
+            'stasis-broker:stasis-shuffle',
+            'opening-ledger:first-match',
+            'drift-appraiser:cursed-drift',
+            'echo-relay:heavy-flash'
+        ] as const) {
+            expect(tags).not.toContain(tag);
+        }
     });
 });

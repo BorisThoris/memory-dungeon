@@ -264,28 +264,79 @@ export const RELIC_DRAFT: Record<RelicId, RelicDraftRow> = {
     shrine_echo: { rarity: 'uncommon', weight: 36, tags: ['favor', 'wager'], archetypes: ['treasure_greed', 'route_gambler'] },
     chapter_compass: { rarity: 'uncommon', weight: 34, tags: ['draft'], archetypes: ['boss_hunter', 'conduit_cartographer'] },
     wager_surety: { rarity: 'rare', weight: 22, tags: ['wager'], archetypes: ['boss_hunter', 'route_gambler', 'treasure_greed'] },
-    parasite_ledger: { rarity: 'uncommon', weight: 38, tags: ['parasite'], archetypes: ['combo_shard_engine', 'boss_hunter'] }
+    parasite_ledger: { rarity: 'uncommon', weight: 38, tags: ['parasite'], archetypes: ['combo_shard_engine', 'boss_hunter'] },
+    /*
+     * Standing rules. These pay on a condition the board keeps offering rather than once at pickup,
+     * so their weights sit a notch under the equivalent-rarity charge relics: a rule that fires all
+     * run is worth more than a number that fires once.
+     */
+    opening_ledger: {
+        rarity: 'common',
+        weight: 86,
+        tags: ['combo'],
+        archetypes: ['conduit_cartographer', 'emergency_toolkit']
+    },
+    tithe_conduit: {
+        rarity: 'common',
+        weight: 80,
+        tags: ['favor'],
+        archetypes: ['treasure_greed', 'conduit_cartographer']
+    },
+    bulwark_plate: { rarity: 'uncommon', weight: 46, tags: ['guard'], archetypes: ['guard_tank'] },
+    stasis_broker: {
+        rarity: 'uncommon',
+        weight: 42,
+        tags: ['shuffle'],
+        archetypes: ['trap_control'],
+        forbiddenWithContract: ['noShuffle']
+    },
+    echo_relay: { rarity: 'rare', weight: 24, tags: ['peek', 'memorize'], archetypes: ['conduit_cartographer'] },
+    drift_appraiser: {
+        rarity: 'rare',
+        weight: 20,
+        tags: ['favor', 'search'],
+        archetypes: ['treasure_greed', 'route_gambler']
+    }
 };
 
 /** Stable iteration order for docs / balance checks. Keep alphabetical for compatibility with existing draft rolls. */
 export const RELIC_POOL = [
+    'bulwark_plate',
     'chapter_compass',
     'combo_shard_plus_step',
     'destroy_bank_plus_one',
+    'drift_appraiser',
+    'echo_relay',
     'extra_shuffle_charge',
     'first_shuffle_free_per_floor',
     'guard_token_plus_one',
     'memorize_bonus_ms',
     'memorize_under_short_memorize',
+    'opening_ledger',
     'parasite_ledger',
     'parasite_ward_once',
     'peek_charge_plus_one',
     'pin_cap_plus_one',
     'region_shuffle_free_first',
     'shrine_echo',
+    'stasis_broker',
     'stray_charge_plus_one',
+    'tithe_conduit',
     'wager_surety'
 ] as const satisfies readonly RelicId[];
+
+/**
+ * The relics that put a standing rule in force instead of paying once at pickup. Named here so the
+ * roster stays the single place that knows which relics are which kind.
+ */
+export const STANDING_RULE_RELIC_IDS: ReadonlySet<RelicId> = new Set<RelicId>([
+    'bulwark_plate',
+    'drift_appraiser',
+    'echo_relay',
+    'opening_ledger',
+    'stasis_broker',
+    'tithe_conduit'
+]);
 
 const RELIC_SYNERGY_RULES_VERSION = 14;
 const ENDLESS_SYNERGY_RELICS = new Set<RelicId>(['chapter_compass', 'wager_surety', 'parasite_ledger']);
@@ -300,7 +351,8 @@ const SHUFFLE_SEARCH_RELICS = new Set<RelicId>([
     'extra_shuffle_charge',
     'first_shuffle_free_per_floor',
     'region_shuffle_free_first',
-    'stray_charge_plus_one'
+    'stray_charge_plus_one',
+    'stasis_broker'
 ]);
 const ANCHOR_SPOTLIGHT_RELICS = new Set<RelicId>(['pin_cap_plus_one', 'peek_charge_plus_one']);
 const WAGER_RELICS = new Set<RelicId>([
@@ -313,19 +365,23 @@ const GREED_ROUTE_RELICS = new Set<RelicId>([
     'guard_token_plus_one',
     'peek_charge_plus_one',
     'wager_surety',
-    'shrine_echo'
+    'shrine_echo',
+    'tithe_conduit',
+    'drift_appraiser'
 ]);
 const MYSTERY_ROUTE_RELICS = new Set<RelicId>([
     'peek_charge_plus_one',
     'pin_cap_plus_one',
     'stray_charge_plus_one',
-    'chapter_compass'
+    'chapter_compass',
+    'echo_relay'
 ]);
 const SAFE_ROUTE_RELICS = new Set<RelicId>([
     'guard_token_plus_one',
     'memorize_bonus_ms',
     'region_shuffle_free_first',
-    'peek_charge_plus_one'
+    'peek_charge_plus_one',
+    'bulwark_plate'
 ]);
 
 const getActiveTraitKinds = (run: RunState): TileTraitKind[] => [

@@ -5,6 +5,7 @@ import {
     normalizeUnknownSettingsOrThrow
 } from '../shared/save-data';
 import { ElectronStoreSaveRepository, type SaveRepository } from './saveRepository';
+import { mergeWindowState, normalizeWindowState, type WindowState } from './window-bounds';
 
 type PersistenceWriteErrorCode = 'quota' | 'permission' | 'busy' | 'unknown';
 
@@ -53,6 +54,23 @@ export class PersistenceService {
 
     getSettings(): Settings {
         return this.getSaveData().settings;
+    }
+
+    getWindowState(): WindowState {
+        return normalizeWindowState(this.repository.getWindowState());
+    }
+
+    /**
+     * Merged rather than replaced: a window closed while minimized reports no usable bounds, and
+     * overwriting with that would lose the size the player actually chose. Failures here are
+     * logged and swallowed — where the window sat is never worth refusing to quit over.
+     */
+    saveWindowState(captured: WindowState): void {
+        try {
+            this.repository.setWindowState(mergeWindowState(this.getWindowState(), captured));
+        } catch (error) {
+            console.error('[persistence] window state write failed', error);
+        }
     }
 
     saveSettings(settings: unknown): SaveData {

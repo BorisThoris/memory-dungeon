@@ -325,6 +325,71 @@ export const ACHIEVEMENT_CATALOG: Record<AchievementId, AchievementCodexEntry> =
         id: 'ACH_SEVEN_DAILIES',
         title: 'Week of Archives',
         description: 'Complete seven Daily runs (UTC calendar days, cumulative).'
+    },
+    ACH_WARDEN_FELLED: {
+        id: 'ACH_WARDEN_FELLED',
+        title: 'Warden Felled',
+        description: 'Claim a warden trophy from a boss floor.'
+    },
+    ACH_ENDLESS_CYCLE: {
+        id: 'ACH_ENDLESS_CYCLE',
+        title: 'Full Circuit',
+        description: 'Reach floor 12 in one Endless run, the length of a full mutator cycle.'
+    },
+    ACH_ENDLESS_TWENTY: {
+        id: 'ACH_ENDLESS_TWENTY',
+        title: 'Twenty Down',
+        description: 'Reach floor 20 in a single Endless run.'
+    },
+    ACH_SCORE_TEN_THOUSAND: {
+        id: 'ACH_SCORE_TEN_THOUSAND',
+        title: 'Vault Mind',
+        description: 'Score 10,000 total points in one run.'
+    },
+    ACH_STREAK_TEN: {
+        id: 'ACH_STREAK_TEN',
+        title: 'Unbroken Ten',
+        description: 'Reach a ten-match clean streak in one run.'
+    },
+    ACH_TRAIT_SCHOLAR: {
+        id: 'ACH_TRAIT_SCHOLAR',
+        title: 'Trait Scholar',
+        description: 'Match five different tile traits in a single run.'
+    },
+    ACH_RELIC_HOARD: {
+        id: 'ACH_RELIC_HOARD',
+        title: 'Relic Hoard',
+        description: 'Hold six relics at once in one run.'
+    },
+    ACH_STANDING_ORDERS: {
+        id: 'ACH_STANDING_ORDERS',
+        title: 'Standing Orders',
+        description: 'Hold three standing-rule relics at once in one run.'
+    },
+    ACH_RELIC_LIBRARY: {
+        id: 'ACH_RELIC_LIBRARY',
+        title: 'Relic Library',
+        description: 'Draft twelve different relics across all your runs.'
+    },
+    ACH_NO_POWERS_TEN: {
+        id: 'ACH_NO_POWERS_TEN',
+        title: 'Bare Hands',
+        description: 'Reach floor 10 in a run where you used no powers.'
+    },
+    ACH_GAUNTLET_RUN: {
+        id: 'ACH_GAUNTLET_RUN',
+        title: 'Gauntlet Runner',
+        description: 'Clear three floors in a single Gauntlet run.'
+    },
+    ACH_PUZZLE_SOLVER: {
+        id: 'ACH_PUZZLE_SOLVER',
+        title: 'Puzzle Solver',
+        description: 'Complete five Puzzle layouts.'
+    },
+    ACH_MEDITATION_HOUR: {
+        id: 'ACH_MEDITATION_HOUR',
+        title: 'Long Sitting',
+        description: 'Clear eight floors in a single Meditation run.'
     }
 };
 
@@ -415,6 +480,36 @@ export const RELIC_CATALOG: Record<RelicId, RelicDefinition> = {
         title: 'Parasite Ledger',
         description:
             'Gain one parasite ward now. On scheduled Endless parasite floors, completing the featured objective slows score-parasite pressure by one step.'
+    },
+    opening_ledger: {
+        id: 'opening_ledger',
+        title: 'Opening Ledger',
+        description: 'The first match you resolve on every floor pays bonus score. Open confidently instead of stalling.'
+    },
+    tithe_conduit: {
+        id: 'tithe_conduit',
+        title: 'Tithe Conduit',
+        description: 'Every Conduit match pays shop gold and a little score, turning routing tiles into a purse.'
+    },
+    bulwark_plate: {
+        id: 'bulwark_plate',
+        title: 'Bulwark Plate',
+        description: 'Every Heavy match braces into a guard token, or into score once guard is capped.'
+    },
+    stasis_broker: {
+        id: 'stasis_broker',
+        title: 'Stasis Broker',
+        description: 'Every Stasis match buys a full-board shuffle charge, so the locking trait becomes a supply.'
+    },
+    echo_relay: {
+        id: 'echo_relay',
+        title: 'Echo Relay',
+        description: 'An Echo match beside a Heavy tile grants a flash pair, rewarding deliberate adjacency.'
+    },
+    drift_appraiser: {
+        id: 'drift_appraiser',
+        title: 'Drift Appraiser',
+        description: 'A Drift match beside a Cursed tile pays two gold and score for taking the risky lane.'
     }
 };
 

@@ -21,7 +21,13 @@ export const relicEffectLabels: Record<RelicId, string> = {
     shrine_echo: 'Next relic milestone echoes into +1 extra selection',
     chapter_compass: '+1 peek now; future Endless drafts lean toward boss, chapter, and mutator answers',
     wager_surety: '+1 guard now; risk wagers pay +1 Favor and soften boss-route busts',
-    parasite_ledger: '+1 parasite ward now; successful parasite floors slow the next parasite tax'
+    parasite_ledger: '+1 parasite ward now; successful parasite floors slow the next parasite tax',
+    opening_ledger: 'Every floor pays bonus score for the first match you resolve',
+    tithe_conduit: 'Every Conduit match pays shop gold and score',
+    bulwark_plate: 'Every Heavy match braces into a guard token, or score once guard is capped',
+    stasis_broker: 'Every Stasis match buys a full-board shuffle charge',
+    echo_relay: 'An Echo match beside Heavy grants a flash pair',
+    drift_appraiser: 'A Drift match beside Cursed pays 2 gold and score'
 };
 
 /**

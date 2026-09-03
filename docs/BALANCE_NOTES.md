@@ -990,11 +990,39 @@ REG-047 readability guardrails now live in `tile-symbol-catalog.ts`: each band e
 
 Shipped pool ids: `extra_shuffle_charge`, `first_shuffle_free_per_floor`, `memorize_bonus_ms`, `destroy_bank_plus_one`, `combo_shard_plus_step`, `memorize_under_short_memorize`, `parasite_ward_once`, `region_shuffle_free_first`, `peek_charge_plus_one`, `stray_charge_plus_one`, `pin_cap_plus_one`, `guard_token_plus_one`, `shrine_echo`, `chapter_compass`, `wager_surety`, `parasite_ledger`.
 
+**Standing-rule relics.** The ids above pay out once, when they are taken. These six pay on a condition the board keeps offering, so they change which tiles a player goes for rather than only which number the floor starts on. Each is one `relic.active` content definition applied from the live trait path in `tile-trait-rules.ts` (`STANDING_RULE_RELIC_DEFINITIONS` in `gameplay-core-contracts.ts`):
+
+| Relic | Rarity | Fires when | Pays |
+|-------|--------|-----------|------|
+| `opening_ledger` | common | the first match resolved on any floor | +25 score |
+| `tithe_conduit` | common | any Conduit match | +1 shop gold, +8 score |
+| `bulwark_plate` | uncommon | any Heavy match | +1 guard token, or +18 score at the guard cap |
+| `stasis_broker` | uncommon | any Stasis match | +1 full-board shuffle charge (barred under `noShuffle`) |
+| `echo_relay` | rare | an Echo match with an adjacent Heavy tile | +1 flash pair |
+| `drift_appraiser` | rare | a Drift match with an adjacent Cursed tile | +2 shop gold, +15 score |
+
+Their draft weights sit a notch under the equivalent-rarity charge relics, because a rule that fires all run is worth more than a number that fires once. `opening_ledger` and `tithe_conduit` are in the demo pool so the demo still shows what the class is; the other four are full-game only.
+
 Milestone offers: first at floor **3**, then every **3** floors (**3, 6, 9, 12, …**); max **12** milestone **visits** per run (`RELIC_FIRST_MILESTONE_FLOOR`, `RELIC_MILESTONE_STEP`, `MAX_RELIC_PICKS_PER_RUN` in `relics.ts`). **Puzzle** runs skip relic drafts. Each offer rolls **three** distinct relics using `RELIC_DRAFT` weights (common / uncommon / rare) with **tier scaling** so later drafts relatively favor higher rarities (`effectiveRelicDraftWeight`, `rollRelicOptions`, `weightedPick.ts`). **Pick budget** per visit stacks: `shrine_echo` relic (bank for next shrine), **Daily** mode (+1), **generous_shrine** mutator (+1), claimed Week of Archives meta unlock after 7 dailies (`relicShrineExtraPickUnlocked` → `metaRelicDraftExtraPerMilestone`), Scholar contract (`bonusRelicDraftPick`) — see `computeRelicOfferPickBudget` in `game.ts`.
 
 Scheduled Endless drafts guarantee one contextual option when an eligible relic answers the current/next chapter, active wager, or near-complete Favor bank; Daily / gauntlet / meditation use the base picker. Hard contract filters remove shuffle relics under `noShuffle` and `destroy_bank_plus_one` under `noDestroy`.
 
 Memorize modifiers (see `getMemorizeDurationForRun` in `game.ts`): **`+280ms`** with `memorize_bonus_ms`; **`+220ms`** when `memorize_under_short_memorize` and `short_memorize` mutator are both active.
+
+## Honor mark ceiling (`meta-progression.ts`)
+
+Honor marks come from four capped sources: achievements (`earned x 2`), the daily archive (7),
+no-powers mastery (5) and relic mastery (5). The profile ladder charges `META_MARKS_PER_LEVEL = 5`
+per level and its top milestone is level **8**, so **40** marks are needed to reach Legend.
+
+With seven achievements the ceiling across all four sources was **31**, and Legend was therefore
+unreachable — the milestone existed in `META_PROGRESS_MILESTONES` and no save could ever satisfy it.
+Widening the achievement set to twenty raises the ceiling to **57**, which makes Legend reachable for
+the first time and still requires most of the roster. The two permanent upgrades cost 7 and 12 marks,
+so the meta track keeps a real spend-versus-save decision against that ceiling.
+
+Recheck this arithmetic whenever `ACHIEVEMENT_IDS`, a source cap, `META_MARKS_PER_LEVEL`, or the top
+milestone level changes; `meta-progression.test.ts` pins the per-source rows but not the ceiling.
 
 ## Presentation mutator match penalties (`game.ts`)
 

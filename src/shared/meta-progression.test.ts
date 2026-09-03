@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { createDefaultSaveData, metaRelicDraftExtraPerMilestoneFromSave } from './save-data';
+import { ACHIEVEMENT_IDS, createDefaultSaveData, metaRelicDraftExtraPerMilestoneFromSave } from './save-data';
 import {
     applyMetaProgressionUnlock,
     buildPermanentUpgradeRows,
@@ -173,7 +173,7 @@ describe('REG-080 permanent upgrade tree and cosmetic track', () => {
         const sources = getMetaHonorMarkSourceRows(save);
 
         expect(sources.map((row) => [row.id, row.marks, row.progress])).toEqual([
-            ['achievements', 2, { current: 1, target: 7 }],
+            ['achievements', 2, { current: 1, target: ACHIEVEMENT_IDS.length }],
             ['daily_archive', 7, { current: 7, target: 7 }],
             ['no_powers_mastery', 2, { current: 2, target: 5 }],
             ['relic_mastery', 1, { current: 3, target: 10 }]
@@ -196,7 +196,7 @@ describe('REG-080 permanent upgrade tree and cosmetic track', () => {
 
         const sources = getMetaHonorMarkSourceRows(save);
         expect(sources.map((row) => [row.id, row.marks, row.progress])).toEqual([
-            ['achievements', 0, { current: 0, target: 7 }],
+            ['achievements', 0, { current: 0, target: ACHIEVEMENT_IDS.length }],
             ['daily_archive', 0, { current: 0, target: 7 }],
             ['no_powers_mastery', 0, { current: 0, target: 5 }],
             ['relic_mastery', 0, { current: 1, target: 10 }]

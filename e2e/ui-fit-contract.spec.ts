@@ -20,6 +20,9 @@ import {
 
 const VIEWPORTS = [
     { id: 'desktop', width: 1440, height: 900 },
+    // The Steam Deck's native panel. Every screen has to fit it for Deck Verified, and it is the
+    // one size in this list that a launch checklist names outright.
+    { id: 'steamdeck', width: 1280, height: 800 },
     { id: 'laptop', width: 1024, height: 768 },
     { id: 'tablet', width: 834, height: 1112 },
     { id: 'phone', width: 390, height: 844 },

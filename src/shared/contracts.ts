@@ -217,7 +217,17 @@ export type RelicId =
     | 'shrine_echo'
     | 'chapter_compass'
     | 'wager_surety'
-    | 'parasite_ledger';
+    | 'parasite_ledger'
+    /*
+     * Standing rules rather than pickup bonuses: each of these changes what a trait is worth for
+     * the rest of the run, so the board you are looking at plays differently once you hold one.
+     */
+    | 'bulwark_plate'
+    | 'tithe_conduit'
+    | 'stasis_broker'
+    | 'opening_ledger'
+    | 'drift_appraiser'
+    | 'echo_relay';
 
 /** Active milestone relic draft (one visit may allow multiple picks). */
 export interface RelicOfferState {
@@ -313,7 +323,25 @@ export type AchievementId =
     | 'ACH_PERFECT_CLEAR'
     | 'ACH_LAST_LIFE'
     | 'ACH_ENDLESS_TEN'
-    | 'ACH_SEVEN_DAILIES';
+    | 'ACH_SEVEN_DAILIES'
+    /*
+     * The seven above are all reached by playing the first mode for a while. These point at the
+     * rest of the game — the wardens, the relic roster, the traits, and the four modes that a
+     * player who only ever presses Play will never open.
+     */
+    | 'ACH_WARDEN_FELLED'
+    | 'ACH_ENDLESS_CYCLE'
+    | 'ACH_ENDLESS_TWENTY'
+    | 'ACH_SCORE_TEN_THOUSAND'
+    | 'ACH_STREAK_TEN'
+    | 'ACH_TRAIT_SCHOLAR'
+    | 'ACH_RELIC_HOARD'
+    | 'ACH_STANDING_ORDERS'
+    | 'ACH_RELIC_LIBRARY'
+    | 'ACH_NO_POWERS_TEN'
+    | 'ACH_GAUNTLET_RUN'
+    | 'ACH_PUZZLE_SOLVER'
+    | 'ACH_MEDITATION_HOUR';
 
 export interface DebugFlags {
     showDebugTools: boolean;

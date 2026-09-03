@@ -36,7 +36,13 @@ export const GAMEPLAY_RELIC_IDS = [
     'wager_surety',
     'parasite_ledger',
     'stray_charge_plus_one',
-    'pin_cap_plus_one'
+    'pin_cap_plus_one',
+    'bulwark_plate',
+    'tithe_conduit',
+    'stasis_broker',
+    'opening_ledger',
+    'drift_appraiser',
+    'echo_relay'
 ] as const satisfies readonly RelicId[];
 
 export const GAMEPLAY_RELIC_OFFER_SERVICE_IDS = [
@@ -1178,6 +1184,239 @@ export const SEER_DEFINITIONS = z.array(gameplayContentDefinitionSchema).parse([
     }
 ]);
 
+/**
+ * Standing-rule relics. The rest of the roster pays out once, when you take it; these change what a
+ * trait is worth every time you match it, so holding one changes which tiles you go for rather than
+ * only which number you started the floor with.
+ */
+export const STANDING_RULE_RELIC_DEFINITIONS = z.array(gameplayContentDefinitionSchema).parse([
+    /*
+     * The claim half. `relic.pick` resolves the definition named `relic.<id>` for the relic being
+     * taken, so every draftable relic needs one. For these six it deliberately pays nothing: the
+     * relic's whole value is the rule it puts in force, stated here so the draft says so out loud.
+     */
+    {
+        id: 'relic.opening_ledger',
+        version: 1,
+        buildId: 'conduit_cartographer',
+        source: { kind: 'relic', id: 'opening_ledger' },
+        trigger: 'content.claimed',
+        conditions: [],
+        effects: [
+            {
+                kind: 'feedback.emit',
+                cue: 'build.opening_ledger.claimed',
+                message: 'Opening Ledger is in force: the first match on every floor now pays bonus score.',
+                tone: 'information'
+            }
+        ]
+    },
+    {
+        id: 'relic.tithe_conduit',
+        version: 1,
+        buildId: 'treasure_greed',
+        source: { kind: 'relic', id: 'tithe_conduit' },
+        trigger: 'content.claimed',
+        conditions: [],
+        effects: [
+            {
+                kind: 'feedback.emit',
+                cue: 'build.tithe_conduit.claimed',
+                message: 'Tithe Conduit is in force: every Conduit match now pays shop gold.',
+                tone: 'information'
+            }
+        ]
+    },
+    {
+        id: 'relic.bulwark_plate',
+        version: 1,
+        buildId: 'guard_tank',
+        source: { kind: 'relic', id: 'bulwark_plate' },
+        trigger: 'content.claimed',
+        conditions: [],
+        effects: [
+            {
+                kind: 'feedback.emit',
+                cue: 'build.bulwark_plate.claimed',
+                message: 'Bulwark Plate is in force: every Heavy match now braces into guard.',
+                tone: 'information'
+            }
+        ]
+    },
+    {
+        id: 'relic.stasis_broker',
+        version: 1,
+        buildId: 'trap_control',
+        source: { kind: 'relic', id: 'stasis_broker' },
+        trigger: 'content.claimed',
+        conditions: [],
+        effects: [
+            {
+                kind: 'feedback.emit',
+                cue: 'build.stasis_broker.claimed',
+                message: 'Stasis Broker is in force: every Stasis match now buys a full-board shuffle.',
+                tone: 'information'
+            }
+        ]
+    },
+    {
+        id: 'relic.echo_relay',
+        version: 1,
+        buildId: 'conduit_cartographer',
+        source: { kind: 'relic', id: 'echo_relay' },
+        trigger: 'content.claimed',
+        conditions: [],
+        effects: [
+            {
+                kind: 'feedback.emit',
+                cue: 'build.echo_relay.claimed',
+                message: 'Echo Relay is in force: an Echo match beside Heavy now grants a flash pair.',
+                tone: 'information'
+            }
+        ]
+    },
+    {
+        id: 'relic.drift_appraiser',
+        version: 1,
+        buildId: 'treasure_greed',
+        source: { kind: 'relic', id: 'drift_appraiser' },
+        trigger: 'content.claimed',
+        conditions: [],
+        effects: [
+            {
+                kind: 'feedback.emit',
+                cue: 'build.drift_appraiser.claimed',
+                message: 'Drift Appraiser is in force: a Drift match beside Cursed now pays gold and score.',
+                tone: 'information'
+            }
+        ]
+    },
+    {
+        id: 'relic.bulwark_plate.heavy_match',
+        version: 1,
+        buildId: 'guard_tank',
+        source: { kind: 'relic', id: 'bulwark_plate' },
+        trigger: 'trait.match',
+        conditions: [
+            { kind: 'relic.active', relicId: 'bulwark_plate' },
+            { kind: 'trait.matched', trait: 'heavy' }
+        ],
+        effects: [
+            { kind: 'inventory.grant_or_score', itemId: 'guard_token', amount: 1, fallbackScore: 18 },
+            {
+                kind: 'feedback.emit',
+                cue: 'build.bulwark_plate.heavy_triggered',
+                message: 'Bulwark Plate braced the Heavy match into guard or overflow score.',
+                tone: 'reward'
+            }
+        ]
+    },
+    {
+        id: 'relic.tithe_conduit.conduit_match',
+        version: 1,
+        buildId: 'treasure_greed',
+        source: { kind: 'relic', id: 'tithe_conduit' },
+        trigger: 'trait.match',
+        conditions: [
+            { kind: 'relic.active', relicId: 'tithe_conduit' },
+            { kind: 'trait.matched', trait: 'conduit' }
+        ],
+        effects: [
+            { kind: 'currency.grant', currency: 'shop_gold', amount: 1 },
+            { kind: 'score.grant', reason: 'trait_reward', amount: 8 },
+            {
+                kind: 'feedback.emit',
+                cue: 'build.tithe_conduit.conduit_triggered',
+                message: 'Tithe Conduit routed the Conduit match into gold.',
+                tone: 'reward'
+            }
+        ]
+    },
+    {
+        id: 'relic.stasis_broker.stasis_match',
+        version: 1,
+        buildId: 'trap_control',
+        source: { kind: 'relic', id: 'stasis_broker' },
+        trigger: 'trait.match',
+        conditions: [
+            { kind: 'relic.active', relicId: 'stasis_broker' },
+            { kind: 'trait.matched', trait: 'stasis' }
+        ],
+        effects: [
+            { kind: 'inventory.grant', itemId: 'shuffle_charge', amount: 1 },
+            {
+                kind: 'feedback.emit',
+                cue: 'build.stasis_broker.stasis_triggered',
+                message: 'Stasis Broker turned the locked pair into one full-board shuffle.',
+                tone: 'reward'
+            }
+        ]
+    },
+    {
+        id: 'relic.opening_ledger.first_match',
+        version: 1,
+        buildId: 'conduit_cartographer',
+        source: { kind: 'relic', id: 'opening_ledger' },
+        trigger: 'trait.match',
+        conditions: [
+            { kind: 'relic.active', relicId: 'opening_ledger' },
+            { kind: 'floor.match_resolutions_is', amount: 0 }
+        ],
+        effects: [
+            { kind: 'score.grant', reason: 'trait_reward', amount: 25 },
+            {
+                kind: 'feedback.emit',
+                cue: 'build.opening_ledger.first_triggered',
+                message: 'Opening Ledger paid out for the first match of the floor.',
+                tone: 'reward'
+            }
+        ]
+    },
+    {
+        id: 'relic.drift_appraiser.cursed_drift',
+        version: 1,
+        buildId: 'treasure_greed',
+        source: { kind: 'relic', id: 'drift_appraiser' },
+        trigger: 'trait.match',
+        conditions: [
+            { kind: 'relic.active', relicId: 'drift_appraiser' },
+            { kind: 'trait.matched', trait: 'drift' },
+            { kind: 'trait.adjacent', trait: 'cursed' }
+        ],
+        effects: [
+            { kind: 'currency.grant', currency: 'shop_gold', amount: 2 },
+            { kind: 'score.grant', reason: 'trait_reward', amount: 15 },
+            {
+                kind: 'feedback.emit',
+                cue: 'build.drift_appraiser.cursed_triggered',
+                message: 'Drift Appraiser appraised the drifting pair beside the curse.',
+                tone: 'reward'
+            }
+        ]
+    },
+    {
+        id: 'relic.echo_relay.heavy_flash',
+        version: 1,
+        buildId: 'conduit_cartographer',
+        source: { kind: 'relic', id: 'echo_relay' },
+        trigger: 'trait.match',
+        conditions: [
+            { kind: 'relic.active', relicId: 'echo_relay' },
+            { kind: 'trait.matched', trait: 'echo' },
+            { kind: 'trait.adjacent', trait: 'heavy' }
+        ],
+        effects: [
+            { kind: 'inventory.grant', itemId: 'flash_pair_charge', amount: 1 },
+            {
+                kind: 'feedback.emit',
+                cue: 'build.echo_relay.heavy_triggered',
+                message: 'Echo Relay carried the braced echo into one flash pair.',
+                tone: 'reward'
+            }
+        ]
+    }
+]);
+
 export const GAMEPLAY_CONTENT_DEFINITIONS = [
     ...CONDUIT_CARTOGRAPHER_DEFINITIONS,
     ...WARDEN_DEFINITIONS,
@@ -1189,7 +1428,8 @@ export const GAMEPLAY_CONTENT_DEFINITIONS = [
     ...LOCKSMITH_DEFINITIONS,
     ...VAULTBREAKER_DEFINITIONS,
     ...SLAYER_DEFINITIONS,
-    ...SEER_DEFINITIONS
+    ...SEER_DEFINITIONS,
+    ...STANDING_RULE_RELIC_DEFINITIONS
 ] as const satisfies readonly GameplayContentDefinition[];
 
 export type GameplaySource = z.infer<typeof gameplaySourceSchema>;

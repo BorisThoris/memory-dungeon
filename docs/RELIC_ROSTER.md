@@ -23,6 +23,21 @@ Relics are **run modifiers** stored on `RunState.relicIds` and chosen from `reli
 | `wager_surety` | Won risk wagers grant +1 extra Favor; lost wagers keep objective streak at x1 | Wager-specific risk control, not a generic life or score boost. |
 | `parasite_ledger` | Successful scheduled Endless parasite objectives reduce parasite pressure by 1 | Slows score-parasite pacing without removing the mutator. |
 
+## Standing-rule roster
+
+Everything above pays out once, at the moment it is taken, so a draft changes the numbers a run starts a floor with. These six pay on a condition the board keeps offering instead, so holding one changes which tiles a player goes for. Each is a `relic.active` content definition applied from the live trait path (`STANDING_RULE_RELIC_DEFINITIONS` in `gameplay-core-contracts.ts`, call sites in `tile-trait-rules.ts`); the matching `relic.<id>` claim definition deliberately pays nothing and only states the rule.
+
+| ID | Fires when | Effect | Non-overlap note |
+|----|-----------|--------|------------------|
+| `opening_ledger` | first match resolved on any floor | +25 score | Rewards opening confidently; forgiveness never pays for a match. |
+| `tithe_conduit` | any Conduit match | +1 shop gold, +8 score | Conduit already pays score for adjacency; this adds the purse, not more adjacency reading. |
+| `bulwark_plate` | any Heavy match | +1 guard token, or +18 score at the cap | Same token economy and cap as `guard_token_plus_one`, keyed to a trait rather than to pickup. |
+| `stasis_broker` | any Stasis match | +1 full-board shuffle charge | Turns the blocking trait into supply; barred under `noShuffle` like the other shuffle relics. |
+| `echo_relay` | Echo match with an adjacent Heavy tile | +1 flash pair | Adjacency-gated, so it competes with Echo's other pairings rather than stacking on all of them. |
+| `drift_appraiser` | Drift match with an adjacent Cursed tile | +2 shop gold, +15 score | Pays for entering the cursed lane; `parasite_ledger` pays for surviving the parasite, not for the risk. |
+
+Draft weights sit a notch under the equivalent-rarity charge relics: a rule that fires all run is worth more than a number that fires once. `opening_ledger` and `tithe_conduit` are in the demo pool so a demo player sees what the class is; the other four are full-game only.
+
 ## Expansion candidates (deferred)
 
 - “Score multiplier” — overlaps mutator `score_parasite` design space; prefer mutators for scoring.  

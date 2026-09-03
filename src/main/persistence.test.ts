@@ -24,6 +24,8 @@ vi.mock('electron-store', () => {
 import { PersistenceService } from './persistence';
 
 class MemorySaveRepository implements SaveRepository {
+    private windowState: unknown = null;
+
     constructor(private saveData: unknown = normalizeSaveData()) {}
 
     getSaveData(): unknown {
@@ -32,6 +34,14 @@ class MemorySaveRepository implements SaveRepository {
 
     setSaveData(saveData: SaveData): void {
         this.saveData = saveData;
+    }
+
+    getWindowState(): unknown {
+        return this.windowState;
+    }
+
+    setWindowState(windowState: unknown): void {
+        this.windowState = windowState;
     }
 }
 
@@ -159,5 +169,26 @@ describe('PersistenceService', () => {
 
         expect(p.unlockAchievement('ACH_FIRST_CLEAR')).toEqual(saveData);
         expect(write).not.toHaveBeenCalled();
+    });
+
+    it('remembers where the window was, and keeps the size when a minimized close reports none', () => {
+        const repository = new MemorySaveRepository();
+        const p = new PersistenceService(repository);
+        expect(p.getWindowState()).toEqual({ bounds: null, maximized: false });
+
+        p.saveWindowState({ bounds: { height: 800, width: 1200, x: 40, y: 60 }, maximized: false });
+        expect(p.getWindowState()).toEqual({ bounds: { height: 800, width: 1200, x: 40, y: 60 }, maximized: false });
+
+        p.saveWindowState({ bounds: null, maximized: true });
+        expect(p.getWindowState()).toEqual({ bounds: { height: 800, width: 1200, x: 40, y: 60 }, maximized: true });
+    });
+
+    it('never refuses to quit over a window-placement write failure', () => {
+        const repository = new MemorySaveRepository();
+        repository.setWindowState = () => {
+            throw new Error('disk full');
+        };
+        const p = new PersistenceService(repository);
+        expect(() => p.saveWindowState({ bounds: { height: 800, width: 1200, x: 0, y: 0 }, maximized: false })).not.toThrow();
     });
 });

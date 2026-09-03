@@ -25,7 +25,13 @@ export const TILE_TRAIT_INTERACTION_TEXT = {
     'wager-surety:cursed-buffer': 'Wager Surety buffered cursed risk',
     'reward-perk:echo-conduit-double': 'Perk pop: Echo Conduit Lens doubles the route',
     'reward-perk:trait-streak-flash': 'Perk pop: Trait Streak Lens flashes a pair',
-    'reward-perk:cursed-opener-greed': 'Perk pop: Cursed Opener pays gold'
+    'reward-perk:cursed-opener-greed': 'Perk pop: Cursed Opener pays gold',
+    'bulwark-plate:heavy-guard': 'Bulwark Plate + Heavy: braced guard',
+    'tithe-conduit:conduit-gold': 'Tithe Conduit + Conduit: routed gold',
+    'stasis-broker:stasis-shuffle': 'Stasis Broker + Stasis: bought shuffle',
+    'opening-ledger:first-match': 'Opening Ledger: first match of the floor',
+    'drift-appraiser:cursed-drift': 'Drift Appraiser + Drift near Cursed: appraised risk',
+    'echo-relay:heavy-flash': 'Echo Relay + Echo near Heavy: relayed flash'
 } as const;
 
 export type TileTraitInteractionTag = keyof typeof TILE_TRAIT_INTERACTION_TEXT;
@@ -57,7 +63,13 @@ export const TILE_TRAIT_INTERACTION_TAGS = [
     'wager-surety:cursed-buffer',
     'reward-perk:echo-conduit-double',
     'reward-perk:trait-streak-flash',
-    'reward-perk:cursed-opener-greed'
+    'reward-perk:cursed-opener-greed',
+    'bulwark-plate:heavy-guard',
+    'tithe-conduit:conduit-gold',
+    'stasis-broker:stasis-shuffle',
+    'opening-ledger:first-match',
+    'drift-appraiser:cursed-drift',
+    'echo-relay:heavy-flash'
 ] as const satisfies readonly TileTraitInteractionTag[];
 
 const isTileTraitInteractionTag = (value: string): value is TileTraitInteractionTag =>

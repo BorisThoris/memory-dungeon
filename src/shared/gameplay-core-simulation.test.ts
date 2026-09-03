@@ -62,9 +62,15 @@ const initialRun = (seed: number): RunState => ({
 } as unknown as RunState);
 
 describe('seeded gameplay core simulation', () => {
+    /*
+     * The seed is a sample, not a contract: the command list below is what 384 steps must reach.
+     * Adding content shifts the RNG stream, and 7241 became the one seed in a dozen that stops
+     * producing `board.pin_toggle` (its bucket only ever lands on steps with no pinnable tile, at
+     * any step count). Re-sample rather than lower the coverage list.
+     */
     it('is deterministic, replayable, schema-valid, and invariant-clean', () => {
-        const first = runGameplayCoreSimulation(initialRun(7241), { seed: 7241, steps: 384 });
-        const second = runGameplayCoreSimulation(initialRun(7241), { seed: 7241, steps: 384 });
+        const first = runGameplayCoreSimulation(initialRun(7243), { seed: 7243, steps: 384 });
+        const second = runGameplayCoreSimulation(initialRun(7243), { seed: 7243, steps: 384 });
 
         expect(first).toEqual(second);
         expect(first.commands).toHaveLength(384);

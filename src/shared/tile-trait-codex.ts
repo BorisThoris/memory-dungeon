@@ -51,7 +51,13 @@ const INTERACTION_DESCRIPTIONS: Record<TileTraitInteractionTag, string> = {
     'wager-surety:cursed-buffer': 'Draft Wager Surety to soften Cursed plus Volatile miss tries while keeping recall pressure visible.',
     'reward-perk:echo-conduit-double': 'Claim Echo Conduit Lens so Echo beside Conduit doubles its peek and adjacent Sealed shard payoff.',
     'reward-perk:trait-streak-flash': 'Claim Trait Streak Lens so a trait match at x3+ clean streak creates a flash-pair charge.',
-    'reward-perk:cursed-opener-greed': 'Claim Cursed Opener Contract so the first Cursed match each floor becomes a gold and score play.'
+    'reward-perk:cursed-opener-greed': 'Claim Cursed Opener Contract so the first Cursed match each floor becomes a gold and score play.',
+    'bulwark-plate:heavy-guard': 'Draft Bulwark Plate to make every Heavy match brace into guard, or into score once guard is capped.',
+    'tithe-conduit:conduit-gold': 'Draft Tithe Conduit to make every Conduit match pay shop gold on top of its score.',
+    'stasis-broker:stasis-shuffle': 'Draft Stasis Broker to turn every Stasis match into a full-board shuffle charge.',
+    'opening-ledger:first-match': 'Draft Opening Ledger so the first match you resolve on every floor pays bonus score.',
+    'drift-appraiser:cursed-drift': 'Draft Drift Appraiser so a Drift match beside Cursed pays two gold and score for taking the risky lane.',
+    'echo-relay:heavy-flash': 'Draft Echo Relay so an Echo match beside Heavy grants a flash-pair charge.'
 };
 
 export const getTileTraitCodexRows = (): TileTraitCodexRow[] =>

@@ -37,12 +37,18 @@ export {
 
 export const DEMO_MODE_IDS = ['classic'] as const;
 
-/** Every common relic. Kept in `RELIC_POOL` order. */
+/**
+ * Every common relic. Kept in `RELIC_POOL` order. The two standing-rule commons are here on
+ * purpose: a demo that only ever hands out charge bumps would advertise a shallower game than the
+ * full roster is, and breadth — not the class of relic — is what the demo caps.
+ */
 export const DEMO_COMMON_RELIC_IDS: readonly RelicId[] = [
     'extra_shuffle_charge',
     'first_shuffle_free_per_floor',
     'memorize_bonus_ms',
-    'region_shuffle_free_first'
+    'opening_ledger',
+    'region_shuffle_free_first',
+    'tithe_conduit'
 ];
 
 /** Power relics that stay in the demo so a build can still take shape. */

@@ -98,7 +98,20 @@ export const ACHIEVEMENT_IDS = [
     'ACH_PERFECT_CLEAR',
     'ACH_LAST_LIFE',
     'ACH_ENDLESS_TEN',
-    'ACH_SEVEN_DAILIES'
+    'ACH_SEVEN_DAILIES',
+    'ACH_WARDEN_FELLED',
+    'ACH_ENDLESS_CYCLE',
+    'ACH_ENDLESS_TWENTY',
+    'ACH_SCORE_TEN_THOUSAND',
+    'ACH_STREAK_TEN',
+    'ACH_TRAIT_SCHOLAR',
+    'ACH_RELIC_HOARD',
+    'ACH_STANDING_ORDERS',
+    'ACH_RELIC_LIBRARY',
+    'ACH_NO_POWERS_TEN',
+    'ACH_GAUNTLET_RUN',
+    'ACH_PUZZLE_SOLVER',
+    'ACH_MEDITATION_HOUR'
 ] as const satisfies readonly AchievementId[];
 
 export const createAchievementState = (): AchievementState =>
