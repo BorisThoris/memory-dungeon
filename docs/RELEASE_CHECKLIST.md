@@ -22,8 +22,9 @@ achievement on the Partner site or shoot a trailer.
 | Every achievement the game can award has a Steam API name to award it under | done | the repository | `src/shared/steam-achievement-api-names.ts` |
 | Rich Presence publishes what the player is doing, and clears when the run ends | done | the repository | `src/shared/rich-presence.ts` |
 | The save file sits at one stable path per platform, ready for Auto-Cloud | done | the repository | `src/shared/save-location.ts` |
-| The 20 achievement API names exist on the Partner site | **not done** | a person | Stats & Achievements. The names are listed by `yarn release:checklist`. |
-| The `#Status_*` localization tokens are defined on the Partner site | **not done** | a person | Until they exist, friends see the raw token instead of a sentence. |
+| The Partner-site rows are generated from what the game awards and broadcasts | done | the repository | `scripts/steam-partner-config.ts` |
+| The 20 achievement API names exist on the Partner site | **not done** | a person | Stats & Achievements. `yarn steam:partner-config` prints the rows, titles and descriptions to paste. |
+| The `#Status_*` localization tokens are defined on the Partner site | **not done** | a person | `yarn steam:partner-config` prints them. Until they exist, friends see the raw token instead of a sentence. |
 | The Auto-Cloud rows are entered on the Partner site | **not done** | a person | Run `yarn steam:cloud-config` — it prints the rows to copy in. |
 | Ship with `VITE_FEATURE_CLOUD_SAVE=1` once Auto-Cloud is live | **not done** | a person | The flag is off by default so a half-configured app never claims cloud saves. |
 | A save has actually round-tripped between two machines | **not done** | a person | The one row no amount of configuration proves. Somebody has to play on two boxes. |

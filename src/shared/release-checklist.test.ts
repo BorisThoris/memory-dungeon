@@ -10,6 +10,7 @@ import { MIN_WINDOW_HEIGHT, MIN_WINDOW_WIDTH, normalizeWindowState, resolveResto
 import { CRASH_LOG_KEEP_COUNT, pruneCrashLogs, redactUserPaths } from '../main/crash-log';
 import { quarantineFileName, quarantineSaveFile } from '../main/save-recovery';
 import { HARDCODED_COPY_BASELINE, scanComponentCopy } from '../../scripts/copy-locality';
+import { renderAchievementRows, renderRichPresenceRows } from '../../scripts/steam-partner-config';
 import {
     findUnreachableMembers,
     readAppStateMembers,
@@ -92,6 +93,17 @@ const VERIFIERS: Record<string, () => void> = {
         expect(quarantineFileName('memory-dungeon-save.json', '2026-09-03T20:45:12.884Z')).not.toContain(':');
         // The notice the player reads has to name a way out, not just report the failure.
         expect(SAVE_RECOVERY_COPY.action).toMatch(/\S/);
+    },
+    'partner-rows-derived': () => {
+        const achievements = renderAchievementRows();
+
+        // The overlay text and the Codex text come from one catalog, so they cannot disagree.
+        for (const id of ACHIEVEMENT_IDS) {
+            expect(achievements).toContain(STEAM_ACHIEVEMENT_API_NAME[id]);
+        }
+        expect(renderRichPresenceRows()).toContain(
+            buildRichPresence({ floor: null, gameMode: null, inRun: false }).display
+        );
     },
     'rich-presence': () => {
         const inRun = buildRichPresence({ floor: 7, gameMode: 'endless', inRun: true });

@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2471,
-    "codeFileCount": 947,
-    "exportedSymbolCount": 3514,
+    "trackedFileCount": 2474,
+    "codeFileCount": 949,
+    "exportedSymbolCount": 3515,
     "contentItemCount": 63,
     "mechanicCount": 136,
     "stateFieldCount": 144,
-    "relationshipCount": 10254
+    "relationshipCount": 10268
   },
   "inventory": [
     {
@@ -2259,8 +2259,8 @@
     {
       "path": "docs/RELEASE_CHECKLIST.md",
       "category": "documentation",
-      "bytes": 3553,
-      "sha256": "c303419bd57a2d209a9724769d08f4258b1418f2ed9e72537d0dc6f54c2e9e5d"
+      "bytes": 3764,
+      "sha256": "3ef713dfddfb842417c990c009f3704732548f948a2f802ba3b2fe2c02bc5e74"
     },
     {
       "path": "docs/RELIC_ROSTER.md",
@@ -2320,7 +2320,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 36714,
-      "sha256": "a3a92c08abf7514a71c92dc38d4328feefe8a82bd59ae6e00f62f4fcc808a159"
+      "sha256": "87b2e2a1d068cede2e74b0ac32f0ac88b7da4f81b476672ded8e2747d2327be7"
     },
     {
       "path": "docs/UI_RETHINK_PLAN.md",
@@ -3963,8 +3963,8 @@
     {
       "path": "package.json",
       "category": "configuration",
-      "bytes": 28571,
-      "sha256": "c2c2f37673d7512a88c33ad22bbb113029e424d1a0d272977478082142c8819a"
+      "bytes": 28642,
+      "sha256": "323a99a0470c5a1dd20c28eaad662ada54d01f630b0f8eedb49530ee46ad827e"
     },
     {
       "path": "packages/notifications/package.json",
@@ -4637,6 +4637,12 @@
       "category": "script",
       "bytes": 1370,
       "sha256": "e2fa0609efeb471b3db6352f027e9a777e30495cc79aebf8708618f21c566383"
+    },
+    {
+      "path": "scripts/steam-partner-config.ts",
+      "category": "script",
+      "bytes": 2554,
+      "sha256": "7cb356af62f9e099d7ba2d4ef8f6d248f637418c3e1b18249f0b3b344e5d4786"
     },
     {
       "path": "scripts/store-action-reachability.ts",
@@ -11691,14 +11697,14 @@
     {
       "path": "src/shared/release-checklist.test.ts",
       "category": "test",
-      "bytes": 8791,
-      "sha256": "49027a46a749f1cb4451152c9dd18f44e1a22f85d84a67dfa38b4cd4d9463224"
+      "bytes": 9362,
+      "sha256": "f4ffae615d099d5a38537feae36be2f63b663fdeb50cfb41b8a22b51dbbaa733"
     },
     {
       "path": "src/shared/release-checklist.ts",
       "category": "source",
-      "bytes": 8153,
-      "sha256": "1a3536c57b1954cb9f8d38246e6335f3541c6399af444d9d631ea07cc2ed9496"
+      "bytes": 8473,
+      "sha256": "5ae8b8c1db9ed8868f42ac7d0c0219da3774fadf98ede3665c9b12ec1b9efbe6"
     },
     {
       "path": "src/shared/relic-favor-rules.test.ts",
@@ -12299,6 +12305,18 @@
       "category": "source",
       "bytes": 1599,
       "sha256": "d99c3eea29c93358f6971d0b062bfcbcca875c4fadfd61f1509d9a539fd29e94"
+    },
+    {
+      "path": "src/shared/steam-partner-config.test.ts",
+      "category": "test",
+      "bytes": 2729,
+      "sha256": "1f26d679fd27fa8e5b342d2bdb53dab221226f69385fb608b28af5f85e729277"
+    },
+    {
+      "path": "src/shared/steam-rich-presence-tokens.ts",
+      "category": "source",
+      "bytes": 1012,
+      "sha256": "7f68e4a596ae1508c7a788d41aaea5c79c467a99ed96c85f14c27c14f31c79be"
     },
     {
       "path": "src/shared/system-diagrams.test.ts",
@@ -23991,7 +24009,8 @@
       "testedBy": [
         "file:src/shared/achievement-reachability.test.ts",
         "file:src/shared/achievements.test.ts",
-        "file:src/shared/mechanics-catalog-appendix-builder.test.ts"
+        "file:src/shared/mechanics-catalog-appendix-builder.test.ts",
+        "file:src/shared/steam-partner-config.test.ts"
       ]
     },
     {
@@ -25518,6 +25537,7 @@
         "file:src/shared/softlock-fairness.test.ts",
         "file:src/shared/softlock-generator-contract.test.ts",
         "file:src/shared/starting-loadouts.test.ts",
+        "file:src/shared/steam-partner-config.test.ts",
         "file:src/shared/tile-floater-anchor-rules.test.ts",
         "file:src/shared/tile-state-rules.test.ts",
         "file:src/shared/tile-symbol-catalog.test.ts",
@@ -30339,7 +30359,7 @@
       "path": "src/shared/release-checklist.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 166,
+      "lineCount": 178,
       "imports": [
         "file:src/main/crash-log.ts",
         "file:src/main/save-recovery.ts",
@@ -30361,7 +30381,7 @@
       "path": "src/shared/release-checklist.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 214,
+      "lineCount": 221,
       "imports": [],
       "exports": [
         "symbol:src/shared/release-checklist.ts#RELEASE_CHECKLIST",
@@ -30763,7 +30783,8 @@
       ],
       "testedBy": [
         "file:src/shared/release-checklist.test.ts",
-        "file:src/shared/rich-presence.test.ts"
+        "file:src/shared/rich-presence.test.ts",
+        "file:src/shared/steam-partner-config.test.ts"
       ]
     },
     {
@@ -31988,7 +32009,8 @@
         "file:src/shared/run-mode-catalog.test.ts",
         "file:src/shared/run-settings-rules.test.ts",
         "file:src/shared/run-summary-rules.test.ts",
-        "file:src/shared/save-data.test.ts"
+        "file:src/shared/save-data.test.ts",
+        "file:src/shared/steam-partner-config.test.ts"
       ]
     },
     {
@@ -32608,7 +32630,41 @@
         "symbol:src/shared/steam-achievement-api-names.ts#STEAM_ACHIEVEMENT_API_NAME"
       ],
       "testedBy": [
-        "file:src/shared/release-checklist.test.ts"
+        "file:src/shared/release-checklist.test.ts",
+        "file:src/shared/steam-partner-config.test.ts"
+      ]
+    },
+    {
+      "id": "file:src/shared/steam-partner-config.test.ts",
+      "path": "src/shared/steam-partner-config.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 60,
+      "imports": [
+        "file:src/shared/achievements.ts",
+        "file:src/shared/contracts.ts",
+        "file:src/shared/rich-presence.ts",
+        "file:src/shared/save-data.ts",
+        "file:src/shared/steam-achievement-api-names.ts",
+        "file:src/shared/steam-rich-presence-tokens.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/shared/steam-rich-presence-tokens.ts",
+      "path": "src/shared/steam-rich-presence-tokens.ts",
+      "layer": "shared",
+      "role": "production",
+      "lineCount": 21,
+      "imports": [
+        "file:src/shared/contracts.ts"
+      ],
+      "exports": [
+        "symbol:src/shared/steam-rich-presence-tokens.ts#RICH_PRESENCE_TOKEN_TEXT"
+      ],
+      "testedBy": [
+        "file:src/shared/steam-partner-config.test.ts"
       ]
     },
     {
@@ -56214,15 +56270,15 @@
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
       "line": 32,
-      "endLine": 166
+      "endLine": 173
     },
     {
       "id": "symbol:src/shared/release-checklist.ts#releaseChecklistByOwner",
       "name": "releaseChecklistByOwner",
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
-      "line": 172,
-      "endLine": 173
+      "line": 179,
+      "endLine": 180
     },
     {
       "id": "symbol:src/shared/release-checklist.ts#ReleaseChecklistItem",
@@ -56245,16 +56301,16 @@
       "name": "releaseChecklistSections",
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
-      "line": 168,
-      "endLine": 170
+      "line": 175,
+      "endLine": 177
     },
     {
       "id": "symbol:src/shared/release-checklist.ts#renderReleaseChecklistMarkdown",
       "name": "renderReleaseChecklistMarkdown",
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
-      "line": 187,
-      "endLine": 213
+      "line": 194,
+      "endLine": 220
     },
     {
       "id": "symbol:src/shared/relic-favor-rules.ts#gainRelicFavor",
@@ -60279,6 +60335,14 @@
       "file": "src/shared/steam-achievement-api-names.ts",
       "line": 12,
       "endLine": 33
+    },
+    {
+      "id": "symbol:src/shared/steam-rich-presence-tokens.ts#RICH_PRESENCE_TOKEN_TEXT",
+      "name": "RICH_PRESENCE_TOKEN_TEXT",
+      "kind": "value",
+      "file": "src/shared/steam-rich-presence-tokens.ts",
+      "line": 14,
+      "endLine": 20
     },
     {
       "id": "symbol:src/shared/telemetry.ts#classifyTelemetryEvent",
@@ -93644,6 +93708,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/steam-rich-presence-tokens.ts->symbol:src/shared/steam-rich-presence-tokens.ts#RICH_PRESENCE_TOKEN_TEXT",
+      "source": "file:src/shared/steam-rich-presence-tokens.ts",
+      "target": "symbol:src/shared/steam-rich-presence-tokens.ts#RICH_PRESENCE_TOKEN_TEXT",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/telemetry.ts->symbol:src/shared/telemetry.ts#classifyTelemetryEvent",
       "source": "file:src/shared/telemetry.ts",
       "target": "symbol:src/shared/telemetry.ts#classifyTelemetryEvent",
@@ -115893,6 +115963,48 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/steam-partner-config.test.ts->src/shared/achievements.ts",
+      "source": "file:src/shared/steam-partner-config.test.ts",
+      "target": "file:src/shared/achievements.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/steam-partner-config.test.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/steam-partner-config.test.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/steam-partner-config.test.ts->src/shared/rich-presence.ts",
+      "source": "file:src/shared/steam-partner-config.test.ts",
+      "target": "file:src/shared/rich-presence.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/steam-partner-config.test.ts->src/shared/save-data.ts",
+      "source": "file:src/shared/steam-partner-config.test.ts",
+      "target": "file:src/shared/save-data.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/steam-partner-config.test.ts->src/shared/steam-achievement-api-names.ts",
+      "source": "file:src/shared/steam-partner-config.test.ts",
+      "target": "file:src/shared/steam-achievement-api-names.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/steam-partner-config.test.ts->src/shared/steam-rich-presence-tokens.ts",
+      "source": "file:src/shared/steam-partner-config.test.ts",
+      "target": "file:src/shared/steam-rich-presence-tokens.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/steam-rich-presence-tokens.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/steam-rich-presence-tokens.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/telemetry.test.ts->src/shared/telemetry.ts",
       "source": "file:src/shared/telemetry.test.ts",
       "target": "file:src/shared/telemetry.ts",
@@ -125107,6 +125219,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/achievements.ts->file:src/shared/steam-partner-config.test.ts",
+      "source": "file:src/shared/achievements.ts",
+      "target": "file:src/shared/steam-partner-config.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/balance-simulation.ts->file:src/shared/balance-simulation.test.ts",
       "source": "file:src/shared/balance-simulation.ts",
       "target": "file:src/shared/balance-simulation.test.ts",
@@ -126580,6 +126698,12 @@
       "id": "tested_by:src/shared/contracts.ts->file:src/shared/starting-loadouts.test.ts",
       "source": "file:src/shared/contracts.ts",
       "target": "file:src/shared/starting-loadouts.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/contracts.ts->file:src/shared/steam-partner-config.test.ts",
+      "source": "file:src/shared/contracts.ts",
+      "target": "file:src/shared/steam-partner-config.test.ts",
       "kind": "tested_by"
     },
     {
@@ -128485,6 +128609,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/rich-presence.ts->file:src/shared/steam-partner-config.test.ts",
+      "source": "file:src/shared/rich-presence.ts",
+      "target": "file:src/shared/steam-partner-config.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/risk-wager-rules.ts->file:src/shared/risk-wager-rules.test.ts",
       "source": "file:src/shared/risk-wager-rules.ts",
       "target": "file:src/shared/risk-wager-rules.test.ts",
@@ -129193,6 +129323,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/save-data.ts->file:src/shared/steam-partner-config.test.ts",
+      "source": "file:src/shared/save-data.ts",
+      "target": "file:src/shared/steam-partner-config.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/save-location.ts->file:src/shared/release-checklist.test.ts",
       "source": "file:src/shared/save-location.ts",
       "target": "file:src/shared/release-checklist.test.ts",
@@ -129376,6 +129512,18 @@
       "id": "tested_by:src/shared/steam-achievement-api-names.ts->file:src/shared/release-checklist.test.ts",
       "source": "file:src/shared/steam-achievement-api-names.ts",
       "target": "file:src/shared/release-checklist.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/steam-achievement-api-names.ts->file:src/shared/steam-partner-config.test.ts",
+      "source": "file:src/shared/steam-achievement-api-names.ts",
+      "target": "file:src/shared/steam-partner-config.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/steam-rich-presence-tokens.ts->file:src/shared/steam-partner-config.test.ts",
+      "source": "file:src/shared/steam-rich-presence-tokens.ts",
+      "target": "file:src/shared/steam-partner-config.test.ts",
       "kind": "tested_by"
     },
     {

@@ -73,6 +73,13 @@ export const RELEASE_CHECKLIST: readonly ReleaseChecklistItem[] = [
         section: 'Steamworks'
     },
     {
+        evidence: 'scripts/steam-partner-config.ts',
+        id: 'partner-rows-derived',
+        label: 'The Partner-site rows are generated from what the game awards and broadcasts',
+        owner: 'repo',
+        section: 'Steamworks'
+    },
+    {
         evidence: 'scripts/store-action-reachability.ts',
         id: 'store-reachability',
         label: 'No player-facing state or action is left with nothing able to reach it',
@@ -96,14 +103,14 @@ export const RELEASE_CHECKLIST: readonly ReleaseChecklistItem[] = [
     {
         id: 'achievements-on-partner-site',
         label: 'The 20 achievement API names exist on the Partner site',
-        note: 'Stats & Achievements. The names are listed by `yarn release:checklist`.',
+        note: 'Stats & Achievements. `yarn steam:partner-config` prints the rows, titles and descriptions to paste.',
         owner: 'person',
         section: 'Steamworks'
     },
     {
         id: 'rich-presence-tokens',
         label: 'The `#Status_*` localization tokens are defined on the Partner site',
-        note: 'Until they exist, friends see the raw token instead of a sentence.',
+        note: '`yarn steam:partner-config` prints them. Until they exist, friends see the raw token instead of a sentence.',
         owner: 'person',
         section: 'Steamworks'
     },

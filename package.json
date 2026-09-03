@@ -86,6 +86,7 @@
         "audit:copy-locality": "tsx scripts/copy-locality.ts",
         "audit:store-reachability": "tsx scripts/store-action-reachability.ts",
         "steam:cloud-config": "tsx scripts/steam-cloud-config.ts",
+        "steam:partner-config": "tsx scripts/steam-partner-config.ts",
         "test:e2e:startup": "playwright test e2e/startup-budget.spec.ts --workers=1",
         "test:e2e:ui-fit": "playwright test e2e/ui-fit-contract.spec.ts --workers=1",
         "test:e2e:controller": "playwright test e2e/controller-navigation.spec.ts --workers=1",
