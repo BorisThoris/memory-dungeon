@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2469,
-    "codeFileCount": 945,
+    "trackedFileCount": 2471,
+    "codeFileCount": 947,
     "exportedSymbolCount": 3514,
     "contentItemCount": 63,
     "mechanicCount": 136,
     "stateFieldCount": 144,
-    "relationshipCount": 10242
+    "relationshipCount": 10254
   },
   "inventory": [
     {
@@ -2320,7 +2320,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 36714,
-      "sha256": "84bfe12d3261cbedc84818e2f30da17d831efff1a8d02d0c9b8109c8af176fc5"
+      "sha256": "a3a92c08abf7514a71c92dc38d4328feefe8a82bd59ae6e00f62f4fcc808a159"
     },
     {
       "path": "docs/UI_RETHINK_PLAN.md",
@@ -11095,6 +11095,18 @@
       "sha256": "e49cae08b92760d97fb840a30524d7a7df10778293a6a58f00720ee21bbd4ec9"
     },
     {
+      "path": "src/shared/gameplay-journal-cost.test.ts",
+      "category": "test",
+      "bytes": 2168,
+      "sha256": "7c2506f8a2c60a749f9b48f4563581d4f2a4a65633fc7fb9b76d6600d55bd6ab"
+    },
+    {
+      "path": "src/shared/gameplay-journal-trust.test.ts",
+      "category": "test",
+      "bytes": 3857,
+      "sha256": "e879893ff6f4b5b42117378f2823045b789af7b8bd6a32e3d6bf25396f54bf12"
+    },
+    {
       "path": "src/shared/gameplay-journal.test.ts",
       "category": "test",
       "bytes": 2852,
@@ -11103,8 +11115,8 @@
     {
       "path": "src/shared/gameplay-journal.ts",
       "category": "source",
-      "bytes": 3065,
-      "sha256": "dc3b1f425fdddc32e42a820e4e92b915770a98cd7294db3a44cae945b64f5e43"
+      "bytes": 4074,
+      "sha256": "4909fbfca768bfdd49c2b450d68c404c53b5c6523c5b19540c4981383e919aed"
     },
     {
       "path": "src/shared/gameplay-property-invariants.test.ts",
@@ -27829,6 +27841,8 @@
         "file:src/shared/dungeon-room-rules.test.ts",
         "file:src/shared/exploit-surface.test.ts",
         "file:src/shared/gameplay-core.test.ts",
+        "file:src/shared/gameplay-journal-cost.test.ts",
+        "file:src/shared/gameplay-journal-trust.test.ts",
         "file:src/shared/level-clear-rules.test.ts",
         "file:src/shared/match-claim-rules.test.ts",
         "file:src/shared/next-floor-run-state-rules.test.ts",
@@ -28017,6 +28031,8 @@
         "file:src/shared/gameplay-effect-transition.test.ts",
         "file:src/shared/gameplay-feedback-completeness.test.ts",
         "file:src/shared/gameplay-interaction-graph.test.ts",
+        "file:src/shared/gameplay-journal-cost.test.ts",
+        "file:src/shared/gameplay-journal-trust.test.ts",
         "file:src/shared/gameplay-journal.test.ts",
         "file:src/shared/run-summary-rules.test.ts"
       ]
@@ -28364,6 +28380,34 @@
       ]
     },
     {
+      "id": "file:src/shared/gameplay-journal-cost.test.ts",
+      "path": "src/shared/gameplay-journal-cost.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 41,
+      "imports": [
+        "file:src/shared/game.ts",
+        "file:src/shared/gameplay-core-contracts.ts",
+        "file:src/shared/gameplay-journal.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/shared/gameplay-journal-trust.test.ts",
+      "path": "src/shared/gameplay-journal-trust.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 85,
+      "imports": [
+        "file:src/shared/game.ts",
+        "file:src/shared/gameplay-core-contracts.ts",
+        "file:src/shared/gameplay-journal.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
       "id": "file:src/shared/gameplay-journal.test.ts",
       "path": "src/shared/gameplay-journal.test.ts",
       "layer": "shared",
@@ -28383,7 +28427,7 @@
       "path": "src/shared/gameplay-journal.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 90,
+      "lineCount": 110,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/gameplay-core-contracts.ts"
@@ -28398,6 +28442,8 @@
         "symbol:src/shared/gameplay-journal.ts#normalizeGameplayJournalSnapshot"
       ],
       "testedBy": [
+        "file:src/shared/gameplay-journal-cost.test.ts",
+        "file:src/shared/gameplay-journal-trust.test.ts",
         "file:src/shared/gameplay-journal.test.ts",
         "file:src/shared/run-summary-rules.test.ts"
       ]
@@ -53191,8 +53237,8 @@
       "name": "appendGameplayJournal",
       "kind": "value",
       "file": "src/shared/gameplay-journal.ts",
-      "line": 63,
-      "endLine": 79
+      "line": 80,
+      "endLine": 99
     },
     {
       "id": "symbol:src/shared/gameplay-journal.ts#GAMEPLAY_COMMAND_JOURNAL_LIMIT",
@@ -53223,24 +53269,24 @@
       "name": "getGameplayJournalSnapshot",
       "kind": "value",
       "file": "src/shared/gameplay-journal.ts",
-      "line": 59,
-      "endLine": 61
+      "line": 63,
+      "endLine": 65
     },
     {
       "id": "symbol:src/shared/gameplay-journal.ts#getGameplayJournalSummaryFields",
       "name": "getGameplayJournalSummaryFields",
       "kind": "value",
       "file": "src/shared/gameplay-journal.ts",
-      "line": 81,
-      "endLine": 89
+      "line": 101,
+      "endLine": 109
     },
     {
       "id": "symbol:src/shared/gameplay-journal.ts#normalizeGameplayJournalSnapshot",
       "name": "normalizeGameplayJournalSnapshot",
       "kind": "value",
       "file": "src/shared/gameplay-journal.ts",
-      "line": 43,
-      "endLine": 57
+      "line": 47,
+      "endLine": 61
     },
     {
       "id": "symbol:src/shared/generated/blueprintGlossaryGen.ts#BLUEPRINT_GLOSSARY",
@@ -111617,6 +111663,42 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/gameplay-journal-cost.test.ts->src/shared/game.ts",
+      "source": "file:src/shared/gameplay-journal-cost.test.ts",
+      "target": "file:src/shared/game.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/gameplay-journal-cost.test.ts->src/shared/gameplay-core-contracts.ts",
+      "source": "file:src/shared/gameplay-journal-cost.test.ts",
+      "target": "file:src/shared/gameplay-core-contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/gameplay-journal-cost.test.ts->src/shared/gameplay-journal.ts",
+      "source": "file:src/shared/gameplay-journal-cost.test.ts",
+      "target": "file:src/shared/gameplay-journal.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/gameplay-journal-trust.test.ts->src/shared/game.ts",
+      "source": "file:src/shared/gameplay-journal-trust.test.ts",
+      "target": "file:src/shared/game.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/gameplay-journal-trust.test.ts->src/shared/gameplay-core-contracts.ts",
+      "source": "file:src/shared/gameplay-journal-trust.test.ts",
+      "target": "file:src/shared/gameplay-core-contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/gameplay-journal-trust.test.ts->src/shared/gameplay-journal.ts",
+      "source": "file:src/shared/gameplay-journal-trust.test.ts",
+      "target": "file:src/shared/gameplay-journal.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/gameplay-journal.test.ts->src/shared/contracts.ts",
       "source": "file:src/shared/gameplay-journal.test.ts",
       "target": "file:src/shared/contracts.ts",
@@ -127527,6 +127609,18 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/game.ts->file:src/shared/gameplay-journal-cost.test.ts",
+      "source": "file:src/shared/game.ts",
+      "target": "file:src/shared/gameplay-journal-cost.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/game.ts->file:src/shared/gameplay-journal-trust.test.ts",
+      "source": "file:src/shared/game.ts",
+      "target": "file:src/shared/gameplay-journal-trust.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/game.ts->file:src/shared/level-clear-rules.test.ts",
       "source": "file:src/shared/game.ts",
       "target": "file:src/shared/level-clear-rules.test.ts",
@@ -127641,6 +127735,18 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/gameplay-core-contracts.ts->file:src/shared/gameplay-journal-cost.test.ts",
+      "source": "file:src/shared/gameplay-core-contracts.ts",
+      "target": "file:src/shared/gameplay-journal-cost.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/gameplay-core-contracts.ts->file:src/shared/gameplay-journal-trust.test.ts",
+      "source": "file:src/shared/gameplay-core-contracts.ts",
+      "target": "file:src/shared/gameplay-journal-trust.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/gameplay-core-contracts.ts->file:src/shared/gameplay-journal.test.ts",
       "source": "file:src/shared/gameplay-core-contracts.ts",
       "target": "file:src/shared/gameplay-journal.test.ts",
@@ -127716,6 +127822,18 @@
       "id": "tested_by:src/shared/gameplay-interaction-graph.ts->file:src/shared/gameplay-interaction-graph.test.ts",
       "source": "file:src/shared/gameplay-interaction-graph.ts",
       "target": "file:src/shared/gameplay-interaction-graph.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/gameplay-journal.ts->file:src/shared/gameplay-journal-cost.test.ts",
+      "source": "file:src/shared/gameplay-journal.ts",
+      "target": "file:src/shared/gameplay-journal-cost.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/gameplay-journal.ts->file:src/shared/gameplay-journal-trust.test.ts",
+      "source": "file:src/shared/gameplay-journal.ts",
+      "target": "file:src/shared/gameplay-journal-trust.test.ts",
       "kind": "tested_by"
     },
     {
