@@ -3,7 +3,7 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2445,
+    "trackedFileCount": 2446,
     "codeFileCount": 926,
     "exportedSymbolCount": 3477,
     "contentItemCount": 63,
@@ -2283,8 +2283,8 @@
     {
       "path": "docs/STEAM_READINESS.md",
       "category": "documentation",
-      "bytes": 9697,
-      "sha256": "03487914f001ad1033eae70fdc2522b310baa8be336f38807fbfcd1d1a8b880e"
+      "bytes": 9994,
+      "sha256": "e5eb9999e313e435249b1a6cb61448bcc469eee5655e97de9c4d9f25b4902a5e"
     },
     {
       "path": "docs/STRAY_TILE.md",
@@ -3739,6 +3739,12 @@
       "sha256": "cbcd62dd0235e45d2f51e72140566cd40c22b8b23dd87bc88d3044e90faf89b6"
     },
     {
+      "path": "e2e/startup-budget.spec.ts",
+      "category": "test",
+      "bytes": 2989,
+      "sha256": "3e9edd04fed37944eb7d77671fd5f94e49ed43e53214dafeeb92bc270709ec42"
+    },
+    {
       "path": "e2e/startup-intro-contract.spec.ts",
       "category": "test",
       "bytes": 3716,
@@ -3951,8 +3957,8 @@
     {
       "path": "package.json",
       "category": "configuration",
-      "bytes": 28015,
-      "sha256": "2c44635f88dfee4f52e6a83b76daab515fba87c5a454b603c0f9b3d8c26fc3bb"
+      "bytes": 28101,
+      "sha256": "bffca34cde4eb9eee503d754bb9a7c6a52d0fbc1045dba89754cc15e59b8520a"
     },
     {
       "path": "packages/notifications/package.json",

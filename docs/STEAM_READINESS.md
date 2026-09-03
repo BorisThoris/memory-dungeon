@@ -74,6 +74,9 @@ and is not what a colour-palette or crash-log pass should be dragging along.
   the bottom edge.
 - `yarn test:e2e:controller` (`e2e/controller-navigation.spec.ts`) — a stubbed pad against the real screens: the focus ring
   walks the menu, A opens what it lands on, the board flips a tile and the ring can leave it again.
+- `yarn test:e2e:startup` — cold load to a pressable main menu at the Steam Deck's 1280x800, plus a
+  check that nothing threw during startup. Measured against the **dev server**, so the figure is
+  several times a packaged build's and is a regression tripwire rather than a shipping load time.
 - `yarn gate:gameplay` — includes a 1000-floor endless simulation and the balance profile bounds.
 - `src/shared/floor-schedule-reachability.test.ts` and `achievement-reachability.test.ts` — the
   content census: every mutator, floor archetype, featured objective and relic must be reachable,
