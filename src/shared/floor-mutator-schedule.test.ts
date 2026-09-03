@@ -390,3 +390,40 @@ describe('floor archetype progression contract', () => {
         }
     });
 });
+
+describe('warden rotation', () => {
+    const scheduleFor = (level: number) =>
+        pickFloorScheduleEntry(42001, GAME_RULES_VERSION, level, 'endless');
+
+    it('meets all four wardens across three cycles', () => {
+        const bossFloors = Array.from({ length: ENDLESS_CYCLE_FLOOR_COUNT * 3 }, (_, index) => index + 1)
+            .map((level) => ({ level, entry: scheduleFor(level) }))
+            .filter(({ entry }) => entry.floorTag === 'boss');
+
+        // The boss floors do not move: positions 7 and 9 of every cycle, as before.
+        expect(bossFloors.map(({ level }) => level)).toEqual([7, 9, 19, 21, 31, 33]);
+
+        // Position 7 keeps its trap hall - the balance profile leans on that floor's trap
+        // budget - while position 9 rotates, so a run that reaches floor 33 has faced every
+        // warden the game defines rather than the same two.
+        expect(bossFloors.map(({ entry }) => entry.floorArchetypeId)).toEqual([
+            'trap_hall',
+            'rush_recall',
+            'trap_hall',
+            'treasure_gallery',
+            'trap_hall',
+            'spotlight_hunt'
+        ]);
+    });
+
+    it('keeps two boss floors per cycle however far a run goes', () => {
+        for (let cycle = 0; cycle < 6; cycle += 1) {
+            const levels = Array.from(
+                { length: ENDLESS_CYCLE_FLOOR_COUNT },
+                (_, index) => cycle * ENDLESS_CYCLE_FLOOR_COUNT + index + 1
+            );
+            const bosses = levels.filter((level) => scheduleFor(level).floorTag === 'boss');
+            expect(bosses, `cycle ${cycle} boss count`).toHaveLength(2);
+        }
+    });
+});

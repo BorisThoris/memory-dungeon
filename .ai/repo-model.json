@@ -10659,14 +10659,14 @@
     {
       "path": "src/shared/floor-mutator-schedule.test.ts",
       "category": "test",
-      "bytes": 16162,
-      "sha256": "d21eacae9d26959e5e12014a3c739a4338d9ec32e5fa8e7f68212325e246e910"
+      "bytes": 17799,
+      "sha256": "0815c6d275372077dad460118a24db6be4a396ba49581a6a0d2051f1ded2055f"
     },
     {
       "path": "src/shared/floor-mutator-schedule.ts",
       "category": "source",
-      "bytes": 22597,
-      "sha256": "981b5a50b4fe730374865ce72eff597484dfb9bb1ea7870e91087f75a3caf5a2"
+      "bytes": 23951,
+      "sha256": "e4ae68df21f38b702ba22a709af5b21a68943df8e841b9e261ec8722c68f89b6"
     },
     {
       "path": "src/shared/focusDimmedTileIds.test.ts",
@@ -26335,7 +26335,7 @@
       "path": "src/shared/floor-mutator-schedule.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 393,
+      "lineCount": 430,
       "imports": [
         "file:src/shared/board-generation.ts",
         "file:src/shared/contracts.ts",
@@ -26349,7 +26349,7 @@
       "path": "src/shared/floor-mutator-schedule.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 599,
+      "lineCount": 623,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/rng.ts",
@@ -48230,56 +48230,56 @@
       "name": "getFeaturedObjectiveLabel",
       "kind": "value",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 532,
-      "endLine": 533
+      "line": 551,
+      "endLine": 552
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#getFloorArchetypeDefinition",
       "name": "getFloorArchetypeDefinition",
       "kind": "value",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 528,
-      "endLine": 530
+      "line": 547,
+      "endLine": 549
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#getFloorArchetypeProgressionReport",
       "name": "getFloorArchetypeProgressionReport",
       "kind": "value",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 484,
-      "endLine": 526
+      "line": 503,
+      "endLine": 545
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#getFloorArchetypeProgressionRows",
       "name": "getFloorArchetypeProgressionRows",
       "kind": "value",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 479,
-      "endLine": 482
+      "line": 498,
+      "endLine": 501
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#getFloorChapterIdentity",
       "name": "getFloorChapterIdentity",
       "kind": "value",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 535,
-      "endLine": 568
+      "line": 554,
+      "endLine": 587
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#pickFloorScheduleEntry",
       "name": "pickFloorScheduleEntry",
       "kind": "value",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 574,
-      "endLine": 595
+      "line": 593,
+      "endLine": 619
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#usesEndlessFloorSchedule",
       "name": "usesEndlessFloorSchedule",
       "kind": "value",
       "file": "src/shared/floor-mutator-schedule.ts",
-      "line": 597,
-      "endLine": 598
+      "line": 621,
+      "endLine": 622
     },
     {
       "id": "symbol:src/shared/focusDimmedTileIds.ts#computeFocusDimmedTileIds",

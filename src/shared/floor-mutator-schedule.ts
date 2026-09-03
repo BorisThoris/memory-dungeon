@@ -197,11 +197,11 @@ export const CHAPTER_ACT_BIOME_STRUCTURE: readonly ChapterActBiomeDefinition[] =
         lastCycleFloor: 12,
         biomeId: 'spire_convergence',
         biomeTitle: 'Spire Convergence',
-        biomeTone: 'Boss recall, treasure reset, parasite sustain, and spotlight finale.',
+        biomeTone: 'A second warden, treasure reset, parasite sustain, and spotlight finale.',
         paletteHook: 'spire_prismatic_alarm',
         audioHook: 'spire_recall_alarm',
-        pressureCue: 'Boss recall and sustain pressure frame the final spotlight read.',
-        routePreview: 'Expect boss recall, a treasure reset, parasite sustain, then spotlight rotation.',
+        pressureCue: 'The cycle\'s second warden and sustain pressure frame the final read.',
+        routePreview: 'Expect a second warden, a treasure reset, parasite sustain, then spotlight rotation.',
         gateRule: 'Floors 9-12 of each endless cycle.'
     }
 ] as const;
@@ -370,6 +370,25 @@ const ENDLESS_FLOOR_CYCLE: FloorScheduleEntry[] = [
     makeEntry(11, 'parasite_tithe', 'scholar_style', ['score_parasite'], 'normal'),
     makeEntry(12, 'spotlight_hunt', 'cursed_last', ['shifting_spotlight'], 'normal')
 ];
+
+/**
+ * The warden rotation.
+ *
+ * The cycle keeps both boss floors where they are, and the trap hall at position 7 keeps its
+ * warden: the balance profile leans on that floor's trap budget for how a greedy run heals,
+ * and swapping it pushed low-life floors from a third of a run to nearly half. Position 9 is
+ * the one that rotates, so a run meets the Rush Sentinel, then the Gilded Keeper, then the
+ * Mnemonist Observer across three cycles. `dungeonBossForFloor` reads the archetype, so each
+ * warden arrives on the floor its pattern was written for - guard on treasure and locks,
+ * observe on encounters. Two of these wardens were fully written and unreachable before.
+ */
+const POSITION_NINE_WARDEN_ROTATION: readonly FloorScheduleEntry[] = [
+    makeEntry(9, 'rush_recall', 'flip_par', ['short_memorize', 'wide_recall'], 'boss'),
+    makeEntry(9, 'treasure_gallery', 'glass_witness', ['findables_floor'], 'boss'),
+    makeEntry(9, 'spotlight_hunt', 'flip_par', ['shifting_spotlight'], 'boss')
+];
+
+const BOSS_ROTATION_CYCLE_POSITION = 9;
 
 const DEFAULT_ENDLESS_FLOOR_ENTRY = ENDLESS_FLOOR_CYCLE[0] ?? EMPTY_FLOOR_SCHEDULE_ENTRY;
 
@@ -582,7 +601,12 @@ export const pickFloorScheduleEntry = (
     }
     const safeLevel = runNonNegativeIntegerWithFallback(level, 1);
     const idx = Math.max(0, safeLevel - 1) % ENDLESS_FLOOR_CYCLE.length;
-    const base = ENDLESS_FLOOR_CYCLE[idx] ?? DEFAULT_ENDLESS_FLOOR_ENTRY;
+    const cycleIndex = Math.floor(Math.max(0, safeLevel - 1) / ENDLESS_FLOOR_CYCLE.length);
+    const rotated =
+        idx + 1 === BOSS_ROTATION_CYCLE_POSITION
+            ? POSITION_NINE_WARDEN_ROTATION[cycleIndex % POSITION_NINE_WARDEN_ROTATION.length]
+            : undefined;
+    const base = rotated ?? ENDLESS_FLOOR_CYCLE[idx] ?? DEFAULT_ENDLESS_FLOOR_ENTRY;
     const rng = createMulberry32(hashStringToSeed(`floorSchedule:${rulesVersion}:${runSeed}:${level}`));
     /** Optional micro-variation: swap in distraction_channel on ~1/4 boss floors (seeded). */
     if (base.floorTag === 'boss' && rng() < 0.25) {
