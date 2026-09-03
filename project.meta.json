@@ -1,0 +1,357 @@
+{
+  "$schema": "./scripts/project.meta.schema.json",
+  "schemaVersion": 1,
+  "generatedAt": "2026-09-03T20:39:07.342Z",
+  "generatedBy": "scripts/generate-project-meta.mjs",
+  "identity": {
+    "slug": "memory-dungeon",
+    "repoName": "memory-dungeon",
+    "packageName": "memory-dungeon",
+    "version": "1.0.0",
+    "title": "Memory Dungeon",
+    "subtitle": "Steam-focused memory roguelite",
+    "description": "A Windows-first arcade rebuild with run modes, relics, procedural boards, local saves, Electron shell, and polished long-run gameplay feedback.",
+    "tags": [
+      "React",
+      "Three.js",
+      "Electron",
+      "TypeScript"
+    ],
+    "accent": "#f59e0b",
+    "classification": "web-app",
+    "showcaseTier": "showcase",
+    "showcaseOrder": 2
+  },
+  "links": {
+    "deploymentUrl": "https://memory-dungeon-git.pages.dev/",
+    "localUrl": "http://127.0.0.1:4102/",
+    "repository": "https://github.com/BorisThoris/memory-dungeon"
+  },
+  "runtime": {
+    "packageManager": "yarn",
+    "nodeEngine": ">=22.9.0",
+    "buildCommand": "yarn build:cloudflare",
+    "buildOutput": "dist",
+    "runCommand": "yarn dev:renderer --host 127.0.0.1 --port 4102",
+    "devPort": 4102,
+    "scripts": [
+      "dev",
+      "dev:renderer",
+      "demo:browser",
+      "portfolio:smoke",
+      "dev:electron:watch",
+      "dev:electron",
+      "build",
+      "build:cloudflare",
+      "build:renderer",
+      "build:renderer:sourcemap",
+      "analyze:bundle",
+      "build:renderer:locked-dist",
+      "build:renderer:alt-out",
+      "build:electron",
+      "build:electron:sourcemap",
+      "clean",
+      "typecheck",
+      "typecheck:shared",
+      "graph:project",
+      "graph:systems",
+      "blueprint:codegen",
+      "lint",
+      "verify",
+      "ci",
+      "depcheck",
+      "knip",
+      "knip:exports",
+      "knip:production",
+      "gate:package-hygiene",
+      "audit:bundle",
+      "audit:dungeon-topology",
+      "audit:dungeon-topology:json",
+      "audit:dungeon-topology:gate",
+      "audit:dungeon-topology:stress",
+      "audit:renderer-assets",
+      "audit:summary",
+      "fullcheck",
+      "gate:action-loop",
+      "gate:rewards-economy",
+      "gate:navigation",
+      "gate:systems",
+      "gate:security",
+      "gate:build-output",
+      "gate:desktop-build",
+      "gate:changed",
+      "gate:sim-health",
+      "gate:sim-softlock-seeds",
+      "gate:sim-softlock-stress",
+      "gate:softlock-full",
+      "gate:persistence",
+      "gate:renderer-input",
+      "gate:audio-feedback",
+      "gate:asset-rendering",
+      "gate:gameplay",
+      "gate:long-run",
+      "gate:readability-long-run",
+      "gate:long-run-ui-feedback",
+      "sim:endless",
+      "test",
+      "test:gameplay:properties",
+      "test:gameplay:properties:long",
+      "test:watch",
+      "test:e2e",
+      "test:e2e:demo-readiness",
+      "test:e2e:blueprint",
+      "test:e2e:illustration-regression",
+      "test:e2e:a11y",
+      "test:e2e:visual",
+      "test:e2e:visual:device-grid",
+      "test:e2e:visual:device-grid:shard1",
+      "test:e2e:visual:device-grid:shard2",
+      "test:e2e:visual:device-grid:shard3",
+      "test:e2e:visual:device-grid:shard4",
+      "test:e2e:visual:smoke",
+      "test:e2e:visual:smoke:shard1",
+      "test:e2e:visual:smoke:shard2",
+      "test:e2e:visual:smoke:shard3",
+      "test:e2e:mobile-layout",
+      "test:e2e:playable-path:audit",
+      "test:e2e:playable-path:readability",
+      "test:e2e:board-3d-value",
+      "test:e2e:browser-smoke",
+      "test:e2e:browser-smoke:full",
+      "test:e2e:browser-smoke:core",
+      "test:e2e:browser-smoke:routes",
+      "test:e2e:playable-path:full",
+      "test:e2e:renderer-qa",
+      "test:e2e:renderer-qa:full",
+      "test:e2e:renderer-qa:layout",
+      "test:e2e:renderer-qa:navigation",
+      "test:e2e:renderer-qa:interludes",
+      "test:e2e:renderer-qa:3d",
+      "capture:ui-audit",
+      "capture:visual-inventory",
+      "capture:ui-design-reference",
+      "capture:endproduct-parity",
+      "capture:matched-flame",
+      "capture:gameplay-audit",
+      "benchmark:illustration-regression",
+      "docs:ui-audit",
+      "docs:visual-inventory",
+      "docs:mechanics-appendix",
+      "docs:system-diagrams",
+      "docs:system-diagrams:check",
+      "assets:choose-path-bg",
+      "assets:ui-backgrounds:export-runtime-webp",
+      "wip:extract-endproduct",
+      "wip:extract-endproduct:react",
+      "wip:extract-endproduct:png-only",
+      "imagegen",
+      "card-backs:local",
+      "card-backs:local:dry",
+      "face-panels:local",
+      "face-panels:local:dry",
+      "face-panels:export-runtime-webp",
+      "card-normals:export-runtime-webp",
+      "audio:ace-step:batch",
+      "audio:ace-step:batch:dry",
+      "audio:ace-step:smoke",
+      "audio:ace-step:hybrid",
+      "audio:ace-step:hybrid:dry",
+      "audio:ace-step:app",
+      "audio:ace-step:app:wav",
+      "audio:ace-step:app:high",
+      "audio:ace-step:app:max",
+      "audio:ace-step:app:hq-variants",
+      "audio:ace-step:app:max-variants",
+      "audio:ace-step:app:variants",
+      "audio:ace-step:app:dry",
+      "audio:install:ace-app-outputs",
+      "audio:placeholders",
+      "audio:export-runtime-ogg",
+      "audio:materialize-references",
+      "audio:materialize-references-from-pack",
+      "audio:apply-reference-coverage",
+      "audio:prep-ace-app",
+      "gen:face-panel-raster-urls",
+      "card-texture:ideal",
+      "card-texture:ai-brief",
+      "capture:ui-vs-assets",
+      "png:trim-bbox",
+      "optimize:card-front",
+      "generate:card-plates",
+      "build:card-illustration-manifest",
+      "regenerate:illustration-regression",
+      "bake:procedural-set",
+      "test:e2e:ui",
+      "package:dir",
+      "package:win",
+      "postinstall",
+      "meta",
+      "meta:check"
+    ]
+  },
+  "capture": {
+    "route": "/",
+    "waitAfterReadyMs": 2200
+  },
+  "media": {
+    "source": "portfolio-capture",
+    "directory": "C:/Users/Gaming PC/Desktop/Repos/portfolio/public/project-shots/memory-dungeon/latest",
+    "primary": "/project-shots/memory-dungeon/latest/card.jpg",
+    "images": [
+      {
+        "profile": "card",
+        "file": "card.jpg",
+        "path": "/project-shots/memory-dungeon/latest/card.jpg",
+        "bytes": 153615,
+        "width": 1600,
+        "height": 900,
+        "capturedAt": "2026-08-27T12:09:51.356Z"
+      },
+      {
+        "profile": "desktop",
+        "file": "desktop.jpg",
+        "path": "/project-shots/memory-dungeon/latest/desktop.jpg",
+        "bytes": 143595,
+        "width": 1440,
+        "height": 900,
+        "capturedAt": "2026-08-27T12:10:00.960Z"
+      },
+      {
+        "profile": "full",
+        "file": "full.jpg",
+        "path": "/project-shots/memory-dungeon/latest/full.jpg",
+        "bytes": 114558,
+        "width": 1440,
+        "height": 900,
+        "capturedAt": "2026-08-27T12:10:17.984Z"
+      },
+      {
+        "profile": "main",
+        "file": "main.png",
+        "path": "/project-shots/memory-dungeon/main.png",
+        "bytes": 1645171,
+        "width": 1249,
+        "height": 1225,
+        "capturedAt": "2026-05-18T12:09:34.715Z"
+      },
+      {
+        "profile": "mobile",
+        "file": "mobile.jpg",
+        "path": "/project-shots/memory-dungeon/latest/mobile.jpg",
+        "bytes": 35643,
+        "width": 430,
+        "height": 932,
+        "capturedAt": "2026-08-27T12:10:09.070Z"
+      }
+    ]
+  },
+  "stack": {
+    "framework": "React Three Fiber",
+    "language": "TypeScript",
+    "runtimeTargets": [
+      "web",
+      "desktop-electron"
+    ],
+    "libraries": [
+      {
+        "name": "react",
+        "version": "19.2.4"
+      },
+      {
+        "name": "react-dom",
+        "version": "19.2.4"
+      },
+      {
+        "name": "zustand",
+        "version": "5.0.12"
+      },
+      {
+        "name": "three",
+        "version": "^0.183.2"
+      },
+      {
+        "name": "@react-three/fiber",
+        "version": "^9.5.0"
+      },
+      {
+        "name": "pixi.js",
+        "version": "8.17.1"
+      },
+      {
+        "name": "vite",
+        "version": "6.4.3"
+      },
+      {
+        "name": "electron",
+        "version": "41.1.0"
+      },
+      {
+        "name": "typescript",
+        "version": "6.0.2"
+      },
+      {
+        "name": "zod",
+        "version": "^4.4.3"
+      }
+    ],
+    "testing": [
+      "vitest",
+      "@playwright/test",
+      "@testing-library/react"
+    ],
+    "dependencyCount": 13,
+    "devDependencyCount": 49
+  },
+  "metrics": {
+    "sourceFiles": 1061,
+    "testFiles": 420,
+    "sourceLines": 327652,
+    "largestDirectories": [
+      {
+        "directory": "src",
+        "files": 938
+      },
+      {
+        "directory": "e2e",
+        "files": 45
+      },
+      {
+        "directory": "scripts",
+        "files": 45
+      },
+      {
+        "directory": "packages",
+        "files": 14
+      },
+      {
+        "directory": "dist-build",
+        "files": 9
+      }
+    ],
+    "hasReadme": true,
+    "hasTests": true,
+    "hasCi": false,
+    "hasDocs": true
+  },
+  "scores": {
+    "priorityScore": 94,
+    "demoabilityScore": 94,
+    "depthScore": 97,
+    "polishScore": 92,
+    "uniquenessScore": 95,
+    "maintenanceScore": 90
+  },
+  "analysisNotes": "Deep game project with renderer build, Electron path, visual/gameplay gates, assets, and stable local/deployed demo flow.",
+  "git": {
+    "branch": "codex/milestone-meter-feedback",
+    "head": "0e98765",
+    "lastCommitDate": "2026-08-18T17:31:02+03:00",
+    "lastCommitSubject": "Decompose gameplay HUD and tile board feedback surfaces",
+    "commitCount": 899,
+    "remote": "https://github.com/BorisThoris/memory-dungeon.git"
+  },
+  "readme": {
+    "file": "README.md",
+    "heading": "Memory Dungeon"
+  }
+}
