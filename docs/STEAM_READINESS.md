@@ -52,6 +52,7 @@ What was fixed, and why each mattered:
 | `**/fast-uri` -> 3.1.7 | Six advisories via `electron-store > conf > ajv`, which validates the save file. 3.1.4 patches them and stays inside ajv's `^3.0.1`, so no major bump. |
 | `**/@xmldom/xmldom` -> 0.8.15 | Reached the renderer through `pixi.js`. Patch-level move inside 0.8.x. |
 | `axios` resolution 1.16.0 -> 1.20.0 | Nine advisories. The pin was added to fix an older one and had become the thing holding the fix back. |
+| `**/fflate` -> 0.8.3 | Appeared upstream under `@types/three` after the baseline was set, and the ratchet caught it. Types-only, so it never shipped; fixed rather than absorbed into a higher baseline. |
 | wait-on 9.0.4 -> 9.1.0 | Dev-only; its newer range wants the patched axios. |
 
 The 30 that remain all sit under `eslint`, `vite`, `electron-builder`, `depcheck`, `concurrently`,

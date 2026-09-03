@@ -3957,8 +3957,8 @@
     {
       "path": "package.json",
       "category": "configuration",
-      "bytes": 28164,
-      "sha256": "3bc5b68ee1e491f99582e61ad207080f588acd4ad17864068e80e96604bd4aa6"
+      "bytes": 28194,
+      "sha256": "d047fb7d9c93d57423c6d4ee341fa4b100fa2325293fc810b8463ce76c04a464"
     },
     {
       "path": "packages/notifications/package.json",
@@ -14703,8 +14703,8 @@
     {
       "path": "yarn.lock",
       "category": "other",
-      "bytes": 311961,
-      "sha256": "cf005e9cb4203c9cf55a23592b4e9b25810aa5e5abb606636765b5206cc207cd"
+      "bytes": 311975,
+      "sha256": "f0c3d3a1507e8f47e3faf20065b6178b5515836abc33f710ab9de83f50b713b0"
     }
   ],
   "files": [
