@@ -3,7 +3,7 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2415,
+    "trackedFileCount": 2416,
     "codeFileCount": 900,
     "exportedSymbolCount": 3382,
     "contentItemCount": 57,
@@ -3939,8 +3939,8 @@
     {
       "path": "package.json",
       "category": "configuration",
-      "bytes": 27664,
-      "sha256": "89e3f23426bb887c52bd9969fcfbaacded84366ea91e5fb11f38ff95b0b76793"
+      "bytes": 27762,
+      "sha256": "9d006dfde7899bde1f81297e9b81ca3b89e1129692ae1aaea4442ae42258e420"
     },
     {
       "path": "packages/notifications/package.json",
@@ -4463,6 +4463,12 @@
       "category": "script",
       "bytes": 1694,
       "sha256": "2e9f164d7b9462a5035475ac5d0b6717615cc7f05da82b8ea21f3426185a4efd"
+    },
+    {
+      "path": "scripts/check-module-graph-entry.ts",
+      "category": "script",
+      "bytes": 2085,
+      "sha256": "50f9b3868b054da27fa73ae1cb7917a0b9cf611ef5ac2e2cf7f45fb65159544a"
     },
     {
       "path": "scripts/check-renderer-bundle-budget.mjs",
@@ -11823,8 +11829,8 @@
     {
       "path": "src/shared/save-data.ts",
       "category": "source",
-      "bytes": 32847,
-      "sha256": "4052a237c23b45fa724581e4f65540cee4e8f44a60fafea6890b4adf04648121"
+      "bytes": 33557,
+      "sha256": "4c81ae27c53bf759ffc82a9bdf6b05f33557b27d43be9f302f26bdcabe3431d0"
     },
     {
       "path": "src/shared/score-parasite-rules.test.ts",
@@ -30827,7 +30833,7 @@
       "path": "src/shared/save-data.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 796,
+      "lineCount": 811,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/cosmetic-ids.ts",
@@ -56974,8 +56980,8 @@
       "name": "createDefaultSaveData",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 441,
-      "endLine": 452
+      "line": 456,
+      "endLine": 467
     },
     {
       "id": "symbol:src/shared/save-data.ts#DailyStreakEthicsState",
@@ -57006,136 +57012,136 @@
       "name": "getDailyStreakEthicsState",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 705,
-      "endLine": 727
+      "line": 720,
+      "endLine": 742
     },
     {
       "id": "symbol:src/shared/save-data.ts#getRelicPickCountRows",
       "name": "getRelicPickCountRows",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 209,
-      "endLine": 215
+      "line": 224,
+      "endLine": 230
     },
     {
       "id": "symbol:src/shared/save-data.ts#getRelicPickTotal",
       "name": "getRelicPickTotal",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 217,
-      "endLine": 218
+      "line": 232,
+      "endLine": 233
     },
     {
       "id": "symbol:src/shared/save-data.ts#mergeBestFloorNoPowers",
       "name": "mergeBestFloorNoPowers",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 763,
-      "endLine": 774
+      "line": 778,
+      "endLine": 789
     },
     {
       "id": "symbol:src/shared/save-data.ts#mergeDailyComplete",
       "name": "mergeDailyComplete",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 683,
-      "endLine": 703
+      "line": 698,
+      "endLine": 718
     },
     {
       "id": "symbol:src/shared/save-data.ts#mergeEncoreFromRun",
       "name": "mergeEncoreFromRun",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 776,
-      "endLine": 783
+      "line": 791,
+      "endLine": 798
     },
     {
       "id": "symbol:src/shared/save-data.ts#mergePuzzleCompletion",
       "name": "mergePuzzleCompletion",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 729,
-      "endLine": 761
+      "line": 744,
+      "endLine": 776
     },
     {
       "id": "symbol:src/shared/save-data.ts#mergeRelicPickStat",
       "name": "mergeRelicPickStat",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 785,
-      "endLine": 795
+      "line": 800,
+      "endLine": 810
     },
     {
       "id": "symbol:src/shared/save-data.ts#metaRelicDraftExtraPerMilestoneFromSave",
       "name": "metaRelicDraftExtraPerMilestoneFromSave",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 438,
-      "endLine": 439
+      "line": 453,
+      "endLine": 454
     },
     {
       "id": "symbol:src/shared/save-data.ts#normalizeRunSummary",
       "name": "normalizeRunSummary",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 338,
-      "endLine": 435
+      "line": 353,
+      "endLine": 450
     },
     {
       "id": "symbol:src/shared/save-data.ts#normalizeSaveData",
       "name": "normalizeSaveData",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 637,
-      "endLine": 681
+      "line": 652,
+      "endLine": 696
     },
     {
       "id": "symbol:src/shared/save-data.ts#normalizeUnknownSaveData",
       "name": "normalizeUnknownSaveData",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 605,
-      "endLine": 608
+      "line": 620,
+      "endLine": 623
     },
     {
       "id": "symbol:src/shared/save-data.ts#normalizeUnknownSaveDataOrThrow",
       "name": "normalizeUnknownSaveDataOrThrow",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 610,
-      "endLine": 622
+      "line": 625,
+      "endLine": 637
     },
     {
       "id": "symbol:src/shared/save-data.ts#normalizeUnknownSettings",
       "name": "normalizeUnknownSettings",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 624,
-      "endLine": 627
+      "line": 639,
+      "endLine": 642
     },
     {
       "id": "symbol:src/shared/save-data.ts#normalizeUnknownSettingsOrThrow",
       "name": "normalizeUnknownSettingsOrThrow",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 629,
-      "endLine": 635
+      "line": 644,
+      "endLine": 650
     },
     {
       "id": "symbol:src/shared/save-data.ts#RelicPickCountRow",
       "name": "RelicPickCountRow",
       "kind": "interface",
       "file": "src/shared/save-data.ts",
-      "line": 204,
-      "endLine": 207
+      "line": 219,
+      "endLine": 222
     },
     {
       "id": "symbol:src/shared/save-data.ts#saveDataBoundarySchema",
       "name": "saveDataBoundarySchema",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 484,
-      "endLine": 498
+      "line": 499,
+      "endLine": 513
     },
     {
       "id": "symbol:src/shared/save-data.ts#SETTINGS_NUMERIC_RANGES",
@@ -57150,8 +57156,8 @@
       "name": "settingsBoundarySchema",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 460,
-      "endLine": 480
+      "line": 475,
+      "endLine": 495
     },
     {
       "id": "symbol:src/shared/score-parasite-rules.ts#advanceScoreParasiteFloor",

@@ -124,7 +124,22 @@ const defaultPlayerStats = (): PlayerStatsPersisted => ({
 });
 
 const ACHIEVEMENT_ID_SET: ReadonlySet<string> = new Set(ACHIEVEMENT_IDS);
-const RELIC_ID_SET: ReadonlySet<string> = new Set(RELIC_POOL);
+/*
+ * Read RELIC_POOL when a save is first validated, not while this module is evaluating.
+ *
+ * `relics` reaches this file through nine hops - trait-build-rewards, tile-trait-rules,
+ * bonus-rewards, gameplay-core, board-turn-event-facts, turn-resolution, game and
+ * run-summary-rules - so any entry point that loads `relics` first used to evaluate this
+ * module before that one finished and die on `Cannot access 'RELIC_POOL' before
+ * initialization`. The renderer only survived because it happened to enter the graph
+ * somewhere else; a script, a test or a new chunk order did not.
+ */
+let relicIdSet: ReadonlySet<string> | null = null;
+
+const getRelicIdSet = (): ReadonlySet<string> => {
+    relicIdSet ??= new Set<string>(RELIC_POOL);
+    return relicIdSet;
+};
 const MUTATOR_ID_SET: ReadonlySet<string> = new Set(MUTATOR_IDS);
 const GAME_MODE_SET: ReadonlySet<string> = new Set(['endless', 'daily', 'puzzle', 'gauntlet', 'meditation']);
 const STARTING_LOADOUT_ID_SET: ReadonlySet<string> = new Set([
@@ -161,7 +176,7 @@ const isMutatorId = (value: unknown): value is MutatorId =>
     typeof value === 'string' && MUTATOR_ID_SET.has(value);
 
 const isRelicId = (value: unknown): value is RelicId =>
-    typeof value === 'string' && RELIC_ID_SET.has(value);
+    typeof value === 'string' && getRelicIdSet().has(value);
 
 const isStartingLoadoutId = (value: unknown): value is StartingLoadoutId =>
     typeof value === 'string' && STARTING_LOADOUT_ID_SET.has(value);
