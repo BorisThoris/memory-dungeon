@@ -459,3 +459,57 @@
         display: none;
     }
 }
+
+/*
+ * A phone held sideways gave this screen 375px of height, and it spent all of it on the
+ * header: the recommended panel was sliced to a 25px sliver and the mode grid started
+ * below the bottom edge, so there was no way to start a run at all. The width is there, so
+ * the recommended run and the browse grid sit side by side and the header states its title
+ * once, without the sentence that explains what the two halves already show.
+ */
+@media (max-height: 560px) and (min-width: 700px) {
+    .column {
+        display: grid;
+        grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+        grid-template-rows: auto minmax(0, 1fr);
+        align-content: start;
+        gap: 0.5rem 1rem;
+        padding: 0.6rem clamp(0.8rem, 2.5vw, 1.4rem) 0.7rem;
+    }
+
+    .header {
+        grid-column: 1 / -1;
+    }
+
+    .subtitle {
+        display: none;
+    }
+
+    .title {
+        font-size: clamp(1.4rem, 3.4vw, 2rem);
+    }
+
+    .launch {
+        grid-column: 1;
+        min-height: 0;
+    }
+
+    .browse {
+        grid-column: 2;
+        min-height: 0;
+    }
+
+    /*
+     * A browse card is a picker here: the kicker and the name identify the mode, and its
+     * description is one click away in the detail panel. Printing it in a 150px row only
+     * cut it off mid-sentence.
+     */
+    .cardDescription {
+        display: none;
+    }
+
+    .footnote {
+        grid-column: 1 / -1;
+        margin: 0;
+    }
+}

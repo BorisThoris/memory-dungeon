@@ -3789,8 +3789,8 @@
     {
       "path": "e2e/ui-fit-contract.spec.ts",
       "category": "test",
-      "bytes": 9765,
-      "sha256": "aca4bce6ae0c5f14810decdd5bc3867340a5b7399a5abbb71315d84f230919c1"
+      "bytes": 11011,
+      "sha256": "5c017304e184496b10d3febcc78ab796e59c45b39c6a864c77a3af16766b06e9"
     },
     {
       "path": "e2e/ui-redesign-capture.spec.ts",
@@ -7347,8 +7347,8 @@
     {
       "path": "src/renderer/components/ChooseYourPathScreen.module.css",
       "category": "source",
-      "bytes": 9893,
-      "sha256": "72d5c4290286513952d87762dc82a9330b31c744067710d6b0214172fb2d1eac"
+      "bytes": 11320,
+      "sha256": "e628eca387a071f62afa0dfc3a8024deffc1f491904872c3930f289b355e27bc"
     },
     {
       "path": "src/renderer/components/ChooseYourPathScreen.test.tsx",
@@ -7383,8 +7383,8 @@
     {
       "path": "src/renderer/components/CodexScreen.tsx",
       "category": "source",
-      "bytes": 11874,
-      "sha256": "f08239e88f019d91d797b7de617edfcad9165050022d76a24264db479d645302"
+      "bytes": 11963,
+      "sha256": "3076374a969de8a028a600660eb73e55d118128416a8b0dbdf664c42e12ef9f5"
     },
     {
       "path": "src/renderer/components/codexScreenModel.test.ts",
@@ -7485,8 +7485,8 @@
     {
       "path": "src/renderer/components/GameScreen.module.css",
       "category": "source",
-      "bytes": 40918,
-      "sha256": "c558bfd04c11ca1f06112a5bd41ff4c14e71b9db20fc732103847171287589bb"
+      "bytes": 41371,
+      "sha256": "0e8c4842021fbf36d5f2168ddfc8e5d82ea4275baae4f6dfac1e9e2bb69f91cf"
     },
     {
       "path": "src/renderer/components/GameScreen.test.tsx",
@@ -7515,8 +7515,8 @@
     {
       "path": "src/renderer/components/InventoryScreen.module.css",
       "category": "source",
-      "bytes": 3526,
-      "sha256": "a8bffc3fe01a30353026cc80930c98c471292dd3291775970ff254570da206f3"
+      "bytes": 4817,
+      "sha256": "0cad919328cc8588e11dc39a32fe344a24e358756c0c30842b0b70896c56b2eb"
     },
     {
       "path": "src/renderer/components/InventoryScreen.test.tsx",
@@ -7683,8 +7683,8 @@
     {
       "path": "src/renderer/components/RelicDraftOffer.module.css",
       "category": "source",
-      "bytes": 5028,
-      "sha256": "4463dc1be149a940989cd82086b8eb44f3ac4d886e5b14a26675d0479b1ef182"
+      "bytes": 6277,
+      "sha256": "884488c04d636b9e695aa7a950d57a68b92d4b5d24fc2c186b98c37eadc8eca2"
     },
     {
       "path": "src/renderer/components/RelicDraftOfferPanel.test.tsx",
@@ -16412,7 +16412,7 @@
       "path": "src/renderer/components/CodexScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 263,
+      "lineCount": 264,
       "imports": [
         "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/components/codexScreenModel.ts",
@@ -34687,8 +34687,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/CodexScreen.tsx",
-      "line": 262,
-      "endLine": 262
+      "line": 263,
+      "endLine": 263
     },
     {
       "id": "symbol:src/renderer/components/codexScreenModel.ts#buildCodexBuildRows",

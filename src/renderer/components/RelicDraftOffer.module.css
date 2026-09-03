@@ -231,3 +231,56 @@
         display: none;
     }
 }
+
+/*
+ * Short landscape: 375px of height. Three cards side by side is right here - the width is
+ * there - but a card's flavour line and its minimum height are not: the effect is what the
+ * pick turns on, and the services row underneath is what the gold buys.
+ */
+@media (max-height: 560px) and (min-width: 700px) {
+    .panel {
+        gap: 0.35rem;
+    }
+
+    .grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.5rem;
+    }
+
+    .card {
+        min-height: 0;
+        gap: 0.2rem;
+        padding: 0.4rem 0.6rem;
+    }
+
+    .impact,
+    .build {
+        display: none;
+    }
+
+    /*
+     * "Pick one. It stays for the rest of the run." restates the panel's own heading, and at
+     * this height it was pushing the reroll, ban and upgrade offers off the page. The offers
+     * are what the gold buys, so they keep the room.
+     */
+    .footerLine {
+        display: none;
+    }
+
+    .footer {
+        gap: 0.3rem;
+    }
+
+    .services {
+        gap: 0.4rem;
+    }
+
+    /* Label and price on one line, so a 44px target costs one row rather than two. */
+    .service {
+        flex-direction: row;
+        align-items: baseline;
+        gap: 0.35rem;
+        min-height: 32px;
+        padding: 0.3rem 0.55rem;
+    }
+}

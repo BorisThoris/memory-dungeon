@@ -151,11 +151,19 @@
     color: var(--theme-text-muted);
 }
 
-@media (max-width: 860px) {
+/*
+ * Stacking is a narrow-window answer, not a small-window one: a phone held sideways is
+ * 812px wide, so the rule below used to drop the charges panel under the relics where the
+ * 375px of height had already run out. Keep the two columns when the width is there.
+ */
+@media (max-width: 860px) and (min-height: 561px) {
     .columns {
         grid-template-columns: 1fr;
         overflow: hidden;
     }
+}
+
+@media (max-width: 860px) {
 
     /* Two short columns of charges instead of one tall list. */
     .charges {
@@ -172,6 +180,44 @@
     }
 
     .cardMuted {
+        display: none;
+    }
+}
+
+/*
+ * Short landscape: 375px of height against 800 of width. What the run carries - its relics
+ * and its mutators - sits side by side and reads in full. The charge counts step aside in
+ * the in-run view only, because the action dock behind this modal already shows every one
+ * of them on the tool it belongs to; on the menu, where there is no dock, they stay.
+ */
+@media (max-height: 560px) and (min-width: 700px) {
+    .columns {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0.5rem;
+    }
+
+    .main {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        align-content: start;
+        gap: 0.5rem 0.9rem;
+    }
+
+    .section {
+        gap: 0.35rem;
+        min-width: 0;
+    }
+
+    .cards {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0.35rem;
+    }
+
+    .card {
+        padding: 0.45rem 0.6rem;
+    }
+
+    .inRunShell [data-testid='inventory-charges-panel'] {
         display: none;
     }
 }

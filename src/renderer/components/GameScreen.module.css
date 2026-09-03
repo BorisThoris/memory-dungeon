@@ -1199,3 +1199,15 @@ where that rule
     font-weight: 700;
     color: var(--theme-gold-bright);
 }
+/*
+ * Short landscape. The draft's preamble - how many picks this visit, and the footnotes about
+ * chapter alignment and banked favor - was taking 87px of a 375px window and pushing the
+ * offers themselves past the bottom edge. The modal's own subtitle already says which pick
+ * this is, so the cards and the services keep the room.
+ */
+@media (max-height: 560px) {
+    .relicDraftProgress,
+    .relicDraftBonusList {
+        display: none;
+    }
+}

@@ -58,10 +58,11 @@ const plainText = (text: string): string => text.replace(/\*\*/gu, '');
 
 /**
  * The card's line: the sentence an entry leads with, cut on a word boundary at what three
- * lines of a card actually hold. It is a summary that opens into the whole entry, not the
+ * lines hold in the narrowest card the Codex draws - the in-run desk, where the modal is
+ * tighter than the menu screen. It is a summary that opens into the whole entry, not the
  * only copy there is with its end hidden.
  */
-const CARD_SUMMARY_LIMIT = 96;
+const CARD_SUMMARY_LIMIT = 78;
 
 const summarize = (description: string): string => {
     const plain = plainText(description).trim();
