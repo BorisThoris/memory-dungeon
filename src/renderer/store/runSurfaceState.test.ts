@@ -18,7 +18,7 @@ import {
     createOrdinaryTileFlipResult,
     createPausedRunSurfacePatch,
     createPeekModeToggleResult,
-    createRegionShuffleArmSurfaceResult,
+    createRegionShuffleArmToggleSurfaceResult,
     createRegionShuffleSurfaceResult,
     createRunSurfaceReset,
     createShuffleBoardSurfaceResult,
@@ -73,7 +73,7 @@ describe('run surface state helpers', () => {
             destroyPairArmed: false,
             peekModeArmed: false,
             strayRemoveArmed: false,
-            regionShuffleRowArmed: null,
+            regionShuffleArmed: false,
             tileSwapArmed: false,
             tileSwapFirstTileId: null,
             dungeonExitPromptOpen: false,
@@ -98,7 +98,7 @@ describe('run surface state helpers', () => {
             destroyPairArmed: false,
             peekModeArmed: false,
             strayRemoveArmed: false,
-            regionShuffleRowArmed: null,
+            regionShuffleArmed: false,
             tileSwapArmed: false,
             tileSwapFirstTileId: null
         });
@@ -132,7 +132,7 @@ describe('run surface state helpers', () => {
             destroyPairArmed: false,
             peekModeArmed: false,
             strayRemoveArmed: false,
-            regionShuffleRowArmed: null,
+            regionShuffleArmed: false,
             tileSwapArmed: false,
             tileSwapFirstTileId: null
         });
@@ -145,7 +145,7 @@ describe('run surface state helpers', () => {
             destroyPairArmed: false,
             peekModeArmed: false,
             strayRemoveArmed: false,
-            regionShuffleRowArmed: null,
+            regionShuffleArmed: false,
             tileSwapArmed: false,
             tileSwapFirstTileId: null,
             ...BOARD_FLOATER_POP_CLEAR
@@ -174,7 +174,7 @@ describe('run surface state helpers', () => {
                 destroyPairArmed: false,
                 peekModeArmed: false,
                 strayRemoveArmed: false,
-                regionShuffleRowArmed: null,
+                regionShuffleArmed: false,
                 tileSwapArmed: false,
                 tileSwapFirstTileId: null
             },
@@ -194,7 +194,7 @@ describe('run surface state helpers', () => {
                 destroyPairArmed: false,
                 peekModeArmed: false,
                 strayRemoveArmed: false,
-                regionShuffleRowArmed: null,
+                regionShuffleArmed: false,
                 tileSwapArmed: false,
                 tileSwapFirstTileId: null
             },
@@ -233,7 +233,7 @@ describe('run surface state helpers', () => {
                 destroyPairArmed: true,
                 peekModeArmed: false,
                 strayRemoveArmed: false,
-                regionShuffleRowArmed: null,
+                regionShuffleArmed: false,
                 tileSwapArmed: false,
                 tileSwapFirstTileId: null
             },
@@ -253,7 +253,7 @@ describe('run surface state helpers', () => {
                 destroyPairArmed: false,
                 peekModeArmed: false,
                 strayRemoveArmed: false,
-                regionShuffleRowArmed: null,
+                regionShuffleArmed: false,
                 tileSwapArmed: false,
                 tileSwapFirstTileId: null
             },
@@ -309,7 +309,7 @@ describe('run surface state helpers', () => {
                 destroyPairArmed: false,
                 peekModeArmed: true,
                 strayRemoveArmed: false,
-                regionShuffleRowArmed: null,
+                regionShuffleArmed: false,
                 tileSwapArmed: false,
                 tileSwapFirstTileId: null,
                 run: activeRun
@@ -332,7 +332,7 @@ describe('run surface state helpers', () => {
                 destroyPairArmed: false,
                 peekModeArmed: false,
                 strayRemoveArmed: false,
-                regionShuffleRowArmed: null,
+                regionShuffleArmed: false,
                 tileSwapArmed: false,
                 tileSwapFirstTileId: null,
                 run: activeRun
@@ -359,7 +359,7 @@ describe('run surface state helpers', () => {
                 peekModeArmed: true,
                 // Arming is surface state now, so the disarm lands in the patch.
                 strayRemoveArmed: false,
-                regionShuffleRowArmed: null,
+                regionShuffleArmed: false,
                 tileSwapArmed: false,
                 tileSwapFirstTileId: null,
                 run: activeRun
@@ -488,11 +488,15 @@ describe('run surface state helpers', () => {
 
     it('arms and applies region shuffle with board modes cleared', () => {
         const activeRun = { ...createNewRun(0), regionShuffleCharges: 1, status: 'playing' as const };
-        const armed = createRegionShuffleArmSurfaceResult({ row: 0, run: activeRun, view: 'playing' });
+        // Arming takes no row: the board is the row picker, so the mode stays live until a press.
+        const armed = createRegionShuffleArmToggleSurfaceResult({ armed: false, run: activeRun, view: 'playing' });
         expect(armed).toMatchObject({
             kind: 'applied',
-            patch: { boardPinMode: false, destroyPairArmed: false, peekModeArmed: false, regionShuffleRowArmed: 0 }
+            patch: { boardPinMode: false, destroyPairArmed: false, peekModeArmed: false, regionShuffleArmed: true }
         });
+        expect(
+            createRegionShuffleArmToggleSurfaceResult({ armed: true, run: activeRun, view: 'playing' })
+        ).toMatchObject({ kind: 'applied', patch: { regionShuffleArmed: false } });
 
         const shuffled = createRegionShuffleSurfaceResult({ row: 0, run: activeRun, view: 'playing' });
         expect(shuffled.kind).toBe('applied');
@@ -530,7 +534,7 @@ describe('run surface state helpers', () => {
                 destroyPairArmed: false,
                 peekModeArmed: false,
                 strayRemoveArmed: false,
-                regionShuffleRowArmed: null,
+                regionShuffleArmed: false,
                 tileSwapArmed: true,
                 tileSwapFirstTileId: null
             },

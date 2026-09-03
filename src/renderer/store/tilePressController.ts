@@ -39,7 +39,6 @@ type TilePressPatch = Partial<{
     run: RunState;
     shopReturnMode: 'floor' | 'summary' | null;
     strayRemoveArmed: boolean;
-    regionShuffleRowArmed: number | null;
     tileSwapArmed: boolean;
     tileSwapFirstTileId: string | null;
     view: ViewState;
@@ -55,6 +54,7 @@ export const createPlayingTilePressSurfaceResult = ({
     boardPinMode,
     destroyPairArmed,
     peekModeArmed,
+    regionShuffleArmed = false,
     run,
     strayRemoveArmed = false,
     tileSwapArmed = false,
@@ -64,6 +64,7 @@ export const createPlayingTilePressSurfaceResult = ({
     boardPinMode: boolean;
     destroyPairArmed: boolean;
     peekModeArmed: boolean;
+    regionShuffleArmed?: boolean;
     run: RunState;
     strayRemoveArmed?: boolean;
     tileSwapArmed?: boolean;
@@ -75,6 +76,7 @@ export const createPlayingTilePressSurfaceResult = ({
         boardPinMode,
         destroyPairArmed,
         peekModeArmed,
+        regionShuffleArmed,
         tileSwapArmed,
         strayRemoveArmed
     });
@@ -173,6 +175,7 @@ export const createPlayingTilePressSurfaceResult = ({
         destroyPairArmed,
         enemyContacted,
         peekModeArmed,
+        regionShuffleArmed,
         run: actionRun,
         strayRemoveArmed,
         tileSwapArmed,
@@ -238,6 +241,16 @@ export const createPlayingTilePressSurfaceResult = ({
             return {
                 kind: 'patch',
                 patch: createRunWithBoardPowersDisarmedPatch(armedPowerPressResult.run),
+                audio,
+                resolveDelayMs: null
+            };
+        }
+        if (armedPowerPressResult.kind === 'regionShuffleApplied') {
+            // Row shuffle spends its charge on the press, so it disarms the way tile swap does
+            // rather than staying live for a second row.
+            return {
+                kind: 'patch',
+                patch: createRunWithArmedModesClearedPatch(armedPowerPressResult.run),
                 audio,
                 resolveDelayMs: null
             };

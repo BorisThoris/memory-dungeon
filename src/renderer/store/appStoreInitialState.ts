@@ -7,7 +7,7 @@ type AppStoreInitialState = Pick<
     | 'achievementBridgeNotice'
     | 'boardPinMode'
     | 'destroyPairArmed'
-    | 'regionShuffleRowArmed'
+    | 'regionShuffleArmed'
     | 'dungeonExitPromptOpen'
     | 'hydrated'
     | 'hydrating'
@@ -54,7 +54,7 @@ export const createAppStoreInitialState = (): AppStoreInitialState => {
         destroyPairArmed: false,
         peekModeArmed: false,
         strayRemoveArmed: false,
-        regionShuffleRowArmed: null,
+        regionShuffleArmed: false,
         tileSwapArmed: false,
         tileSwapFirstTileId: null,
         dungeonExitPromptOpen: false,

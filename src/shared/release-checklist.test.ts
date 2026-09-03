@@ -9,6 +9,11 @@ import { GAMEPAD_STICK_DEADZONE, readGamepadActions, STANDARD_GAMEPAD_BUTTONS } 
 import { MIN_WINDOW_HEIGHT, MIN_WINDOW_WIDTH, normalizeWindowState, resolveRestoredBounds } from '../main/window-bounds';
 import { CRASH_LOG_KEEP_COUNT, pruneCrashLogs, redactUserPaths } from '../main/crash-log';
 import { quarantineFileName, quarantineSaveFile } from '../main/save-recovery';
+import {
+    findUnreachableMembers,
+    readAppStateMembers,
+    REACHABILITY_EXEMPTIONS
+} from '../../scripts/store-action-reachability';
 import { SAVE_RECOVERY_COPY } from '../renderer/copy/saveRecoveryNotice';
 
 /**
@@ -51,6 +56,15 @@ const VERIFIERS: Record<string, () => void> = {
             Array.from({ length: CRASH_LOG_KEEP_COUNT + 5 }, (_unused, index) => `crash-2026-01-${index + 10}.log`)
         );
         expect(kept.length).toBe(5);
+    },
+    'store-reachability': () => {
+        // The audit that would have caught a deleted toolbar taking a whole power with it.
+        const members = readAppStateMembers(
+            ['export interface AppState {', '    shown: string;', '    hidden: string;', '}'].join('\n')
+        );
+
+        expect(findUnreachableMembers(members, ['state.shown'])).toEqual([{ kind: 'state', name: 'hidden' }]);
+        expect(Object.keys(REACHABILITY_EXEMPTIONS).length).toBeGreaterThan(0);
     },
     'save-read-recovery': () => {
         // A save the game refuses is usually a *newer* save arriving through Steam Cloud from a

@@ -414,7 +414,7 @@ describe('save normalization', () => {
             },
             currentRun: {
                 strayRemoveArmed: true,
-                regionShuffleRowArmed: 0,
+                regionShuffleArmed: true,
                 dungeonRun: null,
                 dungeonKeys: null,
                 dungeonMasterKeys: null,

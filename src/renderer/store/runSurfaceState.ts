@@ -21,6 +21,7 @@ import { reduceGameplayCommand } from '../../shared/gameplay-core';
 import { appendGameplayJournal } from '../../shared/gameplay-journal';
 import {
     applyDestroyPair,
+    canRegionShuffle,
     collectDestroyEligibleTileIds,
 } from '../../shared/board-powers';
 import {
@@ -40,7 +41,7 @@ export interface RunSurfaceState {
     destroyPairArmed: boolean;
     peekModeArmed: boolean;
     strayRemoveArmed: boolean;
-    regionShuffleRowArmed: number | null;
+    regionShuffleArmed: boolean;
     tileSwapArmed: boolean;
     tileSwapFirstTileId: string | null;
     dungeonExitPromptOpen: boolean;
@@ -59,7 +60,7 @@ type RunSurfaceToggleResult =
         | 'destroyPairArmed'
         | 'peekModeArmed'
         | 'strayRemoveArmed'
-        | 'regionShuffleRowArmed'
+        | 'regionShuffleArmed'
         | 'tileSwapArmed'
         | 'tileSwapFirstTileId'
     > & {
@@ -86,6 +87,7 @@ type ArmedBoardPowerPressResult =
     | { kind: 'tileSwapFirstSelected'; tileId: string }
     | { kind: 'tileSwapFirstCleared' }
     | { kind: 'tileSwapApplied'; run: RunState; events: GameplayEvent[] }
+    | { kind: 'regionShuffleApplied'; run: RunState; events: GameplayEvent[] }
     | { kind: 'destroyApplied'; run: RunState; resolvesRun: boolean; events: GameplayEvent[] };
 
 type OrdinaryTileFlipResult =
@@ -132,7 +134,7 @@ export const createRunSurfaceReset = (): RunSurfaceState => ({
     destroyPairArmed: false,
     peekModeArmed: false,
     strayRemoveArmed: false,
-    regionShuffleRowArmed: null,
+    regionShuffleArmed: false,
     tileSwapArmed: false,
     tileSwapFirstTileId: null,
     dungeonExitPromptOpen: false,
@@ -165,7 +167,7 @@ export const createBoardPinModeToggleResult = ({
             destroyPairArmed: false,
             peekModeArmed: false,
             strayRemoveArmed: false,
-            regionShuffleRowArmed: null,
+            regionShuffleArmed: false,
             tileSwapArmed: false,
             tileSwapFirstTileId: null
         },
@@ -205,7 +207,7 @@ export const createDestroyPairArmedToggleResult = ({
             destroyPairArmed: next,
             peekModeArmed: false,
             strayRemoveArmed: false,
-            regionShuffleRowArmed: null,
+            regionShuffleArmed: false,
             tileSwapArmed: false,
             tileSwapFirstTileId: null
         },
@@ -250,7 +252,7 @@ export const createPeekModeToggleResult = ({
             destroyPairArmed: false,
             peekModeArmed: next,
             strayRemoveArmed: false,
-            regionShuffleRowArmed: null,
+            regionShuffleArmed: false,
             tileSwapArmed: false,
             tileSwapFirstTileId: null,
             run: nextRun
@@ -297,7 +299,7 @@ export const createTileSwapToggleResult = ({
             destroyPairArmed: false,
             peekModeArmed: false,
             strayRemoveArmed: false,
-            regionShuffleRowArmed: null,
+            regionShuffleArmed: false,
             tileSwapArmed: next,
             tileSwapFirstTileId: null
         },
@@ -357,25 +359,54 @@ export const createShuffleBoardSurfaceResult = ({
           };
 };
 
-export const createRegionShuffleArmSurfaceResult = ({
-    row,
+/**
+ * Arms row shuffle, or disarms it if it was already armed. There is no row to choose here: the
+ * board is the row picker, so the power stays armed until the player presses a tile (or arms
+ * something else). The previous shape stored a row up front, which left no way to enter the mode
+ * at all — the toolbar that once chose the row was removed in the run-shell rebuild.
+ */
+export const createRegionShuffleArmToggleSurfaceResult = ({
+    armed,
     run,
     view
 }: {
-    row: number | null;
+    armed: boolean;
     run: RunState | null;
     view: ViewState;
 }): RunSurfaceRunPatchResult => {
     if (!run || view !== 'playing' || run.status !== 'playing') {
         return { kind: 'ignored' };
     }
+    // Arming is refused when the rules would refuse the shuffle anyway — a scholar contract, no
+    // charges, a flip in progress. Disarming is always allowed, so a contract picked up mid-floor
+    // cannot strand the player in a mode they can no longer leave.
+    if (!armed && !canRegionShuffle(run)) {
+        return { kind: 'ignored' };
+    }
 
     return {
         kind: 'applied',
-        patch: { ...createRunWithArmedModesClearedPatch(run), regionShuffleRowArmed: row },
-        playArmSfx: false
+        patch: { ...createRunWithArmedModesClearedPatch(run), regionShuffleArmed: !armed },
+        playArmSfx: !armed
     };
 };
+
+/**
+ * The row a tile sits in, or null when the board cannot say. Rows are the unit row shuffle works
+ * in, and the board is what the player presses, so this is the whole translation between them.
+ */
+export const regionShuffleRowForTile = (run: RunState, tileId: string): number | null => {
+    const columns = run.board?.columns ?? 0;
+    const index = run.board?.tiles.findIndex((candidate) => candidate.id === tileId) ?? -1;
+    return columns > 0 && index >= 0 ? Math.floor(index / columns) : null;
+};
+
+/** Shared so the two entry points cannot drift on the id the replay journal is keyed by. */
+const regionShuffleCommandForRow = (run: RunState, row: number) =>
+    createGameplayRegionShuffleCommand(
+        `region-shuffle:${run.runSeed}:${run.board?.level ?? 0}:${run.shuffleNonce}:${row}`,
+        row
+    );
 
 export const createRegionShuffleSurfaceResult = ({
     row,
@@ -390,10 +421,7 @@ export const createRegionShuffleSurfaceResult = ({
         return { kind: 'ignored' };
     }
 
-    const command = createGameplayRegionShuffleCommand(
-        `region-shuffle:${run.runSeed}:${run.board?.level ?? 0}:${run.shuffleNonce}:${row}`,
-        row
-    );
+    const command = regionShuffleCommandForRow(run, row);
     const result = reduceGameplayCommand(run, command);
     return !result.accepted
         ? { kind: 'ignored' }
@@ -495,19 +523,23 @@ export const createBoardPowerContactPolicy = ({
     boardPinMode,
     destroyPairArmed,
     peekModeArmed,
+    regionShuffleArmed = false,
     tileSwapArmed,
     strayRemoveArmed
 }: {
     boardPinMode: boolean;
     destroyPairArmed: boolean;
     peekModeArmed: boolean;
+    regionShuffleArmed?: boolean;
     tileSwapArmed?: boolean;
     strayRemoveArmed: boolean;
 }): {
     armedPowerCount: number;
     canContinueSinglePowerAfterContact: boolean;
 } => {
-    const armedPowerCount = [strayRemoveArmed, peekModeArmed, destroyPairArmed, tileSwapArmed].filter(Boolean).length;
+    const armedPowerCount = [strayRemoveArmed, peekModeArmed, destroyPairArmed, tileSwapArmed, regionShuffleArmed].filter(
+        Boolean
+    ).length;
 
     return {
         armedPowerCount,
@@ -520,6 +552,7 @@ export const createArmedBoardPowerPressResult = ({
     destroyPairArmed,
     enemyContacted,
     peekModeArmed,
+    regionShuffleArmed = false,
     run,
     strayRemoveArmed = false,
     tileSwapArmed = false,
@@ -530,6 +563,7 @@ export const createArmedBoardPowerPressResult = ({
     destroyPairArmed: boolean;
     enemyContacted: boolean;
     peekModeArmed: boolean;
+    regionShuffleArmed?: boolean;
     run: RunState;
     strayRemoveArmed?: boolean;
     tileSwapArmed?: boolean;
@@ -537,6 +571,24 @@ export const createArmedBoardPowerPressResult = ({
     tileId: string;
 }): ArmedBoardPowerPressResult => {
     const canApplyAfterContact = !enemyContacted || canContinueSinglePowerAfterContact;
+
+    if (canApplyAfterContact && regionShuffleArmed) {
+        // The row is chosen by pressing any tile in it, so the power needs no separate row picker:
+        // the board itself is the picker, the way tile swap uses presses to choose its two tiles.
+        const row = regionShuffleRowForTile(run, tileId);
+        if (row === null) {
+            return enemyContacted ? { kind: 'persistEnemyContact', run } : { kind: 'handled' };
+        }
+        const command = regionShuffleCommandForRow(run, row);
+        const result = reduceGameplayCommand(run, command);
+        return !result.accepted
+            ? { kind: 'handled' }
+            : {
+                  kind: 'regionShuffleApplied',
+                  run: appendGameplayJournal(result.run, [command], result.events),
+                  events: result.events
+              };
+    }
 
     if (canApplyAfterContact && strayRemoveArmed) {
         const command = createGameplayStrayRemoveCommand(
@@ -742,7 +794,7 @@ export const clearRunSurfaceArmedModes = (): Pick<
     | 'destroyPairArmed'
     | 'peekModeArmed'
     | 'strayRemoveArmed'
-    | 'regionShuffleRowArmed'
+    | 'regionShuffleArmed'
     | 'tileSwapArmed'
     | 'tileSwapFirstTileId'
 > => ({
@@ -750,7 +802,7 @@ export const clearRunSurfaceArmedModes = (): Pick<
     destroyPairArmed: false,
     peekModeArmed: false,
     strayRemoveArmed: false,
-    regionShuffleRowArmed: null,
+    regionShuffleArmed: false,
     tileSwapArmed: false,
     tileSwapFirstTileId: null
 });
@@ -789,7 +841,7 @@ export const createRunWithArmedModesClearedPatch = (
         | 'destroyPairArmed'
         | 'peekModeArmed'
         | 'strayRemoveArmed'
-        | 'regionShuffleRowArmed'
+        | 'regionShuffleArmed'
         | 'tileSwapArmed'
         | 'tileSwapFirstTileId'
     > & {
@@ -814,7 +866,7 @@ export const createRunWithBoardInteractionClearedPatch = (
     | 'mismatchScorePop'
     | 'peekModeArmed'
     | 'strayRemoveArmed'
-    | 'regionShuffleRowArmed'
+    | 'regionShuffleArmed'
     | 'tileSwapArmed'
     | 'tileSwapFirstTileId'
 > & { run: RunState } => ({

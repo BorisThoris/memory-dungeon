@@ -22,6 +22,8 @@ import {
 import { getRouteChoiceAvailability, routeChoicesForResult } from '../../shared/route-rules';
 import { getTraitRouteObjectiveStatus } from '../../shared/trait-route-objectives';
 import {
+    canRegionShuffle,
+    canRegionShuffleRow,
     canShuffleBoard
 } from '../../shared/board-powers';
 import {
@@ -34,6 +36,7 @@ import { useNotificationStore } from '@cross-repo-libs/notifications';
 import type { CSSProperties } from 'react';
 import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
+import { ROW_SHUFFLE_COPY } from '../copy/rowShufflePower';
 import { runPersistenceInBackground } from '../store/backgroundPersistence';
 import { UI_ART } from '../assets/ui';
 import { isNarrowShortLandscapeForMenuStack } from '../breakpoints';
@@ -405,6 +408,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             toggleBoardPinMode: state.toggleBoardPinMode,
             toggleDestroyPairArmed: state.toggleDestroyPairArmed,
             togglePeekMode: state.togglePeekMode,
+            toggleRegionShuffleArmed: state.toggleRegionShuffleArmed,
             toggleTileSwapArmed: state.toggleTileSwapArmed,
             toggleStrayArm: state.toggleStrayArm,
             undoResolvingFlip: state.undoResolvingFlip
@@ -433,12 +437,21 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     );
     const onboardingStep = getPlayableOnboardingStep(run, saveData);
     const onboardingBoardTargetIds = useMemo(() => onboardingStep?.targetTileIds ?? [], [onboardingStep]);
-    const { boardPinMode, destroyPairArmed, peekModeArmed, strayRemoveArmed, tileSwapArmed, tileSwapFirstTileId } =
+    const {
+        boardPinMode,
+        destroyPairArmed,
+        peekModeArmed,
+        regionShuffleArmed,
+        strayRemoveArmed,
+        tileSwapArmed,
+        tileSwapFirstTileId
+    } =
         useAppStore(
             useShallow((state) => ({
                 boardPinMode: state.boardPinMode,
                 destroyPairArmed: state.destroyPairArmed,
                 peekModeArmed: state.peekModeArmed,
+                regionShuffleArmed: state.regionShuffleArmed,
                 strayRemoveArmed: state.strayRemoveArmed,
                 tileSwapArmed: state.tileSwapArmed,
                 tileSwapFirstTileId: state.tileSwapFirstTileId
@@ -707,6 +720,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         toggleBoardPinMode,
         toggleDestroyPairArmed,
         togglePeekMode,
+        toggleRegionShuffleArmed,
         toggleTileSwapArmed,
         toggleStrayArm,
         undoResolvingFlip
@@ -1331,6 +1345,25 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         return null;
     }
     const shuffleDisabled = !canShuffleBoard(run);
+    // A row needs two hidden tiles to be worth shuffling, so the button is only live when at least
+    // one row on the board qualifies — otherwise the press would spend a charge on nothing.
+    const rowCount = Math.ceil(run.board.tiles.length / run.board.columns);
+    const hasShufflableRow =
+        canRegionShuffle(run) &&
+        Array.from({ length: rowCount }, (_unused, row) => row).some((row) => canRegionShuffleRow(run, row));
+    const rowShuffleDisabled = !hasShufflableRow;
+    const rowShuffleTitle = run.activeContract?.noShuffle
+        ? ROW_SHUFFLE_COPY.scholarContract
+        : run.board.flippedTileIds.length > 0
+          ? ROW_SHUFFLE_COPY.pendingFlip
+          : run.regionShuffleCharges < 1 &&
+              !(run.regionShuffleFreeThisFloor && run.relicIds.includes('region_shuffle_free_first'))
+            ? ROW_SHUFFLE_COPY.noCharges
+            : rowShuffleDisabled
+              ? ROW_SHUFFLE_COPY.noRow
+              : regionShuffleArmed
+                ? ROW_SHUFFLE_COPY.armed
+                : ROW_SHUFFLE_COPY.idle;
     const tileSwapTitle = run.activeContract?.noShuffle
         ? 'Scholar contract: tile swap disabled'
         : run.board.flippedTileIds.length > 0
@@ -1395,6 +1428,16 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                 disabled: tileSwapDisabled,
                 title: tileSwapTitle,
                 onClick: toggleTileSwapArmed
+            },
+            {
+                id: 'row',
+                label: ROW_SHUFFLE_COPY.label,
+                glyph: RUN_SHELL_GLYPHS.shuffle,
+                charges: run.regionShuffleCharges,
+                armed: regionShuffleArmed,
+                disabled: rowShuffleDisabled,
+                title: rowShuffleTitle,
+                onClick: toggleRegionShuffleArmed
             },
             {
                 id: 'pin',

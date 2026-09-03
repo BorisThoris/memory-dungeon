@@ -9,7 +9,15 @@ Tier vocabulary: [`02-helper-tiers-and-cognitive-jobs.md`](../gameplay-depth/02-
 ## GP-H01 — Region shuffle (Search)
 
 ### Status
-**Done** — [`applyRegionShuffle`](../../src/shared/game.ts), `canRegionShuffle`; toolbar UI [`GameLeftToolbar.tsx`](../../src/renderer/components/GameLeftToolbar.tsx).
+**Done** — [`applyRegionShuffle`](../../src/shared/game.ts), `canRegionShuffle`; the **Row** tool in the
+run dock ([`GameScreen.tsx`](../../src/renderer/components/GameScreen.tsx)) arms it, and pressing any
+tile shuffles that tile's row.
+
+This row read "Done" for a long time while pointing at `GameLeftToolbar.tsx`, a component removed in
+the run-shell rebuild. The rules, the command and both store actions survived; the only way to reach
+any of them did not, so the power was unreachable while every test around it passed. `yarn
+audit:store-reachability` now fails on a store action or state field nothing outside the store can
+reach, which is the shape that failure takes.
 
 ### Priority
 Medium

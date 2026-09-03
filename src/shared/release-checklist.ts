@@ -73,6 +73,13 @@ export const RELEASE_CHECKLIST: readonly ReleaseChecklistItem[] = [
         section: 'Steamworks'
     },
     {
+        evidence: 'scripts/store-action-reachability.ts',
+        id: 'store-reachability',
+        label: 'No player-facing state or action is left with nothing able to reach it',
+        owner: 'repo',
+        section: 'Diagnostics'
+    },
+    {
         evidence: 'src/main/save-recovery.ts',
         id: 'save-read-recovery',
         label: 'A save this build cannot read is survivable, and the player is told and given a way out',

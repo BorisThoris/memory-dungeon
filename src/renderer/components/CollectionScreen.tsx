@@ -8,6 +8,7 @@ import { getMetaHonorMarks, getPermanentUpgradeRows } from '../../shared/meta-pr
 import { ACHIEVEMENT_IDS, getRelicPickCountRows } from '../../shared/save-data';
 import { playUiBackSfx, playUiClickSfx, resumeUiSfxContext, uiSfxGainFromSettings } from '../audio/uiSfx';
 import { FittedGrid, MetaShell, SectionRail } from '../ui';
+import { collectionStorageNote } from '../copy/collectionStorageNote';
 import { useAppStore } from '../store/useAppStore';
 import styles from './CollectionScreen.module.css';
 
@@ -38,11 +39,12 @@ interface CollectionSection {
 }
 
 const CollectionScreen = () => {
-    const { closeSubscreen, saveData, settings } = useAppStore(
+    const { closeSubscreen, saveData, settings, steamConnected } = useAppStore(
         useShallow((state) => ({
             closeSubscreen: state.closeSubscreen,
             saveData: state.saveData,
-            settings: state.settings
+            settings: state.settings,
+            steamConnected: state.steamConnected
         }))
     );
     const [activeSectionId, setActiveSectionId] = useState<CollectionSectionId>('achievements');
@@ -118,7 +120,7 @@ const CollectionScreen = () => {
                 playUiBackSfx(uiGain);
                 closeSubscreen();
             }}
-            subtitle={`${activeSection.earnedCount} of ${activeSection.entries.length} ${activeSection.label.toLowerCase()} · ${honorMarks} honor ${honorMarks === 1 ? 'mark' : 'marks'} · everything here is stored on this device.`}
+            subtitle={`${activeSection.earnedCount} of ${activeSection.entries.length} ${activeSection.label.toLowerCase()} · ${honorMarks} honor ${honorMarks === 1 ? 'mark' : 'marks'} · ${collectionStorageNote({ isAchievements: activeSection.id === 'achievements', steamConnected })}`}
             testId="collection-screen"
             title="Collection"
             toolbar={

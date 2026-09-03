@@ -2695,8 +2695,10 @@ describe('useAppStore scholar contract', () => {
         expect(after?.shuffleNonce).toBe(nonceBefore);
         expect(after?.board!.tiles.map((t) => t.id)).toEqual(tileIdsBefore);
 
-        useAppStore.getState().shuffleRegionRow(0);
+        // Row shuffle refuses to even arm under the contract, so there is no mode to leave.
+        useAppStore.getState().toggleRegionShuffleArmed();
         after = useAppStore.getState().run;
+        expect(useAppStore.getState().regionShuffleArmed).toBe(false);
         expect(after?.shuffleNonce).toBe(nonceBefore);
         expect(after?.board!.tiles.map((t) => t.id)).toEqual(tileIdsBefore);
 
