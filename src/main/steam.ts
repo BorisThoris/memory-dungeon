@@ -11,6 +11,7 @@
 import * as steamworks from 'steamworks.js';
 import type { AchievementId, AchievementUnlockResult, RichPresenceState } from '../shared/contracts';
 import { richPresencePairs } from '../shared/rich-presence';
+import { STEAM_ACHIEVEMENT_API_NAME } from '../shared/steam-achievement-api-names';
 import { parseSteamAppId } from './steam-app-id';
 
 export interface SteamAdapter {
@@ -22,34 +23,6 @@ export interface SteamAdapter {
      */
     setRichPresence(state: RichPresenceState): void;
 }
-
-/**
- * Steamworks `achievement.activate` expects the **API Name** from the Steamworks Partner site
- * (Stats & Achievements). These are currently identical to `AchievementId`; if Partner names differ,
- * update this map only — keep `AchievementId` / save data unchanged.
- */
-const STEAM_ACHIEVEMENT_API_NAME = {
-    ACH_FIRST_CLEAR: 'ACH_FIRST_CLEAR', // Partner API Name (identity unless dashboard differs)
-    ACH_LAST_LIFE: 'ACH_LAST_LIFE',
-    ACH_LEVEL_FIVE: 'ACH_LEVEL_FIVE',
-    ACH_PERFECT_CLEAR: 'ACH_PERFECT_CLEAR',
-    ACH_SCORE_THOUSAND: 'ACH_SCORE_THOUSAND',
-    ACH_ENDLESS_TEN: 'ACH_ENDLESS_TEN',
-    ACH_SEVEN_DAILIES: 'ACH_SEVEN_DAILIES',
-    ACH_WARDEN_FELLED: 'ACH_WARDEN_FELLED',
-    ACH_ENDLESS_CYCLE: 'ACH_ENDLESS_CYCLE',
-    ACH_ENDLESS_TWENTY: 'ACH_ENDLESS_TWENTY',
-    ACH_SCORE_TEN_THOUSAND: 'ACH_SCORE_TEN_THOUSAND',
-    ACH_STREAK_TEN: 'ACH_STREAK_TEN',
-    ACH_TRAIT_SCHOLAR: 'ACH_TRAIT_SCHOLAR',
-    ACH_RELIC_HOARD: 'ACH_RELIC_HOARD',
-    ACH_STANDING_ORDERS: 'ACH_STANDING_ORDERS',
-    ACH_RELIC_LIBRARY: 'ACH_RELIC_LIBRARY',
-    ACH_NO_POWERS_TEN: 'ACH_NO_POWERS_TEN',
-    ACH_GAUNTLET_RUN: 'ACH_GAUNTLET_RUN',
-    ACH_PUZZLE_SOLVER: 'ACH_PUZZLE_SOLVER',
-    ACH_MEDITATION_HOUR: 'ACH_MEDITATION_HOUR'
-} as const satisfies Record<AchievementId, string>;
 
 const createMockSteamAdapter = (): SteamAdapter => ({
     isConnected: () => false,

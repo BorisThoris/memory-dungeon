@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2449,
-    "codeFileCount": 928,
-    "exportedSymbolCount": 3479,
+    "trackedFileCount": 2454,
+    "codeFileCount": 931,
+    "exportedSymbolCount": 3486,
     "contentItemCount": 63,
     "mechanicCount": 136,
     "stateFieldCount": 144,
-    "relationshipCount": 10146
+    "relationshipCount": 10173
   },
   "inventory": [
     {
@@ -2257,6 +2257,12 @@
       "sha256": "35229098a2ced1de51f72971930ffc9db9125cc0c10bbb2ae59b847f3ee6870b"
     },
     {
+      "path": "docs/RELEASE_CHECKLIST.md",
+      "category": "documentation",
+      "bytes": 3140,
+      "sha256": "62f7f570612e104e81969dc5b9efafa5abb88a2e308cfe2e2113bc6748db5418"
+    },
+    {
       "path": "docs/RELIC_ROSTER.md",
       "category": "documentation",
       "bytes": 5993,
@@ -2283,8 +2289,8 @@
     {
       "path": "docs/STEAM_READINESS.md",
       "category": "documentation",
-      "bytes": 10125,
-      "sha256": "211bc1f7ce137831d2b80fda52dc388a8ba83a5369f2f819d2e5a7f7735e7eaf"
+      "bytes": 10330,
+      "sha256": "e4dc0c2ef18135515d5f48d9e5899c6ff1253f8dc49f6b371ebc7759a6dffe4a"
     },
     {
       "path": "docs/STRAY_TILE.md",
@@ -2314,7 +2320,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 36714,
-      "sha256": "9988be7441126c8cf32a718ba383521b811c10574ed902a252a6ac5d6f2c7133"
+      "sha256": "067094e3acc526d175bda3f82a18b6745eeae8eae9746fa8983270eda49be768"
     },
     {
       "path": "docs/UI_RETHINK_PLAN.md",
@@ -3957,8 +3963,8 @@
     {
       "path": "package.json",
       "category": "configuration",
-      "bytes": 28194,
-      "sha256": "d047fb7d9c93d57423c6d4ee341fa4b100fa2325293fc810b8463ce76c04a464"
+      "bytes": 28458,
+      "sha256": "a2b5728b0f978d5d34655062518a2e3ebd84e3be54acac00a89bd62ac40dd24f"
     },
     {
       "path": "packages/notifications/package.json",
@@ -4585,6 +4591,12 @@
       "sha256": "8925dd84c374f193ab7cee6c7183c49c57f2862ec3b5030e371733e25b561575"
     },
     {
+      "path": "scripts/release-checklist.ts",
+      "category": "script",
+      "bytes": 1988,
+      "sha256": "4d24bf5bfd49fdc2f657ebb0833715930f2dba77cd415c47046c01ef4e0a1c02"
+    },
+    {
       "path": "scripts/run-mechanics-appendix.ts",
       "category": "script",
       "bytes": 378,
@@ -4815,8 +4827,8 @@
     {
       "path": "src/main/steam.ts",
       "category": "source",
-      "bytes": 5377,
-      "sha256": "23813fcc9f5a3fdd16dc375b1dee157fa51f5b67169e059d1687f1ebbbedd65f"
+      "bytes": 4171,
+      "sha256": "3594d0e771a812c176b8ed9c68c9a364a3b03f3ef9562a4af6a194ff2d6d6e4a"
     },
     {
       "path": "src/main/window-bounds.test.ts",
@@ -11575,6 +11587,18 @@
       "sha256": "1e144373a3f3ded6a20aa6d8d9738ac08e7251ab6127fdbbe7bd748845542d19"
     },
     {
+      "path": "src/shared/release-checklist.test.ts",
+      "category": "test",
+      "bytes": 6539,
+      "sha256": "c8a5671f65306f257e57dd103a1dda99630bc56929e3dfddc1f139514bad2258"
+    },
+    {
+      "path": "src/shared/release-checklist.ts",
+      "category": "source",
+      "bytes": 7426,
+      "sha256": "7144851d33e6575c2479279521a28ae223ce6c483d0260ea58ae896556dec70b"
+    },
+    {
       "path": "src/shared/relic-favor-rules.test.ts",
       "category": "test",
       "bytes": 2121,
@@ -12167,6 +12191,12 @@
       "category": "source",
       "bytes": 4551,
       "sha256": "b2d8a86837b42e8ef27b24a1555b95fbf9c3054a870092f57b0ebb1b7d03de72"
+    },
+    {
+      "path": "src/shared/steam-achievement-api-names.ts",
+      "category": "source",
+      "bytes": 1599,
+      "sha256": "d99c3eea29c93358f6971d0b062bfcbcca875c4fadfd61f1509d9a539fd29e94"
     },
     {
       "path": "src/shared/system-diagrams.test.ts",
@@ -14756,6 +14786,7 @@
       "testedBy": [
         "file:src/main/crash-log.test.ts",
         "file:src/main/crash-reporter.test.ts",
+        "file:src/shared/release-checklist.test.ts",
         "file:src/shared/save-location.test.ts"
       ]
     },
@@ -15113,11 +15144,12 @@
       "path": "src/main/steam.ts",
       "layer": "main",
       "role": "production",
-      "lineCount": 117,
+      "lineCount": 90,
       "imports": [
         "file:src/main/steam-app-id.ts",
         "file:src/shared/contracts.ts",
-        "file:src/shared/rich-presence.ts"
+        "file:src/shared/rich-presence.ts",
+        "file:src/shared/steam-achievement-api-names.ts"
       ],
       "exports": [
         "symbol:src/main/steam.ts#createSteamAdapter",
@@ -15163,7 +15195,8 @@
         "symbol:src/main/window-bounds.ts#WindowStateSource"
       ],
       "testedBy": [
-        "file:src/main/window-bounds.test.ts"
+        "file:src/main/window-bounds.test.ts",
+        "file:src/shared/release-checklist.test.ts"
       ]
     },
     {
@@ -27528,7 +27561,8 @@
       ],
       "testedBy": [
         "file:src/renderer/hooks/useGamepadNavigation.test.tsx",
-        "file:src/shared/gamepad-input.test.ts"
+        "file:src/shared/gamepad-input.test.ts",
+        "file:src/shared/release-checklist.test.ts"
       ]
     },
     {
@@ -29943,6 +29977,45 @@
       ]
     },
     {
+      "id": "file:src/shared/release-checklist.test.ts",
+      "path": "src/shared/release-checklist.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 123,
+      "imports": [
+        "file:src/main/crash-log.ts",
+        "file:src/main/window-bounds.ts",
+        "file:src/shared/gamepad-input.ts",
+        "file:src/shared/release-checklist.ts",
+        "file:src/shared/rich-presence.ts",
+        "file:src/shared/save-data.ts",
+        "file:src/shared/save-location.ts",
+        "file:src/shared/steam-achievement-api-names.ts",
+        "file:src/shared/tile-trait-marks.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/shared/release-checklist.ts",
+      "path": "src/shared/release-checklist.ts",
+      "layer": "shared",
+      "role": "production",
+      "lineCount": 193,
+      "imports": [],
+      "exports": [
+        "symbol:src/shared/release-checklist.ts#RELEASE_CHECKLIST",
+        "symbol:src/shared/release-checklist.ts#releaseChecklistByOwner",
+        "symbol:src/shared/release-checklist.ts#ReleaseChecklistItem",
+        "symbol:src/shared/release-checklist.ts#ReleaseChecklistOwner",
+        "symbol:src/shared/release-checklist.ts#releaseChecklistSections",
+        "symbol:src/shared/release-checklist.ts#renderReleaseChecklistMarkdown"
+      ],
+      "testedBy": [
+        "file:src/shared/release-checklist.test.ts"
+      ]
+    },
+    {
       "id": "file:src/shared/relic-favor-rules.test.ts",
       "path": "src/shared/relic-favor-rules.test.ts",
       "layer": "shared",
@@ -30329,6 +30402,7 @@
         "symbol:src/shared/rich-presence.ts#RichPresenceToken"
       ],
       "testedBy": [
+        "file:src/shared/release-checklist.test.ts",
         "file:src/shared/rich-presence.test.ts"
       ]
     },
@@ -31547,6 +31621,7 @@
         "file:src/shared/profile-summary.test.ts",
         "file:src/shared/puzzle-import.test.ts",
         "file:src/shared/quest-campaign.test.ts",
+        "file:src/shared/release-checklist.test.ts",
         "file:src/shared/run-history.test.ts",
         "file:src/shared/run-mode-catalog.test.ts",
         "file:src/shared/run-settings-rules.test.ts",
@@ -31586,6 +31661,7 @@
         "symbol:src/shared/save-location.ts#UNPACKAGED_APP_DIR_NAME"
       ],
       "testedBy": [
+        "file:src/shared/release-checklist.test.ts",
         "file:src/shared/save-location.test.ts"
       ]
     },
@@ -32158,6 +32234,22 @@
       ]
     },
     {
+      "id": "file:src/shared/steam-achievement-api-names.ts",
+      "path": "src/shared/steam-achievement-api-names.ts",
+      "layer": "shared",
+      "role": "production",
+      "lineCount": 34,
+      "imports": [
+        "file:src/shared/contracts.ts"
+      ],
+      "exports": [
+        "symbol:src/shared/steam-achievement-api-names.ts#STEAM_ACHIEVEMENT_API_NAME"
+      ],
+      "testedBy": [
+        "file:src/shared/release-checklist.test.ts"
+      ]
+    },
+    {
       "id": "file:src/shared/system-diagrams.test.ts",
       "path": "src/shared/system-diagrams.test.ts",
       "layer": "shared",
@@ -32573,6 +32665,7 @@
         "symbol:src/shared/tile-trait-marks.ts#TraitMarkSignature"
       ],
       "testedBy": [
+        "file:src/shared/release-checklist.test.ts",
         "file:src/shared/tile-trait-codex.test.ts",
         "file:src/shared/tile-trait-marks.test.ts"
       ]
@@ -33598,24 +33691,24 @@
       "name": "createSteamAdapter",
       "kind": "value",
       "file": "src/main/steam.ts",
-      "line": 65,
-      "endLine": 116
+      "line": 38,
+      "endLine": 89
     },
     {
       "id": "symbol:src/main/steam.ts#SteamAdapter",
       "name": "SteamAdapter",
       "kind": "interface",
       "file": "src/main/steam.ts",
-      "line": 16,
-      "endLine": 24
+      "line": 17,
+      "endLine": 25
     },
     {
       "id": "symbol:src/main/steam.ts#SteamAdapterOptions",
       "name": "SteamAdapterOptions",
       "kind": "interface",
       "file": "src/main/steam.ts",
-      "line": 60,
-      "endLine": 63
+      "line": 33,
+      "endLine": 36
     },
     {
       "id": "symbol:src/main/window-bounds.ts#captureWindowState",
@@ -55530,6 +55623,54 @@
       "endLine": 46
     },
     {
+      "id": "symbol:src/shared/release-checklist.ts#RELEASE_CHECKLIST",
+      "name": "RELEASE_CHECKLIST",
+      "kind": "value",
+      "file": "src/shared/release-checklist.ts",
+      "line": 32,
+      "endLine": 145
+    },
+    {
+      "id": "symbol:src/shared/release-checklist.ts#releaseChecklistByOwner",
+      "name": "releaseChecklistByOwner",
+      "kind": "value",
+      "file": "src/shared/release-checklist.ts",
+      "line": 151,
+      "endLine": 152
+    },
+    {
+      "id": "symbol:src/shared/release-checklist.ts#ReleaseChecklistItem",
+      "name": "ReleaseChecklistItem",
+      "kind": "interface",
+      "file": "src/shared/release-checklist.ts",
+      "line": 21,
+      "endLine": 30
+    },
+    {
+      "id": "symbol:src/shared/release-checklist.ts#ReleaseChecklistOwner",
+      "name": "ReleaseChecklistOwner",
+      "kind": "type",
+      "file": "src/shared/release-checklist.ts",
+      "line": 13,
+      "endLine": 19
+    },
+    {
+      "id": "symbol:src/shared/release-checklist.ts#releaseChecklistSections",
+      "name": "releaseChecklistSections",
+      "kind": "value",
+      "file": "src/shared/release-checklist.ts",
+      "line": 147,
+      "endLine": 149
+    },
+    {
+      "id": "symbol:src/shared/release-checklist.ts#renderReleaseChecklistMarkdown",
+      "name": "renderReleaseChecklistMarkdown",
+      "kind": "value",
+      "file": "src/shared/release-checklist.ts",
+      "line": 166,
+      "endLine": 192
+    },
+    {
       "id": "symbol:src/shared/relic-favor-rules.ts#gainRelicFavor",
       "name": "gainRelicFavor",
       "kind": "value",
@@ -59544,6 +59685,14 @@
       "file": "src/shared/starting-loadouts.ts",
       "line": 5,
       "endLine": 15
+    },
+    {
+      "id": "symbol:src/shared/steam-achievement-api-names.ts#STEAM_ACHIEVEMENT_API_NAME",
+      "name": "STEAM_ACHIEVEMENT_API_NAME",
+      "kind": "value",
+      "file": "src/shared/steam-achievement-api-names.ts",
+      "line": 12,
+      "endLine": 33
     },
     {
       "id": "symbol:src/shared/telemetry.ts#classifyTelemetryEvent",
@@ -89687,6 +89836,42 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/release-checklist.ts->symbol:src/shared/release-checklist.ts#RELEASE_CHECKLIST",
+      "source": "file:src/shared/release-checklist.ts",
+      "target": "symbol:src/shared/release-checklist.ts#RELEASE_CHECKLIST",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/release-checklist.ts->symbol:src/shared/release-checklist.ts#releaseChecklistByOwner",
+      "source": "file:src/shared/release-checklist.ts",
+      "target": "symbol:src/shared/release-checklist.ts#releaseChecklistByOwner",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/release-checklist.ts->symbol:src/shared/release-checklist.ts#ReleaseChecklistItem",
+      "source": "file:src/shared/release-checklist.ts",
+      "target": "symbol:src/shared/release-checklist.ts#ReleaseChecklistItem",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/release-checklist.ts->symbol:src/shared/release-checklist.ts#ReleaseChecklistOwner",
+      "source": "file:src/shared/release-checklist.ts",
+      "target": "symbol:src/shared/release-checklist.ts#ReleaseChecklistOwner",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/release-checklist.ts->symbol:src/shared/release-checklist.ts#releaseChecklistSections",
+      "source": "file:src/shared/release-checklist.ts",
+      "target": "symbol:src/shared/release-checklist.ts#releaseChecklistSections",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/release-checklist.ts->symbol:src/shared/release-checklist.ts#renderReleaseChecklistMarkdown",
+      "source": "file:src/shared/release-checklist.ts",
+      "target": "symbol:src/shared/release-checklist.ts#renderReleaseChecklistMarkdown",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/relic-favor-rules.ts->symbol:src/shared/relic-favor-rules.ts#gainRelicFavor",
       "source": "file:src/shared/relic-favor-rules.ts",
       "target": "symbol:src/shared/relic-favor-rules.ts#gainRelicFavor",
@@ -92696,6 +92881,12 @@
       "id": "exports:src/shared/starting-loadouts.ts->symbol:src/shared/starting-loadouts.ts#StartingLoadoutDefinition",
       "source": "file:src/shared/starting-loadouts.ts",
       "target": "symbol:src/shared/starting-loadouts.ts#StartingLoadoutDefinition",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/steam-achievement-api-names.ts->symbol:src/shared/steam-achievement-api-names.ts#STEAM_ACHIEVEMENT_API_NAME",
+      "source": "file:src/shared/steam-achievement-api-names.ts",
+      "target": "symbol:src/shared/steam-achievement-api-names.ts#STEAM_ACHIEVEMENT_API_NAME",
       "kind": "exports"
     },
     {
@@ -97749,6 +97940,12 @@
       "id": "imports:src/main/steam.ts->src/shared/rich-presence.ts",
       "source": "file:src/main/steam.ts",
       "target": "file:src/shared/rich-presence.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/main/steam.ts->src/shared/steam-achievement-api-names.ts",
+      "source": "file:src/main/steam.ts",
+      "target": "file:src/shared/steam-achievement-api-names.ts",
       "kind": "imports"
     },
     {
@@ -112494,6 +112691,60 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/release-checklist.test.ts->src/main/crash-log.ts",
+      "source": "file:src/shared/release-checklist.test.ts",
+      "target": "file:src/main/crash-log.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/release-checklist.test.ts->src/main/window-bounds.ts",
+      "source": "file:src/shared/release-checklist.test.ts",
+      "target": "file:src/main/window-bounds.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/release-checklist.test.ts->src/shared/gamepad-input.ts",
+      "source": "file:src/shared/release-checklist.test.ts",
+      "target": "file:src/shared/gamepad-input.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/release-checklist.test.ts->src/shared/release-checklist.ts",
+      "source": "file:src/shared/release-checklist.test.ts",
+      "target": "file:src/shared/release-checklist.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/release-checklist.test.ts->src/shared/rich-presence.ts",
+      "source": "file:src/shared/release-checklist.test.ts",
+      "target": "file:src/shared/rich-presence.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/release-checklist.test.ts->src/shared/save-data.ts",
+      "source": "file:src/shared/release-checklist.test.ts",
+      "target": "file:src/shared/save-data.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/release-checklist.test.ts->src/shared/save-location.ts",
+      "source": "file:src/shared/release-checklist.test.ts",
+      "target": "file:src/shared/save-location.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/release-checklist.test.ts->src/shared/steam-achievement-api-names.ts",
+      "source": "file:src/shared/release-checklist.test.ts",
+      "target": "file:src/shared/steam-achievement-api-names.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/release-checklist.test.ts->src/shared/tile-trait-marks.ts",
+      "source": "file:src/shared/release-checklist.test.ts",
+      "target": "file:src/shared/tile-trait-marks.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/relic-favor-rules.test.ts->src/shared/game-core.ts",
       "source": "file:src/shared/relic-favor-rules.test.ts",
       "target": "file:src/shared/game-core.ts",
@@ -114681,6 +114932,12 @@
       "id": "imports:src/shared/starting-loadouts.ts->src/shared/run-inventory.ts",
       "source": "file:src/shared/starting-loadouts.ts",
       "target": "file:src/shared/run-inventory.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/steam-achievement-api-names.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/steam-achievement-api-names.ts",
+      "target": "file:src/shared/contracts.ts",
       "kind": "imports"
     },
     {
@@ -122110,6 +122367,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/main/crash-log.ts->file:src/shared/release-checklist.test.ts",
+      "source": "file:src/main/crash-log.ts",
+      "target": "file:src/shared/release-checklist.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/main/crash-log.ts->file:src/shared/save-location.test.ts",
       "source": "file:src/main/crash-log.ts",
       "target": "file:src/shared/save-location.test.ts",
@@ -122203,6 +122466,12 @@
       "id": "tested_by:src/main/window-bounds.ts->file:src/main/window-bounds.test.ts",
       "source": "file:src/main/window-bounds.ts",
       "target": "file:src/main/window-bounds.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/main/window-bounds.ts->file:src/shared/release-checklist.test.ts",
+      "source": "file:src/main/window-bounds.ts",
+      "target": "file:src/shared/release-checklist.test.ts",
       "kind": "tested_by"
     },
     {
@@ -126376,6 +126645,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/gamepad-input.ts->file:src/shared/release-checklist.test.ts",
+      "source": "file:src/shared/gamepad-input.ts",
+      "target": "file:src/shared/release-checklist.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/gameplay-core-adapters.ts->file:src/shared/gameplay-core.test.ts",
       "source": "file:src/shared/gameplay-core-adapters.ts",
       "target": "file:src/shared/gameplay-core.test.ts",
@@ -126976,6 +127251,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/release-checklist.ts->file:src/shared/release-checklist.test.ts",
+      "source": "file:src/shared/release-checklist.ts",
+      "target": "file:src/shared/release-checklist.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/relic-favor-rules.ts->file:src/shared/relic-favor-rules.test.ts",
       "source": "file:src/shared/relic-favor-rules.ts",
       "target": "file:src/shared/relic-favor-rules.test.ts",
@@ -127129,6 +127410,12 @@
       "id": "tested_by:src/shared/rest-shrine.ts->file:src/shared/rest-shrine.test.ts",
       "source": "file:src/shared/rest-shrine.ts",
       "target": "file:src/shared/rest-shrine.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/rich-presence.ts->file:src/shared/release-checklist.test.ts",
+      "source": "file:src/shared/rich-presence.ts",
+      "target": "file:src/shared/release-checklist.test.ts",
       "kind": "tested_by"
     },
     {
@@ -127798,6 +128085,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/save-data.ts->file:src/shared/release-checklist.test.ts",
+      "source": "file:src/shared/save-data.ts",
+      "target": "file:src/shared/release-checklist.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/save-data.ts->file:src/shared/run-history.test.ts",
       "source": "file:src/shared/save-data.ts",
       "target": "file:src/shared/run-history.test.ts",
@@ -127825,6 +128118,12 @@
       "id": "tested_by:src/shared/save-data.ts->file:src/shared/save-data.test.ts",
       "source": "file:src/shared/save-data.ts",
       "target": "file:src/shared/save-data.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/save-location.ts->file:src/shared/release-checklist.test.ts",
+      "source": "file:src/shared/save-location.ts",
+      "target": "file:src/shared/release-checklist.test.ts",
       "kind": "tested_by"
     },
     {
@@ -127999,6 +128298,12 @@
       "id": "tested_by:src/shared/starting-loadouts.ts->file:src/shared/starting-loadouts.test.ts",
       "source": "file:src/shared/starting-loadouts.ts",
       "target": "file:src/shared/starting-loadouts.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/steam-achievement-api-names.ts->file:src/shared/release-checklist.test.ts",
+      "source": "file:src/shared/steam-achievement-api-names.ts",
+      "target": "file:src/shared/release-checklist.test.ts",
       "kind": "tested_by"
     },
     {
@@ -128317,6 +128622,12 @@
       "id": "tested_by:src/shared/tile-trait-codex.ts->file:src/shared/tile-trait-codex.test.ts",
       "source": "file:src/shared/tile-trait-codex.ts",
       "target": "file:src/shared/tile-trait-codex.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/tile-trait-marks.ts->file:src/shared/release-checklist.test.ts",
+      "source": "file:src/shared/tile-trait-marks.ts",
+      "target": "file:src/shared/release-checklist.test.ts",
       "kind": "tested_by"
     },
     {
