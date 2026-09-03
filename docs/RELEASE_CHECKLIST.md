@@ -35,6 +35,7 @@ achievement on the Partner site or shoot a trailer.
 
 | Item | State | Owner | Where |
 |---|---|---|---|
+| Every gate is either run by the routine check or declared standalone with a reason | done | the repository | `scripts/gate-reachability.ts` |
 | No dead files or undeclared dependencies reach a build | done | the repository | `package.json (gate:package-hygiene)` |
 | No player-facing state or action is left with nothing able to reach it | done | the repository | `scripts/store-action-reachability.ts` |
 | A save this build cannot read is survivable, and the player is told and given a way out | done | the repository | `src/main/save-recovery.ts` |

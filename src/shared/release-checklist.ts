@@ -94,6 +94,13 @@ export const RELEASE_CHECKLIST: readonly ReleaseChecklistItem[] = [
         section: 'Steamworks'
     },
     {
+        evidence: 'scripts/gate-reachability.ts',
+        id: 'gate-reachability',
+        label: 'Every gate is either run by the routine check or declared standalone with a reason',
+        owner: 'repo',
+        section: 'Diagnostics'
+    },
+    {
         evidence: 'package.json (gate:package-hygiene)',
         id: 'package-hygiene',
         label: 'No dead files or undeclared dependencies reach a build',

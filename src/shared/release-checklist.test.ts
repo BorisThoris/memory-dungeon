@@ -14,6 +14,7 @@ import { MIN_WINDOW_HEIGHT, MIN_WINDOW_WIDTH, normalizeWindowState, resolveResto
 import { CRASH_LOG_KEEP_COUNT, pruneCrashLogs, redactUserPaths } from '../main/crash-log';
 import { quarantineFileName, quarantineSaveFile } from '../main/save-recovery';
 import { HARDCODED_COPY_BASELINE, scanComponentCopy } from '../../scripts/copy-locality';
+import { findUnrunGates, readScripts } from '../../scripts/gate-reachability';
 import { renderAchievementRows, renderRichPresenceRows } from '../../scripts/steam-partner-config';
 import {
     findUnreachableMembers,
@@ -77,6 +78,10 @@ const VERIFIERS: Record<string, () => void> = {
         // what keeps localization a translation budget rather than a refactor.
         expect(HARDCODED_COPY_BASELINE).toBe(0);
         expect(scanComponentCopy()).toEqual([]);
+    },
+    'gate-reachability': () => {
+        // gate:security hid 64 advisories this way; gate:package-hygiene hid five dead files.
+        expect(findUnrunGates(readScripts())).toEqual([]);
     },
     'package-hygiene': () => {
         // The gate itself does the checking; what this row asserts is that something actually runs

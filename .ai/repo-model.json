@@ -3,8 +3,8 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2473,
-    "codeFileCount": 948,
+    "trackedFileCount": 2475,
+    "codeFileCount": 949,
     "exportedSymbolCount": 3513,
     "contentItemCount": 63,
     "mechanicCount": 136,
@@ -2259,8 +2259,8 @@
     {
       "path": "docs/RELEASE_CHECKLIST.md",
       "category": "documentation",
-      "bytes": 4172,
-      "sha256": "1778973cdc7e21857e7ad2d9bfb7c0fec65a75f5f15eed9f7f77daa614a2044c"
+      "bytes": 4316,
+      "sha256": "446f944d2e4009fcaf9cf6139c16e8a11e7dea456621e23d807b0db8f2d99fb2"
     },
     {
       "path": "docs/RELIC_ROSTER.md",
@@ -2320,7 +2320,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 36714,
-      "sha256": "dc6d1c191bb35f33a9ba449d522b31eb659db8e1ff7764daa5b61ea4d21d6e18"
+      "sha256": "cfdb605217744e5a90a1806f73e440640d2e681a2d440ae8f483868977177517"
     },
     {
       "path": "docs/UI_RETHINK_PLAN.md",
@@ -3963,8 +3963,8 @@
     {
       "path": "package.json",
       "category": "configuration",
-      "bytes": 28703,
-      "sha256": "961d4847de390be59089a512cd0b955168f38ae4ca2f5bcef9acf7f924ec58ec"
+      "bytes": 28937,
+      "sha256": "f813749200c16fd259da5ae40c41f994732d8b862367aeab1b0bda11bd5a3052"
     },
     {
       "path": "packages/notifications/package.json",
@@ -4529,6 +4529,12 @@
       "category": "script",
       "bytes": 1413,
       "sha256": "fd4102ae8e364666985579abebd337f7fc9b0b8ef087469269f06d4f1362ad75"
+    },
+    {
+      "path": "scripts/gate-reachability.ts",
+      "category": "script",
+      "bytes": 5853,
+      "sha256": "64b42b40d6d30712f90ce5e54ceee6e1534ec285280b097bd4123be260e588b8"
     },
     {
       "path": "scripts/gate-softlock-seeds.ts",
@@ -11149,6 +11155,12 @@
       "sha256": "39b87073b1f79068ddada0f9d0651ebc9083823bc2e1cf86d1fec434db0b0700"
     },
     {
+      "path": "src/shared/gate-reachability.test.ts",
+      "category": "test",
+      "bytes": 2262,
+      "sha256": "711e518e96baeb5ec9c216f852bc43cf489757e0fff6f7febc33fb1bca16d45b"
+    },
+    {
       "path": "src/shared/generated/blueprintGlossaryGen.ts",
       "category": "source",
       "bytes": 278,
@@ -11697,14 +11709,14 @@
     {
       "path": "src/shared/release-checklist.test.ts",
       "category": "test",
-      "bytes": 11065,
-      "sha256": "d96a9e6dbe4d9f61bce0f6c38b71e08e99a60bd166a157d1b9941f994d10c7ee"
+      "bytes": 11338,
+      "sha256": "2b1058eb683351f032c5d187663bea95637a7f61b60691905df9dcd0e135a0e3"
     },
     {
       "path": "src/shared/release-checklist.ts",
       "category": "source",
-      "bytes": 9206,
-      "sha256": "1627dce72e62afc8277f21687f13df2356eafc0d4db84d20bd1406ab12264c9e"
+      "bytes": 9457,
+      "sha256": "677646589be664d87c61d3f839ad53fdac15a2209625896f8451289805930efd"
     },
     {
       "path": "src/shared/relic-favor-rules.test.ts",
@@ -28537,6 +28549,16 @@
       "testedBy": []
     },
     {
+      "id": "file:src/shared/gate-reachability.test.ts",
+      "path": "src/shared/gate-reachability.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 54,
+      "imports": [],
+      "exports": [],
+      "testedBy": []
+    },
+    {
       "id": "file:src/shared/generated/blueprintGlossaryGen.ts",
       "path": "src/shared/generated/blueprintGlossaryGen.ts",
       "layer": "shared",
@@ -30370,7 +30392,7 @@
       "path": "src/shared/release-checklist.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 212,
+      "lineCount": 217,
       "imports": [
         "file:src/main/crash-log.ts",
         "file:src/main/save-recovery.ts",
@@ -30394,7 +30416,7 @@
       "path": "src/shared/release-checklist.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 242,
+      "lineCount": 249,
       "imports": [],
       "exports": [
         "symbol:src/shared/release-checklist.ts#RELEASE_CHECKLIST",
@@ -56266,15 +56288,15 @@
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
       "line": 32,
-      "endLine": 194
+      "endLine": 201
     },
     {
       "id": "symbol:src/shared/release-checklist.ts#releaseChecklistByOwner",
       "name": "releaseChecklistByOwner",
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
-      "line": 200,
-      "endLine": 201
+      "line": 207,
+      "endLine": 208
     },
     {
       "id": "symbol:src/shared/release-checklist.ts#ReleaseChecklistItem",
@@ -56297,16 +56319,16 @@
       "name": "releaseChecklistSections",
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
-      "line": 196,
-      "endLine": 198
+      "line": 203,
+      "endLine": 205
     },
     {
       "id": "symbol:src/shared/release-checklist.ts#renderReleaseChecklistMarkdown",
       "name": "renderReleaseChecklistMarkdown",
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
-      "line": 215,
-      "endLine": 241
+      "line": 222,
+      "endLine": 248
     },
     {
       "id": "symbol:src/shared/relic-favor-rules.ts#gainRelicFavor",
