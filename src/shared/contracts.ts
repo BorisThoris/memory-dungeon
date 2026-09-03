@@ -1186,6 +1186,11 @@ export interface DesktopApi {
     saveSettings: (settings: Settings) => Promise<unknown>;
     getSaveData: () => Promise<unknown>;
     saveGame: (data: SaveData) => Promise<unknown>;
+    /**
+     * Sets an unreadable save aside and starts a fresh profile. Only reachable from the notice the
+     * player sees when their save could not be read, and never destructive: the old file is kept.
+     */
+    recoverUnreadableSave: () => Promise<unknown>;
     unlockAchievement: (id: AchievementId) => Promise<unknown>;
     /** Publishes what the player is doing to their friends list; cosmetic and never awaited for correctness. */
     setRichPresence: (state: RichPresenceState) => Promise<void>;

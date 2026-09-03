@@ -158,6 +158,28 @@
     outline-offset: 2px;
 }
 
+.saveFailureNotice {
+    composes: steamBridgeNotice;
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--theme-space-sm);
+    background: color-mix(in srgb, var(--theme-ember) 22%, transparent);
+    border-color: color-mix(in srgb, var(--theme-ember-soft) 55%, transparent);
+}
+
+.saveFailureNoticeTitle {
+    font-weight: 600;
+}
+
+.saveFailureNoticeDetail {
+    opacity: 0.85;
+}
+
+.saveFailureNoticeAction {
+    composes: steamBridgeNoticeDismiss;
+    align-self: flex-start;
+}
+
 .layout {
     position: relative;
     z-index: 1;

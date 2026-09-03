@@ -35,6 +35,11 @@ export interface AppState {
     saveReadFailureNotice: string | null;
     saveWritesBlockedByReadFailure: boolean;
     clearSaveReadFailureNotice: () => void;
+    /**
+     * Sets an unreadable save aside and starts a fresh profile, re-enabling writes. The only way
+     * out of a read failure from inside the game.
+     */
+    recoverUnreadableSave: () => Promise<void>;
     boardPinMode: boolean;
     destroyPairArmed: boolean;
     peekModeArmed: boolean;

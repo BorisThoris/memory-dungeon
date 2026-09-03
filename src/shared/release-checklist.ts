@@ -73,6 +73,13 @@ export const RELEASE_CHECKLIST: readonly ReleaseChecklistItem[] = [
         section: 'Steamworks'
     },
     {
+        evidence: 'src/main/save-recovery.ts',
+        id: 'save-read-recovery',
+        label: 'A save this build cannot read is survivable, and the player is told and given a way out',
+        owner: 'repo',
+        section: 'Diagnostics'
+    },
+    {
         evidence: 'src/main/crash-log.ts',
         id: 'crash-reports',
         label: 'Crashes are written to disk with user paths redacted, and pruned',

@@ -3,6 +3,10 @@ import { createDefaultSaveData, normalizeSaveData } from '../shared/save-data';
 import type { SaveRepository } from './saveRepository';
 
 class ThrowingSaveRepository implements SaveRepository {
+    saveFilePath(): string {
+        return '/tmp/memory-dungeon-test/memory-dungeon-save.json';
+    }
+
     constructor(private readonly code: string) {}
 
     getSaveData(): unknown {

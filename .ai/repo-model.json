@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2454,
-    "codeFileCount": 931,
-    "exportedSymbolCount": 3486,
+    "trackedFileCount": 2460,
+    "codeFileCount": 937,
+    "exportedSymbolCount": 3497,
     "contentItemCount": 63,
     "mechanicCount": 136,
     "stateFieldCount": 144,
-    "relationshipCount": 10173
+    "relationshipCount": 10209
   },
   "inventory": [
     {
@@ -2259,8 +2259,8 @@
     {
       "path": "docs/RELEASE_CHECKLIST.md",
       "category": "documentation",
-      "bytes": 3140,
-      "sha256": "62f7f570612e104e81969dc5b9efafa5abb88a2e308cfe2e2113bc6748db5418"
+      "bytes": 3286,
+      "sha256": "49803058374da596e76b58da9841352f51ae281872e476decadec22a9b6dacf2"
     },
     {
       "path": "docs/RELIC_ROSTER.md",
@@ -2320,7 +2320,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 36714,
-      "sha256": "067094e3acc526d175bda3f82a18b6745eeae8eae9746fa8983270eda49be768"
+      "sha256": "4bc45dd9aa83d67ae5231ac1619ff947c2837476eaf43273ca32a5b1c0fd3031"
     },
     {
       "path": "docs/UI_RETHINK_PLAN.md",
@@ -4737,26 +4737,26 @@
     {
       "path": "src/main/ipc.ts",
       "category": "source",
-      "bytes": 5804,
-      "sha256": "b34be410987efdcd5eb9e41c9d7d56561e06f0ecd6f8564d5ccea495d216fa54"
+      "bytes": 6220,
+      "sha256": "4791047700df70256fccc4d2d9495a6a99b8faff430ab8de50eb58843c7ade22"
     },
     {
       "path": "src/main/persistence-write-error.test.ts",
       "category": "test",
-      "bytes": 2868,
-      "sha256": "36152591d04e7271e8f5debbafce8228a88fd77bb873eb09c6aa527e6892a691"
+      "bytes": 2972,
+      "sha256": "ac7e304b26d2ce07673b253adc7b87e7517274002657e66fdf4a974c610ac39d"
     },
     {
       "path": "src/main/persistence.test.ts",
       "category": "test",
-      "bytes": 7840,
-      "sha256": "57cc3ad6c79cb33bc9f511cc62160e03d45184cdcb02d98927c0988ce2c60a8b"
+      "bytes": 10274,
+      "sha256": "57669b0c42f9bd6a81452aaf3978272f799a64a21bb78a1c0b0805b278858acf"
     },
     {
       "path": "src/main/persistence.ts",
       "category": "source",
-      "bytes": 3837,
-      "sha256": "a7517a4420eaf812d7d7bb2fcd51ead4fd4808abbcc35a5503544c7c1947d4d5"
+      "bytes": 5280,
+      "sha256": "7272cdff7dc0b44d4a3b5bcb41d3d58aa388a7c2f70882040e6a3b924bff5153"
     },
     {
       "path": "src/main/renderer-csp.test.ts",
@@ -4789,10 +4789,28 @@
       "sha256": "0d67802ad5b022ae8313fd9040078b6c6fcbac4bfa2610dff51e1d8f854472ae"
     },
     {
+      "path": "src/main/save-recovery-fs.ts",
+      "category": "source",
+      "bytes": 592,
+      "sha256": "8602e419d3b0beb437d65246709e99a9429476e1f2159ad5023709f15edc40d3"
+    },
+    {
+      "path": "src/main/save-recovery.test.ts",
+      "category": "test",
+      "bytes": 4203,
+      "sha256": "c0a0a76421c917f2dfe6d6275c157fbd5cefd7d9d50925a6ac4e19aff1b83317"
+    },
+    {
+      "path": "src/main/save-recovery.ts",
+      "category": "source",
+      "bytes": 4125,
+      "sha256": "269fa02e2cf177be64750528709173edb003a737f71ddb401ddf5e418261a30a"
+    },
+    {
       "path": "src/main/saveRepository.ts",
       "category": "source",
-      "bytes": 1415,
-      "sha256": "e1e296b5053b9ec86099c16dd29b2ab517d820d860fb96257b0b5cd61138a0be"
+      "bytes": 1614,
+      "sha256": "0312746eb72d6df6423133e4e5adadde7eb8ec447703d39dae507d78319e4af6"
     },
     {
       "path": "src/main/startup-display-mode.test.ts",
@@ -4845,8 +4863,8 @@
     {
       "path": "src/preload/index.ts",
       "category": "source",
-      "bytes": 1061,
-      "sha256": "b51852ab784bf61d2932b7109c8a88d832a2fda6b2fb341e5a4c7e2b6430ac21"
+      "bytes": 1158,
+      "sha256": "531c11d18b9084a917d75cc97e7dc7da9d58140799708ff324577678bbebe496"
     },
     {
       "path": "src/renderer/a11y/focusables.test.ts",
@@ -7629,8 +7647,8 @@
     {
       "path": "src/renderer/components/MainMenu.module.css",
       "category": "source",
-      "bytes": 21713,
-      "sha256": "f7d121bd0a3e92ddc89b9a93311581aeaa3ec64cf34691218e0e58566c89c3a5"
+      "bytes": 22207,
+      "sha256": "ec25a3cc79f10c78386a87f3b3540c75cb7c6dea6505c84e5872c3fc92ecb6c1"
     },
     {
       "path": "src/renderer/components/MainMenu.test.tsx",
@@ -7641,8 +7659,8 @@
     {
       "path": "src/renderer/components/MainMenu.tsx",
       "category": "source",
-      "bytes": 15646,
-      "sha256": "e3cefdcf49daf034709ac0aecb4147b2a651a18d406760c1976d32189b2b2398"
+      "bytes": 17353,
+      "sha256": "0b11571810c53f1d66b59c6fe7aed0c24767eda15ed1adbb0d719ac95c963e12"
     },
     {
       "path": "src/renderer/components/MainMenuBackground.module.css",
@@ -7661,6 +7679,12 @@
       "category": "source",
       "bytes": 27276,
       "sha256": "a09566255ab1e99cb304d06d843ccbfff4b4e010ea9766a2fc1bc7215c7e2310"
+    },
+    {
+      "path": "src/renderer/components/MainMenuSaveFailureNotice.test.tsx",
+      "category": "test",
+      "bytes": 4080,
+      "sha256": "2e2b3e0b80d273538caff55bfdeac52905bc251307a4bb99258ba0aa7d1e8d08"
     },
     {
       "path": "src/renderer/components/matchedCardRimFireMaterial.ts",
@@ -8905,6 +8929,12 @@
       "sha256": "00e149b51e6f4edb55dd988f6ac552ec8da56875fa22a01a2489ea98d47703b6"
     },
     {
+      "path": "src/renderer/copy/saveRecoveryNotice.ts",
+      "category": "source",
+      "bytes": 721,
+      "sha256": "d11fe653af59aaf79327dbae3822cd10b4cfae588103b5171d4ba3f649649d8d"
+    },
+    {
       "path": "src/renderer/copy/traitInteractionLaneMap.test.ts",
       "category": "test",
       "bytes": 3004,
@@ -8925,8 +8955,8 @@
     {
       "path": "src/renderer/desktop-client.ts",
       "category": "source",
-      "bytes": 3205,
-      "sha256": "789ea96350c82d6dbc3b82b7c053d1914e8d71686e60ad3cd6315bf14d6c065f"
+      "bytes": 3520,
+      "sha256": "5b45bd8e92d362f0b6c3ca61a217899a53f96c336f488cb24b8093907ad7ae7d"
     },
     {
       "path": "src/renderer/desktop.d.ts",
@@ -9345,8 +9375,8 @@
     {
       "path": "src/renderer/store/appStoreTypes.ts",
       "category": "source",
-      "bytes": 4480,
-      "sha256": "11aa0a24c023106ebb19e20c607a5ec37367fbb321af6981a50c1555bc6879ce"
+      "bytes": 4693,
+      "sha256": "9b8db6361c6313723bd412ec16b8c8dc8350976edb5193590364837abff3561f"
     },
     {
       "path": "src/renderer/store/backgroundPersistence.test.ts",
@@ -9393,8 +9423,8 @@
     {
       "path": "src/renderer/store/hydrationController.ts",
       "category": "source",
-      "bytes": 2157,
-      "sha256": "7f9cdce5b396de877eb36fac00eca927805907fda50b5cb62628cc1da275e686"
+      "bytes": 2409,
+      "sha256": "036d959c1f379edb12e78edc473e217b4b6ceff722d411239d51a5ef16f46670"
     },
     {
       "path": "src/renderer/store/levelCompleteContinuationExecutor.test.ts",
@@ -9661,6 +9691,12 @@
       "sha256": "c0fe2f9feee50a9ed181274853d833eb8d29f1c5a97c71e2bb189069e7435c06"
     },
     {
+      "path": "src/renderer/store/saveReadRecovery.test.ts",
+      "category": "test",
+      "bytes": 3378,
+      "sha256": "c10408063312fab8e39829c3e1ad04457625cf51ca239f6e8d550053c977317d"
+    },
+    {
       "path": "src/renderer/store/shopCloseExecutor.test.ts",
       "category": "test",
       "bytes": 4655,
@@ -9741,8 +9777,8 @@
     {
       "path": "src/renderer/store/useAppStore.ts",
       "category": "source",
-      "bytes": 27758,
-      "sha256": "480b57ff962cd06fc4e7751a2a2e68fc5a6bfc62480e2d28c7948ca8acc6fa9c"
+      "bytes": 28718,
+      "sha256": "728f55d890b4cd4bd2e5034fdef99c864d52ab74a0386879f53dbc7e7dee7703"
     },
     {
       "path": "src/renderer/styles/App.module.css",
@@ -10305,8 +10341,8 @@
     {
       "path": "src/shared/contracts.ts",
       "category": "source",
-      "bytes": 46063,
-      "sha256": "6a577cfad07a3de09f5e72bb1bb99b6ce546e25163f3d430ece2e0ef3348303a"
+      "bytes": 46329,
+      "sha256": "fc578cc5d6700d90829688ea0956fa256cfd9273f59e95ad7385458905795f2f"
     },
     {
       "path": "src/shared/copy-locality.test.ts",
@@ -11139,8 +11175,8 @@
     {
       "path": "src/shared/ipc-channels.ts",
       "category": "source",
-      "bytes": 1890,
-      "sha256": "d98b5ad903d06e970648a87f259c568896040fb745df878c193ccb327009ab68"
+      "bytes": 2069,
+      "sha256": "94d1fb615c90a4ca6344746f12f65fa83a88fc149578b9829c06cb7680c658b4"
     },
     {
       "path": "src/shared/level-clear-rules.test.ts",
@@ -11589,14 +11625,14 @@
     {
       "path": "src/shared/release-checklist.test.ts",
       "category": "test",
-      "bytes": 6539,
-      "sha256": "c8a5671f65306f257e57dd103a1dda99630bc56929e3dfddc1f139514bad2258"
+      "bytes": 7759,
+      "sha256": "d5d38e597c8d6106d38f1aaecb5655d788d39c61d85cccf1c3ac6082fc7163dc"
     },
     {
       "path": "src/shared/release-checklist.ts",
       "category": "source",
-      "bytes": 7426,
-      "sha256": "7144851d33e6575c2479279521a28ae223ce6c483d0260ea58ae896556dec70b"
+      "bytes": 7680,
+      "sha256": "1acecd59659de0577e11bea1af655c19105a967790f902dac9e4927af26c9c16"
     },
     {
       "path": "src/shared/relic-favor-rules.test.ts",
@@ -14924,7 +14960,7 @@
       "path": "src/main/ipc.ts",
       "layer": "main",
       "role": "production",
-      "lineCount": 146,
+      "lineCount": 157,
       "imports": [
         "file:src/main/persistence.ts",
         "file:src/main/steam.ts",
@@ -14944,7 +14980,7 @@
       "path": "src/main/persistence-write-error.test.ts",
       "layer": "main",
       "role": "test",
-      "lineCount": 89,
+      "lineCount": 93,
       "imports": [
         "file:src/main/saveRepository.ts",
         "file:src/shared/save-data.ts"
@@ -14957,9 +14993,10 @@
       "path": "src/main/persistence.test.ts",
       "layer": "main",
       "role": "test",
-      "lineCount": 195,
+      "lineCount": 249,
       "imports": [
         "file:src/main/persistence.ts",
+        "file:src/main/save-recovery.ts",
         "file:src/main/saveRepository.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/save-data.ts"
@@ -14972,8 +15009,10 @@
       "path": "src/main/persistence.ts",
       "layer": "main",
       "role": "production",
-      "lineCount": 114,
+      "lineCount": 147,
       "imports": [
+        "file:src/main/save-recovery-fs.ts",
+        "file:src/main/save-recovery.ts",
         "file:src/main/saveRepository.ts",
         "file:src/main/window-bounds.ts",
         "file:src/shared/contracts.ts",
@@ -14981,7 +15020,8 @@
       ],
       "exports": [
         "symbol:src/main/persistence.ts#PersistenceService",
-        "symbol:src/main/persistence.ts#PersistenceWriteError"
+        "symbol:src/main/persistence.ts#PersistenceWriteError",
+        "symbol:src/main/persistence.ts#RecoverUnreadableSaveResult"
       ],
       "testedBy": [
         "file:src/main/ipc.test.ts",
@@ -15053,11 +15093,59 @@
       ]
     },
     {
+      "id": "file:src/main/save-recovery-fs.ts",
+      "path": "src/main/save-recovery-fs.ts",
+      "layer": "main",
+      "role": "production",
+      "lineCount": 15,
+      "imports": [
+        "file:src/main/save-recovery.ts"
+      ],
+      "exports": [
+        "symbol:src/main/save-recovery-fs.ts#nodeSaveRecoveryFileSystem"
+      ],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/main/save-recovery.test.ts",
+      "path": "src/main/save-recovery.test.ts",
+      "layer": "main",
+      "role": "test",
+      "lineCount": 101,
+      "imports": [
+        "file:src/main/save-recovery.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/main/save-recovery.ts",
+      "path": "src/main/save-recovery.ts",
+      "layer": "main",
+      "role": "production",
+      "lineCount": 96,
+      "imports": [],
+      "exports": [
+        "symbol:src/main/save-recovery.ts#isQuarantinedSaveName",
+        "symbol:src/main/save-recovery.ts#pruneQuarantinedSaves",
+        "symbol:src/main/save-recovery.ts#QUARANTINE_KEEP_COUNT",
+        "symbol:src/main/save-recovery.ts#quarantineFileName",
+        "symbol:src/main/save-recovery.ts#quarantineSaveFile",
+        "symbol:src/main/save-recovery.ts#SaveRecoveryFileSystem",
+        "symbol:src/main/save-recovery.ts#SaveRecoveryResult"
+      ],
+      "testedBy": [
+        "file:src/main/persistence.test.ts",
+        "file:src/main/save-recovery.test.ts",
+        "file:src/shared/release-checklist.test.ts"
+      ]
+    },
+    {
       "id": "file:src/main/saveRepository.ts",
       "path": "src/main/saveRepository.ts",
       "layer": "main",
       "role": "production",
-      "lineCount": 46,
+      "lineCount": 52,
       "imports": [
         "file:src/main/window-bounds.ts",
         "file:src/shared/contracts.ts",
@@ -15204,7 +15292,7 @@
       "path": "src/preload/index.ts",
       "layer": "preload",
       "role": "production",
-      "lineCount": 18,
+      "lineCount": 19,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/ipc-channels.ts"
@@ -17264,12 +17352,13 @@
       "path": "src/renderer/components/MainMenu.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 317,
+      "lineCount": 351,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/breakpoints.ts",
         "file:src/renderer/components/MainMenuBackground.tsx",
+        "file:src/renderer/copy/saveRecoveryNotice.ts",
         "file:src/renderer/desktop-client.ts",
         "file:src/renderer/hooks/hubShellFit.ts",
         "file:src/renderer/hooks/useFitShellZoom.ts",
@@ -17285,7 +17374,8 @@
         "symbol:src/renderer/components/MainMenu.tsx#default"
       ],
       "testedBy": [
-        "file:src/renderer/components/MainMenu.test.tsx"
+        "file:src/renderer/components/MainMenu.test.tsx",
+        "file:src/renderer/components/MainMenuSaveFailureNotice.test.tsx"
       ]
     },
     {
@@ -17322,6 +17412,20 @@
       "testedBy": [
         "file:src/renderer/components/MainMenuBackground.test.tsx"
       ]
+    },
+    {
+      "id": "file:src/renderer/components/MainMenuSaveFailureNotice.test.tsx",
+      "path": "src/renderer/components/MainMenuSaveFailureNotice.test.tsx",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 96,
+      "imports": [
+        "file:src/renderer/components/MainMenu.tsx",
+        "file:src/renderer/copy/saveRecoveryNotice.ts",
+        "file:src/shared/save-data.ts"
+      ],
+      "exports": [],
+      "testedBy": []
     },
     {
       "id": "file:src/renderer/components/matchedCardRimFireMaterial.ts",
@@ -20877,6 +20981,21 @@
       ]
     },
     {
+      "id": "file:src/renderer/copy/saveRecoveryNotice.ts",
+      "path": "src/renderer/copy/saveRecoveryNotice.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 15,
+      "imports": [],
+      "exports": [
+        "symbol:src/renderer/copy/saveRecoveryNotice.ts#SAVE_RECOVERY_COPY"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/MainMenuSaveFailureNotice.test.tsx",
+        "file:src/shared/release-checklist.test.ts"
+      ]
+    },
+    {
       "id": "file:src/renderer/copy/traitInteractionLaneMap.test.ts",
       "path": "src/renderer/copy/traitInteractionLaneMap.test.ts",
       "layer": "renderer",
@@ -20929,7 +21048,7 @@
       "path": "src/renderer/desktop-client.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 102,
+      "lineCount": 107,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/save-data.ts"
@@ -21938,7 +22057,7 @@
       "path": "src/renderer/store/appStoreTypes.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 113,
+      "lineCount": 118,
       "imports": [
         "file:src/renderer/store/matchScorePop.ts",
         "file:src/shared/contracts.ts",
@@ -22067,7 +22186,7 @@
       "path": "src/renderer/store/hydrationController.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 61,
+      "lineCount": 65,
       "imports": [
         "file:src/renderer/store/backgroundPersistence.ts",
         "file:src/shared/contracts.ts",
@@ -22077,10 +22196,12 @@
       ],
       "exports": [
         "symbol:src/renderer/store/hydrationController.ts#createHydratedAppStatePatch",
-        "symbol:src/renderer/store/hydrationController.ts#SAVE_READ_FAILURE_NOTICE"
+        "symbol:src/renderer/store/hydrationController.ts#SAVE_READ_FAILURE_NOTICE",
+        "symbol:src/renderer/store/hydrationController.ts#SAVE_RECOVERY_FAILED_NOTICE"
       ],
       "testedBy": [
-        "file:src/renderer/store/hydrationController.test.ts"
+        "file:src/renderer/store/hydrationController.test.ts",
+        "file:src/renderer/store/saveReadRecovery.test.ts"
       ]
     },
     {
@@ -22947,6 +23068,20 @@
       ]
     },
     {
+      "id": "file:src/renderer/store/saveReadRecovery.test.ts",
+      "path": "src/renderer/store/saveReadRecovery.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 80,
+      "imports": [
+        "file:src/renderer/store/hydrationController.ts",
+        "file:src/renderer/store/useAppStore.ts",
+        "file:src/shared/save-data.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
       "id": "file:src/renderer/store/shopCloseExecutor.test.ts",
       "path": "src/renderer/store/shopCloseExecutor.test.ts",
       "layer": "renderer",
@@ -23204,7 +23339,7 @@
       "path": "src/renderer/store/useAppStore.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 864,
+      "lineCount": 884,
       "imports": [
         "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/audio/uiSfx.ts",
@@ -23241,6 +23376,7 @@
         "file:src/shared/contracts.ts",
         "file:src/shared/game-core.ts",
         "file:src/shared/gameplay-core-adapters.ts",
+        "file:src/shared/save-data.ts",
         "file:src/shared/telemetry.ts"
       ],
       "exports": [
@@ -23252,6 +23388,7 @@
         "file:src/renderer/components/SettingsScreen.test.tsx",
         "file:src/renderer/components/ShopScreen.test.tsx",
         "file:src/renderer/components/SideRoomScreen.test.tsx",
+        "file:src/renderer/store/saveReadRecovery.test.ts",
         "file:src/renderer/store/useAppStore.test.ts"
       ]
     },
@@ -24861,7 +24998,7 @@
       "path": "src/shared/contracts.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1196,
+      "lineCount": 1201,
       "imports": [],
       "exports": [
         "symbol:src/shared/contracts.ts#AchievementId",
@@ -28453,7 +28590,7 @@
       "path": "src/shared/ipc-channels.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 44,
+      "lineCount": 47,
       "imports": [
         "file:src/shared/contracts.ts"
       ],
@@ -29981,10 +30118,12 @@
       "path": "src/shared/release-checklist.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 123,
+      "lineCount": 145,
       "imports": [
         "file:src/main/crash-log.ts",
+        "file:src/main/save-recovery.ts",
         "file:src/main/window-bounds.ts",
+        "file:src/renderer/copy/saveRecoveryNotice.ts",
         "file:src/shared/gamepad-input.ts",
         "file:src/shared/release-checklist.ts",
         "file:src/shared/rich-presence.ts",
@@ -30001,7 +30140,7 @@
       "path": "src/shared/release-checklist.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 193,
+      "lineCount": 200,
       "imports": [],
       "exports": [
         "symbol:src/shared/release-checklist.ts#RELEASE_CHECKLIST",
@@ -31586,6 +31725,7 @@
         "file:src/renderer/components/GameScreen.test.tsx",
         "file:src/renderer/components/inventoryScreenModel.test.ts",
         "file:src/renderer/components/MainMenu.test.tsx",
+        "file:src/renderer/components/MainMenuSaveFailureNotice.test.tsx",
         "file:src/renderer/components/PlayableOnboardingHarness.test.tsx",
         "file:src/renderer/components/ProfileScreen.test.tsx",
         "file:src/renderer/components/SettingsScreen.test.tsx",
@@ -31602,6 +31742,7 @@
         "file:src/renderer/store/runStartState.test.ts",
         "file:src/renderer/store/savePreferenceExecutor.test.ts",
         "file:src/renderer/store/savePreferenceSurfaceState.test.ts",
+        "file:src/renderer/store/saveReadRecovery.test.ts",
         "file:src/renderer/store/useAppStore.test.ts",
         "file:src/shared/achievement-reachability.test.ts",
         "file:src/shared/achievements.test.ts",
@@ -33604,23 +33745,31 @@
       "kind": "value",
       "file": "src/main/ipc.ts",
       "line": 13,
-      "endLine": 145
+      "endLine": 156
     },
     {
       "id": "symbol:src/main/persistence.ts#PersistenceService",
       "name": "PersistenceService",
       "kind": "class",
       "file": "src/main/persistence.ts",
-      "line": 38,
-      "endLine": 113
+      "line": 48,
+      "endLine": 146
     },
     {
       "id": "symbol:src/main/persistence.ts#PersistenceWriteError",
       "name": "PersistenceWriteError",
       "kind": "class",
       "file": "src/main/persistence.ts",
-      "line": 13,
-      "endLine": 21
+      "line": 19,
+      "endLine": 27
+    },
+    {
+      "id": "symbol:src/main/persistence.ts#RecoverUnreadableSaveResult",
+      "name": "RecoverUnreadableSaveResult",
+      "kind": "interface",
+      "file": "src/main/persistence.ts",
+      "line": 44,
+      "endLine": 46
     },
     {
       "id": "symbol:src/main/renderer-loader.ts#loadRendererEntry",
@@ -33655,12 +33804,76 @@
       "endLine": 18
     },
     {
+      "id": "symbol:src/main/save-recovery-fs.ts#nodeSaveRecoveryFileSystem",
+      "name": "nodeSaveRecoveryFileSystem",
+      "kind": "value",
+      "file": "src/main/save-recovery-fs.ts",
+      "line": 6,
+      "endLine": 14
+    },
+    {
+      "id": "symbol:src/main/save-recovery.ts#isQuarantinedSaveName",
+      "name": "isQuarantinedSaveName",
+      "kind": "value",
+      "file": "src/main/save-recovery.ts",
+      "line": 34,
+      "endLine": 38
+    },
+    {
+      "id": "symbol:src/main/save-recovery.ts#pruneQuarantinedSaves",
+      "name": "pruneQuarantinedSaves",
+      "kind": "value",
+      "file": "src/main/save-recovery.ts",
+      "line": 44,
+      "endLine": 51
+    },
+    {
+      "id": "symbol:src/main/save-recovery.ts#QUARANTINE_KEEP_COUNT",
+      "name": "QUARANTINE_KEEP_COUNT",
+      "kind": "value",
+      "file": "src/main/save-recovery.ts",
+      "line": 16,
+      "endLine": 16
+    },
+    {
+      "id": "symbol:src/main/save-recovery.ts#quarantineFileName",
+      "name": "quarantineFileName",
+      "kind": "value",
+      "file": "src/main/save-recovery.ts",
+      "line": 27,
+      "endLine": 32
+    },
+    {
+      "id": "symbol:src/main/save-recovery.ts#quarantineSaveFile",
+      "name": "quarantineSaveFile",
+      "kind": "value",
+      "file": "src/main/save-recovery.ts",
+      "line": 76,
+      "endLine": 95
+    },
+    {
+      "id": "symbol:src/main/save-recovery.ts#SaveRecoveryFileSystem",
+      "name": "SaveRecoveryFileSystem",
+      "kind": "interface",
+      "file": "src/main/save-recovery.ts",
+      "line": 61,
+      "endLine": 69
+    },
+    {
+      "id": "symbol:src/main/save-recovery.ts#SaveRecoveryResult",
+      "name": "SaveRecoveryResult",
+      "kind": "interface",
+      "file": "src/main/save-recovery.ts",
+      "line": 53,
+      "endLine": 58
+    },
+    {
       "id": "symbol:src/main/saveRepository.ts#ElectronStoreSaveRepository",
       "name": "ElectronStoreSaveRepository",
       "kind": "class",
       "file": "src/main/saveRepository.ts",
-      "line": 20,
-      "endLine": 45
+      "line": 22,
+      "endLine": 51
     },
     {
       "id": "symbol:src/main/saveRepository.ts#SaveRepository",
@@ -33668,7 +33881,7 @@
       "kind": "interface",
       "file": "src/main/saveRepository.ts",
       "line": 12,
-      "endLine": 18
+      "endLine": 20
     },
     {
       "id": "symbol:src/main/startup-display-mode.ts#resolveStartupDisplayMode",
@@ -36107,8 +36320,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/MainMenu.tsx",
-      "line": 316,
-      "endLine": 316
+      "line": 350,
+      "endLine": 350
     },
     {
       "id": "symbol:src/renderer/components/MainMenuBackground.tsx#default",
@@ -40247,6 +40460,14 @@
       "endLine": 351
     },
     {
+      "id": "symbol:src/renderer/copy/saveRecoveryNotice.ts#SAVE_RECOVERY_COPY",
+      "name": "SAVE_RECOVERY_COPY",
+      "kind": "value",
+      "file": "src/renderer/copy/saveRecoveryNotice.ts",
+      "line": 9,
+      "endLine": 14
+    },
+    {
       "id": "symbol:src/renderer/copy/traitInteractionLaneMap.ts#buildTraitInteractionLaneMap",
       "name": "buildTraitInteractionLaneMap",
       "kind": "value",
@@ -40315,8 +40536,8 @@
       "name": "desktopClient",
       "kind": "value",
       "file": "src/renderer/desktop-client.ts",
-      "line": 101,
-      "endLine": 101
+      "line": 106,
+      "endLine": 106
     },
     {
       "id": "symbol:src/renderer/dev/BlueprintExplorer.tsx#default",
@@ -41092,7 +41313,7 @@
       "kind": "interface",
       "file": "src/renderer/store/appStoreTypes.ts",
       "line": 16,
-      "endLine": 112
+      "endLine": 117
     },
     {
       "id": "symbol:src/renderer/store/backgroundPersistence.ts#runPersistenceInBackground",
@@ -41171,8 +41392,8 @@
       "name": "createHydratedAppStatePatch",
       "kind": "value",
       "file": "src/renderer/store/hydrationController.ts",
-      "line": 26,
-      "endLine": 60
+      "line": 30,
+      "endLine": 64
     },
     {
       "id": "symbol:src/renderer/store/hydrationController.ts#SAVE_READ_FAILURE_NOTICE",
@@ -41181,6 +41402,14 @@
       "file": "src/renderer/store/hydrationController.ts",
       "line": 7,
       "endLine": 8
+    },
+    {
+      "id": "symbol:src/renderer/store/hydrationController.ts#SAVE_RECOVERY_FAILED_NOTICE",
+      "name": "SAVE_RECOVERY_FAILED_NOTICE",
+      "kind": "value",
+      "file": "src/renderer/store/hydrationController.ts",
+      "line": 11,
+      "endLine": 12
     },
     {
       "id": "symbol:src/renderer/store/levelCompleteContinuationExecutor.ts#executeChooseRouteAndContinue",
@@ -42395,8 +42624,8 @@
       "name": "useAppStore",
       "kind": "value",
       "file": "src/renderer/store/useAppStore.ts",
-      "line": 261,
-      "endLine": 853
+      "line": 262,
+      "endLine": 873
     },
     {
       "id": "symbol:src/renderer/styles/theme.ts#buildRendererThemeStyle",
@@ -45420,7 +45649,7 @@
       "kind": "interface",
       "file": "src/shared/contracts.ts",
       "line": 1184,
-      "endLine": 1195
+      "endLine": 1200
     },
     {
       "id": "symbol:src/shared/contracts.ts#DisplayMode",
@@ -53219,8 +53448,8 @@
       "name": "DESKTOP_IPC_CHANNELS",
       "kind": "value",
       "file": "src/shared/ipc-channels.ts",
-      "line": 20,
-      "endLine": 30
+      "line": 21,
+      "endLine": 32
     },
     {
       "id": "symbol:src/shared/ipc-channels.ts#IPC_CHANNELS",
@@ -53228,15 +53457,15 @@
       "kind": "value",
       "file": "src/shared/ipc-channels.ts",
       "line": 7,
-      "endLine": 17
+      "endLine": 18
     },
     {
       "id": "symbol:src/shared/ipc-channels.ts#IPC_CHANNELS_LEGACY_DESKTOP",
       "name": "IPC_CHANNELS_LEGACY_DESKTOP",
       "kind": "value",
       "file": "src/shared/ipc-channels.ts",
-      "line": 33,
-      "endLine": 43
+      "line": 35,
+      "endLine": 46
     },
     {
       "id": "symbol:src/shared/level-clear-rules.ts#applyFloorClearEnemyHazardDefeats",
@@ -55628,15 +55857,15 @@
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
       "line": 32,
-      "endLine": 145
+      "endLine": 152
     },
     {
       "id": "symbol:src/shared/release-checklist.ts#releaseChecklistByOwner",
       "name": "releaseChecklistByOwner",
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
-      "line": 151,
-      "endLine": 152
+      "line": 158,
+      "endLine": 159
     },
     {
       "id": "symbol:src/shared/release-checklist.ts#ReleaseChecklistItem",
@@ -55659,16 +55888,16 @@
       "name": "releaseChecklistSections",
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
-      "line": 147,
-      "endLine": 149
+      "line": 154,
+      "endLine": 156
     },
     {
       "id": "symbol:src/shared/release-checklist.ts#renderReleaseChecklistMarkdown",
       "name": "renderReleaseChecklistMarkdown",
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
-      "line": 166,
-      "endLine": 192
+      "line": 173,
+      "endLine": 199
     },
     {
       "id": "symbol:src/shared/relic-favor-rules.ts#gainRelicFavor",
@@ -64890,7 +65119,7 @@
         },
         {
           "path": "src/main/persistence.ts",
-          "line": 10
+          "line": 16
         }
       ],
       "tests": [
@@ -65464,7 +65693,7 @@
         },
         {
           "path": "src/renderer/store/useAppStore.ts",
-          "line": 53
+          "line": 54
         }
       ],
       "tests": [
@@ -73336,6 +73565,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/main/persistence.ts->symbol:src/main/persistence.ts#RecoverUnreadableSaveResult",
+      "source": "file:src/main/persistence.ts",
+      "target": "symbol:src/main/persistence.ts#RecoverUnreadableSaveResult",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/main/renderer-loader.ts->symbol:src/main/renderer-loader.ts#loadRendererEntry",
       "source": "file:src/main/renderer-loader.ts",
       "target": "symbol:src/main/renderer-loader.ts#loadRendererEntry",
@@ -73357,6 +73592,54 @@
       "id": "exports:src/main/renderer-security-policy.ts->symbol:src/main/renderer-security-policy.ts#rendererNavigationIsAllowed",
       "source": "file:src/main/renderer-security-policy.ts",
       "target": "symbol:src/main/renderer-security-policy.ts#rendererNavigationIsAllowed",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/main/save-recovery-fs.ts->symbol:src/main/save-recovery-fs.ts#nodeSaveRecoveryFileSystem",
+      "source": "file:src/main/save-recovery-fs.ts",
+      "target": "symbol:src/main/save-recovery-fs.ts#nodeSaveRecoveryFileSystem",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/main/save-recovery.ts->symbol:src/main/save-recovery.ts#isQuarantinedSaveName",
+      "source": "file:src/main/save-recovery.ts",
+      "target": "symbol:src/main/save-recovery.ts#isQuarantinedSaveName",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/main/save-recovery.ts->symbol:src/main/save-recovery.ts#pruneQuarantinedSaves",
+      "source": "file:src/main/save-recovery.ts",
+      "target": "symbol:src/main/save-recovery.ts#pruneQuarantinedSaves",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/main/save-recovery.ts->symbol:src/main/save-recovery.ts#QUARANTINE_KEEP_COUNT",
+      "source": "file:src/main/save-recovery.ts",
+      "target": "symbol:src/main/save-recovery.ts#QUARANTINE_KEEP_COUNT",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/main/save-recovery.ts->symbol:src/main/save-recovery.ts#quarantineFileName",
+      "source": "file:src/main/save-recovery.ts",
+      "target": "symbol:src/main/save-recovery.ts#quarantineFileName",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/main/save-recovery.ts->symbol:src/main/save-recovery.ts#quarantineSaveFile",
+      "source": "file:src/main/save-recovery.ts",
+      "target": "symbol:src/main/save-recovery.ts#quarantineSaveFile",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/main/save-recovery.ts->symbol:src/main/save-recovery.ts#SaveRecoveryFileSystem",
+      "source": "file:src/main/save-recovery.ts",
+      "target": "symbol:src/main/save-recovery.ts#SaveRecoveryFileSystem",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/main/save-recovery.ts->symbol:src/main/save-recovery.ts#SaveRecoveryResult",
+      "source": "file:src/main/save-recovery.ts",
+      "target": "symbol:src/main/save-recovery.ts#SaveRecoveryResult",
       "kind": "exports"
     },
     {
@@ -78304,6 +78587,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/copy/saveRecoveryNotice.ts->symbol:src/renderer/copy/saveRecoveryNotice.ts#SAVE_RECOVERY_COPY",
+      "source": "file:src/renderer/copy/saveRecoveryNotice.ts",
+      "target": "symbol:src/renderer/copy/saveRecoveryNotice.ts#SAVE_RECOVERY_COPY",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/copy/traitInteractionLaneMap.ts->symbol:src/renderer/copy/traitInteractionLaneMap.ts#buildTraitInteractionLaneMap",
       "source": "file:src/renderer/copy/traitInteractionLaneMap.ts",
       "target": "symbol:src/renderer/copy/traitInteractionLaneMap.ts#buildTraitInteractionLaneMap",
@@ -79003,6 +79292,12 @@
       "id": "exports:src/renderer/store/hydrationController.ts->symbol:src/renderer/store/hydrationController.ts#SAVE_READ_FAILURE_NOTICE",
       "source": "file:src/renderer/store/hydrationController.ts",
       "target": "symbol:src/renderer/store/hydrationController.ts#SAVE_READ_FAILURE_NOTICE",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/store/hydrationController.ts->symbol:src/renderer/store/hydrationController.ts#SAVE_RECOVERY_FAILED_NOTICE",
+      "source": "file:src/renderer/store/hydrationController.ts",
+      "target": "symbol:src/renderer/store/hydrationController.ts#SAVE_RECOVERY_FAILED_NOTICE",
       "kind": "exports"
     },
     {
@@ -97823,6 +98118,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/main/persistence.test.ts->src/main/save-recovery.ts",
+      "source": "file:src/main/persistence.test.ts",
+      "target": "file:src/main/save-recovery.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/main/persistence.test.ts->src/main/saveRepository.ts",
       "source": "file:src/main/persistence.test.ts",
       "target": "file:src/main/saveRepository.ts",
@@ -97838,6 +98139,18 @@
       "id": "imports:src/main/persistence.test.ts->src/shared/save-data.ts",
       "source": "file:src/main/persistence.test.ts",
       "target": "file:src/shared/save-data.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/main/persistence.ts->src/main/save-recovery-fs.ts",
+      "source": "file:src/main/persistence.ts",
+      "target": "file:src/main/save-recovery-fs.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/main/persistence.ts->src/main/save-recovery.ts",
+      "source": "file:src/main/persistence.ts",
+      "target": "file:src/main/save-recovery.ts",
       "kind": "imports"
     },
     {
@@ -97874,6 +98187,18 @@
       "id": "imports:src/main/renderer-security-policy.test.ts->src/main/renderer-security-policy.ts",
       "source": "file:src/main/renderer-security-policy.test.ts",
       "target": "file:src/main/renderer-security-policy.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/main/save-recovery-fs.ts->src/main/save-recovery.ts",
+      "source": "file:src/main/save-recovery-fs.ts",
+      "target": "file:src/main/save-recovery.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/main/save-recovery.test.ts->src/main/save-recovery.ts",
+      "source": "file:src/main/save-recovery.test.ts",
+      "target": "file:src/main/save-recovery.ts",
       "kind": "imports"
     },
     {
@@ -100103,6 +100428,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/MainMenu.tsx->src/renderer/copy/saveRecoveryNotice.ts",
+      "source": "file:src/renderer/components/MainMenu.tsx",
+      "target": "file:src/renderer/copy/saveRecoveryNotice.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/MainMenu.tsx->src/renderer/desktop-client.ts",
       "source": "file:src/renderer/components/MainMenu.tsx",
       "target": "file:src/renderer/desktop-client.ts",
@@ -100214,6 +100545,24 @@
       "id": "imports:src/renderer/components/MainMenuBackground.tsx->src/shared/graphicsQuality.ts",
       "source": "file:src/renderer/components/MainMenuBackground.tsx",
       "target": "file:src/shared/graphicsQuality.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/MainMenuSaveFailureNotice.test.tsx->src/renderer/components/MainMenu.tsx",
+      "source": "file:src/renderer/components/MainMenuSaveFailureNotice.test.tsx",
+      "target": "file:src/renderer/components/MainMenu.tsx",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/MainMenuSaveFailureNotice.test.tsx->src/renderer/copy/saveRecoveryNotice.ts",
+      "source": "file:src/renderer/components/MainMenuSaveFailureNotice.test.tsx",
+      "target": "file:src/renderer/copy/saveRecoveryNotice.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/MainMenuSaveFailureNotice.test.tsx->src/shared/save-data.ts",
+      "source": "file:src/renderer/components/MainMenuSaveFailureNotice.test.tsx",
+      "target": "file:src/shared/save-data.ts",
       "kind": "imports"
     },
     {
@@ -105599,6 +105948,24 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/store/saveReadRecovery.test.ts->src/renderer/store/hydrationController.ts",
+      "source": "file:src/renderer/store/saveReadRecovery.test.ts",
+      "target": "file:src/renderer/store/hydrationController.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/store/saveReadRecovery.test.ts->src/renderer/store/useAppStore.ts",
+      "source": "file:src/renderer/store/saveReadRecovery.test.ts",
+      "target": "file:src/renderer/store/useAppStore.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/store/saveReadRecovery.test.ts->src/shared/save-data.ts",
+      "source": "file:src/renderer/store/saveReadRecovery.test.ts",
+      "target": "file:src/shared/save-data.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/store/shopCloseExecutor.test.ts->src/renderer/store/shopCloseExecutor.ts",
       "source": "file:src/renderer/store/shopCloseExecutor.test.ts",
       "target": "file:src/renderer/store/shopCloseExecutor.ts",
@@ -106196,6 +106563,12 @@
       "id": "imports:src/renderer/store/useAppStore.ts->src/shared/gameplay-core-adapters.ts",
       "source": "file:src/renderer/store/useAppStore.ts",
       "target": "file:src/shared/gameplay-core-adapters.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/store/useAppStore.ts->src/shared/save-data.ts",
+      "source": "file:src/renderer/store/useAppStore.ts",
+      "target": "file:src/shared/save-data.ts",
       "kind": "imports"
     },
     {
@@ -112697,9 +113070,21 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/release-checklist.test.ts->src/main/save-recovery.ts",
+      "source": "file:src/shared/release-checklist.test.ts",
+      "target": "file:src/main/save-recovery.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/release-checklist.test.ts->src/main/window-bounds.ts",
       "source": "file:src/shared/release-checklist.test.ts",
       "target": "file:src/main/window-bounds.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/release-checklist.test.ts->src/renderer/copy/saveRecoveryNotice.ts",
+      "source": "file:src/shared/release-checklist.test.ts",
+      "target": "file:src/renderer/copy/saveRecoveryNotice.ts",
       "kind": "imports"
     },
     {
@@ -122427,6 +122812,24 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/main/save-recovery.ts->file:src/main/persistence.test.ts",
+      "source": "file:src/main/save-recovery.ts",
+      "target": "file:src/main/persistence.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/main/save-recovery.ts->file:src/main/save-recovery.test.ts",
+      "source": "file:src/main/save-recovery.ts",
+      "target": "file:src/main/save-recovery.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/main/save-recovery.ts->file:src/shared/release-checklist.test.ts",
+      "source": "file:src/main/save-recovery.ts",
+      "target": "file:src/shared/release-checklist.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/main/saveRepository.ts->file:src/main/persistence-write-error.test.ts",
       "source": "file:src/main/saveRepository.ts",
       "target": "file:src/main/persistence-write-error.test.ts",
@@ -122910,6 +123313,12 @@
       "id": "tested_by:src/renderer/components/MainMenu.tsx->file:src/renderer/components/MainMenu.test.tsx",
       "source": "file:src/renderer/components/MainMenu.tsx",
       "target": "file:src/renderer/components/MainMenu.test.tsx",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/MainMenu.tsx->file:src/renderer/components/MainMenuSaveFailureNotice.test.tsx",
+      "source": "file:src/renderer/components/MainMenu.tsx",
+      "target": "file:src/renderer/components/MainMenuSaveFailureNotice.test.tsx",
       "kind": "tested_by"
     },
     {
@@ -123489,6 +123898,18 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/copy/saveRecoveryNotice.ts->file:src/renderer/components/MainMenuSaveFailureNotice.test.tsx",
+      "source": "file:src/renderer/copy/saveRecoveryNotice.ts",
+      "target": "file:src/renderer/components/MainMenuSaveFailureNotice.test.tsx",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/copy/saveRecoveryNotice.ts->file:src/shared/release-checklist.test.ts",
+      "source": "file:src/renderer/copy/saveRecoveryNotice.ts",
+      "target": "file:src/shared/release-checklist.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/copy/traitInteractionLaneMap.ts->file:src/renderer/copy/traitInteractionLaneMap.test.ts",
       "source": "file:src/renderer/copy/traitInteractionLaneMap.ts",
       "target": "file:src/renderer/copy/traitInteractionLaneMap.test.ts",
@@ -123771,6 +124192,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/store/hydrationController.ts->file:src/renderer/store/saveReadRecovery.test.ts",
+      "source": "file:src/renderer/store/hydrationController.ts",
+      "target": "file:src/renderer/store/saveReadRecovery.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/store/levelCompleteContinuationExecutor.ts->file:src/renderer/store/levelCompleteContinuationExecutor.test.ts",
       "source": "file:src/renderer/store/levelCompleteContinuationExecutor.ts",
       "target": "file:src/renderer/store/levelCompleteContinuationExecutor.test.ts",
@@ -124008,6 +124435,12 @@
       "id": "tested_by:src/renderer/store/useAppStore.ts->file:src/renderer/components/SideRoomScreen.test.tsx",
       "source": "file:src/renderer/store/useAppStore.ts",
       "target": "file:src/renderer/components/SideRoomScreen.test.tsx",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/store/useAppStore.ts->file:src/renderer/store/saveReadRecovery.test.ts",
+      "source": "file:src/renderer/store/useAppStore.ts",
+      "target": "file:src/renderer/store/saveReadRecovery.test.ts",
       "kind": "tested_by"
     },
     {
@@ -127875,6 +128308,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/save-data.ts->file:src/renderer/components/MainMenuSaveFailureNotice.test.tsx",
+      "source": "file:src/shared/save-data.ts",
+      "target": "file:src/renderer/components/MainMenuSaveFailureNotice.test.tsx",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/save-data.ts->file:src/renderer/components/PlayableOnboardingHarness.test.tsx",
       "source": "file:src/shared/save-data.ts",
       "target": "file:src/renderer/components/PlayableOnboardingHarness.test.tsx",
@@ -127968,6 +128407,12 @@
       "id": "tested_by:src/shared/save-data.ts->file:src/renderer/store/savePreferenceSurfaceState.test.ts",
       "source": "file:src/shared/save-data.ts",
       "target": "file:src/renderer/store/savePreferenceSurfaceState.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/save-data.ts->file:src/renderer/store/saveReadRecovery.test.ts",
+      "source": "file:src/shared/save-data.ts",
+      "target": "file:src/renderer/store/saveReadRecovery.test.ts",
       "kind": "tested_by"
     },
     {

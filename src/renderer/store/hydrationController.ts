@@ -7,6 +7,10 @@ import { runPersistenceInBackground } from './backgroundPersistence';
 export const SAVE_READ_FAILURE_NOTICE =
     'Save read failed. Started a temporary in-memory profile and paused autosave to avoid overwriting recoverable data.';
 
+/** Shown when the way out of a read failure itself fails; the old save is still untouched. */
+export const SAVE_RECOVERY_FAILED_NOTICE =
+    'Could not start a fresh profile. Your existing save file has not been changed, and autosave stays paused.';
+
 interface HydratedAppStatePatch {
     hydrated: true;
     hydrating: false;

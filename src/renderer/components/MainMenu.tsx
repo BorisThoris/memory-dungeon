@@ -22,6 +22,7 @@ import {
     uiSfxGainFromSettings
 } from '../audio/uiSfx';
 import MainMenuBackground from './MainMenuBackground';
+import { SAVE_RECOVERY_COPY } from '../copy/saveRecoveryNotice';
 import { runPersistenceInBackground } from '../store/backgroundPersistence';
 import { useAppStore } from '../store/useAppStore';
 import styles from './MainMenu.module.css';
@@ -55,15 +56,25 @@ const MainMenu = ({
     onOpenSettings,
     onStartDungeonShowcase
 }: MainMenuProps) => {
-    const { achievementBridgeNotice, clearAchievementBridgeNotice, persistenceWriteNotice, clearPersistenceWriteNotice } =
-        useAppStore(
-            useShallow((state) => ({
-                achievementBridgeNotice: state.achievementBridgeNotice,
-                clearAchievementBridgeNotice: state.clearAchievementBridgeNotice,
-                persistenceWriteNotice: state.persistenceWriteNotice,
-                clearPersistenceWriteNotice: state.clearPersistenceWriteNotice
-            }))
-        );
+    const {
+        achievementBridgeNotice,
+        clearAchievementBridgeNotice,
+        persistenceWriteNotice,
+        clearPersistenceWriteNotice,
+        recoverUnreadableSave,
+        saveReadFailureNotice,
+        saveWritesBlockedByReadFailure
+    } = useAppStore(
+        useShallow((state) => ({
+            achievementBridgeNotice: state.achievementBridgeNotice,
+            clearAchievementBridgeNotice: state.clearAchievementBridgeNotice,
+            persistenceWriteNotice: state.persistenceWriteNotice,
+            clearPersistenceWriteNotice: state.clearPersistenceWriteNotice,
+            recoverUnreadableSave: state.recoverUnreadableSave,
+            saveReadFailureNotice: state.saveReadFailureNotice,
+            saveWritesBlockedByReadFailure: state.saveWritesBlockedByReadFailure
+        }))
+    );
     const shellRef = useRef<HTMLElement | null>(null);
     const menuFitMeasureRef = useRef<HTMLDivElement | null>(null);
     const { tiltRef: menuFieldTiltRef } = usePlatformTiltField({
@@ -199,6 +210,29 @@ const MainMenu = ({
                                 >
                                     Dismiss
                                 </button>
+                            </div>
+                        ) : null}
+
+                        {saveReadFailureNotice ? (
+                            <div className={styles.saveFailureNotice} role="alert">
+                                <span className={styles.saveFailureNoticeTitle}>{SAVE_RECOVERY_COPY.title}</span>
+                                <span>{saveReadFailureNotice}</span>
+                                {saveWritesBlockedByReadFailure ? (
+                                    <>
+                                        <span className={styles.saveFailureNoticeDetail}>
+                                            {SAVE_RECOVERY_COPY.detail}
+                                        </span>
+                                        <button
+                                            type="button"
+                                            className={styles.saveFailureNoticeAction}
+                                            onClick={() => {
+                                                void recoverUnreadableSave();
+                                            }}
+                                        >
+                                            {SAVE_RECOVERY_COPY.action}
+                                        </button>
+                                    </>
+                                ) : null}
                             </div>
                         ) : null}
 

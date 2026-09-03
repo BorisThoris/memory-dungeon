@@ -3,6 +3,7 @@ import type { SaveData, Settings } from '../shared/contracts';
 import { ACHIEVEMENT_IDS, createDefaultSaveData, normalizeSaveData } from '../shared/save-data';
 
 import type { SaveRepository } from './saveRepository';
+import type { SaveRecoveryFileSystem } from './save-recovery';
 
 vi.mock('electron-store', () => {
     return {
@@ -24,6 +25,10 @@ vi.mock('electron-store', () => {
 import { PersistenceService } from './persistence';
 
 class MemorySaveRepository implements SaveRepository {
+    saveFilePath(): string {
+        return '/tmp/memory-dungeon-test/memory-dungeon-save.json';
+    }
+
     private windowState: unknown = null;
 
     constructor(private saveData: unknown = normalizeSaveData()) {}
@@ -190,5 +195,54 @@ describe('PersistenceService', () => {
         };
         const p = new PersistenceService(repository);
         expect(() => p.saveWindowState({ bounds: { height: 800, width: 1200, x: 0, y: 0 }, maximized: false })).not.toThrow();
+    });
+});
+
+describe('recovering an unreadable save', () => {
+    it('keeps the old file, starts a fresh profile, and lets writes through again', () => {
+        const repository = new MemorySaveRepository();
+        const kept: string[] = [];
+        const fileSystem: SaveRecoveryFileSystem = {
+            basename: (path) => path.slice(path.lastIndexOf('/') + 1),
+            copy: (_from, to) => kept.push(to),
+            dirname: (path) => path.slice(0, path.lastIndexOf('/')),
+            exists: () => true,
+            join: (...segments) => segments.join('/'),
+            listDirectory: () => [],
+            remove: () => undefined
+        };
+        const persistence = new PersistenceService(repository, fileSystem);
+
+        const result = persistence.recoverUnreadableSave('2026-09-03T20:45:12.884Z');
+
+        expect(result.quarantinedAs).toContain('unreadable');
+        expect(kept).toHaveLength(1);
+        expect(result.saveData.bestScore).toBe(0);
+        // The reset is what unblocks writing: the store now holds a save this build can read.
+        expect(() => persistence.getSaveData()).not.toThrow();
+    });
+
+    it('still starts a fresh profile when the old file cannot be copied aside', () => {
+        const reportError = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+        const repository = new MemorySaveRepository();
+        const failingFileSystem: SaveRecoveryFileSystem = {
+            basename: (path) => path.slice(path.lastIndexOf('/') + 1),
+            copy: () => {
+                throw Object.assign(new Error('no space left on device'), { code: 'ENOSPC' });
+            },
+            dirname: (path) => path.slice(0, path.lastIndexOf('/')),
+            exists: () => true,
+            join: (...segments) => segments.join('/'),
+            listDirectory: () => [],
+            remove: () => undefined
+        };
+
+        const result = new PersistenceService(repository, failingFileSystem).recoverUnreadableSave();
+
+        // Leaving the player stuck with autosave off is the worse outcome, and they can already
+        // see the notice saying the read failed.
+        expect(result.quarantinedAs).toBeNull();
+        expect(result.saveData.bestScore).toBe(0);
+        reportError.mockRestore();
     });
 });

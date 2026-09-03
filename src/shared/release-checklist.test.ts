@@ -8,6 +8,8 @@ import { TILE_TRAIT_MARKS, describeTraitMark } from './tile-trait-marks';
 import { GAMEPAD_STICK_DEADZONE, readGamepadActions, STANDARD_GAMEPAD_BUTTONS } from './gamepad-input';
 import { MIN_WINDOW_HEIGHT, MIN_WINDOW_WIDTH, normalizeWindowState, resolveRestoredBounds } from '../main/window-bounds';
 import { CRASH_LOG_KEEP_COUNT, pruneCrashLogs, redactUserPaths } from '../main/crash-log';
+import { quarantineFileName, quarantineSaveFile } from '../main/save-recovery';
+import { SAVE_RECOVERY_COPY } from '../renderer/copy/saveRecoveryNotice';
 
 /**
  * One verifier per `repo` row. The point of the pairing is the assertion below that the two sets
@@ -49,6 +51,26 @@ const VERIFIERS: Record<string, () => void> = {
             Array.from({ length: CRASH_LOG_KEEP_COUNT + 5 }, (_unused, index) => `crash-2026-01-${index + 10}.log`)
         );
         expect(kept.length).toBe(5);
+    },
+    'save-read-recovery': () => {
+        // A save the game refuses is usually a *newer* save arriving through Steam Cloud from a
+        // beta build, so recovery keeps the file rather than deleting it.
+        const kept: string[] = [];
+        const result = quarantineSaveFile('/saves/memory-dungeon-save.json', '2026-09-03T20:45:12.884Z', {
+            basename: (path) => path.slice(path.lastIndexOf('/') + 1),
+            copy: (_from, to) => kept.push(to),
+            dirname: (path) => path.slice(0, path.lastIndexOf('/')),
+            exists: () => true,
+            join: (...segments) => segments.join('/'),
+            listDirectory: () => [],
+            remove: () => undefined
+        });
+
+        expect(result.quarantinedAs).not.toBeNull();
+        expect(kept).toHaveLength(1);
+        expect(quarantineFileName('memory-dungeon-save.json', '2026-09-03T20:45:12.884Z')).not.toContain(':');
+        // The notice the player reads has to name a way out, not just report the failure.
+        expect(SAVE_RECOVERY_COPY.action).toMatch(/\S/);
     },
     'rich-presence': () => {
         const inRun = buildRichPresence({ floor: 7, gameMode: 'endless', inRun: true });

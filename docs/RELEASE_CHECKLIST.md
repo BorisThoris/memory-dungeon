@@ -32,6 +32,7 @@ achievement on the Partner site or shoot a trailer.
 
 | Item | State | Owner | Where |
 |---|---|---|---|
+| A save this build cannot read is survivable, and the player is told and given a way out | done | the repository | `src/main/save-recovery.ts` |
 | Crashes are written to disk with user paths redacted, and pruned | done | the repository | `src/main/crash-log.ts` |
 
 ## Store

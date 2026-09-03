@@ -24,6 +24,7 @@ import {
     createShopRerollSurfaceResult
 } from './shopSurfaceState';
 import { desktopClient } from '../desktop-client';
+import { normalizeUnknownSaveDataOrThrow } from '../../shared/save-data';
 import { createRunResolutionController } from './runResolutionController';
 import { createRunTimerController } from './runTimerController';
 import {
@@ -109,7 +110,7 @@ import {
 } from '../audio/uiSfx';
 import type { StoreNavigationAction } from './navigationModel';
 import { runPersistenceInBackground } from './backgroundPersistence';
-import { createHydratedAppStatePatch } from './hydrationController';
+import { createHydratedAppStatePatch, SAVE_RECOVERY_FAILED_NOTICE } from './hydrationController';
 import { createRunLifecycleController } from './runLifecycleController';
 import { createAppStoreInitialState } from './appStoreInitialState';
 import type { AppState } from './appStoreTypes';
@@ -268,6 +269,25 @@ export const useAppStore = create<AppState>((set, get) => ({
     },
     clearSaveReadFailureNotice: () => {
         set({ saveReadFailureNotice: null });
+    },
+    recoverUnreadableSave: async () => {
+        if (!get().saveWritesBlockedByReadFailure) {
+            return;
+        }
+        try {
+            const recovered = normalizeUnknownSaveDataOrThrow(await desktopClient.recoverUnreadableSave());
+            set({
+                saveData: recovered,
+                saveReadFailureNotice: null,
+                saveWritesBlockedByReadFailure: false,
+                settings: recovered.settings
+            });
+        } catch (error) {
+            // The old save stays where it is and writes stay blocked, which is the safe half of the
+            // pair: the notice is still up, so the player can try again or move the file themselves.
+            console.error('[save] could not start a fresh profile', error);
+            set({ saveReadFailureNotice: SAVE_RECOVERY_FAILED_NOTICE });
+        }
     },
     dismissMatchScorePop: () => {
         set({ matchScorePop: null });

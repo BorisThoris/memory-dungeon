@@ -67,6 +67,11 @@ const fallbackClient: DesktopApi = {
         const currentSave = readLocalSave();
         return writeLocalSave({ ...data, settings: currentSave.settings });
     },
+    async recoverUnreadableSave(): Promise<SaveData> {
+        // The browser fallback keeps its save in local storage, so there is no file to set aside;
+        // the honest equivalent is to write a fresh profile over the one that could not be read.
+        return writeLocalSave(createDefaultSaveData());
+    },
     async setRichPresence(): Promise<void> {
         // No Steam in the browser fallback; presence is cosmetic, so this is a silent no-op.
     },

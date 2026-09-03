@@ -7,6 +7,7 @@ const desktopApi: DesktopApi = {
     saveSettings: (settings) => ipcRenderer.invoke(DESKTOP_IPC_CHANNELS.saveSettings, settings),
     getSaveData: () => ipcRenderer.invoke(DESKTOP_IPC_CHANNELS.getSaveData),
     saveGame: (data) => ipcRenderer.invoke(DESKTOP_IPC_CHANNELS.saveGame, data),
+    recoverUnreadableSave: () => ipcRenderer.invoke(DESKTOP_IPC_CHANNELS.recoverUnreadableSave),
     unlockAchievement: (achievementId) => ipcRenderer.invoke(DESKTOP_IPC_CHANNELS.unlockAchievement, achievementId),
     setRichPresence: (state) => ipcRenderer.invoke(DESKTOP_IPC_CHANNELS.setRichPresence, state),
     isSteamConnected: () => ipcRenderer.invoke(DESKTOP_IPC_CHANNELS.isSteamConnected),

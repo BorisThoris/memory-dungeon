@@ -5,6 +5,12 @@ import {
     normalizeUnknownSettingsOrThrow
 } from '../shared/save-data';
 import { ElectronStoreSaveRepository, type SaveRepository } from './saveRepository';
+import {
+    quarantineSaveFile,
+    type SaveRecoveryFileSystem,
+    type SaveRecoveryResult
+} from './save-recovery';
+import { nodeSaveRecoveryFileSystem } from './save-recovery-fs';
 import { mergeWindowState, normalizeWindowState, type WindowState } from './window-bounds';
 
 type PersistenceWriteErrorCode = 'quota' | 'permission' | 'busy' | 'unknown';
@@ -35,8 +41,15 @@ const mapNodeErrorToCode = (err: unknown): PersistenceWriteErrorCode => {
     return 'unknown';
 };
 
+export interface RecoverUnreadableSaveResult extends SaveRecoveryResult {
+    readonly saveData: SaveData;
+}
+
 export class PersistenceService {
-    constructor(private readonly repository: SaveRepository = new ElectronStoreSaveRepository()) {}
+    constructor(
+        private readonly repository: SaveRepository = new ElectronStoreSaveRepository(),
+        private readonly recoveryFileSystem: SaveRecoveryFileSystem = nodeSaveRecoveryFileSystem
+    ) {}
 
     private commitSaveData(nextSave: SaveData): void {
         try {
@@ -92,6 +105,26 @@ export class PersistenceService {
         });
         this.commitSaveData(nextSave);
         return nextSave;
+    }
+
+    /**
+     * The way out of a save this build cannot read. Copies the file aside under a timestamped name
+     * and starts a fresh profile, so writing works again without the old save being destroyed.
+     *
+     * The quarantine copy is best-effort: if it fails (a full disk, a read-only directory) the
+     * reset still happens, because leaving the player stuck with autosave off is the worse outcome
+     * and they can already see the notice that says so.
+     */
+    recoverUnreadableSave(nowIso: string = new Date().toISOString()): RecoverUnreadableSaveResult {
+        let recovery: SaveRecoveryResult = { pruned: [], quarantinedAs: null };
+        try {
+            recovery = quarantineSaveFile(this.repository.saveFilePath(), nowIso, this.recoveryFileSystem);
+        } catch (error) {
+            console.error('[persistence] could not set the unreadable save aside', error);
+        }
+        const fresh = normalizeSaveData();
+        this.commitSaveData(fresh);
+        return { ...recovery, saveData: fresh };
     }
 
     unlockAchievement(achievementId: AchievementId): SaveData {

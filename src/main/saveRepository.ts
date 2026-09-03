@@ -12,6 +12,8 @@ interface StoreShape {
 export interface SaveRepository {
     getSaveData: () => unknown;
     setSaveData: (saveData: SaveData) => void;
+    /** Where the store keeps its file, so an unreadable save can be copied aside before reset. */
+    saveFilePath: () => string;
     /** Window placement is a property of this machine, not of the save, so it never travels. */
     getWindowState: () => unknown;
     setWindowState: (windowState: WindowState) => void;
@@ -33,6 +35,10 @@ export class ElectronStoreSaveRepository implements SaveRepository {
 
     setSaveData(saveData: SaveData): void {
         this.store.set('saveData', saveData);
+    }
+
+    saveFilePath(): string {
+        return this.store.path;
     }
 
     getWindowState(): unknown {

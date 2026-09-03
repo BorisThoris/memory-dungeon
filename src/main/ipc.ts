@@ -105,6 +105,17 @@ export const registerIpcHandlers = (
     register(IPC_CHANNELS.saveSaveGame, saveGame);
     register(IPC_CHANNELS_LEGACY_DESKTOP.saveGame, saveGame);
 
+    const recoverUnreadableSave = () => {
+        try {
+            return persistence.recoverUnreadableSave();
+        } catch (error) {
+            console.error('[ipc] recover-unreadable-save failed', error);
+            throw error;
+        }
+    };
+    register(IPC_CHANNELS.saveRecoverUnreadable, recoverUnreadableSave);
+    register(IPC_CHANNELS_LEGACY_DESKTOP.recoverUnreadableSave, recoverUnreadableSave);
+
     const unlockAchievement = (_event: IpcMainInvokeEvent, rawAchievementId: unknown) => {
         try {
             const achievementId = normalizeUnknownAchievementId(rawAchievementId);
