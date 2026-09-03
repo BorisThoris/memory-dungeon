@@ -1164,6 +1164,18 @@ export interface SaveData {
     powersFtueSeen?: boolean;
 }
 
+/**
+ * Steam Rich Presence, as sent to the friends list. Declared here rather than in `rich-presence.ts`
+ * so `DesktopApi` can name it without contracts importing a module that imports contracts back.
+ */
+export type RichPresenceToken = '#Status_Menu' | '#Status_Run' | '#Status_Endless' | '#Status_Daily' | '#Status_Puzzle';
+
+export interface RichPresenceState {
+    readonly display: RichPresenceToken;
+    readonly floor?: string;
+    readonly mode?: string;
+}
+
 /** Result of a Steam achievement activation attempt (renderer + main). */
 export type AchievementUnlockResult =
     | { ok: true }
@@ -1175,6 +1187,8 @@ export interface DesktopApi {
     getSaveData: () => Promise<unknown>;
     saveGame: (data: SaveData) => Promise<unknown>;
     unlockAchievement: (id: AchievementId) => Promise<unknown>;
+    /** Publishes what the player is doing to their friends list; cosmetic and never awaited for correctness. */
+    setRichPresence: (state: RichPresenceState) => Promise<void>;
     isSteamConnected: () => Promise<unknown>;
     setDisplayMode: (mode: DisplayMode) => Promise<void>;
     quitApp: () => Promise<void>;

@@ -9,12 +9,18 @@
  * Non-Steam dev builds and web renderer use the mock adapter via preload (`desktopClient`); no Steam install required.
  */
 import * as steamworks from 'steamworks.js';
-import type { AchievementId, AchievementUnlockResult } from '../shared/contracts';
+import type { AchievementId, AchievementUnlockResult, RichPresenceState } from '../shared/contracts';
+import { richPresencePairs } from '../shared/rich-presence';
 import { parseSteamAppId } from './steam-app-id';
 
 export interface SteamAdapter {
     isConnected(): boolean;
     unlockAchievement(achievementId: AchievementId): AchievementUnlockResult;
+    /**
+     * Publishes what the player is doing to their friends list. Never throws: presence is cosmetic
+     * and a failure to set it must not disturb a run.
+     */
+    setRichPresence(state: RichPresenceState): void;
 }
 
 /**
@@ -47,6 +53,7 @@ const STEAM_ACHIEVEMENT_API_NAME = {
 
 const createMockSteamAdapter = (): SteamAdapter => ({
     isConnected: () => false,
+    setRichPresence: () => {},
     unlockAchievement: () => ({ ok: false, reason: 'not_connected' })
 });
 
@@ -70,6 +77,16 @@ export const createSteamAdapter = ({ achievementsEnabled = true }: SteamAdapterO
 
         return {
             isConnected: () => true,
+            setRichPresence: (state) => {
+                try {
+                    for (const [key, value] of richPresencePairs(state)) {
+                        // A null value clears the key, so a run ending does not leave a stale floor up.
+                        client.localplayer.setRichPresence(key, value ?? undefined);
+                    }
+                } catch (error) {
+                    console.warn('[steam] rich presence update failed', error);
+                }
+            },
             unlockAchievement: (achievementId): AchievementUnlockResult => {
                 if (!achievementsEnabled) {
                     return { ok: false, reason: 'steam_rejected', detail: 'achievements_disabled' };

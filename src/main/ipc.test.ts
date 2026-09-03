@@ -50,7 +50,7 @@ describe('registerIpcHandlers', () => {
         registerIpcHandlers(
             () => window as unknown as BrowserWindow,
             persistence,
-            { isConnected: () => false, unlockAchievement: () => ({ ok: false, reason: 'not_connected' }) } satisfies SteamAdapter
+            { isConnected: () => false, setRichPresence: () => {}, unlockAchievement: () => ({ ok: false, reason: 'not_connected' }) } satisfies SteamAdapter
         );
         const handler = electronMocks.handlers.get(IPC_CHANNELS.saveSaveSettings);
 
@@ -74,7 +74,7 @@ describe('registerIpcHandlers', () => {
         registerIpcHandlers(
             () => null,
             persistence,
-            { isConnected: () => true, unlockAchievement } satisfies SteamAdapter
+            { isConnected: () => true, setRichPresence: () => {}, unlockAchievement } satisfies SteamAdapter
         );
         const handler = electronMocks.handlers.get(IPC_CHANNELS.steamUnlockAchievement);
 
@@ -87,7 +87,7 @@ describe('registerIpcHandlers', () => {
         registerIpcHandlers(
             () => null,
             {} as PersistenceService,
-            { isConnected: () => false, unlockAchievement: () => ({ ok: false, reason: 'not_connected' }) } satisfies SteamAdapter
+            { isConnected: () => false, setRichPresence: () => {}, unlockAchievement: () => ({ ok: false, reason: 'not_connected' }) } satisfies SteamAdapter
         );
         const expectedChannels = [
             ...Object.values(DESKTOP_IPC_CHANNELS),

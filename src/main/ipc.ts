@@ -1,6 +1,6 @@
 import { app, ipcMain } from 'electron';
 import type { BrowserWindow, IpcMainInvokeEvent } from 'electron';
-import type { DisplayMode, SaveData, Settings } from '../shared/contracts';
+import type { DisplayMode, RichPresenceState, SaveData, Settings } from '../shared/contracts';
 import { normalizeUnknownAchievementId, normalizeUnknownDisplayMode } from '../shared/desktop-api-boundary';
 import { IPC_CHANNELS, IPC_CHANNELS_LEGACY_DESKTOP } from '../shared/ipc-channels';
 import type { PersistenceService } from './persistence';
@@ -120,6 +120,17 @@ export const registerIpcHandlers = (
     };
     register(IPC_CHANNELS.steamUnlockAchievement, unlockAchievement);
     register(IPC_CHANNELS_LEGACY_DESKTOP.unlockAchievement, unlockAchievement);
+
+    /** Cosmetic: a presence failure must never surface to the renderer as a rejected invoke. */
+    const setRichPresence = (_event: IpcMainInvokeEvent, state: RichPresenceState): void => {
+        try {
+            steamAdapter.setRichPresence(state);
+        } catch (error) {
+            console.warn('[ipc] rich presence update failed', error);
+        }
+    };
+    register(IPC_CHANNELS.steamSetRichPresence, setRichPresence);
+    register(IPC_CHANNELS_LEGACY_DESKTOP.setRichPresence, setRichPresence);
 
     const quitApp = (): void => {
         try {

@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2442,
-    "codeFileCount": 923,
-    "exportedSymbolCount": 3468,
+    "trackedFileCount": 2445,
+    "codeFileCount": 926,
+    "exportedSymbolCount": 3477,
     "contentItemCount": 63,
     "mechanicCount": 136,
     "stateFieldCount": 144,
-    "relationshipCount": 10126
+    "relationshipCount": 10143
   },
   "inventory": [
     {
@@ -2283,8 +2283,8 @@
     {
       "path": "docs/STEAM_READINESS.md",
       "category": "documentation",
-      "bytes": 9009,
-      "sha256": "c8287e10bf4afa2562223bf7da7b173e453f77876abe295d3bebe81b7f335e50"
+      "bytes": 9697,
+      "sha256": "03487914f001ad1033eae70fdc2522b310baa8be336f38807fbfcd1d1a8b880e"
     },
     {
       "path": "docs/STRAY_TILE.md",
@@ -2314,7 +2314,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 36714,
-      "sha256": "a344734aeb125960c2a6afa6fc030a8d7e2e8f543b97b2da0796569eb65b4896"
+      "sha256": "e82e3b4c42ccd16ec80b33bb1a9f09d32d42fa170355067d24f0eec9c66db204"
     },
     {
       "path": "docs/UI_RETHINK_PLAN.md",
@@ -4707,14 +4707,14 @@
     {
       "path": "src/main/ipc.test.ts",
       "category": "test",
-      "bytes": 4128,
-      "sha256": "7900bb628e98fccfe379c7e47dfcf2d62a76f0c17e09fad0db00da3b16e6133b"
+      "bytes": 4209,
+      "sha256": "64aeea49b62e3c548aac53904b5b258e37e2e81e354b718db21fab1af14d2843"
     },
     {
       "path": "src/main/ipc.ts",
       "category": "source",
-      "bytes": 5275,
-      "sha256": "2e9d109468a8b0c5ff3511756921c2ab5ad69816092d877858d21a44094724ff"
+      "bytes": 5804,
+      "sha256": "b34be410987efdcd5eb9e41c9d7d56561e06f0ecd6f8564d5ccea495d216fa54"
     },
     {
       "path": "src/main/persistence-write-error.test.ts",
@@ -4803,8 +4803,8 @@
     {
       "path": "src/main/steam.ts",
       "category": "source",
-      "bytes": 4544,
-      "sha256": "33210cd3c1e09640ab3a99f1083e32691f26a41916f059fbc0723ddeb61da955"
+      "bytes": 5377,
+      "sha256": "23813fcc9f5a3fdd16dc375b1dee157fa51f5b67169e059d1687f1ebbbedd65f"
     },
     {
       "path": "src/main/window-bounds.test.ts",
@@ -4821,8 +4821,8 @@
     {
       "path": "src/preload/index.ts",
       "category": "source",
-      "bytes": 964,
-      "sha256": "d81d57e7b3d6360aae2d12e92a3e78a54142f43b7b1dcf23e3418d50907aa9a3"
+      "bytes": 1061,
+      "sha256": "b51852ab784bf61d2932b7109c8a88d832a2fda6b2fb341e5a4c7e2b6430ac21"
     },
     {
       "path": "src/renderer/a11y/focusables.test.ts",
@@ -4875,8 +4875,8 @@
     {
       "path": "src/renderer/App.tsx",
       "category": "source",
-      "bytes": 18955,
-      "sha256": "de73fe1360132464be1cdba81c26efd7338e3ad70033c406670d31e05b29a644"
+      "bytes": 19369,
+      "sha256": "d12bf372f80c6c515eeaa86f1be92e75fedf0084db28356afe759b42343322c9"
     },
     {
       "path": "src/renderer/assets/ASSET_SOURCES.md",
@@ -8895,8 +8895,8 @@
     {
       "path": "src/renderer/desktop-client.ts",
       "category": "source",
-      "bytes": 3059,
-      "sha256": "b748f5f09ea07e4dd8fb207714c1eabe061c764af58a2453ec0b7fc521190d9b"
+      "bytes": 3205,
+      "sha256": "789ea96350c82d6dbc3b82b7c053d1914e8d71686e60ad3cd6315bf14d6c065f"
     },
     {
       "path": "src/renderer/desktop.d.ts",
@@ -9137,6 +9137,12 @@
       "category": "source",
       "bytes": 2959,
       "sha256": "d78681b4f0f801b76d683547d69e34648ecba029b71701031a86067732f94634"
+    },
+    {
+      "path": "src/renderer/hooks/useRichPresence.ts",
+      "category": "source",
+      "bytes": 1236,
+      "sha256": "80c63df49f531a5b540312acf83544e615529d9ca6fd9ea225a57b8ffb1ec0be"
     },
     {
       "path": "src/renderer/hooks/useViewportSize.test.tsx",
@@ -10269,8 +10275,8 @@
     {
       "path": "src/shared/contracts.ts",
       "category": "source",
-      "bytes": 45418,
-      "sha256": "dbf88f92934e53f2c1102f9eeaa70fee5b63a0cd8e94f89670edbc5fccf1a0bf"
+      "bytes": 46063,
+      "sha256": "6a577cfad07a3de09f5e72bb1bb99b6ce546e25163f3d430ece2e0ef3348303a"
     },
     {
       "path": "src/shared/copy-tone.test.ts",
@@ -11097,8 +11103,8 @@
     {
       "path": "src/shared/ipc-channels.ts",
       "category": "source",
-      "bytes": 1731,
-      "sha256": "1591e81bdfee2c7d982e532b5c8c56b3ca026ac3a2d98b9c378d8dfc2a8fa1c2"
+      "bytes": 1890,
+      "sha256": "d98b5ad903d06e970648a87f259c568896040fb745df878c193ccb327009ab68"
     },
     {
       "path": "src/shared/level-clear-rules.test.ts",
@@ -11639,6 +11645,18 @@
       "category": "source",
       "bytes": 6250,
       "sha256": "57146c10291578907c775b4844ad8969fd70a0506ffabd485928ca2d705f0a51"
+    },
+    {
+      "path": "src/shared/rich-presence.test.ts",
+      "category": "test",
+      "bytes": 3462,
+      "sha256": "9f0e634bb0db3a32415edd1a7e1856b44bbbcb8da524d1e66e37740a7a4f9bfe"
+    },
+    {
+      "path": "src/shared/rich-presence.ts",
+      "category": "source",
+      "bytes": 2482,
+      "sha256": "d41d513c14e28cb8a88c3d6755d9e8049cd973906ebd9137334d46c30ff75db6"
     },
     {
       "path": "src/shared/risk-wager-rules.test.ts",
@@ -14851,7 +14869,7 @@
       "path": "src/main/ipc.ts",
       "layer": "main",
       "role": "production",
-      "lineCount": 135,
+      "lineCount": 146,
       "imports": [
         "file:src/main/persistence.ts",
         "file:src/main/steam.ts",
@@ -15071,10 +15089,11 @@
       "path": "src/main/steam.ts",
       "layer": "main",
       "role": "production",
-      "lineCount": 100,
+      "lineCount": 117,
       "imports": [
         "file:src/main/steam-app-id.ts",
-        "file:src/shared/contracts.ts"
+        "file:src/shared/contracts.ts",
+        "file:src/shared/rich-presence.ts"
       ],
       "exports": [
         "symbol:src/main/steam.ts#createSteamAdapter",
@@ -15128,7 +15147,7 @@
       "path": "src/preload/index.ts",
       "layer": "preload",
       "role": "production",
-      "lineCount": 17,
+      "lineCount": 18,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/ipc-channels.ts"
@@ -15265,7 +15284,7 @@
       "path": "src/renderer/App.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 403,
+      "lineCount": 414,
       "imports": [
         "file:src/renderer/audio/gameplayMusic.ts",
         "file:src/renderer/breakpoints.ts",
@@ -15285,6 +15304,7 @@
         "file:src/renderer/components/startupIntroContract.ts",
         "file:src/renderer/hooks/useEffectiveReducedMotion.ts",
         "file:src/renderer/hooks/useGamepadNavigation.ts",
+        "file:src/renderer/hooks/useRichPresence.ts",
         "file:src/renderer/hooks/useViewportSize.ts",
         "file:src/renderer/store/navigationModel.ts",
         "file:src/renderer/store/useAppStore.ts",
@@ -20838,7 +20858,7 @@
       "path": "src/renderer/desktop-client.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 99,
+      "lineCount": 102,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/save-data.ts"
@@ -21380,6 +21400,22 @@
       "testedBy": [
         "file:src/renderer/hooks/useModalFocusTrap.test.tsx"
       ]
+    },
+    {
+      "id": "file:src/renderer/hooks/useRichPresence.ts",
+      "path": "src/renderer/hooks/useRichPresence.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 27,
+      "imports": [
+        "file:src/renderer/desktop-client.ts",
+        "file:src/shared/contracts.ts",
+        "file:src/shared/rich-presence.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/hooks/useRichPresence.ts#useRichPresence"
+      ],
+      "testedBy": []
     },
     {
       "id": "file:src/renderer/hooks/useViewportSize.test.tsx",
@@ -24754,7 +24790,7 @@
       "path": "src/shared/contracts.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1182,
+      "lineCount": 1196,
       "imports": [],
       "exports": [
         "symbol:src/shared/contracts.ts#AchievementId",
@@ -24870,6 +24906,8 @@
         "symbol:src/shared/contracts.ts#RESOLVE_DELAY_MULTIPLIER_MIN",
         "symbol:src/shared/contracts.ts#ResumableRunStatus",
         "symbol:src/shared/contracts.ts#RewardPerkId",
+        "symbol:src/shared/contracts.ts#RichPresenceState",
+        "symbol:src/shared/contracts.ts#RichPresenceToken",
         "symbol:src/shared/contracts.ts#RouteCardKind",
         "symbol:src/shared/contracts.ts#RouteCardPlan",
         "symbol:src/shared/contracts.ts#RouteChoice",
@@ -28333,7 +28371,7 @@
       "path": "src/shared/ipc-channels.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 41,
+      "lineCount": 44,
       "imports": [
         "file:src/shared/contracts.ts"
       ],
@@ -30211,6 +30249,39 @@
       "testedBy": [
         "file:src/shared/exploit-surface.test.ts",
         "file:src/shared/rest-shrine.test.ts"
+      ]
+    },
+    {
+      "id": "file:src/shared/rich-presence.test.ts",
+      "path": "src/shared/rich-presence.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 70,
+      "imports": [
+        "file:src/shared/rich-presence.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/shared/rich-presence.ts",
+      "path": "src/shared/rich-presence.ts",
+      "layer": "shared",
+      "role": "production",
+      "lineCount": 59,
+      "imports": [
+        "file:src/shared/contracts.ts"
+      ],
+      "exports": [
+        "symbol:src/shared/rich-presence.ts#buildRichPresence",
+        "symbol:src/shared/rich-presence.ts#richPresenceEquals",
+        "symbol:src/shared/rich-presence.ts#RichPresenceInput",
+        "symbol:src/shared/rich-presence.ts#richPresencePairs",
+        "symbol:src/shared/rich-presence.ts#RichPresenceState",
+        "symbol:src/shared/rich-presence.ts#RichPresenceToken"
+      ],
+      "testedBy": [
+        "file:src/shared/rich-presence.test.ts"
       ]
     },
     {
@@ -33392,7 +33463,7 @@
       "kind": "value",
       "file": "src/main/ipc.ts",
       "line": 13,
-      "endLine": 134
+      "endLine": 145
     },
     {
       "id": "symbol:src/main/persistence.ts#PersistenceService",
@@ -33479,24 +33550,24 @@
       "name": "createSteamAdapter",
       "kind": "value",
       "file": "src/main/steam.ts",
-      "line": 58,
-      "endLine": 99
+      "line": 65,
+      "endLine": 116
     },
     {
       "id": "symbol:src/main/steam.ts#SteamAdapter",
       "name": "SteamAdapter",
       "kind": "interface",
       "file": "src/main/steam.ts",
-      "line": 15,
-      "endLine": 18
+      "line": 16,
+      "endLine": 24
     },
     {
       "id": "symbol:src/main/steam.ts#SteamAdapterOptions",
       "name": "SteamAdapterOptions",
       "kind": "interface",
       "file": "src/main/steam.ts",
-      "line": 53,
-      "endLine": 56
+      "line": 60,
+      "endLine": 63
     },
     {
       "id": "symbol:src/main/window-bounds.ts#captureWindowState",
@@ -33719,16 +33790,16 @@
       "name": "APP_MAIN_LANDMARK_ID",
       "kind": "value",
       "file": "src/renderer/App.tsx",
-      "line": 36,
-      "endLine": 36
+      "line": 37,
+      "endLine": 37
     },
     {
       "id": "symbol:src/renderer/App.tsx#default",
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/App.tsx",
-      "line": 402,
-      "endLine": 402
+      "line": 413,
+      "endLine": 413
     },
     {
       "id": "symbol:src/renderer/assets/assetDropInReadiness.ts#ASSET_DROP_IN_CATEGORIES",
@@ -40087,8 +40158,8 @@
       "name": "desktopClient",
       "kind": "value",
       "file": "src/renderer/desktop-client.ts",
-      "line": 98,
-      "endLine": 98
+      "line": 101,
+      "endLine": 101
     },
     {
       "id": "symbol:src/renderer/dev/BlueprintExplorer.tsx#default",
@@ -40441,6 +40512,14 @@
       "file": "src/renderer/hooks/useModalFocusTrap.ts",
       "line": 13,
       "endLine": 96
+    },
+    {
+      "id": "symbol:src/renderer/hooks/useRichPresence.ts#useRichPresence",
+      "name": "useRichPresence",
+      "kind": "value",
+      "file": "src/renderer/hooks/useRichPresence.ts",
+      "line": 14,
+      "endLine": 26
     },
     {
       "id": "symbol:src/renderer/hooks/useViewportSize.ts#useViewportSize",
@@ -45031,8 +45110,8 @@
       "name": "AchievementUnlockResult",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1168,
-      "endLine": 1170
+      "line": 1180,
+      "endLine": 1182
     },
     {
       "id": "symbol:src/shared/contracts.ts#BoardPresentationMode",
@@ -45183,8 +45262,8 @@
       "name": "DesktopApi",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1172,
-      "endLine": 1181
+      "line": 1184,
+      "endLine": 1195
     },
     {
       "id": "symbol:src/shared/contracts.ts#DisplayMode",
@@ -45913,6 +45992,22 @@
       "file": "src/shared/contracts.ts",
       "line": 828,
       "endLine": 833
+    },
+    {
+      "id": "symbol:src/shared/contracts.ts#RichPresenceState",
+      "name": "RichPresenceState",
+      "kind": "interface",
+      "file": "src/shared/contracts.ts",
+      "line": 1173,
+      "endLine": 1177
+    },
+    {
+      "id": "symbol:src/shared/contracts.ts#RichPresenceToken",
+      "name": "RichPresenceToken",
+      "kind": "type",
+      "file": "src/shared/contracts.ts",
+      "line": 1171,
+      "endLine": 1171
     },
     {
       "id": "symbol:src/shared/contracts.ts#RouteCardKind",
@@ -52967,8 +53062,8 @@
       "name": "DESKTOP_IPC_CHANNELS",
       "kind": "value",
       "file": "src/shared/ipc-channels.ts",
-      "line": 19,
-      "endLine": 28
+      "line": 20,
+      "endLine": 30
     },
     {
       "id": "symbol:src/shared/ipc-channels.ts#IPC_CHANNELS",
@@ -52976,15 +53071,15 @@
       "kind": "value",
       "file": "src/shared/ipc-channels.ts",
       "line": 7,
-      "endLine": 16
+      "endLine": 17
     },
     {
       "id": "symbol:src/shared/ipc-channels.ts#IPC_CHANNELS_LEGACY_DESKTOP",
       "name": "IPC_CHANNELS_LEGACY_DESKTOP",
       "kind": "value",
       "file": "src/shared/ipc-channels.ts",
-      "line": 31,
-      "endLine": 40
+      "line": 33,
+      "endLine": 43
     },
     {
       "id": "symbol:src/shared/level-clear-rules.ts#applyFloorClearEnemyHazardDefeats",
@@ -56049,6 +56144,54 @@
       "file": "src/shared/rest-shrine.ts",
       "line": 25,
       "endLine": 30
+    },
+    {
+      "id": "symbol:src/shared/rich-presence.ts#buildRichPresence",
+      "name": "buildRichPresence",
+      "kind": "value",
+      "file": "src/shared/rich-presence.ts",
+      "line": 40,
+      "endLine": 48
+    },
+    {
+      "id": "symbol:src/shared/rich-presence.ts#richPresenceEquals",
+      "name": "richPresenceEquals",
+      "kind": "value",
+      "file": "src/shared/rich-presence.ts",
+      "line": 57,
+      "endLine": 58
+    },
+    {
+      "id": "symbol:src/shared/rich-presence.ts#RichPresenceInput",
+      "name": "RichPresenceInput",
+      "kind": "interface",
+      "file": "src/shared/rich-presence.ts",
+      "line": 24,
+      "endLine": 28
+    },
+    {
+      "id": "symbol:src/shared/rich-presence.ts#richPresencePairs",
+      "name": "richPresencePairs",
+      "kind": "value",
+      "file": "src/shared/rich-presence.ts",
+      "line": 51,
+      "endLine": 55
+    },
+    {
+      "id": "symbol:src/shared/rich-presence.ts#RichPresenceState",
+      "name": "RichPresenceState",
+      "kind": "ExportSpecifier",
+      "file": "src/shared/rich-presence.ts",
+      "line": 14,
+      "endLine": 14
+    },
+    {
+      "id": "symbol:src/shared/rich-presence.ts#RichPresenceToken",
+      "name": "RichPresenceToken",
+      "kind": "ExportSpecifier",
+      "file": "src/shared/rich-presence.ts",
+      "line": 14,
+      "endLine": 14
     },
     {
       "id": "symbol:src/shared/risk-wager-rules.ts#acceptEndlessRiskWager",
@@ -78254,6 +78397,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/hooks/useRichPresence.ts->symbol:src/renderer/hooks/useRichPresence.ts#useRichPresence",
+      "source": "file:src/renderer/hooks/useRichPresence.ts",
+      "target": "symbol:src/renderer/hooks/useRichPresence.ts#useRichPresence",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/hooks/useViewportSize.ts->symbol:src/renderer/hooks/useViewportSize.ts#useViewportSize",
       "source": "file:src/renderer/hooks/useViewportSize.ts",
       "target": "symbol:src/renderer/hooks/useViewportSize.ts#useViewportSize",
@@ -82355,6 +82504,18 @@
       "id": "exports:src/shared/contracts.ts->symbol:src/shared/contracts.ts#RewardPerkId",
       "source": "file:src/shared/contracts.ts",
       "target": "symbol:src/shared/contracts.ts#RewardPerkId",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/contracts.ts->symbol:src/shared/contracts.ts#RichPresenceState",
+      "source": "file:src/shared/contracts.ts",
+      "target": "symbol:src/shared/contracts.ts#RichPresenceState",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/contracts.ts->symbol:src/shared/contracts.ts#RichPresenceToken",
+      "source": "file:src/shared/contracts.ts",
+      "target": "symbol:src/shared/contracts.ts#RichPresenceToken",
       "kind": "exports"
     },
     {
@@ -89960,6 +90121,42 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/rich-presence.ts->symbol:src/shared/rich-presence.ts#buildRichPresence",
+      "source": "file:src/shared/rich-presence.ts",
+      "target": "symbol:src/shared/rich-presence.ts#buildRichPresence",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/rich-presence.ts->symbol:src/shared/rich-presence.ts#richPresenceEquals",
+      "source": "file:src/shared/rich-presence.ts",
+      "target": "symbol:src/shared/rich-presence.ts#richPresenceEquals",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/rich-presence.ts->symbol:src/shared/rich-presence.ts#RichPresenceInput",
+      "source": "file:src/shared/rich-presence.ts",
+      "target": "symbol:src/shared/rich-presence.ts#RichPresenceInput",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/rich-presence.ts->symbol:src/shared/rich-presence.ts#richPresencePairs",
+      "source": "file:src/shared/rich-presence.ts",
+      "target": "symbol:src/shared/rich-presence.ts#richPresencePairs",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/rich-presence.ts->symbol:src/shared/rich-presence.ts#RichPresenceState",
+      "source": "file:src/shared/rich-presence.ts",
+      "target": "symbol:src/shared/rich-presence.ts#RichPresenceState",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/rich-presence.ts->symbol:src/shared/rich-presence.ts#RichPresenceToken",
+      "source": "file:src/shared/rich-presence.ts",
+      "target": "symbol:src/shared/rich-presence.ts#RichPresenceToken",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/risk-wager-rules.ts->symbol:src/shared/risk-wager-rules.ts#acceptEndlessRiskWager",
       "source": "file:src/shared/risk-wager-rules.ts",
       "target": "symbol:src/shared/risk-wager-rules.ts#acceptEndlessRiskWager",
@@ -97473,6 +97670,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/main/steam.ts->src/shared/rich-presence.ts",
+      "source": "file:src/main/steam.ts",
+      "target": "file:src/shared/rich-presence.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/main/window-bounds.test.ts->src/main/window-bounds.ts",
       "source": "file:src/main/window-bounds.test.ts",
       "target": "file:src/main/window-bounds.ts",
@@ -97674,6 +97877,12 @@
       "id": "imports:src/renderer/App.tsx->src/renderer/hooks/useGamepadNavigation.ts",
       "source": "file:src/renderer/App.tsx",
       "target": "file:src/renderer/hooks/useGamepadNavigation.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/App.tsx->src/renderer/hooks/useRichPresence.ts",
+      "source": "file:src/renderer/App.tsx",
+      "target": "file:src/renderer/hooks/useRichPresence.ts",
       "kind": "imports"
     },
     {
@@ -103578,6 +103787,24 @@
       "id": "imports:src/renderer/hooks/useModalFocusTrap.ts->src/renderer/hooks/useLatestRef.ts",
       "source": "file:src/renderer/hooks/useModalFocusTrap.ts",
       "target": "file:src/renderer/hooks/useLatestRef.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/hooks/useRichPresence.ts->src/renderer/desktop-client.ts",
+      "source": "file:src/renderer/hooks/useRichPresence.ts",
+      "target": "file:src/renderer/desktop-client.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/hooks/useRichPresence.ts->src/shared/contracts.ts",
+      "source": "file:src/renderer/hooks/useRichPresence.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/hooks/useRichPresence.ts->src/shared/rich-presence.ts",
+      "source": "file:src/renderer/hooks/useRichPresence.ts",
+      "target": "file:src/shared/rich-presence.ts",
       "kind": "imports"
     },
     {
@@ -112524,6 +112751,18 @@
       "id": "imports:src/shared/rest-shrine.ts->src/shared/session-stats-rules.ts",
       "source": "file:src/shared/rest-shrine.ts",
       "target": "file:src/shared/session-stats-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/rich-presence.test.ts->src/shared/rich-presence.ts",
+      "source": "file:src/shared/rich-presence.test.ts",
+      "target": "file:src/shared/rich-presence.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/rich-presence.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/rich-presence.ts",
+      "target": "file:src/shared/contracts.ts",
       "kind": "imports"
     },
     {
@@ -126808,6 +127047,12 @@
       "id": "tested_by:src/shared/rest-shrine.ts->file:src/shared/rest-shrine.test.ts",
       "source": "file:src/shared/rest-shrine.ts",
       "target": "file:src/shared/rest-shrine.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/rich-presence.ts->file:src/shared/rich-presence.test.ts",
+      "source": "file:src/shared/rich-presence.ts",
+      "target": "file:src/shared/rich-presence.test.ts",
       "kind": "tested_by"
     },
     {

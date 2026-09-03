@@ -11,6 +11,7 @@ export const IPC_CHANNELS = {
     saveSaveGame: 'save:save-game',
     steamIsConnected: 'steam:is-connected',
     steamUnlockAchievement: 'steam:unlock-achievement',
+    steamSetRichPresence: 'steam:set-rich-presence',
     windowSetDisplayMode: 'window:set-display-mode',
     windowQuitApp: 'window:quit-app'
 } as const;
@@ -22,6 +23,7 @@ export const DESKTOP_IPC_CHANNELS: { [K in keyof DesktopApi]: string } = {
     getSaveData: IPC_CHANNELS.saveGetSaveData,
     saveGame: IPC_CHANNELS.saveSaveGame,
     unlockAchievement: IPC_CHANNELS.steamUnlockAchievement,
+    setRichPresence: IPC_CHANNELS.steamSetRichPresence,
     isSteamConnected: IPC_CHANNELS.steamIsConnected,
     setDisplayMode: IPC_CHANNELS.windowSetDisplayMode,
     quitApp: IPC_CHANNELS.windowQuitApp
@@ -35,6 +37,7 @@ export const IPC_CHANNELS_LEGACY_DESKTOP: { [K in keyof DesktopApi]: string } = 
     saveGame: 'desktop:save-game',
     isSteamConnected: 'desktop:is-steam-connected',
     unlockAchievement: 'desktop:unlock-achievement',
+    setRichPresence: 'desktop:set-rich-presence',
     setDisplayMode: 'desktop:set-display-mode',
     quitApp: 'desktop:quit-app'
 };

@@ -20,6 +20,7 @@ import { VIEWPORT_MOBILE_MAX, VIEWPORT_TABLET_MAX } from './breakpoints';
 import { useViewportSize } from './hooks/useViewportSize';
 import { useEffectiveReducedMotion } from './hooks/useEffectiveReducedMotion';
 import { useGamepadNavigation } from './hooks/useGamepadNavigation';
+import { useRichPresence } from './hooks/useRichPresence';
 import styles from './styles/App.module.css';
 import { buildRendererThemeStyle } from './styles/theme';
 import { resolveAdaptiveMusicState, useGameplayMusic } from './audio/gameplayMusic';
@@ -122,6 +123,16 @@ const App = () => {
     const visualView = shellChromeContract.visualView;
     const suppressGameplayStatusOverlays = shellChromeContract.shellChrome === 'gameplay_modal';
     const showDevBlueprintExplorer = import.meta.env.DEV && window.location.pathname === '/__blueprint';
+
+    /*
+     * What the friends list sees. A run in progress names its mode and floor; anything else is
+     * just "in the menus" — presence says where a player is, never how a run is going.
+     */
+    useRichPresence({
+        floor: run?.board?.level ?? null,
+        gameMode: run?.gameMode ?? null,
+        inRun: visualView === 'playing'
+    });
 
     const musicState = resolveAdaptiveMusicState({ run, view: visualView });
     const musicShellActive = hydrated && (visualView === 'menu' || visualView === 'playing');

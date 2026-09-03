@@ -67,6 +67,9 @@ const fallbackClient: DesktopApi = {
         const currentSave = readLocalSave();
         return writeLocalSave({ ...data, settings: currentSave.settings });
     },
+    async setRichPresence(): Promise<void> {
+        // No Steam in the browser fallback; presence is cosmetic, so this is a silent no-op.
+    },
     async unlockAchievement(): Promise<AchievementUnlockResult> {
         return { ok: false, reason: 'not_connected' };
     },
