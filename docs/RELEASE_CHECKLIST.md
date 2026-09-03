@@ -20,6 +20,7 @@ achievement on the Partner site or shoot a trailer.
 
 | Item | State | Owner | Where |
 |---|---|---|---|
+| Every player gets the same Daily Challenge run, floor for floor | done | the repository | `src/shared/daily-determinism.test.ts` |
 | Every achievement the game can award has a Steam API name to award it under | done | the repository | `src/shared/steam-achievement-api-names.ts` |
 | Rich Presence publishes what the player is doing, and clears when the run ends | done | the repository | `src/shared/rich-presence.ts` |
 | The save file sits at one stable path per platform, ready for Auto-Cloud | done | the repository | `src/shared/save-location.ts` |

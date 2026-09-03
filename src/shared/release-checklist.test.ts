@@ -3,7 +3,7 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { RELEASE_CHECKLIST, releaseChecklistByOwner, renderReleaseChecklistMarkdown } from './release-checklist';
 import { ACHIEVEMENT_IDS } from './save-data';
-import { createNewRun } from './game';
+import { createDailyRun, createNewRun } from './game';
 import { chargeFieldsWithATool } from '../renderer/components/runShellToolCatalog';
 import { STEAM_ACHIEVEMENT_API_NAME } from './steam-achievement-api-names';
 import { buildRichPresence, richPresencePairs } from './rich-presence';
@@ -118,6 +118,15 @@ const VERIFIERS: Record<string, () => void> = {
         expect(quarantineFileName('memory-dungeon-save.json', '2026-09-03T20:45:12.884Z')).not.toContain(':');
         // The notice the player reads has to name a way out, not just report the failure.
         expect(SAVE_RECOVERY_COPY.action).toMatch(/\S/);
+    },
+    'daily-determinism': () => {
+        // Two players comparing scores over boards that quietly differed are not competing.
+        const first = createDailyRun(0);
+        const second = createDailyRun(0);
+
+        expect(second.runSeed).toBe(first.runSeed);
+        expect(second.board?.tiles.map((tile) => tile.pairKey)).toEqual(first.board?.tiles.map((tile) => tile.pairKey));
+        expect(second.activeMutators).toEqual(first.activeMutators);
     },
     'partner-rows-derived': () => {
         const achievements = renderAchievementRows();

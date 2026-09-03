@@ -59,6 +59,13 @@ export const RELEASE_CHECKLIST: readonly ReleaseChecklistItem[] = [
         section: 'Input and display'
     },
     {
+        evidence: 'src/shared/daily-determinism.test.ts',
+        id: 'daily-determinism',
+        label: 'Every player gets the same Daily Challenge run, floor for floor',
+        owner: 'repo',
+        section: 'Steamworks'
+    },
+    {
         evidence: 'src/shared/steam-achievement-api-names.ts',
         id: 'achievement-api-names',
         label: 'Every achievement the game can award has a Steam API name to award it under',

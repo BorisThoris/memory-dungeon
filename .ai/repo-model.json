@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2472,
-    "codeFileCount": 947,
+    "trackedFileCount": 2473,
+    "codeFileCount": 948,
     "exportedSymbolCount": 3513,
     "contentItemCount": 63,
     "mechanicCount": 136,
     "stateFieldCount": 144,
-    "relationshipCount": 10276
+    "relationshipCount": 10282
   },
   "inventory": [
     {
@@ -2259,8 +2259,8 @@
     {
       "path": "docs/RELEASE_CHECKLIST.md",
       "category": "documentation",
-      "bytes": 4039,
-      "sha256": "6a537c901159cd4ac53b553b888278b4f08b598eb52ebb0d347bf0015db566a4"
+      "bytes": 4172,
+      "sha256": "1778973cdc7e21857e7ad2d9bfb7c0fec65a75f5f15eed9f7f77daa614a2044c"
     },
     {
       "path": "docs/RELIC_ROSTER.md",
@@ -2320,7 +2320,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 36714,
-      "sha256": "19b42badf0a18fda8dc1b523da6e37c2470b1db6f945d3700baa2be2a7e66616"
+      "sha256": "dc6d1c191bb35f33a9ba449d522b31eb659db8e1ff7764daa5b61ea4d21d6e18"
     },
     {
       "path": "docs/UI_RETHINK_PLAN.md",
@@ -10447,6 +10447,12 @@
       "sha256": "38d585ed9572535a52aa420a29a11b66c306eb2a4b0b71cd9517ae074872d838"
     },
     {
+      "path": "src/shared/daily-determinism.test.ts",
+      "category": "test",
+      "bytes": 3860,
+      "sha256": "c3bc5b03777b0f13c79336af112b09e8b0591f696fa3ab54e2cbf1fde5b1054b"
+    },
+    {
       "path": "src/shared/desktop-api-boundary.test.ts",
       "category": "test",
       "bytes": 1388,
@@ -11691,14 +11697,14 @@
     {
       "path": "src/shared/release-checklist.test.ts",
       "category": "test",
-      "bytes": 10590,
-      "sha256": "5a679a90b6b6c6b31fec4201322487f01f527cf6ab1d6f9d4f2eaa7ca19b71c8"
+      "bytes": 11065,
+      "sha256": "d96a9e6dbe4d9f61bce0f6c38b71e08e99a60bd166a157d1b9941f994d10c7ee"
     },
     {
       "path": "src/shared/release-checklist.ts",
       "category": "source",
-      "bytes": 8967,
-      "sha256": "1d20bb133fa53227731f9c3f502a81590521122184e7fc79518a0a2f78579173"
+      "bytes": 9206,
+      "sha256": "1627dce72e62afc8277f21687f13df2356eafc0d4db84d20bd1406ab12264c9e"
     },
     {
       "path": "src/shared/relic-favor-rules.test.ts",
@@ -25413,6 +25419,7 @@
         "file:src/shared/build-strategy-simulation.test.ts",
         "file:src/shared/combo-shard-rules.test.ts",
         "file:src/shared/content-lock.test.ts",
+        "file:src/shared/daily-determinism.test.ts",
         "file:src/shared/difficulty-profile.test.ts",
         "file:src/shared/dungeon-blueprint-policy-rules.test.ts",
         "file:src/shared/dungeon-board-generation-rules.test.ts",
@@ -25703,6 +25710,20 @@
       "testedBy": [
         "file:src/shared/daily-archive.test.ts"
       ]
+    },
+    {
+      "id": "file:src/shared/daily-determinism.test.ts",
+      "path": "src/shared/daily-determinism.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 83,
+      "imports": [
+        "file:src/shared/contracts.ts",
+        "file:src/shared/game.ts",
+        "file:src/shared/relics.ts"
+      ],
+      "exports": [],
+      "testedBy": []
     },
     {
       "id": "file:src/shared/desktop-api-boundary.test.ts",
@@ -27842,6 +27863,7 @@
       "testedBy": [
         "file:src/renderer/components/runShellToolCatalog.test.ts",
         "file:src/renderer/store/rowShuffleReachability.test.ts",
+        "file:src/shared/daily-determinism.test.ts",
         "file:src/shared/dungeon-boss-clear-rules.test.ts",
         "file:src/shared/dungeon-exit-rules.test.ts",
         "file:src/shared/dungeon-room-rules.test.ts",
@@ -30348,7 +30370,7 @@
       "path": "src/shared/release-checklist.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 203,
+      "lineCount": 212,
       "imports": [
         "file:src/main/crash-log.ts",
         "file:src/main/save-recovery.ts",
@@ -30372,7 +30394,7 @@
       "path": "src/shared/release-checklist.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 235,
+      "lineCount": 242,
       "imports": [],
       "exports": [
         "symbol:src/shared/release-checklist.ts#RELEASE_CHECKLIST",
@@ -30677,6 +30699,7 @@
         "file:src/shared/achievement-reachability.test.ts",
         "file:src/shared/achievements.test.ts",
         "file:src/shared/content-lock.test.ts",
+        "file:src/shared/daily-determinism.test.ts",
         "file:src/shared/exploit-surface.test.ts",
         "file:src/shared/floor-schedule-reachability.test.ts",
         "file:src/shared/game-catalog.test.ts",
@@ -56243,15 +56266,15 @@
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
       "line": 32,
-      "endLine": 187
+      "endLine": 194
     },
     {
       "id": "symbol:src/shared/release-checklist.ts#releaseChecklistByOwner",
       "name": "releaseChecklistByOwner",
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
-      "line": 193,
-      "endLine": 194
+      "line": 200,
+      "endLine": 201
     },
     {
       "id": "symbol:src/shared/release-checklist.ts#ReleaseChecklistItem",
@@ -56274,16 +56297,16 @@
       "name": "releaseChecklistSections",
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
-      "line": 189,
-      "endLine": 191
+      "line": 196,
+      "endLine": 198
     },
     {
       "id": "symbol:src/shared/release-checklist.ts#renderReleaseChecklistMarkdown",
       "name": "renderReleaseChecklistMarkdown",
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
-      "line": 208,
-      "endLine": 234
+      "line": 215,
+      "endLine": 241
     },
     {
       "id": "symbol:src/shared/relic-favor-rules.ts#gainRelicFavor",
@@ -108822,6 +108845,24 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/daily-determinism.test.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/daily-determinism.test.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/daily-determinism.test.ts->src/shared/game.ts",
+      "source": "file:src/shared/daily-determinism.test.ts",
+      "target": "file:src/shared/game.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/daily-determinism.test.ts->src/shared/relics.ts",
+      "source": "file:src/shared/daily-determinism.test.ts",
+      "target": "file:src/shared/relics.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/desktop-api-boundary.test.ts->src/shared/desktop-api-boundary.ts",
       "source": "file:src/shared/desktop-api-boundary.test.ts",
       "target": "file:src/shared/desktop-api-boundary.ts",
@@ -126112,6 +126153,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/contracts.ts->file:src/shared/daily-determinism.test.ts",
+      "source": "file:src/shared/contracts.ts",
+      "target": "file:src/shared/daily-determinism.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/contracts.ts->file:src/shared/difficulty-profile.test.ts",
       "source": "file:src/shared/contracts.ts",
       "target": "file:src/shared/difficulty-profile.test.ts",
@@ -127690,6 +127737,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/game.ts->file:src/shared/daily-determinism.test.ts",
+      "source": "file:src/shared/game.ts",
+      "target": "file:src/shared/daily-determinism.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/game.ts->file:src/shared/dungeon-boss-clear-rules.test.ts",
       "source": "file:src/shared/game.ts",
       "target": "file:src/shared/dungeon-boss-clear-rules.test.ts",
@@ -128527,6 +128580,12 @@
       "id": "tested_by:src/shared/relics.ts->file:src/shared/content-lock.test.ts",
       "source": "file:src/shared/relics.ts",
       "target": "file:src/shared/content-lock.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/relics.ts->file:src/shared/daily-determinism.test.ts",
+      "source": "file:src/shared/relics.ts",
+      "target": "file:src/shared/daily-determinism.test.ts",
       "kind": "tested_by"
     },
     {
