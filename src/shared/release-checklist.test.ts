@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { RELEASE_CHECKLIST, releaseChecklistByOwner, renderReleaseChecklistMarkdown } from './release-checklist';
 import { ACHIEVEMENT_IDS } from './save-data';
@@ -64,6 +66,18 @@ const VERIFIERS: Record<string, () => void> = {
         // what keeps localization a translation budget rather than a refactor.
         expect(HARDCODED_COPY_BASELINE).toBe(0);
         expect(scanComponentCopy()).toEqual([]);
+    },
+    'package-hygiene': () => {
+        // The gate itself does the checking; what this row asserts is that something actually runs
+        // it. It sat unreferenced by any composite gate for a long time, which is how five dead
+        // files accumulated, two of them player-facing copy modules.
+        const scripts = JSON.parse(readFileSync(join(process.cwd(), 'package.json'), 'utf8')).scripts as Record<
+            string,
+            string
+        >;
+
+        expect(scripts['gate:package-hygiene']).toMatch(/knip/);
+        expect(scripts.fullcheck).toContain('gate:package-hygiene');
     },
     'store-reachability': () => {
         // The audit that would have caught a deleted toolbar taking a whole power with it.

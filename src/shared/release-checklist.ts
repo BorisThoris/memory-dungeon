@@ -80,6 +80,13 @@ export const RELEASE_CHECKLIST: readonly ReleaseChecklistItem[] = [
         section: 'Steamworks'
     },
     {
+        evidence: 'package.json (gate:package-hygiene)',
+        id: 'package-hygiene',
+        label: 'No dead files or undeclared dependencies reach a build',
+        owner: 'repo',
+        section: 'Diagnostics'
+    },
+    {
         evidence: 'scripts/store-action-reachability.ts',
         id: 'store-reachability',
         label: 'No player-facing state or action is left with nothing able to reach it',

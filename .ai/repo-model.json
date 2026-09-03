@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2475,
-    "codeFileCount": 950,
-    "exportedSymbolCount": 3515,
+    "trackedFileCount": 2470,
+    "codeFileCount": 945,
+    "exportedSymbolCount": 3507,
     "contentItemCount": 63,
     "mechanicCount": 136,
     "stateFieldCount": 144,
-    "relationshipCount": 10275
+    "relationshipCount": 10260
   },
   "inventory": [
     {
@@ -2259,8 +2259,8 @@
     {
       "path": "docs/RELEASE_CHECKLIST.md",
       "category": "documentation",
-      "bytes": 3764,
-      "sha256": "3ef713dfddfb842417c990c009f3704732548f948a2f802ba3b2fe2c02bc5e74"
+      "bytes": 3887,
+      "sha256": "fa04c0a43ccfb6e05729953b4e5339b7ff2fcfd4fae4a92a69c422d87f29dcb1"
     },
     {
       "path": "docs/RELIC_ROSTER.md",
@@ -2320,7 +2320,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 36714,
-      "sha256": "d8e1642763a9584521f46e34fc9cd2093ee56f7598a3020b7ece10f253f21d53"
+      "sha256": "12994d3b0d3c47caa2807eec004675a3836e76e2f8bccf5790cff29914c4d0c3"
     },
     {
       "path": "docs/UI_RETHINK_PLAN.md",
@@ -3963,8 +3963,8 @@
     {
       "path": "package.json",
       "category": "configuration",
-      "bytes": 28642,
-      "sha256": "323a99a0470c5a1dd20c28eaad662ada54d01f630b0f8eedb49530ee46ad827e"
+      "bytes": 28703,
+      "sha256": "961d4847de390be59089a512cd0b955168f38ae4ca2f5bcef9acf7f924ec58ec"
     },
     {
       "path": "packages/notifications/package.json",
@@ -7015,12 +7015,6 @@
       "sha256": "b6d1023cbc3ba9bba5b1ad872baeb791dfd30d910e9c15327ee76ed2e08fbba0"
     },
     {
-      "path": "src/renderer/assets/ui/icons/index.ts",
-      "category": "source",
-      "bytes": 1264,
-      "sha256": "344b31408b34035acc20cf9d01ed444207817fbf520fe2acc30b1fa3f86a73ba"
-    },
-    {
       "path": "src/renderer/assets/ui/index.ts",
       "category": "source",
       "bytes": 1621,
@@ -7571,12 +7565,6 @@
       "category": "source",
       "bytes": 17642,
       "sha256": "1abcd92423ea6c902b653885ae1ba2374598593c0e4352ccf06713086a541633"
-    },
-    {
-      "path": "src/renderer/components/gameplayHudMutatorLabels.ts",
-      "category": "source",
-      "bytes": 563,
-      "sha256": "020099b5e1c6bccadd577f07b5d9d067a830d971eab017341bff443bbacbc170"
     },
     {
       "path": "src/renderer/components/gameplayRenderProfile.ts",
@@ -8899,12 +8887,6 @@
       "sha256": "99d2d5f0ea4c50371b3315d17b81b7b01a3596a10a728ffea1b596a6ec99feaf"
     },
     {
-      "path": "src/renderer/copy/inventoryScreen.ts",
-      "category": "source",
-      "bytes": 266,
-      "sha256": "e592212ca4a1e38b9bee18d46526c1ffe72526ac616c7912b7256cbab032d52c"
-    },
-    {
       "path": "src/renderer/copy/matchScoreFloater.test.ts",
       "category": "test",
       "bytes": 2010,
@@ -8927,12 +8909,6 @@
       "category": "source",
       "bytes": 3760,
       "sha256": "d66567ee37393fc4a3d44e801b37c97c7d58613ee0cd365a4dc7844bd8e76150"
-    },
-    {
-      "path": "src/renderer/copy/perfectMemory.ts",
-      "category": "source",
-      "bytes": 1459,
-      "sha256": "aa7822edf475e9cad90fa40264fed603eca60bd94c9c9cbd798a436bf125aa25"
     },
     {
       "path": "src/renderer/copy/relicDraftOffer.test.ts",
@@ -11307,14 +11283,14 @@
     {
       "path": "src/shared/localization-readiness.test.ts",
       "category": "test",
-      "bytes": 1330,
-      "sha256": "f445720078f49d5617fccf216ed67772bebb08965a77f07de6dd6a02b89924eb"
+      "bytes": 2256,
+      "sha256": "441a1deb630f223156f469e84bf0c1b14293885a4801ffca4711f29686961c02"
     },
     {
       "path": "src/shared/localization-readiness.ts",
       "category": "source",
-      "bytes": 3525,
-      "sha256": "bb6c3228f128f350d66a44fa65e4f0b748d2957c62e1b1c4dd64d8fa19e3b5d4"
+      "bytes": 3725,
+      "sha256": "3aafd5644c73e2af1785d6066296c5bea16df406a012562bf65198b3e00c56ba"
     },
     {
       "path": "src/shared/long-run-depth.test.ts",
@@ -11703,14 +11679,14 @@
     {
       "path": "src/shared/release-checklist.test.ts",
       "category": "test",
-      "bytes": 9362,
-      "sha256": "f4ffae615d099d5a38537feae36be2f63b663fdeb50cfb41b8a22b51dbbaa733"
+      "bytes": 10039,
+      "sha256": "37e1fb34292581c262e65761bfe2e0eeab0608ae9041ac4721b6fb21718b6fd2"
     },
     {
       "path": "src/shared/release-checklist.ts",
       "category": "source",
-      "bytes": 8473,
-      "sha256": "5ae8b8c1db9ed8868f42ac7d0c0219da3774fadf98ede3665c9b12ec1b9efbe6"
+      "bytes": 8701,
+      "sha256": "98b51063b4de3d9ddcb9cc3d72788e0b4fde3dcc3c47ee006ffdc6429105d2ca"
     },
     {
       "path": "src/shared/relic-favor-rules.test.ts",
@@ -12365,12 +12341,6 @@
       "category": "source",
       "bytes": 4927,
       "sha256": "952703032b51353de505b635133023010604a9e81562bc7495a0b7a621dc2d8d"
-    },
-    {
-      "path": "src/shared/tile-flip-command-transition.ts",
-      "category": "source",
-      "bytes": 1157,
-      "sha256": "b4607e4402100c3956632d27f91e7e0efc44a4ee7b2ed33ced50b6205ae295d4"
     },
     {
       "path": "src/shared/tile-floater-anchor-rules.test.ts",
@@ -15647,18 +15617,6 @@
       "testedBy": []
     },
     {
-      "id": "file:src/renderer/assets/ui/icons/index.ts",
-      "path": "src/renderer/assets/ui/icons/index.ts",
-      "layer": "renderer",
-      "role": "production",
-      "lineCount": 33,
-      "imports": [],
-      "exports": [
-        "symbol:src/renderer/assets/ui/icons/index.ts#GAMEPLAY_TOOLBAR_ICONS"
-      ],
-      "testedBy": []
-    },
-    {
       "id": "file:src/renderer/assets/ui/index.ts",
       "path": "src/renderer/assets/ui/index.ts",
       "layer": "renderer",
@@ -17135,20 +17093,6 @@
       "testedBy": [
         "file:src/renderer/components/GameOverScreen.test.tsx"
       ]
-    },
-    {
-      "id": "file:src/renderer/components/gameplayHudMutatorLabels.ts",
-      "path": "src/renderer/components/gameplayHudMutatorLabels.ts",
-      "layer": "renderer",
-      "role": "production",
-      "lineCount": 17,
-      "imports": [
-        "file:src/shared/contracts.ts"
-      ],
-      "exports": [
-        "symbol:src/renderer/components/gameplayHudMutatorLabels.ts#MUTATOR_HUD_LABELS"
-      ],
-      "testedBy": []
     },
     {
       "id": "file:src/renderer/components/gameplayRenderProfile.ts",
@@ -20947,20 +20891,6 @@
       ]
     },
     {
-      "id": "file:src/renderer/copy/inventoryScreen.ts",
-      "path": "src/renderer/copy/inventoryScreen.ts",
-      "layer": "renderer",
-      "role": "production",
-      "lineCount": 9,
-      "imports": [
-        "file:src/renderer/copy/perfectMemory.ts"
-      ],
-      "exports": [
-        "symbol:src/renderer/copy/inventoryScreen.ts#inventoryScreenCopy"
-      ],
-      "testedBy": []
-    },
-    {
       "id": "file:src/renderer/copy/matchScoreFloater.test.ts",
       "path": "src/renderer/copy/matchScoreFloater.test.ts",
       "layer": "renderer",
@@ -21021,20 +20951,6 @@
       "testedBy": [
         "file:src/renderer/copy/mismatchFloater.test.ts"
       ]
-    },
-    {
-      "id": "file:src/renderer/copy/perfectMemory.ts",
-      "path": "src/renderer/copy/perfectMemory.ts",
-      "layer": "renderer",
-      "role": "production",
-      "lineCount": 34,
-      "imports": [],
-      "exports": [
-        "symbol:src/renderer/copy/perfectMemory.ts#PERFECT_MEMORY_BASE_RULES",
-        "symbol:src/renderer/copy/perfectMemory.ts#perfectMemoryHudKind",
-        "symbol:src/renderer/copy/perfectMemory.ts#perfectMemoryInventoryHint"
-      ],
-      "testedBy": []
     },
     {
       "id": "file:src/renderer/copy/relicDraftOffer.test.ts",
@@ -29016,7 +28932,7 @@
       "path": "src/shared/localization-readiness.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 25,
+      "lineCount": 47,
       "imports": [
         "file:src/shared/localization-readiness.ts"
       ],
@@ -29028,7 +28944,7 @@
       "path": "src/shared/localization-readiness.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 87,
+      "lineCount": 89,
       "imports": [],
       "exports": [
         "symbol:src/shared/localization-readiness.ts#getLocalizationCopySurfaceRows",
@@ -30382,7 +30298,7 @@
       "path": "src/shared/release-checklist.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 178,
+      "lineCount": 192,
       "imports": [
         "file:src/main/crash-log.ts",
         "file:src/main/save-recovery.ts",
@@ -30404,7 +30320,7 @@
       "path": "src/shared/release-checklist.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 221,
+      "lineCount": 228,
       "imports": [],
       "exports": [
         "symbol:src/shared/release-checklist.ts#RELEASE_CHECKLIST",
@@ -32826,25 +32742,6 @@
       ]
     },
     {
-      "id": "file:src/shared/tile-flip-command-transition.ts",
-      "path": "src/shared/tile-flip-command-transition.ts",
-      "layer": "shared",
-      "role": "production",
-      "lineCount": 27,
-      "imports": [
-        "file:src/shared/contracts.ts",
-        "file:src/shared/gameplay-core-contracts.ts",
-        "file:src/shared/gameplay-core.ts",
-        "file:src/shared/gameplay-journal.ts",
-        "file:src/shared/run-array-guards.ts"
-      ],
-      "exports": [
-        "symbol:src/shared/tile-flip-command-transition.ts#createApplyTileFlip",
-        "symbol:src/shared/tile-flip-command-transition.ts#createTileFlipCommandForRun"
-      ],
-      "testedBy": []
-    },
-    {
       "id": "file:src/shared/tile-floater-anchor-rules.test.ts",
       "path": "src/shared/tile-floater-anchor-rules.test.ts",
       "layer": "shared",
@@ -34551,14 +34448,6 @@
       "file": "src/renderer/assets/preloadStartupAssets.ts",
       "line": 106,
       "endLine": 118
-    },
-    {
-      "id": "symbol:src/renderer/assets/ui/icons/index.ts#GAMEPLAY_TOOLBAR_ICONS",
-      "name": "GAMEPLAY_TOOLBAR_ICONS",
-      "kind": "value",
-      "file": "src/renderer/assets/ui/icons/index.ts",
-      "line": 17,
-      "endLine": 32
     },
     {
       "id": "symbol:src/renderer/assets/ui/index.ts#getUiArtRows",
@@ -36407,14 +36296,6 @@
       "file": "src/renderer/components/GameOverScreen.tsx",
       "line": 371,
       "endLine": 371
-    },
-    {
-      "id": "symbol:src/renderer/components/gameplayHudMutatorLabels.ts#MUTATOR_HUD_LABELS",
-      "name": "MUTATOR_HUD_LABELS",
-      "kind": "value",
-      "file": "src/renderer/components/gameplayHudMutatorLabels.ts",
-      "line": 3,
-      "endLine": 16
     },
     {
       "id": "symbol:src/renderer/components/gameplayRenderProfile.ts#GAMEPLAY_RENDER_PROFILE",
@@ -40537,14 +40418,6 @@
       "endLine": 124
     },
     {
-      "id": "symbol:src/renderer/copy/inventoryScreen.ts#inventoryScreenCopy",
-      "name": "inventoryScreenCopy",
-      "kind": "value",
-      "file": "src/renderer/copy/inventoryScreen.ts",
-      "line": 6,
-      "endLine": 8
-    },
-    {
       "id": "symbol:src/renderer/copy/matchScoreFloater.ts#matchScoreFloaterChainCue",
       "name": "matchScoreFloaterChainCue",
       "kind": "value",
@@ -40591,30 +40464,6 @@
       "file": "src/renderer/copy/mismatchFloater.ts",
       "line": 53,
       "endLine": 61
-    },
-    {
-      "id": "symbol:src/renderer/copy/perfectMemory.ts#PERFECT_MEMORY_BASE_RULES",
-      "name": "PERFECT_MEMORY_BASE_RULES",
-      "kind": "value",
-      "file": "src/renderer/copy/perfectMemory.ts",
-      "line": 5,
-      "endLine": 6
-    },
-    {
-      "id": "symbol:src/renderer/copy/perfectMemory.ts#perfectMemoryHudKind",
-      "name": "perfectMemoryHudKind",
-      "kind": "value",
-      "file": "src/renderer/copy/perfectMemory.ts",
-      "line": 25,
-      "endLine": 33
-    },
-    {
-      "id": "symbol:src/renderer/copy/perfectMemory.ts#perfectMemoryInventoryHint",
-      "name": "perfectMemoryInventoryHint",
-      "kind": "value",
-      "file": "src/renderer/copy/perfectMemory.ts",
-      "line": 9,
-      "endLine": 20
     },
     {
       "id": "symbol:src/renderer/copy/relicDraftOffer.ts#buildRelicDraftBonusFootnoteLines",
@@ -54054,7 +53903,7 @@
       "kind": "value",
       "file": "src/shared/localization-readiness.ts",
       "line": 67,
-      "endLine": 73
+      "endLine": 75
     },
     {
       "id": "symbol:src/shared/localization-readiness.ts#getLocalizationReadinessRows",
@@ -54117,8 +53966,8 @@
       "name": "localizationReadyForNewCopy",
       "kind": "value",
       "file": "src/shared/localization-readiness.ts",
-      "line": 75,
-      "endLine": 86
+      "line": 77,
+      "endLine": 88
     },
     {
       "id": "symbol:src/shared/long-run-depth.ts#getLongRunActBossRows",
@@ -56294,15 +56143,15 @@
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
       "line": 32,
-      "endLine": 173
+      "endLine": 180
     },
     {
       "id": "symbol:src/shared/release-checklist.ts#releaseChecklistByOwner",
       "name": "releaseChecklistByOwner",
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
-      "line": 179,
-      "endLine": 180
+      "line": 186,
+      "endLine": 187
     },
     {
       "id": "symbol:src/shared/release-checklist.ts#ReleaseChecklistItem",
@@ -56325,16 +56174,16 @@
       "name": "releaseChecklistSections",
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
-      "line": 175,
-      "endLine": 177
+      "line": 182,
+      "endLine": 184
     },
     {
       "id": "symbol:src/shared/release-checklist.ts#renderReleaseChecklistMarkdown",
       "name": "renderReleaseChecklistMarkdown",
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
-      "line": 194,
-      "endLine": 220
+      "line": 201,
+      "endLine": 227
     },
     {
       "id": "symbol:src/shared/relic-favor-rules.ts#gainRelicFavor",
@@ -60583,22 +60432,6 @@
       "file": "src/shared/test/gameplay-event-fixtures.ts",
       "line": 108,
       "endLine": 159
-    },
-    {
-      "id": "symbol:src/shared/tile-flip-command-transition.ts#createApplyTileFlip",
-      "name": "createApplyTileFlip",
-      "kind": "value",
-      "file": "src/shared/tile-flip-command-transition.ts",
-      "line": 16,
-      "endLine": 26
-    },
-    {
-      "id": "symbol:src/shared/tile-flip-command-transition.ts#createTileFlipCommandForRun",
-      "name": "createTileFlipCommandForRun",
-      "kind": "value",
-      "file": "src/shared/tile-flip-command-transition.ts",
-      "line": 7,
-      "endLine": 14
     },
     {
       "id": "symbol:src/shared/tile-floater-anchor-rules.ts#getMatchFloaterAnchorTileIds",
@@ -74376,12 +74209,6 @@
       "kind": "exports"
     },
     {
-      "id": "exports:src/renderer/assets/ui/icons/index.ts->symbol:src/renderer/assets/ui/icons/index.ts#GAMEPLAY_TOOLBAR_ICONS",
-      "source": "file:src/renderer/assets/ui/icons/index.ts",
-      "target": "symbol:src/renderer/assets/ui/icons/index.ts#GAMEPLAY_TOOLBAR_ICONS",
-      "kind": "exports"
-    },
-    {
       "id": "exports:src/renderer/assets/ui/index.ts->symbol:src/renderer/assets/ui/index.ts#getUiArtRows",
       "source": "file:src/renderer/assets/ui/index.ts",
       "target": "symbol:src/renderer/assets/ui/index.ts#getUiArtRows",
@@ -75765,12 +75592,6 @@
       "id": "exports:src/renderer/components/GameOverScreen.tsx->symbol:src/renderer/components/GameOverScreen.tsx#default",
       "source": "file:src/renderer/components/GameOverScreen.tsx",
       "target": "symbol:src/renderer/components/GameOverScreen.tsx#default",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/components/gameplayHudMutatorLabels.ts->symbol:src/renderer/components/gameplayHudMutatorLabels.ts#MUTATOR_HUD_LABELS",
-      "source": "file:src/renderer/components/gameplayHudMutatorLabels.ts",
-      "target": "symbol:src/renderer/components/gameplayHudMutatorLabels.ts#MUTATOR_HUD_LABELS",
       "kind": "exports"
     },
     {
@@ -78864,12 +78685,6 @@
       "kind": "exports"
     },
     {
-      "id": "exports:src/renderer/copy/inventoryScreen.ts->symbol:src/renderer/copy/inventoryScreen.ts#inventoryScreenCopy",
-      "source": "file:src/renderer/copy/inventoryScreen.ts",
-      "target": "symbol:src/renderer/copy/inventoryScreen.ts#inventoryScreenCopy",
-      "kind": "exports"
-    },
-    {
       "id": "exports:src/renderer/copy/matchScoreFloater.ts->symbol:src/renderer/copy/matchScoreFloater.ts#matchScoreFloaterChainCue",
       "source": "file:src/renderer/copy/matchScoreFloater.ts",
       "target": "symbol:src/renderer/copy/matchScoreFloater.ts#matchScoreFloaterChainCue",
@@ -78903,24 +78718,6 @@
       "id": "exports:src/renderer/copy/mismatchFloater.ts->symbol:src/renderer/copy/mismatchFloater.ts#mismatchFloaterSignal",
       "source": "file:src/renderer/copy/mismatchFloater.ts",
       "target": "symbol:src/renderer/copy/mismatchFloater.ts#mismatchFloaterSignal",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/copy/perfectMemory.ts->symbol:src/renderer/copy/perfectMemory.ts#PERFECT_MEMORY_BASE_RULES",
-      "source": "file:src/renderer/copy/perfectMemory.ts",
-      "target": "symbol:src/renderer/copy/perfectMemory.ts#PERFECT_MEMORY_BASE_RULES",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/copy/perfectMemory.ts->symbol:src/renderer/copy/perfectMemory.ts#perfectMemoryHudKind",
-      "source": "file:src/renderer/copy/perfectMemory.ts",
-      "target": "symbol:src/renderer/copy/perfectMemory.ts#perfectMemoryHudKind",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/copy/perfectMemory.ts->symbol:src/renderer/copy/perfectMemory.ts#perfectMemoryInventoryHint",
-      "source": "file:src/renderer/copy/perfectMemory.ts",
-      "target": "symbol:src/renderer/copy/perfectMemory.ts#perfectMemoryInventoryHint",
       "kind": "exports"
     },
     {
@@ -93900,18 +93697,6 @@
       "kind": "exports"
     },
     {
-      "id": "exports:src/shared/tile-flip-command-transition.ts->symbol:src/shared/tile-flip-command-transition.ts#createApplyTileFlip",
-      "source": "file:src/shared/tile-flip-command-transition.ts",
-      "target": "symbol:src/shared/tile-flip-command-transition.ts#createApplyTileFlip",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/tile-flip-command-transition.ts->symbol:src/shared/tile-flip-command-transition.ts#createTileFlipCommandForRun",
-      "source": "file:src/shared/tile-flip-command-transition.ts",
-      "target": "symbol:src/shared/tile-flip-command-transition.ts#createTileFlipCommandForRun",
-      "kind": "exports"
-    },
-    {
       "id": "exports:src/shared/tile-floater-anchor-rules.ts->symbol:src/shared/tile-floater-anchor-rules.ts#getMatchFloaterAnchorTileIds",
       "source": "file:src/shared/tile-floater-anchor-rules.ts",
       "target": "symbol:src/shared/tile-floater-anchor-rules.ts#getMatchFloaterAnchorTileIds",
@@ -100345,12 +100130,6 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/gameplayHudMutatorLabels.ts->src/shared/contracts.ts",
-      "source": "file:src/renderer/components/gameplayHudMutatorLabels.ts",
-      "target": "file:src/shared/contracts.ts",
-      "kind": "imports"
-    },
-    {
       "id": "imports:src/renderer/components/gameplayRenderProfile.ts->src/shared/contracts.ts",
       "source": "file:src/renderer/components/gameplayRenderProfile.ts",
       "target": "file:src/shared/contracts.ts",
@@ -104650,12 +104429,6 @@
       "id": "imports:src/renderer/copy/hudActionFeedback.ts->src/shared/tile-trait-rules.ts",
       "source": "file:src/renderer/copy/hudActionFeedback.ts",
       "target": "file:src/shared/tile-trait-rules.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/copy/inventoryScreen.ts->src/renderer/copy/perfectMemory.ts",
-      "source": "file:src/renderer/copy/inventoryScreen.ts",
-      "target": "file:src/renderer/copy/perfectMemory.ts",
       "kind": "imports"
     },
     {
@@ -116128,36 +115901,6 @@
       "id": "imports:src/shared/test/gameplay-event-fixtures.ts->src/shared/gameplay-core-contracts.ts",
       "source": "file:src/shared/test/gameplay-event-fixtures.ts",
       "target": "file:src/shared/gameplay-core-contracts.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/tile-flip-command-transition.ts->src/shared/contracts.ts",
-      "source": "file:src/shared/tile-flip-command-transition.ts",
-      "target": "file:src/shared/contracts.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/tile-flip-command-transition.ts->src/shared/gameplay-core-contracts.ts",
-      "source": "file:src/shared/tile-flip-command-transition.ts",
-      "target": "file:src/shared/gameplay-core-contracts.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/tile-flip-command-transition.ts->src/shared/gameplay-core.ts",
-      "source": "file:src/shared/tile-flip-command-transition.ts",
-      "target": "file:src/shared/gameplay-core.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/tile-flip-command-transition.ts->src/shared/gameplay-journal.ts",
-      "source": "file:src/shared/tile-flip-command-transition.ts",
-      "target": "file:src/shared/gameplay-journal.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/tile-flip-command-transition.ts->src/shared/run-array-guards.ts",
-      "source": "file:src/shared/tile-flip-command-transition.ts",
-      "target": "file:src/shared/run-array-guards.ts",
       "kind": "imports"
     },
     {

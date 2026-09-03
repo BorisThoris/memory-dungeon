@@ -33,6 +33,7 @@ achievement on the Partner site or shoot a trailer.
 
 | Item | State | Owner | Where |
 |---|---|---|---|
+| No dead files or undeclared dependencies reach a build | done | the repository | `package.json (gate:package-hygiene)` |
 | No player-facing state or action is left with nothing able to reach it | done | the repository | `scripts/store-action-reachability.ts` |
 | A save this build cannot read is survivable, and the player is told and given a way out | done | the repository | `src/main/save-recovery.ts` |
 | Crashes are written to disk with user paths redacted, and pruned | done | the repository | `src/main/crash-log.ts` |
