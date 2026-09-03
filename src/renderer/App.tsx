@@ -19,6 +19,7 @@ import { resolveStartupIntroAppContract } from './components/startupIntroContrac
 import { VIEWPORT_MOBILE_MAX, VIEWPORT_TABLET_MAX } from './breakpoints';
 import { useViewportSize } from './hooks/useViewportSize';
 import { useEffectiveReducedMotion } from './hooks/useEffectiveReducedMotion';
+import { useGamepadNavigation } from './hooks/useGamepadNavigation';
 import styles from './styles/App.module.css';
 import { buildRendererThemeStyle } from './styles/theme';
 import { resolveAdaptiveMusicState, useGameplayMusic } from './audio/gameplayMusic';
@@ -42,6 +43,9 @@ const focusAppMainLandmark = (): void => {
 };
 
 const App = () => {
+    // Every interactive surface here is a real focusable element, so one directional focus driver
+    // gives the whole game controller support rather than each screen needing its own.
+    useGamepadNavigation();
     const { height, width } = useViewportSize();
     const {
         dismissHowToPlay,

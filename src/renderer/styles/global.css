@@ -213,3 +213,22 @@ h6 {
         transform: translate3d(0, 0, 0) scale(1);
     }
 }
+
+/*
+ * Controller focus. `:focus-visible` is the browser's guess at whether the player needs to see the
+ * ring, and it guesses "no" for focus moved programmatically — which is every move a controller
+ * makes. While a pad is driving, the ring is always shown: on a pad it is the cursor.
+ */
+html[data-gamepad-active='true'] button:focus,
+html[data-gamepad-active='true'] select:focus,
+html[data-gamepad-active='true'] input:focus,
+html[data-gamepad-active='true'] textarea:focus {
+    outline: 2px solid var(--theme-focus, #f1d4a0);
+    outline-offset: 2px;
+}
+
+html[data-gamepad-active='true'] a:focus,
+html[data-gamepad-active='true'] [tabindex]:focus {
+    outline: none;
+    box-shadow: var(--theme-focus-ring, 0 0 0 2px var(--theme-focus, #f1d4a0));
+}

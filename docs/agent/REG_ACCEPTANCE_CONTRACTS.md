@@ -102,7 +102,7 @@ schema: reg | phase | status | contract | proof
 | REG-113 | 4 | done | `REG113_PLACEHOLDER_INVENTORY` re-exports full asset drop-in category table for ship slot tracking. | `assetDropInReadiness` tests |
 | REG-114 | 4 | done | `REG114_MIX_DUCKING_TABLE` documents music duck multipliers for pause, overlays, relic draft, and run-critical SFX. | `audioMixDuckingPolicy` tests |
 | REG-027 | 5 | done | Visual baseline epoch token for screenshot/CI refresh policy. | `regPhase5Hardening` REG027_VISUAL_BASELINE_EPOCH |
-| REG-029 | 5 | done | Input path enumeration (keyboard, pointer, gamepad deferred) for dual-path QA. | `regPhase5Hardening` |
+| REG-029 | 5 | done | Input path enumeration (keyboard, pointer, gamepad) for multi-path QA. | `regPhase5Hardening` |
 | REG-030 | 5 | done | Local-only playtest telemetry schema token; no PII. | `regPhase5Hardening` |
 | REG-031 | 5 | done | WebGL/graphics pass tied to DPR and anisotropy caps via `reg109QualityEnforcesDprAndAniso`. | `graphicsQuality` + `regPhase5Hardening` |
 | REG-039 | 5 | done | Achievements: offline/local-first warning copy for Steam sync deferral. | `regPhase5Hardening` |

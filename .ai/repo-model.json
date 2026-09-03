@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2416,
-    "codeFileCount": 900,
-    "exportedSymbolCount": 3382,
+    "trackedFileCount": 2425,
+    "codeFileCount": 908,
+    "exportedSymbolCount": 3404,
     "contentItemCount": 57,
     "mechanicCount": 130,
     "stateFieldCount": 144,
-    "relationshipCount": 9844
+    "relationshipCount": 9885
   },
   "inventory": [
     {
@@ -225,8 +225,8 @@
     {
       "path": "docs/agent/REG_ACCEPTANCE_CONTRACTS.md",
       "category": "documentation",
-      "bytes": 28950,
-      "sha256": "7a52092a751f99972e9fa75a861f78e8aeb26e6f12806d1e58cdc9ac77ff48c6"
+      "bytes": 28942,
+      "sha256": "b4d87a03dfc31a000b71c750f2e6d6e9ecf484db5c78e3f7cc4ab3b3ff63f47a"
     },
     {
       "path": "docs/agent/REG_BLOCKERS_AND_DEFERRALS.md",
@@ -2301,14 +2301,14 @@
     {
       "path": "docs/system-diagrams/AUDIT.md",
       "category": "documentation",
-      "bytes": 11473,
-      "sha256": "4ea1cf3eb2c3f2b87cd8fe67617679eaf756b29e8c361258b87e18b6917e0703"
+      "bytes": 11467,
+      "sha256": "5c89d167d35db2bf291cef20ad64f06e2cdd433d01c2d2b19efb3ea2977439d8"
     },
     {
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
-      "bytes": 36735,
-      "sha256": "1cae13fdbf3f60379ecb0ca209cd8408c20be4d10663c084cce37f8ef4740391"
+      "bytes": 36714,
+      "sha256": "6213d36944ec9d04fd430a272ca167cd9c3439c1669539a6bbb65ef55c0981e6"
     },
     {
       "path": "docs/UI_RETHINK_PLAN.md",
@@ -3577,6 +3577,12 @@
       "sha256": "8d268ea4c69d05d8fafa777d01d5b8b00d24139365526f47a492582c085ac7c0"
     },
     {
+      "path": "e2e/controller-navigation.spec.ts",
+      "category": "test",
+      "bytes": 6101,
+      "sha256": "445f73b5487c365372840f985f2780e636d54dc9f9d6e9389632b9916c728abb"
+    },
+    {
       "path": "e2e/cyp-review-capture.spec.ts",
       "category": "test",
       "bytes": 2354,
@@ -4821,8 +4827,8 @@
     {
       "path": "src/renderer/App.tsx",
       "category": "source",
-      "bytes": 18671,
-      "sha256": "19861953793dc73d7a7e080236aab5c073f8bad3a73658f98f91f4e53296331f"
+      "bytes": 18955,
+      "sha256": "de73fe1360132464be1cdba81c26efd7338e3ad70033c406670d31e05b29a644"
     },
     {
       "path": "src/renderer/assets/ASSET_SOURCES.md",
@@ -7503,8 +7509,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 88758,
-      "sha256": "44e953f6446d7e097839985ae80be5a29a07e684b65774b1469ff409cd403130"
+      "bytes": 89451,
+      "sha256": "87c55e16abd042068c438d1ea170477dcdcfa54a530d80a172346aa17e761fd7"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -7875,8 +7881,8 @@
     {
       "path": "src/renderer/components/TileBoard.tsx",
       "category": "source",
-      "bytes": 166289,
-      "sha256": "5fcaf850211513135b60235ae847db9c78874dab3613c21e021cc1f6bb114126"
+      "bytes": 166588,
+      "sha256": "520735fb36354c7424bc6e9b05c1732139efeba92f6d53d014f9d1c4ecc0793d"
     },
     {
       "path": "src/renderer/components/tileBoardCanvasContext.test.ts",
@@ -9037,6 +9043,18 @@
       "sha256": "035283080ec5323716d9a0d4bbebb6bd077b66fd885dd9f701c2579421fde7be"
     },
     {
+      "path": "src/renderer/hooks/useGamepadNavigation.test.tsx",
+      "category": "test",
+      "bytes": 5174,
+      "sha256": "fa0d50e7a27fb1a00a62c000b9efa5faeb71d6e45f1321ade0a87c88e30c94f5"
+    },
+    {
+      "path": "src/renderer/hooks/useGamepadNavigation.ts",
+      "category": "source",
+      "bytes": 4674,
+      "sha256": "3ab74cd035b8364152e82af8802a025ea533c15f157edb20b152923941be242b"
+    },
+    {
       "path": "src/renderer/hooks/useGameplayChromeClearance.ts",
       "category": "source",
       "bytes": 4535,
@@ -9097,10 +9115,34 @@
       "sha256": "7b851aa1b3ab9ea8d55f600d0d23b15d35e4e205323199c222bc3bda03494238"
     },
     {
+      "path": "src/renderer/input/gamepadNavigation.test.ts",
+      "category": "test",
+      "bytes": 4995,
+      "sha256": "8ac8ccd1ee3eb6c34dd772d55338c0b639bffe73b267ee8199a051367b116a70"
+    },
+    {
+      "path": "src/renderer/input/gamepadNavigation.ts",
+      "category": "source",
+      "bytes": 6026,
+      "sha256": "232cc4dc5c6f392c38f5ffb8caf8714511b3fefee2ea6bb4850ecdc4f60c5a47"
+    },
+    {
+      "path": "src/renderer/input/spatialFocus.test.ts",
+      "category": "test",
+      "bytes": 2609,
+      "sha256": "af7a534868d7e59c36945914811c2d301bd3906d02098ac3e0fd11e067f091b6"
+    },
+    {
+      "path": "src/renderer/input/spatialFocus.ts",
+      "category": "source",
+      "bytes": 3415,
+      "sha256": "896c2746b9c6bffd8f45f6bbf06c2c0af822d6ec3adda7711576c06e893ff112"
+    },
+    {
       "path": "src/renderer/keyboard/gameplayShortcuts.ts",
       "category": "source",
-      "bytes": 835,
-      "sha256": "d3fc3305e692e6e0873e2f0dd942d2ddc73a97df0801485c1f757878a8d29def"
+      "bytes": 1708,
+      "sha256": "ceefe07a08c4e26f5a4ca84d6c8d3e0305b4fc5123f4c15408fe22ef41a07869"
     },
     {
       "path": "src/renderer/main.tsx",
@@ -9627,8 +9669,8 @@
     {
       "path": "src/renderer/styles/global.css",
       "category": "source",
-      "bytes": 5527,
-      "sha256": "36558e883b2405dacd930fad1808124b7b41fb2e50e8b07753135cf7d9bb808d"
+      "bytes": 6286,
+      "sha256": "6843f66d5f3e92461296829aaba95aa35c637687b56e5ca22844b9aa685068c7"
     },
     {
       "path": "src/renderer/styles/notificationsGame.css",
@@ -10741,6 +10783,18 @@
       "sha256": "e3fc289dbb14f1986947ce349de922a90dd1b3d188a67cb5ddbbb49612a60a9f"
     },
     {
+      "path": "src/shared/gamepad-input.test.ts",
+      "category": "test",
+      "bytes": 4827,
+      "sha256": "471b1c1272b74fcc06f2490ee6121f1329e79c661303882b1ec9a0436c9490f7"
+    },
+    {
+      "path": "src/shared/gamepad-input.ts",
+      "category": "source",
+      "bytes": 5805,
+      "sha256": "b7e4b5e441f99f89db4ee0feb4f13c3ec52a1d8310f177f0f78805a7eefc8a80"
+    },
+    {
       "path": "src/shared/gameplay-core-adapters.ts",
       "category": "source",
       "bytes": 14953,
@@ -11367,8 +11421,8 @@
     {
       "path": "src/shared/qa/regPhase5Hardening.ts",
       "category": "source",
-      "bytes": 2856,
-      "sha256": "8e9fa5eec588b6a8db40528f8c3cbe6fc313e51a3b08fcc307cdf8ada007417a"
+      "bytes": 2865,
+      "sha256": "68720413e3707926900de302fcf682981fd99e6c21a79960b8465996e845b2ab"
     },
     {
       "path": "src/shared/qa/regPhase6Closure.test.ts",
@@ -14993,7 +15047,7 @@
       "path": "src/renderer/App.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 399,
+      "lineCount": 403,
       "imports": [
         "file:src/renderer/audio/gameplayMusic.ts",
         "file:src/renderer/breakpoints.ts",
@@ -15012,6 +15066,7 @@
         "file:src/renderer/components/startupIntroConfig.ts",
         "file:src/renderer/components/startupIntroContract.ts",
         "file:src/renderer/hooks/useEffectiveReducedMotion.ts",
+        "file:src/renderer/hooks/useGamepadNavigation.ts",
         "file:src/renderer/hooks/useViewportSize.ts",
         "file:src/renderer/store/navigationModel.ts",
         "file:src/renderer/store/useAppStore.ts",
@@ -16708,7 +16763,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 1959,
+      "lineCount": 1969,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -16735,6 +16790,7 @@
         "file:src/renderer/gameplay/stickyFingersBlockedTileId.ts",
         "file:src/renderer/hooks/useDistractionChannelTick.ts",
         "file:src/renderer/hooks/useEffectiveReducedMotion.ts",
+        "file:src/renderer/hooks/useGamepadNavigation.ts",
         "file:src/renderer/hooks/useGameplayChromeClearance.ts",
         "file:src/renderer/hooks/useHudPoliteLiveAnnouncement.ts",
         "file:src/renderer/hooks/useLatestRef.ts",
@@ -17650,7 +17706,7 @@
       "path": "src/renderer/components/TileBoard.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 3854,
+      "lineCount": 3857,
       "imports": [
         "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/breakpoints.ts",
@@ -20971,6 +21027,38 @@
       ]
     },
     {
+      "id": "file:src/renderer/hooks/useGamepadNavigation.test.tsx",
+      "path": "src/renderer/hooks/useGamepadNavigation.test.tsx",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 149,
+      "imports": [
+        "file:src/renderer/hooks/useGamepadNavigation.ts",
+        "file:src/renderer/input/gamepadNavigation.ts",
+        "file:src/shared/gamepad-input.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/hooks/useGamepadNavigation.ts",
+      "path": "src/renderer/hooks/useGamepadNavigation.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 126,
+      "imports": [
+        "file:src/renderer/input/gamepadNavigation.ts",
+        "file:src/shared/gamepad-input.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/hooks/useGamepadNavigation.ts#useGamepadConnected",
+        "symbol:src/renderer/hooks/useGamepadNavigation.ts#useGamepadNavigation"
+      ],
+      "testedBy": [
+        "file:src/renderer/hooks/useGamepadNavigation.test.tsx"
+      ]
+    },
+    {
       "id": "file:src/renderer/hooks/useGameplayChromeClearance.ts",
       "path": "src/renderer/hooks/useGameplayChromeClearance.ts",
       "layer": "renderer",
@@ -21120,13 +21208,77 @@
       "testedBy": []
     },
     {
+      "id": "file:src/renderer/input/gamepadNavigation.test.ts",
+      "path": "src/renderer/input/gamepadNavigation.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 138,
+      "imports": [
+        "file:src/renderer/input/gamepadNavigation.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/input/gamepadNavigation.ts",
+      "path": "src/renderer/input/gamepadNavigation.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 148,
+      "imports": [
+        "file:src/renderer/a11y/focusables.ts",
+        "file:src/renderer/input/spatialFocus.ts",
+        "file:src/shared/gamepad-input.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/input/gamepadNavigation.ts#applyGamepadAction",
+        "symbol:src/renderer/input/gamepadNavigation.ts#GAMEPAD_ACTIVE_ATTRIBUTE",
+        "symbol:src/renderer/input/gamepadNavigation.ts#isDispatchingGamepadKey",
+        "symbol:src/renderer/input/gamepadNavigation.ts#listNavigableElements"
+      ],
+      "testedBy": [
+        "file:src/renderer/hooks/useGamepadNavigation.test.tsx",
+        "file:src/renderer/input/gamepadNavigation.test.ts"
+      ]
+    },
+    {
+      "id": "file:src/renderer/input/spatialFocus.test.ts",
+      "path": "src/renderer/input/spatialFocus.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 59,
+      "imports": [
+        "file:src/renderer/input/spatialFocus.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/input/spatialFocus.ts",
+      "path": "src/renderer/input/spatialFocus.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 85,
+      "imports": [],
+      "exports": [
+        "symbol:src/renderer/input/spatialFocus.ts#FocusDirection",
+        "symbol:src/renderer/input/spatialFocus.ts#FocusRect",
+        "symbol:src/renderer/input/spatialFocus.ts#pickSpatialNeighbour",
+        "symbol:src/renderer/input/spatialFocus.ts#SpatialCandidate"
+      ],
+      "testedBy": [
+        "file:src/renderer/input/spatialFocus.test.ts"
+      ]
+    },
+    {
       "id": "file:src/renderer/keyboard/gameplayShortcuts.ts",
       "path": "src/renderer/keyboard/gameplayShortcuts.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 12,
+      "lineCount": 25,
       "imports": [],
       "exports": [
+        "symbol:src/renderer/keyboard/gameplayShortcuts.ts#GAMEPAD_SHORTCUT_ROWS",
         "symbol:src/renderer/keyboard/gameplayShortcuts.ts#GAMEPLAY_SHORTCUT_ROWS"
       ],
       "testedBy": []
@@ -26941,6 +27093,43 @@
         "file:src/shared/score-parasite-rules.test.ts",
         "file:src/shared/softlock-fairness.test.ts",
         "file:src/shared/tile-floater-anchor-rules.test.ts"
+      ]
+    },
+    {
+      "id": "file:src/shared/gamepad-input.test.ts",
+      "path": "src/shared/gamepad-input.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 106,
+      "imports": [
+        "file:src/shared/gamepad-input.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/shared/gamepad-input.ts",
+      "path": "src/shared/gamepad-input.ts",
+      "layer": "shared",
+      "role": "production",
+      "lineCount": 149,
+      "imports": [],
+      "exports": [
+        "symbol:src/shared/gamepad-input.ts#createGamepadRepeatState",
+        "symbol:src/shared/gamepad-input.ts#GAMEPAD_REPEAT_DELAY_MS",
+        "symbol:src/shared/gamepad-input.ts#GAMEPAD_REPEAT_INTERVAL_MS",
+        "symbol:src/shared/gamepad-input.ts#GAMEPAD_STICK_DEADZONE",
+        "symbol:src/shared/gamepad-input.ts#GamepadActionId",
+        "symbol:src/shared/gamepad-input.ts#GamepadRepeatState",
+        "symbol:src/shared/gamepad-input.ts#GamepadSnapshot",
+        "symbol:src/shared/gamepad-input.ts#pickActiveGamepad",
+        "symbol:src/shared/gamepad-input.ts#readGamepadActions",
+        "symbol:src/shared/gamepad-input.ts#STANDARD_GAMEPAD_BUTTONS",
+        "symbol:src/shared/gamepad-input.ts#stepGamepadInput"
+      ],
+      "testedBy": [
+        "file:src/renderer/hooks/useGamepadNavigation.test.tsx",
+        "file:src/shared/gamepad-input.test.ts"
       ]
     },
     {
@@ -32868,16 +33057,16 @@
       "name": "APP_MAIN_LANDMARK_ID",
       "kind": "value",
       "file": "src/renderer/App.tsx",
-      "line": 35,
-      "endLine": 35
+      "line": 36,
+      "endLine": 36
     },
     {
       "id": "symbol:src/renderer/App.tsx#default",
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/App.tsx",
-      "line": 398,
-      "endLine": 398
+      "line": 402,
+      "endLine": 402
     },
     {
       "id": "symbol:src/renderer/assets/assetDropInReadiness.ts#ASSET_DROP_IN_CATEGORIES",
@@ -34900,8 +35089,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 1958,
-      "endLine": 1958
+      "line": 1968,
+      "endLine": 1968
     },
     {
       "id": "symbol:src/renderer/components/gameScreenFeedback.ts#DungeonCombatLogRow",
@@ -35516,8 +35705,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/TileBoard.tsx",
-      "line": 3853,
-      "endLine": 3853
+      "line": 3856,
+      "endLine": 3856
     },
     {
       "id": "symbol:src/renderer/components/TileBoard.tsx#TileBoardClientRect",
@@ -39496,6 +39685,22 @@
       "endLine": 185
     },
     {
+      "id": "symbol:src/renderer/hooks/useGamepadNavigation.ts#useGamepadConnected",
+      "name": "useGamepadConnected",
+      "kind": "value",
+      "file": "src/renderer/hooks/useGamepadNavigation.ts",
+      "line": 107,
+      "endLine": 125
+    },
+    {
+      "id": "symbol:src/renderer/hooks/useGamepadNavigation.ts#useGamepadNavigation",
+      "name": "useGamepadNavigation",
+      "kind": "value",
+      "file": "src/renderer/hooks/useGamepadNavigation.ts",
+      "line": 18,
+      "endLine": 101
+    },
+    {
       "id": "symbol:src/renderer/hooks/useGameplayChromeClearance.ts#useGameplayChromeClearance",
       "name": "useGameplayChromeClearance",
       "kind": "value",
@@ -39566,6 +39771,78 @@
       "file": "src/renderer/initRendererShell.tsx",
       "line": 36,
       "endLine": 42
+    },
+    {
+      "id": "symbol:src/renderer/input/gamepadNavigation.ts#applyGamepadAction",
+      "name": "applyGamepadAction",
+      "kind": "value",
+      "file": "src/renderer/input/gamepadNavigation.ts",
+      "line": 109,
+      "endLine": 147
+    },
+    {
+      "id": "symbol:src/renderer/input/gamepadNavigation.ts#GAMEPAD_ACTIVE_ATTRIBUTE",
+      "name": "GAMEPAD_ACTIVE_ATTRIBUTE",
+      "kind": "value",
+      "file": "src/renderer/input/gamepadNavigation.ts",
+      "line": 16,
+      "endLine": 16
+    },
+    {
+      "id": "symbol:src/renderer/input/gamepadNavigation.ts#isDispatchingGamepadKey",
+      "name": "isDispatchingGamepadKey",
+      "kind": "value",
+      "file": "src/renderer/input/gamepadNavigation.ts",
+      "line": 54,
+      "endLine": 54
+    },
+    {
+      "id": "symbol:src/renderer/input/gamepadNavigation.ts#listNavigableElements",
+      "name": "listNavigableElements",
+      "kind": "value",
+      "file": "src/renderer/input/gamepadNavigation.ts",
+      "line": 36,
+      "endLine": 44
+    },
+    {
+      "id": "symbol:src/renderer/input/spatialFocus.ts#FocusDirection",
+      "name": "FocusDirection",
+      "kind": "type",
+      "file": "src/renderer/input/spatialFocus.ts",
+      "line": 11,
+      "endLine": 11
+    },
+    {
+      "id": "symbol:src/renderer/input/spatialFocus.ts#FocusRect",
+      "name": "FocusRect",
+      "kind": "interface",
+      "file": "src/renderer/input/spatialFocus.ts",
+      "line": 13,
+      "endLine": 18
+    },
+    {
+      "id": "symbol:src/renderer/input/spatialFocus.ts#pickSpatialNeighbour",
+      "name": "pickSpatialNeighbour",
+      "kind": "value",
+      "file": "src/renderer/input/spatialFocus.ts",
+      "line": 45,
+      "endLine": 84
+    },
+    {
+      "id": "symbol:src/renderer/input/spatialFocus.ts#SpatialCandidate",
+      "name": "SpatialCandidate",
+      "kind": "interface",
+      "file": "src/renderer/input/spatialFocus.ts",
+      "line": 20,
+      "endLine": 23
+    },
+    {
+      "id": "symbol:src/renderer/keyboard/gameplayShortcuts.ts#GAMEPAD_SHORTCUT_ROWS",
+      "name": "GAMEPAD_SHORTCUT_ROWS",
+      "kind": "value",
+      "file": "src/renderer/keyboard/gameplayShortcuts.ts",
+      "line": 17,
+      "endLine": 24
     },
     {
       "id": "symbol:src/renderer/keyboard/gameplayShortcuts.ts#GAMEPLAY_SHORTCUT_ROWS",
@@ -50078,6 +50355,94 @@
       "file": "src/shared/game.ts",
       "line": 48,
       "endLine": 48
+    },
+    {
+      "id": "symbol:src/shared/gamepad-input.ts#createGamepadRepeatState",
+      "name": "createGamepadRepeatState",
+      "kind": "value",
+      "file": "src/shared/gamepad-input.ts",
+      "line": 96,
+      "endLine": 96
+    },
+    {
+      "id": "symbol:src/shared/gamepad-input.ts#GAMEPAD_REPEAT_DELAY_MS",
+      "name": "GAMEPAD_REPEAT_DELAY_MS",
+      "kind": "value",
+      "file": "src/shared/gamepad-input.ts",
+      "line": 55,
+      "endLine": 55
+    },
+    {
+      "id": "symbol:src/shared/gamepad-input.ts#GAMEPAD_REPEAT_INTERVAL_MS",
+      "name": "GAMEPAD_REPEAT_INTERVAL_MS",
+      "kind": "value",
+      "file": "src/shared/gamepad-input.ts",
+      "line": 56,
+      "endLine": 56
+    },
+    {
+      "id": "symbol:src/shared/gamepad-input.ts#GAMEPAD_STICK_DEADZONE",
+      "name": "GAMEPAD_STICK_DEADZONE",
+      "kind": "value",
+      "file": "src/shared/gamepad-input.ts",
+      "line": 52,
+      "endLine": 52
+    },
+    {
+      "id": "symbol:src/shared/gamepad-input.ts#GamepadActionId",
+      "name": "GamepadActionId",
+      "kind": "type",
+      "file": "src/shared/gamepad-input.ts",
+      "line": 11,
+      "endLine": 21
+    },
+    {
+      "id": "symbol:src/shared/gamepad-input.ts#GamepadRepeatState",
+      "name": "GamepadRepeatState",
+      "kind": "interface",
+      "file": "src/shared/gamepad-input.ts",
+      "line": 92,
+      "endLine": 94
+    },
+    {
+      "id": "symbol:src/shared/gamepad-input.ts#GamepadSnapshot",
+      "name": "GamepadSnapshot",
+      "kind": "interface",
+      "file": "src/shared/gamepad-input.ts",
+      "line": 24,
+      "endLine": 27
+    },
+    {
+      "id": "symbol:src/shared/gamepad-input.ts#pickActiveGamepad",
+      "name": "pickActiveGamepad",
+      "kind": "value",
+      "file": "src/shared/gamepad-input.ts",
+      "line": 134,
+      "endLine": 148
+    },
+    {
+      "id": "symbol:src/shared/gamepad-input.ts#readGamepadActions",
+      "name": "readGamepadActions",
+      "kind": "value",
+      "file": "src/shared/gamepad-input.ts",
+      "line": 72,
+      "endLine": 89
+    },
+    {
+      "id": "symbol:src/shared/gamepad-input.ts#STANDARD_GAMEPAD_BUTTONS",
+      "name": "STANDARD_GAMEPAD_BUTTONS",
+      "kind": "value",
+      "file": "src/shared/gamepad-input.ts",
+      "line": 33,
+      "endLine": 46
+    },
+    {
+      "id": "symbol:src/shared/gamepad-input.ts#stepGamepadInput",
+      "name": "stepGamepadInput",
+      "kind": "value",
+      "file": "src/shared/gamepad-input.ts",
+      "line": 103,
+      "endLine": 128
     },
     {
       "id": "symbol:src/shared/gameplay-core-adapters.ts#activateDebugRevealThroughGameplayCore",
@@ -61669,7 +62034,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1241
+          "line": 1243
         }
       ],
       "tests": [
@@ -76241,6 +76606,18 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/hooks/useGamepadNavigation.ts->symbol:src/renderer/hooks/useGamepadNavigation.ts#useGamepadConnected",
+      "source": "file:src/renderer/hooks/useGamepadNavigation.ts",
+      "target": "symbol:src/renderer/hooks/useGamepadNavigation.ts#useGamepadConnected",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/hooks/useGamepadNavigation.ts->symbol:src/renderer/hooks/useGamepadNavigation.ts#useGamepadNavigation",
+      "source": "file:src/renderer/hooks/useGamepadNavigation.ts",
+      "target": "symbol:src/renderer/hooks/useGamepadNavigation.ts#useGamepadNavigation",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/hooks/useGameplayChromeClearance.ts->symbol:src/renderer/hooks/useGameplayChromeClearance.ts#useGameplayChromeClearance",
       "source": "file:src/renderer/hooks/useGameplayChromeClearance.ts",
       "target": "symbol:src/renderer/hooks/useGameplayChromeClearance.ts#useGameplayChromeClearance",
@@ -76292,6 +76669,60 @@
       "id": "exports:src/renderer/initRendererShell.tsx->symbol:src/renderer/initRendererShell.tsx#getRendererRootElement",
       "source": "file:src/renderer/initRendererShell.tsx",
       "target": "symbol:src/renderer/initRendererShell.tsx#getRendererRootElement",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/input/gamepadNavigation.ts->symbol:src/renderer/input/gamepadNavigation.ts#applyGamepadAction",
+      "source": "file:src/renderer/input/gamepadNavigation.ts",
+      "target": "symbol:src/renderer/input/gamepadNavigation.ts#applyGamepadAction",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/input/gamepadNavigation.ts->symbol:src/renderer/input/gamepadNavigation.ts#GAMEPAD_ACTIVE_ATTRIBUTE",
+      "source": "file:src/renderer/input/gamepadNavigation.ts",
+      "target": "symbol:src/renderer/input/gamepadNavigation.ts#GAMEPAD_ACTIVE_ATTRIBUTE",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/input/gamepadNavigation.ts->symbol:src/renderer/input/gamepadNavigation.ts#isDispatchingGamepadKey",
+      "source": "file:src/renderer/input/gamepadNavigation.ts",
+      "target": "symbol:src/renderer/input/gamepadNavigation.ts#isDispatchingGamepadKey",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/input/gamepadNavigation.ts->symbol:src/renderer/input/gamepadNavigation.ts#listNavigableElements",
+      "source": "file:src/renderer/input/gamepadNavigation.ts",
+      "target": "symbol:src/renderer/input/gamepadNavigation.ts#listNavigableElements",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/input/spatialFocus.ts->symbol:src/renderer/input/spatialFocus.ts#FocusDirection",
+      "source": "file:src/renderer/input/spatialFocus.ts",
+      "target": "symbol:src/renderer/input/spatialFocus.ts#FocusDirection",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/input/spatialFocus.ts->symbol:src/renderer/input/spatialFocus.ts#FocusRect",
+      "source": "file:src/renderer/input/spatialFocus.ts",
+      "target": "symbol:src/renderer/input/spatialFocus.ts#FocusRect",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/input/spatialFocus.ts->symbol:src/renderer/input/spatialFocus.ts#pickSpatialNeighbour",
+      "source": "file:src/renderer/input/spatialFocus.ts",
+      "target": "symbol:src/renderer/input/spatialFocus.ts#pickSpatialNeighbour",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/input/spatialFocus.ts->symbol:src/renderer/input/spatialFocus.ts#SpatialCandidate",
+      "source": "file:src/renderer/input/spatialFocus.ts",
+      "target": "symbol:src/renderer/input/spatialFocus.ts#SpatialCandidate",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/keyboard/gameplayShortcuts.ts->symbol:src/renderer/keyboard/gameplayShortcuts.ts#GAMEPAD_SHORTCUT_ROWS",
+      "source": "file:src/renderer/keyboard/gameplayShortcuts.ts",
+      "target": "symbol:src/renderer/keyboard/gameplayShortcuts.ts#GAMEPAD_SHORTCUT_ROWS",
       "kind": "exports"
     },
     {
@@ -84176,6 +84607,72 @@
       "id": "exports:src/shared/game.ts->symbol:src/shared/game.ts#WILD_PAIR_KEY",
       "source": "file:src/shared/game.ts",
       "target": "symbol:src/shared/game.ts#WILD_PAIR_KEY",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/gamepad-input.ts->symbol:src/shared/gamepad-input.ts#createGamepadRepeatState",
+      "source": "file:src/shared/gamepad-input.ts",
+      "target": "symbol:src/shared/gamepad-input.ts#createGamepadRepeatState",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/gamepad-input.ts->symbol:src/shared/gamepad-input.ts#GAMEPAD_REPEAT_DELAY_MS",
+      "source": "file:src/shared/gamepad-input.ts",
+      "target": "symbol:src/shared/gamepad-input.ts#GAMEPAD_REPEAT_DELAY_MS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/gamepad-input.ts->symbol:src/shared/gamepad-input.ts#GAMEPAD_REPEAT_INTERVAL_MS",
+      "source": "file:src/shared/gamepad-input.ts",
+      "target": "symbol:src/shared/gamepad-input.ts#GAMEPAD_REPEAT_INTERVAL_MS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/gamepad-input.ts->symbol:src/shared/gamepad-input.ts#GAMEPAD_STICK_DEADZONE",
+      "source": "file:src/shared/gamepad-input.ts",
+      "target": "symbol:src/shared/gamepad-input.ts#GAMEPAD_STICK_DEADZONE",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/gamepad-input.ts->symbol:src/shared/gamepad-input.ts#GamepadActionId",
+      "source": "file:src/shared/gamepad-input.ts",
+      "target": "symbol:src/shared/gamepad-input.ts#GamepadActionId",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/gamepad-input.ts->symbol:src/shared/gamepad-input.ts#GamepadRepeatState",
+      "source": "file:src/shared/gamepad-input.ts",
+      "target": "symbol:src/shared/gamepad-input.ts#GamepadRepeatState",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/gamepad-input.ts->symbol:src/shared/gamepad-input.ts#GamepadSnapshot",
+      "source": "file:src/shared/gamepad-input.ts",
+      "target": "symbol:src/shared/gamepad-input.ts#GamepadSnapshot",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/gamepad-input.ts->symbol:src/shared/gamepad-input.ts#pickActiveGamepad",
+      "source": "file:src/shared/gamepad-input.ts",
+      "target": "symbol:src/shared/gamepad-input.ts#pickActiveGamepad",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/gamepad-input.ts->symbol:src/shared/gamepad-input.ts#readGamepadActions",
+      "source": "file:src/shared/gamepad-input.ts",
+      "target": "symbol:src/shared/gamepad-input.ts#readGamepadActions",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/gamepad-input.ts->symbol:src/shared/gamepad-input.ts#STANDARD_GAMEPAD_BUTTONS",
+      "source": "file:src/shared/gamepad-input.ts",
+      "target": "symbol:src/shared/gamepad-input.ts#STANDARD_GAMEPAD_BUTTONS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/gamepad-input.ts->symbol:src/shared/gamepad-input.ts#stepGamepadInput",
+      "source": "file:src/shared/gamepad-input.ts",
+      "target": "symbol:src/shared/gamepad-input.ts#stepGamepadInput",
       "kind": "exports"
     },
     {
@@ -95211,6 +95708,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/App.tsx->src/renderer/hooks/useGamepadNavigation.ts",
+      "source": "file:src/renderer/App.tsx",
+      "target": "file:src/renderer/hooks/useGamepadNavigation.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/App.tsx->src/renderer/hooks/useViewportSize.ts",
       "source": "file:src/renderer/App.tsx",
       "target": "file:src/renderer/hooks/useViewportSize.ts",
@@ -96756,6 +97259,12 @@
       "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/hooks/useEffectiveReducedMotion.ts",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "file:src/renderer/hooks/useEffectiveReducedMotion.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/hooks/useGamepadNavigation.ts",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "file:src/renderer/hooks/useGamepadNavigation.ts",
       "kind": "imports"
     },
     {
@@ -100953,6 +101462,36 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/hooks/useGamepadNavigation.test.tsx->src/renderer/hooks/useGamepadNavigation.ts",
+      "source": "file:src/renderer/hooks/useGamepadNavigation.test.tsx",
+      "target": "file:src/renderer/hooks/useGamepadNavigation.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/hooks/useGamepadNavigation.test.tsx->src/renderer/input/gamepadNavigation.ts",
+      "source": "file:src/renderer/hooks/useGamepadNavigation.test.tsx",
+      "target": "file:src/renderer/input/gamepadNavigation.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/hooks/useGamepadNavigation.test.tsx->src/shared/gamepad-input.ts",
+      "source": "file:src/renderer/hooks/useGamepadNavigation.test.tsx",
+      "target": "file:src/shared/gamepad-input.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/hooks/useGamepadNavigation.ts->src/renderer/input/gamepadNavigation.ts",
+      "source": "file:src/renderer/hooks/useGamepadNavigation.ts",
+      "target": "file:src/renderer/input/gamepadNavigation.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/hooks/useGamepadNavigation.ts->src/shared/gamepad-input.ts",
+      "source": "file:src/renderer/hooks/useGamepadNavigation.ts",
+      "target": "file:src/shared/gamepad-input.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/hooks/useHudPoliteLiveAnnouncement.test.ts->src/renderer/copy/gameplayHints.ts",
       "source": "file:src/renderer/hooks/useHudPoliteLiveAnnouncement.test.ts",
       "target": "file:src/renderer/copy/gameplayHints.ts",
@@ -101076,6 +101615,36 @@
       "id": "imports:src/renderer/initRendererShell.tsx->src/renderer/styles/theme.ts",
       "source": "file:src/renderer/initRendererShell.tsx",
       "target": "file:src/renderer/styles/theme.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/input/gamepadNavigation.test.ts->src/renderer/input/gamepadNavigation.ts",
+      "source": "file:src/renderer/input/gamepadNavigation.test.ts",
+      "target": "file:src/renderer/input/gamepadNavigation.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/input/gamepadNavigation.ts->src/renderer/a11y/focusables.ts",
+      "source": "file:src/renderer/input/gamepadNavigation.ts",
+      "target": "file:src/renderer/a11y/focusables.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/input/gamepadNavigation.ts->src/renderer/input/spatialFocus.ts",
+      "source": "file:src/renderer/input/gamepadNavigation.ts",
+      "target": "file:src/renderer/input/spatialFocus.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/input/gamepadNavigation.ts->src/shared/gamepad-input.ts",
+      "source": "file:src/renderer/input/gamepadNavigation.ts",
+      "target": "file:src/shared/gamepad-input.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/input/spatialFocus.test.ts->src/renderer/input/spatialFocus.ts",
+      "source": "file:src/renderer/input/spatialFocus.test.ts",
+      "target": "file:src/renderer/input/spatialFocus.ts",
       "kind": "imports"
     },
     {
@@ -106836,6 +107405,12 @@
       "id": "imports:src/shared/game.ts->src/shared/tile-identity.ts",
       "source": "file:src/shared/game.ts",
       "target": "file:src/shared/tile-identity.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/gamepad-input.test.ts->src/shared/gamepad-input.ts",
+      "source": "file:src/shared/gamepad-input.test.ts",
+      "target": "file:src/shared/gamepad-input.ts",
       "kind": "imports"
     },
     {
@@ -120043,6 +120618,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/hooks/useGamepadNavigation.ts->file:src/renderer/hooks/useGamepadNavigation.test.tsx",
+      "source": "file:src/renderer/hooks/useGamepadNavigation.ts",
+      "target": "file:src/renderer/hooks/useGamepadNavigation.test.tsx",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/hooks/useHudPoliteLiveAnnouncement.ts->file:src/renderer/hooks/useHudPoliteLiveAnnouncement.test.ts",
       "source": "file:src/renderer/hooks/useHudPoliteLiveAnnouncement.ts",
       "target": "file:src/renderer/hooks/useHudPoliteLiveAnnouncement.test.ts",
@@ -120058,6 +120639,24 @@
       "id": "tested_by:src/renderer/hooks/useViewportSize.ts->file:src/renderer/hooks/useViewportSize.test.tsx",
       "source": "file:src/renderer/hooks/useViewportSize.ts",
       "target": "file:src/renderer/hooks/useViewportSize.test.tsx",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/input/gamepadNavigation.ts->file:src/renderer/hooks/useGamepadNavigation.test.tsx",
+      "source": "file:src/renderer/input/gamepadNavigation.ts",
+      "target": "file:src/renderer/hooks/useGamepadNavigation.test.tsx",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/input/gamepadNavigation.ts->file:src/renderer/input/gamepadNavigation.test.ts",
+      "source": "file:src/renderer/input/gamepadNavigation.ts",
+      "target": "file:src/renderer/input/gamepadNavigation.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/input/spatialFocus.ts->file:src/renderer/input/spatialFocus.test.ts",
+      "source": "file:src/renderer/input/spatialFocus.ts",
+      "target": "file:src/renderer/input/spatialFocus.test.ts",
       "kind": "tested_by"
     },
     {
@@ -122968,6 +123567,18 @@
       "id": "tested_by:src/shared/game.ts->file:src/shared/tile-floater-anchor-rules.test.ts",
       "source": "file:src/shared/game.ts",
       "target": "file:src/shared/tile-floater-anchor-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/gamepad-input.ts->file:src/renderer/hooks/useGamepadNavigation.test.tsx",
+      "source": "file:src/shared/gamepad-input.ts",
+      "target": "file:src/renderer/hooks/useGamepadNavigation.test.tsx",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/gamepad-input.ts->file:src/shared/gamepad-input.test.ts",
+      "source": "file:src/shared/gamepad-input.ts",
+      "target": "file:src/shared/gamepad-input.test.ts",
       "kind": "tested_by"
     },
     {

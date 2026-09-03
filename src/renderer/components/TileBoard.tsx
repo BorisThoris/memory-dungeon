@@ -2817,9 +2817,12 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                 return;
             }
             if (dir) {
-                event.preventDefault();
                 const next = moveFocusInGrid(board, focusedTileId, dir, interactive, allowGambitThirdFlip);
                 if (next && next !== focusedTileId) {
+                    // Consumed only when the grid actually moved. At the edge of the board the key
+                    // is left unhandled on purpose, so a controller's directional focus driver can
+                    // see that the board is done with it and walk out to the surrounding HUD.
+                    event.preventDefault();
                     setFocusedTileId(next);
                 }
             }

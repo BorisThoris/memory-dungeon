@@ -62,7 +62,8 @@ import {
     relicEffectLabels
 } from '../copy/relicDraftOffer';
 import { GAMBIT_KEYBOARD_HELP_TIP } from '../copy/gameplayHints';
-import { GAMEPLAY_SHORTCUT_ROWS } from '../keyboard/gameplayShortcuts';
+import { GAMEPAD_SHORTCUT_ROWS, GAMEPLAY_SHORTCUT_ROWS } from '../keyboard/gameplayShortcuts';
+import { useGamepadConnected } from '../hooks/useGamepadNavigation';
 import { usePlatformTiltField } from '../platformTilt/usePlatformTiltField';
 import { useAppStore } from '../store/useAppStore';
 import {
@@ -360,6 +361,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const [gauntletNowMs, setGauntletNowMs] = useState(() => Date.now());
     const [abandonRunConfirmOpen, setAbandonRunConfirmOpen] = useState(false);
     const [shortcutsHelpOpen, setShortcutsHelpOpen] = useState(false);
+    const gamepadConnected = useGamepadConnected();
     useEffect(() => {
         if (run.gauntletDeadlineMs === null) {
             return;
@@ -1902,12 +1904,20 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                 variant: 'secondary'
                             }
                         ]}
-                        subtitle="These shortcuts work while a run is active and when focus is not in a text field."
+                        subtitle={
+                            gamepadConnected
+                                ? 'These work while a run is active. Your keyboard still does everything it did.'
+                                : 'These shortcuts work while a run is active and when focus is not in a text field.'
+                        }
                         testId="game-shortcuts-help-overlay"
-                        title="Keyboard shortcuts"
+                        title={gamepadConnected ? 'Controller shortcuts' : 'Keyboard shortcuts'}
                     >
-                        <ul aria-label="Gameplay keyboard shortcuts" className={styles.shortcutsHelpList}>
-                            {GAMEPLAY_SHORTCUT_ROWS.map((row) => (
+                        {/* One list, not two: a player holding a pad is told what the pad does. */}
+                        <ul
+                            aria-label={gamepadConnected ? 'Gameplay controller shortcuts' : 'Gameplay keyboard shortcuts'}
+                            className={styles.shortcutsHelpList}
+                        >
+                            {(gamepadConnected ? GAMEPAD_SHORTCUT_ROWS : GAMEPLAY_SHORTCUT_ROWS).map((row) => (
                                 <li key={row.id}>
                                     <span className={styles.shortcutsHelpKeys}>{row.keys}</span>
                                     {' — '}

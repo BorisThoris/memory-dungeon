@@ -41,9 +41,9 @@ export const REG112_REDUCED_MOTION_SUPPRESSES: readonly string[] = [
 
 export const REG027_VISUAL_BASELINE_EPOCH = '2026-04-reg027-v1' as const;
 
-// --- REG-029: input + a11y unification (paths must stay dual keyboard/pointer) ---
+// --- REG-029: input + a11y unification (keyboard, pointer and controller all reach every screen) ---
 
-export const REG029_INPUT_PATHS = ['keyboard', 'pointer', 'gamepad_deferred'] as const;
+export const REG029_INPUT_PATHS = ['keyboard', 'pointer', 'gamepad'] as const;
 
 // --- REG-030: local balance / telemetry (no PII; offline) ---
 
