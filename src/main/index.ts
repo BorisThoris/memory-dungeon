@@ -15,6 +15,13 @@ import { resolveBuildFlavour } from '../shared/content-lock-state';
 import { createSteamAdapter } from './steam';
 import { resolveStartupDisplayMode } from './startup-display-mode';
 import {
+    crashLogDirectoryFor,
+    createCrashReporter,
+    registerCrashHooks,
+    type CrashHookTarget,
+    type CrashReporter
+} from './crash-reporter';
+import {
     captureWindowState,
     DEFAULT_WINDOW_HEIGHT,
     DEFAULT_WINDOW_WIDTH,
@@ -28,6 +35,7 @@ let mainWindow: BrowserWindow | null = null;
 let persistence: PersistenceService | null = null;
 let steamAdapter: ReturnType<typeof createSteamAdapter> | null = null;
 let ipcHandlersRegistered = false;
+let crashReporter: CrashReporter | null = null;
 
 /**
  * Where to open. `resolveRestoredBounds` decides whether the stored placement still lands on a
@@ -155,6 +163,31 @@ const createMainWindow = (displayMode: DisplayMode): BrowserWindow => {
 };
 
 const ensureServicesAndIpc = (): void => {
+    if (!crashReporter) {
+        /*
+         * Before anything else that can fail. A crash during service startup is exactly the one a
+         * player cannot describe, because the window never appears.
+         */
+        crashReporter = createCrashReporter({
+            appVersion: app.getVersion(),
+            directory: crashLogDirectoryFor(app)
+        });
+        /*
+         * Electron types `App.on` as a union of per-event overloads and Node types `process.on`
+         * the same way, so neither unifies with the plain `(event: string, ...)` seam the hook
+         * registration is written against. The cast is at this one call site so the seam stays
+         * something a test can hand a fake to.
+         */
+        registerCrashHooks(crashReporter, {
+            app: app as unknown as CrashHookTarget,
+            process: process as unknown as CrashHookTarget
+        });
+        if (crashReporter.priorCrashes.count > 0) {
+            console.warn(
+                `[crash] ${crashReporter.priorCrashes.count} crash report(s) from earlier sessions in ${crashReporter.directory}`
+            );
+        }
+    }
     if (!persistence) {
         persistence = new PersistenceService();
     }
@@ -187,7 +220,11 @@ const createOrShowMainWindow = (): void => {
 const gotLock = app.requestSingleInstanceLock();
 const handleFatalStartup = (error: unknown): void => {
     handleFatalStartupFailure(error, {
-        reportError: (failure) => console.error('[startup] fatal main-process failure', failure),
+        reportError: (failure) => {
+            console.error('[startup] fatal main-process failure', failure);
+            // The console is nobody's log on a packaged build; leave the record on disk too.
+            crashReporter?.record('startup_fatal', failure);
+        },
         showError: (title, message) => dialog.showErrorBox(title, message),
         quit: () => app.quit()
     });

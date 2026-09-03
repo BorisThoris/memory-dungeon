@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2431,
-    "codeFileCount": 913,
-    "exportedSymbolCount": 3433,
+    "trackedFileCount": 2435,
+    "codeFileCount": 917,
+    "exportedSymbolCount": 3452,
     "contentItemCount": 63,
     "mechanicCount": 136,
     "stateFieldCount": 144,
-    "relationshipCount": 10041
+    "relationshipCount": 10068
   },
   "inventory": [
     {
@@ -2283,8 +2283,8 @@
     {
       "path": "docs/STEAM_READINESS.md",
       "category": "documentation",
-      "bytes": 5247,
-      "sha256": "d2c5120626edbf7e0cf479dfe18f5f1cc22e6ae87761eccda18eb5b6a34e21f4"
+      "bytes": 5570,
+      "sha256": "922713ac40fca55e8c2124b5f994c7efb83e755e8bc283029931d64bf2f87199"
     },
     {
       "path": "docs/STRAY_TILE.md",
@@ -2314,7 +2314,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 36714,
-      "sha256": "bf6eecb9de0ccf8f0ca68c76e1dab5dd724d902d5d7f2ea0ea28512e196856f6"
+      "sha256": "9e7ba14f34fe16b984e6bbe5fd43d3c343c74c75ca694fffee4c2a93b7705be5"
     },
     {
       "path": "docs/UI_RETHINK_PLAN.md",
@@ -4645,6 +4645,30 @@
       "sha256": "5168d7a9b1191f06283138ce04bbda2b9c1c6d7524eb2e8c14cc983a47a0f339"
     },
     {
+      "path": "src/main/crash-log.test.ts",
+      "category": "test",
+      "bytes": 7862,
+      "sha256": "24ef018847d22219200116a80ed8098710ac474a5f5232dbddba23c2f60b913a"
+    },
+    {
+      "path": "src/main/crash-log.ts",
+      "category": "source",
+      "bytes": 5760,
+      "sha256": "6aacf31da115fc635c623aaa5d8551525c8727a3a206f7e47f0e9c7161c3a2d9"
+    },
+    {
+      "path": "src/main/crash-reporter.test.ts",
+      "category": "test",
+      "bytes": 6356,
+      "sha256": "ae9f8dc36abb41d1195c8dd3c03974e1dae3f3c64f76144715a99bd48652b8b4"
+    },
+    {
+      "path": "src/main/crash-reporter.ts",
+      "category": "source",
+      "bytes": 5198,
+      "sha256": "6ee9d1c1dee107ed914bb96a11a11f0c2a35e976fdcfa9a74b5854f965f9371e"
+    },
+    {
       "path": "src/main/dev-server-url.test.ts",
       "category": "test",
       "bytes": 1017,
@@ -4671,8 +4695,8 @@
     {
       "path": "src/main/index.ts",
       "category": "source",
-      "bytes": 8048,
-      "sha256": "b649a472c2f5f68b0702440915edc4853270f380cfc8148df4b2ffeb1a8dac99"
+      "bytes": 9568,
+      "sha256": "ac3c32b0a218d5909c640d49ab9dbff86d5e9742d55d0fda3d41658df41efdc2"
     },
     {
       "path": "src/main/ipc.test.ts",
@@ -14613,6 +14637,79 @@
       ]
     },
     {
+      "id": "file:src/main/crash-log.test.ts",
+      "path": "src/main/crash-log.test.ts",
+      "layer": "main",
+      "role": "test",
+      "lineCount": 180,
+      "imports": [
+        "file:src/main/crash-log.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/main/crash-log.ts",
+      "path": "src/main/crash-log.ts",
+      "layer": "main",
+      "role": "production",
+      "lineCount": 142,
+      "imports": [],
+      "exports": [
+        "symbol:src/main/crash-log.ts#CRASH_LOG_DIR_NAME",
+        "symbol:src/main/crash-log.ts#CRASH_LOG_KEEP_COUNT",
+        "symbol:src/main/crash-log.ts#CrashKind",
+        "symbol:src/main/crash-log.ts#crashLogFileName",
+        "symbol:src/main/crash-log.ts#CrashRecord",
+        "symbol:src/main/crash-log.ts#describeCrash",
+        "symbol:src/main/crash-log.ts#DescribeCrashContext",
+        "symbol:src/main/crash-log.ts#formatCrashRecord",
+        "symbol:src/main/crash-log.ts#PriorCrashSummary",
+        "symbol:src/main/crash-log.ts#pruneCrashLogs",
+        "symbol:src/main/crash-log.ts#redactUserPaths",
+        "symbol:src/main/crash-log.ts#summarizePriorCrashes"
+      ],
+      "testedBy": [
+        "file:src/main/crash-log.test.ts",
+        "file:src/main/crash-reporter.test.ts"
+      ]
+    },
+    {
+      "id": "file:src/main/crash-reporter.test.ts",
+      "path": "src/main/crash-reporter.test.ts",
+      "layer": "main",
+      "role": "test",
+      "lineCount": 150,
+      "imports": [
+        "file:src/main/crash-log.ts",
+        "file:src/main/crash-reporter.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/main/crash-reporter.ts",
+      "path": "src/main/crash-reporter.ts",
+      "layer": "main",
+      "role": "production",
+      "lineCount": 139,
+      "imports": [
+        "file:src/main/crash-log.ts"
+      ],
+      "exports": [
+        "symbol:src/main/crash-reporter.ts#CrashHookTarget",
+        "symbol:src/main/crash-reporter.ts#crashLogDirectoryFor",
+        "symbol:src/main/crash-reporter.ts#CrashReporter",
+        "symbol:src/main/crash-reporter.ts#CrashReporterOptions",
+        "symbol:src/main/crash-reporter.ts#createCrashReporter",
+        "symbol:src/main/crash-reporter.ts#isFatalRendererExit",
+        "symbol:src/main/crash-reporter.ts#registerCrashHooks"
+      ],
+      "testedBy": [
+        "file:src/main/crash-reporter.test.ts"
+      ]
+    },
+    {
       "id": "file:src/main/dev-server-url.test.ts",
       "path": "src/main/dev-server-url.test.ts",
       "layer": "main",
@@ -14672,8 +14769,9 @@
       "path": "src/main/index.ts",
       "layer": "main",
       "role": "production",
-      "lineCount": 222,
+      "lineCount": 259,
       "imports": [
+        "file:src/main/crash-reporter.ts",
         "file:src/main/dev-server-url.ts",
         "file:src/main/fatal-startup.ts",
         "file:src/main/ipc.ts",
@@ -32927,6 +33025,158 @@
     }
   ],
   "symbols": [
+    {
+      "id": "symbol:src/main/crash-log.ts#CRASH_LOG_DIR_NAME",
+      "name": "CRASH_LOG_DIR_NAME",
+      "kind": "value",
+      "file": "src/main/crash-log.ts",
+      "line": 40,
+      "endLine": 40
+    },
+    {
+      "id": "symbol:src/main/crash-log.ts#CRASH_LOG_KEEP_COUNT",
+      "name": "CRASH_LOG_KEEP_COUNT",
+      "kind": "value",
+      "file": "src/main/crash-log.ts",
+      "line": 38,
+      "endLine": 38
+    },
+    {
+      "id": "symbol:src/main/crash-log.ts#CrashKind",
+      "name": "CrashKind",
+      "kind": "type",
+      "file": "src/main/crash-log.ts",
+      "line": 14,
+      "endLine": 19
+    },
+    {
+      "id": "symbol:src/main/crash-log.ts#crashLogFileName",
+      "name": "crashLogFileName",
+      "kind": "value",
+      "file": "src/main/crash-log.ts",
+      "line": 118,
+      "endLine": 119
+    },
+    {
+      "id": "symbol:src/main/crash-log.ts#CrashRecord",
+      "name": "CrashRecord",
+      "kind": "interface",
+      "file": "src/main/crash-log.ts",
+      "line": 21,
+      "endLine": 30
+    },
+    {
+      "id": "symbol:src/main/crash-log.ts#describeCrash",
+      "name": "describeCrash",
+      "kind": "value",
+      "file": "src/main/crash-log.ts",
+      "line": 88,
+      "endLine": 100
+    },
+    {
+      "id": "symbol:src/main/crash-log.ts#DescribeCrashContext",
+      "name": "DescribeCrashContext",
+      "kind": "interface",
+      "file": "src/main/crash-log.ts",
+      "line": 79,
+      "endLine": 85
+    },
+    {
+      "id": "symbol:src/main/crash-log.ts#formatCrashRecord",
+      "name": "formatCrashRecord",
+      "kind": "value",
+      "file": "src/main/crash-log.ts",
+      "line": 103,
+      "endLine": 115
+    },
+    {
+      "id": "symbol:src/main/crash-log.ts#PriorCrashSummary",
+      "name": "PriorCrashSummary",
+      "kind": "interface",
+      "file": "src/main/crash-log.ts",
+      "line": 133,
+      "endLine": 136
+    },
+    {
+      "id": "symbol:src/main/crash-log.ts#pruneCrashLogs",
+      "name": "pruneCrashLogs",
+      "kind": "value",
+      "file": "src/main/crash-log.ts",
+      "line": 127,
+      "endLine": 130
+    },
+    {
+      "id": "symbol:src/main/crash-log.ts#redactUserPaths",
+      "name": "redactUserPaths",
+      "kind": "value",
+      "file": "src/main/crash-log.ts",
+      "line": 50,
+      "endLine": 63
+    },
+    {
+      "id": "symbol:src/main/crash-log.ts#summarizePriorCrashes",
+      "name": "summarizePriorCrashes",
+      "kind": "value",
+      "file": "src/main/crash-log.ts",
+      "line": 138,
+      "endLine": 141
+    },
+    {
+      "id": "symbol:src/main/crash-reporter.ts#CrashHookTarget",
+      "name": "CrashHookTarget",
+      "kind": "interface",
+      "file": "src/main/crash-reporter.ts",
+      "line": 86,
+      "endLine": 88
+    },
+    {
+      "id": "symbol:src/main/crash-reporter.ts#crashLogDirectoryFor",
+      "name": "crashLogDirectoryFor",
+      "kind": "value",
+      "file": "src/main/crash-reporter.ts",
+      "line": 78,
+      "endLine": 79
+    },
+    {
+      "id": "symbol:src/main/crash-reporter.ts#CrashReporter",
+      "name": "CrashReporter",
+      "kind": "interface",
+      "file": "src/main/crash-reporter.ts",
+      "line": 23,
+      "endLine": 29
+    },
+    {
+      "id": "symbol:src/main/crash-reporter.ts#CrashReporterOptions",
+      "name": "CrashReporterOptions",
+      "kind": "interface",
+      "file": "src/main/crash-reporter.ts",
+      "line": 39,
+      "endLine": 44
+    },
+    {
+      "id": "symbol:src/main/crash-reporter.ts#createCrashReporter",
+      "name": "createCrashReporter",
+      "kind": "value",
+      "file": "src/main/crash-reporter.ts",
+      "line": 46,
+      "endLine": 76
+    },
+    {
+      "id": "symbol:src/main/crash-reporter.ts#isFatalRendererExit",
+      "name": "isFatalRendererExit",
+      "kind": "value",
+      "file": "src/main/crash-reporter.ts",
+      "line": 84,
+      "endLine": 84
+    },
+    {
+      "id": "symbol:src/main/crash-reporter.ts#registerCrashHooks",
+      "name": "registerCrashHooks",
+      "kind": "value",
+      "file": "src/main/crash-reporter.ts",
+      "line": 98,
+      "endLine": 138
+    },
     {
       "id": "symbol:src/main/dev-server-url.ts#resolveDevServerUrl",
       "name": "resolveDevServerUrl",
@@ -72271,6 +72521,120 @@
       "label": "grants routing charge"
     },
     {
+      "id": "exports:src/main/crash-log.ts->symbol:src/main/crash-log.ts#CRASH_LOG_DIR_NAME",
+      "source": "file:src/main/crash-log.ts",
+      "target": "symbol:src/main/crash-log.ts#CRASH_LOG_DIR_NAME",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/main/crash-log.ts->symbol:src/main/crash-log.ts#CRASH_LOG_KEEP_COUNT",
+      "source": "file:src/main/crash-log.ts",
+      "target": "symbol:src/main/crash-log.ts#CRASH_LOG_KEEP_COUNT",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/main/crash-log.ts->symbol:src/main/crash-log.ts#CrashKind",
+      "source": "file:src/main/crash-log.ts",
+      "target": "symbol:src/main/crash-log.ts#CrashKind",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/main/crash-log.ts->symbol:src/main/crash-log.ts#crashLogFileName",
+      "source": "file:src/main/crash-log.ts",
+      "target": "symbol:src/main/crash-log.ts#crashLogFileName",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/main/crash-log.ts->symbol:src/main/crash-log.ts#CrashRecord",
+      "source": "file:src/main/crash-log.ts",
+      "target": "symbol:src/main/crash-log.ts#CrashRecord",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/main/crash-log.ts->symbol:src/main/crash-log.ts#describeCrash",
+      "source": "file:src/main/crash-log.ts",
+      "target": "symbol:src/main/crash-log.ts#describeCrash",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/main/crash-log.ts->symbol:src/main/crash-log.ts#DescribeCrashContext",
+      "source": "file:src/main/crash-log.ts",
+      "target": "symbol:src/main/crash-log.ts#DescribeCrashContext",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/main/crash-log.ts->symbol:src/main/crash-log.ts#formatCrashRecord",
+      "source": "file:src/main/crash-log.ts",
+      "target": "symbol:src/main/crash-log.ts#formatCrashRecord",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/main/crash-log.ts->symbol:src/main/crash-log.ts#PriorCrashSummary",
+      "source": "file:src/main/crash-log.ts",
+      "target": "symbol:src/main/crash-log.ts#PriorCrashSummary",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/main/crash-log.ts->symbol:src/main/crash-log.ts#pruneCrashLogs",
+      "source": "file:src/main/crash-log.ts",
+      "target": "symbol:src/main/crash-log.ts#pruneCrashLogs",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/main/crash-log.ts->symbol:src/main/crash-log.ts#redactUserPaths",
+      "source": "file:src/main/crash-log.ts",
+      "target": "symbol:src/main/crash-log.ts#redactUserPaths",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/main/crash-log.ts->symbol:src/main/crash-log.ts#summarizePriorCrashes",
+      "source": "file:src/main/crash-log.ts",
+      "target": "symbol:src/main/crash-log.ts#summarizePriorCrashes",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/main/crash-reporter.ts->symbol:src/main/crash-reporter.ts#CrashHookTarget",
+      "source": "file:src/main/crash-reporter.ts",
+      "target": "symbol:src/main/crash-reporter.ts#CrashHookTarget",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/main/crash-reporter.ts->symbol:src/main/crash-reporter.ts#crashLogDirectoryFor",
+      "source": "file:src/main/crash-reporter.ts",
+      "target": "symbol:src/main/crash-reporter.ts#crashLogDirectoryFor",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/main/crash-reporter.ts->symbol:src/main/crash-reporter.ts#CrashReporter",
+      "source": "file:src/main/crash-reporter.ts",
+      "target": "symbol:src/main/crash-reporter.ts#CrashReporter",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/main/crash-reporter.ts->symbol:src/main/crash-reporter.ts#CrashReporterOptions",
+      "source": "file:src/main/crash-reporter.ts",
+      "target": "symbol:src/main/crash-reporter.ts#CrashReporterOptions",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/main/crash-reporter.ts->symbol:src/main/crash-reporter.ts#createCrashReporter",
+      "source": "file:src/main/crash-reporter.ts",
+      "target": "symbol:src/main/crash-reporter.ts#createCrashReporter",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/main/crash-reporter.ts->symbol:src/main/crash-reporter.ts#isFatalRendererExit",
+      "source": "file:src/main/crash-reporter.ts",
+      "target": "symbol:src/main/crash-reporter.ts#isFatalRendererExit",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/main/crash-reporter.ts->symbol:src/main/crash-reporter.ts#registerCrashHooks",
+      "source": "file:src/main/crash-reporter.ts",
+      "target": "symbol:src/main/crash-reporter.ts#registerCrashHooks",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/main/dev-server-url.ts->symbol:src/main/dev-server-url.ts#resolveDevServerUrl",
       "source": "file:src/main/dev-server-url.ts",
       "target": "symbol:src/main/dev-server-url.ts#resolveDevServerUrl",
@@ -96416,6 +96780,30 @@
       "kind": "implemented_by"
     },
     {
+      "id": "imports:src/main/crash-log.test.ts->src/main/crash-log.ts",
+      "source": "file:src/main/crash-log.test.ts",
+      "target": "file:src/main/crash-log.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/main/crash-reporter.test.ts->src/main/crash-log.ts",
+      "source": "file:src/main/crash-reporter.test.ts",
+      "target": "file:src/main/crash-log.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/main/crash-reporter.test.ts->src/main/crash-reporter.ts",
+      "source": "file:src/main/crash-reporter.test.ts",
+      "target": "file:src/main/crash-reporter.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/main/crash-reporter.ts->src/main/crash-log.ts",
+      "source": "file:src/main/crash-reporter.ts",
+      "target": "file:src/main/crash-log.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/main/dev-server-url.test.ts->src/main/dev-server-url.ts",
       "source": "file:src/main/dev-server-url.test.ts",
       "target": "file:src/main/dev-server-url.ts",
@@ -96425,6 +96813,12 @@
       "id": "imports:src/main/fatal-startup.test.ts->src/main/fatal-startup.ts",
       "source": "file:src/main/fatal-startup.test.ts",
       "target": "file:src/main/fatal-startup.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/main/index.ts->src/main/crash-reporter.ts",
+      "source": "file:src/main/index.ts",
+      "target": "file:src/main/crash-reporter.ts",
       "kind": "imports"
     },
     {
@@ -120843,6 +121237,24 @@
       "id": "tested_by:src/blueprint/definitions/devTerms.blueprint.json->file:src/shared/blueprintGlossaryGen.test.ts",
       "source": "file:src/blueprint/definitions/devTerms.blueprint.json",
       "target": "file:src/shared/blueprintGlossaryGen.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/main/crash-log.ts->file:src/main/crash-log.test.ts",
+      "source": "file:src/main/crash-log.ts",
+      "target": "file:src/main/crash-log.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/main/crash-log.ts->file:src/main/crash-reporter.test.ts",
+      "source": "file:src/main/crash-log.ts",
+      "target": "file:src/main/crash-reporter.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/main/crash-reporter.ts->file:src/main/crash-reporter.test.ts",
+      "source": "file:src/main/crash-reporter.ts",
+      "target": "file:src/main/crash-reporter.test.ts",
       "kind": "tested_by"
     },
     {
