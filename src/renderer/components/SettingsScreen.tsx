@@ -244,8 +244,8 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                                 }}
                                                 type="button"
                                             >
+                                                {/* The rail picks; the header describes what was picked. */}
                                                 <span className={styles.categoryLabel}>{category.label}</span>
-                                                <span className={styles.categoryNote}>{category.note}</span>
                                             </button>
                                         ))}
                                     </nav>
@@ -272,8 +272,12 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                 </aside>
 
                                 <div className={styles.contentPane}>
+                                    {/*
+                                      * The category is named once. This header used to print it
+                                      * as an eyebrow and again as the title, directly under the
+                                      * rail entry that had just named it a third time.
+                                      */}
                                     <header className={styles.contentHeader}>
-                                        <Eyebrow tone="tight">{activeCategoryMeta.label}</Eyebrow>
                                         <ScreenTitle
                                             as={isModal ? 'h3' : 'h2'}
                                             className={styles.contentTitle}

@@ -7749,8 +7749,8 @@
     {
       "path": "src/renderer/components/SettingsScreen.tsx",
       "category": "source",
-      "bytes": 45176,
-      "sha256": "13d87a1ad7e26d4fec62c1f03711b545c506635c667a6c44abb907c2ca0626f1"
+      "bytes": 45442,
+      "sha256": "a5eb7ff4382b7d9e8089e306398bf55dfdbdff4b874b4f20cc7586c326abf9be"
     },
     {
       "path": "src/renderer/components/ShopScreen.module.css",
@@ -17319,7 +17319,7 @@
       "path": "src/renderer/components/SettingsScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 712,
+      "lineCount": 716,
       "imports": [
         "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/breakpoints.ts",
@@ -35287,8 +35287,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/SettingsScreen.tsx",
-      "line": 711,
-      "endLine": 711
+      "line": 715,
+      "endLine": 715
     },
     {
       "id": "symbol:src/renderer/components/ShopScreen.tsx#default",
