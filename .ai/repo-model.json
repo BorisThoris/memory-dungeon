@@ -5,11 +5,11 @@
     "name": "memory-dungeon",
     "trackedFileCount": 2415,
     "codeFileCount": 900,
-    "exportedSymbolCount": 3383,
+    "exportedSymbolCount": 3382,
     "contentItemCount": 57,
     "mechanicCount": 130,
     "stateFieldCount": 144,
-    "relationshipCount": 9845
+    "relationshipCount": 9844
   },
   "inventory": [
     {
@@ -9303,14 +9303,14 @@
     {
       "path": "src/renderer/store/matchScorePop.test.ts",
       "category": "test",
-      "bytes": 53716,
-      "sha256": "50084574a6f83ddc35de84f76a90556391130f93fb744cf750530f4aaa9b5765"
+      "bytes": 53263,
+      "sha256": "e763920243ca680129ac231f7f6735fc1d3b4e2049099261e2fd515086c66fd5"
     },
     {
       "path": "src/renderer/store/matchScorePop.ts",
       "category": "source",
-      "bytes": 32991,
-      "sha256": "e5bfe407490b74c63627ef4fb3190f40963feefeda09623e84048804e19e988d"
+      "bytes": 30735,
+      "sha256": "d71b02f6f5bb09f11ca62955893c132a28793a3f95d2c5047420770663224a08"
     },
     {
       "path": "src/renderer/store/menuSurfaceState.test.ts",
@@ -21705,7 +21705,7 @@
       "path": "src/renderer/store/matchScorePop.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 1354,
+      "lineCount": 1341,
       "imports": [
         "file:src/renderer/store/gameplayFeedbackAdapter.ts",
         "file:src/renderer/store/matchScorePop.ts",
@@ -21721,7 +21721,7 @@
       "path": "src/renderer/store/matchScorePop.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 968,
+      "lineCount": 906,
       "imports": [
         "file:src/renderer/copy/chainMilestoneFeedback.ts",
         "file:src/renderer/copy/chainMomentum.ts",
@@ -21752,7 +21752,6 @@
         "symbol:src/renderer/store/matchScorePop.ts#MatchScorePopImpactCue",
         "symbol:src/renderer/store/matchScorePop.ts#MatchScorePopIntensity",
         "symbol:src/renderer/store/matchScorePop.ts#MatchScorePopPayoffChip",
-        "symbol:src/renderer/store/matchScorePop.ts#MatchScorePopPayoffLadder",
         "symbol:src/renderer/store/matchScorePop.ts#MatchScorePopPayoffLaneId",
         "symbol:src/renderer/store/matchScorePop.ts#MatchScorePopPayoffLaneMapEntry",
         "symbol:src/renderer/store/matchScorePop.ts#MatchScorePopPayoffSummary",
@@ -40055,80 +40054,80 @@
       "name": "BOARD_FLOATER_POP_CLEAR",
       "kind": "value",
       "file": "src/renderer/store/matchScorePop.ts",
-      "line": 139,
-      "endLine": 142
+      "line": 131,
+      "endLine": 134
     },
     {
       "id": "symbol:src/renderer/store/matchScorePop.ts#buildMatchScorePopCrescendo",
       "name": "buildMatchScorePopCrescendo",
       "kind": "value",
       "file": "src/renderer/store/matchScorePop.ts",
-      "line": 699,
-      "endLine": 774
+      "line": 647,
+      "endLine": 722
     },
     {
       "id": "symbol:src/renderer/store/matchScorePop.ts#buildMatchScorePopImpactCue",
       "name": "buildMatchScorePopImpactCue",
       "kind": "value",
       "file": "src/renderer/store/matchScorePop.ts",
-      "line": 601,
-      "endLine": 649
+      "line": 593,
+      "endLine": 641
     },
     {
       "id": "symbol:src/renderer/store/matchScorePop.ts#buildMatchScorePopPayload",
       "name": "buildMatchScorePopPayload",
       "kind": "function",
       "file": "src/renderer/store/matchScorePop.ts",
-      "line": 779,
-      "endLine": 923
+      "line": 727,
+      "endLine": 861
     },
     {
       "id": "symbol:src/renderer/store/matchScorePop.ts#buildMatchScorePopPayoffLaneMap",
       "name": "buildMatchScorePopPayoffLaneMap",
       "kind": "value",
       "file": "src/renderer/store/matchScorePop.ts",
-      "line": 494,
-      "endLine": 528
+      "line": 486,
+      "endLine": 520
     },
     {
       "id": "symbol:src/renderer/store/matchScorePop.ts#buildMatchScorePopPayoffSummary",
       "name": "buildMatchScorePopPayoffSummary",
       "kind": "value",
       "file": "src/renderer/store/matchScorePop.ts",
-      "line": 530,
-      "endLine": 599
+      "line": 522,
+      "endLine": 591
     },
     {
       "id": "symbol:src/renderer/store/matchScorePop.ts#buildMismatchScorePopPayload",
       "name": "buildMismatchScorePopPayload",
       "kind": "function",
       "file": "src/renderer/store/matchScorePop.ts",
-      "line": 928,
-      "endLine": 967
+      "line": 866,
+      "endLine": 905
     },
     {
       "id": "symbol:src/renderer/store/matchScorePop.ts#getMatchScorePopChainMilestone",
       "name": "getMatchScorePopChainMilestone",
       "kind": "value",
       "file": "src/renderer/store/matchScorePop.ts",
-      "line": 179,
-      "endLine": 182
+      "line": 171,
+      "endLine": 174
     },
     {
       "id": "symbol:src/renderer/store/matchScorePop.ts#getMatchScorePopFeedbackProfile",
       "name": "getMatchScorePopFeedbackProfile",
       "kind": "value",
       "file": "src/renderer/store/matchScorePop.ts",
-      "line": 184,
-      "endLine": 199
+      "line": 176,
+      "endLine": 191
     },
     {
       "id": "symbol:src/renderer/store/matchScorePop.ts#getMatchScorePopSignal",
       "name": "getMatchScorePopSignal",
       "kind": "value",
       "file": "src/renderer/store/matchScorePop.ts",
-      "line": 201,
-      "endLine": 230
+      "line": 193,
+      "endLine": 222
     },
     {
       "id": "symbol:src/renderer/store/matchScorePop.ts#MatchScorePop",
@@ -40136,119 +40135,111 @@
       "kind": "type",
       "file": "src/renderer/store/matchScorePop.ts",
       "line": 11,
-      "endLine": 34
+      "endLine": 33
     },
     {
       "id": "symbol:src/renderer/store/matchScorePop.ts#MatchScorePopCascadeCue",
       "name": "MatchScorePopCascadeCue",
       "kind": "type",
       "file": "src/renderer/store/matchScorePop.ts",
-      "line": 39,
-      "endLine": 43
+      "line": 38,
+      "endLine": 42
     },
     {
       "id": "symbol:src/renderer/store/matchScorePop.ts#MatchScorePopChainMilestone",
       "name": "MatchScorePopChainMilestone",
       "kind": "type",
       "file": "src/renderer/store/matchScorePop.ts",
-      "line": 38,
-      "endLine": 38
+      "line": 37,
+      "endLine": 37
     },
     {
       "id": "symbol:src/renderer/store/matchScorePop.ts#MatchScorePopCrescendo",
       "name": "MatchScorePopCrescendo",
       "kind": "type",
       "file": "src/renderer/store/matchScorePop.ts",
-      "line": 73,
-      "endLine": 80
+      "line": 72,
+      "endLine": 79
     },
     {
       "id": "symbol:src/renderer/store/matchScorePop.ts#MatchScorePopHeadline",
       "name": "MatchScorePopHeadline",
       "kind": "type",
       "file": "src/renderer/store/matchScorePop.ts",
-      "line": 36,
-      "endLine": 36
+      "line": 35,
+      "endLine": 35
     },
     {
       "id": "symbol:src/renderer/store/matchScorePop.ts#MatchScorePopImpactCue",
       "name": "MatchScorePopImpactCue",
       "kind": "type",
       "file": "src/renderer/store/matchScorePop.ts",
-      "line": 55,
-      "endLine": 71
+      "line": 54,
+      "endLine": 70
     },
     {
       "id": "symbol:src/renderer/store/matchScorePop.ts#MatchScorePopIntensity",
       "name": "MatchScorePopIntensity",
       "kind": "type",
       "file": "src/renderer/store/matchScorePop.ts",
-      "line": 37,
-      "endLine": 37
+      "line": 36,
+      "endLine": 36
     },
     {
       "id": "symbol:src/renderer/store/matchScorePop.ts#MatchScorePopPayoffChip",
       "name": "MatchScorePopPayoffChip",
       "kind": "type",
       "file": "src/renderer/store/matchScorePop.ts",
-      "line": 82,
-      "endLine": 88
-    },
-    {
-      "id": "symbol:src/renderer/store/matchScorePop.ts#MatchScorePopPayoffLadder",
-      "name": "MatchScorePopPayoffLadder",
-      "kind": "type",
-      "file": "src/renderer/store/matchScorePop.ts",
-      "line": 119,
-      "endLine": 125
+      "line": 81,
+      "endLine": 87
     },
     {
       "id": "symbol:src/renderer/store/matchScorePop.ts#MatchScorePopPayoffLaneId",
       "name": "MatchScorePopPayoffLaneId",
       "kind": "type",
       "file": "src/renderer/store/matchScorePop.ts",
-      "line": 90,
-      "endLine": 90
+      "line": 89,
+      "endLine": 89
     },
     {
       "id": "symbol:src/renderer/store/matchScorePop.ts#MatchScorePopPayoffLaneMapEntry",
       "name": "MatchScorePopPayoffLaneMapEntry",
       "kind": "type",
       "file": "src/renderer/store/matchScorePop.ts",
-      "line": 92,
-      "endLine": 98
+      "line": 91,
+      "endLine": 97
     },
     {
       "id": "symbol:src/renderer/store/matchScorePop.ts#MatchScorePopPayoffSummary",
       "name": "MatchScorePopPayoffSummary",
       "kind": "type",
       "file": "src/renderer/store/matchScorePop.ts",
-      "line": 100,
-      "endLine": 117
+      "line": 99,
+      "endLine": 116
     },
     {
       "id": "symbol:src/renderer/store/matchScorePop.ts#MatchScorePopRewardBurst",
       "name": "MatchScorePopRewardBurst",
       "kind": "type",
       "file": "src/renderer/store/matchScorePop.ts",
-      "line": 44,
-      "endLine": 49
+      "line": 43,
+      "endLine": 48
     },
     {
       "id": "symbol:src/renderer/store/matchScorePop.ts#MatchScorePopSignal",
       "name": "MatchScorePopSignal",
       "kind": "type",
       "file": "src/renderer/store/matchScorePop.ts",
-      "line": 50,
-      "endLine": 53
+      "line": 49,
+      "endLine": 52
     },
     {
       "id": "symbol:src/renderer/store/matchScorePop.ts#MismatchScorePop",
       "name": "MismatchScorePop",
       "kind": "type",
       "file": "src/renderer/store/matchScorePop.ts",
-      "line": 127,
-      "endLine": 136
+      "line": 119,
+      "endLine": 128
     },
     {
       "id": "symbol:src/renderer/store/menuSurfaceState.ts#createMenuSurfacePatch",
@@ -76769,12 +76760,6 @@
       "id": "exports:src/renderer/store/matchScorePop.ts->symbol:src/renderer/store/matchScorePop.ts#MatchScorePopPayoffChip",
       "source": "file:src/renderer/store/matchScorePop.ts",
       "target": "symbol:src/renderer/store/matchScorePop.ts#MatchScorePopPayoffChip",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/store/matchScorePop.ts->symbol:src/renderer/store/matchScorePop.ts#MatchScorePopPayoffLadder",
-      "source": "file:src/renderer/store/matchScorePop.ts",
-      "target": "symbol:src/renderer/store/matchScorePop.ts#MatchScorePopPayoffLadder",
       "kind": "exports"
     },
     {

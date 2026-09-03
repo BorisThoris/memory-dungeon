@@ -23,7 +23,6 @@ export type MatchScorePop = {
     payoffSummary?: MatchScorePopPayoffSummary;
     payoffChips?: MatchScorePopPayoffChip[];
     payoffLaneMap?: MatchScorePopPayoffLaneMapEntry[];
-    payoffLadder?: MatchScorePopPayoffLadder;
     chainRewardText?: string;
     pickupRewardText?: string;
     routeRewardText?: string;
@@ -116,13 +115,6 @@ export type MatchScorePopPayoffSummary = {
     tier: 'score' | 'chain' | 'combo' | 'reward';
 };
 
-export type MatchScorePopPayoffLadder = {
-    first: string;
-    keep: string;
-    lanes?: string[];
-    then: string;
-    tone: 'chain' | 'combo' | 'reward';
-};
 
 export type MismatchScorePop = {
     tileIdA: string;
@@ -648,50 +640,6 @@ export const buildMatchScorePopImpactCue = ({
     return { label: 'Score pop', tone: 'score' };
 };
 
-const buildMatchScorePopPayoffLadder = ({
-    chainRewardForecastCues = [],
-    impactCue,
-    payoffChips,
-    payoffSummary,
-    rewardBurst
-}: {
-    chainRewardForecastCues?: readonly ChainRewardForecastCue[];
-    impactCue: MatchScorePopImpactCue;
-    payoffChips: readonly MatchScorePopPayoffChip[];
-    payoffSummary: MatchScorePopPayoffSummary;
-    rewardBurst?: MatchScorePopRewardBurst;
-}): MatchScorePopPayoffLadder | undefined => {
-    if (payoffSummary.tier === 'score' && payoffChips.length <= 1) {
-        return undefined;
-    }
-
-    const cashoutChip =
-        payoffChips.find((chip) => chip.id === 'route') ??
-        payoffChips.find((chip) => chip.id === 'pickup') ??
-        payoffChips.find((chip) => chip.id === 'trait') ??
-        payoffChips.find((chip) => chip.id === 'chainReward');
-    const cashoutLanes = payoffChips
-        .filter((chip) => chip.id === 'route' || chip.id === 'pickup' || chip.id === 'trait' || chip.id === 'chainReward')
-        .map((chip) => chip.arcadeCue ?? chip.label)
-        .slice(0, 4);
-    const firstChip = cashoutChip ?? payoffChips.find((chip) => chip.id !== 'score') ?? payoffChips[0];
-    const nextRewardChip = payoffChips.find((chip) => chip.id === 'next');
-    const nextRewardCue = chainRewardForecastCues[0];
-    const tone =
-        payoffSummary.tier === 'combo'
-            ? 'combo'
-            : payoffSummary.tier === 'reward'
-              ? 'reward'
-              : 'chain';
-
-    return {
-        first: firstChip?.arcadeCue ?? impactCue.label,
-        ...(cashoutLanes.length >= 2 ? { lanes: cashoutLanes } : {}),
-        then: nextRewardChip?.arcadeCue ?? rewardBurst?.action ?? payoffSummary.label,
-        keep: nextRewardCue?.chaseLabel ?? nextRewardChip?.value ?? 'Keep streak alive',
-        tone
-    };
-};
 
 const matchScorePopLaneCount = (payoffLaneMap: readonly MatchScorePopPayoffLaneMapEntry[] | undefined): number =>
     runArray<MatchScorePopPayoffLaneMapEntry>(payoffLaneMap).reduce((total, lane) => total + runNonNegativeInteger(lane.count), 0);
@@ -862,13 +810,6 @@ export function buildMatchScorePopPayload(
         payoffSummary,
         rewardBurst
     });
-    const payoffLadder = buildMatchScorePopPayoffLadder({
-        chainRewardForecastCues,
-        impactCue,
-        payoffChips,
-        payoffSummary,
-        rewardBurst
-    });
     const crescendo = buildMatchScorePopCrescendo({
         chainDepth,
         impactCue,
@@ -897,9 +838,6 @@ export function buildMatchScorePopPayload(
     }
     if (rewardBurst) {
         payload.rewardBurst = rewardBurst;
-    }
-    if (payoffLadder) {
-        payload.payoffLadder = payoffLadder;
     }
     if (payoffLaneMap) {
         payload.payoffLaneMap = payoffLaneMap;

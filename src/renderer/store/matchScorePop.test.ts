@@ -556,12 +556,6 @@ describe('buildMatchScorePopPayload', () => {
             value: 'Chain reward',
             tier: 'single'
         });
-        expect(pop?.payoffLadder).toEqual({
-            first: 'Chain cashout',
-            then: 'Combo chase',
-            keep: 'Hold streak',
-            tone: 'reward'
-        });
     });
 
     it('normalizes malformed chain reward counters before building cashout copy', () => {
@@ -696,13 +690,6 @@ describe('buildMatchScorePopPayload', () => {
                 { arcadeCue: 'Chain cashout', id: 'chainReward', label: 'Cashout', value: '+1 combo shard / +1 guard token', tone: 'reward' }
             ])
         );
-        expect(pop?.payoffLadder).toEqual({
-            first: 'Route cashout',
-            lanes: ['Route cashout', 'Pickup cashout', 'Perk pop', 'Chain cashout'],
-            then: 'Cash super stack',
-            keep: 'Prime',
-            tone: 'combo'
-        });
         expect(pop?.payoffLaneMap).toEqual([
             { id: 'route', label: 'Route', count: 1, tone: 'route', cue: 'Route cashout' },
             { id: 'pickup', label: 'Pickup', count: 1, tone: 'pickup', cue: 'Pickup cashout' },
