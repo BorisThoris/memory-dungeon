@@ -75,7 +75,7 @@ export const COSMETIC_CATALOG: Record<CosmeticId, CosmeticDefinition> = {
         slot: 'crest',
         label: 'Daily Bronze Crest',
         description: 'Cosmetic crest slot for daily participation.',
-        unlockSource: 'Future honor bridge: Daily Initiate',
+        unlockSource: 'Honor: Daily Initiate',
         fallback: 'Menu seal',
         gameplayAffecting: false
     },
@@ -84,7 +84,7 @@ export const COSMETIC_CATALOG: Record<CosmeticId, CosmeticDefinition> = {
         slot: 'title',
         label: 'Ascendant V',
         description: 'Cosmetic title slot for no-powers mastery.',
-        unlockSource: 'Future honor bridge: Ascendant V',
+        unlockSource: 'Honor: Ascendant V',
         fallback: 'Seeker title',
         gameplayAffecting: false
     },
@@ -132,11 +132,27 @@ export const cosmeticIsOwned = (save: SaveData, id: string): boolean => {
     return def.defaultOwned === true || ownedCosmeticTags(save).has(cosmeticUnlockTag(id));
 };
 
+/**
+ * What each slot shows, given what the save owns.
+ *
+ * An earned cosmetic wins over the slot's default. This used to be "first owned in catalog order",
+ * and since every slot's default is owned from the start and listed first, the default always won —
+ * so earning the Daily Bronze Crest or the Ascendant V title changed nothing a player could see,
+ * anywhere. A reward nobody can see is not a reward.
+ *
+ * There is no equip screen yet, so the rule has to pick for the player. Later-listed earned
+ * cosmetics win over earlier ones, which puts the newest thing they worked for in front of them.
+ */
 export const deriveCosmeticStates = (save: SaveData): CosmeticStateRow[] => {
-    const firstOwnedBySlot = new Map<CosmeticSlot, string>();
+    const equippedBySlot = new Map<CosmeticSlot, string>();
     for (const def of getCosmeticCatalogRows()) {
-        if (cosmeticIsOwned(save, def.id) && !firstOwnedBySlot.has(def.slot)) {
-            firstOwnedBySlot.set(def.slot, def.id);
+        if (!cosmeticIsOwned(save, def.id)) {
+            continue;
+        }
+        const current = equippedBySlot.get(def.slot);
+        const currentIsDefault = current !== undefined && COSMETIC_CATALOG[current as CosmeticId].defaultOwned === true;
+        if (current === undefined || currentIsDefault || def.defaultOwned !== true) {
+            equippedBySlot.set(def.slot, def.id);
         }
     }
 
@@ -145,7 +161,7 @@ export const deriveCosmeticStates = (save: SaveData): CosmeticStateRow[] => {
         return {
             ...def,
             status: owned ? 'owned' : 'locked',
-            equipped: owned && firstOwnedBySlot.get(def.slot) === def.id
+            equipped: owned && equippedBySlot.get(def.slot) === def.id
         };
     });
 };

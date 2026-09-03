@@ -17,7 +17,12 @@ describe('REG-032 profile summary and save trust shell', () => {
         const rows = getProfileSummaryRows(save);
         expect(rows.map((row) => row.id)).toContain('profile_level');
         expect(rows.find((row) => row.id === 'best_score')?.value).toBe('2,400');
-        expect(rows.find((row) => row.id === 'cosmetics')?.value).toBe('1');
+        // The row names what was earned rather than counting it: this save owns the bronze crest,
+        // so the crest has to appear by name somewhere a player can read it.
+        const cosmeticRow = rows.find((row) => row.id === 'cosmetics');
+        expect(cosmeticRow?.value).toBe('Seeker');
+        expect(cosmeticRow?.source).toContain('Daily Bronze Crest');
+        expect(cosmeticRow?.source).toContain('1 owned');
         expect(rows.every((row) => row.source.length > 0)).toBe(true);
     });
 

@@ -1,3 +1,4 @@
+import { COSMETIC_CATALOG, getEquippedCosmeticId } from './cosmetics';
 import { getDailyArchiveSummary } from './daily-archive';
 import { FEATURE_CLOUD_SAVE } from './feature-flags';
 import { countEligibleHonors } from './honorUnlocks';
@@ -80,13 +81,29 @@ export const buildProfileSaveShellSummary = (
     };
 };
 
+/** The label of whatever is equipped in a slot, or the slot's default when nothing is. */
+const equippedCosmeticLabel = (save: SaveData, slot: 'title' | 'crest'): string | null => {
+    const id = getEquippedCosmeticId(save, slot);
+    return id === null ? null : COSMETIC_CATALOG[id].label;
+};
+
 export const getProfileSummaryRows = (save: SaveData): ProfileSummaryRow[] => {
     const summary = buildProfileSaveShellSummary(save);
+    // Cosmetics used to be a bare count here, which meant earning the Ascendant V title showed a
+    // number going from 0 to 1 and never said what had been won. The count moves to the source
+    // line and the names take the cell.
+    const title = equippedCosmeticLabel(save, 'title');
+    const crest = equippedCosmeticLabel(save, 'crest');
     return [
         { id: 'profile_level', label: 'Profile level', value: String(summary.profileLevel), source: 'Honor marks' },
         { id: 'honor_marks', label: 'Honor marks', value: String(summary.honorMarks), source: 'Achievements/dailies/mastery' },
         { id: 'best_score', label: 'Best score', value: runNonNegativeInteger(save.bestScore).toLocaleString('en-US'), source: 'SaveData.bestScore' },
-        { id: 'cosmetics', label: 'Cosmetics owned', value: String(summary.cosmeticOwned), source: 'unlock tags' },
+        {
+            id: 'cosmetics',
+            label: 'Title',
+            value: title ?? 'None',
+            source: `${crest ?? 'No crest'} · ${summary.cosmeticOwned} owned`
+        },
         { id: 'history', label: 'Run history rows', value: String(summary.runHistoryEntries), source: 'last run journal' },
         { id: 'daily_streak', label: 'Daily streak', value: String(summary.dailyStreak), source: 'playerStats.dailyStreakCosmetic' }
     ];

@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2474,
-    "codeFileCount": 949,
+    "trackedFileCount": 2475,
+    "codeFileCount": 950,
     "exportedSymbolCount": 3515,
     "contentItemCount": 63,
     "mechanicCount": 136,
     "stateFieldCount": 144,
-    "relationshipCount": 10268
+    "relationshipCount": 10275
   },
   "inventory": [
     {
@@ -2320,7 +2320,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 36714,
-      "sha256": "87b2e2a1d068cede2e74b0ac32f0ac88b7da4f81b476672ded8e2747d2327be7"
+      "sha256": "d8e1642763a9584521f46e34fc9cd2093ee56f7598a3020b7ece10f253f21d53"
     },
     {
       "path": "docs/UI_RETHINK_PLAN.md",
@@ -7791,8 +7791,8 @@
     {
       "path": "src/renderer/components/ProfileScreen.test.tsx",
       "category": "test",
-      "bytes": 4225,
-      "sha256": "60bf0a054d95b4913dadc9ed75c2583a437bf063135f3c2a3e5c8b4c8c0c84d4"
+      "bytes": 4215,
+      "sha256": "588d62d18b7c805ddcfb871f2e8eba30310ce4157be0ffc07392a030b63c5b70"
     },
     {
       "path": "src/renderer/components/ProfileScreen.tsx",
@@ -10429,6 +10429,12 @@
       "sha256": "21414898800437d2a5d81420d00f4473720ac13afd5237824d00b09932120462"
     },
     {
+      "path": "src/shared/cosmetic-reachability.test.ts",
+      "category": "test",
+      "bytes": 3081,
+      "sha256": "00f203ac6799f12ea38cf8e08214c54e0f7953f265231c9f8100d8b28f65924b"
+    },
+    {
       "path": "src/shared/cosmetics.test.ts",
       "category": "test",
       "bytes": 2617,
@@ -10437,8 +10443,8 @@
     {
       "path": "src/shared/cosmetics.ts",
       "category": "source",
-      "bytes": 6099,
-      "sha256": "afd328ad1f5d60f7eda0b4b899324671589ba8c9a1ef437650bcdcc1c06533a5"
+      "bytes": 6935,
+      "sha256": "d22699eea346c1344a811eff687d350d286ee0fcdb92dc7d92d20a01a4ff8a1f"
     },
     {
       "path": "src/shared/daily-archive.test.ts",
@@ -11613,14 +11619,14 @@
     {
       "path": "src/shared/profile-summary.test.ts",
       "category": "test",
-      "bytes": 4694,
-      "sha256": "63ae1789296842dc267aa3cb0b093aa84f89b0281545188740136ac7b9d2d691"
+      "bytes": 5044,
+      "sha256": "7f35364d58cc8223ae3ab69e48d647c011790ecfe3fe78c12653b55000953e33"
     },
     {
       "path": "src/shared/profile-summary.ts",
       "category": "source",
-      "bytes": 5736,
-      "sha256": "94796356cf1d5239268415998289e42e8f791da75a2f0e684c736198c4660156"
+      "bytes": 6528,
+      "sha256": "b44b5ca57429669a68fd0622381af6faee395e019379e2ef118684b3ffbaf8f9"
     },
     {
       "path": "src/shared/puzzle-import.test.ts",
@@ -25618,6 +25624,20 @@
       "testedBy": []
     },
     {
+      "id": "file:src/shared/cosmetic-reachability.test.ts",
+      "path": "src/shared/cosmetic-reachability.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 78,
+      "imports": [
+        "file:src/shared/cosmetics.ts",
+        "file:src/shared/profile-summary.ts",
+        "file:src/shared/save-data.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
       "id": "file:src/shared/cosmetics.test.ts",
       "path": "src/shared/cosmetics.test.ts",
       "layer": "shared",
@@ -25635,7 +25655,7 @@
       "path": "src/shared/cosmetics.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 177,
+      "lineCount": 193,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/cosmetic-ids.ts",
@@ -25669,6 +25689,7 @@
         "symbol:src/shared/cosmetics.ts#unlockedCosmeticIds"
       ],
       "testedBy": [
+        "file:src/shared/cosmetic-reachability.test.ts",
         "file:src/shared/cosmetics.test.ts"
       ]
     },
@@ -30081,7 +30102,7 @@
       "path": "src/shared/profile-summary.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 106,
+      "lineCount": 111,
       "imports": [
         "file:src/shared/feature-flags.ts",
         "file:src/shared/profile-summary.ts",
@@ -30095,9 +30116,10 @@
       "path": "src/shared/profile-summary.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 133,
+      "lineCount": 150,
       "imports": [
         "file:src/shared/contracts.ts",
+        "file:src/shared/cosmetics.ts",
         "file:src/shared/daily-archive.ts",
         "file:src/shared/feature-flags.ts",
         "file:src/shared/honorUnlocks.ts",
@@ -30115,6 +30137,7 @@
         "symbol:src/shared/profile-summary.ts#SaveTrustRow"
       ],
       "testedBy": [
+        "file:src/shared/cosmetic-reachability.test.ts",
         "file:src/shared/profile-summary.test.ts"
       ]
     },
@@ -31990,6 +32013,7 @@
         "file:src/shared/achievements.test.ts",
         "file:src/shared/challenge-progression.test.ts",
         "file:src/shared/collection-reward-gallery.test.ts",
+        "file:src/shared/cosmetic-reachability.test.ts",
         "file:src/shared/cosmetics.test.ts",
         "file:src/shared/daily-archive.test.ts",
         "file:src/shared/first-run-help-center.test.ts",
@@ -47269,16 +47293,16 @@
       "name": "deriveCosmeticStates",
       "kind": "value",
       "file": "src/shared/cosmetics.ts",
-      "line": 135,
-      "endLine": 151
+      "line": 146,
+      "endLine": 167
     },
     {
       "id": "symbol:src/shared/cosmetics.ts#getCardThemeRows",
       "name": "getCardThemeRows",
       "kind": "value",
       "file": "src/shared/cosmetics.ts",
-      "line": 165,
-      "endLine": 168
+      "line": 181,
+      "endLine": 184
     },
     {
       "id": "symbol:src/shared/cosmetics.ts#getCosmeticCatalogRows",
@@ -47293,64 +47317,64 @@
       "name": "getCosmeticCollectionRows",
       "kind": "value",
       "file": "src/shared/cosmetics.ts",
-      "line": 155,
-      "endLine": 155
+      "line": 171,
+      "endLine": 171
     },
     {
       "id": "symbol:src/shared/cosmetics.ts#getCosmeticProgressTrackRows",
       "name": "getCosmeticProgressTrackRows",
       "kind": "ExportSpecifier",
       "file": "src/shared/cosmetics.ts",
-      "line": 176,
-      "endLine": 176
+      "line": 192,
+      "endLine": 192
     },
     {
       "id": "symbol:src/shared/cosmetics.ts#getCosmeticRows",
       "name": "getCosmeticRows",
       "kind": "value",
       "file": "src/shared/cosmetics.ts",
-      "line": 153,
-      "endLine": 153
+      "line": 169,
+      "endLine": 169
     },
     {
       "id": "symbol:src/shared/cosmetics.ts#getCosmeticTrackRows",
       "name": "getCosmeticTrackRows",
       "kind": "ExportSpecifier",
       "file": "src/shared/cosmetics.ts",
-      "line": 176,
-      "endLine": 176
+      "line": 192,
+      "endLine": 192
     },
     {
       "id": "symbol:src/shared/cosmetics.ts#getEquippedCardTheme",
       "name": "getEquippedCardTheme",
       "kind": "value",
       "file": "src/shared/cosmetics.ts",
-      "line": 170,
-      "endLine": 171
+      "line": 186,
+      "endLine": 187
     },
     {
       "id": "symbol:src/shared/cosmetics.ts#getEquippedCosmeticId",
       "name": "getEquippedCosmeticId",
       "kind": "value",
       "file": "src/shared/cosmetics.ts",
-      "line": 162,
-      "endLine": 163
+      "line": 178,
+      "endLine": 179
     },
     {
       "id": "symbol:src/shared/cosmetics.ts#getOwnedCosmeticIds",
       "name": "getOwnedCosmeticIds",
       "kind": "value",
       "file": "src/shared/cosmetics.ts",
-      "line": 157,
-      "endLine": 160
+      "line": 173,
+      "endLine": 176
     },
     {
       "id": "symbol:src/shared/cosmetics.ts#resolveEquippedCardTheme",
       "name": "resolveEquippedCardTheme",
       "kind": "value",
       "file": "src/shared/cosmetics.ts",
-      "line": 173,
-      "endLine": 173
+      "line": 189,
+      "endLine": 189
     },
     {
       "id": "symbol:src/shared/cosmetics.ts#unlockedCosmeticIds",
@@ -55717,56 +55741,56 @@
       "name": "buildProfileSaveShellSummary",
       "kind": "value",
       "file": "src/shared/profile-summary.ts",
-      "line": 49,
-      "endLine": 81
+      "line": 50,
+      "endLine": 82
     },
     {
       "id": "symbol:src/shared/profile-summary.ts#CloudSyncState",
       "name": "CloudSyncState",
       "kind": "type",
       "file": "src/shared/profile-summary.ts",
-      "line": 9,
-      "endLine": 9
+      "line": 10,
+      "endLine": 10
     },
     {
       "id": "symbol:src/shared/profile-summary.ts#getProfileSummaryRows",
       "name": "getProfileSummaryRows",
       "kind": "value",
       "file": "src/shared/profile-summary.ts",
-      "line": 83,
-      "endLine": 93
+      "line": 90,
+      "endLine": 110
     },
     {
       "id": "symbol:src/shared/profile-summary.ts#getSaveTrustRows",
       "name": "getSaveTrustRows",
       "kind": "value",
       "file": "src/shared/profile-summary.ts",
-      "line": 95,
-      "endLine": 132
+      "line": 112,
+      "endLine": 149
     },
     {
       "id": "symbol:src/shared/profile-summary.ts#ProfileSaveShellSummary",
       "name": "ProfileSaveShellSummary",
       "kind": "interface",
       "file": "src/shared/profile-summary.ts",
-      "line": 11,
-      "endLine": 33
+      "line": 12,
+      "endLine": 34
     },
     {
       "id": "symbol:src/shared/profile-summary.ts#ProfileSummaryRow",
       "name": "ProfileSummaryRow",
       "kind": "interface",
       "file": "src/shared/profile-summary.ts",
-      "line": 35,
-      "endLine": 40
+      "line": 36,
+      "endLine": 41
     },
     {
       "id": "symbol:src/shared/profile-summary.ts#SaveTrustRow",
       "name": "SaveTrustRow",
       "kind": "interface",
       "file": "src/shared/profile-summary.ts",
-      "line": 42,
-      "endLine": 47
+      "line": 43,
+      "endLine": 48
     },
     {
       "id": "symbol:src/shared/puzzle-import.ts#getPuzzleLibraryRows",
@@ -108787,6 +108811,24 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/cosmetic-reachability.test.ts->src/shared/cosmetics.ts",
+      "source": "file:src/shared/cosmetic-reachability.test.ts",
+      "target": "file:src/shared/cosmetics.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/cosmetic-reachability.test.ts->src/shared/profile-summary.ts",
+      "source": "file:src/shared/cosmetic-reachability.test.ts",
+      "target": "file:src/shared/profile-summary.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/cosmetic-reachability.test.ts->src/shared/save-data.ts",
+      "source": "file:src/shared/cosmetic-reachability.test.ts",
+      "target": "file:src/shared/save-data.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/cosmetics.test.ts->src/shared/cosmetics.ts",
       "source": "file:src/shared/cosmetics.test.ts",
       "target": "file:src/shared/cosmetics.ts",
@@ -113506,6 +113548,12 @@
       "id": "imports:src/shared/profile-summary.ts->src/shared/contracts.ts",
       "source": "file:src/shared/profile-summary.ts",
       "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/profile-summary.ts->src/shared/cosmetics.ts",
+      "source": "file:src/shared/profile-summary.ts",
+      "target": "file:src/shared/cosmetics.ts",
       "kind": "imports"
     },
     {
@@ -126827,6 +126875,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/cosmetics.ts->file:src/shared/cosmetic-reachability.test.ts",
+      "source": "file:src/shared/cosmetics.ts",
+      "target": "file:src/shared/cosmetic-reachability.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/cosmetics.ts->file:src/shared/cosmetics.test.ts",
       "source": "file:src/shared/cosmetics.ts",
       "target": "file:src/shared/cosmetics.test.ts",
@@ -128393,6 +128447,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/profile-summary.ts->file:src/shared/cosmetic-reachability.test.ts",
+      "source": "file:src/shared/profile-summary.ts",
+      "target": "file:src/shared/cosmetic-reachability.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/profile-summary.ts->file:src/shared/profile-summary.test.ts",
       "source": "file:src/shared/profile-summary.ts",
       "target": "file:src/shared/profile-summary.test.ts",
@@ -129200,6 +129260,12 @@
       "id": "tested_by:src/shared/save-data.ts->file:src/shared/collection-reward-gallery.test.ts",
       "source": "file:src/shared/save-data.ts",
       "target": "file:src/shared/collection-reward-gallery.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/save-data.ts->file:src/shared/cosmetic-reachability.test.ts",
+      "source": "file:src/shared/save-data.ts",
+      "target": "file:src/shared/cosmetic-reachability.test.ts",
       "kind": "tested_by"
     },
     {

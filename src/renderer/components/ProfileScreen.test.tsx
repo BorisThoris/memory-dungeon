@@ -48,7 +48,7 @@ describe('ProfileScreen', () => {
         render(<ProfileScreen />);
 
         const summary = screen.getByTestId('profile-summary-grid');
-        for (const label of ['Profile level', 'Honor marks', 'Best score', 'Cosmetics owned', 'Run history rows', 'Daily streak']) {
+        for (const label of ['Profile level', 'Honor marks', 'Best score', 'Title', 'Run history rows', 'Daily streak']) {
             expect(summary).toHaveTextContent(label);
         }
         expect(within(screen.getByTestId('profile-milestone-rail')).getAllByText(/^Lv \d+$/).length).toBeGreaterThan(0);
