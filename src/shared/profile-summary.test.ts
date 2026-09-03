@@ -76,11 +76,20 @@ describe('REG-032 profile summary and save trust shell', () => {
     });
 
     it('uses the product cloud-save feature gate for default save-trust copy', () => {
-        const summary = buildProfileSaveShellSummary(createDefaultSaveData());
-
+        /*
+         * The flag is off unless a packaging step sets `VITE_FEATURE_CLOUD_SAVE=1`, which should
+         * only happen once Steam Auto-Cloud is actually configured. What matters is that the copy
+         * follows the flag in both directions rather than that the flag has one fixed value.
+         */
         expect(FEATURE_CLOUD_SAVE).toBe(false);
-        expect(summary.cloudSyncState).toBe('not_available');
-        expect(summary.cloudSyncCopy).toMatch(/not available in this build/i);
+
+        const off = buildProfileSaveShellSummary(createDefaultSaveData(), { cloudSaveAvailable: false });
+        expect(off.cloudSyncState).toBe('not_available');
+        expect(off.cloudSyncCopy).toMatch(/not available in this build/i);
+
+        const on = buildProfileSaveShellSummary(createDefaultSaveData(), { cloudSaveAvailable: true });
+        expect(on.cloudSyncState).not.toBe('not_available');
+        expect(on.cloudSyncCopy).not.toMatch(/not available in this build/i);
     });
 
     it('keeps the explicit cloud availability override for platform-specific shells', () => {

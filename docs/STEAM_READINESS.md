@@ -18,7 +18,7 @@ file is only about whether the build clears a launch checklist.
 | Window size and position | **Done.** Restored across launches, clamped back onto a display that still exists, and never stored below the size floor. | `src/main/window-bounds.ts`, `src/main/index.ts` |
 | Window modes | **Partial.** Windowed and fullscreen, switchable from Settings and remembered. There is no separate borderless mode; on Windows and Linux Electron's fullscreen is already borderless, so the gap is a macOS one. | `src/main/ipc.ts`, `src/main/startup-display-mode.ts` |
 | Steam achievements | **Done.** Twenty, each mapped to a Partner API Name, and switched off in the demo flavour on Valve's own recommendation. | `src/shared/achievements.ts`, `src/main/steam.ts` |
-| Steam cloud saves | **Not implemented.** `FEATURE_CLOUD_SAVE` stays false until a real backend exists; saves are local only. Deliberate for a pre-launch demo — Valve's shared cloud will not sync to an unreleased base app. | `src/shared/feature-flags.ts` |
+| Steam cloud saves | **Ready to switch on.** Auto-Cloud needs no code in the game, so what was missing was a path that will not drift and a decision about what must not sync. `yarn steam:cloud-config` prints the Partner-site rows from the same constant the save is written with; crash logs are explicitly excluded. `VITE_FEATURE_CLOUD_SAVE=1` at packaging time makes the Settings copy match, and should only be set once the rows are actually saved. | `src/shared/save-location.ts`, `scripts/steam-cloud-config.ts` |
 | Localization | **Not implemented.** All player-facing copy is English string literals. The renderer keeps copy in `src/renderer/copy/` and `src/shared/mechanics-encyclopedia.ts`, which is where an i18n layer would attach. | — |
 | Rich Presence | **Not implemented.** No status strings are published to Steam. | — |
 | Crash reporting | **Local.** Uncaught throws, unhandled rejections, renderer deaths and helper-process deaths write a bounded, redacted record beside the save; the ten newest are kept and the next launch reports how many are waiting. Nothing is sent anywhere — there is no backend and transmitting would need consent. | `src/main/crash-log.ts`, `src/main/crash-reporter.ts` |
@@ -80,7 +80,9 @@ and is not what a colour-palette or crash-log pass should be dragging along.
 
 ## Not yet answered
 
-- **Cloud saves.** Needs a decision on whether saves move at all before launch.
+- **Cloud saves.** The configuration is derived and the exclusions are decided, but nobody has
+  entered the rows on the Partner site or packaged a build with the flag on, so no save has ever
+  actually round-tripped between two machines. That is the step that proves it.
 - **Localization.** Needs a decision on languages before the copy layer is worth building; the cost
   is in extracting the strings, not in the plumbing.
 - **Crash telemetry.** Records are written locally and never leave the machine, so a crash is

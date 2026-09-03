@@ -83,6 +83,7 @@
         "test:e2e:blueprint": "playwright test e2e/blueprint-explorer.spec.ts --workers=1",
         "test:e2e:illustration-regression": "playwright test e2e/tile-card-face-illustration-regression.spec.ts --workers=1",
         "test:e2e:a11y": "playwright test e2e/a11y-scoped-routes.spec.ts --workers=1",
+        "steam:cloud-config": "tsx scripts/steam-cloud-config.ts",
         "test:e2e:ui-fit": "playwright test e2e/ui-fit-contract.spec.ts --workers=1",
         "test:e2e:controller": "playwright test e2e/controller-navigation.spec.ts --workers=1",
         "test:e2e:visual": "yarn test:e2e:visual:device-grid",

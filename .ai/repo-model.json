@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2435,
-    "codeFileCount": 917,
-    "exportedSymbolCount": 3452,
+    "trackedFileCount": 2438,
+    "codeFileCount": 919,
+    "exportedSymbolCount": 3461,
     "contentItemCount": 63,
     "mechanicCount": 136,
     "stateFieldCount": 144,
-    "relationshipCount": 10068
+    "relationshipCount": 10082
   },
   "inventory": [
     {
@@ -2283,8 +2283,8 @@
     {
       "path": "docs/STEAM_READINESS.md",
       "category": "documentation",
-      "bytes": 7357,
-      "sha256": "9ed0d6a0ca9805ef7c5319659fb7473623fb464d15026cf99143b87886371c59"
+      "bytes": 7806,
+      "sha256": "9c30ddd176ce3c32ac80cb17f62320ccd2dc0f70834988eb53f89a3584384a69"
     },
     {
       "path": "docs/STRAY_TILE.md",
@@ -2314,7 +2314,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 36714,
-      "sha256": "9e7ba14f34fe16b984e6bbe5fd43d3c343c74c75ca694fffee4c2a93b7705be5"
+      "sha256": "80c3cb1d57e129b277ca9fafebfb11343e28164361432421c6662e770ad6a305"
     },
     {
       "path": "docs/UI_RETHINK_PLAN.md",
@@ -3951,8 +3951,8 @@
     {
       "path": "package.json",
       "category": "configuration",
-      "bytes": 27948,
-      "sha256": "7c8bda032a7d718970d4d361a745d5a3d20d7602b6d84ede3487dd249b7492aa"
+      "bytes": 28015,
+      "sha256": "2c44635f88dfee4f52e6a83b76daab515fba87c5a454b603c0f9b3d8c26fc3bb"
     },
     {
       "path": "packages/notifications/package.json",
@@ -4609,6 +4609,12 @@
       "sha256": "f6f5a40ea3935d99d912e0d4c8f49c429e1eb534ee0e99c4e8cf2b35ac1652e2"
     },
     {
+      "path": "scripts/steam-cloud-config.ts",
+      "category": "script",
+      "bytes": 1370,
+      "sha256": "e2fa0609efeb471b3db6352f027e9a777e30495cc79aebf8708618f21c566383"
+    },
+    {
       "path": "scripts/svgo-optimize-card-front.mjs",
       "category": "script",
       "bytes": 1040,
@@ -4761,8 +4767,8 @@
     {
       "path": "src/main/saveRepository.ts",
       "category": "source",
-      "bytes": 1272,
-      "sha256": "8ca8c5d0edb878649601d0e431f0343f1c4dba19951533f00091abffeab18a86"
+      "bytes": 1415,
+      "sha256": "e1e296b5053b9ec86099c16dd29b2ab517d820d860fb96257b0b5cd61138a0be"
     },
     {
       "path": "src/main/startup-display-mode.test.ts",
@@ -10713,8 +10719,8 @@
     {
       "path": "src/shared/feature-flags.ts",
       "category": "source",
-      "bytes": 680,
-      "sha256": "29a38b0a3fad945841b33e366d4f5ee8319c11d8769df9c52d74617b4c4391d6"
+      "bytes": 1123,
+      "sha256": "10dfc498f13278b5d0296eff89fbe2f274c607e56ded8aa2184832b2c6febdb8"
     },
     {
       "path": "src/shared/findables.test.ts",
@@ -11445,8 +11451,8 @@
     {
       "path": "src/shared/profile-summary.test.ts",
       "category": "test",
-      "bytes": 4117,
-      "sha256": "f59e344bf2cee868e0f5cc2c605abba38df71c6d032a6d68542360baba8b8e0d"
+      "bytes": 4694,
+      "sha256": "63ae1789296842dc267aa3cb0b093aa84f89b0281545188740136ac7b9d2d691"
     },
     {
       "path": "src/shared/profile-summary.ts",
@@ -11939,6 +11945,18 @@
       "category": "source",
       "bytes": 33886,
       "sha256": "b7c159129fad877eaf8d96d4959f0dd8ca3fe0ab4c81fb5bf16ce27ce75482f0"
+    },
+    {
+      "path": "src/shared/save-location.test.ts",
+      "category": "test",
+      "bytes": 2319,
+      "sha256": "063a7fbdc770a73bbf9654ec5740657923204e77a94fa4f4c67b55dccb83c8e1"
+    },
+    {
+      "path": "src/shared/save-location.ts",
+      "category": "source",
+      "bytes": 3071,
+      "sha256": "3f0055764c08bc3dbbe0b75c599d5648ec69fcb6caa6ede505077fe92bfee5c3"
     },
     {
       "path": "src/shared/score-parasite-rules.test.ts",
@@ -14671,7 +14689,8 @@
       ],
       "testedBy": [
         "file:src/main/crash-log.test.ts",
-        "file:src/main/crash-reporter.test.ts"
+        "file:src/main/crash-reporter.test.ts",
+        "file:src/shared/save-location.test.ts"
       ]
     },
     {
@@ -14941,11 +14960,12 @@
       "path": "src/main/saveRepository.ts",
       "layer": "main",
       "role": "production",
-      "lineCount": 44,
+      "lineCount": 46,
       "imports": [
         "file:src/main/window-bounds.ts",
         "file:src/shared/contracts.ts",
-        "file:src/shared/save-data.ts"
+        "file:src/shared/save-data.ts",
+        "file:src/shared/save-location.ts"
       ],
       "exports": [
         "symbol:src/main/saveRepository.ts#ElectronStoreSaveRepository",
@@ -26554,7 +26574,7 @@
       "path": "src/shared/feature-flags.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 15,
+      "lineCount": 20,
       "imports": [],
       "exports": [
         "symbol:src/shared/feature-flags.ts#FEATURE_CARD_OPENTYPE_GLYPHS",
@@ -29495,7 +29515,7 @@
       "path": "src/shared/profile-summary.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 97,
+      "lineCount": 106,
       "imports": [
         "file:src/shared/feature-flags.ts",
         "file:src/shared/profile-summary.ts",
@@ -31341,6 +31361,41 @@
         "file:src/shared/run-settings-rules.test.ts",
         "file:src/shared/run-summary-rules.test.ts",
         "file:src/shared/save-data.test.ts"
+      ]
+    },
+    {
+      "id": "file:src/shared/save-location.test.ts",
+      "path": "src/shared/save-location.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 60,
+      "imports": [
+        "file:src/main/crash-log.ts",
+        "file:src/shared/save-location.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/shared/save-location.ts",
+      "path": "src/shared/save-location.ts",
+      "layer": "shared",
+      "role": "production",
+      "lineCount": 62,
+      "imports": [],
+      "exports": [
+        "symbol:src/shared/save-location.ts#formatSteamCloudRules",
+        "symbol:src/shared/save-location.ts#PACKAGED_APP_DIR_NAME",
+        "symbol:src/shared/save-location.ts#SAVE_FILE_NAME",
+        "symbol:src/shared/save-location.ts#SAVE_STORE_NAME",
+        "symbol:src/shared/save-location.ts#STEAM_CLOUD_EXCLUSIONS",
+        "symbol:src/shared/save-location.ts#STEAM_CLOUD_RULES",
+        "symbol:src/shared/save-location.ts#SteamCloudRoot",
+        "symbol:src/shared/save-location.ts#SteamCloudRule",
+        "symbol:src/shared/save-location.ts#UNPACKAGED_APP_DIR_NAME"
+      ],
+      "testedBy": [
+        "file:src/shared/save-location.test.ts"
       ]
     },
     {
@@ -33278,16 +33333,16 @@
       "name": "ElectronStoreSaveRepository",
       "kind": "class",
       "file": "src/main/saveRepository.ts",
-      "line": 19,
-      "endLine": 43
+      "line": 20,
+      "endLine": 45
     },
     {
       "id": "symbol:src/main/saveRepository.ts#SaveRepository",
       "name": "SaveRepository",
       "kind": "interface",
       "file": "src/main/saveRepository.ts",
-      "line": 11,
-      "endLine": 17
+      "line": 12,
+      "endLine": 18
     },
     {
       "id": "symbol:src/main/startup-display-mode.ts#resolveStartupDisplayMode",
@@ -48774,24 +48829,24 @@
       "name": "FEATURE_CARD_OPENTYPE_GLYPHS",
       "kind": "value",
       "file": "src/shared/feature-flags.ts",
-      "line": 8,
-      "endLine": 8
+      "line": 13,
+      "endLine": 13
     },
     {
       "id": "symbol:src/shared/feature-flags.ts#FEATURE_CARD_RASTER_DECK",
       "name": "FEATURE_CARD_RASTER_DECK",
       "kind": "value",
       "file": "src/shared/feature-flags.ts",
-      "line": 14,
-      "endLine": 14
+      "line": 19,
+      "endLine": 19
     },
     {
       "id": "symbol:src/shared/feature-flags.ts#FEATURE_CLOUD_SAVE",
       "name": "FEATURE_CLOUD_SAVE",
       "kind": "value",
       "file": "src/shared/feature-flags.ts",
-      "line": 5,
-      "endLine": 5
+      "line": 10,
+      "endLine": 10
     },
     {
       "id": "symbol:src/shared/findables.ts#FINDABLE_REWARD_ROWS",
@@ -58144,6 +58199,78 @@
       "file": "src/shared/save-data.ts",
       "line": 488,
       "endLine": 508
+    },
+    {
+      "id": "symbol:src/shared/save-location.ts#formatSteamCloudRules",
+      "name": "formatSteamCloudRules",
+      "kind": "value",
+      "file": "src/shared/save-location.ts",
+      "line": 58,
+      "endLine": 61
+    },
+    {
+      "id": "symbol:src/shared/save-location.ts#PACKAGED_APP_DIR_NAME",
+      "name": "PACKAGED_APP_DIR_NAME",
+      "kind": "value",
+      "file": "src/shared/save-location.ts",
+      "line": 23,
+      "endLine": 23
+    },
+    {
+      "id": "symbol:src/shared/save-location.ts#SAVE_FILE_NAME",
+      "name": "SAVE_FILE_NAME",
+      "kind": "value",
+      "file": "src/shared/save-location.ts",
+      "line": 16,
+      "endLine": 16
+    },
+    {
+      "id": "symbol:src/shared/save-location.ts#SAVE_STORE_NAME",
+      "name": "SAVE_STORE_NAME",
+      "kind": "value",
+      "file": "src/shared/save-location.ts",
+      "line": 15,
+      "endLine": 15
+    },
+    {
+      "id": "symbol:src/shared/save-location.ts#STEAM_CLOUD_EXCLUSIONS",
+      "name": "STEAM_CLOUD_EXCLUSIONS",
+      "kind": "value",
+      "file": "src/shared/save-location.ts",
+      "line": 51,
+      "endLine": 56
+    },
+    {
+      "id": "symbol:src/shared/save-location.ts#STEAM_CLOUD_RULES",
+      "name": "STEAM_CLOUD_RULES",
+      "kind": "value",
+      "file": "src/shared/save-location.ts",
+      "line": 44,
+      "endLine": 48
+    },
+    {
+      "id": "symbol:src/shared/save-location.ts#SteamCloudRoot",
+      "name": "SteamCloudRoot",
+      "kind": "type",
+      "file": "src/shared/save-location.ts",
+      "line": 26,
+      "endLine": 26
+    },
+    {
+      "id": "symbol:src/shared/save-location.ts#SteamCloudRule",
+      "name": "SteamCloudRule",
+      "kind": "interface",
+      "file": "src/shared/save-location.ts",
+      "line": 28,
+      "endLine": 35
+    },
+    {
+      "id": "symbol:src/shared/save-location.ts#UNPACKAGED_APP_DIR_NAME",
+      "name": "UNPACKAGED_APP_DIR_NAME",
+      "kind": "value",
+      "file": "src/shared/save-location.ts",
+      "line": 24,
+      "endLine": 24
     },
     {
       "id": "symbol:src/shared/score-parasite-rules.ts#advanceScoreParasiteFloor",
@@ -91361,6 +91488,60 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/save-location.ts->symbol:src/shared/save-location.ts#formatSteamCloudRules",
+      "source": "file:src/shared/save-location.ts",
+      "target": "symbol:src/shared/save-location.ts#formatSteamCloudRules",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/save-location.ts->symbol:src/shared/save-location.ts#PACKAGED_APP_DIR_NAME",
+      "source": "file:src/shared/save-location.ts",
+      "target": "symbol:src/shared/save-location.ts#PACKAGED_APP_DIR_NAME",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/save-location.ts->symbol:src/shared/save-location.ts#SAVE_FILE_NAME",
+      "source": "file:src/shared/save-location.ts",
+      "target": "symbol:src/shared/save-location.ts#SAVE_FILE_NAME",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/save-location.ts->symbol:src/shared/save-location.ts#SAVE_STORE_NAME",
+      "source": "file:src/shared/save-location.ts",
+      "target": "symbol:src/shared/save-location.ts#SAVE_STORE_NAME",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/save-location.ts->symbol:src/shared/save-location.ts#STEAM_CLOUD_EXCLUSIONS",
+      "source": "file:src/shared/save-location.ts",
+      "target": "symbol:src/shared/save-location.ts#STEAM_CLOUD_EXCLUSIONS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/save-location.ts->symbol:src/shared/save-location.ts#STEAM_CLOUD_RULES",
+      "source": "file:src/shared/save-location.ts",
+      "target": "symbol:src/shared/save-location.ts#STEAM_CLOUD_RULES",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/save-location.ts->symbol:src/shared/save-location.ts#SteamCloudRoot",
+      "source": "file:src/shared/save-location.ts",
+      "target": "symbol:src/shared/save-location.ts#SteamCloudRoot",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/save-location.ts->symbol:src/shared/save-location.ts#SteamCloudRule",
+      "source": "file:src/shared/save-location.ts",
+      "target": "symbol:src/shared/save-location.ts#SteamCloudRule",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/save-location.ts->symbol:src/shared/save-location.ts#UNPACKAGED_APP_DIR_NAME",
+      "source": "file:src/shared/save-location.ts",
+      "target": "symbol:src/shared/save-location.ts#UNPACKAGED_APP_DIR_NAME",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/score-parasite-rules.ts->symbol:src/shared/score-parasite-rules.ts#advanceScoreParasiteFloor",
       "source": "file:src/shared/score-parasite-rules.ts",
       "target": "symbol:src/shared/score-parasite-rules.ts#advanceScoreParasiteFloor",
@@ -97035,6 +97216,12 @@
       "id": "imports:src/main/saveRepository.ts->src/shared/save-data.ts",
       "source": "file:src/main/saveRepository.ts",
       "target": "file:src/shared/save-data.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/main/saveRepository.ts->src/shared/save-location.ts",
+      "source": "file:src/main/saveRepository.ts",
+      "target": "file:src/shared/save-location.ts",
       "kind": "imports"
     },
     {
@@ -113202,6 +113389,18 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/save-location.test.ts->src/main/crash-log.ts",
+      "source": "file:src/shared/save-location.test.ts",
+      "target": "file:src/main/crash-log.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/save-location.test.ts->src/shared/save-location.ts",
+      "source": "file:src/shared/save-location.test.ts",
+      "target": "file:src/shared/save-location.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/score-parasite-rules.test.ts->src/shared/contracts.ts",
       "source": "file:src/shared/score-parasite-rules.test.ts",
       "target": "file:src/shared/contracts.ts",
@@ -121252,6 +121451,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/main/crash-log.ts->file:src/shared/save-location.test.ts",
+      "source": "file:src/main/crash-log.ts",
+      "target": "file:src/shared/save-location.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/main/crash-reporter.ts->file:src/main/crash-reporter.test.ts",
       "source": "file:src/main/crash-reporter.ts",
       "target": "file:src/main/crash-reporter.test.ts",
@@ -126877,6 +127082,12 @@
       "id": "tested_by:src/shared/save-data.ts->file:src/shared/save-data.test.ts",
       "source": "file:src/shared/save-data.ts",
       "target": "file:src/shared/save-data.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/save-location.ts->file:src/shared/save-location.test.ts",
+      "source": "file:src/shared/save-location.ts",
+      "target": "file:src/shared/save-location.test.ts",
       "kind": "tested_by"
     },
     {
