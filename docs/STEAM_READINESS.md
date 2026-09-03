@@ -23,6 +23,7 @@ file is only about whether the build clears a launch checklist.
 | Rich Presence | **Not implemented.** No status strings are published to Steam. | — |
 | Crash reporting | **Not implemented.** A fatal startup failure shows a native dialog and quits; nothing is reported anywhere. | `src/main/fatal-startup.ts` |
 | Store page metadata | **Out of repository.** Tracked on the Partner site. | — |
+| Colour-blind safety | **Done for the four palettes that carry rules.** Trait, enemy-hazard, hazard-tile, trap-state and interaction-lane colours are each gated against protanopia, deuteranopia and tritanopia. | `src/shared/color-vision.ts`, `tile-trait-palette.test.ts`, `tileBoardThreatColors.test.ts` |
 
 ## Content
 
@@ -56,3 +57,7 @@ Counts a player can actually reach, not counts declared somewhere:
   is in extracting the strings, not in the plumbing.
 - **Crash reporting.** Nothing is collected today, so a crash in the wild is invisible.
 - **Borderless on macOS.** Electron's `setSimpleFullScreen` is the route; untested here.
+- **A second channel for trait identity.** Trait colours are now measurably distinct under every
+  simulated vision, but on a hidden tile the colour is still the only per-trait signal — the
+  interaction lanes carry a pattern, traits do not. The board renders glyphs as geometry and has no
+  text layer, so this needs new marker shapes rather than a label.

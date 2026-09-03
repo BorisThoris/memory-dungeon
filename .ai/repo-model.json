@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2428,
-    "codeFileCount": 910,
-    "exportedSymbolCount": 3418,
+    "trackedFileCount": 2431,
+    "codeFileCount": 913,
+    "exportedSymbolCount": 3433,
     "contentItemCount": 63,
     "mechanicCount": 136,
     "stateFieldCount": 144,
-    "relationshipCount": 10010
+    "relationshipCount": 10041
   },
   "inventory": [
     {
@@ -279,8 +279,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 245484,
-      "sha256": "20db2a231349c03142ba258f02df27075e737577a54873385029ca034be51ec6"
+      "bytes": 246576,
+      "sha256": "b906dcbb171890d912f8b7e1d8e1460c272689c0b92b9801fc7b2b9ff3560928"
     },
     {
       "path": "docs/BLUEPRINT_FRAMEWORK.md",
@@ -2283,8 +2283,8 @@
     {
       "path": "docs/STEAM_READINESS.md",
       "category": "documentation",
-      "bytes": 4581,
-      "sha256": "04f4a3fedb461e2b669f0cbb5e52c36b25fe9e72b913b8f48c6b92f5689766bd"
+      "bytes": 5247,
+      "sha256": "d2c5120626edbf7e0cf479dfe18f5f1cc22e6ae87761eccda18eb5b6a34e21f4"
     },
     {
       "path": "docs/STRAY_TILE.md",
@@ -2314,7 +2314,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 36714,
-      "sha256": "6c57309dd795319d23d6f7ed896fb773534a501817f8bf180821e3acb7136090"
+      "sha256": "bf6eecb9de0ccf8f0ca68c76e1dab5dd724d902d5d7f2ea0ea28512e196856f6"
     },
     {
       "path": "docs/UI_RETHINK_PLAN.md",
@@ -8265,14 +8265,14 @@
     {
       "path": "src/renderer/components/tileBoardReadability.test.ts",
       "category": "test",
-      "bytes": 18674,
-      "sha256": "2ab0f660ad3aa602744b4b262c4a39069a53e0e12f6d12559c23fa33259f080a"
+      "bytes": 19115,
+      "sha256": "cf6926b3cc44bdb8717db89dc40a3047ad8e990ea92660e36639c2ed7ab71265"
     },
     {
       "path": "src/renderer/components/tileBoardReadability.ts",
       "category": "source",
-      "bytes": 18228,
-      "sha256": "ee96756da4670c2b06f5cea1cae0161c00ead38e212a6a817f40bc2a497d5157"
+      "bytes": 19544,
+      "sha256": "27c24c92f0c5dddca0e42912bcefe123351c23be801ff862594c752a32dea644"
     },
     {
       "path": "src/renderer/components/TileBoardReadabilityMarkers.tsx",
@@ -8505,14 +8505,14 @@
     {
       "path": "src/renderer/components/tileBoardThreatColors.test.ts",
       "category": "test",
-      "bytes": 1371,
-      "sha256": "bec8240a2e86bb546182d75d5fd101ca88a419e494d0abbf45b34d0111f6c422"
+      "bytes": 3198,
+      "sha256": "d438c602f94e778bf405f2fedea0808e83d73d7198507430013f3e0e3b8dd6d7"
     },
     {
       "path": "src/renderer/components/tileBoardThreatColors.ts",
       "category": "source",
-      "bytes": 699,
-      "sha256": "259fd961a07f307653bcaafe52d9bb828458574fe8049df8acb51e6aefecef70"
+      "bytes": 1937,
+      "sha256": "7d70af545af95b9c0f533c769f74626a063dad922f48bd2d8e3077fb524c8223"
     },
     {
       "path": "src/renderer/components/tileBoardTransform.test.ts",
@@ -10187,6 +10187,18 @@
       "category": "source",
       "bytes": 6479,
       "sha256": "7d306b692d485a24f199c7139ba45b1ed6bf6890ccd574bce8f924f34e134284"
+    },
+    {
+      "path": "src/shared/color-vision.test.ts",
+      "category": "test",
+      "bytes": 3660,
+      "sha256": "f764526b2c12a908ea3893e2e1a8799268cd5b35ef18488a19874df08d796442"
+    },
+    {
+      "path": "src/shared/color-vision.ts",
+      "category": "source",
+      "bytes": 5760,
+      "sha256": "b130bce12b7cee8fcd18d8a070b1ce35b8f6eea5f074cb00f84ca443970614ce"
     },
     {
       "path": "src/shared/combo-shard-rules.test.ts",
@@ -12175,6 +12187,12 @@
       "sha256": "f86efedb7f3826b6fb36452894ac69d0e37a22308e4b96e7161999bc6fae93fe"
     },
     {
+      "path": "src/shared/tile-trait-palette.test.ts",
+      "category": "test",
+      "bytes": 2383,
+      "sha256": "aa89f1db50b37a36552fb6f3e41abd4ff02edb2409f3464add2831c901094ffd"
+    },
+    {
       "path": "src/shared/tile-trait-rules.test.ts",
       "category": "test",
       "bytes": 51511,
@@ -12183,8 +12201,8 @@
     {
       "path": "src/shared/tile-trait-rules.ts",
       "category": "source",
-      "bytes": 53980,
-      "sha256": "36169cedbc24ac6ccbbe6104ebb48e36402aad6db08a411a77d50273754631f4"
+      "bytes": 54871,
+      "sha256": "2fb2338a4c0c65a1117efcc0a0fd64fde0abd8d7f00198b958ae46609361ed7b"
     },
     {
       "path": "src/shared/trait-build-rewards.test.ts",
@@ -18871,11 +18889,13 @@
       "path": "src/renderer/components/tileBoardReadability.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 374,
+      "lineCount": 379,
       "imports": [
         "file:src/renderer/components/tileBoardReadability.ts",
+        "file:src/renderer/components/tileBoardThreatColors.ts",
         "file:src/shared/contracts.ts",
-        "file:src/shared/tile-identity.ts"
+        "file:src/shared/tile-identity.ts",
+        "file:src/shared/tile-trait-rules.ts"
       ],
       "exports": [],
       "testedBy": []
@@ -18885,7 +18905,7 @@
       "path": "src/renderer/components/tileBoardReadability.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 574,
+      "lineCount": 601,
       "imports": [
         "file:src/renderer/components/tileBoardRows.ts",
         "file:src/renderer/components/tileBoardThreatColors.ts",
@@ -18913,10 +18933,12 @@
         "symbol:src/renderer/components/tileBoardReadability.ts#TileTraitRouteCadence",
         "symbol:src/renderer/components/tileBoardReadability.ts#TileTraitRouteReadabilityGlyph",
         "symbol:src/renderer/components/tileBoardReadability.ts#TileTraitRouteReadabilityIntensity",
-        "symbol:src/renderer/components/tileBoardReadability.ts#TileTraitRouteReadabilityTier"
+        "symbol:src/renderer/components/tileBoardReadability.ts#TileTraitRouteReadabilityTier",
+        "symbol:src/renderer/components/tileBoardReadability.ts#TRAIT_LANE_COLORS"
       ],
       "testedBy": [
-        "file:src/renderer/components/tileBoardReadability.test.ts"
+        "file:src/renderer/components/tileBoardReadability.test.ts",
+        "file:src/renderer/components/tileBoardThreatColors.test.ts"
       ]
     },
     {
@@ -19600,9 +19622,11 @@
       "path": "src/renderer/components/tileBoardThreatColors.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 38,
+      "lineCount": 65,
       "imports": [
+        "file:src/renderer/components/tileBoardReadability.ts",
         "file:src/renderer/components/tileBoardThreatColors.ts",
+        "file:src/shared/color-vision.ts",
         "file:src/shared/contracts.ts"
       ],
       "exports": [],
@@ -19613,15 +19637,19 @@
       "path": "src/renderer/components/tileBoardThreatColors.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 21,
+      "lineCount": 51,
       "imports": [
         "file:src/shared/contracts.ts"
       ],
       "exports": [
+        "symbol:src/renderer/components/tileBoardThreatColors.ts#ENEMY_HAZARD_COLORS",
         "symbol:src/renderer/components/tileBoardThreatColors.ts#enemyHazardColor",
-        "symbol:src/renderer/components/tileBoardThreatColors.ts#hazardTileColor"
+        "symbol:src/renderer/components/tileBoardThreatColors.ts#HAZARD_TILE_COLORS",
+        "symbol:src/renderer/components/tileBoardThreatColors.ts#hazardTileColor",
+        "symbol:src/renderer/components/tileBoardThreatColors.ts#TRAP_STATE_COLORS"
       ],
       "testedBy": [
+        "file:src/renderer/components/tileBoardReadability.test.ts",
         "file:src/renderer/components/tileBoardThreatColors.test.ts"
       ]
     },
@@ -24410,6 +24438,43 @@
       ]
     },
     {
+      "id": "file:src/shared/color-vision.test.ts",
+      "path": "src/shared/color-vision.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 100,
+      "imports": [
+        "file:src/shared/color-vision.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/shared/color-vision.ts",
+      "path": "src/shared/color-vision.ts",
+      "layer": "shared",
+      "role": "production",
+      "lineCount": 148,
+      "imports": [],
+      "exports": [
+        "symbol:src/shared/color-vision.ts#COLOR_VISION_KINDS",
+        "symbol:src/shared/color-vision.ts#colorDistance",
+        "symbol:src/shared/color-vision.ts#ColorVision",
+        "symbol:src/shared/color-vision.ts#ConfusablePair",
+        "symbol:src/shared/color-vision.ts#findConfusablePairs",
+        "symbol:src/shared/color-vision.ts#hexToRgb",
+        "symbol:src/shared/color-vision.ts#Rgb",
+        "symbol:src/shared/color-vision.ts#rgbToHex",
+        "symbol:src/shared/color-vision.ts#rgbToLab",
+        "symbol:src/shared/color-vision.ts#simulateColorVision"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/tileBoardThreatColors.test.ts",
+        "file:src/shared/color-vision.test.ts",
+        "file:src/shared/tile-trait-palette.test.ts"
+      ]
+    },
+    {
       "id": "file:src/shared/combo-shard-rules.test.ts",
       "path": "src/shared/combo-shard-rules.test.ts",
       "layer": "shared",
@@ -24858,6 +24923,7 @@
         "file:src/shared/tile-floater-anchor-rules.test.ts",
         "file:src/shared/tile-state-rules.test.ts",
         "file:src/shared/tile-symbol-catalog.test.ts",
+        "file:src/shared/tile-trait-palette.test.ts",
         "file:src/shared/tile-trait-rules.test.ts",
         "file:src/shared/trait-build-rewards.test.ts",
         "file:src/shared/trait-opportunities.test.ts",
@@ -32128,6 +32194,20 @@
       "testedBy": []
     },
     {
+      "id": "file:src/shared/tile-trait-palette.test.ts",
+      "path": "src/shared/tile-trait-palette.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 50,
+      "imports": [
+        "file:src/shared/color-vision.ts",
+        "file:src/shared/contracts.ts",
+        "file:src/shared/tile-trait-rules.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
       "id": "file:src/shared/tile-trait-rules.test.ts",
       "path": "src/shared/tile-trait-rules.test.ts",
       "layer": "shared",
@@ -32149,7 +32229,7 @@
       "path": "src/shared/tile-trait-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1266,
+      "lineCount": 1278,
       "imports": [
         "file:src/shared/bonus-rewards.ts",
         "file:src/shared/contracts.ts",
@@ -32188,13 +32268,16 @@
         "symbol:src/shared/tile-trait-rules.ts#TileTraitEffectContext",
         "symbol:src/shared/tile-trait-rules.ts#TileTraitEffectResult",
         "symbol:src/shared/tile-trait-rules.ts#TileTraitInteractionTag",
-        "symbol:src/shared/tile-trait-rules.ts#tileTraitKindsInTiles"
+        "symbol:src/shared/tile-trait-rules.ts#tileTraitKindsInTiles",
+        "symbol:src/shared/tile-trait-rules.ts#tileTraitPalette"
       ],
       "testedBy": [
+        "file:src/renderer/components/tileBoardReadability.test.ts",
         "file:src/renderer/store/matchScorePop.test.ts",
         "file:src/renderer/store/useAppStore.test.ts",
         "file:src/shared/gameplay-core.test.ts",
         "file:src/shared/tile-trait-codex.test.ts",
+        "file:src/shared/tile-trait-palette.test.ts",
         "file:src/shared/tile-trait-rules.test.ts"
       ]
     },
@@ -37161,144 +37244,152 @@
       "name": "getDungeonUtilityReadabilityKind",
       "kind": "value",
       "file": "src/renderer/components/tileBoardReadability.ts",
-      "line": 52,
-      "endLine": 77
+      "line": 53,
+      "endLine": 78
     },
     {
       "id": "symbol:src/renderer/components/tileBoardReadability.ts#getTileBoardReadabilityState",
       "name": "getTileBoardReadabilityState",
       "kind": "value",
       "file": "src/renderer/components/tileBoardReadability.ts",
-      "line": 378,
-      "endLine": 573
+      "line": 395,
+      "endLine": 600
     },
     {
       "id": "symbol:src/renderer/components/tileBoardReadability.ts#getTraitLaneReadabilityColor",
       "name": "getTraitLaneReadabilityColor",
       "kind": "value",
       "file": "src/renderer/components/tileBoardReadability.ts",
-      "line": 150,
-      "endLine": 170
+      "line": 167,
+      "endLine": 187
     },
     {
       "id": "symbol:src/renderer/components/tileBoardReadability.ts#getTraitLaneReadabilityPattern",
       "name": "getTraitLaneReadabilityPattern",
       "kind": "value",
       "file": "src/renderer/components/tileBoardReadability.ts",
-      "line": 172,
-      "endLine": 192
+      "line": 189,
+      "endLine": 209
     },
     {
       "id": "symbol:src/renderer/components/tileBoardReadability.ts#getTraitPreviewReadabilityBeatCount",
       "name": "getTraitPreviewReadabilityBeatCount",
       "kind": "value",
       "file": "src/renderer/components/tileBoardReadability.ts",
-      "line": 332,
-      "endLine": 343
+      "line": 349,
+      "endLine": 360
     },
     {
       "id": "symbol:src/renderer/components/tileBoardReadability.ts#getTraitPreviewReadabilityTone",
       "name": "getTraitPreviewReadabilityTone",
       "kind": "value",
       "file": "src/renderer/components/tileBoardReadability.ts",
-      "line": 345,
-      "endLine": 355
+      "line": 362,
+      "endLine": 372
     },
     {
       "id": "symbol:src/renderer/components/tileBoardReadability.ts#getTraitRouteCadenceAction",
       "name": "getTraitRouteCadenceAction",
       "kind": "value",
       "file": "src/renderer/components/tileBoardReadability.ts",
-      "line": 357,
-      "endLine": 376
+      "line": 374,
+      "endLine": 393
     },
     {
       "id": "symbol:src/renderer/components/tileBoardReadability.ts#getTraitRouteReadabilityBeatCount",
       "name": "getTraitRouteReadabilityBeatCount",
       "kind": "value",
       "file": "src/renderer/components/tileBoardReadability.ts",
-      "line": 269,
-      "endLine": 285
+      "line": 286,
+      "endLine": 302
     },
     {
       "id": "symbol:src/renderer/components/tileBoardReadability.ts#getTraitRouteReadabilityBeatTier",
       "name": "getTraitRouteReadabilityBeatTier",
       "kind": "value",
       "file": "src/renderer/components/tileBoardReadability.ts",
-      "line": 248,
-      "endLine": 267
+      "line": 265,
+      "endLine": 284
     },
     {
       "id": "symbol:src/renderer/components/tileBoardReadability.ts#getTraitRouteReadabilityCadence",
       "name": "getTraitRouteReadabilityCadence",
       "kind": "value",
       "file": "src/renderer/components/tileBoardReadability.ts",
-      "line": 311,
-      "endLine": 330
+      "line": 328,
+      "endLine": 347
     },
     {
       "id": "symbol:src/renderer/components/tileBoardReadability.ts#getTraitRouteReadabilityGlyph",
       "name": "getTraitRouteReadabilityGlyph",
       "kind": "value",
       "file": "src/renderer/components/tileBoardReadability.ts",
-      "line": 287,
-      "endLine": 309
+      "line": 304,
+      "endLine": 326
     },
     {
       "id": "symbol:src/renderer/components/tileBoardReadability.ts#getTraitRouteReadabilityIntensity",
       "name": "getTraitRouteReadabilityIntensity",
       "kind": "value",
       "file": "src/renderer/components/tileBoardReadability.ts",
-      "line": 227,
-      "endLine": 246
+      "line": 244,
+      "endLine": 263
     },
     {
       "id": "symbol:src/renderer/components/tileBoardReadability.ts#getTraitRouteReadabilityTier",
       "name": "getTraitRouteReadabilityTier",
       "kind": "value",
       "file": "src/renderer/components/tileBoardReadability.ts",
-      "line": 194,
-      "endLine": 225
+      "line": 211,
+      "endLine": 242
     },
     {
       "id": "symbol:src/renderer/components/tileBoardReadability.ts#TileTraitRouteBeatTier",
       "name": "TileTraitRouteBeatTier",
       "kind": "type",
       "file": "src/renderer/components/tileBoardReadability.ts",
-      "line": 24,
-      "endLine": 24
+      "line": 25,
+      "endLine": 25
     },
     {
       "id": "symbol:src/renderer/components/tileBoardReadability.ts#TileTraitRouteCadence",
       "name": "TileTraitRouteCadence",
       "kind": "type",
       "file": "src/renderer/components/tileBoardReadability.ts",
-      "line": 25,
-      "endLine": 25
+      "line": 26,
+      "endLine": 26
     },
     {
       "id": "symbol:src/renderer/components/tileBoardReadability.ts#TileTraitRouteReadabilityGlyph",
       "name": "TileTraitRouteReadabilityGlyph",
       "kind": "type",
       "file": "src/renderer/components/tileBoardReadability.ts",
-      "line": 34,
-      "endLine": 41
+      "line": 35,
+      "endLine": 42
     },
     {
       "id": "symbol:src/renderer/components/tileBoardReadability.ts#TileTraitRouteReadabilityIntensity",
       "name": "TileTraitRouteReadabilityIntensity",
       "kind": "type",
       "file": "src/renderer/components/tileBoardReadability.ts",
-      "line": 23,
-      "endLine": 23
+      "line": 24,
+      "endLine": 24
     },
     {
       "id": "symbol:src/renderer/components/tileBoardReadability.ts#TileTraitRouteReadabilityTier",
       "name": "TileTraitRouteReadabilityTier",
       "kind": "type",
       "file": "src/renderer/components/tileBoardReadability.ts",
-      "line": 14,
-      "endLine": 22
+      "line": 15,
+      "endLine": 23
+    },
+    {
+      "id": "symbol:src/renderer/components/tileBoardReadability.ts#TRAIT_LANE_COLORS",
+      "name": "TRAIT_LANE_COLORS",
+      "kind": "value",
+      "file": "src/renderer/components/tileBoardReadability.ts",
+      "line": 157,
+      "endLine": 165
     },
     {
       "id": "symbol:src/renderer/components/TileBoardReadabilityMarkers.tsx#TileBoardReadabilityMarkers",
@@ -37893,20 +37984,44 @@
       "endLine": 7
     },
     {
+      "id": "symbol:src/renderer/components/tileBoardThreatColors.ts#ENEMY_HAZARD_COLORS",
+      "name": "ENEMY_HAZARD_COLORS",
+      "kind": "value",
+      "file": "src/renderer/components/tileBoardThreatColors.ts",
+      "line": 10,
+      "endLine": 16
+    },
+    {
       "id": "symbol:src/renderer/components/tileBoardThreatColors.ts#enemyHazardColor",
       "name": "enemyHazardColor",
       "kind": "value",
       "file": "src/renderer/components/tileBoardThreatColors.ts",
-      "line": 3,
-      "endLine": 9
+      "line": 18,
+      "endLine": 24
+    },
+    {
+      "id": "symbol:src/renderer/components/tileBoardThreatColors.ts#HAZARD_TILE_COLORS",
+      "name": "HAZARD_TILE_COLORS",
+      "kind": "value",
+      "file": "src/renderer/components/tileBoardThreatColors.ts",
+      "line": 33,
+      "endLine": 39
     },
     {
       "id": "symbol:src/renderer/components/tileBoardThreatColors.ts#hazardTileColor",
       "name": "hazardTileColor",
       "kind": "value",
       "file": "src/renderer/components/tileBoardThreatColors.ts",
-      "line": 11,
-      "endLine": 20
+      "line": 41,
+      "endLine": 50
+    },
+    {
+      "id": "symbol:src/renderer/components/tileBoardThreatColors.ts#TRAP_STATE_COLORS",
+      "name": "TRAP_STATE_COLORS",
+      "kind": "value",
+      "file": "src/renderer/components/tileBoardThreatColors.ts",
+      "line": 27,
+      "endLine": 31
     },
     {
       "id": "symbol:src/renderer/components/tileBoardTransform.ts#getTileTransform",
@@ -44123,6 +44238,86 @@
       "file": "src/shared/collection-reward-gallery.ts",
       "line": 48,
       "endLine": 139
+    },
+    {
+      "id": "symbol:src/shared/color-vision.ts#COLOR_VISION_KINDS",
+      "name": "COLOR_VISION_KINDS",
+      "kind": "value",
+      "file": "src/shared/color-vision.ts",
+      "line": 16,
+      "endLine": 16
+    },
+    {
+      "id": "symbol:src/shared/color-vision.ts#colorDistance",
+      "name": "colorDistance",
+      "kind": "value",
+      "file": "src/shared/color-vision.ts",
+      "line": 107,
+      "endLine": 111
+    },
+    {
+      "id": "symbol:src/shared/color-vision.ts#ColorVision",
+      "name": "ColorVision",
+      "kind": "type",
+      "file": "src/shared/color-vision.ts",
+      "line": 14,
+      "endLine": 14
+    },
+    {
+      "id": "symbol:src/shared/color-vision.ts#ConfusablePair",
+      "name": "ConfusablePair",
+      "kind": "interface",
+      "file": "src/shared/color-vision.ts",
+      "line": 113,
+      "endLine": 118
+    },
+    {
+      "id": "symbol:src/shared/color-vision.ts#findConfusablePairs",
+      "name": "findConfusablePairs",
+      "kind": "value",
+      "file": "src/shared/color-vision.ts",
+      "line": 124,
+      "endLine": 147
+    },
+    {
+      "id": "symbol:src/shared/color-vision.ts#hexToRgb",
+      "name": "hexToRgb",
+      "kind": "value",
+      "file": "src/shared/color-vision.ts",
+      "line": 26,
+      "endLine": 43
+    },
+    {
+      "id": "symbol:src/shared/color-vision.ts#Rgb",
+      "name": "Rgb",
+      "kind": "interface",
+      "file": "src/shared/color-vision.ts",
+      "line": 18,
+      "endLine": 22
+    },
+    {
+      "id": "symbol:src/shared/color-vision.ts#rgbToHex",
+      "name": "rgbToHex",
+      "kind": "value",
+      "file": "src/shared/color-vision.ts",
+      "line": 45,
+      "endLine": 51
+    },
+    {
+      "id": "symbol:src/shared/color-vision.ts#rgbToLab",
+      "name": "rgbToLab",
+      "kind": "value",
+      "file": "src/shared/color-vision.ts",
+      "line": 96,
+      "endLine": 104
+    },
+    {
+      "id": "symbol:src/shared/color-vision.ts#simulateColorVision",
+      "name": "simulateColorVision",
+      "kind": "value",
+      "file": "src/shared/color-vision.ts",
+      "line": 70,
+      "endLine": 83
     },
     {
       "id": "symbol:src/shared/combo-shard-rules.ts#applyComboShardGain",
@@ -59193,32 +59388,32 @@
       "name": "applyVolatileMismatchTrait",
       "kind": "value",
       "file": "src/shared/tile-trait-rules.ts",
-      "line": 726,
-      "endLine": 767
+      "line": 738,
+      "endLine": 779
     },
     {
       "id": "symbol:src/shared/tile-trait-rules.ts#assignTileTraitsToGeneratedBoard",
       "name": "assignTileTraitsToGeneratedBoard",
       "kind": "value",
       "file": "src/shared/tile-trait-rules.ts",
-      "line": 618,
-      "endLine": 724
+      "line": 630,
+      "endLine": 736
     },
     {
       "id": "symbol:src/shared/tile-trait-rules.ts#calculateTileTraitMatchRewards",
       "name": "calculateTileTraitMatchRewards",
       "kind": "value",
       "file": "src/shared/tile-trait-rules.ts",
-      "line": 1225,
-      "endLine": 1246
+      "line": 1237,
+      "endLine": 1258
     },
     {
       "id": "symbol:src/shared/tile-trait-rules.ts#calculateTileTraitMismatchPenalty",
       "name": "calculateTileTraitMismatchPenalty",
       "kind": "value",
       "file": "src/shared/tile-trait-rules.ts",
-      "line": 1248,
-      "endLine": 1265
+      "line": 1260,
+      "endLine": 1277
     },
     {
       "id": "symbol:src/shared/tile-trait-rules.ts#countTraitComboOpportunityPairs",
@@ -59257,8 +59452,8 @@
       "name": "getRouteTraitForecastLine",
       "kind": "value",
       "file": "src/shared/tile-trait-rules.ts",
-      "line": 577,
-      "endLine": 594
+      "line": 589,
+      "endLine": 606
     },
     {
       "id": "symbol:src/shared/tile-trait-rules.ts#getTileSwapTraitPreviewLines",
@@ -59281,8 +59476,8 @@
       "name": "getTileTraitText",
       "kind": "value",
       "file": "src/shared/tile-trait-rules.ts",
-      "line": 596,
-      "endLine": 602
+      "line": 608,
+      "endLine": 614
     },
     {
       "id": "symbol:src/shared/tile-trait-rules.ts#hasTraitBoardPowerInteractionOpportunity",
@@ -59313,8 +59508,8 @@
       "name": "resolveTileTraitEffects",
       "kind": "value",
       "file": "src/shared/tile-trait-rules.ts",
-      "line": 844,
-      "endLine": 1223
+      "line": 856,
+      "endLine": 1235
     },
     {
       "id": "symbol:src/shared/tile-trait-rules.ts#TILE_TRAIT_COPY",
@@ -59353,8 +59548,8 @@
       "name": "tileTraitColor",
       "kind": "value",
       "file": "src/shared/tile-trait-rules.ts",
-      "line": 399,
-      "endLine": 399
+      "line": 411,
+      "endLine": 411
     },
     {
       "id": "symbol:src/shared/tile-trait-rules.ts#TileTraitEffectContext",
@@ -59385,8 +59580,16 @@
       "name": "tileTraitKindsInTiles",
       "kind": "value",
       "file": "src/shared/tile-trait-rules.ts",
-      "line": 604,
-      "endLine": 616
+      "line": 616,
+      "endLine": 628
+    },
+    {
+      "id": "symbol:src/shared/tile-trait-rules.ts#tileTraitPalette",
+      "name": "tileTraitPalette",
+      "kind": "value",
+      "file": "src/shared/tile-trait-rules.ts",
+      "line": 409,
+      "endLine": 409
     },
     {
       "id": "symbol:src/shared/trait-build-rewards.ts#getTraitBuildBoardHint",
@@ -61309,7 +61512,7 @@
         },
         {
           "path": "src/shared/tile-trait-rules.ts",
-          "line": 1093
+          "line": 1105
         }
       ],
       "tests": [
@@ -61661,7 +61864,7 @@
         },
         {
           "path": "src/shared/tile-trait-rules.ts",
-          "line": 431
+          "line": 443
         }
       ],
       "tests": [
@@ -75410,6 +75613,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/tileBoardReadability.ts->symbol:src/renderer/components/tileBoardReadability.ts#TRAIT_LANE_COLORS",
+      "source": "file:src/renderer/components/tileBoardReadability.ts",
+      "target": "symbol:src/renderer/components/tileBoardReadability.ts#TRAIT_LANE_COLORS",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/TileBoardReadabilityMarkers.tsx->symbol:src/renderer/components/TileBoardReadabilityMarkers.tsx#TileBoardReadabilityMarkers",
       "source": "file:src/renderer/components/TileBoardReadabilityMarkers.tsx",
       "target": "symbol:src/renderer/components/TileBoardReadabilityMarkers.tsx#TileBoardReadabilityMarkers",
@@ -75854,15 +76063,33 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/tileBoardThreatColors.ts->symbol:src/renderer/components/tileBoardThreatColors.ts#ENEMY_HAZARD_COLORS",
+      "source": "file:src/renderer/components/tileBoardThreatColors.ts",
+      "target": "symbol:src/renderer/components/tileBoardThreatColors.ts#ENEMY_HAZARD_COLORS",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/tileBoardThreatColors.ts->symbol:src/renderer/components/tileBoardThreatColors.ts#enemyHazardColor",
       "source": "file:src/renderer/components/tileBoardThreatColors.ts",
       "target": "symbol:src/renderer/components/tileBoardThreatColors.ts#enemyHazardColor",
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/tileBoardThreatColors.ts->symbol:src/renderer/components/tileBoardThreatColors.ts#HAZARD_TILE_COLORS",
+      "source": "file:src/renderer/components/tileBoardThreatColors.ts",
+      "target": "symbol:src/renderer/components/tileBoardThreatColors.ts#HAZARD_TILE_COLORS",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/tileBoardThreatColors.ts->symbol:src/renderer/components/tileBoardThreatColors.ts#hazardTileColor",
       "source": "file:src/renderer/components/tileBoardThreatColors.ts",
       "target": "symbol:src/renderer/components/tileBoardThreatColors.ts#hazardTileColor",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/tileBoardThreatColors.ts->symbol:src/renderer/components/tileBoardThreatColors.ts#TRAP_STATE_COLORS",
+      "source": "file:src/renderer/components/tileBoardThreatColors.ts",
+      "target": "symbol:src/renderer/components/tileBoardThreatColors.ts#TRAP_STATE_COLORS",
       "kind": "exports"
     },
     {
@@ -80525,6 +80752,66 @@
       "id": "exports:src/shared/collection-reward-gallery.ts->symbol:src/shared/collection-reward-gallery.ts#getCollectionRewardGalleryRows",
       "source": "file:src/shared/collection-reward-gallery.ts",
       "target": "symbol:src/shared/collection-reward-gallery.ts#getCollectionRewardGalleryRows",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/color-vision.ts->symbol:src/shared/color-vision.ts#COLOR_VISION_KINDS",
+      "source": "file:src/shared/color-vision.ts",
+      "target": "symbol:src/shared/color-vision.ts#COLOR_VISION_KINDS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/color-vision.ts->symbol:src/shared/color-vision.ts#colorDistance",
+      "source": "file:src/shared/color-vision.ts",
+      "target": "symbol:src/shared/color-vision.ts#colorDistance",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/color-vision.ts->symbol:src/shared/color-vision.ts#ColorVision",
+      "source": "file:src/shared/color-vision.ts",
+      "target": "symbol:src/shared/color-vision.ts#ColorVision",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/color-vision.ts->symbol:src/shared/color-vision.ts#ConfusablePair",
+      "source": "file:src/shared/color-vision.ts",
+      "target": "symbol:src/shared/color-vision.ts#ConfusablePair",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/color-vision.ts->symbol:src/shared/color-vision.ts#findConfusablePairs",
+      "source": "file:src/shared/color-vision.ts",
+      "target": "symbol:src/shared/color-vision.ts#findConfusablePairs",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/color-vision.ts->symbol:src/shared/color-vision.ts#hexToRgb",
+      "source": "file:src/shared/color-vision.ts",
+      "target": "symbol:src/shared/color-vision.ts#hexToRgb",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/color-vision.ts->symbol:src/shared/color-vision.ts#Rgb",
+      "source": "file:src/shared/color-vision.ts",
+      "target": "symbol:src/shared/color-vision.ts#Rgb",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/color-vision.ts->symbol:src/shared/color-vision.ts#rgbToHex",
+      "source": "file:src/shared/color-vision.ts",
+      "target": "symbol:src/shared/color-vision.ts#rgbToHex",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/color-vision.ts->symbol:src/shared/color-vision.ts#rgbToLab",
+      "source": "file:src/shared/color-vision.ts",
+      "target": "symbol:src/shared/color-vision.ts#rgbToLab",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/color-vision.ts->symbol:src/shared/color-vision.ts#simulateColorVision",
+      "source": "file:src/shared/color-vision.ts",
+      "target": "symbol:src/shared/color-vision.ts#simulateColorVision",
       "kind": "exports"
     },
     {
@@ -91976,6 +92263,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/tile-trait-rules.ts->symbol:src/shared/tile-trait-rules.ts#tileTraitPalette",
+      "source": "file:src/shared/tile-trait-rules.ts",
+      "target": "symbol:src/shared/tile-trait-rules.ts#tileTraitPalette",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/trait-build-rewards.ts->symbol:src/shared/trait-build-rewards.ts#getTraitBuildBoardHint",
       "source": "file:src/shared/trait-build-rewards.ts",
       "target": "symbol:src/shared/trait-build-rewards.ts#getTraitBuildBoardHint",
@@ -100689,6 +100982,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/tileBoardReadability.test.ts->src/renderer/components/tileBoardThreatColors.ts",
+      "source": "file:src/renderer/components/tileBoardReadability.test.ts",
+      "target": "file:src/renderer/components/tileBoardThreatColors.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/tileBoardReadability.test.ts->src/shared/contracts.ts",
       "source": "file:src/renderer/components/tileBoardReadability.test.ts",
       "target": "file:src/shared/contracts.ts",
@@ -100698,6 +100997,12 @@
       "id": "imports:src/renderer/components/tileBoardReadability.test.ts->src/shared/tile-identity.ts",
       "source": "file:src/renderer/components/tileBoardReadability.test.ts",
       "target": "file:src/shared/tile-identity.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/tileBoardReadability.test.ts->src/shared/tile-trait-rules.ts",
+      "source": "file:src/renderer/components/tileBoardReadability.test.ts",
+      "target": "file:src/shared/tile-trait-rules.ts",
       "kind": "imports"
     },
     {
@@ -101517,9 +101822,21 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/tileBoardThreatColors.test.ts->src/renderer/components/tileBoardReadability.ts",
+      "source": "file:src/renderer/components/tileBoardThreatColors.test.ts",
+      "target": "file:src/renderer/components/tileBoardReadability.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/tileBoardThreatColors.test.ts->src/renderer/components/tileBoardThreatColors.ts",
       "source": "file:src/renderer/components/tileBoardThreatColors.test.ts",
       "target": "file:src/renderer/components/tileBoardThreatColors.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/tileBoardThreatColors.test.ts->src/shared/color-vision.ts",
+      "source": "file:src/renderer/components/tileBoardThreatColors.test.ts",
+      "target": "file:src/shared/color-vision.ts",
       "kind": "imports"
     },
     {
@@ -106044,6 +106361,12 @@
       "id": "imports:src/shared/collection-reward-gallery.ts->src/shared/save-data.ts",
       "source": "file:src/shared/collection-reward-gallery.ts",
       "target": "file:src/shared/save-data.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/color-vision.test.ts->src/shared/color-vision.ts",
+      "source": "file:src/shared/color-vision.test.ts",
+      "target": "file:src/shared/color-vision.ts",
       "kind": "imports"
     },
     {
@@ -113363,6 +113686,24 @@
     {
       "id": "imports:src/shared/tile-trait-codex.ts->src/shared/tile-trait-rules.ts",
       "source": "file:src/shared/tile-trait-codex.ts",
+      "target": "file:src/shared/tile-trait-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/tile-trait-palette.test.ts->src/shared/color-vision.ts",
+      "source": "file:src/shared/tile-trait-palette.test.ts",
+      "target": "file:src/shared/color-vision.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/tile-trait-palette.test.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/tile-trait-palette.test.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/tile-trait-palette.test.ts->src/shared/tile-trait-rules.ts",
+      "source": "file:src/shared/tile-trait-palette.test.ts",
       "target": "file:src/shared/tile-trait-rules.ts",
       "kind": "imports"
     },
@@ -121309,6 +121650,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/components/tileBoardReadability.ts->file:src/renderer/components/tileBoardThreatColors.test.ts",
+      "source": "file:src/renderer/components/tileBoardReadability.ts",
+      "target": "file:src/renderer/components/tileBoardThreatColors.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/components/tileBoardRegistry.ts->file:src/renderer/components/tileBoardRegistry.test.ts",
       "source": "file:src/renderer/components/tileBoardRegistry.ts",
       "target": "file:src/renderer/components/tileBoardRegistry.test.ts",
@@ -121414,6 +121761,12 @@
       "id": "tested_by:src/renderer/components/tileBoardTextureVariant.ts->file:src/renderer/components/tileBoardTextureVariant.test.ts",
       "source": "file:src/renderer/components/tileBoardTextureVariant.ts",
       "target": "file:src/renderer/components/tileBoardTextureVariant.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/tileBoardThreatColors.ts->file:src/renderer/components/tileBoardReadability.test.ts",
+      "source": "file:src/renderer/components/tileBoardThreatColors.ts",
+      "target": "file:src/renderer/components/tileBoardReadability.test.ts",
       "kind": "tested_by"
     },
     {
@@ -122539,6 +122892,24 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/color-vision.ts->file:src/renderer/components/tileBoardThreatColors.test.ts",
+      "source": "file:src/shared/color-vision.ts",
+      "target": "file:src/renderer/components/tileBoardThreatColors.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/color-vision.ts->file:src/shared/color-vision.test.ts",
+      "source": "file:src/shared/color-vision.ts",
+      "target": "file:src/shared/color-vision.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/color-vision.ts->file:src/shared/tile-trait-palette.test.ts",
+      "source": "file:src/shared/color-vision.ts",
+      "target": "file:src/shared/tile-trait-palette.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/combo-shard-rules.ts->file:src/shared/combo-shard-rules.test.ts",
       "source": "file:src/shared/combo-shard-rules.ts",
       "target": "file:src/shared/combo-shard-rules.test.ts",
@@ -123640,6 +124011,12 @@
       "id": "tested_by:src/shared/contracts.ts->file:src/shared/tile-symbol-catalog.test.ts",
       "source": "file:src/shared/contracts.ts",
       "target": "file:src/shared/tile-symbol-catalog.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/contracts.ts->file:src/shared/tile-trait-palette.test.ts",
+      "source": "file:src/shared/contracts.ts",
+      "target": "file:src/shared/tile-trait-palette.test.ts",
       "kind": "tested_by"
     },
     {
@@ -126577,6 +126954,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/tile-trait-rules.ts->file:src/renderer/components/tileBoardReadability.test.ts",
+      "source": "file:src/shared/tile-trait-rules.ts",
+      "target": "file:src/renderer/components/tileBoardReadability.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/tile-trait-rules.ts->file:src/renderer/store/matchScorePop.test.ts",
       "source": "file:src/shared/tile-trait-rules.ts",
       "target": "file:src/renderer/store/matchScorePop.test.ts",
@@ -126598,6 +126981,12 @@
       "id": "tested_by:src/shared/tile-trait-rules.ts->file:src/shared/tile-trait-codex.test.ts",
       "source": "file:src/shared/tile-trait-rules.ts",
       "target": "file:src/shared/tile-trait-codex.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/tile-trait-rules.ts->file:src/shared/tile-trait-palette.test.ts",
+      "source": "file:src/shared/tile-trait-rules.ts",
+      "target": "file:src/shared/tile-trait-palette.test.ts",
       "kind": "tested_by"
     },
     {

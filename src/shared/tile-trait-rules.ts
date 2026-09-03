@@ -384,17 +384,29 @@ const tileCanShuffleFromVolatileMiss = (tile: Tile, blockedPairKeys: ReadonlySet
 
 const DEFAULT_TRAIT_INTERACTION_SEED: readonly [TileTraitKind, TileTraitKind] = ['conduit', 'echo'];
 
+/**
+ * Trait markers on the board say which trait a tile carries by colour, so these nine have to stay
+ * apart for eyes that cannot separate every hue. They are tuned against the dichromacy simulation
+ * in `color-vision.ts` and gated by `tile-trait-palette.test.ts`: the worst pair used to sit at
+ * dE 2.1 under deuteranopia — below the just-noticeable step, meaning Sealed and Stasis were the
+ * same colour — and now clears 29. Each hue stayed within 16 degrees of the colour it shipped as,
+ * so a returning player still reads Echo as cyan and Cursed as pink. Re-run the gate after any
+ * edit here; hue is the axis that survives least well, so lightness is doing much of the work.
+ */
 const TILE_TRAIT_COLORS: Record<TileTraitKind, string> = {
-    echo: '#62d6d1',
-    volatile: '#f08f48',
-    mirror: '#b890ff',
-    cursed: '#e85d87',
-    sealed: '#8bc3ff',
-    heavy: '#d7b46a',
-    drift: '#76d672',
-    conduit: '#f5cc48',
-    stasis: '#a5b4fc'
+    echo: '#32fdf9',
+    volatile: '#fd8c21',
+    mirror: '#a168fd',
+    cursed: '#f22b8c',
+    sealed: '#67b4eb',
+    heavy: '#c09766',
+    drift: '#bbfcc3',
+    conduit: '#f7f986',
+    stasis: '#2146fd'
 };
+
+/** The palette as data, for the colour-vision gate and any surface that needs the whole set. */
+export const tileTraitPalette = (): Record<TileTraitKind, string> => ({ ...TILE_TRAIT_COLORS });
 
 export const tileTraitColor = (kind: TileTraitKind): string => TILE_TRAIT_COLORS[kind];
 

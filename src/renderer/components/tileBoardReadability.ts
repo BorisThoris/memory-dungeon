@@ -3,6 +3,7 @@ import { getEffectivePrimaryExitLock } from '../../shared/board-inspection';
 import { EXIT_PAIR_KEY } from '../../shared/tile-identity';
 import { hazardTileColor } from './tileBoardThreatColors';
 import { tileTraitColor } from '../../shared/tile-trait-rules';
+import { ENEMY_HAZARD_COLORS, TRAP_STATE_COLORS } from './tileBoardThreatColors';
 import type { TileBoardPowerBackAccent } from './tileBoardRows';
 import {
     getTraitInteractionLaneAction,
@@ -147,26 +148,42 @@ interface TileBoardReadabilityState {
     traitLaneReadabilityPattern: TraitLaneReadabilityPattern | null;
 }
 
+/**
+ * One colour per interaction lane. Each lane also has a pattern (`getTraitLaneReadabilityPattern`),
+ * which is what keeps colour from being the only channel — but the colours still have to hold up:
+ * as shipped, guard and the fallback were dE 1.0 apart for a protanope, and tool and recall only
+ * 11.5 apart in ordinary vision. Gated in `tileBoardThreatColors.test.ts` with the other palettes.
+ */
+export const TRAIT_LANE_COLORS = {
+    block: '#9e6ffe',
+    guard: '#5fbe5f',
+    other: '#f8ecbe',
+    recall: '#b9fefe',
+    risk: '#f83226',
+    shard: '#fdbe21',
+    tool: '#41cffd'
+} as const;
+
 export const getTraitLaneReadabilityColor = (lane: TraitInteractionLaneId): string => {
     if (lane === 'shard') {
-        return '#ffe48a';
+        return TRAIT_LANE_COLORS.shard;
     }
     if (lane === 'guard') {
-        return '#8edb9b';
+        return TRAIT_LANE_COLORS.guard;
     }
     if (lane === 'tool') {
-        return '#5dd6ff';
+        return TRAIT_LANE_COLORS.tool;
     }
     if (lane === 'risk') {
-        return '#ff8f70';
+        return TRAIT_LANE_COLORS.risk;
     }
     if (lane === 'block') {
-        return '#b890ff';
+        return TRAIT_LANE_COLORS.block;
     }
     if (lane === 'recall') {
-        return '#8de6ff';
+        return TRAIT_LANE_COLORS.recall;
     }
-    return '#f2d39d';
+    return TRAIT_LANE_COLORS.other;
 };
 
 export const getTraitLaneReadabilityPattern = (lane: TraitInteractionLaneId): TraitLaneReadabilityPattern => {
@@ -433,10 +450,20 @@ export const getTileBoardReadabilityState = ({
         isTraitRouteTargetBack
     });
     const traitRouteReadabilityIntensity = getTraitRouteReadabilityIntensity(traitRouteReadabilityTier);
-    const enemyOccupiedColor = '#ff9f86';
-    const trapReadabilityColor = isResolvedTrap ? '#7bd88f' : isRevealedTrap ? '#ffcf66' : '#ff7a6a';
+    // Same signal as a sentinel hazard, so it reads from the same gated entry rather than a copy.
+    const enemyOccupiedColor = ENEMY_HAZARD_COLORS.sentinel;
+    /*
+     * Safe, seen, and armed. This triple decides whether a player walks into a trap, and as shipped
+     * resolved and armed were dE 16 apart for a deuteranope — the safe one and the dangerous one.
+     * Gated with the other threat palettes in `tileBoardThreatColors.test.ts`.
+     */
+    const trapReadabilityColor = isResolvedTrap
+        ? TRAP_STATE_COLORS.resolved
+        : isRevealedTrap
+          ? TRAP_STATE_COLORS.revealed
+          : TRAP_STATE_COLORS.armed;
     const faceReadabilityAccentColor = isBossCard
-        ? '#ffcf66'
+        ? ENEMY_HAZARD_COLORS.boss
         : dungeonUtilityKind
           ? dungeonUtilityReadabilityColor(dungeonUtilityKind)
           : isTrapCard
@@ -455,7 +482,7 @@ export const getTileBoardReadabilityState = ({
         : hazardBackAccent
           ? hazardTileColor(hazardBackAccent)
           : isBossCard
-            ? '#ffcf66'
+            ? ENEMY_HAZARD_COLORS.boss
             : dungeonUtilityKind
               ? dungeonUtilityReadabilityColor(dungeonUtilityKind)
               : isTrapCard

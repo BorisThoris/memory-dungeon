@@ -1009,6 +1009,26 @@ Scheduled Endless drafts guarantee one contextual option when an eligible relic 
 
 Memorize modifiers (see `getMemorizeDurationForRun` in `game.ts`): **`+280ms`** with `memorize_bonus_ms`; **`+220ms`** when `memorize_under_short_memorize` and `short_memorize` mutator are both active.
 
+## Board colour and colour vision (`color-vision.ts`)
+
+Five palettes on the board carry rules rather than decoration: tile traits, enemy hazards, hazard
+tiles, trap state, and trait interaction lanes. Each is gated against normal vision plus the three
+dichromacies at a CIE76 floor of dE 25, roughly ten times the just-noticeable step.
+
+As shipped, every one of them had pairs a player could not separate — the worst by palette:
+
+| Palette | Worst pair as shipped | After |
+|---|---|---|
+| Tile trait | Sealed vs Stasis, dE **2.1** (deuteranopia) | 29.8 |
+| Trait lane | Guard vs fallback, dE **1.0** (protanopia) | 27.2 |
+| Enemy hazard | Boss vs Warden, dE **5.5** (tritanopia) | 42.6 |
+| Hazard tile | dE **7.6** | 45.2 |
+| Trap state | Resolved vs Armed, dE **16.1** (deuteranopia) | 51.1 |
+
+Each hue stayed within 16-20 degrees of the colour it replaced, so the board still reads the way a
+returning player learned it. Lightness is doing most of the separation work, because lightness is
+the one axis every dichromat keeps — so an edit that only adjusts hue will not move the gate.
+
 ## Honor mark ceiling (`meta-progression.ts`)
 
 Honor marks come from four capped sources: achievements (`earned x 2`), the daily archive (7),

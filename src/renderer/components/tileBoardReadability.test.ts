@@ -1,10 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import type { BoardState, Tile } from '../../shared/contracts';
 import { EXIT_PAIR_KEY } from '../../shared/tile-identity';
+import { tileTraitColor } from '../../shared/tile-trait-rules';
+import { ENEMY_HAZARD_COLORS, HAZARD_TILE_COLORS, TRAP_STATE_COLORS } from './tileBoardThreatColors';
 import {
     getDungeonUtilityReadabilityKind,
     getTileBoardReadabilityState,
     getTraitLaneReadabilityColor,
+    TRAIT_LANE_COLORS,
     getTraitLaneReadabilityPattern,
     getTraitPreviewReadabilityBeatCount,
     getTraitPreviewReadabilityTone,
@@ -105,28 +108,32 @@ describe('tileBoardReadability', () => {
     });
 
     it('prioritizes hidden accent colors by enemy, hazard, boss, dungeon utility, trap, objective, route, and powers', () => {
+        // Threat accents read from the gated palettes rather than repeating hex here: this test is
+        // about which category wins, and `tileBoardThreatColors.test.ts` owns what each looks like.
         expect(state({ enemyOccupiedBack: true, hazardBackAccent: 'fuse_cache' }).hiddenReadabilityAccentColor).toBe(
-            '#ff9f86'
+            ENEMY_HAZARD_COLORS.sentinel
         );
         expect(state({ hazardBackAccent: 'fuse_cache', tile: tile({ dungeonBossId: 'trap_warden' }) }).hiddenReadabilityAccentColor).toBe(
-            '#ff9f86'
+            HAZARD_TILE_COLORS.trap
         );
-        expect(state({ tile: tile({ dungeonBossId: 'trap_warden' }) }).hiddenReadabilityAccentColor).toBe('#ffcf66');
+        expect(state({ tile: tile({ dungeonBossId: 'trap_warden' }) }).hiddenReadabilityAccentColor).toBe(
+            ENEMY_HAZARD_COLORS.boss
+        );
         expect(state({ tile: tile({ dungeonCardKind: 'exit' }) }).hiddenReadabilityAccentColor).toBe('#7bd88f');
         expect(state({ tile: tile({ dungeonCardKind: 'lock' }) }).hiddenReadabilityAccentColor).toBe('#f2d39d');
         expect(state({ tile: tile({ dungeonCardKind: 'lever' }) }).hiddenReadabilityAccentColor).toBe('#d4a03d');
         expect(state({ tile: tile({ dungeonCardKind: 'shop' }) }).hiddenReadabilityAccentColor).toBe('#5ee0c8');
         expect(state({ tile: tile({ dungeonCardKind: 'trap', dungeonCardState: 'resolved' }) }).hiddenReadabilityAccentColor).toBe(
-            '#7bd88f'
+            TRAP_STATE_COLORS.resolved
         );
         expect(state({ objectiveBackAccent: true }).hiddenReadabilityAccentColor).toBe('#f2d39d');
         expect(state({ routeBackAccent: true }).hiddenReadabilityAccentColor).toBe('#59b4d9');
         expect(state({ traitRewardHotBack: true }).hiddenReadabilityAccentColor).toBe('#ffe48a');
         expect(state({ traitComboSurgeBack: true }).hiddenReadabilityAccentColor).toBe('#ffd166');
         expect(state({ traitComboBack: true }).hiddenReadabilityAccentColor).toBe('#f7f1c2');
-        expect(state({ traitComboBack: true, traitLaneBack: 'guard' }).hiddenReadabilityAccentColor).toBe('#8edb9b');
+        expect(state({ traitComboBack: true, traitLaneBack: 'guard' }).hiddenReadabilityAccentColor).toBe(TRAIT_LANE_COLORS.guard);
         expect(state({ traitRouteTargetBack: true }).hiddenReadabilityAccentColor).toBe('#5dd6ff');
-        expect(state({ tile: tile({ tileTraitKind: 'mirror' }) }).hiddenReadabilityAccentColor).toBe('#b890ff');
+        expect(state({ tile: tile({ tileTraitKind: 'mirror' }) }).hiddenReadabilityAccentColor).toBe(tileTraitColor('mirror'));
         expect(state({ powerBackAccent: 'destroy' }).hiddenReadabilityAccentColor).toBe('#d94848');
         expect(state({ powerBackAccent: 'stray' }).hiddenReadabilityAccentColor).toBe('#d4a03d');
         expect(state({ powerBackAccent: 'swap' }).hiddenReadabilityAccentColor).toBe('#5dd6ff');
@@ -178,8 +185,8 @@ describe('tileBoardReadability', () => {
         expect(result.isRevealedTrap).toBe(true);
         expect(result.isShopCard).toBe(false);
         expect(result.isSelectedCard).toBe(true);
-        expect(result.trapReadabilityColor).toBe('#ffcf66');
-        expect(result.faceReadabilityAccentColor).toBe('#ffcf66');
+        expect(result.trapReadabilityColor).toBe(TRAP_STATE_COLORS.revealed);
+        expect(result.faceReadabilityAccentColor).toBe(ENEMY_HAZARD_COLORS.boss);
     });
 
     it('reports dungeon utility flags used by spatial marker meshes', () => {
@@ -335,13 +342,11 @@ describe('tileBoardReadability', () => {
     });
 
     it('reports trait lane readability colors for hidden card lane markers', () => {
-        expect(getTraitLaneReadabilityColor('shard')).toBe('#ffe48a');
-        expect(getTraitLaneReadabilityColor('guard')).toBe('#8edb9b');
-        expect(getTraitLaneReadabilityColor('tool')).toBe('#5dd6ff');
-        expect(getTraitLaneReadabilityColor('risk')).toBe('#ff8f70');
-        expect(getTraitLaneReadabilityColor('block')).toBe('#b890ff');
-        expect(getTraitLaneReadabilityColor('recall')).toBe('#8de6ff');
-        expect(getTraitLaneReadabilityColor('score')).toBe('#f2d39d');
+        // Lane colours are owned by the colour-vision gate; this pins the mapping, not the hex.
+        for (const lane of ['shard', 'guard', 'tool', 'risk', 'block', 'recall'] as const) {
+            expect(getTraitLaneReadabilityColor(lane)).toBe(TRAIT_LANE_COLORS[lane]);
+        }
+        expect(getTraitLaneReadabilityColor('score')).toBe(TRAIT_LANE_COLORS.other);
         expect(getTraitLaneReadabilityPattern('shard')).toBe('cash-pip');
         expect(getTraitLaneReadabilityPattern('guard')).toBe('guard-ward');
         expect(getTraitLaneReadabilityPattern('tool')).toBe('tool-cross');
@@ -351,9 +356,9 @@ describe('tileBoardReadability', () => {
         expect(getTraitLaneReadabilityPattern('score')).toBe('score-pip');
 
         expect(state({ traitComboBack: true, traitLaneBack: 'shard', tile: tile({ tileTraitKind: 'echo' }) })).toMatchObject({
-            hiddenReadabilityAccentColor: '#ffe48a',
+            hiddenReadabilityAccentColor: TRAIT_LANE_COLORS.shard,
             traitLaneReadabilityAction: 'Cash shard',
-            traitLaneReadabilityColor: '#ffe48a',
+            traitLaneReadabilityColor: TRAIT_LANE_COLORS.shard,
             traitLaneReadabilityId: 'shard',
             traitLaneReadabilityLabel: 'Shard',
             traitLaneReadabilityPattern: 'cash-pip',
