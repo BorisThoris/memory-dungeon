@@ -9,7 +9,7 @@
     "contentItemCount": 63,
     "mechanicCount": 136,
     "stateFieldCount": 144,
-    "relationshipCount": 10107
+    "relationshipCount": 10111
   },
   "inventory": [
     {
@@ -2314,7 +2314,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 36714,
-      "sha256": "078886ba80d7e4bd15b3414ee18d5dbd6591399c846ec91a3dc13efaf8ff4a00"
+      "sha256": "b5ade533333de0bd74e667acd499d75f4f25188ca411531685b20c19d69c6641"
     },
     {
       "path": "docs/UI_RETHINK_PLAN.md",
@@ -10779,8 +10779,8 @@
     {
       "path": "src/shared/floor-schedule-reachability.test.ts",
       "category": "test",
-      "bytes": 3209,
-      "sha256": "40e1d400503819fe0b19cafd7237ef23368d7bfa81fe05c9f2a259b7e437fc2f"
+      "bytes": 6363,
+      "sha256": "befa4222627ff05c1e85826dd1e3b89c93a6a136de1fdc9e63be2496d3080bc6"
     },
     {
       "path": "src/shared/focusDimmedTileIds.test.ts",
@@ -26825,10 +26825,12 @@
       "path": "src/shared/floor-schedule-reachability.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 71,
+      "lineCount": 142,
       "imports": [
         "file:src/shared/contracts.ts",
-        "file:src/shared/floor-mutator-schedule.ts"
+        "file:src/shared/floor-mutator-schedule.ts",
+        "file:src/shared/game-core.ts",
+        "file:src/shared/relics.ts"
       ],
       "exports": [],
       "testedBy": []
@@ -27024,6 +27026,7 @@
         "file:src/shared/dungeon-trap-rules.test.ts",
         "file:src/shared/enemy-hazard-board-rules.test.ts",
         "file:src/shared/exploit-surface.test.ts",
+        "file:src/shared/floor-schedule-reachability.test.ts",
         "file:src/shared/game-over-next-run.test.ts",
         "file:src/shared/game.test.ts",
         "file:src/shared/gameplay-core-playthrough-solver.test.ts",
@@ -30115,6 +30118,7 @@
         "file:src/shared/achievements.test.ts",
         "file:src/shared/content-lock.test.ts",
         "file:src/shared/exploit-surface.test.ts",
+        "file:src/shared/floor-schedule-reachability.test.ts",
         "file:src/shared/game-catalog.test.ts",
         "file:src/shared/game.test.ts",
         "file:src/shared/gameplay-core.test.ts",
@@ -108843,6 +108847,18 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/floor-schedule-reachability.test.ts->src/shared/game-core.ts",
+      "source": "file:src/shared/floor-schedule-reachability.test.ts",
+      "target": "file:src/shared/game-core.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/floor-schedule-reachability.test.ts->src/shared/relics.ts",
+      "source": "file:src/shared/floor-schedule-reachability.test.ts",
+      "target": "file:src/shared/relics.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/focusDimmedTileIds.test.ts->src/shared/contracts.ts",
       "source": "file:src/shared/focusDimmedTileIds.test.ts",
       "target": "file:src/shared/contracts.ts",
@@ -125587,6 +125603,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/game-core.ts->file:src/shared/floor-schedule-reachability.test.ts",
+      "source": "file:src/shared/game-core.ts",
+      "target": "file:src/shared/floor-schedule-reachability.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/game-core.ts->file:src/shared/game-over-next-run.test.ts",
       "source": "file:src/shared/game-core.ts",
       "target": "file:src/shared/game-over-next-run.test.ts",
@@ -126616,6 +126638,12 @@
       "id": "tested_by:src/shared/relics.ts->file:src/shared/exploit-surface.test.ts",
       "source": "file:src/shared/relics.ts",
       "target": "file:src/shared/exploit-surface.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/relics.ts->file:src/shared/floor-schedule-reachability.test.ts",
+      "source": "file:src/shared/relics.ts",
+      "target": "file:src/shared/floor-schedule-reachability.test.ts",
       "kind": "tested_by"
     },
     {
