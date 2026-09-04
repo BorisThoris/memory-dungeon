@@ -3,8 +3,8 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2510,
-    "codeFileCount": 975,
+    "trackedFileCount": 2512,
+    "codeFileCount": 976,
     "exportedSymbolCount": 3539,
     "contentItemCount": 63,
     "mechanicCount": 136,
@@ -2259,8 +2259,8 @@
     {
       "path": "docs/RELEASE_CHECKLIST.md",
       "category": "documentation",
-      "bytes": 5690,
-      "sha256": "8a5fb484a21a5cef5ff7338750a75f2a4efb78a18214464c6f254df08eced88a"
+      "bytes": 5836,
+      "sha256": "dc542bee0be74617d5e17457aaefb9fa02a0adc9b64a8b3f67f1ad0065ff81dc"
     },
     {
       "path": "docs/RELIC_ROSTER.md",
@@ -2320,7 +2320,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 36714,
-      "sha256": "e62e4ee095c086b5e0a9340bad0e3f7bb7735859046d629f86e5a44209179b8f"
+      "sha256": "dfa0bd46cefb4f4b22761139f70816c2b62dbff70f73ba0d12b538c676787ee4"
     },
     {
       "path": "docs/UI_RETHINK_PLAN.md",
@@ -3975,8 +3975,8 @@
     {
       "path": "package.json",
       "category": "configuration",
-      "bytes": 29550,
-      "sha256": "f3190a319496bc157bb85f98efc04bb73a4e76e4a3c704daac0d69aebe8e67a8"
+      "bytes": 29653,
+      "sha256": "fcbde99786e0d69d364524de7d3a0f9b052db6fd9e7610aa982f65aa0a5dddec"
     },
     {
       "path": "packages/notifications/package.json",
@@ -4637,6 +4637,12 @@
       "category": "script",
       "bytes": 378,
       "sha256": "d7c1ef802cb8ac250fc83c66965d0230084c5cb5da384a93299110ad04e32284"
+    },
+    {
+      "path": "scripts/save-field-policy.ts",
+      "category": "script",
+      "bytes": 3337,
+      "sha256": "16b7ff9944ea8067c592918222f053450aa96e1a8a3556de0b970d22900909f3"
     },
     {
       "path": "scripts/script-paths.ts",
@@ -11859,14 +11865,14 @@
     {
       "path": "src/shared/release-checklist.test.ts",
       "category": "test",
-      "bytes": 18429,
-      "sha256": "935ca741a602c603c1e04004ee2d832871b9a98fb9ee7c37af722c9d795693b5"
+      "bytes": 19085,
+      "sha256": "1a57378c6d646bdb2dec6d6b9dcb88b4829bed5e8eafdd1940b38846d28adfa8"
     },
     {
       "path": "src/shared/release-checklist.ts",
       "category": "source",
-      "bytes": 11825,
-      "sha256": "4d5c3196bfd5961e60662ed64f293aa40352f450ccd609b83c8c19271c17c68b"
+      "bytes": 12078,
+      "sha256": "e957ab555c8518d96ce297a43360f52f7f9464924d87c01015c16330e2d56fd0"
     },
     {
       "path": "src/shared/relic-favor-rules.test.ts",
@@ -12347,6 +12353,12 @@
       "category": "source",
       "bytes": 34465,
       "sha256": "81eebda607550ee17d9f699e9b6feee8a43401ef4b81e87e4c2929e7ee91d122"
+    },
+    {
+      "path": "src/shared/save-field-policy.test.ts",
+      "category": "test",
+      "bytes": 1942,
+      "sha256": "fd57d45bc28e79acbaf44fa140e1f1f9a22b553b0f3db805b085928ac1765e79"
     },
     {
       "path": "src/shared/save-location.test.ts",
@@ -30849,7 +30861,7 @@
       "path": "src/shared/release-checklist.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 352,
+      "lineCount": 364,
       "imports": [
         "file:src/main/crash-log.ts",
         "file:src/main/save-recovery.ts",
@@ -30880,7 +30892,7 @@
       "path": "src/shared/release-checklist.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 319,
+      "lineCount": 326,
       "imports": [],
       "exports": [
         "symbol:src/shared/release-checklist.ts#RELEASE_CHECKLIST",
@@ -32686,6 +32698,16 @@
         "file:src/shared/save-data.test.ts",
         "file:src/shared/steam-partner-config.test.ts"
       ]
+    },
+    {
+      "id": "file:src/shared/save-field-policy.test.ts",
+      "path": "src/shared/save-field-policy.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 50,
+      "imports": [],
+      "exports": [],
+      "testedBy": []
     },
     {
       "id": "file:src/shared/save-location.test.ts",
@@ -57031,15 +57053,15 @@
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
       "line": 32,
-      "endLine": 271
+      "endLine": 278
     },
     {
       "id": "symbol:src/shared/release-checklist.ts#releaseChecklistByOwner",
       "name": "releaseChecklistByOwner",
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
-      "line": 277,
-      "endLine": 278
+      "line": 284,
+      "endLine": 285
     },
     {
       "id": "symbol:src/shared/release-checklist.ts#ReleaseChecklistItem",
@@ -57062,16 +57084,16 @@
       "name": "releaseChecklistSections",
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
-      "line": 273,
-      "endLine": 275
+      "line": 280,
+      "endLine": 282
     },
     {
       "id": "symbol:src/shared/release-checklist.ts#renderReleaseChecklistMarkdown",
       "name": "renderReleaseChecklistMarkdown",
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
-      "line": 292,
-      "endLine": 318
+      "line": 299,
+      "endLine": 325
     },
     {
       "id": "symbol:src/shared/relic-favor-rules.ts#gainRelicFavor",

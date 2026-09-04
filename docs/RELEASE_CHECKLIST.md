@@ -49,6 +49,7 @@ achievement on the Partner site or shoot a trailer.
 | The preload bridge exposes nothing the renderer does not call | done | the repository | `scripts/bridge-reachability.ts` |
 | No module is left with its own test as its only caller | done | the repository | `scripts/test-only-modules.ts` |
 | Every shared system is reachable from something that ships, or exempt with a reason | done | the repository | `scripts/shared-reach.ts` |
+| Every persisted save field is named in the migration policy, or exempt with a reason | done | the repository | `scripts/save-field-policy.ts` |
 | No gate or script names a file that is not there | done | the repository | `scripts/script-paths.ts` |
 | A cue that cannot sound leaves the button that asked for it working | done | the repository | `src/renderer/audio/audioSafety.ts` |
 | No player-facing state or action is left with nothing able to reach it | done | the repository | `scripts/store-action-reachability.ts` |

@@ -31,6 +31,11 @@ import {
 import { findTestOnlyModules, TEST_ONLY_EXEMPTIONS } from '../../scripts/test-only-modules';
 import { reachableFromEntries, SHARED_REACH_EXEMPTIONS } from '../../scripts/shared-reach';
 import { findMissingScriptPaths } from '../../scripts/script-paths';
+import {
+    findFieldsWithoutPolicy,
+    readPolicyRoots,
+    SAVE_FIELD_POLICY_EXEMPTIONS
+} from '../../scripts/save-field-policy';
 import { audioNeverThrows, audioNeverThrowsBoolean } from '../renderer/audio/audioSafety';
 import { DESKTOP_IPC_CHANNELS } from './ipc-channels';
 import {
@@ -188,6 +193,13 @@ const VERIFIERS: Record<string, () => void> = {
         expect([...reached].some((path) => path.endsWith('used.ts'))).toBe(true);
         expect([...reached].some((path) => path.endsWith('stranded.ts'))).toBe(false);
         expect(Object.keys(SHARED_REACH_EXEMPTIONS).length).toBeGreaterThan(0);
+    },
+    'save-field-policy': () => {
+        // The failure this guards is the one I actually made: a persisted field added with no
+        // policy, every gate green, and nothing able to say so because they are two lists.
+        expect(findFieldsWithoutPolicy(['runHistory', 'newThing'], new Set(['runHistory']))).toEqual(['newThing']);
+        expect(readPolicyRoots("field: 'runHistory.shareKey'").has('runHistory')).toBe(true);
+        expect(Object.keys(SAVE_FIELD_POLICY_EXEMPTIONS).length).toBeGreaterThan(0);
     },
     'script-paths': () => {
         // A gate naming a renamed test file fails on its first line for anyone who runs it, and

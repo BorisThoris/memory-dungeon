@@ -157,6 +157,13 @@ export const RELEASE_CHECKLIST: readonly ReleaseChecklistItem[] = [
         section: 'Diagnostics'
     },
     {
+        evidence: 'scripts/save-field-policy.ts',
+        id: 'save-field-policy',
+        label: 'Every persisted save field is named in the migration policy, or exempt with a reason',
+        owner: 'repo',
+        section: 'Diagnostics'
+    },
+    {
         evidence: 'scripts/script-paths.ts',
         id: 'script-paths',
         label: 'No gate or script names a file that is not there',
