@@ -1,5 +1,5 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { RunState } from '../../shared/contracts';
 import { createNewRun, createRunSummary, finishMemorizePhase } from '../../shared/game-core';
 import { createDefaultSaveData } from '../../shared/save-data';
@@ -25,11 +25,18 @@ vi.mock('../audio/uiSfx', () => uiSfxMocks);
 vi.mock('zustand/react/shallow', () => ({
     useShallow: <T,>(fn: T) => fn
 }));
+/** The best score as it stood when the run started; the personal-best line is read off this. */
+const gameOverStoreMocks = vi.hoisted(() => ({ bestScoreAtRunStart: null as number | null }));
+
 vi.mock('../store/useAppStore', () => ({
     useAppStore: (selector: (s: never) => unknown) =>
         selector({
             goToMenu: vi.fn(),
             restartRun: vi.fn(),
+            runStartSaveData:
+                gameOverStoreMocks.bestScoreAtRunStart === null
+                    ? null
+                    : { ...createDefaultSaveData(), bestScore: gameOverStoreMocks.bestScoreAtRunStart },
             saveData: createDefaultSaveData(),
             settings: {
                 reduceMotion: true,
@@ -39,13 +46,35 @@ vi.mock('../store/useAppStore', () => ({
         } as never)
 }));
 
-const gameOverRunFixture = (): RunState => {
+const gameOverRunFixture = (totalScore = 0): RunState => {
     let run = finishMemorizePhase(createNewRun(100, { runSeed: 0xabc }));
-    run = { ...run, status: 'gameOver', lives: 0 };
+    run = { ...run, lives: 0, stats: { ...run.stats, totalScore }, status: 'gameOver' };
     return createRunSummary(run, []);
 };
 
 describe('GameOverScreen (REF-031)', () => {
+    beforeEach(() => {
+        gameOverStoreMocks.bestScoreAtRunStart = null;
+    });
+
+    it('says the run beat the record, which the Best Score stat never did', () => {
+        gameOverStoreMocks.bestScoreAtRunStart = 900;
+
+        render(<GameOverScreen run={gameOverRunFixture(1200)} />);
+
+        const line = screen.getByTestId('game-over-personal-best');
+        expect(line).toHaveTextContent(/new personal best/i);
+        expect(line).toHaveAttribute('data-personal-best', 'beaten');
+    });
+
+    it('stays silent about a run that fell short of the record', () => {
+        gameOverStoreMocks.bestScoreAtRunStart = 5000;
+
+        render(<GameOverScreen run={gameOverRunFixture(1200)} />);
+
+        expect(screen.queryByTestId('game-over-personal-best')).not.toBeInTheDocument();
+    });
+
     it('hands the run over on the clipboard, seed and all, and confirms it did', async () => {
         const writeText = vi.fn(async (_text: string) => undefined);
         Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText } });

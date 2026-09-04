@@ -25,6 +25,9 @@ export const gameOverScreenCopy = {
     copyResultAriaLabel: 'Copy this run, seed and all, so someone else can play it',
     copyResultDone: 'Copied',
     copyResultFailed: 'Could not copy',
+    /** The one moment a score-chasing game owes the player a sentence. */
+    personalBestBeaten: 'New personal best',
+    personalBestMatched: 'Matched your personal best',
     runSnapshotKicker: 'Run snapshot',
     statLabels: {
         highestFloor: 'Highest Floor',

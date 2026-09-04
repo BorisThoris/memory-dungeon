@@ -647,3 +647,25 @@
         display: none;
     }
 }
+
+
+/* The one line that says the run mattered. Loud enough to see, quiet enough not to shout. */
+.personalBest {
+    margin: 0.3rem 0 0;
+    align-self: center;
+    padding: 0.16rem 0.7rem;
+    border-radius: var(--ui-radius-pill);
+    border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 46%, transparent);
+    background: color-mix(in srgb, var(--theme-gold-bright) 12%, transparent);
+    color: var(--theme-gold-bright);
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.personalBest[data-personal-best='matched'] {
+    color: var(--theme-text-muted);
+    border-color: var(--theme-border);
+    background: transparent;
+}

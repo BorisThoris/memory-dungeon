@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2512,
-    "codeFileCount": 976,
-    "exportedSymbolCount": 3539,
+    "trackedFileCount": 2514,
+    "codeFileCount": 978,
+    "exportedSymbolCount": 3541,
     "contentItemCount": 63,
     "mechanicCount": 136,
     "stateFieldCount": 144,
-    "relationshipCount": 10417
+    "relationshipCount": 10428
   },
   "inventory": [
     {
@@ -2320,7 +2320,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 36714,
-      "sha256": "dfa0bd46cefb4f4b22761139f70816c2b62dbff70f73ba0d12b538c676787ee4"
+      "sha256": "fe5921db83aaa94bb56a29b1efb557cd1b59cf46af8609c25b68486a7ca344aa"
     },
     {
       "path": "docs/UI_RETHINK_PLAN.md",
@@ -7647,20 +7647,20 @@
     {
       "path": "src/renderer/components/GameOverScreen.module.css",
       "category": "source",
-      "bytes": 13842,
-      "sha256": "4dcdf63c73322007be22d25d53199127868f36b7d85ab1b47849207d72d9dfef"
+      "bytes": 14534,
+      "sha256": "c1706fcd0c4ca43644958a5fe5fc60691935d63cda42e54eb3c4bbce23623a6b"
     },
     {
       "path": "src/renderer/components/GameOverScreen.test.tsx",
       "category": "test",
-      "bytes": 7566,
-      "sha256": "d81efd04aa3b83ecd34ba07d3242a42046cf50cc901e8a153155bb712becde8f"
+      "bytes": 8846,
+      "sha256": "a2fa5cf8d542aef7a7d2f85fbbd793c830e790f6294c9d7456d3a7fc05bfe180"
     },
     {
       "path": "src/renderer/components/GameOverScreen.tsx",
       "category": "source",
-      "bytes": 19113,
-      "sha256": "2fabab13a5b83ce67da73016129e6666491355406032a3e9c2791f1918594c1b"
+      "bytes": 19941,
+      "sha256": "f2cb471cdd17091b1893d947b9e8f5f603b74c95f11d4effcbc8a6b293144d8b"
     },
     {
       "path": "src/renderer/components/gameplayRenderProfile.ts",
@@ -8967,8 +8967,8 @@
     {
       "path": "src/renderer/copy/gameOverScreen.ts",
       "category": "source",
-      "bytes": 3275,
-      "sha256": "8248d409e0e1846c6cc46e68ec64edb1a27eee8ed7612921f1f4cb013f0fb37b"
+      "bytes": 3450,
+      "sha256": "29f0f007fb81d58688c0e02f51055e0e3ef77081e7ecd3ae6ea754162b988d55"
     },
     {
       "path": "src/renderer/copy/gameplayEventAnnouncement.test.ts",
@@ -11711,6 +11711,18 @@
       "category": "source",
       "bytes": 1084,
       "sha256": "dd23833164b8e939ed321a333451c36a4d29b13738167d5adeb2e4208c74f824"
+    },
+    {
+      "path": "src/shared/personal-best.test.ts",
+      "category": "test",
+      "bytes": 2384,
+      "sha256": "f6a1cf0dbc4428dc1d3807c3f562227fa7cc8ea14359464320bac8b01adfea1a"
+    },
+    {
+      "path": "src/shared/personal-best.ts",
+      "category": "source",
+      "bytes": 1581,
+      "sha256": "cae09074a7ffa1e38ce5ccd5d886d1e3642e2a72cb9da9b9429d6509c859acce"
     },
     {
       "path": "src/shared/playable-onboarding.test.ts",
@@ -17387,7 +17399,7 @@
       "path": "src/renderer/components/GameOverScreen.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 170,
+      "lineCount": 199,
       "imports": [
         "file:src/renderer/components/GameOverScreen.tsx",
         "file:src/shared/contracts.ts",
@@ -17403,7 +17415,7 @@
       "path": "src/renderer/components/GameOverScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 401,
+      "lineCount": 419,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/uiSfx.ts",
@@ -17421,6 +17433,7 @@
         "file:src/shared/contracts.ts",
         "file:src/shared/game-catalog.ts",
         "file:src/shared/game-over-next-run.ts",
+        "file:src/shared/personal-best.ts",
         "file:src/shared/run-share-text.ts"
       ],
       "exports": [
@@ -21193,7 +21206,7 @@
       "path": "src/renderer/copy/gameOverScreen.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 68,
+      "lineCount": 71,
       "imports": [],
       "exports": [
         "symbol:src/renderer/copy/gameOverScreen.ts#gameOverScreenCopy"
@@ -25919,6 +25932,7 @@
         "file:src/shared/next-floor-run-state-rules.test.ts",
         "file:src/shared/p2-contracts.test.ts",
         "file:src/shared/pairProximityHint.test.ts",
+        "file:src/shared/personal-best.test.ts",
         "file:src/shared/playthrough-solver.test.ts",
         "file:src/shared/puzzle-import.test.ts",
         "file:src/shared/quest-campaign.test.ts",
@@ -30348,6 +30362,38 @@
       ]
     },
     {
+      "id": "file:src/shared/personal-best.test.ts",
+      "path": "src/shared/personal-best.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 61,
+      "imports": [
+        "file:src/shared/contracts.ts",
+        "file:src/shared/personal-best.ts",
+        "file:src/shared/save-data.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/shared/personal-best.ts",
+      "path": "src/shared/personal-best.ts",
+      "layer": "shared",
+      "role": "production",
+      "lineCount": 42,
+      "imports": [
+        "file:src/shared/contracts.ts",
+        "file:src/shared/run-number-guards.ts"
+      ],
+      "exports": [
+        "symbol:src/shared/personal-best.ts#personalBestResult",
+        "symbol:src/shared/personal-best.ts#PersonalBestResult"
+      ],
+      "testedBy": [
+        "file:src/shared/personal-best.test.ts"
+      ]
+    },
+    {
       "id": "file:src/shared/playable-onboarding.test.ts",
       "path": "src/shared/playable-onboarding.test.ts",
       "layer": "shared",
@@ -32686,6 +32732,7 @@
         "file:src/shared/meta-reward-signals.test.ts",
         "file:src/shared/objective-board.test.ts",
         "file:src/shared/perfect-memory-status.test.ts",
+        "file:src/shared/personal-best.test.ts",
         "file:src/shared/profile-summary.test.ts",
         "file:src/shared/puzzle-import.test.ts",
         "file:src/shared/quest-campaign.test.ts",
@@ -37084,8 +37131,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameOverScreen.tsx",
-      "line": 400,
-      "endLine": 400
+      "line": 418,
+      "endLine": 418
     },
     {
       "id": "symbol:src/renderer/components/gameplayRenderProfile.ts#GAMEPLAY_RENDER_PROFILE",
@@ -41133,7 +41180,7 @@
       "kind": "value",
       "file": "src/renderer/copy/gameOverScreen.ts",
       "line": 4,
-      "endLine": 67
+      "endLine": 70
     },
     {
       "id": "symbol:src/renderer/copy/gameplayEventAnnouncement.ts#buildGameplayEventAnnouncement",
@@ -56198,6 +56245,22 @@
       "file": "src/shared/perfect-memory-status.ts",
       "line": 16,
       "endLine": 16
+    },
+    {
+      "id": "symbol:src/shared/personal-best.ts#personalBestResult",
+      "name": "personalBestResult",
+      "kind": "value",
+      "file": "src/shared/personal-best.ts",
+      "line": 19,
+      "endLine": 41
+    },
+    {
+      "id": "symbol:src/shared/personal-best.ts#PersonalBestResult",
+      "name": "PersonalBestResult",
+      "kind": "type",
+      "file": "src/shared/personal-best.ts",
+      "line": 17,
+      "endLine": 17
     },
     {
       "id": "symbol:src/shared/playable-onboarding.ts#getPlayableOnboardingPrompt",
@@ -90969,6 +91032,18 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/personal-best.ts->symbol:src/shared/personal-best.ts#personalBestResult",
+      "source": "file:src/shared/personal-best.ts",
+      "target": "symbol:src/shared/personal-best.ts#personalBestResult",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/personal-best.ts->symbol:src/shared/personal-best.ts#PersonalBestResult",
+      "source": "file:src/shared/personal-best.ts",
+      "target": "symbol:src/shared/personal-best.ts#PersonalBestResult",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/playable-onboarding.ts->symbol:src/shared/playable-onboarding.ts#getPlayableOnboardingPrompt",
       "source": "file:src/shared/playable-onboarding.ts",
       "target": "symbol:src/shared/playable-onboarding.ts#getPlayableOnboardingPrompt",
@@ -101437,6 +101512,12 @@
       "id": "imports:src/renderer/components/GameOverScreen.tsx->src/shared/game-over-next-run.ts",
       "source": "file:src/renderer/components/GameOverScreen.tsx",
       "target": "file:src/shared/game-over-next-run.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/GameOverScreen.tsx->src/shared/personal-best.ts",
+      "source": "file:src/renderer/components/GameOverScreen.tsx",
+      "target": "file:src/shared/personal-best.ts",
       "kind": "imports"
     },
     {
@@ -114487,6 +114568,36 @@
       "id": "imports:src/shared/perfect-memory-status.ts->src/shared/contracts.ts",
       "source": "file:src/shared/perfect-memory-status.ts",
       "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/personal-best.test.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/personal-best.test.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/personal-best.test.ts->src/shared/personal-best.ts",
+      "source": "file:src/shared/personal-best.test.ts",
+      "target": "file:src/shared/personal-best.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/personal-best.test.ts->src/shared/save-data.ts",
+      "source": "file:src/shared/personal-best.test.ts",
+      "target": "file:src/shared/save-data.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/personal-best.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/personal-best.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/personal-best.ts->src/shared/run-number-guards.ts",
+      "source": "file:src/shared/personal-best.ts",
+      "target": "file:src/shared/run-number-guards.ts",
       "kind": "imports"
     },
     {
@@ -128066,6 +128177,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/contracts.ts->file:src/shared/personal-best.test.ts",
+      "source": "file:src/shared/contracts.ts",
+      "target": "file:src/shared/personal-best.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/contracts.ts->file:src/shared/playthrough-solver.test.ts",
       "source": "file:src/shared/contracts.ts",
       "target": "file:src/shared/playthrough-solver.test.ts",
@@ -129920,6 +130037,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/personal-best.ts->file:src/shared/personal-best.test.ts",
+      "source": "file:src/shared/personal-best.ts",
+      "target": "file:src/shared/personal-best.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/playable-onboarding.ts->file:src/renderer/components/PlayableOnboardingHarness.test.tsx",
       "source": "file:src/shared/playable-onboarding.ts",
       "target": "file:src/renderer/components/PlayableOnboardingHarness.test.tsx",
@@ -131033,6 +131156,12 @@
       "id": "tested_by:src/shared/save-data.ts->file:src/shared/perfect-memory-status.test.ts",
       "source": "file:src/shared/save-data.ts",
       "target": "file:src/shared/perfect-memory-status.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/save-data.ts->file:src/shared/personal-best.test.ts",
+      "source": "file:src/shared/save-data.ts",
+      "target": "file:src/shared/personal-best.test.ts",
       "kind": "tested_by"
     },
     {

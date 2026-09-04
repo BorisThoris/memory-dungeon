@@ -9,6 +9,7 @@ import { useShallow } from 'zustand/react/shallow';
 import { UI_ART } from '../assets/ui';
 import { playGameOverOpenSfx, playUiBackSfx, playUiCopySfx, resumeUiSfxContext, uiSfxGainFromSettings } from '../audio/uiSfx';
 import { gameOverScreenCopy } from '../copy/gameOverScreen';
+import { personalBestResult } from '../../shared/personal-best';
 import { buildRunShareText } from '../../shared/run-share-text';
 import { useCopyToClipboard } from '../hooks/useCopyToClipboard';
 import { useViewportSize } from '../hooks/useViewportSize';
@@ -146,6 +147,11 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
         .filter((achievement): achievement is (typeof ACHIEVEMENTS)[number] => Boolean(achievement));
 
     const nextRunRows = getGameOverNextRunRows(run, saveData, runStartSaveData ?? undefined);
+    const personalBest = personalBestResult({
+        achievementsEnabled: summary.achievementsEnabled,
+        saveAtRunStart: runStartSaveData,
+        summary
+    });
     const metaItems = [
         ...(summary.activeMutators?.map((id) => ({ kind: 'mutator' as const, label: mutatorLabel(id) })) ?? []),
         ...(summary.relicIds?.map((id) => ({ kind: 'relic' as const, label: relicLabel(id) })) ?? [])
@@ -276,6 +282,18 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                                 value={summary.bestScore.toLocaleString()}
                             />
                         </div>
+
+                        {personalBest === null ? null : (
+                            <p
+                                className={styles.personalBest}
+                                data-personal-best={personalBest}
+                                data-testid="game-over-personal-best"
+                            >
+                                {personalBest === 'beaten'
+                                    ? gameOverScreenCopy.personalBestBeaten
+                                    : gameOverScreenCopy.personalBestMatched}
+                            </p>
+                        )}
 
                         <p className={styles.note}>
                             {summary.achievementsEnabled
