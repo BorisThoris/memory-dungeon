@@ -36,16 +36,32 @@ const ACTIVE_GAMEPLAY_PORTRAITS = [
     { height: 896, name: 'large phone', width: 414 }
 ] as const;
 
+/**
+ * "Stacked" means the category nav sits in a band across the top with the content beneath it,
+ * rather than the two sitting side by side. That is a relationship between the `aside` holding the
+ * nav and the content pane after it, so it is measured between those two.
+ *
+ * It used to be measured between a button matching /gameplay/i and a heading. At these viewports
+ * the categories are a `<select>` rather than buttons — the category buttons are display:none — so
+ * that locator silently resolved to "Gameplay reference", a subsection button *inside* the content.
+ * Comparing the content's header against a button below it can never report stacked, whatever the
+ * layout does.
+ */
 async function readSettingsLayout(container: Locator): Promise<{
     contentBelowNav: boolean;
     buttonMetrics: Array<{ width: number; groupWidth: number }>;
 }> {
-    const navButton = await container.getByRole('button', { name: /gameplay/i }).first().boundingBox();
-    const contentHeading = await container
-        .locator('header')
-        .getByRole('heading', { name: /^gameplay$/i })
-        .first()
-        .boundingBox();
+    const bands = await container.evaluate((root) => {
+        const rect = (element: Element | null) => {
+            if (!element) {
+                return null;
+            }
+            const box = (element as HTMLElement).getBoundingClientRect();
+            return { bottom: box.bottom, top: box.top, width: box.width };
+        };
+        const aside = root.querySelector('aside');
+        return { content: rect(aside?.nextElementSibling ?? null), nav: rect(aside) };
+    });
     const footerActions = container.locator('footer').locator('div').first();
     const buttons = await footerActions.locator('button').evaluateAll((elements) =>
         elements.map((element) => ({
@@ -54,11 +70,14 @@ async function readSettingsLayout(container: Locator): Promise<{
         }))
     );
 
-    expect(navButton).toBeTruthy();
-    expect(contentHeading).toBeTruthy();
+    expect(bands.nav, 'settings shell has no nav aside').toBeTruthy();
+    expect(bands.content, 'settings shell has no content pane after the nav').toBeTruthy();
 
     return {
-        contentBelowNav: contentHeading!.y >= navButton!.y + navButton!.height - 1,
+        // Stacked: the content starts at or below where the nav band ends, and the nav spans the
+        // shell rather than taking a column beside it.
+        contentBelowNav:
+            bands.content!.top >= bands.nav!.bottom - 1 && bands.nav!.width >= bands.content!.width - 1,
         buttonMetrics: buttons
     };
 }
@@ -99,12 +118,22 @@ async function expectSettingsPanelInset(page: Page, container: Locator, minInset
     expect(metrics.panelBottom).toBeLessThanOrEqual(metrics.viewportHeight - minInset);
 }
 
-/** Short stacked settings must stay readable at shell zoom 1 (no tiny-fit regression on controls). */
+/**
+ * Short stacked settings must stay readable at shell zoom 1 (no tiny-fit regression on controls).
+ *
+ * The category chooser is not always a strip of buttons: stacked viewports collapse it to a single
+ * `<select>` and hide the buttons entirely, so waiting for one there hangs until the test times out
+ * rather than reporting anything. Measure whichever chooser this viewport actually renders.
+ */
 async function expectSettingsCategoryStripReadable(container: Locator): Promise<void> {
     const gameplayTab = container.getByRole('button', { name: /^gameplay$/i }).first();
-    const tabBox = await gameplayTab.boundingBox();
+    const categorySelect = container.getByTestId('settings-category-menu');
+    const chooser = (await gameplayTab.isVisible().catch(() => false)) ? gameplayTab : categorySelect;
+
+    await expect(chooser, 'settings offers no category chooser at this viewport').toBeVisible();
+    const tabBox = await chooser.boundingBox();
     expect(tabBox).toBeTruthy();
-    expect(tabBox!.height, 'category tab height').toBeGreaterThanOrEqual(40);
+    expect(tabBox!.height, 'category chooser height').toBeGreaterThanOrEqual(40);
 
     const layoutStandard = container.getByRole('button', { name: /^standard$/i }).first();
     await expect(layoutStandard).toBeVisible();

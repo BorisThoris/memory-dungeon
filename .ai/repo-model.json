@@ -3663,8 +3663,8 @@
     {
       "path": "e2e/mobile-layout.spec.ts",
       "category": "test",
-      "bytes": 39618,
-      "sha256": "206af789ebad09bf5129b2c0e5ca65e81049e98696b8333fde44ae25532d4cad"
+      "bytes": 41395,
+      "sha256": "7b8416ade090e0f065ba497794a2f89351421c8eb5090e74e17b55d830673ae1"
     },
     {
       "path": "e2e/mobileTouchHelpers.ts",
