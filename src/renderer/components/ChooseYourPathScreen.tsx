@@ -6,7 +6,9 @@ import {
     choosePathHeroModes,
     choosePathLibraryModes,
     RUN_MODE_GROUP_LABEL,
-    type RunModeDefinition
+    RUN_MODE_GROUP_ORDER,
+    type RunModeDefinition,
+    type RunModeGroup
 } from '../../shared/run-mode-catalog';
 import { isModePosterFallback, resolveModePosterUrl } from '../assets/ui/modeArt';
 import { UI_ART } from '../assets/ui';
@@ -96,6 +98,7 @@ const ChooseYourPathScreen = (): ReactElement => {
 
     const [browseOpen, setBrowseOpen] = useState(true);
     const [query, setQuery] = useState('');
+    const [group, setGroup] = useState<RunModeGroup | null>(null);
     const [detailMode, setDetailMode] = useState<RunModeDefinition | null>(null);
     const [meditationOpen, setMeditationOpen] = useState(false);
     const [meditationSelection, setMeditationSelection] = useState<Set<MutatorId>>(() => new Set());
@@ -116,14 +119,29 @@ const ChooseYourPathScreen = (): ReactElement => {
         ],
         [heroModes, launchMode?.id]
     );
+    /*
+     * The grid pages, and a 1440x900 screen fits four cards, so eleven of the twelve modes were
+     * behind Next presses a player had no reason to make. The catalog already sorts every mode into
+     * a group; these chips make that taxonomy the way you narrow the library, so the kind of run
+     * you want is one click away instead of three pages deep.
+     */
+    const groupCounts = useMemo(() => {
+        const counts = new Map<RunModeGroup, number>();
+        for (const mode of browseModes) {
+            counts.set(mode.group, (counts.get(mode.group) ?? 0) + 1);
+        }
+        return counts;
+    }, [browseModes]);
     const visibleModes = useMemo(() => {
         const q = query.trim().toLowerCase();
-        return q
-            ? browseModes.filter(
-                  (mode) => mode.title.toLowerCase().includes(q) || mode.shortDescription.toLowerCase().includes(q)
-              )
-            : browseModes;
-    }, [browseModes, query]);
+        return browseModes.filter(
+            (mode) =>
+                (group === null || mode.group === group) &&
+                (q === '' ||
+                    mode.title.toLowerCase().includes(q) ||
+                    mode.shortDescription.toLowerCase().includes(q))
+        );
+    }, [browseModes, group, query]);
     const gateRows = useMemo(() => getChallengeModeGateRows(saveData), [saveData]);
 
     const runModeAction = useCallback(
@@ -328,9 +346,6 @@ const ChooseYourPathScreen = (): ReactElement => {
                     <ScreenTitle as="h1" className={styles.title} role="display">
                         Choose Your Path
                     </ScreenTitle>
-                    <p className={styles.subtitle}>
-                        Start the recommended run now, or browse the full mode library when you want a different rule set.
-                    </p>
                 </header>
 
                 {launchMode ? renderLaunch(launchMode) : null}
@@ -356,6 +371,40 @@ const ChooseYourPathScreen = (): ReactElement => {
                                 />
                             </label>
                         </div>
+                        <div
+                            aria-label={CHOOSE_YOUR_PATH_COPY.groupFilterLabel}
+                            className={styles.groupChips}
+                            data-testid="choose-path-group-filter"
+                            role="group"
+                        >
+                            <button
+                                aria-pressed={group === null}
+                                className={`${styles.chip} ${group === null ? styles.chipOn : ''}`.trim()}
+                                onClick={() => {
+                                    playClick();
+                                    setGroup(null);
+                                }}
+                                type="button"
+                            >
+                                {CHOOSE_YOUR_PATH_COPY.groupFilterAll}
+                                <span className={styles.chipCount}>{browseModes.length}</span>
+                            </button>
+                            {RUN_MODE_GROUP_ORDER.filter((name) => (groupCounts.get(name) ?? 0) > 0).map((name) => (
+                                <button
+                                    aria-pressed={group === name}
+                                    className={`${styles.chip} ${group === name ? styles.chipOn : ''}`.trim()}
+                                    key={name}
+                                    onClick={() => {
+                                        playClick();
+                                        setGroup(group === name ? null : name);
+                                    }}
+                                    type="button"
+                                >
+                                    {RUN_MODE_GROUP_LABEL[name]}
+                                    <span className={styles.chipCount}>{groupCounts.get(name)}</span>
+                                </button>
+                            ))}
+                        </div>
                         <FittedGrid
                             ariaLabel="Modes"
                             emptyState={CHOOSE_YOUR_PATH_COPY.noSearchResults}
@@ -364,7 +413,7 @@ const ChooseYourPathScreen = (): ReactElement => {
                             keyForItem={(def) => def.id}
                             minColumnWidth={260}
                             renderItem={(def) => renderCard(def)}
-                            resetKey={query}
+                            resetKey={`${group ?? 'all'}:${query}`}
                             rowHeight={152}
                             testId="choose-path-mode-grid"
                         />

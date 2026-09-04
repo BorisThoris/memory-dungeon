@@ -39,7 +39,12 @@
     display: flex;
     flex-direction: column;
     gap: 1.1rem;
-    width: min(64rem, 100%);
+    /*
+     * 64rem is a reading column, and the header and poster keep it via their own max widths. The
+     * mode grid is not prose: at 64rem it fitted three 260px cards in one row, so a player saw
+     * three of twelve modes and had to page three times to reach the rest.
+     */
+    width: min(84rem, 100%);
     margin: 0 auto;
     padding: 1.4rem clamp(1.2rem, 4vw, 2.4rem) 1.2rem;
     /* No scrollbar: the browse grid pages and the launch panel shrinks on short screens. */
@@ -102,13 +107,6 @@
     font-size: clamp(2.35rem, 5.8vw, 4.65rem);
 }
 
-.subtitle {
-    margin: 0;
-    max-width: 52rem;
-    color: var(--theme-text-muted);
-    font-size: 1rem;
-    line-height: 1.4;
-}
 
 /* ---- recommended run --------------------------------------------------------------- */
 
@@ -117,7 +115,9 @@
     overflow: hidden;
     display: grid;
     align-items: end;
-    min-height: clamp(13rem, 30vh, 17rem);
+    /* The poster states the recommended run; the library below it needs the rest of the column. */
+    min-height: clamp(11rem, 24vh, 15rem);
+    max-height: 17rem;
     border-radius: var(--ui-radius-lg);
     border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 32%, var(--theme-card-border-muted));
     background: linear-gradient(180deg, rgba(255, 243, 217, 0.035), transparent 26%), var(--theme-panel-solid);
@@ -223,6 +223,51 @@
     outline: none;
     border-color: color-mix(in srgb, var(--theme-gold-bright) 46%, transparent);
     box-shadow: 0 0 0 2px color-mix(in srgb, var(--theme-cyan-bright) 45%, transparent);
+}
+
+.groupChips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+}
+
+.chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    min-height: 44px;
+    padding: 0 0.85rem;
+    border-radius: var(--ui-radius-pill);
+    border: 1px solid var(--theme-border);
+    background: rgba(8, 8, 12, 0.72);
+    color: var(--theme-text-muted);
+    font-family: var(--theme-ui-font);
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+}
+
+.chip:hover {
+    color: var(--theme-text);
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 34%, transparent);
+}
+
+.chip:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--theme-cyan-bright) 45%, transparent);
+}
+
+.chipOn {
+    color: var(--theme-ink);
+    background: var(--theme-gold-bright);
+    border-color: var(--theme-gold-bright);
+}
+
+.chipCount {
+    font-size: 0.75rem;
+    font-variant-numeric: tabular-nums;
+    opacity: 0.72;
 }
 
 .grid {
@@ -454,18 +499,13 @@
     .beats {
         display: none;
     }
-
-    .subtitle {
-        display: none;
-    }
 }
 
 /*
  * A phone held sideways gave this screen 375px of height, and it spent all of it on the
  * header: the recommended panel was sliced to a 25px sliver and the mode grid started
  * below the bottom edge, so there was no way to start a run at all. The width is there, so
- * the recommended run and the browse grid sit side by side and the header states its title
- * once, without the sentence that explains what the two halves already show.
+ * the recommended run and the browse grid sit side by side.
  */
 @media (max-height: 560px) and (min-width: 700px) {
     .column {
@@ -481,9 +521,6 @@
         grid-column: 1 / -1;
     }
 
-    .subtitle {
-        display: none;
-    }
 
     .title {
         font-size: clamp(1.4rem, 3.4vw, 2rem);

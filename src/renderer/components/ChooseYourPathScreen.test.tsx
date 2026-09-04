@@ -2,7 +2,7 @@ import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { getMutatorCatalogRows } from '../../shared/game-catalog';
-import { RUN_MODE_CATALOG } from '../../shared/run-mode-catalog';
+import { RUN_MODE_CATALOG, RUN_MODE_GROUP_LABEL } from '../../shared/run-mode-catalog';
 
 const escapeForRegExp = (value: string): string => value.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&');
 import ChooseYourPathScreen from './ChooseYourPathScreen';
@@ -65,6 +65,54 @@ describe('ChooseYourPathScreen', () => {
 
         await user.click(within(launcher).getByRole('button', { name: /^start run$/i }));
         expect(storeSpies.startRun).toHaveBeenCalledTimes(1);
+    });
+
+    it('reaches every mode from the group chips too, for a player who does not know a name', async () => {
+        // The filter answers "show me Pin vow". The chips answer "show me a puzzle", which is the
+        // question someone browsing actually has, and between them no mode is stranded on page 3.
+        const user = userEvent.setup();
+        render(<ChooseYourPathScreen />);
+
+        const launcher = screen.getByRole('region', { name: /recommended run/i });
+        const launchTitle = within(launcher).getByRole('heading', { level: 2 }).textContent?.trim() ?? '';
+        const chips = screen.getByRole('group', { name: /narrow by kind/i });
+        const browse = screen.getByRole('region', { name: /browse modes/i });
+
+        const unreachable: string[] = [];
+        for (const def of RUN_MODE_CATALOG.filter((mode) => mode.title !== launchTitle)) {
+            // Back to All first: a second press on the chip already held is a deselect, and this
+            // loop walks consecutive modes that share a group.
+            await user.click(within(chips).getByRole('button', { name: /^All/iu }));
+            await user.click(within(chips).getByRole('button', { name: new RegExp(`^${RUN_MODE_GROUP_LABEL[def.group]}`, 'iu') }));
+            const tile = within(browse).queryAllByRole('button', {
+                name: new RegExp(`^${escapeForRegExp(def.title)}\\. Open details\\.$`, 'iu')
+            });
+            if (tile.length === 0) {
+                unreachable.push(def.id);
+            }
+        }
+        expect(unreachable, 'catalog modes no group chip surfaces').toEqual([]);
+    });
+
+    it('counts what each chip holds, and adds up to the whole library', async () => {
+        const user = userEvent.setup();
+        render(<ChooseYourPathScreen />);
+
+        const chips = screen.getByRole('group', { name: /narrow by kind/i });
+        const all = within(chips).getByRole('button', { name: /^All/iu });
+        const total = Number(all.textContent?.replace(/\D/gu, ''));
+        const perGroup = within(chips)
+            .getAllByRole('button')
+            .filter((button) => button !== all)
+            .map((button) => Number(button.textContent?.replace(/\D/gu, '')));
+        expect(perGroup.reduce((sum, n) => sum + n, 0)).toBe(total);
+
+        // Pressing a chip twice returns to the whole library rather than stranding the player.
+        const first = within(chips).getAllByRole('button').filter((button) => button !== all)[0]!;
+        await user.click(first);
+        expect(first).toHaveAttribute('aria-pressed', 'true');
+        await user.click(first);
+        expect(all).toHaveAttribute('aria-pressed', 'true');
     });
 
     it('lets a player reach every catalog mode through the filter, paged grid or not', async () => {

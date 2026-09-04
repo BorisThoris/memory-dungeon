@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2495,
-    "codeFileCount": 965,
-    "exportedSymbolCount": 3535,
+    "trackedFileCount": 2497,
+    "codeFileCount": 967,
+    "exportedSymbolCount": 3540,
     "contentItemCount": 63,
     "mechanicCount": 136,
     "stateFieldCount": 144,
-    "relationshipCount": 10359
+    "relationshipCount": 10367
   },
   "inventory": [
     {
@@ -2320,7 +2320,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 36714,
-      "sha256": "353838d00b60616055bcebe7d209f9cb15db6d6344596c72a247f6761328b913"
+      "sha256": "fe9e3917dc6472a3e5ffcccfd998c90dc71fd9ce7b0857cf2a3ad35172f7122c"
     },
     {
       "path": "docs/UI_RETHINK_PLAN.md",
@@ -7497,20 +7497,20 @@
     {
       "path": "src/renderer/components/ChooseYourPathScreen.module.css",
       "category": "source",
-      "bytes": 11320,
-      "sha256": "e628eca387a071f62afa0dfc3a8024deffc1f491904872c3930f289b355e27bc"
+      "bytes": 12379,
+      "sha256": "e46b41098cf562f3b284df109b48c755e4810f07202307b2e75a91c8cb23bcc7"
     },
     {
       "path": "src/renderer/components/ChooseYourPathScreen.test.tsx",
       "category": "test",
-      "bytes": 8044,
-      "sha256": "5e030c9208c45f5f31afd4d676b221118063c81b585515f8ac42a7d6eb2fefe5"
+      "bytes": 10738,
+      "sha256": "c99d1ff36e170351adacb0b4adc2f6c7968a9fd70ebbd66a894bf332c40efc1a"
     },
     {
       "path": "src/renderer/components/ChooseYourPathScreen.tsx",
       "category": "source",
-      "bytes": 21754,
-      "sha256": "f80b9ba99c8ae2cc2800a6a897099213b07254dc8acec3e3ab682f631c72326f"
+      "bytes": 24348,
+      "sha256": "ab7a641cb4c93571c3db5a43e7183f04a8addceb7aecc1ee7153b7bdccbe0983"
     },
     {
       "path": "src/renderer/components/chooseYourPathScreenModel.ts",
@@ -9015,8 +9015,8 @@
     {
       "path": "src/renderer/copy/screenCopy.ts",
       "category": "source",
-      "bytes": 1416,
-      "sha256": "0d3dc1deabeb5299b91250800917e0ed921eea76209a39ad0eeebe264ad26c67"
+      "bytes": 1655,
+      "sha256": "700e4781eb41aeaa764e6a8db81afde251aa5058cac800df191ea76d7dd1f771"
     },
     {
       "path": "src/renderer/copy/settingsHints.ts",
@@ -9975,8 +9975,20 @@
     {
       "path": "src/renderer/ui/FittedGrid.tsx",
       "category": "source",
-      "bytes": 5849,
-      "sha256": "45b639b973e8604a7d82234700a6984fea31898eba9336de11c78fa0f601b578"
+      "bytes": 5541,
+      "sha256": "98ffc9c456011f93f1253156e72ded623cc2ce0a02865d38862bf05bd999c3ba"
+    },
+    {
+      "path": "src/renderer/ui/fittedGridFit.test.ts",
+      "category": "test",
+      "bytes": 2232,
+      "sha256": "1b77ed5edf4c874364687992190bc289b0b1f49b82075214a58b90834bd4c212"
+    },
+    {
+      "path": "src/renderer/ui/fittedGridFit.ts",
+      "category": "source",
+      "bytes": 2313,
+      "sha256": "86c1dcc4337c9b48fc7f1c442effbd1b89d4286976819be42aab99e014b587e2"
     },
     {
       "path": "src/renderer/ui/gameplayIcons.tsx",
@@ -17020,7 +17032,7 @@
       "path": "src/renderer/components/ChooseYourPathScreen.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 164,
+      "lineCount": 212,
       "imports": [
         "file:src/renderer/components/ChooseYourPathScreen.tsx",
         "file:src/renderer/components/chooseYourPathScreenModel.ts",
@@ -17035,7 +17047,7 @@
       "path": "src/renderer/components/ChooseYourPathScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 501,
+      "lineCount": 550,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/assets/ui/modeArt.ts",
@@ -21322,7 +21334,7 @@
       "path": "src/renderer/copy/screenCopy.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 28,
+      "lineCount": 32,
       "imports": [],
       "exports": [
         "symbol:src/renderer/copy/screenCopy.ts#CHOOSE_YOUR_PATH_COPY",
@@ -23909,13 +23921,45 @@
       "path": "src/renderer/ui/FittedGrid.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 149,
-      "imports": [],
+      "lineCount": 144,
+      "imports": [
+        "file:src/renderer/ui/fittedGridFit.ts"
+      ],
       "exports": [
         "symbol:src/renderer/ui/FittedGrid.tsx#default",
         "symbol:src/renderer/ui/FittedGrid.tsx#FittedGridProps"
       ],
       "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/ui/fittedGridFit.test.ts",
+      "path": "src/renderer/ui/fittedGridFit.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 55,
+      "imports": [
+        "file:src/renderer/ui/fittedGridFit.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/ui/fittedGridFit.ts",
+      "path": "src/renderer/ui/fittedGridFit.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 60,
+      "imports": [],
+      "exports": [
+        "symbol:src/renderer/ui/fittedGridFit.ts#computeGridFit",
+        "symbol:src/renderer/ui/fittedGridFit.ts#GridFit",
+        "symbol:src/renderer/ui/fittedGridFit.ts#GridFitInput",
+        "symbol:src/renderer/ui/fittedGridFit.ts#growRowHeight",
+        "symbol:src/renderer/ui/fittedGridFit.ts#MIN_FITTED_ROW_HEIGHT"
+      ],
+      "testedBy": [
+        "file:src/renderer/ui/fittedGridFit.test.ts"
+      ]
     },
     {
       "id": "file:src/renderer/ui/gameplayIcons.tsx",
@@ -36638,8 +36682,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/ChooseYourPathScreen.tsx",
-      "line": 500,
-      "endLine": 500
+      "line": 549,
+      "endLine": 549
     },
     {
       "id": "symbol:src/renderer/components/chooseYourPathScreenModel.ts#buildMeditationPickMutatorRows",
@@ -41271,23 +41315,23 @@
       "kind": "value",
       "file": "src/renderer/copy/screenCopy.ts",
       "line": 8,
-      "endLine": 14
+      "endLine": 18
     },
     {
       "id": "symbol:src/renderer/copy/screenCopy.ts#GAME_OVER_LABELS",
       "name": "GAME_OVER_LABELS",
       "kind": "value",
       "file": "src/renderer/copy/screenCopy.ts",
-      "line": 16,
-      "endLine": 20
+      "line": 20,
+      "endLine": 24
     },
     {
       "id": "symbol:src/renderer/copy/screenCopy.ts#SHOP_COPY",
       "name": "SHOP_COPY",
       "kind": "value",
       "file": "src/renderer/copy/screenCopy.ts",
-      "line": 22,
-      "endLine": 27
+      "line": 26,
+      "endLine": 31
     },
     {
       "id": "symbol:src/renderer/copy/settingsHints.ts#SETTINGS_FOOTER_HINT",
@@ -43582,16 +43626,56 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/ui/FittedGrid.tsx",
-      "line": 148,
-      "endLine": 148
+      "line": 143,
+      "endLine": 143
     },
     {
       "id": "symbol:src/renderer/ui/FittedGrid.tsx#FittedGridProps",
       "name": "FittedGridProps",
       "kind": "interface",
       "file": "src/renderer/ui/FittedGrid.tsx",
+      "line": 11,
+      "endLine": 27
+    },
+    {
+      "id": "symbol:src/renderer/ui/fittedGridFit.ts#computeGridFit",
+      "name": "computeGridFit",
+      "kind": "value",
+      "file": "src/renderer/ui/fittedGridFit.ts",
+      "line": 32,
+      "endLine": 46
+    },
+    {
+      "id": "symbol:src/renderer/ui/fittedGridFit.ts#GridFit",
+      "name": "GridFit",
+      "kind": "interface",
+      "file": "src/renderer/ui/fittedGridFit.ts",
+      "line": 18,
+      "endLine": 23
+    },
+    {
+      "id": "symbol:src/renderer/ui/fittedGridFit.ts#GridFitInput",
+      "name": "GridFitInput",
+      "kind": "interface",
+      "file": "src/renderer/ui/fittedGridFit.ts",
       "line": 10,
-      "endLine": 26
+      "endLine": 16
+    },
+    {
+      "id": "symbol:src/renderer/ui/fittedGridFit.ts#growRowHeight",
+      "name": "growRowHeight",
+      "kind": "value",
+      "file": "src/renderer/ui/fittedGridFit.ts",
+      "line": 52,
+      "endLine": 59
+    },
+    {
+      "id": "symbol:src/renderer/ui/fittedGridFit.ts#MIN_FITTED_ROW_HEIGHT",
+      "name": "MIN_FITTED_ROW_HEIGHT",
+      "kind": "value",
+      "file": "src/renderer/ui/fittedGridFit.ts",
+      "line": 30,
+      "endLine": 30
     },
     {
       "id": "symbol:src/renderer/ui/gameplayIcons.tsx#GameplayDestroyIcon",
@@ -81411,6 +81495,36 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/ui/fittedGridFit.ts->symbol:src/renderer/ui/fittedGridFit.ts#computeGridFit",
+      "source": "file:src/renderer/ui/fittedGridFit.ts",
+      "target": "symbol:src/renderer/ui/fittedGridFit.ts#computeGridFit",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/ui/fittedGridFit.ts->symbol:src/renderer/ui/fittedGridFit.ts#GridFit",
+      "source": "file:src/renderer/ui/fittedGridFit.ts",
+      "target": "symbol:src/renderer/ui/fittedGridFit.ts#GridFit",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/ui/fittedGridFit.ts->symbol:src/renderer/ui/fittedGridFit.ts#GridFitInput",
+      "source": "file:src/renderer/ui/fittedGridFit.ts",
+      "target": "symbol:src/renderer/ui/fittedGridFit.ts#GridFitInput",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/ui/fittedGridFit.ts->symbol:src/renderer/ui/fittedGridFit.ts#growRowHeight",
+      "source": "file:src/renderer/ui/fittedGridFit.ts",
+      "target": "symbol:src/renderer/ui/fittedGridFit.ts#growRowHeight",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/ui/fittedGridFit.ts->symbol:src/renderer/ui/fittedGridFit.ts#MIN_FITTED_ROW_HEIGHT",
+      "source": "file:src/renderer/ui/fittedGridFit.ts",
+      "target": "symbol:src/renderer/ui/fittedGridFit.ts#MIN_FITTED_ROW_HEIGHT",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/ui/gameplayIcons.tsx->symbol:src/renderer/ui/gameplayIcons.tsx#GameplayDestroyIcon",
       "source": "file:src/renderer/ui/gameplayIcons.tsx",
       "target": "symbol:src/renderer/ui/gameplayIcons.tsx#GameplayDestroyIcon",
@@ -107992,6 +108106,18 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/ui/FittedGrid.tsx->src/renderer/ui/fittedGridFit.ts",
+      "source": "file:src/renderer/ui/FittedGrid.tsx",
+      "target": "file:src/renderer/ui/fittedGridFit.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/ui/fittedGridFit.test.ts->src/renderer/ui/fittedGridFit.ts",
+      "source": "file:src/renderer/ui/fittedGridFit.test.ts",
+      "target": "file:src/renderer/ui/fittedGridFit.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/ui/index.ts->src/renderer/ui/AccentBanner.tsx",
       "source": "file:src/renderer/ui/index.ts",
       "target": "file:src/renderer/ui/AccentBanner.tsx",
@@ -126149,6 +126275,12 @@
       "id": "tested_by:src/renderer/styles/theme.ts->file:src/renderer/styles/theme.wcag.test.ts",
       "source": "file:src/renderer/styles/theme.ts",
       "target": "file:src/renderer/styles/theme.wcag.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/ui/fittedGridFit.ts->file:src/renderer/ui/fittedGridFit.test.ts",
+      "source": "file:src/renderer/ui/fittedGridFit.ts",
+      "target": "file:src/renderer/ui/fittedGridFit.test.ts",
       "kind": "tested_by"
     },
     {

@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import styles from './FittedGrid.module.css';
+import { computeGridFit, growRowHeight, type GridFit } from './fittedGridFit';
 
 /**
  * A grid that never scrolls. It measures the space it was given, works out how many cards fit,
@@ -41,7 +42,7 @@ const FittedGrid = <T,>({
     testId
 }: FittedGridProps<T>) => {
     const frameRef = useRef<HTMLDivElement | null>(null);
-    const [frameFit, setFrame] = useState<{ columns: number; height: number; rows: number } | null>(null);
+    const [frameFit, setFrame] = useState<(GridFit & { height: number }) | null>(null);
     // The page is stored with the signature it belongs to, so a filter or section change shows
     // page one without an effect and without ever painting the previous page.
     const [pageState, setPageState] = useState({ page: 0, signature: '' });
@@ -55,9 +56,10 @@ const FittedGrid = <T,>({
         if (width <= 0 || height <= 0) {
             return;
         }
-        const columns = Math.max(1, Math.floor((width + gap) / (minColumnWidth + gap)));
-        const rows = Math.max(1, Math.floor((height + gap) / (rowHeight + gap)));
-        setFrame({ columns, height, rows });
+        setFrame({
+            ...computeGridFit({ frameHeight: height, frameWidth: width, gap, minColumnWidth, rowHeight }),
+            height
+        });
     }, [gap, minColumnWidth, rowHeight]);
 
     useEffect(() => {
@@ -87,15 +89,8 @@ const FittedGrid = <T,>({
         return <div className={styles.empty}>{emptyState}</div>;
     }
 
-    /*
-     * Grow the rows to use the space a short page leaves behind, capped so three cards do not
-     * become three billboards. Without this a five-card section sits in the top third.
-     */
-    const usedRows = frameFit ? Math.max(1, Math.ceil(visible.length / frameFit.columns)) : 1;
-    const grownRowHeight =
-        frameFit && usedRows < frameFit.rows
-            ? Math.min(rowHeight * 1.6, Math.floor((frameFit.height - gap * (usedRows - 1)) / usedRows))
-            : rowHeight;
+    // Grow the rows to use the space a short page leaves behind; never past the frame.
+    const renderedRowHeight = frameFit ? growRowHeight(frameFit, visible.length, gap, frameFit.height) : rowHeight;
 
     return (
         <div className={styles.root}>
@@ -106,7 +101,7 @@ const FittedGrid = <T,>({
                     data-testid={testId}
                     style={{
                         gap: `${gap}px`,
-                        gridAutoRows: `${Math.max(rowHeight, grownRowHeight)}px`,
+                        gridAutoRows: `${renderedRowHeight}px`,
                         gridTemplateColumns: `repeat(auto-fill, minmax(${minColumnWidth}px, 1fr))`
                     }}
                 >

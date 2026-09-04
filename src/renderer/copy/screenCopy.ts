@@ -9,6 +9,10 @@ export const CHOOSE_YOUR_PATH_COPY = {
     dungeonBlurb: 'A clean dungeon descent: procedural floors, route choices, shops, and relic milestones.',
     guidedBlurb:
         'Start with a guided first room: match the marked pair, clear the floor, then choose what the next room changes.',
+    /** The "no group picked" chip on the library's group filter. */
+    groupFilterAll: 'All',
+    /* Not "Filter modes ...": the search box owns that label, and two of them make both ambiguous. */
+    groupFilterLabel: 'Narrow by kind',
     mutatorsSubtitle: 'Toggle mutators for a focused study run, or start calm with a clean ruleset.',
     noSearchResults: 'No modes match this search.'
 } as const;
