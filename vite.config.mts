@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url';
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vitest/config';
 import { visualizer } from 'rollup-plugin-visualizer';
+import { buildContentSecurityPolicy } from './src/shared/content-security-policy';
 /* Plain ESM helper (`.mjs`); no `allowJs` typings -- Vite load-time only. */
 // @ts-expect-error TS7016
 import { viteDevBlueprintApi } from './scripts/vite-dev-blueprint-api.mjs';
@@ -16,6 +17,19 @@ const rendererOutDir = (process.env.VITE_OUT_DIR ?? 'dist').trim() || 'dist';
 const boardWebglPerfSample = path.resolve(__dirname, 'src/renderer/dev/boardWebglPerfSample.ts');
 const boardWebglPerfSampleStub = path.resolve(__dirname, 'src/renderer/dev/boardWebglPerfSample.stub.ts');
 
+/**
+ * The policy in `index.html` is a placeholder so the shipped one can differ from the served one.
+ * Vite copies the HTML verbatim, so a dev allowance written into the file ships with the game.
+ */
+const injectContentSecurityPolicy = (isDevServer: boolean) => ({
+    name: 'memory-dungeon-content-security-policy',
+    transformIndexHtml: {
+        order: 'pre' as const,
+        handler: (html: string): string =>
+            html.replace('%CONTENT_SECURITY_POLICY%', buildContentSecurityPolicy({ allowDevServer: isDevServer }))
+    }
+});
+
 const pruneWipPublicAssetsFromBuild = () => ({
     name: 'memory-dungeon-prune-wip-public-assets',
     closeBundle(): void {
@@ -26,6 +40,7 @@ const pruneWipPublicAssetsFromBuild = () => ({
 
 export default defineConfig(({ mode }) => ({
     plugins: [
+        injectContentSecurityPolicy(mode !== 'production'),
         viteDevBlueprintApi(),
         pruneWipPublicAssetsFromBuild(),
         react(),

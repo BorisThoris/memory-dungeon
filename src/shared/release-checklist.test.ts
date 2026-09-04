@@ -16,6 +16,7 @@ import { quarantineFileName, quarantineSaveFile } from '../main/save-recovery';
 import { HARDCODED_COPY_BASELINE, scanComponentCopy } from '../../scripts/copy-locality';
 import { findUnrunGates, readScripts } from '../../scripts/gate-reachability';
 import { BRIDGE_EXEMPTIONS, findUnusedBridgeMethods } from '../../scripts/bridge-reachability';
+import { buildContentSecurityPolicy } from './content-security-policy';
 import { renderAchievementRows, renderRichPresenceRows } from '../../scripts/steam-partner-config';
 import {
     findUnreachableMembers,
@@ -101,6 +102,15 @@ const VERIFIERS: Record<string, () => void> = {
 
         expect(scripts['gate:package-hygiene']).toMatch(/knip/);
         expect(scripts.fullcheck).toContain('gate:package-hygiene');
+    },
+    'shipped-csp': () => {
+        // Vite copies index.html verbatim, so a hot-reload allowance written there ships with the
+        // game: a packaged renderer allowed to open a websocket to any local port.
+        const shipped = buildContentSecurityPolicy({ allowDevServer: false });
+
+        expect(shipped).not.toMatch(/wss?:\/\//u);
+        expect(shipped).toContain("object-src 'none'");
+        expect(buildContentSecurityPolicy({ allowDevServer: true })).toContain('ws://localhost:*');
     },
     'bridge-surface': () => {
         // Everything on the bridge is callable by anything in the renderer, so an uncalled method

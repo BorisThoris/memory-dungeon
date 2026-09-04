@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2488,
-    "codeFileCount": 960,
-    "exportedSymbolCount": 3529,
+    "trackedFileCount": 2491,
+    "codeFileCount": 962,
+    "exportedSymbolCount": 3532,
     "contentItemCount": 63,
     "mechanicCount": 136,
     "stateFieldCount": 144,
-    "relationshipCount": 10330
+    "relationshipCount": 10339
   },
   "inventory": [
     {
@@ -2259,8 +2259,8 @@
     {
       "path": "docs/RELEASE_CHECKLIST.md",
       "category": "documentation",
-      "bytes": 4606,
-      "sha256": "4a8f981e9e6bf284fc49a611ae61a01107556e7aa1f9c730c15a3933d1ec468b"
+      "bytes": 4758,
+      "sha256": "eb5fa93bacc6b3423a44774f89d6c44c954bba4da69680a14cf0fb27db9cdbb3"
     },
     {
       "path": "docs/RELIC_ROSTER.md",
@@ -2320,7 +2320,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 36714,
-      "sha256": "9ae32edafe89d5584650d40c69a6f72a07aaf50e8ea35eabe90245a40e9055ae"
+      "sha256": "3fe63ca0b36763339dee2bc0e8e4297376a43ac0ba36c5eabe6e74e8d49bbebf"
     },
     {
       "path": "docs/UI_RETHINK_PLAN.md",
@@ -3897,8 +3897,8 @@
     {
       "path": "index.html",
       "category": "other",
-      "bytes": 848,
-      "sha256": "96445c100f9c806f0c2dc6ddb4fe2742b0b3599c81c64885bce14230921bb434"
+      "bytes": 707,
+      "sha256": "6a278beff11eeabc7dc7a74404406377e0f13aa1d63e3f8ef45dfdbbd3803f37"
     },
     {
       "path": "knip.json",
@@ -3963,8 +3963,8 @@
     {
       "path": "package.json",
       "category": "configuration",
-      "bytes": 29046,
-      "sha256": "d1c718524935397f277462720dce258874c04715a15d6b311086d83a4cbe765e"
+      "bytes": 29167,
+      "sha256": "4a4bfebb5cf8619b8ab4c948c04149e8aaca994de01e939371d7c8b290482de6"
     },
     {
       "path": "packages/notifications/package.json",
@@ -4489,6 +4489,12 @@
       "sha256": "ea70b299156be747a49da9c8f9c2b31c8bec3cdb978811a05167928e50f700dd"
     },
     {
+      "path": "scripts/check-built-csp.mjs",
+      "category": "script",
+      "bytes": 1693,
+      "sha256": "25bac87eec8241d223aad53cfecadcb63d054ac888c089b85d3f1945830c8c06"
+    },
+    {
       "path": "scripts/check-depcheck-clean.mjs",
       "category": "script",
       "bytes": 1694,
@@ -4785,8 +4791,8 @@
     {
       "path": "src/main/renderer-csp.test.ts",
       "category": "test",
-      "bytes": 983,
-      "sha256": "9ea2515cb1a7f0bba5fdf87a47f3bb32b19f2e83ab3d0bb9f117b4cb7857102d"
+      "bytes": 2031,
+      "sha256": "4aaa04dd1feba8fcc0ba041832db7d3163eca2672c9169a5e0931e4150690eb1"
     },
     {
       "path": "src/main/renderer-loader.test.ts",
@@ -10453,6 +10459,18 @@
       "sha256": "464456fbef307af846005a722d454b488f38840c7f900e04c4c4142195754594"
     },
     {
+      "path": "src/shared/content-security-policy.test.ts",
+      "category": "test",
+      "bytes": 3212,
+      "sha256": "cd18c91ebdb6e789fe3ebb281371ee9ff56d50885f6b9ec1a3031603bbc0af6a"
+    },
+    {
+      "path": "src/shared/content-security-policy.ts",
+      "category": "source",
+      "bytes": 1892,
+      "sha256": "d889c2ed81a27d8215e6906cba4d07ed20944112651e156fdaacb9f3b393f3fd"
+    },
+    {
       "path": "src/shared/contracts.ts",
       "category": "source",
       "bytes": 47575,
@@ -11781,14 +11799,14 @@
     {
       "path": "src/shared/release-checklist.test.ts",
       "category": "test",
-      "bytes": 12683,
-      "sha256": "125f568f4fd4c52880eda9ffebab8bf9859814389a0898d17399b043892f7879"
+      "bytes": 13259,
+      "sha256": "b4ea73b66ea72962b2ba87c40d3a486f4a906ecdd457fe4febadc7447d015c83"
     },
     {
       "path": "src/shared/release-checklist.ts",
       "category": "source",
-      "bytes": 9963,
-      "sha256": "77bd38ab20a6104500d47518f313c6c5e6a1df15e436c6b8b2f0c87f137d946b"
+      "bytes": 10216,
+      "sha256": "afad13826edbf18dec4292dd2a5f10c1eff614eef9bf6ef3d3f33593fe693ef7"
     },
     {
       "path": "src/shared/relic-favor-rules.test.ts",
@@ -14919,8 +14937,8 @@
     {
       "path": "vite.config.mts",
       "category": "configuration",
-      "bytes": 4688,
-      "sha256": "bf25f0b8cc711029bf600355a046d5c0df28dfc02324212e457428445fde0192"
+      "bytes": 5376,
+      "sha256": "2eb78b85a9e09be587e280a81dd42332336d463a26e5204cf3618691ea84fdb1"
     },
     {
       "path": "vitest.setup.ts",
@@ -15203,8 +15221,10 @@
       "path": "src/main/renderer-csp.test.ts",
       "layer": "main",
       "role": "test",
-      "lineCount": 22,
-      "imports": [],
+      "lineCount": 40,
+      "imports": [
+        "file:src/shared/content-security-policy.ts"
+      ],
       "exports": [],
       "testedBy": []
     },
@@ -25388,6 +25408,36 @@
       ]
     },
     {
+      "id": "file:src/shared/content-security-policy.test.ts",
+      "path": "src/shared/content-security-policy.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 73,
+      "imports": [
+        "file:src/shared/content-security-policy.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/shared/content-security-policy.ts",
+      "path": "src/shared/content-security-policy.ts",
+      "layer": "shared",
+      "role": "production",
+      "lineCount": 46,
+      "imports": [],
+      "exports": [
+        "symbol:src/shared/content-security-policy.ts#buildContentSecurityPolicy",
+        "symbol:src/shared/content-security-policy.ts#ContentSecurityPolicyOptions",
+        "symbol:src/shared/content-security-policy.ts#policyAllowsDevServer"
+      ],
+      "testedBy": [
+        "file:src/main/renderer-csp.test.ts",
+        "file:src/shared/content-security-policy.test.ts",
+        "file:src/shared/release-checklist.test.ts"
+      ]
+    },
+    {
       "id": "file:src/shared/contracts.ts",
       "path": "src/shared/contracts.ts",
       "layer": "shared",
@@ -30630,7 +30680,7 @@
       "path": "src/shared/release-checklist.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 240,
+      "lineCount": 250,
       "imports": [
         "file:src/main/crash-log.ts",
         "file:src/main/save-recovery.ts",
@@ -30639,6 +30689,7 @@
         "file:src/renderer/copy/appErrorBoundary.ts",
         "file:src/renderer/copy/saveRecoveryNotice.ts",
         "file:src/renderer/diagnostics/rendererErrorHooks.ts",
+        "file:src/shared/content-security-policy.ts",
         "file:src/shared/desktop-api-boundary.ts",
         "file:src/shared/game.ts",
         "file:src/shared/gamepad-input.ts",
@@ -30657,7 +30708,7 @@
       "path": "src/shared/release-checklist.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 263,
+      "lineCount": 270,
       "imports": [],
       "exports": [
         "symbol:src/shared/release-checklist.ts#RELEASE_CHECKLIST",
@@ -46241,6 +46292,30 @@
       "endLine": 35
     },
     {
+      "id": "symbol:src/shared/content-security-policy.ts#buildContentSecurityPolicy",
+      "name": "buildContentSecurityPolicy",
+      "kind": "value",
+      "file": "src/shared/content-security-policy.ts",
+      "line": 26,
+      "endLine": 41
+    },
+    {
+      "id": "symbol:src/shared/content-security-policy.ts#ContentSecurityPolicyOptions",
+      "name": "ContentSecurityPolicyOptions",
+      "kind": "interface",
+      "file": "src/shared/content-security-policy.ts",
+      "line": 21,
+      "endLine": 24
+    },
+    {
+      "id": "symbol:src/shared/content-security-policy.ts#policyAllowsDevServer",
+      "name": "policyAllowsDevServer",
+      "kind": "value",
+      "file": "src/shared/content-security-policy.ts",
+      "line": 44,
+      "endLine": 45
+    },
+    {
       "id": "symbol:src/shared/contracts.ts#AchievementId",
       "name": "AchievementId",
       "kind": "type",
@@ -56670,15 +56745,15 @@
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
       "line": 32,
-      "endLine": 215
+      "endLine": 222
     },
     {
       "id": "symbol:src/shared/release-checklist.ts#releaseChecklistByOwner",
       "name": "releaseChecklistByOwner",
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
-      "line": 221,
-      "endLine": 222
+      "line": 228,
+      "endLine": 229
     },
     {
       "id": "symbol:src/shared/release-checklist.ts#ReleaseChecklistItem",
@@ -56701,16 +56776,16 @@
       "name": "releaseChecklistSections",
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
-      "line": 217,
-      "endLine": 219
+      "line": 224,
+      "endLine": 226
     },
     {
       "id": "symbol:src/shared/release-checklist.ts#renderReleaseChecklistMarkdown",
       "name": "renderReleaseChecklistMarkdown",
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
-      "line": 236,
-      "endLine": 262
+      "line": 243,
+      "endLine": 269
     },
     {
       "id": "symbol:src/shared/relic-favor-rules.ts#gainRelicFavor",
@@ -83316,6 +83391,24 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/content-security-policy.ts->symbol:src/shared/content-security-policy.ts#buildContentSecurityPolicy",
+      "source": "file:src/shared/content-security-policy.ts",
+      "target": "symbol:src/shared/content-security-policy.ts#buildContentSecurityPolicy",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/content-security-policy.ts->symbol:src/shared/content-security-policy.ts#ContentSecurityPolicyOptions",
+      "source": "file:src/shared/content-security-policy.ts",
+      "target": "symbol:src/shared/content-security-policy.ts#ContentSecurityPolicyOptions",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/content-security-policy.ts->symbol:src/shared/content-security-policy.ts#policyAllowsDevServer",
+      "source": "file:src/shared/content-security-policy.ts",
+      "target": "symbol:src/shared/content-security-policy.ts#policyAllowsDevServer",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/contracts.ts->symbol:src/shared/contracts.ts#AchievementId",
       "source": "file:src/shared/contracts.ts",
       "target": "symbol:src/shared/contracts.ts#AchievementId",
@@ -99181,6 +99274,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/main/renderer-csp.test.ts->src/shared/content-security-policy.ts",
+      "source": "file:src/main/renderer-csp.test.ts",
+      "target": "file:src/shared/content-security-policy.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/main/renderer-loader.test.ts->src/main/renderer-loader.ts",
       "source": "file:src/main/renderer-loader.test.ts",
       "target": "file:src/main/renderer-loader.ts",
@@ -109339,6 +109438,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/content-security-policy.test.ts->src/shared/content-security-policy.ts",
+      "source": "file:src/shared/content-security-policy.test.ts",
+      "target": "file:src/shared/content-security-policy.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/copy-tone.test.ts->src/shared/copy-tone.ts",
       "source": "file:src/shared/copy-tone.test.ts",
       "target": "file:src/shared/copy-tone.ts",
@@ -114358,6 +114463,12 @@
       "id": "imports:src/shared/release-checklist.test.ts->src/renderer/diagnostics/rendererErrorHooks.ts",
       "source": "file:src/shared/release-checklist.test.ts",
       "target": "file:src/renderer/diagnostics/rendererErrorHooks.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/release-checklist.test.ts->src/shared/content-security-policy.ts",
+      "source": "file:src/shared/release-checklist.test.ts",
+      "target": "file:src/shared/content-security-policy.ts",
       "kind": "imports"
     },
     {
@@ -126290,6 +126401,24 @@
       "id": "tested_by:src/shared/content-lock.ts->file:src/shared/content-lock.test.ts",
       "source": "file:src/shared/content-lock.ts",
       "target": "file:src/shared/content-lock.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/content-security-policy.ts->file:src/main/renderer-csp.test.ts",
+      "source": "file:src/shared/content-security-policy.ts",
+      "target": "file:src/main/renderer-csp.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/content-security-policy.ts->file:src/shared/content-security-policy.test.ts",
+      "source": "file:src/shared/content-security-policy.ts",
+      "target": "file:src/shared/content-security-policy.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/content-security-policy.ts->file:src/shared/release-checklist.test.ts",
+      "source": "file:src/shared/content-security-policy.ts",
+      "target": "file:src/shared/release-checklist.test.ts",
       "kind": "tested_by"
     },
     {

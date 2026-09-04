@@ -108,6 +108,13 @@ export const RELEASE_CHECKLIST: readonly ReleaseChecklistItem[] = [
         section: 'Diagnostics'
     },
     {
+        evidence: 'src/shared/content-security-policy.ts',
+        id: 'shipped-csp',
+        label: 'The packaged build ships no dev-server permissions in its content security policy',
+        owner: 'repo',
+        section: 'Diagnostics'
+    },
+    {
         evidence: 'scripts/bridge-reachability.ts',
         id: 'bridge-surface',
         label: 'The preload bridge exposes nothing the renderer does not call',
