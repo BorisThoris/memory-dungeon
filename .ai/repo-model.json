@@ -4527,8 +4527,8 @@
     {
       "path": "scripts/e2e-locator-audit.ts",
       "category": "script",
-      "bytes": 4006,
-      "sha256": "789ccec250c0affd19ff5a6682a33bf48779885bed0419e8f08f1225fa8848ca"
+      "bytes": 5372,
+      "sha256": "d5109c231375499ac19ca1b88f16c2860b070ecb0955f4b5bb5c8ba7220f4a0b"
     },
     {
       "path": "scripts/extract-endproduct-wip-assets.mjs",
@@ -10935,8 +10935,8 @@
     {
       "path": "src/shared/e2e-locator-audit.test.ts",
       "category": "test",
-      "bytes": 2118,
-      "sha256": "e7b02089346da205ba0166e9063013b4fd15e99314211272f0d37975dd31113f"
+      "bytes": 3250,
+      "sha256": "95109e21f8c4394aca42129b283ce201c2534ca6f745b732ca66fac432f031f3"
     },
     {
       "path": "src/shared/economy-ledger.test.ts",
@@ -27306,7 +27306,7 @@
       "path": "src/shared/e2e-locator-audit.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 53,
+      "lineCount": 74,
       "imports": [],
       "exports": [],
       "testedBy": []

@@ -18,8 +18,13 @@ import { join } from 'node:path';
 /**
  * Locators known to be dead and not yet repaired. The number fails on growth rather than on the
  * debt itself: a gate that cannot pass is a gate nobody runs, which is how this rot started.
+ *
+ * Twelve, across seven ids, each confirmed absent from every file under `src`:
+ * floor-clear-payoff-stack, hud-hazard-tiles, hud-in-run-cause-strip, hud-perfect-memory,
+ * hud-secondary-stat-drawer, hud-touch-detail-rows, power-teaching-panel. All are HUD and interlude
+ * panels removed in the shell rebuild whose specs were never updated.
  */
-export const DEAD_E2E_LOCATOR_BASELINE = 18;
+export const DEAD_E2E_LOCATOR_BASELINE = 12;
 
 const walk = (dir: string, out: string[] = []): string[] => {
     for (const entry of readdirSync(dir)) {
@@ -34,21 +39,37 @@ const walk = (dir: string, out: string[] = []): string[] => {
 };
 
 export interface RenderedTestIds {
-    /** Ids written as plain strings. */
+    /** Every quoted string the source contains, which is where a written test id will be. */
     readonly literals: Set<string>;
     /** Prefixes of ids built from a template, e.g. `side-room-choice-${choice.id}`. */
     readonly prefixes: string[];
 }
 
+/**
+ * Collects every quoted string rather than parsing the attribute around it. A test id reaches the
+ * DOM through more shapes than are worth pattern-matching: a plain attribute, a braced literal, a
+ * `testId` prop, an object property in a data catalog, a ternary picking between two. Trying to
+ * enumerate those produced three separate false alarms; asking only whether the string is written
+ * anywhere in the source produces none, and still catches an id that exists nowhere at all — which
+ * is the rot this is for.
+ */
 export const readRenderedTestIds = (sources: readonly string[]): RenderedTestIds => {
     const literals = new Set<string>();
     const prefixes: string[] = [];
     for (const source of sources) {
-        for (const match of source.matchAll(/(?:data-testid|testId)\s*=\s*(?:\{\s*)?['"]([^'"]+)['"]/gu)) {
+        for (const match of source.matchAll(/['"]([A-Za-z][\w-]*)['"]/gu)) {
             literals.add(match[1] ?? '');
         }
         for (const match of source.matchAll(/(?:data-testid|testId)\s*=\s*\{\s*`([^`$]*)\$\{/gu)) {
             prefixes.push(match[1] ?? '');
+        }
+        /*
+         * A template can start with the variable rather than a literal — SectionRail writes
+         * `${idPrefix}-${option.id}` — so the prefix is only knowable from the prop its callers
+         * pass. Collect those too, or every id such a component renders looks missing.
+         */
+        for (const match of source.matchAll(/\b(?:idPrefix|testIdPrefix)\s*=\s*["']([^"']+)["']/gu)) {
+            prefixes.push(`${match[1] ?? ''}-`);
         }
     }
     return { literals, prefixes };

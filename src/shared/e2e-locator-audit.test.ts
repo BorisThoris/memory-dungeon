@@ -12,16 +12,31 @@ import {
  * test. That is why the e2e suite could rot this far without anyone noticing.
  */
 describe('the e2e locator audit', () => {
-    it('reads test ids from every form the renderer writes them in', () => {
+    it('sees a test id in every shape the source writes one', () => {
+        // Enumerating attribute syntax produced three separate false alarms — a `testId:` property
+        // in a data catalog, a ternary picking between two ids, and a prefix passed as a prop — so
+        // this asks only whether the string is written anywhere.
         const rendered = readRenderedTestIds([
             '<div data-testid="plain" />',
             '<div data-testid={"braced"} />',
             "<Shell testId='prop' />",
-            '<li data-testid={`side-room-choice-${choice.id}`} />'
+            "const row = { testId: 'from-a-catalog' };",
+            "<b data-testid={kind === 'relic' ? 'from-a-ternary' : 'other'} />",
+            '<li data-testid={`side-room-choice-${choice.id}`} />',
+            '<SectionRail idPrefix="collection-tab" />'
         ]);
 
-        expect([...rendered.literals].sort()).toEqual(['braced', 'plain', 'prop']);
-        expect(rendered.prefixes).toEqual(['side-room-choice-']);
+        for (const id of ['plain', 'braced', 'prop', 'from-a-catalog', 'from-a-ternary']) {
+            expect(rendered.literals.has(id), id).toBe(true);
+        }
+        expect(rendered.prefixes).toContain('side-room-choice-');
+        expect(rendered.prefixes).toContain('collection-tab-');
+    });
+
+    it('accepts an id whose prefix its callers supply', () => {
+        const rendered = readRenderedTestIds(['<SectionRail idPrefix="collection-tab" />']);
+
+        expect(findDeadTestIds(['collection-tab-achievements'], rendered)).toEqual([]);
     });
 
     it('reads the ids a spec asks for', () => {
@@ -48,5 +63,11 @@ describe('the e2e locator audit', () => {
         // The rot predates the audit: HUD panels were deleted in a rebuild and their specs were
         // not. Failing on the existing count would make this another gate nobody runs.
         expect(DEAD_E2E_LOCATOR_BASELINE).toBeGreaterThan(0);
+    });
+
+    it('does not call an id missing just because it is not a plain attribute', () => {
+        const rendered = readRenderedTestIds(["const modes = [{ testId: 'hud-mode-identity' }];"]);
+
+        expect(findDeadTestIds(['hud-mode-identity'], rendered)).toEqual([]);
     });
 });
