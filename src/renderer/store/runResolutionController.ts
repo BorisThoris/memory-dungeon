@@ -10,6 +10,7 @@ import type {
 import { createValidatedGameOverRunSummary } from '../../shared/run-summary-rules';
 import { mergeHonorUnlockTags } from '../../shared/honorUnlocks';
 import { runArrayCount } from '../../shared/run-array-guards';
+import { appendRunHistory, buildRunHistoryRecord } from '../../shared/run-history-log';
 import {
     mergeBestFloorNoPowers,
     mergeDailyComplete,
@@ -159,7 +160,9 @@ export const createRunResolutionController = ({
             nextSave = normalizeSaveData({
                 ...nextSave,
                 onboardingDismissed: true,
-                lastRunSummary: nextRun.lastRunSummary
+                lastRunSummary: nextRun.lastRunSummary,
+                // Appended before normalization so the cap and the schema are applied in one place.
+                runHistory: appendRunHistory(nextSave, buildRunHistoryRecord(nextRun, new Date().toISOString()))
             });
             nextSave = mergeHonorUnlockTags(nextSave);
 

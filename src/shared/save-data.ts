@@ -21,6 +21,7 @@ import { HONOR_UNLOCK_IDS } from './honor-unlock-ids';
 import { utcDateKeyMinusOneDay } from './rng';
 import { runArray, runFilteredArray } from './run-array-guards';
 import { isRunRecord } from './run-record-guards';
+import { normalizeRunHistory } from './run-history-log';
 import { runFiniteNumberOrFallback, runNonNegativeIntegerOrFallback } from './run-number-guards';
 import { RELIC_POOL } from './relics';
 import { normalizeSessionStats } from './session-stats-rules';
@@ -474,6 +475,7 @@ export const createDefaultSaveData = (): SaveData => ({
     onboardingDismissed: false,
     firstRunHelpDismissed: false,
     lastRunSummary: null,
+    runHistory: [],
     playerStats: defaultPlayerStats(),
     unlocks: [],
     powersFtueSeen: false
@@ -514,6 +516,7 @@ export const saveDataBoundarySchema = objectBoundarySchema.extend({
     bestScore: z.unknown().optional(),
     firstRunHelpDismissed: z.unknown().optional(),
     lastRunSummary: z.unknown().optional(),
+    runHistory: z.unknown().optional(),
     onboardingDismissed: z.unknown().optional(),
     playerStats: unknownRecordBoundarySchema,
     powersFtueSeen: z.unknown().optional(),
@@ -539,6 +542,7 @@ type SaveDataNormalizationInput = {
     onboardingDismissed?: unknown;
     firstRunHelpDismissed?: unknown;
     lastRunSummary?: unknown;
+    runHistory?: unknown;
     playerStats?: unknown;
     unlocks?: unknown;
     powersFtueSeen?: unknown;
@@ -688,6 +692,13 @@ export const normalizeSaveData = (input?: SaveDataNormalizationInput | null): Sa
         firstRunHelpDismissed:
             typeof input.firstRunHelpDismissed === 'boolean' ? input.firstRunHelpDismissed : defaults.firstRunHelpDismissed,
         lastRunSummary,
+        /*
+         * A history is a convenience, never a reason to reject a profile: an entry this build
+         * cannot read is dropped and the rest of the save loads. `keepLastRunSummary` gates it
+         * for the same reason it gates the summary — a migration that invalidates one invalidates
+         * the other.
+         */
+        runHistory: migrationGate.keepLastRunSummary ? normalizeRunHistory(input.runHistory) : [],
         playerStats: {
             bestFloorNoPowers: finiteNonNegativeInteger(psIn.bestFloorNoPowers, playerStatsDefaults.bestFloorNoPowers),
             dailiesCompleted: dailiesCount,

@@ -1149,6 +1149,22 @@ export interface PlayerStatsPersisted {
     relicShrineExtraPickUnlocked?: boolean;
 }
 
+/**
+ * One finished run, kept so a player has a record of more than the run they just played. Defined
+ * here rather than beside its helpers because `SaveData` cannot import from a module that imports
+ * `SaveData`.
+ */
+export interface RunHistoryRecord {
+    /** The mode as the player picked it, not the game mode underneath it. */
+    readonly mode: string;
+    readonly highestLevel: number;
+    readonly totalScore: number;
+    /** ISO instant the run ended. */
+    readonly endedAtIso: string;
+    /** The key that replays this run, or null for a run that cannot be handed over. */
+    readonly shareKey: string | null;
+}
+
 export interface SaveData {
     schemaVersion: number;
     bestScore: number;
@@ -1158,6 +1174,12 @@ export interface SaveData {
     /** Menu-only explainer panel state; does not suppress playable first-run prompts. */
     firstRunHelpDismissed?: boolean;
     lastRunSummary: RunSummary | null;
+    /**
+     * The last few finished runs, newest first, bounded. `lastRunSummary` is the run you just
+     * played; this is the record of the ones before it. Optional so an older save reads as an
+     * empty history rather than as an invalid one.
+     */
+    runHistory?: RunHistoryRecord[];
     /** v3+ meta */
     playerStats?: PlayerStatsPersisted;
     unlocks?: string[];
