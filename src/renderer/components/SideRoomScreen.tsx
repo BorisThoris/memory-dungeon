@@ -144,7 +144,7 @@ const SideRoomScreen = () => {
                                 >
                                     <strong>{choice.label}</strong>
                                     {choice.traitBuildLabels && choice.traitBuildLabels.length > 0 ? (
-                                        <div className={styles.traitBuildTags} aria-label="Trait build archetypes">
+                                        <div aria-label="Trait build archetypes" className={styles.traitBuildTags} role="group">
                                             {choice.traitBuildLabels.map((label) => (
                                                 <span key={label}>{label}</span>
                                             ))}

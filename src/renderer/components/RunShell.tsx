@@ -91,7 +91,10 @@ const RunShell = ({
                     {String(run.board?.level ?? 1)}
                 </Stat>
                 <Stat label="Lives" testId="hud-lives">
-                    <span className={styles.hearts} aria-label={`${run.lives} of ${maxLives} lives`}>
+                    {/* role="img": every heart inside is aria-hidden, so the label is the only text a screen
+                        reader has. Without a role, aria-label is prohibited here and gets ignored — the
+                        life count then reads as nothing at all. */}
+                    <span aria-label={`${run.lives} of ${maxLives} lives`} className={styles.hearts} role="img">
                         {Array.from({ length: maxLives }, (_, index) => (
                             <span
                                 aria-hidden="true"

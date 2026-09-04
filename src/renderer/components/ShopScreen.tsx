@@ -150,7 +150,10 @@ const ShopScreen = () => {
                                 : SHOP_COPY.subtitle}
                         </p>
                     </div>
-                    <div className={styles.purse} aria-label={`${run.shopGold} shop gold`}>
+                    {/* No aria-label: the contents already read as "Gold 120g". A label here was prohibited
+                        on a plain div, and had it applied it would have replaced that text rather than
+                        adding to it. */}
+                    <div className={styles.purse}>
                         <span>Gold</span>
                         <strong>{run.shopGold}g</strong>
                     </div>

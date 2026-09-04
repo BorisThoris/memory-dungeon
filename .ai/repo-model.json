@@ -2320,7 +2320,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 36714,
-      "sha256": "3fe63ca0b36763339dee2bc0e8e4297376a43ac0ba36c5eabe6e74e8d49bbebf"
+      "sha256": "f7b8f040de62761647b190794f3098b84b8da12befd9fa670701d7e23cf94296"
     },
     {
       "path": "docs/UI_RETHINK_PLAN.md",
@@ -7857,8 +7857,8 @@
     {
       "path": "src/renderer/components/RunShell.tsx",
       "category": "source",
-      "bytes": 8194,
-      "sha256": "85eb0a21d251f766f1fce1bc9212959587e788404c9a6e8a1d0153cc030cad00"
+      "bytes": 8491,
+      "sha256": "a4ebfa10d1879fafe05ed65fd0dd811f8037d60b1e05fcaac8a0e6c3be646ec4"
     },
     {
       "path": "src/renderer/components/runShellGlyphs.tsx",
@@ -7917,14 +7917,14 @@
     {
       "path": "src/renderer/components/ShopScreen.test.tsx",
       "category": "test",
-      "bytes": 7159,
-      "sha256": "1adf1a975ad5aa18a5e8e0aac4aa4ac0d0b89b78088b56e9130a39684d334ca6"
+      "bytes": 7495,
+      "sha256": "f21bfc57cdfd50b818113ab1ff042034df646bee7f56b457197b915bf4726a4d"
     },
     {
       "path": "src/renderer/components/ShopScreen.tsx",
       "category": "source",
-      "bytes": 10668,
-      "sha256": "1058a446d40b3fc1c043dcb1227f244490f4e9530156736df20cd5366ff78cd6"
+      "bytes": 10882,
+      "sha256": "c3cec435c7af95bb2255caa7212a7bdec6fba51f7671d770f35f6ff8e5ed03ea"
     },
     {
       "path": "src/renderer/components/shuffleFlipAnimation.test.ts",
@@ -7953,8 +7953,8 @@
     {
       "path": "src/renderer/components/SideRoomScreen.tsx",
       "category": "source",
-      "bytes": 9684,
-      "sha256": "2ee9839db96c1e6e65d52439e33feaae51f1443273e240a779b34e5c4b930426"
+      "bytes": 9697,
+      "sha256": "eef805d4b616792c4fdb5648bddcb3006568f73b06429136d6f1d758fdb832c4"
     },
     {
       "path": "src/renderer/components/StartupIntro.module.css",
@@ -17895,7 +17895,7 @@
       "path": "src/renderer/components/RunShell.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 198,
+      "lineCount": 201,
       "imports": [
         "file:src/renderer/copy/runDialogCopy.ts",
         "file:src/renderer/ui/gameplayIcons.tsx",
@@ -18050,7 +18050,7 @@
       "path": "src/renderer/components/ShopScreen.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 169,
+      "lineCount": 173,
       "imports": [
         "file:src/renderer/components/ShopScreen.tsx",
         "file:src/renderer/store/useAppStore.ts",
@@ -18067,7 +18067,7 @@
       "path": "src/renderer/components/ShopScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 252,
+      "lineCount": 255,
       "imports": [
         "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/components/gameplayVisualConfig.ts",
@@ -37056,8 +37056,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 197,
-      "endLine": 197
+      "line": 200,
+      "endLine": 200
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellProps",
@@ -37224,8 +37224,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/ShopScreen.tsx",
-      "line": 251,
-      "endLine": 251
+      "line": 254,
+      "endLine": 254
     },
     {
       "id": "symbol:src/renderer/components/shuffleFlipAnimation.ts#computeBoardEntranceMotionBudgetMs",

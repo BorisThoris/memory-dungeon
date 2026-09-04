@@ -72,7 +72,11 @@ describe('ShopScreen', () => {
 
         const dialog = screen.getByRole('dialog', { name: /vendor alcove/i });
         expect(dialog).toHaveAttribute('data-shop-return-mode', 'summary');
-        expect(screen.getByLabelText('4 shop gold')).toHaveTextContent('4g');
+        // Read as text rather than by label: the purse says "Gold 4g" on screen, and an aria-label
+        // on a plain div was both prohibited and would have replaced that text instead of adding
+        // to it. Asserting the visible content is the stronger claim anyway.
+        expect(within(dialog).getByText('Gold')).toBeInTheDocument();
+        expect(within(dialog).getByText('4g')).toBeInTheDocument();
 
         const stock = screen.getByRole('list', { name: /vendor stock/i });
         expect(within(stock).getAllByRole('listitem')).toHaveLength(4);
