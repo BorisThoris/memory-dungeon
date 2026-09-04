@@ -1,4 +1,4 @@
-import { render, screen, within } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { SaveData } from '../../shared/contracts';
@@ -42,6 +42,33 @@ describe('ProfileScreen', () => {
     beforeEach(() => {
         vi.clearAllMocks();
         profileStoreMocks.saveData = null;
+    });
+
+    it('offers nothing to copy on a profile that has never run a daily', () => {
+        render(<ProfileScreen />);
+
+        expect(screen.queryByTestId('profile-copy-daily')).not.toBeInTheDocument();
+    });
+
+    it('copies the streak line once there is a daily record to post', async () => {
+        const saveData = createDefaultSaveData();
+        const stats = saveData.playerStats;
+        expect(stats, 'a default save carries player stats').toBeDefined();
+        stats!.dailiesCompleted = 3;
+        stats!.dailyStreakCosmetic = 5;
+        stats!.lastDailyDateKeyUtc = '20260904';
+        profileStoreMocks.saveData = saveData;
+
+        const writeText = vi.fn(async (_text: string) => undefined);
+        Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText } });
+
+        render(<ProfileScreen />);
+        const button = screen.getByTestId('profile-copy-daily');
+        fireEvent.click(button);
+
+        expect(writeText).toHaveBeenCalledTimes(1);
+        expect(writeText.mock.calls[0]?.[0]).toMatch(/^Daily 20260904 .*streak 5$/u);
+        await waitFor(() => expect(button).toHaveTextContent(/copied/i));
     });
 
     it('shows what the player is part-way through, dailies and quests included', () => {

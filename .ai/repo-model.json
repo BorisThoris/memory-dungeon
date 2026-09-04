@@ -9,7 +9,7 @@
     "contentItemCount": 63,
     "mechanicCount": 136,
     "stateFieldCount": 144,
-    "relationshipCount": 10347
+    "relationshipCount": 10348
   },
   "inventory": [
     {
@@ -2320,7 +2320,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 36714,
-      "sha256": "8b00c4a1f0c8745735e90366fd1bfb16e6f48fd523b1e394b7ef4696930de3fc"
+      "sha256": "1b5e344349f434115d3487a5907b2650a4ca32865ce9c9b63e771de211063dc5"
     },
     {
       "path": "docs/UI_RETHINK_PLAN.md",
@@ -7839,14 +7839,14 @@
     {
       "path": "src/renderer/components/ProfileScreen.test.tsx",
       "category": "test",
-      "bytes": 4941,
-      "sha256": "6323e3b4fd4b92723828aad74c88843d38b99eef602141e2373cc27e712554b7"
+      "bytes": 6125,
+      "sha256": "d29ed4dc2fafafc19f27c3ba6d87bd2fcc1007431445284b67185db471be420c"
     },
     {
       "path": "src/renderer/components/ProfileScreen.tsx",
       "category": "source",
-      "bytes": 6656,
-      "sha256": "35996476c65d82ec272270cad870671378db0335114a32a5ddfb16cc452f2ab1"
+      "bytes": 8114,
+      "sha256": "bcffe43f783e9253ce5d627ac2580bc398a3e8a0b154e53bd8c2b10f1d02bb98"
     },
     {
       "path": "src/renderer/components/RelicDraftOffer.module.css",
@@ -8997,8 +8997,8 @@
     {
       "path": "src/renderer/copy/profileProgress.ts",
       "category": "source",
-      "bytes": 1154,
-      "sha256": "0eb182dcde04bdbfa39fcfb4fd2187ead3f8459b36820af08c01191ae034daa7"
+      "bytes": 1316,
+      "sha256": "00b8a27d281eb937731128979c034bed29ce97bf87b4b476050a3ca587a188f7"
     },
     {
       "path": "src/renderer/copy/relicDraftOffer.test.ts",
@@ -17876,7 +17876,7 @@
       "path": "src/renderer/components/ProfileScreen.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 119,
+      "lineCount": 146,
       "imports": [
         "file:src/renderer/components/ProfileScreen.tsx",
         "file:src/shared/contracts.ts",
@@ -17890,10 +17890,11 @@
       "path": "src/renderer/components/ProfileScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 140,
+      "lineCount": 170,
       "imports": [
         "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/copy/profileProgress.ts",
+        "file:src/renderer/hooks/useCopyToClipboard.ts",
         "file:src/renderer/store/useAppStore.ts",
         "file:src/renderer/ui/index.ts",
         "file:src/shared/daily-archive.ts",
@@ -21251,7 +21252,7 @@
       "path": "src/renderer/copy/profileProgress.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 30,
+      "lineCount": 34,
       "imports": [
         "file:src/shared/local-progress-registry.ts"
       ],
@@ -37134,8 +37135,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/ProfileScreen.tsx",
-      "line": 139,
-      "endLine": 139
+      "line": 169,
+      "endLine": 169
     },
     {
       "id": "symbol:src/renderer/components/RelicDraftOfferPanel.tsx#default",
@@ -41047,23 +41048,23 @@
       "kind": "value",
       "file": "src/renderer/copy/profileProgress.ts",
       "line": 11,
-      "endLine": 16
+      "endLine": 20
     },
     {
       "id": "symbol:src/renderer/copy/profileProgress.ts#PROFILE_PROGRESS_SOURCE_LABEL",
       "name": "PROFILE_PROGRESS_SOURCE_LABEL",
       "kind": "value",
       "file": "src/renderer/copy/profileProgress.ts",
-      "line": 18,
-      "endLine": 22
+      "line": 22,
+      "endLine": 26
     },
     {
       "id": "symbol:src/renderer/copy/profileProgress.ts#PROFILE_PROGRESS_STATUS_LABEL",
       "name": "PROFILE_PROGRESS_STATUS_LABEL",
       "kind": "value",
       "file": "src/renderer/copy/profileProgress.ts",
-      "line": 24,
-      "endLine": 29
+      "line": 28,
+      "endLine": 33
     },
     {
       "id": "symbol:src/renderer/copy/relicDraftOffer.ts#buildRelicDraftBonusFootnoteLines",
@@ -101869,6 +101870,12 @@
       "id": "imports:src/renderer/components/ProfileScreen.tsx->src/renderer/copy/profileProgress.ts",
       "source": "file:src/renderer/components/ProfileScreen.tsx",
       "target": "file:src/renderer/copy/profileProgress.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/ProfileScreen.tsx->src/renderer/hooks/useCopyToClipboard.ts",
+      "source": "file:src/renderer/components/ProfileScreen.tsx",
+      "target": "file:src/renderer/hooks/useCopyToClipboard.ts",
       "kind": "imports"
     },
     {

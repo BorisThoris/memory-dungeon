@@ -9,6 +9,10 @@ import type { LocalProgressRegistryRow } from '../../shared/local-progress-regis
  */
 
 export const PROFILE_PROGRESS_COPY = {
+    copyDaily: 'Copy daily',
+    copyDailyAriaLabel: 'Copy the daily result and streak line',
+    copyDailyDone: 'Copied',
+    copyDailyFailed: 'Could not copy',
     label: 'Progress',
     noRows: 'Play a run to start tracking progress here.',
     /** Streak line in the screen subtitle. Zero reads as no streak rather than "0 day streak". */

@@ -1,7 +1,7 @@
 import { useShallow } from 'zustand/react/shallow';
 import { countEligibleHonors, totalHonorUnlocks } from '../../shared/honorUnlocks';
 import { getMetaProgressionBoard, getMetaProgressionMilestones } from '../../shared/meta-progression';
-import { getDailyArchiveSummary } from '../../shared/daily-archive';
+import { buildDailyArchiveShareString, getDailyArchiveSummary } from '../../shared/daily-archive';
 import {
     getLocalProgressRegistryRows,
     type LocalProgressRegistryRow
@@ -14,6 +14,7 @@ import {
     PROFILE_PROGRESS_SOURCE_LABEL,
     PROFILE_PROGRESS_STATUS_LABEL
 } from '../copy/profileProgress';
+import { useCopyToClipboard } from '../hooks/useCopyToClipboard';
 import { FittedGrid, MetaShell, UiButton } from '../ui';
 import { useAppStore } from '../store/useAppStore';
 import styles from './ProfileScreen.module.css';
@@ -47,6 +48,18 @@ const ProfileScreen = () => {
     const readyReward = board.rows.find((row) => row.status === 'available') ?? null;
     const honorsEarned = countEligibleHonors(saveData);
     const dailyArchive = getDailyArchiveSummary(saveData);
+    const { copy: copyToClipboard, state: copyState } = useCopyToClipboard();
+    /*
+     * Only offered once there is a daily record to post. On a profile that has never run one, the
+     * line would read "streak 0" and the button would be an invitation to share nothing.
+     */
+    const canShareDaily = dailyArchive.dailiesCompleted > 0 || dailyArchive.streak > 0;
+    const copyDailyLabel =
+        copyState === 'copied'
+            ? PROFILE_PROGRESS_COPY.copyDailyDone
+            : copyState === 'failed'
+              ? PROFILE_PROGRESS_COPY.copyDailyFailed
+              : PROFILE_PROGRESS_COPY.copyDaily;
     const progressRows = getLocalProgressRegistryRows(saveData);
 
     return (
@@ -110,6 +123,23 @@ const ProfileScreen = () => {
             </section>
 
             <div className={styles.footer}>
+                {canShareDaily ? (
+                    <UiButton
+                        aria-label={PROFILE_PROGRESS_COPY.copyDailyAriaLabel}
+                        data-copy-state={copyState}
+                        data-testid="profile-copy-daily"
+                        onClick={() => {
+                            resumeUiSfxContext();
+                            playUiClickSfx(uiGain);
+                            copyToClipboard(buildDailyArchiveShareString(saveData));
+                        }}
+                        size="md"
+                        type="button"
+                        variant="secondary"
+                    >
+                        {copyDailyLabel}
+                    </UiButton>
+                ) : null}
                 {nextObjective ? (
                     <p className={styles.nextGoal} data-testid="profile-objective-board">
                         <span className={styles.nextGoalLabel}>Next goal</span>
