@@ -98,9 +98,14 @@ async function captureGameplayStates(page: Page, viewportId: string): Promise<vo
 async function captureTrapFeedbackState(page: Page, viewportId: string): Promise<void> {
     await openPlayablePathFixture(page, 'activeRunWithHazards');
     await expectGameplayReady(page);
-    await page.getByText(/^Info$/i).click({ force: true });
-    await expect(page.getByTestId('hud-hazard-tiles')).toBeVisible({ timeout: 20_000 });
-    await expect(page.getByTestId('hud-in-run-cause-strip')).toBeVisible({ timeout: 20_000 });
+    /*
+     * The hazard-tile panel and the cause strip lived behind an Info disclosure that the HUD
+     * rebuild removed; hazards are marked on the tiles now. What this capture is for is the board
+     * in its hazard state, so it waits for the board and the bar rather than for two panels that
+     * stopped existing — which is what turned this into a 20-second wait per viewport.
+     */
+    await expect(page.getByTestId('tile-board-frame')).toBeVisible({ timeout: 20_000 });
+    await expect(page.getByTestId('hud-mode-identity')).toBeVisible({ timeout: 20_000 });
     await capture(page, viewportId, '05-trap-feedback');
 }
 

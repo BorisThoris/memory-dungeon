@@ -24,7 +24,7 @@ import { join } from 'node:path';
  * hud-secondary-stat-drawer, hud-touch-detail-rows, power-teaching-panel. All are HUD and interlude
  * panels removed in the shell rebuild whose specs were never updated.
  */
-export const DEAD_E2E_LOCATOR_BASELINE = 11;
+export const DEAD_E2E_LOCATOR_BASELINE = 0;
 
 const walk = (dir: string, out: string[] = []): string[] => {
     for (const entry of readdirSync(dir)) {
@@ -75,10 +75,27 @@ export const readRenderedTestIds = (sources: readonly string[]): RenderedTestIds
     return { literals, prefixes };
 };
 
-export const readSpecTestIds = (source: string): string[] => [
-    ...[...source.matchAll(/getByTestId\(\s*['"]([^'"]+)['"]/gu)].map((match) => match[1] ?? ''),
-    ...[...source.matchAll(/\[data-testid=["']([^"']+)["']\]/gu)].map((match) => match[1] ?? '')
-];
+/**
+ * How far past a locator to look for the matcher that consumes it. One assertion, spread over a
+ * few wrapped lines at most; a longer window starts swallowing the next statement.
+ */
+const MATCHER_LOOKAHEAD = 160;
+
+/**
+ * A locator asserted *absent* is naming something that must not render — the point of the
+ * assertion. `floor-clear-payoff-stack` is asserted `toHaveCount(0)` to hold a deleted coaching
+ * strip deleted, and reporting that as rot would push someone to delete the guard that keeps it
+ * gone. Only a locator something waits to *see* can rot into a timeout.
+ */
+const ASSERTED_ABSENT = /\.not\.|toHaveCount\(\s*0\s*\)/u;
+
+export const readSpecTestIds = (source: string): string[] =>
+    [
+        ...source.matchAll(/getByTestId\(\s*['"]([^'"]+)['"]/gu),
+        ...source.matchAll(/\[data-testid=["']([^"']+)["']\]/gu)
+    ]
+        .filter((match) => !ASSERTED_ABSENT.test(source.slice(match.index ?? 0, (match.index ?? 0) + MATCHER_LOOKAHEAD)))
+        .map((match) => match[1] ?? '');
 
 export const findDeadTestIds = (specIds: readonly string[], rendered: RenderedTestIds): string[] =>
     specIds.filter(

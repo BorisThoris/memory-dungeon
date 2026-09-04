@@ -59,10 +59,19 @@ describe('the e2e locator audit', () => {
         ]);
     });
 
-    it('holds a baseline that fails on growth rather than on the debt', () => {
-        // The rot predates the audit: HUD panels were deleted in a rebuild and their specs were
-        // not. Failing on the existing count would make this another gate nobody runs.
-        expect(DEAD_E2E_LOCATOR_BASELINE).toBeGreaterThan(0);
+    it('holds the baseline at zero, now that the debt it was carrying is gone', () => {
+        // The baseline started at twelve because the rot predated the audit: HUD panels were
+        // deleted in a rebuild and their specs were not. Every one of those specs has since been
+        // repaired or answered, so anything above zero is new rot and fails immediately.
+        expect(DEAD_E2E_LOCATOR_BASELINE).toBe(0);
+    });
+
+    it('leaves a locator asserted absent alone, which is the point of that assertion', () => {
+        // `floor-clear-payoff-stack` is asserted toHaveCount(0) to keep a deleted coaching strip
+        // deleted. Reporting it as rot would push someone to delete the guard.
+        expect(readSpecTestIds("await expect(page.getByTestId('gone')).toHaveCount(0);")).toEqual([]);
+        expect(readSpecTestIds("await expect(page.getByTestId('gone')).not.toBeVisible();")).toEqual([]);
+        expect(readSpecTestIds("await expect(page.getByTestId('here')).toBeVisible();")).toEqual(['here']);
     });
 
     it('does not call an id missing just because it is not a plain attribute', () => {

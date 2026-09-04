@@ -3633,20 +3633,20 @@
     {
       "path": "e2e/gameplay-readability.spec.ts",
       "category": "test",
-      "bytes": 15684,
-      "sha256": "b7ac8e53eb5fe3858be74facbcfd1d4c07351535c765908f7c67cfd7a274abfb"
+      "bytes": 16069,
+      "sha256": "eaaeb32fc29a09e0deade2a0f19ffa71943e85127ba75466e69ab4cc791f3b1f"
     },
     {
       "path": "e2e/gameplay-visual-audit.spec.ts",
       "category": "test",
-      "bytes": 12485,
-      "sha256": "58637027eb5b65732e55caa4e0fdfcb79e66d6d7d88f91239b44de0ad66b5a77"
+      "bytes": 12816,
+      "sha256": "0849651eab6e5698f103199e8c6a918ea4a26af6b82f09ed75d03d977a5c6e89"
     },
     {
       "path": "e2e/long-run-feedback-hud.spec.ts",
       "category": "test",
-      "bytes": 4248,
-      "sha256": "5ca649b38f2ba615446aafdafb4749e3392e3b951af109c405001770d1694f21"
+      "bytes": 4454,
+      "sha256": "3a90fd93201f541e2dcd5d014b9116c37b38e20e2b8c55099e0a3062b67da7b4"
     },
     {
       "path": "e2e/memorizeSnapshot.ts",
@@ -3663,8 +3663,8 @@
     {
       "path": "e2e/mobile-layout.spec.ts",
       "category": "test",
-      "bytes": 41395,
-      "sha256": "7b8416ade090e0f065ba497794a2f89351421c8eb5090e74e17b55d830673ae1"
+      "bytes": 41795,
+      "sha256": "0e1668895ccab7270038159a38d81da0768fddac2390b228fba23954722127ba"
     },
     {
       "path": "e2e/mobileTouchHelpers.ts",
@@ -4527,8 +4527,8 @@
     {
       "path": "scripts/e2e-locator-audit.ts",
       "category": "script",
-      "bytes": 5372,
-      "sha256": "d5d9d87bb2cd91b9fde08c28d7dcfe6236bdf72edc3f918b0f8674ad10d6c3ce"
+      "bytes": 6126,
+      "sha256": "dae767c2c2ac56c764e9ac28777a8fdf1d78be43d435ab93460aa9ce00df26fd"
     },
     {
       "path": "scripts/extract-endproduct-wip-assets.mjs",
@@ -10947,8 +10947,8 @@
     {
       "path": "src/shared/e2e-locator-audit.test.ts",
       "category": "test",
-      "bytes": 3250,
-      "sha256": "95109e21f8c4394aca42129b283ce201c2534ca6f745b732ca66fac432f031f3"
+      "bytes": 3943,
+      "sha256": "a51dc385cd0fc2433e8523b281fd036b4cc8d5e070f9c69a9fd904afc40c751d"
     },
     {
       "path": "src/shared/economy-ledger.test.ts",
@@ -27309,7 +27309,7 @@
       "path": "src/shared/e2e-locator-audit.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 74,
+      "lineCount": 83,
       "imports": [],
       "exports": [],
       "testedBy": []

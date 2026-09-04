@@ -39,7 +39,7 @@ test.describe('Gameplay readability hardening', () => {
         });
     }
 
-    test('dense active HUD drawers and power teaching stay bounded', async ({ page }) => {
+    test('a dense active run keeps the bar, the dock and the line bounded', async ({ page }) => {
         test.setTimeout(90_000);
         await page.setViewportSize({ width: 390, height: 844 });
         await openPlayablePathFixture(page, 'activeRunWithHazards');
@@ -49,9 +49,15 @@ test.describe('Gameplay readability hardening', () => {
 
         const powerButton = page.getByTestId('game-action-dock').getByRole('button').first();
         await powerButton.click({ force: true });
-        const teachingPanel = page.getByTestId('power-teaching-panel');
-        if (await teachingPanel.isVisible().catch(() => false)) {
-            await expectLocatorFullyInWindowViewport(page, teachingPanel, 8);
+        /*
+         * Arming a power used to open a teaching panel. The rebuild teaches on the board instead —
+         * tutorial pair markers on the early floors — and says what to do next on the one line
+         * under the bar, so that line is what has to stay readable after a press. The old check
+         * was wrapped in an isVisible guard, so it had been quietly passing over nothing.
+         */
+        const line = page.getByTestId('run-shell-line');
+        if (await line.isVisible().catch(() => false)) {
+            await expectLocatorFullyInWindowViewport(page, line, 8);
         }
 
         await expectBoardKeepsPriority(page);
