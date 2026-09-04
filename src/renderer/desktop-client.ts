@@ -2,7 +2,6 @@ import type {
     AchievementUnlockResult,
     CrashReportSummary,
     DesktopApi,
-    DisplayMode,
     SaveData,
     Settings
 } from '../shared/contracts';
@@ -60,9 +59,6 @@ const writeLocalSave = (saveData: SaveData): SaveData => {
 };
 
 const fallbackClient: DesktopApi = {
-    async getSettings(): Promise<Settings> {
-        return readLocalSave().settings;
-    },
     async saveSettings(settings: Settings): Promise<Settings> {
         const saveData = readLocalSave();
         return writeLocalSave({ ...saveData, settings }).settings;
@@ -95,16 +91,6 @@ const fallbackClient: DesktopApi = {
     },
     async isSteamConnected(): Promise<boolean> {
         return false;
-    },
-    async setDisplayMode(mode: DisplayMode): Promise<void> {
-        const saveData = readLocalSave();
-        writeLocalSave({
-            ...saveData,
-            settings: {
-                ...saveData.settings,
-                displayMode: mode
-            }
-        });
     },
     async quitApp(): Promise<void> {
         /* Electron uses preload IPC; web/Vitest uses this no-op unless window.desktop is mocked. */

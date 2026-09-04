@@ -108,6 +108,13 @@ export const RELEASE_CHECKLIST: readonly ReleaseChecklistItem[] = [
         section: 'Diagnostics'
     },
     {
+        evidence: 'scripts/bridge-reachability.ts',
+        id: 'bridge-surface',
+        label: 'The preload bridge exposes nothing the renderer does not call',
+        owner: 'repo',
+        section: 'Diagnostics'
+    },
+    {
         evidence: 'scripts/store-action-reachability.ts',
         id: 'store-reachability',
         label: 'No player-facing state or action is left with nothing able to reach it',

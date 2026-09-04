@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2486,
-    "codeFileCount": 959,
+    "trackedFileCount": 2488,
+    "codeFileCount": 960,
     "exportedSymbolCount": 3529,
     "contentItemCount": 63,
     "mechanicCount": 136,
     "stateFieldCount": 144,
-    "relationshipCount": 10328
+    "relationshipCount": 10330
   },
   "inventory": [
     {
@@ -2259,8 +2259,8 @@
     {
       "path": "docs/RELEASE_CHECKLIST.md",
       "category": "documentation",
-      "bytes": 4481,
-      "sha256": "591e82904d7ac78a6f0989e33dcc35db3583a0b8f4d20c0b36ddd61d019c08ed"
+      "bytes": 4606,
+      "sha256": "4a8f981e9e6bf284fc49a611ae61a01107556e7aa1f9c730c15a3933d1ec468b"
     },
     {
       "path": "docs/RELIC_ROSTER.md",
@@ -2320,7 +2320,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 36714,
-      "sha256": "4a2cc3829651870c3505a60a5f3e887db9aa47f7cbca6567af788a8c0282089a"
+      "sha256": "9ae32edafe89d5584650d40c69a6f72a07aaf50e8ea35eabe90245a40e9055ae"
     },
     {
       "path": "docs/UI_RETHINK_PLAN.md",
@@ -3963,8 +3963,8 @@
     {
       "path": "package.json",
       "category": "configuration",
-      "bytes": 28937,
-      "sha256": "f813749200c16fd259da5ae40c41f994732d8b862367aeab1b0bda11bd5a3052"
+      "bytes": 29046,
+      "sha256": "d1c718524935397f277462720dce258874c04715a15d6b311086d83a4cbe765e"
     },
     {
       "path": "packages/notifications/package.json",
@@ -4375,6 +4375,12 @@
       "sha256": "a040cbfed022fee0598ea57b2d1167d0da26f2d222d4c28d66f19e64a4deef10"
     },
     {
+      "path": "scripts/bridge-reachability.ts",
+      "category": "script",
+      "bytes": 2864,
+      "sha256": "fa036e4f570088a564199b98d30a1976259e2eb015c71dd7902202bb21ced059"
+    },
+    {
       "path": "scripts/build-card-illustration-manifest.mjs",
       "category": "script",
       "bytes": 1723,
@@ -4755,8 +4761,8 @@
     {
       "path": "src/main/ipc.ts",
       "category": "source",
-      "bytes": 8511,
-      "sha256": "e9ed282012c0c1caa0766c1a6243010eef526a45fe3401aa977bcfd0acb035de"
+      "bytes": 7224,
+      "sha256": "efdedfbc9df2d2e19ec32627b81cdfb4721a63cc988d970ceffb850c3a49a38a"
     },
     {
       "path": "src/main/persistence-write-error.test.ts",
@@ -4881,8 +4887,8 @@
     {
       "path": "src/preload/index.ts",
       "category": "source",
-      "bytes": 1374,
-      "sha256": "af0d9050c3c98928d660824c0f5d6842f50cbb410a245bdcba1aeb8d8331d3a4"
+      "bytes": 1204,
+      "sha256": "1f5332cc0b7c6b3376fd8fb39ffff477ce60a1ec37df8f3060a28fbeebc67268"
     },
     {
       "path": "src/renderer/a11y/focusables.test.ts",
@@ -9027,8 +9033,8 @@
     {
       "path": "src/renderer/desktop-client.ts",
       "category": "source",
-      "bytes": 4032,
-      "sha256": "04dad350e3563da7c6b00ed6a0974d5c55f4881672f25a92c2bb26dc3bdc97c7"
+      "bytes": 3640,
+      "sha256": "b9ab6b084d487af468fdbeacc6194494177454e7310392e39329bb5fa18aec41"
     },
     {
       "path": "src/renderer/desktop.d.ts",
@@ -10315,6 +10321,12 @@
       "sha256": "cefb9f06940de9fca7e4986430be2f3e331432d2a6c70b17a483cba2636da0ff"
     },
     {
+      "path": "src/shared/bridge-reachability.test.ts",
+      "category": "test",
+      "bytes": 1998,
+      "sha256": "3e6cd31a0321d4b339227cde71f2f65094c45a861bf509f507bbff6780bc53d5"
+    },
+    {
       "path": "src/shared/build-strategy-playthrough-simulation.test.ts",
       "category": "test",
       "bytes": 22272,
@@ -10443,8 +10455,8 @@
     {
       "path": "src/shared/contracts.ts",
       "category": "source",
-      "bytes": 47674,
-      "sha256": "864868577998238510a8e39103531424efd8c17353cf03de4b87672271df701f"
+      "bytes": 47575,
+      "sha256": "4381a9d5f51495df0ae8c6abcaeab493bb531fdd0a4d2944031e7d6b64e899cf"
     },
     {
       "path": "src/shared/copy-locality.test.ts",
@@ -11319,8 +11331,8 @@
     {
       "path": "src/shared/ipc-channels.ts",
       "category": "source",
-      "bytes": 2459,
-      "sha256": "8264f11c1b7145c6c0c8a6ac791660444fc67c44de2b78213e52111373afa9d5"
+      "bytes": 2173,
+      "sha256": "9693ae5741db5c95554c177d132d35e3d0bc86e2dfe839026ebad72f3eee98f8"
     },
     {
       "path": "src/shared/level-clear-rules.test.ts",
@@ -11769,14 +11781,14 @@
     {
       "path": "src/shared/release-checklist.test.ts",
       "category": "test",
-      "bytes": 12253,
-      "sha256": "e61d7c56253c295c2f8f07cf4de73a86129dcbef3ff8c3fa4a3e7d0f1b153ad9"
+      "bytes": 12683,
+      "sha256": "125f568f4fd4c52880eda9ffebab8bf9859814389a0898d17399b043892f7879"
     },
     {
       "path": "src/shared/release-checklist.ts",
       "category": "source",
-      "bytes": 9734,
-      "sha256": "373397bf5404f8057be02e3280654704869ac230e2d11002fe3d70e11c0f63ac"
+      "bytes": 9963,
+      "sha256": "77bd38ab20a6104500d47518f313c6c5e6a1df15e436c6b8b2f0c87f137d946b"
     },
     {
       "path": "src/shared/relic-favor-rules.test.ts",
@@ -15117,7 +15129,7 @@
       "path": "src/main/ipc.ts",
       "layer": "main",
       "role": "production",
-      "lineCount": 210,
+      "lineCount": 176,
       "imports": [
         "file:src/main/persistence.ts",
         "file:src/main/steam.ts",
@@ -15450,7 +15462,7 @@
       "path": "src/preload/index.ts",
       "layer": "preload",
       "role": "production",
-      "lineCount": 21,
+      "lineCount": 19,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/ipc-channels.ts"
@@ -21338,7 +21350,7 @@
       "path": "src/renderer/desktop-client.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 122,
+      "lineCount": 108,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/save-data.ts"
@@ -24931,6 +24943,18 @@
       ]
     },
     {
+      "id": "file:src/shared/bridge-reachability.test.ts",
+      "path": "src/shared/bridge-reachability.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 47,
+      "imports": [
+        "file:src/shared/ipc-channels.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
       "id": "file:src/shared/build-strategy-playthrough-simulation.test.ts",
       "path": "src/shared/build-strategy-playthrough-simulation.test.ts",
       "layer": "shared",
@@ -25368,7 +25392,7 @@
       "path": "src/shared/contracts.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1230,
+      "lineCount": 1228,
       "imports": [],
       "exports": [
         "symbol:src/shared/contracts.ts#AchievementId",
@@ -29075,7 +29099,7 @@
       "path": "src/shared/ipc-channels.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 53,
+      "lineCount": 47,
       "imports": [
         "file:src/shared/contracts.ts"
       ],
@@ -29085,7 +29109,8 @@
         "symbol:src/shared/ipc-channels.ts#IPC_CHANNELS_LEGACY_DESKTOP"
       ],
       "testedBy": [
-        "file:src/main/ipc.test.ts"
+        "file:src/main/ipc.test.ts",
+        "file:src/shared/bridge-reachability.test.ts"
       ]
     },
     {
@@ -30605,7 +30630,7 @@
       "path": "src/shared/release-checklist.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 233,
+      "lineCount": 240,
       "imports": [
         "file:src/main/crash-log.ts",
         "file:src/main/save-recovery.ts",
@@ -30632,7 +30657,7 @@
       "path": "src/shared/release-checklist.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 256,
+      "lineCount": 263,
       "imports": [],
       "exports": [
         "symbol:src/shared/release-checklist.ts#RELEASE_CHECKLIST",
@@ -34268,16 +34293,16 @@
       "name": "registerIpcHandlers",
       "kind": "value",
       "file": "src/main/ipc.ts",
-      "line": 41,
-      "endLine": 209
+      "line": 37,
+      "endLine": 175
     },
     {
       "id": "symbol:src/main/ipc.ts#RendererErrorSink",
       "name": "RendererErrorSink",
       "kind": "interface",
       "file": "src/main/ipc.ts",
-      "line": 24,
-      "endLine": 29
+      "line": 20,
+      "endLine": 25
     },
     {
       "id": "symbol:src/main/persistence.ts#PersistenceService",
@@ -41220,8 +41245,8 @@
       "name": "desktopClient",
       "kind": "value",
       "file": "src/renderer/desktop-client.ts",
-      "line": 121,
-      "endLine": 121
+      "line": 107,
+      "endLine": 107
     },
     {
       "id": "symbol:src/renderer/dev/BlueprintExplorer.tsx#default",
@@ -46397,7 +46422,7 @@
       "kind": "interface",
       "file": "src/shared/contracts.ts",
       "line": 1206,
-      "endLine": 1229
+      "endLine": 1227
     },
     {
       "id": "symbol:src/shared/contracts.ts#DisplayMode",
@@ -54236,8 +54261,8 @@
       "name": "DESKTOP_IPC_CHANNELS",
       "kind": "value",
       "file": "src/shared/ipc-channels.ts",
-      "line": 23,
-      "endLine": 36
+      "line": 21,
+      "endLine": 32
     },
     {
       "id": "symbol:src/shared/ipc-channels.ts#IPC_CHANNELS",
@@ -54245,15 +54270,15 @@
       "kind": "value",
       "file": "src/shared/ipc-channels.ts",
       "line": 7,
-      "endLine": 20
+      "endLine": 18
     },
     {
       "id": "symbol:src/shared/ipc-channels.ts#IPC_CHANNELS_LEGACY_DESKTOP",
       "name": "IPC_CHANNELS_LEGACY_DESKTOP",
       "kind": "value",
       "file": "src/shared/ipc-channels.ts",
-      "line": 39,
-      "endLine": 52
+      "line": 35,
+      "endLine": 46
     },
     {
       "id": "symbol:src/shared/level-clear-rules.ts#applyFloorClearEnemyHazardDefeats",
@@ -56645,15 +56670,15 @@
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
       "line": 32,
-      "endLine": 208
+      "endLine": 215
     },
     {
       "id": "symbol:src/shared/release-checklist.ts#releaseChecklistByOwner",
       "name": "releaseChecklistByOwner",
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
-      "line": 214,
-      "endLine": 215
+      "line": 221,
+      "endLine": 222
     },
     {
       "id": "symbol:src/shared/release-checklist.ts#ReleaseChecklistItem",
@@ -56676,16 +56701,16 @@
       "name": "releaseChecklistSections",
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
-      "line": 210,
-      "endLine": 212
+      "line": 217,
+      "endLine": 219
     },
     {
       "id": "symbol:src/shared/release-checklist.ts#renderReleaseChecklistMarkdown",
       "name": "renderReleaseChecklistMarkdown",
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
-      "line": 229,
-      "endLine": 255
+      "line": 236,
+      "endLine": 262
     },
     {
       "id": "symbol:src/shared/relic-favor-rules.ts#gainRelicFavor",
@@ -108924,6 +108949,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/bridge-reachability.test.ts->src/shared/ipc-channels.ts",
+      "source": "file:src/shared/bridge-reachability.test.ts",
+      "target": "file:src/shared/ipc-channels.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/build-strategy-playthrough-simulation.test.ts->src/shared/build-strategy-playthrough-simulation.ts",
       "source": "file:src/shared/build-strategy-playthrough-simulation.test.ts",
       "target": "file:src/shared/build-strategy-playthrough-simulation.ts",
@@ -128731,6 +128762,12 @@
       "id": "tested_by:src/shared/ipc-channels.ts->file:src/main/ipc.test.ts",
       "source": "file:src/shared/ipc-channels.ts",
       "target": "file:src/main/ipc.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/ipc-channels.ts->file:src/shared/bridge-reachability.test.ts",
+      "source": "file:src/shared/ipc-channels.ts",
+      "target": "file:src/shared/bridge-reachability.test.ts",
       "kind": "tested_by"
     },
     {

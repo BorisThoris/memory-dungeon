@@ -8,11 +8,7 @@ import type {
     SaveData,
     Settings
 } from '../shared/contracts';
-import {
-    normalizeRendererErrorReport,
-    normalizeUnknownAchievementId,
-    normalizeUnknownDisplayMode
-} from '../shared/desktop-api-boundary';
+import { normalizeRendererErrorReport, normalizeUnknownAchievementId } from '../shared/desktop-api-boundary';
 import { IPC_CHANNELS, IPC_CHANNELS_LEGACY_DESKTOP } from '../shared/ipc-channels';
 import type { PersistenceService } from './persistence';
 import type { SteamAdapter } from './steam';
@@ -49,16 +45,6 @@ export const registerIpcHandlers = (
         ipcMain.handle(channel, handler);
     };
 
-    const getSettings = (): ReturnType<PersistenceService['getSettings']> => {
-        try {
-            return persistence.getSettings();
-        } catch (error) {
-            console.error('[ipc] get-settings failed', error);
-            throw error;
-        }
-    };
-    register(IPC_CHANNELS.saveGetSettings, getSettings);
-    register(IPC_CHANNELS_LEGACY_DESKTOP.getSettings, getSettings);
 
     const getSaveData = (): ReturnType<PersistenceService['getSaveData']> => {
         try {
@@ -82,26 +68,6 @@ export const registerIpcHandlers = (
     register(IPC_CHANNELS.steamIsConnected, isSteamConnected);
     register(IPC_CHANNELS_LEGACY_DESKTOP.isSteamConnected, isSteamConnected);
 
-    const setDisplayMode = (_event: IpcMainInvokeEvent, rawMode: unknown): void => {
-        try {
-            const mode = normalizeUnknownDisplayMode(rawMode);
-            if (!mode) {
-                console.warn('[ipc] set-display-mode skipped: invalid display mode', rawMode);
-                return;
-            }
-            const window = getMainWindow();
-            if (!window || window.isDestroyed()) {
-                console.warn('[ipc] set-display-mode skipped: no main window');
-                return;
-            }
-            applyDisplayMode(window, mode);
-        } catch (error) {
-            console.error('[ipc] set-display-mode failed', error);
-            throw error;
-        }
-    };
-    register(IPC_CHANNELS.windowSetDisplayMode, setDisplayMode);
-    register(IPC_CHANNELS_LEGACY_DESKTOP.setDisplayMode, setDisplayMode);
 
     const saveSettings = (_event: IpcMainInvokeEvent, settings: unknown): Settings => {
         let saveData: SaveData;

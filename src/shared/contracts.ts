@@ -1204,7 +1204,6 @@ export interface RendererErrorReport {
 }
 
 export interface DesktopApi {
-    getSettings: () => Promise<unknown>;
     saveSettings: (settings: Settings) => Promise<unknown>;
     getSaveData: () => Promise<unknown>;
     saveGame: (data: SaveData) => Promise<unknown>;
@@ -1224,6 +1223,5 @@ export interface DesktopApi {
     /** Publishes what the player is doing to their friends list; cosmetic and never awaited for correctness. */
     setRichPresence: (state: RichPresenceState) => Promise<void>;
     isSteamConnected: () => Promise<unknown>;
-    setDisplayMode: (mode: DisplayMode) => Promise<void>;
     quitApp: () => Promise<void>;
 }

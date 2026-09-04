@@ -15,6 +15,7 @@ import { CRASH_LOG_KEEP_COUNT, pruneCrashLogs, redactUserPaths } from '../main/c
 import { quarantineFileName, quarantineSaveFile } from '../main/save-recovery';
 import { HARDCODED_COPY_BASELINE, scanComponentCopy } from '../../scripts/copy-locality';
 import { findUnrunGates, readScripts } from '../../scripts/gate-reachability';
+import { BRIDGE_EXEMPTIONS, findUnusedBridgeMethods } from '../../scripts/bridge-reachability';
 import { renderAchievementRows, renderRichPresenceRows } from '../../scripts/steam-partner-config';
 import {
     findUnreachableMembers,
@@ -100,6 +101,12 @@ const VERIFIERS: Record<string, () => void> = {
 
         expect(scripts['gate:package-hygiene']).toMatch(/knip/);
         expect(scripts.fullcheck).toContain('gate:package-hygiene');
+    },
+    'bridge-surface': () => {
+        // Everything on the bridge is callable by anything in the renderer, so an uncalled method
+        // is attack surface bought for nothing.
+        expect(findUnusedBridgeMethods(['used'], ['desktopClient.used()'])).toEqual([]);
+        expect(Object.keys(BRIDGE_EXEMPTIONS)).toEqual([]);
     },
     'store-reachability': () => {
         // The audit that would have caught a deleted toolbar taking a whole power with it.
