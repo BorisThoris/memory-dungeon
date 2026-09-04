@@ -1,17 +1,32 @@
 import { useShallow } from 'zustand/react/shallow';
 import { countEligibleHonors, totalHonorUnlocks } from '../../shared/honorUnlocks';
 import { getMetaProgressionBoard, getMetaProgressionMilestones } from '../../shared/meta-progression';
+import { getDailyArchiveSummary } from '../../shared/daily-archive';
+import {
+    getLocalProgressRegistryRows,
+    type LocalProgressRegistryRow
+} from '../../shared/local-progress-registry';
 import { getObjectiveBoardItems } from '../../shared/objective-board';
 import { getProfileSummaryRows } from '../../shared/profile-summary';
 import { playUiBackSfx, playUiClickSfx, resumeUiSfxContext, uiSfxGainFromSettings } from '../audio/uiSfx';
-import { MetaShell, UiButton } from '../ui';
+import {
+    PROFILE_PROGRESS_COPY,
+    PROFILE_PROGRESS_SOURCE_LABEL,
+    PROFILE_PROGRESS_STATUS_LABEL
+} from '../copy/profileProgress';
+import { FittedGrid, MetaShell, UiButton } from '../ui';
 import { useAppStore } from '../store/useAppStore';
 import styles from './ProfileScreen.module.css';
 
 /**
- * Profile. Six numbers, the tier rail, the next goal, and the claim when one is ready. It fits
- * one screen at every size: the recent-run payoff burst, lane map, impact grid and save-trust
- * ledger restated the archive and the settings page, and are gone.
+ * Profile. Six numbers, the tier rail, everything the player is part-way through, the next goal,
+ * and the claim when one is ready. It fits one screen at every size: the recent-run payoff burst,
+ * lane map, impact grid and save-trust ledger restated the archive and the settings page, and are
+ * gone.
+ *
+ * The progress grid is paged rather than long, and it is the first screen to show the daily
+ * archive and the quest campaign at all — both were tracked in the save with nothing rendering
+ * them, so a player's daily streak existed only in a file.
  */
 
 const ProfileScreen = () => {
@@ -31,6 +46,8 @@ const ProfileScreen = () => {
     const nextObjective = objectives.find((item) => item.status === 'active') ?? objectives[0] ?? null;
     const readyReward = board.rows.find((row) => row.status === 'available') ?? null;
     const honorsEarned = countEligibleHonors(saveData);
+    const dailyArchive = getDailyArchiveSummary(saveData);
+    const progressRows = getLocalProgressRegistryRows(saveData);
 
     return (
         <MetaShell
@@ -41,7 +58,7 @@ const ProfileScreen = () => {
                 playUiBackSfx(uiGain);
                 closeSubscreen();
             }}
-            subtitle={`Level ${board.level} · ${honorsEarned} of ${totalHonorUnlocks} honors · stored on this device only.`}
+            subtitle={`Level ${board.level} · ${honorsEarned} of ${totalHonorUnlocks} honors · ${PROFILE_PROGRESS_COPY.streak(dailyArchive.streak)} · stored on this device only.`}
             testId="profile-screen"
             title="Profile"
         >
@@ -69,6 +86,28 @@ const ProfileScreen = () => {
                     </div>
                 ))}
             </div>
+
+            <section aria-label={PROFILE_PROGRESS_COPY.label} className={styles.progress}>
+                <FittedGrid
+                    ariaLabel={PROFILE_PROGRESS_COPY.label}
+                    emptyState={PROFILE_PROGRESS_COPY.noRows}
+                    items={progressRows}
+                    itemNoun="entries"
+                    keyForItem={(row) => `${row.source}:${row.id}`}
+                    minColumnWidth={220}
+                    renderItem={(row: LocalProgressRegistryRow) => (
+                        <article className={styles.progressCard} data-status={row.status}>
+                            <span className={styles.progressKicker}>{PROFILE_PROGRESS_SOURCE_LABEL[row.source]}</span>
+                            <strong className={styles.progressTitle}>{row.title}</strong>
+                            <span className={styles.progressMeta}>
+                                {PROFILE_PROGRESS_STATUS_LABEL[row.status]} · {row.progressLabel}
+                            </span>
+                        </article>
+                    )}
+                    rowHeight={104}
+                    testId="profile-progress-grid"
+                />
+            </section>
 
             <div className={styles.footer}>
                 {nextObjective ? (

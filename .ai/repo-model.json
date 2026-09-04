@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2495,
-    "codeFileCount": 964,
-    "exportedSymbolCount": 3530,
+    "trackedFileCount": 2496,
+    "codeFileCount": 965,
+    "exportedSymbolCount": 3533,
     "contentItemCount": 63,
     "mechanicCount": 136,
     "stateFieldCount": 144,
-    "relationshipCount": 10352
+    "relationshipCount": 10359
   },
   "inventory": [
     {
@@ -2320,7 +2320,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 36714,
-      "sha256": "17d1c65c53388b54236a088e6543642bfb16faf0a25ca07c9efaeb4712a11463"
+      "sha256": "45b8b2e2732f153e19479515afab354f9c5b969a49008082480c287119dbff4c"
     },
     {
       "path": "docs/UI_RETHINK_PLAN.md",
@@ -4689,8 +4689,8 @@
     {
       "path": "scripts/test-only-modules.ts",
       "category": "script",
-      "bytes": 8627,
-      "sha256": "d264f67fe5046727262bc3c61bc170e72aac896663c620371e41e183cf433535"
+      "bytes": 8512,
+      "sha256": "0a7a1271554af7c985af1372008a70137e56b538841cd9532a783c7394139b7d"
     },
     {
       "path": "scripts/vite-dev-blueprint-api.mjs",
@@ -7827,20 +7827,20 @@
     {
       "path": "src/renderer/components/ProfileScreen.module.css",
       "category": "source",
-      "bytes": 3510,
-      "sha256": "b433a16515572b573a00d7e83a81f32d96fa9ed885e31093a2e31339dd7cf77d"
+      "bytes": 4638,
+      "sha256": "6cec97f0af7d77458ee884bf78b959e66343fcb376ac30c9f0fce815e2eadc7f"
     },
     {
       "path": "src/renderer/components/ProfileScreen.test.tsx",
       "category": "test",
-      "bytes": 4215,
-      "sha256": "588d62d18b7c805ddcfb871f2e8eba30310ce4157be0ffc07392a030b63c5b70"
+      "bytes": 4941,
+      "sha256": "6323e3b4fd4b92723828aad74c88843d38b99eef602141e2373cc27e712554b7"
     },
     {
       "path": "src/renderer/components/ProfileScreen.tsx",
       "category": "source",
-      "bytes": 4643,
-      "sha256": "f3454581e93396a8b513363c82af7268bac22f5ff3eed3a9bfe90ded2c7300fc"
+      "bytes": 6656,
+      "sha256": "35996476c65d82ec272270cad870671378db0335114a32a5ddfb16cc452f2ab1"
     },
     {
       "path": "src/renderer/components/RelicDraftOffer.module.css",
@@ -8987,6 +8987,12 @@
       "category": "source",
       "bytes": 3760,
       "sha256": "d66567ee37393fc4a3d44e801b37c97c7d58613ee0cd365a4dc7844bd8e76150"
+    },
+    {
+      "path": "src/renderer/copy/profileProgress.ts",
+      "category": "source",
+      "bytes": 1154,
+      "sha256": "0eb182dcde04bdbfa39fcfb4fd2187ead3f8459b36820af08c01191ae034daa7"
     },
     {
       "path": "src/renderer/copy/relicDraftOffer.test.ts",
@@ -17855,7 +17861,7 @@
       "path": "src/renderer/components/ProfileScreen.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 101,
+      "lineCount": 119,
       "imports": [
         "file:src/renderer/components/ProfileScreen.tsx",
         "file:src/shared/contracts.ts",
@@ -17869,12 +17875,15 @@
       "path": "src/renderer/components/ProfileScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 101,
+      "lineCount": 140,
       "imports": [
         "file:src/renderer/audio/uiSfx.ts",
+        "file:src/renderer/copy/profileProgress.ts",
         "file:src/renderer/store/useAppStore.ts",
         "file:src/renderer/ui/index.ts",
+        "file:src/shared/daily-archive.ts",
         "file:src/shared/honorUnlocks.ts",
+        "file:src/shared/local-progress-registry.ts",
         "file:src/shared/meta-progression.ts",
         "file:src/shared/objective-board.ts",
         "file:src/shared/profile-summary.ts"
@@ -21220,6 +21229,22 @@
       "testedBy": [
         "file:src/renderer/copy/mismatchFloater.test.ts"
       ]
+    },
+    {
+      "id": "file:src/renderer/copy/profileProgress.ts",
+      "path": "src/renderer/copy/profileProgress.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 30,
+      "imports": [
+        "file:src/shared/local-progress-registry.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/copy/profileProgress.ts#PROFILE_PROGRESS_COPY",
+        "symbol:src/renderer/copy/profileProgress.ts#PROFILE_PROGRESS_SOURCE_LABEL",
+        "symbol:src/renderer/copy/profileProgress.ts#PROFILE_PROGRESS_STATUS_LABEL"
+      ],
+      "testedBy": []
     },
     {
       "id": "file:src/renderer/copy/relicDraftOffer.test.ts",
@@ -37098,8 +37123,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/ProfileScreen.tsx",
-      "line": 100,
-      "endLine": 100
+      "line": 139,
+      "endLine": 139
     },
     {
       "id": "symbol:src/renderer/components/RelicDraftOfferPanel.tsx#default",
@@ -41004,6 +41029,30 @@
       "file": "src/renderer/copy/mismatchFloater.ts",
       "line": 53,
       "endLine": 61
+    },
+    {
+      "id": "symbol:src/renderer/copy/profileProgress.ts#PROFILE_PROGRESS_COPY",
+      "name": "PROFILE_PROGRESS_COPY",
+      "kind": "value",
+      "file": "src/renderer/copy/profileProgress.ts",
+      "line": 11,
+      "endLine": 16
+    },
+    {
+      "id": "symbol:src/renderer/copy/profileProgress.ts#PROFILE_PROGRESS_SOURCE_LABEL",
+      "name": "PROFILE_PROGRESS_SOURCE_LABEL",
+      "kind": "value",
+      "file": "src/renderer/copy/profileProgress.ts",
+      "line": 18,
+      "endLine": 22
+    },
+    {
+      "id": "symbol:src/renderer/copy/profileProgress.ts#PROFILE_PROGRESS_STATUS_LABEL",
+      "name": "PROFILE_PROGRESS_STATUS_LABEL",
+      "kind": "value",
+      "file": "src/renderer/copy/profileProgress.ts",
+      "line": 24,
+      "endLine": 29
     },
     {
       "id": "symbol:src/renderer/copy/relicDraftOffer.ts#buildRelicDraftBonusFootnoteLines",
@@ -79425,6 +79474,24 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/copy/profileProgress.ts->symbol:src/renderer/copy/profileProgress.ts#PROFILE_PROGRESS_COPY",
+      "source": "file:src/renderer/copy/profileProgress.ts",
+      "target": "symbol:src/renderer/copy/profileProgress.ts#PROFILE_PROGRESS_COPY",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/copy/profileProgress.ts->symbol:src/renderer/copy/profileProgress.ts#PROFILE_PROGRESS_SOURCE_LABEL",
+      "source": "file:src/renderer/copy/profileProgress.ts",
+      "target": "symbol:src/renderer/copy/profileProgress.ts#PROFILE_PROGRESS_SOURCE_LABEL",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/copy/profileProgress.ts->symbol:src/renderer/copy/profileProgress.ts#PROFILE_PROGRESS_STATUS_LABEL",
+      "source": "file:src/renderer/copy/profileProgress.ts",
+      "target": "symbol:src/renderer/copy/profileProgress.ts#PROFILE_PROGRESS_STATUS_LABEL",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/copy/relicDraftOffer.ts->symbol:src/renderer/copy/relicDraftOffer.ts#buildRelicDraftBonusFootnoteLines",
       "source": "file:src/renderer/copy/relicDraftOffer.ts",
       "target": "symbol:src/renderer/copy/relicDraftOffer.ts#buildRelicDraftBonusFootnoteLines",
@@ -101938,6 +102005,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/ProfileScreen.tsx->src/renderer/copy/profileProgress.ts",
+      "source": "file:src/renderer/components/ProfileScreen.tsx",
+      "target": "file:src/renderer/copy/profileProgress.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/ProfileScreen.tsx->src/renderer/store/useAppStore.ts",
       "source": "file:src/renderer/components/ProfileScreen.tsx",
       "target": "file:src/renderer/store/useAppStore.ts",
@@ -101950,9 +102023,21 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/ProfileScreen.tsx->src/shared/daily-archive.ts",
+      "source": "file:src/renderer/components/ProfileScreen.tsx",
+      "target": "file:src/shared/daily-archive.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/ProfileScreen.tsx->src/shared/honorUnlocks.ts",
       "source": "file:src/renderer/components/ProfileScreen.tsx",
       "target": "file:src/shared/honorUnlocks.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/ProfileScreen.tsx->src/shared/local-progress-registry.ts",
+      "source": "file:src/renderer/components/ProfileScreen.tsx",
+      "target": "file:src/shared/local-progress-registry.ts",
       "kind": "imports"
     },
     {
@@ -105361,6 +105446,12 @@
       "id": "imports:src/renderer/copy/mismatchFloater.ts->src/shared/run-number-guards.ts",
       "source": "file:src/renderer/copy/mismatchFloater.ts",
       "target": "file:src/shared/run-number-guards.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/copy/profileProgress.ts->src/shared/local-progress-registry.ts",
+      "source": "file:src/renderer/copy/profileProgress.ts",
+      "target": "file:src/shared/local-progress-registry.ts",
       "kind": "imports"
     },
     {

@@ -44,6 +44,24 @@ describe('ProfileScreen', () => {
         profileStoreMocks.saveData = null;
     });
 
+    it('shows what the player is part-way through, dailies and quests included', () => {
+        render(<ProfileScreen />);
+
+        const grid = screen.getByRole('list', { name: /progress/i });
+        const cards = within(grid).getAllByRole('article');
+        expect(cards.length).toBeGreaterThan(0);
+        for (const card of cards) {
+            expect(card).toHaveAttribute('data-status');
+            expect(card.textContent?.trim().length ?? 0).toBeGreaterThan(0);
+        }
+    });
+
+    it('states the daily streak in the subtitle, which nothing on any screen said before', () => {
+        render(<ProfileScreen />);
+
+        expect(screen.getByTestId('profile-screen')).toHaveTextContent(/daily streak/i);
+    });
+
     it('states the profile once: six numbers, the tier rail and the next goal', () => {
         render(<ProfileScreen />);
 

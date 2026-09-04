@@ -45,7 +45,6 @@ export const TEST_ONLY_BASELINE: Record<string, string> = {
     'dungeon-e2e-fixtures.ts': 'Ten authored dungeon fixtures; no e2e spec loads them any more.',
     'gameplayEventAnnouncement.ts': 'Announcement presentation for gameplay events, including its dedupe key.',
     'level-result-presentation.ts': 'Floor-clear causality rows: why the floor went the way it did.',
-    'local-progress-registry.ts': 'One registry over daily archive, objective board and quest campaign progress.',
     'runPayoffSignals.ts': 'End-of-run payoff signals with their arcade and audio cues.'
 };
 
