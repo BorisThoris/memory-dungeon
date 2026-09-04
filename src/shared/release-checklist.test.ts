@@ -32,6 +32,14 @@ import { findTestOnlyModules, TEST_ONLY_EXEMPTIONS } from '../../scripts/test-on
 import { reachableFromEntries, SHARED_REACH_EXEMPTIONS } from '../../scripts/shared-reach';
 import { findMissingScriptPaths } from '../../scripts/script-paths';
 import {
+    findUndefinedTokens,
+    findUndersized,
+    MIN_TYPE_PX,
+    readFontTokens,
+    readTypeDeclarations,
+    resolveMinPx
+} from '../../scripts/min-type-size';
+import {
     findFieldsWithoutPolicy,
     readPolicyRoots,
     SAVE_FIELD_POLICY_EXEMPTIONS
@@ -200,6 +208,22 @@ const VERIFIERS: Record<string, () => void> = {
         expect(findFieldsWithoutPolicy(['runHistory', 'newThing'], new Set(['runHistory']))).toEqual(['newThing']);
         expect(readPolicyRoots("field: 'runHistory.shareKey'").has('runHistory')).toBe(true);
         expect(Object.keys(SAVE_FIELD_POLICY_EXEMPTIONS).length).toBeGreaterThan(0);
+    },
+    'min-type-size': () => {
+        // Both failures this guards were shipped: three declarations under the floor that the fit
+        // contract never walked, and a `var()` naming a token defined nowhere, which does nothing
+        // at all and leaves the text at whatever it inherited.
+        const css = ['.kicker {', '    font-size: 0.7rem;', '}'].join('\n');
+        const [tooSmall] = readTypeDeclarations('a.css', css);
+        expect(tooSmall?.px).toBeLessThan(MIN_TYPE_PX);
+        expect(findUndersized(readTypeDeclarations('a.css', css))).toHaveLength(1);
+        expect(findUndersized(readTypeDeclarations('a.css', '.k {\n    font-size: 0.75rem;\n}'))).toEqual([]);
+
+        const tokens = readFontTokens("'--ui-font-label': '0.75rem',");
+        expect(resolveMinPx('var(--ui-font-label)', tokens)).toBe(MIN_TYPE_PX);
+        expect(
+            findUndefinedTokens(readTypeDeclarations('a.css', '.k {\n    font-size: var(--nope);\n}', tokens))
+        ).toHaveLength(1);
     },
     'script-paths': () => {
         // A gate naming a renamed test file fails on its first line for anyone who runs it, and

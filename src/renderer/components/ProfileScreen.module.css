@@ -1,6 +1,11 @@
 /*
- * Profile. Six numbers, one tier rail, one goal line. Everything fits one screen at every
- * size; type floor 12px, controls at least 44px.
+ * Profile. Six numbers, one tier rail, one paged ledger, one goal line. Everything fits one
+ * screen at every size; type floor 12px, controls at least 44px.
+ *
+ * The ledger is one region with three tabs rather than three stacked lists. Stacked, each list
+ * rendered everything it held: twenty recorded runs put thirteen of them, the best one included,
+ * past the bottom edge at 1440x900. Stacking three *paged* regions was no better — at 812x375 each
+ * measured a 25px frame and drew a full-height card into it. One at a time gets the whole budget.
  */
 
 .summary {
@@ -90,11 +95,54 @@
     color: var(--theme-text-muted);
 }
 
-.progress {
+.ledger {
     display: flex;
     flex-direction: column;
+    gap: 0.35rem;
     min-height: 0;
     flex: 1 1 auto;
+}
+
+.ledgerHeader {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    flex: 0 0 auto;
+}
+
+.ledgerHeading {
+    margin: 0;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--theme-gold-bright) 78%, var(--theme-text-subtle));
+}
+
+.ledgerTabs {
+    display: flex;
+    gap: 0.25rem;
+}
+
+.ledgerTab {
+    min-height: 44px;
+    padding: 0.28rem 0.9rem;
+    border-radius: var(--ui-radius-pill);
+    border: 1px solid var(--theme-border);
+    background: transparent;
+    color: var(--theme-text-subtle);
+    font: inherit;
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.ledgerTab[data-selected='true'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 52%, transparent);
+    background: color-mix(in srgb, var(--theme-gold-bright) 12%, transparent);
+    color: var(--theme-gold-bright);
 }
 
 .progressCard {
@@ -109,7 +157,7 @@
 }
 
 .progressKicker {
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     font-weight: 700;
     letter-spacing: 0.18em;
     text-transform: uppercase;
@@ -141,46 +189,31 @@
     opacity: 0.66;
 }
 
-.history {
+.ledgerCard {
     display: flex;
     flex-direction: column;
-    gap: 0.35rem;
-    min-height: 0;
-}
-
-.historyHeading {
-    margin: 0;
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: color-mix(in srgb, var(--theme-gold-bright) 78%, var(--theme-text-subtle));
-}
-
-.historyEmpty {
-    margin: 0;
-    font-size: 0.82rem;
-    color: var(--theme-text-subtle);
-}
-
-.historyList {
-    display: flex;
-    flex-direction: column;
-    gap: 0.2rem;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-}
-
-.historyRow {
-    display: grid;
-    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) minmax(0, 0.8fr) auto;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.25rem 0.4rem;
-    border-radius: var(--ui-radius-sm);
+    gap: 0.15rem;
+    height: 100%;
+    padding: 0.45rem 0.6rem;
+    border-radius: var(--ui-radius-md);
+    border: 1px solid var(--theme-border);
     background: var(--theme-panel-surface-muted);
     font-size: 0.82rem;
+}
+
+.ledgerCardTop {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    min-width: 0;
+}
+
+.ledgerCardFoot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.4rem;
+    margin-top: auto;
 }
 
 .historyMode {
@@ -190,24 +223,13 @@
     white-space: nowrap;
 }
 
-.recordRow {
-    display: grid;
-    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) minmax(0, 0.6fr);
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.25rem 0.4rem;
-    border-radius: var(--ui-radius-sm);
-    background: var(--theme-panel-surface-muted);
-    font-size: 0.82rem;
-}
-
 .historyBest {
-    margin-left: 0.4rem;
+    flex: 0 0 auto;
     padding: 0 0.35rem;
     border-radius: var(--ui-radius-pill);
     border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 46%, transparent);
     color: var(--theme-gold-bright);
-    font-size: 0.68rem;
+    font-size: 0.75rem;
     font-weight: 700;
     letter-spacing: 0.12em;
     text-transform: uppercase;
@@ -285,6 +307,15 @@
 
     .tier[data-status='current'] .tierNote,
     .tier[data-status='reached'] .tierNote {
+        display: none;
+    }
+
+    /*
+     * The tier rail goes at this height. The subtitle already states the level and the honor
+     * count, and its 75px is the difference between the ledger measuring a 25px frame — which
+     * draws a full-height card into a sliver — and one that fits a row.
+     */
+    .tiers {
         display: none;
     }
 

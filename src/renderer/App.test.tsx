@@ -478,6 +478,8 @@ describe('desktop app flow', () => {
 
         renderApp();
 
+        // Profile opens on what the player is part-way through; the run list is one tab over.
+        fireEvent.click(await screen.findByTestId('profile-ledger-runs', undefined, { timeout: 10_000 }));
         const history = await screen.findByTestId('profile-run-history', undefined, { timeout: 10_000 });
         expect(history).toHaveTextContent('Scholar Contract');
         expect(history).toHaveTextContent('Floor 9');

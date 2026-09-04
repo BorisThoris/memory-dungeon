@@ -164,6 +164,13 @@ export const RELEASE_CHECKLIST: readonly ReleaseChecklistItem[] = [
         section: 'Diagnostics'
     },
     {
+        evidence: 'scripts/min-type-size.ts',
+        id: 'min-type-size',
+        label: 'No player-facing text is sized below the readable floor, or sized by a token that does not exist',
+        owner: 'repo',
+        section: 'Diagnostics'
+    },
+    {
         evidence: 'scripts/script-paths.ts',
         id: 'script-paths',
         label: 'No gate or script names a file that is not there',

@@ -1,6 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 import { openModeDetail, openPlayablePathFixture, openRunMenuItem } from './playablePathHelpers';
 import {
+    buildPopulatedProfileSaveJson,
     buildVisualSaveJson,
     gotoWithSave,
     mainMenuPlayButton,
@@ -176,7 +177,9 @@ test.describe('UI fit contract', () => {
     for (const [label, button] of MENU_SCREENS) {
         test(`${label} fits every window`, async ({ page }) => {
             test.setTimeout(300_000);
-            const save = buildVisualSaveJson(true);
+            // Profile grows with play: a full run history and a record per mode. Checking it on a
+            // save that has never finished a run only proves the empty state fits.
+            const save = label === 'profile' ? buildPopulatedProfileSaveJson(true) : buildVisualSaveJson(true);
             await atEverySize(page, label, async () => {
                 await gotoWithSave(page, save);
                 await mainMenuPlayButton(page).waitFor({ state: 'visible', timeout: 30_000 });

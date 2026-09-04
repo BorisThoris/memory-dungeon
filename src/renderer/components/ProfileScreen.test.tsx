@@ -46,6 +46,7 @@ describe('ProfileScreen', () => {
 
     it('says where finished runs will appear on a profile that has none yet', () => {
         render(<ProfileScreen />);
+        fireEvent.click(screen.getByTestId('profile-ledger-runs'));
 
         expect(screen.getByTestId('profile-run-history')).toHaveTextContent(/Finished runs are recorded here/i);
         expect(screen.queryByTestId('profile-run-history-copy')).not.toBeInTheDocument();
@@ -75,6 +76,7 @@ describe('ProfileScreen', () => {
         Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText } });
 
         render(<ProfileScreen />);
+        fireEvent.click(screen.getByTestId('profile-ledger-runs'));
         const history = screen.getByTestId('profile-run-history');
         const rows = within(history).getAllByRole('listitem');
 
@@ -119,6 +121,7 @@ describe('ProfileScreen', () => {
         profileStoreMocks.saveData = saveData;
 
         render(<ProfileScreen />);
+        fireEvent.click(screen.getByTestId('profile-ledger-records'));
         const rows = within(screen.getByTestId('profile-mode-records')).getAllByRole('listitem');
 
         expect(rows).toHaveLength(2);
@@ -132,10 +135,40 @@ describe('ProfileScreen', () => {
 
     it('says where records will appear rather than listing every mode at zero', () => {
         render(<ProfileScreen />);
+        fireEvent.click(screen.getByTestId('profile-ledger-records'));
 
         const records = screen.getByTestId('profile-mode-records');
         expect(records).toHaveTextContent(/A record appears here for each mode/i);
         expect(within(records).queryAllByRole('listitem')).toHaveLength(0);
+    });
+
+    it('shows one part of the record at a time, so no list can push another off screen', () => {
+        const saveData = createDefaultSaveData();
+        saveData.runHistory = [
+            {
+                endedAtIso: '2026-09-04T12:00:00.000Z',
+                highestLevel: 4,
+                mode: 'Classic Dungeon',
+                shareKey: 'md1:classic:33:1:400000',
+                totalScore: 900
+            }
+        ];
+        profileStoreMocks.saveData = saveData;
+
+        render(<ProfileScreen />);
+
+        // Opens on what the player is part-way through, not on what they have already finished.
+        expect(screen.getByTestId('profile-progress-grid')).toBeInTheDocument();
+        expect(screen.queryByTestId('profile-run-history')).not.toBeInTheDocument();
+        expect(screen.queryByTestId('profile-mode-records')).not.toBeInTheDocument();
+
+        fireEvent.click(screen.getByTestId('profile-ledger-runs'));
+        expect(screen.getByTestId('profile-run-history')).toBeInTheDocument();
+        expect(screen.queryByTestId('profile-progress-grid')).not.toBeInTheDocument();
+
+        fireEvent.click(screen.getByTestId('profile-ledger-records'));
+        expect(screen.getByTestId('profile-mode-records')).toBeInTheDocument();
+        expect(screen.queryByTestId('profile-run-history')).not.toBeInTheDocument();
     });
 
     it('marks the best recorded run, and marks only that one', () => {
@@ -166,6 +199,7 @@ describe('ProfileScreen', () => {
         profileStoreMocks.saveData = saveData;
 
         render(<ProfileScreen />);
+        fireEvent.click(screen.getByTestId('profile-ledger-runs'));
         const rows = within(screen.getByTestId('profile-run-history')).getAllByRole('listitem');
 
         // The best run is the highest score, not the newest row.
@@ -188,6 +222,7 @@ describe('ProfileScreen', () => {
         profileStoreMocks.saveData = saveData;
 
         render(<ProfileScreen />);
+        fireEvent.click(screen.getByTestId('profile-ledger-runs'));
 
         expect(screen.getByTestId('profile-run-history')).toHaveTextContent('Daily challenge');
         expect(screen.queryByTestId('profile-run-history-copy')).not.toBeInTheDocument();

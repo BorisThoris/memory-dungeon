@@ -44,3 +44,26 @@ export const MODE_RECORDS_COPY = {
     /** `4 runs` under the record, so a one-off does not read like a long campaign. */
     runs: (runs: number): string => `${runs} ${runs === 1 ? 'run' : 'runs'}`
 } as const;
+
+/**
+ * The three ways to read your own record, in one paged region rather than three stacked lists.
+ *
+ * They were three sections, each rendering everything it had. On a profile with twenty recorded
+ * runs that pushed thirteen of them — the best one included — past the bottom of the screen, on a
+ * screen whose whole contract is that it fits. Stacked paged regions do not work either: at 812×375
+ * each one measured 25px of frame and drew a full-height card into it. One region at a time gets
+ * the whole budget, and the window decides how many rows are on screen.
+ */
+export const PROFILE_LEDGER_VIEWS = ['progress', 'runs', 'records'] as const;
+
+export type ProfileLedgerView = (typeof PROFILE_LEDGER_VIEWS)[number];
+
+export const PROFILE_LEDGER_COPY = {
+    label: 'Your record',
+    tab: {
+        progress: 'In progress',
+        records: 'By mode',
+        runs: 'Recent runs'
+    } satisfies Record<ProfileLedgerView, string>,
+    tabAriaLabel: 'Which part of your record to show'
+} as const;

@@ -86,7 +86,13 @@ const FittedGrid = <T,>({
     );
 
     if (items.length === 0 && emptyState) {
-        return <div className={styles.empty}>{emptyState}</div>;
+        // The empty state keeps the label and the test id: a screen that has nothing to page yet is
+        // still the same region, and dropping them made it unfindable to anything looking for it.
+        return (
+            <div aria-label={ariaLabel} className={styles.empty} data-testid={testId}>
+                {emptyState}
+            </div>
+        );
     }
 
     // Grow the rows to use the space a short page leaves behind; never past the frame.

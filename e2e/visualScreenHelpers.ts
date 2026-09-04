@@ -135,6 +135,54 @@ export const buildVisualSaveJson = (onboardingDismissed: boolean, reduceMotion =
         powersFtueSeen: true
     });
 
+/**
+ * A save with a full run history: twenty finished runs across eight modes, a best score, and the
+ * achievements that open the tier rail.
+ *
+ * The fit contract used to check Profile against {@link buildVisualSaveJson}, which has never
+ * finished a run — so the two lists that grow with play, the run history and the record per mode,
+ * were laid out empty every time it ran. A screen that promises to fit at every size has to be
+ * asked to fit when it is full, not when it is blank.
+ */
+export const buildPopulatedProfileSaveJson = (reduceMotion = true): string => {
+    const modes = ['Classic', 'Daily Challenge', 'Gauntlet', 'Meditation', 'Puzzle', 'Wild', 'Practice', 'Scholar'];
+    const runHistory = Array.from({ length: 20 }, (_, index) => ({
+        mode: modes[index % modes.length] ?? 'Classic',
+        highestLevel: 3 + (index % 11),
+        totalScore: 1200 + index * 137,
+        endedAtIso: new Date(Date.UTC(2026, 7, 1 + index, 12, 30)).toISOString(),
+        shareKey: `md1:classic:3:${420000 + index}`
+    }));
+    return JSON.stringify({
+        schemaVersion: SAVE_SCHEMA_VERSION,
+        bestScore: 3803,
+        achievements: {
+            ACH_FIRST_CLEAR: true,
+            ACH_LEVEL_FIVE: true,
+            ACH_SCORE_THOUSAND: true,
+            ACH_PERFECT_CLEAR: false,
+            ACH_LAST_LIFE: true
+        },
+        settings: {
+            masterVolume: 0.8,
+            musicVolume: 0.55,
+            sfxVolume: 0.8,
+            displayMode: 'windowed',
+            uiScale: 1,
+            reduceMotion,
+            debugFlags: {
+                showDebugTools: false,
+                allowBoardReveal: false,
+                disableAchievementsOnDebug: true
+            }
+        },
+        onboardingDismissed: true,
+        lastRunSummary: null,
+        powersFtueSeen: true,
+        runHistory
+    });
+};
+
 export const buildFreshProfileSaveJson = (reduceMotion = true): string =>
     JSON.stringify({
         schemaVersion: SAVE_SCHEMA_VERSION,

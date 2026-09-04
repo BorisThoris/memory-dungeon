@@ -15,9 +15,17 @@ import {
     PROFILE_PROGRESS_SOURCE_LABEL,
     PROFILE_PROGRESS_STATUS_LABEL
 } from '../copy/profileProgress';
+import type { RunHistoryRecord } from '../../shared/contracts';
 import { normalizeRunHistory } from '../../shared/run-history-log';
-import { getModeRecords } from '../../shared/mode-records';
-import { formatRunHistoryDate, MODE_RECORDS_COPY, RUN_HISTORY_COPY } from '../copy/runHistory';
+import { getModeRecords, type ModeRecord } from '../../shared/mode-records';
+import {
+    formatRunHistoryDate,
+    MODE_RECORDS_COPY,
+    PROFILE_LEDGER_COPY,
+    PROFILE_LEDGER_VIEWS,
+    RUN_HISTORY_COPY,
+    type ProfileLedgerView
+} from '../copy/runHistory';
 import { useCopyToClipboard } from '../hooks/useCopyToClipboard';
 import { FittedGrid, MetaShell, UiButton } from '../ui';
 import { useAppStore } from '../store/useAppStore';
@@ -29,9 +37,12 @@ import styles from './ProfileScreen.module.css';
  * lane map, impact grid and save-trust ledger restated the archive and the settings page, and are
  * gone.
  *
- * The progress grid is paged rather than long, and it is the first screen to show the daily
- * archive and the quest campaign at all — both were tracked in the save with nothing rendering
- * them, so a player's daily streak existed only in a file.
+ * The ledger below the tier rail is one paged region with three tabs — what the player is
+ * part-way through, their recent runs, and their record in each mode. Three stacked lists could
+ * not fit: with a full run history, thirteen rows sat past the bottom edge with nothing able to
+ * scroll them into view. It is also the first screen to show the daily archive and the quest
+ * campaign at all — both were tracked in the save with nothing rendering them, so a player's
+ * daily streak existed only in a file.
  */
 
 const ProfileScreen = () => {
@@ -76,6 +87,7 @@ const ProfileScreen = () => {
     // One copy state per screen would make every row read "Copied" at once, so each row owns which
     // one of them was pressed.
     const [copiedRunKey, setCopiedRunKey] = useState<string | null>(null);
+    const [ledgerView, setLedgerView] = useState<ProfileLedgerView>('progress');
 
     return (
         <MetaShell
@@ -115,57 +127,89 @@ const ProfileScreen = () => {
                 ))}
             </div>
 
-            <section aria-label={PROFILE_PROGRESS_COPY.label} className={styles.progress}>
-                <FittedGrid
-                    ariaLabel={PROFILE_PROGRESS_COPY.label}
-                    emptyState={PROFILE_PROGRESS_COPY.noRows}
-                    items={progressRows}
-                    itemNoun="entries"
-                    keyForItem={(row) => `${row.source}:${row.id}`}
-                    minColumnWidth={220}
-                    renderItem={(row: LocalProgressRegistryRow) => (
-                        <article className={styles.progressCard} data-status={row.status}>
-                            <span className={styles.progressKicker}>{PROFILE_PROGRESS_SOURCE_LABEL[row.source]}</span>
-                            <strong className={styles.progressTitle}>{row.title}</strong>
-                            <span className={styles.progressMeta}>
-                                {PROFILE_PROGRESS_STATUS_LABEL[row.status]} · {row.progressLabel}
-                            </span>
-                        </article>
-                    )}
-                    rowHeight={104}
-                    testId="profile-progress-grid"
-                />
-            </section>
-
-            <section aria-label={MODE_RECORDS_COPY.label} className={styles.history} data-testid="profile-mode-records">
-                <h2 className={styles.historyHeading}>{MODE_RECORDS_COPY.label}</h2>
-                {modeRecords.length === 0 ? (
-                    <p className={styles.historyEmpty}>{MODE_RECORDS_COPY.empty}</p>
-                ) : (
-                    <ul className={styles.historyList}>
-                        {modeRecords.map((record) => (
-                            <li className={styles.recordRow} key={record.mode}>
+            <section aria-label={PROFILE_LEDGER_COPY.label} className={styles.ledger} data-testid="profile-ledger">
+                <div className={styles.ledgerHeader}>
+                    <h2 className={styles.ledgerHeading}>{PROFILE_LEDGER_COPY.label}</h2>
+                    <div aria-label={PROFILE_LEDGER_COPY.tabAriaLabel} className={styles.ledgerTabs} role="tablist">
+                        {PROFILE_LEDGER_VIEWS.map((view) => (
+                            <button
+                                aria-selected={ledgerView === view}
+                                className={styles.ledgerTab}
+                                data-selected={ledgerView === view}
+                                data-testid={`profile-ledger-${view}`}
+                                key={view}
+                                onClick={() => {
+                                    resumeUiSfxContext();
+                                    playUiClickSfx(uiGain);
+                                    setLedgerView(view);
+                                }}
+                                role="tab"
+                                type="button"
+                            >
+                                {PROFILE_LEDGER_COPY.tab[view]}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+                {ledgerView === 'progress' ? (
+                    <FittedGrid
+                        ariaLabel={PROFILE_PROGRESS_COPY.label}
+                        emptyState={PROFILE_PROGRESS_COPY.noRows}
+                        items={progressRows}
+                        itemNoun="entries"
+                        keyForItem={(row) => `${row.source}:${row.id}`}
+                        minColumnWidth={220}
+                        renderItem={(row: LocalProgressRegistryRow) => (
+                            <article className={styles.progressCard} data-status={row.status}>
+                                <span className={styles.progressKicker}>{PROFILE_PROGRESS_SOURCE_LABEL[row.source]}</span>
+                                <strong className={styles.progressTitle}>{row.title}</strong>
+                                <span className={styles.progressMeta}>
+                                    {PROFILE_PROGRESS_STATUS_LABEL[row.status]} · {row.progressLabel}
+                                </span>
+                            </article>
+                        )}
+                        resetKey="progress"
+                        rowHeight={104}
+                        testId="profile-progress-grid"
+                    />
+                ) : ledgerView === 'records' ? (
+                    <FittedGrid
+                        ariaLabel={MODE_RECORDS_COPY.label}
+                        emptyState={MODE_RECORDS_COPY.empty}
+                        items={modeRecords}
+                        itemNoun="records"
+                        keyForItem={(record) => record.mode}
+                        minColumnWidth={240}
+                        renderItem={(record: ModeRecord) => (
+                            <article className={styles.ledgerCard}>
                                 <strong className={styles.historyMode}>{record.mode}</strong>
                                 <span className={styles.historyResult}>
                                     {MODE_RECORDS_COPY.result(record.totalScore, record.highestLevel)}
                                 </span>
                                 <span className={styles.historyDate}>{MODE_RECORDS_COPY.runs(record.runs)}</span>
-                            </li>
-                        ))}
-                    </ul>
-                )}
-            </section>
-
-            <section aria-label={RUN_HISTORY_COPY.label} className={styles.history} data-testid="profile-run-history">
-                <h2 className={styles.historyHeading}>{RUN_HISTORY_COPY.label}</h2>
-                {runHistory.length === 0 ? (
-                    <p className={styles.historyEmpty}>{RUN_HISTORY_COPY.empty}</p>
+                            </article>
+                        )}
+                        resetKey="records"
+                        rowHeight={92}
+                        testId="profile-mode-records"
+                    />
                 ) : (
-                    <ol className={styles.historyList}>
-                        {runHistory.map((record) => (
-                            <li className={styles.historyRow} key={`${record.endedAtIso}:${record.mode}`}>
-                                <strong className={styles.historyMode}>
-                                    {record.mode}
+                    <FittedGrid
+                        ariaLabel={RUN_HISTORY_COPY.label}
+                        emptyState={RUN_HISTORY_COPY.empty}
+                        items={runHistory}
+                        itemNoun="runs"
+                        keyForItem={(record) => `${record.endedAtIso}:${record.mode}`}
+                        minColumnWidth={240}
+                        renderItem={(record: RunHistoryRecord) => (
+                            <article className={styles.ledgerCard}>
+                                {/*
+                                 * The badge sits beside the name rather than inside it: the name
+                                 * ellipsises a long mode away, and a box that clips its overflow
+                                 * was cutting the badge off at the narrowest width.
+                                 */}
+                                <div className={styles.ledgerCardTop}>
+                                    <strong className={styles.historyMode}>{record.mode}</strong>
                                     {bestRecordedScore > 0 && record.totalScore === bestRecordedScore ? (
                                         <span
                                             aria-label={RUN_HISTORY_COPY.bestAriaLabel}
@@ -176,33 +220,38 @@ const ProfileScreen = () => {
                                             {RUN_HISTORY_COPY.best}
                                         </span>
                                     ) : null}
-                                </strong>
+                                </div>
                                 <span className={styles.historyResult}>{RUN_HISTORY_COPY.result(record)}</span>
-                                <span className={styles.historyDate}>{formatRunHistoryDate(record.endedAtIso)}</span>
-                                {record.shareKey === null ? null : (
-                                    <UiButton
-                                        aria-label={RUN_HISTORY_COPY.copyAriaLabel(record)}
-                                        data-testid="profile-run-history-copy"
-                                        onClick={() => {
-                                            resumeUiSfxContext();
-                                            playUiClickSfx(uiGain);
-                                            setCopiedRunKey(record.shareKey);
-                                            copyToClipboard(record.shareKey ?? '');
-                                        }}
-                                        size="sm"
-                                        type="button"
-                                        variant="secondary"
-                                    >
-                                        {copiedRunKey === record.shareKey && copyState === 'copied'
-                                            ? RUN_HISTORY_COPY.copyDone
-                                            : copiedRunKey === record.shareKey && copyState === 'failed'
-                                              ? RUN_HISTORY_COPY.copyFailed
-                                              : RUN_HISTORY_COPY.copy}
-                                    </UiButton>
-                                )}
-                            </li>
-                        ))}
-                    </ol>
+                                <div className={styles.ledgerCardFoot}>
+                                    <span className={styles.historyDate}>{formatRunHistoryDate(record.endedAtIso)}</span>
+                                    {record.shareKey === null ? null : (
+                                        <UiButton
+                                            aria-label={RUN_HISTORY_COPY.copyAriaLabel(record)}
+                                            data-testid="profile-run-history-copy"
+                                            onClick={() => {
+                                                resumeUiSfxContext();
+                                                playUiClickSfx(uiGain);
+                                                setCopiedRunKey(record.shareKey);
+                                                copyToClipboard(record.shareKey ?? '');
+                                            }}
+                                            size="sm"
+                                            type="button"
+                                            variant="secondary"
+                                        >
+                                            {copiedRunKey === record.shareKey && copyState === 'copied'
+                                                ? RUN_HISTORY_COPY.copyDone
+                                                : copiedRunKey === record.shareKey && copyState === 'failed'
+                                                  ? RUN_HISTORY_COPY.copyFailed
+                                                  : RUN_HISTORY_COPY.copy}
+                                        </UiButton>
+                                    )}
+                                </div>
+                            </article>
+                        )}
+                        resetKey="runs"
+                        rowHeight={92}
+                        testId="profile-run-history"
+                    />
                 )}
             </section>
 
