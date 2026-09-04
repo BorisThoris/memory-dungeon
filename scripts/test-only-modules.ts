@@ -24,6 +24,7 @@ export const TEST_ONLY_EXEMPTIONS: Record<string, string> = {
     'assetDropInReadiness.ts': 'Asset pipeline readiness record: what each art category accepts and who owns it.',
     'difficulty-profile.ts': 'The shipped tuning profile written down so a change to the curve has to change this too.',
     'dungeon-combinatoric-matrix.ts': 'QA coverage matrix: which dungeon combinations are covered, excluded or future.',
+    'dungeon-e2e-fixtures.ts': 'A capture plan for the dungeon room types: recipes naming a fixture id, seed, floor and screenshot names. The fixtures it names were never built.',
     'dungeon-versioning.ts': 'Rules-change taxonomy that says which edits must bump the rules version.',
     'dungeonAudioEventCoverage.ts': 'Audio coverage table pairing every dungeon event with its cue and duck.',
     'gameplay-interaction-graph.ts': 'Validates the interaction graph JSON against the feedback facts; a check, not a caller.',
@@ -41,11 +42,7 @@ export const TEST_ONLY_EXEMPTIONS: Record<string, string> = {
  * rebuild. Listed by name so the audit passes on today's repo and fails the moment a *new* module
  * joins them. Reconnect or delete them, then delete the line.
  */
-export const TEST_ONLY_BASELINE: Record<string, string> = {
-    'dungeon-e2e-fixtures.ts': 'Ten authored dungeon fixtures; no e2e spec loads them any more.',
-    'gameplayEventAnnouncement.ts': 'Announcement presentation for gameplay events, including its dedupe key.',
-    'runPayoffSignals.ts': 'End-of-run payoff signals with their arcade and audio cues.'
-};
+export const TEST_ONLY_BASELINE: Record<string, string> = {};
 
 /** Where a module may be reported from. */
 const SOURCE_ROOTS = ['src'] as const;

@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2495,
-    "codeFileCount": 963,
-    "exportedSymbolCount": 3530,
+    "trackedFileCount": 2493,
+    "codeFileCount": 961,
+    "exportedSymbolCount": 3514,
     "contentItemCount": 63,
     "mechanicCount": 136,
     "stateFieldCount": 144,
-    "relationshipCount": 10343
+    "relationshipCount": 10320
   },
   "inventory": [
     {
@@ -2320,7 +2320,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 36714,
-      "sha256": "a140a7ef9e6e1a7ae9671b4c895ecf07380b9676f537d839f4e31c2c87dea2e5"
+      "sha256": "34b8992d9d4fbd3f5545414b6e63d1ef1575e355938dfa0e8e873efb0c594777"
     },
     {
       "path": "docs/UI_RETHINK_PLAN.md",
@@ -4635,8 +4635,8 @@
     {
       "path": "scripts/shared-reach.ts",
       "category": "script",
-      "bytes": 9377,
-      "sha256": "9a9b7d5a6f9faa3489ddc9a95eeff9baa49397fb6690765c1f37667bf8709d0b"
+      "bytes": 9504,
+      "sha256": "a8668f06c5b26d18d138784693991eaba46748a5ea57b705bd16b5d8c12e1912"
     },
     {
       "path": "scripts/sim-build-strategies.ts",
@@ -4695,8 +4695,8 @@
     {
       "path": "scripts/test-only-modules.ts",
       "category": "script",
-      "bytes": 8410,
-      "sha256": "ccba170af4f4cd896d4c2f7e89834fe4821eb208e07d221510ede5c7ad5e8702"
+      "bytes": 8290,
+      "sha256": "5ba7b6ca4d86f4038c1fb134cfd3af92fd15f8cfb917c265724554c24cde20c7"
     },
     {
       "path": "scripts/vite-dev-blueprint-api.mjs",
@@ -9019,18 +9019,6 @@
       "sha256": "b1f6e48226d8c9569ca19dfcf40adc094fdd6fcad42adeea8e834235cbf808e6"
     },
     {
-      "path": "src/renderer/copy/runPayoffSignals.test.ts",
-      "category": "test",
-      "bytes": 13656,
-      "sha256": "310e3753d20cb7fe9546cf05e90a912fce38a8c57a5b3d7c1b46856471347a17"
-    },
-    {
-      "path": "src/renderer/copy/runPayoffSignals.ts",
-      "category": "source",
-      "bytes": 19738,
-      "sha256": "00e149b51e6f4edb55dd988f6ac552ec8da56875fa22a01a2489ea98d47703b6"
-    },
-    {
       "path": "src/renderer/copy/saveRecoveryNotice.ts",
       "category": "source",
       "bytes": 721,
@@ -9303,8 +9291,8 @@
     {
       "path": "src/renderer/hooks/useHudPoliteLiveAnnouncement.ts",
       "category": "source",
-      "bytes": 28292,
-      "sha256": "b09034096266c140eec16473b3b51f67599a6237371e00cb2f83e2ba1feb1f87"
+      "bytes": 28427,
+      "sha256": "1c8c37a172f0d6023f9da3906cb7bd877908389e9f8c2cb0008bfd4c64c256b8"
     },
     {
       "path": "src/renderer/hooks/useLatestRef.ts",
@@ -21294,53 +21282,6 @@
       "testedBy": []
     },
     {
-      "id": "file:src/renderer/copy/runPayoffSignals.test.ts",
-      "path": "src/renderer/copy/runPayoffSignals.test.ts",
-      "layer": "renderer",
-      "role": "test",
-      "lineCount": 325,
-      "imports": [
-        "file:src/renderer/copy/runPayoffSignals.ts",
-        "file:src/shared/contracts.ts"
-      ],
-      "exports": [],
-      "testedBy": []
-    },
-    {
-      "id": "file:src/renderer/copy/runPayoffSignals.ts",
-      "path": "src/renderer/copy/runPayoffSignals.ts",
-      "layer": "renderer",
-      "role": "production",
-      "lineCount": 572,
-      "imports": [
-        "file:src/shared/chain-targets.ts",
-        "file:src/shared/contracts.ts",
-        "file:src/shared/run-array-guards.ts",
-        "file:src/shared/run-number-guards.ts"
-      ],
-      "exports": [
-        "symbol:src/renderer/copy/runPayoffSignals.ts#formatRunPayoffBurstSignalLabel",
-        "symbol:src/renderer/copy/runPayoffSignals.ts#formatRunPayoffCrescendoSignalLabel",
-        "symbol:src/renderer/copy/runPayoffSignals.ts#formatRunPayoffLaneActionMapAttr",
-        "symbol:src/renderer/copy/runPayoffSignals.ts#formatRunPayoffLaneMapAttr",
-        "symbol:src/renderer/copy/runPayoffSignals.ts#formatRunPayoffLaneMapLabel",
-        "symbol:src/renderer/copy/runPayoffSignals.ts#formatRunPayoffSequenceSignalLabel",
-        "symbol:src/renderer/copy/runPayoffSignals.ts#formatRunPayoffSignalsLabel",
-        "symbol:src/renderer/copy/runPayoffSignals.ts#getRunPayoffBurstSignal",
-        "symbol:src/renderer/copy/runPayoffSignals.ts#getRunPayoffCrescendoSignal",
-        "symbol:src/renderer/copy/runPayoffSignals.ts#getRunPayoffLaneAudioCue",
-        "symbol:src/renderer/copy/runPayoffSignals.ts#getRunPayoffLaneBeatCount",
-        "symbol:src/renderer/copy/runPayoffSignals.ts#getRunPayoffLaneMap",
-        "symbol:src/renderer/copy/runPayoffSignals.ts#getRunPayoffLaneScreenCue",
-        "symbol:src/renderer/copy/runPayoffSignals.ts#getRunPayoffSequenceSignal",
-        "symbol:src/renderer/copy/runPayoffSignals.ts#getRunPayoffSignalBeatCount",
-        "symbol:src/renderer/copy/runPayoffSignals.ts#getRunPayoffSignals"
-      ],
-      "testedBy": [
-        "file:src/renderer/copy/runPayoffSignals.test.ts"
-      ]
-    },
-    {
       "id": "file:src/renderer/copy/saveRecoveryNotice.ts",
       "path": "src/renderer/copy/saveRecoveryNotice.ts",
       "layer": "renderer",
@@ -21953,9 +21894,10 @@
       "path": "src/renderer/hooks/useHudPoliteLiveAnnouncement.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 686,
+      "lineCount": 688,
       "imports": [
         "file:src/renderer/copy/boardTurnAnnouncement.ts",
+        "file:src/renderer/copy/gameplayEventAnnouncement.ts",
         "file:src/renderer/copy/gameplayHints.ts",
         "file:src/renderer/copy/hudActionFeedback.ts",
         "file:src/renderer/store/gameplayFeedbackAdapter.ts",
@@ -25703,7 +25645,6 @@
         "file:src/renderer/components/tileTextures.test.ts",
         "file:src/renderer/components/useGameScreenTraitRouteTargets.test.tsx",
         "file:src/renderer/copy/relicDraftOffer.test.ts",
-        "file:src/renderer/copy/runPayoffSignals.test.ts",
         "file:src/renderer/desktop-client.test.ts",
         "file:src/renderer/hooks/useDistractionChannelTick.integration.test.tsx",
         "file:src/renderer/hooks/useHudPoliteLiveAnnouncement.test.ts",
@@ -41113,134 +41054,6 @@
       "endLine": 19
     },
     {
-      "id": "symbol:src/renderer/copy/runPayoffSignals.ts#formatRunPayoffBurstSignalLabel",
-      "name": "formatRunPayoffBurstSignalLabel",
-      "kind": "value",
-      "file": "src/renderer/copy/runPayoffSignals.ts",
-      "line": 469,
-      "endLine": 472
-    },
-    {
-      "id": "symbol:src/renderer/copy/runPayoffSignals.ts#formatRunPayoffCrescendoSignalLabel",
-      "name": "formatRunPayoffCrescendoSignalLabel",
-      "kind": "value",
-      "file": "src/renderer/copy/runPayoffSignals.ts",
-      "line": 529,
-      "endLine": 532
-    },
-    {
-      "id": "symbol:src/renderer/copy/runPayoffSignals.ts#formatRunPayoffLaneActionMapAttr",
-      "name": "formatRunPayoffLaneActionMapAttr",
-      "kind": "value",
-      "file": "src/renderer/copy/runPayoffSignals.ts",
-      "line": 428,
-      "endLine": 430
-    },
-    {
-      "id": "symbol:src/renderer/copy/runPayoffSignals.ts#formatRunPayoffLaneMapAttr",
-      "name": "formatRunPayoffLaneMapAttr",
-      "kind": "value",
-      "file": "src/renderer/copy/runPayoffSignals.ts",
-      "line": 425,
-      "endLine": 426
-    },
-    {
-      "id": "symbol:src/renderer/copy/runPayoffSignals.ts#formatRunPayoffLaneMapLabel",
-      "name": "formatRunPayoffLaneMapLabel",
-      "kind": "value",
-      "file": "src/renderer/copy/runPayoffSignals.ts",
-      "line": 432,
-      "endLine": 438
-    },
-    {
-      "id": "symbol:src/renderer/copy/runPayoffSignals.ts#formatRunPayoffSequenceSignalLabel",
-      "name": "formatRunPayoffSequenceSignalLabel",
-      "kind": "value",
-      "file": "src/renderer/copy/runPayoffSignals.ts",
-      "line": 565,
-      "endLine": 571
-    },
-    {
-      "id": "symbol:src/renderer/copy/runPayoffSignals.ts#formatRunPayoffSignalsLabel",
-      "name": "formatRunPayoffSignalsLabel",
-      "kind": "value",
-      "file": "src/renderer/copy/runPayoffSignals.ts",
-      "line": 387,
-      "endLine": 393
-    },
-    {
-      "id": "symbol:src/renderer/copy/runPayoffSignals.ts#getRunPayoffBurstSignal",
-      "name": "getRunPayoffBurstSignal",
-      "kind": "value",
-      "file": "src/renderer/copy/runPayoffSignals.ts",
-      "line": 440,
-      "endLine": 467
-    },
-    {
-      "id": "symbol:src/renderer/copy/runPayoffSignals.ts#getRunPayoffCrescendoSignal",
-      "name": "getRunPayoffCrescendoSignal",
-      "kind": "value",
-      "file": "src/renderer/copy/runPayoffSignals.ts",
-      "line": 474,
-      "endLine": 527
-    },
-    {
-      "id": "symbol:src/renderer/copy/runPayoffSignals.ts#getRunPayoffLaneAudioCue",
-      "name": "getRunPayoffLaneAudioCue",
-      "kind": "value",
-      "file": "src/renderer/copy/runPayoffSignals.ts",
-      "line": 361,
-      "endLine": 372
-    },
-    {
-      "id": "symbol:src/renderer/copy/runPayoffSignals.ts#getRunPayoffLaneBeatCount",
-      "name": "getRunPayoffLaneBeatCount",
-      "kind": "value",
-      "file": "src/renderer/copy/runPayoffSignals.ts",
-      "line": 357,
-      "endLine": 359
-    },
-    {
-      "id": "symbol:src/renderer/copy/runPayoffSignals.ts#getRunPayoffLaneMap",
-      "name": "getRunPayoffLaneMap",
-      "kind": "value",
-      "file": "src/renderer/copy/runPayoffSignals.ts",
-      "line": 395,
-      "endLine": 423
-    },
-    {
-      "id": "symbol:src/renderer/copy/runPayoffSignals.ts#getRunPayoffLaneScreenCue",
-      "name": "getRunPayoffLaneScreenCue",
-      "kind": "value",
-      "file": "src/renderer/copy/runPayoffSignals.ts",
-      "line": 374,
-      "endLine": 385
-    },
-    {
-      "id": "symbol:src/renderer/copy/runPayoffSignals.ts#getRunPayoffSequenceSignal",
-      "name": "getRunPayoffSequenceSignal",
-      "kind": "value",
-      "file": "src/renderer/copy/runPayoffSignals.ts",
-      "line": 534,
-      "endLine": 563
-    },
-    {
-      "id": "symbol:src/renderer/copy/runPayoffSignals.ts#getRunPayoffSignalBeatCount",
-      "name": "getRunPayoffSignalBeatCount",
-      "kind": "value",
-      "file": "src/renderer/copy/runPayoffSignals.ts",
-      "line": 353,
-      "endLine": 355
-    },
-    {
-      "id": "symbol:src/renderer/copy/runPayoffSignals.ts#getRunPayoffSignals",
-      "name": "getRunPayoffSignals",
-      "kind": "value",
-      "file": "src/renderer/copy/runPayoffSignals.ts",
-      "line": 201,
-      "endLine": 351
-    },
-    {
       "id": "symbol:src/renderer/copy/saveRecoveryNotice.ts#SAVE_RECOVERY_COPY",
       "name": "SAVE_RECOVERY_COPY",
       "kind": "value",
@@ -41725,24 +41538,24 @@
       "name": "formatHudActionFeedbackText",
       "kind": "ExportSpecifier",
       "file": "src/renderer/hooks/useHudPoliteLiveAnnouncement.ts",
-      "line": 16,
-      "endLine": 16
+      "line": 17,
+      "endLine": 17
     },
     {
       "id": "symbol:src/renderer/hooks/useHudPoliteLiveAnnouncement.ts#getFindableToastText",
       "name": "getFindableToastText",
       "kind": "ExportSpecifier",
       "file": "src/renderer/hooks/useHudPoliteLiveAnnouncement.ts",
-      "line": 16,
-      "endLine": 16
+      "line": 17,
+      "endLine": 17
     },
     {
       "id": "symbol:src/renderer/hooks/useHudPoliteLiveAnnouncement.ts#useHudPoliteLiveAnnouncement",
       "name": "useHudPoliteLiveAnnouncement",
       "kind": "value",
       "file": "src/renderer/hooks/useHudPoliteLiveAnnouncement.ts",
-      "line": 119,
-      "endLine": 685
+      "line": 120,
+      "endLine": 687
     },
     {
       "id": "symbol:src/renderer/hooks/useLatestRef.ts#useLatestRef",
@@ -79500,102 +79313,6 @@
       "kind": "exports"
     },
     {
-      "id": "exports:src/renderer/copy/runPayoffSignals.ts->symbol:src/renderer/copy/runPayoffSignals.ts#formatRunPayoffBurstSignalLabel",
-      "source": "file:src/renderer/copy/runPayoffSignals.ts",
-      "target": "symbol:src/renderer/copy/runPayoffSignals.ts#formatRunPayoffBurstSignalLabel",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/copy/runPayoffSignals.ts->symbol:src/renderer/copy/runPayoffSignals.ts#formatRunPayoffCrescendoSignalLabel",
-      "source": "file:src/renderer/copy/runPayoffSignals.ts",
-      "target": "symbol:src/renderer/copy/runPayoffSignals.ts#formatRunPayoffCrescendoSignalLabel",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/copy/runPayoffSignals.ts->symbol:src/renderer/copy/runPayoffSignals.ts#formatRunPayoffLaneActionMapAttr",
-      "source": "file:src/renderer/copy/runPayoffSignals.ts",
-      "target": "symbol:src/renderer/copy/runPayoffSignals.ts#formatRunPayoffLaneActionMapAttr",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/copy/runPayoffSignals.ts->symbol:src/renderer/copy/runPayoffSignals.ts#formatRunPayoffLaneMapAttr",
-      "source": "file:src/renderer/copy/runPayoffSignals.ts",
-      "target": "symbol:src/renderer/copy/runPayoffSignals.ts#formatRunPayoffLaneMapAttr",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/copy/runPayoffSignals.ts->symbol:src/renderer/copy/runPayoffSignals.ts#formatRunPayoffLaneMapLabel",
-      "source": "file:src/renderer/copy/runPayoffSignals.ts",
-      "target": "symbol:src/renderer/copy/runPayoffSignals.ts#formatRunPayoffLaneMapLabel",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/copy/runPayoffSignals.ts->symbol:src/renderer/copy/runPayoffSignals.ts#formatRunPayoffSequenceSignalLabel",
-      "source": "file:src/renderer/copy/runPayoffSignals.ts",
-      "target": "symbol:src/renderer/copy/runPayoffSignals.ts#formatRunPayoffSequenceSignalLabel",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/copy/runPayoffSignals.ts->symbol:src/renderer/copy/runPayoffSignals.ts#formatRunPayoffSignalsLabel",
-      "source": "file:src/renderer/copy/runPayoffSignals.ts",
-      "target": "symbol:src/renderer/copy/runPayoffSignals.ts#formatRunPayoffSignalsLabel",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/copy/runPayoffSignals.ts->symbol:src/renderer/copy/runPayoffSignals.ts#getRunPayoffBurstSignal",
-      "source": "file:src/renderer/copy/runPayoffSignals.ts",
-      "target": "symbol:src/renderer/copy/runPayoffSignals.ts#getRunPayoffBurstSignal",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/copy/runPayoffSignals.ts->symbol:src/renderer/copy/runPayoffSignals.ts#getRunPayoffCrescendoSignal",
-      "source": "file:src/renderer/copy/runPayoffSignals.ts",
-      "target": "symbol:src/renderer/copy/runPayoffSignals.ts#getRunPayoffCrescendoSignal",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/copy/runPayoffSignals.ts->symbol:src/renderer/copy/runPayoffSignals.ts#getRunPayoffLaneAudioCue",
-      "source": "file:src/renderer/copy/runPayoffSignals.ts",
-      "target": "symbol:src/renderer/copy/runPayoffSignals.ts#getRunPayoffLaneAudioCue",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/copy/runPayoffSignals.ts->symbol:src/renderer/copy/runPayoffSignals.ts#getRunPayoffLaneBeatCount",
-      "source": "file:src/renderer/copy/runPayoffSignals.ts",
-      "target": "symbol:src/renderer/copy/runPayoffSignals.ts#getRunPayoffLaneBeatCount",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/copy/runPayoffSignals.ts->symbol:src/renderer/copy/runPayoffSignals.ts#getRunPayoffLaneMap",
-      "source": "file:src/renderer/copy/runPayoffSignals.ts",
-      "target": "symbol:src/renderer/copy/runPayoffSignals.ts#getRunPayoffLaneMap",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/copy/runPayoffSignals.ts->symbol:src/renderer/copy/runPayoffSignals.ts#getRunPayoffLaneScreenCue",
-      "source": "file:src/renderer/copy/runPayoffSignals.ts",
-      "target": "symbol:src/renderer/copy/runPayoffSignals.ts#getRunPayoffLaneScreenCue",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/copy/runPayoffSignals.ts->symbol:src/renderer/copy/runPayoffSignals.ts#getRunPayoffSequenceSignal",
-      "source": "file:src/renderer/copy/runPayoffSignals.ts",
-      "target": "symbol:src/renderer/copy/runPayoffSignals.ts#getRunPayoffSequenceSignal",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/copy/runPayoffSignals.ts->symbol:src/renderer/copy/runPayoffSignals.ts#getRunPayoffSignalBeatCount",
-      "source": "file:src/renderer/copy/runPayoffSignals.ts",
-      "target": "symbol:src/renderer/copy/runPayoffSignals.ts#getRunPayoffSignalBeatCount",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/copy/runPayoffSignals.ts->symbol:src/renderer/copy/runPayoffSignals.ts#getRunPayoffSignals",
-      "source": "file:src/renderer/copy/runPayoffSignals.ts",
-      "target": "symbol:src/renderer/copy/runPayoffSignals.ts#getRunPayoffSignals",
-      "kind": "exports"
-    },
-    {
       "id": "exports:src/renderer/copy/saveRecoveryNotice.ts->symbol:src/renderer/copy/saveRecoveryNotice.ts#SAVE_RECOVERY_COPY",
       "source": "file:src/renderer/copy/saveRecoveryNotice.ts",
       "target": "symbol:src/renderer/copy/saveRecoveryNotice.ts#SAVE_RECOVERY_COPY",
@@ -105391,42 +105108,6 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/copy/runPayoffSignals.test.ts->src/renderer/copy/runPayoffSignals.ts",
-      "source": "file:src/renderer/copy/runPayoffSignals.test.ts",
-      "target": "file:src/renderer/copy/runPayoffSignals.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/copy/runPayoffSignals.test.ts->src/shared/contracts.ts",
-      "source": "file:src/renderer/copy/runPayoffSignals.test.ts",
-      "target": "file:src/shared/contracts.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/copy/runPayoffSignals.ts->src/shared/chain-targets.ts",
-      "source": "file:src/renderer/copy/runPayoffSignals.ts",
-      "target": "file:src/shared/chain-targets.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/copy/runPayoffSignals.ts->src/shared/contracts.ts",
-      "source": "file:src/renderer/copy/runPayoffSignals.ts",
-      "target": "file:src/shared/contracts.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/copy/runPayoffSignals.ts->src/shared/run-array-guards.ts",
-      "source": "file:src/renderer/copy/runPayoffSignals.ts",
-      "target": "file:src/shared/run-array-guards.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/copy/runPayoffSignals.ts->src/shared/run-number-guards.ts",
-      "source": "file:src/renderer/copy/runPayoffSignals.ts",
-      "target": "file:src/shared/run-number-guards.ts",
-      "kind": "imports"
-    },
-    {
       "id": "imports:src/renderer/copy/traitInteractionLaneMap.test.ts->src/renderer/copy/traitInteractionLaneMap.ts",
       "source": "file:src/renderer/copy/traitInteractionLaneMap.test.ts",
       "target": "file:src/renderer/copy/traitInteractionLaneMap.ts",
@@ -105658,6 +105339,12 @@
       "id": "imports:src/renderer/hooks/useHudPoliteLiveAnnouncement.ts->src/renderer/copy/boardTurnAnnouncement.ts",
       "source": "file:src/renderer/hooks/useHudPoliteLiveAnnouncement.ts",
       "target": "file:src/renderer/copy/boardTurnAnnouncement.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/hooks/useHudPoliteLiveAnnouncement.ts->src/renderer/copy/gameplayEventAnnouncement.ts",
+      "source": "file:src/renderer/hooks/useHudPoliteLiveAnnouncement.ts",
+      "target": "file:src/renderer/copy/gameplayEventAnnouncement.ts",
       "kind": "imports"
     },
     {
@@ -125381,12 +125068,6 @@
       "kind": "tested_by"
     },
     {
-      "id": "tested_by:src/renderer/copy/runPayoffSignals.ts->file:src/renderer/copy/runPayoffSignals.test.ts",
-      "source": "file:src/renderer/copy/runPayoffSignals.ts",
-      "target": "file:src/renderer/copy/runPayoffSignals.test.ts",
-      "kind": "tested_by"
-    },
-    {
       "id": "tested_by:src/renderer/copy/saveRecoveryNotice.ts->file:src/renderer/components/MainMenuSaveFailureNotice.test.tsx",
       "source": "file:src/renderer/copy/saveRecoveryNotice.ts",
       "target": "file:src/renderer/components/MainMenuSaveFailureNotice.test.tsx",
@@ -126728,12 +126409,6 @@
       "id": "tested_by:src/shared/contracts.ts->file:src/renderer/copy/relicDraftOffer.test.ts",
       "source": "file:src/shared/contracts.ts",
       "target": "file:src/renderer/copy/relicDraftOffer.test.ts",
-      "kind": "tested_by"
-    },
-    {
-      "id": "tested_by:src/shared/contracts.ts->file:src/renderer/copy/runPayoffSignals.test.ts",
-      "source": "file:src/shared/contracts.ts",
-      "target": "file:src/renderer/copy/runPayoffSignals.test.ts",
       "kind": "tested_by"
     },
     {

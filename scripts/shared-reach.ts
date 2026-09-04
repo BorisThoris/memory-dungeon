@@ -64,6 +64,8 @@ export const SHARED_REACH_EXEMPTIONS: Record<string, string> = {
     'social-play-scope.ts': 'Scope record for what social play does and does not include offline.',
 
     // Test fixtures.
+    'dungeon-e2e-fixtures.ts':
+        'A capture plan, not fixtures: ten recipes naming a fixture id, seed, floor, selectors and screenshot filenames for the dungeon room types. The fixtures it names (dungeonEnemy, dungeonBoss, ...) were never built, so this is a record of intended coverage that does not exist.',
     'dungeon-feature-coverage.ts': 'Test-only dungeon feature coverage helper.',
     'game-fixtures.ts': 'Shared test fixtures.',
     'gameplay-event-fixtures.ts': 'Shared test fixtures for gameplay events.'
@@ -73,9 +75,7 @@ export const SHARED_REACH_EXEMPTIONS: Record<string, string> = {
  * Known and unreachable, and that is a problem rather than a design. The gate passes on these and
  * fails the moment a new module joins them or one of these is fixed and the line goes stale.
  */
-export const SHARED_REACH_BASELINE: Record<string, string> = {
-    'dungeon-e2e-fixtures.ts': 'Ten authored dungeon fixtures — enemy floor, boss floor, trap room, rest, treasure, event, exit lock — that no e2e spec loads and no debug door opens.'
-};
+export const SHARED_REACH_BASELINE: Record<string, string> = {};
 
 const walk = (dir: string, out: string[] = []): string[] => {
     for (const entry of readdirSync(dir)) {

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { runNonNegativeInteger, runNonNegativeIntegerWithFallback } from '../../shared/run-number-guards';
 import { buildBoardTurnAnnouncement, volatileShuffleAnnouncementLine } from '../copy/boardTurnAnnouncement';
+import { buildGameplayEventAnnouncement } from '../copy/gameplayEventAnnouncement';
 import type { BoardTurnResolvedEvent } from '../store/gameplayFeedbackAdapter';
 import { GAMBIT_OPPORTUNITY_HINT_LINE } from '../copy/gameplayHints';
 import type { GameplayFeedbackPresentation } from '../store/gameplayFeedbackAdapter';
@@ -404,9 +405,10 @@ export const useHudPoliteLiveAnnouncement = ({
         if (boardLevel === null) {
             actionSnapRef.current = null;
             if (newGameplayFeedback) {
-                queuePoliteAnnouncement(newGameplayFeedback.message, {
-                    dedupeKey: `gameplay-event:${newGameplayFeedback.eventId}`,
-                    priority: newGameplayFeedback.priority
+                const presentation = buildGameplayEventAnnouncement(newGameplayFeedback);
+                queuePoliteAnnouncement(presentation.message, {
+                    dedupeKey: presentation.dedupeKey,
+                    priority: presentation.priority
                 });
                 announcedGameplayFeedbackEventIdRef.current = newGameplayFeedback.eventId;
             }
