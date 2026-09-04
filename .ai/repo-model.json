@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2497,
-    "codeFileCount": 965,
-    "exportedSymbolCount": 3533,
+    "trackedFileCount": 2495,
+    "codeFileCount": 963,
+    "exportedSymbolCount": 3530,
     "contentItemCount": 63,
     "mechanicCount": 136,
     "stateFieldCount": 144,
-    "relationshipCount": 10359
+    "relationshipCount": 10343
   },
   "inventory": [
     {
@@ -2320,7 +2320,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 36714,
-      "sha256": "45b8b2e2732f153e19479515afab354f9c5b969a49008082480c287119dbff4c"
+      "sha256": "a140a7ef9e6e1a7ae9671b4c895ecf07380b9676f537d839f4e31c2c87dea2e5"
     },
     {
       "path": "docs/UI_RETHINK_PLAN.md",
@@ -4635,8 +4635,8 @@
     {
       "path": "scripts/shared-reach.ts",
       "category": "script",
-      "bytes": 9110,
-      "sha256": "35817b0a1b195fe3bd0ab4c64ab399c9948b2553737beb32350b104400259ce8"
+      "bytes": 9377,
+      "sha256": "9a9b7d5a6f9faa3489ddc9a95eeff9baa49397fb6690765c1f37667bf8709d0b"
     },
     {
       "path": "scripts/sim-build-strategies.ts",
@@ -4695,8 +4695,8 @@
     {
       "path": "scripts/test-only-modules.ts",
       "category": "script",
-      "bytes": 8512,
-      "sha256": "0a7a1271554af7c985af1372008a70137e56b538841cd9532a783c7394139b7d"
+      "bytes": 8410,
+      "sha256": "ccba170af4f4cd896d4c2f7e89834fe4821eb208e07d221510ede5c7ad5e8702"
     },
     {
       "path": "scripts/vite-dev-blueprint-api.mjs",
@@ -11399,18 +11399,6 @@
       "category": "source",
       "bytes": 8758,
       "sha256": "9e411f8618bb4b3a9c7c9035bcf0e8d8f823d2e45091a50430d92d469ce26bf4"
-    },
-    {
-      "path": "src/shared/level-result-presentation.test.ts",
-      "category": "test",
-      "bytes": 10789,
-      "sha256": "03505ab033949f5eefb3f0ac2f0821415bcce49e0e6d38f2360f5784fa193f85"
-    },
-    {
-      "path": "src/shared/level-result-presentation.ts",
-      "category": "source",
-      "bytes": 14253,
-      "sha256": "1355e75c617042c196487becf798eb3adbf5df30cc38a2abe2ab475415ddaf81"
     },
     {
       "path": "src/shared/loaded-gateway-rules.test.ts",
@@ -25067,8 +25055,7 @@
         "symbol:src/shared/boss-encounters.ts#getFloorIdentityContract"
       ],
       "testedBy": [
-        "file:src/shared/boss-encounters.test.ts",
-        "file:src/shared/level-result-presentation.test.ts"
+        "file:src/shared/boss-encounters.test.ts"
       ]
     },
     {
@@ -25801,7 +25788,6 @@
         "file:src/shared/hazard-tiles.test.ts",
         "file:src/shared/inventory-prep.test.ts",
         "file:src/shared/level-clear-rules.test.ts",
-        "file:src/shared/level-result-presentation.test.ts",
         "file:src/shared/loaded-gateway-rules.test.ts",
         "file:src/shared/long-run-depth.test.ts",
         "file:src/shared/long-run-feedback.test.ts",
@@ -29288,43 +29274,6 @@
       ]
     },
     {
-      "id": "file:src/shared/level-result-presentation.test.ts",
-      "path": "src/shared/level-result-presentation.test.ts",
-      "layer": "shared",
-      "role": "test",
-      "lineCount": 275,
-      "imports": [
-        "file:src/shared/boss-encounters.ts",
-        "file:src/shared/contracts.ts",
-        "file:src/shared/level-result-presentation.ts",
-        "file:src/shared/mechanic-feedback.ts"
-      ],
-      "exports": [],
-      "testedBy": []
-    },
-    {
-      "id": "file:src/shared/level-result-presentation.ts",
-      "path": "src/shared/level-result-presentation.ts",
-      "layer": "shared",
-      "role": "production",
-      "lineCount": 336,
-      "imports": [
-        "file:src/shared/boss-encounters.ts",
-        "file:src/shared/contracts.ts",
-        "file:src/shared/mechanic-feedback.ts",
-        "file:src/shared/run-array-guards.ts",
-        "file:src/shared/run-number-guards.ts"
-      ],
-      "exports": [
-        "symbol:src/shared/level-result-presentation.ts#FloorClearCausalityGroup",
-        "symbol:src/shared/level-result-presentation.ts#FloorClearCausalityRow",
-        "symbol:src/shared/level-result-presentation.ts#getFloorClearCausalityRows"
-      ],
-      "testedBy": [
-        "file:src/shared/level-result-presentation.test.ts"
-      ]
-    },
-    {
       "id": "file:src/shared/loaded-gateway-rules.test.ts",
       "path": "src/shared/loaded-gateway-rules.test.ts",
       "layer": "shared",
@@ -29641,7 +29590,6 @@
       "testedBy": [
         "file:src/shared/dungeon-cards.test.ts",
         "file:src/shared/hazard-tiles.test.ts",
-        "file:src/shared/level-result-presentation.test.ts",
         "file:src/shared/mechanic-feedback.test.ts",
         "file:src/shared/power-verbs.test.ts"
       ]
@@ -54539,30 +54487,6 @@
       "file": "src/shared/level-clear-rules.ts",
       "line": 83,
       "endLine": 106
-    },
-    {
-      "id": "symbol:src/shared/level-result-presentation.ts#FloorClearCausalityGroup",
-      "name": "FloorClearCausalityGroup",
-      "kind": "type",
-      "file": "src/shared/level-result-presentation.ts",
-      "line": 7,
-      "endLine": 7
-    },
-    {
-      "id": "symbol:src/shared/level-result-presentation.ts#FloorClearCausalityRow",
-      "name": "FloorClearCausalityRow",
-      "kind": "interface",
-      "file": "src/shared/level-result-presentation.ts",
-      "line": 9,
-      "endLine": 15
-    },
-    {
-      "id": "symbol:src/shared/level-result-presentation.ts#getFloorClearCausalityRows",
-      "name": "getFloorClearCausalityRows",
-      "kind": "value",
-      "file": "src/shared/level-result-presentation.ts",
-      "line": 55,
-      "endLine": 335
     },
     {
       "id": "symbol:src/shared/loaded-gateway-rules.ts#loadedGatewayRouteTypeFor",
@@ -89608,24 +89532,6 @@
       "kind": "exports"
     },
     {
-      "id": "exports:src/shared/level-result-presentation.ts->symbol:src/shared/level-result-presentation.ts#FloorClearCausalityGroup",
-      "source": "file:src/shared/level-result-presentation.ts",
-      "target": "symbol:src/shared/level-result-presentation.ts#FloorClearCausalityGroup",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/level-result-presentation.ts->symbol:src/shared/level-result-presentation.ts#FloorClearCausalityRow",
-      "source": "file:src/shared/level-result-presentation.ts",
-      "target": "symbol:src/shared/level-result-presentation.ts#FloorClearCausalityRow",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/level-result-presentation.ts->symbol:src/shared/level-result-presentation.ts#getFloorClearCausalityRows",
-      "source": "file:src/shared/level-result-presentation.ts",
-      "target": "symbol:src/shared/level-result-presentation.ts#getFloorClearCausalityRows",
-      "kind": "exports"
-    },
-    {
       "id": "exports:src/shared/loaded-gateway-rules.ts->symbol:src/shared/loaded-gateway-rules.ts#loadedGatewayRouteTypeFor",
       "source": "file:src/shared/loaded-gateway-rules.ts",
       "target": "symbol:src/shared/loaded-gateway-rules.ts#loadedGatewayRouteTypeFor",
@@ -113027,60 +112933,6 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/shared/level-result-presentation.test.ts->src/shared/boss-encounters.ts",
-      "source": "file:src/shared/level-result-presentation.test.ts",
-      "target": "file:src/shared/boss-encounters.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/level-result-presentation.test.ts->src/shared/contracts.ts",
-      "source": "file:src/shared/level-result-presentation.test.ts",
-      "target": "file:src/shared/contracts.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/level-result-presentation.test.ts->src/shared/level-result-presentation.ts",
-      "source": "file:src/shared/level-result-presentation.test.ts",
-      "target": "file:src/shared/level-result-presentation.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/level-result-presentation.test.ts->src/shared/mechanic-feedback.ts",
-      "source": "file:src/shared/level-result-presentation.test.ts",
-      "target": "file:src/shared/mechanic-feedback.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/level-result-presentation.ts->src/shared/boss-encounters.ts",
-      "source": "file:src/shared/level-result-presentation.ts",
-      "target": "file:src/shared/boss-encounters.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/level-result-presentation.ts->src/shared/contracts.ts",
-      "source": "file:src/shared/level-result-presentation.ts",
-      "target": "file:src/shared/contracts.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/level-result-presentation.ts->src/shared/mechanic-feedback.ts",
-      "source": "file:src/shared/level-result-presentation.ts",
-      "target": "file:src/shared/mechanic-feedback.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/level-result-presentation.ts->src/shared/run-array-guards.ts",
-      "source": "file:src/shared/level-result-presentation.ts",
-      "target": "file:src/shared/run-array-guards.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/level-result-presentation.ts->src/shared/run-number-guards.ts",
-      "source": "file:src/shared/level-result-presentation.ts",
-      "target": "file:src/shared/run-number-guards.ts",
-      "kind": "imports"
-    },
-    {
       "id": "imports:src/shared/loaded-gateway-rules.test.ts->src/shared/contracts.ts",
       "source": "file:src/shared/loaded-gateway-rules.test.ts",
       "target": "file:src/shared/contracts.ts",
@@ -126483,12 +126335,6 @@
       "kind": "tested_by"
     },
     {
-      "id": "tested_by:src/shared/boss-encounters.ts->file:src/shared/level-result-presentation.test.ts",
-      "source": "file:src/shared/boss-encounters.ts",
-      "target": "file:src/shared/level-result-presentation.test.ts",
-      "kind": "tested_by"
-    },
-    {
       "id": "tested_by:src/shared/build-strategy-playthrough-simulation.ts->file:src/shared/build-strategy-playthrough-simulation.test.ts",
       "source": "file:src/shared/build-strategy-playthrough-simulation.ts",
       "target": "file:src/shared/build-strategy-playthrough-simulation.test.ts",
@@ -127392,12 +127238,6 @@
       "id": "tested_by:src/shared/contracts.ts->file:src/shared/level-clear-rules.test.ts",
       "source": "file:src/shared/contracts.ts",
       "target": "file:src/shared/level-clear-rules.test.ts",
-      "kind": "tested_by"
-    },
-    {
-      "id": "tested_by:src/shared/contracts.ts->file:src/shared/level-result-presentation.test.ts",
-      "source": "file:src/shared/contracts.ts",
-      "target": "file:src/shared/level-result-presentation.test.ts",
       "kind": "tested_by"
     },
     {
@@ -129105,12 +128945,6 @@
       "kind": "tested_by"
     },
     {
-      "id": "tested_by:src/shared/level-result-presentation.ts->file:src/shared/level-result-presentation.test.ts",
-      "source": "file:src/shared/level-result-presentation.ts",
-      "target": "file:src/shared/level-result-presentation.test.ts",
-      "kind": "tested_by"
-    },
-    {
       "id": "tested_by:src/shared/loaded-gateway-rules.ts->file:src/shared/loaded-gateway-rules.test.ts",
       "source": "file:src/shared/loaded-gateway-rules.ts",
       "target": "file:src/shared/loaded-gateway-rules.test.ts",
@@ -129168,12 +129002,6 @@
       "id": "tested_by:src/shared/mechanic-feedback.ts->file:src/shared/hazard-tiles.test.ts",
       "source": "file:src/shared/mechanic-feedback.ts",
       "target": "file:src/shared/hazard-tiles.test.ts",
-      "kind": "tested_by"
-    },
-    {
-      "id": "tested_by:src/shared/mechanic-feedback.ts->file:src/shared/level-result-presentation.test.ts",
-      "source": "file:src/shared/mechanic-feedback.ts",
-      "target": "file:src/shared/level-result-presentation.test.ts",
       "kind": "tested_by"
     },
     {

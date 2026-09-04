@@ -26,7 +26,7 @@ const SHIPPING_ENTRY_POINTS = ['src/renderer/main.tsx', 'src/main/index.ts', 'sr
 export const SHARED_REACH_EXEMPTIONS: Record<string, string> = {
     // Simulations and solvers: gate:sim-health, gate:balance-depth and friends run these.
     'balance-simulation.ts': 'Balance sweep run by the simulation gates, not by a run.',
-    'board-generation.ts': 'Board builder the simulations use; the game builds boards through board-build-rules.',
+    'board-generation.ts': 'Re-export barrel over board-build-rules, board-tile-generation-rules and board-inspection; the simulations import it, the game imports those three directly, and it is the same code either way.',
     'build-strategy-playthrough-simulation.ts': 'Build-strategy playthrough sweep for the balance gates.',
     'build-strategy-simulation.ts': 'Build-strategy sweep for the balance gates.',
     'economy-ledger.ts': 'Economy accounting the long-run depth sweep checks.',
@@ -39,6 +39,7 @@ export const SHARED_REACH_EXEMPTIONS: Record<string, string> = {
     'softlock-generator-contract.ts': 'Softlock seed contract the softlock gate enforces.',
 
     // Build and script inputs.
+    'blueprintAstPoc.ts': 'The dev-only AST round-trip target named in scripts/ast-allowlist.json and read by the Vite dev endpoint; referenced from JSON, so no import edge reaches it.',
     'blueprintGlossaryGen.ts': 'Generated glossary read by the docs generator.',
     'content-security-policy.ts': 'Read by vite.config.mts at build time to stamp the policy into index.html.',
     'dungeon-topology.ts': 'Topology model the dungeon-topology audit script walks.',
@@ -51,6 +52,7 @@ export const SHARED_REACH_EXEMPTIONS: Record<string, string> = {
     'copy-tone.ts': 'Tone rules the copy tests hold the shipped strings to.',
     'difficulty-profile.ts': 'The shipped tuning profile written down so a change to the curve has to change this too.',
     'dungeon-combinatoric-matrix.ts': 'QA coverage matrix: which dungeon combinations are covered, excluded or future.',
+    'dungeon-save-migration.ts': 'Field policy table saying which save fields need a migration when they change; the save tests hold the schema to it. Not a migration routine, so nothing calls it at load.',
     'dungeon-versioning.ts': 'Rules-change taxonomy that says which edits must bump the rules version.',
     'gameplay-interaction-graph.ts': 'Validates the interaction graph JSON against the feedback facts.',
     'localization-readiness.ts': 'Localization readiness record: what is source English, deferred or excluded.',
@@ -72,10 +74,7 @@ export const SHARED_REACH_EXEMPTIONS: Record<string, string> = {
  * fails the moment a new module joins them or one of these is fixed and the line goes stale.
  */
 export const SHARED_REACH_BASELINE: Record<string, string> = {
-    'blueprintAstPoc.ts': 'A proof of concept nothing imports at all, not even a test.',
-    'dungeon-e2e-fixtures.ts': 'Ten authored dungeon fixtures; no e2e spec loads them any more.',
-    'dungeon-save-migration.ts': 'Dungeon save migration: defined and tested, and the save loader never calls it.',
-    'level-result-presentation.ts': 'Floor-clear causality rows; the dialog that showed them was rebuilt without them.'
+    'dungeon-e2e-fixtures.ts': 'Ten authored dungeon fixtures — enemy floor, boss floor, trap room, rest, treasure, event, exit lock — that no e2e spec loads and no debug door opens.'
 };
 
 const walk = (dir: string, out: string[] = []): string[] => {
