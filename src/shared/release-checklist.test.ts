@@ -24,6 +24,10 @@ import {
 import { SAVE_RECOVERY_COPY } from '../renderer/copy/saveRecoveryNotice';
 import { APP_ERROR_COPY } from '../renderer/copy/appErrorBoundary';
 import { normalizeRendererErrorReport } from './desktop-api-boundary';
+import {
+    describeThrownValue,
+    RENDERER_ERROR_REPORT_LIMIT
+} from '../renderer/diagnostics/rendererErrorHooks';
 
 /**
  * One verifier per `repo` row. The point of the pairing is the assertion below that the two sets
@@ -112,6 +116,9 @@ const VERIFIERS: Record<string, () => void> = {
         expect(APP_ERROR_COPY.title).toMatch(/\S/);
         expect(APP_ERROR_COPY.action).toMatch(/\S/);
         expect(normalizeRendererErrorReport('nonsense').message.length).toBeGreaterThan(0);
+        // Async failures too: the main process reported rejections long before the renderer did.
+        expect(describeThrownValue(undefined).message.length).toBeGreaterThan(0);
+        expect(RENDERER_ERROR_REPORT_LIMIT).toBeGreaterThan(0);
     },
     'save-read-recovery': () => {
         // A save the game refuses is usually a *newer* save arriving through Steam Cloud from a

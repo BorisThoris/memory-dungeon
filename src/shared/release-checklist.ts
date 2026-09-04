@@ -117,7 +117,7 @@ export const RELEASE_CHECKLIST: readonly ReleaseChecklistItem[] = [
     {
         evidence: 'src/renderer/components/AppErrorBoundary.tsx',
         id: 'renderer-crash-visible',
-        label: 'A screen that fails to draw shows a message and gets written down, not a blank window',
+        label: 'A renderer failure — a render, a window error, a rejected promise — is written down',
         owner: 'repo',
         section: 'Diagnostics'
     },

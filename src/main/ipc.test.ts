@@ -101,6 +101,27 @@ describe('registerIpcHandlers', () => {
         expect((record.mock.calls[0]?.[1] as Error).message).toBe('boom');
     });
 
+    it('records the failure kind the renderer names, and distrusts anything else', () => {
+        const record = vi.fn();
+        registerIpcHandlers(
+            () => null,
+            {} as PersistenceService,
+            { isConnected: () => false, setRichPresence: () => {}, unlockAchievement: () => ({ ok: false, reason: 'not_connected' }) } satisfies SteamAdapter,
+            { record }
+        );
+        const handler = electronMocks.handlers.get(IPC_CHANNELS.diagnosticsReportRendererError);
+
+        handler?.({}, { message: 'rejected' }, 'renderer_unhandled_rejection');
+        handler?.({}, { message: 'window' }, 'renderer_window_error');
+        handler?.({}, { message: 'nonsense kind' }, 'renderer_pretend_kind');
+
+        expect(record.mock.calls.map(([kind]) => kind)).toEqual([
+            'renderer_unhandled_rejection',
+            'renderer_window_error',
+            'renderer_error'
+        ]);
+    });
+
     it('does not let a malformed report take out the handler', () => {
         const record = vi.fn();
         registerIpcHandlers(

@@ -1,6 +1,6 @@
 import { app, ipcMain } from 'electron';
 import type { BrowserWindow, IpcMainInvokeEvent } from 'electron';
-import type { DisplayMode, RichPresenceState, SaveData, Settings } from '../shared/contracts';
+import type { DisplayMode, RendererErrorKind, RichPresenceState, SaveData, Settings } from '../shared/contracts';
 import {
     normalizeRendererErrorReport,
     normalizeUnknownAchievementId,
@@ -15,8 +15,18 @@ const applyDisplayMode = (window: BrowserWindow, mode: DisplayMode): void => {
 };
 
 export interface RendererErrorSink {
-    record: (kind: 'renderer_error', error: unknown, detail?: string | null) => void;
+    record: (kind: RendererErrorKind, error: unknown, detail?: string | null) => void;
 }
+
+/** Anything else the renderer claims is recorded as a render error rather than trusted. */
+const RENDERER_ERROR_KINDS: readonly RendererErrorKind[] = [
+    'renderer_error',
+    'renderer_window_error',
+    'renderer_unhandled_rejection'
+];
+
+const normalizeRendererErrorKind = (value: unknown): RendererErrorKind =>
+    RENDERER_ERROR_KINDS.find((kind) => kind === value) ?? 'renderer_error';
 
 export const registerIpcHandlers = (
     getMainWindow: () => BrowserWindow | null,
@@ -126,13 +136,13 @@ export const registerIpcHandlers = (
     register(IPC_CHANNELS.saveRecoverUnreadable, recoverUnreadableSave);
     register(IPC_CHANNELS_LEGACY_DESKTOP.recoverUnreadableSave, recoverUnreadableSave);
 
-    const reportRendererError = (_event: IpcMainInvokeEvent, rawReport: unknown): void => {
+    const reportRendererError = (_event: IpcMainInvokeEvent, rawReport: unknown, rawKind?: unknown): void => {
         try {
             const report = normalizeRendererErrorReport(rawReport);
             // Rebuilt as an Error so the crash log formats and redacts it like every other crash.
             const error = new Error(report.message);
             error.stack = report.stack ?? error.stack;
-            rendererErrorSink?.record('renderer_error', error, report.componentStack);
+            rendererErrorSink?.record(normalizeRendererErrorKind(rawKind), error, report.componentStack);
         } catch (error) {
             // A failure to write the report must not take out the screen apologising for one.
             console.error('[ipc] report-renderer-error failed', error);

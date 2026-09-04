@@ -5,6 +5,7 @@ import { createRoot, type Root } from 'react-dom/client';
 import App from './App';
 import { AppErrorBoundary } from './components/AppErrorBoundary';
 import { desktopClient } from './desktop-client';
+import { registerRendererErrorHooks } from './diagnostics/rendererErrorHooks';
 import { PlatformTiltProvider } from './platformTilt/PlatformTiltProvider';
 import { forEachRendererThemeCssVar } from './styles/theme';
 import './styles/global.css';
@@ -60,5 +61,12 @@ export const getRendererRootElement = (documentRef: Document = document): HTMLEl
 export const bootstrapWebRenderer = (): void => {
     const rootElement = getRendererRootElement();
     applyRendererThemeToDocument();
+    // Before mounting: an error thrown during the first render is still an error worth recording.
+    registerRendererErrorHooks({
+        report: (kind, report) => {
+            void desktopClient.reportRendererError(report, kind);
+        },
+        target: window
+    });
     mountRendererApp(rootElement);
 };

@@ -1181,7 +1181,10 @@ export type AchievementUnlockResult =
     | { ok: true }
     | { ok: false; reason: 'not_connected' | 'steam_rejected' | 'persistence_error'; detail?: string };
 
-/** What the renderer knows about a render error it just caught. Message and stack only; no paths. */
+/** Which renderer failure a report describes; mirrors the crash kinds the main process writes. */
+export type RendererErrorKind = 'renderer_error' | 'renderer_window_error' | 'renderer_unhandled_rejection';
+
+/** What the renderer knows about an error it just caught. Message and stack only; no paths. */
 export interface RendererErrorReport {
     readonly message: string;
     readonly stack: string | null;
@@ -1203,7 +1206,7 @@ export interface DesktopApi {
      * Records a render error the top-level boundary caught. Never throws to the caller: a failure
      * to write the report must not take out the screen that is already apologising for one.
      */
-    reportRendererError: (report: RendererErrorReport) => Promise<void>;
+    reportRendererError: (report: RendererErrorReport, kind?: RendererErrorKind) => Promise<void>;
     unlockAchievement: (id: AchievementId) => Promise<unknown>;
     /** Publishes what the player is doing to their friends list; cosmetic and never awaited for correctness. */
     setRichPresence: (state: RichPresenceState) => Promise<void>;

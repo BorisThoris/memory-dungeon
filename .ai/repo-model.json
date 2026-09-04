@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2480,
-    "codeFileCount": 953,
-    "exportedSymbolCount": 3518,
+    "trackedFileCount": 2482,
+    "codeFileCount": 955,
+    "exportedSymbolCount": 3525,
     "contentItemCount": 63,
     "mechanicCount": 136,
     "stateFieldCount": 144,
-    "relationshipCount": 10300
+    "relationshipCount": 10313
   },
   "inventory": [
     {
@@ -2259,8 +2259,8 @@
     {
       "path": "docs/RELEASE_CHECKLIST.md",
       "category": "documentation",
-      "bytes": 4479,
-      "sha256": "084dfbfa73ced22b03bf62c6c144c74d930ba6959b814f62a95eb007eede94aa"
+      "bytes": 4481,
+      "sha256": "591e82904d7ac78a6f0989e33dcc35db3583a0b8f4d20c0b36ddd61d019c08ed"
     },
     {
       "path": "docs/RELIC_ROSTER.md",
@@ -2320,7 +2320,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 36714,
-      "sha256": "24697aaf2e208f700725ba2422532b0bf6b28c01ce751df70490a3113e0ff94f"
+      "sha256": "9a3f2e1be49776547953952963e29cb94c8b8d109eb74ef45c8c9db246516d27"
     },
     {
       "path": "docs/UI_RETHINK_PLAN.md",
@@ -4701,8 +4701,8 @@
     {
       "path": "src/main/crash-log.ts",
       "category": "source",
-      "bytes": 6092,
-      "sha256": "8a641509ea19813d874306fd725a181f0fc4f7e1ec7864b98dbaa6a66ef28992"
+      "bytes": 6261,
+      "sha256": "952be16e2a0a07287289dca456f8513b16d3a6c93d3d66e4e81b9beef75c6918"
     },
     {
       "path": "src/main/crash-reporter.test.ts",
@@ -4749,14 +4749,14 @@
     {
       "path": "src/main/ipc.test.ts",
       "category": "test",
-      "bytes": 5801,
-      "sha256": "bab534849368bde3a792b10b4f5107d0fe5725f8d0c13655663f189c34f96a17"
+      "bytes": 6733,
+      "sha256": "bb94d915eeacee48813e4819b7b65bb257159cc2aa731044ed7c81299a3d3404"
     },
     {
       "path": "src/main/ipc.ts",
       "category": "source",
-      "bytes": 7386,
-      "sha256": "8478359d9b27bb829528e2817e783ab520a5088855885e52855a47389ab8cd82"
+      "bytes": 7839,
+      "sha256": "25d59a51e62849e9aa5b44ffc1316f09ff87e1adb3b0fff437646c1539d274b4"
     },
     {
       "path": "src/main/persistence-write-error.test.ts",
@@ -4881,8 +4881,8 @@
     {
       "path": "src/preload/index.ts",
       "category": "source",
-      "bytes": 1265,
-      "sha256": "b65d3c52e0754c0ff48f45dea0f75919fafd0118af2a254a6ea7c7f6016cf3cf"
+      "bytes": 1277,
+      "sha256": "251855aadaf100f3ecbe1fd8ec63786768856203fbe7a5e98a797e4e0d63b8df"
     },
     {
       "path": "src/renderer/a11y/focusables.test.ts",
@@ -9109,6 +9109,18 @@
       "sha256": "2e0838539c950dd7e50004556cf5c5220022386b8efb0222e579fde479f7d2ee"
     },
     {
+      "path": "src/renderer/diagnostics/rendererErrorHooks.test.ts",
+      "category": "test",
+      "bytes": 4410,
+      "sha256": "9685011e52c5ce2a7f83160683b0d24490b17cf95ed9af1c3728d4c365c08d8f"
+    },
+    {
+      "path": "src/renderer/diagnostics/rendererErrorHooks.ts",
+      "category": "source",
+      "bytes": 3547,
+      "sha256": "70f0c8baa01d98f616e9f65a4242244f02794d2a7b2693a63f645b1928fb9c6c"
+    },
+    {
       "path": "src/renderer/gameplay/regPhase4PlayContract.test.ts",
       "category": "test",
       "bytes": 1954,
@@ -9291,8 +9303,8 @@
     {
       "path": "src/renderer/initRendererShell.tsx",
       "category": "source",
-      "bytes": 2488,
-      "sha256": "9ff22dbc332c3eafb5d7b1a1b1a10c4dac7276ccac62bd577a4a0de54892353f"
+      "bytes": 2843,
+      "sha256": "b50d86d9f38d39ddd5c820111ae0208858372bf29ccd1e6f67a03a555543ece1"
     },
     {
       "path": "src/renderer/input/gamepadNavigation.test.ts",
@@ -10419,8 +10431,8 @@
     {
       "path": "src/shared/contracts.ts",
       "category": "source",
-      "bytes": 46935,
-      "sha256": "47f614d58ff68de9099f1464ab899ce2c6b6294dddff9d04eb72711d882355dc"
+      "bytes": 47164,
+      "sha256": "0dd211dcf7d5b85ad934ebff6a7d25e8968aa0a256dd60f2b314ff82d53c0946"
     },
     {
       "path": "src/shared/copy-locality.test.ts",
@@ -11733,14 +11745,14 @@
     {
       "path": "src/shared/release-checklist.test.ts",
       "category": "test",
-      "bytes": 11890,
-      "sha256": "638dda2486ca19ed8dfd4de1f5e1e8bc29d8f84a9669f08507e39814d4b50918"
+      "bytes": 12253,
+      "sha256": "e61d7c56253c295c2f8f07cf4de73a86129dcbef3ff8c3fa4a3e7d0f1b153ad9"
     },
     {
       "path": "src/shared/release-checklist.ts",
       "category": "source",
-      "bytes": 9732,
-      "sha256": "5762c7475bb5e808612287705e7cd449f8cdd8a737c389350b685dbf5cb3e1ed"
+      "bytes": 9734,
+      "sha256": "373397bf5404f8057be02e3280654704869ac230e2d11002fe3d70e11c0f63ac"
     },
     {
       "path": "src/shared/relic-favor-rules.test.ts",
@@ -14923,7 +14935,7 @@
       "path": "src/main/crash-log.ts",
       "layer": "main",
       "role": "production",
-      "lineCount": 148,
+      "lineCount": 151,
       "imports": [],
       "exports": [
         "symbol:src/main/crash-log.ts#CRASH_LOG_DIR_NAME",
@@ -15064,7 +15076,7 @@
       "path": "src/main/ipc.test.ts",
       "layer": "main",
       "role": "test",
-      "lineCount": 136,
+      "lineCount": 157,
       "imports": [
         "file:src/main/ipc.ts",
         "file:src/main/persistence.ts",
@@ -15080,7 +15092,7 @@
       "path": "src/main/ipc.ts",
       "layer": "main",
       "role": "production",
-      "lineCount": 182,
+      "lineCount": 192,
       "imports": [
         "file:src/main/persistence.ts",
         "file:src/main/steam.ts",
@@ -21454,6 +21466,40 @@
       ]
     },
     {
+      "id": "file:src/renderer/diagnostics/rendererErrorHooks.test.ts",
+      "path": "src/renderer/diagnostics/rendererErrorHooks.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 119,
+      "imports": [
+        "file:src/renderer/diagnostics/rendererErrorHooks.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/diagnostics/rendererErrorHooks.ts",
+      "path": "src/renderer/diagnostics/rendererErrorHooks.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 84,
+      "imports": [
+        "file:src/shared/contracts.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/diagnostics/rendererErrorHooks.ts#describeThrownValue",
+        "symbol:src/renderer/diagnostics/rendererErrorHooks.ts#registerRendererErrorHooks",
+        "symbol:src/renderer/diagnostics/rendererErrorHooks.ts#RENDERER_ERROR_REPORT_LIMIT",
+        "symbol:src/renderer/diagnostics/rendererErrorHooks.ts#RendererErrorHookOptions",
+        "symbol:src/renderer/diagnostics/rendererErrorHooks.ts#RendererErrorHookTarget",
+        "symbol:src/renderer/diagnostics/rendererErrorHooks.ts#RendererErrorSource"
+      ],
+      "testedBy": [
+        "file:src/renderer/diagnostics/rendererErrorHooks.test.ts",
+        "file:src/shared/release-checklist.test.ts"
+      ]
+    },
+    {
       "id": "file:src/renderer/gameplay/regPhase4PlayContract.test.ts",
       "path": "src/renderer/gameplay/regPhase4PlayContract.test.ts",
       "layer": "renderer",
@@ -21890,11 +21936,12 @@
       "path": "src/renderer/initRendererShell.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 65,
+      "lineCount": 73,
       "imports": [
         "file:src/renderer/App.tsx",
         "file:src/renderer/components/AppErrorBoundary.tsx",
         "file:src/renderer/desktop-client.ts",
+        "file:src/renderer/diagnostics/rendererErrorHooks.ts",
         "file:src/renderer/platformTilt/PlatformTiltProvider.tsx",
         "file:src/renderer/styles/theme.ts"
       ],
@@ -25268,7 +25315,7 @@
       "path": "src/shared/contracts.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1214,
+      "lineCount": 1217,
       "imports": [],
       "exports": [
         "symbol:src/shared/contracts.ts#AchievementId",
@@ -25381,6 +25428,7 @@
         "symbol:src/shared/contracts.ts#RelicOfferServiceId",
         "symbol:src/shared/contracts.ts#RelicOfferServiceState",
         "symbol:src/shared/contracts.ts#RelicOfferState",
+        "symbol:src/shared/contracts.ts#RendererErrorKind",
         "symbol:src/shared/contracts.ts#RendererErrorReport",
         "symbol:src/shared/contracts.ts#RESOLVE_DELAY_MULTIPLIER_MIN",
         "symbol:src/shared/contracts.ts#ResumableRunStatus",
@@ -30473,7 +30521,7 @@
       "path": "src/shared/release-checklist.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 226,
+      "lineCount": 233,
       "imports": [
         "file:src/main/crash-log.ts",
         "file:src/main/save-recovery.ts",
@@ -30481,6 +30529,7 @@
         "file:src/renderer/components/runShellToolCatalog.ts",
         "file:src/renderer/copy/appErrorBoundary.ts",
         "file:src/renderer/copy/saveRecoveryNotice.ts",
+        "file:src/renderer/diagnostics/rendererErrorHooks.ts",
         "file:src/shared/desktop-api-boundary.ts",
         "file:src/shared/game.ts",
         "file:src/shared/gamepad-input.ts",
@@ -33942,16 +33991,16 @@
       "name": "CRASH_LOG_DIR_NAME",
       "kind": "value",
       "file": "src/main/crash-log.ts",
-      "line": 46,
-      "endLine": 46
+      "line": 49,
+      "endLine": 49
     },
     {
       "id": "symbol:src/main/crash-log.ts#CRASH_LOG_KEEP_COUNT",
       "name": "CRASH_LOG_KEEP_COUNT",
       "kind": "value",
       "file": "src/main/crash-log.ts",
-      "line": 44,
-      "endLine": 44
+      "line": 47,
+      "endLine": 47
     },
     {
       "id": "symbol:src/main/crash-log.ts#CrashKind",
@@ -33959,79 +34008,79 @@
       "kind": "type",
       "file": "src/main/crash-log.ts",
       "line": 14,
-      "endLine": 25
+      "endLine": 28
     },
     {
       "id": "symbol:src/main/crash-log.ts#crashLogFileName",
       "name": "crashLogFileName",
       "kind": "value",
       "file": "src/main/crash-log.ts",
-      "line": 124,
-      "endLine": 125
+      "line": 127,
+      "endLine": 128
     },
     {
       "id": "symbol:src/main/crash-log.ts#CrashRecord",
       "name": "CrashRecord",
       "kind": "interface",
       "file": "src/main/crash-log.ts",
-      "line": 27,
-      "endLine": 36
+      "line": 30,
+      "endLine": 39
     },
     {
       "id": "symbol:src/main/crash-log.ts#describeCrash",
       "name": "describeCrash",
       "kind": "value",
       "file": "src/main/crash-log.ts",
-      "line": 94,
-      "endLine": 106
+      "line": 97,
+      "endLine": 109
     },
     {
       "id": "symbol:src/main/crash-log.ts#DescribeCrashContext",
       "name": "DescribeCrashContext",
       "kind": "interface",
       "file": "src/main/crash-log.ts",
-      "line": 85,
-      "endLine": 91
+      "line": 88,
+      "endLine": 94
     },
     {
       "id": "symbol:src/main/crash-log.ts#formatCrashRecord",
       "name": "formatCrashRecord",
       "kind": "value",
       "file": "src/main/crash-log.ts",
-      "line": 109,
-      "endLine": 121
+      "line": 112,
+      "endLine": 124
     },
     {
       "id": "symbol:src/main/crash-log.ts#PriorCrashSummary",
       "name": "PriorCrashSummary",
       "kind": "interface",
       "file": "src/main/crash-log.ts",
-      "line": 139,
-      "endLine": 142
+      "line": 142,
+      "endLine": 145
     },
     {
       "id": "symbol:src/main/crash-log.ts#pruneCrashLogs",
       "name": "pruneCrashLogs",
       "kind": "value",
       "file": "src/main/crash-log.ts",
-      "line": 133,
-      "endLine": 136
+      "line": 136,
+      "endLine": 139
     },
     {
       "id": "symbol:src/main/crash-log.ts#redactUserPaths",
       "name": "redactUserPaths",
       "kind": "value",
       "file": "src/main/crash-log.ts",
-      "line": 56,
-      "endLine": 69
+      "line": 59,
+      "endLine": 72
     },
     {
       "id": "symbol:src/main/crash-log.ts#summarizePriorCrashes",
       "name": "summarizePriorCrashes",
       "kind": "value",
       "file": "src/main/crash-log.ts",
-      "line": 144,
-      "endLine": 147
+      "line": 147,
+      "endLine": 150
     },
     {
       "id": "symbol:src/main/crash-reporter.ts#CrashHookTarget",
@@ -34134,8 +34183,8 @@
       "name": "registerIpcHandlers",
       "kind": "value",
       "file": "src/main/ipc.ts",
-      "line": 21,
-      "endLine": 181
+      "line": 31,
+      "endLine": 191
     },
     {
       "id": "symbol:src/main/ipc.ts#RendererErrorSink",
@@ -41194,6 +41243,54 @@
       "endLine": 14
     },
     {
+      "id": "symbol:src/renderer/diagnostics/rendererErrorHooks.ts#describeThrownValue",
+      "name": "describeThrownValue",
+      "kind": "value",
+      "file": "src/renderer/diagnostics/rendererErrorHooks.ts",
+      "line": 34,
+      "endLine": 44
+    },
+    {
+      "id": "symbol:src/renderer/diagnostics/rendererErrorHooks.ts#registerRendererErrorHooks",
+      "name": "registerRendererErrorHooks",
+      "kind": "value",
+      "file": "src/renderer/diagnostics/rendererErrorHooks.ts",
+      "line": 46,
+      "endLine": 83
+    },
+    {
+      "id": "symbol:src/renderer/diagnostics/rendererErrorHooks.ts#RENDERER_ERROR_REPORT_LIMIT",
+      "name": "RENDERER_ERROR_REPORT_LIMIT",
+      "kind": "value",
+      "file": "src/renderer/diagnostics/rendererErrorHooks.ts",
+      "line": 18,
+      "endLine": 18
+    },
+    {
+      "id": "symbol:src/renderer/diagnostics/rendererErrorHooks.ts#RendererErrorHookOptions",
+      "name": "RendererErrorHookOptions",
+      "kind": "interface",
+      "file": "src/renderer/diagnostics/rendererErrorHooks.ts",
+      "line": 27,
+      "endLine": 31
+    },
+    {
+      "id": "symbol:src/renderer/diagnostics/rendererErrorHooks.ts#RendererErrorHookTarget",
+      "name": "RendererErrorHookTarget",
+      "kind": "interface",
+      "file": "src/renderer/diagnostics/rendererErrorHooks.ts",
+      "line": 22,
+      "endLine": 25
+    },
+    {
+      "id": "symbol:src/renderer/diagnostics/rendererErrorHooks.ts#RendererErrorSource",
+      "name": "RendererErrorSource",
+      "kind": "type",
+      "file": "src/renderer/diagnostics/rendererErrorHooks.ts",
+      "line": 20,
+      "endLine": 20
+    },
+    {
       "id": "symbol:src/renderer/gameplay/regPhase4PlayContract.ts#DNG065_BOARD_APPLICATION_LABEL",
       "name": "DNG065_BOARD_APPLICATION_LABEL",
       "kind": "value",
@@ -41454,16 +41551,16 @@
       "name": "bootstrapWebRenderer",
       "kind": "value",
       "file": "src/renderer/initRendererShell.tsx",
-      "line": 60,
-      "endLine": 64
+      "line": 61,
+      "endLine": 72
     },
     {
       "id": "symbol:src/renderer/initRendererShell.tsx#getRendererRootElement",
       "name": "getRendererRootElement",
       "kind": "value",
       "file": "src/renderer/initRendererShell.tsx",
-      "line": 51,
-      "endLine": 57
+      "line": 52,
+      "endLine": 58
     },
     {
       "id": "symbol:src/renderer/input/gamepadNavigation.ts#applyGamepadAction",
@@ -46198,8 +46295,8 @@
       "name": "DesktopApi",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1192,
-      "endLine": 1213
+      "line": 1195,
+      "endLine": 1216
     },
     {
       "id": "symbol:src/shared/contracts.ts#DisplayMode",
@@ -46906,12 +47003,20 @@
       "endLine": 253
     },
     {
+      "id": "symbol:src/shared/contracts.ts#RendererErrorKind",
+      "name": "RendererErrorKind",
+      "kind": "type",
+      "file": "src/shared/contracts.ts",
+      "line": 1185,
+      "endLine": 1185
+    },
+    {
       "id": "symbol:src/shared/contracts.ts#RendererErrorReport",
       "name": "RendererErrorReport",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1185,
-      "endLine": 1190
+      "line": 1188,
+      "endLine": 1193
     },
     {
       "id": "symbol:src/shared/contracts.ts#RESOLVE_DELAY_MULTIPLIER_MIN",
@@ -79403,6 +79508,42 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/diagnostics/rendererErrorHooks.ts->symbol:src/renderer/diagnostics/rendererErrorHooks.ts#describeThrownValue",
+      "source": "file:src/renderer/diagnostics/rendererErrorHooks.ts",
+      "target": "symbol:src/renderer/diagnostics/rendererErrorHooks.ts#describeThrownValue",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/diagnostics/rendererErrorHooks.ts->symbol:src/renderer/diagnostics/rendererErrorHooks.ts#registerRendererErrorHooks",
+      "source": "file:src/renderer/diagnostics/rendererErrorHooks.ts",
+      "target": "symbol:src/renderer/diagnostics/rendererErrorHooks.ts#registerRendererErrorHooks",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/diagnostics/rendererErrorHooks.ts->symbol:src/renderer/diagnostics/rendererErrorHooks.ts#RENDERER_ERROR_REPORT_LIMIT",
+      "source": "file:src/renderer/diagnostics/rendererErrorHooks.ts",
+      "target": "symbol:src/renderer/diagnostics/rendererErrorHooks.ts#RENDERER_ERROR_REPORT_LIMIT",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/diagnostics/rendererErrorHooks.ts->symbol:src/renderer/diagnostics/rendererErrorHooks.ts#RendererErrorHookOptions",
+      "source": "file:src/renderer/diagnostics/rendererErrorHooks.ts",
+      "target": "symbol:src/renderer/diagnostics/rendererErrorHooks.ts#RendererErrorHookOptions",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/diagnostics/rendererErrorHooks.ts->symbol:src/renderer/diagnostics/rendererErrorHooks.ts#RendererErrorHookTarget",
+      "source": "file:src/renderer/diagnostics/rendererErrorHooks.ts",
+      "target": "symbol:src/renderer/diagnostics/rendererErrorHooks.ts#RendererErrorHookTarget",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/diagnostics/rendererErrorHooks.ts->symbol:src/renderer/diagnostics/rendererErrorHooks.ts#RendererErrorSource",
+      "source": "file:src/renderer/diagnostics/rendererErrorHooks.ts",
+      "target": "symbol:src/renderer/diagnostics/rendererErrorHooks.ts#RendererErrorSource",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/gameplay/regPhase4PlayContract.ts->symbol:src/renderer/gameplay/regPhase4PlayContract.ts#DNG065_BOARD_APPLICATION_LABEL",
       "source": "file:src/renderer/gameplay/regPhase4PlayContract.ts",
       "target": "symbol:src/renderer/gameplay/regPhase4PlayContract.ts#DNG065_BOARD_APPLICATION_LABEL",
@@ -83684,6 +83825,12 @@
       "id": "exports:src/shared/contracts.ts->symbol:src/shared/contracts.ts#RelicOfferState",
       "source": "file:src/shared/contracts.ts",
       "target": "symbol:src/shared/contracts.ts#RelicOfferState",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/contracts.ts->symbol:src/shared/contracts.ts#RendererErrorKind",
+      "source": "file:src/shared/contracts.ts",
+      "target": "symbol:src/shared/contracts.ts#RendererErrorKind",
       "kind": "exports"
     },
     {
@@ -104988,6 +105135,18 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/diagnostics/rendererErrorHooks.test.ts->src/renderer/diagnostics/rendererErrorHooks.ts",
+      "source": "file:src/renderer/diagnostics/rendererErrorHooks.test.ts",
+      "target": "file:src/renderer/diagnostics/rendererErrorHooks.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/diagnostics/rendererErrorHooks.ts->src/shared/contracts.ts",
+      "source": "file:src/renderer/diagnostics/rendererErrorHooks.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/gameplay/regPhase4PlayContract.test.ts->src/renderer/gameplay/regPhase4PlayContract.ts",
       "source": "file:src/renderer/gameplay/regPhase4PlayContract.test.ts",
       "target": "file:src/renderer/gameplay/regPhase4PlayContract.ts",
@@ -105231,6 +105390,12 @@
       "id": "imports:src/renderer/initRendererShell.tsx->src/renderer/desktop-client.ts",
       "source": "file:src/renderer/initRendererShell.tsx",
       "target": "file:src/renderer/desktop-client.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/initRendererShell.tsx->src/renderer/diagnostics/rendererErrorHooks.ts",
+      "source": "file:src/renderer/initRendererShell.tsx",
+      "target": "file:src/renderer/diagnostics/rendererErrorHooks.ts",
       "kind": "imports"
     },
     {
@@ -113973,6 +114138,12 @@
       "id": "imports:src/shared/release-checklist.test.ts->src/renderer/copy/saveRecoveryNotice.ts",
       "source": "file:src/shared/release-checklist.test.ts",
       "target": "file:src/renderer/copy/saveRecoveryNotice.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/release-checklist.test.ts->src/renderer/diagnostics/rendererErrorHooks.ts",
+      "source": "file:src/shared/release-checklist.test.ts",
+      "target": "file:src/renderer/diagnostics/rendererErrorHooks.ts",
       "kind": "imports"
     },
     {
@@ -124915,6 +125086,18 @@
       "id": "tested_by:src/renderer/dev/legacy/tileStepLegacy.ts->file:src/renderer/dev/legacy/tileStepLegacy.test.ts",
       "source": "file:src/renderer/dev/legacy/tileStepLegacy.ts",
       "target": "file:src/renderer/dev/legacy/tileStepLegacy.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/diagnostics/rendererErrorHooks.ts->file:src/renderer/diagnostics/rendererErrorHooks.test.ts",
+      "source": "file:src/renderer/diagnostics/rendererErrorHooks.ts",
+      "target": "file:src/renderer/diagnostics/rendererErrorHooks.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/diagnostics/rendererErrorHooks.ts->file:src/shared/release-checklist.test.ts",
+      "source": "file:src/renderer/diagnostics/rendererErrorHooks.ts",
+      "target": "file:src/shared/release-checklist.test.ts",
       "kind": "tested_by"
     },
     {

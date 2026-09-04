@@ -21,6 +21,9 @@ export type CrashKind =
      * otherwise leave no trace at all — the player sees a dead screen and nothing is written down.
      */
     | 'renderer_error'
+    /** A window `error` event or a rejected promise in the renderer, with React not on the stack. */
+    | 'renderer_window_error'
+    | 'renderer_unhandled_rejection'
     | 'child_process_gone'
     | 'startup_fatal';
 
