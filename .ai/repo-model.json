@@ -3,8 +3,8 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2502,
-    "codeFileCount": 970,
+    "trackedFileCount": 2505,
+    "codeFileCount": 971,
     "exportedSymbolCount": 3529,
     "contentItemCount": 63,
     "mechanicCount": 136,
@@ -2320,7 +2320,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 36714,
-      "sha256": "cb2b6a1da91da6ed30c5f55355d3cae09f634574458fe5a8649defd389d48636"
+      "sha256": "978f1b79f0ce537bb808f4cf361d112254da6371372e37d1ae6ae0ee8042f448"
     },
     {
       "path": "docs/UI_RETHINK_PLAN.md",
@@ -3745,6 +3745,12 @@
       "sha256": "6507c4b6e2f8fd4e559fcfbcee2151f924c28c79f67ff53814ef8c9f3d872eb4"
     },
     {
+      "path": "e2e/shared-run-key.spec.ts",
+      "category": "test",
+      "bytes": 2748,
+      "sha256": "13bc7ab460bb90a3f49f0138ee406a64c860eaf31b8671d812a4982d106b5fd1"
+    },
+    {
       "path": "e2e/startup-budget.spec.ts",
       "category": "test",
       "bytes": 2989,
@@ -3963,8 +3969,8 @@
     {
       "path": "package.json",
       "category": "configuration",
-      "bytes": 29451,
-      "sha256": "450829f4a987acffae91ece9b00fc3e046b8b1224ab3e35d688a5be519e5b942"
+      "bytes": 29533,
+      "sha256": "dc68df0024d237e70bb3e8defe6e2e9284d8ac56c855998818d3400eee9e7955"
     },
     {
       "path": "packages/notifications/package.json",
@@ -4625,6 +4631,12 @@
       "category": "script",
       "bytes": 378,
       "sha256": "d7c1ef802cb8ac250fc83c66965d0230084c5cb5da384a93299110ad04e32284"
+    },
+    {
+      "path": "scripts/script-paths.ts",
+      "category": "script",
+      "bytes": 2155,
+      "sha256": "494e374f83f66b4426a04e254059f027baabde3dff91594dfacd4ed200f2d4e3"
     },
     {
       "path": "scripts/seed-sweep-options.ts",
@@ -12341,6 +12353,12 @@
       "category": "source",
       "bytes": 6197,
       "sha256": "5574a6021e44c4b2d350525f0ce6cf382ad442ce9da9ec5453bf181f1d425dce"
+    },
+    {
+      "path": "src/shared/script-paths.test.ts",
+      "category": "test",
+      "bytes": 1299,
+      "sha256": "3c63fa9a790f4f8e0388806056e35a075f92739fa4214cd1454626571af9956a"
     },
     {
       "path": "src/shared/secondary-objective-rules.test.ts",
@@ -32675,6 +32693,16 @@
         "file:src/shared/turn-match-score-rules.test.ts",
         "file:src/shared/turn-match-scoring-summary-rules.test.ts"
       ]
+    },
+    {
+      "id": "file:src/shared/script-paths.test.ts",
+      "path": "src/shared/script-paths.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 28,
+      "imports": [],
+      "exports": [],
+      "testedBy": []
     },
     {
       "id": "file:src/shared/secondary-objective-rules.test.ts",
