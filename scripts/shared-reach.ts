@@ -104,7 +104,9 @@ const resolveSpecifier = (fromFile: string, specifier: string, known: ReadonlySe
 /** Every file the walk arrives at from `entries`, following relative imports only. */
 export const reachableFromEntries = (
     entries: readonly string[],
-    files: readonly string[]
+    files: readonly string[],
+    /** Injected so the walk can be checked without a repository on disk under it. */
+    readSource: (file: string) => string = (file) => readFileSync(file, 'utf8')
 ): Set<string> => {
     const known = new Set(files.map((file) => resolve(file)));
     const seen = new Set<string>();
@@ -116,7 +118,7 @@ export const reachableFromEntries = (
             continue;
         }
         seen.add(current);
-        for (const specifier of readRelativeImports(readFileSync(current, 'utf8'))) {
+        for (const specifier of readRelativeImports(readSource(current))) {
             const target = resolveSpecifier(current, specifier, known);
             if (target !== null && !seen.has(resolve(target))) {
                 queue.push(resolve(target));

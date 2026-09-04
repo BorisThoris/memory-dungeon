@@ -31,6 +31,12 @@ achievement on the Partner site or shoot a trailer.
 | Ship with `VITE_FEATURE_CLOUD_SAVE=1` once Auto-Cloud is live | **not done** | a person | The flag is off by default so a half-configured app never claims cloud saves. |
 | A save has actually round-tripped between two machines | **not done** | a person | The one row no amount of configuration proves. Somebody has to play on two boxes. |
 
+## Steam integration
+
+| Item | State | Owner | Where |
+|---|---|---|---|
+| A player can find their own save file from inside the game | done | the repository | `src/main/ipc.ts` |
+
 ## Diagnostics
 
 | Item | State | Owner | Where |
@@ -40,6 +46,10 @@ achievement on the Partner site or shoot a trailer.
 | End-to-end specs do not point at elements the app stopped rendering | done | the repository | `scripts/e2e-locator-audit.ts` |
 | The packaged build ships no dev-server permissions in its content security policy | done | the repository | `src/shared/content-security-policy.ts` |
 | The preload bridge exposes nothing the renderer does not call | done | the repository | `scripts/bridge-reachability.ts` |
+| No module is left with its own test as its only caller | done | the repository | `scripts/test-only-modules.ts` |
+| Every shared system is reachable from something that ships, or exempt with a reason | done | the repository | `scripts/shared-reach.ts` |
+| No gate or script names a file that is not there | done | the repository | `scripts/script-paths.ts` |
+| A cue that cannot sound leaves the button that asked for it working | done | the repository | `src/renderer/audio/audioSafety.ts` |
 | No player-facing state or action is left with nothing able to reach it | done | the repository | `scripts/store-action-reachability.ts` |
 | A renderer failure — a render, a window error, a rejected promise — is written down | done | the repository | `src/renderer/components/AppErrorBoundary.tsx` |
 | A save this build cannot read is survivable, and the player is told and given a way out | done | the repository | `src/main/save-recovery.ts` |

@@ -28,6 +28,11 @@ import {
     readAppStateMembers,
     REACHABILITY_EXEMPTIONS
 } from '../../scripts/store-action-reachability';
+import { findTestOnlyModules, TEST_ONLY_EXEMPTIONS } from '../../scripts/test-only-modules';
+import { reachableFromEntries, SHARED_REACH_EXEMPTIONS } from '../../scripts/shared-reach';
+import { findMissingScriptPaths } from '../../scripts/script-paths';
+import { audioNeverThrows, audioNeverThrowsBoolean } from '../renderer/audio/audioSafety';
+import { DESKTOP_IPC_CHANNELS } from './ipc-channels';
 import { SAVE_RECOVERY_COPY } from '../renderer/copy/saveRecoveryNotice';
 import { APP_ERROR_COPY } from '../renderer/copy/appErrorBoundary';
 import { normalizeRendererErrorReport } from './desktop-api-boundary';
@@ -140,6 +145,69 @@ const VERIFIERS: Record<string, () => void> = {
 
         expect(findUnreachableMembers(members, ['state.shown'])).toEqual([{ kind: 'state', name: 'hidden' }]);
         expect(Object.keys(REACHABILITY_EXEMPTIONS).length).toBeGreaterThan(0);
+    },
+    'test-only-modules': () => {
+        // A module whose only importer is its own test is content nobody can reach; the audit
+        // stays quiet about one a *different* module's test imports, which is a shared fixture.
+        const sources: Record<string, string> = {
+            'src/a.ts': '',
+            'src/a.test.ts': "import { a } from './a';",
+            'src/b.ts': '',
+            'src/b.test.ts': "import { b } from './b';\nimport { a } from './a';"
+        };
+        const files = Object.keys(sources);
+        const found = findTestOnlyModules(files, files, (file) => sources[file] ?? '');
+
+        // `b` is imported only by its own test; `a` is also imported by b's test, so it is a
+        // shared fixture rather than an orphan.
+        expect(found.map((row) => row.file)).toEqual(['src/b.ts']);
+        expect(Object.keys(TEST_ONLY_EXEMPTIONS).length).toBeGreaterThan(0);
+    },
+    'shared-reach': () => {
+        // The walk starts at what ships; a module nothing on that path imports is not reached.
+        const sources: Record<string, string> = {
+            'src/entry.ts': "import { used } from './used';",
+            'src/used.ts': '',
+            'src/stranded.ts': ''
+        };
+        const files = Object.keys(sources);
+        // The walk resolves paths against the working directory, so the stand-in reader is keyed
+        // on the file name rather than on the relative path it was handed.
+        const reached = reachableFromEntries(
+            ['src/entry.ts'],
+            files,
+            (file) => sources[`src/${file.split('/').pop() ?? ''}`] ?? ''
+        );
+
+        expect([...reached].some((path) => path.endsWith('used.ts'))).toBe(true);
+        expect([...reached].some((path) => path.endsWith('stranded.ts'))).toBe(false);
+        expect(Object.keys(SHARED_REACH_EXEMPTIONS).length).toBeGreaterThan(0);
+    },
+    'script-paths': () => {
+        // A gate naming a renamed test file fails on its first line for anyone who runs it, and
+        // nobody runs a standalone gate, so nothing else would ever say so.
+        expect(findMissingScriptPaths({ 'gate:x': 'vitest run src/Gone.test.tsx' }, () => false)).toEqual([
+            { path: 'src/Gone.test.tsx', script: 'gate:x' }
+        ]);
+        expect(findMissingScriptPaths({ 'gate:x': 'vitest run src/Here.test.tsx' }, () => true)).toEqual([]);
+    },
+    'audio-never-eats-a-press': () => {
+        // Every click handler opens with a cue, so a throwing cue takes the press with it.
+        expect(() =>
+            audioNeverThrows(() => {
+                throw new DOMException('AudioContext has been closed', 'InvalidStateError');
+            })
+        ).not.toThrow();
+        expect(
+            audioNeverThrowsBoolean(() => {
+                throw new Error('decode failed');
+            })
+        ).toBe(false);
+    },
+    'reveal-save-file': () => {
+        // Export, import and backup are all "copy the file yourself", which needs a way to find it.
+        expect(DESKTOP_IPC_CHANNELS.revealSaveFile).toMatch(/\S/);
+        expect(readFileSync(join(process.cwd(), 'src/main/ipc.ts'), 'utf8')).toContain('showItemInFolder');
     },
     'renderer-crash-visible': () => {
         // The process survives a render error, so `renderer_gone` never fires and nothing is

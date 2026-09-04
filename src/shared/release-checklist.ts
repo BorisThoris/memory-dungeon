@@ -80,6 +80,13 @@ export const RELEASE_CHECKLIST: readonly ReleaseChecklistItem[] = [
         section: 'Steamworks'
     },
     {
+        evidence: 'src/main/ipc.ts',
+        id: 'reveal-save-file',
+        label: 'A player can find their own save file from inside the game',
+        owner: 'repo',
+        section: 'Steam integration'
+    },
+    {
         evidence: 'src/shared/save-location.ts',
         id: 'cloud-save-paths',
         label: 'The save file sits at one stable path per platform, ready for Auto-Cloud',
@@ -125,6 +132,34 @@ export const RELEASE_CHECKLIST: readonly ReleaseChecklistItem[] = [
         evidence: 'scripts/bridge-reachability.ts',
         id: 'bridge-surface',
         label: 'The preload bridge exposes nothing the renderer does not call',
+        owner: 'repo',
+        section: 'Diagnostics'
+    },
+    {
+        evidence: 'scripts/test-only-modules.ts',
+        id: 'test-only-modules',
+        label: 'No module is left with its own test as its only caller',
+        owner: 'repo',
+        section: 'Diagnostics'
+    },
+    {
+        evidence: 'scripts/shared-reach.ts',
+        id: 'shared-reach',
+        label: 'Every shared system is reachable from something that ships, or exempt with a reason',
+        owner: 'repo',
+        section: 'Diagnostics'
+    },
+    {
+        evidence: 'scripts/script-paths.ts',
+        id: 'script-paths',
+        label: 'No gate or script names a file that is not there',
+        owner: 'repo',
+        section: 'Diagnostics'
+    },
+    {
+        evidence: 'src/renderer/audio/audioSafety.ts',
+        id: 'audio-never-eats-a-press',
+        label: 'A cue that cannot sound leaves the button that asked for it working',
         owner: 'repo',
         section: 'Diagnostics'
     },

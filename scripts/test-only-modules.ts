@@ -98,13 +98,15 @@ export interface TestOnlyModule {
 
 export const findTestOnlyModules = (
     files: readonly string[],
-    importerFiles: readonly string[] = files
+    importerFiles: readonly string[] = files,
+    /** Injected so the audit can be checked without a repository on disk under it. */
+    readSource: (file: string) => string = (file) => readFileSync(file, 'utf8')
 ): TestOnlyModule[] => {
     const known = new Set(files.map((file) => resolve(file)));
     const importers = new Map<string, string[]>();
 
     for (const file of importerFiles) {
-        const source = readFileSync(file, 'utf8');
+        const source = readSource(file);
         for (const specifier of readRelativeImports(source)) {
             const target = candidatePaths(file, specifier).find((candidate) => known.has(resolve(candidate)));
             if (!target) {

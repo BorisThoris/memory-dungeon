@@ -9,7 +9,7 @@
     "contentItemCount": 63,
     "mechanicCount": 136,
     "stateFieldCount": 144,
-    "relationshipCount": 10383
+    "relationshipCount": 10387
   },
   "inventory": [
     {
@@ -2259,8 +2259,8 @@
     {
       "path": "docs/RELEASE_CHECKLIST.md",
       "category": "documentation",
-      "bytes": 4887,
-      "sha256": "a78996eb94f49abb0e95c0399f7165e8686c65d67db8745bf955b5fabf953915"
+      "bytes": 5563,
+      "sha256": "cd446b62151e37a1160345b01e57a32dba1ad9268166cb01ff3056325ebf675a"
     },
     {
       "path": "docs/RELIC_ROSTER.md",
@@ -2320,7 +2320,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 36714,
-      "sha256": "978f1b79f0ce537bb808f4cf361d112254da6371372e37d1ae6ae0ee8042f448"
+      "sha256": "0716ff06e59d958b96379a992616f807b9e28f6344a5309692dbdabc179fc8fa"
     },
     {
       "path": "docs/UI_RETHINK_PLAN.md",
@@ -4647,8 +4647,8 @@
     {
       "path": "scripts/shared-reach.ts",
       "category": "script",
-      "bytes": 9504,
-      "sha256": "a8668f06c5b26d18d138784693991eaba46748a5ea57b705bd16b5d8c12e1912"
+      "bytes": 9661,
+      "sha256": "bb55a384ca41fba1c75079858107c175ee44f000d93a50585fb10ee55d4ed9a8"
     },
     {
       "path": "scripts/sim-build-strategies.ts",
@@ -4707,8 +4707,8 @@
     {
       "path": "scripts/test-only-modules.ts",
       "category": "script",
-      "bytes": 8290,
-      "sha256": "5ba7b6ca4d86f4038c1fb134cfd3af92fd15f8cfb917c265724554c24cde20c7"
+      "bytes": 8448,
+      "sha256": "01d104df9ff13ed4a34caea165ed708ae53843f217700c0b7ff7482562d9f1f2"
     },
     {
       "path": "scripts/vite-dev-blueprint-api.mjs",
@@ -11841,14 +11841,14 @@
     {
       "path": "src/shared/release-checklist.test.ts",
       "category": "test",
-      "bytes": 13867,
-      "sha256": "46600a00afeaa0d1556e344046b81fe93820d74e78938391764a98adea53e953"
+      "bytes": 17435,
+      "sha256": "8dbe2a8d10c0988bd8a25119a1761b24fca0a79d7484b3e1d4369916f738504b"
     },
     {
       "path": "src/shared/release-checklist.ts",
       "category": "source",
-      "bytes": 10452,
-      "sha256": "cf92380ffbf59608af46209ab51398cc73d8ce240e4978594a1ebf7020436f0b"
+      "bytes": 11591,
+      "sha256": "e98f2dacac352b06aadccf0b18e7cf4421611010cb21a1a17b6920925d82ce5f"
     },
     {
       "path": "src/shared/relic-favor-rules.test.ts",
@@ -16047,7 +16047,8 @@
         "symbol:src/renderer/audio/audioSafety.ts#audioNeverThrowsBoolean"
       ],
       "testedBy": [
-        "file:src/renderer/audio/audioSafety.test.ts"
+        "file:src/renderer/audio/audioSafety.test.ts",
+        "file:src/shared/release-checklist.test.ts"
       ]
     },
     {
@@ -29269,7 +29270,8 @@
       ],
       "testedBy": [
         "file:src/main/ipc.test.ts",
-        "file:src/shared/bridge-reachability.test.ts"
+        "file:src/shared/bridge-reachability.test.ts",
+        "file:src/shared/release-checklist.test.ts"
       ]
     },
     {
@@ -30782,11 +30784,12 @@
       "path": "src/shared/release-checklist.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 264,
+      "lineCount": 332,
       "imports": [
         "file:src/main/crash-log.ts",
         "file:src/main/save-recovery.ts",
         "file:src/main/window-bounds.ts",
+        "file:src/renderer/audio/audioSafety.ts",
         "file:src/renderer/components/runShellToolCatalog.ts",
         "file:src/renderer/copy/appErrorBoundary.ts",
         "file:src/renderer/copy/saveRecoveryNotice.ts",
@@ -30795,6 +30798,7 @@
         "file:src/shared/desktop-api-boundary.ts",
         "file:src/shared/game.ts",
         "file:src/shared/gamepad-input.ts",
+        "file:src/shared/ipc-channels.ts",
         "file:src/shared/release-checklist.ts",
         "file:src/shared/rich-presence.ts",
         "file:src/shared/save-data.ts",
@@ -30810,7 +30814,7 @@
       "path": "src/shared/release-checklist.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 277,
+      "lineCount": 312,
       "imports": [],
       "exports": [
         "symbol:src/shared/release-checklist.ts#RELEASE_CHECKLIST",
@@ -56895,15 +56899,15 @@
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
       "line": 32,
-      "endLine": 229
+      "endLine": 264
     },
     {
       "id": "symbol:src/shared/release-checklist.ts#releaseChecklistByOwner",
       "name": "releaseChecklistByOwner",
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
-      "line": 235,
-      "endLine": 236
+      "line": 270,
+      "endLine": 271
     },
     {
       "id": "symbol:src/shared/release-checklist.ts#ReleaseChecklistItem",
@@ -56926,16 +56930,16 @@
       "name": "releaseChecklistSections",
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
-      "line": 231,
-      "endLine": 233
+      "line": 266,
+      "endLine": 268
     },
     {
       "id": "symbol:src/shared/release-checklist.ts#renderReleaseChecklistMarkdown",
       "name": "renderReleaseChecklistMarkdown",
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
-      "line": 250,
-      "endLine": 276
+      "line": 285,
+      "endLine": 311
     },
     {
       "id": "symbol:src/shared/relic-favor-rules.ts#gainRelicFavor",
@@ -114680,6 +114684,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/release-checklist.test.ts->src/renderer/audio/audioSafety.ts",
+      "source": "file:src/shared/release-checklist.test.ts",
+      "target": "file:src/renderer/audio/audioSafety.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/release-checklist.test.ts->src/renderer/components/runShellToolCatalog.ts",
       "source": "file:src/shared/release-checklist.test.ts",
       "target": "file:src/renderer/components/runShellToolCatalog.ts",
@@ -114725,6 +114735,12 @@
       "id": "imports:src/shared/release-checklist.test.ts->src/shared/gamepad-input.ts",
       "source": "file:src/shared/release-checklist.test.ts",
       "target": "file:src/shared/gamepad-input.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/release-checklist.test.ts->src/shared/ipc-channels.ts",
+      "source": "file:src/shared/release-checklist.test.ts",
+      "target": "file:src/shared/ipc-channels.ts",
       "kind": "imports"
     },
     {
@@ -124794,6 +124810,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/audio/audioSafety.ts->file:src/shared/release-checklist.test.ts",
+      "source": "file:src/renderer/audio/audioSafety.ts",
+      "target": "file:src/shared/release-checklist.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/audio/dungeonAudioEventCoverage.ts->file:src/renderer/audio/dungeonAudioEventCoverage.test.ts",
       "source": "file:src/renderer/audio/dungeonAudioEventCoverage.ts",
       "target": "file:src/renderer/audio/dungeonAudioEventCoverage.test.ts",
@@ -129303,6 +129325,12 @@
       "id": "tested_by:src/shared/ipc-channels.ts->file:src/shared/bridge-reachability.test.ts",
       "source": "file:src/shared/ipc-channels.ts",
       "target": "file:src/shared/bridge-reachability.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/ipc-channels.ts->file:src/shared/release-checklist.test.ts",
+      "source": "file:src/shared/ipc-channels.ts",
+      "target": "file:src/shared/release-checklist.test.ts",
       "kind": "tested_by"
     },
     {
