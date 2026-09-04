@@ -9,6 +9,7 @@ const desktopApi: DesktopApi = {
     recoverUnreadableSave: () => ipcRenderer.invoke(DESKTOP_IPC_CHANNELS.recoverUnreadableSave),
     reportRendererError: (report, kind) => ipcRenderer.invoke(DESKTOP_IPC_CHANNELS.reportRendererError, report, kind),
     getCrashReportSummary: () => ipcRenderer.invoke(DESKTOP_IPC_CHANNELS.getCrashReportSummary),
+    revealSaveFile: () => ipcRenderer.invoke(DESKTOP_IPC_CHANNELS.revealSaveFile),
     unlockAchievement: (achievementId) => ipcRenderer.invoke(DESKTOP_IPC_CHANNELS.unlockAchievement, achievementId),
     setRichPresence: (state) => ipcRenderer.invoke(DESKTOP_IPC_CHANNELS.setRichPresence, state),
     isSteamConnected: () => ipcRenderer.invoke(DESKTOP_IPC_CHANNELS.isSteamConnected),

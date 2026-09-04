@@ -338,6 +338,14 @@ export const useAppStore = create<AppState>((set, get) => ({
         executeStoreRunStartRequest({ kind: 'practice' }, set, get);
     },
 
+    revealSaveFile: () => {
+        // Nothing to update and nothing to await: the file manager is the whole outcome, and a
+        // browser build has no file to reveal, so a false answer is a normal one.
+        void desktopClient.revealSaveFile().catch((error: unknown) => {
+            console.warn('[store] reveal save file failed', error);
+        });
+    },
+
     startScholarContractRun: () => {
         executeStoreRunStartRequest({ kind: 'scholarContract' }, set, get);
     },

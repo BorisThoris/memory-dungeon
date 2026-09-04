@@ -13,14 +13,16 @@ const electronMocks = vi.hoisted(() => ({
         electronMocks.handlers.set(channel, handler);
     }),
     handlers: new Map<string, (...args: unknown[]) => unknown>(),
-    quit: vi.fn()
+    quit: vi.fn(),
+    showItemInFolder: vi.fn()
 }));
 
 vi.mock('electron', () => ({
     app: { quit: electronMocks.quit },
     ipcMain: {
         handle: electronMocks.handle
-    }
+    },
+    shell: { showItemInFolder: electronMocks.showItemInFolder }
 }));
 
 import { registerIpcHandlers } from './ipc';
@@ -39,6 +41,56 @@ describe('registerIpcHandlers', () => {
         electronMocks.handlers.clear();
         electronMocks.handle.mockClear();
         electronMocks.quit.mockClear();
+        electronMocks.showItemInFolder.mockClear();
+    });
+
+    it('reveals the save file where it actually is, rather than opening it', () => {
+        const persistence = {
+            saveFilePath: vi.fn(() => '/saves/memory-dungeon/save.json')
+        } as unknown as PersistenceService;
+
+        registerIpcHandlers(
+            () => null,
+            persistence,
+            {} as unknown as SteamAdapter,
+            createSink(vi.fn())
+        );
+
+        const handler = electronMocks.handlers.get(IPC_CHANNELS.saveRevealFile);
+        expect(handler, 'the reveal channel is registered').toBeDefined();
+        expect(handler?.()).toBe(true);
+        expect(electronMocks.showItemInFolder).toHaveBeenCalledWith('/saves/memory-dungeon/save.json');
+    });
+
+    it('says it could not reveal the save rather than taking the call down with it', () => {
+        const persistence = {
+            saveFilePath: vi.fn(() => {
+                throw new Error('no store yet');
+            })
+        } as unknown as PersistenceService;
+        const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+
+        registerIpcHandlers(
+            () => null,
+            persistence,
+            {} as unknown as SteamAdapter,
+            createSink(vi.fn())
+        );
+
+        expect(electronMocks.handlers.get(IPC_CHANNELS.saveRevealFile)?.()).toBe(false);
+        expect(electronMocks.showItemInFolder).not.toHaveBeenCalled();
+        warn.mockRestore();
+    });
+
+    it('registers the reveal channel under its legacy alias too, like every other bridge method', () => {
+        registerIpcHandlers(
+            () => null,
+            { saveFilePath: vi.fn(() => '/saves/save.json') } as unknown as PersistenceService,
+            {} as unknown as SteamAdapter,
+            createSink(vi.fn())
+        );
+
+        expect(electronMocks.handlers.has(IPC_CHANNELS_LEGACY_DESKTOP.revealSaveFile)).toBe(true);
     });
 
     it('does not report a successful settings commit as failed when fullscreen application throws', () => {

@@ -1219,6 +1219,11 @@ export interface DesktopApi {
     reportRendererError: (report: RendererErrorReport, kind?: RendererErrorKind) => Promise<void>;
     /** Crash reports from earlier sessions, so Settings can say where to find them. */
     getCrashReportSummary: () => Promise<unknown>;
+    /**
+     * Opens the save file in the desktop's file manager, selected. Export, import and backup are
+     * all "copy the file yourself", which needs the player to be able to find the file.
+     */
+    revealSaveFile: () => Promise<unknown>;
     unlockAchievement: (id: AchievementId) => Promise<unknown>;
     /** Publishes what the player is doing to their friends list; cosmetic and never awaited for correctness. */
     setRichPresence: (state: RichPresenceState) => Promise<void>;

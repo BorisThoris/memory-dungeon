@@ -64,6 +64,11 @@ export interface AppState {
     startGauntletRun: (durationMs?: number) => void;
     startPuzzleRun: (puzzleId: string) => void;
     startPracticeRun: () => void;
+    /**
+     * Opens the save file in the desktop file manager. Export, import and backup are all "copy the
+     * file yourself" in this build, so finding the file is the whole task.
+     */
+    revealSaveFile: () => void;
     startScholarContractRun: () => void;
     /** Starts the run a pasted share key describes; ignores anything that is not a key. */
     startSharedRun: (pastedText: string) => void;

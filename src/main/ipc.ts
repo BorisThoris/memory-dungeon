@@ -1,4 +1,4 @@
-import { app, ipcMain } from 'electron';
+import { app, ipcMain, shell } from 'electron';
 import type { BrowserWindow, IpcMainInvokeEvent } from 'electron';
 import type {
     CrashReportSummary,
@@ -161,6 +161,27 @@ export const registerIpcHandlers = (
     };
     register(IPC_CHANNELS.steamSetRichPresence, setRichPresence);
     register(IPC_CHANNELS_LEGACY_DESKTOP.setRichPresence, setRichPresence);
+
+    /*
+     * Export, import and backup are all "copy the file yourself" in this build, which only works
+     * if the player can find the file. Reveal rather than open: opening a save in whatever handles
+     * .json is an invitation to edit it by hand.
+     */
+    const revealSaveFile = (): boolean => {
+        try {
+            const path = persistence.saveFilePath();
+            if (!path) {
+                return false;
+            }
+            shell.showItemInFolder(path);
+            return true;
+        } catch (error) {
+            console.warn('[ipc] reveal-save-file failed', error);
+            return false;
+        }
+    };
+    register(IPC_CHANNELS.saveRevealFile, revealSaveFile);
+    register(IPC_CHANNELS_LEGACY_DESKTOP.revealSaveFile, revealSaveFile);
 
     const quitApp = (): void => {
         try {

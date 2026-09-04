@@ -5,11 +5,11 @@
     "name": "memory-dungeon",
     "trackedFileCount": 2505,
     "codeFileCount": 971,
-    "exportedSymbolCount": 3529,
+    "exportedSymbolCount": 3530,
     "contentItemCount": 63,
     "mechanicCount": 136,
     "stateFieldCount": 144,
-    "relationshipCount": 10382
+    "relationshipCount": 10383
   },
   "inventory": [
     {
@@ -4791,14 +4791,14 @@
     {
       "path": "src/main/ipc.test.ts",
       "category": "test",
-      "bytes": 7159,
-      "sha256": "87a21bc2a67d4bcdba609efc2366d588d4876af59b18a1faf30a6c19ac518fb4"
+      "bytes": 9182,
+      "sha256": "7ff812f15725c7cca93fee9707ab3af859bce499209255a8fd683c3ca3c8b3f6"
     },
     {
       "path": "src/main/ipc.ts",
       "category": "source",
-      "bytes": 7224,
-      "sha256": "efdedfbc9df2d2e19ec32627b81cdfb4721a63cc988d970ceffb850c3a49a38a"
+      "bytes": 8010,
+      "sha256": "5ab0f609876911ad040e7f4def5da816d37d55cff92776ff72098c4b028b37ba"
     },
     {
       "path": "src/main/persistence-write-error.test.ts",
@@ -4815,8 +4815,8 @@
     {
       "path": "src/main/persistence.ts",
       "category": "source",
-      "bytes": 5280,
-      "sha256": "7272cdff7dc0b44d4a3b5bcb41d3d58aa388a7c2f70882040e6a3b924bff5153"
+      "bytes": 5462,
+      "sha256": "66cfa36a48a8a3cf537a7334263bc2e9d38f891a928d02bb6a22bcbbeabf257d"
     },
     {
       "path": "src/main/renderer-csp.test.ts",
@@ -4923,8 +4923,8 @@
     {
       "path": "src/preload/index.ts",
       "category": "source",
-      "bytes": 1204,
-      "sha256": "1f5332cc0b7c6b3376fd8fb39ffff477ce60a1ec37df8f3060a28fbeebc67268"
+      "bytes": 1287,
+      "sha256": "4e00bc8fb20af4d5f5a6b2b43dc83fb0424b64db2711c03885edd28a20cef6f7"
     },
     {
       "path": "src/renderer/a11y/focusables.test.ts",
@@ -7941,8 +7941,8 @@
     {
       "path": "src/renderer/components/SettingsScreen.tsx",
       "category": "source",
-      "bytes": 45941,
-      "sha256": "41547315672c0608c8d4e9a500b94ab882eb33ffbd8b50a38c9f9aa2b55bbee2"
+      "bytes": 46740,
+      "sha256": "f2a27773fdca7d5db68fc6c64a85050aa573a150b4ccfa5fb9f583b7319143a0"
     },
     {
       "path": "src/renderer/components/ShopScreen.module.css",
@@ -8949,8 +8949,8 @@
     {
       "path": "src/renderer/copy/diagnosticsSettings.ts",
       "category": "source",
-      "bytes": 618,
-      "sha256": "7052c17b67c97add61cfa194d92c3da58f98b5dbb06c794acb126f94db1b2b83"
+      "bytes": 999,
+      "sha256": "2a2e4b71e8e78f30d0532b668ac7bb1440e74fe94e3e4a6d0540a28294a355b8"
     },
     {
       "path": "src/renderer/copy/gameOverScreen.ts",
@@ -9069,8 +9069,8 @@
     {
       "path": "src/renderer/desktop-client.ts",
       "category": "source",
-      "bytes": 3640,
-      "sha256": "b9ab6b084d487af468fdbeacc6194494177454e7310392e39329bb5fa18aec41"
+      "bytes": 3898,
+      "sha256": "2a56b4b70d917df7395188587b95823be8b8bbfb89fda440a3fe0042688dbcce"
     },
     {
       "path": "src/renderer/desktop.d.ts",
@@ -9507,8 +9507,8 @@
     {
       "path": "src/renderer/store/appStoreTypes.ts",
       "category": "source",
-      "bytes": 4904,
-      "sha256": "f09f5aa16f70952b31d74c51a3aa848b83dc93f624d042637f9189ecf6b16926"
+      "bytes": 5128,
+      "sha256": "f7ddb40fd15967cfeb6e81731e250123d55585921387016c73ea1084f85c9430"
     },
     {
       "path": "src/renderer/store/backgroundPersistence.test.ts",
@@ -9927,8 +9927,8 @@
     {
       "path": "src/renderer/store/useAppStore.ts",
       "category": "source",
-      "bytes": 28813,
-      "sha256": "79012ee6c0541e1df40304a1f2883704d3a3f8c81b3caedaebcbb706cdac0a9f"
+      "bytes": 29180,
+      "sha256": "c6a507966f2601cac6a05b7bb06bd7bb6635932c22dbeed3b2c8f2c9f2cee02b"
     },
     {
       "path": "src/renderer/styles/App.module.css",
@@ -10509,8 +10509,8 @@
     {
       "path": "src/shared/contracts.ts",
       "category": "source",
-      "bytes": 47575,
-      "sha256": "4381a9d5f51495df0ae8c6abcaeab493bb531fdd0a4d2944031e7d6b64e899cf"
+      "bytes": 47822,
+      "sha256": "70a2de0cd08efee5e35b25f105bb89ad3b8754cb3b32fd01978d7a80cdfbe228"
     },
     {
       "path": "src/shared/copy-locality.test.ts",
@@ -11391,8 +11391,8 @@
     {
       "path": "src/shared/ipc-channels.ts",
       "category": "source",
-      "bytes": 2173,
-      "sha256": "9693ae5741db5c95554c177d132d35e3d0bc86e2dfe839026ebad72f3eee98f8"
+      "bytes": 2310,
+      "sha256": "33bc384ff4172fa491ecc63dfd3c7ad390962fa6940766e3080ec848fa8c7072"
     },
     {
       "path": "src/shared/level-clear-rules.test.ts",
@@ -15214,7 +15214,7 @@
       "path": "src/main/ipc.test.ts",
       "layer": "main",
       "role": "test",
-      "lineCount": 165,
+      "lineCount": 217,
       "imports": [
         "file:src/main/ipc.ts",
         "file:src/main/persistence.ts",
@@ -15231,7 +15231,7 @@
       "path": "src/main/ipc.ts",
       "layer": "main",
       "role": "production",
-      "lineCount": 176,
+      "lineCount": 197,
       "imports": [
         "file:src/main/persistence.ts",
         "file:src/main/steam.ts",
@@ -15281,7 +15281,7 @@
       "path": "src/main/persistence.ts",
       "layer": "main",
       "role": "production",
-      "lineCount": 147,
+      "lineCount": 152,
       "imports": [
         "file:src/main/save-recovery-fs.ts",
         "file:src/main/save-recovery.ts",
@@ -15566,7 +15566,7 @@
       "path": "src/preload/index.ts",
       "layer": "preload",
       "role": "production",
-      "lineCount": 19,
+      "lineCount": 20,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/ipc-channels.ts"
@@ -18130,7 +18130,7 @@
       "path": "src/renderer/components/SettingsScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 730,
+      "lineCount": 742,
       "imports": [
         "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/breakpoints.ts",
@@ -21135,10 +21135,11 @@
       "path": "src/renderer/copy/diagnosticsSettings.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 14,
+      "lineCount": 24,
       "imports": [],
       "exports": [
-        "symbol:src/renderer/copy/diagnosticsSettings.ts#DIAGNOSTICS_COPY"
+        "symbol:src/renderer/copy/diagnosticsSettings.ts#DIAGNOSTICS_COPY",
+        "symbol:src/renderer/copy/diagnosticsSettings.ts#SAVE_FILE_COPY"
       ],
       "testedBy": []
     },
@@ -21455,7 +21456,7 @@
       "path": "src/renderer/desktop-client.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 108,
+      "lineCount": 113,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/save-data.ts"
@@ -22515,7 +22516,7 @@
       "path": "src/renderer/store/appStoreTypes.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 121,
+      "lineCount": 126,
       "imports": [
         "file:src/renderer/store/matchScorePop.ts",
         "file:src/shared/contracts.ts",
@@ -23840,7 +23841,7 @@
       "path": "src/renderer/store/useAppStore.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 885,
+      "lineCount": 893,
       "imports": [
         "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/audio/uiSfx.ts",
@@ -25540,7 +25541,7 @@
       "path": "src/shared/contracts.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1228,
+      "lineCount": 1233,
       "imports": [],
       "exports": [
         "symbol:src/shared/contracts.ts#AchievementId",
@@ -29257,7 +29258,7 @@
       "path": "src/shared/ipc-channels.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 47,
+      "lineCount": 50,
       "imports": [
         "file:src/shared/contracts.ts"
       ],
@@ -34574,7 +34575,7 @@
       "kind": "value",
       "file": "src/main/ipc.ts",
       "line": 37,
-      "endLine": 175
+      "endLine": 196
     },
     {
       "id": "symbol:src/main/ipc.ts#RendererErrorSink",
@@ -34590,7 +34591,7 @@
       "kind": "class",
       "file": "src/main/persistence.ts",
       "line": 48,
-      "endLine": 146
+      "endLine": 151
     },
     {
       "id": "symbol:src/main/persistence.ts#PersistenceWriteError",
@@ -37445,8 +37446,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/SettingsScreen.tsx",
-      "line": 729,
-      "endLine": 729
+      "line": 741,
+      "endLine": 741
     },
     {
       "id": "symbol:src/renderer/components/ShopScreen.tsx#default",
@@ -40985,6 +40986,14 @@
       "endLine": 13
     },
     {
+      "id": "symbol:src/renderer/copy/diagnosticsSettings.ts#SAVE_FILE_COPY",
+      "name": "SAVE_FILE_COPY",
+      "kind": "value",
+      "file": "src/renderer/copy/diagnosticsSettings.ts",
+      "line": 20,
+      "endLine": 23
+    },
+    {
       "id": "symbol:src/renderer/copy/gameOverScreen.ts#gameOverScreenCopy",
       "name": "gameOverScreenCopy",
       "kind": "value",
@@ -41429,8 +41438,8 @@
       "name": "desktopClient",
       "kind": "value",
       "file": "src/renderer/desktop-client.ts",
-      "line": 107,
-      "endLine": 107
+      "line": 112,
+      "endLine": 112
     },
     {
       "id": "symbol:src/renderer/dev/BlueprintExplorer.tsx#default",
@@ -42270,7 +42279,7 @@
       "kind": "interface",
       "file": "src/renderer/store/appStoreTypes.ts",
       "line": 16,
-      "endLine": 120
+      "endLine": 125
     },
     {
       "id": "symbol:src/renderer/store/backgroundPersistence.ts#runPersistenceInBackground",
@@ -43590,7 +43599,7 @@
       "kind": "value",
       "file": "src/renderer/store/useAppStore.ts",
       "line": 262,
-      "endLine": 874
+      "endLine": 882
     },
     {
       "id": "symbol:src/renderer/styles/theme.ts#buildRendererThemeStyle",
@@ -46646,7 +46655,7 @@
       "kind": "interface",
       "file": "src/shared/contracts.ts",
       "line": 1206,
-      "endLine": 1227
+      "endLine": 1232
     },
     {
       "id": "symbol:src/shared/contracts.ts#DisplayMode",
@@ -54485,8 +54494,8 @@
       "name": "DESKTOP_IPC_CHANNELS",
       "kind": "value",
       "file": "src/shared/ipc-channels.ts",
-      "line": 21,
-      "endLine": 32
+      "line": 22,
+      "endLine": 34
     },
     {
       "id": "symbol:src/shared/ipc-channels.ts#IPC_CHANNELS",
@@ -54494,15 +54503,15 @@
       "kind": "value",
       "file": "src/shared/ipc-channels.ts",
       "line": 7,
-      "endLine": 18
+      "endLine": 19
     },
     {
       "id": "symbol:src/shared/ipc-channels.ts#IPC_CHANNELS_LEGACY_DESKTOP",
       "name": "IPC_CHANNELS_LEGACY_DESKTOP",
       "kind": "value",
       "file": "src/shared/ipc-channels.ts",
-      "line": 35,
-      "endLine": 46
+      "line": 37,
+      "endLine": 49
     },
     {
       "id": "symbol:src/shared/level-clear-rules.ts#applyFloorClearEnemyHazardDefeats",
@@ -79441,6 +79450,12 @@
       "id": "exports:src/renderer/copy/diagnosticsSettings.ts->symbol:src/renderer/copy/diagnosticsSettings.ts#DIAGNOSTICS_COPY",
       "source": "file:src/renderer/copy/diagnosticsSettings.ts",
       "target": "symbol:src/renderer/copy/diagnosticsSettings.ts#DIAGNOSTICS_COPY",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/copy/diagnosticsSettings.ts->symbol:src/renderer/copy/diagnosticsSettings.ts#SAVE_FILE_COPY",
+      "source": "file:src/renderer/copy/diagnosticsSettings.ts",
+      "target": "symbol:src/renderer/copy/diagnosticsSettings.ts#SAVE_FILE_COPY",
       "kind": "exports"
     },
     {

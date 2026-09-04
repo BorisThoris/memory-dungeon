@@ -79,6 +79,11 @@ const fallbackClient: DesktopApi = {
         // The browser fallback has no main process and so no crash logs on disk.
         return { count: 0, directory: '', latestFileName: null };
     },
+    async revealSaveFile(): Promise<boolean> {
+        // The browser fallback keeps its save in local storage: there is no file to reveal, and
+        // saying so lets the caller hide the affordance instead of opening nothing.
+        return false;
+    },
     async reportRendererError(): Promise<void> {
         // No main process in the browser fallback, so there is nowhere to write a crash log. The
         // boundary still shows the player what happened; only the record on disk is missing.

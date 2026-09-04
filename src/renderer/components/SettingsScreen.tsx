@@ -37,7 +37,7 @@ import { pairProximityUiStrings } from '../ui/strings/pairProximityUi';
 import packageJson from '../../../package.json';
 import { GAMEPLAY_VISUAL_CSS_VARS } from './gameplayVisualConfig';
 import OverlayModal from './OverlayModal';
-import { DIAGNOSTICS_COPY } from '../copy/diagnosticsSettings';
+import { DIAGNOSTICS_COPY, SAVE_FILE_COPY } from '../copy/diagnosticsSettings';
 import { SETTINGS_FOOTER_HINT, SETTINGS_HINTS } from '../copy/settingsHints';
 import { PlaceholderControl, SegmentedControl, SettingsSection, SliderRow, ToggleRow } from './SettingsControls';
 import {
@@ -59,6 +59,7 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
         closeSettings,
         persistenceWriteNotice,
         priorCrashNotice,
+        revealSaveFile,
         settings,
         saveData,
         updateSettings
@@ -68,6 +69,7 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
             closeSettings: state.closeSettings,
             persistenceWriteNotice: state.persistenceWriteNotice,
             priorCrashNotice: state.priorCrashNotice,
+            revealSaveFile: state.revealSaveFile,
             settings: state.settings,
             saveData: state.saveData,
             updateSettings: state.updateSettings
@@ -619,6 +621,16 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                                         </div>
                                                     ))}
                                                 </div>
+                                                <UiButton
+                                                    aria-label={SAVE_FILE_COPY.revealAriaLabel}
+                                                    data-testid="settings-reveal-save-file"
+                                                    onClick={revealSaveFile}
+                                                    size="md"
+                                                    type="button"
+                                                    variant="secondary"
+                                                >
+                                                    {SAVE_FILE_COPY.reveal}
+                                                </UiButton>
                                                 <div className={styles.profileSummaryGrid} data-testid="settings-save-trust">
                                                     {saveTrustRows.map((row) => (
                                                         <div className={styles.profileSummaryRow} key={row.id}>

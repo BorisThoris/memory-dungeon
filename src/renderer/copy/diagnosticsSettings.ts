@@ -11,3 +11,13 @@ export const DIAGNOSTICS_COPY = {
     /** Shown when nothing has gone wrong, so the row is not a permanent empty space. */
     none: 'No crash reports from earlier sessions.'
 } as const;
+
+/**
+ * Export, import and backup are all "copy the file yourself" in this build, which only works if
+ * the player can find the file. Reveal rather than open: opening a save in whatever handles .json
+ * is an invitation to edit it by hand.
+ */
+export const SAVE_FILE_COPY = {
+    reveal: 'Show save file',
+    revealAriaLabel: 'Show the save file in the file manager'
+} as const;

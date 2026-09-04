@@ -127,6 +127,11 @@ export class PersistenceService {
         return { ...recovery, saveData: fresh };
     }
 
+    /** Where the save lives, for the reveal action and for anything that has to name the file. */
+    saveFilePath(): string {
+        return this.repository.saveFilePath();
+    }
+
     unlockAchievement(achievementId: AchievementId): SaveData {
         const saveData = this.getSaveData();
         if (saveData.achievements[achievementId]) {
