@@ -3,7 +3,7 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2505,
+    "trackedFileCount": 2506,
     "codeFileCount": 971,
     "exportedSymbolCount": 3530,
     "contentItemCount": 63,
@@ -3683,6 +3683,12 @@
       "category": "test",
       "bytes": 3379,
       "sha256": "75842c74187ce9efae99703a15f81bdbd3a0339b48d41aba9759683ddf028514"
+    },
+    {
+      "path": "e2e/pause-controls-reference.spec.ts",
+      "category": "test",
+      "bytes": 1563,
+      "sha256": "c19cc1717630d97db1cdcbd01fa748b6d244cd821029c321c6bd4958a187bade"
     },
     {
       "path": "e2e/playable-path-interludes.spec.ts",
@@ -7683,8 +7689,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 91337,
-      "sha256": "7747657766f676c7b571961665e9dd839bc8da113a6b946e10ac9ef944ea82c1"
+      "bytes": 92267,
+      "sha256": "330898d7d910c92e758919930884d9688cc7e6d899434e24e25e19b544bd6e82"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -17477,7 +17483,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 2027,
+      "lineCount": 2042,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -37018,8 +37024,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 2026,
-      "endLine": 2026
+      "line": 2041,
+      "endLine": 2041
     },
     {
       "id": "symbol:src/renderer/components/gameScreenFeedback.ts#DungeonCombatLogRow",

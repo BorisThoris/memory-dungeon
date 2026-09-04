@@ -1836,7 +1836,8 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                     </OverlayModal>
                 ) : null}
 
-                {!suppressStatusOverlays && !abandonRunConfirmOpen && run.status === 'paused' && (
+                {/* One modal at a time: Controls opens over pause, and closing it comes back here. */}
+                {!suppressStatusOverlays && !abandonRunConfirmOpen && !shortcutsHelpOpen && run.status === 'paused' && (
                     <OverlayModal
                         actions={[
                             { label: 'Resume', onClick: resume, variant: 'primary' },
@@ -1850,6 +1851,20 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                             },
                             { label: 'Inventory', onClick: openInventoryFromPlaying, variant: 'secondary' },
                             { label: 'Codex', onClick: openCodexFromPlaying, variant: 'secondary' },
+                            /*
+                             * The shortcuts overlay opened on F1 or ? and nowhere else, which
+                             * asks the player to already know the shortcut for finding out the
+                             * shortcuts — and a controller has neither key. Pause is where you
+                             * look, and it is reachable from the dock and from Start.
+                             */
+                            {
+                                label: 'Controls',
+                                onClick: () => {
+                                    playMenuOpen();
+                                    setShortcutsHelpOpen(true);
+                                },
+                                variant: 'secondary'
+                            },
                             { label: 'Settings', onClick: openSettingsPlayingMode, variant: 'secondary' },
                             {
                                 label: 'Retreat',
