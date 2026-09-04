@@ -1,4 +1,4 @@
-import { existsSync, readFileSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { buildContentSecurityPolicy, policyAllowsDevServer } from './content-security-policy';
@@ -8,6 +8,11 @@ import { buildContentSecurityPolicy, policyAllowsDevServer } from './content-sec
  * That allowance used to be written straight into `index.html`, and Vite copies the file verbatim,
  * so every packaged build shipped permission for its renderer to open a websocket to any port on
  * the player's machine. Nothing needs that once the bundle is on disk.
+ *
+ * The built file itself is checked by `audit:built-csp` inside `gate:build-output`, which is where
+ * the build happens. A unit test used to look for `dist/index.html` and return quietly when it was
+ * not there — which, in the unit suite, was always — so it read as coverage of the shipped policy
+ * and asserted nothing at all.
  */
 describe('the renderer content security policy', () => {
     it('gives the dev server the socket it needs', () => {
@@ -58,15 +63,4 @@ describe('the renderer content security policy', () => {
         expect(html).toContain('%CONTENT_SECURITY_POLICY%');
     });
 
-    it('does not carry a dev allowance into a built index.html', () => {
-        const built = join(process.cwd(), 'dist', 'index.html');
-        if (!existsSync(built)) {
-            // The renderer bundle is built by gate:build-output, not by the unit suite.
-            return;
-        }
-        const html = readFileSync(built, 'utf8');
-
-        expect(html).not.toContain('%CONTENT_SECURITY_POLICY%');
-        expect(html).not.toMatch(/content="[^"]*wss?:\/\//u);
-    });
 });

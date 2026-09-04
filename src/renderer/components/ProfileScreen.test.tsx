@@ -91,6 +91,42 @@ describe('ProfileScreen', () => {
         expect(rows[1]).not.toHaveTextContent(/copied/i);
     });
 
+    it('marks the best recorded run, and marks only that one', () => {
+        const saveData = createDefaultSaveData();
+        saveData.runHistory = [
+            {
+                endedAtIso: '2026-09-04T12:00:00.000Z',
+                highestLevel: 5,
+                mode: 'Classic Dungeon',
+                shareKey: 'md1:classic:33:1',
+                totalScore: 900
+            },
+            {
+                endedAtIso: '2026-09-03T12:00:00.000Z',
+                highestLevel: 14,
+                mode: 'Wild Run',
+                shareKey: 'md1:wild:33:2',
+                totalScore: 3400
+            },
+            {
+                endedAtIso: '2026-09-02T12:00:00.000Z',
+                highestLevel: 2,
+                mode: 'Practice',
+                shareKey: 'md1:practice:33:3',
+                totalScore: 100
+            }
+        ];
+        profileStoreMocks.saveData = saveData;
+
+        render(<ProfileScreen />);
+        const rows = within(screen.getByTestId('profile-run-history')).getAllByRole('listitem');
+
+        // The best run is the highest score, not the newest row.
+        expect(within(rows[1]!).getByTestId('profile-run-history-best')).toBeInTheDocument();
+        expect(within(rows[0]!).queryByTestId('profile-run-history-best')).not.toBeInTheDocument();
+        expect(within(rows[2]!).queryByTestId('profile-run-history-best')).not.toBeInTheDocument();
+    });
+
     it('offers no key for a run that cannot be handed over, rather than a broken one', () => {
         const saveData = createDefaultSaveData();
         saveData.runHistory = [

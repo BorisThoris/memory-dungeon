@@ -190,6 +190,18 @@
     white-space: nowrap;
 }
 
+.historyBest {
+    margin-left: 0.4rem;
+    padding: 0 0.35rem;
+    border-radius: var(--ui-radius-pill);
+    border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 46%, transparent);
+    color: var(--theme-gold-bright);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
 .historyResult {
     color: var(--theme-text-muted);
     font-variant-numeric: tabular-nums;

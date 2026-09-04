@@ -7857,20 +7857,20 @@
     {
       "path": "src/renderer/components/ProfileScreen.module.css",
       "category": "source",
-      "bytes": 5811,
-      "sha256": "4e7313cf3daa38d62c359718218111c62c7374efce29d178264acc0b946a9e92"
+      "bytes": 6147,
+      "sha256": "281aff38d8a6aa541b84ecd32b9d0c87d5e6409248734dac49df3a0fcb4d08cd"
     },
     {
       "path": "src/renderer/components/ProfileScreen.test.tsx",
       "category": "test",
-      "bytes": 8772,
-      "sha256": "44c1f94c45b9d0051c84cf9e65fee57f5013c13ef437e01cfe2bfd0951e7cd54"
+      "bytes": 10182,
+      "sha256": "0d3cf03661363e0de07437e6ab9a049ee13bf965f0ce54df129b7bf13deab523"
     },
     {
       "path": "src/renderer/components/ProfileScreen.tsx",
       "category": "source",
-      "bytes": 10982,
-      "sha256": "41797b5f0d1cbe3fabb9b6e8800171b4e9935b4d259ec02fd5283e752a00e395"
+      "bytes": 12119,
+      "sha256": "9d1c52b7e71631349aa127c3d924a4579548d74011ae7f5d31e73a21dc819b80"
     },
     {
       "path": "src/renderer/components/RelicDraftOffer.module.css",
@@ -9045,8 +9045,8 @@
     {
       "path": "src/renderer/copy/runHistory.ts",
       "category": "source",
-      "bytes": 1240,
-      "sha256": "3468860f4a125d8e5b0f5bafdcbdc6a7c0ad33adca0531b89863d5db4247448e"
+      "bytes": 1314,
+      "sha256": "9056688cc2a9cc5b5c7dc31fbe61cc649d5e9b95b7359851caca16f9f5107aaa"
     },
     {
       "path": "src/renderer/copy/saveRecoveryNotice.ts",
@@ -10521,8 +10521,8 @@
     {
       "path": "src/shared/content-security-policy.test.ts",
       "category": "test",
-      "bytes": 3212,
-      "sha256": "cd18c91ebdb6e789fe3ebb281371ee9ff56d50885f6b9ec1a3031603bbc0af6a"
+      "bytes": 3061,
+      "sha256": "c6cfa17f6489fe7eaf08421861a8c16d6ec4533e9456a909c113cd7d427cf8e0"
     },
     {
       "path": "src/shared/content-security-policy.ts",
@@ -17975,7 +17975,7 @@
       "path": "src/renderer/components/ProfileScreen.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 212,
+      "lineCount": 248,
       "imports": [
         "file:src/renderer/components/ProfileScreen.tsx",
         "file:src/shared/contracts.ts",
@@ -17989,7 +17989,7 @@
       "path": "src/renderer/components/ProfileScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 215,
+      "lineCount": 233,
       "imports": [
         "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/copy/profileProgress.ts",
@@ -21424,7 +21424,7 @@
       "path": "src/renderer/copy/runHistory.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 31,
+      "lineCount": 33,
       "imports": [
         "file:src/shared/contracts.ts"
       ],
@@ -25601,7 +25601,7 @@
       "path": "src/shared/content-security-policy.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 73,
+      "lineCount": 67,
       "imports": [
         "file:src/shared/content-security-policy.ts"
       ],
@@ -37451,8 +37451,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/ProfileScreen.tsx",
-      "line": 214,
-      "endLine": 214
+      "line": 232,
+      "endLine": 232
     },
     {
       "id": "symbol:src/renderer/components/RelicDraftOfferPanel.tsx#default",
@@ -41507,8 +41507,8 @@
       "name": "formatRunHistoryDate",
       "kind": "value",
       "file": "src/renderer/copy/runHistory.ts",
-      "line": 24,
-      "endLine": 30
+      "line": 26,
+      "endLine": 32
     },
     {
       "id": "symbol:src/renderer/copy/runHistory.ts#RUN_HISTORY_COPY",
@@ -41516,7 +41516,7 @@
       "kind": "value",
       "file": "src/renderer/copy/runHistory.ts",
       "line": 10,
-      "endLine": 21
+      "endLine": 23
     },
     {
       "id": "symbol:src/renderer/copy/saveRecoveryNotice.ts#SAVE_RECOVERY_COPY",

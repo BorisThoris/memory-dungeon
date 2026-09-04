@@ -13,6 +13,8 @@ export const RUN_HISTORY_COPY = {
         `Copy the key for the ${record.mode} run that reached floor ${record.highestLevel}`,
     copyDone: 'Copied',
     copyFailed: 'Failed',
+    best: 'Best',
+    bestAriaLabel: 'Your highest scoring recorded run',
     empty: 'Finished runs are recorded here.',
     label: 'Recent runs',
     /** `Floor 12 · 3,400` — the two numbers a player compares runs by. */

@@ -65,6 +65,12 @@ const ProfileScreen = () => {
               : PROFILE_PROGRESS_COPY.copyDaily;
     const progressRows = getLocalProgressRegistryRows(saveData);
     const runHistory = normalizeRunHistory(saveData.runHistory);
+    /*
+     * Which recorded run is the best one, by score. Read off the history rather than compared to
+     * `saveData.bestScore`: a record set before the history existed, or one older than the twenty
+     * kept, would mark nothing here and leave the player looking for a row that is not there.
+     */
+    const bestRecordedScore = runHistory.reduce((best, entry) => Math.max(best, entry.totalScore), 0);
     // One copy state per screen would make every row read "Copied" at once, so each row owns which
     // one of them was pressed.
     const [copiedRunKey, setCopiedRunKey] = useState<string | null>(null);
@@ -137,7 +143,19 @@ const ProfileScreen = () => {
                     <ol className={styles.historyList}>
                         {runHistory.map((record) => (
                             <li className={styles.historyRow} key={`${record.endedAtIso}:${record.mode}`}>
-                                <strong className={styles.historyMode}>{record.mode}</strong>
+                                <strong className={styles.historyMode}>
+                                    {record.mode}
+                                    {bestRecordedScore > 0 && record.totalScore === bestRecordedScore ? (
+                                        <span
+                                            aria-label={RUN_HISTORY_COPY.bestAriaLabel}
+                                            className={styles.historyBest}
+                                            data-testid="profile-run-history-best"
+                                            role="img"
+                                        >
+                                            {RUN_HISTORY_COPY.best}
+                                        </span>
+                                    ) : null}
+                                </strong>
                                 <span className={styles.historyResult}>{RUN_HISTORY_COPY.result(record)}</span>
                                 <span className={styles.historyDate}>{formatRunHistoryDate(record.endedAtIso)}</span>
                                 {record.shareKey === null ? null : (
