@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2509,
-    "codeFileCount": 974,
-    "exportedSymbolCount": 3537,
+    "trackedFileCount": 2510,
+    "codeFileCount": 975,
+    "exportedSymbolCount": 3539,
     "contentItemCount": 63,
     "mechanicCount": 136,
     "stateFieldCount": 144,
-    "relationshipCount": 10410
+    "relationshipCount": 10415
   },
   "inventory": [
     {
@@ -2320,7 +2320,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 36714,
-      "sha256": "73f7aba8918d520411363761f0fb210b86062dcab44529b8fb132d7241a69fd4"
+      "sha256": "81277b37d50966a648772e80ea277b1064d72cb10459a5fb3b21d0bf5df02228"
     },
     {
       "path": "docs/UI_RETHINK_PLAN.md",
@@ -7851,20 +7851,20 @@
     {
       "path": "src/renderer/components/ProfileScreen.module.css",
       "category": "source",
-      "bytes": 4638,
-      "sha256": "6cec97f0af7d77458ee884bf78b959e66343fcb376ac30c9f0fce815e2eadc7f"
+      "bytes": 5811,
+      "sha256": "4e7313cf3daa38d62c359718218111c62c7374efce29d178264acc0b946a9e92"
     },
     {
       "path": "src/renderer/components/ProfileScreen.test.tsx",
       "category": "test",
-      "bytes": 6125,
-      "sha256": "d29ed4dc2fafafc19f27c3ba6d87bd2fcc1007431445284b67185db471be420c"
+      "bytes": 8772,
+      "sha256": "44c1f94c45b9d0051c84cf9e65fee57f5013c13ef437e01cfe2bfd0951e7cd54"
     },
     {
       "path": "src/renderer/components/ProfileScreen.tsx",
       "category": "source",
-      "bytes": 8114,
-      "sha256": "bcffe43f783e9253ce5d627ac2580bc398a3e8a0b154e53bd8c2b10f1d02bb98"
+      "bytes": 10982,
+      "sha256": "41797b5f0d1cbe3fabb9b6e8800171b4e9935b4d259ec02fd5283e752a00e395"
     },
     {
       "path": "src/renderer/components/RelicDraftOffer.module.css",
@@ -9035,6 +9035,12 @@
       "category": "source",
       "bytes": 2411,
       "sha256": "2e0b08cfb716eca8ca1df6bb193ff4d6da914167a1e3c66e0eba81aa3c271122"
+    },
+    {
+      "path": "src/renderer/copy/runHistory.ts",
+      "category": "source",
+      "bytes": 1240,
+      "sha256": "3468860f4a125d8e5b0f5bafdcbdc6a7c0ad33adca0531b89863d5db4247448e"
     },
     {
       "path": "src/renderer/copy/saveRecoveryNotice.ts",
@@ -17944,7 +17950,7 @@
       "path": "src/renderer/components/ProfileScreen.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 146,
+      "lineCount": 212,
       "imports": [
         "file:src/renderer/components/ProfileScreen.tsx",
         "file:src/shared/contracts.ts",
@@ -17958,10 +17964,11 @@
       "path": "src/renderer/components/ProfileScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 170,
+      "lineCount": 215,
       "imports": [
         "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/copy/profileProgress.ts",
+        "file:src/renderer/copy/runHistory.ts",
         "file:src/renderer/hooks/useCopyToClipboard.ts",
         "file:src/renderer/store/useAppStore.ts",
         "file:src/renderer/ui/index.ts",
@@ -17970,7 +17977,8 @@
         "file:src/shared/local-progress-registry.ts",
         "file:src/shared/meta-progression.ts",
         "file:src/shared/objective-board.ts",
-        "file:src/shared/profile-summary.ts"
+        "file:src/shared/profile-summary.ts",
+        "file:src/shared/run-history-log.ts"
       ],
       "exports": [
         "symbol:src/renderer/components/ProfileScreen.tsx#default"
@@ -21383,6 +21391,21 @@
         "symbol:src/renderer/copy/runDialogCopy.ts#ROUTE_CHOICE_COPY",
         "symbol:src/renderer/copy/runDialogCopy.ts#RUN_SHELL_LABELS",
         "symbol:src/renderer/copy/runDialogCopy.ts#SHORTCUTS_COPY"
+      ],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/copy/runHistory.ts",
+      "path": "src/renderer/copy/runHistory.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 31,
+      "imports": [
+        "file:src/shared/contracts.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/copy/runHistory.ts#formatRunHistoryDate",
+        "symbol:src/renderer/copy/runHistory.ts#RUN_HISTORY_COPY"
       ],
       "testedBy": []
     },
@@ -37357,8 +37380,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/ProfileScreen.tsx",
-      "line": 169,
-      "endLine": 169
+      "line": 214,
+      "endLine": 214
     },
     {
       "id": "symbol:src/renderer/components/RelicDraftOfferPanel.tsx#default",
@@ -41407,6 +41430,22 @@
       "file": "src/renderer/copy/runDialogCopy.ts",
       "line": 15,
       "endLine": 19
+    },
+    {
+      "id": "symbol:src/renderer/copy/runHistory.ts#formatRunHistoryDate",
+      "name": "formatRunHistoryDate",
+      "kind": "value",
+      "file": "src/renderer/copy/runHistory.ts",
+      "line": 24,
+      "endLine": 30
+    },
+    {
+      "id": "symbol:src/renderer/copy/runHistory.ts#RUN_HISTORY_COPY",
+      "name": "RUN_HISTORY_COPY",
+      "kind": "value",
+      "file": "src/renderer/copy/runHistory.ts",
+      "line": 10,
+      "endLine": 21
     },
     {
       "id": "symbol:src/renderer/copy/saveRecoveryNotice.ts#SAVE_RECOVERY_COPY",
@@ -79848,6 +79887,18 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/copy/runHistory.ts->symbol:src/renderer/copy/runHistory.ts#formatRunHistoryDate",
+      "source": "file:src/renderer/copy/runHistory.ts",
+      "target": "symbol:src/renderer/copy/runHistory.ts#formatRunHistoryDate",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/copy/runHistory.ts->symbol:src/renderer/copy/runHistory.ts#RUN_HISTORY_COPY",
+      "source": "file:src/renderer/copy/runHistory.ts",
+      "target": "symbol:src/renderer/copy/runHistory.ts#RUN_HISTORY_COPY",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/copy/saveRecoveryNotice.ts->symbol:src/renderer/copy/saveRecoveryNotice.ts#SAVE_RECOVERY_COPY",
       "source": "file:src/renderer/copy/saveRecoveryNotice.ts",
       "target": "symbol:src/renderer/copy/saveRecoveryNotice.ts#SAVE_RECOVERY_COPY",
@@ -102325,6 +102376,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/ProfileScreen.tsx->src/renderer/copy/runHistory.ts",
+      "source": "file:src/renderer/components/ProfileScreen.tsx",
+      "target": "file:src/renderer/copy/runHistory.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/ProfileScreen.tsx->src/renderer/hooks/useCopyToClipboard.ts",
       "source": "file:src/renderer/components/ProfileScreen.tsx",
       "target": "file:src/renderer/hooks/useCopyToClipboard.ts",
@@ -102376,6 +102433,12 @@
       "id": "imports:src/renderer/components/ProfileScreen.tsx->src/shared/profile-summary.ts",
       "source": "file:src/renderer/components/ProfileScreen.tsx",
       "target": "file:src/shared/profile-summary.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/ProfileScreen.tsx->src/shared/run-history-log.ts",
+      "source": "file:src/renderer/components/ProfileScreen.tsx",
+      "target": "file:src/shared/run-history-log.ts",
       "kind": "imports"
     },
     {
@@ -105802,6 +105865,12 @@
       "id": "imports:src/renderer/copy/relicDraftOffer.ts->src/shared/relics.ts",
       "source": "file:src/renderer/copy/relicDraftOffer.ts",
       "target": "file:src/shared/relics.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/copy/runHistory.ts->src/shared/contracts.ts",
+      "source": "file:src/renderer/copy/runHistory.ts",
+      "target": "file:src/shared/contracts.ts",
       "kind": "imports"
     },
     {

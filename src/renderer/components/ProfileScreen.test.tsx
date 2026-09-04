@@ -44,6 +44,72 @@ describe('ProfileScreen', () => {
         profileStoreMocks.saveData = null;
     });
 
+    it('says where finished runs will appear on a profile that has none yet', () => {
+        render(<ProfileScreen />);
+
+        expect(screen.getByTestId('profile-run-history')).toHaveTextContent(/Finished runs are recorded here/i);
+        expect(screen.queryByTestId('profile-run-history-copy')).not.toBeInTheDocument();
+    });
+
+    it('lists past runs newest first, and hands over the key for one', async () => {
+        const saveData = createDefaultSaveData();
+        saveData.runHistory = [
+            {
+                endedAtIso: '2026-09-04T12:00:00.000Z',
+                highestLevel: 12,
+                mode: 'Wild Run',
+                shareKey: 'md1:wild:33:912',
+                totalScore: 3400
+            },
+            {
+                endedAtIso: '2026-09-01T09:00:00.000Z',
+                highestLevel: 4,
+                mode: 'Practice',
+                shareKey: 'md1:practice:33:77',
+                totalScore: 800
+            }
+        ];
+        profileStoreMocks.saveData = saveData;
+
+        const writeText = vi.fn(async (_text: string) => undefined);
+        Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText } });
+
+        render(<ProfileScreen />);
+        const history = screen.getByTestId('profile-run-history');
+        const rows = within(history).getAllByRole('listitem');
+
+        expect(rows).toHaveLength(2);
+        expect(rows[0]).toHaveTextContent('Wild Run');
+        expect(rows[0]).toHaveTextContent('Floor 12');
+        expect(rows[0]).toHaveTextContent('3,400');
+        expect(rows[1]).toHaveTextContent('Practice');
+
+        fireEvent.click(within(rows[0]!).getByTestId('profile-run-history-copy'));
+        expect(writeText).toHaveBeenCalledWith('md1:wild:33:912');
+        await waitFor(() => expect(rows[0]).toHaveTextContent(/copied/i));
+        // Only the row that was pressed says so.
+        expect(rows[1]).not.toHaveTextContent(/copied/i);
+    });
+
+    it('offers no key for a run that cannot be handed over, rather than a broken one', () => {
+        const saveData = createDefaultSaveData();
+        saveData.runHistory = [
+            {
+                endedAtIso: '2026-09-04T12:00:00.000Z',
+                highestLevel: 6,
+                mode: 'Daily challenge',
+                shareKey: null,
+                totalScore: 1200
+            }
+        ];
+        profileStoreMocks.saveData = saveData;
+
+        render(<ProfileScreen />);
+
+        expect(screen.getByTestId('profile-run-history')).toHaveTextContent('Daily challenge');
+        expect(screen.queryByTestId('profile-run-history-copy')).not.toBeInTheDocument();
+    });
+
     it('offers nothing to copy on a profile that has never run a daily', () => {
         render(<ProfileScreen />);
 

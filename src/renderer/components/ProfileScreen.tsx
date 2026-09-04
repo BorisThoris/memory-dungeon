@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { countEligibleHonors, totalHonorUnlocks } from '../../shared/honorUnlocks';
 import { getMetaProgressionBoard, getMetaProgressionMilestones } from '../../shared/meta-progression';
@@ -14,6 +15,8 @@ import {
     PROFILE_PROGRESS_SOURCE_LABEL,
     PROFILE_PROGRESS_STATUS_LABEL
 } from '../copy/profileProgress';
+import { normalizeRunHistory } from '../../shared/run-history-log';
+import { formatRunHistoryDate, RUN_HISTORY_COPY } from '../copy/runHistory';
 import { useCopyToClipboard } from '../hooks/useCopyToClipboard';
 import { FittedGrid, MetaShell, UiButton } from '../ui';
 import { useAppStore } from '../store/useAppStore';
@@ -61,6 +64,10 @@ const ProfileScreen = () => {
               ? PROFILE_PROGRESS_COPY.copyDailyFailed
               : PROFILE_PROGRESS_COPY.copyDaily;
     const progressRows = getLocalProgressRegistryRows(saveData);
+    const runHistory = normalizeRunHistory(saveData.runHistory);
+    // One copy state per screen would make every row read "Copied" at once, so each row owns which
+    // one of them was pressed.
+    const [copiedRunKey, setCopiedRunKey] = useState<string | null>(null);
 
     return (
         <MetaShell
@@ -120,6 +127,44 @@ const ProfileScreen = () => {
                     rowHeight={104}
                     testId="profile-progress-grid"
                 />
+            </section>
+
+            <section aria-label={RUN_HISTORY_COPY.label} className={styles.history} data-testid="profile-run-history">
+                <h2 className={styles.historyHeading}>{RUN_HISTORY_COPY.label}</h2>
+                {runHistory.length === 0 ? (
+                    <p className={styles.historyEmpty}>{RUN_HISTORY_COPY.empty}</p>
+                ) : (
+                    <ol className={styles.historyList}>
+                        {runHistory.map((record) => (
+                            <li className={styles.historyRow} key={`${record.endedAtIso}:${record.mode}`}>
+                                <strong className={styles.historyMode}>{record.mode}</strong>
+                                <span className={styles.historyResult}>{RUN_HISTORY_COPY.result(record)}</span>
+                                <span className={styles.historyDate}>{formatRunHistoryDate(record.endedAtIso)}</span>
+                                {record.shareKey === null ? null : (
+                                    <UiButton
+                                        aria-label={RUN_HISTORY_COPY.copyAriaLabel(record)}
+                                        data-testid="profile-run-history-copy"
+                                        onClick={() => {
+                                            resumeUiSfxContext();
+                                            playUiClickSfx(uiGain);
+                                            setCopiedRunKey(record.shareKey);
+                                            copyToClipboard(record.shareKey ?? '');
+                                        }}
+                                        size="sm"
+                                        type="button"
+                                        variant="secondary"
+                                    >
+                                        {copiedRunKey === record.shareKey && copyState === 'copied'
+                                            ? RUN_HISTORY_COPY.copyDone
+                                            : copiedRunKey === record.shareKey && copyState === 'failed'
+                                              ? RUN_HISTORY_COPY.copyFailed
+                                              : RUN_HISTORY_COPY.copy}
+                                    </UiButton>
+                                )}
+                            </li>
+                        ))}
+                    </ol>
+                )}
             </section>
 
             <div className={styles.footer}>

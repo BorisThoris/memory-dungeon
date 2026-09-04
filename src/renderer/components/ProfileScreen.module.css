@@ -141,6 +141,65 @@
     opacity: 0.66;
 }
 
+.history {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    min-height: 0;
+}
+
+.historyHeading {
+    margin: 0;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--theme-gold-bright) 78%, var(--theme-text-subtle));
+}
+
+.historyEmpty {
+    margin: 0;
+    font-size: 0.82rem;
+    color: var(--theme-text-subtle);
+}
+
+.historyList {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.historyRow {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) minmax(0, 0.8fr) auto;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.25rem 0.4rem;
+    border-radius: var(--ui-radius-sm);
+    background: var(--theme-panel-surface-muted);
+    font-size: 0.82rem;
+}
+
+.historyMode {
+    color: var(--theme-text);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.historyResult {
+    color: var(--theme-text-muted);
+    font-variant-numeric: tabular-nums;
+}
+
+.historyDate {
+    color: var(--theme-text-subtle);
+    font-variant-numeric: tabular-nums;
+}
+
 .footer {
     display: flex;
     flex-wrap: wrap;
