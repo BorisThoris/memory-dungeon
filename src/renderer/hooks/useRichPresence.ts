@@ -11,16 +11,27 @@ import { desktopClient } from '../desktop-client';
  * Outside Steam the desktop client's no-op fallback runs instead, so this costs nothing in a
  * browser build.
  */
-export const useRichPresence = (input: { floor: number | null; gameMode: GameMode | null; inRun: boolean }): void => {
+export const useRichPresence = ({
+    floor,
+    gameMode,
+    inRun
+}: {
+    floor: number | null;
+    gameMode: GameMode | null;
+    inRun: boolean;
+}): void => {
     const lastSent = useRef<RichPresenceState | null>(null);
 
     useEffect(() => {
-        const next = buildRichPresence(input);
+        // Destructured at the boundary rather than closed over as one object: callers pass a fresh
+        // literal every render, so depending on the object would push presence on every frame —
+        // the exact thing the equality check below exists to avoid.
+        const next = buildRichPresence({ floor, gameMode, inRun });
         if (richPresenceEquals(lastSent.current, next)) {
             return;
         }
         lastSent.current = next;
         // Cosmetic: never awaited, never surfaced. A failure here must not touch the run.
         void desktopClient.setRichPresence(next)?.catch?.(() => {});
-    }, [input.floor, input.gameMode, input.inRun]);
+    }, [floor, gameMode, inRun]);
 };

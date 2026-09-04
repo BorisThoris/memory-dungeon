@@ -36,7 +36,7 @@
         "ai:model:query": "node scripts/ai-repo-model.mjs --query",
         "sim:gameplay-core": "tsx scripts/sim-gameplay-core.ts",
         "blueprint:codegen": "node scripts/blueprint-codegen.mjs",
-        "lint": "cross-env NODE_OPTIONS=--max-old-space-size=4096 eslint . && node scripts/check-test-file-extensions.mjs",
+        "lint": "cross-env NODE_OPTIONS=--max-old-space-size=4096 eslint . --max-warnings 0 && node scripts/check-test-file-extensions.mjs",
         "verify": "yarn typecheck && yarn test",
         "ci": "yarn fullcheck",
         "depcheck": "depcheck",

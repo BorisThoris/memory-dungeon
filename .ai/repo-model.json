@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2506,
-    "codeFileCount": 971,
+    "trackedFileCount": 2507,
+    "codeFileCount": 972,
     "exportedSymbolCount": 3530,
     "contentItemCount": 63,
     "mechanicCount": 136,
     "stateFieldCount": 144,
-    "relationshipCount": 10387
+    "relationshipCount": 10391
   },
   "inventory": [
     {
@@ -2320,7 +2320,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 36714,
-      "sha256": "0716ff06e59d958b96379a992616f807b9e28f6344a5309692dbdabc179fc8fa"
+      "sha256": "e6a7494b37113e7b3d6b88aaa541dadbbb88f74d6447cd2dffe04cf740d1c8b8"
     },
     {
       "path": "docs/UI_RETHINK_PLAN.md",
@@ -3975,8 +3975,8 @@
     {
       "path": "package.json",
       "category": "configuration",
-      "bytes": 29533,
-      "sha256": "dc68df0024d237e70bb3e8defe6e2e9284d8ac56c855998818d3400eee9e7955"
+      "bytes": 29550,
+      "sha256": "f3190a319496bc157bb85f98efc04bb73a4e76e4a3c704daac0d69aebe8e67a8"
     },
     {
       "path": "packages/notifications/package.json",
@@ -9337,10 +9337,16 @@
       "sha256": "d78681b4f0f801b76d683547d69e34648ecba029b71701031a86067732f94634"
     },
     {
+      "path": "src/renderer/hooks/useRichPresence.test.ts",
+      "category": "test",
+      "bytes": 1976,
+      "sha256": "9ee44a53a2cc6f6dd7b05ee85f8d49bb1c5c9817c696e130fd97883699c3ea21"
+    },
+    {
       "path": "src/renderer/hooks/useRichPresence.ts",
       "category": "source",
-      "bytes": 1236,
-      "sha256": "80c63df49f531a5b540312acf83544e615529d9ca6fd9ea225a57b8ffb1ec0be"
+      "bytes": 1553,
+      "sha256": "e8bbbc15d74400e86b92a22a10ed518af4d8917630b66e19c1aa965413159a40"
     },
     {
       "path": "src/renderer/hooks/useViewportSize.test.tsx",
@@ -21473,6 +21479,7 @@
       ],
       "testedBy": [
         "file:src/renderer/App.test.tsx",
+        "file:src/renderer/hooks/useRichPresence.test.ts",
         "file:src/renderer/store/achievementPersistence.test.ts",
         "file:src/renderer/store/persistBridge.test.ts"
       ]
@@ -22055,11 +22062,24 @@
       ]
     },
     {
+      "id": "file:src/renderer/hooks/useRichPresence.test.ts",
+      "path": "src/renderer/hooks/useRichPresence.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 49,
+      "imports": [
+        "file:src/renderer/desktop-client.ts",
+        "file:src/renderer/hooks/useRichPresence.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
       "id": "file:src/renderer/hooks/useRichPresence.ts",
       "path": "src/renderer/hooks/useRichPresence.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 27,
+      "lineCount": 38,
       "imports": [
         "file:src/renderer/desktop-client.ts",
         "file:src/shared/contracts.ts",
@@ -22068,7 +22088,9 @@
       "exports": [
         "symbol:src/renderer/hooks/useRichPresence.ts#useRichPresence"
       ],
-      "testedBy": []
+      "testedBy": [
+        "file:src/renderer/hooks/useRichPresence.test.ts"
+      ]
     },
     {
       "id": "file:src/renderer/hooks/useViewportSize.test.tsx",
@@ -41873,7 +41895,7 @@
       "kind": "value",
       "file": "src/renderer/hooks/useRichPresence.ts",
       "line": 14,
-      "endLine": 26
+      "endLine": 37
     },
     {
       "id": "symbol:src/renderer/hooks/useViewportSize.ts#useViewportSize",
@@ -105918,6 +105940,18 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/hooks/useRichPresence.test.ts->src/renderer/desktop-client.ts",
+      "source": "file:src/renderer/hooks/useRichPresence.test.ts",
+      "target": "file:src/renderer/desktop-client.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/hooks/useRichPresence.test.ts->src/renderer/hooks/useRichPresence.ts",
+      "source": "file:src/renderer/hooks/useRichPresence.test.ts",
+      "target": "file:src/renderer/hooks/useRichPresence.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/hooks/useRichPresence.ts->src/renderer/desktop-client.ts",
       "source": "file:src/renderer/hooks/useRichPresence.ts",
       "target": "file:src/renderer/desktop-client.ts",
@@ -125794,6 +125828,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/desktop-client.ts->file:src/renderer/hooks/useRichPresence.test.ts",
+      "source": "file:src/renderer/desktop-client.ts",
+      "target": "file:src/renderer/hooks/useRichPresence.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/desktop-client.ts->file:src/renderer/store/achievementPersistence.test.ts",
       "source": "file:src/renderer/desktop-client.ts",
       "target": "file:src/renderer/store/achievementPersistence.test.ts",
@@ -125923,6 +125963,12 @@
       "id": "tested_by:src/renderer/hooks/useModalFocusTrap.ts->file:src/renderer/hooks/useModalFocusTrap.test.tsx",
       "source": "file:src/renderer/hooks/useModalFocusTrap.ts",
       "target": "file:src/renderer/hooks/useModalFocusTrap.test.tsx",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/hooks/useRichPresence.ts->file:src/renderer/hooks/useRichPresence.test.ts",
+      "source": "file:src/renderer/hooks/useRichPresence.ts",
+      "target": "file:src/renderer/hooks/useRichPresence.test.ts",
       "kind": "tested_by"
     },
     {
