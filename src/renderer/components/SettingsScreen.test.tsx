@@ -93,3 +93,42 @@ describe('SettingsScreen', () => {
         expect(screen.queryByText(/Live controls|Reference placeholders|Profile trust|Mobile reachability/)).toBeNull();
     });
 });
+
+describe('the crash reports line in Settings', () => {
+    beforeEach(() => {
+        const saveData = createDefaultSaveData();
+        useAppStore.setState({
+            closeSettings: vi.fn(),
+            hydrated: true,
+            saveData,
+            settings: saveData.settings,
+            updateSettings: vi.fn().mockResolvedValue(undefined)
+        });
+    });
+
+    const openAbout = async (user: ReturnType<typeof userEvent.setup>) => {
+        render(<SettingsScreen presentation="page" />);
+        await user.click(screen.getByRole('button', { name: /about/i }));
+    };
+
+    it('names the folder so a report can actually be found and sent', async () => {
+        useAppStore.setState({
+            priorCrashNotice: '2 crash reports from earlier sessions, in /home/p/.config/Memory Dungeon/crash-logs'
+        });
+        await openAbout(userEvent.setup());
+
+        // The summary existed for a long time with a console.warn as its only consumer, which no
+        // player has ever read. Local-only logs are worth nothing if nobody is told where they are.
+        const row = screen.getByTestId('settings-crash-reports');
+        expect(row).toHaveTextContent('2 crash reports');
+        expect(row).toHaveTextContent('crash-logs');
+        expect(row).toHaveTextContent('Reports stay on this machine');
+    });
+
+    it('says so plainly when nothing has crashed', async () => {
+        useAppStore.setState({ priorCrashNotice: null });
+        await openAbout(userEvent.setup());
+
+        expect(screen.getByTestId('settings-crash-reports')).toHaveTextContent('No crash reports');
+    });
+});

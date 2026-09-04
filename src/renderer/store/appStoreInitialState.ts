@@ -19,6 +19,7 @@ type AppStoreInitialState = Pick<
     | 'run'
     | 'runStartSaveData'
     | 'saveData'
+    | 'priorCrashNotice'
     | 'saveReadFailureNotice'
     | 'saveWritesBlockedByReadFailure'
     | 'settings'
@@ -48,6 +49,7 @@ export const createAppStoreInitialState = (): AppStoreInitialState => {
         newlyUnlockedAchievements: [],
         achievementBridgeNotice: null,
         persistenceWriteNotice: null,
+        priorCrashNotice: null,
         saveReadFailureNotice: null,
         saveWritesBlockedByReadFailure: false,
         boardPinMode: false,

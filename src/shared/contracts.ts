@@ -1181,6 +1181,17 @@ export type AchievementUnlockResult =
     | { ok: true }
     | { ok: false; reason: 'not_connected' | 'steam_rejected' | 'persistence_error'; detail?: string };
 
+/**
+ * What earlier sessions left behind, so the player can find it. Crash logs never leave the machine,
+ * which only helps if somebody can be told where they are.
+ */
+export interface CrashReportSummary {
+    readonly count: number;
+    /** Absolute path to the folder holding the logs. */
+    readonly directory: string;
+    readonly latestFileName: string | null;
+}
+
 /** Which renderer failure a report describes; mirrors the crash kinds the main process writes. */
 export type RendererErrorKind = 'renderer_error' | 'renderer_window_error' | 'renderer_unhandled_rejection';
 
@@ -1207,6 +1218,8 @@ export interface DesktopApi {
      * to write the report must not take out the screen that is already apologising for one.
      */
     reportRendererError: (report: RendererErrorReport, kind?: RendererErrorKind) => Promise<void>;
+    /** Crash reports from earlier sessions, so Settings can say where to find them. */
+    getCrashReportSummary: () => Promise<unknown>;
     unlockAchievement: (id: AchievementId) => Promise<unknown>;
     /** Publishes what the player is doing to their friends list; cosmetic and never awaited for correctness. */
     setRichPresence: (state: RichPresenceState) => Promise<void>;

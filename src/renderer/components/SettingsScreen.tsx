@@ -37,6 +37,7 @@ import { pairProximityUiStrings } from '../ui/strings/pairProximityUi';
 import packageJson from '../../../package.json';
 import { GAMEPLAY_VISUAL_CSS_VARS } from './gameplayVisualConfig';
 import OverlayModal from './OverlayModal';
+import { DIAGNOSTICS_COPY } from '../copy/diagnosticsSettings';
 import { SETTINGS_FOOTER_HINT, SETTINGS_HINTS } from '../copy/settingsHints';
 import { PlaceholderControl, SegmentedControl, SettingsSection, SliderRow, ToggleRow } from './SettingsControls';
 import {
@@ -57,6 +58,7 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
         clearPersistenceWriteNotice,
         closeSettings,
         persistenceWriteNotice,
+        priorCrashNotice,
         settings,
         saveData,
         updateSettings
@@ -65,6 +67,7 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
             clearPersistenceWriteNotice: state.clearPersistenceWriteNotice,
             closeSettings: state.closeSettings,
             persistenceWriteNotice: state.persistenceWriteNotice,
+            priorCrashNotice: state.priorCrashNotice,
             settings: state.settings,
             saveData: state.saveData,
             updateSettings: state.updateSettings
@@ -597,6 +600,16 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                                         Saves stay on this device; there is no cloud sync in this build.
                                                     </p>
                                                 ) : null}
+                                                {/*
+                                                 * Crash reports never leave the machine, so the only way anyone can send
+                                                 * one is by being told where it is. Deliberately here rather than on the
+                                                 * menu: a player who crashed once should not be reminded every launch.
+                                                 */}
+                                                <p className={styles.headerCopy} data-testid="settings-crash-reports">
+                                                    <strong>{DIAGNOSTICS_COPY.label}:</strong>{' '}
+                                                    {priorCrashNotice ?? DIAGNOSTICS_COPY.none}{' '}
+                                                    {DIAGNOSTICS_COPY.hint}
+                                                </p>
                                                 <div className={styles.profileSummaryGrid} data-testid="settings-profile-summary">
                                                     {profileSummaryRows.map((row) => (
                                                         <div className={styles.profileSummaryRow} key={row.id}>

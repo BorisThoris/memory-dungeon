@@ -1,6 +1,13 @@
 import { app, ipcMain } from 'electron';
 import type { BrowserWindow, IpcMainInvokeEvent } from 'electron';
-import type { DisplayMode, RendererErrorKind, RichPresenceState, SaveData, Settings } from '../shared/contracts';
+import type {
+    CrashReportSummary,
+    DisplayMode,
+    RendererErrorKind,
+    RichPresenceState,
+    SaveData,
+    Settings
+} from '../shared/contracts';
 import {
     normalizeRendererErrorReport,
     normalizeUnknownAchievementId,
@@ -16,6 +23,9 @@ const applyDisplayMode = (window: BrowserWindow, mode: DisplayMode): void => {
 
 export interface RendererErrorSink {
     record: (kind: RendererErrorKind, error: unknown, detail?: string | null) => void;
+    /** Where the logs live, and what earlier sessions left there. */
+    readonly directory: string;
+    readonly priorCrashes: { readonly count: number; readonly latestFileName: string | null };
 }
 
 /** Anything else the renderer claims is recorded as a render error rather than trusted. */
@@ -150,6 +160,14 @@ export const registerIpcHandlers = (
     };
     register(IPC_CHANNELS.diagnosticsReportRendererError, reportRendererError);
     register(IPC_CHANNELS_LEGACY_DESKTOP.reportRendererError, reportRendererError);
+
+    const getCrashReportSummary = (): CrashReportSummary => ({
+        count: rendererErrorSink?.priorCrashes.count ?? 0,
+        directory: rendererErrorSink?.directory ?? '',
+        latestFileName: rendererErrorSink?.priorCrashes.latestFileName ?? null
+    });
+    register(IPC_CHANNELS.diagnosticsGetCrashSummary, getCrashReportSummary);
+    register(IPC_CHANNELS_LEGACY_DESKTOP.getCrashReportSummary, getCrashReportSummary);
 
     const unlockAchievement = (_event: IpcMainInvokeEvent, rawAchievementId: unknown) => {
         try {

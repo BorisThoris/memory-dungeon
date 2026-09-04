@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { BrowserWindow } from 'electron';
+import type { RendererErrorKind } from '../shared/contracts';
 import { createDefaultSaveData } from '../shared/save-data';
 import {
     DESKTOP_IPC_CHANNELS,
@@ -25,6 +26,13 @@ vi.mock('electron', () => ({
 import { registerIpcHandlers } from './ipc';
 import type { PersistenceService } from './persistence';
 import type { SteamAdapter } from './steam';
+
+/** A crash reporter stand-in: records, and knows where earlier sessions left their logs. */
+const createSink = (record: (kind: RendererErrorKind, error: unknown, detail?: string | null) => void) => ({
+    directory: '/saves/crash-logs',
+    priorCrashes: { count: 2, latestFileName: 'crash-2026-09-03T20-45-12-884Z.log' },
+    record
+});
 
 describe('registerIpcHandlers', () => {
     beforeEach(() => {
@@ -89,7 +97,7 @@ describe('registerIpcHandlers', () => {
             () => null,
             {} as PersistenceService,
             { isConnected: () => false, setRichPresence: () => {}, unlockAchievement: () => ({ ok: false, reason: 'not_connected' }) } satisfies SteamAdapter,
-            { record }
+            createSink(record)
         );
         const handler = electronMocks.handlers.get(IPC_CHANNELS.diagnosticsReportRendererError);
 
@@ -107,7 +115,7 @@ describe('registerIpcHandlers', () => {
             () => null,
             {} as PersistenceService,
             { isConnected: () => false, setRichPresence: () => {}, unlockAchievement: () => ({ ok: false, reason: 'not_connected' }) } satisfies SteamAdapter,
-            { record }
+            createSink(record)
         );
         const handler = electronMocks.handlers.get(IPC_CHANNELS.diagnosticsReportRendererError);
 
@@ -128,7 +136,7 @@ describe('registerIpcHandlers', () => {
             () => null,
             {} as PersistenceService,
             { isConnected: () => false, setRichPresence: () => {}, unlockAchievement: () => ({ ok: false, reason: 'not_connected' }) } satisfies SteamAdapter,
-            { record }
+            createSink(record)
         );
         const handler = electronMocks.handlers.get(IPC_CHANNELS.diagnosticsReportRendererError);
 

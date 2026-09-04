@@ -1,4 +1,11 @@
-import type { AchievementUnlockResult, DesktopApi, DisplayMode, SaveData, Settings } from '../shared/contracts';
+import type {
+    AchievementUnlockResult,
+    CrashReportSummary,
+    DesktopApi,
+    DisplayMode,
+    SaveData,
+    Settings
+} from '../shared/contracts';
 import { createDefaultSaveData, normalizeSaveData, normalizeUnknownSaveDataOrThrow } from '../shared/save-data';
 
 const STORAGE_KEY = 'memory-dungeon-save-data';
@@ -71,6 +78,10 @@ const fallbackClient: DesktopApi = {
         // The browser fallback keeps its save in local storage, so there is no file to set aside;
         // the honest equivalent is to write a fresh profile over the one that could not be read.
         return writeLocalSave(createDefaultSaveData());
+    },
+    async getCrashReportSummary(): Promise<CrashReportSummary> {
+        // The browser fallback has no main process and so no crash logs on disk.
+        return { count: 0, directory: '', latestFileName: null };
     },
     async reportRendererError(): Promise<void> {
         // No main process in the browser fallback, so there is nowhere to write a crash log. The

@@ -2,6 +2,7 @@ import type { DesktopApi, SaveData, Settings } from '../../shared/contracts';
 import { normalizeUnknownSteamConnected } from '../../shared/desktop-api-boundary';
 import { mergeHonorUnlockTags } from '../../shared/honorUnlocks';
 import { createDefaultSaveData, normalizeUnknownSaveData } from '../../shared/save-data';
+import { describeCrashReports, normalizeCrashReportSummary } from '../../shared/crash-report-summary';
 import { runPersistenceInBackground } from './backgroundPersistence';
 
 export const SAVE_READ_FAILURE_NOTICE =
@@ -14,6 +15,7 @@ export const SAVE_RECOVERY_FAILED_NOTICE =
 interface HydratedAppStatePatch {
     hydrated: true;
     hydrating: false;
+    priorCrashNotice: string | null;
     saveData: SaveData;
     saveReadFailureNotice: string | null;
     saveWritesBlockedByReadFailure: boolean;
@@ -23,7 +25,7 @@ interface HydratedAppStatePatch {
 }
 
 interface CreateHydratedAppStatePatchInput {
-    desktop: Pick<DesktopApi, 'getSaveData' | 'isSteamConnected'>;
+    desktop: Pick<DesktopApi, 'getSaveData' | 'isSteamConnected'> & Partial<Pick<DesktopApi, 'getCrashReportSummary'>>;
     persistSaveData: (saveData: SaveData) => Promise<SaveData> | SaveData;
 }
 
@@ -32,7 +34,7 @@ export const createHydratedAppStatePatch = async ({
     persistSaveData
 }: CreateHydratedAppStatePatchInput): Promise<HydratedAppStatePatch> => {
     let saveReadFailed = false;
-    const [rawSave, steamConnected] = await Promise.all([
+    const [rawSave, steamConnected, priorCrashNotice] = await Promise.all([
         Promise.resolve()
             .then(() => desktop.getSaveData())
             .then(normalizeUnknownSaveData)
@@ -43,7 +45,12 @@ export const createHydratedAppStatePatch = async ({
         Promise.resolve()
             .then(() => desktop.isSteamConnected())
             .then(normalizeUnknownSteamConnected)
-            .catch(() => false)
+            .catch(() => false),
+        // Diagnostics are never worth failing a boot over.
+        Promise.resolve()
+            .then(() => desktop.getCrashReportSummary?.() ?? null)
+            .then((summary) => (summary === null ? null : describeCrashReports(normalizeCrashReportSummary(summary))))
+            .catch(() => null)
     ]);
 
     const saveData = mergeHonorUnlockTags(rawSave);
@@ -58,6 +65,7 @@ export const createHydratedAppStatePatch = async ({
         saveData,
         settings: saveData.settings,
         view: 'menu',
+        priorCrashNotice,
         saveReadFailureNotice: saveReadFailed ? SAVE_READ_FAILURE_NOTICE : null,
         saveWritesBlockedByReadFailure: saveReadFailed
     };

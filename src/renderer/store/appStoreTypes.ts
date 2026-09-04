@@ -32,6 +32,8 @@ export interface AppState {
     persistenceWriteNotice: string | null;
     clearPersistenceWriteNotice: () => void;
     /** Save read failures during boot/hydration; blocks autosave so corrupt storage is not overwritten by defaults. */
+    /** Crash reports earlier sessions left behind, phrased for Settings. Null when there are none. */
+    priorCrashNotice: string | null;
     saveReadFailureNotice: string | null;
     saveWritesBlockedByReadFailure: boolean;
     clearSaveReadFailureNotice: () => void;

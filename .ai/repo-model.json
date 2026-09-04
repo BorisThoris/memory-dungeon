@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2482,
-    "codeFileCount": 955,
-    "exportedSymbolCount": 3525,
+    "trackedFileCount": 2486,
+    "codeFileCount": 959,
+    "exportedSymbolCount": 3529,
     "contentItemCount": 63,
     "mechanicCount": 136,
     "stateFieldCount": 144,
-    "relationshipCount": 10313
+    "relationshipCount": 10328
   },
   "inventory": [
     {
@@ -2320,7 +2320,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 36714,
-      "sha256": "9a3f2e1be49776547953952963e29cb94c8b8d109eb74ef45c8c9db246516d27"
+      "sha256": "4a2cc3829651870c3505a60a5f3e887db9aa47f7cbca6567af788a8c0282089a"
     },
     {
       "path": "docs/UI_RETHINK_PLAN.md",
@@ -4749,14 +4749,14 @@
     {
       "path": "src/main/ipc.test.ts",
       "category": "test",
-      "bytes": 6733,
-      "sha256": "bb94d915eeacee48813e4819b7b65bb257159cc2aa731044ed7c81299a3d3404"
+      "bytes": 7159,
+      "sha256": "87a21bc2a67d4bcdba609efc2366d588d4876af59b18a1faf30a6c19ac518fb4"
     },
     {
       "path": "src/main/ipc.ts",
       "category": "source",
-      "bytes": 7839,
-      "sha256": "25d59a51e62849e9aa5b44ffc1316f09ff87e1adb3b0fff437646c1539d274b4"
+      "bytes": 8511,
+      "sha256": "e9ed282012c0c1caa0766c1a6243010eef526a45fe3401aa977bcfd0acb035de"
     },
     {
       "path": "src/main/persistence-write-error.test.ts",
@@ -4881,8 +4881,8 @@
     {
       "path": "src/preload/index.ts",
       "category": "source",
-      "bytes": 1277,
-      "sha256": "251855aadaf100f3ecbe1fd8ec63786768856203fbe7a5e98a797e4e0d63b8df"
+      "bytes": 1374,
+      "sha256": "af0d9050c3c98928d660824c0f5d6842f50cbb410a245bdcba1aeb8d8331d3a4"
     },
     {
       "path": "src/renderer/a11y/focusables.test.ts",
@@ -7887,14 +7887,14 @@
     {
       "path": "src/renderer/components/SettingsScreen.test.tsx",
       "category": "test",
-      "bytes": 4460,
-      "sha256": "0759847b162bee02b85b6dd41de623ae412cd0620441af829cf822b3c1d22c04"
+      "bytes": 6071,
+      "sha256": "9c2cdcfa6c5c4b022fa2c8bbcbad363e1580894fb0a7fea6ac62e1fe44185742"
     },
     {
       "path": "src/renderer/components/SettingsScreen.tsx",
       "category": "source",
-      "bytes": 44879,
-      "sha256": "1893c262d27096699badc8a10b4808887080657ea3e07cf6586dc8aff374b007"
+      "bytes": 45941,
+      "sha256": "41547315672c0608c8d4e9a500b94ab882eb33ffbd8b50a38c9f9aa2b55bbee2"
     },
     {
       "path": "src/renderer/components/ShopScreen.module.css",
@@ -8899,6 +8899,12 @@
       "sha256": "600f9feb9b9d161c2d1bd1598b841962e0de135d7cc30b8deb9bf4de7aea9595"
     },
     {
+      "path": "src/renderer/copy/diagnosticsSettings.ts",
+      "category": "source",
+      "bytes": 618,
+      "sha256": "7052c17b67c97add61cfa194d92c3da58f98b5dbb06c794acb126f94db1b2b83"
+    },
+    {
       "path": "src/renderer/copy/gameOverScreen.ts",
       "category": "source",
       "bytes": 2934,
@@ -9021,8 +9027,8 @@
     {
       "path": "src/renderer/desktop-client.ts",
       "category": "source",
-      "bytes": 3768,
-      "sha256": "cc3747df4be54fc2fc884a886eefc63bbf5459a43e1af6fccd1a79b0bc8e4b3a"
+      "bytes": 4032,
+      "sha256": "04dad350e3563da7c6b00ed6a0974d5c55f4881672f25a92c2bb26dc3bdc97c7"
     },
     {
       "path": "src/renderer/desktop.d.ts",
@@ -9447,14 +9453,14 @@
     {
       "path": "src/renderer/store/appStoreInitialState.ts",
       "category": "source",
-      "bytes": 1810,
-      "sha256": "f1d0677d78a1c78fa804d335a74a190966f493a3ff1271faa47d1e7ecce8725f"
+      "bytes": 1867,
+      "sha256": "8b3df7010f3059e4ea00c0d0f386bf77fddbee36912c7a11f3fda889b13d931d"
     },
     {
       "path": "src/renderer/store/appStoreTypes.ts",
       "category": "source",
-      "bytes": 4622,
-      "sha256": "9d12fcda944878f27490d1b619b8f54cd02769b1c85512cab5aed0ad8b2bec1e"
+      "bytes": 4762,
+      "sha256": "67ff549d4ad7ecec334c6e8201e08df3326fa78a1ef50a06976ba637a6050add"
     },
     {
       "path": "src/renderer/store/backgroundPersistence.test.ts",
@@ -9467,6 +9473,12 @@
       "category": "source",
       "bytes": 317,
       "sha256": "f4b4db6d7fed0e8ee9fe34fa9f99f3c198ad7d1f2d1c59d9a3473866a9238bdb"
+    },
+    {
+      "path": "src/renderer/store/crashSummaryHydration.test.ts",
+      "category": "test",
+      "bytes": 2255,
+      "sha256": "bc21053328734728dccd0046afd8ab067c7275651d32d08864ad7078b950d26a"
     },
     {
       "path": "src/renderer/store/dungeonPressSurfaceState.test.ts",
@@ -9501,8 +9513,8 @@
     {
       "path": "src/renderer/store/hydrationController.ts",
       "category": "source",
-      "bytes": 2409,
-      "sha256": "036d959c1f379edb12e78edc473e217b4b6ceff722d411239d51a5ef16f46670"
+      "bytes": 2950,
+      "sha256": "2e950512b36e8af4351a595d95e7df7696d8ce0a73bf7b24996a9716f98206aa"
     },
     {
       "path": "src/renderer/store/levelCompleteContinuationExecutor.test.ts",
@@ -10431,8 +10443,8 @@
     {
       "path": "src/shared/contracts.ts",
       "category": "source",
-      "bytes": 47164,
-      "sha256": "0dd211dcf7d5b85ad934ebff6a7d25e8968aa0a256dd60f2b314ff82d53c0946"
+      "bytes": 47674,
+      "sha256": "864868577998238510a8e39103531424efd8c17353cf03de4b87672271df701f"
     },
     {
       "path": "src/shared/copy-locality.test.ts",
@@ -10475,6 +10487,18 @@
       "category": "source",
       "bytes": 6935,
       "sha256": "d22699eea346c1344a811eff687d350d286ee0fcdb92dc7d92d20a01a4ff8a1f"
+    },
+    {
+      "path": "src/shared/crash-report-summary.test.ts",
+      "category": "test",
+      "bytes": 2314,
+      "sha256": "cd169fec348709b6c27fd575841409f0799fbb99d9443d590d15cac88a340b7f"
+    },
+    {
+      "path": "src/shared/crash-report-summary.ts",
+      "category": "source",
+      "bytes": 1655,
+      "sha256": "39dbe88097e37840744f2c64f20710ef4db20a8c324cecdb361ea127140849cb"
     },
     {
       "path": "src/shared/daily-archive.test.ts",
@@ -11295,8 +11319,8 @@
     {
       "path": "src/shared/ipc-channels.ts",
       "category": "source",
-      "bytes": 2270,
-      "sha256": "5ba1a943cf7a33fabc74df3d620ab3da8c954d0c5f833c5a7a500ed9248ae40d"
+      "bytes": 2459,
+      "sha256": "8264f11c1b7145c6c0c8a6ac791660444fc67c44de2b78213e52111373afa9d5"
     },
     {
       "path": "src/shared/level-clear-rules.test.ts",
@@ -15076,11 +15100,12 @@
       "path": "src/main/ipc.test.ts",
       "layer": "main",
       "role": "test",
-      "lineCount": 157,
+      "lineCount": 165,
       "imports": [
         "file:src/main/ipc.ts",
         "file:src/main/persistence.ts",
         "file:src/main/steam.ts",
+        "file:src/shared/contracts.ts",
         "file:src/shared/ipc-channels.ts",
         "file:src/shared/save-data.ts"
       ],
@@ -15092,7 +15117,7 @@
       "path": "src/main/ipc.ts",
       "layer": "main",
       "role": "production",
-      "lineCount": 192,
+      "lineCount": 210,
       "imports": [
         "file:src/main/persistence.ts",
         "file:src/main/steam.ts",
@@ -15425,7 +15450,7 @@
       "path": "src/preload/index.ts",
       "layer": "preload",
       "role": "production",
-      "lineCount": 20,
+      "lineCount": 21,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/ipc-channels.ts"
@@ -17944,7 +17969,7 @@
       "path": "src/renderer/components/SettingsScreen.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 96,
+      "lineCount": 135,
       "imports": [
         "file:src/renderer/components/SettingsScreen.tsx",
         "file:src/renderer/store/useAppStore.ts",
@@ -17958,7 +17983,7 @@
       "path": "src/renderer/components/SettingsScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 717,
+      "lineCount": 730,
       "imports": [
         "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/breakpoints.ts",
@@ -17966,6 +17991,7 @@
         "file:src/renderer/components/OverlayModal.tsx",
         "file:src/renderer/components/SettingsControls.tsx",
         "file:src/renderer/components/settingsNavigationModel.ts",
+        "file:src/renderer/copy/diagnosticsSettings.ts",
         "file:src/renderer/copy/settingsHints.ts",
         "file:src/renderer/hooks/useModalFocusTrap.ts",
         "file:src/renderer/hooks/useViewportSize.ts",
@@ -20958,6 +20984,18 @@
       ]
     },
     {
+      "id": "file:src/renderer/copy/diagnosticsSettings.ts",
+      "path": "src/renderer/copy/diagnosticsSettings.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 14,
+      "imports": [],
+      "exports": [
+        "symbol:src/renderer/copy/diagnosticsSettings.ts#DIAGNOSTICS_COPY"
+      ],
+      "testedBy": []
+    },
+    {
       "id": "file:src/renderer/copy/gameOverScreen.ts",
       "path": "src/renderer/copy/gameOverScreen.ts",
       "layer": "renderer",
@@ -21300,7 +21338,7 @@
       "path": "src/renderer/desktop-client.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 111,
+      "lineCount": 122,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/save-data.ts"
@@ -22330,7 +22368,7 @@
       "path": "src/renderer/store/appStoreInitialState.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 65,
+      "lineCount": 67,
       "imports": [
         "file:src/renderer/store/appStoreTypes.ts",
         "file:src/renderer/store/matchScorePop.ts",
@@ -22346,7 +22384,7 @@
       "path": "src/renderer/store/appStoreTypes.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 117,
+      "lineCount": 119,
       "imports": [
         "file:src/renderer/store/matchScorePop.ts",
         "file:src/shared/contracts.ts",
@@ -22383,6 +22421,19 @@
       "testedBy": [
         "file:src/renderer/store/backgroundPersistence.test.ts"
       ]
+    },
+    {
+      "id": "file:src/renderer/store/crashSummaryHydration.test.ts",
+      "path": "src/renderer/store/crashSummaryHydration.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 63,
+      "imports": [
+        "file:src/renderer/store/hydrationController.ts",
+        "file:src/shared/save-data.ts"
+      ],
+      "exports": [],
+      "testedBy": []
     },
     {
       "id": "file:src/renderer/store/dungeonPressSurfaceState.test.ts",
@@ -22475,10 +22526,11 @@
       "path": "src/renderer/store/hydrationController.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 65,
+      "lineCount": 73,
       "imports": [
         "file:src/renderer/store/backgroundPersistence.ts",
         "file:src/shared/contracts.ts",
+        "file:src/shared/crash-report-summary.ts",
         "file:src/shared/desktop-api-boundary.ts",
         "file:src/shared/honorUnlocks.ts",
         "file:src/shared/save-data.ts"
@@ -22489,6 +22541,7 @@
         "symbol:src/renderer/store/hydrationController.ts#SAVE_RECOVERY_FAILED_NOTICE"
       ],
       "testedBy": [
+        "file:src/renderer/store/crashSummaryHydration.test.ts",
         "file:src/renderer/store/hydrationController.test.ts",
         "file:src/renderer/store/saveReadRecovery.test.ts"
       ]
@@ -25315,7 +25368,7 @@
       "path": "src/shared/contracts.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1217,
+      "lineCount": 1230,
       "imports": [],
       "exports": [
         "symbol:src/shared/contracts.ts#AchievementId",
@@ -25335,6 +25388,7 @@
         "symbol:src/shared/contracts.ts#ClearLifeReason",
         "symbol:src/shared/contracts.ts#COMBO_GUARD_STREAK_STEP",
         "symbol:src/shared/contracts.ts#ContractFlags",
+        "symbol:src/shared/contracts.ts#CrashReportSummary",
         "symbol:src/shared/contracts.ts#CURSED_LAST_BONUS_SCORE",
         "symbol:src/shared/contracts.ts#DEBUG_REVEAL_MS",
         "symbol:src/shared/contracts.ts#DebugFlags",
@@ -25471,6 +25525,7 @@
         "symbol:src/shared/contracts.ts#WeakerShuffleMode"
       ],
       "testedBy": [
+        "file:src/main/ipc.test.ts",
         "file:src/main/persistence.test.ts",
         "file:src/renderer/App.test.tsx",
         "file:src/renderer/audio/gameplayMusic.test.ts",
@@ -25800,6 +25855,35 @@
       "testedBy": [
         "file:src/shared/cosmetic-reachability.test.ts",
         "file:src/shared/cosmetics.test.ts"
+      ]
+    },
+    {
+      "id": "file:src/shared/crash-report-summary.test.ts",
+      "path": "src/shared/crash-report-summary.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 58,
+      "imports": [
+        "file:src/shared/crash-report-summary.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/shared/crash-report-summary.ts",
+      "path": "src/shared/crash-report-summary.ts",
+      "layer": "shared",
+      "role": "production",
+      "lineCount": 34,
+      "imports": [
+        "file:src/shared/contracts.ts"
+      ],
+      "exports": [
+        "symbol:src/shared/crash-report-summary.ts#describeCrashReports",
+        "symbol:src/shared/crash-report-summary.ts#normalizeCrashReportSummary"
+      ],
+      "testedBy": [
+        "file:src/shared/crash-report-summary.test.ts"
       ]
     },
     {
@@ -28991,7 +29075,7 @@
       "path": "src/shared/ipc-channels.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 50,
+      "lineCount": 53,
       "imports": [
         "file:src/shared/contracts.ts"
       ],
@@ -32155,6 +32239,7 @@
         "file:src/renderer/components/SideRoomScreen.test.tsx",
         "file:src/renderer/desktop-client.test.ts",
         "file:src/renderer/store/achievementPersistence.test.ts",
+        "file:src/renderer/store/crashSummaryHydration.test.ts",
         "file:src/renderer/store/hydrationController.test.ts",
         "file:src/renderer/store/persistBridge.test.ts",
         "file:src/renderer/store/relicOfferSurfaceState.test.ts",
@@ -34183,16 +34268,16 @@
       "name": "registerIpcHandlers",
       "kind": "value",
       "file": "src/main/ipc.ts",
-      "line": 31,
-      "endLine": 191
+      "line": 41,
+      "endLine": 209
     },
     {
       "id": "symbol:src/main/ipc.ts#RendererErrorSink",
       "name": "RendererErrorSink",
       "kind": "interface",
       "file": "src/main/ipc.ts",
-      "line": 17,
-      "endLine": 19
+      "line": 24,
+      "endLine": 29
     },
     {
       "id": "symbol:src/main/persistence.ts#PersistenceService",
@@ -37055,8 +37140,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/SettingsScreen.tsx",
-      "line": 716,
-      "endLine": 716
+      "line": 729,
+      "endLine": 729
     },
     {
       "id": "symbol:src/renderer/components/ShopScreen.tsx#default",
@@ -40587,6 +40672,14 @@
       "endLine": 21
     },
     {
+      "id": "symbol:src/renderer/copy/diagnosticsSettings.ts#DIAGNOSTICS_COPY",
+      "name": "DIAGNOSTICS_COPY",
+      "kind": "value",
+      "file": "src/renderer/copy/diagnosticsSettings.ts",
+      "line": 8,
+      "endLine": 13
+    },
+    {
       "id": "symbol:src/renderer/copy/gameOverScreen.ts#gameOverScreenCopy",
       "name": "gameOverScreenCopy",
       "kind": "value",
@@ -41127,8 +41220,8 @@
       "name": "desktopClient",
       "kind": "value",
       "file": "src/renderer/desktop-client.ts",
-      "line": 110,
-      "endLine": 110
+      "line": 121,
+      "endLine": 121
     },
     {
       "id": "symbol:src/renderer/dev/BlueprintExplorer.tsx#default",
@@ -41943,8 +42036,8 @@
       "name": "createAppStoreInitialState",
       "kind": "value",
       "file": "src/renderer/store/appStoreInitialState.ts",
-      "line": 35,
-      "endLine": 64
+      "line": 36,
+      "endLine": 66
     },
     {
       "id": "symbol:src/renderer/store/appStoreTypes.ts#AppState",
@@ -41952,7 +42045,7 @@
       "kind": "interface",
       "file": "src/renderer/store/appStoreTypes.ts",
       "line": 16,
-      "endLine": 116
+      "endLine": 118
     },
     {
       "id": "symbol:src/renderer/store/backgroundPersistence.ts#runPersistenceInBackground",
@@ -42031,24 +42124,24 @@
       "name": "createHydratedAppStatePatch",
       "kind": "value",
       "file": "src/renderer/store/hydrationController.ts",
-      "line": 30,
-      "endLine": 64
+      "line": 32,
+      "endLine": 72
     },
     {
       "id": "symbol:src/renderer/store/hydrationController.ts#SAVE_READ_FAILURE_NOTICE",
       "name": "SAVE_READ_FAILURE_NOTICE",
       "kind": "value",
       "file": "src/renderer/store/hydrationController.ts",
-      "line": 7,
-      "endLine": 8
+      "line": 8,
+      "endLine": 9
     },
     {
       "id": "symbol:src/renderer/store/hydrationController.ts#SAVE_RECOVERY_FAILED_NOTICE",
       "name": "SAVE_RECOVERY_FAILED_NOTICE",
       "kind": "value",
       "file": "src/renderer/store/hydrationController.ts",
-      "line": 11,
-      "endLine": 12
+      "line": 12,
+      "endLine": 13
     },
     {
       "id": "symbol:src/renderer/store/levelCompleteContinuationExecutor.ts#executeChooseRouteAndContinue",
@@ -46259,6 +46352,14 @@
       "endLine": 315
     },
     {
+      "id": "symbol:src/shared/contracts.ts#CrashReportSummary",
+      "name": "CrashReportSummary",
+      "kind": "interface",
+      "file": "src/shared/contracts.ts",
+      "line": 1188,
+      "endLine": 1193
+    },
+    {
       "id": "symbol:src/shared/contracts.ts#CURSED_LAST_BONUS_SCORE",
       "name": "CURSED_LAST_BONUS_SCORE",
       "kind": "value",
@@ -46295,8 +46396,8 @@
       "name": "DesktopApi",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1195,
-      "endLine": 1216
+      "line": 1206,
+      "endLine": 1229
     },
     {
       "id": "symbol:src/shared/contracts.ts#DisplayMode",
@@ -47007,16 +47108,16 @@
       "name": "RendererErrorKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1185,
-      "endLine": 1185
+      "line": 1196,
+      "endLine": 1196
     },
     {
       "id": "symbol:src/shared/contracts.ts#RendererErrorReport",
       "name": "RendererErrorReport",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1188,
-      "endLine": 1193
+      "line": 1199,
+      "endLine": 1204
     },
     {
       "id": "symbol:src/shared/contracts.ts#RESOLVE_DELAY_MULTIPLIER_MIN",
@@ -47609,6 +47710,22 @@
       "file": "src/shared/cosmetics.ts",
       "line": 122,
       "endLine": 125
+    },
+    {
+      "id": "symbol:src/shared/crash-report-summary.ts#describeCrashReports",
+      "name": "describeCrashReports",
+      "kind": "value",
+      "file": "src/shared/crash-report-summary.ts",
+      "line": 24,
+      "endLine": 33
+    },
+    {
+      "id": "symbol:src/shared/crash-report-summary.ts#normalizeCrashReportSummary",
+      "name": "normalizeCrashReportSummary",
+      "kind": "value",
+      "file": "src/shared/crash-report-summary.ts",
+      "line": 13,
+      "endLine": 21
     },
     {
       "id": "symbol:src/shared/daily-archive.ts#buildDailyArchiveShareString",
@@ -54119,8 +54236,8 @@
       "name": "DESKTOP_IPC_CHANNELS",
       "kind": "value",
       "file": "src/shared/ipc-channels.ts",
-      "line": 22,
-      "endLine": 34
+      "line": 23,
+      "endLine": 36
     },
     {
       "id": "symbol:src/shared/ipc-channels.ts#IPC_CHANNELS",
@@ -54128,15 +54245,15 @@
       "kind": "value",
       "file": "src/shared/ipc-channels.ts",
       "line": 7,
-      "endLine": 19
+      "endLine": 20
     },
     {
       "id": "symbol:src/shared/ipc-channels.ts#IPC_CHANNELS_LEGACY_DESKTOP",
       "name": "IPC_CHANNELS_LEGACY_DESKTOP",
       "kind": "value",
       "file": "src/shared/ipc-channels.ts",
-      "line": 37,
-      "endLine": 49
+      "line": 39,
+      "endLine": 52
     },
     {
       "id": "symbol:src/shared/level-clear-rules.ts#applyFloorClearEnemyHazardDefeats",
@@ -79016,6 +79133,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/copy/diagnosticsSettings.ts->symbol:src/renderer/copy/diagnosticsSettings.ts#DIAGNOSTICS_COPY",
+      "source": "file:src/renderer/copy/diagnosticsSettings.ts",
+      "target": "symbol:src/renderer/copy/diagnosticsSettings.ts#DIAGNOSTICS_COPY",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/copy/gameOverScreen.ts->symbol:src/renderer/copy/gameOverScreen.ts#gameOverScreenCopy",
       "source": "file:src/renderer/copy/gameOverScreen.ts",
       "target": "symbol:src/renderer/copy/gameOverScreen.ts#gameOverScreenCopy",
@@ -83270,6 +83393,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/contracts.ts->symbol:src/shared/contracts.ts#CrashReportSummary",
+      "source": "file:src/shared/contracts.ts",
+      "target": "symbol:src/shared/contracts.ts#CrashReportSummary",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/contracts.ts->symbol:src/shared/contracts.ts#CURSED_LAST_BONUS_SCORE",
       "source": "file:src/shared/contracts.ts",
       "target": "symbol:src/shared/contracts.ts#CURSED_LAST_BONUS_SCORE",
@@ -84281,6 +84410,18 @@
       "id": "exports:src/shared/cosmetics.ts->symbol:src/shared/cosmetics.ts#unlockedCosmeticIds",
       "source": "file:src/shared/cosmetics.ts",
       "target": "symbol:src/shared/cosmetics.ts#unlockedCosmeticIds",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/crash-report-summary.ts->symbol:src/shared/crash-report-summary.ts#describeCrashReports",
+      "source": "file:src/shared/crash-report-summary.ts",
+      "target": "symbol:src/shared/crash-report-summary.ts#describeCrashReports",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/crash-report-summary.ts->symbol:src/shared/crash-report-summary.ts#normalizeCrashReportSummary",
+      "source": "file:src/shared/crash-report-summary.ts",
+      "target": "symbol:src/shared/crash-report-summary.ts#normalizeCrashReportSummary",
       "kind": "exports"
     },
     {
@@ -98889,6 +99030,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/main/ipc.test.ts->src/shared/contracts.ts",
+      "source": "file:src/main/ipc.test.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/main/ipc.test.ts->src/shared/ipc-channels.ts",
       "source": "file:src/main/ipc.test.ts",
       "target": "file:src/shared/ipc-channels.ts",
@@ -101814,6 +101961,12 @@
       "id": "imports:src/renderer/components/SettingsScreen.tsx->src/renderer/components/settingsNavigationModel.ts",
       "source": "file:src/renderer/components/SettingsScreen.tsx",
       "target": "file:src/renderer/components/settingsNavigationModel.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/SettingsScreen.tsx->src/renderer/copy/diagnosticsSettings.ts",
+      "source": "file:src/renderer/components/SettingsScreen.tsx",
+      "target": "file:src/renderer/copy/diagnosticsSettings.ts",
       "kind": "imports"
     },
     {
@@ -105681,6 +105834,18 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/store/crashSummaryHydration.test.ts->src/renderer/store/hydrationController.ts",
+      "source": "file:src/renderer/store/crashSummaryHydration.test.ts",
+      "target": "file:src/renderer/store/hydrationController.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/store/crashSummaryHydration.test.ts->src/shared/save-data.ts",
+      "source": "file:src/renderer/store/crashSummaryHydration.test.ts",
+      "target": "file:src/shared/save-data.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/store/dungeonPressSurfaceState.test.ts->src/renderer/store/dungeonPressSurfaceState.ts",
       "source": "file:src/renderer/store/dungeonPressSurfaceState.test.ts",
       "target": "file:src/renderer/store/dungeonPressSurfaceState.ts",
@@ -105780,6 +105945,12 @@
       "id": "imports:src/renderer/store/hydrationController.ts->src/shared/contracts.ts",
       "source": "file:src/renderer/store/hydrationController.ts",
       "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/store/hydrationController.ts->src/shared/crash-report-summary.ts",
+      "source": "file:src/renderer/store/hydrationController.ts",
+      "target": "file:src/shared/crash-report-summary.ts",
       "kind": "imports"
     },
     {
@@ -109194,6 +109365,18 @@
       "id": "imports:src/shared/cosmetics.ts->src/shared/meta-progression.ts",
       "source": "file:src/shared/cosmetics.ts",
       "target": "file:src/shared/meta-progression.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/crash-report-summary.test.ts->src/shared/crash-report-summary.ts",
+      "source": "file:src/shared/crash-report-summary.test.ts",
+      "target": "file:src/shared/crash-report-summary.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/crash-report-summary.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/crash-report-summary.ts",
+      "target": "file:src/shared/contracts.ts",
       "kind": "imports"
     },
     {
@@ -125323,6 +125506,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/store/hydrationController.ts->file:src/renderer/store/crashSummaryHydration.test.ts",
+      "source": "file:src/renderer/store/hydrationController.ts",
+      "target": "file:src/renderer/store/crashSummaryHydration.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/store/hydrationController.ts->file:src/renderer/store/hydrationController.test.ts",
       "source": "file:src/renderer/store/hydrationController.ts",
       "target": "file:src/renderer/store/hydrationController.test.ts",
@@ -126070,6 +126259,12 @@
       "id": "tested_by:src/shared/content-lock.ts->file:src/shared/content-lock.test.ts",
       "source": "file:src/shared/content-lock.ts",
       "target": "file:src/shared/content-lock.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/contracts.ts->file:src/main/ipc.test.ts",
+      "source": "file:src/shared/contracts.ts",
+      "target": "file:src/main/ipc.test.ts",
       "kind": "tested_by"
     },
     {
@@ -127294,6 +127489,12 @@
       "id": "tested_by:src/shared/cosmetics.ts->file:src/shared/cosmetics.test.ts",
       "source": "file:src/shared/cosmetics.ts",
       "target": "file:src/shared/cosmetics.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/crash-report-summary.ts->file:src/shared/crash-report-summary.test.ts",
+      "source": "file:src/shared/crash-report-summary.ts",
+      "target": "file:src/shared/crash-report-summary.test.ts",
       "kind": "tested_by"
     },
     {
@@ -129616,6 +129817,12 @@
       "id": "tested_by:src/shared/save-data.ts->file:src/renderer/store/achievementPersistence.test.ts",
       "source": "file:src/shared/save-data.ts",
       "target": "file:src/renderer/store/achievementPersistence.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/save-data.ts->file:src/renderer/store/crashSummaryHydration.test.ts",
+      "source": "file:src/shared/save-data.ts",
+      "target": "file:src/renderer/store/crashSummaryHydration.test.ts",
       "kind": "tested_by"
     },
     {
