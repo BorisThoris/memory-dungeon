@@ -1,17 +1,17 @@
 import type { RunState } from './contracts';
-import { buildRunShareKey } from './run-history';
 import { describeRunModeIdentity } from './run-mode-identity';
+import { describeRunShareKey, encodeRunShareKey } from './run-share-key';
 
 /**
  * The line a player posts after a run.
  *
- * `buildRunShareKey` has always produced the recipe another machine needs to play the same run —
- * mode, rules version, seed — and nothing surfaced it, so a run that went well could be described
- * but never handed over. The recipe on its own is developer-shaped (`endless:3:912`), so it goes
- * at the end of a line that reads like something someone would actually send.
+ * The recipe on its own is developer-shaped, so it goes at the end of a line that reads like
+ * something someone would actually send.
  *
- * Puzzle runs are the one mode with no share: a fixed or imported board is its tile payload, not a
- * seed, and inventing a key for it would hand someone a different board under the same name.
+ * It carries `run-share-key`'s recipe rather than `run-history`'s older `mode:rules:seed` one.
+ * That older recipe cannot reproduce what was played: Wild Run, Practice, Scholar Contract and Pin
+ * vow are all `endless` underneath, so all four produced a key that replays as a plain Classic run
+ * on the same board — the line said "Same run" and meant a different one.
  */
 
 export interface RunShareText {
@@ -25,14 +25,14 @@ const GAME_NAME = 'Memory Dungeon';
 
 export const buildRunShareText = (run: RunState): RunShareText => {
     const summary = run.lastRunSummary;
-    const key = buildRunShareKey(run);
     const identity = describeRunModeIdentity(run);
     const score = (summary?.totalScore ?? run.stats.totalScore).toLocaleString('en-US');
     const floor = summary?.highestLevel ?? run.board?.level ?? 1;
-
     const headline = `${GAME_NAME} — ${identity.label}: floor ${floor}, ${score} points`;
-    if (!key.shareSupported) {
-        return { shareable: false, text: `${headline} (this board has no seed to share)` };
+
+    const recipe = describeRunShareKey(run);
+    if ('refusal' in recipe) {
+        return { shareable: false, text: `${headline}. ${recipe.refusal}` };
     }
-    return { shareable: true, text: `${headline}. Same run: ${key.shareKey}` };
+    return { shareable: true, text: `${headline}. Same run: ${encodeRunShareKey(recipe.key)}` };
 };

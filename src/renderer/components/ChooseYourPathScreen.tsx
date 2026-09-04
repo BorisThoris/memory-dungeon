@@ -10,6 +10,7 @@ import {
     type RunModeDefinition,
     type RunModeGroup
 } from '../../shared/run-mode-catalog';
+import { parseRunShareKey } from '../../shared/run-share-key';
 import { formatNextUtcReset } from '../../shared/utc-countdown';
 import { isModePosterFallback, resolveModePosterUrl } from '../assets/ui/modeArt';
 import { UI_ART } from '../assets/ui';
@@ -82,6 +83,7 @@ const ChooseYourPathScreen = (): ReactElement => {
         startPuzzleRun,
         startRun,
         startScholarContractRun,
+        startSharedRun,
         startWildRun,
         saveData,
         settings
@@ -99,6 +101,7 @@ const ChooseYourPathScreen = (): ReactElement => {
             startPuzzleRun: state.startPuzzleRun,
             startRun: state.startRun,
             startScholarContractRun: state.startScholarContractRun,
+            startSharedRun: state.startSharedRun,
             startWildRun: state.startWildRun,
             saveData: state.saveData,
             settings: state.settings
@@ -122,6 +125,8 @@ const ChooseYourPathScreen = (): ReactElement => {
     const [browseOpen, setBrowseOpen] = useState(true);
     const [query, setQuery] = useState('');
     const [group, setGroup] = useState<RunModeGroup | null>(null);
+    const [sharedKeyText, setSharedKeyText] = useState('');
+    const [sharedKeyRejected, setSharedKeyRejected] = useState(false);
     const [detailMode, setDetailMode] = useState<RunModeDefinition | null>(null);
     const [meditationOpen, setMeditationOpen] = useState(false);
     const [meditationSelection, setMeditationSelection] = useState<Set<MutatorId>>(() => new Set());
@@ -429,6 +434,42 @@ const ChooseYourPathScreen = (): ReactElement => {
                                 </button>
                             ))}
                         </div>
+                        <form
+                            className={styles.sharedRun}
+                            data-testid="choose-path-shared-run"
+                            onSubmit={(event) => {
+                                event.preventDefault();
+                                playClick();
+                                if (!parseRunShareKey(sharedKeyText)) {
+                                    setSharedKeyRejected(true);
+                                    return;
+                                }
+                                setSharedKeyRejected(false);
+                                startSharedRun(sharedKeyText);
+                            }}
+                        >
+                            <label className={styles.sharedRunField}>
+                                <span className={styles.srOnly}>{CHOOSE_YOUR_PATH_COPY.sharedRunLabel}</span>
+                                <input
+                                    autoComplete="off"
+                                    onChange={(event) => {
+                                        setSharedKeyText(event.target.value);
+                                        setSharedKeyRejected(false);
+                                    }}
+                                    placeholder={CHOOSE_YOUR_PATH_COPY.sharedRunPlaceholder}
+                                    type="text"
+                                    value={sharedKeyText}
+                                />
+                            </label>
+                            <UiButton disabled={sharedKeyText.trim() === ''} size="md" type="submit" variant="secondary">
+                                {CHOOSE_YOUR_PATH_COPY.sharedRunPlay}
+                            </UiButton>
+                            {sharedKeyRejected ? (
+                                <p className={styles.sharedRunError} data-testid="choose-path-shared-run-error" role="alert">
+                                    {CHOOSE_YOUR_PATH_COPY.sharedRunUnreadable}
+                                </p>
+                            ) : null}
+                        </form>
                         <p
                             aria-live="polite"
                             className={styles.browseCount}

@@ -65,6 +65,8 @@ export interface AppState {
     startPuzzleRun: (puzzleId: string) => void;
     startPracticeRun: () => void;
     startScholarContractRun: () => void;
+    /** Starts the run a pasted share key describes; ignores anything that is not a key. */
+    startSharedRun: (pastedText: string) => void;
     startMeditationRun: () => void;
     startMeditationRunWithMutators: (mutators: MutatorId[]) => void;
     startPinVowRun: () => void;

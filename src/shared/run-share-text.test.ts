@@ -11,12 +11,15 @@ describe('buildRunShareText', () => {
         expect(share.text).toContain('Memory Dungeon');
         expect(share.text).toContain('Classic Dungeon');
         expect(share.text).toMatch(/floor \d+/u);
-        expect(share.text).toMatch(/Same run: endless:\d+:\d+$/u);
+        expect(share.text).toMatch(/Same run: md1:classic:\d+:\d+$/u);
     });
 
-    it('carries the mode a player actually picked, not the underlying game mode', () => {
-        // A wild run is an endless run underneath; the line has to say Wild Run.
-        expect(buildRunShareText(createWildRun(0)).text).toContain('Wild Run');
+    it('carries the mode a player actually picked, in the name and in the key', () => {
+        // A wild run is an endless run underneath. Both halves of the line have to say so, or the
+        // key hands someone a Classic run on the same board and calls it the same run.
+        const share = buildRunShareText(createWildRun(0));
+        expect(share.text).toContain('Wild Run');
+        expect(share.text).toMatch(/Same run: md1:wild:/u);
     });
 
     it('prefers the finished run summary over live state, since that is the result', () => {
@@ -34,7 +37,7 @@ describe('buildRunShareText', () => {
         const puzzle = BUILTIN_PUZZLES.starter_pairs;
         const share = buildRunShareText(createPuzzleRun(0, puzzle.id, puzzle.tiles, 1));
         expect(share.shareable).toBe(false);
-        expect(share.text).toContain('no seed to share');
+        expect(share.text).toContain('is its tiles, not a seed');
         expect(share.text).not.toContain('Same run:');
     });
 });

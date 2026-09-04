@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2498,
-    "codeFileCount": 966,
-    "exportedSymbolCount": 3521,
+    "trackedFileCount": 2502,
+    "codeFileCount": 970,
+    "exportedSymbolCount": 3529,
     "contentItemCount": 63,
     "mechanicCount": 136,
     "stateFieldCount": 144,
-    "relationshipCount": 10348
+    "relationshipCount": 10382
   },
   "inventory": [
     {
@@ -2320,7 +2320,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 36714,
-      "sha256": "1b5e344349f434115d3487a5907b2650a4ca32865ce9c9b63e771de211063dc5"
+      "sha256": "cb2b6a1da91da6ed30c5f55355d3cae09f634574458fe5a8649defd389d48636"
     },
     {
       "path": "docs/UI_RETHINK_PLAN.md",
@@ -7527,20 +7527,20 @@
     {
       "path": "src/renderer/components/ChooseYourPathScreen.module.css",
       "category": "source",
-      "bytes": 12541,
-      "sha256": "744a1f99a2b5d8a491d8f2f576b831e7dcef1ca2d0b513a8ea5457456f74fdda"
+      "bytes": 13272,
+      "sha256": "eaf89c867d79489cc6a580864e4d9ea0329f2c07d4d1dc2b81d33dcd738d3b55"
     },
     {
       "path": "src/renderer/components/ChooseYourPathScreen.test.tsx",
       "category": "test",
-      "bytes": 12407,
-      "sha256": "3a362a3a435dce260db665bbe044ee0136a0613ca532a08f5285d9008c41dd4a"
+      "bytes": 13708,
+      "sha256": "90f8900c7312a86cb517b52d4c010d3e2a33a020cc9ee6b5d2b9de723cd2dea8"
     },
     {
       "path": "src/renderer/components/ChooseYourPathScreen.tsx",
       "category": "source",
-      "bytes": 25777,
-      "sha256": "18be8218e3f5f6c0262009714f8e8e2b268074d456281705b87dca2d18c55043"
+      "bytes": 28130,
+      "sha256": "77e257a9dedff87e0132e7a1b85455f42bd32218fc930639425c8dd2c9657503"
     },
     {
       "path": "src/renderer/components/chooseYourPathScreenModel.ts",
@@ -9027,8 +9027,8 @@
     {
       "path": "src/renderer/copy/screenCopy.ts",
       "category": "source",
-      "bytes": 1939,
-      "sha256": "ce6005055b786996649d96d580a27d9d0dcb8bf0129eed4a465254a9cb6f6606"
+      "bytes": 2152,
+      "sha256": "793b34397a5697cf7e90689f9f3e915a82a95c3f3aa1df688430577ee13c6718"
     },
     {
       "path": "src/renderer/copy/settingsHints.ts",
@@ -9495,8 +9495,8 @@
     {
       "path": "src/renderer/store/appStoreTypes.ts",
       "category": "source",
-      "bytes": 4762,
-      "sha256": "67ff549d4ad7ecec334c6e8201e08df3326fa78a1ef50a06976ba637a6050add"
+      "bytes": 4904,
+      "sha256": "f09f5aa16f70952b31d74c51a3aa848b83dc93f624d042637f9189ecf6b16926"
     },
     {
       "path": "src/renderer/store/backgroundPersistence.test.ts",
@@ -9759,8 +9759,8 @@
     {
       "path": "src/renderer/store/runStartState.ts",
       "category": "source",
-      "bytes": 7196,
-      "sha256": "b5dff0de1343d277c53b60a442c58755d68b223cff85b76d3fe3f7eac4944fef"
+      "bytes": 7562,
+      "sha256": "d50852feb39b61a64d4f5bdc15d9f8e94ec50c8c8d8a6df488f0c2eeee1e53fa"
     },
     {
       "path": "src/renderer/store/runSurfaceState.test.ts",
@@ -9915,8 +9915,8 @@
     {
       "path": "src/renderer/store/useAppStore.ts",
       "category": "source",
-      "bytes": 28532,
-      "sha256": "db3e00e1424a0193084f1f996cc383093c663c65ead9eab5b3117887ba121477"
+      "bytes": 28813,
+      "sha256": "79012ee6c0541e1df40304a1f2883704d3a3f8c81b3caedaebcbb706cdac0a9f"
     },
     {
       "path": "src/renderer/styles/App.module.css",
@@ -12109,6 +12109,18 @@
       "sha256": "0b077298c300d4998a9c7ced79bed6cff965dec46b0c9b151416e1407f114ef5"
     },
     {
+      "path": "src/shared/run-from-share-key.test.ts",
+      "category": "test",
+      "bytes": 2654,
+      "sha256": "142d8846237451577e32ecd70649d7e22de9dcd0bb8743ac8e9dd010dcd8059f"
+    },
+    {
+      "path": "src/shared/run-from-share-key.ts",
+      "category": "source",
+      "bytes": 2283,
+      "sha256": "ba05f11cbe79089f75d78a4c1c5aaa386cf56e2153db5547bbc185e9fb8bc1b8"
+    },
+    {
       "path": "src/shared/run-history.test.ts",
       "category": "test",
       "bytes": 14920,
@@ -12235,16 +12247,28 @@
       "sha256": "22641132cea3fcd91355a41e41318cf8b69e97c4433681d919dea1f5634484b6"
     },
     {
+      "path": "src/shared/run-share-key.test.ts",
+      "category": "test",
+      "bytes": 4774,
+      "sha256": "12b3a6cf94170e5a745b89031c915aba66d4712ecbc3bc172f351c8c70fc6e0d"
+    },
+    {
+      "path": "src/shared/run-share-key.ts",
+      "category": "source",
+      "bytes": 5519,
+      "sha256": "487f1d1037e123c863f01626660a6279298c4f64d293a68834c3748f2567b46b"
+    },
+    {
       "path": "src/shared/run-share-text.test.ts",
       "category": "test",
-      "bytes": 1874,
-      "sha256": "ff1dc97ea802fa5eb743644e10afa5c3116995600ea8800b7b8f216c335b1d59"
+      "bytes": 2078,
+      "sha256": "433cdd53bd2201f8862f6c505f29b9b383cf08344c77eef7a4e253cbd0157e21"
     },
     {
       "path": "src/shared/run-share-text.ts",
       "category": "source",
-      "bytes": 1700,
-      "sha256": "e5a630766e51297b5ada00c9dd8170bd08a255a666c1d49b16b8027828f7c715"
+      "bytes": 1669,
+      "sha256": "dd98a49b02624d102842339107c4fe949363f81b11d1f42b3bf22acc3914cf31"
     },
     {
       "path": "src/shared/run-summary-rules.test.ts",
@@ -17082,7 +17106,7 @@
       "path": "src/renderer/components/ChooseYourPathScreen.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 247,
+      "lineCount": 276,
       "imports": [
         "file:src/renderer/components/ChooseYourPathScreen.tsx",
         "file:src/renderer/components/chooseYourPathScreenModel.ts",
@@ -17097,7 +17121,7 @@
       "path": "src/renderer/components/ChooseYourPathScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 582,
+      "lineCount": 623,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/assets/ui/modeArt.ts",
@@ -17110,6 +17134,7 @@
         "file:src/shared/challenge-progression.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/run-mode-catalog.ts",
+        "file:src/shared/run-share-key.ts",
         "file:src/shared/utc-countdown.ts"
       ],
       "exports": [
@@ -21337,7 +21362,7 @@
       "path": "src/renderer/copy/screenCopy.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 36,
+      "lineCount": 41,
       "imports": [],
       "exports": [
         "symbol:src/renderer/copy/screenCopy.ts#CHOOSE_YOUR_PATH_COPY",
@@ -22472,7 +22497,7 @@
       "path": "src/renderer/store/appStoreTypes.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 119,
+      "lineCount": 121,
       "imports": [
         "file:src/renderer/store/matchScorePop.ts",
         "file:src/shared/contracts.ts",
@@ -23283,13 +23308,15 @@
       "path": "src/renderer/store/runStartState.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 214,
+      "lineCount": 222,
       "imports": [
         "file:src/renderer/store/runSurfaceState.ts",
         "file:src/shared/builtin-puzzles.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/game-core.ts",
+        "file:src/shared/run-from-share-key.ts",
         "file:src/shared/run-settings-rules.ts",
+        "file:src/shared/run-share-key.ts",
         "file:src/shared/save-data.ts"
       ],
       "exports": [
@@ -23795,7 +23822,7 @@
       "path": "src/renderer/store/useAppStore.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 876,
+      "lineCount": 885,
       "imports": [
         "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/audio/uiSfx.ts",
@@ -23832,6 +23859,7 @@
         "file:src/shared/contracts.ts",
         "file:src/shared/game-core.ts",
         "file:src/shared/gameplay-core-adapters.ts",
+        "file:src/shared/run-share-key.ts",
         "file:src/shared/save-data.ts",
         "file:src/shared/telemetry.ts"
       ],
@@ -25191,6 +25219,7 @@
         "file:src/shared/achievement-reachability.test.ts",
         "file:src/shared/puzzle-import.test.ts",
         "file:src/shared/run-mode-identity.test.ts",
+        "file:src/shared/run-share-key.test.ts",
         "file:src/shared/run-share-text.test.ts",
         "file:src/shared/save-data.test.ts",
         "file:src/shared/softlock-fairness.test.ts"
@@ -27149,7 +27178,8 @@
       ],
       "testedBy": [
         "file:src/shared/dungeon-showcase-run-rules.test.ts",
-        "file:src/shared/run-mode-identity.test.ts"
+        "file:src/shared/run-mode-identity.test.ts",
+        "file:src/shared/run-share-key.test.ts"
       ]
     },
     {
@@ -31631,8 +31661,10 @@
         "file:src/shared/perfect-memory-status.test.ts",
         "file:src/shared/relic-pick-advance-rules.test.ts",
         "file:src/shared/run-creation-rules.test.ts",
+        "file:src/shared/run-from-share-key.test.ts",
         "file:src/shared/run-lifecycle-machine.test.ts",
         "file:src/shared/run-mode-identity.test.ts",
+        "file:src/shared/run-share-key.test.ts",
         "file:src/shared/run-share-text.test.ts",
         "file:src/shared/turn-match-board-cleanup-rules.test.ts",
         "file:src/shared/turn-match-board-resolution-rules.test.ts",
@@ -31742,6 +31774,40 @@
         "file:src/renderer/store/useAppStore.test.ts",
         "file:src/shared/game.test.ts",
         "file:src/shared/run-events.test.ts"
+      ]
+    },
+    {
+      "id": "file:src/shared/run-from-share-key.test.ts",
+      "path": "src/shared/run-from-share-key.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 60,
+      "imports": [
+        "file:src/shared/run-creation-rules.ts",
+        "file:src/shared/run-from-share-key.ts",
+        "file:src/shared/run-mode-identity.ts",
+        "file:src/shared/run-share-key.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/shared/run-from-share-key.ts",
+      "path": "src/shared/run-from-share-key.ts",
+      "layer": "shared",
+      "role": "production",
+      "lineCount": 57,
+      "imports": [
+        "file:src/shared/contracts.ts",
+        "file:src/shared/dungeon-showcase-run-rules.ts",
+        "file:src/shared/run-creation-rules.ts",
+        "file:src/shared/run-share-key.ts"
+      ],
+      "exports": [
+        "symbol:src/shared/run-from-share-key.ts#createRunFromShareKey"
+      ],
+      "testedBy": [
+        "file:src/shared/run-from-share-key.test.ts"
       ]
     },
     {
@@ -32078,6 +32144,7 @@
         "symbol:src/shared/run-mode-identity.ts#runModeIdentityText"
       ],
       "testedBy": [
+        "file:src/shared/run-from-share-key.test.ts",
         "file:src/shared/run-mode-identity.test.ts"
       ]
     },
@@ -32211,11 +32278,50 @@
       ]
     },
     {
+      "id": "file:src/shared/run-share-key.test.ts",
+      "path": "src/shared/run-share-key.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 110,
+      "imports": [
+        "file:src/shared/builtin-puzzles.ts",
+        "file:src/shared/dungeon-showcase-run-rules.ts",
+        "file:src/shared/run-creation-rules.ts",
+        "file:src/shared/run-share-key.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/shared/run-share-key.ts",
+      "path": "src/shared/run-share-key.ts",
+      "layer": "shared",
+      "role": "production",
+      "lineCount": 152,
+      "imports": [
+        "file:src/shared/contracts.ts",
+        "file:src/shared/mechanics-encyclopedia.ts"
+      ],
+      "exports": [
+        "symbol:src/shared/run-share-key.ts#describeRunShareKey",
+        "symbol:src/shared/run-share-key.ts#encodeRunShareKey",
+        "symbol:src/shared/run-share-key.ts#parseRunShareKey",
+        "symbol:src/shared/run-share-key.ts#RUN_SHARE_KEY_PREFIX",
+        "symbol:src/shared/run-share-key.ts#RunShareKey",
+        "symbol:src/shared/run-share-key.ts#RunShareRefusal",
+        "symbol:src/shared/run-share-key.ts#RunShareVariant"
+      ],
+      "testedBy": [
+        "file:src/shared/run-from-share-key.test.ts",
+        "file:src/shared/run-share-key.test.ts"
+      ]
+    },
+    {
       "id": "file:src/shared/run-share-text.test.ts",
       "path": "src/shared/run-share-text.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 41,
+      "lineCount": 44,
       "imports": [
         "file:src/shared/builtin-puzzles.ts",
         "file:src/shared/run-creation-rules.ts",
@@ -32232,8 +32338,8 @@
       "lineCount": 39,
       "imports": [
         "file:src/shared/contracts.ts",
-        "file:src/shared/run-history.ts",
-        "file:src/shared/run-mode-identity.ts"
+        "file:src/shared/run-mode-identity.ts",
+        "file:src/shared/run-share-key.ts"
       ],
       "exports": [
         "symbol:src/shared/run-share-text.ts#buildRunShareText",
@@ -36663,8 +36769,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/ChooseYourPathScreen.tsx",
-      "line": 581,
-      "endLine": 581
+      "line": 622,
+      "endLine": 622
     },
     {
       "id": "symbol:src/renderer/components/chooseYourPathScreenModel.ts#buildMeditationPickMutatorRows",
@@ -41192,23 +41298,23 @@
       "kind": "value",
       "file": "src/renderer/copy/screenCopy.ts",
       "line": 8,
-      "endLine": 22
+      "endLine": 27
     },
     {
       "id": "symbol:src/renderer/copy/screenCopy.ts#GAME_OVER_LABELS",
       "name": "GAME_OVER_LABELS",
       "kind": "value",
       "file": "src/renderer/copy/screenCopy.ts",
-      "line": 24,
-      "endLine": 28
+      "line": 29,
+      "endLine": 33
     },
     {
       "id": "symbol:src/renderer/copy/screenCopy.ts#SHOP_COPY",
       "name": "SHOP_COPY",
       "kind": "value",
       "file": "src/renderer/copy/screenCopy.ts",
-      "line": 30,
-      "endLine": 35
+      "line": 35,
+      "endLine": 40
     },
     {
       "id": "symbol:src/renderer/copy/settingsHints.ts#SETTINGS_FOOTER_HINT",
@@ -42136,7 +42242,7 @@
       "kind": "interface",
       "file": "src/renderer/store/appStoreTypes.ts",
       "line": 16,
-      "endLine": 118
+      "endLine": 120
     },
     {
       "id": "symbol:src/renderer/store/backgroundPersistence.ts#runPersistenceInBackground",
@@ -42887,64 +42993,64 @@
       "name": "createRestartRun",
       "kind": "value",
       "file": "src/renderer/store/runStartState.ts",
-      "line": 158,
-      "endLine": 213
+      "line": 166,
+      "endLine": 221
     },
     {
       "id": "symbol:src/renderer/store/runStartState.ts#createRunStartPlan",
       "name": "createRunStartPlan",
       "kind": "value",
       "file": "src/renderer/store/runStartState.ts",
-      "line": 69,
-      "endLine": 153
+      "line": 72,
+      "endLine": 161
     },
     {
       "id": "symbol:src/renderer/store/runStartState.ts#createRunStartStatePatch",
       "name": "createRunStartStatePatch",
       "kind": "value",
       "file": "src/renderer/store/runStartState.ts",
-      "line": 25,
-      "endLine": 31
+      "line": 27,
+      "endLine": 33
     },
     {
       "id": "symbol:src/renderer/store/runStartState.ts#createRunStartTelemetryPayload",
       "name": "createRunStartTelemetryPayload",
       "kind": "value",
       "file": "src/renderer/store/runStartState.ts",
-      "line": 33,
-      "endLine": 44
+      "line": 35,
+      "endLine": 46
     },
     {
       "id": "symbol:src/renderer/store/runStartState.ts#isDungeonShowcaseRestartRun",
       "name": "isDungeonShowcaseRestartRun",
       "kind": "value",
       "file": "src/renderer/store/runStartState.ts",
-      "line": 155,
-      "endLine": 156
+      "line": 163,
+      "endLine": 164
     },
     {
       "id": "symbol:src/renderer/store/runStartState.ts#RunStartRequest",
       "name": "RunStartRequest",
       "kind": "type",
       "file": "src/renderer/store/runStartState.ts",
-      "line": 50,
-      "endLine": 61
+      "line": 52,
+      "endLine": 64
     },
     {
       "id": "symbol:src/renderer/store/runStartState.ts#RunStartStatePatch",
       "name": "RunStartStatePatch",
       "kind": "interface",
       "file": "src/renderer/store/runStartState.ts",
-      "line": 18,
-      "endLine": 23
+      "line": 20,
+      "endLine": 25
     },
     {
       "id": "symbol:src/renderer/store/runStartState.ts#RunStartTelemetryExtra",
       "name": "RunStartTelemetryExtra",
       "kind": "type",
       "file": "src/renderer/store/runStartState.ts",
-      "line": 16,
-      "endLine": 16
+      "line": 18,
+      "endLine": 18
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#canPauseRunSurface",
@@ -43455,8 +43561,8 @@
       "name": "useAppStore",
       "kind": "value",
       "file": "src/renderer/store/useAppStore.ts",
-      "line": 261,
-      "endLine": 865
+      "line": 262,
+      "endLine": 874
     },
     {
       "id": "symbol:src/renderer/styles/theme.ts#buildRendererThemeStyle",
@@ -58387,6 +58493,14 @@
       "endLine": 928
     },
     {
+      "id": "symbol:src/shared/run-from-share-key.ts#createRunFromShareKey",
+      "name": "createRunFromShareKey",
+      "kind": "value",
+      "file": "src/shared/run-from-share-key.ts",
+      "line": 27,
+      "endLine": 56
+    },
+    {
       "id": "symbol:src/shared/run-history.ts#buildDungeonJournalRows",
       "name": "buildDungeonJournalRows",
       "kind": "value",
@@ -59473,6 +59587,62 @@
       "file": "src/shared/run-settings-rules.ts",
       "line": 3,
       "endLine": 9
+    },
+    {
+      "id": "symbol:src/shared/run-share-key.ts#describeRunShareKey",
+      "name": "describeRunShareKey",
+      "kind": "value",
+      "file": "src/shared/run-share-key.ts",
+      "line": 79,
+      "endLine": 95
+    },
+    {
+      "id": "symbol:src/shared/run-share-key.ts#encodeRunShareKey",
+      "name": "encodeRunShareKey",
+      "kind": "value",
+      "file": "src/shared/run-share-key.ts",
+      "line": 97,
+      "endLine": 105
+    },
+    {
+      "id": "symbol:src/shared/run-share-key.ts#parseRunShareKey",
+      "name": "parseRunShareKey",
+      "kind": "value",
+      "file": "src/shared/run-share-key.ts",
+      "line": 123,
+      "endLine": 151
+    },
+    {
+      "id": "symbol:src/shared/run-share-key.ts#RUN_SHARE_KEY_PREFIX",
+      "name": "RUN_SHARE_KEY_PREFIX",
+      "kind": "value",
+      "file": "src/shared/run-share-key.ts",
+      "line": 18,
+      "endLine": 18
+    },
+    {
+      "id": "symbol:src/shared/run-share-key.ts#RunShareKey",
+      "name": "RunShareKey",
+      "kind": "interface",
+      "file": "src/shared/run-share-key.ts",
+      "line": 30,
+      "endLine": 38
+    },
+    {
+      "id": "symbol:src/shared/run-share-key.ts#RunShareRefusal",
+      "name": "RunShareRefusal",
+      "kind": "type",
+      "file": "src/shared/run-share-key.ts",
+      "line": 41,
+      "endLine": 43
+    },
+    {
+      "id": "symbol:src/shared/run-share-key.ts#RunShareVariant",
+      "name": "RunShareVariant",
+      "kind": "type",
+      "file": "src/shared/run-share-key.ts",
+      "line": 20,
+      "endLine": 28
     },
     {
       "id": "symbol:src/shared/run-share-text.ts#buildRunShareText",
@@ -66580,7 +66750,7 @@
         },
         {
           "path": "src/renderer/store/useAppStore.ts",
-          "line": 53
+          "line": 54
         }
       ],
       "tests": [
@@ -92398,6 +92568,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/run-from-share-key.ts->symbol:src/shared/run-from-share-key.ts#createRunFromShareKey",
+      "source": "file:src/shared/run-from-share-key.ts",
+      "target": "symbol:src/shared/run-from-share-key.ts#createRunFromShareKey",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/run-history.ts->symbol:src/shared/run-history.ts#buildDungeonJournalRows",
       "source": "file:src/shared/run-history.ts",
       "target": "symbol:src/shared/run-history.ts#buildDungeonJournalRows",
@@ -93211,6 +93387,48 @@
       "id": "exports:src/shared/run-settings-rules.ts->symbol:src/shared/run-settings-rules.ts#applyRunSettings",
       "source": "file:src/shared/run-settings-rules.ts",
       "target": "symbol:src/shared/run-settings-rules.ts#applyRunSettings",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/run-share-key.ts->symbol:src/shared/run-share-key.ts#describeRunShareKey",
+      "source": "file:src/shared/run-share-key.ts",
+      "target": "symbol:src/shared/run-share-key.ts#describeRunShareKey",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/run-share-key.ts->symbol:src/shared/run-share-key.ts#encodeRunShareKey",
+      "source": "file:src/shared/run-share-key.ts",
+      "target": "symbol:src/shared/run-share-key.ts#encodeRunShareKey",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/run-share-key.ts->symbol:src/shared/run-share-key.ts#parseRunShareKey",
+      "source": "file:src/shared/run-share-key.ts",
+      "target": "symbol:src/shared/run-share-key.ts#parseRunShareKey",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/run-share-key.ts->symbol:src/shared/run-share-key.ts#RUN_SHARE_KEY_PREFIX",
+      "source": "file:src/shared/run-share-key.ts",
+      "target": "symbol:src/shared/run-share-key.ts#RUN_SHARE_KEY_PREFIX",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/run-share-key.ts->symbol:src/shared/run-share-key.ts#RunShareKey",
+      "source": "file:src/shared/run-share-key.ts",
+      "target": "symbol:src/shared/run-share-key.ts#RunShareKey",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/run-share-key.ts->symbol:src/shared/run-share-key.ts#RunShareRefusal",
+      "source": "file:src/shared/run-share-key.ts",
+      "target": "symbol:src/shared/run-share-key.ts#RunShareRefusal",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/run-share-key.ts->symbol:src/shared/run-share-key.ts#RunShareVariant",
+      "source": "file:src/shared/run-share-key.ts",
+      "target": "symbol:src/shared/run-share-key.ts#RunShareVariant",
       "kind": "exports"
     },
     {
@@ -100571,6 +100789,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/ChooseYourPathScreen.tsx->src/shared/run-share-key.ts",
+      "source": "file:src/renderer/components/ChooseYourPathScreen.tsx",
+      "target": "file:src/shared/run-share-key.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/ChooseYourPathScreen.tsx->src/shared/utc-countdown.ts",
       "source": "file:src/renderer/components/ChooseYourPathScreen.tsx",
       "target": "file:src/shared/utc-countdown.ts",
@@ -106949,9 +107173,21 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/store/runStartState.ts->src/shared/run-from-share-key.ts",
+      "source": "file:src/renderer/store/runStartState.ts",
+      "target": "file:src/shared/run-from-share-key.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/store/runStartState.ts->src/shared/run-settings-rules.ts",
       "source": "file:src/renderer/store/runStartState.ts",
       "target": "file:src/shared/run-settings-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/store/runStartState.ts->src/shared/run-share-key.ts",
+      "source": "file:src/renderer/store/runStartState.ts",
+      "target": "file:src/shared/run-share-key.ts",
       "kind": "imports"
     },
     {
@@ -107840,6 +108076,12 @@
       "id": "imports:src/renderer/store/useAppStore.ts->src/shared/gameplay-core-adapters.ts",
       "source": "file:src/renderer/store/useAppStore.ts",
       "target": "file:src/shared/gameplay-core-adapters.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/store/useAppStore.ts->src/shared/run-share-key.ts",
+      "source": "file:src/renderer/store/useAppStore.ts",
+      "target": "file:src/shared/run-share-key.ts",
       "kind": "imports"
     },
     {
@@ -115445,6 +115687,54 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/run-from-share-key.test.ts->src/shared/run-creation-rules.ts",
+      "source": "file:src/shared/run-from-share-key.test.ts",
+      "target": "file:src/shared/run-creation-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/run-from-share-key.test.ts->src/shared/run-from-share-key.ts",
+      "source": "file:src/shared/run-from-share-key.test.ts",
+      "target": "file:src/shared/run-from-share-key.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/run-from-share-key.test.ts->src/shared/run-mode-identity.ts",
+      "source": "file:src/shared/run-from-share-key.test.ts",
+      "target": "file:src/shared/run-mode-identity.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/run-from-share-key.test.ts->src/shared/run-share-key.ts",
+      "source": "file:src/shared/run-from-share-key.test.ts",
+      "target": "file:src/shared/run-share-key.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/run-from-share-key.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/run-from-share-key.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/run-from-share-key.ts->src/shared/dungeon-showcase-run-rules.ts",
+      "source": "file:src/shared/run-from-share-key.ts",
+      "target": "file:src/shared/dungeon-showcase-run-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/run-from-share-key.ts->src/shared/run-creation-rules.ts",
+      "source": "file:src/shared/run-from-share-key.ts",
+      "target": "file:src/shared/run-creation-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/run-from-share-key.ts->src/shared/run-share-key.ts",
+      "source": "file:src/shared/run-from-share-key.ts",
+      "target": "file:src/shared/run-share-key.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/run-history.test.ts->src/shared/contracts.ts",
       "source": "file:src/shared/run-history.test.ts",
       "target": "file:src/shared/contracts.ts",
@@ -115793,6 +116083,42 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/run-share-key.test.ts->src/shared/builtin-puzzles.ts",
+      "source": "file:src/shared/run-share-key.test.ts",
+      "target": "file:src/shared/builtin-puzzles.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/run-share-key.test.ts->src/shared/dungeon-showcase-run-rules.ts",
+      "source": "file:src/shared/run-share-key.test.ts",
+      "target": "file:src/shared/dungeon-showcase-run-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/run-share-key.test.ts->src/shared/run-creation-rules.ts",
+      "source": "file:src/shared/run-share-key.test.ts",
+      "target": "file:src/shared/run-creation-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/run-share-key.test.ts->src/shared/run-share-key.ts",
+      "source": "file:src/shared/run-share-key.test.ts",
+      "target": "file:src/shared/run-share-key.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/run-share-key.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/run-share-key.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/run-share-key.ts->src/shared/mechanics-encyclopedia.ts",
+      "source": "file:src/shared/run-share-key.ts",
+      "target": "file:src/shared/mechanics-encyclopedia.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/run-share-text.test.ts->src/shared/builtin-puzzles.ts",
       "source": "file:src/shared/run-share-text.test.ts",
       "target": "file:src/shared/builtin-puzzles.ts",
@@ -115817,15 +116143,15 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/shared/run-share-text.ts->src/shared/run-history.ts",
-      "source": "file:src/shared/run-share-text.ts",
-      "target": "file:src/shared/run-history.ts",
-      "kind": "imports"
-    },
-    {
       "id": "imports:src/shared/run-share-text.ts->src/shared/run-mode-identity.ts",
       "source": "file:src/shared/run-share-text.ts",
       "target": "file:src/shared/run-mode-identity.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/run-share-text.ts->src/shared/run-share-key.ts",
+      "source": "file:src/shared/run-share-text.ts",
+      "target": "file:src/shared/run-share-key.ts",
       "kind": "imports"
     },
     {
@@ -126363,6 +126689,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/builtin-puzzles.ts->file:src/shared/run-share-key.test.ts",
+      "source": "file:src/shared/builtin-puzzles.ts",
+      "target": "file:src/shared/run-share-key.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/builtin-puzzles.ts->file:src/shared/run-share-text.test.ts",
       "source": "file:src/shared/builtin-puzzles.ts",
       "target": "file:src/shared/run-share-text.test.ts",
@@ -127932,6 +128264,12 @@
       "id": "tested_by:src/shared/dungeon-showcase-run-rules.ts->file:src/shared/run-mode-identity.test.ts",
       "source": "file:src/shared/dungeon-showcase-run-rules.ts",
       "target": "file:src/shared/run-mode-identity.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/dungeon-showcase-run-rules.ts->file:src/shared/run-share-key.test.ts",
+      "source": "file:src/shared/dungeon-showcase-run-rules.ts",
+      "target": "file:src/shared/run-share-key.test.ts",
       "kind": "tested_by"
     },
     {
@@ -129675,6 +130013,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/run-creation-rules.ts->file:src/shared/run-from-share-key.test.ts",
+      "source": "file:src/shared/run-creation-rules.ts",
+      "target": "file:src/shared/run-from-share-key.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/run-creation-rules.ts->file:src/shared/run-lifecycle-machine.test.ts",
       "source": "file:src/shared/run-creation-rules.ts",
       "target": "file:src/shared/run-lifecycle-machine.test.ts",
@@ -129684,6 +130028,12 @@
       "id": "tested_by:src/shared/run-creation-rules.ts->file:src/shared/run-mode-identity.test.ts",
       "source": "file:src/shared/run-creation-rules.ts",
       "target": "file:src/shared/run-mode-identity.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/run-creation-rules.ts->file:src/shared/run-share-key.test.ts",
+      "source": "file:src/shared/run-creation-rules.ts",
+      "target": "file:src/shared/run-share-key.test.ts",
       "kind": "tested_by"
     },
     {
@@ -129768,6 +130118,12 @@
       "id": "tested_by:src/shared/run-events.ts->file:src/shared/run-events.test.ts",
       "source": "file:src/shared/run-events.ts",
       "target": "file:src/shared/run-events.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/run-from-share-key.ts->file:src/shared/run-from-share-key.test.ts",
+      "source": "file:src/shared/run-from-share-key.ts",
+      "target": "file:src/shared/run-from-share-key.test.ts",
       "kind": "tested_by"
     },
     {
@@ -129879,6 +130235,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/run-mode-identity.ts->file:src/shared/run-from-share-key.test.ts",
+      "source": "file:src/shared/run-mode-identity.ts",
+      "target": "file:src/shared/run-from-share-key.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/run-mode-identity.ts->file:src/shared/run-mode-identity.test.ts",
       "source": "file:src/shared/run-mode-identity.ts",
       "target": "file:src/shared/run-mode-identity.test.ts",
@@ -129906,6 +130268,18 @@
       "id": "tested_by:src/shared/run-settings-rules.ts->file:src/shared/run-settings-rules.test.ts",
       "source": "file:src/shared/run-settings-rules.ts",
       "target": "file:src/shared/run-settings-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/run-share-key.ts->file:src/shared/run-from-share-key.test.ts",
+      "source": "file:src/shared/run-share-key.ts",
+      "target": "file:src/shared/run-from-share-key.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/run-share-key.ts->file:src/shared/run-share-key.test.ts",
+      "source": "file:src/shared/run-share-key.ts",
+      "target": "file:src/shared/run-share-key.test.ts",
       "kind": "tested_by"
     },
     {

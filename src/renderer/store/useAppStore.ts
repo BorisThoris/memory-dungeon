@@ -8,6 +8,7 @@ import type {
 } from '../../shared/contracts';
 import { expireGauntletThroughGameplayCore } from '../../shared/gameplay-core-adapters';
 import { isGauntletExpired } from '../../shared/game-core';
+import { parseRunShareKey } from '../../shared/run-share-key';
 import { trackEvent } from '../../shared/telemetry';
 import { executeRunStartRequest } from './runStartExecutor';
 import type { RunStartRequest } from './runStartState';
@@ -339,6 +340,14 @@ export const useAppStore = create<AppState>((set, get) => ({
 
     startScholarContractRun: () => {
         executeStoreRunStartRequest({ kind: 'scholarContract' }, set, get);
+    },
+
+    startSharedRun: (pastedText) => {
+        const key = parseRunShareKey(pastedText);
+        if (!key) {
+            return;
+        }
+        executeStoreRunStartRequest({ key, kind: 'shared' }, set, get);
     },
 
     startMeditationRun: () => {

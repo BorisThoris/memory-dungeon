@@ -9,6 +9,8 @@ import {
     createPuzzleRun,
     createWildRun
 } from '../../shared/game-core';
+import { createRunFromShareKey } from '../../shared/run-from-share-key';
+import type { RunShareKey } from '../../shared/run-share-key';
 import { metaRelicDraftExtraPerMilestoneFromSave } from '../../shared/save-data';
 import { applyRunSettings } from '../../shared/run-settings-rules';
 import { createRunSurfaceReset, type RunSurfaceState } from './runSurfaceState';
@@ -58,6 +60,7 @@ export type RunStartRequest =
     | { kind: 'practice' }
     | { kind: 'puzzle'; puzzleId: string }
     | { kind: 'scholarContract' }
+    | { key: RunShareKey; kind: 'shared' }
     | { kind: 'wild' };
 
 interface RunStartPlan {
@@ -138,6 +141,11 @@ export const createRunStartPlan = ({
             });
             telemetryExtra = { scholar: true };
             break;
+        case 'shared': {
+            run = createRunFromShareKey(request.key, bestScore, meta);
+            telemetryExtra = { shared: request.key.variant };
+            break;
+        }
         case 'wild':
             run = createWildRun(bestScore, meta);
             telemetryExtra = { wild: true };

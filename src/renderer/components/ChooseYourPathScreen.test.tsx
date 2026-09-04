@@ -10,6 +10,7 @@ import { buildMeditationPickMutatorRows } from './chooseYourPathScreenModel';
 
 const storeSpies = vi.hoisted(() => ({
     startRun: vi.fn(),
+    startSharedRun: vi.fn(),
     startDungeonShowcaseRun: vi.fn(),
     startDailyRun: vi.fn(),
     startGauntletRun: vi.fn()
@@ -43,6 +44,7 @@ vi.mock('../store/useAppStore', async () => {
         startPuzzleRun: vi.fn(),
         startRun: storeSpies.startRun,
         startScholarContractRun: vi.fn(),
+        startSharedRun: storeSpies.startSharedRun,
         startWildRun: vi.fn()
     };
     return {
@@ -78,6 +80,33 @@ describe('ChooseYourPathScreen', () => {
 
         await user.type(screen.getByLabelText(/filter modes/i), 'Wild Run');
         expect(screen.getByTestId('choose-path-mode-count')).toHaveTextContent(`1 of ${total} modes`);
+    });
+
+    it('plays a run someone pasted, whole sentence and all', async () => {
+        const user = userEvent.setup();
+        render(<ChooseYourPathScreen />);
+
+        const form = screen.getByTestId('choose-path-shared-run');
+        await user.type(
+            within(form).getByRole('textbox'),
+            'Memory Dungeon — Wild Run: floor 14, 2,340 points. Same run: md1:wild:33:912'
+        );
+        await user.click(within(form).getByRole('button', { name: /play it/i }));
+
+        expect(storeSpies.startSharedRun).toHaveBeenCalledTimes(1);
+        expect(screen.queryByTestId('choose-path-shared-run-error')).not.toBeInTheDocument();
+    });
+
+    it('says so rather than starting something when the paste is not a key', async () => {
+        const user = userEvent.setup();
+        render(<ChooseYourPathScreen />);
+
+        const form = screen.getByTestId('choose-path-shared-run');
+        await user.type(within(form).getByRole('textbox'), 'have a nice day');
+        await user.click(within(form).getByRole('button', { name: /play it/i }));
+
+        expect(storeSpies.startSharedRun).not.toHaveBeenCalled();
+        expect(screen.getByTestId('choose-path-shared-run-error')).toBeInTheDocument();
     });
 
     it('says when the daily turns over, on the one mode that expires', async () => {
