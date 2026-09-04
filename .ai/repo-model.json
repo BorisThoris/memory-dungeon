@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2500,
+    "trackedFileCount": 2501,
     "codeFileCount": 970,
     "exportedSymbolCount": 3542,
     "contentItemCount": 63,
     "mechanicCount": 136,
     "stateFieldCount": 144,
-    "relationshipCount": 10377
+    "relationshipCount": 10378
   },
   "inventory": [
     {
@@ -2320,7 +2320,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 36714,
-      "sha256": "0f6cc5c84435e4678d3b760576e6bcb6fa679098d0b41adbc6a4df7e592a12f4"
+      "sha256": "70b8dc6f696113c17bdb0b13d5b5acbb6f196a540b2f1188c72bffb9e018574a"
     },
     {
       "path": "docs/UI_RETHINK_PLAN.md",
@@ -3963,8 +3963,8 @@
     {
       "path": "package.json",
       "category": "configuration",
-      "bytes": 29260,
-      "sha256": "df16ddf983ee0db8871173be3f57ff3548a798ab4f29f3cc98810ea2683e3c87"
+      "bytes": 29363,
+      "sha256": "3370a0fa47fb458e4c260037041a191f5491183293ce99a0e7c23a724e8a1c37"
     },
     {
       "path": "packages/notifications/package.json",
@@ -4685,6 +4685,12 @@
       "category": "script",
       "bytes": 54716,
       "sha256": "e9766ced102fa800b33677d1e5102123a694547727729efd4b6049d7cc4c62c8"
+    },
+    {
+      "path": "scripts/test-only-modules.ts",
+      "category": "script",
+      "bytes": 9056,
+      "sha256": "86539be6a7596eb0122baafe5cc18c7b019a08676e27fa7ec6f907239f1d07ff"
     },
     {
       "path": "scripts/vite-dev-blueprint-api.mjs",
@@ -7521,14 +7527,14 @@
     {
       "path": "src/renderer/components/ChooseYourPathScreen.test.tsx",
       "category": "test",
-      "bytes": 10738,
-      "sha256": "c99d1ff36e170351adacb0b4adc2f6c7968a9fd70ebbd66a894bf332c40efc1a"
+      "bytes": 11750,
+      "sha256": "13582cd8965815409e12450cb2b095513069377e1897dad1026a21297ead32eb"
     },
     {
       "path": "src/renderer/components/ChooseYourPathScreen.tsx",
       "category": "source",
-      "bytes": 24348,
-      "sha256": "ab7a641cb4c93571c3db5a43e7183f04a8addceb7aecc1ee7153b7bdccbe0983"
+      "bytes": 25421,
+      "sha256": "ac2a17a4f2faa9346c72f6b5e92107113a5001fb2129d53edbdc0914498f7d82"
     },
     {
       "path": "src/renderer/components/chooseYourPathScreenModel.ts",
@@ -9033,8 +9039,8 @@
     {
       "path": "src/renderer/copy/screenCopy.ts",
       "category": "source",
-      "bytes": 1655,
-      "sha256": "700e4781eb41aeaa764e6a8db81afde251aa5058cac800df191ea76d7dd1f771"
+      "bytes": 1758,
+      "sha256": "e7fffb0e92eb54ff87f0f632f5acc2d90f1b0574c927e194e1001917c5f772aa"
     },
     {
       "path": "src/renderer/copy/settingsHints.ts",
@@ -17094,7 +17100,7 @@
       "path": "src/renderer/components/ChooseYourPathScreen.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 212,
+      "lineCount": 234,
       "imports": [
         "file:src/renderer/components/ChooseYourPathScreen.tsx",
         "file:src/renderer/components/chooseYourPathScreenModel.ts",
@@ -17109,7 +17115,7 @@
       "path": "src/renderer/components/ChooseYourPathScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 550,
+      "lineCount": 575,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/assets/ui/modeArt.ts",
@@ -17121,7 +17127,8 @@
         "file:src/renderer/ui/index.ts",
         "file:src/shared/challenge-progression.ts",
         "file:src/shared/contracts.ts",
-        "file:src/shared/run-mode-catalog.ts"
+        "file:src/shared/run-mode-catalog.ts",
+        "file:src/shared/utc-countdown.ts"
       ],
       "exports": [
         "symbol:src/renderer/components/ChooseYourPathScreen.tsx#default"
@@ -21396,7 +21403,7 @@
       "path": "src/renderer/copy/screenCopy.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 32,
+      "lineCount": 34,
       "imports": [],
       "exports": [
         "symbol:src/renderer/copy/screenCopy.ts#CHOOSE_YOUR_PATH_COPY",
@@ -36760,8 +36767,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/ChooseYourPathScreen.tsx",
-      "line": 549,
-      "endLine": 549
+      "line": 574,
+      "endLine": 574
     },
     {
       "id": "symbol:src/renderer/components/chooseYourPathScreenModel.ts#buildMeditationPickMutatorRows",
@@ -41393,23 +41400,23 @@
       "kind": "value",
       "file": "src/renderer/copy/screenCopy.ts",
       "line": 8,
-      "endLine": 18
+      "endLine": 20
     },
     {
       "id": "symbol:src/renderer/copy/screenCopy.ts#GAME_OVER_LABELS",
       "name": "GAME_OVER_LABELS",
       "kind": "value",
       "file": "src/renderer/copy/screenCopy.ts",
-      "line": 20,
-      "endLine": 24
+      "line": 22,
+      "endLine": 26
     },
     {
       "id": "symbol:src/renderer/copy/screenCopy.ts#SHOP_COPY",
       "name": "SHOP_COPY",
       "kind": "value",
       "file": "src/renderer/copy/screenCopy.ts",
-      "line": 26,
-      "endLine": 31
+      "line": 28,
+      "endLine": 33
     },
     {
       "id": "symbol:src/renderer/copy/settingsHints.ts#SETTINGS_FOOTER_HINT",
@@ -100945,6 +100952,12 @@
       "id": "imports:src/renderer/components/ChooseYourPathScreen.tsx->src/shared/run-mode-catalog.ts",
       "source": "file:src/renderer/components/ChooseYourPathScreen.tsx",
       "target": "file:src/shared/run-mode-catalog.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/ChooseYourPathScreen.tsx->src/shared/utc-countdown.ts",
+      "source": "file:src/renderer/components/ChooseYourPathScreen.tsx",
+      "target": "file:src/shared/utc-countdown.ts",
       "kind": "imports"
     },
     {

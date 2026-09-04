@@ -67,6 +67,28 @@ describe('ChooseYourPathScreen', () => {
         expect(storeSpies.startRun).toHaveBeenCalledTimes(1);
     });
 
+    it('says when the daily turns over, on the one mode that expires', async () => {
+        const user = userEvent.setup();
+        render(<ChooseYourPathScreen />);
+
+        const chips = screen.getByRole('group', { name: /narrow by kind/i });
+        await user.click(within(chips).getByRole('button', { name: /^All/iu }));
+        await user.click(screen.getByRole('button', { name: /^Daily Challenge\. Open details\.$/i }));
+
+        const countdown = await screen.findByTestId('choose-path-daily-reset');
+        expect(countdown).toHaveTextContent(/Next daily in/i);
+        expect(countdown).toHaveTextContent(/\d{2}:\d{2}:\d{2}/u);
+    });
+
+    it('does not put a daily countdown on a mode that never expires', async () => {
+        const user = userEvent.setup();
+        render(<ChooseYourPathScreen />);
+
+        await user.click(screen.getByRole('button', { name: /^Gauntlet\. Open details\.$/i }));
+
+        expect(screen.queryByTestId('choose-path-daily-reset')).not.toBeInTheDocument();
+    });
+
     it('reaches every mode from the group chips too, for a player who does not know a name', async () => {
         // The filter answers "show me Pin vow". The chips answer "show me a puzzle", which is the
         // question someone browsing actually has, and between them no mode is stranded on page 3.

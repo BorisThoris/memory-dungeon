@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState, type ReactElement } from 'react';
+import { useCallback, useEffect, useMemo, useState, type ReactElement } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import type { MutatorId } from '../../shared/contracts';
 import { getChallengeModeGateRows } from '../../shared/challenge-progression';
@@ -10,6 +10,7 @@ import {
     type RunModeDefinition,
     type RunModeGroup
 } from '../../shared/run-mode-catalog';
+import { formatNextUtcReset } from '../../shared/utc-countdown';
 import { isModePosterFallback, resolveModePosterUrl } from '../assets/ui/modeArt';
 import { UI_ART } from '../assets/ui';
 import {
@@ -44,6 +45,28 @@ const launchSummary = (def: RunModeDefinition, freshClassic: boolean): string =>
         : def.id === 'classic'
           ? CHOOSE_YOUR_PATH_COPY.dungeonBlurb
           : def.shortDescription;
+
+/**
+ * The daily is the one mode with an expiry, and the screen never said when it turns over.
+ *
+ * Its own component so the clock starts at mount — which is the moment the daily's panel opens —
+ * and the interval only runs while that panel is on screen. Nothing else on Choose Your Path
+ * re-renders once a second for a clock nobody is reading.
+ */
+const DailyResetCountdown = (): ReactElement => {
+    const [nowMs, setNowMs] = useState(() => Date.now());
+
+    useEffect(() => {
+        const tick = window.setInterval(() => setNowMs(Date.now()), 1000);
+        return () => window.clearInterval(tick);
+    }, []);
+
+    return (
+        <p className={styles.detailLine} data-testid="choose-path-daily-reset">
+            <strong>{CHOOSE_YOUR_PATH_COPY.dailyResetPrefix}</strong> <time>{formatNextUtcReset(nowMs)}</time>
+        </p>
+    );
+};
 
 const ChooseYourPathScreen = (): ReactElement => {
     const {
@@ -310,6 +333,7 @@ const ChooseYourPathScreen = (): ReactElement => {
     };
 
     const detailGate = detailMode ? gateRows.find((row) => row.modeId === detailMode.id) : null;
+    const showsDailyReset = detailMode?.action.type === 'startDailyRun';
 
     return (
         <section aria-label="Choose your path" className={styles.screen} role="region">
@@ -434,6 +458,7 @@ const ChooseYourPathScreen = (): ReactElement => {
                     title={detailMode.title}
                 >
                     <p className={styles.detailLead}>{detailMode.shortDescription}</p>
+                    {showsDailyReset ? <DailyResetCountdown /> : null}
                     {detailMode.startContract ? (
                         <p
                             className={styles.detailLine}

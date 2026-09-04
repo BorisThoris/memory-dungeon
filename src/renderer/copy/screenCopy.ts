@@ -13,6 +13,8 @@ export const CHOOSE_YOUR_PATH_COPY = {
     groupFilterAll: 'All',
     /* Not "Filter modes ...": the search box owns that label, and two of them make both ambiguous. */
     groupFilterLabel: 'Narrow by kind',
+    /** Prefix for the live countdown to the next UTC daily. */
+    dailyResetPrefix: 'Next daily in',
     mutatorsSubtitle: 'Toggle mutators for a focused study run, or start calm with a clean ruleset.',
     noSearchResults: 'No modes match this search.'
 } as const;
