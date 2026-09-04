@@ -37,6 +37,7 @@ achievement on the Partner site or shoot a trailer.
 |---|---|---|---|
 | Every gate is either run by the routine check or declared standalone with a reason | done | the repository | `scripts/gate-reachability.ts` |
 | No dead files or undeclared dependencies reach a build | done | the repository | `package.json (gate:package-hygiene)` |
+| End-to-end specs do not point at elements the app stopped rendering | done | the repository | `scripts/e2e-locator-audit.ts` |
 | The packaged build ships no dev-server permissions in its content security policy | done | the repository | `src/shared/content-security-policy.ts` |
 | The preload bridge exposes nothing the renderer does not call | done | the repository | `scripts/bridge-reachability.ts` |
 | No player-facing state or action is left with nothing able to reach it | done | the repository | `scripts/store-action-reachability.ts` |

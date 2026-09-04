@@ -108,6 +108,13 @@ export const RELEASE_CHECKLIST: readonly ReleaseChecklistItem[] = [
         section: 'Diagnostics'
     },
     {
+        evidence: 'scripts/e2e-locator-audit.ts',
+        id: 'e2e-locators-live',
+        label: 'End-to-end specs do not point at elements the app stopped rendering',
+        owner: 'repo',
+        section: 'Diagnostics'
+    },
+    {
         evidence: 'src/shared/content-security-policy.ts',
         id: 'shipped-csp',
         label: 'The packaged build ships no dev-server permissions in its content security policy',

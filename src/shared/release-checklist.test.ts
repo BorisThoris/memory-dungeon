@@ -17,6 +17,11 @@ import { HARDCODED_COPY_BASELINE, scanComponentCopy } from '../../scripts/copy-l
 import { findUnrunGates, readScripts } from '../../scripts/gate-reachability';
 import { BRIDGE_EXEMPTIONS, findUnusedBridgeMethods } from '../../scripts/bridge-reachability';
 import { buildContentSecurityPolicy } from './content-security-policy';
+import {
+    DEAD_E2E_LOCATOR_BASELINE,
+    findDeadTestIds,
+    readRenderedTestIds
+} from '../../scripts/e2e-locator-audit';
 import { renderAchievementRows, renderRichPresenceRows } from '../../scripts/steam-partner-config';
 import {
     findUnreachableMembers,
@@ -102,6 +107,15 @@ const VERIFIERS: Record<string, () => void> = {
 
         expect(scripts['gate:package-hygiene']).toMatch(/knip/);
         expect(scripts.fullcheck).toContain('gate:package-hygiene');
+    },
+    'e2e-locators-live': () => {
+        // A spec naming a missing element times out rather than failing, so this rot is invisible
+        // until someone reads a timeout carefully.
+        const rendered = readRenderedTestIds(['<div data-testid="present" />']);
+
+        expect(findDeadTestIds(['present'], rendered)).toEqual([]);
+        expect(findDeadTestIds(['gone'], rendered)).toEqual(['gone']);
+        expect(DEAD_E2E_LOCATOR_BASELINE).toBeGreaterThanOrEqual(0);
     },
     'shipped-csp': () => {
         // Vite copies index.html verbatim, so a hot-reload allowance written there ships with the
