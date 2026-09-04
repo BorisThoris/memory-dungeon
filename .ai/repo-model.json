@@ -3,7 +3,7 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2496,
+    "trackedFileCount": 2497,
     "codeFileCount": 965,
     "exportedSymbolCount": 3533,
     "contentItemCount": 63,
@@ -3963,8 +3963,8 @@
     {
       "path": "package.json",
       "category": "configuration",
-      "bytes": 29363,
-      "sha256": "3370a0fa47fb458e4c260037041a191f5491183293ce99a0e7c23a724e8a1c37"
+      "bytes": 29451,
+      "sha256": "450829f4a987acffae91ece9b00fc3e046b8b1224ab3e35d688a5be519e5b942"
     },
     {
       "path": "packages/notifications/package.json",
@@ -4631,6 +4631,12 @@
       "category": "script",
       "bytes": 2255,
       "sha256": "1b5c1c013c0032f946124f46d88d25b31168c282d5b05851a39588072b3dd401"
+    },
+    {
+      "path": "scripts/shared-reach.ts",
+      "category": "script",
+      "bytes": 9110,
+      "sha256": "35817b0a1b195fe3bd0ab4c64ab399c9948b2553737beb32350b104400259ce8"
     },
     {
       "path": "scripts/sim-build-strategies.ts",
