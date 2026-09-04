@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2495,
-    "codeFileCount": 963,
-    "exportedSymbolCount": 3517,
+    "trackedFileCount": 2498,
+    "codeFileCount": 966,
+    "exportedSymbolCount": 3521,
     "contentItemCount": 63,
     "mechanicCount": 136,
     "stateFieldCount": 144,
-    "relationshipCount": 10332
+    "relationshipCount": 10347
   },
   "inventory": [
     {
@@ -2320,7 +2320,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 36714,
-      "sha256": "81d9cd612a45fff75c69017c4f36c468f6ce5d76a599d9a75410bc30fe0dee09"
+      "sha256": "8b00c4a1f0c8745735e90366fd1bfb16e6f48fd523b1e394b7ef4696930de3fc"
     },
     {
       "path": "docs/UI_RETHINK_PLAN.md",
@@ -7629,14 +7629,14 @@
     {
       "path": "src/renderer/components/GameOverScreen.test.tsx",
       "category": "test",
-      "bytes": 6185,
-      "sha256": "10f65df9404ac7d7bb140b8897720fe30b3b16af417272182f1c85fe46bf992a"
+      "bytes": 7566,
+      "sha256": "d81efd04aa3b83ecd34ba07d3242a42046cf50cc901e8a153155bb712becde8f"
     },
     {
       "path": "src/renderer/components/GameOverScreen.tsx",
       "category": "source",
-      "bytes": 17642,
-      "sha256": "1abcd92423ea6c902b653885ae1ba2374598593c0e4352ccf06713086a541633"
+      "bytes": 19113,
+      "sha256": "2fabab13a5b83ce67da73016129e6666491355406032a3e9c2791f1918594c1b"
     },
     {
       "path": "src/renderer/components/gameplayRenderProfile.ts",
@@ -8943,8 +8943,8 @@
     {
       "path": "src/renderer/copy/gameOverScreen.ts",
       "category": "source",
-      "bytes": 2934,
-      "sha256": "2c936218613db4ae1f40ecaa3fe737ed77b2b10dc819b04006a1b9b973a05651"
+      "bytes": 3275,
+      "sha256": "8248d409e0e1846c6cc46e68ec64edb1a27eee8ed7612921f1f4cb013f0fb37b"
     },
     {
       "path": "src/renderer/copy/gameplayEventAnnouncement.test.ts",
@@ -9203,6 +9203,12 @@
       "category": "source",
       "bytes": 2941,
       "sha256": "a92ec380c4a75a9be382eb6e47522c7b15584292c35e455135be2ffba79ee1a2"
+    },
+    {
+      "path": "src/renderer/hooks/useCopyToClipboard.ts",
+      "category": "source",
+      "bytes": 1781,
+      "sha256": "b7f704e7dd54c4ad7d2de4998ae81c1ddf13f0ed0acc84c91d686aa78bffb61c"
     },
     {
       "path": "src/renderer/hooks/useDistractionChannelTick.integration.test.tsx",
@@ -12227,6 +12233,18 @@
       "category": "source",
       "bytes": 382,
       "sha256": "22641132cea3fcd91355a41e41318cf8b69e97c4433681d919dea1f5634484b6"
+    },
+    {
+      "path": "src/shared/run-share-text.test.ts",
+      "category": "test",
+      "bytes": 1874,
+      "sha256": "ff1dc97ea802fa5eb743644e10afa5c3116995600ea8800b7b8f216c335b1d59"
+    },
+    {
+      "path": "src/shared/run-share-text.ts",
+      "category": "source",
+      "bytes": 1700,
+      "sha256": "e5a630766e51297b5ada00c9dd8170bd08a255a666c1d49b16b8027828f7c715"
     },
     {
       "path": "src/shared/run-summary-rules.test.ts",
@@ -17283,7 +17301,7 @@
       "path": "src/renderer/components/GameOverScreen.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 142,
+      "lineCount": 170,
       "imports": [
         "file:src/renderer/components/GameOverScreen.tsx",
         "file:src/shared/contracts.ts",
@@ -17299,13 +17317,14 @@
       "path": "src/renderer/components/GameOverScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 372,
+      "lineCount": 401,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/components/MainMenuBackground.tsx",
         "file:src/renderer/copy/gameOverScreen.ts",
         "file:src/renderer/copy/screenCopy.ts",
+        "file:src/renderer/hooks/useCopyToClipboard.ts",
         "file:src/renderer/hooks/useViewportSize.ts",
         "file:src/renderer/platformTilt/usePlatformTiltField.ts",
         "file:src/renderer/steamStorePage.ts",
@@ -17315,7 +17334,8 @@
         "file:src/shared/content-lock-state.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/game-catalog.ts",
-        "file:src/shared/game-over-next-run.ts"
+        "file:src/shared/game-over-next-run.ts",
+        "file:src/shared/run-share-text.ts"
       ],
       "exports": [
         "symbol:src/renderer/components/GameOverScreen.tsx#default"
@@ -21083,7 +21103,7 @@
       "path": "src/renderer/copy/gameOverScreen.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 60,
+      "lineCount": 68,
       "imports": [],
       "exports": [
         "symbol:src/renderer/copy/gameOverScreen.ts#gameOverScreenCopy"
@@ -21707,6 +21727,19 @@
       "testedBy": [
         "file:src/renderer/hooks/useCoarsePointer.test.tsx"
       ]
+    },
+    {
+      "id": "file:src/renderer/hooks/useCopyToClipboard.ts",
+      "path": "src/renderer/hooks/useCopyToClipboard.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 55,
+      "imports": [],
+      "exports": [
+        "symbol:src/renderer/hooks/useCopyToClipboard.ts#CopyState",
+        "symbol:src/renderer/hooks/useCopyToClipboard.ts#useCopyToClipboard"
+      ],
+      "testedBy": []
     },
     {
       "id": "file:src/renderer/hooks/useDistractionChannelTick.integration.test.tsx",
@@ -25157,6 +25190,7 @@
         "file:src/shared/achievement-reachability.test.ts",
         "file:src/shared/puzzle-import.test.ts",
         "file:src/shared/run-mode-identity.test.ts",
+        "file:src/shared/run-share-text.test.ts",
         "file:src/shared/save-data.test.ts",
         "file:src/shared/softlock-fairness.test.ts"
       ]
@@ -31598,6 +31632,7 @@
         "file:src/shared/run-creation-rules.test.ts",
         "file:src/shared/run-lifecycle-machine.test.ts",
         "file:src/shared/run-mode-identity.test.ts",
+        "file:src/shared/run-share-text.test.ts",
         "file:src/shared/turn-match-board-cleanup-rules.test.ts",
         "file:src/shared/turn-match-board-resolution-rules.test.ts",
         "file:src/shared/turn-match-economy-rules.test.ts",
@@ -32172,6 +32207,39 @@
       ],
       "testedBy": [
         "file:src/shared/run-settings-rules.test.ts"
+      ]
+    },
+    {
+      "id": "file:src/shared/run-share-text.test.ts",
+      "path": "src/shared/run-share-text.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 41,
+      "imports": [
+        "file:src/shared/builtin-puzzles.ts",
+        "file:src/shared/run-creation-rules.ts",
+        "file:src/shared/run-share-text.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/shared/run-share-text.ts",
+      "path": "src/shared/run-share-text.ts",
+      "layer": "shared",
+      "role": "production",
+      "lineCount": 39,
+      "imports": [
+        "file:src/shared/contracts.ts",
+        "file:src/shared/run-history.ts",
+        "file:src/shared/run-mode-identity.ts"
+      ],
+      "exports": [
+        "symbol:src/shared/run-share-text.ts#buildRunShareText",
+        "symbol:src/shared/run-share-text.ts#RunShareText"
+      ],
+      "testedBy": [
+        "file:src/shared/run-share-text.test.ts"
       ]
     },
     {
@@ -36746,8 +36814,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameOverScreen.tsx",
-      "line": 371,
-      "endLine": 371
+      "line": 400,
+      "endLine": 400
     },
     {
       "id": "symbol:src/renderer/components/gameplayRenderProfile.ts#GAMEPLAY_RENDER_PROFILE",
@@ -40787,7 +40855,7 @@
       "kind": "value",
       "file": "src/renderer/copy/gameOverScreen.ts",
       "line": 4,
-      "endLine": 59
+      "endLine": 67
     },
     {
       "id": "symbol:src/renderer/copy/gameplayEventAnnouncement.ts#buildGameplayEventAnnouncement",
@@ -41508,6 +41576,22 @@
       "file": "src/renderer/hooks/useCoarsePointer.ts",
       "line": 56,
       "endLine": 92
+    },
+    {
+      "id": "symbol:src/renderer/hooks/useCopyToClipboard.ts#CopyState",
+      "name": "CopyState",
+      "kind": "type",
+      "file": "src/renderer/hooks/useCopyToClipboard.ts",
+      "line": 12,
+      "endLine": 12
+    },
+    {
+      "id": "symbol:src/renderer/hooks/useCopyToClipboard.ts#useCopyToClipboard",
+      "name": "useCopyToClipboard",
+      "kind": "value",
+      "file": "src/renderer/hooks/useCopyToClipboard.ts",
+      "line": 17,
+      "endLine": 54
     },
     {
       "id": "symbol:src/renderer/hooks/useDistractionChannelTick.ts#useDistractionChannelTick",
@@ -59388,6 +59472,22 @@
       "file": "src/shared/run-settings-rules.ts",
       "line": 3,
       "endLine": 9
+    },
+    {
+      "id": "symbol:src/shared/run-share-text.ts#buildRunShareText",
+      "name": "buildRunShareText",
+      "kind": "value",
+      "file": "src/shared/run-share-text.ts",
+      "line": 26,
+      "endLine": 38
+    },
+    {
+      "id": "symbol:src/shared/run-share-text.ts#RunShareText",
+      "name": "RunShareText",
+      "kind": "interface",
+      "file": "src/shared/run-share-text.ts",
+      "line": 17,
+      "endLine": 22
     },
     {
       "id": "symbol:src/shared/run-summary-rules.ts#createGameOverRunSummary",
@@ -79691,6 +79791,18 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/hooks/useCopyToClipboard.ts->symbol:src/renderer/hooks/useCopyToClipboard.ts#CopyState",
+      "source": "file:src/renderer/hooks/useCopyToClipboard.ts",
+      "target": "symbol:src/renderer/hooks/useCopyToClipboard.ts#CopyState",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/hooks/useCopyToClipboard.ts->symbol:src/renderer/hooks/useCopyToClipboard.ts#useCopyToClipboard",
+      "source": "file:src/renderer/hooks/useCopyToClipboard.ts",
+      "target": "symbol:src/renderer/hooks/useCopyToClipboard.ts#useCopyToClipboard",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/hooks/useDistractionChannelTick.ts->symbol:src/renderer/hooks/useDistractionChannelTick.ts#useDistractionChannelTick",
       "source": "file:src/renderer/hooks/useDistractionChannelTick.ts",
       "target": "symbol:src/renderer/hooks/useDistractionChannelTick.ts#useDistractionChannelTick",
@@ -93101,6 +93213,18 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/run-share-text.ts->symbol:src/shared/run-share-text.ts#buildRunShareText",
+      "source": "file:src/shared/run-share-text.ts",
+      "target": "symbol:src/shared/run-share-text.ts#buildRunShareText",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/run-share-text.ts->symbol:src/shared/run-share-text.ts#RunShareText",
+      "source": "file:src/shared/run-share-text.ts",
+      "target": "symbol:src/shared/run-share-text.ts#RunShareText",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/run-summary-rules.ts->symbol:src/shared/run-summary-rules.ts#createGameOverRunSummary",
       "source": "file:src/shared/run-summary-rules.ts",
       "target": "symbol:src/shared/run-summary-rules.ts#createGameOverRunSummary",
@@ -100722,6 +100846,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/GameOverScreen.tsx->src/renderer/hooks/useCopyToClipboard.ts",
+      "source": "file:src/renderer/components/GameOverScreen.tsx",
+      "target": "file:src/renderer/hooks/useCopyToClipboard.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/GameOverScreen.tsx->src/renderer/hooks/useViewportSize.ts",
       "source": "file:src/renderer/components/GameOverScreen.tsx",
       "target": "file:src/renderer/hooks/useViewportSize.ts",
@@ -100779,6 +100909,12 @@
       "id": "imports:src/renderer/components/GameOverScreen.tsx->src/shared/game-over-next-run.ts",
       "source": "file:src/renderer/components/GameOverScreen.tsx",
       "target": "file:src/shared/game-over-next-run.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/GameOverScreen.tsx->src/shared/run-share-text.ts",
+      "source": "file:src/renderer/components/GameOverScreen.tsx",
+      "target": "file:src/shared/run-share-text.ts",
       "kind": "imports"
     },
     {
@@ -115650,6 +115786,42 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/run-share-text.test.ts->src/shared/builtin-puzzles.ts",
+      "source": "file:src/shared/run-share-text.test.ts",
+      "target": "file:src/shared/builtin-puzzles.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/run-share-text.test.ts->src/shared/run-creation-rules.ts",
+      "source": "file:src/shared/run-share-text.test.ts",
+      "target": "file:src/shared/run-creation-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/run-share-text.test.ts->src/shared/run-share-text.ts",
+      "source": "file:src/shared/run-share-text.test.ts",
+      "target": "file:src/shared/run-share-text.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/run-share-text.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/run-share-text.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/run-share-text.ts->src/shared/run-history.ts",
+      "source": "file:src/shared/run-share-text.ts",
+      "target": "file:src/shared/run-history.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/run-share-text.ts->src/shared/run-mode-identity.ts",
+      "source": "file:src/shared/run-share-text.ts",
+      "target": "file:src/shared/run-mode-identity.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/run-summary-rules.test.ts->src/shared/contracts.ts",
       "source": "file:src/shared/run-summary-rules.test.ts",
       "target": "file:src/shared/contracts.ts",
@@ -126184,6 +126356,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/builtin-puzzles.ts->file:src/shared/run-share-text.test.ts",
+      "source": "file:src/shared/builtin-puzzles.ts",
+      "target": "file:src/shared/run-share-text.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/builtin-puzzles.ts->file:src/shared/save-data.test.ts",
       "source": "file:src/shared/builtin-puzzles.ts",
       "target": "file:src/shared/save-data.test.ts",
@@ -129502,6 +129680,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/run-creation-rules.ts->file:src/shared/run-share-text.test.ts",
+      "source": "file:src/shared/run-creation-rules.ts",
+      "target": "file:src/shared/run-share-text.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/run-creation-rules.ts->file:src/shared/turn-match-board-cleanup-rules.test.ts",
       "source": "file:src/shared/run-creation-rules.ts",
       "target": "file:src/shared/turn-match-board-cleanup-rules.test.ts",
@@ -129715,6 +129899,12 @@
       "id": "tested_by:src/shared/run-settings-rules.ts->file:src/shared/run-settings-rules.test.ts",
       "source": "file:src/shared/run-settings-rules.ts",
       "target": "file:src/shared/run-settings-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/run-share-text.ts->file:src/shared/run-share-text.test.ts",
+      "source": "file:src/shared/run-share-text.ts",
+      "target": "file:src/shared/run-share-text.test.ts",
       "kind": "tested_by"
     },
     {

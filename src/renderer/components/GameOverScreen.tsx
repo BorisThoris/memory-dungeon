@@ -7,8 +7,10 @@ import type { MutatorId, RelicId, RunState } from '../../shared/contracts';
 import { getGameOverNextRunRows } from '../../shared/game-over-next-run';
 import { useShallow } from 'zustand/react/shallow';
 import { UI_ART } from '../assets/ui';
-import { playGameOverOpenSfx, playUiBackSfx, resumeUiSfxContext, uiSfxGainFromSettings } from '../audio/uiSfx';
+import { playGameOverOpenSfx, playUiBackSfx, playUiCopySfx, resumeUiSfxContext, uiSfxGainFromSettings } from '../audio/uiSfx';
 import { gameOverScreenCopy } from '../copy/gameOverScreen';
+import { buildRunShareText } from '../../shared/run-share-text';
+import { useCopyToClipboard } from '../hooks/useCopyToClipboard';
 import { useViewportSize } from '../hooks/useViewportSize';
 import { usePlatformTiltField } from '../platformTilt/usePlatformTiltField';
 import { Eyebrow, Panel, ScreenTitle, StatTile, UiButton } from '../ui';
@@ -114,6 +116,19 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
         [summary]
     );
     const uiGain = uiSfxGainFromSettings(settings.masterVolume, settings.sfxVolume);
+    const { copy: copyToClipboard, state: copyState } = useCopyToClipboard();
+    const runShare = buildRunShareText(run);
+    const copyResultLabel =
+        copyState === 'copied'
+            ? gameOverScreenCopy.copyResultDone
+            : copyState === 'failed'
+              ? gameOverScreenCopy.copyResultFailed
+              : gameOverScreenCopy.copyResultLabel;
+    const copyRunResult = (): void => {
+        resumeUiSfxContext();
+        playUiCopySfx(uiGain);
+        copyToClipboard(runShare.text);
+    };
     const contentLock = getActiveContentLock();
     const steamStoreUrl = getSteamStorePageUrl();
 
@@ -302,6 +317,20 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                                     }}
                                 >
                                     {gameOverScreenCopy.mainMenuLabel}
+                                </UiButton>
+                                <UiButton
+                                    fullWidth
+                                    aria-label={gameOverScreenCopy.copyResultAriaLabel}
+                                    className={styles.desktopActionButton}
+                                    data-copy-state={copyState}
+                                    data-testid="game-over-copy-result"
+                                    disabled={!runShare.shareable}
+                                    onClick={copyRunResult}
+                                    size="lg"
+                                    title={runShare.text}
+                                    variant="secondary"
+                                >
+                                    {copyResultLabel}
                                 </UiButton>
                             </div>
                             {/*

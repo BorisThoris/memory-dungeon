@@ -17,6 +17,14 @@ export const gameOverScreenCopy = {
     playAgainAriaLabel: 'Play Again - start a new run after this expedition',
     mainMenuLabel: 'Main Menu',
     mainMenuAriaLabel: 'Return to the main menu',
+    /**
+     * Copying the result is an action, not another restatement of the score: it hands the run to
+     * somebody else, seed and all.
+     */
+    copyResultLabel: 'Copy result',
+    copyResultAriaLabel: 'Copy this run, seed and all, so someone else can play it',
+    copyResultDone: 'Copied',
+    copyResultFailed: 'Could not copy',
     runSnapshotKicker: 'Run snapshot',
     statLabels: {
         highestFloor: 'Highest Floor',

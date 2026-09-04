@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import type { RunState } from '../../shared/contracts';
 import { createNewRun, createRunSummary, finishMemorizePhase } from '../../shared/game-core';
@@ -9,6 +9,7 @@ import GameOverScreen from './GameOverScreen';
 const uiSfxMocks = vi.hoisted(() => ({
     playGameOverOpenSfx: vi.fn(),
     playUiBackSfx: vi.fn(),
+    playUiCopySfx: vi.fn(),
     resumeUiSfxContext: vi.fn(),
     uiSfxGainFromSettings: () => 1
 }));
@@ -45,6 +46,33 @@ const gameOverRunFixture = (): RunState => {
 };
 
 describe('GameOverScreen (REF-031)', () => {
+    it('hands the run over on the clipboard, seed and all, and confirms it did', async () => {
+        const writeText = vi.fn(async (_text: string) => undefined);
+        Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText } });
+        // Not userEvent: its setup swaps in its own clipboard stub, so the real one never runs.
+        render(<GameOverScreen run={gameOverRunFixture()} />);
+
+        fireEvent.click(screen.getByTestId('game-over-copy-result'));
+
+        expect(writeText).toHaveBeenCalledTimes(1);
+        expect(writeText.mock.calls[0]?.[0]).toMatch(/^Memory Dungeon — .*Same run: /u);
+        await waitFor(() => expect(screen.getByTestId('game-over-copy-result')).toHaveTextContent(/copied/i));
+    });
+
+    it('says it could not copy rather than doing nothing when the clipboard refuses', async () => {
+        Object.defineProperty(navigator, 'clipboard', {
+            configurable: true,
+            value: { writeText: vi.fn(async () => Promise.reject(new Error('denied'))) }
+        });
+        render(<GameOverScreen run={gameOverRunFixture()} />);
+
+        fireEvent.click(screen.getByTestId('game-over-copy-result'));
+
+        await waitFor(() =>
+            expect(screen.getByTestId('game-over-copy-result')).toHaveTextContent(/could not copy/i)
+        );
+    });
+
     it('exposes a single page title and polite run summary for assistive tech', () => {
         render(<GameOverScreen run={gameOverRunFixture()} />);
 
