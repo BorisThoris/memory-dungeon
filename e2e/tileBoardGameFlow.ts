@@ -221,3 +221,21 @@ export async function clickHiddenTileRowCol(page: Page, row: number, column: num
 export async function clickCanvasTile(page: Page, row: number, column: number): Promise<void> {
     await flipTileAtGridCellKeyboard(page, row, column);
 }
+
+/**
+ * Opens the in-run settings modal the way a player does.
+ *
+ * The run dock used to carry a "Run settings (toolbar)" button, and nine places in the e2e suite
+ * still drove it long after the run-shell rebuild removed it. Settings is reached through the pause
+ * menu now — Pause, then Settings — so the route lives here once rather than being retyped at every
+ * call site for the next rebuild to break again.
+ */
+export async function openRunSettings(page: Page): Promise<void> {
+    const pauseOverlay = page.getByTestId('game-pause-overlay');
+    if (!(await pauseOverlay.isVisible().catch(() => false))) {
+        await page.getByTestId('game-toolbar-main-menu').click({ force: true });
+        await expect(pauseOverlay).toBeVisible();
+    }
+    await pauseOverlay.getByRole('button', { name: /^settings$/i }).click({ force: true });
+    await expect(page.getByRole('dialog', { name: /run settings/i })).toBeVisible();
+}

@@ -1,7 +1,7 @@
 import { mkdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { expect, test } from '@playwright/test';
-import { navigateToLevel1PlayPhase } from './tileBoardGameFlow';
+import { navigateToLevel1PlayPhase, openRunSettings } from './tileBoardGameFlow';
 import { completeLevel1Play } from './visualScreenHelpers';
 
 /**
@@ -40,9 +40,7 @@ test.describe('OVR-013 — overlay smoke', () => {
         await pauseOverlay.getByRole('button', { name: /^resume$/i }).click();
         await expect(pauseOverlay).toBeHidden();
 
-        await page.getByRole('button', { name: /run settings \(toolbar\)/i }).evaluate((element) => {
-            (element as HTMLButtonElement).click();
-        });
+        await openRunSettings(page);
         const runSettings = page.getByRole('dialog', { name: /run settings/i });
         await expect(runSettings).toBeVisible();
         await runSettings.getByRole('button', { name: /^back$/i }).evaluate((element) => {

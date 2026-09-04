@@ -3639,8 +3639,8 @@
     {
       "path": "e2e/gameplay-visual-audit.spec.ts",
       "category": "test",
-      "bytes": 12529,
-      "sha256": "9950a6f0ae4ec8570428db8bec0f4998439895dceabc6cf93e5347282c87cad3"
+      "bytes": 12485,
+      "sha256": "58637027eb5b65732e55caa4e0fdfcb79e66d6d7d88f91239b44de0ad66b5a77"
     },
     {
       "path": "e2e/long-run-feedback-hud.spec.ts",
@@ -3663,8 +3663,8 @@
     {
       "path": "e2e/mobile-layout.spec.ts",
       "category": "test",
-      "bytes": 40081,
-      "sha256": "ebbeb8ea2f4a0a58b73ba72f788de476ac57394c08c4ababd6b839a4141f89e4"
+      "bytes": 39618,
+      "sha256": "206af789ebad09bf5129b2c0e5ca65e81049e98696b8333fde44ae25532d4cad"
     },
     {
       "path": "e2e/mobileTouchHelpers.ts",
@@ -3681,8 +3681,8 @@
     {
       "path": "e2e/overlay-smoke.spec.ts",
       "category": "test",
-      "bytes": 3491,
-      "sha256": "af75fd0664cb6e3697fc4943e3bd548233273ebececdd4eabaad9afb9533a785"
+      "bytes": 3379,
+      "sha256": "75842c74187ce9efae99703a15f81bdbd3a0339b48d41aba9759683ddf028514"
     },
     {
       "path": "e2e/playable-path-interludes.spec.ts",
@@ -3741,8 +3741,8 @@
     {
       "path": "e2e/settings-viewport-matrix.spec.ts",
       "category": "test",
-      "bytes": 4035,
-      "sha256": "cbcd62dd0235e45d2f51e72140566cd40c22b8b23dd87bc88d3044e90faf89b6"
+      "bytes": 3958,
+      "sha256": "6507c4b6e2f8fd4e559fcfbcee2151f924c28c79f67ff53814ef8c9f3d872eb4"
     },
     {
       "path": "e2e/startup-budget.spec.ts",
@@ -3801,8 +3801,8 @@
     {
       "path": "e2e/tileBoardGameFlow.ts",
       "category": "test",
-      "bytes": 8981,
-      "sha256": "4dda48d57aff2ea7abc604b29221034e337d6426e8887eebb1a72d61334f1b61"
+      "bytes": 9917,
+      "sha256": "7e56229f97361767d5b6bbfc688cb1ee7557a2aaf68ded9290dc20476f68f782"
     },
     {
       "path": "e2e/ui-design-reference.spec.ts",

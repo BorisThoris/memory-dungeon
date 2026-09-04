@@ -1,7 +1,7 @@
 import { mkdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { expect, test } from '@playwright/test';
-import { navigateToLevel1PlayPhase } from './tileBoardGameFlow';
+import { navigateToLevel1PlayPhase, openRunSettings } from './tileBoardGameFlow';
 import { openMainMenuFromSave } from './visualScreenHelpers';
 
 const OUT_DIR = join(process.cwd(), 'test-results', 'settings-viewport-matrix');
@@ -66,7 +66,7 @@ test.describe('Settings viewport matrix (screenshots)', () => {
         test(`run settings modal ${w}x${h} (${note})`, async ({ page }) => {
             await page.setViewportSize({ width: w, height: h });
             await navigateToLevel1PlayPhase(page);
-            await page.getByRole('button', { name: /run settings \(toolbar\)/i }).evaluate((el) => (el as HTMLButtonElement).click());
+            await openRunSettings(page);
             const dialog = page.getByRole('dialog', { name: /run settings/i });
             await expect(dialog).toBeVisible();
             const layout = (await dialog.getAttribute('data-settings-layout')) ?? 'unknown';

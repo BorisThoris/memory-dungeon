@@ -3,6 +3,7 @@ import { dispatchTouchSequence, forceCoarsePointerMedia, type TouchDispatchPoint
 import {
     clickHiddenTileRowCol,
     navigateToLevel1PlayPhase,
+    openRunSettings,
     waitForBoardPlayPhase
 } from './tileBoardGameFlow';
 import {
@@ -151,7 +152,9 @@ async function expectCoreGameplayChromeFits(page: Page): Promise<void> {
     await expectLocatorFullyInWindowViewport(page, page.getByTestId('game-hud'), 8);
     await expectLocatorFullyInWindowViewport(page, page.getByTestId('tile-board-frame'), 8);
     await expectLocatorFullyInWindowViewport(page, page.getByTestId('game-action-dock'), 8);
-    for (const name of [/fit board/i, /run settings \(toolbar\)/i, /open codex/i, /open inventory/i, /return to main menu/i]) {
+    // "Run settings (toolbar)" is deliberately absent: the run-shell rebuild moved settings behind
+    // the pause menu, so what has to stay reachable on a small screen is the menu button itself.
+    for (const name of [/fit board/i, /open codex/i, /open inventory/i, /return to main menu/i]) {
         await expectLocatorFullyInWindowViewport(page, page.getByRole('button', { name }), 8);
     }
 }
@@ -342,9 +345,7 @@ test.describe('Mobile layout (renderer)', () => {
             await openPlayablePathFixture(page, 'activeRunWithHazards');
             await expectGameplayReady(page);
 
-            await page.getByRole('button', { name: /run settings \(toolbar\)/i }).evaluate((element) => {
-                (element as HTMLButtonElement).click();
-            });
+            await openRunSettings(page);
             await expectDialogFitsWithPrimaryActions(page, /run settings/i);
             const dialog = page.getByRole('dialog', { name: /run settings/i });
             await expectLocatorFullyInWindowViewport(page, dialog.getByRole('button', { name: /^back$/i }), 8);
@@ -418,9 +419,7 @@ test.describe('Mobile layout (renderer)', () => {
     test('run settings modal footer actions span the dialog width on mobile', async ({ page }) => {
         await page.setViewportSize({ width: 390, height: 844 });
         await navigateToLevel1PlayPhase(page);
-        await page.getByRole('button', { name: /run settings \(toolbar\)/i }).evaluate((element) => {
-            (element as HTMLButtonElement).click();
-        });
+        await openRunSettings(page);
         const dialog = page.getByRole('dialog', { name: /run settings/i });
         await expect(dialog).toBeVisible();
         const save = dialog.getByRole('button', { name: /^save$/i });
@@ -472,9 +471,7 @@ test.describe('Mobile layout (renderer)', () => {
     test('short-height landscape run settings modal collapses to one column with full-width actions', async ({ page }) => {
         await page.setViewportSize({ width: 844, height: 390 });
         await openPlayablePathFixture(page, 'activeRunWithHazards');
-        await page.getByRole('button', { name: /run settings \(toolbar\)/i }).evaluate((element) => {
-            (element as HTMLButtonElement).click();
-        });
+        await openRunSettings(page);
         const dialog = page.getByRole('dialog', { name: /run settings/i });
         await expect(dialog).toBeVisible();
         await expect(dialog).toHaveAttribute('data-settings-layout', 'short-stacked');
@@ -517,9 +514,7 @@ test.describe('Mobile layout (renderer)', () => {
     test('900x700 run settings modal keeps About reset action in the viewport without app scroll', async ({ page }) => {
         await page.setViewportSize({ width: 900, height: 700 });
         await navigateToLevel1PlayPhase(page);
-        await page.getByRole('button', { name: /run settings \(toolbar\)/i }).evaluate((element) => {
-            (element as HTMLButtonElement).click();
-        });
+        await openRunSettings(page);
         const dialog = page.getByRole('dialog', { name: /run settings/i });
         await expect(dialog).toBeVisible();
         await expect(dialog).toHaveAttribute('data-settings-layout', 'short-stacked');
@@ -557,9 +552,7 @@ test.describe('Mobile layout (renderer)', () => {
     test('1280x720 run settings modal stays two-column and keeps actions in viewport', async ({ page }) => {
         await page.setViewportSize({ width: 1280, height: 720 });
         await navigateToLevel1PlayPhase(page);
-        await page.getByRole('button', { name: /run settings \(toolbar\)/i }).evaluate((element) => {
-            (element as HTMLButtonElement).click();
-        });
+        await openRunSettings(page);
         const dialog = page.getByRole('dialog', { name: /run settings/i });
         await expect(dialog).toBeVisible();
         await expect(dialog).toHaveAttribute('data-settings-layout', 'wide-short');

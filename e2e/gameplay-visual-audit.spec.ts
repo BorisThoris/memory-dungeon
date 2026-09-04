@@ -7,6 +7,7 @@ import {
     flipTileAtGridCellKeyboard,
     readFrameHiddenTileCount,
     readTileClientRectAtGrid,
+    openRunSettings,
     waitForBoardPlayPhase
 } from './tileBoardGameFlow';
 import {
@@ -125,7 +126,7 @@ async function captureOverlayStates(page: Page, viewportId: string): Promise<voi
     await pause.getByRole('button', { name: /^resume$/i }).click();
     await expect(pause).toBeHidden({ timeout: 15_000 });
 
-    await page.getByRole('button', { name: /run settings \(toolbar\)/i }).click({ force: true });
+    await openRunSettings(page);
     const runSettings = page.getByRole('dialog', { name: /run settings/i });
     await expect(runSettings).toBeVisible({ timeout: 15_000 });
     await capture(page, viewportId, '06-run-settings-modal');
