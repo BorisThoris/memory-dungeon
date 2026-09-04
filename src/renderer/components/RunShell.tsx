@@ -6,7 +6,8 @@ import { MUTATOR_CATALOG } from '../../shared/mechanics-encyclopedia';
 import { describeRunModeIdentity, runModeIdentityText } from '../../shared/run-mode-identity';
 import { GameplayMenuIcon } from '../ui/gameplayIcons';
 import styles from './RunShell.module.css';
-import { RUN_SHELL_LABELS } from '../copy/runDialogCopy';
+import type { PerfectMemoryStatus } from '../../shared/perfect-memory-status';
+import { PERFECT_MEMORY_COPY, RUN_SHELL_LABELS } from '../copy/runDialogCopy';
 
 /**
  * The HTML layer over the 3D board during a run.
@@ -32,6 +33,8 @@ export interface RunShellProps {
     run: RunState;
     /** Precomputed from the host clock, or null when the gauntlet is off. */
     gauntletRemainingMs: number | null;
+    /** Null when the perfect-clear achievement is not live stakes for this run. */
+    perfectMemory?: PerfectMemoryStatus | null;
     /** The one line under the bar. Feedback wins over the standing objective. */
     feedback?: string | null;
     feedbackPriority?: 'info' | 'error';
@@ -70,6 +73,7 @@ const Stat = ({
 const RunShell = ({
     run,
     gauntletRemainingMs,
+    perfectMemory = null,
     feedback,
     feedbackPriority = 'info',
     onboardingLine,
@@ -96,6 +100,16 @@ const RunShell = ({
                     <span className={styles.modeIdentityName}>{modeIdentity.label}</span>
                     {modeIdentity.detail === null ? null : (
                         <span className={styles.modeIdentityDetail}>{modeIdentity.detail}</span>
+                    )}
+                    {perfectMemory === null ? null : (
+                        <span
+                            className={styles.perfectMemory}
+                            data-state={perfectMemory}
+                            data-testid="hud-perfect-memory"
+                        >
+                            {PERFECT_MEMORY_COPY.label}{' '}
+                            {perfectMemory === 'eligible' ? PERFECT_MEMORY_COPY.eligible : PERFECT_MEMORY_COPY.locked}
+                        </span>
                     )}
                 </p>
                 <div className={styles.stats} role="group" aria-label="Run stats">

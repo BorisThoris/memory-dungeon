@@ -64,6 +64,27 @@
     color: var(--theme-gold-bright);
 }
 
+.perfectMemory {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.08rem 0.42rem;
+    border-radius: var(--ui-radius-pill);
+    border: 1px solid var(--theme-border);
+    color: var(--theme-text-subtle);
+}
+
+.perfectMemory[data-state='eligible'] {
+    color: color-mix(in srgb, var(--theme-success) 82%, var(--theme-text));
+    border-color: color-mix(in srgb, var(--theme-success) 42%, var(--theme-border));
+}
+
+.perfectMemory[data-state='locked'] {
+    opacity: 0.7;
+    text-decoration: line-through;
+}
+
 .modeIdentityDetail {
     font-size: 0.75rem;
     letter-spacing: 0.06em;

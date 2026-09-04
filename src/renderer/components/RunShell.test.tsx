@@ -42,6 +42,24 @@ describe('RunShell', () => {
         expect(identity).toHaveTextContent(/Achievements off/i);
     });
 
+    it('says whether the run can still earn perfect memory, and strikes it out once it cannot', () => {
+        const { rerender } = render(
+            <RunShell gauntletRemainingMs={null} onPause={vi.fn()} perfectMemory="eligible" run={playingRun()} tools={[]} />
+        );
+        expect(screen.getByTestId('hud-perfect-memory')).toHaveTextContent(/Eligible/i);
+
+        rerender(
+            <RunShell gauntletRemainingMs={null} onPause={vi.fn()} perfectMemory="locked" run={playingRun()} tools={[]} />
+        );
+        expect(screen.getByTestId('hud-perfect-memory')).toHaveTextContent(/Locked/i);
+    });
+
+    it('leaves the bar alone when perfect memory is not live stakes for this run', () => {
+        render(<RunShell gauntletRemainingMs={null} onPause={vi.fn()} perfectMemory={null} run={playingRun()} tools={[]} />);
+
+        expect(screen.queryByTestId('hud-perfect-memory')).not.toBeInTheDocument();
+    });
+
     it('keeps the mode identity out of the numbers group, which stays four numbers', () => {
         render(<RunShell gauntletRemainingMs={null} onPause={vi.fn()} run={playingRun()} tools={[]} />);
 

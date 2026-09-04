@@ -24,7 +24,7 @@ import { join } from 'node:path';
  * hud-secondary-stat-drawer, hud-touch-detail-rows, power-teaching-panel. All are HUD and interlude
  * panels removed in the shell rebuild whose specs were never updated.
  */
-export const DEAD_E2E_LOCATOR_BASELINE = 12;
+export const DEAD_E2E_LOCATOR_BASELINE = 11;
 
 const walk = (dir: string, out: string[] = []): string[] => {
     for (const entry of readdirSync(dir)) {

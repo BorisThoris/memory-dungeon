@@ -40,3 +40,13 @@ export const ROUTE_CHOICE_COPY = {
 export const RUN_SHELL_LABELS = {
     pause: 'Pause and open the run menu'
 } as const;
+
+/**
+ * The one achievement a player can lose by pressing a dock button. Stated on the run bar so the
+ * cost is visible at the moment of the decision, not afterwards.
+ */
+export const PERFECT_MEMORY_COPY = {
+    eligible: 'Eligible',
+    label: 'Perfect memory',
+    locked: 'Locked'
+} as const;

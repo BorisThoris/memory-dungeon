@@ -87,6 +87,7 @@ import {
     type BoardTurnResolvedEvent
 } from '../store/gameplayFeedbackAdapter';
 import { getLatestGameplayFeedback } from '../store/gameplayFeedbackAdapter';
+import { perfectMemoryStatus } from '../../shared/perfect-memory-status';
 import RunShell, { type RunShellTool } from './RunShell';
 import { RUN_SHELL_GLYPHS } from './runShellGlyphs';
 import MainMenuBackground from './MainMenuBackground';
@@ -1574,6 +1575,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                         data-html-ui-layer="gameplay-chrome-v2"
                     >
                         <RunShell
+                            perfectMemory={perfectMemoryStatus(run, saveData)}
                             feedback={visualHudAnnouncement}
                             feedbackPriority={actionFeedbackPriority}
                             gauntletRemainingMs={gauntletRemainingMs}

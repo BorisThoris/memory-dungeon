@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2493,
-    "codeFileCount": 961,
-    "exportedSymbolCount": 3514,
+    "trackedFileCount": 2495,
+    "codeFileCount": 963,
+    "exportedSymbolCount": 3517,
     "contentItemCount": 63,
     "mechanicCount": 136,
     "stateFieldCount": 144,
-    "relationshipCount": 10320
+    "relationshipCount": 10332
   },
   "inventory": [
     {
@@ -2320,7 +2320,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 36714,
-      "sha256": "34b8992d9d4fbd3f5545414b6e63d1ef1575e355938dfa0e8e873efb0c594777"
+      "sha256": "81d9cd612a45fff75c69017c4f36c468f6ce5d76a599d9a75410bc30fe0dee09"
     },
     {
       "path": "docs/UI_RETHINK_PLAN.md",
@@ -4528,7 +4528,7 @@
       "path": "scripts/e2e-locator-audit.ts",
       "category": "script",
       "bytes": 5372,
-      "sha256": "d5109c231375499ac19ca1b88f16c2860b070ecb0955f4b5bb5c8ba7220f4a0b"
+      "sha256": "d5d9d87bb2cd91b9fde08c28d7dcfe6236bdf72edc3f918b0f8674ad10d6c3ce"
     },
     {
       "path": "scripts/extract-endproduct-wip-assets.mjs",
@@ -7671,8 +7671,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 91184,
-      "sha256": "5f62f4a4db8332573027fea91eba22aa77d33acf5777fe4af0cbe6d36a6c1341"
+      "bytes": 91337,
+      "sha256": "7747657766f676c7b571961665e9dd839bc8da113a6b946e10ac9ef944ea82c1"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -7869,20 +7869,20 @@
     {
       "path": "src/renderer/components/RunShell.module.css",
       "category": "source",
-      "bytes": 8430,
-      "sha256": "6e0ec6b2baa97e4dae7ca619872973d60c55a1fd7ebc4458f0929c00d15e9fae"
+      "bytes": 9004,
+      "sha256": "ef4a67ef4a8ef5a029bd89404a91983a02aceb88260d5444ed6d883af149a058"
     },
     {
       "path": "src/renderer/components/RunShell.test.tsx",
       "category": "test",
-      "bytes": 4775,
-      "sha256": "70d88109124007a264d115e914916aa0776cceb40a61df29f9a0c3b4e1ce2f57"
+      "bytes": 5701,
+      "sha256": "5190c97f4395769d98b6272302c80208179dcd18cdd1ba59d2c4b5df3b6fe11d"
     },
     {
       "path": "src/renderer/components/RunShell.tsx",
       "category": "source",
-      "bytes": 9458,
-      "sha256": "9f5dd5e58c87cfc9143ac2fc416e34f470f97e29e4f338120732140403544b91"
+      "bytes": 10239,
+      "sha256": "2a0376b927bf73067717dfeb8d99862ae5b572607cfb070e902ea2d54bdbcdb0"
     },
     {
       "path": "src/renderer/components/runShellGlyphs.tsx",
@@ -9015,8 +9015,8 @@
     {
       "path": "src/renderer/copy/runDialogCopy.ts",
       "category": "source",
-      "bytes": 2114,
-      "sha256": "b1f6e48226d8c9569ca19dfcf40adc094fdd6fcad42adeea8e834235cbf808e6"
+      "bytes": 2411,
+      "sha256": "2e0b08cfb716eca8ca1df6bb193ff4d6da914167a1e3c66e0eba81aa3c271122"
     },
     {
       "path": "src/renderer/copy/saveRecoveryNotice.ts",
@@ -11657,6 +11657,18 @@
       "category": "source",
       "bytes": 2114,
       "sha256": "7490c580547db582f87bfdff3f2524ba0d383462a36550c5f0d827ea8347c6b5"
+    },
+    {
+      "path": "src/shared/perfect-memory-status.test.ts",
+      "category": "test",
+      "bytes": 1557,
+      "sha256": "b0f208a5dfca00853e31fcfcde0ec115b4b092e951f78b968075f6ae3c4da81b"
+    },
+    {
+      "path": "src/shared/perfect-memory-status.ts",
+      "category": "source",
+      "bytes": 1084,
+      "sha256": "dd23833164b8e939ed321a333451c36a4d29b13738167d5adeb2e4208c74f824"
     },
     {
       "path": "src/shared/playable-onboarding.test.ts",
@@ -17401,7 +17413,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 2025,
+      "lineCount": 2027,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -17453,6 +17465,7 @@
         "file:src/shared/focusDimmedTileIds.ts",
         "file:src/shared/mechanics-encyclopedia.ts",
         "file:src/shared/objective-rules.ts",
+        "file:src/shared/perfect-memory-status.ts",
         "file:src/shared/playable-onboarding.ts",
         "file:src/shared/route-rules.ts",
         "file:src/shared/run-array-guards.ts",
@@ -17917,7 +17930,7 @@
       "path": "src/renderer/components/RunShell.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 96,
+      "lineCount": 114,
       "imports": [
         "file:src/renderer/components/RunShell.tsx",
         "file:src/shared/contracts.ts",
@@ -17931,13 +17944,14 @@
       "path": "src/renderer/components/RunShell.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 213,
+      "lineCount": 227,
       "imports": [
         "file:src/renderer/copy/runDialogCopy.ts",
         "file:src/renderer/ui/gameplayIcons.tsx",
         "file:src/shared/contracts.ts",
         "file:src/shared/gameplay-feedback-facts.ts",
         "file:src/shared/mechanics-encyclopedia.ts",
+        "file:src/shared/perfect-memory-status.ts",
         "file:src/shared/run-mode-identity.ts",
         "file:src/shared/run-number-guards.ts"
       ],
@@ -21269,12 +21283,13 @@
       "path": "src/renderer/copy/runDialogCopy.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 43,
+      "lineCount": 53,
       "imports": [],
       "exports": [
         "symbol:src/renderer/copy/runDialogCopy.ts#ABANDON_DIALOG_COPY",
         "symbol:src/renderer/copy/runDialogCopy.ts#FLOOR_STATUS_COPY",
         "symbol:src/renderer/copy/runDialogCopy.ts#PAUSE_DIALOG_COPY",
+        "symbol:src/renderer/copy/runDialogCopy.ts#PERFECT_MEMORY_COPY",
         "symbol:src/renderer/copy/runDialogCopy.ts#ROUTE_CHOICE_COPY",
         "symbol:src/renderer/copy/runDialogCopy.ts#RUN_SHELL_LABELS",
         "symbol:src/renderer/copy/runDialogCopy.ts#SHORTCUTS_COPY"
@@ -30139,6 +30154,37 @@
       ]
     },
     {
+      "id": "file:src/shared/perfect-memory-status.test.ts",
+      "path": "src/shared/perfect-memory-status.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 35,
+      "imports": [
+        "file:src/shared/perfect-memory-status.ts",
+        "file:src/shared/run-creation-rules.ts",
+        "file:src/shared/save-data.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/shared/perfect-memory-status.ts",
+      "path": "src/shared/perfect-memory-status.ts",
+      "layer": "shared",
+      "role": "production",
+      "lineCount": 24,
+      "imports": [
+        "file:src/shared/contracts.ts"
+      ],
+      "exports": [
+        "symbol:src/shared/perfect-memory-status.ts#perfectMemoryStatus",
+        "symbol:src/shared/perfect-memory-status.ts#PerfectMemoryStatus"
+      ],
+      "testedBy": [
+        "file:src/shared/perfect-memory-status.test.ts"
+      ]
+    },
+    {
       "id": "file:src/shared/playable-onboarding.test.ts",
       "path": "src/shared/playable-onboarding.test.ts",
       "layer": "shared",
@@ -31547,6 +31593,7 @@
         "file:src/renderer/store/tilePressAudioCues.test.ts",
         "file:src/shared/achievement-reachability.test.ts",
         "file:src/shared/memorize-phase-rules.test.ts",
+        "file:src/shared/perfect-memory-status.test.ts",
         "file:src/shared/relic-pick-advance-rules.test.ts",
         "file:src/shared/run-creation-rules.test.ts",
         "file:src/shared/run-lifecycle-machine.test.ts",
@@ -32321,6 +32368,7 @@
         "file:src/shared/meta-progression.test.ts",
         "file:src/shared/meta-reward-signals.test.ts",
         "file:src/shared/objective-board.test.ts",
+        "file:src/shared/perfect-memory-status.test.ts",
         "file:src/shared/profile-summary.test.ts",
         "file:src/shared/puzzle-import.test.ts",
         "file:src/shared/quest-campaign.test.ts",
@@ -36762,8 +36810,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 2024,
-      "endLine": 2024
+      "line": 2026,
+      "endLine": 2026
     },
     {
       "id": "symbol:src/renderer/components/gameScreenFeedback.ts#DungeonCombatLogRow",
@@ -37034,24 +37082,24 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 212,
-      "endLine": 212
+      "line": 226,
+      "endLine": 226
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellProps",
       "name": "RunShellProps",
       "kind": "interface",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 31,
-      "endLine": 44
+      "line": 32,
+      "endLine": 47
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellTool",
       "name": "RunShellTool",
       "kind": "interface",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 20,
-      "endLine": 29
+      "line": 21,
+      "endLine": 30
     },
     {
       "id": "symbol:src/renderer/components/runShellGlyphs.tsx#RUN_SHELL_GLYPHS",
@@ -41028,6 +41076,14 @@
       "file": "src/renderer/copy/runDialogCopy.ts",
       "line": 7,
       "endLine": 9
+    },
+    {
+      "id": "symbol:src/renderer/copy/runDialogCopy.ts#PERFECT_MEMORY_COPY",
+      "name": "PERFECT_MEMORY_COPY",
+      "kind": "value",
+      "file": "src/renderer/copy/runDialogCopy.ts",
+      "line": 48,
+      "endLine": 52
     },
     {
       "id": "symbol:src/renderer/copy/runDialogCopy.ts#ROUTE_CHOICE_COPY",
@@ -55742,6 +55798,22 @@
       "endLine": 68
     },
     {
+      "id": "symbol:src/shared/perfect-memory-status.ts#perfectMemoryStatus",
+      "name": "perfectMemoryStatus",
+      "kind": "value",
+      "file": "src/shared/perfect-memory-status.ts",
+      "line": 18,
+      "endLine": 23
+    },
+    {
+      "id": "symbol:src/shared/perfect-memory-status.ts#PerfectMemoryStatus",
+      "name": "PerfectMemoryStatus",
+      "kind": "type",
+      "file": "src/shared/perfect-memory-status.ts",
+      "line": 16,
+      "endLine": 16
+    },
+    {
       "id": "symbol:src/shared/playable-onboarding.ts#getPlayableOnboardingPrompt",
       "name": "getPlayableOnboardingPrompt",
       "kind": "value",
@@ -64325,7 +64397,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1270
+          "line": 1271
         }
       ],
       "tests": [
@@ -79295,6 +79367,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/copy/runDialogCopy.ts->symbol:src/renderer/copy/runDialogCopy.ts#PERFECT_MEMORY_COPY",
+      "source": "file:src/renderer/copy/runDialogCopy.ts",
+      "target": "symbol:src/renderer/copy/runDialogCopy.ts#PERFECT_MEMORY_COPY",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/copy/runDialogCopy.ts->symbol:src/renderer/copy/runDialogCopy.ts#ROUTE_CHOICE_COPY",
       "source": "file:src/renderer/copy/runDialogCopy.ts",
       "target": "symbol:src/renderer/copy/runDialogCopy.ts#ROUTE_CHOICE_COPY",
@@ -90329,6 +90407,18 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/perfect-memory-status.ts->symbol:src/shared/perfect-memory-status.ts#perfectMemoryStatus",
+      "source": "file:src/shared/perfect-memory-status.ts",
+      "target": "symbol:src/shared/perfect-memory-status.ts#perfectMemoryStatus",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/perfect-memory-status.ts->symbol:src/shared/perfect-memory-status.ts#PerfectMemoryStatus",
+      "source": "file:src/shared/perfect-memory-status.ts",
+      "target": "symbol:src/shared/perfect-memory-status.ts#PerfectMemoryStatus",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/playable-onboarding.ts->symbol:src/shared/playable-onboarding.ts#getPlayableOnboardingPrompt",
       "source": "file:src/shared/playable-onboarding.ts",
       "target": "symbol:src/shared/playable-onboarding.ts#getPlayableOnboardingPrompt",
@@ -101094,6 +101184,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/GameScreen.tsx->src/shared/perfect-memory-status.ts",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "file:src/shared/perfect-memory-status.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/GameScreen.tsx->src/shared/playable-onboarding.ts",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "file:src/shared/playable-onboarding.ts",
@@ -101787,6 +101883,12 @@
       "id": "imports:src/renderer/components/RunShell.tsx->src/shared/mechanics-encyclopedia.ts",
       "source": "file:src/renderer/components/RunShell.tsx",
       "target": "file:src/shared/mechanics-encyclopedia.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/RunShell.tsx->src/shared/perfect-memory-status.ts",
+      "source": "file:src/renderer/components/RunShell.tsx",
+      "target": "file:src/shared/perfect-memory-status.ts",
       "kind": "imports"
     },
     {
@@ -113637,6 +113739,30 @@
       "id": "imports:src/shared/pairProximityHint.ts->src/shared/turn-resolution.ts",
       "source": "file:src/shared/pairProximityHint.ts",
       "target": "file:src/shared/turn-resolution.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/perfect-memory-status.test.ts->src/shared/perfect-memory-status.ts",
+      "source": "file:src/shared/perfect-memory-status.test.ts",
+      "target": "file:src/shared/perfect-memory-status.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/perfect-memory-status.test.ts->src/shared/run-creation-rules.ts",
+      "source": "file:src/shared/perfect-memory-status.test.ts",
+      "target": "file:src/shared/run-creation-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/perfect-memory-status.test.ts->src/shared/save-data.ts",
+      "source": "file:src/shared/perfect-memory-status.test.ts",
+      "target": "file:src/shared/save-data.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/perfect-memory-status.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/perfect-memory-status.ts",
+      "target": "file:src/shared/contracts.ts",
       "kind": "imports"
     },
     {
@@ -128836,6 +128962,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/perfect-memory-status.ts->file:src/shared/perfect-memory-status.test.ts",
+      "source": "file:src/shared/perfect-memory-status.ts",
+      "target": "file:src/shared/perfect-memory-status.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/playable-onboarding.ts->file:src/renderer/components/PlayableOnboardingHarness.test.tsx",
       "source": "file:src/shared/playable-onboarding.ts",
       "target": "file:src/renderer/components/PlayableOnboardingHarness.test.tsx",
@@ -129337,6 +129469,12 @@
       "id": "tested_by:src/shared/run-creation-rules.ts->file:src/shared/memorize-phase-rules.test.ts",
       "source": "file:src/shared/run-creation-rules.ts",
       "target": "file:src/shared/memorize-phase-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/run-creation-rules.ts->file:src/shared/perfect-memory-status.test.ts",
+      "source": "file:src/shared/run-creation-rules.ts",
+      "target": "file:src/shared/perfect-memory-status.test.ts",
       "kind": "tested_by"
     },
     {
@@ -129871,6 +130009,12 @@
       "id": "tested_by:src/shared/save-data.ts->file:src/shared/objective-board.test.ts",
       "source": "file:src/shared/save-data.ts",
       "target": "file:src/shared/objective-board.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/save-data.ts->file:src/shared/perfect-memory-status.test.ts",
+      "source": "file:src/shared/save-data.ts",
+      "target": "file:src/shared/perfect-memory-status.test.ts",
       "kind": "tested_by"
     },
     {
