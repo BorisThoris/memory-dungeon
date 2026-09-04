@@ -80,6 +80,13 @@ export const RELEASE_CHECKLIST: readonly ReleaseChecklistItem[] = [
         section: 'Steamworks'
     },
     {
+        evidence: 'src/shared/run-history-log.ts',
+        id: 'run-history',
+        label: 'A finished run is recorded, so it survives the next one starting',
+        owner: 'repo',
+        section: 'Steam integration'
+    },
+    {
         evidence: 'src/main/ipc.ts',
         id: 'reveal-save-file',
         label: 'A player can find their own save file from inside the game',

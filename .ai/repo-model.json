@@ -9,7 +9,7 @@
     "contentItemCount": 63,
     "mechanicCount": 136,
     "stateFieldCount": 144,
-    "relationshipCount": 10415
+    "relationshipCount": 10417
   },
   "inventory": [
     {
@@ -2259,8 +2259,8 @@
     {
       "path": "docs/RELEASE_CHECKLIST.md",
       "category": "documentation",
-      "bytes": 5563,
-      "sha256": "cd446b62151e37a1160345b01e57a32dba1ad9268166cb01ff3056325ebf675a"
+      "bytes": 5690,
+      "sha256": "8a5fb484a21a5cef5ff7338750a75f2a4efb78a18214464c6f254df08eced88a"
     },
     {
       "path": "docs/RELIC_ROSTER.md",
@@ -2320,7 +2320,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 36714,
-      "sha256": "81277b37d50966a648772e80ea277b1064d72cb10459a5fb3b21d0bf5df02228"
+      "sha256": "e62e4ee095c086b5e0a9340bad0e3f7bb7735859046d629f86e5a44209179b8f"
     },
     {
       "path": "docs/UI_RETHINK_PLAN.md",
@@ -10893,8 +10893,8 @@
     {
       "path": "src/shared/dungeon-save-migration.ts",
       "category": "source",
-      "bytes": 6760,
-      "sha256": "83b19e32553b9b584501bb44028b99c28c528dddfc4a35eb6c62ee9a27bbf4c6"
+      "bytes": 7370,
+      "sha256": "a4f1975982663f15f8adc28e14d18dda6924204bc5b5b84ae1033bfddb42eec2"
     },
     {
       "path": "src/shared/dungeon-scout-rules.test.ts",
@@ -11859,14 +11859,14 @@
     {
       "path": "src/shared/release-checklist.test.ts",
       "category": "test",
-      "bytes": 17435,
-      "sha256": "8dbe2a8d10c0988bd8a25119a1761b24fca0a79d7484b3e1d4369916f738504b"
+      "bytes": 18429,
+      "sha256": "935ca741a602c603c1e04004ee2d832871b9a98fb9ee7c37af722c9d795693b5"
     },
     {
       "path": "src/shared/release-checklist.ts",
       "category": "source",
-      "bytes": 11591,
-      "sha256": "e98f2dacac352b06aadccf0b18e7cf4421611010cb21a1a17b6920925d82ce5f"
+      "bytes": 11825,
+      "sha256": "4d5c3196bfd5961e60662ed64f293aa40352f450ccd609b83c8c19271c17c68b"
     },
     {
       "path": "src/shared/relic-favor-rules.test.ts",
@@ -12339,8 +12339,8 @@
     {
       "path": "src/shared/save-data.test.ts",
       "category": "test",
-      "bytes": 35763,
-      "sha256": "7bf9962d5e4996d52f5504bdfbcc03d34d6c9bf5264eff7e83b3592295aada04"
+      "bytes": 35824,
+      "sha256": "e6b6f8a31b358ae272c68df575d9ba923b8659d5abb1a08ce5b231d8ade5a7d4"
     },
     {
       "path": "src/shared/save-data.ts",
@@ -27184,7 +27184,7 @@
       "path": "src/shared/dungeon-save-migration.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 170,
+      "lineCount": 186,
       "imports": [],
       "exports": [
         "symbol:src/shared/dungeon-save-migration.ts#DUNGEON_SAVE_MIGRATION_POLICY_VERSION",
@@ -30849,7 +30849,7 @@
       "path": "src/shared/release-checklist.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 332,
+      "lineCount": 352,
       "imports": [
         "file:src/main/crash-log.ts",
         "file:src/main/save-recovery.ts",
@@ -30866,6 +30866,7 @@
         "file:src/shared/ipc-channels.ts",
         "file:src/shared/release-checklist.ts",
         "file:src/shared/rich-presence.ts",
+        "file:src/shared/run-history-log.ts",
         "file:src/shared/save-data.ts",
         "file:src/shared/save-location.ts",
         "file:src/shared/steam-achievement-api-names.ts",
@@ -30879,7 +30880,7 @@
       "path": "src/shared/release-checklist.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 312,
+      "lineCount": 319,
       "imports": [],
       "exports": [
         "symbol:src/shared/release-checklist.ts#RELEASE_CHECKLIST",
@@ -31934,6 +31935,7 @@
         "symbol:src/shared/run-history-log.ts#RunHistoryRecord"
       ],
       "testedBy": [
+        "file:src/shared/release-checklist.test.ts",
         "file:src/shared/run-history-log.test.ts"
       ]
     },
@@ -32565,7 +32567,7 @@
       "path": "src/shared/save-data.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 826,
+      "lineCount": 828,
       "imports": [
         "file:src/shared/builtin-puzzles.ts",
         "file:src/shared/contracts.ts",
@@ -50124,16 +50126,16 @@
       "name": "getDungeonSaveMigrationFieldPolicies",
       "kind": "value",
       "file": "src/shared/dungeon-save-migration.ts",
-      "line": 163,
-      "endLine": 164
+      "line": 179,
+      "endLine": 180
     },
     {
       "id": "symbol:src/shared/dungeon-save-migration.ts#shouldDungeonSaveFieldRequireMigration",
       "name": "shouldDungeonSaveFieldRequireMigration",
       "kind": "value",
       "file": "src/shared/dungeon-save-migration.ts",
-      "line": 166,
-      "endLine": 169
+      "line": 182,
+      "endLine": 185
     },
     {
       "id": "symbol:src/shared/dungeon-scout-rules.ts#applyFindableScoutGlint",
@@ -57029,15 +57031,15 @@
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
       "line": 32,
-      "endLine": 264
+      "endLine": 271
     },
     {
       "id": "symbol:src/shared/release-checklist.ts#releaseChecklistByOwner",
       "name": "releaseChecklistByOwner",
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
-      "line": 270,
-      "endLine": 271
+      "line": 277,
+      "endLine": 278
     },
     {
       "id": "symbol:src/shared/release-checklist.ts#ReleaseChecklistItem",
@@ -57060,16 +57062,16 @@
       "name": "releaseChecklistSections",
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
-      "line": 266,
-      "endLine": 268
+      "line": 273,
+      "endLine": 275
     },
     {
       "id": "symbol:src/shared/release-checklist.ts#renderReleaseChecklistMarkdown",
       "name": "renderReleaseChecklistMarkdown",
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
-      "line": 285,
-      "endLine": 311
+      "line": 292,
+      "endLine": 318
     },
     {
       "id": "symbol:src/shared/relic-favor-rules.ts#gainRelicFavor",
@@ -115024,6 +115026,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/release-checklist.test.ts->src/shared/run-history-log.ts",
+      "source": "file:src/shared/release-checklist.test.ts",
+      "target": "file:src/shared/run-history-log.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/release-checklist.test.ts->src/shared/save-data.ts",
       "source": "file:src/shared/release-checklist.test.ts",
       "target": "file:src/shared/save-data.ts",
@@ -130529,6 +130537,12 @@
       "id": "tested_by:src/shared/run-from-share-key.ts->file:src/shared/run-from-share-key.test.ts",
       "source": "file:src/shared/run-from-share-key.ts",
       "target": "file:src/shared/run-from-share-key.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/run-history-log.ts->file:src/shared/release-checklist.test.ts",
+      "source": "file:src/shared/run-history-log.ts",
+      "target": "file:src/shared/release-checklist.test.ts",
       "kind": "tested_by"
     },
     {

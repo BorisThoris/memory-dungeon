@@ -8,9 +8,25 @@ export interface DungeonSaveMigrationFieldPolicy {
     recoveryPolicy: string;
 }
 
-export const DUNGEON_SAVE_MIGRATION_POLICY_VERSION = 'dng-073-v2';
+export const DUNGEON_SAVE_MIGRATION_POLICY_VERSION = 'dng-073-v3';
 
 const DUNGEON_SAVE_MIGRATION_FIELD_POLICIES: readonly DungeonSaveMigrationFieldPolicy[] = [
+    {
+        field: 'runHistory',
+        scope: 'persisted_save',
+        owner: 'SaveData',
+        migrationRequiredWhenChanged: true,
+        recoveryPolicy:
+            'Entries this build cannot read are dropped and the rest of the save loads; a missing history reads as an empty one.'
+    },
+    {
+        field: 'runHistory.shareKey',
+        scope: 'persisted_save',
+        owner: 'SaveData',
+        migrationRequiredWhenChanged: true,
+        recoveryPolicy:
+            'Keys carry their own md1 prefix, so a later key shape is refused rather than misread; a refused key reads as no key.'
+    },
     {
         field: 'lastRunSummary.runSeed',
         scope: 'persisted_save',

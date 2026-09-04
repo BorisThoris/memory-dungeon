@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { RELEASE_CHECKLIST, releaseChecklistByOwner, renderReleaseChecklistMarkdown } from './release-checklist';
-import { ACHIEVEMENT_IDS } from './save-data';
+import { ACHIEVEMENT_IDS, createDefaultSaveData } from './save-data';
 import { createDailyRun, createNewRun } from './game';
 import { chargeFieldsWithATool } from '../renderer/components/runShellToolCatalog';
 import { STEAM_ACHIEVEMENT_API_NAME } from './steam-achievement-api-names';
@@ -33,6 +33,12 @@ import { reachableFromEntries, SHARED_REACH_EXEMPTIONS } from '../../scripts/sha
 import { findMissingScriptPaths } from '../../scripts/script-paths';
 import { audioNeverThrows, audioNeverThrowsBoolean } from '../renderer/audio/audioSafety';
 import { DESKTOP_IPC_CHANNELS } from './ipc-channels';
+import {
+    appendRunHistory,
+    buildRunHistoryRecord,
+    normalizeRunHistory,
+    RUN_HISTORY_LIMIT
+} from './run-history-log';
 import { SAVE_RECOVERY_COPY } from '../renderer/copy/saveRecoveryNotice';
 import { APP_ERROR_COPY } from '../renderer/copy/appErrorBoundary';
 import { normalizeRendererErrorReport } from './desktop-api-boundary';
@@ -203,6 +209,20 @@ const VERIFIERS: Record<string, () => void> = {
                 throw new Error('decode failed');
             })
         ).toBe(false);
+    },
+    'run-history': () => {
+        // A history that is normalized correctly and never written is the failure to guard here,
+        // so the check is that a finished run produces a record and the cap holds.
+        const run = createNewRun(0);
+        const record = buildRunHistoryRecord(run, '2026-09-04T12:00:00.000Z');
+        expect(record.mode).toBe('Classic Dungeon');
+        expect(record.shareKey).toMatch(/^md1:classic:/u);
+
+        const full = Array.from({ length: RUN_HISTORY_LIMIT }, () => record);
+        const appended = appendRunHistory({ ...createDefaultSaveData(), runHistory: full }, record);
+        expect(appended).toHaveLength(RUN_HISTORY_LIMIT);
+        // Junk is dropped rather than costing the player their profile.
+        expect(normalizeRunHistory(['nonsense', null, record])).toEqual([record]);
     },
     'reveal-save-file': () => {
         // Export, import and backup are all "copy the file yourself", which needs a way to find it.

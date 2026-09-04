@@ -783,8 +783,10 @@ describe('save normalization', () => {
         const policies = getDungeonSaveMigrationFieldPolicies();
         const fields = policies.map((policy) => policy.field);
 
-        expect(DUNGEON_SAVE_MIGRATION_POLICY_VERSION).toBe('dng-073-v2');
+        expect(DUNGEON_SAVE_MIGRATION_POLICY_VERSION).toBe('dng-073-v3');
         expect(fields).toEqual(expect.arrayContaining([
+            'runHistory',
+            'runHistory.shareKey',
             'lastRunSummary.runSeed',
             'lastRunSummary.runRulesVersion',
             'lastRunSummary.gameMode',
