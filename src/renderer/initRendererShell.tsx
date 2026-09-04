@@ -3,6 +3,8 @@ import '@cross-repo-libs/notifications/styles.css';
 import { StrictMode } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 import App from './App';
+import { AppErrorBoundary } from './components/AppErrorBoundary';
+import { desktopClient } from './desktop-client';
 import { PlatformTiltProvider } from './platformTilt/PlatformTiltProvider';
 import { forEachRendererThemeCssVar } from './styles/theme';
 import './styles/global.css';
@@ -18,6 +20,18 @@ const mountRendererApp = (rootElement: HTMLElement): Root => {
     const root = createRoot(rootElement);
     root.render(
         <StrictMode>
+            {/*
+             * Outside everything, including the tilt provider and the notification host: a throw in
+             * any of them used to unmount the whole tree and leave an empty window behind.
+             */}
+            <AppErrorBoundary
+                report={(report) => {
+                    void desktopClient.reportRendererError(report);
+                }}
+                reload={() => {
+                    window.location.reload();
+                }}
+            >
             <PlatformTiltProvider>
                 <NotificationHost
                     labels={{
@@ -28,6 +42,7 @@ const mountRendererApp = (rootElement: HTMLElement): Root => {
                     <App />
                 </NotificationHost>
             </PlatformTiltProvider>
+            </AppErrorBoundary>
         </StrictMode>
     );
     return root;

@@ -1,7 +1,11 @@
 import { app, ipcMain } from 'electron';
 import type { BrowserWindow, IpcMainInvokeEvent } from 'electron';
 import type { DisplayMode, RichPresenceState, SaveData, Settings } from '../shared/contracts';
-import { normalizeUnknownAchievementId, normalizeUnknownDisplayMode } from '../shared/desktop-api-boundary';
+import {
+    normalizeRendererErrorReport,
+    normalizeUnknownAchievementId,
+    normalizeUnknownDisplayMode
+} from '../shared/desktop-api-boundary';
 import { IPC_CHANNELS, IPC_CHANNELS_LEGACY_DESKTOP } from '../shared/ipc-channels';
 import type { PersistenceService } from './persistence';
 import type { SteamAdapter } from './steam';
@@ -10,10 +14,16 @@ const applyDisplayMode = (window: BrowserWindow, mode: DisplayMode): void => {
     window.setFullScreen(mode === 'fullscreen');
 };
 
+export interface RendererErrorSink {
+    record: (kind: 'renderer_error', error: unknown, detail?: string | null) => void;
+}
+
 export const registerIpcHandlers = (
     getMainWindow: () => BrowserWindow | null,
     persistence: PersistenceService,
-    steamAdapter: SteamAdapter
+    steamAdapter: SteamAdapter,
+    /** Where a caught render error is written down. Optional so existing callers keep working. */
+    rendererErrorSink: RendererErrorSink | null = null
 ): void => {
     const register = (channel: string, handler: Parameters<typeof ipcMain.handle>[1]): void => {
         ipcMain.handle(channel, handler);
@@ -115,6 +125,21 @@ export const registerIpcHandlers = (
     };
     register(IPC_CHANNELS.saveRecoverUnreadable, recoverUnreadableSave);
     register(IPC_CHANNELS_LEGACY_DESKTOP.recoverUnreadableSave, recoverUnreadableSave);
+
+    const reportRendererError = (_event: IpcMainInvokeEvent, rawReport: unknown): void => {
+        try {
+            const report = normalizeRendererErrorReport(rawReport);
+            // Rebuilt as an Error so the crash log formats and redacts it like every other crash.
+            const error = new Error(report.message);
+            error.stack = report.stack ?? error.stack;
+            rendererErrorSink?.record('renderer_error', error, report.componentStack);
+        } catch (error) {
+            // A failure to write the report must not take out the screen apologising for one.
+            console.error('[ipc] report-renderer-error failed', error);
+        }
+    };
+    register(IPC_CHANNELS.diagnosticsReportRendererError, reportRendererError);
+    register(IPC_CHANNELS_LEGACY_DESKTOP.reportRendererError, reportRendererError);
 
     const unlockAchievement = (_event: IpcMainInvokeEvent, rawAchievementId: unknown) => {
         try {

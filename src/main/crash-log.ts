@@ -15,6 +15,12 @@ export type CrashKind =
     | 'main_uncaught'
     | 'main_unhandled_rejection'
     | 'renderer_gone'
+    /**
+     * A React render threw and the top-level boundary caught it. Distinct from `renderer_gone`:
+     * the process is alive and the window is still open, which is exactly why this one would
+     * otherwise leave no trace at all — the player sees a dead screen and nothing is written down.
+     */
+    | 'renderer_error'
     | 'child_process_gone'
     | 'startup_fatal';
 

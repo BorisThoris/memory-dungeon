@@ -197,7 +197,7 @@ const ensureServicesAndIpc = (): void => {
         });
     }
     if (!ipcHandlersRegistered && persistence && steamAdapter) {
-        registerIpcHandlers(() => mainWindow, persistence, steamAdapter);
+        registerIpcHandlers(() => mainWindow, persistence, steamAdapter, crashReporter);
         ipcHandlersRegistered = true;
     }
 };

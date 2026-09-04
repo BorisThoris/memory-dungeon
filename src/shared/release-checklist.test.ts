@@ -22,6 +22,8 @@ import {
     REACHABILITY_EXEMPTIONS
 } from '../../scripts/store-action-reachability';
 import { SAVE_RECOVERY_COPY } from '../renderer/copy/saveRecoveryNotice';
+import { APP_ERROR_COPY } from '../renderer/copy/appErrorBoundary';
+import { normalizeRendererErrorReport } from './desktop-api-boundary';
 
 /**
  * One verifier per `repo` row. The point of the pairing is the assertion below that the two sets
@@ -103,6 +105,13 @@ const VERIFIERS: Record<string, () => void> = {
 
         expect(findUnreachableMembers(members, ['state.shown'])).toEqual([{ kind: 'state', name: 'hidden' }]);
         expect(Object.keys(REACHABILITY_EXEMPTIONS).length).toBeGreaterThan(0);
+    },
+    'renderer-crash-visible': () => {
+        // The process survives a render error, so `renderer_gone` never fires and nothing is
+        // written; without a boundary the player just gets an empty window.
+        expect(APP_ERROR_COPY.title).toMatch(/\S/);
+        expect(APP_ERROR_COPY.action).toMatch(/\S/);
+        expect(normalizeRendererErrorReport('nonsense').message.length).toBeGreaterThan(0);
     },
     'save-read-recovery': () => {
         // A save the game refuses is usually a *newer* save arriving through Steam Cloud from a

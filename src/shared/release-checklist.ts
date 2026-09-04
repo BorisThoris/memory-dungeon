@@ -115,6 +115,13 @@ export const RELEASE_CHECKLIST: readonly ReleaseChecklistItem[] = [
         section: 'Diagnostics'
     },
     {
+        evidence: 'src/renderer/components/AppErrorBoundary.tsx',
+        id: 'renderer-crash-visible',
+        label: 'A screen that fails to draw shows a message and gets written down, not a blank window',
+        owner: 'repo',
+        section: 'Diagnostics'
+    },
+    {
         evidence: 'src/main/save-recovery.ts',
         id: 'save-read-recovery',
         label: 'A save this build cannot read is survivable, and the player is told and given a way out',

@@ -83,6 +83,39 @@ describe('registerIpcHandlers', () => {
         expect(unlockAchievement).toHaveBeenCalledWith('ACH_FIRST_CLEAR');
     });
 
+    it('writes a caught render error to the crash log', () => {
+        const record = vi.fn();
+        registerIpcHandlers(
+            () => null,
+            {} as PersistenceService,
+            { isConnected: () => false, setRichPresence: () => {}, unlockAchievement: () => ({ ok: false, reason: 'not_connected' }) } satisfies SteamAdapter,
+            { record }
+        );
+        const handler = electronMocks.handlers.get(IPC_CHANNELS.diagnosticsReportRendererError);
+
+        handler?.({}, { componentStack: '\n    at ShopScreen', message: 'boom', stack: 'Error: boom' });
+
+        // The process survives a render error, so renderer_gone never fires; this is the only
+        // record such a failure leaves.
+        expect(record).toHaveBeenCalledWith('renderer_error', expect.any(Error), '\n    at ShopScreen');
+        expect((record.mock.calls[0]?.[1] as Error).message).toBe('boom');
+    });
+
+    it('does not let a malformed report take out the handler', () => {
+        const record = vi.fn();
+        registerIpcHandlers(
+            () => null,
+            {} as PersistenceService,
+            { isConnected: () => false, setRichPresence: () => {}, unlockAchievement: () => ({ ok: false, reason: 'not_connected' }) } satisfies SteamAdapter,
+            { record }
+        );
+        const handler = electronMocks.handlers.get(IPC_CHANNELS.diagnosticsReportRendererError);
+
+        // Whatever state produced the crash also produced this payload.
+        expect(() => handler?.({}, 'not a report')).not.toThrow();
+        expect(record).toHaveBeenCalledTimes(1);
+    });
+
     it('registers every canonical and legacy desktop channel exactly once', () => {
         registerIpcHandlers(
             () => null,

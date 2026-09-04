@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2475,
-    "codeFileCount": 949,
-    "exportedSymbolCount": 3513,
+    "trackedFileCount": 2480,
+    "codeFileCount": 953,
+    "exportedSymbolCount": 3518,
     "contentItemCount": 63,
     "mechanicCount": 136,
     "stateFieldCount": 144,
-    "relationshipCount": 10282
+    "relationshipCount": 10300
   },
   "inventory": [
     {
@@ -2259,8 +2259,8 @@
     {
       "path": "docs/RELEASE_CHECKLIST.md",
       "category": "documentation",
-      "bytes": 4316,
-      "sha256": "446f944d2e4009fcaf9cf6139c16e8a11e7dea456621e23d807b0db8f2d99fb2"
+      "bytes": 4479,
+      "sha256": "084dfbfa73ced22b03bf62c6c144c74d930ba6959b814f62a95eb007eede94aa"
     },
     {
       "path": "docs/RELIC_ROSTER.md",
@@ -2320,7 +2320,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 36714,
-      "sha256": "cfdb605217744e5a90a1806f73e440640d2e681a2d440ae8f483868977177517"
+      "sha256": "24697aaf2e208f700725ba2422532b0bf6b28c01ce751df70490a3113e0ff94f"
     },
     {
       "path": "docs/UI_RETHINK_PLAN.md",
@@ -4701,8 +4701,8 @@
     {
       "path": "src/main/crash-log.ts",
       "category": "source",
-      "bytes": 5760,
-      "sha256": "6aacf31da115fc635c623aaa5d8551525c8727a3a206f7e47f0e9c7161c3a2d9"
+      "bytes": 6092,
+      "sha256": "8a641509ea19813d874306fd725a181f0fc4f7e1ec7864b98dbaa6a66ef28992"
     },
     {
       "path": "src/main/crash-reporter.test.ts",
@@ -4743,20 +4743,20 @@
     {
       "path": "src/main/index.ts",
       "category": "source",
-      "bytes": 9568,
-      "sha256": "ac3c32b0a218d5909c640d49ab9dbff86d5e9742d55d0fda3d41658df41efdc2"
+      "bytes": 9583,
+      "sha256": "cef420d80e8a730014ae65f8670474a7c4ffa1344b1e4be2b3d8e27f71fb81b6"
     },
     {
       "path": "src/main/ipc.test.ts",
       "category": "test",
-      "bytes": 4209,
-      "sha256": "64aeea49b62e3c548aac53904b5b258e37e2e81e354b718db21fab1af14d2843"
+      "bytes": 5801,
+      "sha256": "bab534849368bde3a792b10b4f5107d0fe5725f8d0c13655663f189c34f96a17"
     },
     {
       "path": "src/main/ipc.ts",
       "category": "source",
-      "bytes": 6220,
-      "sha256": "4791047700df70256fccc4d2d9495a6a99b8faff430ab8de50eb58843c7ade22"
+      "bytes": 7386,
+      "sha256": "8478359d9b27bb829528e2817e783ab520a5088855885e52855a47389ab8cd82"
     },
     {
       "path": "src/main/persistence-write-error.test.ts",
@@ -4881,8 +4881,8 @@
     {
       "path": "src/preload/index.ts",
       "category": "source",
-      "bytes": 1158,
-      "sha256": "531c11d18b9084a917d75cc97e7dc7da9d58140799708ff324577678bbebe496"
+      "bytes": 1265,
+      "sha256": "b65d3c52e0754c0ff48f45dea0f75919fafd0118af2a254a6ea7c7f6016cf3cf"
     },
     {
       "path": "src/renderer/a11y/focusables.test.ts",
@@ -7417,6 +7417,24 @@
       "sha256": "54a4caffb22bb7b04769c67b31a6f2a4b38299cea8f23d332cb86a3c1ac9efed"
     },
     {
+      "path": "src/renderer/components/AppErrorBoundary.module.css",
+      "category": "source",
+      "bytes": 1076,
+      "sha256": "b079c90eb907b41e17ae9bbc4101c806fff95a820b94464c81a13f0a3a4d433d"
+    },
+    {
+      "path": "src/renderer/components/AppErrorBoundary.test.tsx",
+      "category": "test",
+      "bytes": 3690,
+      "sha256": "b6aeb1911e9f9f3ed4345b06a8ca6f88b9d3bee41d4b3967be0e480b1d052f4b"
+    },
+    {
+      "path": "src/renderer/components/AppErrorBoundary.tsx",
+      "category": "source",
+      "bytes": 2788,
+      "sha256": "df48f8bbfb972d5bcfc7320ebd96589830890e4dd6a147b5747c73fdfbf78489"
+    },
+    {
       "path": "src/renderer/components/boardRuneFieldMaterial.ts",
       "category": "source",
       "bytes": 1977,
@@ -8809,6 +8827,12 @@
       "sha256": "eea50648d73725279629ed2c6a21a2e7e9c6f449d5c30b726e8bff709e885e21"
     },
     {
+      "path": "src/renderer/copy/appErrorBoundary.ts",
+      "category": "source",
+      "bytes": 887,
+      "sha256": "2f399e2581c978548dda48f0ddb90d2c87c9f6096f31272b5d1746d1342bcfb3"
+    },
+    {
       "path": "src/renderer/copy/boardPowerCopy.ts",
       "category": "source",
       "bytes": 1889,
@@ -8997,8 +9021,8 @@
     {
       "path": "src/renderer/desktop-client.ts",
       "category": "source",
-      "bytes": 3520,
-      "sha256": "5b45bd8e92d362f0b6c3ca61a217899a53f96c336f488cb24b8093907ad7ae7d"
+      "bytes": 3768,
+      "sha256": "cc3747df4be54fc2fc884a886eefc63bbf5459a43e1af6fccd1a79b0bc8e4b3a"
     },
     {
       "path": "src/renderer/desktop.d.ts",
@@ -9267,8 +9291,8 @@
     {
       "path": "src/renderer/initRendererShell.tsx",
       "category": "source",
-      "bytes": 1848,
-      "sha256": "7b851aa1b3ab9ea8d55f600d0d23b15d35e4e205323199c222bc3bda03494238"
+      "bytes": 2488,
+      "sha256": "9ff22dbc332c3eafb5d7b1a1b1a10c4dac7276ccac62bd577a4a0de54892353f"
     },
     {
       "path": "src/renderer/input/gamepadNavigation.test.ts",
@@ -10395,8 +10419,8 @@
     {
       "path": "src/shared/contracts.ts",
       "category": "source",
-      "bytes": 46329,
-      "sha256": "fc578cc5d6700d90829688ea0956fa256cfd9273f59e95ad7385458905795f2f"
+      "bytes": 46935,
+      "sha256": "47f614d58ff68de9099f1464ab899ce2c6b6294dddff9d04eb72711d882355dc"
     },
     {
       "path": "src/shared/copy-locality.test.ts",
@@ -10467,8 +10491,8 @@
     {
       "path": "src/shared/desktop-api-boundary.ts",
       "category": "source",
-      "bytes": 1438,
-      "sha256": "adfa682515153434b1f40edd7fbdec8001fa36bf407311928ea0874260fe700a"
+      "bytes": 2558,
+      "sha256": "e61f7de44fbe3acb0324f0ef7fa1f61a82b4223046a1c44c4c0cd900d96f489d"
     },
     {
       "path": "src/shared/difficulty-profile.test.ts",
@@ -11259,8 +11283,8 @@
     {
       "path": "src/shared/ipc-channels.ts",
       "category": "source",
-      "bytes": 2069,
-      "sha256": "94d1fb615c90a4ca6344746f12f65fa83a88fc149578b9829c06cb7680c658b4"
+      "bytes": 2270,
+      "sha256": "5ba1a943cf7a33fabc74df3d620ab3da8c954d0c5f833c5a7a500ed9248ae40d"
     },
     {
       "path": "src/shared/level-clear-rules.test.ts",
@@ -11709,14 +11733,14 @@
     {
       "path": "src/shared/release-checklist.test.ts",
       "category": "test",
-      "bytes": 11338,
-      "sha256": "2b1058eb683351f032c5d187663bea95637a7f61b60691905df9dcd0e135a0e3"
+      "bytes": 11890,
+      "sha256": "638dda2486ca19ed8dfd4de1f5e1e8bc29d8f84a9669f08507e39814d4b50918"
     },
     {
       "path": "src/shared/release-checklist.ts",
       "category": "source",
-      "bytes": 9457,
-      "sha256": "677646589be664d87c61d3f839ad53fdac15a2209625896f8451289805930efd"
+      "bytes": 9732,
+      "sha256": "5762c7475bb5e808612287705e7cd449f8cdd8a737c389350b685dbf5cb3e1ed"
     },
     {
       "path": "src/shared/relic-favor-rules.test.ts",
@@ -11801,6 +11825,12 @@
       "category": "test",
       "bytes": 3166,
       "sha256": "1e2b69ff91e0751d3f5496e5c5c0508693f56a9e942522a0b677f3d30a697ddf"
+    },
+    {
+      "path": "src/shared/renderer-error-report.test.ts",
+      "category": "test",
+      "bytes": 1787,
+      "sha256": "7cfcff32d14ddf94d8495058039b453371801f8884d478e17dca0043d4462745"
     },
     {
       "path": "src/shared/rest-shrine.test.ts",
@@ -14893,7 +14923,7 @@
       "path": "src/main/crash-log.ts",
       "layer": "main",
       "role": "production",
-      "lineCount": 142,
+      "lineCount": 148,
       "imports": [],
       "exports": [
         "symbol:src/main/crash-log.ts#CRASH_LOG_DIR_NAME",
@@ -15034,7 +15064,7 @@
       "path": "src/main/ipc.test.ts",
       "layer": "main",
       "role": "test",
-      "lineCount": 103,
+      "lineCount": 136,
       "imports": [
         "file:src/main/ipc.ts",
         "file:src/main/persistence.ts",
@@ -15050,7 +15080,7 @@
       "path": "src/main/ipc.ts",
       "layer": "main",
       "role": "production",
-      "lineCount": 157,
+      "lineCount": 182,
       "imports": [
         "file:src/main/persistence.ts",
         "file:src/main/steam.ts",
@@ -15059,7 +15089,8 @@
         "file:src/shared/ipc-channels.ts"
       ],
       "exports": [
-        "symbol:src/main/ipc.ts#registerIpcHandlers"
+        "symbol:src/main/ipc.ts#registerIpcHandlers",
+        "symbol:src/main/ipc.ts#RendererErrorSink"
       ],
       "testedBy": [
         "file:src/main/ipc.test.ts"
@@ -15382,7 +15413,7 @@
       "path": "src/preload/index.ts",
       "layer": "preload",
       "role": "production",
-      "lineCount": 19,
+      "lineCount": 20,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/ipc-channels.ts"
@@ -16751,6 +16782,35 @@
         "symbol:src/renderer/components/AnimatedCardBackSvgLayers.tsx#AnimatedCardBackSvgLayers"
       ],
       "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/AppErrorBoundary.test.tsx",
+      "path": "src/renderer/components/AppErrorBoundary.test.tsx",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 106,
+      "imports": [
+        "file:src/renderer/components/AppErrorBoundary.tsx",
+        "file:src/renderer/copy/appErrorBoundary.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/AppErrorBoundary.tsx",
+      "path": "src/renderer/components/AppErrorBoundary.tsx",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 72,
+      "imports": [
+        "file:src/renderer/copy/appErrorBoundary.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/AppErrorBoundary.tsx#AppErrorBoundary"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/AppErrorBoundary.test.tsx"
+      ]
     },
     {
       "id": "file:src/renderer/components/boardRuneFieldMaterial.ts",
@@ -20694,6 +20754,21 @@
       ]
     },
     {
+      "id": "file:src/renderer/copy/appErrorBoundary.ts",
+      "path": "src/renderer/copy/appErrorBoundary.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 17,
+      "imports": [],
+      "exports": [
+        "symbol:src/renderer/copy/appErrorBoundary.ts#APP_ERROR_COPY"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/AppErrorBoundary.test.tsx",
+        "file:src/shared/release-checklist.test.ts"
+      ]
+    },
+    {
       "id": "file:src/renderer/copy/boardPowerCopy.ts",
       "path": "src/renderer/copy/boardPowerCopy.ts",
       "layer": "renderer",
@@ -21213,7 +21288,7 @@
       "path": "src/renderer/desktop-client.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 107,
+      "lineCount": 111,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/save-data.ts"
@@ -21815,9 +21890,11 @@
       "path": "src/renderer/initRendererShell.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 50,
+      "lineCount": 65,
       "imports": [
         "file:src/renderer/App.tsx",
+        "file:src/renderer/components/AppErrorBoundary.tsx",
+        "file:src/renderer/desktop-client.ts",
         "file:src/renderer/platformTilt/PlatformTiltProvider.tsx",
         "file:src/renderer/styles/theme.ts"
       ],
@@ -25191,7 +25268,7 @@
       "path": "src/shared/contracts.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1201,
+      "lineCount": 1214,
       "imports": [],
       "exports": [
         "symbol:src/shared/contracts.ts#AchievementId",
@@ -25304,6 +25381,7 @@
         "symbol:src/shared/contracts.ts#RelicOfferServiceId",
         "symbol:src/shared/contracts.ts#RelicOfferServiceState",
         "symbol:src/shared/contracts.ts#RelicOfferState",
+        "symbol:src/shared/contracts.ts#RendererErrorReport",
         "symbol:src/shared/contracts.ts#RESOLVE_DELAY_MULTIPLIER_MIN",
         "symbol:src/shared/contracts.ts#ResumableRunStatus",
         "symbol:src/shared/contracts.ts#RewardPerkId",
@@ -25754,19 +25832,22 @@
       "path": "src/shared/desktop-api-boundary.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 36,
+      "lineCount": 66,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/save-data.ts"
       ],
       "exports": [
+        "symbol:src/shared/desktop-api-boundary.ts#normalizeRendererErrorReport",
         "symbol:src/shared/desktop-api-boundary.ts#normalizeUnknownAchievementId",
         "symbol:src/shared/desktop-api-boundary.ts#normalizeUnknownAchievementUnlockResult",
         "symbol:src/shared/desktop-api-boundary.ts#normalizeUnknownDisplayMode",
         "symbol:src/shared/desktop-api-boundary.ts#normalizeUnknownSteamConnected"
       ],
       "testedBy": [
-        "file:src/shared/desktop-api-boundary.test.ts"
+        "file:src/shared/desktop-api-boundary.test.ts",
+        "file:src/shared/release-checklist.test.ts",
+        "file:src/shared/renderer-error-report.test.ts"
       ]
     },
     {
@@ -28862,7 +28943,7 @@
       "path": "src/shared/ipc-channels.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 47,
+      "lineCount": 50,
       "imports": [
         "file:src/shared/contracts.ts"
       ],
@@ -30392,13 +30473,15 @@
       "path": "src/shared/release-checklist.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 217,
+      "lineCount": 226,
       "imports": [
         "file:src/main/crash-log.ts",
         "file:src/main/save-recovery.ts",
         "file:src/main/window-bounds.ts",
         "file:src/renderer/components/runShellToolCatalog.ts",
+        "file:src/renderer/copy/appErrorBoundary.ts",
         "file:src/renderer/copy/saveRecoveryNotice.ts",
+        "file:src/shared/desktop-api-boundary.ts",
         "file:src/shared/game.ts",
         "file:src/shared/gamepad-input.ts",
         "file:src/shared/release-checklist.ts",
@@ -30416,7 +30499,7 @@
       "path": "src/shared/release-checklist.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 249,
+      "lineCount": 256,
       "imports": [],
       "exports": [
         "symbol:src/shared/release-checklist.ts#RELEASE_CHECKLIST",
@@ -30740,6 +30823,18 @@
       "role": "test",
       "lineCount": 91,
       "imports": [],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/shared/renderer-error-report.test.ts",
+      "path": "src/shared/renderer-error-report.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 45,
+      "imports": [
+        "file:src/shared/desktop-api-boundary.ts"
+      ],
       "exports": [],
       "testedBy": []
     },
@@ -33847,16 +33942,16 @@
       "name": "CRASH_LOG_DIR_NAME",
       "kind": "value",
       "file": "src/main/crash-log.ts",
-      "line": 40,
-      "endLine": 40
+      "line": 46,
+      "endLine": 46
     },
     {
       "id": "symbol:src/main/crash-log.ts#CRASH_LOG_KEEP_COUNT",
       "name": "CRASH_LOG_KEEP_COUNT",
       "kind": "value",
       "file": "src/main/crash-log.ts",
-      "line": 38,
-      "endLine": 38
+      "line": 44,
+      "endLine": 44
     },
     {
       "id": "symbol:src/main/crash-log.ts#CrashKind",
@@ -33864,79 +33959,79 @@
       "kind": "type",
       "file": "src/main/crash-log.ts",
       "line": 14,
-      "endLine": 19
+      "endLine": 25
     },
     {
       "id": "symbol:src/main/crash-log.ts#crashLogFileName",
       "name": "crashLogFileName",
       "kind": "value",
       "file": "src/main/crash-log.ts",
-      "line": 118,
-      "endLine": 119
+      "line": 124,
+      "endLine": 125
     },
     {
       "id": "symbol:src/main/crash-log.ts#CrashRecord",
       "name": "CrashRecord",
       "kind": "interface",
       "file": "src/main/crash-log.ts",
-      "line": 21,
-      "endLine": 30
+      "line": 27,
+      "endLine": 36
     },
     {
       "id": "symbol:src/main/crash-log.ts#describeCrash",
       "name": "describeCrash",
       "kind": "value",
       "file": "src/main/crash-log.ts",
-      "line": 88,
-      "endLine": 100
+      "line": 94,
+      "endLine": 106
     },
     {
       "id": "symbol:src/main/crash-log.ts#DescribeCrashContext",
       "name": "DescribeCrashContext",
       "kind": "interface",
       "file": "src/main/crash-log.ts",
-      "line": 79,
-      "endLine": 85
+      "line": 85,
+      "endLine": 91
     },
     {
       "id": "symbol:src/main/crash-log.ts#formatCrashRecord",
       "name": "formatCrashRecord",
       "kind": "value",
       "file": "src/main/crash-log.ts",
-      "line": 103,
-      "endLine": 115
+      "line": 109,
+      "endLine": 121
     },
     {
       "id": "symbol:src/main/crash-log.ts#PriorCrashSummary",
       "name": "PriorCrashSummary",
       "kind": "interface",
       "file": "src/main/crash-log.ts",
-      "line": 133,
-      "endLine": 136
+      "line": 139,
+      "endLine": 142
     },
     {
       "id": "symbol:src/main/crash-log.ts#pruneCrashLogs",
       "name": "pruneCrashLogs",
       "kind": "value",
       "file": "src/main/crash-log.ts",
-      "line": 127,
-      "endLine": 130
+      "line": 133,
+      "endLine": 136
     },
     {
       "id": "symbol:src/main/crash-log.ts#redactUserPaths",
       "name": "redactUserPaths",
       "kind": "value",
       "file": "src/main/crash-log.ts",
-      "line": 50,
-      "endLine": 63
+      "line": 56,
+      "endLine": 69
     },
     {
       "id": "symbol:src/main/crash-log.ts#summarizePriorCrashes",
       "name": "summarizePriorCrashes",
       "kind": "value",
       "file": "src/main/crash-log.ts",
-      "line": 138,
-      "endLine": 141
+      "line": 144,
+      "endLine": 147
     },
     {
       "id": "symbol:src/main/crash-reporter.ts#CrashHookTarget",
@@ -34039,8 +34134,16 @@
       "name": "registerIpcHandlers",
       "kind": "value",
       "file": "src/main/ipc.ts",
-      "line": 13,
-      "endLine": 156
+      "line": 21,
+      "endLine": 181
+    },
+    {
+      "id": "symbol:src/main/ipc.ts#RendererErrorSink",
+      "name": "RendererErrorSink",
+      "kind": "interface",
+      "file": "src/main/ipc.ts",
+      "line": 17,
+      "endLine": 19
     },
     {
       "id": "symbol:src/main/persistence.ts#PersistenceService",
@@ -36137,6 +36240,14 @@
       "file": "src/renderer/components/AnimatedCardBackSvgLayers.tsx",
       "line": 32,
       "endLine": 116
+    },
+    {
+      "id": "symbol:src/renderer/components/AppErrorBoundary.tsx#AppErrorBoundary",
+      "name": "AppErrorBoundary",
+      "kind": "class",
+      "file": "src/renderer/components/AppErrorBoundary.tsx",
+      "line": 28,
+      "endLine": 71
     },
     {
       "id": "symbol:src/renderer/components/boardRuneFieldMaterial.ts#clampBoardRuneFieldDriverUniforms",
@@ -40163,6 +40274,14 @@
       "endLine": 77
     },
     {
+      "id": "symbol:src/renderer/copy/appErrorBoundary.ts#APP_ERROR_COPY",
+      "name": "APP_ERROR_COPY",
+      "kind": "value",
+      "file": "src/renderer/copy/appErrorBoundary.ts",
+      "line": 9,
+      "endLine": 16
+    },
+    {
       "id": "symbol:src/renderer/copy/boardPowerCopy.ts#BOARD_SHUFFLE_COPY",
       "name": "BOARD_SHUFFLE_COPY",
       "kind": "value",
@@ -40959,8 +41078,8 @@
       "name": "desktopClient",
       "kind": "value",
       "file": "src/renderer/desktop-client.ts",
-      "line": 106,
-      "endLine": 106
+      "line": 110,
+      "endLine": 110
     },
     {
       "id": "symbol:src/renderer/dev/BlueprintExplorer.tsx#default",
@@ -41335,16 +41454,16 @@
       "name": "bootstrapWebRenderer",
       "kind": "value",
       "file": "src/renderer/initRendererShell.tsx",
-      "line": 45,
-      "endLine": 49
+      "line": 60,
+      "endLine": 64
     },
     {
       "id": "symbol:src/renderer/initRendererShell.tsx#getRendererRootElement",
       "name": "getRendererRootElement",
       "kind": "value",
       "file": "src/renderer/initRendererShell.tsx",
-      "line": 36,
-      "endLine": 42
+      "line": 51,
+      "endLine": 57
     },
     {
       "id": "symbol:src/renderer/input/gamepadNavigation.ts#applyGamepadAction",
@@ -46079,8 +46198,8 @@
       "name": "DesktopApi",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1184,
-      "endLine": 1200
+      "line": 1192,
+      "endLine": 1213
     },
     {
       "id": "symbol:src/shared/contracts.ts#DisplayMode",
@@ -46785,6 +46904,14 @@
       "file": "src/shared/contracts.ts",
       "line": 233,
       "endLine": 253
+    },
+    {
+      "id": "symbol:src/shared/contracts.ts#RendererErrorReport",
+      "name": "RendererErrorReport",
+      "kind": "interface",
+      "file": "src/shared/contracts.ts",
+      "line": 1185,
+      "endLine": 1190
     },
     {
       "id": "symbol:src/shared/contracts.ts#RESOLVE_DELAY_MULTIPLIER_MIN",
@@ -47515,36 +47642,44 @@
       "endLine": 109
     },
     {
+      "id": "symbol:src/shared/desktop-api-boundary.ts#normalizeRendererErrorReport",
+      "name": "normalizeRendererErrorReport",
+      "kind": "value",
+      "file": "src/shared/desktop-api-boundary.ts",
+      "line": 57,
+      "endLine": 65
+    },
+    {
       "id": "symbol:src/shared/desktop-api-boundary.ts#normalizeUnknownAchievementId",
       "name": "normalizeUnknownAchievementId",
-      "kind": "value",
-      "file": "src/shared/desktop-api-boundary.ts",
-      "line": 27,
-      "endLine": 30
-    },
-    {
-      "id": "symbol:src/shared/desktop-api-boundary.ts#normalizeUnknownAchievementUnlockResult",
-      "name": "normalizeUnknownAchievementUnlockResult",
-      "kind": "value",
-      "file": "src/shared/desktop-api-boundary.ts",
-      "line": 20,
-      "endLine": 23
-    },
-    {
-      "id": "symbol:src/shared/desktop-api-boundary.ts#normalizeUnknownDisplayMode",
-      "name": "normalizeUnknownDisplayMode",
       "kind": "value",
       "file": "src/shared/desktop-api-boundary.ts",
       "line": 32,
       "endLine": 35
     },
     {
+      "id": "symbol:src/shared/desktop-api-boundary.ts#normalizeUnknownAchievementUnlockResult",
+      "name": "normalizeUnknownAchievementUnlockResult",
+      "kind": "value",
+      "file": "src/shared/desktop-api-boundary.ts",
+      "line": 25,
+      "endLine": 28
+    },
+    {
+      "id": "symbol:src/shared/desktop-api-boundary.ts#normalizeUnknownDisplayMode",
+      "name": "normalizeUnknownDisplayMode",
+      "kind": "value",
+      "file": "src/shared/desktop-api-boundary.ts",
+      "line": 37,
+      "endLine": 40
+    },
+    {
       "id": "symbol:src/shared/desktop-api-boundary.ts#normalizeUnknownSteamConnected",
       "name": "normalizeUnknownSteamConnected",
       "kind": "value",
       "file": "src/shared/desktop-api-boundary.ts",
-      "line": 25,
-      "endLine": 25
+      "line": 30,
+      "endLine": 30
     },
     {
       "id": "symbol:src/shared/difficulty-profile.ts#DifficultyProfileAvailability",
@@ -53879,8 +54014,8 @@
       "name": "DESKTOP_IPC_CHANNELS",
       "kind": "value",
       "file": "src/shared/ipc-channels.ts",
-      "line": 21,
-      "endLine": 32
+      "line": 22,
+      "endLine": 34
     },
     {
       "id": "symbol:src/shared/ipc-channels.ts#IPC_CHANNELS",
@@ -53888,15 +54023,15 @@
       "kind": "value",
       "file": "src/shared/ipc-channels.ts",
       "line": 7,
-      "endLine": 18
+      "endLine": 19
     },
     {
       "id": "symbol:src/shared/ipc-channels.ts#IPC_CHANNELS_LEGACY_DESKTOP",
       "name": "IPC_CHANNELS_LEGACY_DESKTOP",
       "kind": "value",
       "file": "src/shared/ipc-channels.ts",
-      "line": 35,
-      "endLine": 46
+      "line": 37,
+      "endLine": 49
     },
     {
       "id": "symbol:src/shared/level-clear-rules.ts#applyFloorClearEnemyHazardDefeats",
@@ -56288,15 +56423,15 @@
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
       "line": 32,
-      "endLine": 201
+      "endLine": 208
     },
     {
       "id": "symbol:src/shared/release-checklist.ts#releaseChecklistByOwner",
       "name": "releaseChecklistByOwner",
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
-      "line": 207,
-      "endLine": 208
+      "line": 214,
+      "endLine": 215
     },
     {
       "id": "symbol:src/shared/release-checklist.ts#ReleaseChecklistItem",
@@ -56319,16 +56454,16 @@
       "name": "releaseChecklistSections",
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
-      "line": 203,
-      "endLine": 205
+      "line": 210,
+      "endLine": 212
     },
     {
       "id": "symbol:src/shared/release-checklist.ts#renderReleaseChecklistMarkdown",
       "name": "renderReleaseChecklistMarkdown",
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
-      "line": 222,
-      "endLine": 248
+      "line": 229,
+      "endLine": 255
     },
     {
       "id": "symbol:src/shared/relic-favor-rules.ts#gainRelicFavor",
@@ -73976,6 +74111,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/main/ipc.ts->symbol:src/main/ipc.ts#RendererErrorSink",
+      "source": "file:src/main/ipc.ts",
+      "target": "symbol:src/main/ipc.ts#RendererErrorSink",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/main/persistence.ts->symbol:src/main/persistence.ts#PersistenceService",
       "source": "file:src/main/persistence.ts",
       "target": "symbol:src/main/persistence.ts#PersistenceService",
@@ -75545,6 +75686,12 @@
       "id": "exports:src/renderer/components/AnimatedCardBackSvgLayers.tsx->symbol:src/renderer/components/AnimatedCardBackSvgLayers.tsx#AnimatedCardBackSvgLayers",
       "source": "file:src/renderer/components/AnimatedCardBackSvgLayers.tsx",
       "target": "symbol:src/renderer/components/AnimatedCardBackSvgLayers.tsx#AnimatedCardBackSvgLayers",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/AppErrorBoundary.tsx->symbol:src/renderer/components/AppErrorBoundary.tsx#AppErrorBoundary",
+      "source": "file:src/renderer/components/AppErrorBoundary.tsx",
+      "target": "symbol:src/renderer/components/AppErrorBoundary.tsx#AppErrorBoundary",
       "kind": "exports"
     },
     {
@@ -78563,6 +78710,12 @@
       "id": "exports:src/renderer/components/useTileBoardWebglContextRecovery.ts->symbol:src/renderer/components/useTileBoardWebglContextRecovery.ts#useTileBoardWebglContextRecovery",
       "source": "file:src/renderer/components/useTileBoardWebglContextRecovery.ts",
       "target": "symbol:src/renderer/components/useTileBoardWebglContextRecovery.ts#useTileBoardWebglContextRecovery",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/copy/appErrorBoundary.ts->symbol:src/renderer/copy/appErrorBoundary.ts#APP_ERROR_COPY",
+      "source": "file:src/renderer/copy/appErrorBoundary.ts",
+      "target": "symbol:src/renderer/copy/appErrorBoundary.ts#APP_ERROR_COPY",
       "kind": "exports"
     },
     {
@@ -83534,6 +83687,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/contracts.ts->symbol:src/shared/contracts.ts#RendererErrorReport",
+      "source": "file:src/shared/contracts.ts",
+      "target": "symbol:src/shared/contracts.ts#RendererErrorReport",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/contracts.ts->symbol:src/shared/contracts.ts#RESOLVE_DELAY_MULTIPLIER_MIN",
       "source": "file:src/shared/contracts.ts",
       "target": "symbol:src/shared/contracts.ts#RESOLVE_DELAY_MULTIPLIER_MIN",
@@ -84077,6 +84236,12 @@
       "id": "exports:src/shared/daily-archive.ts->symbol:src/shared/daily-archive.ts#weekKeyForDaily",
       "source": "file:src/shared/daily-archive.ts",
       "target": "symbol:src/shared/daily-archive.ts#weekKeyForDaily",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/desktop-api-boundary.ts->symbol:src/shared/desktop-api-boundary.ts#normalizeRendererErrorReport",
+      "source": "file:src/shared/desktop-api-boundary.ts",
+      "target": "symbol:src/shared/desktop-api-boundary.ts#normalizeRendererErrorReport",
       "kind": "exports"
     },
     {
@@ -99843,6 +100008,24 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/AppErrorBoundary.test.tsx->src/renderer/components/AppErrorBoundary.tsx",
+      "source": "file:src/renderer/components/AppErrorBoundary.test.tsx",
+      "target": "file:src/renderer/components/AppErrorBoundary.tsx",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/AppErrorBoundary.test.tsx->src/renderer/copy/appErrorBoundary.ts",
+      "source": "file:src/renderer/components/AppErrorBoundary.test.tsx",
+      "target": "file:src/renderer/copy/appErrorBoundary.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/AppErrorBoundary.tsx->src/renderer/copy/appErrorBoundary.ts",
+      "source": "file:src/renderer/components/AppErrorBoundary.tsx",
+      "target": "file:src/renderer/copy/appErrorBoundary.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/boardRuneFieldMaterial.ts->src/renderer/components/boardRuneFieldShaderGlsl.ts",
       "source": "file:src/renderer/components/boardRuneFieldMaterial.ts",
       "target": "file:src/renderer/components/boardRuneFieldShaderGlsl.ts",
@@ -105036,6 +105219,18 @@
       "id": "imports:src/renderer/initRendererShell.tsx->src/renderer/App.tsx",
       "source": "file:src/renderer/initRendererShell.tsx",
       "target": "file:src/renderer/App.tsx",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/initRendererShell.tsx->src/renderer/components/AppErrorBoundary.tsx",
+      "source": "file:src/renderer/initRendererShell.tsx",
+      "target": "file:src/renderer/components/AppErrorBoundary.tsx",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/initRendererShell.tsx->src/renderer/desktop-client.ts",
+      "source": "file:src/renderer/initRendererShell.tsx",
+      "target": "file:src/renderer/desktop-client.ts",
       "kind": "imports"
     },
     {
@@ -113769,9 +113964,21 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/release-checklist.test.ts->src/renderer/copy/appErrorBoundary.ts",
+      "source": "file:src/shared/release-checklist.test.ts",
+      "target": "file:src/renderer/copy/appErrorBoundary.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/release-checklist.test.ts->src/renderer/copy/saveRecoveryNotice.ts",
       "source": "file:src/shared/release-checklist.test.ts",
       "target": "file:src/renderer/copy/saveRecoveryNotice.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/release-checklist.test.ts->src/shared/desktop-api-boundary.ts",
+      "source": "file:src/shared/release-checklist.test.ts",
+      "target": "file:src/shared/desktop-api-boundary.ts",
       "kind": "imports"
     },
     {
@@ -114120,6 +114327,12 @@
       "id": "imports:src/shared/relics.ts->src/shared/weightedPick.ts",
       "source": "file:src/shared/relics.ts",
       "target": "file:src/shared/weightedPick.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/renderer-error-report.test.ts->src/shared/desktop-api-boundary.ts",
+      "source": "file:src/shared/renderer-error-report.test.ts",
+      "target": "file:src/shared/desktop-api-boundary.ts",
       "kind": "imports"
     },
     {
@@ -123847,6 +124060,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/components/AppErrorBoundary.tsx->file:src/renderer/components/AppErrorBoundary.test.tsx",
+      "source": "file:src/renderer/components/AppErrorBoundary.tsx",
+      "target": "file:src/renderer/components/AppErrorBoundary.test.tsx",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/components/boardRuneFieldMaterial.ts->file:src/renderer/components/cardArcaneGlowMaterial.test.ts",
       "source": "file:src/renderer/components/boardRuneFieldMaterial.ts",
       "target": "file:src/renderer/components/cardArcaneGlowMaterial.test.ts",
@@ -124546,6 +124765,18 @@
       "id": "tested_by:src/renderer/components/useTileBoardWebglContextRecovery.ts->file:src/renderer/components/useTileBoardWebglContextRecovery.test.ts",
       "source": "file:src/renderer/components/useTileBoardWebglContextRecovery.ts",
       "target": "file:src/renderer/components/useTileBoardWebglContextRecovery.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/copy/appErrorBoundary.ts->file:src/renderer/components/AppErrorBoundary.test.tsx",
+      "source": "file:src/renderer/copy/appErrorBoundary.ts",
+      "target": "file:src/renderer/components/AppErrorBoundary.test.tsx",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/copy/appErrorBoundary.ts->file:src/shared/release-checklist.test.ts",
+      "source": "file:src/renderer/copy/appErrorBoundary.ts",
+      "target": "file:src/shared/release-checklist.test.ts",
       "kind": "tested_by"
     },
     {
@@ -126892,6 +127123,18 @@
       "id": "tested_by:src/shared/desktop-api-boundary.ts->file:src/shared/desktop-api-boundary.test.ts",
       "source": "file:src/shared/desktop-api-boundary.ts",
       "target": "file:src/shared/desktop-api-boundary.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/desktop-api-boundary.ts->file:src/shared/release-checklist.test.ts",
+      "source": "file:src/shared/desktop-api-boundary.ts",
+      "target": "file:src/shared/release-checklist.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/desktop-api-boundary.ts->file:src/shared/renderer-error-report.test.ts",
+      "source": "file:src/shared/desktop-api-boundary.ts",
+      "target": "file:src/shared/renderer-error-report.test.ts",
       "kind": "tested_by"
     },
     {

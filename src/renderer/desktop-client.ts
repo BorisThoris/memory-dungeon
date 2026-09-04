@@ -72,6 +72,10 @@ const fallbackClient: DesktopApi = {
         // the honest equivalent is to write a fresh profile over the one that could not be read.
         return writeLocalSave(createDefaultSaveData());
     },
+    async reportRendererError(): Promise<void> {
+        // No main process in the browser fallback, so there is nowhere to write a crash log. The
+        // boundary still shows the player what happened; only the record on disk is missing.
+    },
     async setRichPresence(): Promise<void> {
         // No Steam in the browser fallback; presence is cosmetic, so this is a silent no-op.
     },

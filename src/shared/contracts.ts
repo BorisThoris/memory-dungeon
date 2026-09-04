@@ -1181,6 +1181,14 @@ export type AchievementUnlockResult =
     | { ok: true }
     | { ok: false; reason: 'not_connected' | 'steam_rejected' | 'persistence_error'; detail?: string };
 
+/** What the renderer knows about a render error it just caught. Message and stack only; no paths. */
+export interface RendererErrorReport {
+    readonly message: string;
+    readonly stack: string | null;
+    /** React's component stack, which names the screen that failed. */
+    readonly componentStack: string | null;
+}
+
 export interface DesktopApi {
     getSettings: () => Promise<unknown>;
     saveSettings: (settings: Settings) => Promise<unknown>;
@@ -1191,6 +1199,11 @@ export interface DesktopApi {
      * player sees when their save could not be read, and never destructive: the old file is kept.
      */
     recoverUnreadableSave: () => Promise<unknown>;
+    /**
+     * Records a render error the top-level boundary caught. Never throws to the caller: a failure
+     * to write the report must not take out the screen that is already apologising for one.
+     */
+    reportRendererError: (report: RendererErrorReport) => Promise<void>;
     unlockAchievement: (id: AchievementId) => Promise<unknown>;
     /** Publishes what the player is doing to their friends list; cosmetic and never awaited for correctness. */
     setRichPresence: (state: RichPresenceState) => Promise<void>;
