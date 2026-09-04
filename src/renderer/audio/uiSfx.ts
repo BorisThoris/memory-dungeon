@@ -4,6 +4,7 @@
  */
 
 import uiSfxManifest from '../assets/audio/ui/manifest.json';
+import { audioNeverThrows } from './audioSafety';
 import { buildAudioUrlMapByFilename } from './audioGlobUrlMap';
 import { uiSfxManifestSchema } from './audioManifestBoundary';
 import { preloadAudioBuffers } from './preloadAudioBuffers';
@@ -108,8 +109,10 @@ export const uiSfxSampleKeyForCue = (cue: UiSfxCue): UiSfxSampleKey => {
 };
 
 export const resumeUiSfxContext = (): void => {
-    resumeSharedAudioContext();
-    maybePreloadUiSfx();
+    audioNeverThrows(() => {
+        resumeSharedAudioContext();
+        maybePreloadUiSfx();
+    });
 };
 
 function urlForFilename(filename: string): string | undefined {
@@ -310,7 +313,7 @@ export const playUiCue = (
     cue: UiSfxCue,
     gain: number,
     options: { frequency: number; frequencyEnd?: number; durationSec: number; type: OscillatorType }
-): void => playTone(uiSfxSampleKeyForCue(cue), gain, options);
+): void => audioNeverThrows(() => playTone(uiSfxSampleKeyForCue(cue), gain, options));
 
 export const playUiClickSfx = (gain: number): void =>
     playUiCue('click', gain, { frequency: 620, durationSec: 0.04, type: 'sine' });

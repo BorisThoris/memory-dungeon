@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import {
+    getSharedAudioContext,
     resetSharedAudioContextForTests,
     resumeSharedAudioContext
 } from './webAudioContext';
@@ -29,6 +30,35 @@ describe('webAudioContext', () => {
     afterEach(() => {
         resetSharedAudioContextForTests();
         vi.unstubAllGlobals();
+    });
+
+    it('replaces a context the browser closed instead of handing the closed one back', () => {
+        // Every node factory on a closed context throws, so a cached closed handle turns one
+        // audio failure into a permanent one — and cues run before the actions they accompany.
+        let state: AudioContextState = 'running';
+        let built = 0;
+        vi.stubGlobal(
+            'AudioContext',
+            class {
+                get state(): AudioContextState {
+                    return state;
+                }
+                readonly close = vi.fn(async () => undefined);
+                readonly resume = vi.fn(async () => undefined);
+                constructor() {
+                    built += 1;
+                }
+            }
+        );
+
+        const first = getSharedAudioContext();
+        expect(built).toBe(1);
+        expect(getSharedAudioContext()).toBe(first);
+
+        state = 'closed';
+        const replacement = getSharedAudioContext();
+        expect(built).toBe(2);
+        expect(replacement).not.toBe(first);
     });
 
     it('settles a rejected resume attempt', async () => {

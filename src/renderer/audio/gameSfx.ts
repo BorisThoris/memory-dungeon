@@ -4,12 +4,13 @@ import { runFiniteNumber, runNonNegativeInteger } from '../../shared/run-number-
 import { TILE_TRAIT_COUNT_KINDS } from '../../shared/session-stats-rules';
 import { getChainMilestoneFeedback, type ChainMilestoneFeedback } from '../copy/chainMilestoneFeedback';
 import { getChainRewardForecastCues } from '../copy/chainMomentum';
+import { audioNeverThrows, audioNeverThrowsBoolean } from './audioSafety';
 import {
     maybePreloadSampledSfx,
     resolveMatchTierSampleKey,
     resetSampledSfxForTests,
     silenceAllSampleVoices,
-    tryPlaySampled
+    tryPlaySampled as tryPlaySampledUnguarded
 } from './sampledSfx';
 import {
     getSharedAudioContext,
@@ -36,9 +37,15 @@ export const __resetGameSfxEngineForTests = (): void => {
 const getAudioContext = getSharedAudioContext;
 
 export const resumeAudioContext = (): void => {
-    resumeSharedAudioContext();
-    maybePreloadSampledSfx();
+    audioNeverThrows(() => {
+        resumeSharedAudioContext();
+        maybePreloadSampledSfx();
+    });
 };
+
+/** Every cue in this module goes through these two, so no cue can throw into a click handler. */
+const tryPlaySampled = (key: Parameters<typeof tryPlaySampledUnguarded>[0], gain: number): boolean =>
+    audioNeverThrowsBoolean(() => tryPlaySampledUnguarded(key, gain));
 
 const clamp01 = (v: number): number => Math.max(0, Math.min(1, v));
 
@@ -122,16 +129,18 @@ const silenceAllVoices = (): void => {
     }
 };
 
-const playTone = (
-    options: {
-        frequency: number;
-        durationSec: number;
-        gain: number;
-        type: OscillatorType;
-        frequencyEnd?: number;
-        category: SfxCategory;
-    }
-): void => {
+interface ToneOptions {
+    frequency: number;
+    durationSec: number;
+    gain: number;
+    type: OscillatorType;
+    frequencyEnd?: number;
+    category: SfxCategory;
+}
+
+const playTone = (options: ToneOptions): void => audioNeverThrows(() => playToneUnguarded(options));
+
+const playToneUnguarded = (options: ToneOptions): void => {
     if (options.gain <= 0.001) {
         silenceAllVoices();
         silenceAllSampleVoices();

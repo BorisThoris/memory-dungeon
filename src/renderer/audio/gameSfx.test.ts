@@ -22,6 +22,7 @@ import {
     playRelicOfferOpenSfx,
     playRelicPickSfx,
     playResolveSfx,
+    resumeAudioContext,
     playShuffleSfx,
     playWagerArmSfx,
     sfxGainFromSettings
@@ -40,6 +41,27 @@ describe('gameSfx', () => {
         vi.unstubAllGlobals();
         vi.restoreAllMocks();
         oscillators.length = 0;
+    });
+
+    it('does not throw a closed context at the tile the player flipped', () => {
+        // The board's flip handler calls the cue first; a throwing context used to take the flip.
+        vi.stubGlobal(
+            'AudioContext',
+            class {
+                currentTime = 0;
+                destination = {};
+                state = 'running';
+                createOscillator = (): never => {
+                    throw new DOMException('AudioContext has been closed', 'InvalidStateError');
+                };
+                createGain = vi.fn();
+                close = (): Promise<void> => Promise.resolve();
+                resume = (): Promise<void> => Promise.resolve();
+            }
+        );
+
+        expect(() => playFlipSfx(sfxGainFromSettings(1, 1))).not.toThrow();
+        expect(() => resumeAudioContext()).not.toThrow();
     });
 
     it('respects mute instantly (does not schedule nodes)', () => {

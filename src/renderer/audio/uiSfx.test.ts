@@ -60,6 +60,31 @@ describe('uiSfx', () => {
         }
     });
 
+    it('does not throw a closed context at the click handler that asked for the cue', () => {
+        /*
+         * Every button in the game calls a cue before doing what it was pressed for. A closed
+         * AudioContext makes createOscillator throw on every call, so before this guard a closed
+         * context meant the Play button stopped opening Choose Your Path.
+         */
+        vi.stubGlobal(
+            'AudioContext',
+            class {
+                currentTime = 0;
+                destination = {};
+                state = 'running';
+                createOscillator = (): never => {
+                    throw new DOMException('AudioContext has been closed', 'InvalidStateError');
+                };
+                createGain = vi.fn();
+                close = (): Promise<void> => Promise.resolve();
+                resume = (): Promise<void> => Promise.resolve();
+            }
+        );
+
+        expect(() => playUiClickSfx(uiSfxGainFromSettings(1, 1))).not.toThrow();
+        expect(() => resumeUiSfxContext()).not.toThrow();
+    });
+
     it('respects mute without scheduling nodes', () => {
         const createOscillator = vi.fn();
         vi.stubGlobal(

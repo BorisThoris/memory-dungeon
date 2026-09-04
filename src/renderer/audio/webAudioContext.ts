@@ -8,6 +8,15 @@ export const getSharedAudioContext = (): AudioContext | null => {
     if (typeof window === 'undefined') {
         return null;
     }
+    /*
+     * A closed context is not a usable one: every `createOscillator` on it throws
+     * InvalidStateError. Browsers close contexts on their own (memory pressure, a backgrounded
+     * page), and the tests close this one deliberately, so holding on to a closed handle turned
+     * one audio failure into a permanent one. Drop it and build a fresh context instead.
+     */
+    if (audioContext && audioContext.state === 'closed') {
+        audioContext = null;
+    }
     if (!audioContext) {
         try {
             audioContext = new AudioContext();
