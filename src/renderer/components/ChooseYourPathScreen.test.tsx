@@ -67,6 +67,19 @@ describe('ChooseYourPathScreen', () => {
         expect(storeSpies.startRun).toHaveBeenCalledTimes(1);
     });
 
+    it('says how much of the library the filters left, since the grid only shows a page of it', async () => {
+        const user = userEvent.setup();
+        render(<ChooseYourPathScreen />);
+
+        const count = screen.getByTestId('choose-path-mode-count');
+        const total = Number(count.textContent?.match(/of (\d+)/u)?.[1]);
+        expect(total).toBeGreaterThan(1);
+        expect(count).toHaveTextContent(new RegExp(`^${total} of ${total} modes$`, 'u'));
+
+        await user.type(screen.getByLabelText(/filter modes/i), 'Wild Run');
+        expect(screen.getByTestId('choose-path-mode-count')).toHaveTextContent(`1 of ${total} modes`);
+    });
+
     it('says when the daily turns over, on the one mode that expires', async () => {
         const user = userEvent.setup();
         render(<ChooseYourPathScreen />);

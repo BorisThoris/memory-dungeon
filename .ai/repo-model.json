@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2501,
-    "codeFileCount": 970,
-    "exportedSymbolCount": 3542,
+    "trackedFileCount": 2495,
+    "codeFileCount": 964,
+    "exportedSymbolCount": 3530,
     "contentItemCount": 63,
     "mechanicCount": 136,
     "stateFieldCount": 144,
-    "relationshipCount": 10378
+    "relationshipCount": 10352
   },
   "inventory": [
     {
@@ -2320,7 +2320,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 36714,
-      "sha256": "70b8dc6f696113c17bdb0b13d5b5acbb6f196a540b2f1188c72bffb9e018574a"
+      "sha256": "17d1c65c53388b54236a088e6543642bfb16faf0a25ca07c9efaeb4712a11463"
     },
     {
       "path": "docs/UI_RETHINK_PLAN.md",
@@ -4689,8 +4689,8 @@
     {
       "path": "scripts/test-only-modules.ts",
       "category": "script",
-      "bytes": 9056,
-      "sha256": "86539be6a7596eb0122baafe5cc18c7b019a08676e27fa7ec6f907239f1d07ff"
+      "bytes": 8627,
+      "sha256": "d264f67fe5046727262bc3c61bc170e72aac896663c620371e41e183cf433535"
     },
     {
       "path": "scripts/vite-dev-blueprint-api.mjs",
@@ -7419,8 +7419,8 @@
     {
       "path": "src/renderer/cardFace/programmaticCardFace.ts",
       "category": "source",
-      "bytes": 11608,
-      "sha256": "afa9975a451c7326632bb4906b56a8d5a507bd52229fe9606a1b654bdef40a3a"
+      "bytes": 11744,
+      "sha256": "f58b232e07abfc01c8d0d5a518144693c020d7b132d2b59e961452d2ed8e53a1"
     },
     {
       "path": "src/renderer/cardFace/resolveCardIllustrationUrl.test.ts",
@@ -7437,14 +7437,14 @@
     {
       "path": "src/renderer/cardFace/svgMarkup.test.ts",
       "category": "test",
-      "bytes": 649,
-      "sha256": "7b7f083e56cdd7fd956800729c91384c3712b9b01e45a5d5407427803ad69d13"
+      "bytes": 512,
+      "sha256": "5eace2cc9adc32fe62b322b9d93c695eb10c641c9b1022b9dbb28b84e6b4cb11"
     },
     {
       "path": "src/renderer/cardFace/svgMarkup.ts",
       "category": "source",
-      "bytes": 738,
-      "sha256": "e37e90a3ceee11b6abc8379dfe1e0cc2be782de167e72ae0148a0774279d33ed"
+      "bytes": 875,
+      "sha256": "72e4efb35123d5ffea5835ee12f1cdc4bf7315cb19f77488d1511782bf28051c"
     },
     {
       "path": "src/renderer/cardFace/weightedFacePanelPool.ts",
@@ -7521,20 +7521,20 @@
     {
       "path": "src/renderer/components/ChooseYourPathScreen.module.css",
       "category": "source",
-      "bytes": 12379,
-      "sha256": "e46b41098cf562f3b284df109b48c755e4810f07202307b2e75a91c8cb23bcc7"
+      "bytes": 12541,
+      "sha256": "744a1f99a2b5d8a491d8f2f576b831e7dcef1ca2d0b513a8ea5457456f74fdda"
     },
     {
       "path": "src/renderer/components/ChooseYourPathScreen.test.tsx",
       "category": "test",
-      "bytes": 11750,
-      "sha256": "13582cd8965815409e12450cb2b095513069377e1897dad1026a21297ead32eb"
+      "bytes": 12407,
+      "sha256": "3a362a3a435dce260db665bbe044ee0136a0613ca532a08f5285d9008c41dd4a"
     },
     {
       "path": "src/renderer/components/ChooseYourPathScreen.tsx",
       "category": "source",
-      "bytes": 25421,
-      "sha256": "ac2a17a4f2faa9346c72f6b5e92107113a5001fb2129d53edbdc0914498f7d82"
+      "bytes": 25777,
+      "sha256": "18be8218e3f5f6c0262009714f8e8e2b268074d456281705b87dca2d18c55043"
     },
     {
       "path": "src/renderer/components/chooseYourPathScreenModel.ts",
@@ -7781,18 +7781,6 @@
       "category": "source",
       "bytes": 10112,
       "sha256": "8889f0fc8d53d16c56aa8a217c56fdb4bfb8194efc9ae2e87d9e97561787a017"
-    },
-    {
-      "path": "src/renderer/components/metaScreenTocNav.test.ts",
-      "category": "test",
-      "bytes": 1570,
-      "sha256": "b2daef39dfb506dd9289fc237b548ba7ba2e520d48c85588ac1bc3e6b680f2b1"
-    },
-    {
-      "path": "src/renderer/components/metaScreenTocNav.ts",
-      "category": "source",
-      "bytes": 954,
-      "sha256": "107b1cee85ec4216ba8d475fd50467db76cc73e728de03c2aff8c6a9d03a7b52"
     },
     {
       "path": "src/renderer/components/metaStackedShellLayout.test.ts",
@@ -9039,8 +9027,8 @@
     {
       "path": "src/renderer/copy/screenCopy.ts",
       "category": "source",
-      "bytes": 1758,
-      "sha256": "e7fffb0e92eb54ff87f0f632f5acc2d90f1b0574c927e194e1001917c5f772aa"
+      "bytes": 1939,
+      "sha256": "ce6005055b786996649d96d580a27d9d0dcb8bf0129eed4a465254a9cb6f6606"
     },
     {
       "path": "src/renderer/copy/settingsHints.ts",
@@ -10445,18 +10433,6 @@
       "category": "test",
       "bytes": 2524,
       "sha256": "42e28f4369ece6971870280478cd87dda46a4a6454e9f6cd094b24ea1b11b361"
-    },
-    {
-      "path": "src/shared/collection-reward-gallery.test.ts",
-      "category": "test",
-      "bytes": 3036,
-      "sha256": "262687db4a4957efcd5cf5b90e83b54f54cec2b764a1054098a69aa8e230b18f"
-    },
-    {
-      "path": "src/shared/collection-reward-gallery.ts",
-      "category": "source",
-      "bytes": 6479,
-      "sha256": "7d306b692d485a24f199c7139ba45b1ed6bf6890ccd574bce8f924f34e134284"
     },
     {
       "path": "src/shared/color-vision.test.ts",
@@ -12191,18 +12167,6 @@
       "category": "source",
       "bytes": 14871,
       "sha256": "7437d2dfdb2c0b50a8f1b84d3c82d43c43245e40e9dc16bc42322f783b667ba4"
-    },
-    {
-      "path": "src/shared/run-mode-discovery.test.ts",
-      "category": "test",
-      "bytes": 1097,
-      "sha256": "75dbabdf3df27a98bd7cd1193a42c0c3ac3295dfecb23744c63a9bcde9b69372"
-    },
-    {
-      "path": "src/shared/run-mode-discovery.ts",
-      "category": "source",
-      "bytes": 3269,
-      "sha256": "ca09486d4b8e67e4079102c4997f225ec5ec710317f4e1a0aaf703253f12acad"
     },
     {
       "path": "src/shared/run-mode-identity.test.ts",
@@ -16842,7 +16806,7 @@
       "path": "src/renderer/cardFace/programmaticCardFace.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 305,
+      "lineCount": 318,
       "imports": [
         "file:src/renderer/cardFace/cardFaceOverlayPalette.ts",
         "file:src/renderer/cardFace/cardIllustrationDraw.ts",
@@ -16850,6 +16814,7 @@
         "file:src/renderer/cardFace/cardIllustrationRegistry.ts",
         "file:src/renderer/cardFace/overlayDrawTier.ts",
         "file:src/renderer/cardFace/resolveCardIllustrationUrl.ts",
+        "file:src/renderer/cardFace/svgMarkup.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/hashPairKey.ts"
       ],
@@ -16901,7 +16866,7 @@
       "path": "src/renderer/cardFace/svgMarkup.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 19,
+      "lineCount": 16,
       "imports": [
         "file:src/renderer/cardFace/svgMarkup.ts"
       ],
@@ -16913,10 +16878,9 @@
       "path": "src/renderer/cardFace/svgMarkup.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 20,
+      "lineCount": 23,
       "imports": [],
       "exports": [
-        "symbol:src/renderer/cardFace/svgMarkup.ts#escapeXml",
         "symbol:src/renderer/cardFace/svgMarkup.ts#svgLinearGradientDef"
       ],
       "testedBy": [
@@ -17100,7 +17064,7 @@
       "path": "src/renderer/components/ChooseYourPathScreen.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 234,
+      "lineCount": 247,
       "imports": [
         "file:src/renderer/components/ChooseYourPathScreen.tsx",
         "file:src/renderer/components/chooseYourPathScreenModel.ts",
@@ -17115,7 +17079,7 @@
       "path": "src/renderer/components/ChooseYourPathScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 575,
+      "lineCount": 582,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/assets/ui/modeArt.ts",
@@ -17794,32 +17758,6 @@
       ],
       "testedBy": [
         "file:src/renderer/components/matchScoreFloaterTiming.test.ts"
-      ]
-    },
-    {
-      "id": "file:src/renderer/components/metaScreenTocNav.test.ts",
-      "path": "src/renderer/components/metaScreenTocNav.test.ts",
-      "layer": "renderer",
-      "role": "test",
-      "lineCount": 42,
-      "imports": [
-        "file:src/renderer/components/metaScreenTocNav.ts"
-      ],
-      "exports": [],
-      "testedBy": []
-    },
-    {
-      "id": "file:src/renderer/components/metaScreenTocNav.ts",
-      "path": "src/renderer/components/metaScreenTocNav.ts",
-      "layer": "renderer",
-      "role": "production",
-      "lineCount": 31,
-      "imports": [],
-      "exports": [
-        "symbol:src/renderer/components/metaScreenTocNav.ts#handleMetaBodyTocLinkClick"
-      ],
-      "testedBy": [
-        "file:src/renderer/components/metaScreenTocNav.test.ts"
       ]
     },
     {
@@ -21403,7 +21341,7 @@
       "path": "src/renderer/copy/screenCopy.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 34,
+      "lineCount": 36,
       "imports": [],
       "exports": [
         "symbol:src/renderer/copy/screenCopy.ts#CHOOSE_YOUR_PATH_COPY",
@@ -25361,44 +25299,6 @@
       "imports": [],
       "exports": [],
       "testedBy": []
-    },
-    {
-      "id": "file:src/shared/collection-reward-gallery.test.ts",
-      "path": "src/shared/collection-reward-gallery.test.ts",
-      "layer": "shared",
-      "role": "test",
-      "lineCount": 81,
-      "imports": [
-        "file:src/shared/collection-reward-gallery.ts",
-        "file:src/shared/save-data.ts"
-      ],
-      "exports": [],
-      "testedBy": []
-    },
-    {
-      "id": "file:src/shared/collection-reward-gallery.ts",
-      "path": "src/shared/collection-reward-gallery.ts",
-      "layer": "shared",
-      "role": "production",
-      "lineCount": 142,
-      "imports": [
-        "file:src/shared/achievements.ts",
-        "file:src/shared/contracts.ts",
-        "file:src/shared/cosmetics.ts",
-        "file:src/shared/meta-progression.ts",
-        "file:src/shared/run-history.ts",
-        "file:src/shared/save-data.ts"
-      ],
-      "exports": [
-        "symbol:src/shared/collection-reward-gallery.ts#CollectionRewardGalleryRow",
-        "symbol:src/shared/collection-reward-gallery.ts#CollectionRewardGalleryStatus",
-        "symbol:src/shared/collection-reward-gallery.ts#CollectionRewardGalleryTone",
-        "symbol:src/shared/collection-reward-gallery.ts#getCollectionGalleryRows",
-        "symbol:src/shared/collection-reward-gallery.ts#getCollectionRewardGalleryRows"
-      ],
-      "testedBy": [
-        "file:src/shared/collection-reward-gallery.test.ts"
-      ]
     },
     {
       "id": "file:src/shared/color-vision.test.ts",
@@ -32144,38 +32044,6 @@
       ]
     },
     {
-      "id": "file:src/shared/run-mode-discovery.test.ts",
-      "path": "src/shared/run-mode-discovery.test.ts",
-      "layer": "shared",
-      "role": "test",
-      "lineCount": 33,
-      "imports": [
-        "file:src/shared/run-mode-discovery.ts"
-      ],
-      "exports": [],
-      "testedBy": []
-    },
-    {
-      "id": "file:src/shared/run-mode-discovery.ts",
-      "path": "src/shared/run-mode-discovery.ts",
-      "layer": "shared",
-      "role": "production",
-      "lineCount": 92,
-      "imports": [
-        "file:src/shared/run-mode-catalog.ts"
-      ],
-      "exports": [
-        "symbol:src/shared/run-mode-discovery.ts#buildRunModeDiscoveryRows",
-        "symbol:src/shared/run-mode-discovery.ts#buildRunModeDiscoveryState",
-        "symbol:src/shared/run-mode-discovery.ts#filterRunModesForDiscovery",
-        "symbol:src/shared/run-mode-discovery.ts#RunModeDiscoveryRow",
-        "symbol:src/shared/run-mode-discovery.ts#RunModeDiscoveryState"
-      ],
-      "testedBy": [
-        "file:src/shared/run-mode-discovery.test.ts"
-      ]
-    },
-    {
       "id": "file:src/shared/run-mode-identity.test.ts",
       "path": "src/shared/run-mode-identity.test.ts",
       "layer": "shared",
@@ -32521,7 +32389,6 @@
         "file:src/shared/achievement-reachability.test.ts",
         "file:src/shared/achievements.test.ts",
         "file:src/shared/challenge-progression.test.ts",
-        "file:src/shared/collection-reward-gallery.test.ts",
         "file:src/shared/cosmetic-reachability.test.ts",
         "file:src/shared/cosmetics.test.ts",
         "file:src/shared/daily-archive.test.ts",
@@ -36551,40 +36418,40 @@
       "name": "buildProgrammaticCardFaceSvg",
       "kind": "value",
       "file": "src/renderer/cardFace/programmaticCardFace.ts",
-      "line": 101,
-      "endLine": 170
+      "line": 102,
+      "endLine": 183
     },
     {
       "id": "symbol:src/renderer/cardFace/programmaticCardFace.ts#drawProgrammaticCardFaceOverlay",
       "name": "drawProgrammaticCardFaceOverlay",
       "kind": "value",
       "file": "src/renderer/cardFace/programmaticCardFace.ts",
-      "line": 202,
-      "endLine": 283
+      "line": 215,
+      "endLine": 296
     },
     {
       "id": "symbol:src/renderer/cardFace/programmaticCardFace.ts#PROGRAMMATIC_CARD_VIEWBOX",
       "name": "PROGRAMMATIC_CARD_VIEWBOX",
       "kind": "value",
       "file": "src/renderer/cardFace/programmaticCardFace.ts",
-      "line": 16,
-      "endLine": 16
+      "line": 17,
+      "endLine": 17
     },
     {
       "id": "symbol:src/renderer/cardFace/programmaticCardFace.ts#ProgrammaticOverlayVariant",
       "name": "ProgrammaticOverlayVariant",
       "kind": "ExportSpecifier",
       "file": "src/renderer/cardFace/programmaticCardFace.ts",
-      "line": 14,
-      "endLine": 14
+      "line": 15,
+      "endLine": 15
     },
     {
       "id": "symbol:src/renderer/cardFace/programmaticCardFace.ts#tileUsesProgrammaticFaceMotif",
       "name": "tileUsesProgrammaticFaceMotif",
       "kind": "value",
       "file": "src/renderer/cardFace/programmaticCardFace.ts",
-      "line": 27,
-      "endLine": 27
+      "line": 28,
+      "endLine": 28
     },
     {
       "id": "symbol:src/renderer/cardFace/resolveCardIllustrationUrl.ts#CardIllustrationRegistry",
@@ -36603,20 +36470,12 @@
       "endLine": 48
     },
     {
-      "id": "symbol:src/renderer/cardFace/svgMarkup.ts#escapeXml",
-      "name": "escapeXml",
-      "kind": "value",
-      "file": "src/renderer/cardFace/svgMarkup.ts",
-      "line": 2,
-      "endLine": 3
-    },
-    {
       "id": "symbol:src/renderer/cardFace/svgMarkup.ts#svgLinearGradientDef",
       "name": "svgLinearGradientDef",
       "kind": "value",
       "file": "src/renderer/cardFace/svgMarkup.ts",
-      "line": 5,
-      "endLine": 19
+      "line": 8,
+      "endLine": 22
     },
     {
       "id": "symbol:src/renderer/cardFace/weightedFacePanelPool.ts#buildWeightedFacePanelFallbackStrip",
@@ -36767,8 +36626,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/ChooseYourPathScreen.tsx",
-      "line": 574,
-      "endLine": 574
+      "line": 581,
+      "endLine": 581
     },
     {
       "id": "symbol:src/renderer/components/chooseYourPathScreenModel.ts#buildMeditationPickMutatorRows",
@@ -37201,14 +37060,6 @@
       "file": "src/renderer/components/matchScoreFloaterTiming.ts",
       "line": 18,
       "endLine": 44
-    },
-    {
-      "id": "symbol:src/renderer/components/metaScreenTocNav.ts#handleMetaBodyTocLinkClick",
-      "name": "handleMetaBodyTocLinkClick",
-      "kind": "function",
-      "file": "src/renderer/components/metaScreenTocNav.ts",
-      "line": 4,
-      "endLine": 30
     },
     {
       "id": "symbol:src/renderer/components/metaStackedShellLayout.ts#getMetaSubscreenLayout",
@@ -41400,23 +41251,23 @@
       "kind": "value",
       "file": "src/renderer/copy/screenCopy.ts",
       "line": 8,
-      "endLine": 20
+      "endLine": 22
     },
     {
       "id": "symbol:src/renderer/copy/screenCopy.ts#GAME_OVER_LABELS",
       "name": "GAME_OVER_LABELS",
       "kind": "value",
       "file": "src/renderer/copy/screenCopy.ts",
-      "line": 22,
-      "endLine": 26
+      "line": 24,
+      "endLine": 28
     },
     {
       "id": "symbol:src/renderer/copy/screenCopy.ts#SHOP_COPY",
       "name": "SHOP_COPY",
       "kind": "value",
       "file": "src/renderer/copy/screenCopy.ts",
-      "line": 28,
-      "endLine": 33
+      "line": 30,
+      "endLine": 35
     },
     {
       "id": "symbol:src/renderer/copy/settingsHints.ts#SETTINGS_FOOTER_HINT",
@@ -46145,46 +45996,6 @@
       "file": "src/shared/challenge-progression.ts",
       "line": 204,
       "endLine": 217
-    },
-    {
-      "id": "symbol:src/shared/collection-reward-gallery.ts#CollectionRewardGalleryRow",
-      "name": "CollectionRewardGalleryRow",
-      "kind": "interface",
-      "file": "src/shared/collection-reward-gallery.ts",
-      "line": 11,
-      "endLine": 25
-    },
-    {
-      "id": "symbol:src/shared/collection-reward-gallery.ts#CollectionRewardGalleryStatus",
-      "name": "CollectionRewardGalleryStatus",
-      "kind": "type",
-      "file": "src/shared/collection-reward-gallery.ts",
-      "line": 8,
-      "endLine": 8
-    },
-    {
-      "id": "symbol:src/shared/collection-reward-gallery.ts#CollectionRewardGalleryTone",
-      "name": "CollectionRewardGalleryTone",
-      "kind": "type",
-      "file": "src/shared/collection-reward-gallery.ts",
-      "line": 9,
-      "endLine": 9
-    },
-    {
-      "id": "symbol:src/shared/collection-reward-gallery.ts#getCollectionGalleryRows",
-      "name": "getCollectionGalleryRows",
-      "kind": "value",
-      "file": "src/shared/collection-reward-gallery.ts",
-      "line": 141,
-      "endLine": 141
-    },
-    {
-      "id": "symbol:src/shared/collection-reward-gallery.ts#getCollectionRewardGalleryRows",
-      "name": "getCollectionRewardGalleryRows",
-      "kind": "value",
-      "file": "src/shared/collection-reward-gallery.ts",
-      "line": 48,
-      "endLine": 139
     },
     {
       "id": "symbol:src/shared/color-vision.ts#COLOR_VISION_KINDS",
@@ -59553,46 +59364,6 @@
       "file": "src/shared/run-mode-catalog.ts",
       "line": 320,
       "endLine": 322
-    },
-    {
-      "id": "symbol:src/shared/run-mode-discovery.ts#buildRunModeDiscoveryRows",
-      "name": "buildRunModeDiscoveryRows",
-      "kind": "value",
-      "file": "src/shared/run-mode-discovery.ts",
-      "line": 20,
-      "endLine": 38
-    },
-    {
-      "id": "symbol:src/shared/run-mode-discovery.ts#buildRunModeDiscoveryState",
-      "name": "buildRunModeDiscoveryState",
-      "kind": "value",
-      "file": "src/shared/run-mode-discovery.ts",
-      "line": 62,
-      "endLine": 91
-    },
-    {
-      "id": "symbol:src/shared/run-mode-discovery.ts#filterRunModesForDiscovery",
-      "name": "filterRunModesForDiscovery",
-      "kind": "value",
-      "file": "src/shared/run-mode-discovery.ts",
-      "line": 40,
-      "endLine": 60
-    },
-    {
-      "id": "symbol:src/shared/run-mode-discovery.ts#RunModeDiscoveryRow",
-      "name": "RunModeDiscoveryRow",
-      "kind": "interface",
-      "file": "src/shared/run-mode-discovery.ts",
-      "line": 3,
-      "endLine": 11
-    },
-    {
-      "id": "symbol:src/shared/run-mode-discovery.ts#RunModeDiscoveryState",
-      "name": "RunModeDiscoveryState",
-      "kind": "interface",
-      "file": "src/shared/run-mode-discovery.ts",
-      "line": 13,
-      "endLine": 18
     },
     {
       "id": "symbol:src/shared/run-mode-identity.ts#describeRunModeIdentity",
@@ -76252,12 +76023,6 @@
       "kind": "exports"
     },
     {
-      "id": "exports:src/renderer/cardFace/svgMarkup.ts->symbol:src/renderer/cardFace/svgMarkup.ts#escapeXml",
-      "source": "file:src/renderer/cardFace/svgMarkup.ts",
-      "target": "symbol:src/renderer/cardFace/svgMarkup.ts#escapeXml",
-      "kind": "exports"
-    },
-    {
       "id": "exports:src/renderer/cardFace/svgMarkup.ts->symbol:src/renderer/cardFace/svgMarkup.ts#svgLinearGradientDef",
       "source": "file:src/renderer/cardFace/svgMarkup.ts",
       "target": "symbol:src/renderer/cardFace/svgMarkup.ts#svgLinearGradientDef",
@@ -76699,12 +76464,6 @@
       "id": "exports:src/renderer/components/matchScoreFloaterTiming.ts->symbol:src/renderer/components/matchScoreFloaterTiming.ts#matchScoreFloatDurationMs",
       "source": "file:src/renderer/components/matchScoreFloaterTiming.ts",
       "target": "symbol:src/renderer/components/matchScoreFloaterTiming.ts#matchScoreFloatDurationMs",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/components/metaScreenTocNav.ts->symbol:src/renderer/components/metaScreenTocNav.ts#handleMetaBodyTocLinkClick",
-      "source": "file:src/renderer/components/metaScreenTocNav.ts",
-      "target": "symbol:src/renderer/components/metaScreenTocNav.ts#handleMetaBodyTocLinkClick",
       "kind": "exports"
     },
     {
@@ -83407,36 +83166,6 @@
       "id": "exports:src/shared/challenge-progression.ts->symbol:src/shared/challenge-progression.ts#getChallengeModeProgressionRows",
       "source": "file:src/shared/challenge-progression.ts",
       "target": "symbol:src/shared/challenge-progression.ts#getChallengeModeProgressionRows",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/collection-reward-gallery.ts->symbol:src/shared/collection-reward-gallery.ts#CollectionRewardGalleryRow",
-      "source": "file:src/shared/collection-reward-gallery.ts",
-      "target": "symbol:src/shared/collection-reward-gallery.ts#CollectionRewardGalleryRow",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/collection-reward-gallery.ts->symbol:src/shared/collection-reward-gallery.ts#CollectionRewardGalleryStatus",
-      "source": "file:src/shared/collection-reward-gallery.ts",
-      "target": "symbol:src/shared/collection-reward-gallery.ts#CollectionRewardGalleryStatus",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/collection-reward-gallery.ts->symbol:src/shared/collection-reward-gallery.ts#CollectionRewardGalleryTone",
-      "source": "file:src/shared/collection-reward-gallery.ts",
-      "target": "symbol:src/shared/collection-reward-gallery.ts#CollectionRewardGalleryTone",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/collection-reward-gallery.ts->symbol:src/shared/collection-reward-gallery.ts#getCollectionGalleryRows",
-      "source": "file:src/shared/collection-reward-gallery.ts",
-      "target": "symbol:src/shared/collection-reward-gallery.ts#getCollectionGalleryRows",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/collection-reward-gallery.ts->symbol:src/shared/collection-reward-gallery.ts#getCollectionRewardGalleryRows",
-      "source": "file:src/shared/collection-reward-gallery.ts",
-      "target": "symbol:src/shared/collection-reward-gallery.ts#getCollectionRewardGalleryRows",
       "kind": "exports"
     },
     {
@@ -93466,36 +93195,6 @@
       "kind": "exports"
     },
     {
-      "id": "exports:src/shared/run-mode-discovery.ts->symbol:src/shared/run-mode-discovery.ts#buildRunModeDiscoveryRows",
-      "source": "file:src/shared/run-mode-discovery.ts",
-      "target": "symbol:src/shared/run-mode-discovery.ts#buildRunModeDiscoveryRows",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/run-mode-discovery.ts->symbol:src/shared/run-mode-discovery.ts#buildRunModeDiscoveryState",
-      "source": "file:src/shared/run-mode-discovery.ts",
-      "target": "symbol:src/shared/run-mode-discovery.ts#buildRunModeDiscoveryState",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/run-mode-discovery.ts->symbol:src/shared/run-mode-discovery.ts#filterRunModesForDiscovery",
-      "source": "file:src/shared/run-mode-discovery.ts",
-      "target": "symbol:src/shared/run-mode-discovery.ts#filterRunModesForDiscovery",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/run-mode-discovery.ts->symbol:src/shared/run-mode-discovery.ts#RunModeDiscoveryRow",
-      "source": "file:src/shared/run-mode-discovery.ts",
-      "target": "symbol:src/shared/run-mode-discovery.ts#RunModeDiscoveryRow",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/run-mode-discovery.ts->symbol:src/shared/run-mode-discovery.ts#RunModeDiscoveryState",
-      "source": "file:src/shared/run-mode-discovery.ts",
-      "target": "symbol:src/shared/run-mode-discovery.ts#RunModeDiscoveryState",
-      "kind": "exports"
-    },
-    {
       "id": "exports:src/shared/run-mode-identity.ts->symbol:src/shared/run-mode-identity.ts#describeRunModeIdentity",
       "source": "file:src/shared/run-mode-identity.ts",
       "target": "symbol:src/shared/run-mode-identity.ts#describeRunModeIdentity",
@@ -100721,6 +100420,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/cardFace/programmaticCardFace.ts->src/renderer/cardFace/svgMarkup.ts",
+      "source": "file:src/renderer/cardFace/programmaticCardFace.ts",
+      "target": "file:src/renderer/cardFace/svgMarkup.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/cardFace/programmaticCardFace.ts->src/shared/contracts.ts",
       "source": "file:src/renderer/cardFace/programmaticCardFace.ts",
       "target": "file:src/shared/contracts.ts",
@@ -102122,12 +101827,6 @@
       "id": "imports:src/renderer/components/matchScoreFloaterTiming.ts->src/shared/run-array-guards.ts",
       "source": "file:src/renderer/components/matchScoreFloaterTiming.ts",
       "target": "file:src/shared/run-array-guards.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/metaScreenTocNav.test.ts->src/renderer/components/metaScreenTocNav.ts",
-      "source": "file:src/renderer/components/metaScreenTocNav.test.ts",
-      "target": "file:src/renderer/components/metaScreenTocNav.ts",
       "kind": "imports"
     },
     {
@@ -109703,54 +109402,6 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/shared/collection-reward-gallery.test.ts->src/shared/collection-reward-gallery.ts",
-      "source": "file:src/shared/collection-reward-gallery.test.ts",
-      "target": "file:src/shared/collection-reward-gallery.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/collection-reward-gallery.test.ts->src/shared/save-data.ts",
-      "source": "file:src/shared/collection-reward-gallery.test.ts",
-      "target": "file:src/shared/save-data.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/collection-reward-gallery.ts->src/shared/achievements.ts",
-      "source": "file:src/shared/collection-reward-gallery.ts",
-      "target": "file:src/shared/achievements.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/collection-reward-gallery.ts->src/shared/contracts.ts",
-      "source": "file:src/shared/collection-reward-gallery.ts",
-      "target": "file:src/shared/contracts.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/collection-reward-gallery.ts->src/shared/cosmetics.ts",
-      "source": "file:src/shared/collection-reward-gallery.ts",
-      "target": "file:src/shared/cosmetics.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/collection-reward-gallery.ts->src/shared/meta-progression.ts",
-      "source": "file:src/shared/collection-reward-gallery.ts",
-      "target": "file:src/shared/meta-progression.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/collection-reward-gallery.ts->src/shared/run-history.ts",
-      "source": "file:src/shared/collection-reward-gallery.ts",
-      "target": "file:src/shared/run-history.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/collection-reward-gallery.ts->src/shared/save-data.ts",
-      "source": "file:src/shared/collection-reward-gallery.ts",
-      "target": "file:src/shared/save-data.ts",
-      "kind": "imports"
-    },
-    {
       "id": "imports:src/shared/color-vision.test.ts->src/shared/color-vision.ts",
       "source": "file:src/shared/color-vision.test.ts",
       "target": "file:src/shared/color-vision.ts",
@@ -116108,18 +115759,6 @@
       "id": "imports:src/shared/run-mode-catalog.ts->src/shared/content-lock-state.ts",
       "source": "file:src/shared/run-mode-catalog.ts",
       "target": "file:src/shared/content-lock-state.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/run-mode-discovery.test.ts->src/shared/run-mode-discovery.ts",
-      "source": "file:src/shared/run-mode-discovery.test.ts",
-      "target": "file:src/shared/run-mode-discovery.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/run-mode-discovery.ts->src/shared/run-mode-catalog.ts",
-      "source": "file:src/shared/run-mode-discovery.ts",
-      "target": "file:src/shared/run-mode-catalog.ts",
       "kind": "imports"
     },
     {
@@ -125217,12 +124856,6 @@
       "kind": "tested_by"
     },
     {
-      "id": "tested_by:src/renderer/components/metaScreenTocNav.ts->file:src/renderer/components/metaScreenTocNav.test.ts",
-      "source": "file:src/renderer/components/metaScreenTocNav.ts",
-      "target": "file:src/renderer/components/metaScreenTocNav.test.ts",
-      "kind": "tested_by"
-    },
-    {
       "id": "tested_by:src/renderer/components/metaStackedShellLayout.ts->file:src/renderer/components/metaStackedShellLayout.test.ts",
       "source": "file:src/renderer/components/metaStackedShellLayout.ts",
       "target": "file:src/renderer/components/metaStackedShellLayout.test.ts",
@@ -126828,12 +126461,6 @@
       "id": "tested_by:src/shared/challenge-progression.ts->file:src/shared/challenge-progression.test.ts",
       "source": "file:src/shared/challenge-progression.ts",
       "target": "file:src/shared/challenge-progression.test.ts",
-      "kind": "tested_by"
-    },
-    {
-      "id": "tested_by:src/shared/collection-reward-gallery.ts->file:src/shared/collection-reward-gallery.test.ts",
-      "source": "file:src/shared/collection-reward-gallery.ts",
-      "target": "file:src/shared/collection-reward-gallery.test.ts",
       "kind": "tested_by"
     },
     {
@@ -130323,12 +129950,6 @@
       "kind": "tested_by"
     },
     {
-      "id": "tested_by:src/shared/run-mode-discovery.ts->file:src/shared/run-mode-discovery.test.ts",
-      "source": "file:src/shared/run-mode-discovery.ts",
-      "target": "file:src/shared/run-mode-discovery.test.ts",
-      "kind": "tested_by"
-    },
-    {
       "id": "tested_by:src/shared/run-mode-identity.ts->file:src/shared/run-mode-identity.test.ts",
       "source": "file:src/shared/run-mode-identity.ts",
       "target": "file:src/shared/run-mode-identity.test.ts",
@@ -130578,12 +130199,6 @@
       "id": "tested_by:src/shared/save-data.ts->file:src/shared/challenge-progression.test.ts",
       "source": "file:src/shared/save-data.ts",
       "target": "file:src/shared/challenge-progression.test.ts",
-      "kind": "tested_by"
-    },
-    {
-      "id": "tested_by:src/shared/save-data.ts->file:src/shared/collection-reward-gallery.test.ts",
-      "source": "file:src/shared/save-data.ts",
-      "target": "file:src/shared/collection-reward-gallery.test.ts",
       "kind": "tested_by"
     },
     {

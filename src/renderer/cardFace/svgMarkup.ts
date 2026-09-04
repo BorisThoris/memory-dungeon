@@ -1,7 +1,10 @@
-/** Shared XML escaping for programmatic card SVG strings. */
-export const escapeXml = (s: string): string =>
-    s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-
+/**
+ * Where the shape of a card-face gradient lives.
+ *
+ * `escapeXml` used to sit here too. The programmatic face carries no text nodes any more — the
+ * rank and symbol glyphs went when the face became a framed illustration — so there was nothing
+ * left to escape, and an escaper nobody calls is a liability rather than a safety net.
+ */
 export const svgLinearGradientDef = (
     id: string,
     x1: number,

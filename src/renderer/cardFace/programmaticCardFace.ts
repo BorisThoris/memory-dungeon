@@ -10,6 +10,7 @@ import { CARD_ILLUSTRATION_REGISTRY } from './cardIllustrationRegistry';
 import { getCardIllustrationImageByUrl } from './cardIllustrationImages';
 import { drawIllustrationCoverInViewBox, drawProceduralIllustrationCoverInViewBox } from './cardIllustrationDraw';
 import { resolveCardIllustrationUrl } from './resolveCardIllustrationUrl';
+import { svgLinearGradientDef } from './svgMarkup';
 
 export type { ProgrammaticOverlayVariant };
 
@@ -142,19 +143,31 @@ export const buildProgrammaticCardFaceSvg = (
 `
             : '';
 
+    // The two gradients are the same shape; `svgLinearGradientDef` is where that shape lives.
+    const frameGradient = svgLinearGradientDef('pgFrame', fx, fy, fx, fy + fh, true, [
+        { color: c.frameFillTop, offset: '0' },
+        { color: c.frameFillBottom, offset: '0.52' },
+        { color: c.frameFillBottom, offset: '1' }
+    ]);
+    const sigilGradient = svgLinearGradientDef(
+        'pgSigil',
+        shape.cx - 96,
+        shape.cy - 96,
+        shape.cx + 96,
+        shape.cy + 96,
+        true,
+        [
+            { color: c.sigilFillDark, offset: '0' },
+            { color: c.sigilFillLight, offset: '0.5' },
+            { color: c.sigilFillDark, offset: '1' }
+        ]
+    );
+
     return `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}">
   <defs>
-    <linearGradient id="pgFrame" gradientUnits="userSpaceOnUse" x1="${fx}" y1="${fy}" x2="${fx}" y2="${fy + fh}">
-      <stop offset="0" stop-color="${c.frameFillTop}"/>
-      <stop offset="0.52" stop-color="${c.frameFillBottom}"/>
-      <stop offset="1" stop-color="${c.frameFillBottom}"/>
-    </linearGradient>
-    <linearGradient id="pgSigil" gradientUnits="userSpaceOnUse" x1="${shape.cx - 96}" y1="${shape.cy - 96}" x2="${shape.cx + 96}" y2="${shape.cy + 96}">
-      <stop offset="0" stop-color="${c.sigilFillDark}"/>
-      <stop offset="0.5" stop-color="${c.sigilFillLight}"/>
-      <stop offset="1" stop-color="${c.sigilFillDark}"/>
-    </linearGradient>
+    ${frameGradient}
+    ${sigilGradient}
     <radialGradient id="pgVin" gradientUnits="userSpaceOnUse" cx="${shape.cx}" cy="${shape.cy * 0.92}" r="260">
       <stop offset="0.25" stop-color="rgba(0,0,0,0)"/>
       <stop offset="1" stop-color="${c.vignette}"/>

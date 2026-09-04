@@ -225,6 +225,14 @@
     box-shadow: 0 0 0 2px color-mix(in srgb, var(--theme-cyan-bright) 45%, transparent);
 }
 
+.browseCount {
+    margin: 0;
+    color: var(--theme-text-subtle);
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+    font-variant-numeric: tabular-nums;
+}
+
 .groupChips {
     display: flex;
     flex-wrap: wrap;

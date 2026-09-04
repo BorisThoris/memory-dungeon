@@ -429,6 +429,13 @@ const ChooseYourPathScreen = (): ReactElement => {
                                 </button>
                             ))}
                         </div>
+                        <p
+                            aria-live="polite"
+                            className={styles.browseCount}
+                            data-testid="choose-path-mode-count"
+                        >
+                            {CHOOSE_YOUR_PATH_COPY.modeCount(visibleModes.length, browseModes.length)}
+                        </p>
                         <FittedGrid
                             ariaLabel="Modes"
                             emptyState={CHOOSE_YOUR_PATH_COPY.noSearchResults}
