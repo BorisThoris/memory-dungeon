@@ -190,6 +190,17 @@
     white-space: nowrap;
 }
 
+.recordRow {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) minmax(0, 0.6fr);
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.25rem 0.4rem;
+    border-radius: var(--ui-radius-sm);
+    background: var(--theme-panel-surface-muted);
+    font-size: 0.82rem;
+}
+
 .historyBest {
     margin-left: 0.4rem;
     padding: 0 0.35rem;

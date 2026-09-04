@@ -30,3 +30,17 @@ export const formatRunHistoryDate = (endedAtIso: string): string => {
     }
     return at.toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' });
 };
+
+/**
+ * Per-mode records on Profile. Separate from the run list because they answer a different
+ * question: not "what did I do lately" but "how well have I ever done at this".
+ */
+export const MODE_RECORDS_COPY = {
+    empty: 'A record appears here for each mode you finish a run in.',
+    label: 'Records by mode',
+    /** `2,200 · floor 12` — the record itself. */
+    result: (totalScore: number, highestLevel: number): string =>
+        `${totalScore.toLocaleString('en-US')} · floor ${highestLevel}`,
+    /** `4 runs` under the record, so a one-off does not read like a long campaign. */
+    runs: (runs: number): string => `${runs} ${runs === 1 ? 'run' : 'runs'}`
+} as const;

@@ -91,6 +91,53 @@ describe('ProfileScreen', () => {
         expect(rows[1]).not.toHaveTextContent(/copied/i);
     });
 
+    it('keeps a record per mode, so a Gauntlet and a Classic run stop competing for one slot', () => {
+        const saveData = createDefaultSaveData();
+        saveData.runHistory = [
+            {
+                endedAtIso: '2026-09-04T12:00:00.000Z',
+                highestLevel: 12,
+                mode: 'Classic Dungeon',
+                shareKey: 'md1:classic:33:1',
+                totalScore: 3400
+            },
+            {
+                endedAtIso: '2026-09-03T12:00:00.000Z',
+                highestLevel: 3,
+                mode: 'Gauntlet',
+                shareKey: 'md1:gauntlet:33:2:600000',
+                totalScore: 700
+            },
+            {
+                endedAtIso: '2026-09-02T12:00:00.000Z',
+                highestLevel: 2,
+                mode: 'Gauntlet',
+                shareKey: 'md1:gauntlet:33:3:600000',
+                totalScore: 200
+            }
+        ];
+        profileStoreMocks.saveData = saveData;
+
+        render(<ProfileScreen />);
+        const rows = within(screen.getByTestId('profile-mode-records')).getAllByRole('listitem');
+
+        expect(rows).toHaveLength(2);
+        expect(rows[0]).toHaveTextContent('Classic Dungeon');
+        expect(rows[0]).toHaveTextContent('3,400');
+        // The Gauntlet record is its own best, and says how many runs stand behind it.
+        expect(rows[1]).toHaveTextContent('Gauntlet');
+        expect(rows[1]).toHaveTextContent('700');
+        expect(rows[1]).toHaveTextContent('2 runs');
+    });
+
+    it('says where records will appear rather than listing every mode at zero', () => {
+        render(<ProfileScreen />);
+
+        const records = screen.getByTestId('profile-mode-records');
+        expect(records).toHaveTextContent(/A record appears here for each mode/i);
+        expect(within(records).queryAllByRole('listitem')).toHaveLength(0);
+    });
+
     it('marks the best recorded run, and marks only that one', () => {
         const saveData = createDefaultSaveData();
         saveData.runHistory = [

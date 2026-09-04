@@ -16,7 +16,8 @@ import {
     PROFILE_PROGRESS_STATUS_LABEL
 } from '../copy/profileProgress';
 import { normalizeRunHistory } from '../../shared/run-history-log';
-import { formatRunHistoryDate, RUN_HISTORY_COPY } from '../copy/runHistory';
+import { getModeRecords } from '../../shared/mode-records';
+import { formatRunHistoryDate, MODE_RECORDS_COPY, RUN_HISTORY_COPY } from '../copy/runHistory';
 import { useCopyToClipboard } from '../hooks/useCopyToClipboard';
 import { FittedGrid, MetaShell, UiButton } from '../ui';
 import { useAppStore } from '../store/useAppStore';
@@ -71,6 +72,7 @@ const ProfileScreen = () => {
      * kept, would mark nothing here and leave the player looking for a row that is not there.
      */
     const bestRecordedScore = runHistory.reduce((best, entry) => Math.max(best, entry.totalScore), 0);
+    const modeRecords = getModeRecords(runHistory);
     // One copy state per screen would make every row read "Copied" at once, so each row owns which
     // one of them was pressed.
     const [copiedRunKey, setCopiedRunKey] = useState<string | null>(null);
@@ -133,6 +135,25 @@ const ProfileScreen = () => {
                     rowHeight={104}
                     testId="profile-progress-grid"
                 />
+            </section>
+
+            <section aria-label={MODE_RECORDS_COPY.label} className={styles.history} data-testid="profile-mode-records">
+                <h2 className={styles.historyHeading}>{MODE_RECORDS_COPY.label}</h2>
+                {modeRecords.length === 0 ? (
+                    <p className={styles.historyEmpty}>{MODE_RECORDS_COPY.empty}</p>
+                ) : (
+                    <ul className={styles.historyList}>
+                        {modeRecords.map((record) => (
+                            <li className={styles.recordRow} key={record.mode}>
+                                <strong className={styles.historyMode}>{record.mode}</strong>
+                                <span className={styles.historyResult}>
+                                    {MODE_RECORDS_COPY.result(record.totalScore, record.highestLevel)}
+                                </span>
+                                <span className={styles.historyDate}>{MODE_RECORDS_COPY.runs(record.runs)}</span>
+                            </li>
+                        ))}
+                    </ul>
+                )}
             </section>
 
             <section aria-label={RUN_HISTORY_COPY.label} className={styles.history} data-testid="profile-run-history">

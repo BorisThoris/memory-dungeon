@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2514,
-    "codeFileCount": 978,
-    "exportedSymbolCount": 3541,
+    "trackedFileCount": 2516,
+    "codeFileCount": 980,
+    "exportedSymbolCount": 3544,
     "contentItemCount": 63,
     "mechanicCount": 136,
     "stateFieldCount": 144,
-    "relationshipCount": 10428
+    "relationshipCount": 10437
   },
   "inventory": [
     {
@@ -2320,7 +2320,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 36714,
-      "sha256": "fe5921db83aaa94bb56a29b1efb557cd1b59cf46af8609c25b68486a7ca344aa"
+      "sha256": "e2d140b7ab08e05b2cfa20487c646e2f2218486a731da51dd844ba6f24105dfb"
     },
     {
       "path": "docs/UI_RETHINK_PLAN.md",
@@ -7857,20 +7857,20 @@
     {
       "path": "src/renderer/components/ProfileScreen.module.css",
       "category": "source",
-      "bytes": 6147,
-      "sha256": "281aff38d8a6aa541b84ecd32b9d0c87d5e6409248734dac49df3a0fcb4d08cd"
+      "bytes": 6444,
+      "sha256": "7ba132e2eed088373e74c74d90a2faf19d2e0c11e57147ae9f9450ff1f5dc499"
     },
     {
       "path": "src/renderer/components/ProfileScreen.test.tsx",
       "category": "test",
-      "bytes": 10182,
-      "sha256": "0d3cf03661363e0de07437e6ab9a049ee13bf965f0ce54df129b7bf13deab523"
+      "bytes": 12041,
+      "sha256": "d33897bac2569a969347cbcec7c40e34f34a33db2ac59300e5ed75ff62b8f846"
     },
     {
       "path": "src/renderer/components/ProfileScreen.tsx",
       "category": "source",
-      "bytes": 12119,
-      "sha256": "9d1c52b7e71631349aa127c3d924a4579548d74011ae7f5d31e73a21dc819b80"
+      "bytes": 13354,
+      "sha256": "d784308b2fd935ad7b48c5b07682771f26bb7831a24800c1f42e3a78227d5c75"
     },
     {
       "path": "src/renderer/components/RelicDraftOffer.module.css",
@@ -9045,8 +9045,8 @@
     {
       "path": "src/renderer/copy/runHistory.ts",
       "category": "source",
-      "bytes": 1314,
-      "sha256": "9056688cc2a9cc5b5c7dc31fbe61cc649d5e9b95b7359851caca16f9f5107aaa"
+      "bytes": 2001,
+      "sha256": "9d34ac6eaf833064df4f437244ab24dce3b4232178bf664b6673c7e5b36704cd"
     },
     {
       "path": "src/renderer/copy/saveRecoveryNotice.ts",
@@ -11621,6 +11621,18 @@
       "category": "source",
       "bytes": 362,
       "sha256": "8dc08e992ea721ee366877aa0973b12e01f150c7f1aaf20ec5c6afffb419e39d"
+    },
+    {
+      "path": "src/shared/mode-records.test.ts",
+      "category": "test",
+      "bytes": 2366,
+      "sha256": "bb737222c97ba730ee58e68d792a7aff2c24bf363e8b9a027427dc43e366916a"
+    },
+    {
+      "path": "src/shared/mode-records.ts",
+      "category": "source",
+      "bytes": 2488,
+      "sha256": "6cf1dbe0c1b70f031733d19e3882ece0bf5d80dbedc6ff7a82cb968fd2c15332"
     },
     {
       "path": "src/shared/mutators.test.ts",
@@ -17975,7 +17987,7 @@
       "path": "src/renderer/components/ProfileScreen.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 248,
+      "lineCount": 295,
       "imports": [
         "file:src/renderer/components/ProfileScreen.tsx",
         "file:src/shared/contracts.ts",
@@ -17989,7 +18001,7 @@
       "path": "src/renderer/components/ProfileScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 233,
+      "lineCount": 254,
       "imports": [
         "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/copy/profileProgress.ts",
@@ -18001,6 +18013,7 @@
         "file:src/shared/honorUnlocks.ts",
         "file:src/shared/local-progress-registry.ts",
         "file:src/shared/meta-progression.ts",
+        "file:src/shared/mode-records.ts",
         "file:src/shared/objective-board.ts",
         "file:src/shared/profile-summary.ts",
         "file:src/shared/run-history-log.ts"
@@ -21424,12 +21437,13 @@
       "path": "src/renderer/copy/runHistory.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 33,
+      "lineCount": 47,
       "imports": [
         "file:src/shared/contracts.ts"
       ],
       "exports": [
         "symbol:src/renderer/copy/runHistory.ts#formatRunHistoryDate",
+        "symbol:src/renderer/copy/runHistory.ts#MODE_RECORDS_COPY",
         "symbol:src/renderer/copy/runHistory.ts#RUN_HISTORY_COPY"
       ],
       "testedBy": []
@@ -25928,6 +25942,7 @@
         "file:src/shared/memory-recall-feedback.test.ts",
         "file:src/shared/meta-reward-signals.test.ts",
         "file:src/shared/mismatch-grace-rules.test.ts",
+        "file:src/shared/mode-records.test.ts",
         "file:src/shared/mutators.test.ts",
         "file:src/shared/next-floor-run-state-rules.test.ts",
         "file:src/shared/p2-contracts.test.ts",
@@ -30077,6 +30092,36 @@
       ],
       "testedBy": [
         "file:src/shared/mismatch-grace-rules.test.ts"
+      ]
+    },
+    {
+      "id": "file:src/shared/mode-records.test.ts",
+      "path": "src/shared/mode-records.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 58,
+      "imports": [
+        "file:src/shared/contracts.ts",
+        "file:src/shared/mode-records.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/shared/mode-records.ts",
+      "path": "src/shared/mode-records.ts",
+      "layer": "shared",
+      "role": "production",
+      "lineCount": 63,
+      "imports": [
+        "file:src/shared/contracts.ts"
+      ],
+      "exports": [
+        "symbol:src/shared/mode-records.ts#getModeRecords",
+        "symbol:src/shared/mode-records.ts#ModeRecord"
+      ],
+      "testedBy": [
+        "file:src/shared/mode-records.test.ts"
       ]
     },
     {
@@ -37451,8 +37496,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/ProfileScreen.tsx",
-      "line": 232,
-      "endLine": 232
+      "line": 253,
+      "endLine": 253
     },
     {
       "id": "symbol:src/renderer/components/RelicDraftOfferPanel.tsx#default",
@@ -41509,6 +41554,14 @@
       "file": "src/renderer/copy/runHistory.ts",
       "line": 26,
       "endLine": 32
+    },
+    {
+      "id": "symbol:src/renderer/copy/runHistory.ts#MODE_RECORDS_COPY",
+      "name": "MODE_RECORDS_COPY",
+      "kind": "value",
+      "file": "src/renderer/copy/runHistory.ts",
+      "line": 38,
+      "endLine": 46
     },
     {
       "id": "symbol:src/renderer/copy/runHistory.ts#RUN_HISTORY_COPY",
@@ -55981,6 +56034,22 @@
       "file": "src/shared/mismatch-grace-rules.ts",
       "line": 4,
       "endLine": 7
+    },
+    {
+      "id": "symbol:src/shared/mode-records.ts#getModeRecords",
+      "name": "getModeRecords",
+      "kind": "value",
+      "file": "src/shared/mode-records.ts",
+      "line": 33,
+      "endLine": 62
+    },
+    {
+      "id": "symbol:src/shared/mode-records.ts#ModeRecord",
+      "name": "ModeRecord",
+      "kind": "interface",
+      "file": "src/shared/mode-records.ts",
+      "line": 15,
+      "endLine": 22
     },
     {
       "id": "symbol:src/shared/mutators.ts#DAILY_MUTATOR_TABLE",
@@ -79980,6 +80049,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/copy/runHistory.ts->symbol:src/renderer/copy/runHistory.ts#MODE_RECORDS_COPY",
+      "source": "file:src/renderer/copy/runHistory.ts",
+      "target": "symbol:src/renderer/copy/runHistory.ts#MODE_RECORDS_COPY",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/copy/runHistory.ts->symbol:src/renderer/copy/runHistory.ts#RUN_HISTORY_COPY",
       "source": "file:src/renderer/copy/runHistory.ts",
       "target": "symbol:src/renderer/copy/runHistory.ts#RUN_HISTORY_COPY",
@@ -90831,6 +90906,18 @@
       "id": "exports:src/shared/mismatch-grace-rules.ts->symbol:src/shared/mismatch-grace-rules.ts#hasFirstMismatchGrace",
       "source": "file:src/shared/mismatch-grace-rules.ts",
       "target": "symbol:src/shared/mismatch-grace-rules.ts#hasFirstMismatchGrace",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/mode-records.ts->symbol:src/shared/mode-records.ts#getModeRecords",
+      "source": "file:src/shared/mode-records.ts",
+      "target": "symbol:src/shared/mode-records.ts#getModeRecords",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/mode-records.ts->symbol:src/shared/mode-records.ts#ModeRecord",
+      "source": "file:src/shared/mode-records.ts",
+      "target": "symbol:src/shared/mode-records.ts#ModeRecord",
       "kind": "exports"
     },
     {
@@ -102526,6 +102613,12 @@
       "id": "imports:src/renderer/components/ProfileScreen.tsx->src/shared/meta-progression.ts",
       "source": "file:src/renderer/components/ProfileScreen.tsx",
       "target": "file:src/shared/meta-progression.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/ProfileScreen.tsx->src/shared/mode-records.ts",
+      "source": "file:src/renderer/components/ProfileScreen.tsx",
+      "target": "file:src/shared/mode-records.ts",
       "kind": "imports"
     },
     {
@@ -114232,6 +114325,24 @@
       "id": "imports:src/shared/mismatch-grace-rules.ts->src/shared/session-stats-rules.ts",
       "source": "file:src/shared/mismatch-grace-rules.ts",
       "target": "file:src/shared/session-stats-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/mode-records.test.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/mode-records.test.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/mode-records.test.ts->src/shared/mode-records.ts",
+      "source": "file:src/shared/mode-records.test.ts",
+      "target": "file:src/shared/mode-records.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/mode-records.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/mode-records.ts",
+      "target": "file:src/shared/contracts.ts",
       "kind": "imports"
     },
     {
@@ -128153,6 +128264,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/contracts.ts->file:src/shared/mode-records.test.ts",
+      "source": "file:src/shared/contracts.ts",
+      "target": "file:src/shared/mode-records.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/contracts.ts->file:src/shared/mutators.test.ts",
       "source": "file:src/shared/contracts.ts",
       "target": "file:src/shared/mutators.test.ts",
@@ -129956,6 +130073,12 @@
       "id": "tested_by:src/shared/mismatch-grace-rules.ts->file:src/shared/mismatch-grace-rules.test.ts",
       "source": "file:src/shared/mismatch-grace-rules.ts",
       "target": "file:src/shared/mismatch-grace-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/mode-records.ts->file:src/shared/mode-records.test.ts",
+      "source": "file:src/shared/mode-records.ts",
+      "target": "file:src/shared/mode-records.test.ts",
       "kind": "tested_by"
     },
     {
