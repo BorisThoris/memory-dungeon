@@ -552,4 +552,51 @@ describe('runResolutionController', () => {
         expect(harness.state.tileSwapFirstTileId).toBeNull();
         expect(harness.patches.at(-1)).toEqual(runSurfaceReset);
     });
+
+    it('records a finished run in the history, so it survives the next one starting', () => {
+        const baseRun = createNewRun(0);
+        const harness = createHarness(baseRun);
+
+        harness.controller.applyResolvedRun({
+            ...baseRun,
+            lives: 0,
+            status: 'gameOver',
+            stats: { ...baseRun.stats, bestScore: 700, highestLevel: 5, totalScore: 700 }
+        });
+
+        const history = harness.state.saveData.runHistory ?? [];
+        expect(history).toHaveLength(1);
+        expect(history[0]?.mode).toBe('Classic Dungeon');
+        expect(history[0]?.highestLevel).toBe(5);
+        expect(history[0]?.totalScore).toBe(700);
+        expect(history[0]?.shareKey).toMatch(/^md1:classic:/u);
+        expect(Number.isNaN(Date.parse(history[0]?.endedAtIso ?? ''))).toBe(false);
+    });
+
+    it('keeps the run before it rather than replacing the history each time', () => {
+        const baseRun = createNewRun(0);
+        const harness = createHarness(baseRun);
+        harness.state.saveData = {
+            ...harness.state.saveData,
+            runHistory: [
+                {
+                    endedAtIso: '2026-09-01T09:00:00.000Z',
+                    highestLevel: 2,
+                    mode: 'Practice',
+                    shareKey: 'md1:practice:33:77',
+                    totalScore: 100
+                }
+            ]
+        };
+
+        harness.controller.applyResolvedRun({
+            ...baseRun,
+            lives: 0,
+            status: 'gameOver',
+            stats: { ...baseRun.stats, bestScore: 700, highestLevel: 5, totalScore: 700 }
+        });
+
+        const history = harness.state.saveData.runHistory ?? [];
+        expect(history.map((entry) => entry.mode)).toEqual(['Classic Dungeon', 'Practice']);
+    });
 });

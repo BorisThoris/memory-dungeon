@@ -447,6 +447,42 @@ describe('desktop app flow', () => {
         expect(screen.getByTestId('game-hud')).toBeInTheDocument();
     });
 
+    it('shows a finished run on Profile, which is the only place it survives', async () => {
+        // The history is written at game over and read on Profile; this is the seam between them.
+        const saveData = createDefaultSaveData();
+        saveData.runHistory = [
+            {
+                endedAtIso: '2026-09-04T12:00:00.000Z',
+                highestLevel: 9,
+                mode: 'Scholar Contract',
+                shareKey: 'md1:scholar:33:404',
+                totalScore: 2100
+            }
+        ];
+
+        act(() => {
+            useAppStore.setState({
+                hydrated: true,
+                hydrating: false,
+                steamConnected: false,
+                view: 'profile',
+                settingsReturnView: 'menu',
+                subscreenReturnView: 'menu',
+                saveData,
+                settings: saveData.settings,
+                run: null,
+                newlyUnlockedAchievements: [],
+                hydrate: async () => {}
+            });
+        });
+
+        renderApp();
+
+        const history = await screen.findByTestId('profile-run-history', undefined, { timeout: 10_000 });
+        expect(history).toHaveTextContent('Scholar Contract');
+        expect(history).toHaveTextContent('Floor 9');
+    });
+
     it('names the run mode in the HUD of a real gameplay view, not just in the catalog', async () => {
         // PPI-006: every mode's start contract promises the HUD says which mode this is. The
         // component test proves RunShell can render it; this proves the app actually mounts the

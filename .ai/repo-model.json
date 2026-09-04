@@ -4977,8 +4977,8 @@
     {
       "path": "src/renderer/App.test.tsx",
       "category": "test",
-      "bytes": 33134,
-      "sha256": "67ba572bc711697888ce13dbea8b186ab5184be3c8eb2b40a84dc1ef37cb5917"
+      "bytes": 34410,
+      "sha256": "6416b6a47dc0f466638a59f4c2444a1612f2f727458da1ba3d9302ab5058b230"
     },
     {
       "path": "src/renderer/App.tsx",
@@ -9759,8 +9759,8 @@
     {
       "path": "src/renderer/store/runResolutionController.test.ts",
       "category": "test",
-      "bytes": 21442,
-      "sha256": "76fec38e9dc5ec5c3cff5b55fa7100bd432f23d8939e64ba4dc15b9691158a2d"
+      "bytes": 23228,
+      "sha256": "38438efb328e28f9faa8e64c8203d7b976e861cd0d8cbb02f93d8c31721a92d5"
     },
     {
       "path": "src/renderer/store/runResolutionController.ts",
@@ -15713,7 +15713,7 @@
       "path": "src/renderer/App.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 829,
+      "lineCount": 865,
       "imports": [
         "file:src/renderer/App.tsx",
         "file:src/renderer/desktop-client.ts",
@@ -23298,7 +23298,7 @@
       "path": "src/renderer/store/runResolutionController.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 556,
+      "lineCount": 603,
       "imports": [
         "file:src/renderer/store/matchScorePop.ts",
         "file:src/renderer/store/runResolutionController.ts",
