@@ -86,7 +86,7 @@ import {
     getLatestBoardTurnResolvedEvent,
     type BoardTurnResolvedEvent
 } from '../store/gameplayFeedbackAdapter';
-import { getLatestGameplayFeedback } from '../store/gameplayFeedbackAdapter';
+import { projectGameplayFeedback } from '../store/gameplayFeedbackAdapter';
 import { perfectMemoryStatus } from '../../shared/perfect-memory-status';
 import RunShell, { type RunShellTool } from './RunShell';
 import { RUN_SHELL_GLYPHS } from './runShellGlyphs';
@@ -1230,8 +1230,10 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     // Passed as just the journal, which is all the projector reads. Handing it the whole
     // run made the memo's real dependency the run object, so it recomputed on every state
     // change and the compiler could not preserve the memoization at all.
+    // Every feedback event the journal has produced, not just the latest: one command can raise
+    // several, and the live region announces them together as one line for that command.
     const typedGameplayFeedback = useMemo(
-        () => getLatestGameplayFeedback({ gameplayEventJournal }),
+        () => projectGameplayFeedback(gameplayEventJournal),
         [gameplayEventJournal]
     );
     const {

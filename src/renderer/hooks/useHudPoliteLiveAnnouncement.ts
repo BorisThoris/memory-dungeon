@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { runNonNegativeInteger, runNonNegativeIntegerWithFallback } from '../../shared/run-number-guards';
 import { buildBoardTurnAnnouncement, volatileShuffleAnnouncementLine } from '../copy/boardTurnAnnouncement';
-import { buildGameplayEventAnnouncement } from '../copy/gameplayEventAnnouncement';
+import { buildGameplayEventBatchAnnouncement } from '../copy/gameplayEventAnnouncement';
 import type { BoardTurnResolvedEvent } from '../store/gameplayFeedbackAdapter';
 import { GAMBIT_OPPORTUNITY_HINT_LINE } from '../copy/gameplayHints';
 import type { GameplayFeedbackPresentation } from '../store/gameplayFeedbackAdapter';
@@ -18,6 +18,9 @@ export { formatHudActionFeedbackText, getFindableToastText } from '../copy/hudAc
 
 /** Min interval between polite live-region updates (anti-spam for screen readers). */
 const POLITE_HUD_THROTTLE_MS = 400;
+
+/** Stable empty default: a fresh array each render would re-run every memo that reads it. */
+const EMPTY_FEEDBACK: readonly GameplayFeedbackPresentation[] = [];
 
 type HudAnnouncePriority = 'info' | 'error';
 
@@ -58,7 +61,12 @@ const payoffIntensityAnnouncementLine = ({
 };
 
 interface HudPoliteLiveAnnouncementInput {
-    gameplayFeedback?: GameplayFeedbackPresentation | null;
+    /**
+     * Every feedback event the journal has produced, in order. A list rather than the latest one:
+     * a single command can raise several — a match that also claims a findable and trips a hazard
+     * — and announcing only the last of them dropped the rest on the floor.
+     */
+    gameplayFeedback?: readonly GameplayFeedbackPresentation[];
     gauntletRemainingMs: number | null;
     gauntletActive: boolean;
     scoreParasiteActive: boolean;
@@ -119,7 +127,7 @@ const normalizeRecallFocusForAnnouncement = (focus: number, max: number): { focu
 
 export const useHudPoliteLiveAnnouncement = ({
     boardTurnEvent = null,
-    gameplayFeedback = null,
+    gameplayFeedback = EMPTY_FEEDBACK,
     gauntletRemainingMs,
     gauntletActive,
     scoreParasiteActive,
@@ -179,15 +187,13 @@ export const useHudPoliteLiveAnnouncement = ({
         enemyHazardHits: number;
         enemyHazardsDefeated: number;
     } | null>(null);
-    const announcedGameplayFeedbackEventIdRef = useRef<string | null>(null);
+    const announcedGameplayFeedbackEventIdsRef = useRef<Set<string>>(new Set());
     // Read inside the effects rather than during render: whether a feedback event has
     // already been spoken is not a rendering concern, and a render-time read of the ref
     // returns whatever the last committed effect left there.
     const unannouncedGameplayFeedback = useCallback(
-        (): GameplayFeedbackPresentation | null =>
-            gameplayFeedback && gameplayFeedback.eventId !== announcedGameplayFeedbackEventIdRef.current
-                ? gameplayFeedback
-                : null,
+        (): readonly GameplayFeedbackPresentation[] =>
+            gameplayFeedback.filter((item) => !announcedGameplayFeedbackEventIdsRef.current.has(item.eventId)),
         [gameplayFeedback]
     );
     const { focus: normalizedRecallFocusValue, max: normalizedRecallFocusMax } = normalizeRecallFocusForAnnouncement(
@@ -297,6 +303,21 @@ export const useHudPoliteLiveAnnouncement = ({
         [scheduleQueueFlush]
     );
 
+    /** One ordered line per command, and every event in it marked spoken. */
+    const announceGameplayFeedbackBatch = useCallback(
+        (pending: readonly GameplayFeedbackPresentation[]): void => {
+            const batch = buildGameplayEventBatchAnnouncement(pending);
+            if (!batch) {
+                return;
+            }
+            queuePoliteAnnouncement(batch.message, { dedupeKey: batch.dedupeKey, priority: batch.priority });
+            for (const eventId of batch.consumedEventIds) {
+                announcedGameplayFeedbackEventIdsRef.current.add(eventId);
+            }
+        },
+        [queuePoliteAnnouncement]
+    );
+
     useEffect(
         () => () => {
             if (rafIdRef.current != null) {
@@ -387,7 +408,7 @@ export const useHudPoliteLiveAnnouncement = ({
     // findable was claimed, and the event id makes the dedupe key unique per turn, so a
     // re-render cannot re-announce and two identical pickups on different turns both are.
     useEffect(() => {
-        if (!boardTurnEvent || unannouncedGameplayFeedback()?.source.kind === 'findable') {
+        if (!boardTurnEvent || unannouncedGameplayFeedback().some((item) => item.source.kind === 'findable')) {
             return;
         }
         const announcement = buildBoardTurnAnnouncement(boardTurnEvent, { reduceMotion });
@@ -404,14 +425,7 @@ export const useHudPoliteLiveAnnouncement = ({
         const newGameplayFeedback = unannouncedGameplayFeedback();
         if (boardLevel === null) {
             actionSnapRef.current = null;
-            if (newGameplayFeedback) {
-                const presentation = buildGameplayEventAnnouncement(newGameplayFeedback);
-                queuePoliteAnnouncement(presentation.message, {
-                    dedupeKey: presentation.dedupeKey,
-                    priority: presentation.priority
-                });
-                announcedGameplayFeedbackEventIdRef.current = newGameplayFeedback.eventId;
-            }
+            announceGameplayFeedbackBatch(newGameplayFeedback);
             return;
         }
 
@@ -440,17 +454,17 @@ export const useHudPoliteLiveAnnouncement = ({
 
         if (snap === null || snap.level !== boardLevel) {
             actionSnapRef.current = nextSnap;
-            if (newGameplayFeedback) {
-                queuePoliteAnnouncement(newGameplayFeedback.message, {
-                    dedupeKey: `gameplay-event:${newGameplayFeedback.eventId}`,
-                    priority: newGameplayFeedback.priority
-                });
-                announcedGameplayFeedbackEventIdRef.current = newGameplayFeedback.eventId;
-            }
+            announceGameplayFeedbackBatch(newGameplayFeedback);
             return;
         }
 
-        const lines: string[] = newGameplayFeedback ? [newGameplayFeedback.message] : [];
+        const lines: string[] = newGameplayFeedback.map((item) => item.message);
+        /*
+         * `newGameplayFeedback` used to be null-or-one, so `!newGameplayFeedback` read as "the
+         * core said nothing about this turn". An empty array is truthy, so the checks below say
+         * that in terms of length instead — silently, they had stopped suppressing anything.
+         */
+        const coreSaidNothing = newGameplayFeedback.length === 0;
         const lifeDelta = lives - snap.lives;
         const guardDelta = guardTokens - snap.guardTokens;
         const shardDelta = comboShards - snap.comboShards;
@@ -483,7 +497,7 @@ export const useHudPoliteLiveAnnouncement = ({
             lines.push(`Life restored. ${lives} ${lives === 1 ? 'life available' : 'lives available'}.`);
         } else if (guardDelta < 0) {
             lines.push(`Guard token spent. ${guardTokens} guard ${guardTokens === 1 ? 'token remains' : 'tokens remain'}.`);
-        } else if (guardDelta > 0 && !newGameplayFeedback) {
+        } else if (guardDelta > 0 && coreSaidNothing) {
             lines.push(`${pluralize(guardDelta, 'guard token')} gained. ${guardTokens} available.`);
         }
 
@@ -589,7 +603,7 @@ export const useHudPoliteLiveAnnouncement = ({
             );
         }
 
-        if (shardDelta > 0 && !newGameplayFeedback) {
+        if (shardDelta > 0 && coreSaidNothing) {
             lines.push(`${resourceDeltaCopy(shardDelta, 'Combo shard', 'combo shard', 'gained')}. ${comboShards} available.`);
         } else if (shardDelta < 0) {
             lines.push(`${resourceDeltaCopy(shardDelta, 'Combo shard', 'combo shard', 'spent')}. ${comboShards} available.`);
@@ -617,19 +631,22 @@ export const useHudPoliteLiveAnnouncement = ({
 
         if (lines.length > 0) {
             queuePoliteAnnouncement(lines.join(' '), {
-                dedupeKey: `action:${boardLevel}:${lives}:${guardTokens}:${comboShards}:${shopGold}:${shuffleCharges}:${regionShuffleCharges}:${stickyBlockIndex ?? 'none'}:${objectiveProgress}:${normalizedRecallFocusValue}:${normalizedRecallFocusMax}:${recallMatchesThisFloor}:${recallMistakesThisFloor}:${forgottenTileCountThisFloor}:${dungeonEnemiesDefeatedThisFloor}:${enemyHazardHitsThisFloor}:${enemyHazardsDefeatedThisFloor}:${boardTurnEvent?.eventId ?? 'no-turn'}:${newGameplayFeedback?.eventId ?? 'legacy'}`,
+                dedupeKey: `action:${boardLevel}:${lives}:${guardTokens}:${comboShards}:${shopGold}:${shuffleCharges}:${regionShuffleCharges}:${stickyBlockIndex ?? 'none'}:${objectiveProgress}:${normalizedRecallFocusValue}:${normalizedRecallFocusMax}:${recallMatchesThisFloor}:${recallMistakesThisFloor}:${forgottenTileCountThisFloor}:${dungeonEnemiesDefeatedThisFloor}:${enemyHazardHitsThisFloor}:${enemyHazardsDefeatedThisFloor}:${boardTurnEvent?.eventId ?? 'no-turn'}:${newGameplayFeedback.map((item) => item.eventId).join(',') || 'legacy'}`,
                 priority:
-                    lifeDelta < 0 || enemyHazardHitDelta > 0 || newGameplayFeedback?.priority === 'error'
+                    lifeDelta < 0 ||
+                    enemyHazardHitDelta > 0 ||
+                    newGameplayFeedback.some((item) => item.priority === 'error')
                         ? 'error'
                         : 'info'
             });
         }
 
         actionSnapRef.current = nextSnap;
-        if (newGameplayFeedback) {
-            announcedGameplayFeedbackEventIdRef.current = newGameplayFeedback.eventId;
+        for (const item of newGameplayFeedback) {
+            announcedGameplayFeedbackEventIdsRef.current.add(item.eventId);
         }
     }, [
+        announceGameplayFeedbackBatch,
         boardLevel,
         comboShards,
         dungeonEnemiesDefeatedThisFloor,

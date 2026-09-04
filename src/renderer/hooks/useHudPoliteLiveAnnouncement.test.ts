@@ -462,6 +462,50 @@ describe('useHudPoliteLiveAnnouncement', () => {
         expect(result.current.priority).toBe('info');
     });
 
+    it('announces every event one command raised, not just the last of them', async () => {
+        // A single flip can claim a findable and trip a hazard. The hook used to take the latest
+        // feedback event and drop the rest, so the player heard one of the two.
+        const command = 'flip-7';
+        const feedback: GameplayFeedbackPresentation[] = [
+            {
+                audioCategory: 'reward-claim',
+                commandId: command,
+                cue: 'findable.claimed',
+                eventId: `${command}:1`,
+                message: 'Cache claimed.',
+                priority: 'info',
+                source: { kind: 'findable', id: 'cache' },
+                tone: 'reward'
+            },
+            {
+                audioCategory: 'hazard-banish',
+                commandId: command,
+                cue: 'trait.snare.tripped',
+                eventId: `${command}:2`,
+                message: 'Snare tripped.',
+                priority: 'error',
+                source: { kind: 'trait', id: 'snare' },
+                tone: 'warning'
+            }
+        ];
+
+        const { result, rerender } = renderHook(
+            (p: { feedback: readonly GameplayFeedbackPresentation[] }) =>
+                useHudPoliteLiveAnnouncement({ ...base, gameplayFeedback: p.feedback }),
+            { initialProps: { feedback: [] as readonly GameplayFeedbackPresentation[] } }
+        );
+
+        await act(async () => {
+            rerender({ feedback });
+        });
+        await flushRaf();
+
+        expect(result.current.message).toContain('Cache claimed.');
+        expect(result.current.message).toContain('Snare tripped.');
+        // One error among them makes the whole line an error, so it is not announced as routine.
+        expect(result.current.priority).toBe('error');
+    });
+
     it('uses one typed reward message instead of duplicate legacy resource-gain copy', async () => {
         const feedback: GameplayFeedbackPresentation = {
             audioCategory: 'reward-claim',
@@ -477,7 +521,7 @@ describe('useHudPoliteLiveAnnouncement', () => {
             (p: { feedback: GameplayFeedbackPresentation | null; guards: number; shards: number }) =>
                 useHudPoliteLiveAnnouncement({
                     ...base,
-                    gameplayFeedback: p.feedback,
+                    gameplayFeedback: p.feedback ? [p.feedback] : [],
                     guardTokens: p.guards,
                     comboShards: p.shards
                 }),

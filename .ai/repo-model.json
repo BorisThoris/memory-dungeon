@@ -7689,8 +7689,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 92267,
-      "sha256": "330898d7d910c92e758919930884d9688cc7e6d899434e24e25e19b544bd6e82"
+      "bytes": 92446,
+      "sha256": "6aa45dc449a70b4db3fa672a5a4a08aa138f0c34d723185376a4fe7e052757e2"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -9309,14 +9309,14 @@
     {
       "path": "src/renderer/hooks/useHudPoliteLiveAnnouncement.test.ts",
       "category": "test",
-      "bytes": 55173,
-      "sha256": "1727130c912e8804d83e06f83f5c2d0d6970e93d34c60e908759fdccce8a0aaf"
+      "bytes": 57012,
+      "sha256": "f77bc0dbf63fb156b9f04361e24cc5bf2199e42bae2056eda766d8b885ecbd28"
     },
     {
       "path": "src/renderer/hooks/useHudPoliteLiveAnnouncement.ts",
       "category": "source",
-      "bytes": 28427,
-      "sha256": "1c8c37a172f0d6023f9da3906cb7bd877908389e9f8c2cb0008bfd4c64c256b8"
+      "bytes": 29351,
+      "sha256": "edf9c755675154793c27716622540d7d96ae2c76ae9e3e979666b718e7a9b109"
     },
     {
       "path": "src/renderer/hooks/useLatestRef.ts",
@@ -17483,7 +17483,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 2042,
+      "lineCount": 2044,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -21976,7 +21976,7 @@
       "path": "src/renderer/hooks/useHudPoliteLiveAnnouncement.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 1462,
+      "lineCount": 1506,
       "imports": [
         "file:src/renderer/copy/gameplayHints.ts",
         "file:src/renderer/copy/hudActionFeedback.ts",
@@ -21994,7 +21994,7 @@
       "path": "src/renderer/hooks/useHudPoliteLiveAnnouncement.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 688,
+      "lineCount": 705,
       "imports": [
         "file:src/renderer/copy/boardTurnAnnouncement.ts",
         "file:src/renderer/copy/gameplayEventAnnouncement.ts",
@@ -37024,8 +37024,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 2041,
-      "endLine": 2041
+      "line": 2043,
+      "endLine": 2043
     },
     {
       "id": "symbol:src/renderer/components/gameScreenFeedback.ts#DungeonCombatLogRow",
@@ -41848,8 +41848,8 @@
       "name": "useHudPoliteLiveAnnouncement",
       "kind": "value",
       "file": "src/renderer/hooks/useHudPoliteLiveAnnouncement.ts",
-      "line": 120,
-      "endLine": 687
+      "line": 128,
+      "endLine": 704
     },
     {
       "id": "symbol:src/renderer/hooks/useLatestRef.ts#useLatestRef",
@@ -64715,7 +64715,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1271
+          "line": 1273
         }
       ],
       "tests": [
