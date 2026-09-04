@@ -44,6 +44,32 @@
     pointer-events: none;
 }
 
+.modeIdentity {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: center;
+    gap: 0.2rem 0.5rem;
+    margin: 0 0 0.25rem;
+    line-height: 1.2;
+    text-align: center;
+}
+
+/* 0.75rem floor: the HUD's minimum readable type size, same as `.label`. */
+.modeIdentityName {
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--theme-gold-bright);
+}
+
+.modeIdentityDetail {
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    color: var(--theme-text-subtle);
+}
+
 .stats {
     display: flex;
     align-items: flex-end;
@@ -320,6 +346,10 @@
 
     .label {
         letter-spacing: 0.14em;
+    }
+
+    .modeIdentityName {
+        letter-spacing: 0.1em;
     }
 
     .dock {

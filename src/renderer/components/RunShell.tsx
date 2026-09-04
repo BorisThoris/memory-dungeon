@@ -3,6 +3,7 @@ import type { RunState } from '../../shared/contracts';
 import { runNonNegativeInteger } from '../../shared/run-number-guards';
 import { getGameplayFeedbackObjectiveSnapshot } from '../../shared/gameplay-feedback-facts';
 import { MUTATOR_CATALOG } from '../../shared/mechanics-encyclopedia';
+import { describeRunModeIdentity, runModeIdentityText } from '../../shared/run-mode-identity';
 import { GameplayMenuIcon } from '../ui/gameplayIcons';
 import styles from './RunShell.module.css';
 import { RUN_SHELL_LABELS } from '../copy/runDialogCopy';
@@ -79,6 +80,7 @@ const RunShell = ({
     const maxLives = Math.max(run.lives, 5);
     const objective = getGameplayFeedbackObjectiveSnapshot(run);
     const mutatorTitles = run.activeMutators.map((id) => MUTATOR_CATALOG[id]?.title ?? id);
+    const modeIdentity = describeRunModeIdentity(run);
     const line = feedback ?? onboardingLine ?? (objective ? `${objective.label}: ${objective.progress}/${objective.required}` : null);
     const lineTone = feedback ? feedbackPriority : onboardingLine ? 'info' : 'objective';
     const visibleTools = tools.filter((tool) => tool.charges === undefined || tool.charges > 0 || tool.armed);
@@ -86,6 +88,16 @@ const RunShell = ({
     return (
         <div className={styles.shell} data-testid="run-shell">
             <header className={styles.bar} data-testid="game-hud">
+                {/* Identity, not a number: which run this is and the one rule that bends it. It sits
+                    above the stat row rather than inside it so the numbers stay a row of numbers. */}
+                {/* No aria-label: a paragraph prohibits one, and the text below already reads the
+                    whole thing. `title` is the hover affordance, not the accessible name. */}
+                <p className={styles.modeIdentity} data-testid="hud-mode-identity" title={runModeIdentityText(modeIdentity)}>
+                    <span className={styles.modeIdentityName}>{modeIdentity.label}</span>
+                    {modeIdentity.detail === null ? null : (
+                        <span className={styles.modeIdentityDetail}>{modeIdentity.detail}</span>
+                    )}
+                </p>
                 <div className={styles.stats} role="group" aria-label="Run stats">
                 <Stat label="Floor" testId="hud-floor">
                     {String(run.board?.level ?? 1)}

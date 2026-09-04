@@ -59,14 +59,19 @@ export async function openModeDetail(page: Page, modeTitle: string): Promise<Loc
         name: new RegExp(`^${escapeRegExp(modeTitle)}\\. Open details\\.$`, 'i')
     });
     if ((await modeTile.count()) === 0 || !(await modeTile.first().isVisible().catch(() => false))) {
-        const searchButton = page.getByRole('button', { name: /search modes|edit search filter/i });
-        if ((await searchButton.count()) > 0) {
-            await searchButton.first().click({ force: true });
-            await page.getByLabel(/filter modes/i).fill(modeTitle);
-            modeTile = page.getByRole('button', {
-                name: new RegExp(`^${escapeRegExp(modeTitle)}\\. Open details\\.$`, 'i')
-            });
-        }
+        /*
+         * The browse grid is paged, so most modes are not on screen when it opens; the filter is
+         * how you ask for one by name. This used to hunt for a button named "Search modes" first
+         * and give up silently when it found none — the field is an <input type="search"> labelled
+         * "Filter modes" and always has been, so the fallback never ran and every mode past the
+         * first page timed out here instead of failing.
+         */
+        const filter = page.getByLabel(/filter modes/i);
+        await expect(filter).toBeVisible();
+        await filter.fill(modeTitle);
+        modeTile = page.getByRole('button', {
+            name: new RegExp(`^${escapeRegExp(modeTitle)}\\. Open details\\.$`, 'i')
+        });
     }
     await modeTile.scrollIntoViewIfNeeded();
     await modeTile.click({ force: true });

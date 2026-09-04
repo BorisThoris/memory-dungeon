@@ -2,6 +2,9 @@ import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { getMutatorCatalogRows } from '../../shared/game-catalog';
+import { RUN_MODE_CATALOG } from '../../shared/run-mode-catalog';
+
+const escapeForRegExp = (value: string): string => value.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&');
 import ChooseYourPathScreen from './ChooseYourPathScreen';
 import { buildMeditationPickMutatorRows } from './chooseYourPathScreenModel';
 
@@ -62,6 +65,36 @@ describe('ChooseYourPathScreen', () => {
 
         await user.click(within(launcher).getByRole('button', { name: /^start run$/i }));
         expect(storeSpies.startRun).toHaveBeenCalledTimes(1);
+    });
+
+    it('lets a player reach every catalog mode through the filter, paged grid or not', async () => {
+        // The browse grid is paged, so "is the tile on screen right now" is the wrong question: the
+        // filter is how a player asks for a mode by name. Every mode the catalog declares has to
+        // come back from it, or the mode is content nothing can start.
+        const user = userEvent.setup();
+        render(<ChooseYourPathScreen />);
+
+        // The one mode that is never in the browse grid is the one already on the launcher, which
+        // is reachable in one click instead. Which mode that is depends on the profile, so read it
+        // off the launcher rather than hardcoding a title.
+        const launcher = screen.getByRole('region', { name: /recommended run/i });
+        const launchTitle = within(launcher).getByRole('heading', { level: 2 }).textContent?.trim() ?? '';
+        expect(within(launcher).getByRole('button', { name: /^start run$/i })).toBeInTheDocument();
+
+        const browse = screen.getByRole('region', { name: /browse modes/i });
+        const filter = screen.getByLabelText(/filter modes/i);
+        const unreachable: string[] = [];
+        for (const def of RUN_MODE_CATALOG.filter((mode) => mode.title !== launchTitle)) {
+            await user.clear(filter);
+            await user.type(filter, def.title);
+            const tile = within(browse).queryAllByRole('button', {
+                name: new RegExp(`^${escapeForRegExp(def.title)}\\. Open details\\.$`, 'iu')
+            });
+            if (tile.length === 0) {
+                unreachable.push(def.id);
+            }
+        }
+        expect(unreachable, 'catalog modes the filter cannot surface').toEqual([]);
     });
 
     it('states each browse mode once: group, title, one description, locked tag where it applies', () => {

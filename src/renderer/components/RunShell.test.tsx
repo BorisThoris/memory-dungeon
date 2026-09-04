@@ -29,6 +29,26 @@ describe('RunShell', () => {
         expect(screen.queryByTestId('hud-gauntlet-timer')).not.toBeInTheDocument();
     });
 
+    it('names the run mode, so a Practice run is not mistaken for a Classic one', () => {
+        const { rerender } = render(
+            <RunShell gauntletRemainingMs={null} onPause={vi.fn()} run={playingRun()} tools={[]} />
+        );
+        expect(screen.getByTestId('hud-mode-identity')).toHaveTextContent(/Classic Dungeon/i);
+
+        const practice = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, practiceMode: true }));
+        rerender(<RunShell gauntletRemainingMs={null} onPause={vi.fn()} run={practice} tools={[]} />);
+        const identity = screen.getByTestId('hud-mode-identity');
+        expect(identity).toHaveTextContent(/Practice/i);
+        expect(identity).toHaveTextContent(/Achievements off/i);
+    });
+
+    it('keeps the mode identity out of the numbers group, which stays four numbers', () => {
+        render(<RunShell gauntletRemainingMs={null} onPause={vi.fn()} run={playingRun()} tools={[]} />);
+
+        const stats = screen.getByRole('group', { name: /run stats/i });
+        expect(within(stats).queryByTestId('hud-mode-identity')).not.toBeInTheDocument();
+    });
+
     it('shows the gauntlet clock only when a gauntlet is running', () => {
         render(<RunShell gauntletRemainingMs={95_000} onPause={vi.fn()} run={playingRun()} tools={[]} />);
 

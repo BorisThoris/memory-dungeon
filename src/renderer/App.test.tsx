@@ -12,7 +12,8 @@ vi.mock('./assets/preloadStartupAssets', () => ({
 
 import App, { APP_MAIN_LANDMARK_ID } from './App';
 import type { RunState } from '../shared/contracts';
-import { createNewRun, pauseRun } from '../shared/game-core';
+import { createNewRun, finishMemorizePhase, pauseRun } from '../shared/game-core';
+import { createWildRun } from '../shared/run-creation-rules';
 import { generateRouteChoices } from '../shared/route-rules';
 import { createRunShopOffers } from '../shared/shop-rules';
 import { createDefaultSaveData } from '../shared/save-data';
@@ -444,6 +445,36 @@ describe('desktop app flow', () => {
         expect(screen.queryByRole('dialog', { name: /floor cleared/i })).not.toBeInTheDocument();
         expect(await screen.findByRole('dialog', { name: /vendor alcove/i })).toBeInTheDocument();
         expect(screen.getByTestId('game-hud')).toBeInTheDocument();
+    });
+
+    it('names the run mode in the HUD of a real gameplay view, not just in the catalog', async () => {
+        // PPI-006: every mode's start contract promises the HUD says which mode this is. The
+        // component test proves RunShell can render it; this proves the app actually mounts the
+        // shell that does, on a run that is not the default endless one.
+        const saveData = createDefaultSaveData();
+        const wildRun = finishMemorizePhase(createWildRun(0));
+
+        act(() => {
+            useAppStore.setState({
+                hydrated: true,
+                hydrating: false,
+                steamConnected: false,
+                view: 'playing',
+                settingsReturnView: 'menu',
+                subscreenReturnView: 'menu',
+                saveData,
+                settings: saveData.settings,
+                run: wildRun,
+                newlyUnlockedAchievements: [],
+                hydrate: async () => {}
+            });
+        });
+
+        renderApp();
+
+        // GameScreen is lazy: the shell shows "Loading run..." until the chunk resolves.
+        expect(await screen.findByTestId('game-hud', undefined, { timeout: 10_000 })).toBeInTheDocument();
+        expect(screen.getByTestId('hud-mode-identity')).toHaveTextContent(/Wild Run/i);
     });
 
     it('renders the route side-room overlay over gameplay', async () => {
