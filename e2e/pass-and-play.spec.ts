@@ -1,6 +1,12 @@
 import { expect, test } from '@playwright/test';
 import { buildVisualSaveJson, gotoWithSave, mainMenuPlayButton } from './visualScreenHelpers';
-import { flipTileAtGridCellKeyboard, waitForBoardPlayPhase } from './tileBoardGameFlow';
+import {
+    clearFloorByMatchingPairs,
+    flipTileAtGridCellKeyboard,
+    flipRemainingHiddenTiles,
+    waitForBoardPlayPhase
+} from './tileBoardGameFlow';
+import { PASS_AND_PLAY_FLOORS } from '../src/shared/pass-and-play-rules';
 import { findUnreachableControls } from './uiReachability';
 import { CHROME_ANCHORED_BOARD_OVERLAYS, expectBoardOverlaysClearChrome } from './boardOverlayClearance';
 
@@ -185,5 +191,67 @@ test.describe('pass and play', () => {
         await flipTileAtGridCellKeyboard(page, first?.cell[0] ?? 0, first?.cell[1] ?? 0);
         await page.waitForTimeout(600);
         await expect(banner, 'the pass clears once the next player acts').toBeHidden();
+    });
+
+    test('the table reaches the ending it agreed to', async ({ page }) => {
+        // Three real floors, matched on purpose so no life is ever spent: the run has to stop
+        // because the agreed length ran out, not because the party died.
+        test.setTimeout(600_000);
+        await page.setViewportSize({ width: 1280, height: 800 });
+        await openPassAndPlay(page, 2);
+        await waitForBoardPlayPhase(page);
+
+        await expect(page.getByTestId('hud-floor'), 'the HUD reads the agreed length').toContainText(
+            new RegExp(`1\\s*/\\s*${PASS_AND_PLAY_FLOORS}`)
+        );
+
+        /*
+         * Driven by the game's own state rather than a floor counter. A counter and the run drift:
+         * an interlude can take two passes, or a pass can land mid-transition with nothing to
+         * match, and then the loop is a floor ahead of the board and gives up on a game that is
+         * still going. Play until the run says it is over.
+         */
+        const gameOver = page.getByTestId('game-over-above-fold-summary');
+        for (let pass = 0; pass < PASS_AND_PLAY_FLOORS * 3; pass += 1) {
+            /*
+             * The board unmounts the moment the run ends, and its grid hooks go with it. Checking
+             * for the board itself rather than only for the results screen is what stops the loop
+             * driving a board that is no longer there — the first version threw "grid hooks
+             * missing" on a game that had ended exactly as intended.
+             */
+            if (await gameOver.isVisible().catch(() => false)) {
+                break;
+            }
+            if (!(await page.getByTestId('tile-board-frame').isVisible().catch(() => false))) {
+                break;
+            }
+            await waitForBoardPlayPhase(page).catch(() => undefined);
+            await clearFloorByMatchingPairs(page);
+            // A floor is not over when the last pair resolves: the exit is a tile of its own.
+            await flipRemainingHiddenTiles(page);
+            await page.waitForTimeout(1200);
+
+            // Whatever the run puts between floors — an exit door, a route, a vendor — take the
+            // option that continues rather than the one that buys something.
+            /*
+             * Unanchored on purpose. The floor-cleared button is not "Continue" — it is "Continue
+             * to Mystery route floor", named for the route it takes, so an anchored /^continue$/
+             * matches nothing and the run sits on a dialog until the test times out.
+             */
+            for (const name of [/proceed/i, /continue to/i, /back to board/i, /return to board/i, /^skip$/i]) {
+                const button = page.getByRole('button', { name }).first();
+                if (await button.isVisible().catch(() => false)) {
+                    await button.click();
+                    await page.waitForTimeout(1100);
+                }
+            }
+            await page.waitForTimeout(600);
+        }
+
+        await expect(
+            page.getByTestId('game-over-pass-and-play'),
+            'the agreed length ends the game and the standings decide it'
+        ).toBeVisible({ timeout: 60_000 });
+        await expect(page.getByTestId('game-over-pass-and-play-result')).toContainText(/wins|draw/i);
     });
 });

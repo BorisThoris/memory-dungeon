@@ -3693,8 +3693,8 @@
     {
       "path": "e2e/pass-and-play.spec.ts",
       "category": "test",
-      "bytes": 9825,
-      "sha256": "cb8e1bb455589cf1b2993bd5907d87f542150ca49d267192c6e43e52bb067483"
+      "bytes": 13274,
+      "sha256": "abcdaf79de20b26c21f73c1ad4df28e4647d995dda9a2fadb6777fed1f8c51b7"
     },
     {
       "path": "e2e/pause-controls-reference.spec.ts",
@@ -3825,8 +3825,8 @@
     {
       "path": "e2e/tileBoardGameFlow.ts",
       "category": "test",
-      "bytes": 9917,
-      "sha256": "7e56229f97361767d5b6bbfc688cb1ee7557a2aaf68ded9290dc20476f68f782"
+      "bytes": 14481,
+      "sha256": "d094b7d72fa8c22fafcbb181e1c8c441020ce922192b558ae3ef617bc33cf63b"
     },
     {
       "path": "e2e/ui-design-reference.spec.ts",
@@ -8127,8 +8127,8 @@
     {
       "path": "src/renderer/components/TileBoard.tsx",
       "category": "source",
-      "bytes": 167637,
-      "sha256": "791e8990ca0acf83fc94e2497a2ffbc4336b9052c5347a3d4da3028a39c8868e"
+      "bytes": 168435,
+      "sha256": "0234e250383026c76877bd1931bdfafcf8c8abd3d1721337b1ed265fd2fe8588"
     },
     {
       "path": "src/renderer/components/tileBoardCanvasContext.test.ts",
@@ -18646,7 +18646,7 @@
       "path": "src/renderer/components/TileBoard.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 3879,
+      "lineCount": 3894,
       "imports": [
         "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/breakpoints.ts",
@@ -38173,8 +38173,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/TileBoard.tsx",
-      "line": 3878,
-      "endLine": 3878
+      "line": 3893,
+      "endLine": 3893
     },
     {
       "id": "symbol:src/renderer/components/TileBoard.tsx#TileBoardClientRect",

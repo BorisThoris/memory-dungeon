@@ -239,3 +239,109 @@ export async function openRunSettings(page: Page): Promise<void> {
     await pauseOverlay.getByRole('button', { name: /^settings$/i }).click({ force: true });
     await expect(page.getByRole('dialog', { name: /run settings/i })).toBeVisible();
 }
+
+/**
+ * Reads every ordinary pair tile still in play, by grid cell.
+ *
+ * Two things this has to get right, both of which it got wrong first. The grid hooks are 1-based,
+ * so a scan starting at zero silently reads an offset board. And a matched tile keeps its id, so
+ * filtering on the id alone re-picks tiles that are already gone — a floor-clearing helper built
+ * that way flipped forty times, moved the hidden count by two, and reported success.
+ */
+export async function readPairTileCells(
+    page: Page,
+    span = 8
+): Promise<{ cell: [number, number]; pairKey: string }[]> {
+    return page.evaluate((size) => {
+        const w = window as Window & {
+            __e2eGetTileIdAtGrid1?: (row: number, col: number) => string | null;
+            __e2eGetTileStateAtGrid1?: (row: number, col: number) => string | null;
+        };
+        const readId = w.__e2eGetTileIdAtGrid1;
+        const readState = w.__e2eGetTileStateAtGrid1;
+        if (!readId || !readState) {
+            throw new Error('board grid hooks missing — e2e expects Vite dev mode.');
+        }
+        const found: { cell: [number, number]; pairKey: string }[] = [];
+        for (let row = 1; row <= size; row += 1) {
+            for (let column = 1; column <= size; column += 1) {
+                const id = readId(row, column);
+                if (id && /-[AB]$/u.test(id) && readState(row, column) === 'hidden') {
+                    found.push({ cell: [row, column], pairKey: id.replace(/-[AB]$/u, '') });
+                }
+            }
+        }
+        return found;
+    }, span);
+}
+
+/**
+ * Clears the current floor by matching every pair on purpose.
+ *
+ * The board is re-read before every pair: matching removes tiles and can move the ones that are
+ * left, so a plan made before the first flip aims at cells that have since changed. Each pair is
+ * flipped back to back, so no turn is ever a miss and no life is spent.
+ */
+export async function clearFloorByMatchingPairs(page: Page, maxPairs = 40): Promise<number> {
+    let matched = 0;
+    for (let attempt = 0; attempt < maxPairs; attempt += 1) {
+        const byPair = new Map<string, [number, number][]>();
+        for (const tile of await readPairTileCells(page)) {
+            byPair.set(tile.pairKey, [...(byPair.get(tile.pairKey) ?? []), tile.cell]);
+        }
+        const pair = [...byPair.values()].find((cells) => cells.length >= 2);
+        if (!pair) {
+            return matched;
+        }
+        const [first, second] = pair as [[number, number], [number, number]];
+        await flipTileAtGridCellKeyboard(page, first[0], first[1]);
+        await page.waitForTimeout(220);
+        await flipTileAtGridCellKeyboard(page, second[0], second[1]);
+        await page.waitForTimeout(700);
+        matched += 1;
+    }
+    return matched;
+}
+
+/**
+ * Flips whatever is still face down after every pair has been matched.
+ *
+ * A floor is not over when the last pair resolves. What remains — an exit, a findable, a dungeon
+ * card — is a tile of its own and has to be turned over before the run moves on. A helper that
+ * matched every pair and then waited for a floor-clear sat on floor one for nine minutes without
+ * ever saying why.
+ *
+ * @returns how many leftover tiles were flipped.
+ */
+export async function flipRemainingHiddenTiles(page: Page, span = 8, maxFlips = 12): Promise<number> {
+    let flipped = 0;
+    for (let attempt = 0; attempt < maxFlips; attempt += 1) {
+        const cell = await page.evaluate((size) => {
+            const w = window as Window & {
+                __e2eGetTileIdAtGrid1?: (row: number, col: number) => string | null;
+                __e2eGetTileStateAtGrid1?: (row: number, col: number) => string | null;
+            };
+            const readId = w.__e2eGetTileIdAtGrid1;
+            const readState = w.__e2eGetTileStateAtGrid1;
+            if (!readId || !readState) {
+                throw new Error('board grid hooks missing — e2e expects Vite dev mode.');
+            }
+            for (let row = 1; row <= size; row += 1) {
+                for (let column = 1; column <= size; column += 1) {
+                    if (readId(row, column) && readState(row, column) === 'hidden') {
+                        return [row, column] as [number, number];
+                    }
+                }
+            }
+            return null;
+        }, span);
+
+        if (!cell) {
+            return flipped;
+        }
+        await flipTileAtGridCellKeyboard(page, cell[0], cell[1]);
+        await page.waitForTimeout(900);
+        flipped += 1;
+    }
+    return flipped;
+}

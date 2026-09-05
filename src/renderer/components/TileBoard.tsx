@@ -2861,6 +2861,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                 col: number
             ) => { bottom: number; height: number; left: number; right: number; top: number; width: number } | null;
             __e2eGetTileIdAtGrid1?: (row: number, col: number) => string | null;
+            __e2eGetTileStateAtGrid1?: (row: number, col: number) => string | null;
             __e2ePanBoardBy?: (panX: number, panY: number) => void;
             __e2ePickTileAtGrid1?: (row: number, col: number) => void;
         };
@@ -2871,6 +2872,19 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                 return null;
             }
             return board.tiles[r * board.columns + c]?.id ?? null;
+        };
+        /*
+         * The id alone does not say whether a tile is still in play. A matched tile keeps its id,
+         * so a harness that picks by id re-picks tiles that are already gone and reports flips that
+         * do nothing — which is exactly what a floor-clearing helper did until it was measured.
+         */
+        w.__e2eGetTileStateAtGrid1 = (row: number, col: number): string | null => {
+            const r = row - 1;
+            const c = col - 1;
+            if (r < 0 || c < 0 || r >= board.rows || c >= board.columns) {
+                return null;
+            }
+            return board.tiles[r * board.columns + c]?.state ?? null;
         };
         w.__e2eGetTileClientRectAtGrid1 = (row: number, col: number) => {
             const r = row - 1;
@@ -2915,6 +2929,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         return () => {
             delete w.__e2eGetTileClientRectAtGrid1;
             delete w.__e2eGetTileIdAtGrid1;
+            delete w.__e2eGetTileStateAtGrid1;
             delete w.__e2ePanBoardBy;
             delete w.__e2ePickTileAtGrid1;
         };
