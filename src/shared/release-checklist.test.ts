@@ -13,7 +13,7 @@ import {
 } from './pass-and-play-rules';
 import { getSocialPlayScopeRows, SOCIAL_PLAY_SCOPE_DECISION } from './social-play-scope';
 import { isPassAndPlayFinalFloor, PASS_AND_PLAY_FLOORS, resolvePassAndPlayOutcome } from './pass-and-play-rules';
-import { labelsAreAmbiguous } from './control-label-ambiguity';
+import { labelsAreAmbiguous } from '../../scripts/control-label-ambiguity';
 import { PLAYABLE_PATH_FIXTURE_IDS } from './playable-path-fixtures';
 import { DECLARED_SURFACES, findBrokenSurfaces, findUnvisitedSurfaces } from '../../scripts/e2e-surface-coverage';
 import { chargeFieldsWithATool } from '../renderer/components/runShellToolCatalog';

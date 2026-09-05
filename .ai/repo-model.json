@@ -4,12 +4,12 @@
   "repository": {
     "name": "memory-dungeon",
     "trackedFileCount": 2539,
-    "codeFileCount": 992,
-    "exportedSymbolCount": 3575,
+    "codeFileCount": 991,
+    "exportedSymbolCount": 3572,
     "contentItemCount": 63,
     "mechanicCount": 136,
     "stateFieldCount": 144,
-    "relationshipCount": 10514
+    "relationshipCount": 10507
   },
   "inventory": [
     {
@@ -2259,8 +2259,8 @@
     {
       "path": "docs/RELEASE_CHECKLIST.md",
       "category": "documentation",
-      "bytes": 7493,
-      "sha256": "06bb57b4428f6fc8036282fd50b90622c29053cb2c464246ec35d2e0602785e8"
+      "bytes": 7490,
+      "sha256": "d57942fe16c0c63b593d5ef6d9f419c5e139dae3ff478251f9bafeb19fe53482"
     },
     {
       "path": "docs/RELIC_ROSTER.md",
@@ -2320,7 +2320,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 36714,
-      "sha256": "cba691ce3a766e792f009735cdaecbd041d7c1ae432b335b80e692c966aa3fb7"
+      "sha256": "6a8d58e34916dabea7504ae9d082df3dbfc8630dc6bc2c0298cab4f973b084f3"
     },
     {
       "path": "docs/UI_RETHINK_PLAN.md",
@@ -3579,8 +3579,8 @@
     {
       "path": "e2e/ambiguousControls.ts",
       "category": "test",
-      "bytes": 4025,
-      "sha256": "74eafcd3bbd4490d79d0b0e7ad5975e5bd5f6fa37c34be7b8065f3512ff86a99"
+      "bytes": 4022,
+      "sha256": "dd9fe93ff027838d85413735049258122ecb91bc0034f5f07582594f752b0d66"
     },
     {
       "path": "e2e/blueprint-explorer.spec.ts",
@@ -4559,6 +4559,12 @@
       "category": "script",
       "bytes": 1443,
       "sha256": "b509c7f7807f89f30ed16e3232b52da7661cae8a367b0fcc08001a24dc1f664b"
+    },
+    {
+      "path": "scripts/control-label-ambiguity.ts",
+      "category": "script",
+      "bytes": 1562,
+      "sha256": "88d241f77145a689d2f5e1ff39363f23568b70111398748106de9225b1cf0b95"
     },
     {
       "path": "scripts/copy-locality.ts",
@@ -10629,14 +10635,8 @@
     {
       "path": "src/shared/control-label-ambiguity.test.ts",
       "category": "test",
-      "bytes": 1913,
-      "sha256": "2f762558dbd31b9785117e54b42080a0b6d535a990924a067469f62755422488"
-    },
-    {
-      "path": "src/shared/control-label-ambiguity.ts",
-      "category": "source",
-      "bytes": 1562,
-      "sha256": "88d241f77145a689d2f5e1ff39363f23568b70111398748106de9225b1cf0b95"
+      "bytes": 1925,
+      "sha256": "8016478f1d490d74ceda0d86aaaef80a2f459f492e53ec4643f576ea16fe9883"
     },
     {
       "path": "src/shared/copy-locality.test.ts",
@@ -12027,14 +12027,14 @@
     {
       "path": "src/shared/release-checklist.test.ts",
       "category": "test",
-      "bytes": 31296,
-      "sha256": "b483a6b56789acce996a8dee4cd68d26ade55fb38e80ecef63fd35aa8f15e274"
+      "bytes": 31308,
+      "sha256": "9624571eee7ebd23e486770662469cd83a8e8eafaa7c798179da1e6c7703413c"
     },
     {
       "path": "src/shared/release-checklist.ts",
       "category": "source",
-      "bytes": 14977,
-      "sha256": "d9f028530321908503536ae6a0b9126ea42cb5da4c20581b897b7c6efb60c93f"
+      "bytes": 14974,
+      "sha256": "cddfade5b66a6835cf664a25cfe0fe40c7ebed033fae015c94acbec9c1cf8f43"
     },
     {
       "path": "src/shared/relic-favor-rules.test.ts",
@@ -26233,28 +26233,9 @@
       "layer": "shared",
       "role": "test",
       "lineCount": 42,
-      "imports": [
-        "file:src/shared/control-label-ambiguity.ts"
-      ],
+      "imports": [],
       "exports": [],
       "testedBy": []
-    },
-    {
-      "id": "file:src/shared/control-label-ambiguity.ts",
-      "path": "src/shared/control-label-ambiguity.ts",
-      "layer": "shared",
-      "role": "production",
-      "lineCount": 45,
-      "imports": [],
-      "exports": [
-        "symbol:src/shared/control-label-ambiguity.ts#CONTROL_LABEL_SYNONYMS",
-        "symbol:src/shared/control-label-ambiguity.ts#labelsAreAmbiguous",
-        "symbol:src/shared/control-label-ambiguity.ts#normalizeControlLabel"
-      ],
-      "testedBy": [
-        "file:src/shared/control-label-ambiguity.test.ts",
-        "file:src/shared/release-checklist.test.ts"
-      ]
     },
     {
       "id": "file:src/shared/copy-locality.test.ts",
@@ -31301,7 +31282,6 @@
         "file:src/renderer/copy/saveRecoveryNotice.ts",
         "file:src/renderer/diagnostics/rendererErrorHooks.ts",
         "file:src/shared/content-security-policy.ts",
-        "file:src/shared/control-label-ambiguity.ts",
         "file:src/shared/desktop-api-boundary.ts",
         "file:src/shared/game.ts",
         "file:src/shared/gamepad-input.ts",
@@ -48375,30 +48355,6 @@
       "file": "src/shared/contracts.ts",
       "line": 202,
       "endLine": 202
-    },
-    {
-      "id": "symbol:src/shared/control-label-ambiguity.ts#CONTROL_LABEL_SYNONYMS",
-      "name": "CONTROL_LABEL_SYNONYMS",
-      "kind": "value",
-      "file": "src/shared/control-label-ambiguity.ts",
-      "line": 14,
-      "endLine": 31
-    },
-    {
-      "id": "symbol:src/shared/control-label-ambiguity.ts#labelsAreAmbiguous",
-      "name": "labelsAreAmbiguous",
-      "kind": "value",
-      "file": "src/shared/control-label-ambiguity.ts",
-      "line": 43,
-      "endLine": 44
-    },
-    {
-      "id": "symbol:src/shared/control-label-ambiguity.ts#normalizeControlLabel",
-      "name": "normalizeControlLabel",
-      "kind": "value",
-      "file": "src/shared/control-label-ambiguity.ts",
-      "line": 33,
-      "endLine": 40
     },
     {
       "id": "symbol:src/shared/copy-tone.ts#COPY_TONE_RULES",
@@ -85500,24 +85456,6 @@
       "kind": "exports"
     },
     {
-      "id": "exports:src/shared/control-label-ambiguity.ts->symbol:src/shared/control-label-ambiguity.ts#CONTROL_LABEL_SYNONYMS",
-      "source": "file:src/shared/control-label-ambiguity.ts",
-      "target": "symbol:src/shared/control-label-ambiguity.ts#CONTROL_LABEL_SYNONYMS",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/control-label-ambiguity.ts->symbol:src/shared/control-label-ambiguity.ts#labelsAreAmbiguous",
-      "source": "file:src/shared/control-label-ambiguity.ts",
-      "target": "symbol:src/shared/control-label-ambiguity.ts#labelsAreAmbiguous",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/shared/control-label-ambiguity.ts->symbol:src/shared/control-label-ambiguity.ts#normalizeControlLabel",
-      "source": "file:src/shared/control-label-ambiguity.ts",
-      "target": "symbol:src/shared/control-label-ambiguity.ts#normalizeControlLabel",
-      "kind": "exports"
-    },
-    {
       "id": "exports:src/shared/copy-tone.ts->symbol:src/shared/copy-tone.ts#COPY_TONE_RULES",
       "source": "file:src/shared/copy-tone.ts",
       "target": "symbol:src/shared/copy-tone.ts#COPY_TONE_RULES",
@@ -111103,12 +111041,6 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/shared/control-label-ambiguity.test.ts->src/shared/control-label-ambiguity.ts",
-      "source": "file:src/shared/control-label-ambiguity.test.ts",
-      "target": "file:src/shared/control-label-ambiguity.ts",
-      "kind": "imports"
-    },
-    {
       "id": "imports:src/shared/copy-tone.test.ts->src/shared/copy-tone.ts",
       "source": "file:src/shared/copy-tone.test.ts",
       "target": "file:src/shared/copy-tone.ts",
@@ -116170,12 +116102,6 @@
       "id": "imports:src/shared/release-checklist.test.ts->src/shared/content-security-policy.ts",
       "source": "file:src/shared/release-checklist.test.ts",
       "target": "file:src/shared/content-security-policy.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/release-checklist.test.ts->src/shared/control-label-ambiguity.ts",
-      "source": "file:src/shared/release-checklist.test.ts",
-      "target": "file:src/shared/control-label-ambiguity.ts",
       "kind": "imports"
     },
     {
@@ -129632,18 +129558,6 @@
       "id": "tested_by:src/shared/contracts.ts->file:src/shared/version-gate.test.ts",
       "source": "file:src/shared/contracts.ts",
       "target": "file:src/shared/version-gate.test.ts",
-      "kind": "tested_by"
-    },
-    {
-      "id": "tested_by:src/shared/control-label-ambiguity.ts->file:src/shared/control-label-ambiguity.test.ts",
-      "source": "file:src/shared/control-label-ambiguity.ts",
-      "target": "file:src/shared/control-label-ambiguity.test.ts",
-      "kind": "tested_by"
-    },
-    {
-      "id": "tested_by:src/shared/control-label-ambiguity.ts->file:src/shared/release-checklist.test.ts",
-      "source": "file:src/shared/control-label-ambiguity.ts",
-      "target": "file:src/shared/release-checklist.test.ts",
       "kind": "tested_by"
     },
     {

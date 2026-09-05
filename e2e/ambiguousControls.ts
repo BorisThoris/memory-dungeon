@@ -1,5 +1,5 @@
 import type { Page } from '@playwright/test';
-import { CONTROL_LABEL_SYNONYMS } from '../src/shared/control-label-ambiguity';
+import { CONTROL_LABEL_SYNONYMS } from '../scripts/control-label-ambiguity';
 
 /**
  * Two controls in one place that a player cannot tell apart.

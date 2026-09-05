@@ -115,7 +115,7 @@ export const RELEASE_CHECKLIST: readonly ReleaseChecklistItem[] = [
         section: 'Input and display'
     },
     {
-        evidence: 'src/shared/control-label-ambiguity.ts',
+        evidence: 'scripts/control-label-ambiguity.ts',
         id: 'no-duplicate-controls',
         label: 'No screen offers two controls a player reads as the same instruction',
         owner: 'repo',

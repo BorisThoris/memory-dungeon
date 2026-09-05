@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { labelsAreAmbiguous, normalizeControlLabel } from './control-label-ambiguity';
+import { labelsAreAmbiguous, normalizeControlLabel } from '../../scripts/control-label-ambiguity';
 
 describe('labelsAreAmbiguous', () => {
     it('catches the pair that shipped', () => {
