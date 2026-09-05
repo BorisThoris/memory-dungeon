@@ -101,6 +101,27 @@ export const RELEASE_CHECKLIST: readonly ReleaseChecklistItem[] = [
         section: 'Steam integration'
     },
     {
+        evidence: 'src/renderer/store/levelCompleteContinuationExecutor.ts',
+        id: 'pass-and-play-length',
+        label: 'A shared game runs to a stated number of floors and ends with standings, rather than until the lives run out',
+        owner: 'repo',
+        section: 'Steam integration'
+    },
+    {
+        evidence: 'scripts/e2e-surface-coverage.ts',
+        id: 'surface-coverage',
+        label: 'Every screen a player can reach is visited by a test, counted as surfaces rather than views',
+        owner: 'repo',
+        section: 'Input and display'
+    },
+    {
+        evidence: 'src/shared/control-label-ambiguity.ts',
+        id: 'no-duplicate-controls',
+        label: 'No screen offers two controls a player reads as the same instruction',
+        owner: 'repo',
+        section: 'Input and display'
+    },
+    {
         evidence: 'src/renderer/store/runResolutionController.ts',
         id: 'shared-game-not-recorded',
         label: 'A shared game sets no personal best and writes no run history, exactly as its card promises',

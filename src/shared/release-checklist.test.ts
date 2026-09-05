@@ -12,6 +12,10 @@ import {
     passAndPlaySeatCounts
 } from './pass-and-play-rules';
 import { getSocialPlayScopeRows, SOCIAL_PLAY_SCOPE_DECISION } from './social-play-scope';
+import { isPassAndPlayFinalFloor, PASS_AND_PLAY_FLOORS, resolvePassAndPlayOutcome } from './pass-and-play-rules';
+import { labelsAreAmbiguous } from './control-label-ambiguity';
+import { PLAYABLE_PATH_FIXTURE_IDS } from './playable-path-fixtures';
+import { DECLARED_SURFACES, findBrokenSurfaces, findUnvisitedSurfaces } from '../../scripts/e2e-surface-coverage';
 import { chargeFieldsWithATool } from '../renderer/components/runShellToolCatalog';
 import { STEAM_ACHIEVEMENT_API_NAME } from './steam-achievement-api-names';
 import { buildRichPresence, richPresencePairs } from './rich-presence';
@@ -396,6 +400,39 @@ const VERIFIERS: Record<string, () => void> = {
         expect(afterMiss.handoffPending, 'and says so').toBe(true);
 
         expect(getSocialPlayScopeRows().find((row) => row.id === 'pass_and_play')?.status).toBe('shipped');
+    },
+    'pass-and-play-length': () => {
+        // A solo run is endless; a shared game is a contest of a stated length. The rule has to be
+        // a real number the mode card states, and clearing that floor has to end the run.
+        expect(PASS_AND_PLAY_FLOORS).toBeGreaterThan(1);
+        expect(isPassAndPlayFinalFloor(PASS_AND_PLAY_FLOORS)).toBe(true);
+        expect(isPassAndPlayFinalFloor(PASS_AND_PLAY_FLOORS - 1)).toBe(false);
+
+        const mode = RUN_MODE_CATALOG.find((row) => row.id === 'pass_and_play');
+        expect(mode?.shortDescription, 'the card states the length before anyone starts').toContain(
+            String(PASS_AND_PLAY_FLOORS)
+        );
+
+        // And the standings are what decides it, including a draw reported as a draw.
+        let table = createPassAndPlayState(2);
+        table = applyResolvedTurnToPassAndPlay(table, { matched: true, scoreDelta: 200 });
+        table = applyResolvedTurnToPassAndPlay(table, { matched: false, scoreDelta: 0 });
+        table = applyResolvedTurnToPassAndPlay(table, { matched: true, scoreDelta: 200 });
+        expect(resolvePassAndPlayOutcome(table).tied).toBe(true);
+    },
+    'surface-coverage': () => {
+        // The in-floor vendor was a whole screen nothing rendered, and it hid a Deck button no
+        // click could reach. Surfaces, not views: the shop counts twice because it is two screens.
+        expect(findBrokenSurfaces()).toEqual([]);
+        expect(findUnvisitedSurfaces(readFileSync(join(process.cwd(), 'e2e/ui-reachability-gate.spec.ts'), 'utf8')
+            + PLAYABLE_PATH_FIXTURE_IDS.join(' '))).toEqual([]);
+        expect(DECLARED_SURFACES.filter((surface) => surface.key.startsWith('shop opened'))).toHaveLength(2);
+    },
+    'no-duplicate-controls': () => {
+        // The vendor shipped "Back to board" and "Return to board" together, running the same
+        // action, with a test asserting both existed.
+        expect(labelsAreAmbiguous('Back to board', 'Return to board')).toBe(true);
+        expect(labelsAreAmbiguous('Back to board', 'Back to floor summary')).toBe(false);
     },
     'shared-game-not-recorded': () => {
         // Nothing about a shared game reaches the save: achievements are off at creation, and the

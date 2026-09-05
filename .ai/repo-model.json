@@ -9,7 +9,7 @@
     "contentItemCount": 63,
     "mechanicCount": 136,
     "stateFieldCount": 144,
-    "relationshipCount": 10510
+    "relationshipCount": 10514
   },
   "inventory": [
     {
@@ -2259,8 +2259,8 @@
     {
       "path": "docs/RELEASE_CHECKLIST.md",
       "category": "documentation",
-      "bytes": 7001,
-      "sha256": "48c07415668350c47663662950473eb6bdae8392bf948c0746bfc8ff405e43b2"
+      "bytes": 7493,
+      "sha256": "06bb57b4428f6fc8036282fd50b90622c29053cb2c464246ec35d2e0602785e8"
     },
     {
       "path": "docs/RELIC_ROSTER.md",
@@ -2320,7 +2320,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 36714,
-      "sha256": "cd95b055297c75f1f95a50067ad5863daaf062f46ecda1f0e04f5ae09c4da47e"
+      "sha256": "cba691ce3a766e792f009735cdaecbd041d7c1ae432b335b80e692c966aa3fb7"
     },
     {
       "path": "docs/UI_RETHINK_PLAN.md",
@@ -7629,8 +7629,8 @@
     {
       "path": "src/renderer/components/ChooseYourPathScreen.tsx",
       "category": "source",
-      "bytes": 30147,
-      "sha256": "59d0d18a0ce9380d4f1595adf38afd7ead43366666fe5021a2227caf48e9d3a2"
+      "bytes": 30122,
+      "sha256": "c8f4b7c498df882c4b8eaafbea5fe2851c2e0bd93aa9984d1182bbc9e759ca84"
     },
     {
       "path": "src/renderer/components/chooseYourPathScreenModel.ts",
@@ -12027,14 +12027,14 @@
     {
       "path": "src/shared/release-checklist.test.ts",
       "category": "test",
-      "bytes": 28839,
-      "sha256": "0f26102bc9d95ce89f2c2ec669f52f1bca423d87611226c6d84657635f64e0bf"
+      "bytes": 31296,
+      "sha256": "b483a6b56789acce996a8dee4cd68d26ade55fb38e80ecef63fd35aa8f15e274"
     },
     {
       "path": "src/shared/release-checklist.ts",
       "category": "source",
-      "bytes": 14140,
-      "sha256": "4202ee2db94528232b4020d2253072a14af55e3f6932758c9420c2a6e0e39982"
+      "bytes": 14977,
+      "sha256": "d9f028530321908503536ae6a0b9126ea42cb5da4c20581b897b7c6efb60c93f"
     },
     {
       "path": "src/shared/relic-favor-rules.test.ts",
@@ -26252,7 +26252,8 @@
         "symbol:src/shared/control-label-ambiguity.ts#normalizeControlLabel"
       ],
       "testedBy": [
-        "file:src/shared/control-label-ambiguity.test.ts"
+        "file:src/shared/control-label-ambiguity.test.ts",
+        "file:src/shared/release-checklist.test.ts"
       ]
     },
     {
@@ -30864,6 +30865,7 @@
         "file:src/renderer/store/useAppStore.test.ts",
         "file:src/shared/gameplay-core.test.ts",
         "file:src/shared/playable-path-fixtures.test.ts",
+        "file:src/shared/release-checklist.test.ts",
         "file:src/shared/route-card-plan-rules.test.ts",
         "file:src/shared/route-choice-outcome-rules.test.ts",
         "file:src/shared/route-side-room-rules.test.ts"
@@ -31288,7 +31290,7 @@
       "path": "src/shared/release-checklist.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 538,
+      "lineCount": 575,
       "imports": [
         "file:src/main/crash-log.ts",
         "file:src/main/save-recovery.ts",
@@ -31299,11 +31301,13 @@
         "file:src/renderer/copy/saveRecoveryNotice.ts",
         "file:src/renderer/diagnostics/rendererErrorHooks.ts",
         "file:src/shared/content-security-policy.ts",
+        "file:src/shared/control-label-ambiguity.ts",
         "file:src/shared/desktop-api-boundary.ts",
         "file:src/shared/game.ts",
         "file:src/shared/gamepad-input.ts",
         "file:src/shared/ipc-channels.ts",
         "file:src/shared/pass-and-play-rules.ts",
+        "file:src/shared/playable-path-fixtures.ts",
         "file:src/shared/release-checklist.ts",
         "file:src/shared/rich-presence.ts",
         "file:src/shared/run-history-log.ts",
@@ -31322,7 +31326,7 @@
       "path": "src/shared/release-checklist.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 382,
+      "lineCount": 403,
       "imports": [],
       "exports": [
         "symbol:src/shared/release-checklist.ts#RELEASE_CHECKLIST",
@@ -57762,15 +57766,15 @@
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
       "line": 32,
-      "endLine": 334
+      "endLine": 355
     },
     {
       "id": "symbol:src/shared/release-checklist.ts#releaseChecklistByOwner",
       "name": "releaseChecklistByOwner",
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
-      "line": 340,
-      "endLine": 341
+      "line": 361,
+      "endLine": 362
     },
     {
       "id": "symbol:src/shared/release-checklist.ts#ReleaseChecklistItem",
@@ -57793,16 +57797,16 @@
       "name": "releaseChecklistSections",
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
-      "line": 336,
-      "endLine": 338
+      "line": 357,
+      "endLine": 359
     },
     {
       "id": "symbol:src/shared/release-checklist.ts#renderReleaseChecklistMarkdown",
       "name": "renderReleaseChecklistMarkdown",
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
-      "line": 355,
-      "endLine": 381
+      "line": 376,
+      "endLine": 402
     },
     {
       "id": "symbol:src/shared/relic-favor-rules.ts#gainRelicFavor",
@@ -116169,6 +116173,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/release-checklist.test.ts->src/shared/control-label-ambiguity.ts",
+      "source": "file:src/shared/release-checklist.test.ts",
+      "target": "file:src/shared/control-label-ambiguity.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/release-checklist.test.ts->src/shared/desktop-api-boundary.ts",
       "source": "file:src/shared/release-checklist.test.ts",
       "target": "file:src/shared/desktop-api-boundary.ts",
@@ -116196,6 +116206,12 @@
       "id": "imports:src/shared/release-checklist.test.ts->src/shared/pass-and-play-rules.ts",
       "source": "file:src/shared/release-checklist.test.ts",
       "target": "file:src/shared/pass-and-play-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/release-checklist.test.ts->src/shared/playable-path-fixtures.ts",
+      "source": "file:src/shared/release-checklist.test.ts",
+      "target": "file:src/shared/playable-path-fixtures.ts",
       "kind": "imports"
     },
     {
@@ -129625,6 +129641,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/control-label-ambiguity.ts->file:src/shared/release-checklist.test.ts",
+      "source": "file:src/shared/control-label-ambiguity.ts",
+      "target": "file:src/shared/release-checklist.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/copy-tone.ts->file:src/shared/copy-tone.test.ts",
       "source": "file:src/shared/copy-tone.ts",
       "target": "file:src/shared/copy-tone.test.ts",
@@ -131248,6 +131270,12 @@
       "id": "tested_by:src/shared/playable-path-fixtures.ts->file:src/shared/playable-path-fixtures.test.ts",
       "source": "file:src/shared/playable-path-fixtures.ts",
       "target": "file:src/shared/playable-path-fixtures.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/playable-path-fixtures.ts->file:src/shared/release-checklist.test.ts",
+      "source": "file:src/shared/playable-path-fixtures.ts",
+      "target": "file:src/shared/release-checklist.test.ts",
       "kind": "tested_by"
     },
     {

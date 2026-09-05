@@ -15,6 +15,8 @@ achievement on the Partner site or shoot a trailer.
 | Every screen is reachable on a controller, not just the board | done | the repository | `src/shared/gamepad-input.ts` |
 | Window size and position survive a restart, clamped to a usable minimum | done | the repository | `src/main/window-bounds.ts` |
 | Traits carry a shape as well as a colour, so the board reads without colour vision | done | the repository | `src/shared/tile-trait-marks.ts` |
+| Every screen a player can reach is visited by a test, counted as surfaces rather than views | done | the repository | `scripts/e2e-surface-coverage.ts` |
+| No screen offers two controls a player reads as the same instruction | done | the repository | `src/shared/control-label-ambiguity.ts` |
 | The board overlays clear the HUD and the dock they are drawn over | done | the repository | `src/renderer/hooks/useGameplayChromeClearance.ts` |
 | Every dock tool answers a press, and a click on the board picks a tile | done | the repository | `e2e/ui-reachability-gate.spec.ts` |
 
@@ -40,6 +42,7 @@ achievement on the Partner site or shoot a trailer.
 | A missed day is forgiven once, and the player is told so before they miss one | done | the repository | `src/shared/save-data.ts` |
 | A finished run is recorded, so it survives the next one starting | done | the repository | `src/shared/run-history-log.ts` |
 | Two to four people can play one board on one device, and the game says whose turn it is | done | the repository | `src/shared/pass-and-play-rules.ts` |
+| A shared game runs to a stated number of floors and ends with standings, rather than until the lives run out | done | the repository | `src/renderer/store/levelCompleteContinuationExecutor.ts` |
 | A shared game sets no personal best and writes no run history, exactly as its card promises | done | the repository | `src/renderer/store/runResolutionController.ts` |
 | A player can find their own save file from inside the game | done | the repository | `src/main/ipc.ts` |
 
