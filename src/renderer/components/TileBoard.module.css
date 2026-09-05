@@ -68,7 +68,12 @@
 
 .trapResolutionToast {
     position: absolute;
-    top: clamp(3.1rem, 9vmin, 4.6rem);
+    /*
+     * Under the HUD bar, wherever it ends. The guess this replaces put the toast at 72px on a
+     * 1280x800 panel and the bar ends at 99px, so it landed on the score. The fallback is that
+     * same guess, for the frame before the measurement lands.
+     */
+    top: calc(var(--gameplay-hud-top-clearance, clamp(3.1rem, 9vmin, 4.6rem)) + var(--ui-space-xs));
     left: 50%;
     z-index: 6;
     display: grid;
@@ -405,7 +410,8 @@ block board gestures so pan/zoom does not fight the deal. */
 .traitPreviewChip {
     position: absolute;
     left: var(--ui-space-xs);
-    bottom: var(--ui-space-xs);
+    /* Above the action dock, which reaches 80px up the board it is drawn over. */
+    bottom: calc(var(--gameplay-dock-bottom-clearance, 0px) + var(--ui-space-xs));
     z-index: 5;
     display: flex;
     max-width: min(22rem, calc(100% - 1rem));

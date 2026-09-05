@@ -119,7 +119,6 @@ import {
 import { GAMEPLAY_VISUAL_CSS_VARS } from './gameplayVisualConfig';
 import { REG104_DATA_SHELL } from '../gameplay/regPhase4PlayContract';
 import styles from './GameScreen.module.css';
-import boardStyles from './TileBoard.module.css';
 import {
     MATCH_SCORE_FLOAT_FALLBACK_MARGIN_MS,
     matchScoreFloatDurationMs
@@ -974,9 +973,8 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     // Publishes how much room the HUD deck and the action dock actually take, so the
     // floating board overlays position against measured chrome instead of each guessing.
     useGameplayChromeClearance({
-        boardChipClassName: boardStyles.chainOpportunityChip,
-        dockClassName: styles.actionDock,
-        hudClassName: styles.hudRow,
+        dockTestId: 'game-action-dock',
+        hudTestId: 'game-hud',
         shellRef
     });
     const { tiltRef: gameFieldTiltRef } = usePlatformTiltField({

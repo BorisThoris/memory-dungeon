@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 import { buildPopulatedProfileSaveJson, buildVisualSaveJson, gotoWithSave, mainMenuPlayButton } from './visualScreenHelpers';
 import { openPlayablePathFixture } from './playablePathHelpers';
+import { openLevel1Play, waitLevel1PlayReady } from './visualScreenHelpers';
 import { findUnreachableControls } from './uiReachability';
 
 /**
@@ -59,6 +60,45 @@ test.describe('every control a screen shows can be clicked', () => {
             // The browse grid is the one that shipped broken: cards under the pager, on the panel
             // the release checklist names by name.
             expect(await findUnreachableControls(page), `choose your path @ ${viewport.id}`).toEqual([]);
+        });
+    }
+
+    for (const viewport of VIEWPORTS) {
+        test(`the board and its chrome at ${viewport.id}`, async ({ page }) => {
+            test.setTimeout(240_000);
+            await page.setViewportSize({ width: viewport.width, height: viewport.height });
+            await openLevel1Play(page);
+            await waitLevel1PlayReady(page);
+            await page.waitForTimeout(1500);
+
+            expect(await findUnreachableControls(page), `board @ ${viewport.id}`).toEqual([]);
+
+            /*
+             * The board's floating overlays position against measured chrome. The hook that
+             * measures it named two CSS-module classes, the bar and the dock moved to another
+             * module, and it published a clearance of zero every frame with nothing to say so —
+             * so the trap toast went back to sitting on the score. A clearance of zero, or none
+             * at all, means the measurement found no chrome.
+             */
+            const clearance = await page.evaluate(() => {
+                const hud = document.querySelector('[data-testid="game-hud"]');
+                const dock = document.querySelector('[data-testid="game-action-dock"]');
+                const carrier = document.querySelector('[style*="--gameplay-hud-top-clearance"]');
+                const read = (name: string): number =>
+                    carrier ? Number.parseFloat(getComputedStyle(carrier).getPropertyValue(name)) || 0 : 0;
+                return {
+                    publishedTop: read('--gameplay-hud-top-clearance'),
+                    publishedBottom: read('--gameplay-dock-bottom-clearance'),
+                    hudBottom: hud ? Math.round(hud.getBoundingClientRect().bottom) : 0,
+                    dockHeight: dock ? Math.round(dock.getBoundingClientRect().height) : 0
+                };
+            });
+
+            expect(clearance.hudBottom, `the HUD bar is on screen @ ${viewport.id}`).toBeGreaterThan(0);
+            expect(clearance.publishedTop, `HUD clearance measured @ ${viewport.id}`).toBeGreaterThan(0);
+            // Within a pixel of the chrome it is supposed to describe, not merely non-zero.
+            expect(Math.abs(clearance.publishedTop - clearance.hudBottom)).toBeLessThanOrEqual(1);
+            expect(Math.abs(clearance.publishedBottom - clearance.dockHeight)).toBeLessThanOrEqual(1);
         });
     }
 

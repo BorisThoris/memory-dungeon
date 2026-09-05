@@ -3831,8 +3831,8 @@
     {
       "path": "e2e/ui-reachability-gate.spec.ts",
       "category": "test",
-      "bytes": 5410,
-      "sha256": "66484046fde3407674e048f6ec7ffcd96cb46b1548789d1ae037ca560092b7dc"
+      "bytes": 7848,
+      "sha256": "00b71392b113b37e1fde3bb41949f2a218bed3764629a11b2f75d5edad2e452e"
     },
     {
       "path": "e2e/ui-redesign-capture.spec.ts",
@@ -7713,8 +7713,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 92446,
-      "sha256": "6aa45dc449a70b4db3fa672a5a4a08aa138f0c34d723185376a4fe7e052757e2"
+      "bytes": 92326,
+      "sha256": "aae27ae01c0e4c8b3279c0e64a52db10614f94ed6edc9920a182d73e8b9cf309"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -8079,8 +8079,8 @@
     {
       "path": "src/renderer/components/TileBoard.module.css",
       "category": "source",
-      "bytes": 33222,
-      "sha256": "3f390a2bb110a09c1e1ac026241d2040b3e65fec9fb5a0c5e269d6b9262dc7e1"
+      "bytes": 33687,
+      "sha256": "deffd5d19c9c877934b099880240e1a4ccc1fab2514c962698b09f644f4e836f"
     },
     {
       "path": "src/renderer/components/TileBoard.test.tsx",
@@ -9333,8 +9333,8 @@
     {
       "path": "src/renderer/hooks/useGameplayChromeClearance.ts",
       "category": "source",
-      "bytes": 4535,
-      "sha256": "586cd9d06ad457e9ddebc990a985c1eedea723482f9081a9c428e3ff8879c1be"
+      "bytes": 4894,
+      "sha256": "3eb74c199f6750cd3676ffd4c4efaa09990277489d47e9d6a802bcefc222e42b"
     },
     {
       "path": "src/renderer/hooks/useHudPoliteLiveAnnouncement.test.ts",
@@ -17568,7 +17568,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 2044,
+      "lineCount": 2042,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -22073,7 +22073,7 @@
       "path": "src/renderer/hooks/useGameplayChromeClearance.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 102,
+      "lineCount": 111,
       "imports": [],
       "exports": [
         "symbol:src/renderer/hooks/useGameplayChromeClearance.ts#useGameplayChromeClearance"
@@ -37280,8 +37280,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 2043,
-      "endLine": 2043
+      "line": 2041,
+      "endLine": 2041
     },
     {
       "id": "symbol:src/renderer/components/gameScreenFeedback.ts#DungeonCombatLogRow",
@@ -42128,8 +42128,8 @@
       "name": "useGameplayChromeClearance",
       "kind": "value",
       "file": "src/renderer/hooks/useGameplayChromeClearance.ts",
-      "line": 19,
-      "endLine": 101
+      "line": 27,
+      "endLine": 110
     },
     {
       "id": "symbol:src/renderer/hooks/useHudPoliteLiveAnnouncement.ts#formatHudActionFeedbackText",
@@ -65123,7 +65123,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1273
+          "line": 1271
         }
       ],
       "tests": [
