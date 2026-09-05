@@ -15,7 +15,8 @@ export const DAILY_MUTATOR_TABLE: MutatorId[] = [
     'n_back_anchor',
     'category_letters',
     'glass_floor',
-    'generous_shrine'
+    'generous_shrine',
+    'magpie_thief'
 ];
 
 export const hasMutator = (run: RunState, id: MutatorId): boolean =>

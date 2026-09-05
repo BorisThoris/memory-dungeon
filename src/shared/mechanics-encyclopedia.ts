@@ -580,6 +580,12 @@ export const MUTATOR_CATALOG: Record<MutatorId, MutatorDefinition> = {
         description:
             'Each flip sequence (match, miss, gambit, or destroy) moves a Ward pair (lower match score) and a Bounty pair (bonus score) among remaining pairs. Distinct from the cursed “match last” pair.'
     },
+    magpie_thief: {
+        id: 'magpie_thief',
+        title: 'The magpie',
+        description:
+            'Something bright-eyed is nesting on this floor. Every **third miss** it drops in, takes a **pair you already cleared**, and hides it again somewhere you have never looked. Your **score keeps the points** — what it takes is the knowing. A **guard token** scares it off, if you are holding one when it arrives.'
+    },
     generous_shrine: {
         id: 'generous_shrine',
         title: 'Generous shrine',

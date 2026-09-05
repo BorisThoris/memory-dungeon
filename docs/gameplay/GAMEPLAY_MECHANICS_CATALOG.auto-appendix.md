@@ -1,6 +1,6 @@
 # Gameplay mechanics — machine snapshot
 
-**Generated:** 2026-09-03T19:22:08.510Z
+**Generated:** 2026-09-05T22:09:55.655Z
 
 > Regenerate with `yarn docs:mechanics-appendix`. Do not edit by hand.
 
@@ -9,6 +9,6 @@
 | `GAME_RULES_VERSION` | 33 |
 | `ENCYCLOPEDIA_VERSION` | 16 |
 | Relic entries (`RELIC_CATALOG`) | 22 |
-| Mutator entries (`MUTATOR_CATALOG`) | 12 |
+| Mutator entries (`MUTATOR_CATALOG`) | 13 |
 | Achievement entries (`ACHIEVEMENT_CATALOG`) | 20 |
 | `GameMode` codex ids | daily, endless, gauntlet, meditation, puzzle |

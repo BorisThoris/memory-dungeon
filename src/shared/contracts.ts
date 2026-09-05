@@ -155,7 +155,8 @@ export const MUTATOR_IDS = [
     'distraction_channel',
     'findables_floor',
     'shifting_spotlight',
-    'generous_shrine'
+    'generous_shrine',
+    'magpie_thief'
 ] as const;
 export type MutatorId = (typeof MUTATOR_IDS)[number];
 

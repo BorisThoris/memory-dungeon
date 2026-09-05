@@ -3,6 +3,8 @@ import { applyDungeonEnemyAttack } from './dungeon-enemy-card-rules';
 import { getActiveDungeonBossPressureRule } from './dungeon-boss-rules';
 import { advanceEnemyHazardsOnBoard } from './dungeon-enemy-hazard-rules';
 import { springArmedDungeonTraps } from './dungeon-trap-rules';
+import { applyMagpieTheft, resolveMagpieVisit } from './magpie-rules';
+import { hasMutator } from './mutators';
 import {
     applySafeHazardWardMismatch,
     hazardKindsInTiles
@@ -147,6 +149,23 @@ export const resolveMismatchTurnTransition = ({
         : applyVolatileMismatchTrait(wardedHazards.board, run, sourceTiles);
     const spunMiss = rotateRunShiftingSpotlight(run, volatileTrait.board);
 
+    /*
+     * The magpie arrives last, after every other consequence of the miss has landed. It takes back
+     * a pair the player already cleared rather than a life or a point, so it has to act on the
+     * board the turn actually produced — otherwise it would steal from a state the player never saw.
+     */
+    const magpie = hasMutator(run, 'magpie_thief')
+        ? resolveMagpieVisit({
+              board: spunMiss.board,
+              guardTokens: trapStats.guardTokens,
+              mismatchCount: runNonNegativeInteger(stats.mismatches) + 1,
+              rulesVersion: run.runRulesVersion,
+              runSeed: run.runSeed
+          })
+        : null;
+    const boardAfterMagpie =
+        magpie?.theft != null ? applyMagpieTheft(spunMiss.board, magpie.theft) : spunMiss.board;
+
     return {
         ...run,
         status: statusAfterEnemy,
@@ -155,7 +174,7 @@ export const resolveMismatchTurnTransition = ({
         freeShuffleThisFloor: trapSpring.run.freeShuffleThisFloor,
         regionShuffleFreeThisFloor: trapSpring.run.regionShuffleFreeThisFloor,
         dungeonTrapsTriggered: trapSpring.run.dungeonTrapsTriggered,
-        board: spunMiss.board,
+        board: boardAfterMagpie,
         shiftingSpotlightNonce: spunMiss.shiftingSpotlightNonce,
         pinnedTileIds: snareHazard.triggered ? [] : run.pinnedTileIds,
         hazardTileTriggersThisFloor:

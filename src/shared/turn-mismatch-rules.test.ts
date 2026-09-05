@@ -332,3 +332,57 @@ describe('turn mismatch rules', () => {
         expect(resolved.board?.tiles.find((candidate) => candidate.id === 'trap-a')?.dungeonCardState).toBe('resolved');
     });
 });
+
+describe('the magpie on a real miss', () => {
+    const magpieBoard = () =>
+        board([
+            tile('x-A', 'flipped'),
+            tile('y-A', 'flipped', { pairKey: 'y' }),
+            tile('cleared-A', 'matched', { pairKey: 'cleared' }),
+            tile('cleared-B', 'matched', { pairKey: 'cleared' }),
+            tile('z-A', 'hidden', { pairKey: 'z' }),
+            tile('z-B', 'hidden', { pairKey: 'z' })
+        ], { matchedPairs: 1 });
+
+    const missWithMagpie = (mismatches: number, guardTokens = 0, mutators: RunState['activeMutators'] = ['magpie_thief']) => {
+        const b = magpieBoard();
+        const base = run(b);
+        return resolveMismatchTurnTransition({
+            run: {
+                ...base,
+                activeMutators: mutators,
+                stats: { ...base.stats, guardTokens, mismatches }
+            },
+            board: b,
+            tileIds: ['x-A', 'y-A'],
+            sourceTiles: [b.tiles[0]!, b.tiles[1]!],
+            triesDelta: 1,
+            decoyTouched: false
+        });
+    };
+
+    it('takes back a cleared pair on its turn, and leaves the score alone', () => {
+        // Third miss: the bird arrives. The pair it took is face down again.
+        const after = missWithMagpie(2);
+        expect(after.board?.matchedPairs).toBe(0);
+        expect(after.board?.tiles.filter((t) => t.pairKey === 'cleared').every((t) => t.state === 'hidden')).toBe(true);
+        expect(after.stats.totalScore).toBe(run(magpieBoard()).stats.totalScore);
+    });
+
+    it('leaves the board alone on a miss that is not its turn', () => {
+        const after = missWithMagpie(0);
+        expect(after.board?.matchedPairs).toBe(1);
+        expect(after.board?.tiles.filter((t) => t.pairKey === 'cleared').every((t) => t.state === 'matched')).toBe(true);
+    });
+
+    it('is scared off by a guard token, which is what makes holding one a decision', () => {
+        const after = missWithMagpie(2, 3);
+        expect(after.board?.matchedPairs).toBe(1);
+    });
+
+    it('does not visit a floor it was never nesting on', () => {
+        const after = missWithMagpie(2, 0, []);
+        expect(after.board?.matchedPairs).toBe(1);
+    });
+});
+

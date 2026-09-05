@@ -218,7 +218,9 @@ describe('dungeon topology audit script', () => {
                     findables_floor: 4,
                     silhouette_twist: 4,
                     n_back_anchor: 4,
-                    none: 4,
+                    // No `none` bucket any more: floor 6 was the one floor in the cycle carrying
+                    // no mutator at all, and the magpie nests there now.
+                    magpie_thief: 4,
                     glass_floor: 3,
                     sticky_fingers: 3
                 },

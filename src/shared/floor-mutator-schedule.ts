@@ -362,7 +362,14 @@ const ENDLESS_FLOOR_CYCLE: FloorScheduleEntry[] = [
     makeEntry(3, 'treasure_gallery', 'scholar_style', ['findables_floor'], 'breather'),
     makeEntry(4, 'shadow_read', 'cursed_last', ['silhouette_twist'], 'normal'),
     makeEntry(5, 'anchor_chain', 'cursed_last', ['n_back_anchor'], 'normal'),
-    makeEntry(6, 'breather', 'scholar_style', [], 'breather'),
+    /*
+     * The breather is where the magpie nests, and it is the only floor in the cycle that had no
+     * mutator at all — a slot that did nothing on a floor that asks nothing. The bird fits it
+     * exactly: it costs no lives and no points, so the floor keeps its job of letting a run heal,
+     * but it stops the safe floor from being free. A player who spends it clearing pairs and
+     * missing three times will find out what it is for.
+     */
+    makeEntry(6, 'breather', 'scholar_style', ['magpie_thief'], 'breather'),
     makeEntry(7, 'trap_hall', 'glass_witness', ['glass_floor', 'sticky_fingers'], 'boss'),
     makeEntry(8, 'script_room', 'flip_par', ['category_letters'], 'normal'),
     makeEntry(9, 'rush_recall', 'flip_par', ['short_memorize', 'wide_recall'], 'boss'),
