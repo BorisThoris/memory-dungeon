@@ -104,7 +104,7 @@ export const SHOP_ITEM_CATALOG: Record<
     trait_cleanse: {
         itemId: 'trait_cleanse',
         label: 'Trait cleanse',
-        description: 'Immediately softens one hidden Cursed or Volatile trait pair into a safer routing trait.',
+        description: 'Softens one hidden Cursed or Volatile pair into a safer trait.',
         category: 'service',
         compatibleWhen: 'owned',
         baseCost: 2,
@@ -116,7 +116,7 @@ export const SHOP_ITEM_CATALOG: Record<
     trait_routing_kit: {
         itemId: 'trait_routing_kit',
         label: 'Trait routing kit',
-        description: 'Adds 1 peek charge and 1 row/swap charge when this floor has actionable trait adjacency.',
+        description: 'Adds 1 peek and 1 row/swap charge for this floor.',
         category: 'service',
         compatibleWhen: 'owned',
         baseCost: 3,

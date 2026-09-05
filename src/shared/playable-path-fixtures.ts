@@ -38,6 +38,7 @@ export type PlayablePathFixtureId =
     | 'floorClearWithRouteChoices'
     | 'floorClearWithShop'
     | 'floorClearWithShopLowGold'
+    | 'inFloorShop'
     | 'sideRoomPrimary'
     | 'sideRoomChoice'
     | 'sideRoomSkip'
@@ -69,6 +70,7 @@ export const PLAYABLE_PATH_FIXTURE_IDS: readonly PlayablePathFixtureId[] = [
     'floorClearWithRouteChoices',
     'floorClearWithShop',
     'floorClearWithShopLowGold',
+    'inFloorShop',
     'sideRoomPrimary',
     'sideRoomChoice',
     'sideRoomSkip',
@@ -119,6 +121,14 @@ export const createPlayablePathFixture = (
             return { id, view: 'playing', run: floorClearWithShop(20), saveData, shopReturnMode: null };
         case 'floorClearWithShopLowGold':
             return { id, view: 'playing', run: floorClearWithShop(0), saveData, shopReturnMode: null };
+        case 'inFloorShop':
+            /*
+             * The vendor as a player meets it mid-floor, by flipping a shop tile — a different
+             * screen from the one the floor-clear shop shows, with its own exit and its own copy.
+             * Nothing reached it, which is how it shipped with two buttons that did the same thing
+             * and a reachability gate that reported green.
+             */
+            return { id, view: 'shop', run: inFloorShopRun(), saveData, shopReturnMode: 'floor' };
         case 'sideRoomPrimary':
             return { id, view: 'sideRoom', run: sideRoomForRoute('safe'), saveData, shopReturnMode: null };
         case 'sideRoomChoice':
@@ -313,6 +323,13 @@ const floorClearWithShop = (shopGold: number): RunState => {
             : cleared.lastLevelResult
     };
     return { ...stockedRun, shopOffers: createRunShopOffers(stockedRun) };
+};
+
+/** A run still on its floor, standing at a vendor it opened from the board. */
+const inFloorShopRun = (): RunState => {
+    const base = activeRunWithTrapCard();
+    const stocked = { ...base, shopGold: 12 };
+    return { ...stocked, shopOffers: createRunShopOffers(stocked) };
 };
 
 const sideRoomForRoute = (

@@ -3849,8 +3849,8 @@
     {
       "path": "e2e/ui-reachability-gate.spec.ts",
       "category": "test",
-      "bytes": 15619,
-      "sha256": "0a9f1ea886f858f1105cb96882c7bac3041bf045eef1dfad4647be615d2e9121"
+      "bytes": 15811,
+      "sha256": "30530dbbce7d0807a864113c4f0aedc87c7f788750ced966255eeaac36b81296"
     },
     {
       "path": "e2e/ui-redesign-capture.spec.ts",
@@ -11883,8 +11883,8 @@
     {
       "path": "src/shared/playable-path-fixtures.ts",
       "category": "source",
-      "bytes": 12245,
-      "sha256": "9e0146de17a3954e6702a255aa07e323ed209a11738966bc9d85361f08d495e5"
+      "bytes": 13082,
+      "sha256": "11f4ce6119a74ab0d2ef02d1f557cc97401a40fedf601006ed5cd827ecc0351f"
     },
     {
       "path": "src/shared/playthrough-solver-rules.ts",
@@ -12627,8 +12627,8 @@
     {
       "path": "src/shared/shop-rules.ts",
       "category": "source",
-      "bytes": 21584,
-      "sha256": "4169be24faccd67b9f0fa2343d07087065c92e9d8c955d3cc4814fa3ea7174c0"
+      "bytes": 21519,
+      "sha256": "bbc3236ffd23b3885e2720e410d33420a76da422a458bfbf46cec7d973c6a5a2"
     },
     {
       "path": "src/shared/sim-endless-output.test.ts",
@@ -30814,7 +30814,7 @@
       "path": "src/shared/playable-path-fixtures.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 356,
+      "lineCount": 373,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/dungeon-rules.ts",
@@ -56955,16 +56955,16 @@
       "name": "createPlayablePathFixture",
       "kind": "value",
       "file": "src/shared/playable-path-fixtures.ts",
-      "line": 80,
-      "endLine": 137
+      "line": 82,
+      "endLine": 147
     },
     {
       "id": "symbol:src/shared/playable-path-fixtures.ts#PLAYABLE_PATH_FIXTURE_IDS",
       "name": "PLAYABLE_PATH_FIXTURE_IDS",
       "kind": "value",
       "file": "src/shared/playable-path-fixtures.ts",
-      "line": 63,
-      "endLine": 78
+      "line": 64,
+      "endLine": 80
     },
     {
       "id": "symbol:src/shared/playable-path-fixtures.ts#PlayablePathFixtureId",
@@ -56972,23 +56972,23 @@
       "kind": "type",
       "file": "src/shared/playable-path-fixtures.ts",
       "line": 32,
-      "endLine": 46
+      "endLine": 47
     },
     {
       "id": "symbol:src/shared/playable-path-fixtures.ts#PlayablePathFixtureOptions",
       "name": "PlayablePathFixtureOptions",
       "kind": "interface",
       "file": "src/shared/playable-path-fixtures.ts",
-      "line": 56,
-      "endLine": 58
+      "line": 57,
+      "endLine": 59
     },
     {
       "id": "symbol:src/shared/playable-path-fixtures.ts#PlayablePathFixtureState",
       "name": "PlayablePathFixtureState",
       "kind": "interface",
       "file": "src/shared/playable-path-fixtures.ts",
-      "line": 48,
-      "endLine": 54
+      "line": 49,
+      "endLine": 55
     },
     {
       "id": "symbol:src/shared/playthrough-solver-rules.ts#getPrimaryPlaythroughExitTile",

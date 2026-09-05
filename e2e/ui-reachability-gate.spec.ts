@@ -253,6 +253,9 @@ test.describe('every control a screen shows can be clicked', () => {
     const RUN_FIXTURES = [
         'floorClearWithRouteChoices',
         'floorClearWithShop',
+        // The vendor opened from the board, which is a different screen from the floor-clear shop
+        // and the one that shipped two buttons doing the same thing.
+        'inFloorShop',
         'sideRoomChoice',
         'relicDraft',
         'gameOver'
