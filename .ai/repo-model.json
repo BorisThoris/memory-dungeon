@@ -3,8 +3,8 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2520,
-    "codeFileCount": 981,
+    "trackedFileCount": 2522,
+    "codeFileCount": 982,
     "exportedSymbolCount": 3549,
     "contentItemCount": 63,
     "mechanicCount": 136,
@@ -2259,8 +2259,8 @@
     {
       "path": "docs/RELEASE_CHECKLIST.md",
       "category": "documentation",
-      "bytes": 6242,
-      "sha256": "c2a06f65e248500199af200dadfc93b002efd57d1fe52dded6db53e77592124d"
+      "bytes": 6394,
+      "sha256": "828eaf3cd59725b795913eb9a1ef8865d00f6c666b167da0c0290c327705b0f6"
     },
     {
       "path": "docs/RELIC_ROSTER.md",
@@ -2320,7 +2320,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 36714,
-      "sha256": "234eaa91a497fea2f79b7ade68c6340cd212453192b659afaa7e82f81c6bbb3a"
+      "sha256": "7de1fd7a0326b59531904b7e4556bcfec21c6a877296094b3e550d2ef05a81aa"
     },
     {
       "path": "docs/UI_RETHINK_PLAN.md",
@@ -3987,8 +3987,8 @@
     {
       "path": "package.json",
       "category": "configuration",
-      "bytes": 29869,
-      "sha256": "a2e5de10bf6c60a63cb4e9f79d89c1a4ccce6ab9c2a2f7e20ddb6de06cafd006"
+      "bytes": 29984,
+      "sha256": "5070d904fa12e46fb4b4e507005a89fd2a2ffca4249bec4a9bf0a1098dcc8b4f"
     },
     {
       "path": "packages/notifications/package.json",
@@ -4547,6 +4547,12 @@
       "category": "script",
       "bytes": 4443,
       "sha256": "807318626bccb6ee7a67444d2af618f53c1c8b9f59883e0bcef9ecae33bbe0be"
+    },
+    {
+      "path": "scripts/css-custom-properties.ts",
+      "category": "script",
+      "bytes": 6528,
+      "sha256": "3e9b0d34ede8762b043aed7edd710bff6a9ae447532801f1e6531a3ddd622452"
     },
     {
       "path": "scripts/e2e-locator-audit.ts",
@@ -10005,8 +10011,8 @@
     {
       "path": "src/renderer/styles/theme.ts",
       "category": "source",
-      "bytes": 27032,
-      "sha256": "faeb21d1efb204a9c583c1db038a0560b808b91ecb9c5dcede9cc0fdb77de0b8"
+      "bytes": 27992,
+      "sha256": "7b2dbc728c2a216c6789c12227355f98b0235f7300b8caab01b520c86eb94016"
     },
     {
       "path": "src/renderer/styles/theme.wcag.test.ts",
@@ -10607,6 +10613,12 @@
       "category": "source",
       "bytes": 1655,
       "sha256": "39dbe88097e37840744f2c64f20710ef4db20a8c324cecdb361ea127140849cb"
+    },
+    {
+      "path": "src/shared/css-custom-properties.test.ts",
+      "category": "test",
+      "bytes": 4225,
+      "sha256": "b954618b3b7565a283a3c91fd9de6d1426544a7d68f1aec97fe3f958badc76c8"
     },
     {
       "path": "src/shared/daily-archive.test.ts",
@@ -11913,14 +11925,14 @@
     {
       "path": "src/shared/release-checklist.test.ts",
       "category": "test",
-      "bytes": 22894,
-      "sha256": "00df1410620bc95d5df595493c11b437345191cbc6b7e6ba249a579c66090272"
+      "bytes": 24417,
+      "sha256": "bbd121b50318469a8750c1ac6a05613e3ff3e99ae79301a2518d508fd41f4b6e"
     },
     {
       "path": "src/shared/release-checklist.ts",
       "category": "source",
-      "bytes": 12806,
-      "sha256": "50cb291e488794744b2e4b88e6858acefb9e558f59210d46c2d90a0d61e03f08"
+      "bytes": 13069,
+      "sha256": "c2f00c14d6db5698bea143419e8ea61df1361a4d863543303303f9c6e0a2bc6a"
     },
     {
       "path": "src/shared/relic-favor-rules.test.ts",
@@ -24056,7 +24068,7 @@
       "path": "src/renderer/styles/theme.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 453,
+      "lineCount": 469,
       "imports": [],
       "exports": [
         "symbol:src/renderer/styles/theme.ts#buildRendererThemeStyle",
@@ -26192,6 +26204,16 @@
       "testedBy": [
         "file:src/shared/crash-report-summary.test.ts"
       ]
+    },
+    {
+      "id": "file:src/shared/css-custom-properties.test.ts",
+      "path": "src/shared/css-custom-properties.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 93,
+      "imports": [],
+      "exports": [],
+      "testedBy": []
     },
     {
       "id": "file:src/shared/daily-archive.test.ts",
@@ -30991,7 +31013,7 @@
       "path": "src/shared/release-checklist.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 439,
+      "lineCount": 463,
       "imports": [
         "file:src/main/crash-log.ts",
         "file:src/main/save-recovery.ts",
@@ -31022,7 +31044,7 @@
       "path": "src/shared/release-checklist.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 347,
+      "lineCount": 354,
       "imports": [],
       "exports": [
         "symbol:src/shared/release-checklist.ts#RELEASE_CHECKLIST",
@@ -43920,16 +43942,16 @@
       "name": "buildRendererThemeStyle",
       "kind": "value",
       "file": "src/renderer/styles/theme.ts",
-      "line": 433,
-      "endLine": 452
+      "line": 449,
+      "endLine": 468
     },
     {
       "id": "symbol:src/renderer/styles/theme.ts#forEachRendererThemeCssVar",
       "name": "forEachRendererThemeCssVar",
       "kind": "value",
       "file": "src/renderer/styles/theme.ts",
-      "line": 422,
-      "endLine": 429
+      "line": 438,
+      "endLine": 445
     },
     {
       "id": "symbol:src/renderer/styles/theme.ts#RENDERER_THEME",
@@ -43937,23 +43959,23 @@
       "kind": "value",
       "file": "src/renderer/styles/theme.ts",
       "line": 3,
-      "endLine": 389
+      "endLine": 405
     },
     {
       "id": "symbol:src/renderer/styles/theme.ts#RendererThemeDensity",
       "name": "RendererThemeDensity",
       "kind": "type",
       "file": "src/renderer/styles/theme.ts",
-      "line": 431,
-      "endLine": 431
+      "line": 447,
+      "endLine": 447
     },
     {
       "id": "symbol:src/renderer/styles/theme.ts#RendererThemeVars",
       "name": "RendererThemeVars",
       "kind": "type",
       "file": "src/renderer/styles/theme.ts",
-      "line": 420,
-      "endLine": 420
+      "line": 436,
+      "endLine": 436
     },
     {
       "id": "symbol:src/renderer/ui/AccentBanner.tsx#default",
@@ -57257,15 +57279,15 @@
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
       "line": 32,
-      "endLine": 299
+      "endLine": 306
     },
     {
       "id": "symbol:src/shared/release-checklist.ts#releaseChecklistByOwner",
       "name": "releaseChecklistByOwner",
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
-      "line": 305,
-      "endLine": 306
+      "line": 312,
+      "endLine": 313
     },
     {
       "id": "symbol:src/shared/release-checklist.ts#ReleaseChecklistItem",
@@ -57288,16 +57310,16 @@
       "name": "releaseChecklistSections",
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
-      "line": 301,
-      "endLine": 303
+      "line": 308,
+      "endLine": 310
     },
     {
       "id": "symbol:src/shared/release-checklist.ts#renderReleaseChecklistMarkdown",
       "name": "renderReleaseChecklistMarkdown",
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
-      "line": 320,
-      "endLine": 346
+      "line": 327,
+      "endLine": 353
     },
     {
       "id": "symbol:src/shared/relic-favor-rules.ts#gainRelicFavor",

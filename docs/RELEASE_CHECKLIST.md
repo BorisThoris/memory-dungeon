@@ -52,6 +52,7 @@ achievement on the Partner site or shoot a trailer.
 | Every shared system is reachable from something that ships, or exempt with a reason | done | the repository | `scripts/shared-reach.ts` |
 | Every persisted save field is named in the migration policy, or exempt with a reason | done | the repository | `scripts/save-field-policy.ts` |
 | No control a screen shows is left where a click cannot reach it | done | the repository | `e2e/uiReachability.ts` |
+| No style property is written with nothing reading it, or read with nothing defining it | done | the repository | `scripts/css-custom-properties.ts` |
 | No player-facing text is sized below the readable floor, or sized by a token that does not exist | done | the repository | `scripts/min-type-size.ts` |
 | No gate or script names a file that is not there | done | the repository | `scripts/script-paths.ts` |
 | A cue that cannot sound leaves the button that asked for it working | done | the repository | `src/renderer/audio/audioSafety.ts` |

@@ -31,6 +31,12 @@ import {
 import { findTestOnlyModules, TEST_ONLY_EXEMPTIONS } from '../../scripts/test-only-modules';
 import { reachableFromEntries, SHARED_REACH_EXEMPTIONS } from '../../scripts/shared-reach';
 import { findMissingScriptPaths } from '../../scripts/script-paths';
+import {
+    findUndefinedProperties,
+    findUnreadProperties,
+    readDefinedProperties,
+    readVarUses
+} from '../../scripts/css-custom-properties';
 import { resolveDailyStreak } from './save-data';
 import {
     findUndefinedTokens,
@@ -259,6 +265,24 @@ const VERIFIERS: Record<string, () => void> = {
         // And the player is told which it is, on the card rather than only in the save.
         expect(readFileSync('src/shared/daily-archive.ts', 'utf8')).toContain('grace day spent');
         expect(readFileSync('src/renderer/components/ProfileScreen.test.tsx', 'utf8')).toContain('grace day held');
+    },
+    'css-custom-properties': () => {
+        /*
+         * Both halves shipped. A hook measured the HUD every frame and wrote a clearance no rule
+         * read, so the board overlays went back to sitting on the chrome. And three declarations
+         * named a colour token nothing defined, which invalidated them outright — the score
+         * floater's top tier lost its border, its background and both of its glows.
+         */
+        const runtimeWrite = readDefinedProperties('h.ts', "el.style.setProperty('--clearance', '4px');");
+        expect(runtimeWrite[0]).toMatchObject({ property: '--clearance', runtime: true });
+        expect(findUnreadProperties(runtimeWrite, []).map((row) => row.property)).toEqual(['--clearance']);
+        expect(findUnreadProperties(runtimeWrite, readVarUses('a.css', 'top: var(--clearance);'))).toEqual([]);
+
+        const read = readVarUses('a.css', 'color: var(--theme-magenta-bright);');
+        expect(findUndefinedProperties([], read).map((row) => row.property)).toEqual(['--theme-magenta-bright']);
+        expect(findUndefinedProperties(readDefinedProperties('t.ts', "'--theme-magenta-bright': '#f0b6e4',"), read)).toEqual([]);
+        // A read with its own fallback still renders, so it is not a break.
+        expect(findUndefinedProperties([], readVarUses('a.css', 'top: var(--gone, 4px);'))).toEqual([]);
     },
     'min-type-size': () => {
         // Both failures this guards were shipped: three declarations under the floor that the fit

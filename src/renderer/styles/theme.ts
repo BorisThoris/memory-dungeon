@@ -74,6 +74,13 @@ export const RENDERER_THEME = {
         '--theme-emerald-bright': '#b4eb8d',
         '--theme-violet': '#8c62df',
         '--theme-violet-bright': '#d9c7ff',
+        /*
+         * The score floater's top crescendo tier asks for this and nothing defined it. An undefined
+         * var invalidates the whole declaration, so that tier lost its border, its background and
+         * both drop-shadows — the gold one included, since the two shared one `filter` — and the
+         * biggest payoff in a run looked exactly like the tier below it.
+         */
+        '--theme-magenta-bright': '#f0b6e4',
         '--theme-ink': '#05060a',
         '--theme-text': '#f4ecdc',
         '--theme-text-muted': 'rgba(231, 221, 202, 0.76)',
@@ -311,6 +318,15 @@ export const RENDERER_THEME = {
         '--ui-radius-panel': '1.12rem',
         '--ui-radius-modal': '1.02rem',
         '--ui-radius-button': '0.88rem',
+        /*
+         * Button padding by size. `UiButton` has asked for these three since it was written and
+         * nothing defined them, so `padding: var(--ui-button-pad-md)` was an invalid declaration
+         * the cascade dropped, leaving the base `padding: 0`. Screens that set their own padding
+         * hid it; every button that did not had none.
+         */
+        '--ui-button-pad-sm': '0.34rem 0.8rem',
+        '--ui-button-pad-md': '0.55rem 1.05rem',
+        '--ui-button-pad-lg': '0.7rem 1.35rem',
         '--ui-radius-pill': '999px',
 
         /* UI system: spacing (rem) */

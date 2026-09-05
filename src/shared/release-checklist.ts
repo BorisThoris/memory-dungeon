@@ -178,6 +178,13 @@ export const RELEASE_CHECKLIST: readonly ReleaseChecklistItem[] = [
         section: 'Diagnostics'
     },
     {
+        evidence: 'scripts/css-custom-properties.ts',
+        id: 'css-custom-properties',
+        label: 'No style property is written with nothing reading it, or read with nothing defining it',
+        owner: 'repo',
+        section: 'Diagnostics'
+    },
+    {
         evidence: 'scripts/min-type-size.ts',
         id: 'min-type-size',
         label: 'No player-facing text is sized below the readable floor, or sized by a token that does not exist',
