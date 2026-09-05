@@ -632,3 +632,49 @@
         margin: 0;
     }
 }
+
+/* The Classic setup sheet: eight retired menu cards, asked once as choices about this run. */
+.setupGroups {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ui-space-sm);
+    min-height: 0;
+}
+
+.setupGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    margin: 0;
+    padding: var(--ui-space-xs) var(--ui-space-sm);
+    border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 18%, transparent);
+    border-radius: var(--ui-radius-md);
+}
+
+.setupLegend {
+    padding: 0 0.3rem;
+    font-size: var(--ui-font-caption);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--theme-gold-bright);
+}
+
+.setupHint {
+    margin: 0 0 0.15rem;
+    font-size: var(--ui-font-caption);
+    color: var(--theme-text-muted);
+}
+
+/* 44px rows: this sheet is the first thing a Deck or a phone touches. */
+.setupRow {
+    display: flex;
+    align-items: center;
+    gap: var(--ui-space-xs);
+    min-height: 44px;
+    cursor: pointer;
+    color: var(--theme-text-subtle);
+}
+
+.setupRow:hover {
+    color: var(--theme-text);
+}

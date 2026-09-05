@@ -315,13 +315,10 @@ export const useAppStore = create<AppState>((set, get) => ({
         );
     },
 
-    startRun: () => {
-        executeStoreRunStartRequest({ kind: 'endless' }, set, get);
+    startRun: (setup) => {
+        executeStoreRunStartRequest({ kind: 'endless', setup }, set, get);
     },
 
-    startDungeonShowcaseRun: () => {
-        executeStoreRunStartRequest({ kind: 'dungeonShowcase' }, set, get);
-    },
 
     startDailyRun: () => {
         executeStoreRunStartRequest({ kind: 'daily' }, set, get);
@@ -331,17 +328,11 @@ export const useAppStore = create<AppState>((set, get) => ({
         executeStoreRunStartRequest({ kind: 'passAndPlay', seats }, set, get);
     },
 
-    startGauntletRun: (durationMs = 10 * 60 * 1000) => {
-        executeStoreRunStartRequest({ durationMs, kind: 'gauntlet' }, set, get);
-    },
 
     startPuzzleRun: (puzzleId) => {
         executeStoreRunStartRequest({ kind: 'puzzle', puzzleId }, set, get);
     },
 
-    startPracticeRun: () => {
-        executeStoreRunStartRequest({ kind: 'practice' }, set, get);
-    },
 
     revealSaveFile: () => {
         // Nothing to update and nothing to await: the file manager is the whole outcome, and a
@@ -351,9 +342,6 @@ export const useAppStore = create<AppState>((set, get) => ({
         });
     },
 
-    startScholarContractRun: () => {
-        executeStoreRunStartRequest({ kind: 'scholarContract' }, set, get);
-    },
 
     startSharedRun: (pastedText) => {
         const key = parseRunShareKey(pastedText);
@@ -363,21 +351,9 @@ export const useAppStore = create<AppState>((set, get) => ({
         executeStoreRunStartRequest({ key, kind: 'shared' }, set, get);
     },
 
-    startMeditationRun: () => {
-        executeStoreRunStartRequest({ kind: 'meditation' }, set, get);
-    },
 
-    startMeditationRunWithMutators: (mutators) => {
-        executeStoreRunStartRequest({ kind: 'meditationWithMutators', mutators }, set, get);
-    },
 
-    startPinVowRun: () => {
-        executeStoreRunStartRequest({ kind: 'pinVow' }, set, get);
-    },
 
-    startWildRun: () => {
-        executeStoreRunStartRequest({ kind: 'wild' }, set, get);
-    },
 
     pickRelic: (relicId) => {
         const result = createRelicPickSurfaceResult({

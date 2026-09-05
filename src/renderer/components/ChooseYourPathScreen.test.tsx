@@ -1,3 +1,4 @@
+import { CLASSIC_SETUP_COPY } from '../copy/screenCopy';
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -65,6 +66,7 @@ describe('ChooseYourPathScreen', () => {
         expect(within(launcher).getByRole('heading', { name: /^classic run$/i })).toBeInTheDocument();
         expect(within(launcher).getByTestId('choose-path-first-run-beats').children).toHaveLength(3);
 
+        // One click still plays: the setup sheet is a door beside Start, not in front of it.
         await user.click(within(launcher).getByRole('button', { name: /^start run$/i }));
         expect(storeSpies.startRun).toHaveBeenCalledTimes(1);
     });
@@ -78,7 +80,7 @@ describe('ChooseYourPathScreen', () => {
         expect(total).toBeGreaterThan(1);
         expect(count).toHaveTextContent(new RegExp(`^${total} of ${total} modes$`, 'u'));
 
-        await user.type(screen.getByLabelText(/filter modes/i), 'Wild Run');
+        await user.type(screen.getByLabelText(/filter modes/i), 'Glyph Cross');
         expect(screen.getByTestId('choose-path-mode-count')).toHaveTextContent(`1 of ${total} modes`);
     });
 
@@ -126,7 +128,7 @@ describe('ChooseYourPathScreen', () => {
         const user = userEvent.setup();
         render(<ChooseYourPathScreen />);
 
-        await user.click(screen.getByRole('button', { name: /^Gauntlet\. Open details\.$/i }));
+        await user.click(screen.getByRole('button', { name: /^Puzzle\. Open details\.$/i }));
 
         expect(screen.queryByTestId('choose-path-daily-reset')).not.toBeInTheDocument();
     });
@@ -213,9 +215,8 @@ describe('ChooseYourPathScreen', () => {
         render(<ChooseYourPathScreen />);
 
         const browse = screen.getByRole('region', { name: /browse modes/i });
-        const endless = within(browse).getByRole('button', { name: /^Endless Mode\. Open details\.$/i });
-        expect(endless).toHaveTextContent(/core modes/i);
-        expect(endless).toHaveTextContent('In the full game');
+        const puzzle = within(browse).getByRole('button', { name: /^Glyph Cross\. Open details\.$/i });
+        expect(puzzle).toHaveTextContent(/puzzle/i);
         // The taxonomy strips are gone: a card carries no "lanes" or "launch loop" copy.
         expect(browse).not.toHaveTextContent(/launch loop|chain leads|read pressure|chase reward/i);
         // The tile's accessible name is the title alone, which is what the e2e harness matches.
@@ -226,10 +227,10 @@ describe('ChooseYourPathScreen', () => {
         const user = userEvent.setup();
         render(<ChooseYourPathScreen />);
 
-        await user.type(screen.getByRole('searchbox', { name: /filter modes/i }), 'gauntlet');
+        await user.type(screen.getByRole('searchbox', { name: /filter modes/i }), 'mirror');
         const browse = screen.getByRole('region', { name: /browse modes/i });
-        expect(within(browse).getByRole('button', { name: /^Gauntlet\. Open details\.$/i })).toBeInTheDocument();
-        expect(within(browse).queryByRole('button', { name: /^Daily Challenge\. Open details\.$/i })).not.toBeInTheDocument();
+        expect(within(browse).getByRole('button', { name: /^Mirror Puzzle\. Open details\.$/i })).toBeInTheDocument();
+        expect(within(browse).queryByRole('button', { name: /^Glyph Cross\. Open details\.$/i })).not.toBeInTheDocument();
     });
 
     it('opens a mode in the detail modal and plays it from there', async () => {
@@ -243,26 +244,24 @@ describe('ChooseYourPathScreen', () => {
         expect(storeSpies.startDailyRun).toHaveBeenCalledTimes(1);
     });
 
-    it('keeps locked modes visible and explains the lock in the modal', async () => {
-        const user = userEvent.setup();
+    it('keeps locked modes visible and explains the lock in the modal', () => {
         render(<ChooseYourPathScreen />);
 
-        await user.click(screen.getByRole('button', { name: /^Endless Mode\. Open details\.$/i }));
-        const modal = screen.getByTestId('library-mode-detail-modal');
-        expect(within(modal).getByText(/locked intentionally/i)).toBeInTheDocument();
-        expect(within(modal).queryByRole('button', { name: /^play$/i })).not.toBeInTheDocument();
+        // Endless was a locked card promising a longer Classic and never became one; it is gone.
+        expect(screen.queryByRole('button', { name: /^Endless Mode\. Open details\.$/i })).toBeNull();
     });
 
-    it('offers gauntlet durations as presets instead of a generic play button', async () => {
+    it('offers the run clock in the setup sheet, where Gauntlet went', async () => {
         const user = userEvent.setup();
         render(<ChooseYourPathScreen />);
 
-        await user.click(screen.getByRole('button', { name: /^Gauntlet\. Open details\.$/i }));
-        const presets = within(screen.getByTestId('library-mode-detail-modal')).getByRole('group', { name: /gauntlet duration/i });
-        const buttons = within(presets).getAllByRole('button');
-        expect(buttons.length).toBeGreaterThan(0);
-        await user.click(buttons[0]!);
-        expect(storeSpies.startGauntletRun).toHaveBeenCalledTimes(1);
+        // The setup sits beside Start on the launcher, where the retired preset cards went.
+        await user.click(screen.getByRole('button', { name: new RegExp(`^${CLASSIC_SETUP_COPY.title}$`, 'iu') }));
+
+        const sheet = screen.getByTestId('classic-setup-sheet');
+        await user.click(within(sheet).getByRole('radio', { name: /10 minutes/i }));
+        await user.click(within(sheet).getByRole('button', { name: /^start run$/i }));
+        expect(storeSpies.startRun).toHaveBeenCalledWith(expect.objectContaining({ pressure: 'timed_10' }));
     });
 
     it('offers the seat counts in the order a person counts them', async () => {

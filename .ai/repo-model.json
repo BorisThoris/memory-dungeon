@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2539,
-    "codeFileCount": 991,
-    "exportedSymbolCount": 3572,
+    "trackedFileCount": 2543,
+    "codeFileCount": 994,
+    "exportedSymbolCount": 3584,
     "contentItemCount": 63,
     "mechanicCount": 136,
     "stateFieldCount": 144,
-    "relationshipCount": 10507
+    "relationshipCount": 10530
   },
   "inventory": [
     {
@@ -2320,7 +2320,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 36714,
-      "sha256": "6a8d58e34916dabea7504ae9d082df3dbfc8630dc6bc2c0298cab4f973b084f3"
+      "sha256": "cc117245844fff1684f7667cc5fdf1509ce27981807c9342bfc696e7e554572e"
     },
     {
       "path": "docs/UI_RETHINK_PLAN.md",
@@ -4705,6 +4705,12 @@
       "sha256": "d7c1ef802cb8ac250fc83c66965d0230084c5cb5da384a93299110ad04e32284"
     },
     {
+      "path": "scripts/run-mode-scope.ts",
+      "category": "script",
+      "bytes": 7171,
+      "sha256": "fa3afb08f42acf086fe6a0cb4e6b09eb30d89a3928a3b1ee60b07cf2067f32c1"
+    },
+    {
       "path": "scripts/save-field-policy.ts",
       "category": "script",
       "bytes": 3337,
@@ -5049,14 +5055,14 @@
     {
       "path": "src/renderer/App.test.tsx",
       "category": "test",
-      "bytes": 34612,
-      "sha256": "320cf9745a590ea22256f4ca9058d45eb3ed328ded8d1b9ddec990f3a41a01f0"
+      "bytes": 34855,
+      "sha256": "45997ed454c1a5f2e58c8378ba1660d34dc737de47ba13745061c173c13e8c1f"
     },
     {
       "path": "src/renderer/App.tsx",
       "category": "source",
-      "bytes": 20194,
-      "sha256": "4d2671f87e2a9f81a90d5e1d2ef20ed85e0f45564fbbb2f43c97fd4341ff2b9b"
+      "bytes": 20004,
+      "sha256": "6f66ff1284caf5771c0dfb6812e1b4b6a9696bfae168d741820d94ed8155babc"
     },
     {
       "path": "src/renderer/assets/ASSET_SOURCES.md",
@@ -7623,20 +7629,20 @@
     {
       "path": "src/renderer/components/ChooseYourPathScreen.module.css",
       "category": "source",
-      "bytes": 14708,
-      "sha256": "85280a34190f86b77aa98bead6daa446a1e3ef1ef9b9302e8750210dff0260cd"
+      "bytes": 15775,
+      "sha256": "019ef61995a1e2606e4d39018125dd28c893b1558c4ddd2e2ab88acb1cdcb6f5"
     },
     {
       "path": "src/renderer/components/ChooseYourPathScreen.test.tsx",
       "category": "test",
-      "bytes": 14626,
-      "sha256": "7d934def4fade83fb36e4c6d55ff27f088031e62d0c6323357d6f521b28c0a15"
+      "bytes": 14601,
+      "sha256": "016bc898d7deee423507c105c24db44479e06fcdcc12659b5ef6506b10db84e8"
     },
     {
       "path": "src/renderer/components/ChooseYourPathScreen.tsx",
       "category": "source",
-      "bytes": 30122,
-      "sha256": "c8f4b7c498df882c4b8eaafbea5fe2851c2e0bd93aa9984d1182bbc9e759ca84"
+      "bytes": 30999,
+      "sha256": "408259118e1b2f51ca9013182a00451125ad78906367bb0b334b3427be481ebc"
     },
     {
       "path": "src/renderer/components/chooseYourPathScreenModel.ts",
@@ -7821,14 +7827,14 @@
     {
       "path": "src/renderer/components/MainMenu.test.tsx",
       "category": "test",
-      "bytes": 3692,
-      "sha256": "4fec15b4cccb1b8bea6a22efd1a9eedf9ca38c45eb3d25284975f7c327577c09"
+      "bytes": 3546,
+      "sha256": "8cec112f8d11d9738ea2fdbae121aaffb17ebd21e84658721bfee08bf9e82891"
     },
     {
       "path": "src/renderer/components/MainMenu.tsx",
       "category": "source",
-      "bytes": 17353,
-      "sha256": "0b11571810c53f1d66b59c6fe7aed0c24767eda15ed1adbb0d719ac95c963e12"
+      "bytes": 16173,
+      "sha256": "ce16e8151b61854ec6d9c5b9399fd323a5a09b2aabb7dfb6e8006cb9d570f0db"
     },
     {
       "path": "src/renderer/components/MainMenuBackground.module.css",
@@ -7851,8 +7857,8 @@
     {
       "path": "src/renderer/components/MainMenuSaveFailureNotice.test.tsx",
       "category": "test",
-      "bytes": 4080,
-      "sha256": "2e2b3e0b80d273538caff55bfdeac52905bc251307a4bb99258ba0aa7d1e8d08"
+      "bytes": 4035,
+      "sha256": "75e38e0d6406196d6ba7a116ec202612f9a8e8138b014598e184df9bee4c2f49"
     },
     {
       "path": "src/renderer/components/matchedCardRimFireMaterial.ts",
@@ -9141,8 +9147,8 @@
     {
       "path": "src/renderer/copy/screenCopy.ts",
       "category": "source",
-      "bytes": 2620,
-      "sha256": "43cbef4d37dab90dfa2fb3a69d0adefdfc8affb499139c1c968018e2b8913f63"
+      "bytes": 3621,
+      "sha256": "2f48cdb02bb47cc0fb4fe694daaa150cdb00f77b60ce296a73e193ce1a332b42"
     },
     {
       "path": "src/renderer/copy/settingsHints.ts",
@@ -9615,8 +9621,8 @@
     {
       "path": "src/renderer/store/appStoreTypes.ts",
       "category": "source",
-      "bytes": 5238,
-      "sha256": "539728e5b3183bb9362aaba3bb12fecd1ff5a600c9412356645df290f2ef088e"
+      "bytes": 5180,
+      "sha256": "fb03bf9f7f56f2a4fc72b2ef18725b1fd27818b348d17c7fe778d1fea1cc2323"
     },
     {
       "path": "src/renderer/store/backgroundPersistence.test.ts",
@@ -9885,14 +9891,14 @@
     {
       "path": "src/renderer/store/runStartState.test.ts",
       "category": "test",
-      "bytes": 7710,
-      "sha256": "d0defff4c93db7f7ea457e0a827469ed7236f708e184c2d168feb4c6d5e17490"
+      "bytes": 7718,
+      "sha256": "984ea7287aeccd68dfd5fa7bbbd1affec9f526aa76e14194d7408d7eda425cb2"
     },
     {
       "path": "src/renderer/store/runStartState.ts",
       "category": "source",
-      "bytes": 8528,
-      "sha256": "93af41f0a7bf722b0bea514efdf27b7cf6e4f34bf3ca642f55c5b165b4ae3dba"
+      "bytes": 7475,
+      "sha256": "2b8c383be295d45d0da187357df9c0ddf2e661469aceb6590732552f593ec4bc"
     },
     {
       "path": "src/renderer/store/runSurfaceState.test.ts",
@@ -10041,14 +10047,14 @@
     {
       "path": "src/renderer/store/useAppStore.test.ts",
       "category": "test",
-      "bytes": 116547,
-      "sha256": "f05d976225ecd0163e7c55ab87c8e590016b3650d0c82e1022595897a7f8292c"
+      "bytes": 108324,
+      "sha256": "bd96cae9a87deff6a9a2eaed6fc1b8e50bb6242ebe2ede6ae5fa006bbe91748a"
     },
     {
       "path": "src/renderer/store/useAppStore.ts",
       "category": "source",
-      "bytes": 30213,
-      "sha256": "6b678e555b8b971cf1b95f43a4a4bc885c9df504821a6bab2774e5476c116e39"
+      "bytes": 29272,
+      "sha256": "024d14796f242c80976db8287ac64f319df4dc395a1e84736deb9792a49b3f61"
     },
     {
       "path": "src/renderer/styles/App.module.css",
@@ -10317,8 +10323,8 @@
     {
       "path": "src/shared/balance-notes-drift.test.ts",
       "category": "test",
-      "bytes": 2146,
-      "sha256": "59f3dd4fd843eeae64417678cc31f044155b564f3205731ea87ed4b06841a900"
+      "bytes": 2096,
+      "sha256": "aa131afeaeb72489c864c0de730ed18e1237b1b54335f9773de3d09dce29bbdb"
     },
     {
       "path": "src/shared/balance-simulation.test.ts",
@@ -10557,20 +10563,32 @@
     {
       "path": "src/shared/challenge-progression.test.ts",
       "category": "test",
-      "bytes": 6285,
-      "sha256": "9252eab32a76a546f8ca989fed613d4ae74a798f03579eac022d86d86cc02f30"
+      "bytes": 6542,
+      "sha256": "d72850b8bef28976260b1177f8f13be915dfd8886f4ebc8bf605cc3354accfee"
     },
     {
       "path": "src/shared/challenge-progression.ts",
       "category": "source",
-      "bytes": 11628,
-      "sha256": "d26305472dee2874f9e0306b3f05d18d6e9f8b3049fa526257e5e2285147992e"
+      "bytes": 9952,
+      "sha256": "13a1dc1a3eb60a835a5364054e9ff306d315e1dedf5a1c1de868793c0c429d96"
     },
     {
       "path": "src/shared/check-depcheck-clean-script.test.ts",
       "category": "test",
       "bytes": 2524,
       "sha256": "42e28f4369ece6971870280478cd87dda46a4a6454e9f6cd094b24ea1b11b361"
+    },
+    {
+      "path": "src/shared/classic-run-setup.test.ts",
+      "category": "test",
+      "bytes": 4136,
+      "sha256": "c1c875e7b83e4005d0936c892c370487b7b33f1c948ace1b08e1a63db82b5fa0"
+    },
+    {
+      "path": "src/shared/classic-run-setup.ts",
+      "category": "source",
+      "bytes": 5267,
+      "sha256": "1aa8d015cc5d7b2c0197b5cf83ae30b33278fdaf1ca1a487f4ba3208f1e62e3d"
     },
     {
       "path": "src/shared/color-vision.test.ts",
@@ -12387,14 +12405,14 @@
     {
       "path": "src/shared/run-mode-catalog.test.ts",
       "category": "test",
-      "bytes": 5260,
-      "sha256": "0a79a613d1247b5876a11739c39d5a4932f781ed59179ccc1944c8f93ed05bbf"
+      "bytes": 2593,
+      "sha256": "0aa02de729215b9c477dea21a002b3028b58dab942853f11159c8deb7b34479b"
     },
     {
       "path": "src/shared/run-mode-catalog.ts",
       "category": "source",
-      "bytes": 15082,
-      "sha256": "285d05da5f27ebafd911b6c244e41fd0b33e2be8e92c4ec5b5d595f4ecb24b8d"
+      "bytes": 8200,
+      "sha256": "ae4b51dabff3cda734d4bd83345968d866ab83c6daecf9160959c387599e6729"
     },
     {
       "path": "src/shared/run-mode-identity.test.ts",
@@ -12407,6 +12425,12 @@
       "category": "source",
       "bytes": 3563,
       "sha256": "c1cb9b64d74f07a9bb03f08a42c3636bbac96f6af15bab8f793f28f8a2f79662"
+    },
+    {
+      "path": "src/shared/run-mode-scope.test.ts",
+      "category": "test",
+      "bytes": 2379,
+      "sha256": "56b29766e262f01ab73ba3abde11dde5425da8c109f85f671ea3f4ac5f898feb"
     },
     {
       "path": "src/shared/run-number-guards.test.ts",
@@ -15887,7 +15911,7 @@
       "path": "src/renderer/App.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 867,
+      "lineCount": 870,
       "imports": [
         "file:src/renderer/App.tsx",
         "file:src/renderer/desktop-client.ts",
@@ -15908,7 +15932,7 @@
       "path": "src/renderer/App.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 425,
+      "lineCount": 422,
       "imports": [
         "file:src/renderer/audio/gameplayMusic.ts",
         "file:src/renderer/breakpoints.ts",
@@ -17329,10 +17353,11 @@
       "path": "src/renderer/components/ChooseYourPathScreen.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 295,
+      "lineCount": 294,
       "imports": [
         "file:src/renderer/components/ChooseYourPathScreen.tsx",
         "file:src/renderer/components/chooseYourPathScreenModel.ts",
+        "file:src/renderer/copy/screenCopy.ts",
         "file:src/shared/game-catalog.ts",
         "file:src/shared/run-mode-catalog.ts"
       ],
@@ -17344,19 +17369,18 @@
       "path": "src/renderer/components/ChooseYourPathScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 662,
+      "lineCount": 653,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/assets/ui/modeArt.ts",
         "file:src/renderer/audio/uiSfx.ts",
-        "file:src/renderer/components/chooseYourPathScreenModel.ts",
         "file:src/renderer/components/OverlayModal.tsx",
         "file:src/renderer/copy/passAndPlay.ts",
         "file:src/renderer/copy/screenCopy.ts",
         "file:src/renderer/store/useAppStore.ts",
         "file:src/renderer/ui/index.ts",
         "file:src/shared/challenge-progression.ts",
-        "file:src/shared/contracts.ts",
+        "file:src/shared/classic-run-setup.ts",
         "file:src/shared/pass-and-play-rules.ts",
         "file:src/shared/run-mode-catalog.ts",
         "file:src/shared/run-share-key.ts",
@@ -17885,7 +17909,7 @@
       "path": "src/renderer/components/MainMenu.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 94,
+      "lineCount": 91,
       "imports": [
         "file:src/renderer/components/MainMenu.tsx",
         "file:src/shared/save-data.ts"
@@ -17898,7 +17922,7 @@
       "path": "src/renderer/components/MainMenu.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 351,
+      "lineCount": 334,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/uiSfx.ts",
@@ -17964,7 +17988,7 @@
       "path": "src/renderer/components/MainMenuSaveFailureNotice.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 96,
+      "lineCount": 95,
       "imports": [
         "file:src/renderer/components/MainMenu.tsx",
         "file:src/renderer/copy/saveRecoveryNotice.ts",
@@ -21647,14 +21671,17 @@
       "path": "src/renderer/copy/screenCopy.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 50,
+      "lineCount": 74,
       "imports": [],
       "exports": [
         "symbol:src/renderer/copy/screenCopy.ts#CHOOSE_YOUR_PATH_COPY",
+        "symbol:src/renderer/copy/screenCopy.ts#CLASSIC_SETUP_COPY",
         "symbol:src/renderer/copy/screenCopy.ts#GAME_OVER_LABELS",
         "symbol:src/renderer/copy/screenCopy.ts#SHOP_COPY"
       ],
-      "testedBy": []
+      "testedBy": [
+        "file:src/renderer/components/ChooseYourPathScreen.test.tsx"
+      ]
     },
     {
       "id": "file:src/renderer/copy/settingsHints.ts",
@@ -22798,9 +22825,10 @@
       "path": "src/renderer/store/appStoreTypes.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 128,
+      "lineCount": 124,
       "imports": [
         "file:src/renderer/store/matchScorePop.ts",
+        "file:src/shared/classic-run-setup.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/dungeon-rules.ts",
         "file:src/shared/meta-progression.ts"
@@ -23633,10 +23661,11 @@
       "path": "src/renderer/store/runStartState.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 189,
+      "lineCount": 191,
       "imports": [
         "file:src/renderer/store/runStartState.ts",
         "file:src/shared/builtin-puzzles.ts",
+        "file:src/shared/classic-run-setup.ts",
         "file:src/shared/game-core.ts",
         "file:src/shared/save-data.ts"
       ],
@@ -23648,10 +23677,11 @@
       "path": "src/renderer/store/runStartState.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 241,
+      "lineCount": 209,
       "imports": [
         "file:src/renderer/store/runSurfaceState.ts",
         "file:src/shared/builtin-puzzles.ts",
+        "file:src/shared/classic-run-setup.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/game-core.ts",
         "file:src/shared/run-from-share-key.ts",
@@ -24138,11 +24168,12 @@
       "path": "src/renderer/store/useAppStore.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 2861,
+      "lineCount": 2672,
       "imports": [
         "file:src/renderer/store/matchScorePop.ts",
         "file:src/renderer/store/useAppStore.ts",
         "file:src/shared/board-generation.ts",
+        "file:src/shared/classic-run-setup.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/dungeon-rules.ts",
         "file:src/shared/game-core.ts",
@@ -24162,7 +24193,7 @@
       "path": "src/renderer/store/useAppStore.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 911,
+      "lineCount": 887,
       "imports": [
         "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/audio/uiSfx.ts",
@@ -24703,10 +24734,10 @@
       "path": "src/shared/balance-notes-drift.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 42,
+      "lineCount": 41,
       "imports": [
+        "file:src/shared/classic-run-setup.ts",
         "file:src/shared/game-core.ts",
-        "file:src/shared/run-mode-catalog.ts",
         "file:src/shared/tile-symbol-catalog.ts",
         "file:src/shared/turn-resolution.ts"
       ],
@@ -25646,7 +25677,7 @@
       "path": "src/shared/challenge-progression.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 286,
+      "lineCount": 247,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/meta-progression.ts",
@@ -25680,6 +25711,48 @@
       "imports": [],
       "exports": [],
       "testedBy": []
+    },
+    {
+      "id": "file:src/shared/classic-run-setup.test.ts",
+      "path": "src/shared/classic-run-setup.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 103,
+      "imports": [
+        "file:src/shared/classic-run-setup.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/shared/classic-run-setup.ts",
+      "path": "src/shared/classic-run-setup.ts",
+      "layer": "shared",
+      "role": "production",
+      "lineCount": 130,
+      "imports": [
+        "file:src/shared/contracts.ts",
+        "file:src/shared/run-creation-rules.ts"
+      ],
+      "exports": [
+        "symbol:src/shared/classic-run-setup.ts#buildClassicRunOptions",
+        "symbol:src/shared/classic-run-setup.ts#buildVowContract",
+        "symbol:src/shared/classic-run-setup.ts#CHAOS_MUTATORS",
+        "symbol:src/shared/classic-run-setup.ts#ClassicRunPacingId",
+        "symbol:src/shared/classic-run-setup.ts#ClassicRunPressureId",
+        "symbol:src/shared/classic-run-setup.ts#ClassicRunSetup",
+        "symbol:src/shared/classic-run-setup.ts#ClassicRunVowId",
+        "symbol:src/shared/classic-run-setup.ts#DEFAULT_CLASSIC_RUN_SETUP",
+        "symbol:src/shared/classic-run-setup.ts#describeClassicRunSetup",
+        "symbol:src/shared/classic-run-setup.ts#isDefaultClassicRunSetup",
+        "symbol:src/shared/classic-run-setup.ts#pressureDurationMs"
+      ],
+      "testedBy": [
+        "file:src/renderer/store/runStartState.test.ts",
+        "file:src/renderer/store/useAppStore.test.ts",
+        "file:src/shared/balance-notes-drift.test.ts",
+        "file:src/shared/classic-run-setup.test.ts"
+      ]
     },
     {
       "id": "file:src/shared/color-vision.test.ts",
@@ -30088,8 +30161,7 @@
       "testedBy": [
         "file:src/shared/game-catalog.test.ts",
         "file:src/shared/mechanics-catalog-appendix-builder.test.ts",
-        "file:src/shared/mechanics-encyclopedia.test.ts",
-        "file:src/shared/run-mode-catalog.test.ts"
+        "file:src/shared/mechanics-encyclopedia.test.ts"
       ]
     },
     {
@@ -32621,9 +32693,8 @@
       "path": "src/shared/run-mode-catalog.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 116,
+      "lineCount": 62,
       "imports": [
-        "file:src/shared/mechanics-encyclopedia.ts",
         "file:src/shared/run-mode-catalog.ts",
         "file:src/shared/save-data.ts"
       ],
@@ -32635,7 +32706,7 @@
       "path": "src/shared/run-mode-catalog.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 359,
+      "lineCount": 205,
       "imports": [
         "file:src/shared/challenge-progression.ts",
         "file:src/shared/content-lock-state.ts",
@@ -32663,11 +32734,11 @@
       "testedBy": [
         "file:src/renderer/assets/ui/modeArt.test.ts",
         "file:src/renderer/components/ChooseYourPathScreen.test.tsx",
-        "file:src/shared/balance-notes-drift.test.ts",
         "file:src/shared/content-lock.test.ts",
         "file:src/shared/release-checklist.test.ts",
         "file:src/shared/run-mode-catalog.test.ts",
-        "file:src/shared/run-mode-identity.test.ts"
+        "file:src/shared/run-mode-identity.test.ts",
+        "file:src/shared/run-mode-scope.test.ts"
       ]
     },
     {
@@ -32705,6 +32776,18 @@
         "file:src/shared/run-from-share-key.test.ts",
         "file:src/shared/run-mode-identity.test.ts"
       ]
+    },
+    {
+      "id": "file:src/shared/run-mode-scope.test.ts",
+      "path": "src/shared/run-mode-scope.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 54,
+      "imports": [
+        "file:src/shared/run-mode-catalog.ts"
+      ],
+      "exports": [],
+      "testedBy": []
     },
     {
       "id": "file:src/shared/run-number-guards.test.ts",
@@ -35545,8 +35628,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/App.tsx",
-      "line": 424,
-      "endLine": 424
+      "line": 421,
+      "endLine": 421
     },
     {
       "id": "symbol:src/renderer/assets/assetDropInReadiness.ts#ASSET_DROP_IN_CATEGORIES",
@@ -37353,8 +37436,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/ChooseYourPathScreen.tsx",
-      "line": 661,
-      "endLine": 661
+      "line": 652,
+      "endLine": 652
     },
     {
       "id": "symbol:src/renderer/components/chooseYourPathScreenModel.ts#buildMeditationPickMutatorRows",
@@ -37713,8 +37796,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/MainMenu.tsx",
-      "line": 350,
-      "endLine": 350
+      "line": 333,
+      "endLine": 333
     },
     {
       "id": "symbol:src/renderer/components/MainMenuBackground.tsx#default",
@@ -41965,6 +42048,14 @@
       "endLine": 27
     },
     {
+      "id": "symbol:src/renderer/copy/screenCopy.ts#CLASSIC_SETUP_COPY",
+      "name": "CLASSIC_SETUP_COPY",
+      "kind": "value",
+      "file": "src/renderer/copy/screenCopy.ts",
+      "line": 58,
+      "endLine": 73
+    },
+    {
       "id": "symbol:src/renderer/copy/screenCopy.ts#GAME_OVER_LABELS",
       "name": "GAME_OVER_LABELS",
       "kind": "value",
@@ -42906,7 +42997,7 @@
       "kind": "interface",
       "file": "src/renderer/store/appStoreTypes.ts",
       "line": 16,
-      "endLine": 127
+      "endLine": 123
     },
     {
       "id": "symbol:src/renderer/store/backgroundPersistence.ts#runPersistenceInBackground",
@@ -43665,64 +43756,64 @@
       "name": "createRestartRun",
       "kind": "value",
       "file": "src/renderer/store/runStartState.ts",
-      "line": 176,
-      "endLine": 240
+      "line": 144,
+      "endLine": 208
     },
     {
       "id": "symbol:src/renderer/store/runStartState.ts#createRunStartPlan",
       "name": "createRunStartPlan",
       "kind": "value",
       "file": "src/renderer/store/runStartState.ts",
-      "line": 73,
-      "endLine": 171
+      "line": 72,
+      "endLine": 139
     },
     {
       "id": "symbol:src/renderer/store/runStartState.ts#createRunStartStatePatch",
       "name": "createRunStartStatePatch",
       "kind": "value",
       "file": "src/renderer/store/runStartState.ts",
-      "line": 27,
-      "endLine": 33
+      "line": 34,
+      "endLine": 40
     },
     {
       "id": "symbol:src/renderer/store/runStartState.ts#createRunStartTelemetryPayload",
       "name": "createRunStartTelemetryPayload",
       "kind": "value",
       "file": "src/renderer/store/runStartState.ts",
-      "line": 35,
-      "endLine": 46
+      "line": 42,
+      "endLine": 53
     },
     {
       "id": "symbol:src/renderer/store/runStartState.ts#isDungeonShowcaseRestartRun",
       "name": "isDungeonShowcaseRestartRun",
       "kind": "value",
       "file": "src/renderer/store/runStartState.ts",
-      "line": 173,
-      "endLine": 174
+      "line": 141,
+      "endLine": 142
     },
     {
       "id": "symbol:src/renderer/store/runStartState.ts#RunStartRequest",
       "name": "RunStartRequest",
       "kind": "type",
       "file": "src/renderer/store/runStartState.ts",
-      "line": 52,
-      "endLine": 65
+      "line": 59,
+      "endLine": 64
     },
     {
       "id": "symbol:src/renderer/store/runStartState.ts#RunStartStatePatch",
       "name": "RunStartStatePatch",
       "kind": "interface",
       "file": "src/renderer/store/runStartState.ts",
-      "line": 20,
-      "endLine": 25
+      "line": 27,
+      "endLine": 32
     },
     {
       "id": "symbol:src/renderer/store/runStartState.ts#RunStartTelemetryExtra",
       "name": "RunStartTelemetryExtra",
       "kind": "type",
       "file": "src/renderer/store/runStartState.ts",
-      "line": 18,
-      "endLine": 18
+      "line": 25,
+      "endLine": 25
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#canPauseRunSurface",
@@ -44234,7 +44325,7 @@
       "kind": "value",
       "file": "src/renderer/store/useAppStore.ts",
       "line": 263,
-      "endLine": 900
+      "endLine": 876
     },
     {
       "id": "symbol:src/renderer/styles/theme.ts#buildRendererThemeStyle",
@@ -46650,7 +46741,7 @@
       "kind": "type",
       "file": "src/shared/challenge-progression.ts",
       "line": 11,
-      "endLine": 21
+      "endLine": 16
     },
     {
       "id": "symbol:src/shared/challenge-progression.ts#ChallengeGateStatus",
@@ -46665,80 +46756,168 @@
       "name": "challengeGateSummary",
       "kind": "value",
       "file": "src/shared/challenge-progression.ts",
-      "line": 155,
-      "endLine": 166
+      "line": 114,
+      "endLine": 125
     },
     {
       "id": "symbol:src/shared/challenge-progression.ts#ChallengeModeGateRow",
       "name": "ChallengeModeGateRow",
       "kind": "interface",
       "file": "src/shared/challenge-progression.ts",
-      "line": 23,
-      "endLine": 35
+      "line": 18,
+      "endLine": 30
     },
     {
       "id": "symbol:src/shared/challenge-progression.ts#ChallengeModeMotivationSummary",
       "name": "ChallengeModeMotivationSummary",
       "kind": "interface",
       "file": "src/shared/challenge-progression.ts",
-      "line": 252,
-      "endLine": 258
+      "line": 213,
+      "endLine": 219
     },
     {
       "id": "symbol:src/shared/challenge-progression.ts#ChallengeModeProgressionRow",
       "name": "ChallengeModeProgressionRow",
       "kind": "type",
       "file": "src/shared/challenge-progression.ts",
-      "line": 170,
-      "endLine": 176
+      "line": 129,
+      "endLine": 135
     },
     {
       "id": "symbol:src/shared/challenge-progression.ts#ChallengeProgressionStatus",
       "name": "ChallengeProgressionStatus",
       "kind": "type",
       "file": "src/shared/challenge-progression.ts",
-      "line": 168,
-      "endLine": 168
+      "line": 127,
+      "endLine": 127
     },
     {
       "id": "symbol:src/shared/challenge-progression.ts#getChallengeModeGateForMode",
       "name": "getChallengeModeGateForMode",
       "kind": "value",
       "file": "src/shared/challenge-progression.ts",
-      "line": 232,
-      "endLine": 250
+      "line": 193,
+      "endLine": 211
     },
     {
       "id": "symbol:src/shared/challenge-progression.ts#getChallengeModeGateRow",
       "name": "getChallengeModeGateRow",
       "kind": "value",
       "file": "src/shared/challenge-progression.ts",
-      "line": 150,
-      "endLine": 153
+      "line": 109,
+      "endLine": 112
     },
     {
       "id": "symbol:src/shared/challenge-progression.ts#getChallengeModeGateRows",
       "name": "getChallengeModeGateRows",
       "kind": "value",
       "file": "src/shared/challenge-progression.ts",
-      "line": 147,
-      "endLine": 148
+      "line": 106,
+      "endLine": 107
     },
     {
       "id": "symbol:src/shared/challenge-progression.ts#getChallengeModeMotivationSummary",
       "name": "getChallengeModeMotivationSummary",
       "kind": "value",
       "file": "src/shared/challenge-progression.ts",
-      "line": 262,
-      "endLine": 285
+      "line": 223,
+      "endLine": 246
     },
     {
       "id": "symbol:src/shared/challenge-progression.ts#getChallengeModeProgressionRows",
       "name": "getChallengeModeProgressionRows",
       "kind": "value",
       "file": "src/shared/challenge-progression.ts",
-      "line": 217,
-      "endLine": 230
+      "line": 178,
+      "endLine": 191
+    },
+    {
+      "id": "symbol:src/shared/classic-run-setup.ts#buildClassicRunOptions",
+      "name": "buildClassicRunOptions",
+      "kind": "value",
+      "file": "src/shared/classic-run-setup.ts",
+      "line": 81,
+      "endLine": 96
+    },
+    {
+      "id": "symbol:src/shared/classic-run-setup.ts#buildVowContract",
+      "name": "buildVowContract",
+      "kind": "value",
+      "file": "src/shared/classic-run-setup.ts",
+      "line": 67,
+      "endLine": 78
+    },
+    {
+      "id": "symbol:src/shared/classic-run-setup.ts#CHAOS_MUTATORS",
+      "name": "CHAOS_MUTATORS",
+      "kind": "value",
+      "file": "src/shared/classic-run-setup.ts",
+      "line": 49,
+      "endLine": 49
+    },
+    {
+      "id": "symbol:src/shared/classic-run-setup.ts#ClassicRunPacingId",
+      "name": "ClassicRunPacingId",
+      "kind": "type",
+      "file": "src/shared/classic-run-setup.ts",
+      "line": 22,
+      "endLine": 22
+    },
+    {
+      "id": "symbol:src/shared/classic-run-setup.ts#ClassicRunPressureId",
+      "name": "ClassicRunPressureId",
+      "kind": "type",
+      "file": "src/shared/classic-run-setup.ts",
+      "line": 25,
+      "endLine": 25
+    },
+    {
+      "id": "symbol:src/shared/classic-run-setup.ts#ClassicRunSetup",
+      "name": "ClassicRunSetup",
+      "kind": "interface",
+      "file": "src/shared/classic-run-setup.ts",
+      "line": 27,
+      "endLine": 37
+    },
+    {
+      "id": "symbol:src/shared/classic-run-setup.ts#ClassicRunVowId",
+      "name": "ClassicRunVowId",
+      "kind": "type",
+      "file": "src/shared/classic-run-setup.ts",
+      "line": 19,
+      "endLine": 19
+    },
+    {
+      "id": "symbol:src/shared/classic-run-setup.ts#DEFAULT_CLASSIC_RUN_SETUP",
+      "name": "DEFAULT_CLASSIC_RUN_SETUP",
+      "kind": "value",
+      "file": "src/shared/classic-run-setup.ts",
+      "line": 39,
+      "endLine": 46
+    },
+    {
+      "id": "symbol:src/shared/classic-run-setup.ts#describeClassicRunSetup",
+      "name": "describeClassicRunSetup",
+      "kind": "value",
+      "file": "src/shared/classic-run-setup.ts",
+      "line": 108,
+      "endLine": 129
+    },
+    {
+      "id": "symbol:src/shared/classic-run-setup.ts#isDefaultClassicRunSetup",
+      "name": "isDefaultClassicRunSetup",
+      "kind": "value",
+      "file": "src/shared/classic-run-setup.ts",
+      "line": 99,
+      "endLine": 105
+    },
+    {
+      "id": "symbol:src/shared/classic-run-setup.ts#pressureDurationMs",
+      "name": "pressureDurationMs",
+      "kind": "value",
+      "file": "src/shared/classic-run-setup.ts",
+      "line": 58,
+      "endLine": 59
     },
     {
       "id": "symbol:src/shared/color-vision.ts#COLOR_VISION_KINDS",
@@ -60209,64 +60388,64 @@
       "name": "applyContentLockToRunMode",
       "kind": "value",
       "file": "src/shared/run-mode-catalog.ts",
-      "line": 319,
-      "endLine": 322
+      "line": 161,
+      "endLine": 164
     },
     {
       "id": "symbol:src/shared/run-mode-catalog.ts#CHOOSE_PATH_HERO_MODE_IDS",
       "name": "CHOOSE_PATH_HERO_MODE_IDS",
       "kind": "value",
       "file": "src/shared/run-mode-catalog.ts",
-      "line": 338,
-      "endLine": 338
+      "line": 184,
+      "endLine": 184
     },
     {
       "id": "symbol:src/shared/run-mode-catalog.ts#ChoosePathHeroModeId",
       "name": "ChoosePathHeroModeId",
       "kind": "type",
       "file": "src/shared/run-mode-catalog.ts",
-      "line": 339,
-      "endLine": 339
+      "line": 185,
+      "endLine": 185
     },
     {
       "id": "symbol:src/shared/run-mode-catalog.ts#choosePathHeroModes",
       "name": "choosePathHeroModes",
       "kind": "function",
       "file": "src/shared/run-mode-catalog.ts",
-      "line": 343,
-      "endLine": 351
+      "line": 189,
+      "endLine": 197
     },
     {
       "id": "symbol:src/shared/run-mode-catalog.ts#choosePathLibraryModes",
       "name": "choosePathLibraryModes",
       "kind": "function",
       "file": "src/shared/run-mode-catalog.ts",
-      "line": 354,
-      "endLine": 356
+      "line": 200,
+      "endLine": 202
     },
     {
       "id": "symbol:src/shared/run-mode-catalog.ts#getRunModeCatalog",
       "name": "getRunModeCatalog",
       "kind": "function",
       "file": "src/shared/run-mode-catalog.ts",
-      "line": 325,
-      "endLine": 327
+      "line": 167,
+      "endLine": 169
     },
     {
       "id": "symbol:src/shared/run-mode-catalog.ts#getRunModeChallengeGateRows",
       "name": "getRunModeChallengeGateRows",
       "kind": "ExportSpecifier",
       "file": "src/shared/run-mode-catalog.ts",
-      "line": 358,
-      "endLine": 358
+      "line": 204,
+      "endLine": 204
     },
     {
       "id": "symbol:src/shared/run-mode-catalog.ts#getRunModeDefinition",
       "name": "getRunModeDefinition",
       "kind": "function",
       "file": "src/shared/run-mode-catalog.ts",
-      "line": 333,
-      "endLine": 335
+      "line": 175,
+      "endLine": 177
     },
     {
       "id": "symbol:src/shared/run-mode-catalog.ts#PuzzleRunModeId",
@@ -60281,24 +60460,24 @@
       "name": "RUN_MODE_CATALOG",
       "kind": "value",
       "file": "src/shared/run-mode-catalog.ts",
-      "line": 74,
-      "endLine": 316
+      "line": 61,
+      "endLine": 158
     },
     {
       "id": "symbol:src/shared/run-mode-catalog.ts#RUN_MODE_GROUP_LABEL",
       "name": "RUN_MODE_GROUP_LABEL",
       "kind": "value",
       "file": "src/shared/run-mode-catalog.ts",
-      "line": 67,
-      "endLine": 72
+      "line": 56,
+      "endLine": 59
     },
     {
       "id": "symbol:src/shared/run-mode-catalog.ts#RUN_MODE_GROUP_ORDER",
       "name": "RUN_MODE_GROUP_ORDER",
       "kind": "value",
       "file": "src/shared/run-mode-catalog.ts",
-      "line": 60,
-      "endLine": 65
+      "line": 54,
+      "endLine": 54
     },
     {
       "id": "symbol:src/shared/run-mode-catalog.ts#RunModeAction",
@@ -60306,7 +60485,7 @@
       "kind": "type",
       "file": "src/shared/run-mode-catalog.ts",
       "line": 15,
-      "endLine": 30
+      "endLine": 21
     },
     {
       "id": "symbol:src/shared/run-mode-catalog.ts#RunModeAvailability",
@@ -60321,8 +60500,8 @@
       "name": "RunModeDefinition",
       "kind": "interface",
       "file": "src/shared/run-mode-catalog.ts",
-      "line": 32,
-      "endLine": 57
+      "line": 23,
+      "endLine": 48
     },
     {
       "id": "symbol:src/shared/run-mode-catalog.ts#RunModeGroup",
@@ -60337,8 +60516,8 @@
       "name": "runModesByGroup",
       "kind": "function",
       "file": "src/shared/run-mode-catalog.ts",
-      "line": 329,
-      "endLine": 331
+      "line": 171,
+      "endLine": 173
     },
     {
       "id": "symbol:src/shared/run-mode-identity.ts#describeRunModeIdentity",
@@ -64861,7 +65040,7 @@
         },
         {
           "path": "src/renderer/store/useAppStore.test.ts",
-          "line": 3
+          "line": 4
         }
       ],
       "enables": [
@@ -67348,7 +67527,7 @@
         },
         {
           "path": "src/renderer/store/useAppStore.test.ts",
-          "line": 18
+          "line": 19
         }
       ],
       "enables": [
@@ -67879,7 +68058,7 @@
         },
         {
           "path": "src/renderer/store/useAppStore.test.ts",
-          "line": 7
+          "line": 8
         },
         {
           "path": "src/shared/gameplay-core-simulation.test.ts",
@@ -68010,7 +68189,7 @@
         },
         {
           "path": "src/renderer/store/runStartState.ts",
-          "line": 1
+          "line": 15
         }
       ],
       "tests": [
@@ -80662,6 +80841,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/copy/screenCopy.ts->symbol:src/renderer/copy/screenCopy.ts#CLASSIC_SETUP_COPY",
+      "source": "file:src/renderer/copy/screenCopy.ts",
+      "target": "symbol:src/renderer/copy/screenCopy.ts#CLASSIC_SETUP_COPY",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/copy/screenCopy.ts->symbol:src/renderer/copy/screenCopy.ts#GAME_OVER_LABELS",
       "source": "file:src/renderer/copy/screenCopy.ts",
       "target": "symbol:src/renderer/copy/screenCopy.ts#GAME_OVER_LABELS",
@@ -84241,6 +84426,72 @@
       "id": "exports:src/shared/challenge-progression.ts->symbol:src/shared/challenge-progression.ts#getChallengeModeProgressionRows",
       "source": "file:src/shared/challenge-progression.ts",
       "target": "symbol:src/shared/challenge-progression.ts#getChallengeModeProgressionRows",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/classic-run-setup.ts->symbol:src/shared/classic-run-setup.ts#buildClassicRunOptions",
+      "source": "file:src/shared/classic-run-setup.ts",
+      "target": "symbol:src/shared/classic-run-setup.ts#buildClassicRunOptions",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/classic-run-setup.ts->symbol:src/shared/classic-run-setup.ts#buildVowContract",
+      "source": "file:src/shared/classic-run-setup.ts",
+      "target": "symbol:src/shared/classic-run-setup.ts#buildVowContract",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/classic-run-setup.ts->symbol:src/shared/classic-run-setup.ts#CHAOS_MUTATORS",
+      "source": "file:src/shared/classic-run-setup.ts",
+      "target": "symbol:src/shared/classic-run-setup.ts#CHAOS_MUTATORS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/classic-run-setup.ts->symbol:src/shared/classic-run-setup.ts#ClassicRunPacingId",
+      "source": "file:src/shared/classic-run-setup.ts",
+      "target": "symbol:src/shared/classic-run-setup.ts#ClassicRunPacingId",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/classic-run-setup.ts->symbol:src/shared/classic-run-setup.ts#ClassicRunPressureId",
+      "source": "file:src/shared/classic-run-setup.ts",
+      "target": "symbol:src/shared/classic-run-setup.ts#ClassicRunPressureId",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/classic-run-setup.ts->symbol:src/shared/classic-run-setup.ts#ClassicRunSetup",
+      "source": "file:src/shared/classic-run-setup.ts",
+      "target": "symbol:src/shared/classic-run-setup.ts#ClassicRunSetup",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/classic-run-setup.ts->symbol:src/shared/classic-run-setup.ts#ClassicRunVowId",
+      "source": "file:src/shared/classic-run-setup.ts",
+      "target": "symbol:src/shared/classic-run-setup.ts#ClassicRunVowId",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/classic-run-setup.ts->symbol:src/shared/classic-run-setup.ts#DEFAULT_CLASSIC_RUN_SETUP",
+      "source": "file:src/shared/classic-run-setup.ts",
+      "target": "symbol:src/shared/classic-run-setup.ts#DEFAULT_CLASSIC_RUN_SETUP",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/classic-run-setup.ts->symbol:src/shared/classic-run-setup.ts#describeClassicRunSetup",
+      "source": "file:src/shared/classic-run-setup.ts",
+      "target": "symbol:src/shared/classic-run-setup.ts#describeClassicRunSetup",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/classic-run-setup.ts->symbol:src/shared/classic-run-setup.ts#isDefaultClassicRunSetup",
+      "source": "file:src/shared/classic-run-setup.ts",
+      "target": "symbol:src/shared/classic-run-setup.ts#isDefaultClassicRunSetup",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/classic-run-setup.ts->symbol:src/shared/classic-run-setup.ts#pressureDurationMs",
+      "source": "file:src/shared/classic-run-setup.ts",
+      "target": "symbol:src/shared/classic-run-setup.ts#pressureDurationMs",
       "kind": "exports"
     },
     {
@@ -101897,6 +102148,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/ChooseYourPathScreen.test.tsx->src/renderer/copy/screenCopy.ts",
+      "source": "file:src/renderer/components/ChooseYourPathScreen.test.tsx",
+      "target": "file:src/renderer/copy/screenCopy.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/ChooseYourPathScreen.test.tsx->src/shared/game-catalog.ts",
       "source": "file:src/renderer/components/ChooseYourPathScreen.test.tsx",
       "target": "file:src/shared/game-catalog.ts",
@@ -101924,12 +102181,6 @@
       "id": "imports:src/renderer/components/ChooseYourPathScreen.tsx->src/renderer/audio/uiSfx.ts",
       "source": "file:src/renderer/components/ChooseYourPathScreen.tsx",
       "target": "file:src/renderer/audio/uiSfx.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/renderer/components/ChooseYourPathScreen.tsx->src/renderer/components/chooseYourPathScreenModel.ts",
-      "source": "file:src/renderer/components/ChooseYourPathScreen.tsx",
-      "target": "file:src/renderer/components/chooseYourPathScreenModel.ts",
       "kind": "imports"
     },
     {
@@ -101969,9 +102220,9 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/ChooseYourPathScreen.tsx->src/shared/contracts.ts",
+      "id": "imports:src/renderer/components/ChooseYourPathScreen.tsx->src/shared/classic-run-setup.ts",
       "source": "file:src/renderer/components/ChooseYourPathScreen.tsx",
-      "target": "file:src/shared/contracts.ts",
+      "target": "file:src/shared/classic-run-setup.ts",
       "kind": "imports"
     },
     {
@@ -107471,6 +107722,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/store/appStoreTypes.ts->src/shared/classic-run-setup.ts",
+      "source": "file:src/renderer/store/appStoreTypes.ts",
+      "target": "file:src/shared/classic-run-setup.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/store/appStoreTypes.ts->src/shared/contracts.ts",
       "source": "file:src/renderer/store/appStoreTypes.ts",
       "target": "file:src/shared/contracts.ts",
@@ -108503,6 +108760,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/store/runStartState.test.ts->src/shared/classic-run-setup.ts",
+      "source": "file:src/renderer/store/runStartState.test.ts",
+      "target": "file:src/shared/classic-run-setup.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/store/runStartState.test.ts->src/shared/game-core.ts",
       "source": "file:src/renderer/store/runStartState.test.ts",
       "target": "file:src/shared/game-core.ts",
@@ -108524,6 +108787,12 @@
       "id": "imports:src/renderer/store/runStartState.ts->src/shared/builtin-puzzles.ts",
       "source": "file:src/renderer/store/runStartState.ts",
       "target": "file:src/shared/builtin-puzzles.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/store/runStartState.ts->src/shared/classic-run-setup.ts",
+      "source": "file:src/renderer/store/runStartState.ts",
+      "target": "file:src/shared/classic-run-setup.ts",
       "kind": "imports"
     },
     {
@@ -109175,6 +109444,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/store/useAppStore.test.ts->src/shared/classic-run-setup.ts",
+      "source": "file:src/renderer/store/useAppStore.test.ts",
+      "target": "file:src/shared/classic-run-setup.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/store/useAppStore.test.ts->src/shared/contracts.ts",
       "source": "file:src/renderer/store/useAppStore.test.ts",
       "target": "file:src/shared/contracts.ts",
@@ -109733,15 +110008,15 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/shared/balance-notes-drift.test.ts->src/shared/game-core.ts",
+      "id": "imports:src/shared/balance-notes-drift.test.ts->src/shared/classic-run-setup.ts",
       "source": "file:src/shared/balance-notes-drift.test.ts",
-      "target": "file:src/shared/game-core.ts",
+      "target": "file:src/shared/classic-run-setup.ts",
       "kind": "imports"
     },
     {
-      "id": "imports:src/shared/balance-notes-drift.test.ts->src/shared/run-mode-catalog.ts",
+      "id": "imports:src/shared/balance-notes-drift.test.ts->src/shared/game-core.ts",
       "source": "file:src/shared/balance-notes-drift.test.ts",
-      "target": "file:src/shared/run-mode-catalog.ts",
+      "target": "file:src/shared/game-core.ts",
       "kind": "imports"
     },
     {
@@ -110948,6 +111223,24 @@
       "id": "imports:src/shared/challenge-progression.ts->src/shared/run-number-guards.ts",
       "source": "file:src/shared/challenge-progression.ts",
       "target": "file:src/shared/run-number-guards.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/classic-run-setup.test.ts->src/shared/classic-run-setup.ts",
+      "source": "file:src/shared/classic-run-setup.test.ts",
+      "target": "file:src/shared/classic-run-setup.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/classic-run-setup.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/classic-run-setup.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/classic-run-setup.ts->src/shared/run-creation-rules.ts",
+      "source": "file:src/shared/classic-run-setup.ts",
+      "target": "file:src/shared/run-creation-rules.ts",
       "kind": "imports"
     },
     {
@@ -117449,12 +117742,6 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/shared/run-mode-catalog.test.ts->src/shared/mechanics-encyclopedia.ts",
-      "source": "file:src/shared/run-mode-catalog.test.ts",
-      "target": "file:src/shared/mechanics-encyclopedia.ts",
-      "kind": "imports"
-    },
-    {
       "id": "imports:src/shared/run-mode-catalog.test.ts->src/shared/run-mode-catalog.ts",
       "source": "file:src/shared/run-mode-catalog.test.ts",
       "target": "file:src/shared/run-mode-catalog.ts",
@@ -117524,6 +117811,12 @@
       "id": "imports:src/shared/run-mode-identity.ts->src/shared/contracts.ts",
       "source": "file:src/shared/run-mode-identity.ts",
       "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/run-mode-scope.test.ts->src/shared/run-mode-catalog.ts",
+      "source": "file:src/shared/run-mode-scope.test.ts",
+      "target": "file:src/shared/run-mode-catalog.ts",
       "kind": "imports"
     },
     {
@@ -127257,6 +127550,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/copy/screenCopy.ts->file:src/renderer/components/ChooseYourPathScreen.test.tsx",
+      "source": "file:src/renderer/copy/screenCopy.ts",
+      "target": "file:src/renderer/components/ChooseYourPathScreen.test.tsx",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/copy/traitInteractionLaneMap.ts->file:src/renderer/copy/traitInteractionLaneMap.test.ts",
       "source": "file:src/renderer/copy/traitInteractionLaneMap.ts",
       "target": "file:src/renderer/copy/traitInteractionLaneMap.test.ts",
@@ -128298,6 +128597,30 @@
       "id": "tested_by:src/shared/challenge-progression.ts->file:src/shared/challenge-progression.test.ts",
       "source": "file:src/shared/challenge-progression.ts",
       "target": "file:src/shared/challenge-progression.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/classic-run-setup.ts->file:src/renderer/store/runStartState.test.ts",
+      "source": "file:src/shared/classic-run-setup.ts",
+      "target": "file:src/renderer/store/runStartState.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/classic-run-setup.ts->file:src/renderer/store/useAppStore.test.ts",
+      "source": "file:src/shared/classic-run-setup.ts",
+      "target": "file:src/renderer/store/useAppStore.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/classic-run-setup.ts->file:src/shared/balance-notes-drift.test.ts",
+      "source": "file:src/shared/classic-run-setup.ts",
+      "target": "file:src/shared/balance-notes-drift.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/classic-run-setup.ts->file:src/shared/classic-run-setup.test.ts",
+      "source": "file:src/shared/classic-run-setup.ts",
+      "target": "file:src/shared/classic-run-setup.test.ts",
       "kind": "tested_by"
     },
     {
@@ -130953,12 +131276,6 @@
       "kind": "tested_by"
     },
     {
-      "id": "tested_by:src/shared/mechanics-encyclopedia.ts->file:src/shared/run-mode-catalog.test.ts",
-      "source": "file:src/shared/mechanics-encyclopedia.ts",
-      "target": "file:src/shared/run-mode-catalog.test.ts",
-      "kind": "tested_by"
-    },
-    {
       "id": "tested_by:src/shared/memorize-phase-rules.ts->file:src/shared/memorize-phase-rules.test.ts",
       "source": "file:src/shared/memorize-phase-rules.ts",
       "target": "file:src/shared/memorize-phase-rules.test.ts",
@@ -131865,12 +132182,6 @@
       "kind": "tested_by"
     },
     {
-      "id": "tested_by:src/shared/run-mode-catalog.ts->file:src/shared/balance-notes-drift.test.ts",
-      "source": "file:src/shared/run-mode-catalog.ts",
-      "target": "file:src/shared/balance-notes-drift.test.ts",
-      "kind": "tested_by"
-    },
-    {
       "id": "tested_by:src/shared/run-mode-catalog.ts->file:src/shared/content-lock.test.ts",
       "source": "file:src/shared/run-mode-catalog.ts",
       "target": "file:src/shared/content-lock.test.ts",
@@ -131892,6 +132203,12 @@
       "id": "tested_by:src/shared/run-mode-catalog.ts->file:src/shared/run-mode-identity.test.ts",
       "source": "file:src/shared/run-mode-catalog.ts",
       "target": "file:src/shared/run-mode-identity.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/run-mode-catalog.ts->file:src/shared/run-mode-scope.test.ts",
+      "source": "file:src/shared/run-mode-catalog.ts",
+      "target": "file:src/shared/run-mode-scope.test.ts",
       "kind": "tested_by"
     },
     {

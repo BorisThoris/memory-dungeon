@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useMemo, useState, type ReactElement } from 'react';
 import { useShallow } from 'zustand/react/shallow';
-import type { MutatorId } from '../../shared/contracts';
 import { getChallengeModeGateRows } from '../../shared/challenge-progression';
 import {
     choosePathHeroModes,
@@ -26,10 +25,10 @@ import {
 } from '../audio/uiSfx';
 import { FittedGrid, Eyebrow, ScreenTitle, UiButton } from '../ui';
 import { useAppStore } from '../store/useAppStore';
-import { buildMeditationPickMutatorRows } from './chooseYourPathScreenModel';
 import OverlayModal from './OverlayModal';
 import styles from './ChooseYourPathScreen.module.css';
-import { CHOOSE_YOUR_PATH_COPY } from '../copy/screenCopy';
+import { CHOOSE_YOUR_PATH_COPY, CLASSIC_SETUP_COPY } from '../copy/screenCopy';
+import { DEFAULT_CLASSIC_RUN_SETUP, type ClassicRunSetup } from '../../shared/classic-run-setup';
 
 /**
  * Mode select. One recommended run a new player can start in one click, and a library of
@@ -79,18 +78,10 @@ const ChooseYourPathScreen = (): ReactElement => {
         closeSubscreen,
         openSettings,
         startDailyRun,
-        startDungeonShowcaseRun,
-        startGauntletRun,
-        startMeditationRun,
-        startMeditationRunWithMutators,
         startPassAndPlayRun,
-        startPinVowRun,
-        startPracticeRun,
         startPuzzleRun,
         startRun,
-        startScholarContractRun,
         startSharedRun,
-        startWildRun,
         saveData,
         settings
     } = useAppStore(
@@ -98,18 +89,10 @@ const ChooseYourPathScreen = (): ReactElement => {
             closeSubscreen: state.closeSubscreen,
             openSettings: state.openSettings,
             startDailyRun: state.startDailyRun,
-            startDungeonShowcaseRun: state.startDungeonShowcaseRun,
-            startGauntletRun: state.startGauntletRun,
-            startMeditationRun: state.startMeditationRun,
-            startMeditationRunWithMutators: state.startMeditationRunWithMutators,
             startPassAndPlayRun: state.startPassAndPlayRun,
-            startPinVowRun: state.startPinVowRun,
-            startPracticeRun: state.startPracticeRun,
             startPuzzleRun: state.startPuzzleRun,
             startRun: state.startRun,
-            startScholarContractRun: state.startScholarContractRun,
             startSharedRun: state.startSharedRun,
-            startWildRun: state.startWildRun,
             saveData: state.saveData,
             settings: state.settings
         }))
@@ -135,8 +118,8 @@ const ChooseYourPathScreen = (): ReactElement => {
     const [sharedKeyText, setSharedKeyText] = useState('');
     const [sharedKeyRejected, setSharedKeyRejected] = useState(false);
     const [detailMode, setDetailMode] = useState<RunModeDefinition | null>(null);
-    const [meditationOpen, setMeditationOpen] = useState(false);
-    const [meditationSelection, setMeditationSelection] = useState<Set<MutatorId>>(() => new Set());
+    const [setupOpen, setSetupOpen] = useState(false);
+    const [setup, setSetup] = useState<ClassicRunSetup>(DEFAULT_CLASSIC_RUN_SETUP);
 
     const heroModes = useMemo(() => choosePathHeroModes(), []);
     const launchMode = useMemo((): RunModeDefinition | null => {
@@ -184,10 +167,13 @@ const ChooseYourPathScreen = (): ReactElement => {
             const { action } = def;
             switch (action.type) {
                 case 'startRun':
+                    /*
+                     * Straight into the run. The setup sheet is a door beside Start, not in front
+                     * of it: a player who just wants to play should not pay a dialog every time,
+                     * and the whole point of retiring the preset cards was to stop asking people
+                     * to make a decision before they know anything about the run.
+                     */
                     startRun();
-                    return;
-                case 'startDungeonShowcaseRun':
-                    startDungeonShowcaseRun();
                     return;
                 case 'startDailyRun':
                     startDailyRun();
@@ -198,39 +184,11 @@ const ChooseYourPathScreen = (): ReactElement => {
                 case 'puzzle':
                     startPuzzleRun(action.puzzleId);
                     return;
-                case 'startWildRun':
-                    startWildRun();
-                    return;
-                case 'startPracticeRun':
-                    startPracticeRun();
-                    return;
-                case 'startScholarContractRun':
-                    startScholarContractRun();
-                    return;
-                case 'startPinVowRun':
-                    startPinVowRun();
-                    return;
-                case 'meditationSetup':
-                    playOpen();
-                    setMeditationOpen(true);
-                    return;
                 case 'locked':
-                case 'gauntlet':
                     return;
             }
         },
-        [
-            playOpen,
-            startDailyRun,
-            startPassAndPlayRun,
-            startDungeonShowcaseRun,
-            startPinVowRun,
-            startPracticeRun,
-            startPuzzleRun,
-            startRun,
-            startScholarContractRun,
-            startWildRun
-        ]
+        [startDailyRun, startPassAndPlayRun, startPuzzleRun, startRun]
     );
 
     const closeDetail = useCallback((): void => {
@@ -240,7 +198,7 @@ const ChooseYourPathScreen = (): ReactElement => {
 
     const detailActions = (def: RunModeDefinition) => {
         const close = { label: 'Close', onClick: closeDetail, variant: 'secondary' as const };
-        if (def.availability !== 'available' || def.action.type === 'gauntlet') {
+        if (def.availability !== 'available') {
             return [close];
         }
         /*
@@ -269,19 +227,6 @@ const ChooseYourPathScreen = (): ReactElement => {
                 }))
             ];
         }
-        if (def.action.type === 'meditationSetup') {
-            return [
-                close,
-                {
-                    label: 'Set up run…',
-                    onClick: (): void => {
-                        setDetailMode(null);
-                        runModeAction(def);
-                    },
-                    variant: 'primary' as const
-                }
-            ];
-        }
         return [
             close,
             {
@@ -297,7 +242,7 @@ const ChooseYourPathScreen = (): ReactElement => {
 
     const renderLaunch = (def: RunModeDefinition): ReactElement => {
         const freshClassic = def.id === 'classic' && !saveData.onboardingDismissed;
-        const canStart = def.availability === 'available' && def.action.type !== 'gauntlet';
+        const canStart = def.availability === 'available';
         return (
             <section aria-label="Recommended run" className={styles.launch} data-testid="choose-path-launcher">
                 <img alt="" className={styles.launchPoster} src={resolveModePosterUrl(def.posterKey)} />
@@ -325,6 +270,22 @@ const ChooseYourPathScreen = (): ReactElement => {
                         >
                             Start run
                         </UiButton>
+                        {/* The door beside Start, not in front of it: the eight retired preset
+                            cards live behind this, and a player who just wants to play never has
+                            to open it. */}
+                        {def.action.type === 'startRun' ? (
+                            <UiButton
+                                onClick={() => {
+                                    playOpen();
+                                    setSetupOpen(true);
+                                }}
+                                size="lg"
+                                type="button"
+                                variant="secondary"
+                            >
+                                {CLASSIC_SETUP_COPY.title}
+                            </UiButton>
+                        ) : null}
                         <UiButton
                             aria-controls="choose-path-more-modes"
                             aria-expanded={browseOpen}
@@ -567,93 +528,123 @@ const ChooseYourPathScreen = (): ReactElement => {
                     {detailMode.availability !== 'available' ? (
                         <p className={styles.detailMuted}>This mode is intentionally locked in the demo. It ships in the full game.</p>
                     ) : null}
-                    {detailMode.action.type === 'gauntlet' && detailMode.availability === 'available' ? (
-                        <div aria-label="Gauntlet duration" className={styles.presets} role="group">
-                            {detailMode.action.presets.map((preset) => (
-                                <UiButton
-                                    key={preset.label}
-                                    onClick={() => {
-                                        setDetailMode(null);
-                                        startGauntletRun(preset.durationMs);
-                                    }}
-                                    size="md"
-                                    type="button"
-                                    variant="secondary"
-                                >
-                                    {preset.label}
-                                </UiButton>
-                            ))}
-                        </div>
-                    ) : null}
                 </OverlayModal>
             ) : null}
 
-            {meditationOpen ? (
+            {setupOpen ? (
                 <OverlayModal
                     actions={[
                         {
-                            label: 'Cancel',
+                            label: CLASSIC_SETUP_COPY.cancelLabel,
                             onClick: () => {
                                 playBack();
-                                setMeditationOpen(false);
+                                setSetupOpen(false);
                             },
                             variant: 'secondary'
                         },
                         {
-                            label: 'Calm (no mutators)',
+                            label: CLASSIC_SETUP_COPY.startLabel,
                             onClick: () => {
-                                startMeditationRun();
-                                setMeditationOpen(false);
-                            },
-                            variant: 'secondary'
-                        },
-                        {
-                            label: 'Start with selection',
-                            onClick: () => {
-                                startMeditationRunWithMutators([...meditationSelection]);
-                                setMeditationOpen(false);
+                                startRun(setup);
+                                setSetupOpen(false);
                             },
                             variant: 'primary'
                         }
                     ]}
                     onEscape={() => {
                         playBack();
-                        setMeditationOpen(false);
+                        setSetupOpen(false);
                     }}
-                    subtitle={CHOOSE_YOUR_PATH_COPY.mutatorsSubtitle}
-                    title="Meditation setup"
+                    subtitle={CLASSIC_SETUP_COPY.subtitle}
+                    testId="classic-setup-sheet"
+                    title={CLASSIC_SETUP_COPY.title}
                 >
-                    <ul className={styles.mutatorList}>
-                        {buildMeditationPickMutatorRows().map((def) => {
-                            const inputId = `choose-path-meditation-mutator-${def.id}`;
-                            return (
-                                <li className={styles.mutatorRow} key={def.id}>
+                    <div className={styles.setupGroups}>
+                        <fieldset className={styles.setupGroup}>
+                            <legend className={styles.setupLegend}>{CLASSIC_SETUP_COPY.vowsLabel}</legend>
+                            <p className={styles.setupHint}>{CLASSIC_SETUP_COPY.vowsHint}</p>
+                            {([
+                                ['scholar', CLASSIC_SETUP_COPY.scholarLabel],
+                                ['pin_vow', CLASSIC_SETUP_COPY.pinVowLabel]
+                            ] as const).map(([vow, label]) => (
+                                <label className={styles.setupRow} key={vow}>
                                     <input
-                                        checked={meditationSelection.has(def.id)}
-                                        id={inputId}
-                                        onChange={() =>
-                                            setMeditationSelection((current) => {
-                                                const next = new Set(current);
-                                                if (next.has(def.id)) {
-                                                    next.delete(def.id);
-                                                } else {
-                                                    next.add(def.id);
-                                                }
-                                                return next;
-                                            })
+                                        checked={setup.vows.includes(vow)}
+                                        onChange={(event) =>
+                                            setSetup((current) => ({
+                                                ...current,
+                                                vows: event.target.checked
+                                                    ? [...current.vows, vow]
+                                                    : current.vows.filter((held) => held !== vow)
+                                            }))
                                         }
                                         type="checkbox"
                                     />
-                                    <label className={styles.mutatorLabel} htmlFor={inputId}>
-                                        <strong>{def.title}</strong>
-                                        <span>{def.description}</span>
-                                    </label>
-                                </li>
-                            );
-                        })}
-                    </ul>
+                                    <span>{label}</span>
+                                </label>
+                            ))}
+                        </fieldset>
+
+                        <fieldset className={styles.setupGroup}>
+                            <legend className={styles.setupLegend}>{CLASSIC_SETUP_COPY.pressureLabel}</legend>
+                            {([
+                                ['none', CLASSIC_SETUP_COPY.noClockLabel],
+                                ['timed_5', '5 minutes'],
+                                ['timed_10', '10 minutes'],
+                                ['timed_15', '15 minutes']
+                            ] as const).map(([pressure, label]) => (
+                                <label className={styles.setupRow} key={pressure}>
+                                    <input
+                                        checked={setup.pressure === pressure}
+                                        name="classic-setup-pressure"
+                                        onChange={() => setSetup((current) => ({ ...current, pressure }))}
+                                        type="radio"
+                                    />
+                                    <span>{label}</span>
+                                </label>
+                            ))}
+                        </fieldset>
+
+                        <fieldset className={styles.setupGroup}>
+                            <legend className={styles.setupLegend}>{CLASSIC_SETUP_COPY.pacingLabel}</legend>
+                            <label className={styles.setupRow}>
+                                <input
+                                    checked={setup.pacing === 'calm'}
+                                    onChange={(event) =>
+                                        setSetup((current) => ({
+                                            ...current,
+                                            pacing: event.target.checked ? 'calm' : 'standard'
+                                        }))
+                                    }
+                                    type="checkbox"
+                                />
+                                <span>{CLASSIC_SETUP_COPY.calmLabel}</span>
+                            </label>
+                            <label className={styles.setupRow}>
+                                <input
+                                    checked={setup.chaos}
+                                    onChange={(event) =>
+                                        setSetup((current) => ({ ...current, chaos: event.target.checked }))
+                                    }
+                                    type="checkbox"
+                                />
+                                <span>{CLASSIC_SETUP_COPY.chaosLabel}</span>
+                            </label>
+                            <label className={styles.setupRow}>
+                                <input
+                                    checked={setup.unrecorded}
+                                    onChange={(event) =>
+                                        setSetup((current) => ({ ...current, unrecorded: event.target.checked }))
+                                    }
+                                    type="checkbox"
+                                />
+                                <span>{CLASSIC_SETUP_COPY.unrecordedLabel}</span>
+                            </label>
+                        </fieldset>
+                    </div>
                 </OverlayModal>
             ) : null}
+
         </section>
     );
 };

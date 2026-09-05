@@ -1,4 +1,4 @@
-import type { MutatorId, RunState, SaveData, Settings } from '../../shared/contracts';
+import type { RunState, SaveData, Settings } from '../../shared/contracts';
 import { getBuiltinPuzzle } from '../../shared/builtin-puzzles';
 import {
     createDailyRun,
@@ -10,6 +10,13 @@ import {
     createWildRun
 } from '../../shared/game-core';
 import { createRunFromShareKey } from '../../shared/run-from-share-key';
+import {
+    buildClassicRunOptions,
+    DEFAULT_CLASSIC_RUN_SETUP,
+    describeClassicRunSetup,
+    isDefaultClassicRunSetup,
+    type ClassicRunSetup
+} from '../../shared/classic-run-setup';
 import type { RunShareKey } from '../../shared/run-share-key';
 import { metaRelicDraftExtraPerMilestoneFromSave } from '../../shared/save-data';
 import { applyRunSettings } from '../../shared/run-settings-rules';
@@ -51,18 +58,10 @@ const metaRelicOptionsForSave = (saveData: SaveData) => ({
 
 export type RunStartRequest =
     | { kind: 'daily' }
-    | { kind: 'dungeonShowcase' }
-    | { kind: 'endless' }
-    | { durationMs: number; kind: 'gauntlet' }
-    | { kind: 'meditation' }
+    | { kind: 'endless'; setup?: ClassicRunSetup }
     | { kind: 'passAndPlay'; seats: number }
-    | { kind: 'meditationWithMutators'; mutators: MutatorId[] }
-    | { kind: 'pinVow' }
-    | { kind: 'practice' }
     | { kind: 'puzzle'; puzzleId: string }
-    | { kind: 'scholarContract' }
-    | { key: RunShareKey; kind: 'shared' }
-    | { kind: 'wild' };
+    | { key: RunShareKey; kind: 'shared' };
 
 interface RunStartPlan {
     patch: RunStartStatePatch;
@@ -88,47 +87,33 @@ export const createRunStartPlan = ({
         case 'daily':
             run = createDailyRun(bestScore, meta);
             break;
-        case 'dungeonShowcase':
-            run = createDungeonShowcaseRun(bestScore, meta);
-            telemetryExtra = { showcase: 'dungeon' };
-            break;
-        case 'endless':
+        case 'endless': {
+            /*
+             * The main run, and the only place the old preset cards now live. Gauntlet's timer,
+             * Wild's joker, Scholar's and Pin Vow's contracts, Practice's unrecorded flag and
+             * Meditation's pacing are all `createNewRun` options, so they arrive here as a setup
+             * the player chose rather than as separate menu entries that started the same run.
+             */
+            const setup = request.setup ?? DEFAULT_CLASSIC_RUN_SETUP;
             run = createNewRun(bestScore, {
                 ...meta,
-                onboardingSafeFirstFloor: !saveData.onboardingDismissed
+                ...buildClassicRunOptions(setup),
+                // The safe first floor is for someone's first run, not for someone who has just
+                // asked for a timed chaos descent under a vow.
+                onboardingSafeFirstFloor: !saveData.onboardingDismissed && isDefaultClassicRunSetup(setup)
             });
+            telemetryExtra = {
+                setup: describeClassicRunSetup(setup).join(',') || undefined
+            };
             break;
-        case 'gauntlet':
-            run = createGauntletRun(bestScore, request.durationMs, meta);
-            break;
-        case 'meditation':
-            run = createMeditationRun(bestScore, undefined, meta);
-            break;
+        }
         case 'passAndPlay':
             /*
              * The same endless ruleset every solo run uses; only the credit is split. It skips the
-             * onboarding-safe first floor because a table sitting down together is not a first run,
-             * and it never carries the save's best score into the seats — see the summary policy.
+             * onboarding-safe first floor because a table sitting down together is not a first run.
              */
             run = createNewRun(bestScore, { ...meta, passAndPlaySeats: request.seats });
             telemetryExtra = { passAndPlaySeats: request.seats };
-            break;
-        case 'meditationWithMutators':
-            run = createMeditationRun(bestScore, request.mutators, meta);
-            telemetryExtra = {
-                meditation_focus_count: request.mutators.length,
-                meditation_focus: request.mutators.length > 0 ? request.mutators.join(',') : undefined
-            };
-            break;
-        case 'pinVow':
-            run = createNewRun(bestScore, {
-                ...meta,
-                activeContract: { noShuffle: false, noDestroy: false, maxMismatches: null, maxPinsTotalRun: 10 }
-            });
-            telemetryExtra = { pinVow: true };
-            break;
-        case 'practice':
-            run = createNewRun(bestScore, { practiceMode: true, ...meta });
             break;
         case 'puzzle': {
             const puzzle = getBuiltinPuzzle(request.puzzleId);
@@ -139,27 +124,10 @@ export const createRunStartPlan = ({
             telemetryExtra = { puzzleId: puzzle.id };
             break;
         }
-        case 'scholarContract':
-            run = createNewRun(bestScore, {
-                ...meta,
-                activeContract: {
-                    noShuffle: true,
-                    noDestroy: true,
-                    maxMismatches: null,
-                    bonusRelicDraftPick: true
-                }
-            });
-            telemetryExtra = { scholar: true };
-            break;
         case 'shared': {
             run = createRunFromShareKey(request.key, bestScore, meta);
-            telemetryExtra = { shared: request.key.variant };
             break;
         }
-        case 'wild':
-            run = createWildRun(bestScore, meta);
-            telemetryExtra = { wild: true };
-            break;
     }
 
     const patchedRun = applyRunSettings(run, settings);

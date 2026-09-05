@@ -47,3 +47,27 @@ export const SHOP_COPY = {
     sideRoomSubtitle: 'Spend current shop gold, then return to the board. This vendor does not advance the floor.',
     subtitle: 'Spend temporary shop gold before the next floor. Unspent gold expires when the run ends.'
 } as const;
+
+/**
+ * The Classic setup sheet: how this run should be played, asked once, in front of the run.
+ *
+ * These lines replaced eight menu cards. They are written as choices about a run rather than as
+ * names of modes, because that is what they are — the player is not picking a different game, they
+ * are saying how hard they want this one to be.
+ */
+export const CLASSIC_SETUP_COPY = {
+    title: 'Set up your run',
+    subtitle: 'Everything here is optional. Start plays the plain descent.',
+    vowsLabel: 'Vows',
+    vowsHint: 'Self-imposed restrictions. Harder, and yours to choose.',
+    scholarLabel: 'Scholar: no shuffle, no destroy',
+    pinVowLabel: 'Pin vow: ten pins for the whole run',
+    pacingLabel: 'Pacing',
+    calmLabel: 'Calm: slower resolves',
+    pressureLabel: 'Clock',
+    noClockLabel: 'No clock',
+    chaosLabel: 'Wild: a joker tile and a chaotic floor set',
+    unrecordedLabel: 'Do not record this run',
+    startLabel: 'Start run',
+    cancelLabel: 'Cancel'
+} as const;

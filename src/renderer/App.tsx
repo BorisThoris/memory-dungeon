@@ -61,7 +61,6 @@ const App = () => {
         openSettings,
         run,
         saveData,
-        startDungeonShowcaseRun,
         settingsReturnView,
         subscreenReturnView,
         settings,
@@ -80,7 +79,6 @@ const App = () => {
             openSettings: state.openSettings,
             run: state.run,
             saveData: state.saveData,
-            startDungeonShowcaseRun: state.startDungeonShowcaseRun,
             settingsReturnView: state.settingsReturnView,
             subscreenReturnView: state.subscreenReturnView,
             settings: state.settings,
@@ -336,7 +334,6 @@ const App = () => {
                                         onOpenCodex={openCodexFromMenu}
                                         onOpenInventory={openInventoryFromMenu}
                                         onPlay={openModeSelect}
-                                        onStartDungeonShowcase={startDungeonShowcaseRun}
                                         showHowToPlay={!saveData.firstRunHelpDismissed && !saveData.onboardingDismissed}
                                     />
                                 ) : null}

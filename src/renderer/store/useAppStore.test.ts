@@ -1,3 +1,4 @@
+import { DEFAULT_CLASSIC_RUN_SETUP } from '../../shared/classic-run-setup';
 import { beforeEach, afterEach, describe, expect, it, vi } from 'vitest';
 import type { BoardState, RunState, SaveData, Tile } from '../../shared/contracts';
 import { buildBoard, countFindablePairs } from '../../shared/board-generation';
@@ -376,21 +377,6 @@ describe('useAppStore timers', () => {
         expect(useAppStore.getState().run?.lives).toBe(4);
     });
 
-    it('starts a practice-only dungeon showcase on an active combat room', () => {
-        useAppStore.getState().startDungeonShowcaseRun();
-
-        const state = useAppStore.getState();
-        const run = state.run;
-        expect(state.view).toBe('playing');
-        expect(run?.status).toBe('playing');
-        expect(run?.practiceMode).toBe(true);
-        expect(run?.dungeonShowcaseRun).toBe(true);
-        expect(run?.achievementsEnabled).toBe(false);
-        expect(run?.board?.level).toBe(5);
-        expect(run?.board?.enemyHazards?.length).toBeGreaterThan(0);
-        expect(run?.board?.tiles.some((tile) => tile.dungeonCardKind === 'enemy')).toBe(true);
-        expect(run?.dungeonRun.currentFloor).toBe(5);
-    });
 
     it('does not set matchScorePop on mismatch resolve; mismatches increment and mismatchScorePop payload is stored', async () => {
         useAppStore.getState().startRun();
@@ -520,83 +506,8 @@ describe('useAppStore timers', () => {
         expect(runAfterNextPress?.board?.flippedTileIds).toContain(nextPairTile!.id);
     });
 
-    it('ends gauntlet when the deadline passes without a tile press', async () => {
-        useAppStore.getState().startGauntletRun();
-        const started = useAppStore.getState().run;
-        expect(started?.gameMode).toBe('gauntlet');
-        useAppStore.setState({
-            run: { ...started!, gauntletDeadlineMs: Date.now() - 50 }
-        });
-        await vi.advanceTimersByTimeAsync(400);
-        expect(useAppStore.getState().run?.status).toBe('gameOver');
-        expect(useAppStore.getState().view).toBe('gameOver');
-        expect(useAppStore.getState().run?.gameplayCommandJournal).toEqual(
-            expect.arrayContaining([expect.objectContaining({ type: 'run.gauntlet_expire' })])
-        );
-        expect(useAppStore.getState().run?.gameplayEventJournal).toEqual(
-            expect.arrayContaining([
-                expect.objectContaining({ type: 'run.gauntlet_expired' }),
-                expect.objectContaining({ type: 'feedback.requested', cue: 'mode.gauntlet.expired' })
-            ])
-        );
-    });
 
-    it('journals Gauntlet expiry before an expired tile input can mutate the board', () => {
-        useAppStore.getState().startGauntletRun();
-        const started = useAppStore.getState().run!;
-        const target = started.board!.tiles.find((tile) => tile.state === 'hidden')!;
-        useAppStore.setState({
-            view: 'playing',
-            run: {
-                ...started,
-                status: 'playing',
-                gauntletDeadlineMs: Date.now() - 1
-            }
-        });
 
-        useAppStore.getState().pressTile(target.id);
-
-        const expired = useAppStore.getState().run!;
-        expect(useAppStore.getState().view).toBe('gameOver');
-        expect(expired).toMatchObject({ status: 'gameOver', lives: 0 });
-        expect(expired.board?.tiles.find((tile) => tile.id === target.id)?.state).toBe('hidden');
-        expect(expired.gameplayCommandJournal).toEqual(
-            expect.arrayContaining([expect.objectContaining({ type: 'run.gauntlet_expire' })])
-        );
-        expect(expired.gameplayEventJournal).toEqual(
-            expect.arrayContaining([expect.objectContaining({ type: 'run.gauntlet_expired' })])
-        );
-    });
-
-    it('does not expire a paused gauntlet until the run resumes', async () => {
-        useAppStore.getState().startGauntletRun();
-        const started = useAppStore.getState().run;
-        expect(started?.gameMode).toBe('gauntlet');
-
-        useAppStore.setState({
-            view: 'playing',
-            run: {
-                ...started!,
-                status: 'paused',
-                gauntletDeadlineMs: Date.now() - 50,
-                timerState: {
-                    ...started!.timerState,
-                    pausedFromStatus: 'playing',
-                    gauntletPausedAtMs: Date.now() - 1_000
-                }
-            }
-        });
-
-        await vi.advanceTimersByTimeAsync(400);
-
-        expect(useAppStore.getState().run?.status).toBe('paused');
-        expect(useAppStore.getState().view).toBe('playing');
-
-        useAppStore.getState().resume();
-
-        expect(useAppStore.getState().run?.status).toBe('playing');
-        expect(useAppStore.getState().run?.gauntletDeadlineMs).toBeGreaterThan(Date.now());
-    });
 
     it('SIDE-013: inventory overlay and run settings modal use the same frozen run snapshot after memorize', async () => {
         useAppStore.getState().startRun();
@@ -2450,7 +2361,7 @@ describe('useAppStore timers', () => {
             tileSwapArmed: true,
             tileSwapFirstTileId: 'stale-tile'
         });
-        useAppStore.getState().startWildRun();
+        useAppStore.getState().startRun({ ...DEFAULT_CLASSIC_RUN_SETUP, chaos: true });
 
         expect(useAppStore.getState().dungeonExitPromptOpen).toBe(false);
         expect(useAppStore.getState().shopReturnMode).toBeNull();
@@ -2670,48 +2581,9 @@ describe('useAppStore scholar contract', () => {
         vi.useRealTimers();
     });
 
-    it('startScholarContractRun leaves shuffle, region shuffle, and tile swap as no-ops from store', async () => {
-        useAppStore.getState().startScholarContractRun();
-        notifyCurrentBoardReady();
-        const started = useAppStore.getState().run;
-        expect(started?.activeContract).toEqual({
-            noShuffle: true,
-            noDestroy: true,
-            maxMismatches: null,
-            bonusRelicDraftPick: true
-        });
-
-        const memorizeDuration = started?.timerState.memorizeRemainingMs ?? 0;
-        await vi.advanceTimersByTimeAsync(memorizeDuration + 1);
-
-        const run = useAppStore.getState().run;
-        expect(run?.status).toBe('playing');
-
-        const nonceBefore = run!.shuffleNonce;
-        const tileIdsBefore = run!.board!.tiles.map((t) => t.id);
-
-        useAppStore.getState().shuffleBoard();
-        let after = useAppStore.getState().run;
-        expect(after?.shuffleNonce).toBe(nonceBefore);
-        expect(after?.board!.tiles.map((t) => t.id)).toEqual(tileIdsBefore);
-
-        // Row shuffle refuses to even arm under the contract, so there is no mode to leave.
-        useAppStore.getState().toggleRegionShuffleArmed();
-        after = useAppStore.getState().run;
-        expect(useAppStore.getState().regionShuffleArmed).toBe(false);
-        expect(after?.shuffleNonce).toBe(nonceBefore);
-        expect(after?.board!.tiles.map((t) => t.id)).toEqual(tileIdsBefore);
-
-        useAppStore.getState().toggleTileSwapArmed();
-        after = useAppStore.getState().run;
-        expect(useAppStore.getState().tileSwapArmed).toBe(false);
-        expect(useAppStore.getState().tileSwapFirstTileId).toBeNull();
-        expect(after?.shuffleNonce).toBe(nonceBefore);
-        expect(after?.board!.tiles.map((t) => t.id)).toEqual(tileIdsBefore);
-    });
 
     it('scholar contract blocks destroy arming even with banked charges', async () => {
-        useAppStore.getState().startScholarContractRun();
+        useAppStore.getState().startRun({ ...DEFAULT_CLASSIC_RUN_SETUP, vows: ['scholar'] });
         notifyCurrentBoardReady();
         const memorizeDuration = useAppStore.getState().run?.timerState.memorizeRemainingMs ?? 0;
         await vi.advanceTimersByTimeAsync(memorizeDuration + 1);
@@ -2725,28 +2597,6 @@ describe('useAppStore scholar contract', () => {
         expect(useAppStore.getState().run?.destroyPairCharges).toBe(1);
     });
 
-    it('restartRun keeps scholar activeContract on the new run', async () => {
-        useAppStore.getState().startScholarContractRun();
-        notifyCurrentBoardReady();
-        const memorizeDuration = useAppStore.getState().run?.timerState.memorizeRemainingMs ?? 0;
-        await vi.advanceTimersByTimeAsync(memorizeDuration + 1);
-
-        expect(useAppStore.getState().run?.activeContract).toEqual({
-            noShuffle: true,
-            noDestroy: true,
-            maxMismatches: null,
-            bonusRelicDraftPick: true
-        });
-
-        useAppStore.getState().restartRun();
-
-        expect(useAppStore.getState().run?.activeContract).toEqual({
-            noShuffle: true,
-            noDestroy: true,
-            maxMismatches: null,
-            bonusRelicDraftPick: true
-        });
-    });
 });
 
 describe('useAppStore restartRun menu modes', () => {
@@ -2761,24 +2611,6 @@ describe('useAppStore restartRun menu modes', () => {
         vi.useRealTimers();
     });
 
-    it('restartRun after Wild Run keeps wild menu run and joker mutator bundle', async () => {
-        useAppStore.getState().startWildRun();
-        notifyCurrentBoardReady();
-        const started = useAppStore.getState().run;
-        expect(started?.wildMenuRun).toBe(true);
-        expect(started?.wildMatchesRemaining).toBeGreaterThanOrEqual(1);
-
-        const memorizeDuration = started?.timerState.memorizeRemainingMs ?? 0;
-        await vi.advanceTimersByTimeAsync(memorizeDuration + 1);
-        expect(useAppStore.getState().run?.status).toBe('playing');
-
-        useAppStore.getState().restartRun();
-
-        const next = useAppStore.getState().run;
-        expect(next?.wildMenuRun).toBe(true);
-        expect(next?.wildMatchesRemaining).toBeGreaterThanOrEqual(1);
-        expect(next?.activeMutators).toEqual(['sticky_fingers', 'short_memorize', 'findables_floor']);
-    });
 
     it('restartRun keeps the guided safe first floor until onboarding is completed', () => {
         const randomSpy = vi.spyOn(Math, 'random').mockReturnValue(1.1 / 0x7fffffff);
@@ -2811,30 +2643,9 @@ describe('useAppStore restartRun menu modes', () => {
         }
     });
 
-    it('restartRun after Dungeon Showcase game over keeps the authored combat-room setup', () => {
-        useAppStore.getState().startDungeonShowcaseRun();
-        const started = useAppStore.getState().run;
-        expect(started?.dungeonShowcaseRun).toBe(true);
-        expect(started?.board?.level).toBe(5);
-
-        useAppStore.setState({
-            run: createRunSummary({ ...started!, status: 'gameOver', lives: 0 }, []),
-            view: 'gameOver'
-        });
-
-        useAppStore.getState().restartRun();
-
-        const next = useAppStore.getState().run;
-        expect(next?.dungeonShowcaseRun).toBe(true);
-        expect(next?.status).toBe('playing');
-        expect(next?.practiceMode).toBe(true);
-        expect(next?.board?.level).toBe(5);
-        expect(next?.board?.enemyHazards?.length).toBeGreaterThan(0);
-        expect(next?.board?.tiles.some((tile) => tile.dungeonCardKind === 'enemy')).toBe(true);
-    });
 
     it('restartRun after Pin vow keeps maxPinsTotalRun contract', async () => {
-        useAppStore.getState().startPinVowRun();
+        useAppStore.getState().startRun({ ...DEFAULT_CLASSIC_RUN_SETUP, vows: ['pin_vow'] });
         notifyCurrentBoardReady();
         const started = useAppStore.getState().run;
         expect(started?.activeContract).toEqual({

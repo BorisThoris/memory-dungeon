@@ -11,14 +11,9 @@ export type ChallengeGateStatus = 'available' | 'locked' | 'deferred';
 export type ChallengeGateId =
     | 'classic_open'
     | 'daily_local_seed'
-    | 'gauntlet_local_timer'
     | 'puzzle_library'
-    | 'wild_lab'
-    | 'contract_training'
-    | 'meditation_training'
     | 'same_device_table'
-    | 'local_mode_select'
-    | 'endless_deferred';
+    | 'local_mode_select';
 
 export interface ChallengeModeGateRow {
     modeId: string;
@@ -47,55 +42,19 @@ const puzzleCompleted = (save: SaveData, puzzleId: string): boolean =>
  * other v1 mode; say that instead, and let `endless_deferred` mean only what it says.
  */
 const gateIdForMode = (mode: RunModeDefinition): ChallengeGateId => {
-    if (mode.id === 'endless') return 'endless_deferred';
     if (mode.id === 'classic') return 'classic_open';
     if (mode.id === 'daily') return 'daily_local_seed';
-    if (mode.id === 'gauntlet') return 'gauntlet_local_timer';
     if (mode.id.startsWith('puzzle_')) return 'puzzle_library';
-    if (mode.id === 'wild') return 'wild_lab';
     if (mode.id === 'pass_and_play') return 'same_device_table';
-    if (mode.id === 'scholar' || mode.id === 'pin_vow') return 'contract_training';
-    if (mode.id === 'meditation' || mode.id === 'practice') return 'meditation_training';
     return 'local_mode_select';
 };
 
 const rowForMode = (save: SaveData, mode: RunModeDefinition): ChallengeModeGateRow => {
-    const firstClear = save.achievements.ACH_FIRST_CLEAR ? 1 : 0;
     const dailies = runNonNegativeInteger(save.playerStats?.dailiesCompleted);
     const starterPuzzleDone = puzzleCompleted(save, 'starter_pairs') ? 1 : 0;
     const gateId = gateIdForMode(mode);
 
-    if (mode.id === 'endless') {
-        return {
-            modeId: mode.id,
-            title: mode.title,
-            gateId,
-            status: 'deferred',
-            entryCondition: 'Deferred v1 mode: Classic owns playable endless-style progression.',
-            lockoutReason: 'Future ultra-long balance pass; no online gate is required.',
-            progress: { current: 0, target: 1 },
-            saveFields: ['none'],
-            offlineOnly: true,
-            onlineRequired: false,
-            qaRoute: 'Assert card is locked and Classic remains playable.'
-        };
-    }
 
-    if (mode.id === 'gauntlet') {
-        return {
-            modeId: mode.id,
-            title: mode.title,
-            gateId,
-            status: firstClear >= 1 ? 'available' : 'locked',
-            entryCondition: 'Clear any local floor once to unlock timed challenge presets.',
-            lockoutReason: firstClear >= 1 ? null : 'First clear not completed yet.',
-            progress: { current: firstClear, target: 1 },
-            saveFields: ['achievements.ACH_FIRST_CLEAR'],
-            offlineOnly: true,
-            onlineRequired: false,
-            qaRoute: 'Toggle ACH_FIRST_CLEAR in local save; Gauntlet gate should flip to available.'
-        };
-    }
 
     if (mode.id === 'puzzle_glyph_cross') {
         return {
@@ -175,7 +134,11 @@ export type ChallengeModeProgressionRow = Omit<ChallengeModeGateRow, 'status'> &
     motivationCopy: string;
 };
 
-const progressionModeIds = ['daily', 'gauntlet', 'puzzle_glyph_cross', 'scholar', 'pin_vow'] as const;
+/**
+ * The lanes a player progresses through, now that Gauntlet, Scholar and Pin Vow are Classic setup
+ * options rather than modes: the daily, the table, and the authored puzzle.
+ */
+const progressionModeIds = ['daily', 'pass_and_play', 'puzzle_glyph_cross'] as const;
 
 const challengeTierRank: Record<MetaProgressionDifficultyTier, number> = {
     initiate: 0,
@@ -186,10 +149,8 @@ const challengeTierRank: Record<MetaProgressionDifficultyTier, number> = {
 
 const recommendedTierByModeId: Record<(typeof progressionModeIds)[number], MetaProgressionDifficultyTier> = {
     daily: 'initiate',
-    gauntlet: 'adept',
-    puzzle_glyph_cross: 'adept',
-    scholar: 'ascendant',
-    pin_vow: 'ascendant'
+    pass_and_play: 'adept',
+    puzzle_glyph_cross: 'adept'
 };
 
 const progressionStatus = (row: ChallengeModeGateRow): ChallengeProgressionStatus =>

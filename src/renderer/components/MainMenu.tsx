@@ -39,7 +39,6 @@ interface MainMenuProps {
     onOpenCodex: () => void;
     onOpenInventory: () => void;
     onOpenSettings: () => void;
-    onStartDungeonShowcase: () => void;
 }
 
 const MainMenu = ({
@@ -54,7 +53,6 @@ const MainMenu = ({
     onOpenCodex,
     onOpenInventory,
     onOpenSettings,
-    onStartDungeonShowcase
 }: MainMenuProps) => {
     const {
         achievementBridgeNotice,
@@ -280,21 +278,6 @@ const MainMenu = ({
                                                 >
                                                     <span className={styles.ctaContent}>
                                                         <span className={styles.ctaTitle}>Play</span>
-                                                    </span>
-                                                </UiButton>
-                                                <UiButton
-                                                    aria-label="Dungeon Showcase"
-                                                    className={`${styles.ctaButton} ${styles.ctaButtonShowcase}`}
-                                                    fullWidth
-                                                    size={playButtonSize}
-                                                    variant="secondary"
-                                                    onClick={() => {
-                                                        playMenuOpen();
-                                                        onStartDungeonShowcase();
-                                                    }}
-                                                >
-                                                    <span className={styles.ctaContent}>
-                                                        <span className={styles.ctaTitle}>Dungeon Showcase</span>
                                                     </span>
                                                 </UiButton>
                                                 <div className={styles.secondaryActionGrid} data-testid="main-menu-secondary-actions">

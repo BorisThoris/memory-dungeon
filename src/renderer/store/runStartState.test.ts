@@ -1,3 +1,4 @@
+import { DEFAULT_CLASSIC_RUN_SETUP } from '../../shared/classic-run-setup';
 import { describe, expect, it } from 'vitest';
 import { BUILTIN_PUZZLES } from '../../shared/builtin-puzzles';
 import {
@@ -61,16 +62,21 @@ describe('runStartState', () => {
             telemetry: { mode: 'endless', practice: false }
         });
         expect(createRunStartPlan({ request: { kind: 'daily' }, saveData, settings })?.run.gameMode).toBe('daily');
+        // The timer and the joker are Classic setup options now, not their own start requests.
         expect(
-            createRunStartPlan({ request: { durationMs: 123_000, kind: 'gauntlet' }, saveData, settings })?.run
-        ).toMatchObject({
-            gameMode: 'gauntlet',
-            gauntletSessionDurationMs: 123_000
-        });
-        expect(createRunStartPlan({ request: { kind: 'wild' }, saveData, settings })).toMatchObject({
-            run: { wildMenuRun: true },
-            telemetry: { wild: true }
-        });
+            createRunStartPlan({
+                request: { kind: 'endless', setup: { ...DEFAULT_CLASSIC_RUN_SETUP, pressure: 'timed_5' } },
+                saveData,
+                settings
+            })?.run
+        ).toMatchObject({ gauntletSessionDurationMs: 300_000 });
+        expect(
+            createRunStartPlan({
+                request: { kind: 'endless', setup: { ...DEFAULT_CLASSIC_RUN_SETUP, chaos: true } },
+                saveData,
+                settings
+            })?.run.activeMutators
+        ).toContain('sticky_fingers');
     });
 
     it('creates start plans with mode-specific telemetry extras', () => {
@@ -78,24 +84,20 @@ describe('runStartState', () => {
         const settings = saveData.settings;
         const puzzle = BUILTIN_PUZZLES.starter_pairs;
 
-        expect(createRunStartPlan({ request: { kind: 'dungeonShowcase' }, saveData, settings })).toMatchObject({
-            run: { dungeonShowcaseRun: true },
-            telemetry: { showcase: 'dungeon' }
-        });
         expect(createRunStartPlan({ request: { kind: 'puzzle', puzzleId: puzzle.id }, saveData, settings })).toMatchObject({
             run: { gameMode: 'puzzle', puzzleId: puzzle.id },
             telemetry: { puzzleId: puzzle.id }
         });
         expect(
             createRunStartPlan({
-                request: { kind: 'meditationWithMutators', mutators: ['wide_recall', 'n_back_anchor'] },
+                request: {
+                    kind: 'endless',
+                    setup: { ...DEFAULT_CLASSIC_RUN_SETUP, focusMutators: ['wide_recall', 'n_back_anchor'] }
+                },
                 saveData,
                 settings
-            })
-        ).toMatchObject({
-            run: { activeMutators: ['wide_recall', 'n_back_anchor'], gameMode: 'meditation' },
-            telemetry: { meditation_focus: 'wide_recall,n_back_anchor', meditation_focus_count: 2 }
-        });
+            })?.run.activeMutators
+        ).toEqual(['wide_recall', 'n_back_anchor']);
     });
 
     it('returns null for unknown puzzle starts without creating a run patch', () => {

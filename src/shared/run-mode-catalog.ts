@@ -5,7 +5,7 @@ import { PASS_AND_PLAY_FLOORS } from './pass-and-play-rules';
  * Kept separate from `GameMode` in contracts — entries may share an underlying mode with flags.
  */
 
-export type RunModeGroup = 'core' | 'time_attack' | 'puzzle' | 'training';
+export type RunModeGroup = 'core' | 'puzzle';
 
 export type RunModeAvailability = 'available' | 'locked' | 'disabled';
 
@@ -13,20 +13,11 @@ export type RunModeAvailability = 'available' | 'locked' | 'disabled';
 export type PuzzleRunModeId = 'starter_pairs' | 'mirror_craft' | 'glyph_cross';
 
 export type RunModeAction =
+    /** Opens the Classic setup, where the retired preset cards now live as choices. */
     | { type: 'startRun' }
-    | { type: 'startDungeonShowcaseRun' }
     | { type: 'startDailyRun' }
     | { type: 'locked' }
-    | {
-          type: 'gauntlet';
-          presets: ReadonlyArray<{ label: string; durationMs: number }>;
-      }
     | { type: 'puzzle'; puzzleId: PuzzleRunModeId }
-    | { type: 'startWildRun' }
-    | { type: 'startPracticeRun' }
-    | { type: 'startScholarContractRun' }
-    | { type: 'startPinVowRun' }
-    | { type: 'meditationSetup' }
     | { type: 'startPassAndPlayRun'; seats: number };
 
 export interface RunModeDefinition {
@@ -56,19 +47,15 @@ export interface RunModeDefinition {
     action: RunModeAction;
 }
 
-/** Eyebrow / section order on Choose Your Path. */
-export const RUN_MODE_GROUP_ORDER: readonly RunModeGroup[] = [
-    'core',
-    'time_attack',
-    'puzzle',
-    'training'
-] as const;
+/**
+ * Eyebrow / section order on Choose Your Path. Only the groups that still hold a mode: time attack and training became
+ * Classic setup options.
+ */
+export const RUN_MODE_GROUP_ORDER: readonly RunModeGroup[] = ['core', 'puzzle'] as const;
 
 export const RUN_MODE_GROUP_LABEL: Record<RunModeGroup, string> = {
     core: 'Core modes',
-    time_attack: 'Time attack',
-    puzzle: 'Puzzle',
-    training: 'Training & contracts'
+    puzzle: 'Puzzle'
 };
 
 export const RUN_MODE_CATALOG: readonly RunModeDefinition[] = [
@@ -127,67 +114,6 @@ export const RUN_MODE_CATALOG: readonly RunModeDefinition[] = [
         action: { type: 'startPassAndPlayRun', seats: 2 }
     },
     {
-        id: 'dungeon_showcase',
-        title: 'Dungeon Showcase',
-        shortDescription: 'Jump straight into a live dungeon board with enemy patrols, route exits, traps, shops, bosses, and locked-room vocabulary.',
-        startContract: {
-            label: 'Start signal',
-            signal: 'HUD mode reads Dungeon Showcase.',
-            testId: 'hud-mode-identity'
-        },
-        identityTag: 'Dungeon preview',
-        promise: 'See the shipped dungeon systems immediately: patrols, route exits, trap vocabulary, boss prep, and locked-room rewards.',
-        eligibilityNote: 'Showcase disables achievements and mastery records so it can start on a staged dungeon floor.',
-        outcomeSummary: 'Showcase results are practice-only and do not affect daily fairness or Classic mastery.',
-        group: 'core',
-        availability: 'available',
-        posterKey: 'dungeon_showcase',
-        testId: 'choose-path-dungeon-showcase',
-        action: { type: 'startDungeonShowcaseRun' }
-    },
-    {
-        id: 'endless',
-        title: 'Endless Mode',
-        shortDescription: 'Upcoming ultra-long variant. Locked intentionally while long-form balance, rewards, and fatigue rules are tuned.',
-        startContract: {
-            label: 'Start signal',
-            signal: 'Locked for v1; no run starts from this card.',
-            testId: 'library-mode-detail-modal'
-        },
-        availabilityDetail:
-            'Staged for a later balance pass: Classic already provides procedural long-run play; this card is not an unlock requirement or broken button.',
-        group: 'core',
-        availability: 'locked',
-        posterKey: 'endless',
-        testId: 'choose-path-low-cta',
-        action: { type: 'locked' }
-    },
-    {
-        id: 'gauntlet',
-        title: 'Gauntlet',
-        shortDescription: 'Timed pressure run: pick 5, 10, or 15 minutes and race clean floors before the clock seals.',
-        startContract: {
-            label: 'Start signal',
-            signal: 'HUD mode reads Gauntlet and shows the timer.',
-            testId: 'hud-mode-identity'
-        },
-        identityTag: 'Clock pressure',
-        promise: 'Timed mastery — same memory loop, but every decision competes with the countdown.',
-        eligibilityNote: 'Achievements stay eligible unless debug/assist rules lock a specific achievement; local honors track Gauntlet proof.',
-        outcomeSummary: 'Gauntlet results emphasize timed floor clears and local pressure mastery.',
-        group: 'time_attack',
-        availability: 'available',
-        posterKey: 'gauntlet',
-        action: {
-            type: 'gauntlet',
-            presets: [
-                { label: '5m', durationMs: 5 * 60 * 1000 },
-                { label: '10m', durationMs: 10 * 60 * 1000 },
-                { label: '15m', durationMs: 15 * 60 * 1000 }
-            ]
-        }
-    },
-    {
         id: 'puzzle_starter',
         title: 'Puzzle',
         shortDescription: 'Curated tile layout; focus on solving the board.',
@@ -229,90 +155,6 @@ export const RUN_MODE_CATALOG: readonly RunModeDefinition[] = [
         posterKey: 'puzzle',
         action: { type: 'puzzle', puzzleId: 'glyph_cross' }
     },
-    {
-        id: 'wild',
-        title: 'Wild Run',
-        shortDescription: 'Chaos lab: joker matching, sticky fingers, short memorize, and dense pickups for power discovery.',
-        startContract: {
-            label: 'Start signal',
-            signal: 'HUD mode reads Wild Run and shows wild matching.',
-            testId: 'hud-mode-identity'
-        },
-        identityTag: 'Chaos lab',
-        promise: 'Experiment with volatile tools and wild matching; expect swingy floors and fast discoveries.',
-        eligibilityNote: 'Practice-adjacent chaos run; perfect-memory style achievements are blocked by wild/power use, but local run stats still record.',
-        outcomeSummary: 'Wild results highlight volatile mutators, joker matching, and discovery.',
-        group: 'training',
-        availability: 'available',
-        posterKey: 'wild',
-        action: { type: 'startWildRun' }
-    },
-    {
-        id: 'practice',
-        title: 'Practice',
-        shortDescription: 'Low-pressure lab for learning powers, tiles, and routes without chasing mastery rewards.',
-        startContract: {
-            label: 'Start signal',
-            signal: 'HUD mode reads Practice and achievements are disabled.',
-            testId: 'hud-mode-identity'
-        },
-        promise: 'Learn and test — a safe place to rehearse the core loop.',
-        eligibilityNote: 'Practice disables achievements so experimentation cannot pollute mastery runs.',
-        group: 'training',
-        availability: 'available',
-        posterKey: 'practice',
-        action: { type: 'startPracticeRun' }
-    },
-    {
-        id: 'scholar',
-        title: 'Scholar',
-        startContract: {
-            label: 'Start signal',
-            signal: 'HUD mode reads Scholar Contract.',
-            testId: 'hud-mode-identity'
-        },
-        shortDescription: 'Mastery contract: no shuffle, no swap, no destroy — prove the read without damage-control tools.',
-        promise: 'Purist memory — planning and recall over rescue buttons.',
-        eligibilityNote: 'Achievements remain eligible; the contract also grants an extra relic choice at shrines.',
-        group: 'training',
-        availability: 'available',
-        posterKey: 'scholar',
-        action: { type: 'startScholarContractRun' }
-    },
-    {
-        id: 'pin_vow',
-        title: 'Pin vow',
-        startContract: {
-            label: 'Start signal',
-            signal: 'HUD mode reads Pin vow and shows the pin cap.',
-            testId: 'hud-mode-identity'
-        },
-        shortDescription: 'Planning constraint: only ten pin placements across the run, so every mark matters.',
-        promise: 'Precise planning — spend marks intentionally and preserve spatial memory.',
-        eligibilityNote: 'Achievements remain eligible; pins are Perfect Memory-safe, but the placement cap is strict.',
-        group: 'training',
-        availability: 'available',
-        posterKey: 'pin_vow',
-        action: { type: 'startPinVowRun' }
-    },
-    {
-        id: 'meditation',
-        title: 'Meditation',
-        startContract: {
-            label: 'Start signal',
-            signal: 'HUD mode reads Meditation Run.',
-            testId: 'hud-mode-identity'
-        },
-        shortDescription: 'Comfort practice: calmer pacing, longer memorize windows, and optional focused mutator study.',
-        identityTag: 'Calm practice',
-        promise: 'Focused comfort — study patterns without the usual pressure spike.',
-        eligibilityNote: 'Achievements remain eligible when rules allow, but Meditation is positioned as practice/comfort first.',
-        outcomeSummary: 'Meditation results emphasize comfort practice and focused study.',
-        group: 'training',
-        availability: 'available',
-        posterKey: 'meditation',
-        action: { type: 'meditationSetup' }
-    }
 ] as const;
 
 /** A catalog mode as this build flavour ships it: locked modes stay visible and say why. */
@@ -334,8 +176,12 @@ export function getRunModeDefinition(id: string): RunModeDefinition | null {
     return getRunModeCatalog().find((mode) => mode.id === id) ?? null;
 }
 
-/** Featured hero row on Choose Your Path. Order is fixed; Dungeon Showcase is first for portfolio demos. */
-export const CHOOSE_PATH_HERO_MODE_IDS = ['dungeon_showcase', 'classic', 'daily', 'endless'] as const;
+/**
+ * Featured hero row on Choose Your Path. Classic leads because it is the game; the other two are
+ * the only entries that differ in kind rather than in settings — the same board for everyone that
+ * day, and the same board for everyone at the table.
+ */
+export const CHOOSE_PATH_HERO_MODE_IDS = ['classic', 'daily', 'pass_and_play'] as const;
 export type ChoosePathHeroModeId = (typeof CHOOSE_PATH_HERO_MODE_IDS)[number];
 
 const CHOOSE_PATH_HERO_ID_SET = new Set<string>(CHOOSE_PATH_HERO_MODE_IDS);
@@ -350,7 +196,7 @@ export function choosePathHeroModes(): readonly RunModeDefinition[] {
     });
 }
 
-/** All modes below the hero row (Gauntlet, puzzles, training), stable catalog order. */
+/** All modes below the hero row (the authored puzzles), stable catalog order. */
 export function choosePathLibraryModes(): readonly RunModeDefinition[] {
     return getRunModeCatalog().filter((m) => !CHOOSE_PATH_HERO_ID_SET.has(m.id));
 }

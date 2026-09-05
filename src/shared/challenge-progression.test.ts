@@ -26,16 +26,16 @@ describe('REG-081 challenge mode progression gates', () => {
             unlockedAchievements: [],
             bestStreak: 2,
             perfectClears: 0,
-            gameMode: 'gauntlet'
+            gameMode: 'endless'
         };
 
         const rows = getChallengeModeProgressionRows(save);
-        expect(rows.map((row) => row.modeId)).toEqual(['daily', 'gauntlet', 'puzzle_glyph_cross', 'scholar', 'pin_vow']);
-        expect(rows.find((row) => row.modeId === 'gauntlet')?.status).toBe('unlocked');
-        expect(rows.find((row) => row.modeId === 'gauntlet')).toMatchObject({
+        expect(rows.map((row) => row.modeId)).toEqual(['daily', 'pass_and_play', 'puzzle_glyph_cross']);
+        expect(rows.find((row) => row.modeId === 'pass_and_play')?.status).toBe('unlocked');
+        expect(rows.find((row) => row.modeId === 'pass_and_play')).toMatchObject({
             recommendedTier: 'adept',
             recommendedTierLabel: 'Adept tier',
-            motivationCopy: 'Gauntlet is ready for local play.'
+            motivationCopy: 'Pass and Play is ready for local play.'
         });
         expect(rows.find((row) => row.modeId === 'puzzle_glyph_cross')?.status).toBe('in_progress');
         expect(rows.every((row) => row.offlineOnly)).toBe(true);
@@ -43,9 +43,10 @@ describe('REG-081 challenge mode progression gates', () => {
     });
 
     it('returns explicit lock copy for a selected mode', () => {
-        const gate = getChallengeModeGateForMode(createDefaultSaveData(), 'gauntlet');
-        expect(gate?.status).toBe('locked');
-        expect(gate?.lockReason).toContain('First clear');
+        // The puzzle lane is the one that still gates on something a player has to do first.
+        const gate = getChallengeModeGateForMode(createDefaultSaveData(), 'puzzle_glyph_cross');
+        expect(gate?.status).toBe('in_progress');
+        expect(gate?.lockReason).toContain('Starter Pairs');
     });
 
     it('normalizes malformed daily counters before projecting challenge gates', () => {
@@ -71,11 +72,11 @@ describe('REG-081 challenge mode progression gates', () => {
             profileTier: 'initiate',
             profileTierLabel: 'Initiate tier',
             nextRecommendedRow: {
-                modeId: 'gauntlet',
+                modeId: 'pass_and_play',
                 recommendedTier: 'adept'
             },
             nextChallengeCopy:
-                'Gauntlet sits as an Adept tier goal; First clear not completed yet.'
+                'Pass and Play sits as an Adept tier goal; Pass and Play is ready for local play.'
         });
         expect(freshSummary.activeRows.map((row) => row.modeId)).toEqual(['daily']);
 
@@ -89,14 +90,14 @@ describe('REG-081 challenge mode progression gates', () => {
         const adeptSummary = getChallengeModeMotivationSummary(adeptWithoutFirstClear);
 
         expect(adeptSummary.profileTier).toBe('adept');
+        // Pass and Play is open to anyone, so at Adept the next lane is the authored puzzle,
+        // which still gates on finishing Starter Pairs.
         expect(adeptSummary.nextRecommendedRow).toMatchObject({
-            modeId: 'gauntlet',
+            modeId: 'puzzle_glyph_cross',
             recommendedTier: 'adept',
-            status: 'locked'
+            status: 'in_progress'
         });
-        expect(adeptSummary.nextChallengeCopy).toBe(
-            'Gauntlet sits as an Adept tier goal; First clear not completed yet.'
-        );
+        expect(adeptSummary.nextChallengeCopy).toContain('Glyph Cross');
 
         const ascendant = createDefaultSaveData();
         ascendant.achievements.ACH_FIRST_CLEAR = true;
@@ -117,10 +118,8 @@ describe('REG-081 challenge mode progression gates', () => {
         expect(ascendantSummary.profileTier).toBe('ascendant');
         expect(ascendantSummary.activeRows.map((row) => row.modeId)).toEqual([
             'daily',
-            'gauntlet',
+            'pass_and_play',
             'puzzle_glyph_cross',
-            'scholar',
-            'pin_vow'
         ]);
         expect(ascendantSummary.nextRecommendedRow).toBeNull();
         expect(ascendantSummary.nextChallengeCopy).toBe('All visible challenge lanes are in the active profile tier.');
@@ -128,10 +127,12 @@ describe('REG-081 challenge mode progression gates', () => {
 });
 
 describe('gate ids stay attached to the mode they describe', () => {
-    it('gives only the deferred endless mode the deferred endless gate', () => {
+    it('has no deferred gate left, because the mode that needed one is gone', () => {
+        // `endless_deferred` was the id every unclassified mode fell through to. The card it named
+        // was locked from the day it was added and never became a game; retiring it retired the
+        // deferral too.
         const rows = getChallengeModeGateRows(createDefaultSaveData());
-        const deferredEndless = rows.filter((row) => row.gateId === 'endless_deferred').map((row) => row.modeId);
-        expect(deferredEndless).toEqual(['endless']);
+        expect(rows.filter((row) => row.status === 'deferred')).toEqual([]);
     });
 
     it('does not label a shipped same-device mode as the one that cannot be played', () => {
@@ -142,12 +143,11 @@ describe('gate ids stay attached to the mode they describe', () => {
         expect(row?.status).toBe('available');
     });
 
-    it('puts an unclassified mode on local mode select rather than on a deferral', () => {
+    it('puts every catalog mode on a gate it can name', () => {
         const rows = getChallengeModeGateRows(createDefaultSaveData());
+        expect(rows.length).toBeGreaterThan(0);
         for (const row of rows) {
-            if (row.status !== 'deferred') {
-                expect(row.gateId, row.modeId).not.toBe('endless_deferred');
-            }
+            expect(row.gateId, row.modeId).toBeTruthy();
         }
     });
 });

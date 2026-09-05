@@ -1,6 +1,6 @@
+import type { ClassicRunSetup } from '../../shared/classic-run-setup';
 import type {
     AchievementId,
-    MutatorId,
     RelicId,
     RelicOfferServiceId,
     RunState,
@@ -58,26 +58,22 @@ export interface AppState {
     mismatchScorePop: MismatchScorePop | null;
     dismissMismatchScorePop: () => void;
     hydrate: () => Promise<void>;
-    startRun: () => void;
-    startDungeonShowcaseRun: () => void;
+    /**
+     * The main run. The setup carries what the retired preset cards used to start — a timer, a
+     * joker, a vow, an unrecorded run, a calmer pace — as choices about this run.
+     */
+    startRun: (setup?: ClassicRunSetup) => void;
     startDailyRun: () => void;
     /** Same-device multiplayer; defaults to two seats. */
     startPassAndPlayRun: (seats?: number) => void;
-    startGauntletRun: (durationMs?: number) => void;
     startPuzzleRun: (puzzleId: string) => void;
-    startPracticeRun: () => void;
     /**
      * Opens the save file in the desktop file manager. Export, import and backup are all "copy the
      * file yourself" in this build, so finding the file is the whole task.
      */
     revealSaveFile: () => void;
-    startScholarContractRun: () => void;
     /** Starts the run a pasted share key describes; ignores anything that is not a key. */
     startSharedRun: (pastedText: string) => void;
-    startMeditationRun: () => void;
-    startMeditationRunWithMutators: (mutators: MutatorId[]) => void;
-    startPinVowRun: () => void;
-    startWildRun: () => void;
     pickRelic: (relicId: RelicId) => void;
     applyRelicOfferService: (serviceId: RelicOfferServiceId, targetRelicId?: RelicId) => void;
     dismissPowersFtue: () => Promise<void>;

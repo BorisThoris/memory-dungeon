@@ -50,7 +50,6 @@ const renderMenu = () =>
             onOpenProfile={vi.fn()}
             onOpenSettings={vi.fn()}
             onPlay={vi.fn()}
-            onStartDungeonShowcase={vi.fn()}
             reduceMotion
             saveData={createDefaultSaveData()}
             showHowToPlay={false}
