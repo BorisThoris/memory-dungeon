@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { buildVisualSaveJson, gotoWithSave, mainMenuPlayButton } from './visualScreenHelpers';
-import { readFrameHiddenTileCount, waitForBoardPlayPhase } from './tileBoardGameFlow';
+import { flipTileAtGridCellKeyboard, waitForBoardPlayPhase } from './tileBoardGameFlow';
 import { findUnreachableControls } from './uiReachability';
 
 /**
@@ -89,38 +89,63 @@ test.describe('pass and play', () => {
         expect((await readSeats())[0]?.active, 'the first player opens').toBe(true);
 
         /*
-         * Turns are taken by clicking real points on the board: the tiles are WebGL, so there is no
-         * element per tile. Keep taking turns until the device changes hands — which is the rule
-         * under test, and the only thing this asserts about the board itself.
+         * Force a miss rather than hope for one. Tile ids are `${pairKey}-A|B`, so two tiles from
+         * different pairs cannot match — and the dev hook picks by grid cell, which is how the rest
+         * of this suite drives a WebGL board that has no element per tile.
+         *
+         * The first version of this clicked blind points and waited for a mismatch to happen. It
+         * passed three times and then found the floor's exit instead, which opened a dialog over
+         * the board and failed on an assertion about seats. A test that depends on the board not
+         * going well is a test that reports something other than what it is named for.
          */
-        const frame = page.getByTestId('tile-board-frame');
-        const box = await frame.boundingBox();
-        expect(box, 'the board frame is on screen').not.toBeNull();
-        const point = (xFraction: number, yFraction: number): [number, number] => [
-            Math.round((box?.x ?? 0) + (box?.width ?? 0) * xFraction),
-            Math.round((box?.y ?? 0) + (box?.height ?? 0) * yFraction)
-        ];
-
-        const spots: [number, number][] = [
-            [0.2, 0.28], [0.5, 0.28], [0.8, 0.28],
-            [0.2, 0.72], [0.5, 0.72], [0.8, 0.72],
-            [0.35, 0.5], [0.65, 0.5]
-        ];
-        let passed = false;
-        for (let round = 0; round < 4 && !passed; round += 1) {
-            for (const spot of spots) {
-                await page.mouse.click(...point(...spot));
-                await page.waitForTimeout(420);
-                const seats = await readSeats();
-                if (seats[1]?.active === true) {
-                    passed = true;
-                    break;
-                }
-                if ((await readFrameHiddenTileCount(page)) === 0) {
-                    break;
-                }
+        const cells: [number, number][] = [];
+        for (let row = 0; row < 4; row += 1) {
+            for (let column = 0; column < 4; column += 1) {
+                cells.push([row, column]);
             }
         }
+        const idAt = (row: number, column: number) =>
+            page.evaluate(
+                ([r, c]) => {
+                    const w = window as Window & { __e2eGetTileIdAtGrid1?: (row: number, col: number) => string | null };
+                    return w.__e2eGetTileIdAtGrid1?.(r, c) ?? null;
+                },
+                [row, column] as const
+            );
+        const pairOf = (tileId: string): string => tileId.replace(/-[AB]$/u, '');
+
+        /*
+         * Only ordinary pair tiles, whose ids end in -A or -B. Floor one also carries dungeon
+         * furniture — the exit among it — and picking one of those reveals the exit and opens a
+         * dialog over the board instead of resolving a turn, which is how the first deliberate
+         * miss here still failed.
+         */
+        const seen: { cell: [number, number]; pair: string }[] = [];
+        for (const cell of cells) {
+            const tileId = await idAt(...cell);
+            if (tileId && /-[AB]$/u.test(tileId)) {
+                seen.push({ cell, pair: pairOf(tileId) });
+            }
+        }
+        const first = seen[0];
+        const other = seen.find((row) => first && row.pair !== first.pair);
+        expect(first, 'the board has tiles to pick').toBeDefined();
+        expect(other, 'the board has two different pairs, so a miss is possible').toBeDefined();
+
+        await flipTileAtGridCellKeyboard(page, first?.cell[0] ?? 0, first?.cell[1] ?? 0);
+        await page.waitForTimeout(400);
+        // A floor objective can complete on a flip and put a route prompt over the board; staying
+        // on the floor is the answer here, since the turn under test has not resolved yet.
+        const exitPrompt = page.getByRole('dialog', { name: /unlocked exit|exit/i });
+        if (await exitPrompt.isVisible().catch(() => false)) {
+            await exitPrompt.getByRole('button', { name: /^stay$/i }).click();
+            await page.waitForTimeout(300);
+        }
+        await flipTileAtGridCellKeyboard(page, other?.cell[0] ?? 0, other?.cell[1] ?? 1);
+        await expect
+            .poll(async () => (await readSeats())[1]?.active === true, { timeout: 20_000 })
+            .toBe(true);
+        const passed = true;
 
         expect(passed, 'a miss passes the turn to the second player').toBe(true);
 
@@ -134,8 +159,18 @@ test.describe('pass and play', () => {
         await expect(banner, 'the board says who the device went to').toBeVisible();
         await expect(banner).toContainText(/pass to player 2/i);
 
+        /*
+         * And it is said, not only drawn. A player using a screen reader has no banner, and the
+         * person the device is going to may not be looking at the screen at all — the whole reason
+         * the beat exists is that they were waiting rather than watching.
+         */
+        await expect(page.getByTestId('hud-polite-live-region'), 'the pass is announced').toContainText(
+            /player 2's turn/i,
+            { timeout: 10_000 }
+        );
+
         // And it clears when that player acts, rather than sitting over their board.
-        await page.mouse.click(...point(0.5, 0.28));
+        await flipTileAtGridCellKeyboard(page, first?.cell[0] ?? 0, first?.cell[1] ?? 0);
         await page.waitForTimeout(600);
         await expect(banner, 'the pass clears once the next player acts').toBeHidden();
     });

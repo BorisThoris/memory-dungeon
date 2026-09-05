@@ -72,6 +72,7 @@ import {
     relicEffectLabels
 } from '../copy/relicDraftOffer';
 import { GAMBIT_KEYBOARD_HELP_TIP } from '../copy/gameplayHints';
+import { PASS_AND_PLAY_COPY } from '../copy/passAndPlay';
 import { GAMEPAD_SHORTCUT_ROWS, GAMEPLAY_SHORTCUT_ROWS } from '../keyboard/gameplayShortcuts';
 import { useGamepadConnected } from '../hooks/useGamepadNavigation';
 import { usePlatformTiltField } from '../platformTilt/usePlatformTiltField';
@@ -1007,6 +1008,10 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         return [...merged];
     }, [run.peekRevealedTileIds, run.flashPairRevealedTileIds]);
     const allowGambitThirdFlip = run.gambitAvailableThisFloor && !run.gambitThirdFlipUsed;
+    const activeSeatLabel = run.passAndPlay
+        ? (run.passAndPlay.seats[run.passAndPlay.activeSeatIndex]?.label ?? null)
+        : null;
+
     const gambitThirdPickActive =
         run.status === 'resolving' &&
         allowGambitThirdFlip &&
@@ -1228,6 +1233,13 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         () => projectGameplayFeedback(gameplayEventJournal),
         [gameplayEventJournal]
     );
+    /*
+     * The pass, said out loud. The banner on the board reaches whoever is looking at the screen;
+     * the person the device is going to may not be, and a player using a screen reader has no
+     * banner at all. Announced only on a change, so the opening seat does not repeat itself.
+     */
+    const announcedSeatRef = useRef<string | null>(null);
+
     const {
         message: politeHudAnnouncement,
         priority: politeHudAnnouncementPriority,
@@ -1276,6 +1288,23 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const handleTileSelect = useCallback((tileId: string): void => {
         useAppStore.getState().pressTile(tileId);
     }, []);
+
+    useEffect(() => {
+        if (activeSeatLabel === null) {
+            announcedSeatRef.current = null;
+            return;
+        }
+        if (announcedSeatRef.current === activeSeatLabel) {
+            return;
+        }
+        const opening = announcedSeatRef.current === null;
+        announcedSeatRef.current = activeSeatLabel;
+        if (!opening) {
+            queuePoliteAnnouncement(PASS_AND_PLAY_COPY.handoffAnnouncement(activeSeatLabel), {
+                dedupeKey: 'pass-and-play-turn'
+            });
+        }
+    }, [activeSeatLabel, queuePoliteAnnouncement]);
 
     const showForgivenessHint = Boolean(
         run.board &&
@@ -1637,11 +1666,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                 ref={tileBoardRef}
                                 allowGambitThirdFlip={allowGambitThirdFlip}
                                 board={run.board}
-                                handoffSeatLabel={
-                                    run.passAndPlay?.handoffPending === true
-                                        ? (run.passAndPlay.seats[run.passAndPlay.activeSeatIndex]?.label ?? null)
-                                        : null
-                                }
+                                handoffSeatLabel={run.passAndPlay?.handoffPending === true ? activeSeatLabel : null}
                                 cursedPairKey={run.board.cursedPairKey ?? null}
                                 wardPairKey={run.board.wardPairKey ?? null}
                                 bountyPairKey={run.board.bountyPairKey ?? null}

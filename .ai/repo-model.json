@@ -9,7 +9,7 @@
     "contentItemCount": 63,
     "mechanicCount": 136,
     "stateFieldCount": 144,
-    "relationshipCount": 10487
+    "relationshipCount": 10488
   },
   "inventory": [
     {
@@ -2320,7 +2320,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 36714,
-      "sha256": "80cb168b18abb8449223397240731d3e2a9703d52af241f3197f12ff7d628749"
+      "sha256": "eda1ab6ce66f5f119498f913c097659993486daa077c52d3abb6606bf91d607b"
     },
     {
       "path": "docs/UI_RETHINK_PLAN.md",
@@ -3687,8 +3687,8 @@
     {
       "path": "e2e/pass-and-play.spec.ts",
       "category": "test",
-      "bytes": 6948,
-      "sha256": "47343f3ea2fa3462ce820a695623c98de6ab242c6bad88748e44c92af588bc0d"
+      "bytes": 9143,
+      "sha256": "91c03d97f53e763aee63915dec2798ebd17bb668e649f4e98e42dd5014784b83"
     },
     {
       "path": "e2e/pause-controls-reference.spec.ts",
@@ -7743,8 +7743,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 93612,
-      "sha256": "2461797aa64df0a4322efbd5f48e773460c742095999ff7977c13d4f9b0947cb"
+      "bytes": 94552,
+      "sha256": "ef22e85258cd4d1ec2765350247c643b947cdb6568a46d2ba02577265c4d69a2"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -17645,7 +17645,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 2056,
+      "lineCount": 2081,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -17669,6 +17669,7 @@
         "file:src/renderer/copy/gameplayHints.ts",
         "file:src/renderer/copy/matchScoreFloater.ts",
         "file:src/renderer/copy/mismatchFloater.ts",
+        "file:src/renderer/copy/passAndPlay.ts",
         "file:src/renderer/copy/relicDraftOffer.ts",
         "file:src/renderer/copy/runDialogCopy.ts",
         "file:src/renderer/gameplay/regPhase4PlayContract.ts",
@@ -37475,8 +37476,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 2055,
-      "endLine": 2055
+      "line": 2080,
+      "endLine": 2080
     },
     {
       "id": "symbol:src/renderer/components/gameScreenFeedback.ts#DungeonCombatLogRow",
@@ -65478,7 +65479,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1265
+          "line": 1277
         }
       ],
       "tests": [
@@ -102460,6 +102461,12 @@
       "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/copy/mismatchFloater.ts",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "file:src/renderer/copy/mismatchFloater.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/copy/passAndPlay.ts",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "file:src/renderer/copy/passAndPlay.ts",
       "kind": "imports"
     },
     {
