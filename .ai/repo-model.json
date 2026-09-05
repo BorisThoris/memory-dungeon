@@ -3831,8 +3831,8 @@
     {
       "path": "e2e/ui-reachability-gate.spec.ts",
       "category": "test",
-      "bytes": 8076,
-      "sha256": "f3982ec2ae6677a84f4f18837498c1f3cf290e555e621f449871360ca9d70acc"
+      "bytes": 8370,
+      "sha256": "1b3004d9b6d6453e53f6a4387c47ad2051780aa0a3394ad329f3c48944dbebf7"
     },
     {
       "path": "e2e/ui-redesign-capture.spec.ts",
@@ -7965,8 +7965,8 @@
     {
       "path": "src/renderer/components/SettingsScreen.module.css",
       "category": "source",
-      "bytes": 32045,
-      "sha256": "ecdbc4a326b357ea3b2d7089a9b1eda47d943140ffc9740360a0697f03cd2a4a"
+      "bytes": 32343,
+      "sha256": "63c277b2bcef85b0650820c302c873489217046b17cd1d0c91d1bd12bb1cda16"
     },
     {
       "path": "src/renderer/components/SettingsScreen.test.tsx",

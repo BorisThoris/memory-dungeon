@@ -868,9 +868,14 @@
     --settings-content-gap: 0.38rem;
     --settings-content-pad: 0.42rem;
     --settings-header-gap: 0.08rem;
-    --settings-section-gap: 0.34rem;
-    --settings-section-pad: 0.42rem;
-    --settings-field-pad: 0.4rem;
+    /*
+     * Tightened by roughly 12px of rhythm: the camera-mode segmented control rendered that far
+     * below the content pane's edge, and the pane clips at this size, so its three buttons were
+     * cut in half and a press at their middle landed on the pane instead of on a button.
+     */
+    --settings-section-gap: 0.26rem;
+    --settings-section-pad: 0.32rem;
+    --settings-field-pad: 0.3rem;
     --settings-footer-pad-top: 0.28rem;
 }
 

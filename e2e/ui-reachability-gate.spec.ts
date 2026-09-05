@@ -70,7 +70,10 @@ test.describe('every control a screen shows can be clicked', () => {
 
     for (const viewport of VIEWPORTS) {
         test(`the board and its chrome at ${viewport.id}`, async ({ page }) => {
-            test.setTimeout(240_000);
+            // This one plays a floor to get there, which is the slowest arrival in the gate and the
+            // first thing to time out when the machine is busy — a timeout says nothing about
+            // whether a control was reachable, so the budget matches the run-driven fit tests.
+            test.setTimeout(600_000);
             await page.setViewportSize({ width: viewport.width, height: viewport.height });
             await openLevel1Play(page);
             await waitLevel1PlayReady(page);
