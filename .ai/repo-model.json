@@ -3,8 +3,8 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2537,
-    "codeFileCount": 991,
+    "trackedFileCount": 2539,
+    "codeFileCount": 992,
     "exportedSymbolCount": 3575,
     "contentItemCount": 63,
     "mechanicCount": 136,
@@ -2320,7 +2320,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 36714,
-      "sha256": "6a8d58e34916dabea7504ae9d082df3dbfc8630dc6bc2c0298cab4f973b084f3"
+      "sha256": "cd95b055297c75f1f95a50067ad5863daaf062f46ecda1f0e04f5ae09c4da47e"
     },
     {
       "path": "docs/UI_RETHINK_PLAN.md",
@@ -4005,8 +4005,8 @@
     {
       "path": "package.json",
       "category": "configuration",
-      "bytes": 30160,
-      "sha256": "cbf24658d77e411adb697a12d1e4a6baa60079098e2cea0bba03fdd54a0628d9"
+      "bytes": 30256,
+      "sha256": "3ec1768de2e162bccf44ea1c4905210df519a3cd670ae55a2c738320f7900ae0"
     },
     {
       "path": "packages/notifications/package.json",
@@ -4583,6 +4583,12 @@
       "category": "script",
       "bytes": 6524,
       "sha256": "b2ce2fef17a22a3b3e3795211f1cf26ca774943fb101d79c242b7c5ed9b8cba0"
+    },
+    {
+      "path": "scripts/e2e-surface-coverage.ts",
+      "category": "script",
+      "bytes": 6837,
+      "sha256": "ccabc9a2dcd566592ca9917980d38920584fe62ba40aef9dba9ee2750e1a1f4d"
     },
     {
       "path": "scripts/extract-endproduct-wip-assets.mjs",
@@ -11099,6 +11105,12 @@
       "category": "test",
       "bytes": 4577,
       "sha256": "f5120864219b8f3fd71dca551887088a98264fb3358e7d78cb2f88bae420a512"
+    },
+    {
+      "path": "src/shared/e2e-surface-coverage.test.ts",
+      "category": "test",
+      "bytes": 2289,
+      "sha256": "01139e51d802a56ee7995cbd56f88fe14d01e914fbb4a0d1bfa9f9f64df0f988"
     },
     {
       "path": "src/shared/economy-ledger.test.ts",
@@ -27758,6 +27770,16 @@
       "layer": "shared",
       "role": "test",
       "lineCount": 92,
+      "imports": [],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/shared/e2e-surface-coverage.test.ts",
+      "path": "src/shared/e2e-surface-coverage.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 52,
       "imports": [],
       "exports": [],
       "testedBy": []
