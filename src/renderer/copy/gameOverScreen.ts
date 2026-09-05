@@ -10,7 +10,18 @@ export const gameOverScreenCopy = {
     politeRunSummary: (totalScore: number, highestLevel: number) =>
         `Expedition complete. Final score ${totalScore.toLocaleString()}. Highest floor ${highestLevel}.`,
     achievementsNoteOn: 'Achievements counted for this run.',
+    /**
+     * Why achievements did not count, in the run's own terms.
+     *
+     * There used to be one line for this — "Achievements were off (debug tools used)" — and three
+     * ways to turn them off. A practice run has said the player used debug tools since practice
+     * shipped; a shared game said it too. Naming the reason costs one function and stops the
+     * results screen telling a player something that did not happen.
+     */
     achievementsNoteOff: 'Achievements were off (debug tools used).',
+    achievementsNoteOffShared: 'Achievements are off in a shared game.',
+    achievementsNoteOffPractice: 'Achievements are off in practice.',
+    achievementsNoteOffShowcase: 'Achievements are off in the showcase.',
     actionKicker: 'Next move',
     actionHeading: 'Continue the archive',
     playAgainLabel: 'Play Again',
@@ -68,3 +79,34 @@ export const gameOverScreenCopy = {
     achievementHeading: 'New archive entries',
     flipTimelineSummary: 'Flip timeline'
 } as const;
+
+/**
+ * The achievements line for a run, picked by the reason they were off rather than by assuming one.
+ * Order matters only in that a shared game is the strongest claim: it is the one the mode's card
+ * already made to the table before they started.
+ */
+export const achievementsNote = ({
+    achievementsEnabled,
+    dungeonShowcaseRun,
+    practiceMode,
+    sharedTable
+}: {
+    achievementsEnabled: boolean;
+    dungeonShowcaseRun?: boolean;
+    practiceMode?: boolean;
+    sharedTable?: boolean;
+}): string => {
+    if (achievementsEnabled) {
+        return gameOverScreenCopy.achievementsNoteOn;
+    }
+    if (sharedTable === true) {
+        return gameOverScreenCopy.achievementsNoteOffShared;
+    }
+    if (practiceMode === true) {
+        return gameOverScreenCopy.achievementsNoteOffPractice;
+    }
+    if (dungeonShowcaseRun === true) {
+        return gameOverScreenCopy.achievementsNoteOffShowcase;
+    }
+    return gameOverScreenCopy.achievementsNoteOff;
+};

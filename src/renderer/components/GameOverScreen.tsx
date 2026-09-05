@@ -8,7 +8,7 @@ import { getGameOverNextRunRows } from '../../shared/game-over-next-run';
 import { useShallow } from 'zustand/react/shallow';
 import { UI_ART } from '../assets/ui';
 import { playGameOverOpenSfx, playUiBackSfx, playUiCopySfx, resumeUiSfxContext, uiSfxGainFromSettings } from '../audio/uiSfx';
-import { gameOverScreenCopy } from '../copy/gameOverScreen';
+import { achievementsNote, gameOverScreenCopy } from '../copy/gameOverScreen';
 import { personalBestResult } from '../../shared/personal-best';
 import { buildRunShareText } from '../../shared/run-share-text';
 import { useCopyToClipboard } from '../hooks/useCopyToClipboard';
@@ -330,9 +330,12 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                         )}
 
                         <p className={styles.note}>
-                            {summary.achievementsEnabled
-                                ? gameOverScreenCopy.achievementsNoteOn
-                                : gameOverScreenCopy.achievementsNoteOff}
+                            {achievementsNote({
+                                achievementsEnabled: summary.achievementsEnabled,
+                                dungeonShowcaseRun: summary.dungeonShowcaseRun,
+                                practiceMode: summary.practiceMode,
+                                sharedTable: passAndPlayOutcome !== null
+                            })}
                         </p>
                     </Panel>
 

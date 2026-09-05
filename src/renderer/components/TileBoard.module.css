@@ -955,3 +955,25 @@ block board gestures so pan/zoom does not fight the deal. */
     font-size: var(--ui-font-caption);
     color: var(--theme-text-subtle);
 }
+
+/*
+ * The clearances above are for a board frame that fills the shell, which is the mobile-camera case.
+ * On the desktop and tablet layout the stage is itself inset by those same clearances, so an
+ * overlay inside the frame that adds them again is offset twice: measured at 1280x800, the HUD
+ * ended at 144, the frame began at 144, and the pass banner sat at 296.
+ *
+ * That double count arrived when the stage gained its inset — the overlays were correct before it
+ * and nothing said they had stopped being so. The frame carries the mode it is in, so the two cases
+ * can simply be told apart.
+ */
+[data-mobile-camera-mode='false'] .passHandoff {
+    top: var(--ui-space-sm);
+}
+
+[data-mobile-camera-mode='false'] .trapResolutionToast {
+    top: var(--ui-space-xs);
+}
+
+[data-mobile-camera-mode='false'] .traitPreviewChip {
+    bottom: var(--ui-space-xs);
+}

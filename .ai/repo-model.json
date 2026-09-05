@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2532,
-    "codeFileCount": 988,
-    "exportedSymbolCount": 3569,
+    "trackedFileCount": 2533,
+    "codeFileCount": 989,
+    "exportedSymbolCount": 3570,
     "contentItemCount": 63,
     "mechanicCount": 136,
     "stateFieldCount": 144,
-    "relationshipCount": 10496
+    "relationshipCount": 10499
   },
   "inventory": [
     {
@@ -2320,7 +2320,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 36714,
-      "sha256": "3510db57ea3ea2474b2a1fd66e596885426f0de025c50afd5c7aea2f2b07d65e"
+      "sha256": "99c831a10997201ea552ea341dd22398e4226fe7dc5d9865d19cc43cd2235c34"
     },
     {
       "path": "docs/UI_RETHINK_PLAN.md",
@@ -7707,8 +7707,8 @@
     {
       "path": "src/renderer/components/GameOverScreen.tsx",
       "category": "source",
-      "bytes": 22105,
-      "sha256": "3dc32f6dbac809dce4aa3f36b622ac65fec16bb5bb1605c463763d119d2634ca"
+      "bytes": 22303,
+      "sha256": "ef82be3f850b66ef0d84621a1fcc81aeefdb0f681b744dc6a8fdde6b8a1d86d1"
     },
     {
       "path": "src/renderer/components/gameplayRenderProfile.ts",
@@ -8109,8 +8109,8 @@
     {
       "path": "src/renderer/components/TileBoard.module.css",
       "category": "source",
-      "bytes": 35010,
-      "sha256": "5931438cb7fb7cdfb67b66d76b0cd693f21a8b6e1936f33f09f8f43eea317a34"
+      "bytes": 35874,
+      "sha256": "030da2174599e20878b1e0b52db0d6ab9dece43a940c19790bdeb2cf8bdad8a1"
     },
     {
       "path": "src/renderer/components/TileBoard.test.tsx",
@@ -9013,10 +9013,16 @@
       "sha256": "2a2e4b71e8e78f30d0532b668ac7bb1440e74fe94e3e4a6d0540a28294a355b8"
     },
     {
+      "path": "src/renderer/copy/gameOverScreen.test.ts",
+      "category": "test",
+      "bytes": 1764,
+      "sha256": "a4f0a750675bf88ead90ce026b1f138764dd8632ba93fd041cd32467923556ac"
+    },
+    {
       "path": "src/renderer/copy/gameOverScreen.ts",
       "category": "source",
-      "bytes": 3450,
-      "sha256": "29f0f007fb81d58688c0e02f51055e0e3ef77081e7ecd3ae6ea754162b988d55"
+      "bytes": 5090,
+      "sha256": "e743878753866ee1369730f006c9e29822c244b06d0a9cc1cddf257ec3822782"
     },
     {
       "path": "src/renderer/copy/gameplayEventAnnouncement.test.ts",
@@ -17526,7 +17532,7 @@
       "path": "src/renderer/components/GameOverScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 453,
+      "lineCount": 456,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/uiSfx.ts",
@@ -21321,16 +21327,31 @@
       "testedBy": []
     },
     {
+      "id": "file:src/renderer/copy/gameOverScreen.test.ts",
+      "path": "src/renderer/copy/gameOverScreen.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 39,
+      "imports": [
+        "file:src/renderer/copy/gameOverScreen.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
       "id": "file:src/renderer/copy/gameOverScreen.ts",
       "path": "src/renderer/copy/gameOverScreen.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 71,
+      "lineCount": 113,
       "imports": [],
       "exports": [
+        "symbol:src/renderer/copy/gameOverScreen.ts#achievementsNote",
         "symbol:src/renderer/copy/gameOverScreen.ts#gameOverScreenCopy"
       ],
-      "testedBy": []
+      "testedBy": [
+        "file:src/renderer/copy/gameOverScreen.test.ts"
+      ]
     },
     {
       "id": "file:src/renderer/copy/gameplayEventAnnouncement.test.ts",
@@ -37420,8 +37441,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameOverScreen.tsx",
-      "line": 452,
-      "endLine": 452
+      "line": 455,
+      "endLine": 455
     },
     {
       "id": "symbol:src/renderer/components/gameplayRenderProfile.ts#GAMEPLAY_RENDER_PROFILE",
@@ -41464,12 +41485,20 @@
       "endLine": 23
     },
     {
+      "id": "symbol:src/renderer/copy/gameOverScreen.ts#achievementsNote",
+      "name": "achievementsNote",
+      "kind": "value",
+      "file": "src/renderer/copy/gameOverScreen.ts",
+      "line": 88,
+      "endLine": 112
+    },
+    {
       "id": "symbol:src/renderer/copy/gameOverScreen.ts#gameOverScreenCopy",
       "name": "gameOverScreenCopy",
       "kind": "value",
       "file": "src/renderer/copy/gameOverScreen.ts",
       "line": 4,
-      "endLine": 70
+      "endLine": 81
     },
     {
       "id": "symbol:src/renderer/copy/gameplayEventAnnouncement.ts#buildGameplayEventAnnouncement",
@@ -80241,6 +80270,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/copy/gameOverScreen.ts->symbol:src/renderer/copy/gameOverScreen.ts#achievementsNote",
+      "source": "file:src/renderer/copy/gameOverScreen.ts",
+      "target": "symbol:src/renderer/copy/gameOverScreen.ts#achievementsNote",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/copy/gameOverScreen.ts->symbol:src/renderer/copy/gameOverScreen.ts#gameOverScreenCopy",
       "source": "file:src/renderer/copy/gameOverScreen.ts",
       "target": "symbol:src/renderer/copy/gameOverScreen.ts#gameOverScreenCopy",
@@ -106624,6 +106659,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/copy/gameOverScreen.test.ts->src/renderer/copy/gameOverScreen.ts",
+      "source": "file:src/renderer/copy/gameOverScreen.test.ts",
+      "target": "file:src/renderer/copy/gameOverScreen.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/copy/gameplayEventAnnouncement.test.ts->src/renderer/copy/gameplayEventAnnouncement.ts",
       "source": "file:src/renderer/copy/gameplayEventAnnouncement.test.ts",
       "target": "file:src/renderer/copy/gameplayEventAnnouncement.ts",
@@ -127037,6 +127078,12 @@
       "id": "tested_by:src/renderer/copy/collectionStorageNote.ts->file:src/renderer/copy/collectionStorageNote.test.ts",
       "source": "file:src/renderer/copy/collectionStorageNote.ts",
       "target": "file:src/renderer/copy/collectionStorageNote.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/copy/gameOverScreen.ts->file:src/renderer/copy/gameOverScreen.test.ts",
+      "source": "file:src/renderer/copy/gameOverScreen.ts",
+      "target": "file:src/renderer/copy/gameOverScreen.test.ts",
       "kind": "tested_by"
     },
     {
