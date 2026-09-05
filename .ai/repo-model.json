@@ -5,11 +5,11 @@
     "name": "memory-dungeon",
     "trackedFileCount": 2532,
     "codeFileCount": 988,
-    "exportedSymbolCount": 3568,
+    "exportedSymbolCount": 3569,
     "contentItemCount": 63,
     "mechanicCount": 136,
     "stateFieldCount": 144,
-    "relationshipCount": 10484
+    "relationshipCount": 10487
   },
   "inventory": [
     {
@@ -2320,7 +2320,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 36714,
-      "sha256": "009e45ba5c572e62394ca728dd4cc91b9c38ad05cefe6d002a6cc891e9d12105"
+      "sha256": "80cb168b18abb8449223397240731d3e2a9703d52af241f3197f12ff7d628749"
     },
     {
       "path": "docs/UI_RETHINK_PLAN.md",
@@ -3687,8 +3687,8 @@
     {
       "path": "e2e/pass-and-play.spec.ts",
       "category": "test",
-      "bytes": 5795,
-      "sha256": "b7944007c93943fe06e0ab68f4ba02b012c2f8c9a85158091c615e2bb6894364"
+      "bytes": 6567,
+      "sha256": "95d12f823217ebe2fd026fd9f15b4f6dde99032dc3390c8ded38815d0f4f6671"
     },
     {
       "path": "e2e/pause-controls-reference.spec.ts",
@@ -7611,8 +7611,8 @@
     {
       "path": "src/renderer/components/ChooseYourPathScreen.tsx",
       "category": "source",
-      "bytes": 28617,
-      "sha256": "e1456d0592101058e7306fdf9701205bb49cfa81cffba3a5db12a5b59ba124cf"
+      "bytes": 29720,
+      "sha256": "7e9b354e0e50ab6508b3eacca99d03942843e22fad8e48f99ca8679b03bbec8e"
     },
     {
       "path": "src/renderer/components/chooseYourPathScreenModel.ts",
@@ -9069,8 +9069,8 @@
     {
       "path": "src/renderer/copy/passAndPlay.ts",
       "category": "source",
-      "bytes": 1414,
-      "sha256": "f0e82cb821295f51fe9a43fd0298f64e1dc217fb3c9cae23eaa13f34e300cb6f"
+      "bytes": 1576,
+      "sha256": "4b9704caa1989b0ce25346a68236a8867ec2656c04786f479d86bc557ea7aaf6"
     },
     {
       "path": "src/renderer/copy/profileProgress.ts",
@@ -11799,14 +11799,14 @@
     {
       "path": "src/shared/pass-and-play-rules.test.ts",
       "category": "test",
-      "bytes": 7457,
-      "sha256": "53d221e0d3c452a88bfa1fe921c9a0dc06f85c9cd98b8e1b863f518328836968"
+      "bytes": 8065,
+      "sha256": "68bca5551a6197a3e7ddd870928af79297ca22e4553db4dc8c485b2a70e1e4a0"
     },
     {
       "path": "src/shared/pass-and-play-rules.ts",
       "category": "source",
-      "bytes": 5357,
-      "sha256": "cbba538609010d8abc5e27b0456a0ef99c469a05d8115b1f06c31e3d4bdda08d"
+      "bytes": 5735,
+      "sha256": "9657817576718b6c51ca430d1bf566a0874ae38ecdaee786f7a70af37347190d"
     },
     {
       "path": "src/shared/perfect-memory-status.test.ts",
@@ -17302,18 +17302,20 @@
       "path": "src/renderer/components/ChooseYourPathScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 634,
+      "lineCount": 655,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/assets/ui/modeArt.ts",
         "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/components/chooseYourPathScreenModel.ts",
         "file:src/renderer/components/OverlayModal.tsx",
+        "file:src/renderer/copy/passAndPlay.ts",
         "file:src/renderer/copy/screenCopy.ts",
         "file:src/renderer/store/useAppStore.ts",
         "file:src/renderer/ui/index.ts",
         "file:src/shared/challenge-progression.ts",
         "file:src/shared/contracts.ts",
+        "file:src/shared/pass-and-play-rules.ts",
         "file:src/shared/run-mode-catalog.ts",
         "file:src/shared/run-share-key.ts",
         "file:src/shared/social-play-scope.ts",
@@ -21470,7 +21472,7 @@
       "path": "src/renderer/copy/passAndPlay.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 29,
+      "lineCount": 31,
       "imports": [],
       "exports": [
         "symbol:src/renderer/copy/passAndPlay.ts#PASS_AND_PLAY_COPY"
@@ -30568,7 +30570,7 @@
       "path": "src/shared/pass-and-play-rules.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 160,
+      "lineCount": 174,
       "imports": [
         "file:src/shared/pass-and-play-rules.ts"
       ],
@@ -30580,7 +30582,7 @@
       "path": "src/shared/pass-and-play-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 127,
+      "lineCount": 137,
       "imports": [
         "file:src/shared/contracts.ts"
       ],
@@ -30594,6 +30596,7 @@
         "symbol:src/shared/pass-and-play-rules.ts#PASS_AND_PLAY_MIN_SEATS",
         "symbol:src/shared/pass-and-play-rules.ts#PassAndPlayOutcome",
         "symbol:src/shared/pass-and-play-rules.ts#PassAndPlaySeat",
+        "symbol:src/shared/pass-and-play-rules.ts#passAndPlaySeatCounts",
         "symbol:src/shared/pass-and-play-rules.ts#PassAndPlayStanding",
         "symbol:src/shared/pass-and-play-rules.ts#PassAndPlayState",
         "symbol:src/shared/pass-and-play-rules.ts#ResolvedTurnFacts",
@@ -37256,8 +37259,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/ChooseYourPathScreen.tsx",
-      "line": 633,
-      "endLine": 633
+      "line": 654,
+      "endLine": 654
     },
     {
       "id": "symbol:src/renderer/components/chooseYourPathScreenModel.ts#buildMeditationPickMutatorRows",
@@ -41649,7 +41652,7 @@
       "kind": "value",
       "file": "src/renderer/copy/passAndPlay.ts",
       "line": 8,
-      "endLine": 28
+      "endLine": 30
     },
     {
       "id": "symbol:src/renderer/copy/profileProgress.ts#PROFILE_PROGRESS_COPY",
@@ -56608,16 +56611,16 @@
       "name": "acknowledgePassAndPlayHandoff",
       "kind": "value",
       "file": "src/shared/pass-and-play-rules.ts",
-      "line": 88,
-      "endLine": 89
+      "line": 98,
+      "endLine": 99
     },
     {
       "id": "symbol:src/shared/pass-and-play-rules.ts#applyResolvedTurnToPassAndPlay",
       "name": "applyResolvedTurnToPassAndPlay",
       "kind": "value",
       "file": "src/shared/pass-and-play-rules.ts",
-      "line": 62,
-      "endLine": 85
+      "line": 72,
+      "endLine": 95
     },
     {
       "id": "symbol:src/shared/pass-and-play-rules.ts#createPassAndPlayState",
@@ -56632,16 +56635,16 @@
       "name": "getActiveSeat",
       "kind": "value",
       "file": "src/shared/pass-and-play-rules.ts",
-      "line": 46,
-      "endLine": 47
+      "line": 56,
+      "endLine": 57
     },
     {
       "id": "symbol:src/shared/pass-and-play-rules.ts#isPassAndPlayRun",
       "name": "isPassAndPlayRun",
       "kind": "value",
       "file": "src/shared/pass-and-play-rules.ts",
-      "line": 125,
-      "endLine": 126
+      "line": 135,
+      "endLine": 136
     },
     {
       "id": "symbol:src/shared/pass-and-play-rules.ts#PASS_AND_PLAY_MAX_SEATS",
@@ -56664,8 +56667,8 @@
       "name": "PassAndPlayOutcome",
       "kind": "interface",
       "file": "src/shared/pass-and-play-rules.ts",
-      "line": 98,
-      "endLine": 104
+      "line": 108,
+      "endLine": 114
     },
     {
       "id": "symbol:src/shared/pass-and-play-rules.ts#PassAndPlaySeat",
@@ -56676,12 +56679,20 @@
       "endLine": 21
     },
     {
+      "id": "symbol:src/shared/pass-and-play-rules.ts#passAndPlaySeatCounts",
+      "name": "passAndPlaySeatCounts",
+      "kind": "value",
+      "file": "src/shared/pass-and-play-rules.ts",
+      "line": 50,
+      "endLine": 54
+    },
+    {
       "id": "symbol:src/shared/pass-and-play-rules.ts#PassAndPlayStanding",
       "name": "PassAndPlayStanding",
       "kind": "interface",
       "file": "src/shared/pass-and-play-rules.ts",
-      "line": 91,
-      "endLine": 96
+      "line": 101,
+      "endLine": 106
     },
     {
       "id": "symbol:src/shared/pass-and-play-rules.ts#PassAndPlayState",
@@ -56696,16 +56707,16 @@
       "name": "ResolvedTurnFacts",
       "kind": "interface",
       "file": "src/shared/pass-and-play-rules.ts",
-      "line": 49,
-      "endLine": 54
+      "line": 59,
+      "endLine": 64
     },
     {
       "id": "symbol:src/shared/pass-and-play-rules.ts#resolvePassAndPlayOutcome",
       "name": "resolvePassAndPlayOutcome",
       "kind": "value",
       "file": "src/shared/pass-and-play-rules.ts",
-      "line": 111,
-      "endLine": 122
+      "line": 121,
+      "endLine": 132
     },
     {
       "id": "symbol:src/shared/perfect-memory-status.ts#perfectMemoryStatus",
@@ -91639,6 +91650,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/pass-and-play-rules.ts->symbol:src/shared/pass-and-play-rules.ts#passAndPlaySeatCounts",
+      "source": "file:src/shared/pass-and-play-rules.ts",
+      "target": "symbol:src/shared/pass-and-play-rules.ts#passAndPlaySeatCounts",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/pass-and-play-rules.ts->symbol:src/shared/pass-and-play-rules.ts#PassAndPlayStanding",
       "source": "file:src/shared/pass-and-play-rules.ts",
       "target": "symbol:src/shared/pass-and-play-rules.ts#PassAndPlayStanding",
@@ -101786,6 +101803,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/ChooseYourPathScreen.tsx->src/renderer/copy/passAndPlay.ts",
+      "source": "file:src/renderer/components/ChooseYourPathScreen.tsx",
+      "target": "file:src/renderer/copy/passAndPlay.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/ChooseYourPathScreen.tsx->src/renderer/copy/screenCopy.ts",
       "source": "file:src/renderer/components/ChooseYourPathScreen.tsx",
       "target": "file:src/renderer/copy/screenCopy.ts",
@@ -101813,6 +101836,12 @@
       "id": "imports:src/renderer/components/ChooseYourPathScreen.tsx->src/shared/contracts.ts",
       "source": "file:src/renderer/components/ChooseYourPathScreen.tsx",
       "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/ChooseYourPathScreen.tsx->src/shared/pass-and-play-rules.ts",
+      "source": "file:src/renderer/components/ChooseYourPathScreen.tsx",
+      "target": "file:src/shared/pass-and-play-rules.ts",
       "kind": "imports"
     },
     {

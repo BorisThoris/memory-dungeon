@@ -11,6 +11,8 @@ import {
     type RunModeGroup
 } from '../../shared/run-mode-catalog';
 import { buildSocialScopeNote } from '../../shared/social-play-scope';
+import { PASS_AND_PLAY_MIN_SEATS, passAndPlaySeatCounts } from '../../shared/pass-and-play-rules';
+import { PASS_AND_PLAY_COPY } from '../copy/passAndPlay';
 import { parseRunShareKey } from '../../shared/run-share-key';
 import { formatNextUtcReset } from '../../shared/utc-countdown';
 import { isModePosterFallback, resolveModePosterUrl } from '../assets/ui/modeArt';
@@ -240,6 +242,25 @@ const ChooseYourPathScreen = (): ReactElement => {
         const close = { label: 'Close', onClick: closeDetail, variant: 'secondary' as const };
         if (def.availability !== 'available' || def.action.type === 'gauntlet') {
             return [close];
+        }
+        /*
+         * One press per seat count, rather than a Play button and a setup screen behind it. The
+         * rules always allowed up to four seats and only two were reachable, which is the same
+         * "declared but unreachable" shape this project keeps finding; a table deciding how many
+         * are playing should not have to walk through a second screen to say so.
+         */
+        if (def.action.type === 'startPassAndPlayRun') {
+            return [
+                close,
+                ...passAndPlaySeatCounts().map((seats) => ({
+                    label: PASS_AND_PLAY_COPY.seatCountLabel(seats),
+                    onClick: (): void => {
+                        setDetailMode(null);
+                        startPassAndPlayRun(seats);
+                    },
+                    variant: seats === PASS_AND_PLAY_MIN_SEATS ? ('primary' as const) : ('secondary' as const)
+                }))
+            ];
         }
         if (def.action.type === 'meditationSetup') {
             return [

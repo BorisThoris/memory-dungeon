@@ -6,6 +6,8 @@
  * from across a table, not to read a sentence about turn ownership.
  */
 export const PASS_AND_PLAY_COPY = {
+    /** One start action per seat count, so a table says how many are playing in one press. */
+    seatCountLabel: (seats: number): string => `${seats} players`,
     /** Label over the seat scores in the HUD. */
     seatsLabel: 'Players',
     /** Spoken by the live region when the device changes hands. */

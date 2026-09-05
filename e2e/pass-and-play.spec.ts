@@ -12,7 +12,7 @@ import { findUnreachableControls } from './uiReachability';
  * and read back off the HUD.
  */
 
-const openPassAndPlay = async (page: import('@playwright/test').Page): Promise<void> => {
+const openPassAndPlay = async (page: import('@playwright/test').Page, seats = 2): Promise<void> => {
     await gotoWithSave(page, buildVisualSaveJson(true));
     await mainMenuPlayButton(page).waitFor({ state: 'visible', timeout: 30_000 });
     await mainMenuPlayButton(page).click();
@@ -22,7 +22,8 @@ const openPassAndPlay = async (page: import('@playwright/test').Page): Promise<v
     // `/^play/i` matches the Recommended run's "Start run" behind it and starts the wrong mode.
     const detail = page.getByRole('dialog', { name: /pass and play/i });
     await detail.waitFor({ state: 'visible', timeout: 20_000 });
-    await detail.getByRole('button', { name: /^play$/i }).click();
+    // One action per seat count: the table says how many are playing in a single press.
+    await detail.getByRole('button', { name: new RegExp(`^${seats} players$`, 'i') }).click();
     await page.getByTestId('run-shell').waitFor({ state: 'visible', timeout: 30_000 });
 };
 
@@ -50,6 +51,18 @@ test.describe('pass and play', () => {
         ]);
 
         expect(await findUnreachableControls(page), 'pass and play board').toEqual([]);
+    });
+
+    test('a table of three gets three seats, not the two the catalog used to hardcode', async ({ page }) => {
+        test.setTimeout(300_000);
+        await page.setViewportSize({ width: 1280, height: 800 });
+        await openPassAndPlay(page, 3);
+
+        // The rules always allowed up to four. Only two were reachable, which is this project's
+        // most common defect wearing a different hat.
+        await expect(page.getByTestId('hud-seat-seat-3')).toBeVisible();
+        await expect(page.getByTestId('hud-seat-seat-4')).toHaveCount(0);
+        expect(await findUnreachableControls(page), 'three-seat board').toEqual([]);
     });
 
     test('a miss hands the device to the other player', async ({ page }) => {

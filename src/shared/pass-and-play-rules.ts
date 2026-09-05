@@ -43,6 +43,16 @@ export const createPassAndPlayState = (seatCount: number = PASS_AND_PLAY_MIN_SEA
     }))
 });
 
+/**
+ * Every seat count the rules accept, so a screen can offer them all instead of picking one and
+ * leaving the rest reachable only from a unit test.
+ */
+export const passAndPlaySeatCounts = (): readonly number[] =>
+    Array.from(
+        { length: PASS_AND_PLAY_MAX_SEATS - PASS_AND_PLAY_MIN_SEATS + 1 },
+        (_unused, index) => PASS_AND_PLAY_MIN_SEATS + index
+    );
+
 export const getActiveSeat = (state: PassAndPlayState): PassAndPlaySeat | null =>
     state.seats[state.activeSeatIndex] ?? null;
 

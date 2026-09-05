@@ -7,6 +7,7 @@ import {
     isPassAndPlayRun,
     PASS_AND_PLAY_MAX_SEATS,
     PASS_AND_PLAY_MIN_SEATS,
+    passAndPlaySeatCounts,
     resolvePassAndPlayOutcome
 } from './pass-and-play-rules';
 
@@ -32,6 +33,19 @@ describe('createPassAndPlayState', () => {
     it('gives every seat a distinct id, because the HUD keys on it', () => {
         const ids = createPassAndPlayState(4).seats.map((seat) => seat.id);
         expect(new Set(ids).size).toBe(4);
+    });
+});
+
+describe('passAndPlaySeatCounts', () => {
+    it('offers every seat count the rules accept, so none is reachable only from a test', () => {
+        expect(passAndPlaySeatCounts()).toEqual([2, 3, 4]);
+    });
+
+    it('stays in step with the bounds rather than repeating them', () => {
+        const counts = passAndPlaySeatCounts();
+        expect(counts[0]).toBe(PASS_AND_PLAY_MIN_SEATS);
+        expect(counts[counts.length - 1]).toBe(PASS_AND_PLAY_MAX_SEATS);
+        expect(counts.every((seats) => createPassAndPlayState(seats).seats.length === seats)).toBe(true);
     });
 });
 
