@@ -3603,8 +3603,8 @@
     {
       "path": "e2e/demo-readiness.spec.ts",
       "category": "test",
-      "bytes": 5361,
-      "sha256": "5c9f1fa4af1c7da72602ca4b560dd6efbd693079e12ebaaaffca24a860304adc"
+      "bytes": 6017,
+      "sha256": "d4f99a23f111ccf6f57b380cd58339fa4ddc655327ef84d406b9ee13efd4fe71"
     },
     {
       "path": "e2e/dungeon-board-3d-value.spec.ts",
@@ -3987,8 +3987,8 @@
     {
       "path": "package.json",
       "category": "configuration",
-      "bytes": 29984,
-      "sha256": "5070d904fa12e46fb4b4e507005a89fd2a2ffca4249bec4a9bf0a1098dcc8b4f"
+      "bytes": 30047,
+      "sha256": "d86cefa6fe5957d98656e28291b867113cad0f682410257258bf7b513d032002"
     },
     {
       "path": "packages/notifications/package.json",
@@ -4581,8 +4581,8 @@
     {
       "path": "scripts/gate-reachability.ts",
       "category": "script",
-      "bytes": 5853,
-      "sha256": "64b42b40d6d30712f90ce5e54ceee6e1534ec285280b097bd4123be260e588b8"
+      "bytes": 6261,
+      "sha256": "ed73e088db2aeadba26423e0082d8c07ff9295210c442ea141b1b4d7ba9ac59a"
     },
     {
       "path": "scripts/gate-softlock-seeds.ts",

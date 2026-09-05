@@ -27,6 +27,8 @@ export const STANDALONE_GATES: Record<string, string> = {
         'A command-line view of a check that already runs as src/shared/copy-locality.test.ts, which the full test run covers.',
     'gate:asset-rendering':
         'Selects the asset test files plus audit:renderer-assets; fullcheck runs that audit directly and the tests with everything else.',
+    'gate:demo-readiness':
+        'The whole first-run path from a clean browser, counting any console error as blocking. Repaired and its timeouts widened, and still about one run in ten fails here with a bare timeout naming no pending action. Gating on that would cost more than it catches; the one thing in it worth gating — that a click picks a tile — is asserted by gate:ui-reachability instead.',
     'gate:changed': 'Selects gates by what a branch touched; it is the selector, not a gate.',
     'gate:long-run':
         'Its 1000-floor sim is gate:sim-health and its balance bounds are gate:balance-depth, both of which fullcheck runs; this bundles them for a release candidate.',

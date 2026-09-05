@@ -93,6 +93,7 @@
         "audit:store-reachability": "tsx scripts/store-action-reachability.ts",
         "audit:css-custom-properties": "tsx scripts/css-custom-properties.ts",
         "audit:min-type-size": "tsx scripts/min-type-size.ts",
+        "gate:demo-readiness": "yarn test:e2e:demo-readiness",
         "gate:ui-reachability": "playwright test e2e/ui-reachability-gate.spec.ts --workers=1",
         "audit:save-field-policy": "tsx scripts/save-field-policy.ts",
         "audit:script-paths": "tsx scripts/script-paths.ts",

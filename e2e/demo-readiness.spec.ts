@@ -129,7 +129,14 @@ test.describe('portfolio demo readiness', () => {
     test.use({ storageState: { cookies: [], origins: [] } });
 
     test('starts a clean desktop demo run and keeps the first board usable', async ({ page }) => {
-        test.setTimeout(120_000);
+        /*
+         * Six times the median rather than two. Both tests together run in 45-55s here, and the
+         * one failure in thirteen runs was a bare timeout with no pending action — this machine's
+         * browser tests occasionally take several times their usual, which timed out the board
+         * reachability test at 240s and the game-over fit test at 420s the same way. A budget that
+         * tight reports as a failure with nothing to say about the product.
+         */
+        test.setTimeout(300_000);
         const errors = installBlockingErrorChecks(page);
         await installAudioHookAudit(page);
 
@@ -144,7 +151,9 @@ test.describe('portfolio demo readiness', () => {
     });
 
     test('keeps the first-run demo path available on mobile', async ({ page }) => {
-        test.setTimeout(45_000);
+        // Was 45s — less headroom than the desktop pass it follows, on a first-run path that
+        // takes 20-25s of that by itself. Same budget as above.
+        test.setTimeout(300_000);
         await page.setViewportSize({ width: 390, height: 844 });
         const errors = installBlockingErrorChecks(page);
         await installAudioHookAudit(page);
