@@ -4,6 +4,7 @@ import { openPlayablePathFixture } from './playablePathHelpers';
 import { openLevel1Play, waitLevel1PlayReady } from './visualScreenHelpers';
 import { readFrameHiddenTileCount, waitForBoardPlayPhase } from './tileBoardGameFlow';
 import { findUnreachableControls } from './uiReachability';
+import { findAmbiguousControls } from './ambiguousControls';
 import { CHROME_ANCHORED_BOARD_OVERLAYS, expectBoardOverlaysClearChrome } from './boardOverlayClearance';
 
 /**
@@ -53,6 +54,7 @@ test.describe('every control a screen shows can be clicked', () => {
                 await page.getByRole('button', { name: button }).click();
                 await page.waitForTimeout(600);
                 expect(await findUnreachableControls(page), `${label} @ ${viewport.id}`).toEqual([]);
+                expect(await findAmbiguousControls(page), `${label} reads twice @ ${viewport.id}`).toEqual([]);
             }
         });
 
@@ -270,6 +272,7 @@ test.describe('every control a screen shows can be clicked', () => {
                 }
                 await page.waitForTimeout(800);
                 expect(await findUnreachableControls(page), `${fixture} @ ${viewport.id}`).toEqual([]);
+                expect(await findAmbiguousControls(page), `${fixture} reads twice @ ${viewport.id}`).toEqual([]);
 
                 /*
                  * The shop fixture lands on the floor-clear dialog, one click short of the vendor
@@ -284,6 +287,11 @@ test.describe('every control a screen shows can be clicked', () => {
                     await page.getByTestId('shop-screen').waitFor({ state: 'visible', timeout: 20_000 });
                     await page.waitForTimeout(700);
                     expect(await findUnreachableControls(page), `vendor @ ${viewport.id}`).toEqual([]);
+                    /*
+                     * The vendor is where this shipped: two buttons a player could not tell apart,
+                     * running the same action, with the screen's own test asserting both existed.
+                     */
+                    expect(await findAmbiguousControls(page), `vendor reads twice @ ${viewport.id}`).toEqual([]);
                 }
             });
         }

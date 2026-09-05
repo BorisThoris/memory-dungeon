@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2534,
-    "codeFileCount": 989,
-    "exportedSymbolCount": 3572,
+    "trackedFileCount": 2537,
+    "codeFileCount": 991,
+    "exportedSymbolCount": 3575,
     "contentItemCount": 63,
     "mechanicCount": 136,
     "stateFieldCount": 144,
-    "relationshipCount": 10505
+    "relationshipCount": 10510
   },
   "inventory": [
     {
@@ -2320,7 +2320,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 36714,
-      "sha256": "e617ec77dd0ab11dc8018bd70d3b95da98457ee8ede579a9e5bc91740f27a205"
+      "sha256": "6a8d58e34916dabea7504ae9d082df3dbfc8630dc6bc2c0298cab4f973b084f3"
     },
     {
       "path": "docs/UI_RETHINK_PLAN.md",
@@ -3577,6 +3577,12 @@
       "sha256": "e1ed7b1d42b2a6934ab4c262b85fcaaecabdeec169ab600f71cc5804ef5eaa87"
     },
     {
+      "path": "e2e/ambiguousControls.ts",
+      "category": "test",
+      "bytes": 4025,
+      "sha256": "74eafcd3bbd4490d79d0b0e7ad5975e5bd5f6fa37c34be7b8065f3512ff86a99"
+    },
+    {
       "path": "e2e/blueprint-explorer.spec.ts",
       "category": "test",
       "bytes": 1578,
@@ -3843,8 +3849,8 @@
     {
       "path": "e2e/ui-reachability-gate.spec.ts",
       "category": "test",
-      "bytes": 14972,
-      "sha256": "bb60f0c371ce1e579828f0aa729fb81a3a712449189ca91ef61caca93ae9ec92"
+      "bytes": 15619,
+      "sha256": "0a9f1ea886f858f1105cb96882c7bac3041bf045eef1dfad4647be615d2e9121"
     },
     {
       "path": "e2e/ui-redesign-capture.spec.ts",
@@ -10613,6 +10619,18 @@
       "category": "source",
       "bytes": 50206,
       "sha256": "22ff5128d2ba35b5243a469fa235a1393b36e3119d205e8e78a6ae377ad4c917"
+    },
+    {
+      "path": "src/shared/control-label-ambiguity.test.ts",
+      "category": "test",
+      "bytes": 1913,
+      "sha256": "2f762558dbd31b9785117e54b42080a0b6d535a990924a067469f62755422488"
+    },
+    {
+      "path": "src/shared/control-label-ambiguity.ts",
+      "category": "source",
+      "bytes": 1562,
+      "sha256": "88d241f77145a689d2f5e1ff39363f23568b70111398748106de9225b1cf0b95"
     },
     {
       "path": "src/shared/copy-locality.test.ts",
@@ -26195,6 +26213,34 @@
         "file:src/shared/turn-match-scoring-summary-rules.test.ts",
         "file:src/shared/turn-mismatch-rules.test.ts",
         "file:src/shared/version-gate.test.ts"
+      ]
+    },
+    {
+      "id": "file:src/shared/control-label-ambiguity.test.ts",
+      "path": "src/shared/control-label-ambiguity.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 42,
+      "imports": [
+        "file:src/shared/control-label-ambiguity.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/shared/control-label-ambiguity.ts",
+      "path": "src/shared/control-label-ambiguity.ts",
+      "layer": "shared",
+      "role": "production",
+      "lineCount": 45,
+      "imports": [],
+      "exports": [
+        "symbol:src/shared/control-label-ambiguity.ts#CONTROL_LABEL_SYNONYMS",
+        "symbol:src/shared/control-label-ambiguity.ts#labelsAreAmbiguous",
+        "symbol:src/shared/control-label-ambiguity.ts#normalizeControlLabel"
+      ],
+      "testedBy": [
+        "file:src/shared/control-label-ambiguity.test.ts"
       ]
     },
     {
@@ -48303,6 +48349,30 @@
       "file": "src/shared/contracts.ts",
       "line": 202,
       "endLine": 202
+    },
+    {
+      "id": "symbol:src/shared/control-label-ambiguity.ts#CONTROL_LABEL_SYNONYMS",
+      "name": "CONTROL_LABEL_SYNONYMS",
+      "kind": "value",
+      "file": "src/shared/control-label-ambiguity.ts",
+      "line": 14,
+      "endLine": 31
+    },
+    {
+      "id": "symbol:src/shared/control-label-ambiguity.ts#labelsAreAmbiguous",
+      "name": "labelsAreAmbiguous",
+      "kind": "value",
+      "file": "src/shared/control-label-ambiguity.ts",
+      "line": 43,
+      "endLine": 44
+    },
+    {
+      "id": "symbol:src/shared/control-label-ambiguity.ts#normalizeControlLabel",
+      "name": "normalizeControlLabel",
+      "kind": "value",
+      "file": "src/shared/control-label-ambiguity.ts",
+      "line": 33,
+      "endLine": 40
     },
     {
       "id": "symbol:src/shared/copy-tone.ts#COPY_TONE_RULES",
@@ -85404,6 +85474,24 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/control-label-ambiguity.ts->symbol:src/shared/control-label-ambiguity.ts#CONTROL_LABEL_SYNONYMS",
+      "source": "file:src/shared/control-label-ambiguity.ts",
+      "target": "symbol:src/shared/control-label-ambiguity.ts#CONTROL_LABEL_SYNONYMS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/control-label-ambiguity.ts->symbol:src/shared/control-label-ambiguity.ts#labelsAreAmbiguous",
+      "source": "file:src/shared/control-label-ambiguity.ts",
+      "target": "symbol:src/shared/control-label-ambiguity.ts#labelsAreAmbiguous",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/control-label-ambiguity.ts->symbol:src/shared/control-label-ambiguity.ts#normalizeControlLabel",
+      "source": "file:src/shared/control-label-ambiguity.ts",
+      "target": "symbol:src/shared/control-label-ambiguity.ts#normalizeControlLabel",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/copy-tone.ts->symbol:src/shared/copy-tone.ts#COPY_TONE_RULES",
       "source": "file:src/shared/copy-tone.ts",
       "target": "symbol:src/shared/copy-tone.ts#COPY_TONE_RULES",
@@ -110989,6 +111077,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/control-label-ambiguity.test.ts->src/shared/control-label-ambiguity.ts",
+      "source": "file:src/shared/control-label-ambiguity.test.ts",
+      "target": "file:src/shared/control-label-ambiguity.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/copy-tone.test.ts->src/shared/copy-tone.ts",
       "source": "file:src/shared/copy-tone.test.ts",
       "target": "file:src/shared/copy-tone.ts",
@@ -129500,6 +129594,12 @@
       "id": "tested_by:src/shared/contracts.ts->file:src/shared/version-gate.test.ts",
       "source": "file:src/shared/contracts.ts",
       "target": "file:src/shared/version-gate.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/control-label-ambiguity.ts->file:src/shared/control-label-ambiguity.test.ts",
+      "source": "file:src/shared/control-label-ambiguity.ts",
+      "target": "file:src/shared/control-label-ambiguity.test.ts",
       "kind": "tested_by"
     },
     {
