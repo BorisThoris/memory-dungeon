@@ -160,13 +160,28 @@ describe('ShopScreen', () => {
         expect(uiSfxMocks.playUiBackSfx).toHaveBeenCalledTimes(2);
     });
 
-    it('labels the in-floor vendor as a return to the board', () => {
+    it('gives the in-floor vendor one way out, not two that do the same thing', () => {
+        /*
+         * This used to assert both "Back to board" and "Return to board" were present, which is how
+         * the duplicate survived: `continueFromShop` returns early into the same function the back
+         * button calls whenever `shopReturnMode` is 'floor', so the two buttons ran identical code
+         * and the test held them in place.
+         */
+        const closeShopToFloorSummary = vi.fn();
         act(() => {
-            useAppStore.setState({ run: shopRun({ status: 'playing' }), shopReturnMode: 'floor' });
+            useAppStore.setState({
+                run: shopRun({ status: 'playing' }),
+                shopReturnMode: 'floor',
+                closeShopToFloorSummary
+            });
         });
         render(<ShopScreen />);
         const dock = screen.getByTestId('shop-action-dock');
-        expect(within(dock).getByRole('button', { name: /back to board/i })).toBeInTheDocument();
-        expect(within(dock).getByRole('button', { name: /return to board/i })).toBeInTheDocument();
+        const exits = within(dock).getAllByRole('button', { name: /board/i });
+        expect(exits).toHaveLength(1);
+        expect(exits[0]).toHaveTextContent(/back to board/i);
+
+        fireEvent.click(exits[0] as HTMLElement);
+        expect(closeShopToFloorSummary).toHaveBeenCalledTimes(1);
     });
 });

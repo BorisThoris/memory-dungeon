@@ -8019,14 +8019,14 @@
     {
       "path": "src/renderer/components/ShopScreen.test.tsx",
       "category": "test",
-      "bytes": 7495,
-      "sha256": "f21bfc57cdfd50b818113ab1ff042034df646bee7f56b457197b915bf4726a4d"
+      "bytes": 8114,
+      "sha256": "5e82d63c01b6530c7e167f06d9590febaf2135b95aa9ac4b3e178cef5bafd7d1"
     },
     {
       "path": "src/renderer/components/ShopScreen.tsx",
       "category": "source",
-      "bytes": 10882,
-      "sha256": "c3cec435c7af95bb2255caa7212a7bdec6fba51f7671d770f35f6ff8e5ed03ea"
+      "bytes": 11868,
+      "sha256": "eebc13f835fc86e29126a696ac3d410dc69933d02afe8eced14403829eb1d955"
     },
     {
       "path": "src/renderer/components/shuffleFlipAnimation.test.ts",
@@ -9123,8 +9123,8 @@
     {
       "path": "src/renderer/copy/screenCopy.ts",
       "category": "source",
-      "bytes": 2152,
-      "sha256": "793b34397a5697cf7e90689f9f3e915a82a95c3f3aa1df688430577ee13c6718"
+      "bytes": 2620,
+      "sha256": "43cbef4d37dab90dfa2fb3a69d0adefdfc8affb499139c1c968018e2b8913f63"
     },
     {
       "path": "src/renderer/copy/settingsHints.ts",
@@ -18353,7 +18353,7 @@
       "path": "src/renderer/components/ShopScreen.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 173,
+      "lineCount": 188,
       "imports": [
         "file:src/renderer/components/ShopScreen.tsx",
         "file:src/renderer/store/useAppStore.ts",
@@ -18370,7 +18370,7 @@
       "path": "src/renderer/components/ShopScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 255,
+      "lineCount": 267,
       "imports": [
         "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/components/gameplayVisualConfig.ts",
@@ -21617,7 +21617,7 @@
       "path": "src/renderer/copy/screenCopy.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 41,
+      "lineCount": 50,
       "imports": [],
       "exports": [
         "symbol:src/renderer/copy/screenCopy.ts#CHOOSE_YOUR_PATH_COPY",
@@ -37957,8 +37957,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/ShopScreen.tsx",
-      "line": 254,
-      "endLine": 254
+      "line": 266,
+      "endLine": 266
     },
     {
       "id": "symbol:src/renderer/components/shuffleFlipAnimation.ts#computeBoardEntranceMotionBudgetMs",
@@ -41926,7 +41926,7 @@
       "kind": "value",
       "file": "src/renderer/copy/screenCopy.ts",
       "line": 35,
-      "endLine": 40
+      "endLine": 49
     },
     {
       "id": "symbol:src/renderer/copy/settingsHints.ts#SETTINGS_FOOTER_HINT",

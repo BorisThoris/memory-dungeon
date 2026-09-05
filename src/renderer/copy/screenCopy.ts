@@ -34,6 +34,15 @@ export const GAME_OVER_LABELS = {
 
 export const SHOP_COPY = {
     emptyState: 'The vendor has nothing left this visit.',
+    /*
+     * The exits are named for where they go, not for the shape of the gesture. "Back" and "return"
+     * mean the same thing to a player, and the alcove shipped with both on screen at once, doing
+     * the same thing, one of them styled as the primary.
+     */
+    backToBoard: 'Back to board',
+    backToFloorSummary: 'Back to floor summary',
+    continue: 'Continue',
+    continueToRoute: (routeLabel: string): string => `Continue to ${routeLabel} floor`,
     /** The side-room vendor, which does not advance the floor. */
     sideRoomSubtitle: 'Spend current shop gold, then return to the board. This vendor does not advance the floor.',
     subtitle: 'Spend temporary shop gold before the next floor. Unspent gold expires when the run ends.'

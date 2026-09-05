@@ -208,23 +208,35 @@ const ShopScreen = () => {
                 />
 
                 <footer className={styles.footer}>
+                    {/*
+                      * One exit when the vendor was opened from the board, two when it sits on the
+                      * floor summary. Both buttons used to show in both cases, and in the in-floor
+                      * shop they read "Back to board" and "Return to board" — and did the same
+                      * thing: `continueFromShop` returns early into the very function the back
+                      * button calls when `shopReturnMode` is 'floor'. A player mid-run was asked to
+                      * choose between two identical actions, one of them styled as the primary.
+                      */}
                     <OverlayActionDock
-                        actions={[
-                            {
-                                label: inFloorShop ? 'Back to board' : 'Back to floor summary',
-                                onClick: onBack,
-                                variant: 'secondary'
-                            },
-                            {
-                                label: inFloorShop
-                                    ? 'Return to board'
-                                    : run.pendingRouteCardPlan
-                                    ? `Continue to ${routeTypeLabel(run.pendingRouteCardPlan.routeType)} floor`
-                                    : 'Continue',
-                                onClick: onContinue,
-                                variant: 'primary'
-                            }
-                        ]}
+                        actions={
+                            inFloorShop
+                                ? [{ label: SHOP_COPY.backToBoard, onClick: onBack, variant: 'primary' as const }]
+                                : [
+                                      {
+                                          label: SHOP_COPY.backToFloorSummary,
+                                          onClick: onBack,
+                                          variant: 'secondary' as const
+                                      },
+                                      {
+                                          label: run.pendingRouteCardPlan
+                                              ? SHOP_COPY.continueToRoute(
+                                                    routeTypeLabel(run.pendingRouteCardPlan.routeType)
+                                                )
+                                              : SHOP_COPY.continue,
+                                          onClick: onContinue,
+                                          variant: 'primary' as const
+                                      }
+                                  ]
+                        }
                         className={styles.footerActions}
                         leading={
                             <button
