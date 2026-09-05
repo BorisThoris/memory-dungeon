@@ -53,7 +53,14 @@ export const readUnreachableControls = async (page: Page): Promise<string[]> =>
                     return true;
                 }
                 const top = document.elementFromPoint(x, y);
-                return !top || !(el === top || el.contains(top) || top.contains(el));
+                /*
+                 * The control itself, or something inside it — a label, an icon — since a press
+                 * there bubbles to the control. An ANCESTOR on top is not the same thing and used
+                 * to pass here: that is precisely what a control overflowing its clipped parent
+                 * looks like, the centre landing outside the clip on the wrapper. It hid a browse
+                 * card on a 390px phone that rendered, hit-tested, and did nothing when pressed.
+                 */
+                return !top || !(el === top || el.contains(top));
             })
             .map(name);
     }, CONTROL_SELECTOR);

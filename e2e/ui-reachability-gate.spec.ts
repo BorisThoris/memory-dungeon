@@ -13,10 +13,15 @@ import { findUnreachableControls } from './uiReachability';
  * actually caught something, so it can sit in the routine path and answer in a couple of minutes.
  */
 
-// The two that found real bugs: the Deck's panel, and a phone held sideways.
+/*
+ * The three that found real bugs: the Deck's panel, a phone held sideways, and a phone held
+ * upright — where a browse card rendered at 44px inside a shorter frame, so its middle fell
+ * outside the clip and the press landed on the wrapper instead.
+ */
 const VIEWPORTS = [
     { id: 'steamdeck', width: 1280, height: 800 },
-    { id: 'landscape', width: 812, height: 375 }
+    { id: 'landscape', width: 812, height: 375 },
+    { id: 'phone', width: 390, height: 844 }
 ] as const;
 
 const MENU_SCREENS = [

@@ -72,10 +72,22 @@ export async function openModeDetail(page: Page, modeTitle: string): Promise<Loc
         modeTile = page.getByRole('button', {
             name: new RegExp(`^${escapeRegExp(modeTitle)}\\. Open details\\.$`, 'i')
         });
+        /*
+         * Wait for the filtered grid to settle before pressing anything. Filling the field
+         * re-renders the grid, and a click resolved against the old tree lands on a node React has
+         * already replaced: the press goes nowhere and the modal never opens. That raced roughly
+         * one sweep in three, and read as the detail sheet having vanished.
+         */
+        await expect(modeTile).toHaveCount(1, { timeout: 10_000 });
+        await expect(modeTile).toBeVisible();
     }
+    const modal = page.getByTestId('library-mode-detail-modal');
     await modeTile.scrollIntoViewIfNeeded();
     await modeTile.click({ force: true });
-    const modal = page.getByTestId('library-mode-detail-modal');
+    // One more press if the first landed mid-render. Opening the sheet twice is the same sheet.
+    if (!(await modal.isVisible({ timeout: 4_000 }).catch(() => false))) {
+        await modeTile.click({ force: true });
+    }
     await expect(modal).toBeVisible();
     await expect(modal.getByRole('heading', { name: new RegExp(`^${escapeRegExp(modeTitle)}$`, 'i') })).toBeVisible();
     return modal;

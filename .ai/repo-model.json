@@ -3711,8 +3711,8 @@
     {
       "path": "e2e/playablePathHelpers.ts",
       "category": "test",
-      "bytes": 11068,
-      "sha256": "95b86e298acce5f332d4dcbe24da6a9d846660e1667deed85f8918ca254ceb2c"
+      "bytes": 11797,
+      "sha256": "068042963c91ca907f45f61a0af9b07fe34403e2e70394edb5aa468d0ff14aec"
     },
     {
       "path": "e2e/pngDiff.ts",
@@ -3831,8 +3831,8 @@
     {
       "path": "e2e/ui-reachability-gate.spec.ts",
       "category": "test",
-      "bytes": 7848,
-      "sha256": "00b71392b113b37e1fde3bb41949f2a218bed3764629a11b2f75d5edad2e452e"
+      "bytes": 8076,
+      "sha256": "f3982ec2ae6677a84f4f18837498c1f3cf290e555e621f449871360ca9d70acc"
     },
     {
       "path": "e2e/ui-redesign-capture.spec.ts",
@@ -3849,8 +3849,8 @@
     {
       "path": "e2e/uiReachability.ts",
       "category": "test",
-      "bytes": 3493,
-      "sha256": "7532aa0a866309f335f1c61d29830be431e179983cc52c18d96e876ef5ceaa58"
+      "bytes": 4006,
+      "sha256": "05895eb6e141e084241feabdff733ac1e300dd382c522a2e2b369b5883e40e1e"
     },
     {
       "path": "e2e/viewport-fit-stress.spec.ts",
@@ -10047,8 +10047,8 @@
     {
       "path": "src/renderer/ui/FittedGrid.module.css",
       "category": "source",
-      "bytes": 1671,
-      "sha256": "8032ca44e463dbbb6e1daeb29737b4517c3dccb687adde00b675757463dca04e"
+      "bytes": 2073,
+      "sha256": "ee34836a7d117889b1340c86a1378151d60c4e88289b85fe114ba0d24a92f15e"
     },
     {
       "path": "src/renderer/ui/FittedGrid.tsx",

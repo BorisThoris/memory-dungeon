@@ -13,7 +13,13 @@
 
 .frame {
     flex: 1 1 auto;
-    min-height: 0;
+    /*
+     * Never shorter than the row it has to hold. The frame clips, so a frame below this height
+     * cut the card in half and left its middle — the point a click lands on — outside the clip,
+     * on the wrapper: a card that rendered, hit-tested and did nothing when pressed. Overflowing
+     * the screen instead makes it the screen's problem, which the fit contract reports.
+     */
+    min-height: 44px;
     overflow: hidden;
 }
 
