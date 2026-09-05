@@ -216,6 +216,39 @@ const VERIFIERS: Record<string, () => void> = {
         expect(readPolicyRoots("field: 'runHistory.shareKey'").has('runHistory')).toBe(true);
         expect(Object.keys(SAVE_FIELD_POLICY_EXEMPTIONS).length).toBeGreaterThan(0);
     },
+    'board-chrome-clearance': () => {
+        /*
+         * The hook that measures the chrome named two CSS-module classes; the bar and the dock
+         * moved to another module and it published a clearance of zero every frame, read by no
+         * stylesheet at all, while the trap toast sat on the score. So: it finds the chrome by
+         * test id, it does not write a clearance it could not measure, and the overlays read it.
+         */
+        const hook = readFileSync('src/renderer/hooks/useGameplayChromeClearance.ts', 'utf8');
+        expect(hook).toContain('data-testid=');
+        expect(hook).toContain('removeProperty');
+        expect(hook).not.toContain('hudClassName');
+
+        const board = readFileSync('src/renderer/components/TileBoard.module.css', 'utf8');
+        expect(board).toContain('var(--gameplay-hud-top-clearance');
+        expect(board).toContain('var(--gameplay-dock-bottom-clearance');
+    },
+    'board-controls-answer': () => {
+        /*
+         * Reachable and responsive are different, and both were wrong this week: a browse card
+         * that hit-tested fine and did nothing, and Stray and Undo sitting lit while dropping
+         * every press. The gate presses each tool and clicks the board; the dock takes its
+         * enabled state from the same rule the action applies.
+         */
+        const gate = readFileSync('e2e/ui-reachability-gate.spec.ts', 'utf8');
+        expect(gate).toContain('the board tools answer a press');
+        expect(gate).toContain('a pointer click on the board flips a tile');
+        expect(gate).toContain('every dock tool answers a press');
+
+        const screen = readFileSync('src/renderer/components/GameScreen.tsx', 'utf8');
+        // Undo is live only while a pair resolves, which is the rule its action already applies.
+        expect(screen).toContain("disabled: run.status !== 'resolving'");
+        expect(screen).toContain('RUN_TOOL_REASONS.stray.noCharges');
+    },
     'ui-reachability': () => {
         /*
          * The rule itself needs a browser — a click's centre point and what is painted there are

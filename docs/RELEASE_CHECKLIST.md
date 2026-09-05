@@ -15,6 +15,8 @@ achievement on the Partner site or shoot a trailer.
 | Every screen is reachable on a controller, not just the board | done | the repository | `src/shared/gamepad-input.ts` |
 | Window size and position survive a restart, clamped to a usable minimum | done | the repository | `src/main/window-bounds.ts` |
 | Traits carry a shape as well as a colour, so the board reads without colour vision | done | the repository | `src/shared/tile-trait-marks.ts` |
+| The board overlays clear the HUD and the dock they are drawn over | done | the repository | `src/renderer/hooks/useGameplayChromeClearance.ts` |
+| Every dock tool answers a press, and a click on the board picks a tile | done | the repository | `e2e/ui-reachability-gate.spec.ts` |
 
 ## Steamworks
 

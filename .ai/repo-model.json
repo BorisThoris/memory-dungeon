@@ -2259,8 +2259,8 @@
     {
       "path": "docs/RELEASE_CHECKLIST.md",
       "category": "documentation",
-      "bytes": 6394,
-      "sha256": "828eaf3cd59725b795913eb9a1ef8865d00f6c666b167da0c0290c327705b0f6"
+      "bytes": 6677,
+      "sha256": "7db97bae3830ae21db177b5a498ec464992eb286908c43ba31f52cdcd8f2eab7"
     },
     {
       "path": "docs/RELIC_ROSTER.md",
@@ -11925,14 +11925,14 @@
     {
       "path": "src/shared/release-checklist.test.ts",
       "category": "test",
-      "bytes": 24417,
-      "sha256": "bbd121b50318469a8750c1ac6a05613e3ff3e99ae79301a2518d508fd41f4b6e"
+      "bytes": 26384,
+      "sha256": "484f88fb2d22c594c698f5516d3381952ac2a285679ec032e5c93d72073d9655"
     },
     {
       "path": "src/shared/release-checklist.ts",
       "category": "source",
-      "bytes": 13069,
-      "sha256": "c2f00c14d6db5698bea143419e8ea61df1361a4d863543303303f9c6e0a2bc6a"
+      "bytes": 13587,
+      "sha256": "87539d5c932a5773eb395e678ca3239868ecadc9cd8d53d277b49728e616e561"
     },
     {
       "path": "src/shared/relic-favor-rules.test.ts",
@@ -31014,7 +31014,7 @@
       "path": "src/shared/release-checklist.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 463,
+      "lineCount": 496,
       "imports": [
         "file:src/main/crash-log.ts",
         "file:src/main/save-recovery.ts",
@@ -31045,7 +31045,7 @@
       "path": "src/shared/release-checklist.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 354,
+      "lineCount": 368,
       "imports": [],
       "exports": [
         "symbol:src/shared/release-checklist.ts#RELEASE_CHECKLIST",
@@ -57288,15 +57288,15 @@
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
       "line": 32,
-      "endLine": 306
+      "endLine": 320
     },
     {
       "id": "symbol:src/shared/release-checklist.ts#releaseChecklistByOwner",
       "name": "releaseChecklistByOwner",
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
-      "line": 312,
-      "endLine": 313
+      "line": 326,
+      "endLine": 327
     },
     {
       "id": "symbol:src/shared/release-checklist.ts#ReleaseChecklistItem",
@@ -57319,16 +57319,16 @@
       "name": "releaseChecklistSections",
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
-      "line": 308,
-      "endLine": 310
+      "line": 322,
+      "endLine": 324
     },
     {
       "id": "symbol:src/shared/release-checklist.ts#renderReleaseChecklistMarkdown",
       "name": "renderReleaseChecklistMarkdown",
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
-      "line": 327,
-      "endLine": 353
+      "line": 341,
+      "endLine": 367
     },
     {
       "id": "symbol:src/shared/relic-favor-rules.ts#gainRelicFavor",

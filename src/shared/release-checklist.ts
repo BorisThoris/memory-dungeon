@@ -171,6 +171,20 @@ export const RELEASE_CHECKLIST: readonly ReleaseChecklistItem[] = [
         section: 'Diagnostics'
     },
     {
+        evidence: 'src/renderer/hooks/useGameplayChromeClearance.ts',
+        id: 'board-chrome-clearance',
+        label: 'The board overlays clear the HUD and the dock they are drawn over',
+        owner: 'repo',
+        section: 'Input and display'
+    },
+    {
+        evidence: 'e2e/ui-reachability-gate.spec.ts',
+        id: 'board-controls-answer',
+        label: 'Every dock tool answers a press, and a click on the board picks a tile',
+        owner: 'repo',
+        section: 'Input and display'
+    },
+    {
         evidence: 'e2e/uiReachability.ts',
         id: 'ui-reachability',
         label: 'No control a screen shows is left where a click cannot reach it',
