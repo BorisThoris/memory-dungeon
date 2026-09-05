@@ -3,7 +3,7 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2518,
+    "trackedFileCount": 2520,
     "codeFileCount": 981,
     "exportedSymbolCount": 3548,
     "contentItemCount": 63,
@@ -2259,8 +2259,8 @@
     {
       "path": "docs/RELEASE_CHECKLIST.md",
       "category": "documentation",
-      "bytes": 5990,
-      "sha256": "93754d8918b23d4f8f7728e92f638292821371f49f4ed3449c7586d68a83b2cf"
+      "bytes": 6108,
+      "sha256": "31a9e1077f6c90ccd7337ed47c72e44ee4c6cb1f2684bceb07fbd1e704048907"
     },
     {
       "path": "docs/RELIC_ROSTER.md",
@@ -3825,8 +3825,14 @@
     {
       "path": "e2e/ui-fit-contract.spec.ts",
       "category": "test",
-      "bytes": 16404,
-      "sha256": "52e01ec554272671e85d1de6aaadeeee84b6bf2e8aab26217c0b2d1ddd40ad18"
+      "bytes": 13977,
+      "sha256": "02c5c2a7bf484d37eaa6be4c2a4ac2d88f9fe93d1c1ca880264540c3f95c9ced"
+    },
+    {
+      "path": "e2e/ui-reachability-gate.spec.ts",
+      "category": "test",
+      "bytes": 3101,
+      "sha256": "cf3776a7f281d7e17ad31b6e241c33d0cd39e113403ca692ab5beecdc1f82748"
     },
     {
       "path": "e2e/ui-redesign-capture.spec.ts",
@@ -3839,6 +3845,12 @@
       "category": "test",
       "bytes": 1767,
       "sha256": "59ea1c07254525c75dfe49d427a20d3a8b97ccb2450c59bc84ce6022c0323770"
+    },
+    {
+      "path": "e2e/uiReachability.ts",
+      "category": "test",
+      "bytes": 3493,
+      "sha256": "7532aa0a866309f335f1c61d29830be431e179983cc52c18d96e876ef5ceaa58"
     },
     {
       "path": "e2e/viewport-fit-stress.spec.ts",
@@ -3975,8 +3987,8 @@
     {
       "path": "package.json",
       "category": "configuration",
-      "bytes": 29744,
-      "sha256": "8d7365376ab3e57ffb6048ed46a8f23d68110091b53dbc19550b0c797690dc00"
+      "bytes": 29869,
+      "sha256": "a2e5de10bf6c60a63cb4e9f79d89c1a4ccce6ab9c2a2f7e20ddb6de06cafd006"
     },
     {
       "path": "packages/notifications/package.json",
@@ -11901,14 +11913,14 @@
     {
       "path": "src/shared/release-checklist.test.ts",
       "category": "test",
-      "bytes": 20253,
-      "sha256": "70c838f48e50d07d7f0d971a08f154b4c9313e28febaa3a9b7eb4bc086cd0809"
+      "bytes": 21407,
+      "sha256": "6add85e9a05dcf23247ad32d048fce1da03dc666fe280d8f3e831b9d1b9452f7"
     },
     {
       "path": "src/shared/release-checklist.ts",
       "category": "source",
-      "bytes": 12335,
-      "sha256": "02cab03b29a68decee1acbcf0c8868997b3911663c5812e66c09cfaa2d3ea745"
+      "bytes": 12558,
+      "sha256": "668f6142249d6db8fefc36a88cf27824003500e584c690deb9d51f19c090e3c1"
     },
     {
       "path": "src/shared/relic-favor-rules.test.ts",
@@ -30979,7 +30991,7 @@
       "path": "src/shared/release-checklist.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 388,
+      "lineCount": 406,
       "imports": [
         "file:src/main/crash-log.ts",
         "file:src/main/save-recovery.ts",
@@ -31010,7 +31022,7 @@
       "path": "src/shared/release-checklist.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 333,
+      "lineCount": 340,
       "imports": [],
       "exports": [
         "symbol:src/shared/release-checklist.ts#RELEASE_CHECKLIST",
@@ -57244,15 +57256,15 @@
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
       "line": 32,
-      "endLine": 285
+      "endLine": 292
     },
     {
       "id": "symbol:src/shared/release-checklist.ts#releaseChecklistByOwner",
       "name": "releaseChecklistByOwner",
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
-      "line": 291,
-      "endLine": 292
+      "line": 298,
+      "endLine": 299
     },
     {
       "id": "symbol:src/shared/release-checklist.ts#ReleaseChecklistItem",
@@ -57275,16 +57287,16 @@
       "name": "releaseChecklistSections",
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
-      "line": 287,
-      "endLine": 289
+      "line": 294,
+      "endLine": 296
     },
     {
       "id": "symbol:src/shared/release-checklist.ts#renderReleaseChecklistMarkdown",
       "name": "renderReleaseChecklistMarkdown",
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
-      "line": 306,
-      "endLine": 332
+      "line": 313,
+      "endLine": 339
     },
     {
       "id": "symbol:src/shared/relic-favor-rules.ts#gainRelicFavor",

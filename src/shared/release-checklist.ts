@@ -164,6 +164,13 @@ export const RELEASE_CHECKLIST: readonly ReleaseChecklistItem[] = [
         section: 'Diagnostics'
     },
     {
+        evidence: 'e2e/uiReachability.ts',
+        id: 'ui-reachability',
+        label: 'No control a screen shows is left where a click cannot reach it',
+        owner: 'repo',
+        section: 'Diagnostics'
+    },
+    {
         evidence: 'scripts/min-type-size.ts',
         id: 'min-type-size',
         label: 'No player-facing text is sized below the readable floor, or sized by a token that does not exist',

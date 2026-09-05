@@ -209,6 +209,24 @@ const VERIFIERS: Record<string, () => void> = {
         expect(readPolicyRoots("field: 'runHistory.shareKey'").has('runHistory')).toBe(true);
         expect(Object.keys(SAVE_FIELD_POLICY_EXEMPTIONS).length).toBeGreaterThan(0);
     },
+    'ui-reachability': () => {
+        /*
+         * The rule itself needs a browser — a click's centre point and what is painted there are
+         * layout, and there is no layout in this suite — so the gate proves it and this proves the
+         * gate is wired. That pairing is the point: the fit sweep asked this question too, and took
+         * half an hour, so nobody ran it and a browse grid nothing could click reached the Steam
+         * Deck's own panel.
+         */
+        const pkg = readFileSync('package.json', 'utf8');
+        expect(pkg).toContain('"gate:ui-reachability"');
+        expect(pkg.slice(pkg.indexOf('"fullcheck"'), pkg.indexOf('"fullcheck"') + 400)).toContain('gate:ui-reachability');
+
+        const helper = readFileSync('e2e/uiReachability.ts', 'utf8');
+        expect(helper).toContain('export const findUnreachableControls');
+        // Two readings intersected, so a relayout in flight is not reported as a dead button.
+        expect(helper).toContain('export const readUnreachableControls');
+        expect(readFileSync('e2e/ui-reachability-gate.spec.ts', 'utf8')).toContain('findUnreachableControls');
+    },
     'min-type-size': () => {
         // Both failures this guards were shipped: three declarations under the floor that the fit
         // contract never walked, and a `var()` naming a token defined nowhere, which does nothing

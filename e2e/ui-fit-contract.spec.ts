@@ -1,5 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 import { openModeDetail, openPlayablePathFixture, openRunMenuItem } from './playablePathHelpers';
+import { findUnreachableControls } from './uiReachability';
 import {
     buildPopulatedProfileSaveJson,
     buildVisualSaveJson,
@@ -35,7 +36,6 @@ interface FitReport {
     undersized: string[];
     clipped: string[];
     belowFold: string[];
-    unreachable: string[];
 }
 
 const describeFit = async (page: Page): Promise<FitReport> =>
@@ -108,52 +108,11 @@ const describeFit = async (page: Page): Promise<FitReport> =>
             })
             .map(name);
 
-        /*
-         * A control a click cannot reach. The browse grid paged a card into a frame too short to
-         * hold it, so the card was cut in half and its middle sat under the pager: on a Steam Deck
-         * panel every mode in the bottom row looked like a button and answered to nothing. Being
-         * on screen is not the same as being clickable, and nothing above can tell the difference.
-         */
-        const CONTROLS = 'button, a[href], input, select, textarea, [role="button"], [role="tab"], [tabindex]:not([tabindex="-1"])';
-        /*
-         * A modal covers what is behind it on purpose, so while one is open only the controls
-         * inside it are meant to answer. Without this the check reported every button on the board
-         * the moment the pause sheet opened, which is the modal working.
-         */
-        const modals = Array.from(document.querySelectorAll('[aria-modal="true"]')).filter(shown);
-        const openModal = modals[modals.length - 1] ?? null;
-        const unreachable = Array.from(document.querySelectorAll(CONTROLS))
-            // `inert` means the app has already said this subtree is out of reach on purpose.
-            .filter((el) => shown(el) && !(el as HTMLElement).hasAttribute('disabled') && !el.closest('[inert]'))
-            .filter((el) => openModal === null || openModal.contains(el))
-            .filter((el) => {
-                const r = el.getBoundingClientRect();
-                const x = Math.round(r.left + r.width / 2);
-                const y = Math.round(r.top + r.height / 2);
-                if (x < 0 || y < 0 || x >= window.innerWidth || y >= window.innerHeight) {
-                    return true;
-                }
-                const top = document.elementFromPoint(x, y);
-                return !top || !(el === top || el.contains(top) || top.contains(el));
-            })
-            .map(name);
-
-        return { scrollers, undersized, clipped, belowFold, unreachable };
+        return { scrollers, undersized, clipped, belowFold };
     });
 
 const expectFits = async (page: Page, label: string, viewport: string): Promise<void> => {
-    let report = await describeFit(page);
-    /*
-     * Hit-testing is the one check here that can catch a relayout in progress: after a resize the
-     * grids re-measure through a ResizeObserver and a React render, and a card read in that gap
-     * sits briefly under the pager. A real overlap is still there a moment later; a transient is
-     * not, so only what survives both reads counts.
-     */
-    if (report.unreachable.length > 0) {
-        await page.waitForTimeout(600);
-        const second = await describeFit(page);
-        report = { ...second, unreachable: second.unreachable.filter((row) => report.unreachable.includes(row)) };
-    }
+    const report = { ...(await describeFit(page)), unreachable: await findUnreachableControls(page) };
     const summary = `${label} @ ${viewport}`;
     // Name what broke before asserting, so a CI log says which element on which screen.
     for (const [kind, rows] of Object.entries(report)) {
