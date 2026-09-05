@@ -3,8 +3,8 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2522,
-    "codeFileCount": 982,
+    "trackedFileCount": 2524,
+    "codeFileCount": 983,
     "exportedSymbolCount": 3550,
     "contentItemCount": 63,
     "mechanicCount": 136,
@@ -2320,7 +2320,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 36714,
-      "sha256": "7de1fd7a0326b59531904b7e4556bcfec21c6a877296094b3e550d2ef05a81aa"
+      "sha256": "8fa6d99cf81109de0daf37efa0a3ce9f9ae37b5c3f6b776cb66c37be1414ac3c"
     },
     {
       "path": "docs/UI_RETHINK_PLAN.md",
@@ -3987,8 +3987,8 @@
     {
       "path": "package.json",
       "category": "configuration",
-      "bytes": 30047,
-      "sha256": "d86cefa6fe5957d98656e28291b867113cad0f682410257258bf7b513d032002"
+      "bytes": 30160,
+      "sha256": "cbf24658d77e411adb697a12d1e4a6baa60079098e2cea0bba03fdd54a0628d9"
     },
     {
       "path": "packages/notifications/package.json",
@@ -4553,6 +4553,12 @@
       "category": "script",
       "bytes": 6528,
       "sha256": "3e9b0d34ede8762b043aed7edd710bff6a9ae447532801f1e6531a3ddd622452"
+    },
+    {
+      "path": "scripts/css-duplicate-rules.ts",
+      "category": "script",
+      "bytes": 8888,
+      "sha256": "09f359e854492cd67730f221fc0212ed81bd59ce3b9f17c113f8a7afed336bb8"
     },
     {
       "path": "scripts/e2e-locator-audit.ts",
@@ -7671,8 +7677,8 @@
     {
       "path": "src/renderer/components/GameOverScreen.module.css",
       "category": "source",
-      "bytes": 15461,
-      "sha256": "dddaee157636759a68b22f8a3a3041219a05a54c82d5671571477df10b0f1ed8"
+      "bytes": 15436,
+      "sha256": "0827859254821576bf10b5da2810000b5fa2aed06306a556312d29c05bc817a5"
     },
     {
       "path": "src/renderer/components/GameOverScreen.test.tsx",
@@ -7707,8 +7713,8 @@
     {
       "path": "src/renderer/components/GameScreen.module.css",
       "category": "source",
-      "bytes": 41371,
-      "sha256": "0e8c4842021fbf36d5f2168ddfc8e5d82ea4275baae4f6dfac1e9e2bb69f91cf"
+      "bytes": 40397,
+      "sha256": "ffd21ee66830bfae437a8fc7ae25ec3b91f53210500d83a7e54809edf6dd75b8"
     },
     {
       "path": "src/renderer/components/GameScreen.test.tsx",
@@ -7965,8 +7971,8 @@
     {
       "path": "src/renderer/components/SettingsScreen.module.css",
       "category": "source",
-      "bytes": 32343,
-      "sha256": "63c277b2bcef85b0650820c302c873489217046b17cd1d0c91d1bd12bb1cda16"
+      "bytes": 31943,
+      "sha256": "8b753385e35e6ca84e84085f5193b957ab41c389a31a3a5654ceb05e22e2afd0"
     },
     {
       "path": "src/renderer/components/SettingsScreen.test.tsx",
@@ -10619,6 +10625,12 @@
       "category": "test",
       "bytes": 4225,
       "sha256": "b954618b3b7565a283a3c91fd9de6d1426544a7d68f1aec97fe3f958badc76c8"
+    },
+    {
+      "path": "src/shared/css-duplicate-rules.test.ts",
+      "category": "test",
+      "bytes": 4188,
+      "sha256": "eff750aff6d3606874323df68cc997154e3e3b89bb7456a493b3ec8c65cc566e"
     },
     {
       "path": "src/shared/daily-archive.test.ts",
@@ -26212,6 +26224,16 @@
       "layer": "shared",
       "role": "test",
       "lineCount": 93,
+      "imports": [],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/shared/css-duplicate-rules.test.ts",
+      "path": "src/shared/css-duplicate-rules.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 88,
       "imports": [],
       "exports": [],
       "testedBy": []

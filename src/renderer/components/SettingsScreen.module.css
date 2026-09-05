@@ -961,24 +961,8 @@
     display: none;
 }
 
-.stackedShell .contentPane {
-    overflow: hidden;
-}
-
-.stackedShell .contentScroll {
-    flex: 1 1 auto;
-    min-height: 0;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    padding-bottom: 0.4rem;
-}
-
 .stackedShell .footer {
-    padding-top: 0.42rem;
     padding-bottom: max(0.38rem, env(safe-area-inset-bottom, 0px));
-    background:
-        linear-gradient(180deg, rgba(7, 8, 12, 0), rgba(7, 8, 12, 0.96) 32%),
-        color-mix(in srgb, var(--theme-void) 68%, transparent);
 }
 
 .shortLandscapeShell .subsectionNav {

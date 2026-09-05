@@ -68,12 +68,10 @@
     position: absolute;
     inset: 0;
     pointer-events: none;
-    opacity: 0.5;
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
     mix-blend-mode: normal;
-    filter: saturate(1.08) contrast(1.04);
     /* PLAY-006: arena spotlight — slightly tighter than the torch ring so the dais reads centered */
     mask-image: radial-gradient(ellipse 108% 96% at 50% 47%, black 18%, rgba(0, 0, 0, 0.9) 55%, transparent 100%);
 }
@@ -195,11 +193,6 @@
         radial-gradient(ellipse 120% 100% at 50% 0%, color-mix(in srgb, var(--theme-cyan-bright) 7%, transparent), transparent 54%),
         linear-gradient(180deg, color-mix(in srgb, var(--theme-text) 3.5%, transparent), transparent 62%),
         linear-gradient(180deg, color-mix(in srgb, var(--theme-stone-highlight) 14%, transparent), color-mix(in srgb, var(--theme-void) 82%, transparent));
-    box-shadow:
-        0 16px 34px color-mix(in srgb, var(--theme-shadow) 32%, transparent),
-        0 0 24px color-mix(in srgb, var(--theme-glow-gold-soft) 10%, transparent),
-        inset 0 1px 0 color-mix(in srgb, var(--theme-text) 6%, transparent),
-        inset 0 -1px 0 color-mix(in srgb, var(--theme-gold-deep) 18%, transparent);
     backdrop-filter: blur(calc(var(--game-deck-blur) * 0.72)) saturate(1.16);
 }
 
@@ -329,28 +322,25 @@
         var(--theme-hud-stage-ellipse),
         radial-gradient(ellipse at 50% 72%, color-mix(in srgb, var(--theme-shadow) 10%, transparent), transparent 66%),
         var(--theme-hud-stage-linear);
-    box-shadow:
-        inset 0 0 0 1px color-mix(in srgb, var(--theme-cyan-bright) 12%, transparent),
-        inset 0 0 0 2px color-mix(in srgb, var(--theme-gold-bright) 6%, transparent),
-        inset 0 28px 90px color-mix(in srgb, var(--theme-shadow) 34%, transparent),
-        0 24px 54px color-mix(in srgb, var(--theme-shadow) 18%, transparent),
-        0 0 44px color-mix(in srgb, var(--theme-glow-cyan-soft) 12%, transparent);
 }
 
 /* REG-002: desktop stage density — avoid a board floating in an oversized frame on 1366×768+.
    Mobile camera keeps its full-bleed rules below; this applies only to the non-camera desktop/tablet layout. */
 .shell:not([data-mobile-camera-mode='true']) .boardStage {
     position: absolute;
-    inset: 0;
+    /*
+     * Full-bleed, but clear of the chrome drawn over it. At 1280x800 the top row of cards reached
+     * under the HUD and the run's score and mutator were printed across two card faces — both
+     * harder to read for it. The clearances are the ones the chrome publishes about itself; with
+     * no measurement yet, this is the full bleed it was.
+     */
+    inset: var(--gameplay-hud-top-clearance, 0px) 0 var(--gameplay-dock-bottom-clearance, 0px);
     display: block;
     width: 100%;
     max-width: none;
     margin: 0;
     padding: 0;
     overflow: hidden;
-    border: 0;
-    border-radius: 0;
-    box-shadow: none;
     z-index: 0;
     --gameplay-stage-dais-bottom: -10%;
     --gameplay-stage-dais-width: min(86%, 62rem);
@@ -528,7 +518,6 @@
 .shell:not([data-mobile-camera-mode='true']) .actionDock {
     position: absolute;
     left: 50%;
-    bottom: max(0.36rem, env(safe-area-inset-bottom, 0px));
     width: fit-content;
     max-width: calc(100% - 1rem);
     margin: 0;
@@ -569,9 +558,6 @@
     background:
         linear-gradient(180deg, rgba(255, 243, 217, 0.05), transparent 54%),
         color-mix(in srgb, var(--theme-panel-solid) 90%, var(--theme-gold-deep) 10%);
-    box-shadow:
-        inset 0 1px 0 color-mix(in srgb, var(--theme-gold-bright) 10%, transparent),
-        inset 0 -1px 0 color-mix(in srgb, var(--theme-shadow) 14%, transparent);
 }
 
 @media (max-width: 760px), (max-height: 760px) {
@@ -951,10 +937,6 @@ subdued cool palette. */
 
 .shell:not([data-mobile-camera-mode='true']) .hudRow {
     box-sizing: border-box;
-    padding:
-        var(--gameplay-shell-block-pad, 0.36rem)
-        var(--gameplay-shell-inline-pad, clamp(0.3rem, 0.8vw, 0.58rem))
-        0;
 }
 
 .shell:not([data-mobile-camera-mode='true']) .gambitOpportunityHint {
@@ -1011,19 +993,16 @@ subdued cool palette. */
         0 0 48px color-mix(in srgb, var(--theme-glow-cyan-soft) 16%, transparent);
 }
 
+/*
+ * Only what the decorative rule above needs cancelled on desktop. This used to repeat the whole
+ * layout block declared earlier in this file — same selector, same properties — so an edit to the
+ * first one changed nothing and said nothing, which is how a stage inset landed here and did not
+ * move a pixel. Layout lives in the one place now.
+ */
 .shell:not([data-mobile-camera-mode='true']) .boardStage {
-    position: absolute;
-    inset: 0;
-    display: block;
-    width: 100%;
-    max-width: none;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
     border: 0;
     border-radius: 0;
     box-shadow: none;
-    z-index: 0;
 }
 
 /* UIL-001: gameplay HTML layer v2. The board is the full-screen canvas; HUD chrome is a set of
@@ -1031,10 +1010,6 @@ subdued cool palette. */
 not one central dashboard box. */
 .shell:not([data-mobile-camera-mode='true']) [data-html-ui-layer='gameplay-chrome-v2'] {
     --gameplay-html-edge-pad: clamp(0.55rem, 1.15vw, 1rem);
-    --gameplay-island-surface:
-        radial-gradient(ellipse 120% 180% at 50% -28%, color-mix(in srgb, var(--theme-gold-bright) 13%, transparent), transparent 58%),
-        linear-gradient(180deg, color-mix(in srgb, var(--theme-text) 5%, transparent), transparent 52%),
-        color-mix(in srgb, var(--theme-void) 70%, transparent);
 }
 
 .shell:not([data-mobile-camera-mode='true']) .hudRow {

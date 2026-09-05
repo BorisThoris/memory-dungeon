@@ -262,7 +262,6 @@
 }
 
 .nextRunCard p {
-    margin: 0.16rem 0 0;
     color: var(--theme-text-subtle);
     font-size: 0.76rem;
     line-height: 1.36;
