@@ -265,6 +265,25 @@ describe('ChooseYourPathScreen', () => {
         expect(storeSpies.startGauntletRun).toHaveBeenCalledTimes(1);
     });
 
+    it('offers the seat counts in the order a person counts them', async () => {
+        /*
+         * The dock renders every secondary and then every primary, so marking two players as the
+         * primary tore it out of its own ordered set: a table opening this sheet read "3 players,
+         * 4 players, 2 players". These are equal choices along one dimension.
+         */
+        const user = userEvent.setup();
+        render(<ChooseYourPathScreen />);
+
+        await user.click(screen.getByRole('button', { name: /^Pass and Play\. Open details\.$/i }));
+        const modal = screen.getByTestId('library-mode-detail-modal');
+        const seatLabels = within(modal)
+            .getAllByRole('button')
+            .map((button) => (button.textContent ?? '').trim())
+            .filter((label) => /player/i.test(label));
+
+        expect(seatLabels).toEqual(['2 players', '3 players', '4 players']);
+    });
+
     it('renders meditation mutator picks through the shared catalog rows in title order', () => {
         const rows = buildMeditationPickMutatorRows();
         const titles = rows.map((row) => row.title);

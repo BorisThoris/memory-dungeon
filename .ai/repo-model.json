@@ -7623,14 +7623,14 @@
     {
       "path": "src/renderer/components/ChooseYourPathScreen.test.tsx",
       "category": "test",
-      "bytes": 13708,
-      "sha256": "90f8900c7312a86cb517b52d4c010d3e2a33a020cc9ee6b5d2b9de723cd2dea8"
+      "bytes": 14626,
+      "sha256": "7d934def4fade83fb36e4c6d55ff27f088031e62d0c6323357d6f521b28c0a15"
     },
     {
       "path": "src/renderer/components/ChooseYourPathScreen.tsx",
       "category": "source",
-      "bytes": 29720,
-      "sha256": "7e9b354e0e50ab6508b3eacca99d03942843e22fad8e48f99ca8679b03bbec8e"
+      "bytes": 30147,
+      "sha256": "59d0d18a0ce9380d4f1595adf38afd7ead43366666fe5021a2227caf48e9d3a2"
     },
     {
       "path": "src/renderer/components/chooseYourPathScreenModel.ts",
@@ -17329,7 +17329,7 @@
       "path": "src/renderer/components/ChooseYourPathScreen.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 276,
+      "lineCount": 295,
       "imports": [
         "file:src/renderer/components/ChooseYourPathScreen.tsx",
         "file:src/renderer/components/chooseYourPathScreenModel.ts",
@@ -17344,7 +17344,7 @@
       "path": "src/renderer/components/ChooseYourPathScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 655,
+      "lineCount": 662,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/assets/ui/modeArt.ts",
@@ -37369,8 +37369,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/ChooseYourPathScreen.tsx",
-      "line": 654,
-      "endLine": 654
+      "line": 661,
+      "endLine": 661
     },
     {
       "id": "symbol:src/renderer/components/chooseYourPathScreenModel.ts#buildMeditationPickMutatorRows",

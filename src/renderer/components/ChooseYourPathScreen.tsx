@@ -11,7 +11,7 @@ import {
     type RunModeGroup
 } from '../../shared/run-mode-catalog';
 import { buildSocialScopeNote } from '../../shared/social-play-scope';
-import { PASS_AND_PLAY_MIN_SEATS, passAndPlaySeatCounts } from '../../shared/pass-and-play-rules';
+import { passAndPlaySeatCounts } from '../../shared/pass-and-play-rules';
 import { PASS_AND_PLAY_COPY } from '../copy/passAndPlay';
 import { parseRunShareKey } from '../../shared/run-share-key';
 import { formatNextUtcReset } from '../../shared/utc-countdown';
@@ -252,13 +252,20 @@ const ChooseYourPathScreen = (): ReactElement => {
         if (def.action.type === 'startPassAndPlayRun') {
             return [
                 close,
+                /*
+                 * All one variant, deliberately. The dock renders every secondary and then every
+                 * primary, so marking two players as the primary tore it out of its own ordered
+                 * set and the table read "3 players, 4 players, 2 players". These are equal
+                 * choices along one dimension; the count is the only thing that differs, so they
+                 * belong together in the order a person counts.
+                 */
                 ...passAndPlaySeatCounts().map((seats) => ({
                     label: PASS_AND_PLAY_COPY.seatCountLabel(seats),
                     onClick: (): void => {
                         setDetailMode(null);
                         startPassAndPlayRun(seats);
                     },
-                    variant: seats === PASS_AND_PLAY_MIN_SEATS ? ('primary' as const) : ('secondary' as const)
+                    variant: 'primary' as const
                 }))
             ];
         }
