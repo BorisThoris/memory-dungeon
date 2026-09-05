@@ -140,7 +140,10 @@ export const getCollectionRewardSignals = (save: SaveData): MetaRewardSignalRow[
             kind: daily.dailiesCompleted > 0 ? 'progress' : 'empty_state',
             title: 'Daily archive value',
             body: `${daily.dailiesCompleted} daily clear(s) | streak ${daily.streak}.`,
-            cta: daily.dailiesCompleted > 0 ? 'Return tomorrow to extend the local streak.' : 'Try Daily Challenge to add your first archive row.'
+            cta:
+                daily.dailiesCompleted > 0
+                    ? 'Return tomorrow to extend the local streak. Miss a day and it is forgiven once.'
+                    : 'Try Daily Challenge to add your first archive row.'
         }
     ];
 };

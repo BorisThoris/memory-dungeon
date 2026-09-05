@@ -27,12 +27,12 @@ export const HONOR_UNLOCK_CATALOG: Record<HonorUnlockId, HonorUnlockDefinition> 
     honor_daily_streak_3: {
         id: 'honor_daily_streak_3',
         title: 'Triple Dawn',
-        description: 'Reach a cosmetic daily streak of three consecutive UTC days.'
+        description: 'Reach a cosmetic daily streak of three UTC days. One missed day is forgiven.'
     },
     honor_daily_streak_7: {
         id: 'honor_daily_streak_7',
         title: 'Week of Days',
-        description: 'Reach a cosmetic daily streak of seven consecutive UTC days.'
+        description: 'Reach a cosmetic daily streak of seven UTC days. One missed day is forgiven.'
     },
     honor_ascendant_5: {
         id: 'honor_ascendant_5',

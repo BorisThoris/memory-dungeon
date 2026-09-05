@@ -11409,8 +11409,8 @@
     {
       "path": "src/shared/honorUnlocks.ts",
       "category": "source",
-      "bytes": 5573,
-      "sha256": "d63445366181064343ea8047fdcad2c44dd573814bf039846d0001064173d413"
+      "bytes": 5605,
+      "sha256": "f1414fc87d21f789ad124150d5ceae6c2292d381b2fe5dc128ac21246da9150b"
     },
     {
       "path": "src/shared/interlude-transition-rules.ts",
@@ -11625,8 +11625,8 @@
     {
       "path": "src/shared/meta-reward-signals.ts",
       "category": "source",
-      "bytes": 9961,
-      "sha256": "bbe51af0c156c34cfecd335e67e1b81bbf56b23623fd12e9844327a2185c204a"
+      "bytes": 10053,
+      "sha256": "bd480e2992a55c562e621662bce1f609f624ca4eb053c7da2d2941ca00fcbd19"
     },
     {
       "path": "src/shared/min-type-size.test.ts",
@@ -30063,7 +30063,7 @@
       "path": "src/shared/meta-reward-signals.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 245,
+      "lineCount": 248,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/daily-archive.ts",
@@ -56000,32 +56000,32 @@
       "name": "buildMetaRewardSignals",
       "kind": "value",
       "file": "src/shared/meta-reward-signals.ts",
-      "line": 209,
-      "endLine": 209
+      "line": 212,
+      "endLine": 212
     },
     {
       "id": "symbol:src/shared/meta-reward-signals.ts#getCodexRewardSignal",
       "name": "getCodexRewardSignal",
       "kind": "value",
       "file": "src/shared/meta-reward-signals.ts",
-      "line": 243,
-      "endLine": 244
+      "line": 246,
+      "endLine": 247
     },
     {
       "id": "symbol:src/shared/meta-reward-signals.ts#getCodexRewardSignals",
       "name": "getCodexRewardSignals",
       "kind": "value",
       "file": "src/shared/meta-reward-signals.ts",
-      "line": 186,
-      "endLine": 207
+      "line": 189,
+      "endLine": 210
     },
     {
       "id": "symbol:src/shared/meta-reward-signals.ts#getCollectionRewardSignal",
       "name": "getCollectionRewardSignal",
       "kind": "value",
       "file": "src/shared/meta-reward-signals.ts",
-      "line": 239,
-      "endLine": 240
+      "line": 242,
+      "endLine": 243
     },
     {
       "id": "symbol:src/shared/meta-reward-signals.ts#getCollectionRewardSignals",
@@ -56033,23 +56033,23 @@
       "kind": "value",
       "file": "src/shared/meta-reward-signals.ts",
       "line": 114,
-      "endLine": 146
+      "endLine": 149
     },
     {
       "id": "symbol:src/shared/meta-reward-signals.ts#getInventoryRewardSignal",
       "name": "getInventoryRewardSignal",
       "kind": "value",
       "file": "src/shared/meta-reward-signals.ts",
-      "line": 241,
-      "endLine": 242
+      "line": 244,
+      "endLine": 245
     },
     {
       "id": "symbol:src/shared/meta-reward-signals.ts#getInventoryRewardSignals",
       "name": "getInventoryRewardSignals",
       "kind": "value",
       "file": "src/shared/meta-reward-signals.ts",
-      "line": 148,
-      "endLine": 184
+      "line": 151,
+      "endLine": 187
     },
     {
       "id": "symbol:src/shared/meta-reward-signals.ts#getMetaProgressionRunImpactRows",
