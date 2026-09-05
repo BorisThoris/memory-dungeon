@@ -44,6 +44,12 @@ export interface BoardTurnHazardKindFacts {
 }
 
 export interface BoardTurnAnnouncementFacts {
+    /** Pairs the magpie took back this floor, before and after this turn. */
+    magpieTheftsBefore: number;
+    magpieTheftsAfter: number;
+    /** Times a guard token drove it off this floor, before and after this turn. */
+    magpieScaredOffBefore: number;
+    magpieScaredOffAfter: number;
     /**
      * Which tiles the floater anchors to. Not simply the flipped ids: a gambit resolves
      * three tiles but the floater belongs on the matched pair, and only the rules layer
@@ -165,6 +171,10 @@ export const getBoardTurnAnnouncementFacts = (
         findablesClaimedAfter: runNonNegativeInteger(after.findablesClaimedThisFloor),
         findablesTotalBefore: runNonNegativeInteger(before.findablesTotalThisFloor),
         findablesTotalAfter: runNonNegativeInteger(after.findablesTotalThisFloor),
+        magpieTheftsBefore: runNonNegativeInteger(before.magpieTheftsThisFloor),
+        magpieTheftsAfter: runNonNegativeInteger(after.magpieTheftsThisFloor),
+        magpieScaredOffBefore: runNonNegativeInteger(before.magpieScaredOffThisFloor),
+        magpieScaredOffAfter: runNonNegativeInteger(after.magpieScaredOffThisFloor),
         hazardTilesBefore: runNonNegativeInteger(before.hazardTileTriggersThisFloor),
         hazardTilesAfter: runNonNegativeInteger(after.hazardTileTriggersThisFloor),
         hazardKinds: {

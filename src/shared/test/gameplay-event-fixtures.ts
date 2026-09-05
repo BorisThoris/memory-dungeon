@@ -18,6 +18,10 @@ const DEFAULT_ANNOUNCEMENT: BoardTurnAnnouncementFacts = {
     findablesClaimedAfter: 0,
     findablesTotalBefore: 0,
     findablesTotalAfter: 0,
+    magpieTheftsBefore: 0,
+    magpieTheftsAfter: 0,
+    magpieScaredOffBefore: 0,
+    magpieScaredOffAfter: 0,
     hazardTilesBefore: 0,
     hazardTilesAfter: 0,
     hazardKinds: {

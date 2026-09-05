@@ -1125,6 +1125,10 @@ export interface RunState {
     forgottenTileIdsThisFloor: string[];
     /** Hazard tiles: total normal-run hazard triggers this floor. */
     hazardTileTriggersThisFloor: number;
+    /** Pairs the magpie has taken back on this floor. */
+    magpieTheftsThisFloor: number;
+    /** Times a guard token drove the magpie off on this floor. */
+    magpieScaredOffThisFloor: number;
     hazardShuffleSnaresThisFloor: number;
     hazardCascadeCachesThisFloor: number;
     hazardMirrorDecoysThisFloor: number;

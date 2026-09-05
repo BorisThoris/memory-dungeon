@@ -1,4 +1,5 @@
 import { getHazardTileLiveCopy, HAZARD_TILE_KINDS } from '../../shared/hazard-tiles';
+import { MAGPIE_BEAT_COPY } from './magpieBeat';
 import type { BoardTurnResolvedEvent } from '../store/gameplayFeedbackAdapter';
 import { getChainMilestoneFeedback } from './chainMilestoneFeedback';
 import { getChainRewardForecastCues, getChainRewardUrgencyCopy } from './chainMomentum';
@@ -203,6 +204,22 @@ export interface BoardTurnAnnouncementResult {
  * the spoken feedback could disagree with the rules and could double-fire or go silent
  * depending on render timing. Keyed on eventId, one turn announces once.
  */
+/**
+ * The magpie's line for a turn it visited on.
+ *
+ * Read from the event's own before/after counters like every other announcement here, rather than
+ * from the run: the theft already happened by the time this is called, and diffing a snapshot would
+ * be reconstructing what the core already said.
+ */
+export const magpieAnnouncementLines = (turnEvent: BoardTurnResolvedEvent): string[] => {
+    const { magpieTheftsBefore, magpieTheftsAfter, magpieScaredOffBefore, magpieScaredOffAfter } =
+        turnEvent.announcement;
+    return [
+        ...(magpieTheftsAfter > magpieTheftsBefore ? [MAGPIE_BEAT_COPY.theftAnnouncement] : []),
+        ...(magpieScaredOffAfter > magpieScaredOffBefore ? [MAGPIE_BEAT_COPY.scaredAnnouncement] : [])
+    ];
+};
+
 export const buildBoardTurnAnnouncement = (
     turnEvent: BoardTurnResolvedEvent,
     { reduceMotion }: { reduceMotion: boolean }
@@ -211,6 +228,11 @@ export const buildBoardTurnAnnouncement = (
         chainMilestoneAnnouncement(turnEvent),
         chainBreakAnnouncement(turnEvent),
         ...hazardTileAnnouncementLines(turnEvent, { reduceMotion }),
+        /*
+         * Ahead of the counters: the bird moved a pair, and a player who hears the score before
+         * they hear that will already be looking in the wrong place.
+         */
+        ...magpieAnnouncementLines(turnEvent),
         ...counterAnnouncementLines(turnEvent),
         getBoardTurnPickupAnnouncement(turnEvent)?.text ?? null
     ].filter((line): line is string => line != null && line.length > 0);

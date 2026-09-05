@@ -1507,6 +1507,10 @@ export const boardTurnAnnouncementFactsSchema = z
         livesAfter: z.number().int().nonnegative(),
         findablesClaimedBefore: z.number().int().nonnegative(),
         findablesClaimedAfter: z.number().int().nonnegative(),
+        magpieTheftsBefore: z.number().int().nonnegative().default(0),
+        magpieTheftsAfter: z.number().int().nonnegative().default(0),
+        magpieScaredOffBefore: z.number().int().nonnegative().default(0),
+        magpieScaredOffAfter: z.number().int().nonnegative().default(0),
         findablesTotalBefore: z.number().int().nonnegative(),
         findablesTotalAfter: z.number().int().nonnegative(),
         // Defaulted so events already in a run's journal still parse: the journal is

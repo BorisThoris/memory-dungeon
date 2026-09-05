@@ -177,6 +177,10 @@ export const resolveMismatchTurnTransition = ({
         board: boardAfterMagpie,
         shiftingSpotlightNonce: spunMiss.shiftingSpotlightNonce,
         pinnedTileIds: snareHazard.triggered ? [] : run.pinnedTileIds,
+        magpieTheftsThisFloor:
+            runNonNegativeInteger(run.magpieTheftsThisFloor) + (magpie?.kind === 'theft' ? 1 : 0),
+        magpieScaredOffThisFloor:
+            runNonNegativeInteger(run.magpieScaredOffThisFloor) + (magpie?.kind === 'scared_off' ? 1 : 0),
         hazardTileTriggersThisFloor:
             runNonNegativeInteger(run.hazardTileTriggersThisFloor) +
             (snareHazard.triggered ? 1 : 0) +
@@ -208,7 +212,17 @@ export const resolveMismatchTurnTransition = ({
             currentStreak: Math.floor(runNonNegativeInteger(stats.currentStreak) / 2),
             rating: calculateRating(penalty.tries),
             highestLevel: Math.max(runNonNegativeInteger(stats.highestLevel), runNonNegativeInteger(advancedTrapBoard.level)),
-            guardTokens: runNonNegativeInteger(enemyAttack.guardTokens),
+            /*
+             * The magpie's token is spent here, not inside its own rules: it decides whether it
+             * was driven off, and the run is what actually holds the tokens. A visit that reports
+             * a spend and never deducts one is a protection the player pays nothing for.
+             */
+            guardTokens: Math.min(
+                runNonNegativeInteger(enemyAttack.guardTokens),
+                magpie?.kind === 'scared_off'
+                    ? runNonNegativeInteger(magpie.guardTokens)
+                    : runNonNegativeInteger(enemyAttack.guardTokens)
+            ),
             tileTraitMismatches: addTileTraitCountStats(trapStats.tileTraitMismatches, sourceTiles),
             volatileTraitShuffles:
                 runNonNegativeInteger(trapStats.volatileTraitShuffles) + (volatileTrait.triggered ? 1 : 0)
