@@ -267,3 +267,62 @@
         gap: 0.25rem;
     }
 }
+
+/*
+ * A phone held sideways: 375px of height and no width problem, so not one of the width
+ * breakpoints above fires and nothing collapses. The header and the action dock took 181px of a
+ * 308px plate and left the card grid a 31px frame, so the cards rendered outside it and were
+ * clipped away — there was no way to buy anything at all. The plate takes more of the window and
+ * the header gives up the line that repeats what the title already says.
+ */
+@media (max-height: 560px) {
+    .shell {
+        max-height: min(96dvh, 100%);
+        gap: 0.4rem;
+        padding: 0.5rem 0.7rem;
+    }
+
+    .header {
+        align-items: center;
+        padding-bottom: 0.35rem;
+    }
+
+    .headerText p {
+        display: none;
+    }
+
+    .footer {
+        padding-top: 0.35rem;
+    }
+
+    /*
+     * The card turns on its side rather than losing anything. Stacked it needed about 150px and
+     * the frame has 112, so the buy button rendered outside the clip and could not be pressed.
+     * The description is what a player buys on, so it stays: name and price on one line, effect
+     * under it, and the button beside them both.
+     */
+    .stockCard {
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-content: center;
+        align-items: center;
+        gap: 0.1rem 0.6rem;
+        padding: 0.4rem 0.55rem;
+    }
+
+    .stockTopline,
+    .stockCard h3,
+    .stockCard p {
+        grid-column: 1;
+    }
+
+    .stockCard p {
+        line-height: 1.28;
+    }
+
+    .stockAction {
+        grid-column: 2;
+        grid-row: 1 / span 3;
+        margin-top: 0;
+        white-space: nowrap;
+    }
+}

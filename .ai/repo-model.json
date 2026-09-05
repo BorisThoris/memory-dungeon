@@ -7965,8 +7965,8 @@
     {
       "path": "src/renderer/components/ShopScreen.module.css",
       "category": "source",
-      "bytes": 6898,
-      "sha256": "1eafc6261c9342aa54cd6159eaeef05631931b8116c1ae606a75c7e2adfac911"
+      "bytes": 8509,
+      "sha256": "69fc51c835c69b7a7239c9d88385747b29cd20364d1fc6047adc2beed3937562"
     },
     {
       "path": "src/renderer/components/ShopScreen.test.tsx",
