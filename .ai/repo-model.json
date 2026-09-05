@@ -3831,8 +3831,8 @@
     {
       "path": "e2e/ui-reachability-gate.spec.ts",
       "category": "test",
-      "bytes": 3101,
-      "sha256": "cf3776a7f281d7e17ad31b6e241c33d0cd39e113403ca692ab5beecdc1f82748"
+      "bytes": 5410,
+      "sha256": "66484046fde3407674e048f6ec7ffcd96cb46b1548789d1ae037ca560092b7dc"
     },
     {
       "path": "e2e/ui-redesign-capture.spec.ts",

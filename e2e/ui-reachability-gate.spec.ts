@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { buildPopulatedProfileSaveJson, buildVisualSaveJson, gotoWithSave, mainMenuPlayButton } from './visualScreenHelpers';
+import { openPlayablePathFixture } from './playablePathHelpers';
 import { findUnreachableControls } from './uiReachability';
 
 /**
@@ -59,5 +60,52 @@ test.describe('every control a screen shows can be clicked', () => {
             // the release checklist names by name.
             expect(await findUnreachableControls(page), `choose your path @ ${viewport.id}`).toEqual([]);
         });
+    }
+
+    /*
+     * The screens a run actually passes through. The vendor's cards were clipped away entirely on
+     * a phone held sideways — there was no way to buy anything — and only the half-hour sweep saw
+     * it, because the fast checks all stop at the main menu. The fixtures reach these directly
+     * instead of playing a floor to get to each one.
+     */
+    const RUN_FIXTURES = [
+        'floorClearWithRouteChoices',
+        'floorClearWithShop',
+        'sideRoomChoice',
+        'relicDraft',
+        'gameOver'
+    ] as const;
+
+    for (const viewport of VIEWPORTS) {
+        for (const fixture of RUN_FIXTURES) {
+            test(`${fixture} at ${viewport.id}`, async ({ page }) => {
+                test.setTimeout(180_000);
+                await page.setViewportSize({ width: viewport.width, height: viewport.height });
+                // The dev-only fixture hook can miss a beat right after a navigation.
+                try {
+                    await openPlayablePathFixture(page, fixture);
+                } catch {
+                    await page.waitForTimeout(1500);
+                    await openPlayablePathFixture(page, fixture);
+                }
+                await page.waitForTimeout(800);
+                expect(await findUnreachableControls(page), `${fixture} @ ${viewport.id}`).toEqual([]);
+
+                /*
+                 * The shop fixture lands on the floor-clear dialog, one click short of the vendor
+                 * — and the vendor is the screen that shipped with its cards clipped away, so
+                 * stopping here would check everything except the thing that broke.
+                 */
+                if (fixture === 'floorClearWithShop') {
+                    await page
+                        .getByRole('dialog', { name: /floor cleared/i })
+                        .getByRole('button', { name: /visit shop/i })
+                        .click({ force: true });
+                    await page.getByTestId('shop-screen').waitFor({ state: 'visible', timeout: 20_000 });
+                    await page.waitForTimeout(700);
+                    expect(await findUnreachableControls(page), `vendor @ ${viewport.id}`).toEqual([]);
+                }
+            });
+        }
     }
 });
