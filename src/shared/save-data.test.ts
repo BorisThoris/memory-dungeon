@@ -306,9 +306,34 @@ describe('save normalization', () => {
         const second = mergeDailyComplete(first, '20260426');
         expect(second.playerStats?.dailyStreakCosmetic).toBe(2);
 
-        const missedDay = mergeDailyComplete(second, '20260428');
-        expect(missedDay.playerStats?.dailyStreakCosmetic).toBe(1);
-        expect(Object.keys(missedDay.playerStats ?? {})).not.toContain('streakFreezeCount');
+        // One missed day is forgiven, and it costs the grace day rather than a currency to buy.
+        const missedOne = mergeDailyComplete(second, '20260428');
+        expect(missedOne.playerStats?.dailyStreakCosmetic).toBe(3);
+        expect(missedOne.playerStats?.dailyStreakGraceAvailable).toBe(false);
+        expect(Object.keys(missedOne.playerStats ?? {})).not.toContain('streakFreezeCount');
+
+        // Missing again with the grace spent starts the streak over, and hands the grace back.
+        const missedTwice = mergeDailyComplete(missedOne, '20260430');
+        expect(missedTwice.playerStats?.dailyStreakCosmetic).toBe(1);
+        expect(missedTwice.playerStats?.dailyStreakGraceAvailable).toBe(true);
+    });
+
+    it('earns the grace day back on a consecutive clear, so every-other-day cannot hold a streak', () => {
+        const day1 = mergeDailyComplete(normalizeSaveData({}), '20260501');
+        const day3 = mergeDailyComplete(day1, '20260503');
+        expect(day3.playerStats?.dailyStreakCosmetic).toBe(2);
+        expect(day3.playerStats?.dailyStreakGraceAvailable).toBe(false);
+
+        const day4 = mergeDailyComplete(day3, '20260504');
+        expect(day4.playerStats?.dailyStreakCosmetic).toBe(3);
+        expect(day4.playerStats?.dailyStreakGraceAvailable).toBe(true);
+    });
+
+    it('starts over when the gap is longer than the one day the grace covers', () => {
+        const day1 = mergeDailyComplete(normalizeSaveData({}), '20260601');
+        const day5 = mergeDailyComplete(day1, '20260605');
+        expect(day5.playerStats?.dailyStreakCosmetic).toBe(1);
+        expect(day5.playerStats?.dailyStreakGraceAvailable).toBe(true);
     });
 
     it('canonicalizes legacy daily date keys and rejects impossible persisted dates', () => {
@@ -783,7 +808,7 @@ describe('save normalization', () => {
         const policies = getDungeonSaveMigrationFieldPolicies();
         const fields = policies.map((policy) => policy.field);
 
-        expect(DUNGEON_SAVE_MIGRATION_POLICY_VERSION).toBe('dng-073-v3');
+        expect(DUNGEON_SAVE_MIGRATION_POLICY_VERSION).toBe('dng-073-v4');
         expect(fields).toEqual(expect.arrayContaining([
             'runHistory',
             'runHistory.shareKey',

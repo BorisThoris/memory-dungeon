@@ -8,7 +8,7 @@ export interface DungeonSaveMigrationFieldPolicy {
     recoveryPolicy: string;
 }
 
-export const DUNGEON_SAVE_MIGRATION_POLICY_VERSION = 'dng-073-v3';
+export const DUNGEON_SAVE_MIGRATION_POLICY_VERSION = 'dng-073-v4';
 
 const DUNGEON_SAVE_MIGRATION_FIELD_POLICIES: readonly DungeonSaveMigrationFieldPolicy[] = [
     {
@@ -54,6 +54,14 @@ const DUNGEON_SAVE_MIGRATION_FIELD_POLICIES: readonly DungeonSaveMigrationFieldP
         owner: 'PlayerStatsPersisted',
         migrationRequiredWhenChanged: true,
         recoveryPolicy: 'Invalid or missing encore history resets to an empty local history.'
+    },
+    {
+        field: 'playerStats.dailyStreakGraceAvailable',
+        scope: 'persisted_save',
+        owner: 'PlayerStatsPersisted',
+        migrationRequiredWhenChanged: true,
+        recoveryPolicy:
+            'A missing or invalid grace flag reads as available, so an older save is forgiven its next missed day rather than punished for having no record of one.'
     },
     {
         field: 'playerStats.relicPickCounts',

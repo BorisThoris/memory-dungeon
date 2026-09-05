@@ -12,7 +12,7 @@ Design context: [GAME_MECHANICS_IDEAS.md](./GAME_MECHANICS_IDEAS.md), [GAME_MECH
 - [x] `[P0]` **A2** — Daily + one mutator (shorter memorize, no destroy, etc.); can follow A1; needs **D2**.
 - [x] `[P1]` **A3** — Daily results: seed id, score, floor, optional share string / clipboard.
 - [x] `[P1]` **A4** — Weekly curated floor: JSON `level` + `seed`; later remote config. *(Menu banner + `starter_pairs`; remote config later.)*
-- [x] `[P2]` **A5** — Optional streak: cosmetic or low-pressure only; avoid punishing misses ([MARKET_SIMILAR_GAMES_RESEARCH.md](./MARKET_SIMILAR_GAMES_RESEARCH.md) §4). *(Cosmetic streak in `playerStats`.)*
+- [x] `[P2]` **A5** — Optional streak: cosmetic or low-pressure only; avoid punishing misses ([MARKET_SIMILAR_GAMES_RESEARCH.md](./MARKET_SIMILAR_GAMES_RESEARCH.md) §4). *(Cosmetic streak in `playerStats`, with one grace day: a single missed UTC day is forgiven and a consecutive clear earns the grace back — see `resolveDailyStreak` in `save-data.ts`.)*
 
 ---
 

@@ -52,7 +52,7 @@ export interface DailyStreakEthicsRow {
 
 export interface DailyStreakEthicsSummary {
     currentStreak: number;
-    freezePolicy: 'not_supported_v1';
+    freezePolicy: 'one_grace_day_v1';
     missedDayRule: string;
     rewardCopy: string;
     utcResetKey: string;
@@ -114,6 +114,11 @@ export const getDailyArchiveSummary = (save: SaveData, nowMs: number = Date.now(
     const ps = save.playerStats;
     const completed = runNonNegativeInteger(ps?.dailiesCompleted);
     const streak = runNonNegativeInteger(ps?.dailyStreakCosmetic);
+    /*
+     * Said on the card, not just enforced in the rule. A forgiveness a player cannot see is one
+     * they still play under pressure to avoid, which is the opposite of what it is for.
+     */
+    const graceLabel = ps?.dailyStreakGraceAvailable === false ? 'grace day spent' : 'grace day held';
     const lastKey = ps?.lastDailyDateKeyUtc ?? null;
     const lastDate = parseDateKeyUtc(lastKey);
     const validLastKey = lastDate ? lastKey : null;
@@ -132,9 +137,14 @@ export const getDailyArchiveSummary = (save: SaveData, nowMs: number = Date.now(
             onlineLeaderboardDeferred: true,
             comparisonString:
                 completed > 0
-                    ? `Last daily ${validLastKey ?? 'unknown'} · ${completed} local clears · streak ${streak}`
+                    ? `Last daily ${validLastKey ?? 'unknown'} · ${completed} local clears · streak ${streak} · ${graceLabel}`
                     : `Today ${todayKey} · no local clear recorded yet`,
-            sourceFields: ['playerStats.dailiesCompleted', 'playerStats.lastDailyDateKeyUtc', 'playerStats.dailyStreakCosmetic']
+            sourceFields: [
+                'playerStats.dailiesCompleted',
+                'playerStats.lastDailyDateKeyUtc',
+                'playerStats.dailyStreakCosmetic',
+                'playerStats.dailyStreakGraceAvailable'
+            ]
         },
         {
             scope: 'weekly',
@@ -159,8 +169,12 @@ export const getDailyArchiveSummary = (save: SaveData, nowMs: number = Date.now(
             description: 'Offline season label for local journaling and future export strings.',
             localOnly: true,
             onlineLeaderboardDeferred: true,
-            comparisonString: `${seasonKey(effectiveDate)} · streak ${streak} · online boards deferred`,
-            sourceFields: ['playerStats.dailyStreakCosmetic', 'docs/LEADERBOARDS_DEFERRAL.md']
+            comparisonString: `${seasonKey(effectiveDate)} · streak ${streak} · ${graceLabel} · online boards deferred`,
+            sourceFields: [
+                'playerStats.dailyStreakCosmetic',
+                'playerStats.dailyStreakGraceAvailable',
+                'docs/LEADERBOARDS_DEFERRAL.md'
+            ]
         }
     ];
     return {
@@ -264,7 +278,7 @@ export const getDailyStreakEthicsRows = (save: SaveData, nowMs: number = Date.no
             id: 'missed_day',
             label: 'Missed-day rule',
             value: summary.missedDayRule,
-            description: 'Missed days reset the cosmetic streak; no penalty blocks Classic or core progression.',
+            description: 'One missed day is forgiven; a longer gap starts the streak again. No penalty blocks Classic or core progression.',
             ethicalTone: 'low_pressure',
             localOnly: true
         },
@@ -284,11 +298,13 @@ export const getDailyStreakEthicsRow = (save: SaveData, nowMs: number = Date.now
     const state = getDailyStreakEthicsState(save, todayKey);
     return {
         currentStreak: state.currentStreak,
-        freezePolicy: 'not_supported_v1',
+        freezePolicy: 'one_grace_day_v1',
         missedDayRule:
-            state.missedDayBehavior === 'reset_to_one_on_next_completion'
-                ? 'Missed days reset the cosmetic streak only; no core fairness is lost.'
-                : 'Optional UTC streak; no pressure or penalty.',
+            state.missedDayBehavior === 'forgiven_by_grace_day'
+                ? 'One missed day is forgiven; the streak is holding.'
+                : state.missedDayBehavior === 'reset_to_one_on_next_completion'
+                  ? 'The streak starts again on the next clear; no core fairness is lost.'
+                  : 'Optional UTC streak; one missed day is forgiven and no penalty applies.',
         rewardCopy: 'Rewards are cosmetic/profile motivation only, never required for core run fairness.',
         utcResetKey: state.nextResetUtcKey
     };

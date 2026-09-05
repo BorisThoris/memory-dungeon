@@ -130,7 +130,7 @@ describe('REG-083 daily weekly season archive', () => {
         expect(summary.lastDailyDateKeyUtc).toBeNull();
         expect(summary.rows[0]).toMatchObject({
             archiveKey: '20260228',
-            comparisonString: 'Last daily unknown · 1 local clears · streak 2',
+            comparisonString: 'Last daily unknown · 1 local clears · streak 2 · grace day held',
             key: '20260228'
         });
         expect(summary.rows[1]?.archiveKey).toBe(weekKeyForDaily('20260228'));
@@ -193,8 +193,8 @@ describe('REG-083 daily weekly season archive', () => {
 
         const row = getDailyStreakEthicsRow(save, Date.UTC(2026, 3, 26, 1));
         expect(row.currentStreak).toBe(2);
-        expect(row.freezePolicy).toBe('not_supported_v1');
-        expect(row.missedDayRule).toMatch(/optional|reset/i);
+        expect(row.freezePolicy).toBe('one_grace_day_v1');
+        expect(row.missedDayRule).toMatch(/forgiven|optional|starts again/i);
         expect(row.rewardCopy).toMatch(/cosmetic/i);
         expect(row.utcResetKey).toBe('20260426');
     });

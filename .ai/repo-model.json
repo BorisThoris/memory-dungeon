@@ -5,11 +5,11 @@
     "name": "memory-dungeon",
     "trackedFileCount": 2520,
     "codeFileCount": 981,
-    "exportedSymbolCount": 3548,
+    "exportedSymbolCount": 3549,
     "contentItemCount": 63,
     "mechanicCount": 136,
     "stateFieldCount": 144,
-    "relationshipCount": 10442
+    "relationshipCount": 10443
   },
   "inventory": [
     {
@@ -807,8 +807,8 @@
     {
       "path": "docs/HOOK_AND_DEPTH_TASKS.md",
       "category": "documentation",
-      "bytes": 7313,
-      "sha256": "05cdff1426678cfb239009f0835615d150aa7151391f2985eae63e4cb1b94700"
+      "bytes": 7462,
+      "sha256": "4eb27961281c5341a4dde89ab314a19f675afc274d4fcfec5b44f485a8cef98a"
     },
     {
       "path": "docs/IDEAS_AUDITS.md",
@@ -10551,8 +10551,8 @@
     {
       "path": "src/shared/contracts.ts",
       "category": "source",
-      "bytes": 48746,
-      "sha256": "ee21ddb55a4f42842738ce2a97bf5d5e99bdfd98fafac065f32e4a59202bcfbb"
+      "bytes": 49074,
+      "sha256": "4c720ccad4f588a540c9215bde021292a5717709b464172b7aa861e2e6db9427"
     },
     {
       "path": "src/shared/copy-locality.test.ts",
@@ -10611,14 +10611,14 @@
     {
       "path": "src/shared/daily-archive.test.ts",
       "category": "test",
-      "bytes": 7573,
-      "sha256": "41e39cae24c477ba43cfa681983771bfc405ca2c00b8019c586f9a3b7ca097a1"
+      "bytes": 7607,
+      "sha256": "3682fe079c8c582468612df5ce71d06e7c4de64358e33bb9affcd93bb1dae086"
     },
     {
       "path": "src/shared/daily-archive.ts",
       "category": "source",
-      "bytes": 11958,
-      "sha256": "38d585ed9572535a52aa420a29a11b66c306eb2a4b0b71cd9517ae074872d838"
+      "bytes": 12716,
+      "sha256": "a827521ccf1e045a0f3ddc8d87b2db601a7bd4004b496b007bd233cf2d0c48a6"
     },
     {
       "path": "src/shared/daily-determinism.test.ts",
@@ -10917,8 +10917,8 @@
     {
       "path": "src/shared/dungeon-save-migration.ts",
       "category": "source",
-      "bytes": 7370,
-      "sha256": "a4f1975982663f15f8adc28e14d18dda6924204bc5b5b84ae1033bfddb42eec2"
+      "bytes": 7744,
+      "sha256": "326c8f84fd575ad5f4689277800ed2ad60670ff91cc4b0b9e1b4c2fbad72191e"
     },
     {
       "path": "src/shared/dungeon-scout-rules.test.ts",
@@ -12393,14 +12393,14 @@
     {
       "path": "src/shared/save-data.test.ts",
       "category": "test",
-      "bytes": 35824,
-      "sha256": "e6b6f8a31b358ae272c68df575d9ba923b8659d5abb1a08ce5b231d8ade5a7d4"
+      "bytes": 37264,
+      "sha256": "2c2dad167014d2804c9ae037d9086c6e0ebbe89421a6e43878da143f3c4f083f"
     },
     {
       "path": "src/shared/save-data.ts",
       "category": "source",
-      "bytes": 34465,
-      "sha256": "81eebda607550ee17d9f699e9b6feee8a43401ef4b81e87e4c2929e7ee91d122"
+      "bytes": 37025,
+      "sha256": "121d529f8ed8745435b6908c83dd38f3f4808e6ce4c6ef1e55f0b5373117db06"
     },
     {
       "path": "src/shared/save-field-policy.test.ts",
@@ -25674,7 +25674,7 @@
       "path": "src/shared/contracts.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1255,
+      "lineCount": 1261,
       "imports": [],
       "exports": [
         "symbol:src/shared/contracts.ts#AchievementId",
@@ -26211,7 +26211,7 @@
       "path": "src/shared/daily-archive.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 296,
+      "lineCount": 312,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/run-number-guards.ts",
@@ -27254,7 +27254,7 @@
       "path": "src/shared/dungeon-save-migration.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 186,
+      "lineCount": 194,
       "imports": [],
       "exports": [
         "symbol:src/shared/dungeon-save-migration.ts#DUNGEON_SAVE_MIGRATION_POLICY_VERSION",
@@ -32709,7 +32709,7 @@
       "path": "src/shared/save-data.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 828,
+      "lineCount": 853,
       "imports": [
         "file:src/shared/builtin-puzzles.ts",
         "file:src/shared/contracts.ts",
@@ -32727,7 +32727,7 @@
       "path": "src/shared/save-data.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 835,
+      "lineCount": 886,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/cosmetic-ids.ts",
@@ -32765,6 +32765,7 @@
         "symbol:src/shared/save-data.ts#normalizeUnknownSettings",
         "symbol:src/shared/save-data.ts#normalizeUnknownSettingsOrThrow",
         "symbol:src/shared/save-data.ts#RelicPickCountRow",
+        "symbol:src/shared/save-data.ts#resolveDailyStreak",
         "symbol:src/shared/save-data.ts#saveDataBoundarySchema",
         "symbol:src/shared/save-data.ts#SETTINGS_NUMERIC_RANGES",
         "symbol:src/shared/save-data.ts#settingsBoundarySchema"
@@ -46815,8 +46816,8 @@
       "name": "AchievementUnlockResult",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1202,
-      "endLine": 1204
+      "line": 1208,
+      "endLine": 1210
     },
     {
       "id": "symbol:src/shared/contracts.ts#BoardPresentationMode",
@@ -46935,8 +46936,8 @@
       "name": "CrashReportSummary",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1210,
-      "endLine": 1215
+      "line": 1216,
+      "endLine": 1221
     },
     {
       "id": "symbol:src/shared/contracts.ts#CURSED_LAST_BONUS_SCORE",
@@ -46975,8 +46976,8 @@
       "name": "DesktopApi",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1228,
-      "endLine": 1254
+      "line": 1234,
+      "endLine": 1260
     },
     {
       "id": "symbol:src/shared/contracts.ts#DisplayMode",
@@ -47584,7 +47585,7 @@
       "kind": "interface",
       "file": "src/shared/contracts.ts",
       "line": 1137,
-      "endLine": 1150
+      "endLine": 1156
     },
     {
       "id": "symbol:src/shared/contracts.ts#PuzzleCompletionRecord",
@@ -47687,16 +47688,16 @@
       "name": "RendererErrorKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1218,
-      "endLine": 1218
+      "line": 1224,
+      "endLine": 1224
     },
     {
       "id": "symbol:src/shared/contracts.ts#RendererErrorReport",
       "name": "RendererErrorReport",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1221,
-      "endLine": 1226
+      "line": 1227,
+      "endLine": 1232
     },
     {
       "id": "symbol:src/shared/contracts.ts#RESOLVE_DELAY_MULTIPLIER_MIN",
@@ -47727,16 +47728,16 @@
       "name": "RichPresenceState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1195,
-      "endLine": 1199
+      "line": 1201,
+      "endLine": 1205
     },
     {
       "id": "symbol:src/shared/contracts.ts#RichPresenceToken",
       "name": "RichPresenceToken",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1193,
-      "endLine": 1193
+      "line": 1199,
+      "endLine": 1199
     },
     {
       "id": "symbol:src/shared/contracts.ts#RouteCardKind",
@@ -47823,8 +47824,8 @@
       "name": "RunHistoryRecord",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1157,
-      "endLine": 1166
+      "line": 1163,
+      "endLine": 1172
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunShopItemCategory",
@@ -47903,8 +47904,8 @@
       "name": "SaveData",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1168,
-      "endLine": 1187
+      "line": 1174,
+      "endLine": 1193
     },
     {
       "id": "symbol:src/shared/contracts.ts#SCHOLAR_STYLE_FLOOR_BONUS_SCORE",
@@ -48319,24 +48320,24 @@
       "name": "buildDailyArchiveShareString",
       "kind": "value",
       "file": "src/shared/daily-archive.ts",
-      "line": 181,
-      "endLine": 191
+      "line": 195,
+      "endLine": 205
     },
     {
       "id": "symbol:src/shared/daily-archive.ts#buildDailyResultsLoopRows",
       "name": "buildDailyResultsLoopRows",
       "kind": "value",
       "file": "src/shared/daily-archive.ts",
-      "line": 207,
-      "endLine": 239
+      "line": 221,
+      "endLine": 253
     },
     {
       "id": "symbol:src/shared/daily-archive.ts#buildDailyResultsShareString",
       "name": "buildDailyResultsShareString",
       "kind": "value",
       "file": "src/shared/daily-archive.ts",
-      "line": 193,
-      "endLine": 205
+      "line": 207,
+      "endLine": 219
     },
     {
       "id": "symbol:src/shared/daily-archive.ts#dailyArchiveDateKeyForTimestamp",
@@ -48399,8 +48400,8 @@
       "name": "getDailyArchiveRows",
       "kind": "value",
       "file": "src/shared/daily-archive.ts",
-      "line": 178,
-      "endLine": 179
+      "line": 192,
+      "endLine": 193
     },
     {
       "id": "symbol:src/shared/daily-archive.ts#getDailyArchiveSummary",
@@ -48408,31 +48409,31 @@
       "kind": "value",
       "file": "src/shared/daily-archive.ts",
       "line": 113,
-      "endLine": 176
+      "endLine": 190
     },
     {
       "id": "symbol:src/shared/daily-archive.ts#getDailyResultsLoopRows",
       "name": "getDailyResultsLoopRows",
       "kind": "value",
       "file": "src/shared/daily-archive.ts",
-      "line": 241,
-      "endLine": 241
+      "line": 255,
+      "endLine": 255
     },
     {
       "id": "symbol:src/shared/daily-archive.ts#getDailyStreakEthicsRow",
       "name": "getDailyStreakEthicsRow",
       "kind": "value",
       "file": "src/shared/daily-archive.ts",
-      "line": 282,
-      "endLine": 295
+      "line": 296,
+      "endLine": 311
     },
     {
       "id": "symbol:src/shared/daily-archive.ts#getDailyStreakEthicsRows",
       "name": "getDailyStreakEthicsRows",
       "kind": "value",
       "file": "src/shared/daily-archive.ts",
-      "line": 243,
-      "endLine": 280
+      "line": 257,
+      "endLine": 294
     },
     {
       "id": "symbol:src/shared/daily-archive.ts#seasonKeyForDaily",
@@ -50319,16 +50320,16 @@
       "name": "getDungeonSaveMigrationFieldPolicies",
       "kind": "value",
       "file": "src/shared/dungeon-save-migration.ts",
-      "line": 179,
-      "endLine": 180
+      "line": 187,
+      "endLine": 188
     },
     {
       "id": "symbol:src/shared/dungeon-save-migration.ts#shouldDungeonSaveFieldRequireMigration",
       "name": "shouldDungeonSaveFieldRequireMigration",
       "kind": "value",
       "file": "src/shared/dungeon-save-migration.ts",
-      "line": 182,
-      "endLine": 185
+      "line": 190,
+      "endLine": 193
     },
     {
       "id": "symbol:src/shared/dungeon-scout-rules.ts#applyFindableScoutGlint",
@@ -60207,24 +60208,24 @@
       "name": "ACHIEVEMENT_IDS",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 95,
-      "endLine": 116
+      "line": 97,
+      "endLine": 118
     },
     {
       "id": "symbol:src/shared/save-data.ts#createAchievementState",
       "name": "createAchievementState",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 118,
-      "endLine": 125
+      "line": 120,
+      "endLine": 127
     },
     {
       "id": "symbol:src/shared/save-data.ts#createDefaultSaveData",
       "name": "createDefaultSaveData",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 470,
-      "endLine": 482
+      "line": 473,
+      "endLine": 485
     },
     {
       "id": "symbol:src/shared/save-data.ts#DailyStreakEthicsState",
@@ -60232,7 +60233,7 @@
       "kind": "interface",
       "file": "src/shared/save-data.ts",
       "line": 33,
-      "endLine": 41
+      "endLine": 43
     },
     {
       "id": "symbol:src/shared/save-data.ts#DailyStreakFreezePolicy",
@@ -60247,160 +60248,168 @@
       "name": "DEFAULT_SETTINGS",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 43,
-      "endLine": 67
+      "line": 45,
+      "endLine": 69
     },
     {
       "id": "symbol:src/shared/save-data.ts#getDailyStreakEthicsState",
       "name": "getDailyStreakEthicsState",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 744,
-      "endLine": 766
+      "line": 785,
+      "endLine": 817
     },
     {
       "id": "symbol:src/shared/save-data.ts#getRelicPickCountRows",
       "name": "getRelicPickCountRows",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 238,
-      "endLine": 244
+      "line": 241,
+      "endLine": 247
     },
     {
       "id": "symbol:src/shared/save-data.ts#getRelicPickTotal",
       "name": "getRelicPickTotal",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 246,
-      "endLine": 247
+      "line": 249,
+      "endLine": 250
     },
     {
       "id": "symbol:src/shared/save-data.ts#mergeBestFloorNoPowers",
       "name": "mergeBestFloorNoPowers",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 802,
-      "endLine": 813
+      "line": 853,
+      "endLine": 864
     },
     {
       "id": "symbol:src/shared/save-data.ts#mergeDailyComplete",
       "name": "mergeDailyComplete",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 722,
-      "endLine": 742
+      "line": 758,
+      "endLine": 783
     },
     {
       "id": "symbol:src/shared/save-data.ts#mergeEncoreFromRun",
       "name": "mergeEncoreFromRun",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 815,
-      "endLine": 822
+      "line": 866,
+      "endLine": 873
     },
     {
       "id": "symbol:src/shared/save-data.ts#mergePuzzleCompletion",
       "name": "mergePuzzleCompletion",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 768,
-      "endLine": 800
+      "line": 819,
+      "endLine": 851
     },
     {
       "id": "symbol:src/shared/save-data.ts#mergeRelicPickStat",
       "name": "mergeRelicPickStat",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 824,
-      "endLine": 834
+      "line": 875,
+      "endLine": 885
     },
     {
       "id": "symbol:src/shared/save-data.ts#metaRelicDraftExtraPerMilestoneFromSave",
       "name": "metaRelicDraftExtraPerMilestoneFromSave",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 467,
-      "endLine": 468
+      "line": 470,
+      "endLine": 471
     },
     {
       "id": "symbol:src/shared/save-data.ts#normalizeRunSummary",
       "name": "normalizeRunSummary",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 367,
-      "endLine": 464
+      "line": 370,
+      "endLine": 467
     },
     {
       "id": "symbol:src/shared/save-data.ts#normalizeSaveData",
       "name": "normalizeSaveData",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 669,
-      "endLine": 720
+      "line": 672,
+      "endLine": 725
     },
     {
       "id": "symbol:src/shared/save-data.ts#normalizeUnknownSaveData",
       "name": "normalizeUnknownSaveData",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 637,
-      "endLine": 640
+      "line": 640,
+      "endLine": 643
     },
     {
       "id": "symbol:src/shared/save-data.ts#normalizeUnknownSaveDataOrThrow",
       "name": "normalizeUnknownSaveDataOrThrow",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 642,
-      "endLine": 654
+      "line": 645,
+      "endLine": 657
     },
     {
       "id": "symbol:src/shared/save-data.ts#normalizeUnknownSettings",
       "name": "normalizeUnknownSettings",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 656,
-      "endLine": 659
+      "line": 659,
+      "endLine": 662
     },
     {
       "id": "symbol:src/shared/save-data.ts#normalizeUnknownSettingsOrThrow",
       "name": "normalizeUnknownSettingsOrThrow",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 661,
-      "endLine": 667
+      "line": 664,
+      "endLine": 670
     },
     {
       "id": "symbol:src/shared/save-data.ts#RelicPickCountRow",
       "name": "RelicPickCountRow",
       "kind": "interface",
       "file": "src/shared/save-data.ts",
-      "line": 233,
-      "endLine": 236
+      "line": 236,
+      "endLine": 239
+    },
+    {
+      "id": "symbol:src/shared/save-data.ts#resolveDailyStreak",
+      "name": "resolveDailyStreak",
+      "kind": "value",
+      "file": "src/shared/save-data.ts",
+      "line": 736,
+      "endLine": 756
     },
     {
       "id": "symbol:src/shared/save-data.ts#saveDataBoundarySchema",
       "name": "saveDataBoundarySchema",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 514,
-      "endLine": 529
+      "line": 517,
+      "endLine": 532
     },
     {
       "id": "symbol:src/shared/save-data.ts#SETTINGS_NUMERIC_RANGES",
       "name": "SETTINGS_NUMERIC_RANGES",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 87,
-      "endLine": 93
+      "line": 89,
+      "endLine": 95
     },
     {
       "id": "symbol:src/shared/save-data.ts#settingsBoundarySchema",
       "name": "settingsBoundarySchema",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 490,
-      "endLine": 510
+      "line": 493,
+      "endLine": 513
     },
     {
       "id": "symbol:src/shared/save-location.ts#formatSteamCloudRules",
@@ -94205,6 +94214,12 @@
       "id": "exports:src/shared/save-data.ts->symbol:src/shared/save-data.ts#RelicPickCountRow",
       "source": "file:src/shared/save-data.ts",
       "target": "symbol:src/shared/save-data.ts#RelicPickCountRow",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/save-data.ts->symbol:src/shared/save-data.ts#resolveDailyStreak",
+      "source": "file:src/shared/save-data.ts",
+      "target": "symbol:src/shared/save-data.ts#resolveDailyStreak",
       "kind": "exports"
     },
     {

@@ -28,12 +28,14 @@ import { normalizeSessionStats } from './session-stats-rules';
 import { evaluateSaveMigrationGate, isRecognizedSaveSchemaVersion } from './version-gate';
 import { normalizeGameplayJournalSnapshot } from './gameplay-journal';
 
-export type DailyStreakFreezePolicy = 'not_supported';
+export type DailyStreakFreezePolicy = 'one_grace_day';
 
 export interface DailyStreakEthicsState {
     currentStreak: number;
     nextResetUtcKey: string;
-    missedDayBehavior: 'reset_to_one_on_next_completion' | 'no_clear_recorded_yet';
+    missedDayBehavior: 'reset_to_one_on_next_completion' | 'forgiven_by_grace_day' | 'no_clear_recorded_yet';
+    /** Whether the one grace day is unspent right now. */
+    graceAvailable: boolean;
     freezePolicy: DailyStreakFreezePolicy;
     rewardLimit: 'cosmetic_and_meta_only';
     tone: 'friendly_no_shame';
@@ -131,6 +133,7 @@ const defaultPlayerStats = (): PlayerStatsPersisted => ({
     dailiesCompleted: 0,
     lastDailyDateKeyUtc: null,
     dailyStreakCosmetic: 0,
+    dailyStreakGraceAvailable: true,
     relicPickCounts: {},
     encorePairKeysLastRun: [],
     puzzleCompletions: createPuzzleCompletionMap(),
@@ -703,6 +706,8 @@ export const normalizeSaveData = (input?: SaveDataNormalizationInput | null): Sa
             bestFloorNoPowers: finiteNonNegativeInteger(psIn.bestFloorNoPowers, playerStatsDefaults.bestFloorNoPowers),
             dailiesCompleted: dailiesCount,
             lastDailyDateKeyUtc: normalizeDailyDateKeyUtc(psIn.lastDailyDateKeyUtc),
+            dailyStreakGraceAvailable:
+                typeof psIn.dailyStreakGraceAvailable === 'boolean' ? psIn.dailyStreakGraceAvailable : true,
             dailyStreakCosmetic: finiteNonNegativeInteger(
                 psIn.dailyStreakCosmetic,
                 playerStatsDefaults.dailyStreakCosmetic
@@ -719,14 +724,49 @@ export const normalizeSaveData = (input?: SaveDataNormalizationInput | null): Sa
     };
 };
 
+/**
+ * Where a daily clear leaves the streak, and the grace day.
+ *
+ * The project's own research says a daily streak should carry small rewards and forgive a miss,
+ * and this one did not: one skipped UTC day dropped it straight back to 1, which is the pressure
+ * the design notes set out to avoid. So a single gap is forgiven while the grace day is unspent,
+ * and a clear on a consecutive day earns it back — a real miss costs nothing, and clearing every
+ * other day still cannot hold a streak open forever, because the grace never refills that way.
+ */
+export const resolveDailyStreak = ({
+    completedDateKeyUtc,
+    graceAvailable,
+    previousDateKeyUtc,
+    streak
+}: {
+    completedDateKeyUtc: string;
+    graceAvailable: boolean;
+    previousDateKeyUtc: string | null;
+    streak: number;
+}): { streak: number; graceAvailable: boolean; usedGrace: boolean } => {
+    const yesterday = utcDateKeyMinusOneDay(completedDateKeyUtc);
+    if (previousDateKeyUtc === yesterday) {
+        return { streak: streak + 1, graceAvailable: true, usedGrace: false };
+    }
+    if (graceAvailable && previousDateKeyUtc !== null && previousDateKeyUtc === utcDateKeyMinusOneDay(yesterday)) {
+        return { streak: streak + 1, graceAvailable: false, usedGrace: true };
+    }
+    // A longer gap, or a gap with the grace already spent: start again, with the grace restored.
+    return { streak: 1, graceAvailable: true, usedGrace: false };
+};
+
 export const mergeDailyComplete = (save: SaveData, completedDateKeyUtc: string): SaveData => {
     const ps = save.playerStats ?? defaultPlayerStats();
     if (ps.lastDailyDateKeyUtc === completedDateKeyUtc) {
         return save;
     }
     const prev = ps.lastDailyDateKeyUtc;
-    const streak =
-        prev === utcDateKeyMinusOneDay(completedDateKeyUtc) ? ps.dailyStreakCosmetic + 1 : 1;
+    const next = resolveDailyStreak({
+        completedDateKeyUtc,
+        graceAvailable: ps.dailyStreakGraceAvailable !== false,
+        previousDateKeyUtc: prev,
+        streak: ps.dailyStreakCosmetic
+    });
     const newDailies = ps.dailiesCompleted + 1;
 
     return normalizeSaveData({
@@ -735,7 +775,8 @@ export const mergeDailyComplete = (save: SaveData, completedDateKeyUtc: string):
             ...ps,
             dailiesCompleted: newDailies,
             lastDailyDateKeyUtc: completedDateKeyUtc,
-            dailyStreakCosmetic: streak,
+            dailyStreakCosmetic: next.streak,
+            dailyStreakGraceAvailable: next.graceAvailable,
             relicShrineExtraPickUnlocked: ps.relicShrineExtraPickUnlocked === true
         }
     });
@@ -746,22 +787,32 @@ export const getDailyStreakEthicsState = (save: SaveData, todayDateKeyUtc: strin
     const alreadyCompletedToday = ps.lastDailyDateKeyUtc === todayDateKeyUtc;
     const continuedFromYesterday = ps.lastDailyDateKeyUtc === utcDateKeyMinusOneDay(todayDateKeyUtc);
     const noClearYet = ps.lastDailyDateKeyUtc == null || ps.dailiesCompleted <= 0;
+    const graceAvailable = ps.dailyStreakGraceAvailable !== false;
+    // One day back from yesterday: the gap the grace day covers.
+    const withinGrace = ps.lastDailyDateKeyUtc === utcDateKeyMinusOneDay(utcDateKeyMinusOneDay(todayDateKeyUtc));
     const missedDayBehavior: DailyStreakEthicsState['missedDayBehavior'] =
         noClearYet || alreadyCompletedToday || continuedFromYesterday
             ? 'no_clear_recorded_yet'
-            : 'reset_to_one_on_next_completion';
+            : withinGrace && graceAvailable
+              ? 'forgiven_by_grace_day'
+              : 'reset_to_one_on_next_completion';
 
     return {
         currentStreak: ps.dailyStreakCosmetic,
         nextResetUtcKey: todayDateKeyUtc,
         missedDayBehavior,
-        freezePolicy: 'not_supported',
+        graceAvailable,
+        freezePolicy: 'one_grace_day',
         rewardLimit: 'cosmetic_and_meta_only',
         tone: 'friendly_no_shame',
         copy:
-            missedDayBehavior === 'reset_to_one_on_next_completion'
-                ? 'Missed days simply reset the cosmetic streak on the next clear. No core run fairness is lost.'
-                : 'Daily streaks are optional local motivation. Clear today before UTC reset if you want to extend it.'
+            missedDayBehavior === 'forgiven_by_grace_day'
+                ? 'You missed a day, and the streak is holding. Clear today and it carries on.'
+                : missedDayBehavior === 'reset_to_one_on_next_completion'
+                  ? 'The streak starts again on your next clear. No core run fairness is lost.'
+                  : graceAvailable
+                    ? 'Optional local motivation. One missed day is forgiven; clear before the UTC reset to extend it.'
+                    : 'Optional local motivation. The grace day is spent — a clear on a consecutive day earns it back.'
     };
 };
 

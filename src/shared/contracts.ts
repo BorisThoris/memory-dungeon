@@ -1140,6 +1140,12 @@ export interface PlayerStatsPersisted {
     lastDailyDateKeyUtc: string | null;
     /** Cosmetic streak: consecutive UTC days with at least one daily completed. */
     dailyStreakCosmetic: number;
+    /**
+     * Whether the streak's one grace day is unspent. A single missed UTC day is forgiven while it
+     * is, and clearing on a consecutive day earns it back — so a genuine miss costs nothing and
+     * clearing every other day still cannot hold a streak open forever.
+     */
+    dailyStreakGraceAvailable?: boolean;
     relicPickCounts: Partial<Record<RelicId, number>>;
     /** REG-022: local puzzle completion records by builtin/import puzzle id. */
     puzzleCompletions?: Record<string, PuzzleCompletionRecord>;
