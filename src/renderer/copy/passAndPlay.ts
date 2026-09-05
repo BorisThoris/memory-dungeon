@@ -15,6 +15,8 @@ export const PASS_AND_PLAY_COPY = {
     seatShortLabel: (seatNumber: number): string => `P${seatNumber}`,
     /** What a screen reader reads for a seat, so the short form costs nothing. */
     seatAnnouncement: (label: string, score: number): string => `${label}, ${score.toLocaleString()}`,
+    /** How far through the agreed length the table is, so nobody has to remember. */
+    floorProgress: (level: number, floors: number): string => `${level} / ${floors}`,
     /** Label over the seat scores in the HUD. */
     seatsLabel: 'Players',
     /** Spoken by the live region when the device changes hands. */

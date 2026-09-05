@@ -14,6 +14,7 @@ import {
     type LevelCompleteContinuationSurfaceResult
 } from './levelCompleteSurfaceState';
 import { createDeadInterludeGameOverRun } from './sideRoomSurfaceState';
+import { isPassAndPlayFinalFloor, isPassAndPlayRun } from '../../shared/pass-and-play-rules';
 
 type ContinuationPatch = Exclude<LevelCompleteContinuationSurfaceResult, { kind: 'gameOver' }>['patch'];
 
@@ -45,6 +46,18 @@ const routeDeadInterludeRunToGameOver = (
     return true;
 };
 
+const routePassAndPlayFinalFloorToGameOver = (
+    run: RunState,
+    applyResolvedRun: (run: RunState) => void
+): boolean => {
+    const clearedLevel = run.lastLevelResult?.level ?? run.board?.level ?? 0;
+    if (!isPassAndPlayRun(run.passAndPlay) || !isPassAndPlayFinalFloor(clearedLevel)) {
+        return false;
+    }
+    applyResolvedRun({ ...run, status: 'gameOver' });
+    return true;
+};
+
 const applyContinuationResult = (
     continuation: LevelCompleteContinuationSurfaceResult,
     deps: LevelCompleteContinuationExecutorDeps
@@ -69,6 +82,20 @@ export const executeContinueToNextLevel = (deps: LevelCompleteContinuationExecut
     }
 
     if (routeDeadInterludeRunToGameOver(run, deps.applyResolvedRun)) {
+        return;
+    }
+
+    /*
+     * A shared game is a contest of an agreed length, not an endless descent: once the last floor
+     * is cleared the table is done and the standings decide it. Ending here rather than inside the
+     * turn rules keeps the board, the floors and the lives exactly as a solo run has them — the
+     * only thing multiplayer changes is when the run stops.
+     *
+     * Deliberately before the relic-offer guard below. The agreed length lands on a milestone
+     * floor, and offering a table a relic draft for a run that is already over would be asking
+     * them to build for floors nobody is going to play.
+     */
+    if (routePassAndPlayFinalFloorToGameOver(run, deps.applyResolvedRun)) {
         return;
     }
 

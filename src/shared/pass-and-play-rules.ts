@@ -20,6 +20,24 @@ import type { PassAndPlaySeat, PassAndPlayState } from './contracts';
 
 export type { PassAndPlaySeat, PassAndPlayState };
 
+/**
+ * How many floors a shared game runs for.
+ *
+ * A solo run is endless by design: it ends when the player runs out of lives, and the score is how
+ * far they got. That is the wrong shape for people sitting down together. A table wants a contest
+ * with a known length — everyone gets the same amount of board, the highest total wins, and the
+ * game is over in one sitting rather than whenever the shared lives happen to run out.
+ *
+ * Three is short enough to play again immediately, which is what a table actually does, and long
+ * enough that one lucky floor does not decide it. It is one number rather than a range because a
+ * range whose other values nothing offers is content nobody can reach.
+ */
+export const PASS_AND_PLAY_FLOORS = 3;
+
+/** True once the floor just cleared was the last one the table agreed to play. */
+export const isPassAndPlayFinalFloor = (level: number): boolean =>
+    Number.isFinite(level) && level >= PASS_AND_PLAY_FLOORS;
+
 /** Two people is the point; four is where a single device stops being fair to the person waiting. */
 export const PASS_AND_PLAY_MIN_SEATS = 2;
 export const PASS_AND_PLAY_MAX_SEATS = 4;

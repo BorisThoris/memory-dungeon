@@ -1,4 +1,5 @@
 import { isModeAvailableInBuild } from './content-lock-state';
+import { PASS_AND_PLAY_FLOORS } from './pass-and-play-rules';
 /**
  * Product-facing run mode catalog for Choose Your Path (ordered, stable ids).
  * Kept separate from `GameMode` in contracts — entries may share an underlying mode with flags.
@@ -105,7 +106,7 @@ export const RUN_MODE_CATALOG: readonly RunModeDefinition[] = [
         id: 'pass_and_play',
         title: 'Pass and Play',
         shortDescription:
-            'Two to four people, one device. Find a pair and you go again; miss and it is the next player\u2019s turn.',
+            `Two to four people, one device, ${PASS_AND_PLAY_FLOORS} floors. Find a pair and you go again; miss and it is the next player\u2019s turn.`,
         startContract: {
             label: 'Start signal',
             signal: 'The HUD shows a score per player and says whose turn it is.',
@@ -116,7 +117,7 @@ export const RUN_MODE_CATALOG: readonly RunModeDefinition[] = [
             'The dungeon everyone already knows, played around one screen \u2014 the rule is the one every table already knows.',
         eligibilityNote:
             'A shared game does not set your personal best or write a run to your history: the score on screen belongs to the table, not to this save.',
-        outcomeSummary: 'The higher score wins, and a draw is reported as a draw.',
+        outcomeSummary: `Everyone plays the same ${PASS_AND_PLAY_FLOORS} floors; the higher score wins, and a draw is reported as a draw.`,
         availabilityDetail:
             'Offline and local. It needs no account, no second device, and nothing online \u2014 the same board, taking turns.',
         group: 'core',

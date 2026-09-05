@@ -9,7 +9,7 @@ import styles from './RunShell.module.css';
 import type { PerfectMemoryStatus } from '../../shared/perfect-memory-status';
 import { PERFECT_MEMORY_COPY, RUN_SHELL_LABELS } from '../copy/runDialogCopy';
 import { PASS_AND_PLAY_COPY } from '../copy/passAndPlay';
-import { isPassAndPlayRun } from '../../shared/pass-and-play-rules';
+import { isPassAndPlayRun, PASS_AND_PLAY_FLOORS } from '../../shared/pass-and-play-rules';
 
 /**
  * The HTML layer over the 3D board during a run.
@@ -115,8 +115,12 @@ const RunShell = ({
                     )}
                 </p>
                 <div className={styles.stats} role="group" aria-label="Run stats">
+                {/* A shared game runs to an agreed number of floors, so the floor count is a
+                    progress reading rather than a depth reading. */}
                 <Stat label="Floor" testId="hud-floor">
-                    {String(run.board?.level ?? 1)}
+                    {isPassAndPlayRun(run.passAndPlay)
+                        ? PASS_AND_PLAY_COPY.floorProgress(run.board?.level ?? 1, PASS_AND_PLAY_FLOORS)
+                        : String(run.board?.level ?? 1)}
                 </Stat>
                 <Stat label="Lives" testId="hud-lives">
                     {/* role="img": every heart inside is aria-hidden, so the label is the only text a screen

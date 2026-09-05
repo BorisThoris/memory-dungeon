@@ -4,7 +4,9 @@ import {
     applyResolvedTurnToPassAndPlay,
     createPassAndPlayState,
     getActiveSeat,
+    isPassAndPlayFinalFloor,
     isPassAndPlayRun,
+    PASS_AND_PLAY_FLOORS,
     PASS_AND_PLAY_MAX_SEATS,
     PASS_AND_PLAY_MIN_SEATS,
     passAndPlaySeatCounts,
@@ -33,6 +35,24 @@ describe('createPassAndPlayState', () => {
     it('gives every seat a distinct id, because the HUD keys on it', () => {
         const ids = createPassAndPlayState(4).seats.map((seat) => seat.id);
         expect(new Set(ids).size).toBe(4);
+    });
+});
+
+describe('the agreed length', () => {
+    it('runs for a stated number of floors rather than until the lives run out', () => {
+        // A solo run is endless by design. A table wants a contest it can finish in one sitting,
+        // with the same amount of board for everyone.
+        expect(PASS_AND_PLAY_FLOORS).toBeGreaterThan(1);
+        expect(isPassAndPlayFinalFloor(PASS_AND_PLAY_FLOORS)).toBe(true);
+        expect(isPassAndPlayFinalFloor(PASS_AND_PLAY_FLOORS - 1)).toBe(false);
+    });
+
+    it('treats anything past the agreed length as finished too, not as another floor', () => {
+        expect(isPassAndPlayFinalFloor(PASS_AND_PLAY_FLOORS + 5)).toBe(true);
+    });
+
+    it('does not end on a level it cannot read', () => {
+        expect(isPassAndPlayFinalFloor(Number.NaN)).toBe(false);
     });
 });
 

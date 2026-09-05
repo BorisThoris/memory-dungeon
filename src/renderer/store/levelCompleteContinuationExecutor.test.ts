@@ -2,6 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 import type { RunState } from '../../shared/contracts';
 import { createPlayablePathFixture } from '../../shared/playable-path-fixtures';
 import { openRelicOffer } from '../../shared/game-core';
+import { createPassAndPlayState, PASS_AND_PLAY_FLOORS } from '../../shared/pass-and-play-rules';
 import {
     executeChooseRouteAndContinue,
     executeContinueToNextLevel,
@@ -41,6 +42,64 @@ describe('level complete continuation executors', () => {
         expect(deps.prepareMemorizeTimerForBoardReady).toHaveBeenCalledWith(
             expect.objectContaining({ status: 'memorize' })
         );
+    });
+
+    describe('a shared game runs to the length the table agreed', () => {
+        const sharedRunAtLevel = (level: number): RunState => {
+            const base = createPlayablePathFixture('floorClearWithRouteChoices').run!;
+            return {
+                ...base,
+                board: base.board ? { ...base.board, level } : base.board,
+                lastLevelResult: base.lastLevelResult ? { ...base.lastLevelResult, level } : base.lastLevelResult,
+                passAndPlay: createPassAndPlayState(2)
+            };
+        };
+
+        it('ends the game once the last agreed floor is cleared', () => {
+            const deps = createDeps(createState({ run: sharedRunAtLevel(PASS_AND_PLAY_FLOORS) }));
+
+            executeContinueToNextLevel(deps);
+
+            expect(deps.applyResolvedRun).toHaveBeenCalledWith(
+                expect.objectContaining({ status: 'gameOver' })
+            );
+            expect(deps.prepareMemorizeTimerForBoardReady).not.toHaveBeenCalled();
+        });
+
+        it('keeps going before then, so the table plays the whole length', () => {
+            const deps = createDeps(createState({ run: sharedRunAtLevel(PASS_AND_PLAY_FLOORS - 1) }));
+
+            executeContinueToNextLevel(deps);
+
+            expect(deps.applyResolvedRun).not.toHaveBeenCalledWith(
+                expect.objectContaining({ status: 'gameOver' })
+            );
+            expect(deps.prepareMemorizeTimerForBoardReady).toHaveBeenCalled();
+        });
+
+        /*
+         * The control is that the run is not *ended*, rather than that it advances: the agreed
+         * length happens to fall on a relic milestone floor, where a solo run pauses for the draft
+         * instead of continuing. Asserting the advance here would have been asserting the
+         * milestone, not the mode.
+         */
+        it('never ends a solo run at that floor, so the length belongs to the mode', () => {
+            const base = createPlayablePathFixture('floorClearWithRouteChoices').run!;
+            const soloAtFinalFloor: RunState = {
+                ...base,
+                board: base.board ? { ...base.board, level: PASS_AND_PLAY_FLOORS } : base.board,
+                lastLevelResult: base.lastLevelResult
+                    ? { ...base.lastLevelResult, level: PASS_AND_PLAY_FLOORS }
+                    : base.lastLevelResult
+            };
+            const deps = createDeps(createState({ run: soloAtFinalFloor }));
+
+            executeContinueToNextLevel(deps);
+
+            expect(deps.applyResolvedRun).not.toHaveBeenCalledWith(
+                expect.objectContaining({ status: 'gameOver' })
+            );
+        });
     });
 
     it('does not advance puzzle runs or runs with an existing relic offer', () => {
