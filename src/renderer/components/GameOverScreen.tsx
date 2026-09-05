@@ -237,7 +237,7 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                         <img alt="" className={styles.divider} src={UI_ART.dividerOrnament} />
                         <p className={styles.copy}>{gameOverScreenCopy.floorCaption(summary.highestLevel)}</p>
                         {/* The rules this run ran under: a fact the score means nothing without. */}
-                        <p className={styles.copy} data-testid="game-over-mode-identity">
+                        <p className={`${styles.copy} ${styles.modeIdentity}`} data-testid="game-over-mode-identity">
                             {runModeIdentityLine(summary)}
                         </p>
 

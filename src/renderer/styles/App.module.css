@@ -156,3 +156,11 @@
         transform: scale(1);
     }
 }
+
+/*
+ * The gameplay layer. A plain pass-through box: it exists so the board can be marked inert while
+ * a meta shell is stacked over it, without changing how anything below it lays out.
+ */
+.gameplayLayer {
+    display: contents;
+}

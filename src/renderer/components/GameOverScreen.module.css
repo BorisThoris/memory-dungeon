@@ -399,6 +399,15 @@
     .summaryGrid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
+
+    /*
+     * The rail has the whole width once the layout stacks, so the two next-run cards sit side by
+     * side in it. Stacked they added 83px to a column that already ran 44px past the bottom of a
+     * 834x1112 window, and the chain target sat there with nothing able to scroll it into view.
+     */
+    .nextRunGrid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
 }
 
 @media (max-width: 760px) {
@@ -570,6 +579,11 @@
 }
 
 @media (max-width: 560px) {
+    /* Too narrow to sit two abreast; back to one card per row. */
+    .nextRunGrid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
     .layout {
         grid-template-columns: minmax(0, 1fr);
         gap: 0.5rem;
@@ -643,7 +657,20 @@
      * One row on 375px of height: the chain target is the thing to do differently next run.
      * The profile's next goal is on the Profile screen, which is where it is acted on.
      */
+    .nextRunGrid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
     .nextRunGrid > *:nth-child(n + 2) {
+        display: none;
+    }
+
+    /*
+     * The mode identity line goes. In this column it wraps to two lines and costs 56px of the
+     * 375 there are — and the heading directly above it already names the mode, so it was
+     * spending a seventh of the window saying the same thing twice.
+     */
+    .modeIdentity {
         display: none;
     }
 }

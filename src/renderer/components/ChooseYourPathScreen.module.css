@@ -519,6 +519,26 @@
 }
 
 /* Short screens: the poster shrinks so the mode grid keeps its own space. */
+/*
+ * The title is sized off the width, so on a 1280x800 panel it set 74px type and the header alone
+ * took 222px — 28% of the window on two words. What was left gave the browse grid a 15px frame,
+ * and a card rendered into that has its middle under the pager: on the Steam Deck's own panel
+ * every mode in the grid looked like a button and did nothing when pressed. Height decides here.
+ */
+@media (max-height: 900px) {
+    .column {
+        gap: 0.8rem;
+    }
+
+    .header {
+        gap: 0.25rem;
+    }
+
+    .title {
+        font-size: clamp(1.9rem, 3.6vw, 2.8rem);
+    }
+}
+
 @media (max-height: 780px) {
     .launch {
         min-height: 0;
@@ -556,13 +576,36 @@
         padding: 0.6rem clamp(0.8rem, 2.5vw, 1.4rem) 0.7rem;
     }
 
+    /*
+     * The title sits beside the back button rather than under it. Stacked, the header alone was
+     * spending 111px of the 375 this screen gets, and both columns below it paid for that.
+     */
     .header {
         grid-column: 1 / -1;
+        flex-direction: row;
+        align-items: center;
+        gap: 0.9rem;
+    }
+
+    .headerRow {
+        flex: 0 0 auto;
+    }
+
+    /*
+     * The group chips and the running count go. Both were added to this screen after this layout
+     * was drawn and neither was measured against it: the chips wrapped to two rows and took 94px
+     * of the browse column's 210, which left the mode grid below the bottom edge with no way to
+     * reach it. The search field narrows the list by name and the pager states the count, so
+     * nothing here is the only way to do anything.
+     */
+    .groupChips,
+    .browseCount {
+        display: none;
     }
 
 
     .title {
-        font-size: clamp(1.4rem, 3.4vw, 2rem);
+        font-size: clamp(1.15rem, 2.6vw, 1.6rem);
     }
 
     .launch {

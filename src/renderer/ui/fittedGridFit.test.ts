@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { MIN_FITTED_ROW_HEIGHT, computeGridFit, growRowHeight } from './fittedGridFit';
+import { MIN_CLICKABLE_ROW_HEIGHT, computeGridFit, growRowHeight } from './fittedGridFit';
 
 const base = { frameHeight: 340, frameWidth: 947, gap: 10, minColumnWidth: 260, rowHeight: 152 };
 
@@ -22,8 +22,14 @@ describe('computeGridFit', () => {
         expect(fit.rowHeight).toBeLessThanOrEqual(132);
     });
 
-    it('stops shrinking where a card stops being a card', () => {
-        expect(computeGridFit({ ...base, frameHeight: 20 }).rowHeight).toBe(MIN_FITTED_ROW_HEIGHT);
+    it('never renders a row taller than the frame that clips it', () => {
+        // The old floor of 88 painted a card half outside a 60px frame, and its middle — the point
+        // a click lands on — sat under the pager, so the card did nothing when pressed.
+        expect(computeGridFit({ ...base, frameHeight: 60 }).rowHeight).toBe(60);
+    });
+
+    it('stops shrinking where a row stops being a tap target', () => {
+        expect(computeGridFit({ ...base, frameHeight: 20 }).rowHeight).toBe(MIN_CLICKABLE_ROW_HEIGHT);
     });
 
     it('leaves a row that already fits exactly alone', () => {

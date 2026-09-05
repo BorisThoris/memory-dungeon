@@ -369,11 +369,22 @@ const App = () => {
                             (view === 'playing' || shellChromeContract.boardMounted) &&
                             run && (
                                 <Suspense fallback={<div role="status">Loading run...</div>}>
-                                    <GameScreen
-                                        achievements={newlyUnlockedAchievements}
-                                        run={run}
-                                        suppressStatusOverlays={suppressGameplayStatusOverlays}
-                                    />
+                                    {/*
+                                     * Inert while a shell is stacked over it. The board stays mounted so the run
+                                     * survives, but it is covered: leaving it live left every tool button and the
+                                     * board itself in the tab order behind a panel that hides them, and a click at
+                                     * their centre landed on the panel instead. Covered and unusable should say so.
+                                     */}
+                                    <div
+                                        className={styles.gameplayLayer}
+                                        inert={inGameShellOverlay}
+                                    >
+                                        <GameScreen
+                                            achievements={newlyUnlockedAchievements}
+                                            run={run}
+                                            suppressStatusOverlays={suppressGameplayStatusOverlays}
+                                        />
+                                    </div>
                                 </Suspense>
                             )}
 

@@ -24,10 +24,19 @@ export interface GridFit {
 
 /**
  * Below this a card is no longer a card — poster, kicker and title stop being legible at all — so
- * a frame shorter than this is a layout that cannot be satisfied, and clipping is the honest
- * result rather than a row of slivers.
+ * a frame shorter than this is a layout that cannot be satisfied.
+ *
+ * It used to be a floor the row kept even when the frame was shorter, on the reasoning that
+ * clipping was the honest result. It was not honest: the frame clips, so the card was cut in
+ * half and its middle landed under the pager. On a 1280x800 panel every mode in the browse grid
+ * looked like a button and answered to nothing at all, because a click at its centre hit the
+ * pager instead. A sliver you can press beats a card you cannot, so the row now takes the frame
+ * height and this is what a screen has to give it before the cards read properly.
  */
 export const MIN_FITTED_ROW_HEIGHT = 88;
+
+/** Under this a row is not a tap target either, so the frame is the wrong shape at any size. */
+export const MIN_CLICKABLE_ROW_HEIGHT = 44;
 
 export const computeGridFit = ({
     frameHeight,
@@ -42,7 +51,7 @@ export const computeGridFit = ({
         return { columns, rowHeight, rows };
     }
     // One row that does not fit: shrink it to the frame rather than spill past the clip.
-    return { columns, rowHeight: Math.max(MIN_FITTED_ROW_HEIGHT, Math.floor(frameHeight)), rows: 1 };
+    return { columns, rowHeight: Math.max(MIN_CLICKABLE_ROW_HEIGHT, Math.floor(frameHeight)), rows: 1 };
 };
 
 /**
