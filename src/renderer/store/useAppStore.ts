@@ -1,5 +1,5 @@
 import { create } from 'zustand/react';
-import { PASS_AND_PLAY_MIN_SEATS } from '../../shared/pass-and-play-rules';
+import { acknowledgePassAndPlayHandoff, PASS_AND_PLAY_MIN_SEATS } from '../../shared/pass-and-play-rules';
 import type {
     AchievementId,
     AchievementUnlockResult,
@@ -534,7 +534,7 @@ export const useAppStore = create<AppState>((set, get) => ({
 
     pressTile: (tileId) => {
         const {
-            run,
+            run: pressedRun,
             view,
             boardPinMode,
             destroyPairArmed,
@@ -545,9 +545,22 @@ export const useAppStore = create<AppState>((set, get) => ({
             tileSwapFirstTileId
         } = get();
 
-        if (!run || view !== 'playing') {
+        if (!pressedRun || view !== 'playing') {
             return;
         }
+
+        /*
+         * The next player has acted, so the pass banner has done its job. Cleared into the run this
+         * press works from, not with a separate write: everything below derives a new run from this
+         * one, so a write here would be overwritten by the flip a moment later and the banner would
+         * come back. It is cleared on an action rather than on a timer because the beat waits for
+         * whoever the device went to, and a table can take as long as it likes to hand a laptop
+         * across.
+         */
+        const run =
+            pressedRun.passAndPlay?.handoffPending === true
+                ? { ...pressedRun, passAndPlay: acknowledgePassAndPlayHandoff(pressedRun.passAndPlay) }
+                : pressedRun;
 
         const gambitThirdPick =
             run.status === 'resolving' &&

@@ -917,3 +917,41 @@ block board gestures so pan/zoom does not fight the deal. */
         transform: translate3d(var(--stack-x), var(--stack-y), var(--stack-z))
             rotateX(44deg) rotateY(-24deg) rotateZ(calc(-5deg + var(--deck-i, 0) * 0.65deg));
     }}
+/*
+ * The pass. Anchored under the HUD by the clearance the chrome publishes about itself, for the same
+ * reason the trap toast is: a fixed offset here landed on the score at 1280x800.
+ *
+ * It is deliberately large and centred. The person it addresses is across a table and was not
+ * watching the screen — a HUD-sized line would not reach them.
+ */
+.passHandoff {
+    position: absolute;
+    top: calc(var(--gameplay-hud-top-clearance, clamp(3.1rem, 9vmin, 4.6rem)) + var(--ui-space-sm));
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 7;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.1rem;
+    max-width: min(92%, 32rem);
+    padding: var(--ui-space-xs) var(--ui-space-md);
+    border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 34%, transparent);
+    border-radius: var(--ui-radius-pill);
+    background: color-mix(in srgb, var(--theme-void) 88%, transparent);
+    box-shadow: 0 14px 34px color-mix(in srgb, var(--theme-shadow) 46%, transparent);
+    text-align: center;
+    pointer-events: none;
+}
+
+.passHandoffTitle {
+    font-size: clamp(1rem, 2.4vmin, 1.35rem);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: var(--theme-gold-bright);
+}
+
+.passHandoffBody {
+    font-size: var(--ui-font-caption);
+    color: var(--theme-text-subtle);
+}

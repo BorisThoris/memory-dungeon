@@ -1637,6 +1637,11 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                 ref={tileBoardRef}
                                 allowGambitThirdFlip={allowGambitThirdFlip}
                                 board={run.board}
+                                handoffSeatLabel={
+                                    run.passAndPlay?.handoffPending === true
+                                        ? (run.passAndPlay.seats[run.passAndPlay.activeSeatIndex]?.label ?? null)
+                                        : null
+                                }
                                 cursedPairKey={run.board.cursedPairKey ?? null}
                                 wardPairKey={run.board.wardPairKey ?? null}
                                 bountyPairKey={run.board.bountyPairKey ?? null}

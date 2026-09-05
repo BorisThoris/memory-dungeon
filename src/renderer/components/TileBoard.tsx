@@ -19,6 +19,7 @@ import { getFindableRewardText } from '../../shared/findables';
 import { getHazardTileBoardSummary, getHazardTileTelegraph } from '../../shared/hazard-tiles';
 import { getTileSwapTraitPreviewLines, getTileTraitInteractionPreviewLines } from '../../shared/tile-trait-rules';
 import { BOARD_ROUTE_COACHING, BOARD_ROUTE_REWARD_LABEL } from '../copy/boardRouteCoaching';
+import { PASS_AND_PLAY_COPY } from '../copy/passAndPlay';
 import {
     getSelectedTraitFollowupTileIds,
     getTraitOpportunitySummary,
@@ -423,6 +424,11 @@ export type TileBoardHandle = {
 
 interface TileBoardProps {
     board: BoardState;
+    /**
+     * The seat the device has just passed to, or null when it has not. Drawn over the board because
+     * the person it is addressed to is not the person who was looking at the HUD.
+     */
+    handoffSeatLabel?: string | null;
     debugPeekActive: boolean;
     interactive: boolean;
     mobileCameraMode: boolean;
@@ -722,6 +728,7 @@ const parseCountAttribute = (value: string): Map<string, number> => {
 const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard(
     {
         board,
+        handoffSeatLabel = null,
         debugPeekActive,
         interactive,
         mobileCameraMode,
@@ -3637,6 +3644,20 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             <div className={styles.srBoardLive} aria-live="polite" data-testid="tile-board-live-region">
                 {boardLiveMessage}
             </div>
+            {/* The pass. It does not block: the board is face down after a miss, so there is
+                nothing to hide and nothing to click through — it clears when the next player
+                flips. A modal here would put an extra press between every single turn. */}
+            {handoffSeatLabel ? (
+                <div
+                    aria-live="polite"
+                    className={styles.passHandoff}
+                    data-testid="board-pass-handoff"
+                    role="status"
+                >
+                    <span className={styles.passHandoffTitle}>{PASS_AND_PLAY_COPY.handoffTitle(handoffSeatLabel)}</span>
+                    <span className={styles.passHandoffBody}>{PASS_AND_PLAY_COPY.handoffBody}</span>
+                </div>
+            ) : null}
             {trapResolutionMessage ? (
                 <div
                     className={styles.trapResolutionToast}

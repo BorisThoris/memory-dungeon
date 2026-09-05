@@ -103,5 +103,20 @@ test.describe('pass and play', () => {
         }
 
         expect(passed, 'a miss passes the turn to the second player').toBe(true);
+
+        /*
+         * The pass has to be visible to the person it is addressed to. They were not watching the
+         * HUD — they were waiting — so a seat marker changing colour is not a signal that reaches
+         * them. The rules tracked this beat before anything drew it, which is exactly the shape of
+         * defect this project keeps finding: a state nothing renders.
+         */
+        const banner = page.getByTestId('board-pass-handoff');
+        await expect(banner, 'the board says who the device went to').toBeVisible();
+        await expect(banner).toContainText(/pass to player 2/i);
+
+        // And it clears when that player acts, rather than sitting over their board.
+        await page.mouse.click(...point(0.5, 0.28));
+        await page.waitForTimeout(600);
+        await expect(banner, 'the pass clears once the next player acts').toBeHidden();
     });
 });

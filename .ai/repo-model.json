@@ -9,7 +9,7 @@
     "contentItemCount": 63,
     "mechanicCount": 136,
     "stateFieldCount": 144,
-    "relationshipCount": 10483
+    "relationshipCount": 10484
   },
   "inventory": [
     {
@@ -2320,7 +2320,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 36714,
-      "sha256": "271a7799d0c8a86fa5bcc9c8b8677783787a1ef1cca187a2f4d7232e103232ab"
+      "sha256": "009e45ba5c572e62394ca728dd4cc91b9c38ad05cefe6d002a6cc891e9d12105"
     },
     {
       "path": "docs/UI_RETHINK_PLAN.md",
@@ -3687,8 +3687,8 @@
     {
       "path": "e2e/pass-and-play.spec.ts",
       "category": "test",
-      "bytes": 4917,
-      "sha256": "7f51b532c9bb6791af06e909e5f333f5e8ee560131892e68d4bd8583e7929c4c"
+      "bytes": 5795,
+      "sha256": "b7944007c93943fe06e0ab68f4ba02b012c2f8c9a85158091c615e2bb6894364"
     },
     {
       "path": "e2e/pause-controls-reference.spec.ts",
@@ -7743,8 +7743,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 93289,
-      "sha256": "c8da2804241dce1617472e6e33d8ebd5dda0c3131b011e8900f5e33fc7b65a37"
+      "bytes": 93612,
+      "sha256": "2461797aa64df0a4322efbd5f48e773460c742095999ff7977c13d4f9b0947cb"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -8109,8 +8109,8 @@
     {
       "path": "src/renderer/components/TileBoard.module.css",
       "category": "source",
-      "bytes": 33687,
-      "sha256": "deffd5d19c9c877934b099880240e1a4ccc1fab2514c962698b09f644f4e836f"
+      "bytes": 35010,
+      "sha256": "5931438cb7fb7cdfb67b66d76b0cd693f21a8b6e1936f33f09f8f43eea317a34"
     },
     {
       "path": "src/renderer/components/TileBoard.test.tsx",
@@ -8121,8 +8121,8 @@
     {
       "path": "src/renderer/components/TileBoard.tsx",
       "category": "source",
-      "bytes": 166509,
-      "sha256": "9c2c2fe75c0c239774293dad7cd2ec61cdc418441054afa50302715c83002079"
+      "bytes": 167637,
+      "sha256": "791e8990ca0acf83fc94e2497a2ffbc4336b9052c5347a3d4da3028a39c8868e"
     },
     {
       "path": "src/renderer/components/tileBoardCanvasContext.test.ts",
@@ -10017,8 +10017,8 @@
     {
       "path": "src/renderer/store/useAppStore.ts",
       "category": "source",
-      "bytes": 29407,
-      "sha256": "dc06b5835bb03abc08dc4905578d984d6c43bbd949a5f28617c1e10b6ee6fdb4"
+      "bytes": 30213,
+      "sha256": "6b678e555b8b971cf1b95f43a4a4bc885c9df504821a6bab2774e5476c116e39"
     },
     {
       "path": "src/renderer/styles/App.module.css",
@@ -17643,7 +17643,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 2051,
+      "lineCount": 2056,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -18631,7 +18631,7 @@
       "path": "src/renderer/components/TileBoard.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 3858,
+      "lineCount": 3879,
       "imports": [
         "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/breakpoints.ts",
@@ -18654,6 +18654,7 @@
         "file:src/renderer/copy/boardRouteCoaching.ts",
         "file:src/renderer/copy/chainMomentum.ts",
         "file:src/renderer/copy/chainOpportunityBeat.ts",
+        "file:src/renderer/copy/passAndPlay.ts",
         "file:src/renderer/copy/traitInteractionLaneMap.ts",
         "file:src/renderer/dev/boardWebglPerfSample.ts",
         "file:src/renderer/gameplay/regPhase4PlayContract.ts",
@@ -24098,7 +24099,7 @@
       "path": "src/renderer/store/useAppStore.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 898,
+      "lineCount": 911,
       "imports": [
         "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/audio/uiSfx.ts",
@@ -37471,8 +37472,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 2050,
-      "endLine": 2050
+      "line": 2055,
+      "endLine": 2055
     },
     {
       "id": "symbol:src/renderer/components/gameScreenFeedback.ts#DungeonCombatLogRow",
@@ -38127,24 +38128,24 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/TileBoard.tsx",
-      "line": 3857,
-      "endLine": 3857
+      "line": 3878,
+      "endLine": 3878
     },
     {
       "id": "symbol:src/renderer/components/TileBoard.tsx#TileBoardClientRect",
       "name": "TileBoardClientRect",
       "kind": "type",
       "file": "src/renderer/components/TileBoard.tsx",
-      "line": 409,
-      "endLine": 416
+      "line": 410,
+      "endLine": 417
     },
     {
       "id": "symbol:src/renderer/components/TileBoard.tsx#TileBoardHandle",
       "name": "TileBoardHandle",
       "kind": "type",
       "file": "src/renderer/components/TileBoard.tsx",
-      "line": 418,
-      "endLine": 422
+      "line": 419,
+      "endLine": 423
     },
     {
       "id": "symbol:src/renderer/components/tileBoardCanvasContext.ts#getTileBoardCanvasContextConfig",
@@ -44128,7 +44129,7 @@
       "kind": "value",
       "file": "src/renderer/store/useAppStore.ts",
       "line": 263,
-      "endLine": 887
+      "endLine": 900
     },
     {
       "id": "symbol:src/renderer/styles/theme.ts#buildRendererThemeStyle",
@@ -104140,6 +104141,12 @@
       "id": "imports:src/renderer/components/TileBoard.tsx->src/renderer/copy/chainOpportunityBeat.ts",
       "source": "file:src/renderer/components/TileBoard.tsx",
       "target": "file:src/renderer/copy/chainOpportunityBeat.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/TileBoard.tsx->src/renderer/copy/passAndPlay.ts",
+      "source": "file:src/renderer/components/TileBoard.tsx",
+      "target": "file:src/renderer/copy/passAndPlay.ts",
       "kind": "imports"
     },
     {
