@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
+    getChallengeModeGateRow,
+    getChallengeModeGateRows,
     getChallengeModeGateForMode,
     getChallengeModeMotivationSummary,
     getChallengeModeProgressionRows
@@ -122,5 +124,30 @@ describe('REG-081 challenge mode progression gates', () => {
         ]);
         expect(ascendantSummary.nextRecommendedRow).toBeNull();
         expect(ascendantSummary.nextChallengeCopy).toBe('All visible challenge lanes are in the active profile tier.');
+    });
+});
+
+describe('gate ids stay attached to the mode they describe', () => {
+    it('gives only the deferred endless mode the deferred endless gate', () => {
+        const rows = getChallengeModeGateRows(createDefaultSaveData());
+        const deferredEndless = rows.filter((row) => row.gateId === 'endless_deferred').map((row) => row.modeId);
+        expect(deferredEndless).toEqual(['endless']);
+    });
+
+    it('does not label a shipped same-device mode as the one that cannot be played', () => {
+        // Adding pass-and-play to the catalog inherited `endless_deferred` from a fall-through,
+        // which is an id that means "deferred", on a row the Choose Path sheet renders.
+        const row = getChallengeModeGateRow(createDefaultSaveData(), 'pass_and_play');
+        expect(row?.gateId).toBe('same_device_table');
+        expect(row?.status).toBe('available');
+    });
+
+    it('puts an unclassified mode on local mode select rather than on a deferral', () => {
+        const rows = getChallengeModeGateRows(createDefaultSaveData());
+        for (const row of rows) {
+            if (row.status !== 'deferred') {
+                expect(row.gateId, row.modeId).not.toBe('endless_deferred');
+            }
+        }
     });
 });

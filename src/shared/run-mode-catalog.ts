@@ -46,9 +46,6 @@ export interface RunModeDefinition {
     outcomeSummary?: string;
     /** Extra availability/rules detail for locked or staged modes. */
     availabilityDetail?: string;
-    /** REG-081: offline save-derived challenge gate summary for QA and UI. */
-    challengeGateId?: string;
-    challengeGateSummary?: string;
     group: RunModeGroup;
     availability: RunModeAvailability;
     /** Key into mode poster map (`modeArt.ts`). */
@@ -85,8 +82,6 @@ export const RUN_MODE_CATALOG: readonly RunModeDefinition[] = [
         },
         availabilityDetail:
             'This is the live long-run ruleset for v1. It uses the internal endless simulation but is branded Classic until the future ultra-long Endless variant ships.',
-        challengeGateId: 'classic_entry',
-        challengeGateSummary: 'Unlocked by default; seeds local progress for other challenge gates.',
         group: 'core',
         availability: 'available',
         posterKey: 'classic',
@@ -101,8 +96,6 @@ export const RUN_MODE_CATALOG: readonly RunModeDefinition[] = [
             signal: 'HUD mode reads Daily challenge and shows the UTC daily key.',
             testId: 'hud-mode-identity'
         },
-        challengeGateId: 'daily_entry',
-        challengeGateSummary: 'Unlocked after first clear; available by default for v1 local play.',
         group: 'core',
         availability: 'available',
         posterKey: 'daily',
@@ -181,8 +174,6 @@ export const RUN_MODE_CATALOG: readonly RunModeDefinition[] = [
         promise: 'Timed mastery — same memory loop, but every decision competes with the countdown.',
         eligibilityNote: 'Achievements stay eligible unless debug/assist rules lock a specific achievement; local honors track Gauntlet proof.',
         outcomeSummary: 'Gauntlet results emphasize timed floor clears and local pressure mastery.',
-        challengeGateId: 'gauntlet_entry',
-        challengeGateSummary: 'Unlocked after any first clear; available in v1 to avoid blocking timed local play.',
         group: 'time_attack',
         availability: 'available',
         posterKey: 'gauntlet',
@@ -232,8 +223,6 @@ export const RUN_MODE_CATALOG: readonly RunModeDefinition[] = [
             signal: 'HUD mode reads Puzzle: Glyph Cross.',
             testId: 'hud-mode-identity'
         },
-        challengeGateId: 'glyph_cross_entry',
-        challengeGateSummary: 'Recommended after two puzzle completions or first clear; playable offline in v1.',
         group: 'puzzle',
         availability: 'available',
         posterKey: 'puzzle',
@@ -252,8 +241,6 @@ export const RUN_MODE_CATALOG: readonly RunModeDefinition[] = [
         promise: 'Experiment with volatile tools and wild matching; expect swingy floors and fast discoveries.',
         eligibilityNote: 'Practice-adjacent chaos run; perfect-memory style achievements are blocked by wild/power use, but local run stats still record.',
         outcomeSummary: 'Wild results highlight volatile mutators, joker matching, and discovery.',
-        challengeGateId: 'wild_entry',
-        challengeGateSummary: 'Unlocked after reaching floor 5 or earning First Clear; surfaced as practice-adjacent.',
         group: 'training',
         availability: 'available',
         posterKey: 'wild',
@@ -286,8 +273,6 @@ export const RUN_MODE_CATALOG: readonly RunModeDefinition[] = [
         shortDescription: 'Mastery contract: no shuffle, no swap, no destroy — prove the read without damage-control tools.',
         promise: 'Purist memory — planning and recall over rescue buttons.',
         eligibilityNote: 'Achievements remain eligible; the contract also grants an extra relic choice at shrines.',
-        challengeGateId: 'scholar_entry',
-        challengeGateSummary: 'Unlocked after first clear; contract stays local and non-online.',
         group: 'training',
         availability: 'available',
         posterKey: 'scholar',
@@ -304,8 +289,6 @@ export const RUN_MODE_CATALOG: readonly RunModeDefinition[] = [
         shortDescription: 'Planning constraint: only ten pin placements across the run, so every mark matters.',
         promise: 'Precise planning — spend marks intentionally and preserve spatial memory.',
         eligibilityNote: 'Achievements remain eligible; pins are Perfect Memory-safe, but the placement cap is strict.',
-        challengeGateId: 'pin_vow_entry',
-        challengeGateSummary: 'Unlocked after best no-powers floor 5 or first clear; strict local pin cap.',
         group: 'training',
         availability: 'available',
         posterKey: 'pin_vow',

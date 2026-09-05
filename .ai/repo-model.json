@@ -10539,14 +10539,14 @@
     {
       "path": "src/shared/challenge-progression.test.ts",
       "category": "test",
-      "bytes": 4994,
-      "sha256": "21f58a8cf2bd619710fb114be9936a234a521c4ac36ba445dcfba47b95d55ff7"
+      "bytes": 6285,
+      "sha256": "9252eab32a76a546f8ca989fed613d4ae74a798f03579eac022d86d86cc02f30"
     },
     {
       "path": "src/shared/challenge-progression.ts",
       "category": "source",
-      "bytes": 10933,
-      "sha256": "8696cdfb2a59035bba17428f8ff927cdf30151d32f7712edc6c902d65e67f018"
+      "bytes": 11628,
+      "sha256": "d26305472dee2874f9e0306b3f05d18d6e9f8b3049fa526257e5e2285147992e"
     },
     {
       "path": "src/shared/check-depcheck-clean-script.test.ts",
@@ -12363,8 +12363,8 @@
     {
       "path": "src/shared/run-mode-catalog.ts",
       "category": "source",
-      "bytes": 16131,
-      "sha256": "c9cca70ef7dfdd202c770ee70fb7350e61a5f9fbd07f96854bca86ea0f818cce"
+      "bytes": 14932,
+      "sha256": "72d698a10adf7f411529546e3ff0128c7fdb763e06c3777db5302bfcdfdb74a4"
     },
     {
       "path": "src/shared/run-mode-identity.test.ts",
@@ -25601,7 +25601,7 @@
       "path": "src/shared/challenge-progression.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 127,
+      "lineCount": 154,
       "imports": [
         "file:src/shared/challenge-progression.ts",
         "file:src/shared/save-data.ts"
@@ -25614,7 +25614,7 @@
       "path": "src/shared/challenge-progression.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 273,
+      "lineCount": 286,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/meta-progression.ts",
@@ -32578,7 +32578,7 @@
       "path": "src/shared/run-mode-catalog.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 375,
+      "lineCount": 358,
       "imports": [
         "file:src/shared/challenge-progression.ts",
         "file:src/shared/content-lock-state.ts"
@@ -46592,7 +46592,7 @@
       "kind": "type",
       "file": "src/shared/challenge-progression.ts",
       "line": 11,
-      "endLine": 19
+      "endLine": 21
     },
     {
       "id": "symbol:src/shared/challenge-progression.ts#ChallengeGateStatus",
@@ -46607,80 +46607,80 @@
       "name": "challengeGateSummary",
       "kind": "value",
       "file": "src/shared/challenge-progression.ts",
-      "line": 142,
-      "endLine": 153
+      "line": 155,
+      "endLine": 166
     },
     {
       "id": "symbol:src/shared/challenge-progression.ts#ChallengeModeGateRow",
       "name": "ChallengeModeGateRow",
       "kind": "interface",
       "file": "src/shared/challenge-progression.ts",
-      "line": 21,
-      "endLine": 33
+      "line": 23,
+      "endLine": 35
     },
     {
       "id": "symbol:src/shared/challenge-progression.ts#ChallengeModeMotivationSummary",
       "name": "ChallengeModeMotivationSummary",
       "kind": "interface",
       "file": "src/shared/challenge-progression.ts",
-      "line": 239,
-      "endLine": 245
+      "line": 252,
+      "endLine": 258
     },
     {
       "id": "symbol:src/shared/challenge-progression.ts#ChallengeModeProgressionRow",
       "name": "ChallengeModeProgressionRow",
       "kind": "type",
       "file": "src/shared/challenge-progression.ts",
-      "line": 157,
-      "endLine": 163
+      "line": 170,
+      "endLine": 176
     },
     {
       "id": "symbol:src/shared/challenge-progression.ts#ChallengeProgressionStatus",
       "name": "ChallengeProgressionStatus",
       "kind": "type",
       "file": "src/shared/challenge-progression.ts",
-      "line": 155,
-      "endLine": 155
+      "line": 168,
+      "endLine": 168
     },
     {
       "id": "symbol:src/shared/challenge-progression.ts#getChallengeModeGateForMode",
       "name": "getChallengeModeGateForMode",
       "kind": "value",
       "file": "src/shared/challenge-progression.ts",
-      "line": 219,
-      "endLine": 237
+      "line": 232,
+      "endLine": 250
     },
     {
       "id": "symbol:src/shared/challenge-progression.ts#getChallengeModeGateRow",
       "name": "getChallengeModeGateRow",
       "kind": "value",
       "file": "src/shared/challenge-progression.ts",
-      "line": 137,
-      "endLine": 140
+      "line": 150,
+      "endLine": 153
     },
     {
       "id": "symbol:src/shared/challenge-progression.ts#getChallengeModeGateRows",
       "name": "getChallengeModeGateRows",
       "kind": "value",
       "file": "src/shared/challenge-progression.ts",
-      "line": 134,
-      "endLine": 135
+      "line": 147,
+      "endLine": 148
     },
     {
       "id": "symbol:src/shared/challenge-progression.ts#getChallengeModeMotivationSummary",
       "name": "getChallengeModeMotivationSummary",
       "kind": "value",
       "file": "src/shared/challenge-progression.ts",
-      "line": 249,
-      "endLine": 272
+      "line": 262,
+      "endLine": 285
     },
     {
       "id": "symbol:src/shared/challenge-progression.ts#getChallengeModeProgressionRows",
       "name": "getChallengeModeProgressionRows",
       "kind": "value",
       "file": "src/shared/challenge-progression.ts",
-      "line": 204,
-      "endLine": 217
+      "line": 217,
+      "endLine": 230
     },
     {
       "id": "symbol:src/shared/color-vision.ts#COLOR_VISION_KINDS",
@@ -60135,64 +60135,64 @@
       "name": "applyContentLockToRunMode",
       "kind": "value",
       "file": "src/shared/run-mode-catalog.ts",
-      "line": 335,
-      "endLine": 338
+      "line": 318,
+      "endLine": 321
     },
     {
       "id": "symbol:src/shared/run-mode-catalog.ts#CHOOSE_PATH_HERO_MODE_IDS",
       "name": "CHOOSE_PATH_HERO_MODE_IDS",
       "kind": "value",
       "file": "src/shared/run-mode-catalog.ts",
-      "line": 354,
-      "endLine": 354
+      "line": 337,
+      "endLine": 337
     },
     {
       "id": "symbol:src/shared/run-mode-catalog.ts#ChoosePathHeroModeId",
       "name": "ChoosePathHeroModeId",
       "kind": "type",
       "file": "src/shared/run-mode-catalog.ts",
-      "line": 355,
-      "endLine": 355
+      "line": 338,
+      "endLine": 338
     },
     {
       "id": "symbol:src/shared/run-mode-catalog.ts#choosePathHeroModes",
       "name": "choosePathHeroModes",
       "kind": "function",
       "file": "src/shared/run-mode-catalog.ts",
-      "line": 359,
-      "endLine": 367
+      "line": 342,
+      "endLine": 350
     },
     {
       "id": "symbol:src/shared/run-mode-catalog.ts#choosePathLibraryModes",
       "name": "choosePathLibraryModes",
       "kind": "function",
       "file": "src/shared/run-mode-catalog.ts",
-      "line": 370,
-      "endLine": 372
+      "line": 353,
+      "endLine": 355
     },
     {
       "id": "symbol:src/shared/run-mode-catalog.ts#getRunModeCatalog",
       "name": "getRunModeCatalog",
       "kind": "function",
       "file": "src/shared/run-mode-catalog.ts",
-      "line": 341,
-      "endLine": 343
+      "line": 324,
+      "endLine": 326
     },
     {
       "id": "symbol:src/shared/run-mode-catalog.ts#getRunModeChallengeGateRows",
       "name": "getRunModeChallengeGateRows",
       "kind": "ExportSpecifier",
       "file": "src/shared/run-mode-catalog.ts",
-      "line": 374,
-      "endLine": 374
+      "line": 357,
+      "endLine": 357
     },
     {
       "id": "symbol:src/shared/run-mode-catalog.ts#getRunModeDefinition",
       "name": "getRunModeDefinition",
       "kind": "function",
       "file": "src/shared/run-mode-catalog.ts",
-      "line": 349,
-      "endLine": 351
+      "line": 332,
+      "endLine": 334
     },
     {
       "id": "symbol:src/shared/run-mode-catalog.ts#PuzzleRunModeId",
@@ -60207,24 +60207,24 @@
       "name": "RUN_MODE_CATALOG",
       "kind": "value",
       "file": "src/shared/run-mode-catalog.ts",
-      "line": 76,
-      "endLine": 332
+      "line": 73,
+      "endLine": 315
     },
     {
       "id": "symbol:src/shared/run-mode-catalog.ts#RUN_MODE_GROUP_LABEL",
       "name": "RUN_MODE_GROUP_LABEL",
       "kind": "value",
       "file": "src/shared/run-mode-catalog.ts",
-      "line": 69,
-      "endLine": 74
+      "line": 66,
+      "endLine": 71
     },
     {
       "id": "symbol:src/shared/run-mode-catalog.ts#RUN_MODE_GROUP_ORDER",
       "name": "RUN_MODE_GROUP_ORDER",
       "kind": "value",
       "file": "src/shared/run-mode-catalog.ts",
-      "line": 62,
-      "endLine": 67
+      "line": 59,
+      "endLine": 64
     },
     {
       "id": "symbol:src/shared/run-mode-catalog.ts#RunModeAction",
@@ -60248,7 +60248,7 @@
       "kind": "interface",
       "file": "src/shared/run-mode-catalog.ts",
       "line": 31,
-      "endLine": 59
+      "endLine": 56
     },
     {
       "id": "symbol:src/shared/run-mode-catalog.ts#RunModeGroup",
@@ -60263,8 +60263,8 @@
       "name": "runModesByGroup",
       "kind": "function",
       "file": "src/shared/run-mode-catalog.ts",
-      "line": 345,
-      "endLine": 347
+      "line": 328,
+      "endLine": 330
     },
     {
       "id": "symbol:src/shared/run-mode-identity.ts#describeRunModeIdentity",

@@ -16,6 +16,8 @@ export type ChallengeGateId =
     | 'wild_lab'
     | 'contract_training'
     | 'meditation_training'
+    | 'same_device_table'
+    | 'local_mode_select'
     | 'endless_deferred';
 
 export interface ChallengeModeGateRow {
@@ -35,15 +37,26 @@ export interface ChallengeModeGateRow {
 const puzzleCompleted = (save: SaveData, puzzleId: string): boolean =>
     save.playerStats?.puzzleCompletions?.[puzzleId]?.completed === true;
 
+/**
+ * Which gate a mode sits behind.
+ *
+ * The fall-through used to be `endless_deferred`, which is not a default — it is the id meaning
+ * "the deferred ultra-long mode". Every mode this list did not name inherited it, so adding
+ * pass-and-play silently labelled a shipped, unlocked, same-device mode as the one thing in the
+ * catalog that cannot be played. A mode nobody has classified is on local mode select like every
+ * other v1 mode; say that instead, and let `endless_deferred` mean only what it says.
+ */
 const gateIdForMode = (mode: RunModeDefinition): ChallengeGateId => {
+    if (mode.id === 'endless') return 'endless_deferred';
     if (mode.id === 'classic') return 'classic_open';
     if (mode.id === 'daily') return 'daily_local_seed';
     if (mode.id === 'gauntlet') return 'gauntlet_local_timer';
     if (mode.id.startsWith('puzzle_')) return 'puzzle_library';
     if (mode.id === 'wild') return 'wild_lab';
+    if (mode.id === 'pass_and_play') return 'same_device_table';
     if (mode.id === 'scholar' || mode.id === 'pin_vow') return 'contract_training';
     if (mode.id === 'meditation' || mode.id === 'practice') return 'meditation_training';
-    return 'endless_deferred';
+    return 'local_mode_select';
 };
 
 const rowForMode = (save: SaveData, mode: RunModeDefinition): ChallengeModeGateRow => {
