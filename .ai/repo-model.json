@@ -3687,8 +3687,8 @@
     {
       "path": "e2e/pass-and-play.spec.ts",
       "category": "test",
-      "bytes": 6567,
-      "sha256": "95d12f823217ebe2fd026fd9f15b4f6dde99032dc3390c8ded38815d0f4f6671"
+      "bytes": 6948,
+      "sha256": "47343f3ea2fa3462ce820a695623c98de6ab242c6bad88748e44c92af588bc0d"
     },
     {
       "path": "e2e/pause-controls-reference.spec.ts",
@@ -3831,8 +3831,8 @@
     {
       "path": "e2e/ui-fit-contract.spec.ts",
       "category": "test",
-      "bytes": 13977,
-      "sha256": "02c5c2a7bf484d37eaa6be4c2a4ac2d88f9fe93d1c1ca880264540c3f95c9ced"
+      "bytes": 15770,
+      "sha256": "1d34eb6fd00c9eb759c4ccabec9a46064a9a01236ce8cbbad451008516de5ea9"
     },
     {
       "path": "e2e/ui-reachability-gate.spec.ts",
@@ -7941,8 +7941,8 @@
     {
       "path": "src/renderer/components/RunShell.module.css",
       "category": "source",
-      "bytes": 10137,
-      "sha256": "2022d75c38fd1be2400df641303058cce33fbe8182e82987cb9eae23125537c6"
+      "bytes": 10721,
+      "sha256": "fe6dbaad621550885bf32ee55432b411dd05b34e638e5f238490c4ed83744f0a"
     },
     {
       "path": "src/renderer/components/RunShell.test.tsx",
@@ -7953,8 +7953,8 @@
     {
       "path": "src/renderer/components/RunShell.tsx",
       "category": "source",
-      "bytes": 11638,
-      "sha256": "0eb2cfed81b00cc2c45ae7e936500e30de5294bb6cf6be63149bcc6990f08c44"
+      "bytes": 12541,
+      "sha256": "5f60d6c1ca50cf9621b20fb3fe4e873800ba3815d81dcae7d5247a8371c791f0"
     },
     {
       "path": "src/renderer/components/runShellGlyphs.tsx",
@@ -9069,8 +9069,8 @@
     {
       "path": "src/renderer/copy/passAndPlay.ts",
       "category": "source",
-      "bytes": 1576,
-      "sha256": "4b9704caa1989b0ce25346a68236a8867ec2656c04786f479d86bc557ea7aaf6"
+      "bytes": 2017,
+      "sha256": "f379bbf6183aee42284d9d88a9610ed26f6a3a4f24b64f3c511430f5ce8d2e5c"
     },
     {
       "path": "src/renderer/copy/profileProgress.ts",
@@ -18181,7 +18181,7 @@
       "path": "src/renderer/components/RunShell.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 249,
+      "lineCount": 261,
       "imports": [
         "file:src/renderer/copy/passAndPlay.ts",
         "file:src/renderer/copy/runDialogCopy.ts",
@@ -21472,7 +21472,7 @@
       "path": "src/renderer/copy/passAndPlay.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 31,
+      "lineCount": 38,
       "imports": [],
       "exports": [
         "symbol:src/renderer/copy/passAndPlay.ts#PASS_AND_PLAY_COPY"
@@ -37747,8 +37747,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 248,
-      "endLine": 248
+      "line": 260,
+      "endLine": 260
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellProps",
@@ -41652,7 +41652,7 @@
       "kind": "value",
       "file": "src/renderer/copy/passAndPlay.ts",
       "line": 8,
-      "endLine": 30
+      "endLine": 37
     },
     {
       "id": "symbol:src/renderer/copy/profileProgress.ts#PROFILE_PROGRESS_COPY",

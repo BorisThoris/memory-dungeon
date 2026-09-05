@@ -8,6 +8,13 @@
 export const PASS_AND_PLAY_COPY = {
     /** One start action per seat count, so a table says how many are playing in one press. */
     seatCountLabel: (seats: number): string => `${seats} players`,
+    /**
+     * The seat name with no room to say it. On a phone held sideways the full names pushed the whole
+     * stat row past the right edge, taking the mutator with them.
+     */
+    seatShortLabel: (seatNumber: number): string => `P${seatNumber}`,
+    /** What a screen reader reads for a seat, so the short form costs nothing. */
+    seatAnnouncement: (label: string, score: number): string => `${label}, ${score.toLocaleString()}`,
     /** Label over the seat scores in the HUD. */
     seatsLabel: 'Players',
     /** Spoken by the live region when the device changes hands. */

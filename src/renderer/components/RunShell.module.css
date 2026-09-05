@@ -436,3 +436,30 @@
     font-variant-numeric: tabular-nums;
     color: var(--theme-text);
 }
+
+/*
+ * Four seats do not fit beside the run's own stats on a phone held sideways: at 812x375 the full
+ * names pushed the stat row past the right edge and took the mutator chip with them. The names
+ * shorten rather than the row wrapping, because 375px of height has none to spare.
+ */
+.seatLabelShort {
+    display: none;
+}
+
+@media (max-height: 430px), (max-width: 620px) {
+    .seatRow {
+        gap: 0.2rem;
+    }
+
+    .seat {
+        padding: 0.1rem 0.22rem 0.14rem;
+    }
+
+    .seatLabelLong {
+        display: none;
+    }
+
+    .seatLabelShort {
+        display: inline;
+    }
+}

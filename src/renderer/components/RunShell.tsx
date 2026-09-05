@@ -145,13 +145,25 @@ const RunShell = ({
                         <span className={styles.seatRow}>
                             {run.passAndPlay.seats.map((seat, index) => (
                                 <span
+                                    aria-label={PASS_AND_PLAY_COPY.seatAnnouncement(seat.label, seat.score)}
                                     className={styles.seat}
                                     data-active={index === run.passAndPlay?.activeSeatIndex ? 'true' : 'false'}
                                     data-testid={`hud-seat-${seat.id}`}
                                     key={seat.id}
+                                    role="img"
                                 >
-                                    <span className={styles.seatLabel}>{seat.label}</span>
-                                    <span className={styles.seatScore}>{seat.score.toLocaleString()}</span>
+                                    {/* Both names ship and CSS picks one. The row has to narrow
+                                        without the seat count changing what it means, and the
+                                        aria-label above carries the full name either way. */}
+                                    <span aria-hidden="true" className={styles.seatLabel}>
+                                        <span className={styles.seatLabelLong}>{seat.label}</span>
+                                        <span className={styles.seatLabelShort}>
+                                            {PASS_AND_PLAY_COPY.seatShortLabel(index + 1)}
+                                        </span>
+                                    </span>
+                                    <span aria-hidden="true" className={styles.seatScore}>
+                                        {seat.score.toLocaleString()}
+                                    </span>
                                 </span>
                             ))}
                         </span>

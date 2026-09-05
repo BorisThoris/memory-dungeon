@@ -289,6 +289,40 @@ test.describe('UI fit contract', () => {
         );
     });
 
+    /*
+     * Four seats is the crowded case for the run bar: it is the widest the HUD ever gets, and it
+     * broke at 812x375 the first time it was measured — the full seat names pushed the stat row
+     * past the right edge and took the mutator chip with them. Held to the contract at every size,
+     * because a shared game is played on whatever is on the table.
+     */
+    test('a four-seat run bar fits every window', async ({ page }) => {
+        test.setTimeout(420_000);
+        const save = buildVisualSaveJson(true);
+        await atEverySize(
+            page,
+            'pass and play',
+            async () => {
+                await gotoWithSave(page, save);
+                await mainMenuPlayButton(page).waitFor({ state: 'visible', timeout: 30_000 });
+                await mainMenuPlayButton(page).click();
+                await page.waitForTimeout(800);
+                // Filter rather than hunt: the browse grid is paged to fit, and on a phone that is
+                // one card per page out of thirteen.
+                await page.getByRole('searchbox', { name: /filter modes/i }).fill('Pass and Play');
+                await page.waitForTimeout(500);
+                await page.getByRole('button', { name: /pass and play/i }).first().click();
+                const detail = page.getByRole('dialog', { name: /pass and play/i });
+                await detail.waitFor({ state: 'visible', timeout: 20_000 });
+                await detail.getByRole('button', { name: /^4 players$/i }).click();
+                await page.getByTestId('run-shell').waitFor({ state: 'visible', timeout: 30_000 });
+                await page.waitForTimeout(1200);
+            },
+            async () => {
+                await page.waitForTimeout(700);
+            }
+        );
+    });
+
     test('the mode detail sheet fits every window', async ({ page }) => {
         test.setTimeout(420_000);
         const save = buildVisualSaveJson(true);

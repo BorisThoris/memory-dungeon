@@ -17,6 +17,13 @@ const openPassAndPlay = async (page: import('@playwright/test').Page, seats = 2)
     await mainMenuPlayButton(page).waitFor({ state: 'visible', timeout: 30_000 });
     await mainMenuPlayButton(page).click();
     await page.waitForTimeout(900);
+    /*
+     * Filter rather than hunt. The browse grid is paged to fit without scrollbars, and at 390x844
+     * that is one card per page out of thirteen — a spec that clicks the card by name works at
+     * desktop and waits forever on a phone.
+     */
+    await page.getByRole('searchbox', { name: /filter modes/i }).fill('Pass and Play');
+    await page.waitForTimeout(600);
     await page.getByRole('button', { name: /pass and play/i }).first().click();
     // The card opens a detail sheet; its Play button is scoped to that dialog. An unscoped
     // `/^play/i` matches the Recommended run's "Start run" behind it and starts the wrong mode.
