@@ -23,6 +23,7 @@ import {
     buildCodexModeRows,
     buildCodexMutatorRows,
     buildCodexRelicRows,
+    buildCodexResidentRows,
     CODEX_TOC,
     filterTopics
 } from './codexScreenModel';
@@ -116,6 +117,7 @@ const CodexScreen = ({ stackedOnGameplay = false }: CodexScreenProps) => {
             settings: { kicker: 'Assist', entries: ENCYCLOPEDIA_SETTINGS_AND_ASSISTS_TOPICS },
             pickups: { kicker: 'Board', entries: ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS },
             traits: { kicker: 'Trait', entries: [...getTileTraitCodexRows(), ...getTileTraitInteractionCodexRows()] },
+            residents: { kicker: 'Resident', entries: buildCodexResidentRows() },
             contracts: { kicker: 'Contract', entries: ENCYCLOPEDIA_CONTRACT_TOPICS },
             'featured-runs': { kicker: 'Featured run', entries: ENCYCLOPEDIA_FEATURED_RUN_TOPICS },
             builds: { kicker: 'Build archetype', entries: buildCodexBuildRows() },

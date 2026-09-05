@@ -106,6 +106,13 @@
     color: var(--theme-gold-bright);
 }
 
+/* The resident's own voice, set apart from the run's own bookkeeping above it. */
+.notes li[data-tone='resident'] {
+    color: var(--theme-text-muted);
+    font-weight: 500;
+    font-style: italic;
+}
+
 /* ---- doors ------------------------------------------------------------------------- */
 
 .routes {

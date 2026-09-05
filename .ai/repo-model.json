@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2547,
-    "codeFileCount": 998,
-    "exportedSymbolCount": 3592,
+    "trackedFileCount": 2551,
+    "codeFileCount": 1002,
+    "exportedSymbolCount": 3604,
     "contentItemCount": 63,
     "mechanicCount": 136,
     "stateFieldCount": 144,
-    "relationshipCount": 10553
+    "relationshipCount": 10586
   },
   "inventory": [
     {
@@ -2320,7 +2320,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 36714,
-      "sha256": "dd6e8029c0a9b8258dfcb7b2c5b14a09123272364ea11fa6a726a08f9368068e"
+      "sha256": "0d6ffcf37d243440aa52f31a46c485bbecd895143e4dd2ed52e9634ffe79fb99"
     },
     {
       "path": "docs/UI_RETHINK_PLAN.md",
@@ -7659,14 +7659,14 @@
     {
       "path": "src/renderer/components/CodexScreen.test.tsx",
       "category": "test",
-      "bytes": 4999,
-      "sha256": "ed7fa08db0920562a4c15435f4ee74d3237834de65f81c7fd0dd1636f9f66101"
+      "bytes": 5090,
+      "sha256": "483e32e55b3f108c5cea8856dd563c7e27c6ff9179da18e8bc1b7746995957e7"
     },
     {
       "path": "src/renderer/components/CodexScreen.tsx",
       "category": "source",
-      "bytes": 11963,
-      "sha256": "3076374a969de8a028a600660eb73e55d118128416a8b0dbdf664c42e12ef9f5"
+      "bytes": 12073,
+      "sha256": "27159e09d10d826e2a5798fe99f7ceac6a90b120a64f93b838593c5a9492e9e1"
     },
     {
       "path": "src/renderer/components/codexScreenModel.test.ts",
@@ -7677,8 +7677,8 @@
     {
       "path": "src/renderer/components/codexScreenModel.ts",
       "category": "source",
-      "bytes": 3238,
-      "sha256": "f6042707b9737296708037fc742820ad47340f03cda5c67321378020eba86bcf"
+      "bytes": 4120,
+      "sha256": "f5cd937531ca496edc722292e61525911c8ffe3fa1f2bf3c75fb054fdf37204d"
     },
     {
       "path": "src/renderer/components/CollectionScreen.module.css",
@@ -7707,20 +7707,20 @@
     {
       "path": "src/renderer/components/FloorClearDialog.module.css",
       "category": "source",
-      "bytes": 9265,
-      "sha256": "c7a270ce0c696f6d93580b3c14e5303b8f24d3ed0a5bb00038f2a38e839256a8"
+      "bytes": 9467,
+      "sha256": "be6ce2e214d2b07b6ad1e60e2c1856c445b2389bd3e601ce2c75e96979864f96"
     },
     {
       "path": "src/renderer/components/FloorClearDialog.test.tsx",
       "category": "test",
-      "bytes": 6000,
-      "sha256": "2e95c179eb85660a7909a673a4f116d29b1c7d9fa1ec452e8263520b0464a188"
+      "bytes": 6505,
+      "sha256": "a07a1c6f4d772b71490f168b5339bae4efa9a06df3f692b66c29cd7c4eddd13a"
     },
     {
       "path": "src/renderer/components/FloorClearDialog.tsx",
       "category": "source",
-      "bytes": 10249,
-      "sha256": "a1fdf8a02d4eb79cb4faf2cdf34b905638a9483a95c85deb800888706d9435b6"
+      "bytes": 10768,
+      "sha256": "de49b14642881898db29c73c74486bf6a11dc7dae8df986d120efdca9261aba9"
     },
     {
       "path": "src/renderer/components/GameOverScreen.module.css",
@@ -7773,8 +7773,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 94552,
-      "sha256": "ef22e85258cd4d1ec2765350247c643b947cdb6568a46d2ba02577265c4d69a2"
+      "bytes": 95125,
+      "sha256": "17f666fb6a95caacbe26fcbf00610a109e3159b98d864ec9680c1a214fe0493a"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -9043,6 +9043,18 @@
       "sha256": "2a2e4b71e8e78f30d0532b668ac7bb1440e74fe94e3e4a6d0540a28294a355b8"
     },
     {
+      "path": "src/renderer/copy/floorCurioBeat.test.ts",
+      "category": "test",
+      "bytes": 2216,
+      "sha256": "6f996590749efc50feec095ef121ec288b22c547fc426f9c0a1d4cd1ebb5f904"
+    },
+    {
+      "path": "src/renderer/copy/floorCurioBeat.ts",
+      "category": "source",
+      "bytes": 1826,
+      "sha256": "ff34f20c47323bb50b7881db7fa4e168e1a403b35bd46fc94bc81faffe8aa979"
+    },
+    {
       "path": "src/renderer/copy/gameOverScreen.test.ts",
       "category": "test",
       "bytes": 1764,
@@ -9081,8 +9093,8 @@
     {
       "path": "src/renderer/copy/magpieBeat.test.ts",
       "category": "test",
-      "bytes": 2434,
-      "sha256": "94c5ba81d5a4b077dcc59330615a2570b8d96702d05a624fc8e7f5daeeda73de"
+      "bytes": 2849,
+      "sha256": "9a67da73e17f16d2e5ecc2f9240748829194024ca828114d7aed804e9ac6c611"
     },
     {
       "path": "src/renderer/copy/magpieBeat.ts",
@@ -9837,8 +9849,8 @@
     {
       "path": "src/renderer/store/relicOfferSurfaceState.test.ts",
       "category": "test",
-      "bytes": 11136,
-      "sha256": "13d60f033b535d0c6f19af1632e1bed7ce5fc6df0cd4928885bc0b8abef94196"
+      "bytes": 11798,
+      "sha256": "c6902a393bc4b326d31733f2a76a56b384f7ace1433f11508683913aea62780a"
     },
     {
       "path": "src/renderer/store/relicOfferSurfaceState.ts",
@@ -10659,8 +10671,8 @@
     {
       "path": "src/shared/contracts.ts",
       "category": "source",
-      "bytes": 50424,
-      "sha256": "d7d482fad1b493165851c8475c7e2fa0764ce0facddf74b9751a6eb61f11e350"
+      "bytes": 50535,
+      "sha256": "db7850f6feed6adbd37ce66f3833f0e8dec86856e3cc2436f0d80c1136ed24be"
     },
     {
       "path": "src/shared/control-label-ambiguity.test.ts",
@@ -11221,6 +11233,18 @@
       "sha256": "f3a94a271c1e8e9e56d078b45bf31975a7bef2e5bce3840be34bbbde4deddf95"
     },
     {
+      "path": "src/shared/floor-curio-rules.test.ts",
+      "category": "test",
+      "bytes": 7469,
+      "sha256": "7855f0dd1b25d3d9e41e0ae0afaa76d121ca83668f435e94730ca260fffabd0d"
+    },
+    {
+      "path": "src/shared/floor-curio-rules.ts",
+      "category": "source",
+      "bytes": 7016,
+      "sha256": "88026d2f5195886af779a0956ab3b5ea562dcb734d5423b6769e58cda127dc93"
+    },
+    {
       "path": "src/shared/floor-mutator-schedule.test.ts",
       "category": "test",
       "bytes": 17799,
@@ -11295,8 +11319,8 @@
     {
       "path": "src/shared/game.test.ts",
       "category": "test",
-      "bytes": 378655,
-      "sha256": "4a1715a3623647f5decb37d12b5e6227e8760e0f761a4038f5fff52d66220c26"
+      "bytes": 379829,
+      "sha256": "7a6129d1d58576065e87bb27496e07a7ad906aaf1027e4b8a7992cf7a0839d22"
     },
     {
       "path": "src/shared/game.ts",
@@ -11823,8 +11847,8 @@
     {
       "path": "src/shared/next-floor-run-state-rules.ts",
       "category": "source",
-      "bytes": 5167,
-      "sha256": "c8c22e1522c9e8a5673381f215a6390c1e1b5e0c8ea21d369481c732f808de20"
+      "bytes": 5716,
+      "sha256": "a9ee52b285748c65b2f11ca8c7a0206c29653ed314ef2f0dc01a41bea19545e8"
     },
     {
       "path": "src/shared/next-floor-transition-rules.ts",
@@ -17439,7 +17463,7 @@
       "path": "src/renderer/components/CodexScreen.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 110,
+      "lineCount": 111,
       "imports": [
         "file:src/renderer/components/CodexScreen.tsx",
         "file:src/shared/save-data.ts"
@@ -17452,7 +17476,7 @@
       "path": "src/renderer/components/CodexScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 264,
+      "lineCount": 266,
       "imports": [
         "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/components/codexScreenModel.ts",
@@ -17490,8 +17514,10 @@
       "path": "src/renderer/components/codexScreenModel.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 92,
+      "lineCount": 115,
       "imports": [
+        "file:src/renderer/copy/floorCurioBeat.ts",
+        "file:src/shared/floor-curio-rules.ts",
         "file:src/shared/game-catalog.ts",
         "file:src/shared/relics.ts"
       ],
@@ -17500,6 +17526,7 @@
         "symbol:src/renderer/components/codexScreenModel.ts#buildCodexModeRows",
         "symbol:src/renderer/components/codexScreenModel.ts#buildCodexMutatorRows",
         "symbol:src/renderer/components/codexScreenModel.ts#buildCodexRelicRows",
+        "symbol:src/renderer/components/codexScreenModel.ts#buildCodexResidentRows",
         "symbol:src/renderer/components/codexScreenModel.ts#CODEX_TOC",
         "symbol:src/renderer/components/codexScreenModel.ts#CodexTab",
         "symbol:src/renderer/components/codexScreenModel.ts#codexTabAllows",
@@ -17508,7 +17535,8 @@
         "symbol:src/renderer/components/codexScreenModel.ts#tocVisible"
       ],
       "testedBy": [
-        "file:src/renderer/components/codexScreenModel.test.ts"
+        "file:src/renderer/components/codexScreenModel.test.ts",
+        "file:src/renderer/copy/floorCurioBeat.test.ts"
       ]
     },
     {
@@ -17565,7 +17593,7 @@
       "path": "src/renderer/components/FloorClearDialog.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 140,
+      "lineCount": 151,
       "imports": [
         "file:src/renderer/components/FloorClearDialog.tsx",
         "file:src/shared/contracts.ts"
@@ -17578,7 +17606,7 @@
       "path": "src/renderer/components/FloorClearDialog.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 230,
+      "lineCount": 241,
       "imports": [
         "file:src/renderer/components/OverlayModal.tsx",
         "file:src/shared/contracts.ts",
@@ -17735,7 +17763,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 2081,
+      "lineCount": 2093,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -17756,6 +17784,7 @@
         "file:src/renderer/components/useGameScreenTraitRouteTargets.ts",
         "file:src/renderer/copy/boardPowerCopy.ts",
         "file:src/renderer/copy/chainMomentum.ts",
+        "file:src/renderer/copy/floorCurioBeat.ts",
         "file:src/renderer/copy/gameplayHints.ts",
         "file:src/renderer/copy/matchScoreFloater.ts",
         "file:src/renderer/copy/mismatchFloater.ts",
@@ -17784,6 +17813,7 @@
         "file:src/shared/cameraViewportMode.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/dungeon-rules.ts",
+        "file:src/shared/floor-curio-rules.ts",
         "file:src/shared/floor-mutator-schedule.ts",
         "file:src/shared/focusDimmedTileIds.ts",
         "file:src/shared/mechanics-encyclopedia.ts",
@@ -21415,6 +21445,38 @@
       "testedBy": []
     },
     {
+      "id": "file:src/renderer/copy/floorCurioBeat.test.ts",
+      "path": "src/renderer/copy/floorCurioBeat.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 53,
+      "imports": [
+        "file:src/renderer/components/codexScreenModel.ts",
+        "file:src/renderer/copy/floorCurioBeat.ts",
+        "file:src/shared/floor-curio-rules.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/copy/floorCurioBeat.ts",
+      "path": "src/renderer/copy/floorCurioBeat.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 34,
+      "imports": [
+        "file:src/shared/floor-curio-rules.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/copy/floorCurioBeat.ts#FLOOR_CURIO_COPY",
+        "symbol:src/renderer/copy/floorCurioBeat.ts#floorClearResidentLine",
+        "symbol:src/renderer/copy/floorCurioBeat.ts#floorCurioAnnouncement"
+      ],
+      "testedBy": [
+        "file:src/renderer/copy/floorCurioBeat.test.ts"
+      ]
+    },
+    {
       "id": "file:src/renderer/copy/gameOverScreen.test.ts",
       "path": "src/renderer/copy/gameOverScreen.test.ts",
       "layer": "renderer",
@@ -21520,7 +21582,7 @@
       "path": "src/renderer/copy/magpieBeat.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 47,
+      "lineCount": 57,
       "imports": [
         "file:src/renderer/copy/boardTurnAnnouncement.ts",
         "file:src/renderer/copy/magpieBeat.ts",
@@ -23511,7 +23573,7 @@
       "path": "src/renderer/store/relicOfferSurfaceState.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 282,
+      "lineCount": 294,
       "imports": [
         "file:src/renderer/store/relicOfferSurfaceState.ts",
         "file:src/shared/contracts.ts",
@@ -25993,7 +26055,7 @@
       "path": "src/shared/contracts.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1295,
+      "lineCount": 1297,
       "imports": [],
       "exports": [
         "symbol:src/shared/contracts.ts#AchievementId",
@@ -28158,6 +28220,46 @@
       "testedBy": []
     },
     {
+      "id": "file:src/shared/floor-curio-rules.test.ts",
+      "path": "src/shared/floor-curio-rules.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 164,
+      "imports": [
+        "file:src/shared/floor-curio-rules.ts",
+        "file:src/shared/run-creation-rules.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/shared/floor-curio-rules.ts",
+      "path": "src/shared/floor-curio-rules.ts",
+      "layer": "shared",
+      "role": "production",
+      "lineCount": 161,
+      "imports": [
+        "file:src/shared/contracts.ts",
+        "file:src/shared/rng.ts",
+        "file:src/shared/run-number-guards.ts"
+      ],
+      "exports": [
+        "symbol:src/shared/floor-curio-rules.ts#applyFloorCurio",
+        "symbol:src/shared/floor-curio-rules.ts#FLOOR_CURIOS",
+        "symbol:src/shared/floor-curio-rules.ts#FloorCurio",
+        "symbol:src/shared/floor-curio-rules.ts#FloorCurioEffect",
+        "symbol:src/shared/floor-curio-rules.ts#FloorCurioId",
+        "symbol:src/shared/floor-curio-rules.ts#getFloorCurio",
+        "symbol:src/shared/floor-curio-rules.ts#MIN_CURIO_MEMORIZE_MS",
+        "symbol:src/shared/floor-curio-rules.ts#pickFloorCurio"
+      ],
+      "testedBy": [
+        "file:src/renderer/copy/floorCurioBeat.test.ts",
+        "file:src/shared/floor-curio-rules.test.ts",
+        "file:src/shared/game.test.ts"
+      ]
+    },
+    {
       "id": "file:src/shared/floor-mutator-schedule.test.ts",
       "path": "src/shared/floor-mutator-schedule.test.ts",
       "layer": "shared",
@@ -28517,12 +28619,13 @@
       "path": "src/shared/game.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 8767,
+      "lineCount": 8790,
       "imports": [
         "file:src/shared/board-generation.ts",
         "file:src/shared/board-powers.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/dungeon-rules.ts",
+        "file:src/shared/floor-curio-rules.ts",
         "file:src/shared/game-core.ts",
         "file:src/shared/mutators.ts",
         "file:src/shared/objective-rules.ts",
@@ -30616,12 +30719,13 @@
       "path": "src/shared/next-floor-run-state-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 131,
+      "lineCount": 144,
       "imports": [
         "file:src/shared/board-inspection.ts",
         "file:src/shared/board-tile-generation-rules.ts",
         "file:src/shared/bonus-rewards.ts",
         "file:src/shared/contracts.ts",
+        "file:src/shared/floor-curio-rules.ts",
         "file:src/shared/hazard-banisher-rules.ts",
         "file:src/shared/relics.ts",
         "file:src/shared/run-timer-rules.ts",
@@ -32337,6 +32441,7 @@
         "file:src/renderer/store/shopCloseExecutor.test.ts",
         "file:src/renderer/store/tilePressAudioCues.test.ts",
         "file:src/shared/achievement-reachability.test.ts",
+        "file:src/shared/floor-curio-rules.test.ts",
         "file:src/shared/memorize-phase-rules.test.ts",
         "file:src/shared/perfect-memory-status.test.ts",
         "file:src/shared/relic-pick-advance-rules.test.ts",
@@ -37547,88 +37652,96 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/CodexScreen.tsx",
-      "line": 263,
-      "endLine": 263
+      "line": 265,
+      "endLine": 265
     },
     {
       "id": "symbol:src/renderer/components/codexScreenModel.ts#buildCodexBuildRows",
       "name": "buildCodexBuildRows",
       "kind": "value",
       "file": "src/renderer/components/codexScreenModel.ts",
-      "line": 71,
-      "endLine": 78
+      "line": 74,
+      "endLine": 81
     },
     {
       "id": "symbol:src/renderer/components/codexScreenModel.ts#buildCodexModeRows",
       "name": "buildCodexModeRows",
       "kind": "value",
       "file": "src/renderer/components/codexScreenModel.ts",
-      "line": 84,
-      "endLine": 91
+      "line": 107,
+      "endLine": 114
     },
     {
       "id": "symbol:src/renderer/components/codexScreenModel.ts#buildCodexMutatorRows",
       "name": "buildCodexMutatorRows",
       "kind": "value",
       "file": "src/renderer/components/codexScreenModel.ts",
-      "line": 82,
-      "endLine": 82
+      "line": 105,
+      "endLine": 105
     },
     {
       "id": "symbol:src/renderer/components/codexScreenModel.ts#buildCodexRelicRows",
       "name": "buildCodexRelicRows",
       "kind": "value",
       "file": "src/renderer/components/codexScreenModel.ts",
-      "line": 80,
-      "endLine": 80
+      "line": 103,
+      "endLine": 103
+    },
+    {
+      "id": "symbol:src/renderer/components/codexScreenModel.ts#buildCodexResidentRows",
+      "name": "buildCodexResidentRows",
+      "kind": "value",
+      "file": "src/renderer/components/codexScreenModel.ts",
+      "line": 90,
+      "endLine": 101
     },
     {
       "id": "symbol:src/renderer/components/codexScreenModel.ts#CODEX_TOC",
       "name": "CODEX_TOC",
       "kind": "value",
       "file": "src/renderer/components/codexScreenModel.ts",
-      "line": 17,
-      "endLine": 31
+      "line": 19,
+      "endLine": 34
     },
     {
       "id": "symbol:src/renderer/components/codexScreenModel.ts#CodexTab",
       "name": "CodexTab",
       "kind": "type",
       "file": "src/renderer/components/codexScreenModel.ts",
-      "line": 13,
-      "endLine": 13
+      "line": 15,
+      "endLine": 15
     },
     {
       "id": "symbol:src/renderer/components/codexScreenModel.ts#codexTabAllows",
       "name": "codexTabAllows",
       "kind": "value",
       "file": "src/renderer/components/codexScreenModel.ts",
-      "line": 43,
-      "endLine": 51
+      "line": 46,
+      "endLine": 54
     },
     {
       "id": "symbol:src/renderer/components/codexScreenModel.ts#filterTopics",
       "name": "filterTopics",
       "kind": "value",
       "file": "src/renderer/components/codexScreenModel.ts",
-      "line": 33,
-      "endLine": 41
+      "line": 36,
+      "endLine": 44
     },
     {
       "id": "symbol:src/renderer/components/codexScreenModel.ts#hasCodexFilterMatch",
       "name": "hasCodexFilterMatch",
       "kind": "value",
       "file": "src/renderer/components/codexScreenModel.ts",
-      "line": 55,
-      "endLine": 69
+      "line": 58,
+      "endLine": 72
     },
     {
       "id": "symbol:src/renderer/components/codexScreenModel.ts#tocVisible",
       "name": "tocVisible",
       "kind": "value",
       "file": "src/renderer/components/codexScreenModel.ts",
-      "line": 53,
-      "endLine": 53
+      "line": 56,
+      "endLine": 56
     },
     {
       "id": "symbol:src/renderer/components/CollectionScreen.tsx#default",
@@ -37643,8 +37756,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/FloorClearDialog.tsx",
-      "line": 229,
-      "endLine": 229
+      "line": 240,
+      "endLine": 240
     },
     {
       "id": "symbol:src/renderer/components/FloorClearDialog.tsx#FloorClearDialogProps",
@@ -37652,7 +37765,7 @@
       "kind": "interface",
       "file": "src/renderer/components/FloorClearDialog.tsx",
       "line": 42,
-      "endLine": 58
+      "endLine": 63
     },
     {
       "id": "symbol:src/renderer/components/FloorClearDialog.tsx#FloorClearRouteOption",
@@ -37747,8 +37860,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 2080,
-      "endLine": 2080
+      "line": 2092,
+      "endLine": 2092
     },
     {
       "id": "symbol:src/renderer/components/gameScreenFeedback.ts#DungeonCombatLogRow",
@@ -41733,6 +41846,30 @@
       "file": "src/renderer/copy/diagnosticsSettings.ts",
       "line": 20,
       "endLine": 23
+    },
+    {
+      "id": "symbol:src/renderer/copy/floorCurioBeat.ts#FLOOR_CURIO_COPY",
+      "name": "FLOOR_CURIO_COPY",
+      "kind": "value",
+      "file": "src/renderer/copy/floorCurioBeat.ts",
+      "line": 16,
+      "endLine": 25
+    },
+    {
+      "id": "symbol:src/renderer/copy/floorCurioBeat.ts#floorClearResidentLine",
+      "name": "floorClearResidentLine",
+      "kind": "value",
+      "file": "src/renderer/copy/floorCurioBeat.ts",
+      "line": 28,
+      "endLine": 29
+    },
+    {
+      "id": "symbol:src/renderer/copy/floorCurioBeat.ts#floorCurioAnnouncement",
+      "name": "floorCurioAnnouncement",
+      "kind": "value",
+      "file": "src/renderer/copy/floorCurioBeat.ts",
+      "line": 32,
+      "endLine": 33
     },
     {
       "id": "symbol:src/renderer/copy/gameOverScreen.ts#achievementsNote",
@@ -47419,16 +47556,16 @@
       "name": "AchievementState",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1169,
-      "endLine": 1169
+      "line": 1171,
+      "endLine": 1171
     },
     {
       "id": "symbol:src/shared/contracts.ts#AchievementUnlockResult",
       "name": "AchievementUnlockResult",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1242,
-      "endLine": 1244
+      "line": 1244,
+      "endLine": 1246
     },
     {
       "id": "symbol:src/shared/contracts.ts#BoardPresentationMode",
@@ -47547,8 +47684,8 @@
       "name": "CrashReportSummary",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1250,
-      "endLine": 1255
+      "line": 1252,
+      "endLine": 1257
     },
     {
       "id": "symbol:src/shared/contracts.ts#CURSED_LAST_BONUS_SCORE",
@@ -47587,8 +47724,8 @@
       "name": "DesktopApi",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1268,
-      "endLine": 1294
+      "line": 1270,
+      "endLine": 1296
     },
     {
       "id": "symbol:src/shared/contracts.ts#DisplayMode",
@@ -48211,8 +48348,8 @@
       "name": "PlayerStatsPersisted",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1171,
-      "endLine": 1190
+      "line": 1173,
+      "endLine": 1192
     },
     {
       "id": "symbol:src/shared/contracts.ts#PuzzleCompletionRecord",
@@ -48315,16 +48452,16 @@
       "name": "RendererErrorKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1258,
-      "endLine": 1258
+      "line": 1260,
+      "endLine": 1260
     },
     {
       "id": "symbol:src/shared/contracts.ts#RendererErrorReport",
       "name": "RendererErrorReport",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1261,
-      "endLine": 1266
+      "line": 1263,
+      "endLine": 1268
     },
     {
       "id": "symbol:src/shared/contracts.ts#RESOLVE_DELAY_MULTIPLIER_MIN",
@@ -48355,16 +48492,16 @@
       "name": "RichPresenceState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1235,
-      "endLine": 1239
+      "line": 1237,
+      "endLine": 1241
     },
     {
       "id": "symbol:src/shared/contracts.ts#RichPresenceToken",
       "name": "RichPresenceToken",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1233,
-      "endLine": 1233
+      "line": 1235,
+      "endLine": 1235
     },
     {
       "id": "symbol:src/shared/contracts.ts#RouteCardKind",
@@ -48451,8 +48588,8 @@
       "name": "RunHistoryRecord",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1197,
-      "endLine": 1206
+      "line": 1199,
+      "endLine": 1208
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunShopItemCategory",
@@ -48492,7 +48629,7 @@
       "kind": "interface",
       "file": "src/shared/contracts.ts",
       "line": 962,
-      "endLine": 1167
+      "endLine": 1169
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunStatus",
@@ -48531,8 +48668,8 @@
       "name": "SaveData",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1208,
-      "endLine": 1227
+      "line": 1210,
+      "endLine": 1229
     },
     {
       "id": "symbol:src/shared/contracts.ts#SCHOLAR_STYLE_FLOOR_BONUS_SCORE",
@@ -51613,6 +51750,70 @@
       "file": "src/shared/floor-completion-transitions.ts",
       "line": 11,
       "endLine": 23
+    },
+    {
+      "id": "symbol:src/shared/floor-curio-rules.ts#applyFloorCurio",
+      "name": "applyFloorCurio",
+      "kind": "value",
+      "file": "src/shared/floor-curio-rules.ts",
+      "line": 140,
+      "endLine": 160
+    },
+    {
+      "id": "symbol:src/shared/floor-curio-rules.ts#FLOOR_CURIOS",
+      "name": "FLOOR_CURIOS",
+      "kind": "value",
+      "file": "src/shared/floor-curio-rules.ts",
+      "line": 59,
+      "endLine": 106
+    },
+    {
+      "id": "symbol:src/shared/floor-curio-rules.ts#FloorCurio",
+      "name": "FloorCurio",
+      "kind": "interface",
+      "file": "src/shared/floor-curio-rules.ts",
+      "line": 40,
+      "endLine": 49
+    },
+    {
+      "id": "symbol:src/shared/floor-curio-rules.ts#FloorCurioEffect",
+      "name": "FloorCurioEffect",
+      "kind": "interface",
+      "file": "src/shared/floor-curio-rules.ts",
+      "line": 31,
+      "endLine": 38
+    },
+    {
+      "id": "symbol:src/shared/floor-curio-rules.ts#FloorCurioId",
+      "name": "FloorCurioId",
+      "kind": "type",
+      "file": "src/shared/floor-curio-rules.ts",
+      "line": 23,
+      "endLine": 29
+    },
+    {
+      "id": "symbol:src/shared/floor-curio-rules.ts#getFloorCurio",
+      "name": "getFloorCurio",
+      "kind": "value",
+      "file": "src/shared/floor-curio-rules.ts",
+      "line": 108,
+      "endLine": 109
+    },
+    {
+      "id": "symbol:src/shared/floor-curio-rules.ts#MIN_CURIO_MEMORIZE_MS",
+      "name": "MIN_CURIO_MEMORIZE_MS",
+      "kind": "value",
+      "file": "src/shared/floor-curio-rules.ts",
+      "line": 127,
+      "endLine": 127
+    },
+    {
+      "id": "symbol:src/shared/floor-curio-rules.ts#pickFloorCurio",
+      "name": "pickFloorCurio",
+      "kind": "value",
+      "file": "src/shared/floor-curio-rules.ts",
+      "line": 117,
+      "endLine": 120
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#CHAPTER_ACT_BIOME_STRUCTURE",
@@ -56835,16 +57036,16 @@
       "name": "createNextFloorRunState",
       "kind": "value",
       "file": "src/shared/next-floor-run-state-rules.ts",
-      "line": 27,
-      "endLine": 130
+      "line": 28,
+      "endLine": 143
     },
     {
       "id": "symbol:src/shared/next-floor-run-state-rules.ts#CreateNextFloorRunStateOptions",
       "name": "CreateNextFloorRunStateOptions",
       "kind": "interface",
       "file": "src/shared/next-floor-run-state-rules.ts",
-      "line": 17,
-      "endLine": 25
+      "line": 18,
+      "endLine": 26
     },
     {
       "id": "symbol:src/shared/next-floor-transition-rules.ts#advanceToNextLevel",
@@ -65801,7 +66002,7 @@
         },
         {
           "path": "src/shared/game.test.ts",
-          "line": 365
+          "line": 366
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
@@ -65934,7 +66135,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1277
+          "line": 1288
         }
       ],
       "tests": [
@@ -65980,7 +66181,7 @@
         },
         {
           "path": "src/shared/next-floor-run-state-rules.ts",
-          "line": 22
+          "line": 23
         },
         {
           "path": "src/shared/game.ts",
@@ -66277,7 +66478,7 @@
         },
         {
           "path": "src/shared/next-floor-run-state-rules.ts",
-          "line": 56
+          "line": 57
         },
         {
           "path": "src/shared/flip-tile-transition.ts",
@@ -66771,7 +66972,7 @@
         },
         {
           "path": "src/shared/next-floor-run-state-rules.ts",
-          "line": 55
+          "line": 56
         }
       ],
       "tests": [
@@ -67289,7 +67490,7 @@
         },
         {
           "path": "src/shared/next-floor-run-state-rules.ts",
-          "line": 15
+          "line": 8
         },
         {
           "path": "src/shared/board-power-actions.ts",
@@ -67342,7 +67543,7 @@
         },
         {
           "path": "src/shared/next-floor-run-state-rules.ts",
-          "line": 15
+          "line": 8
         }
       ],
       "tests": [
@@ -69680,7 +69881,7 @@
         },
         {
           "path": "src/shared/next-floor-run-state-rules.ts",
-          "line": 52
+          "line": 53
         }
       ],
       "tests": [
@@ -77580,6 +77781,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/codexScreenModel.ts->symbol:src/renderer/components/codexScreenModel.ts#buildCodexResidentRows",
+      "source": "file:src/renderer/components/codexScreenModel.ts",
+      "target": "symbol:src/renderer/components/codexScreenModel.ts#buildCodexResidentRows",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/codexScreenModel.ts->symbol:src/renderer/components/codexScreenModel.ts#CODEX_TOC",
       "source": "file:src/renderer/components/codexScreenModel.ts",
       "target": "symbol:src/renderer/components/codexScreenModel.ts#CODEX_TOC",
@@ -80691,6 +80898,24 @@
       "id": "exports:src/renderer/copy/diagnosticsSettings.ts->symbol:src/renderer/copy/diagnosticsSettings.ts#SAVE_FILE_COPY",
       "source": "file:src/renderer/copy/diagnosticsSettings.ts",
       "target": "symbol:src/renderer/copy/diagnosticsSettings.ts#SAVE_FILE_COPY",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/copy/floorCurioBeat.ts->symbol:src/renderer/copy/floorCurioBeat.ts#FLOOR_CURIO_COPY",
+      "source": "file:src/renderer/copy/floorCurioBeat.ts",
+      "target": "symbol:src/renderer/copy/floorCurioBeat.ts#FLOOR_CURIO_COPY",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/copy/floorCurioBeat.ts->symbol:src/renderer/copy/floorCurioBeat.ts#floorClearResidentLine",
+      "source": "file:src/renderer/copy/floorCurioBeat.ts",
+      "target": "symbol:src/renderer/copy/floorCurioBeat.ts#floorClearResidentLine",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/copy/floorCurioBeat.ts->symbol:src/renderer/copy/floorCurioBeat.ts#floorCurioAnnouncement",
+      "source": "file:src/renderer/copy/floorCurioBeat.ts",
+      "target": "symbol:src/renderer/copy/floorCurioBeat.ts#floorCurioAnnouncement",
       "kind": "exports"
     },
     {
@@ -88101,6 +88326,54 @@
       "id": "exports:src/shared/floor-completion-transitions.ts->symbol:src/shared/floor-completion-transitions.ts#createApplyDestroyPair",
       "source": "file:src/shared/floor-completion-transitions.ts",
       "target": "symbol:src/shared/floor-completion-transitions.ts#createApplyDestroyPair",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/floor-curio-rules.ts->symbol:src/shared/floor-curio-rules.ts#applyFloorCurio",
+      "source": "file:src/shared/floor-curio-rules.ts",
+      "target": "symbol:src/shared/floor-curio-rules.ts#applyFloorCurio",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/floor-curio-rules.ts->symbol:src/shared/floor-curio-rules.ts#FLOOR_CURIOS",
+      "source": "file:src/shared/floor-curio-rules.ts",
+      "target": "symbol:src/shared/floor-curio-rules.ts#FLOOR_CURIOS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/floor-curio-rules.ts->symbol:src/shared/floor-curio-rules.ts#FloorCurio",
+      "source": "file:src/shared/floor-curio-rules.ts",
+      "target": "symbol:src/shared/floor-curio-rules.ts#FloorCurio",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/floor-curio-rules.ts->symbol:src/shared/floor-curio-rules.ts#FloorCurioEffect",
+      "source": "file:src/shared/floor-curio-rules.ts",
+      "target": "symbol:src/shared/floor-curio-rules.ts#FloorCurioEffect",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/floor-curio-rules.ts->symbol:src/shared/floor-curio-rules.ts#FloorCurioId",
+      "source": "file:src/shared/floor-curio-rules.ts",
+      "target": "symbol:src/shared/floor-curio-rules.ts#FloorCurioId",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/floor-curio-rules.ts->symbol:src/shared/floor-curio-rules.ts#getFloorCurio",
+      "source": "file:src/shared/floor-curio-rules.ts",
+      "target": "symbol:src/shared/floor-curio-rules.ts#getFloorCurio",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/floor-curio-rules.ts->symbol:src/shared/floor-curio-rules.ts#MIN_CURIO_MEMORIZE_MS",
+      "source": "file:src/shared/floor-curio-rules.ts",
+      "target": "symbol:src/shared/floor-curio-rules.ts#MIN_CURIO_MEMORIZE_MS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/floor-curio-rules.ts->symbol:src/shared/floor-curio-rules.ts#pickFloorCurio",
+      "source": "file:src/shared/floor-curio-rules.ts",
+      "target": "symbol:src/shared/floor-curio-rules.ts#pickFloorCurio",
       "kind": "exports"
     },
     {
@@ -102553,6 +102826,18 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/codexScreenModel.ts->src/renderer/copy/floorCurioBeat.ts",
+      "source": "file:src/renderer/components/codexScreenModel.ts",
+      "target": "file:src/renderer/copy/floorCurioBeat.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/codexScreenModel.ts->src/shared/floor-curio-rules.ts",
+      "source": "file:src/renderer/components/codexScreenModel.ts",
+      "target": "file:src/shared/floor-curio-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/codexScreenModel.ts->src/shared/game-catalog.ts",
       "source": "file:src/renderer/components/codexScreenModel.ts",
       "target": "file:src/shared/game-catalog.ts",
@@ -103039,6 +103324,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/copy/floorCurioBeat.ts",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "file:src/renderer/copy/floorCurioBeat.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/copy/gameplayHints.ts",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "file:src/renderer/copy/gameplayHints.ts",
@@ -103204,6 +103495,12 @@
       "id": "imports:src/renderer/components/GameScreen.tsx->src/shared/dungeon-rules.ts",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "file:src/shared/dungeon-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/GameScreen.tsx->src/shared/floor-curio-rules.ts",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "file:src/shared/floor-curio-rules.ts",
       "kind": "imports"
     },
     {
@@ -107212,6 +107509,30 @@
       "id": "imports:src/renderer/copy/collectionStorageNote.test.ts->src/renderer/copy/collectionStorageNote.ts",
       "source": "file:src/renderer/copy/collectionStorageNote.test.ts",
       "target": "file:src/renderer/copy/collectionStorageNote.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/copy/floorCurioBeat.test.ts->src/renderer/components/codexScreenModel.ts",
+      "source": "file:src/renderer/copy/floorCurioBeat.test.ts",
+      "target": "file:src/renderer/components/codexScreenModel.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/copy/floorCurioBeat.test.ts->src/renderer/copy/floorCurioBeat.ts",
+      "source": "file:src/renderer/copy/floorCurioBeat.test.ts",
+      "target": "file:src/renderer/copy/floorCurioBeat.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/copy/floorCurioBeat.test.ts->src/shared/floor-curio-rules.ts",
+      "source": "file:src/renderer/copy/floorCurioBeat.test.ts",
+      "target": "file:src/shared/floor-curio-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/copy/floorCurioBeat.ts->src/shared/floor-curio-rules.ts",
+      "source": "file:src/renderer/copy/floorCurioBeat.ts",
+      "target": "file:src/shared/floor-curio-rules.ts",
       "kind": "imports"
     },
     {
@@ -113197,6 +113518,36 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/floor-curio-rules.test.ts->src/shared/floor-curio-rules.ts",
+      "source": "file:src/shared/floor-curio-rules.test.ts",
+      "target": "file:src/shared/floor-curio-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/floor-curio-rules.test.ts->src/shared/run-creation-rules.ts",
+      "source": "file:src/shared/floor-curio-rules.test.ts",
+      "target": "file:src/shared/run-creation-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/floor-curio-rules.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/floor-curio-rules.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/floor-curio-rules.ts->src/shared/rng.ts",
+      "source": "file:src/shared/floor-curio-rules.ts",
+      "target": "file:src/shared/rng.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/floor-curio-rules.ts->src/shared/run-number-guards.ts",
+      "source": "file:src/shared/floor-curio-rules.ts",
+      "target": "file:src/shared/run-number-guards.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/floor-mutator-schedule.test.ts->src/shared/board-generation.ts",
       "source": "file:src/shared/floor-mutator-schedule.test.ts",
       "target": "file:src/shared/board-generation.ts",
@@ -113470,6 +113821,12 @@
       "id": "imports:src/shared/game.test.ts->src/shared/dungeon-rules.ts",
       "source": "file:src/shared/game.test.ts",
       "target": "file:src/shared/dungeon-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/game.test.ts->src/shared/floor-curio-rules.ts",
+      "source": "file:src/shared/game.test.ts",
+      "target": "file:src/shared/floor-curio-rules.ts",
       "kind": "imports"
     },
     {
@@ -115828,6 +116185,12 @@
       "id": "imports:src/shared/next-floor-run-state-rules.ts->src/shared/contracts.ts",
       "source": "file:src/shared/next-floor-run-state-rules.ts",
       "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/next-floor-run-state-rules.ts->src/shared/floor-curio-rules.ts",
+      "source": "file:src/shared/next-floor-run-state-rules.ts",
+      "target": "file:src/shared/floor-curio-rules.ts",
       "kind": "imports"
     },
     {
@@ -127079,6 +127442,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/components/codexScreenModel.ts->file:src/renderer/copy/floorCurioBeat.test.ts",
+      "source": "file:src/renderer/components/codexScreenModel.ts",
+      "target": "file:src/renderer/copy/floorCurioBeat.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/components/CollectionScreen.tsx->file:src/renderer/components/CollectionScreen.test.tsx",
       "source": "file:src/renderer/components/CollectionScreen.tsx",
       "target": "file:src/renderer/components/CollectionScreen.test.tsx",
@@ -127760,6 +128129,12 @@
       "id": "tested_by:src/renderer/copy/collectionStorageNote.ts->file:src/renderer/copy/collectionStorageNote.test.ts",
       "source": "file:src/renderer/copy/collectionStorageNote.ts",
       "target": "file:src/renderer/copy/collectionStorageNote.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/copy/floorCurioBeat.ts->file:src/renderer/copy/floorCurioBeat.test.ts",
+      "source": "file:src/renderer/copy/floorCurioBeat.ts",
+      "target": "file:src/renderer/copy/floorCurioBeat.test.ts",
       "kind": "tested_by"
     },
     {
@@ -130541,6 +130916,24 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/floor-curio-rules.ts->file:src/renderer/copy/floorCurioBeat.test.ts",
+      "source": "file:src/shared/floor-curio-rules.ts",
+      "target": "file:src/renderer/copy/floorCurioBeat.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/floor-curio-rules.ts->file:src/shared/floor-curio-rules.test.ts",
+      "source": "file:src/shared/floor-curio-rules.ts",
+      "target": "file:src/shared/floor-curio-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/floor-curio-rules.ts->file:src/shared/game.test.ts",
+      "source": "file:src/shared/floor-curio-rules.ts",
+      "target": "file:src/shared/game.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/floor-mutator-schedule.ts->file:src/renderer/hooks/useDistractionChannelTick.integration.test.tsx",
       "source": "file:src/shared/floor-mutator-schedule.ts",
       "target": "file:src/renderer/hooks/useDistractionChannelTick.integration.test.tsx",
@@ -132230,6 +132623,12 @@
       "id": "tested_by:src/shared/run-creation-rules.ts->file:src/shared/achievement-reachability.test.ts",
       "source": "file:src/shared/run-creation-rules.ts",
       "target": "file:src/shared/achievement-reachability.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/run-creation-rules.ts->file:src/shared/floor-curio-rules.test.ts",
+      "source": "file:src/shared/run-creation-rules.ts",
+      "target": "file:src/shared/floor-curio-rules.test.ts",
       "kind": "tested_by"
     },
     {

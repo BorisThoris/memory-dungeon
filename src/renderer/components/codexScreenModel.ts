@@ -6,6 +6,8 @@ import {
     VISUAL_ENDLESS_MODE_LOCKED
 } from '../../shared/game-catalog';
 import { getRelicBuildArchetypeSummaries } from '../../shared/relics';
+import { FLOOR_CURIOS } from '../../shared/floor-curio-rules';
+import { FLOOR_CURIO_COPY } from '../copy/floorCurioBeat';
 
 type TextTopic = { title: string; description: string };
 
@@ -21,6 +23,7 @@ export const CODEX_TOC: { href: string; label: string; kind: TocKind }[] = [
     { href: '#codex-settings', label: 'Settings', kind: 'guide' },
     { href: '#codex-pickups', label: 'Pickups', kind: 'guide' },
     { href: '#codex-traits', label: 'Traits', kind: 'guide' },
+    { href: '#codex-residents', label: 'Residents', kind: 'guide' },
     { href: '#codex-contracts', label: 'Contracts', kind: 'guide' },
     { href: '#codex-featured-runs', label: 'Featured', kind: 'guide' },
     { href: '#codex-builds', label: 'Builds', kind: 'guide' },
@@ -76,6 +79,26 @@ export const buildCodexBuildRows = () =>
             .map((id) => RELIC_CATALOG[id]?.title ?? id)
             .join(', ')}.`
     }));
+
+/**
+ * The cast, as the Codex lists them: who they are, what they say, and what they actually change.
+ *
+ * The overview article comes first so the section reads as a cast list rather than six unrelated
+ * modifiers — a player who opens this wants to know that every floor has someone on it before
+ * they want to know what a sock does.
+ */
+export const buildCodexResidentRows = () => [
+    {
+        id: 'floor_residents',
+        title: FLOOR_CURIO_COPY.codexTitle,
+        description: FLOOR_CURIO_COPY.codexDescription
+    },
+    ...FLOOR_CURIOS.map((curio) => ({
+        id: curio.id,
+        title: curio.name,
+        description: `${curio.line} ${curio.effectSummary}`
+    }))
+];
 
 export const buildCodexRelicRows = () => getRelicCatalogRows();
 

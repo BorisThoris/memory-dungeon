@@ -73,6 +73,8 @@ import {
 } from '../copy/relicDraftOffer';
 import { GAMBIT_KEYBOARD_HELP_TIP } from '../copy/gameplayHints';
 import { PASS_AND_PLAY_COPY } from '../copy/passAndPlay';
+import { floorClearResidentLine } from '../copy/floorCurioBeat';
+import { pickFloorCurio } from '../../shared/floor-curio-rules';
 import { GAMEPAD_SHORTCUT_ROWS, GAMEPLAY_SHORTCUT_ROWS } from '../keyboard/gameplayShortcuts';
 import { useGamepadConnected } from '../hooks/useGamepadNavigation';
 import { usePlatformTiltField } from '../platformTilt/usePlatformTiltField';
@@ -1149,6 +1151,15 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             ? pickFloorScheduleEntry(run.runSeed, run.runRulesVersion, run.lastLevelResult.level + 1, run.gameMode)
             : null;
     const nextFloorObjectiveLabel = getFeaturedObjectiveLabel(nextFloorPreview?.featuredObjectiveId ?? null);
+    /**
+     * Named from the same seed, rules version and floor number the advance will use, so the
+     * promise made here is the resident who actually arrives.
+     */
+    const nextFloorResidentLine = run.lastLevelResult
+        ? floorClearResidentLine(
+              pickFloorCurio(run.runSeed, run.lastLevelResult.level + 1, run.runRulesVersion)
+          )
+        : null;
     const nextFloorIdentity = nextFloorPreview
         ? getFloorIdentityContract({
               floorTag: nextFloorPreview.floorTag,
@@ -1994,6 +2005,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                             playUiClick();
                             chooseRouteAndContinue(id);
                         }}
+                        residentLine={nextFloorResidentLine}
                         result={run.lastLevelResult}
                         routeIntro={routeChoiceRequiredCopy}
                         routeOptions={floorClearRouteOptions}

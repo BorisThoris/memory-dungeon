@@ -47,6 +47,11 @@ export interface FloorClearDialogProps {
     lifeBonusLine: string | null;
     /** One line for the featured objective outcome on endless floors, or null. */
     objectiveLine: string | null;
+    /**
+     * Who is waiting on the next floor, named before you commit to the stairs. Rolled from the
+     * run's own seed, so this is a promise the floor advance keeps rather than flavour text.
+     */
+    residentLine: string | null;
     routeRequired: boolean;
     routeIntro: string;
     routeOptions: readonly FloorClearRouteOption[];
@@ -68,6 +73,7 @@ const FloorClearDialog = ({
     objectiveLine,
     onArmWager,
     onChooseRoute,
+    residentLine,
     result,
     routeIntro,
     routeOptions,
@@ -129,10 +135,15 @@ const FloorClearDialog = ({
                     </div>
                 </dl>
 
-                {lifeBonusLine || objectiveLine ? (
+                {lifeBonusLine || objectiveLine || residentLine ? (
                     <ul className={styles.notes} data-testid="floor-clear-notes">
                         {lifeBonusLine ? <li data-tone="reward">{lifeBonusLine}</li> : null}
                         {objectiveLine ? <li>{objectiveLine}</li> : null}
+                        {residentLine ? (
+                            <li data-testid="floor-clear-resident" data-tone="resident">
+                                {residentLine}
+                            </li>
+                        ) : null}
                     </ul>
                 ) : null}
 

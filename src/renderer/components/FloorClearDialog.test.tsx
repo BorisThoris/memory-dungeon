@@ -58,6 +58,7 @@ const renderDialog = (overrides: Partial<FloorClearDialogProps> = {}) => {
         objectiveLine: null,
         onArmWager: vi.fn(),
         onChooseRoute: vi.fn(),
+        residentLine: null,
         result,
         routeIntro: 'Pick one door to continue.',
         routeOptions: [],
@@ -72,6 +73,16 @@ const renderDialog = (overrides: Partial<FloorClearDialogProps> = {}) => {
 };
 
 describe('FloorClearDialog', () => {
+    it('names who is on the next floor before the stairs are taken', () => {
+        renderDialog({ residentLine: 'Downstairs: A hoarding rat. It has been collecting.' });
+        expect(screen.getByTestId('floor-clear-resident')).toHaveTextContent(/a hoarding rat/i);
+    });
+
+    it('leaves the notes list out entirely when there is nothing to note', () => {
+        renderDialog();
+        expect(screen.queryByTestId('floor-clear-notes')).not.toBeInTheDocument();
+    });
+
     it('states the floor score, run total and four stats once', () => {
         renderDialog();
         expect(screen.getByRole('dialog', { name: /floor cleared/i })).toHaveTextContent('Floor 3');

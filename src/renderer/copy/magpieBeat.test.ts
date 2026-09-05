@@ -3,8 +3,18 @@ import { createBoardTurnResolvedEventFixture } from '../../shared/test/gameplay-
 import { buildBoardTurnAnnouncement, magpieAnnouncementLines } from './boardTurnAnnouncement';
 import { MAGPIE_BEAT_COPY } from './magpieBeat';
 
-const turnEvent = (announcement: Record<string, number>) => {
-    const base = createBoardTurnResolvedEventFixture({ commandId: 'magpie-test', outcome: 'mismatch' });
+/*
+ * The fixture is typed as the whole gameplay-event union, so the board-turn shape has to be named
+ * to reach `announcement`. Narrowed rather than cast to `any`: the point of these tests is that the
+ * announcement fields exist on the event the core actually emits.
+ */
+type BoardTurnEvent = Parameters<typeof magpieAnnouncementLines>[0];
+
+const turnEvent = (announcement: Partial<BoardTurnEvent['announcement']>): BoardTurnEvent => {
+    const base = createBoardTurnResolvedEventFixture({
+        commandId: 'magpie-test',
+        outcome: 'mismatch'
+    }) as BoardTurnEvent;
     return { ...base, announcement: { ...base.announcement, ...announcement } };
 };
 

@@ -151,6 +151,7 @@ import {
     openRelicOffer
 } from './objective-rules';
 import { DECOY_PAIR_KEY, WILD_PAIR_KEY } from './tile-identity';
+import { MIN_CURIO_MEMORIZE_MS, pickFloorCurio } from './floor-curio-rules';
 import { DAILY_MUTATOR_TABLE } from './mutators';
 import { RELIC_POOL } from './relics';
 import { makeBoard as createBoard, makePair as createPair, makeRun as createRun, makeTile as createTile } from './test/game-fixtures';
@@ -7059,12 +7060,24 @@ describe('game rules', () => {
         };
         const bankedMs = afterLifeLoss.pendingMemorizeBonusMs;
         const nextRun = advanceToNextLevel(finishedLevel);
+        // The floor's resident also touches this window, so the banked bonus is one of two terms.
+        const resident = pickFloorCurio(
+            finishedLevel.runSeed,
+            nextRun.board!.level,
+            finishedLevel.runRulesVersion
+        );
+
         expect(nextRun.pendingMemorizeBonusMs).toBe(0);
         expect(nextRun.timerState.memorizeRemainingMs).toBe(
-            getMemorizeDurationForRun(
-                { ...finishedLevel, activeMutators: nextRun.activeMutators, board: nextRun.board },
-                nextRun.board!.level
-            ) + bankedMs
+            Math.max(
+                MIN_CURIO_MEMORIZE_MS,
+                getMemorizeDurationForRun(
+                    { ...finishedLevel, activeMutators: nextRun.activeMutators, board: nextRun.board },
+                    nextRun.board!.level
+                ) +
+                    bankedMs +
+                    resident.effect.memorizeBonusMs
+            )
         );
     });
 
@@ -7394,16 +7407,26 @@ describe('game rules', () => {
         expect(nextRun.stats.tries).toBe(0);
         expect(nextRun.stats.currentLevelScore).toBe(0);
         expect(nextRun.stats.currentStreak).toBe(0);
-        expect(nextRun.stats.guardTokens).toBe(2);
+        // Arriving on a floor also seats its resident, and some of them hand over a token, a
+        // shuffle or a longer look. Read the resident's contribution from the same seed the
+        // advance used, so this stays an assertion about what carries over rather than a bet on
+        // who happened to be downstairs.
+        const resident = pickFloorCurio(finishedLevel.runSeed, 2, finishedLevel.runRulesVersion);
+
+        expect(nextRun.floorCurioId).toBe(resident.id);
+        expect(nextRun.stats.guardTokens).toBe(2 + resident.effect.guardTokens);
         expect(nextRun.stats.comboShards).toBe(2);
         expect(nextRun.stats.totalScore).toBe(300);
         expect(nextRun.timerState.memorizeRemainingMs).toBe(
-            getMemorizeDurationForRun(
-                { ...finishedLevel, activeMutators: nextRun.activeMutators, board: nextRun.board },
-                nextRun.board!.level
+            Math.max(
+                MIN_CURIO_MEMORIZE_MS,
+                getMemorizeDurationForRun(
+                    { ...finishedLevel, activeMutators: nextRun.activeMutators, board: nextRun.board },
+                    nextRun.board!.level
+                ) + resident.effect.memorizeBonusMs
             )
         );
-        expect(nextRun.shuffleCharges).toBe(1);
+        expect(nextRun.shuffleCharges).toBe(1 + resident.effect.shuffleCharges);
         expect(nextRun.pinnedTileIds).toEqual([]);
     });
 

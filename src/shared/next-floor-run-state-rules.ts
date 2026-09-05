@@ -5,6 +5,7 @@ import {
     type RunState
 } from './contracts';
 import { hasRewardPerk } from './bonus-rewards';
+import { applyFloorCurio, pickFloorCurio } from './floor-curio-rules';
 import { boardHasGlassDecoy } from './board-inspection';
 import { countFindablePairs } from './board-tile-generation-rules';
 import { createTimerState } from './run-timer-rules';
@@ -70,6 +71,8 @@ export const createNextFloorRunState = (
         recallBonusScoreThisFloor: 0,
         forgottenTileIdsThisFloor: [],
         hazardTileTriggersThisFloor: 0,
+        magpieTheftsThisFloor: 0,
+        magpieScaredOffThisFloor: 0,
         hazardShuffleSnaresThisFloor: 0,
         hazardCascadeCachesThisFloor: 0,
         hazardMirrorDecoysThisFloor: 0,
@@ -119,10 +122,20 @@ export const createNextFloorRunState = (
             currentStreak: 0
         }
     };
+    /*
+     * Whoever lives on the next floor moves in before anything else reads the run: their peek
+     * charge, their coins and their token are part of the floor the player is about to be handed,
+     * not a bonus applied to a floor already underway.
+     */
+    const populated = applyFloorCurio(
+        nextRun,
+        pickFloorCurio(run.runSeed, nextBoard.level, run.runRulesVersion)
+    );
+
     if (behavior.resolveHazardBanish === false || !hasRewardPerk(run, 'hazard_banish_per_floor')) {
-        return nextRun;
+        return populated;
     }
-    const resolved = resolveHazardBanisherFloorStart(nextRun);
+    const resolved = resolveHazardBanisherFloorStart(populated);
     if (resolved.outcome === 'inactive') {
         throw new Error('Hazard Banish was active before next-floor construction but inactive after it.');
     }

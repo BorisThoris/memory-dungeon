@@ -29,7 +29,8 @@ describe('CodexScreen', () => {
 
         const rail = screen.getByRole('tablist', { name: /codex sections/i });
         const tabs = within(rail).getAllByRole('tab');
-        expect(tabs.length).toBe(13);
+        expect(tabs.length).toBe(14);
+        expect(within(rail).getByRole('tab', { name: /^Residents/ })).toBeInTheDocument();
         expect(within(rail).getByRole('tab', { name: /^Core/ })).toHaveAttribute('aria-selected', 'true');
         expect(screen.getByLabelText(/filter topics/i)).toBeInTheDocument();
 

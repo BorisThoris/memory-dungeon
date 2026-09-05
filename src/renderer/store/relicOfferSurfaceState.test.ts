@@ -193,17 +193,34 @@ describe('relicOfferSurfaceState', () => {
             { relicId: 'parasite_ledger' as RelicId, cue: 'build.parasite_ledger.claimed', field: 'parasiteWardRemaining' }
         ];
 
+        /**
+         * The last pick of an offer advances the floor, and arriving on a floor also seats its
+         * resident, whose welcome can touch the same counters. Measure each relic against a
+         * control pick taken from the same run, so the delta is the relic's own contribution
+         * rather than the relic plus whoever lives downstairs.
+         */
+        const readField = (run: RunState, field: string): number =>
+            field === 'guardTokens'
+                ? run.stats.guardTokens
+                : run[field as 'peekCharges' | 'parasiteWardRemaining'];
+
         for (const row of cases) {
             const offered = offeredRun();
+            const preparedRun = (options: RelicId[]): RunState => ({
+                ...offered,
+                gameMode: 'endless',
+                runRulesVersion: GAME_RULES_VERSION,
+                board: { ...offered.board!, floorArchetypeId: 'survey_hall' },
+                relicOffer: { ...offered.relicOffer!, options }
+            });
+            const control = createRelicPickSurfaceResult({
+                relicId: 'extra_shuffle_charge',
+                run: preparedRun(['extra_shuffle_charge' as RelicId]),
+                saveData: createDefaultSaveData()
+            });
             const result = createRelicPickSurfaceResult({
                 relicId: row.relicId,
-                run: {
-                    ...offered,
-                    gameMode: 'endless',
-                    runRulesVersion: GAME_RULES_VERSION,
-                    board: { ...offered.board!, floorArchetypeId: 'survey_hall' },
-                    relicOffer: { ...offered.relicOffer!, options: [row.relicId] }
-                },
+                run: preparedRun([row.relicId]),
                 saveData: createDefaultSaveData()
             });
 
@@ -211,15 +228,10 @@ describe('relicOfferSurfaceState', () => {
                 kind: 'accepted',
                 feedback: { audioCategory: 'relic-pick', cue: row.cue }
             });
+            expect(control.kind).toBe('accepted');
             expect(result.kind).toBe('accepted');
-            if (result.kind !== 'accepted') continue;
-            const before = row.field === 'guardTokens'
-                ? offered.stats.guardTokens
-                : offered[row.field as 'peekCharges' | 'parasiteWardRemaining'];
-            const value = row.field === 'guardTokens'
-                ? result.patch.run.stats.guardTokens
-                : result.patch.run[row.field as 'peekCharges' | 'parasiteWardRemaining'];
-            expect(value).toBe(before + 1);
+            if (control.kind !== 'accepted' || result.kind !== 'accepted') continue;
+            expect(readField(result.patch.run, row.field)).toBe(readField(control.patch.run, row.field) + 1);
         }
     });
 
