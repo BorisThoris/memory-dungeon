@@ -4095,8 +4095,8 @@
     {
       "path": "playwright.config.ts",
       "category": "configuration",
-      "bytes": 1939,
-      "sha256": "2e52bcb871362d413cdb47abdda16726af5cd6555491761d7ea1e9ba821da93a"
+      "bytes": 2885,
+      "sha256": "964b184bccb3826178cbd1206ddee491c198d20ca4e2f49e915737942334a157"
     },
     {
       "path": "public/favicon.svg",

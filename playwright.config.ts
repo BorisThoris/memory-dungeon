@@ -1,4 +1,31 @@
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
 import type { PlaywrightTestConfig } from '@playwright/test';
+
+/**
+ * The Chromium to launch when the pinned build is not installed.
+ *
+ * `PLAYWRIGHT_CHROMIUM_PATH` says it outright. Failing that, a runner that sets the standard
+ * `PLAYWRIGHT_BROWSERS_PATH` usually has a browser under it, and taking that is what lets a gate
+ * run from `yarn fullcheck` rather than only from a shell that happened to export a second
+ * variable — a gate that cannot start is worse than no gate, because it reports as a failure
+ * with nothing to say about the product.
+ */
+const resolveSystemChromium = (): string | null => {
+    const explicit = process.env.PLAYWRIGHT_CHROMIUM_PATH;
+    if (explicit) {
+        return explicit;
+    }
+    const root = process.env.PLAYWRIGHT_BROWSERS_PATH;
+    if (!root || root === '0') {
+        return null;
+    }
+    const candidate = join(root, 'chromium');
+    return existsSync(candidate) ? candidate : null;
+};
+
+const systemChromiumPath = resolveSystemChromium();
+
 
 const parsedWorkers = Number.parseInt(process.env.PLAYWRIGHT_WORKERS ?? '', 10);
 const workers = Number.isFinite(parsedWorkers) && parsedWorkers > 0 ? parsedWorkers : 1;
@@ -18,9 +45,7 @@ const config: PlaywrightTestConfig = {
     use: {
         baseURL: 'http://127.0.0.1:5173',
         /** Point at a system Chromium when the pinned browser build is not installed (remote runners). */
-        ...(process.env.PLAYWRIGHT_CHROMIUM_PATH
-            ? { launchOptions: { executablePath: process.env.PLAYWRIGHT_CHROMIUM_PATH } }
-            : {}),
+        ...(systemChromiumPath ? { launchOptions: { executablePath: systemChromiumPath } } : {}),
         serviceWorkers: 'block',
         /** Keeps CI artifacts smaller than `trace: 'on'` while preserving traces for flaky retries. */
         trace: 'retain-on-failure',
