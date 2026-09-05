@@ -94,6 +94,20 @@ export const RELEASE_CHECKLIST: readonly ReleaseChecklistItem[] = [
         section: 'Steam integration'
     },
     {
+        evidence: 'src/shared/pass-and-play-rules.ts',
+        id: 'pass-and-play',
+        label: 'Two to four people can play one board on one device, and the game says whose turn it is',
+        owner: 'repo',
+        section: 'Steam integration'
+    },
+    {
+        evidence: 'src/renderer/store/runResolutionController.ts',
+        id: 'shared-game-not-recorded',
+        label: 'A shared game sets no personal best and writes no run history, exactly as its card promises',
+        owner: 'repo',
+        section: 'Steam integration'
+    },
+    {
         evidence: 'src/main/ipc.ts',
         id: 'reveal-save-file',
         label: 'A player can find their own save file from inside the game',

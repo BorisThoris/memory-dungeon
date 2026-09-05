@@ -9,7 +9,7 @@
     "contentItemCount": 63,
     "mechanicCount": 136,
     "stateFieldCount": 144,
-    "relationshipCount": 10490
+    "relationshipCount": 10496
   },
   "inventory": [
     {
@@ -225,8 +225,8 @@
     {
       "path": "docs/agent/REG_ACCEPTANCE_CONTRACTS.md",
       "category": "documentation",
-      "bytes": 28942,
-      "sha256": "b4d87a03dfc31a000b71c750f2e6d6e9ecf484db5c78e3f7cc4ab3b3ff63f47a"
+      "bytes": 29165,
+      "sha256": "5114c0fff3958c11e8143438b9f1e59773489d6296746b621ff4c999b675b1f7"
     },
     {
       "path": "docs/agent/REG_BLOCKERS_AND_DEFERRALS.md",
@@ -2259,8 +2259,8 @@
     {
       "path": "docs/RELEASE_CHECKLIST.md",
       "category": "documentation",
-      "bytes": 6677,
-      "sha256": "7db97bae3830ae21db177b5a498ec464992eb286908c43ba31f52cdcd8f2eab7"
+      "bytes": 7001,
+      "sha256": "48c07415668350c47663662950473eb6bdae8392bf948c0746bfc8ff405e43b2"
     },
     {
       "path": "docs/RELIC_ROSTER.md",
@@ -2320,7 +2320,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 36714,
-      "sha256": "eeb9f1f1d07a76c029a62002feb2118da37bccb4de1b333b1f04aafc9e11d9f8"
+      "sha256": "3510db57ea3ea2474b2a1fd66e596885426f0de025c50afd5c7aea2f2b07d65e"
     },
     {
       "path": "docs/UI_RETHINK_PLAN.md",
@@ -11985,14 +11985,14 @@
     {
       "path": "src/shared/release-checklist.test.ts",
       "category": "test",
-      "bytes": 26384,
-      "sha256": "484f88fb2d22c594c698f5516d3381952ac2a285679ec032e5c93d72073d9655"
+      "bytes": 28839,
+      "sha256": "0f26102bc9d95ce89f2c2ec669f52f1bca423d87611226c6d84657635f64e0bf"
     },
     {
       "path": "src/shared/release-checklist.ts",
       "category": "source",
-      "bytes": 13587,
-      "sha256": "87539d5c932a5773eb395e678ca3239868ecadc9cd8d53d277b49728e616e561"
+      "bytes": 14140,
+      "sha256": "4202ee2db94528232b4020d2253072a14af55e3f6932758c9420c2a6e0e39982"
     },
     {
       "path": "src/shared/relic-favor-rules.test.ts",
@@ -30607,7 +30607,8 @@
       ],
       "testedBy": [
         "file:src/renderer/store/passAndPlayProjection.test.ts",
-        "file:src/shared/pass-and-play-rules.test.ts"
+        "file:src/shared/pass-and-play-rules.test.ts",
+        "file:src/shared/release-checklist.test.ts"
       ]
     },
     {
@@ -31187,7 +31188,7 @@
       "path": "src/shared/release-checklist.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 496,
+      "lineCount": 538,
       "imports": [
         "file:src/main/crash-log.ts",
         "file:src/main/save-recovery.ts",
@@ -31202,11 +31203,14 @@
         "file:src/shared/game.ts",
         "file:src/shared/gamepad-input.ts",
         "file:src/shared/ipc-channels.ts",
+        "file:src/shared/pass-and-play-rules.ts",
         "file:src/shared/release-checklist.ts",
         "file:src/shared/rich-presence.ts",
         "file:src/shared/run-history-log.ts",
+        "file:src/shared/run-mode-catalog.ts",
         "file:src/shared/save-data.ts",
         "file:src/shared/save-location.ts",
+        "file:src/shared/social-play-scope.ts",
         "file:src/shared/steam-achievement-api-names.ts",
         "file:src/shared/tile-trait-marks.ts"
       ],
@@ -31218,7 +31222,7 @@
       "path": "src/shared/release-checklist.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 368,
+      "lineCount": 382,
       "imports": [],
       "exports": [
         "symbol:src/shared/release-checklist.ts#RELEASE_CHECKLIST",
@@ -32576,6 +32580,7 @@
         "file:src/renderer/components/ChooseYourPathScreen.test.tsx",
         "file:src/shared/balance-notes-drift.test.ts",
         "file:src/shared/content-lock.test.ts",
+        "file:src/shared/release-checklist.test.ts",
         "file:src/shared/run-mode-catalog.test.ts",
         "file:src/shared/run-mode-identity.test.ts"
       ]
@@ -33520,6 +33525,7 @@
         "symbol:src/shared/social-play-scope.ts#SocialPlayStatus"
       ],
       "testedBy": [
+        "file:src/shared/release-checklist.test.ts",
         "file:src/shared/social-play-scope.test.ts"
       ]
     },
@@ -57607,15 +57613,15 @@
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
       "line": 32,
-      "endLine": 320
+      "endLine": 334
     },
     {
       "id": "symbol:src/shared/release-checklist.ts#releaseChecklistByOwner",
       "name": "releaseChecklistByOwner",
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
-      "line": 326,
-      "endLine": 327
+      "line": 340,
+      "endLine": 341
     },
     {
       "id": "symbol:src/shared/release-checklist.ts#ReleaseChecklistItem",
@@ -57638,16 +57644,16 @@
       "name": "releaseChecklistSections",
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
-      "line": 322,
-      "endLine": 324
+      "line": 336,
+      "endLine": 338
     },
     {
       "id": "symbol:src/shared/release-checklist.ts#renderReleaseChecklistMarkdown",
       "name": "renderReleaseChecklistMarkdown",
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
-      "line": 341,
-      "endLine": 367
+      "line": 355,
+      "endLine": 381
     },
     {
       "id": "symbol:src/shared/relic-favor-rules.ts#gainRelicFavor",
@@ -115978,6 +115984,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/release-checklist.test.ts->src/shared/pass-and-play-rules.ts",
+      "source": "file:src/shared/release-checklist.test.ts",
+      "target": "file:src/shared/pass-and-play-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/release-checklist.test.ts->src/shared/release-checklist.ts",
       "source": "file:src/shared/release-checklist.test.ts",
       "target": "file:src/shared/release-checklist.ts",
@@ -115996,6 +116008,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/release-checklist.test.ts->src/shared/run-mode-catalog.ts",
+      "source": "file:src/shared/release-checklist.test.ts",
+      "target": "file:src/shared/run-mode-catalog.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/release-checklist.test.ts->src/shared/save-data.ts",
       "source": "file:src/shared/release-checklist.test.ts",
       "target": "file:src/shared/save-data.ts",
@@ -116005,6 +116023,12 @@
       "id": "imports:src/shared/release-checklist.test.ts->src/shared/save-location.ts",
       "source": "file:src/shared/release-checklist.test.ts",
       "target": "file:src/shared/save-location.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/release-checklist.test.ts->src/shared/social-play-scope.ts",
+      "source": "file:src/shared/release-checklist.test.ts",
+      "target": "file:src/shared/social-play-scope.ts",
       "kind": "imports"
     },
     {
@@ -130910,6 +130934,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/pass-and-play-rules.ts->file:src/shared/release-checklist.test.ts",
+      "source": "file:src/shared/pass-and-play-rules.ts",
+      "target": "file:src/shared/release-checklist.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/perfect-memory-status.ts->file:src/shared/perfect-memory-status.test.ts",
       "source": "file:src/shared/perfect-memory-status.ts",
       "target": "file:src/shared/perfect-memory-status.test.ts",
@@ -131672,6 +131702,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/run-mode-catalog.ts->file:src/shared/release-checklist.test.ts",
+      "source": "file:src/shared/run-mode-catalog.ts",
+      "target": "file:src/shared/release-checklist.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/run-mode-catalog.ts->file:src/shared/run-mode-catalog.test.ts",
       "source": "file:src/shared/run-mode-catalog.ts",
       "target": "file:src/shared/run-mode-catalog.test.ts",
@@ -132251,6 +132287,12 @@
       "id": "tested_by:src/shared/slayer-floor-clear-transition.ts->file:src/shared/gameplay-core.test.ts",
       "source": "file:src/shared/slayer-floor-clear-transition.ts",
       "target": "file:src/shared/gameplay-core.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/social-play-scope.ts->file:src/shared/release-checklist.test.ts",
+      "source": "file:src/shared/social-play-scope.ts",
+      "target": "file:src/shared/release-checklist.test.ts",
       "kind": "tested_by"
     },
     {

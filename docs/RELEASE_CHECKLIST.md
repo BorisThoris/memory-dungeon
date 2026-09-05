@@ -39,6 +39,8 @@ achievement on the Partner site or shoot a trailer.
 |---|---|---|---|
 | A missed day is forgiven once, and the player is told so before they miss one | done | the repository | `src/shared/save-data.ts` |
 | A finished run is recorded, so it survives the next one starting | done | the repository | `src/shared/run-history-log.ts` |
+| Two to four people can play one board on one device, and the game says whose turn it is | done | the repository | `src/shared/pass-and-play-rules.ts` |
+| A shared game sets no personal best and writes no run history, exactly as its card promises | done | the repository | `src/renderer/store/runResolutionController.ts` |
 | A player can find their own save file from inside the game | done | the repository | `src/main/ipc.ts` |
 
 ## Diagnostics

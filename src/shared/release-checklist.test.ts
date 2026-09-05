@@ -4,6 +4,14 @@ import { describe, expect, it } from 'vitest';
 import { RELEASE_CHECKLIST, releaseChecklistByOwner, renderReleaseChecklistMarkdown } from './release-checklist';
 import { ACHIEVEMENT_IDS, createDefaultSaveData } from './save-data';
 import { createDailyRun, createNewRun } from './game';
+import { RUN_MODE_CATALOG } from './run-mode-catalog';
+import {
+    applyResolvedTurnToPassAndPlay,
+    createPassAndPlayState,
+    PASS_AND_PLAY_MIN_SEATS,
+    passAndPlaySeatCounts
+} from './pass-and-play-rules';
+import { getSocialPlayScopeRows, SOCIAL_PLAY_SCOPE_DECISION } from './social-play-scope';
 import { chargeFieldsWithATool } from '../renderer/components/runShellToolCatalog';
 import { STEAM_ACHIEVEMENT_API_NAME } from './steam-achievement-api-names';
 import { buildRichPresence, richPresencePairs } from './rich-presence';
@@ -367,6 +375,40 @@ const VERIFIERS: Record<string, () => void> = {
         expect(appended).toHaveLength(RUN_HISTORY_LIMIT);
         // Junk is dropped rather than costing the player their profile.
         expect(normalizeRunHistory(['nonsense', null, record])).toEqual([record]);
+    },
+    'pass-and-play': () => {
+        // The mode is on the catalog, every seat count it allows can be started, and the turn rule
+        // is the one the card describes: a match keeps the device, a miss passes it.
+        const mode = RUN_MODE_CATALOG.find((row) => row.id === 'pass_and_play');
+        expect(mode?.availability).toBe('available');
+        expect(mode?.action).toEqual({ type: 'startPassAndPlayRun', seats: PASS_AND_PLAY_MIN_SEATS });
+
+        expect(passAndPlaySeatCounts().length).toBeGreaterThan(1);
+        for (const seats of passAndPlaySeatCounts()) {
+            expect(createNewRun(0, { passAndPlaySeats: seats }).passAndPlay?.seats).toHaveLength(seats);
+        }
+
+        const opening = createPassAndPlayState();
+        const afterMatch = applyResolvedTurnToPassAndPlay(opening, { matched: true, scoreDelta: 100 });
+        expect(afterMatch.activeSeatIndex, 'a match keeps the device').toBe(0);
+        const afterMiss = applyResolvedTurnToPassAndPlay(afterMatch, { matched: false, scoreDelta: 0 });
+        expect(afterMiss.activeSeatIndex, 'a miss passes it').toBe(1);
+        expect(afterMiss.handoffPending, 'and says so').toBe(true);
+
+        expect(getSocialPlayScopeRows().find((row) => row.id === 'pass_and_play')?.status).toBe('shipped');
+    },
+    'shared-game-not-recorded': () => {
+        // Nothing about a shared game reaches the save: achievements are off at creation, and the
+        // scope decision still persists no multiplayer field at all.
+        expect(createNewRun(0, { passAndPlaySeats: 2 }).achievementsEnabled).toBe(false);
+        expect(createNewRun(0).achievementsEnabled).toBe(true);
+        expect(SOCIAL_PLAY_SCOPE_DECISION.persistedMultiplayerFields).toEqual([]);
+        expect(SOCIAL_PLAY_SCOPE_DECISION.onlineRequiresReg052).toBe(true);
+        // The guard itself, named where it lives, so deleting it fails this row rather than a
+        // screen quietly starting to record shared games.
+        expect(readFileSync(join(process.cwd(), 'src/renderer/store/runResolutionController.ts'), 'utf8')).toContain(
+            'const sharedTable = isPassAndPlayRun('
+        );
     },
     'reveal-save-file': () => {
         // Export, import and backup are all "copy the file yourself", which needs a way to find it.
