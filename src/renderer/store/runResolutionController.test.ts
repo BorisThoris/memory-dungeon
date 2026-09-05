@@ -2,6 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 import type { AchievementId, BoardState, RunState, SaveData, Settings, Tile, ViewState } from '../../shared/contracts';
 import { createNewRun } from '../../shared/game-core';
 import { createDefaultSaveData } from '../../shared/save-data';
+import { getModeRecords } from '../../shared/mode-records';
 import { EXIT_PAIR_KEY } from '../../shared/tile-identity';
 import { enableDebugPeek } from '../../shared/run-timer-rules';
 import type { MatchScorePop, MismatchScorePop } from './matchScorePop';
@@ -145,6 +146,73 @@ describe('runResolutionController', () => {
         expect(harness.persistSaveData).toHaveBeenCalledWith(harness.state.saveData);
         expect(harness.persistSaveDataThenUnlockAchievements).not.toHaveBeenCalled();
         expect(gameSfxMocks.playFloorClearSfx).toHaveBeenCalledWith(0.5);
+    });
+
+    /*
+     * The mode's own card promises this before anyone starts: "A shared game does not set your
+     * personal best or write a run to your history." It was enforced by one branch and asserted by
+     * nothing, which is the shape of defect this batch has been finding all along — and it is also
+     * what lets REG-051 keep saying no multiplayer field is persisted.
+     */
+    describe('a shared game does not touch this save', () => {
+        const finishedRun = (run: RunState): RunState => ({
+            ...run,
+            status: 'gameOver',
+            stats: { ...run.stats, bestScore: 4200, highestLevel: 6, levelsCleared: 5, totalScore: 4200 }
+        });
+
+        it('writes no best score, no history and no summary for a pass-and-play run', () => {
+            const baseRun = createNewRun(0, {
+                echoFeedbackEnabled: false,
+                gameMode: 'endless',
+                passAndPlaySeats: 2
+            });
+            const harness = createHarness(baseRun);
+            const before = harness.state.saveData;
+
+            harness.controller.applyResolvedRun(finishedRun(baseRun));
+
+            expect(harness.state.view, 'the table still sees its results screen').toBe('gameOver');
+            expect(harness.state.run?.lastRunSummary, 'the summary is still built for the screen').not.toBeNull();
+            expect(harness.state.saveData.bestScore, 'personal best').toBe(before.bestScore);
+            expect(harness.state.saveData.runHistory ?? [], 'run history').toEqual(before.runHistory ?? []);
+            expect(harness.state.saveData.lastRunSummary, 'last run summary').toEqual(before.lastRunSummary);
+            expect(harness.state.newlyUnlockedAchievements, 'achievements').toEqual([]);
+        });
+
+        it('still writes all of it for the same run played alone, so the guard is the seats and not a no-op', () => {
+            const baseRun = createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless' });
+            const harness = createHarness(baseRun);
+
+            harness.controller.applyResolvedRun(finishedRun(baseRun));
+
+            expect(harness.state.saveData.bestScore).toBe(4200);
+            expect(harness.state.saveData.runHistory ?? []).toHaveLength(1);
+            expect(harness.state.saveData.lastRunSummary).not.toBeNull();
+        });
+
+        it('leaves the profile with no mode record to show for it', () => {
+            // Profile's per-mode records are derived from run history rather than written beside
+            // it, so a shared game that writes no history cannot set a record either. Asserted
+            // rather than assumed: it is the reason the earlier check is enough.
+            const baseRun = createNewRun(0, {
+                echoFeedbackEnabled: false,
+                gameMode: 'endless',
+                passAndPlaySeats: 4
+            });
+            const harness = createHarness(baseRun);
+
+            harness.controller.applyResolvedRun(finishedRun(baseRun));
+
+            expect(getModeRecords(harness.state.saveData.runHistory ?? [])).toEqual([]);
+        });
+
+        it('creates a pass-and-play run with achievements already disabled, like practice', () => {
+            expect(
+                createNewRun(0, { gameMode: 'endless', passAndPlaySeats: 3 }).achievementsEnabled
+            ).toBe(false);
+            expect(createNewRun(0, { gameMode: 'endless' }).achievementsEnabled).toBe(true);
+        });
     });
 
     it('deactivates debug reveal through the gameplay core when a phase ends', () => {

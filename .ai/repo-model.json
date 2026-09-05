@@ -9,7 +9,7 @@
     "contentItemCount": 63,
     "mechanicCount": 136,
     "stateFieldCount": 144,
-    "relationshipCount": 10488
+    "relationshipCount": 10490
   },
   "inventory": [
     {
@@ -2320,7 +2320,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 36714,
-      "sha256": "eda1ab6ce66f5f119498f913c097659993486daa077c52d3abb6606bf91d607b"
+      "sha256": "eeb9f1f1d07a76c029a62002feb2118da37bccb4de1b333b1f04aafc9e11d9f8"
     },
     {
       "path": "docs/UI_RETHINK_PLAN.md",
@@ -9831,8 +9831,8 @@
     {
       "path": "src/renderer/store/runResolutionController.test.ts",
       "category": "test",
-      "bytes": 23228,
-      "sha256": "38438efb328e28f9faa8e64c8203d7b976e861cd0d8cbb02f93d8c31721a92d5"
+      "bytes": 26733,
+      "sha256": "799c8914cf56e1cddfb3c46c73e24c2ccc922d6ccfd8c2d034064833182fca2d"
     },
     {
       "path": "src/renderer/store/runResolutionController.ts",
@@ -23492,12 +23492,13 @@
       "path": "src/renderer/store/runResolutionController.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 603,
+      "lineCount": 671,
       "imports": [
         "file:src/renderer/store/matchScorePop.ts",
         "file:src/renderer/store/runResolutionController.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/game-core.ts",
+        "file:src/shared/mode-records.ts",
         "file:src/shared/run-timer-rules.ts",
         "file:src/shared/save-data.ts",
         "file:src/shared/tile-identity.ts"
@@ -30312,6 +30313,7 @@
         "symbol:src/shared/mode-records.ts#ModeRecord"
       ],
       "testedBy": [
+        "file:src/renderer/store/runResolutionController.test.ts",
         "file:src/shared/mode-records.test.ts"
       ]
     },
@@ -108194,6 +108196,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/store/runResolutionController.test.ts->src/shared/mode-records.ts",
+      "source": "file:src/renderer/store/runResolutionController.test.ts",
+      "target": "file:src/shared/mode-records.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/store/runResolutionController.test.ts->src/shared/run-timer-rules.ts",
       "source": "file:src/renderer/store/runResolutionController.test.ts",
       "target": "file:src/shared/run-timer-rules.ts",
@@ -130803,6 +130811,12 @@
       "id": "tested_by:src/shared/mismatch-grace-rules.ts->file:src/shared/mismatch-grace-rules.test.ts",
       "source": "file:src/shared/mismatch-grace-rules.ts",
       "target": "file:src/shared/mismatch-grace-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/mode-records.ts->file:src/renderer/store/runResolutionController.test.ts",
+      "source": "file:src/shared/mode-records.ts",
+      "target": "file:src/renderer/store/runResolutionController.test.ts",
       "kind": "tested_by"
     },
     {
