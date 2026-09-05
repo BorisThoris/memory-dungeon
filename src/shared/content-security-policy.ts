@@ -8,15 +8,15 @@
  * any port on the player's machine. Nothing needs that once the bundle is on disk.
  */
 
-/** Ports are unknown ahead of time, so the dev entries are wildcards over the loopback names. */
-const DEV_SERVER_SOCKETS = [
-    'ws://127.0.0.1:*',
-    'ws://localhost:*',
-    'ws://[::1]:*',
-    'wss://127.0.0.1:*',
-    'wss://localhost:*',
-    'wss://[::1]:*'
-] as const;
+/**
+ * Ports are unknown ahead of time, so the dev entries are wildcards over the loopback names.
+ *
+ * No IPv6 literal: `ws://[::1]:*` is not a source Chromium accepts — a port wildcard on a
+ * bracketed address is rejected outright — so it was dropped from the policy and printed a console
+ * error on every dev page load. The `localhost` entry already covers the loopback URL Vite serves,
+ * whichever family it resolves through, because a CSP source matches the URL's host as written.
+ */
+const DEV_SERVER_SOCKETS = ['ws://127.0.0.1:*', 'ws://localhost:*', 'wss://127.0.0.1:*', 'wss://localhost:*'] as const;
 
 export interface ContentSecurityPolicyOptions {
     /** True only while Vite is serving; a packaged build never needs the hot-reload socket. */

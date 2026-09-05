@@ -2,6 +2,7 @@ import { expect, test } from '@playwright/test';
 import { buildPopulatedProfileSaveJson, buildVisualSaveJson, gotoWithSave, mainMenuPlayButton } from './visualScreenHelpers';
 import { openPlayablePathFixture } from './playablePathHelpers';
 import { openLevel1Play, waitLevel1PlayReady } from './visualScreenHelpers';
+import { readFrameHiddenTileCount, waitForBoardPlayPhase } from './tileBoardGameFlow';
 import { findUnreachableControls } from './uiReachability';
 
 /**
@@ -109,6 +110,53 @@ test.describe('every control a screen shows can be clicked', () => {
             expect(Math.abs(clearance.publishedBottom - clearance.dockHeight)).toBeLessThanOrEqual(1);
         });
     }
+
+    test('a pointer click on the board flips a tile', async ({ page }) => {
+        test.setTimeout(600_000);
+        await page.setViewportSize({ width: 1280, height: 800 });
+        await openLevel1Play(page);
+        await waitLevel1PlayReady(page);
+        await waitForBoardPlayPhase(page);
+
+        /*
+         * The tiles are drawn by WebGL, so there is no element per tile to press and none of the
+         * checks here can see one. The suite's own tile helper flips with the keyboard, so nothing
+         * end to end proved that a mouse click picks a tile at all — the whole pointer path was
+         * covered by unit tests over the picking maths and by nothing that clicks.
+         *
+         * So click real points across the board until one lands on a tile. Every point missing is
+         * itself the failure: it means a press anywhere on the board picks nothing.
+         */
+        const frame = page.getByTestId('tile-board-frame');
+        await expect(frame).toBeVisible();
+        const box = await frame.boundingBox();
+        expect(box, 'the board frame is on screen').not.toBeNull();
+
+        const before = await readFrameHiddenTileCount(page);
+        expect(before, 'the board starts with hidden tiles').toBeGreaterThan(0);
+
+        const columns = [0.22, 0.5, 0.78];
+        const rows = [0.3, 0.7];
+        let flipped = false;
+        for (const yFraction of rows) {
+            for (const xFraction of columns) {
+                await page.mouse.click(
+                    Math.round((box?.x ?? 0) + (box?.width ?? 0) * xFraction),
+                    Math.round((box?.y ?? 0) + (box?.height ?? 0) * yFraction)
+                );
+                await page.waitForTimeout(500);
+                if ((await readFrameHiddenTileCount(page)) !== before) {
+                    flipped = true;
+                    break;
+                }
+            }
+            if (flipped) {
+                break;
+            }
+        }
+
+        expect(flipped, 'a click somewhere on the board picks a tile').toBe(true);
+    });
 
     test('the board tools answer a press', async ({ page }) => {
         // Same reason the board test carries a long budget: it plays a floor to get there.

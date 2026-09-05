@@ -3603,8 +3603,8 @@
     {
       "path": "e2e/demo-readiness.spec.ts",
       "category": "test",
-      "bytes": 5022,
-      "sha256": "d21ed19ff55cddd9ad6ec7ac6af305e52ee674e76e2c2f8bc75c22e1e4378e8c"
+      "bytes": 5361,
+      "sha256": "5c9f1fa4af1c7da72602ca4b560dd6efbd693079e12ebaaaffca24a860304adc"
     },
     {
       "path": "e2e/dungeon-board-3d-value.spec.ts",
@@ -3831,8 +3831,8 @@
     {
       "path": "e2e/ui-reachability-gate.spec.ts",
       "category": "test",
-      "bytes": 12259,
-      "sha256": "ca6cfe1038da2f32ca67508a72cb60fef66c2fd158c1f7a283a7d63c4620e5da"
+      "bytes": 14396,
+      "sha256": "adf643a4471cae53766f1877b5c57922bbb26aa30b8cfbebf679af6bedca8f83"
     },
     {
       "path": "e2e/ui-redesign-capture.spec.ts",
@@ -10551,8 +10551,8 @@
     {
       "path": "src/shared/content-security-policy.ts",
       "category": "source",
-      "bytes": 1892,
-      "sha256": "d889c2ed81a27d8215e6906cba4d07ed20944112651e156fdaacb9f3b393f3fd"
+      "bytes": 2232,
+      "sha256": "342be9416a1b1494873a19f529ff4fe8e218d26e956dfd436ea528de1115ac1e"
     },
     {
       "path": "src/shared/contracts.ts",

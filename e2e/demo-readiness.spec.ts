@@ -1,5 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 import { clickHiddenTileRowCol, readFrameHiddenTileCount, waitForBoardPlayPhase } from './tileBoardGameFlow';
+import { openRunMenuItem } from './playablePathHelpers';
 import { dismissStartupIntro } from './startupIntroHelpers';
 import { mainMenuPlayButton } from './visualScreenHelpers';
 
@@ -109,15 +110,19 @@ async function expectInteractiveBoard(page: Page) {
     await clickHiddenTileRowCol(page, 1, 1, hiddenBefore);
 }
 
+/*
+ * Settings during a run is reached through the run menu, not a top-level button. This looked for
+ * the menu's own Settings entry, which is not on screen once a run has started, and timed out —
+ * a rot nothing caught because no routine gate ran this spec.
+ */
 async function expectSettingsCanOpenAndClose(page: Page) {
-    await page.getByRole('button', { name: /settings/i }).click();
+    await openRunMenuItem(page, 'settings');
 
-    const settingsSurface = page.getByRole('dialog', { name: /settings/i }).first();
+    const settingsSurface = page.getByTestId('settings-shell-panel');
+    await expect(settingsSurface).toBeVisible({ timeout: 20_000 });
 
-    await expect(settingsSurface).toBeVisible();
-
-    await settingsSurface.getByRole('button', { name: /^back$/i }).click();
-    await expect(settingsSurface).toBeHidden();
+    await settingsSurface.getByRole('button', { name: /^back$/i }).click({ force: true });
+    await expect(settingsSurface).toBeHidden({ timeout: 20_000 });
 }
 
 test.describe('portfolio demo readiness', () => {
