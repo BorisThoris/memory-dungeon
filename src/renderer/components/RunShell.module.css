@@ -385,3 +385,54 @@
         padding: 0.4rem 0.2rem 0.35rem;
     }
 }
+
+/*
+ * The seat strip. It reads from across a table, so the active seat is marked by weight and a rule
+ * under it rather than by colour alone — the same reason the trait palette got a second channel.
+ */
+.seats {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    min-width: 0;
+}
+
+.seatRow {
+    display: flex;
+    gap: var(--ui-space-xs);
+    min-width: 0;
+}
+
+.seat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.05rem;
+    padding: 0.1rem 0.4rem 0.16rem;
+    border-bottom: 2px solid transparent;
+    border-radius: var(--ui-radius-sm);
+    min-width: 0;
+}
+
+.seat[data-active='true'] {
+    border-bottom-color: var(--theme-gold-bright);
+    background: color-mix(in srgb, var(--theme-gold-bright) 10%, transparent);
+}
+
+.seatLabel {
+    font-size: var(--ui-font-caption);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--theme-text-muted);
+    white-space: nowrap;
+}
+
+.seat[data-active='true'] .seatLabel {
+    color: var(--theme-text);
+}
+
+.seatScore {
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    color: var(--theme-text);
+}

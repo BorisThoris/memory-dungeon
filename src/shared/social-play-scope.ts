@@ -28,11 +28,11 @@ export const SOCIAL_PLAY_DECISIONS: readonly SocialPlayDecisionRow[] = [
     SHIPPED_SOCIAL_PLAY_DECISION,
     {
         id: 'pass_and_play',
-        status: 'deferred',
+        status: 'shipped',
         title: 'Pass-and-play',
         description:
-            'Same-device multiplayer needs turn ownership, per-player labels, scoring handoff, and restart/game-over policy before it can ship.',
-        uiCopy: 'Pass-and-play is not enabled in this build; modes remain single-player local runs.',
+            'Same-device multiplayer ships with turn ownership (a miss passes the device), per-player labels and scores in the HUD, a handoff beat between turns, and a restart that keeps the table seated. It persists nothing: a shared game sets no personal best and writes no run history.',
+        uiCopy: 'Pass and Play: two to four people on one device, offline. Shared games are not recorded to this profile.',
         persistence: 'none',
         onlineRequired: false
     },
@@ -52,13 +52,49 @@ export const getSocialPlayDecisionRows = (): readonly SocialPlayDecisionRow[] =>
 export const getSocialPlayScopeRows = getSocialPlayDecisionRows;
 
 export const SOCIAL_PLAY_SCOPE_DECISION = {
-    shippedScope: 'share_only',
+    /**
+     * Widened from `share_only` when pass-and-play shipped. Everything still local: the online row
+     * below is the one that is deferred, and it is deferred for the same reasons it always was.
+     */
+    shippedScope: 'share_and_same_device',
     persistedMultiplayerFields: [],
     onlineRequiresReg052: true
 } as const;
 
+/**
+ * The first shipped row. More than one ships now, so this is the *primary* one rather than the only
+ * one — callers that want the whole picture should read the rows or use `buildSocialScopeNote`.
+ */
 export const getShippedSocialPlayDecision = (): SocialPlayDecisionRow =>
     SOCIAL_PLAY_DECISIONS.find((row) => row.status === 'shipped') ?? SHIPPED_SOCIAL_PLAY_DECISION;
+
+/** Short labels for the scope note, so it never has to be restated in a component. */
+const SOCIAL_SCOPE_NOTE_LABEL: Record<SocialPlayDecisionId, string> = {
+    online_challenges: 'Online challenges',
+    pass_and_play: 'same-device play',
+    share_strings: 'share strings'
+};
+
+/**
+ * The one line Choose Your Path shows about what this build's social layer actually is.
+ *
+ * Derived from the decision table rather than written beside it: the hand-written version said
+ * "local runs and share strings only" and stayed on screen saying it after same-device play
+ * shipped, which is a promise the game was no longer keeping. A sentence built from the rows it
+ * describes cannot drift from them.
+ */
+export const buildSocialScopeNote = (): string => {
+    const shipped = SOCIAL_PLAY_DECISIONS.filter((row) => row.status === 'shipped').map(
+        (row) => SOCIAL_SCOPE_NOTE_LABEL[row.id]
+    );
+    const deferred = SOCIAL_PLAY_DECISIONS.filter((row) => row.status === 'deferred').map(
+        (row) => SOCIAL_SCOPE_NOTE_LABEL[row.id]
+    );
+    const list = (parts: readonly string[]): string =>
+        parts.length <= 1 ? (parts[0] ?? '') : `${parts.slice(0, -1).join(', ')} and ${parts[parts.length - 1]}`;
+    const head = `Offline-first: local runs, ${list(shipped)}.`;
+    return deferred.length === 0 ? head : `${head} ${list(deferred)} stay deferred.`;
+};
 
 export const buildSocialShareCopy = ({
     mode,

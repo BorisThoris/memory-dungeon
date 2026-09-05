@@ -29,6 +29,7 @@ import { createSessionStats } from './session-stats-rules';
 import { createTimerState, normalizeTimerTimestampMs } from './run-timer-rules';
 import { buildBoard } from './board-build-rules';
 import { applyStartingLoadout } from './starting-loadouts';
+import { createPassAndPlayState } from './pass-and-play-rules';
 
 const clamp = (value: number, min: number, max: number): number => Math.min(max, Math.max(min, value));
 
@@ -62,6 +63,8 @@ export interface CreateRunOptions {
     metaRelicDraftExtraPerMilestone?: number;
     /** Optional starting archetype/loadout for early run identity. */
     startingLoadoutId?: StartingLoadoutId | null;
+    /** Seats for a same-device multiplayer run; omitted for every solo run. */
+    passAndPlaySeats?: number | null;
 }
 
 const randomRunSeed = (): number => Math.floor(Math.random() * 0x7fffffff);
@@ -116,9 +119,11 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
     const run: RunState = {
         status: 'memorize',
         lives: INITIAL_LIVES,
+        passAndPlay:
+            options.passAndPlaySeats != null ? createPassAndPlayState(options.passAndPlaySeats) : null,
         board,
         stats: createSessionStats(bestScore),
-        achievementsEnabled: !options.practiceMode,
+        achievementsEnabled: !options.practiceMode && options.passAndPlaySeats == null,
         debugUsed: false,
         debugPeekActive: false,
         pendingMemorizeBonusMs: 0,

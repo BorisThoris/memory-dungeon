@@ -61,6 +61,8 @@ export interface AppState {
     startRun: () => void;
     startDungeonShowcaseRun: () => void;
     startDailyRun: () => void;
+    /** Same-device multiplayer; defaults to two seats. */
+    startPassAndPlayRun: (seats?: number) => void;
     startGauntletRun: (durationMs?: number) => void;
     startPuzzleRun: (puzzleId: string) => void;
     startPracticeRun: () => void;

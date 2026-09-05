@@ -934,9 +934,38 @@ export interface RunTimerState {
     gauntletPausedAtMs?: number | null;
 }
 
+/**
+ * One person at a same-device table. Defined here rather than beside its rules for the same reason
+ * `RunHistoryRecord` is: `RunState` cannot import from a module that imports `RunState`.
+ */
+export interface PassAndPlaySeat {
+    /** Stable across a run; used for test ids and for keying the HUD. */
+    readonly id: string;
+    readonly label: string;
+    readonly score: number;
+    readonly matches: number;
+    /** Completed turns, so a standings line can say who has had fewer. */
+    readonly turns: number;
+}
+
+export interface PassAndPlayState {
+    readonly seats: readonly PassAndPlaySeat[];
+    readonly activeSeatIndex: number;
+    /**
+     * True from the moment a turn is lost until the next player acts. The board is face down at
+     * that instant, which is the only safe moment to hand a device over.
+     */
+    readonly handoffPending: boolean;
+}
+
 export interface RunState {
     status: RunStatus;
     lives: number;
+    /**
+     * Same-device multiplayer seats, or null on every single-player run. Lives and the board stay
+     * shared — only the credit is split — so nothing else in the run has to know this is here.
+     */
+    passAndPlay?: PassAndPlayState | null;
     board: BoardState | null;
     stats: SessionStats;
     achievementsEnabled: boolean;

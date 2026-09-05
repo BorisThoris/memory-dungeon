@@ -1,4 +1,5 @@
 import { create } from 'zustand/react';
+import { PASS_AND_PLAY_MIN_SEATS } from '../../shared/pass-and-play-rules';
 import type {
     AchievementId,
     AchievementUnlockResult,
@@ -324,6 +325,10 @@ export const useAppStore = create<AppState>((set, get) => ({
 
     startDailyRun: () => {
         executeStoreRunStartRequest({ kind: 'daily' }, set, get);
+    },
+
+    startPassAndPlayRun: (seats = PASS_AND_PLAY_MIN_SEATS) => {
+        executeStoreRunStartRequest({ kind: 'passAndPlay', seats }, set, get);
     },
 
     startGauntletRun: (durationMs = 10 * 60 * 1000) => {

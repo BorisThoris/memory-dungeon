@@ -7,14 +7,17 @@ import {
 } from './social-play-scope';
 
 describe('REG-051 social play scope decision', () => {
-    it('ships share-only offline social and defers pass-and-play/online honestly', () => {
-        expect(SOCIAL_PLAY_SCOPE_DECISION.shippedScope).toBe('share_only');
+    it('ships offline share strings and same-device play, and still defers everything online', () => {
+        expect(SOCIAL_PLAY_SCOPE_DECISION.shippedScope).toBe('share_and_same_device');
+        // Unchanged by pass-and-play, and the reason it could ship: a shared game persists nothing.
         expect(SOCIAL_PLAY_SCOPE_DECISION.persistedMultiplayerFields).toEqual([]);
         expect(SOCIAL_PLAY_SCOPE_DECISION.onlineRequiresReg052).toBe(true);
 
         const rows = getSocialPlayScopeRows();
         expect(rows.find((row) => row.id === 'share_strings')?.status).toBe('shipped');
-        expect(rows.find((row) => row.id === 'pass_and_play')?.status).toBe('deferred');
+        expect(rows.find((row) => row.id === 'pass_and_play')?.status).toBe('shipped');
+        expect(rows.find((row) => row.id === 'pass_and_play')?.onlineRequired).toBe(false);
+        expect(rows.find((row) => row.id === 'online_challenges')?.status).toBe('deferred');
         expect(rows.find((row) => row.id === 'online_challenges')?.uiCopy).toMatch(/online|deferred/i);
         expect(getShippedSocialPlayDecision()).toMatchObject({
             id: 'share_strings',

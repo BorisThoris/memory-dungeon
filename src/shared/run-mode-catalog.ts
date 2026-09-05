@@ -25,7 +25,8 @@ export type RunModeAction =
     | { type: 'startPracticeRun' }
     | { type: 'startScholarContractRun' }
     | { type: 'startPinVowRun' }
-    | { type: 'meditationSetup' };
+    | { type: 'meditationSetup' }
+    | { type: 'startPassAndPlayRun'; seats: number };
 
 export interface RunModeDefinition {
     id: string;
@@ -106,6 +107,30 @@ export const RUN_MODE_CATALOG: readonly RunModeDefinition[] = [
         availability: 'available',
         posterKey: 'daily',
         action: { type: 'startDailyRun' }
+    },
+    {
+        id: 'pass_and_play',
+        title: 'Pass and Play',
+        shortDescription:
+            'Two to four people, one device. Find a pair and you go again; miss and it is the next player\u2019s turn.',
+        startContract: {
+            label: 'Start signal',
+            signal: 'The HUD shows a score per player and says whose turn it is.',
+            testId: 'hud-pass-and-play'
+        },
+        identityTag: 'Same device',
+        promise:
+            'The dungeon everyone already knows, played around one screen \u2014 the rule is the one every table already knows.',
+        eligibilityNote:
+            'A shared game does not set your personal best or write a run to your history: the score on screen belongs to the table, not to this save.',
+        outcomeSummary: 'The higher score wins, and a draw is reported as a draw.',
+        availabilityDetail:
+            'Offline and local. It needs no account, no second device, and nothing online \u2014 the same board, taking turns.',
+        group: 'core',
+        availability: 'available',
+        posterKey: 'pass_and_play',
+        testId: 'mode-pass-and-play',
+        action: { type: 'startPassAndPlayRun', seats: 2 }
     },
     {
         id: 'dungeon_showcase',

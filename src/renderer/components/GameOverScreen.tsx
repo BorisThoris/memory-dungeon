@@ -19,6 +19,8 @@ import { useAppStore } from '../store/useAppStore';
 import MainMenuBackground from './MainMenuBackground';
 import styles from './GameOverScreen.module.css';
 import { GAME_OVER_LABELS } from '../copy/screenCopy';
+import { PASS_AND_PLAY_COPY } from '../copy/passAndPlay';
+import { isPassAndPlayRun, resolvePassAndPlayOutcome } from '../../shared/pass-and-play-rules';
 
 interface GameOverScreenProps {
     run: RunState;
@@ -108,6 +110,7 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
         strength: 1
     });
     const summary = run.lastRunSummary;
+    const passAndPlayOutcome = isPassAndPlayRun(run.passAndPlay) ? resolvePassAndPlayOutcome(run.passAndPlay) : null;
 
     const politeRunSummaryText = useMemo(
         () =>
@@ -215,6 +218,37 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                         {gameOverScreenCopy.mainMenuLabel}
                     </UiButton>
                 </section>
+
+                {/* The result the table came for, above the run's own numbers: at a shared device
+                    the first question is who won, and only then how the run went. */}
+                {passAndPlayOutcome ? (
+                    <section
+                        aria-label={PASS_AND_PLAY_COPY.standingsLabel}
+                        className={styles.passAndPlay}
+                        data-testid="game-over-pass-and-play"
+                    >
+                        <strong className={styles.passAndPlayTitle} data-testid="game-over-pass-and-play-result">
+                            {passAndPlayOutcome.tied
+                                ? PASS_AND_PLAY_COPY.drawTitle
+                                : PASS_AND_PLAY_COPY.winnerTitle(passAndPlayOutcome.winners[0]?.label ?? '')}
+                        </strong>
+                        {passAndPlayOutcome.tied ? <span>{PASS_AND_PLAY_COPY.drawBody}</span> : null}
+                        <ol className={styles.passAndPlayStandings}>
+                            {passAndPlayOutcome.standings.map((row) => (
+                                <li
+                                    className={styles.passAndPlayStanding}
+                                    data-testid={`game-over-standing-${row.seat.id}`}
+                                    data-winner={row.winner ? 'true' : 'false'}
+                                    key={row.seat.id}
+                                >
+                                    <span>{row.seat.label}</span>
+                                    <span>{row.seat.score.toLocaleString()}</span>
+                                </li>
+                            ))}
+                        </ol>
+                        <span className={styles.passAndPlayNote}>{PASS_AND_PLAY_COPY.notRecordedNote}</span>
+                    </section>
+                ) : null}
 
                 <div className={styles.layout}>
                     <Panel className={styles.heroPanel} padding="lg" variant="strong">

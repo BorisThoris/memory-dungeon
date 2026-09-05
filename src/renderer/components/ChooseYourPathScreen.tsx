@@ -10,6 +10,7 @@ import {
     type RunModeDefinition,
     type RunModeGroup
 } from '../../shared/run-mode-catalog';
+import { buildSocialScopeNote } from '../../shared/social-play-scope';
 import { parseRunShareKey } from '../../shared/run-share-key';
 import { formatNextUtcReset } from '../../shared/utc-countdown';
 import { isModePosterFallback, resolveModePosterUrl } from '../assets/ui/modeArt';
@@ -69,6 +70,8 @@ const DailyResetCountdown = (): ReactElement => {
     );
 };
 
+const socialScopeNote = buildSocialScopeNote();
+
 const ChooseYourPathScreen = (): ReactElement => {
     const {
         closeSubscreen,
@@ -78,6 +81,7 @@ const ChooseYourPathScreen = (): ReactElement => {
         startGauntletRun,
         startMeditationRun,
         startMeditationRunWithMutators,
+        startPassAndPlayRun,
         startPinVowRun,
         startPracticeRun,
         startPuzzleRun,
@@ -96,6 +100,7 @@ const ChooseYourPathScreen = (): ReactElement => {
             startGauntletRun: state.startGauntletRun,
             startMeditationRun: state.startMeditationRun,
             startMeditationRunWithMutators: state.startMeditationRunWithMutators,
+            startPassAndPlayRun: state.startPassAndPlayRun,
             startPinVowRun: state.startPinVowRun,
             startPracticeRun: state.startPracticeRun,
             startPuzzleRun: state.startPuzzleRun,
@@ -185,6 +190,9 @@ const ChooseYourPathScreen = (): ReactElement => {
                 case 'startDailyRun':
                     startDailyRun();
                     return;
+                case 'startPassAndPlayRun':
+                    startPassAndPlayRun(action.seats);
+                    return;
                 case 'puzzle':
                     startPuzzleRun(action.puzzleId);
                     return;
@@ -212,6 +220,7 @@ const ChooseYourPathScreen = (): ReactElement => {
         [
             playOpen,
             startDailyRun,
+            startPassAndPlayRun,
             startDungeonShowcaseRun,
             startPinVowRun,
             startPracticeRun,
@@ -492,8 +501,10 @@ const ChooseYourPathScreen = (): ReactElement => {
                     </section>
                 ) : null}
 
+                {/* Built from the scope decision table, not restated here: this line was still
+                    promising "share strings only" after same-device play shipped. */}
                 <p className={styles.footnote} data-testid="choose-path-offline-note">
-                    Offline-first: local runs and share strings only. Online challenges stay deferred.
+                    {socialScopeNote}
                 </p>
             </div>
 

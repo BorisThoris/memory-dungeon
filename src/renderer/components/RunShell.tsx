@@ -8,6 +8,8 @@ import { GameplayMenuIcon } from '../ui/gameplayIcons';
 import styles from './RunShell.module.css';
 import type { PerfectMemoryStatus } from '../../shared/perfect-memory-status';
 import { PERFECT_MEMORY_COPY, RUN_SHELL_LABELS } from '../copy/runDialogCopy';
+import { PASS_AND_PLAY_COPY } from '../copy/passAndPlay';
+import { isPassAndPlayRun } from '../../shared/pass-and-play-rules';
 
 /**
  * The HTML layer over the 3D board during a run.
@@ -135,6 +137,26 @@ const RunShell = ({
                 <Stat label="Score" primary testId="hud-score">
                     {runNonNegativeInteger(run.stats.totalScore).toLocaleString()}
                 </Stat>
+                {/* Only on a shared game. The run's own score stays: the table is still playing one
+                    run together, and these say who has earned which part of it. */}
+                {isPassAndPlayRun(run.passAndPlay) ? (
+                    <div className={styles.seats} data-testid="hud-pass-and-play">
+                        <span className={styles.label}>{PASS_AND_PLAY_COPY.seatsLabel}</span>
+                        <span className={styles.seatRow}>
+                            {run.passAndPlay.seats.map((seat, index) => (
+                                <span
+                                    className={styles.seat}
+                                    data-active={index === run.passAndPlay?.activeSeatIndex ? 'true' : 'false'}
+                                    data-testid={`hud-seat-${seat.id}`}
+                                    key={seat.id}
+                                >
+                                    <span className={styles.seatLabel}>{seat.label}</span>
+                                    <span className={styles.seatScore}>{seat.score.toLocaleString()}</span>
+                                </span>
+                            ))}
+                        </span>
+                    </div>
+                ) : null}
                 <Stat label="Shards" testId="hud-combo-shards">
                     {String(run.stats.comboShards)}
                 </Stat>

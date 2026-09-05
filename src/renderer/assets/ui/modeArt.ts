@@ -33,7 +33,8 @@ export const MODE_CARD_ART = {
     practice: resolveUiBackgroundUrl('bg-mode-practice-v1.webp', modePlaceholderUrl),
     scholar: resolveUiBackgroundUrl('bg-mode-scholar-v1.webp', modePlaceholderUrl),
     pin_vow: resolveUiBackgroundUrl('bg-mode-pin-vow-v1.webp', modePlaceholderUrl),
-    meditation: resolveUiBackgroundUrl('bg-mode-meditation-v1.webp', modePlaceholderUrl)
+    meditation: resolveUiBackgroundUrl('bg-mode-meditation-v1.webp', modePlaceholderUrl),
+    pass_and_play: resolveUiBackgroundUrl('bg-mode-pass-and-play-v1.webp', modePlaceholderUrl)
 } as const;
 
 export type ModePosterKey = keyof typeof MODE_CARD_ART;
@@ -51,7 +52,8 @@ export const MODE_POSTER_KEYS = [
     'practice',
     'scholar',
     'pin_vow',
-    'meditation'
+    'meditation',
+    'pass_and_play'
 ] as const satisfies readonly ModePosterKey[];
 
 export const isModePosterFallback = (posterKey: string): boolean =>

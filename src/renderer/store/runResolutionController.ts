@@ -35,6 +35,8 @@ import {
     type MatchScorePop,
     type MismatchScorePop
 } from './matchScorePop';
+import { projectPassAndPlayTurn } from './passAndPlayProjection';
+import { isPassAndPlayRun } from '../../shared/pass-and-play-rules';
 
 interface RunResolutionState {
     run: RunState | null;
@@ -119,9 +121,18 @@ export const createRunResolutionController = ({
         }
 
         const unlockedAchievements = evaluateAchievementUnlocks(nextRun, saveForAchievements);
+        /*
+         * A shared game does not belong to this save. Two people took turns on one board, so there
+         * is no honest way to write the number on screen into one person's personal best or their
+         * run history — and the mode's own card says so before anyone starts. Achievements are
+         * already off (the run is created with them disabled, like practice); this is the rest of it.
+         */
+        const sharedTable = isPassAndPlayRun(nextRun.passAndPlay);
         let nextSave = normalizeSaveData({
             ...state.saveData,
-            bestScore: Math.max(state.saveData.bestScore, nextRun.stats.bestScore)
+            bestScore: sharedTable
+                ? state.saveData.bestScore
+                : Math.max(state.saveData.bestScore, nextRun.stats.bestScore)
         });
 
         if (nextRun.status === 'levelComplete' && nextRun.gameMode === 'daily' && nextRun.dailyDateKeyUtc) {
@@ -152,19 +163,23 @@ export const createRunResolutionController = ({
         }
 
         if (nextRun.status === 'gameOver') {
-            nextSave = mergeEncoreFromRun(nextSave, nextRun.matchedPairKeysThisRun);
+            // The summary is built either way: the results screen reads it, and a shared game still
+            // has to show the table what happened. Only the writes to the save are skipped.
             nextRun = createValidatedGameOverRunSummary(nextRun, unlockedAchievements);
-            if (!nextRun.powersUsedThisRun) {
-                nextSave = mergeBestFloorNoPowers(nextSave, nextRun.stats.highestLevel);
+            if (!sharedTable) {
+                nextSave = mergeEncoreFromRun(nextSave, nextRun.matchedPairKeysThisRun);
+                if (!nextRun.powersUsedThisRun) {
+                    nextSave = mergeBestFloorNoPowers(nextSave, nextRun.stats.highestLevel);
+                }
+                nextSave = normalizeSaveData({
+                    ...nextSave,
+                    onboardingDismissed: true,
+                    lastRunSummary: nextRun.lastRunSummary,
+                    // Appended before normalization so the cap and the schema are applied in one place.
+                    runHistory: appendRunHistory(nextSave, buildRunHistoryRecord(nextRun, new Date().toISOString()))
+                });
+                nextSave = mergeHonorUnlockTags(nextSave);
             }
-            nextSave = normalizeSaveData({
-                ...nextSave,
-                onboardingDismissed: true,
-                lastRunSummary: nextRun.lastRunSummary,
-                // Appended before normalization so the cap and the schema are applied in one place.
-                runHistory: appendRunHistory(nextSave, buildRunHistoryRecord(nextRun, new Date().toISOString()))
-            });
-            nextSave = mergeHonorUnlockTags(nextSave);
 
             const summary = nextRun.lastRunSummary;
             if (summary) {
@@ -240,7 +255,9 @@ export const createRunResolutionController = ({
         if (pop) {
             playMatchPayoffSfx(gain, pop);
         }
-        applyResolvedRun(next);
+        // Same boundary as the floaters: the seats advance from the typed event, not from a diff
+        // of the run, so nothing about multiplayer reaches the command journal.
+        applyResolvedRun({ ...next, passAndPlay: projectPassAndPlayTurn(run.passAndPlay, event) });
     };
 
     const applyImmediateGameOverFromTilePress = (resolvedRun: RunState): void => {

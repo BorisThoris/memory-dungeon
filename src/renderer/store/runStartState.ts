@@ -55,6 +55,7 @@ export type RunStartRequest =
     | { kind: 'endless' }
     | { durationMs: number; kind: 'gauntlet' }
     | { kind: 'meditation' }
+    | { kind: 'passAndPlay'; seats: number }
     | { kind: 'meditationWithMutators'; mutators: MutatorId[] }
     | { kind: 'pinVow' }
     | { kind: 'practice' }
@@ -102,6 +103,15 @@ export const createRunStartPlan = ({
             break;
         case 'meditation':
             run = createMeditationRun(bestScore, undefined, meta);
+            break;
+        case 'passAndPlay':
+            /*
+             * The same endless ruleset every solo run uses; only the credit is split. It skips the
+             * onboarding-safe first floor because a table sitting down together is not a first run,
+             * and it never carries the save's best score into the seats — see the summary policy.
+             */
+            run = createNewRun(bestScore, { ...meta, passAndPlaySeats: request.seats });
+            telemetryExtra = { passAndPlaySeats: request.seats };
             break;
         case 'meditationWithMutators':
             run = createMeditationRun(bestScore, request.mutators, meta);
@@ -167,6 +177,15 @@ export const createRestartRun = (previousRun: RunState | null, saveData: SaveDat
     const bestScore = saveData.bestScore;
     const meta = metaRelicOptionsForSave(saveData);
     const startingLoadoutId = previousRun?.startingLoadoutId ?? null;
+
+    /*
+     * A table that just finished wants another game, not a solo run. Restart is a separate path
+     * from the start plan, so a mode that forgets itself here quietly hands the device to one
+     * player mid-evening.
+     */
+    if (previousRun?.passAndPlay) {
+        return createNewRun(bestScore, { ...meta, passAndPlaySeats: previousRun.passAndPlay.seats.length });
+    }
 
     if (isDungeonShowcaseRestartRun(previousRun)) {
         return createDungeonShowcaseRun(bestScore, meta);
