@@ -5,11 +5,11 @@
     "name": "memory-dungeon",
     "trackedFileCount": 2522,
     "codeFileCount": 982,
-    "exportedSymbolCount": 3549,
+    "exportedSymbolCount": 3550,
     "contentItemCount": 63,
     "mechanicCount": 136,
     "stateFieldCount": 144,
-    "relationshipCount": 10443
+    "relationshipCount": 10444
   },
   "inventory": [
     {
@@ -3633,8 +3633,8 @@
     {
       "path": "e2e/gameplay-readability.spec.ts",
       "category": "test",
-      "bytes": 16069,
-      "sha256": "eaaeb32fc29a09e0deade2a0f19ffa71943e85127ba75466e69ab4cc791f3b1f"
+      "bytes": 16229,
+      "sha256": "93dc4af7751c102f880811039c36071ba23b3a4446570007e3974573a34517b9"
     },
     {
       "path": "e2e/gameplay-visual-audit.spec.ts",
@@ -3831,8 +3831,8 @@
     {
       "path": "e2e/ui-reachability-gate.spec.ts",
       "category": "test",
-      "bytes": 8370,
-      "sha256": "1b3004d9b6d6453e53f6a4387c47ad2051780aa0a3394ad329f3c48944dbebf7"
+      "bytes": 12259,
+      "sha256": "ca6cfe1038da2f32ca67508a72cb60fef66c2fd158c1f7a283a7d63c4620e5da"
     },
     {
       "path": "e2e/ui-redesign-capture.spec.ts",
@@ -7719,8 +7719,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 92326,
-      "sha256": "aae27ae01c0e4c8b3279c0e64a52db10614f94ed6edc9920a182d73e8b9cf309"
+      "bytes": 93289,
+      "sha256": "c8da2804241dce1617472e6e33d8ebd5dda0c3131b011e8900f5e33fc7b65a37"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -9063,8 +9063,8 @@
     {
       "path": "src/renderer/copy/runDialogCopy.ts",
       "category": "source",
-      "bytes": 2411,
-      "sha256": "2e0b08cfb716eca8ca1df6bb193ff4d6da914167a1e3c66e0eba81aa3c271122"
+      "bytes": 3095,
+      "sha256": "22b87afc3d23997974e836ebbfdb5b22db2bf08ace18c4e08668761bbf683ea5"
     },
     {
       "path": "src/renderer/copy/runHistory.ts",
@@ -17580,7 +17580,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 2042,
+      "lineCount": 2051,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -21456,7 +21456,7 @@
       "path": "src/renderer/copy/runDialogCopy.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 53,
+      "lineCount": 72,
       "imports": [],
       "exports": [
         "symbol:src/renderer/copy/runDialogCopy.ts#ABANDON_DIALOG_COPY",
@@ -21465,6 +21465,7 @@
         "symbol:src/renderer/copy/runDialogCopy.ts#PERFECT_MEMORY_COPY",
         "symbol:src/renderer/copy/runDialogCopy.ts#ROUTE_CHOICE_COPY",
         "symbol:src/renderer/copy/runDialogCopy.ts#RUN_SHELL_LABELS",
+        "symbol:src/renderer/copy/runDialogCopy.ts#RUN_TOOL_REASONS",
         "symbol:src/renderer/copy/runDialogCopy.ts#SHORTCUTS_COPY"
       ],
       "testedBy": []
@@ -37302,8 +37303,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 2041,
-      "endLine": 2041
+      "line": 2050,
+      "endLine": 2050
     },
     {
       "id": "symbol:src/renderer/components/gameScreenFeedback.ts#DungeonCombatLogRow",
@@ -41582,8 +41583,8 @@
       "name": "PERFECT_MEMORY_COPY",
       "kind": "value",
       "file": "src/renderer/copy/runDialogCopy.ts",
-      "line": 48,
-      "endLine": 52
+      "line": 67,
+      "endLine": 71
     },
     {
       "id": "symbol:src/renderer/copy/runDialogCopy.ts#ROUTE_CHOICE_COPY",
@@ -41600,6 +41601,14 @@
       "file": "src/renderer/copy/runDialogCopy.ts",
       "line": 40,
       "endLine": 42
+    },
+    {
+      "id": "symbol:src/renderer/copy/runDialogCopy.ts#RUN_TOOL_REASONS",
+      "name": "RUN_TOOL_REASONS",
+      "kind": "value",
+      "file": "src/renderer/copy/runDialogCopy.ts",
+      "line": 52,
+      "endLine": 61
     },
     {
       "id": "symbol:src/renderer/copy/runDialogCopy.ts#SHORTCUTS_COPY",
@@ -65145,7 +65154,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1271
+          "line": 1265
         }
       ],
       "tests": [
@@ -80136,6 +80145,12 @@
       "id": "exports:src/renderer/copy/runDialogCopy.ts->symbol:src/renderer/copy/runDialogCopy.ts#RUN_SHELL_LABELS",
       "source": "file:src/renderer/copy/runDialogCopy.ts",
       "target": "symbol:src/renderer/copy/runDialogCopy.ts#RUN_SHELL_LABELS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/copy/runDialogCopy.ts->symbol:src/renderer/copy/runDialogCopy.ts#RUN_TOOL_REASONS",
+      "source": "file:src/renderer/copy/runDialogCopy.ts",
+      "target": "symbol:src/renderer/copy/runDialogCopy.ts#RUN_TOOL_REASONS",
       "kind": "exports"
     },
     {

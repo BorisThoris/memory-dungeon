@@ -36,13 +36,7 @@ import { useNotificationStore } from '@cross-repo-libs/notifications';
 import type { CSSProperties } from 'react';
 import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
-import {
-    ABANDON_DIALOG_COPY,
-    FLOOR_STATUS_COPY,
-    PAUSE_DIALOG_COPY,
-    ROUTE_CHOICE_COPY,
-    SHORTCUTS_COPY
-} from '../copy/runDialogCopy';
+import { ABANDON_DIALOG_COPY, FLOOR_STATUS_COPY, PAUSE_DIALOG_COPY, ROUTE_CHOICE_COPY, RUN_TOOL_REASONS, SHORTCUTS_COPY } from '../copy/runDialogCopy';
 import {
     BOARD_SHUFFLE_COPY,
     FLASH_PAIR_COPY,
@@ -1496,16 +1490,31 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                   ]
                 : []),
             {
+                /*
+                 * Disabled on the same rule the action itself applies: arming needs a charge, and
+                 * disarming is always allowed. The two used to be able to disagree, and did — the
+                 * button stayed lit with no charges and the press was dropped in silence.
+                 */
                 ...toolSpec('stray'),
                 glyph: RUN_SHELL_GLYPHS.stray,
                 armed: strayRemoveArmed,
-                title: 'Remove a stray tile',
+                charges: run.strayRemoveCharges,
+                disabled: !strayRemoveArmed && runNonNegativeInteger(run.strayRemoveCharges) <= 0,
+                title:
+                    !strayRemoveArmed && runNonNegativeInteger(run.strayRemoveCharges) <= 0
+                        ? RUN_TOOL_REASONS.stray.noCharges
+                        : RUN_TOOL_REASONS.stray.available,
                 onClick: toggleStrayArm
             },
             {
+                // Same rule as `createUndoResolvingSurfaceResult`: only while a pair is resolving.
                 ...toolSpec('undo'),
                 glyph: RUN_SHELL_GLYPHS.undo,
-                title: 'Undo the last flip',
+                disabled: run.status !== 'resolving',
+                title:
+                    run.status === 'resolving'
+                        ? RUN_TOOL_REASONS.undo.available
+                        : RUN_TOOL_REASONS.undo.notResolving,
                 onClick: undoResolvingFlip
             }
         ];

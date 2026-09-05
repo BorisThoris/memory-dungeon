@@ -42,6 +42,25 @@ export const RUN_SHELL_LABELS = {
 } as const;
 
 /**
+ * What a dock tool says when it cannot act.
+ *
+ * Stray and Undo used to stay lit whatever the run was doing, and pressing either did nothing at
+ * all — no arming, no message, no reason. Undo in particular only works while a flipped pair is
+ * resolving, a second or so per turn, so it spent almost the whole run looking available and
+ * answering to nothing.
+ */
+export const RUN_TOOL_REASONS = {
+    stray: {
+        available: 'Remove a stray tile',
+        noCharges: 'No stray removals left this run'
+    },
+    undo: {
+        available: 'Undo the flip being resolved',
+        notResolving: 'Undo is available only while a flipped pair is resolving'
+    }
+} as const;
+
+/**
  * The one achievement a player can lose by pressing a dock button. Stated on the run bar so the
  * cost is visible at the moment of the decision, not afterwards.
  */

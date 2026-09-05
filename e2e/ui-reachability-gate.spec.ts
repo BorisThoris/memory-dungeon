@@ -110,6 +110,81 @@ test.describe('every control a screen shows can be clicked', () => {
         });
     }
 
+    test('the board tools answer a press', async ({ page }) => {
+        // Same reason the board test carries a long budget: it plays a floor to get there.
+        test.setTimeout(600_000);
+        await page.setViewportSize({ width: 1280, height: 800 });
+        await openLevel1Play(page);
+        await waitLevel1PlayReady(page);
+        await page.waitForTimeout(1500);
+
+        /*
+         * Hit-testing says a press can land on the control. It does not say the control does
+         * anything, and those came apart twice this week in opposite directions: a browse card
+         * that hit-tested fine and did nothing, and settings buttons that hit-tested as covered
+         * and worked. The dock is the game's primary control surface and the only test that
+         * pressed one of its tools wrapped its single assertion in `if (line.isVisible())`, so it
+         * asserted nothing whenever the line was absent — which is the state it was guarding for.
+         */
+        const readBoard = () =>
+            page.evaluate(() => {
+                const dock = document.querySelector('[data-testid="game-action-dock"]');
+                const line = document.querySelector('[data-testid="run-shell-line"]');
+                return {
+                    line: line ? (line.textContent ?? '').trim() : null,
+                    tools: Array.from(dock?.querySelectorAll('button') ?? [])
+                        .map((button) => ({
+                            id: button.getAttribute('data-testid') ?? '',
+                            disabled: button.hasAttribute('disabled'),
+                            pressed: button.getAttribute('aria-pressed'),
+                            text: (button.textContent ?? '').trim()
+                        }))
+                        .filter((tool) => tool.id.startsWith('tool-'))
+                };
+            });
+
+        const opening = await readBoard();
+        expect(opening.tools.length, 'the dock offers tools to press').toBeGreaterThan(0);
+
+        const answered: string[] = [];
+        const silent: string[] = [];
+        for (const tool of opening.tools) {
+            const before = await readBoard();
+            const was = before.tools.find((candidate) => candidate.id === tool.id);
+            if (!was || was.disabled) {
+                // A tool with nothing to spend is not expected to answer; it is not silent either.
+                continue;
+            }
+            await page.getByTestId(tool.id).click({ force: true });
+            await page.waitForTimeout(600);
+            const after = await readBoard();
+            const now = after.tools.find((candidate) => candidate.id === tool.id);
+
+            /*
+             * Three ways a press shows: the tool arms, it spends its charge and leaves the dock or
+             * changes its count, or the run line says what happened.
+             */
+            const armed = now !== undefined && now.pressed !== was.pressed;
+            const spent = now === undefined || now.text !== was.text;
+            const said = after.line !== before.line;
+            (armed || spent || said ? answered : silent).push(tool.id);
+
+            /*
+             * Disarm by pressing the same tool again, not with Escape. Escape opens the run menu,
+             * and every one of these actions is guarded on the view still being the board — so an
+             * Escape between presses quietly made every later tool look dead, which is how this
+             * loop first accused three working tools.
+             */
+            if (armed && now?.pressed === 'true') {
+                await page.getByTestId(tool.id).click({ force: true });
+                await page.waitForTimeout(300);
+            }
+        }
+
+        expect(silent, 'every dock tool answers a press').toEqual([]);
+        expect(answered.length, 'at least one tool was pressable').toBeGreaterThan(0);
+    });
+
     /*
      * The screens a run actually passes through. The vendor's cards were clipped away entirely on
      * a phone held sideways — there was no way to buy anything — and only the half-hour sweep saw

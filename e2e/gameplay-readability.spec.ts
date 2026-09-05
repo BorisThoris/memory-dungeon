@@ -56,9 +56,10 @@ test.describe('Gameplay readability hardening', () => {
          * was wrapped in an isVisible guard, so it had been quietly passing over nothing.
          */
         const line = page.getByTestId('run-shell-line');
-        if (await line.isVisible().catch(() => false)) {
-            await expectLocatorFullyInWindowViewport(page, line, 8);
-        }
+        // Not guarded any more. The guard was there for the case the assertion is about — the line
+        // absent after a press — so the test said nothing exactly when it mattered.
+        await expect(line).toBeVisible();
+        await expectLocatorFullyInWindowViewport(page, line, 8);
 
         await expectBoardKeepsPriority(page);
     });
