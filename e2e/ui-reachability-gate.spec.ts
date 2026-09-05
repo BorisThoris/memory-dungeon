@@ -4,6 +4,7 @@ import { openPlayablePathFixture } from './playablePathHelpers';
 import { openLevel1Play, waitLevel1PlayReady } from './visualScreenHelpers';
 import { readFrameHiddenTileCount, waitForBoardPlayPhase } from './tileBoardGameFlow';
 import { findUnreachableControls } from './uiReachability';
+import { CHROME_ANCHORED_BOARD_OVERLAYS, expectBoardOverlaysClearChrome } from './boardOverlayClearance';
 
 /**
  * The fast half of the fit contract: does a click reach the thing it lands on.
@@ -102,6 +103,14 @@ test.describe('every control a screen shows can be clicked', () => {
                     dockHeight: dock ? Math.round(dock.getBoundingClientRect().height) : 0
                 };
             });
+
+            /*
+             * Whatever overlays this board happens to be showing sit below the chrome and only one
+             * clearance below it. Measuring what is published is not the same as checking what it
+             * moved: the stage inset made three overlays offset twice and every existing check
+             * stayed green.
+             */
+            await expectBoardOverlaysClearChrome(page, CHROME_ANCHORED_BOARD_OVERLAYS, `board @ ${viewport.id}`);
 
             expect(clearance.hudBottom, `the HUD bar is on screen @ ${viewport.id}`).toBeGreaterThan(0);
             expect(clearance.publishedTop, `HUD clearance measured @ ${viewport.id}`).toBeGreaterThan(0);

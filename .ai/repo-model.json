@@ -3,7 +3,7 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2533,
+    "trackedFileCount": 2534,
     "codeFileCount": 989,
     "exportedSymbolCount": 3570,
     "contentItemCount": 63,
@@ -3583,6 +3583,12 @@
       "sha256": "1c44d64f2842c6ce0ed3e4b1afe93e0e06e701218e506791c4b9e87c592bff06"
     },
     {
+      "path": "e2e/boardOverlayClearance.ts",
+      "category": "test",
+      "bytes": 3824,
+      "sha256": "29e0105824d36db8d018257c8fffb79c567305dd2145f421b5cb2de06a346d1b"
+    },
+    {
       "path": "e2e/capture-matched-flame.spec.ts",
       "category": "test",
       "bytes": 6951,
@@ -3687,8 +3693,8 @@
     {
       "path": "e2e/pass-and-play.spec.ts",
       "category": "test",
-      "bytes": 9143,
-      "sha256": "91c03d97f53e763aee63915dec2798ebd17bb668e649f4e98e42dd5014784b83"
+      "bytes": 9825,
+      "sha256": "cb8e1bb455589cf1b2993bd5907d87f542150ca49d267192c6e43e52bb067483"
     },
     {
       "path": "e2e/pause-controls-reference.spec.ts",
@@ -3837,8 +3843,8 @@
     {
       "path": "e2e/ui-reachability-gate.spec.ts",
       "category": "test",
-      "bytes": 14396,
-      "sha256": "adf643a4471cae53766f1877b5c57922bbb26aa30b8cfbebf679af6bedca8f83"
+      "bytes": 14972,
+      "sha256": "bb60f0c371ce1e579828f0aa729fb81a3a712449189ca91ef61caca93ae9ec92"
     },
     {
       "path": "e2e/ui-redesign-capture.spec.ts",
@@ -4569,8 +4575,8 @@
     {
       "path": "scripts/e2e-locator-audit.ts",
       "category": "script",
-      "bytes": 6126,
-      "sha256": "dae767c2c2ac56c764e9ac28777a8fdf1d78be43d435ab93460aa9ce00df26fd"
+      "bytes": 6524,
+      "sha256": "b2ce2fef17a22a3b3e3795211f1cf26ca774943fb101d79c242b7c5ed9b8cba0"
     },
     {
       "path": "scripts/extract-endproduct-wip-assets.mjs",
@@ -11073,8 +11079,8 @@
     {
       "path": "src/shared/e2e-locator-audit.test.ts",
       "category": "test",
-      "bytes": 3943,
-      "sha256": "a51dc385cd0fc2433e8523b281fd036b4cc8d5e070f9c69a9fd904afc40c751d"
+      "bytes": 4577,
+      "sha256": "f5120864219b8f3fd71dca551887088a98264fb3358e7d78cb2f88bae420a512"
     },
     {
       "path": "src/shared/economy-ledger.test.ts",
@@ -27703,7 +27709,7 @@
       "path": "src/shared/e2e-locator-audit.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 83,
+      "lineCount": 92,
       "imports": [],
       "exports": [],
       "testedBy": []

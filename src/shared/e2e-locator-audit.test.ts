@@ -70,6 +70,15 @@ describe('the e2e locator audit', () => {
         // `floor-clear-payoff-stack` is asserted toHaveCount(0) to keep a deleted coaching strip
         // deleted. Reporting it as rot would push someone to delete the guard.
         expect(readSpecTestIds("await expect(page.getByTestId('gone')).toHaveCount(0);")).toEqual([]);
+    });
+
+    it('ignores a selector built from a variable, which names no id at all', () => {
+        // A helper that takes the id as an argument reported its own template as a dead locator,
+        // which is the audit misreading its input rather than finding a rotted spec.
+        expect(readSpecTestIds('document.querySelector(`[data-testid="${testId}"]`)')).toEqual([]);
+        expect(readSpecTestIds('page.getByTestId(`hud-seat-${seat.id}`)')).toEqual([]);
+        // A real literal beside one still counts.
+        expect(readSpecTestIds('page.getByTestId("run-shell"); q(`[data-testid="${id}"]`)')).toEqual(['run-shell']);
         expect(readSpecTestIds("await expect(page.getByTestId('gone')).not.toBeVisible();")).toEqual([]);
         expect(readSpecTestIds("await expect(page.getByTestId('here')).toBeVisible();")).toEqual(['here']);
     });

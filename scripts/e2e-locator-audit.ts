@@ -89,13 +89,21 @@ const MATCHER_LOOKAHEAD = 160;
  */
 const ASSERTED_ABSENT = /\.not\.|toHaveCount\(\s*0\s*\)/u;
 
+/**
+ * A selector built from a variable names no id at all. `[data-testid="${testId}"]` inside a helper
+ * that takes the id as an argument is the caller's id to get right, and reporting the template as
+ * a dead locator is the audit misreading its own input rather than finding a rotted spec.
+ */
+const INTERPOLATED = /\$\{|^\$/u;
+
 export const readSpecTestIds = (source: string): string[] =>
     [
         ...source.matchAll(/getByTestId\(\s*['"]([^'"]+)['"]/gu),
         ...source.matchAll(/\[data-testid=["']([^"']+)["']\]/gu)
     ]
         .filter((match) => !ASSERTED_ABSENT.test(source.slice(match.index ?? 0, (match.index ?? 0) + MATCHER_LOOKAHEAD)))
-        .map((match) => match[1] ?? '');
+        .map((match) => match[1] ?? '')
+        .filter((id) => id.length > 0 && !INTERPOLATED.test(id));
 
 export const findDeadTestIds = (specIds: readonly string[], rendered: RenderedTestIds): string[] =>
     specIds.filter(

@@ -2,6 +2,7 @@ import { expect, test } from '@playwright/test';
 import { buildVisualSaveJson, gotoWithSave, mainMenuPlayButton } from './visualScreenHelpers';
 import { flipTileAtGridCellKeyboard, waitForBoardPlayPhase } from './tileBoardGameFlow';
 import { findUnreachableControls } from './uiReachability';
+import { CHROME_ANCHORED_BOARD_OVERLAYS, expectBoardOverlaysClearChrome } from './boardOverlayClearance';
 
 /**
  * The mode a player has to be able to reach and actually play.
@@ -158,6 +159,17 @@ test.describe('pass and play', () => {
         const banner = page.getByTestId('board-pass-handoff');
         await expect(banner, 'the board says who the device went to').toBeVisible();
         await expect(banner).toContainText(/pass to player 2/i);
+
+        /*
+         * And it sits where it says it does. This overlay offsets itself by the clearance the HUD
+         * publishes, which was right until the stage was inset by that same clearance — after which
+         * it counted twice and sat 144px into the board with nothing failing.
+         */
+        const placed = await expectBoardOverlaysClearChrome(page, CHROME_ANCHORED_BOARD_OVERLAYS, 'the pass');
+        expect(
+            placed.map((row) => row.testId),
+            'the pass banner was measured, not skipped'
+        ).toContain('board-pass-handoff');
 
         /*
          * And it is said, not only drawn. A player using a screen reader has no banner, and the
