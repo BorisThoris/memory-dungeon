@@ -35,6 +35,7 @@ achievement on the Partner site or shoot a trailer.
 
 | Item | State | Owner | Where |
 |---|---|---|---|
+| A missed day is forgiven once, and the player is told so before they miss one | done | the repository | `src/shared/save-data.ts` |
 | A finished run is recorded, so it survives the next one starting | done | the repository | `src/shared/run-history-log.ts` |
 | A player can find their own save file from inside the game | done | the repository | `src/main/ipc.ts` |
 

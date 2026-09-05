@@ -80,6 +80,13 @@ export const RELEASE_CHECKLIST: readonly ReleaseChecklistItem[] = [
         section: 'Steamworks'
     },
     {
+        evidence: 'src/shared/save-data.ts',
+        id: 'daily-streak-grace',
+        label: 'A missed day is forgiven once, and the player is told so before they miss one',
+        owner: 'repo',
+        section: 'Steam integration'
+    },
+    {
         evidence: 'src/shared/run-history-log.ts',
         id: 'run-history',
         label: 'A finished run is recorded, so it survives the next one starting',

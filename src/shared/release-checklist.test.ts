@@ -31,6 +31,7 @@ import {
 import { findTestOnlyModules, TEST_ONLY_EXEMPTIONS } from '../../scripts/test-only-modules';
 import { reachableFromEntries, SHARED_REACH_EXEMPTIONS } from '../../scripts/shared-reach';
 import { findMissingScriptPaths } from '../../scripts/script-paths';
+import { resolveDailyStreak } from './save-data';
 import {
     findUndefinedTokens,
     findUndersized,
@@ -226,6 +227,38 @@ const VERIFIERS: Record<string, () => void> = {
         // Two readings intersected, so a relayout in flight is not reported as a dead button.
         expect(helper).toContain('export const readUnreachableControls');
         expect(readFileSync('e2e/ui-reachability-gate.spec.ts', 'utf8')).toContain('findUnreachableControls');
+    },
+    'daily-streak-grace': () => {
+        // A day away from the machine costs nothing; two in a row still start the streak over.
+        const missedOne = resolveDailyStreak({
+            completedDateKeyUtc: '20260428',
+            graceAvailable: true,
+            previousDateKeyUtc: '20260426',
+            streak: 2
+        });
+        expect(missedOne).toEqual({ streak: 3, graceAvailable: false, usedGrace: true });
+
+        // Every other day cannot hold a streak open: the grace only refills on a consecutive clear.
+        expect(
+            resolveDailyStreak({
+                completedDateKeyUtc: '20260430',
+                graceAvailable: false,
+                previousDateKeyUtc: '20260428',
+                streak: 3
+            })
+        ).toEqual({ streak: 1, graceAvailable: true, usedGrace: false });
+        expect(
+            resolveDailyStreak({
+                completedDateKeyUtc: '20260429',
+                graceAvailable: false,
+                previousDateKeyUtc: '20260428',
+                streak: 3
+            })
+        ).toEqual({ streak: 4, graceAvailable: true, usedGrace: false });
+
+        // And the player is told which it is, on the card rather than only in the save.
+        expect(readFileSync('src/shared/daily-archive.ts', 'utf8')).toContain('grace day spent');
+        expect(readFileSync('src/renderer/components/ProfileScreen.test.tsx', 'utf8')).toContain('grace day held');
     },
     'min-type-size': () => {
         // Both failures this guards were shipped: three declarations under the floor that the fit

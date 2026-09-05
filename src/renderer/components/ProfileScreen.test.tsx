@@ -142,6 +142,35 @@ describe('ProfileScreen', () => {
         expect(within(records).queryAllByRole('listitem')).toHaveLength(0);
     });
 
+    it('tells the player the streak has a grace day, and whether it is still there', () => {
+        /*
+         * The rule lives in `resolveDailyStreak` and is tested there, which proves the streak
+         * survives a missed day and proves nothing about whether the player ever finds out. A
+         * forgiveness nobody is told about is one they still play under pressure to avoid.
+         */
+        const saveData = createDefaultSaveData();
+        saveData.playerStats = {
+            ...saveData.playerStats!,
+            dailiesCompleted: 4,
+            dailyStreakCosmetic: 4,
+            dailyStreakGraceAvailable: true,
+            lastDailyDateKeyUtc: '20260901'
+        };
+        profileStoreMocks.saveData = saveData;
+
+        const held = render(<ProfileScreen />);
+        expect(screen.getByTestId('profile-progress-grid')).toHaveTextContent(/grace day held/i);
+        held.unmount();
+
+        profileStoreMocks.saveData = {
+            ...saveData,
+            playerStats: { ...saveData.playerStats, dailyStreakGraceAvailable: false }
+        };
+
+        render(<ProfileScreen />);
+        expect(screen.getByTestId('profile-progress-grid')).toHaveTextContent(/grace day spent/i);
+    });
+
     it('shows one part of the record at a time, so no list can push another off screen', () => {
         const saveData = createDefaultSaveData();
         saveData.runHistory = [
