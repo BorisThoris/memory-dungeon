@@ -171,8 +171,25 @@
     }
 
     .chargeRow {
-        min-height: 2.2rem;
-        padding: 0.35rem 0.6rem;
+        min-height: 2rem;
+        padding: 0.3rem 0.6rem;
+    }
+
+    /*
+     * In-run on a phone the body is 520px and the three sections were 576: the last two
+     * charge rows sat under the body's edge. The gaps between sections give the difference
+     * up, with the header's title above.
+     */
+    .columns {
+        gap: 0.6rem;
+    }
+
+    .main {
+        gap: 0.75rem;
+    }
+
+    .section {
+        gap: 0.4rem;
     }
 
     .cards {

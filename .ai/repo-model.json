@@ -291,8 +291,8 @@
     {
       "path": "docs/CHAIN_CHUNK_FEVER_DESIGN.md",
       "category": "documentation",
-      "bytes": 40677,
-      "sha256": "064211b2d0d564d3f45887d43914471c3203d8935179bcddf1fb41358fb63f3c"
+      "bytes": 41127,
+      "sha256": "d6a0f8f312557553a85493fa3260a421ededf66a4fda436b7325c63bca1934bb"
     },
     {
       "path": "docs/COLLECTIBLE_SYSTEM.md",
@@ -7827,8 +7827,8 @@
     {
       "path": "src/renderer/components/InventoryScreen.module.css",
       "category": "source",
-      "bytes": 5462,
-      "sha256": "634fa5d56ecc48206c03b262b9ef1e693744b83bf6790aca864cb1702623e04b"
+      "bytes": 5824,
+      "sha256": "5178762b3912dbedf3a180e0d0088202ce4201ec207dea9e5a3d12853eb13981"
     },
     {
       "path": "src/renderer/components/InventoryScreen.test.tsx",
@@ -7923,8 +7923,8 @@
     {
       "path": "src/renderer/components/MetaScreen.module.css",
       "category": "source",
-      "bytes": 10112,
-      "sha256": "8889f0fc8d53d16c56aa8a217c56fdb4bfb8194efc9ae2e87d9e97561787a017"
+      "bytes": 10621,
+      "sha256": "4d26a940b391ab578461126bc8048ad3d518d7be1b77499961624c1bae5318cb"
     },
     {
       "path": "src/renderer/components/metaStackedShellLayout.test.ts",
@@ -8073,8 +8073,8 @@
     {
       "path": "src/renderer/components/ShopScreen.module.css",
       "category": "source",
-      "bytes": 8532,
-      "sha256": "f57dcfb122bc5cbaf2906572ce88613004710fdc6a3fb1d0763dbb3d8b388c3d"
+      "bytes": 8918,
+      "sha256": "536a3cd46742c70b21954fc9d83045de09e2041662f44b9c2740877fc4485c2b"
     },
     {
       "path": "src/renderer/components/ShopScreen.test.tsx",
@@ -10185,8 +10185,8 @@
     {
       "path": "src/renderer/styles/notificationsGame.css",
       "category": "source",
-      "bytes": 5408,
-      "sha256": "a6d007adde82fae4135348190a22cc413c0f6b93b2217ee1c64d9f728ca835cd"
+      "bytes": 5527,
+      "sha256": "9e245f9a19ecc6562bb65008cf526cd126164f1412cb7ec107928c37c70f5e27"
     },
     {
       "path": "src/renderer/styles/theme.parity.test.ts",

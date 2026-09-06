@@ -46,13 +46,14 @@
  * The retry-loop sheets (side room, vendor, floor clear) put their action buttons in the
  * bottom of the window - a phone's sheet rises from there, and a phone held sideways has
  * nowhere else - and a pickup toast 6.5rem from the bottom painted over them: "Shard spark
- * +1 combo shard" sat on Rest heal on a phone and on Save the time sideways. While a dialog
- * is open the stack moves to the top, over the scrimmed board, where nothing is being pressed.
+ * +1 combo shard" sat on Rest heal on a phone and on Save the time sideways. Moved to the
+ * top it painted over the run bar instead. No toast carries an action, and the pickup it
+ * names is on the run bar and in the inventory, so while a dialog is open the stack is not
+ * shown: a decision screen gets no card over it, and a toast still alive when the dialog
+ * closes shows then.
  */
 :root:has([role='dialog']) .crn-host {
-    top: calc(env(safe-area-inset-top, 0px) + 0.6rem);
-    bottom: auto;
-    flex-direction: column;
+    visibility: hidden;
 }
 
 .crn-card {

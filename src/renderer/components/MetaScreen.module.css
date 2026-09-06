@@ -342,3 +342,19 @@
 :global([data-reduce-motion='true']) .modalOverlayDesk {
     backdrop-filter: none;
 }
+
+/*
+ * The in-run plate on a phone: the display title at the menu's phone size is 51px, which
+ * ran "Inventory" off the plate's right edge and, with the Back row under it, took the body
+ * the height of its last two charge rows. The title is the modal size here; the kicker and
+ * the run line under it say the rest.
+ */
+@media (max-width: 560px) {
+    .modalInnerDesk .headerText :is(h1, h2) {
+        font-size: clamp(1.6rem, 8vw, 2.2rem);
+    }
+
+    .modalInnerDesk .header {
+        gap: 0.5rem;
+    }
+}
