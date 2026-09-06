@@ -1,0 +1,60 @@
+{
+  "notes": "Comparison run-bed candidates: the three vault beds (Ambience_mix.wav, Music_thunder, Menu_atmo) and the curated freesound library next to the repo (run-bed-references.txt -> Library_mix.wav; run-bed-references-vault.txt -> Library_vault_mix.wav). `yarn audio:ace-step:run-bed:library`.",
+  "jobs": [
+    {
+      "id": "run-bed-mix",
+      "task_type": "text2music",
+      "caption": "Memory Dungeon vault aesthetic, active run tension: seamless loopable gameplay bed grown from the vault's own ambience - cold marble room tone, low distant thunder rolling under crystalline haze, a faint ventilation hum, restrained puzzle focus not horror, soft slow pulse, no vocals, no hook melody, no drop, loop-friendly",
+      "lyrics": "[Instrumental]",
+      "instrumental": true,
+      "duration": 30,
+      "reference_audio": "reference-audio/Ambience_mix.wav",
+      "audio_cover_strength": 0.45,
+      "seed": 930501
+    },
+    {
+      "id": "run-bed-thunder",
+      "task_type": "text2music",
+      "caption": "Memory Dungeon vault aesthetic, active run tension: seamless loopable gameplay bed, low distant thunder under crystalline haze and cold marble room tone, restrained puzzle focus not horror, soft slow pulse, no vocals, no hook melody, no drop, loop-friendly",
+      "lyrics": "[Instrumental]",
+      "instrumental": true,
+      "duration": 30,
+      "reference_audio": "reference-audio/Music_thunder.wav",
+      "audio_cover_strength": 0.45,
+      "seed": 930502
+    },
+    {
+      "id": "run-bed-atmo",
+      "task_type": "text2music",
+      "caption": "Memory Dungeon vault aesthetic, active run tension: seamless loopable gameplay bed built on the menu's cold marble atmosphere, distant glass resonance with a slow undertow of thunder, restrained puzzle focus not horror, soft slow pulse, no vocals, no hook melody, no drop, loop-friendly",
+      "lyrics": "[Instrumental]",
+      "instrumental": true,
+      "duration": 30,
+      "reference_audio": "reference-audio/Menu_atmo.wav",
+      "audio_cover_strength": 0.45,
+      "seed": 930503
+    },
+    {
+      "id": "run-bed-library",
+      "task_type": "text2music",
+      "caption": "Memory Dungeon vault aesthetic, active run tension: seamless loopable gameplay bed woven from dark atmospheres, slow analog drones, glassy bell overtones and mystical chime transitions, cold marble air, restrained puzzle focus not horror, soft slow pulse, no vocals, no hook melody, no drop, loop-friendly",
+      "lyrics": "[Instrumental]",
+      "instrumental": true,
+      "duration": 30,
+      "reference_audio": "reference-audio/Library_mix.wav",
+      "audio_cover_strength": 0.5,
+      "seed": 930504
+    },
+    {
+      "id": "run-bed-library-vault",
+      "task_type": "text2music",
+      "caption": "Memory Dungeon vault aesthetic, active run tension: seamless loopable gameplay bed woven from dark atmospheres, slow analog drones and glassy bell overtones over the vault's own marble room tone and distant thunder, restrained puzzle focus not horror, soft slow pulse, no vocals, no hook melody, no drop, loop-friendly",
+      "lyrics": "[Instrumental]",
+      "instrumental": true,
+      "duration": 30,
+      "reference_audio": "reference-audio/Library_vault_mix.wav",
+      "audio_cover_strength": 0.5,
+      "seed": 930505
+    }
+  ]
+}

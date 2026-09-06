@@ -104,6 +104,8 @@ The repo uses a **single** root `tsconfig.json` for `tsc --noEmit` so CSS module
 | `yarn audio:ace-step:batch:dry` | Same with `--dry-run` (no torch) |
 | `yarn audio:ace-step:app:xl` | Full app batch on the 4B `acestep-v15-xl-turbo` checkpoint (8 steps, two takes) |
 | `yarn audio:ace-step:ambience` | Portfolio run-bed job on XL turbo (three takes) |
+| `yarn audio:ace-step:run-bed` | Gameplay run-loop candidates on XL turbo guided by Ballance-pack reference blends (`jobs.run-bed-ambience.json`; build the blends first with `build-ambience-reference-mix.py`) |
+| `yarn audio:ace-step:run-bed:library` | Comparison candidates guided by the vault beds and the freesound library (`jobs.run-bed-library.json`) |
 | `yarn face-panels:export-runtime-webp` | Export checked-in `face-panel-NN.png` masters to runtime WebP and rebuild `facePanelRasterUrls.ts` |
 | `yarn gen:face-panel-raster-urls` | Rebuild `facePanelRasterUrls.ts` after adding/removing `face-panel-NN.webp` runtime files |
 | `yarn card-normals:export-runtime-webp` | Export checked-in card normal-map PNG masters to smaller runtime WebP maps |
@@ -168,6 +170,10 @@ The repo uses a **single** root `tsconfig.json` for `tsc --noEmit` so CSS module
 | `audio-pipeline/batch_ace_step.py` | ACE-Step 1.5 JSON job batch → `tmp/audio/ace-step/` + manifest |
 | `audio-pipeline/pick-ace-takes.py` | Objective take scoring for `v##` renders → picks JSON for `install-ace-app-outputs.mjs --picks` |
 | `audio-pipeline/jobs.portfolio-ambience.json` | Fallback run bed (`yarn audio:ace-step:ambience`; installed as `assets/audio/portfolio-feedback-pack/demo-ambience-loop.wav`, used only when `music/run-loop.ogg` is absent) |
+| `audio-pipeline/build-ambience-reference-mix.py` | Level-matched crossfade chain of reference tracks (the `dont_modify` beds by default, or a `--list` of paths incl. MP3s) → `reference-audio/*.wav` (gitignored) for `reference_audio` |
+| `audio-pipeline/jobs.run-bed-ambience.json` | Run-loop candidates guided by blends of the Ballance pack (`dont_modify/`, `yarn audio:ace-step:run-bed`) |
+| `audio-pipeline/jobs.run-bed-library.json` | Comparison run-loop candidates: vault beds alone and the curated freesound library next to the repo (`yarn audio:ace-step:run-bed:library`) |
+| `audio-pipeline/run-bed-references-ballance-*.txt`, `run-bed-references*.txt` | Reference track lists (paths relative to the Repos folder, resolved from worktrees too) fed to `build-ambience-reference-mix.py --list` |
 | `audio-pipeline/make-seamless-loop.py` | Seamless loop + RMS/peak match for a chosen ACE-Step loop take (menu/run beds, portfolio ambience) |
 | `audio-pipeline/jobs.example.json` | Example jobs (`text2music`, reference audio, `cover`) |
 | `audio-pipeline/jobs.game-ambient.example.json` | Text-only ambient/menu + run tension (no `samples/` files) |

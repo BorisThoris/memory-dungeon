@@ -115,4 +115,6 @@ yarn face-panels:install:zimage && yarn face-panels:export-runtime-webp
 
 Sides must sit on a 16 px grid (`batch_local_zimage.py` snaps them). Face panels render at ~2.2× (1136×1296), lose a 6% inset on every side (`cropInset`), and are Lanczos-downsampled to the 520×592 masters on install; the tier slot order (01-48 common, 49-72 uncommon, 73-80 rare) is fixed by `weightedFacePanelPool.ts`, so keep the manifest order when editing motifs.
 
+**Shipped set:** the card fronts in the repo are the SDXL gold–cyan panels from §7 — that palette is the intended card style, matching the main-menu shell. The Z-Image batch below is an optional alternative kept for its pipeline; install it only on purpose.
+
 **Prompting lesson (turbo, no CFG):** write only what you want to see. The first panel pass said “tarot-inspired … no frame, no card, no faces” and the model painted framed tarot cards with figures on 40 of 80 slots. The shipped prompts describe “a concept painting that fills the whole image edge to edge … the single inanimate subject”, avoid the words *tarot*, *card* and *frame* entirely, and phrase every motif as an object or scene rather than an archetype.

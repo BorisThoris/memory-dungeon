@@ -181,6 +181,8 @@
         "audio:ace-step:app:variants": "node scripts/audio-pipeline/run-ace-batch.mjs --jobs scripts/audio-pipeline/jobs.memory-dungeon-app-audio.json --variants 3",
         "audio:ace-step:app:xl": "node scripts/audio-pipeline/run-ace-batch.mjs --jobs scripts/audio-pipeline/jobs.memory-dungeon-app-audio.json --config-path acestep-v15-xl-turbo --inference-steps 8 --variants 2",
         "audio:ace-step:ambience": "node scripts/audio-pipeline/run-ace-batch.mjs --jobs scripts/audio-pipeline/jobs.portfolio-ambience.json --config-path acestep-v15-xl-turbo --inference-steps 8 --variants 3 --out-dir tmp/audio/ace-step-ambience",
+        "audio:ace-step:run-bed": "node scripts/audio-pipeline/run-ace-batch.mjs --jobs scripts/audio-pipeline/jobs.run-bed-ambience.json --config-path acestep-v15-xl-turbo --inference-steps 8 --variants 3 --out-dir tmp/audio/ace-step-run-bed",
+        "audio:ace-step:run-bed:library": "node scripts/audio-pipeline/run-ace-batch.mjs --jobs scripts/audio-pipeline/jobs.run-bed-library.json --config-path acestep-v15-xl-turbo --inference-steps 8 --variants 3 --out-dir tmp/audio/ace-step-run-bed",
         "audio:ace-step:app:dry": "node scripts/audio-pipeline/run-ace-batch.mjs --dry-run --jobs scripts/audio-pipeline/jobs.memory-dungeon-app-audio.json",
         "audio:install:ace-app-outputs": "node scripts/audio-pipeline/install-ace-app-outputs.mjs && yarn audio:export-runtime-ogg",
         "audio:placeholders": "node scripts/audio-pipeline/generate-procedural-sfx-wavs.mjs",

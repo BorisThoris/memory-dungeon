@@ -38,14 +38,21 @@
   },
   "loops": {
     "menu-loop": {
-      "take": "v01",
       "installed": false,
-      "note": "XL take rendered but not installed; the shipped loop is the earlier 2B render, kept by request."
+      "note": "Shipped menu loop is the earlier 2B render, kept by request; the XL take (v01) was rendered but not installed."
     },
     "run-loop": {
+      "installed": true,
+      "jobs": "jobs.run-bed-ambience.json",
+      "job": "run-bed-ballance-music",
       "take": "v02",
-      "installed": false,
-      "note": "XL take rendered but not installed; the shipped loop is the earlier 2B render, kept by request."
+      "seed": 938425,
+      "reference_audio": "reference-audio/Ballance_music_mix.wav (build-ambience-reference-mix.py --list run-bed-references-ballance-music.txt --seconds-per-source 6)",
+      "audio_cover_strength": 0.5,
+      "configPath": "acestep-v15-xl-turbo",
+      "inference_steps": 8,
+      "make-seamless-loop": "--skip-head 1.0 --skip-tail 3.0 --crossfade 2.0 --target-rms-db -21 --peak-db -2",
+      "note": "Gameplay bed steered by the Ballance pack (dont_modify/). Comparison candidates (vault beds, freesound library) rendered via jobs.run-bed-library.json but not installed."
     },
     "demo-ambience-loop": {
       "jobs": "jobs.portfolio-ambience.json",
