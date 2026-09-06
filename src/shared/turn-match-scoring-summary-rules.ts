@@ -26,6 +26,7 @@ export interface TurnMatchScoringSummaryInput {
     matchedTiles: readonly Tile[];
     encorePairKeys: readonly string[];
     findableScoreBonus: number;
+    chunkScore: number;
     routeCardScore: number;
     dungeonScore: number;
     enemyDamageScore: number;
@@ -44,6 +45,7 @@ export const resolveTurnMatchScoringSummary = ({
     matchedTiles,
     encorePairKeys,
     findableScoreBonus,
+    chunkScore,
     routeCardScore,
     dungeonScore,
     enemyDamageScore,
@@ -69,6 +71,7 @@ export const resolveTurnMatchScoringSummary = ({
         recallBonus,
         encoreBonus,
         findableScoreBonus,
+        chunkScore,
         routeCardScore,
         dungeonScore,
         enemyDamageScore,

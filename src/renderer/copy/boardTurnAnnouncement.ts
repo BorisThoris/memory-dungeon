@@ -1,5 +1,7 @@
 import { getHazardTileLiveCopy, HAZARD_TILE_KINDS } from '../../shared/hazard-tiles';
 import { MAGPIE_BEAT_COPY } from './magpieBeat';
+import { CHAIN_BEAT_COPY } from './chainBeat';
+import { getChainTier } from '../../shared/chain-tier-rules';
 import type { BoardTurnResolvedEvent } from '../store/gameplayFeedbackAdapter';
 import { getChainMilestoneFeedback } from './chainMilestoneFeedback';
 import { getChainRewardForecastCues, getChainRewardUrgencyCopy } from './chainMomentum';
@@ -220,6 +222,19 @@ export const magpieAnnouncementLines = (turnEvent: BoardTurnResolvedEvent): stri
     ];
 };
 
+/**
+ * The chunk's line for a turn where a chain broke one. Read off the event's counters, so the
+ * renderer never has to diff boards to know pairs left.
+ */
+export const chunkAnnouncementLines = (turnEvent: BoardTurnResolvedEvent): string[] => {
+    const { chunkPairsBrokenBefore, chunkPairsBrokenAfter, chainAfter } = turnEvent.announcement;
+    const pairs = chunkPairsBrokenAfter - chunkPairsBrokenBefore;
+    if (pairs <= 0) {
+        return [];
+    }
+    return [CHAIN_BEAT_COPY.chunkAnnouncement(pairs, getChainTier(chainAfter), chainAfter)];
+};
+
 export const buildBoardTurnAnnouncement = (
     turnEvent: BoardTurnResolvedEvent,
     { reduceMotion }: { reduceMotion: boolean }
@@ -232,6 +247,7 @@ export const buildBoardTurnAnnouncement = (
          * Ahead of the counters: the bird moved a pair, and a player who hears the score before
          * they hear that will already be looking in the wrong place.
          */
+        ...chunkAnnouncementLines(turnEvent),
         ...magpieAnnouncementLines(turnEvent),
         ...counterAnnouncementLines(turnEvent),
         getBoardTurnPickupAnnouncement(turnEvent)?.text ?? null

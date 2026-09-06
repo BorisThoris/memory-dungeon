@@ -213,6 +213,8 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
         recallBonusScoreThisFloor: 0,
         forgottenTileIdsThisFloor: [],
         hazardTileTriggersThisFloor: 0,
+        chunkBreaksThisFloor: 0,
+        chunkPairsBrokenThisFloor: 0,
         magpieTheftsThisFloor: 0,
         magpieScaredOffThisFloor: 0,
         hazardShuffleSnaresThisFloor: 0,

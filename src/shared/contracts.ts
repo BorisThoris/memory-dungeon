@@ -1141,6 +1141,9 @@ export interface RunState {
     floorCurioId?: string | null;
     /** True once the player has greeted this floor's resident. One greeting per floor. */
     floorCurioGreeted?: boolean;
+    /** Chunk breaks a chain has bought on this floor, and the pairs they took with them. */
+    chunkBreaksThisFloor: number;
+    chunkPairsBrokenThisFloor: number;
     /** Pairs the magpie has taken back on this floor. */
     magpieTheftsThisFloor: number;
     /** Times a guard token drove the magpie off on this floor. */

@@ -8,6 +8,8 @@ export interface TurnMatchProgressResult {
     safeHazardWardChargesThisFloor: number;
     hazardTileTriggersThisFloor: number;
     hazardCascadeCachesThisFloor: number;
+    chunkBreaksThisFloor: number;
+    chunkPairsBrokenThisFloor: number;
     hazardFragileCacheClaimsThisFloor: number;
     hazardTollCachesThisFloor: number;
     hazardFuseCachesThisFloor: number;
@@ -36,6 +38,8 @@ export interface TurnMatchProgressResult {
 
 export interface TurnMatchProgressInput {
     run: RunState;
+    /** Pairs the chunk break took this turn; zero when the chain did not buy one. */
+    chunkPairsBroken: number;
     cursedMatchedEarly: boolean;
     findablesClaimedDelta: number;
     routeCardSafeHazardWardCharges: number;
@@ -66,6 +70,7 @@ export interface TurnMatchProgressInput {
 
 export const resolveTurnMatchProgress = ({
     run,
+    chunkPairsBroken,
     cursedMatchedEarly,
     findablesClaimedDelta,
     routeCardSafeHazardWardCharges,
@@ -118,6 +123,10 @@ export const resolveTurnMatchProgress = ({
             (fuseCacheClaimed ? 1 : 0),
         hazardCascadeCachesThisFloor:
             runNonNegativeInteger(run.hazardCascadeCachesThisFloor) + (cascadeHazardTriggered ? 1 : 0),
+        chunkBreaksThisFloor:
+            runNonNegativeInteger(run.chunkBreaksThisFloor) + (runNonNegativeInteger(chunkPairsBroken) > 0 ? 1 : 0),
+        chunkPairsBrokenThisFloor:
+            runNonNegativeInteger(run.chunkPairsBrokenThisFloor) + runNonNegativeInteger(chunkPairsBroken),
         hazardFragileCacheClaimsThisFloor:
             runNonNegativeInteger(run.hazardFragileCacheClaimsThisFloor) + (fragileCacheClaimed ? 1 : 0),
         hazardTollCachesThisFloor:

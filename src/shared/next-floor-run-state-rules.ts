@@ -72,6 +72,8 @@ export const createNextFloorRunState = (
         forgottenTileIdsThisFloor: [],
         hazardTileTriggersThisFloor: 0,
         floorCurioGreeted: false,
+        chunkBreaksThisFloor: 0,
+        chunkPairsBrokenThisFloor: 0,
         magpieTheftsThisFloor: 0,
         magpieScaredOffThisFloor: 0,
         hazardShuffleSnaresThisFloor: 0,

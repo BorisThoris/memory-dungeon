@@ -15,6 +15,8 @@ export interface ResolvedMatchScoreInput {
     recallBonus: number;
     encoreBonus: number;
     findableScoreBonus: number;
+    /** What the chunk break paid; zero on a turn with no break. */
+    chunkScore: number;
     routeCardScore: number;
     dungeonScore: number;
     enemyDamageScore: number;
@@ -34,6 +36,7 @@ export const calculateResolvedMatchScore = ({
     recallBonus,
     encoreBonus,
     findableScoreBonus,
+    chunkScore,
     routeCardScore,
     dungeonScore,
     enemyDamageScore,
@@ -51,6 +54,7 @@ export const calculateResolvedMatchScore = ({
             runNonNegativeInteger(recallBonus) +
             runNonNegativeInteger(encoreBonus) +
             runNonNegativeInteger(findableScoreBonus) +
+            runNonNegativeInteger(chunkScore) +
             runNonNegativeInteger(routeCardScore) +
             runNonNegativeInteger(dungeonScore) +
             runNonNegativeInteger(enemyDamageScore) +

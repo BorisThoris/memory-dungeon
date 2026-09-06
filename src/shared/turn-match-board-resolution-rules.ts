@@ -21,11 +21,15 @@ import {
     hazardKindsInTiles
 } from './hazard-tile-effect-rules';
 import { createMatchedPairClaimBoard, type MatchClaimContext } from './match-claim-rules';
+import { resolveChunkBreak, type ChunkBreakResult } from './chunk-break-rules';
+import { normalizeSessionStats } from './session-stats-rules';
+import { runNonNegativeInteger } from './run-number-guards';
 
 export interface TurnMatchBoardResolutionResult {
     board: BoardState;
     findableScout: ReturnType<typeof applyFindableScoutGlint>;
     cascadeHazard: ReturnType<typeof applyCascadeCacheHazard>;
+    chunkBreak: ChunkBreakResult;
     fragileCacheClaimed: boolean;
     tollCacheClaimed: boolean;
     fuseCacheClaimed: boolean;
@@ -86,7 +90,18 @@ export const resolveTurnMatchBoardResolution = ({
     const tollCacheClaimed = matchedHazards.has('toll_cache');
     const fuseCacheClaimed = matchedHazards.has('fuse_cache');
     const fuseCacheFresh = fuseCacheClaimed && run.matchResolutionsThisFloor < FUSE_CACHE_FRESH_RESOLUTION_LIMIT;
-    const enemyDamage = damageFirstActiveDungeonEnemy(cascadeHazard.board, 1);
+    /*
+     * The chain this match completes is the chain that buys the break: the streak the run holds
+     * plus this match. The break runs before enemy damage so that, once chunks hit enemies
+     * (design §2.6), the damage step sees the board the chunk left behind.
+     */
+    const chunkBreak = resolveChunkBreak({
+        board: cascadeHazard.board,
+        run,
+        matchedTileIds: [firstTileId, secondTileId],
+        chain: runNonNegativeInteger(normalizeSessionStats(run.stats).currentStreak) + 1
+    });
+    const enemyDamage = damageFirstActiveDungeonEnemy(chunkBreak.board, 1);
     const hazardDamage = damageFirstRevealedEnemyHazard(enemyDamage.board, 1);
     const advancedHazardBoard = advanceEnemyHazardsOnBoard(hazardDamage.board);
     const lastPairHazardClear = defeatEnemyHazardsBlockingLastPair(advancedHazardBoard);
@@ -104,6 +119,7 @@ export const resolveTurnMatchBoardResolution = ({
         board: omenScout.board,
         findableScout,
         cascadeHazard,
+        chunkBreak,
         fragileCacheClaimed,
         tollCacheClaimed,
         fuseCacheClaimed,

@@ -44,6 +44,13 @@ export interface BoardTurnHazardKindFacts {
 }
 
 export interface BoardTurnAnnouncementFacts {
+    /** Chunk breaks this floor and the pairs they took, before and after this turn. */
+    chunkBreaksBefore: number;
+    chunkBreaksAfter: number;
+    chunkPairsBrokenBefore: number;
+    chunkPairsBrokenAfter: number;
+    /** The chain the run holds after this turn; zero after a mismatch. */
+    chainAfter: number;
     /** Pairs the magpie took back this floor, before and after this turn. */
     magpieTheftsBefore: number;
     magpieTheftsAfter: number;
@@ -171,6 +178,11 @@ export const getBoardTurnAnnouncementFacts = (
         findablesClaimedAfter: runNonNegativeInteger(after.findablesClaimedThisFloor),
         findablesTotalBefore: runNonNegativeInteger(before.findablesTotalThisFloor),
         findablesTotalAfter: runNonNegativeInteger(after.findablesTotalThisFloor),
+        chunkBreaksBefore: runNonNegativeInteger(before.chunkBreaksThisFloor),
+        chunkBreaksAfter: runNonNegativeInteger(after.chunkBreaksThisFloor),
+        chunkPairsBrokenBefore: runNonNegativeInteger(before.chunkPairsBrokenThisFloor),
+        chunkPairsBrokenAfter: runNonNegativeInteger(after.chunkPairsBrokenThisFloor),
+        chainAfter: runNonNegativeInteger(after.stats.currentStreak),
         magpieTheftsBefore: runNonNegativeInteger(before.magpieTheftsThisFloor),
         magpieTheftsAfter: runNonNegativeInteger(after.magpieTheftsThisFloor),
         magpieScaredOffBefore: runNonNegativeInteger(before.magpieScaredOffThisFloor),
