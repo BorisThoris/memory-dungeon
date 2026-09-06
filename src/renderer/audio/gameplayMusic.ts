@@ -20,7 +20,8 @@ const resolvePortfolioMusicUrl = (filename: string): string | undefined =>
     portfolioMusicUrls[`../../../assets/audio/portfolio-feedback-pack/${filename}`];
 const resolveTrackUrl = (track: 'menu' | 'run'): string | undefined => {
     if (track === 'run') {
-        return resolvePortfolioMusicUrl('demo-ambience-loop.ogg') ?? resolveMusicUrl('run-loop.ogg');
+        // The shipped run loop is the in-run music; the portfolio ambience bed only covers builds without it.
+        return resolveMusicUrl('run-loop.ogg') ?? resolvePortfolioMusicUrl('demo-ambience-loop.ogg');
     }
     return resolveMusicUrl('menu-loop.ogg');
 };

@@ -167,7 +167,7 @@ The repo uses a **single** root `tsconfig.json` for `tsc --noEmit` so CSS module
 | `card-pipeline/*.ps1` | Windows PowerShell helpers for textures |
 | `audio-pipeline/batch_ace_step.py` | ACE-Step 1.5 JSON job batch → `tmp/audio/ace-step/` + manifest |
 | `audio-pipeline/pick-ace-takes.py` | Objective take scoring for `v##` renders → picks JSON for `install-ace-app-outputs.mjs --picks` |
-| `audio-pipeline/jobs.portfolio-ambience.json` | Run bed for the demo (`yarn audio:ace-step:ambience`; installed as `assets/audio/portfolio-feedback-pack/demo-ambience-loop.wav`) |
+| `audio-pipeline/jobs.portfolio-ambience.json` | Fallback run bed (`yarn audio:ace-step:ambience`; installed as `assets/audio/portfolio-feedback-pack/demo-ambience-loop.wav`, used only when `music/run-loop.ogg` is absent) |
 | `audio-pipeline/make-seamless-loop.py` | Seamless loop + RMS/peak match for a chosen ACE-Step loop take (menu/run beds, portfolio ambience) |
 | `audio-pipeline/jobs.example.json` | Example jobs (`text2music`, reference audio, `cover`) |
 | `audio-pipeline/jobs.game-ambient.example.json` | Text-only ambient/menu + run tension (no `samples/` files) |

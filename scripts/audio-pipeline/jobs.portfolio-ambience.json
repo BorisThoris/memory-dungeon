@@ -1,5 +1,5 @@
 {
-  "notes": "Run bed for the browser/Electron demo: gameplayMusic.ts prefers assets/audio/portfolio-feedback-pack/demo-ambience-loop.ogg over music/run-loop.ogg whenever it exists. Render with `yarn audio:ace-step:ambience`, then make-seamless-loop.py the chosen take into that WAV and `yarn audio:export-runtime-ogg`.",
+  "notes": "Fallback run bed: gameplayMusic.ts plays music/run-loop.ogg in runs and only falls back to assets/audio/portfolio-feedback-pack/demo-ambience-loop.ogg when that loop is absent (e.g. a trimmed browser demo bundle). Render with `yarn audio:ace-step:ambience`, then make-seamless-loop.py the chosen take into that WAV and `yarn audio:export-runtime-ogg`.",
   "jobs": [
     {
       "id": "demo-ambience-loop",

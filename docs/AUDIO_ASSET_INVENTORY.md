@@ -4,7 +4,7 @@ Ultra-deep catalog of **all shipped audio roles** (29 targets): runtime triggers
 
 For end-to-end wiring, see [AUDIO_INTEGRATION.md](./AUDIO_INTEGRATION.md).
 
-> **Current renders (2026-09-07):** all 29 cues and both music loops were regenerated on **ACE-Step 1.5 XL turbo** (4B DiT, 8 steps, DCW sampler) — see [`generated-ace-step-app-last-run.json`](../scripts/audio-pipeline/generated-ace-step-app-last-run.json) for seeds and the per-job take picks. One-shots went through the trim + loudnorm install; `menu-loop`, `run-loop`, and the portfolio `demo-ambience-loop` (the run bed players actually hear) were cut into seamless loops with [`make-seamless-loop.py`](../scripts/audio-pipeline/make-seamless-loop.py), so the music loops are now 24 s rather than the 30 s job duration.
+> **Current renders (2026-09-07):** all 29 one-shot cues were regenerated on **ACE-Step 1.5 XL turbo** (4B DiT, 8 steps, DCW sampler) — see [`generated-ace-step-app-last-run.json`](../scripts/audio-pipeline/generated-ace-step-app-last-run.json) for seeds and the per-job take picks — through the trim + loudnorm install. `menu-loop` and `run-loop` deliberately keep the earlier 30 s renders (the XL takes were rendered but not installed). The portfolio `demo-ambience-loop` was cut into a seamless 24 s bed with [`make-seamless-loop.py`](../scripts/audio-pipeline/make-seamless-loop.py) and is now only the fallback run bed: `gameplayMusic.ts` plays `run-loop.ogg` in runs.
 
 ## Contents
 

@@ -39,17 +39,20 @@
   "loops": {
     "menu-loop": {
       "take": "v01",
-      "make-seamless-loop": "--skip-head 1.0 --skip-tail 3.0 --crossfade 2.0 --target-rms-db -21 --peak-db -2"
+      "installed": false,
+      "note": "XL take rendered but not installed; the shipped loop is the earlier 2B render, kept by request."
     },
     "run-loop": {
       "take": "v02",
-      "make-seamless-loop": "--skip-head 1.0 --skip-tail 3.0 --crossfade 2.0 --target-rms-db -21 --peak-db -2"
+      "installed": false,
+      "note": "XL take rendered but not installed; the shipped loop is the earlier 2B render, kept by request."
     },
     "demo-ambience-loop": {
       "jobs": "jobs.portfolio-ambience.json",
       "take": "v01",
       "make-seamless-loop": "--skip-head 1.0 --skip-tail 3.0 --crossfade 2.5 --target-rms-db -25 --peak-db -3",
-      "target": "assets/audio/portfolio-feedback-pack/demo-ambience-loop.wav"
+      "target": "assets/audio/portfolio-feedback-pack/demo-ambience-loop.wav",
+      "note": "Fallback run bed only; gameplayMusic.ts plays music/run-loop.ogg in runs."
     }
   },
   "install": "install-ace-app-outputs.mjs --picks --loudness (trim to job duration, loudnorm I=-16 TP=-1.5 LRA=11, 48 kHz stereo PCM16)",
