@@ -1,27 +1,27 @@
 {
-  "notes": "Gameplay run-bed candidates guided by the Ballance sound pack the project already carries (src/renderer/assets/audio/dont_modify/ is the full 40-file rip). Build the reference blends first: build-ambience-reference-mix.py --list run-bed-references-ballance-music.txt --seconds-per-source 6 --out reference-audio/Ballance_music_mix.wav and --list run-bed-references-ballance-all.txt --seconds-per-source 1.5 --out reference-audio/Ballance_all_mix.wav. Render with `yarn audio:ace-step:run-bed`, score with pick-ace-takes.py, cut the winner with make-seamless-loop.py into src/renderer/assets/audio/music/run-loop.wav. Reference audio guides style only; the Ballance files themselves are never shipped as music (see RIGHTS.md).",
+  "notes": "Gameplay run-bed candidates. Two inputs define the sound (see MUSIC_SCENE_BRIEF.md): the main-menu cathedral painting, translated into the caption's scene block, and the Ballance sound pack the project already carries (src/renderer/assets/audio/dont_modify/, the full 40-file rip), passed as reference_audio blends. Build the blends first: build-ambience-reference-mix.py --list run-bed-references-ballance-music.txt --seconds-per-source 6 --out reference-audio/Ballance_music_mix.wav and --list run-bed-references-ballance-all.txt --seconds-per-source 1.5 --crossfade 0.4 --out reference-audio/Ballance_all_mix.wav. Render with `yarn audio:ace-step:run-bed`, score with pick-ace-takes.py, cut the winner with make-seamless-loop.py into src/renderer/assets/audio/music/run-loop.wav. Reference audio guides style only; the Ballance files themselves are never shipped as music (see RIGHTS.md).",
   "jobs": [
     {
       "id": "run-bed-ballance-music",
       "task_type": "text2music",
-      "caption": "Memory Dungeon vault aesthetic, active run tension: seamless loopable gameplay bed in the spirit of Ballance - cold marble menu atmosphere, distant rolling thunder, a soft ventilator hum and a faint UFO drone, sparse checkpoint chime overtones, restrained puzzle focus not horror, soft slow pulse, no vocals, no hook melody, no drop, loop-friendly",
+      "caption": "Memory Dungeon gameplay bed, seamless loopable, set in a vast empty gothic cathedral nave at night, tiers of stone arches receding into indigo dark, long stone reverb and a deep quiet sub-drone, cold cyan glass shimmer drifting high above warm candlelit low sustain, music that breathes rather than plays, slow swells, hushed and reverent not horror, aged gold cold stone and cyan glass, a game in progress on the stone floor so there is quiet forward motion - a soft slow pulse, distant rolling thunder undertow, a faint ventilator hum and UFO drone, sparse checkpoint chime overtones in the spirit of Ballance, restrained puzzle focus, no vocals, no drums, no hook melody, no drop, loop-friendly",
       "lyrics": "[Instrumental]",
       "instrumental": true,
       "duration": 30,
       "reference_audio": "reference-audio/Ballance_music_mix.wav",
       "audio_cover_strength": 0.5,
-      "seed": 930506
+      "seed": 930606
     },
     {
       "id": "run-bed-ballance-all",
       "task_type": "text2music",
-      "caption": "Memory Dungeon vault aesthetic, active run tension: seamless loopable gameplay bed built from the textures of a marble-run puzzle - wooden and stone balls rolling on rails, paper rustle, soft wooden flap and stone tick accents far in the mix, ventilator hum and distant thunder underneath, restrained puzzle focus not horror, soft slow pulse, no vocals, no hook melody, no drop, loop-friendly",
+      "caption": "Memory Dungeon gameplay bed, seamless loopable, set in a vast empty gothic cathedral nave at night, tiers of stone arches receding into indigo dark, long stone reverb and a deep quiet sub-drone, cold cyan glass shimmer drifting high above warm candlelit low sustain, music that breathes rather than plays, slow swells, hushed and reverent not horror, aged gold cold stone and cyan glass, a marble-run puzzle playing out on the stone floor - wooden and stone balls rolling on rails, paper rustle, soft wooden flap and stone tick accents far back in the reverb, ventilator hum and distant thunder underneath, a soft slow pulse, restrained puzzle focus, no vocals, no drums, no hook melody, no drop, loop-friendly",
       "lyrics": "[Instrumental]",
       "instrumental": true,
       "duration": 30,
       "reference_audio": "reference-audio/Ballance_all_mix.wav",
       "audio_cover_strength": 0.5,
-      "seed": 930507
+      "seed": 930607
     }
   ]
 }

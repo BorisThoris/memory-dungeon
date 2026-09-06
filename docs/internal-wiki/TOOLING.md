@@ -178,6 +178,7 @@ The repo uses a **single** root `tsconfig.json` for `tsc --noEmit` so CSS module
 | `audio-pipeline/jobs.example.json` | Example jobs (`text2music`, reference audio, `cover`) |
 | `audio-pipeline/jobs.game-ambient.example.json` | Text-only ambient/menu + run tension (no `samples/` files) |
 | `audio-pipeline/jobs.sfx.example.json` | ACE-Step captions for gameplay one-shots → trim → `src/renderer/assets/audio/sfx/` |
+| `audio-pipeline/MUSIC_SCENE_BRIEF.md` | Main-menu painting translated into caption language for the loops, paired with the Ballance reference blends |
 | `audio-pipeline/RIGHTS.md` / `EVENT_MAP.md` / `PROMPTS.md` | Legal strategy, SFX mapping, caption seeds |
 | `audio-pipeline/README.md` | Install + rights notes for ACE-Step |
 

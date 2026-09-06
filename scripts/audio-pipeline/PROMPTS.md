@@ -8,6 +8,8 @@ Copy lines into your jobs file `caption` field. Do not paste copyrighted lyrics 
 
 Authoritative **captions for all 21 shipped targets** (gameplay, UI, menu/run loops) live in [`jobs.memory-dungeon-app-audio.json`](jobs.memory-dungeon-app-audio.json). Each `caption` pairs with that job’s **`reference_audio`** for timbre.
 
+**Scene brief from the shell art:** [`MUSIC_SCENE_BRIEF.md`](MUSIC_SCENE_BRIEF.md) turns the main-menu cathedral painting into caption language (space, light, motion, palette) and pairs it with the Ballance reference blends; use its compact caption block for any loop.
+
 **Memory Dungeon style brief** (repeated in those captions):
 
 - Setting: dark fantasy **memory-vault / shrine** of recalled pairs, **arcade-tight**, **crystalline** or **marble-glass** textures, **restrained** mix.

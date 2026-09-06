@@ -45,14 +45,15 @@
       "installed": true,
       "jobs": "jobs.run-bed-ambience.json",
       "job": "run-bed-ballance-music",
-      "take": "v02",
-      "seed": 938425,
+      "take": "v03",
+      "seed": 946444,
+      "caption": "scene block from MUSIC_SCENE_BRIEF.md (main-menu cathedral painting) + Ballance textures",
       "reference_audio": "reference-audio/Ballance_music_mix.wav (build-ambience-reference-mix.py --list run-bed-references-ballance-music.txt --seconds-per-source 6)",
       "audio_cover_strength": 0.5,
       "configPath": "acestep-v15-xl-turbo",
       "inference_steps": 8,
       "make-seamless-loop": "--skip-head 1.0 --skip-tail 3.0 --crossfade 2.0 --target-rms-db -21 --peak-db -2",
-      "note": "Gameplay bed steered by the Ballance pack (dont_modify/). Comparison candidates (vault beds, freesound library) rendered via jobs.run-bed-library.json but not installed."
+      "note": "Gameplay bed: caption carries the menu painting as a scene brief, reference audio carries the Ballance pack. Comparison candidates (vault beds, freesound library) in jobs.run-bed-library.json were rendered but not installed."
     },
     "demo-ambience-loop": {
       "jobs": "jobs.portfolio-ambience.json",

@@ -1,5 +1,5 @@
 {
-  "$comment": "Z-Image-Turbo batch for shell scenes, Choose Your Path posters, and the app icon. Render with `yarn ui-art:local`, pick a take from tmp/zimage/ui-backgrounds.zimage.manifest/contact-sheet.png, copy it to the path in `target`, then `yarn assets:ui-backgrounds:export-runtime-webp`. Palette: deep midnight blue-black stone, antique gold trim, cool cyan arcane glow (theme.ts). Prompts end with the no-text / no-people guard because turbo runs without a negative prompt.",
+  "$comment": "Z-Image-Turbo batch for shell scenes, Choose Your Path posters, and the app icon. Render with `yarn ui-art:local`, pick a take from tmp/zimage/ui-backgrounds.zimage.manifest/contact-sheet.png, copy it to the path in `target`, then `yarn assets:ui-backgrounds:export-runtime-webp`. Palette: deep midnight blue-black stone, antique gold trim, cool cyan arcane glow (theme.ts). Prompts end with the no-text / no-people guard because turbo runs without a negative prompt. Shipped from this batch: the mode posters, mode-dungeon-showcase, and the app icon. bg-gameplay-arcane-workshop-v1 and bg-board-arcane-table-v1 were rendered and installed once, then reverted to the earlier procedural layers by request; their entries stay so the alternative can be re-installed with `--only`.",
   "defaults": {
     "width": 1376,
     "height": 768,
