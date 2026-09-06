@@ -75,6 +75,7 @@ import { GAMBIT_KEYBOARD_HELP_TIP } from '../copy/gameplayHints';
 import { PASS_AND_PLAY_COPY } from '../copy/passAndPlay';
 import { floorClearResidentLine } from '../copy/floorCurioBeat';
 import { pickFloorCurio } from '../../shared/floor-curio-rules';
+import { canGreetFloorCurio } from '../../shared/floor-curio-greeting-rules';
 import { GAMEPAD_SHORTCUT_ROWS, GAMEPLAY_SHORTCUT_ROWS } from '../keyboard/gameplayShortcuts';
 import { useGamepadConnected } from '../hooks/useGamepadNavigation';
 import { usePlatformTiltField } from '../platformTilt/usePlatformTiltField';
@@ -398,6 +399,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const gameScreenActions = useAppStore(
         useShallow((state) => ({
             applyFlashPairPower: state.applyFlashPairPower,
+            greetFloorResident: state.greetFloorResident,
             acceptEndlessRiskWager: state.acceptEndlessRiskWager,
             activateDungeonExitFromPrompt: state.activateDungeonExitFromPrompt,
             chooseRouteAndContinue: state.chooseRouteAndContinue,
@@ -711,6 +713,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         settingsBoardBloomEnabled && settingsGraphicsQuality === 'high' ? styles.boardStageCssBloom : '';
     const {
         applyFlashPairPower,
+        greetFloorResident,
         acceptEndlessRiskWager,
         activateDungeonExitFromPrompt,
         chooseRouteAndContinue,
@@ -1155,6 +1158,12 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
      * Named from the same seed, rules version and floor number the advance will use, so the
      * promise made here is the resident who actually arrives.
      */
+    const canGreetResident = canGreetFloorCurio(run);
+    const residentGreetTitle = canGreetResident
+        ? RUN_TOOL_REASONS.greet.available
+        : run.floorCurioGreeted === true
+          ? RUN_TOOL_REASONS.greet.alreadyGreeted
+          : RUN_TOOL_REASONS.greet.nobodyHome;
     const nextFloorResidentLine = run.lastLevelResult
         ? floorClearResidentLine(
               pickFloorCurio(run.runSeed, run.lastLevelResult.level + 1, run.runRulesVersion)
@@ -1545,6 +1554,18 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                         ? RUN_TOOL_REASONS.stray.noCharges
                         : RUN_TOOL_REASONS.stray.available,
                 onClick: toggleStrayArm
+            },
+            {
+                /*
+                 * The one control that talks rather than moves tiles. Disabled on exactly the rule
+                 * the action applies, with the reason spelled out: an affordance that stays lit
+                 * and swallows the press is how the stray button used to behave.
+                 */
+                ...toolSpec('greet'),
+                glyph: RUN_SHELL_GLYPHS.greet,
+                disabled: !canGreetResident,
+                title: residentGreetTitle,
+                onClick: greetFloorResident
             },
             {
                 // Same rule as `createUndoResolvingSurfaceResult`: only while a pair is resolving.

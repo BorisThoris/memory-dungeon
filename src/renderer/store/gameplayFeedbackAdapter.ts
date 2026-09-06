@@ -22,6 +22,7 @@ export type GameplayFeedbackAudioCategory =
     | 'side-room'
     | 'wild-match'
     | 'undo'
+    | 'curio-greet'
     | 'wager';
 
 export interface GameplayFeedbackPresentation {
@@ -82,6 +83,9 @@ const audioCategoryFor = (
     }
     if (feedback.source.kind === 'system' && feedback.source.id === 'relic_offer') {
         return 'relic-service';
+    }
+    if (feedback.source.kind === 'system' && feedback.source.id === 'floor_curio') {
+        return 'curio-greet';
     }
     if (feedback.source.kind === 'system' && feedback.source.id === 'wild_joker') {
         return 'wild-match';

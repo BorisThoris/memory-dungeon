@@ -137,6 +137,23 @@ export const MIN_CURIO_MEMORIZE_MS = 1_500;
  * Clamped on the way out: a shortened window is a real cost, but no resident is allowed to leave
  * the player with a negative anything or with a window too short to read.
  */
+/**
+ * Puts a resident on the floor without their welcome.
+ *
+ * Floor one uses this. Every other floor is announced on the floor-clear screen before the stairs
+ * are taken, and the arrival gift is the payoff of that announcement — you were told a hoarding rat
+ * was down there and you find its coins. Nobody announces floor one, so an arrival gift there is
+ * unexplained variance in the opening budget: two runs of the same mode would start with different
+ * peeks and different memorize windows for no reason the player could ever see. They are still
+ * there, still have a line, and still answer a greeting — which is the only channel that says who
+ * they are out loud.
+ */
+export const seatFloorCurio = (run: RunState, curio: FloorCurio): RunState => ({
+    ...run,
+    floorCurioId: curio.id,
+    floorCurioGreeted: false
+});
+
 export const applyFloorCurio = (run: RunState, curio: FloorCurio): RunState => ({
     ...run,
     timerState: {

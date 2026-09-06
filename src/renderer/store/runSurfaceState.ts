@@ -4,6 +4,7 @@ import {
     createGameplayDungeonExitActivateCommand,
     createGameplayFlashPairCommand,
     createGameplayGambitCommitCommand,
+    createGameplayGreetCurioCommand,
     createGameplayPeekCommand,
     createGameplayRegionShuffleCommand,
     createGameplayShuffleCommand,
@@ -17,6 +18,7 @@ import {
     type DungeonExitActivationSpend
 } from '../../shared/dungeon-exit-rules';
 import { getDungeonExitStatus } from '../../shared/dungeon-board-status';
+import { canGreetFloorCurio } from '../../shared/floor-curio-greeting-rules';
 import { reduceGameplayCommand } from '../../shared/gameplay-core';
 import { appendGameplayJournal } from '../../shared/gameplay-journal';
 import {
@@ -448,6 +450,36 @@ export const createFlashPairSurfaceResult = ({
 
     const command = createGameplayFlashPairCommand(
         `flash-pair:${run.runSeed}:${run.board?.level ?? 0}:${run.shuffleNonce}:${run.flashPairCharges}`
+    );
+    const result = reduceGameplayCommand(run, command);
+    return !result.accepted
+        ? { kind: 'ignored' }
+        : {
+              kind: 'applied',
+              patch: { run: appendGameplayJournal(result.run, [command], result.events) },
+              playArmSfx: true,
+              events: result.events
+          };
+};
+
+/**
+ * Greeting the floor's resident. Free, once per floor, and never a mistake — so the only reasons
+ * it can be refused are structural: not on the board, not this floor's turn to talk, already said
+ * hello. The rules module owns all three; this only builds the command.
+ */
+export const createGreetCurioSurfaceResult = ({
+    run,
+    view
+}: {
+    run: RunState | null;
+    view: ViewState;
+}): RunSurfaceRunPatchResult => {
+    if (!run || view !== 'playing' || !canGreetFloorCurio(run)) {
+        return { kind: 'ignored' };
+    }
+
+    const command = createGameplayGreetCurioCommand(
+        `curio-greet:${run.runSeed}:${run.board?.level ?? 0}:${run.floorCurioId ?? 'nobody'}`
     );
     const result = reduceGameplayCommand(run, command);
     return !result.accepted

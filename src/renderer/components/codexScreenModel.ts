@@ -7,7 +7,8 @@ import {
 } from '../../shared/game-catalog';
 import { getRelicBuildArchetypeSummaries } from '../../shared/relics';
 import { FLOOR_CURIOS } from '../../shared/floor-curio-rules';
-import { FLOOR_CURIO_COPY } from '../copy/floorCurioBeat';
+import { codexResidentDescription, FLOOR_CURIO_COPY } from '../copy/floorCurioBeat';
+import { FLOOR_CURIO_GREETINGS } from '../../shared/floor-curio-greeting-rules';
 
 type TextTopic = { title: string; description: string };
 
@@ -96,7 +97,7 @@ export const buildCodexResidentRows = () => [
     ...FLOOR_CURIOS.map((curio) => ({
         id: curio.id,
         title: curio.name,
-        description: `${curio.line} ${curio.effectSummary}`
+        description: codexResidentDescription(curio, FLOOR_CURIO_GREETINGS[curio.id].gained)
     }))
 ];
 

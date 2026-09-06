@@ -71,6 +71,7 @@ export const createNextFloorRunState = (
         recallBonusScoreThisFloor: 0,
         forgottenTileIdsThisFloor: [],
         hazardTileTriggersThisFloor: 0,
+        floorCurioGreeted: false,
         magpieTheftsThisFloor: 0,
         magpieScaredOffThisFloor: 0,
         hazardShuffleSnaresThisFloor: 0,

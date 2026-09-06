@@ -21,12 +21,17 @@ export const FLOOR_CURIO_COPY = {
     codexDescription:
         'Every floor has someone else on it, rolled from your run seed. Most of them help. One of them ' +
         'talks over the memorize window. One of them is a sock. You are told who is coming before you ' +
-        'take the stairs.'
+        'take the stairs, and once you are down there you can say hello — free, once per floor, from ' +
+        'the Greet control. It never costs you anything, and most of them give you something for it.'
 } as const;
 
 /** "Downstairs: A hoarding rat. It has been collecting..." — the note on the floor-clear screen. */
 export const floorClearResidentLine = (curio: FloorCurio): string =>
     `${FLOOR_CURIO_COPY.downstairsPrefix}: ${curio.name}. ${curio.line}`;
+
+/** How the Codex describes one resident: what they do on arrival, and what they say if greeted. */
+export const codexResidentDescription = (curio: FloorCurio, greetingGained: string): string =>
+    `${curio.line} ${curio.effectSummary} Greet them: ${greetingGained}`;
 
 /** The same meeting, said plainly: who, and what it changes. */
 export const floorCurioAnnouncement = (curio: FloorCurio): string =>

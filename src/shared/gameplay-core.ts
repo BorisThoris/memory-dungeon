@@ -64,6 +64,11 @@ import { rotateRunShiftingSpotlight } from './shifting-spotlight-rules';
 import { resolveHazardBanisherFloorStart } from './hazard-banisher-rules';
 import { applyRouteChoiceOutcome } from './route-rules';
 import { createRelicPickTransitionResult } from './relic-pick-transition-rules';
+import {
+    canGreetFloorCurio,
+    greetFloorCurio,
+    runFloorCurioGreeting
+} from './floor-curio-greeting-rules';
 import { repairRunProgressionSoftlocks } from './run-progression-repair';
 import { applyRelicOfferService, hasRunRelic, RELIC_OFFER_SERVICE_CATALOG } from './relics';
 import { applyRunEventChoice, rollRunEventRoom, type RunEventChoiceEffect } from './run-events';
@@ -103,6 +108,7 @@ const REGION_SHUFFLE_SOURCE: GameplaySource = { kind: 'power', id: 'region_shuff
 const TILE_SWAP_SOURCE: GameplaySource = { kind: 'power', id: 'tile_swap' };
 const FLASH_PAIR_SOURCE: GameplaySource = { kind: 'power', id: 'flash_pair' };
 const UNDO_RESOLVE_SOURCE: GameplaySource = { kind: 'power', id: 'undo_resolve' };
+const CURIO_GREET_SOURCE: GameplaySource = { kind: 'system', id: 'floor_curio' };
 const TILE_FLIP_SOURCE: GameplaySource = { kind: 'system', id: 'tile_flip' };
 const MEMORIZE_SOURCE: GameplaySource = { kind: 'system', id: 'memorize' };
 const RUN_TIMER_SOURCE: GameplaySource = { kind: 'system', id: 'run_timer' };
@@ -569,6 +575,40 @@ const applyFlashPairCommand = (
         type: 'feedback.requested',
         cue: 'power.flash_pair.used',
         message: `Flash Pair revealed ${revealedTileIds.join(' and ')}; ${afterCharges} charge${afterCharges === 1 ? '' : 's'} remain.`,
+        tone: 'information'
+    });
+    return { run: nextRun, command, events, accepted: true };
+};
+
+const applyGreetCurioCommand = (
+    run: RunState,
+    command: Extract<GameplayCommand, { type: 'board.curio_greet' }>
+): GameplayCommandResult => {
+    const greeting = canGreetFloorCurio(run) ? runFloorCurioGreeting(run) : null;
+    const nextRun = greetFloorCurio(run);
+    if (!greeting || nextRun === run) {
+        return rejectedResult(run, command.commandId, 'There is nobody on this floor to greet.', command);
+    }
+    const events: GameplayEvent[] = [];
+    const writeEvent = makeEventWriter(command.commandId, CURIO_GREET_SOURCE, events);
+    writeEvent({
+        type: 'board.curio_greeted',
+        curioId: greeting.curioId,
+        peekChargesBefore: runNonNegativeInteger(run.peekCharges),
+        peekChargesAfter: runNonNegativeInteger(nextRun.peekCharges),
+        shopGoldBefore: runNonNegativeInteger(run.shopGold),
+        shopGoldAfter: runNonNegativeInteger(nextRun.shopGold),
+        guardTokensBefore: runNonNegativeInteger(run.stats.guardTokens),
+        guardTokensAfter: runNonNegativeInteger(nextRun.stats.guardTokens),
+        strayChargesBefore: runNonNegativeInteger(run.strayRemoveCharges),
+        strayChargesAfter: runNonNegativeInteger(nextRun.strayRemoveCharges),
+        undoUsesBefore: runNonNegativeInteger(run.undoUsesThisFloor),
+        undoUsesAfter: runNonNegativeInteger(nextRun.undoUsesThisFloor)
+    });
+    writeEvent({
+        type: 'feedback.requested',
+        cue: `curio.${greeting.curioId}.greeted`,
+        message: greeting.reply,
         tone: 'information'
     });
     return { run: nextRun, command, events, accepted: true };
@@ -1920,6 +1960,9 @@ export const reduceGameplayCommand = (run: RunState, input: unknown): GameplayCo
     }
     if (command.type === 'board.undo_resolve') {
         return applyUndoResolveCommand(run, command);
+    }
+    if (command.type === 'board.curio_greet') {
+        return applyGreetCurioCommand(run, command);
     }
     if (command.type === 'shop.purchase') {
         return applyShopPurchaseCommand(run, command);

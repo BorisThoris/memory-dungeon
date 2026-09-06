@@ -57,6 +57,11 @@ export const RUN_TOOL_REASONS = {
     undo: {
         available: 'Undo the flip being resolved',
         notResolving: 'Undo is available only while a flipped pair is resolving'
+    },
+    greet: {
+        available: 'Say hello to whoever is on this floor',
+        alreadyGreeted: 'You have already said hello on this floor',
+        nobodyHome: 'There is nobody on this floor to greet'
     }
 } as const;
 

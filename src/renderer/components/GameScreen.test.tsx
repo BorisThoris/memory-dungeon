@@ -23,6 +23,7 @@ import { BOARD_FLOATER_POP_CLEAR } from '../store/matchScorePop';
 
 const gameSfxMocks = vi.hoisted(() => ({
     playMismatchRecoveryCrescendoSfx: vi.fn(),
+    playPowerArmSfx: vi.fn(),
     playRelicOfferOpenSfx: vi.fn(),
     playWagerArmSfx: vi.fn(),
     resumeAudioContext: vi.fn(),
@@ -222,6 +223,48 @@ describe('GameScreen (OVR-014)', () => {
                 ...BOARD_FLOATER_POP_CLEAR
             });
         });
+    });
+
+    it('docks a greet control that answers a press, and refuses a second hello on the same floor', async () => {
+        // A verb that exists in the rules and in the store but is not on the board is a verb the
+        // player does not have. Press the real button and read what the store came back with.
+        const run: RunState = {
+            ...createNewRun(0, { runSeed: 4_242 }),
+            status: 'playing',
+            floorCurioId: 'off_duty_guard',
+            floorCurioGreeted: false
+        };
+        act(() => {
+            useAppStore.setState({ run, view: 'playing' });
+        });
+        render(
+            <PlatformTiltProvider>
+                <NotificationHost>
+                    <GameScreen achievements={[]} run={run} />
+                </NotificationHost>
+            </PlatformTiltProvider>
+        );
+
+        const greet = screen.getByTestId('tool-greet');
+        expect(greet).toBeEnabled();
+
+        act(() => {
+            fireEvent.click(greet);
+        });
+
+        const greeted = useAppStore.getState().run!;
+        expect(greeted.floorCurioGreeted).toBe(true);
+        expect(greeted.stats.guardTokens).toBe(run.stats.guardTokens + 1);
+        expect(
+            (greeted.gameplayEventJournal as { type: string }[]).some(
+                (event) => event.type === 'board.curio_greeted'
+            )
+        ).toBe(true);
+
+        act(() => {
+            fireEvent.click(greet);
+        });
+        expect(useAppStore.getState().run!.stats.guardTokens).toBe(run.stats.guardTokens + 1);
     });
 
     it('defers achievement toasts while the floor-cleared modal is visible, then emits after leaving levelComplete', () => {

@@ -1649,6 +1649,12 @@ export const gameplayCommandSchema = z.discriminatedUnion('type', [
     z
         .object({
             ...commandBase,
+            type: z.literal('board.curio_greet')
+        })
+        .strict(),
+    z
+        .object({
+            ...commandBase,
             type: z.literal('shop.purchase'),
             offerId: z.string().min(1).max(160)
         })
@@ -2015,6 +2021,23 @@ export const gameplayEventSchema = z.discriminatedUnion('type', [
             shuffleNonceBefore: z.number().int().nonnegative(),
             shuffleNonceAfter: z.number().int().nonnegative(),
             usedFreeCharge: z.boolean()
+        })
+        .strict(),
+    z
+        .object({
+            ...eventBase,
+            type: z.literal('board.curio_greeted'),
+            curioId: z.string().min(1).max(64),
+            peekChargesBefore: z.number().int().nonnegative(),
+            peekChargesAfter: z.number().int().nonnegative(),
+            shopGoldBefore: z.number().int().nonnegative(),
+            shopGoldAfter: z.number().int().nonnegative(),
+            guardTokensBefore: z.number().int().nonnegative(),
+            guardTokensAfter: z.number().int().nonnegative(),
+            strayChargesBefore: z.number().int().nonnegative(),
+            strayChargesAfter: z.number().int().nonnegative(),
+            undoUsesBefore: z.number().int().nonnegative(),
+            undoUsesAfter: z.number().int().nonnegative()
         })
         .strict(),
     z
@@ -2558,6 +2581,13 @@ export const createGameplayFlashPairCommand = (commandId: string): GameplayComma
         schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
         commandId,
         type: 'board.flash_pair'
+    });
+
+export const createGameplayGreetCurioCommand = (commandId: string): GameplayCommand =>
+    gameplayCommandSchema.parse({
+        schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
+        commandId,
+        type: 'board.curio_greet'
     });
 
 export const createGameplayUndoResolveCommand = (commandId: string): GameplayCommand =>

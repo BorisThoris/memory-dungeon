@@ -111,6 +111,16 @@ export function GameplayUndoIcon({ className, ...rest }: GameplayIconProps) {
     );
 }
 
+/** A speech bubble: the dock's one control that talks to something rather than moving tiles. */
+export function GameplayGreetIcon({ className, ...rest }: GameplayIconProps) {
+    return (
+        <svg {...base} className={className} {...rest}>
+            <path d="M4 6h16v10H10l-4 4v-4H4z" />
+            <path d="M8.5 11h.01M12 11h.01M15.5 11h.01" />
+        </svg>
+    );
+}
+
 export function GameplayStrayIcon({ className, ...rest }: GameplayIconProps) {
     return (
         <svg {...base} className={className} {...rest}>

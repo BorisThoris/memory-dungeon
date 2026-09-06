@@ -53,7 +53,7 @@ describe('the run dock catalog', () => {
         for (const id of runShellToolIds()) {
             expect(GAME_SCREEN, `the dock does not build "${id}" from the catalog`).toContain(`toolSpec('${id}')`);
         }
-        expect(GAME_SCREEN).not.toMatch(/^\s+id: '(shuffle|swap|row|pin|destroy|peek|flash|stray|undo)',$/mu);
+        expect(GAME_SCREEN).not.toMatch(/^\s+id: '(shuffle|swap|row|pin|destroy|peek|flash|stray|undo|greet)',$/mu);
     });
 
     it('marks exactly the tools that are not always offered', () => {

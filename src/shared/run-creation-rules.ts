@@ -21,6 +21,7 @@ import { DAILY_MUTATOR_TABLE } from './mutators';
 import { hasRunRelic } from './relics';
 import { deriveDailyMutatorIndex, deriveDailyRunSeed, formatDailyDateKeyUtc } from './rng';
 import { createDungeonRunMapState } from './run-map';
+import { pickFloorCurio, seatFloorCurio } from './floor-curio-rules';
 import { countFindablePairs } from './board-tile-generation-rules';
 import { boardHasGlassDecoy } from './board-inspection';
 import { DECOY_PAIR_KEY } from './tile-identity';
@@ -261,14 +262,24 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
 
     const memorizeMs = getMemorizeDurationForRun(runWithRelics, 1) + runWithRelics.pendingMemorizeBonusMs;
 
-    return {
-        ...runWithRelics,
-        freeShuffleThisFloor: hasRunRelic(runWithRelics, 'first_shuffle_free_per_floor'),
-        regionShuffleFreeThisFloor:
-            hasRunRelic(runWithRelics, 'region_shuffle_free_first') ||
-            hasRewardPerk(runWithRelics, 'free_first_swap_per_floor'),
-        timerState: createTimerState({ memorizeRemainingMs: memorizeMs })
-    };
+    /*
+     * Floor one has a resident too — seated, not welcomed. If the opening floor had nobody, the
+     * cast would be something a player only discovers on their second floor and the greet control
+     * would open the run disabled, which reads as broken rather than as empty. It gets no arrival
+     * gift for the reason `seatFloorCurio` gives: nothing announced them, so nothing can explain
+     * the change. Say hello and they will tell you themselves.
+     */
+    return seatFloorCurio(
+        {
+            ...runWithRelics,
+            freeShuffleThisFloor: hasRunRelic(runWithRelics, 'first_shuffle_free_per_floor'),
+            regionShuffleFreeThisFloor:
+                hasRunRelic(runWithRelics, 'region_shuffle_free_first') ||
+                hasRewardPerk(runWithRelics, 'free_first_swap_per_floor'),
+            timerState: createTimerState({ memorizeRemainingMs: memorizeMs })
+        },
+        pickFloorCurio(runWithRelics.runSeed, 1, runWithRelics.runRulesVersion)
+    );
 };
 
 export const createMeditationRun = (

@@ -1125,9 +1125,11 @@ export interface RunState {
     forgottenTileIdsThisFloor: string[];
     /** Hazard tiles: total normal-run hazard triggers this floor. */
     hazardTileTriggersThisFloor: number;
-    /** Pairs the magpie has taken back on this floor. */
     /** Who is resident on this floor; null before the first floor opens. */
     floorCurioId?: string | null;
+    /** True once the player has greeted this floor's resident. One greeting per floor. */
+    floorCurioGreeted?: boolean;
+    /** Pairs the magpie has taken back on this floor. */
     magpieTheftsThisFloor: number;
     /** Times a guard token drove the magpie off on this floor. */
     magpieScaredOffThisFloor: number;

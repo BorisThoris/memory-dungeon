@@ -45,6 +45,7 @@ import {
     createDestroyPairArmedToggleResult,
     createDungeonExitActivationSurfaceResult,
     createFlashPairSurfaceResult,
+    createGreetCurioSurfaceResult,
     createGambitThirdPickPressResult,
     createPeekModeToggleResult,
     createRegionShuffleArmToggleSurfaceResult,
@@ -736,6 +737,19 @@ export const useAppStore = create<AppState>((set, get) => ({
         if (result.playArmSfx) {
             void resumeAudioContext();
             playPowerArmSfx(sfxGainFromStore() * 0.78);
+        }
+        set(result.patch);
+    },
+
+    greetFloorResident: () => {
+        const { run, view } = get();
+        const result = createGreetCurioSurfaceResult({ run, view });
+        if (result.kind === 'ignored') {
+            return;
+        }
+        if (result.playArmSfx) {
+            void resumeAudioContext();
+            playPowerArmSfx(sfxGainFromStore() * 0.7);
         }
         set(result.patch);
     },

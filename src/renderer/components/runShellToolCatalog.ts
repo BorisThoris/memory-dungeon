@@ -9,10 +9,20 @@ import type { RunState } from '../../shared/contracts';
  * statement, and `runShellToolCatalog.test.ts` checks it against the charge fields on RunState —
  * a power a run can hold charges for, with no tool that spends them, is a power a player cannot use.
  *
- * `spends: null` marks a tool with no charge of its own: pin, stray and undo are governed by their
+ * `spends: null` marks a tool with no charge of its own: pin, undo and greet are governed by their
  * own rules rather than a counter.
  */
-export type RunShellToolId = 'shuffle' | 'swap' | 'row' | 'pin' | 'destroy' | 'peek' | 'flash' | 'stray' | 'undo';
+export type RunShellToolId =
+    | 'shuffle'
+    | 'swap'
+    | 'row'
+    | 'pin'
+    | 'destroy'
+    | 'peek'
+    | 'flash'
+    | 'stray'
+    | 'undo'
+    | 'greet';
 
 /** The charge fields on RunState that a dock tool is expected to spend. */
 export type RunPowerChargeField = Extract<
@@ -45,7 +55,10 @@ export const RUN_SHELL_TOOL_CATALOG: readonly RunShellToolSpec[] = [
     // Only Practice and Wild runs carry flash charges, so the dock hides it elsewhere.
     { conditional: true, id: 'flash', label: 'Flash', spends: 'flashPairCharges' },
     { conditional: false, id: 'stray', label: 'Stray', spends: 'strayRemoveCharges' },
-    { conditional: false, id: 'undo', label: 'Undo', spends: null }
+    { conditional: false, id: 'undo', label: 'Undo', spends: null },
+    // Greeting the floor's resident costs nothing and is governed by a once-per-floor rule rather
+    // than a counter, so it spends no charge.
+    { conditional: false, id: 'greet', label: 'Greet', spends: null }
 ];
 
 export const runShellToolIds = (): RunShellToolId[] => RUN_SHELL_TOOL_CATALOG.map((tool) => tool.id);

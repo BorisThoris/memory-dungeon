@@ -105,6 +105,8 @@ export interface AppState {
     shuffleBoard: () => void;
     notifyMemorizeBoardReady: (boardKey: string) => void;
     applyFlashPairPower: () => void;
+    /** Say hello to the floor's resident. Free, once per floor. */
+    greetFloorResident: () => void;
     toggleBoardPinMode: () => void;
     toggleDestroyPairArmed: () => void;
     pause: () => void;
