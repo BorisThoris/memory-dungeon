@@ -43,17 +43,16 @@
 }
 
 /*
- * On a phone the retry-loop sheets (side room, vendor, floor clear) rise from the bottom, and
- * a pickup toast at 6.5rem from the bottom painted over their action buttons - "Shard spark
- * +1 combo shard" sat on Rest heal. While a dialog is open at that width the stack moves to
- * the top, over the scrimmed board, where nothing is being pressed.
+ * The retry-loop sheets (side room, vendor, floor clear) put their action buttons in the
+ * bottom of the window - a phone's sheet rises from there, and a phone held sideways has
+ * nowhere else - and a pickup toast 6.5rem from the bottom painted over them: "Shard spark
+ * +1 combo shard" sat on Rest heal on a phone and on Save the time sideways. While a dialog
+ * is open the stack moves to the top, over the scrimmed board, where nothing is being pressed.
  */
-@media (max-width: 760px) {
-    :root:has([role='dialog']) .crn-host {
-        top: calc(env(safe-area-inset-top, 0px) + 0.6rem);
-        bottom: auto;
-        flex-direction: column;
-    }
+:root:has([role='dialog']) .crn-host {
+    top: calc(env(safe-area-inset-top, 0px) + 0.6rem);
+    bottom: auto;
+    flex-direction: column;
 }
 
 .crn-card {
