@@ -1180,6 +1180,18 @@ where that rule
  * offers themselves past the bottom edge. The modal's own subtitle already says which pick
  * this is, so the cards and the services keep the room.
  */
+/*
+ * A phone: four relic cards one per row and the three services under them ran past the
+ * overlay body, and the third service ("Upgrade offer - 3g") was cut at the plate's edge.
+ * The two header bullets (chapter alignment, featured favor) are the lines to lose, as they
+ * already are at a short height; the pick and the services are what the screen is for.
+ */
+@media (max-width: 720px) {
+    .relicDraftBonusList {
+        display: none;
+    }
+}
+
 @media (max-height: 560px) {
     .relicDraftProgress,
     .relicDraftBonusList {

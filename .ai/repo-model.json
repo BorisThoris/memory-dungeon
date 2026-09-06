@@ -291,8 +291,8 @@
     {
       "path": "docs/CHAIN_CHUNK_FEVER_DESIGN.md",
       "category": "documentation",
-      "bytes": 40394,
-      "sha256": "b4dd0b90494a461fdbef8d35d046bc9fefe070b5643ad73d5b54dcdbadddf203"
+      "bytes": 40581,
+      "sha256": "6a2436b199f5412627a298e566e86cc99d6830e6b253ff06e4e25c5b3e3b8f8c"
     },
     {
       "path": "docs/COLLECTIBLE_SYSTEM.md",
@@ -7797,8 +7797,8 @@
     {
       "path": "src/renderer/components/GameScreen.module.css",
       "category": "source",
-      "bytes": 42923,
-      "sha256": "c9451e6816d5a010c851a499cc0340993aa548d231fbad59c13533e5ccbe5516"
+      "bytes": 43377,
+      "sha256": "1f16b30bd5df4250702f8a9098e325f11ed97ff1054ee247590f23687738aa05"
     },
     {
       "path": "src/renderer/components/GameScreen.test.tsx",
@@ -7989,8 +7989,8 @@
     {
       "path": "src/renderer/components/RelicDraftOffer.module.css",
       "category": "source",
-      "bytes": 6931,
-      "sha256": "87c4e761f9c83378e5ee8459040e7131155193c94cbe7d0561a8d9f42e6d53c9"
+      "bytes": 7030,
+      "sha256": "34789b122bc6d0cf538c3987c8ddcbdf0b5cf0a5c547205c0b3ed8648d09ced1"
     },
     {
       "path": "src/renderer/components/RelicDraftOfferPanel.test.tsx",

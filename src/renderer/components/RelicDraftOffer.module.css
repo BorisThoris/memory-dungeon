@@ -222,6 +222,14 @@
  * since the effect is what the pick turns on.
  */
 @media (max-width: 720px) {
+    .services {
+        gap: 0.35rem;
+    }
+
+    .service {
+        padding: 0.3rem 0.6rem;
+    }
+
     .grid {
         grid-template-columns: 1fr;
         gap: 0.4rem;
