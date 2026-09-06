@@ -13,6 +13,13 @@ export const BREAK_WAVE_MAX_DELAY_SECONDS = 0.6;
  */
 export const FEVER_WAVE_SLOW = 1.7;
 export const FEVER_WAVE_MAX_DELAY_SECONDS = 0.95;
+/**
+ * The ripple. A pair a later wave took leaves after the wave before it: the partner pops, then
+ * its clump answers. One beat per wave, on top of the spread within the wave, so a three-wave
+ * reaction reads as three answers and not as one blink.
+ */
+export const RIPPLE_WAVE_GAP_SECONDS = 0.24;
+export const RIPPLE_WAVE_MAX_OFFSET_SECONDS = 1.2;
 
 /**
  * How long a removed tile waits before it bursts and leaves.
@@ -44,11 +51,12 @@ export const getBreakWaveDelaySec = (board: Pick<BoardState, 'columns' | 'tiles'
             nearest = distance;
         }
     });
+    const waveOffset = Math.min(RIPPLE_WAVE_MAX_OFFSET_SECONDS, Math.max(0, tile.brokenAtWave ?? 0) * RIPPLE_WAVE_GAP_SECONDS);
     if (!Number.isFinite(nearest)) {
-        return 0;
+        return waveOffset;
     }
     if (tile.brokenAtTier === 'fever') {
-        return Math.min(FEVER_WAVE_MAX_DELAY_SECONDS, nearest * BREAK_WAVE_SECONDS_PER_STEP * FEVER_WAVE_SLOW);
+        return waveOffset + Math.min(FEVER_WAVE_MAX_DELAY_SECONDS, nearest * BREAK_WAVE_SECONDS_PER_STEP * FEVER_WAVE_SLOW);
     }
-    return Math.min(BREAK_WAVE_MAX_DELAY_SECONDS, nearest * BREAK_WAVE_SECONDS_PER_STEP);
+    return waveOffset + Math.min(BREAK_WAVE_MAX_DELAY_SECONDS, nearest * BREAK_WAVE_SECONDS_PER_STEP);
 };

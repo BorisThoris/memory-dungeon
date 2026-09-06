@@ -11,35 +11,76 @@ import { activeEnemyHazardsForBoard } from './enemy-hazard-board-rules';
 import type { FindableKind } from './contracts';
 
 /**
- * The chunk break: what a chain buys you.
+ * The chunk break: what a match does to the board around it.
  *
- * A correct match with a chain behind it does not just clear its own pair. It breaks the
- * same-suit tiles around it, and their partners go with them wherever they are — a wave of
- * shatters out from the match and answering pops across the board. One small, skilled input, a
- * large visible consequence, bigger the better you have been playing. That is the whole loop.
+ * A correct match does not just clear its own pair. It pops the same-suit tiles touching it, and
+ * their partners go with them wherever they are - and every tile that pops is a new seed, so the
+ * pops ripple: a partner that left from across the board takes its own neighbours, and theirs.
+ * Bubble games are built on contact - a bubble touching its colour goes with it, and what it was
+ * holding falls - and Tetris Attack and Puyo on the chain reaction that follows. Here the contact
+ * rule runs on every match, live, and the chain decides how far each pop reaches: a lone match
+ * takes what touches it, a Clean chain two steps, Sharp the whole clump, Fever the clump and its
+ * halo. One small, skilled input, a large visible consequence, bigger the better you have been
+ * playing. That is the whole loop.
  *
  * What it is not: a way to skip the memory game. Cascaded pairs score less than a matched pair,
- * carry no streak, recall or rating credit, and only ever take plain pair tiles and treasure —
+ * carry no streak, recall or rating credit, and only ever take plain pair tiles and treasure -
  * never the exit, a key, a lever, a lock, a shrine, a route special or a hazard. Memory still
- * pays best; the chunk makes it faster and louder. See `docs/CHAIN_CHUNK_FEVER_DESIGN.md` §2.3.
+ * pays best; the pop makes it faster and louder. See `docs/CHAIN_CHUNK_FEVER_DESIGN.md` 2.3 and 8.
  *
  * Treasure is in because of what the floors are made of. Measured on generated endless floors
  * (`cascade-balance-simulation.ts`), an early floor is one to three plain tiles and a wall of
  * dungeon cards, most of them treasure; a chunk that took only plain pairs broke on almost no
- * floor before the twelfth. A chunk that reaches a treasure pair spills it — the loot pays out as
- * if matched — which is the Peggle reading anyway: the ball through the purple peg is the point.
+ * floor before the twelfth. A chunk that reaches a treasure pair spills it - the loot pays out as
+ * if matched - which is the Peggle reading anyway: the ball through the purple peg is the point.
  */
-/** Tuning Fork: how far a Clean break reaches into the clump. */
-export const TUNING_FORK_CLEAN_DEPTH = 2;
+/**
+ * The pop and the ripple, by tier.
+ *
+ * Every match pops the whole same-suit clump touching it, chain or no chain: that is the contact
+ * rule, and it runs live on every match. What the chain buys is the ripple - how far the pops
+ * travel through the partners. A lone match's partners leave and stop (one wave). A Clean chain
+ * lets each partner that left take its own clump (two waves). Sharp and Fever let the reaction
+ * run until a wave takes nothing - Puyo's chain. Tuning Fork adds a wave where the count is
+ * finite.
+ */
+export const POP_WAVES = 1;
+export const CLEAN_WAVES = 2;
+export const TUNING_FORK_EXTRA_WAVES = 1;
+
+/**
+ * Contact, or reach. A pop is contact: a pair goes when both its halves touch the clump. Reaching
+ * a partner across the board - the half you would otherwise have had to remember - is what the
+ * chain buys from Clean, and what the Tuning Fork lends a lone match. Pairs still leave together,
+ * always: a pair with a half outside the clump stays whole on a pop.
+ */
+export const breakReachesPartners = (tier: ChainTier, relics: readonly RelicId[] = []): boolean =>
+    tier !== 'none' || relics.includes('tuning_fork');
 /** Magpie's Ledger: what spilled treasure gold is multiplied by. */
 export const MAGPIE_LEDGER_GOLD_MULTIPLIER = 2;
 /**
+ * The ripple. Every tile a wave takes seeds the next wave with the same reach, until a wave takes
+ * nothing. A second wave lifts the whole break's score by this share, a third by twice it, up to
+ * the cap - the chain reaction is the shot worth naming, as it is in Puyo.
+ */
+export const RIPPLE_WAVE_LIFT = 0.2;
+export const RIPPLE_MAX_LIFT = 2;
+/** A chain reaction cannot outrun the board, but a bound keeps the rule honest on an authored one. */
+export const RIPPLE_MAX_WAVES = 12;
+/**
  * The drop. Puzzle Bobble's second ingredient: a cluster falls once nothing holds it. Here a
  * Sharp or Fever break that leaves the matched suit with this many pairs or fewer, all of them
- * plain, takes those pairs too — wherever they sit. The last pairs of a suit become a target
+ * plain, takes those pairs too - wherever they sit. The last pairs of a suit become a target
  * instead of a chore, and a break that empties a suit reads as the clean sweep it is.
  */
 export const DROP_MAX_PAIRS = 2;
+
+/** How many waves the ripple may run at this tier: the pop alone, the pop and its partners' clumps, or the whole reaction. */
+export const rippleWaves = (tier: ChainTier, relics: readonly RelicId[] = []): number => {
+    if (tier === 'sharp' || tier === 'fever') return RIPPLE_MAX_WAVES;
+    const base = tier === 'clean' ? CLEAN_WAVES : POP_WAVES;
+    return base + (relics.includes('tuning_fork') ? TUNING_FORK_EXTRA_WAVES : 0);
+};
 
 export interface ChunkBreakResult {
     board: BoardState;
@@ -60,6 +101,10 @@ export interface ChunkBreakResult {
     treasuresSpilled: number;
     /** Pairs that dropped because the break left their suit with too few to hold them; also in `brokenPairKeys`. */
     droppedPairKeys: string[];
+    /** Waves the ripple ran: 1 for a break that stopped at the match's own region, 0 when nothing broke. */
+    waves: number;
+    /** The pairs each wave took, in order; the drop is not a wave and is not here. */
+    wavePairKeys: string[][];
 }
 
 /**
@@ -122,6 +167,8 @@ export const tileBlocksChunk = (tile: Tile): boolean =>
 export interface SuitRegionOptions {
     /** Spilled toffee: the tiles stick, so the region also propagates diagonally. */
     diagonal?: boolean;
+    /** Tiles the walk never enters or crosses: the matched pair, once a later wave starts elsewhere. */
+    exclude?: readonly string[];
     /**
      * Fever: the region takes a halo — every hidden tile bordering it, whatever its suit. Peggle's
      * fever lights every peg left; here the whole neighbourhood of the clump goes with it.
@@ -154,6 +201,10 @@ export const findSuitRegion = (
             ? [...orthogonalNeighbours(cell, columns, total), ...diagonalNeighbours(cell, columns, total)]
             : orthogonalNeighbours(cell, columns, total);
     const seen = new Set<number>(seeds);
+    for (const id of options.exclude ?? []) {
+        const index = board.tiles.findIndex((tile) => tile.id === id);
+        if (index >= 0) seen.add(index);
+    }
     const region: number[] = [];
     let frontier = [...seeds];
     for (let step = 0; step < depth && frontier.length > 0; step += 1) {
@@ -185,14 +236,18 @@ export const findSuitRegion = (
     return region;
 };
 
-/** Score for a chunk of `pairs` pairs on `level`: under a base match per pair, rising with size. */
-export const chunkBreakScore = (level: number, pairs: number, tier: ChainTier): number => {
+/** What a ripple of `waves` waves multiplies the break by: nothing for one wave, capped. */
+export const rippleLift = (waves: number): number =>
+    Math.min(RIPPLE_MAX_LIFT, 1 + RIPPLE_WAVE_LIFT * Math.max(0, runNonNegativeInteger(waves) - 1));
+
+/** Score for a chunk of `pairs` pairs on `level`: under a base match per pair, rising with size and with the ripple. */
+export const chunkBreakScore = (level: number, pairs: number, tier: ChainTier, waves = 1): number => {
     const count = runNonNegativeInteger(pairs);
     if (count === 0) return 0;
     const perPair = Math.floor(calculateMatchScore(level, 0) * 0.6);
     const sizeBonus = 6 * count * (count - 1);
     const feverLift = tier === 'fever' ? 1.5 : 1;
-    return Math.floor((perPair * count + sizeBonus) * feverLift);
+    return Math.floor((perPair * count + sizeBonus) * feverLift * rippleLift(waves));
 };
 
 /** Shards a chunk drops: one per two pairs, or one per pair in Fever. */
@@ -225,68 +280,102 @@ export const resolveChunkBreak = ({
         claimedFindableKind: null,
         treasureGold: 0,
         treasuresSpilled: 0,
-        droppedPairKeys: []
+        droppedPairKeys: [],
+        waves: 0,
+        wavePairKeys: []
     };
-    if (tier === 'none' || run.gameMode === 'meditation') {
+    if (run.gameMode === 'meditation') {
         return nothing;
     }
 
-    // Clean: the match's same-suit neighbours (two steps with the Tuning Fork). Sharp: the whole
-    // clump. Fever: the clump and its halo.
     const relics = run.relicIds ?? [];
-    const cleanDepth = relics.includes('tuning_fork') ? TUNING_FORK_CLEAN_DEPTH : 1;
-    const region = findSuitRegion(board, matchedTileIds, tier === 'clean' ? cleanDepth : Number.POSITIVE_INFINITY, {
-        diagonal: run.floorCurioId === 'sticky_toffee',
-        halo: tier === 'fever'
-    });
+    const wavesAllowed = rippleWaves(tier, relics);
+    const reachesPartners = breakReachesPartners(tier, relics);
+    const diagonal = run.floorCurioId === 'sticky_toffee';
     const byPairKey = new Map<string, Tile[]>();
     for (const tile of board.tiles) {
         byPairKey.set(tile.pairKey, [...(byPairKey.get(tile.pairKey) ?? []), tile]);
     }
     const brokenPairKeys: string[] = [];
+    const wavePairKeys: string[][] = [];
+    const regionTileIds = new Set<string>();
     let claimedFindableKind: FindableKind | null = null;
     let treasureScore = 0;
     let treasureGold = 0;
     let treasuresSpilled = 0;
-    for (const index of region) {
-        const tile = board.tiles[index]!;
-        if (brokenPairKeys.includes(tile.pairKey)) continue;
-        if (board.cursedPairKey && tile.pairKey === board.cursedPairKey) continue;
-        const pair = byPairKey.get(tile.pairKey) ?? [];
-        // One findable pair per break goes with the chunk: drop the treasure. The turn awards it
-        // through the same path a matched findable takes, so nothing is paid twice or never.
-        if (
-            claimedFindableKind === null &&
-            tile.findableKind &&
-            pair.length === 2 &&
-            pair.every((half) => tileIsPlainApartFromFindable(half) && half.findableKind)
-        ) {
-            claimedFindableKind = tile.findableKind;
-            brokenPairKeys.push(tile.pairKey);
-            continue;
+
+    // The waves. The first is the pop: the whole same-suit clump touching the match and, at
+    // Fever, its halo. Every pair a wave takes leaves both halves, and where the chain allows it
+    // the partner's half seeds the next wave - its own clump goes, and so on until a wave takes
+    // nothing. A halo pair is the edge of the celebration, not a bridge: it does not seed.
+    let seeds: string[] = [...matchedTileIds];
+    for (let wave = 0; wave < wavesAllowed && seeds.length > 0; wave += 1) {
+        const core = findSuitRegion(board, seeds, Number.POSITIVE_INFINITY, { diagonal, exclude: matchedTileIds });
+        const region =
+            tier === 'fever' && wave === 0
+                ? findSuitRegion(board, seeds, Number.POSITIVE_INFINITY, { diagonal, exclude: matchedTileIds, halo: true })
+                : core;
+        const coreSet = new Set(core);
+        const regionSet = new Set(region.map((index) => board.tiles[index]!.id));
+        const taken: string[] = [];
+        const haloTaken = new Set<string>();
+        for (const index of region) {
+            const tile = board.tiles[index]!;
+            regionTileIds.add(tile.id);
+            if (brokenPairKeys.includes(tile.pairKey) || taken.includes(tile.pairKey)) continue;
+            if (board.cursedPairKey && tile.pairKey === board.cursedPairKey) continue;
+            const pair = byPairKey.get(tile.pairKey) ?? [];
+            // Contact: without a chain, a pair goes only when both halves are in the region.
+            if (!reachesPartners && !pair.every((half) => regionSet.has(half.id))) continue;
+            const take = () => {
+                taken.push(tile.pairKey);
+                if (!coreSet.has(index)) haloTaken.add(tile.pairKey);
+            };
+            // One findable pair per break goes with the chunk: drop the treasure. The turn awards it
+            // through the same path a matched findable takes, so nothing is paid twice or never.
+            if (
+                claimedFindableKind === null &&
+                tile.findableKind &&
+                pair.length === 2 &&
+                pair.every((half) => tileIsPlainApartFromFindable(half) && half.findableKind)
+            ) {
+                claimedFindableKind = tile.findableKind;
+                take();
+                continue;
+            }
+            // Treasure spills: both halves go, and the loot pays as if the pair had been matched.
+            if (tile.dungeonCardKind === 'treasure') {
+                if (pair.length !== 2 || !pair.every(tileIsChunkTreasure)) continue;
+                const reward = treasureDungeonMatchReward(tile.dungeonCardEffectId ?? pair[1]?.dungeonCardEffectId ?? null);
+                treasureScore += reward.score;
+                // Magpie's Ledger: spilled treasure pays double gold. Matched treasure is untouched, so
+                // the relic rewards the cascade and never the plain match.
+                treasureGold += reward.shopGold * (relics.includes('magpie_ledger') ? MAGPIE_LEDGER_GOLD_MULTIPLIER : 1);
+                treasuresSpilled += reward.treasuresOpened;
+                take();
+                continue;
+            }
+            if (!tileCanBreakInChunk(tile)) continue;
+            // Pairs leave together, always. If the partner cannot go, neither does this tile.
+            if (pair.length !== 2 || !pair.every(tileCanBreakInChunk)) continue;
+            take();
         }
-        // Treasure spills: both halves go, and the loot pays as if the pair had been matched.
-        if (tile.dungeonCardKind === 'treasure') {
-            if (pair.length !== 2 || !pair.every(tileIsChunkTreasure)) continue;
-            const reward = treasureDungeonMatchReward(tile.dungeonCardEffectId ?? pair[1]?.dungeonCardEffectId ?? null);
-            treasureScore += reward.score;
-            // Magpie's Ledger: spilled treasure pays double gold. Matched treasure is untouched, so
-            // the relic rewards the cascade and never the plain match.
-            treasureGold += reward.shopGold * (relics.includes('magpie_ledger') ? MAGPIE_LEDGER_GOLD_MULTIPLIER : 1);
-            treasuresSpilled += reward.treasuresOpened;
-            brokenPairKeys.push(tile.pairKey);
-            continue;
+        if (taken.length === 0) {
+            break;
         }
-        if (!tileCanBreakInChunk(tile)) continue;
-        // Pairs leave together, always. If the partner cannot go, neither does this tile.
-        if (pair.length !== 2 || !pair.every(tileCanBreakInChunk)) continue;
-        brokenPairKeys.push(tile.pairKey);
+        wavePairKeys.push(taken);
+        brokenPairKeys.push(...taken);
+        // The partners the wave pulled from elsewhere seed the next one: the half outside every
+        // region walked so far. The half inside has had its clump walked already.
+        seeds = taken
+            .filter((pairKey) => !haloTaken.has(pairKey))
+            .flatMap((pairKey) => (byPairKey.get(pairKey) ?? []).filter((half) => !regionTileIds.has(half.id)).map((half) => half.id));
     }
+    const matchedSuit = board.tiles.find((tile) => matchedTileIds.includes(tile.id))?.suit ?? null;
 
     // The drop: at Sharp or better, when the break leaves the matched suit with at most
     // DROP_MAX_PAIRS plain pairs, they fall too. Anything with a job of its own holds the suit up.
     const droppedPairKeys: string[] = [];
-    const matchedSuit = board.tiles.find((tile) => matchedTileIds.includes(tile.id))?.suit ?? null;
     if ((tier === 'sharp' || tier === 'fever') && matchedSuit && brokenPairKeys.length > 0) {
         const matched = new Set(matchedTileIds);
         const remaining = new Map<string, Tile[]>();
@@ -309,8 +398,7 @@ export const resolveChunkBreak = ({
         }
     }
 
-    // Chunks are attacks: every enemy the region reached takes the chunk's size in damage.
-    const regionTileIds = new Set(region.map((index) => board.tiles[index]!.id));
+    // Chunks are attacks: every enemy any wave reached takes the chunk's size in damage.
     const chunkDamage = Math.max(1, brokenPairKeys.length);
     let hitBoard: BoardState = board;
     let enemyHits = 0;
@@ -338,7 +426,12 @@ export const resolveChunkBreak = ({
         return nothing;
     }
     const broken = new Set(brokenPairKeys);
+    const waveOfPair = new Map<string, number>();
+    wavePairKeys.forEach((keys, wave) => keys.forEach((pairKey) => waveOfPair.set(pairKey, wave)));
+    // The drop is not a wave; it leaves after the last one.
+    const lastWave = Math.max(0, wavePairKeys.length - 1);
     const brokenTileIds = hitBoard.tiles.filter((tile) => broken.has(tile.pairKey)).map((tile) => tile.id);
+    const waves = wavePairKeys.length;
     return {
         board: {
             ...hitBoard,
@@ -350,6 +443,7 @@ export const resolveChunkBreak = ({
                           state: 'removed' as const,
                           brokenByChunk: true,
                           brokenAtTier: tier,
+                          brokenAtWave: waveOfPair.get(tile.pairKey) ?? lastWave,
                           findableKind: undefined,
                           dungeonCardState: tile.dungeonCardKind ? ('resolved' as const) : tile.dungeonCardState
                       }
@@ -359,13 +453,15 @@ export const resolveChunkBreak = ({
         tier,
         brokenPairKeys,
         brokenTileIds,
-        score: chunkBreakScore(board.level, brokenPairKeys.length, tier) + enemyScore + treasureScore,
+        score: chunkBreakScore(board.level, brokenPairKeys.length, tier, Math.max(1, waves)) + enemyScore + treasureScore,
         comboShardGain: chunkBreakComboShards(brokenPairKeys.length, tier),
         enemyHits,
         enemiesDefeated,
         claimedFindableKind,
         treasureGold,
         droppedPairKeys,
-        treasuresSpilled
+        treasuresSpilled,
+        waves,
+        wavePairKeys
     };
 };

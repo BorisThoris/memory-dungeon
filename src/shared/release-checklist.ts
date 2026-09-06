@@ -74,6 +74,13 @@ export const RELEASE_CHECKLIST: readonly ReleaseChecklistItem[] = [
     },
     {
         evidence: 'src/shared/chunk-break-rules.ts',
+        id: 'the-live-pop',
+        label: 'Every match pops the same-suit clump touching it, live, with no chain behind it; a pair goes only when both halves touch, and the chain is what reaches a partner across the board and ripples through the islands',
+        owner: 'repo',
+        section: 'Gameplay'
+    },
+    {
+        evidence: 'src/shared/chunk-break-rules.ts',
         id: 'the-drop',
         label: 'A Sharp or Fever break that leaves a suit with two plain pairs or fewer takes them too, and never a card with a job',
         owner: 'repo',

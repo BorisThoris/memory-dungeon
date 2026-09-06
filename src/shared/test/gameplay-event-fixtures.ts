@@ -30,6 +30,7 @@ const DEFAULT_ANNOUNCEMENT: BoardTurnAnnouncementFacts = {
     chunkTreasuresSpilled: 0,
     chunkSuitCleared: false,
     chunkDroppedPairs: 0,
+    chunkRippleWaves: 0,
     magpieTheftsBefore: 0,
     magpieTheftsAfter: 0,
     magpieScaredOffBefore: 0,

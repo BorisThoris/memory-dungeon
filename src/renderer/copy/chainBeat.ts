@@ -18,20 +18,24 @@ export const CHAIN_TIER_LABELS: Readonly<Record<ChainTier, string>> = {
 export const CHAIN_STYLE_LONG_SPAN = 4;
 
 export const CHAIN_BEAT_COPY = {
-    /** The run line, one sentence, has to carry size and cause. */
+    /** The run line, one sentence, has to carry size and cause. A break with no chain behind it is the pop. */
     chunkLine: (pairs: number, tier: ChainTier): string =>
-        `${CHAIN_TIER_LABELS[tier] || 'Chain'} break: ${pairs} ${pairs === 1 ? 'pair' : 'pairs'} went with that match.`,
+        tier === 'none'
+            ? `Pop: ${pairs} ${pairs === 1 ? 'pair' : 'pairs'} went with that match.`
+            : `${CHAIN_TIER_LABELS[tier]} break: ${pairs} ${pairs === 1 ? 'pair' : 'pairs'} went with that match.`,
     /** Spoken to a screen reader, where the shatter wave is invisible. */
     chunkAnnouncement: (pairs: number, tier: ChainTier, chain: number): string =>
-        `Chain ${chain}, ${CHAIN_TIER_LABELS[tier] || 'chain'} break. ${pairs} more ${
-            pairs === 1 ? 'pair' : 'pairs'
-        } of the same suit broke away with that match and left the board.`,
+        tier === 'none'
+            ? `Pop. ${pairs} ${pairs === 1 ? 'pair' : 'pairs'} of the same suit touching that match broke away and left the board.`
+            : `Chain ${chain}, ${CHAIN_TIER_LABELS[tier]} break. ${pairs} more ${
+                  pairs === 1 ? 'pair' : 'pairs'
+              } of the same suit broke away with that match and left the board.`,
     feverLine: 'Fever. The whole clump went.',
-    /** The clump read on a focused tile: what it stands in, and what a Sharp break there would take. */
+    /** The clump read on a focused tile: what it stands in, and what a match there pops. */
     clumpRead: (suitName: string, size: number, pairsSharpWouldTake: number): string =>
         `${suitName} clump of ${size}` +
         (pairsSharpWouldTake > 0
-            ? ` — a Sharp break here takes ${pairsSharpWouldTake} more ${pairsSharpWouldTake === 1 ? 'pair' : 'pairs'}.`
+            ? ` — a match here pops ${pairsSharpWouldTake} more ${pairsSharpWouldTake === 1 ? 'pair' : 'pairs'}.`
             : '.'),
     /**
      * The style line: what made this break worth a name. Peggle labels the shot ("Long shot",
@@ -43,9 +47,13 @@ export const CHAIN_BEAT_COPY = {
         chunkTreasuresSpilled: number;
         chunkSuitCleared: boolean;
         chunkDroppedPairs?: number;
+        chunkRippleWaves?: number;
     }): string | null => {
         const tags: string[] = [];
-        // The drop reads first: a pair that fell with nothing touching it is the surprise.
+        // The ripple reads first: a reaction that ran on after the pop is the shot to own.
+        const waves = style.chunkRippleWaves ?? 0;
+        if (waves >= 2) tags.push(`Ripple ×${waves}`);
+        // Then the drop: a pair that fell with nothing touching it is the surprise.
         const dropped = style.chunkDroppedPairs ?? 0;
         if (dropped > 0) tags.push(dropped === 1 ? 'Drop' : `Drop ×${dropped}`);
         if (style.chunkPartnerSpanMax >= CHAIN_STYLE_LONG_SPAN) tags.push('Partner across the board');
@@ -59,16 +67,17 @@ export const CHAIN_BEAT_COPY = {
     /** Hover on the chain stat: what the tier is made of and where the next rungs sit on this floor. */
     momentumHint: (chain: number, cascaded: number, rungs: { sharp: number; fever: number }): string =>
         `${cascaded > 0 ? `Chain ${chain} plus ${cascaded} cascaded, momentum ${chain + cascaded}` : `Chain ${chain}`}. ` +
-        `Clean from 3, Sharp from ${rungs.sharp}, Fever from ${rungs.fever} on this floor. A miss halves the chain and puts the fire out.`,
+        `Every match pops the clump it touches. Clean from 3 lets the partners ripple, Sharp from ${rungs.sharp} runs the reaction out, Fever from ${rungs.fever} adds the halo on this floor. A miss halves the chain and puts the fire out.`,
     /** The meter, for a screen reader: where the momentum stands on the ladder. */
     meterLabel: (momentum: number, feverAt: number, full: boolean): string =>
         full ? `Fever meter full: momentum ${momentum}.` : `Fever meter: momentum ${momentum} of ${feverAt}.`,
     codexChainTitle: 'Chain, chunk and Fever',
     codexChainDescription:
-        'Every correct match in a row raises your chain, and every pair a chunk breaks adds to its momentum. From chain 3 (Clean) a match also breaks the same-suit tiles beside it, ' +
-        'and their partners go with them. Sharp — about two-fifths of the floor\'s pairs of momentum, four at least — breaks the whole connected clump. Fever — about two-thirds, seven at least — takes the clump and everything touching it. ' +
-        'Treasure inside a chunk spills and pays as if you had matched it. Broken pairs score less than matched ones and give no recall credit — memory still pays best — but they drop combo shards ' +
-        'and clear the floor faster. A miss halves the chain and puts the fire out. ' +
-        'A break with a shape gets a name on the run line: a partner taken from across the board, a halo, a treasure spill, a clean sweep of a suit. ' +
-        'Clear the floor with momentum still standing and the end pays out: a gold at Clean and Sharp, a shard and two gold at Fever — Extreme Fever. Never score, never rating.'
+        'Every match pops: the whole same-suit clump touching the two tiles you matched breaks away with them, and the partners of those pairs go too, wherever they sit. ' +
+        'The chain decides how far the pops ripple. With no chain the partners leave and stop. From chain 3 (Clean) each partner that left takes its own clump - a second wave. ' +
+        'Sharp - about two-fifths of the floor\'s pairs of momentum, four at least - runs the reaction until a wave takes nothing. Fever - about two-thirds, seven at least - adds the halo: everything touching the first clump, whatever its suit. ' +
+        'Every pair a break takes adds to the chain\'s momentum. Treasure inside a break spills and pays as if you had matched it. Broken pairs score less than matched ones and give no recall credit - memory still pays best - but they drop combo shards, ' +
+        'clear the floor faster, and a longer ripple pays more. A miss halves the chain and puts the fire out. ' +
+        'A break with a shape gets a name on the run line: a ripple that ran on, a drop, a partner taken from across the board, a halo, a treasure spill, a clean sweep of a suit. ' +
+        'Clear the floor with momentum still standing and the end pays out: a gold at Clean and Sharp, a shard and two gold at Fever - Extreme Fever. Never score, never rating.'
 } as const;

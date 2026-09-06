@@ -227,6 +227,8 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
         feverFloorsThisRun: 0,
         chunkPairsDroppedThisFloor: 0,
         chunkDropsThisRun: 0,
+        bestRippleThisFloor: 0,
+        bestRippleThisRun: 0,
         magpieTheftsThisFloor: 0,
         magpieScaredOffThisFloor: 0,
         hazardShuffleSnaresThisFloor: 0,

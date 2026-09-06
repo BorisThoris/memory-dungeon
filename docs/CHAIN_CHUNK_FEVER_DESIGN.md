@@ -8,7 +8,7 @@
 
 ## 0. The one-paragraph version
 
-Memory Dungeon has a deep rules layer and almost no *payoff*. A correct match turns two tiles grey. The streak is a number in the HUD. Nothing on the board ever happens *because* you were good. Bubble shooters and Peggle are addictive for one reason above all others: **one small, skilled input produces a large, visible, escalating consequence on the board** — and the consequence is bigger the better you have been playing. This document takes that loop and translates it honestly into a memory game: every tile carries a **suit** you can see on its back; a **chain** of correct matches earns you the right to **break a chunk** — the whole connected same-suit region around your match goes at once, partners included; and a long enough chain tips into **Fever**, the celebration beat. The dungeon is not beside this loop; it is inside it — chunks are how you hit enemies, traps are what stops a chunk, the exit is the last peg.
+Memory Dungeon has a deep rules layer and almost no *payoff*. A correct match turns two tiles grey. The streak is a number in the HUD. Nothing on the board ever happens *because* you were good. Bubble shooters and Peggle are addictive for one reason above all others: **one small, skilled input produces a large, visible, escalating consequence on the board** — and the consequence is bigger the better you have been playing. This document takes that loop and translates it honestly into a memory game: every tile carries a **suit** you can see on its back; **every match pops** — the whole same-suit clump touching the two tiles you matched breaks away with them, live, the moment the second tile turns; a **chain** of correct matches is what lets the pop **ripple** — the partners it pulls from across the board take their own clumps, wave after wave; and a long enough chain tips into **Fever**, the celebration beat. The dungeon is not beside this loop; it is inside it — pops are how you hit enemies, traps are what stops a pop, the exit is the last peg. Section 8 is the second pass, made after the first ten generations shipped: the brief said *while we're playing, not at the end*, and the first pass had gated the pop behind the chain.
 
 ---
 
@@ -77,12 +77,12 @@ Suits: **Ember**, **Tide**, **Moss**, **Bone**. Colour plus a distinct rune, bec
 
 The streak is renamed in player-facing copy to the **chain**, and it gets named tiers, said aloud on the run line and coloured on the HUD:
 
-| Momentum | Tier name | What it unlocks |
+| Momentum | Tier name | What it unlocks (as of §8) |
 |---|---|---|
-| 1–2 | — | a match |
-| 3+ | **Clean** | chunk break: neighbours |
-| max(4, 40% of the floor's pairs) | **Sharp** | chunk break: full region |
-| max(7, 65% of the floor's pairs) | **Fever** | region + its halo + celebration + shard burst |
+| 0–2 | — | **the pop**: the clump touching the match, pairs whose both halves touch it |
+| 3+ | **Clean** | **the ripple**: partners across the board leave too, and each takes its own clump (two waves) |
+| max(4, 40% of the floor's pairs) | **Sharp** | the reaction runs until a wave takes nothing |
+| max(7, 65% of the floor's pairs) | **Fever** | Sharp + the first clump's halo + celebration + shard burst |
 
 **Momentum**, not the streak alone, climbs the ladder: the streak plus every pair the chunks broke since the chain last dropped (`chainMomentum`, `runChainTier`). The score streak, recall and rating never see cascaded pairs; only the tier does. Gen 121's simulation forced both halves of this. With fixed rungs at ×6/×10, Fever arrived on *zero percent* of floors even for a player who never missed — a twelve-pair floor ends before a chain of ten can exist. With floor-relative rungs but a streak-only ladder, the ladder ate itself: the better the player, the more pairs the chunks took, the fewer matches were left to climb with, and a sloppy player reached Fever more often than a clean one. Counting the cascade toward the tier is what a bubble shooter does with its combo, and it is what makes Fever mean "you ran most of this floor without dropping it".
 
@@ -91,6 +91,8 @@ The chain milestone pings the feedback rail already makes (×3 "Chain started", 
 A mismatch halves the streak (the score multiplier forgives) and drops the cascade's momentum to zero: the fire goes out, and the ladder is climbed again from what was remembered. That is the "one more" tension the genre runs on, and it maps onto a real skill: the chain is literally how many things in a row you remembered.
 
 ### 2.3 Chunk break — the leverage
+
+> **Superseded in part by §8.** This section is the first pass (Gens 117–142), where the break was what a chain of three bought. The second pass makes the pop live on every match and gives the chain the ripple instead. The mechanics below — pairs leave together, treasure spills, cascades score less and carry no recall credit, what never breaks — all still hold.
 
 When a match resolves with chain ≥ 3, the game finds the **connected same-suit region** (4-neighbour, through hidden tiles only) around the two matched tiles.
 
@@ -220,14 +222,115 @@ The brief asked for five things. Where each one landed, by generation and by fil
 | **Delve into the franchises and see what makes them tick.** | Section 1 above — Puzzle Bobble's leverage and drop, Peggle's multiplier ladder and last peg, Zuma's chains of chains, Bejeweled's gravity and Sugar Crush — and section 2's translation of each into a memory game, with 2.7 saying what was deliberately left out. The aim guide a bubble shooter draws became the clump read (Gen 127, `clump-read-rules.ts`), which follows the pointer and keyboard focus and names the pairs a Sharp break would take. |
 | **A polished, satisfying Steam game: elaborate, add tasks.** | Balance against a simulation with stated bands rather than by feel (Gen 121, `cascade-balance-simulation.ts`, `yarn sim:cascade --check`); records, four achievements with Steam API names, per-mode chain records (Gen 129); Codex entries and self-proving release-checklist rows (Gen 122, 131); the fit contract, reachability gate and review captures at desktop, Deck and phone (Gen 122, 132); the build plan in section 4 with every generation's row, and the next batch in section 7. |
 
-## 7. Next batch
+## 7. Next batch (as set after Gen 142)
 
-What Gens 133–142 left on the table, plus the franchise ingredient still untranslated.
+Superseded by §9: the brief's second pass reordered everything. Kept for the record.
 
 | Gen | Task | Why |
 |---|---|---|
-| **143** | The magpie play-through (task 114 / #156): a recorded floor with the magpie on it, a theft from a chunk's spill, and the scare. | The one resident whose theft interacts with the cascade and has no e2e proof. |
-| **144** | The phone board's stage: the board sits under a large empty band in portrait; give the stage's spare height to the board or to the chip and the beat line. | Seen in every phone capture since Gen 132; the fit margin fix (Gen 134) grew the tiles, not the frame. |
-| **145** | Zuma's chains of chains: a break whose halo takes another suit's pair starts a second read — that suit's clump gets the ring and the chip for one turn, so a cascade can be aimed across suits. | Section 1.3's ingredient: the chain that makes the next chain. The halo already crosses suits at Fever; nothing shows the player where it went. |
-| **146** | A per-floor "best break" replay card on the floor-clear dialog: the biggest chunk's shape drawn as a small grid glyph with its pairs and tier. | Peggle's end-of-level slow-motion replay is the memory a player keeps; the recap is one line of text today. |
-| **147** | Closing sweep over 143–146. | Sims, docs, gates, captures, push. |
+| — | The magpie play-through (task 114 / #156). | Carried into §9. |
+| — | The phone board's stage band in portrait. | Carried into §9. |
+| — | Zuma's chains of chains: a halo pair's suit gets the ring for one turn. | Folded into the ripple (§8.3): a halo pair is the edge of the celebration and does not seed, by measurement. |
+| — | A per-floor "best break" replay card. | Carried into §9 as the best ripple. |
+
+## 8. The second pass: the live pop
+
+### 8.1 What the brief meant, read again
+
+> *"It needs to connect in the entire game we have. It needs to be like Tetris: if things with similar groups are matched and touch they should break away together. Not just on the end, but while we're playing. When you match a pair it should pop in real time; if it's touching more blocks of the same pair, they should all pop as well."*
+
+Four claims, and the first pass had honoured only two of them.
+
+1. **Contact is the rule.** A group that touches the thing you matched goes with it. In Puzzle Bobble the bubble you fire attaches, and if three or more of its colour are now touching they burst — *touching*, not "within range", not "if you earned it". In Tetris Attack (Panel de Pon) three in a line clear on contact. The first pass had this rule but rationed it: a lone match broke nothing, a chain of three broke the neighbours, a chain of four the clump. That is Peggle's ladder applied to Puzzle Bobble's contact, and it put the game's best moment behind a gate a new player would not reach on floor one.
+2. **Live, every time.** *Not just on the end, but while we're playing.* The pop belongs to the moment the second tile turns, not to a floor-end payout (Extreme Fever, Gen 125, is a payout at the end and is fine as one — but it was the loudest thing in the loop, and it was at the end).
+3. **Same group, all of it.** *If it's touching more blocks of the same pair, they should all pop as well.* The whole touching clump, not a step into it.
+4. **Woven, not bolted on.** *It needs to connect in the entire game.* The pop has to be what hits a warden, what a trap stops, what the treasure spills from, what the relics bend, what the magpie steals from, what the tips recount after, what the floor-clear line names, what the Codex teaches. Most of that weave existed (§2.6); it was reached less often than it should have been because the pop was.
+
+### 8.2 What the franchises do on contact, and what we take
+
+| Game | Contact rule | Chain reaction | Gravity | What we take |
+|---|---|---|---|---|
+| **Puzzle Bobble** | fired bubble + 2 touching of its colour burst | none directly; what they held **drops** | bubbles hang from the ceiling; unsupported ones fall | contact on every match (the pop); the drop (Gen 137) |
+| **Tetris Attack / Panel de Pon** | 3 in a line clear; panels above fall | falls that land in a new line = a **chain**, ×1, ×2, ×3… named and counted | yes, the whole reaction is gravity | the wave count as the thing worth naming ("Ripple ×3"), scored on top |
+| **Puyo Puyo** | 4 connected of a colour pop | pops let the rest fall into new groups; chains are the whole game | yes | one wave seeds the next; a longer reaction pays more, up to a cap |
+| **Tetris** | a full line clears | none (tetrises are a size bonus) | pieces fall, rows don't | size pays more per pair (`6·n·(n−1)`) |
+| **Peggle** | the ball hits pegs; hit pegs clear at ball-out | Fever on the last peg | ball physics | the tier ladder for *reach*, the halo, Fever's celebration |
+| **Bejeweled / Candy Crush** | 3 in a line | falls make new lines; specials | yes | nothing new here; a memory board has no gravity (§8.6) |
+
+The gap between us and every one of them is **gravity**. Every chain reaction in the genre is gravity: something clears, something else falls into the gap, the fall makes a new clear. A memory game cannot have gravity — a tile that moves is a memory the player loses, which is the one thing the game must never do to them. So the ripple has to travel some other way, and the only other way on this board is **the partner**: a pair is two tiles, and when one goes, the other goes, wherever it is. The partner is our falling block. That is the whole idea of §8.3.
+
+### 8.3 The refined system
+
+**Every match pops.** When the second tile turns and the two match, the game walks the connected same-suit region (4-neighbour, hidden tiles only, never through an unsprung trap) out from both tiles. Every plain pair with **both halves in that region** breaks away with the match. Pairs still leave together, always; a pair with a half outside the clump stays whole on a pop, because reaching that half is what the chain is for. No chain is needed. This is the contact rule and it runs on floor one, turn one.
+
+**The chain buys the ripple.** Every pair a wave takes leaves both halves. Where the chain allows it, the half *outside* the region — the partner pulled from across the board — seeds the next wave: its own clump is walked and popped the same way, and so on.
+
+| Tier | Waves | Read as |
+|---|---|---|
+| none (0–2) | 1 | the pop: what touches you |
+| Clean (3+) | 2 | the pop, and each partner it pulled takes its clump |
+| Sharp | unbounded (12) | the reaction runs until a wave takes nothing — Puyo's chain |
+| Fever | unbounded + halo | Sharp, and the first clump's halo (every hidden tile touching it, any suit) |
+
+Tuning Fork lends a lone match the chain's reach (partners leave and seed one wave) and adds a wave to Clean. A halo pair is the edge of the celebration, not a bridge: it does not seed. The matched pair itself is never re-taken by a later wave. The drop (Gen 137) still fires at Sharp and Fever after the last wave and is not a wave.
+
+**Islands.** The deal (`tile-suit-rules.ts`) now lays every suit with three pairs or more as **two clumps seeded apart**, so about thirty percent of a floor's pairs straddle two islands of their suit (measured on 6×4, 8×4 and 8×6: 1.7–1.9 islands per suit, 0.29–0.32 straddling). A lone match pops the island it is in; the straddling pairs sit there whole; a Clean chain is what takes them and, with them, the other island. The reason is the measurement in §8.5: with one clump per suit the ripple had nothing to bridge, and the ladder it was meant to reward fired on four percent of floors.
+
+**What it pays.** Unchanged in kind, extended in size: cascade pay is 60% of a base match per pair plus `6·n·(n−1)` for size, ×1.5 at Fever, and now ×(1 + 0.2·(waves−1)) for the ripple, capped at ×2. Shards one per two pairs, one per pair at Fever. No streak credit, no recall credit, no rating credit — a chunk never moved a rating on any of the 432 floors of the first sim and does not now.
+
+**Momentum.** Every pair a break takes feeds the ladder, the pop's included. §8.5 records why: a ladder fed by the ripple alone reached Fever on four percent of clean floors.
+
+**What the player sees and hears.** The stage pulses on a pop (softer than Clean); the shatter wave spreads from the match within a wave, and each later wave leaves a beat after the one before it (`RIPPLE_WAVE_GAP_SECONDS`), so a three-wave reaction reads as three answers across the board. The run line says "Pop: 2 pairs went with that match" or "Clean break: …", and the style line names the shape: **Ripple ×3** first, then Drop, Partner across the board, Halo, Treasure spill, Clean sweep. The chain stat's hover and the Codex entry say the rule in one breath: every match pops the clump it touches; Clean lets the partners ripple; Sharp runs the reaction out; Fever adds the halo.
+
+**What stays memory.** The symbol on the face is still the only thing that makes a match; the suit on the back is the map. A pair with a half outside the clump — the partner you will have to remember — is exactly the pair the pop leaves you. The pop takes what you could see; the chain takes what you remembered.
+
+### 8.4 The weave, restated for the live pop
+
+| Dungeon thing | Then | Now |
+|---|---|---|
+| Wardens and revealed hazards | a chunk that reached them hit for its size | every wave that reaches them hits; a pop on turn one can land the first blow |
+| Traps (unsprung) | stop the region | stop every wave's region |
+| Treasure | spills with a chunk at Clean+ | spills with a pop, both halves touching; a straddling treasure waits for the chain |
+| Keys, levers, locks, shrines, gateways, shops, rooms, the exit | never break | never break; they hold a suit up against the drop, and a pair with such a partner stays |
+| The cursed pair | never breaks | never breaks, never seeds |
+| The magpie | steals from a chunk's spill and resets the tile's tier stamp | the same, and resets its wave stamp |
+| Sticky toffee | the region is diagonal | every wave is diagonal |
+| Relics | Tuning Fork +1 step, Magpie's Ledger ×2 spilled gold, Suit Lens three suits | Tuning Fork lends a lone match the chain's reach and +1 wave; the others unchanged |
+| Proximity tips | recounted after a break | recounted after every wave's removals, because the tip reads the board, not the rule |
+| Floor archetypes | clumped / scattered / two-suit deals | the same, and a clumped or two-suit deal now lays islands |
+
+### 8.5 Measured, not guessed
+
+`yarn sim:cascade` on 6 seeds × 24 floors × 3 miss rates, the same harness as Gen 121, with `ripple` (mean of the floor's longest ripple, in waves) and `rippled` (share of floors with a second wave) added to the report.
+
+| Variant | miss 0: turns | pairs/floor | Fever | rippled | miss 0.25: Fever | rippled |
+|---|---|---|---|---|---|---|
+| Gen 137 (chain-gated break) | 9.2 | 4.13 | 0.59 | — | 0.15 | — |
+| pop + ripple, momentum from every pair | 8.1 | 5.26 | 0.51 | — | 0.19 | — |
+| momentum from the ripple only | 8.3 | 5.14 | **0.04** | — | 0.00 | — |
+| + contact rule (both halves touch) | 8.3 | 5.16 | 0.53 | ~0.05 | 0.19 | ~0.05 |
+| **+ islands (shipped)** | **8.3** | **5.15** | **0.50** | **0.14** | **0.19** | **0.10** |
+
+What the rows say. The pop shortens a clean floor by a turn and takes one more pair per floor than the gated break did, and every band still holds (`CASCADE_BALANCE_BANDS`): a clean player clears every floor, no floor sticks, chunk score is 16% of level score, Fever is on half the clean player's big floors and a fifth of the sloppy player's, Extreme Fever 0.75 against 0.21, rating drift zero. The one band that moved is the test harness's smaller sample (3 seeds × floors 1–18): clean Fever on big floors sat at 0.47 against a 0.5 floor with one clump per suit and at 0.5 with islands. The ripple-only momentum row is the one that decides the design: partners rarely sat outside their clump, so the ladder starved. Islands are what make the ripple a thing that happens (14% of clean floors, 10% of sloppy ones — the clean player's is higher, which is the whole point of the chain).
+
+Where it is still thin: rippled floors are a minority. Early floors are one to three plain tiles and a wall of dungeon cards; the ripple needs a Clean chain *and* a straddling pair *and* the far island still standing. §9 has the two levers left: a third island on big boards, and letting a treasure pair straddle.
+
+### 8.6 What is still deliberately not in
+
+- **Gravity.** No tile ever moves because of a break. The partner is the falling block.
+- **Pops without a match.** A flip that mismatches pops nothing; the contact rule needs a match to touch.
+- **Popping the matched suit's whole floor.** The pop is the clump you touch; the rest of the suit is the chain's, or the drop's when two pairs are all that is left.
+- **Ripple through the halo.** Measured as a bridge it would take every neighbouring clump at Fever; it stays the edge.
+
+## 9. Next batch
+
+| Gen | Task | Why |
+|---|---|---|
+| **148** | A third island on boards of 32 tiles or more, and a treasure pair allowed to straddle. | §8.5's two levers for the ripple's frequency, both measurable with the sim before they ship. |
+| **149** | Records for the ripple: best ripple on the floor-clear recap, the run summary, the share line; an achievement at Ripple ×3, reachability-proven. | The counters exist (`bestRippleThisFloor`, `bestRippleThisRun`); nothing shows them yet. |
+| **150** | The e2e chain-review capture of a pop on turn one and a ripple at Clean, on a fixture that lays islands. | The proof the brief asked for: *while we're playing*. |
+| **151** | The magpie play-through (task 114 / #156), now with a pop to steal from on turn one. | Carried. |
+| **152** | The phone board's stage band in portrait. | Carried. |
+| **153** | A per-wave sound: the answering pops across the board pitch a step above the pop. | The audio phrase is one rising line per pair; the ripple has no voice of its own yet. |
+| **154** | First-run: the tutorial floor's first match is laid to pop. | The pop is the game's best moment; the new player should meet it on their first match. |
+| **155** | Closing sweep over 143–154. | Sims, docs, gates, captures, push. |

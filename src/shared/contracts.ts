@@ -435,8 +435,10 @@ export interface Tile {
     suit?: TileSuit;
     /** True on a tile a chunk break took off the board, so it can be told apart from a defeated enemy. */
     brokenByChunk?: boolean;
-    /** The tier the break that took this tile landed at, so the shatter can play a Fever break slower. */
-    brokenAtTier?: 'clean' | 'sharp' | 'fever';
+    /** The tier the break that took this tile landed at ('none' for a pop), so the shatter can play a Fever break slower. */
+    brokenAtTier?: 'none' | 'clean' | 'sharp' | 'fever';
+    /** Which wave of the ripple took this tile: 0 for the match's own region, 1 for what its partners popped, and so on. */
+    brokenAtWave?: number;
     /** Visual variant index for atomic-pairs styling (optional). */
     atomicVariant?: number;
     /** If set, matching this pair claims a pickup reward on eligible floors. */
@@ -1199,6 +1201,9 @@ export interface RunState {
     /** The drop: pairs that fell because a break left their suit with too few to hold, this floor and this run's count of drops. */
     chunkPairsDroppedThisFloor: number;
     chunkDropsThisRun: number;
+    /** The longest ripple this floor and this run, in waves: 1 is a pop that stopped at its clump. */
+    bestRippleThisFloor: number;
+    bestRippleThisRun: number;
     /** Pairs the magpie has taken back on this floor. */
     magpieTheftsThisFloor: number;
     /** Times a guard token drove the magpie off on this floor. */

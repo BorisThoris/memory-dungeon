@@ -1190,8 +1190,14 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         ? latestTurnForPulse.announcement.chunkPairsBrokenAfter - latestTurnForPulse.announcement.chunkPairsBrokenBefore
         : 0;
     const pulseTier: ChainTier = latestTurnForPulse?.announcement.chainTierAfter ?? 'none';
-    const breakPulseTier: ChainTier | 'none' =
-        latestTurnForPulse && pulsePairs > 0 && expiredPulseEventId !== pulseEventId ? pulseTier : 'none';
+    // A break with no chain behind it is the pop: it pulses too, softly, so a match never reads as
+    // two tiles going grey while four more vanish for no reason.
+    const breakPulseTier: ChainTier | 'pop' | 'none' =
+        latestTurnForPulse && pulsePairs > 0 && expiredPulseEventId !== pulseEventId
+            ? pulseTier === 'none'
+                ? 'pop'
+                : pulseTier
+            : 'none';
     useEffect(() => {
         if (pulseEventId === null || pulsePairs <= 0) {
             return undefined;

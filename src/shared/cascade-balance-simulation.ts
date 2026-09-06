@@ -51,6 +51,8 @@ export interface CascadeBalanceFloorSample {
     chunkPairs: number;
     feverBreaks: number;
     bestChain: number;
+    /** The longest ripple on the floor, in waves (`bestRippleThisFloor`): what the chain bought beyond the pop. */
+    bestRipple: number;
     comboShardsGained: number;
     pairsOnFloor: number;
     /** Extreme Fever: the tier the momentum held when the floor cleared, and what it paid. */
@@ -74,6 +76,10 @@ export interface CascadeBalanceBandReport {
     chunkBreaksPerFloor: number;
     chunkPairsPerFloor: number;
     feverFloorShare: number;
+    /** Mean of the floor's longest ripple, in waves; 1 is a floor of pops that stopped at their clump. */
+    meanBestRipple: number;
+    /** Share of floors where a break rippled at all: a second wave, which only a chain buys. */
+    rippleFloorShare: number;
     ratingCounts: Record<Rating, number>;
     /** Floors where the rating differed from `calculateRating(mistakes)`; must be zero. */
     ratingDriftFloors: number;
@@ -227,6 +233,7 @@ export const playCascadeBalanceFloor = ({
         chunkPairs: runNonNegativeInteger(run.chunkPairsBrokenThisFloor),
         feverBreaks,
         bestChain,
+        bestRipple: runNonNegativeInteger(run.bestRippleThisFloor),
         comboShardsGained: Math.max(0, runNonNegativeInteger(run.stats.comboShards) - shardsAtStart),
         pairsOnFloor,
         momentumBonusTier: run.lastLevelResult?.momentumBonusTier ?? 'none',
@@ -259,6 +266,8 @@ const summarizeBand = (missRate: number, samples: CascadeBalanceFloorSample[]): 
         chunkBreaksPerFloor: mean((sample) => sample.chunkBreaks),
         chunkPairsPerFloor: mean((sample) => sample.chunkPairs),
         feverFloorShare: mean((sample) => (sample.feverBreaks > 0 ? 1 : 0)),
+        meanBestRipple: mean((sample) => sample.bestRipple),
+        rippleFloorShare: mean((sample) => (sample.bestRipple >= 2 ? 1 : 0)),
         ratingCounts,
         ratingDriftFloors: samples.filter((sample) => sample.rating !== sample.ratingFromMistakes).length,
         extremeFeverShare: mean((sample) => (sample.momentumBonusTier === 'fever' ? 1 : 0)),
@@ -410,6 +419,6 @@ export const summarizeCascadeBalance = (report: CascadeBalanceReport): string =>
                 `miss=${band.missRate}: cleared=${band.clearedShare.toFixed(2)} settled=${band.settledShare.toFixed(2)} turns=${band.meanTurns.toFixed(1)} ` +
                 `mistakes=${band.meanMistakes.toFixed(2)} score=${band.meanLevelScore.toFixed(0)} chunkShare=${band.chunkShareOfScore.toFixed(2)} ` +
                 `breaks/floor=${band.chunkBreaksPerFloor.toFixed(2)} pairs/floor=${band.chunkPairsPerFloor.toFixed(2)} ` +
-                `fever=${band.feverFloorShare.toFixed(2)} extreme=${band.extremeFeverShare.toFixed(2)} bonusGold=${band.meanMomentumBonusGold.toFixed(2)} drift=${band.ratingDriftFloors}`
+                `fever=${band.feverFloorShare.toFixed(2)} ripple=${band.meanBestRipple.toFixed(2)} rippled=${band.rippleFloorShare.toFixed(2)} extreme=${band.extremeFeverShare.toFixed(2)} bonusGold=${band.meanMomentumBonusGold.toFixed(2)} drift=${band.ratingDriftFloors}`
         )
     ].join('\n');

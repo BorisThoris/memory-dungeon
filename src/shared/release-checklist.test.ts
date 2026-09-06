@@ -133,6 +133,27 @@ const VERIFIERS: Record<string, () => void> = {
             expect(band.ratingDriftFloors, `miss ${band.missRate}`).toBe(0);
         }
     },
+    'the-live-pop': () => {
+        const rowTile = (id: string) => makeTile(id, id[0]!, id[0]!, { suit: 'ABCD'.includes(id[0]!) ? 'ember' : 'tide' });
+        // One row: A's clump reaches B1; B2 sits two on, touching C1; C2 touches D1.
+        const rowTiles = ['A1', 'A2', 'B1', 'T1', 'B2', 'C1', 'T2', 'C2', 'D1', 'S1', 'D2', 'S2'].map(rowTile);
+        const row = makeBoard(rowTiles, { columns: 12, rows: 1, level: 3 });
+        const run = createNewRun(0, { gameMode: 'endless', runSeed: 7 });
+        const lone = resolveChunkBreak({ board: row, run, matchedTileIds: ['A1', 'A2'], chain: 1 });
+        expect(lone.brokenPairKeys, 'a lone match is contact: B has a half outside the clump').toEqual([]);
+        const touching = makeBoard(
+            rowTiles.map((t) => (t.id === 'B2' ? rowTile('T1') : t.id === 'T1' ? rowTile('B2') : t)),
+            { columns: 12, rows: 1, level: 3 }
+        );
+        const pop = resolveChunkBreak({ board: touching, run, matchedTileIds: ['A1', 'A2'], chain: 1 });
+        expect(pop.brokenPairKeys, 'both halves touching: the pair pops with the match').toEqual(['B']);
+        expect(pop.waves).toBe(1);
+        const clean = resolveChunkBreak({ board: row, run, matchedTileIds: ['A1', 'A2'], chain: 3 });
+        expect(clean.wavePairKeys, 'Clean reaches the partner and it takes its own clump').toEqual([['B'], ['C']]);
+        const sharp = resolveChunkBreak({ board: row, run, matchedTileIds: ['A1', 'A2'], chain: 4 });
+        expect(sharp.wavePairKeys, 'Sharp runs the reaction out').toEqual([['B'], ['C'], ['D']]);
+        expect(sharp.board.tiles.find((t) => t.id === 'D2')?.brokenAtWave).toBe(2);
+    },
     'the-drop': () => {
         const suit = (id: string) => (['A', 'B', 'C'].includes(id[0]!) ? 'ember' : 'tide');
         const tile = (id: string) => makeTile(id, id[0]!, id[0]!, { suit: suit(id) });

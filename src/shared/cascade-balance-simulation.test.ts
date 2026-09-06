@@ -38,11 +38,11 @@ describe('the cascade, measured', () => {
         }
     });
 
-    it('clears faster the cleaner you play, and the chunk is why', () => {
+    it('clears faster the cleaner you play, and the ripple is why: every match pops, only a chain ripples', () => {
         const clean = report.bands.find((band) => band.missRate === 0)!;
         const reference = report.bands.find((band) => band.missRate === CASCADE_BALANCE_BANDS.referenceMissRate)!;
         expect(clean.meanTurns).toBeLessThan(reference.meanTurns);
-        expect(clean.chunkPairsPerFloor).toBeGreaterThanOrEqual(reference.chunkPairsPerFloor);
+        expect(clean.rippleFloorShare).toBeGreaterThan(reference.rippleFloorShare);
     });
 
     it('holds the stated bands, which is the whole point of writing them down', () => {

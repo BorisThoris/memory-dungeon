@@ -4,8 +4,9 @@
  * The streak — consecutive correct matches — already existed as a score multiplier and a number
  * in the HUD. Peggle's multiplier is not a number; it is a ladder you can feel yourself climbing,
  * and every rung changes what the board does. So the streak gets tiers with names, and the tiers
- * unlock the chunk break (`chunk-break-rules.ts`): a lone match is a match, a Clean chain breaks
- * the tiles beside the match, a Sharp chain breaks the whole region, and Fever is the celebration.
+ * decide how far a break ripples (`chunk-break-rules.ts`): every match pops the clump touching
+ * it, a Clean chain lets the partners that left take their own clumps, a Sharp chain lets the
+ * reaction run until it stops, and Fever is the celebration.
  *
  * A mismatch halves the chain (`turn-mismatch-rules.ts`), the way a missed peg ends the shot.
  * That is the "one more" tension the whole genre runs on, and here it maps onto a real skill: the
@@ -29,7 +30,7 @@ export type ChainTier = 'none' | 'clean' | 'sharp' | 'fever';
  * One ladder, not two. The game already announces chain milestones at x3 ("Chain started"), x6
  * ("Surge") and x10 ("Combo") — chain targets, milestone pings and the feedback rail all read
  * those rungs. The break tiers sit on the same rungs so a player climbing hears one story:
- * the ping at x3 is the moment the board starts breaking for you.
+ * the ping at x3 is the moment the pops start reaching across the board for you.
  */
 export const CHAIN_TIER_CLEAN_FROM = 3;
 export const CHAIN_TIER_SHARP_FROM = 6;
@@ -77,7 +78,7 @@ export const getChainTier = (chain: number, pairsOnFloor?: number | null): Chain
     return 'none';
 };
 
-/** Whether a chain at this depth is allowed to break a chunk at all. */
+/** Whether a chain at this depth ripples beyond the pop: the partners that leave take their clumps too. */
 export const chainCanBreakChunk = (chain: number, pairsOnFloor?: number | null): boolean =>
     getChainTier(chain, pairsOnFloor) !== 'none';
 

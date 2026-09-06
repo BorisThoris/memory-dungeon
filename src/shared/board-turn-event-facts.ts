@@ -69,6 +69,8 @@ export interface BoardTurnAnnouncementFacts {
     chunkSuitCleared: boolean;
     /** Pairs that dropped with this turn's break because their suit had too few left to hold them. */
     chunkDroppedPairs: number;
+    /** Waves the ripple ran this turn: 1 for a pop that stopped at its own clump, 0 without a break. */
+    chunkRippleWaves: number;
     /** Pairs the magpie took back this floor, before and after this turn. */
     magpieTheftsBefore: number;
     magpieTheftsAfter: number;
@@ -158,8 +160,11 @@ const chunkStyleFacts = (
     before: RunState,
     after: RunState,
     matchedTileIds: readonly string[]
-): Pick<BoardTurnAnnouncementFacts, 'chunkPartnerSpanMax' | 'chunkHaloPairs' | 'chunkTreasuresSpilled' | 'chunkSuitCleared'> => {
-    const none = { chunkPartnerSpanMax: 0, chunkHaloPairs: 0, chunkTreasuresSpilled: 0, chunkSuitCleared: false };
+): Pick<
+    BoardTurnAnnouncementFacts,
+    'chunkPartnerSpanMax' | 'chunkHaloPairs' | 'chunkTreasuresSpilled' | 'chunkSuitCleared' | 'chunkRippleWaves'
+> => {
+    const none = { chunkPartnerSpanMax: 0, chunkHaloPairs: 0, chunkTreasuresSpilled: 0, chunkSuitCleared: false, chunkRippleWaves: 0 };
     const afterBoard = after.board;
     if (!afterBoard) {
         return none;
@@ -199,7 +204,15 @@ const chunkStyleFacts = (
     }
     const suitCleared =
         matchSuit != null && !afterBoard.tiles.some((tile) => tile.state === 'hidden' && tile.suit === matchSuit);
-    return { chunkPartnerSpanMax: spanMax, chunkHaloPairs: haloPairs, chunkTreasuresSpilled: treasures, chunkSuitCleared: suitCleared };
+    // The rule stamps each taken tile with its wave; the ripple's length is the last wave plus one.
+    const rippleWaves = taken.reduce((max, { tile }) => Math.max(max, runNonNegativeInteger(tile.brokenAtWave ?? 0)), 0) + 1;
+    return {
+        chunkPartnerSpanMax: spanMax,
+        chunkHaloPairs: haloPairs,
+        chunkTreasuresSpilled: treasures,
+        chunkSuitCleared: suitCleared,
+        chunkRippleWaves: rippleWaves
+    };
 };
 
 /** Route-special tiles still present on the board, so the announcer never counts them itself. */
