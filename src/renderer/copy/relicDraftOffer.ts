@@ -5,6 +5,20 @@
 import type { RelicId, RelicOfferState, RunState } from '../../shared/contracts';
 import { hasRelicDraftOptionReasons } from '../../shared/relics';
 
+/**
+ * The sealed offering. Its whole job is to be honest about what is being traded — the card cannot
+ * say what it is, so it has to say exactly what kind of thing it is and what you give up to take
+ * it, or it reads as a shrug rather than a gamble.
+ */
+export const SEALED_RELIC_COPY = {
+    tier: 'Sealed',
+    title: 'A sealed offering',
+    effect: 'Nobody has opened this one. It leans rarer than what is on the table.',
+    impact: 'You do not get to know whether it suits the run you are actually in.',
+    /** Said the moment it lands, because a gamble with no reveal is just a slower click. */
+    revealed: (title: string): string => `The seal comes off: ${title}.`
+} as const;
+
 export const relicEffectLabels: Record<RelicId, string> = {
     extra_shuffle_charge: '+1 archive shuffle charge for trap halls (now)',
     first_shuffle_free_per_floor: 'First full-board shuffle each dungeon floor costs no charge',

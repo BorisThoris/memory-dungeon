@@ -251,6 +251,11 @@ export interface RelicOfferState {
     favorBonusPicks?: number;
     /** Display-only reason copy for chapter-aligned options in the current draft round. */
     contextualOptionReasons?: Partial<Record<RelicId, string>>;
+    /**
+     * The sealed fourth option: a real relic the draft screen refuses to name. Pickable like any
+     * other option; null when the pool had nothing left to seal.
+     */
+    sealedRelicId?: RelicId | null;
 }
 
 export type RelicOfferServiceId = 'reroll_offer' | 'ban_option' | 'upgrade_offer';

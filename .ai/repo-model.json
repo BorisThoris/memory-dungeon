@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2553,
-    "codeFileCount": 1004,
-    "exportedSymbolCount": 3616,
+    "trackedFileCount": 2555,
+    "codeFileCount": 1006,
+    "exportedSymbolCount": 3620,
     "contentItemCount": 63,
     "mechanicCount": 136,
     "stateFieldCount": 144,
-    "relationshipCount": 10616
+    "relationshipCount": 10638
   },
   "inventory": [
     {
@@ -2320,7 +2320,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 36715,
-      "sha256": "84aa9b4347284dacdd7fbf2e91563e7f7006e4b53861f439dc2e09fb99954c46"
+      "sha256": "b727c4f612fa3a320ced9ee8095f669f7d93de51d682afb6af7d00c563fb0596"
     },
     {
       "path": "docs/UI_RETHINK_PLAN.md",
@@ -7773,8 +7773,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 96136,
-      "sha256": "998a69e080008e791f7c732e1079e0c241dd7489259b5dcf24c998cde23ce8a8"
+      "bytes": 96209,
+      "sha256": "ec144ec86dfcd542683d2a89e031731d50dfc713bba10a7f49860f7d328d2b1f"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -7953,20 +7953,20 @@
     {
       "path": "src/renderer/components/RelicDraftOffer.module.css",
       "category": "source",
-      "bytes": 6277,
-      "sha256": "884488c04d636b9e695aa7a950d57a68b92d4b5d24fc2c186b98c37eadc8eca2"
+      "bytes": 6609,
+      "sha256": "753c108651cb78ecf5e34159a92d9d2b3ed583f20037cf8c529d9428dd0274c8"
     },
     {
       "path": "src/renderer/components/RelicDraftOfferPanel.test.tsx",
       "category": "test",
-      "bytes": 7801,
-      "sha256": "515771624402acaa25c697d527a4227ff90513d7a68f68d57eb4fbe562952cab"
+      "bytes": 9368,
+      "sha256": "99ab936dda6481e51518d10b40b9fb423963b82ccc5f211fe2bf453bfc440f21"
     },
     {
       "path": "src/renderer/components/RelicDraftOfferPanel.tsx",
       "category": "source",
-      "bytes": 10483,
-      "sha256": "46ae264d6c08094add39c6822df57dbbb144e551e0c828f3f425fc4f46a2888c"
+      "bytes": 12046,
+      "sha256": "b210786dda4f982878dfdf3e11e5564654e8e9763a3c0c1673abf93f0122c771"
     },
     {
       "path": "src/renderer/components/RunShell.module.css",
@@ -9147,8 +9147,8 @@
     {
       "path": "src/renderer/copy/relicDraftOffer.ts",
       "category": "source",
-      "bytes": 5113,
-      "sha256": "131b16deacb12ae12d120fbde8600512d8b3cf5685e05af4a6f9bd463e3ee596"
+      "bytes": 5807,
+      "sha256": "46e14cd6b5a1720d8109a1e86313559d88058f21d6f88f1e9c6267f5f77e8ed0"
     },
     {
       "path": "src/renderer/copy/runDialogCopy.ts",
@@ -9849,14 +9849,14 @@
     {
       "path": "src/renderer/store/relicOfferSurfaceState.test.ts",
       "category": "test",
-      "bytes": 11798,
-      "sha256": "c6902a393bc4b326d31733f2a76a56b384f7ace1433f11508683913aea62780a"
+      "bytes": 13354,
+      "sha256": "6aab899eeb862a8681e4b588dad7c569b8bce9253b5c5bb2bcba6cbd90a90fc6"
     },
     {
       "path": "src/renderer/store/relicOfferSurfaceState.ts",
       "category": "source",
-      "bytes": 4121,
-      "sha256": "5d74085d4de2f02645b27eeede906efdcfb3aed660aaf179c8a22db45151a87c"
+      "bytes": 5093,
+      "sha256": "67d5a2f4a90f59500889825e0c8a0d3a90e066454f43a97951ba236c3791d68f"
     },
     {
       "path": "src/renderer/store/riskWagerSurfaceState.test.ts",
@@ -10671,8 +10671,8 @@
     {
       "path": "src/shared/contracts.ts",
       "category": "source",
-      "bytes": 50659,
-      "sha256": "a9881623fa55e14ac21f78cc4efecd56bebabfc7c05a32d9952afe0ec850b311"
+      "bytes": 50875,
+      "sha256": "d0f31843e871377e6a765736edfa0debffd85522f49dc43c822cdb9edd28b477"
     },
     {
       "path": "src/shared/control-label-ambiguity.test.ts",
@@ -12153,8 +12153,8 @@
     {
       "path": "src/shared/relic-offer-rules.ts",
       "category": "source",
-      "bytes": 3863,
-      "sha256": "63e951eae67238239a9b6382989fa43e41ca3db65612d4fdb2f5f70aac60588c"
+      "bytes": 4000,
+      "sha256": "ea66ad5c2294b488174317ff7e89839d3e634b24175da1ac7426c3ae9908d118"
     },
     {
       "path": "src/shared/relic-pick-advance-rules.test.ts",
@@ -12171,8 +12171,8 @@
     {
       "path": "src/shared/relic-pick-transition-rules.ts",
       "category": "source",
-      "bytes": 3483,
-      "sha256": "3c813437c29bd6e430c239e555b0ccb555795beb7848071114b226df2a2377d9"
+      "bytes": 3813,
+      "sha256": "5abf678f5571f481fffdac5a6448fa720c37b671e6e247f1c9332ee19eda80a3"
     },
     {
       "path": "src/shared/relicBalanceDoc.test.ts",
@@ -12647,6 +12647,18 @@
       "category": "test",
       "bytes": 1299,
       "sha256": "3c63fa9a790f4f8e0388806056e35a075f92739fa4214cd1454626571af9956a"
+    },
+    {
+      "path": "src/shared/sealed-relic-rules.test.ts",
+      "category": "test",
+      "bytes": 4701,
+      "sha256": "fe2693d4c883466984fd012a33f65502e4c899accf38ffa844eed249998d00f5"
+    },
+    {
+      "path": "src/shared/sealed-relic-rules.ts",
+      "category": "source",
+      "bytes": 3005,
+      "sha256": "d6607288c27ad63c561b50154863c46f6b80130c95cf52059b4c4a810ff2f991"
     },
     {
       "path": "src/shared/secondary-objective-rules.test.ts",
@@ -17776,7 +17788,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 2114,
+      "lineCount": 2115,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -18267,7 +18279,7 @@
       "path": "src/renderer/components/RelicDraftOfferPanel.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 182,
+      "lineCount": 219,
       "imports": [
         "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/components/RelicDraftOfferPanel.tsx",
@@ -18281,7 +18293,7 @@
       "path": "src/renderer/components/RelicDraftOfferPanel.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 247,
+      "lineCount": 273,
       "imports": [
         "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/copy/relicDraftOffer.ts",
@@ -21728,7 +21740,7 @@
       "path": "src/renderer/copy/relicDraftOffer.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 114,
+      "lineCount": 128,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/relics.ts"
@@ -21740,7 +21752,8 @@
         "symbol:src/renderer/copy/relicDraftOffer.ts#getRelicOfferTitle",
         "symbol:src/renderer/copy/relicDraftOffer.ts#relicDraftProgressLine",
         "symbol:src/renderer/copy/relicDraftOffer.ts#relicDraftRoundAdvancedAnnouncement",
-        "symbol:src/renderer/copy/relicDraftOffer.ts#relicEffectLabels"
+        "symbol:src/renderer/copy/relicDraftOffer.ts#relicEffectLabels",
+        "symbol:src/renderer/copy/relicDraftOffer.ts#SEALED_RELIC_COPY"
       ],
       "testedBy": [
         "file:src/renderer/copy/relicDraftOffer.test.ts"
@@ -23588,7 +23601,7 @@
       "path": "src/renderer/store/relicOfferSurfaceState.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 294,
+      "lineCount": 330,
       "imports": [
         "file:src/renderer/store/relicOfferSurfaceState.ts",
         "file:src/shared/contracts.ts",
@@ -23604,11 +23617,13 @@
       "path": "src/renderer/store/relicOfferSurfaceState.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 124,
+      "lineCount": 144,
       "imports": [
+        "file:src/renderer/copy/relicDraftOffer.ts",
         "file:src/renderer/store/gameplayFeedbackAdapter.ts",
         "file:src/renderer/store/runSurfaceState.ts",
         "file:src/shared/contracts.ts",
+        "file:src/shared/game-catalog.ts",
         "file:src/shared/gameplay-core-adapters.ts",
         "file:src/shared/gameplay-core-contracts.ts",
         "file:src/shared/gameplay-core.ts",
@@ -26073,7 +26088,7 @@
       "path": "src/shared/contracts.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1299,
+      "lineCount": 1304,
       "imports": [],
       "exports": [
         "symbol:src/shared/contracts.ts#AchievementId",
@@ -26408,6 +26423,7 @@
         "file:src/shared/save-data.test.ts",
         "file:src/shared/score-parasite-rules.test.ts",
         "file:src/shared/scoring-rules.test.ts",
+        "file:src/shared/sealed-relic-rules.test.ts",
         "file:src/shared/secondary-objective-rules.test.ts",
         "file:src/shared/secondary-objectives.test.ts",
         "file:src/shared/shifting-spotlight-rules.test.ts",
@@ -31759,14 +31775,15 @@
       "path": "src/shared/relic-offer-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 107,
+      "lineCount": 109,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/gameplay-core-adapters.ts",
         "file:src/shared/mutators.ts",
         "file:src/shared/relic-pick-transition-rules.ts",
         "file:src/shared/relics.ts",
-        "file:src/shared/run-number-guards.ts"
+        "file:src/shared/run-number-guards.ts",
+        "file:src/shared/sealed-relic-rules.ts"
       ],
       "exports": [
         "symbol:src/shared/relic-offer-rules.ts#applyRelicOfferServiceToRun",
@@ -31780,7 +31797,8 @@
       "testedBy": [
         "file:src/shared/gameplay-property-invariants.test.ts",
         "file:src/shared/relic-offer-rules.test.ts",
-        "file:src/shared/relic-pick-advance-rules.test.ts"
+        "file:src/shared/relic-pick-advance-rules.test.ts",
+        "file:src/shared/sealed-relic-rules.test.ts"
       ]
     },
     {
@@ -31825,11 +31843,12 @@
       "path": "src/shared/relic-pick-transition-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 98,
+      "lineCount": 102,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/relics.ts",
-        "file:src/shared/run-number-guards.ts"
+        "file:src/shared/run-number-guards.ts",
+        "file:src/shared/sealed-relic-rules.ts"
       ],
       "exports": [
         "symbol:src/shared/relic-pick-transition-rules.ts#createRelicPickTransitionResult",
@@ -31952,7 +31971,8 @@
         "file:src/shared/mechanics-catalog-appendix-builder.test.ts",
         "file:src/shared/relicBalanceDoc.test.ts",
         "file:src/shared/relics.test.ts",
-        "file:src/shared/save-data.test.ts"
+        "file:src/shared/save-data.test.ts",
+        "file:src/shared/sealed-relic-rules.test.ts"
       ]
     },
     {
@@ -32518,6 +32538,7 @@
         "file:src/shared/run-mode-identity.test.ts",
         "file:src/shared/run-share-key.test.ts",
         "file:src/shared/run-share-text.test.ts",
+        "file:src/shared/sealed-relic-rules.test.ts",
         "file:src/shared/turn-match-board-cleanup-rules.test.ts",
         "file:src/shared/turn-match-board-resolution-rules.test.ts",
         "file:src/shared/turn-match-economy-rules.test.ts",
@@ -33603,6 +33624,43 @@
       "imports": [],
       "exports": [],
       "testedBy": []
+    },
+    {
+      "id": "file:src/shared/sealed-relic-rules.test.ts",
+      "path": "src/shared/sealed-relic-rules.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 113,
+      "imports": [
+        "file:src/shared/contracts.ts",
+        "file:src/shared/relic-offer-rules.ts",
+        "file:src/shared/relics.ts",
+        "file:src/shared/run-creation-rules.ts",
+        "file:src/shared/sealed-relic-rules.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/shared/sealed-relic-rules.ts",
+      "path": "src/shared/sealed-relic-rules.ts",
+      "layer": "shared",
+      "role": "production",
+      "lineCount": 64,
+      "imports": [
+        "file:src/shared/content-lock-state.ts",
+        "file:src/shared/contracts.ts",
+        "file:src/shared/relics.ts",
+        "file:src/shared/rng.ts"
+      ],
+      "exports": [
+        "symbol:src/shared/sealed-relic-rules.ts#isSealedRelicOption",
+        "symbol:src/shared/sealed-relic-rules.ts#rollSealedRelic",
+        "symbol:src/shared/sealed-relic-rules.ts#SEALED_RELIC_RARITY_ORDER"
+      ],
+      "testedBy": [
+        "file:src/shared/sealed-relic-rules.test.ts"
+      ]
     },
     {
       "id": "file:src/shared/secondary-objective-rules.test.ts",
@@ -37926,8 +37984,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 2113,
-      "endLine": 2113
+      "line": 2114,
+      "endLine": 2114
     },
     {
       "id": "symbol:src/renderer/components/gameScreenFeedback.ts#DungeonCombatLogRow",
@@ -38190,8 +38248,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/RelicDraftOfferPanel.tsx",
-      "line": 246,
-      "endLine": 246
+      "line": 272,
+      "endLine": 272
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#default",
@@ -42190,56 +42248,64 @@
       "name": "buildRelicDraftBonusFootnoteLines",
       "kind": "function",
       "file": "src/renderer/copy/relicDraftOffer.ts",
-      "line": 75,
-      "endLine": 113
+      "line": 89,
+      "endLine": 127
     },
     {
       "id": "symbol:src/renderer/copy/relicDraftOffer.ts#getRelicDraftVisitTotals",
       "name": "getRelicDraftVisitTotals",
       "kind": "function",
       "file": "src/renderer/copy/relicDraftOffer.ts",
-      "line": 38,
-      "endLine": 42
+      "line": 52,
+      "endLine": 56
     },
     {
       "id": "symbol:src/renderer/copy/relicDraftOffer.ts#getRelicOfferSubtitle",
       "name": "getRelicOfferSubtitle",
       "kind": "function",
       "file": "src/renderer/copy/relicDraftOffer.ts",
-      "line": 48,
-      "endLine": 56
+      "line": 62,
+      "endLine": 70
     },
     {
       "id": "symbol:src/renderer/copy/relicDraftOffer.ts#getRelicOfferTitle",
       "name": "getRelicOfferTitle",
       "kind": "function",
       "file": "src/renderer/copy/relicDraftOffer.ts",
-      "line": 44,
-      "endLine": 46
+      "line": 58,
+      "endLine": 60
     },
     {
       "id": "symbol:src/renderer/copy/relicDraftOffer.ts#relicDraftProgressLine",
       "name": "relicDraftProgressLine",
       "kind": "function",
       "file": "src/renderer/copy/relicDraftOffer.ts",
-      "line": 59,
-      "endLine": 65
+      "line": 73,
+      "endLine": 79
     },
     {
       "id": "symbol:src/renderer/copy/relicDraftOffer.ts#relicDraftRoundAdvancedAnnouncement",
       "name": "relicDraftRoundAdvancedAnnouncement",
       "kind": "function",
       "file": "src/renderer/copy/relicDraftOffer.ts",
-      "line": 67,
-      "endLine": 69
+      "line": 81,
+      "endLine": 83
     },
     {
       "id": "symbol:src/renderer/copy/relicDraftOffer.ts#relicEffectLabels",
       "name": "relicEffectLabels",
       "kind": "value",
       "file": "src/renderer/copy/relicDraftOffer.ts",
-      "line": 8,
-      "endLine": 31
+      "line": 22,
+      "endLine": 45
+    },
+    {
+      "id": "symbol:src/renderer/copy/relicDraftOffer.ts#SEALED_RELIC_COPY",
+      "name": "SEALED_RELIC_COPY",
+      "kind": "value",
+      "file": "src/renderer/copy/relicDraftOffer.ts",
+      "line": 13,
+      "endLine": 20
     },
     {
       "id": "symbol:src/renderer/copy/runDialogCopy.ts#ABANDON_DIALOG_COPY",
@@ -44014,16 +44080,16 @@
       "name": "createRelicOfferServiceSurfaceResult",
       "kind": "value",
       "file": "src/renderer/store/relicOfferSurfaceState.ts",
-      "line": 91,
-      "endLine": 123
+      "line": 111,
+      "endLine": 143
     },
     {
       "id": "symbol:src/renderer/store/relicOfferSurfaceState.ts#createRelicPickSurfaceResult",
       "name": "createRelicPickSurfaceResult",
       "kind": "value",
       "file": "src/renderer/store/relicOfferSurfaceState.ts",
-      "line": 41,
-      "endLine": 89
+      "line": 43,
+      "endLine": 109
     },
     {
       "id": "symbol:src/renderer/store/riskWagerSurfaceState.ts#createRiskWagerSurfaceResult",
@@ -47638,64 +47704,64 @@
       "name": "AchievementId",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 320,
-      "endLine": 345
+      "line": 325,
+      "endLine": 350
     },
     {
       "id": "symbol:src/shared/contracts.ts#AchievementState",
       "name": "AchievementState",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1173,
-      "endLine": 1173
+      "line": 1178,
+      "endLine": 1178
     },
     {
       "id": "symbol:src/shared/contracts.ts#AchievementUnlockResult",
       "name": "AchievementUnlockResult",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1246,
-      "endLine": 1248
+      "line": 1251,
+      "endLine": 1253
     },
     {
       "id": "symbol:src/shared/contracts.ts#BoardPresentationMode",
       "name": "BoardPresentationMode",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 354,
-      "endLine": 354
+      "line": 359,
+      "endLine": 359
     },
     {
       "id": "symbol:src/shared/contracts.ts#BoardScreenSpaceAA",
       "name": "BoardScreenSpaceAA",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 368,
-      "endLine": 368
+      "line": 373,
+      "endLine": 373
     },
     {
       "id": "symbol:src/shared/contracts.ts#BoardState",
       "name": "BoardState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 471,
-      "endLine": 518
+      "line": 476,
+      "endLine": 523
     },
     {
       "id": "symbol:src/shared/contracts.ts#BonusRewardId",
       "name": "BonusRewardId",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 814,
-      "endLine": 827
+      "line": 819,
+      "endLine": 832
     },
     {
       "id": "symbol:src/shared/contracts.ts#BonusRewardLedger",
       "name": "BonusRewardLedger",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 836,
-      "endLine": 841
+      "line": 841,
+      "endLine": 846
     },
     {
       "id": "symbol:src/shared/contracts.ts#BOSS_FLOOR_SCORE_MULTIPLIER",
@@ -47718,8 +47784,8 @@
       "name": "CameraViewportModePreference",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 361,
-      "endLine": 361
+      "line": 366,
+      "endLine": 366
     },
     {
       "id": "symbol:src/shared/contracts.ts#CATALYST_ALTAR_FALLBACK_SCORE_REWARD",
@@ -47766,16 +47832,16 @@
       "name": "ContractFlags",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 308,
-      "endLine": 316
+      "line": 313,
+      "endLine": 321
     },
     {
       "id": "symbol:src/shared/contracts.ts#CrashReportSummary",
       "name": "CrashReportSummary",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1254,
-      "endLine": 1259
+      "line": 1259,
+      "endLine": 1264
     },
     {
       "id": "symbol:src/shared/contracts.ts#CURSED_LAST_BONUS_SCORE",
@@ -47798,8 +47864,8 @@
       "name": "DebugFlags",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 347,
-      "endLine": 351
+      "line": 352,
+      "endLine": 356
     },
     {
       "id": "symbol:src/shared/contracts.ts#DEFAULT_PAIR_COUNT_CAP",
@@ -47814,8 +47880,8 @@
       "name": "DesktopApi",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1272,
-      "endLine": 1298
+      "line": 1277,
+      "endLine": 1303
     },
     {
       "id": "symbol:src/shared/contracts.ts#DisplayMode",
@@ -47830,96 +47896,96 @@
       "name": "DungeonBossId",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 641,
-      "endLine": 641
+      "line": 646,
+      "endLine": 646
     },
     {
       "id": "symbol:src/shared/contracts.ts#DungeonCardEffectId",
       "name": "DungeonCardEffectId",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 699,
-      "endLine": 737
+      "line": 704,
+      "endLine": 742
     },
     {
       "id": "symbol:src/shared/contracts.ts#DungeonCardKind",
       "name": "DungeonCardKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 617,
-      "endLine": 628
+      "line": 622,
+      "endLine": 633
     },
     {
       "id": "symbol:src/shared/contracts.ts#DungeonCardState",
       "name": "DungeonCardState",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 640,
-      "endLine": 640
+      "line": 645,
+      "endLine": 645
     },
     {
       "id": "symbol:src/shared/contracts.ts#DungeonExitLockKind",
       "name": "DungeonExitLockKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 616,
-      "endLine": 616
+      "line": 621,
+      "endLine": 621
     },
     {
       "id": "symbol:src/shared/contracts.ts#DungeonFloorBlueprint",
       "name": "DungeonFloorBlueprint",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 667,
-      "endLine": 698
+      "line": 672,
+      "endLine": 703
     },
     {
       "id": "symbol:src/shared/contracts.ts#DungeonKeyKind",
       "name": "DungeonKeyKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 615,
-      "endLine": 615
+      "line": 620,
+      "endLine": 620
     },
     {
       "id": "symbol:src/shared/contracts.ts#DungeonObjectiveId",
       "name": "DungeonObjectiveId",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 658,
-      "endLine": 666
+      "line": 663,
+      "endLine": 671
     },
     {
       "id": "symbol:src/shared/contracts.ts#DungeonRunMapState",
       "name": "DungeonRunMapState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 804,
-      "endLine": 812
+      "line": 809,
+      "endLine": 817
     },
     {
       "id": "symbol:src/shared/contracts.ts#DungeonRunNode",
       "name": "DungeonRunNode",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 782,
-      "endLine": 802
+      "line": 787,
+      "endLine": 807
     },
     {
       "id": "symbol:src/shared/contracts.ts#DungeonRunNodeKind",
       "name": "DungeonRunNodeKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 769,
-      "endLine": 779
+      "line": 774,
+      "endLine": 784
     },
     {
       "id": "symbol:src/shared/contracts.ts#DungeonRunNodeStatus",
       "name": "DungeonRunNodeStatus",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 780,
-      "endLine": 780
+      "line": 785,
+      "endLine": 785
     },
     {
       "id": "symbol:src/shared/contracts.ts#ENDLESS_RISK_WAGER_BONUS_FAVOR",
@@ -47950,40 +48016,40 @@
       "name": "EndlessRiskWagerState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 301,
-      "endLine": 306
+      "line": 306,
+      "endLine": 311
     },
     {
       "id": "symbol:src/shared/contracts.ts#EnemyHazardKind",
       "name": "EnemyHazardKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 642,
-      "endLine": 642
+      "line": 647,
+      "endLine": 647
     },
     {
       "id": "symbol:src/shared/contracts.ts#EnemyHazardPattern",
       "name": "EnemyHazardPattern",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 643,
-      "endLine": 643
+      "line": 648,
+      "endLine": 648
     },
     {
       "id": "symbol:src/shared/contracts.ts#EnemyHazardState",
       "name": "EnemyHazardState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 645,
-      "endLine": 657
+      "line": 650,
+      "endLine": 662
     },
     {
       "id": "symbol:src/shared/contracts.ts#EnemyHazardStateKind",
       "name": "EnemyHazardStateKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 644,
-      "endLine": 644
+      "line": 649,
+      "endLine": 649
     },
     {
       "id": "symbol:src/shared/contracts.ts#FEATURED_OBJECTIVE_STREAK_BONUS_MAX",
@@ -48086,16 +48152,16 @@
       "name": "FloorArchetypeId",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 458,
-      "endLine": 469
+      "line": 463,
+      "endLine": 474
     },
     {
       "id": "symbol:src/shared/contracts.ts#FloorTag",
       "name": "FloorTag",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 457,
-      "endLine": 457
+      "line": 462,
+      "endLine": 462
     },
     {
       "id": "symbol:src/shared/contracts.ts#FUSE_CACHE_EXPIRED_SHOP_GOLD_REWARD",
@@ -48150,16 +48216,16 @@
       "name": "GameplayCommandJournalEntry",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 912,
-      "endLine": 916
+      "line": 917,
+      "endLine": 921
     },
     {
       "id": "symbol:src/shared/contracts.ts#GameplayEventJournalEntry",
       "name": "GameplayEventJournalEntry",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 918,
-      "endLine": 928
+      "line": 923,
+      "endLine": 933
     },
     {
       "id": "symbol:src/shared/contracts.ts#GAUNTLET_FLOOR_CLEAR_TIME_BONUS_MS",
@@ -48182,16 +48248,16 @@
       "name": "GraphicsQualityPreset",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 371,
-      "endLine": 371
+      "line": 376,
+      "endLine": 376
     },
     {
       "id": "symbol:src/shared/contracts.ts#HazardTileKind",
       "name": "HazardTileKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 629,
-      "endLine": 629
+      "line": 634,
+      "endLine": 634
     },
     {
       "id": "symbol:src/shared/contracts.ts#INITIAL_LIVES",
@@ -48230,8 +48296,8 @@
       "name": "LevelResult",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 542,
-      "endLine": 593
+      "line": 547,
+      "endLine": 598
     },
     {
       "id": "symbol:src/shared/contracts.ts#LOADED_GATEWAY_SCORE_REWARD",
@@ -48414,16 +48480,16 @@
       "name": "PassAndPlaySeat",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 942,
-      "endLine": 950
+      "line": 947,
+      "endLine": 955
     },
     {
       "id": "symbol:src/shared/contracts.ts#PassAndPlayState",
       "name": "PassAndPlayState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 952,
-      "endLine": 960
+      "line": 957,
+      "endLine": 965
     },
     {
       "id": "symbol:src/shared/contracts.ts#PIN_LATTICE_SCORE_REWARD",
@@ -48438,8 +48504,8 @@
       "name": "PlayerStatsPersisted",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1175,
-      "endLine": 1194
+      "line": 1180,
+      "endLine": 1199
     },
     {
       "id": "symbol:src/shared/contracts.ts#PuzzleCompletionRecord",
@@ -48518,16 +48584,16 @@
       "name": "RelicOfferServiceId",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 256,
-      "endLine": 256
+      "line": 261,
+      "endLine": 261
     },
     {
       "id": "symbol:src/shared/contracts.ts#RelicOfferServiceState",
       "name": "RelicOfferServiceState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 258,
-      "endLine": 266
+      "line": 263,
+      "endLine": 271
     },
     {
       "id": "symbol:src/shared/contracts.ts#RelicOfferState",
@@ -48535,23 +48601,23 @@
       "kind": "interface",
       "file": "src/shared/contracts.ts",
       "line": 234,
-      "endLine": 254
+      "endLine": 259
     },
     {
       "id": "symbol:src/shared/contracts.ts#RendererErrorKind",
       "name": "RendererErrorKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1262,
-      "endLine": 1262
+      "line": 1267,
+      "endLine": 1267
     },
     {
       "id": "symbol:src/shared/contracts.ts#RendererErrorReport",
       "name": "RendererErrorReport",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1265,
-      "endLine": 1270
+      "line": 1270,
+      "endLine": 1275
     },
     {
       "id": "symbol:src/shared/contracts.ts#RESOLVE_DELAY_MULTIPLIER_MIN",
@@ -48566,184 +48632,184 @@
       "name": "ResumableRunStatus",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 317,
-      "endLine": 317
+      "line": 322,
+      "endLine": 322
     },
     {
       "id": "symbol:src/shared/contracts.ts#RewardPerkId",
       "name": "RewardPerkId",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 829,
-      "endLine": 834
+      "line": 834,
+      "endLine": 839
     },
     {
       "id": "symbol:src/shared/contracts.ts#RichPresenceState",
       "name": "RichPresenceState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1239,
-      "endLine": 1243
+      "line": 1244,
+      "endLine": 1248
     },
     {
       "id": "symbol:src/shared/contracts.ts#RichPresenceToken",
       "name": "RichPresenceToken",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1237,
-      "endLine": 1237
+      "line": 1242,
+      "endLine": 1242
     },
     {
       "id": "symbol:src/shared/contracts.ts#RouteCardKind",
       "name": "RouteCardKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 596,
-      "endLine": 596
+      "line": 601,
+      "endLine": 601
     },
     {
       "id": "symbol:src/shared/contracts.ts#RouteCardPlan",
       "name": "RouteCardPlan",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 753,
-      "endLine": 758
+      "line": 758,
+      "endLine": 763
     },
     {
       "id": "symbol:src/shared/contracts.ts#RouteChoice",
       "name": "RouteChoice",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 760,
-      "endLine": 767
+      "line": 765,
+      "endLine": 772
     },
     {
       "id": "symbol:src/shared/contracts.ts#RouteNodeType",
       "name": "RouteNodeType",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 595,
-      "endLine": 595
+      "line": 600,
+      "endLine": 600
     },
     {
       "id": "symbol:src/shared/contracts.ts#RouteSideRoomChoiceState",
       "name": "RouteSideRoomChoiceState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 845,
-      "endLine": 858
+      "line": 850,
+      "endLine": 863
     },
     {
       "id": "symbol:src/shared/contracts.ts#RouteSideRoomKind",
       "name": "RouteSideRoomKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 843,
-      "endLine": 843
+      "line": 848,
+      "endLine": 848
     },
     {
       "id": "symbol:src/shared/contracts.ts#RouteSideRoomState",
       "name": "RouteSideRoomState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 860,
-      "endLine": 876
+      "line": 865,
+      "endLine": 881
     },
     {
       "id": "symbol:src/shared/contracts.ts#RouteSpecialKind",
       "name": "RouteSpecialKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 597,
-      "endLine": 613
+      "line": 602,
+      "endLine": 618
     },
     {
       "id": "symbol:src/shared/contracts.ts#RouteWorldIntensity",
       "name": "RouteWorldIntensity",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 614,
-      "endLine": 614
+      "line": 619,
+      "endLine": 619
     },
     {
       "id": "symbol:src/shared/contracts.ts#RouteWorldProfile",
       "name": "RouteWorldProfile",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 739,
-      "endLine": 751
+      "line": 744,
+      "endLine": 756
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunHistoryRecord",
       "name": "RunHistoryRecord",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1201,
-      "endLine": 1210
+      "line": 1206,
+      "endLine": 1215
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunShopItemCategory",
       "name": "RunShopItemCategory",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 281,
-      "endLine": 281
+      "line": 286,
+      "endLine": 286
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunShopItemId",
       "name": "RunShopItemId",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 268,
-      "endLine": 280
+      "line": 273,
+      "endLine": 285
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunShopOfferAvailability",
       "name": "RunShopOfferAvailability",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 282,
-      "endLine": 282
+      "line": 287,
+      "endLine": 287
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunShopOfferState",
       "name": "RunShopOfferState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 284,
-      "endLine": 299
+      "line": 289,
+      "endLine": 304
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunState",
       "name": "RunState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 962,
-      "endLine": 1171
+      "line": 967,
+      "endLine": 1176
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunStatus",
       "name": "RunStatus",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 318,
-      "endLine": 318
+      "line": 323,
+      "endLine": 323
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunSummary",
       "name": "RunSummary",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 878,
-      "endLine": 910
+      "line": 883,
+      "endLine": 915
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunTimerState",
       "name": "RunTimerState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 930,
-      "endLine": 936
+      "line": 935,
+      "endLine": 941
     },
     {
       "id": "symbol:src/shared/contracts.ts#SAVE_SCHEMA_VERSION",
@@ -48758,8 +48824,8 @@
       "name": "SaveData",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1212,
-      "endLine": 1231
+      "line": 1217,
+      "endLine": 1236
     },
     {
       "id": "symbol:src/shared/contracts.ts#SCHOLAR_STYLE_FLOOR_BONUS_SCORE",
@@ -48774,16 +48840,16 @@
       "name": "SessionStats",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 520,
-      "endLine": 540
+      "line": 525,
+      "endLine": 545
     },
     {
       "id": "symbol:src/shared/contracts.ts#Settings",
       "name": "Settings",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 373,
-      "endLine": 408
+      "line": 378,
+      "endLine": 413
     },
     {
       "id": "symbol:src/shared/contracts.ts#SHIFTING_BOUNTY_MATCH_BONUS",
@@ -48822,8 +48888,8 @@
       "name": "Tile",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 410,
-      "endLine": 455
+      "line": 415,
+      "endLine": 460
     },
     {
       "id": "symbol:src/shared/contracts.ts#TileState",
@@ -48838,8 +48904,8 @@
       "name": "TileTraitKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 630,
-      "endLine": 639
+      "line": 635,
+      "endLine": 644
     },
     {
       "id": "symbol:src/shared/contracts.ts#TOLL_CACHE_MATCH_SCORE_TOLL",
@@ -58526,56 +58592,56 @@
       "name": "applyRelicOfferServiceToRun",
       "kind": "value",
       "file": "src/shared/relic-offer-rules.ts",
-      "line": 97,
-      "endLine": 104
+      "line": 99,
+      "endLine": 106
     },
     {
       "id": "symbol:src/shared/relic-offer-rules.ts#computeRelicOfferPickBudget",
       "name": "computeRelicOfferPickBudget",
       "kind": "value",
       "file": "src/shared/relic-offer-rules.ts",
-      "line": 36,
-      "endLine": 40
+      "line": 37,
+      "endLine": 41
     },
     {
       "id": "symbol:src/shared/relic-offer-rules.ts#createRelicPickAdvanceResult",
       "name": "createRelicPickAdvanceResult",
       "kind": "value",
       "file": "src/shared/relic-offer-rules.ts",
-      "line": 88,
-      "endLine": 95
+      "line": 90,
+      "endLine": 97
     },
     {
       "id": "symbol:src/shared/relic-offer-rules.ts#MAX_RELIC_PICKS_PER_OFFER",
       "name": "MAX_RELIC_PICKS_PER_OFFER",
       "kind": "value",
       "file": "src/shared/relic-offer-rules.ts",
-      "line": 19,
-      "endLine": 19
+      "line": 20,
+      "endLine": 20
     },
     {
       "id": "symbol:src/shared/relic-offer-rules.ts#openRelicOffer",
       "name": "openRelicOffer",
       "kind": "value",
       "file": "src/shared/relic-offer-rules.ts",
-      "line": 42,
-      "endLine": 84
+      "line": 43,
+      "endLine": 86
     },
     {
       "id": "symbol:src/shared/relic-offer-rules.ts#RelicPickAdvanceResult",
       "name": "RelicPickAdvanceResult",
       "kind": "type",
       "file": "src/shared/relic-offer-rules.ts",
-      "line": 86,
-      "endLine": 86
+      "line": 88,
+      "endLine": 88
     },
     {
       "id": "symbol:src/shared/relic-offer-rules.ts#useRelicOfferService",
       "name": "useRelicOfferService",
       "kind": "value",
       "file": "src/shared/relic-offer-rules.ts",
-      "line": 106,
-      "endLine": 106
+      "line": 108,
+      "endLine": 108
     },
     {
       "id": "symbol:src/shared/relic-pick-advance-rules.ts#completeRelicPickAndAdvance",
@@ -58590,16 +58656,16 @@
       "name": "createRelicPickTransitionResult",
       "kind": "value",
       "file": "src/shared/relic-pick-transition-rules.ts",
-      "line": 22,
-      "endLine": 97
+      "line": 23,
+      "endLine": 101
     },
     {
       "id": "symbol:src/shared/relic-pick-transition-rules.ts#RelicPickTransitionResult",
       "name": "RelicPickTransitionResult",
       "kind": "type",
       "file": "src/shared/relic-pick-transition-rules.ts",
-      "line": 12,
-      "endLine": 15
+      "line": 13,
+      "endLine": 16
     },
     {
       "id": "symbol:src/shared/relics.ts#applyRelicOfferService",
@@ -61776,6 +61842,30 @@
       "file": "src/shared/scoring-rules.ts",
       "line": 120,
       "endLine": 134
+    },
+    {
+      "id": "symbol:src/shared/sealed-relic-rules.ts#isSealedRelicOption",
+      "name": "isSealedRelicOption",
+      "kind": "value",
+      "file": "src/shared/sealed-relic-rules.ts",
+      "line": 62,
+      "endLine": 63
+    },
+    {
+      "id": "symbol:src/shared/sealed-relic-rules.ts#rollSealedRelic",
+      "name": "rollSealedRelic",
+      "kind": "value",
+      "file": "src/shared/sealed-relic-rules.ts",
+      "line": 34,
+      "endLine": 59
+    },
+    {
+      "id": "symbol:src/shared/sealed-relic-rules.ts#SEALED_RELIC_RARITY_ORDER",
+      "name": "SEALED_RELIC_RARITY_ORDER",
+      "kind": "value",
+      "file": "src/shared/sealed-relic-rules.ts",
+      "line": 22,
+      "endLine": 22
     },
     {
       "id": "symbol:src/shared/secondary-objective-rules.ts#DefaultClearObjectiveBonusResult",
@@ -81309,6 +81399,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/copy/relicDraftOffer.ts->symbol:src/renderer/copy/relicDraftOffer.ts#SEALED_RELIC_COPY",
+      "source": "file:src/renderer/copy/relicDraftOffer.ts",
+      "target": "symbol:src/renderer/copy/relicDraftOffer.ts#SEALED_RELIC_COPY",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/copy/runDialogCopy.ts->symbol:src/renderer/copy/runDialogCopy.ts#ABANDON_DIALOG_COPY",
       "source": "file:src/renderer/copy/runDialogCopy.ts",
       "target": "symbol:src/renderer/copy/runDialogCopy.ts#ABANDON_DIALOG_COPY",
@@ -95961,6 +96057,24 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/sealed-relic-rules.ts->symbol:src/shared/sealed-relic-rules.ts#isSealedRelicOption",
+      "source": "file:src/shared/sealed-relic-rules.ts",
+      "target": "symbol:src/shared/sealed-relic-rules.ts#isSealedRelicOption",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/sealed-relic-rules.ts->symbol:src/shared/sealed-relic-rules.ts#rollSealedRelic",
+      "source": "file:src/shared/sealed-relic-rules.ts",
+      "target": "symbol:src/shared/sealed-relic-rules.ts#rollSealedRelic",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/sealed-relic-rules.ts->symbol:src/shared/sealed-relic-rules.ts#SEALED_RELIC_RARITY_ORDER",
+      "source": "file:src/shared/sealed-relic-rules.ts",
+      "target": "symbol:src/shared/sealed-relic-rules.ts#SEALED_RELIC_RARITY_ORDER",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/secondary-objective-rules.ts->symbol:src/shared/secondary-objective-rules.ts#DefaultClearObjectiveBonusResult",
       "source": "file:src/shared/secondary-objective-rules.ts",
       "target": "symbol:src/shared/secondary-objective-rules.ts#DefaultClearObjectiveBonusResult",
@@ -109204,6 +109318,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/store/relicOfferSurfaceState.ts->src/renderer/copy/relicDraftOffer.ts",
+      "source": "file:src/renderer/store/relicOfferSurfaceState.ts",
+      "target": "file:src/renderer/copy/relicDraftOffer.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/store/relicOfferSurfaceState.ts->src/renderer/store/gameplayFeedbackAdapter.ts",
       "source": "file:src/renderer/store/relicOfferSurfaceState.ts",
       "target": "file:src/renderer/store/gameplayFeedbackAdapter.ts",
@@ -109219,6 +109339,12 @@
       "id": "imports:src/renderer/store/relicOfferSurfaceState.ts->src/shared/contracts.ts",
       "source": "file:src/renderer/store/relicOfferSurfaceState.ts",
       "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/store/relicOfferSurfaceState.ts->src/shared/game-catalog.ts",
+      "source": "file:src/renderer/store/relicOfferSurfaceState.ts",
+      "target": "file:src/shared/game-catalog.ts",
       "kind": "imports"
     },
     {
@@ -117556,6 +117682,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/relic-offer-rules.ts->src/shared/sealed-relic-rules.ts",
+      "source": "file:src/shared/relic-offer-rules.ts",
+      "target": "file:src/shared/sealed-relic-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/relic-pick-advance-rules.test.ts->src/shared/contracts.ts",
       "source": "file:src/shared/relic-pick-advance-rules.test.ts",
       "target": "file:src/shared/contracts.ts",
@@ -117631,6 +117763,12 @@
       "id": "imports:src/shared/relic-pick-transition-rules.ts->src/shared/run-number-guards.ts",
       "source": "file:src/shared/relic-pick-transition-rules.ts",
       "target": "file:src/shared/run-number-guards.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/relic-pick-transition-rules.ts->src/shared/sealed-relic-rules.ts",
+      "source": "file:src/shared/relic-pick-transition-rules.ts",
+      "target": "file:src/shared/sealed-relic-rules.ts",
       "kind": "imports"
     },
     {
@@ -119245,6 +119383,60 @@
       "id": "imports:src/shared/scoring-rules.ts->src/shared/tile-identity.ts",
       "source": "file:src/shared/scoring-rules.ts",
       "target": "file:src/shared/tile-identity.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/sealed-relic-rules.test.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/sealed-relic-rules.test.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/sealed-relic-rules.test.ts->src/shared/relic-offer-rules.ts",
+      "source": "file:src/shared/sealed-relic-rules.test.ts",
+      "target": "file:src/shared/relic-offer-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/sealed-relic-rules.test.ts->src/shared/relics.ts",
+      "source": "file:src/shared/sealed-relic-rules.test.ts",
+      "target": "file:src/shared/relics.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/sealed-relic-rules.test.ts->src/shared/run-creation-rules.ts",
+      "source": "file:src/shared/sealed-relic-rules.test.ts",
+      "target": "file:src/shared/run-creation-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/sealed-relic-rules.test.ts->src/shared/sealed-relic-rules.ts",
+      "source": "file:src/shared/sealed-relic-rules.test.ts",
+      "target": "file:src/shared/sealed-relic-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/sealed-relic-rules.ts->src/shared/content-lock-state.ts",
+      "source": "file:src/shared/sealed-relic-rules.ts",
+      "target": "file:src/shared/content-lock-state.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/sealed-relic-rules.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/sealed-relic-rules.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/sealed-relic-rules.ts->src/shared/relics.ts",
+      "source": "file:src/shared/sealed-relic-rules.ts",
+      "target": "file:src/shared/relics.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/sealed-relic-rules.ts->src/shared/rng.ts",
+      "source": "file:src/shared/sealed-relic-rules.ts",
+      "target": "file:src/shared/rng.ts",
       "kind": "imports"
     },
     {
@@ -130694,6 +130886,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/contracts.ts->file:src/shared/sealed-relic-rules.test.ts",
+      "source": "file:src/shared/contracts.ts",
+      "target": "file:src/shared/sealed-relic-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/contracts.ts->file:src/shared/secondary-objective-rules.test.ts",
       "source": "file:src/shared/contracts.ts",
       "target": "file:src/shared/secondary-objective-rules.test.ts",
@@ -132692,6 +132890,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/relic-offer-rules.ts->file:src/shared/sealed-relic-rules.test.ts",
+      "source": "file:src/shared/relic-offer-rules.ts",
+      "target": "file:src/shared/sealed-relic-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/relic-pick-advance-rules.ts->file:src/shared/gameplay-property-invariants.test.ts",
       "source": "file:src/shared/relic-pick-advance-rules.ts",
       "target": "file:src/shared/gameplay-property-invariants.test.ts",
@@ -132785,6 +132989,12 @@
       "id": "tested_by:src/shared/relics.ts->file:src/shared/save-data.test.ts",
       "source": "file:src/shared/relics.ts",
       "target": "file:src/shared/save-data.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/relics.ts->file:src/shared/sealed-relic-rules.test.ts",
+      "source": "file:src/shared/relics.ts",
+      "target": "file:src/shared/sealed-relic-rules.test.ts",
       "kind": "tested_by"
     },
     {
@@ -133031,6 +133241,12 @@
       "id": "tested_by:src/shared/run-creation-rules.ts->file:src/shared/run-share-text.test.ts",
       "source": "file:src/shared/run-creation-rules.ts",
       "target": "file:src/shared/run-share-text.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/run-creation-rules.ts->file:src/shared/sealed-relic-rules.test.ts",
+      "source": "file:src/shared/run-creation-rules.ts",
+      "target": "file:src/shared/sealed-relic-rules.test.ts",
       "kind": "tested_by"
     },
     {
@@ -133703,6 +133919,12 @@
       "id": "tested_by:src/shared/scoring-rules.ts->file:src/shared/turn-match-scoring-summary-rules.test.ts",
       "source": "file:src/shared/scoring-rules.ts",
       "target": "file:src/shared/turn-match-scoring-summary-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/sealed-relic-rules.ts->file:src/shared/sealed-relic-rules.test.ts",
+      "source": "file:src/shared/sealed-relic-rules.ts",
+      "target": "file:src/shared/sealed-relic-rules.test.ts",
       "kind": "tested_by"
     },
     {

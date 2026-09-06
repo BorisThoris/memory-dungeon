@@ -70,6 +70,12 @@
     border-color: color-mix(in srgb, var(--theme-gold-bright) 36%, var(--theme-card-border-muted));
 }
 
+/* The sealed card gets a dashed edge: it reads as unopened rather than as another rarity band. */
+.card[data-rarity='sealed'] {
+    border-style: dashed;
+    border-color: color-mix(in srgb, var(--theme-text-muted) 55%, var(--theme-card-border-muted));
+}
+
 .cardHead {
     display: flex;
     align-items: center;
@@ -92,6 +98,10 @@
 
 .card[data-rarity='rare'] .tier {
     color: var(--theme-cyan-bright);
+}
+
+.card[data-rarity='sealed'] .tier {
+    color: var(--theme-text-muted);
 }
 
 .tag {

@@ -8,6 +8,7 @@ import {
     runRelicIds
 } from './relics';
 import { decrementRunCounter, runNonNegativeInteger } from './run-number-guards';
+import { rollSealedRelic } from './sealed-relic-rules';
 
 export type RelicPickTransitionResult =
     | { kind: 'unchanged'; run: RunState }
@@ -28,7 +29,9 @@ export const createRelicPickTransitionResult = (
         return { kind: 'unchanged', run };
     }
     const offer = run.relicOffer;
-    if (!offer?.options.includes(relicId) || !isRelicDraftEligible(relicId, run)) {
+    // The sealed card is a real option; it is only the screen that will not name it.
+    const offered = offer?.options.includes(relicId) === true || offer?.sealedRelicId === relicId;
+    if (!offer || !offered || !isRelicDraftEligible(relicId, run)) {
         return { kind: 'unchanged', run };
     }
 
@@ -80,7 +83,8 @@ export const createRelicPickTransitionResult = (
                         }
                     }),
                     favorBonusPicks: offer.favorBonusPicks,
-                    contextualOptionReasons
+                    contextualOptionReasons,
+                    sealedRelicId: rollSealedRelic(next, tierIndex, cleared, newPickRound, newOptions)
                 }
             }
         };

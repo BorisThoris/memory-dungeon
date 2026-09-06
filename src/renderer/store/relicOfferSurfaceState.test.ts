@@ -186,6 +186,42 @@ describe('relicOfferSurfaceState', () => {
         });
     });
 
+    it('says what came out of the seal, by name, before explaining what it does', () => {
+        // A gamble with no reveal is a slower click: the player has to reverse-engineer what they
+        // won from the effect text.
+        const offered = offeredRun();
+        const result = createRelicPickSurfaceResult({
+            relicId: 'peek_charge_plus_one',
+            run: {
+                ...offered,
+                relicOffer: {
+                    ...offered.relicOffer!,
+                    options: ['extra_shuffle_charge' as RelicId],
+                    sealedRelicId: 'peek_charge_plus_one' as RelicId
+                }
+            },
+            saveData: createDefaultSaveData()
+        });
+
+        expect(result.kind).toBe('accepted');
+        if (result.kind !== 'accepted') return;
+        expect(result.patch.run.relicIds).toContain('peek_charge_plus_one');
+        expect(result.feedback?.message).toMatch(/seal comes off/i);
+    });
+
+    it('leaves an ordinary pick unadorned, so the reveal means something when it appears', () => {
+        const offered = offeredRun();
+        const result = createRelicPickSurfaceResult({
+            relicId: 'extra_shuffle_charge',
+            run: { ...offered, relicOffer: { ...offered.relicOffer!, options: ['extra_shuffle_charge' as RelicId] } },
+            saveData: createDefaultSaveData()
+        });
+
+        expect(result.kind).toBe('accepted');
+        if (result.kind !== 'accepted') return;
+        expect(result.feedback?.message ?? '').not.toMatch(/seal comes off/i);
+    });
+
     it('projects Slayer preparation relics through typed pick feedback', () => {
         const cases = [
             { relicId: 'chapter_compass' as RelicId, cue: 'build.chapter_compass.claimed', field: 'peekCharges' },

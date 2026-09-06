@@ -19,6 +19,43 @@ describe('RelicDraftOfferPanel', () => {
         vi.restoreAllMocks();
     });
 
+    it('offers a sealed card that will not say what it is, and picks the relic behind it', () => {
+        const onPick = vi.fn();
+        render(
+            <RelicDraftOfferPanel
+                descriptionById={{ peek_charge_plus_one: '+1 peek charge.' } as Record<RelicId, string>}
+                onPick={onPick}
+                optionIds={['peek_charge_plus_one']}
+                pickRound={0}
+                sealedRelicId="chapter_compass"
+            />
+        );
+
+        const sealed = screen.getByTestId('relic-offer-sealed-card');
+        // The seal is the whole feature: nothing rendered may name the relic, its effect, or its
+        // rarity band, on the face of the card or in its accessible name.
+        expect(sealed).not.toHaveTextContent(/compass/i);
+        expect(sealed.getAttribute('aria-label')).not.toMatch(/compass|peek|\brare\b|\buncommon\b|\bcommon\b/i);
+        expect(sealed).toHaveTextContent(/sealed/i);
+
+        fireEvent.click(sealed);
+        expect(onPick).toHaveBeenCalledWith('chapter_compass');
+    });
+
+    it('leaves the sealed card out when the pool had nothing left to seal', () => {
+        render(
+            <RelicDraftOfferPanel
+                descriptionById={{ peek_charge_plus_one: '+1 peek charge.' } as Record<RelicId, string>}
+                onPick={vi.fn()}
+                optionIds={['peek_charge_plus_one']}
+                pickRound={0}
+                sealedRelicId={null}
+            />
+        );
+
+        expect(screen.queryByTestId('relic-offer-sealed-card')).not.toBeInTheDocument();
+    });
+
     it('renders one card per relic with tier, build tag, effect and one impact line', () => {
         const onPick = vi.fn();
         render(

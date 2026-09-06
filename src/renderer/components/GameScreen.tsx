@@ -2002,6 +2002,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                             optionIds={run.relicOffer.options}
                             pickRound={run.relicOffer.pickRound}
                             reasonById={run.relicOffer.contextualOptionReasons}
+                            sealedRelicId={run.relicOffer.sealedRelicId}
                             serviceActions={run.relicOffer.services}
                             sfxGain={shuffleSfxGain}
                         />

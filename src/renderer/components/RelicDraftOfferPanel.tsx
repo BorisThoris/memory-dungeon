@@ -11,7 +11,7 @@ import {
 } from '../../shared/relics';
 import { playRelicChoiceCrescendoSfx, resumeAudioContext, type RelicChoiceCrescendoSfxTier } from '../audio/gameSfx';
 import { getTraitBuildDraftHintForRelic } from '../../shared/trait-build-rewards';
-import { relicDraftRoundAdvancedAnnouncement } from '../copy/relicDraftOffer';
+import { relicDraftRoundAdvancedAnnouncement, SEALED_RELIC_COPY } from '../copy/relicDraftOffer';
 import styles from './RelicDraftOffer.module.css';
 
 /**
@@ -31,6 +31,8 @@ interface RelicDraftOfferPanelProps {
     onUseService?: (serviceId: RelicOfferServiceAction['serviceId'], targetRelicId?: RelicId) => void;
     /** Advances when options reroll mid-visit (multi-pick). */
     pickRound: number;
+    /** The offer's sealed option, or null when the pool had nothing left to seal. */
+    sealedRelicId?: RelicId | null;
     sfxGain?: number;
 }
 
@@ -59,6 +61,7 @@ const RelicDraftOfferPanel = ({
     optionIds,
     pickRound,
     reasonById,
+    sealedRelicId = null,
     serviceActions = [],
     sfxGain = 0
 }: RelicDraftOfferPanelProps) => {
@@ -216,6 +219,29 @@ const RelicDraftOfferPanel = ({
                         </button>
                     );
                 })}
+                {sealedRelicId ? (
+                    /*
+                     * Deliberately built from copy alone: nothing here reads the relic catalog for
+                     * the sealed id, so no title, effect, rarity chip or accessible name can leak
+                     * what the card is. The id only leaves this component through `onPick`.
+                     */
+                    <button
+                        aria-label={`${SEALED_RELIC_COPY.tier} relic: ${SEALED_RELIC_COPY.title}. ${SEALED_RELIC_COPY.effect} ${SEALED_RELIC_COPY.impact}`}
+                        className={styles.card}
+                        data-rarity="sealed"
+                        data-testid="relic-offer-sealed-card"
+                        key={`sealed-${pickRound}`}
+                        onClick={() => onPick(sealedRelicId)}
+                        type="button"
+                    >
+                        <span className={styles.cardHead}>
+                            <span className={styles.tier}>{SEALED_RELIC_COPY.tier}</span>
+                        </span>
+                        <strong className={styles.title}>{SEALED_RELIC_COPY.title}</strong>
+                        <span className={styles.effect}>{SEALED_RELIC_COPY.effect}</span>
+                        <span className={styles.impact}>{SEALED_RELIC_COPY.impact}</span>
+                    </button>
+                ) : null}
             </div>
             <div className={styles.footer}>
                 <span className={styles.footerLine}>Pick one. It stays for the rest of the run.</span>

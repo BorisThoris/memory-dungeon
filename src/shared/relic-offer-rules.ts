@@ -1,6 +1,7 @@
 import type { RelicId, RelicOfferServiceId, RunState } from './contracts';
 import { hasMutator } from './mutators';
 import { applyRelicImmediateThroughGameplayCore } from './gameplay-core-adapters';
+import { rollSealedRelic } from './sealed-relic-rules';
 import {
     applyRelicOfferService,
     getRelicDraftOptionReasons,
@@ -78,7 +79,8 @@ export const openRelicOffer = (run: RunState): RunState => {
                 }
             }),
             favorBonusPicks: consumedFavorBonusPicks,
-            contextualOptionReasons
+            contextualOptionReasons,
+            sealedRelicId: rollSealedRelic(run, tierIndex, cleared, 0, options)
         }
     };
 };

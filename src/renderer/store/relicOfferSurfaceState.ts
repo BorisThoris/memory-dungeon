@@ -7,6 +7,8 @@ import { reduceGameplayCommand } from '../../shared/gameplay-core';
 import { appendGameplayJournal } from '../../shared/gameplay-journal';
 import { advanceFloorThroughGameplayCore } from '../../shared/gameplay-core-adapters';
 import { mergeHonorUnlockTags } from '../../shared/honorUnlocks';
+import { RELIC_CATALOG } from '../../shared/game-catalog';
+import { SEALED_RELIC_COPY } from '../copy/relicDraftOffer';
 import { mergeRelicPickStat, normalizeSaveData } from '../../shared/save-data';
 import { clearRunSurfaceArmedModes, type RunSurfaceState } from './runSurfaceState';
 import {
@@ -47,7 +49,10 @@ export const createRelicPickSurfaceResult = ({
     run: RunState | null;
     saveData: SaveData;
 }): RelicPickSurfaceResult => {
-    if (!run?.relicOffer?.options.includes(relicId)) {
+    // The sealed card is an option the screen refuses to name, not an option the screen refuses.
+    const offered =
+        run?.relicOffer?.options.includes(relicId) === true || run?.relicOffer?.sealedRelicId === relicId;
+    if (!run?.relicOffer || !offered) {
         return { kind: 'ignored' };
     }
 
@@ -75,9 +80,24 @@ export const createRelicPickSurfaceResult = ({
 
     const nextSave = mergeHonorUnlockTags(normalizeSaveData(mergeRelicPickStat(saveData, relicId)));
 
+    /*
+     * The reveal. A sealed card that resolves into an ordinary claim line is a slower click: the
+     * player took a gamble and has to work out from the effect text what they actually won. Say it
+     * first, by name, then let the usual claim line explain what it does.
+     */
+    const claimFeedback =
+        getNewGameplayFeedback(run, nextRun).find((item) => item.audioCategory === 'relic-pick') ?? null;
+    const sealedReveal =
+        claimFeedback && offer.sealedRelicId === relicId
+            ? {
+                  ...claimFeedback,
+                  message: `${SEALED_RELIC_COPY.revealed(RELIC_CATALOG[relicId]?.title ?? relicId)} ${claimFeedback.message}`
+              }
+            : claimFeedback;
+
     return {
         kind: 'accepted',
-        feedback: getNewGameplayFeedback(run, nextRun).find((item) => item.audioCategory === 'relic-pick') ?? null,
+        feedback: sealedReveal,
         nextSave,
         patch: {
             run: nextRun,
