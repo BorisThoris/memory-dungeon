@@ -291,8 +291,8 @@
     {
       "path": "docs/CHAIN_CHUNK_FEVER_DESIGN.md",
       "category": "documentation",
-      "bytes": 39480,
-      "sha256": "2b6f42d6580ebb409da69b888ea20ce10420ddc57fab5b25748aad2a211b2a65"
+      "bytes": 39661,
+      "sha256": "aeae28308f4193c9a6cf0562beb453e57e1937da7eec183edb3e9e0ca229d8da"
     },
     {
       "path": "docs/COLLECTIBLE_SYSTEM.md",
@@ -7797,8 +7797,8 @@
     {
       "path": "src/renderer/components/GameScreen.module.css",
       "category": "source",
-      "bytes": 42454,
-      "sha256": "8518ee9d8086c4874d7d1ccec445b618ccb86ae90c5808c5f0d38af0f2ec44e7"
+      "bytes": 42923,
+      "sha256": "c9451e6816d5a010c851a499cc0340993aa548d231fbad59c13533e5ccbe5516"
     },
     {
       "path": "src/renderer/components/GameScreen.test.tsx",
@@ -7827,8 +7827,8 @@
     {
       "path": "src/renderer/components/InventoryScreen.module.css",
       "category": "source",
-      "bytes": 4817,
-      "sha256": "0cad919328cc8588e11dc39a32fe344a24e358756c0c30842b0b70896c56b2eb"
+      "bytes": 5462,
+      "sha256": "634fa5d56ecc48206c03b262b9ef1e693744b83bf6790aca864cb1702623e04b"
     },
     {
       "path": "src/renderer/components/InventoryScreen.test.tsx",

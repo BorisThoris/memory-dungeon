@@ -1185,6 +1185,23 @@ where that rule
     .relicDraftBonusList {
         display: none;
     }
+
+    /*
+     * The shortcuts overlay is six rows and the Gambit tip; at 812x375 the tip's second line
+     * ran under the overlay body's edge. The rows tighten to what a phone held sideways can
+     * hold and every line stays on the plate.
+     */
+    .shortcutsHelpList {
+        gap: 0.2rem;
+        font-size: 0.88rem;
+        line-height: 1.3;
+    }
+
+    .shortcutsHelpTip {
+        margin-top: 0.4rem;
+        font-size: 0.82rem;
+        line-height: 1.3;
+    }
 }
 
 

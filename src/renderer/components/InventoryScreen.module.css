@@ -185,6 +185,27 @@
 }
 
 /*
+ * The Deck's 1280x800 in-run: the overlay sits on the board stage, its body is about 280px,
+ * and ten charge rows in one column are 480. Two short columns, the same answer the narrow
+ * rule gives, and the last row ("Match score multiplier") stops going under the body's edge.
+ */
+@media (max-height: 820px) and (min-height: 561px) and (min-width: 861px) {
+    .inRunShell .charges {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .inRunShell .chargeRow {
+        min-height: 2.2rem;
+        padding: 0.3rem 0.6rem;
+    }
+
+    .inRunShell .chargeRow dt {
+        font-size: 0.82rem;
+        line-height: 1.2;
+    }
+}
+
+/*
  * Short landscape: 375px of height against 800 of width. What the run carries - its relics
  * and its mutators - sits side by side and reads in full. The charge counts step aside in
  * the in-run view only, because the action dock behind this modal already shows every one
