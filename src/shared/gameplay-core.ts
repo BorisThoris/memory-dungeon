@@ -66,6 +66,7 @@ import { applyRouteChoiceOutcome } from './route-rules';
 import { createRelicPickTransitionResult } from './relic-pick-transition-rules';
 import {
     canGreetFloorCurio,
+    floorCurioGreetingReply,
     greetFloorCurio,
     runFloorCurioGreeting
 } from './floor-curio-greeting-rules';
@@ -608,7 +609,7 @@ const applyGreetCurioCommand = (
     writeEvent({
         type: 'feedback.requested',
         cue: `curio.${greeting.curioId}.greeted`,
-        message: greeting.reply,
+        message: floorCurioGreetingReply(greeting, run),
         tone: 'information'
     });
     return { run: nextRun, command, events, accepted: true };

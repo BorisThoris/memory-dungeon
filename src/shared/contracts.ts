@@ -425,6 +425,8 @@ export interface Tile {
     state: TileState;
     /** Visible on the back from the moment the floor opens. Absent only on legacy or authored boards. */
     suit?: TileSuit;
+    /** True on a tile a chunk break took off the board, so it can be told apart from a defeated enemy. */
+    brokenByChunk?: boolean;
     /** Visual variant index for atomic-pairs styling (optional). */
     atomicVariant?: number;
     /** If set, matching this pair claims a pickup reward on eligible floors. */

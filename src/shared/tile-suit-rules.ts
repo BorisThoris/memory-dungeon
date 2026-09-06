@@ -280,3 +280,35 @@ export const sameSuitNeighbourRate = (board: Pick<BoardState, 'columns' | 'tiles
     });
     return counted === 0 ? 0 : sum / counted;
 };
+
+/**
+ * The suit of the biggest connected hidden clump on the board, or null on an empty one. What the
+ * gossiping skull tells you when greeted: not where the tiles are, just which suit is worth a chain.
+ */
+export const largestHiddenSuitClump = (
+    board: Pick<BoardState, 'columns' | 'tiles'>
+): { suit: TileSuit; size: number } | null => {
+    const columns = getSafeBoardColumns(board);
+    const total = board.tiles.length;
+    const seen = new Set<number>();
+    let best: { suit: TileSuit; size: number } | null = null;
+    board.tiles.forEach((tile, start) => {
+        if (seen.has(start) || tile.state !== 'hidden' || !tile.suit) return;
+        const suit = tile.suit;
+        let size = 0;
+        const stack = [start];
+        seen.add(start);
+        while (stack.length > 0) {
+            const cell = stack.pop()!;
+            size += 1;
+            for (const next of orthogonalNeighbours(cell, columns, total)) {
+                const candidate = board.tiles[next];
+                if (seen.has(next) || !candidate || candidate.state !== 'hidden' || candidate.suit !== suit) continue;
+                seen.add(next);
+                stack.push(next);
+            }
+        }
+        if (!best || size > best.size) best = { suit, size };
+    });
+    return best;
+};

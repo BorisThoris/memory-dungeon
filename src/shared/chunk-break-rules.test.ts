@@ -117,9 +117,11 @@ describe('what it pays', () => {
 describe('through a real turn', () => {
     const runWithChain = (chain: number) => {
         const base = makeRun(layout(), { gameMode: 'endless' });
+        // The fixture rolls a random floor resident; toffee would make this break diagonal.
         return {
             ...base,
             board: board(),
+            floorCurioId: null,
             stats: { ...base.stats, currentStreak: chain - 1 }
         };
     };

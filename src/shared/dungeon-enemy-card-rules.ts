@@ -30,16 +30,14 @@ export const activeDungeonEnemyPairKeys = (board: BoardState): string[] => [
     )
 ];
 
-export const damageFirstActiveDungeonEnemy = (
+/** Damages one enemy pair by key: the chunk break hits the enemy it broke over, not the first one. */
+export const damageDungeonEnemyPair = (
     board: BoardState,
+    pairKey: string,
     amount: number
 ): { board: BoardState; defeated: number; score: number } => {
     const damage = runNonNegativeInteger(amount);
-    if (damage <= 0) {
-        return { board, defeated: 0, score: 0 };
-    }
-    const pairKey = activeDungeonEnemyPairKeys(board)[0];
-    if (!pairKey) {
+    if (damage <= 0 || !activeDungeonEnemyPairKeys(board).includes(pairKey)) {
         return { board, defeated: 0, score: 0 };
     }
     const currentHp = runNonNegativeInteger(
@@ -74,6 +72,14 @@ export const damageFirstActiveDungeonEnemy = (
         defeated,
         score: defeated ? DUNGEON_ENEMY_DEFEAT_SCORE : 0
     };
+};
+
+export const damageFirstActiveDungeonEnemy = (
+    board: BoardState,
+    amount: number
+): { board: BoardState; defeated: number; score: number } => {
+    const pairKey = activeDungeonEnemyPairKeys(board)[0];
+    return pairKey ? damageDungeonEnemyPair(board, pairKey, amount) : { board, defeated: 0, score: 0 };
 };
 
 export const applyDungeonEnemyAttack = (

@@ -269,12 +269,16 @@ export const advanceEnemyHazardsOnBoard = (board: BoardState, steps: number = 1)
     return defeatEnemyHazardOccupationOnFinalPair({ ...board, enemyHazardTurn: nextTurn, enemyHazards: nextHazards });
 };
 
-export const damageFirstRevealedEnemyHazard = (
+/** Damages one revealed hazard by id: the chunk break hits the hazard standing inside it. */
+export const damageEnemyHazardById = (
     board: BoardState,
+    hazardId: string,
     amount: number
 ): { board: BoardState; defeated: number; bossDefeated: number; score: number } => {
     const damage = runNonNegativeInteger(amount);
-    const target = activeEnemyHazardsForBoard(board).find((hazard) => hazard.state === 'revealed' && runNonNegativeInteger(hazard.hp) > 0);
+    const target = activeEnemyHazardsForBoard(board).find(
+        (hazard) => hazard.id === hazardId && hazard.state === 'revealed' && runNonNegativeInteger(hazard.hp) > 0
+    );
     if (!target || damage <= 0) {
         return { board, defeated: 0, bossDefeated: 0, score: 0 };
     }
@@ -298,6 +302,16 @@ export const damageFirstRevealedEnemyHazard = (
         bossDefeated: defeated && target.bossId ? 1 : 0,
         score: defeated ? (target.bossId ? DUNGEON_BOSS_DEFEAT_SCORE : DUNGEON_ENEMY_DEFEAT_SCORE) : 0
     };
+};
+
+export const damageFirstRevealedEnemyHazard = (
+    board: BoardState,
+    amount: number
+): { board: BoardState; defeated: number; bossDefeated: number; score: number } => {
+    const target = activeEnemyHazardsForBoard(board).find((hazard) => hazard.state === 'revealed' && runNonNegativeInteger(hazard.hp) > 0);
+    return target
+        ? damageEnemyHazardById(board, target.id, amount)
+        : { board, defeated: 0, bossDefeated: 0, score: 0 };
 };
 
 export const applyEnemyHazardClick = (

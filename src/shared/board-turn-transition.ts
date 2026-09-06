@@ -191,6 +191,18 @@ export const createResolveBoardTurnTransition = ({
                 lanternScout,
                 omenScout
             } = resolution;
+            /*
+             * A findable that went with the chunk is paid the way a matched findable is paid, through
+             * the same adapter with its own command id, so its score and shards land in the same sums.
+             */
+            const chunkFindable = chunkBreak.claimedFindableKind
+                ? resolveFindableMatchRewardThroughGameplayCore(
+                      run,
+                      chunkBreak.claimedFindableKind,
+                      `findable-chunk:${run.runSeed}:${run.board.level}:${runNonNegativeInteger(run.matchResolutionsThisFloor)}:${matchedPairKey}`,
+                      execution
+                  )
+                : { scoreGain: 0, comboShardGain: 0, safeHazardWardGain: 0, scoutRevealGain: 0, migrated: false, commands: [], events: [] };
             const traitReward = resolveTileTraitEffects({
                 run,
                 board: run.board,
@@ -206,7 +218,7 @@ export const createResolveBoardTurnTransition = ({
                 matchedTiles: [tileMatchA, tileMatchB],
                 encorePairKeys,
                 findableScoreBonus: resolvedFindableScoreBonus + traitReward.scoreBonus,
-                chunkScore: chunkBreak.score,
+                chunkScore: chunkBreak.score + chunkFindable.scoreGain,
                 routeCardScore: routeCardReward.score,
                 dungeonScore: dungeonReward.score,
                 enemyDamageScore: enemyDamage.score,
@@ -220,7 +232,7 @@ export const createResolveBoardTurnTransition = ({
                 catalystAltarUpgraded,
                 currentStreak: scoring.currentStreak,
                 dungeonReward,
-                findableComboShardGain: resolvedFindableComboShardGain + traitReward.comboShardGain + chunkBreak.comboShardGain,
+                findableComboShardGain: resolvedFindableComboShardGain + traitReward.comboShardGain + chunkBreak.comboShardGain + chunkFindable.comboShardGain,
                 mimicCacheBite,
                 mimicCacheFatalBite,
                 mimicCacheGuardBite,
@@ -277,7 +289,7 @@ export const createResolveBoardTurnTransition = ({
             const progress = resolveTurnMatchProgress({
                 run,
                 cursedMatchedEarly: scoring.cursedMatchedEarly,
-                findablesClaimedDelta,
+                findablesClaimedDelta: findablesClaimedDelta + (chunkBreak.claimedFindableKind ? 1 : 0),
                 routeCardSafeHazardWardCharges: routeCardReward.safeHazardWardCharges,
                 findableSafeHazardWardGain: resolvedFindableSafeHazardWardGain,
                 cascadeHazardTriggered: cascadeHazard.triggered,
@@ -492,6 +504,18 @@ export const createResolveBoardTurnTransition = ({
                 lanternScout,
                 omenScout
             } = resolution;
+            /*
+             * A findable that went with the chunk is paid the way a matched findable is paid, through
+             * the same adapter with its own command id, so its score and shards land in the same sums.
+             */
+            const chunkFindable = chunkBreak.claimedFindableKind
+                ? resolveFindableMatchRewardThroughGameplayCore(
+                      run,
+                      chunkBreak.claimedFindableKind,
+                      `findable-chunk:${run.runSeed}:${run.board.level}:${runNonNegativeInteger(run.matchResolutionsThisFloor)}:${matchedPairKey}`,
+                      execution
+                  )
+                : { scoreGain: 0, comboShardGain: 0, safeHazardWardGain: 0, scoutRevealGain: 0, migrated: false, commands: [], events: [] };
             const traitReward = resolveTileTraitEffects({
                 run,
                 board: run.board,
@@ -507,7 +531,7 @@ export const createResolveBoardTurnTransition = ({
                 matchedTiles: [firstTile, secondTile],
                 encorePairKeys,
                 findableScoreBonus: resolvedFindableScoreBonus + traitReward.scoreBonus,
-                chunkScore: chunkBreak.score,
+                chunkScore: chunkBreak.score + chunkFindable.scoreGain,
                 routeCardScore: routeCardReward.score,
                 dungeonScore: dungeonReward.score,
                 enemyDamageScore: enemyDamage.score,
@@ -521,7 +545,7 @@ export const createResolveBoardTurnTransition = ({
                 catalystAltarUpgraded,
                 currentStreak: scoring.currentStreak,
                 dungeonReward,
-                findableComboShardGain: resolvedFindableComboShardGain + traitReward.comboShardGain + chunkBreak.comboShardGain,
+                findableComboShardGain: resolvedFindableComboShardGain + traitReward.comboShardGain + chunkBreak.comboShardGain + chunkFindable.comboShardGain,
                 mimicCacheBite,
                 mimicCacheFatalBite,
                 mimicCacheGuardBite,
@@ -579,7 +603,7 @@ export const createResolveBoardTurnTransition = ({
             const progress = resolveTurnMatchProgress({
                 run,
                 cursedMatchedEarly: scoring.cursedMatchedEarly,
-                findablesClaimedDelta,
+                findablesClaimedDelta: findablesClaimedDelta + (chunkBreak.claimedFindableKind ? 1 : 0),
                 routeCardSafeHazardWardCharges: routeCardReward.safeHazardWardCharges,
                 findableSafeHazardWardGain: resolvedFindableSafeHazardWardGain,
                 cascadeHazardTriggered: cascadeHazard.triggered,

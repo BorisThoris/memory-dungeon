@@ -1,5 +1,6 @@
 import type { RunState } from './contracts';
 import { getFloorCurio, type FloorCurioId } from './floor-curio-rules';
+import { getTileSuit, largestHiddenSuitClump } from './tile-suit-rules';
 import { runNonNegativeInteger } from './run-number-guards';
 
 /**
@@ -29,6 +30,8 @@ export interface FloorCurioGreeting {
     readonly curioId: FloorCurioId;
     /** What they say back, in their own register. */
     readonly reply: string;
+    /** A reply that reads the floor; falls back to `reply` when there is nothing to read. */
+    readonly replyFor?: (run: RunState) => string | null;
     /** What the player actually walks away with, said plainly. */
     readonly gained: string;
     readonly effect: FloorCurioGreetingEffect;
@@ -66,6 +69,15 @@ export const FLOOR_CURIO_GREETINGS: Readonly<Record<FloorCurioId, FloorCurioGree
     gossiping_skull: {
         curioId: 'gossiping_skull',
         reply: 'It tells you, in detail, about the last person who came through here and exactly which tile finished them.',
+        // The skull has watched this floor for a long time. It knows which clump is worth a chain.
+        replyFor: (run) => {
+            const clump = run.board ? largestHiddenSuitClump(run.board) : null;
+            return clump && clump.size >= 3
+                ? `It tells you, in detail, about the last person who came through here — and that the big ${
+                      getTileSuit(clump.suit).name
+                  } clump, ${clump.size} tiles of it, is where they should have started.`
+                : null;
+        },
         gained: 'One more chance to take a flip back — someone else already made that mistake for you.',
         effect: { ...NOTHING, undoUses: 1 }
     },
@@ -120,3 +132,7 @@ export const greetFloorCurio = (run: RunState): RunState => {
         }
     };
 };
+
+/** The line a greeting actually says on this run: the floor-reading one when it has something to read. */
+export const floorCurioGreetingReply = (greeting: FloorCurioGreeting, run: RunState): string =>
+    greeting.replyFor?.(run) ?? greeting.reply;

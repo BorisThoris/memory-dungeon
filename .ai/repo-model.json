@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2568,
-    "codeFileCount": 1018,
-    "exportedSymbolCount": 3652,
+    "trackedFileCount": 2569,
+    "codeFileCount": 1019,
+    "exportedSymbolCount": 3659,
     "contentItemCount": 63,
     "mechanicCount": 136,
     "stateFieldCount": 144,
-    "relationshipCount": 10738
+    "relationshipCount": 10763
   },
   "inventory": [
     {
@@ -291,8 +291,8 @@
     {
       "path": "docs/CHAIN_CHUNK_FEVER_DESIGN.md",
       "category": "documentation",
-      "bytes": 16074,
-      "sha256": "ab5177a973eb577b8d69a0c09e8aa18e87e67e734054707268451973ced1928b"
+      "bytes": 16491,
+      "sha256": "613d989a336f67c52d966a7ee5a8ba11ce25a4522163d5fba4931112c6b04631"
     },
     {
       "path": "docs/COLLECTIBLE_SYSTEM.md",
@@ -778,7 +778,7 @@
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
       "bytes": 472,
-      "sha256": "bfd6e3872f132d3d7170dbe7d8b4777ae6e15726d3997170156dd89a52abfcd2"
+      "sha256": "d8cf42e6211eb3a677a30eca60ad0710310fbfa847f6df7b45a013cbec707811"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -2326,7 +2326,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 36715,
-      "sha256": "da4552019091787e14ee95a2ca6b15ec26f0fa6fd215518a4ef1e9396424b526"
+      "sha256": "c17fac342f7f56beb56e0fe0ecfb29862d2b0b227f71da5c9823a8cb0d8fb506"
     },
     {
       "path": "docs/UI_RETHINK_PLAN.md",
@@ -7665,8 +7665,8 @@
     {
       "path": "src/renderer/components/CodexScreen.test.tsx",
       "category": "test",
-      "bytes": 5090,
-      "sha256": "483e32e55b3f108c5cea8856dd563c7e27c6ff9179da18e8bc1b7746995957e7"
+      "bytes": 5841,
+      "sha256": "f251d6d9baed28c0f3d56d5d305d8f77e1234539e32b5b693558de96f6afe47c"
     },
     {
       "path": "src/renderer/components/CodexScreen.tsx",
@@ -10348,7 +10348,7 @@
       "path": "src/shared/__snapshots__/mechanics-catalog-appendix-builder.test.ts.snap",
       "category": "source",
       "bytes": 642,
-      "sha256": "9636b40f0ebce21147df556e8652084b995c0f8f9248f6580b2c9ede94445781"
+      "sha256": "2a054e923e34f183c2faea60b3ab366b3e1458887d3281e0b8c1ea404e4be629"
     },
     {
       "path": "src/shared/achievement-reachability.test.ts",
@@ -10539,8 +10539,8 @@
     {
       "path": "src/shared/board-turn-transition.ts",
       "category": "source",
-      "bytes": 33826,
-      "sha256": "630f0561e8c369ae29214500e1720358817634a727472e5589413652b3b5e7cd"
+      "bytes": 35652,
+      "sha256": "980c40fe192c3f903388f4b1d4ed2c70917bcfa228ccfda1f61f237f1541c82c"
     },
     {
       "path": "src/shared/bonus-rewards.test.ts",
@@ -10657,16 +10657,22 @@
       "sha256": "42e28f4369ece6971870280478cd87dda46a4a6454e9f6cd094b24ea1b11b361"
     },
     {
+      "path": "src/shared/chunk-break-dungeon-rules.test.ts",
+      "category": "test",
+      "bytes": 9710,
+      "sha256": "a085b4d5eac0ecb429b8d65cb514c6f9c8e9855b81755086547473ac033056a9"
+    },
+    {
       "path": "src/shared/chunk-break-rules.test.ts",
       "category": "test",
-      "bytes": 8651,
-      "sha256": "26dcb1f9356cb40591a5b1796a536676e29cfdab7ec7492d5ea3a37a10e851cb"
+      "bytes": 8776,
+      "sha256": "39603e6d268e406a87291df7159baf4264c7b60321673af4e1634c73174a4a6d"
     },
     {
       "path": "src/shared/chunk-break-rules.ts",
       "category": "source",
-      "bytes": 6693,
-      "sha256": "b365c7923de500d600379ccbf5c00a88cbb14df2b39cde160e25b8d13c12cd9e"
+      "bytes": 11028,
+      "sha256": "8c0e43331bb6da010cce36830f5bbdb5825cbe34f19cc35877618c117c5966dd"
     },
     {
       "path": "src/shared/classic-run-setup.test.ts",
@@ -10737,8 +10743,8 @@
     {
       "path": "src/shared/contracts.ts",
       "category": "source",
-      "bytes": 51424,
-      "sha256": "31be91fb33e0b550c4c8a57b3169b5e0b006e8535dcd4a443c75596dfdd59ec4"
+      "bytes": 51560,
+      "sha256": "99d07b3b10c1a3c515aaa2df339469b2116e26e36ac3ff51dc857d3404ba8ccc"
     },
     {
       "path": "src/shared/control-label-ambiguity.test.ts",
@@ -10995,8 +11001,8 @@
     {
       "path": "src/shared/dungeon-enemy-card-rules.ts",
       "category": "source",
-      "bytes": 3981,
-      "sha256": "0d95bfe4c0f99b690af3d31df77a856b148e08b8ba5fa2dcca773b3d3f1a0e3b"
+      "bytes": 4339,
+      "sha256": "6bf2b3d8be8244bd298433ae3526d426fe3f1c5e82d6e0511e376ef5c52a2829"
     },
     {
       "path": "src/shared/dungeon-enemy-hazard-rules.test.ts",
@@ -11007,8 +11013,8 @@
     {
       "path": "src/shared/dungeon-enemy-hazard-rules.ts",
       "category": "source",
-      "bytes": 16178,
-      "sha256": "028443b23e69d759f14b8bc029acc5461df017ac706340985eaef19fd1ba1891"
+      "bytes": 16781,
+      "sha256": "a245bdcbba25d6df48d146d0004c24440afe098d9a71c42b28e869b6cba3afc6"
     },
     {
       "path": "src/shared/dungeon-exit-rules.test.ts",
@@ -11307,8 +11313,8 @@
     {
       "path": "src/shared/floor-curio-greeting-rules.ts",
       "category": "source",
-      "bytes": 5566,
-      "sha256": "56224d6242d9a9f17ab783613b1ef48e96c1b0da4e25ebcaa58ab9c0aa4615b5"
+      "bytes": 6584,
+      "sha256": "66d5a3c08729eeb12c9a36c83530de849774d2981a5bfa1aaacb2fdca328e43d"
     },
     {
       "path": "src/shared/floor-curio-rules.test.ts",
@@ -11463,8 +11469,8 @@
     {
       "path": "src/shared/gameplay-core.ts",
       "category": "source",
-      "bytes": 90792,
-      "sha256": "c9019518ebe6135e6fca00509e7ca877d520671684999e366723ac418e88d91f"
+      "bytes": 90845,
+      "sha256": "0c9d80568091084cd51c59a9de7e7b5338b62a8db6f1343d03f0f2084287b041"
     },
     {
       "path": "src/shared/gameplay-effect-transition.test.ts",
@@ -11751,8 +11757,8 @@
     {
       "path": "src/shared/magpie-rules.ts",
       "category": "source",
-      "bytes": 6374,
-      "sha256": "86f15c7a1b9b640e4cf5ce26b339bc0ef3ffb121f6c4f0d16b40cac3793bf366"
+      "bytes": 7097,
+      "sha256": "6b85e791cfc89d1cb50bd75a2c6afa508b5279eb3d06cd49e81e0ead495f281c"
     },
     {
       "path": "src/shared/main-menu-hub-quality.test.ts",
@@ -11811,8 +11817,8 @@
     {
       "path": "src/shared/mechanics-encyclopedia.ts",
       "category": "source",
-      "bytes": 48217,
-      "sha256": "94a0d612a3d8be8f4c0bdfd6dcca76680a0ef9d58a25c292e11540cc212cd768"
+      "bytes": 49520,
+      "sha256": "958490316cabe41f94906dbd56f2ccb639769cae3ac08ef565b08fbff0799d2d"
     },
     {
       "path": "src/shared/memorize-phase-rules.test.ts",
@@ -12963,8 +12969,8 @@
     {
       "path": "src/shared/tile-suit-rules.ts",
       "category": "source",
-      "bytes": 11776,
-      "sha256": "7b8bdb1a96374febace0abf8584cdaf47917017ac91a8f351de5a8a6685eca2a"
+      "bytes": 13063,
+      "sha256": "150a09847068fc5369e21b56c56e8129b365683389542bb7ba4e0c4326e68eef"
     },
     {
       "path": "src/shared/tile-symbol-catalog.test.ts",
@@ -17566,7 +17572,7 @@
       "path": "src/renderer/components/CodexScreen.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 111,
+      "lineCount": 124,
       "imports": [
         "file:src/renderer/components/CodexScreen.tsx",
         "file:src/shared/save-data.ts"
@@ -25637,7 +25643,7 @@
       "path": "src/shared/board-turn-transition.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 721,
+      "lineCount": 745,
       "imports": [
         "file:src/shared/board-inspection.ts",
         "file:src/shared/contracts.ts",
@@ -26082,11 +26088,29 @@
       "testedBy": []
     },
     {
+      "id": "file:src/shared/chunk-break-dungeon-rules.test.ts",
+      "path": "src/shared/chunk-break-dungeon-rules.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 181,
+      "imports": [
+        "file:src/shared/chunk-break-rules.ts",
+        "file:src/shared/contracts.ts",
+        "file:src/shared/floor-curio-greeting-rules.ts",
+        "file:src/shared/game.ts",
+        "file:src/shared/magpie-rules.ts",
+        "file:src/shared/run-creation-rules.ts",
+        "file:src/shared/test/game-fixtures.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
       "id": "file:src/shared/chunk-break-rules.test.ts",
       "path": "src/shared/chunk-break-rules.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 176,
+      "lineCount": 178,
       "imports": [
         "file:src/shared/chunk-break-rules.ts",
         "file:src/shared/contracts.ts",
@@ -26103,11 +26127,14 @@
       "path": "src/shared/chunk-break-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 160,
+      "lineCount": 262,
       "imports": [
         "file:src/shared/board-grid-dimensions.ts",
         "file:src/shared/chain-tier-rules.ts",
         "file:src/shared/contracts.ts",
+        "file:src/shared/dungeon-enemy-card-rules.ts",
+        "file:src/shared/dungeon-enemy-hazard-rules.ts",
+        "file:src/shared/enemy-hazard-board-rules.ts",
         "file:src/shared/run-number-guards.ts",
         "file:src/shared/scoring-rules.ts",
         "file:src/shared/tile-identity.ts"
@@ -26118,9 +26145,13 @@
         "symbol:src/shared/chunk-break-rules.ts#chunkBreakScore",
         "symbol:src/shared/chunk-break-rules.ts#findSuitRegion",
         "symbol:src/shared/chunk-break-rules.ts#resolveChunkBreak",
-        "symbol:src/shared/chunk-break-rules.ts#tileCanBreakInChunk"
+        "symbol:src/shared/chunk-break-rules.ts#SuitRegionOptions",
+        "symbol:src/shared/chunk-break-rules.ts#tileBlocksChunk",
+        "symbol:src/shared/chunk-break-rules.ts#tileCanBreakInChunk",
+        "symbol:src/shared/chunk-break-rules.ts#tileIsPlainApartFromFindable"
       ],
       "testedBy": [
+        "file:src/shared/chunk-break-dungeon-rules.test.ts",
         "file:src/shared/chunk-break-rules.test.ts"
       ]
     },
@@ -26349,7 +26380,7 @@
       "path": "src/shared/contracts.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1314,
+      "lineCount": 1316,
       "imports": [],
       "exports": [
         "symbol:src/shared/contracts.ts#AchievementId",
@@ -26595,6 +26626,7 @@
         "file:src/shared/boss-encounters.test.ts",
         "file:src/shared/build-strategy-playthrough-simulation.test.ts",
         "file:src/shared/build-strategy-simulation.test.ts",
+        "file:src/shared/chunk-break-dungeon-rules.test.ts",
         "file:src/shared/chunk-break-rules.test.ts",
         "file:src/shared/combo-shard-rules.test.ts",
         "file:src/shared/content-lock.test.ts",
@@ -27493,7 +27525,7 @@
       "path": "src/shared/dungeon-enemy-card-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 115,
+      "lineCount": 121,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/dungeon-match-reward-rules.ts",
@@ -27503,6 +27535,7 @@
         "symbol:src/shared/dungeon-enemy-card-rules.ts#activeDungeonEnemyPairKeys",
         "symbol:src/shared/dungeon-enemy-card-rules.ts#applyDungeonEnemyAttack",
         "symbol:src/shared/dungeon-enemy-card-rules.ts#clearDungeonCardFields",
+        "symbol:src/shared/dungeon-enemy-card-rules.ts#damageDungeonEnemyPair",
         "symbol:src/shared/dungeon-enemy-card-rules.ts#damageFirstActiveDungeonEnemy",
         "symbol:src/shared/dungeon-enemy-card-rules.ts#revealOneHiddenDungeonHazardPair"
       ],
@@ -27528,7 +27561,7 @@
       "path": "src/shared/dungeon-enemy-hazard-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 437,
+      "lineCount": 451,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/dungeon-boss-rules.ts",
@@ -27547,6 +27580,7 @@
         "symbol:src/shared/dungeon-enemy-hazard-rules.ts#applyEnemyHazardClick",
         "symbol:src/shared/dungeon-enemy-hazard-rules.ts#clearLastPairEnemyHazardSoftlock",
         "symbol:src/shared/dungeon-enemy-hazard-rules.ts#createEnemyHazardsForBoard",
+        "symbol:src/shared/dungeon-enemy-hazard-rules.ts#damageEnemyHazardById",
         "symbol:src/shared/dungeon-enemy-hazard-rules.ts#damageFirstRevealedEnemyHazard",
         "symbol:src/shared/dungeon-enemy-hazard-rules.ts#defeatEnemyHazardsBlockingLastPair",
         "symbol:src/shared/dungeon-enemy-hazard-rules.ts#defeatEnemyHazardsForFloorClear",
@@ -28541,22 +28575,25 @@
       "path": "src/shared/floor-curio-greeting-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 123,
+      "lineCount": 139,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/floor-curio-rules.ts",
-        "file:src/shared/run-number-guards.ts"
+        "file:src/shared/run-number-guards.ts",
+        "file:src/shared/tile-suit-rules.ts"
       ],
       "exports": [
         "symbol:src/shared/floor-curio-greeting-rules.ts#canGreetFloorCurio",
         "symbol:src/shared/floor-curio-greeting-rules.ts#FLOOR_CURIO_GREETINGS",
         "symbol:src/shared/floor-curio-greeting-rules.ts#FloorCurioGreeting",
         "symbol:src/shared/floor-curio-greeting-rules.ts#FloorCurioGreetingEffect",
+        "symbol:src/shared/floor-curio-greeting-rules.ts#floorCurioGreetingReply",
         "symbol:src/shared/floor-curio-greeting-rules.ts#getFloorCurioGreeting",
         "symbol:src/shared/floor-curio-greeting-rules.ts#greetFloorCurio",
         "symbol:src/shared/floor-curio-greeting-rules.ts#runFloorCurioGreeting"
       ],
       "testedBy": [
+        "file:src/shared/chunk-break-dungeon-rules.test.ts",
         "file:src/shared/floor-curio-greeting-rules.test.ts"
       ]
     },
@@ -29215,6 +29252,7 @@
       "testedBy": [
         "file:src/renderer/components/runShellToolCatalog.test.ts",
         "file:src/renderer/store/rowShuffleReachability.test.ts",
+        "file:src/shared/chunk-break-dungeon-rules.test.ts",
         "file:src/shared/chunk-break-rules.test.ts",
         "file:src/shared/daily-determinism.test.ts",
         "file:src/shared/dungeon-boss-clear-rules.test.ts",
@@ -29551,7 +29589,7 @@
       "path": "src/shared/gameplay-core.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 2062,
+      "lineCount": 2063,
       "imports": [
         "file:src/shared/board-inspection.ts",
         "file:src/shared/board-power-actions.ts",
@@ -30485,7 +30523,7 @@
       "path": "src/shared/magpie-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 159,
+      "lineCount": 174,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/rng.ts"
@@ -30499,6 +30537,7 @@
         "symbol:src/shared/magpie-rules.ts#resolveMagpieVisit"
       ],
       "testedBy": [
+        "file:src/shared/chunk-break-dungeon-rules.test.ts",
         "file:src/shared/magpie-rules.test.ts"
       ]
     },
@@ -30672,7 +30711,7 @@
       "path": "src/shared/mechanics-encyclopedia.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 994,
+      "lineCount": 1013,
       "imports": [
         "file:src/shared/contracts.ts"
       ],
@@ -32796,6 +32835,7 @@
         "file:src/renderer/store/shopCloseExecutor.test.ts",
         "file:src/renderer/store/tilePressAudioCues.test.ts",
         "file:src/shared/achievement-reachability.test.ts",
+        "file:src/shared/chunk-break-dungeon-rules.test.ts",
         "file:src/shared/floor-curio-greeting-rules.test.ts",
         "file:src/shared/floor-curio-rules.test.ts",
         "file:src/shared/memorize-phase-rules.test.ts",
@@ -34576,6 +34616,7 @@
       ],
       "testedBy": [
         "file:src/renderer/store/relicOfferSurfaceState.test.ts",
+        "file:src/shared/chunk-break-dungeon-rules.test.ts",
         "file:src/shared/chunk-break-rules.test.ts",
         "file:src/shared/game.test.ts",
         "file:src/shared/memory-recall-feedback.test.ts",
@@ -34761,7 +34802,7 @@
       "path": "src/shared/tile-suit-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 283,
+      "lineCount": 315,
       "imports": [
         "file:src/shared/board-grid-dimensions.ts",
         "file:src/shared/contracts.ts",
@@ -34774,6 +34815,7 @@
         "symbol:src/shared/tile-suit-rules.ts#dealTilesInClumps",
         "symbol:src/shared/tile-suit-rules.ts#getTileSuit",
         "symbol:src/shared/tile-suit-rules.ts#isLayoutPinnedTile",
+        "symbol:src/shared/tile-suit-rules.ts#largestHiddenSuitClump",
         "symbol:src/shared/tile-suit-rules.ts#sameSuitNeighbourRate",
         "symbol:src/shared/tile-suit-rules.ts#TILE_SUIT_CATALOG",
         "symbol:src/shared/tile-suit-rules.ts#TILE_SUITS",
@@ -46929,7 +46971,7 @@
       "kind": "value",
       "file": "src/shared/board-turn-transition.ts",
       "line": 89,
-      "endLine": 720
+      "endLine": 744
     },
     {
       "id": "symbol:src/shared/bonus-rewards.ts#BONUS_REWARD_CATALOG",
@@ -47688,48 +47730,72 @@
       "name": "chunkBreakComboShards",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 104,
-      "endLine": 107
+      "line": 148,
+      "endLine": 151
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#ChunkBreakResult",
       "name": "ChunkBreakResult",
       "kind": "interface",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 21,
-      "endLine": 30
+      "line": 25,
+      "endLine": 39
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#chunkBreakScore",
       "name": "chunkBreakScore",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 94,
-      "endLine": 101
+      "line": 138,
+      "endLine": 145
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#findSuitRegion",
       "name": "findSuitRegion",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 59,
-      "endLine": 91
+      "line": 97,
+      "endLine": 135
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#resolveChunkBreak",
       "name": "resolveChunkBreak",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 109,
-      "endLine": 159
+      "line": 153,
+      "endLine": 261
+    },
+    {
+      "id": "symbol:src/shared/chunk-break-rules.ts#SuitRegionOptions",
+      "name": "SuitRegionOptions",
+      "kind": "interface",
+      "file": "src/shared/chunk-break-rules.ts",
+      "line": 87,
+      "endLine": 90
+    },
+    {
+      "id": "symbol:src/shared/chunk-break-rules.ts#tileBlocksChunk",
+      "name": "tileBlocksChunk",
+      "kind": "value",
+      "file": "src/shared/chunk-break-rules.ts",
+      "line": 84,
+      "endLine": 85
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#tileCanBreakInChunk",
       "name": "tileCanBreakInChunk",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 33,
-      "endLine": 41
+      "line": 56,
+      "endLine": 57
+    },
+    {
+      "id": "symbol:src/shared/chunk-break-rules.ts#tileIsPlainApartFromFindable",
+      "name": "tileIsPlainApartFromFindable",
+      "kind": "value",
+      "file": "src/shared/chunk-break-rules.ts",
+      "line": 46,
+      "endLine": 53
     },
     {
       "id": "symbol:src/shared/classic-run-setup.ts#buildClassicRunOptions",
@@ -48208,16 +48274,16 @@
       "name": "AchievementState",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1188,
-      "endLine": 1188
+      "line": 1190,
+      "endLine": 1190
     },
     {
       "id": "symbol:src/shared/contracts.ts#AchievementUnlockResult",
       "name": "AchievementUnlockResult",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1261,
-      "endLine": 1263
+      "line": 1263,
+      "endLine": 1265
     },
     {
       "id": "symbol:src/shared/contracts.ts#BoardPresentationMode",
@@ -48240,24 +48306,24 @@
       "name": "BoardState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 483,
-      "endLine": 530
+      "line": 485,
+      "endLine": 532
     },
     {
       "id": "symbol:src/shared/contracts.ts#BonusRewardId",
       "name": "BonusRewardId",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 826,
-      "endLine": 839
+      "line": 828,
+      "endLine": 841
     },
     {
       "id": "symbol:src/shared/contracts.ts#BonusRewardLedger",
       "name": "BonusRewardLedger",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 848,
-      "endLine": 853
+      "line": 850,
+      "endLine": 855
     },
     {
       "id": "symbol:src/shared/contracts.ts#BOSS_FLOOR_SCORE_MULTIPLIER",
@@ -48336,8 +48402,8 @@
       "name": "CrashReportSummary",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1269,
-      "endLine": 1274
+      "line": 1271,
+      "endLine": 1276
     },
     {
       "id": "symbol:src/shared/contracts.ts#CURSED_LAST_BONUS_SCORE",
@@ -48376,8 +48442,8 @@
       "name": "DesktopApi",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1287,
-      "endLine": 1313
+      "line": 1289,
+      "endLine": 1315
     },
     {
       "id": "symbol:src/shared/contracts.ts#DisplayMode",
@@ -48392,96 +48458,96 @@
       "name": "DungeonBossId",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 653,
-      "endLine": 653
+      "line": 655,
+      "endLine": 655
     },
     {
       "id": "symbol:src/shared/contracts.ts#DungeonCardEffectId",
       "name": "DungeonCardEffectId",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 711,
-      "endLine": 749
+      "line": 713,
+      "endLine": 751
     },
     {
       "id": "symbol:src/shared/contracts.ts#DungeonCardKind",
       "name": "DungeonCardKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 629,
-      "endLine": 640
+      "line": 631,
+      "endLine": 642
     },
     {
       "id": "symbol:src/shared/contracts.ts#DungeonCardState",
       "name": "DungeonCardState",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 652,
-      "endLine": 652
+      "line": 654,
+      "endLine": 654
     },
     {
       "id": "symbol:src/shared/contracts.ts#DungeonExitLockKind",
       "name": "DungeonExitLockKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 628,
-      "endLine": 628
+      "line": 630,
+      "endLine": 630
     },
     {
       "id": "symbol:src/shared/contracts.ts#DungeonFloorBlueprint",
       "name": "DungeonFloorBlueprint",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 679,
-      "endLine": 710
+      "line": 681,
+      "endLine": 712
     },
     {
       "id": "symbol:src/shared/contracts.ts#DungeonKeyKind",
       "name": "DungeonKeyKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 627,
-      "endLine": 627
+      "line": 629,
+      "endLine": 629
     },
     {
       "id": "symbol:src/shared/contracts.ts#DungeonObjectiveId",
       "name": "DungeonObjectiveId",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 670,
-      "endLine": 678
+      "line": 672,
+      "endLine": 680
     },
     {
       "id": "symbol:src/shared/contracts.ts#DungeonRunMapState",
       "name": "DungeonRunMapState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 816,
-      "endLine": 824
+      "line": 818,
+      "endLine": 826
     },
     {
       "id": "symbol:src/shared/contracts.ts#DungeonRunNode",
       "name": "DungeonRunNode",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 794,
-      "endLine": 814
+      "line": 796,
+      "endLine": 816
     },
     {
       "id": "symbol:src/shared/contracts.ts#DungeonRunNodeKind",
       "name": "DungeonRunNodeKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 781,
-      "endLine": 791
+      "line": 783,
+      "endLine": 793
     },
     {
       "id": "symbol:src/shared/contracts.ts#DungeonRunNodeStatus",
       "name": "DungeonRunNodeStatus",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 792,
-      "endLine": 792
+      "line": 794,
+      "endLine": 794
     },
     {
       "id": "symbol:src/shared/contracts.ts#ENDLESS_RISK_WAGER_BONUS_FAVOR",
@@ -48520,32 +48586,32 @@
       "name": "EnemyHazardKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 654,
-      "endLine": 654
+      "line": 656,
+      "endLine": 656
     },
     {
       "id": "symbol:src/shared/contracts.ts#EnemyHazardPattern",
       "name": "EnemyHazardPattern",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 655,
-      "endLine": 655
+      "line": 657,
+      "endLine": 657
     },
     {
       "id": "symbol:src/shared/contracts.ts#EnemyHazardState",
       "name": "EnemyHazardState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 657,
-      "endLine": 669
+      "line": 659,
+      "endLine": 671
     },
     {
       "id": "symbol:src/shared/contracts.ts#EnemyHazardStateKind",
       "name": "EnemyHazardStateKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 656,
-      "endLine": 656
+      "line": 658,
+      "endLine": 658
     },
     {
       "id": "symbol:src/shared/contracts.ts#FEATURED_OBJECTIVE_STREAK_BONUS_MAX",
@@ -48648,16 +48714,16 @@
       "name": "FloorArchetypeId",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 470,
-      "endLine": 481
+      "line": 472,
+      "endLine": 483
     },
     {
       "id": "symbol:src/shared/contracts.ts#FloorTag",
       "name": "FloorTag",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 469,
-      "endLine": 469
+      "line": 471,
+      "endLine": 471
     },
     {
       "id": "symbol:src/shared/contracts.ts#FUSE_CACHE_EXPIRED_SHOP_GOLD_REWARD",
@@ -48712,16 +48778,16 @@
       "name": "GameplayCommandJournalEntry",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 924,
-      "endLine": 928
+      "line": 926,
+      "endLine": 930
     },
     {
       "id": "symbol:src/shared/contracts.ts#GameplayEventJournalEntry",
       "name": "GameplayEventJournalEntry",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 930,
-      "endLine": 940
+      "line": 932,
+      "endLine": 942
     },
     {
       "id": "symbol:src/shared/contracts.ts#GAUNTLET_FLOOR_CLEAR_TIME_BONUS_MS",
@@ -48752,8 +48818,8 @@
       "name": "HazardTileKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 641,
-      "endLine": 641
+      "line": 643,
+      "endLine": 643
     },
     {
       "id": "symbol:src/shared/contracts.ts#INITIAL_LIVES",
@@ -48792,8 +48858,8 @@
       "name": "LevelResult",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 554,
-      "endLine": 605
+      "line": 556,
+      "endLine": 607
     },
     {
       "id": "symbol:src/shared/contracts.ts#LOADED_GATEWAY_SCORE_REWARD",
@@ -48976,16 +49042,16 @@
       "name": "PassAndPlaySeat",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 954,
-      "endLine": 962
+      "line": 956,
+      "endLine": 964
     },
     {
       "id": "symbol:src/shared/contracts.ts#PassAndPlayState",
       "name": "PassAndPlayState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 964,
-      "endLine": 972
+      "line": 966,
+      "endLine": 974
     },
     {
       "id": "symbol:src/shared/contracts.ts#PIN_LATTICE_SCORE_REWARD",
@@ -49000,8 +49066,8 @@
       "name": "PlayerStatsPersisted",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1190,
-      "endLine": 1209
+      "line": 1192,
+      "endLine": 1211
     },
     {
       "id": "symbol:src/shared/contracts.ts#PuzzleCompletionRecord",
@@ -49104,16 +49170,16 @@
       "name": "RendererErrorKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1277,
-      "endLine": 1277
+      "line": 1279,
+      "endLine": 1279
     },
     {
       "id": "symbol:src/shared/contracts.ts#RendererErrorReport",
       "name": "RendererErrorReport",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1280,
-      "endLine": 1285
+      "line": 1282,
+      "endLine": 1287
     },
     {
       "id": "symbol:src/shared/contracts.ts#RESOLVE_DELAY_MULTIPLIER_MIN",
@@ -49136,112 +49202,112 @@
       "name": "RewardPerkId",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 841,
-      "endLine": 846
+      "line": 843,
+      "endLine": 848
     },
     {
       "id": "symbol:src/shared/contracts.ts#RichPresenceState",
       "name": "RichPresenceState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1254,
-      "endLine": 1258
+      "line": 1256,
+      "endLine": 1260
     },
     {
       "id": "symbol:src/shared/contracts.ts#RichPresenceToken",
       "name": "RichPresenceToken",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1252,
-      "endLine": 1252
+      "line": 1254,
+      "endLine": 1254
     },
     {
       "id": "symbol:src/shared/contracts.ts#RouteCardKind",
       "name": "RouteCardKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 608,
-      "endLine": 608
+      "line": 610,
+      "endLine": 610
     },
     {
       "id": "symbol:src/shared/contracts.ts#RouteCardPlan",
       "name": "RouteCardPlan",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 765,
-      "endLine": 770
+      "line": 767,
+      "endLine": 772
     },
     {
       "id": "symbol:src/shared/contracts.ts#RouteChoice",
       "name": "RouteChoice",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 772,
-      "endLine": 779
+      "line": 774,
+      "endLine": 781
     },
     {
       "id": "symbol:src/shared/contracts.ts#RouteNodeType",
       "name": "RouteNodeType",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 607,
-      "endLine": 607
+      "line": 609,
+      "endLine": 609
     },
     {
       "id": "symbol:src/shared/contracts.ts#RouteSideRoomChoiceState",
       "name": "RouteSideRoomChoiceState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 857,
-      "endLine": 870
+      "line": 859,
+      "endLine": 872
     },
     {
       "id": "symbol:src/shared/contracts.ts#RouteSideRoomKind",
       "name": "RouteSideRoomKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 855,
-      "endLine": 855
+      "line": 857,
+      "endLine": 857
     },
     {
       "id": "symbol:src/shared/contracts.ts#RouteSideRoomState",
       "name": "RouteSideRoomState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 872,
-      "endLine": 888
+      "line": 874,
+      "endLine": 890
     },
     {
       "id": "symbol:src/shared/contracts.ts#RouteSpecialKind",
       "name": "RouteSpecialKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 609,
-      "endLine": 625
+      "line": 611,
+      "endLine": 627
     },
     {
       "id": "symbol:src/shared/contracts.ts#RouteWorldIntensity",
       "name": "RouteWorldIntensity",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 626,
-      "endLine": 626
+      "line": 628,
+      "endLine": 628
     },
     {
       "id": "symbol:src/shared/contracts.ts#RouteWorldProfile",
       "name": "RouteWorldProfile",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 751,
-      "endLine": 763
+      "line": 753,
+      "endLine": 765
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunHistoryRecord",
       "name": "RunHistoryRecord",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1216,
-      "endLine": 1225
+      "line": 1218,
+      "endLine": 1227
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunShopItemCategory",
@@ -49280,8 +49346,8 @@
       "name": "RunState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 974,
-      "endLine": 1186
+      "line": 976,
+      "endLine": 1188
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunStatus",
@@ -49296,16 +49362,16 @@
       "name": "RunSummary",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 890,
-      "endLine": 922
+      "line": 892,
+      "endLine": 924
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunTimerState",
       "name": "RunTimerState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 942,
-      "endLine": 948
+      "line": 944,
+      "endLine": 950
     },
     {
       "id": "symbol:src/shared/contracts.ts#SAVE_SCHEMA_VERSION",
@@ -49320,8 +49386,8 @@
       "name": "SaveData",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1227,
-      "endLine": 1246
+      "line": 1229,
+      "endLine": 1248
     },
     {
       "id": "symbol:src/shared/contracts.ts#SCHOLAR_STYLE_FLOOR_BONUS_SCORE",
@@ -49336,8 +49402,8 @@
       "name": "SessionStats",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 532,
-      "endLine": 552
+      "line": 534,
+      "endLine": 554
     },
     {
       "id": "symbol:src/shared/contracts.ts#Settings",
@@ -49385,7 +49451,7 @@
       "kind": "interface",
       "file": "src/shared/contracts.ts",
       "line": 420,
-      "endLine": 467
+      "endLine": 469
     },
     {
       "id": "symbol:src/shared/contracts.ts#TileState",
@@ -49408,8 +49474,8 @@
       "name": "TileTraitKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 642,
-      "endLine": 651
+      "line": 644,
+      "endLine": 653
     },
     {
       "id": "symbol:src/shared/contracts.ts#TOLL_CACHE_MATCH_SCORE_TOLL",
@@ -50800,8 +50866,8 @@
       "name": "applyDungeonEnemyAttack",
       "kind": "value",
       "file": "src/shared/dungeon-enemy-card-rules.ts",
-      "line": 79,
-      "endLine": 91
+      "line": 85,
+      "endLine": 97
     },
     {
       "id": "symbol:src/shared/dungeon-enemy-card-rules.ts#clearDungeonCardFields",
@@ -50812,20 +50878,28 @@
       "endLine": 16
     },
     {
+      "id": "symbol:src/shared/dungeon-enemy-card-rules.ts#damageDungeonEnemyPair",
+      "name": "damageDungeonEnemyPair",
+      "kind": "value",
+      "file": "src/shared/dungeon-enemy-card-rules.ts",
+      "line": 34,
+      "endLine": 75
+    },
+    {
       "id": "symbol:src/shared/dungeon-enemy-card-rules.ts#damageFirstActiveDungeonEnemy",
       "name": "damageFirstActiveDungeonEnemy",
       "kind": "value",
       "file": "src/shared/dungeon-enemy-card-rules.ts",
-      "line": 33,
-      "endLine": 77
+      "line": 77,
+      "endLine": 83
     },
     {
       "id": "symbol:src/shared/dungeon-enemy-card-rules.ts#revealOneHiddenDungeonHazardPair",
       "name": "revealOneHiddenDungeonHazardPair",
       "kind": "value",
       "file": "src/shared/dungeon-enemy-card-rules.ts",
-      "line": 93,
-      "endLine": 114
+      "line": 99,
+      "endLine": 120
     },
     {
       "id": "symbol:src/shared/dungeon-enemy-hazard-rules.ts#advanceEnemyHazardsOnBoard",
@@ -50840,16 +50914,16 @@
       "name": "applyEnemyHazardClick",
       "kind": "value",
       "file": "src/shared/dungeon-enemy-hazard-rules.ts",
-      "line": 303,
-      "endLine": 351
+      "line": 317,
+      "endLine": 365
     },
     {
       "id": "symbol:src/shared/dungeon-enemy-hazard-rules.ts#clearLastPairEnemyHazardSoftlock",
       "name": "clearLastPairEnemyHazardSoftlock",
       "kind": "value",
       "file": "src/shared/dungeon-enemy-hazard-rules.ts",
-      "line": 421,
-      "endLine": 436
+      "line": 435,
+      "endLine": 450
     },
     {
       "id": "symbol:src/shared/dungeon-enemy-hazard-rules.ts#createEnemyHazardsForBoard",
@@ -50860,28 +50934,36 @@
       "endLine": 245
     },
     {
+      "id": "symbol:src/shared/dungeon-enemy-hazard-rules.ts#damageEnemyHazardById",
+      "name": "damageEnemyHazardById",
+      "kind": "value",
+      "file": "src/shared/dungeon-enemy-hazard-rules.ts",
+      "line": 273,
+      "endLine": 305
+    },
+    {
       "id": "symbol:src/shared/dungeon-enemy-hazard-rules.ts#damageFirstRevealedEnemyHazard",
       "name": "damageFirstRevealedEnemyHazard",
       "kind": "value",
       "file": "src/shared/dungeon-enemy-hazard-rules.ts",
-      "line": 272,
-      "endLine": 301
+      "line": 307,
+      "endLine": 315
     },
     {
       "id": "symbol:src/shared/dungeon-enemy-hazard-rules.ts#defeatEnemyHazardsBlockingLastPair",
       "name": "defeatEnemyHazardsBlockingLastPair",
       "kind": "value",
       "file": "src/shared/dungeon-enemy-hazard-rules.ts",
-      "line": 391,
-      "endLine": 419
+      "line": 405,
+      "endLine": 433
     },
     {
       "id": "symbol:src/shared/dungeon-enemy-hazard-rules.ts#defeatEnemyHazardsForFloorClear",
       "name": "defeatEnemyHazardsForFloorClear",
       "kind": "value",
       "file": "src/shared/dungeon-enemy-hazard-rules.ts",
-      "line": 353,
-      "endLine": 372
+      "line": 367,
+      "endLine": 386
     },
     {
       "id": "symbol:src/shared/dungeon-enemy-hazard-rules.ts#ENEMY_HAZARD_PATTERN_DEFINITIONS",
@@ -52416,56 +52498,64 @@
       "name": "canGreetFloorCurio",
       "kind": "value",
       "file": "src/shared/floor-curio-greeting-rules.ts",
-      "line": 101,
-      "endLine": 102
+      "line": 113,
+      "endLine": 114
     },
     {
       "id": "symbol:src/shared/floor-curio-greeting-rules.ts#FLOOR_CURIO_GREETINGS",
       "name": "FLOOR_CURIO_GREETINGS",
       "kind": "value",
       "file": "src/shared/floor-curio-greeting-rules.ts",
-      "line": 45,
-      "endLine": 84
+      "line": 48,
+      "endLine": 96
     },
     {
       "id": "symbol:src/shared/floor-curio-greeting-rules.ts#FloorCurioGreeting",
       "name": "FloorCurioGreeting",
       "kind": "interface",
       "file": "src/shared/floor-curio-greeting-rules.ts",
-      "line": 28,
-      "endLine": 35
+      "line": 29,
+      "endLine": 38
     },
     {
       "id": "symbol:src/shared/floor-curio-greeting-rules.ts#FloorCurioGreetingEffect",
       "name": "FloorCurioGreetingEffect",
       "kind": "interface",
       "file": "src/shared/floor-curio-greeting-rules.ts",
-      "line": 20,
-      "endLine": 26
+      "line": 21,
+      "endLine": 27
+    },
+    {
+      "id": "symbol:src/shared/floor-curio-greeting-rules.ts#floorCurioGreetingReply",
+      "name": "floorCurioGreetingReply",
+      "kind": "value",
+      "file": "src/shared/floor-curio-greeting-rules.ts",
+      "line": 137,
+      "endLine": 138
     },
     {
       "id": "symbol:src/shared/floor-curio-greeting-rules.ts#getFloorCurioGreeting",
       "name": "getFloorCurioGreeting",
       "kind": "value",
       "file": "src/shared/floor-curio-greeting-rules.ts",
-      "line": 86,
-      "endLine": 89
+      "line": 98,
+      "endLine": 101
     },
     {
       "id": "symbol:src/shared/floor-curio-greeting-rules.ts#greetFloorCurio",
       "name": "greetFloorCurio",
       "kind": "value",
       "file": "src/shared/floor-curio-greeting-rules.ts",
-      "line": 105,
-      "endLine": 122
+      "line": 117,
+      "endLine": 134
     },
     {
       "id": "symbol:src/shared/floor-curio-greeting-rules.ts#runFloorCurioGreeting",
       "name": "runFloorCurioGreeting",
       "kind": "value",
       "file": "src/shared/floor-curio-greeting-rules.ts",
-      "line": 92,
-      "endLine": 93
+      "line": 104,
+      "endLine": 105
     },
     {
       "id": "symbol:src/shared/floor-curio-rules.ts#applyFloorCurio",
@@ -55552,32 +55642,32 @@
       "name": "GameplayCommandResult",
       "kind": "interface",
       "file": "src/shared/gameplay-core.ts",
-      "line": 85,
-      "endLine": 90
+      "line": 86,
+      "endLine": 91
     },
     {
       "id": "symbol:src/shared/gameplay-core.ts#GameplayReplayResult",
       "name": "GameplayReplayResult",
       "kind": "interface",
       "file": "src/shared/gameplay-core.ts",
-      "line": 92,
-      "endLine": 97
+      "line": 93,
+      "endLine": 98
     },
     {
       "id": "symbol:src/shared/gameplay-core.ts#reduceGameplayCommand",
       "name": "reduceGameplayCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core.ts",
-      "line": 1925,
-      "endLine": 2046
+      "line": 1926,
+      "endLine": 2047
     },
     {
       "id": "symbol:src/shared/gameplay-core.ts#replayGameplayCommands",
       "name": "replayGameplayCommands",
       "kind": "value",
       "file": "src/shared/gameplay-core.ts",
-      "line": 2048,
-      "endLine": 2061
+      "line": 2049,
+      "endLine": 2062
     },
     {
       "id": "symbol:src/shared/gameplay-effect-transition.ts#applyGameplayDefinitionTransition",
@@ -56824,8 +56914,8 @@
       "name": "applyMagpieTheft",
       "kind": "value",
       "file": "src/shared/magpie-rules.ts",
-      "line": 132,
-      "endLine": 158
+      "line": 146,
+      "endLine": 173
     },
     {
       "id": "symbol:src/shared/magpie-rules.ts#isMagpieVisitTurn",
@@ -56864,8 +56954,8 @@
       "name": "resolveMagpieVisit",
       "kind": "value",
       "file": "src/shared/magpie-rules.ts",
-      "line": 63,
-      "endLine": 126
+      "line": 77,
+      "endLine": 140
     },
     {
       "id": "symbol:src/shared/main-menu-hub-quality.ts#getMainMenuHubQualityRows",
@@ -57064,16 +57154,16 @@
       "name": "ENCYCLOPEDIA_CONTRACT_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 955,
-      "endLine": 973
+      "line": 974,
+      "endLine": 992
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_FEATURED_RUN_TOPICS",
       "name": "ENCYCLOPEDIA_FEATURED_RUN_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 976,
-      "endLine": 993
+      "line": 995,
+      "endLine": 1012
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS",
@@ -57081,7 +57171,7 @@
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
       "line": 876,
-      "endLine": 952
+      "endLine": 971
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_POWER_TOPICS",
@@ -63588,6 +63678,14 @@
       "endLine": 245
     },
     {
+      "id": "symbol:src/shared/tile-suit-rules.ts#largestHiddenSuitClump",
+      "name": "largestHiddenSuitClump",
+      "kind": "value",
+      "file": "src/shared/tile-suit-rules.ts",
+      "line": 288,
+      "endLine": 314
+    },
+    {
       "id": "symbol:src/shared/tile-suit-rules.ts#sameSuitNeighbourRate",
       "name": "sameSuitNeighbourRate",
       "kind": "value",
@@ -65934,7 +66032,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 1617
+          "line": 1618
         },
         {
           "path": "src/shared/board-power-actions.ts",
@@ -66137,7 +66235,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 209
+          "line": 210
         },
         {
           "path": "src/shared/gameplay-core-adapters.ts",
@@ -66258,7 +66356,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 373
+          "line": 374
         },
         {
           "path": "src/shared/relics.ts",
@@ -68236,7 +68334,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 1006
+          "line": 1007
         },
         {
           "path": "src/shared/tile-trait-rules.ts",
@@ -70886,7 +70984,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 369
+          "line": 370
         }
       ],
       "tests": [
@@ -71682,7 +71780,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 373
+          "line": 374
         },
         {
           "path": "src/shared/route-choice-outcome-rules.ts",
@@ -85803,9 +85901,27 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/chunk-break-rules.ts->symbol:src/shared/chunk-break-rules.ts#SuitRegionOptions",
+      "source": "file:src/shared/chunk-break-rules.ts",
+      "target": "symbol:src/shared/chunk-break-rules.ts#SuitRegionOptions",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/chunk-break-rules.ts->symbol:src/shared/chunk-break-rules.ts#tileBlocksChunk",
+      "source": "file:src/shared/chunk-break-rules.ts",
+      "target": "symbol:src/shared/chunk-break-rules.ts#tileBlocksChunk",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/chunk-break-rules.ts->symbol:src/shared/chunk-break-rules.ts#tileCanBreakInChunk",
       "source": "file:src/shared/chunk-break-rules.ts",
       "target": "symbol:src/shared/chunk-break-rules.ts#tileCanBreakInChunk",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/chunk-break-rules.ts->symbol:src/shared/chunk-break-rules.ts#tileIsPlainApartFromFindable",
+      "source": "file:src/shared/chunk-break-rules.ts",
+      "target": "symbol:src/shared/chunk-break-rules.ts#tileIsPlainApartFromFindable",
       "kind": "exports"
     },
     {
@@ -88119,6 +88235,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/dungeon-enemy-card-rules.ts->symbol:src/shared/dungeon-enemy-card-rules.ts#damageDungeonEnemyPair",
+      "source": "file:src/shared/dungeon-enemy-card-rules.ts",
+      "target": "symbol:src/shared/dungeon-enemy-card-rules.ts#damageDungeonEnemyPair",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/dungeon-enemy-card-rules.ts->symbol:src/shared/dungeon-enemy-card-rules.ts#damageFirstActiveDungeonEnemy",
       "source": "file:src/shared/dungeon-enemy-card-rules.ts",
       "target": "symbol:src/shared/dungeon-enemy-card-rules.ts#damageFirstActiveDungeonEnemy",
@@ -88152,6 +88274,12 @@
       "id": "exports:src/shared/dungeon-enemy-hazard-rules.ts->symbol:src/shared/dungeon-enemy-hazard-rules.ts#createEnemyHazardsForBoard",
       "source": "file:src/shared/dungeon-enemy-hazard-rules.ts",
       "target": "symbol:src/shared/dungeon-enemy-hazard-rules.ts#createEnemyHazardsForBoard",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/dungeon-enemy-hazard-rules.ts->symbol:src/shared/dungeon-enemy-hazard-rules.ts#damageEnemyHazardById",
+      "source": "file:src/shared/dungeon-enemy-hazard-rules.ts",
+      "target": "symbol:src/shared/dungeon-enemy-hazard-rules.ts#damageEnemyHazardById",
       "kind": "exports"
     },
     {
@@ -89340,6 +89468,12 @@
       "id": "exports:src/shared/floor-curio-greeting-rules.ts->symbol:src/shared/floor-curio-greeting-rules.ts#FloorCurioGreetingEffect",
       "source": "file:src/shared/floor-curio-greeting-rules.ts",
       "target": "symbol:src/shared/floor-curio-greeting-rules.ts#FloorCurioGreetingEffect",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/floor-curio-greeting-rules.ts->symbol:src/shared/floor-curio-greeting-rules.ts#floorCurioGreetingReply",
+      "source": "file:src/shared/floor-curio-greeting-rules.ts",
+      "target": "symbol:src/shared/floor-curio-greeting-rules.ts#floorCurioGreetingReply",
       "kind": "exports"
     },
     {
@@ -97698,6 +97832,12 @@
       "id": "exports:src/shared/tile-suit-rules.ts->symbol:src/shared/tile-suit-rules.ts#isLayoutPinnedTile",
       "source": "file:src/shared/tile-suit-rules.ts",
       "target": "symbol:src/shared/tile-suit-rules.ts#isLayoutPinnedTile",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/tile-suit-rules.ts->symbol:src/shared/tile-suit-rules.ts#largestHiddenSuitClump",
+      "source": "file:src/shared/tile-suit-rules.ts",
+      "target": "symbol:src/shared/tile-suit-rules.ts#largestHiddenSuitClump",
       "kind": "exports"
     },
     {
@@ -113068,6 +113208,48 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/chunk-break-dungeon-rules.test.ts->src/shared/chunk-break-rules.ts",
+      "source": "file:src/shared/chunk-break-dungeon-rules.test.ts",
+      "target": "file:src/shared/chunk-break-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/chunk-break-dungeon-rules.test.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/chunk-break-dungeon-rules.test.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/chunk-break-dungeon-rules.test.ts->src/shared/floor-curio-greeting-rules.ts",
+      "source": "file:src/shared/chunk-break-dungeon-rules.test.ts",
+      "target": "file:src/shared/floor-curio-greeting-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/chunk-break-dungeon-rules.test.ts->src/shared/game.ts",
+      "source": "file:src/shared/chunk-break-dungeon-rules.test.ts",
+      "target": "file:src/shared/game.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/chunk-break-dungeon-rules.test.ts->src/shared/magpie-rules.ts",
+      "source": "file:src/shared/chunk-break-dungeon-rules.test.ts",
+      "target": "file:src/shared/magpie-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/chunk-break-dungeon-rules.test.ts->src/shared/run-creation-rules.ts",
+      "source": "file:src/shared/chunk-break-dungeon-rules.test.ts",
+      "target": "file:src/shared/run-creation-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/chunk-break-dungeon-rules.test.ts->src/shared/test/game-fixtures.ts",
+      "source": "file:src/shared/chunk-break-dungeon-rules.test.ts",
+      "target": "file:src/shared/test/game-fixtures.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/chunk-break-rules.test.ts->src/shared/chunk-break-rules.ts",
       "source": "file:src/shared/chunk-break-rules.test.ts",
       "target": "file:src/shared/chunk-break-rules.ts",
@@ -113119,6 +113301,24 @@
       "id": "imports:src/shared/chunk-break-rules.ts->src/shared/contracts.ts",
       "source": "file:src/shared/chunk-break-rules.ts",
       "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/chunk-break-rules.ts->src/shared/dungeon-enemy-card-rules.ts",
+      "source": "file:src/shared/chunk-break-rules.ts",
+      "target": "file:src/shared/dungeon-enemy-card-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/chunk-break-rules.ts->src/shared/dungeon-enemy-hazard-rules.ts",
+      "source": "file:src/shared/chunk-break-rules.ts",
+      "target": "file:src/shared/dungeon-enemy-hazard-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/chunk-break-rules.ts->src/shared/enemy-hazard-board-rules.ts",
+      "source": "file:src/shared/chunk-break-rules.ts",
+      "target": "file:src/shared/enemy-hazard-board-rules.ts",
       "kind": "imports"
     },
     {
@@ -114925,6 +115125,12 @@
       "id": "imports:src/shared/floor-curio-greeting-rules.ts->src/shared/run-number-guards.ts",
       "source": "file:src/shared/floor-curio-greeting-rules.ts",
       "target": "file:src/shared/run-number-guards.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/floor-curio-greeting-rules.ts->src/shared/tile-suit-rules.ts",
+      "source": "file:src/shared/floor-curio-greeting-rules.ts",
+      "target": "file:src/shared/tile-suit-rules.ts",
       "kind": "imports"
     },
     {
@@ -130856,6 +131062,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/chunk-break-rules.ts->file:src/shared/chunk-break-dungeon-rules.test.ts",
+      "source": "file:src/shared/chunk-break-rules.ts",
+      "target": "file:src/shared/chunk-break-dungeon-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/chunk-break-rules.ts->file:src/shared/chunk-break-rules.test.ts",
       "source": "file:src/shared/chunk-break-rules.ts",
       "target": "file:src/shared/chunk-break-rules.test.ts",
@@ -131447,6 +131659,12 @@
       "id": "tested_by:src/shared/contracts.ts->file:src/shared/build-strategy-simulation.test.ts",
       "source": "file:src/shared/contracts.ts",
       "target": "file:src/shared/build-strategy-simulation.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/contracts.ts->file:src/shared/chunk-break-dungeon-rules.test.ts",
+      "source": "file:src/shared/contracts.ts",
+      "target": "file:src/shared/chunk-break-dungeon-rules.test.ts",
       "kind": "tested_by"
     },
     {
@@ -132560,6 +132778,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/floor-curio-greeting-rules.ts->file:src/shared/chunk-break-dungeon-rules.test.ts",
+      "source": "file:src/shared/floor-curio-greeting-rules.ts",
+      "target": "file:src/shared/chunk-break-dungeon-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/floor-curio-greeting-rules.ts->file:src/shared/floor-curio-greeting-rules.test.ts",
       "source": "file:src/shared/floor-curio-greeting-rules.ts",
       "target": "file:src/shared/floor-curio-greeting-rules.test.ts",
@@ -133148,6 +133372,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/game.ts->file:src/shared/chunk-break-dungeon-rules.test.ts",
+      "source": "file:src/shared/game.ts",
+      "target": "file:src/shared/chunk-break-dungeon-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/game.ts->file:src/shared/chunk-break-rules.test.ts",
       "source": "file:src/shared/game.ts",
       "target": "file:src/shared/chunk-break-rules.test.ts",
@@ -133559,6 +133789,12 @@
       "id": "tested_by:src/shared/long-run-feedback.ts->file:src/shared/long-run-feedback.test.ts",
       "source": "file:src/shared/long-run-feedback.ts",
       "target": "file:src/shared/long-run-feedback.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/magpie-rules.ts->file:src/shared/chunk-break-dungeon-rules.test.ts",
+      "source": "file:src/shared/magpie-rules.ts",
+      "target": "file:src/shared/chunk-break-dungeon-rules.test.ts",
       "kind": "tested_by"
     },
     {
@@ -134321,6 +134557,12 @@
       "id": "tested_by:src/shared/run-creation-rules.ts->file:src/shared/achievement-reachability.test.ts",
       "source": "file:src/shared/run-creation-rules.ts",
       "target": "file:src/shared/achievement-reachability.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/run-creation-rules.ts->file:src/shared/chunk-break-dungeon-rules.test.ts",
+      "source": "file:src/shared/run-creation-rules.ts",
+      "target": "file:src/shared/chunk-break-dungeon-rules.test.ts",
       "kind": "tested_by"
     },
     {
@@ -135269,6 +135511,12 @@
       "id": "tested_by:src/shared/test/game-fixtures.ts->file:src/renderer/store/relicOfferSurfaceState.test.ts",
       "source": "file:src/shared/test/game-fixtures.ts",
       "target": "file:src/renderer/store/relicOfferSurfaceState.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/test/game-fixtures.ts->file:src/shared/chunk-break-dungeon-rules.test.ts",
+      "source": "file:src/shared/test/game-fixtures.ts",
+      "target": "file:src/shared/chunk-break-dungeon-rules.test.ts",
       "kind": "tested_by"
     },
     {

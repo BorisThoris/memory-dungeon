@@ -40,9 +40,23 @@ export interface MagpieVisit {
 export const isMagpieVisitTurn = (mismatchCount: number): boolean =>
     Number.isFinite(mismatchCount) && mismatchCount > 0 && mismatchCount % MAGPIE_MISS_INTERVAL === 0;
 
-const matchedPairKeys = (board: BoardState): string[] => [
-    ...new Set(board.tiles.filter((tile) => tile.state === 'matched').map((tile) => tile.pairKey))
+/**
+ * What it can take: pairs a chunk broke first, then pairs the player matched. It takes what you
+ * were given before what you earned — funnier, and fairer. A defeated enemy is also `removed`,
+ * so the chunk marks its casualties and the bird only picks up those.
+ */
+const chunkBrokenPairKeys = (board: BoardState): string[] => [
+    ...new Set(
+        board.tiles.filter((tile) => tile.state === 'removed' && tile.brokenByChunk === true).map((tile) => tile.pairKey)
+    )
 ];
+
+const matchedPairKeys = (board: BoardState): string[] => {
+    const cascaded = chunkBrokenPairKeys(board);
+    return cascaded.length > 0
+        ? cascaded
+        : [...new Set(board.tiles.filter((tile) => tile.state === 'matched').map((tile) => tile.pairKey))];
+};
 
 /**
  * Where a stolen pair can land: cells holding tiles that are still face down.
@@ -143,7 +157,8 @@ export const applyMagpieTheft = (board: BoardState, theft: MagpieTheft): BoardSt
         if (!stolen || !displaced) {
             return;
         }
-        tiles[to] = { ...stolen, state: 'hidden' };
+        // Back on the floor, so no longer a chunk casualty — the bird cannot take it twice for free.
+        tiles[to] = { ...stolen, state: 'hidden', brokenByChunk: undefined };
         if (to !== from) {
             tiles[from] = displaced;
         }

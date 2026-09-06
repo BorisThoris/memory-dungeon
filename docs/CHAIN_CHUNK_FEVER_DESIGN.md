@@ -123,6 +123,8 @@ The dungeon systems are not spectators to the cascade. They are what the cascade
 | **Traps** | Traps **stop chunks**: the region does not propagate through a trap tile. Traps become spatial — a trap in the middle of your Ember clump is a wall, and springing it opens the clump. |
 | **Findables** | A findable inside a broken chunk is **claimed** by the cascade (drop the treasure). |
 | **Exit tile** | Never cascades. It is the last peg; you flip it yourself. |
+| **Levers, keys, locks** | Never cascade, and a findable riding on one stays with it — the exit is waiting for that card, and a chunk that swallowed it would softlock the floor (found by the softlock scenario matrix in Gen 120). |
+| **Hidden wardens** | Not hit. A chunk only damages a warden the player can already see; a hidden one inside a clump is untouched — you learn where it is the way you always did. |
 | **Magpie** (Gen 112) | Steals from cascaded pairs first. Funnier, and fairer — it takes what you were given, before what you earned. |
 | **Residents** (Gen 114) | Spilled toffee: *"The tiles stick"* — chunk regions propagate diagonally on that floor. The skull tells you the biggest chunk's suit when greeted. |
 | **Route worlds / mutators** | Each pressure floor can bias suit clustering (a `four_clump` floor vs a `scattered` floor) — a new lever for the twelve-floor cycle without new mechanics. |

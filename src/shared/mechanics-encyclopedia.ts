@@ -8,7 +8,7 @@
 import type { AchievementId, GameMode, MutatorId, RelicId } from './contracts';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 17 as const;
+export const ENCYCLOPEDIA_VERSION = 18 as const;
 
 export interface RelicDefinition {
     id: RelicId;
@@ -874,6 +874,25 @@ export const ENCYCLOPEDIA_SETTINGS_AND_ASSISTS_TOPICS: readonly EncyclopediaTopi
 
 /** Bonus pickups and special tile types (not the same as relics). */
 export const ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS: readonly EncyclopediaTopic[] = [
+    {
+        id: 'chain_chunk_fever',
+        title: 'Chain, chunk and Fever',
+        description:
+            'Every correct match in a row raises your chain. From chain 3 (Clean) a match also breaks the same-suit tiles beside it, ' +
+            'and their partners go with them. From chain 6 (Sharp) the whole connected clump goes. At chain 10 it is Fever. ' +
+            'Broken pairs score less than matched ones and give no recall credit — memory still pays best — but they drop combo ' +
+            'shards and clear the floor faster. A miss drops the chain to zero.'
+    },
+    {
+        id: 'chunk_and_the_dungeon',
+        title: 'What a chunk does to the dungeon',
+        description:
+            'A chunk is an attack: every revealed enemy or warden standing inside it takes the chunk\'s size in damage. ' +
+            'An unsprung trap stops a chunk — the clump does not spread through it — so springing a trap opens the clump behind it. ' +
+            'One findable inside a chunk goes with it and pays out. The exit never breaks; you flip it yourself. ' +
+            'The magpie steals from pairs a chunk broke before pairs you matched. Spilled toffee makes clumps stick diagonally, ' +
+            'and a greeted skull will tell you which clump is worth a chain.'
+    },
     {
         id: 'tile_suits',
         title: 'Suits',

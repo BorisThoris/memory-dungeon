@@ -4,6 +4,10 @@ import { getChainTier, type ChainTier } from './chain-tier-rules';
 import { runNonNegativeInteger } from './run-number-guards';
 import { calculateMatchScore } from './scoring-rules';
 import { isSingletonUtilityPairKey } from './tile-identity';
+import { activeDungeonEnemyPairKeys, damageDungeonEnemyPair } from './dungeon-enemy-card-rules';
+import { damageEnemyHazardById } from './dungeon-enemy-hazard-rules';
+import { activeEnemyHazardsForBoard } from './enemy-hazard-board-rules';
+import type { FindableKind } from './contracts';
 
 /**
  * The chunk break: what a chain buys you.
@@ -27,18 +31,30 @@ export interface ChunkBreakResult {
     brokenTileIds: string[];
     score: number;
     comboShardGain: number;
+    /** Enemies the chunk broke over: hits landed, and how many it finished. */
+    enemyHits: number;
+    enemiesDefeated: number;
+    /** A findable pair that was inside the chunk and went with it; the turn awards it. */
+    claimedFindableKind: FindableKind | null;
 }
 
-/** Only plain pair tiles break. Everything with a job of its own stays on the board. */
-export const tileCanBreakInChunk = (tile: Tile): boolean =>
+/**
+ * A hidden tile with no dungeon, route or hazard job. A findable riding on such a tile is the one
+ * extra the chunk is allowed to take; a findable riding on a lever or a key is not — that card's
+ * job is what the exit is waiting for, and a chunk that swallowed it would softlock the floor.
+ */
+export const tileIsPlainApartFromFindable = (tile: Tile): boolean =>
     tile.state === 'hidden' &&
     !isSingletonUtilityPairKey(tile.pairKey) &&
     tile.dungeonCardKind == null &&
     tile.dungeonBossId == null &&
     tile.routeSpecialKind == null &&
     tile.routeCardKind == null &&
-    tile.findableKind == null &&
     tile.tileHazardKind == null;
+
+/** Only plain pair tiles break. Everything with a job of its own stays on the board. */
+export const tileCanBreakInChunk = (tile: Tile): boolean =>
+    tileIsPlainApartFromFindable(tile) && tile.findableKind == null;
 
 const orthogonalNeighbours = (index: number, columns: number, total: number): number[] => {
     const row = Math.floor(index / columns);
@@ -51,15 +67,38 @@ const orthogonalNeighbours = (index: number, columns: number, total: number): nu
     return out;
 };
 
+const diagonalNeighbours = (index: number, columns: number, total: number): number[] => {
+    const row = Math.floor(index / columns);
+    const col = index % columns;
+    const out: number[] = [];
+    for (const [dr, dc] of [[-1, -1], [-1, 1], [1, -1], [1, 1]] as const) {
+        const r = row + dr;
+        const c = col + dc;
+        const cell = r * columns + c;
+        if (r >= 0 && c >= 0 && c < columns && cell < total) out.push(cell);
+    }
+    return out;
+};
+
+/** A trap that has not sprung stops a chunk: the region does not propagate through it. */
+export const tileBlocksChunk = (tile: Tile): boolean =>
+    tile.dungeonCardKind === 'trap' && tile.dungeonCardState !== 'resolved';
+
+export interface SuitRegionOptions {
+    /** Spilled toffee: the tiles stick, so the region also propagates diagonally. */
+    diagonal?: boolean;
+}
+
 /**
- * The connected same-suit region around a set of seed tiles, walking through hidden tiles only.
- * Returns tile indices, seeds excluded. `depth` of 1 is the seeds' neighbours; `Infinity` is the
- * whole region.
+ * The connected same-suit region around a set of seed tiles, walking through hidden tiles only
+ * and never through an unsprung trap. Returns tile indices, seeds excluded. `depth` of 1 is the
+ * seeds' neighbours; `Infinity` is the whole region.
  */
 export const findSuitRegion = (
     board: Pick<BoardState, 'columns' | 'tiles'>,
     seedTileIds: readonly string[],
-    depth: number
+    depth: number,
+    options: SuitRegionOptions = {}
 ): number[] => {
     const columns = getSafeBoardColumns(board);
     const total = board.tiles.length;
@@ -70,16 +109,21 @@ export const findSuitRegion = (
     if (seeds.length === 0 || suits.size === 0) {
         return [];
     }
+    const neighboursOf = (cell: number): number[] =>
+        options.diagonal
+            ? [...orthogonalNeighbours(cell, columns, total), ...diagonalNeighbours(cell, columns, total)]
+            : orthogonalNeighbours(cell, columns, total);
     const seen = new Set<number>(seeds);
     const region: number[] = [];
     let frontier = [...seeds];
     for (let step = 0; step < depth && frontier.length > 0; step += 1) {
         const next: number[] = [];
         for (const from of frontier) {
-            for (const cell of orthogonalNeighbours(from, columns, total)) {
+            for (const cell of neighboursOf(from)) {
                 if (seen.has(cell)) continue;
                 const tile = board.tiles[cell];
                 if (!tile || tile.state !== 'hidden' || !tile.suit || !suits.has(tile.suit)) continue;
+                if (tileBlocksChunk(tile)) continue;
                 seen.add(cell);
                 region.push(cell);
                 next.push(cell);
@@ -113,47 +157,105 @@ export const resolveChunkBreak = ({
     chain
 }: {
     board: BoardState;
-    run: Pick<RunState, 'gameMode'>;
+    run: Pick<RunState, 'gameMode' | 'floorCurioId'>;
     matchedTileIds: readonly string[];
     chain: number;
 }): ChunkBreakResult => {
     const tier = getChainTier(chain);
-    const nothing: ChunkBreakResult = { board, tier, brokenPairKeys: [], brokenTileIds: [], score: 0, comboShardGain: 0 };
+    const nothing: ChunkBreakResult = {
+        board,
+        tier,
+        brokenPairKeys: [],
+        brokenTileIds: [],
+        score: 0,
+        comboShardGain: 0,
+        enemyHits: 0,
+        enemiesDefeated: 0,
+        claimedFindableKind: null
+    };
     if (tier === 'none' || run.gameMode === 'meditation') {
         return nothing;
     }
 
-    const region = findSuitRegion(board, matchedTileIds, tier === 'clean' ? 1 : Number.POSITIVE_INFINITY);
+    const region = findSuitRegion(board, matchedTileIds, tier === 'clean' ? 1 : Number.POSITIVE_INFINITY, {
+        diagonal: run.floorCurioId === 'sticky_toffee'
+    });
     const byPairKey = new Map<string, Tile[]>();
     for (const tile of board.tiles) {
         byPairKey.set(tile.pairKey, [...(byPairKey.get(tile.pairKey) ?? []), tile]);
     }
     const brokenPairKeys: string[] = [];
+    let claimedFindableKind: FindableKind | null = null;
     for (const index of region) {
         const tile = board.tiles[index]!;
         if (brokenPairKeys.includes(tile.pairKey)) continue;
-        if (!tileCanBreakInChunk(tile)) continue;
         if (board.cursedPairKey && tile.pairKey === board.cursedPairKey) continue;
-        // Pairs leave together, always. If the partner cannot go, neither does this tile.
         const pair = byPairKey.get(tile.pairKey) ?? [];
+        // One findable pair per break goes with the chunk: drop the treasure. The turn awards it
+        // through the same path a matched findable takes, so nothing is paid twice or never.
+        if (
+            claimedFindableKind === null &&
+            tile.findableKind &&
+            pair.length === 2 &&
+            pair.every((half) => tileIsPlainApartFromFindable(half) && half.findableKind)
+        ) {
+            claimedFindableKind = tile.findableKind;
+            brokenPairKeys.push(tile.pairKey);
+            continue;
+        }
+        if (!tileCanBreakInChunk(tile)) continue;
+        // Pairs leave together, always. If the partner cannot go, neither does this tile.
         if (pair.length !== 2 || !pair.every(tileCanBreakInChunk)) continue;
         brokenPairKeys.push(tile.pairKey);
     }
-    if (brokenPairKeys.length === 0) {
+
+    // Chunks are attacks: every enemy the region reached takes the chunk's size in damage.
+    const regionTileIds = new Set(region.map((index) => board.tiles[index]!.id));
+    const chunkDamage = Math.max(1, brokenPairKeys.length);
+    let hitBoard: BoardState = board;
+    let enemyHits = 0;
+    let enemiesDefeated = 0;
+    let enemyScore = 0;
+    for (const pairKey of activeDungeonEnemyPairKeys(board)) {
+        const inRegion = (byPairKey.get(pairKey) ?? []).some((half) => regionTileIds.has(half.id));
+        if (!inRegion) continue;
+        const hit = damageDungeonEnemyPair(hitBoard, pairKey, chunkDamage);
+        hitBoard = hit.board;
+        enemyHits += 1;
+        enemiesDefeated += hit.defeated;
+        enemyScore += hit.score;
+    }
+    for (const hazard of activeEnemyHazardsForBoard(board)) {
+        if (hazard.state !== 'revealed' || !regionTileIds.has(hazard.currentTileId)) continue;
+        const hit = damageEnemyHazardById(hitBoard, hazard.id, chunkDamage);
+        hitBoard = hit.board;
+        enemyHits += 1;
+        enemiesDefeated += hit.defeated;
+        enemyScore += hit.score;
+    }
+
+    if (brokenPairKeys.length === 0 && enemyHits === 0) {
         return nothing;
     }
     const broken = new Set(brokenPairKeys);
-    const brokenTileIds = board.tiles.filter((tile) => broken.has(tile.pairKey)).map((tile) => tile.id);
+    const brokenTileIds = hitBoard.tiles.filter((tile) => broken.has(tile.pairKey)).map((tile) => tile.id);
     return {
         board: {
-            ...board,
-            matchedPairs: runNonNegativeInteger(board.matchedPairs) + brokenPairKeys.length,
-            tiles: board.tiles.map((tile) => (broken.has(tile.pairKey) ? { ...tile, state: 'removed' as const } : tile))
+            ...hitBoard,
+            matchedPairs: runNonNegativeInteger(hitBoard.matchedPairs) + brokenPairKeys.length,
+            tiles: hitBoard.tiles.map((tile) =>
+                broken.has(tile.pairKey)
+                    ? { ...tile, state: 'removed' as const, brokenByChunk: true, findableKind: undefined }
+                    : tile
+            )
         },
         tier,
         brokenPairKeys,
         brokenTileIds,
-        score: chunkBreakScore(board.level, brokenPairKeys.length, tier),
-        comboShardGain: chunkBreakComboShards(brokenPairKeys.length, tier)
+        score: chunkBreakScore(board.level, brokenPairKeys.length, tier) + enemyScore,
+        comboShardGain: chunkBreakComboShards(brokenPairKeys.length, tier),
+        enemyHits,
+        enemiesDefeated,
+        claimedFindableKind
     };
 };

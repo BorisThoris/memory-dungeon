@@ -102,6 +102,19 @@ describe('CodexScreen', () => {
             expect(sections).toContain('scoring');
             // The trait interaction lives in another section and the one filter reaches it.
             expect(sections).toContain('traits');
+            // The first fitted page has six slots and "combo shard" now hits the chain article too,
+            // so the interaction line may sit on a later page. Page to it: the pager is how a
+            // player reaches it, and this proves the pager under a filter.
+            const pageTo = (text: string): void => {
+                for (let page = 0; page < 6 && !entries.textContent?.includes(text); page += 1) {
+                    const next = screen.getByRole('button', { name: /^next$/i });
+                    if ((next as HTMLButtonElement).disabled) break;
+                    act(() => {
+                        next.click();
+                    });
+                }
+            };
+            pageTo('Echo + Sealed: combo shard');
             expect(entries).toHaveTextContent('Echo + Sealed: combo shard');
         } finally {
             vi.useRealTimers();
