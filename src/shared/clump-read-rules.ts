@@ -7,7 +7,8 @@ import { findSuitRegion, tileCanBreakInChunk, tileIsChunkTreasure } from './chun
  * A bubble shooter draws the aim line; here the plan is the suits on the backs, and nothing said
  * how big a clump was. This reads the connected same-suit region a tile belongs to and how many
  * pairs a Sharp break there would take — the same region rule the break uses, so the read is the
- * truth of the board and not an estimate of it. Read on focus, on selection, and by the skull.
+ * truth of the board and not an estimate of it. Read on focus, under the pointer, on the first
+ * flipped tile, and by the skull.
  */
 export interface ClumpRead {
     suit: TileSuit;
@@ -23,7 +24,9 @@ const canGoWithAChunk = (tile: Tile): boolean => tileCanBreakInChunk(tile) || ti
 
 export const getClumpRead = (board: Pick<BoardState, 'columns' | 'tiles'>, tileId: string): ClumpRead | null => {
     const seed = board.tiles.find((tile) => tile.id === tileId);
-    if (!seed || seed.state !== 'hidden' || !seed.suit) {
+    // A flipped tile still stands in its clump: the break fires when its partner turns up, so
+    // the read is worth more after the first flip, not less. Matched and removed tiles are gone.
+    if (!seed || (seed.state !== 'hidden' && seed.state !== 'flipped') || !seed.suit) {
         return null;
     }
     const region = findSuitRegion(board, [tileId], Number.POSITIVE_INFINITY).map((index) => board.tiles[index]!);

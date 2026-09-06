@@ -104,6 +104,7 @@ interface TileBezelProps {
     interactive: boolean;
     isPinned: boolean;
     onTilePick: (tileId: string) => void;
+    onTileHover?: (tileId: string | null) => void;
     reduceMotion: boolean;
     resolvingSelection: ResolvingSelectionState;
     shuffleMotionDeadlineMs: number;
@@ -193,6 +194,7 @@ const TileBezelInner = ({
     interactive,
     isPinned,
     onTilePick,
+    onTileHover,
     reduceMotion,
     resolvingSelection,
     shuffleMotionDeadlineMs,
@@ -672,6 +674,7 @@ const TileBezelInner = ({
         }
 
         hoverTiltRef.current = pointerMoveState.hoverTilt;
+        onTileHover?.(pointerMoveState.hoverTilt.tileId);
     };
 
     const handleCardPointerOut = (): void => {
@@ -689,6 +692,7 @@ const TileBezelInner = ({
 
         pressingOnCardRef.current = pointerOutState.pressingOnCard;
         hoverTiltRef.current = pointerOutState.hoverTilt;
+        onTileHover?.(null);
     };
 
     const surfaceVariant = getTileBoardSurfaceVariant(tile, faceUp, resolvingSelection);

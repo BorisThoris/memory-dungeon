@@ -1,4 +1,6 @@
 import { describe, expect, it } from 'vitest';
+import { createNewRun } from './run-creation-rules';
+import { describeRunModeIdentity } from './run-mode-identity';
 import {
     buildClassicRunOptions,
     buildVowContract,
@@ -35,6 +37,9 @@ describe('the retired cards, as options', () => {
         expect(options.enableWildJoker).toBe(true);
         expect(options.initialStrayRemoveCharges).toBe(1);
         expect(options.activeMutators).toEqual([...CHAOS_MUTATORS]);
+        // The bar and the retry read this flag, not the joker: a chaos run has to carry it.
+        expect(options.wildMenuRun).toBe(true);
+        expect(describeRunModeIdentity(createNewRun(0, options)).label).toBe('Wild Run');
     });
 
     it('carries the Scholar contract, including the shuffle it has to forbid', () => {

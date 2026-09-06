@@ -31,6 +31,7 @@ interface TileBoardSceneBoardGroupProps {
     interactionSuppressed: boolean;
     interactive: boolean;
     onTilePick: (tileId: string) => void;
+    onTileHover?: (tileId: string | null) => void;
     reduceMotion: boolean;
     resolvingMatchWaveKey: string | null;
     sharedCardBackLayers: readonly CardBackSvgLayerGeometry[] | null;
@@ -65,6 +66,7 @@ export const TileBoardSceneBoardGroup = ({
     interactionSuppressed,
     interactive,
     onTilePick,
+    onTileHover,
     reduceMotion,
     resolvingMatchWaveKey,
     sharedCardBackLayers,
@@ -165,6 +167,7 @@ export const TileBoardSceneBoardGroup = ({
                     isPinned={isPinned}
                     memorizeCurseHighlight={memorizeCurseHighlight}
                     onTilePick={onTilePick}
+                    onTileHover={onTileHover}
                     reduceMotion={reduceMotion}
                     resolvingMatchWaveKey={resolvingMatchWaveKey}
                     resolvingSelection={resolvingSelection}

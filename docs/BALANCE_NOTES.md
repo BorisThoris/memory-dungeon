@@ -4,6 +4,8 @@ Post-relic / post-mutator tuning. Constants live in `src/shared/contracts.ts` un
 
 ## Recent intent
 
+- **Gen 132 closing sweep:** `yarn sim:cascade --check` and `--relics --check` re-run after Gens 127–131; every band holds and the report numbers are those recorded under Gen 130 and Gen 126 — nothing in the clump read, the feel layer, the records, the relic registrations or the chain's carry into daily and shared play touched the cascade's pay.
+
 - **Gen 130 chain relics (`relics.ts`, `chunk-break-rules.ts`, `tile-suit-rules.ts`):** Tuning Fork (`tuning_fork`, Clean depth 2), Magpie's Ledger (`magpie_ledger`, spilled treasure gold ×2) and Suit Lens (`suit_lens`, three suits a floor). Measured alone on 6 seeds × 24 floors, each keeps every bare band: 25%-miss Fever share 0.14 / 0.15 / 0.19, clean chunk share of score 0.14 / 0.12 / 0.13. Held together the reference Fever share is 0.23 and the clean chunk share 0.14, so the full loadout is held to `CASCADE_RELIC_BANDS` (reference Fever ≤ 0.3) rather than the bare 0.2 — a build of three chain relics is meant to move that number, and the relaxation is written down rather than absorbed into the bare bands.
 
 - **Gen 126 deal profiles (`tile-suit-rules.ts`):** the floor archetype now chooses how suits are dealt — clumped (breather, treasure gallery, gate, shadow read, anchor chain, script room, parasite tithe), scattered (speed trial, trap hall, rush recall) or two-suit (spotlight hunt). Clean-player sim on 6 seeds × 24 floors: clumped floors cascade 4.25 pairs a floor with Fever on 60%; scattered 2.07 and 50%; two-suit 7.83 and 75%. Overall bands unchanged and green (chunk share of score 0.12 clean, 0.10 at 25% misses; Extreme Fever 0.75 / 0.45 / 0.21).

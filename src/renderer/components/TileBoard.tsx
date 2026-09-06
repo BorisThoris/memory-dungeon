@@ -18,6 +18,8 @@ import { getClumpRead } from '../../shared/clump-read-rules';
 import { CHAIN_BEAT_COPY } from '../copy/chainBeat';
 import { getTileSuit } from '../../shared/tile-suit-rules';
 
+/** The pointer has to rest on a tile this long before the clump read follows it. */
+const HOVER_CLUMP_READ_DELAY_MS = 160;
 const EMPTY_CLUMP_READ: ReadonlySet<string> = new Set();
 import { resolveAdaptiveBoardRenderQuality } from '../../shared/graphicsQuality';
 import { getFindableRewardText } from '../../shared/findables';
@@ -1436,6 +1438,36 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         ]
     );
 
+    /*
+     * The clump read under the pointer. Focus and the first flipped tile already carry it; a
+     * mouse player hovering a hidden tile had nothing, and that is how most players at a desk
+     * consider a tile. A short delay keeps the chip from flickering as the pointer crosses the
+     * board; leaving a tile clears it at once.
+     */
+    const [hoveredTileId, setHoveredTileId] = useState<string | null>(null);
+    const hoverReadTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const handleTileHover = useCallback((tileId: string | null): void => {
+        if (hoverReadTimerRef.current !== null) {
+            clearTimeout(hoverReadTimerRef.current);
+            hoverReadTimerRef.current = null;
+        }
+        if (tileId === null) {
+            setHoveredTileId(null);
+            return;
+        }
+        hoverReadTimerRef.current = setTimeout(() => {
+            hoverReadTimerRef.current = null;
+            setHoveredTileId(tileId);
+        }, HOVER_CLUMP_READ_DELAY_MS);
+    }, []);
+    useEffect(
+        () => () => {
+            if (hoverReadTimerRef.current !== null) {
+                clearTimeout(hoverReadTimerRef.current);
+            }
+        },
+        []
+    );
     const selectedPreviewTileId = useMemo(() => {
         if (boardApplicationFocused || board.flippedTileIds.length !== 1) {
             return null;
@@ -1444,7 +1476,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         const tile = board.tiles.find((candidate) => candidate.id === tileId);
         return tile && tile.state === 'flipped' ? tile.id : null;
     }, [board.flippedTileIds, board.tiles, boardApplicationFocused]);
-    const previewChipTileId = boardApplicationFocused ? focusedTileId : selectedPreviewTileId;
+    const previewChipTileId = boardApplicationFocused ? focusedTileId : (selectedPreviewTileId ?? hoveredTileId);
     /*
      * The clump the considered tile stands in: outlined on the board and named in the chip. Read
      * from the live board through the same region rule the break uses, so what is promised is
@@ -3786,6 +3818,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         nBackAnchorPairKey={nBackAnchorPairKey}
                                         nBackMutatorActive={nBackMutatorActive}
                                         onTilePick={handleTileSelect}
+                                        onTileHover={handleTileHover}
                                         onViewportMetricsChange={handleStageViewportChange}
                                         pairProximityHintsEnabled={pairProximityHintsEnabled}
                                         peekRevealedTileIds={peekRevealedTileIds}

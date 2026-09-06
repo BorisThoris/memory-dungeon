@@ -5445,6 +5445,56 @@
                 "src/shared/tile-suit-rules.test.ts",
                 "src/shared/cascade-balance-simulation.test.ts"
             ]
+        },
+        {
+            "id": "board.chain_chunk_fever",
+            "label": "Chain, Chunk and Fever",
+            "kind": "board",
+            "role": "chain_tiered_clump_break_and_treasure_spill",
+            "evidence": [
+                "src/shared/chain-tier-rules.ts",
+                "src/shared/chunk-break-rules.ts",
+                "src/shared/tile-suit-rules.ts",
+                "src/shared/board-turn-transition.ts",
+                "src/renderer/copy/chainBeat.ts"
+            ],
+            "reads": [
+                "currentStreak",
+                "chunkPairsThisChain",
+                "tileStates",
+                "pairKeys",
+                "relicIds",
+                "runSeed"
+            ],
+            "writes": [
+                "tileStates",
+                "matchedPairs",
+                "score",
+                "shopGold",
+                "comboShards",
+                "chunkPairsThisChain",
+                "feedbackLines"
+            ],
+            "enables": [
+                "objective.floor_clear",
+                "economy.shop_gold",
+                "inventory.combo_shard",
+                "build.combo_shard_engine",
+                "build.treasure_greed"
+            ],
+            "blocks": [],
+            "softlockGuards": [
+                "exit-key-lever-lock-shrine-gateway-shop-room-never-break",
+                "chain-gated-no-recall-credit",
+                "rating-unmoved-by-chunks",
+                "floor-relative-rungs"
+            ],
+            "tests": [
+                "src/shared/chunk-break-rules.test.ts",
+                "src/shared/chain-tier-rules.test.ts",
+                "src/shared/cascade-balance-simulation.test.ts",
+                "src/shared/release-checklist.test.ts"
+            ]
         }
     ],
     "edges": [
@@ -8759,6 +8809,60 @@
             "target": "feedback.gameplay_hud",
             "kind": "displays",
             "label": "shows the bigger clumps on the backs"
+        },
+        {
+            "source": "core.board_turn_resolution",
+            "target": "board.chain_chunk_fever",
+            "kind": "consequence",
+            "label": "a match at Clean or better breaks the clump around it"
+        },
+        {
+            "source": "board.chain_chunk_fever",
+            "target": "objective.floor_clear",
+            "kind": "modifies",
+            "label": "removes cascaded pairs toward the clear, never the exit"
+        },
+        {
+            "source": "board.chain_chunk_fever",
+            "target": "economy.shop_gold",
+            "kind": "grants",
+            "label": "spilled treasure pays as matched"
+        },
+        {
+            "source": "board.chain_chunk_fever",
+            "target": "inventory.combo_shard",
+            "kind": "grants",
+            "label": "shards per cascaded pair, one each at Fever"
+        },
+        {
+            "source": "board.chain_chunk_fever",
+            "target": "feedback.gameplay_hud",
+            "kind": "displays",
+            "label": "tier name, break pulse, style line, floor-clear recap"
+        },
+        {
+            "source": "board.chain_chunk_fever",
+            "target": "core.gameplay_commands",
+            "kind": "triggers",
+            "label": "chunk facts on the board.turn_resolved event"
+        },
+        {
+            "source": "relic.tuning_fork",
+            "target": "board.chain_chunk_fever",
+            "kind": "modifies",
+            "label": "Clean break reaches two steps"
+        },
+        {
+            "source": "relic.magpie_ledger",
+            "target": "board.chain_chunk_fever",
+            "kind": "modifies",
+            "label": "spilled treasure gold doubled"
+        },
+        {
+            "source": "relic.suit_lens",
+            "target": "board.chain_chunk_fever",
+            "kind": "modifies",
+            "label": "three suits a floor, bigger clumps"
         }
     ],
     "coverage": {

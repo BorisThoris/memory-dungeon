@@ -82,6 +82,8 @@ interface TileBoardSceneProps {
     interactionSuppressed: boolean;
     interactive: boolean;
     onTilePick: (tileId: string) => void;
+    /** A hidden tile under the pointer, or null when the pointer leaves it; the clump read follows it. */
+    onTileHover?: (tileId: string | null) => void;
     onViewportMetricsChange: (viewport: { width: number; height: number }) => void;
     pinnedTileIds: string[];
     previewActive: boolean;
@@ -154,6 +156,7 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
     interactionSuppressed,
     interactive,
     onTilePick,
+    onTileHover,
     onViewportMetricsChange,
     pinnedTileIds,
     previewActive,
@@ -411,6 +414,7 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
                 interactionSuppressed={interactionSuppressed}
                 interactive={interactive}
                 onTilePick={onTilePick}
+                onTileHover={onTileHover}
                 reduceMotion={reduceMotion}
                 resolvingMatchWaveKey={resolvingMatchWaveKey}
                 sharedCardBackLayers={sharedCardBackLayers}

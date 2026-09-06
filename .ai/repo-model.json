@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2583,
+    "trackedFileCount": 2584,
     "codeFileCount": 1031,
     "exportedSymbolCount": 3711,
     "contentItemCount": 66,
-    "mechanicCount": 139,
+    "mechanicCount": 140,
     "stateFieldCount": 145,
-    "relationshipCount": 10955
+    "relationshipCount": 10990
   },
   "inventory": [
     {
@@ -279,8 +279,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 252145,
-      "sha256": "eb305d88a94c8c823ae971a02cf9ce13de9329474029cffe98ff15170daa4202"
+      "bytes": 252498,
+      "sha256": "477a673fa5e41d97fb352c7b2d35ca1dd9c9fc5b3e6e6cd850fbecf1563b3bab"
     },
     {
       "path": "docs/BLUEPRINT_FRAMEWORK.md",
@@ -291,8 +291,8 @@
     {
       "path": "docs/CHAIN_CHUNK_FEVER_DESIGN.md",
       "category": "documentation",
-      "bytes": 26822,
-      "sha256": "38845f45e2b3265cc3c09bf4c0eb89497c69c1c9cf10262ffd46ff86ec0a6c6e"
+      "bytes": 28273,
+      "sha256": "8f92d52d5d4d09a0d71e3f7cf40c3e1831f5d1d6320c2afaa796d01c9e9a465f"
     },
     {
       "path": "docs/COLLECTIBLE_SYSTEM.md",
@@ -778,7 +778,7 @@
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
       "bytes": 472,
-      "sha256": "a06c4617f908e608df683ff1c665b13e45f97b431c3cfc9622a8d0c28bb4d1c0"
+      "sha256": "21b194cd9365fb55c76314f9e4ae8a169638661b2dd5947ed45015492359aff1"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -2326,7 +2326,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 36715,
-      "sha256": "46fbbd60d07eb9688e12c5b79be9bd6f5fbfc003592cad1394a3e0faf012767b"
+      "sha256": "f26bf519400dd002ba279597ebc1cb603f2bdc3b55c17c919b7bc776864fe8db"
     },
     {
       "path": "docs/UI_RETHINK_PLAN.md",
@@ -3613,6 +3613,12 @@
       "sha256": "9a7baa0fc1e5e3579b976412cc371155b1c78732a1d7a6d0a2778d9c69c74097"
     },
     {
+      "path": "e2e/chain-review-capture.spec.ts",
+      "category": "test",
+      "bytes": 3449,
+      "sha256": "a5fcb02c63b1489865198d2e07dc4526cfaf24b5e74bfa62cffe970fd47397a4"
+    },
+    {
       "path": "e2e/controller-navigation.spec.ts",
       "category": "test",
       "bytes": 6101,
@@ -3729,8 +3735,8 @@
     {
       "path": "e2e/playable-path-mode-matrix.spec.ts",
       "category": "test",
-      "bytes": 4187,
-      "sha256": "609e9452271fe3f2bd02d8bf1c3c78ea266fda4a48e54b424a84d5b94ef90c32"
+      "bytes": 5501,
+      "sha256": "feff71da93cc13c016e3070887d5e53b90a990ec5636e027620c503ae6261dea"
     },
     {
       "path": "e2e/playable-path-navigation.spec.ts",
@@ -8169,8 +8175,8 @@
     {
       "path": "src/renderer/components/TileBezel.tsx",
       "category": "source",
-      "bytes": 33348,
-      "sha256": "a96128ba46149d6879aad9ea1eb4a0c522ca9af5c44b3636310d4d5c870f7254"
+      "bytes": 33503,
+      "sha256": "13ecb15e8684b69eab197d6093ee997765fb1c8cd4a114d48ff654501c0b8169"
     },
     {
       "path": "src/renderer/components/TileBoard.module.css",
@@ -8187,8 +8193,8 @@
     {
       "path": "src/renderer/components/TileBoard.tsx",
       "category": "source",
-      "bytes": 169791,
-      "sha256": "4269ccc19793038674831441a3dad83574801b99d4aa286deeb3ff4cddf9e870"
+      "bytes": 171223,
+      "sha256": "28927c8855bad17463aecded64204e6e986a35936fcc2a44a7e4d7ea25905ac6"
     },
     {
       "path": "src/renderer/components/tileBoardBreakWave.test.ts",
@@ -8661,14 +8667,14 @@
     {
       "path": "src/renderer/components/TileBoardScene.tsx",
       "category": "source",
-      "bytes": 16871,
-      "sha256": "6a5d0f234994119cf79c6924e79c265bb9b22495dc8e62ac315e08efac7eccac"
+      "bytes": 17088,
+      "sha256": "1bdbd004ff0228f67205bfdd0e7268bbeb33c2b4c3fedc42870aa09e5b8448e8"
     },
     {
       "path": "src/renderer/components/TileBoardSceneBoardGroup.tsx",
       "category": "source",
-      "bytes": 8553,
-      "sha256": "bd9af9cbe9a44f272a74409c8c29678311fed093bd3a12a798b4013fde3919db"
+      "bytes": 8667,
+      "sha256": "d54a10bf424158a8f37e5a11a4971afda6032c6a973510fd3ed1131e27ee5cc1"
     },
     {
       "path": "src/renderer/components/tileBoardSceneFrame.test.ts",
@@ -10737,26 +10743,26 @@
     {
       "path": "src/shared/classic-run-setup.test.ts",
       "category": "test",
-      "bytes": 4136,
-      "sha256": "c1c875e7b83e4005d0936c892c370487b7b33f1c948ace1b08e1a63db82b5fa0"
+      "bytes": 4483,
+      "sha256": "5a864485d04ede4947df3de2cfa6de12574bdb54561ddb7f650645346095cee9"
     },
     {
       "path": "src/shared/classic-run-setup.ts",
       "category": "source",
-      "bytes": 5267,
-      "sha256": "1aa8d015cc5d7b2c0197b5cf83ae30b33278fdaf1ca1a487f4ba3208f1e62e3d"
+      "bytes": 5480,
+      "sha256": "fcdd7eff864998b4b9e334be1289cda7a00c726753b7ea9b6fdd8f7c7bfdf1d3"
     },
     {
       "path": "src/shared/clump-read-rules.test.ts",
       "category": "test",
-      "bytes": 2540,
-      "sha256": "b4117c3adf46ccc8bcb8b42095c565973163c4715bf9832a63755b85d90e6bf5"
+      "bytes": 2809,
+      "sha256": "4613726e0ff7797db15ca243c145eaa44b26dac8ea0183bb16875961c6e3a3fe"
     },
     {
       "path": "src/shared/clump-read-rules.ts",
       "category": "source",
-      "bytes": 2163,
-      "sha256": "f600f40f1a43895c427355f0c8e883a81eb6d1e466491f261b5a98efb0d80c87"
+      "bytes": 2421,
+      "sha256": "221c6bbb13cd9cde7a8d0a7ba6b7153dc121e920093df60d653eaad30c275068"
     },
     {
       "path": "src/shared/color-vision.test.ts",
@@ -11589,8 +11595,8 @@
     {
       "path": "src/shared/gameplay-interaction-graph-data.json",
       "category": "source",
-      "bytes": 293023,
-      "sha256": "d841659b0f17ff9170c78bf7db7e15b0dd3c9cad65a1bbec77877d204dafab60"
+      "bytes": 296713,
+      "sha256": "d4379af70de5d3822b7797b720f9425a9396cf3c54c626b4eeb4bb498e85d5b9"
     },
     {
       "path": "src/shared/gameplay-interaction-graph.test.ts",
@@ -18955,7 +18961,7 @@
       "path": "src/renderer/components/TileBezel.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 865,
+      "lineCount": 869,
       "imports": [
         "file:src/renderer/components/cardArcaneGlowMaterial.ts",
         "file:src/renderer/components/cardSvgPlaneGeometry.ts",
@@ -19014,7 +19020,7 @@
       "path": "src/renderer/components/TileBoard.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 3924,
+      "lineCount": 3957,
       "imports": [
         "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/breakpoints.ts",
@@ -20486,7 +20492,7 @@
       "path": "src/renderer/components/TileBoardScene.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 434,
+      "lineCount": 438,
       "imports": [
         "file:src/renderer/components/gameplayRenderProfile.ts",
         "file:src/renderer/components/TileBezel.tsx",
@@ -20526,7 +20532,7 @@
       "path": "src/renderer/components/TileBoardSceneBoardGroup.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 202,
+      "lineCount": 205,
       "imports": [
         "file:src/renderer/components/cardSvgPlaneGeometry.ts",
         "file:src/renderer/components/TileBezel.tsx",
@@ -26427,9 +26433,11 @@
       "path": "src/shared/classic-run-setup.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 103,
+      "lineCount": 108,
       "imports": [
-        "file:src/shared/classic-run-setup.ts"
+        "file:src/shared/classic-run-setup.ts",
+        "file:src/shared/run-creation-rules.ts",
+        "file:src/shared/run-mode-identity.ts"
       ],
       "exports": [],
       "testedBy": []
@@ -26439,7 +26447,7 @@
       "path": "src/shared/classic-run-setup.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 130,
+      "lineCount": 132,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/run-creation-rules.ts"
@@ -26469,7 +26477,7 @@
       "path": "src/shared/clump-read-rules.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 49,
+      "lineCount": 52,
       "imports": [
         "file:src/shared/clump-read-rules.ts",
         "file:src/shared/contracts.ts",
@@ -26483,7 +26491,7 @@
       "path": "src/shared/clump-read-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 44,
+      "lineCount": 47,
       "imports": [
         "file:src/shared/chunk-break-rules.ts",
         "file:src/shared/contracts.ts"
@@ -30104,7 +30112,7 @@
       "path": "src/shared/gameplay-interaction-graph-data.json",
       "layer": "shared",
       "role": "production",
-      "lineCount": 8795,
+      "lineCount": 8899,
       "imports": [],
       "exports": [],
       "testedBy": []
@@ -33199,6 +33207,7 @@
         "file:src/renderer/store/tilePressAudioCues.test.ts",
         "file:src/shared/achievement-reachability.test.ts",
         "file:src/shared/chunk-break-dungeon-rules.test.ts",
+        "file:src/shared/classic-run-setup.test.ts",
         "file:src/shared/floor-curio-greeting-rules.test.ts",
         "file:src/shared/floor-curio-rules.test.ts",
         "file:src/shared/memorize-phase-rules.test.ts",
@@ -33731,6 +33740,7 @@
         "symbol:src/shared/run-mode-identity.ts#runModeIdentityText"
       ],
       "testedBy": [
+        "file:src/shared/classic-run-setup.test.ts",
         "file:src/shared/run-from-share-key.test.ts",
         "file:src/shared/run-mode-identity.test.ts"
       ]
@@ -39426,40 +39436,40 @@
       "name": "TileBezel",
       "kind": "value",
       "file": "src/renderer/components/TileBezel.tsx",
-      "line": 864,
-      "endLine": 864
+      "line": 868,
+      "endLine": 868
     },
     {
       "id": "symbol:src/renderer/components/TileBezel.tsx#TileHoverTiltState",
       "name": "TileHoverTiltState",
       "kind": "interface",
       "file": "src/renderer/components/TileBezel.tsx",
-      "line": 157,
-      "endLine": 161
+      "line": 158,
+      "endLine": 162
     },
     {
       "id": "symbol:src/renderer/components/TileBoard.tsx#default",
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/TileBoard.tsx",
-      "line": 3923,
-      "endLine": 3923
+      "line": 3956,
+      "endLine": 3956
     },
     {
       "id": "symbol:src/renderer/components/TileBoard.tsx#TileBoardClientRect",
       "name": "TileBoardClientRect",
       "kind": "type",
       "file": "src/renderer/components/TileBoard.tsx",
-      "line": 415,
-      "endLine": 422
+      "line": 417,
+      "endLine": 424
     },
     {
       "id": "symbol:src/renderer/components/TileBoard.tsx#TileBoardHandle",
       "name": "TileBoardHandle",
       "kind": "type",
       "file": "src/renderer/components/TileBoard.tsx",
-      "line": 424,
-      "endLine": 428
+      "line": 426,
+      "endLine": 430
     },
     {
       "id": "symbol:src/renderer/components/tileBoardBreakWave.ts#BREAK_WAVE_MAX_DELAY_SECONDS",
@@ -41250,16 +41260,16 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/TileBoardScene.tsx",
-      "line": 433,
-      "endLine": 433
+      "line": 437,
+      "endLine": 437
     },
     {
       "id": "symbol:src/renderer/components/TileBoardScene.tsx#TileBoardSceneHandle",
       "name": "TileBoardSceneHandle",
       "kind": "ExportSpecifier",
       "file": "src/renderer/components/TileBoardScene.tsx",
-      "line": 143,
-      "endLine": 143
+      "line": 145,
+      "endLine": 145
     },
     {
       "id": "symbol:src/renderer/components/TileBoardScene.tsx#TileHoverTiltState",
@@ -41274,8 +41284,8 @@
       "name": "TileBoardSceneBoardGroup",
       "kind": "value",
       "file": "src/renderer/components/TileBoardSceneBoardGroup.tsx",
-      "line": 46,
-      "endLine": 201
+      "line": 47,
+      "endLine": 204
     },
     {
       "id": "symbol:src/renderer/components/tileBoardSceneFrame.ts#runTileBoardSceneFrame",
@@ -48459,7 +48469,7 @@
       "kind": "value",
       "file": "src/shared/classic-run-setup.ts",
       "line": 81,
-      "endLine": 96
+      "endLine": 98
     },
     {
       "id": "symbol:src/shared/classic-run-setup.ts#buildVowContract",
@@ -48522,16 +48532,16 @@
       "name": "describeClassicRunSetup",
       "kind": "value",
       "file": "src/shared/classic-run-setup.ts",
-      "line": 108,
-      "endLine": 129
+      "line": 110,
+      "endLine": 131
     },
     {
       "id": "symbol:src/shared/classic-run-setup.ts#isDefaultClassicRunSetup",
       "name": "isDefaultClassicRunSetup",
       "kind": "value",
       "file": "src/shared/classic-run-setup.ts",
-      "line": 99,
-      "endLine": 105
+      "line": 101,
+      "endLine": 107
     },
     {
       "id": "symbol:src/shared/classic-run-setup.ts#pressureDurationMs",
@@ -48546,16 +48556,16 @@
       "name": "ClumpRead",
       "kind": "interface",
       "file": "src/shared/clump-read-rules.ts",
-      "line": 12,
-      "endLine": 20
+      "line": 13,
+      "endLine": 21
     },
     {
       "id": "symbol:src/shared/clump-read-rules.ts#getClumpRead",
       "name": "getClumpRead",
       "kind": "value",
       "file": "src/shared/clump-read-rules.ts",
-      "line": 24,
-      "endLine": 43
+      "line": 25,
+      "endLine": 46
     },
     {
       "id": "symbol:src/shared/color-vision.ts#COLOR_VISION_KINDS",
@@ -66496,6 +66506,67 @@
   ],
   "mechanics": [
     {
+      "id": "mechanic:board.chain_chunk_fever",
+      "mechanicId": "board.chain_chunk_fever",
+      "label": "Chain, Chunk and Fever",
+      "kind": "board",
+      "role": "chain_tiered_clump_break_and_treasure_spill",
+      "evidence": [
+        {
+          "path": "src/shared/chain-tier-rules.ts",
+          "line": 7
+        },
+        {
+          "path": "src/shared/chunk-break-rules.ts",
+          "line": 14
+        },
+        {
+          "path": "src/shared/tile-suit-rules.ts",
+          "line": 17
+        },
+        {
+          "path": "src/shared/board-turn-transition.ts",
+          "line": 183
+        },
+        {
+          "path": "src/renderer/copy/chainBeat.ts",
+          "line": 4
+        }
+      ],
+      "tests": [
+        {
+          "path": "src/shared/chunk-break-rules.test.ts",
+          "line": 8
+        },
+        {
+          "path": "src/shared/chain-tier-rules.test.ts",
+          "line": 4
+        },
+        {
+          "path": "src/shared/cascade-balance-simulation.test.ts",
+          "line": 35
+        },
+        {
+          "path": "src/shared/release-checklist.test.ts",
+          "line": 25
+        }
+      ],
+      "enables": [
+        "objective.floor_clear",
+        "economy.shop_gold",
+        "inventory.combo_shard",
+        "build.combo_shard_engine",
+        "build.treasure_greed"
+      ],
+      "blocks": [],
+      "softlockGuards": [
+        "exit-key-lever-lock-shrine-gateway-shop-room-never-break",
+        "chain-gated-no-recall-credit",
+        "rating-unmoved-by-chunks",
+        "floor-relative-rungs"
+      ]
+    },
+    {
       "id": "mechanic:board.cleanup",
       "mechanicId": "board.cleanup",
       "label": "Board Cleanup",
@@ -73429,9 +73500,12 @@
       "id": "state:chunkPairsThisChain",
       "name": "chunkPairsThisChain",
       "readBy": [
+        "mechanic:board.chain_chunk_fever",
         "mechanic:relic.tuning_fork"
       ],
-      "writtenBy": []
+      "writtenBy": [
+        "mechanic:board.chain_chunk_fever"
+      ]
     },
     {
       "id": "state:comboShardRequests",
@@ -73462,6 +73536,7 @@
         "mechanic:simulation.build_evaluation"
       ],
       "writtenBy": [
+        "mechanic:board.chain_chunk_fever",
         "mechanic:core.gameplay_commands",
         "mechanic:inventory.combo_shard",
         "mechanic:progression.route_side_room",
@@ -73495,6 +73570,7 @@
       "id": "state:currentStreak",
       "name": "currentStreak",
       "readBy": [
+        "mechanic:board.chain_chunk_fever",
         "mechanic:perk.trait_streak_toolkit"
       ],
       "writtenBy": []
@@ -73850,6 +73926,7 @@
         "mechanic:feedback.gameplay_hud"
       ],
       "writtenBy": [
+        "mechanic:board.chain_chunk_fever",
         "mechanic:core.gameplay_commands",
         "mechanic:exit.primary",
         "mechanic:feedback.gameplay_hud",
@@ -74288,6 +74365,7 @@
         "mechanic:objective.floor_clear"
       ],
       "writtenBy": [
+        "mechanic:board.chain_chunk_fever",
         "mechanic:core.board_turn_resolution",
         "mechanic:power.destroy_pair"
       ]
@@ -74387,6 +74465,7 @@
       "id": "state:pairKeys",
       "name": "pairKeys",
       "readBy": [
+        "mechanic:board.chain_chunk_fever",
         "mechanic:board.wild_joker_tile",
         "mechanic:core.board_turn_resolution",
         "mechanic:power.wild_match"
@@ -74683,6 +74762,7 @@
       "id": "state:relicIds",
       "name": "relicIds",
       "readBy": [
+        "mechanic:board.chain_chunk_fever",
         "mechanic:build.boss_hunter",
         "mechanic:build.combo_shard_engine",
         "mechanic:build.conduit_cartographer",
@@ -74880,6 +74960,7 @@
       "id": "state:runSeed",
       "name": "runSeed",
       "readBy": [
+        "mechanic:board.chain_chunk_fever",
         "mechanic:board.scout_reveal",
         "mechanic:inventory.mutator_loadout"
       ],
@@ -74950,6 +75031,7 @@
         "mechanic:reward.chest_gold"
       ],
       "writtenBy": [
+        "mechanic:board.chain_chunk_fever",
         "mechanic:core.board_turn_resolution",
         "mechanic:core.gameplay_commands",
         "mechanic:findable.score_glint",
@@ -75069,6 +75151,7 @@
         "mechanic:simulation.build_evaluation"
       ],
       "writtenBy": [
+        "mechanic:board.chain_chunk_fever",
         "mechanic:core.gameplay_commands",
         "mechanic:economy.shop_gold",
         "mechanic:perk.cursed_opener_greed",
@@ -75221,6 +75304,7 @@
       "id": "state:tileStates",
       "name": "tileStates",
       "readBy": [
+        "mechanic:board.chain_chunk_fever",
         "mechanic:board.cleanup",
         "mechanic:board.scout_reveal",
         "mechanic:board.wild_joker_tile",
@@ -75247,6 +75331,7 @@
         "mechanic:safety.softlock_fairness"
       ],
       "writtenBy": [
+        "mechanic:board.chain_chunk_fever",
         "mechanic:board.cleanup",
         "mechanic:board.wild_joker_tile",
         "mechanic:core.board_turn_resolution",
@@ -75987,6 +76072,13 @@
       "target": "mechanic:shop.typed_key",
       "kind": "consequence",
       "label": "converts gold into chosen route insurance"
+    },
+    {
+      "id": "consequence:mechanic:core.board_turn_resolution->mechanic:board.chain_chunk_fever:a match at Clean or better breaks the clump around it",
+      "source": "mechanic:core.board_turn_resolution",
+      "target": "mechanic:board.chain_chunk_fever",
+      "kind": "consequence",
+      "label": "a match at Clean or better breaks the clump around it"
     },
     {
       "id": "consequence:mechanic:economy.relic_favor->mechanic:build.reveal_scout:compounds information rewards into relic choices",
@@ -76747,6 +76839,13 @@
       "source": "content:relic.wager_surety",
       "target": "file:src/shared/relics.ts",
       "kind": "declared_by"
+    },
+    {
+      "id": "displays:mechanic:board.chain_chunk_fever->mechanic:feedback.gameplay_hud:tier name, break pulse, style line, floor-clear recap",
+      "source": "mechanic:board.chain_chunk_fever",
+      "target": "mechanic:feedback.gameplay_hud",
+      "kind": "displays",
+      "label": "tier name, break pulse, style line, floor-clear recap"
     },
     {
       "id": "displays:mechanic:board.scout_reveal->mechanic:feedback.gameplay_hud:shows scouted information",
@@ -100238,6 +100337,20 @@
       "label": "adjacent Heavy condition"
     },
     {
+      "id": "grants:mechanic:board.chain_chunk_fever->mechanic:economy.shop_gold:spilled treasure pays as matched",
+      "source": "mechanic:board.chain_chunk_fever",
+      "target": "mechanic:economy.shop_gold",
+      "kind": "grants",
+      "label": "spilled treasure pays as matched"
+    },
+    {
+      "id": "grants:mechanic:board.chain_chunk_fever->mechanic:inventory.combo_shard:shards per cascaded pair, one each at Fever",
+      "source": "mechanic:board.chain_chunk_fever",
+      "target": "mechanic:inventory.combo_shard",
+      "kind": "grants",
+      "label": "shards per cascaded pair, one each at Fever"
+    },
+    {
       "id": "grants:mechanic:economy.relic_favor->mechanic:progression.relic_draft:converts Favor into future relic picks",
       "source": "mechanic:economy.relic_favor",
       "target": "mechanic:progression.relic_draft",
@@ -100754,6 +100867,36 @@
       "target": "mechanic:safety.softlock_fairness",
       "kind": "guarded_by",
       "label": "keeps per-seed survival within profile bounds"
+    },
+    {
+      "id": "implemented_by:mechanic:board.chain_chunk_fever->file:src/renderer/copy/chainBeat.ts",
+      "source": "mechanic:board.chain_chunk_fever",
+      "target": "file:src/renderer/copy/chainBeat.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:board.chain_chunk_fever->file:src/shared/board-turn-transition.ts",
+      "source": "mechanic:board.chain_chunk_fever",
+      "target": "file:src/shared/board-turn-transition.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:board.chain_chunk_fever->file:src/shared/chain-tier-rules.ts",
+      "source": "mechanic:board.chain_chunk_fever",
+      "target": "file:src/shared/chain-tier-rules.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:board.chain_chunk_fever->file:src/shared/chunk-break-rules.ts",
+      "source": "mechanic:board.chain_chunk_fever",
+      "target": "file:src/shared/chunk-break-rules.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:board.chain_chunk_fever->file:src/shared/tile-suit-rules.ts",
+      "source": "mechanic:board.chain_chunk_fever",
+      "target": "file:src/shared/tile-suit-rules.ts",
+      "kind": "implemented_by"
     },
     {
       "id": "implemented_by:mechanic:board.cleanup->file:src/shared/board-inspection.ts",
@@ -115030,6 +115173,18 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/classic-run-setup.test.ts->src/shared/run-creation-rules.ts",
+      "source": "file:src/shared/classic-run-setup.test.ts",
+      "target": "file:src/shared/run-creation-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/classic-run-setup.test.ts->src/shared/run-mode-identity.ts",
+      "source": "file:src/shared/classic-run-setup.test.ts",
+      "target": "file:src/shared/run-mode-identity.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/classic-run-setup.ts->src/shared/contracts.ts",
       "source": "file:src/shared/classic-run-setup.ts",
       "target": "file:src/shared/contracts.ts",
@@ -124192,6 +124347,13 @@
       "kind": "imports"
     },
     {
+      "id": "modifies:mechanic:board.chain_chunk_fever->mechanic:objective.floor_clear:removes cascaded pairs toward the clear, never the exit",
+      "source": "mechanic:board.chain_chunk_fever",
+      "target": "mechanic:objective.floor_clear",
+      "kind": "modifies",
+      "label": "removes cascaded pairs toward the clear, never the exit"
+    },
+    {
       "id": "modifies:mechanic:core.board_turn_resolution->mechanic:power.wild_match:owns wildcard consumption inside the turn event sequence",
       "source": "mechanic:core.board_turn_resolution",
       "target": "mechanic:power.wild_match",
@@ -124437,6 +124599,13 @@
       "label": "requests claimed trophy score"
     },
     {
+      "id": "modifies:mechanic:relic.magpie_ledger->mechanic:board.chain_chunk_fever:spilled treasure gold doubled",
+      "source": "mechanic:relic.magpie_ledger",
+      "target": "mechanic:board.chain_chunk_fever",
+      "kind": "modifies",
+      "label": "spilled treasure gold doubled"
+    },
+    {
       "id": "modifies:mechanic:relic.memorize_bonus_ms->mechanic:phase.memorize:adds 280 ms globally",
       "source": "mechanic:relic.memorize_bonus_ms",
       "target": "mechanic:phase.memorize",
@@ -124456,6 +124625,20 @@
       "target": "mechanic:progression.route_side_room",
       "kind": "modifies",
       "label": "converts the first treasure claim into Favor"
+    },
+    {
+      "id": "modifies:mechanic:relic.suit_lens->mechanic:board.chain_chunk_fever:three suits a floor, bigger clumps",
+      "source": "mechanic:relic.suit_lens",
+      "target": "mechanic:board.chain_chunk_fever",
+      "kind": "modifies",
+      "label": "three suits a floor, bigger clumps"
+    },
+    {
+      "id": "modifies:mechanic:relic.tuning_fork->mechanic:board.chain_chunk_fever:Clean break reaches two steps",
+      "source": "mechanic:relic.tuning_fork",
+      "target": "mechanic:board.chain_chunk_fever",
+      "kind": "modifies",
+      "label": "Clean break reaches two steps"
     },
     {
       "id": "modifies:mechanic:relic.wager_surety->mechanic:economy.relic_favor:requests won-wager Favor",
@@ -124575,6 +124758,42 @@
       "target": "mechanic:lock.typed_key",
       "kind": "priority_guard",
       "label": "typed lock insurance first"
+    },
+    {
+      "id": "reads:mechanic:board.chain_chunk_fever->state:chunkPairsThisChain",
+      "source": "mechanic:board.chain_chunk_fever",
+      "target": "state:chunkPairsThisChain",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:board.chain_chunk_fever->state:currentStreak",
+      "source": "mechanic:board.chain_chunk_fever",
+      "target": "state:currentStreak",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:board.chain_chunk_fever->state:pairKeys",
+      "source": "mechanic:board.chain_chunk_fever",
+      "target": "state:pairKeys",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:board.chain_chunk_fever->state:relicIds",
+      "source": "mechanic:board.chain_chunk_fever",
+      "target": "state:relicIds",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:board.chain_chunk_fever->state:runSeed",
+      "source": "mechanic:board.chain_chunk_fever",
+      "target": "state:runSeed",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:board.chain_chunk_fever->state:tileStates",
+      "source": "mechanic:board.chain_chunk_fever",
+      "target": "state:tileStates",
+      "kind": "reads"
     },
     {
       "id": "reads:mechanic:board.cleanup->state:enemyHazards",
@@ -128075,6 +128294,30 @@
       "target": "mechanic:trait.heavy",
       "kind": "synergy",
       "label": "guard spark"
+    },
+    {
+      "id": "tested_by:mechanic:board.chain_chunk_fever->file:src/shared/cascade-balance-simulation.test.ts",
+      "source": "mechanic:board.chain_chunk_fever",
+      "target": "file:src/shared/cascade-balance-simulation.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:board.chain_chunk_fever->file:src/shared/chain-tier-rules.test.ts",
+      "source": "mechanic:board.chain_chunk_fever",
+      "target": "file:src/shared/chain-tier-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:board.chain_chunk_fever->file:src/shared/chunk-break-rules.test.ts",
+      "source": "mechanic:board.chain_chunk_fever",
+      "target": "file:src/shared/chunk-break-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:board.chain_chunk_fever->file:src/shared/release-checklist.test.ts",
+      "source": "mechanic:board.chain_chunk_fever",
+      "target": "file:src/shared/release-checklist.test.ts",
+      "kind": "tested_by"
     },
     {
       "id": "tested_by:mechanic:board.cleanup->file:src/shared/board-inspection.test.ts",
@@ -136622,6 +136865,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/run-creation-rules.ts->file:src/shared/classic-run-setup.test.ts",
+      "source": "file:src/shared/run-creation-rules.ts",
+      "target": "file:src/shared/classic-run-setup.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/run-creation-rules.ts->file:src/shared/floor-curio-greeting-rules.test.ts",
       "source": "file:src/shared/run-creation-rules.ts",
       "target": "file:src/shared/floor-curio-greeting-rules.test.ts",
@@ -136913,6 +137162,12 @@
       "id": "tested_by:src/shared/run-mode-catalog.ts->file:src/shared/run-mode-scope.test.ts",
       "source": "file:src/shared/run-mode-catalog.ts",
       "target": "file:src/shared/run-mode-scope.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/run-mode-identity.ts->file:src/shared/classic-run-setup.test.ts",
+      "source": "file:src/shared/run-mode-identity.ts",
+      "target": "file:src/shared/classic-run-setup.test.ts",
       "kind": "tested_by"
     },
     {
@@ -138146,6 +138401,13 @@
       "kind": "tested_by"
     },
     {
+      "id": "triggers:mechanic:board.chain_chunk_fever->mechanic:core.gameplay_commands:chunk facts on the board.turn_resolved event",
+      "source": "mechanic:board.chain_chunk_fever",
+      "target": "mechanic:core.gameplay_commands",
+      "kind": "triggers",
+      "label": "chunk facts on the board.turn_resolved event"
+    },
+    {
       "id": "triggers:mechanic:core.board_turn_resolution->mechanic:board.scout_reveal:turns Scout Glint into deterministic board information",
       "source": "mechanic:core.board_turn_resolution",
       "target": "mechanic:board.scout_reveal",
@@ -138781,6 +139043,48 @@
       "target": "mechanic:exit.primary",
       "kind": "unblocks",
       "label": "allows exit"
+    },
+    {
+      "id": "writes:mechanic:board.chain_chunk_fever->state:chunkPairsThisChain",
+      "source": "mechanic:board.chain_chunk_fever",
+      "target": "state:chunkPairsThisChain",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:board.chain_chunk_fever->state:comboShards",
+      "source": "mechanic:board.chain_chunk_fever",
+      "target": "state:comboShards",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:board.chain_chunk_fever->state:feedbackLines",
+      "source": "mechanic:board.chain_chunk_fever",
+      "target": "state:feedbackLines",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:board.chain_chunk_fever->state:matchedPairs",
+      "source": "mechanic:board.chain_chunk_fever",
+      "target": "state:matchedPairs",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:board.chain_chunk_fever->state:score",
+      "source": "mechanic:board.chain_chunk_fever",
+      "target": "state:score",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:board.chain_chunk_fever->state:shopGold",
+      "source": "mechanic:board.chain_chunk_fever",
+      "target": "state:shopGold",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:board.chain_chunk_fever->state:tileStates",
+      "source": "mechanic:board.chain_chunk_fever",
+      "target": "state:tileStates",
+      "kind": "writes"
     },
     {
       "id": "writes:mechanic:board.cleanup->state:flippedTileIds",

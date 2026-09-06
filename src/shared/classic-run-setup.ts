@@ -85,7 +85,9 @@ export const buildClassicRunOptions = (setup: ClassicRunSetup): CreateRunOptions
     return {
         ...(contract ? { activeContract: contract } : {}),
         ...(activeMutators.length > 0 ? { activeMutators } : {}),
-        ...(setup.chaos ? { enableWildJoker: true, initialStrayRemoveCharges: 1 } : {}),
+        // `wildMenuRun` is the flag the HUD identity and the restart precedence read for a wild run;
+        // without it a chaos descent said "Classic Dungeon" on the bar and retried as one.
+        ...(setup.chaos ? { enableWildJoker: true, initialStrayRemoveCharges: 1, wildMenuRun: true } : {}),
         ...(setup.pressure !== 'none' ? { gauntletDurationMs: pressureDurationMs(setup.pressure) } : {}),
         ...(setup.pacing === 'calm' ? { resolveDelayMultiplier: 1.35 } : {}),
         ...(setup.unrecorded ? { practiceMode: true } : {}),

@@ -33,13 +33,16 @@ describe('the clump read', () => {
         expect(getClumpRead(board(withExit), 'A1')?.pairsSharpWouldTake).toBe(1);
     });
 
-    it('is a lone tile when its neighbours are another suit, and nothing for a face-up or removed tile', () => {
+    it('is a lone tile when its neighbours are another suit, and nothing for a matched or removed tile', () => {
         // D2 sits under A2 and beside C2, both ember. (D1 is not lone: F1 below it is tide.)
         expect(getClumpRead(board(), 'D2')?.size).toBe(1);
         expect(getClumpRead(board(), 'D2')?.pairsSharpWouldTake).toBe(0);
         expect(getClumpRead(board(), 'D1')?.size).toBe(5);
+        // A flipped tile still reads: its clump is the one that breaks when its partner turns up.
         const flipped = layout().map((t) => (t.id === 'A1' ? { ...t, state: 'flipped' as const } : t));
-        expect(getClumpRead(board(flipped), 'A1')).toBeNull();
+        expect(getClumpRead(board(flipped), 'A1')?.size).toBe(6);
+        const matched = layout().map((t) => (t.id === 'A1' ? { ...t, state: 'matched' as const } : t));
+        expect(getClumpRead(board(matched), 'A1')).toBeNull();
         const gone = layout().map((t) => (t.pairKey === 'B' ? { ...t, state: 'removed' as const } : t));
         // With B gone, C is cut off from A: the clump is A alone.
         expect(getClumpRead(board(gone), 'A1')?.size).toBe(2);
