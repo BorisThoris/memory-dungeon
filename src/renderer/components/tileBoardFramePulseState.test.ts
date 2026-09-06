@@ -223,7 +223,7 @@ describe('tileBoardFramePulseState', () => {
             time: 3,
             wasMatched: false
         });
-        expect(started).toEqual({ burst: 1, startedAt: 3, wasMatched: true });
+        expect(started).toEqual({ burst: 1, departure: 0, startedAt: 3, wasMatched: true });
 
         const duration = GAMEPLAY_BOARD_VISUALS.matchedEdgeEffect.burstDuration.default;
         const halfway = computeTileBoardMatchedBurstState({
@@ -244,7 +244,7 @@ describe('tileBoardFramePulseState', () => {
                 time: 3 + duration + 0.001,
                 wasMatched: true
             })
-        ).toEqual({ burst: 0, startedAt: null, wasMatched: true });
+        ).toEqual({ burst: 0, departure: 0, startedAt: null, wasMatched: true });
     });
 
     it('clears matched victory burst for non-matched tiles', () => {
@@ -256,7 +256,7 @@ describe('tileBoardFramePulseState', () => {
                 time: 4,
                 wasMatched: true
             })
-        ).toEqual({ burst: 0, startedAt: null, wasMatched: false });
+        ).toEqual({ burst: 0, departure: 0, startedAt: null, wasMatched: false });
     });
 
     it('computes and clears flip-pop visual envelope', () => {

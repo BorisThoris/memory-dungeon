@@ -15,9 +15,15 @@
  */
 export type ChainTier = 'none' | 'clean' | 'sharp' | 'fever';
 
-export const CHAIN_TIER_CLEAN_FROM = 2;
-export const CHAIN_TIER_SHARP_FROM = 5;
-export const CHAIN_TIER_FEVER_FROM = 8;
+/*
+ * One ladder, not two. The game already announces chain milestones at x3 ("Chain started"), x6
+ * ("Surge") and x10 ("Combo") — chain targets, milestone pings and the feedback rail all read
+ * those rungs. The break tiers sit on the same rungs so a player climbing hears one story:
+ * the ping at x3 is the moment the board starts breaking for you.
+ */
+export const CHAIN_TIER_CLEAN_FROM = 3;
+export const CHAIN_TIER_SHARP_FROM = 6;
+export const CHAIN_TIER_FEVER_FROM = 10;
 
 export const getChainTier = (chain: number): ChainTier => {
     const depth = Number.isFinite(chain) ? Math.max(0, Math.floor(chain)) : 0;

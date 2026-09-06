@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2565,
-    "codeFileCount": 1015,
-    "exportedSymbolCount": 3647,
+    "trackedFileCount": 2568,
+    "codeFileCount": 1018,
+    "exportedSymbolCount": 3652,
     "contentItemCount": 63,
     "mechanicCount": 136,
     "stateFieldCount": 144,
-    "relationshipCount": 10720
+    "relationshipCount": 10738
   },
   "inventory": [
     {
@@ -291,8 +291,8 @@
     {
       "path": "docs/CHAIN_CHUNK_FEVER_DESIGN.md",
       "category": "documentation",
-      "bytes": 15811,
-      "sha256": "b5612147068bc7788d27ac26c30343bae26667fdf20b9dbd882772e73df978de"
+      "bytes": 16074,
+      "sha256": "ab5177a973eb577b8d69a0c09e8aa18e87e67e734054707268451973ced1928b"
     },
     {
       "path": "docs/COLLECTIBLE_SYSTEM.md",
@@ -2326,7 +2326,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 36715,
-      "sha256": "4f4a6724ea2c74c28600a1965d9923b1db346ec33fc1aad383c376247985b18d"
+      "sha256": "da4552019091787e14ee95a2ca6b15ec26f0fa6fd215518a4ef1e9396424b526"
     },
     {
       "path": "docs/UI_RETHINK_PLAN.md",
@@ -7293,8 +7293,8 @@
     {
       "path": "src/renderer/audio/gameSfx.ts",
       "category": "source",
-      "bytes": 33105,
-      "sha256": "86245ac77a84a74a30b5fc65f8fdf8e50ff72febdd2f3d0ea4ddc9d5024a8085"
+      "bytes": 34595,
+      "sha256": "e9db8dfe41cec15b18cff911e3f8e6b7114ae09cdcd0f5b3d8244a8aee81e9ae"
     },
     {
       "path": "src/renderer/audio/preloadAudioBuffers.test.ts",
@@ -7767,20 +7767,20 @@
     {
       "path": "src/renderer/components/GameScreen.module.css",
       "category": "source",
-      "bytes": 40397,
-      "sha256": "ffd21ee66830bfae437a8fc7ae25ec3b91f53210500d83a7e54809edf6dd75b8"
+      "bytes": 41967,
+      "sha256": "df6e77129813890b0888d5ed66a2d0fa75d4cd0fe0528c1fbb1dc831b5b269dd"
     },
     {
       "path": "src/renderer/components/GameScreen.test.tsx",
       "category": "test",
-      "bytes": 92067,
-      "sha256": "ea0372f0c1e29c6d97fec388522d5d89ebf567b3b54806e6ffc5ec23cb615c3d"
+      "bytes": 93945,
+      "sha256": "67969d3b2bfa428e3d281199501669c734bda29547208666ca8d073a60c447f6"
     },
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 96209,
-      "sha256": "ec144ec86dfcd542683d2a89e031731d50dfc713bba10a7f49860f7d328d2b1f"
+      "bytes": 99251,
+      "sha256": "815742a6b1ae1f90517fea2b6ac50ac0d9273399831a9b5191f58e4faca20334"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -7983,14 +7983,14 @@
     {
       "path": "src/renderer/components/RunShell.test.tsx",
       "category": "test",
-      "bytes": 5701,
-      "sha256": "5190c97f4395769d98b6272302c80208179dcd18cdd1ba59d2c4b5df3b6fe11d"
+      "bytes": 5789,
+      "sha256": "0f38b6f92a52c4f25041e2e89dfe18f926eb912df2fb82bbfefd2e8fd9234326"
     },
     {
       "path": "src/renderer/components/RunShell.tsx",
       "category": "source",
-      "bytes": 12891,
-      "sha256": "2b1a0624b1ca20f6d48480423d347b1d628f8eb160287b76f0387e2125d2d584"
+      "bytes": 13715,
+      "sha256": "d2075c0a9d3d305c4d9994796a341b7e90b2bbdfd74f2b5dc357c4d003421dfe"
     },
     {
       "path": "src/renderer/components/runShellGlyphs.tsx",
@@ -8145,8 +8145,8 @@
     {
       "path": "src/renderer/components/TileBezel.tsx",
       "category": "source",
-      "bytes": 33061,
-      "sha256": "64fb92412a3fe68be7a1ab59804585f189ee33b6440b067c0fdd8caebb5b9bed"
+      "bytes": 33338,
+      "sha256": "85644e9d73dcb04ec5c406be26bd17068f62d1a46b7f11624fb9c8c01175ca9a"
     },
     {
       "path": "src/renderer/components/TileBoard.module.css",
@@ -8165,6 +8165,18 @@
       "category": "source",
       "bytes": 168435,
       "sha256": "0234e250383026c76877bd1931bdfafcf8c8abd3d1721337b1ed265fd2fe8588"
+    },
+    {
+      "path": "src/renderer/components/tileBoardBreakWave.test.ts",
+      "category": "test",
+      "bytes": 2081,
+      "sha256": "873e14167145ef746bf3e098db56a94b556e9e855995104ba95052752bdfb502"
+    },
+    {
+      "path": "src/renderer/components/tileBoardBreakWave.ts",
+      "category": "source",
+      "bytes": 1985,
+      "sha256": "806fe453dfd8ef7eacd0edd10a47766cd29afe8d3cb44e626186bb47cd2d0d7d"
     },
     {
       "path": "src/renderer/components/tileBoardCanvasContext.test.ts",
@@ -8307,8 +8319,8 @@
     {
       "path": "src/renderer/components/tileBoardFrameAdvance.ts",
       "category": "source",
-      "bytes": 11852,
-      "sha256": "0bed92a13b219ae1ebd607e50ebe4a33741c7dd9d1de9afe5d474bc983efe764"
+      "bytes": 12107,
+      "sha256": "0fa2fab5329726042ff4224b4238e6c0fdcf09cd92448b6e04e1c3f94586e3fe"
     },
     {
       "path": "src/renderer/components/tileBoardFrameBag.test.ts",
@@ -8321,6 +8333,12 @@
       "category": "source",
       "bytes": 4040,
       "sha256": "781cb322166c5a647c110af105756cd444ad719342c8533870598862c413c6f5"
+    },
+    {
+      "path": "src/renderer/components/tileBoardFrameDeparture.test.ts",
+      "category": "test",
+      "bytes": 1758,
+      "sha256": "9d7c78cd03488b1f90f492f3961139235ec88570cf9ea68d9bb8375d939dd88f"
     },
     {
       "path": "src/renderer/components/tileBoardFrameMaterialState.test.ts",
@@ -8337,26 +8355,26 @@
     {
       "path": "src/renderer/components/tileBoardFramePropsSnapshot.test.ts",
       "category": "test",
-      "bytes": 2706,
-      "sha256": "b674d89c58e97001c7c6107ba11707d81baa7da6c502875e65625c1250a29d7c"
+      "bytes": 2740,
+      "sha256": "c953af90238e3bfe88be1d6ee033ff08da4fa4f971d110355c8fa534df0e1bd9"
     },
     {
       "path": "src/renderer/components/tileBoardFramePropsSnapshot.ts",
       "category": "source",
-      "bytes": 2199,
-      "sha256": "4faaea1dc3a6e0f7ceeb9d4ee809da8b1ac89fc15c517ff5116f1814da7dc26b"
+      "bytes": 2324,
+      "sha256": "2731d290ec59e5568e05495df6e9f772c7008ccd0f349d9cf0fd36f0119c2bc3"
     },
     {
       "path": "src/renderer/components/tileBoardFramePulseState.test.ts",
       "category": "test",
-      "bytes": 9635,
-      "sha256": "bff2c055f08b297d1b3f33c627313ec75ae99c5eb2fa14d713335e7c7dfb251e"
+      "bytes": 9677,
+      "sha256": "6d1f84c51bf7cf233dbd7bfd1052465545ed44744f930db0ff61435533d6cfaa"
     },
     {
       "path": "src/renderer/components/tileBoardFramePulseState.ts",
       "category": "source",
-      "bytes": 8579,
-      "sha256": "fb06a804c9f97e1e170ff51ea67a1932095065b8297f87503edbd80a1f96791f"
+      "bytes": 10103,
+      "sha256": "d6ffe39000f5044a6270b59a4ac73998c2d4fa168ad45d36555c449a1d3681ef"
     },
     {
       "path": "src/renderer/components/tileBoardFrameVisualState.test.ts",
@@ -9009,8 +9027,8 @@
     {
       "path": "src/renderer/copy/chainBeat.ts",
       "category": "source",
-      "bytes": 1784,
-      "sha256": "5d663d6ae7834261b99a664c570956d263d324cbcdd23dfdda3e9aa641a08c78"
+      "bytes": 1785,
+      "sha256": "acb1466387ef3d47ae8ff8c4ad25b8282dac1e3bcb3123572e0361380884e800"
     },
     {
       "path": "src/renderer/copy/chainMilestoneFeedback.test.ts",
@@ -10611,14 +10629,14 @@
     {
       "path": "src/shared/chain-tier-rules.test.ts",
       "category": "test",
-      "bytes": 1445,
-      "sha256": "fb3c07bab5e359c42dceef8a040f0695508a5f457b347ba5af969ba9b6770627"
+      "bytes": 1446,
+      "sha256": "98b17006952daa02482829fbae51336daa8cbbc7ffec09fa1f5ec501aadc78f6"
     },
     {
       "path": "src/shared/chain-tier-rules.ts",
       "category": "source",
-      "bytes": 1874,
-      "sha256": "0e7ecf2cc504a9aa296735598cd34f4a85b4ed6c201baf985ad485defe7f123e"
+      "bytes": 2234,
+      "sha256": "92781fecaceb7ee878c05f8a4298cbc58f1ec3051732d68f2038c19f48296f9e"
     },
     {
       "path": "src/shared/challenge-progression.test.ts",
@@ -10642,7 +10660,7 @@
       "path": "src/shared/chunk-break-rules.test.ts",
       "category": "test",
       "bytes": 8651,
-      "sha256": "8ef4332391186d44a9a170ee3ffc4c786feecabd8857c84873e3f992f0c9034f"
+      "sha256": "26dcb1f9356cb40591a5b1796a536676e29cfdab7ec7492d5ea3a37a10e851cb"
     },
     {
       "path": "src/shared/chunk-break-rules.ts",
@@ -16501,13 +16519,14 @@
       "path": "src/renderer/audio/gameSfx.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 939,
+      "lineCount": 978,
       "imports": [
         "file:src/renderer/audio/audioSafety.ts",
         "file:src/renderer/audio/sampledSfx.ts",
         "file:src/renderer/audio/webAudioContext.ts",
         "file:src/renderer/copy/chainMilestoneFeedback.ts",
         "file:src/renderer/copy/chainMomentum.ts",
+        "file:src/shared/chain-tier-rules.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/run-array-guards.ts",
         "file:src/shared/run-number-guards.ts",
@@ -17825,7 +17844,7 @@
       "path": "src/renderer/components/GameScreen.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 2313,
+      "lineCount": 2353,
       "imports": [
         "file:src/renderer/components/GameScreen.tsx",
         "file:src/renderer/components/gameScreenFeedback.ts",
@@ -17848,7 +17867,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 2115,
+      "lineCount": 2169,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -17896,6 +17915,7 @@
         "file:src/shared/bonus-rewards.ts",
         "file:src/shared/boss-encounters.ts",
         "file:src/shared/cameraViewportMode.ts",
+        "file:src/shared/chain-tier-rules.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/dungeon-rules.ts",
         "file:src/shared/floor-curio-greeting-rules.ts",
@@ -17914,7 +17934,8 @@
         "file:src/shared/trait-route-objectives.ts"
       ],
       "exports": [
-        "symbol:src/renderer/components/GameScreen.tsx#default"
+        "symbol:src/renderer/components/GameScreen.tsx#default",
+        "symbol:src/renderer/components/GameScreen.tsx#LAST_PAIR_HOLD_MS"
       ],
       "testedBy": [
         "file:src/renderer/components/GameScreen.test.tsx"
@@ -18374,7 +18395,7 @@
       "path": "src/renderer/components/RunShell.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 114,
+      "lineCount": 115,
       "imports": [
         "file:src/renderer/components/RunShell.tsx",
         "file:src/shared/contracts.ts",
@@ -18388,11 +18409,13 @@
       "path": "src/renderer/components/RunShell.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 265,
+      "lineCount": 278,
       "imports": [
+        "file:src/renderer/copy/chainBeat.ts",
         "file:src/renderer/copy/passAndPlay.ts",
         "file:src/renderer/copy/runDialogCopy.ts",
         "file:src/renderer/ui/gameplayIcons.tsx",
+        "file:src/shared/chain-tier-rules.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/gameplay-feedback-facts.ts",
         "file:src/shared/mechanics-encyclopedia.ts",
@@ -18800,13 +18823,14 @@
       "path": "src/renderer/components/TileBezel.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 861,
+      "lineCount": 865,
       "imports": [
         "file:src/renderer/components/cardArcaneGlowMaterial.ts",
         "file:src/renderer/components/cardSvgPlaneGeometry.ts",
         "file:src/renderer/components/gameplayRenderProfile.ts",
         "file:src/renderer/components/matchedCardRimFireMaterial.ts",
         "file:src/renderer/components/SuitMarkerPlane.tsx",
+        "file:src/renderer/components/tileBoardBreakWave.ts",
         "file:src/renderer/components/tileBoardCardBend.ts",
         "file:src/renderer/components/TileBoardCardSurface.tsx",
         "file:src/renderer/components/tileBoardDisposables.ts",
@@ -18903,6 +18927,38 @@
       ],
       "testedBy": [
         "file:src/renderer/components/TileBoard.test.tsx"
+      ]
+    },
+    {
+      "id": "file:src/renderer/components/tileBoardBreakWave.test.ts",
+      "path": "src/renderer/components/tileBoardBreakWave.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 48,
+      "imports": [
+        "file:src/renderer/components/tileBoardBreakWave.ts",
+        "file:src/shared/contracts.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/tileBoardBreakWave.ts",
+      "path": "src/renderer/components/tileBoardBreakWave.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 44,
+      "imports": [
+        "file:src/shared/board-grid-dimensions.ts",
+        "file:src/shared/contracts.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/tileBoardBreakWave.ts#BREAK_WAVE_MAX_DELAY_SECONDS",
+        "symbol:src/renderer/components/tileBoardBreakWave.ts#BREAK_WAVE_SECONDS_PER_STEP",
+        "symbol:src/renderer/components/tileBoardBreakWave.ts#getBreakWaveDelaySec"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/tileBoardBreakWave.test.ts"
       ]
     },
     {
@@ -19353,7 +19409,7 @@
       "path": "src/renderer/components/tileBoardFrameAdvance.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 306,
+      "lineCount": 309,
       "imports": [
         "file:src/renderer/components/tileBoardCardBend.ts",
         "file:src/renderer/components/tileBoardFrameBag.ts",
@@ -19404,6 +19460,18 @@
       ]
     },
     {
+      "id": "file:src/renderer/components/tileBoardFrameDeparture.test.ts",
+      "path": "src/renderer/components/tileBoardFrameDeparture.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 49,
+      "imports": [
+        "file:src/renderer/components/tileBoardFramePulseState.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
       "id": "file:src/renderer/components/tileBoardFrameMaterialState.test.ts",
       "path": "src/renderer/components/tileBoardFrameMaterialState.test.ts",
       "layer": "renderer",
@@ -19440,7 +19508,7 @@
       "path": "src/renderer/components/tileBoardFramePropsSnapshot.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 86,
+      "lineCount": 87,
       "imports": [
         "file:src/renderer/components/tileBoardFramePropsSnapshot.ts"
       ],
@@ -19452,7 +19520,7 @@
       "path": "src/renderer/components/tileBoardFramePropsSnapshot.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 62,
+      "lineCount": 64,
       "imports": [
         "file:src/renderer/components/tileBoardReadability.ts",
         "file:src/renderer/components/tileBoardTransform.ts",
@@ -19487,13 +19555,14 @@
       "path": "src/renderer/components/tileBoardFramePulseState.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 305,
+      "lineCount": 333,
       "imports": [
         "file:src/renderer/components/gameplayVisualConfig.ts",
         "file:src/renderer/components/tileResolvingSelection.ts",
         "file:src/shared/contracts.ts"
       ],
       "exports": [
+        "symbol:src/renderer/components/tileBoardFramePulseState.ts#BREAK_DEPARTURE_SECONDS",
         "symbol:src/renderer/components/tileBoardFramePulseState.ts#CARD_FACE_UP_SURFACE_SECONDS",
         "symbol:src/renderer/components/tileBoardFramePulseState.ts#CARD_FLIP_POP_SECONDS",
         "symbol:src/renderer/components/tileBoardFramePulseState.ts#computeTileBoardFaceUpStructState",
@@ -19506,6 +19575,7 @@
         "symbol:src/renderer/components/tileBoardFramePulseState.ts#MATCH_PULSE_DECAY_PER_SECOND"
       ],
       "testedBy": [
+        "file:src/renderer/components/tileBoardFrameDeparture.test.ts",
         "file:src/renderer/components/tileBoardFramePulseState.test.ts"
       ]
     },
@@ -25943,7 +26013,7 @@
       "path": "src/shared/chain-tier-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 41,
+      "lineCount": 47,
       "imports": [],
       "exports": [
         "symbol:src/shared/chain-tier-rules.ts#CHAIN_TIER_CLEAN_FROM",
@@ -26459,6 +26529,7 @@
         "file:src/renderer/components/RunShell.test.tsx",
         "file:src/renderer/components/ShopScreen.test.tsx",
         "file:src/renderer/components/TileBoard.test.tsx",
+        "file:src/renderer/components/tileBoardBreakWave.test.ts",
         "file:src/renderer/components/tileBoardCardTint.test.ts",
         "file:src/renderer/components/tileBoardDomAccessibility.test.ts",
         "file:src/renderer/components/tileBoardDomSurfaceModel.test.ts",
@@ -36641,184 +36712,184 @@
       "name": "__resetGameSfxEngineForTests",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 30,
-      "endLine": 35
+      "line": 31,
+      "endLine": 36
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playChainOpportunityBeatSfx",
       "name": "playChainOpportunityBeatSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 436,
-      "endLine": 461
+      "line": 471,
+      "endLine": 496
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playCountdownPressureSfx",
       "name": "playCountdownPressureSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 898,
-      "endLine": 910
+      "line": 937,
+      "endLine": 949
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playDestroyPairSfx",
       "name": "playDestroyPairSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 774,
-      "endLine": 786
+      "line": 813,
+      "endLine": 825
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playFlipSfx",
       "name": "playFlipSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 187,
-      "endLine": 192
+      "line": 188,
+      "endLine": 193
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playFloorClearSfx",
       "name": "playFloorClearSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 865,
-      "endLine": 882
+      "line": 904,
+      "endLine": 921
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playGambitCommitSfx",
       "name": "playGambitCommitSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 195,
-      "endLine": 210
+      "line": 196,
+      "endLine": 211
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playMatchPayoffSfx",
       "name": "playMatchPayoffSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 632,
-      "endLine": 662
+      "line": 667,
+      "endLine": 697
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playMatchSfx",
       "name": "playMatchSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 213,
-      "endLine": 241
+      "line": 214,
+      "endLine": 242
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playMismatchRecoveryCrescendoSfx",
       "name": "playMismatchRecoveryCrescendoSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 463,
-      "endLine": 488
+      "line": 498,
+      "endLine": 523
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playPeekPowerSfx",
       "name": "playPeekPowerSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 789,
-      "endLine": 801
+      "line": 828,
+      "endLine": 840
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playPowerArmSfx",
       "name": "playPowerArmSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 759,
-      "endLine": 771
+      "line": 798,
+      "endLine": 810
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playRelicChoiceCrescendoSfx",
       "name": "playRelicChoiceCrescendoSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 490,
-      "endLine": 514
+      "line": 525,
+      "endLine": 549
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playRelicOfferOpenSfx",
       "name": "playRelicOfferOpenSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 884,
-      "endLine": 896
+      "line": 923,
+      "endLine": 935
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playRelicPickSfx",
       "name": "playRelicPickSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 912,
-      "endLine": 924
+      "line": 951,
+      "endLine": 963
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playResolveSfx",
       "name": "playResolveSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 668,
-      "endLine": 746
+      "line": 703,
+      "endLine": 785
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playShuffleSfx",
       "name": "playShuffleSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 822,
-      "endLine": 860
+      "line": 861,
+      "endLine": 899
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playStrayPowerSfx",
       "name": "playStrayPowerSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 804,
-      "endLine": 816
+      "line": 843,
+      "endLine": 855
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playTrapSfx",
       "name": "playTrapSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 749,
-      "endLine": 756
+      "line": 788,
+      "endLine": 795
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playWagerArmSfx",
       "name": "playWagerArmSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 926,
-      "endLine": 938
+      "line": 965,
+      "endLine": 977
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#RelicChoiceCrescendoSfxTier",
       "name": "RelicChoiceCrescendoSfxTier",
       "kind": "type",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 59,
-      "endLine": 59
+      "line": 60,
+      "endLine": 60
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#resumeAudioContext",
       "name": "resumeAudioContext",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 39,
-      "endLine": 44
+      "line": 40,
+      "endLine": 45
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#sfxGainFromSettings",
       "name": "sfxGainFromSettings",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 53,
-      "endLine": 54
+      "line": 54,
+      "endLine": 55
     },
     {
       "id": "symbol:src/renderer/audio/preloadAudioBuffers.ts#preloadAudioBuffers",
@@ -38233,8 +38304,16 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 2114,
-      "endLine": 2114
+      "line": 2168,
+      "endLine": 2168
+    },
+    {
+      "id": "symbol:src/renderer/components/GameScreen.tsx#LAST_PAIR_HOLD_MS",
+      "name": "LAST_PAIR_HOLD_MS",
+      "kind": "value",
+      "file": "src/renderer/components/GameScreen.tsx",
+      "line": 266,
+      "endLine": 266
     },
     {
       "id": "symbol:src/renderer/components/gameScreenFeedback.ts#DungeonCombatLogRow",
@@ -38505,24 +38584,24 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 264,
-      "endLine": 264
+      "line": 277,
+      "endLine": 277
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellProps",
       "name": "RunShellProps",
       "kind": "interface",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 34,
-      "endLine": 49
+      "line": 36,
+      "endLine": 51
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellTool",
       "name": "RunShellTool",
       "kind": "interface",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 23,
-      "endLine": 32
+      "line": 25,
+      "endLine": 34
     },
     {
       "id": "symbol:src/renderer/components/runShellGlyphs.tsx#RUN_SHELL_GLYPHS",
@@ -38881,16 +38960,16 @@
       "name": "TileBezel",
       "kind": "value",
       "file": "src/renderer/components/TileBezel.tsx",
-      "line": 860,
-      "endLine": 860
+      "line": 864,
+      "endLine": 864
     },
     {
       "id": "symbol:src/renderer/components/TileBezel.tsx#TileHoverTiltState",
       "name": "TileHoverTiltState",
       "kind": "interface",
       "file": "src/renderer/components/TileBezel.tsx",
-      "line": 156,
-      "endLine": 160
+      "line": 157,
+      "endLine": 161
     },
     {
       "id": "symbol:src/renderer/components/TileBoard.tsx#default",
@@ -38915,6 +38994,30 @@
       "file": "src/renderer/components/TileBoard.tsx",
       "line": 419,
       "endLine": 423
+    },
+    {
+      "id": "symbol:src/renderer/components/tileBoardBreakWave.ts#BREAK_WAVE_MAX_DELAY_SECONDS",
+      "name": "BREAK_WAVE_MAX_DELAY_SECONDS",
+      "kind": "value",
+      "file": "src/renderer/components/tileBoardBreakWave.ts",
+      "line": 7,
+      "endLine": 7
+    },
+    {
+      "id": "symbol:src/renderer/components/tileBoardBreakWave.ts#BREAK_WAVE_SECONDS_PER_STEP",
+      "name": "BREAK_WAVE_SECONDS_PER_STEP",
+      "kind": "value",
+      "file": "src/renderer/components/tileBoardBreakWave.ts",
+      "line": 5,
+      "endLine": 5
+    },
+    {
+      "id": "symbol:src/renderer/components/tileBoardBreakWave.ts#getBreakWaveDelaySec",
+      "name": "getBreakWaveDelaySec",
+      "kind": "value",
+      "file": "src/renderer/components/tileBoardBreakWave.ts",
+      "line": 18,
+      "endLine": 43
     },
     {
       "id": "symbol:src/renderer/components/tileBoardCanvasContext.ts#getTileBoardCanvasContextConfig",
@@ -39690,7 +39793,7 @@
       "kind": "value",
       "file": "src/renderer/components/tileBoardFrameAdvance.ts",
       "line": 32,
-      "endLine": 305
+      "endLine": 308
     },
     {
       "id": "symbol:src/renderer/components/tileBoardFrameBag.ts#createOrUpdateTileBezelFrameBag",
@@ -39737,8 +39840,8 @@
       "name": "createTileBezelFramePropsSnapshot",
       "kind": "value",
       "file": "src/renderer/components/tileBoardFramePropsSnapshot.ts",
-      "line": 57,
-      "endLine": 61
+      "line": 59,
+      "endLine": 63
     },
     {
       "id": "symbol:src/renderer/components/tileBoardFramePropsSnapshot.ts#TileBezelFramePropsSnapshot",
@@ -39746,7 +39849,7 @@
       "kind": "interface",
       "file": "src/renderer/components/tileBoardFramePropsSnapshot.ts",
       "line": 14,
-      "endLine": 55
+      "endLine": 57
     },
     {
       "id": "symbol:src/renderer/components/tileBoardFramePropsSnapshot.ts#TileBoardFrameHoverTiltState",
@@ -39755,6 +39858,14 @@
       "file": "src/renderer/components/tileBoardFramePropsSnapshot.ts",
       "line": 8,
       "endLine": 12
+    },
+    {
+      "id": "symbol:src/renderer/components/tileBoardFramePulseState.ts#BREAK_DEPARTURE_SECONDS",
+      "name": "BREAK_DEPARTURE_SECONDS",
+      "kind": "value",
+      "file": "src/renderer/components/tileBoardFramePulseState.ts",
+      "line": 75,
+      "endLine": 75
     },
     {
       "id": "symbol:src/renderer/components/tileBoardFramePulseState.ts#CARD_FACE_UP_SURFACE_SECONDS",
@@ -39777,56 +39888,56 @@
       "name": "computeTileBoardFaceUpStructState",
       "kind": "value",
       "file": "src/renderer/components/tileBoardFramePulseState.ts",
-      "line": 114,
-      "endLine": 147
+      "line": 123,
+      "endLine": 156
     },
     {
       "id": "symbol:src/renderer/components/tileBoardFramePulseState.ts#computeTileBoardFlipPopStart",
       "name": "computeTileBoardFlipPopStart",
       "kind": "value",
       "file": "src/renderer/components/tileBoardFramePulseState.ts",
-      "line": 94,
-      "endLine": 112
+      "line": 103,
+      "endLine": 121
     },
     {
       "id": "symbol:src/renderer/components/tileBoardFramePulseState.ts#computeTileBoardFlipPopVisualState",
       "name": "computeTileBoardFlipPopVisualState",
       "kind": "value",
       "file": "src/renderer/components/tileBoardFramePulseState.ts",
-      "line": 204,
-      "endLine": 228
+      "line": 229,
+      "endLine": 253
     },
     {
       "id": "symbol:src/renderer/components/tileBoardFramePulseState.ts#computeTileBoardFramePulseTransitionState",
       "name": "computeTileBoardFramePulseTransitionState",
       "kind": "value",
       "file": "src/renderer/components/tileBoardFramePulseState.ts",
-      "line": 230,
-      "endLine": 304
+      "line": 255,
+      "endLine": 332
     },
     {
       "id": "symbol:src/renderer/components/tileBoardFramePulseState.ts#computeTileBoardMatchedBurstState",
       "name": "computeTileBoardMatchedBurstState",
       "kind": "value",
       "file": "src/renderer/components/tileBoardFramePulseState.ts",
-      "line": 171,
-      "endLine": 202
+      "line": 180,
+      "endLine": 227
     },
     {
       "id": "symbol:src/renderer/components/tileBoardFramePulseState.ts#computeTileBoardMatchPulseState",
       "name": "computeTileBoardMatchPulseState",
       "kind": "value",
       "file": "src/renderer/components/tileBoardFramePulseState.ts",
-      "line": 149,
-      "endLine": 169
+      "line": 158,
+      "endLine": 178
     },
     {
       "id": "symbol:src/renderer/components/tileBoardFramePulseState.ts#computeTileBoardResolvingWaveFrameState",
       "name": "computeTileBoardResolvingWaveFrameState",
       "kind": "value",
       "file": "src/renderer/components/tileBoardFramePulseState.ts",
-      "line": 75,
-      "endLine": 92
+      "line": 84,
+      "endLine": 101
     },
     {
       "id": "symbol:src/renderer/components/tileBoardFramePulseState.ts#MATCH_PULSE_DECAY_PER_SECOND",
@@ -47425,32 +47536,32 @@
       "name": "CHAIN_TIER_CLEAN_FROM",
       "kind": "value",
       "file": "src/shared/chain-tier-rules.ts",
-      "line": 18,
-      "endLine": 18
+      "line": 24,
+      "endLine": 24
     },
     {
       "id": "symbol:src/shared/chain-tier-rules.ts#CHAIN_TIER_FEVER_FROM",
       "name": "CHAIN_TIER_FEVER_FROM",
       "kind": "value",
       "file": "src/shared/chain-tier-rules.ts",
-      "line": 20,
-      "endLine": 20
+      "line": 26,
+      "endLine": 26
     },
     {
       "id": "symbol:src/shared/chain-tier-rules.ts#CHAIN_TIER_SHARP_FROM",
       "name": "CHAIN_TIER_SHARP_FROM",
       "kind": "value",
       "file": "src/shared/chain-tier-rules.ts",
-      "line": 19,
-      "endLine": 19
+      "line": 25,
+      "endLine": 25
     },
     {
       "id": "symbol:src/shared/chain-tier-rules.ts#chainCanBreakChunk",
       "name": "chainCanBreakChunk",
       "kind": "value",
       "file": "src/shared/chain-tier-rules.ts",
-      "line": 31,
-      "endLine": 31
+      "line": 37,
+      "endLine": 37
     },
     {
       "id": "symbol:src/shared/chain-tier-rules.ts#ChainTier",
@@ -47465,16 +47576,16 @@
       "name": "getChainTier",
       "kind": "value",
       "file": "src/shared/chain-tier-rules.ts",
-      "line": 22,
-      "endLine": 28
+      "line": 28,
+      "endLine": 34
     },
     {
       "id": "symbol:src/shared/chain-tier-rules.ts#nextChainTierAt",
       "name": "nextChainTierAt",
       "kind": "value",
       "file": "src/shared/chain-tier-rules.ts",
-      "line": 34,
-      "endLine": 40
+      "line": 40,
+      "endLine": 46
     },
     {
       "id": "symbol:src/shared/challenge-progression.ts#ChallengeGateId",
@@ -66852,7 +66963,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1297
+          "line": 1348
         }
       ],
       "tests": [
@@ -78630,6 +78741,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/GameScreen.tsx->symbol:src/renderer/components/GameScreen.tsx#LAST_PAIR_HOLD_MS",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "symbol:src/renderer/components/GameScreen.tsx#LAST_PAIR_HOLD_MS",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/gameScreenFeedback.ts->symbol:src/renderer/components/gameScreenFeedback.ts#DungeonCombatLogRow",
       "source": "file:src/renderer/components/gameScreenFeedback.ts",
       "target": "symbol:src/renderer/components/gameScreenFeedback.ts#DungeonCombatLogRow",
@@ -79137,6 +79254,24 @@
       "id": "exports:src/renderer/components/TileBoard.tsx->symbol:src/renderer/components/TileBoard.tsx#TileBoardHandle",
       "source": "file:src/renderer/components/TileBoard.tsx",
       "target": "symbol:src/renderer/components/TileBoard.tsx#TileBoardHandle",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/tileBoardBreakWave.ts->symbol:src/renderer/components/tileBoardBreakWave.ts#BREAK_WAVE_MAX_DELAY_SECONDS",
+      "source": "file:src/renderer/components/tileBoardBreakWave.ts",
+      "target": "symbol:src/renderer/components/tileBoardBreakWave.ts#BREAK_WAVE_MAX_DELAY_SECONDS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/tileBoardBreakWave.ts->symbol:src/renderer/components/tileBoardBreakWave.ts#BREAK_WAVE_SECONDS_PER_STEP",
+      "source": "file:src/renderer/components/tileBoardBreakWave.ts",
+      "target": "symbol:src/renderer/components/tileBoardBreakWave.ts#BREAK_WAVE_SECONDS_PER_STEP",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/tileBoardBreakWave.ts->symbol:src/renderer/components/tileBoardBreakWave.ts#getBreakWaveDelaySec",
+      "source": "file:src/renderer/components/tileBoardBreakWave.ts",
+      "target": "symbol:src/renderer/components/tileBoardBreakWave.ts#getBreakWaveDelaySec",
       "kind": "exports"
     },
     {
@@ -79767,6 +79902,12 @@
       "id": "exports:src/renderer/components/tileBoardFramePropsSnapshot.ts->symbol:src/renderer/components/tileBoardFramePropsSnapshot.ts#TileBoardFrameHoverTiltState",
       "source": "file:src/renderer/components/tileBoardFramePropsSnapshot.ts",
       "target": "symbol:src/renderer/components/tileBoardFramePropsSnapshot.ts#TileBoardFrameHoverTiltState",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/tileBoardFramePulseState.ts->symbol:src/renderer/components/tileBoardFramePulseState.ts#BREAK_DEPARTURE_SECONDS",
+      "source": "file:src/renderer/components/tileBoardFramePulseState.ts",
+      "target": "symbol:src/renderer/components/tileBoardFramePulseState.ts#BREAK_DEPARTURE_SECONDS",
       "kind": "exports"
     },
     {
@@ -102931,6 +103072,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/audio/gameSfx.ts->src/shared/chain-tier-rules.ts",
+      "source": "file:src/renderer/audio/gameSfx.ts",
+      "target": "file:src/shared/chain-tier-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/audio/gameSfx.ts->src/shared/contracts.ts",
       "source": "file:src/renderer/audio/gameSfx.ts",
       "target": "file:src/shared/contracts.ts",
@@ -104467,6 +104614,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/GameScreen.tsx->src/shared/chain-tier-rules.ts",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "file:src/shared/chain-tier-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/GameScreen.tsx->src/shared/contracts.ts",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "file:src/shared/contracts.ts",
@@ -105217,6 +105370,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/RunShell.tsx->src/renderer/copy/chainBeat.ts",
+      "source": "file:src/renderer/components/RunShell.tsx",
+      "target": "file:src/renderer/copy/chainBeat.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/RunShell.tsx->src/renderer/copy/passAndPlay.ts",
       "source": "file:src/renderer/components/RunShell.tsx",
       "target": "file:src/renderer/copy/passAndPlay.ts",
@@ -105232,6 +105391,12 @@
       "id": "imports:src/renderer/components/RunShell.tsx->src/renderer/ui/gameplayIcons.tsx",
       "source": "file:src/renderer/components/RunShell.tsx",
       "target": "file:src/renderer/ui/gameplayIcons.tsx",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/RunShell.tsx->src/shared/chain-tier-rules.ts",
+      "source": "file:src/renderer/components/RunShell.tsx",
+      "target": "file:src/shared/chain-tier-rules.ts",
       "kind": "imports"
     },
     {
@@ -105793,6 +105958,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/TileBezel.tsx->src/renderer/components/tileBoardBreakWave.ts",
+      "source": "file:src/renderer/components/TileBezel.tsx",
+      "target": "file:src/renderer/components/tileBoardBreakWave.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/TileBezel.tsx->src/renderer/components/tileBoardCardBend.ts",
       "source": "file:src/renderer/components/TileBezel.tsx",
       "target": "file:src/renderer/components/tileBoardCardBend.ts",
@@ -106168,6 +106339,30 @@
       "id": "imports:src/renderer/components/TileBoard.tsx->src/shared/trait-opportunities.ts",
       "source": "file:src/renderer/components/TileBoard.tsx",
       "target": "file:src/shared/trait-opportunities.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/tileBoardBreakWave.test.ts->src/renderer/components/tileBoardBreakWave.ts",
+      "source": "file:src/renderer/components/tileBoardBreakWave.test.ts",
+      "target": "file:src/renderer/components/tileBoardBreakWave.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/tileBoardBreakWave.test.ts->src/shared/contracts.ts",
+      "source": "file:src/renderer/components/tileBoardBreakWave.test.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/tileBoardBreakWave.ts->src/shared/board-grid-dimensions.ts",
+      "source": "file:src/renderer/components/tileBoardBreakWave.ts",
+      "target": "file:src/shared/board-grid-dimensions.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/tileBoardBreakWave.ts->src/shared/contracts.ts",
+      "source": "file:src/renderer/components/tileBoardBreakWave.ts",
+      "target": "file:src/shared/contracts.ts",
       "kind": "imports"
     },
     {
@@ -106630,6 +106825,12 @@
       "id": "imports:src/renderer/components/tileBoardFrameBag.ts->src/shared/contracts.ts",
       "source": "file:src/renderer/components/tileBoardFrameBag.ts",
       "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/tileBoardFrameDeparture.test.ts->src/renderer/components/tileBoardFramePulseState.ts",
+      "source": "file:src/renderer/components/tileBoardFrameDeparture.test.ts",
+      "target": "file:src/renderer/components/tileBoardFramePulseState.ts",
       "kind": "imports"
     },
     {
@@ -129059,6 +129260,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/components/tileBoardBreakWave.ts->file:src/renderer/components/tileBoardBreakWave.test.ts",
+      "source": "file:src/renderer/components/tileBoardBreakWave.ts",
+      "target": "file:src/renderer/components/tileBoardBreakWave.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/components/tileBoardCanvasContext.ts->file:src/renderer/components/tileBoardCanvasContext.test.ts",
       "source": "file:src/renderer/components/tileBoardCanvasContext.ts",
       "target": "file:src/renderer/components/tileBoardCanvasContext.test.ts",
@@ -129134,6 +129341,12 @@
       "id": "tested_by:src/renderer/components/tileBoardFramePropsSnapshot.ts->file:src/renderer/components/tileBoardFramePropsSnapshot.test.ts",
       "source": "file:src/renderer/components/tileBoardFramePropsSnapshot.ts",
       "target": "file:src/renderer/components/tileBoardFramePropsSnapshot.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/tileBoardFramePulseState.ts->file:src/renderer/components/tileBoardFrameDeparture.test.ts",
+      "source": "file:src/renderer/components/tileBoardFramePulseState.ts",
+      "target": "file:src/renderer/components/tileBoardFrameDeparture.test.ts",
       "kind": "tested_by"
     },
     {
@@ -130838,6 +131051,12 @@
       "id": "tested_by:src/shared/contracts.ts->file:src/renderer/components/TileBoard.test.tsx",
       "source": "file:src/shared/contracts.ts",
       "target": "file:src/renderer/components/TileBoard.test.tsx",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/contracts.ts->file:src/renderer/components/tileBoardBreakWave.test.ts",
+      "source": "file:src/shared/contracts.ts",
+      "target": "file:src/renderer/components/tileBoardBreakWave.test.ts",
       "kind": "tested_by"
     },
     {

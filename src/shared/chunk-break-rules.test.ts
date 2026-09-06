@@ -19,7 +19,7 @@ import {
  *   A' B' E  F        E F tide
  *   D' C' E' F'
  *
- * Match A. Clean (chain 2) reaches A's neighbours: B. Sharp (chain 5) walks the whole ember
+ * Match A. Clean (chain 3) reaches A's neighbours: B. Sharp (chain 6) walks the whole ember
  * region: B and, through B', C. D's clump is tide and never comes along.
  */
 const suit = (id: string): TileSuit => (['A', 'B', 'C'].includes(id[0]!) ? 'ember' : 'tide');
@@ -56,7 +56,7 @@ describe('what breaks', () => {
     });
 
     it('Clean breaks the pair beside the match, and both halves leave together', () => {
-        const result = resolveChunkBreak({ board: board(), run: endless, matchedTileIds: ['A1', 'A2'], chain: 2 });
+        const result = resolveChunkBreak({ board: board(), run: endless, matchedTileIds: ['A1', 'A2'], chain: 3 });
         expect(result.tier).toBe('clean');
         expect(result.brokenPairKeys).toEqual(['B']);
         expect(result.brokenTileIds.sort()).toEqual(['B1', 'B2']);
@@ -65,7 +65,7 @@ describe('what breaks', () => {
     });
 
     it('Sharp breaks the whole clump, partners across the board included', () => {
-        const result = resolveChunkBreak({ board: board(), run: endless, matchedTileIds: ['A1', 'A2'], chain: 5 });
+        const result = resolveChunkBreak({ board: board(), run: endless, matchedTileIds: ['A1', 'A2'], chain: 6 });
         expect(result.tier).toBe('sharp');
         expect(result.brokenPairKeys.sort()).toEqual(['B', 'C']);
         expect(result.board.tiles.find((t) => t.id === 'D1')?.state).toBe('hidden');
@@ -73,7 +73,7 @@ describe('what breaks', () => {
 
     it('leaves a pair alone when its partner has a job of its own', () => {
         const tiles = layout().map((t) => (t.id === 'C2' ? { ...t, findableKind: 'shard_spark' as const } : t));
-        const result = resolveChunkBreak({ board: board(tiles), run: endless, matchedTileIds: ['A1', 'A2'], chain: 5 });
+        const result = resolveChunkBreak({ board: board(tiles), run: endless, matchedTileIds: ['A1', 'A2'], chain: 6 });
         expect(result.brokenPairKeys).toEqual(['B']);
         expect(tileCanBreakInChunk(tiles.find((t) => t.id === 'C2')!)).toBe(false);
     });
@@ -85,7 +85,7 @@ describe('what breaks', () => {
             board: board(tiles, { cursedPairKey: 'B' }),
             run: endless,
             matchedTileIds: ['A1', 'A2'],
-            chain: 5
+            chain: 6
         });
         expect(result.brokenPairKeys).toEqual(['C']);
         expect(result.board.tiles.find((t) => t.pairKey === EXIT_PAIR_KEY)?.state).toBe('hidden');
@@ -125,7 +125,7 @@ describe('through a real turn', () => {
     };
 
     it('takes the pair beside a Clean match off the board and says so on the journal', () => {
-        const run = runWithChain(2);
+        const run = runWithChain(3);
         const after = resolveBoardTurn(flipTile(flipTile(run, 'A1'), 'A2'));
 
         expect(after.board!.tiles.find((t) => t.id === 'B1')?.state).toBe('removed');
@@ -137,16 +137,16 @@ describe('through a real turn', () => {
         const turn = (after.gameplayEventJournal as { type: string; announcement?: Record<string, number> }[])
             .filter((event) => event.type === 'board.turn_resolved')
             .at(-1)!;
-        expect(turn.announcement).toMatchObject({ chunkPairsBrokenBefore: 0, chunkPairsBrokenAfter: 1, chainAfter: 2 });
+        expect(turn.announcement).toMatchObject({ chunkPairsBrokenBefore: 0, chunkPairsBrokenAfter: 1, chainAfter: 3 });
     });
 
     it('pays the chunk on top of the match, without touching the chain', () => {
         const plain = resolveBoardTurn(flipTile(flipTile(runWithChain(1), 'A1'), 'A2'));
-        const chained = resolveBoardTurn(flipTile(flipTile(runWithChain(2), 'A1'), 'A2'));
-        // A chain-2 match already scores more than a chain-1 match; the chunk is on top of that.
-        const chainOnlyDelta = 10;
+        const chained = resolveBoardTurn(flipTile(flipTile(runWithChain(3), 'A1'), 'A2'));
+        // A chain-3 match already scores more than a chain-1 match; the chunk is on top of that.
+        const chainOnlyDelta = 20;
         expect(chained.stats.currentLevelScore - plain.stats.currentLevelScore).toBeGreaterThan(chainOnlyDelta);
-        expect(chained.stats.currentStreak).toBe(2);
+        expect(chained.stats.currentStreak).toBe(3);
         expect(chained.recallMatchesThisFloor).toBe(plain.recallMatchesThisFloor);
     });
 
@@ -163,7 +163,7 @@ describe('the proximity badge stays honest', () => {
         const distanceBefore = getPairProximityGridDistance(before, 'D1');
         expect(distanceBefore).toBe(5);
 
-        const broken = resolveChunkBreak({ board: before, run: endless, matchedTileIds: ['A1', 'A2'], chain: 5 });
+        const broken = resolveChunkBreak({ board: before, run: endless, matchedTileIds: ['A1', 'A2'], chain: 6 });
         expect(broken.brokenPairKeys.length).toBeGreaterThan(0);
         expect(getPairProximityGridDistance(broken.board, 'D1')).toBe(distanceBefore);
 

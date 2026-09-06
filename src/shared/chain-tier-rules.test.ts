@@ -28,7 +28,7 @@ describe('the chain ladder', () => {
         expect(nextChainTierAt(1)).toBe(CHAIN_TIER_CLEAN_FROM);
         expect(nextChainTierAt(3)).toBe(CHAIN_TIER_SHARP_FROM);
         expect(nextChainTierAt(6)).toBe(CHAIN_TIER_FEVER_FROM);
-        expect(nextChainTierAt(9)).toBeNull();
+        expect(nextChainTierAt(12)).toBeNull();
     });
 
     it('treats garbage as no chain rather than as Fever', () => {

@@ -15,7 +15,7 @@ const tool = (overrides: Partial<RunShellTool> & { id: string }): RunShellTool =
 });
 
 describe('RunShell', () => {
-    it('renders the four run numbers as one stats group', () => {
+    it('renders the five run numbers as one stats group', () => {
         const run = playingRun();
         render(<RunShell gauntletRemainingMs={null} onPause={vi.fn()} run={run} tools={[]} />);
 
@@ -24,6 +24,7 @@ describe('RunShell', () => {
         expect(within(stats).getByTestId('hud-lives')).toHaveTextContent(/lives/i);
         expect(within(stats).getByTestId('hud-score')).toHaveTextContent(/score/i);
         expect(within(stats).getByTestId('hud-combo-shards')).toHaveTextContent(/shards/i);
+        expect(within(stats).getByTestId('hud-chain')).toHaveTextContent(/chain/i);
         // Guards, the clock and mutators only appear when they carry a value.
         expect(screen.queryByTestId('hud-guards')).not.toBeInTheDocument();
         expect(screen.queryByTestId('hud-gauntlet-timer')).not.toBeInTheDocument();
@@ -60,7 +61,7 @@ describe('RunShell', () => {
         expect(screen.queryByTestId('hud-perfect-memory')).not.toBeInTheDocument();
     });
 
-    it('keeps the mode identity out of the numbers group, which stays four numbers', () => {
+    it('keeps the mode identity out of the numbers group, which stays a row of numbers', () => {
         render(<RunShell gauntletRemainingMs={null} onPause={vi.fn()} run={playingRun()} tools={[]} />);
 
         const stats = screen.getByRole('group', { name: /run stats/i });

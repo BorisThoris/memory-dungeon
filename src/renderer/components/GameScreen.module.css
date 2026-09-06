@@ -1186,3 +1186,57 @@ where that rule
         display: none;
     }
 }
+
+
+/* ---- chunk break pulse ---------------------------------------------------------------- */
+
+/* The whole stage answers a break: a short bloom that scales with the tier. Fever is gold and
+   held; Clean is barely there. Driven by a data attribute the screen sets from the resolved-turn
+   event and clears after BREAK_PULSE_MS, so the animation restarts on every break. */
+.boardStage[data-break-pulse='clean'] {
+    animation: boardStageBreakPulse 0.72s ease-out 1;
+    --break-pulse-strength: 0.18;
+}
+
+.boardStage[data-break-pulse='sharp'] {
+    animation: boardStageBreakPulse 0.72s ease-out 1;
+    --break-pulse-strength: 0.34;
+}
+
+.boardStage[data-break-pulse='fever'] {
+    animation: boardStageFeverPulse 0.72s ease-out 1;
+    --break-pulse-strength: 0.5;
+}
+
+@keyframes boardStageBreakPulse {
+    0% {
+        box-shadow: inset 0 0 0 0 transparent;
+    }
+    18% {
+        box-shadow: inset 0 0 48px 8px color-mix(in srgb, var(--theme-gold-bright) calc(var(--break-pulse-strength) * 100%), transparent);
+    }
+    100% {
+        box-shadow: inset 0 0 0 0 transparent;
+    }
+}
+
+@keyframes boardStageFeverPulse {
+    0% {
+        box-shadow: inset 0 0 0 0 transparent;
+        filter: saturate(1);
+    }
+    16% {
+        box-shadow: inset 0 0 96px 18px color-mix(in srgb, var(--theme-gold-bright) 50%, transparent);
+        filter: saturate(1.25);
+    }
+    100% {
+        box-shadow: inset 0 0 0 0 transparent;
+        filter: saturate(1);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .boardStage[data-break-pulse] {
+        animation: none;
+    }
+}

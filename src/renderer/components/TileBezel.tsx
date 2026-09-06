@@ -30,6 +30,7 @@ import { createMatchedCardRimFireMaterial } from './matchedCardRimFireMaterial';
 import { gameplayRenderQualityProfile } from './gameplayRenderProfile';
 import { TileBoardCardSurface } from './TileBoardCardSurface';
 import { SuitMarkerPlane } from './SuitMarkerPlane';
+import { getBreakWaveDelaySec } from './tileBoardBreakWave';
 import { TileBoardEffectOverlays } from './TileBoardEffectOverlays';
 import { TileBoardHoverChrome } from './TileBoardHoverChrome';
 import { TileBoardReadabilityMarkers } from './TileBoardReadabilityMarkers';
@@ -288,12 +289,15 @@ const TileBezelInner = ({
     const useSvgMeshFront = sharedCardFrontGeometry != null;
     const useSvgMeshBack = sharedCardBackLayers != null;
 
+    // Where this tile sits in the chunk-break wave, from the board alone: no event plumbing.
+    const breakWaveDelaySec = useMemo(() => getBreakWaveDelaySec(board, tile), [board, tile]);
     const propsSnapshot: TileBezelFramePropsSnapshot = {
         boardColumns,
         boardEntranceMotionBudgetMs,
         boardEntranceMotionDeadlineMs,
         boardEntranceStaggerTileCount,
         boardRows,
+        breakWaveDelaySec,
         enemyOccupiedBack,
         faceUp,
         fieldAmp,

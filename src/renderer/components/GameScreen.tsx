@@ -76,6 +76,7 @@ import { PASS_AND_PLAY_COPY } from '../copy/passAndPlay';
 import { floorClearResidentLine } from '../copy/floorCurioBeat';
 import { pickFloorCurio } from '../../shared/floor-curio-rules';
 import { canGreetFloorCurio } from '../../shared/floor-curio-greeting-rules';
+import { getChainTier, type ChainTier } from '../../shared/chain-tier-rules';
 import { GAMEPAD_SHORTCUT_ROWS, GAMEPLAY_SHORTCUT_ROWS } from '../keyboard/gameplayShortcuts';
 import { useGamepadConnected } from '../hooks/useGamepadNavigation';
 import { usePlatformTiltField } from '../platformTilt/usePlatformTiltField';
@@ -258,6 +259,11 @@ const getClearLifeBonusLabel = (result: NonNullable<RunState['lastLevelResult']>
 
 
 
+
+/** How long the stage carries the break pulse; matches the CSS animation. */
+const BREAK_PULSE_MS = 720;
+/** The breath before the floor-clear dialog on the last pair. */
+export const LAST_PAIR_HOLD_MS = 650;
 
 type NextFloorSignalRow = {
     detail: string | null;
@@ -1164,6 +1170,51 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         : run.floorCurioGreeted === true
           ? RUN_TOOL_REASONS.greet.alreadyGreeted
           : RUN_TOOL_REASONS.greet.nobodyHome;
+    /*
+     * The break, on the whole stage. Projected from the latest resolved-turn event rather than a
+     * board diff: a break is a chunk counter moving on that event. The pulse lives until a timer
+     * marks that event id expired, so two breaks in a row each get their own, and nothing sets
+     * state synchronously inside an effect.
+     */
+    const latestTurnForPulse = getLatestBoardTurnResolvedEvent(run);
+    const [expiredPulseEventId, setExpiredPulseEventId] = useState<string | null>(null);
+    const pulseEventId = latestTurnForPulse?.eventId ?? null;
+    const pulsePairs = latestTurnForPulse
+        ? latestTurnForPulse.announcement.chunkPairsBrokenAfter - latestTurnForPulse.announcement.chunkPairsBrokenBefore
+        : 0;
+    const breakPulseTier: ChainTier | 'none' =
+        latestTurnForPulse && pulsePairs > 0 && expiredPulseEventId !== pulseEventId
+            ? getChainTier(latestTurnForPulse.announcement.chainAfter)
+            : 'none';
+    useEffect(() => {
+        if (pulseEventId === null || pulsePairs <= 0) {
+            return undefined;
+        }
+        const clear = window.setTimeout(() => setExpiredPulseEventId(pulseEventId), BREAK_PULSE_MS);
+        return () => window.clearTimeout(clear);
+    }, [pulseEventId, pulsePairs]);
+
+    /*
+     * The last pair is its own moment. The dialog used to appear on the same frame the pair
+     * resolved; now the board holds for a breath first, so the finish is louder than anything
+     * before it. Keyed by the floor that was just cleared: a screen that opens already complete
+     * — a resumed save, a replayed floor — has no last pair to hold for and shows the dialog
+     * now; reduced motion skips the hold, since a delay with nothing moving is just latency.
+     */
+    const floorClearKey = `${run.runSeed}:${run.lastLevelResult?.level ?? 'none'}`;
+    const [floorClearShownAtMount] = useState(() => (run.status === 'levelComplete' ? floorClearKey : null));
+    const [floorClearReleasedKey, setFloorClearReleasedKey] = useState<string | null>(null);
+    const floorClearHeld =
+        run.status === 'levelComplete' &&
+        (reduceMotion || floorClearShownAtMount === floorClearKey || floorClearReleasedKey === floorClearKey);
+    useEffect(() => {
+        if (run.status !== 'levelComplete' || reduceMotion) {
+            return undefined;
+        }
+        const timer = window.setTimeout(() => setFloorClearReleasedKey(floorClearKey), LAST_PAIR_HOLD_MS);
+        return () => window.clearTimeout(timer);
+    }, [run.status, reduceMotion, floorClearKey]);
+
     const nextFloorResidentLine = run.lastLevelResult
         ? floorClearResidentLine(
               pickFloorCurio(run.runSeed, run.lastLevelResult.level + 1, run.runRulesVersion)
@@ -1671,6 +1722,8 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                             ref={boardStageRef}
                             data-testid="board-stage"
                             className={`${styles.boardStage} ${cameraViewportMode ? styles.boardStageCamera : ''} ${boardPresentationClass} ${boardStageCssBloomClass}`.trim()}
+                            data-chain-tier={getChainTier(run.stats.currentStreak)}
+                            data-break-pulse={breakPulseTier}
                             data-match-crescendo-beats={
                                 boardFloaterPayload?.kind === 'match'
                                     ? boardFloaterPayload.crescendo?.beatCount ?? 0
@@ -2012,6 +2065,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                 {!suppressStatusOverlays &&
                     !abandonRunConfirmOpen &&
                     run.status === 'levelComplete' &&
+                    floorClearHeld &&
                     run.lastLevelResult &&
                     !run.relicOffer && (
                     <FloorClearDialog

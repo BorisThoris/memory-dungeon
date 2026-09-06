@@ -18,6 +18,8 @@ interface TileBoardMatchPulseState {
 
 interface TileBoardMatchedBurstState {
     burst: number;
+    /** 0 until a removed tile has burst, then 1 once it has left; always 0 for matched tiles. */
+    departure: number;
     startedAt: number | null;
     wasMatched: boolean;
 }
@@ -48,6 +50,8 @@ interface TileBoardFramePulseRefsState {
 }
 
 interface TileBoardFramePulseTransitionInput {
+    /** Seconds a removed tile waits for the break wave before it bursts; ignored otherwise. */
+    breakWaveDelaySec?: number;
     current: TileBoardFramePulseRefsState;
     delta: number;
     faceUp: boolean;
@@ -59,11 +63,16 @@ interface TileBoardFramePulseTransitionInput {
 }
 
 interface TileBoardFramePulseTransitionState {
+    /** 0→1 as a removed tile scales away after its burst; 0 for every other tile. */
+    departure: number;
     flipPopScaleMultiplier: number;
     flipPopZ: number;
     matchedVictoryBurst: number;
     refs: TileBoardFramePulseRefsState;
 }
+
+/** How long a removed tile takes to scale away after its burst. */
+export const BREAK_DEPARTURE_SECONDS = 0.26;
 
 const clamp01 = (value: number): number => Math.min(1, Math.max(0, value));
 
@@ -173,21 +182,33 @@ export const computeTileBoardMatchedBurstState = ({
     startedAt,
     tileState,
     time,
-    wasMatched
+    wasMatched,
+    breakWaveDelaySec = 0
 }: {
     reduceMotion: boolean;
     startedAt: number | null;
     tileState: Tile['state'];
     time: number;
     wasMatched: boolean;
+    /** Seconds a removed tile waits for the break wave before it bursts; ignored for matched tiles. */
+    breakWaveDelaySec?: number;
 }): TileBoardMatchedBurstState => {
-    if (tileState !== 'matched') {
-        return { burst: 0, startedAt: null, wasMatched: false };
+    /*
+     * A removed tile is a chunk-break casualty: it bursts like a match, after the wave reaches
+     * it, and then it departs — `departure` runs 0→1 after the burst and the frame scales the
+     * card away on it. A matched tile bursts and stays; it never departs.
+     */
+    const removed = tileState === 'removed';
+    if (tileState !== 'matched' && !removed) {
+        return { burst: 0, departure: 0, startedAt: null, wasMatched: false };
     }
 
-    const nextStartedAt = !wasMatched ? time : startedAt;
+    const nextStartedAt = !wasMatched ? time + (removed ? breakWaveDelaySec ?? 0 : 0) : startedAt;
     if (nextStartedAt == null) {
-        return { burst: 0, startedAt: null, wasMatched: true };
+        return { burst: 0, departure: removed ? 1 : 0, startedAt: null, wasMatched: true };
+    }
+    if (time < nextStartedAt) {
+        return { burst: 0, departure: 0, startedAt: nextStartedAt, wasMatched: true };
     }
 
     const burstDuration = reduceMotion
@@ -195,10 +216,14 @@ export const computeTileBoardMatchedBurstState = ({
         : GAMEPLAY_BOARD_VISUALS.matchedEdgeEffect.burstDuration.default;
     const progress = clamp01((time - nextStartedAt) / burstDuration);
     const burst = 1 - smoothstep01(progress);
+    const departure = removed
+        ? clamp01((time - nextStartedAt - burstDuration * 0.5) / (reduceMotion ? 0.12 : BREAK_DEPARTURE_SECONDS))
+        : 0;
+    const settled = removed ? departure >= 1 : progress >= 1;
 
-    return progress >= 1
-        ? { burst, startedAt: null, wasMatched: true }
-        : { burst, startedAt: nextStartedAt, wasMatched: true };
+    return settled
+        ? { burst, departure, startedAt: null, wasMatched: true }
+        : { burst, departure, startedAt: nextStartedAt, wasMatched: true };
 };
 
 export const computeTileBoardFlipPopVisualState = ({
@@ -231,6 +256,7 @@ export const computeTileBoardFramePulseTransitionState = ({
     current,
     delta,
     faceUp,
+    breakWaveDelaySec = 0,
     reduceMotion,
     resolvingSelection,
     resolvingWaveKey,
@@ -272,6 +298,7 @@ export const computeTileBoardFramePulseTransitionState = ({
     });
 
     const matchedBurstState = computeTileBoardMatchedBurstState({
+        breakWaveDelaySec,
         reduceMotion,
         startedAt: current.matchedVictoryBurstStartedAt,
         tileState,
@@ -286,6 +313,7 @@ export const computeTileBoardFramePulseTransitionState = ({
     });
 
     return {
+        departure: matchedBurstState.departure,
         flipPopScaleMultiplier: flipPopVisualState.scaleMultiplier,
         flipPopZ: flipPopVisualState.z,
         matchedVictoryBurst: matchedBurstState.burst,

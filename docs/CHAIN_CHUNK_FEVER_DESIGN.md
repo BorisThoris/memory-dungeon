@@ -79,19 +79,21 @@ The streak is renamed in player-facing copy to the **chain**, and it gets named 
 
 | Chain | Tier name | What it unlocks |
 |---|---|---|
-| ×1 | — | a match |
-| ×2–×4 | **Clean** | chunk break: neighbours |
-| ×5–×7 | **Sharp** | chunk break: full region |
-| ×8+ | **Fever** | region + celebration + shard burst |
+| ×1–×2 | — | a match |
+| ×3–×5 | **Clean** | chunk break: neighbours |
+| ×6–×9 | **Sharp** | chunk break: full region |
+| ×10+ | **Fever** | region + celebration + shard burst |
+
+The rungs are the ones the game already announces — chain targets, milestone pings and the feedback rail all read ×3/×6/×10 — so a player climbing hears one story rather than two ladders. (Gen 119 aligned these; the first draft said ×2/×5/×8.)
 
 A mismatch drops the chain to zero, the way a missed peg ends the shot. That is the "one more" tension the genre runs on, and it maps onto a real skill: the chain is literally how many things in a row you remembered.
 
 ### 2.3 Chunk break — the leverage
 
-When a match resolves with chain ≥ 2, the game finds the **connected same-suit region** (4-neighbour, through hidden tiles only) around the two matched tiles.
+When a match resolves with chain ≥ 3, the game finds the **connected same-suit region** (4-neighbour, through hidden tiles only) around the two matched tiles.
 
-- **Clean** (×2–×4): every hidden same-suit tile *orthogonally adjacent* to either matched tile breaks away — and its partner, wherever it is, breaks with it. Pairs leave together, always.
-- **Sharp** (×5+): the *entire connected region* breaks, partners included.
+- **Clean** (×3–×5): every hidden same-suit tile *orthogonally adjacent* to either matched tile breaks away — and its partner, wherever it is, breaks with it. Pairs leave together, always.
+- **Sharp** (×6+): the *entire connected region* breaks, partners included.
 - Tiles that break are set to `removed` and scored as a **cascade**: less than a matched pair (no streak credit, no recall credit, no perfect-rating credit) but real score, scaled by chunk size, and **one combo shard per two pairs cascaded** — so a big break feeds survival, not only the number.
 
 What the player sees: they match a pair inside a big Ember chunk, and the Ember chunk *goes* — a wave of shatters spreading out from the match, partners across the board popping in answer, the pitch climbing with each one. That is the drop. That is the whole reason to build a chain.
@@ -100,7 +102,7 @@ What the player does not get: cascaded pairs do not count toward the floor's rec
 
 ### 2.4 Fever — the terminal celebration
 
-At chain ×8 the break is a **Fever break**: the board dims and pulses gold, time stretches for a beat (a 450 ms slow-in on the shatter wave, respecting `reduceMotion`), a distinct sting plays, and the run line names it. Every cascaded pair in a Fever break drops a shard, not every second one.
+At chain ×10 the break is a **Fever break**: the board dims and pulses gold, time stretches for a beat (a 450 ms slow-in on the shatter wave, respecting `reduceMotion`), a distinct sting plays, and the run line names it. Every cascaded pair in a Fever break drops a shard, not every second one.
 
 And the floor's **last pair** is its own moment regardless of chain — the last-peg beat: the exit tile lights, the board holds for a breath, then the floor-clear dialog. Today the dialog just appears. The finish should be louder than anything before it.
 

@@ -26,8 +26,8 @@ export const CHAIN_BEAT_COPY = {
     feverLine: 'Fever. The whole clump went.',
     codexChainTitle: 'Chain, chunk and Fever',
     codexChainDescription:
-        'Every correct match in a row raises your chain. From chain 2 (Clean) a match also breaks the same-suit tiles beside it, ' +
-        'and their partners go with them. From chain 5 (Sharp) the whole connected clump goes. At chain 8 it is Fever. ' +
+        'Every correct match in a row raises your chain. From chain 3 (Clean) a match also breaks the same-suit tiles beside it, ' +
+        'and their partners go with them. From chain 6 (Sharp) the whole connected clump goes. At chain 10 it is Fever. ' +
         'Broken pairs score less than matched ones and give no recall credit — memory still pays best — but they drop combo shards ' +
         'and clear the floor faster. A miss drops the chain to zero.'
 } as const;

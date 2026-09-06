@@ -9,6 +9,8 @@ import styles from './RunShell.module.css';
 import type { PerfectMemoryStatus } from '../../shared/perfect-memory-status';
 import { PERFECT_MEMORY_COPY, RUN_SHELL_LABELS } from '../copy/runDialogCopy';
 import { PASS_AND_PLAY_COPY } from '../copy/passAndPlay';
+import { CHAIN_TIER_LABELS } from '../copy/chainBeat';
+import { getChainTier } from '../../shared/chain-tier-rules';
 import { isPassAndPlayRun, PASS_AND_PLAY_FLOORS } from '../../shared/pass-and-play-rules';
 
 /**
@@ -173,6 +175,17 @@ const RunShell = ({
                         </span>
                     </div>
                 ) : null}
+                {/* The ladder you are climbing. Depth plus the rung's name, because a tier that only
+                    exists in the rules is a tier the player never planned around. */}
+                <Stat label="Chain" testId="hud-chain">
+                    <span data-chain-tier={getChainTier(run.stats.currentStreak)}>
+                        {`×${runNonNegativeInteger(run.stats.currentStreak)}${
+                            CHAIN_TIER_LABELS[getChainTier(run.stats.currentStreak)]
+                                ? ` ${CHAIN_TIER_LABELS[getChainTier(run.stats.currentStreak)]}`
+                                : ''
+                        }`}
+                    </span>
+                </Stat>
                 <Stat label="Shards" testId="hud-combo-shards">
                     {String(run.stats.comboShards)}
                 </Stat>

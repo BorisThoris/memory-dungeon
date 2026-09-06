@@ -59,6 +59,7 @@ export const advanceTileBezelFrame = (bag: TileBezelFrameBag, state: RootState, 
         reduceMotion: p.reduceMotion,
         resolvingSelection: p.resolvingSelection,
         resolvingWaveKey: p.resolvingMatchWaveKey,
+        breakWaveDelaySec: p.breakWaveDelaySec,
         time: clock.elapsedTime,
         tileState: p.tile.state
     });
@@ -74,7 +75,9 @@ export const advanceTileBezelFrame = (bag: TileBezelFrameBag, state: RootState, 
     bag.prevTileMatchedRef.current = pulseRefs.wasMatched;
     const matchPulse = bag.matchPulseRef.current;
     const matchedVictoryBurst = pulseTransition.matchedVictoryBurst;
-    const flipPopMul = pulseTransition.flipPopScaleMultiplier;
+    // A departing tile shares the flip-pop scale channel: once its burst is done it shrinks to
+    // nothing, and a group at scale zero is a tile that has left the board.
+    const flipPopMul = pulseTransition.flipPopScaleMultiplier * (1 - pulseTransition.departure);
     const flipPopZ = pulseTransition.flipPopZ;
 
     const frontBase = bag.frontBaseRef.current;

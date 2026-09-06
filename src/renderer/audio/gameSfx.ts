@@ -3,6 +3,7 @@ import { runArray, runArrayCount, runFilteredStringArray } from '../../shared/ru
 import { runFiniteNumber, runNonNegativeInteger } from '../../shared/run-number-guards';
 import { TILE_TRAIT_COUNT_KINDS } from '../../shared/session-stats-rules';
 import { getChainMilestoneFeedback, type ChainMilestoneFeedback } from '../copy/chainMilestoneFeedback';
+import { getChainTier, type ChainTier } from '../../shared/chain-tier-rules';
 import { getChainRewardForecastCues } from '../copy/chainMomentum';
 import { audioNeverThrows, audioNeverThrowsBoolean } from './audioSafety';
 import {
@@ -378,6 +379,40 @@ const playChainMilestoneAccentSfx = (gain: number, milestone: ChainMilestoneFeed
     });
 };
 
+/**
+ * The chunk, as a sound: one rising note per pair that left, spaced like the shatter wave, so a
+ * big break is audibly bigger than a small one. Fever adds a held sting on top — the finish is
+ * supposed to be louder than anything before it.
+ */
+const playChunkBreakSfx = (gain: number, pairs: number, tier: ChainTier): void => {
+    const count = Math.max(1, Math.min(pairs, 12));
+    for (let index = 0; index < count; index += 1) {
+        const lift = index * 46;
+        window.setTimeout(() => {
+            playTone({
+                frequency: 720 + lift,
+                frequencyEnd: 1080 + lift * 1.4,
+                durationSec: 0.09,
+                gain: gain * (tier === 'fever' ? 0.3 : 0.22),
+                type: 'triangle',
+                category: 'match'
+            });
+        }, index * 55);
+    }
+    if (tier === 'fever') {
+        window.setTimeout(() => {
+            playTone({
+                frequency: 660,
+                frequencyEnd: 1320,
+                durationSec: 0.42,
+                gain: gain * 0.34,
+                type: 'sine',
+                category: 'match'
+            });
+        }, count * 55 + 40);
+    }
+};
+
 const playBrokenChainRewardLossSfx = (gain: number, chainDepthLost: number): void => {
     playTone({
         frequency: 760 + Math.min(chainDepthLost, 10) * 22,
@@ -676,6 +711,10 @@ export const playResolveSfx = (before: RunState, after: RunState, gain: number):
         const chainMilestone = getChainMilestoneFeedback(before.stats.currentStreak, after.stats.currentStreak);
         if (chainMilestone) {
             playChainMilestoneAccentSfx(gain, chainMilestone);
+        }
+        const chunkPairs = (after.chunkPairsBrokenThisFloor ?? 0) - (before.chunkPairsBrokenThisFloor ?? 0);
+        if (chunkPairs > 0) {
+            playChunkBreakSfx(gain, chunkPairs, getChainTier(after.stats.currentStreak));
         }
         if ((after.findablesClaimedThisFloor ?? 0) > (before.findablesClaimedThisFloor ?? 0)) {
             playTone({

@@ -52,6 +52,8 @@ export interface TileBezelFramePropsSnapshot {
     enemyOccupiedBack: boolean;
     /** Cancels match pulse / flip pop when a new resolving pair replaces the previous without a full idle frame. */
     resolvingMatchWaveKey: string | null;
+    /** Seconds a removed tile waits for the chunk-break wave before it bursts and leaves. */
+    breakWaveDelaySec: number;
 }
 
 export const createTileBezelFramePropsSnapshot = (

@@ -59,6 +59,7 @@ describe('tileBoardFramePropsSnapshot', () => {
             presentationWideRecall: true,
             reduceMotion: false,
             resolvingMatchWaveKey: 'wave-a',
+            breakWaveDelaySec: 0,
             resolvingSelection: 'match',
             routeBackAccent: false,
             shuffleBoardOrderIndex: 2,

@@ -11,7 +11,7 @@ import { createDefaultSaveData } from '../../shared/save-data';
 import { GAMBIT_KEYBOARD_HELP_TIP } from '../copy/gameplayHints';
 import { PlatformTiltProvider } from '../platformTilt/PlatformTiltProvider';
 import { useAppStore } from '../store/useAppStore';
-import GameScreen from './GameScreen';
+import GameScreen, { LAST_PAIR_HOLD_MS } from './GameScreen';
 import {
     getDungeonCombatLogRows,
     getStackCashoutLaneCount,
@@ -223,6 +223,39 @@ describe('GameScreen (OVR-014)', () => {
                 ...BOARD_FLOATER_POP_CLEAR
             });
         });
+    });
+
+    it('holds the board for a breath when the last pair resolves, then shows the floor-clear dialog', () => {
+        // The finish should be louder than anything before it. That needs a beat between the pair
+        // resolving and the dialog — but only on that transition, never on a screen that opens
+        // already complete, or every resumed save would pay the wait for nothing.
+        vi.useFakeTimers();
+        try {
+            const cleared = levelCompleteRunFixture();
+            const playing: RunState = { ...cleared, status: 'playing', lastLevelResult: null };
+            const { rerender } = render(
+                <PlatformTiltProvider>
+                    <NotificationHost>
+                        <GameScreen achievements={[]} run={playing} />
+                    </NotificationHost>
+                </PlatformTiltProvider>
+            );
+            rerender(
+                <PlatformTiltProvider>
+                    <NotificationHost>
+                        <GameScreen achievements={[]} run={cleared} />
+                    </NotificationHost>
+                </PlatformTiltProvider>
+            );
+            expect(screen.queryByRole('dialog', { name: /floor cleared/i })).not.toBeInTheDocument();
+
+            act(() => {
+                vi.advanceTimersByTime(LAST_PAIR_HOLD_MS + 10);
+            });
+            expect(screen.getByRole('dialog', { name: /floor cleared/i })).toBeInTheDocument();
+        } finally {
+            vi.useRealTimers();
+        }
     });
 
     it('docks a greet control that answers a press, and refuses a second hello on the same floor', async () => {
@@ -2201,6 +2234,10 @@ describe('GameScreen (OVR-014)', () => {
     });
 
     it('shows armed and resolved endless risk wager copy', () => {
+        // Each rerender is the next floor clearing, and a cleared floor holds for a beat before its
+        // dialog; advance past it after each one.
+        vi.useFakeTimers();
+        const pastTheBeat = () => act(() => vi.advanceTimersByTime(LAST_PAIR_HOLD_MS + 10));
         const baseRun = createNewRun(0, { echoFeedbackEnabled: false });
         const armedRun: RunState = {
             ...baseRun,
@@ -2295,6 +2332,7 @@ describe('GameScreen (OVR-014)', () => {
             </PlatformTiltProvider>
         );
 
+        pastTheBeat();
         expect(screen.getByTestId('floor-clear-notes')).toHaveTextContent('Risk wager won: +2 Favor');
         expect(screen.getByTestId('floor-clear-notes')).toHaveTextContent('+3 Favor');
 
@@ -2306,7 +2344,9 @@ describe('GameScreen (OVR-014)', () => {
             </PlatformTiltProvider>
         );
 
+        pastTheBeat();
         expect(screen.getByTestId('floor-clear-notes')).toHaveTextContent('Flip par: Missed');
         expect(screen.getByTestId('floor-clear-notes')).toHaveTextContent('Risk wager lost: -2 streak');
+        vi.useRealTimers();
     });
 });
