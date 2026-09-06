@@ -7827,8 +7827,8 @@
     {
       "path": "src/renderer/components/InventoryScreen.module.css",
       "category": "source",
-      "bytes": 5824,
-      "sha256": "5178762b3912dbedf3a180e0d0088202ce4201ec207dea9e5a3d12853eb13981"
+      "bytes": 6051,
+      "sha256": "c0c98496bab9a10d073a0bb24903ae1175e9bcd08fe115d1934a0902be34b824"
     },
     {
       "path": "src/renderer/components/InventoryScreen.test.tsx",
@@ -7923,8 +7923,8 @@
     {
       "path": "src/renderer/components/MetaScreen.module.css",
       "category": "source",
-      "bytes": 10621,
-      "sha256": "4d26a940b391ab578461126bc8048ad3d518d7be1b77499961624c1bae5318cb"
+      "bytes": 10702,
+      "sha256": "a426a4898a635f2b76b910fe19832f50a81be82a96dc568f4c1929defb1a8614"
     },
     {
       "path": "src/renderer/components/metaStackedShellLayout.test.ts",

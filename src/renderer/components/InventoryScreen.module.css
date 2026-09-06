@@ -192,6 +192,13 @@
         gap: 0.4rem;
     }
 
+    /* "Free shuffle this floor" is three lines in a phone's half-column; tighter leading keeps
+       the row inside the body with the rest. */
+    .chargeRow dt {
+        font-size: 0.82rem;
+        line-height: 1.15;
+    }
+
     .cards {
         grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
     }

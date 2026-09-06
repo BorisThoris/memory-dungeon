@@ -357,4 +357,8 @@
     .modalInnerDesk .header {
         gap: 0.5rem;
     }
+
+    .modalInnerDesk .headerText {
+        padding: 0.55rem 0.8rem 0.6rem;
+    }
 }
