@@ -23,6 +23,7 @@ const DEFAULT_ANNOUNCEMENT: BoardTurnAnnouncementFacts = {
     chunkPairsBrokenBefore: 0,
     chunkPairsBrokenAfter: 0,
     chainAfter: 0,
+    chainTierAfter: 'none' as const,
     magpieTheftsBefore: 0,
     magpieTheftsAfter: 0,
     magpieScaredOffBefore: 0,

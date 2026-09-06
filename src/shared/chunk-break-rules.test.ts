@@ -65,15 +65,24 @@ describe('what breaks', () => {
     });
 
     it('Sharp breaks the whole clump, partners across the board included', () => {
-        const result = resolveChunkBreak({ board: board(), run: endless, matchedTileIds: ['A1', 'A2'], chain: 6 });
+        // Six pairs on this board: Sharp from x4, Fever from x7 (floor-relative rungs).
+        const result = resolveChunkBreak({ board: board(), run: endless, matchedTileIds: ['A1', 'A2'], chain: 4 });
         expect(result.tier).toBe('sharp');
         expect(result.brokenPairKeys.sort()).toEqual(['B', 'C']);
         expect(result.board.tiles.find((t) => t.id === 'D1')?.state).toBe('hidden');
     });
 
+    it('Fever takes the clump and its halo: every hidden tile bordering it, whatever its suit', () => {
+        const result = resolveChunkBreak({ board: board(), run: endless, matchedTileIds: ['A1', 'A2'], chain: 7 });
+        expect(result.tier).toBe('fever');
+        // The ember clump is B and C; D1 and E1 border it, so tide D and E go with it. F touches nothing.
+        expect(result.brokenPairKeys.sort()).toEqual(['B', 'C', 'D', 'E']);
+        expect(result.board.tiles.find((t) => t.id === 'F1')?.state).toBe('hidden');
+    });
+
     it('leaves a pair alone when its partner has a job of its own', () => {
         const tiles = layout().map((t) => (t.id === 'C2' ? { ...t, findableKind: 'shard_spark' as const } : t));
-        const result = resolveChunkBreak({ board: board(tiles), run: endless, matchedTileIds: ['A1', 'A2'], chain: 6 });
+        const result = resolveChunkBreak({ board: board(tiles), run: endless, matchedTileIds: ['A1', 'A2'], chain: 4 });
         expect(result.brokenPairKeys).toEqual(['B']);
         expect(tileCanBreakInChunk(tiles.find((t) => t.id === 'C2')!)).toBe(false);
     });
@@ -85,7 +94,7 @@ describe('what breaks', () => {
             board: board(tiles, { cursedPairKey: 'B' }),
             run: endless,
             matchedTileIds: ['A1', 'A2'],
-            chain: 6
+            chain: 4
         });
         expect(result.brokenPairKeys).toEqual(['C']);
         expect(result.board.tiles.find((t) => t.pairKey === EXIT_PAIR_KEY)?.state).toBe('hidden');
@@ -165,7 +174,7 @@ describe('the proximity badge stays honest', () => {
         const distanceBefore = getPairProximityGridDistance(before, 'D1');
         expect(distanceBefore).toBe(5);
 
-        const broken = resolveChunkBreak({ board: before, run: endless, matchedTileIds: ['A1', 'A2'], chain: 6 });
+        const broken = resolveChunkBreak({ board: before, run: endless, matchedTileIds: ['A1', 'A2'], chain: 4 });
         expect(broken.brokenPairKeys.length).toBeGreaterThan(0);
         expect(getPairProximityGridDistance(broken.board, 'D1')).toBe(distanceBefore);
 

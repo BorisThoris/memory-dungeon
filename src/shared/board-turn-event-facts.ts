@@ -1,4 +1,5 @@
 import type { RouteCardKind, RouteSpecialKind, TileTraitKind, RunState } from './contracts';
+import { runChainTier } from './chain-tier-rules';
 import { TILE_TRAIT_COUNT_KINDS } from './session-stats-rules';
 import {
     getGameplayFeedbackObjectiveSnapshot,
@@ -51,6 +52,8 @@ export interface BoardTurnAnnouncementFacts {
     chunkPairsBrokenAfter: number;
     /** The chain the run holds after this turn; zero after a mismatch. */
     chainAfter: number;
+    /** The break tier that chain reaches on this floor, stamped by the rules so no surface recomputes it. */
+    chainTierAfter: 'none' | 'clean' | 'sharp' | 'fever';
     /** Pairs the magpie took back this floor, before and after this turn. */
     magpieTheftsBefore: number;
     magpieTheftsAfter: number;
@@ -183,6 +186,7 @@ export const getBoardTurnAnnouncementFacts = (
         chunkPairsBrokenBefore: runNonNegativeInteger(before.chunkPairsBrokenThisFloor),
         chunkPairsBrokenAfter: runNonNegativeInteger(after.chunkPairsBrokenThisFloor),
         chainAfter: runNonNegativeInteger(after.stats.currentStreak),
+        chainTierAfter: runChainTier(after),
         magpieTheftsBefore: runNonNegativeInteger(before.magpieTheftsThisFloor),
         magpieTheftsAfter: runNonNegativeInteger(after.magpieTheftsThisFloor),
         magpieScaredOffBefore: runNonNegativeInteger(before.magpieScaredOffThisFloor),

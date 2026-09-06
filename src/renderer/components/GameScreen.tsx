@@ -76,7 +76,7 @@ import { PASS_AND_PLAY_COPY } from '../copy/passAndPlay';
 import { floorClearResidentLine } from '../copy/floorCurioBeat';
 import { pickFloorCurio } from '../../shared/floor-curio-rules';
 import { canGreetFloorCurio } from '../../shared/floor-curio-greeting-rules';
-import { getChainTier, type ChainTier } from '../../shared/chain-tier-rules';
+import { runChainTier, type ChainTier } from '../../shared/chain-tier-rules';
 import { GAMEPAD_SHORTCUT_ROWS, GAMEPLAY_SHORTCUT_ROWS } from '../keyboard/gameplayShortcuts';
 import { useGamepadConnected } from '../hooks/useGamepadNavigation';
 import { usePlatformTiltField } from '../platformTilt/usePlatformTiltField';
@@ -1184,7 +1184,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         : 0;
     const breakPulseTier: ChainTier | 'none' =
         latestTurnForPulse && pulsePairs > 0 && expiredPulseEventId !== pulseEventId
-            ? getChainTier(latestTurnForPulse.announcement.chainAfter)
+            ? latestTurnForPulse.announcement.chainTierAfter
             : 'none';
     useEffect(() => {
         if (pulseEventId === null || pulsePairs <= 0) {
@@ -1722,7 +1722,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                             ref={boardStageRef}
                             data-testid="board-stage"
                             className={`${styles.boardStage} ${cameraViewportMode ? styles.boardStageCamera : ''} ${boardPresentationClass} ${boardStageCssBloomClass}`.trim()}
-                            data-chain-tier={getChainTier(run.stats.currentStreak)}
+                            data-chain-tier={runChainTier(run)}
                             data-break-pulse={breakPulseTier}
                             data-match-crescendo-beats={
                                 boardFloaterPayload?.kind === 'match'

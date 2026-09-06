@@ -25,7 +25,7 @@ const layout = (edit: (t: Tile) => Tile = (t) => t): Tile[] =>
 const board = (tiles: Tile[], overrides: Partial<BoardState> = {}): BoardState =>
     makeBoard(tiles, { columns: 4, rows: 3, level: 3, ...overrides });
 const endless: Pick<RunState, 'gameMode' | 'floorCurioId'> = { gameMode: 'endless', floorCurioId: null };
-const sharp = (b: BoardState, run: Pick<RunState, 'gameMode' | 'floorCurioId'> = endless) => resolveChunkBreak({ board: b, run, matchedTileIds: ['A1', 'A2'], chain: 6 });
+const sharp = (b: BoardState, run: Pick<RunState, 'gameMode' | 'floorCurioId'> = endless) => resolveChunkBreak({ board: b, run, matchedTileIds: ['A1', 'A2'], chain: 4 });
 
 describe('traps stop chunks', () => {
     it('does not propagate through an unsprung trap, so C behind it survives', () => {

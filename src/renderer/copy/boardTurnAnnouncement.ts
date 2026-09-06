@@ -1,7 +1,6 @@
 import { getHazardTileLiveCopy, HAZARD_TILE_KINDS } from '../../shared/hazard-tiles';
 import { MAGPIE_BEAT_COPY } from './magpieBeat';
 import { CHAIN_BEAT_COPY } from './chainBeat';
-import { getChainTier } from '../../shared/chain-tier-rules';
 import type { BoardTurnResolvedEvent } from '../store/gameplayFeedbackAdapter';
 import { getChainMilestoneFeedback } from './chainMilestoneFeedback';
 import { getChainRewardForecastCues, getChainRewardUrgencyCopy } from './chainMomentum';
@@ -227,12 +226,12 @@ export const magpieAnnouncementLines = (turnEvent: BoardTurnResolvedEvent): stri
  * renderer never has to diff boards to know pairs left.
  */
 export const chunkAnnouncementLines = (turnEvent: BoardTurnResolvedEvent): string[] => {
-    const { chunkPairsBrokenBefore, chunkPairsBrokenAfter, chainAfter } = turnEvent.announcement;
+    const { chunkPairsBrokenBefore, chunkPairsBrokenAfter, chainAfter, chainTierAfter } = turnEvent.announcement;
     const pairs = chunkPairsBrokenAfter - chunkPairsBrokenBefore;
     if (pairs <= 0) {
         return [];
     }
-    return [CHAIN_BEAT_COPY.chunkAnnouncement(pairs, getChainTier(chainAfter), chainAfter)];
+    return [CHAIN_BEAT_COPY.chunkAnnouncement(pairs, chainTierAfter, chainAfter)];
 };
 
 export const buildBoardTurnAnnouncement = (

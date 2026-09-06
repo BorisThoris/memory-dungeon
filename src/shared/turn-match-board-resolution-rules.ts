@@ -21,9 +21,9 @@ import {
     hazardKindsInTiles
 } from './hazard-tile-effect-rules';
 import { createMatchedPairClaimBoard, type MatchClaimContext } from './match-claim-rules';
+import { chainMomentum } from './chain-tier-rules';
 import { resolveChunkBreak, type ChunkBreakResult } from './chunk-break-rules';
 import { normalizeSessionStats } from './session-stats-rules';
-import { runNonNegativeInteger } from './run-number-guards';
 
 export interface TurnMatchBoardResolutionResult {
     board: BoardState;
@@ -99,7 +99,7 @@ export const resolveTurnMatchBoardResolution = ({
         board: cascadeHazard.board,
         run,
         matchedTileIds: [firstTileId, secondTileId],
-        chain: runNonNegativeInteger(normalizeSessionStats(run.stats).currentStreak) + 1
+        chain: chainMomentum(normalizeSessionStats(run.stats).currentStreak + 1, run.chunkPairsThisChain)
     });
     const enemyDamage = damageFirstActiveDungeonEnemy(chunkBreak.board, 1);
     const hazardDamage = damageFirstRevealedEnemyHazard(enemyDamage.board, 1);

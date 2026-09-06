@@ -7,12 +7,22 @@
  * unlock the chunk break (`chunk-break-rules.ts`): a lone match is a match, a Clean chain breaks
  * the tiles beside the match, a Sharp chain breaks the whole region, and Fever is the celebration.
  *
- * A mismatch drops the chain to zero, the way a missed peg ends the shot. That is the "one more"
- * tension the whole genre runs on, and here it maps onto a real skill: the chain is literally how
- * many things in a row you remembered.
+ * A mismatch halves the chain (`turn-mismatch-rules.ts`), the way a missed peg ends the shot.
+ * That is the "one more" tension the whole genre runs on, and here it maps onto a real skill: the
+ * chain is literally how many things in a row you remembered.
+ *
+ * The ladder climbs on momentum, not on the streak alone: the streak plus every pair the chunks
+ * broke since the chain last dropped. Measured (`cascade-balance-simulation.ts`), a ladder that
+ * counted only matches ate itself — the better the player, the more pairs the chunks took, the
+ * fewer matches were left to climb with, and Fever arrived less often for a clean player than
+ * for a sloppy one. In a bubble shooter the cascade counts toward the combo; here it counts
+ * toward the tier and nothing else — the score streak, recall and rating never see it.
  *
  * See `docs/CHAIN_CHUNK_FEVER_DESIGN.md` §2.2.
  */
+import type { RunState } from './contracts';
+import { runNonNegativeInteger } from './run-number-guards';
+
 export type ChainTier = 'none' | 'clean' | 'sharp' | 'fever';
 
 /*
@@ -25,22 +35,58 @@ export const CHAIN_TIER_CLEAN_FROM = 3;
 export const CHAIN_TIER_SHARP_FROM = 6;
 export const CHAIN_TIER_FEVER_FROM = 10;
 
-export const getChainTier = (chain: number): ChainTier => {
+/**
+ * Sharp and Fever as shares of the floor's pairs, with the fixed rungs as floors.
+ *
+ * Measured, not guessed (`cascade-balance-simulation.ts`): with the rungs fixed at 6 and 10,
+ * Fever arrived on zero percent of floors even for a player who never missed, because a Clean
+ * break removes pairs and a ten-to-fourteen-pair floor ends before a chain of ten can exist. The
+ * ladder was eating itself. A floor is the unit of this game, so the top rungs are a share of the
+ * floor: Fever is "you ran most of this floor clean", which is what it always meant.
+ */
+export const CHAIN_TIER_SHARP_SHARE = 0.4;
+export const CHAIN_TIER_FEVER_SHARE = 0.65;
+export const CHAIN_TIER_SHARP_MIN = 4;
+export const CHAIN_TIER_FEVER_MIN = 7;
+
+export const chainTierRungs = (pairsOnFloor: number | null | undefined): { clean: number; sharp: number; fever: number } => {
+    const pairs = Number.isFinite(pairsOnFloor) ? Math.max(0, Math.floor(pairsOnFloor as number)) : 0;
+    if (pairs <= 0) {
+        return { clean: CHAIN_TIER_CLEAN_FROM, sharp: CHAIN_TIER_SHARP_FROM, fever: CHAIN_TIER_FEVER_FROM };
+    }
+    const sharp = Math.max(CHAIN_TIER_SHARP_MIN, Math.ceil(pairs * CHAIN_TIER_SHARP_SHARE));
+    const fever = Math.max(CHAIN_TIER_FEVER_MIN, sharp + 1, Math.ceil(pairs * CHAIN_TIER_FEVER_SHARE));
+    return { clean: CHAIN_TIER_CLEAN_FROM, sharp, fever };
+};
+
+/** Momentum: the streak plus the pairs chunks broke since it last dropped. What the ladder reads. */
+export const chainMomentum = (chain: number, cascadedPairs: number): number =>
+    runNonNegativeInteger(chain) + runNonNegativeInteger(cascadedPairs);
+
+/** The run's live tier: its momentum against its floor. The one call every surface should make. */
+export const runChainTier = (run: Pick<RunState, 'stats' | 'chunkPairsThisChain' | 'board'>): ChainTier =>
+    getChainTier(chainMomentum(run.stats.currentStreak, run.chunkPairsThisChain), run.board?.pairCount ?? null);
+
+/** The tier a chain has reached on a floor of `pairsOnFloor` pairs; omit the floor for the fixed rungs. */
+export const getChainTier = (chain: number, pairsOnFloor?: number | null): ChainTier => {
     const depth = Number.isFinite(chain) ? Math.max(0, Math.floor(chain)) : 0;
-    if (depth >= CHAIN_TIER_FEVER_FROM) return 'fever';
-    if (depth >= CHAIN_TIER_SHARP_FROM) return 'sharp';
-    if (depth >= CHAIN_TIER_CLEAN_FROM) return 'clean';
+    const rungs = chainTierRungs(pairsOnFloor);
+    if (depth >= rungs.fever) return 'fever';
+    if (depth >= rungs.sharp) return 'sharp';
+    if (depth >= rungs.clean) return 'clean';
     return 'none';
 };
 
 /** Whether a chain at this depth is allowed to break a chunk at all. */
-export const chainCanBreakChunk = (chain: number): boolean => getChainTier(chain) !== 'none';
+export const chainCanBreakChunk = (chain: number, pairsOnFloor?: number | null): boolean =>
+    getChainTier(chain, pairsOnFloor) !== 'none';
 
 /** The next rung, for "one more and the region goes" copy; null at the top. */
-export const nextChainTierAt = (chain: number): number | null => {
-    const tier = getChainTier(chain);
-    if (tier === 'none') return CHAIN_TIER_CLEAN_FROM;
-    if (tier === 'clean') return CHAIN_TIER_SHARP_FROM;
-    if (tier === 'sharp') return CHAIN_TIER_FEVER_FROM;
+export const nextChainTierAt = (chain: number, pairsOnFloor?: number | null): number | null => {
+    const tier = getChainTier(chain, pairsOnFloor);
+    const rungs = chainTierRungs(pairsOnFloor);
+    if (tier === 'none') return rungs.clean;
+    if (tier === 'clean') return rungs.sharp;
+    if (tier === 'sharp') return rungs.fever;
     return null;
 };

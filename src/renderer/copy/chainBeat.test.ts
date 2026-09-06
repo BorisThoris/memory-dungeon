@@ -18,7 +18,7 @@ describe('the chunk says something', () => {
 
     it('names the chain, the tier and how many pairs left, because a silent break reads as a bug', () => {
         const lines = chunkAnnouncementLines(
-            turnEvent({ chunkPairsBrokenBefore: 1, chunkPairsBrokenAfter: 4, chainAfter: 6 })
+            turnEvent({ chunkPairsBrokenBefore: 1, chunkPairsBrokenAfter: 4, chainAfter: 6, chainTierAfter: 'sharp' })
         );
         expect(lines).toEqual([CHAIN_BEAT_COPY.chunkAnnouncement(3, 'sharp', 6)]);
         expect(lines[0]).toMatch(/Chain 6/);
@@ -28,7 +28,7 @@ describe('the chunk says something', () => {
 
     it('reaches the assembled turn announcement, not only its own helper', () => {
         const announced = buildBoardTurnAnnouncement(
-            turnEvent({ chunkPairsBrokenBefore: 0, chunkPairsBrokenAfter: 2, chainAfter: 3 }),
+            turnEvent({ chunkPairsBrokenBefore: 0, chunkPairsBrokenAfter: 2, chainAfter: 3, chainTierAfter: 'clean' }),
             { reduceMotion: false }
         );
         expect(announced?.lines.join(' ')).toContain(CHAIN_BEAT_COPY.chunkAnnouncement(2, 'clean', 3));

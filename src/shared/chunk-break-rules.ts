@@ -6,6 +6,7 @@ import { calculateMatchScore } from './scoring-rules';
 import { isSingletonUtilityPairKey } from './tile-identity';
 import { activeDungeonEnemyPairKeys, damageDungeonEnemyPair } from './dungeon-enemy-card-rules';
 import { damageEnemyHazardById } from './dungeon-enemy-hazard-rules';
+import { treasureDungeonMatchReward } from './dungeon-match-reward-rules';
 import { activeEnemyHazardsForBoard } from './enemy-hazard-board-rules';
 import type { FindableKind } from './contracts';
 
@@ -18,9 +19,15 @@ import type { FindableKind } from './contracts';
  * large visible consequence, bigger the better you have been playing. That is the whole loop.
  *
  * What it is not: a way to skip the memory game. Cascaded pairs score less than a matched pair,
- * carry no streak, recall or rating credit, and only ever take plain pair tiles — never the exit,
- * a dungeon card, a route special, a findable or a hazard. Memory still pays best; the chunk
- * makes it faster and louder. See `docs/CHAIN_CHUNK_FEVER_DESIGN.md` §2.3.
+ * carry no streak, recall or rating credit, and only ever take plain pair tiles and treasure —
+ * never the exit, a key, a lever, a lock, a shrine, a route special or a hazard. Memory still
+ * pays best; the chunk makes it faster and louder. See `docs/CHAIN_CHUNK_FEVER_DESIGN.md` §2.3.
+ *
+ * Treasure is in because of what the floors are made of. Measured on generated endless floors
+ * (`cascade-balance-simulation.ts`), an early floor is one to three plain tiles and a wall of
+ * dungeon cards, most of them treasure; a chunk that took only plain pairs broke on almost no
+ * floor before the twelfth. A chunk that reaches a treasure pair spills it — the loot pays out as
+ * if matched — which is the Peggle reading anyway: the ball through the purple peg is the point.
  */
 export interface ChunkBreakResult {
     board: BoardState;
@@ -36,6 +43,9 @@ export interface ChunkBreakResult {
     enemiesDefeated: number;
     /** A findable pair that was inside the chunk and went with it; the turn awards it. */
     claimedFindableKind: FindableKind | null;
+    /** Treasure pairs the chunk spilled: their gold and how many count as opened. Score is in `score`. */
+    treasureGold: number;
+    treasuresSpilled: number;
 }
 
 /**
@@ -55,6 +65,17 @@ export const tileIsPlainApartFromFindable = (tile: Tile): boolean =>
 /** Only plain pair tiles break. Everything with a job of its own stays on the board. */
 export const tileCanBreakInChunk = (tile: Tile): boolean =>
     tileIsPlainApartFromFindable(tile) && tile.findableKind == null;
+
+/** A hidden, unopened treasure card with no other job: a chunk that reaches it spills it. */
+export const tileIsChunkTreasure = (tile: Tile): boolean =>
+    tile.state === 'hidden' &&
+    tile.dungeonCardKind === 'treasure' &&
+    tile.dungeonCardState !== 'resolved' &&
+    !isSingletonUtilityPairKey(tile.pairKey) &&
+    tile.dungeonBossId == null &&
+    tile.routeSpecialKind == null &&
+    tile.routeCardKind == null &&
+    tile.tileHazardKind == null;
 
 const orthogonalNeighbours = (index: number, columns: number, total: number): number[] => {
     const row = Math.floor(index / columns);
@@ -87,6 +108,11 @@ export const tileBlocksChunk = (tile: Tile): boolean =>
 export interface SuitRegionOptions {
     /** Spilled toffee: the tiles stick, so the region also propagates diagonally. */
     diagonal?: boolean;
+    /**
+     * Fever: the region takes a halo — every hidden tile bordering it, whatever its suit. Peggle's
+     * fever lights every peg left; here the whole neighbourhood of the clump goes with it.
+     */
+    halo?: boolean;
 }
 
 /**
@@ -131,15 +157,26 @@ export const findSuitRegion = (
         }
         frontier = next;
     }
+    if (options.halo) {
+        for (const from of [...seeds, ...region]) {
+            for (const cell of neighboursOf(from)) {
+                if (seen.has(cell)) continue;
+                const tile = board.tiles[cell];
+                if (!tile || tile.state !== 'hidden' || tileBlocksChunk(tile)) continue;
+                seen.add(cell);
+                region.push(cell);
+            }
+        }
+    }
     return region;
 };
 
-/** Score for a chunk of `pairs` pairs on `level`: half a base match per pair, rising with size. */
+/** Score for a chunk of `pairs` pairs on `level`: under a base match per pair, rising with size. */
 export const chunkBreakScore = (level: number, pairs: number, tier: ChainTier): number => {
     const count = runNonNegativeInteger(pairs);
     if (count === 0) return 0;
-    const perPair = Math.floor(calculateMatchScore(level, 0) * 0.5);
-    const sizeBonus = 5 * count * (count - 1);
+    const perPair = Math.floor(calculateMatchScore(level, 0) * 0.6);
+    const sizeBonus = 6 * count * (count - 1);
     const feverLift = tier === 'fever' ? 1.5 : 1;
     return Math.floor((perPair * count + sizeBonus) * feverLift);
 };
@@ -161,7 +198,7 @@ export const resolveChunkBreak = ({
     matchedTileIds: readonly string[];
     chain: number;
 }): ChunkBreakResult => {
-    const tier = getChainTier(chain);
+    const tier = getChainTier(chain, board.pairCount);
     const nothing: ChunkBreakResult = {
         board,
         tier,
@@ -171,14 +208,18 @@ export const resolveChunkBreak = ({
         comboShardGain: 0,
         enemyHits: 0,
         enemiesDefeated: 0,
-        claimedFindableKind: null
+        claimedFindableKind: null,
+        treasureGold: 0,
+        treasuresSpilled: 0
     };
     if (tier === 'none' || run.gameMode === 'meditation') {
         return nothing;
     }
 
+    // Clean: the match's same-suit neighbours. Sharp: the whole clump. Fever: the clump and its halo.
     const region = findSuitRegion(board, matchedTileIds, tier === 'clean' ? 1 : Number.POSITIVE_INFINITY, {
-        diagonal: run.floorCurioId === 'sticky_toffee'
+        diagonal: run.floorCurioId === 'sticky_toffee',
+        halo: tier === 'fever'
     });
     const byPairKey = new Map<string, Tile[]>();
     for (const tile of board.tiles) {
@@ -186,6 +227,9 @@ export const resolveChunkBreak = ({
     }
     const brokenPairKeys: string[] = [];
     let claimedFindableKind: FindableKind | null = null;
+    let treasureScore = 0;
+    let treasureGold = 0;
+    let treasuresSpilled = 0;
     for (const index of region) {
         const tile = board.tiles[index]!;
         if (brokenPairKeys.includes(tile.pairKey)) continue;
@@ -200,6 +244,16 @@ export const resolveChunkBreak = ({
             pair.every((half) => tileIsPlainApartFromFindable(half) && half.findableKind)
         ) {
             claimedFindableKind = tile.findableKind;
+            brokenPairKeys.push(tile.pairKey);
+            continue;
+        }
+        // Treasure spills: both halves go, and the loot pays as if the pair had been matched.
+        if (tile.dungeonCardKind === 'treasure') {
+            if (pair.length !== 2 || !pair.every(tileIsChunkTreasure)) continue;
+            const reward = treasureDungeonMatchReward(tile.dungeonCardEffectId ?? pair[1]?.dungeonCardEffectId ?? null);
+            treasureScore += reward.score;
+            treasureGold += reward.shopGold;
+            treasuresSpilled += reward.treasuresOpened;
             brokenPairKeys.push(tile.pairKey);
             continue;
         }
@@ -245,17 +299,25 @@ export const resolveChunkBreak = ({
             matchedPairs: runNonNegativeInteger(hitBoard.matchedPairs) + brokenPairKeys.length,
             tiles: hitBoard.tiles.map((tile) =>
                 broken.has(tile.pairKey)
-                    ? { ...tile, state: 'removed' as const, brokenByChunk: true, findableKind: undefined }
+                    ? {
+                          ...tile,
+                          state: 'removed' as const,
+                          brokenByChunk: true,
+                          findableKind: undefined,
+                          dungeonCardState: tile.dungeonCardKind ? ('resolved' as const) : tile.dungeonCardState
+                      }
                     : tile
             )
         },
         tier,
         brokenPairKeys,
         brokenTileIds,
-        score: chunkBreakScore(board.level, brokenPairKeys.length, tier) + enemyScore,
+        score: chunkBreakScore(board.level, brokenPairKeys.length, tier) + enemyScore + treasureScore,
         comboShardGain: chunkBreakComboShards(brokenPairKeys.length, tier),
         enemyHits,
         enemiesDefeated,
-        claimedFindableKind
+        claimedFindableKind,
+        treasureGold,
+        treasuresSpilled
     };
 };

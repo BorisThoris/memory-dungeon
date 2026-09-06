@@ -205,6 +205,9 @@ export const resolveMismatchTurnTransition = ({
             runNonNegativeInteger(run.recallMistakesThisFloor) + 1 + runNonNegativeInteger(traitPenalty.recallMistakesDelta),
         forgottenTileIdsThisFloor: rememberForgottenTiles(run.forgottenTileIdsThisFloor, tileIds),
         decoyFlippedThisFloor: run.decoyFlippedThisFloor || decoyTouched,
+        // A miss keeps half the streak (the score multiplier forgives) but the cascade's momentum
+        // is gone: the fire goes out, and the ladder is climbed again from what was remembered.
+        chunkPairsThisChain: 0,
         stats: {
             ...trapStats,
             tries: penalty.tries,

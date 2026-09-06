@@ -63,6 +63,34 @@ const bossDungeonMatchReward = (bossId: Tile['dungeonBossId']): DungeonMatchRewa
     };
 };
 
+/**
+ * What a treasure pays when it opens. A matched treasure and a treasure a chunk spilled
+ * (`chunk-break-rules.ts`) pay the same: the loot is the card's, not the way it was reached.
+ */
+export const treasureDungeonMatchReward = (effectId: Tile['dungeonCardEffectId'] | null): DungeonMatchReward => {
+    if (effectId === 'treasure_shard') {
+        return {
+            ...emptyDungeonMatchReward(),
+            score: 12,
+            shopGold: 1
+        };
+    }
+    if (effectId === 'treasure_cache') {
+        return {
+            ...emptyDungeonMatchReward(),
+            score: DUNGEON_TREASURE_CACHE_SCORE_REWARD,
+            shopGold: DUNGEON_TREASURE_CACHE_GOLD_REWARD,
+            treasuresOpened: 1
+        };
+    }
+    return {
+        ...emptyDungeonMatchReward(),
+        score: DUNGEON_TREASURE_SCORE_REWARD,
+        shopGold: DUNGEON_TREASURE_GOLD_REWARD,
+        treasuresOpened: 1
+    };
+};
+
 export const getDungeonMatchReward = (run: RunState, first: Tile, second: Tile): DungeonMatchReward => {
     const kind = first.dungeonCardKind ?? second.dungeonCardKind ?? null;
     const effectId = first.dungeonCardEffectId ?? second.dungeonCardEffectId ?? null;
@@ -91,27 +119,7 @@ export const getDungeonMatchReward = (run: RunState, first: Tile, second: Tile):
               };
     }
     if (kind === 'treasure') {
-        if (effectId === 'treasure_shard') {
-            return {
-                ...emptyDungeonMatchReward(),
-                score: 12,
-                shopGold: 1
-            };
-        }
-        if (effectId === 'treasure_cache') {
-            return {
-                ...emptyDungeonMatchReward(),
-                score: DUNGEON_TREASURE_CACHE_SCORE_REWARD,
-                shopGold: DUNGEON_TREASURE_CACHE_GOLD_REWARD,
-                treasuresOpened: 1
-            };
-        }
-        return {
-            ...emptyDungeonMatchReward(),
-            score: DUNGEON_TREASURE_SCORE_REWARD,
-            shopGold: DUNGEON_TREASURE_GOLD_REWARD,
-            treasuresOpened: 1
-        };
+        return treasureDungeonMatchReward(effectId);
     }
     if (kind === 'shrine') {
         return { ...emptyDungeonMatchReward(), guardTokens: 1, relicFavor: 1 };

@@ -271,7 +271,7 @@ export const createResolveBoardTurnTransition = ({
             const economy = resolveTurnMatchEconomy({
                 run,
                 routeCardShopGold: routeCardReward.shopGold,
-                dungeonShopGold: dungeonReward.shopGold,
+                dungeonShopGold: dungeonReward.shopGold + chunkBreak.treasureGold,
                 dungeonKeysDelta: dungeonReward.keysHeldDelta,
                 dungeonMasterKeysDelta: dungeonReward.masterKeysHeldDelta,
                 tollCacheClaimed,
@@ -294,6 +294,7 @@ export const createResolveBoardTurnTransition = ({
                 findableSafeHazardWardGain: resolvedFindableSafeHazardWardGain,
                 cascadeHazardTriggered: cascadeHazard.triggered,
                 chunkPairsBroken: chunkBreak.brokenPairKeys.length,
+                chunkScore: chunkBreak.score + chunkFindable.scoreGain,
                 fragileCacheClaimed,
                 tollCacheClaimed,
                 fuseCacheClaimed,
@@ -312,7 +313,7 @@ export const createResolveBoardTurnTransition = ({
                 pinLatticeRewarded,
                 defeatedDungeonEnemies,
                 defeatedEnemyHazards,
-                openedDungeonTreasures: dungeonReward.treasuresOpened,
+                openedDungeonTreasures: dungeonReward.treasuresOpened + chunkBreak.treasuresSpilled,
                 resolvedDungeonTraps: dungeonTrapResolvedDelta,
                 usedDungeonGateways: dungeonReward.gatewaysUsed
             });
@@ -585,7 +586,7 @@ export const createResolveBoardTurnTransition = ({
             const economy = resolveTurnMatchEconomy({
                 run,
                 routeCardShopGold: routeCardReward.shopGold,
-                dungeonShopGold: dungeonReward.shopGold,
+                dungeonShopGold: dungeonReward.shopGold + chunkBreak.treasureGold,
                 dungeonKeysDelta: dungeonReward.keysHeldDelta,
                 dungeonMasterKeysDelta: dungeonReward.masterKeysHeldDelta,
                 tollCacheClaimed,
@@ -608,6 +609,7 @@ export const createResolveBoardTurnTransition = ({
                 findableSafeHazardWardGain: resolvedFindableSafeHazardWardGain,
                 cascadeHazardTriggered: cascadeHazard.triggered,
                 chunkPairsBroken: chunkBreak.brokenPairKeys.length,
+                chunkScore: chunkBreak.score + chunkFindable.scoreGain,
                 fragileCacheClaimed,
                 tollCacheClaimed,
                 fuseCacheClaimed,
@@ -626,7 +628,7 @@ export const createResolveBoardTurnTransition = ({
                 pinLatticeRewarded,
                 defeatedDungeonEnemies,
                 defeatedEnemyHazards,
-                openedDungeonTreasures: dungeonReward.treasuresOpened,
+                openedDungeonTreasures: dungeonReward.treasuresOpened + chunkBreak.treasuresSpilled,
                 resolvedDungeonTraps: dungeonTrapResolvedDelta,
                 usedDungeonGateways: dungeonReward.gatewaysUsed
             });

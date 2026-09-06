@@ -77,23 +77,27 @@ Suits: **Ember**, **Tide**, **Moss**, **Bone**. Colour plus a distinct rune, bec
 
 The streak is renamed in player-facing copy to the **chain**, and it gets named tiers, said aloud on the run line and coloured on the HUD:
 
-| Chain | Tier name | What it unlocks |
+| Momentum | Tier name | What it unlocks |
 |---|---|---|
-| ×1–×2 | — | a match |
-| ×3–×5 | **Clean** | chunk break: neighbours |
-| ×6–×9 | **Sharp** | chunk break: full region |
-| ×10+ | **Fever** | region + celebration + shard burst |
+| 1–2 | — | a match |
+| 3+ | **Clean** | chunk break: neighbours |
+| max(4, 40% of the floor's pairs) | **Sharp** | chunk break: full region |
+| max(7, 65% of the floor's pairs) | **Fever** | region + its halo + celebration + shard burst |
 
-The rungs are the ones the game already announces — chain targets, milestone pings and the feedback rail all read ×3/×6/×10 — so a player climbing hears one story rather than two ladders. (Gen 119 aligned these; the first draft said ×2/×5/×8.)
+**Momentum**, not the streak alone, climbs the ladder: the streak plus every pair the chunks broke since the chain last dropped (`chainMomentum`, `runChainTier`). The score streak, recall and rating never see cascaded pairs; only the tier does. Gen 121's simulation forced both halves of this. With fixed rungs at ×6/×10, Fever arrived on *zero percent* of floors even for a player who never missed — a twelve-pair floor ends before a chain of ten can exist. With floor-relative rungs but a streak-only ladder, the ladder ate itself: the better the player, the more pairs the chunks took, the fewer matches were left to climb with, and a sloppy player reached Fever more often than a clean one. Counting the cascade toward the tier is what a bubble shooter does with its combo, and it is what makes Fever mean "you ran most of this floor without dropping it".
 
-A mismatch drops the chain to zero, the way a missed peg ends the shot. That is the "one more" tension the genre runs on, and it maps onto a real skill: the chain is literally how many things in a row you remembered.
+The chain milestone pings the feedback rail already makes (×3 "Chain started", ×6 "Surge", ×10 "Combo") are the *score* ladder and still read the streak; the Clean rung sits on ×3 with them. Sharp and Fever are the *board* ladder and move with the floor. (Gen 119 aligned the fixed rungs; Gen 121 made the top two floor-relative. The milestone copy still says ×6/×10 — Gen 122 should make it read the floor's rungs.)
+
+A mismatch halves the streak (the score multiplier forgives) and drops the cascade's momentum to zero: the fire goes out, and the ladder is climbed again from what was remembered. That is the "one more" tension the genre runs on, and it maps onto a real skill: the chain is literally how many things in a row you remembered.
 
 ### 2.3 Chunk break — the leverage
 
 When a match resolves with chain ≥ 3, the game finds the **connected same-suit region** (4-neighbour, through hidden tiles only) around the two matched tiles.
 
-- **Clean** (×3–×5): every hidden same-suit tile *orthogonally adjacent* to either matched tile breaks away — and its partner, wherever it is, breaks with it. Pairs leave together, always.
-- **Sharp** (×6+): the *entire connected region* breaks, partners included.
+- **Clean**: every hidden same-suit tile *orthogonally adjacent* to either matched tile breaks away — and its partner, wherever it is, breaks with it. Pairs leave together, always.
+- **Sharp**: the *entire connected region* breaks, partners included.
+- **Fever**: the region **and its halo** — every hidden tile bordering the clump, whatever its suit. Peggle's fever lights every peg left; here the whole neighbourhood of the clump goes.
+- **Treasure spills.** A treasure pair inside the region breaks with it and pays exactly what a matched treasure pays (score, gold, "treasure opened"). This is not generosity; it is what the floors are made of. Measured in Gen 121, an early endless floor is one to three plain tiles and a wall of dungeon cards, most of them treasure — a chunk that took only plain pairs broke on almost no floor before the twelfth. Keys, levers, locks, shrines, gateways, shops, rooms and the exit still never break.
 - Tiles that break are set to `removed` and scored as a **cascade**: less than a matched pair (no streak credit, no recall credit, no perfect-rating credit) but real score, scaled by chunk size, and **one combo shard per two pairs cascaded** — so a big break feeds survival, not only the number.
 
 What the player sees: they match a pair inside a big Ember chunk, and the Ember chunk *goes* — a wave of shatters spreading out from the match, partners across the board popping in answer, the pitch climbing with each one. That is the drop. That is the whole reason to build a chain.
@@ -102,7 +106,7 @@ What the player does not get: cascaded pairs do not count toward the floor's rec
 
 ### 2.4 Fever — the terminal celebration
 
-At chain ×10 the break is a **Fever break**: the board dims and pulses gold, time stretches for a beat (a 450 ms slow-in on the shatter wave, respecting `reduceMotion`), a distinct sting plays, and the run line names it. Every cascaded pair in a Fever break drops a shard, not every second one.
+At the Fever rung the break is a **Fever break** — the clump and its halo go — the board dims and pulses gold, time stretches for a beat (a 450 ms slow-in on the shatter wave, respecting `reduceMotion`), a distinct sting plays, and the run line names it. Every cascaded pair in a Fever break drops a shard, not every second one.
 
 And the floor's **last pair** is its own moment regardless of chain — the last-peg beat: the exit tile lights, the board holds for a breath, then the floor-clear dialog. Today the dialog just appears. The finish should be louder than anything before it.
 
@@ -122,6 +126,7 @@ The dungeon systems are not spectators to the cascade. They are what the cascade
 | **Enemy cards** | A chunk break that includes an enemy's tile **hits it** for chunk-size damage. Chunks are attacks. A big enough Sharp break kills a warden outright. |
 | **Traps** | Traps **stop chunks**: the region does not propagate through a trap tile. Traps become spatial — a trap in the middle of your Ember clump is a wall, and springing it opens the clump. |
 | **Findables** | A findable inside a broken chunk is **claimed** by the cascade (drop the treasure). |
+| **Treasure cards** | **Spill.** A treasure pair inside the region breaks and pays as if matched (Gen 121). Without this the cascade was a non-feature on early floors, which are mostly treasure. |
 | **Exit tile** | Never cascades. It is the last peg; you flip it yourself. |
 | **Levers, keys, locks** | Never cascade, and a findable riding on one stays with it — the exit is waiting for that card, and a chunk that swallowed it would softlock the floor (found by the softlock scenario matrix in Gen 120). |
 | **Hidden wardens** | Not hit. A chunk only damages a warden the player can already see; a hidden one inside a clump is untouched — you learn where it is the way you always did. |
@@ -146,7 +151,7 @@ Every rule below is a pure function in `src/shared/`, reachable from the real tu
 |---|---|
 | `TileSuit` on `Tile` (`suit: 'ember' \| 'tide' \| 'moss' \| 'bone'`) | `contracts.ts` |
 | Suit assignment + clustered dealing | `board-tile-generation-rules.ts` → new `tile-suit-rules.ts` |
-| Chain tiers | new `chain-tier-rules.ts` (`getChainTier(streak)`) |
+| Chain tiers | new `chain-tier-rules.ts` (`getChainTier(momentum, pairsOnFloor)`, `runChainTier(run)`) |
 | Region finder + break rule | new `chunk-break-rules.ts` (`findSuitRegion`, `resolveChunkBreak`) |
 | Turn integration | `turn-match-board-resolution-rules.ts` after the claim, before enemy damage; enemy damage reads the chunk |
 | Event | `board.chunk_broken` on `gameplay-core-contracts.ts`; facts on `board.turn_resolved` (`chunkPairsBefore/After`, `chainTier`) |
@@ -169,7 +174,7 @@ Each generation is its own commit, verified and pushed. Order is chosen so that 
 | **118** | Chain tiers + chunk break rule in the real turn path, `removed` state, cascade scoring, shard grant, typed event, journal facts, proximity recompute test. | Unit + turn-path tests; the endless simulation still replays deterministically; proximity test from §2.5. |
 | **119** | Presentation: shatter wave, tier names on the HUD and run line, pitch ladder tied to chunk size, Fever pulse (reduce-motion safe), last-pair beat. | Component tests for the announcement; a Playwright pass that builds a chain and screenshots a break at desktop and Deck sizes. |
 | **120** | Dungeon weave: enemies take chunk damage, traps block regions, findables claimed by cascade, exit immune, magpie prefers cascaded pairs, toffee/skull hooks. | Rule tests per row of §2.6; encyclopedia entries. |
-| **121** | Balance pass: simulate 2,000 endless runs before/after; tune cascade score, shard rate, tier thresholds; per-floor clustering profiles on the twelve-floor cycle. | Sim report in `BALANCE_NOTES.md`; floor-clear time and rating distributions within stated bands. |
+| **121** | Balance pass, done: `cascade-balance-simulation.ts` plays generated endless floors with a player who misses a stated share of turns; bands stated in code and gated (`yarn sim:cascade --check`, `gate:gameplay`). Found and fixed: fixed rungs unreachable, the streak-only ladder eating itself, dungeon-card floors with nothing to break (treasure spills), a Fever with nothing to break (the halo), a sim player that flipped the shop by accident and called it stuck. Per-floor clustering profiles were **not** built — no authored per-floor table exists to hang them on; the archetype cycle already varies what a chunk can reach more than clustering would. | Sim section in `BALANCE_NOTES.md`; bands hold on 6 seeds × 24 floors × 3 miss rates. |
 | **122** | Closing sweep: Codex, release checklist rows, e2e proof of a chunk break in the app, `fullcheck` + fit contract. | Green gates; a recorded play-through that reaches Fever. |
 
 ---

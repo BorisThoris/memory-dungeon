@@ -1146,6 +1146,10 @@ export interface RunState {
     /** Chunk breaks a chain has bought on this floor, and the pairs they took with them. */
     chunkBreaksThisFloor: number;
     chunkPairsBrokenThisFloor: number;
+    /** Score the chunks paid this floor, findables and spilled treasure included; the sim's honest ledger. */
+    chunkScoreThisFloor: number;
+    /** Pairs chunks broke since the chain last dropped: momentum the tier ladder counts, the score streak does not. */
+    chunkPairsThisChain: number;
     /** Pairs the magpie has taken back on this floor. */
     magpieTheftsThisFloor: number;
     /** Times a guard token drove the magpie off on this floor. */

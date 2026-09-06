@@ -3,7 +3,7 @@ import { runArray, runArrayCount, runFilteredStringArray } from '../../shared/ru
 import { runFiniteNumber, runNonNegativeInteger } from '../../shared/run-number-guards';
 import { TILE_TRAIT_COUNT_KINDS } from '../../shared/session-stats-rules';
 import { getChainMilestoneFeedback, type ChainMilestoneFeedback } from '../copy/chainMilestoneFeedback';
-import { getChainTier, type ChainTier } from '../../shared/chain-tier-rules';
+import { runChainTier, type ChainTier } from '../../shared/chain-tier-rules';
 import { getChainRewardForecastCues } from '../copy/chainMomentum';
 import { audioNeverThrows, audioNeverThrowsBoolean } from './audioSafety';
 import {
@@ -714,7 +714,7 @@ export const playResolveSfx = (before: RunState, after: RunState, gain: number):
         }
         const chunkPairs = (after.chunkPairsBrokenThisFloor ?? 0) - (before.chunkPairsBrokenThisFloor ?? 0);
         if (chunkPairs > 0) {
-            playChunkBreakSfx(gain, chunkPairs, getChainTier(after.stats.currentStreak));
+            playChunkBreakSfx(gain, chunkPairs, runChainTier(after));
         }
         if ((after.findablesClaimedThisFloor ?? 0) > (before.findablesClaimedThisFloor ?? 0)) {
             playTone({

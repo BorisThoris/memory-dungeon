@@ -74,6 +74,8 @@ export const createNextFloorRunState = (
         floorCurioGreeted: false,
         chunkBreaksThisFloor: 0,
         chunkPairsBrokenThisFloor: 0,
+        chunkScoreThisFloor: 0,
+        chunkPairsThisChain: 0,
         magpieTheftsThisFloor: 0,
         magpieScaredOffThisFloor: 0,
         hazardShuffleSnaresThisFloor: 0,
