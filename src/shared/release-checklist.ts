@@ -73,6 +73,13 @@ export const RELEASE_CHECKLIST: readonly ReleaseChecklistItem[] = [
         section: 'Gameplay'
     },
     {
+        evidence: 'src/shared/pass-and-play-rules.ts',
+        id: 'chain-in-daily-and-shared-play',
+        label: 'The share line and the daily post name the best chain, the quest ladder asks for Sharp floors, and a shared table credits a chunk to the seat that broke it',
+        owner: 'repo',
+        section: 'Gameplay'
+    },
+    {
         evidence: 'src/shared/daily-determinism.test.ts',
         id: 'daily-determinism',
         label: 'Every player gets the same Daily Challenge run, floor for floor',

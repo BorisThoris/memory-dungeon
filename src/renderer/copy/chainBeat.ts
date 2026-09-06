@@ -27,6 +27,12 @@ export const CHAIN_BEAT_COPY = {
             pairs === 1 ? 'pair' : 'pairs'
         } of the same suit broke away with that match and left the board.`,
     feverLine: 'Fever. The whole clump went.',
+    /** The clump read on a focused tile: what it stands in, and what a Sharp break there would take. */
+    clumpRead: (suitName: string, size: number, pairsSharpWouldTake: number): string =>
+        `${suitName} clump of ${size}` +
+        (pairsSharpWouldTake > 0
+            ? ` — a Sharp break here takes ${pairsSharpWouldTake} more ${pairsSharpWouldTake === 1 ? 'pair' : 'pairs'}.`
+            : '.'),
     /**
      * The style line: what made this break worth a name. Peggle labels the shot ("Long shot",
      * "Lucky bounce") so the player can own it; one line, only the tags that apply, or nothing.

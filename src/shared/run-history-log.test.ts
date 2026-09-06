@@ -78,3 +78,16 @@ describe('appendRunHistory', () => {
         expect(appendRunHistory(createDefaultSaveData(), buildRunHistoryRecord(createNewRun(0), AT))).toHaveLength(1);
     });
 });
+
+describe('the chain in the history', () => {
+    it('records the longest chain and the biggest chunk, and reads a row without them as zero', () => {
+        const run = createGauntletRun(0, 600_000);
+        const chained = { ...run, biggestChunkPairs: 7, bestChainThisRun: 9 };
+        const record = buildRunHistoryRecord(chained, AT);
+        expect(record.bestChain).toBe(9);
+        expect(record.biggestChunk).toBe(7);
+        expect(buildRunHistoryRecord(run, AT).biggestChunk).toBeUndefined();
+        expect(normalizeRunHistory([{ mode: 'Old', endedAtIso: AT, totalScore: 5, highestLevel: 1 }])[0]?.bestChain).toBeUndefined();
+        expect(normalizeRunHistory([{ ...record }])[0]).toMatchObject({ bestChain: 9, biggestChunk: 7 });
+    });
+});

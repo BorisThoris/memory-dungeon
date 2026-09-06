@@ -1,4 +1,4 @@
-import type { BoardState, Rating, RunState, Tile } from './contracts';
+import type { BoardState, Rating, RelicId, RunState, Tile } from './contracts';
 import { GAME_RULES_VERSION } from './contracts';
 import { buildBoard } from './board-generation';
 import { countFindablePairs } from './board-tile-generation-rules';
@@ -106,6 +106,8 @@ export interface CascadeBalanceSimulationInput {
     floors: readonly number[];
     missRates: readonly number[];
     rulesVersion?: number;
+    /** Relics every floor is played with; empty for the bare rules. */
+    relicIds?: readonly RelicId[];
 }
 
 const EMPTY_RATINGS = (): Record<Rating, number> => ({ 'S++': 0, S: 0, A: 0, B: 0, C: 0, D: 0, F: 0 });
@@ -121,13 +123,16 @@ export const playCascadeBalanceFloor = ({
     floor,
     missRate,
     rulesVersion = GAME_RULES_VERSION,
-    maxTurns = 240
+    maxTurns = 240,
+    relicIds = []
 }: {
     seed: number;
     floor: number;
     missRate: number;
     rulesVersion?: number;
     maxTurns?: number;
+    /** Relics the player holds: the loadout axis, so a build that leans into the chain is measured too. */
+    relicIds?: readonly RelicId[];
 }): CascadeBalanceFloorSample => {
     const schedule = pickFloorScheduleEntry(seed, rulesVersion, floor, 'endless');
     const board = buildBoard(floor, {
@@ -138,10 +143,17 @@ export const playCascadeBalanceFloor = ({
         featuredObjectiveId: schedule.featuredObjectiveId,
         cycleFloor: schedule.cycleFloor,
         gameMode: 'endless',
-        activeMutators: schedule.mutators
+        activeMutators: schedule.mutators,
+        relicIds
     });
     const base = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless', runSeed: seed }));
-    let run: RunState = { ...base, board, status: 'playing', findablesTotalThisFloor: countFindablePairs(board.tiles) };
+    let run: RunState = {
+        ...base,
+        board,
+        status: 'playing',
+        relicIds: [...relicIds],
+        findablesTotalThisFloor: countFindablePairs(board.tiles)
+    };
     const rng = createMulberry32(hashStringToSeed(`cascade-sim:${seed}:${floor}:${missRate}:${rulesVersion}`));
     const shardsAtStart = runNonNegativeInteger(run.stats.comboShards);
 
@@ -258,13 +270,14 @@ export const runCascadeBalanceSimulation = ({
     seeds,
     floors,
     missRates,
-    rulesVersion = GAME_RULES_VERSION
+    rulesVersion = GAME_RULES_VERSION,
+    relicIds = []
 }: CascadeBalanceSimulationInput): CascadeBalanceReport => {
     const samples: CascadeBalanceFloorSample[] = [];
     for (const missRate of missRates) {
         for (const seed of seeds) {
             for (const floor of floors) {
-                samples.push(playCascadeBalanceFloor({ seed, floor, missRate, rulesVersion }));
+                samples.push(playCascadeBalanceFloor({ seed, floor, missRate, rulesVersion, relicIds }));
             }
         }
     }
@@ -295,7 +308,22 @@ export const runCascadeBalanceSimulation = ({
  * a real part of the score without becoming most of it, Fever is a thing a clean player reaches on
  * the floors big enough to hold ten pairs, and nobody's rating ever moved because of a chunk.
  */
-export const CASCADE_BALANCE_BANDS = {
+/** The three relics that touch the cascade, held together: the loadout the bands must survive. */
+export const CASCADE_RELIC_LOADOUT: readonly RelicId[] = ['tuning_fork', 'magpie_ledger', 'suit_lens'];
+
+export interface CascadeBalanceBands {
+    minSettledShare: number;
+    cleanClearedShare: { min: number };
+    cleanChunkShareOfScore: { min: number; max: number };
+    cleanTurnsOverReferenceTurns: { max: number };
+    cleanFeverShareOnBigFloors: { min: number };
+    bigFloorPairs: number;
+    referenceFeverShare: { max: number };
+    extremeFeverCleanOverReference: { min: number };
+    referenceMissRate: number;
+}
+
+export const CASCADE_BALANCE_BANDS: CascadeBalanceBands = {
     /** Every band, every floor: a floor ends cleared or in a death, never stuck. */
     minSettledShare: 1,
     /** A player who never misses clears every floor. */
@@ -312,11 +340,22 @@ export const CASCADE_BALANCE_BANDS = {
     /** Extreme Fever is the clean player's finish: they must reach it more often than the reference player. */
     extremeFeverCleanOverReference: { min: 1.5 },
     referenceMissRate: 0.25
-} as const;
+};
+
+/**
+ * The bands a chain build is held to. Each relic alone sits inside the bare bands; all three
+ * together lift a 25%-miss player's Fever share to about 0.23, which is what three relics
+ * dedicated to the chain are for. The relaxation is stated here, once, rather than hidden by
+ * loosening the bare bands.
+ */
+export const CASCADE_RELIC_BANDS: CascadeBalanceBands = {
+    ...CASCADE_BALANCE_BANDS,
+    referenceFeverShare: { max: 0.3 }
+};
 
 export const assertCascadeBalanceWithinBands = (
     report: CascadeBalanceReport,
-    bands: typeof CASCADE_BALANCE_BANDS = CASCADE_BALANCE_BANDS
+    bands: CascadeBalanceBands = CASCADE_BALANCE_BANDS
 ): { ok: boolean; issues: string[] } => {
     const issues: string[] = [];
     const clean = report.bands.find((band) => band.missRate === 0);

@@ -31,6 +31,29 @@ describe('buildRunShareText', () => {
         const share = buildRunShareText(finished as typeof run);
         expect(share.text).toContain('floor 14');
         expect(share.text).toContain('2,340');
+        // A run with no chain to speak of does not post "best chain ×0".
+        expect(share.text).not.toContain('chain');
+    });
+
+    it('names the best chain and the Fever floors, since those are what a friend replays the key to beat', () => {
+        const run = createNewRun(0);
+        const finished = {
+            ...run,
+            lastRunSummary: {
+                ...run.lastRunSummary,
+                highestLevel: 6,
+                totalScore: 900,
+                bestChain: 11,
+                sharpFloors: 3,
+                feverFloors: 2
+            } as typeof run.lastRunSummary
+        };
+        const share = buildRunShareText(finished as typeof run);
+        expect(share.text).toContain('900 points, best chain ×11, Fever on 2 floors.');
+        expect(share.text).toMatch(/Same run: md1:classic:\d+:\d+$/u);
+        // Mid-run, the live counters stand in for the summary the run has not written yet.
+        const live = { ...run, bestChainThisFloor: 5, feverFloorsThisRun: 1 };
+        expect(buildRunShareText(live).text).toContain('best chain ×5, Fever on 1 floor.');
     });
 
     it('refuses to invent a key for a puzzle board, and says so instead of failing', () => {

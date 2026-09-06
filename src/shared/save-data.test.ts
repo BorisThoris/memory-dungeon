@@ -17,6 +17,7 @@ import {
     getRelicPickTotal,
     mergeDailyComplete,
     mergeBestFloorNoPowers,
+    mergeChainFloorStats,
     mergePuzzleCompletion,
     mergeRelicPickStat,
     normalizeSaveData,
@@ -808,7 +809,7 @@ describe('save normalization', () => {
         const policies = getDungeonSaveMigrationFieldPolicies();
         const fields = policies.map((policy) => policy.field);
 
-        expect(DUNGEON_SAVE_MIGRATION_POLICY_VERSION).toBe('dng-073-v4');
+        expect(DUNGEON_SAVE_MIGRATION_POLICY_VERSION).toBe('dng-073-v5');
         expect(fields).toEqual(expect.arrayContaining([
             'runHistory',
             'runHistory.shareKey',
@@ -817,6 +818,8 @@ describe('save normalization', () => {
             'lastRunSummary.gameMode',
             'playerStats.encorePairKeysLastRun',
             'playerStats.relicPickCounts',
+            'playerStats.sharpFloors',
+            'playerStats.feverFloors',
             'settings.cameraViewportModePreference',
             'settings.pairProximityHintsEnabled',
             'dungeonRun',
@@ -838,6 +841,50 @@ describe('save normalization', () => {
         expect(shouldDungeonSaveFieldRequireMigration('playerStats.relicPickCounts')).toBe(true);
         expect(shouldDungeonSaveFieldRequireMigration('dungeonKeys')).toBe(false);
         expect(shouldDungeonSaveFieldRequireMigration('board.dungeonKeysHeldByKind')).toBe(false);
+    });
+});
+
+describe('the chain in the save', () => {
+    it('keeps the chain records a summary carries, and drops ones that do not read as counts', () => {
+        const save = createDefaultSaveData();
+        const base = {
+            totalScore: 100,
+            bestScore: 100,
+            levelsCleared: 2,
+            highestLevel: 3,
+            achievementsEnabled: true,
+            unlockedAchievements: [],
+            bestStreak: 4,
+            perfectClears: 0
+        };
+        const kept = normalizeSaveData({
+            ...save,
+            lastRunSummary: { ...base, biggestChunk: 6, bestChain: 9, sharpFloors: 2, feverFloors: 1 }
+        });
+        expect(kept.lastRunSummary).toMatchObject({ biggestChunk: 6, bestChain: 9, sharpFloors: 2, feverFloors: 1 });
+        const dropped = normalizeSaveData({
+            ...save,
+            lastRunSummary: { ...base, biggestChunk: 'six', bestChain: 'nine', sharpFloors: Number.NaN } as never
+        });
+        expect(dropped.lastRunSummary).not.toBeNull();
+        expect(dropped.lastRunSummary).not.toHaveProperty('biggestChunk');
+        expect(dropped.lastRunSummary).not.toHaveProperty('bestChain');
+        expect(dropped.lastRunSummary).not.toHaveProperty('sharpFloors');
+        expect(dropped.lastRunSummary).not.toHaveProperty('feverFloors');
+    });
+
+    it('counts a Sharp floor once, a Fever floor twice over, and a lesser floor not at all', () => {
+        const save = createDefaultSaveData();
+        expect(save.playerStats).toMatchObject({ sharpFloors: 0, feverFloors: 0 });
+        expect(mergeChainFloorStats(save, 'clean')).toBe(save);
+        expect(mergeChainFloorStats(save, 'none')).toBe(save);
+        const sharp = mergeChainFloorStats(save, 'sharp');
+        expect(sharp.playerStats).toMatchObject({ sharpFloors: 1, feverFloors: 0 });
+        const fever = mergeChainFloorStats(sharp, 'fever');
+        expect(fever.playerStats).toMatchObject({ sharpFloors: 2, feverFloors: 1 });
+        // An older save with no counters reads as zero rather than as a broken profile.
+        const older = normalizeSaveData({ ...save, playerStats: { ...save.playerStats, sharpFloors: 'many' } as never });
+        expect(older.playerStats?.sharpFloors).toBe(0);
     });
 });
 

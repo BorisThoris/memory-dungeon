@@ -550,11 +550,20 @@
     }
 }
 
+/*
+ * On a 390px phone the launch panel's three actions (Start, Set up, Browse) wrap to three rows,
+ * and with the summary above them the panel ran past its 17rem cap and clipped the last button:
+ * "Hide modes" rendered, hit-tested on its clipped parent, and did nothing when pressed. The
+ * summary goes (the sheet and the setup door say all of it) and the cap comes off, so every
+ * action is on the panel and reachable. Found by the fit contract and the reachability gate.
+ */
 @media (max-width: 560px) {
     .launch {
         min-height: 0;
+        max-height: none;
     }
 
+    .launchSummary,
     .beats {
         display: none;
     }
@@ -677,4 +686,31 @@
 
 .setupRow:hover {
     color: var(--theme-text);
+}
+
+/*
+ * Short landscape: 375px of height. Nine 44px rows in one column is 396px before the title and
+ * the actions, so the sheet's last group sat below the fold on a phone held sideways. The three
+ * groups go side by side — the width is there — the rows come down to 32px, and the vows' hint
+ * steps aside: the legend says "Vows" and each row says what the vow is.
+ */
+@media (max-height: 560px) and (min-width: 700px) {
+    .setupGroups {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: var(--ui-space-xs);
+    }
+
+    .setupGroup {
+        gap: 0;
+        padding: 0.15rem var(--ui-space-xs) 0.25rem;
+    }
+
+    .setupHint {
+        display: none;
+    }
+
+    .setupRow {
+        min-height: 32px;
+    }
 }

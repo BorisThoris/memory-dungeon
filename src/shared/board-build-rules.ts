@@ -128,7 +128,7 @@ export const buildBoard = (level: number, options: BuildBoardOptions = {}): Boar
         // Authored boards placed exactly stay exactly as authored; everything else gets its suits.
         const tiles = exactFixedTiles
             ? plannedTiles
-            : dealBoardSuits(plannedTiles, columns, runSeed, level, rulesVersion, getSuitDealProfile(floorArchetypeId));
+            : dealBoardSuits(plannedTiles, columns, runSeed, level, rulesVersion, getSuitDealProfile(floorArchetypeId), options.relicIds ?? []);
         const rows = Math.ceil(tileCount / columns);
         const realPairKeys = new Set(tiles.map((t) => t.pairKey).filter((k) => !isSingletonUtilityPairKey(k)));
         const exit = tiles.find((t) => t.pairKey === EXIT_PAIR_KEY);
@@ -261,7 +261,7 @@ export const buildBoard = (level: number, options: BuildBoardOptions = {}): Boar
      * exit, branches, hazards and rewards where it wants them and those stay pinned; the plain
      * pairs are dealt in clumps around them so the floor opens as a map rather than a field.
      */
-    const tiles = dealBoardSuits(layoutTiles, columns, runSeed, level, rulesVersion, getSuitDealProfile(floorArchetypeId));
+    const tiles = dealBoardSuits(layoutTiles, columns, runSeed, level, rulesVersion, getSuitDealProfile(floorArchetypeId), options.relicIds ?? []);
     const rows = Math.ceil(tileCount / columns);
     const cursedPairKey =
         featuredObjectiveId === 'cursed_last' || featuredObjectiveId === null

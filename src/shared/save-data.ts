@@ -16,6 +16,7 @@ import {
     type StartingLoadoutId
 } from './contracts';
 import { z } from 'zod';
+import type { ChainTier } from './chain-tier-rules';
 import { COSMETIC_IDS } from './cosmetic-ids';
 import { HONOR_UNLOCK_IDS } from './honor-unlock-ids';
 import { utcDateKeyMinusOneDay } from './rng';
@@ -114,7 +115,11 @@ export const ACHIEVEMENT_IDS = [
     'ACH_NO_POWERS_TEN',
     'ACH_GAUNTLET_RUN',
     'ACH_PUZZLE_SOLVER',
-    'ACH_MEDITATION_HOUR'
+    'ACH_MEDITATION_HOUR',
+    'ACH_FIRST_FEVER',
+    'ACH_CHUNK_SIX',
+    'ACH_EXTREME_FEVER',
+    'ACH_WARDEN_BY_CHUNK'
 ] as const satisfies readonly AchievementId[];
 
 export const createAchievementState = (): AchievementState =>
@@ -137,7 +142,9 @@ const defaultPlayerStats = (): PlayerStatsPersisted => ({
     relicPickCounts: {},
     encorePairKeysLastRun: [],
     puzzleCompletions: createPuzzleCompletionMap(),
-    relicShrineExtraPickUnlocked: false
+    relicShrineExtraPickUnlocked: false,
+    sharpFloors: 0,
+    feverFloors: 0
 });
 
 const ACHIEVEMENT_ID_SET: ReadonlySet<string> = new Set(ACHIEVEMENT_IDS);
@@ -424,6 +431,14 @@ export const normalizeRunSummary = (input: unknown): RunSummary | null => {
         gameplayCommandJournal: source.gameplayCommandJournal,
         gameplayEventJournal: source.gameplayEventJournal
     });
+    // The chain's records are optional counters: absent on a summary from before the cascade,
+    // kept when they read as whole numbers, dropped rather than rejected otherwise.
+    const chainRecord = (value: unknown): number | undefined =>
+        value === undefined ? undefined : finiteNonNegativeInteger(value, Number.NaN);
+    const biggestChunk = chainRecord(source.biggestChunk);
+    const bestChain = chainRecord(source.bestChain);
+    const sharpFloors = chainRecord(source.sharpFloors);
+    const feverFloors = chainRecord(source.feverFloors);
 
     return {
         totalScore,
@@ -436,6 +451,10 @@ export const normalizeRunSummary = (input: unknown): RunSummary | null => {
             : [],
         bestStreak,
         perfectClears,
+        ...(Number.isFinite(biggestChunk) ? { biggestChunk } : {}),
+        ...(Number.isFinite(bestChain) ? { bestChain } : {}),
+        ...(Number.isFinite(sharpFloors) ? { sharpFloors } : {}),
+        ...(Number.isFinite(feverFloors) ? { feverFloors } : {}),
         ...(Number.isFinite(runSeed) ? { runSeed } : {}),
         ...(Number.isFinite(runRulesVersion) ? { runRulesVersion } : {}),
         ...(gameMode ? { gameMode } : {}),
@@ -717,7 +736,9 @@ export const normalizeSaveData = (input?: SaveDataNormalizationInput | null): Sa
                 : playerStatsDefaults.encorePairKeysLastRun,
             puzzleCompletions: normalizePuzzleCompletions(psIn.puzzleCompletions),
             relicPickCounts,
-            relicShrineExtraPickUnlocked
+            relicShrineExtraPickUnlocked,
+            sharpFloors: finiteNonNegativeInteger(psIn.sharpFloors, 0),
+            feverFloors: finiteNonNegativeInteger(psIn.feverFloors, 0)
         },
         unlocks: normalizeUnlocks(input.unlocks),
         powersFtueSeen: typeof input.powersFtueSeen === 'boolean' ? input.powersFtueSeen : defaults.powersFtueSeen ?? false
@@ -778,6 +799,26 @@ export const mergeDailyComplete = (save: SaveData, completedDateKeyUtc: string):
             dailyStreakCosmetic: next.streak,
             dailyStreakGraceAvailable: next.graceAvailable,
             relicShrineExtraPickUnlocked: ps.relicShrineExtraPickUnlocked === true
+        }
+    });
+};
+
+/**
+ * A cleared floor's chain record, folded into the profile: one Sharp floor when the chain reached
+ * Sharp or better, one Fever floor when it reached Fever. Called once per clear; a floor whose
+ * chain stayed below Sharp leaves the save untouched.
+ */
+export const mergeChainFloorStats = (save: SaveData, floorChainTier: ChainTier): SaveData => {
+    if (floorChainTier !== 'sharp' && floorChainTier !== 'fever') {
+        return save;
+    }
+    const ps = save.playerStats ?? defaultPlayerStats();
+    return normalizeSaveData({
+        ...save,
+        playerStats: {
+            ...ps,
+            sharpFloors: runNonNegativeIntegerOrFallback(ps.sharpFloors, 0) + 1,
+            feverFloors: runNonNegativeIntegerOrFallback(ps.feverFloors, 0) + (floorChainTier === 'fever' ? 1 : 0)
         }
     });
 };

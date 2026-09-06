@@ -229,6 +229,9 @@ export type RelicId =
      * the rest of the run, so the board you are looking at plays differently once you hold one.
      */
     | 'bulwark_plate'
+    | 'tuning_fork'
+    | 'magpie_ledger'
+    | 'suit_lens'
     | 'tithe_conduit'
     | 'stasis_broker'
     | 'opening_ledger'
@@ -352,7 +355,11 @@ export type AchievementId =
     | 'ACH_NO_POWERS_TEN'
     | 'ACH_GAUNTLET_RUN'
     | 'ACH_PUZZLE_SOLVER'
-    | 'ACH_MEDITATION_HOUR';
+    | 'ACH_MEDITATION_HOUR'
+    | 'ACH_FIRST_FEVER'
+    | 'ACH_CHUNK_SIX'
+    | 'ACH_EXTREME_FEVER'
+    | 'ACH_WARDEN_BY_CHUNK';
 
 export interface DebugFlags {
     showDebugTools: boolean;
@@ -908,6 +915,12 @@ export interface RunSummary {
     unlockedAchievements: AchievementId[];
     bestStreak: number;
     perfectClears: number;
+    /** The biggest chunk one break took, in pairs; absent on a run before the cascade existed. */
+    biggestChunk?: number;
+    /** The chain's run: the longest chain held, and the cleared floors whose chain reached Sharp and Fever. */
+    bestChain?: number;
+    sharpFloors?: number;
+    feverFloors?: number;
     /** Present for seeded modes (daily, shared challenge). */
     runSeed?: number;
     runRulesVersion?: number;
@@ -971,6 +984,10 @@ export interface PassAndPlaySeat {
     readonly matches: number;
     /** Completed turns, so a standings line can say who has had fewer. */
     readonly turns: number;
+    /** Pairs this seat's chunks took, the longest chain it held, and the chain it holds right now. */
+    readonly chunkPairs: number;
+    readonly bestChain: number;
+    readonly chain: number;
 }
 
 export interface PassAndPlayState {
@@ -981,6 +998,11 @@ export interface PassAndPlayState {
      * that instant, which is the only safe moment to hand a device over.
      */
     readonly handoffPending: boolean;
+    /**
+     * The chain the seat that just lost the device was holding when it missed, so the handoff can
+     * say what the table just watched end. Zero when the miss ended nothing worth naming.
+     */
+    readonly handoffChainLost: number;
 }
 
 export interface RunState {
@@ -1163,6 +1185,14 @@ export interface RunState {
     /** Breaks that landed at the Fever rung this floor, and the longest chain the floor saw. */
     feverBreaksThisFloor: number;
     bestChainThisFloor: number;
+    /** Run-wide: Fever breaks, the biggest single chunk in pairs, wardens a chunk finished. Records and achievements read these. */
+    feverBreaksThisRun: number;
+    biggestChunkPairs: number;
+    chunkWardenKills: number;
+    /** Run-wide chain records: the longest chain, and cleared floors whose chain reached Sharp or Fever. */
+    bestChainThisRun: number;
+    sharpFloorsThisRun: number;
+    feverFloorsThisRun: number;
     /** Pairs the magpie has taken back on this floor. */
     magpieTheftsThisFloor: number;
     /** Times a guard token drove the magpie off on this floor. */
@@ -1225,6 +1255,9 @@ export interface PlayerStatsPersisted {
     encorePairKeysLastRun: string[];
     /** Meta: +1 relic pick at each milestone draft after the Profile reward is claimed. */
     relicShrineExtraPickUnlocked?: boolean;
+    /** Cleared floors whose chain reached Sharp, and Fever, across local runs. The chain quest reads the first. */
+    sharpFloors?: number;
+    feverFloors?: number;
 }
 
 /**
@@ -1241,6 +1274,9 @@ export interface RunHistoryRecord {
     readonly endedAtIso: string;
     /** The key that replays this run, or null for a run that cannot be handed over. */
     readonly shareKey: string | null;
+    /** The chain's records for this run: longest chain and biggest chunk in pairs. Absent on older rows. */
+    readonly bestChain?: number;
+    readonly biggestChunk?: number;
 }
 
 export interface SaveData {

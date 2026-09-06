@@ -2,7 +2,7 @@ import type { HazardTileKind, Tile, TileTraitKind } from '../../shared/contracts
 import { DECOY_PAIR_KEY } from '../../shared/tile-identity';
 import { isTilePickable } from './tileBoardPick';
 
-export type TileBoardPowerBackAccent = 'destroy' | 'peek' | 'stray' | 'pin' | 'swap' | 'swapOrigin';
+export type TileBoardPowerBackAccent = 'destroy' | 'peek' | 'stray' | 'pin' | 'swap' | 'swapOrigin' | 'clump';
 
 interface TileBoardHiddenBackAccents {
     destroyBlockedDecoyBack: boolean;
@@ -15,6 +15,8 @@ interface TileBoardHiddenBackAccents {
 }
 
 export interface TileBoardHiddenBackAccentsInput {
+    /** The clump the focused or selected tile stands in; outlined so the read is on the board, not only in a chip. */
+    clumpReadTileIds?: ReadonlySet<string>;
     destroyEligibleTileIds: ReadonlySet<string>;
     destroyPowerVisualActive: boolean;
     faceUp: boolean;
@@ -32,6 +34,7 @@ export interface TileBoardHiddenBackAccentsInput {
 }
 
 export const getTileBoardHiddenBackAccents = ({
+    clumpReadTileIds,
     destroyEligibleTileIds,
     destroyPowerVisualActive,
     faceUp,
@@ -77,6 +80,9 @@ export const getTileBoardHiddenBackAccents = ({
         powerBackAccent = 'peek';
     } else if (strayPowerVisualActive && strayEligibleTileIds.has(tile.id)) {
         powerBackAccent = 'stray';
+    } else if (clumpReadTileIds?.has(tile.id)) {
+        // Lowest priority: a power that is armed always outranks a read.
+        powerBackAccent = 'clump';
     }
 
     return {

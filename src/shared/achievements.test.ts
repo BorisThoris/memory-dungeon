@@ -5,7 +5,8 @@ import {
     ACHIEVEMENTS,
     evaluateAchievementUnlocks,
     getAchievementProgressRows,
-    getAchievementProgressSummary
+    getAchievementProgressSummary,
+    CHUNK_SIX_PAIRS
 } from './achievements';
 import { createNewRun } from './game-core';
 import { RELIC_POOL } from './relics';
@@ -302,5 +303,38 @@ describe('achievements that point at the rest of the game', () => {
 
     it('trips none of them on a fresh run', () => {
         expect(unlocksFor(baseRun())).toEqual([]);
+    });
+});
+
+describe('the chain loop achievements', () => {
+    it('unlock from the run-wide chain counters and the floor-clear result', () => {
+        const base = createNewRun(0);
+        const save = createDefaultSaveData();
+        const quiet = evaluateAchievementUnlocks(base, save);
+        expect(quiet).not.toContain('ACH_FIRST_FEVER');
+        expect(quiet).not.toContain('ACH_CHUNK_SIX');
+        expect(quiet).not.toContain('ACH_EXTREME_FEVER');
+        expect(quiet).not.toContain('ACH_WARDEN_BY_CHUNK');
+        const loud = evaluateAchievementUnlocks(
+            {
+                ...base,
+                feverBreaksThisRun: 1,
+                biggestChunkPairs: CHUNK_SIX_PAIRS,
+                chunkWardenKills: 1,
+                lastLevelResult: {
+                    level: 3,
+                    scoreGained: 100,
+                    rating: 'S',
+                    livesRemaining: 5,
+                    perfect: false,
+                    mistakes: 1,
+                    clearLifeReason: 'none',
+                    clearLifeGained: 0,
+                    momentumBonusTier: 'fever'
+                }
+            },
+            save
+        );
+        expect(loud).toEqual(expect.arrayContaining(['ACH_FIRST_FEVER', 'ACH_CHUNK_SIX', 'ACH_EXTREME_FEVER', 'ACH_WARDEN_BY_CHUNK']));
     });
 });

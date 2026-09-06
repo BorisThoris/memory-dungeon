@@ -6,6 +6,7 @@ import { getFindableRewardText } from '../../shared/findables';
 import { getHazardTileTelegraph } from '../../shared/hazard-tiles';
 import { getPairProximityGridDistance } from '../../shared/pairProximityHint';
 import { getTileSuit } from '../../shared/tile-suit-rules';
+import { getClumpRead } from '../../shared/clump-read-rules';
 import { DECOY_PAIR_KEY } from '../../shared/tile-identity';
 import { routeSpecialLabel, routeSpecialRewardLine } from '../../shared/route-world';
 import {
@@ -240,8 +241,13 @@ export const getTileAriaLabel = (
             : `Tile ${tile.label}, row ${row}, column ${column}`
         : `Hidden tile, row ${row}, column ${column}`;
     // The suit is the one thing a face-down tile shows, so it is the one thing its name says.
+    // A hidden tile also says how big a clump it stands in: the read a sighted player gets from the
+    // outline on the board, and the number the chain is planned against.
+    const clump = !faceUp && tile.state === 'hidden' ? getClumpRead(board, tile.id) : null;
     const suitNote = tile.suit && tile.state !== 'matched' && tile.state !== 'removed'
-        ? ` ${getTileSuit(tile.suit).name} suit.`
+        ? clump && clump.size > 1
+            ? ` ${getTileSuit(tile.suit).name} suit, clump of ${clump.size}.`
+            : ` ${getTileSuit(tile.suit).name} suit.`
         : '';
     const findableNote = tile.findableKind && faceUp && tile.state !== 'matched' ? ` ${getFindableRewardText(tile.findableKind)}` : '';
     const scoutSourceNote =

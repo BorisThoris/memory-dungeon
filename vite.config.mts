@@ -80,6 +80,14 @@ export default defineConfig(({ mode }) => ({
         host: '127.0.0.1',
         port: 5173,
         strictPort: true,
+        /*
+         * Playwright runs against this dev server. Hot reload navigates the page whenever a file
+         * changes, and a test mid-flip reads that as "execution context destroyed"; a run that
+         * overlaps any editing is a run that fails for no reason the app has. The e2e web server
+         * sets E2E_DISABLE_HMR=1, so each test still loads the latest code on its own navigation
+         * and nothing reloads under it.
+         */
+        hmr: process.env.E2E_DISABLE_HMR === '1' ? false : undefined,
         watch: {
             ignored: ['**/.codex-run/**', '**/output/**', '**/release/**', '**/dist/**', '**/dist-build/**', '**/dist-electron/**']
         }

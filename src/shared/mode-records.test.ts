@@ -55,3 +55,15 @@ describe('getModeRecords', () => {
         expect(records[0]?.endedAtIso).toBe('2026-09-01T12:00:00.000Z');
     });
 });
+
+describe('the chain records by mode', () => {
+    it('keeps the longest chain and biggest chunk across every run, not only the highest-scoring one', () => {
+        const records = getModeRecords([
+            { ...run('Classic Dungeon', 900), bestChain: 12, biggestChunk: 3 },
+            { ...run('Classic Dungeon', 2200), bestChain: 5, biggestChunk: 7 },
+            run('Gauntlet', 400)
+        ]);
+        expect(records[0]).toMatchObject({ mode: 'Classic Dungeon', totalScore: 2200, bestChain: 12, biggestChunk: 7 });
+        expect(records[1]).toMatchObject({ mode: 'Gauntlet', bestChain: 0, biggestChunk: 0 });
+    });
+});

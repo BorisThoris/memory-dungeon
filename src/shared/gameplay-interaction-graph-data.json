@@ -1,5 +1,5 @@
 {
-    "version": 24,
+    "version": 25,
     "mechanics": [
         {
             "id": "trait.echo",
@@ -5347,6 +5347,104 @@
                 "src/shared/tile-trait-rules.test.ts",
                 "src/shared/relics.test.ts"
             ]
+        },
+        {
+            "id": "relic.tuning_fork",
+            "label": "Tuning Fork Relic",
+            "kind": "relic",
+            "role": "standing_rule_clean_break_depth",
+            "evidence": [
+                "src/shared/relics.ts",
+                "src/shared/gameplay-core-contracts.ts",
+                "src/shared/chunk-break-rules.ts",
+                "src/renderer/copy/relicDraftOffer.ts"
+            ],
+            "reads": [
+                "relicOffer",
+                "relicIds",
+                "chunkPairsThisChain"
+            ],
+            "writes": [
+                "relicIds",
+                "feedbackLines"
+            ],
+            "enables": [
+                "build.combo_shard_engine"
+            ],
+            "blocks": [],
+            "softlockGuards": [
+                "draft-eligibility",
+                "exit-never-breaks"
+            ],
+            "tests": [
+                "src/shared/chunk-break-rules.test.ts",
+                "src/shared/cascade-balance-simulation.test.ts"
+            ]
+        },
+        {
+            "id": "relic.magpie_ledger",
+            "label": "Magpie's Ledger Relic",
+            "kind": "relic",
+            "role": "standing_rule_spilled_treasure_gold",
+            "evidence": [
+                "src/shared/relics.ts",
+                "src/shared/gameplay-core-contracts.ts",
+                "src/shared/chunk-break-rules.ts",
+                "src/renderer/copy/relicDraftOffer.ts"
+            ],
+            "reads": [
+                "relicOffer",
+                "relicIds"
+            ],
+            "writes": [
+                "relicIds",
+                "shopGold",
+                "feedbackLines"
+            ],
+            "enables": [
+                "build.treasure_greed"
+            ],
+            "blocks": [],
+            "softlockGuards": [
+                "draft-eligibility",
+                "spill-pays-as-matched"
+            ],
+            "tests": [
+                "src/shared/chunk-break-rules.test.ts",
+                "src/shared/cascade-balance-simulation.test.ts"
+            ]
+        },
+        {
+            "id": "relic.suit_lens",
+            "label": "Suit Lens Relic",
+            "kind": "relic",
+            "role": "standing_rule_three_suit_deal",
+            "evidence": [
+                "src/shared/relics.ts",
+                "src/shared/gameplay-core-contracts.ts",
+                "src/shared/tile-suit-rules.ts",
+                "src/renderer/copy/relicDraftOffer.ts"
+            ],
+            "reads": [
+                "relicOffer",
+                "relicIds"
+            ],
+            "writes": [
+                "relicIds",
+                "feedbackLines"
+            ],
+            "enables": [
+                "build.combo_shard_engine"
+            ],
+            "blocks": [],
+            "softlockGuards": [
+                "draft-eligibility",
+                "seeded-deal"
+            ],
+            "tests": [
+                "src/shared/tile-suit-rules.test.ts",
+                "src/shared/cascade-balance-simulation.test.ts"
+            ]
         }
     ],
     "edges": [
@@ -8601,6 +8699,66 @@
             "target": "relic.drift_appraiser",
             "kind": "triggers",
             "label": "Drift beside Cursed invokes Drift Appraiser"
+        },
+        {
+            "source": "relic.tuning_fork",
+            "target": "core.gameplay_commands",
+            "kind": "triggers",
+            "label": "Clean-depth rule commands"
+        },
+        {
+            "source": "relic.tuning_fork",
+            "target": "build.combo_shard_engine",
+            "kind": "belongs_to",
+            "label": "Tuning Fork build source"
+        },
+        {
+            "source": "relic.tuning_fork",
+            "target": "feedback.gameplay_hud",
+            "kind": "displays",
+            "label": "shows the deeper Clean break"
+        },
+        {
+            "source": "relic.magpie_ledger",
+            "target": "core.gameplay_commands",
+            "kind": "triggers",
+            "label": "spilled-treasure rule commands"
+        },
+        {
+            "source": "relic.magpie_ledger",
+            "target": "build.treasure_greed",
+            "kind": "belongs_to",
+            "label": "Magpie's Ledger build source"
+        },
+        {
+            "source": "relic.magpie_ledger",
+            "target": "economy.shop_gold",
+            "kind": "grants",
+            "label": "doubles gold from spilled treasure"
+        },
+        {
+            "source": "relic.magpie_ledger",
+            "target": "feedback.gameplay_hud",
+            "kind": "displays",
+            "label": "shows the doubled spill"
+        },
+        {
+            "source": "relic.suit_lens",
+            "target": "core.gameplay_commands",
+            "kind": "triggers",
+            "label": "three-suit deal rule commands"
+        },
+        {
+            "source": "relic.suit_lens",
+            "target": "build.combo_shard_engine",
+            "kind": "belongs_to",
+            "label": "Suit Lens build source"
+        },
+        {
+            "source": "relic.suit_lens",
+            "target": "feedback.gameplay_hud",
+            "kind": "displays",
+            "label": "shows the bigger clumps on the backs"
         }
     ],
     "coverage": {

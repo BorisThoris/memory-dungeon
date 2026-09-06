@@ -174,6 +174,18 @@ export const AUDIO_INTERACTION_COVERAGE: readonly AudioInteractionCoverageRow[] 
         reducedMotionSafe: true
     },
     {
+        id: 'chunk_break_ladder',
+        domain: 'gameplay',
+        interaction: 'A chain breaks a chunk: one rising note per pair, a Fever sting on top, a thud when a warden fell',
+        cue: 'none',
+        callsite: 'playResolveSfx -> playChunkBreakSfx / playChunkWardenThudSfx; App -> useFeverDuck ducks the bed for one beat',
+        semanticMoment: 'reward',
+        decision: 'procedural_only',
+        cooldownPolicy: 'phrase capped at CHUNK_BREAK_MAX_NOTES with a per-note taper; match category polyphony cap; fever duck keyed to the event so it fires once',
+        mixRole: 'the cascade phrase: pitch climbs with the chunk, level does not',
+        reducedMotionSafe: true
+    },
+    {
         id: 'stacked_reward_setup',
         domain: 'gameplay',
         interaction: 'Successful match resolves exactly two payoff channels together',

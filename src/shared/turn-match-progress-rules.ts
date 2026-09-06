@@ -15,6 +15,10 @@ export interface TurnMatchProgressResult {
     chunkPairsThisChain: number;
     feverBreaksThisFloor: number;
     bestChainThisFloor: number;
+    feverBreaksThisRun: number;
+    biggestChunkPairs: number;
+    chunkWardenKills: number;
+    bestChainThisRun: number;
     hazardFragileCacheClaimsThisFloor: number;
     hazardTollCachesThisFloor: number;
     hazardFuseCachesThisFloor: number;
@@ -49,6 +53,8 @@ export interface TurnMatchProgressInput {
     /** The tier the break landed at, and the chain the run holds after this match. */
     chunkTier: ChainTier;
     chainAfter: number;
+    /** Wardens the chunk finished this turn. */
+    chunkWardensDefeated: number;
     cursedMatchedEarly: boolean;
     findablesClaimedDelta: number;
     routeCardSafeHazardWardCharges: number;
@@ -83,6 +89,7 @@ export const resolveTurnMatchProgress = ({
     chunkScore,
     chunkTier,
     chainAfter,
+    chunkWardensDefeated,
     cursedMatchedEarly,
     findablesClaimedDelta,
     routeCardSafeHazardWardCharges,
@@ -145,6 +152,12 @@ export const resolveTurnMatchProgress = ({
             runNonNegativeInteger(run.feverBreaksThisFloor) +
             (runNonNegativeInteger(chunkPairsBroken) > 0 && chunkTier === 'fever' ? 1 : 0),
         bestChainThisFloor: Math.max(runNonNegativeInteger(run.bestChainThisFloor), runNonNegativeInteger(chainAfter)),
+        feverBreaksThisRun:
+            runNonNegativeInteger(run.feverBreaksThisRun) +
+            (runNonNegativeInteger(chunkPairsBroken) > 0 && chunkTier === 'fever' ? 1 : 0),
+        biggestChunkPairs: Math.max(runNonNegativeInteger(run.biggestChunkPairs), runNonNegativeInteger(chunkPairsBroken)),
+        chunkWardenKills: runNonNegativeInteger(run.chunkWardenKills) + runNonNegativeInteger(chunkWardensDefeated),
+        bestChainThisRun: Math.max(runNonNegativeInteger(run.bestChainThisRun), runNonNegativeInteger(chainAfter)),
         hazardFragileCacheClaimsThisFloor:
             runNonNegativeInteger(run.hazardFragileCacheClaimsThisFloor) + (fragileCacheClaimed ? 1 : 0),
         hazardTollCachesThisFloor:

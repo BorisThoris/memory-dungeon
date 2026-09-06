@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
     acknowledgePassAndPlayHandoff,
+    describePassAndPlayChainLost,
     applyResolvedTurnToPassAndPlay,
     createPassAndPlayState,
     getActiveSeat,
@@ -118,6 +119,45 @@ describe('applyResolvedTurnToPassAndPlay', () => {
         expect(state.seats[0]).toMatchObject({ matches: 2, score: 250, turns: 3 });
         expect(state.seats[1]).toMatchObject({ matches: 1, score: 90, turns: 2 });
         expect(state.activeSeatIndex).toBe(0);
+    });
+});
+
+describe('the chain at a shared table', () => {
+    it('credits a chunk to the seat whose turn broke it, and keeps that seat\'s longest chain', () => {
+        let state = createPassAndPlayState();
+        state = applyResolvedTurnToPassAndPlay(state, { ...match(100), chainAfter: 1 });
+        state = applyResolvedTurnToPassAndPlay(state, { ...match(150), chainAfter: 2 });
+        state = applyResolvedTurnToPassAndPlay(state, { ...match(400), chainAfter: 5, chunkPairs: 3 });
+        expect(state.seats[0]).toMatchObject({ chunkPairs: 3, bestChain: 5, chain: 5 });
+        expect(state.seats[1]).toMatchObject({ chunkPairs: 0, bestChain: 0, chain: 0 });
+    });
+
+    it('ends the seat\'s chain on a miss and remembers what the handoff cost', () => {
+        let state = createPassAndPlayState();
+        state = applyResolvedTurnToPassAndPlay(state, { ...match(100), chainAfter: 3 });
+        state = applyResolvedTurnToPassAndPlay(state, miss());
+        expect(state.seats[0]).toMatchObject({ chain: 0, bestChain: 3 });
+        expect(state.handoffChainLost).toBe(3);
+        expect(describePassAndPlayChainLost(state)).toEqual({ label: 'Player 1', chain: 3 });
+        // The next seat's first match clears it: nothing lingers into their turn.
+        state = applyResolvedTurnToPassAndPlay(state, { ...match(50), chainAfter: 1 });
+        expect(state.handoffChainLost).toBe(0);
+        expect(describePassAndPlayChainLost(state)).toBeNull();
+    });
+
+    it('does not name a chain too short to notice, and counts a match without a stamped chain as one link', () => {
+        let state = createPassAndPlayState(3);
+        state = applyResolvedTurnToPassAndPlay(state, match(10));
+        expect(state.seats[0]?.chain).toBe(1);
+        state = applyResolvedTurnToPassAndPlay(state, miss());
+        expect(state.handoffChainLost).toBe(1);
+        expect(describePassAndPlayChainLost(state)).toBeNull();
+        // The seat that lost the device is the one before the active seat, wrapping at the table's end.
+        state = applyResolvedTurnToPassAndPlay(state, miss());
+        state = applyResolvedTurnToPassAndPlay(state, { ...match(10), chainAfter: 2 });
+        state = applyResolvedTurnToPassAndPlay(state, miss());
+        expect(state.activeSeatIndex).toBe(0);
+        expect(describePassAndPlayChainLost(state)).toEqual({ label: 'Player 3', chain: 2 });
     });
 });
 

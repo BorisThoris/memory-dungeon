@@ -19,6 +19,9 @@ export interface ModeRecord {
     readonly endedAtIso: string;
     /** How many recorded runs are in this mode, so a one-off record reads as one. */
     readonly runs: number;
+    /** The chain's records across every run in the mode, not only the best-scoring one. */
+    readonly bestChain: number;
+    readonly biggestChunk: number;
 }
 
 const beats = (candidate: RunHistoryRecord, current: ModeRecord): boolean =>
@@ -40,7 +43,9 @@ export const getModeRecords = (history: readonly RunHistoryRecord[]): ModeRecord
                 highestLevel: entry.highestLevel,
                 mode: entry.mode,
                 runs: 1,
-                totalScore: entry.totalScore
+                totalScore: entry.totalScore,
+                bestChain: entry.bestChain ?? 0,
+                biggestChunk: entry.biggestChunk ?? 0
             });
             continue;
         }
@@ -53,7 +58,11 @@ export const getModeRecords = (history: readonly RunHistoryRecord[]): ModeRecord
                       totalScore: entry.totalScore
                   }
                 : current),
-            runs: current.runs + 1
+            runs: current.runs + 1,
+            // The chain's records are their own ledger: a run that scored less can still hold the
+            // longest chain or the biggest chunk the mode has seen.
+            bestChain: Math.max(current.bestChain, entry.bestChain ?? 0),
+            biggestChunk: Math.max(current.biggestChunk, entry.biggestChunk ?? 0)
         });
     }
     return [...byMode.values()].sort(

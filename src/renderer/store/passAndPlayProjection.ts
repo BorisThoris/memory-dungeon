@@ -23,6 +23,8 @@ export const projectPassAndPlayTurn = (
     }
     return applyResolvedTurnToPassAndPlay(previous, {
         matched: turnEvent.outcome === 'match' || turnEvent.outcome === 'gambit_match',
-        scoreDelta: turnEvent.totalScoreAfter - turnEvent.totalScoreBefore
+        scoreDelta: turnEvent.totalScoreAfter - turnEvent.totalScoreBefore,
+        chunkPairs: turnEvent.announcement.chunkPairsBrokenAfter - turnEvent.announcement.chunkPairsBrokenBefore,
+        chainAfter: turnEvent.announcement.chainAfter
     });
 };

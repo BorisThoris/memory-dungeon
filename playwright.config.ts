@@ -63,7 +63,7 @@ const config: PlaywrightTestConfig = {
         }
     ],
     webServer: {
-        command: 'yarn vite --host 127.0.0.1 --port 5173 --strictPort',
+        command: 'cross-env E2E_DISABLE_HMR=1 yarn vite --host 127.0.0.1 --port 5173 --strictPort',
         url: 'http://127.0.0.1:5173',
         reuseExistingServer: !process.env.CI,
         /** Cold caches / busy agents: avoid false failures while Vite prebundles (default 60s is tight). */

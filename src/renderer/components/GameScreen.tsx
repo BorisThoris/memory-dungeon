@@ -73,6 +73,7 @@ import {
 } from '../copy/relicDraftOffer';
 import { GAMBIT_KEYBOARD_HELP_TIP } from '../copy/gameplayHints';
 import { PASS_AND_PLAY_COPY } from '../copy/passAndPlay';
+import { describePassAndPlayChainLost } from '../../shared/pass-and-play-rules';
 import { floorClearResidentLine } from '../copy/floorCurioBeat';
 import { pickFloorCurio } from '../../shared/floor-curio-rules';
 import { canGreetFloorCurio } from '../../shared/floor-curio-greeting-rules';
@@ -108,6 +109,7 @@ import {
     resumeAudioContext,
     sfxGainFromSettings
 } from '../audio/gameSfx';
+import { rumbleForBreak } from '../input/gamepadRumble';
 import {
     playMenuOpenSfx,
     playUiBackSfx,
@@ -1022,6 +1024,9 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const activeSeatLabel = run.passAndPlay
         ? (run.passAndPlay.seats[run.passAndPlay.activeSeatIndex]?.label ?? null)
         : null;
+    const chainLost = run.passAndPlay ? describePassAndPlayChainLost(run.passAndPlay) : null;
+    const chainLostLabel = chainLost?.label ?? null;
+    const chainLostLength = chainLost?.chain ?? 0;
 
     const gambitThirdPickActive =
         run.status === 'resolving' &&
@@ -1182,17 +1187,18 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const pulsePairs = latestTurnForPulse
         ? latestTurnForPulse.announcement.chunkPairsBrokenAfter - latestTurnForPulse.announcement.chunkPairsBrokenBefore
         : 0;
+    const pulseTier: ChainTier = latestTurnForPulse?.announcement.chainTierAfter ?? 'none';
     const breakPulseTier: ChainTier | 'none' =
-        latestTurnForPulse && pulsePairs > 0 && expiredPulseEventId !== pulseEventId
-            ? latestTurnForPulse.announcement.chainTierAfter
-            : 'none';
+        latestTurnForPulse && pulsePairs > 0 && expiredPulseEventId !== pulseEventId ? pulseTier : 'none';
     useEffect(() => {
         if (pulseEventId === null || pulsePairs <= 0) {
             return undefined;
         }
+        // The pad shakes with the stage: same event, same tier, once. Reduce motion turns it off.
+        rumbleForBreak(pulseTier, reduceMotion);
         const clear = window.setTimeout(() => setExpiredPulseEventId(pulseEventId), BREAK_PULSE_MS);
         return () => window.clearTimeout(clear);
-    }, [pulseEventId, pulsePairs]);
+    }, [pulseEventId, pulsePairs, pulseTier, reduceMotion]);
 
     /*
      * The last pair is its own moment. The dialog used to appear on the same frame the pair
@@ -1371,11 +1377,17 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         const opening = announcedSeatRef.current === null;
         announcedSeatRef.current = activeSeatLabel;
         if (!opening) {
-            queuePoliteAnnouncement(PASS_AND_PLAY_COPY.handoffAnnouncement(activeSeatLabel), {
-                dedupeKey: 'pass-and-play-turn'
-            });
+            queuePoliteAnnouncement(
+                PASS_AND_PLAY_COPY.handoffAnnouncement(
+                    activeSeatLabel,
+                    chainLostLabel !== null && chainLostLength > 0 ? { chain: chainLostLength, label: chainLostLabel } : null
+                ),
+                {
+                    dedupeKey: 'pass-and-play-turn'
+                }
+            );
         }
-    }, [activeSeatLabel, queuePoliteAnnouncement]);
+    }, [activeSeatLabel, chainLostLabel, chainLostLength, queuePoliteAnnouncement]);
 
     const showForgivenessHint = Boolean(
         run.board &&

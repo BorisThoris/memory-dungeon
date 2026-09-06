@@ -8,6 +8,7 @@ import {
     chunkBreakComboShards,
     chunkBreakScore,
     findSuitRegion,
+    MAGPIE_LEDGER_GOLD_MULTIPLIER,
     resolveChunkBreak,
     tileCanBreakInChunk
 } from './chunk-break-rules';
@@ -182,5 +183,37 @@ describe('the proximity badge stays honest', () => {
         for (const id of broken.brokenTileIds) {
             expect(getPairProximityGridDistance(broken.board, id)).toBeNull();
         }
+    });
+});
+
+describe('relics that touch the cascade', () => {
+    it('Tuning Fork lets a Clean break reach two steps, so C goes with B', () => {
+        const plain = resolveChunkBreak({ board: board(), run: endless, matchedTileIds: ['A1', 'A2'], chain: 3 });
+        expect(plain.brokenPairKeys).toEqual(['B']);
+        const forked = resolveChunkBreak({
+            board: board(),
+            run: { ...endless, relicIds: ['tuning_fork'] },
+            matchedTileIds: ['A1', 'A2'],
+            chain: 3
+        });
+        expect(forked.tier).toBe('clean');
+        expect(forked.brokenPairKeys.sort()).toEqual(['B', 'C']);
+    });
+
+    it("Magpie's Ledger doubles the gold a spilled treasure pays, and nothing else", () => {
+        const treasure = layout().map((t) =>
+            t.pairKey === 'B' ? { ...t, dungeonCardKind: 'treasure' as const, dungeonCardEffectId: 'treasure_gold' as const, dungeonCardState: 'hidden' as const } : t
+        );
+        const plain = resolveChunkBreak({ board: board(treasure), run: endless, matchedTileIds: ['A1', 'A2'], chain: 4 });
+        const ledger = resolveChunkBreak({
+            board: board(treasure),
+            run: { ...endless, relicIds: ['magpie_ledger'] },
+            matchedTileIds: ['A1', 'A2'],
+            chain: 4
+        });
+        expect(plain.treasuresSpilled).toBe(1);
+        expect(ledger.treasureGold).toBe(plain.treasureGold * MAGPIE_LEDGER_GOLD_MULTIPLIER);
+        expect(ledger.score).toBe(plain.score);
+        expect(ledger.brokenPairKeys).toEqual(plain.brokenPairKeys);
     });
 });

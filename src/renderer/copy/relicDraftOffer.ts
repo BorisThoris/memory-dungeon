@@ -41,7 +41,10 @@ export const relicEffectLabels: Record<RelicId, string> = {
     bulwark_plate: 'Every Heavy match braces into a guard token, or score once guard is capped',
     stasis_broker: 'Every Stasis match buys a full-board shuffle charge',
     echo_relay: 'An Echo match beside Heavy grants a flash pair',
-    drift_appraiser: 'A Drift match beside Cursed pays 2 gold and score'
+    drift_appraiser: 'A Drift match beside Cursed pays 2 gold and score',
+    tuning_fork: 'Every Clean break reaches two steps into the clump instead of one',
+    magpie_ledger: 'Treasure a chunk spills pays double gold; matched treasure is unchanged',
+    suit_lens: 'Every floor deals three suits instead of four: bigger clumps, bigger breaks'
 };
 
 /**

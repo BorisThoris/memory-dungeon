@@ -13,6 +13,7 @@ const baseInput = (run = createNewRun(0)) => ({
     chunkScore: 0,
     chunkTier: 'none' as const,
     chainAfter: 0,
+    chunkWardensDefeated: 0,
     fragileCacheClaimed: false,
     tollCacheClaimed: false,
     fuseCacheClaimed: false,
@@ -57,6 +58,7 @@ describe('resolveTurnMatchProgress', () => {
             chunkScore: 0,
             chunkTier: 'none' as const,
             chainAfter: 0,
+            chunkWardensDefeated: 0,
             fragileCacheClaimed: true,
             tollCacheClaimed: true,
             fuseCacheClaimed: true,
@@ -189,6 +191,7 @@ describe('resolveTurnMatchProgress', () => {
             chunkScore: 0,
             chunkTier: 'none' as const,
             chainAfter: 0,
+            chunkWardensDefeated: 0,
             fragileCacheClaimed: true,
             tollCacheClaimed: true,
             fuseCacheClaimed: true,
@@ -258,5 +261,15 @@ describe("the chain's floor", () => {
         const third = resolveTurnMatchProgress({ ...baseInput(run), chunkPairsBroken: 0, chunkTier: 'fever', chainAfter: 9 });
         expect(third.feverBreaksThisFloor).toBe(1);
         expect(third.bestChainThisFloor).toBe(9);
+    });
+});
+
+describe('the run-wide chain records', () => {
+    it('keep the biggest chunk, count Fever breaks and wardens the chunks finished across floors', () => {
+        const first = resolveTurnMatchProgress({ ...baseInput(), chunkPairsBroken: 4, chunkTier: 'fever', chainAfter: 5, chunkWardensDefeated: 1 });
+        expect(first).toMatchObject({ biggestChunkPairs: 4, feverBreaksThisRun: 1, chunkWardenKills: 1 });
+        const run = { ...createNewRun(0), biggestChunkPairs: 4, feverBreaksThisRun: 1, chunkWardenKills: 1 };
+        const second = resolveTurnMatchProgress({ ...baseInput(run), chunkPairsBroken: 2, chunkTier: 'sharp', chainAfter: 3, chunkWardensDefeated: 0 });
+        expect(second).toMatchObject({ biggestChunkPairs: 4, feverBreaksThisRun: 1, chunkWardenKills: 1 });
     });
 });

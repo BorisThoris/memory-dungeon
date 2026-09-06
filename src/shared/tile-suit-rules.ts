@@ -1,4 +1,4 @@
-import type { BoardState, FloorArchetypeId, Tile, TileSuit } from './contracts';
+import type { BoardState, FloorArchetypeId, RelicId, Tile, TileSuit } from './contracts';
 import { getSafeBoardColumns } from './board-grid-dimensions';
 import { createMulberry32, hashStringToSeed, pickRngIndex, shuffleWithRng } from './rng';
 import { isSingletonUtilityPairKey } from './tile-identity';
@@ -291,19 +291,27 @@ export const scatterTiles = (
     return tiles.map((tile) => (isPinned(tile) ? tile : loose[next++]!));
 };
 
+/** Suit Lens: the suits a floor deals when the relic is held. Two-suit floors stay two. */
+export const SUIT_LENS_SUIT_COUNT = 3;
+
+export const suitCountForDeal = (profile: SuitDealProfile, relicIds: readonly RelicId[] = []): number =>
+    profile === 'two_suit' ? 2 : relicIds.includes('suit_lens') ? SUIT_LENS_SUIT_COUNT : TILE_SUITS.length;
+
 export const dealBoardSuits = (
     tiles: readonly Tile[],
     columns: number,
     runSeed: number,
     level: number,
     rulesVersion: number,
-    profile: SuitDealProfile = 'clumped'
+    profile: SuitDealProfile = 'clumped',
+    relicIds: readonly RelicId[] = []
 ): Tile[] => {
+    const suitCount = suitCountForDeal(profile, relicIds);
     if (profile === 'scattered') {
-        return scatterTiles(assignSuitsToTiles(tiles, runSeed, level, rulesVersion), runSeed, level, rulesVersion, isLayoutPinnedTile);
+        return scatterTiles(assignSuitsToTiles(tiles, runSeed, level, rulesVersion, suitCount), runSeed, level, rulesVersion, isLayoutPinnedTile);
     }
     return dealTilesInClumps(
-        assignSuitsToTiles(tiles, runSeed, level, rulesVersion, profile === 'two_suit' ? 2 : TILE_SUITS.length),
+        assignSuitsToTiles(tiles, runSeed, level, rulesVersion, suitCount),
         columns,
         runSeed,
         level,

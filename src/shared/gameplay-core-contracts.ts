@@ -38,6 +38,9 @@ export const GAMEPLAY_RELIC_IDS = [
     'stray_charge_plus_one',
     'pin_cap_plus_one',
     'bulwark_plate',
+    'tuning_fork',
+    'magpie_ledger',
+    'suit_lens',
     'tithe_conduit',
     'stasis_broker',
     'opening_ledger',
@@ -1207,6 +1210,54 @@ export const STANDING_RULE_RELIC_DEFINITIONS = z.array(gameplayContentDefinition
                 kind: 'feedback.emit',
                 cue: 'build.opening_ledger.claimed',
                 message: 'Opening Ledger is in force: the first match on every floor now pays bonus score.',
+                tone: 'information'
+            }
+        ]
+    },
+    {
+        id: 'relic.tuning_fork',
+        version: 1,
+        buildId: 'combo_shard_engine',
+        source: { kind: 'relic', id: 'tuning_fork' },
+        trigger: 'content.claimed',
+        conditions: [],
+        effects: [
+            {
+                kind: 'feedback.emit',
+                cue: 'build.tuning_fork.claimed',
+                message: 'Tuning Fork is in force: a Clean break now reaches two steps into the clump.',
+                tone: 'information'
+            }
+        ]
+    },
+    {
+        id: 'relic.magpie_ledger',
+        version: 1,
+        buildId: 'treasure_greed',
+        source: { kind: 'relic', id: 'magpie_ledger' },
+        trigger: 'content.claimed',
+        conditions: [],
+        effects: [
+            {
+                kind: 'feedback.emit',
+                cue: 'build.magpie_ledger.claimed',
+                message: "Magpie's Ledger is in force: treasure a chunk spills pays double gold.",
+                tone: 'information'
+            }
+        ]
+    },
+    {
+        id: 'relic.suit_lens',
+        version: 1,
+        buildId: 'combo_shard_engine',
+        source: { kind: 'relic', id: 'suit_lens' },
+        trigger: 'content.claimed',
+        conditions: [],
+        effects: [
+            {
+                kind: 'feedback.emit',
+                cue: 'build.suit_lens.claimed',
+                message: 'Suit Lens is in force: every floor from here deals three suits, so the clumps run bigger.',
                 tone: 'information'
             }
         ]

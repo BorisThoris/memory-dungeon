@@ -151,7 +151,7 @@ const RunShell = ({
                         <span className={styles.seatRow}>
                             {run.passAndPlay.seats.map((seat, index) => (
                                 <span
-                                    aria-label={PASS_AND_PLAY_COPY.seatAnnouncement(seat.label, seat.score)}
+                                    aria-label={PASS_AND_PLAY_COPY.seatAnnouncement(seat.label, seat.score, seat.bestChain)}
                                     className={styles.seat}
                                     data-active={index === run.passAndPlay?.activeSeatIndex ? 'true' : 'false'}
                                     data-testid={`hud-seat-${seat.id}`}

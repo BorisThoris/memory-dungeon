@@ -77,6 +77,32 @@ describe('REG-083 daily weekly season archive', () => {
         expect(share).toContain('Daily 20260425');
         expect(share).toContain('local-only');
         expect(share).not.toMatch(/rank|leaderboard|account/i);
+        // No chain, no chain clause: an older summary does not post "best chain ×0".
+        expect(share).not.toContain('chain');
+    });
+
+    it('names the best chain and the Fever floors when the daily had them', () => {
+        const save = createDefaultSaveData();
+        save.playerStats = { ...save.playerStats!, dailiesCompleted: 1, lastDailyDateKeyUtc: '20260425' };
+        save.lastRunSummary = {
+            totalScore: 900,
+            bestScore: 900,
+            levelsCleared: 2,
+            highestLevel: 3,
+            achievementsEnabled: true,
+            unlockedAchievements: [],
+            bestStreak: 3,
+            perfectClears: 0,
+            gameMode: 'daily',
+            dailyDateKeyUtc: '20260425',
+            bestChain: 9,
+            sharpFloors: 2,
+            feverFloors: 1
+        };
+        const share = buildDailyArchiveShareString(save);
+        expect(share).toContain('best chain ×9');
+        expect(share).toContain('Fever on 1 floor(s)');
+        expect(share.indexOf('best chain')).toBeLessThan(share.indexOf('local-only'));
     });
 
     it('normalizes malformed archive counters before building summaries and share strings', () => {

@@ -685,3 +685,19 @@ describe('tile board DOM accessibility helpers', () => {
         ).toBe('');
     });
 });
+
+describe('the clump in the tile name', () => {
+    it('says how big a clump a hidden tile stands in, so the read is not only on the board', () => {
+        const suited: BoardState = {
+            ...board,
+            columns: 2,
+            rows: 2,
+            tiles: board.tiles.map((tile, index) => ({ ...tile, suit: index < 3 ? ('ember' as const) : ('tide' as const) }))
+        };
+        const [a1] = suited.tiles as [Tile, ...Tile[]];
+        expect(getTileAriaLabel(suited, a1, false, 1, 1, {})).toContain('Ember suit, clump of 3.');
+        const lone = { ...suited, tiles: suited.tiles.map((tile, index) => ({ ...tile, suit: index === 0 ? ('ember' as const) : ('tide' as const) })) };
+        expect(getTileAriaLabel(lone, lone.tiles[0]!, false, 1, 1, {})).toContain('Ember suit.');
+        expect(getTileAriaLabel(lone, lone.tiles[0]!, false, 1, 1, {})).not.toContain('clump');
+    });
+});

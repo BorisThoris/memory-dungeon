@@ -24,6 +24,7 @@ import { useRichPresence } from './hooks/useRichPresence';
 import styles from './styles/App.module.css';
 import { buildRendererThemeStyle } from './styles/theme';
 import { resolveAdaptiveMusicState, useGameplayMusic } from './audio/gameplayMusic';
+import { useFeverDuck } from './audio/feverDuck';
 import { setTelemetrySink } from '../shared/telemetry';
 import { createGameOverRunSummary } from '../shared/run-summary-rules';
 import {
@@ -135,11 +136,12 @@ const App = () => {
     const musicState = resolveAdaptiveMusicState({ run, view: visualView });
     const musicShellActive = hydrated && (visualView === 'menu' || visualView === 'playing');
 
+    const feverDuck = useFeverDuck(run);
     useGameplayMusic({
         active: musicShellActive && musicState.active,
         track: musicState.track,
         masterVolume: settings.masterVolume,
-        musicVolume: settings.musicVolume * musicState.volumeMultiplier,
+        musicVolume: settings.musicVolume * musicState.volumeMultiplier * feverDuck,
         suppressed: musicState.suppressed
     });
 

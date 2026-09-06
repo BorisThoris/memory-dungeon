@@ -116,3 +116,17 @@ describe('tileBoardHiddenBackAccents', () => {
         expect(decoy.powerBackAccent).toBeNull();
     });
 });
+
+describe('the clump read accent', () => {
+    it('outlines the clump the considered tile stands in, and yields to any armed power', () => {
+        expect(accents({ clumpReadTileIds: new Set(['tile-a']) }).powerBackAccent).toBe('clump');
+        expect(accents({ clumpReadTileIds: new Set(['other']) }).powerBackAccent).toBeNull();
+        expect(
+            accents({
+                clumpReadTileIds: new Set(['tile-a']),
+                peekPowerVisualActive: true,
+                peekEligibleTileIds: new Set(['tile-a'])
+            }).powerBackAccent
+        ).toBe('peek');
+    });
+});

@@ -146,6 +146,7 @@ describe('rollRelicOptions', () => {
             'extra_shuffle_charge',
             'first_shuffle_free_per_floor',
             'guard_token_plus_one',
+            'magpie_ledger',
             'memorize_bonus_ms',
             'memorize_under_short_memorize',
             'opening_ledger',
@@ -157,7 +158,9 @@ describe('rollRelicOptions', () => {
             'shrine_echo',
             'stasis_broker',
             'stray_charge_plus_one',
+            'suit_lens',
             'tithe_conduit',
+            'tuning_fork',
             'wager_surety'
         ]);
         expect(Object.keys(RELIC_DRAFT).sort()).toEqual([...RELIC_POOL].sort());

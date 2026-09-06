@@ -3,13 +3,18 @@ import { createPassAndPlayState } from '../../shared/pass-and-play-rules';
 import type { BoardTurnResolvedEvent } from './gameplayFeedbackAdapter';
 import { projectPassAndPlayTurn } from './passAndPlayProjection';
 
-const turnEvent = (partial: Partial<BoardTurnResolvedEvent>): BoardTurnResolvedEvent =>
+type ChainFacts = Pick<BoardTurnResolvedEvent['announcement'], 'chunkPairsBrokenBefore' | 'chunkPairsBrokenAfter' | 'chainAfter'>;
+
+const turnEvent = (
+    partial: Partial<Omit<BoardTurnResolvedEvent, 'announcement'>> & { announcement?: Partial<ChainFacts> }
+): BoardTurnResolvedEvent =>
     ({
         outcome: 'match',
         totalScoreBefore: 0,
         totalScoreAfter: 0,
-        ...partial
-    }) as BoardTurnResolvedEvent;
+        ...partial,
+        announcement: { chunkPairsBrokenBefore: 0, chunkPairsBrokenAfter: 0, chainAfter: 0, ...partial.announcement }
+    }) as unknown as BoardTurnResolvedEvent;
 
 describe('projectPassAndPlayTurn', () => {
     it('leaves a solo run alone rather than inventing a table', () => {
@@ -45,6 +50,18 @@ describe('projectPassAndPlayTurn', () => {
         expect(
             projectPassAndPlayTurn(createPassAndPlayState(), turnEvent({ outcome: 'gambit_mismatch' }))?.activeSeatIndex
         ).toBe(1);
+    });
+
+    it('credits the chunk and the chain the event stamped to the seat that took the turn', () => {
+        const state = createPassAndPlayState();
+        const broke = projectPassAndPlayTurn(
+            state,
+            turnEvent({ announcement: { chunkPairsBrokenBefore: 2, chunkPairsBrokenAfter: 6, chainAfter: 5 }, totalScoreAfter: 900 })
+        );
+        expect(broke?.seats[0]).toMatchObject({ chunkPairs: 4, chain: 5, bestChain: 5, score: 900 });
+        const dropped = projectPassAndPlayTurn(broke, turnEvent({ outcome: 'mismatch', announcement: { chainAfter: 0 } }));
+        expect(dropped?.handoffChainLost).toBe(5);
+        expect(dropped?.seats[0]).toMatchObject({ chain: 0, bestChain: 5 });
     });
 
     it('reads the score delta from the event rather than from the run', () => {

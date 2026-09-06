@@ -25,6 +25,7 @@ describe('REG-037 audio interaction coverage', () => {
             'chain_reward_cashout',
             'chain_reward_armed',
             'resolved_cascade_accent',
+            'chunk_break_ladder',
             'stacked_reward_setup',
             'stacked_reward_burst',
             'super_stacked_reward_burst',

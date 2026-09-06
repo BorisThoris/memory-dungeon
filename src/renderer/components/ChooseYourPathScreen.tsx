@@ -122,14 +122,15 @@ const ChooseYourPathScreen = (): ReactElement => {
     const [setup, setSetup] = useState<ClassicRunSetup>(DEFAULT_CLASSIC_RUN_SETUP);
 
     const heroModes = useMemo(() => choosePathHeroModes(), []);
-    const launchMode = useMemo((): RunModeDefinition | null => {
-        const preferred = saveData.onboardingDismissed ? 'dungeon_showcase' : 'classic';
-        return (
-            heroModes.find((mode) => mode.id === preferred && mode.availability === 'available') ??
+    // Classic leads. The showcase this used to prefer after onboarding was retired into the
+    // setup sheet's unrecorded option, so the preference fell through to Classic anyway.
+    const launchMode = useMemo(
+        (): RunModeDefinition | null =>
+            heroModes.find((mode) => mode.id === 'classic' && mode.availability === 'available') ??
             heroModes.find((mode) => mode.availability === 'available') ??
-            null
-        );
-    }, [heroModes, saveData.onboardingDismissed]);
+            null,
+        [heroModes]
+    );
     const browseModes = useMemo(
         (): readonly RunModeDefinition[] => [
             ...heroModes.filter((mode) => mode.id !== launchMode?.id),

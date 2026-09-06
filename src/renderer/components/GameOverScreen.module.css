@@ -732,6 +732,13 @@
     color: var(--theme-text-subtle);
 }
 
+/* The seat's chain record, quieter than the name it follows. */
+.passAndPlayStandingChain {
+    font-size: var(--ui-font-caption);
+    font-weight: 400;
+    color: var(--theme-text-muted);
+}
+
 /* Weight, not colour alone: the winner has to read on a monochrome panel too. */
 .passAndPlayStanding[data-winner='true'] {
     font-weight: 700;

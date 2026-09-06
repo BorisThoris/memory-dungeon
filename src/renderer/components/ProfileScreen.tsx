@@ -186,6 +186,11 @@ const ProfileScreen = () => {
                                 <span className={styles.historyResult}>
                                     {MODE_RECORDS_COPY.result(record.totalScore, record.highestLevel)}
                                 </span>
+                                {MODE_RECORDS_COPY.chain(record.bestChain, record.biggestChunk) ? (
+                                    <span className={styles.historyResult} data-testid="profile-mode-record-chain">
+                                        {MODE_RECORDS_COPY.chain(record.bestChain, record.biggestChunk)}
+                                    </span>
+                                ) : null}
                                 <span className={styles.historyDate}>{MODE_RECORDS_COPY.runs(record.runs)}</span>
                             </article>
                         )}

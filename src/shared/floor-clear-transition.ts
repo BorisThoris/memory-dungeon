@@ -30,6 +30,7 @@ import { hasMutator } from './mutators';
 import { getParasiteFloorsAfterFeaturedObjectiveClear } from './score-parasite-rules';
 import { normalizeSessionStats } from './session-stats-rules';
 import { runNonNegativeInteger } from './run-number-guards';
+import { getChainTier } from './chain-tier-rules';
 import type { GameplayCommand, GameplayEvent } from './gameplay-core-contracts';
 
 export interface FloorClearExecutionContext {
@@ -142,6 +143,9 @@ export const createFinalizeLevelTransition = ({
         if (momentumBonus.tier === 'fever') {
             bonusTags.push(EXTREME_FEVER_BONUS_TAG);
         }
+        // The floor's chain record: the deepest rung its longest chain reached, against this
+        // floor's ladder. The run counts floors, not breaks, so a quest can ask for three floors.
+        const floorChainTier = getChainTier(runNonNegativeInteger(run.bestChainThisFloor), board.pairCount);
         const totalRelicFavorGained =
             featuredObjectiveClear.relicFavorGained + featuredObjectiveClear.endlessRiskWagerFavorGained;
         const relicFavor = gainRelicFavor(run, totalRelicFavorGained);
@@ -212,6 +216,10 @@ export const createFinalizeLevelTransition = ({
             flashPairRevealedTileIds: [],
             stickyBlockIndex: null,
             dungeonRun,
+            sharpFloorsThisRun:
+                runNonNegativeInteger(run.sharpFloorsThisRun) +
+                (floorChainTier === 'sharp' || floorChainTier === 'fever' ? 1 : 0),
+            feverFloorsThisRun: runNonNegativeInteger(run.feverFloorsThisRun) + (floorChainTier === 'fever' ? 1 : 0),
             stats: {
                 ...stats,
                 comboShards: applyMomentumBonusShards(stats.comboShards, momentumBonus),

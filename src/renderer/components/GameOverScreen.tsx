@@ -241,7 +241,18 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                                     data-winner={row.winner ? 'true' : 'false'}
                                     key={row.seat.id}
                                 >
-                                    <span>{row.seat.label}</span>
+                                    <span>
+                                        {row.seat.label}
+                                        {row.seat.bestChain > 0 ? (
+                                            <span
+                                                className={styles.passAndPlayStandingChain}
+                                                data-testid={`game-over-standing-${row.seat.id}-chain`}
+                                            >
+                                                {' · '}
+                                                {PASS_AND_PLAY_COPY.seatChainNote(row.seat.bestChain)}
+                                            </span>
+                                        ) : null}
+                                    </span>
                                     <span>{row.seat.score.toLocaleString()}</span>
                                 </li>
                             ))}

@@ -42,7 +42,15 @@ export const MODE_RECORDS_COPY = {
     result: (totalScore: number, highestLevel: number): string =>
         `${totalScore.toLocaleString('en-US')} · floor ${highestLevel}`,
     /** `4 runs` under the record, so a one-off does not read like a long campaign. */
-    runs: (runs: number): string => `${runs} ${runs === 1 ? 'run' : 'runs'}`
+    runs: (runs: number): string => `${runs} ${runs === 1 ? 'run' : 'runs'}`,
+    /** `Chain ×12 · chunk of 7` — the chain's own records for the mode; nothing when the mode has none. */
+    chain: (bestChain: number, biggestChunk: number): string | null => {
+        const parts = [
+            bestChain > 0 ? `Chain ×${bestChain}` : null,
+            biggestChunk > 0 ? `chunk of ${biggestChunk}` : null
+        ].filter((part): part is string => part !== null);
+        return parts.length === 0 ? null : parts.join(' · ');
+    }
 } as const;
 
 /**

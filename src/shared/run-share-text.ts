@@ -1,6 +1,7 @@
 import type { RunState } from './contracts';
 import { describeRunModeIdentity } from './run-mode-identity';
 import { describeRunShareKey, encodeRunShareKey } from './run-share-key';
+import { runNonNegativeInteger } from './run-number-guards';
 
 /**
  * The line a player posts after a run.
@@ -28,7 +29,16 @@ export const buildRunShareText = (run: RunState): RunShareText => {
     const identity = describeRunModeIdentity(run);
     const score = (summary?.totalScore ?? run.stats.totalScore).toLocaleString('en-US');
     const floor = summary?.highestLevel ?? run.board?.level ?? 1;
-    const headline = `${GAME_NAME} — ${identity.label}: floor ${floor}, ${score} points`;
+    // The chain is the part worth bragging about, and the part a friend replaying the key can beat.
+    const bestChain = summary?.bestChain ?? Math.max(runNonNegativeInteger(run.bestChainThisRun), runNonNegativeInteger(run.bestChainThisFloor));
+    const feverFloors = summary?.feverFloors ?? runNonNegativeInteger(run.feverFloorsThisRun);
+    const chain = [
+        runNonNegativeInteger(bestChain) > 0 ? `, best chain ×${runNonNegativeInteger(bestChain)}` : '',
+        runNonNegativeInteger(feverFloors) > 0
+            ? `, Fever on ${runNonNegativeInteger(feverFloors)} ${runNonNegativeInteger(feverFloors) === 1 ? 'floor' : 'floors'}`
+            : ''
+    ].join('');
+    const headline = `${GAME_NAME} — ${identity.label}: floor ${floor}, ${score} points${chain}`;
 
     const recipe = describeRunShareKey(run);
     if ('refusal' in recipe) {

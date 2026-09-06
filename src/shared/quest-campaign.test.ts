@@ -37,7 +37,17 @@ describe('REG-082 quest contract campaign ladder', () => {
         expect(rows.find((row) => row.id === 'daily_rhythm')?.status).toBe('active');
         expect(rows.every((row) => row.offlineOnly)).toBe(true);
         expect(rows.every((row) => row.retryRule.includes('local'))).toBe(true);
-        expect(questCampaignSummary(save)).toMatchObject({ total: 5, completed: 3, active: 2, locked: 0 });
+        expect(questCampaignSummary(save)).toMatchObject({ total: 6, completed: 3, active: 3, locked: 0 });
+    });
+
+    it('counts Sharp floors toward the chain quest, and completes it at three', () => {
+        const save = createDefaultSaveData();
+        save.achievements.ACH_FIRST_CLEAR = true;
+        save.playerStats = { ...save.playerStats!, sharpFloors: 2 };
+        const row = getQuestCampaignRows(save).find((entry) => entry.id === 'chain_rhythm');
+        expect(row).toMatchObject({ status: 'active', progressLabel: '2/3', saveFields: ['playerStats.sharpFloors'] });
+        save.playerStats = { ...save.playerStats!, sharpFloors: 3 };
+        expect(getQuestCampaignRows(save).find((entry) => entry.id === 'chain_rhythm')?.status).toBe('completed');
     });
 
     it('maps run summaries back to campaign contract rows', () => {

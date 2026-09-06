@@ -8,7 +8,8 @@ export type QuestCampaignStepId =
     | 'scholar_oath'
     | 'gauntlet_proof'
     | 'daily_rhythm'
-    | 'relic_apprentice';
+    | 'relic_apprentice'
+    | 'chain_rhythm';
 
 export type QuestCampaignStatus = 'completed' | 'active' | 'locked' | 'failed';
 export type QuestContractRetryPolicy = 'retry_next_run' | 'retry_same_mode' | 'persistent';
@@ -94,6 +95,18 @@ export const QUEST_CAMPAIGN_LADDER: readonly QuestCampaignDefinition[] = [
         retryPolicy: 'persistent',
         reward: 'Daily streak honor and future campaign branch.',
         offlineOnly: true
+    },
+    {
+        id: 'chain_rhythm',
+        order: 6,
+        title: 'Chain Rhythm',
+        description: 'Reach a Sharp chain on three cleared floors.',
+        target: 3,
+        saveFields: ['playerStats.sharpFloors'],
+        contractFlag: null,
+        retryPolicy: 'persistent',
+        reward: 'Chain honor progress.',
+        offlineOnly: true
     }
 ] as const;
 
@@ -109,6 +122,8 @@ const progressFor = (save: SaveData, id: QuestCampaignStepId): number => {
             return runNonNegativeInteger(save.playerStats?.dailiesCompleted);
         case 'relic_apprentice':
             return getRelicPickTotal(save.playerStats?.relicPickCounts);
+        case 'chain_rhythm':
+            return runNonNegativeInteger(save.playerStats?.sharpFloors);
         default:
             return 0;
     }

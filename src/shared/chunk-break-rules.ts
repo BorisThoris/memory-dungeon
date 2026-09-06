@@ -1,4 +1,4 @@
-import type { BoardState, RunState, Tile } from './contracts';
+import type { BoardState, RelicId, RunState, Tile } from './contracts';
 import { getSafeBoardColumns } from './board-grid-dimensions';
 import { getChainTier, type ChainTier } from './chain-tier-rules';
 import { runNonNegativeInteger } from './run-number-guards';
@@ -29,6 +29,11 @@ import type { FindableKind } from './contracts';
  * floor before the twelfth. A chunk that reaches a treasure pair spills it — the loot pays out as
  * if matched — which is the Peggle reading anyway: the ball through the purple peg is the point.
  */
+/** Tuning Fork: how far a Clean break reaches into the clump. */
+export const TUNING_FORK_CLEAN_DEPTH = 2;
+/** Magpie's Ledger: what spilled treasure gold is multiplied by. */
+export const MAGPIE_LEDGER_GOLD_MULTIPLIER = 2;
+
 export interface ChunkBreakResult {
     board: BoardState;
     tier: ChainTier;
@@ -194,7 +199,7 @@ export const resolveChunkBreak = ({
     chain
 }: {
     board: BoardState;
-    run: Pick<RunState, 'gameMode' | 'floorCurioId'>;
+    run: Pick<RunState, 'gameMode' | 'floorCurioId'> & { relicIds?: readonly RelicId[] };
     matchedTileIds: readonly string[];
     chain: number;
 }): ChunkBreakResult => {
@@ -216,8 +221,11 @@ export const resolveChunkBreak = ({
         return nothing;
     }
 
-    // Clean: the match's same-suit neighbours. Sharp: the whole clump. Fever: the clump and its halo.
-    const region = findSuitRegion(board, matchedTileIds, tier === 'clean' ? 1 : Number.POSITIVE_INFINITY, {
+    // Clean: the match's same-suit neighbours (two steps with the Tuning Fork). Sharp: the whole
+    // clump. Fever: the clump and its halo.
+    const relics = run.relicIds ?? [];
+    const cleanDepth = relics.includes('tuning_fork') ? TUNING_FORK_CLEAN_DEPTH : 1;
+    const region = findSuitRegion(board, matchedTileIds, tier === 'clean' ? cleanDepth : Number.POSITIVE_INFINITY, {
         diagonal: run.floorCurioId === 'sticky_toffee',
         halo: tier === 'fever'
     });
@@ -252,7 +260,9 @@ export const resolveChunkBreak = ({
             if (pair.length !== 2 || !pair.every(tileIsChunkTreasure)) continue;
             const reward = treasureDungeonMatchReward(tile.dungeonCardEffectId ?? pair[1]?.dungeonCardEffectId ?? null);
             treasureScore += reward.score;
-            treasureGold += reward.shopGold;
+            // Magpie's Ledger: spilled treasure pays double gold. Matched treasure is untouched, so
+            // the relic rewards the cascade and never the plain match.
+            treasureGold += reward.shopGold * (relics.includes('magpie_ledger') ? MAGPIE_LEDGER_GOLD_MULTIPLIER : 1);
             treasuresSpilled += reward.treasuresOpened;
             brokenPairKeys.push(tile.pairKey);
             continue;

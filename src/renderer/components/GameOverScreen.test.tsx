@@ -52,6 +52,28 @@ const gameOverRunFixture = (totalScore = 0): RunState => {
     return createRunSummary(run, []);
 };
 
+describe('the table at game over', () => {
+    it('shows each seat\'s best chain on the standings, and says nothing for a seat that never chained', () => {
+        const run = gameOverRunFixture(500);
+        const shared: RunState = {
+            ...run,
+            passAndPlay: {
+                activeSeatIndex: 0,
+                handoffPending: false,
+                handoffChainLost: 0,
+                seats: [
+                    { id: 'seat-1', label: 'Player 1', matches: 4, score: 300, turns: 5, chunkPairs: 3, bestChain: 4, chain: 0 },
+                    { id: 'seat-2', label: 'Player 2', matches: 2, score: 200, turns: 4, chunkPairs: 0, bestChain: 0, chain: 0 }
+                ]
+            }
+        };
+        render(<GameOverScreen run={shared} />);
+        expect(screen.getByTestId('game-over-standing-seat-1-chain')).toHaveTextContent('best chain ×4');
+        expect(screen.queryByTestId('game-over-standing-seat-2-chain')).toBeNull();
+        expect(screen.getByTestId('game-over-pass-and-play-result')).toHaveTextContent('Player 1 wins');
+    });
+});
+
 describe('GameOverScreen (REF-031)', () => {
     beforeEach(() => {
         gameOverStoreMocks.bestScoreAtRunStart = null;

@@ -2,15 +2,22 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { RELEASE_CHECKLIST, releaseChecklistByOwner, renderReleaseChecklistMarkdown } from './release-checklist';
-import { ACHIEVEMENT_IDS, createDefaultSaveData } from './save-data';
+import { ACHIEVEMENT_IDS, createDefaultSaveData, mergeChainFloorStats } from './save-data';
 import { createDailyRun, createNewRun } from './game';
 import { RUN_MODE_CATALOG } from './run-mode-catalog';
 import {
     applyResolvedTurnToPassAndPlay,
     createPassAndPlayState,
+    describePassAndPlayChainLost,
     PASS_AND_PLAY_MIN_SEATS,
     passAndPlaySeatCounts
 } from './pass-and-play-rules';
+import { createRunSummary } from './game-core';
+import { buildRunShareText } from './run-share-text';
+import { buildDailyArchiveShareString } from './daily-archive';
+import { getQuestCampaignRows, QUEST_CAMPAIGN_LADDER } from './quest-campaign';
+import { getDungeonSaveMigrationFieldPolicies } from './dungeon-save-migration';
+import { PASS_AND_PLAY_COPY } from '../renderer/copy/passAndPlay';
 import { getSocialPlayScopeRows, SOCIAL_PLAY_SCOPE_DECISION } from './social-play-scope';
 import { isPassAndPlayFinalFloor, PASS_AND_PLAY_FLOORS, resolvePassAndPlayOutcome } from './pass-and-play-rules';
 import { labelsAreAmbiguous } from '../../scripts/control-label-ambiguity';
@@ -124,6 +131,40 @@ const VERIFIERS: Record<string, () => void> = {
         for (const band of report.bands) {
             expect(band.ratingDriftFloors, `miss ${band.missRate}`).toBe(0);
         }
+    },
+    'chain-in-daily-and-shared-play': () => {
+        // The summary carries the chain's records, and both share strings read them.
+        const run = createNewRun(0, { gameMode: 'endless', runSeed: 7 });
+        const chained = createRunSummary({ ...run, bestChainThisRun: 9, sharpFloorsThisRun: 2, feverFloorsThisRun: 1 }, []);
+        expect(chained.lastRunSummary).toMatchObject({ bestChain: 9, sharpFloors: 2, feverFloors: 1 });
+        expect(buildRunShareText(chained).text).toContain('best chain ×9');
+        const dailySave = {
+            ...createDefaultSaveData(),
+            lastRunSummary: { ...chained.lastRunSummary!, gameMode: 'daily' as const, dailyDateKeyUtc: '20260906' }
+        };
+        expect(buildDailyArchiveShareString(dailySave)).toContain('best chain ×9');
+        // The quest reads a persisted counter that has a migration policy, and three Sharp floors complete it.
+        const quest = QUEST_CAMPAIGN_LADDER.find((row) => row.id === 'chain_rhythm');
+        expect(quest?.saveFields).toEqual(['playerStats.sharpFloors']);
+        expect(getDungeonSaveMigrationFieldPolicies().map((policy) => policy.field)).toContain('playerStats.sharpFloors');
+        let save = createDefaultSaveData();
+        save.achievements.ACH_FIRST_CLEAR = true;
+        for (let floor = 0; floor < 3; floor += 1) {
+            save = mergeChainFloorStats(save, floor === 2 ? 'fever' : 'sharp');
+        }
+        expect(getQuestCampaignRows(save).find((row) => row.id === 'chain_rhythm')?.status).toBe('completed');
+        // A shared table: the chunk is the seat's, and the handoff names the chain it ended.
+        const broke = applyResolvedTurnToPassAndPlay(createPassAndPlayState(), {
+            matched: true,
+            scoreDelta: 300,
+            chunkPairs: 3,
+            chainAfter: 4
+        });
+        expect(broke.seats[0]).toMatchObject({ chunkPairs: 3, bestChain: 4 });
+        const passed = applyResolvedTurnToPassAndPlay(broke, { matched: false, scoreDelta: 0 });
+        const lost = describePassAndPlayChainLost(passed);
+        expect(lost).toEqual({ label: 'Player 1', chain: 4 });
+        expect(PASS_AND_PLAY_COPY.handoffAnnouncement('Player 2', lost)).toBe("Player 1's chain of 4 ends. Player 2's turn.");
     },
     'achievement-api-names': () => {
         // The map is what `achievement.activate` is handed. An id the game can award but the map

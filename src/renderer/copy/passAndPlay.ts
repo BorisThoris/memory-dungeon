@@ -14,13 +14,20 @@ export const PASS_AND_PLAY_COPY = {
      */
     seatShortLabel: (seatNumber: number): string => `P${seatNumber}`,
     /** What a screen reader reads for a seat, so the short form costs nothing. */
-    seatAnnouncement: (label: string, score: number): string => `${label}, ${score.toLocaleString()}`,
+    seatAnnouncement: (label: string, score: number, bestChain = 0): string =>
+        `${label}, ${score.toLocaleString()}${bestChain > 0 ? `, best chain ×${bestChain}` : ''}`,
+    /** The seat's chain record on the standings, beside the score. */
+    seatChainNote: (bestChain: number): string => `best chain ×${bestChain}`,
     /** How far through the agreed length the table is, so nobody has to remember. */
     floorProgress: (level: number, floors: number): string => `${level} / ${floors}`,
     /** Label over the seat scores in the HUD. */
     seatsLabel: 'Players',
-    /** Spoken by the live region when the device changes hands. */
-    handoffAnnouncement: (label: string): string => `${label}'s turn.`,
+    /**
+     * Spoken by the live region when the device changes hands. When the miss ended a chain worth
+     * naming, the line says whose and how long first: that is the moment the table reacts to.
+     */
+    handoffAnnouncement: (label: string, chainLost: { label: string; chain: number } | null = null): string =>
+        chainLost ? `${chainLost.label}'s chain of ${chainLost.chain} ends. ${label}'s turn.` : `${label}'s turn.`,
     /** The banner over a face-down board between turns. */
     handoffTitle: (label: string): string => `Pass to ${label}`,
     handoffBody: 'The board is face down. Flip any tile when you are ready.',

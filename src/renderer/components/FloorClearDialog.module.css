@@ -313,6 +313,25 @@
         font-size: 0.92rem;
     }
 
+    /*
+     * The recap lines give way to the third door. The chain's line is two rows at this width
+     * and the run bar's chain stat and the next floor's beat carry the same numbers; the
+     * objective and the resident's aside are read again on the next floor. What stays is money
+     * the player just earned: a life bonus or an Extreme Fever payout, the reward-toned lines.
+     * A notes list left with nothing to show steps out of the column so its gap goes too.
+     */
+    .notes li:not([data-tone='reward']) {
+        display: none;
+    }
+
+    .notes:not(:has(li[data-tone='reward'])) {
+        display: none;
+    }
+
+    .body {
+        gap: 0.7rem;
+    }
+
     /* One band for the score, so all three doors stay on the page. */
     .score {
         grid-template-areas: 'label value total';

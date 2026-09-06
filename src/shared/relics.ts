@@ -283,6 +283,10 @@ export const RELIC_DRAFT: Record<RelicId, RelicDraftRow> = {
         archetypes: ['treasure_greed', 'conduit_cartographer']
     },
     bulwark_plate: { rarity: 'uncommon', weight: 46, tags: ['guard'], archetypes: ['guard_tank'] },
+    // The cascade's own three: a build can lean into the chain the way it leans into guard or traps.
+    tuning_fork: { rarity: 'uncommon', weight: 48, tags: ['combo'], archetypes: ['combo_shard_engine'] },
+    magpie_ledger: { rarity: 'uncommon', weight: 44, tags: ['combo'], archetypes: ['treasure_greed', 'combo_shard_engine'] },
+    suit_lens: { rarity: 'rare', weight: 30, tags: ['combo'], archetypes: ['combo_shard_engine', 'conduit_cartographer'] },
     stasis_broker: {
         rarity: 'uncommon',
         weight: 42,
@@ -310,6 +314,7 @@ export const RELIC_POOL = [
     'extra_shuffle_charge',
     'first_shuffle_free_per_floor',
     'guard_token_plus_one',
+    'magpie_ledger',
     'memorize_bonus_ms',
     'memorize_under_short_memorize',
     'opening_ledger',
@@ -321,7 +326,9 @@ export const RELIC_POOL = [
     'shrine_echo',
     'stasis_broker',
     'stray_charge_plus_one',
+    'suit_lens',
     'tithe_conduit',
+    'tuning_fork',
     'wager_surety'
 ] as const satisfies readonly RelicId[];
 
@@ -331,6 +338,9 @@ export const RELIC_POOL = [
  */
 export const STANDING_RULE_RELIC_IDS: ReadonlySet<RelicId> = new Set<RelicId>([
     'bulwark_plate',
+    'tuning_fork',
+    'magpie_ledger',
+    'suit_lens',
     'drift_appraiser',
     'echo_relay',
     'opening_ledger',

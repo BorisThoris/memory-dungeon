@@ -21,9 +21,15 @@
     border: 0;
 }
 
+/*
+ * One row, however many offers. The sealed offering made this four cards, and a fixed
+ * three-column grid wrapped the fourth under the others: on a 1024×768 laptop window the two
+ * rows of 11rem cards pushed the reroll, ban and upgrade offers below the fold, where a click
+ * could not reach them. Four across a desktop is still a card each wide enough to read.
+ */
 .grid {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
     gap: 0.7rem;
 }
 
@@ -253,7 +259,6 @@
     }
 
     .grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 0.5rem;
     }
 

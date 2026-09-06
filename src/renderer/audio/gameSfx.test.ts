@@ -22,6 +22,7 @@ import {
     playRelicOfferOpenSfx,
     playRelicPickSfx,
     playResolveSfx,
+    CHUNK_BREAK_MAX_NOTES,
     resumeAudioContext,
     playShuffleSfx,
     playWagerArmSfx,
@@ -142,6 +143,65 @@ describe('gameSfx', () => {
             playMatchSfx(g);
         }
         expect(stops.length).toBeGreaterThanOrEqual(1);
+    });
+
+    it('plays the shatter phrase capped at nine notes, a sting at Fever, and a thud when a warden fell', () => {
+        vi.useFakeTimers();
+        try {
+            const createOscillator = vi.fn(() => {
+                const o = {
+                    type: 'sine' as OscillatorType,
+                    frequency: { setValueAtTime: vi.fn(), exponentialRampToValueAtTime: vi.fn() },
+                    connect: vi.fn(),
+                    start: vi.fn(),
+                    stop: vi.fn(),
+                    addEventListener: vi.fn()
+                };
+                oscillators.push(o);
+                return o;
+            });
+            const createGain = vi.fn(() => ({
+                gain: { setValueAtTime: vi.fn(), exponentialRampToValueAtTime: vi.fn() },
+                connect: vi.fn()
+            }));
+            vi.stubGlobal(
+                'AudioContext',
+                class {
+                    currentTime = 0;
+                    destination = {};
+                    createOscillator = createOscillator;
+                    createGain = createGain;
+                    close = (): Promise<void> => Promise.resolve();
+                }
+            );
+            const gain = sfxGainFromSettings(1, 1);
+            const board = { pairCount: 12 };
+            const before = {
+                stats: { matchesFound: 1, tries: 1, currentStreak: 7 },
+                chunkPairsBrokenThisFloor: 0,
+                chunkPairsThisChain: 0,
+                dungeonEnemiesDefeatedThisFloor: 0,
+                board
+            } as unknown as RunState;
+            const after = {
+                stats: { matchesFound: 2, tries: 2, currentStreak: 8 },
+                chunkPairsBrokenThisFloor: 12,
+                chunkPairsThisChain: 12,
+                dungeonEnemiesDefeatedThisFloor: 1,
+                board
+            } as unknown as RunState;
+            playResolveSfx(before, after, gain);
+            const beforePhrase = createOscillator.mock.calls.length;
+            vi.advanceTimersByTime(2_000);
+            // Nine notes for twelve pairs, one Fever sting, one warden thud, on top of the match itself.
+            expect(createOscillator.mock.calls.length - beforePhrase).toBe(CHUNK_BREAK_MAX_NOTES + 1);
+            const thudSeen = (oscillators as unknown as Array<{ frequency?: { setValueAtTime: { mock: { calls: number[][] } } } }>).some(
+                (o) => o.frequency?.setValueAtTime.mock.calls.some((call) => call[0] === 110) ?? false
+            );
+            expect(thudSeen).toBe(true);
+        } finally {
+            vi.useRealTimers();
+        }
     });
 
     it('adds a sparkle layer for surge-depth match chains only', () => {

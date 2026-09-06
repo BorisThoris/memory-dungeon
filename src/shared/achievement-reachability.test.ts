@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { BUILTIN_PUZZLE_IDS } from './builtin-puzzles';
 import { GAME_RULES_VERSION, MAX_COMBO_SHARDS, type AchievementId } from './contracts';
-import { evaluateAchievementUnlocks } from './achievements';
+import { CHUNK_SIX_PAIRS, evaluateAchievementUnlocks } from './achievements';
+import { resolveChunkBreak } from './chunk-break-rules';
+import { createPlayablePathFixture } from './playable-path-fixtures';
 import { ENDLESS_CYCLE_FLOOR_COUNT } from './floor-mutator-schedule';
 import { MAX_RELIC_PICKS_PER_RUN, RELIC_POOL, STANDING_RULE_RELIC_IDS } from './relics';
 import { createDailyRun, createGauntletRun, createMeditationRun, createNewRun } from './run-creation-rules';
@@ -88,7 +90,18 @@ describe('achievement thresholds against real content', () => {
         // Not a behaviour check: a reminder that adding an id means deciding whether its bar is
         // reachable. `ACH_PUZZLE_SOLVER` is why.
         const known: AchievementId[] = [...ACHIEVEMENT_IDS];
-        expect(known).toHaveLength(20);
+        expect(known).toHaveLength(24);
         expect(GAME_RULES_VERSION).toBeGreaterThan(0);
+    });
+});
+
+describe('the chain loop achievements against real boards', () => {
+    it('Sixfold asks for no more pairs than one Fever break on a clumped board takes', () => {
+        // The clumped fixture is the board the e2e plays to Fever; a Fever break on its first pair
+        // takes the ember clump and its halo. If that is not six pairs, six is not earnable.
+        const run = createPlayablePathFixture('cascadeClump').run!;
+        const broken = resolveChunkBreak({ board: run.board!, run, matchedTileIds: ['em1-A', 'em1-B'], chain: 8 });
+        expect(broken.tier).toBe('fever');
+        expect(broken.brokenPairKeys.length).toBeGreaterThanOrEqual(CHUNK_SIX_PAIRS);
     });
 });

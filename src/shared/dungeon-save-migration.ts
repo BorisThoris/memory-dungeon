@@ -8,7 +8,7 @@ export interface DungeonSaveMigrationFieldPolicy {
     recoveryPolicy: string;
 }
 
-export const DUNGEON_SAVE_MIGRATION_POLICY_VERSION = 'dng-073-v4';
+export const DUNGEON_SAVE_MIGRATION_POLICY_VERSION = 'dng-073-v5';
 
 const DUNGEON_SAVE_MIGRATION_FIELD_POLICIES: readonly DungeonSaveMigrationFieldPolicy[] = [
     {
@@ -69,6 +69,20 @@ const DUNGEON_SAVE_MIGRATION_FIELD_POLICIES: readonly DungeonSaveMigrationFieldP
         owner: 'PlayerStatsPersisted',
         migrationRequiredWhenChanged: true,
         recoveryPolicy: 'Invalid pick-count maps reset to an empty local counter map.'
+    },
+    {
+        field: 'playerStats.sharpFloors',
+        scope: 'persisted_save',
+        owner: 'PlayerStatsPersisted',
+        migrationRequiredWhenChanged: true,
+        recoveryPolicy: 'A missing or invalid Sharp-floor count reads as zero; the chain quest starts over rather than the save being refused.'
+    },
+    {
+        field: 'playerStats.feverFloors',
+        scope: 'persisted_save',
+        owner: 'PlayerStatsPersisted',
+        migrationRequiredWhenChanged: true,
+        recoveryPolicy: 'A missing or invalid Fever-floor count reads as zero.'
     },
     {
         field: 'settings.cameraViewportModePreference',

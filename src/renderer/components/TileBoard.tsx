@@ -14,6 +14,11 @@ import {
 import { flushSync } from 'react-dom';
 import type { BoardScreenSpaceAA, BoardState, GraphicsQualityPreset, RewardPerkId, RunStatus } from '../../shared/contracts';
 import { getChainTargetFeedback } from '../../shared/chain-targets';
+import { getClumpRead } from '../../shared/clump-read-rules';
+import { CHAIN_BEAT_COPY } from '../copy/chainBeat';
+import { getTileSuit } from '../../shared/tile-suit-rules';
+
+const EMPTY_CLUMP_READ: ReadonlySet<string> = new Set();
 import { resolveAdaptiveBoardRenderQuality } from '../../shared/graphicsQuality';
 import { getFindableRewardText } from '../../shared/findables';
 import { getHazardTileBoardSummary, getHazardTileTelegraph } from '../../shared/hazard-tiles';
@@ -180,7 +185,7 @@ const getFocusedPreviewBeatCount = ({
     rewardHotText,
     tone
 }: {
-    kind: 'hazard' | 'pickup' | 'trait';
+    kind: 'hazard' | 'pickup' | 'trait' | 'clump';
     rewardHotText?: string | null;
     tone: 'cashout' | 'hazard' | 'pickup' | 'setup' | 'trait';
 }): 3 | 4 | 5 => {
@@ -198,7 +203,7 @@ const getFocusedPreviewAudioCue = ({
     rewardHotText,
     tone
 }: {
-    kind: 'hazard' | 'pickup' | 'trait';
+    kind: 'hazard' | 'pickup' | 'trait' | 'clump';
     rewardHotText?: string | null;
     tone: 'cashout' | 'hazard' | 'pickup' | 'setup' | 'trait';
 }): 'preview-cashout' | 'preview-hazard' | 'preview-pickup' | 'preview-route' => {
@@ -219,7 +224,7 @@ const getFocusedPreviewScreenCue = ({
     rewardHotText,
     tone
 }: {
-    kind: 'hazard' | 'pickup' | 'trait';
+    kind: 'hazard' | 'pickup' | 'trait' | 'clump';
     rewardHotText?: string | null;
     tone: 'cashout' | 'hazard' | 'pickup' | 'setup' | 'trait';
 }): BoardFeedbackScreenCue => {
@@ -1440,11 +1445,24 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         return tile && tile.state === 'flipped' ? tile.id : null;
     }, [board.flippedTileIds, board.tiles, boardApplicationFocused]);
     const previewChipTileId = boardApplicationFocused ? focusedTileId : selectedPreviewTileId;
+    /*
+     * The clump the considered tile stands in: outlined on the board and named in the chip. Read
+     * from the live board through the same region rule the break uses, so what is promised is
+     * what a Sharp break there would take.
+     */
+    const clumpRead = useMemo(
+        () => (previewChipTileId && runStatus === 'playing' ? getClumpRead(board, previewChipTileId) : null),
+        [board, previewChipTileId, runStatus]
+    );
+    const clumpReadTileIds = useMemo(
+        () => (clumpRead && clumpRead.size > 1 ? new Set(clumpRead.tileIds) : EMPTY_CLUMP_READ),
+        [clumpRead]
+    );
     const focusedPreviewChip = useMemo((): {
         action: 'Cashout' | 'Claim' | 'Preview' | 'Route' | 'Scout';
         eyebrow: string;
         lines: string[];
-        kind: 'hazard' | 'trait' | 'pickup';
+        kind: 'hazard' | 'trait' | 'pickup' | 'clump';
         rewardHotText?: string | null;
         source: 'focus' | 'selected';
         tone: 'cashout' | 'hazard' | 'pickup' | 'setup' | 'trait';
@@ -1508,10 +1526,21 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                 tone: 'pickup'
             };
         }
+        if (clumpRead && clumpRead.size > 1) {
+            return {
+                action: 'Preview',
+                eyebrow: 'Clump',
+                lines: [CHAIN_BEAT_COPY.clumpRead(getTileSuit(clumpRead.suit).name, clumpRead.size, clumpRead.pairsSharpWouldTake)],
+                kind: 'clump',
+                source,
+                tone: 'setup'
+            };
+        }
         return null;
     }, [
         board,
         boardApplicationFocused,
+        clumpRead,
         previewChipTileId,
         tileSwapFirstTileId,
         tileSwapPowerVisualActive,
@@ -3779,6 +3808,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         destroyPowerVisualActive={destroyPowerVisualActive}
                                         destroyEligibleTileIds={destroyEligibleTileIds}
                                         peekPowerVisualActive={peekPowerVisualActive}
+                                        clumpReadTileIds={clumpReadTileIds}
                                         peekEligibleTileIds={peekEligibleTileIds}
                                         strayPowerVisualActive={strayPowerVisualActive}
                                         strayEligibleTileIds={strayEligibleTileIds}

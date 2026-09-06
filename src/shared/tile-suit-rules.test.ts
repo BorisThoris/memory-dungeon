@@ -13,6 +13,7 @@ import {
     largestHiddenSuitClump,
     sameSuitNeighbourRate,
     SUIT_DEAL_PROFILE_BY_ARCHETYPE,
+    suitCountForDeal,
     TILE_SUIT_CATALOG,
     TILE_SUITS
 } from './tile-suit-rules';
@@ -189,5 +190,22 @@ describe('the deal profile', () => {
             scattered += sameSuitNeighbourRate(rush);
         }
         expect(clumped / 4).toBeGreaterThan(scattered / 4 + 0.1);
+    });
+});
+
+describe('the Suit Lens', () => {
+    it('deals three suits instead of four, and leaves a two-suit floor at two', () => {
+        const tiles = pairs(16);
+        expect(new Set(dealBoardSuits(tiles, 6, 3, 8, GAME_RULES_VERSION, 'clumped').map((t) => t.suit)).size).toBe(4);
+        expect(new Set(dealBoardSuits(tiles, 6, 3, 8, GAME_RULES_VERSION, 'clumped', ['suit_lens']).map((t) => t.suit)).size).toBe(3);
+        expect(new Set(dealBoardSuits(tiles, 6, 3, 8, GAME_RULES_VERSION, 'two_suit', ['suit_lens']).map((t) => t.suit)).size).toBe(2);
+        expect(suitCountForDeal('scattered', ['suit_lens'])).toBe(3);
+    });
+
+    it("reaches the built floor through the run's relics", () => {
+        const plain = buildBoard(10, { runSeed: 31, runRulesVersion: GAME_RULES_VERSION, gameMode: 'endless', floorArchetypeId: 'breather' });
+        const lensed = buildBoard(10, { runSeed: 31, runRulesVersion: GAME_RULES_VERSION, gameMode: 'endless', floorArchetypeId: 'breather', relicIds: ['suit_lens'] });
+        expect(new Set(plain.tiles.map((t) => t.suit)).size).toBe(4);
+        expect(new Set(lensed.tiles.map((t) => t.suit)).size).toBe(3);
     });
 });

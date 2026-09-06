@@ -13,6 +13,7 @@ import { runArrayCount } from '../../shared/run-array-guards';
 import { appendRunHistory, buildRunHistoryRecord } from '../../shared/run-history-log';
 import {
     mergeBestFloorNoPowers,
+    mergeChainFloorStats,
     mergeDailyComplete,
     mergeEncoreFromRun,
     mergePuzzleCompletion,
@@ -37,6 +38,8 @@ import {
 } from './matchScorePop';
 import { projectPassAndPlayTurn } from './passAndPlayProjection';
 import { isPassAndPlayRun } from '../../shared/pass-and-play-rules';
+import { getChainTier } from '../../shared/chain-tier-rules';
+import { runNonNegativeInteger } from '../../shared/run-number-guards';
 
 interface RunResolutionState {
     run: RunState | null;
@@ -148,6 +151,15 @@ export const createRunResolutionController = ({
 
         if (nextRun.status === 'levelComplete' && nextRun.gameMode === 'puzzle') {
             nextSave = mergePuzzleCompletion(nextSave, nextRun);
+        }
+
+        // The cleared floor's chain record, once per clear and never from a shared table: a Sharp
+        // or Fever floor is the profile's, and the chain quest counts them.
+        if (nextRun.status === 'levelComplete' && prevStatus !== 'levelComplete' && !sharedTable) {
+            nextSave = mergeChainFloorStats(
+                nextSave,
+                getChainTier(runNonNegativeInteger(nextRun.lastLevelResult?.bestChain), nextRun.board?.pairCount ?? null)
+            );
         }
 
         if (unlockedAchievements.length > 0) {

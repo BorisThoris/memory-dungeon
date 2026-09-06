@@ -10,6 +10,9 @@ import { normalizeSessionStats } from './session-stats-rules';
 
 export type AchievementDefinition = AchievementCodexEntry;
 
+/** Pairs one break has to take for Sixfold: a Fever halo on a clumped board does it (see the reachability test). */
+export const CHUNK_SIX_PAIRS = 6;
+
 /** Re-export encyclopedia copy (single source of truth). */
 export const ACHIEVEMENT_BY_ID: Record<AchievementId, AchievementDefinition> = ACHIEVEMENT_CATALOG;
 
@@ -122,6 +125,11 @@ export const evaluateAchievementUnlocks = (run: RunState, saveData: SaveData): A
         Object.keys(saveData.playerStats?.puzzleCompletions ?? {}).length >= BUILTIN_PUZZLE_IDS.length
     );
     award('ACH_MEDITATION_HOUR', run.gameMode === 'meditation' && stats.levelsCleared >= 8);
+    // The chain loop's own four: reached through play a fixture proves (achievement-reachability.test.ts).
+    award('ACH_FIRST_FEVER', runNonNegativeInteger(run.feverBreaksThisRun) >= 1);
+    award('ACH_CHUNK_SIX', runNonNegativeInteger(run.biggestChunkPairs) >= CHUNK_SIX_PAIRS);
+    award('ACH_EXTREME_FEVER', run.lastLevelResult?.momentumBonusTier === 'fever');
+    award('ACH_WARDEN_BY_CHUNK', runNonNegativeInteger(run.chunkWardenKills) >= 1);
 
     return unlocked;
 };

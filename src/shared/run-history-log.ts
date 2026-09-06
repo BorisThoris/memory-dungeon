@@ -32,12 +32,16 @@ export const normalizeRunHistoryRecord = (input: unknown): RunHistoryRecord | nu
     if (mode === '' || Number.isNaN(Date.parse(endedAtIso))) {
         return null;
     }
+    const bestChain = runNonNegativeInteger(input.bestChain);
+    const biggestChunk = runNonNegativeInteger(input.biggestChunk);
     return {
         endedAtIso,
         highestLevel: runNonNegativeInteger(input.highestLevel),
         mode,
         shareKey: typeof input.shareKey === 'string' && input.shareKey.length > 0 ? input.shareKey : null,
-        totalScore: runNonNegativeInteger(input.totalScore)
+        totalScore: runNonNegativeInteger(input.totalScore),
+        ...(bestChain > 0 ? { bestChain } : {}),
+        ...(biggestChunk > 0 ? { biggestChunk } : {})
     };
 };
 
@@ -58,12 +62,19 @@ export const normalizeRunHistory = (input: unknown): RunHistoryRecord[] => {
 export const buildRunHistoryRecord = (run: RunState, endedAtIso: string): RunHistoryRecord => {
     const summary: RunSummary | null = run.lastRunSummary;
     const recipe = describeRunShareKey(run);
+    const bestChain = runNonNegativeInteger(
+        summary?.bestChain ??
+            Math.max(runNonNegativeInteger(run.bestChainThisRun), runNonNegativeInteger(run.bestChainThisFloor))
+    );
+    const biggestChunk = runNonNegativeInteger(summary?.biggestChunk ?? run.biggestChunkPairs);
     return {
         endedAtIso,
         highestLevel: runNonNegativeInteger(summary?.highestLevel ?? run.stats.highestLevel),
         mode: describeRunModeIdentity(run).label,
         shareKey: 'refusal' in recipe ? null : encodeRunShareKey(recipe.key),
-        totalScore: runNonNegativeInteger(summary?.totalScore ?? run.stats.totalScore)
+        totalScore: runNonNegativeInteger(summary?.totalScore ?? run.stats.totalScore),
+        ...(bestChain > 0 ? { bestChain } : {}),
+        ...(biggestChunk > 0 ? { biggestChunk } : {})
     };
 };
 

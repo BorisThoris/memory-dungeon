@@ -1,6 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 import { openModeDetail, openPlayablePathFixture, openRunMenuItem } from './playablePathHelpers';
 import { findUnreachableControls } from './uiReachability';
+import { dismissStartupIntro } from './startupIntroHelpers';
 import {
     buildPopulatedProfileSaveJson,
     buildVisualSaveJson,
@@ -329,19 +330,33 @@ test.describe('UI fit contract', () => {
         await atEverySize(page, 'mode detail', async () => {
             await gotoWithSave(page, save);
             await mainMenuPlayButton(page).waitFor({ state: 'visible', timeout: 30_000 });
-            await openModeDetail(page, 'Classic Run');
+            // Classic is the recommended run and sits on the launch panel, which has a setup door
+            // rather than a detail sheet; the sheet belongs to the library cards, so open one of those.
+            await openModeDetail(page, 'Puzzle');
             await page.waitForTimeout(500);
         });
     });
 
-    test('the dungeon showcase fits every window', async ({ page }) => {
+    /*
+     * Gen 111 retired the Dungeon Showcase card: it was Classic on a staged board with records off,
+     * and that became the setup sheet's "do not record" option. This case used to click a
+     * main-menu button of that name, which no longer exists, and timed out at every size reading
+     * as a load problem rather than a stale locator. The sheet is the surface that replaced it,
+     * and it is a real dialog with two vows, a clock, a pace, a joker and a record toggle, so it
+     * is the one that has to fit.
+     */
+    test('the run setup sheet fits every window', async ({ page }) => {
         test.setTimeout(420_000);
         const save = buildVisualSaveJson(true);
-        await atEverySize(page, 'dungeon showcase', async () => {
+        await atEverySize(page, 'run setup sheet', async () => {
             await gotoWithSave(page, save);
-            await mainMenuPlayButton(page).waitFor({ state: 'visible', timeout: 30_000 });
-            await page.getByRole('button', { name: /^dungeon showcase$/i }).click();
-            await page.waitForTimeout(1200);
+            await dismissStartupIntro(page);
+            await mainMenuPlayButton(page).click({ force: true });
+            const launch = page.getByRole('region', { name: /recommended run/i });
+            await expect(launch).toBeVisible({ timeout: 15_000 });
+            await launch.getByRole('button', { name: /^set up your run$/i }).click({ force: true });
+            await expect(page.getByRole('dialog', { name: /set up your run/i })).toBeVisible({ timeout: 15_000 });
+            await page.waitForTimeout(600);
         });
     });
 

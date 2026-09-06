@@ -52,12 +52,16 @@ const clampSeatCount = (requested: number): number => {
 export const createPassAndPlayState = (seatCount: number = PASS_AND_PLAY_MIN_SEATS): PassAndPlayState => ({
     activeSeatIndex: 0,
     handoffPending: false,
+    handoffChainLost: 0,
     seats: Array.from({ length: clampSeatCount(seatCount) }, (_unused, index) => ({
         id: `seat-${index + 1}`,
         label: `Player ${index + 1}`,
         matches: 0,
         score: 0,
-        turns: 0
+        turns: 0,
+        chunkPairs: 0,
+        bestChain: 0,
+        chain: 0
     }))
 });
 
@@ -79,7 +83,33 @@ export interface ResolvedTurnFacts {
     readonly matched: boolean;
     /** Change in the run's total score across this turn, credited whichever way it went. */
     readonly scoreDelta: number;
+    /** Pairs a chunk took with this match, credited to the seat that broke it. Absent means none. */
+    readonly chunkPairs?: number;
+    /** The run's chain after this turn, as the rules stamped it; the seat's own chain follows it. */
+    readonly chainAfter?: number;
 }
+
+const wholeNumber = (value: number | undefined): number =>
+    value !== undefined && Number.isFinite(value) ? Math.max(0, Math.trunc(value)) : 0;
+
+/** A chain the handoff line is worth naming: two pairs is the shortest run of luck a table notices. */
+export const PASS_AND_PLAY_CHAIN_CALLOUT_FROM = 2;
+
+/**
+ * The seat that just handed the device over, and the chain it lost doing so. Null when no handoff
+ * is pending or the chain that ended was too short to say out loud.
+ */
+export const describePassAndPlayChainLost = (state: PassAndPlayState): { label: string; chain: number } | null => {
+    if (!state.handoffPending || state.seats.length === 0) {
+        return null;
+    }
+    const chain = wholeNumber(state.handoffChainLost);
+    if (chain < PASS_AND_PLAY_CHAIN_CALLOUT_FROM) {
+        return null;
+    }
+    const from = state.seats[(state.activeSeatIndex - 1 + state.seats.length) % state.seats.length];
+    return from ? { chain, label: from.label } : null;
+};
 
 /**
  * Credits the turn to whoever took it, then decides whether the device moves.
@@ -89,25 +119,35 @@ export interface ResolvedTurnFacts {
  */
 export const applyResolvedTurnToPassAndPlay = (
     state: PassAndPlayState,
-    { matched, scoreDelta }: ResolvedTurnFacts
+    { matched, scoreDelta, chunkPairs, chainAfter }: ResolvedTurnFacts
 ): PassAndPlayState => {
     const delta = Number.isFinite(scoreDelta) ? Math.trunc(scoreDelta) : 0;
-    const seats = state.seats.map((seat, index) =>
-        index === state.activeSeatIndex
-            ? {
-                  ...seat,
-                  matches: seat.matches + (matched ? 1 : 0),
-                  score: seat.score + delta,
-                  turns: seat.turns + 1
-              }
-            : seat
-    );
+    const active = state.seats[state.activeSeatIndex];
+    const chainLost = wholeNumber(active?.chain);
+    const seats = state.seats.map((seat, index) => {
+        if (index !== state.activeSeatIndex) {
+            return seat;
+        }
+        // A chunk broken on this seat's turn is this seat's: the chain that bought it was theirs,
+        // and the pairs it took go on their line rather than vanishing into the run's total.
+        const chain = matched ? (chainAfter === undefined ? wholeNumber(seat.chain) + 1 : wholeNumber(chainAfter)) : 0;
+        return {
+            ...seat,
+            matches: seat.matches + (matched ? 1 : 0),
+            score: seat.score + delta,
+            turns: seat.turns + 1,
+            chunkPairs: wholeNumber(seat.chunkPairs) + (matched ? wholeNumber(chunkPairs) : 0),
+            bestChain: Math.max(wholeNumber(seat.bestChain), chain),
+            chain
+        };
+    });
     if (matched) {
-        return { ...state, handoffPending: false, seats };
+        return { ...state, handoffPending: false, handoffChainLost: 0, seats };
     }
     return {
         activeSeatIndex: (state.activeSeatIndex + 1) % Math.max(1, seats.length),
         handoffPending: true,
+        handoffChainLost: chainLost,
         seats
     };
 };

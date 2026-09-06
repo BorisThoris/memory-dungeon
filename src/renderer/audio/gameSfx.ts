@@ -384,16 +384,22 @@ const playChainMilestoneAccentSfx = (gain: number, milestone: ChainMilestoneFeed
  * big break is audibly bigger than a small one. Fever adds a held sting on top — the finish is
  * supposed to be louder than anything before it.
  */
+/** Notes in the shatter phrase: a nine-pair break is one rising phrase, not nine collisions. */
+export const CHUNK_BREAK_MAX_NOTES = 9;
+
 const playChunkBreakSfx = (gain: number, pairs: number, tier: ChainTier): void => {
-    const count = Math.max(1, Math.min(pairs, 12));
+    const count = Math.max(1, Math.min(pairs, CHUNK_BREAK_MAX_NOTES));
     for (let index = 0; index < count; index += 1) {
         const lift = index * 46;
+        // Each later note sits a little under the one before it, so the phrase climbs in pitch
+        // without climbing in level and the sting on top still has room.
+        const taper = 1 / (1 + index * 0.08);
         window.setTimeout(() => {
             playTone({
                 frequency: 720 + lift,
                 frequencyEnd: 1080 + lift * 1.4,
                 durationSec: 0.09,
-                gain: gain * (tier === 'fever' ? 0.3 : 0.22),
+                gain: gain * (tier === 'fever' ? 0.3 : 0.22) * taper,
                 type: 'triangle',
                 category: 'match'
             });
@@ -411,6 +417,18 @@ const playChunkBreakSfx = (gain: number, pairs: number, tier: ChainTier): void =
             });
         }, count * 55 + 40);
     }
+};
+
+/** A chunk that finished a warden: one low thud under the phrase, so the kill reads as weight. */
+const playChunkWardenThudSfx = (gain: number): void => {
+    playTone({
+        frequency: 110,
+        frequencyEnd: 58,
+        durationSec: 0.28,
+        gain: gain * 0.3,
+        type: 'sine',
+        category: 'match'
+    });
 };
 
 const playBrokenChainRewardLossSfx = (gain: number, chainDepthLost: number): void => {
@@ -715,6 +733,11 @@ export const playResolveSfx = (before: RunState, after: RunState, gain: number):
         const chunkPairs = (after.chunkPairsBrokenThisFloor ?? 0) - (before.chunkPairsBrokenThisFloor ?? 0);
         if (chunkPairs > 0) {
             playChunkBreakSfx(gain, chunkPairs, runChainTier(after));
+            const wardensDown =
+                (after.dungeonEnemiesDefeatedThisFloor ?? 0) - (before.dungeonEnemiesDefeatedThisFloor ?? 0);
+            if (wardensDown > 0) {
+                playChunkWardenThudSfx(gain);
+            }
         }
         if ((after.findablesClaimedThisFloor ?? 0) > (before.findablesClaimedThisFloor ?? 0)) {
             playTone({

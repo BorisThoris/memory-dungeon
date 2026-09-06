@@ -192,6 +192,16 @@ export const getDailyArchiveSummary = (save: SaveData, nowMs: number = Date.now(
 export const getDailyArchiveRows = (save: SaveData, nowMs: number = Date.now()): DailyArchiveIdentity[] =>
     getDailyArchiveSummary(save, nowMs).rows;
 
+const dailyChainSuffix = (last: NonNullable<SaveData['lastRunSummary']>): string => {
+    const bestChain = runNonNegativeInteger(last.bestChain);
+    const feverFloors = runNonNegativeInteger(last.feverFloors);
+    const parts = [
+        bestChain > 0 ? `best chain ×${bestChain}` : null,
+        feverFloors > 0 ? `Fever on ${feverFloors} floor(s)` : null
+    ].filter((part): part is string => part !== null);
+    return parts.length === 0 ? '' : ` · ${parts.join(' · ')}`;
+};
+
 export const buildDailyArchiveShareString = (save: SaveData): string => {
     const summary = getDailyArchiveSummary(save);
     const dailyKey =
@@ -201,7 +211,10 @@ export const buildDailyArchiveShareString = (save: SaveData): string => {
         last?.gameMode === 'daily'
             ? ` · ${runNonNegativeInteger(last.totalScore)} pts · ${runNonNegativeInteger(last.levelsCleared)} clear(s)`
             : '';
-    return `Daily ${dailyKey}${score} · ${summary.dailiesCompleted} local-only daily clear(s) · streak ${summary.streak}`;
+    // The chain is the part of a daily worth comparing across a table: the same board, so the same
+    // clumps, so "best chain ×9" means something to the next person who plays it.
+    const chain = last?.gameMode === 'daily' ? dailyChainSuffix(last) : '';
+    return `Daily ${dailyKey}${score}${chain} · ${summary.dailiesCompleted} local-only daily clear(s) · streak ${summary.streak}`;
 };
 
 export const buildDailyResultsShareString = (

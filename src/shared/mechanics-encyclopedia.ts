@@ -8,7 +8,7 @@
 import type { AchievementId, GameMode, MutatorId, RelicId } from './contracts';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 23 as const;
+export const ENCYCLOPEDIA_VERSION = 26 as const;
 
 export interface RelicDefinition {
     id: RelicId;
@@ -390,6 +390,26 @@ export const ACHIEVEMENT_CATALOG: Record<AchievementId, AchievementCodexEntry> =
         id: 'ACH_MEDITATION_HOUR',
         title: 'Long Sitting',
         description: 'Clear eight floors in a single Meditation run.'
+    },
+    ACH_FIRST_FEVER: {
+        id: 'ACH_FIRST_FEVER',
+        title: 'Fever',
+        description: 'Break a chunk at the Fever rung of the chain.'
+    },
+    ACH_CHUNK_SIX: {
+        id: 'ACH_CHUNK_SIX',
+        title: 'Sixfold',
+        description: 'Take six pairs or more with a single chunk break.'
+    },
+    ACH_EXTREME_FEVER: {
+        id: 'ACH_EXTREME_FEVER',
+        title: 'Extreme Fever',
+        description: 'Clear a floor with the chain still at Fever when the last pair goes.'
+    },
+    ACH_WARDEN_BY_CHUNK: {
+        id: 'ACH_WARDEN_BY_CHUNK',
+        title: 'Buried',
+        description: 'Finish a warden with a chunk break rather than a match.'
     }
 };
 
@@ -500,6 +520,21 @@ export const RELIC_CATALOG: Record<RelicId, RelicDefinition> = {
         id: 'stasis_broker',
         title: 'Stasis Broker',
         description: 'Every Stasis match buys a full-board shuffle charge, so the locking trait becomes a supply.'
+    },
+    tuning_fork: {
+        id: 'tuning_fork',
+        title: 'Tuning Fork',
+        description: 'A Clean break reaches two steps into the clump instead of one, so the chain starts breaking earlier.'
+    },
+    magpie_ledger: {
+        id: 'magpie_ledger',
+        title: "Magpie's Ledger",
+        description: 'Treasure a chunk spills pays double gold. Matched treasure pays what it always did.'
+    },
+    suit_lens: {
+        id: 'suit_lens',
+        title: 'Suit Lens',
+        description: 'Every floor deals three suits instead of four, so the clumps are bigger and the breaks are too.'
     },
     echo_relay: {
         id: 'echo_relay',
@@ -903,6 +938,7 @@ export const ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS: readonly EncyclopediaTopic[] 
             'Every tile wears one of four suits on its back — Ember, Tide, Moss or Bone — and both halves of a pair share it. ' +
             'Suits are dealt in clumps, so the floor opens as a map you can plan against before you flip anything. ' +
             'The floor decides the shape: a breather or a treasure hall deals big clumps, a rush, speed or trap floor deals its suits scattered, and a spotlight floor deals only two. ' +
+            'Focus or select a hidden tile and the board outlines the clump it stands in and says how many pairs a Sharp break there would take. ' +
             'The symbol on the front is still the thing to remember; the suit is the thing you can see.'
     },
     {
