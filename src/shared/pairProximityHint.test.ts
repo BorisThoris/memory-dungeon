@@ -166,3 +166,35 @@ describe('getPairProximityGridDistance', () => {
         expect(getPairProximityGridDistance(b, 'open')).toBe(2);
     });
 });
+
+describe('after a chunk break', () => {
+    // The user's rule for the cascade: every time tiles break away, the number on every card is
+    // recomputed so it is never wrong. Removed tiles are gaps — not candidates, not obstacles —
+    // and a flipped tile whose only partner left the board has no number at all.
+    it('never counts a removed tile as a partner', () => {
+        const b = boardRect(3, 1, [tile('a', 'p1', 'flipped'), tile('b', 'p1', 'removed'), tile('c', 'p1', 'hidden')]);
+        expect(getPairProximityGridDistance(b, 'a')).toBe(2);
+    });
+
+    it('measures across the gap a removed tile left, because positions never move', () => {
+        const b = boardRect(4, 1, [
+            tile('a', 'p1', 'flipped'),
+            tile('x', 'p2', 'removed'),
+            tile('y', 'p2', 'removed'),
+            tile('b', 'p1', 'hidden')
+        ]);
+        expect(getPairProximityGridDistance(b, 'a')).toBe(3);
+    });
+
+    it('has no number for a tile whose partner broke away, and none for the tiles that left', () => {
+        const b = boardRect(2, 2, [
+            tile('a', 'p1', 'flipped'),
+            tile('b', 'p1', 'removed'),
+            tile('c', 'p2', 'removed'),
+            tile('d', 'p2', 'removed')
+        ]);
+        expect(getPairProximityGridDistance(b, 'a')).toBeNull();
+        expect(getPairProximityGridDistance(b, 'b')).toBeNull();
+        expect(getPairProximityGridDistance(b, 'c')).toBeNull();
+    });
+});

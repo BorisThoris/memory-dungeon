@@ -8,7 +8,7 @@
 import type { AchievementId, GameMode, MutatorId, RelicId } from './contracts';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 19 as const;
+export const ENCYCLOPEDIA_VERSION = 23 as const;
 
 export interface RelicDefinition {
     id: RelicId;
@@ -832,7 +832,8 @@ export const ENCYCLOPEDIA_SETTINGS_AND_ASSISTS_TOPICS: readonly EncyclopediaTopi
         id: 'assist_pair_proximity',
         title: 'Pair proximity hints',
         description:
-            'Optional setting: shows **distance-class** hints between paired tiles (Manhattan steps on the grid). **Informational only**—does not change score, streak math, or perfect / achievement rules.'
+            'Optional setting: shows **distance-class** hints between paired tiles (Manhattan steps on the grid). **Informational only**—does not change score, streak math, or perfect / achievement rules. ' +
+            'The number is read off the live board on every flip and every break: a tile a chunk took is a gap, never a partner, and a card whose partner broke away shows no number at all.'
     },
     {
         id: 'assist_focus_dim',
@@ -881,7 +882,9 @@ export const ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS: readonly EncyclopediaTopic[] 
             'Every correct match in a row raises your chain, and every pair a chunk breaks adds to its momentum. From chain 3 (Clean) a match also breaks the same-suit tiles beside it, ' +
             'and their partners go with them. Sharp — about two-fifths of the floor\'s pairs of momentum, four at least — breaks the whole connected clump. Fever — about two-thirds, seven at least — takes the clump and everything touching it. ' +
             'Treasure inside a chunk spills and pays as if you had matched it. Broken pairs score less than matched ones and give no recall credit — memory still pays best — but they drop combo ' +
-            'shards and clear the floor faster. A miss halves the chain and puts the fire out.'
+            'shards and clear the floor faster. A miss halves the chain and puts the fire out. ' +
+            'A break with a shape gets a name on the run line: a partner taken from across the board, a halo, a treasure spill, a clean sweep of a suit. ' +
+            'Clear the floor with momentum still standing and the end pays out: a gold at Clean and Sharp, a shard and two gold at Fever — Extreme Fever. Never score, never rating.'
     },
     {
         id: 'chunk_and_the_dungeon',
@@ -899,6 +902,7 @@ export const ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS: readonly EncyclopediaTopic[] 
         description:
             'Every tile wears one of four suits on its back — Ember, Tide, Moss or Bone — and both halves of a pair share it. ' +
             'Suits are dealt in clumps, so the floor opens as a map you can plan against before you flip anything. ' +
+            'The floor decides the shape: a breather or a treasure hall deals big clumps, a rush, speed or trap floor deals its suits scattered, and a spotlight floor deals only two. ' +
             'The symbol on the front is still the thing to remember; the suit is the thing you can see.'
     },
     {

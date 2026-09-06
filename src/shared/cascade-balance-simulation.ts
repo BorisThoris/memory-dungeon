@@ -16,6 +16,7 @@ import { getPrimaryPlaythroughExitTile, getUnresolvedPlayablePairGroups } from '
 import { createMulberry32, hashStringToSeed, pickRngIndex } from './rng';
 import { runNonNegativeInteger } from './run-number-guards';
 import { isSingletonUtilityPairKey } from './tile-identity';
+import { getSuitDealProfile, type SuitDealProfile } from './tile-suit-rules';
 import { calculateRating } from './scoring-rules';
 
 /**
@@ -52,6 +53,11 @@ export interface CascadeBalanceFloorSample {
     bestChain: number;
     comboShardsGained: number;
     pairsOnFloor: number;
+    /** Extreme Fever: the tier the momentum held when the floor cleared, and what it paid. */
+    momentumBonusTier: 'none' | 'clean' | 'sharp' | 'fever';
+    momentumBonusGold: number;
+    /** How the floor dealt its suits (by archetype), so the report can say what each shape buys. */
+    suitDealProfile: SuitDealProfile;
 }
 
 export interface CascadeBalanceBandReport {
@@ -71,6 +77,17 @@ export interface CascadeBalanceBandReport {
     ratingCounts: Record<Rating, number>;
     /** Floors where the rating differed from `calculateRating(mistakes)`; must be zero. */
     ratingDriftFloors: number;
+    /** Floors cleared at the Fever rung of momentum: the Extreme Fever payout. */
+    extremeFeverShare: number;
+    meanMomentumBonusGold: number;
+}
+
+export interface CascadeBalanceProfileReport {
+    profile: SuitDealProfile;
+    floors: number;
+    chunkPairsPerFloor: number;
+    feverFloorShare: number;
+    meanTurns: number;
 }
 
 export interface CascadeBalanceReport {
@@ -78,6 +95,8 @@ export interface CascadeBalanceReport {
     seeds: number[];
     floors: number[];
     bands: CascadeBalanceBandReport[];
+    /** The clean player's floors by deal profile: what clumped, scattered and two-suit floors buy. */
+    cleanByProfile: CascadeBalanceProfileReport[];
     samples: CascadeBalanceFloorSample[];
 }
 
@@ -197,7 +216,10 @@ export const playCascadeBalanceFloor = ({
         feverBreaks,
         bestChain,
         comboShardsGained: Math.max(0, runNonNegativeInteger(run.stats.comboShards) - shardsAtStart),
-        pairsOnFloor
+        pairsOnFloor,
+        momentumBonusTier: run.lastLevelResult?.momentumBonusTier ?? 'none',
+        momentumBonusGold: runNonNegativeInteger(run.lastLevelResult?.momentumBonusGold),
+        suitDealProfile: getSuitDealProfile(schedule.floorArchetypeId)
     };
 };
 
@@ -226,7 +248,9 @@ const summarizeBand = (missRate: number, samples: CascadeBalanceFloorSample[]): 
         chunkPairsPerFloor: mean((sample) => sample.chunkPairs),
         feverFloorShare: mean((sample) => (sample.feverBreaks > 0 ? 1 : 0)),
         ratingCounts,
-        ratingDriftFloors: samples.filter((sample) => sample.rating !== sample.ratingFromMistakes).length
+        ratingDriftFloors: samples.filter((sample) => sample.rating !== sample.ratingFromMistakes).length,
+        extremeFeverShare: mean((sample) => (sample.momentumBonusTier === 'fever' ? 1 : 0)),
+        meanMomentumBonusGold: mean((sample) => sample.momentumBonusGold)
     };
 };
 
@@ -244,11 +268,24 @@ export const runCascadeBalanceSimulation = ({
             }
         }
     }
+    const cleanSamples = samples.filter((sample) => sample.missRate === 0);
+    const profiles: SuitDealProfile[] = ['clumped', 'scattered', 'two_suit'];
+    const cleanByProfile = profiles
+        .map((profile) => cleanSamples.filter((sample) => sample.suitDealProfile === profile))
+        .filter((group) => group.length > 0)
+        .map((group) => ({
+            profile: group[0]!.suitDealProfile,
+            floors: group.length,
+            chunkPairsPerFloor: group.reduce((sum, sample) => sum + sample.chunkPairs, 0) / group.length,
+            feverFloorShare: group.filter((sample) => sample.feverBreaks > 0).length / group.length,
+            meanTurns: group.reduce((sum, sample) => sum + sample.turns, 0) / group.length
+        }));
     return {
         rulesVersion,
         seeds: [...seeds],
         floors: [...floors],
         bands: missRates.map((missRate) => summarizeBand(missRate, samples.filter((sample) => sample.missRate === missRate))),
+        cleanByProfile,
         samples
     };
 };
@@ -272,6 +309,8 @@ export const CASCADE_BALANCE_BANDS = {
     bigFloorPairs: 8,
     /** Fever floor share at the reference miss rate: rare, or the ladder is not a ladder. */
     referenceFeverShare: { max: 0.2 },
+    /** Extreme Fever is the clean player's finish: they must reach it more often than the reference player. */
+    extremeFeverCleanOverReference: { min: 1.5 },
     referenceMissRate: 0.25
 } as const;
 
@@ -309,6 +348,11 @@ export const assertCascadeBalanceWithinBands = (
             issues.push(`clean/reference turns ratio ${ratio.toFixed(3)} above ${bands.cleanTurnsOverReferenceTurns.max}`);
         }
     }
+    if (clean && reference && clean.extremeFeverShare < reference.extremeFeverShare * bands.extremeFeverCleanOverReference.min) {
+        issues.push(
+            `clean extremeFeverShare ${clean.extremeFeverShare.toFixed(3)} is not ${bands.extremeFeverCleanOverReference.min}x the reference ${reference.extremeFeverShare.toFixed(3)}`
+        );
+    }
     if (reference && reference.feverFloorShare > bands.referenceFeverShare.max) {
         issues.push(`reference feverFloorShare ${reference.feverFloorShare.toFixed(3)} above ${bands.referenceFeverShare.max}`);
     }
@@ -316,12 +360,17 @@ export const assertCascadeBalanceWithinBands = (
 };
 
 export const summarizeCascadeBalance = (report: CascadeBalanceReport): string =>
-    report.bands
+    [
+        ...report.cleanByProfile.map(
+            (row) =>
+                `clean ${row.profile}: floors=${row.floors} pairs/floor=${row.chunkPairsPerFloor.toFixed(2)} fever=${row.feverFloorShare.toFixed(2)} turns=${row.meanTurns.toFixed(1)}`
+        ),
+        ...report.bands
         .map(
             (band) =>
                 `miss=${band.missRate}: cleared=${band.clearedShare.toFixed(2)} settled=${band.settledShare.toFixed(2)} turns=${band.meanTurns.toFixed(1)} ` +
                 `mistakes=${band.meanMistakes.toFixed(2)} score=${band.meanLevelScore.toFixed(0)} chunkShare=${band.chunkShareOfScore.toFixed(2)} ` +
                 `breaks/floor=${band.chunkBreaksPerFloor.toFixed(2)} pairs/floor=${band.chunkPairsPerFloor.toFixed(2)} ` +
-                `fever=${band.feverFloorShare.toFixed(2)} drift=${band.ratingDriftFloors}`
+                `fever=${band.feverFloorShare.toFixed(2)} extreme=${band.extremeFeverShare.toFixed(2)} bonusGold=${band.meanMomentumBonusGold.toFixed(2)} drift=${band.ratingDriftFloors}`
         )
-        .join('\n');
+    ].join('\n');

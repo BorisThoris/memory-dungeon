@@ -1,4 +1,5 @@
 import type { RouteCardKind, RouteSpecialKind, TileTraitKind, RunState } from './contracts';
+import { getSafeBoardColumns } from './board-grid-dimensions';
 import { runChainTier } from './chain-tier-rules';
 import { TILE_TRAIT_COUNT_KINDS } from './session-stats-rules';
 import {
@@ -54,6 +55,16 @@ export interface BoardTurnAnnouncementFacts {
     chainAfter: number;
     /** The break tier that chain reaches on this floor, stamped by the rules so no surface recomputes it. */
     chainTierAfter: 'none' | 'clean' | 'sharp' | 'fever';
+    /**
+     * The shape of this turn's chunk, for the style line (Peggle's "Long shot"): the widest gap
+     * between a broken pair's halves in grid steps, pairs the halo took from another suit, treasure
+     * pairs spilled, and whether the match's suit is now gone from the floor. Zeros on a turn
+     * without a break.
+     */
+    chunkPartnerSpanMax: number;
+    chunkHaloPairs: number;
+    chunkTreasuresSpilled: number;
+    chunkSuitCleared: boolean;
     /** Pairs the magpie took back this floor, before and after this turn. */
     magpieTheftsBefore: number;
     magpieTheftsAfter: number;
@@ -134,6 +145,59 @@ const firstTileValue = <T>(
     return null;
 };
 
+/**
+ * What this turn's chunk looked like, read off the two boards: a tile that was hidden before and
+ * is `removed` (by a chunk) after is a tile the chunk took. Nothing here re-runs the break rule;
+ * it describes the board the rule left, which is the only thing the announcer may read.
+ */
+const chunkStyleFacts = (
+    before: RunState,
+    after: RunState,
+    matchedTileIds: readonly string[]
+): Pick<BoardTurnAnnouncementFacts, 'chunkPartnerSpanMax' | 'chunkHaloPairs' | 'chunkTreasuresSpilled' | 'chunkSuitCleared'> => {
+    const none = { chunkPartnerSpanMax: 0, chunkHaloPairs: 0, chunkTreasuresSpilled: 0, chunkSuitCleared: false };
+    const afterBoard = after.board;
+    if (!afterBoard) {
+        return none;
+    }
+    const columns = getSafeBoardColumns(afterBoard);
+    const beforeState = new Map((before.board?.tiles ?? []).map((tile) => [tile.id, tile.state]));
+    const taken = afterBoard.tiles
+        .map((tile, index) => ({ tile, index }))
+        .filter(({ tile }) => tile.state === 'removed' && tile.brokenByChunk === true && beforeState.get(tile.id) === 'hidden');
+    if (taken.length === 0) {
+        return none;
+    }
+    const byPair = new Map<string, number[]>();
+    for (const { tile, index } of taken) {
+        byPair.set(tile.pairKey, [...(byPair.get(tile.pairKey) ?? []), index]);
+    }
+    const matchSuit = firstTileValue(before, matchedTileIds, (tile) => tile.suit ?? null);
+    let spanMax = 0;
+    let haloPairs = 0;
+    let treasures = 0;
+    for (const [pairKey, indexes] of byPair) {
+        if (indexes.length === 2) {
+            const [a, b] = indexes as [number, number];
+            spanMax = Math.max(
+                spanMax,
+                Math.abs(Math.floor(a / columns) - Math.floor(b / columns)) + Math.abs((a % columns) - (b % columns))
+            );
+        }
+        const first = afterBoard.tiles[indexes[0]!]!;
+        if (matchSuit && first.suit && first.suit !== matchSuit) {
+            haloPairs += 1;
+        }
+        if (first.dungeonCardKind === 'treasure') {
+            treasures += 1;
+        }
+        void pairKey;
+    }
+    const suitCleared =
+        matchSuit != null && !afterBoard.tiles.some((tile) => tile.state === 'hidden' && tile.suit === matchSuit);
+    return { chunkPartnerSpanMax: spanMax, chunkHaloPairs: haloPairs, chunkTreasuresSpilled: treasures, chunkSuitCleared: suitCleared };
+};
+
 /** Route-special tiles still present on the board, so the announcer never counts them itself. */
 const routeSpecialCount = (run: RunState): number =>
     (run.board?.tiles ?? []).filter((tile) => tile.routeSpecialKind != null).length;
@@ -187,6 +251,7 @@ export const getBoardTurnAnnouncementFacts = (
         chunkPairsBrokenAfter: runNonNegativeInteger(after.chunkPairsBrokenThisFloor),
         chainAfter: runNonNegativeInteger(after.stats.currentStreak),
         chainTierAfter: runChainTier(after),
+        ...chunkStyleFacts(before, after, flippedTileIds),
         magpieTheftsBefore: runNonNegativeInteger(before.magpieTheftsThisFloor),
         magpieTheftsAfter: runNonNegativeInteger(after.magpieTheftsThisFloor),
         magpieScaredOffBefore: runNonNegativeInteger(before.magpieScaredOffThisFloor),

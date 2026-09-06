@@ -8,8 +8,11 @@ export async function dismissStartupIntro(page: Page): Promise<void> {
     const introVisible = await intro.isVisible().catch(() => false);
 
     if (introVisible) {
+        // The intro can close on its own between the visibility check and the click. A dispatch
+        // with no timeout then waits for a dialog that is never coming back and eats the whole
+        // test budget; give it a beat and fall through to the poll below, which is the real check.
         await intro
-            .dispatchEvent('click')
+            .dispatchEvent('click', undefined, { timeout: 5_000 })
             .catch(
                 async () =>
                     await intro

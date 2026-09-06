@@ -410,19 +410,6 @@ export const moveFocusInGrid = (
     return fromId;
 };
 
-export const getPairProximityLabel = (
-    board: BoardState,
-    tile: Tile,
-    pairProximityHintsEnabled: boolean,
-    faceUp: boolean
-): string | null => {
-    if (!pairProximityHintsEnabled || !faceUp) {
-        return null;
-    }
-    const distance = getPairProximityGridDistance(board, tile.id);
-    return distance == null ? null : `${distance}`;
-};
-
 export const getFocusedTileLiveLabel = ({
     board,
     debugPeekActive,

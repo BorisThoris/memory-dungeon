@@ -1,12 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import type { BoardState } from '../../shared/contracts';
+import type { BoardState, Tile } from '../../shared/contracts';
 import {
     getBoardChainAccessibilitySummary,
     getDungeonCardText,
     getEnemyHazardText,
     getFocusedTileLiveLabel,
     getHazardTileText,
-    getPairProximityLabel,
     getPickableTileIds,
     getPowerTargetAriaText,
     getTileBeatAccessibilityText,
@@ -571,8 +570,40 @@ describe('tile board DOM accessibility helpers', () => {
         expect(getHazardTileText(hazardTile)).toContain('Hazard tile:');
         expect(gridIndexFromTileId(board, 'b2')).toBe(3);
         expect(gridIndexFromTileId(board, 'missing')).toBe(0);
-        expect(getPairProximityLabel(proximityBoard, proximityBoard.tiles[0]!, true, true)).toBe('1');
-        expect(getPairProximityLabel(proximityBoard, proximityBoard.tiles[0]!, false, true)).toBeNull();
+        expect(proximityBoard.flippedTileIds).toEqual(['a1']);
+    });
+
+    it('reads the pair distance off the board a chunk left: across the gap, or not at all', () => {
+        // The live label is the one place a screen reader hears the number the badge shows, so it
+        // has to be as honest as the badge after a break: a removed tile is a gap, never a partner.
+        const label = (tiles: BoardState['tiles']): string =>
+            getFocusedTileLiveLabel({
+                board: { ...board, columns: 2, rows: 2, flippedTileIds: ['a1'], tiles },
+                debugPeekActive: false,
+                destroyEligibleTileIds: new Set(),
+                destroyPowerVisualActive: false,
+                focusedTileId: 'a1',
+                pairProximityHintsEnabled: true,
+                peekEligibleTileIds: new Set(),
+                peekPowerVisualActive: false,
+                peekRevealedTileIds: new Set(),
+                previewActive: false,
+                runStatus: 'playing',
+                strayEligibleTileIds: new Set(),
+                strayPowerVisualActive: false,
+                tileSwapEligibleTileIds: new Set(),
+                tileSwapFirstTileId: null,
+                tileSwapPowerVisualActive: false
+            });
+        const [a1, a2, b1, b2] = board.tiles as [Tile, Tile, Tile, Tile];
+        // a1 flipped at (0,0); its partner a2 at (0,1) is one step away.
+        expect(label([{ ...a1, state: 'flipped' }, a2, b1, b2])).toContain('Pair distance: 1 grid steps');
+        // The b pair broke away: the gap changes nothing for a1, whose partner is still there.
+        expect(
+            label([{ ...a1, state: 'flipped' }, a2, { ...b1, state: 'removed' }, { ...b2, state: 'removed' }])
+        ).toContain('Pair distance: 1 grid steps');
+        // A partner that left the board is not a partner; the label says nothing about distance.
+        expect(label([{ ...a1, state: 'flipped' }, { ...a2, state: 'removed' }, b1, b2])).not.toContain('Pair distance');
     });
 
     it('builds the focused tile live label with power targeting and pair proximity copy', () => {

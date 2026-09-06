@@ -598,6 +598,16 @@ export interface LevelResult {
     recallMatches?: number;
     recallMistakes?: number;
     recallBonusScore?: number;
+    /** The chain's floor: chunks broken, pairs they took, Fever breaks, the longest chain. */
+    chunkBreaks?: number;
+    chunkPairsBroken?: number;
+    feverBreaks?: number;
+    bestChain?: number;
+    /** Extreme Fever: the momentum still standing when the last pair went, and what it paid. */
+    chainMomentumAtClear?: number;
+    momentumBonusTier?: 'none' | 'clean' | 'sharp' | 'fever';
+    momentumBonusShards?: number;
+    momentumBonusGold?: number;
     /** REG-017: deterministic local route options for the next floor; UI-only until map/shop nodes land. */
     routeChoices?: RouteChoice[];
     traitRouteObjectiveCompleted?: boolean;
@@ -1150,6 +1160,9 @@ export interface RunState {
     chunkScoreThisFloor: number;
     /** Pairs chunks broke since the chain last dropped: momentum the tier ladder counts, the score streak does not. */
     chunkPairsThisChain: number;
+    /** Breaks that landed at the Fever rung this floor, and the longest chain the floor saw. */
+    feverBreaksThisFloor: number;
+    bestChainThisFloor: number;
     /** Pairs the magpie has taken back on this floor. */
     magpieTheftsThisFloor: number;
     /** Times a guard token drove the magpie off on this floor. */

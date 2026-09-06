@@ -231,7 +231,8 @@ export const chunkAnnouncementLines = (turnEvent: BoardTurnResolvedEvent): strin
     if (pairs <= 0) {
         return [];
     }
-    return [CHAIN_BEAT_COPY.chunkAnnouncement(pairs, chainTierAfter, chainAfter)];
+    const style = CHAIN_BEAT_COPY.styleLine(turnEvent.announcement);
+    return [CHAIN_BEAT_COPY.chunkAnnouncement(pairs, chainTierAfter, chainAfter), ...(style ? [style] : [])];
 };
 
 export const buildBoardTurnAnnouncement = (

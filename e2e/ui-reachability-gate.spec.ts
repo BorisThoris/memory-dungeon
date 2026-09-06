@@ -258,7 +258,10 @@ test.describe('every control a screen shows can be clicked', () => {
         'inFloorShop',
         'sideRoomChoice',
         'relicDraft',
-        'gameOver'
+        'gameOver',
+        // The board a chain is built on: suits on every back, the chain stat with its momentum
+        // hint, and the stage that pulses on a break. Nothing here may sit where a click cannot reach.
+        'cascadeClump'
     ] as const;
 
     for (const viewport of VIEWPORTS) {

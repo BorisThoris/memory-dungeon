@@ -1,4 +1,5 @@
 import type { RunState } from './contracts';
+import type { ChainTier } from './chain-tier-rules';
 import { decrementRunCounter, runNonNegativeInteger } from './run-number-guards';
 
 export interface TurnMatchProgressResult {
@@ -12,6 +13,8 @@ export interface TurnMatchProgressResult {
     chunkPairsBrokenThisFloor: number;
     chunkScoreThisFloor: number;
     chunkPairsThisChain: number;
+    feverBreaksThisFloor: number;
+    bestChainThisFloor: number;
     hazardFragileCacheClaimsThisFloor: number;
     hazardTollCachesThisFloor: number;
     hazardFuseCachesThisFloor: number;
@@ -43,6 +46,9 @@ export interface TurnMatchProgressInput {
     /** Pairs the chunk break took this turn; zero when the chain did not buy one. */
     chunkPairsBroken: number;
     chunkScore: number;
+    /** The tier the break landed at, and the chain the run holds after this match. */
+    chunkTier: ChainTier;
+    chainAfter: number;
     cursedMatchedEarly: boolean;
     findablesClaimedDelta: number;
     routeCardSafeHazardWardCharges: number;
@@ -75,6 +81,8 @@ export const resolveTurnMatchProgress = ({
     run,
     chunkPairsBroken,
     chunkScore,
+    chunkTier,
+    chainAfter,
     cursedMatchedEarly,
     findablesClaimedDelta,
     routeCardSafeHazardWardCharges,
@@ -133,6 +141,10 @@ export const resolveTurnMatchProgress = ({
             runNonNegativeInteger(run.chunkPairsBrokenThisFloor) + runNonNegativeInteger(chunkPairsBroken),
         chunkScoreThisFloor: runNonNegativeInteger(run.chunkScoreThisFloor) + runNonNegativeInteger(chunkScore),
         chunkPairsThisChain: runNonNegativeInteger(run.chunkPairsThisChain) + runNonNegativeInteger(chunkPairsBroken),
+        feverBreaksThisFloor:
+            runNonNegativeInteger(run.feverBreaksThisFloor) +
+            (runNonNegativeInteger(chunkPairsBroken) > 0 && chunkTier === 'fever' ? 1 : 0),
+        bestChainThisFloor: Math.max(runNonNegativeInteger(run.bestChainThisFloor), runNonNegativeInteger(chainAfter)),
         hazardFragileCacheClaimsThisFloor:
             runNonNegativeInteger(run.hazardFragileCacheClaimsThisFloor) + (fragileCacheClaimed ? 1 : 0),
         hazardTollCachesThisFloor:

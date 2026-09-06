@@ -454,6 +454,54 @@ describe('GameScreen (OVR-014)', () => {
         });
     });
 
+    it('pulses the stage with the break tier for one beat after a chunk breaks, then lets it go', () => {
+        // The shatter is a projection of the turn event, not a diff of boards: the stage reads the
+        // stamped tier and pairs from the latest resolved turn, holds the pulse for BREAK_PULSE_MS,
+        // and drops it, so a board that re-renders for any other reason never pulses twice.
+        vi.useFakeTimers();
+        try {
+            const baseRun = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false }));
+            const breakEvent = createBoardTurnResolvedEventFixture({
+                commandId: 'chunk-break',
+                announcement: {
+                    chunkPairsBrokenBefore: 0,
+                    chunkPairsBrokenAfter: 3,
+                    chainAfter: 5,
+                    chainTierAfter: 'fever'
+                }
+            });
+            const broken = {
+                ...baseRun,
+                chunkBreaksThisFloor: 1,
+                chunkPairsBrokenThisFloor: 3,
+                chunkPairsThisChain: 3,
+                gameplayEventJournal: [breakEvent]
+            } as RunState;
+            const { rerender } = render(
+                <PlatformTiltProvider>
+                    <NotificationHost>
+                        <GameScreen achievements={[]} run={baseRun} />
+                    </NotificationHost>
+                </PlatformTiltProvider>
+            );
+            expect(screen.getByTestId('board-stage')).toHaveAttribute('data-break-pulse', 'none');
+            rerender(
+                <PlatformTiltProvider>
+                    <NotificationHost>
+                        <GameScreen achievements={[]} run={broken} />
+                    </NotificationHost>
+                </PlatformTiltProvider>
+            );
+            expect(screen.getByTestId('board-stage')).toHaveAttribute('data-break-pulse', 'fever');
+            act(() => {
+                vi.advanceTimersByTime(800);
+            });
+            expect(screen.getByTestId('board-stage')).toHaveAttribute('data-break-pulse', 'none');
+        } finally {
+            vi.useRealTimers();
+        }
+    });
+
     it('adds chain reward stack context to pickup reward toasts', async () => {
         const baseRun = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false }));
         const initialRun = {

@@ -3,6 +3,7 @@ import type { LevelResult, RouteNodeType } from '../../shared/contracts';
 import { runNonNegativeInteger } from '../../shared/run-number-guards';
 import OverlayModal, { type ModalAction } from './OverlayModal';
 import styles from './FloorClearDialog.module.css';
+import { FLOOR_CLEAR_CHAIN_COPY } from '../copy/floorClearChain';
 
 /**
  * Floor cleared. One dialog that says four things: what the floor paid, how it went, which
@@ -86,6 +87,7 @@ const FloorClearDialog = ({
     const scoreGained = runNonNegativeInteger(result.scoreGained);
     const mistakes = runNonNegativeInteger(result.mistakes);
     const lives = runNonNegativeInteger(result.livesRemaining);
+    const chainLine = FLOOR_CLEAR_CHAIN_COPY.recapLine(result);
     const streakLine = wager
         ? wager.armed
             ? `Risk wager armed. The next objective pays +${wager.bonusFavor} Favor; a miss ${
@@ -135,9 +137,14 @@ const FloorClearDialog = ({
                     </div>
                 </dl>
 
-                {lifeBonusLine || objectiveLine || residentLine ? (
+                {lifeBonusLine || objectiveLine || residentLine || chainLine ? (
                     <ul className={styles.notes} data-testid="floor-clear-notes">
                         {lifeBonusLine ? <li data-tone="reward">{lifeBonusLine}</li> : null}
+                        {chainLine ? (
+                            <li data-testid="floor-clear-chain" data-tone={result.momentumBonusTier === 'fever' ? 'reward' : undefined}>
+                                {chainLine}
+                            </li>
+                        ) : null}
                         {objectiveLine ? <li>{objectiveLine}</li> : null}
                         {residentLine ? (
                             <li data-testid="floor-clear-resident" data-tone="resident">

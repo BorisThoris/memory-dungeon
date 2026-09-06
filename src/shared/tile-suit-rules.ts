@@ -1,4 +1,4 @@
-import type { BoardState, Tile, TileSuit } from './contracts';
+import type { BoardState, FloorArchetypeId, Tile, TileSuit } from './contracts';
 import { getSafeBoardColumns } from './board-grid-dimensions';
 import { createMulberry32, hashStringToSeed, pickRngIndex, shuffleWithRng } from './rng';
 import { isSingletonUtilityPairKey } from './tile-identity';
@@ -78,14 +78,16 @@ export const assignSuitsToTiles = (
     tiles: readonly Tile[],
     runSeed: number,
     level: number,
-    rulesVersion: number
+    rulesVersion: number,
+    suitCount: number = TILE_SUITS.length
 ): Tile[] => {
     const rng = suitRng(runSeed, level, rulesVersion, 'assign');
     const pairKeys = [...new Set(tiles.map((tile) => tile.pairKey))];
     const dealt = shuffleWithRng(() => rng(), pairKeys);
+    const palette = TILE_SUITS.slice(0, Math.max(1, Math.min(TILE_SUITS.length, Math.floor(suitCount))));
     const suitByPairKey = new Map<string, TileSuit>();
     dealt.forEach((pairKey, index) => {
-        suitByPairKey.set(pairKey, TILE_SUITS[index % TILE_SUITS.length]!);
+        suitByPairKey.set(pairKey, palette[index % palette.length]!);
     });
     return tiles.map((tile) => ({ ...tile, suit: suitByPairKey.get(tile.pairKey) ?? TILE_SUITS[0]! }));
 };
@@ -245,21 +247,70 @@ export const isLayoutPinnedTile = (tile: Tile): boolean =>
     isSingletonUtilityPairKey(tile.pairKey) || tile.dungeonBossId != null;
 
 /** Every tile gets a suit, then the loose ones are dealt in clumps around the pinned ones. */
+/**
+ * How a floor deals its suits. The archetype chooses: a breather or a treasure hall opens as a
+ * map of big clumps (a bubble board you can read at a glance); a rush, a speed trial or a trap
+ * hall deals its suits scattered, so a chain has to be earned across the board; a spotlight
+ * floor deals only two suits, so the clumps are huge where the light lets you see them at all.
+ * This is the cycle's clustering lever (design §2.6), keyed to the archetype because the
+ * archetype is what a floor already announces about itself.
+ */
+export type SuitDealProfile = 'clumped' | 'scattered' | 'two_suit';
+
+export const SUIT_DEAL_PROFILE_BY_ARCHETYPE: Readonly<Record<FloorArchetypeId, SuitDealProfile>> = {
+    survey_hall: 'clumped',
+    speed_trial: 'scattered',
+    treasure_gallery: 'clumped',
+    shadow_read: 'clumped',
+    anchor_chain: 'clumped',
+    trap_hall: 'scattered',
+    script_room: 'clumped',
+    rush_recall: 'scattered',
+    parasite_tithe: 'clumped',
+    spotlight_hunt: 'two_suit',
+    breather: 'clumped'
+};
+
+export const getSuitDealProfile = (floorArchetypeId: FloorArchetypeId | null | undefined): SuitDealProfile =>
+    floorArchetypeId ? SUIT_DEAL_PROFILE_BY_ARCHETYPE[floorArchetypeId] : 'clumped';
+
+/** A uniform shuffle of the loose tiles around the pinned ones: the scattered deal. */
+export const scatterTiles = (
+    tiles: readonly Tile[],
+    runSeed: number,
+    level: number,
+    rulesVersion: number,
+    isPinned: (tile: Tile) => boolean = () => false
+): Tile[] => {
+    const rng = suitRng(runSeed, level, rulesVersion, 'scatter');
+    const loose = shuffleWithRng(
+        () => rng(),
+        tiles.filter((tile) => !isPinned(tile))
+    );
+    let next = 0;
+    return tiles.map((tile) => (isPinned(tile) ? tile : loose[next++]!));
+};
+
 export const dealBoardSuits = (
     tiles: readonly Tile[],
     columns: number,
     runSeed: number,
     level: number,
-    rulesVersion: number
-): Tile[] =>
-    dealTilesInClumps(
-        assignSuitsToTiles(tiles, runSeed, level, rulesVersion),
+    rulesVersion: number,
+    profile: SuitDealProfile = 'clumped'
+): Tile[] => {
+    if (profile === 'scattered') {
+        return scatterTiles(assignSuitsToTiles(tiles, runSeed, level, rulesVersion), runSeed, level, rulesVersion, isLayoutPinnedTile);
+    }
+    return dealTilesInClumps(
+        assignSuitsToTiles(tiles, runSeed, level, rulesVersion, profile === 'two_suit' ? 2 : TILE_SUITS.length),
         columns,
         runSeed,
         level,
         rulesVersion,
         isLayoutPinnedTile
     );
+};
 
 /**
  * How clumped the board is: mean fraction of each tile's orthogonal neighbours that share its suit.

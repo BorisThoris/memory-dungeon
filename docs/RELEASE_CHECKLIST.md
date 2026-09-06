@@ -20,6 +20,13 @@ achievement on the Partner site or shoot a trailer.
 | The board overlays clear the HUD and the dock they are drawn over | done | the repository | `src/renderer/hooks/useGameplayChromeClearance.ts` |
 | Every dock tool answers a press, and a click on the board picks a tile | done | the repository | `e2e/ui-reachability-gate.spec.ts` |
 
+## Gameplay
+
+| Item | State | Owner | Where |
+|---|---|---|---|
+| Every pair wears a suit, and a chain breaks the clump around a match — treasure spills, the exit never goes | done | the repository | `src/shared/chunk-break-rules.ts` |
+| The cascade is tuned against a simulation with stated bands, and a chunk never moves a rating | done | the repository | `src/shared/cascade-balance-simulation.ts` |
+
 ## Steamworks
 
 | Item | State | Owner | Where |

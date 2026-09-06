@@ -11,6 +11,8 @@ const baseInput = (run = createNewRun(0)) => ({
     cascadeHazardTriggered: false,
     chunkPairsBroken: 0,
     chunkScore: 0,
+    chunkTier: 'none' as const,
+    chainAfter: 0,
     fragileCacheClaimed: false,
     tollCacheClaimed: false,
     fuseCacheClaimed: false,
@@ -53,6 +55,8 @@ describe('resolveTurnMatchProgress', () => {
             cascadeHazardTriggered: true,
             chunkPairsBroken: 0,
             chunkScore: 0,
+            chunkTier: 'none' as const,
+            chainAfter: 0,
             fragileCacheClaimed: true,
             tollCacheClaimed: true,
             fuseCacheClaimed: true,
@@ -183,6 +187,8 @@ describe('resolveTurnMatchProgress', () => {
             cascadeHazardTriggered: true,
             chunkPairsBroken: 0,
             chunkScore: 0,
+            chunkTier: 'none' as const,
+            chainAfter: 0,
             fragileCacheClaimed: true,
             tollCacheClaimed: true,
             fuseCacheClaimed: true,
@@ -235,5 +241,22 @@ describe('resolveTurnMatchProgress', () => {
         expect(result.dungeonTrapsResolvedThisFloor).toBe(2);
         expect(result.dungeonGatewaysUsed).toBe(1);
         expect(result.dungeonGatewaysUsedThisFloor).toBe(1);
+    });
+});
+
+describe("the chain's floor", () => {
+    it('counts a Fever break and keeps the longest chain the floor saw', () => {
+        const first = resolveTurnMatchProgress({ ...baseInput(), chunkPairsBroken: 3, chunkTier: 'fever', chainAfter: 6 });
+        expect(first.feverBreaksThisFloor).toBe(1);
+        expect(first.bestChainThisFloor).toBe(6);
+        // A Sharp break is not a Fever break, and a shorter chain does not lower the best.
+        const run = { ...createNewRun(0), feverBreaksThisFloor: 1, bestChainThisFloor: 6 };
+        const second = resolveTurnMatchProgress({ ...baseInput(run), chunkPairsBroken: 2, chunkTier: 'sharp', chainAfter: 2 });
+        expect(second.feverBreaksThisFloor).toBe(1);
+        expect(second.bestChainThisFloor).toBe(6);
+        // Fever tier with nothing broken is a tier, not a break.
+        const third = resolveTurnMatchProgress({ ...baseInput(run), chunkPairsBroken: 0, chunkTier: 'fever', chainAfter: 9 });
+        expect(third.feverBreaksThisFloor).toBe(1);
+        expect(third.bestChainThisFloor).toBe(9);
     });
 });

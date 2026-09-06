@@ -78,6 +78,25 @@ describe('FloorClearDialog', () => {
         expect(screen.getByTestId('floor-clear-resident')).toHaveTextContent(/a hoarding rat/i);
     });
 
+    it('recaps the chain and names Extreme Fever with what it paid', () => {
+        renderDialog({
+            result: {
+                ...result,
+                bestChain: 6,
+                chunkBreaks: 2,
+                chunkPairsBroken: 5,
+                feverBreaks: 1,
+                chainMomentumAtClear: 9,
+                momentumBonusTier: 'fever',
+                momentumBonusShards: 1,
+                momentumBonusGold: 3
+            }
+        });
+        const chain = screen.getByTestId('floor-clear-chain');
+        expect(chain).toHaveTextContent('Best chain ×6 · 2 chunks, 5 pairs cascaded · Fever ×1 · Extreme Fever at momentum 9: +1 shard, +3 gold.');
+        expect(chain).toHaveAttribute('data-tone', 'reward');
+    });
+
     it('leaves the notes list out entirely when there is nothing to note', () => {
         renderDialog();
         expect(screen.queryByTestId('floor-clear-notes')).not.toBeInTheDocument();

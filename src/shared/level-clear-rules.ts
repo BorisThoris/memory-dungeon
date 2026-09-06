@@ -13,6 +13,7 @@ import {
     calculatePerfectClearBonus
 } from './scoring-rules';
 import { runNonNegativeInteger } from './run-number-guards';
+import type { FloorClearMomentumBonus } from './floor-clear-momentum-bonus-rules';
 
 export const getClearLifeReason = (tries: number): ClearLifeReason => {
     if (tries === 0) return 'perfect';
@@ -54,6 +55,10 @@ export const applyFloorClearEnemyHazardDefeats = (
 
 export type FloorClearStatLevelResultFields = Pick<
     LevelResult,
+    | 'bestChain'
+    | 'chunkBreaks'
+    | 'chunkPairsBroken'
+    | 'feverBreaks'
     | 'anchorSealUses'
     | 'catalystAltarUpgrades'
     | 'hazardCascadeCaches'
@@ -81,6 +86,10 @@ export type FloorClearStatLevelResultFields = Pick<
 const positive = (value: number): number | undefined => (value > 0 ? value : undefined);
 
 export const getFloorClearStatLevelResultFields = (run: RunState): FloorClearStatLevelResultFields => ({
+    bestChain: positive(run.bestChainThisFloor),
+    chunkBreaks: positive(run.chunkBreaksThisFloor),
+    chunkPairsBroken: positive(run.chunkPairsBrokenThisFloor),
+    feverBreaks: positive(run.feverBreaksThisFloor),
     anchorSealUses: positive(run.anchorSealUsesThisFloor),
     catalystAltarUpgrades: positive(run.catalystAltarUpgradesThisFloor),
     hazardCascadeCaches: positive(run.hazardCascadeCachesThisFloor),
@@ -165,6 +174,7 @@ export interface CreateFloorClearLevelResultInput {
     level: number;
     livesRemaining: number;
     mistakes: number;
+    momentumBonus: FloorClearMomentumBonus;
     objectiveBonusScore: number;
     perfect: boolean;
     rating: LevelResult['rating'];
@@ -194,6 +204,7 @@ export const createFloorClearLevelResult = ({
     level,
     livesRemaining,
     mistakes,
+    momentumBonus,
     objectiveBonusScore,
     perfect,
     rating,
@@ -240,5 +251,9 @@ export const createFloorClearLevelResult = ({
             ? traitRouteObjectiveReward
             : undefined,
     ...getFloorClearStatLevelResultFields(run),
+    chainMomentumAtClear: momentumBonus.momentum > 0 ? momentumBonus.momentum : undefined,
+    momentumBonusTier: momentumBonus.tier !== 'none' ? momentumBonus.tier : undefined,
+    momentumBonusShards: momentumBonus.shards > 0 ? momentumBonus.shards : undefined,
+    momentumBonusGold: momentumBonus.gold > 0 ? momentumBonus.gold : undefined,
     routeChoices
 });

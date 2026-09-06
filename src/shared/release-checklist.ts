@@ -59,6 +59,20 @@ export const RELEASE_CHECKLIST: readonly ReleaseChecklistItem[] = [
         section: 'Input and display'
     },
     {
+        evidence: 'src/shared/chunk-break-rules.ts',
+        id: 'chain-chunk-fever',
+        label: 'Every pair wears a suit, and a chain breaks the clump around a match — treasure spills, the exit never goes',
+        owner: 'repo',
+        section: 'Gameplay'
+    },
+    {
+        evidence: 'src/shared/cascade-balance-simulation.ts',
+        id: 'cascade-balance',
+        label: 'The cascade is tuned against a simulation with stated bands, and a chunk never moves a rating',
+        owner: 'repo',
+        section: 'Gameplay'
+    },
+    {
         evidence: 'src/shared/daily-determinism.test.ts',
         id: 'daily-determinism',
         label: 'Every player gets the same Daily Challenge run, floor for floor',

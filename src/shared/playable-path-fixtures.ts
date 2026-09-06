@@ -5,6 +5,8 @@ import {
     type BoardState,
     type RunState,
     type SaveData,
+    type Tile,
+    type TileSuit,
     type ViewState
 } from './contracts';
 import { createDefaultSaveData, normalizeSaveData } from './save-data';
@@ -44,7 +46,8 @@ export type PlayablePathFixtureId =
     | 'sideRoomSkip'
     | 'sideRoomThenShop'
     | 'relicDraft'
-    | 'gameOver';
+    | 'gameOver'
+    | 'cascadeClump';
 
 export interface PlayablePathFixtureState {
     id: PlayablePathFixtureId;
@@ -76,7 +79,8 @@ export const PLAYABLE_PATH_FIXTURE_IDS: readonly PlayablePathFixtureId[] = [
     'sideRoomSkip',
     'sideRoomThenShop',
     'relicDraft',
-    'gameOver'
+    'gameOver',
+    'cascadeClump'
 ] as const;
 
 export const createPlayablePathFixture = (
@@ -141,6 +145,8 @@ export const createPlayablePathFixture = (
             return { id, view: 'playing', run: relicDraftRun(), saveData, shopReturnMode: null };
         case 'gameOver':
             return { id, view: 'gameOver', run: gameOverRun(), saveData, shopReturnMode: null };
+        case 'cascadeClump':
+            return { id, view: 'playing', run: cascadeClumpRun(), saveData, shopReturnMode: null };
         default:
             return assertNever(id);
     }
@@ -197,6 +203,62 @@ const activeRunWithTraitRouteSetup = (): RunState => {
         stats: {
             ...base.stats,
             currentStreak: 2
+        }
+    };
+};
+
+/**
+ * A board built to be chained: twelve plain pairs in three suit columns, each pair side by side.
+ * Matching row by row climbs the ladder on its own — Clean on the third pair, Sharp once the
+ * first break adds momentum, Fever before the fourth row — so an end-to-end pass can watch the
+ * clump go, the halo take its neighbours and the floor clear, on a board nothing random shaped.
+ */
+const cascadeClumpRun = (): RunState => {
+    const base = finishMemorizePhase(
+        createNewRun(0, {
+            echoFeedbackEnabled: false,
+            gameMode: 'endless',
+            runSeed: 172_721
+        })
+    );
+    const suits: TileSuit[] = ['ember', 'tide', 'moss'];
+    const tiles: Tile[] = [];
+    for (let row = 0; row < 4; row += 1) {
+        suits.forEach((suit, column) => {
+            const key = `${suit.slice(0, 2)}${row + 1}`;
+            const symbol = String(row * 3 + column + 1).padStart(2, '0');
+            tiles.push(
+                { id: `${key}-A`, pairKey: key, symbol, label: symbol, state: 'hidden', suit },
+                { id: `${key}-B`, pairKey: key, symbol, label: symbol, state: 'hidden', suit }
+            );
+        });
+    }
+    const board: BoardState = {
+        ...base.board!,
+        columns: 6,
+        rows: 4,
+        pairCount: 12,
+        matchedPairs: 0,
+        flippedTileIds: [],
+        cursedPairKey: null,
+        // No exit on this board: the floor ends when the last pair goes, the way a classic board does.
+        // The generated board's exit id would otherwise wait forever for a tile that is not there.
+        dungeonExitTileId: null,
+        dungeonExitActivated: false,
+        tiles
+    };
+    return {
+        ...base,
+        board,
+        findablesClaimedThisFloor: 0,
+        findablesTotalThisFloor: 0,
+        chunkBreaksThisFloor: 0,
+        chunkPairsBrokenThisFloor: 0,
+        chunkScoreThisFloor: 0,
+        chunkPairsThisChain: 0,
+        stats: {
+            ...base.stats,
+            currentStreak: 0
         }
     };
 };

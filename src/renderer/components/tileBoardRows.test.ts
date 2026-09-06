@@ -468,3 +468,33 @@ describe('tileBoardRows', () => {
         expect(result[1]!.tile.tileTraitKind).toBeUndefined();
     });
 });
+
+describe('pair distance after a chunk break', () => {
+    // The rows are rebuilt from the live board on every render, so the frame that removes the
+    // chunk is the frame every badge is recomputed in. This pins that: a flipped tile reads the
+    // distance across the gap, a tile that left has no badge, and nothing is read from a stale board.
+    it('recomputes every badge from the board the chunk left behind', () => {
+        const before = board(
+            [
+                tile('a1', 'a', 'flipped'),
+                tile('b1', 'b'),
+                tile('b2', 'b'),
+                tile('a2', 'a'),
+                tile('c1', 'c'),
+                tile('c2', 'c')
+            ],
+            { columns: 2, rows: 3, flippedTileIds: ['a1'] }
+        );
+        const beforeRows = rows({ board: before }).flat();
+        expect(beforeRows.find((row) => row.tile.id === 'a1')?.pairProximityDistance).toBe(2);
+
+        const after = board(
+            before.tiles.map((t) => (t.pairKey === 'b' ? { ...t, state: 'removed' as const, brokenByChunk: true } : t)),
+            { columns: 2, rows: 3, flippedTileIds: ['a1'] }
+        );
+        const afterRows = rows({ board: after }).flat();
+        expect(afterRows.find((row) => row.tile.id === 'a1')?.pairProximityDistance).toBe(2);
+        expect(afterRows.find((row) => row.tile.id === 'b1')?.pairProximityDistance).toBeNull();
+        expect(afterRows.find((row) => row.tile.id === 'b2')?.pairProximityDistance).toBeNull();
+    });
+});

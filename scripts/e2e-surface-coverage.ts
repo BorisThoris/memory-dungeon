@@ -109,6 +109,14 @@ export const DECLARED_SURFACES: readonly DeclaredSurface[] = [
         key: 'a relic draft mid-run',
         fixtureId: 'relicDraft',
         holds: (state) => state.run != null
+    },
+    {
+        key: 'a clumped board where a chain breaks chunks',
+        fixtureId: 'cascadeClump',
+        holds: (state) =>
+            state.view === 'playing' &&
+            state.run?.status === 'playing' &&
+            (state.run.board?.tiles.every((tile) => tile.suit != null) ?? false)
     }
 ];
 

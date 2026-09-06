@@ -30,6 +30,24 @@ describe('RunShell', () => {
         expect(screen.queryByTestId('hud-gauntlet-timer')).not.toBeInTheDocument();
     });
 
+    it('explains the chain tier from momentum, so a Sharp read on a x3 chain is not a mystery', () => {
+        const base = playingRun();
+        const run: RunState = {
+            ...base,
+            board: { ...base.board!, pairCount: 12 },
+            chunkPairsThisChain: 2,
+            stats: { ...base.stats, currentStreak: 3 }
+        };
+        render(<RunShell gauntletRemainingMs={null} onPause={vi.fn()} run={run} tools={[]} />);
+
+        const chain = within(screen.getByTestId('hud-chain')).getByText(/×3/);
+        // Twelve pairs: Sharp from 5, Fever from 8. A chain of 3 plus 2 cascaded pairs is Sharp.
+        expect(chain).toHaveAttribute('data-chain-tier', 'sharp');
+        expect(chain).toHaveTextContent(/Sharp/);
+        expect(chain).toHaveAttribute('title', expect.stringMatching(/momentum 5/));
+        expect(chain).toHaveAttribute('title', expect.stringMatching(/Sharp from 5, Fever from 8/));
+    });
+
     it('names the run mode, so a Practice run is not mistaken for a Classic one', () => {
         const { rerender } = render(
             <RunShell gauntletRemainingMs={null} onPause={vi.fn()} run={playingRun()} tools={[]} />

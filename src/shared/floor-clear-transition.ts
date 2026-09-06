@@ -13,6 +13,11 @@ import { getRunDungeonMapState } from './dungeon-run-state-rules';
 import { getDungeonBossTrophyCacheResult } from './dungeon-boss-clear-rules';
 import { calculateRating } from './scoring-rules';
 import {
+    applyMomentumBonusShards,
+    EXTREME_FEVER_BONUS_TAG,
+    getFloorClearMomentumBonus
+} from './floor-clear-momentum-bonus-rules';
+import {
     applyFloorClearEnemyHazardDefeats,
     calculateFloorClearScore,
     createFloorClearLevelResult,
@@ -127,6 +132,16 @@ export const createFinalizeLevelTransition = ({
         const bestScore = Math.max(runNonNegativeInteger(stats.bestScore), totalScore);
         const rating = calculateRating(tries);
         const lives = Math.min(MAX_LIVES, livesBeforeClear + clearLifeGained);
+        // Extreme Fever: the momentum still standing when the last pair went pays gold, and a
+        // shard at Fever. Read before the streak resets with the floor, never from the score.
+        const momentumBonus = getFloorClearMomentumBonus({
+            chain: stats.currentStreak,
+            cascadedPairs: run.chunkPairsThisChain,
+            pairsOnFloor: board.pairCount
+        });
+        if (momentumBonus.tier === 'fever') {
+            bonusTags.push(EXTREME_FEVER_BONUS_TAG);
+        }
         const totalRelicFavorGained =
             featuredObjectiveClear.relicFavorGained + featuredObjectiveClear.endlessRiskWagerFavorGained;
         const relicFavor = gainRelicFavor(run, totalRelicFavorGained);
@@ -158,6 +173,7 @@ export const createFinalizeLevelTransition = ({
             level: board.level,
             livesRemaining: lives,
             mistakes: tries,
+            momentumBonus,
             objectiveBonusScore: objectiveBonus,
             perfect,
             rating,
@@ -181,7 +197,7 @@ export const createFinalizeLevelTransition = ({
             bonusRelicPicksNextOffer: relicFavor.bonusRelicPicksNextOffer,
             favorBonusRelicPicksNextOffer: relicFavor.favorBonusRelicPicksNextOffer,
             relicFavorProgress: relicFavor.relicFavorProgress,
-            shopGold: runNonNegativeInteger(run.shopGold) + getShopGoldRewardForFloor(board.level),
+            shopGold: runNonNegativeInteger(run.shopGold) + getShopGoldRewardForFloor(board.level) + momentumBonus.gold,
             shopOffers: run.shopOffers,
             parasiteFloors,
             featuredObjectiveStreak: featuredObjectiveClear.featuredObjectiveStreak,
@@ -198,6 +214,7 @@ export const createFinalizeLevelTransition = ({
             dungeonRun,
             stats: {
                 ...stats,
+                comboShards: applyMomentumBonusShards(stats.comboShards, momentumBonus),
                 totalScore,
                 bestScore,
                 currentLevelScore: scoreGained,

@@ -14,7 +14,10 @@ import {
 import { getSocialPlayScopeRows, SOCIAL_PLAY_SCOPE_DECISION } from './social-play-scope';
 import { isPassAndPlayFinalFloor, PASS_AND_PLAY_FLOORS, resolvePassAndPlayOutcome } from './pass-and-play-rules';
 import { labelsAreAmbiguous } from '../../scripts/control-label-ambiguity';
-import { PLAYABLE_PATH_FIXTURE_IDS } from './playable-path-fixtures';
+import { PLAYABLE_PATH_FIXTURE_IDS, createPlayablePathFixture } from './playable-path-fixtures';
+import { resolveChunkBreak } from './chunk-break-rules';
+import { EXIT_PAIR_KEY } from './dungeon-rules';
+import { assertCascadeBalanceWithinBands, runCascadeBalanceSimulation } from './cascade-balance-simulation';
 import { DECLARED_SURFACES, findBrokenSurfaces, findUnvisitedSurfaces } from '../../scripts/e2e-surface-coverage';
 import { chargeFieldsWithATool } from '../renderer/components/runShellToolCatalog';
 import { STEAM_ACHIEVEMENT_API_NAME } from './steam-achievement-api-names';
@@ -85,6 +88,43 @@ import {
  * says so, and a check cannot be quietly orphaned when its row is deleted.
  */
 const VERIFIERS: Record<string, () => void> = {
+    'chain-chunk-fever': () => {
+        // A generated floor: every tile has a suit and both halves of a pair share it.
+        const generated = createNewRun(0, { gameMode: 'endless', runSeed: 42_001 }).board!;
+        const suitByPair = new Map<string, string | undefined>();
+        for (const tile of generated.tiles) {
+            expect(tile.suit, `${tile.id} has no suit`).toBeDefined();
+            const seen = suitByPair.get(tile.pairKey);
+            if (seen !== undefined) {
+                expect(tile.suit, `${tile.pairKey} halves disagree on suit`).toBe(seen);
+            }
+            suitByPair.set(tile.pairKey, tile.suit);
+        }
+        // The clumped board: a Fever chain on the first pair breaks its clump and the halo, and
+        // an exit dropped into the clump stays on the board.
+        const fixture = createPlayablePathFixture('cascadeClump').run!;
+        const withExit = {
+            ...fixture.board!,
+            tiles: fixture.board!.tiles.map((tile, index) =>
+                index === 1 ? { ...tile, pairKey: EXIT_PAIR_KEY, dungeonCardKind: 'exit' as const } : tile
+            )
+        };
+        const broken = resolveChunkBreak({ board: withExit, run: fixture, matchedTileIds: ['em1-A', 'em1-B'], chain: 8 });
+        expect(broken.tier).toBe('fever');
+        expect(broken.brokenPairKeys.length).toBeGreaterThan(0);
+        expect(broken.board.tiles.find((tile) => tile.pairKey === EXIT_PAIR_KEY)?.state).toBe('hidden');
+    },
+    'cascade-balance': () => {
+        const report = runCascadeBalanceSimulation({
+            seeds: [42_001, 8_675_309, 1_234],
+            floors: Array.from({ length: 18 }, (_unused, index) => index + 1),
+            missRates: [0, 0.1, 0.25]
+        });
+        expect(assertCascadeBalanceWithinBands(report).issues).toEqual([]);
+        for (const band of report.bands) {
+            expect(band.ratingDriftFloors, `miss ${band.missRate}`).toBe(0);
+        }
+    },
     'achievement-api-names': () => {
         // The map is what `achievement.activate` is handed. An id the game can award but the map
         // does not carry would throw at the Steam boundary on the one moment that matters.

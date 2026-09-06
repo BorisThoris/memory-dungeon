@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { Tile } from './contracts';
+import type { Tile, FloorArchetypeId } from './contracts';
 import { buildBoard } from './board-build-rules';
 import { createNewRun } from './run-creation-rules';
 import { GAME_RULES_VERSION } from './contracts';
@@ -8,8 +8,11 @@ import {
     assignSuitsToTiles,
     dealBoardSuits,
     dealTilesInClumps,
+    getSuitDealProfile,
     isLayoutPinnedTile,
+    largestHiddenSuitClump,
     sameSuitNeighbourRate,
+    SUIT_DEAL_PROFILE_BY_ARCHETYPE,
     TILE_SUIT_CATALOG,
     TILE_SUITS
 } from './tile-suit-rules';
@@ -137,5 +140,54 @@ describe('a built board', () => {
         const replay = buildBoard(3, { runSeed: 77, runRulesVersion: GAME_RULES_VERSION, gameMode: 'endless' });
         expect(replay.tiles.findIndex((tile) => tile.pairKey === EXIT_PAIR_KEY)).toBe(exitIndex);
         expect(dealBoardSuits(board.tiles, board.columns, 77, 3, GAME_RULES_VERSION)[exitIndex]?.pairKey).toBe(EXIT_PAIR_KEY);
+    });
+});
+
+describe('the deal profile', () => {
+    it('is named for every archetype, so a new floor kind cannot fall through to a shape nobody chose', () => {
+        const ids: FloorArchetypeId[] = [
+            'survey_hall', 'speed_trial', 'treasure_gallery', 'shadow_read', 'anchor_chain', 'trap_hall',
+            'script_room', 'rush_recall', 'parasite_tithe', 'spotlight_hunt', 'breather'
+        ];
+        for (const id of ids) {
+            expect(['clumped', 'scattered', 'two_suit']).toContain(SUIT_DEAL_PROFILE_BY_ARCHETYPE[id]);
+        }
+        expect(Object.keys(SUIT_DEAL_PROFILE_BY_ARCHETYPE).sort()).toEqual([...ids].sort());
+        expect(getSuitDealProfile(null)).toBe('clumped');
+        expect(getSuitDealProfile('rush_recall')).toBe('scattered');
+        expect(getSuitDealProfile('spotlight_hunt')).toBe('two_suit');
+    });
+
+    it('scatters a rush floor and clumps a breather, on the same tiles', () => {
+        const tiles = pairs(18);
+        const clumped = dealBoardSuits(tiles, 6, 91, 9, GAME_RULES_VERSION, 'clumped');
+        const scattered = dealBoardSuits(tiles, 6, 91, 9, GAME_RULES_VERSION, 'scattered');
+        expect(sameSuitNeighbourRate({ columns: 6, tiles: clumped })).toBeGreaterThan(
+            sameSuitNeighbourRate({ columns: 6, tiles: scattered }) + 0.15
+        );
+        // Same tiles either way, and both halves of every pair still share a suit.
+        expect(scattered.map((t) => t.id).sort()).toEqual(tiles.map((t) => t.id).sort());
+        for (const tile of scattered) {
+            expect(scattered.find((other) => other.pairKey === tile.pairKey && other.id !== tile.id)?.suit).toBe(tile.suit);
+        }
+    });
+
+    it('deals a spotlight floor in two suits only, still clumped', () => {
+        const tiles = pairs(12);
+        const two = dealBoardSuits(tiles, 6, 5, 12, GAME_RULES_VERSION, 'two_suit');
+        expect(new Set(two.map((t) => t.suit)).size).toBe(2);
+        expect(largestHiddenSuitClump({ columns: 6, tiles: two })?.size).toBeGreaterThanOrEqual(8);
+    });
+
+    it('reads the profile off the built floor: a rush floor opens scattered, a breather clumped', () => {
+        let clumped = 0;
+        let scattered = 0;
+        for (const runSeed of [21, 22, 23, 24]) {
+            const breather = buildBoard(10, { runSeed, runRulesVersion: GAME_RULES_VERSION, gameMode: 'endless', floorArchetypeId: 'breather' });
+            const rush = buildBoard(10, { runSeed, runRulesVersion: GAME_RULES_VERSION, gameMode: 'endless', floorArchetypeId: 'rush_recall' });
+            clumped += sameSuitNeighbourRate(breather);
+            scattered += sameSuitNeighbourRate(rush);
+        }
+        expect(clumped / 4).toBeGreaterThan(scattered / 4 + 0.1);
     });
 });
