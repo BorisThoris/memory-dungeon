@@ -198,3 +198,28 @@ Each generation is its own commit, verified and pushed. Order is chosen so that 
 - **Colour-blind safety.** Rune per suit, not colour alone; verified with the trait palette's existing contrast audit.
 - **Determinism / replay.** Clustered dealing and region breaks are seeded and pure; the endless simulation's core-replay check (Gen 17) catches any drift.
 - **Score inflation breaking records.** Per-mode records (Gen 71) mean a new scoring regime is a new record season; the balance pass sets the bands.
+
+## 6. Delivered against the brief
+
+The brief asked for five things. Where each one landed, by generation and by file, so the answer is checkable rather than claimed.
+
+| Ask | Where it landed |
+|---|---|
+| **Combo-break cards; huge same-type chunks break away together and disappear when matched.** | Suits on every tile (Gen 117, `tile-suit-rules.ts`); a chain that climbs Clean → Sharp → Fever on momentum (Gen 118, `chain-tier-rules.ts`); the chunk break that removes the connected same-suit region around a match, the whole region at Sharp and the halo at Fever (Gen 118–121, `chunk-break-rules.ts`); the shatter wave, tier names and Fever pulse (Gen 119, `tileBoardBreakWave.ts`, `chainBeat.ts`); the style line naming what each break did (Gen 124); Extreme Fever at the floor's end (Gen 125); the feel layer — layered shatter audio, the Fever music duck, controller rumble (Gen 128, `gameSfx.ts`, `feverDuck.ts`, `gamepadRumble.ts`). |
+| **Recalculate every card's proximity tip whenever cards disappear or break away.** | The proximity recompute in the turn path after a chunk (Gen 118, `board-turn-transition.ts`); a removed tile is never a partner and distance is measured across the gap, proven where the player reads it — the tip, the DOM tree and the recorded play-through (Gen 123, `pair-proximity-rules.ts`, `tileBoardDomAccessibility.ts`, `e2e/cascade-chain.spec.ts`). |
+| **Weave the dungeon into the Peggle / bubble craze so it makes sense.** | Exit, keys, levers, locks, shrines, gateways, shops and rooms never break; treasure spills with the chunk and pays as matched; a chunk finishes a warden and lands a thud; floor archetypes deal clumped, scattered or two-suit boards (Gen 120, 126, 128; `chunk-break-rules.ts`, `tile-suit-rules.ts`); three relics that touch the cascade, drafted in the run (Gen 130); chunk pairs and best chains credited per seat at a shared table and carried by the daily post and the quest ladder (Gen 131). |
+| **Delve into the franchises and see what makes them tick.** | Section 1 above — Puzzle Bobble's leverage and drop, Peggle's multiplier ladder and last peg, Zuma's chains of chains, Bejeweled's gravity and Sugar Crush — and section 2's translation of each into a memory game, with 2.7 saying what was deliberately left out. The aim guide a bubble shooter draws became the clump read (Gen 127, `clump-read-rules.ts`), which follows the pointer and keyboard focus and names the pairs a Sharp break would take. |
+| **A polished, satisfying Steam game: elaborate, add tasks.** | Balance against a simulation with stated bands rather than by feel (Gen 121, `cascade-balance-simulation.ts`, `yarn sim:cascade --check`); records, four achievements with Steam API names, per-mode chain records (Gen 129); Codex entries and self-proving release-checklist rows (Gen 122, 131); the fit contract, reachability gate and review captures at desktop, Deck and phone (Gen 122, 132); the build plan in section 4 with every generation's row, and the next batch in section 7. |
+
+## 7. Next batch
+
+What the sweep saw and did not fix, plus what the franchises still have to teach. Each is a task on the board.
+
+| Gen | Task | Why |
+|---|---|---|
+| **133** | A Fever meter on the HUD: a bar under the Chain stat that fills toward the next rung and flashes at Fever. | Peggle's multiplier is legible at a glance; ours is a number and a tier name, and the momentum hint is on hover only. The ladder should be seen filling. |
+| **134** | The phone board fills its stage in portrait. | On a 390px phone the 6×4 board sits in a third of the stage with empty bands above and below; the tiles are small where the suits and clump rings need to read. |
+| **135** | Phone chrome: the dock's Shuffle and Swap labels touch at 390px, and the Mystery door's risk line clips under the floor-clear actions. | Both are visible in the review captures and neither is caught by a gate, which means the gate is missing a rule too. |
+| **136** | A retry after a setup run keeps the whole setup, not only the vow or the wild flag. | Restart precedence predates the setup sheet: the clock and the pace are dropped on Play again. |
+| **137** | The drop: a clump cut off from every other tile of its suit by removals breaks on its own at Sharp or better, the way a bubble cluster falls once nothing holds it. | Section 1.1's ingredient with no translation yet. It makes the last pairs of a suit a target rather than a chore. |
+| **138** | A recorded play-through with the magpie on the floor (task 114 / #156). | The one resident whose theft interacts with a chunk's spill and has no e2e proof. |
