@@ -291,8 +291,8 @@
     {
       "path": "docs/CHAIN_CHUNK_FEVER_DESIGN.md",
       "category": "documentation",
-      "bytes": 40081,
-      "sha256": "1b6994e97549ccf12a0d35d7588a2ce3cc93e036b0111a5304aa999cd7dd428c"
+      "bytes": 40394,
+      "sha256": "b4dd0b90494a461fdbef8d35d046bc9fefe070b5643ad73d5b54dcdbadddf203"
     },
     {
       "path": "docs/COLLECTIBLE_SYSTEM.md",
@@ -10185,8 +10185,8 @@
     {
       "path": "src/renderer/styles/notificationsGame.css",
       "category": "source",
-      "bytes": 4797,
-      "sha256": "8b56d89d03bbdfd9cc00761b686bbdab186dc2a16adb523da96b86da4b394c5a"
+      "bytes": 5347,
+      "sha256": "d6f2c7c73f156dfed9eda8503ddca9b53b66e8d1379d05fcb8fe7feb565ff734"
     },
     {
       "path": "src/renderer/styles/theme.parity.test.ts",
