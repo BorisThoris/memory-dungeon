@@ -11,14 +11,21 @@ export async function dismissStartupIntro(page: Page): Promise<void> {
         // The intro can close on its own between the visibility check and the click. A dispatch
         // with no timeout then waits for a dialog that is never coming back and eats the whole
         // test budget; give it a beat and fall through to the poll below, which is the real check.
+        // The fallback needs the same bound: `locator.evaluate` waits for its element with no
+        // limit of its own, and a trace of the "main menu hang" showed it waiting 410 seconds on
+        // a dialog that had already gone.
         await intro
             .dispatchEvent('click', undefined, { timeout: 5_000 })
             .catch(
                 async () =>
                     await intro
-                        .evaluate((el) => {
-                            (el as HTMLElement).click();
-                        })
+                        .evaluate(
+                            (el) => {
+                                (el as HTMLElement).click();
+                            },
+                            undefined,
+                            { timeout: 2_000 }
+                        )
                         .catch(() => {})
             );
     }

@@ -359,7 +359,8 @@ export type AchievementId =
     | 'ACH_FIRST_FEVER'
     | 'ACH_CHUNK_SIX'
     | 'ACH_EXTREME_FEVER'
-    | 'ACH_WARDEN_BY_CHUNK';
+    | 'ACH_WARDEN_BY_CHUNK'
+    | 'ACH_NOTHING_HELD_IT';
 
 export interface DebugFlags {
     showDebugTools: boolean;
@@ -434,6 +435,8 @@ export interface Tile {
     suit?: TileSuit;
     /** True on a tile a chunk break took off the board, so it can be told apart from a defeated enemy. */
     brokenByChunk?: boolean;
+    /** The tier the break that took this tile landed at, so the shatter can play a Fever break slower. */
+    brokenAtTier?: 'clean' | 'sharp' | 'fever';
     /** Visual variant index for atomic-pairs styling (optional). */
     atomicVariant?: number;
     /** If set, matching this pair claims a pickup reward on eligible floors. */
@@ -1193,6 +1196,9 @@ export interface RunState {
     bestChainThisRun: number;
     sharpFloorsThisRun: number;
     feverFloorsThisRun: number;
+    /** The drop: pairs that fell because a break left their suit with too few to hold, this floor and this run's count of drops. */
+    chunkPairsDroppedThisFloor: number;
+    chunkDropsThisRun: number;
     /** Pairs the magpie has taken back on this floor. */
     magpieTheftsThisFloor: number;
     /** Times a guard token drove the magpie off on this floor. */

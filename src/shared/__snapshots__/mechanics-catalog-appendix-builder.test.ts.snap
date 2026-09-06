@@ -13,7 +13,7 @@ exports[`mechanics-catalog-appendix-builder > matches stable appendix snapshot 1
 | \`ENCYCLOPEDIA_VERSION\` | 26 |
 | Relic entries (\`RELIC_CATALOG\`) | 25 |
 | Mutator entries (\`MUTATOR_CATALOG\`) | 13 |
-| Achievement entries (\`ACHIEVEMENT_CATALOG\`) | 24 |
+| Achievement entries (\`ACHIEVEMENT_CATALOG\`) | 25 |
 | \`GameMode\` codex ids | daily, endless, gauntlet, meditation, puzzle |
 "
 `;

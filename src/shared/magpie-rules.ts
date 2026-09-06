@@ -158,7 +158,7 @@ export const applyMagpieTheft = (board: BoardState, theft: MagpieTheft): BoardSt
             return;
         }
         // Back on the floor, so no longer a chunk casualty — the bird cannot take it twice for free.
-        tiles[to] = { ...stolen, state: 'hidden', brokenByChunk: undefined };
+        tiles[to] = { ...stolen, state: 'hidden', brokenByChunk: undefined, brokenAtTier: undefined };
         if (to !== from) {
             tiles[from] = displaced;
         }

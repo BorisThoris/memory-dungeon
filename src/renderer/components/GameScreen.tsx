@@ -264,6 +264,8 @@ const getClearLifeBonusLabel = (result: NonNullable<RunState['lastLevelResult']>
 
 /** How long the stage carries the break pulse; matches the CSS animation. */
 const BREAK_PULSE_MS = 720;
+/** A Fever break is held longer: the stage pushes in and stays for the slowed shatter wave. */
+const FEVER_BREAK_PULSE_MS = 1100;
 /** The breath before the floor-clear dialog on the last pair. */
 export const LAST_PAIR_HOLD_MS = 650;
 
@@ -1196,7 +1198,10 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         }
         // The pad shakes with the stage: same event, same tier, once. Reduce motion turns it off.
         rumbleForBreak(pulseTier, reduceMotion);
-        const clear = window.setTimeout(() => setExpiredPulseEventId(pulseEventId), BREAK_PULSE_MS);
+        const clear = window.setTimeout(
+            () => setExpiredPulseEventId(pulseEventId),
+            pulseTier === 'fever' ? FEVER_BREAK_PULSE_MS : BREAK_PULSE_MS
+        );
         return () => window.clearTimeout(clear);
     }, [pulseEventId, pulsePairs, pulseTier, reduceMotion]);
 

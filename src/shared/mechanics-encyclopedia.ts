@@ -410,6 +410,11 @@ export const ACHIEVEMENT_CATALOG: Record<AchievementId, AchievementCodexEntry> =
         id: 'ACH_WARDEN_BY_CHUNK',
         title: 'Buried',
         description: 'Finish a warden with a chunk break rather than a match.'
+    },
+    ACH_NOTHING_HELD_IT: {
+        id: 'ACH_NOTHING_HELD_IT',
+        title: 'Nothing held it',
+        description: 'Watch a suit\'s last pairs drop with a break, without a match touching them.'
     }
 };
 
@@ -919,7 +924,10 @@ export const ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS: readonly EncyclopediaTopic[] 
             'Treasure inside a chunk spills and pays as if you had matched it. Broken pairs score less than matched ones and give no recall credit — memory still pays best — but they drop combo ' +
             'shards and clear the floor faster. A miss halves the chain and puts the fire out. ' +
             'A break with a shape gets a name on the run line: a partner taken from across the board, a halo, a treasure spill, a clean sweep of a suit. ' +
-            'Clear the floor with momentum still standing and the end pays out: a gold at Clean and Sharp, a shard and two gold at Fever — Extreme Fever. Never score, never rating.'
+            'Clear the floor with momentum still standing and the end pays out: a gold at Clean and Sharp, a shard and two gold at Fever — Extreme Fever. Never score, never rating. ' +
+            'The bar under the Chain number is the ladder itself: ticks at Clean and Sharp, full at Fever, red for a beat when a chain drops. ' +
+            'The drop: a Sharp or Fever break that leaves a suit with two plain pairs or fewer takes them too, wherever they sit — nothing holds them. ' +
+            'A Fever break plays slower and the stage leans in while it does.'
     },
     {
         id: 'chunk_and_the_dungeon',

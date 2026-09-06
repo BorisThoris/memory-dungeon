@@ -248,7 +248,12 @@
         padding: 0.45rem 0.6rem;
     }
 
+    /*
+     * The dock wants room for a skip and a claim side by side; the left column is 20rem and
+     * the two buttons need about 22, so the claim sat on top of the skip. The footer takes the
+     * whole width instead - it is its own row either way, so the height is unchanged.
+     */
     .actions {
-        grid-column: 1;
+        grid-column: 1 / -1;
     }
 }

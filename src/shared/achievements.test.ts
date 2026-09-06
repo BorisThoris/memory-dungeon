@@ -315,12 +315,13 @@ describe('the chain loop achievements', () => {
         expect(quiet).not.toContain('ACH_CHUNK_SIX');
         expect(quiet).not.toContain('ACH_EXTREME_FEVER');
         expect(quiet).not.toContain('ACH_WARDEN_BY_CHUNK');
+        expect(quiet).not.toContain('ACH_NOTHING_HELD_IT');
         const loud = evaluateAchievementUnlocks(
             {
                 ...base,
                 feverBreaksThisRun: 1,
                 biggestChunkPairs: CHUNK_SIX_PAIRS,
-                chunkWardenKills: 1,
+                chunkWardenKills: 1, chunkDropsThisRun: 1,
                 lastLevelResult: {
                     level: 3,
                     scoreGained: 100,
@@ -335,6 +336,6 @@ describe('the chain loop achievements', () => {
             },
             save
         );
-        expect(loud).toEqual(expect.arrayContaining(['ACH_FIRST_FEVER', 'ACH_CHUNK_SIX', 'ACH_EXTREME_FEVER', 'ACH_WARDEN_BY_CHUNK']));
+        expect(loud).toEqual(expect.arrayContaining(['ACH_FIRST_FEVER', 'ACH_CHUNK_SIX', 'ACH_EXTREME_FEVER', 'ACH_WARDEN_BY_CHUNK', 'ACH_NOTHING_HELD_IT']));
     });
 });

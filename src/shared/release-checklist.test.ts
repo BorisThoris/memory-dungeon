@@ -24,6 +24,7 @@ import { labelsAreAmbiguous } from '../../scripts/control-label-ambiguity';
 import { PLAYABLE_PATH_FIXTURE_IDS, createPlayablePathFixture } from './playable-path-fixtures';
 import { resolveChunkBreak } from './chunk-break-rules';
 import { EXIT_PAIR_KEY } from './dungeon-rules';
+import { makeBoard, makeTile } from './test/game-fixtures';
 import { assertCascadeBalanceWithinBands, runCascadeBalanceSimulation } from './cascade-balance-simulation';
 import { DECLARED_SURFACES, findBrokenSurfaces, findUnvisitedSurfaces } from '../../scripts/e2e-surface-coverage';
 import { chargeFieldsWithATool } from '../renderer/components/runShellToolCatalog';
@@ -131,6 +132,24 @@ const VERIFIERS: Record<string, () => void> = {
         for (const band of report.bands) {
             expect(band.ratingDriftFloors, `miss ${band.missRate}`).toBe(0);
         }
+    },
+    'the-drop': () => {
+        const suit = (id: string) => (['A', 'B', 'C'].includes(id[0]!) ? 'ember' : 'tide');
+        const tile = (id: string) => makeTile(id, id[0]!, id[0]!, { suit: suit(id) });
+        const cutOff = [tile('A1'), tile('B1'), tile('D1'), tile('C1'), tile('A2'), tile('B2'), tile('E1'), tile('C2'), tile('D2'), tile('F1'), tile('E2'), tile('F2')];
+        const board = makeBoard(cutOff, { columns: 4, rows: 3, level: 3 });
+        const run = createNewRun(0, { gameMode: 'endless', runSeed: 7 });
+        const sharp = resolveChunkBreak({ board, run, matchedTileIds: ['A1', 'A2'], chain: 6 });
+        expect(sharp.droppedPairKeys, 'the cut-off pair drops at Sharp').toEqual(['C']);
+        const clean = resolveChunkBreak({ board, run, matchedTileIds: ['A1', 'A2'], chain: 3 });
+        expect(clean.droppedPairKeys, 'Clean does not drop').toEqual([]);
+        const withExit = makeBoard(
+            cutOff.map((t) => (t.id === 'C2' ? { ...t, pairKey: EXIT_PAIR_KEY, dungeonCardKind: 'exit' as const } : t)),
+            { columns: 4, rows: 3, level: 3 }
+        );
+        const held = resolveChunkBreak({ board: withExit, run, matchedTileIds: ['A1', 'A2'], chain: 6 });
+        expect(held.droppedPairKeys, 'a card with a job holds the suit').toEqual([]);
+        expect(held.board.tiles.find((t) => t.pairKey === EXIT_PAIR_KEY)?.state).toBe('hidden');
     },
     'chain-in-daily-and-shared-play': () => {
         // The summary carries the chain's records, and both share strings read them.

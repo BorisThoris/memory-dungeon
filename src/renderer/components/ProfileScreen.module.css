@@ -323,3 +323,50 @@
         gap: 0.5rem;
     }
 }
+
+/*
+ * Short landscape: the record grid gets one row about 48px tall between the stat tiles and the
+ * pager, and a three-line progress card lost its third line under the cell's edge. The kicker
+ * ("Daily") is the line to lose - the title names the archive - and the card tightens to two.
+ */
+@media (max-height: 560px) and (min-width: 700px) {
+    .progressKicker {
+        display: none;
+    }
+
+    .progressCard {
+        gap: 0.1rem;
+        padding: 0.3rem 0.6rem;
+    }
+
+    .progressMeta {
+        font-size: 0.74rem;
+        line-height: 1.25;
+    }
+
+    /*
+     * The stat tiles are the other 68px. Stacked, a label like "Run history rows" wraps under
+     * its number and every tile takes the tallest one's height; laid out as a strip - label
+     * left, number right - the row is half that, and the half goes to the record grid, whose
+     * status line ("In progress · Today ... · no local clear recorded yet") wraps to two lines
+     * in a 250px column and lost the second under the cell's edge.
+     */
+    .summaryCell {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.4rem;
+        padding: 0.3rem 0.5rem;
+    }
+
+    .summaryCell dt {
+        font-size: 0.68rem;
+        letter-spacing: 0.06em;
+        line-height: 1.15;
+    }
+
+    .summaryCell dd {
+        font-size: 1.05rem;
+        flex: 0 0 auto;
+    }
+}

@@ -1,4 +1,4 @@
-import { render, screen, within } from '@testing-library/react';
+import { act, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 import { createNewRun, finishMemorizePhase } from '../../shared/game-core';
@@ -46,6 +46,52 @@ describe('RunShell', () => {
         expect(chain).toHaveTextContent(/Sharp/);
         expect(chain).toHaveAttribute('title', expect.stringMatching(/momentum 5/));
         expect(chain).toHaveAttribute('title', expect.stringMatching(/Sharp from 5, Fever from 8/));
+        // The meter reads the same ladder: momentum 5 of 8, Sharp, not yet full.
+        const meter = screen.getByTestId('hud-chain-meter');
+        expect(meter).toHaveAttribute('data-chain-tier', 'sharp');
+        expect(meter).toHaveAttribute('data-meter-fill', '0.625');
+        expect(meter).toHaveAttribute('data-meter-full', 'false');
+        expect(meter).toHaveAttribute('aria-label', 'Fever meter: momentum 5 of 8.');
+    });
+
+    it('drains the meter for a beat when a chain of Clean or better drops to nothing', () => {
+        vi.useFakeTimers();
+        try {
+            const base = playingRun();
+            const chained: RunState = {
+                ...base,
+                board: { ...base.board!, pairCount: 12 },
+                stats: { ...base.stats, currentStreak: 4 }
+            };
+            const { rerender } = render(<RunShell gauntletRemainingMs={null} onPause={vi.fn()} run={chained} tools={[]} />);
+            expect(screen.getByTestId('hud-chain-meter')).toHaveAttribute('data-meter-drop', 'false');
+            rerender(<RunShell gauntletRemainingMs={null} onPause={vi.fn()} run={{ ...chained, stats: { ...chained.stats, currentStreak: 0 } }} tools={[]} />);
+            act(() => {
+                vi.advanceTimersByTime(1);
+            });
+            expect(screen.getByTestId('hud-chain-meter')).toHaveAttribute('data-meter-drop', 'true');
+            act(() => {
+                vi.advanceTimersByTime(800);
+            });
+            expect(screen.getByTestId('hud-chain-meter')).toHaveAttribute('data-meter-drop', 'false');
+        } finally {
+            vi.useRealTimers();
+        }
+    });
+
+    it('fills the Fever meter and keeps it full past the rung', () => {
+        const base = playingRun();
+        const run: RunState = {
+            ...base,
+            board: { ...base.board!, pairCount: 12 },
+            chunkPairsThisChain: 4,
+            stats: { ...base.stats, currentStreak: 6 }
+        };
+        render(<RunShell gauntletRemainingMs={null} onPause={vi.fn()} run={run} tools={[]} />);
+        const meter = screen.getByTestId('hud-chain-meter');
+        expect(meter).toHaveAttribute('data-meter-full', 'true');
+        expect(meter).toHaveAttribute('data-meter-fill', '1.000');
+        expect(meter).toHaveAttribute('aria-label', 'Fever meter full: momentum 10.');
     });
 
     it('names the run mode, so a Practice run is not mistaken for a Classic one', () => {

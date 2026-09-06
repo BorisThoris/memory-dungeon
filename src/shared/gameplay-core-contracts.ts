@@ -1564,10 +1564,13 @@ export const boardTurnAnnouncementFactsSchema = z
         chunkPairsBrokenAfter: z.number().int().nonnegative().default(0),
         chainAfter: z.number().int().nonnegative().default(0),
         chainTierAfter: z.enum(['none', 'clean', 'sharp', 'fever']).default('none'),
+
+        chainTierBefore: z.enum(['none', 'clean', 'sharp', 'fever']).default('none'),
         chunkPartnerSpanMax: z.number().int().nonnegative().default(0),
         chunkHaloPairs: z.number().int().nonnegative().default(0),
         chunkTreasuresSpilled: z.number().int().nonnegative().default(0),
         chunkSuitCleared: z.boolean().default(false),
+        chunkDroppedPairs: z.number().int().nonnegative().default(0),
         magpieTheftsBefore: z.number().int().nonnegative().default(0),
         magpieTheftsAfter: z.number().int().nonnegative().default(0),
         magpieScaredOffBefore: z.number().int().nonnegative().default(0),

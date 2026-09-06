@@ -5,6 +5,14 @@ import { getSafeBoardColumns } from '../../shared/board-grid-dimensions';
 export const BREAK_WAVE_SECONDS_PER_STEP = 0.07;
 /** No tile waits longer than this, whatever the board size; past it the wave reads as lag. */
 export const BREAK_WAVE_MAX_DELAY_SECONDS = 0.6;
+/**
+ * Hit-stop. Peggle slows time on the last peg; a Fever break here played at Clean's speed. At
+ * Fever the wave spreads slower and is allowed to run longer, so the biggest break of the floor
+ * is the one the player gets to watch. Bounded so a turn never feels slow: a full-width Fever
+ * wave is still under a second.
+ */
+export const FEVER_WAVE_SLOW = 1.7;
+export const FEVER_WAVE_MAX_DELAY_SECONDS = 0.95;
 
 /**
  * How long a removed tile waits before it bursts and leaves.
@@ -38,6 +46,9 @@ export const getBreakWaveDelaySec = (board: Pick<BoardState, 'columns' | 'tiles'
     });
     if (!Number.isFinite(nearest)) {
         return 0;
+    }
+    if (tile.brokenAtTier === 'fever') {
+        return Math.min(FEVER_WAVE_MAX_DELAY_SECONDS, nearest * BREAK_WAVE_SECONDS_PER_STEP * FEVER_WAVE_SLOW);
     }
     return Math.min(BREAK_WAVE_MAX_DELAY_SECONDS, nearest * BREAK_WAVE_SECONDS_PER_STEP);
 };

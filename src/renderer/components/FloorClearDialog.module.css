@@ -314,6 +314,15 @@
     }
 
     /*
+     * The room's name is the line a phone can spare: the door's title says the route, the
+     * reward line says what it pays, and the risk line is the one that was sliding under the
+     * dialog's actions on the third door. The name is still in the door's accessible label.
+     */
+    .doorRoom {
+        display: none;
+    }
+
+    /*
      * The recap lines give way to the third door. The chain's line is two rows at this width
      * and the run bar's chain stat and the next floor's beat carry the same numbers; the
      * objective and the resident's aside are read again on the next floor. What stays is money

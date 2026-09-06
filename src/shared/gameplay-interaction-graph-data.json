@@ -1322,7 +1322,9 @@
                 "hazardTileTriggersThisFloor",
                 "safeHazardWardsUsedThisFloor",
                 "dungeonEnemiesDefeatedThisFloor",
-                "enemyHazardsDefeatedThisFloor"
+                "enemyHazardsDefeatedThisFloor",
+                "chunkPairsDroppedThisFloor",
+                "chunkDropsThisRun"
             ],
             "writes": [
                 "sessionStats",
@@ -5456,7 +5458,9 @@
                 "src/shared/chunk-break-rules.ts",
                 "src/shared/tile-suit-rules.ts",
                 "src/shared/board-turn-transition.ts",
-                "src/renderer/copy/chainBeat.ts"
+                "src/renderer/copy/chainBeat.ts",
+                "src/renderer/components/tileBoardBreakWave.ts",
+                "src/renderer/components/RunShell.tsx"
             ],
             "reads": [
                 "currentStreak",
@@ -5473,7 +5477,9 @@
                 "shopGold",
                 "comboShards",
                 "chunkPairsThisChain",
-                "feedbackLines"
+                "feedbackLines",
+                "chunkPairsDroppedThisFloor",
+                "chunkDropsThisRun"
             ],
             "enables": [
                 "objective.floor_clear",
@@ -5487,13 +5493,16 @@
                 "exit-key-lever-lock-shrine-gateway-shop-room-never-break",
                 "chain-gated-no-recall-credit",
                 "rating-unmoved-by-chunks",
-                "floor-relative-rungs"
+                "floor-relative-rungs",
+                "the-drop-holds-on-jobs"
             ],
             "tests": [
                 "src/shared/chunk-break-rules.test.ts",
                 "src/shared/chain-tier-rules.test.ts",
                 "src/shared/cascade-balance-simulation.test.ts",
-                "src/shared/release-checklist.test.ts"
+                "src/shared/release-checklist.test.ts",
+                "src/renderer/components/RunShell.test.tsx",
+                "src/renderer/components/tileBoardBreakWave.test.ts"
             ]
         }
     ],

@@ -8,6 +8,7 @@ import {
     chunkBreakComboShards,
     chunkBreakScore,
     findSuitRegion,
+    DROP_MAX_PAIRS,
     MAGPIE_LEDGER_GOLD_MULTIPLIER,
     resolveChunkBreak,
     tileCanBreakInChunk
@@ -215,5 +216,54 @@ describe('relics that touch the cascade', () => {
         expect(ledger.treasureGold).toBe(plain.treasureGold * MAGPIE_LEDGER_GOLD_MULTIPLIER);
         expect(ledger.score).toBe(plain.score);
         expect(ledger.brokenPairKeys).toEqual(plain.brokenPairKeys);
+    });
+});
+
+describe('the drop', () => {
+    /*
+     * The same suits, laid so C is cut off from A and B by tide:
+     *
+     *   A1 B1 D1 C1
+     *   A2 B2 E1 C2
+     *   D2 F1 E2 F2
+     *
+     * Sharp on A takes B through the region and leaves the ember suit with one pair, C, that
+     * touches nothing ember. Nothing holds it: it drops with the break.
+     */
+    const cutOff = (): Tile[] => [
+        tile('A1'), tile('B1'), tile('D1'), tile('C1'),
+        tile('A2'), tile('B2'), tile('E1'), tile('C2'),
+        tile('D2'), tile('F1'), tile('E2'), tile('F2')
+    ];
+
+    it('takes the last pairs of the suit when a Sharp break leaves too few to hold', () => {
+        const result = resolveChunkBreak({ board: board(cutOff()), run: endless, matchedTileIds: ['A1', 'A2'], chain: 6 });
+        expect(result.tier).toBe('sharp');
+        expect(result.droppedPairKeys).toEqual(['C']);
+        expect(result.brokenPairKeys).toEqual(['B', 'C']);
+        expect(result.board.tiles.filter((t) => t.pairKey === 'C').every((t) => t.state === 'removed')).toBe(true);
+        expect(DROP_MAX_PAIRS).toBe(2);
+    });
+
+    it('does not drop at Clean: the drop is a Sharp reward, not a rule about neighbours', () => {
+        const result = resolveChunkBreak({ board: board(cutOff()), run: endless, matchedTileIds: ['A1', 'A2'], chain: 3 });
+        expect(result.droppedPairKeys).toEqual([]);
+        expect(result.brokenPairKeys).toEqual(['B']);
+    });
+
+    it('holds when a remaining pair has a job of its own, or when too many remain', () => {
+        const withExit = cutOff().map((t) => (t.id === 'C2' ? { ...t, dungeonCardKind: 'exit' as const } : t));
+        expect(
+            resolveChunkBreak({ board: board(withExit), run: endless, matchedTileIds: ['A1', 'A2'], chain: 6 }).droppedPairKeys
+        ).toEqual([]);
+        // Three ember pairs left standing is a clump, not a remnant: G and H join C, all cut off.
+        const crowded = cutOff().map((t) =>
+            t.id === 'D1' ? tile('G1', { suit: 'ember' }) : t.id === 'D2' ? tile('G2', { suit: 'ember' }) : t
+        );
+        const moreEmber = crowded.map((t) =>
+            t.id === 'F1' ? tile('H1', { suit: 'ember' }) : t.id === 'F2' ? tile('H2', { suit: 'ember' }) : t
+        );
+        const result = resolveChunkBreak({ board: board(moreEmber), run: endless, matchedTileIds: ['A1', 'A2'], chain: 6 });
+        expect(result.droppedPairKeys).toEqual([]);
     });
 });

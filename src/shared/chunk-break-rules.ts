@@ -33,6 +33,13 @@ import type { FindableKind } from './contracts';
 export const TUNING_FORK_CLEAN_DEPTH = 2;
 /** Magpie's Ledger: what spilled treasure gold is multiplied by. */
 export const MAGPIE_LEDGER_GOLD_MULTIPLIER = 2;
+/**
+ * The drop. Puzzle Bobble's second ingredient: a cluster falls once nothing holds it. Here a
+ * Sharp or Fever break that leaves the matched suit with this many pairs or fewer, all of them
+ * plain, takes those pairs too — wherever they sit. The last pairs of a suit become a target
+ * instead of a chore, and a break that empties a suit reads as the clean sweep it is.
+ */
+export const DROP_MAX_PAIRS = 2;
 
 export interface ChunkBreakResult {
     board: BoardState;
@@ -51,6 +58,8 @@ export interface ChunkBreakResult {
     /** Treasure pairs the chunk spilled: their gold and how many count as opened. Score is in `score`. */
     treasureGold: number;
     treasuresSpilled: number;
+    /** Pairs that dropped because the break left their suit with too few to hold them; also in `brokenPairKeys`. */
+    droppedPairKeys: string[];
 }
 
 /**
@@ -215,7 +224,8 @@ export const resolveChunkBreak = ({
         enemiesDefeated: 0,
         claimedFindableKind: null,
         treasureGold: 0,
-        treasuresSpilled: 0
+        treasuresSpilled: 0,
+        droppedPairKeys: []
     };
     if (tier === 'none' || run.gameMode === 'meditation') {
         return nothing;
@@ -273,6 +283,32 @@ export const resolveChunkBreak = ({
         brokenPairKeys.push(tile.pairKey);
     }
 
+    // The drop: at Sharp or better, when the break leaves the matched suit with at most
+    // DROP_MAX_PAIRS plain pairs, they fall too. Anything with a job of its own holds the suit up.
+    const droppedPairKeys: string[] = [];
+    const matchedSuit = board.tiles.find((tile) => matchedTileIds.includes(tile.id))?.suit ?? null;
+    if ((tier === 'sharp' || tier === 'fever') && matchedSuit && brokenPairKeys.length > 0) {
+        const matched = new Set(matchedTileIds);
+        const remaining = new Map<string, Tile[]>();
+        for (const tile of board.tiles) {
+            if (tile.suit !== matchedSuit || tile.state !== 'hidden') continue;
+            if (matched.has(tile.id) || brokenPairKeys.includes(tile.pairKey)) continue;
+            remaining.set(tile.pairKey, [...(remaining.get(tile.pairKey) ?? []), tile]);
+        }
+        const holds = [...remaining.entries()].some(
+            ([pairKey, halves]) =>
+                halves.length !== 2 ||
+                !halves.every(tileCanBreakInChunk) ||
+                (board.cursedPairKey != null && pairKey === board.cursedPairKey)
+        );
+        if (!holds && remaining.size > 0 && remaining.size <= DROP_MAX_PAIRS) {
+            for (const pairKey of remaining.keys()) {
+                droppedPairKeys.push(pairKey);
+                brokenPairKeys.push(pairKey);
+            }
+        }
+    }
+
     // Chunks are attacks: every enemy the region reached takes the chunk's size in damage.
     const regionTileIds = new Set(region.map((index) => board.tiles[index]!.id));
     const chunkDamage = Math.max(1, brokenPairKeys.length);
@@ -313,6 +349,7 @@ export const resolveChunkBreak = ({
                           ...tile,
                           state: 'removed' as const,
                           brokenByChunk: true,
+                          brokenAtTier: tier,
                           findableKind: undefined,
                           dungeonCardState: tile.dungeonCardKind ? ('resolved' as const) : tile.dungeonCardState
                       }
@@ -328,6 +365,7 @@ export const resolveChunkBreak = ({
         enemiesDefeated,
         claimedFindableKind,
         treasureGold,
+        droppedPairKeys,
         treasuresSpilled
     };
 };

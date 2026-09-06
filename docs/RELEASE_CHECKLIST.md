@@ -26,6 +26,7 @@ achievement on the Partner site or shoot a trailer.
 |---|---|---|---|
 | Every pair wears a suit, and a chain breaks the clump around a match — treasure spills, the exit never goes | done | the repository | `src/shared/chunk-break-rules.ts` |
 | The cascade is tuned against a simulation with stated bands, and a chunk never moves a rating | done | the repository | `src/shared/cascade-balance-simulation.ts` |
+| A Sharp or Fever break that leaves a suit with two plain pairs or fewer takes them too, and never a card with a job | done | the repository | `src/shared/chunk-break-rules.ts` |
 | The share line and the daily post name the best chain, the quest ladder asks for Sharp floors, and a shared table credits a chunk to the seat that broke it | done | the repository | `src/shared/pass-and-play-rules.ts` |
 
 ## Steamworks

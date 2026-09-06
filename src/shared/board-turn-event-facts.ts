@@ -55,6 +55,8 @@ export interface BoardTurnAnnouncementFacts {
     chainAfter: number;
     /** The break tier that chain reaches on this floor, stamped by the rules so no surface recomputes it. */
     chainTierAfter: 'none' | 'clean' | 'sharp' | 'fever';
+    /** The tier the run held before this turn, so a miss can say what it ended. */
+    chainTierBefore: 'none' | 'clean' | 'sharp' | 'fever';
     /**
      * The shape of this turn's chunk, for the style line (Peggle's "Long shot"): the widest gap
      * between a broken pair's halves in grid steps, pairs the halo took from another suit, treasure
@@ -65,6 +67,8 @@ export interface BoardTurnAnnouncementFacts {
     chunkHaloPairs: number;
     chunkTreasuresSpilled: number;
     chunkSuitCleared: boolean;
+    /** Pairs that dropped with this turn's break because their suit had too few left to hold them. */
+    chunkDroppedPairs: number;
     /** Pairs the magpie took back this floor, before and after this turn. */
     magpieTheftsBefore: number;
     magpieTheftsAfter: number;
@@ -251,7 +255,12 @@ export const getBoardTurnAnnouncementFacts = (
         chunkPairsBrokenAfter: runNonNegativeInteger(after.chunkPairsBrokenThisFloor),
         chainAfter: runNonNegativeInteger(after.stats.currentStreak),
         chainTierAfter: runChainTier(after),
+        chainTierBefore: runChainTier(before),
         ...chunkStyleFacts(before, after, flippedTileIds),
+        chunkDroppedPairs: Math.max(
+            0,
+            runNonNegativeInteger(after.chunkPairsDroppedThisFloor) - runNonNegativeInteger(before.chunkPairsDroppedThisFloor)
+        ),
         magpieTheftsBefore: runNonNegativeInteger(before.magpieTheftsThisFloor),
         magpieTheftsAfter: runNonNegativeInteger(after.magpieTheftsThisFloor),
         magpieScaredOffBefore: runNonNegativeInteger(before.magpieScaredOffThisFloor),

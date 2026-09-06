@@ -81,6 +81,43 @@ export const getChainTier = (chain: number, pairsOnFloor?: number | null): Chain
 export const chainCanBreakChunk = (chain: number, pairsOnFloor?: number | null): boolean =>
     getChainTier(chain, pairsOnFloor) !== 'none';
 
+/**
+ * The ladder as one bar: momentum over the Fever rung, with the Clean and Sharp rungs as ticks.
+ *
+ * Peggle's multiplier reads at a glance because it is a meter, not a number. One bar for the whole
+ * ladder rather than one per rung: a bar that emptied the moment you reached Sharp would read as a
+ * loss at the exact moment the player did something right.
+ */
+export interface ChainMeter {
+    tier: ChainTier;
+    /** 0..1 of the way to Fever; 1 at Fever and beyond. */
+    fill: number;
+    /** Where the Clean and Sharp rungs sit on the bar, 0..1. */
+    ticks: { clean: number; sharp: number };
+    /** True at Fever: the bar is full and stays full until the chain drops. */
+    full: boolean;
+    momentum: number;
+    feverAt: number;
+}
+
+export const chainMeter = (momentum: number, pairsOnFloor?: number | null): ChainMeter => {
+    const depth = runNonNegativeInteger(momentum);
+    const rungs = chainTierRungs(pairsOnFloor);
+    const fever = Math.max(1, rungs.fever);
+    return {
+        tier: getChainTier(depth, pairsOnFloor),
+        fill: Math.min(1, depth / fever),
+        ticks: { clean: Math.min(1, rungs.clean / fever), sharp: Math.min(1, rungs.sharp / fever) },
+        full: depth >= fever,
+        momentum: depth,
+        feverAt: fever
+    };
+};
+
+/** The run's own meter: its momentum against its floor. */
+export const runChainMeter = (run: Pick<RunState, 'stats' | 'chunkPairsThisChain' | 'board'>): ChainMeter =>
+    chainMeter(chainMomentum(run.stats.currentStreak, run.chunkPairsThisChain), run.board?.pairCount ?? null);
+
 /** The next rung, for "one more and the region goes" copy; null at the top. */
 export const nextChainTierAt = (chain: number, pairsOnFloor?: number | null): number | null => {
     const tier = getChainTier(chain, pairsOnFloor);

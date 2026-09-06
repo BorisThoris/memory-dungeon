@@ -42,8 +42,12 @@ export const CHAIN_BEAT_COPY = {
         chunkHaloPairs: number;
         chunkTreasuresSpilled: number;
         chunkSuitCleared: boolean;
+        chunkDroppedPairs?: number;
     }): string | null => {
         const tags: string[] = [];
+        // The drop reads first: a pair that fell with nothing touching it is the surprise.
+        const dropped = style.chunkDroppedPairs ?? 0;
+        if (dropped > 0) tags.push(dropped === 1 ? 'Drop' : `Drop ×${dropped}`);
         if (style.chunkPartnerSpanMax >= CHAIN_STYLE_LONG_SPAN) tags.push('Partner across the board');
         if (style.chunkHaloPairs > 0) tags.push('Halo');
         if (style.chunkTreasuresSpilled > 0) {
@@ -56,6 +60,9 @@ export const CHAIN_BEAT_COPY = {
     momentumHint: (chain: number, cascaded: number, rungs: { sharp: number; fever: number }): string =>
         `${cascaded > 0 ? `Chain ${chain} plus ${cascaded} cascaded, momentum ${chain + cascaded}` : `Chain ${chain}`}. ` +
         `Clean from 3, Sharp from ${rungs.sharp}, Fever from ${rungs.fever} on this floor. A miss halves the chain and puts the fire out.`,
+    /** The meter, for a screen reader: where the momentum stands on the ladder. */
+    meterLabel: (momentum: number, feverAt: number, full: boolean): string =>
+        full ? `Fever meter full: momentum ${momentum}.` : `Fever meter: momentum ${momentum} of ${feverAt}.`,
     codexChainTitle: 'Chain, chunk and Fever',
     codexChainDescription:
         'Every correct match in a row raises your chain, and every pair a chunk breaks adds to its momentum. From chain 3 (Clean) a match also breaks the same-suit tiles beside it, ' +

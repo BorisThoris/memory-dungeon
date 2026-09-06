@@ -19,6 +19,8 @@ export interface TurnMatchProgressResult {
     biggestChunkPairs: number;
     chunkWardenKills: number;
     bestChainThisRun: number;
+    chunkPairsDroppedThisFloor: number;
+    chunkDropsThisRun: number;
     hazardFragileCacheClaimsThisFloor: number;
     hazardTollCachesThisFloor: number;
     hazardFuseCachesThisFloor: number;
@@ -55,6 +57,8 @@ export interface TurnMatchProgressInput {
     chainAfter: number;
     /** Wardens the chunk finished this turn. */
     chunkWardensDefeated: number;
+    /** Pairs that dropped with the break because nothing held them; zero on most turns. */
+    chunkDroppedPairs: number;
     cursedMatchedEarly: boolean;
     findablesClaimedDelta: number;
     routeCardSafeHazardWardCharges: number;
@@ -90,6 +94,7 @@ export const resolveTurnMatchProgress = ({
     chunkTier,
     chainAfter,
     chunkWardensDefeated,
+    chunkDroppedPairs,
     cursedMatchedEarly,
     findablesClaimedDelta,
     routeCardSafeHazardWardCharges,
@@ -158,6 +163,8 @@ export const resolveTurnMatchProgress = ({
         biggestChunkPairs: Math.max(runNonNegativeInteger(run.biggestChunkPairs), runNonNegativeInteger(chunkPairsBroken)),
         chunkWardenKills: runNonNegativeInteger(run.chunkWardenKills) + runNonNegativeInteger(chunkWardensDefeated),
         bestChainThisRun: Math.max(runNonNegativeInteger(run.bestChainThisRun), runNonNegativeInteger(chainAfter)),
+        chunkPairsDroppedThisFloor: runNonNegativeInteger(run.chunkPairsDroppedThisFloor) + runNonNegativeInteger(chunkDroppedPairs),
+        chunkDropsThisRun: runNonNegativeInteger(run.chunkDropsThisRun) + (runNonNegativeInteger(chunkDroppedPairs) > 0 ? 1 : 0),
         hazardFragileCacheClaimsThisFloor:
             runNonNegativeInteger(run.hazardFragileCacheClaimsThisFloor) + (fragileCacheClaimed ? 1 : 0),
         hazardTollCachesThisFloor:
