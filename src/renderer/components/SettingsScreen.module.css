@@ -1014,6 +1014,16 @@
     align-items: start;
 }
 
+/*
+ * Side by side at 812x375 each card is about 380px wide, and the camera shell's hint wraps to
+ * a second line: the two lines put Auto / Always / Never under the pane's edge again, where a
+ * press lands on the pane. The hints go here - "Layout Style" and "Mobile Camera Shell" with
+ * their three named options read on their own, and the hints are back at any other size.
+ */
+.shortLandscapeShell .boardPresentationPair .fieldText span {
+    display: none;
+}
+
 .shortLandscapeShell .segmentButton,
 .shortLandscapeShell .segmentButtonDisabled {
     min-height: 2rem;

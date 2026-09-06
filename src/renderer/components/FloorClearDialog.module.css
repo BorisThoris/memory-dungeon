@@ -396,6 +396,23 @@
     }
 }
 
+/*
+ * A laptop's 1024x768: the summary gained the floor resident's line and the door cards lost
+ * their risk line ("-1 life; unavailable at 1 life.") under the body's edge, the one line a
+ * door is chosen on. The room name is flavour and steps aside at this height too, as it
+ * already does on a phone, and the card's padding tightens.
+ */
+@media (max-height: 800px) {
+    .door {
+        gap: 0.25rem;
+        padding: 0.55rem 0.75rem 0.6rem;
+    }
+
+    .doorRoom {
+        display: none;
+    }
+}
+
 @media (max-height: 560px) {
     .routesIntro {
         display: none;

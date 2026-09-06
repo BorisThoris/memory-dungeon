@@ -203,7 +203,7 @@ const ShopScreen = () => {
                         );
                     }}
                     resetKey={`shop:${run.shopOffers.length}`}
-                    rowHeight={158}
+                    rowHeight={172}
                     testId="shop-stock"
                 />
 

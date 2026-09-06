@@ -291,8 +291,8 @@
     {
       "path": "docs/CHAIN_CHUNK_FEVER_DESIGN.md",
       "category": "documentation",
-      "bytes": 39661,
-      "sha256": "aeae28308f4193c9a6cf0562beb453e57e1937da7eec183edb3e9e0ca229d8da"
+      "bytes": 40081,
+      "sha256": "1b6994e97549ccf12a0d35d7588a2ce3cc93e036b0111a5304aa999cd7dd428c"
     },
     {
       "path": "docs/COLLECTIBLE_SYSTEM.md",
@@ -7743,8 +7743,8 @@
     {
       "path": "src/renderer/components/FloorClearDialog.module.css",
       "category": "source",
-      "bytes": 10477,
-      "sha256": "221aff5881fdc385745dc38d4e2d27048a35193b96c6eae8514915dd4e03516f"
+      "bytes": 10979,
+      "sha256": "d10df4b3eba883228c2292cf8edcda4b79d6ed37a7e79e0b96ea0f94cb78305e"
     },
     {
       "path": "src/renderer/components/FloorClearDialog.test.tsx",
@@ -8055,8 +8055,8 @@
     {
       "path": "src/renderer/components/SettingsScreen.module.css",
       "category": "source",
-      "bytes": 31943,
-      "sha256": "8b753385e35e6ca84e84085f5193b957ab41c389a31a3a5654ceb05e22e2afd0"
+      "bytes": 32408,
+      "sha256": "5c88434de830cd80472a6c115edbf94159da5ea63c050bfa1c7cce89373ba6b1"
     },
     {
       "path": "src/renderer/components/SettingsScreen.test.tsx",
@@ -8073,8 +8073,8 @@
     {
       "path": "src/renderer/components/ShopScreen.module.css",
       "category": "source",
-      "bytes": 8509,
-      "sha256": "69fc51c835c69b7a7239c9d88385747b29cd20364d1fc6047adc2beed3937562"
+      "bytes": 8532,
+      "sha256": "f57dcfb122bc5cbaf2906572ce88613004710fdc6a3fb1d0763dbb3d8b388c3d"
     },
     {
       "path": "src/renderer/components/ShopScreen.test.tsx",
@@ -8086,7 +8086,7 @@
       "path": "src/renderer/components/ShopScreen.tsx",
       "category": "source",
       "bytes": 11868,
-      "sha256": "eebc13f835fc86e29126a696ac3d410dc69933d02afe8eced14403829eb1d955"
+      "sha256": "dfd96733aa37e72c5367aa31d958db394fef3cb6ff330e6c7e9b121ca2dbf9b5"
     },
     {
       "path": "src/renderer/components/shuffleFlipAnimation.test.ts",
