@@ -340,7 +340,7 @@
     }
 
     .progressMeta {
-        font-size: 0.74rem;
+        font-size: 0.75rem;
         line-height: 1.25;
     }
 
@@ -360,7 +360,6 @@
     }
 
     .summaryCell dt {
-        font-size: 0.68rem;
         letter-spacing: 0.06em;
         line-height: 1.15;
     }

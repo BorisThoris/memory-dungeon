@@ -7971,8 +7971,8 @@
     {
       "path": "src/renderer/components/ProfileScreen.module.css",
       "category": "source",
-      "bytes": 8940,
-      "sha256": "2051f163385f0fefced133bf3848077efb079e2d7556ad8198bd123b764890b2"
+      "bytes": 8912,
+      "sha256": "15df5399cc9af3df2c05028bfb2a88040ffb0d021d50c3bcd25e17710ec99910"
     },
     {
       "path": "src/renderer/components/ProfileScreen.test.tsx",
