@@ -96,3 +96,23 @@ yarn face-panels:local
 Outputs: `tmp/face-panels/face-panel-01.png` … `face-panel-80.png` plus `scripts/card-pipeline/generated-face-panels-last-run.json`. Default recipe is **three tiers**: 48 **common**, 24 **uncommon**, 8 **rare** (rarer tiers use slightly longer prompts / more steps). Runtime picks from a **weighted strip** (~70% / ~20% / ~10%) so showcase panels stay special. Copy PNG masters into `src/renderer/assets/cards/illustrations/`, then run `yarn face-panels:export-runtime-webp` so the shipped barrel imports WebP runtime files. Keep prompts short (CLIP ~77-token limit per SDXL encoder).
 
 Treat each output as **standalone artwork**: the bitmap should read as illustration only (full canvas = paint), not a photograph of cardstock, borders, deck chrome, or “a tarot card showing …”. Prompt the **motif/scene/symbol** (relic, crystal, blade, tower, etc.); ornate frame and HUD chrome are drawn in code. After replacing PNGs from a regen, run `yarn build:card-illustration-manifest`, bump illustration schema / gameplay texture version if visuals shift, and `yarn regenerate:illustration-regression` if hashes are enforced.
+
+---
+
+## 8. Local Z-Image-Turbo batches (offline, replaces SDXL for new art)
+
+[Z-Image-Turbo](https://huggingface.co/Tongyi-MAI/Z-Image-Turbo) (Tongyi-MAI, **Apache-2.0**, 6B DiT, 8-step distilled) is the current local image model: sharper than SDXL base, follows long natural-language prompts, and needs ~20 GB VRAM in bf16 (the batch script switches on CPU offload automatically below that). Weights land in the Hugging Face cache on first run (~33 GB, no token needed). Turbo runs with `guidance_scale=0`, so there is no negative prompt — put the guards (“no text, no letters, no people…”) in the prompt itself.
+
+```bash
+yarn ui-art:local:dry                 # plan for scenes / posters / icon
+yarn ui-art:local                     # renders 3 takes per slot into tmp/zimage/ui-backgrounds.zimage.manifest/
+# pick takes from contact-sheet.png, record them in ui-backgrounds.zimage.picks.json, then:
+yarn ui-art:install && yarn assets:ui-backgrounds:export-runtime-webp
+
+yarn face-panels:local:zimage         # 80 mats, 2 takes each, rendered at 1040×1184
+yarn face-panels:install:zimage && yarn face-panels:export-runtime-webp
+```
+
+Sides must sit on a 16 px grid (`batch_local_zimage.py` snaps them). Face panels render at ~2.2× (1136×1296), lose a 6% inset on every side (`cropInset`), and are Lanczos-downsampled to the 520×592 masters on install; the tier slot order (01-48 common, 49-72 uncommon, 73-80 rare) is fixed by `weightedFacePanelPool.ts`, so keep the manifest order when editing motifs.
+
+**Prompting lesson (turbo, no CFG):** write only what you want to see. The first panel pass said “tarot-inspired … no frame, no card, no faces” and the model painted framed tarot cards with figures on 40 of 80 slots. The shipped prompts describe “a concept painting that fills the whole image edge to edge … the single inanimate subject”, avoid the words *tarot*, *card* and *frame* entirely, and phrase every motif as an object or scene rather than an archetype.

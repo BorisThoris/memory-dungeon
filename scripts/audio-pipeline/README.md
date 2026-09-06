@@ -157,6 +157,30 @@ The Memory Dungeon app batch in [`jobs.memory-dungeon-app-audio.json`](jobs.memo
 6. **Install into the repo:** `yarn audio:install:ace-app-outputs -- --variant <n> --loudness` (omit `--variant` if you did not use `--variants` > 1; same variant index applies to all jobs). This overwrites the paths listed in the install map.
 7. **Playtest** in the app (master volume, SFX, loop seams for menu/run), then **commit** the new WAVs (expect a large binary diff).
 
+### ACE-Step 1.5 XL (4B DiT) — current production batch
+
+Upstream shipped the **XL** DiT series in v0.1.6 (April 2026) and the **DCW** wavelet sampler correction in v0.1.7 (on by default). The 4B `acestep-v15-xl-turbo` checkpoint (8 steps, no CFG, ~20 GB on disk, ~12 GB VRAM in bf16) lives next to the 2B turbo weights under `cross-repo-libs/local-models/ace-step-1.5/checkpoints/`. Select it with `--config-path acestep-v15-xl-turbo` (or `ACESTEP_CONFIG_PATH`); the 1.7B LM stays the same.
+
+```bash
+yarn audio:ace-step:app:xl        # XL turbo, 8 steps, two takes per job (v01 / v02)
+yarn audio:install:ace-app-outputs -- --variant 1 --loudness
+```
+
+Keep turbo checkpoints at **8** steps: the `--quality high|max` presets (14/18 steps) were tuned for the 2B model and do not improve the distilled XL sampler.
+
+**Choosing takes without ears in the loop:** [`pick-ace-takes.py`](pick-ace-takes.py) scores every `v##` take per job (no clipping, early onset, energy in the first second for one-shots; even 1 s RMS windows for loops) and writes a picks JSON. `install-ace-app-outputs.mjs` accepts it with **`--picks tmp/audio/ace-picks.json`** (per-job override of `--variant`). Listen afterwards; the metrics only rule out obviously bad takes.
+
+```powershell
+.\.venv-audio\Scripts\python.exe scripts/audio-pipeline/pick-ace-takes.py --ace-out tmp/audio/ace-step --jobs scripts/audio-pipeline/jobs.memory-dungeon-app-audio.json --out tmp/audio/ace-picks.json
+yarn audio:install:ace-app-outputs -- --picks tmp/audio/ace-picks.json --loudness
+```
+
+**Portfolio run bed:** `yarn audio:ace-step:ambience` renders [`jobs.portfolio-ambience.json`](jobs.portfolio-ambience.json) (three takes) into `tmp/audio/ace-step-ambience/`; pick one, run `make-seamless-loop.py` into `assets/audio/portfolio-feedback-pack/demo-ambience-loop.wav`, then `yarn audio:export-runtime-ogg`. `gameplayMusic.ts` prefers that file over `music/run-loop.ogg`, so it is the bed players actually hear during runs.
+
+**Loops:** text2music renders open cold and fade out, so `install-ace-app-outputs.mjs`'s plain `-t` trim leaves a seam. For `menu-loop`, `run-loop`, and the portfolio `demo-ambience-loop`, run [`make-seamless-loop.py`](make-seamless-loop.py) on the chosen take instead: it drops the intro/outro, equal-power crossfades the tail back over the head, and scales to a target RMS under a peak ceiling (`--target-rms-db -24 --peak-db -3` for the subtle run bed).
+
+**Git worktrees:** the wrappers look for `cross-repo-libs` as a sibling of the repo root. From a worktree under `.claude/worktrees/`, set `CROSS_REPO_LIBS_ROOT=<path to cross-repo-libs>` (and `ACESTEP_PYTHON=<main checkout>\.venv-audio\Scripts\python.exe`, because the venv is gitignored and lives only in the main checkout). Reference WAVs are gitignored too — run `yarn audio:materialize-references` once per worktree.
+
 ## Yarn scripts
 
 | Script | Purpose |

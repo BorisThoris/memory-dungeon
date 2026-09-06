@@ -35,7 +35,7 @@ export const ASSET_DROP_IN_CATEGORIES: readonly AssetDropInCategory[] = [
         namingExample: 'bg-mode-gauntlet-v1.webp',
         manifestOrBarrel: 'src/renderer/assets/ui/modeArt.ts MODE_CARD_ART',
         fallbackBehavior: 'Unknown or unfinished poster keys resolve to bg-mode-placeholder-v1.webp and show fallback badges.',
-        rightsStatus: 'placeholder',
+        rightsStatus: 'ai_generated_project',
         dropInRisk: 'low',
         verification: ['yarn vitest run src/renderer/assets/ui/modeArt.test.ts']
     },

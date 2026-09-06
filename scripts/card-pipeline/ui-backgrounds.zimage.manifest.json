@@ -1,0 +1,100 @@
+{
+  "$comment": "Z-Image-Turbo batch for shell scenes, Choose Your Path posters, and the app icon. Render with `yarn ui-art:local`, pick a take from tmp/zimage/ui-backgrounds.zimage.manifest/contact-sheet.png, copy it to the path in `target`, then `yarn assets:ui-backgrounds:export-runtime-webp`. Palette: deep midnight blue-black stone, antique gold trim, cool cyan arcane glow (theme.ts). Prompts end with the no-text / no-people guard because turbo runs without a negative prompt.",
+  "defaults": {
+    "width": 1376,
+    "height": 768,
+    "steps": 8,
+    "candidates": 3
+  },
+  "entries": [
+    {
+      "id": "bg-mode-pass-and-play-v1",
+      "target": "src/renderer/assets/ui/backgrounds/bg-mode-pass-and-play-v1.png",
+      "seed": 41010,
+      "prompt": "Dark fantasy digital painting, wide cinematic shot of a round stone table in a torchlit dungeon chamber, four ornate empty high-backed chairs gathered around it, a spread of face-down cards with antique gold filigree backs fanned across the table, warm torchlight from iron sconces mixing with a cool cyan arcane glow rising from a rune circle etched into the tabletop, deep midnight blue-black shadows, antique gold accents, painterly, focal point slightly right of center, no text, no letters, no watermark, no people."
+    },
+    {
+      "id": "bg-mode-puzzle-v1",
+      "target": "src/renderer/assets/ui/backgrounds/bg-mode-puzzle-v1.png",
+      "seed": 41020,
+      "prompt": "Dark fantasy digital painting, wide cinematic shot of an ancient stone puzzle altar inside a vaulted dungeon crypt, a precise grid of engraved stone tiles laid out on the altar with cool cyan light seeping from the carved grooves, antique gold inlay tracing the grid, soft mist on the floor, gothic arches fading into deep midnight blue-black darkness behind, painterly, orderly and calm composition, focal point slightly right of center, no text, no letters, no watermark, no people."
+    },
+    {
+      "id": "bg-mode-mirror-puzzle-v1",
+      "target": "src/renderer/assets/ui/backgrounds/bg-mode-mirror-puzzle-v1.png",
+      "seed": 41030,
+      "prompt": "Dark fantasy digital painting, wide cinematic shot of a perfectly symmetrical mirrored dungeon hall, two identical gothic arched alcoves facing each other across a still black reflecting pool, glowing cyan rune tiles mirrored on both sides and again in the water, antique gold filigree pillars, low fog, deep midnight blue-black palette with cool cyan light, painterly, bilateral symmetry, no text, no letters, no watermark, no people."
+    },
+    {
+      "id": "bg-mode-gauntlet-v1",
+      "target": "src/renderer/assets/ui/backgrounds/bg-mode-gauntlet-v1.png",
+      "seed": 41040,
+      "prompt": "Dark fantasy digital painting, wide cinematic shot of a colossal brass clockwork mechanism built into a dungeon wall, enormous interlocking gears and a giant hourglass of glowing cyan sand at the center, ember sparks drifting in the air, a sense of pressure and urgency, antique gold and brass against deep midnight blue-black stone, painterly, focal point slightly right of center, no text, no letters, no numbers, no watermark, no people."
+    },
+    {
+      "id": "bg-mode-wild-v1",
+      "target": "src/renderer/assets/ui/backgrounds/bg-mode-wild-v1.png",
+      "seed": 41050,
+      "prompt": "Dark fantasy digital painting, wide cinematic shot of a volatile arcane crystal bursting into violet and cyan sparks above a stone dungeon altar, ornate gold-backed cards scattering and tumbling through the air caught in the magical shockwave, chaotic energy trails, deep midnight blue-black shadows with antique gold accents, painterly, dynamic, focal point slightly right of center, no text, no letters, no watermark, no people."
+    },
+    {
+      "id": "bg-mode-practice-v1",
+      "target": "src/renderer/assets/ui/backgrounds/bg-mode-practice-v1.png",
+      "seed": 41060,
+      "prompt": "Calm dark fantasy digital painting, wide shot of a quiet study alcove in a dungeon library, a worn wooden table with a few ornate gold-backed cards laid neatly in a row, a single candle and a small cyan glass lantern casting soft light, stone shelves with old books behind, peaceful and unhurried mood, deep midnight blue-black palette with warm gold and cool cyan, painterly, focal point slightly right of center, no text, no letters, no watermark, no people."
+    },
+    {
+      "id": "bg-mode-scholar-v1",
+      "target": "src/renderer/assets/ui/backgrounds/bg-mode-scholar-v1.png",
+      "seed": 41070,
+      "prompt": "Dark fantasy digital painting, wide cinematic shot of a grand vaulted dungeon library, towering stone shelves of ancient leather tomes, a carved lectern holding an open grimoire whose pages glow with cyan runes, gold candlelight and drifting dust motes, disciplined orderly symmetrical composition, deep midnight blue-black palette with antique gold, painterly, no text, no letters, no watermark, no people."
+    },
+    {
+      "id": "bg-mode-pin-vow-v1",
+      "target": "src/renderer/assets/ui/backgrounds/bg-mode-pin-vow-v1.png",
+      "seed": 41080,
+      "prompt": "Dark fantasy digital painting, wide shot of an ancient map table in a dungeon war room, a large parchment plan pinned down by glowing antique gold pins connected with taut cyan threads forming a sparse strategic pattern, a brass compass and candle nearby, deep midnight blue-black shadows, warm candlelight, painterly, focal point slightly right of center, no text, no letters, no writing on the map, no watermark, no people."
+    },
+    {
+      "id": "bg-mode-meditation-v1",
+      "target": "src/renderer/assets/ui/backgrounds/bg-mode-meditation-v1.png",
+      "seed": 41090,
+      "prompt": "Serene dark fantasy digital painting, wide shot of a floating stone shrine in a misty underground cavern, a single ornate gold-backed card hovering weightlessly above a perfectly still pool, soft cyan light rays falling from above, gentle gold glow, tranquil and meditative, deep midnight blue-black palette, painterly, focal point slightly right of center, no text, no letters, no watermark, no people."
+    },
+    {
+      "id": "mode-dungeon-showcase",
+      "target": "src/renderer/assets/ui/backgrounds/mode-dungeon-showcase.png",
+      "width": 1280,
+      "height": 720,
+      "seed": 41100,
+      "prompt": "Dark fantasy digital painting, wide cinematic shot of a dungeon arena, a horned shadow figure with two glowing red eyes looming inside a cyan arcane archway behind a ring of face-down gold-backed cards resting on a raised stone dais, torchlight and cool cyan glow, antique gold accents on deep midnight blue-black stone, painterly, ominous but playful, no text, no letters, no watermark."
+    },
+    {
+      "id": "bg-gameplay-arcane-workshop-v1",
+      "target": "src/renderer/assets/ui/backgrounds/bg-gameplay-arcane-workshop-v1.png",
+      "width": 1536,
+      "height": 1024,
+      "seed": 41110,
+      "prompt": "Dark fantasy digital painting, wide shot of an arcane alchemist workshop inside a dungeon vault, stone walls lined with shelves of glowing cyan potion bottles, brass instruments and hanging chains, iron torches on the walls, a large empty round stone workbench in the middle of the floor lit by a faint cyan rune circle, the center of the image kept dark and uncluttered, deep midnight blue-black shadows with antique gold accents, painterly, no text, no letters, no watermark, no people.",
+      "alphaFrom": "scripts/card-pipeline/masks/bg-gameplay-arcane-workshop-v1.alpha.png"
+    },
+    {
+      "id": "bg-board-arcane-table-v1",
+      "target": "src/renderer/assets/ui/backgrounds/bg-board-arcane-table-v1.png",
+      "width": 1536,
+      "height": 1024,
+      "seed": 41120,
+      "prompt": "Straight top-down view of an ancient dark slate stone tabletop, a large faint etched arcane rune circle with thin antique gold inlay geometry glowing softly cyan from the grooves, subtle scratches and dust, low contrast, mostly dark and even so objects placed on top stay readable, soft vignette at the edges, game texture, no text, no letters, no objects, no watermark, no people.",
+      "alphaFrom": "scripts/card-pipeline/masks/bg-board-arcane-table-v1.alpha.png",
+      "gain": 0.51
+    },
+    {
+      "id": "app-icon-memory-dungeon",
+      "target": "build/icon.png",
+      "width": 1024,
+      "height": 1024,
+      "seed": 41130,
+      "prompt": "App icon, dark fantasy, a single ornate playing card back seen straight on and centered, antique gold filigree frame around deep midnight blue-black stone, a glowing cyan crystal set in the exact center, symmetrical, clean bold shapes readable at small size, plain deep midnight background with a soft vignette, no text, no letters, no watermark, no people."
+    }
+  ]
+}

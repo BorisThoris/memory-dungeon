@@ -1,0 +1,15 @@
+{
+  "bg-mode-pass-and-play-v1": 1,
+  "bg-mode-puzzle-v1": 1,
+  "bg-mode-mirror-puzzle-v1": 2,
+  "bg-mode-gauntlet-v1": 3,
+  "bg-mode-wild-v1": 2,
+  "bg-mode-practice-v1": 3,
+  "bg-mode-scholar-v1": 1,
+  "bg-mode-pin-vow-v1": 1,
+  "bg-mode-meditation-v1": 1,
+  "mode-dungeon-showcase": 1,
+  "bg-gameplay-arcane-workshop-v1": 1,
+  "bg-board-arcane-table-v1": 2,
+  "app-icon-memory-dungeon": 3
+}
