@@ -2158,9 +2158,19 @@ describe('REG-017 route choices', () => {
             findablesTotalThisFloor: countFindablePairs(board.tiles)
         };
 
+        // The boss walks after every turn, so "a safe pair" is decided per turn against where it
+        // is *now* — not against the opening layout, which any change to the deal would move.
+        const used = new Set<string>();
         for (let index = 0; index < boss.maxHp; index += 1) {
-            const pair = matchPairs[index]!;
-            run = resolveBoardTurn(flipTile(flipTile(run, pair[0]!.id), pair[1]!.id));
+            const live = run.board!.enemyHazards!.find((hazard) => hazard.id === boss.id)!;
+            const pair = matchPairs.find(
+                (group) =>
+                    !used.has(group[0]!.pairKey) &&
+                    !group.some((tile) => tile.id === live.currentTileId || tile.id === live.nextTileId)
+            );
+            expect(pair, `no safe pair left on turn ${index + 1}`).toBeTruthy();
+            used.add(pair![0]!.pairKey);
+            run = resolveBoardTurn(flipTile(flipTile(run, pair![0]!.id), pair![1]!.id));
         }
 
         const defeatedBoss = run.board!.enemyHazards!.find((hazard) => hazard.id === boss.id)!;
@@ -5021,10 +5031,13 @@ describe('dungeon cards', () => {
             source: 'floor_clear_shop',
             itemIds: ['heal_life', 'peek_charge', 'region_shuffle_charge', 'destroy_charge', 'iron_key']
         });
+        // The board vendor reads the floor it stands on: this seed's floor carries a dangerous trait
+        // pair, so a cleanse leads the stock and the master key still closes it.
         expect(getRunShopStockPlan(boardRun)).toMatchObject({
             source: 'board_shop',
-            itemIds: ['trait_routing_kit', 'heal_life', 'peek_charge', 'region_shuffle_charge', 'destroy_charge', 'master_key']
+            itemIds: ['trait_cleanse', 'trait_routing_kit', 'heal_life', 'peek_charge', 'region_shuffle_charge', 'master_key']
         });
+        expect(getRunShopStockPlan(boardRun)).toEqual(getRunShopStockPlan({ ...boardRun, board: { ...board } }));
         expect(getRunShopReadModel(floorShopRun)).toMatchObject({
             source: 'floor_clear_shop',
             offerCount: floorOffers.length,

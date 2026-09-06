@@ -29,6 +29,7 @@ import { createCardArcaneGlowMaterial } from './cardArcaneGlowMaterial';
 import { createMatchedCardRimFireMaterial } from './matchedCardRimFireMaterial';
 import { gameplayRenderQualityProfile } from './gameplayRenderProfile';
 import { TileBoardCardSurface } from './TileBoardCardSurface';
+import { SuitMarkerPlane } from './SuitMarkerPlane';
 import { TileBoardEffectOverlays } from './TileBoardEffectOverlays';
 import { TileBoardHoverChrome } from './TileBoardHoverChrome';
 import { TileBoardReadabilityMarkers } from './TileBoardReadabilityMarkers';
@@ -767,6 +768,7 @@ const TileBezelInner = ({
                         useSvgMeshFront={useSvgMeshFront}
                         wearAssets={wearAssets}
                     />
+                    {tile.suit ? <SuitMarkerPlane faceZ={faceZ} suit={tile.suit} /> : null}
                     <TileBoardHoverChrome
                         arcaneGlowGeometry={arcaneGlowGeometry}
                         face="back"

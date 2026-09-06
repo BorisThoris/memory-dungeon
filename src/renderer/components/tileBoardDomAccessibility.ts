@@ -5,6 +5,7 @@ import { getDungeonCardCopy } from '../../shared/dungeon-rules';
 import { getFindableRewardText } from '../../shared/findables';
 import { getHazardTileTelegraph } from '../../shared/hazard-tiles';
 import { getPairProximityGridDistance } from '../../shared/pairProximityHint';
+import { getTileSuit } from '../../shared/tile-suit-rules';
 import { DECOY_PAIR_KEY } from '../../shared/tile-identity';
 import { routeSpecialLabel, routeSpecialRewardLine } from '../../shared/route-world';
 import {
@@ -238,6 +239,10 @@ export const getTileAriaLabel = (
             ? `Decoy trap tile, row ${row}, column ${column}. It never forms a pair.`
             : `Tile ${tile.label}, row ${row}, column ${column}`
         : `Hidden tile, row ${row}, column ${column}`;
+    // The suit is the one thing a face-down tile shows, so it is the one thing its name says.
+    const suitNote = tile.suit && tile.state !== 'matched' && tile.state !== 'removed'
+        ? ` ${getTileSuit(tile.suit).name} suit.`
+        : '';
     const findableNote = tile.findableKind && faceUp && tile.state !== 'matched' ? ` ${getFindableRewardText(tile.findableKind)}` : '';
     const scoutSourceNote =
         tile.scoutRevealSource === 'omen_seal'
@@ -288,7 +293,7 @@ export const getTileAriaLabel = (
         selectedFollowupTileIds: routeSetupContext.selectedFollowupTileIds,
         targetTileIds: routeSetupContext.targetTileIds
     });
-    return `${base}${findableNote}${routeNote}${dungeonNote}${getHazardTileText(tile)}${getTileTraitText(tile)}${getTileTraitPreviewText(board, tile)}${routeSetupNote}${selectedFollowupNote}${rewardHotNote}${beatNote}${passiveScoutNote}${getEnemyHazardText(board, tile.id)}`;
+    return `${base}${suitNote}${findableNote}${routeNote}${dungeonNote}${getHazardTileText(tile)}${getTileTraitText(tile)}${getTileTraitPreviewText(board, tile)}${routeSetupNote}${selectedFollowupNote}${rewardHotNote}${beatNote}${passiveScoutNote}${getEnemyHazardText(board, tile.id)}`;
 };
 
 export const getPowerTargetAriaText = (

@@ -8,7 +8,7 @@
 import type { AchievementId, GameMode, MutatorId, RelicId } from './contracts';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 16 as const;
+export const ENCYCLOPEDIA_VERSION = 17 as const;
 
 export interface RelicDefinition {
     id: RelicId;
@@ -874,6 +874,14 @@ export const ENCYCLOPEDIA_SETTINGS_AND_ASSISTS_TOPICS: readonly EncyclopediaTopi
 
 /** Bonus pickups and special tile types (not the same as relics). */
 export const ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS: readonly EncyclopediaTopic[] = [
+    {
+        id: 'tile_suits',
+        title: 'Suits',
+        description:
+            'Every tile wears one of four suits on its back — Ember, Tide, Moss or Bone — and both halves of a pair share it. ' +
+            'Suits are dealt in clumps, so the floor opens as a map you can plan against before you flip anything. ' +
+            'The symbol on the front is still the thing to remember; the suit is the thing you can see.'
+    },
     {
         id: 'pickup_findables',
         title: 'Findables (bonus pickups)',

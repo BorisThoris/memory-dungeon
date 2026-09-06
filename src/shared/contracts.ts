@@ -96,6 +96,11 @@ export const BOSS_FLOOR_SCORE_MULTIPLIER = 1.25;
 
 export type DisplayMode = 'windowed' | 'fullscreen';
 export type TileState = 'hidden' | 'flipped' | 'matched' | 'removed';
+/**
+ * The suit painted on a tile's back. Both tiles of a pair share it, and it is the one thing about
+ * a face-down tile the player is allowed to know — the map a chain is planned against.
+ */
+export type TileSuit = 'ember' | 'tide' | 'moss' | 'bone';
 export type Rating = 'S++' | 'S' | 'A' | 'B' | 'C' | 'D' | 'F';
 export type ClearLifeReason = 'none' | 'clean' | 'perfect';
 export type FeaturedObjectiveId = 'scholar_style' | 'glass_witness' | 'cursed_last' | 'flip_par';
@@ -418,6 +423,8 @@ export interface Tile {
     symbol: string;
     label: string;
     state: TileState;
+    /** Visible on the back from the moment the floor opens. Absent only on legacy or authored boards. */
+    suit?: TileSuit;
     /** Visual variant index for atomic-pairs styling (optional). */
     atomicVariant?: number;
     /** If set, matching this pair claims a pickup reward on eligible floors. */
