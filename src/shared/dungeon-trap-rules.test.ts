@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import type { BoardState, RunState, Tile } from './contracts';
 import { createNewRun } from './game-core';
 import {
+    disarmDungeonTrapPairByPeek,
     DUNGEON_HEX_TRAP_SCORE_PENALTY,
     DUNGEON_TRAP_SCORE_PENALTY,
     resolveOneArmedTrapPair,
@@ -78,6 +79,9 @@ describe('dungeon-trap-rules', () => {
         expect(result.run.stats.totalScore).toBe(0);
         expect(result.board.matchedPairs).toBe(1);
         expect(result.board.tiles.every((candidate) => candidate.dungeonCardState === 'resolved')).toBe(true);
+        // A trap that has bitten is finished with the floor: it leaves rather than sitting there
+        // face-up as a card the player has to keep reading around.
+        expect(result.board.tiles.every((candidate) => candidate.state === 'removed')).toBe(true);
     });
 
     it('normalizes malformed trap counters before resolving traps', () => {
@@ -195,6 +199,7 @@ describe('dungeon-trap-rules', () => {
         const revealedRun = revealDungeonCardPair({ ...run, board }, board.tiles[0]!);
 
         expect(revealedRun.board?.tiles.every((candidate) => candidate.dungeonCardState === 'resolved')).toBe(true);
+        expect(revealedRun.board?.tiles.every((candidate) => candidate.state === 'removed')).toBe(true);
         expect(revealedRun.dungeonTrapsTriggered).toBe(run.dungeonTrapsTriggered + 1);
     });
 
@@ -211,5 +216,51 @@ describe('dungeon-trap-rules', () => {
             expect.arrayContaining([expect.objectContaining({ dungeonCardState: 'resolved' })])
         );
         expect(resolved.tiles.find((candidate) => candidate.id === 'other-a')?.dungeonCardState).toBe('revealed');
+    });
+});
+
+describe('a trap the player finds with a peek charge', () => {
+    const runWithTrapPair = (): RunState => {
+        const run = createNewRun(0);
+        const board = createBoard([
+            tile('t1', 'T', { dungeonCardKind: 'trap', dungeonCardState: 'hidden', dungeonCardEffectId: 'trap_spikes' }),
+            tile('t2', 'T', { dungeonCardKind: 'trap', dungeonCardState: 'hidden', dungeonCardEffectId: 'trap_spikes' }),
+            tile('a1', 'A'),
+            tile('a2', 'A')
+        ]);
+        return { ...run, status: 'playing', board };
+    };
+
+    it('pops the whole pair off the board without costing a life', () => {
+        const run = runWithTrapPair();
+
+        const disarmed = disarmDungeonTrapPairByPeek(run, 't1');
+
+        expect(disarmed.lives).toBe(run.lives);
+        expect(disarmed.dungeonTrapsTriggered).toBe(run.dungeonTrapsTriggered);
+        expect(
+            disarmed.board!.tiles.filter((candidate) => candidate.pairKey === 'T')
+        ).toEqual(expect.arrayContaining([expect.objectContaining({ state: 'removed', dungeonCardState: 'resolved' })]));
+        expect(
+            disarmed.board!.tiles.filter((candidate) => candidate.pairKey === 'T').every((candidate) => candidate.state === 'removed')
+        ).toBe(true);
+    });
+
+    it('counts as a resolved trap pair, so a disarm-traps floor can be finished this way', () => {
+        const run = runWithTrapPair();
+
+        const disarmed = disarmDungeonTrapPairByPeek(run, 't1');
+
+        expect(disarmed.dungeonTrapsResolvedThisFloor).toBe(run.dungeonTrapsResolvedThisFloor + 1);
+        expect(disarmed.board!.matchedPairs).toBe(run.board!.matchedPairs + 1);
+    });
+
+    it('leaves everything that is not an armed trap alone', () => {
+        const run = runWithTrapPair();
+
+        expect(disarmDungeonTrapPairByPeek(run, 'a1')).toBe(run);
+        expect(disarmDungeonTrapPairByPeek(disarmDungeonTrapPairByPeek(run, 't1'), 't2')).toEqual(
+            disarmDungeonTrapPairByPeek(run, 't1')
+        );
     });
 });

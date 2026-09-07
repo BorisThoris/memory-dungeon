@@ -18,7 +18,8 @@ import {
     createRunWithArmedModesClearedPatch,
     createRunWithBoardInteractionClearedPatch,
     createRunWithBoardPowersDisarmedPatch,
-    createRunWithPeekDisarmedPatch
+    createRunWithPeekDisarmedPatch,
+    pressWillSpendPeekCharge
 } from './runSurfaceState';
 
 export type TilePressAudioCue =
@@ -83,16 +84,26 @@ export const createPlayingTilePressSurfaceResult = ({
     let actionRun = run;
     let pressedTile = actionRun.board?.tiles.find((tile) => tile.id === tileId) ?? null;
     const flippedBefore = actionRun.board?.flippedTileIds.length ?? 0;
+    /*
+     * A peek is free. The charge buys a look, and a look never puts a hand near the card, so the
+     * enemy standing on it has nothing to strike at. This press used to resolve hazard contact
+     * first and the peek second, which charged a life for the privilege of looking at the one
+     * square on the board a player most wants to check before committing to it.
+     */
+    const peekPressIsFree = pressWillSpendPeekCharge({
+        canContinueSinglePowerAfterContact,
+        peekModeArmed,
+        run: actionRun,
+        tileId
+    });
     // Routed through the command so a hazard contact is journalled like every other
     // mutation. It was the last direct transition on the press path, which meant a hit
     // that cost a life left no trace in the replayable command journal.
-    const hazardContact = applyEnemyHazardContactThroughGameplayCore(
-        actionRun,
-        tileId,
-        flippedBefore === 0
-    );
-    const hazardRun = hazardContact.run;
-    const enemyContacted = hazardContact.accepted;
+    const hazardContact = peekPressIsFree
+        ? null
+        : applyEnemyHazardContactThroughGameplayCore(actionRun, tileId, flippedBefore === 0);
+    const hazardRun = hazardContact?.run ?? actionRun;
+    const enemyContacted = hazardContact?.accepted ?? false;
 
     if (enemyContacted) {
         audio.push({ kind: 'resolveContact', fromRun: run, toRun: hazardRun });

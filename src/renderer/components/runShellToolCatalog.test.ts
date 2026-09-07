@@ -57,8 +57,13 @@ describe('the run dock catalog', () => {
     });
 
     it('marks exactly the tools that are not always offered', () => {
-        // Flash pair only carries charges in Practice and Wild runs; everything else is always
+        // Flash pair only carries charges in Practice and Wild runs, and the exit and the store
+        // only exist once their card has been found on this floor. Everything else is always
         // present, disabled with a reason when it cannot be used.
-        expect(RUN_SHELL_TOOL_CATALOG.filter((tool) => tool.conditional).map((tool) => tool.id)).toEqual(['flash']);
+        expect(RUN_SHELL_TOOL_CATALOG.filter((tool) => tool.conditional).map((tool) => tool.id)).toEqual([
+            'flash',
+            'exit',
+            'store'
+        ]);
     });
 });

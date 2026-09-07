@@ -248,6 +248,32 @@ describe('useAppStore timers', () => {
         expect(useAppStore.getState().run?.status).toBe('playing');
     });
 
+    it('ends the study period when the player says so, and stops the clock ending it twice', async () => {
+        useAppStore.getState().startRun();
+        notifyCurrentBoardReady();
+
+        const memorizeDuration = useAppStore.getState().run?.timerState.memorizeRemainingMs ?? 0;
+        expect(useAppStore.getState().run?.status).toBe('memorize');
+
+        useAppStore.getState().skipMemorizePhase();
+
+        expect(useAppStore.getState().run?.status).toBe('playing');
+        expect(useAppStore.getState().run?.timerState.memorizeRemainingMs).toBeNull();
+
+        // The countdown that was running has to be cancelled, not merely outrun: firing it into
+        // a phase that is already over is how a skipped study period would undo itself.
+        const flipHistoryAfterSkip = useAppStore.getState().run?.flipHistory;
+        await vi.advanceTimersByTimeAsync(memorizeDuration + 1);
+        expect(useAppStore.getState().run?.status).toBe('playing');
+        expect(useAppStore.getState().run?.flipHistory).toEqual(flipHistoryAfterSkip);
+    });
+
+    it('ignores a skip when there is no study period to end', () => {
+        useAppStore.getState().skipMemorizePhase();
+
+        expect(useAppStore.getState().run).toBeNull();
+    });
+
     it('GLD-P0-006: hydrate read failure is visible and blocks default-profile autosave', async () => {
         window.localStorage.setItem('memory-dungeon-save-data', '{not-valid-json');
         useAppStore.setState({
@@ -1072,7 +1098,7 @@ describe('useAppStore timers', () => {
         expect(useAppStore.getState().destroyPairArmed).toBe(false);
     });
 
-    it('applies moving enemy contact before resolving an armed peek power', () => {
+    it('does not charge a life for peeking at the tile an enemy is standing on', () => {
         const baseRun = createNewRun(0, { echoFeedbackEnabled: false, runSeed: 55 });
         const tiles: Tile[] = [
             { id: 'a1', pairKey: 'A', symbol: 'A', label: 'A', state: 'hidden' },
@@ -1121,12 +1147,18 @@ describe('useAppStore timers', () => {
         useAppStore.getState().pressTile('a1');
 
         const nextRun = useAppStore.getState().run!;
-        expect(nextRun.lives).toBe(baseRun.lives - 1);
-        expect(nextRun.enemyHazardHitsThisFloor).toBe(1);
+        /*
+         * A peek is a look, not a reach. Charging contact for it made checking the single most
+         * dangerous square on the board the most expensive thing a player could do, which is the
+         * opposite of what a scouting charge is for. The hazard is left exactly where it was: it
+         * was never touched, so it neither strikes nor advances.
+         */
+        expect(nextRun.lives).toBe(baseRun.lives);
+        expect(nextRun.enemyHazardHitsThisFloor).toBe(0);
         expect(nextRun.peekCharges).toBe(0);
         expect(nextRun.peekRevealedTileIds).toEqual(['a1']);
         expect(nextRun.board!.flippedTileIds).toEqual([]);
-        expect(nextRun.board!.enemyHazards![0]).toMatchObject({ state: 'revealed', currentTileId: 'b1' });
+        expect(nextRun.board!.enemyHazards![0]).toMatchObject({ state: 'hidden', currentTileId: 'a1' });
         expect(useAppStore.getState().peekModeArmed).toBe(false);
     });
 
@@ -1444,7 +1476,8 @@ describe('useAppStore timers', () => {
 
         const nextRun = useAppStore.getState().run!;
         expect(nextRun.dungeonTrapsTriggered).toBe(1);
-        expect(nextRun.board!.tiles.find((tile) => tile.id === trapTile.id)!.state).toBe('flipped');
+        // The trap turns over and pops off the board in the same beat.
+        expect(nextRun.board!.tiles.find((tile) => tile.id === trapTile.id)!.state).toBe('removed');
         expect(
             nextRun.board!.tiles
                 .filter((tile) => tile.pairKey === trapTile.pairKey)
@@ -2206,6 +2239,77 @@ describe('useAppStore timers', () => {
         expect(useAppStore.getState().run?.status).toBe('levelComplete');
         expect(useAppStore.getState().run?.dungeonKeys.iron).toBe(0);
         expect(useAppStore.getState().dungeonExitPromptOpen).toBe(false);
+    });
+
+    it('reopens the exit prompt from the dock after the exit card has popped off the board', () => {
+        const baseRun = createNewRun(0, { echoFeedbackEnabled: false, runSeed: 81_408 });
+        const exitTile = baseRun.board!.tiles.find((tile) => tile.pairKey === EXIT_PAIR_KEY)!;
+        const board: BoardState = {
+            ...baseRun.board!,
+            dungeonExitTileId: exitTile.id,
+            tiles: baseRun.board!.tiles.map((tile) =>
+                tile.id === exitTile.id
+                    ? {
+                          ...tile,
+                          // Where a revealed exit ends up now: found, and gone from the board.
+                          state: 'removed' as const,
+                          dungeonCardKind: 'exit' as const,
+                          dungeonCardState: 'revealed' as const
+                      }
+                    : tile
+            )
+        };
+        useAppStore.setState({
+            view: 'playing',
+            run: { ...baseRun, board, status: 'playing' },
+            dungeonExitPromptOpen: false
+        });
+
+        useAppStore.getState().openDungeonExitPrompt();
+
+        expect(useAppStore.getState().dungeonExitPromptOpen).toBe(true);
+    });
+
+    it('does not offer the door before the exit card has been found', () => {
+        const baseRun = createNewRun(0, { echoFeedbackEnabled: false, runSeed: 81_409 });
+        useAppStore.setState({
+            view: 'playing',
+            run: { ...baseRun, status: 'playing' },
+            dungeonExitPromptOpen: false
+        });
+
+        useAppStore.getState().openDungeonExitPrompt();
+
+        expect(useAppStore.getState().dungeonExitPromptOpen).toBe(false);
+    });
+
+    it('reopens the vendor from the dock once its card has been found', () => {
+        const baseRun = createNewRun(0, { echoFeedbackEnabled: false, runSeed: 81_410 });
+        const withOffers = { ...baseRun, shopOffers: createRunShopOffers(baseRun) };
+        useAppStore.setState({
+            view: 'playing',
+            run: {
+                ...withOffers,
+                status: 'playing',
+                board: { ...withOffers.board!, dungeonShopVisited: true }
+            },
+            shopReturnMode: null
+        });
+
+        useAppStore.getState().openDungeonShopFromFloor();
+
+        expect(useAppStore.getState().view).toBe('shop');
+        expect(useAppStore.getState().shopReturnMode).toBe('floor');
+    });
+
+    it('does not offer the vendor on a floor whose shop card is still hidden', () => {
+        const baseRun = createNewRun(0, { echoFeedbackEnabled: false, runSeed: 81_411 });
+        const withOffers = { ...baseRun, shopOffers: createRunShopOffers(baseRun) };
+        useAppStore.setState({ view: 'playing', run: { ...withOffers, status: 'playing' } });
+
+        useAppStore.getState().openDungeonShopFromFloor();
+
+        expect(useAppStore.getState().view).toBe('playing');
     });
 
     it('keeps the dungeon exit prompt open when activation is refused', () => {

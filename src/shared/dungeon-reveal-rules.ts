@@ -18,8 +18,13 @@ export const revealDungeonExit = (run: RunState, tileId: string): RunState => {
             tiles: run.board.tiles.map((candidate): Tile =>
                 candidate.id === tileId
                     ? {
+                          /*
+                           * The exit pops the moment it is found. Standing on the board as a
+                           * face-up card it was a tile the player had to keep hunting for again
+                           * every time they wanted to leave; the run dock carries the door now.
+                           */
                           ...candidate,
-                          state: candidate.state === 'hidden' ? 'flipped' : candidate.state,
+                          state: candidate.state === 'hidden' ? 'removed' : candidate.state,
                           dungeonCardState: 'revealed'
                       }
                     : candidate
@@ -42,8 +47,10 @@ export const revealDungeonShop = (run: RunState, tileId: string): RunState => {
         tiles: run.board.tiles.map((candidate): Tile =>
             candidate.id === tileId
                 ? {
+                      // Same as the exit: the vendor pops once found, and the dock keeps the door
+                      // to it open for the rest of the floor.
                       ...candidate,
-                      state: candidate.state === 'hidden' ? 'flipped' : candidate.state,
+                      state: candidate.state === 'hidden' ? 'removed' : candidate.state,
                       dungeonCardState: 'resolved'
                   }
                 : candidate

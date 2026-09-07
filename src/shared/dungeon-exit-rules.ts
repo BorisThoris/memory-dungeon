@@ -100,7 +100,8 @@ export const sealBoardForDungeonExit = (board: BoardState, activatedExitTileId?:
             if (tile.pairKey === EXIT_PAIR_KEY) {
                 return {
                     ...tile,
-                    state: 'matched' as const,
+                    // The exit already popped when it was revealed; sealing must not put it back.
+                    state: 'removed' as const,
                     dungeonCardState: 'resolved' as const,
                     dungeonExitActivated: activatedExitTileId == null || tile.id === activatedExitTileId
                 };

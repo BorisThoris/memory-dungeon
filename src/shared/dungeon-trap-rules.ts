@@ -76,7 +76,10 @@ export const springArmedDungeonTraps = (
         matchedPairs: Math.min(runNonNegativeInteger(board.pairCount), runNonNegativeInteger(board.matchedPairs) + triggered),
         tiles: board.tiles.map((candidate) =>
             keys.includes(candidate.pairKey) && candidate.dungeonCardKind === 'trap'
-                ? { ...candidate, dungeonCardState: 'resolved' as const, state: 'flipped' as const }
+                ? // A sprung trap has spent itself. It used to stay face-up for the rest of the floor,
+                  // a dead card the player had to keep reading around; now it pops off the board the
+                  // way a claimed pair does, so the bite is the only thing it leaves behind.
+                  { ...candidate, dungeonCardState: 'resolved' as const, state: 'removed' as const }
                 : alarmTriggered && candidate.dungeonCardKind === 'enemy' && candidate.dungeonCardState === 'hidden'
                   ? { ...candidate, dungeonCardState: 'revealed' as const }
                 : triggered > 0 &&
@@ -130,6 +133,46 @@ export const revealDungeonCardPair = (run: RunState, tile: Tile): RunState => {
     return {
         ...run,
         board: revealedBoard
+    };
+};
+
+/**
+ * Spotting a trap with a peek charge takes it off the board for nothing.
+ *
+ * A peek is a look, not a reach: the player spends the charge, sees the trap, and the trap is
+ * disarmed rather than sprung. It costs no life and no guard token, and it counts as a resolved
+ * trap pair the same way springing one does, so a disarm-traps floor can be finished this way.
+ */
+export const disarmDungeonTrapPairByPeek = (run: RunState, tileId: string): RunState => {
+    const board = run.board;
+    const tile = board?.tiles.find((candidate) => candidate.id === tileId);
+    if (
+        !board ||
+        !tile ||
+        tile.dungeonCardKind !== 'trap' ||
+        tile.dungeonCardState === 'resolved' ||
+        tile.state === 'matched' ||
+        tile.state === 'removed'
+    ) {
+        return run;
+    }
+    const disarmedBoard: BoardState = {
+        ...board,
+        flippedTileIds: board.flippedTileIds.filter((id) => id !== tileId),
+        matchedPairs: Math.min(
+            runNonNegativeInteger(board.pairCount),
+            runNonNegativeInteger(board.matchedPairs) + 1
+        ),
+        tiles: board.tiles.map((candidate) =>
+            candidate.pairKey === tile.pairKey && candidate.dungeonCardKind === 'trap'
+                ? { ...candidate, dungeonCardState: 'resolved' as const, state: 'removed' as const }
+                : candidate
+        )
+    };
+    return {
+        ...run,
+        board: disarmedBoard,
+        dungeonTrapsResolvedThisFloor: runNonNegativeInteger(run.dungeonTrapsResolvedThisFloor) + 1
     };
 };
 

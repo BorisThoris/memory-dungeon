@@ -351,3 +351,41 @@ describe('match claim rules', () => {
         expect(sprungThirdBoard.tiles.find((t) => t.id === sprungTrapThird.id)?.state).toBe('flipped');
     });
 });
+
+describe('a claimed pair', () => {
+    const claimBoard = (kind: Tile['dungeonCardKind'], effectId: string) => {
+        const first = tile('l1', 'L', { dungeonCardKind: kind, dungeonCardState: 'revealed', dungeonCardEffectId: effectId as Tile['dungeonCardEffectId'] });
+        const second = tile('l2', 'L', { dungeonCardKind: kind, dungeonCardState: 'revealed', dungeonCardEffectId: effectId as Tile['dungeonCardEffectId'] });
+        const run = runWith([first, second]);
+        const context = deriveMatchClaimContext({
+            firstTile: first,
+            firstTileId: first.id,
+            run,
+            secondTile: second,
+            secondTileId: second.id
+        });
+
+        return createMatchedPairClaimBoard({
+            board: run.board!,
+            context,
+            firstTileId: first.id,
+            secondTileId: second.id
+        });
+    };
+
+    it('pops a lever off the board once it has been thrown', () => {
+        const board = claimBoard('lever', 'lever_floor');
+
+        // A lever is a switch, not a souvenir. Leaving it face-up gave the player a card with
+        // nothing left to say, competing for the read the hidden cards still need.
+        expect(board.tiles.every((candidate) => candidate.state === 'removed')).toBe(true);
+        expect(board.dungeonLeverCount).toBe(1);
+        expect(board.matchedPairs).toBe(1);
+    });
+
+    it('still lays an ordinary claimed pair face-up', () => {
+        const board = claimBoard('treasure', 'treasure_coins');
+
+        expect(board.tiles.every((candidate) => candidate.state === 'matched')).toBe(true);
+    });
+});

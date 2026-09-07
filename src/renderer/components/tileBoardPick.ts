@@ -57,7 +57,10 @@ export const pickableMeshRaycast: Mesh['raycast'] = function pickableMeshRaycast
 };
 
 export const isTilePickable = (tile: Tile, interactive: boolean, flipLocked: boolean): boolean => {
-    if (tile.state === 'matched') {
+    // A card that has left the board takes its hit target with it. Removed tiles play a burst and
+    // then scale away to nothing, so leaving them pickable left invisible buttons behind wherever
+    // a trap sprang, a lever was thrown, or a chunk broke.
+    if (tile.state === 'matched' || tile.state === 'removed') {
         return false;
     }
 

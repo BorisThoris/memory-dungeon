@@ -168,8 +168,13 @@ import {
     getScheduledSoftlockFloorOptions
 } from './softlock-generator-contract';
 
+/**
+ * A trap that has been set off. It resolves its card and leaves the board in the same beat, so
+ * the pair it occupied stops being something the player has to read around for the rest of the
+ * floor. The dungeon card fields survive removal; only the tile state changes.
+ */
 const isSprungTrapForTest = (tile: Tile): boolean =>
-    tile.dungeonCardKind === 'trap' && tile.dungeonCardState === 'resolved' && tile.state === 'flipped';
+    tile.dungeonCardKind === 'trap' && tile.dungeonCardState === 'resolved' && tile.state === 'removed';
 
 describe('tilesArePairMatch', () => {
     it('matches two normal tiles with the same pairKey', () => {
@@ -5673,12 +5678,12 @@ describe('dungeon cards', () => {
         expect(
             afterReveal.board!.tiles
                 .filter((tile) => tile.pairKey === 'T')
-                .every((tile) => tile.dungeonCardState === 'resolved' && tile.state === 'flipped')
+                .every((tile) => tile.dungeonCardState === 'resolved' && tile.state === 'removed')
         ).toBe(true);
-        expect(afterReveal.board!.tiles.find((tile) => tile.id === 't1')!.state).toBe('flipped');
+        expect(afterReveal.board!.tiles.find((tile) => tile.id === 't1')!.state).toBe('removed');
     });
 
-    it('keeps sprung traps permanently face-up without making them a second-card selection', () => {
+    it('pops sprung traps off the board rather than leaving them as a second-card selection', () => {
         const tiles: Tile[] = [
             {
                 ...createTile('t1', 'T', '!'),
@@ -5704,7 +5709,7 @@ describe('dungeon cards', () => {
         expect(
             afterTrapReveal.board!.tiles
                 .filter((tile) => tile.pairKey === 'T')
-                .every((tile) => tile.dungeonCardState === 'resolved' && tile.state === 'flipped')
+                .every((tile) => tile.dungeonCardState === 'resolved' && tile.state === 'removed')
         ).toBe(true);
 
         const selectedFirstTrap = flipTile(afterTrapReveal, 't1');
@@ -5778,10 +5783,12 @@ describe('dungeon cards', () => {
         expect(
             resolvedMiss.board!.tiles
                 .filter((tile) => tile.pairKey === 'T')
-                .every((tile) => tile.dungeonCardState === 'resolved' && tile.state === 'flipped')
+                .every((tile) => tile.dungeonCardState === 'resolved' && tile.state === 'removed')
         ).toBe(true);
         expect(getDungeonThreatStatus(resolvedMiss.board)).toMatchObject({
-            trapCardPairCount: 1,
+            // The pair is off the board once the trap springs, so nothing is left standing on it;
+            // the floor still records that a trap pair was resolved here.
+            trapCardPairCount: 0,
             armedTrapCardPairCount: 0,
             resolvedTrapCardPairCount: 1,
             movingEnemyHazardCount: 0,
@@ -5791,7 +5798,7 @@ describe('dungeon cards', () => {
         expect(inspectBoardFairness(resolvedMiss.board!).issues).toEqual([]);
     });
 
-    it('keeps sprung traps face-up through undo and gambit failures', () => {
+    it('keeps sprung traps off the board through undo and gambit failures', () => {
         const tiles: Tile[] = [
             {
                 ...createTile('t1', 'T', '!'),
@@ -5817,7 +5824,7 @@ describe('dungeon cards', () => {
         const undone = cancelResolvingWithUndo(resolving);
         const trapTilesAfterUndo = undone.board!.tiles.filter((tile) => tile.pairKey === 'T');
 
-        expect(trapTilesAfterUndo.every((tile) => tile.dungeonCardState === 'resolved' && tile.state === 'flipped')).toBe(true);
+        expect(trapTilesAfterUndo.every((tile) => tile.dungeonCardState === 'resolved' && tile.state === 'removed')).toBe(true);
 
         const selectedTrap = flipTile(undone, 't1');
         expect(selectedTrap).toBe(undone);
@@ -5826,7 +5833,7 @@ describe('dungeon cards', () => {
         const gambitFail = resolveBoardTurn(flipTile(selectedMismatch, 'b1'));
         const trapTilesAfterGambit = gambitFail.board!.tiles.filter((tile) => tile.pairKey === 'T');
 
-        expect(trapTilesAfterGambit.every((tile) => tile.dungeonCardState === 'resolved' && tile.state === 'flipped')).toBe(true);
+        expect(trapTilesAfterGambit.every((tile) => tile.dungeonCardState === 'resolved' && tile.state === 'removed')).toBe(true);
     });
 
     it('separates trap card status from moving enemy hazards', () => {

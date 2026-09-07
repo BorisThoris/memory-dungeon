@@ -57,7 +57,8 @@ describe('dungeon reveal rules', () => {
 
         expect(revealed.board?.tiles[0]).toMatchObject({
             id: 'exit',
-            state: 'flipped',
+            // The exit pops the moment it is found; the run dock carries it from then on.
+            state: 'removed',
             dungeonCardState: 'revealed'
         });
     });
@@ -71,7 +72,7 @@ describe('dungeon reveal rules', () => {
         expect(revealed.shopOffers).toEqual([existingOffer]);
         expect(revealed.board?.tiles[0]).toMatchObject({
             id: 'shop',
-            state: 'flipped',
+            state: 'removed',
             dungeonCardState: 'resolved'
         });
     });

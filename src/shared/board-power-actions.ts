@@ -29,6 +29,7 @@ import {
 } from './board-power-targeting';
 import { clearResolveState } from './run-timer-rules';
 import { normalizeSessionStats } from './session-stats-rules';
+import { disarmDungeonTrapPairByPeek } from './dungeon-trap-rules';
 import { hiddenUnlessSprungTrap } from './tile-state-rules';
 import { hasRunRelic } from './relics';
 import { runFilteredStringArray } from './run-array-guards';
@@ -379,7 +380,7 @@ export const applyPeek = (run: RunState, tileId: string): RunState => {
                   )
               }
             : run.board;
-    return {
+    const peeked: RunState = {
         ...run,
         board,
         peekCharges: decrementRunCounter(peekCharges),
@@ -388,6 +389,12 @@ export const applyPeek = (run: RunState, tileId: string): RunState => {
         forgottenTileIdsThisFloor: rememberForgottenTiles(run.forgottenTileIdsThisFloor, [tileId]),
         peekRevealedTileIds: [...peekRevealedTileIds, tileId]
     };
+    /*
+     * A trap the peek finds is disarmed on the spot rather than left armed under a card the
+     * player now knows about. Looking is the whole cost of the charge: the trap pops, and no
+     * life is spent on knowing where it was.
+     */
+    return disarmDungeonTrapPairByPeek(peeked, tileId);
 };
 
 export const applyStrayRemove = (run: RunState, tileId: string): RunState => {

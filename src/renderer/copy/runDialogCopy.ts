@@ -62,7 +62,23 @@ export const RUN_TOOL_REASONS = {
         available: 'Say hello to whoever is on this floor',
         alreadyGreeted: 'You have already said hello on this floor',
         nobodyHome: 'There is nobody on this floor to greet'
+    },
+    exit: {
+        available: 'Open the exit you found on this floor',
+        locked: 'The exit is found, but not open yet'
+    },
+    store: {
+        available: 'Go back to the vendor you found on this floor'
     }
+} as const;
+
+/**
+ * The study period ends itself on a clock. This is the line that tells the player they can end
+ * it themselves, and the label the same control carries for a screen reader.
+ */
+export const MEMORIZE_SKIP_COPY = {
+    hint: 'Double-tap the board to start early',
+    label: 'Start the floor early'
 } as const;
 
 /**

@@ -25,16 +25,23 @@ describe('tile state rules', () => {
         expect(hiddenUnlessSprungTrap(trap).state).toBe('flipped');
     });
 
-    it('hides ordinary flipped tiles and terminal trap tiles', () => {
+    it('hides ordinary flipped tiles and armed trap tiles', () => {
         expect(hiddenUnlessSprungTrap(tile()).state).toBe('hidden');
-        expect(hiddenUnlessSprungTrap(tile({
-            dungeonCardKind: 'trap',
-            dungeonCardState: 'resolved',
-            state: 'matched'
-        })).state).toBe('hidden');
         expect(hiddenUnlessSprungTrap(tile({
             dungeonCardKind: 'trap',
             dungeonCardState: 'hidden'
         })).state).toBe('hidden');
+    });
+
+    it('leaves a card that has already left the board where it is', () => {
+        // Traps pop off the board when they spring, so a turn that hides its flipped tiles must
+        // not drag a removed one back under the player's finger.
+        for (const state of ['matched', 'removed'] as const) {
+            expect(hiddenUnlessSprungTrap(tile({
+                dungeonCardKind: 'trap',
+                dungeonCardState: 'resolved',
+                state
+            })).state).toBe(state);
+        }
     });
 });

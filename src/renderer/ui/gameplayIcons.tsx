@@ -121,6 +121,28 @@ export function GameplayGreetIcon({ className, ...rest }: GameplayIconProps) {
     );
 }
 
+/** A doorway with a step out of it: the floor exit, once the card has popped off the board. */
+export function GameplayExitIcon({ className, ...rest }: GameplayIconProps) {
+    return (
+        <svg {...base} className={className} {...rest}>
+            <path d="M14 4H6v16h8" />
+            <path d="M11 12h9" />
+            <path d="m17 9 3 3-3 3" />
+        </svg>
+    );
+}
+
+/** An awning over a counter: the floor vendor, reachable after its card has popped. */
+export function GameplayStoreIcon({ className, ...rest }: GameplayIconProps) {
+    return (
+        <svg {...base} className={className} {...rest}>
+            <path d="M4 4h16l1 5a3 3 0 0 1-6 0 3 3 0 0 1-6 0 3 3 0 0 1-6 0Z" />
+            <path d="M5 12v8h14v-8" />
+            <path d="M10 20v-5h4v5" />
+        </svg>
+    );
+}
+
 export function GameplayStrayIcon({ className, ...rest }: GameplayIconProps) {
     return (
         <svg {...base} className={className} {...rest}>
