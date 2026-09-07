@@ -159,8 +159,11 @@ describe('the residents lean in', () => {
         swap('C2', 'E2');
         const dry = sharp(board(tiles));
         const sticky = sharp(board(tiles), { gameMode: 'endless', floorCurioId: 'sticky_toffee' });
-        expect(dry.brokenPairKeys).not.toContain('C');
+        // Dry, the clump never reaches C - it leaves the board as the drop, the suit's last pair
+        // with nothing holding it. Sticky, the clump itself takes C, and nothing is left to drop.
+        expect(dry.droppedPairKeys).toEqual(['C']);
         expect(sticky.brokenPairKeys).toContain('C');
+        expect(sticky.droppedPairKeys).toEqual([]);
     });
 
     it('the greeted skull names the biggest clump on the floor', () => {

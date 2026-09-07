@@ -116,8 +116,18 @@ const orthogonalNeighbours = (index: number, columns: number, total: number): nu
  * of tiles is untouched — only their order changes. Which tile of a suit lands in which of that
  * suit's cells is shuffled, so the two halves of a pair are not predictably adjacent.
  *
+ * Islands. A suit with `ISLAND_MIN_TILES` loose tiles or more is dealt as two clumps, seeded
+ * apart from each other, so about half its pairs straddle them. That is what the ripple is for
+ * (`chunk-break-rules.ts`): a lone match pops the island it is in, and the chain is what reaches
+ * the partner on the other island and pops that one too. One clump per suit, measured, gave the
+ * ripple nothing to bridge — partners sat inside the clump that had just gone.
+ *
  * Deterministic from the seed. A replay deals the same map.
  */
+/** A suit with this many loose tiles (three pairs) is dealt as two islands rather than one clump. */
+export const ISLAND_MIN_TILES = 6;
+export const ISLANDS_PER_SUIT = 2;
+
 export const dealTilesInClumps = (
     tiles: readonly Tile[],
     columns: number,
@@ -173,24 +183,33 @@ export const dealTilesInClumps = (
      * at random leaves the last suits picking through the gaps between earlier regions, which on
      * a small board is most of the board.
      */
-    const seedCellFor = (): number | null => {
+    const touchesSuit = (cell: number, suit: TileSuit): boolean =>
+        orthogonalNeighbours(cell, columns, total).some((n) => cellSuit[n] === suit);
+    const seedCellFor = (suit: TileSuit, apartFromOwn: boolean): number | null => {
         const free = freeCells();
         if (free.length === 0) return null;
         const bordering = free.filter((cell) =>
             orthogonalNeighbours(cell, columns, total).some((n) => cellSuit[n] !== null)
         );
-        const pool = bordering.length > 0 ? bordering : free;
+        // A second island seeds away from the first, or it is the first island grown larger.
+        const apart = apartFromOwn ? bordering.filter((cell) => !touchesSuit(cell, suit)) : bordering;
+        const pool = apart.length > 0 ? apart : bordering.length > 0 ? bordering : free;
         return pool[pickRngIndex(rng, pool.length)]!;
     };
-    for (const suit of shuffleWithRng(() => rng(), [...suits])) {
-        const seed = seedCellFor();
-        if (seed === null) break;
-        claim(suit, seed);
-        while ((quota.get(suit) ?? 0) > 0 && unassigned > 0) {
-            const edge = frontier.get(suit)!;
+    const growIsland = (suit: TileSuit, cells: number, apartFromOwn: boolean): void => {
+        const seed = seedCellFor(suit, apartFromOwn);
+        if (seed === null) return;
+        const island: number[] = [];
+        const claimHere = (cell: number): void => {
+            claim(suit, cell);
+            island.push(cell);
+        };
+        claimHere(seed);
+        let remaining = cells - 1;
+        while (remaining > 0 && (quota.get(suit) ?? 0) > 0 && unassigned > 0) {
             let picked: number | null = null;
-            for (let attempt = 0; attempt < edge.length * 2 && picked === null; attempt += 1) {
-                const from = edge[pickRngIndex(rng, edge.length)]!;
+            for (let attempt = 0; attempt < island.length * 2 && picked === null; attempt += 1) {
+                const from = island[pickRngIndex(rng, island.length)]!;
                 const open = orthogonalNeighbours(from, columns, total).filter(isFree);
                 if (open.length > 0) {
                     picked = open[pickRngIndex(rng, open.length)]!;
@@ -201,7 +220,24 @@ export const dealTilesInClumps = (
                 if (free.length === 0) break;
                 picked = free[pickRngIndex(rng, free.length)]!;
             }
-            claim(suit, picked);
+            claimHere(picked);
+            remaining -= 1;
+        }
+    };
+    for (const suit of shuffleWithRng(() => rng(), [...suits])) {
+        const own = quota.get(suit) ?? 0;
+        const islands = own >= ISLAND_MIN_TILES ? ISLANDS_PER_SUIT : 1;
+        const first = islands === 1 ? own : Math.ceil(own / 2);
+        growIsland(suit, first, false);
+        if (islands > 1 && (quota.get(suit) ?? 0) > 0) {
+            growIsland(suit, quota.get(suit) ?? 0, true);
+        }
+        // Whatever the islands could not place (a board with no free cell left beside them) goes
+        // wherever is free, so every suit still gets exactly its count.
+        while ((quota.get(suit) ?? 0) > 0 && unassigned > 0) {
+            const free = freeCells();
+            if (free.length === 0) break;
+            claim(suit, free[pickRngIndex(rng, free.length)]!);
         }
     }
 

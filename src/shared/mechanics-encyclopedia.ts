@@ -410,6 +410,11 @@ export const ACHIEVEMENT_CATALOG: Record<AchievementId, AchievementCodexEntry> =
         id: 'ACH_WARDEN_BY_CHUNK',
         title: 'Buried',
         description: 'Finish a warden with a chunk break rather than a match.'
+    },
+    ACH_NOTHING_HELD_IT: {
+        id: 'ACH_NOTHING_HELD_IT',
+        title: 'Nothing held it',
+        description: 'Watch a suit\'s last pairs drop with a break, without a match touching them.'
     }
 };
 
@@ -524,7 +529,7 @@ export const RELIC_CATALOG: Record<RelicId, RelicDefinition> = {
     tuning_fork: {
         id: 'tuning_fork',
         title: 'Tuning Fork',
-        description: 'A Clean break reaches two steps into the clump instead of one, so the chain starts breaking earlier.'
+        description: 'The ripple runs one wave further: a lone match lets the partners that left take their own clumps, and a Clean chain runs a wave more than that.'
     },
     magpie_ledger: {
         id: 'magpie_ledger',
@@ -914,12 +919,14 @@ export const ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS: readonly EncyclopediaTopic[] 
         id: 'chain_chunk_fever',
         title: 'Chain, chunk and Fever',
         description:
-            'Every correct match in a row raises your chain, and every pair a chunk breaks adds to its momentum. From chain 3 (Clean) a match also breaks the same-suit tiles beside it, ' +
-            'and their partners go with them. Sharp — about two-fifths of the floor\'s pairs of momentum, four at least — breaks the whole connected clump. Fever — about two-thirds, seven at least — takes the clump and everything touching it. ' +
-            'Treasure inside a chunk spills and pays as if you had matched it. Broken pairs score less than matched ones and give no recall credit — memory still pays best — but they drop combo ' +
-            'shards and clear the floor faster. A miss halves the chain and puts the fire out. ' +
-            'A break with a shape gets a name on the run line: a partner taken from across the board, a halo, a treasure spill, a clean sweep of a suit. ' +
-            'Clear the floor with momentum still standing and the end pays out: a gold at Clean and Sharp, a shard and two gold at Fever — Extreme Fever. Never score, never rating.'
+            'Every match pops: the whole same-suit clump touching the two tiles you matched breaks away with them, and their partners go too. ' +
+            'A pair goes only when both its halves touch the clump, so a partner across the board is the chain\'s to reach. ' +
+            'From chain 3 (Clean) each partner that left takes its own clump - a second wave. Sharp, about two-fifths of the floor\'s pairs of momentum and four at least, runs the reaction until a wave takes nothing. ' +
+            'Fever, about two-thirds and seven at least, adds the halo: everything touching the first clump, whatever its suit. Every pair a break takes adds to the chain\'s momentum. ' +
+            'Treasure inside a break spills and pays as if you had matched it. Broken pairs score less than matched ones and give no recall credit - memory still pays best - but they drop combo shards, ' +
+            'clear the floor faster, and a longer ripple pays more. A miss halves the chain and puts the fire out. ' +
+            'A break with a shape gets a name on the run line: a ripple that ran on, a drop, a partner taken from across the board, a halo, a treasure spill, a clean sweep of a suit. ' +
+            'Clear the floor with momentum still standing and the end pays out: a gold at Clean and Sharp, a shard and two gold at Fever - Extreme Fever. Never score, never rating.'
     },
     {
         id: 'chunk_and_the_dungeon',

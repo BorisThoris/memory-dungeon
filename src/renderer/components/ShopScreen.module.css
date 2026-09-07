@@ -67,7 +67,8 @@
 .stockCard p {
     margin: 0;
     color: var(--theme-text-muted);
-    line-height: 1.42;
+    font-size: 0.92rem;
+    line-height: 1.4;
 }
 
 .purse {
@@ -315,7 +316,18 @@
         grid-column: 1;
     }
 
+    /*
+     * The text column beside the button is about 165px, so "Row/swap charge" wrapped to two
+     * display-size lines and its effect to three, and the card ran past the 112px row. The
+     * name is one line at 1rem and the effect a step smaller; both still read.
+     */
+    .stockCard h3 {
+        font-size: 1rem;
+        line-height: 1.2;
+    }
+
     .stockCard p {
+        font-size: 0.82rem;
         line-height: 1.28;
     }
 

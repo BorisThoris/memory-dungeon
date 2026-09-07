@@ -1,6 +1,6 @@
 import { getHazardTileLiveCopy, HAZARD_TILE_KINDS } from '../../shared/hazard-tiles';
 import { MAGPIE_BEAT_COPY } from './magpieBeat';
-import { CHAIN_BEAT_COPY } from './chainBeat';
+import { CHAIN_BEAT_COPY, CHAIN_TIER_LABELS } from './chainBeat';
 import type { BoardTurnResolvedEvent } from '../store/gameplayFeedbackAdapter';
 import { getChainMilestoneFeedback } from './chainMilestoneFeedback';
 import { getChainRewardForecastCues, getChainRewardUrgencyCopy } from './chainMomentum';
@@ -105,9 +105,13 @@ export const chainMilestoneAnnouncement = (turnEvent: BoardTurnResolvedEvent): s
  * so a turn that ends a chain of 3 or more says so exactly once.
  */
 export const chainBreakAnnouncement = (turnEvent: BoardTurnResolvedEvent): string | null => {
-    const { currentStreakBefore, currentStreakAfter } = turnEvent.announcement;
+    const { currentStreakBefore, currentStreakAfter, chainTierBefore } = turnEvent.announcement;
     if (currentStreakBefore < 3 || currentStreakAfter >= currentStreakBefore) {
         return null;
+    }
+    // A Sharp or Fever chain ending is the beat the table groans at: say which fire went out.
+    if (chainTierBefore === 'sharp' || chainTierBefore === 'fever') {
+        return `${CHAIN_TIER_LABELS[chainTierBefore]} chain x${currentStreakBefore} broken - the fire is out. Recover with a remembered pair.`;
     }
     return `Chain x${currentStreakBefore} broken - recover with a remembered pair.`;
 };

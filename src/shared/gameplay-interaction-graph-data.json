@@ -1322,7 +1322,11 @@
                 "hazardTileTriggersThisFloor",
                 "safeHazardWardsUsedThisFloor",
                 "dungeonEnemiesDefeatedThisFloor",
-                "enemyHazardsDefeatedThisFloor"
+                "enemyHazardsDefeatedThisFloor",
+                "chunkPairsDroppedThisFloor",
+                "chunkDropsThisRun",
+                "bestRippleThisFloor",
+                "bestRippleThisRun"
             ],
             "writes": [
                 "sessionStats",
@@ -5450,13 +5454,15 @@
             "id": "board.chain_chunk_fever",
             "label": "Chain, Chunk and Fever",
             "kind": "board",
-            "role": "chain_tiered_clump_break_and_treasure_spill",
+            "role": "live_pop_chain_tiered_ripple_and_treasure_spill",
             "evidence": [
                 "src/shared/chain-tier-rules.ts",
                 "src/shared/chunk-break-rules.ts",
                 "src/shared/tile-suit-rules.ts",
                 "src/shared/board-turn-transition.ts",
-                "src/renderer/copy/chainBeat.ts"
+                "src/renderer/copy/chainBeat.ts",
+                "src/renderer/components/tileBoardBreakWave.ts",
+                "src/renderer/components/RunShell.tsx"
             ],
             "reads": [
                 "currentStreak",
@@ -5473,7 +5479,11 @@
                 "shopGold",
                 "comboShards",
                 "chunkPairsThisChain",
-                "feedbackLines"
+                "feedbackLines",
+                "chunkPairsDroppedThisFloor",
+                "chunkDropsThisRun",
+                "bestRippleThisFloor",
+                "bestRippleThisRun"
             ],
             "enables": [
                 "objective.floor_clear",
@@ -5487,13 +5497,20 @@
                 "exit-key-lever-lock-shrine-gateway-shop-room-never-break",
                 "chain-gated-no-recall-credit",
                 "rating-unmoved-by-chunks",
-                "floor-relative-rungs"
+                "floor-relative-rungs",
+                "the-drop-holds-on-jobs",
+                "pop-is-contact-both-halves-touch",
+                "matched-pair-never-retaken",
+                "halo-never-seeds-a-wave"
             ],
             "tests": [
                 "src/shared/chunk-break-rules.test.ts",
                 "src/shared/chain-tier-rules.test.ts",
+                "src/shared/tile-suit-rules.test.ts",
                 "src/shared/cascade-balance-simulation.test.ts",
-                "src/shared/release-checklist.test.ts"
+                "src/shared/release-checklist.test.ts",
+                "src/renderer/components/RunShell.test.tsx",
+                "src/renderer/components/tileBoardBreakWave.test.ts"
             ]
         }
     ],

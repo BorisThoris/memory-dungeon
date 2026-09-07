@@ -1225,7 +1225,7 @@ export const STANDING_RULE_RELIC_DEFINITIONS = z.array(gameplayContentDefinition
             {
                 kind: 'feedback.emit',
                 cue: 'build.tuning_fork.claimed',
-                message: 'Tuning Fork is in force: a Clean break now reaches two steps into the clump.',
+                message: 'Tuning Fork is in force: the ripple runs one wave further, and a lone match reaches its partners.',
                 tone: 'information'
             }
         ]
@@ -1564,10 +1564,14 @@ export const boardTurnAnnouncementFactsSchema = z
         chunkPairsBrokenAfter: z.number().int().nonnegative().default(0),
         chainAfter: z.number().int().nonnegative().default(0),
         chainTierAfter: z.enum(['none', 'clean', 'sharp', 'fever']).default('none'),
+
+        chainTierBefore: z.enum(['none', 'clean', 'sharp', 'fever']).default('none'),
         chunkPartnerSpanMax: z.number().int().nonnegative().default(0),
         chunkHaloPairs: z.number().int().nonnegative().default(0),
         chunkTreasuresSpilled: z.number().int().nonnegative().default(0),
         chunkSuitCleared: z.boolean().default(false),
+        chunkDroppedPairs: z.number().int().nonnegative().default(0),
+        chunkRippleWaves: z.number().int().nonnegative().default(0),
         magpieTheftsBefore: z.number().int().nonnegative().default(0),
         magpieTheftsAfter: z.number().int().nonnegative().default(0),
         magpieScaredOffBefore: z.number().int().nonnegative().default(0),

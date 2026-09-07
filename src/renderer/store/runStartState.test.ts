@@ -1,4 +1,3 @@
-import { DEFAULT_CLASSIC_RUN_SETUP } from '../../shared/classic-run-setup';
 import { describe, expect, it } from 'vitest';
 import { BUILTIN_PUZZLES } from '../../shared/builtin-puzzles';
 import {
@@ -12,6 +11,7 @@ import {
     createWildRun
 } from '../../shared/game-core';
 import { createDefaultSaveData } from '../../shared/save-data';
+import { buildClassicRunOptions, DEFAULT_CLASSIC_RUN_SETUP } from '../../shared/classic-run-setup';
 import {
     createRestartRun,
     createRunStartPlan,
@@ -125,6 +125,14 @@ describe('runStartState', () => {
         const saveData = createDefaultSaveData();
 
         expect(createRestartRun(createDailyRun(0), saveData).gameMode).toBe('daily');
+        // A setup-sheet run: the clock, the pace and both vows all come back, not only the vow.
+        const chosen = createNewRun(0, buildClassicRunOptions({ ...DEFAULT_CLASSIC_RUN_SETUP, pacing: 'calm', pressure: 'timed_5', vows: ['scholar', 'pin_vow'] }));
+        expect(createRestartRun(chosen, saveData)).toMatchObject({
+            gameMode: 'endless',
+            gauntletSessionDurationMs: 5 * 60 * 1000,
+            resolveDelayMultiplier: 1.35,
+            activeContract: { noShuffle: true, noDestroy: true, maxPinsTotalRun: 10 }
+        });
         expect(createRestartRun(createGauntletRun(0, 123_000), saveData)).toMatchObject({
             gameMode: 'gauntlet',
             gauntletSessionDurationMs: 123_000

@@ -34,6 +34,10 @@ test.describe('chain review captures', () => {
             await waitForBoardPlayPhase(page);
             await hoverTile(page, 1, 1);
             await expect(page.getByTestId('board-stage')).toBeVisible();
+            // The Fever meter has a box under the chain number at every size, not only a label.
+            const meter = await page.getByTestId('hud-chain-meter').boundingBox();
+            expect(meter?.width ?? 0).toBeGreaterThan(30);
+            expect(meter?.height ?? 0).toBeGreaterThanOrEqual(3);
             await page.screenshot({ path: `${OUT}/board-clump-read-${viewport.id}.png` });
         });
     }
@@ -51,6 +55,23 @@ test.describe('chain review captures', () => {
         await openPlayablePathFixture(page, 'relicDraft');
         await page.waitForTimeout(900);
         await page.screenshot({ path: `${OUT}/relic-draft-laptop.png` });
+    });
+
+    test('the side room on a phone held sideways', async ({ page }) => {
+        await page.setViewportSize({ width: 812, height: 375 });
+        await openPlayablePathFixture(page, 'sideRoomPrimary');
+        await page.waitForTimeout(700);
+        await page.screenshot({ path: `${OUT}/side-room-landscape.png` });
+    });
+
+    test('the profile on a phone held sideways', async ({ page }) => {
+        await page.setViewportSize({ width: 812, height: 375 });
+        await gotoWithSave(page, buildVisualSaveJson(true));
+        await dismissStartupIntro(page);
+        await page.getByRole('button', { name: /^profile$/i }).click({ force: true });
+        await expect(page.getByRole('heading', { name: /profile/i }).first()).toBeVisible({ timeout: 15_000 });
+        await page.waitForTimeout(600);
+        await page.screenshot({ path: `${OUT}/profile-landscape.png` });
     });
 
     test('the setup sheet on a phone held sideways', async ({ page }) => {

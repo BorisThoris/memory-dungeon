@@ -19,6 +19,10 @@ export interface TurnMatchProgressResult {
     biggestChunkPairs: number;
     chunkWardenKills: number;
     bestChainThisRun: number;
+    chunkPairsDroppedThisFloor: number;
+    chunkDropsThisRun: number;
+    bestRippleThisFloor: number;
+    bestRippleThisRun: number;
     hazardFragileCacheClaimsThisFloor: number;
     hazardTollCachesThisFloor: number;
     hazardFuseCachesThisFloor: number;
@@ -55,6 +59,17 @@ export interface TurnMatchProgressInput {
     chainAfter: number;
     /** Wardens the chunk finished this turn. */
     chunkWardensDefeated: number;
+    /** Pairs that dropped with the break because nothing held them; zero on most turns. */
+    chunkDroppedPairs: number;
+    /**
+     * Pairs that feed the ladder: every pair the break took, the pop's included. Measured
+     * (`cascade-balance-simulation.ts`): a ladder fed by the ripple alone reached Fever on four
+     * percent of clean floors, because partners rarely sit outside their clump; the pop counts,
+     * as a bubble shooter's cascade counts toward its combo.
+     */
+    chunkMomentumPairs: number;
+    /** Waves the ripple ran this turn; zero without a break. */
+    chunkRippleWaves: number;
     cursedMatchedEarly: boolean;
     findablesClaimedDelta: number;
     routeCardSafeHazardWardCharges: number;
@@ -90,6 +105,9 @@ export const resolveTurnMatchProgress = ({
     chunkTier,
     chainAfter,
     chunkWardensDefeated,
+    chunkDroppedPairs,
+    chunkMomentumPairs,
+    chunkRippleWaves,
     cursedMatchedEarly,
     findablesClaimedDelta,
     routeCardSafeHazardWardCharges,
@@ -147,7 +165,7 @@ export const resolveTurnMatchProgress = ({
         chunkPairsBrokenThisFloor:
             runNonNegativeInteger(run.chunkPairsBrokenThisFloor) + runNonNegativeInteger(chunkPairsBroken),
         chunkScoreThisFloor: runNonNegativeInteger(run.chunkScoreThisFloor) + runNonNegativeInteger(chunkScore),
-        chunkPairsThisChain: runNonNegativeInteger(run.chunkPairsThisChain) + runNonNegativeInteger(chunkPairsBroken),
+        chunkPairsThisChain: runNonNegativeInteger(run.chunkPairsThisChain) + runNonNegativeInteger(chunkMomentumPairs),
         feverBreaksThisFloor:
             runNonNegativeInteger(run.feverBreaksThisFloor) +
             (runNonNegativeInteger(chunkPairsBroken) > 0 && chunkTier === 'fever' ? 1 : 0),
@@ -158,6 +176,10 @@ export const resolveTurnMatchProgress = ({
         biggestChunkPairs: Math.max(runNonNegativeInteger(run.biggestChunkPairs), runNonNegativeInteger(chunkPairsBroken)),
         chunkWardenKills: runNonNegativeInteger(run.chunkWardenKills) + runNonNegativeInteger(chunkWardensDefeated),
         bestChainThisRun: Math.max(runNonNegativeInteger(run.bestChainThisRun), runNonNegativeInteger(chainAfter)),
+        chunkPairsDroppedThisFloor: runNonNegativeInteger(run.chunkPairsDroppedThisFloor) + runNonNegativeInteger(chunkDroppedPairs),
+        chunkDropsThisRun: runNonNegativeInteger(run.chunkDropsThisRun) + (runNonNegativeInteger(chunkDroppedPairs) > 0 ? 1 : 0),
+        bestRippleThisFloor: Math.max(runNonNegativeInteger(run.bestRippleThisFloor), runNonNegativeInteger(chunkRippleWaves)),
+        bestRippleThisRun: Math.max(runNonNegativeInteger(run.bestRippleThisRun), runNonNegativeInteger(chunkRippleWaves)),
         hazardFragileCacheClaimsThisFloor:
             runNonNegativeInteger(run.hazardFragileCacheClaimsThisFloor) + (fragileCacheClaimed ? 1 : 0),
         hazardTollCachesThisFloor:

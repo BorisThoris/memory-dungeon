@@ -55,6 +55,8 @@ export interface BoardTurnAnnouncementFacts {
     chainAfter: number;
     /** The break tier that chain reaches on this floor, stamped by the rules so no surface recomputes it. */
     chainTierAfter: 'none' | 'clean' | 'sharp' | 'fever';
+    /** The tier the run held before this turn, so a miss can say what it ended. */
+    chainTierBefore: 'none' | 'clean' | 'sharp' | 'fever';
     /**
      * The shape of this turn's chunk, for the style line (Peggle's "Long shot"): the widest gap
      * between a broken pair's halves in grid steps, pairs the halo took from another suit, treasure
@@ -65,6 +67,10 @@ export interface BoardTurnAnnouncementFacts {
     chunkHaloPairs: number;
     chunkTreasuresSpilled: number;
     chunkSuitCleared: boolean;
+    /** Pairs that dropped with this turn's break because their suit had too few left to hold them. */
+    chunkDroppedPairs: number;
+    /** Waves the ripple ran this turn: 1 for a pop that stopped at its own clump, 0 without a break. */
+    chunkRippleWaves: number;
     /** Pairs the magpie took back this floor, before and after this turn. */
     magpieTheftsBefore: number;
     magpieTheftsAfter: number;
@@ -154,8 +160,11 @@ const chunkStyleFacts = (
     before: RunState,
     after: RunState,
     matchedTileIds: readonly string[]
-): Pick<BoardTurnAnnouncementFacts, 'chunkPartnerSpanMax' | 'chunkHaloPairs' | 'chunkTreasuresSpilled' | 'chunkSuitCleared'> => {
-    const none = { chunkPartnerSpanMax: 0, chunkHaloPairs: 0, chunkTreasuresSpilled: 0, chunkSuitCleared: false };
+): Pick<
+    BoardTurnAnnouncementFacts,
+    'chunkPartnerSpanMax' | 'chunkHaloPairs' | 'chunkTreasuresSpilled' | 'chunkSuitCleared' | 'chunkRippleWaves'
+> => {
+    const none = { chunkPartnerSpanMax: 0, chunkHaloPairs: 0, chunkTreasuresSpilled: 0, chunkSuitCleared: false, chunkRippleWaves: 0 };
     const afterBoard = after.board;
     if (!afterBoard) {
         return none;
@@ -195,7 +204,15 @@ const chunkStyleFacts = (
     }
     const suitCleared =
         matchSuit != null && !afterBoard.tiles.some((tile) => tile.state === 'hidden' && tile.suit === matchSuit);
-    return { chunkPartnerSpanMax: spanMax, chunkHaloPairs: haloPairs, chunkTreasuresSpilled: treasures, chunkSuitCleared: suitCleared };
+    // The rule stamps each taken tile with its wave; the ripple's length is the last wave plus one.
+    const rippleWaves = taken.reduce((max, { tile }) => Math.max(max, runNonNegativeInteger(tile.brokenAtWave ?? 0)), 0) + 1;
+    return {
+        chunkPartnerSpanMax: spanMax,
+        chunkHaloPairs: haloPairs,
+        chunkTreasuresSpilled: treasures,
+        chunkSuitCleared: suitCleared,
+        chunkRippleWaves: rippleWaves
+    };
 };
 
 /** Route-special tiles still present on the board, so the announcer never counts them itself. */
@@ -251,7 +268,12 @@ export const getBoardTurnAnnouncementFacts = (
         chunkPairsBrokenAfter: runNonNegativeInteger(after.chunkPairsBrokenThisFloor),
         chainAfter: runNonNegativeInteger(after.stats.currentStreak),
         chainTierAfter: runChainTier(after),
+        chainTierBefore: runChainTier(before),
         ...chunkStyleFacts(before, after, flippedTileIds),
+        chunkDroppedPairs: Math.max(
+            0,
+            runNonNegativeInteger(after.chunkPairsDroppedThisFloor) - runNonNegativeInteger(before.chunkPairsDroppedThisFloor)
+        ),
         magpieTheftsBefore: runNonNegativeInteger(before.magpieTheftsThisFloor),
         magpieTheftsAfter: runNonNegativeInteger(after.magpieTheftsThisFloor),
         magpieScaredOffBefore: runNonNegativeInteger(before.magpieScaredOffThisFloor),

@@ -264,6 +264,8 @@ const getClearLifeBonusLabel = (result: NonNullable<RunState['lastLevelResult']>
 
 /** How long the stage carries the break pulse; matches the CSS animation. */
 const BREAK_PULSE_MS = 720;
+/** A Fever break is held longer: the stage pushes in and stays for the slowed shatter wave. */
+const FEVER_BREAK_PULSE_MS = 1100;
 /** The breath before the floor-clear dialog on the last pair. */
 export const LAST_PAIR_HOLD_MS = 650;
 
@@ -1188,15 +1190,24 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         ? latestTurnForPulse.announcement.chunkPairsBrokenAfter - latestTurnForPulse.announcement.chunkPairsBrokenBefore
         : 0;
     const pulseTier: ChainTier = latestTurnForPulse?.announcement.chainTierAfter ?? 'none';
-    const breakPulseTier: ChainTier | 'none' =
-        latestTurnForPulse && pulsePairs > 0 && expiredPulseEventId !== pulseEventId ? pulseTier : 'none';
+    // A break with no chain behind it is the pop: it pulses too, softly, so a match never reads as
+    // two tiles going grey while four more vanish for no reason.
+    const breakPulseTier: ChainTier | 'pop' | 'none' =
+        latestTurnForPulse && pulsePairs > 0 && expiredPulseEventId !== pulseEventId
+            ? pulseTier === 'none'
+                ? 'pop'
+                : pulseTier
+            : 'none';
     useEffect(() => {
         if (pulseEventId === null || pulsePairs <= 0) {
             return undefined;
         }
         // The pad shakes with the stage: same event, same tier, once. Reduce motion turns it off.
         rumbleForBreak(pulseTier, reduceMotion);
-        const clear = window.setTimeout(() => setExpiredPulseEventId(pulseEventId), BREAK_PULSE_MS);
+        const clear = window.setTimeout(
+            () => setExpiredPulseEventId(pulseEventId),
+            pulseTier === 'fever' ? FEVER_BREAK_PULSE_MS : BREAK_PULSE_MS
+        );
         return () => window.clearTimeout(clear);
     }, [pulseEventId, pulsePairs, pulseTier, reduceMotion]);
 

@@ -16,7 +16,9 @@ import {
     safelyReleasePointerCapture,
     safelySetPointerCapture,
     screenPointToWorld,
-    type TileBoardScreenPoint
+    type TileBoardScreenPoint,
+    getCameraFitMargin,
+    PORTRAIT_CAMERA_FIT_MARGIN
 } from './tileBoardViewport';
 
 afterEach(() => {
@@ -275,5 +277,18 @@ describe('tileBoardViewport', () => {
         expect(setPointerCapture).toHaveBeenCalledWith(9);
         expect(hasPointerCapture).toHaveBeenCalledWith(9);
         expect(releasePointerCapture).not.toHaveBeenCalled();
+    });
+});
+
+describe('the portrait fit margin', () => {
+    it('fits a phone held upright tighter than one held sideways', () => {
+        expect(getCameraFitMargin({ viewportWidth: 390, viewportHeight: 600 })).toBe(PORTRAIT_CAMERA_FIT_MARGIN);
+        expect(getCameraFitMargin({ viewportWidth: 812, viewportHeight: 300 })).toBe(MOBILE_CAMERA_FIT_MARGIN);
+        expect(PORTRAIT_CAMERA_FIT_MARGIN).toBeGreaterThan(MOBILE_CAMERA_FIT_MARGIN);
+        expect(PORTRAIT_CAMERA_FIT_MARGIN).toBeLessThan(1);
+        // A 6×4 board on a 390×600 stage: width-limited, and the tiles grow by the margin's ratio.
+        const before = getBoardFitZoom({ boardWidth: 6, boardHeight: 4, viewportWidth: 390, viewportHeight: 600, margin: MOBILE_CAMERA_FIT_MARGIN });
+        const after = getBoardFitZoom({ boardWidth: 6, boardHeight: 4, viewportWidth: 390, viewportHeight: 600, margin: PORTRAIT_CAMERA_FIT_MARGIN });
+        expect(after / before).toBeCloseTo(PORTRAIT_CAMERA_FIT_MARGIN / MOBILE_CAMERA_FIT_MARGIN, 5);
     });
 });

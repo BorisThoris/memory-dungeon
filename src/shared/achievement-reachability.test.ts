@@ -8,6 +8,7 @@ import { ENDLESS_CYCLE_FLOOR_COUNT } from './floor-mutator-schedule';
 import { MAX_RELIC_PICKS_PER_RUN, RELIC_POOL, STANDING_RULE_RELIC_IDS } from './relics';
 import { createDailyRun, createGauntletRun, createMeditationRun, createNewRun } from './run-creation-rules';
 import { ACHIEVEMENT_IDS, createDefaultSaveData } from './save-data';
+import { makeBoard, makeTile } from './test/game-fixtures';
 
 /**
  * An achievement whose threshold exceeds the content that exists is unearnable, and looks exactly
@@ -90,7 +91,7 @@ describe('achievement thresholds against real content', () => {
         // Not a behaviour check: a reminder that adding an id means deciding whether its bar is
         // reachable. `ACH_PUZZLE_SOLVER` is why.
         const known: AchievementId[] = [...ACHIEVEMENT_IDS];
-        expect(known).toHaveLength(24);
+        expect(known).toHaveLength(25);
         expect(GAME_RULES_VERSION).toBeGreaterThan(0);
     });
 });
@@ -103,5 +104,20 @@ describe('the chain loop achievements against real boards', () => {
         const broken = resolveChunkBreak({ board: run.board!, run, matchedTileIds: ['em1-A', 'em1-B'], chain: 8 });
         expect(broken.tier).toBe('fever');
         expect(broken.brokenPairKeys.length).toBeGreaterThanOrEqual(CHUNK_SIX_PAIRS);
+    });
+
+    it('Nothing held it is earnable: a Sharp break on a cut-off suit drops its last pair', () => {
+        // A, B, C ember; D, E, F tide. C touches no ember tile, so a Sharp break on A takes B
+        // through the clump and C drops. One drop is the whole bar.
+        const suit = (id: string) => (['A', 'B', 'C'].includes(id[0]!) ? 'ember' : 'tide');
+        const tile = (id: string) => makeTile(id, id[0]!, id[0]!, { suit: suit(id) });
+        const board = makeBoard(
+            [tile('A1'), tile('B1'), tile('D1'), tile('C1'), tile('A2'), tile('B2'), tile('E1'), tile('C2'), tile('D2'), tile('F1'), tile('E2'), tile('F2')],
+            { columns: 4, rows: 3, level: 3 }
+        );
+        const run = createNewRun(0);
+        const broken = resolveChunkBreak({ board, run, matchedTileIds: ['A1', 'A2'], chain: 6 });
+        expect(broken.droppedPairKeys).toEqual(['C']);
+        expect(evaluateAchievementUnlocks({ ...run, chunkDropsThisRun: 1 }, createDefaultSaveData())).toContain('ACH_NOTHING_HELD_IT');
     });
 });

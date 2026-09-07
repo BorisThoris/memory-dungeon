@@ -64,7 +64,7 @@ import { getResolvingSelectionState } from './tileResolvingSelection';
 import { DUNGEON_BOARD_STAGE_LAYER_POLICY, DUNGEON_BOARD_STAGE_PERFORMANCE_BUDGET } from './tileBoardStageLayers';
 import {
     COMPACT_BOARD_FIT_MARGIN,
-    MOBILE_CAMERA_FIT_MARGIN,
+    getCameraFitMargin,
     ROOMY_BOARD_FIT_MARGIN,
     carryBoardViewportForward,
     clampBoardViewport,
@@ -2763,7 +2763,11 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         () => (board.rows - 1) * TILE_SPACING + 1 + 2 * BOARD_LAYOUT_VIEWPORT_PADDING,
         [board.rows]
     );
-    const fitMargin = cameraViewportMode ? MOBILE_CAMERA_FIT_MARGIN : compact ? COMPACT_BOARD_FIT_MARGIN : ROOMY_BOARD_FIT_MARGIN;
+    const fitMargin = cameraViewportMode
+        ? getCameraFitMargin({ viewportHeight: stageWorldViewport.height, viewportWidth: stageWorldViewport.width })
+        : compact
+          ? COMPACT_BOARD_FIT_MARGIN
+          : ROOMY_BOARD_FIT_MARGIN;
     const fitZoom = useMemo(
         () =>
             getBoardFitZoom({

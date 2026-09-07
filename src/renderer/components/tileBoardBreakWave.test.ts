@@ -1,6 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import type { Tile } from '../../shared/contracts';
-import { BREAK_WAVE_MAX_DELAY_SECONDS, BREAK_WAVE_SECONDS_PER_STEP, getBreakWaveDelaySec } from './tileBoardBreakWave';
+import { BREAK_WAVE_MAX_DELAY_SECONDS, BREAK_WAVE_SECONDS_PER_STEP, getBreakWaveDelaySec,
+    FEVER_WAVE_MAX_DELAY_SECONDS,
+    FEVER_WAVE_SLOW
+} from './tileBoardBreakWave';
 
 const tile = (id: string, state: Tile['state'], suit: Tile['suit']): Tile => ({
     id,
@@ -38,6 +41,18 @@ describe('the break wave', () => {
     it('never waits longer than the cap, whatever the board size', () => {
         const far = [tile('A1', 'matched', 'moss'), ...Array.from({ length: 40 }, (_, i) => tile(`h${i}`, 'hidden', 'bone')), tile('Z1', 'removed', 'moss')];
         expect(getBreakWaveDelaySec({ columns: 1, tiles: far }, far.at(-1)!)).toBe(BREAK_WAVE_MAX_DELAY_SECONDS);
+    });
+
+    it('plays a Fever break slower and lets it run longer: the hit-stop', () => {
+        const fever = { ...tiles[2]!, brokenAtTier: 'fever' as const };
+        expect(getBreakWaveDelaySec(board, fever)).toBeCloseTo(2 * BREAK_WAVE_SECONDS_PER_STEP * FEVER_WAVE_SLOW);
+        expect(FEVER_WAVE_SLOW).toBeGreaterThan(1);
+        expect(FEVER_WAVE_MAX_DELAY_SECONDS).toBeGreaterThan(BREAK_WAVE_MAX_DELAY_SECONDS);
+        expect(FEVER_WAVE_MAX_DELAY_SECONDS).toBeLessThan(1);
+        const far = [tile('A1', 'matched', 'moss'), ...Array.from({ length: 40 }, (_, i) => tile(`h${i}`, 'hidden', 'bone')), { ...tile('Z1', 'removed', 'moss'), brokenAtTier: 'fever' as const }];
+        expect(getBreakWaveDelaySec({ columns: 1, tiles: far }, far.at(-1)!)).toBe(FEVER_WAVE_MAX_DELAY_SECONDS);
+        // Sharp keeps the ordinary pace: the hit-stop is Fever's alone.
+        expect(getBreakWaveDelaySec(board, { ...tiles[2]!, brokenAtTier: 'sharp' as const })).toBeCloseTo(2 * BREAK_WAVE_SECONDS_PER_STEP);
     });
 
     it('leaves without a wave when no matched tile shares its suit, rather than never leaving', () => {

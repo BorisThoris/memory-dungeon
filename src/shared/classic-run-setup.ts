@@ -1,4 +1,4 @@
-import type { ContractFlags, MutatorId } from './contracts';
+import type { ContractFlags, MutatorId, RunState } from './contracts';
 import type { CreateRunOptions } from './run-creation-rules';
 
 /**
@@ -94,6 +94,40 @@ export const buildClassicRunOptions = (setup: ClassicRunSetup): CreateRunOptions
         // A vow is a claim about how the run was played, so the shuffle it forbids has to be the
         // weaker one too — otherwise "no shuffle" only means "no button".
         ...(contract?.noShuffle ? { weakerShuffleMode: 'rows_only' as const } : {})
+    };
+};
+
+/**
+ * The setup a run was started with, read back from the run's own flags, so a retry restarts the
+ * run the player asked for. Restart precedence predates the sheet: it kept a vow or the wild flag
+ * and dropped the clock and the pace, because each retired card had been one flag and the sheet
+ * is several at once. Null for anything that is not a Classic run; the focus mutators are not
+ * recoverable from a run (the floor schedule writes the same field) and come back empty.
+ */
+export const classicRunSetupFromRun = (
+    run: Pick<
+        RunState,
+        'gameMode' | 'activeContract' | 'wildMenuRun' | 'practiceMode' | 'gauntletSessionDurationMs' | 'resolveDelayMultiplier'
+    >
+): ClassicRunSetup | null => {
+    if (run.gameMode !== 'endless') {
+        return null;
+    }
+    const contract = run.activeContract;
+    const vows: ClassicRunVowId[] = [];
+    if (contract?.noShuffle === true && contract.noDestroy === true) vows.push('scholar');
+    if (contract?.maxPinsTotalRun != null) vows.push('pin_vow');
+    const pressure =
+        (Object.keys(PRESSURE_DURATION_MS) as ClassicRunPressureId[]).find(
+            (id) => PRESSURE_DURATION_MS[id] !== null && PRESSURE_DURATION_MS[id] === run.gauntletSessionDurationMs
+        ) ?? 'none';
+    return {
+        chaos: run.wildMenuRun === true,
+        focusMutators: [],
+        pacing: Number.isFinite(run.resolveDelayMultiplier) && run.resolveDelayMultiplier > 1 ? 'calm' : 'standard',
+        pressure,
+        unrecorded: run.practiceMode === true,
+        vows
     };
 };
 

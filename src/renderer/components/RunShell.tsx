@@ -1,4 +1,4 @@
-import { memo, type ReactElement } from 'react';
+import { memo, useEffect, useRef, useState, type CSSProperties, type ReactElement } from 'react';
 import type { RunState } from '../../shared/contracts';
 import { runNonNegativeInteger } from '../../shared/run-number-guards';
 import { getGameplayFeedbackObjectiveSnapshot } from '../../shared/gameplay-feedback-facts';
@@ -10,7 +10,7 @@ import type { PerfectMemoryStatus } from '../../shared/perfect-memory-status';
 import { PERFECT_MEMORY_COPY, RUN_SHELL_LABELS } from '../copy/runDialogCopy';
 import { PASS_AND_PLAY_COPY } from '../copy/passAndPlay';
 import { CHAIN_BEAT_COPY, CHAIN_TIER_LABELS } from '../copy/chainBeat';
-import { chainTierRungs, runChainTier } from '../../shared/chain-tier-rules';
+import { chainTierRungs, runChainMeter, runChainTier } from '../../shared/chain-tier-rules';
 import { isPassAndPlayRun, PASS_AND_PLAY_FLOORS } from '../../shared/pass-and-play-rules';
 
 /**
@@ -57,20 +57,51 @@ const formatTimer = (ms: number): string => {
     return `${minutes}:${seconds.toString().padStart(2, '0')}`;
 };
 
+/** How long the meter reads as draining after a chain drops. */
+const CHAIN_METER_DROP_MS = 700;
+
+/**
+ * The chain-drop beat on the meter. When momentum falls from Clean or better to nothing, the
+ * bar drains red for a beat instead of snapping empty: the loss is half of the loop, and a
+ * meter that vanished silently taught nothing. Timer-set so the render never sets state.
+ */
+const useChainMeterDrop = (momentum: number, cleanRung: number): boolean => {
+    const [dropping, setDropping] = useState(false);
+    const previousRef = useRef(momentum);
+    useEffect(() => {
+        const previous = previousRef.current;
+        previousRef.current = momentum;
+        if (!(previous >= cleanRung && momentum === 0)) {
+            return undefined;
+        }
+        const start = window.setTimeout(() => setDropping(true), 0);
+        const end = window.setTimeout(() => setDropping(false), CHAIN_METER_DROP_MS);
+        return () => {
+            window.clearTimeout(start);
+            window.clearTimeout(end);
+        };
+    }, [momentum, cleanRung]);
+    return dropping;
+};
+
 const Stat = ({
     label,
     children,
+    meter = null,
     primary = false,
     testId
 }: {
     label: string;
     children: ReactElement | string;
+    /** A bar under the value, the stat's full width; only the Chain stat carries one. */
+    meter?: ReactElement | null;
     primary?: boolean;
     testId: string;
 }): ReactElement => (
     <div className={`${styles.stat} ${primary ? styles.statPrimary : ''}`.trim()} data-testid={testId}>
         <span className={styles.label}>{label}</span>
         <span className={`${styles.value} ${primary ? styles.valuePrimary : ''}`.trim()}>{children}</span>
+        {meter}
     </div>
 );
 
@@ -89,6 +120,8 @@ const RunShell = ({
     const objective = getGameplayFeedbackObjectiveSnapshot(run);
     const mutatorTitles = run.activeMutators.map((id) => MUTATOR_CATALOG[id]?.title ?? id);
     const modeIdentity = describeRunModeIdentity(run);
+    const chainMeterView = runChainMeter(run);
+    const chainMeterDropping = useChainMeterDrop(chainMeterView.momentum, chainTierRungs(run.board?.pairCount ?? null).clean);
     const line = feedback ?? onboardingLine ?? (objective ? `${objective.label}: ${objective.progress}/${objective.required}` : null);
     const lineTone = feedback ? feedbackPriority : onboardingLine ? 'info' : 'objective';
     const visibleTools = tools.filter((tool) => tool.charges === undefined || tool.charges > 0 || tool.armed);
@@ -177,7 +210,36 @@ const RunShell = ({
                 ) : null}
                 {/* The ladder you are climbing. Depth plus the rung's name, because a tier that only
                     exists in the rules is a tier the player never planned around. */}
-                <Stat label="Chain" testId="hud-chain">
+                <Stat
+                    label="Chain"
+                    meter={(() => {
+                        // The ladder as a bar. Peggle's multiplier reads at a glance because it is a
+                        // meter; ours was a number, a word and a hover hint. Ticks at Clean and Sharp,
+                        // full at Fever, and it stays full until the chain drops.
+                        const meter = chainMeterView;
+                        return (
+                            <span
+                                aria-label={CHAIN_BEAT_COPY.meterLabel(meter.momentum, meter.feverAt, meter.full)}
+                                className={styles.chainMeter}
+                                data-chain-tier={meter.tier}
+                                data-meter-drop={chainMeterDropping ? 'true' : 'false'}
+                                data-meter-fill={meter.fill.toFixed(3)}
+                                data-meter-full={meter.full ? 'true' : 'false'}
+                                data-testid="hud-chain-meter"
+                                role="img"
+                                style={
+                                    {
+                                        '--chain-meter-clean': `${(meter.ticks.clean * 100).toFixed(1)}%`,
+                                        '--chain-meter-sharp': `${(meter.ticks.sharp * 100).toFixed(1)}%`
+                                    } as CSSProperties
+                                }
+                            >
+                                <span className={styles.chainMeterFill} style={{ width: `${(meter.fill * 100).toFixed(1)}%` }} />
+                            </span>
+                        );
+                    })()}
+                    testId="hud-chain"
+                >
                     <span
                         data-chain-tier={runChainTier(run)}
                         title={CHAIN_BEAT_COPY.momentumHint(

@@ -314,6 +314,15 @@
     }
 
     /*
+     * The room's name is the line a phone can spare: the door's title says the route, the
+     * reward line says what it pays, and the risk line is the one that was sliding under the
+     * dialog's actions on the third door. The name is still in the door's accessible label.
+     */
+    .doorRoom {
+        display: none;
+    }
+
+    /*
      * The recap lines give way to the third door. The chain's line is two rows at this width
      * and the run bar's chain stat and the next floor's beat carry the same numbers; the
      * objective and the resident's aside are read again on the next floor. What stays is money
@@ -384,6 +393,23 @@
         clip: rect(0, 0, 0, 0);
         white-space: nowrap;
         border: 0;
+    }
+}
+
+/*
+ * A laptop's 1024x768: the summary gained the floor resident's line and the door cards lost
+ * their risk line ("-1 life; unavailable at 1 life.") under the body's edge, the one line a
+ * door is chosen on. The room name is flavour and steps aside at this height too, as it
+ * already does on a phone, and the card's padding tightens.
+ */
+@media (max-height: 800px) {
+    .door {
+        gap: 0.25rem;
+        padding: 0.55rem 0.75rem 0.6rem;
+    }
+
+    .doorRoom {
+        display: none;
     }
 }
 

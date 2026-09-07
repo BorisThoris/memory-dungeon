@@ -73,6 +73,20 @@ export const RELEASE_CHECKLIST: readonly ReleaseChecklistItem[] = [
         section: 'Gameplay'
     },
     {
+        evidence: 'src/shared/chunk-break-rules.ts',
+        id: 'the-live-pop',
+        label: 'Every match pops the same-suit clump touching it, live, with no chain behind it; a pair goes only when both halves touch, and the chain is what reaches a partner across the board and ripples through the islands',
+        owner: 'repo',
+        section: 'Gameplay'
+    },
+    {
+        evidence: 'src/shared/chunk-break-rules.ts',
+        id: 'the-drop',
+        label: 'A Sharp or Fever break that leaves a suit with two plain pairs or fewer takes them too, and never a card with a job',
+        owner: 'repo',
+        section: 'Gameplay'
+    },
+    {
         evidence: 'src/shared/pass-and-play-rules.ts',
         id: 'chain-in-daily-and-shared-play',
         label: 'The share line and the daily post name the best chain, the quest ladder asks for Sharp floors, and a shared table credits a chunk to the seat that broke it',

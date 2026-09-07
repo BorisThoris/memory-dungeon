@@ -493,8 +493,13 @@ describe('GameScreen (OVR-014)', () => {
                 </PlatformTiltProvider>
             );
             expect(screen.getByTestId('board-stage')).toHaveAttribute('data-break-pulse', 'fever');
+            // Fever is held past the ordinary beat: the hit-stop, while the slowed wave plays out.
             act(() => {
                 vi.advanceTimersByTime(800);
+            });
+            expect(screen.getByTestId('board-stage')).toHaveAttribute('data-break-pulse', 'fever');
+            act(() => {
+                vi.advanceTimersByTime(400);
             });
             expect(screen.getByTestId('board-stage')).toHaveAttribute('data-break-pulse', 'none');
         } finally {

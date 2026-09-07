@@ -5,7 +5,8 @@ import {
     CHAIN_TIER_SHARP_FROM,
     chainCanBreakChunk,
     getChainTier,
-    nextChainTierAt
+    nextChainTierAt,
+    chainMeter
 } from './chain-tier-rules';
 
 describe('the chain ladder', () => {
@@ -29,6 +30,16 @@ describe('the chain ladder', () => {
         expect(nextChainTierAt(3)).toBe(CHAIN_TIER_SHARP_FROM);
         expect(nextChainTierAt(6)).toBe(CHAIN_TIER_FEVER_FROM);
         expect(nextChainTierAt(12)).toBeNull();
+    });
+
+    it('reads the ladder as one bar with the rungs as ticks, full at Fever', () => {
+        // Twelve pairs: Clean 3, Sharp 5, Fever 8.
+        expect(chainMeter(0, 12)).toMatchObject({ tier: 'none', fill: 0, full: false, feverAt: 8 });
+        expect(chainMeter(5, 12)).toMatchObject({ tier: 'sharp', fill: 0.625, full: false });
+        expect(chainMeter(5, 12).ticks).toEqual({ clean: 0.375, sharp: 0.625 });
+        expect(chainMeter(8, 12)).toMatchObject({ tier: 'fever', fill: 1, full: true });
+        expect(chainMeter(11, 12)).toMatchObject({ fill: 1, full: true, momentum: 11 });
+        expect(chainMeter(Number.NaN, 12).fill).toBe(0);
     });
 
     it('treats garbage as no chain rather than as Fever', () => {

@@ -375,14 +375,22 @@
 
     .dock {
         width: calc(100% - 1rem);
+        flex-wrap: wrap;
         gap: 0.2rem;
         padding: 0.5rem 0.4rem max(0.5rem, env(safe-area-inset-bottom, 0px));
     }
 
+    /*
+     * Eight tools with 12px labels need about 420px in one row; a 390px phone has 370. One row
+     * ran "SHUFFLE" into "SWAP". Two rows of four give every label its width and keep every
+     * tool's target at 44px; the stage pays about 45px for it, which the portrait fit margin
+     * (Gen 134) more than gives back.
+     */
     .tool {
         min-width: 0;
-        flex: 1 1 0;
+        flex: 1 1 22%;
         padding: 0.4rem 0.2rem 0.35rem;
+        min-height: 3rem;
     }
 }
 
@@ -461,5 +469,86 @@
 
     .seatLabelShort {
         display: inline;
+    }
+}
+
+/*
+ * The Fever meter under the chain number: one bar for the whole ladder, ticks where Clean and
+ * Sharp sit, full at Fever. Four pixels tall so the stat row keeps its height on a phone sideways.
+ */
+.chainMeter {
+    display: block;
+    position: relative;
+    width: 100%;
+    min-width: 3.4rem;
+    height: 4px;
+    margin-top: 0.22rem;
+    border-radius: 2px;
+    overflow: hidden;
+    background:
+        linear-gradient(90deg, transparent var(--chain-meter-clean, 37%), var(--theme-text-muted) var(--chain-meter-clean, 37%), var(--theme-text-muted) calc(var(--chain-meter-clean, 37%) + 1px), transparent calc(var(--chain-meter-clean, 37%) + 1px)),
+        linear-gradient(90deg, transparent var(--chain-meter-sharp, 62%), var(--theme-text-muted) var(--chain-meter-sharp, 62%), var(--theme-text-muted) calc(var(--chain-meter-sharp, 62%) + 1px), transparent calc(var(--chain-meter-sharp, 62%) + 1px)),
+        color-mix(in srgb, var(--theme-gold-bright) 28%, transparent);
+}
+
+.chainMeterFill {
+    display: block;
+    height: 100%;
+    border-radius: 2px;
+    background: color-mix(in srgb, var(--theme-gold-bright) 70%, var(--theme-text));
+    transition: width 240ms ease;
+}
+
+.chainMeter[data-chain-tier='sharp'] .chainMeterFill {
+    background: var(--theme-gold-bright);
+}
+
+.chainMeter[data-meter-full='true'] .chainMeterFill {
+    background: #ffd27a;
+    box-shadow: 0 0 8px color-mix(in srgb, var(--theme-glow-gold) 90%, transparent);
+    animation: chainMeterFever 900ms ease-in-out infinite alternate;
+}
+
+@keyframes chainMeterFever {
+    from {
+        opacity: 0.72;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .chainMeterFill {
+        transition: none;
+        animation: none;
+    }
+}
+
+/* The drop: the bar reads red for a beat as it empties, so the loss lands. */
+.chainMeter[data-meter-drop='true'] .chainMeterFill {
+    background: #ff8f7a;
+    box-shadow: 0 0 8px rgba(255, 120, 96, 0.7);
+    transition: width 650ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.chainMeter[data-meter-drop='true'] {
+    animation: chainMeterDropFlash 700ms ease-out 1;
+}
+
+@keyframes chainMeterDropFlash {
+    0% {
+        background-color: rgba(255, 120, 96, 0.45);
+    }
+
+    100% {
+        background-color: transparent;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .chainMeter[data-meter-drop='true'] {
+        animation: none;
     }
 }

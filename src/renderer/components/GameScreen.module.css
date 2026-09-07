@@ -1180,10 +1180,39 @@ where that rule
  * offers themselves past the bottom edge. The modal's own subtitle already says which pick
  * this is, so the cards and the services keep the room.
  */
+/*
+ * A phone: four relic cards one per row and the three services under them ran past the
+ * overlay body, and the third service ("Upgrade offer - 3g") was cut at the plate's edge.
+ * The two header bullets (chapter alignment, featured favor) are the lines to lose, as they
+ * already are at a short height; the pick and the services are what the screen is for.
+ */
+@media (max-width: 720px) {
+    .relicDraftBonusList {
+        display: none;
+    }
+}
+
 @media (max-height: 560px) {
     .relicDraftProgress,
     .relicDraftBonusList {
         display: none;
+    }
+
+    /*
+     * The shortcuts overlay is six rows and the Gambit tip; at 812x375 the tip's second line
+     * ran under the overlay body's edge. The rows tighten to what a phone held sideways can
+     * hold and every line stays on the plate.
+     */
+    .shortcutsHelpList {
+        gap: 0.2rem;
+        font-size: 0.88rem;
+        line-height: 1.3;
+    }
+
+    .shortcutsHelpTip {
+        margin-top: 0.4rem;
+        font-size: 0.82rem;
+        line-height: 1.3;
     }
 }
 
@@ -1193,6 +1222,11 @@ where that rule
 /* The whole stage answers a break: a short bloom that scales with the tier. Fever is gold and
    held; Clean is barely there. Driven by a data attribute the screen sets from the resolved-turn
    event and clears after BREAK_PULSE_MS, so the animation restarts on every break. */
+.boardStage[data-break-pulse='pop'] {
+    animation: boardStageBreakPulse 0.6s ease-out 1;
+    --break-pulse-strength: 0.11;
+}
+
 .boardStage[data-break-pulse='clean'] {
     animation: boardStageBreakPulse 0.72s ease-out 1;
     --break-pulse-strength: 0.18;
@@ -1203,8 +1237,12 @@ where that rule
     --break-pulse-strength: 0.34;
 }
 
+/*
+ * Fever is the hit-stop: the stage pushes in a hair and holds while the slowed shatter wave
+ * plays, then eases back. 1.1s to match FEVER_BREAK_PULSE_MS; reduce motion turns it off.
+ */
 .boardStage[data-break-pulse='fever'] {
-    animation: boardStageFeverPulse 0.72s ease-out 1;
+    animation: boardStageFeverPulse 1.1s cubic-bezier(0.2, 0.9, 0.3, 1) 1;
     --break-pulse-strength: 0.5;
 }
 
@@ -1224,14 +1262,22 @@ where that rule
     0% {
         box-shadow: inset 0 0 0 0 transparent;
         filter: saturate(1);
+        transform: scale(1);
     }
-    16% {
+    10% {
         box-shadow: inset 0 0 96px 18px color-mix(in srgb, var(--theme-gold-bright) 50%, transparent);
         filter: saturate(1.25);
+        transform: scale(1.025);
+    }
+    55% {
+        box-shadow: inset 0 0 72px 12px color-mix(in srgb, var(--theme-gold-bright) 32%, transparent);
+        filter: saturate(1.18);
+        transform: scale(1.025);
     }
     100% {
         box-shadow: inset 0 0 0 0 transparent;
         filter: saturate(1);
+        transform: scale(1);
     }
 }
 

@@ -3,6 +3,7 @@ import { createNewRun } from './run-creation-rules';
 import { describeRunModeIdentity } from './run-mode-identity';
 import {
     buildClassicRunOptions,
+    classicRunSetupFromRun,
     buildVowContract,
     CHAOS_MUTATORS,
     DEFAULT_CLASSIC_RUN_SETUP,
@@ -103,5 +104,18 @@ describe('describeClassicRunSetup', () => {
                 setup({ chaos: true, pacing: 'calm', pressure: 'timed_15', unrecorded: true, vows: ['scholar', 'pin_vow'] })
             )
         ).toEqual(['Scholar vow', 'Pin vow', 'Wild', 'Calm', '15 min', 'Unrecorded']);
+    });
+});
+
+describe('classicRunSetupFromRun', () => {
+    it('reads a whole setup back off the run it started, so a retry keeps all of it', () => {
+        const chosen = setup({ chaos: true, pacing: 'calm', pressure: 'timed_10', unrecorded: true, vows: ['scholar', 'pin_vow'] });
+        const run = createNewRun(0, buildClassicRunOptions(chosen));
+        expect(classicRunSetupFromRun(run)).toEqual({ ...chosen, focusMutators: [] });
+    });
+
+    it('reads the plain descent as the default, and a non-Classic run as nothing', () => {
+        expect(classicRunSetupFromRun(createNewRun(0))).toEqual(DEFAULT_CLASSIC_RUN_SETUP);
+        expect(classicRunSetupFromRun({ ...createNewRun(0), gameMode: 'daily' })).toBeNull();
     });
 });

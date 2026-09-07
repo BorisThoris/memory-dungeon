@@ -14,6 +14,7 @@ import {
     buildClassicRunOptions,
     DEFAULT_CLASSIC_RUN_SETUP,
     describeClassicRunSetup,
+    classicRunSetupFromRun,
     isDefaultClassicRunSetup,
     type ClassicRunSetup
 } from '../../shared/classic-run-setup';
@@ -178,6 +179,22 @@ export const createRestartRun = (previousRun: RunState | null, saveData: SaveDat
             previousRun.activeMutators.length > 0 ? previousRun.activeMutators : undefined,
             meta
         );
+    }
+
+    /*
+     * A Classic run started from the setup sheet is several choices at once — a clock, a pace,
+     * vows, the joker, the record toggle — and the one-flag branches below each restart one of
+     * them and forget the rest. Read the whole setup back off the run and restart all of it.
+     */
+    const setup = previousRun ? classicRunSetupFromRun(previousRun) : null;
+    if (setup && !isDefaultClassicRunSetup(setup)) {
+        return createNewRun(bestScore, {
+            ...meta,
+            ...buildClassicRunOptions(setup),
+            // The contract object itself carries on: a mismatch cap the sheet does not offer survives.
+            ...(previousRun?.activeContract ? { activeContract: previousRun.activeContract } : {}),
+            startingLoadoutId
+        });
     }
 
     if (previousRun?.activeContract?.maxPinsTotalRun != null) {

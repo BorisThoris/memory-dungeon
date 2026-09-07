@@ -119,7 +119,8 @@ export const ACHIEVEMENT_IDS = [
     'ACH_FIRST_FEVER',
     'ACH_CHUNK_SIX',
     'ACH_EXTREME_FEVER',
-    'ACH_WARDEN_BY_CHUNK'
+    'ACH_WARDEN_BY_CHUNK',
+    'ACH_NOTHING_HELD_IT'
 ] as const satisfies readonly AchievementId[];
 
 export const createAchievementState = (): AchievementState =>

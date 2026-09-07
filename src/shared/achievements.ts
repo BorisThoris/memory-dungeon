@@ -130,6 +130,7 @@ export const evaluateAchievementUnlocks = (run: RunState, saveData: SaveData): A
     award('ACH_CHUNK_SIX', runNonNegativeInteger(run.biggestChunkPairs) >= CHUNK_SIX_PAIRS);
     award('ACH_EXTREME_FEVER', run.lastLevelResult?.momentumBonusTier === 'fever');
     award('ACH_WARDEN_BY_CHUNK', runNonNegativeInteger(run.chunkWardenKills) >= 1);
+    award('ACH_NOTHING_HELD_IT', runNonNegativeInteger(run.chunkDropsThisRun) >= 1);
 
     return unlocked;
 };
