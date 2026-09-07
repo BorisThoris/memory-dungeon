@@ -301,3 +301,38 @@ that the spectacle costs legibility. This repo is building shatter waves, hit-st
 Fever pulse and screen shake into a game whose core verb is *remembering where a card is* — a verb
 that depends entirely on the player reading and holding board state. That combination is more
 fragile than Tetris Effect's, not less. Tasks 160 and 159 are the response.
+
+### The chain lineage: depth beats width, by design and by an order of magnitude
+
+Puyo Nexus returned HTTP 403 to direct fetches, so this is assembled from multiple concurring
+secondary sources rather than quoted from the primary wiki. Treat the **shape** as reliable and the
+**exact tables** as not yet verified — chain power values differ per game and per mode, which every
+source agrees on.
+
+The formula is a single product:
+
+    points = 10 x (puyo cleared) x (chain power + colour bonus + group bonus)
+
+The asymmetry inside that bracket is the whole design:
+
+- **Chain power starts around 40 for the first link and climbs steeply per link.**
+- **Group bonus — the reward for clearing a *bigger* cluster — is single digits.** A five-puyo group
+  adds about +2.
+
+Worked, as the sources give it: four puyo on the first link scores (10 x 4) x 40 = 1,600. Five puyo
+scores (10 x 5) x (40 + 2) = 2,100. Adding a whole extra puyo to the cluster bought 2 points of
+multiplier; adding a *link* multiplies the whole thing.
+
+**Depth is worth an order of magnitude more than width, and the scoring is tuned to say so
+explicitly.** Panel de Pon says the same thing through a different mechanism, confirmed 3-0 in §5:
+a 4-combo sends a 3-wide rod and only a 7-panel clear produces a full-width row, while chain depth
+sends a full row per link.
+
+This is the sharpest external criticism of this game's current cascade, and it is worth stating
+plainly. Measured in Gen 151, our break leaves the matched suit with **zero** plain pairs on 92-98%
+of matches **at every tier** — none, Clean, Sharp and Fever alike. Width is total and depth changes
+almost nothing. The genre this game's ladder is modelled on does the exact opposite, on purpose,
+because that is what makes the placement decision matter.
+
+Task 157 (suits are too small) is therefore not a polish item. It is the difference between having
+a chain ladder and having a chain ladder that means something.
