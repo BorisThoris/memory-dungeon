@@ -91,8 +91,14 @@ isolation. The helpers already retry with 30-second `toPass` budgets, so this is
 rather than a product defect, and the timeouts were deliberately **not** raised to suit one
 environment. CI sets `retries: 2`; a local run sets none, so a developer sees the flake and CI
 hides it, which is worth knowing before trusting a green CI badge.
-- `yarn gate:systems` — module graph, dungeon topology, simulation health, and a 16-seed x
-  1000-floor softlock sweep.
+- `yarn gate:systems` — module graph, dungeon topology, simulation health, a 16-seed x
+  1000-floor softlock sweep, and the occupancy census (`yarn gate:occupancy`).
+- `yarn gate:occupancy` — plays generated floors and checks that the set of systems which never
+  fire, and the set that fire too rarely to learn, is exactly the recorded baseline. It fails in
+  both directions: a system that goes quiet is a regression, and one that comes back to life is
+  progress nobody wrote down. It exists because a shipped, unit-tested, documented rule (the
+  cascade pop) fired on 0% of matches on real floors for six floors, and no other gate could see
+  it — reachability is not occupancy.
 
 ## Not yet answered
 

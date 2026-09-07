@@ -4,7 +4,10 @@ import {
     simulateSystemOccupancy,
     summarizeSystemOccupancy,
     SYSTEM_OCCUPANCY_BANDS,
-    SYSTEM_OCCUPANCY_COUNTERS
+    SYSTEM_OCCUPANCY_BASELINE,
+    SYSTEM_OCCUPANCY_BASELINE_FLOORS,
+    SYSTEM_OCCUPANCY_COUNTERS,
+    judgeSystemOccupancyAgainstBaseline
 } from './system-occupancy-simulation';
 
 /**
@@ -16,33 +19,30 @@ import {
  * is nothing left to fall. Two others - shuffle snares and the safe-hazard ward - come back the
  * moment a floor keeps pairs back from the dungeon's budget, which was measured and is its own
  * change (see `pairCapacityForDungeonEncounter`). That is the finding, not a reason to skip the
- * check: the list below is a baseline to burn down, and it is asserted exactly. A system that
- * goes quiet fails this test the moment it does, and a system brought back to life fails it too,
- * which is the only way a list like this ever shrinks.
+ * check: `SYSTEM_OCCUPANCY_BASELINE` is a baseline to burn down, and it is asserted exactly. A
+ * system that goes quiet fails this test the moment it does, and a system brought back to life
+ * fails it too, which is the only way a list like this ever shrinks.
+ *
+ * The baseline lives in the module rather than here so `yarn gate:occupancy` asserts the same
+ * list this test does - one record, two readers.
  */
-const KNOWN_SILENT = [
-    'anchorSealUsesThisFloor',
-    'catalystAltarUpgradesThisFloor',
-    'chunkPairsDroppedThisFloor',
-    'enemyHazardHitsThisFloor',
-    'hazardMirrorDecoysThisFloor',
-    'hazardShuffleSnaresThisFloor',
-    'lanternWardScoutsThisFloor',
-    'magpieTheftsThisFloor',
-    'mimicCacheClaimsThisFloor',
-    'parasiteVesselConversionsThisFloor',
-    'pinLatticeRewardsThisFloor',
-    'safeHazardWardsUsedThisFloor'
-] as const;
+const KNOWN_SILENT = SYSTEM_OCCUPANCY_BASELINE.silent;
 
 /** Systems under their cadence band but not silent. Same ratchet, same rules. */
-const KNOWN_THIN = ['feverBreaksThisFloor'] as const;
+const KNOWN_THIN = SYSTEM_OCCUPANCY_BASELINE.thin;
 
 describe('what actually happens to a player', () => {
-    const report = simulateSystemOccupancy({ floors: 12 });
+    const report = simulateSystemOccupancy({ floors: SYSTEM_OCCUPANCY_BASELINE_FLOORS });
 
     it('is the same census on a replay', () => {
-        expect(simulateSystemOccupancy({ floors: 12 }).rows).toEqual(report.rows);
+        expect(simulateSystemOccupancy({ floors: SYSTEM_OCCUPANCY_BASELINE_FLOORS }).rows).toEqual(report.rows);
+    });
+
+    it('agrees with the gate, so the gate and this test cannot drift apart', () => {
+        expect(judgeSystemOccupancyAgainstBaseline(report), summarizeSystemOccupancy(report)).toEqual({
+            ok: true,
+            issues: []
+        });
     });
 
     it('runs the loop on nearly every floor: matches resolve and matches pop', () => {

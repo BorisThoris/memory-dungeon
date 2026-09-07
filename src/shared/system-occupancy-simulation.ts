@@ -212,6 +212,71 @@ export const SYSTEM_OCCUPANCY_BANDS = {
     rare: { min: 0.005 }
 } as const;
 
+/**
+ * The census as a ratchet: what is silent and what is thin today, asserted exactly.
+ *
+ * `judgeSystemOccupancy` asks the aspirational question - is anything silent or thin at all - and
+ * the answer is yes, twelve and one, so it cannot gate anything until that is nought. This is the
+ * question a gate can ask meanwhile: has the set CHANGED. A system that goes quiet fails it the
+ * moment it does, and a system brought back to life fails it too, which is the only way a list
+ * like this ever shrinks rather than drifts.
+ *
+ * Every entry is a debt with a task against it, not an exemption. Four of the silent ones are
+ * route specials this census structurally cannot reach, because it plays floors rather than runs
+ * (task 150). Two more come back the moment a floor keeps pairs back from the dungeon's budget
+ * (task 156). The drop needs a suit big enough to leave a remnant (tasks 151, 157).
+ */
+export const SYSTEM_OCCUPANCY_BASELINE = {
+    silent: [
+        'anchorSealUsesThisFloor',
+        'catalystAltarUpgradesThisFloor',
+        'chunkPairsDroppedThisFloor',
+        'enemyHazardHitsThisFloor',
+        'hazardMirrorDecoysThisFloor',
+        'hazardShuffleSnaresThisFloor',
+        'lanternWardScoutsThisFloor',
+        'magpieTheftsThisFloor',
+        'mimicCacheClaimsThisFloor',
+        'parasiteVesselConversionsThisFloor',
+        'pinLatticeRewardsThisFloor',
+        'safeHazardWardsUsedThisFloor'
+    ],
+    thin: ['feverBreaksThisFloor']
+} as const;
+
+/** The floor count the baseline above was measured at. A different count measures a different game. */
+export const SYSTEM_OCCUPANCY_BASELINE_FLOORS = 12;
+
+/**
+ * Compare a census against the recorded baseline, naming what moved in either direction.
+ *
+ * This is what a gate runs. `judgeSystemOccupancy` says whether the game is where it should be;
+ * this says whether a change made it worse - or better without anyone updating the record, which
+ * matters just as much, because an unrecorded revival is how a baseline stops meaning anything.
+ */
+export const judgeSystemOccupancyAgainstBaseline = (
+    report: SystemOccupancyReport
+): { ok: boolean; issues: string[] } => {
+    const silent = report.rows.filter((row) => row.floorShare === 0).map((row) => row.key);
+    const thin = report.rows
+        .filter((row) => row.floorShare > 0 && row.floorShare < SYSTEM_OCCUPANCY_BANDS[row.cadence].min)
+        .map((row) => row.key);
+    const issues: string[] = [];
+    const compare = (label: string, observed: readonly string[], expected: readonly string[]): void => {
+        for (const key of observed) {
+            if (!expected.includes(key)) issues.push(`${key} is now ${label} and is not in the baseline`);
+        }
+        for (const key of expected) {
+            if (!observed.includes(key)) {
+                issues.push(`${key} is no longer ${label} - it came back to life, so update the baseline`);
+            }
+        }
+    };
+    compare('silent', silent, SYSTEM_OCCUPANCY_BASELINE.silent);
+    compare('thin', thin, SYSTEM_OCCUPANCY_BASELINE.thin);
+    return { ok: issues.length === 0, issues };
+};
+
 export const judgeSystemOccupancy = (report: SystemOccupancyReport): { ok: boolean; issues: string[]; silent: string[] } => {
     const issues: string[] = [];
     const silent: string[] = [];

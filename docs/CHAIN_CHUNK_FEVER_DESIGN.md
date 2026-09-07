@@ -433,7 +433,7 @@ the exit included, and the shop sells one.
 | **152** | Fever reaches 4% of floors against a 10% bar. | The ladder was re-tuned for the pop's shorter floors; the census says it is still short of where the design wants it. |
 | **153** | Three hazard tiles never spring: shuffle snares, mirror decoys, mimic caches. | They are laid, but the floor ends before a player steps on them. |
 | **154** | Roaming hazards never land a hit, so their ward never absorbs one. | Two systems silent for one reason: the hazard's walk is slower than a floor now lasts. |
-| **155** | Put the occupancy census in `gate:systems`. | A ratchet nobody runs is a comment. |
+| **155** | ~~Put the occupancy census in `gate:systems`.~~ Done: `yarn gate:occupancy` asserts the baseline in both directions, off one shared record the census test reads too. | A ratchet nobody runs is a comment. |
 | **156** | Reserve plain pairs from the dungeon budget, properly. | §11.2: worth doing, with the recipe taught to cut optional content before identity and the build-strategy fixtures re-measured. |
 | **157** | The magpie play-through (task 114 / #156). | Carried. |
 
