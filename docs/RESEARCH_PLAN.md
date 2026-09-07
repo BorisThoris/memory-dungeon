@@ -16,6 +16,13 @@ Each pass is fanned out, its claims extracted and adversarially verified 3-vote,
 survives is recorded. A refuted claim is recorded as refuted, because the first pass showed that
 the most quotable claims are the ones most likely to die.
 
+**Outcome (recorded after the fact):** the automated passes ran but their verification stage was
+cut off by a service rate limit twice, so 368 claims came back unverified and only seven reached a
+verdict (`RESEARCH_NOTES_2.md` §0). The passes were then redone by hand against primary sources.
+That produced two documents: `RESEARCH_NOTES_2.md` for what was confirmed source-by-source, and
+`MARKET_SURVEY.md` — nine comparable products measured against Steam's own published statistics,
+which is the market half of the question and the part the automated passes never reached.
+
 | # | Pass | Why this repo needs it |
 |---|---|---|
 | 1 | Puzzle-roguelike retention, with measured evidence only | Re-run of the failed angle. This game ships meta-progression, endless, dailies and a difficulty ladder on no verified basis. |

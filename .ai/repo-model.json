@@ -3,7 +3,7 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2615,
+    "trackedFileCount": 2616,
     "codeFileCount": 1035,
     "exportedSymbolCount": 3754,
     "contentItemCount": 66,
@@ -905,6 +905,12 @@
       "category": "documentation",
       "bytes": 19683,
       "sha256": "c43c37b8a956ca68a5f70f569f66c6b79effc8c263e1d0dc215383a5b716a611"
+    },
+    {
+      "path": "docs/MARKET_SURVEY.md",
+      "category": "documentation",
+      "bytes": 8018,
+      "sha256": "cd14d8d0d72a9f0211733c8715bb93abe0908536a5bbbba1ed2a5b6e1c9112a7"
     },
     {
       "path": "docs/MEMORY_DUNGEON_PROJECT_REPORT.md",
@@ -2295,8 +2301,8 @@
     {
       "path": "docs/RESEARCH_PLAN.md",
       "category": "documentation",
-      "bytes": 3382,
-      "sha256": "348521f5157934761043c039e75ec9fb88c4a05e9bcf8ec7f45bf5309cc1ed93"
+      "bytes": 3962,
+      "sha256": "0dcf7c1aa170ab23ba1bb4a9b81822165eedb853859fe3f559ddf1ea8f042c71"
     },
     {
       "path": "docs/research/RESEARCH_LOG.md",
