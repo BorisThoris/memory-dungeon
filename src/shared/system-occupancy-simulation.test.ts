@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+    dominantSystemKeys,
     judgeSystemOccupancy,
     simulateSystemOccupancy,
     summarizeSystemOccupancy,
@@ -67,6 +68,24 @@ describe('what actually happens to a player', () => {
             .map((row) => row.key)
             .sort();
         expect(thin, summarizeSystemOccupancy(report)).toEqual([...KNOWN_THIN].sort());
+    });
+
+    it('names nothing as dominant, because every cadence label now matches what the game does', () => {
+        expect(dominantSystemKeys(report), summarizeSystemOccupancy(report)).toEqual([]);
+        expect(SYSTEM_OCCUPANCY_BASELINE.dominant).toEqual([]);
+    });
+
+    it('would name a system that grew past its cadence, which is the half a minimum cannot see', () => {
+        // The ceilings are new and everything currently passes them, so the only way to know they
+        // are wired to anything is to hand the judge a census that breaches one. A `rare` system on
+        // four floors in five is the case this exists for: still firing, still passing every
+        // minimum, and no longer the occasional flourish it was designed as.
+        const rare = report.rows.find((row) => row.cadence === 'rare')!;
+        const swollen = { ...report, rows: report.rows.map((row) => (row.key === rare.key ? { ...row, floorShare: 0.8 } : row)) };
+        expect(dominantSystemKeys(swollen)).toEqual([rare.key]);
+        const verdict = judgeSystemOccupancy(swollen);
+        expect(verdict.dominant.some((line) => line.includes(rare.key) && line.includes('above 0.25'))).toBe(true);
+        expect(judgeSystemOccupancyAgainstBaseline(swollen).issues.some((line) => line.includes('is now dominant'))).toBe(true);
     });
 
     it('censuses a counter that tallies something that happened, never a charge that is merely available', () => {

@@ -5,11 +5,11 @@
     "name": "memory-dungeon",
     "trackedFileCount": 2621,
     "codeFileCount": 1040,
-    "exportedSymbolCount": 3786,
+    "exportedSymbolCount": 3787,
     "contentItemCount": 66,
     "mechanicCount": 140,
     "stateFieldCount": 149,
-    "relationshipCount": 11115
+    "relationshipCount": 11116
   },
   "inventory": [
     {
@@ -279,8 +279,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 267304,
-      "sha256": "c8d09f6b61a0e4130c4fb8ae4bb8d2d5ce61d28348c1f2a8dd1cebec06ddf8cd"
+      "bytes": 269124,
+      "sha256": "62eec18b24918b62a16b8d3c3226223a6752bcc5c1b0f548335226f20a1c7243"
     },
     {
       "path": "docs/BLUEPRINT_FRAMEWORK.md",
@@ -778,7 +778,7 @@
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
       "bytes": 472,
-      "sha256": "9bd9c4ef222a027957336ab187ec92a3228c41f4bc1870f012a890e4173a2a72"
+      "sha256": "684bf0459407f97017ca44fe5206700f7065139c35ecd4f174080051101f4a34"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -4935,8 +4935,8 @@
     {
       "path": "scripts/sim-occupancy.ts",
       "category": "script",
-      "bytes": 2349,
-      "sha256": "a0f03a275d4129f661cca5d209881725fdf08a3229dfd578aeaa8a24bf62b476"
+      "bytes": 3016,
+      "sha256": "a3780cd930f8858eaff8b7df43be740e13dedf5bf0e65eefcbf10ccc7223419a"
     },
     {
       "path": "scripts/sim-pop.ts",
@@ -13191,14 +13191,14 @@
     {
       "path": "src/shared/system-occupancy-simulation.test.ts",
       "category": "test",
-      "bytes": 4033,
-      "sha256": "2bc0e365e39a8fb7d17ed376b0b22163570abaaeb0c02f919b000a23e4ddf383"
+      "bytes": 5379,
+      "sha256": "a7c5ff62d96c42911ef9bcba09ea5e24bc4be633ea3737bc4f69e07f601f87fd"
     },
     {
       "path": "src/shared/system-occupancy-simulation.ts",
       "category": "source",
-      "bytes": 16280,
-      "sha256": "4c1cefc83c0dbaab24f5bd8ddc0b4b2fcb959181ff409260805725c61dc36fc7"
+      "bytes": 18866,
+      "sha256": "5fd5737eab4e63d19e3252206d75e818c1253c503736574576f4ce816dfae077"
     },
     {
       "path": "src/shared/telemetry.test.ts",
@@ -35288,7 +35288,7 @@
       "path": "src/shared/system-occupancy-simulation.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 85,
+      "lineCount": 104,
       "imports": [
         "file:src/shared/system-occupancy-simulation.ts"
       ],
@@ -35300,7 +35300,7 @@
       "path": "src/shared/system-occupancy-simulation.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 314,
+      "lineCount": 356,
       "imports": [
         "file:src/shared/board-generation.ts",
         "file:src/shared/board-tile-generation-rules.ts",
@@ -35313,6 +35313,7 @@
         "file:src/shared/tile-identity.ts"
       ],
       "exports": [
+        "symbol:src/shared/system-occupancy-simulation.ts#dominantSystemKeys",
         "symbol:src/shared/system-occupancy-simulation.ts#judgeSystemOccupancy",
         "symbol:src/shared/system-occupancy-simulation.ts#judgeSystemOccupancyAgainstBaseline",
         "symbol:src/shared/system-occupancy-simulation.ts#OCCUPANCY_SEEDS",
@@ -64969,20 +64970,28 @@
       "endLine": 20
     },
     {
+      "id": "symbol:src/shared/system-occupancy-simulation.ts#dominantSystemKeys",
+      "name": "dominantSystemKeys",
+      "kind": "value",
+      "file": "src/shared/system-occupancy-simulation.ts",
+      "line": 344,
+      "endLine": 345
+    },
+    {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#judgeSystemOccupancy",
       "name": "judgeSystemOccupancy",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 290,
-      "endLine": 304
+      "line": 319,
+      "endLine": 341
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#judgeSystemOccupancyAgainstBaseline",
       "name": "judgeSystemOccupancyAgainstBaseline",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 267,
-      "endLine": 288
+      "line": 295,
+      "endLine": 317
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#OCCUPANCY_SEEDS",
@@ -65005,8 +65014,8 @@
       "name": "summarizeSystemOccupancy",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 306,
-      "endLine": 313
+      "line": 347,
+      "endLine": 355
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#SYSTEM_OCCUPANCY_BANDS",
@@ -65021,16 +65030,16 @@
       "name": "SYSTEM_OCCUPANCY_BASELINE",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 240,
-      "endLine": 255
+      "line": 261,
+      "endLine": 283
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#SYSTEM_OCCUPANCY_BASELINE_FLOORS",
       "name": "SYSTEM_OCCUPANCY_BASELINE_FLOORS",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 258,
-      "endLine": 258
+      "line": 286,
+      "endLine": 286
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#SYSTEM_OCCUPANCY_COUNTERS",
@@ -100419,6 +100428,12 @@
       "id": "exports:src/shared/steam-rich-presence-tokens.ts->symbol:src/shared/steam-rich-presence-tokens.ts#RICH_PRESENCE_TOKEN_TEXT",
       "source": "file:src/shared/steam-rich-presence-tokens.ts",
       "target": "symbol:src/shared/steam-rich-presence-tokens.ts#RICH_PRESENCE_TOKEN_TEXT",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/system-occupancy-simulation.ts->symbol:src/shared/system-occupancy-simulation.ts#dominantSystemKeys",
+      "source": "file:src/shared/system-occupancy-simulation.ts",
+      "target": "symbol:src/shared/system-occupancy-simulation.ts#dominantSystemKeys",
       "kind": "exports"
     },
     {

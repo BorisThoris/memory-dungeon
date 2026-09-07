@@ -47,11 +47,11 @@ export const SYSTEM_OCCUPANCY_COUNTERS: readonly SystemOccupancyCounter[] = [
     { key: 'recallMatchesThisFloor', label: 'A pair was matched from memory', family: 'memory', cadence: 'core' },
     { key: 'recallMistakesThisFloor', label: 'A mismatch was made', family: 'memory', cadence: 'common' },
     { key: 'matchResolutionsThisFloor', label: 'A turn resolved', family: 'memory', cadence: 'core' },
-    { key: 'findablesClaimedThisFloor', label: 'A pickup was claimed', family: 'reward', cadence: 'common' },
+    { key: 'findablesClaimedThisFloor', label: 'A pickup was claimed', family: 'reward', cadence: 'core' },
     { key: 'dungeonTreasuresOpenedThisFloor', label: 'A treasure was opened', family: 'reward', cadence: 'common' },
     { key: 'dungeonEnemiesDefeatedThisFloor', label: 'A warden was defeated', family: 'dungeon', cadence: 'common' },
     { key: 'dungeonTrapsResolvedThisFloor', label: 'A trap was resolved', family: 'dungeon', cadence: 'common' },
-    { key: 'dungeonGatewaysUsedThisFloor', label: 'A gateway was used', family: 'dungeon', cadence: 'rare' },
+    { key: 'dungeonGatewaysUsedThisFloor', label: 'A gateway was used', family: 'dungeon', cadence: 'common' },
     { key: 'enemyHazardHitsThisFloor', label: 'A roaming hazard landed a hit', family: 'dungeon', cadence: 'rare' },
     { key: 'hazardTileTriggersThisFloor', label: 'A hazard tile triggered', family: 'hazard', cadence: 'common' },
     { key: 'hazardShuffleSnaresThisFloor', label: 'A shuffle snare sprang', family: 'hazard', cadence: 'rare' },
@@ -200,8 +200,8 @@ export const simulateSystemOccupancy = ({
  * never happens is not rare, it is absent, and absent is what this census exists to catch.
  */
 export const SYSTEM_OCCUPANCY_BANDS = {
-    core: { min: 0.9 },
-    common: { min: 0.1 },
+    core: { min: 0.9, max: 1 },
+    common: { min: 0.1, max: 0.9 },
     /*
      * 0.005 is one floor in two hundred, which is below what this census can resolve rather than a
      * cadence anyone would design for: a system that fires once because a seed allowed it clears
@@ -209,8 +209,29 @@ export const SYSTEM_OCCUPANCY_BANDS = {
      * caches thin that sit at 4-7% over 160, so the bar was measuring the sample, not the game.
      * A real bar needs more floors under it first.
      */
-    rare: { min: 0.005 }
+    rare: { min: 0.005, max: 0.25 }
 } as const;
+
+/**
+ * The ceilings, and why a census needs them.
+ *
+ * Every bar here was a minimum, so the census could only ever see the dead half of the game. A
+ * system can fail its own design from the other direction just as completely: something written to
+ * be occasional that fires on a third of floors is not a rare flourish a player notices, it is
+ * part of the floor, and something written as one system among several that fires on nearly all of
+ * them has quietly become the loop while its neighbours went quiet. Both are the same failure as a
+ * silence - the game is not the game that was designed - and neither leaves a trace a minimum can
+ * catch.
+ *
+ * Run against the ceilings the first time, two rows breached and both were mislabels rather than
+ * generation faults, which is worth stating because it is the answer a good diagnostic gives most
+ * often: `dungeonGatewaysUsedThisFloor` at 0.369 and `findablesClaimedThisFloor` at 0.944 were
+ * filed `rare` and `common`, and taking a route gateway or claiming a findable is something this
+ * game means to happen on most floors. They are relabelled rather than tuned. `core` keeps a
+ * ceiling of 1 so the shape of the record is the same for every cadence, and so that a `core`
+ * system reading above 1 - which would mean the counter is being read as something other than a
+ * share - fails rather than passes.
+ */
 
 /**
  * The census as a ratchet: what is silent and what is thin today, asserted exactly.
@@ -251,7 +272,14 @@ export const SYSTEM_OCCUPANCY_BASELINE = {
         'pinLatticeRewardsThisFloor',
         'safeHazardWardsUsedThisFloor'
     ],
-    thin: ['feverBreaksThisFloor']
+    thin: ['feverBreaksThisFloor'],
+    /*
+     * Empty, and that is a result rather than a placeholder: with the two mislabelled cadences
+     * corrected there is nothing running above its own ceiling. It is a ratchet like the other two
+     * - a system that grows into the floor fails this the moment it does, and the fix is either the
+     * generation or the label, decided deliberately and written down here.
+     */
+    dominant: [] as readonly string[]
 } as const;
 
 /** The floor count the baseline above was measured at. A different count measures a different game. */
@@ -284,12 +312,16 @@ export const judgeSystemOccupancyAgainstBaseline = (
     };
     compare('silent', silent, SYSTEM_OCCUPANCY_BASELINE.silent);
     compare('thin', thin, SYSTEM_OCCUPANCY_BASELINE.thin);
+    compare('dominant', dominantSystemKeys(report), SYSTEM_OCCUPANCY_BASELINE.dominant);
     return { ok: issues.length === 0, issues };
 };
 
-export const judgeSystemOccupancy = (report: SystemOccupancyReport): { ok: boolean; issues: string[]; silent: string[] } => {
+export const judgeSystemOccupancy = (
+    report: SystemOccupancyReport
+): { ok: boolean; issues: string[]; silent: string[]; dominant: string[] } => {
     const issues: string[] = [];
     const silent: string[] = [];
+    const dominant: string[] = [];
     for (const row of report.rows) {
         if (row.floorShare === 0) {
             silent.push(`${row.key} (${row.label}) never fired on any of ${report.floors} floors`);
@@ -299,15 +331,25 @@ export const judgeSystemOccupancy = (report: SystemOccupancyReport): { ok: boole
         if (row.floorShare < band.min) {
             issues.push(`${row.key} floorShare ${row.floorShare.toFixed(3)} below ${band.min} for a ${row.cadence} system`);
         }
+        if (row.floorShare > band.max) {
+            dominant.push(
+                `${row.key} (${row.label}) fired on ${row.floorShare.toFixed(3)} of floors, above ${band.max} for a ${row.cadence} system`
+            );
+        }
     }
-    return { ok: issues.length === 0 && silent.length === 0, issues, silent };
+    return { ok: issues.length === 0 && silent.length === 0 && dominant.length === 0, issues, silent, dominant };
 };
+
+/** Systems firing above their cadence's ceiling: the other half of the census. */
+export const dominantSystemKeys = (report: SystemOccupancyReport): string[] =>
+    report.rows.filter((row) => row.floorShare > SYSTEM_OCCUPANCY_BANDS[row.cadence].max).map((row) => row.key);
 
 export const summarizeSystemOccupancy = (report: SystemOccupancyReport): string =>
     [...report.rows]
         .sort((a, b) => a.floorShare - b.floorShare)
         .map(
             (row) =>
-                `${row.floorShare === 0 ? 'SILENT' : row.floorShare.toFixed(3).padStart(6)} ${row.cadence.padEnd(6)} ${row.family.padEnd(8)} ${row.key}`
+                `${row.floorShare === 0 ? 'SILENT' : row.floorShare.toFixed(3).padStart(6)} ` +
+                `x${row.perFloor.toFixed(2).padStart(6)} ${row.cadence.padEnd(6)} ${row.family.padEnd(8)} ${row.key}`
         )
         .join('\n');

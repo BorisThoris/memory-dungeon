@@ -33,13 +33,23 @@ if (verdict.silent.length > 0) {
 if (verdict.issues.length > 0) {
     process.stdout.write(`\nThin systems:\n${verdict.issues.map((line) => `- ${line}`).join('\n')}\n`);
 }
+/*
+ * The other half of the census. A system above its cadence's ceiling has stopped being what it was
+ * designed as - an occasional flourish that happens on a third of floors is part of the floor - and
+ * it is as much a divergence from the designed game as a silence, with the difference that nothing
+ * ever noticed because every bar here used to be a minimum.
+ */
+if (verdict.dominant.length > 0) {
+    process.stdout.write(`\nDominant systems:\n${verdict.dominant.map((line) => `- ${line}`).join('\n')}\n`);
+}
 if (ratchet) {
     const against = judgeSystemOccupancyAgainstBaseline(report);
     if (!against.ok) {
         process.stderr.write(
             `\nThe census moved away from its recorded baseline:\n${against.issues.map((line) => `- ${line}`).join('\n')}\n\n` +
                 'A system that went quiet is a regression; one that came back to life is progress that has to be ' +
-                'recorded. Either way, update SYSTEM_OCCUPANCY_BASELINE deliberately.\n'
+                'recorded; one that grew past its cadence is a system eating the floors around it. Any of the three, ' +
+                'update SYSTEM_OCCUPANCY_BASELINE deliberately - or fix the cadence label if that is what is wrong.\n'
         );
         process.exit(1);
     }
