@@ -208,7 +208,8 @@
         "package:win": "node scripts/write-steam-appid.mjs && yarn build && electron-builder --win nsis",
         "package:win:demo": "cross-env MEMORY_DUNGEON_BUILD_FLAVOUR=demo VITE_BUILD_FLAVOUR=demo node scripts/write-steam-appid.mjs && cross-env VITE_BUILD_FLAVOUR=demo yarn build && electron-builder --win nsis",
         "postinstall": "node scripts/postinstall.cjs",
-        "gate:occupancy": "tsx scripts/sim-occupancy.ts --ratchet"
+        "gate:occupancy": "tsx scripts/sim-occupancy.ts --ratchet",
+        "docs:dungeon-archive": "tsx scripts/archive-dungeon-layer.ts"
     },
     "dependencies": {
         "@fontsource/cinzel": "5.2.5",

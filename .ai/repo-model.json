@@ -3,7 +3,7 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2621,
+    "trackedFileCount": 2623,
     "codeFileCount": 1040,
     "exportedSymbolCount": 3787,
     "contentItemCount": 66,
@@ -2287,6 +2287,12 @@
       "sha256": "564cf4d681619fec21e2163ba3ef08bf079858e5435c0408fe35e09e3ef4a335"
     },
     {
+      "path": "docs/REMOVED_DUNGEON_LAYER.md",
+      "category": "documentation",
+      "bytes": 18797,
+      "sha256": "70a248950760b23eb4ea1d58b06293162c6527cfba244a5d86e7b53b473168af"
+    },
+    {
       "path": "docs/RESEARCH_NOTES_2.md",
       "category": "documentation",
       "bytes": 19596,
@@ -4047,8 +4053,8 @@
     {
       "path": "package.json",
       "category": "configuration",
-      "bytes": 32699,
-      "sha256": "8fba115efd6557f348d9422f5e79ba080edd09c8c0c2108d3ce20a4102bbd999"
+      "bytes": 32771,
+      "sha256": "f15008a541f7a230783349cc3e02c648a1716259ded6ad8a20206d7a4f523e10"
     },
     {
       "path": "packages/notifications/package.json",
@@ -4241,6 +4247,12 @@
       "category": "script",
       "bytes": 27157,
       "sha256": "7eb834e945dcd430756468ba3d3f0bd1f98778a274227f746b1baf0a06df894f"
+    },
+    {
+      "path": "scripts/archive-dungeon-layer.ts",
+      "category": "script",
+      "bytes": 8537,
+      "sha256": "3e6df2e37ffefa39bec4aa3e9948b3ae0c12582d3af45271f60f2fefbaa8a808"
     },
     {
       "path": "scripts/ast-allowlist.json",
