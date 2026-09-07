@@ -1,0 +1,22 @@
+# Reference set for the gameplay run bed (jobs.run-bed-ambience.json, id run-bed-library*).
+# Paths are relative to the folder that contains this repository, so the sibling sample library
+# (cross-repo-libs/references/MusicalAppReactConcept/build/audio, ~820 freesound MP3s) resolves.
+# Curated for a dark vault: drones, dark atmospheres, glassy bells, mystical transitions.
+# Build: build-ambience-reference-mix.py --list this-file --seconds-per-source 5 --out reference-audio/Library_mix.wav
+
+cross-repo-libs/references/MusicalAppReactConcept/build/audio/Atmosphere/fs_671182_hell-atmosphere-02-wav.mp3
+cross-repo-libs/references/MusicalAppReactConcept/build/audio/Atmosphere/fs_685679_humming-in-a-minor.mp3
+cross-repo-libs/references/MusicalAppReactConcept/build/audio/Atmosphere/fs_386059_insomnia-chimes-wav.mp3
+cross-repo-libs/references/MusicalAppReactConcept/build/audio/Atmosphere/fs_269593_ambient-industrial-factory-cave.mp3
+cross-repo-libs/references/MusicalAppReactConcept/build/audio/Atmosphere/fs_51245_atmospheric-ambient-short-piano-and-bass-wav.mp3
+cross-repo-libs/references/MusicalAppReactConcept/build/audio/Atmosphere/fs_554867_ambient-hits-ambient-hit-0.mp3
+cross-repo-libs/references/MusicalAppReactConcept/build/audio/Atmosphere/fs_824393_space-4307.mp3
+cross-repo-libs/references/MusicalAppReactConcept/build/audio/Atmosphere/Nature/fs_819527_experimental-sci-fi-ambience.mp3
+cross-repo-libs/references/MusicalAppReactConcept/build/audio/Synth/Drone/fs_607238_electric-dream-synth-drone-electric-cinematic-wav.mp3
+cross-repo-libs/references/MusicalAppReactConcept/build/audio/Synth/Drone/fs_829769_phase-drone-fx-ea-1-analog-modeler-synth-7.mp3
+cross-repo-libs/references/MusicalAppReactConcept/build/audio/Synth/Drone/fs_796902_alien-metal-pad-synth-glitch-wav.mp3
+cross-repo-libs/references/MusicalAppReactConcept/build/audio/Synth/Pad/fs_19391_woslo-wav.mp3
+cross-repo-libs/references/MusicalAppReactConcept/build/audio/FX/Transitions/fs_419594_mystical-wind-chimes-transition-fx.mp3
+cross-repo-libs/references/MusicalAppReactConcept/build/audio/FX/Transitions/fs_656641_shadows-reverse-fx-c-minor.mp3
+cross-repo-libs/references/MusicalAppReactConcept/build/audio/Mallets/Bells/fs_791489_bell-08-os.mp3
+cross-repo-libs/references/MusicalAppReactConcept/build/audio/Mallets/Vibraphone/fs_593541_ep-322-one-shot-vibraphone-c-low-mf-legato-02-wav.mp3

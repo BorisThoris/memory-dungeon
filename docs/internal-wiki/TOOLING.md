@@ -94,8 +94,18 @@ The repo uses a **single** root `tsconfig.json` for `tsc --noEmit` so CSS module
 | `yarn card-backs:local:dry` | Same with `--dry-run` (no torch; lists plan) |
 | `yarn face-panels:local` | `py -3 scripts/card-pipeline/batch_local_face_panels.py` (SDXL tarot mat panels 520×592, 80 tiered) |
 | `yarn face-panels:local:dry` | Same with `--dry-run` |
+| `yarn ui-art:local` | `py -3.12 scripts/card-pipeline/batch_local_zimage.py` — local **Z-Image-Turbo** batch for shell scenes, mode posters, and the app icon (`ui-backgrounds.zimage.manifest.json`; takes land in `tmp/zimage/…` with a contact sheet) |
+| `yarn ui-art:local:dry` | Same with `--dry-run` (no torch) |
+| `yarn ui-art:install` | Copy the takes listed in `ui-backgrounds.zimage.picks.json` to their `target` paths, then run `yarn assets:ui-backgrounds:export-runtime-webp` |
+| `yarn face-panels:manifest:zimage` | Rebuild `face-panels.zimage.manifest.json` (80 tiered motifs, 2× render size) |
+| `yarn face-panels:local:zimage` | Z-Image-Turbo face-panel batch (`face-panels.zimage.manifest.json`); `:dry` variant lists the plan |
+| `yarn face-panels:install:zimage` | Downsample picked takes to the 520×592 `face-panel-NN.png` masters, then run `yarn face-panels:export-runtime-webp` |
 | `yarn audio:ace-step:batch` | `py -3 scripts/audio-pipeline/batch_ace_step.py` — local **ACE-Step 1.5** batch (Python 3.11+ venv; see `scripts/audio-pipeline/README.md`; outputs under `tmp/audio/ace-step/`) |
 | `yarn audio:ace-step:batch:dry` | Same with `--dry-run` (no torch) |
+| `yarn audio:ace-step:app:xl` | Full app batch on the 4B `acestep-v15-xl-turbo` checkpoint (8 steps, two takes) |
+| `yarn audio:ace-step:ambience` | Portfolio run-bed job on XL turbo (three takes) |
+| `yarn audio:ace-step:run-bed` | Gameplay run-loop candidates on XL turbo guided by Ballance-pack reference blends (`jobs.run-bed-ambience.json`; build the blends first with `build-ambience-reference-mix.py`) |
+| `yarn audio:ace-step:run-bed:library` | Comparison candidates guided by the vault beds and the freesound library (`jobs.run-bed-library.json`) |
 | `yarn face-panels:export-runtime-webp` | Export checked-in `face-panel-NN.png` masters to runtime WebP and rebuild `facePanelRasterUrls.ts` |
 | `yarn gen:face-panel-raster-urls` | Rebuild `facePanelRasterUrls.ts` after adding/removing `face-panel-NN.webp` runtime files |
 | `yarn card-normals:export-runtime-webp` | Export checked-in card normal-map PNG masters to smaller runtime WebP maps |
@@ -145,6 +155,11 @@ The repo uses a **single** root `tsconfig.json` for `tsc --noEmit` so CSS module
 | `svgo-optimize-card-front.mjs` | SVG optimize pass (`yarn optimize:card-front`) |
 | `card-pipeline/image_gen.mjs` | Card image generation |
 | `card-pipeline/batch_local_card_backs.py` | Local GPU SDXL batch card backs → `normalize-card-texture.ps1` |
+| `card-pipeline/batch_local_zimage.py` | Local GPU **Z-Image-Turbo** manifest batch (backgrounds, posters, icon, face panels) → `tmp/zimage/<manifest>/` + contact sheet |
+| `card-pipeline/install_zimage_picks.py` | Copy/resize picked Z-Image takes to manifest `target` paths (`*.zimage.picks.json`) |
+| `card-pipeline/build-face-panels-zimage-manifest.py` | Writes `face-panels.zimage.manifest.json` (tier slots match `weightedFacePanelPool.ts`) |
+| `card-pipeline/ui-backgrounds.zimage.manifest.json` | Prompts + targets for shell scenes, mode posters, app icon |
+| `card-pipeline/masks/*.alpha.png` | Alpha profiles kept from the earlier gameplay scene masters; `install_zimage_picks.py` re-applies them via manifest `alphaFrom` |
 | `card-pipeline/requirements-local-card-backs.txt` | Pip deps for `batch_local_card_backs.py` |
 | `card-pipeline/card-back-prompts.manifest.example.json` | Example `--manifest` for custom prompts |
 | `card-pipeline/print-card-texture-ideal.mjs` | Texture ideal / AI brief output |
@@ -153,9 +168,17 @@ The repo uses a **single** root `tsconfig.json` for `tsc --noEmit` so CSS module
 | `card-pipeline/cardTextureConstants.mjs` | Shared constants for pipeline |
 | `card-pipeline/*.ps1` | Windows PowerShell helpers for textures |
 | `audio-pipeline/batch_ace_step.py` | ACE-Step 1.5 JSON job batch → `tmp/audio/ace-step/` + manifest |
+| `audio-pipeline/pick-ace-takes.py` | Objective take scoring for `v##` renders → picks JSON for `install-ace-app-outputs.mjs --picks` |
+| `audio-pipeline/jobs.portfolio-ambience.json` | Fallback run bed (`yarn audio:ace-step:ambience`; installed as `assets/audio/portfolio-feedback-pack/demo-ambience-loop.wav`, used only when `music/run-loop.ogg` is absent) |
+| `audio-pipeline/build-ambience-reference-mix.py` | Level-matched crossfade chain of reference tracks (the `dont_modify` beds by default, or a `--list` of paths incl. MP3s) → `reference-audio/*.wav` (gitignored) for `reference_audio` |
+| `audio-pipeline/jobs.run-bed-ambience.json` | Run-loop candidates guided by blends of the Ballance pack (`dont_modify/`, `yarn audio:ace-step:run-bed`) |
+| `audio-pipeline/jobs.run-bed-library.json` | Comparison run-loop candidates: vault beds alone and the curated freesound library next to the repo (`yarn audio:ace-step:run-bed:library`) |
+| `audio-pipeline/run-bed-references-ballance-*.txt`, `run-bed-references*.txt` | Reference track lists (paths relative to the Repos folder, resolved from worktrees too) fed to `build-ambience-reference-mix.py --list` |
+| `audio-pipeline/make-seamless-loop.py` | Seamless loop + RMS/peak match for a chosen ACE-Step loop take (menu/run beds, portfolio ambience) |
 | `audio-pipeline/jobs.example.json` | Example jobs (`text2music`, reference audio, `cover`) |
 | `audio-pipeline/jobs.game-ambient.example.json` | Text-only ambient/menu + run tension (no `samples/` files) |
 | `audio-pipeline/jobs.sfx.example.json` | ACE-Step captions for gameplay one-shots → trim → `src/renderer/assets/audio/sfx/` |
+| `audio-pipeline/MUSIC_SCENE_BRIEF.md` | Main-menu painting translated into caption language for the loops, paired with the Ballance reference blends |
 | `audio-pipeline/RIGHTS.md` / `EVENT_MAP.md` / `PROMPTS.md` | Legal strategy, SFX mapping, caption seeds |
 | `audio-pipeline/README.md` | Install + rights notes for ACE-Step |
 

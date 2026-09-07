@@ -60,6 +60,7 @@ function parseArgs() {
     let dryRun = false;
     /** @type {string | undefined} */
     let variant = undefined;
+    let picksFile = undefined;
     let loudness = false;
     for (let i = 0; i < argv.length; i += 1) {
         if (argv[i] === '--ace-out' && argv[i + 1]) {
@@ -73,11 +74,14 @@ function parseArgs() {
         } else if (argv[i] === '--variant' && argv[i + 1]) {
             variant = argv[i + 1];
             i += 1;
+        } else if (argv[i] === '--picks' && argv[i + 1]) {
+            picksFile = argv[i + 1];
+            i += 1;
         } else if (argv[i] === '--loudness' || argv[i] === '--normalize') {
             loudness = true;
         }
     }
-    return { aceOut, jobsFile, dryRun, variant, loudness };
+    return { aceOut, jobsFile, dryRun, variant, loudness, picksFile };
 }
 
 function loadJobDurations(jobsPath) {
@@ -204,8 +208,14 @@ function ffmpegEncodeArgs(dur, loudness) {
 }
 
 function main() {
-    const { aceOut, jobsFile, dryRun, variant, loudness } = parseArgs();
+    const { aceOut, jobsFile, dryRun, variant, loudness, picksFile } = parseArgs();
     const durations = loadJobDurations(jobsFile);
+    /** Per-job take overrides from pick-ace-takes.py: { picks: { jobId: 'v02' } } or { jobId: 'v02' }. */
+    let picks = {};
+    if (picksFile) {
+        const rawPicks = JSON.parse(fs.readFileSync(path.resolve(repoRoot, picksFile), 'utf8'));
+        picks = rawPicks && typeof rawPicks.picks === 'object' ? rawPicks.picks : rawPicks;
+    }
     const ffmpegOk = hasFfmpeg();
 
     if (loudness) {
@@ -228,8 +238,9 @@ function main() {
     let multiVariantNoted = false;
 
     for (const [jobId, relDest] of Object.entries(JOB_INSTALL_PATHS)) {
-        const { sourceDir, picked, hasMultipleVariantDirs } = resolveSourceDir(aceOut, jobId, variant);
-        if (!variant && hasMultipleVariantDirs && !multiVariantNoted) {
+        const jobVariant = picks[jobId] ?? variant;
+        const { sourceDir, picked, hasMultipleVariantDirs } = resolveSourceDir(aceOut, jobId, jobVariant);
+        if (!jobVariant && hasMultipleVariantDirs && !multiVariantNoted) {
             console.warn(
                 'install-ace-app-outputs: ACE job folders include multiple v## takes; defaulting to v01. Use --variant <n> to install a different take (e.g. --variant 2 for v02).'
             );

@@ -1,0 +1,14 @@
+{
+  "notes": "Fallback run bed: gameplayMusic.ts plays music/run-loop.ogg in runs and only falls back to assets/audio/portfolio-feedback-pack/demo-ambience-loop.ogg when that loop is absent (e.g. a trimmed browser demo bundle). Render with `yarn audio:ace-step:ambience`, then make-seamless-loop.py the chosen take into that WAV and `yarn audio:export-runtime-ogg`.",
+  "jobs": [
+    {
+      "id": "demo-ambience-loop",
+      "task_type": "text2music",
+      "caption": "Memory Dungeon vault aesthetic: dark fantasy memory-shrine, subtle seamless ambient bed for a card memory game, low volume room tone, cold marble air, faint crystalline glass shimmer, slow soft pad drifting underneath, no drums, no vocals, no lead melody, non-distracting, loop-friendly",
+      "lyrics": "[Instrumental]",
+      "instrumental": true,
+      "duration": 30,
+      "seed": 930401
+    }
+  ]
+}

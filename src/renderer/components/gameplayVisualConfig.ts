@@ -198,7 +198,7 @@ export const GAMEPLAY_CARD_VISUALS = {
     },
     renderProfile: GAMEPLAY_RENDER_PROFILE.id,
     surfaceMapVersion: 5,
-    textureVersion: 49,
+    textureVersion: 51,
     texturedBackEmblemOpacity: 0.26,
     texturedBackPatternOpacity: 0.28,
     texturedBackTint: {

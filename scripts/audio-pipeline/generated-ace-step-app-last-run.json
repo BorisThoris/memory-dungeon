@@ -1,0 +1,435 @@
+{
+  "$comment": "Provenance for the shipped ACE-Step renders (regenerate: yarn audio:ace-step:app:xl, yarn audio:ace-step:ambience; choose with pick-ace-takes.py; install with install-ace-app-outputs.mjs --picks; loops via make-seamless-loop.py).",
+  "generatedAt": "2026-09-06T21:18:17.047167+00:00",
+  "configPath": "acestep-v15-xl-turbo",
+  "lmModelPath": "acestep-5Hz-lm-1.7B",
+  "inferenceSteps": 8,
+  "variants": 2,
+  "picks": {
+    "flip": "v02",
+    "gambit-commit": "v02",
+    "match-tier-low": "v01",
+    "match-tier-mid": "v02",
+    "match-tier-high": "v02",
+    "mismatch": "v02",
+    "power-arm": "v01",
+    "destroy-pair": "v02",
+    "peek-power": "v02",
+    "stray-power": "v02",
+    "shuffle-full": "v01",
+    "shuffle-quick": "v01",
+    "floor-clear": "v01",
+    "ui-click": "v02",
+    "ui-confirm": "v02",
+    "ui-back": "v02",
+    "ui-counter": "v01",
+    "menu-open": "v02",
+    "run-start": "v01",
+    "intro-sting": "v02",
+    "pause-open": "v01",
+    "pause-resume": "v02",
+    "game-over-open": "v02",
+    "ui-copy": "v01",
+    "relic-offer-open": "v01",
+    "relic-pick": "v01",
+    "wager-arm": "v01",
+    "menu-loop": "v01",
+    "run-loop": "v02"
+  },
+  "loops": {
+    "menu-loop": {
+      "installed": false,
+      "note": "Shipped menu loop is the earlier 2B render, kept by request; the XL take (v01) was rendered but not installed."
+    },
+    "run-loop": {
+      "installed": true,
+      "jobs": "jobs.run-bed-ambience.json",
+      "job": "run-bed-ballance-music",
+      "take": "v03",
+      "seed": 946444,
+      "caption": "scene block from MUSIC_SCENE_BRIEF.md (main-menu cathedral painting) + Ballance textures",
+      "reference_audio": "reference-audio/Ballance_music_mix.wav (build-ambience-reference-mix.py --list run-bed-references-ballance-music.txt --seconds-per-source 6)",
+      "audio_cover_strength": 0.5,
+      "configPath": "acestep-v15-xl-turbo",
+      "inference_steps": 8,
+      "make-seamless-loop": "--skip-head 1.0 --skip-tail 3.0 --crossfade 2.0 --target-rms-db -21 --peak-db -2",
+      "note": "Gameplay bed: caption carries the menu painting as a scene brief, reference audio carries the Ballance pack. Comparison candidates (vault beds, freesound library) in jobs.run-bed-library.json were rendered but not installed."
+    },
+    "demo-ambience-loop": {
+      "jobs": "jobs.portfolio-ambience.json",
+      "take": "v01",
+      "make-seamless-loop": "--skip-head 1.0 --skip-tail 3.0 --crossfade 2.5 --target-rms-db -25 --peak-db -3",
+      "target": "assets/audio/portfolio-feedback-pack/demo-ambience-loop.wav",
+      "note": "Fallback run bed only; gameplayMusic.ts plays music/run-loop.ogg in runs."
+    }
+  },
+  "install": "install-ace-app-outputs.mjs --picks --loudness (trim to job duration, loudnorm I=-16 TP=-1.5 LRA=11, 48 kHz stereo PCM16)",
+  "results": [
+    {
+      "id": "flip",
+      "variant": 1,
+      "seed": 920101,
+      "success": true
+    },
+    {
+      "id": "flip",
+      "variant": 2,
+      "seed": 928020,
+      "success": true
+    },
+    {
+      "id": "gambit-commit",
+      "variant": 1,
+      "seed": 920102,
+      "success": true
+    },
+    {
+      "id": "gambit-commit",
+      "variant": 2,
+      "seed": 928021,
+      "success": true
+    },
+    {
+      "id": "match-tier-low",
+      "variant": 1,
+      "seed": 920103,
+      "success": true
+    },
+    {
+      "id": "match-tier-low",
+      "variant": 2,
+      "seed": 928022,
+      "success": true
+    },
+    {
+      "id": "match-tier-mid",
+      "variant": 1,
+      "seed": 920104,
+      "success": true
+    },
+    {
+      "id": "match-tier-mid",
+      "variant": 2,
+      "seed": 928023,
+      "success": true
+    },
+    {
+      "id": "match-tier-high",
+      "variant": 1,
+      "seed": 920105,
+      "success": true
+    },
+    {
+      "id": "match-tier-high",
+      "variant": 2,
+      "seed": 928024,
+      "success": true
+    },
+    {
+      "id": "mismatch",
+      "variant": 1,
+      "seed": 920106,
+      "success": true
+    },
+    {
+      "id": "mismatch",
+      "variant": 2,
+      "seed": 928025,
+      "success": true
+    },
+    {
+      "id": "power-arm",
+      "variant": 1,
+      "seed": 920107,
+      "success": true
+    },
+    {
+      "id": "power-arm",
+      "variant": 2,
+      "seed": 928026,
+      "success": true
+    },
+    {
+      "id": "destroy-pair",
+      "variant": 1,
+      "seed": 920108,
+      "success": true
+    },
+    {
+      "id": "destroy-pair",
+      "variant": 2,
+      "seed": 928027,
+      "success": true
+    },
+    {
+      "id": "peek-power",
+      "variant": 1,
+      "seed": 920109,
+      "success": true
+    },
+    {
+      "id": "peek-power",
+      "variant": 2,
+      "seed": 928028,
+      "success": true
+    },
+    {
+      "id": "stray-power",
+      "variant": 1,
+      "seed": 920110,
+      "success": true
+    },
+    {
+      "id": "stray-power",
+      "variant": 2,
+      "seed": 928029,
+      "success": true
+    },
+    {
+      "id": "shuffle-full",
+      "variant": 1,
+      "seed": 920111,
+      "success": true
+    },
+    {
+      "id": "shuffle-full",
+      "variant": 2,
+      "seed": 928030,
+      "success": true
+    },
+    {
+      "id": "shuffle-quick",
+      "variant": 1,
+      "seed": 920112,
+      "success": true
+    },
+    {
+      "id": "shuffle-quick",
+      "variant": 2,
+      "seed": 928031,
+      "success": true
+    },
+    {
+      "id": "floor-clear",
+      "variant": 1,
+      "seed": 920113,
+      "success": true
+    },
+    {
+      "id": "floor-clear",
+      "variant": 2,
+      "seed": 928032,
+      "success": true
+    },
+    {
+      "id": "ui-click",
+      "variant": 1,
+      "seed": 920114,
+      "success": true
+    },
+    {
+      "id": "ui-click",
+      "variant": 2,
+      "seed": 928033,
+      "success": true
+    },
+    {
+      "id": "ui-confirm",
+      "variant": 1,
+      "seed": 920115,
+      "success": true
+    },
+    {
+      "id": "ui-confirm",
+      "variant": 2,
+      "seed": 928034,
+      "success": true
+    },
+    {
+      "id": "ui-back",
+      "variant": 1,
+      "seed": 920116,
+      "success": true
+    },
+    {
+      "id": "ui-back",
+      "variant": 2,
+      "seed": 928035,
+      "success": true
+    },
+    {
+      "id": "ui-counter",
+      "variant": 1,
+      "seed": 920117,
+      "success": true
+    },
+    {
+      "id": "ui-counter",
+      "variant": 2,
+      "seed": 928036,
+      "success": true
+    },
+    {
+      "id": "menu-open",
+      "variant": 1,
+      "seed": 920118,
+      "success": true
+    },
+    {
+      "id": "menu-open",
+      "variant": 2,
+      "seed": 928037,
+      "success": true
+    },
+    {
+      "id": "run-start",
+      "variant": 1,
+      "seed": 920119,
+      "success": true
+    },
+    {
+      "id": "run-start",
+      "variant": 2,
+      "seed": 928038,
+      "success": true
+    },
+    {
+      "id": "intro-sting",
+      "variant": 1,
+      "seed": 920122,
+      "success": true
+    },
+    {
+      "id": "intro-sting",
+      "variant": 2,
+      "seed": 928041,
+      "success": true
+    },
+    {
+      "id": "pause-open",
+      "variant": 1,
+      "seed": 920123,
+      "success": true
+    },
+    {
+      "id": "pause-open",
+      "variant": 2,
+      "seed": 928042,
+      "success": true
+    },
+    {
+      "id": "pause-resume",
+      "variant": 1,
+      "seed": 920124,
+      "success": true
+    },
+    {
+      "id": "pause-resume",
+      "variant": 2,
+      "seed": 928043,
+      "success": true
+    },
+    {
+      "id": "game-over-open",
+      "variant": 1,
+      "seed": 920125,
+      "success": true
+    },
+    {
+      "id": "game-over-open",
+      "variant": 2,
+      "seed": 928044,
+      "success": true
+    },
+    {
+      "id": "ui-copy",
+      "variant": 1,
+      "seed": 920126,
+      "success": true
+    },
+    {
+      "id": "ui-copy",
+      "variant": 2,
+      "seed": 928045,
+      "success": true
+    },
+    {
+      "id": "relic-offer-open",
+      "variant": 1,
+      "seed": 920127,
+      "success": true
+    },
+    {
+      "id": "relic-offer-open",
+      "variant": 2,
+      "seed": 928046,
+      "success": true
+    },
+    {
+      "id": "relic-pick",
+      "variant": 1,
+      "seed": 920128,
+      "success": true
+    },
+    {
+      "id": "relic-pick",
+      "variant": 2,
+      "seed": 928047,
+      "success": true
+    },
+    {
+      "id": "wager-arm",
+      "variant": 1,
+      "seed": 920129,
+      "success": true
+    },
+    {
+      "id": "wager-arm",
+      "variant": 2,
+      "seed": 928048,
+      "success": true
+    },
+    {
+      "id": "menu-loop",
+      "variant": 1,
+      "seed": 920120,
+      "success": true
+    },
+    {
+      "id": "menu-loop",
+      "variant": 2,
+      "seed": 928039,
+      "success": true
+    },
+    {
+      "id": "run-loop",
+      "variant": 1,
+      "seed": 920121,
+      "success": true
+    },
+    {
+      "id": "run-loop",
+      "variant": 2,
+      "seed": 928040,
+      "success": true
+    },
+    {
+      "id": "demo-ambience-loop",
+      "variant": 1,
+      "seed": 930401,
+      "success": true
+    },
+    {
+      "id": "demo-ambience-loop",
+      "variant": 2,
+      "seed": 938320,
+      "success": true
+    },
+    {
+      "id": "demo-ambience-loop",
+      "variant": 3,
+      "seed": 946239,
+      "success": true
+    }
+  ]
+}

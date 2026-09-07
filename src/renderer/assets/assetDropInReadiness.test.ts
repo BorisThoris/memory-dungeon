@@ -29,7 +29,8 @@ describe('REG-059 asset drop-in readiness', () => {
     it('summarizes placeholder and licensed-asset risks before release swaps', () => {
         const summary = assetDropInReadinessSummary();
         expect(summary.categories).toBe(ASSET_DROP_IN_CATEGORIES.length);
-        expect(summary.placeholderCount).toBeGreaterThanOrEqual(1);
+        // Every mode poster now ships bespoke Z-Image-Turbo art; only the explicit `fallback` key is a placeholder.
+        expect(summary.placeholderCount).toBe(0);
         expect(summary.licensedRequiredCount).toBeGreaterThanOrEqual(1);
         expect(summary.verificationCommands).toContain('yarn audit:renderer-assets');
     });

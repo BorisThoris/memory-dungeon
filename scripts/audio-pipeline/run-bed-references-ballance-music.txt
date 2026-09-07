@@ -1,0 +1,10 @@
+# Ballance pack (the committed dont_modify/ set is the full 40-file rip): the musical / atmospheric tracks.
+# Build: build-ambience-reference-mix.py --list this-file --seconds-per-source 6 --out reference-audio/Ballance_music_mix.wav
+memory-dungeon/src/renderer/assets/audio/dont_modify/Menu_atmo.wav
+memory-dungeon/src/renderer/assets/audio/dont_modify/Music_thunder.wav
+memory-dungeon/src/renderer/assets/audio/dont_modify/Menu_load.wav
+memory-dungeon/src/renderer/assets/audio/dont_modify/Misc_Ventilator.wav
+memory-dungeon/src/renderer/assets/audio/dont_modify/Misc_UFO.wav
+memory-dungeon/src/renderer/assets/audio/dont_modify/Misc_UFO_anim.wav
+memory-dungeon/src/renderer/assets/audio/dont_modify/Misc_Lightning.wav
+memory-dungeon/src/renderer/assets/audio/dont_modify/Misc_Checkpoint.wav
