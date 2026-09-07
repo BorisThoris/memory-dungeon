@@ -1,6 +1,8 @@
 import { buildBoard } from './board-build-rules';
 import { resolveChunkBreak } from './chunk-break-rules';
 import type { BoardState, Tile } from './contracts';
+import { GAME_RULES_VERSION } from './contracts';
+import { pickFloorScheduleEntry } from './floor-mutator-schedule';
 
 /**
  * Does a match on a real floor actually pop anything?
@@ -14,6 +16,13 @@ import type { BoardState, Tile } from './contracts';
  * This measures the one number that says the loop is reachable where a player meets it: over
  * every whole pair on a generated floor, the share of matches that would take at least one
  * other pair with them, at chain one - no ladder, no relics, no help.
+ *
+ * The floors are built through `pickFloorScheduleEntry`, the way a run builds them, so the board
+ * carries its tag, archetype, objective and mutators. It did not at first - it asked `buildBoard`
+ * for a bare floor - and that is the same mistake one level up as the one this file exists to
+ * catch: a measurement taken on a board no player is dealt. Measured both ways the scheduled
+ * floors pop at least as often (0.52-1.00 against 0.50-1.00), so the bands did not move; the
+ * point is that the number now describes the game.
  */
 export interface PopReachFloorSample {
     level: number;
@@ -51,7 +60,17 @@ export const simulatePopReach = (levels = 12, seeds: readonly number[] = POP_REA
     const run = { gameMode: 'endless' as const, floorCurioId: null, relicIds: [] as const };
     for (let level = 1; level <= levels; level += 1) {
         for (const seed of seeds) {
-            const board: BoardState = buildBoard(level, { runSeed: seed, gameMode: 'endless', cycleFloor: level });
+            const schedule = pickFloorScheduleEntry(seed, GAME_RULES_VERSION, level, 'endless');
+            const board: BoardState = buildBoard(level, {
+                runSeed: seed,
+                runRulesVersion: GAME_RULES_VERSION,
+                gameMode: 'endless',
+                cycleFloor: schedule.cycleFloor,
+                floorTag: schedule.floorTag,
+                floorArchetypeId: schedule.floorArchetypeId,
+                featuredObjectiveId: schedule.featuredObjectiveId,
+                activeMutators: schedule.mutators
+            });
             const byPair = new Map<string, Tile[]>();
             for (const tile of board.tiles) byPair.set(tile.pairKey, [...(byPair.get(tile.pairKey) ?? []), tile]);
             const whole = [...byPair.values()].filter((halves) => halves.length === 2);

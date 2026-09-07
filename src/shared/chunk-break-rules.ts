@@ -68,10 +68,23 @@ export const RIPPLE_MAX_LIFT = 2;
 /** A chain reaction cannot outrun the board, but a bound keeps the rule honest on an authored one. */
 export const RIPPLE_MAX_WAVES = 12;
 /**
- * The drop. Puzzle Bobble's second ingredient: a cluster falls once nothing holds it. Here a
- * Sharp or Fever break that leaves the matched suit with this many pairs or fewer, all of them
- * plain, takes those pairs too - wherever they sit. The last pairs of a suit become a target
- * instead of a chore, and a break that empties a suit reads as the clean sweep it is.
+ * The drop. Puzzle Bobble's second ingredient: a cluster falls once nothing holds it. A Sharp or
+ * Fever break that leaves the matched suit with this many plain pairs or fewer takes them too,
+ * wherever they sit - a suit down to a pair or two can never pop again (a pop needs two same-suit
+ * pairs touching), so what is left is a chore, not a target.
+ *
+ * Measured over 120 generated floors it fired on nothing at all, which also left
+ * `ACH_NOTHING_HELD_IT` unearnable. Two causes, and only one of them is the drop's own. The first
+ * is that a pair with a job - the exit, a key, an enemy, a treasure - used to veto the whole drop:
+ * 483 of 501 Sharp and Fever breaks were refused on that alone. A key sitting in the suit is not
+ * what holds the plain tiles up, so it no longer stops them falling; it simply is not taken.
+ *
+ * The second is not the drop's to fix: at Sharp the ripple runs until a wave takes nothing, so it
+ * has usually swept every plain pair of the suit before the drop looks (0 left on 92-98% of breaks
+ * at every tier). Letting the drop run at the bounded tiers instead was tried and rejected - on a
+ * four-pair suit it hands a chain-one match the whole suit, which is the tier ladder collapsing.
+ * The remnant this rule wants is a bigger suit than generation deals today; that is a task, not a
+ * threshold.
  */
 export const DROP_MAX_PAIRS = 2;
 
@@ -400,7 +413,8 @@ export const resolveChunkBreak = ({
     const matchedSuit = board.tiles.find((tile) => matchedTileIds.includes(tile.id))?.suit ?? null;
 
     // The drop: at Sharp or better, when the break leaves the matched suit with at most
-    // DROP_MAX_PAIRS plain pairs, they fall too. Anything with a job of its own holds the suit up.
+    // DROP_MAX_PAIRS plain pairs, those fall too. Pairs with a job of their own stay standing,
+    // and no longer veto the drop - they are not what holds the plain tiles up.
     const droppedPairKeys: string[] = [];
     if ((tier === 'sharp' || tier === 'fever') && matchedSuit && brokenPairKeys.length > 0) {
         const matched = new Set(matchedTileIds);
@@ -410,14 +424,17 @@ export const resolveChunkBreak = ({
             if (matched.has(tile.id) || brokenPairKeys.includes(tile.pairKey)) continue;
             remaining.set(tile.pairKey, [...(remaining.get(tile.pairKey) ?? []), tile]);
         }
-        const holds = [...remaining.entries()].some(
-            ([pairKey, halves]) =>
-                halves.length !== 2 ||
-                !halves.every(tileCanBreakInChunk) ||
-                (board.cursedPairKey != null && pairKey === board.cursedPairKey)
-        );
-        if (!holds && remaining.size > 0 && remaining.size <= DROP_MAX_PAIRS) {
-            for (const pairKey of remaining.keys()) {
+        // A cursed pair is never taken without the player choosing it, so it stays standing too.
+        const plainPairKeys = [...remaining.entries()]
+            .filter(
+                ([pairKey, halves]) =>
+                    halves.length === 2 &&
+                    halves.every(tileCanBreakInChunk) &&
+                    !(board.cursedPairKey != null && pairKey === board.cursedPairKey)
+            )
+            .map(([pairKey]) => pairKey);
+        if (plainPairKeys.length > 0 && plainPairKeys.length <= DROP_MAX_PAIRS) {
+            for (const pairKey of plainPairKeys) {
                 droppedPairKeys.push(pairKey);
                 brokenPairKeys.push(pairKey);
             }

@@ -202,6 +202,13 @@ export const simulateSystemOccupancy = ({
 export const SYSTEM_OCCUPANCY_BANDS = {
     core: { min: 0.9 },
     common: { min: 0.1 },
+    /*
+     * 0.005 is one floor in two hundred, which is below what this census can resolve rather than a
+     * cadence anyone would design for: a system that fires once because a seed allowed it clears
+     * the bar. Raising it to 0.02 was tried and reverted - at 120 floors it called three hazard
+     * caches thin that sit at 4-7% over 160, so the bar was measuring the sample, not the game.
+     * A real bar needs more floors under it first.
+     */
     rare: { min: 0.005 }
 } as const;
 
