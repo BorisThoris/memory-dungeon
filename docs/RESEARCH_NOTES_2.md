@@ -257,3 +257,47 @@ formula whose growth rate itself grows:
 That is what an endless mode looks like when it is a continuation of the same ladder rather than a
 separate structure — and it is why Balatro's endless eventually breaks on floating-point rather
 than on design.
+
+### Our own stack, and what it actually costs
+
+**Greenworks** (the Node/Electron Steamworks binding, fetched from its repository):
+
+- It is the binding with real shipping history: *"originally developed by Greenheart Games to
+  enable Steam integration in Game Dev Tycoon"*, then open-sourced.
+- Its maintenance status is stated by its own maintainers, and it is not reassuring: *"maintained
+  on a best-effort basis"*, *"active development is not a priority"*, and *"responses to issues and
+  pull requests may be slow due to limited time."*
+- It targets **Steam SDK v1.62**, supports **Electron v1.0.0+** and NW.js v0.8/v0.11+.
+- **Prebuilt binaries are published for NW.js only.** Electron users compile the native addon
+  themselves, per Electron version and architecture.
+
+Set that against the Deck Verified requirement confirmed in §1 — *"The default controller
+configuration must provide users with the ability to access all content"* — and the shape of the
+risk for this project is specific rather than vague: the platform integration for an Electron game
+runs through a best-effort-maintained community addon that must be rebuilt per Electron version,
+with no published Electron binaries, while the certification we care about turns on controller
+behaviour. That is a thing to validate early, not at submission.
+
+### Accessibility as actually shipped, not as specified
+
+The first pass gathered the *specifications* (Steam's Camera Comfort declaration, the XAG text
+minimums, the Game Accessibility Guidelines). This asks what shipped puzzle games actually do.
+
+**Tetris Effect: Connected** — the closest analogue in the market to what this game is building, a
+cascade-heavy puzzle game whose whole identity is visual spectacle (Can I Play That accessibility
+review, quoted):
+
+- **No text size option.** *"The same goes for a text size option, which is a bit lacking."*
+- **No option to reduce or disable background and particle effects.** The reviewer's description of
+  the consequence is the warning this project should read twice: *"It can be easy to get distracted
+  by the background because there's a lot happening"*, and the camera *"can make it harder to see
+  your block positioning."*
+- The only time-manipulation is the Zone mechanic, which is a *gameplay* system requiring a trigger
+  press — not an accessibility option, and no use to a player who cannot operate it.
+
+The lesson is not that Tetris Effect is careless; it is that a celebrated, high-budget,
+spectacle-first puzzle game shipped with no reduced-motion option and its own reviewers reporting
+that the spectacle costs legibility. This repo is building shatter waves, hit-stop, slow-motion, a
+Fever pulse and screen shake into a game whose core verb is *remembering where a card is* — a verb
+that depends entirely on the player reading and holding board state. That combination is more
+fragile than Tetris Effect's, not less. Tasks 160 and 159 are the response.
