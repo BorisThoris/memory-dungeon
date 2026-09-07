@@ -43,7 +43,9 @@ import {
 import {
     createBoardPinModeToggleResult,
     createDestroyPairArmedToggleResult,
+    canOpenDungeonExitPrompt,
     createDungeonExitActivationSurfaceResult,
+    createDungeonShopOpenFromFloorResult,
     createFlashPairSurfaceResult,
     createGreetCurioSurfaceResult,
     createGambitThirdPickPressResult,
@@ -629,6 +631,23 @@ export const useAppStore = create<AppState>((set, get) => ({
         );
     },
 
+    openDungeonExitPrompt: () => {
+        const { run, view } = get();
+        if (!canOpenDungeonExitPrompt(run, view)) {
+            return;
+        }
+        set({ dungeonExitPromptOpen: true });
+    },
+
+    openDungeonShopFromFloor: () => {
+        const { run, view } = get();
+        const result = createDungeonShopOpenFromFloorResult({ run, view });
+        if (result.kind === 'ignored') {
+            return;
+        }
+        set(result.patch);
+    },
+
     closeDungeonExitPrompt: () => {
         set({ dungeonExitPromptOpen: false });
     },
@@ -726,6 +745,10 @@ export const useAppStore = create<AppState>((set, get) => ({
 
     notifyMemorizeBoardReady: (boardKey) => {
         runTimerController.notifyMemorizeBoardReady(boardKey);
+    },
+
+    skipMemorizePhase: () => {
+        runTimerController.skipMemorizePhase();
     },
 
     applyFlashPairPower: () => {

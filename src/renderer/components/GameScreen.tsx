@@ -88,6 +88,7 @@ import {
 } from '../store/gameplayFeedbackAdapter';
 import { projectGameplayFeedback } from '../store/gameplayFeedbackAdapter';
 import { perfectMemoryStatus } from '../../shared/perfect-memory-status';
+import { MemorizeSkipLayer } from './MemorizeSkipLayer';
 import RunShell, { type RunShellTool } from './RunShell';
 import { RUN_SHELL_GLYPHS } from './runShellGlyphs';
 import MainMenuBackground from './MainMenuBackground';
@@ -423,6 +424,9 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             openShopFromLevelComplete: state.openShopFromLevelComplete,
             openSettings: state.openSettings,
             notifyMemorizeBoardReady: state.notifyMemorizeBoardReady,
+            openDungeonExitPrompt: state.openDungeonExitPrompt,
+            openDungeonShopFromFloor: state.openDungeonShopFromFloor,
+            skipMemorizePhase: state.skipMemorizePhase,
             pause: state.pause,
             pickRelic: state.pickRelic,
             resume: state.resume,
@@ -732,9 +736,12 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         dismissPowersFtue,
         goToMenu,
         openCodexFromPlaying,
+        openDungeonExitPrompt,
+        openDungeonShopFromFloor,
         openInventoryFromPlaying,
         openShopFromLevelComplete,
         openSettings,
+        skipMemorizePhase,
         pause,
         applyRelicOfferService,
         pickRelic,
@@ -1542,6 +1549,15 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
 
     // Ids and labels come from the catalog rather than being retyped here, so a tool the catalog
     // names but the dock forgets to build is a type error rather than a missing button.
+    /*
+     * The exit and the vendor pop off the board when they are found, so the dock carries them
+     * from that point on. Offered on the same condition the board tile used to answer to — the
+     * card has been turned up on this floor — rather than on whether it can be used right now,
+     * so a locked exit still tells the player where the door is and what it wants.
+     */
+    const dungeonExitDockOffered = run.status === 'playing' && dungeonExitStatus.revealed && dungeonExitStatus.exitTile !== null;
+    const dungeonStoreDockOffered =
+        run.status === 'playing' && run.board.dungeonShopVisited === true && run.shopOffers.length > 0;
     const toolSpec = (id: RunShellToolId): Pick<RunShellTool, 'id' | 'label'> => {
         const spec = RUN_SHELL_TOOL_CATALOG.find((candidate) => candidate.id === id);
         if (!spec) {
@@ -1641,6 +1657,35 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                 title: residentGreetTitle,
                 onClick: greetFloorResident
             },
+            ...(dungeonExitDockOffered
+                ? [
+                      {
+                          ...toolSpec('exit'),
+                          glyph: RUN_SHELL_GLYPHS.exit,
+                          disabled: false,
+                          title: dungeonExitStatus.canActivate
+                              ? RUN_TOOL_REASONS.exit.available
+                              : RUN_TOOL_REASONS.exit.locked,
+                          onClick: () => {
+                              playUiClick();
+                              openDungeonExitPrompt();
+                          }
+                      }
+                  ]
+                : []),
+            ...(dungeonStoreDockOffered
+                ? [
+                      {
+                          ...toolSpec('store'),
+                          glyph: RUN_SHELL_GLYPHS.store,
+                          title: RUN_TOOL_REASONS.store.available,
+                          onClick: () => {
+                              playUiClick();
+                              openDungeonShopFromFloor();
+                          }
+                      }
+                  ]
+                : []),
             {
                 // Same rule as `createUndoResolvingSurfaceResult`: only while a pair is resolving.
                 ...toolSpec('undo'),
@@ -1829,6 +1874,9 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                 shuffleSfxGain={shuffleSfxGain}
                                 stickyBlockedTileId={stickyBlockedTileId}
                             />
+                            {run.status === 'memorize' && !suppressStatusOverlays ? (
+                                <MemorizeSkipLayer onSkip={skipMemorizePhase} />
+                            ) : null}
                             {boardFloaterPayload ? (
                                 <span
                                     key={`live-${boardFloaterPayload.key}`}

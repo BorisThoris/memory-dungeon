@@ -83,6 +83,11 @@ import {
     type TileBoardViewportMetrics,
     type TileBoardViewportState
 } from './tileBoardViewport';
+import {
+    mousePressWasATap,
+    twoFingerContactIsACameraGesture,
+    type TileBoardGesturePointPair
+} from './tileBoardGestureCommit';
 import { BOARD_LAYOUT_VIEWPORT_PADDING, TILE_SPACING } from './tileShatter';
 import { computeBoardEntranceMotionBudgetMs, computeShuffleMotionBudgetMs } from './shuffleFlipAnimation';
 import { boardWebglPerfSampleRecordReactCommit, boardWebglPerfSampleVerboseEnabled } from '../dev/boardWebglPerfSample';
@@ -523,6 +528,8 @@ interface StageWorldViewport {
 
 interface MouseDragSnapshot {
     dragActive: boolean;
+    /** When the button went down, so a fast click that slid a little still reads as a click. */
+    pressedAtMs: number;
     pickOnRelease: boolean;
     pointerId: number;
     startClientX: number;
@@ -843,6 +850,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
     const hoverTiltRef = useRef<TileHoverTiltState>({ tileId: null, x: 0, y: 0 });
     const activeTouchPointsRef = useRef<Map<number, TileBoardGesturePoint>>(new Map());
     const gestureSnapshotRef = useRef<TileBoardPinchGestureSnapshot | null>(null);
+    /** Where the two fingers were when the contact armed, so a gesture can be told from two taps. */
+    const gestureStartTouchesRef = useRef<TileBoardGesturePointPair | null>(null);
+    const gestureCommittedRef = useRef(false);
     const mouseDragSnapshotRef = useRef<MouseDragSnapshot | null>(null);
     const chainOpportunityBeatSfxSignatureRef = useRef<string | null>(null);
     const gestureActiveRef = useRef(false);
@@ -2821,6 +2831,8 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         (clearSuppression: boolean): void => {
             activeTouchPointsRef.current.clear();
             gestureSnapshotRef.current = null;
+            gestureStartTouchesRef.current = null;
+            gestureCommittedRef.current = false;
             syncGestureActive(false);
             if (clearSuppression) {
                 syncSelectionSuppressed(false);
@@ -3156,16 +3168,50 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                 secondTouch,
                 viewport: activeViewport
             });
+            /*
+             * Armed, not committed. Two fingers on the board is where a pinch starts and also
+             * where a fast pair of taps happens to be; suppressing selection here is what used to
+             * eat the second tap. The gesture takes the board over only once it moves.
+             */
+            gestureStartTouchesRef.current = { first: firstTouch, second: secondTouch };
+            gestureCommittedRef.current = false;
+        };
 
+        /** Hands the board to the camera. Only called once the contact has actually moved. */
+        const commitGestureSession = (): void => {
+            if (gestureCommittedRef.current) {
+                return;
+            }
+            gestureCommittedRef.current = true;
             syncGestureActive(true);
             syncSelectionSuppressed(true);
+        };
+
+        /**
+         * True when the contact has become a camera gesture. Until it has, the fingers are still
+         * candidates for a tap and nothing about the viewport or the selection may change.
+         */
+        const gestureHasCommitted = (): boolean => {
+            if (gestureCommittedRef.current) {
+                return true;
+            }
+            const start = gestureStartTouchesRef.current;
+            const trackedTouches = getTrackedGestureTouches();
+            if (!start || !trackedTouches) {
+                return false;
+            }
+            if (!twoFingerContactIsACameraGesture(start, { first: trackedTouches[0], second: trackedTouches[1] })) {
+                return false;
+            }
+            commitGestureSession();
+            return true;
         };
 
         const updateGestureViewport = (): void => {
             const snapshot = gestureSnapshotRef.current;
             const trackedTouches = getTrackedGestureTouches();
 
-            if (!snapshot || !trackedTouches) {
+            if (!snapshot || !trackedTouches || !gestureHasCommitted()) {
                 return;
             }
 
@@ -3205,8 +3251,8 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             activeTouchPointsRef.current.set(event.pointerId, { clientX: event.clientX, clientY: event.clientY });
 
             if (activeTouchPointsRef.current.size >= 2) {
+                // Arming only. The press is still a candidate for a tap, so it is left alone.
                 beginGestureSession();
-                stopGestureEvent(event);
             }
         };
 
@@ -3219,7 +3265,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
 
             if (activeTouchPointsRef.current.size >= 2 && gestureSnapshotRef.current) {
                 updateGestureViewport();
-                stopGestureEvent(event);
+                if (gestureCommittedRef.current) {
+                    stopGestureEvent(event);
+                }
                 return;
             }
 
@@ -3245,6 +3293,8 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             }
 
             gestureSnapshotRef.current = null;
+            gestureStartTouchesRef.current = null;
+            gestureCommittedRef.current = false;
             syncGestureActive(false);
 
             if (activeTouchPointsRef.current.size === 0) {
@@ -3268,8 +3318,8 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             }
 
             syncTouchList(event.touches);
+            // As with pointerdown: two fingers arriving is not yet a gesture, so the event stands.
             beginGestureSession();
-            stopTouchGestureEvent(event);
         };
 
         const handleTouchMove = (event: globalThis.TouchEvent): void => {
@@ -3282,7 +3332,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                 beginGestureSession();
             }
             updateGestureViewport();
-            stopTouchGestureEvent(event);
+            if (gestureCommittedRef.current) {
+                stopTouchGestureEvent(event);
+            }
         };
 
         const handleTouchEnd = (event: globalThis.TouchEvent): void => {
@@ -3293,15 +3345,27 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             if (event.touches.length >= 2) {
                 syncTouchList(event.touches);
                 beginGestureSession();
-                stopTouchGestureEvent(event);
+                if (gestureCommittedRef.current) {
+                    stopTouchGestureEvent(event);
+                }
                 return;
             }
 
+            /*
+             * Only a committed gesture gets to swallow the lift. Cancelling it unconditionally is
+             * what turned the last tap of a fast burst into nothing at all: the fingers had armed
+             * a pinch that never happened, and the tap died with it.
+             */
+            const wasCommitted = gestureCommittedRef.current;
             activeTouchPointsRef.current.clear();
             gestureSnapshotRef.current = null;
+            gestureStartTouchesRef.current = null;
+            gestureCommittedRef.current = false;
             syncGestureActive(false);
             syncSelectionSuppressed(false);
-            stopTouchGestureEvent(event);
+            if (wasCommitted) {
+                stopTouchGestureEvent(event);
+            }
         };
 
         stageNode.addEventListener('pointerdown', handlePointerDown, true);
@@ -3407,6 +3471,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
 
             mouseDragSnapshotRef.current = {
                 dragActive: event.button !== 0,
+                pressedAtMs: Date.now(),
                 pickOnRelease: event.button === 0,
                 pointerId: event.pointerId,
                 startClientX: event.clientX,
@@ -3485,7 +3550,19 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                 return;
             }
 
-            const shouldPick = event.type === 'pointerup' && snapshot.pickOnRelease && !snapshot.dragActive;
+            /*
+             * A quick click that slid a few pixels is still a click. Judging it on the pan
+             * threshold alone dropped picks during fast play, where the hand is already moving to
+             * the next card as the button comes up.
+             */
+            const shouldPick =
+                event.type === 'pointerup' &&
+                snapshot.pickOnRelease &&
+                mousePressWasATap({
+                    dragActive: snapshot.dragActive,
+                    durationMs: Date.now() - snapshot.pressedAtMs,
+                    travelPx: Math.hypot(event.clientX - snapshot.startClientX, event.clientY - snapshot.startClientY)
+                });
             mouseDragSnapshotRef.current = null;
             syncGestureActive(false);
             syncSelectionSuppressed(false);

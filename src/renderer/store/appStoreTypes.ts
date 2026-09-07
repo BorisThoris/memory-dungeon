@@ -95,6 +95,13 @@ export interface AppState {
     dismissHowToPlay: () => Promise<void>;
     claimMetaProgressionReward: (rowId: string) => MetaProgressionUnlockResult;
     pressTile: (tileId: string) => void;
+    /**
+     * Re-opens the door. The exit card pops off the board when it is found, so after "Stay" the
+     * dock is the only way back to it.
+     */
+    openDungeonExitPrompt: () => void;
+    /** Re-opens the floor vendor, which pops off the board the same way the exit does. */
+    openDungeonShopFromFloor: () => void;
     closeDungeonExitPrompt: () => void;
     activateDungeonExitFromPrompt: (spend?: DungeonExitActivationSpend) => void;
     togglePeekMode: () => void;
@@ -104,6 +111,8 @@ export interface AppState {
     toggleRegionShuffleArmed: () => void;
     shuffleBoard: () => void;
     notifyMemorizeBoardReady: (boardKey: string) => void;
+    /** Ends the study period early, on a deliberate double tap of the board. */
+    skipMemorizePhase: () => void;
     applyFlashPairPower: () => void;
     /** Say hello to the floor's resident. Free, once per floor. */
     greetFloorResident: () => void;

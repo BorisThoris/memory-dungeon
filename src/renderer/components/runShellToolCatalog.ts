@@ -22,7 +22,9 @@ export type RunShellToolId =
     | 'flash'
     | 'stray'
     | 'undo'
-    | 'greet';
+    | 'greet'
+    | 'exit'
+    | 'store';
 
 /** The charge fields on RunState that a dock tool is expected to spend. */
 export type RunPowerChargeField = Extract<
@@ -58,7 +60,15 @@ export const RUN_SHELL_TOOL_CATALOG: readonly RunShellToolSpec[] = [
     { conditional: false, id: 'undo', label: 'Undo', spends: null },
     // Greeting the floor's resident costs nothing and is governed by a once-per-floor rule rather
     // than a counter, so it spends no charge.
-    { conditional: false, id: 'greet', label: 'Greet', spends: null }
+    { conditional: false, id: 'greet', label: 'Greet', spends: null },
+    /*
+     * The two doors. Both cards pop off the board the moment they are found, so from then on the
+     * dock is the only way back to them: the exit for a player who said "Stay" and changed their
+     * mind, the vendor for a floor whose stock is still worth a second look. Conditional because
+     * neither is offered until its card has actually been turned up on this floor.
+     */
+    { conditional: true, id: 'exit', label: 'Exit', spends: null },
+    { conditional: true, id: 'store', label: 'Store', spends: null }
 ];
 
 export const runShellToolIds = (): RunShellToolId[] => RUN_SHELL_TOOL_CATALOG.map((tool) => tool.id);

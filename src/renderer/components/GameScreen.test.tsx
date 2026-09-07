@@ -2131,6 +2131,93 @@ describe('GameScreen (OVR-014)', () => {
         expect(hint.querySelectorAll('*')).toHaveLength(0);
     });
 
+    it('carries the door in the dock once the exit card has popped off the board', () => {
+        const baseRun = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless' }));
+        const exitTile: Tile = {
+            id: 'exit',
+            pairKey: EXIT_PAIR_KEY,
+            // Where a found exit lives now: revealed, and gone from the board.
+            state: 'removed',
+            symbol: '^',
+            label: 'Exit',
+            dungeonCardKind: 'exit',
+            dungeonCardState: 'revealed',
+            dungeonCardEffectId: 'exit_safe'
+        };
+        const board: BoardState = {
+            ...baseRun.board!,
+            tiles: [
+                { ...baseRun.board!.tiles[0]!, id: 'a1', pairKey: 'a', state: 'hidden' },
+                { ...baseRun.board!.tiles[1]!, id: 'a2', pairKey: 'a', state: 'hidden' },
+                exitTile
+            ],
+            pairCount: 1,
+            matchedPairs: 0,
+            dungeonExitTileId: 'exit'
+        };
+        const run: RunState = { ...baseRun, board, status: 'playing' };
+        // The dock action reads the store, the way every other run action does.
+        act(() => {
+            useAppStore.setState({ run, view: 'playing', dungeonExitPromptOpen: false });
+        });
+
+        render(
+            <PlatformTiltProvider>
+                <NotificationHost>
+                    <GameScreen achievements={[]} run={run} />
+                </NotificationHost>
+            </PlatformTiltProvider>
+        );
+
+        expect(screen.getByTestId('tool-exit')).toBeEnabled();
+        expect(screen.queryByTestId('dungeon-exit-overlay')).toBeNull();
+
+        act(() => {
+            fireEvent.click(screen.getByTestId('tool-exit'));
+        });
+
+        expect(screen.getByTestId('dungeon-exit-overlay')).toBeInTheDocument();
+    });
+
+    it('keeps the door out of the dock while the exit card is still hidden', () => {
+        const baseRun = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless' }));
+
+        render(
+            <PlatformTiltProvider>
+                <NotificationHost>
+                    <GameScreen achievements={[]} run={{ ...baseRun, status: 'playing' }} />
+                </NotificationHost>
+            </PlatformTiltProvider>
+        );
+
+        expect(screen.queryByTestId('tool-exit')).toBeNull();
+    });
+
+    it('offers a double tap out of the study period, and only while it is running', () => {
+        const memorizing = createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless' });
+        expect(memorizing.status).toBe('memorize');
+
+        const view = render(
+            <PlatformTiltProvider>
+                <NotificationHost>
+                    <GameScreen achievements={[]} run={memorizing} />
+                </NotificationHost>
+            </PlatformTiltProvider>
+        );
+
+        expect(screen.getByTestId('memorize-skip-layer')).toBeInTheDocument();
+
+        view.rerender(
+            <PlatformTiltProvider>
+                <NotificationHost>
+                    <GameScreen achievements={[]} run={finishMemorizePhase(memorizing)} />
+                </NotificationHost>
+            </PlatformTiltProvider>
+        );
+
+        expect(screen.queryByTestId('memorize-skip-layer')).toBeNull();
+    });
+
     it('shows a free proceed action for terminal key-lock fallback exits', () => {
         const baseRun = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless' }));
         const exitTile: Tile = {

@@ -18,6 +18,7 @@ import {
     type DungeonExitActivationSpend
 } from '../../shared/dungeon-exit-rules';
 import { getDungeonExitStatus } from '../../shared/dungeon-board-status';
+import { runShopOffers } from '../../shared/shop-rules';
 import { canGreetFloorCurio } from '../../shared/floor-curio-greeting-rules';
 import { reduceGameplayCommand } from '../../shared/gameplay-core';
 import { appendGameplayJournal } from '../../shared/gameplay-journal';
@@ -25,6 +26,7 @@ import {
     applyDestroyPair,
     canRegionShuffle,
     collectDestroyEligibleTileIds,
+    tileIsPeekEligiblePreview
 } from '../../shared/board-powers';
 import {
     applyEnemyHazardClick,
@@ -36,6 +38,7 @@ import {
     type MatchScorePop,
     type MismatchScorePop
 } from './matchScorePop';
+import { runFilteredStringArray } from '../../shared/run-array-guards';
 import { runNonNegativeInteger } from '../../shared/run-number-guards';
 
 export interface RunSurfaceState {
@@ -517,6 +520,51 @@ export const createUndoResolvingSurfaceResult = ({
           };
 };
 
+/**
+ * Whether the run dock should be offering the door.
+ *
+ * The exit card pops off the board the moment it is found, so the board itself can no longer be
+ * the way back to it: a player who answers "Stay" once would otherwise have sealed their own
+ * floor. The dock carries the door for the rest of the floor instead, on exactly the condition
+ * the board used to carry it — the exit has been revealed.
+ */
+export const canOpenDungeonExitPrompt = (run: RunState | null, view: ViewState): boolean => {
+    if (!run || view !== 'playing' || run.status !== 'playing') {
+        return false;
+    }
+    const status = getDungeonExitStatus(run);
+    return Boolean(status.exitTile) && status.revealed;
+};
+
+/** Whether the run dock should be offering the vendor: found on this floor, and still stocked. */
+export const canOpenDungeonShopFromFloor = (run: RunState | null, view: ViewState): boolean =>
+    Boolean(
+        run &&
+            view === 'playing' &&
+            run.status === 'playing' &&
+            run.board?.dungeonShopVisited === true &&
+            runShopOffers(run.shopOffers).length > 0
+    );
+
+export const createDungeonShopOpenFromFloorResult = ({
+    run,
+    view
+}: {
+    run: RunState | null;
+    view: ViewState;
+}): { kind: 'ignored' } | { kind: 'applied'; patch: Partial<RunSurfaceState> & { view: ViewState } } =>
+    !canOpenDungeonShopFromFloor(run, view)
+        ? { kind: 'ignored' }
+        : {
+              kind: 'applied',
+              patch: {
+                  ...clearRunSurfaceArmedModes(),
+                  dungeonExitPromptOpen: false,
+                  shopReturnMode: 'floor',
+                  view: 'shop'
+              }
+          };
+
 export const createDungeonExitActivationSurfaceResult = ({
     run,
     spend,
@@ -578,6 +626,34 @@ export const createBoardPowerContactPolicy = ({
         canContinueSinglePowerAfterContact: !boardPinMode && armedPowerCount === 1
     };
 };
+
+/**
+ * Whether this press is going to be spent looking rather than reaching.
+ *
+ * A peek is the one board power that never touches the card: the player pays a charge to see
+ * what is under it. Pressing a tile an enemy is standing on used to cost a life first and apply
+ * the peek second, which made looking at the most dangerous square on the board the most
+ * expensive thing a player could do. The press path asks this before it resolves hazard
+ * contact, so it has to accept exactly what applyPeek accepts.
+ */
+export const pressWillSpendPeekCharge = ({
+    canContinueSinglePowerAfterContact,
+    peekModeArmed,
+    run,
+    tileId
+}: {
+    canContinueSinglePowerAfterContact: boolean;
+    peekModeArmed: boolean;
+    run: RunState;
+    tileId: string;
+}): boolean =>
+    peekModeArmed &&
+    canContinueSinglePowerAfterContact &&
+    run.status === 'playing' &&
+    runNonNegativeInteger(run.peekCharges) > 0 &&
+    run.board != null &&
+    run.board.flippedTileIds.length === 0 &&
+    tileIsPeekEligiblePreview(run.board, runFilteredStringArray(run.peekRevealedTileIds), tileId);
 
 export const createArmedBoardPowerPressResult = ({
     canContinueSinglePowerAfterContact,
@@ -733,8 +809,14 @@ export const createOrdinaryTileFlipResult = ({
 
     const flippedAfter = nextRun.board?.flippedTileIds.length ?? 0;
     const pressedTileAfter = nextRun.board?.tiles.find((tile) => tile.id === tileId) ?? null;
+    /*
+     * A card the press turned over. A sprung trap turns over and pops off the board in the same
+     * beat, so it lands on 'removed' rather than 'flipped' — the flip still happened, and the
+     * player still needs to hear it, so removal counts here too.
+     */
     const pressedTileBecameFaceUp =
-        pressedTileBefore?.state === 'hidden' && pressedTileAfter?.state === 'flipped';
+        pressedTileBefore?.state === 'hidden' &&
+        (pressedTileAfter?.state === 'flipped' || pressedTileAfter?.state === 'removed');
 
     return {
         kind: 'flipped',

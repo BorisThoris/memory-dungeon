@@ -1286,3 +1286,42 @@ where that rule
         animation: none;
     }
 }
+
+/*
+ * The study-period skip target. It covers the board for exactly as long as the board is being
+ * studied and takes no presses of its own beyond the double tap, so the tiles under it are never
+ * competing with it for a press: during memorize they are not pickable at all.
+ */
+.memorizeSkipLayer {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding: 0 0 1.1rem;
+    border: 0;
+    border-radius: inherit;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.memorizeSkipHint {
+    padding: 0.22rem 0.62rem 0.26rem;
+    border-radius: var(--ui-radius-md);
+    border: 1px solid color-mix(in srgb, var(--theme-parchment) 26%, transparent);
+    background: color-mix(in srgb, var(--theme-void-alt) 76%, transparent);
+    color: color-mix(in srgb, var(--theme-parchment) 82%, transparent);
+    font-size: var(--ui-font-size-xs);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    pointer-events: none;
+}
+
+.memorizeSkipLayer:focus-visible {
+    outline: 2px solid var(--theme-gold);
+    outline-offset: -3px;
+}

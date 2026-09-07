@@ -142,8 +142,10 @@ describe('sealBoardForDungeonExit', () => {
         expect(sealed.dungeonExitActivated).toBe(true);
         expect(sealed.flippedTileIds).toEqual([]);
         expect(sealed.matchedPairs).toBe(2);
+        // The exit popped off the board when it was revealed; sealing the floor keeps it gone
+        // rather than putting a face-up card back where the player watched one leave.
         expect(sealed.tiles.find((candidate) => candidate.id === 'exit')).toMatchObject({
-            state: 'matched',
+            state: 'removed',
             dungeonCardState: 'resolved',
             dungeonExitActivated: true
         });

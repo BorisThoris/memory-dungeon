@@ -72,7 +72,7 @@ describe('tile press controller', () => {
         if (result.kind === 'patch') {
             expect(result.patch.dungeonExitPromptOpen).toBe(true);
             expect(result.patch.run?.board?.tiles.find((tile) => tile.id === exitTile.id)).toMatchObject({
-                state: 'flipped',
+                state: 'removed',
                 dungeonCardState: 'revealed'
             });
             expect(result.audio).toEqual([{ kind: 'flip' }]);

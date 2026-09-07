@@ -41,6 +41,8 @@ interface RunTimerController {
     resumeRunWithTimers: (run: RunState) => RunState;
     scheduleDebugRevealTimer: (duration: number) => void;
     scheduleResolveTimer: (duration: number) => void;
+    /** Ends the study period early on the player's word. True when a phase was actually ended. */
+    skipMemorizePhase: () => boolean;
     syncGauntletExpiryWatch: () => void;
 }
 
@@ -312,6 +314,27 @@ export const createRunTimerController = ({
         return resumedRun;
     };
 
+    /*
+     * The study period is a gift of time, not a toll. A player who has already read the board
+     * should not have to sit and watch the rest of the clock, so a deliberate double tap ends it
+     * here — the same completion the timer would have run, with the timer cancelled so it cannot
+     * fire a second time into a phase that is already over.
+     */
+    const skipMemorizePhase = (): boolean => {
+        const { run, view } = getState();
+        if (!run || view !== 'playing' || run.status !== 'memorize') {
+            return false;
+        }
+        const skipped = completeMemorizePhase(run);
+        if (skipped === run) {
+            return false;
+        }
+        clearMemorizeTimer();
+        pendingMemorizeBoardKey = null;
+        setRun(skipped);
+        return true;
+    };
+
     const notifyMemorizeBoardReady = (boardKey: string): void => {
         const { run, view } = getState();
         if (
@@ -340,6 +363,7 @@ export const createRunTimerController = ({
         resumeRunWithTimers,
         scheduleDebugRevealTimer,
         scheduleResolveTimer,
+        skipMemorizePhase,
         syncGauntletExpiryWatch
     };
 };

@@ -150,7 +150,12 @@ export const createMatchedPairClaimBoard = ({
             if (tile.id === firstTileId || tile.id === secondTileId) {
                 return clearDungeonCardFields({
                     ...tile,
-                    state: 'matched' as const,
+                    /*
+                     * A lever is a switch, not a souvenir. Once it is thrown its pair has nothing
+                     * left to say, so it pops off the board instead of sitting there face-up
+                     * competing for the read the remaining hidden cards need.
+                     */
+                    state: context.matchedDungeonKind === 'lever' ? ('removed' as const) : ('matched' as const),
                     findableKind: undefined,
                     routeCardKind: undefined,
                     routeSpecialKind: undefined,

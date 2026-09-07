@@ -59,7 +59,7 @@ describe('dungeon press surface state helpers', () => {
         if (result.kind === 'exitPrompt') {
             expect(result.playFlipSfx).toBe(true);
             expect(result.run.board!.tiles.find((tile) => tile.id === exitTile.id)).toMatchObject({
-                state: 'flipped',
+                state: 'removed',
                 dungeonCardState: 'revealed'
             });
             expect(result.run.gameplayCommandJournal).toEqual([
