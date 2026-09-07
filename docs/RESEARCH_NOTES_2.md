@@ -175,3 +175,85 @@ scratchpad. The ones most worth checking next, because they would change a decis
 
 **Nothing in that list should be cited or designed against until it is checked.** The first pass's
 lesson stands: the claims that sound most authoritative are the ones most likely to die.
+
+---
+
+## 8. CONFIRMED — the second round, verified by hand against primary sources
+
+After the automated passes died, the remaining topics were redone by fetching each source directly
+and quoting it. These are confirmed the same way §§1-4 are.
+
+### Generation budgets — the method tasks 156 and 157 were blocked on
+
+**Dead Cells** (Motion Twin's lead level designer, quoted verbatim):
+
+- The content budget is a **ratio against level geometry**, not a fixed count: *"The number of
+  monsters in one level is defined by the total length of the combat based tiles in the level."*
+  Worked example: 250 combat tiles at 1 monster per 5 tiles = 50 monsters.
+- Expensive content is **weighted against the same budget** — some monsters *"count for 10 tiles"*
+  rather than one.
+- Room selection is **retry-until-compliant**, not trim-a-finished-list: *"For each node, the
+  algorithm tries a random room, among the ones dedicated for this particular biome, and tests to
+  see if it complies with the instructions given by the graph."* A node's declared content type
+  therefore cannot be silently dropped — which is precisely the failure this repo hit.
+
+**DCSS** (level-syntax documentation, quoted verbatim) separates three things this repo keeps
+conflating:
+
+- **CHANCE** — an absolute appearance probability on a 1-in-10000 scale. *"If specified as a raw
+  number, the chance of selecting the vault is <number> in 10000."* `CHANCE: 5%`, `CHANCE: 500` and
+  `: chance(500)` are equivalent.
+- **WEIGHT** — a relative share among competitors, default 10: *"[vault's WEIGHT: / sum of all
+  WEIGHT:s of vaults of that type]"*.
+- **DEPTH vs PLACE** — the guaranteed-versus-chance split, stated outright. DEPTH *"does not force
+  a map to be placed in a particular place; it applies only when the dungeon builder is looking for
+  a random vault"*; PLACE *"will force the map... to be picked when D:3 is generated."*
+- Both are **depth-scopable**: `WEIGHT: 100 (D:2-4), 20 (Crypt, Zot)` — so a floor band can be
+  tuned without disturbing the rest, which is exactly what floors 2-6 need here.
+
+### Detecting dead and dominant content — the method behind task 158
+
+Mega Crit on Slay the Spire (Game Developer interview, quoted verbatim):
+
+- **Two metrics, not one**: pick rate when offered, and how often the card appears in winning decks.
+- The operational definition of dead, which the occupancy census arrived at independently: a pick
+  rate *"too low and it's 'basically not a card in our game at that point.'"*
+- Why they measured at all, which applies exactly here: *"look, we're not going to reasonably be
+  able to balance this many cards, we don't have a team of people to do this."* Pool size forced
+  the method.
+- A worked case of warping: **Dual Wield**, buffed to duplicate any card in hand — *"It was totally
+  broken. You could copy skills and go infinite really easily."* Fixed by restricting it to Skill
+  cards. The tell was a rule interacting with itself.
+
+### Peggle assists the player, deliberately and secretly
+
+PopCap's Jason Kapalka (Game Developer, quoted verbatim):
+
+- *"The Lucky Bounce that ensures that a ball hits a target peg instead of plunking into the dead
+  ball zone is used sparingly."*
+- *"We do apply a lot of extra 'luck' to players in their first half-dozen levels or so to keep
+  them from getting frustrated while learning the ropes."*
+
+Worth sitting with: the reference product for "a cascade that feels good" tilts the odds for a new
+player across **the first half-dozen levels** — the same span, floors 1 to 6, where this game's pop
+fired on nothing at all. Kapalka also notes the risk: players who suspect assistance tend to assume
+something worse than what is actually happening.
+
+### Balatro's escalation curve
+
+Community wiki, fetched directly. Marked as community documentation rather than a developer
+statement, but the numbers are checkable in-game.
+
+Base chip requirement by ante (White Stake): **300, 800, 2000, 5000, 11000, 20000, 35000, 50000**.
+Within an ante the blinds are fixed multiples of that base — Small 1x, Big 1.5x, Boss 2x.
+
+Two things about the shape. The requirement grows about 167x across a run, but the *ratio* between
+consecutive antes **falls** from 2.67x to about 1.43x — the curve decelerates in relative terms
+even as it explodes in absolute ones. And past the designed 8-ante run the table is abandoned for a
+formula whose growth rate itself grows:
+
+    Chip Requirement = Ante8 · (1.6 + (0.75(Ante-8))^(1+0.2(Ante-8)))^(Ante-8)
+
+That is what an endless mode looks like when it is a continuation of the same ladder rather than a
+separate structure — and it is why Balatro's endless eventually breaks on floating-point rather
+than on design.
