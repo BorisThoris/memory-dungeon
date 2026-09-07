@@ -3,7 +3,7 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2607,
+    "trackedFileCount": 2606,
     "codeFileCount": 1031,
     "exportedSymbolCount": 3733,
     "contentItemCount": 66,
@@ -23,12 +23,6 @@
       "category": "documentation",
       "bytes": 1277,
       "sha256": "821bd9e7f420a3422679830332d6448b63e0881b118399ff076de0a995673b1c"
-    },
-    {
-      "path": ".claude/launch.json",
-      "category": "configuration",
-      "bytes": 187,
-      "sha256": "95ef2c6ab050c160c96bd16f3335ab0e6159c1d92cdbf6371ca280a0906b681d"
     },
     {
       "path": ".depcheckrc.json",
@@ -51,8 +45,8 @@
     {
       "path": ".gitignore",
       "category": "other",
-      "bytes": 770,
-      "sha256": "ed337601fd16e3211010ec5e50c051e8d57aa4376efe354f75e1ef58f3435d58"
+      "bytes": 734,
+      "sha256": "f2a5c8011ae8d6da3882d20b38e930f85ce53ccf8e560f24e3c7fa9094a90ccf"
     },
     {
       "path": ".idea/.gitignore",
