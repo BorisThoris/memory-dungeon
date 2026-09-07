@@ -5,11 +5,11 @@
     "name": "memory-dungeon",
     "trackedFileCount": 2616,
     "codeFileCount": 1035,
-    "exportedSymbolCount": 3754,
+    "exportedSymbolCount": 3758,
     "contentItemCount": 66,
     "mechanicCount": 140,
     "stateFieldCount": 149,
-    "relationshipCount": 11070
+    "relationshipCount": 11074
   },
   "inventory": [
     {
@@ -279,8 +279,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 260319,
-      "sha256": "bc674c42f764a9c36ebe87716d5e4463cbf671f72032a16a0fb87e73e8781f58"
+      "bytes": 263780,
+      "sha256": "8fe90191d3f6620e2625e42f9ad60140feaf73fcd69fc3ab70360605e796f77a"
     },
     {
       "path": "docs/BLUEPRINT_FRAMEWORK.md",
@@ -778,7 +778,7 @@
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
       "bytes": 472,
-      "sha256": "d25d3aea5a81399883879929b1b7e21fe544677677d19fda3a393a9fbb5de38c"
+      "sha256": "9b546138c6e36e49aab8f4e68b85a73e02b28229b17a97dbbee4a22216351178"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -11109,14 +11109,14 @@
     {
       "path": "src/shared/dungeon-blueprint-policy-rules.test.ts",
       "category": "test",
-      "bytes": 3340,
-      "sha256": "622e607c0ea26d8a775ebf737ece2b1a753ec52a0197e0c621ba6e08327a18bc"
+      "bytes": 4003,
+      "sha256": "096b165890b326b465f021e39ed901ae9b5792cadae07cafb6e30390cead7ee1"
     },
     {
       "path": "src/shared/dungeon-blueprint-policy-rules.ts",
       "category": "source",
-      "bytes": 11456,
-      "sha256": "ecb279707124d1eecd31e91f1e180557ea7fec4b60a377d667b7e69e2bc8b5f7"
+      "bytes": 13320,
+      "sha256": "e0f6b19b4310197af06567d97f5329ce1fbcf2e302f28117f890d52c0aa87677"
     },
     {
       "path": "src/shared/dungeon-board-generation-rules.test.ts",
@@ -11187,8 +11187,8 @@
     {
       "path": "src/shared/dungeon-card-recipe-rules.ts",
       "category": "source",
-      "bytes": 9173,
-      "sha256": "0a3c222e78866bbd25ab2bea20d4c467a81efe69c061d2159ac06e4a50b69e12"
+      "bytes": 14027,
+      "sha256": "c3de6bdbf04b6570d5d28ca23c7d988a0776b3f48944a0e93fd27a5a3d1e4778"
     },
     {
       "path": "src/shared/dungeon-cards.test.ts",
@@ -11283,8 +11283,8 @@
     {
       "path": "src/shared/dungeon-floor-blueprint-rules.ts",
       "category": "source",
-      "bytes": 6655,
-      "sha256": "b68778a1265303951bb4dcdc9bec91892c9c5c6666efb7c0995646082576a379"
+      "bytes": 6877,
+      "sha256": "b721c18f190ab8b3707b15dc3284571179a2309b54062ff5241ffba13079045f"
     },
     {
       "path": "src/shared/dungeon-key-copy.ts",
@@ -11661,8 +11661,8 @@
     {
       "path": "src/shared/game.test.ts",
       "category": "test",
-      "bytes": 382240,
-      "sha256": "4ece71b75a148625fe46909a4961980202e16cd05320de42ad794ceb9a21100a"
+      "bytes": 382881,
+      "sha256": "f7ec0203e9cf52b33e1ad40706e094264fec88364569f50a31d4962dcb547aa5"
     },
     {
       "path": "src/shared/game.ts",
@@ -13167,8 +13167,8 @@
     {
       "path": "src/shared/system-occupancy-simulation.ts",
       "category": "source",
-      "bytes": 15555,
-      "sha256": "257105204cc6223d61a750d363b7383fc12ed47157b2242ea22e671266db6809"
+      "bytes": 15988,
+      "sha256": "846d12550010a4db2ef466835b19cee39a6441a04aa125e8f6346b412949120e"
     },
     {
       "path": "src/shared/telemetry.test.ts",
@@ -27605,7 +27605,7 @@
       "path": "src/shared/dungeon-blueprint-policy-rules.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 70,
+      "lineCount": 80,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/dungeon-blueprint-policy-rules.ts"
@@ -27618,7 +27618,7 @@
       "path": "src/shared/dungeon-blueprint-policy-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 310,
+      "lineCount": 342,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/dungeon-encounter-context-rules.ts",
@@ -27628,10 +27628,14 @@
       "exports": [
         "symbol:src/shared/dungeon-blueprint-policy-rules.ts#budgetForFloor",
         "symbol:src/shared/dungeon-blueprint-policy-rules.ts#chooseRoomEffectsForFloor",
+        "symbol:src/shared/dungeon-blueprint-policy-rules.ts#DUNGEON_MIN_PAIRS",
         "symbol:src/shared/dungeon-blueprint-policy-rules.ts#dungeonBossForFloor",
         "symbol:src/shared/dungeon-blueprint-policy-rules.ts#dungeonObjectiveForFloor",
         "symbol:src/shared/dungeon-blueprint-policy-rules.ts#exitRouteTypeForFloor",
         "symbol:src/shared/dungeon-blueprint-policy-rules.ts#exitSpecsForFloor",
+        "symbol:src/shared/dungeon-blueprint-policy-rules.ts#floorPairCount",
+        "symbol:src/shared/dungeon-blueprint-policy-rules.ts#LOOP_RESERVE_SHARE",
+        "symbol:src/shared/dungeon-blueprint-policy-rules.ts#loopReservedPairs",
         "symbol:src/shared/dungeon-blueprint-policy-rules.ts#pairCapacityForDungeonEncounter",
         "symbol:src/shared/dungeon-blueprint-policy-rules.ts#primaryExitLockKindForFloor",
         "symbol:src/shared/dungeon-blueprint-policy-rules.ts#requiredLeverCountForFloor",
@@ -27877,7 +27881,7 @@
       "path": "src/shared/dungeon-card-recipe-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 260,
+      "lineCount": 341,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/dungeon-blueprint-policy-rules.ts",
@@ -28189,7 +28193,7 @@
       "path": "src/shared/dungeon-floor-blueprint-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 195,
+      "lineCount": 198,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/dungeon-blueprint-policy-rules.ts",
@@ -29571,7 +29575,7 @@
       "path": "src/shared/game.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 8827,
+      "lineCount": 8836,
       "imports": [
         "file:src/shared/board-generation.ts",
         "file:src/shared/board-powers.ts",
@@ -35169,7 +35173,7 @@
       "path": "src/shared/system-occupancy-simulation.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 304,
+      "lineCount": 311,
       "imports": [
         "file:src/shared/board-generation.ts",
         "file:src/shared/board-tile-generation-rules.ts",
@@ -51235,6 +51239,14 @@
       "endLine": 287
     },
     {
+      "id": "symbol:src/shared/dungeon-blueprint-policy-rules.ts#DUNGEON_MIN_PAIRS",
+      "name": "DUNGEON_MIN_PAIRS",
+      "kind": "value",
+      "file": "src/shared/dungeon-blueprint-policy-rules.ts",
+      "line": 322,
+      "endLine": 322
+    },
+    {
       "id": "symbol:src/shared/dungeon-blueprint-policy-rules.ts#dungeonBossForFloor",
       "name": "dungeonBossForFloor",
       "kind": "value",
@@ -51267,12 +51279,36 @@
       "endLine": 174
     },
     {
+      "id": "symbol:src/shared/dungeon-blueprint-policy-rules.ts#floorPairCount",
+      "name": "floorPairCount",
+      "kind": "value",
+      "file": "src/shared/dungeon-blueprint-policy-rules.ts",
+      "line": 325,
+      "endLine": 326
+    },
+    {
+      "id": "symbol:src/shared/dungeon-blueprint-policy-rules.ts#LOOP_RESERVE_SHARE",
+      "name": "LOOP_RESERVE_SHARE",
+      "kind": "value",
+      "file": "src/shared/dungeon-blueprint-policy-rules.ts",
+      "line": 321,
+      "endLine": 321
+    },
+    {
+      "id": "symbol:src/shared/dungeon-blueprint-policy-rules.ts#loopReservedPairs",
+      "name": "loopReservedPairs",
+      "kind": "value",
+      "file": "src/shared/dungeon-blueprint-policy-rules.ts",
+      "line": 329,
+      "endLine": 330
+    },
+    {
       "id": "symbol:src/shared/dungeon-blueprint-policy-rules.ts#pairCapacityForDungeonEncounter",
       "name": "pairCapacityForDungeonEncounter",
       "kind": "value",
       "file": "src/shared/dungeon-blueprint-policy-rules.ts",
-      "line": 301,
-      "endLine": 309
+      "line": 332,
+      "endLine": 341
     },
     {
       "id": "symbol:src/shared/dungeon-blueprint-policy-rules.ts#primaryExitLockKindForFloor",
@@ -51736,7 +51772,7 @@
       "kind": "value",
       "file": "src/shared/dungeon-card-recipe-rules.ts",
       "line": 38,
-      "endLine": 72
+      "endLine": 153
     },
     {
       "id": "symbol:src/shared/dungeon-card-recipe-rules.ts#DungeonCardAssignment",
@@ -51759,16 +51795,16 @@
       "name": "dungeonCardRecipeForFloor",
       "kind": "value",
       "file": "src/shared/dungeon-card-recipe-rules.ts",
-      "line": 172,
-      "endLine": 259
+      "line": 253,
+      "endLine": 340
     },
     {
       "id": "symbol:src/shared/dungeon-card-recipe-rules.ts#minorSupplyCard",
       "name": "minorSupplyCard",
       "kind": "value",
       "file": "src/shared/dungeon-card-recipe-rules.ts",
-      "line": 165,
-      "endLine": 170
+      "line": 246,
+      "endLine": 251
     },
     {
       "id": "symbol:src/shared/dungeon-cards.ts#DUNGEON_CARD_EFFECT_DEFINITIONS",
@@ -52240,23 +52276,23 @@
       "kind": "value",
       "file": "src/shared/dungeon-floor-blueprint-rules.ts",
       "line": 27,
-      "endLine": 80
+      "endLine": 83
     },
     {
       "id": "symbol:src/shared/dungeon-floor-blueprint-rules.ts#DungeonEncounterBudgetSummary",
       "name": "DungeonEncounterBudgetSummary",
       "kind": "interface",
       "file": "src/shared/dungeon-floor-blueprint-rules.ts",
-      "line": 82,
-      "endLine": 100
+      "line": 85,
+      "endLine": 103
     },
     {
       "id": "symbol:src/shared/dungeon-floor-blueprint-rules.ts#inspectDungeonEncounterBudget",
       "name": "inspectDungeonEncounterBudget",
       "kind": "value",
       "file": "src/shared/dungeon-floor-blueprint-rules.ts",
-      "line": 116,
-      "endLine": 194
+      "line": 119,
+      "endLine": 197
     },
     {
       "id": "symbol:src/shared/dungeon-key-copy.ts#dungeonKeyKindArticleLabel",
@@ -64607,16 +64643,16 @@
       "name": "judgeSystemOccupancy",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 280,
-      "endLine": 294
+      "line": 287,
+      "endLine": 301
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#judgeSystemOccupancyAgainstBaseline",
       "name": "judgeSystemOccupancyAgainstBaseline",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 257,
-      "endLine": 278
+      "line": 264,
+      "endLine": 285
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#OCCUPANCY_SEEDS",
@@ -64639,8 +64675,8 @@
       "name": "summarizeSystemOccupancy",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 296,
-      "endLine": 303
+      "line": 303,
+      "endLine": 310
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#SYSTEM_OCCUPANCY_BANDS",
@@ -64655,16 +64691,16 @@
       "name": "SYSTEM_OCCUPANCY_BASELINE",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 229,
-      "endLine": 245
+      "line": 236,
+      "endLine": 252
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#SYSTEM_OCCUPANCY_BASELINE_FLOORS",
       "name": "SYSTEM_OCCUPANCY_BASELINE_FLOORS",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 248,
-      "endLine": 248
+      "line": 255,
+      "endLine": 255
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#SYSTEM_OCCUPANCY_COUNTERS",
@@ -89832,6 +89868,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/dungeon-blueprint-policy-rules.ts->symbol:src/shared/dungeon-blueprint-policy-rules.ts#DUNGEON_MIN_PAIRS",
+      "source": "file:src/shared/dungeon-blueprint-policy-rules.ts",
+      "target": "symbol:src/shared/dungeon-blueprint-policy-rules.ts#DUNGEON_MIN_PAIRS",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/dungeon-blueprint-policy-rules.ts->symbol:src/shared/dungeon-blueprint-policy-rules.ts#dungeonBossForFloor",
       "source": "file:src/shared/dungeon-blueprint-policy-rules.ts",
       "target": "symbol:src/shared/dungeon-blueprint-policy-rules.ts#dungeonBossForFloor",
@@ -89853,6 +89895,24 @@
       "id": "exports:src/shared/dungeon-blueprint-policy-rules.ts->symbol:src/shared/dungeon-blueprint-policy-rules.ts#exitSpecsForFloor",
       "source": "file:src/shared/dungeon-blueprint-policy-rules.ts",
       "target": "symbol:src/shared/dungeon-blueprint-policy-rules.ts#exitSpecsForFloor",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/dungeon-blueprint-policy-rules.ts->symbol:src/shared/dungeon-blueprint-policy-rules.ts#floorPairCount",
+      "source": "file:src/shared/dungeon-blueprint-policy-rules.ts",
+      "target": "symbol:src/shared/dungeon-blueprint-policy-rules.ts#floorPairCount",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/dungeon-blueprint-policy-rules.ts->symbol:src/shared/dungeon-blueprint-policy-rules.ts#LOOP_RESERVE_SHARE",
+      "source": "file:src/shared/dungeon-blueprint-policy-rules.ts",
+      "target": "symbol:src/shared/dungeon-blueprint-policy-rules.ts#LOOP_RESERVE_SHARE",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/dungeon-blueprint-policy-rules.ts->symbol:src/shared/dungeon-blueprint-policy-rules.ts#loopReservedPairs",
+      "source": "file:src/shared/dungeon-blueprint-policy-rules.ts",
+      "target": "symbol:src/shared/dungeon-blueprint-policy-rules.ts#loopReservedPairs",
       "kind": "exports"
     },
     {

@@ -298,6 +298,37 @@ export const chooseRoomEffectsForFloor = (
  * is worth doing as its own change, with the recipe taught to cut optional content before
  * identity. Until then the loop is served by the suit palette instead (`suitCountForPairs`).
  */
+/**
+ * The share of a floor's pairs the loop keeps for itself, and why the dungeon does not get all of
+ * them.
+ *
+ * This capacity used to be the floor's entire pair count - the identical expression to the one in
+ * `board-build-rules.ts` that decides how many pairs the floor has at all. A key, a lever, a
+ * gateway and an enemy could therefore take every pair on the board, and measured over 120
+ * generated floors they often did: floors 2 to 6 carried nought to two pairs a break could touch,
+ * so the pop, the ripple and the drop had nothing to work with. A rule cannot fire on tiles that
+ * generation never leaves it.
+ *
+ * The share is expressed against the floor's own pair count rather than as a flat number, which is
+ * how Dead Cells expresses its content budget: the monster count there is derived from the total
+ * length of a level's combat tiles, not fixed per level, so a bigger level carries proportionally
+ * more. A ratio also degrades sensibly - a three-pair floor keeps one, a sixteen-pair floor keeps
+ * four - where a flat reserve would either starve small floors or barely touch large ones.
+ *
+ * `DUNGEON_MIN_PAIRS` is the other end of it. The reserve never takes the dungeon below this,
+ * because a floor with no dungeon content at all is not a floor of this game.
+ */
+export const LOOP_RESERVE_SHARE = 0.25;
+export const DUNGEON_MIN_PAIRS = 2;
+
+/** Pairs the floor has in total, before the dungeon and the loop divide them. */
+export const floorPairCount = (level: number, pairCountDelta: number): number =>
+    clamp(level + 1 + pairCountDelta, Math.min(2, NUMBER_SYMBOLS.length), NUMBER_SYMBOLS.length);
+
+/** Plain pairs kept back from the dungeon so the break has material. */
+export const loopReservedPairs = (pairs: number): number =>
+    Math.max(0, Math.min(Math.round(pairs * LOOP_RESERVE_SHARE), pairs - DUNGEON_MIN_PAIRS));
+
 export const pairCapacityForDungeonEncounter = (
     level: number,
     floorTag: FloorTag,
@@ -305,5 +336,6 @@ export const pairCapacityForDungeonEncounter = (
     dungeonNodeKind?: DungeonRunNodeKind | null
 ): number => {
     const encounter = createDungeonEncounterContext(dungeonNodeKind, floorTag, floorArchetypeId);
-    return clamp(level + 1 + encounter.pairCountDelta, Math.min(2, NUMBER_SYMBOLS.length), NUMBER_SYMBOLS.length);
+    const pairs = floorPairCount(level, encounter.pairCountDelta);
+    return pairs - loopReservedPairs(pairs);
 };

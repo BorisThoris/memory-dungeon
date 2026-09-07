@@ -38,7 +38,15 @@ export type DungeonCardRecipeBudgets = Pick<
 export const capDungeonCardRecipeForBudget = (
     cards: DungeonCardAssignment[],
     capacity: number,
-    objectiveId: DungeonFloorBlueprint['objectiveId']
+    objectiveId: DungeonFloorBlueprint['objectiveId'],
+    /*
+     * The objective the floor's ARCHETYPE would have chosen, when that differs from the one it
+     * actually has. A boss floor overrides the archetype - `trap_hall` wants `disarm_traps` and a
+     * boss `trap_hall` gets `defeat_boss` - so protecting only the live objective drops the traps
+     * from a trap hall. Both are protected, which is what "cut optional before identity" means
+     * when a floor has two identities.
+     */
+    archetypeObjectiveId?: DungeonFloorBlueprint['objectiveId'] | null
 ): DungeonCardAssignment[] => {
     if (cards.length <= capacity) {
         return cards;
@@ -55,17 +63,90 @@ export const capDungeonCardRecipeForBudget = (
         }
     };
 
+    // What the floor cannot finish without.
     take((card) => card.bossId != null || card.effectId === 'lever_floor');
-    if (objectiveId === 'claim_route') {
-        take((card) => card.kind === 'gateway');
+    /*
+     * Then the floor's threat, in full, before anything optional.
+     *
+     * The reserve takes pairs away from the dungeon, and something has to give. Letting it fall on
+     * threat made every floor safer, and `build-strategy-playthrough-simulation` caught the
+     * consequence immediately: `routeRiskRejections` went to zero across all nine builds, because a
+     * route the risk policy would refuse had stopped existing. A reserve that buys the loop material
+     * by quietly disarming the dungeon is not a trade this game wants, and it would have shown up
+     * later as a whole system - route risk assessment - going silent.
+     *
+     * So threat is protected and the reserve is paid for out of what is genuinely optional: spare
+     * rewards and utility. That is the "cut optional before identity" rule with threat counted as
+     * identity, which on reflection is what a dungeon floor is.
+     */
+    take((card) => card.kind === 'enemy' || card.kind === 'trap');
+    /*
+     * What the floor's objective is about.
+     *
+     * `pacify_floor` and `defeat_boss` were missing here, and their absence is the "an elite floor
+     * paid no reward" failure the earlier reserve attempts recorded and could not account for. An
+     * elite's whole objective is its enemies, and with nothing protecting them the trim took them
+     * for anything that happened to come earlier in the list. Reading `objectiveContributions` off
+     * the card definitions instead was tried and is worse: `find_exit` is contributed to by almost
+     * every card, so on an ordinary floor that take swallows the entire capacity.
+     */
+    const objectives = new Set(
+        [objectiveId, archetypeObjectiveId].filter((id): id is DungeonFloorBlueprint['objectiveId'] => id != null)
+    );
+    /*
+     * An objective made of several kinds keeps one of each before any of them gets a second copy.
+     *
+     * `loot_cache` is the case that proved this necessary. Its pieces are the cache, the lock on it
+     * and the key to that lock, and the recipe authors the treasures first; a straight take filled
+     * the whole remaining capacity with three treasures and left a treasure gallery with no lock
+     * and no key, while the floor's exit still asked for a treasure key. The floor's own objective
+     * had been trimmed into something that could not be completed.
+     *
+     * Reading it kind by kind is the same breadth-before-depth rule the generic fill below uses,
+     * just applied one level earlier - inside the objective rather than only after it.
+     */
+    const takeAcrossKinds = (predicate: (card: DungeonCardAssignment) => boolean): void => {
+        const kindsSeen = new Set<string>();
+        take((card) => {
+            if (!predicate(card) || kindsSeen.has(card.kind)) return false;
+            kindsSeen.add(card.kind);
+            return true;
+        });
+        take(predicate);
+    };
+    if (objectives.has('pacify_floor') || objectives.has('defeat_boss')) {
+        takeAcrossKinds((card) => card.kind === 'enemy');
     }
-    if (objectiveId === 'disarm_traps') {
-        take((card) => card.kind === 'trap' || card.effectId === 'rune_seal');
+    if (objectives.has('claim_route')) {
+        takeAcrossKinds((card) => card.kind === 'gateway');
     }
-    if (objectiveId === 'loot_cache') {
-        take((card) => card.kind === 'treasure' || card.kind === 'lock');
-        take((card) => card.kind === 'key');
+    if (objectives.has('disarm_traps')) {
+        takeAcrossKinds((card) => card.kind === 'trap' || card.effectId === 'rune_seal');
     }
+    if (objectives.has('loot_cache')) {
+        takeAcrossKinds((card) => card.kind === 'treasure' || card.kind === 'lock' || card.kind === 'key');
+    }
+    /*
+     * Then one of every other kind the recipe asked for, before any kind gets a second copy.
+     *
+     * This is the pass the two earlier attempts at a reserve did not have, and it is why they
+     * failed. With the capacity equal to the floor's whole pair count nothing was ever cut, so the
+     * order below the objective did not matter; the moment pairs were held back it mattered
+     * enormously, and the generic fill took three treasures onto a treasure floor while an elite
+     * floor's only reward card fell off the end. The floors that broke were the ones whose
+     * identity card was not named by their objective.
+     *
+     * Breadth before depth fixes that without teaching this function what an archetype means: a
+     * floor keeps one of everything it authored, and only ever loses the second and subsequent
+     * copy. That makes the reserve cut what is optional - an extra treasure, a spare key - which
+     * is the distinction the earlier attempts got backwards.
+     */
+    const kindsTaken = new Set<string>(selected.map((card) => card.kind));
+    take((card) => {
+        if (kindsTaken.has(card.kind)) return false;
+        kindsTaken.add(card.kind);
+        return true;
+    });
     take(() => true);
 
     return selected;

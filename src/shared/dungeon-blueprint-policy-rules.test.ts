@@ -8,6 +8,9 @@ import {
     dungeonObjectiveForFloor,
     exitRouteTypeForFloor,
     exitSpecsForFloor,
+    DUNGEON_MIN_PAIRS,
+    floorPairCount,
+    loopReservedPairs,
     pairCapacityForDungeonEncounter,
     primaryExitLockKindForFloor,
     requiredLeverCountForFloor,
@@ -62,8 +65,15 @@ describe('dungeon blueprint policy rules', () => {
         );
     });
 
-    it('adjusts pair capacity by encounter pressure', () => {
-        expect(pairCapacityForDungeonEncounter(4, 'normal', null, 'elite')).toBe(6);
-        expect(pairCapacityForDungeonEncounter(4, 'normal', null, 'rest')).toBe(4);
+    it('adjusts pair capacity by encounter pressure, and keeps the loop its share', () => {
+        // The capacity is the floor's pairs minus the loop's reserve, not the floor's whole pair
+        // count. An elite floor of six pairs hands the dungeon four and keeps two back for the
+        // break; a rest floor of four hands over three. Before the reserve these were 6 and 4 -
+        // the entire floor - which is why the pop had nothing to touch on floors 2 to 6.
+        expect(pairCapacityForDungeonEncounter(4, 'normal', null, 'elite')).toBe(4);
+        expect(pairCapacityForDungeonEncounter(4, 'normal', null, 'rest')).toBe(3);
+        expect(loopReservedPairs(floorPairCount(4, 1))).toBe(2);
+        // The dungeon is never reserved out of existence.
+        expect(loopReservedPairs(DUNGEON_MIN_PAIRS)).toBe(0);
     });
 });

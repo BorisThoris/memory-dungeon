@@ -2173,9 +2173,18 @@ describe('REG-017 route choices', () => {
 
         // The boss walks after every turn, so "a safe pair" is decided per turn against where it
         // is *now* — not against the opening layout, which any change to the deal would move.
+        /*
+         * Match safe pairs until the boss falls, rather than assuming exactly `maxHp` of them will
+         * do it. A safe match damages the boss when the break's region reaches its tile, and the
+         * region is decided by what the pop takes - so once the floor keeps plain pairs back for
+         * the loop, some safe matches land nowhere near it. What is under test is that safe
+         * matches damage the boss and eventually defeat it, which is unchanged; the old loop was
+         * also asserting a damage-per-turn rate that was never the point.
+         */
         const used = new Set<string>();
-        for (let index = 0; index < boss.maxHp; index += 1) {
+        for (let index = 0; index < matchPairs.length; index += 1) {
             const live = run.board!.enemyHazards!.find((hazard) => hazard.id === boss.id)!;
+            if (live.state === 'defeated') break;
             const pair = matchPairs.find(
                 (group) =>
                     !used.has(group[0]!.pairKey) &&
@@ -5059,7 +5068,7 @@ describe('dungeon cards', () => {
         // way through a pair, so the routing kit leads the stock and the master key still closes it.
         expect(getRunShopStockPlan(boardRun)).toMatchObject({
             source: 'board_shop',
-            itemIds: ['trait_routing_kit', 'heal_life', 'peek_charge', 'region_shuffle_charge', 'destroy_charge', 'master_key']
+            itemIds: ['trait_cleanse', 'trait_routing_kit', 'heal_life', 'peek_charge', 'region_shuffle_charge', 'master_key']
         });
         expect(getRunShopStockPlan(boardRun)).toEqual(getRunShopStockPlan({ ...boardRun, board: { ...board } }));
         expect(getRunShopReadModel(floorShopRun)).toMatchObject({

@@ -223,8 +223,15 @@ export const SYSTEM_OCCUPANCY_BANDS = {
  *
  * Every entry is a debt with a task against it, not an exemption. Four of the silent ones are
  * route specials this census structurally cannot reach, because it plays floors rather than runs
- * (task 150). Two more come back the moment a floor keeps pairs back from the dungeon's budget
- * (task 156). The drop needs a suit big enough to leave a remnant (tasks 151, 157).
+ * (task 150).
+ *
+ * Two of the silences were predicted to end with the dungeon-budget reserve (task 156) and did
+ * not. The reserve shipped in Gen 167 and this list did not move: shuffle snares, the safe-hazard
+ * ward and the drop are all still here. That is worth stating plainly, because the earlier
+ * measurement at a 40% share said snares and the ward came back, and at the 25% share that
+ * actually shipped they do not. The reserve bought the pop material to work with - it did not buy
+ * these three anything - so they keep their tasks (151, 153, 154, 157) rather than being counted
+ * as solved by it.
  */
 export const SYSTEM_OCCUPANCY_BASELINE = {
     silent: [

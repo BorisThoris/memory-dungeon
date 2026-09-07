@@ -61,7 +61,10 @@ export const createDungeonFloorBlueprint = ({
             exitLockKinds: exitSpecs.map((exit) => exit.lockKind)
         }),
         pairedCardCapacity,
-        objectiveId
+        objectiveId,
+        // A boss floor overrides its archetype's objective; the trim protects both, so a boss
+        // trap hall keeps its traps as well as its boss.
+        dungeonObjectiveForFloor(level, 'normal', floorArchetypeId)
     );
     return {
         level,
