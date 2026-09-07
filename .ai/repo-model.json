@@ -9,7 +9,7 @@
     "contentItemCount": 66,
     "mechanicCount": 140,
     "stateFieldCount": 149,
-    "relationshipCount": 11116
+    "relationshipCount": 11115
   },
   "inventory": [
     {
@@ -279,8 +279,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 269124,
-      "sha256": "62eec18b24918b62a16b8d3c3226223a6752bcc5c1b0f548335226f20a1c7243"
+      "bytes": 271823,
+      "sha256": "11b01d7a704374208d1dcf05412ed37377dd9221d9e3151a5da50ff44973ac28"
     },
     {
       "path": "docs/BLUEPRINT_FRAMEWORK.md",
@@ -291,8 +291,8 @@
     {
       "path": "docs/CHAIN_CHUNK_FEVER_DESIGN.md",
       "category": "documentation",
-      "bytes": 62914,
-      "sha256": "cc28d8359686083c71f6a8bbab2e5afd2b91703d868518c477571ddbf88628e1"
+      "bytes": 63173,
+      "sha256": "27475de9010f03d874785ac14efeab9d70ac34ef2a8179c0d906f5bf06fcaea1"
     },
     {
       "path": "docs/COLLECTIBLE_SYSTEM.md",
@@ -778,7 +778,7 @@
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
       "bytes": 472,
-      "sha256": "684bf0459407f97017ca44fe5206700f7065139c35ecd4f174080051101f4a34"
+      "sha256": "38d69ab9aaadedb695f814b429b7ec25d9e9740148b3687089c3b7029bf82c98"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -8200,7 +8200,7 @@
       "path": "src/renderer/components/RunShell.test.tsx",
       "category": "test",
       "bytes": 9088,
-      "sha256": "81d2b8e53fcb58fc3dbc0b81bfbaac0a177003ec25317b3a5e835cc1954ac4f5"
+      "sha256": "b36a11ccecce0ab2040e944e7be27a6a6da8d28120f1d863c75ccf91e6f6dbcd"
     },
     {
       "path": "src/renderer/components/RunShell.tsx",
@@ -10875,8 +10875,8 @@
     {
       "path": "src/shared/cascade-balance-simulation.ts",
       "category": "source",
-      "bytes": 21219,
-      "sha256": "e5ae0286442359c7d32ed19f73398ce02adf4c0479e9cba80cfad1acc11e2595"
+      "bytes": 21804,
+      "sha256": "ab6a5cd7586f5d576d830483645ecb78499c50f1578a0e192335a9b07f4ef8ad"
     },
     {
       "path": "src/shared/chain-targets.test.ts",
@@ -10893,14 +10893,14 @@
     {
       "path": "src/shared/chain-tier-rules.test.ts",
       "category": "test",
-      "bytes": 2119,
-      "sha256": "c8ab6878892e40bd5d8a1cf8860fa41bd3df1d90c9a34d072bbf16f26fb00a86"
+      "bytes": 2321,
+      "sha256": "cc66431549a7fa6926602e0dc4642a01106466cb4728b8e821b6688ef99863b8"
     },
     {
       "path": "src/shared/chain-tier-rules.ts",
       "category": "source",
-      "bytes": 6801,
-      "sha256": "b02cbb7ef73a21eb5f78b94b0a8c5ce795056843df87b6ea2c586813e09263bd"
+      "bytes": 7913,
+      "sha256": "772a183b5eb61d0a370b57473eea9cee355a60cf5de1b39ff4ec5558448d232f"
     },
     {
       "path": "src/shared/challenge-progression.test.ts",
@@ -12477,8 +12477,8 @@
     {
       "path": "src/shared/release-checklist.test.ts",
       "category": "test",
-      "bytes": 40282,
-      "sha256": "92bb754e32068c28f7fb61c3c445877588327210cb97617c4f6ccf1b6fa1dc1e"
+      "bytes": 40601,
+      "sha256": "ad9d9328ff709d549826be88520ffb8f8680d4037fbbec64b3f3bbcff7800370"
     },
     {
       "path": "src/shared/release-checklist.ts",
@@ -13197,8 +13197,8 @@
     {
       "path": "src/shared/system-occupancy-simulation.ts",
       "category": "source",
-      "bytes": 18866,
-      "sha256": "5fd5737eab4e63d19e3252206d75e818c1253c503736574576f4ce816dfae077"
+      "bytes": 19720,
+      "sha256": "6feabb5eee52a8d0e562c953b51c7be603553d65e075866b7639544ba6bded42"
     },
     {
       "path": "src/shared/telemetry.test.ts",
@@ -26517,11 +26517,10 @@
       "path": "src/shared/cascade-balance-simulation.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 444,
+      "lineCount": 450,
       "imports": [
         "file:src/shared/board-generation.ts",
         "file:src/shared/board-tile-generation-rules.ts",
-        "file:src/shared/chain-tier-rules.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/floor-mutator-schedule.ts",
         "file:src/shared/game.ts",
@@ -26587,7 +26586,7 @@
       "path": "src/shared/chain-tier-rules.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 50,
+      "lineCount": 53,
       "imports": [
         "file:src/shared/chain-tier-rules.ts"
       ],
@@ -26599,7 +26598,7 @@
       "path": "src/shared/chain-tier-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 131,
+      "lineCount": 148,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/run-number-guards.ts"
@@ -32674,7 +32673,7 @@
       "path": "src/shared/release-checklist.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 710,
+      "lineCount": 713,
       "imports": [
         "file:src/main/crash-log.ts",
         "file:src/main/save-recovery.ts",
@@ -35300,7 +35299,7 @@
       "path": "src/shared/system-occupancy-simulation.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 356,
+      "lineCount": 370,
       "imports": [
         "file:src/shared/board-generation.ts",
         "file:src/shared/board-tile-generation-rules.ts",
@@ -48694,104 +48693,104 @@
       "name": "assertCascadeBalanceWithinBands",
       "kind": "value",
       "file": "src/shared/cascade-balance-simulation.ts",
-      "line": 377,
-      "endLine": 427
+      "line": 383,
+      "endLine": 433
     },
     {
       "id": "symbol:src/shared/cascade-balance-simulation.ts#CASCADE_BALANCE_BANDS",
       "name": "CASCADE_BALANCE_BANDS",
       "kind": "value",
       "file": "src/shared/cascade-balance-simulation.ts",
-      "line": 336,
-      "endLine": 364
+      "line": 342,
+      "endLine": 370
     },
     {
       "id": "symbol:src/shared/cascade-balance-simulation.ts#CASCADE_RELIC_BANDS",
       "name": "CASCADE_RELIC_BANDS",
       "kind": "value",
       "file": "src/shared/cascade-balance-simulation.ts",
-      "line": 372,
-      "endLine": 375
+      "line": 378,
+      "endLine": 381
     },
     {
       "id": "symbol:src/shared/cascade-balance-simulation.ts#CASCADE_RELIC_LOADOUT",
       "name": "CASCADE_RELIC_LOADOUT",
       "kind": "value",
       "file": "src/shared/cascade-balance-simulation.ts",
-      "line": 321,
-      "endLine": 321
+      "line": 327,
+      "endLine": 327
     },
     {
       "id": "symbol:src/shared/cascade-balance-simulation.ts#CascadeBalanceBandReport",
       "name": "CascadeBalanceBandReport",
       "kind": "interface",
       "file": "src/shared/cascade-balance-simulation.ts",
-      "line": 65,
-      "endLine": 89
+      "line": 64,
+      "endLine": 88
     },
     {
       "id": "symbol:src/shared/cascade-balance-simulation.ts#CascadeBalanceBands",
       "name": "CascadeBalanceBands",
       "kind": "interface",
       "file": "src/shared/cascade-balance-simulation.ts",
-      "line": 323,
-      "endLine": 334
+      "line": 329,
+      "endLine": 340
     },
     {
       "id": "symbol:src/shared/cascade-balance-simulation.ts#CascadeBalanceFloorSample",
       "name": "CascadeBalanceFloorSample",
       "kind": "interface",
       "file": "src/shared/cascade-balance-simulation.ts",
-      "line": 36,
-      "endLine": 63
+      "line": 35,
+      "endLine": 62
     },
     {
       "id": "symbol:src/shared/cascade-balance-simulation.ts#CascadeBalanceProfileReport",
       "name": "CascadeBalanceProfileReport",
       "kind": "interface",
       "file": "src/shared/cascade-balance-simulation.ts",
-      "line": 91,
-      "endLine": 97
+      "line": 90,
+      "endLine": 96
     },
     {
       "id": "symbol:src/shared/cascade-balance-simulation.ts#CascadeBalanceReport",
       "name": "CascadeBalanceReport",
       "kind": "interface",
       "file": "src/shared/cascade-balance-simulation.ts",
-      "line": 99,
-      "endLine": 107
+      "line": 98,
+      "endLine": 106
     },
     {
       "id": "symbol:src/shared/cascade-balance-simulation.ts#CascadeBalanceSimulationInput",
       "name": "CascadeBalanceSimulationInput",
       "kind": "interface",
       "file": "src/shared/cascade-balance-simulation.ts",
-      "line": 109,
-      "endLine": 117
+      "line": 108,
+      "endLine": 116
     },
     {
       "id": "symbol:src/shared/cascade-balance-simulation.ts#playCascadeBalanceFloor",
       "name": "playCascadeBalanceFloor",
       "kind": "value",
       "file": "src/shared/cascade-balance-simulation.ts",
-      "line": 127,
-      "endLine": 243
+      "line": 126,
+      "endLine": 249
     },
     {
       "id": "symbol:src/shared/cascade-balance-simulation.ts#runCascadeBalanceSimulation",
       "name": "runCascadeBalanceSimulation",
       "kind": "value",
       "file": "src/shared/cascade-balance-simulation.ts",
-      "line": 278,
-      "endLine": 313
+      "line": 284,
+      "endLine": 319
     },
     {
       "id": "symbol:src/shared/cascade-balance-simulation.ts#summarizeCascadeBalance",
       "name": "summarizeCascadeBalance",
       "kind": "value",
       "file": "src/shared/cascade-balance-simulation.ts",
-      "line": 429,
-      "endLine": 443
+      "line": 435,
+      "endLine": 449
     },
     {
       "id": "symbol:src/shared/chain-targets.ts#ChainTargetBand",
@@ -48838,16 +48837,16 @@
       "name": "CHAIN_TIER_FEVER_MIN",
       "kind": "value",
       "file": "src/shared/chain-tier-rules.ts",
-      "line": 51,
-      "endLine": 51
+      "line": 68,
+      "endLine": 68
     },
     {
       "id": "symbol:src/shared/chain-tier-rules.ts#CHAIN_TIER_FEVER_SHARE",
       "name": "CHAIN_TIER_FEVER_SHARE",
       "kind": "value",
       "file": "src/shared/chain-tier-rules.ts",
-      "line": 49,
-      "endLine": 49
+      "line": 66,
+      "endLine": 66
     },
     {
       "id": "symbol:src/shared/chain-tier-rules.ts#CHAIN_TIER_SHARP_FROM",
@@ -48862,8 +48861,8 @@
       "name": "CHAIN_TIER_SHARP_MIN",
       "kind": "value",
       "file": "src/shared/chain-tier-rules.ts",
-      "line": 50,
-      "endLine": 50
+      "line": 67,
+      "endLine": 67
     },
     {
       "id": "symbol:src/shared/chain-tier-rules.ts#CHAIN_TIER_SHARP_SHARE",
@@ -48878,32 +48877,32 @@
       "name": "chainCanBreakChunk",
       "kind": "value",
       "file": "src/shared/chain-tier-rules.ts",
-      "line": 82,
-      "endLine": 83
+      "line": 99,
+      "endLine": 100
     },
     {
       "id": "symbol:src/shared/chain-tier-rules.ts#chainMeter",
       "name": "chainMeter",
       "kind": "value",
       "file": "src/shared/chain-tier-rules.ts",
-      "line": 104,
-      "endLine": 116
+      "line": 121,
+      "endLine": 133
     },
     {
       "id": "symbol:src/shared/chain-tier-rules.ts#ChainMeter",
       "name": "ChainMeter",
       "kind": "interface",
       "file": "src/shared/chain-tier-rules.ts",
-      "line": 92,
-      "endLine": 102
+      "line": 109,
+      "endLine": 119
     },
     {
       "id": "symbol:src/shared/chain-tier-rules.ts#chainMomentum",
       "name": "chainMomentum",
       "kind": "value",
       "file": "src/shared/chain-tier-rules.ts",
-      "line": 64,
-      "endLine": 65
+      "line": 81,
+      "endLine": 82
     },
     {
       "id": "symbol:src/shared/chain-tier-rules.ts#ChainTier",
@@ -48918,40 +48917,40 @@
       "name": "chainTierRungs",
       "kind": "value",
       "file": "src/shared/chain-tier-rules.ts",
-      "line": 53,
-      "endLine": 61
+      "line": 70,
+      "endLine": 78
     },
     {
       "id": "symbol:src/shared/chain-tier-rules.ts#getChainTier",
       "name": "getChainTier",
       "kind": "value",
       "file": "src/shared/chain-tier-rules.ts",
-      "line": 72,
-      "endLine": 79
+      "line": 89,
+      "endLine": 96
     },
     {
       "id": "symbol:src/shared/chain-tier-rules.ts#nextChainTierAt",
       "name": "nextChainTierAt",
       "kind": "value",
       "file": "src/shared/chain-tier-rules.ts",
-      "line": 123,
-      "endLine": 130
+      "line": 140,
+      "endLine": 147
     },
     {
       "id": "symbol:src/shared/chain-tier-rules.ts#runChainMeter",
       "name": "runChainMeter",
       "kind": "value",
       "file": "src/shared/chain-tier-rules.ts",
-      "line": 119,
-      "endLine": 120
+      "line": 136,
+      "endLine": 137
     },
     {
       "id": "symbol:src/shared/chain-tier-rules.ts#runChainTier",
       "name": "runChainTier",
       "kind": "value",
       "file": "src/shared/chain-tier-rules.ts",
-      "line": 68,
-      "endLine": 69
+      "line": 85,
+      "endLine": 86
     },
     {
       "id": "symbol:src/shared/challenge-progression.ts#ChallengeGateId",
@@ -64974,24 +64973,24 @@
       "name": "dominantSystemKeys",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 344,
-      "endLine": 345
+      "line": 358,
+      "endLine": 359
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#judgeSystemOccupancy",
       "name": "judgeSystemOccupancy",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 319,
-      "endLine": 341
+      "line": 333,
+      "endLine": 355
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#judgeSystemOccupancyAgainstBaseline",
       "name": "judgeSystemOccupancyAgainstBaseline",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 295,
-      "endLine": 317
+      "line": 309,
+      "endLine": 331
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#OCCUPANCY_SEEDS",
@@ -65014,8 +65013,8 @@
       "name": "summarizeSystemOccupancy",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 347,
-      "endLine": 355
+      "line": 361,
+      "endLine": 369
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#SYSTEM_OCCUPANCY_BANDS",
@@ -65031,15 +65030,15 @@
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
       "line": 261,
-      "endLine": 283
+      "endLine": 288
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#SYSTEM_OCCUPANCY_BASELINE_FLOORS",
       "name": "SYSTEM_OCCUPANCY_BASELINE_FLOORS",
       "kind": "value",
       "file": "src/shared/system-occupancy-simulation.ts",
-      "line": 286,
-      "endLine": 286
+      "line": 300,
+      "endLine": 300
     },
     {
       "id": "symbol:src/shared/system-occupancy-simulation.ts#SYSTEM_OCCUPANCY_COUNTERS",
@@ -116554,12 +116553,6 @@
       "id": "imports:src/shared/cascade-balance-simulation.ts->src/shared/board-tile-generation-rules.ts",
       "source": "file:src/shared/cascade-balance-simulation.ts",
       "target": "file:src/shared/board-tile-generation-rules.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/shared/cascade-balance-simulation.ts->src/shared/chain-tier-rules.ts",
-      "source": "file:src/shared/cascade-balance-simulation.ts",
-      "target": "file:src/shared/chain-tier-rules.ts",
       "kind": "imports"
     },
     {

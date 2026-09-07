@@ -272,7 +272,12 @@ export const SYSTEM_OCCUPANCY_BASELINE = {
         'pinLatticeRewardsThisFloor',
         'safeHazardWardsUsedThisFloor'
     ],
-    thin: ['feverBreaksThisFloor'],
+    /*
+     * Empty since Gen 170. `feverBreaksThisFloor` was the one entry, and it left the list when the
+     * Fever rung moved from two thirds of a floor to half of one: the tier used to arrive on the
+     * last match or two, with nothing left for a Fever break to take.
+     */
+    thin: [] as readonly string[],
     /*
      * Empty, and that is a result rather than a placeholder: with the two mislabelled cadences
      * corrected there is nothing running above its own ceiling. It is a ratchet like the other two
@@ -282,8 +287,17 @@ export const SYSTEM_OCCUPANCY_BASELINE = {
     dominant: [] as readonly string[]
 } as const;
 
-/** The floor count the baseline above was measured at. A different count measures a different game. */
-export const SYSTEM_OCCUPANCY_BASELINE_FLOORS = 12;
+/**
+ * The floor count the baseline above was measured at. A different count measures a different game:
+ * three hazard caches that sit at 4-7% over sixteen floors read as under 2% over twelve.
+ *
+ * Sixteen since Gen 170, which is `simulateSystemOccupancy`'s own default, so the ratchet and the
+ * aspirational check now read the same census rather than two different ones. Twelve was chosen in
+ * Gen 167 to match an earlier measurement and had the effect of holding the ratchet to the first
+ * act, where floors are small: Fever cleared its bar at sixteen floors (0.119) while still reading
+ * thin at twelve (0.050), which is the sample talking rather than the game.
+ */
+export const SYSTEM_OCCUPANCY_BASELINE_FLOORS = 16;
 
 /**
  * Compare a census against the recorded baseline, naming what moved in either direction.

@@ -33,11 +33,14 @@ describe('the chain ladder', () => {
     });
 
     it('reads the ladder as one bar with the rungs as ticks, full at Fever', () => {
-        // Twelve pairs: Clean 3, Sharp 5, Fever 8.
-        expect(chainMeter(0, 12)).toMatchObject({ tier: 'none', fill: 0, full: false, feverAt: 8 });
-        expect(chainMeter(5, 12)).toMatchObject({ tier: 'sharp', fill: 0.625, full: false });
-        expect(chainMeter(5, 12).ticks).toEqual({ clean: 0.375, sharp: 0.625 });
-        expect(chainMeter(8, 12)).toMatchObject({ tier: 'fever', fill: 1, full: true });
+        // Twelve pairs: Clean 3, Sharp 5, Fever 7 - the fixed minimum of 7 rather than half of
+        // twelve, which is 6 and would sit on top of Sharp.
+        expect(chainMeter(0, 12)).toMatchObject({ tier: 'none', fill: 0, full: false, feverAt: 7 });
+        expect(chainMeter(5, 12)).toMatchObject({ tier: 'sharp', full: false });
+        expect(chainMeter(5, 12).fill).toBeCloseTo(5 / 7);
+        expect(chainMeter(5, 12).ticks.clean).toBeCloseTo(3 / 7);
+        expect(chainMeter(5, 12).ticks.sharp).toBeCloseTo(5 / 7);
+        expect(chainMeter(7, 12)).toMatchObject({ tier: 'fever', fill: 1, full: true });
         expect(chainMeter(11, 12)).toMatchObject({ fill: 1, full: true, momentum: 11 });
         expect(chainMeter(Number.NaN, 12).fill).toBe(0);
     });

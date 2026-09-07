@@ -43,10 +43,27 @@ export const CHAIN_TIER_FEVER_FROM = 10;
  * Fever arrived on zero percent of floors even for a player who never missed, because a Clean
  * break removes pairs and a ten-to-fourteen-pair floor ends before a chain of ten can exist. The
  * ladder was eating itself. A floor is the unit of this game, so the top rungs are a share of the
- * floor: Fever is "you ran most of this floor clean", which is what it always meant.
+ * floor: Fever is "you ran half this floor clean", which is what it always meant.
  */
 export const CHAIN_TIER_SHARP_SHARE = 0.4;
-export const CHAIN_TIER_FEVER_SHARE = 0.65;
+/*
+ * Half the floor, not two thirds.
+ *
+ * At 0.65 a clean player's momentum reached the Fever rung on 61% of floors and a break landed at
+ * Fever on 8% of them, because the rung arrived on the last match or two - when the board is
+ * nearly empty and there is nothing left for a Fever break to take. The halo, the celebration and
+ * the shard burst are all break-time effects, so at two thirds of a floor they were content the
+ * game almost never showed: the occupancy census had `feverBreaksThisFloor` on the thin list from
+ * the day it was written.
+ *
+ * Fever has to arrive while there are still pairs to break with it. Measured across the share:
+ * 0.65 leaves a clean player at 0.08 of floors, 0.55 at 0.20, 0.5 at 0.27 and 0.45 at 0.28 - but
+ * 0.45 takes the clean-over-reference separation to 1.88 against a band of 2, because half a floor
+ * is a run a sloppy player also puts together. 0.5 keeps the separation at 2.64 and takes the
+ * census, which plays at a 15% miss rate, from 0.05 to 0.119 - over the 0.1 bar a `common` system
+ * has to clear, which is what this rung was always meant to be.
+ */
+export const CHAIN_TIER_FEVER_SHARE = 0.5;
 export const CHAIN_TIER_SHARP_MIN = 4;
 export const CHAIN_TIER_FEVER_MIN = 7;
 

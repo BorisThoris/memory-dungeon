@@ -2,7 +2,6 @@ import type { BoardState, Rating, RelicId, RunState, Tile } from './contracts';
 import { GAME_RULES_VERSION } from './contracts';
 import { buildBoard } from './board-generation';
 import { countFindablePairs } from './board-tile-generation-rules';
-import { runChainTier } from './chain-tier-rules';
 import { pickFloorScheduleEntry } from './floor-mutator-schedule';
 import {
     activateDungeonExit,
@@ -164,7 +163,6 @@ export const playCascadeBalanceFloor = ({
     const shardsAtStart = runNonNegativeInteger(run.stats.comboShards);
 
     let turns = 0;
-    let feverBreaks = 0;
     let bestChain = 0;
     const pairsOnFloor = board.pairCount;
 
@@ -195,16 +193,24 @@ export const playCascadeBalanceFloor = ({
             first = group[0]!;
             second = group[1]!;
         }
-        const before = run;
         run = resolveBoardTurn(flipTile(flipTile(run, first.id), second.id));
         turns += 1;
-        const chain = runNonNegativeInteger(run.stats.currentStreak);
-        bestChain = Math.max(bestChain, chain);
-        const pairsBroken = runNonNegativeInteger(run.chunkPairsBrokenThisFloor) - runNonNegativeInteger(before.chunkPairsBrokenThisFloor);
-        if (pairsBroken > 0 && runChainTier(run) === 'fever') {
-            feverBreaks += 1;
-        }
+        bestChain = Math.max(bestChain, runNonNegativeInteger(run.stats.currentStreak));
     }
+    /*
+     * The floor's Fever breaks are the game's own tally, not this loop's reconstruction.
+     *
+     * This used to count a break as Fever when `runChainTier(run)` read fever AFTER the turn
+     * resolved - which is the tier the break's own pairs had just bought, not the tier the break
+     * happened at. The game increments `feverBreaksThisFloor` when the break itself resolves at
+     * Fever (`turn-match-progress-rules.ts`), and the two readings differ by a factor of five: this
+     * sim reported a clean player reaching Fever on 26% of floors while `sim:occupancy`, reading
+     * the counter, reported 4%. Every Fever band here was tuned against the inflated number.
+     *
+     * A simulation that re-derives a rule instead of reading the ledger the game keeps is the
+     * mistake the occupancy census exists to catch, one level up. It is fixed the same way.
+     */
+    const feverBreaks = runNonNegativeInteger(run.feverBreaksThisFloor);
     if (run.status === 'playing') {
         const exit = getPrimaryPlaythroughExitTile(run.board!);
         if (exit) {

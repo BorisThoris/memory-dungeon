@@ -41,17 +41,17 @@ describe('RunShell', () => {
         render(<RunShell gauntletRemainingMs={null} onPause={vi.fn()} run={run} tools={[]} />);
 
         const chain = within(screen.getByTestId('hud-chain')).getByText(/×3/);
-        // Twelve pairs: Sharp from 5, Fever from 8. A chain of 3 plus 2 cascaded pairs is Sharp.
+        // Twelve pairs: Sharp from 5, Fever from 7. A chain of 3 plus 2 cascaded pairs is Sharp.
         expect(chain).toHaveAttribute('data-chain-tier', 'sharp');
         expect(chain).toHaveTextContent(/Sharp/);
         expect(chain).toHaveAttribute('title', expect.stringMatching(/momentum 5/));
-        expect(chain).toHaveAttribute('title', expect.stringMatching(/Sharp from 5 runs the reaction out, Fever from 8/));
-        // The meter reads the same ladder: momentum 5 of 8, Sharp, not yet full.
+        expect(chain).toHaveAttribute('title', expect.stringMatching(/Sharp from 5 runs the reaction out, Fever from 7/));
+        // The meter reads the same ladder: momentum 5 of 7, Sharp, not yet full.
         const meter = screen.getByTestId('hud-chain-meter');
         expect(meter).toHaveAttribute('data-chain-tier', 'sharp');
-        expect(meter).toHaveAttribute('data-meter-fill', '0.625');
+        expect(meter).toHaveAttribute('data-meter-fill', '0.714');
         expect(meter).toHaveAttribute('data-meter-full', 'false');
-        expect(meter).toHaveAttribute('aria-label', 'Fever meter: momentum 5 of 8.');
+        expect(meter).toHaveAttribute('aria-label', 'Fever meter: momentum 5 of 7.');
     });
 
     it('drains the meter for a beat when a chain of Clean or better drops to nothing', () => {
