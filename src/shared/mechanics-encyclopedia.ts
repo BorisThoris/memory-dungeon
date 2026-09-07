@@ -534,7 +534,7 @@ export const RELIC_CATALOG: Record<RelicId, RelicDefinition> = {
     tuning_fork: {
         id: 'tuning_fork',
         title: 'Tuning Fork',
-        description: 'The ripple runs one wave further: a lone match lets the partners that left take their own clumps, and a Clean chain runs a wave more than that.'
+        description: 'A lone match reaches its partners across the board, the ripple runs one wave further from Clean, and a Sharp break feeds the chain everything it took.'
     },
     magpie_ledger: {
         id: 'magpie_ledger',
@@ -544,7 +544,7 @@ export const RELIC_CATALOG: Record<RelicId, RelicDefinition> = {
     suit_lens: {
         id: 'suit_lens',
         title: 'Suit Lens',
-        description: 'Every floor deals three suits instead of four, so the clumps are bigger and the breaks are too.'
+        description: 'Every floor deals one suit fewer than it would have, down to two, so the clumps are bigger and the breaks are too.'
     },
     echo_relay: {
         id: 'echo_relay',

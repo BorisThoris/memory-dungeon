@@ -19,8 +19,8 @@ import type { FindableKind } from './contracts';
  * Bubble games are built on contact - a bubble touching its colour goes with it, and what it was
  * holding falls - and Tetris Attack and Puyo on the chain reaction that follows. Here the contact
  * rule runs on every match, live, and the chain decides how far each pop reaches: a lone match
- * takes what touches it, a Clean chain two steps, Sharp the whole clump, Fever the clump and its
- * halo. One small, skilled input, a large visible consequence, bigger the better you have been
+ * takes what it is touching, a Clean chain the partners those tiles had elsewhere, Sharp the whole
+ * clump and the reaction after it, Fever the clump and its halo. One small, skilled input, a large visible consequence, bigger the better you have been
  * playing. That is the whole loop.
  *
  * What it is not: a way to skip the memory game. Cascaded pairs score less than a matched pair,
@@ -37,16 +37,56 @@ import type { FindableKind } from './contracts';
 /**
  * The pop and the ripple, by tier.
  *
- * Every match pops the whole same-suit clump touching it, chain or no chain: that is the contact
- * rule, and it runs live on every match. What the chain buys is the ripple - how far the pops
- * travel through the partners. A lone match's partners leave and stop (one wave). A Clean chain
- * lets each partner that left take its own clump (two waves). Sharp and Fever let the reaction
- * run until a wave takes nothing - Puyo's chain. Tuning Fork adds a wave where the count is
- * finite.
+ * Every match pops the same-suit tiles around it, chain or no chain: that is the contact rule,
+ * and it runs live on every match. What the chain buys is how far that goes. A bounded wave walks
+ * two steps into the clump and stops, and below Clean a pair goes only when the wave has both of
+ * its halves - so a lone match takes what it is touching. A Clean chain adds the partner reach:
+ * the pops now take a pair whose other half is across the board. Sharp and Fever unbind both -
+ * the whole clump, and the reaction running from every partner until a wave takes nothing, which
+ * is Puyo's chain. Tuning Fork adds a wave where the count is finite.
  */
 export const POP_WAVES = 1;
-export const CLEAN_WAVES = 2;
+/**
+ * The ripple is what Sharp buys, and it used to be Clean's.
+ *
+ * Measured by `yarn sim:pop` at the rung each tier actually sits on, the old ladder paid 1.67
+ * pairs at chain one, 1.91 at Clean, 1.92 at Sharp and 3.34 at Fever. Sharp was worth one
+ * hundredth of a pair over Clean - a whole rung of the chain, for nothing a player could see -
+ * and the entire payoff sat at Fever, whose payoff is the halo: the neighbourhood of the clump
+ * whatever its suit, which is width, not depth. That is not a ladder, it is a switch that flips
+ * at the top.
+ *
+ * The reason is that Clean had already been given everything. Two waves plus the partner reach
+ * sweeps every breakable pair a suit has - a suit runs to eight pairs and only about half of them
+ * can break, the rest being dungeon cards - so Sharp's unbounded reaction arrived at a clump that
+ * was already gone. One wave at Clean hands the reaction back to Sharp, which is where
+ * `docs/CHAIN_CHUNK_FEVER_DESIGN.md` 2.3 always put it: Clean buys that the pops reach a partner
+ * across the board at all, and Sharp buys that the reaction runs.
+ */
+export const CLEAN_WAVES = 1;
 export const TUNING_FORK_EXTRA_WAVES = 1;
+
+/**
+ * How far into the clump one wave walks. This is the depth half of the ladder, and it was missing
+ * entirely: every wave walked the whole connected same-suit region whatever the chain behind it,
+ * so a chain-one match covered the same area as a Sharp one and the tier decided only how many
+ * times that happened.
+ *
+ * A bounded wave stops two steps from its seeds. Reach one was measured and is too small on this
+ * board: below Clean a pop has no partner reach, so it needs both halves of another pair inside
+ * the region, and a one-step region holds too few tiles for that - a chain-one match fell to 0.26
+ * pairs, which is the pop going invisible again and the regression Gen 148 exists to prevent.
+ *
+ * Bounding the wave does cost the chain-one pop, and that cost is the point rather than a side
+ * effect: it took 1.67 pairs and now takes 1.18, and the floors a player meets first pop on 0.63
+ * to 1.00 of matches where they used to pop on 0.94 to 1.00. A match with no chain behind it was
+ * taking most of what a Fever break takes, which is what left the ladder nothing to sell.
+ */
+export const BOUNDED_BREAK_REACH = 2;
+
+/** How deep into the same-suit clump a wave walks at this tier; Infinity is the whole region. */
+export const breakClumpReach = (tier: ChainTier): number =>
+    tier === 'sharp' || tier === 'fever' ? Number.POSITIVE_INFINITY : BOUNDED_BREAK_REACH;
 
 /**
  * Contact, or reach. A pop is contact: a pair goes when both its halves touch the clump. Reaching
@@ -91,8 +131,23 @@ export const DROP_MAX_PAIRS = 2;
 /** How many waves the ripple may run at this tier: the pop alone, the pop and its partners' clumps, or the whole reaction. */
 export const rippleWaves = (tier: ChainTier, relics: readonly RelicId[] = []): number => {
     if (tier === 'sharp' || tier === 'fever') return RIPPLE_MAX_WAVES;
-    const base = tier === 'clean' ? CLEAN_WAVES : POP_WAVES;
-    return base + (relics.includes('tuning_fork') ? TUNING_FORK_EXTRA_WAVES : 0);
+    if (tier !== 'clean') return POP_WAVES;
+    /*
+     * The Tuning Fork's extra wave lands from Clean up, not on a lone match.
+     *
+     * It used to apply at every bounded tier, which was fair when Clean already had two waves and
+     * the relic took it to three. With the reaction handed back to Sharp, the same rule would give
+     * a fork holder at chain one exactly what a Clean chain buys, and measured with the chain
+     * loadout that is what happened: floors cleared in 5.0 turns instead of 8.4, so no chain
+     * survived long enough to reach a Fever rung that is a share of the floor's pairs, and Fever
+     * fell to 0.06 of big floors against a 0.15 band. A relic that switches the top of the ladder
+     * off is not a reward.
+     *
+     * What the fork gives a lone match is `breakReachesPartners` - the pops take a pair whose
+     * other half is across the board - which is its headline and is untouched. The reaction still
+     * has to be earned.
+     */
+    return CLEAN_WAVES + (relics.includes('tuning_fork') ? TUNING_FORK_EXTRA_WAVES : 0);
 };
 
 export interface ChunkBreakResult {
@@ -289,10 +344,33 @@ export const chunkBreakComboShards = (pairs: number, tier: ChainTier): number =>
  * own wave and whole credit for every wave the chain bought holds both ends: 20% of floors clean
  * against 6% at the reference miss rate.
  */
-export const chunkBreakMomentumPairs = (result: Pick<ChunkBreakResult, 'brokenPairKeys' | 'wavePairKeys'>): number => {
+export const chunkBreakMomentumPairs = (
+    result: Pick<ChunkBreakResult, 'brokenPairKeys' | 'wavePairKeys' | 'tier'>,
+    relics: readonly RelicId[] = []
+): number => {
     const pop = result.wavePairKeys[0]?.length ?? 0;
     const rest = Math.max(0, result.brokenPairKeys.length - pop);
-    return Math.ceil(pop / 2) + rest;
+    /*
+     * The Tuning Fork sustains a break that was already a full reaction: at Sharp or Fever its pop
+     * counts in full rather than at half.
+     *
+     * It needed one, and the measurement says why. The fork's gift is that a lone match reaches
+     * its partners, which makes floors clear faster - 5.2 turns against 5.8 - while the Fever rung
+     * is a share of the floor's pairs. Faster clears, fewer matches to climb with: with the chain
+     * loadout held, a clean player's Fever share on big floors fell to 0.08 against a 0.15 band,
+     * and the relic that is supposed to be the chain build's centrepiece was buying width at the
+     * bottom of the ladder by taking the top of it away.
+     *
+     * Two other repairs were measured and rejected. Full credit for every pop takes the ladder's
+     * separation to 1.9 against a band of 2 - a 25%-miss player reaches Fever nearly as often as a
+     * clean one, which is Gen 145's finding reproduced exactly. Full credit from Clean up does the
+     * same thing more slowly (ratio 1.81), because a chain of three is well within a sloppy
+     * player's reach. Sharp is not: gating the sustain there puts the clean player at 0.13 and the
+     * reference player at 0.05, a separation of 2.8, and keeps the relic's reward where the relic's
+     * name is - a note that goes on ringing once you have struck it properly.
+     */
+    const sustained = relics.includes('tuning_fork') && (result.tier === 'sharp' || result.tier === 'fever');
+    return (sustained ? pop : Math.ceil(pop / 2)) + rest;
 };
 
 export const resolveChunkBreak = ({
@@ -348,11 +426,12 @@ export const resolveChunkBreak = ({
     // the partner's half seeds the next wave - its own clump goes, and so on until a wave takes
     // nothing. A halo pair is the edge of the celebration, not a bridge: it does not seed.
     let seeds: string[] = [...matchedTileIds];
+    const reach = breakClumpReach(tier);
     for (let wave = 0; wave < wavesAllowed && seeds.length > 0; wave += 1) {
-        const core = findSuitRegion(board, seeds, Number.POSITIVE_INFINITY, { diagonal, exclude: matchedTileIds });
+        const core = findSuitRegion(board, seeds, reach, { diagonal, exclude: matchedTileIds });
         const region =
             tier === 'fever' && wave === 0
-                ? findSuitRegion(board, seeds, Number.POSITIVE_INFINITY, { diagonal, exclude: matchedTileIds, halo: true })
+                ? findSuitRegion(board, seeds, reach, { diagonal, exclude: matchedTileIds, halo: true })
                 : core;
         const coreSet = new Set(core);
         const regionSet = new Set(region.map((index) => board.tiles[index]!.id));

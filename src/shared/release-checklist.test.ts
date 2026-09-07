@@ -150,7 +150,7 @@ const VERIFIERS: Record<string, () => void> = {
         expect(pop.brokenPairKeys, 'both halves touching: the pair pops with the match').toEqual(['B']);
         expect(pop.waves).toBe(1);
         const clean = resolveChunkBreak({ board: row, run, matchedTileIds: ['A1', 'A2'], chain: 3 });
-        expect(clean.wavePairKeys, 'Clean reaches the partner and it takes its own clump').toEqual([['B'], ['C']]);
+        expect(clean.wavePairKeys, 'Clean reaches the partner across the board; the reaction is Sharp\'s').toEqual([['B']]);
         const sharp = resolveChunkBreak({ board: row, run, matchedTileIds: ['A1', 'A2'], chain: 4 });
         expect(sharp.wavePairKeys, 'Sharp runs the reaction out').toEqual([['B'], ['C'], ['D']]);
         expect(sharp.board.tiles.find((t) => t.id === 'D2')?.brokenAtWave).toBe(2);

@@ -6,6 +6,7 @@ import { makeBoard, makeRun, makeTile } from './test/game-fixtures';
 import { EXIT_PAIR_KEY } from './dungeon-rules';
 import {
     chunkBreakComboShards,
+    chunkBreakMomentumPairs,
     chunkBreakScore,
     findSuitRegion,
     DROP_MAX_PAIRS,
@@ -151,13 +152,16 @@ describe('the ripple', () => {
         expect(result.board.tiles.find((t) => t.id === 'C1')?.state).toBe('hidden');
     });
 
-    it('Clean: each partner that left takes its own clump, one wave more', () => {
+    it('Clean: the pops reach a partner across the board, but the reaction is still Sharp\'s', () => {
+        // B1 touches the clump and B2 does not, which is exactly the pair a lone match leaves
+        // whole. Clean takes it - that is the whole of what this rung buys - and stops there:
+        // C, which only B2's departure could have reached, is untouched until Sharp.
         const result = resolveChunkBreak({ board: row(), run: endless, matchedTileIds: ['A1', 'A2'], chain: 3 });
         expect(result.tier).toBe('clean');
-        expect(result.wavePairKeys).toEqual([['B'], ['C']]);
-        expect(result.waves).toBe(2);
-        expect(waveOf(result, 'C1')).toBe(1);
-        expect(waveOf(result, 'C2')).toBe(1);
+        expect(result.wavePairKeys).toEqual([['B']]);
+        expect(result.waves).toBe(1);
+        expect(waveOf(result, 'B2')).toBe(0);
+        expect(result.board.tiles.find((t) => t.id === 'C1')?.state).toBe('hidden');
         expect(result.board.tiles.find((t) => t.id === 'D1')?.state).toBe('hidden');
     });
 
@@ -169,7 +173,7 @@ describe('the ripple', () => {
         expect(waveOf(result, 'D2')).toBe(2);
         expect(rippleWaves('sharp')).toBe(RIPPLE_MAX_WAVES);
         expect(rippleWaves('none')).toBe(1);
-        expect(rippleWaves('clean')).toBe(2);
+        expect(rippleWaves('clean')).toBe(1);
     });
 
     it('a longer reaction pays more for the same pairs, up to the cap', () => {
@@ -269,7 +273,7 @@ describe('the proximity badge stays honest', () => {
 });
 
 describe('relics that touch the cascade', () => {
-    it('Tuning Fork lends a lone match the chain\'s reach: the partner leaves, and takes C with it', () => {
+    it("Tuning Fork lends a lone match the Clean rung's partner reach, and sustains a Sharp break", () => {
         const plain = resolveChunkBreak({ board: row(), run: endless, matchedTileIds: ['A1', 'A2'], chain: 1 });
         expect(plain.brokenPairKeys).toEqual([]);
         const forked = resolveChunkBreak({
@@ -278,10 +282,19 @@ describe('relics that touch the cascade', () => {
             matchedTileIds: ['A1', 'A2'],
             chain: 1
         });
+        // B has a half outside the clump, so a lone match leaves it whole; the fork takes it.
+        // The reaction after it still belongs to Sharp, so C stays standing.
         expect(forked.tier).toBe('none');
-        expect(forked.wavePairKeys).toEqual([['B'], ['C']]);
-        expect(rippleWaves('none', ['tuning_fork'])).toBe(2);
+        expect(forked.wavePairKeys).toEqual([['B']]);
+        expect(rippleWaves('none', ['tuning_fork'])).toBe(1);
+        expect(rippleWaves('clean', ['tuning_fork'])).toBe(2);
         expect(rippleWaves('sharp', ['tuning_fork'])).toBe(RIPPLE_MAX_WAVES);
+        // And the sustain: at Sharp the fork's break feeds the ladder its whole pop, not half.
+        const twoPairPop = { brokenPairKeys: ['B', 'C', 'D'], wavePairKeys: [['B', 'C'], ['D']] };
+        expect(chunkBreakMomentumPairs({ ...twoPairPop, tier: 'sharp' })).toBe(2);
+        expect(chunkBreakMomentumPairs({ ...twoPairPop, tier: 'sharp' }, ['tuning_fork'])).toBe(3);
+        // Below Sharp it is the ordinary half credit, fork or no fork: the sustain is earned.
+        expect(chunkBreakMomentumPairs({ ...twoPairPop, tier: 'clean' }, ['tuning_fork'])).toBe(2);
     });
 
     it("Magpie's Ledger doubles the gold a spilled treasure pays, and nothing else", () => {

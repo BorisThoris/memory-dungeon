@@ -8,7 +8,14 @@ import {
     summarizeCascadeBalance
 } from './cascade-balance-simulation';
 
-const SEEDS = [42_001, 8_675_309, 1_234];
+/*
+ * Six seeds, not three. `cleanFeverShareOnBigFloors` is a share of the clumped floors a clean
+ * player finished, and on three seeds that is about forty floors - so one floor either way moves
+ * it by 0.025 and the 0.15 band is inside the noise. Measured on the same code, three seeds put
+ * the relic loadout at 0.08 and the simulation script's own six-seed run put it at 0.13; the
+ * band is not what disagreed, the sample was.
+ */
+const SEEDS = [42_001, 8_675_309, 1_234, 555_019, 90_210, 31_337];
 /*
  * Every floor of the first act and a half, not a stride through them: floor archetypes cycle, and
  * a stride of three lands on the same few (a rush boss with nothing to break, three times) and

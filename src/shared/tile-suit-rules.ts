@@ -14,8 +14,9 @@ import { isSingletonUtilityPairKey } from './tile-identity';
  * So every pair gets a suit, both halves share it, and it is painted on the back. The symbol on
  * the front is still the memory challenge; the suit is the map. Suits are dealt in clumps so the
  * board opens with visible regions, and later a chain of correct matches gets to break one of
- * those regions (`chunk-break-rules.ts`). Four suits, each with a rune as well as a colour,
- * because colour alone is not a channel this game trusts (Gen 6, Gen 11).
+ * those regions (`chunk-break-rules.ts`). Up to four suits - how many a floor deals is
+ * `suitCountForPairs`, and each has a rune as well as a colour, because colour alone is not a
+ * channel this game trusts (Gen 6, Gen 11).
  *
  * See `docs/CHAIN_CHUNK_FEVER_DESIGN.md` §2.1.
  */
@@ -70,7 +71,7 @@ const suitRng = (runSeed: number, level: number, rulesVersion: number, stage: st
 /**
  * Gives every pair key one suit, shared by both of its tiles.
  *
- * Suits are dealt round-robin over a shuffled order of pair keys, so the four suits are always
+ * Suits are dealt round-robin over a shuffled order of pair keys, so the floor's suits are always
  * within one pair of each other in count. A board where one suit is half the tiles is one where
  * the chunk break stops being a decision — every match is inside the big clump.
  */
@@ -327,21 +328,29 @@ export const scatterTiles = (
     return tiles.map((tile) => (isPinned(tile) ? tile : loose[next++]!));
 };
 
-/** Suit Lens: the suits a floor deals when the relic is held. Two-suit floors stay two. */
-export const SUIT_LENS_SUIT_COUNT = 3;
-
 /**
- * How many suits a board of this many pairs can carry.
+ * Suit Lens: one suit fewer than the floor would otherwise deal, never below one.
  *
- * A suit that owns one pair cannot be broken into: the pop needs two pairs of a suit touching
- * before anything can go with a match. Measured on real generated floors, four suits over the
- * two pairs of floor 1, the three of floor 2 and the four of floor 3 meant *no match on the
- * first three floors of a run could ever pop* - the loop the game is built on was invisible
- * exactly where a new player meets it. So the palette grows with the board: one suit while a
- * floor is small enough that everything should connect, and a fourth only once there are eight
- * pairs to spread over. It reads as a difficulty curve too, the way a bubble shooter opens with
- * two colours and adds more.
+ * It used to be a cap at three, which worked when every floor of eight pairs or more dealt four.
+ * Under the palette below a floor deals one, two or three, so a cap at three would do nothing on
+ * almost every floor a player sees - a relic that is dead content on the boards it ships with,
+ * which is the failure the occupancy census exists to catch. Taking one off whatever the floor
+ * would have dealt keeps the promise the relic actually makes: bigger clumps, bigger breaks.
+ *
+ * Two suits is the floor it will not go under, for the same reason `MIN_PAIRS_FOR_TWO_SUITS`
+ * exists and for a second one that was measured: one suit is not a bigger clump, it is a board
+ * with no map on it, and a board with no map clears in 4.8 turns instead of 8.4 - too fast for a
+ * chain to reach the Fever rung at all, which took Fever to zero across every band of
+ * `cascade-balance-simulation` with this relic held. A relic that switches the top of the ladder
+ * off is not a reward. A `two_suit` floor is exempt for the same reason.
+ *
+ * That leaves it live on any floor dealt three suits or four, which under this palette is floor
+ * 22 and deeper - a wider reach than the cap at three it replaces, which only ever bit on a
+ * four-suit floor.
  */
+export const SUIT_LENS_SUITS_REMOVED = 1;
+export const SUIT_LENS_MIN_SUITS = 2;
+
 /**
  * Pairs a break could take, which is what the palette has to be measured against.
  *
@@ -361,16 +370,53 @@ const breakablePairCount = (tiles: readonly Tile[]): number => {
     return [...halves.values()].filter((count) => count === 2).length;
 };
 
-export const suitCountForPairs = (pairs: number): number =>
-    Math.max(1, Math.min(TILE_SUITS.length, Math.floor(Math.max(0, pairs) / 2)));
+/**
+ * How many suits a board of this many pairs can carry: how big a suit wants to be, and the
+ * smallest floor that still gets a map.
+ *
+ * Two findings, one from each direction. A suit that owns one pair cannot be broken into at all -
+ * the pop needs two pairs of a suit touching - and four suits over the two pairs of floor 1, the
+ * three of floor 2 and the four of floor 3 meant no match on the first three floors of a run
+ * could ever pop, the loop invisible exactly where a new player meets it (Gen 148). So the
+ * palette has to grow with the board.
+ *
+ * The other direction is that it was growing far too fast. One suit per two pairs put four suits
+ * on any floor of eight pairs or more and left a mean suit of four and a half pairs, of which
+ * only about half can break - the rest are dungeon cards. A clump that small is swallowed whole
+ * by one bounded wave, so the chain ladder had nothing left to pay out with: Sharp was worth
+ * three hundredths of a pair over Clean (`chunk-break-rules.ts`). Depth needs somewhere to go.
+ *
+ * One suit per six pairs gives the reaction room to run. Measured by `yarn sim:pop`, the ladder
+ * widens from 1.67 / 1.91 / 1.92 / 3.34 pairs per match to 1.18 / 2.32 / 2.71 / 3.71: the spread
+ * from a lone match to Fever goes 1.66 to 2.53, and the thinnest rung goes from a hundredth of a
+ * pair to four tenths. It still reads as a difficulty curve, the way a bubble shooter opens with
+ * two colours and adds more; it just climbs at the pace the break can use.
+ *
+ * `MIN_PAIRS_FOR_TWO_SUITS` is the legibility floor. The suit is the map (Gen 117): a board dealt
+ * one suit has no map at all, only a uniform field, and six breakable pairs is enough that a
+ * player is entitled to regions to plan against. It costs the ladder about a tenth of a pair at
+ * the Sharp rung against leaving the palette to the ratio alone, and that is the trade this file
+ * makes on purpose: a readable board first.
+ */
+export const SUIT_TARGET_PAIRS = 6;
+export const MIN_PAIRS_FOR_TWO_SUITS = 6;
+
+export const suitCountForPairs = (pairs: number): number => {
+    const count = Math.max(0, pairs);
+    const legibilityFloor = count >= MIN_PAIRS_FOR_TWO_SUITS ? 2 : 1;
+    return Math.max(legibilityFloor, Math.min(TILE_SUITS.length, Math.round(count / SUIT_TARGET_PAIRS)));
+};
 
 export const suitCountForDeal = (
     profile: SuitDealProfile,
     relicIds: readonly RelicId[] = [],
     pairs = Number.POSITIVE_INFINITY
 ): number => {
-    const cap = profile === 'two_suit' ? 2 : relicIds.includes('suit_lens') ? SUIT_LENS_SUIT_COUNT : TILE_SUITS.length;
-    return Math.min(cap, suitCountForPairs(pairs));
+    const dealt = Math.min(profile === 'two_suit' ? 2 : TILE_SUITS.length, suitCountForPairs(pairs));
+    if (profile === 'two_suit' || !relicIds.includes('suit_lens') || dealt <= SUIT_LENS_MIN_SUITS) {
+        return dealt;
+    }
+    return Math.max(SUIT_LENS_MIN_SUITS, dealt - SUIT_LENS_SUITS_REMOVED);
 };
 
 export const dealBoardSuits = (

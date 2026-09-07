@@ -483,7 +483,11 @@ describe('shop rules', () => {
                     ? { ...tile, pairKey: 'echo', tileTraitKind: 'echo' as const }
                     : index === 1
                       ? { ...tile, pairKey: 'sealed', tileTraitKind: 'sealed' as const }
-                      : tile
+                      // The other traits are cleared so the assertion below reads the adjacency
+                      // this test sets up, not whichever traits the generated board happened to
+                      // deal alongside it - which is what it was doing, and what made it fail
+                      // when the suit deal changed the tile order underneath it.
+                      : { ...tile, tileTraitKind: undefined }
             )
         };
         const run = {

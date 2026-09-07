@@ -125,10 +125,16 @@ describe('a built board', () => {
     it('opens clumped, not scattered, on every floor big enough to have a palette', () => {
         // A floor dealt one suit reads as perfectly clumped and perfectly shuffled at once - the
         // measure needs two suits to mean anything - so this starts where the palette does.
+        //
+        // Eight seeds, not four. The control here is a real shuffle, and on four seeds its own
+        // variance is wider than the effect: at floor 10 the shuffled board landed at 0.56 on one
+        // sample against a 0.48 mean, which is enough to fail a margin the deal clears everywhere.
+        // Averaging the control over twice as many boards fixes the measurement rather than the
+        // margin, which is the honest way round.
         for (const level of [10, 14, 18]) {
             let clumped = 0;
             let uniform = 0;
-            const seeds = [11, 12, 13, 14];
+            const seeds = [11, 12, 13, 14, 21, 34, 55, 89];
             for (const runSeed of seeds) {
                 const board = buildBoard(level, { runSeed, runRulesVersion: GAME_RULES_VERSION, gameMode: 'endless' });
                 clumped += sameSuitNeighbourRate(board);
@@ -205,18 +211,23 @@ describe('the deal profile', () => {
 });
 
 describe('the Suit Lens', () => {
-    it('deals three suits instead of four, and leaves a two-suit floor at two', () => {
+    it('deals one suit fewer than the floor would have, and never takes a board below two', () => {
         const tiles = pairs(16);
-        expect(new Set(dealBoardSuits(tiles, 6, 3, 8, GAME_RULES_VERSION, 'clumped').map((t) => t.suit)).size).toBe(4);
-        expect(new Set(dealBoardSuits(tiles, 6, 3, 8, GAME_RULES_VERSION, 'clumped', ['suit_lens']).map((t) => t.suit)).size).toBe(3);
+        expect(new Set(dealBoardSuits(tiles, 6, 3, 8, GAME_RULES_VERSION, 'clumped').map((t) => t.suit)).size).toBe(3);
+        expect(new Set(dealBoardSuits(tiles, 6, 3, 8, GAME_RULES_VERSION, 'clumped', ['suit_lens']).map((t) => t.suit)).size).toBe(2);
         expect(new Set(dealBoardSuits(tiles, 6, 3, 8, GAME_RULES_VERSION, 'two_suit', ['suit_lens']).map((t) => t.suit)).size).toBe(2);
+        // A board already at two, or too small to have been dealt two, is left where it is.
+        expect(new Set(dealBoardSuits(pairs(10), 5, 3, 8, GAME_RULES_VERSION, 'clumped', ['suit_lens']).map((t) => t.suit)).size).toBe(2);
+        expect(new Set(dealBoardSuits(pairs(4), 4, 3, 8, GAME_RULES_VERSION, 'clumped', ['suit_lens']).map((t) => t.suit)).size).toBe(1);
         expect(suitCountForDeal('scattered', ['suit_lens'])).toBe(3);
     });
 
     it("reaches the built floor through the run's relics", () => {
-        const plain = buildBoard(10, { runSeed: 31, runRulesVersion: GAME_RULES_VERSION, gameMode: 'endless', floorArchetypeId: 'breather' });
-        const lensed = buildBoard(10, { runSeed: 31, runRulesVersion: GAME_RULES_VERSION, gameMode: 'endless', floorArchetypeId: 'breather', relicIds: ['suit_lens'] });
-        expect(new Set(plain.tiles.map((t) => t.suit)).size).toBe(4);
-        expect(new Set(lensed.tiles.map((t) => t.suit)).size).toBe(3);
+        // Floor 22: deep enough that the palette deals three, which is where the lens bites.
+        const plain = buildBoard(22, { runSeed: 31, runRulesVersion: GAME_RULES_VERSION, gameMode: 'endless', floorArchetypeId: 'breather' });
+        const lensed = buildBoard(22, { runSeed: 31, runRulesVersion: GAME_RULES_VERSION, gameMode: 'endless', floorArchetypeId: 'breather', relicIds: ['suit_lens'] });
+        const plainSuits = new Set(plain.tiles.map((t) => t.suit)).size;
+        expect(plainSuits).toBeGreaterThan(2);
+        expect(new Set(lensed.tiles.map((t) => t.suit)).size).toBe(plainSuits - 1);
     });
 });

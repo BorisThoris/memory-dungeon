@@ -216,7 +216,7 @@ export const SYSTEM_OCCUPANCY_BANDS = {
  * The census as a ratchet: what is silent and what is thin today, asserted exactly.
  *
  * `judgeSystemOccupancy` asks the aspirational question - is anything silent or thin at all - and
- * the answer is yes, twelve and one, so it cannot gate anything until that is nought. This is the
+ * the answer is yes, eleven and one, so it cannot gate anything until that is nought. This is the
  * question a gate can ask meanwhile: has the set CHANGED. A system that goes quiet fails it the
  * moment it does, and a system brought back to life fails it too, which is the only way a list
  * like this ever shrinks rather than drifts.
@@ -225,19 +225,22 @@ export const SYSTEM_OCCUPANCY_BANDS = {
  * route specials this census structurally cannot reach, because it plays floors rather than runs
  * (task 150).
  *
- * Two of the silences were predicted to end with the dungeon-budget reserve (task 156) and did
- * not. The reserve shipped in Gen 167 and this list did not move: shuffle snares, the safe-hazard
- * ward and the drop are all still here. That is worth stating plainly, because the earlier
- * measurement at a 40% share said snares and the ward came back, and at the 25% share that
- * actually shipped they do not. The reserve bought the pop material to work with - it did not buy
- * these three anything - so they keep their tasks (151, 153, 154, 157) rather than being counted
- * as solved by it.
+ * The list has moved once, and it is worth recording how. Two silences were predicted to end with
+ * the dungeon-budget reserve (task 156). The reserve shipped in Gen 167 and none of them moved:
+ * the earlier measurement at a 40% share said shuffle snares and the safe-hazard ward came back,
+ * and at the 25% share that actually shipped they do not.
+ *
+ * The drop came off this list in Gen 168 instead, and from the direction Gen 151 predicted. Its
+ * finding was that the drop had nothing to take because the ripple had already swept the suit, and
+ * that "the remnant this rule wants is a bigger suit than generation deals today; that is a task,
+ * not a threshold." Gen 168 is that task: a bounded wave below Sharp and one suit per six pairs
+ * leave a remnant standing, and the drop now takes it. The two the reserve was supposed to wake
+ * keep their tasks (153, 154) rather than being counted as solved by anything.
  */
 export const SYSTEM_OCCUPANCY_BASELINE = {
     silent: [
         'anchorSealUsesThisFloor',
         'catalystAltarUpgradesThisFloor',
-        'chunkPairsDroppedThisFloor',
         'enemyHazardHitsThisFloor',
         'hazardMirrorDecoysThisFloor',
         'hazardShuffleSnaresThisFloor',
