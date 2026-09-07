@@ -3,7 +3,7 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2584,
+    "trackedFileCount": 2607,
     "codeFileCount": 1031,
     "exportedSymbolCount": 3732,
     "contentItemCount": 66,
@@ -23,6 +23,12 @@
       "category": "documentation",
       "bytes": 1277,
       "sha256": "821bd9e7f420a3422679830332d6448b63e0881b118399ff076de0a995673b1c"
+    },
+    {
+      "path": ".claude/launch.json",
+      "category": "configuration",
+      "bytes": 187,
+      "sha256": "95ef2c6ab050c160c96bd16f3335ab0e6159c1d92cdbf6371ca280a0906b681d"
     },
     {
       "path": ".depcheckrc.json",
@@ -45,8 +51,8 @@
     {
       "path": ".gitignore",
       "category": "other",
-      "bytes": 734,
-      "sha256": "f2a5c8011ae8d6da3882d20b38e930f85ce53ccf8e560f24e3c7fa9094a90ccf"
+      "bytes": 770,
+      "sha256": "ed337601fd16e3211010ec5e50c051e8d57aa4376efe354f75e1ef58f3435d58"
     },
     {
       "path": ".idea/.gitignore",
@@ -106,7 +112,7 @@
       "path": "assets/audio/portfolio-feedback-pack/countdown-pressure.ogg",
       "category": "asset",
       "bytes": 3704,
-      "sha256": "0d475b6b0837470748efee9e6b484b1cde56bf2a554d34c6c41c073a18a746d5"
+      "sha256": "437bdda7a76f1ebe1b7081b182a2e419acde4b787aa1c1db5c8c5aef6293e959"
     },
     {
       "path": "assets/audio/portfolio-feedback-pack/countdown-pressure.wav",
@@ -117,14 +123,14 @@
     {
       "path": "assets/audio/portfolio-feedback-pack/demo-ambience-loop.ogg",
       "category": "asset",
-      "bytes": 4782,
-      "sha256": "2d8915dec1dafb21a2f869240aa926c23de77fb440eba7b2c98e9d4ff6546211"
+      "bytes": 352411,
+      "sha256": "b6c397488b9c70c70b559f4d9a72c27c937bea60207edbb12705643b162aa71a"
     },
     {
       "path": "assets/audio/portfolio-feedback-pack/demo-ambience-loop.wav",
       "category": "asset",
-      "bytes": 529244,
-      "sha256": "657ccfecd0c4dbc348f94967facfd035e4e806e437f12914bd5154f6b1afd0cc"
+      "bytes": 4512044,
+      "sha256": "d85e85c4f536d20db55e4c6de3024f2c030903b13f13ab7975ce1273a15bc6f2"
     },
     {
       "path": "assets/audio/portfolio-feedback-pack/demo-ambience-loop.wav.jobs.json",
@@ -136,7 +142,7 @@
       "path": "assets/audio/portfolio-feedback-pack/floor-clear.ogg",
       "category": "asset",
       "bytes": 3941,
-      "sha256": "29462be8e74bb7007a826a6c1d33202d4b44e351b558b2e034979f1967738a76"
+      "sha256": "0781d9730b8552030f8668a55e8ba37c1744d2f72c58eb4fde7dfd5cc6e9fb6b"
     },
     {
       "path": "assets/audio/portfolio-feedback-pack/floor-clear.wav",
@@ -148,7 +154,7 @@
       "path": "assets/audio/portfolio-feedback-pack/match-success.ogg",
       "category": "asset",
       "bytes": 3831,
-      "sha256": "72c730ab601221a2454d32cfcc8348272c0b2db95df32dd39a6362bca92ae643"
+      "sha256": "7b4f12975d4cfa5ab5c28ca0369a18c1af1bbf32f379f9a8153711d690087ed9"
     },
     {
       "path": "assets/audio/portfolio-feedback-pack/match-success.wav",
@@ -160,7 +166,7 @@
       "path": "assets/audio/portfolio-feedback-pack/mistake.ogg",
       "category": "asset",
       "bytes": 3805,
-      "sha256": "aab5b338c119429cfd32d61655298f4e9f91a8e8dba84b3c1f40ef7d43d8c3b2"
+      "sha256": "6298560b37411df4f39f2d2c659a270611dc0d4acee53431eca3bcad2ed7c257"
     },
     {
       "path": "assets/audio/portfolio-feedback-pack/mistake.wav",
@@ -171,14 +177,14 @@
     {
       "path": "assets/audio/portfolio-feedback-pack/README.md",
       "category": "documentation",
-      "bytes": 604,
-      "sha256": "7bf2c7c6e83519593fc1ef81164f30734dd3db0a53bf3182f2a7ad97a08963f9"
+      "bytes": 921,
+      "sha256": "f8d13979e8e8b03e210cf4e9e870c4260e2e3e9ba2c038a790ad38fb126aa9d4"
     },
     {
       "path": "assets/audio/portfolio-feedback-pack/relic-offer-shimmer.ogg",
       "category": "asset",
       "bytes": 3982,
-      "sha256": "02195da73dab083aa3486329cd8059f09b97935c2b49b010e66b64a2f199e700"
+      "sha256": "0e6377b327fdd5accbcd60987d469d8e579d9d0e76923b90326892e6fe4f38f1"
     },
     {
       "path": "assets/audio/portfolio-feedback-pack/relic-offer-shimmer.wav",
@@ -201,8 +207,8 @@
     {
       "path": "build/icon.png",
       "category": "asset",
-      "bytes": 31224,
-      "sha256": "acd8bb39257c139a30117c4a3103a2aff66c629de7d4b831dd790e8cd433c7f3"
+      "bytes": 894132,
+      "sha256": "9c6f9415e97af000fca3c586f6b93aef18a2dc0f8213e96a88cf8012cf3936cf"
     },
     {
       "path": "CONTRIBUTING.md",
@@ -261,8 +267,8 @@
     {
       "path": "docs/AUDIO_ASSET_INVENTORY.md",
       "category": "documentation",
-      "bytes": 13037,
-      "sha256": "e539c3d6bfdd102602c29aaf2c9e0c2f6b440e7a52f21270cfc2f23ce6540e68"
+      "bytes": 13980,
+      "sha256": "a55f4a6d91acb95cffdfa60dacc498885993f774d2dfa6dd72a68240ef49a4fb"
     },
     {
       "path": "docs/AUDIO_INTEGRATION.md",
@@ -891,8 +897,8 @@
     {
       "path": "docs/internal-wiki/TOOLING.md",
       "category": "documentation",
-      "bytes": 16990,
-      "sha256": "a950c2ddb2c801e278d53f360bd9a74791e97b59c75e5cbb178a8289b47c5b25"
+      "bytes": 20655,
+      "sha256": "dbc12327e4ba3930f2d213902552447c7bf81d727ff71cc3d7b8e51819069e6b"
     },
     {
       "path": "docs/LEADERBOARDS_DEFERRAL.md",
@@ -933,8 +939,8 @@
     {
       "path": "docs/new_design/CARD_TEXTURE_AI_BRIEF.md",
       "category": "documentation",
-      "bytes": 6347,
-      "sha256": "a2970a83abfbf0d7332eabaf8ab3464b0c69340d8ffa40cc13a51f359861d577"
+      "bytes": 8604,
+      "sha256": "5b1ae2a0bdbc1a7ce59df69dbf36d9a34fb9243a79f045d3274f0e96ceb4e10f"
     },
     {
       "path": "docs/new_design/COMPONENT_CATALOG.md",
@@ -4023,8 +4029,8 @@
     {
       "path": "package.json",
       "category": "configuration",
-      "bytes": 30355,
-      "sha256": "b39890903f50e7a46e617d7ac9d789d7bbc1da0f9933b604c858cffd4f04331b"
+      "bytes": 32506,
+      "sha256": "269b9ee0580d44c8388603ada75e5a5bceb75d4b998a258b4ee63503b0a36679"
     },
     {
       "path": "packages/notifications/package.json",
@@ -4237,6 +4243,12 @@
       "sha256": "78792f95dce7822d1606fa24f58e33015a358a6b5c3837cfd28a8c6b616eb631"
     },
     {
+      "path": "scripts/audio-pipeline/build-ambience-reference-mix.py",
+      "category": "script",
+      "bytes": 6033,
+      "sha256": "358c17cda3c2de78e3b142189867708075d69a2d51df72ec496a025209b5c4eb"
+    },
+    {
       "path": "scripts/audio-pipeline/environment.audio.example.env",
       "category": "script",
       "bytes": 1059,
@@ -4273,10 +4285,16 @@
       "sha256": "bdb0ebfc47c615d5f40340c8ad4654db5f35ff1c9b1a20397ff74a0311162046"
     },
     {
+      "path": "scripts/audio-pipeline/generated-ace-step-app-last-run.json",
+      "category": "script",
+      "bytes": 9167,
+      "sha256": "106dee30e49895cf6a91917fe72b0a9961df4af39fecafbef0ad15623224a6c5"
+    },
+    {
       "path": "scripts/audio-pipeline/install-ace-app-outputs.mjs",
       "category": "script",
-      "bytes": 11215,
-      "sha256": "102e51fc8517147d0550cc0420975294ae79443a7c57b9bb45272726b36c0d3b"
+      "bytes": 11785,
+      "sha256": "20f1ad81f76a839887f7189ec525423b1899745f5b0b2b31d4370e40adfc0912"
     },
     {
       "path": "scripts/audio-pipeline/install-acestep.ps1",
@@ -4315,6 +4333,24 @@
       "sha256": "8fd31208e2db4f0ab87e6f180503814be27af19be31d1ad72506ad7c72bf0d4d"
     },
     {
+      "path": "scripts/audio-pipeline/jobs.portfolio-ambience.json",
+      "category": "script",
+      "bytes": 877,
+      "sha256": "c60a621fe14032527e09436f24bdd7ce382b28f1dd535285cc9917f467f00d44"
+    },
+    {
+      "path": "scripts/audio-pipeline/jobs.run-bed-ambience.json",
+      "category": "script",
+      "bytes": 2952,
+      "sha256": "5cf7d1646fffebe94b782105c705b78d40a78f630f4d948bf5ac6df3f204ed4a"
+    },
+    {
+      "path": "scripts/audio-pipeline/jobs.run-bed-library.json",
+      "category": "script",
+      "bytes": 3307,
+      "sha256": "06be8c8d4539dcced751288e3995b089ca0e6359aeee38277a1ea795d9d020ea"
+    },
+    {
       "path": "scripts/audio-pipeline/jobs.sfx.example.json",
       "category": "script",
       "bytes": 4394,
@@ -4325,6 +4361,12 @@
       "category": "script",
       "bytes": 444,
       "sha256": "9ab4ee8be000000c0e0eda8f61ebd3ad14bb301d50c973d29f4062318d3bdaa5"
+    },
+    {
+      "path": "scripts/audio-pipeline/make-seamless-loop.py",
+      "category": "script",
+      "bytes": 3758,
+      "sha256": "3c9c5fcbac668141b838fb087c81b903a25e8460c9089c606f38424aba5000f2"
     },
     {
       "path": "scripts/audio-pipeline/materialize-reference-audio-from-pack.mjs",
@@ -4339,6 +4381,18 @@
       "sha256": "5685baeb51d9a9ef60af81747881d61a03303a693e6119cfa8676a7d91debeca"
     },
     {
+      "path": "scripts/audio-pipeline/MUSIC_SCENE_BRIEF.md",
+      "category": "script",
+      "bytes": 3563,
+      "sha256": "eafc3125d01e4078dc8d7db1ec71171de06055d14eb3ab6c030e52cd075d5a6b"
+    },
+    {
+      "path": "scripts/audio-pipeline/pick-ace-takes.py",
+      "category": "script",
+      "bytes": 4878,
+      "sha256": "736b58021cf3287acfafdcaa7a760c3ac7b4576976092cd9da44debfb58b2841"
+    },
+    {
       "path": "scripts/audio-pipeline/proceduralBeatPrimitives.mjs",
       "category": "script",
       "bytes": 9274,
@@ -4347,14 +4401,14 @@
     {
       "path": "scripts/audio-pipeline/PROMPTS.md",
       "category": "script",
-      "bytes": 2984,
-      "sha256": "69631b4607ad220b53c3522388db02a5ed9dc8646bc1938746c87565106a84ec"
+      "bytes": 3254,
+      "sha256": "acd0f5de9d5c33297de3e1efcfa0b9f1b1e7770d8d5e4de06fcb25065ce8a0d5"
     },
     {
       "path": "scripts/audio-pipeline/README.md",
       "category": "script",
-      "bytes": 18413,
-      "sha256": "79a0f1cfac7b944ec6c333d94079e7e4cb21b2837eb49189994ee2e74dcf9c81"
+      "bytes": 22827,
+      "sha256": "6c23f7b665be1cf4a3d8f195d9af237dfd9f2826d3d0a1e1edf79476c66b5fc9"
     },
     {
       "path": "scripts/audio-pipeline/reference-audio/README.md",
@@ -4365,14 +4419,38 @@
     {
       "path": "scripts/audio-pipeline/RIGHTS.md",
       "category": "script",
-      "bytes": 1410,
-      "sha256": "8a508eea9de0fd113f96c3de7dccdfaca92ba71eae8e2999a1d067de1b40b4c6"
+      "bytes": 2053,
+      "sha256": "17d28642a047e733966969033613adaa621648d08ae772712893d1aebcb03c6d"
     },
     {
       "path": "scripts/audio-pipeline/run-ace-batch.mjs",
       "category": "script",
-      "bytes": 690,
-      "sha256": "1989a5defbaf9bbdea9853c41f41d77ca8a6c560025e8c56aa61f07b30c9faa3"
+      "bytes": 962,
+      "sha256": "b4bbcf0ce71a7d4e2a6d109a810b6ed37e1cdd55ae7d19e6870df9b319234317"
+    },
+    {
+      "path": "scripts/audio-pipeline/run-bed-references-ballance-all.txt",
+      "category": "script",
+      "bytes": 3079,
+      "sha256": "e198e16af3b3d937219c7e0fe4c586330828a80b80e688a80ed53581358ce2d1"
+    },
+    {
+      "path": "scripts/audio-pipeline/run-bed-references-ballance-music.txt",
+      "category": "script",
+      "bytes": 794,
+      "sha256": "4737ced741c520d7c3570de01f8ce19956610bb639dfae611041d95850e43db6"
+    },
+    {
+      "path": "scripts/audio-pipeline/run-bed-references-vault.txt",
+      "category": "script",
+      "bytes": 2190,
+      "sha256": "9cd2ea5f0f73d8528dcc4bf7d4e9e55ddde0fe5b03aef8996218cc64d2440396"
+    },
+    {
+      "path": "scripts/audio-pipeline/run-bed-references.txt",
+      "category": "script",
+      "bytes": 2378,
+      "sha256": "d7b7fad14700035994124da32b72e084a7b5be987b6a9311ca3633a6c9c0af32"
     },
     {
       "path": "scripts/audio-pipeline/samples/.gitkeep",
@@ -4449,14 +4527,26 @@
     {
       "path": "scripts/card-pipeline/batch_local_card_backs.py",
       "category": "script",
-      "bytes": 463,
-      "sha256": "14877c1209eaa4a326695d62f6c44616210dcc3ec47544c78f68b2a35cc35934"
+      "bytes": 669,
+      "sha256": "09e00b6040570a86b3d4b24f45448ccef8d64e8f7848c79c9fc2578bf543e2c6"
     },
     {
       "path": "scripts/card-pipeline/batch_local_face_panels.py",
       "category": "script",
-      "bytes": 464,
-      "sha256": "5aba295829223ff8cdb534f1f88553ce127c631578da9f8bd003e174e0f8b719"
+      "bytes": 670,
+      "sha256": "b87e4e127331413cc1dc33b1def6915fb0b01db5ce629b9971a30778909dc52d"
+    },
+    {
+      "path": "scripts/card-pipeline/batch_local_zimage.py",
+      "category": "script",
+      "bytes": 9579,
+      "sha256": "6d05e60796493a0395e3d4c1676295c5276c95273d21aab92da5fd2b9af35244"
+    },
+    {
+      "path": "scripts/card-pipeline/build-face-panels-zimage-manifest.py",
+      "category": "script",
+      "bytes": 7228,
+      "sha256": "18c5526a3a87a8ce7c7b67e29a40c23de55d699c93c4fbcd727e7a9f943acff0"
     },
     {
       "path": "scripts/card-pipeline/capture-ui-vs-asset-screens.mjs",
@@ -4495,6 +4585,18 @@
       "sha256": "ced15b377cbdd64470422a92dccc7f37a9f5bfc2614b1f5b5742766a173ac67a"
     },
     {
+      "path": "scripts/card-pipeline/face-panels.zimage.manifest.json",
+      "category": "script",
+      "bytes": 56679,
+      "sha256": "532395bca1cdaabc2845a1fe8b90130456bef8147fe43e4119407d22d186a8cc"
+    },
+    {
+      "path": "scripts/card-pipeline/face-panels.zimage.picks.json",
+      "category": "script",
+      "bytes": 3,
+      "sha256": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356"
+    },
+    {
       "path": "scripts/card-pipeline/generate-card-textures.ps1",
       "category": "script",
       "bytes": 17682,
@@ -4515,8 +4617,26 @@
     {
       "path": "scripts/card-pipeline/image_gen.mjs",
       "category": "script",
-      "bytes": 696,
-      "sha256": "ad2dfa63e91f1e92ae477d7f14182a3862240407f6b40b9e6aa5d98ba649991c"
+      "bytes": 968,
+      "sha256": "544fc451723757b3bc7cdecb080c7b00064c296ab3bd4b2f74dadc6efe0c669b"
+    },
+    {
+      "path": "scripts/card-pipeline/install_zimage_picks.py",
+      "category": "script",
+      "bytes": 5392,
+      "sha256": "f909c0014131c8523391404b87acab0be3e54a22032b82bce208649eb051d9f7"
+    },
+    {
+      "path": "scripts/card-pipeline/masks/bg-board-arcane-table-v1.alpha.png",
+      "category": "script",
+      "bytes": 29844,
+      "sha256": "9b9d5b0f393b5813561c5aaf59fa11381a91a9a7d20eaa369864baa0c6cf5af0"
+    },
+    {
+      "path": "scripts/card-pipeline/masks/bg-gameplay-arcane-workshop-v1.alpha.png",
+      "category": "script",
+      "bytes": 74844,
+      "sha256": "252633ccd22895352df0a3fb98854d5d89c76b6a4a59b014174f97b1fd3fc504"
     },
     {
       "path": "scripts/card-pipeline/normalize-card-texture.ps1",
@@ -4547,6 +4667,18 @@
       "category": "script",
       "bytes": 3961,
       "sha256": "ea70b299156be747a49da9c8f9c2b31c8bec3cdb978811a05167928e50f700dd"
+    },
+    {
+      "path": "scripts/card-pipeline/ui-backgrounds.zimage.manifest.json",
+      "category": "script",
+      "bytes": 9058,
+      "sha256": "c620bd0954389b88380715e0e94e9938ec065c7ab7d223ff410aba1123956c83"
+    },
+    {
+      "path": "scripts/card-pipeline/ui-backgrounds.zimage.picks.json",
+      "category": "script",
+      "bytes": 393,
+      "sha256": "9b9b54c4b2da96f86ccc7f17874dd19b1e6c47ac765e998a93a2934da1e30392"
     },
     {
       "path": "scripts/check-built-csp.mjs",
@@ -5091,20 +5223,20 @@
     {
       "path": "src/renderer/assets/ASSET_SOURCES.md",
       "category": "source",
-      "bytes": 13145,
-      "sha256": "68d22c2b56671ae5f941afce61a92050acaa4a423d6b4b4f3b1edf4b6fda2219"
+      "bytes": 15324,
+      "sha256": "4e7205488687e658726955e38b57a75d041b1dd6d1da78f529aefbe997fc6e03"
     },
     {
       "path": "src/renderer/assets/assetDropInReadiness.test.ts",
       "category": "test",
-      "bytes": 2028,
-      "sha256": "9a1d88143f12f7e15f9512c967d101772c3ccc540fb4b97870974cd943f94bd4"
+      "bytes": 2127,
+      "sha256": "13cf07d3159cbcbcb643a9c78e6cc9574219c993591fd21300f3e7283289737c"
     },
     {
       "path": "src/renderer/assets/assetDropInReadiness.ts",
       "category": "source",
-      "bytes": 5858,
-      "sha256": "d0a914c91828956787531a22fec40b3610625808ed24232d291c3cecd65dff2d"
+      "bytes": 5867,
+      "sha256": "bfd68b7d95b154b5e12d0d6319ae003025250202c7755606b40a5f6a908d0054"
     },
     {
       "path": "src/renderer/assets/audio/dont_modify/ATARI.wav",
@@ -5367,20 +5499,20 @@
     {
       "path": "src/renderer/assets/audio/music/run-loop.ogg",
       "category": "source",
-      "bytes": 531367,
-      "sha256": "15440813d8fbe001eeca6fb463df7cd7bdd0c2cf80d4b277becb0e49d02e21e5"
+      "bytes": 456034,
+      "sha256": "d1c488605f077dd25efdda79fc7cf2e00fb622c8b9629adfab09c5a304af1fdc"
     },
     {
       "path": "src/renderer/assets/audio/music/run-loop.wav",
       "category": "source",
-      "bytes": 5760078,
-      "sha256": "e8d0a1e09e6bfad66bbe2c6e88c325674890d0970bccfc27bfa35f9aa8dd53cb"
+      "bytes": 4608044,
+      "sha256": "e2f454c97b2efe3377c8f001d0dbf844e7af2b650126957dcc1b13f60e562d14"
     },
     {
       "path": "src/renderer/assets/audio/sfx/countdown-pressure.ogg",
       "category": "source",
       "bytes": 3704,
-      "sha256": "4c15dc42ab6f035fbf51fbcf6ac79235190ce175e0810d7b311b68e8e3a2625e"
+      "sha256": "7572e981aaab1657f902d0a15999c234b2acc6dd30f2bf42b01b43dfa826d4a9"
     },
     {
       "path": "src/renderer/assets/audio/sfx/countdown-pressure.wav",
@@ -5391,50 +5523,50 @@
     {
       "path": "src/renderer/assets/audio/sfx/destroy-pair.ogg",
       "category": "source",
-      "bytes": 97746,
-      "sha256": "0a787e4bd2658e6164df3a095bf7ef23e5a7333df48d1e9235e26c63f0748afc"
+      "bytes": 97765,
+      "sha256": "c6abbe071976a20f370c88b334309a40a5b1da87dbbe4e4c2d34ec00778cf314"
     },
     {
       "path": "src/renderer/assets/audio/sfx/destroy-pair.wav",
       "category": "source",
       "bytes": 1344078,
-      "sha256": "39aabdfdf6b474b5d0b3aa26166e4e5ddcdf007cce79125f62f1119c52c2f52b"
+      "sha256": "2b641d5a69d8b9a0aec00828a53e38f94a728c15f6a5b43bcb0e999fb0146d6d"
     },
     {
       "path": "src/renderer/assets/audio/sfx/flip.ogg",
       "category": "source",
-      "bytes": 73171,
-      "sha256": "c94456b17ba0fb786b663276c0bbe2bbbaaa1a9ad5d9f4fe321764b286c5a63c"
+      "bytes": 66614,
+      "sha256": "fc0f826273131b40f612e34615df5b18e58f024f50ca4daf7fbdb65f34112f0a"
     },
     {
       "path": "src/renderer/assets/audio/sfx/flip.wav",
       "category": "source",
       "bytes": 752718,
-      "sha256": "1a7d0b187efe6938f790d20ec88829a136e6e04038b6c1afa2e32e3176aeeaf1"
+      "sha256": "1522ed0742746fb92f2fce7c927bc5ca33b315706dd1664a6198eb1a3b5b787e"
     },
     {
       "path": "src/renderer/assets/audio/sfx/floor-clear.ogg",
       "category": "source",
-      "bytes": 101628,
-      "sha256": "7e744c20d485abd0ea6037a412754c241f8319c25584ab6f687286b390aebe42"
+      "bytes": 105901,
+      "sha256": "dbb4fa4c3ee32f53b1371d50695790e7543ac919352f496080eec58c6d2b3783"
     },
     {
       "path": "src/renderer/assets/audio/sfx/floor-clear.wav",
       "category": "source",
       "bytes": 1344078,
-      "sha256": "f251b0889c5c5d305b8c0b0950d66f49fdb51158a3f0df2f38d0f7b0f6bc6f19"
+      "sha256": "29b96ef052345c1cbc1238950bb6d75bdd1d37710302dbb26156d2e25f7c7826"
     },
     {
       "path": "src/renderer/assets/audio/sfx/gambit-commit.ogg",
       "category": "source",
-      "bytes": 86005,
-      "sha256": "df96a8f033e4015871a8fca277b4cbf4c638fe6fe0b0061ca7163f6773e630e1"
+      "bytes": 85196,
+      "sha256": "5a8dfe6e3f721c45f84fc7c82ee677ed2a95eb111c9f90aaf3365f12ef653b61"
     },
     {
       "path": "src/renderer/assets/audio/sfx/gambit-commit.wav",
       "category": "source",
       "bytes": 944718,
-      "sha256": "65c6e2b7d071fd5d382cedeb7b5286f565b88c4c64a8952fb813cf171660915a"
+      "sha256": "dd593da2a2414b63c6f50142edc4e2785be0c84e305d926f711a3232d87a968d"
     },
     {
       "path": "src/renderer/assets/audio/sfx/manifest.json",
@@ -5445,74 +5577,74 @@
     {
       "path": "src/renderer/assets/audio/sfx/match-tier-high.ogg",
       "category": "source",
-      "bytes": 98902,
-      "sha256": "3d4cdc29d85a964c8299da07a682ee558cfd32797622b5a315d4af7f064618e2"
+      "bytes": 103914,
+      "sha256": "d806836cd0946b88c4be1cc6d0dbcda7aed22b0ad478cd74dcf1445f94fa528f"
     },
     {
       "path": "src/renderer/assets/audio/sfx/match-tier-high.wav",
       "category": "source",
       "bytes": 1344078,
-      "sha256": "d7e6fcc3f96a8e61109b2757126eaa9a12052d87c8eb6f14eeb713228b8af663"
+      "sha256": "8204eb1e8778abc7a1b6361b7cfa38b9cde0309ecd3fc8df0bcb8a9629f58a9e"
     },
     {
       "path": "src/renderer/assets/audio/sfx/match-tier-low.ogg",
       "category": "source",
-      "bytes": 71757,
-      "sha256": "317dfcb4d9e46a45031a46c4549fcbacef70b13301552b3fdd48e6d08d5371c0"
+      "bytes": 81856,
+      "sha256": "fb71a29175a3e754b1ddd88cbae639b4961f65bceea86b8779739632177ce3a6"
     },
     {
       "path": "src/renderer/assets/audio/sfx/match-tier-low.wav",
       "category": "source",
       "bytes": 944718,
-      "sha256": "ef7a3cf4c69b36984e3e2b3da1610d7da74a18a11aa299db887e8f3ee328ebd8"
+      "sha256": "6d17d2ae2d4a75d83462e6bdc01f23007af193ea19ee1d79073580c20fbc0fe3"
     },
     {
       "path": "src/renderer/assets/audio/sfx/match-tier-mid.ogg",
       "category": "source",
-      "bytes": 91787,
-      "sha256": "f2a4b735252ab87e2d63ba203d77a3c059ce6198ff43eaf7d8030d0cb903c9ac"
+      "bytes": 93755,
+      "sha256": "b67ccd1c93bdeb707aac63da97e220a971cd7adf59b26edc02fd6d0b5879203c"
     },
     {
       "path": "src/renderer/assets/audio/sfx/match-tier-mid.wav",
       "category": "source",
       "bytes": 1152078,
-      "sha256": "592d59028c67588a0560bd1e5dd3581d7d2e0f41275d05df5b36bffbbed4216b"
+      "sha256": "ec7e4bb55867cacf6c7462532d0d2ed6dc0801e216b1d2bb6b8b3f3471313bb4"
     },
     {
       "path": "src/renderer/assets/audio/sfx/mismatch.ogg",
       "category": "source",
-      "bytes": 73047,
-      "sha256": "130c1c75df4cb784dbf0bf5e9a466a9007b5aa768bea3d5fcc903bd7f8ca061c"
+      "bytes": 75883,
+      "sha256": "cc34bcdb9054c6084e2473c39ece5ae94233741b1f13a96bdb66abcf90903e3a"
     },
     {
       "path": "src/renderer/assets/audio/sfx/mismatch.wav",
       "category": "source",
       "bytes": 944718,
-      "sha256": "381f1e3b33f5aac6399c22c55694db8ae9bdc670bcc3cfcba1446a4a27dfa39b"
+      "sha256": "b9c9d848372495535a3e6d9b45742bcba7838faff0c126a0cc779d39d41337b3"
     },
     {
       "path": "src/renderer/assets/audio/sfx/peek-power.ogg",
       "category": "source",
-      "bytes": 80987,
-      "sha256": "742f64aecff0021a2d37956e540cdc625c5c5a0d88d967e10fa4f96aca045efa"
+      "bytes": 92030,
+      "sha256": "f21c5398b1dabe4aca586929441551ca65e5251cac013de004d8dd3342f164cf"
     },
     {
       "path": "src/renderer/assets/audio/sfx/peek-power.wav",
       "category": "source",
       "bytes": 944718,
-      "sha256": "165eefd2d76f991874fa6d31646492844f09fc8c94f01476f987ac51ccf99c83"
+      "sha256": "ad66a4fde0bba9bc5eedd60f6280e0703cb98435418cc556a99bf7eba7352910"
     },
     {
       "path": "src/renderer/assets/audio/sfx/power-arm.ogg",
       "category": "source",
-      "bytes": 72171,
-      "sha256": "65932bb932466814532003723140da2743732c7f35fb58b2a5aef5548a92b61c"
+      "bytes": 82164,
+      "sha256": "cd5fc67e5f7b81731c95317e5cfb7a9e89fa6f2e4a16833ae39e7f8aef10eed1"
     },
     {
       "path": "src/renderer/assets/audio/sfx/power-arm.wav",
       "category": "source",
       "bytes": 944718,
-      "sha256": "ff71111a8942e68f29c4cb7c413752ef9f0865cb7cffbc789e43c11f41d47325"
+      "sha256": "2befeab36a83935faa7e7b890bc0bb4dbe67df59655e7b205fafac430cb8a5d4"
     },
     {
       "path": "src/renderer/assets/audio/sfx/README.md",
@@ -5523,98 +5655,98 @@
     {
       "path": "src/renderer/assets/audio/sfx/relic-offer-open.ogg",
       "category": "source",
-      "bytes": 72346,
-      "sha256": "054fd6e175610aee07f135a0adeec8ecdb04492e918307f30f53fd81b061dc87"
+      "bytes": 76534,
+      "sha256": "777565246d77ce7d54a027c7bac8ef4d65af6293949470ceaef761b305f7f927"
     },
     {
       "path": "src/renderer/assets/audio/sfx/relic-offer-open.wav",
       "category": "source",
       "bytes": 944718,
-      "sha256": "97342481d56cb0847b2f25ba8f9dc23f21cd58ffe250b033d6f55d913eaf64e0"
+      "sha256": "5d910a4f03dad4c65d4bd3f0f0f21c7d416b2de46517544ed4a23dee605c75d8"
     },
     {
       "path": "src/renderer/assets/audio/sfx/relic-pick.ogg",
       "category": "source",
-      "bytes": 63936,
-      "sha256": "f5bf16646cdf237d35b699260aa8cf3ecb10d291a876a8820d6b4aeb32f1237d"
+      "bytes": 66573,
+      "sha256": "d929283103980d9ebb136c83aa81a1985f7a7ba53c4f1c2faf1ad48fc6a8f4a8"
     },
     {
       "path": "src/renderer/assets/audio/sfx/relic-pick.wav",
       "category": "source",
       "bytes": 752718,
-      "sha256": "fa0a6d647e5460cb5f1dfc5c674ba33af39fd987fb1363d00ff0d11eaa5cc563"
+      "sha256": "10f5888a8a52fe628fa52f1ca57ab9e8ca272590387e16c1347ef643d55be758"
     },
     {
       "path": "src/renderer/assets/audio/sfx/shuffle-full.ogg",
       "category": "source",
-      "bytes": 107446,
-      "sha256": "2e99757b082f0d6d8f44a7c3fa759e26c5458d40868781ebc308395683c51a1f"
+      "bytes": 112622,
+      "sha256": "658c563f1bce23a58319fbc7a4809e451c7d17961fca566a1521e80845b62b04"
     },
     {
       "path": "src/renderer/assets/audio/sfx/shuffle-full.wav",
       "category": "source",
       "bytes": 1344078,
-      "sha256": "8870c18ba569be58874bbac87676d09747a5d66e63a2f284b4b00da784aa1f7d"
+      "sha256": "f739734d1fd8d2d1a9c9a6d6194fc767a6d9c2671239f881afb6d2a0deffc346"
     },
     {
       "path": "src/renderer/assets/audio/sfx/shuffle-quick.ogg",
       "category": "source",
-      "bytes": 53853,
-      "sha256": "ad8aa31e60a144b4dcb5a88a0ebfbea54280babdfafa06caaff408ff252be671"
+      "bytes": 63323,
+      "sha256": "670ef0a037d4f59c4a1c75060bdc0f2c2d1665b6a0ea125329f1fea6cf8fe33d"
     },
     {
       "path": "src/renderer/assets/audio/sfx/shuffle-quick.wav",
       "category": "source",
       "bytes": 752718,
-      "sha256": "f726d2f4ca1bd8738618d00374645760076d694f22a3716d3fca814a0061f4cf"
+      "sha256": "dee449b7dc437837d8094d2dc94023e3d7b02dcfd0b79166d62845ddb07d93cf"
     },
     {
       "path": "src/renderer/assets/audio/sfx/stray-power.ogg",
       "category": "source",
-      "bytes": 70282,
-      "sha256": "e5e0283585bb71bd266a9938964e88adeb4eb67139283f34d90e21e73bb2770f"
+      "bytes": 78016,
+      "sha256": "6626d841d88ff3d54f8bb74ce8a7c253dee8a2e6c3f580353800e66ae0093960"
     },
     {
       "path": "src/renderer/assets/audio/sfx/stray-power.wav",
       "category": "source",
       "bytes": 944718,
-      "sha256": "f4a304ca792d5fd609f768046e402288fa6fcf67133322ef6aa6dbc220dd6088"
+      "sha256": "09196a3bb94a6077dcb04e5068f280249668526f6752d930ede71dfc3a5dae51"
     },
     {
       "path": "src/renderer/assets/audio/sfx/wager-arm.ogg",
       "category": "source",
-      "bytes": 71070,
-      "sha256": "b5f9d217a6f4a3c4d83ecab91d0c3ffbe43762c0e162be4c9e4af2b48b8b39be"
+      "bytes": 67614,
+      "sha256": "e57da11353b9c22a9a7b0810599a8b082d040d9445b2546affdff6a8ee3eb9dd"
     },
     {
       "path": "src/renderer/assets/audio/sfx/wager-arm.wav",
       "category": "source",
       "bytes": 752718,
-      "sha256": "7176a98e0bd12e5f0a03096ba1fe3102d9a1c50bd749bf2cec12a68d7f3519fd"
+      "sha256": "24d946a848bb79955b0b9a8f1599c34d66317fd45d301ec4c257f9e9d5bfea2b"
     },
     {
       "path": "src/renderer/assets/audio/ui/game-over-open.ogg",
       "category": "source",
-      "bytes": 58420,
-      "sha256": "fe72667dc02131a9be8d6d791804970eecb09dc9f57d07348fad90ceebadd8cf"
+      "bytes": 60506,
+      "sha256": "fa5d4c294defa1f6261ec40ea62e036d16fe45c596c7d8b070a57266048dc4de"
     },
     {
       "path": "src/renderer/assets/audio/ui/game-over-open.wav",
       "category": "source",
       "bytes": 752718,
-      "sha256": "e76ea0c44fc27e669d3b59f1d2d9277236847e628a0dc72d10b58d126262f32f"
+      "sha256": "756f023936c60280a31fd70bed631f404fbd1be78ff5846ed36f45963fea96bd"
     },
     {
       "path": "src/renderer/assets/audio/ui/intro-sting.ogg",
       "category": "source",
-      "bytes": 69978,
-      "sha256": "8c3b97dc196d2e5e4eb69ce445dc813052771f91b3ae62f14660d75518e3cee6"
+      "bytes": 70939,
+      "sha256": "c1e74d2c9f64e0e6a60e30d3d684d4edea90c310d6732433f907b4f19f91b461"
     },
     {
       "path": "src/renderer/assets/audio/ui/intro-sting.wav",
       "category": "source",
       "bytes": 752718,
-      "sha256": "9c61fdd80dc4e6f23b0ff3aa6c00a3a7c9405b9338a783f0fe4071ad7e6c0100"
+      "sha256": "0e4824e9e23ee19ff2ca9e9d3027c74c67f6f9364a834c4e6b167f4d712e907b"
     },
     {
       "path": "src/renderer/assets/audio/ui/manifest.json",
@@ -5625,38 +5757,38 @@
     {
       "path": "src/renderer/assets/audio/ui/menu-open.ogg",
       "category": "source",
-      "bytes": 61583,
-      "sha256": "63b0af8e07022452e3badb1696f6352165def615a374527eb928e1a415a5c81b"
+      "bytes": 64123,
+      "sha256": "3aa7e186b5dc3c0b6df86401a2f0e2c89128b0e73f4bf2abc969f3b4e34a5955"
     },
     {
       "path": "src/renderer/assets/audio/ui/menu-open.wav",
       "category": "source",
       "bytes": 752718,
-      "sha256": "de0d5506badbe420d4d8a861ee24cc9931d1a2c1afc26f0837d7e357fa31c952"
+      "sha256": "953f933d8f232b76e9ac59a9de8f96ac592b206f22d2e6795d1da08171818f7c"
     },
     {
       "path": "src/renderer/assets/audio/ui/pause-open.ogg",
       "category": "source",
-      "bytes": 47739,
-      "sha256": "6f9d381fb50b09008b2db667f27d6a23216f373aa31375ca5ae48c0b8aa07664"
+      "bytes": 51586,
+      "sha256": "29231890c3736e8d38448d9132f4774d8ea12fc9c8a8d84a1b7695a0b5bf2699"
     },
     {
       "path": "src/renderer/assets/audio/ui/pause-open.wav",
       "category": "source",
       "bytes": 560718,
-      "sha256": "2769dead181417f52472521676057ea23beb8c98408ba5a576f66a2fe73393b7"
+      "sha256": "a3cdf3a287f907cb17ce0c201ecd6138469d88a86ce1c3b395ecf22f8f09c1e3"
     },
     {
       "path": "src/renderer/assets/audio/ui/pause-resume.ogg",
       "category": "source",
-      "bytes": 49869,
-      "sha256": "1c0a692a769d834f92a5bc7b79746043c958beb971e0161a607620b4f2789a23"
+      "bytes": 47257,
+      "sha256": "1348bb5074e5fb53d39ec29ca2ca0cf56fe06ef932b47c52785c790e2787ddbe"
     },
     {
       "path": "src/renderer/assets/audio/ui/pause-resume.wav",
       "category": "source",
       "bytes": 560718,
-      "sha256": "e6b79b240bbb36e06c8e89a4af98d9a042204137e8e6cca34f39aa546e2ff10e"
+      "sha256": "39842fc34c86a217b045445a0dee9df3ac4db564a59f937f680697a599acc0a6"
     },
     {
       "path": "src/renderer/assets/audio/ui/README.md",
@@ -5667,74 +5799,74 @@
     {
       "path": "src/renderer/assets/audio/ui/run-start.ogg",
       "category": "source",
-      "bytes": 66409,
-      "sha256": "591de2e55c308541ef8224e48cec8508448bbcd52a81e06d3d32c2207b121dbf"
+      "bytes": 70636,
+      "sha256": "7fe46efca321067da260d0be13e06cba7c78be59e67f73532ca9008cd65ecdfc"
     },
     {
       "path": "src/renderer/assets/audio/ui/run-start.wav",
       "category": "source",
       "bytes": 752718,
-      "sha256": "fc98d248e682bcf032f17c055134ba0a807704bb85747281c5d60dde2984fddf"
+      "sha256": "7b4eac40a9f7b8e666056e9611e871c0fa0ab3ee61b1159905a232919f74f62b"
     },
     {
       "path": "src/renderer/assets/audio/ui/ui-back.ogg",
       "category": "source",
-      "bytes": 43218,
-      "sha256": "c6385fa8760556022fa7d15fab889839691a6f4036c1182ea9979bf1b39904e6"
+      "bytes": 48717,
+      "sha256": "b63ab3c3db9ed8fb522ea9ef8a6555211d0bfa44eddbfae94aabd3628d3f44df"
     },
     {
       "path": "src/renderer/assets/audio/ui/ui-back.wav",
       "category": "source",
       "bytes": 560718,
-      "sha256": "cb240072af61c69829a43001cc0afaf4f1a1820162b59ee313de5d22aa030278"
+      "sha256": "ac9fe6c2c54c2fe389b6c959a1eca1badc16b0b2537498a594fb84e3596b8c7a"
     },
     {
       "path": "src/renderer/assets/audio/ui/ui-click.ogg",
       "category": "source",
-      "bytes": 49772,
-      "sha256": "4a70f1b0b4b89b6766a13f386b79738b395d51ae9ab6246cc42696dbf94b9790"
+      "bytes": 53168,
+      "sha256": "334ddd71e3f320125f035bc3c136c49cf1169a65a0f1bdf8755682d33f6d9602"
     },
     {
       "path": "src/renderer/assets/audio/ui/ui-click.wav",
       "category": "source",
       "bytes": 560718,
-      "sha256": "cd104f071a2754d8f4f1076bf4d96ae3d9a63f30ffb7a0f1ed55d9fd3a993251"
+      "sha256": "6e2ccd66b7352264c29839696bfc83432307bb4e3a36bb7721df828da0cb4ff7"
     },
     {
       "path": "src/renderer/assets/audio/ui/ui-confirm.ogg",
       "category": "source",
-      "bytes": 46588,
-      "sha256": "2ab521818b9ab62c7899206443417e648e1eb7e1f7439832884cb5219465a9dc"
+      "bytes": 43748,
+      "sha256": "be026f09c2f541cd27bec06548b36070b81e5a5f8d268f016ef136e3b43046b4"
     },
     {
       "path": "src/renderer/assets/audio/ui/ui-confirm.wav",
       "category": "source",
       "bytes": 560718,
-      "sha256": "9b26942d28716d090a89c7ff0c6bfaa75454df30173a93bf504cd7f263552df2"
+      "sha256": "530bc8a89263d32b7163049c5758a0c46788a5207e44e53cc691f4bd39db507d"
     },
     {
       "path": "src/renderer/assets/audio/ui/ui-copy.ogg",
       "category": "source",
-      "bytes": 31169,
-      "sha256": "d2ad30d2af865c5f1beca4457021c89a249313fc1a20e5a51080f08f3d0b3357"
+      "bytes": 35547,
+      "sha256": "4ba96d6be5b2fd1a2a65c941a493561eb336c7b7bb3d0e9563b7b414081296c7"
     },
     {
       "path": "src/renderer/assets/audio/ui/ui-copy.wav",
       "category": "source",
       "bytes": 384078,
-      "sha256": "37914cb6a6202287bee5684451761b72f1e0960246a023e2cd753bed976a6457"
+      "sha256": "d6253046cda27f2c356a357df11f712719f7c0e32d13f041b9ad72b6bbeacf7f"
     },
     {
       "path": "src/renderer/assets/audio/ui/ui-counter.ogg",
       "category": "source",
-      "bytes": 31190,
-      "sha256": "a386f4f74083c2823b6463dbe1b88d366f9f1e5c6aaa9c5a412ac73adc61ee06"
+      "bytes": 35705,
+      "sha256": "e9825f761c767beac077db4780a3cf75f384203783834a26840ad6e15e29de7e"
     },
     {
       "path": "src/renderer/assets/audio/ui/ui-counter.wav",
       "category": "source",
       "bytes": 384078,
-      "sha256": "b269f9375673d2e70d84446f2f68ab1fb0cfbd9b06e0277127beebb3e4491a55"
+      "sha256": "27e6e55281e9baa101fba52ea9ea7a516c67a8f09ece1294c001a06aafcb9f7b"
     },
     {
       "path": "src/renderer/assets/cards/illustrations/deck-01.svg",
@@ -6945,56 +7077,62 @@
     {
       "path": "src/renderer/assets/ui/backgrounds/bg-mode-gauntlet-v1.png",
       "category": "source",
-      "bytes": 125035,
-      "sha256": "161e37bd1a91199b2631227799f27d78302ea96b17926b2fb000759eb9abdf30"
+      "bytes": 1550277,
+      "sha256": "45e5229b3f41a04c9949a7ba9a683cdef5bb86b8d3ef29d6fd036bf9fce9445d"
     },
     {
       "path": "src/renderer/assets/ui/backgrounds/bg-mode-gauntlet-v1.webp",
       "category": "source",
-      "bytes": 26252,
-      "sha256": "8e9fc17f1088b1251a443d8fa4723db65ae0b5cfaa72804e1c74f5cb8f81b83c"
+      "bytes": 117252,
+      "sha256": "3e79183e4b6b32ba97870d7af20bed4e210d1975011d69391091d4b39ec4e863"
     },
     {
       "path": "src/renderer/assets/ui/backgrounds/bg-mode-meditation-v1.png",
       "category": "source",
-      "bytes": 106989,
-      "sha256": "00a0417dfdefdc53b3b201ee929478d3ba32c802cab8b688ac9bd0fbfdf0fca3"
+      "bytes": 980912,
+      "sha256": "70be48f23f8eac923035e535349547f704eef6c542cec00f250bcf8a77a8f506"
     },
     {
       "path": "src/renderer/assets/ui/backgrounds/bg-mode-meditation-v1.webp",
       "category": "source",
-      "bytes": 21916,
-      "sha256": "78735607bf0218942c1c3ee149aa0157b441f6451533bc179ce104ed46faf33f"
+      "bytes": 37356,
+      "sha256": "fe6874b281305530182f922d7e7508874131fef738c154f2fdd4349df734c1f5"
     },
     {
       "path": "src/renderer/assets/ui/backgrounds/bg-mode-mirror-puzzle-v1.png",
       "category": "source",
-      "bytes": 80998,
-      "sha256": "63430e977204707548a8be0677b097d72c19d877749f4cca1dd78b9728ce7990"
+      "bytes": 1206342,
+      "sha256": "f046ebccc1d309d8087da877d4ffa70cc14a86d4a6ab5ec731fc8765c227eafb"
     },
     {
       "path": "src/renderer/assets/ui/backgrounds/bg-mode-mirror-puzzle-v1.webp",
       "category": "source",
-      "bytes": 13338,
-      "sha256": "c24774489f66e9d2af223012f1ec9472616c55cfeb77fe79e050882226e31ef0"
+      "bytes": 64432,
+      "sha256": "900da0dbeeb0734160bf53911addcde15e84a876292d7388c36987a379d6f767"
+    },
+    {
+      "path": "src/renderer/assets/ui/backgrounds/bg-mode-pass-and-play-v1.png",
+      "category": "source",
+      "bytes": 1376473,
+      "sha256": "8d2bef354831e8252433f1e0fe285f4cf10bddf3463bd0744ed3797add59b8de"
     },
     {
       "path": "src/renderer/assets/ui/backgrounds/bg-mode-pass-and-play-v1.webp",
       "category": "source",
-      "bytes": 20484,
-      "sha256": "071a9599b75f8340544840ab2ce1166be3a81c923ddf068964ce00cbeadc3093"
+      "bytes": 91146,
+      "sha256": "b4d4666f65c9430c974bb8bd3f7d25f087aa4847d7a03c1bc74268409dbddeb2"
     },
     {
       "path": "src/renderer/assets/ui/backgrounds/bg-mode-pin-vow-v1.png",
       "category": "source",
-      "bytes": 84238,
-      "sha256": "e89bc8afb7632311617259637297795790960c36c33dac19086f546925e1c262"
+      "bytes": 1272831,
+      "sha256": "9a3748406f0ff0903ee32ea98dd9d1d432cb98432c3049905d2f174ceda5a48e"
     },
     {
       "path": "src/renderer/assets/ui/backgrounds/bg-mode-pin-vow-v1.webp",
       "category": "source",
-      "bytes": 15622,
-      "sha256": "586b306ec1ac407b27cbdb6b3607234ff120a84f35a5a498a85e47508af50b2a"
+      "bytes": 76094,
+      "sha256": "3ad438dbbe6488218814eb892924caa9c2dab3b4d27a46110833c09f8247d3a8"
     },
     {
       "path": "src/renderer/assets/ui/backgrounds/bg-mode-placeholder-v1.png",
@@ -7011,62 +7149,62 @@
     {
       "path": "src/renderer/assets/ui/backgrounds/bg-mode-practice-v1.png",
       "category": "source",
-      "bytes": 93819,
-      "sha256": "c5008f69b4947cd3ff5b83de52b8f631d83ff60c45a35ccfc5d127fe293b0bd7"
+      "bytes": 1095538,
+      "sha256": "b8e3c7f01218eb27ae7914f74f85dc38f664f6d99200a5d5fd3c38ca73561879"
     },
     {
       "path": "src/renderer/assets/ui/backgrounds/bg-mode-practice-v1.webp",
       "category": "source",
-      "bytes": 19426,
-      "sha256": "4409e255099610cdf7928612e3f0aba0da29f8286b99b2a28d39d57fb22ae4ce"
+      "bytes": 48772,
+      "sha256": "2a2bb073fcaa47f13d94e849721d12442257765267d4232dc99a9961d1a775fe"
     },
     {
       "path": "src/renderer/assets/ui/backgrounds/bg-mode-puzzle-v1.png",
       "category": "source",
-      "bytes": 103731,
-      "sha256": "663edac4c5f582ae5b8ad4ee0b5d9d8c0874b4fda33b74d1bd4027519bd4495d"
+      "bytes": 1251134,
+      "sha256": "9d80869b295d5cde7eb0ec9c1ed5c765cf43e6b93d8bbff26a22897bff3e9471"
     },
     {
       "path": "src/renderer/assets/ui/backgrounds/bg-mode-puzzle-v1.webp",
       "category": "source",
-      "bytes": 23586,
-      "sha256": "374e2e21486345b13f212830824fbc72e4cfc60e007f94e7579de1e0f045759c"
+      "bytes": 79212,
+      "sha256": "6691bcfa6c9008c3d05dc41e36e8cfcbcea4a8b9ce94f7cc48f1b3c14cbcab14"
     },
     {
       "path": "src/renderer/assets/ui/backgrounds/bg-mode-scholar-v1.png",
       "category": "source",
-      "bytes": 57681,
-      "sha256": "edcbc0e8e16fb30517e4edfc8f935a8f239c86c3ce1ea796d52bfcb2b3b9ba95"
+      "bytes": 1406518,
+      "sha256": "3e4cebbb60b8ed30516f722dfd5ad42f2d7f187fa70a18747b78f30c8a512ee3"
     },
     {
       "path": "src/renderer/assets/ui/backgrounds/bg-mode-scholar-v1.webp",
       "category": "source",
-      "bytes": 13448,
-      "sha256": "9fe25744337b05ce3f69b8155237046709c13b9b77580961a34b5d2c4dc4503a"
+      "bytes": 94864,
+      "sha256": "05bc8f2e5387c74eaf7183be5a932543fd6e40c719c7b89469f5822ef0d555e6"
     },
     {
       "path": "src/renderer/assets/ui/backgrounds/bg-mode-wild-v1.png",
       "category": "source",
-      "bytes": 128673,
-      "sha256": "6938a1f5c03f277a2eafc76b9daeedd7b237016658adb046b8dd6aaae74eee9b"
+      "bytes": 1436137,
+      "sha256": "a0c38f182f1642592eeeb69f2f8aafb0e76644415aa43a25cc6ad6bfa72e8903"
     },
     {
       "path": "src/renderer/assets/ui/backgrounds/bg-mode-wild-v1.webp",
       "category": "source",
-      "bytes": 23770,
-      "sha256": "eb1c55e75a840be57e083b4b13c7b9938654320eb3f6143218aaf892963a8aae"
+      "bytes": 96700,
+      "sha256": "d258d9381a476fdb1b7b32ec9ebbb21ffadd1069b6e46d4669d3b7933bd8e3fe"
     },
     {
       "path": "src/renderer/assets/ui/backgrounds/mode-dungeon-showcase.png",
       "category": "source",
-      "bytes": 291450,
-      "sha256": "ae638938d96ce349926850ea48829f53a23f5287b03035a835465ca6f304aba6"
+      "bytes": 1236497,
+      "sha256": "f4dbc8dafcf474106918be2e5dcfd672f94a6a282b828949a24966e17361b60f"
     },
     {
       "path": "src/renderer/assets/ui/backgrounds/mode-dungeon-showcase.webp",
       "category": "source",
-      "bytes": 34988,
-      "sha256": "2ad6d0ce07bb5dc70c9c7696c0658efb16ea0cd13e72d45d9d470772e953971c"
+      "bytes": 88368,
+      "sha256": "2fefad4549112dcfd7b6e9e1309099144e8b35e9e65af55e2ef8560eba5d4d7e"
     },
     {
       "path": "src/renderer/assets/ui/brand-crest.svg",
@@ -7311,8 +7449,8 @@
     {
       "path": "src/renderer/audio/gameplayMusic.ts",
       "category": "source",
-      "bytes": 10161,
-      "sha256": "c56816f26f45b9cbd27531c5404511fc46d18c7a91b159544b250679c618e087"
+      "bytes": 10272,
+      "sha256": "f4626adbda9f8fa8b8117d9be99e31dd4fbe41b60fa375870eb3d613082c0d50"
     },
     {
       "path": "src/renderer/audio/gameSfx.test.ts",
@@ -7792,7 +7930,7 @@
       "path": "src/renderer/components/gameplayVisualConfig.ts",
       "category": "source",
       "bytes": 13335,
-      "sha256": "12c25cc27e1c5ea8d72e0f6acfe6e371206387a3c5a344cd0aa9818fed6de6c4"
+      "sha256": "197c255467d8ae99fdb50f7e5a4791a5765a472837d3211269d46f3b4eaf8763"
     },
     {
       "path": "src/renderer/components/GameScreen.module.css",
@@ -16221,7 +16359,7 @@
       "path": "src/renderer/assets/assetDropInReadiness.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 46,
+      "lineCount": 47,
       "imports": [
         "file:src/renderer/assets/assetDropInReadiness.ts"
       ],
@@ -16617,7 +16755,7 @@
       "path": "src/renderer/audio/gameplayMusic.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 286,
+      "lineCount": 287,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/run-lifecycle-machine.ts"
@@ -37173,32 +37311,32 @@
       "name": "getAdaptiveMusicState",
       "kind": "value",
       "file": "src/renderer/audio/gameplayMusic.ts",
-      "line": 127,
-      "endLine": 151
+      "line": 128,
+      "endLine": 152
     },
     {
       "id": "symbol:src/renderer/audio/gameplayMusic.ts#musicGainFromSettings",
       "name": "musicGainFromSettings",
       "kind": "value",
       "file": "src/renderer/audio/gameplayMusic.ts",
-      "line": 42,
-      "endLine": 43
+      "line": 43,
+      "endLine": 44
     },
     {
       "id": "symbol:src/renderer/audio/gameplayMusic.ts#resolveAdaptiveMusicState",
       "name": "resolveAdaptiveMusicState",
       "kind": "value",
       "file": "src/renderer/audio/gameplayMusic.ts",
-      "line": 76,
-      "endLine": 125
+      "line": 77,
+      "endLine": 126
     },
     {
       "id": "symbol:src/renderer/audio/gameplayMusic.ts#useGameplayMusic",
       "name": "useGameplayMusic",
       "kind": "function",
       "file": "src/renderer/audio/gameplayMusic.ts",
-      "line": 157,
-      "endLine": 285
+      "line": 158,
+      "endLine": 286
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#__resetGameSfxEngineForTests",
