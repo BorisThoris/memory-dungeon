@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { BUILTIN_PUZZLE_IDS } from './builtin-puzzles';
 import { GAME_RULES_VERSION, MAX_COMBO_SHARDS, type AchievementId } from './contracts';
-import { CHUNK_SIX_PAIRS, evaluateAchievementUnlocks } from './achievements';
+import { CHAIN_REACTION_WAVES, CHUNK_SIX_PAIRS, evaluateAchievementUnlocks } from './achievements';
 import { resolveChunkBreak } from './chunk-break-rules';
 import { createPlayablePathFixture } from './playable-path-fixtures';
 import { ENDLESS_CYCLE_FLOOR_COUNT } from './floor-mutator-schedule';
@@ -91,7 +91,7 @@ describe('achievement thresholds against real content', () => {
         // Not a behaviour check: a reminder that adding an id means deciding whether its bar is
         // reachable. `ACH_PUZZLE_SOLVER` is why.
         const known: AchievementId[] = [...ACHIEVEMENT_IDS];
-        expect(known).toHaveLength(25);
+        expect(known).toHaveLength(26);
         expect(GAME_RULES_VERSION).toBeGreaterThan(0);
     });
 });
@@ -119,5 +119,23 @@ describe('the chain loop achievements against real boards', () => {
         const broken = resolveChunkBreak({ board, run, matchedTileIds: ['A1', 'A2'], chain: 6 });
         expect(broken.droppedPairKeys).toEqual(['C']);
         expect(evaluateAchievementUnlocks({ ...run, chunkDropsThisRun: 1 }, createDefaultSaveData())).toContain('ACH_NOTHING_HELD_IT');
+    });
+
+    it('Chain reaction is earnable: a Sharp break across a suit\'s islands runs three waves', () => {
+        // One row: A's clump reaches B1, B's partner sits two on and touches C1, C's touches D1.
+        // The deal lays every suit of three pairs or more as two islands (`tile-suit-rules.ts`),
+        // which is what puts a partner outside the clump for the ripple to reach.
+        const rowTile = (id: string) => makeTile(id, id[0]!, id[0]!, { suit: 'ABCD'.includes(id[0]!) ? 'ember' : 'tide' });
+        const board = makeBoard(
+            ['A1', 'A2', 'B1', 'T1', 'B2', 'C1', 'T2', 'C2', 'D1', 'S1', 'D2', 'S2'].map(rowTile),
+            { columns: 12, rows: 1, level: 3 }
+        );
+        const run = createNewRun(0);
+        const broken = resolveChunkBreak({ board, run, matchedTileIds: ['A1', 'A2'], chain: 4 });
+        expect(broken.tier).toBe('sharp');
+        expect(broken.waves).toBeGreaterThanOrEqual(CHAIN_REACTION_WAVES);
+        expect(evaluateAchievementUnlocks({ ...run, bestRippleThisRun: broken.waves }, createDefaultSaveData())).toContain(
+            'ACH_CHAIN_REACTION'
+        );
     });
 });

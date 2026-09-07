@@ -32,11 +32,14 @@ export const buildRunShareText = (run: RunState): RunShareText => {
     // The chain is the part worth bragging about, and the part a friend replaying the key can beat.
     const bestChain = summary?.bestChain ?? Math.max(runNonNegativeInteger(run.bestChainThisRun), runNonNegativeInteger(run.bestChainThisFloor));
     const feverFloors = summary?.feverFloors ?? runNonNegativeInteger(run.feverFloorsThisRun);
+    const bestRipple = summary?.bestRipple ?? Math.max(runNonNegativeInteger(run.bestRippleThisRun), runNonNegativeInteger(run.bestRippleThisFloor));
     const chain = [
         runNonNegativeInteger(bestChain) > 0 ? `, best chain ×${runNonNegativeInteger(bestChain)}` : '',
         runNonNegativeInteger(feverFloors) > 0
             ? `, Fever on ${runNonNegativeInteger(feverFloors)} ${runNonNegativeInteger(feverFloors) === 1 ? 'floor' : 'floors'}`
-            : ''
+            : '',
+        // A ripple of one wave is every match ever made; only a reaction that carried is news.
+        runNonNegativeInteger(bestRipple) >= 2 ? `, ripple ×${runNonNegativeInteger(bestRipple)}` : ''
     ].join('');
     const headline = `${GAME_NAME} — ${identity.label}: floor ${floor}, ${score} points${chain}`;
 

@@ -87,6 +87,13 @@ export const RELEASE_CHECKLIST: readonly ReleaseChecklistItem[] = [
         section: 'Gameplay'
     },
     {
+        evidence: 'src/shared/run-summary-rules.ts',
+        id: 'ripple-records',
+        label: 'The longest ripple a run reached is carried on the summary, posted on the run and daily share lines when it went past one wave, and earns Chain reaction at three',
+        owner: 'repo',
+        section: 'Gameplay'
+    },
+    {
         evidence: 'src/shared/pass-and-play-rules.ts',
         id: 'chain-in-daily-and-shared-play',
         label: 'The share line and the daily post name the best chain, the quest ladder asks for Sharp floors, and a shared table credits a chunk to the seat that broke it',

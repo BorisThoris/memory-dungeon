@@ -360,7 +360,8 @@ export type AchievementId =
     | 'ACH_CHUNK_SIX'
     | 'ACH_EXTREME_FEVER'
     | 'ACH_WARDEN_BY_CHUNK'
-    | 'ACH_NOTHING_HELD_IT';
+    | 'ACH_NOTHING_HELD_IT'
+    | 'ACH_CHAIN_REACTION';
 
 export interface DebugFlags {
     showDebugTools: boolean;
@@ -924,6 +925,8 @@ export interface RunSummary {
     biggestChunk?: number;
     /** The chain's run: the longest chain held, and the cleared floors whose chain reached Sharp and Fever. */
     bestChain?: number;
+    /** The longest ripple the run reached, in waves; 1 is a pop that stopped at the clump it touched. */
+    bestRipple?: number;
     sharpFloors?: number;
     feverFloors?: number;
     /** Present for seeded modes (daily, shared challenge). */

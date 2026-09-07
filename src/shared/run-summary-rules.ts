@@ -27,6 +27,7 @@ export const createRunSummary = (run: RunState, unlockedAchievements: Achievemen
             perfectClears: Math.min(stats.perfectClears, levelsCleared),
             biggestChunk: runNonNegativeInteger(run.biggestChunkPairs),
             bestChain: Math.max(runNonNegativeInteger(run.bestChainThisRun), runNonNegativeInteger(run.bestChainThisFloor)),
+            bestRipple: Math.max(runNonNegativeInteger(run.bestRippleThisRun), runNonNegativeInteger(run.bestRippleThisFloor)),
             sharpFloors: runNonNegativeInteger(run.sharpFloorsThisRun),
             feverFloors: runNonNegativeInteger(run.feverFloorsThisRun),
             runSeed: runNonNegativeInteger(run.runSeed),

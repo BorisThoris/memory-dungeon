@@ -3,11 +3,15 @@ import { openPlayablePathFixture } from './playablePathHelpers';
 import { flipTileAtGridCellKeyboard, readPairTileCells, waitForBoardPlayPhase } from './tileBoardGameFlow';
 
 /**
- * The whole loop, where a player meets it: suits on a clumped board, a chain climbing, a chunk
- * breaking with a visible pulse, Fever, and the floor clearing on the far side of it.
+ * The whole loop, where a player meets it: suits on a clumped board, the pop on the very first
+ * match, a chain climbing, Fever, and the floor clearing on the far side of it.
  *
  * Every layer has a unit test; none of them proves the layers meet in the app. The fixture is a
  * board nothing random shaped, so what this watches is the rules and the presentation, not luck.
+ *
+ * The first assertion is the brief's own: a match with no chain behind it takes the clump it
+ * touches, live, on turn one. If that ever regresses to "a chain of three buys a break", this
+ * test fails on the first match rather than at the end of the floor.
  */
 test.describe('chain, chunk and Fever in the app', () => {
     // Software WebGL on a runner makes every probe cost about a second; the budget is for that, not for slack.
@@ -28,6 +32,37 @@ test.describe('chain, chunk and Fever in the app', () => {
         await flipTileAtGridCellKeyboard(page, second[0], second[1]);
         return true;
     };
+
+    const readRemovedCount = async (page: Page): Promise<number> =>
+        page.evaluate(() => {
+            const w = window as Window & { __e2eGetTileStateAtGrid1?: (row: number, col: number) => string | null };
+            let removed = 0;
+            for (let row = 1; row <= 4; row += 1) {
+                for (let col = 1; col <= 6; col += 1) {
+                    if (w.__e2eGetTileStateAtGrid1?.(row, col) === 'removed') removed += 1;
+                }
+            }
+            return removed;
+        });
+
+    test('the first match pops the clump it touches, with no chain behind it', async ({ page }) => {
+        await openPlayablePathFixture(page, 'cascadeClump');
+        await waitForBoardPlayPhase(page);
+
+        // Turn one, chain zero: the ladder has bought nothing yet.
+        await expect(page.getByTestId('board-stage')).toHaveAttribute('data-chain-tier', 'none');
+        expect(await readRemovedCount(page), 'nothing has left the board yet').toBe(0);
+
+        expect(await matchNextPair(page), 'the fixture offered a pair to match').toBe(true);
+        await page.waitForTimeout(700);
+
+        // The pair the player matched turns `matched`; every tile a pop took is `removed`. On this
+        // fixture the matched pair stands inside a column of its own suit, so the pop takes it.
+        const removed = await readRemovedCount(page);
+        expect(removed, 'the pop took the touching clump on the first match').toBeGreaterThan(0);
+        const chain = await page.getByTestId('hud-chain').textContent();
+        expect(chain ?? '', 'the pop happened at chain one, not at a tier').toMatch(/1/);
+    });
 
     test('matching row by row breaks the clump, reaches Fever, and clears the floor', async ({ page }) => {
         await openPlayablePathFixture(page, 'cascadeClump');
@@ -76,10 +111,10 @@ test.describe('chain, chunk and Fever in the app', () => {
             }
         }
 
-        // Clean lasts one match on this board — the first break lifts momentum straight to Sharp —
+        // The pop lifts momentum fast on this board — the first match takes its whole suit column —
         // so what the samples must catch is the top of the ladder, not every rung on the way.
-        expect([...tiersSeen], 'the ladder was climbed').toEqual(expect.arrayContaining(['sharp', 'fever']));
-        // Tiles a chunk took leave in the `removed` state, not `matched`: the durable trace of a
+        expect([...tiersSeen], 'the ladder was climbed').toEqual(expect.arrayContaining(['fever']));
+        // Tiles a pop took leave in the `removed` state, not `matched`: the durable trace of a
         // break. (The 720 ms stage pulse is a unit-tested projection; a runner on software WebGL
         // cannot probe inside that window reliably.)
         expect(removedSeen, 'a chunk removed tiles').toBeGreaterThan(0);

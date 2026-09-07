@@ -5,11 +5,11 @@
     "name": "memory-dungeon",
     "trackedFileCount": 2584,
     "codeFileCount": 1031,
-    "exportedSymbolCount": 3732,
+    "exportedSymbolCount": 3733,
     "contentItemCount": 66,
     "mechanicCount": 140,
     "stateFieldCount": 149,
-    "relationshipCount": 11028
+    "relationshipCount": 11031
   },
   "inventory": [
     {
@@ -291,8 +291,8 @@
     {
       "path": "docs/CHAIN_CHUNK_FEVER_DESIGN.md",
       "category": "documentation",
-      "bytes": 53908,
-      "sha256": "38cf9d50640247d8ad347acf84f95dd0706e791e0e9415c902cef2cdf8c6d833"
+      "bytes": 53960,
+      "sha256": "fe8dcfc84f7ff3c3fa24aa7432a70bdf9174c52fecb825e7b07b5f2e289baa07"
     },
     {
       "path": "docs/COLLECTIBLE_SYSTEM.md",
@@ -778,7 +778,7 @@
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
       "bytes": 472,
-      "sha256": "c35dc6c81ad73c036a3c756233ea5a4ef8ec58082c13075e6999253bee742cd4"
+      "sha256": "4d5fea5b749ef07643feb38e713b73f728d011339cbe31240b1f640618e89395"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -2265,8 +2265,8 @@
     {
       "path": "docs/RELEASE_CHECKLIST.md",
       "category": "documentation",
-      "bytes": 8573,
-      "sha256": "65d83e43d9e364c0667c5fad6c6396af2912146abb7db5109e2dc7233f2466d9"
+      "bytes": 8799,
+      "sha256": "0cd2fab0001472231436b8a566ce291717a6da1c0f3567c40ad962d44f393990"
     },
     {
       "path": "docs/RELIC_ROSTER.md",
@@ -2326,7 +2326,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 36715,
-      "sha256": "0e378f4e2fe61beae776adea0399440c022a202228c5b0039405b8146144b039"
+      "sha256": "210d415ac4974df5a7abec6007903f8ebe1114a213eacb4466d35aaa13b48a22"
     },
     {
       "path": "docs/UI_RETHINK_PLAN.md",
@@ -3609,14 +3609,14 @@
     {
       "path": "e2e/cascade-chain.spec.ts",
       "category": "test",
-      "bytes": 4979,
-      "sha256": "9a7baa0fc1e5e3579b976412cc371155b1c78732a1d7a6d0a2778d9c69c74097"
+      "bytes": 6858,
+      "sha256": "c20494393ae39dcc2b3b5047346c5d507b8ab0183844d37f0cf2a97006d4c421"
     },
     {
       "path": "e2e/chain-review-capture.spec.ts",
       "category": "test",
-      "bytes": 4639,
-      "sha256": "c3a863d43946952a88fbf9799763adb1b36da4f0bc032a7e82670150781fa50d"
+      "bytes": 6325,
+      "sha256": "4b64b80d98ea24e22c80f94a725de5862f4353ec2e2afd49253d3ab075861ca7"
     },
     {
       "path": "e2e/controller-navigation.spec.ts",
@@ -9057,8 +9057,8 @@
     {
       "path": "src/renderer/copy/chainBeat.ts",
       "category": "source",
-      "bytes": 5742,
-      "sha256": "c2ab1c57aa55da0abcbb65feb1736267047c3add5e61c8d993ee0c2b818a9ef5"
+      "bytes": 5426,
+      "sha256": "16a84d49d15848ca3bca935fbdf4de630445183892638a9e5b34e0df5cea7fbc"
     },
     {
       "path": "src/renderer/copy/chainMilestoneFeedback.test.ts",
@@ -10396,13 +10396,13 @@
       "path": "src/shared/__snapshots__/mechanics-catalog-appendix-builder.test.ts.snap",
       "category": "source",
       "bytes": 642,
-      "sha256": "038fef7e5e577a15c95c813576acbc4314fa6f2684010a69b78cea697339e11b"
+      "sha256": "283d06a9e42b18d4179bcad26db03ccfe6f191c8fc3f83f1082d935bcc939005"
     },
     {
       "path": "src/shared/achievement-reachability.test.ts",
       "category": "test",
-      "bytes": 6598,
-      "sha256": "a319d18a8f465560bcba1788337d6e7b5ab3884e5412b86ee288aa006bbcaab9"
+      "bytes": 7745,
+      "sha256": "4501f6a6a30f88b9b7319ff5ddc079f9c897e65752477b8e17b8e2f394950fe3"
     },
     {
       "path": "src/shared/achievements.test.ts",
@@ -10413,8 +10413,8 @@
     {
       "path": "src/shared/achievements.ts",
       "category": "source",
-      "bytes": 5796,
-      "sha256": "78e0670b0aaa5f64a1d4d7b1f7850b7b86a04e93c726d1dc2a5ac5ab3816974a"
+      "bytes": 6031,
+      "sha256": "ea1e40875f6da0619995c18351c6c5394f2c4806e159182379c943521e90717f"
     },
     {
       "path": "src/shared/ai-repo-model.test.ts",
@@ -10821,8 +10821,8 @@
     {
       "path": "src/shared/contracts.ts",
       "category": "source",
-      "bytes": 54906,
-      "sha256": "092c04394a31041fdda6d2d9cee59f2c2ecc596a68a28cd6605915f97b368ca1"
+      "bytes": 55064,
+      "sha256": "68cf2f8bb111f22970f46919411f0297f2bee98dd315df62d8f5eff0d8e467fb"
     },
     {
       "path": "src/shared/control-label-ambiguity.test.ts",
@@ -10905,8 +10905,8 @@
     {
       "path": "src/shared/daily-archive.ts",
       "category": "source",
-      "bytes": 13469,
-      "sha256": "4370051247b621a357738ed84e80c1be8699a7b1d6c86765db95a92be768f9cc"
+      "bytes": 13591,
+      "sha256": "df7913f8babdfc80607cba1d5ff5fe4f2d4c12e0bfbf15c16b132bc6a0ba3af7"
     },
     {
       "path": "src/shared/daily-determinism.test.ts",
@@ -11907,8 +11907,8 @@
     {
       "path": "src/shared/mechanics-encyclopedia.ts",
       "category": "source",
-      "bytes": 52463,
-      "sha256": "03260d7eb9a03d4540f38eca0053b93a20a2fef175db05bbaa234762f4ff56a9"
+      "bytes": 52691,
+      "sha256": "98866838e6d7cb405591c13ba432d33b1027b3369b44b40c60ae68f7fc2e419d"
     },
     {
       "path": "src/shared/memorize-phase-rules.test.ts",
@@ -12267,14 +12267,14 @@
     {
       "path": "src/shared/release-checklist.test.ts",
       "category": "test",
-      "bytes": 39323,
-      "sha256": "0773497d06fc26f7936a67c43c3e18766dcba294fdbdfaf9992973177ef8a41d"
+      "bytes": 40273,
+      "sha256": "01bb2a95d9cef65818d3352bb4dc5c073657f91e869cfad4e768289182a14fdf"
     },
     {
       "path": "src/shared/release-checklist.ts",
       "category": "source",
-      "bytes": 16509,
-      "sha256": "753eb9c5a8bfad32fc642efe68da025ab3f8c288b2b621424f6c72c565316cf1"
+      "bytes": 16836,
+      "sha256": "d6dd712bc432efdfcb65353770aa079d8f9b2f67fa36859912cabac713b7000b"
     },
     {
       "path": "src/shared/relic-favor-rules.test.ts",
@@ -12723,8 +12723,8 @@
     {
       "path": "src/shared/run-share-text.ts",
       "category": "source",
-      "bytes": 2416,
-      "sha256": "216388e3788cb387f116238a1fe45236b68d13d2af56fe6903197a3fad0831af"
+      "bytes": 2767,
+      "sha256": "8e8970e66dddf36225f9321a35b1f6bcaa8ecf887b6b371d879d7755e337e7d2"
     },
     {
       "path": "src/shared/run-summary-rules.test.ts",
@@ -12735,8 +12735,8 @@
     {
       "path": "src/shared/run-summary-rules.ts",
       "category": "source",
-      "bytes": 3775,
-      "sha256": "101eb09f6d016837898600a2f1f0c60c4014e4965817aa1416e0a559488dfce7"
+      "bytes": 3903,
+      "sha256": "a0e3920ec94a25e223ccd1cfd51b2b0e3e86adb2796a77b4161d4424a1a424b5"
     },
     {
       "path": "src/shared/run-timer-rules.test.ts",
@@ -12759,8 +12759,8 @@
     {
       "path": "src/shared/save-data.ts",
       "category": "source",
-      "bytes": 39017,
-      "sha256": "2c460efdf460afacde7ff2da7014b2fa78ed5c0909d6e9fc7eef024cbb41a33a"
+      "bytes": 39162,
+      "sha256": "fa37a8333059b128cf61b1cfbb5347c7ef4da423af09845cdfced7da8591943d"
     },
     {
       "path": "src/shared/save-field-policy.test.ts",
@@ -12957,8 +12957,8 @@
     {
       "path": "src/shared/steam-achievement-api-names.ts",
       "category": "source",
-      "bytes": 1815,
-      "sha256": "e24f07156e201e867c899244f5ace11f76ebc87dc861caef2c8c9f43ebe38c0e"
+      "bytes": 1861,
+      "sha256": "71cda3d3e982234c872627e250b4c34d4bf2fb1f7a8c9c9383b2845dca0952f1"
     },
     {
       "path": "src/shared/steam-partner-config.test.ts",
@@ -21652,7 +21652,7 @@
       "path": "src/renderer/copy/chainBeat.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 84,
+      "lineCount": 81,
       "imports": [
         "file:src/shared/chain-tier-rules.ts"
       ],
@@ -25168,7 +25168,7 @@
       "path": "src/shared/achievement-reachability.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 124,
+      "lineCount": 142,
       "imports": [
         "file:src/shared/achievements.ts",
         "file:src/shared/builtin-puzzles.ts",
@@ -25205,7 +25205,7 @@
       "path": "src/shared/achievements.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 137,
+      "lineCount": 141,
       "imports": [
         "file:src/shared/builtin-puzzles.ts",
         "file:src/shared/contracts.ts",
@@ -25223,6 +25223,7 @@
         "symbol:src/shared/achievements.ts#AchievementProgressRow",
         "symbol:src/shared/achievements.ts#AchievementProgressSummary",
         "symbol:src/shared/achievements.ts#ACHIEVEMENTS",
+        "symbol:src/shared/achievements.ts#CHAIN_REACTION_WAVES",
         "symbol:src/shared/achievements.ts#CHUNK_SIX_PAIRS",
         "symbol:src/shared/achievements.ts#evaluateAchievementUnlocks",
         "symbol:src/shared/achievements.ts#getAchievementProgressRows",
@@ -25232,6 +25233,7 @@
         "file:src/shared/achievement-reachability.test.ts",
         "file:src/shared/achievements.test.ts",
         "file:src/shared/mechanics-catalog-appendix-builder.test.ts",
+        "file:src/shared/release-checklist.test.ts",
         "file:src/shared/steam-partner-config.test.ts"
       ]
     },
@@ -26707,7 +26709,7 @@
       "path": "src/shared/contracts.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1380,
+      "lineCount": 1383,
       "imports": [],
       "exports": [
         "symbol:src/shared/contracts.ts#AchievementId",
@@ -27287,7 +27289,7 @@
       "path": "src/shared/daily-archive.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 325,
+      "lineCount": 327,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/run-number-guards.ts",
@@ -31089,7 +31091,7 @@
       "path": "src/shared/mechanics-encyclopedia.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1060,
+      "lineCount": 1065,
       "imports": [
         "file:src/shared/contracts.ts"
       ],
@@ -32309,7 +32311,7 @@
       "path": "src/shared/release-checklist.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 696,
+      "lineCount": 710,
       "imports": [
         "file:src/main/crash-log.ts",
         "file:src/main/save-recovery.ts",
@@ -32320,6 +32322,7 @@
         "file:src/renderer/copy/passAndPlay.ts",
         "file:src/renderer/copy/saveRecoveryNotice.ts",
         "file:src/renderer/diagnostics/rendererErrorHooks.ts",
+        "file:src/shared/achievements.ts",
         "file:src/shared/cascade-balance-simulation.ts",
         "file:src/shared/chunk-break-rules.ts",
         "file:src/shared/content-security-policy.ts",
@@ -32354,7 +32357,7 @@
       "path": "src/shared/release-checklist.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 438,
+      "lineCount": 445,
       "imports": [],
       "exports": [
         "symbol:src/shared/release-checklist.ts#RELEASE_CHECKLIST",
@@ -33965,7 +33968,7 @@
       "path": "src/shared/run-share-text.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 49,
+      "lineCount": 52,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/run-mode-identity.ts",
@@ -34004,7 +34007,7 @@
       "path": "src/shared/run-summary-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 78,
+      "lineCount": 79,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/gameplay-journal.ts",
@@ -34088,7 +34091,7 @@
       "path": "src/shared/save-data.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 928,
+      "lineCount": 931,
       "imports": [
         "file:src/shared/chain-tier-rules.ts",
         "file:src/shared/contracts.ts",
@@ -34862,7 +34865,7 @@
       "path": "src/shared/steam-achievement-api-names.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 39,
+      "lineCount": 40,
       "imports": [
         "file:src/shared/contracts.ts"
       ],
@@ -42742,7 +42745,7 @@
       "kind": "value",
       "file": "src/renderer/copy/chainBeat.ts",
       "line": 20,
-      "endLine": 83
+      "endLine": 80
     },
     {
       "id": "symbol:src/renderer/copy/chainBeat.ts#CHAIN_STYLE_LONG_SPAN",
@@ -46501,8 +46504,8 @@
       "name": "ACHIEVEMENT_BY_ID",
       "kind": "value",
       "file": "src/shared/achievements.ts",
-      "line": 17,
-      "endLine": 17
+      "line": 20,
+      "endLine": 20
     },
     {
       "id": "symbol:src/shared/achievements.ts#AchievementDefinition",
@@ -46517,24 +46520,32 @@
       "name": "AchievementProgressRow",
       "kind": "interface",
       "file": "src/shared/achievements.ts",
-      "line": 21,
-      "endLine": 24
+      "line": 24,
+      "endLine": 27
     },
     {
       "id": "symbol:src/shared/achievements.ts#AchievementProgressSummary",
       "name": "AchievementProgressSummary",
       "kind": "interface",
       "file": "src/shared/achievements.ts",
-      "line": 26,
-      "endLine": 29
+      "line": 29,
+      "endLine": 32
     },
     {
       "id": "symbol:src/shared/achievements.ts#ACHIEVEMENTS",
       "name": "ACHIEVEMENTS",
       "kind": "value",
       "file": "src/shared/achievements.ts",
-      "line": 19,
-      "endLine": 19
+      "line": 22,
+      "endLine": 22
+    },
+    {
+      "id": "symbol:src/shared/achievements.ts#CHAIN_REACTION_WAVES",
+      "name": "CHAIN_REACTION_WAVES",
+      "kind": "value",
+      "file": "src/shared/achievements.ts",
+      "line": 17,
+      "endLine": 17
     },
     {
       "id": "symbol:src/shared/achievements.ts#CHUNK_SIX_PAIRS",
@@ -46549,24 +46560,24 @@
       "name": "evaluateAchievementUnlocks",
       "kind": "value",
       "file": "src/shared/achievements.ts",
-      "line": 44,
-      "endLine": 136
+      "line": 47,
+      "endLine": 140
     },
     {
       "id": "symbol:src/shared/achievements.ts#getAchievementProgressRows",
       "name": "getAchievementProgressRows",
       "kind": "value",
       "file": "src/shared/achievements.ts",
-      "line": 31,
-      "endLine": 34
+      "line": 34,
+      "endLine": 37
     },
     {
       "id": "symbol:src/shared/achievements.ts#getAchievementProgressSummary",
       "name": "getAchievementProgressSummary",
       "kind": "value",
       "file": "src/shared/achievements.ts",
-      "line": 36,
-      "endLine": 42
+      "line": 39,
+      "endLine": 45
     },
     {
       "id": "symbol:src/shared/balance-simulation.ts#assertBalanceSimulationWithinBaseline",
@@ -49126,63 +49137,63 @@
       "kind": "type",
       "file": "src/shared/contracts.ts",
       "line": 333,
-      "endLine": 363
+      "endLine": 364
     },
     {
       "id": "symbol:src/shared/contracts.ts#AchievementState",
       "name": "AchievementState",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1248,
-      "endLine": 1248
+      "line": 1251,
+      "endLine": 1251
     },
     {
       "id": "symbol:src/shared/contracts.ts#AchievementUnlockResult",
       "name": "AchievementUnlockResult",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1327,
-      "endLine": 1329
+      "line": 1330,
+      "endLine": 1332
     },
     {
       "id": "symbol:src/shared/contracts.ts#BoardPresentationMode",
       "name": "BoardPresentationMode",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 372,
-      "endLine": 372
+      "line": 373,
+      "endLine": 373
     },
     {
       "id": "symbol:src/shared/contracts.ts#BoardScreenSpaceAA",
       "name": "BoardScreenSpaceAA",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 386,
-      "endLine": 386
+      "line": 387,
+      "endLine": 387
     },
     {
       "id": "symbol:src/shared/contracts.ts#BoardState",
       "name": "BoardState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 497,
-      "endLine": 544
+      "line": 498,
+      "endLine": 545
     },
     {
       "id": "symbol:src/shared/contracts.ts#BonusRewardId",
       "name": "BonusRewardId",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 850,
-      "endLine": 863
+      "line": 851,
+      "endLine": 864
     },
     {
       "id": "symbol:src/shared/contracts.ts#BonusRewardLedger",
       "name": "BonusRewardLedger",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 872,
-      "endLine": 877
+      "line": 873,
+      "endLine": 878
     },
     {
       "id": "symbol:src/shared/contracts.ts#BOSS_FLOOR_SCORE_MULTIPLIER",
@@ -49205,8 +49216,8 @@
       "name": "CameraViewportModePreference",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 379,
-      "endLine": 379
+      "line": 380,
+      "endLine": 380
     },
     {
       "id": "symbol:src/shared/contracts.ts#CATALYST_ALTAR_FALLBACK_SCORE_REWARD",
@@ -49261,8 +49272,8 @@
       "name": "CrashReportSummary",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1335,
-      "endLine": 1340
+      "line": 1338,
+      "endLine": 1343
     },
     {
       "id": "symbol:src/shared/contracts.ts#CURSED_LAST_BONUS_SCORE",
@@ -49285,8 +49296,8 @@
       "name": "DebugFlags",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 365,
-      "endLine": 369
+      "line": 366,
+      "endLine": 370
     },
     {
       "id": "symbol:src/shared/contracts.ts#DEFAULT_PAIR_COUNT_CAP",
@@ -49301,8 +49312,8 @@
       "name": "DesktopApi",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1353,
-      "endLine": 1379
+      "line": 1356,
+      "endLine": 1382
     },
     {
       "id": "symbol:src/shared/contracts.ts#DisplayMode",
@@ -49317,96 +49328,96 @@
       "name": "DungeonBossId",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 677,
-      "endLine": 677
+      "line": 678,
+      "endLine": 678
     },
     {
       "id": "symbol:src/shared/contracts.ts#DungeonCardEffectId",
       "name": "DungeonCardEffectId",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 735,
-      "endLine": 773
+      "line": 736,
+      "endLine": 774
     },
     {
       "id": "symbol:src/shared/contracts.ts#DungeonCardKind",
       "name": "DungeonCardKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 653,
-      "endLine": 664
+      "line": 654,
+      "endLine": 665
     },
     {
       "id": "symbol:src/shared/contracts.ts#DungeonCardState",
       "name": "DungeonCardState",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 676,
-      "endLine": 676
+      "line": 677,
+      "endLine": 677
     },
     {
       "id": "symbol:src/shared/contracts.ts#DungeonExitLockKind",
       "name": "DungeonExitLockKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 652,
-      "endLine": 652
+      "line": 653,
+      "endLine": 653
     },
     {
       "id": "symbol:src/shared/contracts.ts#DungeonFloorBlueprint",
       "name": "DungeonFloorBlueprint",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 703,
-      "endLine": 734
+      "line": 704,
+      "endLine": 735
     },
     {
       "id": "symbol:src/shared/contracts.ts#DungeonKeyKind",
       "name": "DungeonKeyKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 651,
-      "endLine": 651
+      "line": 652,
+      "endLine": 652
     },
     {
       "id": "symbol:src/shared/contracts.ts#DungeonObjectiveId",
       "name": "DungeonObjectiveId",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 694,
-      "endLine": 702
+      "line": 695,
+      "endLine": 703
     },
     {
       "id": "symbol:src/shared/contracts.ts#DungeonRunMapState",
       "name": "DungeonRunMapState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 840,
-      "endLine": 848
+      "line": 841,
+      "endLine": 849
     },
     {
       "id": "symbol:src/shared/contracts.ts#DungeonRunNode",
       "name": "DungeonRunNode",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 818,
-      "endLine": 838
+      "line": 819,
+      "endLine": 839
     },
     {
       "id": "symbol:src/shared/contracts.ts#DungeonRunNodeKind",
       "name": "DungeonRunNodeKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 805,
-      "endLine": 815
+      "line": 806,
+      "endLine": 816
     },
     {
       "id": "symbol:src/shared/contracts.ts#DungeonRunNodeStatus",
       "name": "DungeonRunNodeStatus",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 816,
-      "endLine": 816
+      "line": 817,
+      "endLine": 817
     },
     {
       "id": "symbol:src/shared/contracts.ts#ENDLESS_RISK_WAGER_BONUS_FAVOR",
@@ -49445,32 +49456,32 @@
       "name": "EnemyHazardKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 678,
-      "endLine": 678
+      "line": 679,
+      "endLine": 679
     },
     {
       "id": "symbol:src/shared/contracts.ts#EnemyHazardPattern",
       "name": "EnemyHazardPattern",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 679,
-      "endLine": 679
+      "line": 680,
+      "endLine": 680
     },
     {
       "id": "symbol:src/shared/contracts.ts#EnemyHazardState",
       "name": "EnemyHazardState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 681,
-      "endLine": 693
+      "line": 682,
+      "endLine": 694
     },
     {
       "id": "symbol:src/shared/contracts.ts#EnemyHazardStateKind",
       "name": "EnemyHazardStateKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 680,
-      "endLine": 680
+      "line": 681,
+      "endLine": 681
     },
     {
       "id": "symbol:src/shared/contracts.ts#FEATURED_OBJECTIVE_STREAK_BONUS_MAX",
@@ -49573,16 +49584,16 @@
       "name": "FloorArchetypeId",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 484,
-      "endLine": 495
+      "line": 485,
+      "endLine": 496
     },
     {
       "id": "symbol:src/shared/contracts.ts#FloorTag",
       "name": "FloorTag",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 483,
-      "endLine": 483
+      "line": 484,
+      "endLine": 484
     },
     {
       "id": "symbol:src/shared/contracts.ts#FUSE_CACHE_EXPIRED_SHOP_GOLD_REWARD",
@@ -49637,16 +49648,16 @@
       "name": "GameplayCommandJournalEntry",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 954,
-      "endLine": 958
+      "line": 957,
+      "endLine": 961
     },
     {
       "id": "symbol:src/shared/contracts.ts#GameplayEventJournalEntry",
       "name": "GameplayEventJournalEntry",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 960,
-      "endLine": 970
+      "line": 963,
+      "endLine": 973
     },
     {
       "id": "symbol:src/shared/contracts.ts#GAUNTLET_FLOOR_CLEAR_TIME_BONUS_MS",
@@ -49669,16 +49680,16 @@
       "name": "GraphicsQualityPreset",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 389,
-      "endLine": 389
+      "line": 390,
+      "endLine": 390
     },
     {
       "id": "symbol:src/shared/contracts.ts#HazardTileKind",
       "name": "HazardTileKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 665,
-      "endLine": 665
+      "line": 666,
+      "endLine": 666
     },
     {
       "id": "symbol:src/shared/contracts.ts#INITIAL_LIVES",
@@ -49717,8 +49728,8 @@
       "name": "LevelResult",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 568,
-      "endLine": 629
+      "line": 569,
+      "endLine": 630
     },
     {
       "id": "symbol:src/shared/contracts.ts#LOADED_GATEWAY_SCORE_REWARD",
@@ -49901,16 +49912,16 @@
       "name": "PassAndPlaySeat",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 984,
-      "endLine": 996
+      "line": 987,
+      "endLine": 999
     },
     {
       "id": "symbol:src/shared/contracts.ts#PassAndPlayState",
       "name": "PassAndPlayState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 998,
-      "endLine": 1011
+      "line": 1001,
+      "endLine": 1014
     },
     {
       "id": "symbol:src/shared/contracts.ts#PIN_LATTICE_SCORE_REWARD",
@@ -49925,8 +49936,8 @@
       "name": "PlayerStatsPersisted",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1250,
-      "endLine": 1272
+      "line": 1253,
+      "endLine": 1275
     },
     {
       "id": "symbol:src/shared/contracts.ts#PuzzleCompletionRecord",
@@ -50029,16 +50040,16 @@
       "name": "RendererErrorKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1343,
-      "endLine": 1343
+      "line": 1346,
+      "endLine": 1346
     },
     {
       "id": "symbol:src/shared/contracts.ts#RendererErrorReport",
       "name": "RendererErrorReport",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1346,
-      "endLine": 1351
+      "line": 1349,
+      "endLine": 1354
     },
     {
       "id": "symbol:src/shared/contracts.ts#RESOLVE_DELAY_MULTIPLIER_MIN",
@@ -50061,112 +50072,112 @@
       "name": "RewardPerkId",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 865,
-      "endLine": 870
+      "line": 866,
+      "endLine": 871
     },
     {
       "id": "symbol:src/shared/contracts.ts#RichPresenceState",
       "name": "RichPresenceState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1320,
-      "endLine": 1324
+      "line": 1323,
+      "endLine": 1327
     },
     {
       "id": "symbol:src/shared/contracts.ts#RichPresenceToken",
       "name": "RichPresenceToken",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1318,
-      "endLine": 1318
+      "line": 1321,
+      "endLine": 1321
     },
     {
       "id": "symbol:src/shared/contracts.ts#RouteCardKind",
       "name": "RouteCardKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 632,
-      "endLine": 632
+      "line": 633,
+      "endLine": 633
     },
     {
       "id": "symbol:src/shared/contracts.ts#RouteCardPlan",
       "name": "RouteCardPlan",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 789,
-      "endLine": 794
+      "line": 790,
+      "endLine": 795
     },
     {
       "id": "symbol:src/shared/contracts.ts#RouteChoice",
       "name": "RouteChoice",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 796,
-      "endLine": 803
+      "line": 797,
+      "endLine": 804
     },
     {
       "id": "symbol:src/shared/contracts.ts#RouteNodeType",
       "name": "RouteNodeType",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 631,
-      "endLine": 631
+      "line": 632,
+      "endLine": 632
     },
     {
       "id": "symbol:src/shared/contracts.ts#RouteSideRoomChoiceState",
       "name": "RouteSideRoomChoiceState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 881,
-      "endLine": 894
+      "line": 882,
+      "endLine": 895
     },
     {
       "id": "symbol:src/shared/contracts.ts#RouteSideRoomKind",
       "name": "RouteSideRoomKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 879,
-      "endLine": 879
+      "line": 880,
+      "endLine": 880
     },
     {
       "id": "symbol:src/shared/contracts.ts#RouteSideRoomState",
       "name": "RouteSideRoomState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 896,
-      "endLine": 912
+      "line": 897,
+      "endLine": 913
     },
     {
       "id": "symbol:src/shared/contracts.ts#RouteSpecialKind",
       "name": "RouteSpecialKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 633,
-      "endLine": 649
+      "line": 634,
+      "endLine": 650
     },
     {
       "id": "symbol:src/shared/contracts.ts#RouteWorldIntensity",
       "name": "RouteWorldIntensity",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 650,
-      "endLine": 650
+      "line": 651,
+      "endLine": 651
     },
     {
       "id": "symbol:src/shared/contracts.ts#RouteWorldProfile",
       "name": "RouteWorldProfile",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 775,
-      "endLine": 787
+      "line": 776,
+      "endLine": 788
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunHistoryRecord",
       "name": "RunHistoryRecord",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1279,
-      "endLine": 1291
+      "line": 1282,
+      "endLine": 1294
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunShopItemCategory",
@@ -50205,8 +50216,8 @@
       "name": "RunState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1013,
-      "endLine": 1246
+      "line": 1016,
+      "endLine": 1249
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunStatus",
@@ -50221,16 +50232,16 @@
       "name": "RunSummary",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 914,
-      "endLine": 952
+      "line": 915,
+      "endLine": 955
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunTimerState",
       "name": "RunTimerState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 972,
-      "endLine": 978
+      "line": 975,
+      "endLine": 981
     },
     {
       "id": "symbol:src/shared/contracts.ts#SAVE_SCHEMA_VERSION",
@@ -50245,8 +50256,8 @@
       "name": "SaveData",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1293,
-      "endLine": 1312
+      "line": 1296,
+      "endLine": 1315
     },
     {
       "id": "symbol:src/shared/contracts.ts#SCHOLAR_STYLE_FLOOR_BONUS_SCORE",
@@ -50261,16 +50272,16 @@
       "name": "SessionStats",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 546,
-      "endLine": 566
+      "line": 547,
+      "endLine": 567
     },
     {
       "id": "symbol:src/shared/contracts.ts#Settings",
       "name": "Settings",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 391,
-      "endLine": 426
+      "line": 392,
+      "endLine": 427
     },
     {
       "id": "symbol:src/shared/contracts.ts#SHIFTING_BOUNTY_MATCH_BONUS",
@@ -50309,8 +50320,8 @@
       "name": "Tile",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 428,
-      "endLine": 481
+      "line": 429,
+      "endLine": 482
     },
     {
       "id": "symbol:src/shared/contracts.ts#TileState",
@@ -50333,8 +50344,8 @@
       "name": "TileTraitKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 666,
-      "endLine": 675
+      "line": 667,
+      "endLine": 676
     },
     {
       "id": "symbol:src/shared/contracts.ts#TOLL_CACHE_MATCH_SCORE_TOLL",
@@ -50669,24 +50680,24 @@
       "name": "buildDailyArchiveShareString",
       "kind": "value",
       "file": "src/shared/daily-archive.ts",
-      "line": 205,
-      "endLine": 218
+      "line": 207,
+      "endLine": 220
     },
     {
       "id": "symbol:src/shared/daily-archive.ts#buildDailyResultsLoopRows",
       "name": "buildDailyResultsLoopRows",
       "kind": "value",
       "file": "src/shared/daily-archive.ts",
-      "line": 234,
-      "endLine": 266
+      "line": 236,
+      "endLine": 268
     },
     {
       "id": "symbol:src/shared/daily-archive.ts#buildDailyResultsShareString",
       "name": "buildDailyResultsShareString",
       "kind": "value",
       "file": "src/shared/daily-archive.ts",
-      "line": 220,
-      "endLine": 232
+      "line": 222,
+      "endLine": 234
     },
     {
       "id": "symbol:src/shared/daily-archive.ts#dailyArchiveDateKeyForTimestamp",
@@ -50765,24 +50776,24 @@
       "name": "getDailyResultsLoopRows",
       "kind": "value",
       "file": "src/shared/daily-archive.ts",
-      "line": 268,
-      "endLine": 268
+      "line": 270,
+      "endLine": 270
     },
     {
       "id": "symbol:src/shared/daily-archive.ts#getDailyStreakEthicsRow",
       "name": "getDailyStreakEthicsRow",
       "kind": "value",
       "file": "src/shared/daily-archive.ts",
-      "line": 309,
-      "endLine": 324
+      "line": 311,
+      "endLine": 326
     },
     {
       "id": "symbol:src/shared/daily-archive.ts#getDailyStreakEthicsRows",
       "name": "getDailyStreakEthicsRows",
       "kind": "value",
       "file": "src/shared/daily-archive.ts",
-      "line": 270,
-      "endLine": 307
+      "line": 272,
+      "endLine": 309
     },
     {
       "id": "symbol:src/shared/daily-archive.ts#seasonKeyForDaily",
@@ -58030,7 +58041,7 @@
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
       "line": 290,
-      "endLine": 419
+      "endLine": 424
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#AchievementCodexEntry",
@@ -58045,8 +58056,8 @@
       "name": "CODEX_CORE_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 669,
-      "endLine": 717
+      "line": 674,
+      "endLine": 722
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#CodexCoreTopic",
@@ -58061,48 +58072,48 @@
       "name": "ENCYCLOPEDIA_CONTRACT_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 1021,
-      "endLine": 1039
+      "line": 1026,
+      "endLine": 1044
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_FEATURED_RUN_TOPICS",
       "name": "ENCYCLOPEDIA_FEATURED_RUN_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 1042,
-      "endLine": 1059
+      "line": 1047,
+      "endLine": 1064
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS",
       "name": "ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 917,
-      "endLine": 1018
+      "line": 922,
+      "endLine": 1023
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_POWER_TOPICS",
       "name": "ENCYCLOPEDIA_POWER_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 720,
-      "endLine": 781
+      "line": 725,
+      "endLine": 786
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS",
       "name": "ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 786,
-      "endLine": 865
+      "line": 791,
+      "endLine": 870
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_SETTINGS_AND_ASSISTS_TOPICS",
       "name": "ENCYCLOPEDIA_SETTINGS_AND_ASSISTS_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 870,
-      "endLine": 914
+      "line": 875,
+      "endLine": 919
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_VERSION",
@@ -58125,8 +58136,8 @@
       "name": "GAME_MODE_CODEX",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 637,
-      "endLine": 666
+      "line": 642,
+      "endLine": 671
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#GameModeCodexEntry",
@@ -58173,8 +58184,8 @@
       "name": "MUTATOR_CATALOG",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 559,
-      "endLine": 635
+      "line": 564,
+      "endLine": 640
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#MutatorDefinition",
@@ -58189,8 +58200,8 @@
       "name": "RELIC_CATALOG",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 424,
-      "endLine": 554
+      "line": 429,
+      "endLine": 559
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#RelicDefinition",
@@ -60006,15 +60017,15 @@
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
       "line": 32,
-      "endLine": 390
+      "endLine": 397
     },
     {
       "id": "symbol:src/shared/release-checklist.ts#releaseChecklistByOwner",
       "name": "releaseChecklistByOwner",
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
-      "line": 396,
-      "endLine": 397
+      "line": 403,
+      "endLine": 404
     },
     {
       "id": "symbol:src/shared/release-checklist.ts#ReleaseChecklistItem",
@@ -60037,16 +60048,16 @@
       "name": "releaseChecklistSections",
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
-      "line": 392,
-      "endLine": 394
+      "line": 399,
+      "endLine": 401
     },
     {
       "id": "symbol:src/shared/release-checklist.ts#renderReleaseChecklistMarkdown",
       "name": "renderReleaseChecklistMarkdown",
       "kind": "value",
       "file": "src/shared/release-checklist.ts",
-      "line": 411,
-      "endLine": 437
+      "line": 418,
+      "endLine": 444
     },
     {
       "id": "symbol:src/shared/relic-favor-rules.ts#gainRelicFavor",
@@ -62846,7 +62857,7 @@
       "kind": "value",
       "file": "src/shared/run-share-text.ts",
       "line": 27,
-      "endLine": 48
+      "endLine": 51
     },
     {
       "id": "symbol:src/shared/run-share-text.ts#RunShareText",
@@ -62861,8 +62872,8 @@
       "name": "createGameOverRunSummary",
       "kind": "value",
       "file": "src/shared/run-summary-rules.ts",
-      "line": 59,
-      "endLine": 60
+      "line": 60,
+      "endLine": 61
     },
     {
       "id": "symbol:src/shared/run-summary-rules.ts#createRunSummary",
@@ -62870,15 +62881,15 @@
       "kind": "value",
       "file": "src/shared/run-summary-rules.ts",
       "line": 12,
-      "endLine": 52
+      "endLine": 53
     },
     {
       "id": "symbol:src/shared/run-summary-rules.ts#createValidatedGameOverRunSummary",
       "name": "createValidatedGameOverRunSummary",
       "kind": "value",
       "file": "src/shared/run-summary-rules.ts",
-      "line": 68,
-      "endLine": 77
+      "line": 69,
+      "endLine": 78
     },
     {
       "id": "symbol:src/shared/run-timer-rules.ts#clearResolveState",
@@ -62958,23 +62969,23 @@
       "kind": "value",
       "file": "src/shared/save-data.ts",
       "line": 98,
-      "endLine": 124
+      "endLine": 125
     },
     {
       "id": "symbol:src/shared/save-data.ts#createAchievementState",
       "name": "createAchievementState",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 126,
-      "endLine": 133
+      "line": 127,
+      "endLine": 134
     },
     {
       "id": "symbol:src/shared/save-data.ts#createDefaultSaveData",
       "name": "createDefaultSaveData",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 493,
-      "endLine": 505
+      "line": 496,
+      "endLine": 508
     },
     {
       "id": "symbol:src/shared/save-data.ts#DailyStreakEthicsState",
@@ -63005,152 +63016,152 @@
       "name": "getDailyStreakEthicsState",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 827,
-      "endLine": 859
+      "line": 830,
+      "endLine": 862
     },
     {
       "id": "symbol:src/shared/save-data.ts#getRelicPickCountRows",
       "name": "getRelicPickCountRows",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 249,
-      "endLine": 255
+      "line": 250,
+      "endLine": 256
     },
     {
       "id": "symbol:src/shared/save-data.ts#getRelicPickTotal",
       "name": "getRelicPickTotal",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 257,
-      "endLine": 258
+      "line": 258,
+      "endLine": 259
     },
     {
       "id": "symbol:src/shared/save-data.ts#mergeBestFloorNoPowers",
       "name": "mergeBestFloorNoPowers",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 895,
-      "endLine": 906
+      "line": 898,
+      "endLine": 909
     },
     {
       "id": "symbol:src/shared/save-data.ts#mergeChainFloorStats",
       "name": "mergeChainFloorStats",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 812,
-      "endLine": 825
+      "line": 815,
+      "endLine": 828
     },
     {
       "id": "symbol:src/shared/save-data.ts#mergeDailyComplete",
       "name": "mergeDailyComplete",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 780,
-      "endLine": 805
+      "line": 783,
+      "endLine": 808
     },
     {
       "id": "symbol:src/shared/save-data.ts#mergeEncoreFromRun",
       "name": "mergeEncoreFromRun",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 908,
-      "endLine": 915
+      "line": 911,
+      "endLine": 918
     },
     {
       "id": "symbol:src/shared/save-data.ts#mergePuzzleCompletion",
       "name": "mergePuzzleCompletion",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 861,
-      "endLine": 893
+      "line": 864,
+      "endLine": 896
     },
     {
       "id": "symbol:src/shared/save-data.ts#mergeRelicPickStat",
       "name": "mergeRelicPickStat",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 917,
-      "endLine": 927
+      "line": 920,
+      "endLine": 930
     },
     {
       "id": "symbol:src/shared/save-data.ts#metaRelicDraftExtraPerMilestoneFromSave",
       "name": "metaRelicDraftExtraPerMilestoneFromSave",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 490,
-      "endLine": 491
+      "line": 493,
+      "endLine": 494
     },
     {
       "id": "symbol:src/shared/save-data.ts#normalizeRunSummary",
       "name": "normalizeRunSummary",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 378,
-      "endLine": 487
+      "line": 379,
+      "endLine": 490
     },
     {
       "id": "symbol:src/shared/save-data.ts#normalizeSaveData",
       "name": "normalizeSaveData",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 692,
-      "endLine": 747
+      "line": 695,
+      "endLine": 750
     },
     {
       "id": "symbol:src/shared/save-data.ts#normalizeUnknownSaveData",
       "name": "normalizeUnknownSaveData",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 660,
-      "endLine": 663
+      "line": 663,
+      "endLine": 666
     },
     {
       "id": "symbol:src/shared/save-data.ts#normalizeUnknownSaveDataOrThrow",
       "name": "normalizeUnknownSaveDataOrThrow",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 665,
-      "endLine": 677
+      "line": 668,
+      "endLine": 680
     },
     {
       "id": "symbol:src/shared/save-data.ts#normalizeUnknownSettings",
       "name": "normalizeUnknownSettings",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 679,
-      "endLine": 682
+      "line": 682,
+      "endLine": 685
     },
     {
       "id": "symbol:src/shared/save-data.ts#normalizeUnknownSettingsOrThrow",
       "name": "normalizeUnknownSettingsOrThrow",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 684,
-      "endLine": 690
+      "line": 687,
+      "endLine": 693
     },
     {
       "id": "symbol:src/shared/save-data.ts#RelicPickCountRow",
       "name": "RelicPickCountRow",
       "kind": "interface",
       "file": "src/shared/save-data.ts",
-      "line": 244,
-      "endLine": 247
+      "line": 245,
+      "endLine": 248
     },
     {
       "id": "symbol:src/shared/save-data.ts#resolveDailyStreak",
       "name": "resolveDailyStreak",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 758,
-      "endLine": 778
+      "line": 761,
+      "endLine": 781
     },
     {
       "id": "symbol:src/shared/save-data.ts#saveDataBoundarySchema",
       "name": "saveDataBoundarySchema",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 537,
-      "endLine": 552
+      "line": 540,
+      "endLine": 555
     },
     {
       "id": "symbol:src/shared/save-data.ts#SETTINGS_NUMERIC_RANGES",
@@ -63165,8 +63176,8 @@
       "name": "settingsBoundarySchema",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 513,
-      "endLine": 533
+      "line": 516,
+      "endLine": 536
     },
     {
       "id": "symbol:src/shared/save-location.ts#formatSteamCloudRules",
@@ -64230,7 +64241,7 @@
       "kind": "value",
       "file": "src/shared/steam-achievement-api-names.ts",
       "line": 12,
-      "endLine": 38
+      "endLine": 39
     },
     {
       "id": "symbol:src/shared/steam-rich-presence-tokens.ts#RICH_PRESENCE_TOKEN_TEXT",
@@ -86059,6 +86070,12 @@
       "id": "exports:src/shared/achievements.ts->symbol:src/shared/achievements.ts#ACHIEVEMENTS",
       "source": "file:src/shared/achievements.ts",
       "target": "symbol:src/shared/achievements.ts#ACHIEVEMENTS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/achievements.ts->symbol:src/shared/achievements.ts#CHAIN_REACTION_WAVES",
+      "source": "file:src/shared/achievements.ts",
+      "target": "symbol:src/shared/achievements.ts#CHAIN_REACTION_WAVES",
       "kind": "exports"
     },
     {
@@ -120962,6 +120979,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/release-checklist.test.ts->src/shared/achievements.ts",
+      "source": "file:src/shared/release-checklist.test.ts",
+      "target": "file:src/shared/achievements.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/release-checklist.test.ts->src/shared/cascade-balance-simulation.ts",
       "source": "file:src/shared/release-checklist.test.ts",
       "target": "file:src/shared/cascade-balance-simulation.ts",
@@ -133303,6 +133326,12 @@
       "id": "tested_by:src/shared/achievements.ts->file:src/shared/mechanics-catalog-appendix-builder.test.ts",
       "source": "file:src/shared/achievements.ts",
       "target": "file:src/shared/mechanics-catalog-appendix-builder.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/achievements.ts->file:src/shared/release-checklist.test.ts",
+      "source": "file:src/shared/achievements.ts",
+      "target": "file:src/shared/release-checklist.test.ts",
       "kind": "tested_by"
     },
     {

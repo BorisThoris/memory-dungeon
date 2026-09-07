@@ -23,6 +23,7 @@ import { isPassAndPlayFinalFloor, PASS_AND_PLAY_FLOORS, resolvePassAndPlayOutcom
 import { labelsAreAmbiguous } from '../../scripts/control-label-ambiguity';
 import { PLAYABLE_PATH_FIXTURE_IDS, createPlayablePathFixture } from './playable-path-fixtures';
 import { resolveChunkBreak } from './chunk-break-rules';
+import { CHAIN_REACTION_WAVES, evaluateAchievementUnlocks } from './achievements';
 import { EXIT_PAIR_KEY } from './dungeon-rules';
 import { makeBoard, makeTile } from './test/game-fixtures';
 import { assertCascadeBalanceWithinBands, runCascadeBalanceSimulation } from './cascade-balance-simulation';
@@ -171,6 +172,19 @@ const VERIFIERS: Record<string, () => void> = {
         const held = resolveChunkBreak({ board: withExit, run, matchedTileIds: ['A1', 'A2'], chain: 6 });
         expect(held.droppedPairKeys, 'a card with a job holds the suit').toEqual([]);
         expect(held.board.tiles.find((t) => t.pairKey === EXIT_PAIR_KEY)?.state).toBe('hidden');
+    },
+    'ripple-records': () => {
+        const run = createNewRun(0, { gameMode: 'endless', runSeed: 7 });
+        const rippled = createRunSummary({ ...run, bestRippleThisRun: 3, bestChainThisRun: 6 }, []);
+        expect(rippled.lastRunSummary).toMatchObject({ bestRipple: 3 });
+        expect(buildRunShareText(rippled).text, 'the run share posts the ripple').toContain('ripple ×3');
+        // One wave is every match ever made; the line stays quiet about it.
+        const popOnly = createRunSummary({ ...run, bestRippleThisRun: 1, bestChainThisRun: 2 }, []);
+        expect(buildRunShareText(popOnly).text).not.toContain('ripple');
+        expect(
+            evaluateAchievementUnlocks({ ...run, bestRippleThisRun: CHAIN_REACTION_WAVES }, createDefaultSaveData()),
+            'three waves earns Chain reaction'
+        ).toContain('ACH_CHAIN_REACTION');
     },
     'chain-in-daily-and-shared-play': () => {
         // The summary carries the chain's records, and both share strings read them.

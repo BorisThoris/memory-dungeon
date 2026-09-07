@@ -415,6 +415,11 @@ export const ACHIEVEMENT_CATALOG: Record<AchievementId, AchievementCodexEntry> =
         id: 'ACH_NOTHING_HELD_IT',
         title: 'Nothing held it',
         description: 'Watch a suit\'s last pairs drop with a break, without a match touching them.'
+    },
+    ACH_CHAIN_REACTION: {
+        id: 'ACH_CHAIN_REACTION',
+        title: 'Chain reaction',
+        description: 'Send a pop three waves deep: a partner across the board takes its own clump, and that one takes another.'
     }
 };
 

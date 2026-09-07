@@ -120,7 +120,8 @@ export const ACHIEVEMENT_IDS = [
     'ACH_CHUNK_SIX',
     'ACH_EXTREME_FEVER',
     'ACH_WARDEN_BY_CHUNK',
-    'ACH_NOTHING_HELD_IT'
+    'ACH_NOTHING_HELD_IT',
+    'ACH_CHAIN_REACTION'
 ] as const satisfies readonly AchievementId[];
 
 export const createAchievementState = (): AchievementState =>
@@ -438,6 +439,7 @@ export const normalizeRunSummary = (input: unknown): RunSummary | null => {
         value === undefined ? undefined : finiteNonNegativeInteger(value, Number.NaN);
     const biggestChunk = chainRecord(source.biggestChunk);
     const bestChain = chainRecord(source.bestChain);
+    const bestRipple = chainRecord(source.bestRipple);
     const sharpFloors = chainRecord(source.sharpFloors);
     const feverFloors = chainRecord(source.feverFloors);
 
@@ -454,6 +456,7 @@ export const normalizeRunSummary = (input: unknown): RunSummary | null => {
         perfectClears,
         ...(Number.isFinite(biggestChunk) ? { biggestChunk } : {}),
         ...(Number.isFinite(bestChain) ? { bestChain } : {}),
+        ...(Number.isFinite(bestRipple) ? { bestRipple } : {}),
         ...(Number.isFinite(sharpFloors) ? { sharpFloors } : {}),
         ...(Number.isFinite(feverFloors) ? { feverFloors } : {}),
         ...(Number.isFinite(runSeed) ? { runSeed } : {}),

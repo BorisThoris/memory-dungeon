@@ -18,19 +18,16 @@ export const CHAIN_TIER_LABELS: Readonly<Record<ChainTier, string>> = {
 export const CHAIN_STYLE_LONG_SPAN = 4;
 
 export const CHAIN_BEAT_COPY = {
-    /** The run line, one sentence, has to carry size and cause. A break with no chain behind it is the pop. */
-    chunkLine: (pairs: number, tier: ChainTier): string =>
-        tier === 'none'
-            ? `Pop: ${pairs} ${pairs === 1 ? 'pair' : 'pairs'} went with that match.`
-            : `${CHAIN_TIER_LABELS[tier]} break: ${pairs} ${pairs === 1 ? 'pair' : 'pairs'} went with that match.`,
-    /** Spoken to a screen reader, where the shatter wave is invisible. */
+    /**
+     * The break's line: the one the feedback rail shows and a screen reader speaks, so it has to
+     * carry size and cause in one sentence. A break with no chain behind it is the pop.
+     */
     chunkAnnouncement: (pairs: number, tier: ChainTier, chain: number): string =>
         tier === 'none'
             ? `Pop. ${pairs} ${pairs === 1 ? 'pair' : 'pairs'} of the same suit touching that match broke away and left the board.`
             : `Chain ${chain}, ${CHAIN_TIER_LABELS[tier]} break. ${pairs} more ${
                   pairs === 1 ? 'pair' : 'pairs'
               } of the same suit broke away with that match and left the board.`,
-    feverLine: 'Fever. The whole clump went.',
     /** The clump read on a focused tile: what it stands in, and what a match there pops. */
     clumpRead: (suitName: string, size: number, pairsSharpWouldTake: number): string =>
         `${suitName} clump of ${size}` +

@@ -195,9 +195,11 @@ export const getDailyArchiveRows = (save: SaveData, nowMs: number = Date.now()):
 const dailyChainSuffix = (last: NonNullable<SaveData['lastRunSummary']>): string => {
     const bestChain = runNonNegativeInteger(last.bestChain);
     const feverFloors = runNonNegativeInteger(last.feverFloors);
+    const bestRipple = runNonNegativeInteger(last.bestRipple);
     const parts = [
         bestChain > 0 ? `best chain ×${bestChain}` : null,
-        feverFloors > 0 ? `Fever on ${feverFloors} floor(s)` : null
+        feverFloors > 0 ? `Fever on ${feverFloors} floor(s)` : null,
+        bestRipple >= 2 ? `ripple ×${bestRipple}` : null
     ].filter((part): part is string => part !== null);
     return parts.length === 0 ? '' : ` · ${parts.join(' · ')}`;
 };

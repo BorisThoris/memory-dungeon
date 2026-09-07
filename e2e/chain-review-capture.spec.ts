@@ -1,7 +1,12 @@
 import { expect, test, type Page } from '@playwright/test';
 import { openPlayablePathFixture } from './playablePathHelpers';
 import { dismissStartupIntro } from './startupIntroHelpers';
-import { readTileClientRectAtGrid, waitForBoardPlayPhase } from './tileBoardGameFlow';
+import {
+    flipTileAtGridCellKeyboard,
+    readPairTileCells,
+    readTileClientRectAtGrid,
+    waitForBoardPlayPhase
+} from './tileBoardGameFlow';
 import { buildVisualSaveJson, gotoWithSave, mainMenuPlayButton } from './visualScreenHelpers';
 
 /*
@@ -41,6 +46,35 @@ test.describe('chain review captures', () => {
             await page.screenshot({ path: `${OUT}/board-clump-read-${viewport.id}.png` });
         });
     }
+
+    /*
+     * The brief's own frame: the board before the first match, and the board a beat after it, on
+     * the same fixture. Between the two, a clump the player never touched is gone — that is the
+     * pop, live, with no chain behind it. The third frame is a later turn, where the chain has
+     * bought the ripple and the run line names it.
+     */
+    test('the pop on the first match, and the run line after it', async ({ page }) => {
+        await page.setViewportSize({ width: 1280, height: 800 });
+        await openPlayablePathFixture(page, 'cascadeClump');
+        await waitForBoardPlayPhase(page);
+        await page.screenshot({ path: `${OUT}/pop-before.png` });
+
+        const byPair = new Map<string, [number, number][]>();
+        for (const tile of await readPairTileCells(page)) {
+            byPair.set(tile.pairKey, [...(byPair.get(tile.pairKey) ?? []), tile.cell]);
+        }
+        const pair = [...byPair.values()].find((cells) => cells.length >= 2);
+        expect(pair, 'the fixture offered a pair to match').toBeTruthy();
+        const [first, second] = pair as [[number, number], [number, number]];
+        await flipTileAtGridCellKeyboard(page, first[0], first[1]);
+        await page.waitForTimeout(220);
+        await flipTileAtGridCellKeyboard(page, second[0], second[1]);
+        // Mid-shatter: the wave is still spreading, which is the frame worth looking at.
+        await page.waitForTimeout(320);
+        await page.screenshot({ path: `${OUT}/pop-during.png` });
+        await page.waitForTimeout(900);
+        await page.screenshot({ path: `${OUT}/pop-after.png` });
+    });
 
     test('the floor-clear dialog on a phone', async ({ page }) => {
         await page.setViewportSize({ width: 390, height: 844 });

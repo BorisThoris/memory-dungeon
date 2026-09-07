@@ -13,6 +13,9 @@ export type AchievementDefinition = AchievementCodexEntry;
 /** Pairs one break has to take for Sixfold: a Fever halo on a clumped board does it (see the reachability test). */
 export const CHUNK_SIX_PAIRS = 6;
 
+/** A ripple worth an achievement: the pop, a partner's clump, and that partner's clump. */
+export const CHAIN_REACTION_WAVES = 3;
+
 /** Re-export encyclopedia copy (single source of truth). */
 export const ACHIEVEMENT_BY_ID: Record<AchievementId, AchievementDefinition> = ACHIEVEMENT_CATALOG;
 
@@ -131,6 +134,7 @@ export const evaluateAchievementUnlocks = (run: RunState, saveData: SaveData): A
     award('ACH_EXTREME_FEVER', run.lastLevelResult?.momentumBonusTier === 'fever');
     award('ACH_WARDEN_BY_CHUNK', runNonNegativeInteger(run.chunkWardenKills) >= 1);
     award('ACH_NOTHING_HELD_IT', runNonNegativeInteger(run.chunkDropsThisRun) >= 1);
+    award('ACH_CHAIN_REACTION', runNonNegativeInteger(run.bestRippleThisRun) >= CHAIN_REACTION_WAVES);
 
     return unlocked;
 };

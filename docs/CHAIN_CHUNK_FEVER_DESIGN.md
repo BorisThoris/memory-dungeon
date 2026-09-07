@@ -327,8 +327,8 @@ Where it is still thin: rippled floors are a minority. Early floors are one to t
 | Gen | Task | Why |
 |---|---|---|
 | **148** | A third island on boards of 32 tiles or more, and a treasure pair allowed to straddle. | §8.5's two levers for the ripple's frequency, both measurable with the sim before they ship. |
-| **149** | Records for the ripple: best ripple on the floor-clear recap, the run summary, the share line; an achievement at Ripple ×3, reachability-proven. | The counters exist (`bestRippleThisFloor`, `bestRippleThisRun`); nothing shows them yet. |
-| **150** | The e2e chain-review capture of a pop on turn one and a ripple at Clean, on a fixture that lays islands. | The proof the brief asked for: *while we're playing*. |
+| ~~149~~ | ~~Records for the ripple~~ — **done in Gen 147**: `bestRipple` on the run summary and the persisted one, the run and daily share lines past one wave, and **Chain reaction** at three waves with a reachability proof. | |
+| ~~150~~ | ~~The e2e proof of the pop~~ — **done in Gen 147**: `cascade-chain.spec.ts` asserts the first match of a floor pops the clump it touches at chain one, and the review capture takes the board before, during and after that match. | |
 | **151** | The magpie play-through (task 114 / #156), now with a pop to steal from on turn one. | Carried. |
 | **152** | The phone board's stage band in portrait. | Carried. |
 | **153** | A per-wave sound: the answering pops across the board pitch a step above the pop. | The audio phrase is one rising line per pair; the ripple has no voice of its own yet. |

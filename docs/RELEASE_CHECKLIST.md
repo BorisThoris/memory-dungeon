@@ -28,6 +28,7 @@ achievement on the Partner site or shoot a trailer.
 | The cascade is tuned against a simulation with stated bands, and a chunk never moves a rating | done | the repository | `src/shared/cascade-balance-simulation.ts` |
 | Every match pops the same-suit clump touching it, live, with no chain behind it; a pair goes only when both halves touch, and the chain is what reaches a partner across the board and ripples through the islands | done | the repository | `src/shared/chunk-break-rules.ts` |
 | A Sharp or Fever break that leaves a suit with two plain pairs or fewer takes them too, and never a card with a job | done | the repository | `src/shared/chunk-break-rules.ts` |
+| The longest ripple a run reached is carried on the summary, posted on the run and daily share lines when it went past one wave, and earns Chain reaction at three | done | the repository | `src/shared/run-summary-rules.ts` |
 | The share line and the daily post name the best chain, the quest ladder asks for Sharp floors, and a shared table credits a chunk to the seat that broke it | done | the repository | `src/shared/pass-and-play-rules.ts` |
 
 ## Steamworks
