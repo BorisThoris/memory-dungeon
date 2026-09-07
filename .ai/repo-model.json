@@ -279,8 +279,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 256260,
-      "sha256": "5c9f23ad75c71476d482a57d33b9a267edffb10b0342e494a83c160ad651fcdd"
+      "bytes": 258278,
+      "sha256": "1fcd717a2921a17c55cdcbd1c895fd6c81134948b7976a438e037628f697ad1f"
     },
     {
       "path": "docs/BLUEPRINT_FRAMEWORK.md",
@@ -291,8 +291,8 @@
     {
       "path": "docs/CHAIN_CHUNK_FEVER_DESIGN.md",
       "category": "documentation",
-      "bytes": 58647,
-      "sha256": "9125d6eff7785318419abc938e87fbd8812eadadb95b47f45b66b5abd9bb6b13"
+      "bytes": 61832,
+      "sha256": "a16ca61dfa8b136e6a231eeefcae2678b1ca5a62a57b22f03f3abf07d6821fec"
     },
     {
       "path": "docs/COLLECTIBLE_SYSTEM.md",
@@ -778,7 +778,7 @@
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
       "bytes": 472,
-      "sha256": "0c8d627a015cf58074a7c5a118104cdda5b7f2d9d113804bff938ae8d6725318"
+      "sha256": "d09b771ada427c9a40c96eb428b1add335c6bec773eb32ca4daf7c5ca89064a5"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -2326,7 +2326,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 36715,
-      "sha256": "d89b94e044cb4ed679a5f6a20cf929a55001010cbd5a2abd048572e1fcf4e702"
+      "sha256": "ad54a0967aae373c6ba9bb478c48ae0f9a73ba6b056e2a5ce0b09f02e269739e"
     },
     {
       "path": "docs/UI_RETHINK_PLAN.md",
@@ -11091,8 +11091,8 @@
     {
       "path": "src/shared/dungeon-blueprint-policy-rules.ts",
       "category": "source",
-      "bytes": 10635,
-      "sha256": "2062d640dd95de842d47ad637437a56065925adaaf308c284ff8b7bfedb6967e"
+      "bytes": 11456,
+      "sha256": "ecb279707124d1eecd31e91f1e180557ea7fec4b60a377d667b7e69e2bc8b5f7"
     },
     {
       "path": "src/shared/dungeon-board-generation-rules.test.ts",
@@ -13137,8 +13137,8 @@
     {
       "path": "src/shared/system-occupancy-simulation.test.ts",
       "category": "test",
-      "bytes": 3366,
-      "sha256": "3684b709158a0d6f820f0b1f8c2b96c88bd9766e123b25a0873d0161fb518e61"
+      "bytes": 3583,
+      "sha256": "00d6902c0b2f35c6a46f2a64e2c1d7c07250b5a46b2f966a26ee0d7a4c258b9e"
     },
     {
       "path": "src/shared/system-occupancy-simulation.ts",
@@ -27594,7 +27594,7 @@
       "path": "src/shared/dungeon-blueprint-policy-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 298,
+      "lineCount": 310,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/dungeon-encounter-context-rules.ts",
@@ -35132,7 +35132,7 @@
       "path": "src/shared/system-occupancy-simulation.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 80,
+      "lineCount": 82,
       "imports": [
         "file:src/shared/system-occupancy-simulation.ts"
       ],
@@ -51243,8 +51243,8 @@
       "name": "pairCapacityForDungeonEncounter",
       "kind": "value",
       "file": "src/shared/dungeon-blueprint-policy-rules.ts",
-      "line": 289,
-      "endLine": 297
+      "line": 301,
+      "endLine": 309
     },
     {
       "id": "symbol:src/shared/dungeon-blueprint-policy-rules.ts#primaryExitLockKindForFloor",

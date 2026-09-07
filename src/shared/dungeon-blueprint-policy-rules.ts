@@ -286,6 +286,18 @@ export const chooseRoomEffectsForFloor = (
     return effectId ? [effectId] : [];
 };
 
+/**
+ * Pairs the dungeon may occupy on a floor.
+ *
+ * This equals the floor's whole pair count, which means a key, a lever, a gateway or an enemy may
+ * take every pair on the board. Measured (`sim:pop`, `sim:occupancy`), that is why floors 2 to 6
+ * carry nought to two pairs a break can touch. Reserving a share for the loop was tried and
+ * measured: at 40% it gutted floor identity (an elite floor paid no reward at all), at 25% it
+ * lifted the pop rate on floors 3 to 6 by about a tenth and woke one silent system, at the cost
+ * of a long tail of floors losing the card their archetype is named for. It is worth doing and it
+ * is worth doing as its own change, with the recipe taught to cut optional content before
+ * identity. Until then the loop is served by the suit palette instead (`suitCountForPairs`).
+ */
 export const pairCapacityForDungeonEncounter = (
     level: number,
     floorTag: FloorTag,

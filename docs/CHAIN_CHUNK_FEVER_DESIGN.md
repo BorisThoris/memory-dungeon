@@ -379,14 +379,64 @@ Every layer had a unit test. The loop had a balance simulation. An end-to-end te
 
 `yarn sim:pop --check` asks it directly, per floor, on generated boards: floors 1 to 6 must pop on 45% of matches, every floor on 25%, and the whole span on 50%. `pop-reach-simulation.test.ts` gates the same bands in the suite. Both fail on the boards this section describes.
 
-## 11. Next batch
+## 11. The census: which systems ever happen
+
+Gen 148 fixed a rule that was correct, tested, documented and fired on nothing. What let that
+ship was not a missing test - the pop had unit tests, an e2e case and a design section. It was
+that every one of them ran against a board built to exercise it. The repo could prove a system was
+*reachable*; nothing asked whether it was ever *occupied* on a floor a player is dealt.
+
+`system-occupancy-simulation.ts` (`yarn sim:occupancy`) is that question, asked mechanically. It
+plays 120 generated floors and reads the run's own per-floor counters - twenty-nine of them, every
+counter that means "this happened to the player", none that mean "you have three left". A system
+that never moves its counter is silent, and silence is the finding.
+
+### 11.1 What it found
+
+Twelve systems fire on no floor at all: the drop, roaming-hazard hits, shuffle snares, mirror
+decoys, mimic caches, the magpie's theft, anchor seals, catalyst altars, parasite vessels, pin
+lattices, lantern wards, safe-hazard wards. One is thin: a break lands at Fever on 4% of floors
+against a 10% bar.
+
+Four of those twelve are route specials the census structurally cannot reach, because it plays
+floors rather than runs. That is a limit of the instrument, not a verdict on the systems, and it
+is its own task.
+
+The list is asserted exactly, as a ratchet. A system that goes quiet fails the test the moment it
+does; a system brought back to life fails it too. That is the only way a baseline like this ever
+shrinks rather than drifts.
+
+### 11.2 The reserve, measured and set down
+
+The obvious cause of most of the silence is that the dungeon's paired-card budget is the floor's
+whole pair count: on floors 2 to 6 a key, a lever, a gateway and an enemy can take every pair,
+leaving nought to two a break can touch. Reserving a share for the loop was implemented and
+measured twice, and shipped neither time. At 40% it lifted the pop rate on floors 3-6 by about a
+tenth and woke two silent systems, and gutted floor identity - an elite floor paid no reward, a
+treasure gallery held no treasure. At 25% it kept most of the gain and still cost a long tail of
+floors the card their archetype is named for.
+
+It is worth doing, with `capDungeonCardRecipeForBudget` taught to cut optional content before
+identity. The attempt also established the trap in that trim order: the order of the selected
+cards is the order they are laid on the board, so reordering it moves cards between slots even
+when nothing is cut. Taking keys first zeroed the locksmith build's master-key evidence across
+every seed, because the locks that build exists to buy a master key for are ones the recipe writes
+keyless on purpose. A keyless lock is content, not a softlock - a master key opens any of them,
+the exit included, and the shop sells one.
+
+## 12. Next batch
 
 | Gen | Task | Why |
 |---|---|---|
-| **149** | Reserve a share of each floor's pairs from the dungeon's paired-card budget, measured with `sim:pop` first and the dungeon's own audits second. | Floors 2 to 6 are still mostly furniture; the palette rule compensates rather than fixes. Attempted here and reverted: it broke the dungeon, route and simulation tests, which is a batch of its own. |
-| **150** | A third island on boards of 32 tiles or more, and a treasure pair allowed to straddle. | The ripple fires on 7% of floors; islands are what give it something to bridge. |
-| **151** | The floor's suits on the floor-clear recap, so a player learns the palette is growing with them. | One suit to four across the first eight floors is a difficulty curve nothing names. |
-| **152** | The magpie play-through (task 114 / #156). | Carried. |
-| **153** | The phone board's stage band in portrait. | Carried. |
-| **154** | First-run: the tutorial floor's first match is laid to pop. | The pop is the game's best moment and floor 1 now pops on half its matches; it should be all of them. |
-| **155** | Closing sweep over 143-154. | Sims, docs, gates, captures, push. |
+| **150** | Census the run, not just floors: route plans, side rooms, relic drafts. | Four of the twelve silences are route specials the floor-level census cannot reach, so a silence does not yet mean the game. |
+| **151** | The drop never fires in a real run. | It needs a Sharp or Fever break on a suit already down to two plain pairs; on a real floor the pop has usually taken them first. |
+| **152** | Fever reaches 4% of floors against a 10% bar. | The ladder was re-tuned for the pop's shorter floors; the census says it is still short of where the design wants it. |
+| **153** | Three hazard tiles never spring: shuffle snares, mirror decoys, mimic caches. | They are laid, but the floor ends before a player steps on them. |
+| **154** | Roaming hazards never land a hit, so their ward never absorbs one. | Two systems silent for one reason: the hazard's walk is slower than a floor now lasts. |
+| **155** | Put the occupancy census in `gate:systems`. | A ratchet nobody runs is a comment. |
+| **156** | Reserve plain pairs from the dungeon budget, properly. | §11.2: worth doing, with the recipe taught to cut optional content before identity and the build-strategy fixtures re-measured. |
+| **157** | The magpie play-through (task 114 / #156). | Carried. |
+
+Deferred from the batch set after Gen 142, still wanted, now behind the census: a third island on
+boards of 32 tiles or more; the floor's suits on the floor-clear recap; the tutorial floor's first
+match laid to pop.

@@ -10,8 +10,10 @@ import {
 /**
  * The census, gated as a ratchet.
  *
- * Twelve systems fire on no floor at all today. That is the finding, not a reason to skip the
- * check: the list below is a baseline to burn down, and it is asserted exactly. A system that
+ * Twelve systems fire on no floor at all today. Two of them - shuffle snares and the safe-hazard
+ * ward - come back the moment a floor keeps pairs back from the dungeon's budget, which was
+ * measured and is its own change (see `pairCapacityForDungeonEncounter`). That is the finding,
+ * not a reason to skip the check: the list below is a baseline to burn down, and it is asserted exactly. A system that
  * goes quiet fails this test the moment it does, and a system brought back to life fails it too,
  * which is the only way a list like this ever shrinks.
  */
