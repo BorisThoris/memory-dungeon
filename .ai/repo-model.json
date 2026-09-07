@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2609,
-    "codeFileCount": 1033,
-    "exportedSymbolCount": 3743,
+    "trackedFileCount": 2612,
+    "codeFileCount": 1035,
+    "exportedSymbolCount": 3751,
     "contentItemCount": 66,
     "mechanicCount": 140,
     "stateFieldCount": 149,
-    "relationshipCount": 11047
+    "relationshipCount": 11066
   },
   "inventory": [
     {
@@ -4023,8 +4023,8 @@
     {
       "path": "package.json",
       "category": "configuration",
-      "bytes": 32551,
-      "sha256": "070c0d4c0e18d876beb16b679d80a6db62e01d58149f686e03c3fd91dfd073e4"
+      "bytes": 32608,
+      "sha256": "9b42f29b1e12e39d2f4dd6f430f5e349ce32199ea7d52a32ec8be9fade706ff3"
     },
     {
       "path": "packages/notifications/package.json",
@@ -4907,6 +4907,12 @@
       "category": "script",
       "bytes": 2654,
       "sha256": "f6f5a40ea3935d99d912e0d4c8f49c429e1eb534ee0e99c4e8cf2b35ac1652e2"
+    },
+    {
+      "path": "scripts/sim-occupancy.ts",
+      "category": "script",
+      "bytes": 1313,
+      "sha256": "b5bc3e4d5b2784f6f2c2ec8638c755a4bb5063a4373a2faa4eead25acdb2f9b0"
     },
     {
       "path": "scripts/sim-pop.ts",
@@ -13127,6 +13133,18 @@
       "category": "test",
       "bytes": 7994,
       "sha256": "d392754366a9b190099654ecff48c0668b7facc3a4d750869aa135d90491da04"
+    },
+    {
+      "path": "src/shared/system-occupancy-simulation.test.ts",
+      "category": "test",
+      "bytes": 3366,
+      "sha256": "3684b709158a0d6f820f0b1f8c2b96c88bd9766e123b25a0873d0161fb518e61"
+    },
+    {
+      "path": "src/shared/system-occupancy-simulation.ts",
+      "category": "source",
+      "bytes": 11987,
+      "sha256": "cb6c991a7c9382a361184e408190266cc86fd868c31fe0bb65126ef3d94369ab"
     },
     {
       "path": "src/shared/telemetry.test.ts",
@@ -35108,6 +35126,49 @@
       "imports": [],
       "exports": [],
       "testedBy": []
+    },
+    {
+      "id": "file:src/shared/system-occupancy-simulation.test.ts",
+      "path": "src/shared/system-occupancy-simulation.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 80,
+      "imports": [
+        "file:src/shared/system-occupancy-simulation.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/shared/system-occupancy-simulation.ts",
+      "path": "src/shared/system-occupancy-simulation.ts",
+      "layer": "shared",
+      "role": "production",
+      "lineCount": 232,
+      "imports": [
+        "file:src/shared/board-generation.ts",
+        "file:src/shared/board-tile-generation-rules.ts",
+        "file:src/shared/contracts.ts",
+        "file:src/shared/floor-mutator-schedule.ts",
+        "file:src/shared/game.ts",
+        "file:src/shared/playthrough-solver-rules.ts",
+        "file:src/shared/rng.ts",
+        "file:src/shared/run-number-guards.ts",
+        "file:src/shared/tile-identity.ts"
+      ],
+      "exports": [
+        "symbol:src/shared/system-occupancy-simulation.ts#judgeSystemOccupancy",
+        "symbol:src/shared/system-occupancy-simulation.ts#OCCUPANCY_SEEDS",
+        "symbol:src/shared/system-occupancy-simulation.ts#simulateSystemOccupancy",
+        "symbol:src/shared/system-occupancy-simulation.ts#summarizeSystemOccupancy",
+        "symbol:src/shared/system-occupancy-simulation.ts#SYSTEM_OCCUPANCY_BANDS",
+        "symbol:src/shared/system-occupancy-simulation.ts#SYSTEM_OCCUPANCY_COUNTERS",
+        "symbol:src/shared/system-occupancy-simulation.ts#SystemOccupancyCounter",
+        "symbol:src/shared/system-occupancy-simulation.ts#SystemOccupancyReport"
+      ],
+      "testedBy": [
+        "file:src/shared/system-occupancy-simulation.test.ts"
+      ]
     },
     {
       "id": "file:src/shared/telemetry.test.ts",
@@ -64512,6 +64573,70 @@
       "file": "src/shared/steam-rich-presence-tokens.ts",
       "line": 14,
       "endLine": 20
+    },
+    {
+      "id": "symbol:src/shared/system-occupancy-simulation.ts#judgeSystemOccupancy",
+      "name": "judgeSystemOccupancy",
+      "kind": "value",
+      "file": "src/shared/system-occupancy-simulation.ts",
+      "line": 208,
+      "endLine": 222
+    },
+    {
+      "id": "symbol:src/shared/system-occupancy-simulation.ts#OCCUPANCY_SEEDS",
+      "name": "OCCUPANCY_SEEDS",
+      "kind": "value",
+      "file": "src/shared/system-occupancy-simulation.ts",
+      "line": 151,
+      "endLine": 151
+    },
+    {
+      "id": "symbol:src/shared/system-occupancy-simulation.ts#simulateSystemOccupancy",
+      "name": "simulateSystemOccupancy",
+      "kind": "value",
+      "file": "src/shared/system-occupancy-simulation.ts",
+      "line": 153,
+      "endLine": 195
+    },
+    {
+      "id": "symbol:src/shared/system-occupancy-simulation.ts#summarizeSystemOccupancy",
+      "name": "summarizeSystemOccupancy",
+      "kind": "value",
+      "file": "src/shared/system-occupancy-simulation.ts",
+      "line": 224,
+      "endLine": 231
+    },
+    {
+      "id": "symbol:src/shared/system-occupancy-simulation.ts#SYSTEM_OCCUPANCY_BANDS",
+      "name": "SYSTEM_OCCUPANCY_BANDS",
+      "kind": "value",
+      "file": "src/shared/system-occupancy-simulation.ts",
+      "line": 202,
+      "endLine": 206
+    },
+    {
+      "id": "symbol:src/shared/system-occupancy-simulation.ts#SYSTEM_OCCUPANCY_COUNTERS",
+      "name": "SYSTEM_OCCUPANCY_COUNTERS",
+      "kind": "value",
+      "file": "src/shared/system-occupancy-simulation.ts",
+      "line": 43,
+      "endLine": 72
+    },
+    {
+      "id": "symbol:src/shared/system-occupancy-simulation.ts#SystemOccupancyCounter",
+      "name": "SystemOccupancyCounter",
+      "kind": "interface",
+      "file": "src/shared/system-occupancy-simulation.ts",
+      "line": 29,
+      "endLine": 41
+    },
+    {
+      "id": "symbol:src/shared/system-occupancy-simulation.ts#SystemOccupancyReport",
+      "name": "SystemOccupancyReport",
+      "kind": "interface",
+      "file": "src/shared/system-occupancy-simulation.ts",
+      "line": 81,
+      "endLine": 93
     },
     {
       "id": "symbol:src/shared/telemetry.ts#classifyTelemetryEvent",
@@ -99681,6 +99806,54 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/system-occupancy-simulation.ts->symbol:src/shared/system-occupancy-simulation.ts#judgeSystemOccupancy",
+      "source": "file:src/shared/system-occupancy-simulation.ts",
+      "target": "symbol:src/shared/system-occupancy-simulation.ts#judgeSystemOccupancy",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/system-occupancy-simulation.ts->symbol:src/shared/system-occupancy-simulation.ts#OCCUPANCY_SEEDS",
+      "source": "file:src/shared/system-occupancy-simulation.ts",
+      "target": "symbol:src/shared/system-occupancy-simulation.ts#OCCUPANCY_SEEDS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/system-occupancy-simulation.ts->symbol:src/shared/system-occupancy-simulation.ts#simulateSystemOccupancy",
+      "source": "file:src/shared/system-occupancy-simulation.ts",
+      "target": "symbol:src/shared/system-occupancy-simulation.ts#simulateSystemOccupancy",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/system-occupancy-simulation.ts->symbol:src/shared/system-occupancy-simulation.ts#summarizeSystemOccupancy",
+      "source": "file:src/shared/system-occupancy-simulation.ts",
+      "target": "symbol:src/shared/system-occupancy-simulation.ts#summarizeSystemOccupancy",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/system-occupancy-simulation.ts->symbol:src/shared/system-occupancy-simulation.ts#SYSTEM_OCCUPANCY_BANDS",
+      "source": "file:src/shared/system-occupancy-simulation.ts",
+      "target": "symbol:src/shared/system-occupancy-simulation.ts#SYSTEM_OCCUPANCY_BANDS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/system-occupancy-simulation.ts->symbol:src/shared/system-occupancy-simulation.ts#SYSTEM_OCCUPANCY_COUNTERS",
+      "source": "file:src/shared/system-occupancy-simulation.ts",
+      "target": "symbol:src/shared/system-occupancy-simulation.ts#SYSTEM_OCCUPANCY_COUNTERS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/system-occupancy-simulation.ts->symbol:src/shared/system-occupancy-simulation.ts#SystemOccupancyCounter",
+      "source": "file:src/shared/system-occupancy-simulation.ts",
+      "target": "symbol:src/shared/system-occupancy-simulation.ts#SystemOccupancyCounter",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/system-occupancy-simulation.ts->symbol:src/shared/system-occupancy-simulation.ts#SystemOccupancyReport",
+      "source": "file:src/shared/system-occupancy-simulation.ts",
+      "target": "symbol:src/shared/system-occupancy-simulation.ts#SystemOccupancyReport",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/telemetry.ts->symbol:src/shared/telemetry.ts#classifyTelemetryEvent",
       "source": "file:src/shared/telemetry.ts",
       "target": "symbol:src/shared/telemetry.ts#classifyTelemetryEvent",
@@ -124033,6 +124206,66 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/system-occupancy-simulation.test.ts->src/shared/system-occupancy-simulation.ts",
+      "source": "file:src/shared/system-occupancy-simulation.test.ts",
+      "target": "file:src/shared/system-occupancy-simulation.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/system-occupancy-simulation.ts->src/shared/board-generation.ts",
+      "source": "file:src/shared/system-occupancy-simulation.ts",
+      "target": "file:src/shared/board-generation.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/system-occupancy-simulation.ts->src/shared/board-tile-generation-rules.ts",
+      "source": "file:src/shared/system-occupancy-simulation.ts",
+      "target": "file:src/shared/board-tile-generation-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/system-occupancy-simulation.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/system-occupancy-simulation.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/system-occupancy-simulation.ts->src/shared/floor-mutator-schedule.ts",
+      "source": "file:src/shared/system-occupancy-simulation.ts",
+      "target": "file:src/shared/floor-mutator-schedule.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/system-occupancy-simulation.ts->src/shared/game.ts",
+      "source": "file:src/shared/system-occupancy-simulation.ts",
+      "target": "file:src/shared/game.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/system-occupancy-simulation.ts->src/shared/playthrough-solver-rules.ts",
+      "source": "file:src/shared/system-occupancy-simulation.ts",
+      "target": "file:src/shared/playthrough-solver-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/system-occupancy-simulation.ts->src/shared/rng.ts",
+      "source": "file:src/shared/system-occupancy-simulation.ts",
+      "target": "file:src/shared/rng.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/system-occupancy-simulation.ts->src/shared/run-number-guards.ts",
+      "source": "file:src/shared/system-occupancy-simulation.ts",
+      "target": "file:src/shared/run-number-guards.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/system-occupancy-simulation.ts->src/shared/tile-identity.ts",
+      "source": "file:src/shared/system-occupancy-simulation.ts",
+      "target": "file:src/shared/tile-identity.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/telemetry.test.ts->src/shared/telemetry.ts",
       "source": "file:src/shared/telemetry.test.ts",
       "target": "file:src/shared/telemetry.ts",
@@ -138654,6 +138887,12 @@
       "id": "tested_by:src/shared/steam-rich-presence-tokens.ts->file:src/shared/steam-partner-config.test.ts",
       "source": "file:src/shared/steam-rich-presence-tokens.ts",
       "target": "file:src/shared/steam-partner-config.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/system-occupancy-simulation.ts->file:src/shared/system-occupancy-simulation.test.ts",
+      "source": "file:src/shared/system-occupancy-simulation.ts",
+      "target": "file:src/shared/system-occupancy-simulation.test.ts",
       "kind": "tested_by"
     },
     {

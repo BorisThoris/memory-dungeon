@@ -77,6 +77,7 @@
         "sim:endless": "tsx scripts/sim-endless.ts",
         "sim:cascade": "tsx scripts/sim-cascade.ts",
         "sim:pop": "tsx scripts/sim-pop.ts",
+        "sim:occupancy": "tsx scripts/sim-occupancy.ts",
         "test": "vitest run --maxWorkers=2",
         "test:gameplay:properties": "vitest run src/shared/gameplay-property-invariants.test.ts src/shared/puzzle-import.test.ts --testTimeout=10000",
         "test:gameplay:properties:long": "cross-env GAMEPLAY_PROPERTY_RUNS=1000 vitest run src/shared/gameplay-property-invariants.test.ts src/shared/puzzle-import.test.ts --testTimeout=30000",
