@@ -3,7 +3,7 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2613,
+    "trackedFileCount": 2614,
     "codeFileCount": 1035,
     "exportedSymbolCount": 3751,
     "contentItemCount": 66,
@@ -2285,6 +2285,12 @@
       "category": "documentation",
       "bytes": 8727,
       "sha256": "25581f649eeb2bed72af7b40421ac72a6d7fb3e87d73bf11ee4929f46df9bac4"
+    },
+    {
+      "path": "docs/RESEARCH_PLAN.md",
+      "category": "documentation",
+      "bytes": 3382,
+      "sha256": "348521f5157934761043c039e75ec9fb88c4a05e9bcf8ec7f45bf5309cc1ed93"
     },
     {
       "path": "docs/research/RESEARCH_LOG.md",
