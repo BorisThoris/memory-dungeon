@@ -6,6 +6,7 @@ import {
     type FindableKind,
     type RunState
 } from './contracts';
+import { chunkBreakMomentumPairs } from './chunk-break-rules';
 import { clearFinalPairEnemyHazardOccupationForRun } from './enemy-hazard-board-rules';
 import { isBoardComplete } from './board-inspection';
 import { DECOY_PAIR_KEY, WILD_PAIR_KEY } from './tile-identity';
@@ -299,7 +300,7 @@ export const createResolveBoardTurnTransition = ({
                 chainAfter: scoring.currentStreak,
                 chunkWardensDefeated: chunkBreak.enemiesDefeated,
                 chunkDroppedPairs: chunkBreak.droppedPairKeys.length,
-                chunkMomentumPairs: chunkBreak.brokenPairKeys.length,
+                chunkMomentumPairs: chunkBreakMomentumPairs(chunkBreak),
                 chunkRippleWaves: chunkBreak.waves,
                 fragileCacheClaimed,
                 tollCacheClaimed,
@@ -620,7 +621,7 @@ export const createResolveBoardTurnTransition = ({
                 chainAfter: scoring.currentStreak,
                 chunkWardensDefeated: chunkBreak.enemiesDefeated,
                 chunkDroppedPairs: chunkBreak.droppedPairKeys.length,
-                chunkMomentumPairs: chunkBreak.brokenPairKeys.length,
+                chunkMomentumPairs: chunkBreakMomentumPairs(chunkBreak),
                 chunkRippleWaves: chunkBreak.waves,
                 fragileCacheClaimed,
                 tollCacheClaimed,

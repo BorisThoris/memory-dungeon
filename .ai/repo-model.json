@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2606,
-    "codeFileCount": 1031,
-    "exportedSymbolCount": 3733,
+    "trackedFileCount": 2609,
+    "codeFileCount": 1033,
+    "exportedSymbolCount": 3743,
     "contentItemCount": 66,
     "mechanicCount": 140,
     "stateFieldCount": 149,
-    "relationshipCount": 11031
+    "relationshipCount": 11047
   },
   "inventory": [
     {
@@ -279,8 +279,8 @@
     {
       "path": "docs/BALANCE_NOTES.md",
       "category": "documentation",
-      "bytes": 254391,
-      "sha256": "dfb9696fb647b76a64d3e2a6eff34f6c638de94bfa93471f14fa3b5c9cf7ec3e"
+      "bytes": 256260,
+      "sha256": "5c9f23ad75c71476d482a57d33b9a267edffb10b0342e494a83c160ad651fcdd"
     },
     {
       "path": "docs/BLUEPRINT_FRAMEWORK.md",
@@ -291,8 +291,8 @@
     {
       "path": "docs/CHAIN_CHUNK_FEVER_DESIGN.md",
       "category": "documentation",
-      "bytes": 53960,
-      "sha256": "fe8dcfc84f7ff3c3fa24aa7432a70bdf9174c52fecb825e7b07b5f2e289baa07"
+      "bytes": 58647,
+      "sha256": "9125d6eff7785318419abc938e87fbd8812eadadb95b47f45b66b5abd9bb6b13"
     },
     {
       "path": "docs/COLLECTIBLE_SYSTEM.md",
@@ -778,7 +778,7 @@
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
       "bytes": 472,
-      "sha256": "4d5fea5b749ef07643feb38e713b73f728d011339cbe31240b1f640618e89395"
+      "sha256": "0c8d627a015cf58074a7c5a118104cdda5b7f2d9d113804bff938ae8d6725318"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -2326,7 +2326,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 36715,
-      "sha256": "210d415ac4974df5a7abec6007903f8ebe1114a213eacb4466d35aaa13b48a22"
+      "sha256": "d89b94e044cb4ed679a5f6a20cf929a55001010cbd5a2abd048572e1fcf4e702"
     },
     {
       "path": "docs/UI_RETHINK_PLAN.md",
@@ -4023,8 +4023,8 @@
     {
       "path": "package.json",
       "category": "configuration",
-      "bytes": 32506,
-      "sha256": "269b9ee0580d44c8388603ada75e5a5bceb75d4b998a258b4ee63503b0a36679"
+      "bytes": 32551,
+      "sha256": "070c0d4c0e18d876beb16b679d80a6db62e01d58149f686e03c3fd91dfd073e4"
     },
     {
       "path": "packages/notifications/package.json",
@@ -4907,6 +4907,12 @@
       "category": "script",
       "bytes": 2654,
       "sha256": "f6f5a40ea3935d99d912e0d4c8f49c429e1eb534ee0e99c4e8cf2b35ac1652e2"
+    },
+    {
+      "path": "scripts/sim-pop.ts",
+      "category": "script",
+      "bytes": 1014,
+      "sha256": "6e18de7eba2eea8e5bf737af8323beda6c4acf257e08b972dfc74d2778a35808"
     },
     {
       "path": "scripts/steam-cloud-config.ts",
@@ -10293,8 +10299,8 @@
     {
       "path": "src/renderer/store/useAppStore.test.ts",
       "category": "test",
-      "bytes": 108324,
-      "sha256": "bd96cae9a87deff6a9a2eaed6fc1b8e50bb6242ebe2ede6ae5fa006bbe91748a"
+      "bytes": 109012,
+      "sha256": "d85ba9de14d558cd61acce3672b9c27d478f8e09a11d09695e997c6579721cd1"
     },
     {
       "path": "src/renderer/store/useAppStore.ts",
@@ -10725,8 +10731,8 @@
     {
       "path": "src/shared/board-turn-transition.ts",
       "category": "source",
-      "bytes": 36614,
-      "sha256": "aed0499bb006b53eaab827a0506bcea85985af222c93d0b9e657ba8a342b1f7c"
+      "bytes": 36683,
+      "sha256": "9aaf69f581d70c2bf826a5b857c6350b6187dbd74faaf59aa3b78d1fc7244821"
     },
     {
       "path": "src/shared/bonus-rewards.test.ts",
@@ -10809,8 +10815,8 @@
     {
       "path": "src/shared/cascade-balance-simulation.ts",
       "category": "source",
-      "bytes": 20035,
-      "sha256": "a234a90267b5ae9e69bc8bea679ef2258032114d5c16acd7da3114f3c2d0b6bb"
+      "bytes": 21219,
+      "sha256": "e5ae0286442359c7d32ed19f73398ce02adf4c0479e9cba80cfad1acc11e2595"
     },
     {
       "path": "src/shared/chain-targets.test.ts",
@@ -10869,8 +10875,8 @@
     {
       "path": "src/shared/chunk-break-rules.ts",
       "category": "source",
-      "bytes": 22298,
-      "sha256": "47c636a47c34fd4d96256e3b8452b84bef8b0833313ab434bffa4e4632946a36"
+      "bytes": 23942,
+      "sha256": "2b4970df42ed23ffbff73db6bc267fe06b264c70d2cfbdb2b94842bc843ce677"
     },
     {
       "path": "src/shared/classic-run-setup.test.ts",
@@ -11625,8 +11631,8 @@
     {
       "path": "src/shared/game.test.ts",
       "category": "test",
-      "bytes": 380773,
-      "sha256": "f234f930fe282bfae7be97a220433833dce076f3feb3217108e422e1215d3409"
+      "bytes": 382240,
+      "sha256": "4ece71b75a148625fe46909a4961980202e16cd05320de42ad794ceb9a21100a"
     },
     {
       "path": "src/shared/game.ts",
@@ -12287,6 +12293,18 @@
       "category": "source",
       "bytes": 4877,
       "sha256": "d0d995464f2865af51fffbf2db3cdd4be2dab94eb7d391790883ac25a81ff0c8"
+    },
+    {
+      "path": "src/shared/pop-reach-simulation.test.ts",
+      "category": "test",
+      "bytes": 1786,
+      "sha256": "eef6b1dad7dfc957e7f0ffb4a86cb1a4ea6ca4fdbd45e2ab0339fbcc32fe0bb7"
+    },
+    {
+      "path": "src/shared/pop-reach-simulation.ts",
+      "category": "source",
+      "bytes": 6795,
+      "sha256": "4d687e86a4b8c485263d933a62d06437ac22e80cf4608a5e7fa63229aff93ba1"
     },
     {
       "path": "src/shared/power-verbs.test.ts",
@@ -13185,14 +13203,14 @@
     {
       "path": "src/shared/tile-suit-rules.test.ts",
       "category": "test",
-      "bytes": 10872,
-      "sha256": "74e123732879aee057dfe460cae3e3a6af68e16c812c64dd1a322d84c74f71ee"
+      "bytes": 11659,
+      "sha256": "2df215bf6f3f5650092c9cbc5da925766d415740932359baaa19a01de79e82d4"
     },
     {
       "path": "src/shared/tile-suit-rules.ts",
       "category": "source",
-      "bytes": 17814,
-      "sha256": "fc237989d92107ea68aa6c192f03b7ec52448ea3b9a3843a71b7aad897429a84"
+      "bytes": 19827,
+      "sha256": "59726e45183c2f7bd38220e1332155c5cd23994d3d58989109699d1ac94ed9fa"
     },
     {
       "path": "src/shared/tile-symbol-catalog.test.ts",
@@ -13305,8 +13323,8 @@
     {
       "path": "src/shared/turn-match-board-resolution-rules.test.ts",
       "category": "test",
-      "bytes": 4880,
-      "sha256": "1099591df97eea0ea14dab34803e525760edb219617e6dbcf8e94ca377264b5c"
+      "bytes": 5438,
+      "sha256": "d19e1aaebace94b6db87c26ef40a00b66b2d4a83fc0e4db901503edcb051ff8d"
     },
     {
       "path": "src/shared/turn-match-board-resolution-rules.ts",
@@ -24831,7 +24849,7 @@
       "path": "src/renderer/store/useAppStore.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 2672,
+      "lineCount": 2683,
       "imports": [
         "file:src/renderer/store/matchScorePop.ts",
         "file:src/renderer/store/useAppStore.ts",
@@ -25989,9 +26007,10 @@
       "path": "src/shared/board-turn-transition.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 759,
+      "lineCount": 760,
       "imports": [
         "file:src/shared/board-inspection.ts",
+        "file:src/shared/chunk-break-rules.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/enemy-hazard-board-rules.ts",
         "file:src/shared/gambit-match-rules.ts",
@@ -26335,7 +26354,7 @@
       "path": "src/shared/cascade-balance-simulation.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 425,
+      "lineCount": 444,
       "imports": [
         "file:src/shared/board-generation.ts",
         "file:src/shared/board-tile-generation-rules.ts",
@@ -26538,7 +26557,7 @@
       "path": "src/shared/chunk-break-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 468,
+      "lineCount": 494,
       "imports": [
         "file:src/shared/board-grid-dimensions.ts",
         "file:src/shared/chain-tier-rules.ts",
@@ -26554,6 +26573,7 @@
       "exports": [
         "symbol:src/shared/chunk-break-rules.ts#breakReachesPartners",
         "symbol:src/shared/chunk-break-rules.ts#chunkBreakComboShards",
+        "symbol:src/shared/chunk-break-rules.ts#chunkBreakMomentumPairs",
         "symbol:src/shared/chunk-break-rules.ts#ChunkBreakResult",
         "symbol:src/shared/chunk-break-rules.ts#chunkBreakScore",
         "symbol:src/shared/chunk-break-rules.ts#CLEAN_WAVES",
@@ -29509,7 +29529,7 @@
       "path": "src/shared/game.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 8803,
+      "lineCount": 8827,
       "imports": [
         "file:src/shared/board-generation.ts",
         "file:src/shared/board-powers.ts",
@@ -32080,6 +32100,43 @@
         "file:src/shared/gameplay-core-playthrough-solver.test.ts",
         "file:src/shared/gameplay-property-invariants.test.ts",
         "file:src/shared/playthrough-solver.test.ts"
+      ]
+    },
+    {
+      "id": "file:src/shared/pop-reach-simulation.test.ts",
+      "path": "src/shared/pop-reach-simulation.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 40,
+      "imports": [
+        "file:src/shared/pop-reach-simulation.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/shared/pop-reach-simulation.ts",
+      "path": "src/shared/pop-reach-simulation.ts",
+      "layer": "shared",
+      "role": "production",
+      "lineCount": 145,
+      "imports": [
+        "file:src/shared/board-build-rules.ts",
+        "file:src/shared/chunk-break-rules.ts",
+        "file:src/shared/contracts.ts"
+      ],
+      "exports": [
+        "symbol:src/shared/pop-reach-simulation.ts#judgePopReach",
+        "symbol:src/shared/pop-reach-simulation.ts#POP_REACH_BANDS",
+        "symbol:src/shared/pop-reach-simulation.ts#POP_REACH_SEEDS",
+        "symbol:src/shared/pop-reach-simulation.ts#PopReachFloorSample",
+        "symbol:src/shared/pop-reach-simulation.ts#PopReachLevelReport",
+        "symbol:src/shared/pop-reach-simulation.ts#PopReachReport",
+        "symbol:src/shared/pop-reach-simulation.ts#simulatePopReach",
+        "symbol:src/shared/pop-reach-simulation.ts#summarizePopReach"
+      ],
+      "testedBy": [
+        "file:src/shared/pop-reach-simulation.test.ts"
       ]
     },
     {
@@ -35322,7 +35379,7 @@
       "path": "src/shared/tile-suit-rules.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 212,
+      "lineCount": 223,
       "imports": [
         "file:src/shared/board-build-rules.ts",
         "file:src/shared/contracts.ts",
@@ -35339,7 +35396,7 @@
       "path": "src/shared/tile-suit-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 410,
+      "lineCount": 450,
       "imports": [
         "file:src/shared/board-grid-dimensions.ts",
         "file:src/shared/contracts.ts",
@@ -35361,6 +35418,7 @@
         "symbol:src/shared/tile-suit-rules.ts#SUIT_DEAL_PROFILE_BY_ARCHETYPE",
         "symbol:src/shared/tile-suit-rules.ts#SUIT_LENS_SUIT_COUNT",
         "symbol:src/shared/tile-suit-rules.ts#suitCountForDeal",
+        "symbol:src/shared/tile-suit-rules.ts#suitCountForPairs",
         "symbol:src/shared/tile-suit-rules.ts#SuitDealProfile",
         "symbol:src/shared/tile-suit-rules.ts#TILE_SUIT_CATALOG",
         "symbol:src/shared/tile-suit-rules.ts#TILE_SUITS",
@@ -35763,7 +35821,7 @@
       "path": "src/shared/turn-match-board-resolution-rules.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 122,
+      "lineCount": 128,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/match-claim-rules.ts",
@@ -47636,40 +47694,40 @@
       "name": "BoardTurnExecutionContext",
       "kind": "interface",
       "file": "src/shared/board-turn-transition.ts",
-      "line": 74,
-      "endLine": 84
+      "line": 75,
+      "endLine": 85
     },
     {
       "id": "symbol:src/shared/board-turn-transition.ts#BoardTurnFindableRewardResult",
       "name": "BoardTurnFindableRewardResult",
       "kind": "interface",
       "file": "src/shared/board-turn-transition.ts",
-      "line": 37,
-      "endLine": 45
+      "line": 38,
+      "endLine": 46
     },
     {
       "id": "symbol:src/shared/board-turn-transition.ts#BoardTurnTransitionDependencies",
       "name": "BoardTurnTransitionDependencies",
       "kind": "interface",
       "file": "src/shared/board-turn-transition.ts",
-      "line": 53,
-      "endLine": 72
+      "line": 54,
+      "endLine": 73
     },
     {
       "id": "symbol:src/shared/board-turn-transition.ts#BoardTurnWildMatchResult",
       "name": "BoardTurnWildMatchResult",
       "kind": "interface",
       "file": "src/shared/board-turn-transition.ts",
-      "line": 47,
-      "endLine": 51
+      "line": 48,
+      "endLine": 52
     },
     {
       "id": "symbol:src/shared/board-turn-transition.ts#createResolveBoardTurnTransition",
       "name": "createResolveBoardTurnTransition",
       "kind": "value",
       "file": "src/shared/board-turn-transition.ts",
-      "line": 89,
-      "endLine": 758
+      "line": 90,
+      "endLine": 759
     },
     {
       "id": "symbol:src/shared/bonus-rewards.ts#BONUS_REWARD_CATALOG",
@@ -48252,24 +48310,24 @@
       "name": "assertCascadeBalanceWithinBands",
       "kind": "value",
       "file": "src/shared/cascade-balance-simulation.ts",
-      "line": 365,
-      "endLine": 408
+      "line": 377,
+      "endLine": 427
     },
     {
       "id": "symbol:src/shared/cascade-balance-simulation.ts#CASCADE_BALANCE_BANDS",
       "name": "CASCADE_BALANCE_BANDS",
       "kind": "value",
       "file": "src/shared/cascade-balance-simulation.ts",
-      "line": 335,
-      "endLine": 352
+      "line": 336,
+      "endLine": 364
     },
     {
       "id": "symbol:src/shared/cascade-balance-simulation.ts#CASCADE_RELIC_BANDS",
       "name": "CASCADE_RELIC_BANDS",
       "kind": "value",
       "file": "src/shared/cascade-balance-simulation.ts",
-      "line": 360,
-      "endLine": 363
+      "line": 372,
+      "endLine": 375
     },
     {
       "id": "symbol:src/shared/cascade-balance-simulation.ts#CASCADE_RELIC_LOADOUT",
@@ -48293,7 +48351,7 @@
       "kind": "interface",
       "file": "src/shared/cascade-balance-simulation.ts",
       "line": 323,
-      "endLine": 333
+      "endLine": 334
     },
     {
       "id": "symbol:src/shared/cascade-balance-simulation.ts#CascadeBalanceFloorSample",
@@ -48348,8 +48406,8 @@
       "name": "summarizeCascadeBalance",
       "kind": "value",
       "file": "src/shared/cascade-balance-simulation.ts",
-      "line": 410,
-      "endLine": 424
+      "line": 429,
+      "endLine": 443
     },
     {
       "id": "symbol:src/shared/chain-targets.ts#ChainTargetBand",
@@ -48620,8 +48678,16 @@
       "name": "chunkBreakComboShards",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 254,
-      "endLine": 257
+      "line": 264,
+      "endLine": 267
+    },
+    {
+      "id": "symbol:src/shared/chunk-break-rules.ts#chunkBreakMomentumPairs",
+      "name": "chunkBreakMomentumPairs",
+      "kind": "value",
+      "file": "src/shared/chunk-break-rules.ts",
+      "line": 279,
+      "endLine": 283
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#ChunkBreakResult",
@@ -48636,8 +48702,8 @@
       "name": "chunkBreakScore",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 244,
-      "endLine": 251
+      "line": 254,
+      "endLine": 261
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#CLEAN_WAVES",
@@ -48660,8 +48726,8 @@
       "name": "findSuitRegion",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 184,
-      "endLine": 237
+      "line": 194,
+      "endLine": 247
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#MAGPIE_LEDGER_GOLD_MULTIPLIER",
@@ -48684,8 +48750,8 @@
       "name": "resolveChunkBreak",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 259,
-      "endLine": 467
+      "line": 285,
+      "endLine": 493
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#RIPPLE_MAX_LIFT",
@@ -48716,8 +48782,8 @@
       "name": "rippleLift",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 240,
-      "endLine": 241
+      "line": 250,
+      "endLine": 251
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#rippleWaves",
@@ -48732,40 +48798,40 @@
       "name": "SuitRegionOptions",
       "kind": "interface",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 167,
-      "endLine": 177
+      "line": 177,
+      "endLine": 187
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#tileBlocksChunk",
       "name": "tileBlocksChunk",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 164,
-      "endLine": 165
+      "line": 174,
+      "endLine": 175
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#tileCanBreakInChunk",
       "name": "tileCanBreakInChunk",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 125,
-      "endLine": 126
+      "line": 136,
+      "endLine": 136
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#tileIsChunkTreasure",
       "name": "tileIsChunkTreasure",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 129,
-      "endLine": 137
+      "line": 139,
+      "endLine": 147
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#tileIsPlainApartFromFindable",
       "name": "tileIsPlainApartFromFindable",
       "kind": "value",
       "file": "src/shared/chunk-break-rules.ts",
-      "line": 115,
-      "endLine": 122
+      "line": 132,
+      "endLine": 133
     },
     {
       "id": "symbol:src/shared/chunk-break-rules.ts#TUNING_FORK_EXTRA_WAVES",
@@ -59464,6 +59530,70 @@
       "endLine": 124
     },
     {
+      "id": "symbol:src/shared/pop-reach-simulation.ts#judgePopReach",
+      "name": "judgePopReach",
+      "kind": "value",
+      "file": "src/shared/pop-reach-simulation.ts",
+      "line": 113,
+      "endLine": 135
+    },
+    {
+      "id": "symbol:src/shared/pop-reach-simulation.ts#POP_REACH_BANDS",
+      "name": "POP_REACH_BANDS",
+      "kind": "value",
+      "file": "src/shared/pop-reach-simulation.ts",
+      "line": 103,
+      "endLine": 111
+    },
+    {
+      "id": "symbol:src/shared/pop-reach-simulation.ts#POP_REACH_SEEDS",
+      "name": "POP_REACH_SEEDS",
+      "kind": "value",
+      "file": "src/shared/pop-reach-simulation.ts",
+      "line": 47,
+      "endLine": 47
+    },
+    {
+      "id": "symbol:src/shared/pop-reach-simulation.ts#PopReachFloorSample",
+      "name": "PopReachFloorSample",
+      "kind": "interface",
+      "file": "src/shared/pop-reach-simulation.ts",
+      "line": 18,
+      "endLine": 29
+    },
+    {
+      "id": "symbol:src/shared/pop-reach-simulation.ts#PopReachLevelReport",
+      "name": "PopReachLevelReport",
+      "kind": "interface",
+      "file": "src/shared/pop-reach-simulation.ts",
+      "line": 31,
+      "endLine": 40
+    },
+    {
+      "id": "symbol:src/shared/pop-reach-simulation.ts#PopReachReport",
+      "name": "PopReachReport",
+      "kind": "interface",
+      "file": "src/shared/pop-reach-simulation.ts",
+      "line": 42,
+      "endLine": 45
+    },
+    {
+      "id": "symbol:src/shared/pop-reach-simulation.ts#simulatePopReach",
+      "name": "simulatePopReach",
+      "kind": "value",
+      "file": "src/shared/pop-reach-simulation.ts",
+      "line": 49,
+      "endLine": 96
+    },
+    {
+      "id": "symbol:src/shared/pop-reach-simulation.ts#summarizePopReach",
+      "name": "summarizePopReach",
+      "kind": "value",
+      "file": "src/shared/pop-reach-simulation.ts",
+      "line": 137,
+      "endLine": 144
+    },
+    {
       "id": "symbol:src/shared/power-verbs.ts#getPowerVerbRows",
       "name": "getPowerVerbRows",
       "kind": "value",
@@ -64724,8 +64854,8 @@
       "name": "dealBoardSuits",
       "kind": "value",
       "file": "src/shared/tile-suit-rules.ts",
-      "line": 336,
-      "endLine": 357
+      "line": 376,
+      "endLine": 397
     },
     {
       "id": "symbol:src/shared/tile-suit-rules.ts#dealTilesInClumps",
@@ -64780,16 +64910,16 @@
       "name": "largestHiddenSuitClump",
       "kind": "value",
       "file": "src/shared/tile-suit-rules.ts",
-      "line": 383,
-      "endLine": 409
+      "line": 423,
+      "endLine": 449
     },
     {
       "id": "symbol:src/shared/tile-suit-rules.ts#sameSuitNeighbourRate",
       "name": "sameSuitNeighbourRate",
       "kind": "value",
       "file": "src/shared/tile-suit-rules.ts",
-      "line": 363,
-      "endLine": 377
+      "line": 403,
+      "endLine": 417
     },
     {
       "id": "symbol:src/shared/tile-suit-rules.ts#scatterTiles",
@@ -64820,8 +64950,16 @@
       "name": "suitCountForDeal",
       "kind": "value",
       "file": "src/shared/tile-suit-rules.ts",
-      "line": 333,
-      "endLine": 334
+      "line": 367,
+      "endLine": 374
+    },
+    {
+      "id": "symbol:src/shared/tile-suit-rules.ts#suitCountForPairs",
+      "name": "suitCountForPairs",
+      "kind": "value",
+      "file": "src/shared/tile-suit-rules.ts",
+      "line": 364,
+      "endLine": 365
     },
     {
       "id": "symbol:src/shared/tile-suit-rules.ts#SuitDealProfile",
@@ -66862,7 +67000,7 @@
         },
         {
           "path": "src/shared/board-turn-transition.ts",
-          "line": 183
+          "line": 9
         },
         {
           "path": "src/renderer/copy/chainBeat.ts",
@@ -87669,6 +87807,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/chunk-break-rules.ts->symbol:src/shared/chunk-break-rules.ts#chunkBreakMomentumPairs",
+      "source": "file:src/shared/chunk-break-rules.ts",
+      "target": "symbol:src/shared/chunk-break-rules.ts#chunkBreakMomentumPairs",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/chunk-break-rules.ts->symbol:src/shared/chunk-break-rules.ts#ChunkBreakResult",
       "source": "file:src/shared/chunk-break-rules.ts",
       "target": "symbol:src/shared/chunk-break-rules.ts#ChunkBreakResult",
@@ -95799,6 +95943,54 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/pop-reach-simulation.ts->symbol:src/shared/pop-reach-simulation.ts#judgePopReach",
+      "source": "file:src/shared/pop-reach-simulation.ts",
+      "target": "symbol:src/shared/pop-reach-simulation.ts#judgePopReach",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/pop-reach-simulation.ts->symbol:src/shared/pop-reach-simulation.ts#POP_REACH_BANDS",
+      "source": "file:src/shared/pop-reach-simulation.ts",
+      "target": "symbol:src/shared/pop-reach-simulation.ts#POP_REACH_BANDS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/pop-reach-simulation.ts->symbol:src/shared/pop-reach-simulation.ts#POP_REACH_SEEDS",
+      "source": "file:src/shared/pop-reach-simulation.ts",
+      "target": "symbol:src/shared/pop-reach-simulation.ts#POP_REACH_SEEDS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/pop-reach-simulation.ts->symbol:src/shared/pop-reach-simulation.ts#PopReachFloorSample",
+      "source": "file:src/shared/pop-reach-simulation.ts",
+      "target": "symbol:src/shared/pop-reach-simulation.ts#PopReachFloorSample",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/pop-reach-simulation.ts->symbol:src/shared/pop-reach-simulation.ts#PopReachLevelReport",
+      "source": "file:src/shared/pop-reach-simulation.ts",
+      "target": "symbol:src/shared/pop-reach-simulation.ts#PopReachLevelReport",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/pop-reach-simulation.ts->symbol:src/shared/pop-reach-simulation.ts#PopReachReport",
+      "source": "file:src/shared/pop-reach-simulation.ts",
+      "target": "symbol:src/shared/pop-reach-simulation.ts#PopReachReport",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/pop-reach-simulation.ts->symbol:src/shared/pop-reach-simulation.ts#simulatePopReach",
+      "source": "file:src/shared/pop-reach-simulation.ts",
+      "target": "symbol:src/shared/pop-reach-simulation.ts#simulatePopReach",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/pop-reach-simulation.ts->symbol:src/shared/pop-reach-simulation.ts#summarizePopReach",
+      "source": "file:src/shared/pop-reach-simulation.ts",
+      "target": "symbol:src/shared/pop-reach-simulation.ts#summarizePopReach",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/power-verbs.ts->symbol:src/shared/power-verbs.ts#getPowerVerbRows",
       "source": "file:src/shared/power-verbs.ts",
       "target": "symbol:src/shared/power-verbs.ts#getPowerVerbRows",
@@ -99816,6 +100008,12 @@
       "id": "exports:src/shared/tile-suit-rules.ts->symbol:src/shared/tile-suit-rules.ts#suitCountForDeal",
       "source": "file:src/shared/tile-suit-rules.ts",
       "target": "symbol:src/shared/tile-suit-rules.ts#suitCountForDeal",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/tile-suit-rules.ts->symbol:src/shared/tile-suit-rules.ts#suitCountForPairs",
+      "source": "file:src/shared/tile-suit-rules.ts",
+      "target": "symbol:src/shared/tile-suit-rules.ts#suitCountForPairs",
       "kind": "exports"
     },
     {
@@ -114937,6 +115135,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/board-turn-transition.ts->src/shared/chunk-break-rules.ts",
+      "source": "file:src/shared/board-turn-transition.ts",
+      "target": "file:src/shared/chunk-break-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/board-turn-transition.ts->src/shared/contracts.ts",
       "source": "file:src/shared/board-turn-transition.ts",
       "target": "file:src/shared/contracts.ts",
@@ -120778,6 +120982,30 @@
       "id": "imports:src/shared/playthrough-solver.ts->src/shared/tile-identity.ts",
       "source": "file:src/shared/playthrough-solver.ts",
       "target": "file:src/shared/tile-identity.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/pop-reach-simulation.test.ts->src/shared/pop-reach-simulation.ts",
+      "source": "file:src/shared/pop-reach-simulation.test.ts",
+      "target": "file:src/shared/pop-reach-simulation.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/pop-reach-simulation.ts->src/shared/board-build-rules.ts",
+      "source": "file:src/shared/pop-reach-simulation.ts",
+      "target": "file:src/shared/board-build-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/pop-reach-simulation.ts->src/shared/chunk-break-rules.ts",
+      "source": "file:src/shared/pop-reach-simulation.ts",
+      "target": "file:src/shared/chunk-break-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/pop-reach-simulation.ts->src/shared/contracts.ts",
+      "source": "file:src/shared/pop-reach-simulation.ts",
+      "target": "file:src/shared/contracts.ts",
       "kind": "imports"
     },
     {
@@ -137046,6 +137274,12 @@
       "id": "tested_by:src/shared/playthrough-solver.ts->file:src/shared/playthrough-solver.test.ts",
       "source": "file:src/shared/playthrough-solver.ts",
       "target": "file:src/shared/playthrough-solver.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/pop-reach-simulation.ts->file:src/shared/pop-reach-simulation.test.ts",
+      "source": "file:src/shared/pop-reach-simulation.ts",
+      "target": "file:src/shared/pop-reach-simulation.test.ts",
       "kind": "tested_by"
     },
     {

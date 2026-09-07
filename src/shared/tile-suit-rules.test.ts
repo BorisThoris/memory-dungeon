@@ -112,11 +112,20 @@ describe('a built board', () => {
         }
     });
 
-    it('opens clumped, not scattered, on every floor big enough to have a map', () => {
-        // Floor one is two pairs and an exit, and floor three is ten tiles across four suits —
-        // there is no room for regions before the board reaches sixteen tiles. From there on,
-        // the built board has to beat a shuffle of its own tiles by a clear margin.
-        for (const level of [6, 10, 14, 18]) {
+    it('deals one suit while a floor is too small to carry a palette, so a match can always pop', () => {
+        // The palette grows with the floor's breakable pairs (`suitCountForPairs`). Early floors
+        // are three to seven pairs, most of them dungeon cards; four suits over them meant no two
+        // breakable pairs ever shared one and no match could pop. One suit is the floor's answer.
+        for (const level of [1, 2, 3, 4]) {
+            const board = buildBoard(level, { runSeed: 11, runRulesVersion: GAME_RULES_VERSION, gameMode: 'endless' });
+            expect(new Set(board.tiles.map((tile) => tile.suit)).size, `floor ${level}`).toBe(1);
+        }
+    });
+
+    it('opens clumped, not scattered, on every floor big enough to have a palette', () => {
+        // A floor dealt one suit reads as perfectly clumped and perfectly shuffled at once - the
+        // measure needs two suits to mean anything - so this starts where the palette does.
+        for (const level of [10, 14, 18]) {
             let clumped = 0;
             let uniform = 0;
             const seeds = [11, 12, 13, 14];
@@ -184,8 +193,10 @@ describe('the deal profile', () => {
         let clumped = 0;
         let scattered = 0;
         for (const runSeed of [21, 22, 23, 24]) {
-            const breather = buildBoard(10, { runSeed, runRulesVersion: GAME_RULES_VERSION, gameMode: 'endless', floorArchetypeId: 'breather' });
-            const rush = buildBoard(10, { runSeed, runRulesVersion: GAME_RULES_VERSION, gameMode: 'endless', floorArchetypeId: 'rush_recall' });
+            // Floor 14: deep enough that both archetypes carry more than one suit, which the
+            // measure needs (a one-suit floor reads as clumped and shuffled at the same time).
+            const breather = buildBoard(14, { runSeed, runRulesVersion: GAME_RULES_VERSION, gameMode: 'endless', floorArchetypeId: 'breather' });
+            const rush = buildBoard(14, { runSeed, runRulesVersion: GAME_RULES_VERSION, gameMode: 'endless', floorArchetypeId: 'rush_recall' });
             clumped += sameSuitNeighbourRate(breather);
             scattered += sameSuitNeighbourRate(rush);
         }

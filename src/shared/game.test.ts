@@ -1512,12 +1512,25 @@ describe('REG-017 route choices', () => {
     });
 
     it('plays generated enemy cards through reveal, active damage, attack, and defeat', () => {
-        const board = buildBoard(5, {
+        const generated = buildBoard(5, {
             runSeed: 172_501,
             runRulesVersion: GAME_RULES_VERSION,
             dungeonNodeKind: 'trap',
             gameMode: 'endless'
         });
+        /*
+         * Every match pops the clump it touches, and a break that reaches an enemy hits it for
+         * its size (design doc 2.6) - so on a one-suit floor the support match would kill this
+         * enemy before the step being tested. The enemy wears its own suit here, which puts it
+         * outside the pop's region and leaves the reveal-damage-attack-defeat beats one at a
+         * time. `chunk-break-dungeon-rules.test.ts` is where a break hitting an enemy is proved.
+         */
+        const board = {
+            ...generated,
+            tiles: generated.tiles.map((tile) =>
+                tile.dungeonCardKind === 'enemy' ? { ...tile, suit: 'bone' as const } : { ...tile, suit: 'ember' as const }
+            )
+        };
         const groups = new Map<string, Tile[]>();
         for (const tile of board.tiles) {
             const group = groups.get(tile.pairKey) ?? [];
@@ -2277,12 +2290,21 @@ describe('REG-017 route choices', () => {
     });
 
     it('removes generated enemies defeated by active chip damage from the board', () => {
-        const board = buildBoard(5, {
+        const generated = buildBoard(5, {
             runSeed: 172_700,
             runRulesVersion: GAME_RULES_VERSION,
             dungeonNodeKind: 'combat',
             gameMode: 'endless'
         });
+        // The enemy keeps its own suit so the support match's pop cannot reach it: a break that
+        // does reach an enemy kills it into the chunk's own ledger, and the chip path this test
+        // is named for would never run.
+        const board = {
+            ...generated,
+            tiles: generated.tiles.map((tile) =>
+                tile.dungeonCardKind === 'enemy' ? { ...tile, suit: 'bone' as const } : { ...tile, suit: 'ember' as const }
+            )
+        };
         const groups = new Map<string, Tile[]>();
         for (const tile of board.tiles) {
             const group = groups.get(tile.pairKey) ?? [];
@@ -2330,7 +2352,9 @@ describe('REG-017 route choices', () => {
                 .filter((tile) => tile.pairKey === enemyPair[0]!.pairKey)
                 .every((tile) => tile.state === 'removed' && tile.dungeonCardKind == null)
         ).toBe(true);
-        expect(resolved.board!.matchedPairs).toBe(run.board!.matchedPairs + 2);
+        // The match, the enemy it chipped down, and whatever the pop took with it: the count is a
+        // floor, not an equality, because every match now breaks the clump it touches.
+        expect(resolved.board!.matchedPairs).toBeGreaterThanOrEqual(run.board!.matchedPairs + 2);
         expect(inspectBoardFairness(resolved.board!).issues.map((issue) => issue.code)).not.toContain(
             'matched_pairs_counter_mismatch'
         );
@@ -5031,11 +5055,11 @@ describe('dungeon cards', () => {
             source: 'floor_clear_shop',
             itemIds: ['heal_life', 'peek_charge', 'region_shuffle_charge', 'destroy_charge', 'iron_key']
         });
-        // The board vendor reads the floor it stands on: this seed's floor carries a dangerous trait
-        // pair, so a cleanse leads the stock and the master key still closes it.
+        // The board vendor reads the floor it stands on: this seed's floor wants routing help and a
+        // way through a pair, so the routing kit leads the stock and the master key still closes it.
         expect(getRunShopStockPlan(boardRun)).toMatchObject({
             source: 'board_shop',
-            itemIds: ['trait_cleanse', 'trait_routing_kit', 'heal_life', 'peek_charge', 'region_shuffle_charge', 'master_key']
+            itemIds: ['trait_routing_kit', 'heal_life', 'peek_charge', 'region_shuffle_charge', 'destroy_charge', 'master_key']
         });
         expect(getRunShopStockPlan(boardRun)).toEqual(getRunShopStockPlan({ ...boardRun, board: { ...board } }));
         expect(getRunShopReadModel(floorShopRun)).toMatchObject({

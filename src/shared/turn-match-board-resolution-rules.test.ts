@@ -19,14 +19,20 @@ describe('resolveTurnMatchBoardResolution', () => {
         const run = createNewRun(0);
         const [first, second] = firstPair(run.board!);
         const third = run.board!.tiles.find((tile) => tile.pairKey !== first.pairKey)!;
+        // The third tile's pair wears another suit, so the match's pop cannot take it: what this
+        // test is about is the gambit tile going back to hidden, not what the break reaches.
         const board = {
             ...run.board!,
             flippedTileIds: [first.id, second.id, third.id],
-            tiles: run.board!.tiles.map((tile) =>
-                tile.id === first.id || tile.id === second.id || tile.id === third.id
-                    ? { ...tile, state: 'flipped' as const }
-                    : tile
-            )
+            tiles: run.board!.tiles.map((tile) => {
+                // Only the matched pair wears its suit, so its pop reaches nothing: what this test
+                // is about is the gambit tile going back to hidden, not what a break takes.
+                const suited =
+                    tile.pairKey === first.pairKey ? { ...tile, suit: 'ember' as const } : { ...tile, suit: 'bone' as const };
+                return tile.id === first.id || tile.id === second.id || tile.id === third.id
+                    ? { ...suited, state: 'flipped' as const }
+                    : suited;
+            })
         };
         const context = deriveMatchClaimContext({
             firstTile: first,

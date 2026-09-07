@@ -488,7 +488,6 @@ describe('useAppStore timers', () => {
         useAppStore.getState().pressTile(matchingTile!.id);
 
         const matchedRun = useAppStore.getState().run;
-        expect(matchedRun?.status).toBe('playing');
         expect(matchedRun?.board).not.toBeNull();
         const matchedBoard = matchedRun?.board;
 
@@ -496,14 +495,26 @@ describe('useAppStore timers', () => {
             throw new Error('Expected board to exist after immediate match resolution.');
         }
 
+        // The match itself resolves in the same press, which is what this test is about.
         expect(matchedBoard.flippedTileIds).toHaveLength(0);
         expect(matchedBoard.tiles.find((tile) => tile.id === firstTile!.id)?.state).toBe('matched');
         expect(matchedBoard.tiles.find((tile) => tile.id === matchingTile!.id)?.state).toBe('matched');
 
-        useAppStore.getState().pressTile(nextPairTile!.id);
-        const runAfterNextPress = useAppStore.getState().run;
-        expect(runAfterNextPress?.board).not.toBeNull();
-        expect(runAfterNextPress?.board?.flippedTileIds).toContain(nextPairTile!.id);
+        /*
+         * Floor one is two pairs of one suit, so the match's pop can take the other pair and end
+         * the floor there and then. Either way the turn resolved without waiting: if the floor is
+         * still open the next tile flips on the next press, and if it is not, nothing is left to
+         * flip because the break took it.
+         */
+        if (matchedRun?.status === 'playing') {
+            useAppStore.getState().pressTile(nextPairTile!.id);
+            const runAfterNextPress = useAppStore.getState().run;
+            expect(runAfterNextPress?.board).not.toBeNull();
+            expect(runAfterNextPress?.board?.flippedTileIds).toContain(nextPairTile!.id);
+        } else {
+            expect(matchedRun?.status).toBe('levelComplete');
+            expect(matchedBoard.tiles.filter((tile) => tile.state === 'hidden' && tile.pairKey === nextPairTile!.pairKey)).toEqual([]);
+        }
     });
 
 

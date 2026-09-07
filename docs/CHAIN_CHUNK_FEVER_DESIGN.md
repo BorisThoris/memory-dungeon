@@ -8,7 +8,7 @@
 
 ## 0. The one-paragraph version
 
-Memory Dungeon has a deep rules layer and almost no *payoff*. A correct match turns two tiles grey. The streak is a number in the HUD. Nothing on the board ever happens *because* you were good. Bubble shooters and Peggle are addictive for one reason above all others: **one small, skilled input produces a large, visible, escalating consequence on the board** — and the consequence is bigger the better you have been playing. This document takes that loop and translates it honestly into a memory game: every tile carries a **suit** you can see on its back; **every match pops** — the whole same-suit clump touching the two tiles you matched breaks away with them, live, the moment the second tile turns; a **chain** of correct matches is what lets the pop **ripple** — the partners it pulls from across the board take their own clumps, wave after wave; and a long enough chain tips into **Fever**, the celebration beat. The dungeon is not beside this loop; it is inside it — pops are how you hit enemies, traps are what stops a pop, the exit is the last peg. Section 8 is the second pass, made after the first ten generations shipped: the brief said *while we're playing, not at the end*, and the first pass had gated the pop behind the chain.
+Memory Dungeon has a deep rules layer and almost no *payoff*. A correct match turns two tiles grey. The streak is a number in the HUD. Nothing on the board ever happens *because* you were good. Bubble shooters and Peggle are addictive for one reason above all others: **one small, skilled input produces a large, visible, escalating consequence on the board** — and the consequence is bigger the better you have been playing. This document takes that loop and translates it honestly into a memory game: every tile carries a **suit** you can see on its back; **every match pops** — the whole same-suit clump touching the two tiles you matched breaks away with them, live, the moment the second tile turns; a **chain** of correct matches is what lets the pop **ripple** — the partners it pulls from across the board take their own clumps, wave after wave; and a long enough chain tips into **Fever**, the celebration beat. The dungeon is not beside this loop; it is inside it — pops are how you hit enemies, traps are what stops a pop, the exit is the last peg. Section 8 is the second pass, made after the first ten generations shipped: the brief said *while we're playing, not at the end*, and the first pass had gated the pop behind the chain. Section 10 is the third: the rule from section 8 was correct and the generated boards could not use it, so on floors 1 to 6 of a real run nothing popped at all.
 
 ---
 
@@ -322,15 +322,71 @@ Where it is still thin: rippled floors are a minority. Early floors are one to t
 - **Popping the matched suit's whole floor.** The pop is the clump you touch; the rest of the suit is the chain's, or the drop's when two pairs are all that is left.
 - **Ripple through the halo.** Measured as a bridge it would take every neighbouring clump at Fever; it stays the edge.
 
-## 9. Next batch
+## 10. The pop was invisible, and why nothing caught it
+
+Section 8 shipped the rule. Playing the game showed it doing nothing: floors went by and no clump ever went with a match. The rule was right and the boards could not use it.
+
+### 10.1 What a real floor was
+
+Measured with `yarn sim:pop`, over eight seeds per floor, counting the share of matches that take at least one other pair with them at chain one:
+
+| Floor | Whole pairs | Suits | Breakable pairs | Matches that popped |
+|---|---|---|---|---|
+| 1 | 2 | 3 | 2 | **0%** |
+| 2 | 3 | 4 | 0 | **0%** |
+| 3 | 4 | 4 | 0 | **0%** |
+| 4 | 6 | 4 | 0 | 6% |
+| 5 | 6 | 4 | 1 | 19% |
+| 6 | 7 | 4 | 1 | 21% |
+| 10 | 11 | 4 | 6 | 58% |
+
+Two causes, both in generation, neither in the break rule.
+
+**Four suits over two pairs.** The suit deal spread the palette evenly so that no suit owned half the board — a rule written when suits were a map to read, before they decided what breaks. On a floor of two or three pairs it guaranteed that no two pairs shared a suit, and a pop needs two of a suit touching before anything can go. Floor 1 could not pop. Not rarely: never, on any seed.
+
+**The floor was all furniture.** Keys, levers, gateways, exits, enemies and hazards took every pair on floors 2 to 6 (floor 3: four pairs, none of them breakable). The break may not take a key or a lever — that would softlock the floor — so there was nothing left for it.
+
+### 10.2 What changed
+
+**The palette grows with the floor** (`suitCountForPairs`): one suit while a floor has fewer than four breakable pairs, a second at four, a third at six, the fourth at eight. Counted against *breakable* pairs, not every pair, because a floor of four keys and one plain pair has one pair to clump. Early floors are one suit and everything connects; suits arrive as the floor grows, and reading them becomes the skill. That is how a bubble shooter opens, too — two colours, then more.
+
+**A cache or a snare is not structure** (`tileCanBreakInChunk`). The six `tileHazardKind` values are bonuses with strings attached riding on ordinary pairs, and they were excluded from breaking along with the keys and levers. They are in now: a pop sweeps a cache away without springing it — the player never flipped it, so its effect never fires and its reward is lost. That is the trade, and it is the one Puzzle Bobble makes when a bubble falls because its support went.
+
+Not changed: the dungeon's paired-card budget. Reserving pairs from it moved the pop rate by a few points and broke thirteen tests across the dungeon, the route layer and two simulations. It is in §11 as the follow-up it should be, measured before it is written.
+
+### 10.3 What a real floor is now
+
+| Floor | Suits | Matches that popped | Pairs per match |
+|---|---|---|---|
+| 1 | 1 | 50% | 0.50 |
+| 2 | 1 | 79% | 0.92 |
+| 3 | 1 | 56% | 0.56 |
+| 4 | 1 | 90% | 1.15 |
+| 5 | 1 | 94% | 1.35 |
+| 6 | 1 | 100% | 2.14 |
+| 8 | 3 | 75% | 0.94 |
+| 12 | 4 | 61% | 0.82 |
+
+### 10.4 The ladder, after the pop
+
+A floor that used to take 9.2 turns takes 6.3. Fewer matches means less room to climb, and the pop feeds the ladder for everyone — at full credit a player who missed a quarter of their turns reached Fever on 22% of floors against a clean player's 35%, which is not a ladder. At no credit the ladder starved (4%). The pop's own wave now counts half and every wave the chain bought counts whole: 20% of floors for a clean player, 6% at the reference miss rate, a ratio of 3.3.
+
+One band moved with it. `cleanFeverShareOnBigFloors` was 0.5, written when a chain of three was the only way anything broke and Fever had to be reachable or the loop had no payoff. The pop is the payoff now and Fever is the celebration on top, so it is rarer for everyone: the band is 0.15, and a new one, `feverCleanOverReference ≥ 2`, carries what the old one was really protecting — that the ladder separates a good player from a sloppy one.
+
+### 10.5 The gate that was missing
+
+Every layer had a unit test. The loop had a balance simulation. An end-to-end test played a fixture to Fever. None of them asked the question a player asks on their first floor: *when I match a pair, does anything go with it?* The fixture the end-to-end test used was hand-built with three suits in columns, so it always popped; the balance simulation averaged over 24 floors, so floors 1 to 6 popping nothing disappeared into the mean.
+
+`yarn sim:pop --check` asks it directly, per floor, on generated boards: floors 1 to 6 must pop on 45% of matches, every floor on 25%, and the whole span on 50%. `pop-reach-simulation.test.ts` gates the same bands in the suite. Both fail on the boards this section describes.
+
+## 11. Next batch
 
 | Gen | Task | Why |
 |---|---|---|
-| **148** | A third island on boards of 32 tiles or more, and a treasure pair allowed to straddle. | §8.5's two levers for the ripple's frequency, both measurable with the sim before they ship. |
-| ~~149~~ | ~~Records for the ripple~~ — **done in Gen 147**: `bestRipple` on the run summary and the persisted one, the run and daily share lines past one wave, and **Chain reaction** at three waves with a reachability proof. | |
-| ~~150~~ | ~~The e2e proof of the pop~~ — **done in Gen 147**: `cascade-chain.spec.ts` asserts the first match of a floor pops the clump it touches at chain one, and the review capture takes the board before, during and after that match. | |
-| **151** | The magpie play-through (task 114 / #156), now with a pop to steal from on turn one. | Carried. |
-| **152** | The phone board's stage band in portrait. | Carried. |
-| **153** | A per-wave sound: the answering pops across the board pitch a step above the pop. | The audio phrase is one rising line per pair; the ripple has no voice of its own yet. |
-| **154** | First-run: the tutorial floor's first match is laid to pop. | The pop is the game's best moment; the new player should meet it on their first match. |
-| **155** | Closing sweep over 143–154. | Sims, docs, gates, captures, push. |
+| **149** | Reserve a share of each floor's pairs from the dungeon's paired-card budget, measured with `sim:pop` first and the dungeon's own audits second. | Floors 2 to 6 are still mostly furniture; the palette rule compensates rather than fixes. Attempted here and reverted: it broke the dungeon, route and simulation tests, which is a batch of its own. |
+| **150** | A third island on boards of 32 tiles or more, and a treasure pair allowed to straddle. | The ripple fires on 7% of floors; islands are what give it something to bridge. |
+| **151** | The floor's suits on the floor-clear recap, so a player learns the palette is growing with them. | One suit to four across the first eight floors is a difficulty curve nothing names. |
+| **152** | The magpie play-through (task 114 / #156). | Carried. |
+| **153** | The phone board's stage band in portrait. | Carried. |
+| **154** | First-run: the tutorial floor's first match is laid to pop. | The pop is the game's best moment and floor 1 now pops on half its matches; it should be all of them. |
+| **155** | Closing sweep over 143-154. | Sims, docs, gates, captures, push. |

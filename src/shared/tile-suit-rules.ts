@@ -330,8 +330,48 @@ export const scatterTiles = (
 /** Suit Lens: the suits a floor deals when the relic is held. Two-suit floors stay two. */
 export const SUIT_LENS_SUIT_COUNT = 3;
 
-export const suitCountForDeal = (profile: SuitDealProfile, relicIds: readonly RelicId[] = []): number =>
-    profile === 'two_suit' ? 2 : relicIds.includes('suit_lens') ? SUIT_LENS_SUIT_COUNT : TILE_SUITS.length;
+/**
+ * How many suits a board of this many pairs can carry.
+ *
+ * A suit that owns one pair cannot be broken into: the pop needs two pairs of a suit touching
+ * before anything can go with a match. Measured on real generated floors, four suits over the
+ * two pairs of floor 1, the three of floor 2 and the four of floor 3 meant *no match on the
+ * first three floors of a run could ever pop* - the loop the game is built on was invisible
+ * exactly where a new player meets it. So the palette grows with the board: one suit while a
+ * floor is small enough that everything should connect, and a fourth only once there are eight
+ * pairs to spread over. It reads as a difficulty curve too, the way a bubble shooter opens with
+ * two colours and adds more.
+ */
+/**
+ * Pairs a break could take, which is what the palette has to be measured against.
+ *
+ * Mirrors `tileCanBreakInChunk` in shape without importing the break rule (the dungeon modules
+ * it pulls in lead back here). Counting every pair instead - keys, levers, gateways, the exit -
+ * spread the four suits over floors whose breakable pairs were one or two, so no two of them
+ * ever shared a suit.
+ */
+const breakablePairCount = (tiles: readonly Tile[]): number => {
+    const halves = new Map<string, number>();
+    for (const tile of tiles) {
+        if (isSingletonUtilityPairKey(tile.pairKey)) continue;
+        if (tile.dungeonCardKind != null && tile.dungeonCardKind !== 'treasure') continue;
+        if (tile.dungeonBossId != null || tile.routeSpecialKind != null || tile.routeCardKind != null) continue;
+        halves.set(tile.pairKey, (halves.get(tile.pairKey) ?? 0) + 1);
+    }
+    return [...halves.values()].filter((count) => count === 2).length;
+};
+
+export const suitCountForPairs = (pairs: number): number =>
+    Math.max(1, Math.min(TILE_SUITS.length, Math.floor(Math.max(0, pairs) / 2)));
+
+export const suitCountForDeal = (
+    profile: SuitDealProfile,
+    relicIds: readonly RelicId[] = [],
+    pairs = Number.POSITIVE_INFINITY
+): number => {
+    const cap = profile === 'two_suit' ? 2 : relicIds.includes('suit_lens') ? SUIT_LENS_SUIT_COUNT : TILE_SUITS.length;
+    return Math.min(cap, suitCountForPairs(pairs));
+};
 
 export const dealBoardSuits = (
     tiles: readonly Tile[],
@@ -342,7 +382,7 @@ export const dealBoardSuits = (
     profile: SuitDealProfile = 'clumped',
     relicIds: readonly RelicId[] = []
 ): Tile[] => {
-    const suitCount = suitCountForDeal(profile, relicIds);
+    const suitCount = suitCountForDeal(profile, relicIds, breakablePairCount(tiles));
     if (profile === 'scattered') {
         return scatterTiles(assignSuitsToTiles(tiles, runSeed, level, rulesVersion, suitCount), runSeed, level, rulesVersion, isLayoutPinnedTile);
     }

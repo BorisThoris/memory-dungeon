@@ -326,6 +326,7 @@ export interface CascadeBalanceBands {
     cleanChunkShareOfScore: { min: number; max: number };
     cleanTurnsOverReferenceTurns: { max: number };
     cleanFeverShareOnBigFloors: { min: number };
+    feverCleanOverReference: { min: number };
     bigFloorPairs: number;
     referenceFeverShare: { max: number };
     extremeFeverCleanOverReference: { min: number };
@@ -341,8 +342,19 @@ export const CASCADE_BALANCE_BANDS: CascadeBalanceBands = {
     cleanChunkShareOfScore: { min: 0.08, max: 0.4 },
     /** Turns to clear at zero misses over turns at the reference miss rate: faster, and by enough to feel. */
     cleanTurnsOverReferenceTurns: { max: 0.9 },
-    /** Fever floor share at zero misses, over floors with at least eight pairs. */
-    cleanFeverShareOnBigFloors: { min: 0.5 },
+    /**
+     * Fever floor share at zero misses, over floors with at least eight pairs.
+     *
+     * Was 0.5, when a chain of three was the only way anything broke and Fever had to be
+     * reachable or the loop had no payoff at all. Since the pop (design doc 8) every match
+     * breaks, a floor clears in six turns instead of nine, and there are fewer matches left to
+     * climb a ladder with. Fever is now the celebration on top of a loop that already pays, so
+     * it is rarer for everyone - and what the ladder must still do is separate: see
+     * `feverCleanOverReference` below, which is the band that carries the intent now.
+     */
+    cleanFeverShareOnBigFloors: { min: 0.15 },
+    /** Fever floors at zero misses over Fever floors at the reference miss rate: the ladder separates. */
+    feverCleanOverReference: { min: 2 },
     bigFloorPairs: 8,
     /** Fever floor share at the reference miss rate: rare, or the ladder is not a ladder. */
     referenceFeverShare: { max: 0.2 },
@@ -403,6 +415,13 @@ export const assertCascadeBalanceWithinBands = (
     }
     if (reference && reference.feverFloorShare > bands.referenceFeverShare.max) {
         issues.push(`reference feverFloorShare ${reference.feverFloorShare.toFixed(3)} above ${bands.referenceFeverShare.max}`);
+    }
+    // The ladder has to separate: Fever means "you ran this floor clean", or it means nothing.
+    if (clean && reference && reference.feverFloorShare > 0) {
+        const ratio = clean.feverFloorShare / reference.feverFloorShare;
+        if (ratio < bands.feverCleanOverReference.min) {
+            issues.push(`clean/reference Fever ratio ${ratio.toFixed(2)} below ${bands.feverCleanOverReference.min}`);
+        }
     }
     return { ok: issues.length === 0, issues };
 };

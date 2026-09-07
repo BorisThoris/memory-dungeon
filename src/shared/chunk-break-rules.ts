@@ -108,22 +108,32 @@ export interface ChunkBreakResult {
 }
 
 /**
- * A hidden tile with no dungeon, route or hazard job. A findable riding on such a tile is the one
- * extra the chunk is allowed to take; a findable riding on a lever or a key is not — that card's
- * job is what the exit is waiting for, and a chunk that swallowed it would softlock the floor.
+ * A hidden tile with no job the floor's structure depends on: not the exit, a key, a lever, a
+ * lock, a shrine, a gateway, a shop, a room, a boss or a route card. Those are what the exit is
+ * waiting for, and a break that swallowed one would softlock the floor.
+ *
+ * A cache or a snare (`tileHazardKind`) is not structure - it is a bonus with a string attached,
+ * and it rides on an ordinary pair. It is in, because leaving it out is what made the loop
+ * invisible: measured on real generated floors, snares and caches took one to two of the three
+ * to seven pairs of floors 2 to 6, and with them excluded those floors had nought to two
+ * breakable pairs between them. A pop sweeps a cache away without springing it - the player
+ * never flipped it, so its effect never fires and its reward is lost. That is the trade, and it
+ * is the same one Puzzle Bobble makes when a bubble falls because its support went.
  */
-export const tileIsPlainApartFromFindable = (tile: Tile): boolean =>
+const tileHasNoFloorJob = (tile: Tile): boolean =>
     tile.state === 'hidden' &&
     !isSingletonUtilityPairKey(tile.pairKey) &&
     tile.dungeonCardKind == null &&
     tile.dungeonBossId == null &&
     tile.routeSpecialKind == null &&
-    tile.routeCardKind == null &&
-    tile.tileHazardKind == null;
+    tile.routeCardKind == null;
 
-/** Only plain pair tiles break. Everything with a job of its own stays on the board. */
-export const tileCanBreakInChunk = (tile: Tile): boolean =>
-    tileIsPlainApartFromFindable(tile) && tile.findableKind == null;
+/** A findable riding on a tile with no floor job is the one extra a break is allowed to claim. */
+export const tileIsPlainApartFromFindable = (tile: Tile): boolean =>
+    tileHasNoFloorJob(tile) && tile.tileHazardKind == null;
+
+/** What a break may take: a pair with no structural job, and no findable to claim twice. */
+export const tileCanBreakInChunk = (tile: Tile): boolean => tileHasNoFloorJob(tile) && tile.findableKind == null;
 
 /** A hidden, unopened treasure card with no other job: a chunk that reaches it spills it. */
 export const tileIsChunkTreasure = (tile: Tile): boolean =>
@@ -254,6 +264,22 @@ export const chunkBreakScore = (level: number, pairs: number, tier: ChainTier, w
 export const chunkBreakComboShards = (pairs: number, tier: ChainTier): number => {
     const count = runNonNegativeInteger(pairs);
     return tier === 'fever' ? count : Math.floor(count / 2);
+};
+
+/**
+ * Pairs a break feeds the ladder.
+ *
+ * Every match pops, so the pop is free to everyone. Measured three ways: at full credit a player
+ * who missed a quarter of their turns reached Fever on 22% of floors against a clean player's
+ * 35%, which is not a ladder; at no credit the ladder starved, because the pop clears a floor in
+ * six turns and a streak cannot climb that far before the floor ends. Half credit for the pop's
+ * own wave and whole credit for every wave the chain bought holds both ends: 20% of floors clean
+ * against 6% at the reference miss rate.
+ */
+export const chunkBreakMomentumPairs = (result: Pick<ChunkBreakResult, 'brokenPairKeys' | 'wavePairKeys'>): number => {
+    const pop = result.wavePairKeys[0]?.length ?? 0;
+    const rest = Math.max(0, result.brokenPairKeys.length - pop);
+    return Math.ceil(pop / 2) + rest;
 };
 
 export const resolveChunkBreak = ({
