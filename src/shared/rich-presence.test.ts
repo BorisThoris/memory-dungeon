@@ -14,18 +14,8 @@ describe('buildRichPresence', () => {
             floor: '3',
             mode: 'Endless'
         });
-        expect(buildRichPresence({ floor: 1, gameMode: 'daily', inRun: true }).display).toBe('#Status_Daily');
-        expect(buildRichPresence({ floor: 1, gameMode: 'puzzle', inRun: true }).display).toBe('#Status_Puzzle');
     });
 
-    it('falls back to a generic run token for modes without one of their own', () => {
-        expect(buildRichPresence({ floor: 2, gameMode: 'gauntlet', inRun: true })).toEqual({
-            display: '#Status_Run',
-            floor: '2',
-            mode: 'Gauntlet'
-        });
-        expect(buildRichPresence({ floor: 2, gameMode: 'meditation', inRun: true }).mode).toBe('Meditation');
-    });
 
     it('omits a floor it cannot trust rather than broadcasting a wrong one', () => {
         for (const floor of [0, -1, Number.NaN, Number.POSITIVE_INFINITY, null, undefined]) {
@@ -51,8 +41,8 @@ describe('richPresencePairs', () => {
     });
 
     it('sends the display token first, which is the one Steam actually renders', () => {
-        const pairs = richPresencePairs(buildRichPresence({ floor: 4, gameMode: 'daily', inRun: true }));
-        expect(pairs[0]).toEqual(['steam_display', '#Status_Daily']);
+        const pairs = richPresencePairs(buildRichPresence({ floor: 4, gameMode: 'endless', inRun: true }));
+        expect(pairs[0]).toEqual(['steam_display', '#Status_Endless']);
         expect(pairs).toContainEqual(['floor', '4']);
     });
 });

@@ -13,8 +13,7 @@ const storeSpies = vi.hoisted(() => ({
     startRun: vi.fn(),
     startSharedRun: vi.fn(),
     startDungeonShowcaseRun: vi.fn(),
-    startDailyRun: vi.fn(),
-    startGauntletRun: vi.fn()
+    startPassAndPlayRun: vi.fn()
 }));
 
 vi.mock('../audio/uiSfx', () => ({
@@ -35,14 +34,10 @@ vi.mock('../store/useAppStore', async () => {
         openSettings: vi.fn(),
         saveData,
         settings: saveData.settings,
-        startDailyRun: storeSpies.startDailyRun,
         startDungeonShowcaseRun: storeSpies.startDungeonShowcaseRun,
-        startGauntletRun: storeSpies.startGauntletRun,
-        startMeditationRun: vi.fn(),
-        startMeditationRunWithMutators: vi.fn(),
+        startPassAndPlayRun: storeSpies.startPassAndPlayRun,
         startPinVowRun: vi.fn(),
         startPracticeRun: vi.fn(),
-        startPuzzleRun: vi.fn(),
         startRun: storeSpies.startRun,
         startScholarContractRun: vi.fn(),
         startSharedRun: storeSpies.startSharedRun,
@@ -77,11 +72,11 @@ describe('ChooseYourPathScreen', () => {
 
         const count = screen.getByTestId('choose-path-mode-count');
         const total = Number(count.textContent?.match(/of (\d+)/u)?.[1]);
-        expect(total).toBeGreaterThan(1);
+        expect(total).toBeGreaterThan(0);
         expect(count).toHaveTextContent(new RegExp(`^${total} of ${total} modes$`, 'u'));
 
-        await user.type(screen.getByLabelText(/filter modes/i), 'Glyph Cross');
-        expect(screen.getByTestId('choose-path-mode-count')).toHaveTextContent(`1 of ${total} modes`);
+        await user.type(screen.getByLabelText(/filter modes/i), 'nothing matches this');
+        expect(screen.getByTestId('choose-path-mode-count')).toHaveTextContent(`0 of ${total} modes`);
     });
 
     it('plays a run someone pasted, whole sentence and all', async () => {
@@ -111,27 +106,7 @@ describe('ChooseYourPathScreen', () => {
         expect(screen.getByTestId('choose-path-shared-run-error')).toBeInTheDocument();
     });
 
-    it('says when the daily turns over, on the one mode that expires', async () => {
-        const user = userEvent.setup();
-        render(<ChooseYourPathScreen />);
 
-        const chips = screen.getByRole('group', { name: /narrow by kind/i });
-        await user.click(within(chips).getByRole('button', { name: /^All/iu }));
-        await user.click(screen.getByRole('button', { name: /^Daily Challenge\. Open details\.$/i }));
-
-        const countdown = await screen.findByTestId('choose-path-daily-reset');
-        expect(countdown).toHaveTextContent(/Next daily in/i);
-        expect(countdown).toHaveTextContent(/\d{2}:\d{2}:\d{2}/u);
-    });
-
-    it('does not put a daily countdown on a mode that never expires', async () => {
-        const user = userEvent.setup();
-        render(<ChooseYourPathScreen />);
-
-        await user.click(screen.getByRole('button', { name: /^Puzzle\. Open details\.$/i }));
-
-        expect(screen.queryByTestId('choose-path-daily-reset')).not.toBeInTheDocument();
-    });
 
     it('reaches every mode from the group chips too, for a player who does not know a name', async () => {
         // The filter answers "show me Pin vow". The chips answer "show me a puzzle", which is the
@@ -215,33 +190,34 @@ describe('ChooseYourPathScreen', () => {
         render(<ChooseYourPathScreen />);
 
         const browse = screen.getByRole('region', { name: /browse modes/i });
-        const puzzle = within(browse).getByRole('button', { name: /^Glyph Cross\. Open details\.$/i });
-        expect(puzzle).toHaveTextContent(/puzzle/i);
+        const table = within(browse).getByRole('button', { name: /^Pass and Play\. Open details\.$/i });
+        expect(table).toHaveTextContent(/core modes/i);
         // The taxonomy strips are gone: a card carries no "lanes" or "launch loop" copy.
         expect(browse).not.toHaveTextContent(/launch loop|chain leads|read pressure|chase reward/i);
-        // The tile's accessible name is the title alone, which is what the e2e harness matches.
-        expect(within(browse).getByRole('button', { name: /^Daily Challenge\. Open details\.$/i })).toBeInTheDocument();
     });
 
     it('filters the library by title or description', async () => {
         const user = userEvent.setup();
         render(<ChooseYourPathScreen />);
 
-        await user.type(screen.getByRole('searchbox', { name: /filter modes/i }), 'mirror');
+        await user.type(screen.getByRole('searchbox', { name: /filter modes/i }), 'device');
         const browse = screen.getByRole('region', { name: /browse modes/i });
-        expect(within(browse).getByRole('button', { name: /^Mirror Puzzle\. Open details\.$/i })).toBeInTheDocument();
-        expect(within(browse).queryByRole('button', { name: /^Glyph Cross\. Open details\.$/i })).not.toBeInTheDocument();
+        expect(within(browse).getByRole('button', { name: /^Pass and Play\. Open details\.$/i })).toBeInTheDocument();
+
+        await user.clear(screen.getByRole('searchbox', { name: /filter modes/i }));
+        await user.type(screen.getByRole('searchbox', { name: /filter modes/i }), 'nothing matches this');
+        expect(within(browse).queryByRole('button', { name: /^Pass and Play\. Open details\.$/i })).not.toBeInTheDocument();
     });
 
     it('opens a mode in the detail modal and plays it from there', async () => {
         const user = userEvent.setup();
         render(<ChooseYourPathScreen />);
 
-        await user.click(screen.getByRole('button', { name: /^Daily Challenge\. Open details\.$/i }));
+        await user.click(screen.getByRole('button', { name: /^Pass and Play\. Open details\.$/i }));
         const modal = screen.getByTestId('library-mode-detail-modal');
-        expect(within(modal).getByText(/shared daily mutators/i)).toBeInTheDocument();
-        await user.click(within(modal).getByRole('button', { name: /^play$/i }));
-        expect(storeSpies.startDailyRun).toHaveBeenCalledTimes(1);
+        expect(within(modal).getByText(/one device/i)).toBeInTheDocument();
+        await user.click(within(modal).getByRole('button', { name: /^2 players$/i }));
+        expect(storeSpies.startPassAndPlayRun).toHaveBeenCalledWith(2);
     });
 
     it('keeps locked modes visible and explains the lock in the modal', () => {

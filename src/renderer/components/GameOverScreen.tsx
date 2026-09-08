@@ -44,27 +44,13 @@ const runModeIdentityLine = (summary: NonNullable<RunState['lastRunSummary']>): 
     if (summary.dungeonShowcaseRun) {
         return gameOverScreenCopy.modeIdentity.dungeonShowcase;
     }
-    switch (summary.gameMode) {
-        case 'gauntlet':
-            return gameOverScreenCopy.modeIdentity.gauntlet;
-        case 'meditation':
-            return gameOverScreenCopy.modeIdentity.meditation;
-        case 'puzzle':
-            return gameOverScreenCopy.modeIdentity.puzzle;
-        case 'daily':
-            return gameOverScreenCopy.modeIdentity.daily;
-        default:
-            if (summary.practiceMode) {
-                return gameOverScreenCopy.modeIdentity.practice;
-            }
-            return gameOverScreenCopy.modeIdentity.classic;
+    if (summary.practiceMode) {
+        return gameOverScreenCopy.modeIdentity.practice;
     }
+    return gameOverScreenCopy.modeIdentity.classic;
 };
 
 const runModeHeading = (summary: NonNullable<RunState['lastRunSummary']>): string => {
-    if (summary.gameMode === 'daily' && summary.dailyDateKeyUtc) {
-        return gameOverScreenCopy.runModeHeadings.daily(summary.dailyDateKeyUtc);
-    }
     if (summary.activeContract?.noShuffle) {
         return gameOverScreenCopy.runModeHeadings.scholar;
     }
@@ -77,18 +63,9 @@ const runModeHeading = (summary: NonNullable<RunState['lastRunSummary']>): strin
     if (summary.dungeonShowcaseRun) {
         return gameOverScreenCopy.runModeHeadings.dungeonShowcase;
     }
-    switch (summary.gameMode) {
-        case 'gauntlet':
-            return gameOverScreenCopy.runModeHeadings.gauntlet;
-        case 'meditation':
-            return gameOverScreenCopy.runModeHeadings.meditation;
-        case 'puzzle':
-            return gameOverScreenCopy.runModeHeadings.puzzle;
-        default:
-            return summary.practiceMode
-                ? gameOverScreenCopy.runModeHeadings.practice
-                : gameOverScreenCopy.runModeHeadings.classic;
-    }
+    return summary.practiceMode
+        ? gameOverScreenCopy.runModeHeadings.practice
+        : gameOverScreenCopy.runModeHeadings.classic;
 };
 
 const GameOverScreen = ({ run }: GameOverScreenProps) => {

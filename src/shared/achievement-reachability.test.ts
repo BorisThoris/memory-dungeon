@@ -1,12 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { BUILTIN_PUZZLE_IDS } from './builtin-puzzles';
 import { GAME_RULES_VERSION, MAX_COMBO_SHARDS, type AchievementId } from './contracts';
 import { CHAIN_REACTION_WAVES, CHUNK_SIX_PAIRS, evaluateAchievementUnlocks } from './achievements';
 import { resolveChunkBreak } from './chunk-break-rules';
 import { createPlayablePathFixture } from './playable-path-fixtures';
 import { ENDLESS_CYCLE_FLOOR_COUNT } from './floor-mutator-schedule';
 import { MAX_RELIC_PICKS_PER_RUN, RELIC_POOL, STANDING_RULE_RELIC_IDS } from './relics';
-import { createDailyRun, createGauntletRun, createMeditationRun, createNewRun } from './run-creation-rules';
+import { createNewRun } from './run-creation-rules';
 import { ACHIEVEMENT_IDS, createDefaultSaveData } from './save-data';
 import { makeBoard, makeTile } from './test/game-fixtures';
 
@@ -20,19 +19,6 @@ import { makeBoard, makeTile } from './test/game-fixtures';
  * player could ever accumulate.
  */
 describe('achievement thresholds against real content', () => {
-    it('never asks for more puzzles than the game ships', () => {
-        const save = createDefaultSaveData();
-        const everyBuiltinCompleted = {
-            ...save,
-            playerStats: {
-                ...save.playerStats!,
-                puzzleCompletions: Object.fromEntries(
-                    BUILTIN_PUZZLE_IDS.map((id) => [id, { bestMistakes: 0, bestScore: 1, completed: true }])
-                )
-            }
-        };
-        expect(evaluateAchievementUnlocks(createNewRun(0), everyBuiltinCompleted)).toContain('ACH_PUZZLE_SOLVER');
-    });
 
     it('never asks for more distinct relics than the pool holds', () => {
         const save = createDefaultSaveData();
@@ -76,12 +62,6 @@ describe('achievement thresholds against real content', () => {
         expect(unlocked).toEqual(expect.arrayContaining(['ACH_ENDLESS_CYCLE', 'ACH_ENDLESS_TWENTY']));
     });
 
-    it('leaves achievements enabled in every mode that has one', () => {
-        // A mode-specific achievement is unreachable if that mode turns achievements off.
-        for (const run of [createNewRun(0), createMeditationRun(0), createGauntletRun(0), createDailyRun(0)]) {
-            expect(run.achievementsEnabled).toBe(true);
-        }
-    });
 
     it('asks for no more combo shards than the cap allows', () => {
         expect(MAX_COMBO_SHARDS).toBeGreaterThan(0);
@@ -89,9 +69,10 @@ describe('achievement thresholds against real content', () => {
 
     it('covers every achievement id, so a new one cannot skip this file unnoticed', () => {
         // Not a behaviour check: a reminder that adding an id means deciding whether its bar is
-        // reachable. `ACH_PUZZLE_SOLVER` is why.
+        // reachable — and that removing what earns one means removing the id, which is why the
+        // four mode-tied marks went with their modes (docs/REMOVED_MODES.md).
         const known: AchievementId[] = [...ACHIEVEMENT_IDS];
-        expect(known).toHaveLength(26);
+        expect(known).toHaveLength(22);
         expect(GAME_RULES_VERSION).toBeGreaterThan(0);
     });
 });

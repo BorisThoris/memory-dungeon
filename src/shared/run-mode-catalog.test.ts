@@ -53,9 +53,8 @@ describe('REG-081 challenge mode gates', () => {
         const save = createDefaultSaveData();
         const rows = getRunModeChallengeGateRows(save);
 
-        expect(rows.map((row) => row.modeId)).toEqual(['daily', 'pass_and_play', 'puzzle_glyph_cross']);
+        expect(rows.map((row) => row.modeId)).toEqual(['classic', 'pass_and_play']);
         expect(rows.every((row) => row.offlineOnly)).toBe(true);
         expect(rows.find((row) => row.modeId === 'pass_and_play')?.status).toBe('unlocked');
-        expect(rows.find((row) => row.modeId === 'puzzle_glyph_cross')?.status).toBe('in_progress');
     });
 });

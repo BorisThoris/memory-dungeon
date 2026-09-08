@@ -114,8 +114,7 @@ describe('classicRunSetupFromRun', () => {
         expect(classicRunSetupFromRun(run)).toEqual({ ...chosen, focusMutators: [] });
     });
 
-    it('reads the plain descent as the default, and a non-Classic run as nothing', () => {
+    it('reads the plain descent as the default', () => {
         expect(classicRunSetupFromRun(createNewRun(0))).toEqual(DEFAULT_CLASSIC_RUN_SETUP);
-        expect(classicRunSetupFromRun({ ...createNewRun(0), gameMode: 'daily' })).toBeNull();
     });
 });

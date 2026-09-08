@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { createDefaultSaveData } from './save-data';
-import { createDailyRun, createGauntletRun, createNewRun, createWildRun } from './run-creation-rules';
+import { createNewRun, createWildRun } from './run-creation-rules';
 import {
     appendRunHistory,
     buildRunHistoryRecord,
@@ -26,12 +26,9 @@ describe('buildRunHistoryRecord', () => {
     });
 
     it('carries the key that replays the run', () => {
-        expect(buildRunHistoryRecord(createGauntletRun(0, 600_000), AT).shareKey).toMatch(/^md1:gauntlet:\d+:\d+:600000$/u);
+        expect(buildRunHistoryRecord(createNewRun(0, { gauntletDurationMs: 600_000 }), AT).shareKey).toMatch(/^md1:gauntlet:\d+:\d+:600000$/u);
     });
 
-    it('records a run that cannot be handed over with no key rather than a wrong one', () => {
-        expect(buildRunHistoryRecord(createDailyRun(0), AT).shareKey).toBeNull();
-    });
 });
 
 describe('normalizeRunHistory', () => {
@@ -81,7 +78,7 @@ describe('appendRunHistory', () => {
 
 describe('the chain in the history', () => {
     it('records the longest chain and the biggest chunk, and reads a row without them as zero', () => {
-        const run = createGauntletRun(0, 600_000);
+        const run = createNewRun(0, { gauntletDurationMs: 600_000 });
         const chained = { ...run, biggestChunkPairs: 7, bestChainThisRun: 9 };
         const record = buildRunHistoryRecord(chained, AT);
         expect(record.bestChain).toBe(9);

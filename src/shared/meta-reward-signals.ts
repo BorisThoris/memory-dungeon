@@ -1,5 +1,4 @@
 import type { RunState, SaveData } from './contracts';
-import { getDailyArchiveSummary } from './daily-archive';
 import { getMetaProgressionBoard, getMetaProgressionFeedback } from './meta-progression';
 import { getObjectiveBoardItems } from './objective-board';
 import { runMutatorIds, runRelicIds } from './relics';
@@ -115,7 +114,8 @@ export const getCollectionRewardSignals = (save: SaveData): MetaRewardSignalRow[
     const board = getMetaProgressionBoard(save);
     const progression = getMetaProgressionFeedback(save);
     const objective = getObjectiveBoardItems(save).find((row) => row.status === 'active' || row.status === 'locked');
-    const daily = getDailyArchiveSummary(save);
+    const sharpFloors = runNonNegativeInteger(save.playerStats?.sharpFloors);
+    const feverFloors = runNonNegativeInteger(save.playerStats?.feverFloors);
     return [
         {
             id: 'collection_profile_level',
@@ -132,18 +132,18 @@ export const getCollectionRewardSignals = (save: SaveData): MetaRewardSignalRow[
             kind: 'next_goal',
             title: objective?.title ?? 'Start a mastery goal',
             body: objective ? `${objective.progress.current}/${objective.progress.target} | ${objective.status}` : 'No active objective rows yet.',
-            cta: objective?.reward ?? 'Play Classic or Daily to create progress.'
+            cta: objective?.reward ?? 'Play a run to create progress.'
         },
         {
-            id: 'collection_daily_archive',
+            id: 'collection_chain_archive',
             screen: 'collection',
-            kind: daily.dailiesCompleted > 0 ? 'progress' : 'empty_state',
-            title: 'Daily archive value',
-            body: `${daily.dailiesCompleted} daily clear(s) | streak ${daily.streak}.`,
+            kind: sharpFloors > 0 ? 'progress' : 'empty_state',
+            title: 'Chain archive value',
+            body: `${sharpFloors} Sharp floor(s) | ${feverFloors} Fever floor(s).`,
             cta:
-                daily.dailiesCompleted > 0
-                    ? 'Return tomorrow to extend the local streak. Miss a day and it is forgiven once.'
-                    : 'Try Daily Challenge to add your first archive row.'
+                sharpFloors > 0
+                    ? 'Seven Sharp floors make the Week of Archives upgrade claimable.'
+                    : 'Break four pairs at once to reach Sharp and add your first archive row.'
         }
     ];
 };

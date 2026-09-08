@@ -132,7 +132,7 @@ describe('REG-096 game over next-run loop', () => {
         const save = createDefaultSaveData();
         save.playerStats = {
             ...save.playerStats!,
-            dailiesCompleted: 7
+            sharpFloors: 7
         };
         const run = createRunSummary({ ...finishMemorizePhase(createNewRun(0)), status: 'gameOver', lives: 0 }, []);
 
@@ -142,7 +142,7 @@ describe('REG-096 game over next-run loop', () => {
             title: 'Next goal',
             value: 'Week of Archives ready',
             detail: 'Week of Archives is ready. Adept tier at profile level 3 (3 honor marks).',
-            actionHint: 'Use Profile for reward status; choose Classic to benefit from permanent upgrades.',
+            actionHint: 'Use Profile for reward status and Choose Your Path for the next attempt.',
             localOnly: true
         });
     });
@@ -151,12 +151,12 @@ describe('REG-096 game over next-run loop', () => {
         const before = createDefaultSaveData();
         before.playerStats = {
             ...before.playerStats!,
-            dailiesCompleted: 6
+            sharpFloors: 6
         };
         const after = createDefaultSaveData();
         after.playerStats = {
             ...after.playerStats!,
-            dailiesCompleted: 7
+            sharpFloors: 7
         };
         const run = createRunSummary({ ...finishMemorizePhase(createNewRun(0)), status: 'gameOver', lives: 0 }, []);
 
@@ -165,7 +165,7 @@ describe('REG-096 game over next-run loop', () => {
         expect(row).toMatchObject({
             value: 'Week of Archives ready',
             detail:
-                '+1 relic pick per milestone can be unlocked from Profile. +1 honor mark from daily archive progress. Next: Week of Archives is ready. Adept tier at profile level 3 (3 honor marks).'
+                '+1 relic pick per milestone can be unlocked from Profile. +1 honor mark from Sharp floor progress. Next: Week of Archives is ready. Adept tier at profile level 3 (3 honor marks).'
         });
     });
 });

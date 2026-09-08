@@ -4,12 +4,13 @@ import { MUTATOR_CATALOG } from './mechanics-encyclopedia';
 /**
  * The recipe that reproduces a run on another machine.
  *
- * `buildRunShareKey` in `run-history.ts` predates this and records only `mode:rules:seed`. That is
- * not enough to reproduce what the player played: Wild Run, Practice, Scholar Contract and Pin vow
- * are all `endless` underneath, so all four produce a key that replays as a plain Classic run on
- * the same board. A key that hands someone a different run under the same name is worse than no
- * key, so this carries the variant a player actually picked, plus whatever else that variant needs
- * to come out the same — the clock for a gauntlet, the chosen mutators for a meditation.
+ * `buildRunShareKey` in `run-history.ts` predates this and records only `mode:rules:seed`. There is
+ * one mode, so that is not enough to reproduce what the player played: chaos, practice, a scholar
+ * contract, a pin vow and a clock are all setup-sheet choices on the same mode, and every one of
+ * them would produce a key that replays as a plain Classic run on the same board. A key that hands
+ * someone a different run under the same name is worse than no key, so this carries the variant a
+ * player actually set up, plus whatever else that variant needs to come out the same — the clock
+ * for a timed run, the chosen mutators for a calm one.
  *
  * The `md1` prefix is a version marker. When the shape has to change, old keys can still be read
  * or refused deliberately instead of silently parsing into something else.
@@ -17,43 +18,31 @@ import { MUTATOR_CATALOG } from './mechanics-encyclopedia';
 
 export const RUN_SHARE_KEY_PREFIX = 'md1';
 
-export type RunShareVariant =
-    | 'classic'
-    | 'wild'
-    | 'practice'
-    | 'scholar'
-    | 'pin_vow'
-    | 'showcase'
-    | 'gauntlet'
-    | 'meditation';
+export type RunShareVariant = 'classic' | 'wild' | 'practice' | 'scholar' | 'pin_vow' | 'showcase' | 'gauntlet' | 'meditation';
 
 export interface RunShareKey {
     readonly variant: RunShareVariant;
     readonly rulesVersion: number;
     readonly seed: number;
-    /** Gauntlet only: the clock the run was played against. */
+    /** Timed runs only: the clock the run was played against. */
     readonly durationMs?: number;
-    /** Meditation only: the focus mutators the player chose. */
+    /** Calm runs only: the focus mutators the player chose. */
     readonly mutators?: readonly MutatorId[];
 }
 
-/** Why a run cannot be handed over, in the words the player is shown. */
-export type RunShareRefusal =
-    | 'A daily is already the same run for everyone — share the date, not a key.'
-    | 'A puzzle board is its tiles, not a seed, so there is no key that reproduces it.';
+/**
+ * Why a run cannot be handed over, in the words the player is shown.
+ *
+ * Nothing refuses today — the daily and the puzzle board were the only two runs a seed could not
+ * reproduce, and both went with the mode collapse. The type stays because `describeRunShareKey`
+ * returns a union the callers already branch on, and the next unshareable run should refuse here
+ * rather than hand out a key that replays as something else.
+ */
+export type RunShareRefusal = 'This run cannot be reproduced from a seed.';
 
 const variantOf = (run: RunState): RunShareVariant | RunShareRefusal => {
-    if (run.gameMode === 'daily') {
-        return 'A daily is already the same run for everyone — share the date, not a key.';
-    }
-    if (run.gameMode === 'puzzle') {
-        return 'A puzzle board is its tiles, not a seed, so there is no key that reproduces it.';
-    }
-    if (run.gameMode === 'gauntlet') {
+    if (run.gauntletDeadlineMs !== null) {
         return 'gauntlet';
-    }
-    if (run.gameMode === 'meditation') {
-        return 'meditation';
     }
     if (run.dungeonShowcaseRun) {
         return 'showcase';
@@ -88,8 +77,7 @@ export const describeRunShareKey = (run: RunState): { key: RunShareKey } | { ref
             rulesVersion,
             seed,
             variant,
-            ...(variant === 'gauntlet' ? { durationMs: run.gauntletSessionDurationMs ?? 0 } : {}),
-            ...(variant === 'meditation' ? { mutators: [...run.activeMutators] } : {})
+            ...(variant === 'gauntlet' ? { durationMs: run.gauntletSessionDurationMs ?? 0 } : {})
         }
     };
 };

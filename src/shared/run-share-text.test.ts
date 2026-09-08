@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { BUILTIN_PUZZLES } from './builtin-puzzles';
 import { buildRunShareText } from './run-share-text';
-import { createNewRun, createPuzzleRun, createWildRun } from './run-creation-rules';
+import { createNewRun, createWildRun } from './run-creation-rules';
 
 describe('buildRunShareText', () => {
     it('names the game, the mode, the floor and the score, then the recipe', () => {
@@ -56,11 +55,4 @@ describe('buildRunShareText', () => {
         expect(buildRunShareText(live).text).toContain('best chain ×5, Fever on 1 floor.');
     });
 
-    it('refuses to invent a key for a puzzle board, and says so instead of failing', () => {
-        const puzzle = BUILTIN_PUZZLES.starter_pairs;
-        const share = buildRunShareText(createPuzzleRun(0, puzzle.id, puzzle.tiles, 1));
-        expect(share.shareable).toBe(false);
-        expect(share.text).toContain('is its tiles, not a seed');
-        expect(share.text).not.toContain('Same run:');
-    });
 });

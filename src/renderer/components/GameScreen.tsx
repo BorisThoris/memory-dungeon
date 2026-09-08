@@ -1305,7 +1305,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const gauntletRemainingMs =
         run.gauntletDeadlineMs !== null ? Math.max(0, run.gauntletDeadlineMs - gauntletNowMs) : null;
 
-    const gauntletActive = run.gameMode === 'gauntlet' && run.gauntletDeadlineMs !== null;
+    const gauntletActive = run.gauntletDeadlineMs !== null;
     useEffect(() => {
         if (!gauntletActive || run.status !== 'playing' || gauntletRemainingMs === null) {
             previousCountdownPressureSecondRef.current = null;

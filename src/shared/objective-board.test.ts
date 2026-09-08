@@ -21,15 +21,14 @@ describe('REG-021 objective board', () => {
         progressed.playerStats = {
             ...progressed.playerStats!,
             bestFloorNoPowers: 5,
-            dailiesCompleted: 2,
-            dailyStreakCosmetic: 2
+            sharpFloors: 2,
         };
         const items = getObjectiveBoardItems(progressed);
 
         expect(items.find((item) => item.id === 'first_clear')?.status).toBe('completed');
         expect(items.find((item) => item.id === 'no_powers_floor_5')?.status).toBe('completed');
-        expect(items.find((item) => item.id === 'daily_three')?.progress).toEqual({ current: 2, target: 3 });
-        expect(items.find((item) => item.id === 'daily_three')?.status).toBe('active');
+        expect(items.find((item) => item.id === 'sharp_three')?.progress).toEqual({ current: 2, target: 3 });
+        expect(items.find((item) => item.id === 'sharp_three')?.status).toBe('active');
         expect(items.find((item) => item.id === 'relic_shrine_extra')?.status).toBe('locked');
     });
 
@@ -52,7 +51,7 @@ describe('REG-021 objective board', () => {
         save.playerStats = {
             ...save.playerStats!,
             bestFloorNoPowers: Number.POSITIVE_INFINITY,
-            dailiesCompleted: Number.NaN,
+            sharpFloors: Number.NaN,
             relicPickCounts: { guard_token_plus_one: Number.POSITIVE_INFINITY, parasite_ledger: 1.9 }
         };
         save.lastRunSummary = {
@@ -64,17 +63,15 @@ describe('REG-021 objective board', () => {
             unlockedAchievements: [],
             bestStreak: 0,
             perfectClears: 0,
-            gameMode: 'gauntlet'
         };
 
         expect(buildObjectiveBoardRows(save).map((row) => `${row.id}:${row.progress}`)).toEqual([
             'first_clear:1/1',
             'no_powers_floor_5:0/5',
-            'daily_initiate:0/1',
             'relic_habit:1/10',
-            'gauntlet_proof:0/1'
+            'sharp_floor:0/1'
         ]);
-        expect(getObjectiveBoardItems(save).find((item) => item.id === 'daily_three')?.progress).toEqual({
+        expect(getObjectiveBoardItems(save).find((item) => item.id === 'sharp_three')?.progress).toEqual({
             current: 0,
             target: 3
         });

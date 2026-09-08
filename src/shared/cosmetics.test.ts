@@ -52,8 +52,8 @@ describe('REG-025 cosmetics catalog', () => {
         save.unlocks = ['cosmetic:crest_daily_bronze'];
 
         const rows = getCosmeticTrackRows(save);
-        expect(rows.map((row) => row.trackId)).toEqual(['starter', 'daily', 'mastery']);
-        expect(rows.find((row) => row.trackId === 'daily')?.owned).toBe(1);
+        expect(rows.map((row) => row.trackId)).toEqual(['starter', 'sharp', 'mastery']);
+        expect(rows.find((row) => row.trackId === 'sharp')?.owned).toBe(1);
         expect(rows.every((row) => row.gameplayAffecting === false)).toBe(true);
     });
 });

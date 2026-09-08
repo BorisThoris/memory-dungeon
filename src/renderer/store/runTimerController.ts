@@ -132,7 +132,6 @@ export const createRunTimerController = ({
         const shouldWatch =
             view === 'playing' &&
             run &&
-            run.gameMode === 'gauntlet' &&
             run.gauntletDeadlineMs !== null &&
             run.status !== 'paused' &&
             run.status !== 'gameOver';
@@ -151,7 +150,6 @@ export const createRunTimerController = ({
             if (
                 !currentRun ||
                 currentView !== 'playing' ||
-                currentRun.gameMode !== 'gauntlet' ||
                 currentRun.gauntletDeadlineMs === null ||
                 currentRun.status === 'paused' ||
                 currentRun.status === 'gameOver'

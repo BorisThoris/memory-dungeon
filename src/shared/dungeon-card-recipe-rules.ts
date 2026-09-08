@@ -278,7 +278,7 @@ export const dungeonCardRecipeForFloor = (
     }
 
     let threatsAdded = bossCard ? 1 : 0;
-    if (threatsAdded < budgets.threatBudget && level >= 2 && gameMode !== 'meditation') {
+    if (threatsAdded < budgets.threatBudget && level >= 2) {
         cards.push(
             floorArchetypeId === 'shadow_read'
                 ? trapCard('trap_hex', floorArchetypeId)

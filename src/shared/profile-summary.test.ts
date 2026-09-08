@@ -9,7 +9,7 @@ describe('REG-032 profile summary and save trust shell', () => {
         save.bestScore = 2400;
         save.playerStats = {
             ...save.playerStats!,
-            dailiesCompleted: 3,
+            sharpFloors: 3,
             bestFloorNoPowers: 5
         };
         save.unlocks = ['cosmetic:crest_daily_bronze'];
@@ -21,7 +21,7 @@ describe('REG-032 profile summary and save trust shell', () => {
         // so the crest has to appear by name somewhere a player can read it.
         const cosmeticRow = rows.find((row) => row.id === 'cosmetics');
         expect(cosmeticRow?.value).toBe('Seeker');
-        expect(cosmeticRow?.source).toContain('Daily Bronze Crest');
+        expect(cosmeticRow?.source).toContain('Bronze Crest');
         expect(cosmeticRow?.source).toContain('1 owned');
         expect(rows.every((row) => row.source.length > 0)).toBe(true);
     });
@@ -41,7 +41,7 @@ describe('REG-032 profile summary and save trust shell', () => {
         save.bestScore = 2400;
         save.playerStats = {
             ...save.playerStats!,
-            dailiesCompleted: 1,
+            sharpFloors: 1,
             bestFloorNoPowers: 5
         };
 
@@ -55,7 +55,7 @@ describe('REG-032 profile summary and save trust shell', () => {
         const save = createDefaultSaveData();
         save.playerStats = {
             ...save.playerStats!,
-            dailiesCompleted: 4,
+            sharpFloors: 4,
             bestFloorNoPowers: 2
         };
 
@@ -67,9 +67,9 @@ describe('REG-032 profile summary and save trust shell', () => {
             nextMilestoneLabel: 'Adept tier',
             nextMilestoneProgressCopy: 'Adept tier at profile level 3 (4 honor marks).',
             nextRewardTitle: 'Week of Archives',
-            nextRewardProgressCopy: '4/7 from Daily archive completions',
-            nextHonorMarkSourceCopy: 'Clear one more Daily Challenge for 1 honor mark.',
-            progressionMotivationCopy: 'Next: Week of Archives (4/7 from Daily archive completions).'
+            nextRewardProgressCopy: '4/7 from Sharp floor clears',
+            nextHonorMarkSourceCopy: 'Clear one more Sharp floor for 1 honor mark.',
+            progressionMotivationCopy: 'Next: Week of Archives (4/7 from Sharp floor clears).'
         });
     });
 

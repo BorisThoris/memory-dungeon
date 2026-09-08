@@ -1,13 +1,11 @@
 import fc from 'fast-check';
 import { describe, expect, it } from 'vitest';
 import { GAME_RULES_VERSION, SAVE_SCHEMA_VERSION } from './contracts';
-import { BUILTIN_PUZZLES } from './builtin-puzzles';
 import {
     DUNGEON_SAVE_MIGRATION_POLICY_VERSION,
     getDungeonSaveMigrationFieldPolicies,
     shouldDungeonSaveFieldRequireMigration
 } from './dungeon-save-migration';
-import { createNewRun, createPuzzleRun } from './game-core';
 import { RELIC_POOL } from './relics';
 import {
     createAchievementState,
@@ -15,10 +13,8 @@ import {
     DEFAULT_SETTINGS,
     getRelicPickCountRows,
     getRelicPickTotal,
-    mergeDailyComplete,
     mergeBestFloorNoPowers,
     mergeChainFloorStats,
-    mergePuzzleCompletion,
     mergeRelicPickStat,
     normalizeSaveData,
     normalizeUnknownSaveData,
@@ -29,7 +25,7 @@ import {
     settingsBoundarySchema,
     SETTINGS_NUMERIC_RANGES
 } from './save-data';
-import type { RunState, RunSummary, SaveData, Settings } from './contracts';
+import type { RunSummary, SaveData, Settings } from './contracts';
 import {
     CURRENT_VERSION_GATE,
     formatVersionGateSummary,
@@ -81,14 +77,13 @@ describe('save normalization', () => {
                 injectedSetting: 'discard'
             },
             playerStats: {
-                dailiesCompleted: 3,
+                sharpFloors: 3,
                 injectedStat: 'discard'
             }
         });
 
         expect(save.bestScore).toBe(42);
         expect(save.settings.displayMode).toBe('fullscreen');
-        expect(save.playerStats?.dailiesCompleted).toBe(3);
         expect(save).not.toHaveProperty('injectedRoot');
         expect(save.settings).not.toHaveProperty('injectedSetting');
         expect(save.playerStats).not.toHaveProperty('injectedStat');
@@ -276,9 +271,7 @@ describe('save normalization', () => {
         const fromCount = normalizeSaveData({
             playerStats: {
                 bestFloorNoPowers: 0,
-                dailiesCompleted: 7,
-                lastDailyDateKeyUtc: null,
-                dailyStreakCosmetic: 0,
+                sharpFloors: 7,
                 relicPickCounts: {},
                 encorePairKeysLastRun: []
             }
@@ -288,9 +281,7 @@ describe('save normalization', () => {
         const claimed = normalizeSaveData({
             playerStats: {
                 bestFloorNoPowers: 0,
-                dailiesCompleted: 7,
-                lastDailyDateKeyUtc: null,
-                dailyStreakCosmetic: 0,
+                sharpFloors: 7,
                 relicPickCounts: {},
                 encorePairKeysLastRun: [],
                 relicShrineExtraPickUnlocked: true
@@ -299,81 +290,27 @@ describe('save normalization', () => {
         expect(claimed.playerStats?.relicShrineExtraPickUnlocked).toBe(true);
     });
 
-    it('REG-053 tracks UTC daily streaks without freeze currency or pressure fields', () => {
-        const first = mergeDailyComplete(normalizeSaveData({}), '20260425');
-        expect(first.playerStats?.dailyStreakCosmetic).toBe(1);
-        expect(first.playerStats?.lastDailyDateKeyUtc).toBe('20260425');
 
-        const second = mergeDailyComplete(first, '20260426');
-        expect(second.playerStats?.dailyStreakCosmetic).toBe(2);
 
-        // One missed day is forgiven, and it costs the grace day rather than a currency to buy.
-        const missedOne = mergeDailyComplete(second, '20260428');
-        expect(missedOne.playerStats?.dailyStreakCosmetic).toBe(3);
-        expect(missedOne.playerStats?.dailyStreakGraceAvailable).toBe(false);
-        expect(Object.keys(missedOne.playerStats ?? {})).not.toContain('streakFreezeCount');
 
-        // Missing again with the grace spent starts the streak over, and hands the grace back.
-        const missedTwice = mergeDailyComplete(missedOne, '20260430');
-        expect(missedTwice.playerStats?.dailyStreakCosmetic).toBe(1);
-        expect(missedTwice.playerStats?.dailyStreakGraceAvailable).toBe(true);
-    });
 
-    it('earns the grace day back on a consecutive clear, so every-other-day cannot hold a streak', () => {
-        const day1 = mergeDailyComplete(normalizeSaveData({}), '20260501');
-        const day3 = mergeDailyComplete(day1, '20260503');
-        expect(day3.playerStats?.dailyStreakCosmetic).toBe(2);
-        expect(day3.playerStats?.dailyStreakGraceAvailable).toBe(false);
-
-        const day4 = mergeDailyComplete(day3, '20260504');
-        expect(day4.playerStats?.dailyStreakCosmetic).toBe(3);
-        expect(day4.playerStats?.dailyStreakGraceAvailable).toBe(true);
-    });
-
-    it('starts over when the gap is longer than the one day the grace covers', () => {
-        const day1 = mergeDailyComplete(normalizeSaveData({}), '20260601');
-        const day5 = mergeDailyComplete(day1, '20260605');
-        expect(day5.playerStats?.dailyStreakCosmetic).toBe(1);
-        expect(day5.playerStats?.dailyStreakGraceAvailable).toBe(true);
-    });
-
-    it('canonicalizes legacy daily date keys and rejects impossible persisted dates', () => {
-        expect(
-            normalizeSaveData({
-                playerStats: { ...createDefaultSaveData().playerStats!, lastDailyDateKeyUtc: '2026-04-30' },
-                lastRunSummary: {
-                    totalScore: 1,
-                    bestScore: 1,
-                    levelsCleared: 1,
-                    highestLevel: 1,
-                    achievementsEnabled: true,
-                    unlockedAchievements: [],
-                    bestStreak: 1,
-                    perfectClears: 0,
-                    dailyDateKeyUtc: '2026-04-30'
+    it('normalizes malformed merge counters before updating persisted progress', () => {
+        const save = {
+            ...createDefaultSaveData(),
+            playerStats: {
+                ...createDefaultSaveData().playerStats!,
+                bestFloorNoPowers: Number.NaN,
+                relicPickCounts: {
+                    guard_token_plus_one: Number.POSITIVE_INFINITY
                 }
-            })
-        ).toMatchObject({
-            playerStats: { lastDailyDateKeyUtc: '20260430' },
-            lastRunSummary: { dailyDateKeyUtc: '20260430' }
-        });
-
-        const invalid = normalizeSaveData({
-            playerStats: { ...createDefaultSaveData().playerStats!, lastDailyDateKeyUtc: '20260231' },
-            lastRunSummary: {
-                totalScore: 1,
-                bestScore: 1,
-                levelsCleared: 1,
-                highestLevel: 1,
-                achievementsEnabled: true,
-                unlockedAchievements: [],
-                bestStreak: 1,
-                perfectClears: 0,
-                dailyDateKeyUtc: 'not-a-date'
             }
+        } as SaveData;
+
+        expect(mergeBestFloorNoPowers(save, Number.POSITIVE_INFINITY)).toBe(save);
+        expect(mergeBestFloorNoPowers(save, 3.9).playerStats?.bestFloorNoPowers).toBe(3);
+        expect(mergeRelicPickStat(save, 'guard_token_plus_one').playerStats?.relicPickCounts).toEqual({
+            guard_token_plus_one: 1
         });
-        expect(invalid.playerStats?.lastDailyDateKeyUtc).toBeNull();
-        expect(invalid.lastRunSummary?.dailyDateKeyUtc).toBeUndefined();
     });
 
     it('table-driven legacy / partial fixtures normalize without undefined leaks (REF-065)', () => {
@@ -387,10 +324,7 @@ describe('save normalization', () => {
                 name: 'partial_player_stats',
                 input: {
                     playerStats: {
-                        bestFloorNoPowers: 3,
-                        dailiesCompleted: 1,
-                        lastDailyDateKeyUtc: '2026-01-01',
-                        dailyStreakCosmetic: 2
+                        bestFloorNoPowers: 3
                     } as SaveData['playerStats']
                 }
             }
@@ -413,12 +347,9 @@ describe('save normalization', () => {
             },
             playerStats: {
                 bestFloorNoPowers: 5,
-                dailiesCompleted: 2,
-                lastDailyDateKeyUtc: '2026-04-30',
-                dailyStreakCosmetic: 2,
+                sharpFloors: 2,
                 relicPickCounts: null,
                 encorePairKeysLastRun: null,
-                puzzleCompletions: null,
                 relicShrineExtraPickUnlocked: false
             },
             lastRunSummary: {
@@ -458,7 +389,6 @@ describe('save normalization', () => {
         expect(normalized.settings.pairProximityHintsEnabled).toBe(DEFAULT_SETTINGS.pairProximityHintsEnabled);
         expect(normalized.playerStats?.encorePairKeysLastRun).toEqual([]);
         expect(normalized.playerStats?.relicPickCounts).toEqual({});
-        expect(normalized.playerStats?.puzzleCompletions).toEqual({});
         expect(normalized.lastRunSummary?.runSeed).toBe(72001);
         expect(normalized.lastRunSummary?.runRulesVersion).toBe(GAME_RULES_VERSION);
         expect(normalized.lastRunSummary?.dungeonShowcaseRun).toBe(true);
@@ -475,23 +405,15 @@ describe('save normalization', () => {
                 ACH_LEVEL_FIVE: true,
                 BAD_ACHIEVEMENT: true
             },
-            unlocks: ['achievement:ACH_LEVEL_FIVE', 44, 'bad:unlock', 'honor:honor_daily_initiate'],
+            unlocks: ['achievement:ACH_LEVEL_FIVE', 44, 'bad:unlock', 'honor:honor_sharp_initiate'],
             playerStats: {
                 bestFloorNoPowers: -5,
-                dailiesCompleted: Number.NaN,
-                lastDailyDateKeyUtc: 20260513,
-                dailyStreakCosmetic: Number.NEGATIVE_INFINITY,
                 relicPickCounts: {
                     extra_shuffle_charge: 2.8,
                     missing_relic: 99,
                     guard_token_plus_one: -1
                 },
-                encorePairKeysLastRun: ['A', 42, 'B'],
-                puzzleCompletions: {
-                    starter_pairs: { completed: true, bestMistakes: -1, bestScore: 120.9 },
-                    malformed: { completed: 'true', bestMistakes: 0, bestScore: 20 },
-                    bad_score: { completed: true, bestMistakes: 1, bestScore: Number.NaN }
-                }
+                encorePairKeysLastRun: ['A', 42, 'B']
             } as unknown as SaveData['playerStats'],
             lastRunSummary: {
                 totalScore: Number.NaN,
@@ -511,16 +433,10 @@ describe('save normalization', () => {
         expect(normalized.achievements.ACH_FIRST_CLEAR).toBe(false);
         expect(normalized.achievements.ACH_LEVEL_FIVE).toBe(true);
         expect(Object.keys(normalized.achievements)).not.toContain('BAD_ACHIEVEMENT');
-        expect(normalized.unlocks).toEqual(['achievement:ACH_LEVEL_FIVE', 'honor:honor_daily_initiate']);
+        expect(normalized.unlocks).toEqual(['achievement:ACH_LEVEL_FIVE', 'honor:honor_sharp_initiate']);
         expect(normalized.playerStats?.bestFloorNoPowers).toBe(0);
-        expect(normalized.playerStats?.dailiesCompleted).toBe(0);
-        expect(normalized.playerStats?.lastDailyDateKeyUtc).toBeNull();
-        expect(normalized.playerStats?.dailyStreakCosmetic).toBe(0);
         expect(normalized.playerStats?.relicPickCounts).toEqual({ extra_shuffle_charge: 2 });
         expect(normalized.playerStats?.encorePairKeysLastRun).toEqual(['A', 'B']);
-        expect(normalized.playerStats?.puzzleCompletions).toEqual({
-            starter_pairs: { completed: true, bestMistakes: 0, bestScore: 120 }
-        });
         expect(normalized.lastRunSummary).toBeNull();
     });
 
@@ -544,15 +460,8 @@ describe('save normalization', () => {
     it('bounds persisted collections and rejects unknown or oversized identifiers', () => {
         const expectedLimits = {
             encorePairKeys: 80,
-            entryTextLength: 128,
-            puzzleCompletions: 256
+            entryTextLength: 128
         };
-        const puzzleCompletions = Object.fromEntries(
-            Array.from({ length: expectedLimits.puzzleCompletions + 20 }, (_, index) => [
-                `puzzle_${index}`,
-                { completed: true, bestMistakes: index, bestScore: index }
-            ])
-        );
         const oversized = 'x'.repeat(expectedLimits.entryTextLength + 1);
 
         const normalized = normalizeSaveData({
@@ -567,7 +476,6 @@ describe('save normalization', () => {
             playerStats: {
                 ...createDefaultSaveData().playerStats!,
                 encorePairKeysLastRun: [oversized, '', ...Array.from({ length: 100 }, (_, index) => `pair_${index}`)],
-                puzzleCompletions: { [oversized]: { completed: true, bestMistakes: 0, bestScore: 1 }, ...puzzleCompletions }
             }
         });
 
@@ -575,26 +483,8 @@ describe('save normalization', () => {
         expect(normalized.unlocks).not.toContain(`honor:${oversized}`);
         expect(normalized.playerStats?.encorePairKeysLastRun).toHaveLength(expectedLimits.encorePairKeys);
         expect(normalized.playerStats?.encorePairKeysLastRun).not.toContain(oversized);
-        expect(Object.keys(normalized.playerStats?.puzzleCompletions ?? {})).toHaveLength(
-            expectedLimits.puzzleCompletions
-        );
-        expect(normalized.playerStats?.puzzleCompletions).not.toHaveProperty(oversized);
     });
 
-    it('keeps caller-supplied puzzle ids as own dictionary keys without prototype mutation', () => {
-        const puzzleCompletions = JSON.parse(`{
-            "__proto__":{"completed":true,"bestMistakes":1,"bestScore":10},
-            "constructor":{"completed":true,"bestMistakes":2,"bestScore":20},
-            "toString":{"completed":true,"bestMistakes":3,"bestScore":30}
-        }`);
-
-        const normalized = normalizeUnknownSaveData({ playerStats: { puzzleCompletions } });
-        const completions = normalized.playerStats?.puzzleCompletions;
-
-        expect(Object.getPrototypeOf(completions)).toBeNull();
-        expect(Object.keys(completions ?? {})).toEqual(['__proto__', 'constructor', 'toString']);
-        expect(completions?.__proto__).toEqual({ completed: true, bestMistakes: 1, bestScore: 10 });
-    });
 
     it('dedupes save-loaded reward and run summary ledgers before they can replay duplicates', () => {
         const normalized = normalizeSaveData({
@@ -708,102 +598,7 @@ describe('save normalization', () => {
         expect(normalized.lastRunSummary).toBeNull();
     });
 
-    it('GLD-P0-004 merges puzzle completion records without losing previous bests', () => {
-        const puzzle = BUILTIN_PUZZLES.starter_pairs!;
-        const save = normalizeSaveData({
-            ...createDefaultSaveData(),
-            playerStats: {
-                ...createDefaultSaveData().playerStats!,
-                puzzleCompletions: {
-                    starter_pairs: {
-                        completed: true,
-                        bestMistakes: 1,
-                        bestScore: 150
-                    }
-                }
-            }
-        });
-        const puzzleRun = {
-            ...createPuzzleRun(0, puzzle.id, puzzle.tiles),
-            status: 'levelComplete' as const,
-            stats: {
-                ...createNewRun(0).stats,
-                tries: 0,
-                totalScore: 100
-            }
-        };
 
-        const merged = mergePuzzleCompletion(save, puzzleRun);
-
-        expect(merged.playerStats?.puzzleCompletions?.starter_pairs).toEqual({
-            completed: true,
-            bestMistakes: 0,
-            bestScore: 150
-        });
-    });
-
-    it('normalizes malformed merge counters before updating persisted progress', () => {
-        const puzzle = BUILTIN_PUZZLES.starter_pairs!;
-        const save = {
-            ...createDefaultSaveData(),
-            playerStats: {
-                ...createDefaultSaveData().playerStats!,
-                bestFloorNoPowers: Number.NaN,
-                relicPickCounts: {
-                    guard_token_plus_one: Number.POSITIVE_INFINITY
-                },
-                puzzleCompletions: {
-                    starter_pairs: {
-                        completed: true,
-                        bestMistakes: Number.POSITIVE_INFINITY,
-                        bestScore: Number.NaN
-                    }
-                }
-            }
-        } as SaveData;
-        const puzzleRun = {
-            ...createPuzzleRun(0, puzzle.id, puzzle.tiles),
-            status: 'levelComplete' as const,
-            lastLevelResult: {
-                level: 1,
-                scoreGained: 0,
-                rating: 'S' as const,
-                livesRemaining: 5,
-                perfect: true,
-                mistakes: Number.POSITIVE_INFINITY,
-                clearLifeReason: 'none' as const,
-                clearLifeGained: 0
-            },
-            stats: {
-                ...createNewRun(0).stats,
-                tries: Number.NaN,
-                totalScore: Number.POSITIVE_INFINITY
-            }
-        };
-
-        const mergedPuzzle = mergePuzzleCompletion(save, puzzleRun);
-        expect(mergedPuzzle.playerStats?.puzzleCompletions?.starter_pairs).toEqual({
-            completed: true,
-            bestMistakes: 0,
-            bestScore: 0
-        });
-
-        const malformedStatsRun = {
-            ...puzzleRun,
-            lastLevelResult: null,
-            stats: Number.NaN as unknown as RunState['stats']
-        };
-        expect(mergePuzzleCompletion(save, malformedStatsRun).playerStats?.puzzleCompletions?.starter_pairs).toEqual({
-            completed: true,
-            bestMistakes: 0,
-            bestScore: 0
-        });
-        expect(mergeBestFloorNoPowers(save, Number.POSITIVE_INFINITY)).toBe(save);
-        expect(mergeBestFloorNoPowers(save, 3.9).playerStats?.bestFloorNoPowers).toBe(3);
-        expect(mergeRelicPickStat(save, 'guard_token_plus_one').playerStats?.relicPickCounts).toEqual({
-            guard_token_plus_one: 1
-        });
-    });
 
     it('DNG-073 documents which dungeon fields require save migrations', () => {
         const policies = getDungeonSaveMigrationFieldPolicies();

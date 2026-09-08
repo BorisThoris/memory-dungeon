@@ -6,7 +6,7 @@ describe('REG-091 main menu hub quality rows', () => {
     it('derives mode entry, profile, local save, and offline social rows from save data', () => {
         const save = createDefaultSaveData();
         save.bestScore = 1200;
-        save.playerStats = { ...save.playerStats!, dailiesCompleted: 2, dailyStreakCosmetic: 1 };
+        save.playerStats = { ...save.playerStats!, sharpFloors: 2,};
 
         const rows = getMainMenuHubQualityRows(save, null);
         expect(rows.map((row) => row.id)).toEqual(['mode_entry', 'profile_strip', 'return_loop', 'trust_boundary']);

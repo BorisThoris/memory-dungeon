@@ -283,7 +283,7 @@ export const assignDungeonFillerCardsToTiles = (
     gameMode?: GameMode,
     dungeonNodeKind?: DungeonRunNodeKind | null
 ): Tile[] => {
-    if (!gameMode || gameMode === 'puzzle' || gameMode === 'meditation' || level <= 1) {
+    if (!gameMode || level <= 1) {
         return tiles;
     }
     const eligibleKeys = [

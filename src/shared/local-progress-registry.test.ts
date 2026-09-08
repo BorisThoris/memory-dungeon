@@ -9,9 +9,7 @@ describe('GLD-P1-009 local progress registry adapters', () => {
         save.playerStats = {
             ...save.playerStats!,
             bestFloorNoPowers: 5,
-            dailiesCompleted: 3,
-            dailyStreakCosmetic: 2,
-            lastDailyDateKeyUtc: '20260425'
+            sharpFloors: 3,
         };
         save.lastRunSummary = {
             totalScore: 120,
@@ -21,27 +19,22 @@ describe('GLD-P1-009 local progress registry adapters', () => {
             achievementsEnabled: true,
             unlockedAchievements: [],
             bestStreak: 2,
-            perfectClears: 0,
-            gameMode: 'gauntlet'
+            perfectClears: 0
         };
 
-        const rows = getLocalProgressRegistryRows(save, Date.UTC(2026, 3, 26, 1));
+        const rows = getLocalProgressRegistryRows(save);
 
         expect(new Set(rows.map((row) => row.source))).toEqual(
-            new Set(['daily_archive', 'objective_board', 'quest_campaign'])
+            new Set(['objective_board', 'quest_campaign'])
         );
         expect(rows.every((row) => row.localOnly)).toBe(true);
         expect(rows.every((row) => row.progressLabel.length > 0)).toBe(true);
         expect(rows.every((row) => row.sourceFields.length > 0)).toBe(true);
-        expect(rows.find((row) => row.source === 'daily_archive' && row.id === 'daily:20260425')).toMatchObject({
-            status: 'completed',
-            progressLabel: expect.stringContaining('20260425')
-        });
-        expect(rows.find((row) => row.source === 'objective_board' && row.id === 'daily_three')).toMatchObject({
+        expect(rows.find((row) => row.source === 'objective_board' && row.id === 'sharp_three')).toMatchObject({
             status: 'completed',
             progressLabel: '3/3'
         });
-        expect(rows.find((row) => row.source === 'quest_campaign' && row.id === 'daily_rhythm')).toMatchObject({
+        expect(rows.find((row) => row.source === 'quest_campaign' && row.id === 'chain_rhythm')).toMatchObject({
             status: 'completed',
             progressLabel: '3/3'
         });
@@ -49,7 +42,7 @@ describe('GLD-P1-009 local progress registry adapters', () => {
 
     it('summarizes active, completed, locked, and failed status vocabulary consistently', () => {
         const save = createDefaultSaveData();
-        const summary = getLocalProgressRegistrySummary(save, Date.UTC(2026, 3, 26, 1));
+        const summary = getLocalProgressRegistrySummary(save);
 
         expect(summary.localOnly).toBe(true);
         expect(summary.total).toBeGreaterThan(0);

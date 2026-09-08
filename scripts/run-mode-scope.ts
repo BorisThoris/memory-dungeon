@@ -38,34 +38,10 @@ export const RUN_MODE_SCOPE: readonly RunModeScopeRow[] = [
         reason: 'The main game. Everything else is measured against it.'
     },
     {
-        modeId: 'daily',
-        kind: 'distinct',
-        changes: 'Fixes the seed and the mutators from the UTC date, and records a streak.',
-        reason: 'The same board for everyone that day is a different proposition, not a difficulty knob: it is the only mode where a score means something next to someone else’s.'
-    },
-    {
         modeId: 'pass_and_play',
         kind: 'distinct',
         changes: 'Seats two to four players, passes the device on a miss, ends at an agreed length.',
         reason: 'Changes who is playing rather than what the board does. Same-device multiplayer is the one thing here a solo run cannot be turned into.'
-    },
-    {
-        modeId: 'puzzle_starter',
-        kind: 'distinct',
-        changes: 'Builds the board from a handcrafted tile list instead of generating one.',
-        reason: 'A designed board is not a procedural board with settings; it is the one family here that is authored rather than rolled.'
-    },
-    {
-        modeId: 'puzzle_mirror',
-        kind: 'distinct',
-        changes: 'Builds the board from a handcrafted tile list instead of generating one.',
-        reason: 'Same as the starter puzzle: authored, not generated.'
-    },
-    {
-        modeId: 'puzzle_glyph_cross',
-        kind: 'distinct',
-        changes: 'Builds the board from a handcrafted tile list instead of generating one.',
-        reason: 'Same as the starter puzzle: authored, not generated.'
     },
     {
         modeId: 'endless',

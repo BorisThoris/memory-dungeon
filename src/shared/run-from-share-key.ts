@@ -1,10 +1,5 @@
 import type { CreateRunOptions } from './run-creation-rules';
-import {
-    createGauntletRun,
-    createMeditationRun,
-    createNewRun,
-    createWildRun
-} from './run-creation-rules';
+import { createNewRun, createWildRun } from './run-creation-rules';
 import { createDungeonShowcaseRun } from './dungeon-showcase-run-rules';
 import type { RunState } from './contracts';
 import type { RunShareKey } from './run-share-key';
@@ -17,8 +12,8 @@ import type { RunShareKey } from './run-share-key';
  * different board and quietly call it the same run. `runRulesVersionOverride` exists for exactly
  * this, and this is the first thing to use it.
  *
- * Every branch routes to the same factory the mode's own menu entry uses, so a shared run and a
- * run started from the library are the same run, not two things that look alike.
+ * Every branch builds the run the setup sheet builds for the same choices, so a shared run and a
+ * run started from the sheet are the same run, not two things that look alike.
  */
 
 const CONTRACT_SCHOLAR = { bonusRelicDraftPick: true, maxMismatches: null, noDestroy: true, noShuffle: true };
@@ -37,9 +32,13 @@ export const createRunFromShareKey = (
 
     switch (key.variant) {
         case 'gauntlet':
-            return createGauntletRun(bestScore, key.durationMs ?? 0, seeded);
+            return createNewRun(bestScore, { ...seeded, gauntletDurationMs: key.durationMs ?? 0 });
         case 'meditation':
-            return createMeditationRun(bestScore, key.mutators ? [...key.mutators] : undefined, seeded);
+            return createNewRun(bestScore, {
+                ...seeded,
+                ...(key.mutators && key.mutators.length > 0 ? { activeMutators: [...key.mutators] } : {}),
+                resolveDelayMultiplier: 1.35
+            });
         case 'pin_vow':
             return createNewRun(bestScore, { ...seeded, activeContract: CONTRACT_PIN_VOW });
         case 'practice':

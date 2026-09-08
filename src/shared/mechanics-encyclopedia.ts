@@ -321,11 +321,6 @@ export const ACHIEVEMENT_CATALOG: Record<AchievementId, AchievementCodexEntry> =
         title: 'Abyssal Ten',
         description: 'Reach floor 10 in a single Endless run.'
     },
-    ACH_SEVEN_DAILIES: {
-        id: 'ACH_SEVEN_DAILIES',
-        title: 'Week of Archives',
-        description: 'Complete seven Daily runs (UTC calendar days, cumulative).'
-    },
     ACH_WARDEN_FELLED: {
         id: 'ACH_WARDEN_FELLED',
         title: 'Warden Felled',
@@ -375,21 +370,6 @@ export const ACHIEVEMENT_CATALOG: Record<AchievementId, AchievementCodexEntry> =
         id: 'ACH_NO_POWERS_TEN',
         title: 'Bare Hands',
         description: 'Reach floor 10 in a run where you used no powers.'
-    },
-    ACH_GAUNTLET_RUN: {
-        id: 'ACH_GAUNTLET_RUN',
-        title: 'Gauntlet Runner',
-        description: 'Clear three floors in a single Gauntlet run.'
-    },
-    ACH_PUZZLE_SOLVER: {
-        id: 'ACH_PUZZLE_SOLVER',
-        title: 'Puzzle Solver',
-        description: 'Complete every built-in Puzzle layout.'
-    },
-    ACH_MEDITATION_HOUR: {
-        id: 'ACH_MEDITATION_HOUR',
-        title: 'Long Sitting',
-        description: 'Clear eight floors in a single Meditation run.'
     },
     ACH_FIRST_FEVER: {
         id: 'ACH_FIRST_FEVER',
@@ -644,30 +624,8 @@ export const GAME_MODE_CODEX: GameModeCodexEntry[] = [
         id: 'endless',
         title: 'Classic Run',
         description:
-            'Standard descent: procedural floors, named endless chapters, one featured objective per floor, and relic offers every three clears. Completing featured objectives builds Favor; every 3 Favor banks +1 extra relic selection for the next shrine. Endless shrine drafts can now surface chapter-aligned relics. (Internal mode id: endless.)'
+            'The one mode. Procedural floors, named endless chapters, one featured objective per floor, and relic offers every three clears. Completing featured objectives builds Favor; every 3 Favor banks +1 extra relic selection for the next shrine. Shrine drafts can surface chapter-aligned relics. Everything the retired mode cards used to switch on — a clock, calm pacing, vows, chaos, an unrecorded run — is a choice on the setup sheet in front of the run. (Internal mode id: endless.)'
     },
-    {
-        id: 'daily',
-        title: 'Daily Challenge',
-        description:
-            'Everyone plays the **same seed** for the **UTC calendar day**. Daily mutators come from a **fixed rotation table** keyed off the date so the challenge is shared worldwide.'
-    },
-    {
-        id: 'puzzle',
-        title: 'Puzzle',
-        description: 'Fixed handcrafted boards from the built-in puzzle set; puzzle JSON menu import is not enabled in this build.'
-    },
-    {
-        id: 'gauntlet',
-        title: 'Gauntlet',
-        description:
-            'A **run-wide wall-clock deadline** from the menu duration preset (commonly **5 / 10 / 15** minutes). When time runs out you hit **game over** even with lives left—pace your clears against the clock.'
-    },
-    {
-        id: 'meditation',
-        title: 'Meditation',
-        description: 'Longer memorize windows and calmer pacing for practice-style runs.'
-    }
 ];
 
 /** High-level topics — see also granular `ENCYCLOPEDIA_POWER_TOPICS` etc. */

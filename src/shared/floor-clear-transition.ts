@@ -207,7 +207,7 @@ export const createFinalizeLevelTransition = ({
             featuredObjectiveStreak: featuredObjectiveClear.featuredObjectiveStreak,
             endlessRiskWager: featuredObjectiveClear.activeEndlessRiskWager ? null : run.endlessRiskWager,
             gauntletDeadlineMs:
-                run.gameMode === 'gauntlet' && run.gauntletDeadlineMs !== null
+                run.gauntletDeadlineMs !== null
                     ? extendTimerTimestampMs(run.gauntletDeadlineMs, GAUNTLET_FLOOR_CLEAR_TIME_BONUS_MS)
                     : run.gauntletDeadlineMs,
             board,

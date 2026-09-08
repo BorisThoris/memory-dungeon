@@ -9,7 +9,6 @@ import {
     type RelicId,
     type RunState,
     type StartingLoadoutId,
-    type Tile,
     type WeakerShuffleMode
 } from './contracts';
 import { filterMutatorsByContentLock } from './content-lock-state';
@@ -17,22 +16,17 @@ import { createBonusRewardLedger, hasRewardPerk } from './bonus-rewards';
 import { applyRelicImmediateThroughGameplayCore } from './gameplay-core-adapters';
 import { getTraitRouteObjectiveSeed } from './trait-route-objectives';
 import { pickFloorScheduleEntry, usesEndlessFloorSchedule } from './floor-mutator-schedule';
-import { DAILY_MUTATOR_TABLE } from './mutators';
 import { hasRunRelic } from './relics';
-import { deriveDailyMutatorIndex, deriveDailyRunSeed, formatDailyDateKeyUtc } from './rng';
 import { createDungeonRunMapState } from './run-map';
 import { pickFloorCurio, seatFloorCurio } from './floor-curio-rules';
 import { countFindablePairs } from './board-tile-generation-rules';
 import { boardHasGlassDecoy } from './board-inspection';
-import { DECOY_PAIR_KEY } from './tile-identity';
 import { getMemorizeDurationForRun } from './scoring-rules';
 import { createSessionStats } from './session-stats-rules';
 import { createTimerState, normalizeTimerTimestampMs } from './run-timer-rules';
 import { buildBoard } from './board-build-rules';
 import { applyStartingLoadout } from './starting-loadouts';
 import { createPassAndPlayState } from './pass-and-play-rules';
-
-const clamp = (value: number, min: number, max: number): number => Math.min(max, Math.max(min, value));
 
 export interface CreateRunOptions {
     runSeed?: number;
@@ -298,17 +292,6 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
     );
 };
 
-export const createMeditationRun = (
-    bestScore: number,
-    focusMutators?: MutatorId[],
-    extra: Partial<CreateRunOptions> = {}
-): RunState =>
-    createNewRun(bestScore, {
-        gameMode: 'meditation',
-        activeMutators: focusMutators && focusMutators.length > 0 ? focusMutators : undefined,
-        ...extra
-    });
-
 export const createWildRun = (bestScore: number, extra: Partial<CreateRunOptions> = {}): RunState =>
     createNewRun(bestScore, {
         enableWildJoker: true,
@@ -317,61 +300,6 @@ export const createWildRun = (bestScore: number, extra: Partial<CreateRunOptions
         activeMutators: ['sticky_fingers', 'short_memorize', 'findables_floor'],
         ...extra
     });
-
-export const createDailyRun = (bestScore: number, extra: Partial<CreateRunOptions> = {}): RunState => {
-    const runSeed = deriveDailyRunSeed(GAME_RULES_VERSION);
-    const mutIndex = deriveDailyMutatorIndex(runSeed, DAILY_MUTATOR_TABLE.length);
-    const dailyMutator = DAILY_MUTATOR_TABLE[mutIndex] ?? DAILY_MUTATOR_TABLE[0];
-    const activeMutators = dailyMutator ? [dailyMutator] : [];
-
-    return createNewRun(bestScore, {
-        runSeed,
-        gameMode: 'daily',
-        activeMutators,
-        dailyDateKeyUtc: formatDailyDateKeyUtc(),
-        ...extra
-    });
-};
-
-export const createGauntletRun = (
-    bestScore: number,
-    gauntletDurationMs: number = 10 * 60 * 1000,
-    extra: Partial<CreateRunOptions> = {}
-): RunState =>
-    createNewRun(bestScore, {
-        gameMode: 'gauntlet',
-        gauntletDurationMs,
-        ...extra
-    });
-
-export const createPuzzleRun = (
-    bestScore: number,
-    puzzleId: string,
-    tiles: Tile[],
-    level = 1,
-    extra: Partial<CreateRunOptions> = {}
-): RunState => {
-    const columns = clamp(Math.ceil(Math.sqrt(tiles.length)), 2, 8);
-    const rows = Math.ceil(tiles.length / columns);
-    const pairCount = new Set(tiles.map((t) => t.pairKey).filter((k) => k !== DECOY_PAIR_KEY)).size;
-
-    return createNewRun(bestScore, {
-        gameMode: 'puzzle',
-        puzzleId,
-        fixedBoard: {
-            level,
-            pairCount,
-            columns,
-            rows,
-            tiles: tiles.map((t) => ({ ...t })),
-            flippedTileIds: [],
-            matchedPairs: 0,
-            floorArchetypeId: null,
-            featuredObjectiveId: null
-        },
-        ...extra
-    });
-};
 
 export const isGauntletExpired = (run: RunState): boolean => {
     const gauntletDeadlineMs = normalizeTimerTimestampMs(run.gauntletDeadlineMs);

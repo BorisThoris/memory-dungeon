@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { MutatorId, RelicId, RouteNodeType, RunState } from './contracts';
-import { createDailyRun, createNewRun } from './game-core';
+import { createNewRun } from './game-core';
 import { pickFloorScheduleEntry } from './floor-mutator-schedule';
 import {
     applyRelicOfferService,
@@ -105,9 +105,6 @@ describe('needsRelicPick', () => {
         expect(needsRelicPick(levelCompleteRun(3, 0))).toBe(true);
     });
 
-    it('is false for puzzle mode', () => {
-        expect(needsRelicPick(levelCompleteRun(3, 0, { gameMode: 'puzzle' }))).toBe(false);
-    });
 
     it('is false after max picks', () => {
         expect(needsRelicPick(levelCompleteRun(15, MAX_RELIC_PICKS_PER_RUN))).toBe(false);
@@ -339,27 +336,6 @@ describe('rollRelicOptions', () => {
         expect(getRelicDraftOptionReasonRows(reasons).map((row) => row.reason)).toContain('Answers short memorize');
     });
 
-    it('keeps non-Endless drafts on base odds except hard filters', () => {
-        const daily = {
-            ...createDailyRun(0),
-            status: 'levelComplete' as const,
-            lastLevelResult: {
-                level: 3,
-                scoreGained: 10,
-                rating: 'S' as const,
-                livesRemaining: 3,
-                perfect: false,
-                mistakes: 0,
-                clearLifeReason: 'none' as const,
-                clearLifeGained: 0
-            }
-        };
-
-        expect(getRelicDraftOptionReasons(daily, 3, rollRelicOptions(daily, 0, 3))).toBeUndefined();
-        expect(isRelicDraftEligible('chapter_compass', daily)).toBe(false);
-        expect(isRelicDraftEligible('wager_surety', daily)).toBe(false);
-        expect(isRelicDraftEligible('parasite_ledger', daily)).toBe(false);
-    });
 
     it('reads relic draft option reasons in relic pool order', () => {
         const reasons = {

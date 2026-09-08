@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { createRunFromShareKey } from './run-from-share-key';
-import { createGauntletRun, createNewRun, createWildRun } from './run-creation-rules';
+import { createNewRun, createWildRun } from './run-creation-rules';
 import { describeRunShareKey, type RunShareKey } from './run-share-key';
 import { describeRunModeIdentity } from './run-mode-identity';
 
@@ -44,7 +44,7 @@ describe('createRunFromShareKey', () => {
     });
 
     it('replays a gauntlet against the same clock', () => {
-        const replayed = createRunFromShareKey(keyOf(createGauntletRun(0, 900_000)), 0);
+        const replayed = createRunFromShareKey(keyOf(createNewRun(0, { gauntletDurationMs: 900_000 })), 0);
         expect(replayed.gauntletSessionDurationMs).toBe(900_000);
     });
 

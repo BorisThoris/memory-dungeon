@@ -142,34 +142,6 @@ describe('ProfileScreen', () => {
         expect(within(records).queryAllByRole('listitem')).toHaveLength(0);
     });
 
-    it('tells the player the streak has a grace day, and whether it is still there', () => {
-        /*
-         * The rule lives in `resolveDailyStreak` and is tested there, which proves the streak
-         * survives a missed day and proves nothing about whether the player ever finds out. A
-         * forgiveness nobody is told about is one they still play under pressure to avoid.
-         */
-        const saveData = createDefaultSaveData();
-        saveData.playerStats = {
-            ...saveData.playerStats!,
-            dailiesCompleted: 4,
-            dailyStreakCosmetic: 4,
-            dailyStreakGraceAvailable: true,
-            lastDailyDateKeyUtc: '20260901'
-        };
-        profileStoreMocks.saveData = saveData;
-
-        const held = render(<ProfileScreen />);
-        expect(screen.getByTestId('profile-progress-grid')).toHaveTextContent(/grace day held/i);
-        held.unmount();
-
-        profileStoreMocks.saveData = {
-            ...saveData,
-            playerStats: { ...saveData.playerStats, dailyStreakGraceAvailable: false }
-        };
-
-        render(<ProfileScreen />);
-        expect(screen.getByTestId('profile-progress-grid')).toHaveTextContent(/grace day spent/i);
-    });
 
     it('shows one part of the record at a time, so no list can push another off screen', () => {
         const saveData = createDefaultSaveData();
@@ -263,26 +235,6 @@ describe('ProfileScreen', () => {
         expect(screen.queryByTestId('profile-copy-daily')).not.toBeInTheDocument();
     });
 
-    it('copies the streak line once there is a daily record to post', async () => {
-        const saveData = createDefaultSaveData();
-        const stats = saveData.playerStats;
-        expect(stats, 'a default save carries player stats').toBeDefined();
-        stats!.dailiesCompleted = 3;
-        stats!.dailyStreakCosmetic = 5;
-        stats!.lastDailyDateKeyUtc = '20260904';
-        profileStoreMocks.saveData = saveData;
-
-        const writeText = vi.fn(async (_text: string) => undefined);
-        Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText } });
-
-        render(<ProfileScreen />);
-        const button = screen.getByTestId('profile-copy-daily');
-        fireEvent.click(button);
-
-        expect(writeText).toHaveBeenCalledTimes(1);
-        expect(writeText.mock.calls[0]?.[0]).toMatch(/^Daily 20260904 .*streak 5$/u);
-        await waitFor(() => expect(button).toHaveTextContent(/copied/i));
-    });
 
     it('shows what the player is part-way through, dailies and quests included', () => {
         render(<ProfileScreen />);
@@ -296,17 +248,17 @@ describe('ProfileScreen', () => {
         }
     });
 
-    it('states the daily streak in the subtitle, which nothing on any screen said before', () => {
+    it('states the chain in the subtitle, which nothing on any screen said before', () => {
         render(<ProfileScreen />);
 
-        expect(screen.getByTestId('profile-screen')).toHaveTextContent(/daily streak/i);
+        expect(screen.getByTestId('profile-screen')).toHaveTextContent(/sharp floor/i);
     });
 
     it('states the profile once: six numbers, the tier rail and the next goal', () => {
         render(<ProfileScreen />);
 
         const summary = screen.getByTestId('profile-summary-grid');
-        for (const label of ['Profile level', 'Honor marks', 'Best score', 'Title', 'Run history rows', 'Daily streak']) {
+        for (const label of ['Profile level', 'Honor marks', 'Best score', 'Title', 'Run history rows', 'Sharp floors']) {
             expect(summary).toHaveTextContent(label);
         }
         expect(within(screen.getByTestId('profile-milestone-rail')).getAllByText(/^Lv \d+$/).length).toBeGreaterThan(0);

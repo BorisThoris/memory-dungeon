@@ -20,7 +20,7 @@ describe('REG-080 permanent upgrade tree and cosmetic track', () => {
         const save = createDefaultSaveData();
         save.playerStats = {
             ...save.playerStats!,
-            dailiesCompleted: 7,
+            sharpFloors: 7,
             bestFloorNoPowers: 5,
             relicShrineExtraPickUnlocked: true
         };
@@ -29,7 +29,7 @@ describe('REG-080 permanent upgrade tree and cosmetic track', () => {
         expect(upgrades.map((row) => row.id)).toEqual([
             'relic_shrine_extra_pick',
             'ascendant_title_track',
-            'daily_cosmetic_track'
+            'sharp_cosmetic_track'
         ]);
         expect(upgrades.find((row) => row.id === 'relic_shrine_extra_pick')?.status).toBe('unlocked');
         expect(upgrades.every((row) => row.offlineOnly)).toBe(true);
@@ -40,7 +40,7 @@ describe('REG-080 permanent upgrade tree and cosmetic track', () => {
         const save = createDefaultSaveData();
         save.playerStats = {
             ...save.playerStats!,
-            dailiesCompleted: 7,
+            sharpFloors: 7,
             relicShrineExtraPickUnlocked: false
         };
 
@@ -49,7 +49,7 @@ describe('REG-080 permanent upgrade tree and cosmetic track', () => {
             progress: { current: 7, target: 7 }
         });
         expect(buildPermanentUpgradeRows(save).filter((row) => row.status === 'unlocked').map((row) => row.id)).toEqual([
-            'daily_cosmetic_track'
+            'sharp_cosmetic_track'
         ]);
         expect(metaProgressionSummary(save).upgradesUnlocked).toBe(1);
     });
@@ -59,7 +59,7 @@ describe('REG-080 permanent upgrade tree and cosmetic track', () => {
         save.unlocks = ['cosmetic:crest_daily_bronze'];
         save.playerStats = {
             ...save.playerStats!,
-            dailiesCompleted: 3,
+            sharpFloors: 3,
             bestFloorNoPowers: 4
         };
 
@@ -79,7 +79,7 @@ describe('REG-080 permanent upgrade tree and cosmetic track', () => {
         save.achievements.ACH_FIRST_CLEAR = true;
         save.playerStats = {
             ...save.playerStats!,
-            dailiesCompleted: 4,
+            sharpFloors: 4,
             bestFloorNoPowers: 2,
             relicPickCounts: {
                 extra_shuffle_charge: 3
@@ -90,8 +90,8 @@ describe('REG-080 permanent upgrade tree and cosmetic track', () => {
         expect(board.level).toBeGreaterThan(1);
         expect(board.levelProgress.target).toBe(5);
         expect(board.nextReward?.id).toBe('upgrade_relic_shrine_extra_pick');
-        expect(board.nextReward?.source).toBe('Daily archive completions');
-        expect(board.nextReward?.modeRule).toBe('disabled_in_daily');
+        expect(board.nextReward?.source).toBe('Sharp floor clears');
+        expect(board.nextReward?.modeRule).toBe('visible_in_classic');
         expect(board.longTermGoal?.id).toBe('upgrade_scholar_prep_slot');
         expect(board.longTermGoal?.status).toBe('locked');
         expect(board.rows.every((row) => row.localOnly)).toBe(true);
@@ -137,7 +137,7 @@ describe('REG-080 permanent upgrade tree and cosmetic track', () => {
         const save = createDefaultSaveData();
         save.playerStats = {
             ...save.playerStats!,
-            dailiesCompleted: 7,
+            sharpFloors: 7,
             relicShrineExtraPickUnlocked: true
         };
 
@@ -145,7 +145,7 @@ describe('REG-080 permanent upgrade tree and cosmetic track', () => {
         const week = rows.find((row) => row.id === 'upgrade_relic_shrine_extra_pick');
         expect(week).toMatchObject({
             gameplayAffecting: true,
-            modeRule: 'disabled_in_daily',
+            modeRule: 'visible_in_classic',
             status: 'owned'
         });
         expect(rows.filter((row) => row.track === 'cosmetic').every((row) => row.gameplayAffecting === false)).toBe(true);
@@ -163,7 +163,7 @@ describe('REG-080 permanent upgrade tree and cosmetic track', () => {
         save.achievements.ACH_FIRST_CLEAR = true;
         save.playerStats = {
             ...save.playerStats!,
-            dailiesCompleted: 9,
+            sharpFloors: 9,
             bestFloorNoPowers: 2,
             relicPickCounts: {
                 extra_shuffle_charge: 3
@@ -174,11 +174,11 @@ describe('REG-080 permanent upgrade tree and cosmetic track', () => {
 
         expect(sources.map((row) => [row.id, row.marks, row.progress])).toEqual([
             ['achievements', 2, { current: 1, target: ACHIEVEMENT_IDS.length }],
-            ['daily_archive', 7, { current: 7, target: 7 }],
+            ['sharp_floors', 7, { current: 7, target: 7 }],
             ['no_powers_mastery', 2, { current: 2, target: 5 }],
             ['relic_mastery', 1, { current: 3, target: 10 }]
         ]);
-        expect(sources.find((row) => row.id === 'daily_archive')?.nextMarkCopy).toBeNull();
+        expect(sources.find((row) => row.id === 'sharp_floors')?.nextMarkCopy).toBeNull();
         expect(sources.find((row) => row.id === 'relic_mastery')?.nextMarkCopy).toBe('Pick 1 more relic for 1 honor mark.');
     });
 
@@ -186,7 +186,7 @@ describe('REG-080 permanent upgrade tree and cosmetic track', () => {
         const save = createDefaultSaveData();
         save.playerStats = {
             ...save.playerStats!,
-            dailiesCompleted: Number.POSITIVE_INFINITY,
+            sharpFloors: Number.POSITIVE_INFINITY,
             bestFloorNoPowers: Number.NaN,
             relicPickCounts: {
                 guard_token_plus_one: Number.POSITIVE_INFINITY,
@@ -197,7 +197,7 @@ describe('REG-080 permanent upgrade tree and cosmetic track', () => {
         const sources = getMetaHonorMarkSourceRows(save);
         expect(sources.map((row) => [row.id, row.marks, row.progress])).toEqual([
             ['achievements', 0, { current: 0, target: ACHIEVEMENT_IDS.length }],
-            ['daily_archive', 0, { current: 0, target: 7 }],
+            ['sharp_floors', 0, { current: 0, target: 7 }],
             ['no_powers_mastery', 0, { current: 0, target: 5 }],
             ['relic_mastery', 0, { current: 1, target: 10 }]
         ]);
@@ -218,11 +218,11 @@ describe('REG-080 permanent upgrade tree and cosmetic track', () => {
         expect(buildPermanentUpgradeRows(save).map((row) => [row.id, row.status, row.progress])).toEqual([
             ['relic_shrine_extra_pick', 'locked', { current: 0, target: 7 }],
             ['ascendant_title_track', 'locked', { current: 0, target: 5 }],
-            ['daily_cosmetic_track', 'locked', { current: 0, target: 3 }]
+            ['sharp_cosmetic_track', 'locked', { current: 0, target: 3 }]
         ]);
         expect(getCosmeticTrackDefinitionRows(save).map((row) => [row.trackId, row.status, row.progress])).toEqual([
             ['starter', 'owned', { current: 1, target: 1 }],
-            ['daily', 'locked', { current: 0, target: 3 }],
+            ['sharp', 'locked', { current: 0, target: 3 }],
             ['mastery', 'locked', { current: 0, target: 5 }]
         ]);
     });
@@ -258,7 +258,7 @@ describe('REG-080 permanent upgrade tree and cosmetic track', () => {
         save.achievements.ACH_PERFECT_CLEAR = true;
         save.playerStats = {
             ...save.playerStats!,
-            dailiesCompleted: 7,
+            sharpFloors: 7,
             bestFloorNoPowers: 5,
             relicPickCounts: {
                 extra_shuffle_charge: 8
@@ -286,7 +286,7 @@ describe('REG-080 permanent upgrade tree and cosmetic track', () => {
         save.achievements.ACH_FIRST_CLEAR = true;
         save.playerStats = {
             ...save.playerStats!,
-            dailiesCompleted: 4,
+            sharpFloors: 4,
             bestFloorNoPowers: 2
         };
 
@@ -301,8 +301,8 @@ describe('REG-080 permanent upgrade tree and cosmetic track', () => {
             nextReward: {
                 id: 'upgrade_relic_shrine_extra_pick',
                 status: 'locked',
-                progressCopy: '4/7 from Daily archive completions',
-                modeRule: 'disabled_in_daily'
+                progressCopy: '4/7 from Sharp floor clears',
+                modeRule: 'visible_in_classic'
             },
             longTermGoal: {
                 id: 'upgrade_scholar_prep_slot',
@@ -314,7 +314,7 @@ describe('REG-080 permanent upgrade tree and cosmetic track', () => {
                 marksRemaining: 2
             },
             nextMilestoneCopy: 'Adept tier at profile level 3 (2 honor marks).',
-            motivationCopy: 'Next: Week of Archives (4/7 from Daily archive completions).'
+            motivationCopy: 'Next: Week of Archives (4/7 from Sharp floor clears).'
         });
     });
 
@@ -322,7 +322,7 @@ describe('REG-080 permanent upgrade tree and cosmetic track', () => {
         const save = createDefaultSaveData();
         save.playerStats = {
             ...save.playerStats!,
-            dailiesCompleted: 7
+            sharpFloors: 7
         };
 
         const feedback = getMetaProgressionFeedback(save);
@@ -341,7 +341,7 @@ describe('REG-080 permanent upgrade tree and cosmetic track', () => {
         const save = createDefaultSaveData();
         save.playerStats = {
             ...save.playerStats!,
-            dailiesCompleted: 7,
+            sharpFloors: 7,
             relicShrineExtraPickUnlocked: false
         };
 
@@ -366,14 +366,14 @@ describe('REG-080 permanent upgrade tree and cosmetic track', () => {
         expect(lockedResult).toMatchObject({
             applied: false,
             reason: 'locked',
-            feedbackCopy: 'Week of Archives needs 7 more from Daily archive completions.'
+            feedbackCopy: 'Week of Archives needs 7 more from Sharp floor clears.'
         });
         expect(lockedResult.save).toBe(locked);
 
         const owned = createDefaultSaveData();
         owned.playerStats = {
             ...owned.playerStats!,
-            dailiesCompleted: 7,
+            sharpFloors: 7,
             relicShrineExtraPickUnlocked: true
         };
         expect(applyMetaProgressionUnlock(owned, 'upgrade_relic_shrine_extra_pick')).toMatchObject({

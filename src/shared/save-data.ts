@@ -10,7 +10,6 @@ import {
     type PlayerStatsPersisted,
     type RelicId,
     type RunSummary,
-    type RunState,
     type SaveData,
     type Settings,
     type StartingLoadoutId
@@ -19,29 +18,13 @@ import { z } from 'zod';
 import type { ChainTier } from './chain-tier-rules';
 import { COSMETIC_IDS } from './cosmetic-ids';
 import { HONOR_UNLOCK_IDS } from './honor-unlock-ids';
-import { utcDateKeyMinusOneDay } from './rng';
 import { runArray, runFilteredArray } from './run-array-guards';
 import { isRunRecord } from './run-record-guards';
 import { normalizeRunHistory } from './run-history-log';
 import { runFiniteNumberOrFallback, runNonNegativeIntegerOrFallback } from './run-number-guards';
 import { RELIC_POOL } from './relics';
-import { normalizeSessionStats } from './session-stats-rules';
 import { evaluateSaveMigrationGate, isRecognizedSaveSchemaVersion } from './version-gate';
 import { normalizeGameplayJournalSnapshot } from './gameplay-journal';
-
-export type DailyStreakFreezePolicy = 'one_grace_day';
-
-export interface DailyStreakEthicsState {
-    currentStreak: number;
-    nextResetUtcKey: string;
-    missedDayBehavior: 'reset_to_one_on_next_completion' | 'forgiven_by_grace_day' | 'no_clear_recorded_yet';
-    /** Whether the one grace day is unspent right now. */
-    graceAvailable: boolean;
-    freezePolicy: DailyStreakFreezePolicy;
-    rewardLimit: 'cosmetic_and_meta_only';
-    tone: 'friendly_no_shame';
-    copy: string;
-}
 
 export const DEFAULT_SETTINGS: Settings = {
     masterVolume: 0.8,
@@ -102,7 +85,6 @@ export const ACHIEVEMENT_IDS = [
     'ACH_PERFECT_CLEAR',
     'ACH_LAST_LIFE',
     'ACH_ENDLESS_TEN',
-    'ACH_SEVEN_DAILIES',
     'ACH_WARDEN_FELLED',
     'ACH_ENDLESS_CYCLE',
     'ACH_ENDLESS_TWENTY',
@@ -113,9 +95,6 @@ export const ACHIEVEMENT_IDS = [
     'ACH_STANDING_ORDERS',
     'ACH_RELIC_LIBRARY',
     'ACH_NO_POWERS_TEN',
-    'ACH_GAUNTLET_RUN',
-    'ACH_PUZZLE_SOLVER',
-    'ACH_MEDITATION_HOUR',
     'ACH_FIRST_FEVER',
     'ACH_CHUNK_SIX',
     'ACH_EXTREME_FEVER',
@@ -133,17 +112,11 @@ export const createAchievementState = (): AchievementState =>
         {} as AchievementState
     );
 
-const createPuzzleCompletionMap = (): NonNullable<PlayerStatsPersisted['puzzleCompletions']> => Object.create(null);
 
 const defaultPlayerStats = (): PlayerStatsPersisted => ({
     bestFloorNoPowers: 0,
-    dailiesCompleted: 0,
-    lastDailyDateKeyUtc: null,
-    dailyStreakCosmetic: 0,
-    dailyStreakGraceAvailable: true,
     relicPickCounts: {},
     encorePairKeysLastRun: [],
-    puzzleCompletions: createPuzzleCompletionMap(),
     relicShrineExtraPickUnlocked: false,
     sharpFloors: 0,
     feverFloors: 0
@@ -167,7 +140,7 @@ const getRelicIdSet = (): ReadonlySet<string> => {
     return relicIdSet;
 };
 const MUTATOR_ID_SET: ReadonlySet<string> = new Set(MUTATOR_IDS);
-const GAME_MODE_SET: ReadonlySet<string> = new Set(['endless', 'daily', 'puzzle', 'gauntlet', 'meditation']);
+const GAME_MODE_SET: ReadonlySet<string> = new Set(['endless']);
 const STARTING_LOADOUT_ID_SET: ReadonlySet<string> = new Set([
     'memory_scout',
     'route_tactician',
@@ -184,7 +157,6 @@ const PERSISTED_COLLECTION_LIMITS = {
     encorePairKeys: 80,
     entryTextLength: 128,
     inspectedEntries: 1024,
-    puzzleCompletions: 256,
     unlockTags: 128
 } as const;
 const PERSISTED_SUMMARY_TEXT_LIMIT = 256;
@@ -215,21 +187,6 @@ const finiteClampedNumber = (
     range: { readonly min: number; readonly max: number }
 ): number =>
     Math.min(range.max, Math.max(range.min, runFiniteNumberOrFallback(value, fallback)));
-
-const normalizeDailyDateKeyUtc = (value: unknown): string | null => {
-    if (typeof value !== 'string') {
-        return null;
-    }
-    const compact = /^\d{8}$/.test(value) ? value : /^\d{4}-\d{2}-\d{2}$/.test(value) ? value.replaceAll('-', '') : null;
-    if (!compact) {
-        return null;
-    }
-    const year = Number(compact.slice(0, 4));
-    const month = Number(compact.slice(4, 6)) - 1;
-    const day = Number(compact.slice(6, 8));
-    const date = new Date(Date.UTC(year, month, day));
-    return date.getUTCFullYear() === year && date.getUTCMonth() === month && date.getUTCDate() === day ? compact : null;
-};
 
 const normalizeAchievements = (input: unknown): AchievementState => {
     const out = createAchievementState();
@@ -264,47 +221,6 @@ const normalizeRelicPickCounts = (input: unknown): PlayerStatsPersisted['relicPi
         if (count > 0) {
             out[id] = count;
         }
-    }
-    return out;
-};
-
-const normalizePuzzleCompletions = (input: unknown): NonNullable<PlayerStatsPersisted['puzzleCompletions']> => {
-    if (!isUnknownRecord(input)) {
-        return createPuzzleCompletionMap();
-    }
-    const out = createPuzzleCompletionMap();
-    let inspected = 0;
-    let retained = 0;
-    for (const id in input) {
-        if (!Object.prototype.hasOwnProperty.call(input, id)) {
-            continue;
-        }
-        if (
-            inspected >= PERSISTED_COLLECTION_LIMITS.inspectedEntries ||
-            retained >= PERSISTED_COLLECTION_LIMITS.puzzleCompletions
-        ) {
-            break;
-        }
-        inspected += 1;
-        const value = input[id];
-        if (id.length === 0 || id.length > PERSISTED_COLLECTION_LIMITS.entryTextLength || !isUnknownRecord(value)) {
-            continue;
-        }
-        if (value.completed !== true) {
-            continue;
-        }
-        const bestMistakes =
-            value.bestMistakes === null ? null : finiteNonNegativeInteger(value.bestMistakes, Number.NaN);
-        const bestScore = finiteNonNegativeInteger(value.bestScore, Number.NaN);
-        if ((bestMistakes !== null && !Number.isFinite(bestMistakes)) || !Number.isFinite(bestScore)) {
-            continue;
-        }
-        out[id] = {
-            completed: true,
-            bestMistakes,
-            bestScore
-        };
-        retained += 1;
     }
     return out;
 };
@@ -395,7 +311,8 @@ export const normalizeRunSummary = (input: unknown): RunSummary | null => {
     const runRulesVersion =
         source.runRulesVersion === undefined ? undefined : finiteNonNegativeInteger(source.runRulesVersion, Number.NaN);
     const gameMode = isGameMode(source.gameMode) ? source.gameMode : undefined;
-    const dailyDateKeyUtc = normalizeDailyDateKeyUtc(source.dailyDateKeyUtc);
+    const gauntletSessionDurationMs =
+        source.gauntletSessionDurationMs == null ? null : finiteNonNegativeInteger(source.gauntletSessionDurationMs, 0);
     const activeContract = normalizeContractFlags(source.activeContract);
     const activeMutators = Array.isArray(source.activeMutators)
         ? [...new Set(runFilteredArray(source.activeMutators, isMutatorId))]
@@ -462,7 +379,7 @@ export const normalizeRunSummary = (input: unknown): RunSummary | null => {
         ...(Number.isFinite(runSeed) ? { runSeed } : {}),
         ...(Number.isFinite(runRulesVersion) ? { runRulesVersion } : {}),
         ...(gameMode ? { gameMode } : {}),
-        ...(dailyDateKeyUtc ? { dailyDateKeyUtc } : {}),
+        ...(gauntletSessionDurationMs != null ? { gauntletSessionDurationMs } : {}),
         ...(activeMutators ? { activeMutators } : {}),
         ...(relicIds ? { relicIds } : {}),
         ...(Number.isFinite(payoffPickupClaimed) ? { payoffPickupClaimed } : {}),
@@ -703,7 +620,6 @@ export const normalizeSaveData = (input?: SaveDataNormalizationInput | null): Sa
     const mergedAchievements = normalizeAchievements(input.achievements);
     const playerStatsDefaults = defaultPlayerStats();
     const psIn = isUnknownRecord(input.playerStats) ? input.playerStats : {};
-    const dailiesCount = finiteNonNegativeInteger(psIn.dailiesCompleted, playerStatsDefaults.dailiesCompleted);
     const relicPickCounts = normalizeRelicPickCounts(psIn.relicPickCounts);
     const relicShrineExtraPickUnlocked = psIn.relicShrineExtraPickUnlocked === true;
     const lastRunSummary =
@@ -727,18 +643,9 @@ export const normalizeSaveData = (input?: SaveDataNormalizationInput | null): Sa
         runHistory: migrationGate.keepLastRunSummary ? normalizeRunHistory(input.runHistory) : [],
         playerStats: {
             bestFloorNoPowers: finiteNonNegativeInteger(psIn.bestFloorNoPowers, playerStatsDefaults.bestFloorNoPowers),
-            dailiesCompleted: dailiesCount,
-            lastDailyDateKeyUtc: normalizeDailyDateKeyUtc(psIn.lastDailyDateKeyUtc),
-            dailyStreakGraceAvailable:
-                typeof psIn.dailyStreakGraceAvailable === 'boolean' ? psIn.dailyStreakGraceAvailable : true,
-            dailyStreakCosmetic: finiteNonNegativeInteger(
-                psIn.dailyStreakCosmetic,
-                playerStatsDefaults.dailyStreakCosmetic
-            ),
             encorePairKeysLastRun: Array.isArray(psIn.encorePairKeysLastRun)
                 ? normalizeStringLedger(psIn.encorePairKeysLastRun, PERSISTED_COLLECTION_LIMITS.encorePairKeys)
                 : playerStatsDefaults.encorePairKeysLastRun,
-            puzzleCompletions: normalizePuzzleCompletions(psIn.puzzleCompletions),
             relicPickCounts,
             relicShrineExtraPickUnlocked,
             sharpFloors: finiteNonNegativeInteger(psIn.sharpFloors, 0),
@@ -747,64 +654,6 @@ export const normalizeSaveData = (input?: SaveDataNormalizationInput | null): Sa
         unlocks: normalizeUnlocks(input.unlocks),
         powersFtueSeen: typeof input.powersFtueSeen === 'boolean' ? input.powersFtueSeen : defaults.powersFtueSeen ?? false
     };
-};
-
-/**
- * Where a daily clear leaves the streak, and the grace day.
- *
- * The project's own research says a daily streak should carry small rewards and forgive a miss,
- * and this one did not: one skipped UTC day dropped it straight back to 1, which is the pressure
- * the design notes set out to avoid. So a single gap is forgiven while the grace day is unspent,
- * and a clear on a consecutive day earns it back — a real miss costs nothing, and clearing every
- * other day still cannot hold a streak open forever, because the grace never refills that way.
- */
-export const resolveDailyStreak = ({
-    completedDateKeyUtc,
-    graceAvailable,
-    previousDateKeyUtc,
-    streak
-}: {
-    completedDateKeyUtc: string;
-    graceAvailable: boolean;
-    previousDateKeyUtc: string | null;
-    streak: number;
-}): { streak: number; graceAvailable: boolean; usedGrace: boolean } => {
-    const yesterday = utcDateKeyMinusOneDay(completedDateKeyUtc);
-    if (previousDateKeyUtc === yesterday) {
-        return { streak: streak + 1, graceAvailable: true, usedGrace: false };
-    }
-    if (graceAvailable && previousDateKeyUtc !== null && previousDateKeyUtc === utcDateKeyMinusOneDay(yesterday)) {
-        return { streak: streak + 1, graceAvailable: false, usedGrace: true };
-    }
-    // A longer gap, or a gap with the grace already spent: start again, with the grace restored.
-    return { streak: 1, graceAvailable: true, usedGrace: false };
-};
-
-export const mergeDailyComplete = (save: SaveData, completedDateKeyUtc: string): SaveData => {
-    const ps = save.playerStats ?? defaultPlayerStats();
-    if (ps.lastDailyDateKeyUtc === completedDateKeyUtc) {
-        return save;
-    }
-    const prev = ps.lastDailyDateKeyUtc;
-    const next = resolveDailyStreak({
-        completedDateKeyUtc,
-        graceAvailable: ps.dailyStreakGraceAvailable !== false,
-        previousDateKeyUtc: prev,
-        streak: ps.dailyStreakCosmetic
-    });
-    const newDailies = ps.dailiesCompleted + 1;
-
-    return normalizeSaveData({
-        ...save,
-        playerStats: {
-            ...ps,
-            dailiesCompleted: newDailies,
-            lastDailyDateKeyUtc: completedDateKeyUtc,
-            dailyStreakCosmetic: next.streak,
-            dailyStreakGraceAvailable: next.graceAvailable,
-            relicShrineExtraPickUnlocked: ps.relicShrineExtraPickUnlocked === true
-        }
-    });
 };
 
 /**
@@ -823,74 +672,6 @@ export const mergeChainFloorStats = (save: SaveData, floorChainTier: ChainTier):
             ...ps,
             sharpFloors: runNonNegativeIntegerOrFallback(ps.sharpFloors, 0) + 1,
             feverFloors: runNonNegativeIntegerOrFallback(ps.feverFloors, 0) + (floorChainTier === 'fever' ? 1 : 0)
-        }
-    });
-};
-
-export const getDailyStreakEthicsState = (save: SaveData, todayDateKeyUtc: string): DailyStreakEthicsState => {
-    const ps = save.playerStats ?? defaultPlayerStats();
-    const alreadyCompletedToday = ps.lastDailyDateKeyUtc === todayDateKeyUtc;
-    const continuedFromYesterday = ps.lastDailyDateKeyUtc === utcDateKeyMinusOneDay(todayDateKeyUtc);
-    const noClearYet = ps.lastDailyDateKeyUtc == null || ps.dailiesCompleted <= 0;
-    const graceAvailable = ps.dailyStreakGraceAvailable !== false;
-    // One day back from yesterday: the gap the grace day covers.
-    const withinGrace = ps.lastDailyDateKeyUtc === utcDateKeyMinusOneDay(utcDateKeyMinusOneDay(todayDateKeyUtc));
-    const missedDayBehavior: DailyStreakEthicsState['missedDayBehavior'] =
-        noClearYet || alreadyCompletedToday || continuedFromYesterday
-            ? 'no_clear_recorded_yet'
-            : withinGrace && graceAvailable
-              ? 'forgiven_by_grace_day'
-              : 'reset_to_one_on_next_completion';
-
-    return {
-        currentStreak: ps.dailyStreakCosmetic,
-        nextResetUtcKey: todayDateKeyUtc,
-        missedDayBehavior,
-        graceAvailable,
-        freezePolicy: 'one_grace_day',
-        rewardLimit: 'cosmetic_and_meta_only',
-        tone: 'friendly_no_shame',
-        copy:
-            missedDayBehavior === 'forgiven_by_grace_day'
-                ? 'You missed a day, and the streak is holding. Clear today and it carries on.'
-                : missedDayBehavior === 'reset_to_one_on_next_completion'
-                  ? 'The streak starts again on your next clear. No core run fairness is lost.'
-                  : graceAvailable
-                    ? 'Optional local motivation. One missed day is forgiven; clear before the UTC reset to extend it.'
-                    : 'Optional local motivation. The grace day is spent — a clear on a consecutive day earns it back.'
-    };
-};
-
-export const mergePuzzleCompletion = (save: SaveData, run: RunState): SaveData => {
-    if (run.gameMode !== 'puzzle' || !run.puzzleId || run.status !== 'levelComplete') {
-        return save;
-    }
-
-    const ps = save.playerStats ?? defaultPlayerStats();
-    const completions = ps.puzzleCompletions ?? {};
-    const existing = completions[run.puzzleId];
-    const stats = normalizeSessionStats(run.stats);
-    const mistakes = finiteNonNegativeInteger(run.lastLevelResult?.mistakes ?? stats.tries, 0);
-    const score = stats.totalScore;
-    const existingBestMistakes =
-        existing?.bestMistakes == null ? null : finiteNonNegativeInteger(existing.bestMistakes, mistakes);
-    const existingBestScore = finiteNonNegativeInteger(existing?.bestScore, 0);
-
-    return normalizeSaveData({
-        ...save,
-        playerStats: {
-            ...ps,
-            puzzleCompletions: {
-                ...completions,
-                [run.puzzleId]: {
-                    completed: true,
-                    bestMistakes:
-                        existingBestMistakes == null
-                            ? mistakes
-                            : Math.min(existingBestMistakes, mistakes),
-                    bestScore: Math.max(existingBestScore, score)
-                }
-            }
         }
     });
 };

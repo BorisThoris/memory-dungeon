@@ -1,22 +1,11 @@
 import { describe, expect, it, vi } from 'vitest';
 
-import { GAME_RULES_VERSION, type Tile } from './contracts';
+import { GAME_RULES_VERSION } from './contracts';
 import {
-    createDailyRun,
-    createGauntletRun,
     createNewRun,
-    createPuzzleRun,
     createWildRun,
     isGauntletExpired
 } from './run-creation-rules';
-
-const tile = (id: string, pairKey: string): Tile => ({
-    id,
-    pairKey,
-    symbol: pairKey,
-    label: pairKey,
-    state: 'hidden'
-});
 
 describe('run creation rules', () => {
     it('creates a deterministic base run with an initialized board', () => {
@@ -45,36 +34,18 @@ describe('run creation rules', () => {
         expect(run.activeMutators).toEqual(['sticky_fingers', 'short_memorize', 'findables_floor']);
     });
 
-    it('creates puzzle runs from copied fixed tiles', () => {
-        const tiles = [tile('p1', 'P'), tile('p2', 'P')];
 
-        const run = createPuzzleRun(0, 'puzzle-one', tiles, 4, {
-            runSeed: 20_003,
-            runRulesVersionOverride: GAME_RULES_VERSION
-        });
+    it('carries the clock the setup sheet asked for', () => {
+        const timed = createNewRun(0, { gauntletDurationMs: 60_000, runSeed: 20_005 });
 
-        expect(run.gameMode).toBe('puzzle');
-        expect(run.puzzleId).toBe('puzzle-one');
-        expect(run.board?.level).toBe(4);
-        expect(run.board?.tiles).toEqual(tiles);
-        expect(run.board?.tiles).not.toBe(tiles);
+        expect(timed.gameMode).toBe('endless');
+        expect(timed.gauntletSessionDurationMs).toBe(60_000);
     });
 
-    it('creates daily and gauntlet run metadata', () => {
-        const daily = createDailyRun(0, { runSeed: 20_004 });
-        const gauntlet = createGauntletRun(0, 60_000, { runSeed: 20_005 });
-
-        expect(daily.gameMode).toBe('daily');
-        expect(daily.dailyDateKeyUtc).not.toBeNull();
-        expect(daily.activeMutators).toHaveLength(1);
-        expect(gauntlet.gameMode).toBe('gauntlet');
-        expect(gauntlet.gauntletSessionDurationMs).toBe(60_000);
-    });
-
-    it('reports gauntlet expiration only while unpaused', () => {
+    it('reports clock expiration only while unpaused', () => {
         vi.useFakeTimers();
         vi.setSystemTime(1_000);
-        const run = createGauntletRun(0, 500, { runSeed: 20_006 });
+        const run = createNewRun(0, { gauntletDurationMs: 500, runSeed: 20_006 });
 
         vi.setSystemTime(2_000);
 

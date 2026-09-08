@@ -102,15 +102,7 @@ describe('level complete continuation executors', () => {
         });
     });
 
-    it('does not advance puzzle runs or runs with an existing relic offer', () => {
-        const puzzleRun = {
-            ...createPlayablePathFixture('floorClearWithRouteChoices').run!,
-            gameMode: 'puzzle' as const
-        };
-        const puzzleDeps = createDeps(createState({ run: puzzleRun }));
-        executeContinueToNextLevel(puzzleDeps);
-        expect(puzzleDeps.clearAllTimers).not.toHaveBeenCalled();
-
+    it('does not advance runs with an existing relic offer', () => {
         const relicRun = openRelicOffer(createPlayablePathFixture('relicDraft').run!);
         const relicDeps = createDeps(createState({ run: relicRun }));
         executeContinueToNextLevel(relicDeps);
@@ -120,7 +112,6 @@ describe('level complete continuation executors', () => {
     it('routes dead interlude runs through game-over resolution before early returns', () => {
         const run: RunState = {
             ...createPlayablePathFixture('floorClearWithRouteChoices').run!,
-            gameMode: 'puzzle',
             lives: 0
         };
         const deps = createDeps(createState({ run }));

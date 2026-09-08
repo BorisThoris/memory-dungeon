@@ -27,13 +27,14 @@ describe('run mode scope', () => {
         }
     });
 
-    it('keeps the three that differ in kind, and the authored puzzles', () => {
+    it('keeps the two that differ in kind', () => {
         expect(isDistinctRunMode('classic')).toBe(true);
-        expect(isDistinctRunMode('daily')).toBe(true);
         expect(isDistinctRunMode('pass_and_play')).toBe(true);
-        expect(getRunModeScopeRows().filter((row) => row.modeId.startsWith('puzzle_')).every((row) => row.kind === 'distinct')).toBe(
-            true
-        );
+        // Everything else on the sheet is the same game with a knob turned, which is the point.
+        expect(getRunModeScopeRows().filter((row) => row.kind === 'distinct').map((row) => row.modeId)).toEqual([
+            'classic',
+            'pass_and_play'
+        ]);
     });
 
     it('calls the option-bag entries what they are', () => {

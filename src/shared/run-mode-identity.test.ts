@@ -1,13 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { BUILTIN_PUZZLES } from './builtin-puzzles';
 import { RUN_MODE_CATALOG } from './run-mode-catalog';
 import { describeRunModeIdentity, runModeIdentityText } from './run-mode-identity';
 import {
-    createDailyRun,
-    createGauntletRun,
-    createMeditationRun,
     createNewRun,
-    createPuzzleRun,
     createWildRun
 } from './run-creation-rules';
 import { createDungeonShowcaseRun } from './dungeon-showcase-run-rules';
@@ -20,41 +15,15 @@ describe('describeRunModeIdentity', () => {
         expect(describeRunModeIdentity(createNewRun(0))).toEqual({ detail: null, label: 'Classic Dungeon' });
     });
 
-    it('shows the UTC key on a daily run, which is the whole point of the seed', () => {
-        const identity = describeRunModeIdentity(createDailyRun(0));
-        expect(identity.label).toBe('Daily challenge');
-        expect(identity.detail).toMatch(/^\d{4}-\d{2}-\d{2} UTC$/u);
-    });
 
-    it('leaves a daily key it does not recognise alone rather than mangling it', () => {
-        const run = { ...createDailyRun(0), dailyDateKeyUtc: 'seeded-by-hand' };
-        expect(describeRunModeIdentity(run).detail).toBe('seeded-by-hand');
-    });
 
     it('names the showcase run even though it is an endless run underneath', () => {
         expect(describeRunModeIdentity(createDungeonShowcaseRun(0)).label).toBe('Dungeon Showcase');
     });
 
-    it('leaves the gauntlet clock to the clock stat instead of repeating it', () => {
-        expect(describeRunModeIdentity(createGauntletRun(0, 600_000))).toEqual({ detail: null, label: 'Gauntlet' });
-    });
 
-    it('names the puzzle being solved, not just "puzzle"', () => {
-        const puzzle = BUILTIN_PUZZLES.mirror_craft;
-        const identity = describeRunModeIdentity(createPuzzleRun(0, puzzle.id, puzzle.tiles, 1));
-        expect(identity.label).toBe(`Puzzle: ${puzzle.title}`);
-        expect(identity.detail).toBe(puzzle.goalText);
-    });
 
-    it('falls back to the bare puzzle label when the id is not a builtin', () => {
-        const puzzle = BUILTIN_PUZZLES.starter_pairs;
-        const run = { ...createPuzzleRun(0, puzzle.id, puzzle.tiles, 1), puzzleId: 'imported_elsewhere' };
-        expect(describeRunModeIdentity(run)).toEqual({ detail: null, label: 'Puzzle' });
-    });
 
-    it('names a meditation run', () => {
-        expect(describeRunModeIdentity(createMeditationRun(0)).label).toBe('Meditation Run');
-    });
 
     it('shows the wild matches left, which is the rule that makes a wild run wild', () => {
         const run = createWildRun(0);

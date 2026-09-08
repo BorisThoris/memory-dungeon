@@ -14,11 +14,7 @@ import type { GameMode, RichPresenceState, RichPresenceToken } from './contracts
 export type { RichPresenceState, RichPresenceToken } from './contracts';
 
 const MODE_LABELS: Record<GameMode, string> = {
-    daily: 'Daily Challenge',
-    endless: 'Endless',
-    gauntlet: 'Gauntlet',
-    meditation: 'Meditation',
-    puzzle: 'Puzzle'
+    endless: 'Endless'
 };
 
 export interface RichPresenceInput {
@@ -27,10 +23,13 @@ export interface RichPresenceInput {
     readonly inRun: boolean;
 }
 
+/*
+ * One mode, one token. The map stays a map rather than a constant because the fallback below is
+ * what a mode added later gets before it has a Partner-site token of its own, and losing that
+ * would mean a new mode silently broadcasting the wrong line.
+ */
 const TOKEN_BY_MODE: Partial<Record<GameMode, RichPresenceToken>> = {
-    daily: '#Status_Daily',
-    endless: '#Status_Endless',
-    puzzle: '#Status_Puzzle'
+    endless: '#Status_Endless'
 };
 
 /**

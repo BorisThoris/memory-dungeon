@@ -19,20 +19,10 @@ export interface HonorUnlockDefinition {
 }
 
 export const HONOR_UNLOCK_CATALOG: Record<HonorUnlockId, HonorUnlockDefinition> = {
-    honor_daily_initiate: {
-        id: 'honor_daily_initiate',
-        title: 'Daily Initiate',
-        description: 'Complete at least one Daily run (UTC day).'
-    },
-    honor_daily_streak_3: {
-        id: 'honor_daily_streak_3',
-        title: 'Triple Dawn',
-        description: 'Reach a cosmetic daily streak of three UTC days. One missed day is forgiven.'
-    },
-    honor_daily_streak_7: {
-        id: 'honor_daily_streak_7',
-        title: 'Week of Days',
-        description: 'Reach a cosmetic daily streak of seven UTC days. One missed day is forgiven.'
+    honor_sharp_initiate: {
+        id: 'honor_sharp_initiate',
+        title: 'Sharp Initiate',
+        description: 'Clear at least one floor whose chain reached Sharp.'
     },
     honor_ascendant_5: {
         id: 'honor_ascendant_5',
@@ -53,11 +43,6 @@ export const HONOR_UNLOCK_CATALOG: Record<HonorUnlockId, HonorUnlockDefinition> 
         id: 'honor_relic_habit',
         title: 'Relic Habit',
         description: 'Pick relics at least ten times across runs (milestone offers count).'
-    },
-    honor_gauntlet_proof: {
-        id: 'honor_gauntlet_proof',
-        title: 'Gauntlet Proof',
-        description: 'Finish a Gauntlet run with at least one floor cleared (last run summary).'
     }
 };
 
@@ -65,7 +50,7 @@ export const HONOR_UNLOCK_CATALOG: Record<HonorUnlockId, HonorUnlockDefinition> 
 export const HONOR_UNLOCK_ORDER = HONOR_UNLOCK_IDS;
 
 const HONOR_COSMETIC_UNLOCKS: Partial<Record<HonorUnlockId, CosmeticId>> = {
-    honor_daily_initiate: 'crest_daily_bronze',
+    honor_sharp_initiate: 'crest_daily_bronze',
     honor_ascendant_5: 'title_ascendant_v'
 };
 
@@ -88,23 +73,16 @@ export const hasHonorUnlock = (save: SaveData, id: HonorUnlockId): boolean =>
 /** Which honors are earned given current save stats (independent of whether tags are already stored). */
 export const eligibleHonorUnlockIds = (save: SaveData): HonorUnlockId[] => {
     const ps = save.playerStats;
-    const dailies = runNonNegativeInteger(ps?.dailiesCompleted);
-    const streak = runNonNegativeInteger(ps?.dailyStreakCosmetic);
     const bestNp = runNonNegativeInteger(ps?.bestFloorNoPowers);
     const bestScore = runNonNegativeInteger(save.bestScore);
     const relicPicks = getRelicPickTotal(ps?.relicPickCounts);
-    const last = save.lastRunSummary;
-    const lastLevelsCleared = runNonNegativeInteger(last?.levelsCleared);
 
     const earned: HonorUnlockId[] = [];
-    if (dailies >= 1) earned.push('honor_daily_initiate');
-    if (streak >= 3) earned.push('honor_daily_streak_3');
-    if (streak >= 7) earned.push('honor_daily_streak_7');
+    if (runNonNegativeInteger(ps?.sharpFloors) >= 1) earned.push('honor_sharp_initiate');
     if (bestNp >= 5) earned.push('honor_ascendant_5');
     if (bestNp >= 10) earned.push('honor_ascendant_10');
     if (bestScore >= 2000) earned.push('honor_score_maestro');
     if (relicPicks >= 10) earned.push('honor_relic_habit');
-    if (last?.gameMode === 'gauntlet' && lastLevelsCleared >= 1) earned.push('honor_gauntlet_proof');
 
     return [...new Set(earned)];
 };

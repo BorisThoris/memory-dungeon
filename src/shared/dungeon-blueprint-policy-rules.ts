@@ -182,7 +182,7 @@ export const shouldAddDungeonShopTile = (
     gameMode?: GameMode,
     dungeonNodeKind?: DungeonRunNodeKind | null
 ): boolean => {
-    if (!gameMode || gameMode === 'puzzle' || level <= 1 || floorTag === 'boss') {
+    if (!gameMode || level <= 1 || floorTag === 'boss') {
         return false;
     }
     if (dungeonNodeKind === 'shop') {
@@ -208,7 +208,7 @@ export const roomEffectForFloor = (
     gameMode?: GameMode,
     dungeonNodeKind?: DungeonRunNodeKind | null
 ): DungeonCardEffectId | null => {
-    if (!gameMode || gameMode === 'puzzle' || level <= 1 || floorTag === 'boss') {
+    if (!gameMode || level <= 1 || floorTag === 'boss') {
         return null;
     }
     const rng = createMulberry32(hashStringToSeed(`dungeonRoom:${rulesVersion}:${runSeed}:${level}`));

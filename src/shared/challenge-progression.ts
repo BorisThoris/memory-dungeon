@@ -4,16 +4,10 @@ import {
     getMetaProgressionFeedback,
     type MetaProgressionDifficultyTier
 } from './meta-progression';
-import { runNonNegativeInteger } from './run-number-guards';
 import { getRunModeCatalog, type RunModeDefinition } from './run-mode-catalog';
 
 export type ChallengeGateStatus = 'available' | 'locked' | 'deferred';
-export type ChallengeGateId =
-    | 'classic_open'
-    | 'daily_local_seed'
-    | 'puzzle_library'
-    | 'same_device_table'
-    | 'local_mode_select';
+export type ChallengeGateId = 'classic_open' | 'same_device_table' | 'local_mode_select';
 
 export interface ChallengeModeGateRow {
     modeId: string;
@@ -29,9 +23,6 @@ export interface ChallengeModeGateRow {
     qaRoute: string;
 }
 
-const puzzleCompleted = (save: SaveData, puzzleId: string): boolean =>
-    save.playerStats?.puzzleCompletions?.[puzzleId]?.completed === true;
-
 /**
  * Which gate a mode sits behind.
  *
@@ -43,50 +34,12 @@ const puzzleCompleted = (save: SaveData, puzzleId: string): boolean =>
  */
 const gateIdForMode = (mode: RunModeDefinition): ChallengeGateId => {
     if (mode.id === 'classic') return 'classic_open';
-    if (mode.id === 'daily') return 'daily_local_seed';
-    if (mode.id.startsWith('puzzle_')) return 'puzzle_library';
     if (mode.id === 'pass_and_play') return 'same_device_table';
     return 'local_mode_select';
 };
 
-const rowForMode = (save: SaveData, mode: RunModeDefinition): ChallengeModeGateRow => {
-    const dailies = runNonNegativeInteger(save.playerStats?.dailiesCompleted);
-    const starterPuzzleDone = puzzleCompleted(save, 'starter_pairs') ? 1 : 0;
+const rowForMode = (_save: SaveData, mode: RunModeDefinition): ChallengeModeGateRow => {
     const gateId = gateIdForMode(mode);
-
-
-
-    if (mode.id === 'puzzle_glyph_cross') {
-        return {
-            modeId: mode.id,
-            title: mode.title,
-            gateId,
-            status: starterPuzzleDone >= 1 ? 'available' : 'locked',
-            entryCondition: 'Complete Starter Pairs locally before the advanced Glyph Cross puzzle.',
-            lockoutReason: starterPuzzleDone >= 1 ? null : 'Starter Pairs puzzle completion missing.',
-            progress: { current: starterPuzzleDone, target: 1 },
-            saveFields: ['playerStats.puzzleCompletions.starter_pairs.completed'],
-            offlineOnly: true,
-            onlineRequired: false,
-            qaRoute: 'Mark starter_pairs completed in SaveData; advanced puzzle gate should unlock.'
-        };
-    }
-
-    if (mode.id === 'daily') {
-        return {
-            modeId: mode.id,
-            title: mode.title,
-            gateId,
-            status: 'available',
-            entryCondition: 'Available offline; UTC date derives the local seed.',
-            lockoutReason: null,
-            progress: { current: Math.min(dailies, 1), target: 1 },
-            saveFields: ['playerStats.dailiesCompleted', 'playerStats.lastDailyDateKeyUtc'],
-            offlineOnly: true,
-            onlineRequired: false,
-            qaRoute: 'Start Daily with network disabled; seed and countdown still resolve locally.'
-        };
-    }
 
     return {
         modeId: mode.id,
@@ -135,10 +88,10 @@ export type ChallengeModeProgressionRow = Omit<ChallengeModeGateRow, 'status'> &
 };
 
 /**
- * The lanes a player progresses through, now that Gauntlet, Scholar and Pin Vow are Classic setup
- * options rather than modes: the daily, the table, and the authored puzzle.
+ * The lanes a player progresses through, now that every preset is a Classic setup option rather
+ * than a mode: the one mode, and the table.
  */
-const progressionModeIds = ['daily', 'pass_and_play', 'puzzle_glyph_cross'] as const;
+const progressionModeIds = ['classic', 'pass_and_play'] as const;
 
 const challengeTierRank: Record<MetaProgressionDifficultyTier, number> = {
     initiate: 0,
@@ -148,9 +101,8 @@ const challengeTierRank: Record<MetaProgressionDifficultyTier, number> = {
 };
 
 const recommendedTierByModeId: Record<(typeof progressionModeIds)[number], MetaProgressionDifficultyTier> = {
-    daily: 'initiate',
-    pass_and_play: 'adept',
-    puzzle_glyph_cross: 'adept'
+    classic: 'initiate',
+    pass_and_play: 'adept'
 };
 
 const progressionStatus = (row: ChallengeModeGateRow): ChallengeProgressionStatus =>
@@ -158,7 +110,7 @@ const progressionStatus = (row: ChallengeModeGateRow): ChallengeProgressionStatu
         ? 'unlocked'
         : row.status === 'deferred'
           ? 'deferred'
-          : row.modeId === 'puzzle_glyph_cross' || row.progress.current > 0
+          : row.progress.current > 0
             ? 'in_progress'
             : 'locked';
 

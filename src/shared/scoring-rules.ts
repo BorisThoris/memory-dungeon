@@ -85,7 +85,11 @@ export const getMemorizeDurationForRun = (run: RunState, level: number): number 
     if (hasRunRelic(run, 'memorize_under_short_memorize') && hasMutator(run, 'short_memorize')) {
         ms += 220;
     }
-    if (run.gameMode === 'meditation') {
+    /*
+     * Calm pacing, the setup sheet's replacement for the Meditation card. `resolveDelayMultiplier`
+     * is the only field the sheet raises above 1, so it is what a calm run is recognised by.
+     */
+    if (Number.isFinite(run.resolveDelayMultiplier) && run.resolveDelayMultiplier > 1) {
         ms = Math.floor(ms * 1.55);
     }
     const bossPressure = getActiveDungeonBossPressureRule(run.board);

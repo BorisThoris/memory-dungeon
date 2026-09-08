@@ -2,7 +2,6 @@ import { describe, expect, it } from 'vitest';
 import {
     getChallengeModeGateRow,
     getChallengeModeGateRows,
-    getChallengeModeGateForMode,
     getChallengeModeMotivationSummary,
     getChallengeModeProgressionRows
 } from './challenge-progression';
@@ -14,7 +13,7 @@ describe('REG-081 challenge mode progression gates', () => {
         save.achievements.ACH_FIRST_CLEAR = true;
         save.playerStats = {
             ...save.playerStats!,
-            dailiesCompleted: 2,
+            sharpFloors: 2,
             bestFloorNoPowers: 5
         };
         save.lastRunSummary = {
@@ -30,39 +29,18 @@ describe('REG-081 challenge mode progression gates', () => {
         };
 
         const rows = getChallengeModeProgressionRows(save);
-        expect(rows.map((row) => row.modeId)).toEqual(['daily', 'pass_and_play', 'puzzle_glyph_cross']);
+        expect(rows.map((row) => row.modeId)).toEqual(['classic', 'pass_and_play']);
         expect(rows.find((row) => row.modeId === 'pass_and_play')?.status).toBe('unlocked');
         expect(rows.find((row) => row.modeId === 'pass_and_play')).toMatchObject({
             recommendedTier: 'adept',
             recommendedTierLabel: 'Adept tier',
             motivationCopy: 'Pass and Play is ready for local play.'
         });
-        expect(rows.find((row) => row.modeId === 'puzzle_glyph_cross')?.status).toBe('in_progress');
         expect(rows.every((row) => row.offlineOnly)).toBe(true);
         expect(rows.every((row) => row.onlineRequired === false)).toBe(true);
     });
 
-    it('returns explicit lock copy for a selected mode', () => {
-        // The puzzle lane is the one that still gates on something a player has to do first.
-        const gate = getChallengeModeGateForMode(createDefaultSaveData(), 'puzzle_glyph_cross');
-        expect(gate?.status).toBe('in_progress');
-        expect(gate?.lockReason).toContain('Starter Pairs');
-    });
 
-    it('normalizes malformed daily counters before projecting challenge gates', () => {
-        const save = createDefaultSaveData();
-        save.playerStats = {
-            ...save.playerStats!,
-            dailiesCompleted: Number.POSITIVE_INFINITY
-        };
-
-        const daily = getChallengeModeProgressionRows(save).find((row) => row.modeId === 'daily');
-
-        expect(daily).toMatchObject({
-            status: 'unlocked',
-            progress: { current: 0, target: 1 }
-        });
-    });
 
     it('summarizes the next challenge lane from the current profile difficulty tier', () => {
         const fresh = createDefaultSaveData();
@@ -78,26 +56,20 @@ describe('REG-081 challenge mode progression gates', () => {
             nextChallengeCopy:
                 'Pass and Play sits as an Adept tier goal; Pass and Play is ready for local play.'
         });
-        expect(freshSummary.activeRows.map((row) => row.modeId)).toEqual(['daily']);
+        expect(freshSummary.activeRows.map((row) => row.modeId)).toEqual(['classic']);
 
         const adeptWithoutFirstClear = createDefaultSaveData();
         adeptWithoutFirstClear.playerStats = {
             ...adeptWithoutFirstClear.playerStats!,
-            dailiesCompleted: 7,
+            sharpFloors: 7,
             bestFloorNoPowers: 3
         };
 
         const adeptSummary = getChallengeModeMotivationSummary(adeptWithoutFirstClear);
 
         expect(adeptSummary.profileTier).toBe('adept');
-        // Pass and Play is open to anyone, so at Adept the next lane is the authored puzzle,
-        // which still gates on finishing Starter Pairs.
-        expect(adeptSummary.nextRecommendedRow).toMatchObject({
-            modeId: 'puzzle_glyph_cross',
-            recommendedTier: 'adept',
-            status: 'in_progress'
-        });
-        expect(adeptSummary.nextChallengeCopy).toContain('Glyph Cross');
+        // Both lanes are open to anyone, so at Adept there is no locked lane left to recommend.
+        expect(adeptSummary.nextRecommendedRow).toBeNull();
 
         const ascendant = createDefaultSaveData();
         ascendant.achievements.ACH_FIRST_CLEAR = true;
@@ -106,21 +78,14 @@ describe('REG-081 challenge mode progression gates', () => {
         ascendant.achievements.ACH_PERFECT_CLEAR = true;
         ascendant.playerStats = {
             ...ascendant.playerStats!,
-            dailiesCompleted: 7,
-            bestFloorNoPowers: 5,
-            puzzleCompletions: {
-                starter_pairs: { completed: true, bestMistakes: 0, bestScore: 100 }
-            }
+            sharpFloors: 7,
+            bestFloorNoPowers: 5
         };
 
         const ascendantSummary = getChallengeModeMotivationSummary(ascendant);
 
         expect(ascendantSummary.profileTier).toBe('ascendant');
-        expect(ascendantSummary.activeRows.map((row) => row.modeId)).toEqual([
-            'daily',
-            'pass_and_play',
-            'puzzle_glyph_cross',
-        ]);
+        expect(ascendantSummary.activeRows.map((row) => row.modeId)).toEqual(['classic', 'pass_and_play']);
         expect(ascendantSummary.nextRecommendedRow).toBeNull();
         expect(ascendantSummary.nextChallengeCopy).toBe('All visible challenge lanes are in the active profile tier.');
     });

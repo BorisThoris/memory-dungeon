@@ -33,7 +33,7 @@ const board = (tiles: Tile[], overrides: Partial<BoardState> = {}): BoardState =
 });
 
 const runWithBoard = (candidate: BoardState): RunState => ({
-    ...finishMemorizePhase(createNewRun(0, { gameMode: 'puzzle', runSeed: 4_412 })),
+    ...finishMemorizePhase(createNewRun(0, { runSeed: 4_412 })),
     board: candidate,
     status: 'playing'
 });

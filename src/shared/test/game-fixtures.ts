@@ -35,8 +35,20 @@ export const makeBoard = (tiles: Tile[], overrides: Partial<BoardState> = {}): B
     ...overrides
 });
 
+/*
+ * A bare run: this floor's tiles, and nothing the floor schedule would otherwise add.
+ *
+ * The fixture used to ask for `gameMode: 'puzzle'`, whose only job here was to switch off two
+ * things a unit asserting one score term should not also be asserting: the endless floor schedule
+ * (whatever mutator floor one happened to draw) and the recall focus every real run starts with
+ * (a flat `RECALL_FOCUS_MATCH_SCORE` on every match). With one mode left, the fixture says both
+ * directly, the same way it already says `echoFeedbackEnabled: false`. A test that wants either
+ * one passes it in `overrides` — `Recall Focus memory loop` in `game.test.ts` does exactly that.
+ */
 export const makeRun = (tiles: Tile[], overrides: Partial<RunState> = {}): RunState => ({
-    ...finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'puzzle' })),
+    ...finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false })),
+    activeMutators: [],
+    recallFocus: 0,
     board: makeBoard(tiles),
     findablesTotalThisFloor: countFindablePairs(tiles),
     ...overrides

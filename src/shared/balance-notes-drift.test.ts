@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
-import { createGauntletRun } from './game-core';
+import { createNewRun } from './game-core';
 import { PRESENTATION_MUTATOR_MATCH_PENALTIES } from './turn-resolution';
 import { pressureDurationMs } from './classic-run-setup';
 import { SYMBOL_BAND_LAST_LEVEL_LETTER, SYMBOL_BAND_LAST_LEVEL_NUMERIC } from './tile-symbol-catalog';
@@ -26,7 +26,7 @@ describe('docs/BALANCE_NOTES.md drift guard (REF-040)', () => {
         expect(md).toContain(`| \`distraction_channel\` | ${PRESENTATION_MUTATOR_MATCH_PENALTIES.distraction_channel} |`);
     });
 
-    it('gauntlet presets and default match run-mode-catalog / createGauntletRun', () => {
+    it('clock presets and default match the setup sheet', () => {
         const md = readBalanceNotes();
         expect(md).toMatch(/5\s*\/\s*10\s*\/\s*15/);
         // The three durations are Classic setup options now, not a card of their own.
@@ -34,7 +34,7 @@ describe('docs/BALANCE_NOTES.md drift guard (REF-040)', () => {
             Math.round((pressureDurationMs(id) ?? 0) / 60_000)
         );
         expect(minutes).toEqual([5, 10, 15]);
-        expect(createGauntletRun(0).gauntletSessionDurationMs).toBe(10 * 60 * 1000);
+        expect(createNewRun(0, { gauntletDurationMs: 10 * 60 * 1000 }).gauntletSessionDurationMs).toBe(10 * 60 * 1000);
         expect(md).toMatch(/10\s*m/);
     });
 });

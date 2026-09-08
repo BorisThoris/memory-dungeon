@@ -15,11 +15,6 @@ import { GAME_RULES_VERSION } from './contracts';
 import { buildBoard, inspectBoardFairness } from './board-generation';
 
 describe('usesEndlessFloorSchedule', () => {
-    it('is false for non-endless modes', () => {
-        expect(usesEndlessFloorSchedule('puzzle', FLOOR_SCHEDULE_RULES_VERSION)).toBe(false);
-        expect(usesEndlessFloorSchedule('daily', FLOOR_SCHEDULE_RULES_VERSION)).toBe(false);
-    });
-
     it('is false when rules version is below the floor schedule gate', () => {
         expect(usesEndlessFloorSchedule('endless', FLOOR_SCHEDULE_RULES_VERSION - 1)).toBe(false);
     });
@@ -32,26 +27,6 @@ describe('usesEndlessFloorSchedule', () => {
 describe('pickFloorScheduleEntry', () => {
     const rv = FLOOR_SCHEDULE_RULES_VERSION;
 
-    it('returns an empty schedule entry for non-endless modes', () => {
-        expect(pickFloorScheduleEntry(1, rv, 5, 'puzzle')).toEqual({
-            mutators: [],
-            floorTag: 'normal',
-            floorArchetypeId: null,
-            featuredObjectiveId: null,
-            cycleFloor: null,
-            actId: null,
-            actTitle: null,
-            actFloorNumber: null,
-            actFloorCount: null,
-            biomeId: null,
-            biomeTitle: null,
-            biomeTone: null,
-            title: null,
-            hint: null,
-            theme: null,
-            riskProfile: null
-        });
-    });
 
     it('returns an empty schedule entry when rules version is below the gate', () => {
         expect(pickFloorScheduleEntry(1, rv - 1, 5, 'endless')).toEqual({

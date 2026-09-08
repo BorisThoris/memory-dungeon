@@ -17,9 +17,6 @@ const recurringRelicPickBonusCount = (run: RunState): number => {
     if (hasMutator(run, 'generous_shrine')) {
         count += 1;
     }
-    if (run.gameMode === 'daily') {
-        count += 1;
-    }
     count += runNonNegativeInteger(run.metaRelicDraftExtraPerMilestone);
     if (run.activeContract?.bonusRelicDraftPick) {
         count += 1;

@@ -35,7 +35,6 @@ describe('relic-offer-rules', () => {
                 noShuffle: true
             },
             activeMutators: ['generous_shrine'],
-            gameMode: 'daily',
             metaRelicDraftExtraPerMilestone: 1
         });
 

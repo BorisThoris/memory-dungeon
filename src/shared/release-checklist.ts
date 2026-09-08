@@ -95,17 +95,10 @@ export const RELEASE_CHECKLIST: readonly ReleaseChecklistItem[] = [
     },
     {
         evidence: 'src/shared/pass-and-play-rules.ts',
-        id: 'chain-in-daily-and-shared-play',
-        label: 'The share line and the daily post name the best chain, the quest ladder asks for Sharp floors, and a shared table credits a chunk to the seat that broke it',
+        id: 'chain-in-share-and-shared-play',
+        label: 'The share line names the best chain, the quest ladder asks for Sharp floors, and a shared table credits a chunk to the seat that broke it',
         owner: 'repo',
         section: 'Gameplay'
-    },
-    {
-        evidence: 'src/shared/daily-determinism.test.ts',
-        id: 'daily-determinism',
-        label: 'Every player gets the same Daily Challenge run, floor for floor',
-        owner: 'repo',
-        section: 'Steamworks'
     },
     {
         evidence: 'src/shared/steam-achievement-api-names.ts',
@@ -120,13 +113,6 @@ export const RELEASE_CHECKLIST: readonly ReleaseChecklistItem[] = [
         label: 'Rich Presence publishes what the player is doing, and clears when the run ends',
         owner: 'repo',
         section: 'Steamworks'
-    },
-    {
-        evidence: 'src/shared/save-data.ts',
-        id: 'daily-streak-grace',
-        label: 'A missed day is forgiven once, and the player is told so before they miss one',
-        owner: 'repo',
-        section: 'Steam integration'
     },
     {
         evidence: 'src/shared/run-history-log.ts',

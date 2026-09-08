@@ -1312,10 +1312,10 @@ where that rule
 .memorizeSkipHint {
     padding: 0.22rem 0.62rem 0.26rem;
     border-radius: var(--ui-radius-md);
-    border: 1px solid color-mix(in srgb, var(--theme-parchment) 26%, transparent);
+    border: 1px solid color-mix(in srgb, var(--theme-text-subtle) 26%, transparent);
     background: color-mix(in srgb, var(--theme-void-alt) 76%, transparent);
-    color: color-mix(in srgb, var(--theme-parchment) 82%, transparent);
-    font-size: var(--ui-font-size-xs);
+    color: color-mix(in srgb, var(--theme-text-subtle) 82%, transparent);
+    font-size: var(--ui-font-caption);
     letter-spacing: 0.04em;
     text-transform: uppercase;
     pointer-events: none;

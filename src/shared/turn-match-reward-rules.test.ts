@@ -96,22 +96,6 @@ describe('turn match reward rules', () => {
         expect(reward.lives).toBe(4);
     });
 
-    it('does not award streak combo or guard bonuses in meditation', () => {
-        const reward = calculateResolvedMatchSurvivalReward({
-            catalystAltarUpgraded: false,
-            currentStreak: 4,
-            dungeonReward: emptyReward,
-            findableComboShardGain: 0,
-            mimicCacheBite: false,
-            mimicCacheFatalBite: false,
-            mimicCacheGuardBite: false,
-            routeCardReward: emptyReward,
-            run: run({ gameMode: 'meditation' })
-        });
-
-        expect(reward.guardTokens).toBe(0);
-        expect(reward.comboShards).toBe(0);
-    });
 
     it('sets lives to zero on fatal mimic bites', () => {
         const reward = calculateResolvedMatchSurvivalReward({

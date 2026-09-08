@@ -401,10 +401,6 @@ export const resolveChunkBreak = ({
         waves: 0,
         wavePairKeys: []
     };
-    if (run.gameMode === 'meditation') {
-        return nothing;
-    }
-
     const relics = run.relicIds ?? [];
     const wavesAllowed = rippleWaves(tier, relics);
     const reachesPartners = breakReachesPartners(tier, relics);

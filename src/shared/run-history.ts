@@ -234,7 +234,7 @@ export const buildRunShareKey = (run: RunState): RunShareKey => {
     const seed = summary?.runSeed ?? run.runSeed ?? null;
     const rulesVersion = summary?.runRulesVersion ?? run.runRulesVersion ?? null;
     const mode = summary?.gameMode ?? run.gameMode;
-    const shareSupported = seed != null && rulesVersion != null && mode !== 'puzzle';
+    const shareSupported = seed != null && rulesVersion != null;
     return {
         kind: 'local_share_key',
         shareKey: shareSupported ? `${mode}:${rulesVersion}:${seed}` : 'local-share-unavailable',

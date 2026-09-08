@@ -7,7 +7,7 @@ import { RICH_PRESENCE_TOKEN_TEXT } from './steam-rich-presence-tokens';
 import { STEAM_ACHIEVEMENT_API_NAME } from './steam-achievement-api-names';
 import type { GameMode } from './contracts';
 
-const GAME_MODES: GameMode[] = ['daily', 'endless', 'gauntlet', 'meditation', 'puzzle'];
+const GAME_MODES: GameMode[] = ['endless'];
 
 describe('the Partner-site rows', () => {
     it('lists every achievement the game can award', () => {

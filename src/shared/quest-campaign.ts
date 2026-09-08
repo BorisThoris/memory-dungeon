@@ -6,8 +6,7 @@ import { normalizeSessionStats } from './session-stats-rules';
 export type QuestCampaignStepId =
     | 'first_lantern'
     | 'scholar_oath'
-    | 'gauntlet_proof'
-    | 'daily_rhythm'
+    | 'timed_proof'
     | 'relic_apprentice'
     | 'chain_rhythm';
 
@@ -61,15 +60,15 @@ export const QUEST_CAMPAIGN_LADDER: readonly QuestCampaignDefinition[] = [
         offlineOnly: true
     },
     {
-        id: 'gauntlet_proof',
+        id: 'timed_proof',
         order: 3,
-        title: 'Gauntlet Proof',
-        description: 'Clear one floor in a timed Gauntlet run.',
+        title: 'Timed Proof',
+        description: 'Clear one floor in a run started with a clock.',
         target: 1,
-        saveFields: ['lastRunSummary.gameMode', 'lastRunSummary.levelsCleared'],
+        saveFields: ['lastRunSummary.gauntletSessionDurationMs', 'lastRunSummary.levelsCleared'],
         contractFlag: 'gauntletDeadlineMs',
         retryPolicy: 'retry_same_mode',
-        reward: 'Gauntlet proof honor.',
+        reward: 'Timed proof progress.',
         offlineOnly: true
     },
     {
@@ -82,18 +81,6 @@ export const QUEST_CAMPAIGN_LADDER: readonly QuestCampaignDefinition[] = [
         contractFlag: null,
         retryPolicy: 'persistent',
         reward: 'Relic habit honor and cosmetic track progress.',
-        offlineOnly: true
-    },
-    {
-        id: 'daily_rhythm',
-        order: 4,
-        title: 'Daily Rhythm',
-        description: 'Clear three Daily Challenge floors across local UTC days.',
-        target: 3,
-        saveFields: ['playerStats.dailiesCompleted', 'playerStats.lastDailyDateKeyUtc'],
-        contractFlag: 'dailyDateKeyUtc',
-        retryPolicy: 'persistent',
-        reward: 'Daily streak honor and future campaign branch.',
         offlineOnly: true
     },
     {
@@ -116,10 +103,10 @@ const progressFor = (save: SaveData, id: QuestCampaignStepId): number => {
             return save.achievements.ACH_FIRST_CLEAR ? 1 : 0;
         case 'scholar_oath':
             return runNonNegativeInteger(save.playerStats?.bestFloorNoPowers);
-        case 'gauntlet_proof':
-            return save.lastRunSummary?.gameMode === 'gauntlet' ? runNonNegativeInteger(save.lastRunSummary.levelsCleared) : 0;
-        case 'daily_rhythm':
-            return runNonNegativeInteger(save.playerStats?.dailiesCompleted);
+        case 'timed_proof':
+            return save.lastRunSummary?.gauntletSessionDurationMs != null
+                ? runNonNegativeInteger(save.lastRunSummary.levelsCleared)
+                : 0;
         case 'relic_apprentice':
             return getRelicPickTotal(save.playerStats?.relicPickCounts);
         case 'chain_rhythm':
@@ -197,11 +184,11 @@ export const buildActiveQuestContractRows = (run: RunState): ActiveQuestContract
             offlineOnly: true
         });
     }
-    if (run.gameMode === 'gauntlet') {
+    if (run.gauntletDeadlineMs != null) {
         const levelsCleared = stats.levelsCleared;
         rows.push({
-            id: 'gauntlet_proof',
-            label: 'Gauntlet Proof',
+            id: 'timed_proof',
+            label: 'Timed Proof',
             status: levelsCleared >= 1 ? 'completed' : 'active',
             progressLabel: `${Math.min(levelsCleared, 1)}/1 timed clears`,
             failureReason: run.gauntletDeadlineMs != null && Date.now() > run.gauntletDeadlineMs ? 'Timer expired; retry the same preset.' : null,
@@ -216,13 +203,12 @@ export const getQuestCampaignRows = buildQuestCampaignRows;
 
 export const questCampaignSummary = getQuestCampaignSummary;
 
-export const getQuestContractForRunSummary = (summary: { gameMode?: string; levelsCleared?: number } | null): QuestCampaignStepId | null => {
+export const getQuestContractForRunSummary = (
+    summary: { gauntletSessionDurationMs?: number | null; levelsCleared?: number } | null
+): QuestCampaignStepId | null => {
     const levelsCleared = runNonNegativeInteger(summary?.levelsCleared);
-    if (summary?.gameMode === 'gauntlet' && levelsCleared >= 1) {
-        return 'gauntlet_proof';
-    }
-    if (summary?.gameMode === 'daily' && levelsCleared >= 1) {
-        return 'daily_rhythm';
+    if (summary?.gauntletSessionDurationMs != null && levelsCleared >= 1) {
+        return 'timed_proof';
     }
     if (levelsCleared >= 1) {
         return 'first_lantern';

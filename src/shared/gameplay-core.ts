@@ -868,9 +868,6 @@ const applyFloorAdvanceCommand = (
     if (runNonNegativeInteger(run.lives) <= 0) {
         return rejectedResult(run, command.commandId, 'A defeated run cannot advance to another floor.', command);
     }
-    if (run.gameMode === 'puzzle') {
-        return rejectedResult(run, command.commandId, 'Puzzle runs do not advance into procedural floors.', command);
-    }
     if (run.sideRoom || run.relicOffer) {
         return rejectedResult(run, command.commandId, 'Resolve the current floor interlude before advancing.', command);
     }
@@ -1798,8 +1795,8 @@ const applyGauntletExpireCommand = (
     command: Extract<GameplayCommand, { type: 'run.gauntlet_expire' }>
 ): GameplayCommandResult => {
     const deadlineMs = run.gauntletDeadlineMs;
-    if (run.gameMode !== 'gauntlet' || deadlineMs === null || deadlineMs === undefined) {
-        return rejectedResult(run, command.commandId, 'Run is not a gauntlet with a deadline.', command);
+    if (deadlineMs === null || deadlineMs === undefined) {
+        return rejectedResult(run, command.commandId, 'Run has no deadline to expire.', command);
     }
     if (run.status === 'gameOver') {
         return rejectedResult(run, command.commandId, 'Gauntlet run has already ended.', command);

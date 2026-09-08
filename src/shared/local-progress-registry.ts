@@ -1,9 +1,8 @@
 import type { SaveData } from './contracts';
-import { getDailyArchiveRows } from './daily-archive';
 import { getObjectiveBoardItems, type ObjectiveBoardStatus } from './objective-board';
 import { getQuestCampaignRows, type QuestCampaignStatus } from './quest-campaign';
 
-export type LocalProgressRegistrySource = 'daily_archive' | 'objective_board' | 'quest_campaign';
+export type LocalProgressRegistrySource = 'objective_board' | 'quest_campaign';
 export type LocalProgressRegistryStatus = 'active' | 'completed' | 'locked' | 'failed';
 
 export interface LocalProgressRegistryRow {
@@ -19,20 +18,7 @@ export interface LocalProgressRegistryRow {
 const mapObjectiveStatus = (status: ObjectiveBoardStatus): LocalProgressRegistryStatus => status;
 const mapQuestStatus = (status: QuestCampaignStatus): LocalProgressRegistryStatus => status;
 
-export const getLocalProgressRegistryRows = (
-    save: SaveData,
-    nowMs: number = Date.now()
-): LocalProgressRegistryRow[] => {
-    const dailyRows = getDailyArchiveRows(save, nowMs).map((row): LocalProgressRegistryRow => ({
-        id: `${row.scope}:${row.key}`,
-        source: 'daily_archive',
-        title: row.title,
-        status: row.status ?? 'active',
-        progressLabel: row.comparisonString,
-        localOnly: true,
-        sourceFields: row.sourceFields
-    }));
-
+export const getLocalProgressRegistryRows = (save: SaveData): LocalProgressRegistryRow[] => {
     const objectiveRows = getObjectiveBoardItems(save).map((row): LocalProgressRegistryRow => ({
         id: row.id,
         source: 'objective_board',
@@ -53,14 +39,13 @@ export const getLocalProgressRegistryRows = (
         sourceFields: row.saveFields
     }));
 
-    return [...dailyRows, ...objectiveRows, ...questRows];
+    return [...objectiveRows, ...questRows];
 };
 
 export const getLocalProgressRegistrySummary = (
-    save: SaveData,
-    nowMs: number = Date.now()
+    save: SaveData
 ): { total: number; completed: number; active: number; locked: number; failed: number; localOnly: true } => {
-    const rows = getLocalProgressRegistryRows(save, nowMs);
+    const rows = getLocalProgressRegistryRows(save);
     return {
         total: rows.length,
         completed: rows.filter((row) => row.status === 'completed').length,

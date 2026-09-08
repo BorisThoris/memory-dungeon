@@ -13,12 +13,12 @@ import { createDefaultSaveData } from './save-data';
 describe('REG-011 meta reward signals', () => {
     it('gives collection a durable next reward and progress meter from save data', () => {
         const save = createDefaultSaveData();
-        save.playerStats = { ...save.playerStats!, dailiesCompleted: 4 };
+        save.playerStats = { ...save.playerStats!, sharpFloors: 4 };
 
         const signal = getCollectionRewardSignal(save);
         expect(signal.id).toBe('collection_profile_level');
         expect(signal.progress).toBeDefined();
-        expect(signal.cta).toBe('Clear one more Daily Challenge for 1 honor mark.');
+        expect(signal.cta).toBe('Clear one more Sharp floor for 1 honor mark.');
         expect(signal.body).toMatch(/honor marks/i);
         expect(signal.body).toMatch(/Adept tier at profile level 3/i);
     });
@@ -65,7 +65,7 @@ describe('REG-011 meta reward signals', () => {
 
     it('translates permanent profile unlocks into next-run impact rows', () => {
         const save = createDefaultSaveData();
-        save.playerStats = { ...save.playerStats!, dailiesCompleted: 7 };
+        save.playerStats = { ...save.playerStats!, sharpFloors: 7 };
 
         const rows = getMetaProgressionRunImpactRows(save);
         expect(rows[0]).toMatchObject({

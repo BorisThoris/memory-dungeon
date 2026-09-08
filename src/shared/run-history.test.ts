@@ -57,29 +57,6 @@ describe('REG-085 run history, share keys, and journal', () => {
         expect(rows.every((row) => row.offlineOnly)).toBe(true);
     });
 
-    it('does not advertise puzzle boards as share-key reconstructable', () => {
-        const base = completedRun();
-        const run: RunState = {
-            ...base,
-            gameMode: 'puzzle',
-            lastRunSummary: base.lastRunSummary
-                ? {
-                      ...base.lastRunSummary,
-                      gameMode: 'puzzle'
-                  }
-                : base.lastRunSummary
-        };
-
-        const link = buildRunShareKey(run);
-
-        expect(link).toMatchObject({
-            kind: 'local_share_key',
-            shareKey: 'local-share-unavailable',
-            shareSupported: false,
-            shareString: 'local share unavailable'
-        });
-        expect(link.reason).toContain('tile payload');
-    });
 
     it('derives a capped dungeon journal without persisting full playback data', () => {
         const base = completedRun();

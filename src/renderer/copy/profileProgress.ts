@@ -1,26 +1,21 @@
 import type { LocalProgressRegistryRow } from '../../shared/local-progress-registry';
 
 /**
- * What the Profile screen calls the three things it now tracks.
+ * What the Profile screen calls the two things it now tracks.
  *
- * The daily archive and the quest campaign were whole systems with no screen: a player who ran
- * dailies had a streak recorded in their save and nowhere to see it, and the quest campaign
- * counted steps nothing displayed. Profile showed the objective board alone.
+ * The quest campaign was a whole system with no screen: it counted steps nothing displayed, and
+ * Profile showed the objective board alone. The daily archive was the third, and went with the
+ * mode (`docs/REMOVED_MODES.md`).
  */
 
 export const PROFILE_PROGRESS_COPY = {
-    copyDaily: 'Copy daily',
-    copyDailyAriaLabel: 'Copy the daily result and streak line',
-    copyDailyDone: 'Copied',
-    copyDailyFailed: 'Could not copy',
     label: 'Progress',
     noRows: 'Play a run to start tracking progress here.',
-    /** Streak line in the screen subtitle. Zero reads as no streak rather than "0 day streak". */
-    streak: (days: number): string => (days > 0 ? `${days}-day daily streak` : 'no daily streak yet')
+    /** Chain line in the screen subtitle. Zero reads as none yet rather than "0 Sharp floors". */
+    sharpFloors: (floors: number): string => (floors > 0 ? `${floors} Sharp floor${floors === 1 ? '' : 's'}` : 'no Sharp floor yet')
 } as const;
 
 export const PROFILE_PROGRESS_SOURCE_LABEL: Record<LocalProgressRegistryRow['source'], string> = {
-    daily_archive: 'Daily',
     objective_board: 'Objective',
     quest_campaign: 'Quest'
 };

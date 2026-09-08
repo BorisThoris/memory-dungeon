@@ -29,13 +29,12 @@ achievement on the Partner site or shoot a trailer.
 | Every match pops the same-suit clump touching it, live, with no chain behind it; a pair goes only when both halves touch, and the chain is what reaches a partner across the board and ripples through the islands | done | the repository | `src/shared/chunk-break-rules.ts` |
 | A Sharp or Fever break that leaves a suit with two plain pairs or fewer takes them too, and never a card with a job | done | the repository | `src/shared/chunk-break-rules.ts` |
 | The longest ripple a run reached is carried on the summary, posted on the run and daily share lines when it went past one wave, and earns Chain reaction at three | done | the repository | `src/shared/run-summary-rules.ts` |
-| The share line and the daily post name the best chain, the quest ladder asks for Sharp floors, and a shared table credits a chunk to the seat that broke it | done | the repository | `src/shared/pass-and-play-rules.ts` |
+| The share line names the best chain, the quest ladder asks for Sharp floors, and a shared table credits a chunk to the seat that broke it | done | the repository | `src/shared/pass-and-play-rules.ts` |
 
 ## Steamworks
 
 | Item | State | Owner | Where |
 |---|---|---|---|
-| Every player gets the same Daily Challenge run, floor for floor | done | the repository | `src/shared/daily-determinism.test.ts` |
 | Every achievement the game can award has a Steam API name to award it under | done | the repository | `src/shared/steam-achievement-api-names.ts` |
 | Rich Presence publishes what the player is doing, and clears when the run ends | done | the repository | `src/shared/rich-presence.ts` |
 | The save file sits at one stable path per platform, ready for Auto-Cloud | done | the repository | `src/shared/save-location.ts` |
@@ -50,7 +49,6 @@ achievement on the Partner site or shoot a trailer.
 
 | Item | State | Owner | Where |
 |---|---|---|---|
-| A missed day is forgiven once, and the player is told so before they miss one | done | the repository | `src/shared/save-data.ts` |
 | A finished run is recorded, so it survives the next one starting | done | the repository | `src/shared/run-history-log.ts` |
 | Two to four people can play one board on one device, and the game says whose turn it is | done | the repository | `src/shared/pass-and-play-rules.ts` |
 | A shared game runs to a stated number of floors and ends with standings, rather than until the lives run out | done | the repository | `src/renderer/store/levelCompleteContinuationExecutor.ts` |

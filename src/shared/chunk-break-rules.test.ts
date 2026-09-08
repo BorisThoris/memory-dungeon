@@ -127,10 +127,6 @@ describe('what breaks', () => {
         expect(result.board.tiles.find((t) => t.pairKey === EXIT_PAIR_KEY)?.state).toBe('hidden');
     });
 
-    it('does not run in meditation, which has no chain to spend', () => {
-        const result = resolveChunkBreak({ board: board(), run: { gameMode: 'meditation' }, matchedTileIds: ['A1', 'A2'], chain: 9 });
-        expect(result.brokenPairKeys).toEqual([]);
-    });
 });
 
 describe('the ripple', () => {

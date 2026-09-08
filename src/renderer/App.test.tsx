@@ -735,11 +735,11 @@ describe('desktop app flow', () => {
         expect(choosePath).toBeInTheDocument();
         expect(await screen.findByRole('region', { name: /browse modes/i })).toBeInTheDocument();
         // Endless was a locked card promising a longer Classic and never became one; the browse
-        // grid now holds the authored puzzles, which are the only entries that build a different
-        // board rather than the same one with a setting changed.
+        // grid now holds Pass and Play, the one entry that is a different proposition rather than
+        // the same board with a setting changed.
         expect(screen.queryByRole('button', { name: /endless mode/i })).toBeNull();
         await waitFor(() => {
-            expect(within(choosePath).getAllByText(/puzzle/i).length).toBeGreaterThan(0);
+            expect(within(choosePath).getAllByText(/pass and play/i).length).toBeGreaterThan(0);
         });
     }, 30_000);
 

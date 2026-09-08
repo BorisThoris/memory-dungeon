@@ -47,7 +47,7 @@ export const pauseRun = (run: RunState): RunState => {
     const timerState = timerStateForRun(run.timerState);
     const gauntletDeadlineMs = normalizeTimerTimestampMs(run.gauntletDeadlineMs);
     const gauntletPausedAtMs =
-        run.gameMode === 'gauntlet' && gauntletDeadlineMs !== null
+        gauntletDeadlineMs !== null
             ? normalizeTimerTimestampMs(Date.now())
             : (timerState.gauntletPausedAtMs ?? null);
 
@@ -119,7 +119,7 @@ export const resumeRun = (run: RunState): RunState => {
     const gauntletDeadlineMs = normalizeTimerTimestampMs(run.gauntletDeadlineMs);
     const gauntletPausedAtMs = normalizeTimerTimestampMs(timerState.gauntletPausedAtMs);
     const gauntletPauseDeltaMs =
-        run.gameMode === 'gauntlet' && gauntletDeadlineMs !== null && gauntletPausedAtMs !== null
+        gauntletDeadlineMs !== null && gauntletPausedAtMs !== null
             ? Math.max(0, Date.now() - gauntletPausedAtMs)
             : 0;
 

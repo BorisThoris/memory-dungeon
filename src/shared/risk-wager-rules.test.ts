@@ -51,7 +51,7 @@ describe('risk wager rules', () => {
     });
 
     it('does not mutate runs that are not eligible', () => {
-        const ineligible = run({ gameMode: 'daily' });
+        const ineligible = run({ featuredObjectiveStreak: 0 });
 
         expect(canOfferEndlessRiskWager(ineligible)).toBe(false);
         expect(acceptEndlessRiskWager(ineligible)).toBe(ineligible);

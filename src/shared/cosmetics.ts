@@ -70,12 +70,16 @@ export const COSMETIC_CATALOG: Record<CosmeticId, CosmeticDefinition> = {
         gameplayAffecting: false,
         defaultOwned: true
     },
+    /*
+     * The id predates the one-mode collapse and is kept verbatim so a save that already owns this
+     * crest still owns it. What earns it moved: the daily is gone, a Sharp floor is not.
+     */
     crest_daily_bronze: {
         id: 'crest_daily_bronze',
         slot: 'crest',
-        label: 'Daily Bronze Crest',
-        description: 'Cosmetic crest slot for daily participation.',
-        unlockSource: 'Honor: Daily Initiate',
+        label: 'Bronze Crest',
+        description: 'Cosmetic crest slot for the first floor whose chain reached Sharp.',
+        unlockSource: 'Honor: Sharp Initiate',
         fallback: 'Menu seal',
         gameplayAffecting: false
     },

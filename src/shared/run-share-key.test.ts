@@ -1,5 +1,4 @@
 import { describe, expect, it } from 'vitest';
-import { BUILTIN_PUZZLES } from './builtin-puzzles';
 import { createDungeonShowcaseRun } from './dungeon-showcase-run-rules';
 import {
     describeRunShareKey,
@@ -8,11 +7,7 @@ import {
     type RunShareKey
 } from './run-share-key';
 import {
-    createDailyRun,
-    createGauntletRun,
-    createMeditationRun,
     createNewRun,
-    createPuzzleRun,
     createWildRun
 } from './run-creation-rules';
 
@@ -41,27 +36,13 @@ describe('describeRunShareKey', () => {
     });
 
     it('carries the clock a gauntlet was played against, since the seed alone is a different run', () => {
-        const key = keyOf(createGauntletRun(0, 600_000));
+        const key = keyOf(createNewRun(0, { gauntletDurationMs: 600_000 }));
         expect(key.variant).toBe('gauntlet');
         expect(key.durationMs).toBe(600_000);
     });
 
-    it('carries the mutators a meditation run was set up with', () => {
-        const key = keyOf(createMeditationRun(0, ['short_memorize']));
-        expect(key.variant).toBe('meditation');
-        expect(key.mutators).toEqual(['short_memorize']);
-    });
 
-    it('refuses a daily, because the date already makes it the same run for everyone', () => {
-        const described = describeRunShareKey(createDailyRun(0));
-        expect('refusal' in described && described.refusal).toMatch(/share the date/u);
-    });
 
-    it('refuses a puzzle, because the board is its tiles rather than a seed', () => {
-        const puzzle = BUILTIN_PUZZLES.starter_pairs;
-        const described = describeRunShareKey(createPuzzleRun(0, puzzle.id, puzzle.tiles, 1));
-        expect('refusal' in described && described.refusal).toMatch(/is its tiles/u);
-    });
 });
 
 describe('encode and parse', () => {
@@ -73,8 +54,7 @@ describe('encode and parse', () => {
             createNewRun(0, { activeContract: scholarContract }),
             createNewRun(0, { activeContract: pinVowContract }),
             createDungeonShowcaseRun(0),
-            createGauntletRun(0, 900_000),
-            createMeditationRun(0, ['short_memorize', 'sticky_fingers'])
+            createNewRun(0, { gauntletDurationMs: 900_000 })
         ]) {
             const key = keyOf(run);
             expect(parseRunShareKey(encodeRunShareKey(key)), key.variant).toEqual(key);

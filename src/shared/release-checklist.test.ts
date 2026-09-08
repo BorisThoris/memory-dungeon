@@ -3,7 +3,7 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { RELEASE_CHECKLIST, releaseChecklistByOwner, renderReleaseChecklistMarkdown } from './release-checklist';
 import { ACHIEVEMENT_IDS, createDefaultSaveData, mergeChainFloorStats } from './save-data';
-import { createDailyRun, createNewRun } from './game';
+import { createNewRun } from './game';
 import { RUN_MODE_CATALOG } from './run-mode-catalog';
 import {
     applyResolvedTurnToPassAndPlay,
@@ -14,7 +14,6 @@ import {
 } from './pass-and-play-rules';
 import { createRunSummary } from './game-core';
 import { buildRunShareText } from './run-share-text';
-import { buildDailyArchiveShareString } from './daily-archive';
 import { getQuestCampaignRows, QUEST_CAMPAIGN_LADDER } from './quest-campaign';
 import { getDungeonSaveMigrationFieldPolicies } from './dungeon-save-migration';
 import { PASS_AND_PLAY_COPY } from '../renderer/copy/passAndPlay';
@@ -61,7 +60,6 @@ import {
     readDefinedProperties,
     readVarUses
 } from '../../scripts/css-custom-properties';
-import { resolveDailyStreak } from './save-data';
 import {
     findUndefinedTokens,
     findUndersized,
@@ -189,17 +187,12 @@ const VERIFIERS: Record<string, () => void> = {
             'three waves earns Chain reaction'
         ).toContain('ACH_CHAIN_REACTION');
     },
-    'chain-in-daily-and-shared-play': () => {
+    'chain-in-share-and-shared-play': () => {
         // The summary carries the chain's records, and both share strings read them.
         const run = createNewRun(0, { gameMode: 'endless', runSeed: 7 });
         const chained = createRunSummary({ ...run, bestChainThisRun: 9, sharpFloorsThisRun: 2, feverFloorsThisRun: 1 }, []);
         expect(chained.lastRunSummary).toMatchObject({ bestChain: 9, sharpFloors: 2, feverFloors: 1 });
         expect(buildRunShareText(chained).text).toContain('best chain ×9');
-        const dailySave = {
-            ...createDefaultSaveData(),
-            lastRunSummary: { ...chained.lastRunSummary!, gameMode: 'daily' as const, dailyDateKeyUtc: '20260906' }
-        };
-        expect(buildDailyArchiveShareString(dailySave)).toContain('best chain ×9');
         // The quest reads a persisted counter that has a migration policy, and three Sharp floors complete it.
         const quest = QUEST_CAMPAIGN_LADDER.find((row) => row.id === 'chain_rhythm');
         expect(quest?.saveFields).toEqual(['playerStats.sharpFloors']);
@@ -417,38 +410,6 @@ const VERIFIERS: Record<string, () => void> = {
         expect(helper).toContain('export const readUnreachableControls');
         expect(readFileSync('e2e/ui-reachability-gate.spec.ts', 'utf8')).toContain('findUnreachableControls');
     },
-    'daily-streak-grace': () => {
-        // A day away from the machine costs nothing; two in a row still start the streak over.
-        const missedOne = resolveDailyStreak({
-            completedDateKeyUtc: '20260428',
-            graceAvailable: true,
-            previousDateKeyUtc: '20260426',
-            streak: 2
-        });
-        expect(missedOne).toEqual({ streak: 3, graceAvailable: false, usedGrace: true });
-
-        // Every other day cannot hold a streak open: the grace only refills on a consecutive clear.
-        expect(
-            resolveDailyStreak({
-                completedDateKeyUtc: '20260430',
-                graceAvailable: false,
-                previousDateKeyUtc: '20260428',
-                streak: 3
-            })
-        ).toEqual({ streak: 1, graceAvailable: true, usedGrace: false });
-        expect(
-            resolveDailyStreak({
-                completedDateKeyUtc: '20260429',
-                graceAvailable: false,
-                previousDateKeyUtc: '20260428',
-                streak: 3
-            })
-        ).toEqual({ streak: 4, graceAvailable: true, usedGrace: false });
-
-        // And the player is told which it is, on the card rather than only in the save.
-        expect(readFileSync('src/shared/daily-archive.ts', 'utf8')).toContain('grace day spent');
-        expect(readFileSync('src/renderer/components/ProfileScreen.test.tsx', 'utf8')).toContain('grace day held');
-    },
     'css-custom-properties': () => {
         /*
          * Both halves shipped. A hook measured the HUD every frame and wrote a clearance no rule
@@ -619,15 +580,6 @@ const VERIFIERS: Record<string, () => void> = {
         expect(quarantineFileName('memory-dungeon-save.json', '2026-09-03T20:45:12.884Z')).not.toContain(':');
         // The notice the player reads has to name a way out, not just report the failure.
         expect(SAVE_RECOVERY_COPY.action).toMatch(/\S/);
-    },
-    'daily-determinism': () => {
-        // Two players comparing scores over boards that quietly differed are not competing.
-        const first = createDailyRun(0);
-        const second = createDailyRun(0);
-
-        expect(second.runSeed).toBe(first.runSeed);
-        expect(second.board?.tiles.map((tile) => tile.pairKey)).toEqual(first.board?.tiles.map((tile) => tile.pairKey));
-        expect(second.activeMutators).toEqual(first.activeMutators);
     },
     'partner-rows-derived': () => {
         const achievements = renderAchievementRows();

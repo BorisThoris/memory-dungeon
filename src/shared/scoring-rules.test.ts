@@ -30,9 +30,10 @@ describe('scoring-rules', () => {
         const shortBase = getMemorizeDuration(1, short.board!.tiles.length);
         expect(getMemorizeDurationForRun(short, 1)).toBe(shortBase - 350);
 
-        const meditation = createNewRun(0, { gameMode: 'meditation' });
-        expect(getMemorizeDurationForRun(meditation, 1)).toBe(
-            Math.floor(getMemorizeDuration(1, meditation.board!.tiles.length) * 1.55)
+        // Calm pacing, the setup sheet's replacement for the Meditation card.
+        const calm = createNewRun(0, { resolveDelayMultiplier: 1.35 });
+        expect(getMemorizeDurationForRun(calm, 1)).toBe(
+            Math.floor(getMemorizeDuration(1, calm.board!.tiles.length) * 1.55)
         );
     });
 

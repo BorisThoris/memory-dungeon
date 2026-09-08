@@ -159,7 +159,7 @@ const enemyHazardCountForFloor = (
     nodeKind: DungeonRunNodeKind | null,
     gameMode?: GameMode
 ): number => {
-    if (!gameMode || gameMode === 'puzzle' || gameMode === 'meditation' || level <= 1) {
+    if (!gameMode || level <= 1) {
         return 0;
     }
     if (nodeKind === 'boss' || floorTag === 'boss') {

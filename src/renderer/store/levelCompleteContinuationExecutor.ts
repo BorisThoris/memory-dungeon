@@ -99,7 +99,7 @@ export const executeContinueToNextLevel = (deps: LevelCompleteContinuationExecut
         return;
     }
 
-    if (run.gameMode === 'puzzle' || run.relicOffer) {
+    if (run.relicOffer) {
         return;
     }
 

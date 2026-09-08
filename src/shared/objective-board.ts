@@ -24,11 +24,9 @@ export interface ObjectiveBoardItem {
 
 export const buildObjectiveBoardRows = (save: SaveData): ObjectiveBoardRow[] => {
     const ps = save.playerStats;
-    const last = save.lastRunSummary;
-    const dailies = runNonNegativeInteger(ps?.dailiesCompleted);
     const bestNoPowers = runNonNegativeInteger(ps?.bestFloorNoPowers);
     const relicPicks = getRelicPickTotal(ps?.relicPickCounts);
-    const gauntletClears = last?.gameMode === 'gauntlet' ? runNonNegativeInteger(last.levelsCleared) : 0;
+    const sharpFloors = runNonNegativeInteger(ps?.sharpFloors);
 
     return [
         {
@@ -48,14 +46,6 @@ export const buildObjectiveBoardRows = (save: SaveData): ObjectiveBoardRow[] => 
             reward: 'Ascendant honor'
         },
         {
-            id: 'daily_initiate',
-            title: 'Daily initiate',
-            description: 'Clear a Daily Challenge floor.',
-            status: dailies >= 1 ? 'completed' : save.achievements.ACH_FIRST_CLEAR ? 'active' : 'locked',
-            progress: `${Math.min(dailies, 1)}/1`,
-            reward: 'Daily honor and streak progress'
-        },
-        {
             id: 'relic_habit',
             title: 'Relic habit',
             description: 'Pick relics across local runs.',
@@ -64,12 +54,12 @@ export const buildObjectiveBoardRows = (save: SaveData): ObjectiveBoardRow[] => 
             reward: 'Relic habit honor'
         },
         {
-            id: 'gauntlet_proof',
-            title: 'Gauntlet proof',
-            description: 'Clear at least one floor in a Gauntlet run.',
-            status: gauntletClears >= 1 ? 'completed' : save.achievements.ACH_FIRST_CLEAR ? 'active' : 'locked',
-            progress: `${Math.min(gauntletClears, 1)}/1`,
-            reward: 'Gauntlet proof honor'
+            id: 'sharp_floor',
+            title: 'Sharp floor',
+            description: 'Clear a floor whose chain reached Sharp.',
+            status: sharpFloors >= 1 ? 'completed' : save.achievements.ACH_FIRST_CLEAR ? 'active' : 'locked',
+            progress: `${Math.min(sharpFloors, 1)}/1`,
+            reward: 'Week of Archives progress'
         }
     ];
 };
@@ -77,7 +67,7 @@ export const buildObjectiveBoardRows = (save: SaveData): ObjectiveBoardRow[] => 
 export const getObjectiveBoardItems = (save: SaveData): ObjectiveBoardItem[] => {
     const ps = save.playerStats;
     const firstClear = save.achievements.ACH_FIRST_CLEAR;
-    const dailies = runNonNegativeInteger(ps?.dailiesCompleted);
+    const sharpFloors = runNonNegativeInteger(ps?.sharpFloors);
     const bestNoPowers = runNonNegativeInteger(ps?.bestFloorNoPowers);
     return [
         {
@@ -97,19 +87,19 @@ export const getObjectiveBoardItems = (save: SaveData): ObjectiveBoardItem[] => 
             reward: 'Ascendant honor'
         },
         {
-            id: 'daily_three',
-            title: 'Daily rhythm',
-            description: 'Clear three Daily Challenge floors.',
-            status: dailies >= 3 ? 'completed' : 'active',
-            progress: { current: Math.min(dailies, 3), target: 3 },
-            reward: 'Daily streak honor'
+            id: 'sharp_three',
+            title: 'Sharp rhythm',
+            description: 'Clear three floors whose chain reached Sharp.',
+            status: sharpFloors >= 3 ? 'completed' : 'active',
+            progress: { current: Math.min(sharpFloors, 3), target: 3 },
+            reward: 'Week of Archives progress'
         },
         {
             id: 'relic_shrine_extra',
             title: 'Week of Archives',
-            description: 'Clear seven daily floors to make +1 relic pick at each shrine claimable.',
-            status: (ps?.relicShrineExtraPickUnlocked ?? false) ? 'completed' : dailies >= 3 ? 'active' : 'locked',
-            progress: { current: Math.min(dailies, 7), target: 7 },
+            description: 'Clear seven Sharp floors to make +1 relic pick at each shrine claimable.',
+            status: (ps?.relicShrineExtraPickUnlocked ?? false) ? 'completed' : sharpFloors >= 3 ? 'active' : 'locked',
+            progress: { current: Math.min(sharpFloors, 7), target: 7 },
             reward: '+1 relic selection at milestones'
         }
     ];

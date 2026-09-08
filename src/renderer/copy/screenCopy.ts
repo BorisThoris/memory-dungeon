@@ -14,7 +14,6 @@ export const CHOOSE_YOUR_PATH_COPY = {
     /* Not "Filter modes ...": the search box owns that label, and two of them make both ambiguous. */
     groupFilterLabel: 'Narrow by kind',
     /** Prefix for the live countdown to the next UTC daily. */
-    dailyResetPrefix: 'Next daily in',
     mutatorsSubtitle: 'Toggle mutators for a focused study run, or start calm with a clean ruleset.',
     /** `4 of 12 modes` under the library's filters. Counts are substituted by the screen. */
     modeCount: (shown: number, total: number): string => `${shown} of ${total} modes`,

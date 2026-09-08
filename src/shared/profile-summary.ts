@@ -1,5 +1,4 @@
 import { COSMETIC_CATALOG, getEquippedCosmeticId } from './cosmetics';
-import { getDailyArchiveSummary } from './daily-archive';
 import { FEATURE_CLOUD_SAVE } from './feature-flags';
 import { countEligibleHonors } from './honorUnlocks';
 import { getMetaProgressionBoard, getMetaProgressionFeedback } from './meta-progression';
@@ -24,7 +23,7 @@ export interface ProfileSaveShellSummary {
     progressionMotivationCopy: string;
     cosmeticOwned: number;
     runHistoryEntries: number;
-    dailyStreak: number;
+    sharpFloors: number;
     saveLocationCopy: string;
     cloudSyncState: CloudSyncState;
     cloudSyncCopy: string;
@@ -34,7 +33,7 @@ export interface ProfileSaveShellSummary {
 }
 
 export interface ProfileSummaryRow {
-    id: 'profile_level' | 'honor_marks' | 'best_score' | 'cosmetics' | 'history' | 'daily_streak';
+    id: 'profile_level' | 'honor_marks' | 'best_score' | 'cosmetics' | 'history' | 'sharp_floors';
     label: string;
     value: string;
     source: string;
@@ -53,7 +52,6 @@ export const buildProfileSaveShellSummary = (
 ): ProfileSaveShellSummary => {
     const board = getMetaProgressionBoard(save);
     const progression = getMetaProgressionFeedback(save);
-    const daily = getDailyArchiveSummary(save);
     return {
         profileScope: 'single_local_profile',
         profileLevel: board.level,
@@ -69,7 +67,7 @@ export const buildProfileSaveShellSummary = (
         progressionMotivationCopy: progression.motivationCopy,
         cosmeticOwned: board.summary.cosmeticOwned,
         runHistoryEntries: buildRunJournalRowsFromSave(save).length,
-        dailyStreak: daily.streak,
+        sharpFloors: runNonNegativeInteger(save.playerStats?.sharpFloors),
         saveLocationCopy: 'Single local profile on this device. Steam/cloud sync is not required for v1.',
         cloudSyncState: cloudSaveAvailable ? 'available' : 'not_available',
         cloudSyncCopy: cloudSaveAvailable
@@ -105,7 +103,7 @@ export const getProfileSummaryRows = (save: SaveData): ProfileSummaryRow[] => {
             source: `${crest ?? 'No crest'} · ${summary.cosmeticOwned} owned`
         },
         { id: 'history', label: 'Run history rows', value: String(summary.runHistoryEntries), source: 'last run journal' },
-        { id: 'daily_streak', label: 'Daily streak', value: String(summary.dailyStreak), source: 'playerStats.dailyStreakCosmetic' }
+        { id: 'sharp_floors', label: 'Sharp floors', value: String(summary.sharpFloors), source: 'playerStats.sharpFloors' }
     ];
 };
 

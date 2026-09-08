@@ -40,7 +40,6 @@ export const calculateResolvedMatchSurvivalReward = ({
     routeCardReward,
     run
 }: ResolvedMatchSurvivalRewardInput): ResolvedMatchSurvivalReward => {
-    const meditation = run.gameMode === 'meditation';
     const safeCurrentStreak = runNonNegativeInteger(currentStreak);
     const safeLives = runNonNegativeInteger(run.lives);
     const routeGuardTokens = runNonNegativeInteger(routeCardReward.guardTokens);
@@ -50,7 +49,7 @@ export const calculateResolvedMatchSurvivalReward = ({
     const safeFindableComboShardGain = runNonNegativeInteger(findableComboShardGain);
     const stats = normalizeSessionStats(run.stats);
     const guardTokenGain =
-        meditation || safeCurrentStreak <= 0 || safeCurrentStreak % COMBO_GUARD_STREAK_STEP !== 0 ? 0 : 1;
+        safeCurrentStreak <= 0 || safeCurrentStreak % COMBO_GUARD_STREAK_STEP !== 0 ? 0 : 1;
     const guardTokensBeforeRewards = decrementRunCounter(stats.guardTokens, mimicCacheGuardBite ? 1 : 0);
     const comboShardsBeforeRewards = decrementRunCounter(stats.comboShards, catalystAltarUpgraded ? 1 : 0);
     const livesBeforeComboReward = decrementRunCounter(safeLives, mimicCacheBite && !mimicCacheGuardBite ? 1 : 0);
@@ -58,14 +57,7 @@ export const calculateResolvedMatchSurvivalReward = ({
         MAX_GUARD_TOKENS,
         guardTokensBeforeRewards + guardTokenGain + routeGuardTokens + dungeonGuardTokens
     );
-    const comboShardReward = meditation
-        ? applyComboShardGain(
-              comboShardsBeforeRewards,
-              mimicCacheFatalBite ? 0 : livesBeforeComboReward,
-              safeFindableComboShardGain + routeComboShards + dungeonComboShards,
-              false
-          )
-        : applyComboShardGain(
+    const comboShardReward = applyComboShardGain(
               comboShardsBeforeRewards,
               mimicCacheFatalBite ? 0 : livesBeforeComboReward,
               (safeCurrentStreak > 0 && safeCurrentStreak % COMBO_SHARD_STREAK_STEP === 0 ? 1 : 0) +
@@ -74,7 +66,7 @@ export const calculateResolvedMatchSurvivalReward = ({
                   dungeonComboShards
           );
     const chainHealLifeGain =
-        meditation || safeCurrentStreak <= 0 || safeCurrentStreak % CHAIN_HEAL_STREAK_STEP !== 0 ? 0 : 1;
+        safeCurrentStreak <= 0 || safeCurrentStreak % CHAIN_HEAL_STREAK_STEP !== 0 ? 0 : 1;
     const lives = mimicCacheFatalBite
         ? 0
         : Math.min(

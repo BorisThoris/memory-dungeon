@@ -9,7 +9,6 @@ import {
     CHUNK_SIX_PAIRS
 } from './achievements';
 import { createNewRun } from './game-core';
-import { RELIC_POOL } from './relics';
 import { ACHIEVEMENT_IDS, createDefaultSaveData, createAchievementState } from './save-data';
 
 describe('achievement catalog copy', () => {
@@ -134,7 +133,7 @@ describe('achievement rules', () => {
             }
         };
         const saveData = createDefaultSaveData();
-        saveData.playerStats = { ...saveData.playerStats!, dailiesCompleted: Number.POSITIVE_INFINITY };
+        saveData.playerStats = { ...saveData.playerStats!, sharpFloors: Number.POSITIVE_INFINITY };
 
         expect(evaluateAchievementUnlocks(run, saveData)).toEqual([]);
     });
@@ -161,18 +160,12 @@ describe('achievement rules', () => {
         expect(evaluateAchievementUnlocks(run, createDefaultSaveData())).toContain('ACH_ENDLESS_TEN');
     });
 
-    it('unlocks ACH_SEVEN_DAILIES from save progress', () => {
-        const run = createNewRun(0);
-        const saveData = createDefaultSaveData();
-        saveData.playerStats = { ...saveData.playerStats!, dailiesCompleted: 7 };
-        expect(evaluateAchievementUnlocks(run, saveData)).toContain('ACH_SEVEN_DAILIES');
-    });
 });
 
 describe('achievements that point at the rest of the game', () => {
     /**
-     * The original seven all fall out of playing Classic for a while. These are the ones that only
-     * trip when a player goes and finds something — a warden, a mode, a build — so each test says
+     * The original six all fall out of playing for a while. These are the ones that only
+     * trip when a player goes and finds something — a warden, a build, a chain — so each test says
      * what has to happen, and the last one says nothing trips by accident.
      */
     const baseRun = (overrides: Partial<RunState> = {}): RunState => ({
@@ -211,12 +204,6 @@ describe('achievements that point at the rest of the game', () => {
             stats: { ...createNewRun(0).stats, highestLevel: 20 }
         });
         expect(unlocksFor(deepEndless)).toEqual(expect.arrayContaining(['ACH_ENDLESS_CYCLE', 'ACH_ENDLESS_TWENTY']));
-
-        const deepGauntlet = baseRun({
-            gameMode: 'gauntlet',
-            stats: { ...createNewRun(0).stats, highestLevel: 20 }
-        });
-        expect(unlocksFor(deepGauntlet)).not.toContain('ACH_ENDLESS_CYCLE');
     });
 
     it('reads the streak, the score and the trait spread off the run', () => {
@@ -253,53 +240,7 @@ describe('achievements that point at the rest of the game', () => {
         expect(unlocksFor(threeRules)).not.toContain('ACH_RELIC_HOARD');
     });
 
-    it('reads the cumulative marks off the save, not the run', () => {
-        const save = createDefaultSaveData();
-        const library = {
-            ...save,
-            playerStats: {
-                ...save.playerStats!,
-                relicPickCounts: Object.fromEntries(RELIC_POOL.slice(0, 12).map((id) => [id, 1]))
-            }
-        };
-        expect(unlocksFor(baseRun(), library)).toContain('ACH_RELIC_LIBRARY');
 
-        const elevenOnly = {
-            ...save,
-            playerStats: {
-                ...save.playerStats!,
-                relicPickCounts: Object.fromEntries(RELIC_POOL.slice(0, 11).map((id) => [id, 1]))
-            }
-        };
-        expect(unlocksFor(baseRun(), elevenOnly)).not.toContain('ACH_RELIC_LIBRARY');
-
-        const bareHands = { ...save, playerStats: { ...save.playerStats!, bestFloorNoPowers: 10 } };
-        expect(unlocksFor(baseRun(), bareHands)).toContain('ACH_NO_POWERS_TEN');
-
-        const puzzles = {
-            ...save,
-            playerStats: {
-                ...save.playerStats!,
-                puzzleCompletions: Object.fromEntries(
-                    ['a', 'b', 'c', 'd', 'e'].map((id) => [id, { completed: true, bestMistakes: 0, bestScore: 1 }])
-                )
-            }
-        };
-        expect(unlocksFor(baseRun(), puzzles)).toContain('ACH_PUZZLE_SOLVER');
-    });
-
-    it('gives each of the other modes a mark of its own', () => {
-        const stats = createNewRun(0).stats;
-        expect(unlocksFor(baseRun({ gameMode: 'gauntlet', stats: { ...stats, levelsCleared: 3 } }))).toContain(
-            'ACH_GAUNTLET_RUN'
-        );
-        expect(unlocksFor(baseRun({ gameMode: 'meditation', stats: { ...stats, levelsCleared: 8 } }))).toContain(
-            'ACH_MEDITATION_HOUR'
-        );
-        expect(unlocksFor(baseRun({ gameMode: 'meditation', stats: { ...stats, levelsCleared: 7 } }))).not.toContain(
-            'ACH_MEDITATION_HOUR'
-        );
-    });
 
     it('trips none of them on a fresh run', () => {
         expect(unlocksFor(baseRun())).toEqual([]);

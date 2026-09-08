@@ -4,13 +4,10 @@ import { fileURLToPath } from 'node:url';
 import { describe, expect, it, vi } from 'vitest';
 import {
     createMulberry32,
-    deriveDailyMutatorIndex,
-    deriveDailyRunSeed,
     deriveLevelTileRngSeed,
     hashStringToSeed,
     pickRngIndex,
     shuffleWithRng,
-    utcDateKeyMinusOneDay
 } from './rng';
 
 const listTypeScriptFiles = (dir: string): string[] =>
@@ -107,19 +104,6 @@ describe('derived seeds', () => {
         expect(deriveLevelTileRngSeed(10, 3, 8)).toBe(deriveLevelTileRngSeed(10, 3, 8));
     });
 
-    it('deriveDailyRunSeed is stable for a fixed date', () => {
-        const d = new Date(Date.UTC(2026, 3, 17, 12, 0, 0));
-        expect(deriveDailyRunSeed(8, d)).toBe(deriveDailyRunSeed(8, d));
-    });
 
-    it('deriveDailyMutatorIndex is bounded', () => {
-        expect(deriveDailyMutatorIndex(123456, 8)).toBeGreaterThanOrEqual(0);
-        expect(deriveDailyMutatorIndex(123456, 8)).toBeLessThan(8);
-    });
 
-    it('subtracts one UTC day only for valid compact daily keys', () => {
-        expect(utcDateKeyMinusOneDay('20260301')).toBe('20260228');
-        expect(utcDateKeyMinusOneDay('20260231')).toBe('20260231');
-        expect(utcDateKeyMinusOneDay('2026-03-01')).toBe('2026-03-01');
-    });
 });

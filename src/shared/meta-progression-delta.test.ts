@@ -8,7 +8,7 @@ describe('meta progression run delta feedback', () => {
         const before = createDefaultSaveData();
         before.playerStats = {
             ...before.playerStats!,
-            dailiesCompleted: 6,
+            sharpFloors: 6,
             bestFloorNoPowers: 4,
             relicPickCounts: {
                 extra_shuffle_charge: 1
@@ -22,7 +22,7 @@ describe('meta progression run delta feedback', () => {
         after.achievements.ACH_PERFECT_CLEAR = true;
         after.playerStats = {
             ...after.playerStats!,
-            dailiesCompleted: 7,
+            sharpFloors: 7,
             bestFloorNoPowers: 5,
             relicPickCounts: {
                 extra_shuffle_charge: 2
@@ -40,9 +40,9 @@ describe('meta progression run delta feedback', () => {
             'reward_upgrade_relic_shrine_extra_pick',
             'milestone_reached',
             'honor_source_achievements',
-            'honor_source_daily_archive',
             'honor_source_no_powers_mastery',
-            'honor_source_relic_mastery'
+            'honor_source_relic_mastery',
+            'honor_source_sharp_floors'
         ]);
         expect(delta.rows.find((row) => row.id === 'profile_level')).toMatchObject({
             before: '3',
@@ -71,7 +71,7 @@ describe('meta progression run delta feedback', () => {
         const ready = createDefaultSaveData();
         ready.playerStats = {
             ...ready.playerStats!,
-            dailiesCompleted: 7,
+            sharpFloors: 7,
             relicShrineExtraPickUnlocked: false
         };
         const owned = applyMetaProgressionUnlock(ready, 'upgrade_relic_shrine_extra_pick').save;
@@ -105,7 +105,7 @@ describe('meta progression run delta feedback', () => {
         expect(delta.headline).toBe('No new meta unlocks. Earn one more achievement for 2 honor marks.');
         expect(delta.summaryCopy).toBe('No new meta unlocks. Earn one more achievement for 2 honor marks.');
         expect(delta.nextGoalCopy).toBe(
-            'Next: Week of Archives (0/7 from Daily archive completions). Adept tier at profile level 3 (10 honor marks).'
+            'Next: Week of Archives (0/7 from Sharp floor clears). Adept tier at profile level 3 (10 honor marks).'
         );
     });
 });

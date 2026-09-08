@@ -33,7 +33,7 @@ export const createRunSummary = (run: RunState, unlockedAchievements: Achievemen
             runSeed: runNonNegativeInteger(run.runSeed),
             runRulesVersion: runNonNegativeInteger(run.runRulesVersion),
             gameMode: run.gameMode,
-            dailyDateKeyUtc: run.dailyDateKeyUtc ?? undefined,
+            gauntletSessionDurationMs: run.gauntletSessionDurationMs ?? undefined,
             activeMutators: [...runMutatorIds(run.activeMutators)],
             relicIds: [...runRelicIds(run.relicIds)],
             payoffPickupClaimed: Math.min(runNonNegativeInteger(run.findablesClaimedThisFloor), payoffPickupTotal),

@@ -1133,3 +1133,38 @@ These are defined next to `getPresentationMutatorMatchPenalty` in `game.ts` (not
 - Verification passed: `yarn typecheck`, `git diff --check` with only existing LF-to-CRLF normalization warnings, `yarn test` (179 files / 1302 tests), and `yarn lint`. Lint still reports the two existing `react-refresh/only-export-components` warnings in `src/renderer/components/GameScreen.tsx`; there are no lint errors.
 - Browser smoke attempt: `yarn playwright test e2e/navigation-flow.spec.ts e2e/playable-path-navigation.spec.ts --workers=1` exceeded a 15-minute outer command timeout without useful assertion output. The timed-out navigation/playable-path process tree from this pass was stopped; other local processes were left untouched as likely concurrent lanes or existing servers.
 - Remaining work: rerun the browser/e2e stabilization lane on a quiet server (`yarn test:e2e:renderer-qa`, or at least navigation/playable-path/gameplay-readability), manually smoke floor clear into Safe / Greed / Mystery, confirm gauntlet final countdown audio in the live shell, and decide whether the `GameScreen.tsx` exported helpers/constants should move to a small module to silence Fast Refresh warnings before freeze.
+
+## Gen 171: one mode
+
+`GameMode` is now `'endless'` and nothing else. The daily, the puzzle set, the gauntlet and the
+meditation run are gone; `docs/REMOVED_MODES.md` holds what each of them was, generated from the
+catalogs on the commit before they were deleted.
+
+Nothing a player could set up was lost. The setup sheet (`classic-run-setup.ts`) had already
+absorbed every one of them as an option on the one mode: the gauntlet's clock is **Pressure**
+(`timed_5 / timed_10 / timed_15`), the meditation's slower window is **Calm pacing**, the wild run
+is **Chaos**, practice is **Unrecorded**, and both contracts are **Vows**. What went with the modes
+is what only they had: the daily's shared seed and its streak, and the three authored puzzle boards.
+
+Three balance terms moved as a result, and each is a real change to what the one mode pays:
+
+- **Memorize window.** The 1.55× stretch was `gameMode === 'meditation'`; it now reads
+  `resolveDelayMultiplier > 1`, which only Calm pacing sets. Same window, reachable from the sheet.
+- **Streak rewards.** Meditation suppressed the guard token, the combo shard and the chain heal on
+  a streak. That was a mode rule with nowhere to live, so it is gone: every run pays the streak.
+- **Recall focus.** The puzzle branch returned 0 from `calculateRecallMatchBonus`, and a great many
+  score units were written against runs built with `gameMode: 'puzzle'` for exactly that quiet. Those
+  fixtures now say `recallFocus: 0` outright; a real run still opens at `INITIAL_RECALL_FOCUS`, so
+  every match in the one mode pays `RECALL_FOCUS_MATCH_SCORE` on top of the terms those units name.
+
+The bands did not move and did not need to: `sim:pop --check`, `sim:cascade --check`,
+`sim:cascade --check --relics` and `sim:occupancy` all pass unchanged after the collapse, which is
+the point of the exercise — what the simulations measure is now what everyone plays.
+
+The daily's meta layer was re-sourced rather than deleted, because the reward at the end of it is
+real. **Week of Archives** (+1 relic pick at every milestone shrine) asked for seven daily clears; it
+now asks for seven floors whose chain reached **Sharp** (`playerStats.sharpFloors`), a counter the
+one mode moves and the chain quest already keeps. The honor that carried the bronze crest was
+re-pointed the same way (`honor_sharp_initiate`). Four achievements and four honors that only a
+removed mode could earn were deleted outright rather than left standing unearnable — which is the
+failure `achievement-reachability.test.ts` exists to catch.

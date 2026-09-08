@@ -2,7 +2,6 @@ import type { AchievementId, RunState, SaveData } from './contracts';
 import { ACHIEVEMENT_CATALOG, type AchievementCodexEntry } from './mechanics-encyclopedia';
 import { runRecord } from './run-record-guards';
 import { runNonNegativeInteger } from './run-number-guards';
-import { BUILTIN_PUZZLE_IDS } from './builtin-puzzles';
 import { ENDLESS_CYCLE_FLOOR_COUNT } from './floor-mutator-schedule';
 import { STANDING_RULE_RELIC_IDS } from './relics';
 import { ACHIEVEMENT_IDS } from './save-data';
@@ -84,14 +83,10 @@ export const evaluateAchievementUnlocks = (run: RunState, saveData: SaveData): A
         unlocked.push('ACH_ENDLESS_TEN');
     }
 
-    if (runNonNegativeInteger(saveData.playerStats?.dailiesCompleted) >= 7 && !saveData.achievements.ACH_SEVEN_DAILIES) {
-        unlocked.push('ACH_SEVEN_DAILIES');
-    }
-
     /*
      * The rules below point at the rest of the game. Each reads state the run already carries, so
-     * none of them needs its own counter: a player who never opens Gauntlet simply never trips the
-     * Gauntlet one, and the achievement list on the store page is what tells them it is there.
+     * none of them needs its own counter: a player who never draws a warden simply never trips the
+     * warden one, and the achievement list on the store page is what tells them it is there.
      */
     const award = (id: AchievementId, earned: boolean): void => {
         if (earned && !saveData.achievements[id]) {
@@ -117,17 +112,6 @@ export const evaluateAchievementUnlocks = (run: RunState, saveData: SaveData): A
             .length >= 12
     );
     award('ACH_NO_POWERS_TEN', runNonNegativeInteger(saveData.playerStats?.bestFloorNoPowers) >= 10);
-    award('ACH_GAUNTLET_RUN', run.gameMode === 'gauntlet' && stats.levelsCleared >= 3);
-    /*
-     * Every builtin puzzle, not an arbitrary five: the game ships three, so asking for five made
-     * this unearnable for anyone who has not imported puzzles of their own. The threshold is
-     * derived from the catalogue so shipping a fourth puzzle raises the bar automatically.
-     */
-    award(
-        'ACH_PUZZLE_SOLVER',
-        Object.keys(saveData.playerStats?.puzzleCompletions ?? {}).length >= BUILTIN_PUZZLE_IDS.length
-    );
-    award('ACH_MEDITATION_HOUR', run.gameMode === 'meditation' && stats.levelsCleared >= 8);
     // The chain loop's own four: reached through play a fixture proves (achievement-reachability.test.ts).
     award('ACH_FIRST_FEVER', runNonNegativeInteger(run.feverBreaksThisRun) >= 1);
     award('ACH_CHUNK_SIX', runNonNegativeInteger(run.biggestChunkPairs) >= CHUNK_SIX_PAIRS);

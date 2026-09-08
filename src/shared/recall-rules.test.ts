@@ -71,7 +71,7 @@ describe('recall rules', () => {
         expect(tileHasRecallClue(tile({ dungeonCardState: 'revealed' }))).toBe(true);
     });
 
-    it('clamps focus and scores non-puzzle remembered matches', () => {
+    it('clamps focus and scores remembered matches', () => {
         const run = { ...createNewRun(0, { echoFeedbackEnabled: false }), recallFocus: RECALL_FOCUS_MAX + 2 };
         expect(normalizeRecallFocus(-10)).toBe(0);
         expect(normalizeRecallFocus(RECALL_FOCUS_MAX + 2)).toBe(RECALL_FOCUS_MAX);
@@ -80,7 +80,6 @@ describe('recall rules', () => {
         expect(calculateRecallMatchBonus(run, [tile({ lanternScouted: true })])).toBe(
             RECALL_FOCUS_MAX * RECALL_FOCUS_MATCH_SCORE + RECALL_CLUE_MATCH_SCORE
         );
-        expect(calculateRecallMatchBonus({ ...run, gameMode: 'puzzle' }, [tile({ lanternScouted: true })])).toBe(0);
     });
 
     it('caps pending memorize bonus from life loss', () => {

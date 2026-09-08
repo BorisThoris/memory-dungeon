@@ -19,7 +19,7 @@ import {
 
 const TOPIC_ID = /^[a-z][a-z0-9_]*$/;
 
-const ALL_GAME_MODES: GameMode[] = ['endless', 'daily', 'puzzle', 'gauntlet', 'meditation'];
+const ALL_GAME_MODES: GameMode[] = ['endless'];
 
 function assertCatalogEntry<T extends { id: string; title: string; description: string }>(
     key: string,

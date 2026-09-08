@@ -16,7 +16,7 @@ export type MetaProgressionTrack = 'permanent_upgrade' | 'cosmetic';
 export type MetaProgressionStatus = 'owned' | 'available' | 'locked';
 export type LegacyMetaProgressionStatus = 'unlocked' | 'in_progress' | 'locked' | 'owned';
 export type MetaCurrencyId = 'honor_marks';
-export type MetaUpgradeModeRule = 'disabled_in_daily' | 'visible_in_classic' | 'cosmetic_only';
+export type MetaUpgradeModeRule = 'visible_in_classic' | 'cosmetic_only';
 
 export interface MetaProgressionRow {
     id: string;
@@ -37,7 +37,7 @@ export interface MetaProgressionRow {
 }
 
 export interface PermanentUpgradeRow {
-    id: 'relic_shrine_extra_pick' | 'ascendant_title_track' | 'daily_cosmetic_track';
+    id: 'relic_shrine_extra_pick' | 'ascendant_title_track' | 'sharp_cosmetic_track';
     title: string;
     status: LegacyMetaProgressionStatus;
     offlineOnly: true;
@@ -47,7 +47,7 @@ export interface PermanentUpgradeRow {
 }
 
 export interface CosmeticTrackRow {
-    trackId: 'starter' | 'daily' | 'mastery' | 'relic';
+    trackId: 'starter' | 'sharp' | 'mastery' | 'relic';
     cosmeticId: CosmeticId;
     label: string;
     status: LegacyMetaProgressionStatus;
@@ -66,7 +66,7 @@ export interface MetaProgressionSummary {
     cosmeticOwned: number;
 }
 
-export type MetaHonorMarkSourceId = 'achievements' | 'daily_archive' | 'no_powers_mastery' | 'relic_mastery';
+export type MetaHonorMarkSourceId = 'achievements' | 'sharp_floors' | 'no_powers_mastery' | 'relic_mastery';
 
 export interface MetaHonorMarkSourceRow {
     id: MetaHonorMarkSourceId;
@@ -150,7 +150,7 @@ const META_PROGRESS_MILESTONES: Array<{
 
 export const getMetaHonorMarkSourceRows = (save: SaveData): MetaHonorMarkSourceRow[] => {
     const achievementProgress = getAchievementProgressSummary(save.achievements);
-    const dailies = Math.min(7, runNonNegativeInteger(save.playerStats?.dailiesCompleted));
+    const sharpFloors = Math.min(7, runNonNegativeInteger(save.playerStats?.sharpFloors));
     const noPowers = Math.min(5, runNonNegativeInteger(save.playerStats?.bestFloorNoPowers));
     const relics = Math.min(10, getRelicPickTotal(save.playerStats?.relicPickCounts));
     const relicsToNextMark = relics >= 10 ? null : relics % 2 === 0 ? 2 : 1;
@@ -165,13 +165,13 @@ export const getMetaHonorMarkSourceRows = (save: SaveData): MetaHonorMarkSourceR
             nextMarkUnitsRemaining: achievementProgress.earned < achievementProgress.total ? 1 : null
         },
         {
-            id: 'daily_archive',
-            label: 'Daily archive',
-            marks: dailies,
+            id: 'sharp_floors',
+            label: 'Sharp floors',
+            marks: sharpFloors,
             cap: 7,
-            progress: { current: dailies, target: 7 },
-            nextMarkCopy: dailies < 7 ? 'Clear one more Daily Challenge for 1 honor mark.' : null,
-            nextMarkUnitsRemaining: dailies < 7 ? 1 : null
+            progress: { current: sharpFloors, target: 7 },
+            nextMarkCopy: sharpFloors < 7 ? 'Clear one more Sharp floor for 1 honor mark.' : null,
+            nextMarkUnitsRemaining: sharpFloors < 7 ? 1 : null
         },
         {
             id: 'no_powers_mastery',
@@ -223,7 +223,7 @@ const lockedStatusForProgress = (current: number, target: number, owned: boolean
     enabled ? statusForProgress(current, target, owned) : owned ? 'owned' : 'locked';
 
 export const getPermanentUpgradeRows = (save: SaveData): MetaProgressionRow[] => {
-    const dailies = runNonNegativeInteger(save.playerStats?.dailiesCompleted);
+    const sharpFloors = runNonNegativeInteger(save.playerStats?.sharpFloors);
     const bestNoPowers = runNonNegativeInteger(save.playerStats?.bestFloorNoPowers);
     return [
         {
@@ -231,16 +231,16 @@ export const getPermanentUpgradeRows = (save: SaveData): MetaProgressionRow[] =>
             track: 'permanent_upgrade',
             title: 'Week of Archives',
             description: 'Permanent local upgrade: +1 relic selection at each milestone shrine.',
-            status: statusForProgress(dailies, 7, save.playerStats?.relicShrineExtraPickUnlocked === true),
-            progress: { current: Math.min(dailies, 7), target: 7 },
+            status: statusForProgress(sharpFloors, 7, save.playerStats?.relicShrineExtraPickUnlocked === true),
+            progress: { current: Math.min(sharpFloors, 7), target: 7 },
             reward: '+1 relic pick per milestone',
             currencyId: 'honor_marks',
             cost: 7,
             gameplayAffecting: true,
             localOnly: true,
-            gate: 'Clear seven Daily Challenge floors. No online account required.',
-            source: 'Daily archive completions',
-            modeRule: 'disabled_in_daily'
+            gate: 'Clear seven floors whose chain reached Sharp. No online account required.',
+            source: 'Sharp floor clears',
+            modeRule: 'visible_in_classic'
         },
         {
             id: 'upgrade_scholar_prep_slot',
@@ -515,16 +515,16 @@ const legacyStatus = (owned: boolean, current: number, target: number): LegacyMe
     owned ? 'owned' : current > 0 || current >= target ? 'in_progress' : 'locked';
 
 export const buildPermanentUpgradeRows = (save: SaveData): PermanentUpgradeRow[] => {
-    const dailies = runNonNegativeInteger(save.playerStats?.dailiesCompleted);
+    const sharpFloors = runNonNegativeInteger(save.playerStats?.sharpFloors);
     const noPowers = runNonNegativeInteger(save.playerStats?.bestFloorNoPowers);
     return [
         {
             id: 'relic_shrine_extra_pick',
             title: 'Week of Archives',
-            status: save.playerStats?.relicShrineExtraPickUnlocked ? 'unlocked' : dailies > 0 ? 'in_progress' : 'locked',
+            status: save.playerStats?.relicShrineExtraPickUnlocked ? 'unlocked' : sharpFloors > 0 ? 'in_progress' : 'locked',
             offlineOnly: true,
             payToSkip: false,
-            progress: { current: Math.min(dailies, 7), target: 7 },
+            progress: { current: Math.min(sharpFloors, 7), target: 7 },
             reward: '+1 relic selection at milestones'
         },
         {
@@ -537,20 +537,20 @@ export const buildPermanentUpgradeRows = (save: SaveData): PermanentUpgradeRow[]
             reward: 'Ascendant title cosmetics'
         },
         {
-            id: 'daily_cosmetic_track',
-            title: 'Daily cosmetic track',
-            status: dailies >= 3 ? 'unlocked' : dailies > 0 ? 'in_progress' : 'locked',
+            id: 'sharp_cosmetic_track',
+            title: 'Sharp cosmetic track',
+            status: sharpFloors >= 3 ? 'unlocked' : sharpFloors > 0 ? 'in_progress' : 'locked',
             offlineOnly: true,
             payToSkip: false,
-            progress: { current: Math.min(dailies, 3), target: 3 },
-            reward: 'Daily crest cosmetics'
+            progress: { current: Math.min(sharpFloors, 3), target: 3 },
+            reward: 'Bronze crest cosmetics'
         }
     ];
 };
 
-/** One row per cosmetic track (daily/mastery/relic gating), not the aggregate summary from `getCosmeticTrackProgressSummary`. */
+/** One row per cosmetic track (sharp/mastery/relic gating), not the aggregate summary from `getCosmeticTrackProgressSummary`. */
 export const getCosmeticTrackDefinitionRows = (save: SaveData): CosmeticTrackRow[] => {
-    const dailies = runNonNegativeInteger(save.playerStats?.dailiesCompleted);
+    const sharpFloors = runNonNegativeInteger(save.playerStats?.sharpFloors);
     const noPowers = runNonNegativeInteger(save.playerStats?.bestFloorNoPowers);
     return [
         {
@@ -563,12 +563,12 @@ export const getCosmeticTrackDefinitionRows = (save: SaveData): CosmeticTrackRow
             gameplayAffecting: false
         },
         {
-            trackId: 'daily',
+            trackId: 'sharp',
             cosmeticId: 'crest_daily_bronze',
             label: COSMETIC_CATALOG.crest_daily_bronze.label,
-            status: legacyStatus(cosmeticIsOwned(save, 'crest_daily_bronze'), dailies, 3),
+            status: legacyStatus(cosmeticIsOwned(save, 'crest_daily_bronze'), sharpFloors, 3),
             owned: cosmeticIsOwned(save, 'crest_daily_bronze') ? 1 : 0,
-            progress: { current: Math.min(dailies, 3), target: 3 },
+            progress: { current: Math.min(sharpFloors, 3), target: 3 },
             gameplayAffecting: false
         },
         {
@@ -586,12 +586,12 @@ export const getCosmeticTrackDefinitionRows = (save: SaveData): CosmeticTrackRow
 /** Aggregate owned/total per track for collection UI. Lives here to avoid a cosmetics/meta-progression import cycle. */
 export const getCosmeticTrackProgressSummary = (save: SaveData) => {
     const legacyRows = getCosmeticTrackDefinitionRows(save);
-    const trackIds = ['starter', 'daily', 'mastery'] as const;
+    const trackIds = ['starter', 'sharp', 'mastery'] as const;
     return trackIds.map((trackId) => {
         const matching =
             trackId === 'starter'
                 ? deriveCosmeticStates(save).filter((row) => row.defaultOwned)
-                : trackId === 'daily'
+                : trackId === 'sharp'
                   ? legacyRows.filter((row) => row.cosmeticId === 'crest_daily_bronze')
                   : legacyRows.filter((row) => row.cosmeticId === 'title_ascendant_v');
         return {

@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest';
 import { GAME_RULES_VERSION, type BoardState, type MutatorId, type RouteNodeType, type RunState, type Tile } from './contracts';
-import { BUILTIN_PUZZLE_IDS, BUILTIN_PUZZLES } from './builtin-puzzles';
 import {
     boardHasActionableProgressionPair,
     buildBoard,
@@ -12,11 +11,7 @@ import {
     repairDungeonExitSoftlocks
 } from './board-generation';
 import {
-    createDailyRun,
-    createGauntletRun,
-    createMeditationRun,
     createNewRun,
-    createPuzzleRun,
     createWildRun,
     finishMemorizePhase
 } from './game-core';
@@ -36,7 +31,6 @@ import {
 import {
     WILD_PAIR_KEY
 } from './tile-identity';
-import { DAILY_MUTATOR_TABLE } from './mutators';
 import { pickFloorScheduleEntry } from './floor-mutator-schedule';
 
 const DECOY_PAIR_KEY = '__decoy__';
@@ -193,17 +187,6 @@ describe('REG-087 board fairness inspection', () => {
         }
     });
 
-    it('accepts every daily mutator as structurally completeable', () => {
-        for (const mutator of DAILY_MUTATOR_TABLE) {
-            expectBoardFair(
-                buildBoard(4, {
-                    runSeed: 20260425,
-                    runRulesVersion: GAME_RULES_VERSION,
-                    activeMutators: [mutator]
-                })
-            );
-        }
-    });
 
     it('accepts important mutator combinations without orphaning real pairs', () => {
         const rows: MutatorId[][] = [
@@ -958,9 +941,8 @@ describe('REG-087 run-start fairness coverage', () => {
     it('accepts current local/offline run starts after memorize', () => {
         const runs = [
             createNewRun(0, { runSeed: 11 }),
-            createDailyRun(0),
-            createGauntletRun(0, 5 * 60 * 1000, { runSeed: 12 }),
-            createMeditationRun(0, undefined, { runSeed: 13 })
+            createNewRun(0, { gauntletDurationMs: 5 * 60 * 1000, runSeed: 12 }),
+            createNewRun(0, { resolveDelayMultiplier: 1.35, runSeed: 13 })
         ];
 
         for (const run of runs) {
@@ -968,12 +950,6 @@ describe('REG-087 run-start fairness coverage', () => {
         }
     });
 
-    it('accepts every built-in puzzle start', () => {
-        for (const id of BUILTIN_PUZZLE_IDS) {
-            const puzzle = BUILTIN_PUZZLES[id];
-            expectRunFair(playableRun(createPuzzleRun(0, puzzle.id, puzzle.tiles)));
-        }
-    });
 
     it('accepts wild/joker starts while a real actionable tile route remains', () => {
         const run = playableRun(createWildRun(0, { runSeed: 14 }));

@@ -32,7 +32,7 @@ export const ASSET_DROP_IN_CATEGORIES: readonly AssetDropInCategory[] = [
         label: 'Choose Path mode posters',
         authoritativePath: 'src/renderer/assets/ui/backgrounds/',
         acceptedFormats: ['png', 'webp'],
-        namingExample: 'bg-mode-gauntlet-v1.webp',
+        namingExample: 'bg-mode-classic-v1.webp',
         manifestOrBarrel: 'src/renderer/assets/ui/modeArt.ts MODE_CARD_ART',
         fallbackBehavior: 'Unknown or unfinished poster keys resolve to bg-mode-placeholder-v1.webp and show fallback badges.',
         rightsStatus: 'ai_generated_project',

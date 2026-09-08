@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { DEBUG_REVEAL_MS, type RunState } from './contracts';
-import { createGauntletRun, createNewRun, finishMemorizePhase } from './game-core';
+import { createNewRun, finishMemorizePhase } from './game-core';
 import {
     clearResolveState,
     createTimerState,
@@ -98,7 +98,7 @@ describe('run timer rules', () => {
     it('extends gauntlet deadlines by paused wall-clock time', () => {
         vi.useFakeTimers();
         vi.setSystemTime(1_000);
-        const playing = finishMemorizePhase(createGauntletRun(0, 60_000));
+        const playing = finishMemorizePhase(createNewRun(0, { gauntletDurationMs: 60_000 }));
         const paused = pauseRun(playing);
         vi.setSystemTime(2_500);
         const resumed = resumeRun(paused);
@@ -107,7 +107,7 @@ describe('run timer rules', () => {
     });
 
     it('normalizes malformed gauntlet timer fields while pausing and resuming', () => {
-        const playing = finishMemorizePhase(createGauntletRun(0, 60_000));
+        const playing = finishMemorizePhase(createNewRun(0, { gauntletDurationMs: 60_000 }));
         const malformedDeadline = pauseRun({
             ...playing,
             gauntletDeadlineMs: Number.POSITIVE_INFINITY

@@ -5,7 +5,7 @@ import { assertTokenCoverage, calculateMemoryTaxReview } from './mechanic-feedba
 
 describe('REG-045 power verb teaching', () => {
     it('groups every shipped toolbar power by cognitive job with cost and consequence copy', () => {
-        const run = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'puzzle' }));
+        const run = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false }));
         const rows = getPowerVerbRows(run);
 
         expect(Object.keys(POWER_VERB_GROUPS)).toEqual(['recall', 'search', 'damage_control', 'risk']);
@@ -70,7 +70,7 @@ describe('REG-045 power verb teaching', () => {
     });
 
     it('normalizes malformed saved counters before projecting power rows', () => {
-        const run = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'puzzle' }));
+        const run = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false }));
         const rows = getPowerVerbRows({
             ...run,
             activeContract: { noDestroy: false, noShuffle: false, maxMismatches: null, maxPinsTotalRun: 1.9 },
@@ -107,7 +107,7 @@ describe('REG-045 power verb teaching', () => {
     });
 
     it('blocks flip-sensitive teaching rows when open-flip state is malformed', () => {
-        const run = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'puzzle' }));
+        const run = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false }));
         const rows = getPowerVerbRows({
             ...run,
             board: run.board

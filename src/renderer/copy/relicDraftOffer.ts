@@ -119,9 +119,6 @@ export function buildRelicDraftBonusFootnoteLines(run: RunState): string[] {
     if (run.metaRelicDraftExtraPerMilestone > 0) {
         lines.push('Meta unlock: +1 relic choice at each milestone.');
     }
-    if (run.dailyDateKeyUtc) {
-        lines.push('Daily: extra pick when the schedule grants it.');
-    }
     if (run.activeMutators.includes('generous_shrine')) {
         lines.push('Generous Shrine mutator: +1 relic pick on this floor.');
     }

@@ -56,21 +56,10 @@ const modeLabel = (summary: RunSummary): string => {
     if (summary.dungeonShowcaseRun) {
         return 'Dungeon Showcase';
     }
-    switch (summary.gameMode) {
-        case 'daily':
-            return summary.dailyDateKeyUtc ? `Daily ${summary.dailyDateKeyUtc}` : 'Daily';
-        case 'gauntlet':
-            return 'Gauntlet';
-        case 'meditation':
-            return 'Meditation';
-        case 'puzzle':
-            return 'Puzzle';
-        default:
-            if (summary.practiceMode) {
-                return 'Practice';
-            }
-            return 'Classic';
+    if (summary.practiceMode) {
+        return 'Practice';
     }
+    return 'Classic';
 };
 
 const getFallbackNextGoalRow = (summary: RunSummary | null): GameOverNextRunRow => ({
@@ -104,10 +93,7 @@ const getMetaNextGoalRow = (save: SaveData, previousSave?: SaveData): GameOverNe
         title: 'Next goal',
         value,
         detail,
-        actionHint:
-            nextReward?.modeRule === 'disabled_in_daily'
-                ? 'Use Profile for reward status; choose Classic to benefit from permanent upgrades.'
-                : 'Use Profile for reward status and Choose Your Path for the next attempt.',
+        actionHint: 'Use Profile for reward status and Choose Your Path for the next attempt.',
         localOnly: true
     };
 };

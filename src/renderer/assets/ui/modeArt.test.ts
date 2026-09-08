@@ -24,8 +24,7 @@ describe('modeArt vs run-mode-catalog', () => {
         expect(rows.find((row) => row.key === 'classic')?.status).toBe('custom');
         expect(rows.find((row) => row.key === MODE_POSTER_FALLBACK_KEY)?.status).toBe('fallback');
         expect(rows.find((row) => row.key === 'dungeon_showcase')?.status).toBe('custom');
-        expect(rows.find((row) => row.key === 'gauntlet')?.status).toBe('custom');
-        expect(modePosterHasCustomArt('daily')).toBe(true);
+        expect(rows.find((row) => row.key === 'classic')?.status).toBe('custom');
         expect(modePosterHasCustomArt('scholar')).toBe(true);
         expect(RUN_MODE_CATALOG.every((mode) => modePosterHasCustomArt(mode.posterKey))).toBe(true);
         expect(rows.every((row) => row.assetUrl.length > 0)).toBe(true);

@@ -149,7 +149,7 @@ describe('save preference executor', () => {
         const saveData = createDefaultSaveData();
         saveData.playerStats = {
             ...saveData.playerStats!,
-            dailiesCompleted: 7,
+            sharpFloors: 7,
             relicShrineExtraPickUnlocked: false
         };
         const deps = createDeps(saveData);

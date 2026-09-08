@@ -1,9 +1,9 @@
 import { DEFAULT_CLASSIC_RUN_SETUP } from '../../shared/classic-run-setup';
 import { beforeEach, afterEach, describe, expect, it, vi } from 'vitest';
-import type { BoardState, RunState, SaveData, Tile } from '../../shared/contracts';
+import type { BoardState, RunState, Tile } from '../../shared/contracts';
 import { buildBoard, countFindablePairs } from '../../shared/board-generation';
 import { EXIT_PAIR_KEY, ROOM_PAIR_KEY, SHOP_PAIR_KEY } from '../../shared/dungeon-rules';
-import { createDailyRun, createNewRun, createPuzzleRun, createRunSummary } from '../../shared/game-core';
+import { createNewRun, createRunSummary } from '../../shared/game-core';
 import { createPlayablePathFixture, type PlayablePathFixtureId } from '../../shared/playable-path-fixtures';
 import { generateRouteChoices } from '../../shared/route-rules';
 import { rollRunEventRoom } from '../../shared/run-events';
@@ -333,7 +333,7 @@ describe('useAppStore timers', () => {
         const saveData = createDefaultSaveData();
         saveData.playerStats = {
             ...saveData.playerStats!,
-            dailiesCompleted: 7,
+            sharpFloors: 7,
             relicShrineExtraPickUnlocked: false
         };
         useAppStore.setState({
@@ -1820,7 +1820,6 @@ describe('useAppStore timers', () => {
         };
 
         for (const run of [
-            makeDeadCompleteRun({ gameMode: 'puzzle', puzzleId: 'starter_pairs' }),
             makeDeadCompleteRun({
                 relicOffer: {
                     tier: 1,
@@ -1859,137 +1858,9 @@ describe('useAppStore timers', () => {
         }
     });
 
-    it('GLD-P0-003: continueToNextLevel does not advance completed puzzle runs', () => {
-        const puzzleTiles: Tile[] = [
-            { id: 'p1', pairKey: 'P', symbol: 'P', label: 'P', state: 'matched' },
-            { id: 'p2', pairKey: 'P', symbol: 'P', label: 'P', state: 'matched' }
-        ];
-        const run: RunState = {
-            ...createPuzzleRun(0, 'guard_test', puzzleTiles),
-            status: 'levelComplete'
-        };
-        useAppStore.setState({ view: 'playing', run });
 
-        useAppStore.getState().continueToNextLevel();
 
-        expect(useAppStore.getState().view).toBe('playing');
-        expect(useAppStore.getState().run).toBe(run);
-    });
 
-    it('GLD-P0-004: clearing a builtin puzzle records completion in memory and persisted save data', async () => {
-        useAppStore.getState().startPuzzleRun('starter_pairs');
-        notifyCurrentBoardReady();
-
-        const memorizeDuration = useAppStore.getState().run?.timerState.memorizeRemainingMs ?? 0;
-        await vi.advanceTimersByTimeAsync(memorizeDuration + 1);
-
-        const board = useAppStore.getState().run?.board;
-        expect(board).toBeDefined();
-
-        for (const [first, second] of normalPairGroups(board!)) {
-            useAppStore.getState().pressTile(first!.id);
-            useAppStore.getState().pressTile(second!.id);
-        }
-
-        const state = useAppStore.getState();
-        const completion = state.saveData.playerStats?.puzzleCompletions?.starter_pairs;
-        expect(state.view).toBe('playing');
-        expect(state.run?.status).toBe('levelComplete');
-        expect(completion).toEqual({
-            completed: true,
-            bestMistakes: 0,
-            bestScore: state.run?.stats.totalScore
-        });
-
-        const persisted = JSON.parse(window.localStorage.getItem('memory-dungeon-save-data') ?? '{}') as SaveData;
-        expect(persisted.playerStats?.puzzleCompletions?.starter_pairs).toEqual(completion);
-    });
-
-    it('GLD-P0-005: zero-clear daily game over does not count as daily completion', async () => {
-        const baseRun = createDailyRun(0, { echoFeedbackEnabled: false, runSeed: 50_005 });
-        const board = buildBoard(1, {
-            gameMode: 'daily',
-            runSeed: baseRun.runSeed,
-            runRulesVersion: baseRun.runRulesVersion
-        });
-        const groups = normalPairGroups(board);
-        useAppStore.setState({
-            view: 'playing',
-            run: {
-                ...baseRun,
-                board,
-                status: 'playing',
-                lives: 1,
-                activeContract: {
-                    noShuffle: false,
-                    noDestroy: false,
-                    maxMismatches: 0,
-                    bonusRelicDraftPick: false
-                },
-                stats: { ...baseRun.stats, guardTokens: 0 },
-                findablesTotalThisFloor: countFindablePairs(board.tiles)
-            }
-        });
-
-        useAppStore.getState().pressTile(groups[0]![0]!.id);
-        useAppStore.getState().pressTile(groups[1]![0]!.id);
-        await vi.advanceTimersByTimeAsync(1400);
-
-        const state = useAppStore.getState();
-        expect(state.view).toBe('gameOver');
-        expect(state.run?.stats.levelsCleared).toBe(0);
-        expect(state.saveData.playerStats?.dailiesCompleted).toBe(0);
-        expect(state.saveData.playerStats?.lastDailyDateKeyUtc).toBeNull();
-        expect(state.saveData.achievements.ACH_SEVEN_DAILIES).toBe(false);
-    });
-
-    it('GLD-P0-005: first daily floor clear persists completion and can unlock seven dailies', async () => {
-        const saveData = createDefaultSaveData();
-        useAppStore.setState({
-            saveData: {
-                ...saveData,
-                playerStats: {
-                    ...saveData.playerStats!,
-                    dailiesCompleted: 6,
-                    lastDailyDateKeyUtc: '19990101'
-                }
-            }
-        });
-        const baseRun = createDailyRun(0, { echoFeedbackEnabled: false, runSeed: 50_006 });
-        const board = buildBoard(1, {
-            gameMode: 'daily',
-            runSeed: baseRun.runSeed,
-            runRulesVersion: baseRun.runRulesVersion
-        });
-        useAppStore.setState({
-            view: 'playing',
-            run: {
-                ...baseRun,
-                board,
-                status: 'playing',
-                findablesTotalThisFloor: countFindablePairs(board.tiles)
-            }
-        });
-
-        for (const [first, second] of normalPairGroups(board)) {
-            useAppStore.getState().pressTile(first!.id);
-            useAppStore.getState().pressTile(second!.id);
-        }
-        const exitTile = useAppStore.getState().run?.board?.tiles.find((tile) => tile.pairKey === '__exit__');
-        if (exitTile && useAppStore.getState().run?.status === 'playing') {
-            useAppStore.getState().pressTile(exitTile.id);
-            useAppStore.getState().activateDungeonExitFromPrompt('none');
-        }
-
-        const state = useAppStore.getState();
-        expect(state.run?.status).toBe('levelComplete');
-        expect(state.saveData.playerStats?.dailiesCompleted).toBe(7);
-        expect(state.saveData.playerStats?.lastDailyDateKeyUtc).toBe(baseRun.dailyDateKeyUtc);
-        expect(state.saveData.achievements.ACH_SEVEN_DAILIES).toBe(true);
-
-        useAppStore.getState().endRun();
-        expect(useAppStore.getState().saveData.playerStats?.dailiesCompleted).toBe(7);
-    });
 
     it('REG-044: menu meta screens can open settings and return to the intended surface', () => {
         useAppStore.getState().openModeSelect();

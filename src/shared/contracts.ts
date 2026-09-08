@@ -122,18 +122,24 @@ export type ViewState =
 /** Where sub-screens (mode select, collection, profile, inventory, codex) return on Back. */
 export type SubscreenReturnView = Exclude<ViewState, 'boot' | 'settings'>;
 
-export type GameMode = 'endless' | 'daily' | 'puzzle' | 'gauntlet' | 'meditation';
+/**
+ * One mode.
+ *
+ * The game had five: `endless`, `daily`, `puzzle`, `gauntlet` and `meditation`. Four of them were
+ * variants of a loop that is not finished, and shipping four variants of an unfinished thing is
+ * shipping four unfinished things - it quadruples the surface every change has to be checked
+ * against while the loop itself is still being built.
+ *
+ * `daily` in particular is a good, cheap feature and it is coming back once the loop is finished:
+ * see `docs/THESIS_THE_ADDICTIVE_LOOP.md` Appendix C.7, which states the precondition rather than
+ * leaving it to be re-argued.
+ */
+export type GameMode = 'endless';
 export type StartingLoadoutId = 'memory_scout' | 'route_tactician' | 'cursebreaker' | 'vaultbreaker';
 
 export type PuzzleDifficulty = 'starter' | 'standard' | 'advanced';
 export type PuzzleGoal = 'clear_all' | 'perfect_clear' | 'flip_par';
 export type PuzzlePackId = 'tutorial' | 'beginner' | 'challenge' | 'experimental';
-
-export interface PuzzleCompletionRecord {
-    completed: boolean;
-    bestMistakes: number | null;
-    bestScore: number;
-}
 
 export interface BuiltinPuzzleDefinition {
     id: string;
@@ -337,11 +343,10 @@ export type AchievementId =
     | 'ACH_PERFECT_CLEAR'
     | 'ACH_LAST_LIFE'
     | 'ACH_ENDLESS_TEN'
-    | 'ACH_SEVEN_DAILIES'
     /*
-     * The seven above are all reached by playing the first mode for a while. These point at the
-     * rest of the game — the wardens, the relic roster, the traits, and the four modes that a
-     * player who only ever presses Play will never open.
+     * The six above are all reached by playing for a while. These point at the rest of the game —
+     * the wardens, the relic roster, the traits, and the cascade a player who only ever flips two
+     * tiles at a time will never see.
      */
     | 'ACH_WARDEN_FELLED'
     | 'ACH_ENDLESS_CYCLE'
@@ -353,9 +358,6 @@ export type AchievementId =
     | 'ACH_STANDING_ORDERS'
     | 'ACH_RELIC_LIBRARY'
     | 'ACH_NO_POWERS_TEN'
-    | 'ACH_GAUNTLET_RUN'
-    | 'ACH_PUZZLE_SOLVER'
-    | 'ACH_MEDITATION_HOUR'
     | 'ACH_FIRST_FEVER'
     | 'ACH_CHUNK_SIX'
     | 'ACH_EXTREME_FEVER'
@@ -933,7 +935,8 @@ export interface RunSummary {
     runSeed?: number;
     runRulesVersion?: number;
     gameMode?: GameMode;
-    dailyDateKeyUtc?: string;
+    /** The clock the run was played against, when the setup sheet's Pressure option set one. */
+    gauntletSessionDurationMs?: number;
     activeMutators?: MutatorId[];
     relicIds?: RelicId[];
     /** Archive-safe payoff lanes copied from the final run state for Profile / Collection recap surfaces. */
@@ -1252,19 +1255,7 @@ export type AchievementState = Record<AchievementId, boolean>;
 
 export interface PlayerStatsPersisted {
     bestFloorNoPowers: number;
-    dailiesCompleted: number;
-    lastDailyDateKeyUtc: string | null;
-    /** Cosmetic streak: consecutive UTC days with at least one daily completed. */
-    dailyStreakCosmetic: number;
-    /**
-     * Whether the streak's one grace day is unspent. A single missed UTC day is forgiven while it
-     * is, and clearing on a consecutive day earns it back — so a genuine miss costs nothing and
-     * clearing every other day still cannot hold a streak open forever.
-     */
-    dailyStreakGraceAvailable?: boolean;
     relicPickCounts: Partial<Record<RelicId, number>>;
-    /** REG-022: local puzzle completion records by builtin/import puzzle id. */
-    puzzleCompletions?: Record<string, PuzzleCompletionRecord>;
     /** Spaced encore: pairKeys seen on previous completed run (no PII). */
     encorePairKeysLastRun: string[];
     /** Meta: +1 relic pick at each milestone draft after the Profile reward is claimed. */

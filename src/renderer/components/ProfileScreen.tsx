@@ -2,12 +2,12 @@ import { useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { countEligibleHonors, totalHonorUnlocks } from '../../shared/honorUnlocks';
 import { getMetaProgressionBoard, getMetaProgressionMilestones } from '../../shared/meta-progression';
-import { buildDailyArchiveShareString, getDailyArchiveSummary } from '../../shared/daily-archive';
 import {
     getLocalProgressRegistryRows,
     type LocalProgressRegistryRow
 } from '../../shared/local-progress-registry';
 import { getObjectiveBoardItems } from '../../shared/objective-board';
+import { runNonNegativeInteger } from '../../shared/run-number-guards';
 import { getProfileSummaryRows } from '../../shared/profile-summary';
 import { playUiBackSfx, playUiClickSfx, resumeUiSfxContext, uiSfxGainFromSettings } from '../audio/uiSfx';
 import {
@@ -62,19 +62,8 @@ const ProfileScreen = () => {
     const nextObjective = objectives.find((item) => item.status === 'active') ?? objectives[0] ?? null;
     const readyReward = board.rows.find((row) => row.status === 'available') ?? null;
     const honorsEarned = countEligibleHonors(saveData);
-    const dailyArchive = getDailyArchiveSummary(saveData);
     const { copy: copyToClipboard, state: copyState } = useCopyToClipboard();
-    /*
-     * Only offered once there is a daily record to post. On a profile that has never run one, the
-     * line would read "streak 0" and the button would be an invitation to share nothing.
-     */
-    const canShareDaily = dailyArchive.dailiesCompleted > 0 || dailyArchive.streak > 0;
-    const copyDailyLabel =
-        copyState === 'copied'
-            ? PROFILE_PROGRESS_COPY.copyDailyDone
-            : copyState === 'failed'
-              ? PROFILE_PROGRESS_COPY.copyDailyFailed
-              : PROFILE_PROGRESS_COPY.copyDaily;
+    const sharpFloors = runNonNegativeInteger(saveData.playerStats?.sharpFloors);
     const progressRows = getLocalProgressRegistryRows(saveData);
     const runHistory = normalizeRunHistory(saveData.runHistory);
     /*
@@ -98,7 +87,7 @@ const ProfileScreen = () => {
                 playUiBackSfx(uiGain);
                 closeSubscreen();
             }}
-            subtitle={`Level ${board.level} · ${honorsEarned} of ${totalHonorUnlocks} honors · ${PROFILE_PROGRESS_COPY.streak(dailyArchive.streak)} · stored on this device only.`}
+            subtitle={`Level ${board.level} · ${honorsEarned} of ${totalHonorUnlocks} honors · ${PROFILE_PROGRESS_COPY.sharpFloors(sharpFloors)} · stored on this device only.`}
             testId="profile-screen"
             title="Profile"
         >
@@ -261,23 +250,6 @@ const ProfileScreen = () => {
             </section>
 
             <div className={styles.footer}>
-                {canShareDaily ? (
-                    <UiButton
-                        aria-label={PROFILE_PROGRESS_COPY.copyDailyAriaLabel}
-                        data-copy-state={copyState}
-                        data-testid="profile-copy-daily"
-                        onClick={() => {
-                            resumeUiSfxContext();
-                            playUiClickSfx(uiGain);
-                            copyToClipboard(buildDailyArchiveShareString(saveData));
-                        }}
-                        size="md"
-                        type="button"
-                        variant="secondary"
-                    >
-                        {copyDailyLabel}
-                    </UiButton>
-                ) : null}
                 {nextObjective ? (
                     <p className={styles.nextGoal} data-testid="profile-objective-board">
                         <span className={styles.nextGoalLabel}>Next goal</span>

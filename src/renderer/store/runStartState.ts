@@ -1,14 +1,5 @@
 import type { RunState, SaveData, Settings } from '../../shared/contracts';
-import { getBuiltinPuzzle } from '../../shared/builtin-puzzles';
-import {
-    createDailyRun,
-    createDungeonShowcaseRun,
-    createGauntletRun,
-    createMeditationRun,
-    createNewRun,
-    createPuzzleRun,
-    createWildRun
-} from '../../shared/game-core';
+import { createDungeonShowcaseRun, createNewRun, createWildRun } from '../../shared/game-core';
 import { createRunFromShareKey } from '../../shared/run-from-share-key';
 import {
     buildClassicRunOptions,
@@ -58,10 +49,8 @@ const metaRelicOptionsForSave = (saveData: SaveData) => ({
 });
 
 export type RunStartRequest =
-    | { kind: 'daily' }
     | { kind: 'endless'; setup?: ClassicRunSetup }
     | { kind: 'passAndPlay'; seats: number }
-    | { kind: 'puzzle'; puzzleId: string }
     | { key: RunShareKey; kind: 'shared' };
 
 interface RunStartPlan {
@@ -85,12 +74,9 @@ export const createRunStartPlan = ({
     let telemetryExtra: RunStartTelemetryExtra = {};
 
     switch (request.kind) {
-        case 'daily':
-            run = createDailyRun(bestScore, meta);
-            break;
         case 'endless': {
             /*
-             * The main run, and the only place the old preset cards now live. Gauntlet's timer,
+             * The one mode, and the only place the old preset cards now live. Gauntlet's timer,
              * Wild's joker, Scholar's and Pin Vow's contracts, Practice's unrecorded flag and
              * Meditation's pacing are all `createNewRun` options, so they arrive here as a setup
              * the player chose rather than as separate menu entries that started the same run.
@@ -116,15 +102,6 @@ export const createRunStartPlan = ({
             run = createNewRun(bestScore, { ...meta, passAndPlaySeats: request.seats });
             telemetryExtra = { passAndPlaySeats: request.seats };
             break;
-        case 'puzzle': {
-            const puzzle = getBuiltinPuzzle(request.puzzleId);
-            if (!puzzle) {
-                return null;
-            }
-            run = createPuzzleRun(bestScore, puzzle.id, puzzle.tiles, 1, meta);
-            telemetryExtra = { puzzleId: puzzle.id };
-            break;
-        }
         case 'shared': {
             run = createRunFromShareKey(request.key, bestScore, meta);
             break;
@@ -158,27 +135,6 @@ export const createRestartRun = (previousRun: RunState | null, saveData: SaveDat
 
     if (isDungeonShowcaseRestartRun(previousRun)) {
         return createDungeonShowcaseRun(bestScore, meta);
-    }
-
-    if (previousRun?.gameMode === 'daily') {
-        return createDailyRun(bestScore, meta);
-    }
-
-    if (previousRun?.gameMode === 'gauntlet') {
-        return createGauntletRun(bestScore, previousRun.gauntletSessionDurationMs ?? 10 * 60 * 1000, meta);
-    }
-
-    if (previousRun?.gameMode === 'puzzle' && previousRun.puzzleId) {
-        const puzzle = getBuiltinPuzzle(previousRun.puzzleId);
-        return puzzle ? createPuzzleRun(bestScore, puzzle.id, puzzle.tiles, 1, meta) : createNewRun(bestScore, meta);
-    }
-
-    if (previousRun?.gameMode === 'meditation') {
-        return createMeditationRun(
-            bestScore,
-            previousRun.activeMutators.length > 0 ? previousRun.activeMutators : undefined,
-            meta
-        );
     }
 
     /*

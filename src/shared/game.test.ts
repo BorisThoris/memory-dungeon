@@ -22,11 +22,11 @@ import {
     FUSE_CACHE_FRESH_RESOLUTION_LIMIT,
     FUSE_CACHE_FRESH_SCORE_REWARD,
     FUSE_CACHE_FRESH_SHOP_GOLD_REWARD,
-    GAUNTLET_FLOOR_CLEAR_TIME_BONUS_MS,
     GAME_RULES_VERSION,
     MATCH_DELAY_MS,
     MAX_COMBO_SHARDS,
     MAX_GUARD_TOKENS,
+    INITIAL_RECALL_FOCUS,
     MAX_LIVES,
     MEMORIZE_BONUS_PER_LIFE_LOST_MS,
     RECALL_CLUE_MATCH_SCORE,
@@ -46,16 +46,12 @@ import {
     isBoardComplete
 } from './board-generation';
 import {
-    createDailyRun,
-    createGauntletRun,
     createNewRun,
-    createPuzzleRun,
     createWildRun,
     enableDebugPeek,
     finishMemorizePhase,
     getMemorizeDuration,
     getMemorizeDurationForRun,
-    isGauntletExpired,
     pauseRun,
     resumeRun,
     advanceToNextLevel
@@ -152,7 +148,6 @@ import {
 } from './objective-rules';
 import { DECOY_PAIR_KEY, WILD_PAIR_KEY } from './tile-identity';
 import { MIN_CURIO_MEMORIZE_MS, pickFloorCurio } from './floor-curio-rules';
-import { DAILY_MUTATOR_TABLE } from './mutators';
 import { RELIC_POOL } from './relics';
 import { makeBoard as createBoard, makePair as createPair, makeRun as createRun, makeTile as createTile } from './test/game-fixtures';
 import {
@@ -355,7 +350,8 @@ describe('Recall Focus memory loop', () => {
                 createTile('b1', 'B', 'B'),
                 createTile('b2', 'B', 'B')
             ]),
-            gameMode: 'endless' as const
+            // The focus a real run opens with. The fixture zeroes it so score units measure one term.
+            recallFocus: INITIAL_RECALL_FOCUS
         };
         const resolved = resolveBoardTurn(flipTile(flipTile(run, 'a1'), 'a2'));
 
@@ -376,7 +372,7 @@ describe('Recall Focus memory loop', () => {
                 createTile('b1', 'B', 'B'),
                 createTile('b2', 'B', 'B')
             ]),
-            gameMode: 'endless' as const
+            recallFocus: INITIAL_RECALL_FOCUS
         };
         const resolved = resolveBoardTurn(flipTile(flipTile(run, 'a1'), 'a2'));
 
@@ -711,15 +707,6 @@ const routeBoard = (
         }
     });
 
-describe('createDailyRun', () => {
-    it('uses daily mode, one table mutator, and a UTC date key', () => {
-        const run = createDailyRun(0);
-        expect(run.gameMode).toBe('daily');
-        expect(run.activeMutators).toHaveLength(1);
-        expect(DAILY_MUTATOR_TABLE).toContain(run.activeMutators[0]);
-        expect(run.dailyDateKeyUtc).toMatch(/^\d{8}$/);
-    });
-});
 
 describe('REG-088 first-run to first-win rules path', () => {
     it('clears the first two classic floors with local progress and achievements enabled', () => {
@@ -817,15 +804,6 @@ describe('GLD-P0-003 lifecycle advance guards', () => {
         }
     });
 
-    it('refuses to advance completed puzzle runs into procedural floors', () => {
-        const puzzleRun = finishMemorizePhase(
-            createPuzzleRun(0, 'guard_test', [createTile('p1', 'P', 'P'), createTile('p2', 'P', 'P')])
-        );
-        const cleared = clearRealPairs(puzzleRun);
-
-        expect(cleared.status).toBe('levelComplete');
-        expect(advanceToNextLevel(cleared)).toBe(cleared);
-    });
 
     it('refuses to bypass pending route side rooms and relic drafts', () => {
         const sideRoomClear = playPerfectFloors(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 30_005 }), 1);
@@ -3311,21 +3289,19 @@ describe('normal-run hazard tiles', () => {
         expect(inspectBoardFairness(floorTwo).issues).toEqual([]);
     });
 
-    it('generates hazard tiles deterministically across generated modes but not fixed boards', () => {
-        const modes = ['endless', 'daily', 'gauntlet', 'meditation', 'puzzle'] as const;
-
-        for (const gameMode of modes) {
+    it('generates hazard tiles deterministically on a generated board but not a fixed one', () => {
+        for (const includeWildTile of [false, true]) {
             const board = buildBoard(6, {
-                gameMode,
+                gameMode: 'endless',
                 runSeed: 91_001,
                 runRulesVersion: GAME_RULES_VERSION,
-                includeWildTile: gameMode === 'puzzle'
+                includeWildTile
             });
             const repeat = buildBoard(6, {
-                gameMode,
+                gameMode: 'endless',
                 runSeed: 91_001,
                 runRulesVersion: GAME_RULES_VERSION,
-                includeWildTile: gameMode === 'puzzle'
+                includeWildTile
             });
 
             expect(board.tiles.map((tile) => tile.tileHazardKind ?? null)).toEqual(
@@ -3348,7 +3324,6 @@ describe('normal-run hazard tiles', () => {
         }
 
         const fixed = buildBoard(6, {
-            gameMode: 'puzzle',
             runSeed: 91_001,
             runRulesVersion: GAME_RULES_VERSION,
             fixedTiles: [createTile('a1', 'A', 'A'), createTile('a2', 'A', 'A')]
@@ -4714,7 +4689,6 @@ describe('dungeon cards', () => {
                 flipTile(
                     {
                         ...createRun(bossPair('rush_sentinel', 'Rush Sentinel')),
-                        gameMode: 'meditation'
                     },
                     'rush_sentinel-a'
                 ),
@@ -6676,31 +6650,6 @@ describe('endless chapters and featured objectives', () => {
         expect(canOfferEndlessRiskWager(accepted)).toBe(false);
     });
 
-    it('does not offer risk wagers outside scheduled endless runs', () => {
-        const daily = createDailyRun(0, { echoFeedbackEnabled: false });
-        const clearedDaily: RunState = {
-            ...daily,
-            status: 'levelComplete',
-            featuredObjectiveStreak: ENDLESS_RISK_WAGER_MIN_STREAK,
-            lastLevelResult: {
-                level: 1,
-                scoreGained: 100,
-                rating: 'S++',
-                livesRemaining: daily.lives,
-                perfect: true,
-                mistakes: 0,
-                clearLifeReason: 'perfect',
-                clearLifeGained: 1,
-                featuredObjectiveId: 'flip_par',
-                featuredObjectiveCompleted: true,
-                featuredObjectiveStreak: ENDLESS_RISK_WAGER_MIN_STREAK,
-                relicFavorGained: 1
-            }
-        };
-
-        expect(canOfferEndlessRiskWager(clearedDaily)).toBe(false);
-        expect(acceptEndlessRiskWager(clearedDaily)).toBe(clearedDaily);
-    });
 
     it('keeps an accepted risk wager through relic offer flow', () => {
         const base = createNewRun(0, { echoFeedbackEnabled: false });
@@ -7101,7 +7050,6 @@ describe('game rules', () => {
         const finishedLevel = {
             ...afterLifeLoss,
             status: 'levelComplete' as const,
-            gameMode: 'meditation' as const,
             board: afterLifeLoss.board
                 ? {
                       ...afterLifeLoss.board,
@@ -7141,7 +7089,7 @@ describe('game rules', () => {
         expect(finishedLevel.status).toBe('levelComplete');
         expect(finishedLevel.lives).toBe(3);
 
-        const nextRun = advanceToNextLevel({ ...finishedLevel, gameMode: 'meditation' });
+        const nextRun = advanceToNextLevel(finishedLevel);
 
         expect(nextRun.status).toBe('memorize');
         expect(nextRun.lives).toBe(finishedLevel.lives);
@@ -7271,7 +7219,7 @@ describe('game rules', () => {
         expect(firstMatch.stats.totalScore).toBe(30);
         expect(firstMatch.stats.currentStreak).toBe(1);
         expect(secondMatch.status).toBe('levelComplete');
-        expect(secondMatch.stats.totalScore).toBe(240);
+        expect(secondMatch.stats.totalScore).toBe(240 + RECALL_FOCUS_MATCH_SCORE);
         expect(secondMatch.stats.bestStreak).toBe(2);
     });
 
@@ -7288,7 +7236,7 @@ describe('game rules', () => {
 
         expect(resolved.status).toBe('levelComplete');
         expect(resolved.lives).toBe(5);
-        expect(resolved.stats.totalScore).toBe(215);
+        expect(resolved.stats.totalScore).toBe(215 + RECALL_FOCUS_MATCH_SCORE);
         expect(resolved.lastLevelResult?.perfect).toBe(false);
         expect(resolved.lastLevelResult?.mistakes).toBe(1);
         expect(resolved.lastLevelResult?.clearLifeReason).toBe('clean');
@@ -7432,10 +7380,10 @@ describe('game rules', () => {
 
     it('advances to the next level in memorize phase, resets floor state, and preserves banked sustain', () => {
         const finishedLevel = {
-            ...createNewRun(250, { gameMode: 'meditation' }),
+            ...createNewRun(250),
             status: 'levelComplete' as const,
             stats: {
-                ...createNewRun(250, { gameMode: 'meditation' }).stats,
+                ...createNewRun(250).stats,
                 tries: 4,
                 totalScore: 300,
                 currentLevelScore: 145,
@@ -8501,7 +8449,6 @@ describe('active contract limits', () => {
     it('noShuffle overrides extra_shuffle_charge with presentation mutators active', () => {
         const memorized = finishMemorizePhase(
             createNewRun(0, {
-                gameMode: 'puzzle',
                 initialRelicIds: ['extra_shuffle_charge'],
                 activeMutators: ['silhouette_twist'] as MutatorId[]
             })
@@ -8521,7 +8468,6 @@ describe('active contract limits', () => {
     it('noShuffle overrides first_shuffle_free_per_floor with presentation mutators active', () => {
         const memorized = finishMemorizePhase(
             createNewRun(0, {
-                gameMode: 'puzzle',
                 initialRelicIds: ['first_shuffle_free_per_floor'],
                 activeMutators: ['wide_recall'] as MutatorId[]
             })
@@ -8542,7 +8488,6 @@ describe('active contract limits', () => {
     it('noShuffle overrides region_shuffle_free_first with presentation mutators active', () => {
         const memorized = finishMemorizePhase(
             createNewRun(0, {
-                gameMode: 'puzzle',
                 initialRelicIds: ['region_shuffle_free_first'],
                 activeMutators: ['distraction_channel'] as MutatorId[]
             })
@@ -8563,7 +8508,6 @@ describe('active contract limits', () => {
     it('noDestroy overrides destroy_bank_plus_one with presentation mutators active', () => {
         const memorized = finishMemorizePhase(
             createNewRun(0, {
-                gameMode: 'puzzle',
                 initialRelicIds: ['destroy_bank_plus_one'],
                 activeMutators: ['wide_recall'] as MutatorId[]
             })
@@ -8580,7 +8524,6 @@ describe('active contract limits', () => {
     it('noShuffle and noDestroy block shuffle region destroy with relic economy and presentation mutators active', () => {
         const memorized = finishMemorizePhase(
             createNewRun(0, {
-                gameMode: 'puzzle',
                 initialRelicIds: ['extra_shuffle_charge', 'destroy_bank_plus_one'],
                 activeMutators: ['wide_recall', 'distraction_channel'] as MutatorId[]
             })
@@ -8623,12 +8566,10 @@ describe('active contract limits', () => {
 describe('relic and mutator stacking', () => {
     it('extends memorize under short_memorize when memorize_under_short_memorize relic is owned', () => {
         const withRelic = createNewRun(0, {
-            gameMode: 'puzzle',
             activeMutators: ['short_memorize'],
             initialRelicIds: ['memorize_under_short_memorize']
         });
         const withoutRelic = createNewRun(0, {
-            gameMode: 'puzzle',
             activeMutators: ['short_memorize']
         });
         expect(getMemorizeDurationForRun(withRelic, 1)).toBe(getMemorizeDurationForRun(withoutRelic, 1) + 220);
@@ -8637,7 +8578,6 @@ describe('relic and mutator stacking', () => {
 
     it('stacks memorize_bonus_ms with short_memorize', () => {
         const run = createNewRun(0, {
-            gameMode: 'puzzle',
             activeMutators: ['short_memorize'],
             initialRelicIds: ['memorize_bonus_ms']
         });
@@ -8651,10 +8591,6 @@ describe('computeRelicOfferPickBudget', () => {
         expect(computeRelicOfferPickBudget(run)).toBe(1);
     });
 
-    it('stacks daily mode and generous_shrine mutator', () => {
-        const run = createNewRun(0, { gameMode: 'daily', activeMutators: ['generous_shrine'] });
-        expect(computeRelicOfferPickBudget(run)).toBe(3);
-    });
 
     it('stacks meta relic draft flag and scholar contract', () => {
         const run = createNewRun(0, {
@@ -8709,7 +8645,7 @@ describe('relic draft multi-pick', () => {
     });
 
     it('skips an exhausted initial relic offer instead of opening an empty draft', () => {
-        let run = createNewRun(999, { gameMode: 'daily' });
+        let run = createNewRun(999);
         run = {
             ...run,
             status: 'levelComplete',
@@ -8774,69 +8710,3 @@ describe('relic draft multi-pick', () => {
     });
 });
 
-describe('gauntlet deadline', () => {
-    it('reports expired when deadline is in the past', () => {
-        const run: RunState = {
-            ...createNewRun(0, { gameMode: 'puzzle' }),
-            gameMode: 'gauntlet',
-            gauntletDeadlineMs: Date.now() - 1
-        };
-        expect(isGauntletExpired(run)).toBe(true);
-    });
-
-    it('reports not expired when deadline is in the future', () => {
-        const run: RunState = {
-            ...createNewRun(0, { gameMode: 'puzzle' }),
-            gameMode: 'gauntlet',
-            gauntletDeadlineMs: Date.now() + 86_400_000
-        };
-        expect(isGauntletExpired(run)).toBe(false);
-    });
-
-    it('ignores malformed gauntlet deadlines for expiry checks', () => {
-        const run: RunState = {
-            ...createNewRun(0, { gameMode: 'puzzle' }),
-            gameMode: 'gauntlet',
-            gauntletDeadlineMs: Number.NaN
-        };
-        expect(isGauntletExpired(run)).toBe(false);
-    });
-
-    it('extends the deadline on each gauntlet floor clear', () => {
-        const started = finishMemorizePhase(createGauntletRun(0, 60_000));
-        const deadline = 1_900_000;
-        const finished = clearRealPairs({ ...started, gauntletDeadlineMs: deadline });
-
-        expect(finished.status).toBe('levelComplete');
-        expect(finished.gauntletDeadlineMs).toBe(deadline + GAUNTLET_FLOOR_CLEAR_TIME_BONUS_MS);
-    });
-
-    it('drops malformed gauntlet deadlines on floor clear instead of extending them', () => {
-        const started = finishMemorizePhase(createGauntletRun(0, 60_000));
-        const finished = clearRealPairs({ ...started, gauntletDeadlineMs: Number.POSITIVE_INFINITY });
-
-        expect(finished.status).toBe('levelComplete');
-        expect(finished.gauntletDeadlineMs).toBeNull();
-    });
-
-    it('does not expire while paused and extends the deadline by paused wall-clock time on resume', () => {
-        const pausedAtMs = Date.now() - 5_000;
-        const run = {
-            ...pauseRun(finishMemorizePhase(createGauntletRun(0, 60_000))),
-            gauntletDeadlineMs: Date.now() - 1,
-            timerState: {
-                ...pauseRun(finishMemorizePhase(createGauntletRun(0, 60_000))).timerState,
-                gauntletPausedAtMs: pausedAtMs
-            }
-        };
-
-        expect(run.status).toBe('paused');
-        expect(isGauntletExpired(run)).toBe(false);
-
-        const resumed = resumeRun(run);
-
-        expect(resumed.status).toBe('playing');
-        expect(resumed.timerState.gauntletPausedAtMs).toBeNull();
-        expect(resumed.gauntletDeadlineMs).toBeGreaterThan(Date.now());
-    });
-});

@@ -38,15 +38,4 @@ describe('executeRunStartRequest', () => {
         );
     });
 
-    it('does nothing when the run start request cannot create a plan', () => {
-        const deps = createDeps();
-
-        executeRunStartRequest({ kind: 'puzzle', puzzleId: 'missing' }, deps);
-
-        expect(deps.clearAllTimers).not.toHaveBeenCalled();
-        expect(deps.trackRunStart).not.toHaveBeenCalled();
-        expect(deps.playRunStartSfx).not.toHaveBeenCalled();
-        expect(deps.setState).not.toHaveBeenCalled();
-        expect(deps.prepareMemorizeTimerForBoardReady).not.toHaveBeenCalled();
-    });
 });

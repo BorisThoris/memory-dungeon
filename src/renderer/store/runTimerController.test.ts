@@ -49,7 +49,7 @@ afterEach(() => {
 describe('runTimerController', () => {
     it('starts memorize countdown only after the matching board-ready key arrives', async () => {
         vi.useFakeTimers();
-        const base = createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'puzzle' });
+        const base = createNewRun(0, { echoFeedbackEnabled: false });
         const run: RunState = {
             ...base,
             timerState: {
@@ -83,7 +83,7 @@ describe('runTimerController', () => {
     it('snapshots remaining memorize time when freezing an active memorize run', () => {
         vi.useFakeTimers();
         vi.setSystemTime(1000);
-        const base = createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'puzzle' });
+        const base = createNewRun(0, { echoFeedbackEnabled: false });
         const run: RunState = {
             ...base,
             timerState: {
@@ -114,7 +114,7 @@ describe('runTimerController', () => {
 
     it('resumes a paused resolving run and fires the delayed resolve callback', async () => {
         vi.useFakeTimers();
-        const base = createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'puzzle' });
+        const base = createNewRun(0, { echoFeedbackEnabled: false });
         const flippedTileIds = base.board?.tiles.slice(0, 2).map((tile) => tile.id) ?? [];
         const resolvingRun: RunState = {
             ...base,
@@ -145,7 +145,7 @@ describe('runTimerController', () => {
 
     it('resumes a paused memorize run with zero remaining time through the returned run state', () => {
         vi.useFakeTimers();
-        const base = createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'puzzle' });
+        const base = createNewRun(0, { echoFeedbackEnabled: false });
         const memorizeRun: RunState = {
             ...base,
             status: 'memorize',
@@ -176,7 +176,7 @@ describe('runTimerController', () => {
 
     it('resumes a paused debug reveal with zero remaining time through the returned run state', () => {
         vi.useFakeTimers();
-        const playing = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'puzzle' }));
+        const playing = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false }));
         const debugPeekRun = enableDebugPeek(playing, false);
         const debugRun: RunState = {
             ...debugPeekRun,
@@ -207,7 +207,7 @@ describe('runTimerController', () => {
 
     it('expires an active debug reveal through a journaled timer lifecycle command', async () => {
         vi.useFakeTimers();
-        const playing = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'puzzle' }));
+        const playing = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false }));
         const debugRun = enableDebugPeek(playing, false);
         const harness = createHarnessWithCallbacks(debugRun);
 
@@ -231,10 +231,9 @@ describe('runTimerController', () => {
     it('routes expired gauntlet runs through the resolved-run callback', async () => {
         vi.useFakeTimers();
         vi.setSystemTime(10_000);
-        const base = createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'gauntlet' });
+        const base = createNewRun(0, { echoFeedbackEnabled: false });
         const run: RunState = {
             ...base,
-            gameMode: 'gauntlet',
             gauntletDeadlineMs: 9_999,
             status: 'playing'
         };
@@ -261,7 +260,7 @@ describe('runTimerController', () => {
 
     it('clears pending resolve timers without clearing memorize board readiness', async () => {
         vi.useFakeTimers();
-        const base = createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'puzzle' });
+        const base = createNewRun(0, { echoFeedbackEnabled: false });
         const run: RunState = {
             ...base,
             timerState: {

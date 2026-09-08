@@ -48,9 +48,6 @@ export const tileHasRecallClue = (tile: Tile): boolean =>
 export const normalizeRecallFocus = (focus: number): number => clamp(runNonNegativeInteger(focus), 0, RECALL_FOCUS_MAX);
 
 export const calculateRecallMatchBonus = (run: RunState, tiles: readonly Tile[]): number => {
-    if (run.gameMode === 'puzzle') {
-        return 0;
-    }
     const focusBonus = normalizeRecallFocus(run.recallFocus) * RECALL_FOCUS_MATCH_SCORE;
     const clueBonus = tiles.some(tileHasRecallClue) ? RECALL_CLUE_MATCH_SCORE : 0;
     return focusBonus + clueBonus;
@@ -77,10 +74,6 @@ export const getMemorizePhaseRecallFocusForRoute = (
     run: RunState,
     currentRouteType: RouteNodeType | null | undefined
 ): number => {
-    if (run.gameMode === 'puzzle') {
-        return INITIAL_RECALL_FOCUS;
-    }
-
     const previous = run.lastLevelResult;
     if (!previous) {
         return INITIAL_RECALL_FOCUS;

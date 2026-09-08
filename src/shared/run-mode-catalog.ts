@@ -5,19 +5,15 @@ import { PASS_AND_PLAY_FLOORS } from './pass-and-play-rules';
  * Kept separate from `GameMode` in contracts — entries may share an underlying mode with flags.
  */
 
-export type RunModeGroup = 'core' | 'puzzle';
+export type RunModeGroup = 'core';
 
 export type RunModeAvailability = 'available' | 'locked' | 'disabled';
 
 /** Discriminated actions — no store imports; renderer maps these to `useAppStore` methods. */
-export type PuzzleRunModeId = 'starter_pairs' | 'mirror_craft' | 'glyph_cross';
-
 export type RunModeAction =
     /** Opens the Classic setup, where the retired preset cards now live as choices. */
     | { type: 'startRun' }
-    | { type: 'startDailyRun' }
     | { type: 'locked' }
-    | { type: 'puzzle'; puzzleId: PuzzleRunModeId }
     | { type: 'startPassAndPlayRun'; seats: number };
 
 export interface RunModeDefinition {
@@ -48,14 +44,14 @@ export interface RunModeDefinition {
 }
 
 /**
- * Eyebrow / section order on Choose Your Path. Only the groups that still hold a mode: time attack and training became
- * Classic setup options.
+ * Eyebrow / section order on Choose Your Path. One group holds every entry now: time attack and
+ * training became Classic setup options, and the daily and the authored puzzles went with the mode
+ * collapse (`docs/REMOVED_MODES.md`).
  */
-export const RUN_MODE_GROUP_ORDER: readonly RunModeGroup[] = ['core', 'puzzle'] as const;
+export const RUN_MODE_GROUP_ORDER: readonly RunModeGroup[] = ['core'] as const;
 
 export const RUN_MODE_GROUP_LABEL: Record<RunModeGroup, string> = {
-    core: 'Core modes',
-    puzzle: 'Puzzle'
+    core: 'Core modes'
 };
 
 export const RUN_MODE_CATALOG: readonly RunModeDefinition[] = [
@@ -74,20 +70,6 @@ export const RUN_MODE_CATALOG: readonly RunModeDefinition[] = [
         availability: 'available',
         posterKey: 'classic',
         action: { type: 'startRun' }
-    },
-    {
-        id: 'daily',
-        title: 'Daily Challenge',
-        shortDescription: 'Shared daily mutators and seed. Resets at UTC midnight.',
-        startContract: {
-            label: 'Start signal',
-            signal: 'HUD mode reads Daily challenge and shows the UTC daily key.',
-            testId: 'hud-mode-identity'
-        },
-        group: 'core',
-        availability: 'available',
-        posterKey: 'daily',
-        action: { type: 'startDailyRun' }
     },
     {
         id: 'pass_and_play',
@@ -113,48 +95,6 @@ export const RUN_MODE_CATALOG: readonly RunModeDefinition[] = [
         testId: 'mode-pass-and-play',
         action: { type: 'startPassAndPlayRun', seats: 2 }
     },
-    {
-        id: 'puzzle_starter',
-        title: 'Puzzle',
-        shortDescription: 'Curated tile layout; focus on solving the board.',
-        startContract: {
-            label: 'Start signal',
-            signal: 'HUD mode reads Puzzle: Starter.',
-            testId: 'hud-mode-identity'
-        },
-        group: 'puzzle',
-        availability: 'available',
-        posterKey: 'puzzle',
-        action: { type: 'puzzle', puzzleId: 'starter_pairs' }
-    },
-    {
-        id: 'puzzle_mirror',
-        title: 'Mirror Puzzle',
-        shortDescription: 'Intermediate mirror craft layout.',
-        startContract: {
-            label: 'Start signal',
-            signal: 'HUD mode reads Puzzle: Mirror craft.',
-            testId: 'hud-mode-identity'
-        },
-        group: 'puzzle',
-        availability: 'available',
-        posterKey: 'mirror_puzzle',
-        action: { type: 'puzzle', puzzleId: 'mirror_craft' }
-    },
-    {
-        id: 'puzzle_glyph_cross',
-        title: 'Glyph Cross',
-        shortDescription: 'Advanced 4×2 glyph pattern puzzle.',
-        startContract: {
-            label: 'Start signal',
-            signal: 'HUD mode reads Puzzle: Glyph Cross.',
-            testId: 'hud-mode-identity'
-        },
-        group: 'puzzle',
-        availability: 'available',
-        posterKey: 'puzzle',
-        action: { type: 'puzzle', puzzleId: 'glyph_cross' }
-    },
 ] as const;
 
 /** A catalog mode as this build flavour ships it: locked modes stay visible and say why. */
@@ -177,11 +117,14 @@ export function getRunModeDefinition(id: string): RunModeDefinition | null {
 }
 
 /**
- * Featured hero row on Choose Your Path. Classic leads because it is the game; the other two are
- * the only entries that differ in kind rather than in settings — the same board for everyone that
- * day, and the same board for everyone at the table.
+ * Featured hero row on Choose Your Path.
+ *
+ * Classic alone, because it is the game. It used to share the row with the daily and the table;
+ * the daily went with the mode collapse, and putting the table up there too would leave the browse
+ * grid below it empty — a section header over nothing. Pass and Play stays in the library, which
+ * is where a player goes looking for something other than the run in front of them.
  */
-export const CHOOSE_PATH_HERO_MODE_IDS = ['classic', 'daily', 'pass_and_play'] as const;
+export const CHOOSE_PATH_HERO_MODE_IDS = ['classic'] as const;
 export type ChoosePathHeroModeId = (typeof CHOOSE_PATH_HERO_MODE_IDS)[number];
 
 const CHOOSE_PATH_HERO_ID_SET = new Set<string>(CHOOSE_PATH_HERO_MODE_IDS);
@@ -196,7 +139,7 @@ export function choosePathHeroModes(): readonly RunModeDefinition[] {
     });
 }
 
-/** All modes below the hero row (the authored puzzles), stable catalog order. */
+/** Anything the hero row does not carry, in stable catalog order. Empty while it carries both. */
 export function choosePathLibraryModes(): readonly RunModeDefinition[] {
     return getRunModeCatalog().filter((m) => !CHOOSE_PATH_HERO_ID_SET.has(m.id));
 }

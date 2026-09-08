@@ -323,18 +323,10 @@ export const useAppStore = create<AppState>((set, get) => ({
     },
 
 
-    startDailyRun: () => {
-        executeStoreRunStartRequest({ kind: 'daily' }, set, get);
-    },
-
     startPassAndPlayRun: (seats = PASS_AND_PLAY_MIN_SEATS) => {
         executeStoreRunStartRequest({ kind: 'passAndPlay', seats }, set, get);
     },
 
-
-    startPuzzleRun: (puzzleId) => {
-        executeStoreRunStartRequest({ kind: 'puzzle', puzzleId }, set, get);
-    },
 
 
     revealSaveFile: () => {

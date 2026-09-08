@@ -24,14 +24,12 @@ describe('honorUnlocks', () => {
         const base = createDefaultSaveData();
         base.playerStats = {
             ...base.playerStats!,
-            dailiesCompleted: 1,
+            sharpFloors: 1,
             bestFloorNoPowers: 5
         };
 
         const merged = mergeHonorUnlockTags(base);
 
-        expect(merged.unlocks).toContain(honorUnlockTag('honor_daily_initiate'));
-        expect(merged.unlocks).toContain('cosmetic:crest_daily_bronze');
         expect(merged.unlocks).toContain(honorUnlockTag('honor_ascendant_5'));
         expect(merged.unlocks).toContain('cosmetic:title_ascendant_v');
     });
@@ -47,22 +45,20 @@ describe('honorUnlocks', () => {
         expect(Object.keys(HONOR_UNLOCK_CATALOG)).toEqual(HONOR_UNLOCK_IDS);
         expect(HONOR_UNLOCK_ORDER).toBe(HONOR_UNLOCK_IDS);
         expect(HONOR_UNLOCK_ORDER).toHaveLength(totalHonorUnlocks);
-        expect(totalHonorUnlocks).toBe(8);
+        expect(totalHonorUnlocks).toBe(5);
     });
 
     it.each(['__proto__', 'constructor', 'toString'])('rejects prototype honor id %s', (honorId) => {
         expect(parseHonorUnlockTag(`honor:${honorId}`)).toBeNull();
     });
 
-    it('eligibleHonorUnlockIds respects daily streak and no-powers floor', () => {
+    it('eligibleHonorUnlockIds respects Sharp floors and the no-powers floor', () => {
         const save = createDefaultSaveData();
         save.playerStats = {
             ...save.playerStats!,
-            dailiesCompleted: 1,
-            dailyStreakCosmetic: 7,
+            sharpFloors: 1,
             bestFloorNoPowers: 10,
             relicPickCounts: { extra_shuffle_charge: 10 },
-            lastDailyDateKeyUtc: '2026-01-01',
             encorePairKeysLastRun: []
         };
         save.bestScore = 3000;
@@ -75,16 +71,12 @@ describe('honorUnlocks', () => {
             unlockedAchievements: [],
             bestStreak: 1,
             perfectClears: 0,
-            gameMode: 'gauntlet'
         };
 
         const ids = eligibleHonorUnlockIds(save);
-        expect(ids).toContain('honor_daily_initiate');
-        expect(ids).toContain('honor_daily_streak_7');
         expect(ids).toContain('honor_ascendant_10');
         expect(ids).toContain('honor_score_maestro');
         expect(ids).toContain('honor_relic_habit');
-        expect(ids).toContain('honor_gauntlet_proof');
     });
 
     it('normalizes malformed counters before granting eligible honors', () => {
@@ -92,8 +84,7 @@ describe('honorUnlocks', () => {
         save.bestScore = Number.POSITIVE_INFINITY;
         save.playerStats = {
             ...save.playerStats!,
-            dailiesCompleted: Number.POSITIVE_INFINITY,
-            dailyStreakCosmetic: Number.NaN,
+            sharpFloors: Number.POSITIVE_INFINITY,
             bestFloorNoPowers: Number.POSITIVE_INFINITY,
             relicPickCounts: {
                 guard_token_plus_one: Number.POSITIVE_INFINITY,
@@ -109,7 +100,6 @@ describe('honorUnlocks', () => {
             unlockedAchievements: [],
             bestStreak: 1,
             perfectClears: 0,
-            gameMode: 'gauntlet'
         };
 
         expect(eligibleHonorUnlockIds(save)).toEqual([]);

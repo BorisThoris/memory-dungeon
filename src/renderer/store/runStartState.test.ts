@@ -1,12 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { BUILTIN_PUZZLES } from '../../shared/builtin-puzzles';
 import {
-    createDailyRun,
     createDungeonShowcaseRun,
-    createGauntletRun,
-    createMeditationRun,
     createNewRun,
-    createPuzzleRun,
     createRunSummary,
     createWildRun
 } from '../../shared/game-core';
@@ -61,7 +56,6 @@ describe('runStartState', () => {
             run: { gameMode: 'endless', resolveDelayMultiplier: 1.5 },
             telemetry: { mode: 'endless', practice: false }
         });
-        expect(createRunStartPlan({ request: { kind: 'daily' }, saveData, settings })?.run.gameMode).toBe('daily');
         // The timer and the joker are Classic setup options now, not their own start requests.
         expect(
             createRunStartPlan({
@@ -79,15 +73,10 @@ describe('runStartState', () => {
         ).toContain('sticky_fingers');
     });
 
-    it('creates start plans with mode-specific telemetry extras', () => {
+    it('creates start plans with setup-specific telemetry extras', () => {
         const saveData = createDefaultSaveData();
         const settings = saveData.settings;
-        const puzzle = BUILTIN_PUZZLES.starter_pairs;
 
-        expect(createRunStartPlan({ request: { kind: 'puzzle', puzzleId: puzzle.id }, saveData, settings })).toMatchObject({
-            run: { gameMode: 'puzzle', puzzleId: puzzle.id },
-            telemetry: { puzzleId: puzzle.id }
-        });
         expect(
             createRunStartPlan({
                 request: {
@@ -100,17 +89,6 @@ describe('runStartState', () => {
         ).toEqual(['wide_recall', 'n_back_anchor']);
     });
 
-    it('returns null for unknown puzzle starts without creating a run patch', () => {
-        const saveData = createDefaultSaveData();
-
-        expect(
-            createRunStartPlan({
-                request: { kind: 'puzzle', puzzleId: 'missing' },
-                saveData,
-                settings: saveData.settings
-            })
-        ).toBeNull();
-    });
 
     it('recognizes live and summarized dungeon showcase runs for restart', () => {
         const run = createDungeonShowcaseRun(0);
@@ -121,10 +99,9 @@ describe('runStartState', () => {
         expect(isDungeonShowcaseRestartRun(createNewRun(0))).toBe(false);
     });
 
-    it('restarts authored game modes from the previous run type', () => {
+    it('restarts a setup-sheet run from the previous run type', () => {
         const saveData = createDefaultSaveData();
 
-        expect(createRestartRun(createDailyRun(0), saveData).gameMode).toBe('daily');
         // A setup-sheet run: the clock, the pace and both vows all come back, not only the vow.
         const chosen = createNewRun(0, buildClassicRunOptions({ ...DEFAULT_CLASSIC_RUN_SETUP, pacing: 'calm', pressure: 'timed_5', vows: ['scholar', 'pin_vow'] }));
         expect(createRestartRun(chosen, saveData)).toMatchObject({
@@ -133,19 +110,10 @@ describe('runStartState', () => {
             resolveDelayMultiplier: 1.35,
             activeContract: { noShuffle: true, noDestroy: true, maxPinsTotalRun: 10 }
         });
-        expect(createRestartRun(createGauntletRun(0, 123_000), saveData)).toMatchObject({
-            gameMode: 'gauntlet',
-            gauntletSessionDurationMs: 123_000
-        });
-        expect(createRestartRun(createMeditationRun(0, ['wide_recall']), saveData)).toMatchObject({
-            gameMode: 'meditation',
-            activeMutators: ['wide_recall']
-        });
     });
 
-    it('restarts puzzle, wild, practice, and dungeon showcase runs with their mode identity preserved', () => {
+    it('restarts wild, practice, and dungeon showcase runs with their setup preserved', () => {
         const saveData = createDefaultSaveData();
-        const puzzle = BUILTIN_PUZZLES.starter_pairs;
 
         expect(createRestartRun(createDungeonShowcaseRun(0), saveData)).toMatchObject({
             dungeonShowcaseRun: true,
@@ -157,10 +125,6 @@ describe('runStartState', () => {
             activeMutators: ['sticky_fingers', 'short_memorize', 'findables_floor']
         });
         expect(createRestartRun(createNewRun(0, { practiceMode: true }), saveData).practiceMode).toBe(true);
-        expect(createRestartRun(createPuzzleRun(0, puzzle.id, puzzle.tiles, 1), saveData)).toMatchObject({
-            gameMode: 'puzzle',
-            puzzleId: puzzle.id
-        });
     });
 
     it('preserves restart contracts and applies onboarding-safe first floor for plain endless restarts', () => {

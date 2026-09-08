@@ -63,10 +63,8 @@ export interface AppState {
      * joker, a vow, an unrecorded run, a calmer pace — as choices about this run.
      */
     startRun: (setup?: ClassicRunSetup) => void;
-    startDailyRun: () => void;
     /** Same-device multiplayer; defaults to two seats. */
     startPassAndPlayRun: (seats?: number) => void;
-    startPuzzleRun: (puzzleId: string) => void;
     /**
      * Opens the save file in the desktop file manager. Export, import and backup are all "copy the
      * file yourself" in this build, so finding the file is the whole task.

@@ -113,10 +113,9 @@ export const resolveAdaptiveMusicState = ({ hidden = false, run, view }: Adaptiv
     }
 
     if (lifecycleState === 'memorize' || lifecycleState === 'playing' || lifecycleState === 'resolving') {
-        const gauntletPressure = run.gameMode === 'gauntlet' && run.gauntletDeadlineMs !== null;
         const bossPressure = run.board?.floorTag === 'boss';
         const mutatorPressure = run.activeMutators.length >= 2;
-        if (gauntletPressure || bossPressure || mutatorPressure) {
+        if (bossPressure || mutatorPressure) {
             return { active: true, layer: 'run_pressure', suppressed: false, track: 'run', volumeMultiplier: 0.96 };
         }
         return { active: true, layer: 'run_focus', suppressed: false, track: 'run', volumeMultiplier: 0.74 };

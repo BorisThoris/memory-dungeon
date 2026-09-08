@@ -19,9 +19,10 @@ const firstPair = (board: BoardState): [Tile, Tile] => {
 
 describe('resolveTurnMatchScoringSummary', () => {
     it('computes streak, encore bonus, score totals, and best score', () => {
-        const base = createNewRun(40, { gameMode: 'puzzle', activeMutators: [] });
+        const base = createNewRun(40, { activeMutators: [], onboardingSafeFirstFloor: true });
         const run = {
             ...base,
+            recallFocus: 0,
             stats: {
                 ...base.stats,
                 totalScore: 10,
@@ -70,9 +71,10 @@ describe('resolveTurnMatchScoringSummary', () => {
     });
 
     it('normalizes malformed persisted score counters before summarizing a match', () => {
-        const base = createNewRun(41, { gameMode: 'puzzle', activeMutators: [] });
+        const base = createNewRun(41, { activeMutators: [], onboardingSafeFirstFloor: true });
         const run = {
             ...base,
+            recallFocus: 0,
             stats: {
                 ...base.stats,
                 totalScore: Number.NaN,
@@ -111,9 +113,10 @@ describe('resolveTurnMatchScoringSummary', () => {
     });
 
     it('normalizes malformed stat records before summarizing a match', () => {
-        const base = createNewRun(42, { gameMode: 'puzzle', activeMutators: [] });
+        const base = createNewRun(42, { activeMutators: [], onboardingSafeFirstFloor: true });
         const run = {
             ...base,
+            recallFocus: 0,
             stats: Number.NaN as unknown as RunState['stats']
         };
         const [first, second] = firstPair(run.board!);

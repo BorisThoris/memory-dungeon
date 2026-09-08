@@ -14,9 +14,7 @@ import { appendRunHistory, buildRunHistoryRecord } from '../../shared/run-histor
 import {
     mergeBestFloorNoPowers,
     mergeChainFloorStats,
-    mergeDailyComplete,
     mergeEncoreFromRun,
-    mergePuzzleCompletion,
     normalizeSaveData
 } from '../../shared/save-data';
 import {
@@ -113,9 +111,7 @@ export const createRunResolutionController = ({
                   ).run;
 
         let saveForAchievements = state.saveData;
-        if (nextRun.status === 'levelComplete' && nextRun.gameMode === 'daily' && nextRun.dailyDateKeyUtc) {
-            saveForAchievements = mergeDailyComplete(state.saveData, nextRun.dailyDateKeyUtc);
-        } else if (nextRun.status === 'gameOver') {
+        if (nextRun.status === 'gameOver') {
             let projected = mergeEncoreFromRun(state.saveData, nextRun.matchedPairKeysThisRun);
             if (!nextRun.powersUsedThisRun) {
                 projected = mergeBestFloorNoPowers(projected, nextRun.stats.highestLevel);
@@ -138,19 +134,11 @@ export const createRunResolutionController = ({
                 : Math.max(state.saveData.bestScore, nextRun.stats.bestScore)
         });
 
-        if (nextRun.status === 'levelComplete' && nextRun.gameMode === 'daily' && nextRun.dailyDateKeyUtc) {
-            nextSave = mergeDailyComplete(nextSave, nextRun.dailyDateKeyUtc);
-        }
-
         if (nextRun.status === 'levelComplete' && !nextSave.onboardingDismissed) {
             nextSave = normalizeSaveData({
                 ...nextSave,
                 onboardingDismissed: true
             });
-        }
-
-        if (nextRun.status === 'levelComplete' && nextRun.gameMode === 'puzzle') {
-            nextSave = mergePuzzleCompletion(nextSave, nextRun);
         }
 
         // The cleared floor's chain record, once per clear and never from a shared table: a Sharp

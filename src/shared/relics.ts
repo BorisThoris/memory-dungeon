@@ -872,9 +872,6 @@ const makeRng = (seed: number): (() => number) => {
 };
 
 export const needsRelicPick = (run: RunState): boolean => {
-    if (run.gameMode === 'puzzle') {
-        return false;
-    }
     if (runNonNegativeInteger(run.lives) <= 0) {
         return false;
     }

@@ -22,18 +22,13 @@ export const MODE_POSTER_FALLBACK_COPY = {
 /** Per-mode poster rasters for Choose Your Path (TASK-018). */
 export const MODE_CARD_ART = {
     classic: resolveUiBackgroundUrl('bg-mode-classic-v1.webp', modePlaceholderUrl),
-    daily: resolveUiBackgroundUrl('bg-mode-daily-v1.webp', modePlaceholderUrl),
     dungeon_showcase: resolveUiBackgroundUrl('mode-dungeon-showcase.webp', modePlaceholderUrl),
     endless: resolveUiBackgroundUrl('bg-mode-endless-v1.webp', modePlaceholderUrl),
     fallback: modePlaceholderUrl,
-    gauntlet: resolveUiBackgroundUrl('bg-mode-gauntlet-v1.webp', modePlaceholderUrl),
-    puzzle: resolveUiBackgroundUrl('bg-mode-puzzle-v1.webp', modePlaceholderUrl),
-    mirror_puzzle: resolveUiBackgroundUrl('bg-mode-mirror-puzzle-v1.webp', modePlaceholderUrl),
     wild: resolveUiBackgroundUrl('bg-mode-wild-v1.webp', modePlaceholderUrl),
     practice: resolveUiBackgroundUrl('bg-mode-practice-v1.webp', modePlaceholderUrl),
     scholar: resolveUiBackgroundUrl('bg-mode-scholar-v1.webp', modePlaceholderUrl),
     pin_vow: resolveUiBackgroundUrl('bg-mode-pin-vow-v1.webp', modePlaceholderUrl),
-    meditation: resolveUiBackgroundUrl('bg-mode-meditation-v1.webp', modePlaceholderUrl),
     pass_and_play: resolveUiBackgroundUrl('bg-mode-pass-and-play-v1.webp', modePlaceholderUrl)
 } as const;
 
@@ -41,18 +36,13 @@ export type ModePosterKey = keyof typeof MODE_CARD_ART;
 
 export const MODE_POSTER_KEYS = [
     'classic',
-    'daily',
     'dungeon_showcase',
     'endless',
     'fallback',
-    'gauntlet',
-    'puzzle',
-    'mirror_puzzle',
     'wild',
     'practice',
     'scholar',
     'pin_vow',
-    'meditation',
     'pass_and_play'
 ] as const satisfies readonly ModePosterKey[];
 

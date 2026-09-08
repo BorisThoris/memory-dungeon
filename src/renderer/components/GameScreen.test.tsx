@@ -1336,7 +1336,7 @@ describe('GameScreen (OVR-014)', () => {
     });
 
     it('falls back to the chain cue when a match has no reward line to name', () => {
-        const playing = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'puzzle' }));
+        const playing = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false }));
 
         render(
             <PlatformTiltProvider>
@@ -1368,7 +1368,7 @@ describe('GameScreen (OVR-014)', () => {
     });
 
     it('survives malformed floater array payloads without inventing rows', () => {
-        const playing = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'puzzle' }));
+        const playing = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false }));
         render(
             <PlatformTiltProvider>
                 <NotificationHost>
@@ -1405,7 +1405,7 @@ describe('GameScreen (OVR-014)', () => {
     });
 
     it('passes armed durable reward perk cues into the board chain context', () => {
-        const base = createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'puzzle' });
+        const base = createNewRun(0, { echoFeedbackEnabled: false });
         const playing = finishMemorizePhase(base);
         const run = {
             ...playing,
@@ -1444,7 +1444,7 @@ describe('GameScreen (OVR-014)', () => {
 
     it('marks plain chain-break misses as a break with one recovery line', () => {
         vi.useFakeTimers();
-        const playing = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'puzzle' }));
+        const playing = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false }));
         try {
             render(
                 <PlatformTiltProvider>
@@ -1501,7 +1501,7 @@ describe('GameScreen (OVR-014)', () => {
         });
 
         vi.useFakeTimers();
-        const base = createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'puzzle' });
+        const base = createNewRun(0, { echoFeedbackEnabled: false });
         const playing = finishMemorizePhase(base);
         try {
             render(
@@ -1555,7 +1555,7 @@ describe('GameScreen (OVR-014)', () => {
         });
 
         vi.useFakeTimers();
-        const base = createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'puzzle' });
+        const base = createNewRun(0, { echoFeedbackEnabled: false });
         const playing = finishMemorizePhase(base);
         try {
             render(
@@ -1588,7 +1588,7 @@ describe('GameScreen (OVR-014)', () => {
 
     it('does not call pause when KeyP is pressed during a relic offer', () => {
         const pauseSpy = vi.spyOn(useAppStore.getState(), 'pause');
-        const base = createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'puzzle' });
+        const base = createNewRun(0, { echoFeedbackEnabled: false });
         const playing = finishMemorizePhase(base);
         const run: RunState = {
             ...playing,
@@ -1638,7 +1638,7 @@ describe('GameScreen (OVR-014)', () => {
     it('REG-097 resumes a paused run when Escape uses the overlay back path', () => {
         const resumeSpy = vi.spyOn(useAppStore.getState(), 'resume');
         const paused: RunState = {
-            ...finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'puzzle' })),
+            ...finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false })),
             status: 'paused',
             timerState: {
                 memorizeRemainingMs: null,
@@ -1667,7 +1667,7 @@ describe('GameScreen (OVR-014)', () => {
     });
 
     it('shows relic draft title, progress, and Scholar footnote for a multi-pick offer', () => {
-        const base = createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'puzzle' });
+        const base = createNewRun(0, { echoFeedbackEnabled: false });
         const playing = finishMemorizePhase(base);
         const run: RunState = {
             ...playing,
@@ -1717,7 +1717,7 @@ describe('GameScreen (OVR-014)', () => {
     });
 
     it('does not show progress line for a single-pick relic offer', () => {
-        const base = createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'puzzle' });
+        const base = createNewRun(0, { echoFeedbackEnabled: false });
         const playing = finishMemorizePhase(base);
         const run: RunState = {
             ...playing,

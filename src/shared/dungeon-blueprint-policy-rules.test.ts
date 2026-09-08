@@ -56,7 +56,6 @@ describe('dungeon blueprint policy rules', () => {
         expect(shouldAddDungeonShopTile(1, 1, 3, 'normal', null, 'endless', 'shop')).toBe(true);
         expect(shouldAddDungeonShopTile(1, 1, 3, 'normal', null, 'endless', 'rest')).toBe(false);
         expect(chooseRoomEffectsForFloor(1, 1, 3, 'normal', null, 'endless', 'trap')).toEqual(['room_trap_workshop']);
-        expect(chooseRoomEffectsForFloor(1, 1, 3, 'normal', null, 'puzzle')).toEqual([]);
     });
 
     it('lets treasure-gallery room policy override generic breather rooms', () => {

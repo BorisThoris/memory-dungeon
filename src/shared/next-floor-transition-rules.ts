@@ -57,7 +57,7 @@ export const advanceToNextLevel = (
         };
     }
 
-    if (run.gameMode === 'puzzle' || run.sideRoom || run.relicOffer) {
+    if (run.sideRoom || run.relicOffer) {
         return run;
     }
 

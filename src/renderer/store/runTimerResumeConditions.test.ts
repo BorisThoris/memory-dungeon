@@ -8,7 +8,7 @@ import {
 
 describe('runTimerResumeConditions (REF-004)', () => {
     it('schedules memorize timer when remaining is 0 (not only when truthy)', () => {
-        const base = createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'puzzle' });
+        const base = createNewRun(0, { echoFeedbackEnabled: false });
         const run: RunState = {
             ...base,
             timerState: {
@@ -20,7 +20,7 @@ describe('runTimerResumeConditions (REF-004)', () => {
     });
 
     it('does not schedule memorize when remaining is null', () => {
-        const base = createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'puzzle' });
+        const base = createNewRun(0, { echoFeedbackEnabled: false });
         const run: RunState = {
             ...base,
             timerState: {
@@ -32,7 +32,7 @@ describe('runTimerResumeConditions (REF-004)', () => {
     });
 
     it('schedules debug reveal when remaining is 0 and peek is active', () => {
-        const playing = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'puzzle' }));
+        const playing = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false }));
         const run: RunState = {
             ...playing,
             debugPeekActive: true,
@@ -45,7 +45,7 @@ describe('runTimerResumeConditions (REF-004)', () => {
     });
 
     it('does not schedule debug reveal when remaining is null', () => {
-        const playing = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'puzzle' }));
+        const playing = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false }));
         const run: RunState = {
             ...playing,
             debugPeekActive: true,

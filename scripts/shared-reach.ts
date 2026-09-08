@@ -38,6 +38,10 @@ export const SHARED_REACH_EXEMPTIONS: Record<string, string> = {
     'long-run-depth.ts': 'Long-run depth sweep for the balance gates.',
     'playthrough-solver-rules.ts': 'Solver rules for the playthrough gates.',
     'playthrough-solver.ts': 'Playthrough solver for the gates.',
+    'pop-reach-simulation.ts':
+        'The pop ladder sweep, run by `yarn sim:pop` and the gameplay gate; its rungs are the proof a match at each tier reaches further than the one below it.',
+    'system-occupancy-simulation.ts':
+        'The occupancy census, run by `yarn sim:occupancy` and `gate:occupancy`; it counts how many floors each system actually fires on, which is the measurement reachability alone cannot make.',
     'softlock-generator-contract.ts': 'Softlock seed contract the softlock gate enforces.',
 
     // Build and script inputs.

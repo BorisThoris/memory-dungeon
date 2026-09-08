@@ -46,39 +46,3 @@ export const deriveLevelTileRngSeed = (runSeed: number, level: number, rulesVers
 export const deriveShuffleRngSeed = (runSeed: number, level: number, shuffleNonce: number, rulesVersion: number): number =>
     hashStringToSeed(`shuffle:${rulesVersion}:${runSeed}:${level}:${shuffleNonce}`);
 
-export const deriveDailyRunSeed = (rulesVersion: number, date: Date = new Date()): number => {
-    const y = date.getUTCFullYear();
-    const m = date.getUTCMonth() + 1;
-    const d = date.getUTCDate();
-    const key = `${rulesVersion}-${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
-    return hashStringToSeed(key);
-};
-
-export const formatDailyDateKeyUtc = (date: Date = new Date()): string => {
-    const y = date.getUTCFullYear();
-    const m = date.getUTCMonth() + 1;
-    const d = date.getUTCDate();
-    return `${y}${String(m).padStart(2, '0')}${String(d).padStart(2, '0')}`;
-};
-
-export const utcDateKeyMinusOneDay = (key: string): string => {
-    if (!/^\d{8}$/.test(key)) {
-        return key;
-    }
-    const y = Number(key.slice(0, 4));
-    const m = Number(key.slice(4, 6)) - 1;
-    const d = Number(key.slice(6, 8));
-    const dt = new Date(Date.UTC(y, m, d));
-    if (dt.getUTCFullYear() !== y || dt.getUTCMonth() !== m || dt.getUTCDate() !== d) {
-        return key;
-    }
-    dt.setUTCDate(dt.getUTCDate() - 1);
-    return formatDailyDateKeyUtc(dt);
-};
-
-export const deriveDailyMutatorIndex = (dailySeed: number, mutatorTableLength: number): number => {
-    if (mutatorTableLength <= 0) {
-        return 0;
-    }
-    return hashStringToSeed(`dailyMut:${dailySeed}`) % mutatorTableLength;
-};
