@@ -3,7 +3,6 @@ import {
     CURSED_LAST_BONUS_SCORE,
     FLIP_PAR_BONUS_SCORE,
     GLASS_WITNESS_BONUS_SCORE,
-    type RelicId,
     SCHOLAR_STYLE_FLOOR_BONUS_SCORE
 } from './contracts';
 import {
@@ -37,7 +36,7 @@ describe('secondary objective rules', () => {
 
     it('uses the score table in reward copy', () => {
         expect(getFeaturedObjectiveRewardCopy('cursed_last')).toBe(
-            `+${CURSED_LAST_BONUS_SCORE} score and featured-objective Favor when scheduled.`
+            `+${CURSED_LAST_BONUS_SCORE} score when scheduled.`
         );
     });
 
@@ -126,8 +125,7 @@ describe('secondary objective rules', () => {
             bonusTags: ['scholar_style', 'glass_witness', 'cursed_last', 'flip_par'],
             featuredObjectiveClear: {
                 featuredObjectiveStreak: run.featuredObjectiveStreak,
-                featuredObjectiveStreakBonus: 0,
-                relicFavorGained: 0
+                featuredObjectiveStreakBonus: 0
             }
         });
     });
@@ -147,30 +145,24 @@ describe('secondary objective rules', () => {
             bonusTags: ['scholar_style', 'objective_streak'],
             featuredObjectiveClear: {
                 featuredObjectiveStreak: 2,
-                relicFavorGained: 1
             }
         });
     });
 
-    it('computes featured objective clear streak, favor, and streak bonus', () => {
+    it('computes featured objective clear streak and streak bonus', () => {
         const run = {
             ...createNewRun(0),
             featuredObjectiveStreak: 2
         };
 
         const result = getFeaturedObjectiveClearResult({
-            board: { ...run.board!, floorTag: 'normal', level: 3 },
             completed: true,
             objectiveId: 'scholar_style',
             run
         });
 
         expect(result).toMatchObject({
-            activeEndlessRiskWager: null,
-            endlessRiskWagerFavorGained: 0,
-            endlessRiskWagerOutcome: undefined,
             featuredObjectiveStreak: 3,
-            relicFavorGained: 1
         });
         expect(result.featuredObjectiveStreakBonus).toBeGreaterThan(0);
     });
@@ -182,7 +174,6 @@ describe('secondary objective rules', () => {
         };
 
         expect(getFeaturedObjectiveClearResult({
-            board: run.board!,
             completed: true,
             objectiveId: 'scholar_style',
             run
@@ -191,7 +182,6 @@ describe('secondary objective rules', () => {
         });
 
         expect(getFeaturedObjectiveClearResult({
-            board: run.board!,
             completed: false,
             objectiveId: 'flip_par',
             run: { ...run, featuredObjectiveStreak: Number.POSITIVE_INFINITY }
@@ -200,7 +190,6 @@ describe('secondary objective rules', () => {
         });
 
         expect(getFeaturedObjectiveClearResult({
-            board: run.board!,
             completed: false,
             objectiveId: null,
             run: { ...run, featuredObjectiveStreak: Number.NaN }
@@ -216,136 +205,15 @@ describe('secondary objective rules', () => {
         };
 
         expect(getFeaturedObjectiveClearResult({
-            board: run.board!,
             completed: false,
             objectiveId: 'flip_par',
             run
         })).toMatchObject({
             featuredObjectiveStreak: 1,
-            endlessRiskWagerStreakLost: undefined,
-            relicFavorGained: 0
         });
     });
 
-    it('resets wager misses unless wager surety is held', () => {
-        const run = {
-            ...createNewRun(0),
-            endlessRiskWager: {
-                acceptedOnLevel: 1,
-                targetLevel: 2,
-                streakAtRisk: 4,
-                bonusFavorOnSuccess: 2
-            },
-            featuredObjectiveStreak: 4
-        };
-        const board = { ...run.board!, level: 2 };
 
-        expect(getFeaturedObjectiveClearResult({
-            board,
-            completed: false,
-            objectiveId: 'glass_witness',
-            run
-        })).toMatchObject({
-            endlessRiskWagerOutcome: 'lost',
-            endlessRiskWagerStreakLost: 4,
-            featuredObjectiveStreak: 0
-        });
-        expect(getFeaturedObjectiveClearResult({
-            board,
-            completed: false,
-            objectiveId: 'glass_witness',
-            run: { ...run, relicIds: ['wager_surety'] }
-        })).toMatchObject({
-            endlessRiskWagerOutcome: 'lost',
-            endlessRiskWagerStreakLost: 3,
-            featuredObjectiveStreak: 1
-        });
-    });
 
-    it('normalizes malformed wager counters before loss and reward calculations', () => {
-        const run = {
-            ...createNewRun(0),
-            endlessRiskWager: {
-                acceptedOnLevel: 1,
-                targetLevel: 2,
-                streakAtRisk: 4.9,
-                bonusFavorOnSuccess: Number.POSITIVE_INFINITY
-            },
-            featuredObjectiveStreak: 4.9
-        };
-        const board = { ...run.board!, level: 2 };
 
-        expect(getFeaturedObjectiveClearResult({
-            board,
-            completed: false,
-            objectiveId: 'glass_witness',
-            run: { ...run, relicIds: ['wager_surety'] }
-        })).toMatchObject({
-            endlessRiskWagerOutcome: 'lost',
-            endlessRiskWagerStreakLost: 3,
-            featuredObjectiveStreak: 1
-        });
-
-        expect(getFeaturedObjectiveClearResult({
-            board,
-            completed: true,
-            objectiveId: 'glass_witness',
-            run: { ...run, relicIds: ['wager_surety'] }
-        })).toMatchObject({
-            endlessRiskWagerFavorGained: 1,
-            endlessRiskWagerOutcome: 'won',
-            featuredObjectiveStreak: 5
-        });
-    });
-
-    it('ignores malformed relic ids before applying wager surety', () => {
-        const run = {
-            ...createNewRun(0),
-            endlessRiskWager: {
-                acceptedOnLevel: 1,
-                targetLevel: 2,
-                streakAtRisk: 4,
-                bonusFavorOnSuccess: 2
-            },
-            featuredObjectiveStreak: 4,
-            relicIds: Number.NaN as unknown as RelicId[]
-        };
-
-        expect(getFeaturedObjectiveClearResult({
-            board: { ...run.board!, level: 2 },
-            completed: false,
-            objectiveId: 'glass_witness',
-            run
-        })).toMatchObject({
-            endlessRiskWagerOutcome: 'lost',
-            endlessRiskWagerStreakLost: 4,
-            featuredObjectiveStreak: 0
-        });
-    });
-
-    it('adds wager favor on featured objective wager wins', () => {
-        const run = {
-            ...createNewRun(0),
-            endlessRiskWager: {
-                acceptedOnLevel: 1,
-                targetLevel: 2,
-                streakAtRisk: 2,
-                bonusFavorOnSuccess: 2
-            },
-            featuredObjectiveStreak: 2,
-            relicIds: ['wager_surety'] satisfies RelicId[]
-        };
-
-        expect(getFeaturedObjectiveClearResult({
-            board: { ...run.board!, level: 2 },
-            completed: true,
-            objectiveId: 'scholar_style',
-            run
-        })).toMatchObject({
-            endlessRiskWagerFavorGained: 3,
-            endlessRiskWagerOutcome: 'won',
-            featuredObjectiveStreak: 3,
-            relicFavorGained: 1
-        });
-    });
 });

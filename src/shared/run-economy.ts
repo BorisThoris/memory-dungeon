@@ -55,16 +55,6 @@ export const RUN_ECONOMY_DEFINITIONS = [
         maxValue: 2
     },
     {
-        id: 'relic_favor',
-        label: 'Relic favor',
-        bucket: 'temporary_run',
-        purpose: 'Temporary run currency for relic-pick momentum.',
-        source: 'endless featured objectives and risk wagers',
-        sink: 'every three favor banks an extra relic pick for the next shrine',
-        persistence: 'temporary_run',
-        maxValue: 3
-    },
-    {
         id: 'findable_pickups',
         label: 'Findable pickups',
         bucket: 'temporary_run',
@@ -106,8 +96,6 @@ const valueFor = (run: RunState, id: string): string => {
             return `${stats.comboShards}/2`;
         case 'guard_tokens':
             return `${stats.guardTokens}/2`;
-        case 'relic_favor':
-            return `${runNonNegativeInteger(run.relicFavorProgress)}/3`;
         case 'findable_pickups':
             return `${runNonNegativeInteger(run.findablesClaimedThisFloor)}/${runNonNegativeInteger(run.findablesTotalThisFloor)}`;
         case 'assist_charges':
@@ -126,8 +114,6 @@ const numericValueFor = (run: RunState, id: string): number => {
             return stats.comboShards;
         case 'guard_tokens':
             return stats.guardTokens;
-        case 'relic_favor':
-            return runNonNegativeInteger(run.relicFavorProgress);
         case 'findable_pickups':
             return runNonNegativeInteger(run.findablesClaimedThisFloor);
         case 'assist_charges':

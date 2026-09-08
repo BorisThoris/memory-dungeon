@@ -11,10 +11,9 @@ describe('REG-021 objective board', () => {
         expect(emptyItems.map((item) => item.status)).toEqual([
             'active',
             'active',
-            'active',
-            'locked'
+            'active'
         ]);
-        expect(objectiveBoardSummary(empty)).toEqual({ total: 4, completed: 0, active: 3, locked: 1 });
+        expect(objectiveBoardSummary(empty)).toEqual({ total: 3, completed: 0, active: 3, locked: 0 });
 
         const progressed = createDefaultSaveData();
         progressed.achievements.ACH_FIRST_CLEAR = true;
@@ -29,7 +28,6 @@ describe('REG-021 objective board', () => {
         expect(items.find((item) => item.id === 'no_powers_floor_5')?.status).toBe('completed');
         expect(items.find((item) => item.id === 'sharp_three')?.progress).toEqual({ current: 2, target: 3 });
         expect(items.find((item) => item.id === 'sharp_three')?.status).toBe('active');
-        expect(items.find((item) => item.id === 'relic_shrine_extra')?.status).toBe('locked');
     });
 
     it('normalizes malformed pin vow counters before projecting run progress rows', () => {
@@ -68,7 +66,6 @@ describe('REG-021 objective board', () => {
         expect(buildObjectiveBoardRows(save).map((row) => `${row.id}:${row.progress}`)).toEqual([
             'first_clear:1/1',
             'no_powers_floor_5:0/5',
-            'relic_habit:1/10',
             'sharp_floor:0/1'
         ]);
         expect(getObjectiveBoardItems(save).find((item) => item.id === 'sharp_three')?.progress).toEqual({

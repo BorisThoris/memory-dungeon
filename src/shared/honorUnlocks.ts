@@ -6,7 +6,7 @@ import type { SaveData } from './contracts';
 import { cosmeticUnlockTag, type CosmeticId } from './cosmetics';
 import { HONOR_UNLOCK_IDS, type HonorUnlockId } from './honor-unlock-ids';
 import { runNonNegativeInteger } from './run-number-guards';
-import { getRelicPickTotal, normalizeSaveData } from './save-data';
+import { normalizeSaveData } from './save-data';
 
 export { HONOR_UNLOCK_IDS, type HonorUnlockId } from './honor-unlock-ids';
 
@@ -38,11 +38,6 @@ export const HONOR_UNLOCK_CATALOG: Record<HonorUnlockId, HonorUnlockDefinition> 
         id: 'honor_score_maestro',
         title: 'Score Maestro',
         description: 'Reach a best score of at least 2000 across any runs.'
-    },
-    honor_relic_habit: {
-        id: 'honor_relic_habit',
-        title: 'Relic Habit',
-        description: 'Pick relics at least ten times across runs (milestone offers count).'
     }
 };
 
@@ -75,14 +70,12 @@ export const eligibleHonorUnlockIds = (save: SaveData): HonorUnlockId[] => {
     const ps = save.playerStats;
     const bestNp = runNonNegativeInteger(ps?.bestFloorNoPowers);
     const bestScore = runNonNegativeInteger(save.bestScore);
-    const relicPicks = getRelicPickTotal(ps?.relicPickCounts);
 
     const earned: HonorUnlockId[] = [];
     if (runNonNegativeInteger(ps?.sharpFloors) >= 1) earned.push('honor_sharp_initiate');
     if (bestNp >= 5) earned.push('honor_ascendant_5');
     if (bestNp >= 10) earned.push('honor_ascendant_10');
     if (bestScore >= 2000) earned.push('honor_score_maestro');
-    if (relicPicks >= 10) earned.push('honor_relic_habit');
 
     return [...new Set(earned)];
 };

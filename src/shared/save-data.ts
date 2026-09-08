@@ -91,9 +91,6 @@ export const ACHIEVEMENT_IDS = [
     'ACH_SCORE_TEN_THOUSAND',
     'ACH_STREAK_TEN',
     'ACH_TRAIT_SCHOLAR',
-    'ACH_RELIC_HOARD',
-    'ACH_STANDING_ORDERS',
-    'ACH_RELIC_LIBRARY',
     'ACH_NO_POWERS_TEN',
     'ACH_FIRST_FEVER',
     'ACH_CHUNK_SIX',
@@ -405,10 +402,6 @@ export const normalizeRunSummary = (input: unknown): RunSummary | null => {
             : {})
     };
 };
-
-/** +1 relic pick at each milestone when meta unlock is active (copied into `RunState.metaRelicDraftExtraPerMilestone`). */
-export const metaRelicDraftExtraPerMilestoneFromSave = (save: SaveData): number =>
-    save.playerStats?.relicShrineExtraPickUnlocked === true ? 1 : 0;
 
 export const createDefaultSaveData = (): SaveData => ({
     schemaVersion: SAVE_SCHEMA_VERSION,

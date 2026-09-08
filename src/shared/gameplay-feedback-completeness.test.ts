@@ -50,8 +50,7 @@ describe('gameplay feedback completeness', () => {
             totalScore: 'totalScore',
             dungeonKeys: 'dungeonKeys',
             peekCharges: 'peekCharges',
-            pinnedTileCount: 'pinnedTileIds',
-            relicFavorProgress: 'relicFavorProgress'
+            pinnedTileCount: 'pinnedTileIds'
         });
     });
 
@@ -87,7 +86,7 @@ describe('gameplay feedback completeness', () => {
         });
     });
 
-    it('reports power, key, score, streak, and Favor HUD counters that the narrow audit previously missed', () => {
+    it('reports power, key, score and streak HUD counters that the narrow audit previously missed', () => {
         const command = createGameplayPeekCommand('missing-resource-feedback', 'tile-a');
         const diagnostic = inspectGameplayFeedbackCompleteness({
             before: run(),
@@ -100,7 +99,6 @@ describe('gameplay feedback completeness', () => {
                 peekCharges: 1,
                 flashPairCharges: 1,
                 strayRemoveCharges: 1,
-                relicFavorProgress: 1,
                 pinnedTileIds: ['tile-a'],
                 stats: {
                     currentStreak: 1,
@@ -128,7 +126,6 @@ describe('gameplay feedback completeness', () => {
             'peekCharges',
             'flashPairCharges',
             'strayRemoveCharges',
-            'relicFavorProgress',
             'pinnedTileCount'
         ]);
         expect(diagnostic?.message).toContain('changed feedback-critical fields without typed presentation');

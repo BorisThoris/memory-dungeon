@@ -29,7 +29,6 @@ import type { GameplayCommand, GameplayEvent } from './gameplay-core-contracts';
 import { addTileTraitCountStats, normalizeSessionStats } from './session-stats-rules';
 import { runFilteredStringArrayOrNull, runStringArray } from './run-array-guards';
 import { runNonNegativeInteger } from './run-number-guards';
-import { gainRelicFavor } from './relic-favor-rules';
 import type { TileTraitInteractionTag } from './tile-trait-rules';
 import { applyTraitRouteObjectiveProgress } from './trait-route-objectives';
 
@@ -243,7 +242,6 @@ export const createResolveBoardTurnTransition = ({
             execution?.traitInteractionTags?.push(...traitReward.interactionTags);
             const traitRouteObjective = applyTraitRouteObjectiveProgress(run, traitReward.interactionTags);
             const lives = survivalReward.lives;
-            const routeFavor = gainRelicFavor(run, routeCardReward.relicFavor + dungeonReward.relicFavor + traitReward.relicFavorGain);
             const wildMatch = usedWild && runNonNegativeInteger(run.wildMatchesRemaining) > 0
                 ? consumeWildMatchThroughGameplayCore(
                       run,
@@ -343,9 +341,6 @@ export const createResolveBoardTurnTransition = ({
                 shopGold: economy.shopGold,
                 dungeonKeys: economy.dungeonKeys,
                 dungeonMasterKeys: economy.dungeonMasterKeys,
-                bonusRelicPicksNextOffer: routeFavor.bonusRelicPicksNextOffer,
-                favorBonusRelicPicksNextOffer: routeFavor.favorBonusRelicPicksNextOffer,
-                relicFavorProgress: routeFavor.relicFavorProgress,
                 nBackMatchCounter: followup.nBackMatchCounter,
                 nBackAnchorPairKey: followup.nBackAnchorPairKey,
                 matchedPairKeysThisRun: [...runStringArray(run.matchedPairKeysThisRun), scoring.encoreKey],
@@ -555,7 +550,6 @@ export const createResolveBoardTurnTransition = ({
             execution?.traitInteractionTags?.push(...traitReward.interactionTags);
             const traitRouteObjective = applyTraitRouteObjectiveProgress(run, traitReward.interactionTags);
             const lives = survivalReward.lives;
-            const routeFavor = gainRelicFavor(run, routeCardReward.relicFavor + dungeonReward.relicFavor + traitReward.relicFavorGain);
     
             const wildMatch = usedWild && runNonNegativeInteger(run.wildMatchesRemaining) > 0
                 ? consumeWildMatchThroughGameplayCore(
@@ -654,9 +648,6 @@ export const createResolveBoardTurnTransition = ({
                 shopGold: economy.shopGold,
                 dungeonKeys: economy.dungeonKeys,
                 dungeonMasterKeys: economy.dungeonMasterKeys,
-                bonusRelicPicksNextOffer: routeFavor.bonusRelicPicksNextOffer,
-                favorBonusRelicPicksNextOffer: routeFavor.favorBonusRelicPicksNextOffer,
-                relicFavorProgress: routeFavor.relicFavorProgress,
                 nBackMatchCounter: followup.nBackMatchCounter,
                 nBackAnchorPairKey: followup.nBackAnchorPairKey,
                 matchedPairKeysThisRun: [...runStringArray(run.matchedPairKeysThisRun), scoring.encoreKey],

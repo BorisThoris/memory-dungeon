@@ -1,13 +1,11 @@
 import type { RunState, SaveData } from './contracts';
 import { runNonNegativeInteger } from './run-number-guards';
-import { getRelicPickTotal } from './save-data';
 import { normalizeSessionStats } from './session-stats-rules';
 
 export type QuestCampaignStepId =
     | 'first_lantern'
     | 'scholar_oath'
     | 'timed_proof'
-    | 'relic_apprentice'
     | 'chain_rhythm';
 
 export type QuestCampaignStatus = 'completed' | 'active' | 'locked' | 'failed';
@@ -72,20 +70,8 @@ export const QUEST_CAMPAIGN_LADDER: readonly QuestCampaignDefinition[] = [
         offlineOnly: true
     },
     {
-        id: 'relic_apprentice',
-        order: 5,
-        title: 'Relic Apprentice',
-        description: 'Pick ten relics across local runs.',
-        target: 10,
-        saveFields: ['playerStats.relicPickCounts'],
-        contractFlag: null,
-        retryPolicy: 'persistent',
-        reward: 'Relic habit honor and cosmetic track progress.',
-        offlineOnly: true
-    },
-    {
         id: 'chain_rhythm',
-        order: 6,
+        order: 5,
         title: 'Chain Rhythm',
         description: 'Reach a Sharp chain on three cleared floors.',
         target: 3,
@@ -107,8 +93,6 @@ const progressFor = (save: SaveData, id: QuestCampaignStepId): number => {
             return save.lastRunSummary?.gauntletSessionDurationMs != null
                 ? runNonNegativeInteger(save.lastRunSummary.levelsCleared)
                 : 0;
-        case 'relic_apprentice':
-            return getRelicPickTotal(save.playerStats?.relicPickCounts);
         case 'chain_rhythm':
             return runNonNegativeInteger(save.playerStats?.sharpFloors);
         default:

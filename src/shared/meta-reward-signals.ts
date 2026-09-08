@@ -47,12 +47,6 @@ const metaRowTone = (row: ReturnType<typeof getMetaProgressionBoard>['rows'][num
 };
 
 const metaRowImpact = (row: ReturnType<typeof getMetaProgressionBoard>['rows'][number]): { lane: string; impact: string } => {
-    if (row.id === 'upgrade_relic_shrine_extra_pick') {
-        return {
-            lane: 'Relic draft',
-            impact: row.status === 'owned' ? '+1 milestone pick active' : '+1 pick when unlocked'
-        };
-    }
     if (row.id === 'upgrade_scholar_prep_slot') {
         return {
             lane: 'Run setup',
@@ -79,9 +73,6 @@ const metaRowNextAction = (row: ReturnType<typeof getMetaProgressionBoard>['rows
 };
 
 const metaRowBoardMoment = (row: ReturnType<typeof getMetaProgressionBoard>['rows'][number]): string => {
-    if (row.id === 'upgrade_relic_shrine_extra_pick') {
-        return row.status === 'owned' ? 'Choose deeper relic synergy' : 'More relic choice at milestone floors';
-    }
     if (row.id === 'upgrade_scholar_prep_slot') {
         return 'Plan a future pre-run assist';
     }

@@ -164,9 +164,6 @@ export interface CreateFloorClearLevelResultInput {
     bonusTags: readonly string[];
     clearLifeGained: number;
     clearLifeReason: ClearLifeReason;
-    endlessRiskWagerFavorGained: number;
-    endlessRiskWagerOutcome: LevelResult['endlessRiskWagerOutcome'];
-    endlessRiskWagerStreakLost: LevelResult['endlessRiskWagerStreakLost'];
     featuredObjectiveCompleted: boolean;
     featuredObjectiveId: FeaturedObjectiveId | null;
     featuredObjectiveStreak: number;
@@ -178,7 +175,6 @@ export interface CreateFloorClearLevelResultInput {
     objectiveBonusScore: number;
     perfect: boolean;
     rating: LevelResult['rating'];
-    relicFavorGained: number;
     routeChoices: LevelResult['routeChoices'];
     run: RunState;
     scoreGained: number;
@@ -194,9 +190,6 @@ export const createFloorClearLevelResult = ({
     bonusTags,
     clearLifeGained,
     clearLifeReason,
-    endlessRiskWagerFavorGained,
-    endlessRiskWagerOutcome,
-    endlessRiskWagerStreakLost,
     featuredObjectiveCompleted,
     featuredObjectiveId,
     featuredObjectiveStreak,
@@ -208,7 +201,6 @@ export const createFloorClearLevelResult = ({
     objectiveBonusScore,
     perfect,
     rating,
-    relicFavorGained,
     routeChoices,
     run,
     scoreGained,
@@ -229,18 +221,11 @@ export const createFloorClearLevelResult = ({
     objectiveBonusScore: objectiveBonusScore > 0 ? objectiveBonusScore : undefined,
     featuredObjectiveId: featuredObjectiveId ?? undefined,
     featuredObjectiveCompleted: featuredObjectiveId != null ? featuredObjectiveCompleted : undefined,
-    relicFavorGained: featuredObjectiveId != null ? relicFavorGained : undefined,
     featuredObjectiveStreak: featuredObjectiveId != null ? featuredObjectiveStreak : undefined,
     featuredObjectiveStreakBonus:
         featuredObjectiveId != null && featuredObjectiveStreakBonus > 0
             ? featuredObjectiveStreakBonus
             : undefined,
-    endlessRiskWagerOutcome,
-    endlessRiskWagerFavorGained:
-        endlessRiskWagerFavorGained > 0
-            ? endlessRiskWagerFavorGained
-            : undefined,
-    endlessRiskWagerStreakLost,
     bossTrophyCacheOutcome,
     bossTrophyCacheScore: bossTrophyCacheScore > 0 ? bossTrophyCacheScore : undefined,
     traitRouteObjectiveCompleted: traitRouteObjectiveRequired > 0 ? traitRouteObjectiveCompleted : undefined,

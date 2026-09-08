@@ -1401,3 +1401,23 @@ Nothing moved. `sim:cascade --check` holds at Fever 0.38 (miss 0.1) / 0.20 (miss
 Fever 0.58 / 0.43, ripple 1.09 / 1.06; `sim:pop --check` holds the ladder spread at 4.74; the
 occupancy census reports no silent system. The draft was a stop between floors, not a thing on
 the board.
+
+### The second half: nothing feeds a draft that never opens
+
+Favor existed to bank relic picks. With no draft it was a counter on the HUD and the floor-clear
+line that climbed toward nothing, so it is no longer earned anywhere: not from a featured
+objective, not from a boss floor, not from a cursed match, not from a secret room. The counters
+stay on the run shape reading nought until T1.14, and a `relic_favor.grant` effect in an old
+journal is recorded as changing nothing. The Endless risk wager staked an objective streak for
+Favor and paid nothing else, so it is gone from the floor-clear dialog, the rules and the core; a
+`risk_wager.accept` in an old journal is rejected with a reason. A featured objective still builds
+its streak and pays its score kicker; a miss still decays it.
+
+Everything that counted relic picks across runs is gone with it: the Collection's relic section,
+the three relic achievements (Steam has never seen them), the Relic Habit honor, the Relic
+Apprentice quest, the relic-mastery honor-mark source and the Week of Archives permanent upgrade,
+which bought an extra pick at a shrine that no longer opens. The Profile's next-reward slot now
+falls to the cosmetic tracks. The relic loadout leaves the run inventory.
+
+Nothing on the board moved: `sim:cascade --check`, `sim:pop --check` and the occupancy census hold
+exactly where the first half left them.

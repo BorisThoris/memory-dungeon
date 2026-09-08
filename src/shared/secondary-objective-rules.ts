@@ -11,7 +11,6 @@ import {
     type FeaturedObjectiveId
 } from './contracts';
 import { usesEndlessFloorSchedule } from './floor-mutator-schedule';
-import { hasRunRelic } from './relics';
 import { runNonNegativeInteger } from './run-number-guards';
 
 export const FEATURED_OBJECTIVE_BONUS_SCORES: Record<FeaturedObjectiveId, number> = {
@@ -81,61 +80,30 @@ export const getDefaultClearObjectiveBonus = (
 };
 
 export interface FeaturedObjectiveClearResult {
-    activeEndlessRiskWager: RunState['endlessRiskWager'];
-    endlessRiskWagerFavorGained: number;
-    endlessRiskWagerOutcome: 'won' | 'lost' | undefined;
-    endlessRiskWagerStreakLost: number | undefined;
     featuredObjectiveStreak: number;
     featuredObjectiveStreakBonus: number;
-    relicFavorGained: number;
-}
-
-export interface FeaturedObjectiveClearOptions {
-    wagerSuretyFavorBonus?: number;
-    wagerSuretyLossStreakFloor?: number;
 }
 
 export const getFeaturedObjectiveClearResult = ({
-    board,
     completed,
     objectiveId,
-    run,
-    options = {}
+    run
 }: {
-    board: BoardState;
     completed: boolean;
     objectiveId: FeaturedObjectiveId | null;
     run: RunState;
-    options?: FeaturedObjectiveClearOptions;
 }): FeaturedObjectiveClearResult => {
-    const activeEndlessRiskWager =
-        objectiveId != null && run.endlessRiskWager?.targetLevel === board.level
-            ? run.endlessRiskWager
-            : null;
-    const endlessRiskWagerOutcome =
-        activeEndlessRiskWager != null ? (completed ? 'won' as const : 'lost' as const) : undefined;
-    const hasWagerSurety = hasRunRelic(run, 'wager_surety');
-    const wagerSuretyFavorBonus = hasWagerSurety
-        ? runNonNegativeInteger(options.wagerSuretyFavorBonus ?? 1)
-        : 0;
-    const wagerSuretyLossStreakFloor = hasWagerSurety
-        ? runNonNegativeInteger(options.wagerSuretyLossStreakFloor ?? 1)
-        : 0;
+    /*
+     * The Endless risk wager and its Favor payout went in Gen 175 with the relic draft the Favor
+     * fed. A featured objective still builds a streak and pays a score kicker; a miss decays it.
+     */
     const previousFeaturedObjectiveStreak = runNonNegativeInteger(run.featuredObjectiveStreak);
     const featuredObjectiveStreak =
         objectiveId != null
             ? completed
                 ? previousFeaturedObjectiveStreak + 1
-                : activeEndlessRiskWager
-                  ? hasWagerSurety
-                      ? Math.min(previousFeaturedObjectiveStreak, wagerSuretyLossStreakFloor)
-                      : 0
-                  : Math.max(0, previousFeaturedObjectiveStreak - FEATURED_OBJECTIVE_STREAK_MISS_DECAY)
+                : Math.max(0, previousFeaturedObjectiveStreak - FEATURED_OBJECTIVE_STREAK_MISS_DECAY)
             : previousFeaturedObjectiveStreak;
-    const endlessRiskWagerStreakLost =
-        activeEndlessRiskWager != null && !completed
-            ? Math.max(0, runNonNegativeInteger(activeEndlessRiskWager.streakAtRisk) - featuredObjectiveStreak)
-            : undefined;
     const featuredObjectiveStreakBonus =
         objectiveId != null && completed
             ? Math.min(
@@ -143,20 +111,9 @@ export const getFeaturedObjectiveClearResult = ({
                   FEATURED_OBJECTIVE_STREAK_BONUS_MAX
               )
             : 0;
-    const relicFavorGained = objectiveId != null && completed ? (board.floorTag === 'boss' ? 2 : 1) : 0;
-    const endlessRiskWagerFavorGained =
-        completed && activeEndlessRiskWager
-            ? runNonNegativeInteger(activeEndlessRiskWager.bonusFavorOnSuccess) + wagerSuretyFavorBonus
-            : 0;
-
     return {
-        activeEndlessRiskWager,
-        endlessRiskWagerFavorGained,
-        endlessRiskWagerOutcome,
-        endlessRiskWagerStreakLost,
         featuredObjectiveStreak,
-        featuredObjectiveStreakBonus,
-        relicFavorGained
+        featuredObjectiveStreakBonus
     };
 };
 
@@ -173,20 +130,14 @@ export interface FloorClearObjectiveResult {
     objectiveBonus: number;
 }
 
-export const getFloorClearObjectiveResult = (
-    run: RunState,
-    board: BoardState,
-    options: FeaturedObjectiveClearOptions = {}
-): FloorClearObjectiveResult => {
+export const getFloorClearObjectiveResult = (run: RunState, board: BoardState): FloorClearObjectiveResult => {
     const featuredObjectiveId = isEndlessFeaturedObjectiveBoard(run, board) ? board.featuredObjectiveId : null;
     const featuredObjectiveCompleted =
         featuredObjectiveId != null ? isFeaturedObjectiveCompleted(run, board, featuredObjectiveId) : false;
     const featuredObjectiveClear = getFeaturedObjectiveClearResult({
-        board,
         completed: featuredObjectiveCompleted,
         objectiveId: featuredObjectiveId,
-        run,
-        options
+        run
     });
     const bonusTags: string[] = [];
     let objectiveBonus = 0;
@@ -216,5 +167,5 @@ export const getFloorClearObjectiveResult = (
 
 export const getFeaturedObjectiveRewardCopy = (id: FeaturedObjectiveId): string => {
     const score = getFeaturedObjectiveBonusScore(id);
-    return `+${score} score and featured-objective Favor when scheduled.`;
+    return `+${score} score when scheduled.`;
 };

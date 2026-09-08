@@ -120,13 +120,14 @@ describe('REG-096 game over next-run loop', () => {
 
         const row = getGameOverNextRunRows(run, save).find((entry) => entry.id === 'next_goal');
 
+        // The relic shrine's extra pick was the ready reward here until the draft went (Gen 175).
         expect(row).toMatchObject({
             title: 'Next goal',
-            value: 'Week of Archives ready',
-            detail: 'Week of Archives is ready. Adept tier at profile level 3 (3 honor marks).',
             actionHint: 'Use Profile for reward status and Choose Your Path for the next attempt.',
             localOnly: true
         });
+        expect(row?.value).not.toBe('Week of Archives ready');
+        expect(row?.detail).toContain('Adept tier at profile level 3 (3 honor marks).');
     });
 
     it('can prioritize concrete post-run meta deltas when previous save state is provided', () => {
@@ -144,10 +145,9 @@ describe('REG-096 game over next-run loop', () => {
 
         const row = getGameOverNextRunRows(run, after, before).find((entry) => entry.id === 'next_goal');
 
-        expect(row).toMatchObject({
-            value: 'Week of Archives ready',
-            detail:
-                '+1 relic pick per milestone can be unlocked from Profile. +1 honor mark from Sharp floor progress. Next: Week of Archives is ready. Adept tier at profile level 3 (3 honor marks).'
-        });
+        expect(row).toMatchObject({ value: 'Sharp floors advanced' });
+        expect(row?.detail).toContain('+1 honor mark from Sharp floor progress.');
+        expect(row?.detail).toContain('Adept tier at profile level 3 (3 honor marks).');
+        expect(row?.detail).not.toContain('Next: Next:');
     });
 });

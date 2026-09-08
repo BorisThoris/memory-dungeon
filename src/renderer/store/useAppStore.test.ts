@@ -286,31 +286,6 @@ describe('useAppStore timers', () => {
         expect(window.localStorage.getItem('memory-dungeon-save-data')).toBe(futureSave);
     });
 
-    it('claims a ready meta progression reward and applies it to future run starts', () => {
-        const saveData = createDefaultSaveData();
-        saveData.playerStats = {
-            ...saveData.playerStats!,
-            sharpFloors: 7,
-            relicShrineExtraPickUnlocked: false
-        };
-        useAppStore.setState({
-            saveData,
-            settings: saveData.settings
-        });
-
-        const result = useAppStore.getState().claimMetaProgressionReward('upgrade_relic_shrine_extra_pick');
-
-        expect(result).toMatchObject({
-            applied: true,
-            reason: 'applied'
-        });
-        expect(useAppStore.getState().saveData.playerStats?.relicShrineExtraPickUnlocked).toBe(true);
-
-        useAppStore.getState().startRun();
-
-        expect(useAppStore.getState().run?.metaRelicDraftExtraPerMilestone).toBe(1);
-        expect(useAppStore.getState().runStartSaveData?.playerStats?.relicShrineExtraPickUnlocked).toBe(true);
-    });
 
     it('freezes a pending board resolution while settings are open', async () => {
         useAppStore.getState().startRun();
@@ -1376,44 +1351,6 @@ describe('useAppStore timers', () => {
 
 
 
-    it('plays wager-arm cue when risk wager is accepted', () => {
-        const run = useAppStore.getState().run;
-        useAppStore.getState().startRun();
-        const current = useAppStore.getState().run!;
-        useAppStore.setState({
-            run: {
-                ...current,
-                status: 'levelComplete',
-                featuredObjectiveStreak: 2,
-                lastLevelResult: {
-                    level: 1,
-                    scoreGained: 120,
-                    rating: 'S++',
-                    livesRemaining: 5,
-                    perfect: true,
-                    mistakes: 0,
-                    clearLifeReason: 'perfect',
-                    clearLifeGained: 1,
-                    featuredObjectiveId: 'flip_par',
-                    featuredObjectiveCompleted: true,
-                    relicFavorGained: 1,
-                    featuredObjectiveStreak: 2
-                }
-            }
-        });
-
-        useAppStore.getState().acceptEndlessRiskWager();
-        expect(gameSfxMocks.resumeAudioContext).toHaveBeenCalled();
-        expect(gameSfxMocks.playWagerArmSfx).toHaveBeenCalledTimes(1);
-        expect(run).not.toBe(useAppStore.getState().run);
-        expect(useAppStore.getState().run?.gameplayCommandJournal).toEqual([
-            expect.objectContaining({ type: 'risk_wager.accept' })
-        ]);
-        expect(useAppStore.getState().run?.gameplayEventJournal).toEqual(expect.arrayContaining([
-            expect.objectContaining({ type: 'risk_wager.accepted', targetLevel: 2 }),
-            expect.objectContaining({ type: 'feedback.requested', cue: 'build.route_gambler.wager_accepted' })
-        ]));
-    });
 
     it('REG-088: first classic run can clear, continue, end locally, and persist first-win progress', async () => {
         useAppStore.getState().startRun();

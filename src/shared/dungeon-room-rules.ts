@@ -13,7 +13,6 @@ import {
     trapWorkshopTileUpdates
 } from './dungeon-room-targeting-rules';
 import { addRunDungeonKey } from './dungeon-key-rules';
-import { gainRelicFavor } from './relic-favor-rules';
 import { decrementRunCounter, runNonNegativeInteger } from './run-number-guards';
 import { normalizeSessionStats } from './session-stats-rules';
 import {
@@ -115,13 +114,7 @@ export const revealDungeonRoom = (run: RunState, tileId: string): RunState => {
                 : runNonNegativeInteger(run.dungeonTrapsResolvedThisFloor)
         };
     } else if (effectId === 'room_omen_archive') {
-        const favor = gainRelicFavor(run, 1);
-        nextRun = {
-            ...gainDungeonRoomScore(run, DUNGEON_OMEN_ARCHIVE_SCORE_REWARD),
-            bonusRelicPicksNextOffer: favor.bonusRelicPicksNextOffer,
-            favorBonusRelicPicksNextOffer: favor.favorBonusRelicPicksNextOffer,
-            relicFavorProgress: favor.relicFavorProgress
-        };
+        nextRun = gainDungeonRoomScore(run, DUNGEON_OMEN_ARCHIVE_SCORE_REWARD);
     } else if (effectId === 'room_locked_cache') {
         const keyKind: DungeonKeyKind = tile.dungeonKeyKind ?? 'iron';
         if (runNonNegativeInteger(run.dungeonKeys[keyKind]) > 0) {

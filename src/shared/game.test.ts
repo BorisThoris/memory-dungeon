@@ -10,8 +10,6 @@ import type {
     Tile
 } from './contracts';
 import {
-    ENDLESS_RISK_WAGER_BONUS_FAVOR,
-    ENDLESS_RISK_WAGER_MIN_STREAK,
     FEATURED_OBJECTIVE_STREAK_BONUS_PER_STEP,
     FINDABLE_MATCH_COMBO_SHARDS,
     FINDABLE_MATCH_SAFE_HAZARD_WARDS,
@@ -102,10 +100,6 @@ import {
     ROOM_PAIR_KEY,
     SHOP_PAIR_KEY
 } from './dungeon-rules';
-import {
-    acceptEndlessRiskWager,
-    canOfferEndlessRiskWager
-} from './objective-rules';
 import { DECOY_PAIR_KEY, WILD_PAIR_KEY } from './tile-identity';
 import { MIN_CURIO_MEMORIZE_MS, pickFloorCurio } from './floor-curio-rules';
 import { makeBoard as createBoard, makePair as createPair, makeRun as createRun, makeTile as createTile } from './test/game-fixtures';
@@ -521,16 +515,6 @@ const clearRealPairs = (run: RunState): RunState => {
     }
     return leaveThroughExit(current);
 };
-
-const withoutTileTraits = (run: RunState): RunState => ({
-    ...run,
-    board: run.board
-        ? {
-              ...run.board,
-              tiles: run.board.tiles.map((tile) => ({ ...tile, tileTraitKind: undefined }))
-          }
-        : run.board
-});
 
 const leaveThroughExit = (run: RunState): RunState => {
     const exitTile = run.board?.dungeonExitTileId
@@ -2653,7 +2637,7 @@ describe('dungeon cards', () => {
         };
         const opened = activateDungeonExit(revealDungeonExit(exitRun, 'route-exit'));
         expect(opened.stats.totalScore).toBeGreaterThanOrEqual(35);
-        expect(opened.relicFavorProgress).toBe(1);
+        expect(opened.relicFavorProgress).toBe(0); // Favor is no longer earned (Gen 175)
     });
 
     it('gives each dungeon boss a distinct match payoff and copy read', () => {
@@ -2685,7 +2669,7 @@ describe('dungeon cards', () => {
 
         const trapWarden = resolveBoardTurn(flipTile(flipTile(createRun(bossPair('trap_warden', 'Trap Warden')), 'trap_warden-a'), 'trap_warden-b'));
         expect(trapWarden.stats.guardTokens).toBe(1);
-        expect(trapWarden.relicFavorProgress).toBe(1);
+        expect(trapWarden.relicFavorProgress).toBe(0); // Favor is no longer earned (Gen 175)
         expect(getDungeonCardCopy(bossPair('trap_warden', 'Trap Warden')[0])).toMatch(/guard/i);
 
         const rushSentinel = resolveBoardTurn(
@@ -2722,7 +2706,7 @@ describe('dungeon cards', () => {
         const spireObserver = resolveBoardTurn(
             flipTile(flipTile(createRun(bossPair('spire_observer', 'Spire Observer')), 'spire_observer-a'), 'spire_observer-b')
         );
-        expect(spireObserver.relicFavorProgress).toBe(2);
+        expect(spireObserver.relicFavorProgress).toBe(0); // Favor is no longer earned (Gen 175)
         expect(getDungeonCardCopy(bossPair('spire_observer', 'Spire Observer')[0])).toMatch(/extra Favor/i);
     });
 
@@ -3876,7 +3860,7 @@ describe('dungeon cards', () => {
             createRun([roomTile('archive', 'room_omen_archive', 'Omen Archive'), hiddenEnemyA, hiddenEnemyB]),
             'archive'
         );
-        expect(archiveRun.relicFavorProgress).toBe(1);
+        expect(archiveRun.relicFavorProgress).toBe(0); // Favor is no longer earned (Gen 175)
         expect(
             archiveRun.board!.tiles
                 .filter((tile) => tile.pairKey === 'E')
@@ -3936,25 +3920,6 @@ describe('endless chapters and featured objectives', () => {
         expect(finished.lastLevelResult?.bonusTags).not.toContain('cursed_last');
     });
 
-    it('banks an extra relic pick when favor reaches three', () => {
-        const started = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false }));
-        const [firstPair, secondPair] = pairTileIds(started.board!);
-        const primed = {
-            ...started,
-            relicFavorProgress: 2
-        };
-
-        const afterFirstMatch = resolveBoardTurn(flipTile(flipTile(primed, firstPair![0]!), firstPair![1]!));
-        const finished = leaveThroughExit(
-            resolveBoardTurn(flipTile(flipTile(afterFirstMatch, secondPair![0]!), secondPair![1]!))
-        );
-
-        expect(finished.status).toBe('levelComplete');
-        expect(finished.lastLevelResult?.relicFavorGained).toBe(1);
-        expect(finished.relicFavorProgress).toBe(0);
-        expect(finished.bonusRelicPicksNextOffer).toBe(1);
-        expect(finished.favorBonusRelicPicksNextOffer).toBe(1);
-    });
 
     it('builds a featured-objective streak and awards a score kicker after the first clear', () => {
         const started = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false }));
@@ -3992,160 +3957,11 @@ describe('endless chapters and featured objectives', () => {
         expect(finished.lastLevelResult?.featuredObjectiveStreakBonus).toBeUndefined();
     });
 
-    it('offers and accepts an endless risk wager after a completed streak of two', () => {
-        const base = createNewRun(0, { echoFeedbackEnabled: false });
-        const cleared: RunState = {
-            ...base,
-            status: 'levelComplete',
-            featuredObjectiveStreak: ENDLESS_RISK_WAGER_MIN_STREAK,
-            lastLevelResult: {
-                level: 1,
-                scoreGained: 100,
-                rating: 'S++',
-                livesRemaining: base.lives,
-                perfect: true,
-                mistakes: 0,
-                clearLifeReason: 'perfect',
-                clearLifeGained: 1,
-                featuredObjectiveId: 'flip_par',
-                featuredObjectiveCompleted: true,
-                featuredObjectiveStreak: ENDLESS_RISK_WAGER_MIN_STREAK,
-                relicFavorGained: 1
-            }
-        };
-
-        expect(canOfferEndlessRiskWager(cleared)).toBe(true);
-        const accepted = acceptEndlessRiskWager(cleared);
-        expect(accepted.endlessRiskWager).toEqual({
-            acceptedOnLevel: 1,
-            targetLevel: 2,
-            streakAtRisk: ENDLESS_RISK_WAGER_MIN_STREAK,
-            bonusFavorOnSuccess: ENDLESS_RISK_WAGER_BONUS_FAVOR
-        });
-        expect(canOfferEndlessRiskWager(accepted)).toBe(false);
-    });
 
 
 
-    it('wins a risk wager by completing the next featured objective and converts bonus favor', () => {
-        const base = createNewRun(0, { echoFeedbackEnabled: false });
-        const cleared: RunState = {
-            ...base,
-            status: 'levelComplete',
-            featuredObjectiveStreak: ENDLESS_RISK_WAGER_MIN_STREAK,
-            lastLevelResult: {
-                level: 1,
-                scoreGained: 100,
-                rating: 'S++',
-                livesRemaining: base.lives,
-                perfect: true,
-                mistakes: 0,
-                clearLifeReason: 'perfect',
-                clearLifeGained: 1,
-                featuredObjectiveId: 'flip_par',
-                featuredObjectiveCompleted: true,
-                featuredObjectiveStreak: ENDLESS_RISK_WAGER_MIN_STREAK,
-                relicFavorGained: 1
-            }
-        };
-        const wagered = acceptEndlessRiskWager(cleared);
-        const next = withoutTileTraits(finishMemorizePhase(advanceToNextLevel(wagered)));
 
-        const finished = clearRealPairs(next);
 
-        expect(finished.status).toBe('levelComplete');
-        expect(finished.endlessRiskWager).toBeNull();
-        expect(finished.lastLevelResult?.endlessRiskWagerOutcome).toBe('won');
-        expect(finished.lastLevelResult?.endlessRiskWagerFavorGained).toBe(ENDLESS_RISK_WAGER_BONUS_FAVOR);
-        expect(finished.lastLevelResult?.relicFavorGained).toBe(1 + ENDLESS_RISK_WAGER_BONUS_FAVOR);
-        expect(finished.bonusRelicPicksNextOffer).toBe(1);
-        expect(finished.favorBonusRelicPicksNextOffer).toBe(1);
-        expect(finished.relicFavorProgress).toBe(0);
-    });
-
-    it('wager_surety adds favor on won wagers and leaves x1 streak on wager failure', () => {
-        const base = createNewRun(0, { echoFeedbackEnabled: false, initialRelicIds: ['wager_surety'] });
-        const cleared: RunState = {
-            ...base,
-            status: 'levelComplete',
-            featuredObjectiveStreak: ENDLESS_RISK_WAGER_MIN_STREAK,
-            lastLevelResult: {
-                level: 1,
-                scoreGained: 100,
-                rating: 'S++',
-                livesRemaining: base.lives,
-                perfect: true,
-                mistakes: 0,
-                clearLifeReason: 'perfect',
-                clearLifeGained: 1,
-                featuredObjectiveId: 'flip_par',
-                featuredObjectiveCompleted: true,
-                featuredObjectiveStreak: ENDLESS_RISK_WAGER_MIN_STREAK,
-                relicFavorGained: 1
-            }
-        };
-        const wagered = acceptEndlessRiskWager(cleared);
-        const won = clearRealPairs(finishMemorizePhase(advanceToNextLevel(wagered)));
-        const lostStart: RunState = {
-            ...finishMemorizePhase(advanceToNextLevel(wagered)),
-            matchResolutionsThisFloor: 99
-        };
-        const lost = clearRealPairs(lostStart);
-
-        expect(won.lastLevelResult?.endlessRiskWagerOutcome).toBe('won');
-        expect(won.lastLevelResult?.endlessRiskWagerFavorGained).toBe(ENDLESS_RISK_WAGER_BONUS_FAVOR + 1);
-        expect(won.lastLevelResult?.relicFavorGained).toBe(1 + ENDLESS_RISK_WAGER_BONUS_FAVOR + 1);
-        expect(won.gameplayEventJournal).toEqual(expect.arrayContaining([
-            expect.objectContaining({ type: 'relic_favor.requested', reason: 'risk_wager_win', amount: 1 }),
-            expect.objectContaining({ type: 'feedback.requested', cue: 'build.wager_surety.wager_won' })
-        ]));
-        expect(lost.lastLevelResult?.endlessRiskWagerOutcome).toBe('lost');
-        expect(lost.featuredObjectiveStreak).toBe(1);
-        expect(lost.lastLevelResult?.endlessRiskWagerStreakLost).toBe(ENDLESS_RISK_WAGER_MIN_STREAK - 1);
-        expect(lost.gameplayEventJournal).toEqual(expect.arrayContaining([
-            expect.objectContaining({ type: 'featured_streak_floor.requested', reason: 'risk_wager_loss', amount: 1 }),
-            expect.objectContaining({ type: 'feedback.requested', cue: 'build.wager_surety.wager_lost' })
-        ]));
-    });
-
-    it('loses a risk wager by missing the next featured objective and resets the streak', () => {
-        const base = createNewRun(0, { echoFeedbackEnabled: false });
-        const cleared: RunState = {
-            ...base,
-            status: 'levelComplete',
-            featuredObjectiveStreak: ENDLESS_RISK_WAGER_MIN_STREAK,
-            lastLevelResult: {
-                level: 1,
-                scoreGained: 100,
-                rating: 'S++',
-                livesRemaining: base.lives,
-                perfect: true,
-                mistakes: 0,
-                clearLifeReason: 'perfect',
-                clearLifeGained: 1,
-                featuredObjectiveId: 'flip_par',
-                featuredObjectiveCompleted: true,
-                featuredObjectiveStreak: ENDLESS_RISK_WAGER_MIN_STREAK,
-                relicFavorGained: 1
-            }
-        };
-        const wagered = acceptEndlessRiskWager(cleared);
-        const next: RunState = {
-            ...finishMemorizePhase(advanceToNextLevel(wagered)),
-            matchResolutionsThisFloor: 99
-        };
-
-        const finished = clearRealPairs(next);
-
-        expect(finished.status).toBe('levelComplete');
-        expect(finished.endlessRiskWager).toBeNull();
-        expect(finished.featuredObjectiveStreak).toBe(0);
-        expect(finished.lastLevelResult?.featuredObjectiveCompleted).toBe(false);
-        expect(finished.lastLevelResult?.endlessRiskWagerOutcome).toBe('lost');
-        expect(finished.lastLevelResult?.endlessRiskWagerStreakLost).toBe(ENDLESS_RISK_WAGER_MIN_STREAK);
-        expect(finished.lastLevelResult?.endlessRiskWagerFavorGained).toBeUndefined();
-        expect(finished.lastLevelResult?.relicFavorGained).toBe(0);
-    });
 
     it('parasite_ledger reduces parasite progress only on featured-objective success', () => {
         const base = finishMemorizePhase(
@@ -4196,45 +4012,6 @@ describe('endless chapters and featured objectives', () => {
         ]));
     });
 
-    it('grants +2 favor on boss floors when the featured objective succeeds', () => {
-        const run = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false }));
-        const board: BoardState = {
-            level: 7,
-            pairCount: 2,
-            columns: 2,
-            rows: 3,
-            tiles: [
-                createTile('a1', 'A', 'A'),
-                createTile('a2', 'A', 'A'),
-                createTile('b1', 'B', 'B'),
-                createTile('b2', 'B', 'B'),
-                createTile('decoy', DECOY_PAIR_KEY, 'X')
-            ],
-            flippedTileIds: [],
-            matchedPairs: 0,
-            floorTag: 'boss',
-            cursedPairKey: null,
-            wardPairKey: null,
-            bountyPairKey: null,
-            floorArchetypeId: 'trap_hall',
-            featuredObjectiveId: 'glass_witness'
-        };
-        const bossRun: RunState = {
-            ...run,
-            board,
-            activeMutators: ['glass_floor', 'sticky_fingers'],
-            glassDecoyActiveThisFloor: true
-        };
-
-        const afterFirstMatch = resolveBoardTurn(flipTile(flipTile(bossRun, 'a1'), 'a2'));
-        const finished = resolveBoardTurn(flipTile(flipTile(afterFirstMatch, 'b1'), 'b2'));
-
-        expect(finished.status).toBe('levelComplete');
-        expect(finished.lastLevelResult?.featuredObjectiveId).toBe('glass_witness');
-        expect(finished.lastLevelResult?.featuredObjectiveCompleted).toBe(true);
-        expect(finished.lastLevelResult?.relicFavorGained).toBe(2);
-        expect(finished.relicFavorProgress).toBe(2);
-    });
 
     it('only generates cursedPairKey on cursed-last featured-objective floors', () => {
         const flipParBoard = buildBoard(1, {

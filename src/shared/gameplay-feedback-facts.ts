@@ -37,7 +37,6 @@ export interface GameplayFeedbackCriticalSnapshot {
     peekCharges: number;
     flashPairCharges: number;
     strayRemoveCharges: number;
-    relicFavorProgress: number;
     pinnedTileCount: number;
     objective: GameplayFeedbackObjectiveSnapshot | null;
     recallFocus: number;
@@ -73,7 +72,6 @@ export const GAMEPLAY_FEEDBACK_CRITICAL_FIELD_SOURCES = {
     peekCharges: 'peekCharges',
     flashPairCharges: 'flashPairCharges',
     strayRemoveCharges: 'strayRemoveCharges',
-    relicFavorProgress: 'relicFavorProgress',
     pinnedTileCount: 'pinnedTileIds',
     objective: 'objectiveCompleted',
     recallFocus: 'recallFocus',
@@ -146,7 +144,6 @@ export const getGameplayFeedbackCriticalSnapshot = (
         peekCharges: runNonNegativeInteger(run.peekCharges),
         flashPairCharges: runNonNegativeInteger(run.flashPairCharges),
         strayRemoveCharges: runNonNegativeInteger(run.strayRemoveCharges),
-        relicFavorProgress: runNonNegativeInteger(run.relicFavorProgress),
         pinnedTileCount: runArrayCount(run.pinnedTileIds),
         objective: getGameplayFeedbackObjectiveSnapshot(run),
         recallFocus: runNonNegativeInteger(run.recallFocus),

@@ -6,7 +6,6 @@ import {
     type RunState
 } from './contracts';
 import { getDungeonLevelResultTags } from './secondary-objectives';
-import { gainRelicFavor } from './relic-favor-rules';
 import { clearCurrentDungeonNode } from './run-map';
 import { getRunDungeonMapState } from './dungeon-run-state-rules';
 import { getDungeonBossTrophyCacheResult } from './dungeon-boss-clear-rules';
@@ -38,7 +37,6 @@ export interface FloorClearExecutionContext {
 
 export interface FloorClearSlayerInput {
     bossTrophyClaimed: boolean;
-    riskWagerOutcome: 'won' | 'lost' | undefined;
     featuredObjectiveCompleted: boolean;
     scoreParasiteActive: boolean;
 }
@@ -47,8 +45,6 @@ export interface FloorClearSlayerResult {
     commands: GameplayCommand[];
     events: GameplayEvent[];
     bossTrophyScoreGain: number;
-    riskWagerFavorGain: number;
-    riskWagerStreakFloor: number;
     parasiteRelief: number;
 }
 
@@ -88,17 +84,13 @@ export const createFinalizeLevelTransition = ({
             run,
             {
                 bossTrophyClaimed: legacyBossTrophyCache.outcome === 'claimed',
-                riskWagerOutcome: legacyFloorClearObjective.featuredObjectiveClear.endlessRiskWagerOutcome,
                 featuredObjectiveCompleted: legacyFloorClearObjective.featuredObjectiveCompleted,
                 scoreParasiteActive: hasMutator(run, 'score_parasite')
             },
             `floor-clear:${run.runSeed}:${board.level}`,
             execution
         );
-        const floorClearObjective = getFloorClearObjectiveResult(run, board, {
-            wagerSuretyFavorBonus: slayerFloorClear.riskWagerFavorGain,
-            wagerSuretyLossStreakFloor: slayerFloorClear.riskWagerStreakFloor
-        });
+        const floorClearObjective = getFloorClearObjectiveResult(run, board);
         const bonusTags: string[] = [...floorClearObjective.bonusTags];
         if (run.traitRouteObjectiveCompletedThisFloor) {
             bonusTags.push('trait_route_objective');
@@ -144,9 +136,6 @@ export const createFinalizeLevelTransition = ({
         // The floor's chain record: the deepest rung its longest chain reached, against this
         // floor's ladder. The run counts floors, not breaks, so a quest can ask for three floors.
         const floorChainTier = getChainTier(runNonNegativeInteger(run.bestChainThisFloor), board.pairCount);
-        const totalRelicFavorGained =
-            featuredObjectiveClear.relicFavorGained + featuredObjectiveClear.endlessRiskWagerFavorGained;
-        const relicFavor = gainRelicFavor(run, totalRelicFavorGained);
         /*
          * A cleared floor used to offer three doors here - Safe, Greed, Mystery - and the run
          * stopped on a screen until the player picked one. It does not any more: the next board is
@@ -177,9 +166,6 @@ export const createFinalizeLevelTransition = ({
             bonusTags,
             clearLifeGained,
             clearLifeReason,
-            endlessRiskWagerFavorGained: featuredObjectiveClear.endlessRiskWagerFavorGained,
-            endlessRiskWagerOutcome: featuredObjectiveClear.endlessRiskWagerOutcome,
-            endlessRiskWagerStreakLost: featuredObjectiveClear.endlessRiskWagerStreakLost,
             featuredObjectiveCompleted,
             featuredObjectiveId,
             featuredObjectiveStreak: featuredObjectiveClear.featuredObjectiveStreak,
@@ -191,7 +177,6 @@ export const createFinalizeLevelTransition = ({
             objectiveBonusScore: objectiveBonus,
             perfect,
             rating,
-            relicFavorGained: totalRelicFavorGained,
             routeChoices,
             run,
             scoreGained,
@@ -208,9 +193,6 @@ export const createFinalizeLevelTransition = ({
             ...journaledRun,
             status: 'levelComplete',
             lives,
-            bonusRelicPicksNextOffer: relicFavor.bonusRelicPicksNextOffer,
-            favorBonusRelicPicksNextOffer: relicFavor.favorBonusRelicPicksNextOffer,
-            relicFavorProgress: relicFavor.relicFavorProgress,
             /*
              * A cleared floor used to pay three to eight gold and stock a shop for it. There is no
              * shop and nothing to spend on (Gen 174), so the wallet is closed: nought in, nothing
@@ -220,7 +202,6 @@ export const createFinalizeLevelTransition = ({
             shopOffers: [],
             parasiteFloors,
             featuredObjectiveStreak: featuredObjectiveClear.featuredObjectiveStreak,
-            endlessRiskWager: featuredObjectiveClear.activeEndlessRiskWager ? null : run.endlessRiskWager,
             gauntletDeadlineMs:
                 run.gauntletDeadlineMs !== null
                     ? extendTimerTimestampMs(run.gauntletDeadlineMs, GAUNTLET_FLOOR_CLEAR_TIME_BONUS_MS)

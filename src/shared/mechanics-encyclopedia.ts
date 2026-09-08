@@ -351,21 +351,6 @@ export const ACHIEVEMENT_CATALOG: Record<AchievementId, AchievementCodexEntry> =
         title: 'Trait Scholar',
         description: 'Match five different tile traits in a single run.'
     },
-    ACH_RELIC_HOARD: {
-        id: 'ACH_RELIC_HOARD',
-        title: 'Relic Hoard',
-        description: 'Hold six relics at once in one run.'
-    },
-    ACH_STANDING_ORDERS: {
-        id: 'ACH_STANDING_ORDERS',
-        title: 'Standing Orders',
-        description: 'Hold three standing-rule relics at once in one run.'
-    },
-    ACH_RELIC_LIBRARY: {
-        id: 'ACH_RELIC_LIBRARY',
-        title: 'Relic Library',
-        description: 'Draft twelve different relics across all your runs.'
-    },
     ACH_NO_POWERS_TEN: {
         id: 'ACH_NO_POWERS_TEN',
         title: 'Bare Hands',

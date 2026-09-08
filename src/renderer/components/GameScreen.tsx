@@ -1,7 +1,6 @@
 import { ACHIEVEMENTS } from '../../shared/achievements';
 import {
     MAX_LIVES,
-    ENDLESS_RISK_WAGER_BONUS_FAVOR,
     MAX_PINNED_TILES,
     RECALL_FOCUS_MAX,
     type AchievementId,
@@ -16,7 +15,6 @@ import { formatLevelResultObjectiveLine } from '../../shared/secondary-objective
 import { runFilteredArray, runFilteredStringArray } from '../../shared/run-array-guards';
 import { runNonNegativeInteger } from '../../shared/run-number-guards';
 import {
-    canOfferEndlessRiskWager
 } from '../../shared/objective-rules';
 import { getTraitRouteObjectiveStatus } from '../../shared/trait-route-objectives';
 import {
@@ -83,7 +81,6 @@ import RunShell, { type RunShellTool } from './RunShell';
 import { RUN_SHELL_GLYPHS } from './runShellGlyphs';
 import MainMenuBackground from './MainMenuBackground';
 import FloorClearDialog, {
-    type FloorClearWager
 } from './FloorClearDialog';
 import OverlayModal, { type ModalAction } from './OverlayModal';
 import { useGameScreenBoardVisualSettings } from './gameScreenStoreSelectors';
@@ -396,7 +393,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         useShallow((state) => ({
             applyFlashPairPower: state.applyFlashPairPower,
             greetFloorResident: state.greetFloorResident,
-            acceptEndlessRiskWager: state.acceptEndlessRiskWager,
             activateDungeonExitFromPrompt: state.activateDungeonExitFromPrompt,
             closeDungeonExitPrompt: state.closeDungeonExitPrompt,
             continueToNextLevel: state.continueToNextLevel,
@@ -708,7 +704,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const {
         applyFlashPairPower,
         greetFloorResident,
-        acceptEndlessRiskWager,
         activateDungeonExitFromPrompt,
         closeDungeonExitPrompt,
         continueToNextLevel,
@@ -1006,40 +1001,8 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const clearLifeBonusLabel = run.lastLevelResult ? getClearLifeBonusLabel(run.lastLevelResult) : null;
     const endlessChapterActive =
         run.gameMode === 'endless' && usesEndlessFloorSchedule(run.gameMode, run.runRulesVersion);
-    const favorGained = runNonNegativeInteger(run.lastLevelResult?.relicFavorGained);
     const featuredObjectiveResultLine = run.lastLevelResult ? formatLevelResultObjectiveLine(run.lastLevelResult) : null;
-    const wagerSuretyActive = run.relicIds.includes('wager_surety');
-    const offeredRiskWagerFavor = ENDLESS_RISK_WAGER_BONUS_FAVOR + (wagerSuretyActive ? 1 : 0);
-    const endlessRiskWagerOutcomeLine =
-        run.lastLevelResult?.endlessRiskWagerOutcome === 'won'
-            ? `Risk wager won: +${runNonNegativeInteger(run.lastLevelResult.endlessRiskWagerFavorGained)} Favor`
-            : run.lastLevelResult?.endlessRiskWagerOutcome === 'lost'
-              ? `Risk wager lost: -${runNonNegativeInteger(run.lastLevelResult.endlessRiskWagerStreakLost)} streak`
-              : null;
-    const endlessRiskWagerOfferAvailable = canOfferEndlessRiskWager(run);
-    const acceptedEndlessRiskWager =
-        run.lastLevelResult && run.endlessRiskWager?.acceptedOnLevel === run.lastLevelResult.level
-            ? run.endlessRiskWager
-            : null;
-    const floorClearWager: FloorClearWager | null = acceptedEndlessRiskWager
-        ? {
-              armed: true,
-              bonusFavor: acceptedEndlessRiskWager.bonusFavorOnSuccess,
-              streakAtRisk: acceptedEndlessRiskWager.streakAtRisk,
-              suretyActive: wagerSuretyActive
-          }
-        : endlessRiskWagerOfferAvailable
-          ? {
-                armed: false,
-                bonusFavor: offeredRiskWagerFavor,
-                streakAtRisk: run.featuredObjectiveStreak,
-                suretyActive: wagerSuretyActive
-            }
-          : null;
-    const floorClearObjectiveLine =
-        [featuredObjectiveResultLine, favorGained > 0 ? `+${favorGained} Favor` : null, endlessRiskWagerOutcomeLine]
-            .filter((part): part is string => Boolean(part))
-            .join(' · ') || null;
+    const floorClearObjectiveLine = featuredObjectiveResultLine;
     const floorClearActions: ModalAction[] = [
         {
             label: 'Continue',
@@ -1987,14 +1950,9 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                         bestStreak={run.stats.bestStreak}
                         lifeBonusLine={clearLifeBonusLabel}
                         objectiveLine={floorClearObjectiveLine}
-                        onArmWager={() => {
-                            playUiClick();
-                            acceptEndlessRiskWager();
-                        }}
                         residentLine={nextFloorResidentLine}
                         result={run.lastLevelResult}
                         totalScore={run.stats.totalScore}
-                        wager={floorClearWager}
                     />
                 )}
 

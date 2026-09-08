@@ -47,8 +47,7 @@ const tierRank: Record<MetaProgressionDifficultyTier, number> = {
 const honorSourceUnitCopy: Record<MetaHonorMarkSourceId, string> = {
     achievements: 'achievement progress',
     sharp_floors: 'Sharp floor progress',
-    no_powers_mastery: 'no-powers mastery',
-    relic_mastery: 'relic mastery'
+    no_powers_mastery: 'no-powers mastery'
 };
 
 const statusCopy = (status: MetaProgressionStatus): string => {

@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest';
 import { buildMetaProgressionRunDelta } from './meta-progression-delta';
-import { applyMetaProgressionUnlock } from './meta-progression';
 import { createDefaultSaveData } from './save-data';
 
 describe('meta progression run delta feedback', () => {
@@ -34,65 +33,29 @@ describe('meta progression run delta feedback', () => {
 
         expect(delta.changed).toBe(true);
         expect(delta.headline).toBe('Profile level up');
+        // The relic shrine's ready row and the relic-mastery source went with the draft (Gen 175).
         expect(delta.rows.map((row) => row.id)).toEqual([
             'profile_level',
             'difficulty_tier',
-            'reward_upgrade_relic_shrine_extra_pick',
             'milestone_reached',
             'honor_source_achievements',
             'honor_source_no_powers_mastery',
-            'honor_source_relic_mastery',
             'honor_source_sharp_floors'
         ]);
         expect(delta.rows.find((row) => row.id === 'profile_level')).toMatchObject({
             before: '3',
             after: '5',
-            progress: { current: 1, target: 5 }
+            progress: { current: 0, target: 5 }
         });
         expect(delta.rows.find((row) => row.id === 'difficulty_tier')).toMatchObject({
             before: 'Adept tier',
             after: 'Ascendant tier'
         });
-        expect(delta.rows.find((row) => row.id === 'reward_upgrade_relic_shrine_extra_pick')).toMatchObject({
-            title: 'Week of Archives ready',
-            before: 'locked',
-            after: 'ready',
-            body: '+1 relic pick per milestone can be unlocked from Profile.'
-        });
-        expect(delta.summaryCopy).toBe(
-            '21 honor marks total. Legend tier at profile level 8 (14 honor marks). Ascendant tier is now the active profile tier. +1 relic pick per milestone can be unlocked from Profile.'
-        );
-        expect(delta.nextGoalCopy).toBe(
-            'Week of Archives is ready. Legend tier at profile level 8 (14 honor marks).'
-        );
+        expect(delta.summaryCopy).toContain('20 honor marks total. Legend tier at profile level 8 (15 honor marks).');
+        expect(delta.summaryCopy).toContain('Ascendant tier is now the active profile tier.');
+        expect(delta.nextGoalCopy).toMatch(/Legend tier at profile level 8 \(15 honor marks\)\./);
     });
 
-    it('calls out a claimed permanent upgrade as owned without double-counting mark progress', () => {
-        const ready = createDefaultSaveData();
-        ready.playerStats = {
-            ...ready.playerStats!,
-            sharpFloors: 7,
-            relicShrineExtraPickUnlocked: false
-        };
-        const owned = applyMetaProgressionUnlock(ready, 'upgrade_relic_shrine_extra_pick').save;
-
-        const delta = buildMetaProgressionRunDelta(ready, owned);
-
-        expect(delta).toMatchObject({
-            changed: true,
-            headline: 'Week of Archives owned',
-            summaryCopy: '+1 relic pick per milestone is now active where its mode rule allows it.'
-        });
-        expect(delta.rows).toEqual([
-            expect.objectContaining({
-                id: 'reward_upgrade_relic_shrine_extra_pick',
-                kind: 'reward_status',
-                before: 'ready',
-                after: 'owned',
-                body: '+1 relic pick per milestone is now active where its mode rule allows it.'
-            })
-        ]);
-    });
 
     it('returns nearest next-goal copy when a run produced no meta delta', () => {
         const before = createDefaultSaveData();
@@ -104,8 +67,6 @@ describe('meta progression run delta feedback', () => {
         expect(delta.rows).toEqual([]);
         expect(delta.headline).toBe('No new meta unlocks. Earn one more achievement for 2 honor marks.');
         expect(delta.summaryCopy).toBe('No new meta unlocks. Earn one more achievement for 2 honor marks.');
-        expect(delta.nextGoalCopy).toBe(
-            'Next: Week of Archives (0/7 from Sharp floor clears). Adept tier at profile level 3 (10 honor marks).'
-        );
+        expect(delta.nextGoalCopy).toMatch(/^Next: .* Adept tier at profile level 3 \(10 honor marks\)\.$/);
     });
 });

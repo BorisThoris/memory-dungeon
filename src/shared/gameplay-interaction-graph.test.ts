@@ -14,7 +14,6 @@ import {
     MEMORY_SCOUT_DEFINITIONS,
     LOCKSMITH_DEFINITIONS,
     SABOTEUR_DEFINITIONS,
-    SEER_DEFINITIONS,
     SLAYER_DEFINITIONS,
     SUPPLY_CACHE_DEFINITIONS,
     WARDEN_DEFINITIONS
@@ -370,7 +369,7 @@ describe('gameplay interaction graph', () => {
     });
 
 
-    it('connects Slayer preparation through boss, wager, Favor, and parasite consequences', () => {
+    it('connects Slayer preparation through boss and parasite consequences', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
         const sourceNodeByDefinition = new Map(SLAYER_DEFINITIONS.map((definition) => [
             definition.id,
@@ -386,52 +385,13 @@ describe('gameplay interaction graph', () => {
 
         expect(byId.get('build.boss_hunter')).toMatchObject({ kind: 'build', role: 'boss_objective_extraction_build' });
         expect(byId.get('reward.boss_trophy_cache')).toMatchObject({ kind: 'reward', role: 'boss_objective_score_consequence' });
-        expect(byId.get('economy.relic_favor')).toMatchObject({ kind: 'economy', role: 'objective_to_relic_selection_resource' });
         expect(byId.get('hazard.score_parasite')).toMatchObject({ kind: 'hazard', role: 'chapter_pressure_and_objective_counterplay' });
         expect(gameplayInteractionGraph.edges).toEqual(expect.arrayContaining([
             expect.objectContaining({ source: 'relic.chapter_compass', target: 'reward.boss_trophy_cache', kind: 'modifies' }),
-            expect.objectContaining({ source: 'relic.wager_surety', target: 'economy.relic_favor', kind: 'modifies' }),
-            expect.objectContaining({ source: 'relic.wager_surety', target: 'objective.featured_streak', kind: 'modifies' }),
             expect.objectContaining({ source: 'relic.parasite_ledger', target: 'hazard.score_parasite', kind: 'counterplay' }),
             expect.objectContaining({ source: 'objective.defeat_boss', target: 'reward.boss_trophy_cache', kind: 'triggers' }),
             expect.objectContaining({ source: 'safety.parasite_ward', target: 'hazard.score_parasite', kind: 'counterplay' }),
             expect.objectContaining({ source: 'build.boss_hunter', target: 'reward.boss_trophy_cache', kind: 'consequence' })
-        ]));
-    });
-
-    it('connects the Seer from secrets and Scout Glints through Pin, Peek, and safe correction decisions', () => {
-        const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
-        const sourceNodeByDefinition = new Map([
-            ['bonus_reward.secret_favor', 'reward.secret_favor'],
-            ['relic.stray_charge_plus_one', 'relic.stray_charge_plus_one'],
-            ['relic.pin_cap_plus_one', 'relic.pin_cap_plus_one'],
-            ['findable.scout_glint', 'findable.scout_glint']
-        ]);
-
-        for (const definition of SEER_DEFINITIONS) {
-            const nodeId = sourceNodeByDefinition.get(definition.id);
-            expect(nodeId, definition.id).toBeTruthy();
-            expect(byId.get(nodeId!), definition.id).toMatchObject({
-                tests: expect.arrayContaining(['src/shared/gameplay-core.test.ts'])
-            });
-        }
-
-        expect(byId.get('build.reveal_scout')).toMatchObject({ kind: 'build', role: 'information_control_build' });
-        expect(byId.get('inventory.stray_remove_charge')).toMatchObject({
-            kind: 'inventory',
-            role: 'bounded_board_control_resource'
-        });
-        expect(byId.get('power.pin')).toMatchObject({ kind: 'power', role: 'player_authored_memory_marker' });
-        expect(byId.get('power.stray_remove')).toMatchObject({ kind: 'power', role: 'completion_safe_board_control' });
-        expect(byId.get('board.scout_reveal')).toMatchObject({ kind: 'board', role: 'information_consequence' });
-        expect(gameplayInteractionGraph.edges).toEqual(expect.arrayContaining([
-            expect.objectContaining({ source: 'reward.secret_favor', target: 'inventory.peek_charge', kind: 'grants' }),
-            expect.objectContaining({ source: 'reward.secret_favor', target: 'economy.relic_favor', kind: 'grants' }),
-            expect.objectContaining({ source: 'relic.stray_charge_plus_one', target: 'inventory.stray_remove_charge', kind: 'grants' }),
-            expect.objectContaining({ source: 'relic.pin_cap_plus_one', target: 'power.pin', kind: 'modifies' }),
-            expect.objectContaining({ source: 'findable.scout_glint', target: 'board.scout_reveal', kind: 'triggers' }),
-            expect.objectContaining({ source: 'inventory.stray_remove_charge', target: 'power.stray_remove', kind: 'enables' }),
-            expect.objectContaining({ source: 'power.stray_remove', target: 'objective.floor_clear', kind: 'counterplay' })
         ]));
     });
 
@@ -450,17 +410,10 @@ describe('gameplay interaction graph', () => {
             kind: 'power',
             role: 'mismatch_rescue_with_failure_cost'
         });
-        expect(byId.get('objective.risk_wager')).toMatchObject({
-            kind: 'objective',
-            role: 'optional_streak_for_favor_commitment'
-        });
         expect(gameplayInteractionGraph.edges).toEqual(expect.arrayContaining([
             expect.objectContaining({ source: 'progression.run_flow', target: 'inventory.gambit_token', kind: 'grants' }),
             expect.objectContaining({ source: 'inventory.gambit_token', target: 'power.gambit', kind: 'enables' }),
             expect.objectContaining({ source: 'power.gambit', target: 'objective.floor_clear', kind: 'counterplay' }),
-            expect.objectContaining({ source: 'objective.featured_streak', target: 'objective.risk_wager', kind: 'gates' }),
-            expect.objectContaining({ source: 'objective.risk_wager', target: 'economy.relic_favor', kind: 'grants' }),
-            expect.objectContaining({ source: 'relic.wager_surety', target: 'objective.risk_wager', kind: 'counterplay' }),
             expect.objectContaining({ source: 'build.route_gambler', target: 'power.gambit', kind: 'consequence' })
         ]));
     });
@@ -667,7 +620,7 @@ describe('gameplay interaction graph', () => {
 
     it('connects Hazard Banish acquisition to its typed floor-start removal or Destroy fallback', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
-        expect(gameplayInteractionGraph.version).toBe(28);
+        expect(gameplayInteractionGraph.version).toBe(29);
         expect(byId.get('perk.hazard_banish_per_floor')).toMatchObject({
             kind: 'perk',
             role: 'durable_floor_start_hazard_or_destroy_conversion',
@@ -709,7 +662,7 @@ describe('gameplay interaction graph', () => {
 
     it('connects flat typed floor advancement through pressure, board preparation, feedback, persistence, and replay', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
-        expect(gameplayInteractionGraph.version).toBe(28);
+        expect(gameplayInteractionGraph.version).toBe(29);
         expect(byId.get('progression.run_flow')).toMatchObject({
             kind: 'progression',
             role: 'typed_flat_replayable_floor_transition',

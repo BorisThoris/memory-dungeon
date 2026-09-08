@@ -84,7 +84,6 @@ export const getVisualHudAnnouncementSignal = (
         normalized.includes('reward') ||
         normalized.includes('shop gold') ||
         normalized.includes('combo shard') ||
-        normalized.includes('favor') ||
         normalized.includes('cascade cache fired') ||
         normalized.includes('toll cache claimed') ||
         normalized.includes('fuse cache claimed late')
@@ -233,9 +232,6 @@ export const getVisualHudAnnouncementImpact = (
     }
     if (normalizedAnnouncement.includes('shop gold') || normalizedAnnouncement.includes('gold')) {
         pushUniqueDetail(details, { label: '+Gold', tone: 'reward' });
-    }
-    if (normalizedAnnouncement.includes('favor')) {
-        pushUniqueDetail(details, { label: '+Favor', tone: 'reward' });
     }
     if (normalizedAnnouncement.includes('life restored')) {
         pushUniqueDetail(details, { label: '+Life', tone: 'reward' });

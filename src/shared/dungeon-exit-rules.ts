@@ -7,7 +7,6 @@ import {
 import { addRunDungeonKey } from './dungeon-key-rules';
 import { clearDungeonCardFields } from './dungeon-enemy-card-rules';
 import { defeatEnemyHazardsForFloorClear } from './dungeon-enemy-hazard-rules';
-import { gainRelicFavor } from './relic-favor-rules';
 import { decrementRunCounter, runNonNegativeInteger } from './run-number-guards';
 import { normalizeSessionStats } from './session-stats-rules';
 import {
@@ -123,7 +122,6 @@ export const applyDungeonExitObjectiveReward = (
     const rewarded =
         (objective.completed || (objective.objectiveId === 'claim_route' && status.routeType != null)) &&
         objective.objectiveId !== 'find_exit';
-    const favor = gainRelicFavor(run, rewarded ? DUNGEON_OBJECTIVE_FAVOR_REWARD : 0);
     const stats = normalizeSessionStats(run.stats);
     const totalScore = stats.totalScore + DUNGEON_OBJECTIVE_SCORE_REWARD;
 
@@ -138,10 +136,7 @@ export const applyDungeonExitObjectiveReward = (
                       currentLevelScore: stats.currentLevelScore + DUNGEON_OBJECTIVE_SCORE_REWARD,
                       bestScore: Math.max(stats.bestScore, totalScore)
                   }
-                : run.stats,
-            bonusRelicPicksNextOffer: favor.bonusRelicPicksNextOffer,
-            favorBonusRelicPicksNextOffer: favor.favorBonusRelicPicksNextOffer,
-            relicFavorProgress: favor.relicFavorProgress
+                : run.stats
         }
     };
 };

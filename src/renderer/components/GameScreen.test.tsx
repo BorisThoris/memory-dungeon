@@ -396,7 +396,6 @@ describe('GameScreen (OVR-014)', () => {
         expect(screen.getByTestId('floor-clear-score')).toHaveTextContent('+0');
         expect(screen.getByTestId('floor-clear-stats')).toHaveTextContent(/Misses\s*0/);
         expect(screen.getByTestId('floor-clear-notes')).toHaveTextContent('Flip par: Complete');
-        expect(screen.getByTestId('floor-clear-notes')).toHaveTextContent('Risk wager lost: -0 streak');
     });
 
     it('queues a polite next-tool announcement when a swap can create a trait route', async () => {
@@ -1639,7 +1638,7 @@ describe('GameScreen (OVR-014)', () => {
 
 
 
-    it('shows featured objective result, favor gain, and next-floor preview on endless floor clear', () => {
+    it('shows featured objective result and next-floor preview on endless floor clear', () => {
         const baseRun = createNewRun(0, { echoFeedbackEnabled: false });
         const run: RunState = {
             ...baseRun,
@@ -1757,7 +1756,6 @@ describe('GameScreen (OVR-014)', () => {
         const notes = screen.getByTestId('floor-clear-notes');
         expect(notes).toHaveTextContent('Perfect floor bonus: +1 Life');
         expect(notes).toHaveTextContent('Flip par: Complete (+30 score)');
-        expect(notes).toHaveTextContent('+1 Favor');
         // No route is offered between floors any more (Gen 173): the doors are gone from the
         // screen, and the floor clear goes straight on.
         expect(screen.queryByTestId('route-choice-panel')).toBeNull();
@@ -2011,173 +2009,5 @@ describe('GameScreen (OVR-014)', () => {
         expect(screen.getByRole('button', { name: 'Stay' })).toBeEnabled();
     });
 
-    it('shows and arms an endless risk wager when the cleared streak is eligible', () => {
-        const baseRun = createNewRun(0, { echoFeedbackEnabled: false });
-        const run: RunState = {
-            ...baseRun,
-            status: 'levelComplete',
-            relicOffer: null,
-            featuredObjectiveStreak: 2,
-            lastLevelResult: {
-                level: 1,
-                scoreGained: 120,
-                rating: 'S++',
-                livesRemaining: 5,
-                perfect: true,
-                mistakes: 0,
-                clearLifeReason: 'perfect',
-                clearLifeGained: 1,
-                featuredObjectiveId: 'flip_par',
-                featuredObjectiveCompleted: true,
-                relicFavorGained: 1,
-                featuredObjectiveStreak: 2,
-                objectiveBonusScore: 30,
-                bonusTags: ['flip_par', 'objective_streak']
-            }
-        };
-        act(() => {
-            useAppStore.setState({ run });
-        });
 
-        const { getByTestId, getByRole } = render(
-            <PlatformTiltProvider>
-                <NotificationHost>
-                    <GameScreen achievements={[]} run={run} />
-                </NotificationHost>
-            </PlatformTiltProvider>
-        );
-
-        expect(getByTestId('endless-risk-wager-panel')).toHaveAttribute('data-armed', 'false');
-        expect(getByTestId('endless-risk-wager-panel')).toHaveTextContent(
-            'Stake your x2 objective streak on the next floor for +2 Favor.'
-        );
-        fireEvent.click(
-            getByRole('button', {
-                name: /Arm wager\. Stake: x2 streak\. Payoff: \+2 Favor\. Trigger: Next objective.*miss it and the streak breaks/i
-            })
-        );
-        expect(useAppStore.getState().run?.endlessRiskWager).toEqual({
-            acceptedOnLevel: 1,
-            targetLevel: 2,
-            streakAtRisk: 2,
-            bonusFavorOnSuccess: 2
-        });
-    });
-
-    it('shows armed and resolved endless risk wager copy', () => {
-        // Each rerender is the next floor clearing, and a cleared floor holds for a beat before its
-        // dialog; advance past it after each one.
-        vi.useFakeTimers();
-        const pastTheBeat = () => act(() => vi.advanceTimersByTime(LAST_PAIR_HOLD_MS + 10));
-        const baseRun = createNewRun(0, { echoFeedbackEnabled: false });
-        const armedRun: RunState = {
-            ...baseRun,
-            status: 'levelComplete',
-            relicOffer: null,
-            featuredObjectiveStreak: 2,
-            endlessRiskWager: {
-                acceptedOnLevel: 1,
-                targetLevel: 2,
-                streakAtRisk: 2,
-                bonusFavorOnSuccess: 2
-            },
-            lastLevelResult: {
-                level: 1,
-                scoreGained: 120,
-                rating: 'S++',
-                livesRemaining: 5,
-                perfect: true,
-                mistakes: 0,
-                clearLifeReason: 'perfect',
-                clearLifeGained: 1,
-                featuredObjectiveId: 'flip_par',
-                featuredObjectiveCompleted: true,
-                relicFavorGained: 1,
-                featuredObjectiveStreak: 2
-            }
-        };
-        const resolvedRun: RunState = {
-            ...baseRun,
-            status: 'levelComplete',
-            relicOffer: null,
-            featuredObjectiveStreak: 3,
-            lastLevelResult: {
-                level: 2,
-                scoreGained: 160,
-                rating: 'S++',
-                livesRemaining: 5,
-                perfect: true,
-                mistakes: 0,
-                clearLifeReason: 'perfect',
-                clearLifeGained: 1,
-                featuredObjectiveId: 'flip_par',
-                featuredObjectiveCompleted: true,
-                relicFavorGained: 3,
-                featuredObjectiveStreak: 3,
-                endlessRiskWagerOutcome: 'won',
-                endlessRiskWagerFavorGained: 2
-            }
-        };
-        const lostRun: RunState = {
-            ...baseRun,
-            status: 'levelComplete',
-            relicOffer: null,
-            featuredObjectiveStreak: 1,
-            lastLevelResult: {
-                level: 3,
-                scoreGained: 80,
-                rating: 'B',
-                livesRemaining: 4,
-                perfect: false,
-                mistakes: 1,
-                clearLifeReason: 'none',
-                clearLifeGained: 0,
-                featuredObjectiveId: 'flip_par',
-                featuredObjectiveCompleted: false,
-                relicFavorGained: 0,
-                featuredObjectiveStreak: 1,
-                endlessRiskWagerOutcome: 'lost',
-                endlessRiskWagerStreakLost: 2
-            }
-        };
-
-        const { rerender } = render(
-            <PlatformTiltProvider>
-                <NotificationHost>
-                    <GameScreen achievements={[]} run={armedRun} />
-                </NotificationHost>
-            </PlatformTiltProvider>
-        );
-
-        expect(screen.getByTestId('endless-risk-wager-panel')).toHaveAttribute('data-armed', 'true');
-        expect(screen.getByTestId('endless-risk-wager-panel')).toHaveTextContent(
-            'Risk wager armed. The next objective pays +2 Favor; a miss breaks the x2 streak.'
-        );
-        expect(screen.queryByRole('button', { name: /arm wager/i })).toBeNull();
-
-        rerender(
-            <PlatformTiltProvider>
-                <NotificationHost>
-                    <GameScreen achievements={[]} run={resolvedRun} />
-                </NotificationHost>
-            </PlatformTiltProvider>
-        );
-
-        pastTheBeat();
-        expect(screen.getByTestId('floor-clear-notes')).toHaveTextContent('Risk wager won: +2 Favor');
-        expect(screen.getByTestId('floor-clear-notes')).toHaveTextContent('+3 Favor');
-
-        rerender(
-            <PlatformTiltProvider>
-                <NotificationHost>
-                    <GameScreen achievements={[]} run={lostRun} />
-                </NotificationHost>
-            </PlatformTiltProvider>
-        );
-
-        pastTheBeat();
-        expect(screen.getByTestId('floor-clear-notes')).toHaveTextContent('Flip par: Missed');
-        expect(screen.getByTestId('floor-clear-notes')).toHaveTextContent('Risk wager lost: -2 streak');
-        vi.useRealTimers();
-    });
 });

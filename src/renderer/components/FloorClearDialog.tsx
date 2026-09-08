@@ -7,17 +7,10 @@ import { FLOOR_CLEAR_CHAIN_COPY } from '../copy/floorClearChain';
 
 /**
  * Floor cleared. One dialog that says three things: what the floor paid, how it went, and (on
- * endless floors) whether the player wants to stake the objective streak. Nothing else lives
- * here; coaching, causality and momentum strips were deleted, and the three doors went with the
- * route offer (Gen 173; the wiring in Gen 174).
+ * endless floors) the objective outcome. Nothing else lives here; coaching, causality and momentum
+ * strips were deleted, the three doors went with the route offer (Gen 173; the wiring in Gen
+ * 174), and the risk wager went with the Favor it paid (Gen 175).
  */
-
-export interface FloorClearWager {
-    armed: boolean;
-    bonusFavor: number;
-    streakAtRisk: number;
-    suretyActive: boolean;
-}
 
 export interface FloorClearDialogProps {
     result: LevelResult;
@@ -32,8 +25,6 @@ export interface FloorClearDialogProps {
      * run's own seed, so this is a promise the floor advance keeps rather than flavour text.
      */
     residentLine: string | null;
-    wager: FloorClearWager | null;
-    onArmWager: () => void;
     actions: ModalAction[];
 }
 
@@ -44,24 +35,15 @@ const FloorClearDialog = ({
     bestStreak,
     lifeBonusLine,
     objectiveLine,
-    onArmWager,
     residentLine,
     result,
-    totalScore,
-    wager
+    totalScore
 }: FloorClearDialogProps) => {
     const level = runNonNegativeInteger(result.level);
     const scoreGained = runNonNegativeInteger(result.scoreGained);
     const mistakes = runNonNegativeInteger(result.mistakes);
     const lives = runNonNegativeInteger(result.livesRemaining);
     const chainLine = FLOOR_CLEAR_CHAIN_COPY.recapLine(result);
-    const streakLine = wager
-        ? wager.armed
-            ? `Risk wager armed. The next objective pays +${wager.bonusFavor} Favor; a miss ${
-                  wager.suretyActive ? 'drops' : 'breaks'
-              } the x${wager.streakAtRisk} streak.`
-            : `Stake your x${wager.streakAtRisk} objective streak on the next floor for +${wager.bonusFavor} Favor.`
-        : null;
 
     return (
         <OverlayModal
@@ -121,23 +103,6 @@ const FloorClearDialog = ({
                 ) : null}
 
 
-                {wager && streakLine ? (
-                    <div className={styles.wager} data-armed={wager.armed ? 'true' : 'false'} data-testid="endless-risk-wager-panel">
-                        <span className={styles.wagerLine}>{streakLine}</span>
-                        {wager.armed ? null : (
-                            <button
-                                aria-label={`Arm wager. Stake: x${wager.streakAtRisk} streak. Payoff: +${wager.bonusFavor} Favor. Trigger: Next objective; miss it and the streak ${
-                                    wager.suretyActive ? 'falls to x1' : 'breaks'
-                                }.`}
-                                className={styles.wagerButton}
-                                onClick={onArmWager}
-                                type="button"
-                            >
-                                Arm wager
-                            </button>
-                        )}
-                    </div>
-                ) : null}
             </div>
         </OverlayModal>
     );

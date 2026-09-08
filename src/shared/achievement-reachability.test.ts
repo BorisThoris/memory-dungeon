@@ -4,7 +4,6 @@ import { CHAIN_REACTION_WAVES, CHUNK_SIX_PAIRS, evaluateAchievementUnlocks } fro
 import { resolveChunkBreak } from './chunk-break-rules';
 import { createPlayablePathFixture } from './playable-path-fixtures';
 import { ENDLESS_CYCLE_FLOOR_COUNT } from './floor-mutator-schedule';
-import { MAX_RELIC_PICKS_PER_RUN, RELIC_POOL, STANDING_RULE_RELIC_IDS } from './relics';
 import { createNewRun } from './run-creation-rules';
 import { ACHIEVEMENT_IDS, createDefaultSaveData } from './save-data';
 import { makeBoard, makeTile } from './test/game-fixtures';
@@ -20,34 +19,7 @@ import { makeBoard, makeTile } from './test/game-fixtures';
  */
 describe('achievement thresholds against real content', () => {
 
-    it('never asks for more distinct relics than the pool holds', () => {
-        const save = createDefaultSaveData();
-        const everyRelicDrafted = {
-            ...save,
-            playerStats: {
-                ...save.playerStats!,
-                relicPickCounts: Object.fromEntries(RELIC_POOL.map((id) => [id, 1]))
-            }
-        };
-        expect(evaluateAchievementUnlocks(createNewRun(0), everyRelicDrafted)).toContain('ACH_RELIC_LIBRARY');
-    });
 
-    it('never asks for more relics in one run than a run can grant', () => {
-        // Relic count and standing-rule count both have to fit inside the per-run pick cap.
-        const held = RELIC_POOL.slice(0, MAX_RELIC_PICKS_PER_RUN);
-        const standingHeld = [...STANDING_RULE_RELIC_IDS].slice(0, MAX_RELIC_PICKS_PER_RUN);
-        const unlocked = evaluateAchievementUnlocks(
-            { ...createNewRun(0), relicIds: held } as ReturnType<typeof createNewRun>,
-            createDefaultSaveData()
-        );
-        expect(unlocked).toContain('ACH_RELIC_HOARD');
-        expect(
-            evaluateAchievementUnlocks(
-                { ...createNewRun(0), relicIds: standingHeld } as ReturnType<typeof createNewRun>,
-                createDefaultSaveData()
-            )
-        ).toContain('ACH_STANDING_ORDERS');
-    });
 
     it('keeps the Endless depth marks inside what a cycle can reach', () => {
         // The cycle repeats, so any floor number is reachable; the check is that the cheaper mark
@@ -72,7 +44,7 @@ describe('achievement thresholds against real content', () => {
         // reachable — and that removing what earns one means removing the id, which is why the
         // four mode-tied marks went with their modes (docs/REMOVED_MODES.md).
         const known: AchievementId[] = [...ACHIEVEMENT_IDS];
-        expect(known).toHaveLength(22);
+        expect(known).toHaveLength(19);
         expect(GAME_RULES_VERSION).toBeGreaterThan(0);
     });
 });

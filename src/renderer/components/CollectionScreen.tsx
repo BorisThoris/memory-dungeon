@@ -3,9 +3,8 @@ import { useShallow } from 'zustand/react/shallow';
 import { ACHIEVEMENT_BY_ID } from '../../shared/achievements';
 import { getCosmeticCollectionRows } from '../../shared/cosmetics';
 import { HONOR_UNLOCK_CATALOG, HONOR_UNLOCK_ORDER, hasHonorUnlock } from '../../shared/honorUnlocks';
-import { RELIC_CATALOG } from '../../shared/game-catalog';
 import { getMetaHonorMarks, getPermanentUpgradeRows } from '../../shared/meta-progression';
-import { ACHIEVEMENT_IDS, getRelicPickCountRows } from '../../shared/save-data';
+import { ACHIEVEMENT_IDS } from '../../shared/save-data';
 import { playUiBackSfx, playUiClickSfx, resumeUiSfxContext, uiSfxGainFromSettings } from '../audio/uiSfx';
 import { FittedGrid, MetaShell, SectionRail } from '../ui';
 import { collectionStorageNote } from '../copy/collectionStorageNote';
@@ -13,12 +12,12 @@ import { useAppStore } from '../store/useAppStore';
 import styles from './CollectionScreen.module.css';
 
 /**
- * Collection. One section rail over one fitted grid: achievements, honors, relics, cosmetics,
+ * Collection. One section rail over one fitted grid: achievements, honors, cosmetics,
  * upgrades. Each card states what it is, whether it is earned, and what earns it. The reward
  * signal, gallery, payoff burst, lane-map and impact strips restated the same rows and are gone.
  */
 
-type CollectionSectionId = 'achievements' | 'honors' | 'relics' | 'cosmetics' | 'upgrades';
+type CollectionSectionId = 'achievements' | 'honors' | 'cosmetics' | 'upgrades';
 
 interface CollectionEntry {
     id: string;
@@ -69,17 +68,6 @@ const CollectionScreen = () => {
             return { id, title: def.title, detail: def.description, status: earned ? 'Earned' : 'Locked', earned };
         });
 
-        const relics: CollectionEntry[] = getRelicPickCountRows(saveData.playerStats?.relicPickCounts).map((row) => {
-            const def = RELIC_CATALOG[row.id];
-            return {
-                id: row.id,
-                title: def?.title ?? row.id,
-                detail: def?.description ?? '',
-                status: row.count > 0 ? `${row.count} ${row.count === 1 ? 'pick' : 'picks'}` : 'Never drafted',
-                earned: row.count > 0
-            };
-        });
-
         const cosmetics: CollectionEntry[] = getCosmeticCollectionRows(saveData).map((row) => ({
             id: row.id,
             title: row.title ?? row.label,
@@ -102,7 +90,6 @@ const CollectionScreen = () => {
         return [
             { id: 'achievements', label: 'Achievements', kicker: 'Achievement', entries: achievements, earnedCount: achievements.filter((row) => row.earned).length },
             { id: 'honors', label: 'Honors', kicker: 'Honor', entries: honors, earnedCount: honors.filter((row) => row.earned).length },
-            { id: 'relics', label: 'Relics', kicker: 'Relic', entries: relics, earnedCount: relics.filter((row) => row.earned).length },
             { id: 'cosmetics', label: 'Cosmetics', kicker: 'Cosmetic', entries: cosmetics, earnedCount: cosmetics.filter((row) => row.earned).length },
             { id: 'upgrades', label: 'Upgrades', kicker: 'Permanent upgrade', entries: upgrades, earnedCount: upgrades.filter((row) => row.earned).length }
         ];

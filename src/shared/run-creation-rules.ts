@@ -52,8 +52,6 @@ export interface CreateRunOptions {
     dungeonShowcaseRun?: boolean;
     /** First-run guidance: build floor 1 as ordinary real pairs so prompts never target specials. */
     onboardingSafeFirstFloor?: boolean;
-    /** Copied from save: +1 relic pick at each milestone when meta unlock is active. */
-    metaRelicDraftExtraPerMilestone?: number;
     /** Seats for a same-device multiplayer run; omitted for every solo run. */
     passAndPlaySeats?: number | null;
 }
@@ -152,7 +150,7 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
         traitRouteObjectiveRewardClaimedThisFloor: false,
         traitRouteObjectiveRewardTextThisFloor: null,
         traitRouteObjectiveTriggeredTagsThisFloor: [],
-        metaRelicDraftExtraPerMilestone: options.metaRelicDraftExtraPerMilestone ?? 0,
+        metaRelicDraftExtraPerMilestone: 0,
         relicOffer: null,
         activeContract: options.activeContract ?? null,
         practiceMode: options.practiceMode ?? false,

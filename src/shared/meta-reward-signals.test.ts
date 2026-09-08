@@ -68,14 +68,9 @@ describe('REG-011 meta reward signals', () => {
         save.playerStats = { ...save.playerStats!, sharpFloors: 7 };
 
         const rows = getMetaProgressionRunImpactRows(save);
-        expect(rows[0]).toMatchObject({
-            id: 'upgrade_relic_shrine_extra_pick',
-            lane: 'Relic draft',
-            impact: '+1 pick when unlocked',
-            boardMoment: 'More relic choice at milestone floors',
-            nextAction: 'Claim now',
-            tone: 'ready'
-        });
+        // The relic shrine's extra pick led this list until the draft went (Gen 175).
+        expect(rows.some((row) => row.id === 'upgrade_relic_shrine_extra_pick')).toBe(false);
+        expect(rows[0]).toMatchObject({ id: 'upgrade_scholar_prep_slot', lane: 'Run setup' });
         expect(rows.some((row) => row.tone === 'deferred')).toBe(true);
         expect(rows.some((row) => row.tone === 'cosmetic')).toBe(true);
     });

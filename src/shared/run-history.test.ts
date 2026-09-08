@@ -157,7 +157,6 @@ describe('REG-085 run history, share keys, and journal', () => {
 
         expect(rows.find((row) => row.id === 'dungeon_rewards')?.value).toBe('0 treasures, 0 keys, 0 shop gold');
         expect(rows.find((row) => row.id === 'dungeon_rewards')?.detail).toContain('0 relics carried');
-        expect(rows.find((row) => row.id === 'dungeon_rewards')?.detail).toContain('1 bonus relic picks banked');
         expect(rows.find((row) => row.id === 'dungeon_objective')?.detail).toContain('0 traps resolved this floor; 0 gateways used this run.');
         expect(rows.find((row) => row.id === 'dungeon_outcome')?.detail).toContain('0 enemy hazard hits this floor; 0 best streak.');
         expect(exportText).not.toMatch(/NaN|Infinity/);

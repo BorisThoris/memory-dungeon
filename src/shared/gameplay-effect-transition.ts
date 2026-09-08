@@ -14,7 +14,6 @@ import {
     getRunInventoryItemQuantity,
     useRunInventoryItem
 } from './run-inventory';
-import { gainRelicFavor } from './relic-favor-rules';
 import { runNonNegativeInteger } from './run-number-guards';
 import { normalizeSessionStats } from './session-stats-rules';
 
@@ -301,20 +300,22 @@ export const applyGameplayDefinitionTransition = (
                 break;
             }
             case 'relic_favor.grant': {
-                const progressBefore = runNonNegativeInteger(nextRun.relicFavorProgress);
-                const bonusPicksBefore = runNonNegativeInteger(nextRun.bonusRelicPicksNextOffer);
-                const favorBonusPicksBefore = runNonNegativeInteger(nextRun.favorBonusRelicPicksNextOffer);
-                const favor = gainRelicFavor(nextRun, effect.amount);
-                nextRun = { ...nextRun, ...favor };
+                /*
+                 * Favor banked picks for a relic draft that no longer opens (Gen 175). The grant
+                 * is recorded so an old journal still replays, and it moves nothing.
+                 */
+                const progress = runNonNegativeInteger(nextRun.relicFavorProgress);
+                const bonusPicks = runNonNegativeInteger(nextRun.bonusRelicPicksNextOffer);
+                const favorBonusPicks = runNonNegativeInteger(nextRun.favorBonusRelicPicksNextOffer);
                 writeEvent({
                     type: 'relic_favor.changed',
                     requested: effect.amount,
-                    progressBefore,
-                    progressAfter: favor.relicFavorProgress,
-                    bonusPicksBefore,
-                    bonusPicksAfter: favor.bonusRelicPicksNextOffer,
-                    favorBonusPicksBefore,
-                    favorBonusPicksAfter: favor.favorBonusRelicPicksNextOffer
+                    progressBefore: progress,
+                    progressAfter: progress,
+                    bonusPicksBefore: bonusPicks,
+                    bonusPicksAfter: bonusPicks,
+                    favorBonusPicksBefore: favorBonusPicks,
+                    favorBonusPicksAfter: favorBonusPicks
                 });
                 break;
             }

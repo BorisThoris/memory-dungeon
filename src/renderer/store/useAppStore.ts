@@ -71,7 +71,6 @@ import {
     executeContinueToNextLevel
 } from './levelCompleteContinuationExecutor';
 import { createMenuSurfacePatch } from './menuSurfaceState';
-import { createRiskWagerSurfaceResult } from './riskWagerSurfaceState';
 import { projectGameplayFeedback } from './gameplayFeedbackAdapter';
 import {
     playDestroyPairSfx,
@@ -82,7 +81,6 @@ import {
     playResolveSfx,
     playStrayPowerSfx,
     playTrapSfx,
-    playWagerArmSfx,
     resumeAudioContext,
     sfxGainFromSettings
 } from '../audio/gameSfx';
@@ -702,19 +700,6 @@ export const useAppStore = create<AppState>((set, get) => ({
             resumeUiSfxContext,
             setState: set
         });
-    },
-
-    acceptEndlessRiskWager: () => {
-        const result = createRiskWagerSurfaceResult(get().run);
-        if (result.kind === 'ignored') {
-            return;
-        }
-
-        if (projectGameplayFeedback(result.events).some((feedback) => feedback.audioCategory === 'wager')) {
-            void resumeAudioContext();
-            playWagerArmSfx(sfxGainFromStore());
-        }
-        set(result.patch);
     },
 
     continueToNextLevel: () => {

@@ -123,10 +123,6 @@ export {
     tilesArePairMatch
 } from './scoring-rules';
 export {
-    acceptEndlessRiskWager,
-    canOfferEndlessRiskWager
-} from './risk-wager-rules';
-export {
     buildBoard,
     type BuildBoardOptions
 } from './board-build-rules';

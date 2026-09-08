@@ -10,7 +10,6 @@ import {
 } from './cosmetics';
 import { countEligibleHonors } from './honorUnlocks';
 import { runNonNegativeInteger } from './run-number-guards';
-import { getRelicPickTotal, normalizeSaveData } from './save-data';
 
 export type MetaProgressionTrack = 'permanent_upgrade' | 'cosmetic';
 export type MetaProgressionStatus = 'owned' | 'available' | 'locked';
@@ -37,7 +36,7 @@ export interface MetaProgressionRow {
 }
 
 export interface PermanentUpgradeRow {
-    id: 'relic_shrine_extra_pick' | 'ascendant_title_track' | 'sharp_cosmetic_track';
+    id: 'ascendant_title_track' | 'sharp_cosmetic_track';
     title: string;
     status: LegacyMetaProgressionStatus;
     offlineOnly: true;
@@ -47,7 +46,7 @@ export interface PermanentUpgradeRow {
 }
 
 export interface CosmeticTrackRow {
-    trackId: 'starter' | 'sharp' | 'mastery' | 'relic';
+    trackId: 'starter' | 'sharp' | 'mastery';
     cosmeticId: CosmeticId;
     label: string;
     status: LegacyMetaProgressionStatus;
@@ -66,7 +65,7 @@ export interface MetaProgressionSummary {
     cosmeticOwned: number;
 }
 
-export type MetaHonorMarkSourceId = 'achievements' | 'sharp_floors' | 'no_powers_mastery' | 'relic_mastery';
+export type MetaHonorMarkSourceId = 'achievements' | 'sharp_floors' | 'no_powers_mastery';
 
 export interface MetaHonorMarkSourceRow {
     id: MetaHonorMarkSourceId;
@@ -152,8 +151,6 @@ export const getMetaHonorMarkSourceRows = (save: SaveData): MetaHonorMarkSourceR
     const achievementProgress = getAchievementProgressSummary(save.achievements);
     const sharpFloors = Math.min(7, runNonNegativeInteger(save.playerStats?.sharpFloors));
     const noPowers = Math.min(5, runNonNegativeInteger(save.playerStats?.bestFloorNoPowers));
-    const relics = Math.min(10, getRelicPickTotal(save.playerStats?.relicPickCounts));
-    const relicsToNextMark = relics >= 10 ? null : relics % 2 === 0 ? 2 : 1;
     return [
         {
             id: 'achievements',
@@ -181,18 +178,6 @@ export const getMetaHonorMarkSourceRows = (save: SaveData): MetaHonorMarkSourceR
             progress: { current: noPowers, target: 5 },
             nextMarkCopy: noPowers < 5 ? 'Raise your best no-powers floor by 1 for 1 honor mark.' : null,
             nextMarkUnitsRemaining: noPowers < 5 ? 1 : null
-        },
-        {
-            id: 'relic_mastery',
-            label: 'Relic mastery',
-            marks: Math.floor(relics / 2),
-            cap: 5,
-            progress: { current: relics, target: 10 },
-            nextMarkCopy:
-                relicsToNextMark === null
-                    ? null
-                    : `Pick ${relicsToNextMark} more relic${relicsToNextMark === 1 ? '' : 's'} for 1 honor mark.`,
-            nextMarkUnitsRemaining: relicsToNextMark
         }
     ];
 };
@@ -223,25 +208,8 @@ const lockedStatusForProgress = (current: number, target: number, owned: boolean
     enabled ? statusForProgress(current, target, owned) : owned ? 'owned' : 'locked';
 
 export const getPermanentUpgradeRows = (save: SaveData): MetaProgressionRow[] => {
-    const sharpFloors = runNonNegativeInteger(save.playerStats?.sharpFloors);
     const bestNoPowers = runNonNegativeInteger(save.playerStats?.bestFloorNoPowers);
     return [
-        {
-            id: 'upgrade_relic_shrine_extra_pick',
-            track: 'permanent_upgrade',
-            title: 'Week of Archives',
-            description: 'Permanent local upgrade: +1 relic selection at each milestone shrine.',
-            status: statusForProgress(sharpFloors, 7, save.playerStats?.relicShrineExtraPickUnlocked === true),
-            progress: { current: Math.min(sharpFloors, 7), target: 7 },
-            reward: '+1 relic pick per milestone',
-            currencyId: 'honor_marks',
-            cost: 7,
-            gameplayAffecting: true,
-            localOnly: true,
-            gate: 'Clear seven floors whose chain reached Sharp. No online account required.',
-            source: 'Sharp floor clears',
-            modeRule: 'visible_in_classic'
-        },
         {
             id: 'upgrade_scholar_prep_slot',
             track: 'permanent_upgrade',
@@ -365,23 +333,6 @@ export const applyMetaProgressionUnlock = (save: SaveData, rowId: string): MetaP
             applied: false,
             reason: 'locked',
             feedbackCopy: `${row.title} needs ${row.progress.target - row.progress.current} more from ${row.source}.`
-        };
-    }
-
-    if (row.id === 'upgrade_relic_shrine_extra_pick') {
-        const nextSave = normalizeSaveData({
-            ...save,
-            playerStats: {
-                ...save.playerStats!,
-                relicShrineExtraPickUnlocked: true
-            }
-        });
-        return {
-            save: nextSave,
-            row: { ...row, status: 'owned' },
-            applied: true,
-            reason: 'applied',
-            feedbackCopy: `${row.title} unlocked: ${row.reward}.`
         };
     }
 
@@ -519,15 +470,6 @@ export const buildPermanentUpgradeRows = (save: SaveData): PermanentUpgradeRow[]
     const noPowers = runNonNegativeInteger(save.playerStats?.bestFloorNoPowers);
     return [
         {
-            id: 'relic_shrine_extra_pick',
-            title: 'Week of Archives',
-            status: save.playerStats?.relicShrineExtraPickUnlocked ? 'unlocked' : sharpFloors > 0 ? 'in_progress' : 'locked',
-            offlineOnly: true,
-            payToSkip: false,
-            progress: { current: Math.min(sharpFloors, 7), target: 7 },
-            reward: '+1 relic selection at milestones'
-        },
-        {
             id: 'ascendant_title_track',
             title: 'Ascendant title track',
             status: noPowers >= 5 ? 'unlocked' : noPowers > 0 ? 'in_progress' : 'locked',
@@ -548,7 +490,7 @@ export const buildPermanentUpgradeRows = (save: SaveData): PermanentUpgradeRow[]
     ];
 };
 
-/** One row per cosmetic track (sharp/mastery/relic gating), not the aggregate summary from `getCosmeticTrackProgressSummary`. */
+/** One row per cosmetic track (sharp/mastery gating), not the aggregate summary from `getCosmeticTrackProgressSummary`. */
 export const getCosmeticTrackDefinitionRows = (save: SaveData): CosmeticTrackRow[] => {
     const sharpFloors = runNonNegativeInteger(save.playerStats?.sharpFloors);
     const noPowers = runNonNegativeInteger(save.playerStats?.bestFloorNoPowers);

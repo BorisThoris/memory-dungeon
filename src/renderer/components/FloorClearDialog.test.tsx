@@ -1,5 +1,4 @@
 import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 import type { LevelResult } from '../../shared/contracts';
 import FloorClearDialog, { type FloorClearDialogProps } from './FloorClearDialog';
@@ -21,11 +20,9 @@ const renderDialog = (overrides: Partial<FloorClearDialogProps> = {}) => {
         bestStreak: 6,
         lifeBonusLine: null,
         objectiveLine: null,
-        onArmWager: vi.fn(),
         residentLine: null,
         result,
         totalScore: 1240,
-        wager: null,
         ...overrides
     };
     render(<FloorClearDialog {...props} />);
@@ -84,21 +81,4 @@ describe('FloorClearDialog', () => {
         expect(notes).toHaveTextContent('Flip par: Complete (+30 score) · +1 Favor');
     });
 
-    it('offers the wager with one line and one button, then shows it armed', async () => {
-        const user = userEvent.setup();
-        const props = renderDialog({ wager: { armed: false, bonusFavor: 2, streakAtRisk: 3, suretyActive: false } });
-        expect(screen.getByTestId('endless-risk-wager-panel')).toHaveTextContent(
-            'Stake your x3 objective streak on the next floor for +2 Favor.'
-        );
-        await user.click(screen.getByRole('button', { name: /^arm wager\./i }));
-        expect(props.onArmWager).toHaveBeenCalledTimes(1);
-
-        render(
-            <FloorClearDialog {...props} wager={{ armed: true, bonusFavor: 2, streakAtRisk: 3, suretyActive: true }} />
-        );
-        const armed = screen.getAllByTestId('endless-risk-wager-panel').at(-1)!;
-        expect(armed).toHaveAttribute('data-armed', 'true');
-        expect(armed).toHaveTextContent('a miss drops the x3 streak');
-        expect(screen.getAllByRole('button', { name: /arm wager/i })).toHaveLength(1);
-    });
 });

@@ -180,9 +180,6 @@ describe('level-clear-rules', () => {
             bonusTags: ['boss_floor', 'boss_floor', 'boss_trophy_cache'],
             clearLifeGained: 1,
             clearLifeReason: 'perfect',
-            endlessRiskWagerFavorGained: 2,
-            endlessRiskWagerOutcome: 'won',
-            endlessRiskWagerStreakLost: undefined,
             featuredObjectiveCompleted: true,
             featuredObjectiveId: 'flip_par',
             featuredObjectiveStreak: 3,
@@ -194,7 +191,6 @@ describe('level-clear-rules', () => {
             objectiveBonusScore: 40,
             perfect: true,
             rating: 'S',
-            relicFavorGained: 5,
             routeChoices: [{ id: 'route-a', routeType: 'safe', label: 'Safe', detail: 'Safe route.' }],
             run,
             scoreGained: 250
@@ -213,11 +209,8 @@ describe('level-clear-rules', () => {
             objectiveBonusScore: 40,
             featuredObjectiveId: 'flip_par',
             featuredObjectiveCompleted: true,
-            relicFavorGained: 5,
             featuredObjectiveStreak: 3,
             featuredObjectiveStreakBonus: 12,
-            endlessRiskWagerOutcome: 'won',
-            endlessRiskWagerFavorGained: 2,
             bossTrophyCacheOutcome: 'claimed',
             bossTrophyCacheScore: 90,
             hazardTileTriggers: 2,
@@ -235,9 +228,6 @@ describe('level-clear-rules', () => {
             bonusTags: [],
             clearLifeGained: 0,
             clearLifeReason: 'none',
-            endlessRiskWagerFavorGained: 0,
-            endlessRiskWagerOutcome: undefined,
-            endlessRiskWagerStreakLost: undefined,
             featuredObjectiveCompleted: false,
             featuredObjectiveId: null,
             featuredObjectiveStreak: 0,
@@ -249,7 +239,6 @@ describe('level-clear-rules', () => {
             objectiveBonusScore: 0,
             perfect: false,
             rating: 'C',
-            relicFavorGained: 0,
             routeChoices: undefined,
             run,
             scoreGained: 100
@@ -259,10 +248,8 @@ describe('level-clear-rules', () => {
         expect(result.objectiveBonusScore).toBeUndefined();
         expect(result.featuredObjectiveId).toBeUndefined();
         expect(result.featuredObjectiveCompleted).toBeUndefined();
-        expect(result.relicFavorGained).toBeUndefined();
         expect(result.featuredObjectiveStreak).toBeUndefined();
         expect(result.featuredObjectiveStreakBonus).toBeUndefined();
-        expect(result.endlessRiskWagerFavorGained).toBeUndefined();
         expect(result.bossTrophyCacheScore).toBeUndefined();
     });
 });

@@ -94,7 +94,6 @@ export interface TileTraitEffectResult {
     interactionTags: TileTraitInteractionTag[];
     peekChargeGain: number;
     recallFocusGain: number;
-    relicFavorGain: number;
     regionShuffleChargeGain: number;
     scoreBonus: number;
     shopGoldGain: number;
@@ -353,7 +352,6 @@ const createEmptyTraitEffectResult = (): TileTraitEffectResult => ({
     interactionTags: [],
     peekChargeGain: 0,
     recallFocusGain: 0,
-    relicFavorGain: 0,
     regionShuffleChargeGain: 0,
     scoreBonus: 0,
     shopGoldGain: 0,
@@ -946,7 +944,6 @@ export const resolveTileTraitEffects = ({
             (hasTrait('mirror') ? 1 : 0) +
             (hasTrait('volatile') && hasRunRelic(run, 'wager_surety') && guardTokens < MAX_GUARD_TOKENS ? 1 : 0);
         result.peekChargeGain = hasTrait('echo') ? 1 : 0;
-        result.relicFavorGain = hasTrait('cursed') ? 1 : 0;
         result.scoreBonus =
             [...traits].reduce((sum, trait) => sum + (TILE_TRAIT_MATCH_SCORE_BONUS[trait] ?? 0), 0) +
             (hasTrait('echo') && hasRunRelic(run, 'chapter_compass') ? 10 : 0);
@@ -1267,7 +1264,6 @@ export const calculateTileTraitMatchRewards = (
     comboShardGain: number;
     guardTokenGain: number;
     peekChargeGain: number;
-    relicFavorGain: number;
     scoreBonus: number;
     shopGoldGain: number;
 } => {
@@ -1276,7 +1272,6 @@ export const calculateTileTraitMatchRewards = (
         comboShardGain: effect.comboShardGain,
         guardTokenGain: effect.guardTokenGain,
         peekChargeGain: effect.peekChargeGain,
-        relicFavorGain: effect.relicFavorGain,
         scoreBonus: effect.scoreBonus,
         shopGoldGain: effect.shopGoldGain
     };

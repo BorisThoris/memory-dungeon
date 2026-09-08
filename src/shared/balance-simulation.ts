@@ -14,7 +14,6 @@ import { countReachableExitKeySources, getEffectivePrimaryExitLock, inspectBoard
 import { activeEnemyHazardsForBoard } from './enemy-hazard-board-rules';
 import { FINDABLE_REWARD_ROWS, getFindableSpawnWeightRows } from './findables';
 import { pickFloorScheduleEntry, usesEndlessFloorSchedule } from './floor-mutator-schedule';
-import { RELIC_DRAFT, RELIC_POOL, type RelicDraftRarity } from './relics';
 import {
     countTraitComboOpportunityPairs,
     countTraitInteractionLines,
@@ -67,10 +66,8 @@ export interface BalanceSimulationReport {
         hazardTileCount: number;
         contactRisk: number;
         floorBand: BalanceSimulationFloorBand;
-        relicFavorPotential: number;
         comboShardPotential: number;
         guardRewardPotential: number;
-        relicOfferAvailable: number;
         consumableRewardPotential: number;
         treasureRewardPairs: number;
         routeRewardPairs: number;
@@ -104,10 +101,8 @@ export interface BalanceSimulationReport {
         bossMovingEnemyHazards: number;
         hazardTileCount: number;
         contactRisk: number;
-        relicFavorPotential: number;
         comboShardPotential: number;
         guardRewardPotential: number;
-        relicOfferAvailable: number;
         consumableRewardPotential: number;
         treasureRewardPairs: number;
         routeRewardPairs: number;
@@ -241,14 +236,6 @@ const scheduleMutatorsFor = (seed: number, rulesVersion: number, level: number):
 
 const average = (values: readonly number[]): number =>
     values.length === 0 ? 0 : values.reduce((sum, value) => sum + value, 0) / values.length;
-
-const relicRarityShare = (rarity: RelicDraftRarity): number => {
-    const total = RELIC_POOL.reduce((sum, id) => sum + RELIC_DRAFT[id].weight, 0);
-    const rarityTotal = RELIC_POOL
-        .filter((id) => RELIC_DRAFT[id].rarity === rarity)
-        .reduce((sum, id) => sum + RELIC_DRAFT[id].weight, 0);
-    return total === 0 ? 0 : rarityTotal / total;
-};
 
 const simulationNodeKindForFloor = (floor: number, floorTag: string): DungeonRunNodeKind => {
     if (floorTag === 'boss') return 'boss';
@@ -543,10 +530,8 @@ export const runBalanceSimulation = ({
                 hazardTileCount,
                 contactRisk: activeHazards.reduce((sum, hazard) => sum + hazard.damage, 0),
                 floorBand: floorBandFor(floor),
-                relicFavorPotential: schedule.featuredObjectiveId != null ? (schedule.floorTag === 'boss' ? 2 : 1) : 0,
                 comboShardPotential: countFindablePairs(board.tiles) + (routeRewardPairs > 0 ? 1 : 0),
                 guardRewardPotential: shrinePairs + (dungeonNodeKind === 'rest' ? 1 : 0),
-                relicOfferAvailable: floor >= 3 && floor % 3 === 0 ? 1 : 0,
                 consumableRewardPotential: keyPairs,
                 treasureRewardPairs,
                 routeRewardPairs,
@@ -604,7 +589,6 @@ export const runBalanceSimulation = ({
             ...totals,
             [sample.floorBand]:
                 totals[sample.floorBand] +
-                sample.relicFavorPotential +
                 sample.comboShardPotential +
                 sample.guardRewardPotential +
                 sample.consumableRewardPotential +
@@ -764,22 +748,6 @@ export const runBalanceSimulation = ({
             'simulationNodeKindForFloor'
         ),
         row(
-            'rare_relic_weight_share',
-            'Rare relic draft weight share',
-            Number(relicRarityShare('rare').toFixed(2)),
-            0.1,
-            0.25,
-            'RELIC_DRAFT weights'
-        ),
-        row(
-            'avg_relic_favor_potential_per_floor',
-            'Average featured-objective Favor potential per floor',
-            Number(average(samples.map((sample) => sample.relicFavorPotential)).toFixed(2)),
-            0.4,
-            1.2,
-            'featured objective schedule'
-        ),
-        row(
             'avg_combo_shard_potential_per_floor',
             'Average combo shard potential per floor',
             Number(average(samples.map((sample) => sample.comboShardPotential)).toFixed(2)),
@@ -798,14 +766,6 @@ export const runBalanceSimulation = ({
             0.05,
             1.5,
             'ward-spark findables'
-        ),
-        row(
-            'relic_offer_cadence',
-            'Relic offer cadence per simulated seed',
-            Number(average(safeSeeds.map(() => floorNumbers.filter((floor) => floor >= 3 && floor % 3 === 0).length)).toFixed(2)),
-            Math.floor(safeFloors / 4),
-            Math.ceil(safeFloors / 2),
-            'relic milestone cadence'
         ),
         row(
             'reward_band_spread',
@@ -871,10 +831,8 @@ export const runBalanceSimulation = ({
             bossMovingEnemyHazards: samples.reduce((sum, sample) => sum + sample.bossMovingEnemyHazards, 0),
             hazardTileCount: samples.reduce((sum, sample) => sum + sample.hazardTileCount, 0),
             contactRisk: samples.reduce((sum, sample) => sum + sample.contactRisk, 0),
-            relicFavorPotential: samples.reduce((sum, sample) => sum + sample.relicFavorPotential, 0),
             comboShardPotential: samples.reduce((sum, sample) => sum + sample.comboShardPotential, 0),
             guardRewardPotential: samples.reduce((sum, sample) => sum + sample.guardRewardPotential, 0),
-            relicOfferAvailable: samples.reduce((sum, sample) => sum + sample.relicOfferAvailable, 0),
             consumableRewardPotential: samples.reduce((sum, sample) => sum + sample.consumableRewardPotential, 0),
             treasureRewardPairs: samples.reduce((sum, sample) => sum + sample.treasureRewardPairs, 0),
             routeRewardPairs: samples.reduce((sum, sample) => sum + sample.routeRewardPairs, 0),
@@ -927,7 +885,6 @@ export const assertBalanceSimulationWithinBaseline = (
 };
 
 const sampleRewardPotential = (sample: BalanceSimulationReport['samples'][number]): number =>
-    sample.relicFavorPotential +
     sample.comboShardPotential +
     sample.guardRewardPotential +
     sample.consumableRewardPotential +

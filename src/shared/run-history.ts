@@ -208,7 +208,7 @@ export const buildDungeonJournalRows = (run: RunState): RunHistoryJournalRow[] =
         id: 'dungeon_rewards',
         label: 'Dungeon rewards',
         value: `${runNonNegativeInteger(run.dungeonTreasuresOpened)} treasures, ${keyCount} keys, ${runNonNegativeInteger(run.shopGold)} shop gold`,
-        detail: `${runRelicIds(run.relicIds).length} relics carried; ${runNonNegativeInteger(run.bonusRelicPicksNextOffer) + runNonNegativeInteger(run.favorBonusRelicPicksNextOffer)} bonus relic picks banked.`,
+        detail: `${runRelicIds(run.relicIds).length} relics carried.`,
         persistence: 'derived_export',
         exportSafe: true,
         offlineOnly: true

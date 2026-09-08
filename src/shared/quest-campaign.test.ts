@@ -36,7 +36,7 @@ describe('REG-082 quest contract campaign ladder', () => {
         expect(rows.find((row) => row.id === 'chain_rhythm')?.status).toBe('active');
         expect(rows.every((row) => row.offlineOnly)).toBe(true);
         expect(rows.every((row) => row.retryRule.includes('local'))).toBe(true);
-        expect(questCampaignSummary(save)).toMatchObject({ total: 5, completed: 2, active: 3, locked: 0 });
+        expect(questCampaignSummary(save)).toMatchObject({ total: 4, completed: 2, active: 2, locked: 0 });
     });
 
     it('counts Sharp floors toward the chain quest, and completes it at three', () => {
@@ -78,7 +78,6 @@ describe('REG-082 quest contract campaign ladder', () => {
         expect(rows.find((row) => row.id === 'scholar_oath')?.progressLabel).toBe('0/5');
         expect(rows.find((row) => row.id === 'timed_proof')?.progressLabel).toBe('0/1');
         expect(rows.find((row) => row.id === 'chain_rhythm')?.progressLabel).toBe('0/3');
-        expect(rows.find((row) => row.id === 'relic_apprentice')?.progressLabel).toBe('1/10');
         expect(getQuestContractForRunSummary({ levelsCleared: Number.POSITIVE_INFINITY })).toBeNull();
     });
 

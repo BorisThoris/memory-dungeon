@@ -74,7 +74,10 @@ const DELETED_RELIC_DRAFT_MODULES: readonly string[] = [
     'scripts/sim-build-strategy-playthroughs.ts',
     'src/renderer/components/RelicDraftOfferPanel.tsx',
     'src/renderer/store/relicOfferSurfaceState.ts',
-    'src/renderer/copy/relicDraftOffer.ts'
+    'src/renderer/copy/relicDraftOffer.ts',
+    'src/shared/relic-favor-rules.ts',
+    'src/shared/risk-wager-rules.ts',
+    'src/renderer/store/riskWagerSurfaceState.ts'
 ];
 
 const DELETED_MODULES: readonly string[] = [
@@ -162,8 +165,11 @@ push('   nought on every run. The shop modules listed second at the end are dele
 push('5. **Gen 175 — no draft, no loadout.** The milestone relic draft never opens, the four starting loadouts');
 push('   are gone from run creation, and the build-strategy simulations that drafted against them are deleted');
 push('   with the draft surface, its store slice and its copy. A `relic.offer_open`, `relic.pick` or');
-push('   `relic.offer_service_use` command in an old journal is rejected with a reason. The relic definitions');
-push('   and their in-play effects come out in the second half of the same generation.');
+push('   `relic.offer_service_use` command in an old journal is rejected with a reason. The second half of the');
+push('   same generation cuts what fed the draft: Favor is no longer earned anywhere, the Endless risk wager that');
+push('   staked a streak for Favor is gone, and the Collection, achievements, honors, quests and Profile upgrade');
+push('   that counted relic picks are gone with it. The relic definitions and their in-play effects go with the');
+push('   dungeon modules.');
 push('6. **Gen 176 — the dungeon modules go.** The `dungeon-*` files listed last at the end are deleted, with the');
 push('   run-state fields and save shape that carried them.');
 push();

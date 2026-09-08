@@ -84,7 +84,10 @@ const getMetaNextGoalRow = (save: SaveData, previousSave?: SaveData): GameOverNe
     }
     if (delta?.changed === true) {
         value = delta.headline;
-        detail = `${delta.summaryCopy} Next: ${delta.nextGoalCopy}`;
+        // The goal copy already says "Next:" when the reward is still locked; do not say it twice.
+        detail = delta.nextGoalCopy.startsWith('Next: ')
+            ? `${delta.summaryCopy} ${delta.nextGoalCopy}`
+            : `${delta.summaryCopy} Next: ${delta.nextGoalCopy}`;
     }
 
     return {

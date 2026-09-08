@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { ACHIEVEMENT_IDS, createDefaultSaveData, metaRelicDraftExtraPerMilestoneFromSave } from './save-data';
+import { ACHIEVEMENT_IDS, createDefaultSaveData } from './save-data';
 import {
     applyMetaProgressionUnlock,
     buildPermanentUpgradeRows,
@@ -26,33 +26,11 @@ describe('REG-080 permanent upgrade tree and cosmetic track', () => {
         };
         const upgrades = buildPermanentUpgradeRows(save);
 
-        expect(upgrades.map((row) => row.id)).toEqual([
-            'relic_shrine_extra_pick',
-            'ascendant_title_track',
-            'sharp_cosmetic_track'
-        ]);
-        expect(upgrades.find((row) => row.id === 'relic_shrine_extra_pick')?.status).toBe('unlocked');
+        expect(upgrades.map((row) => row.id)).toEqual(['ascendant_title_track', 'sharp_cosmetic_track']);
         expect(upgrades.every((row) => row.offlineOnly)).toBe(true);
         expect(upgrades.every((row) => row.payToSkip === false)).toBe(true);
     });
 
-    it('does not count ready-but-unclaimed Week of Archives as a legacy owned upgrade', () => {
-        const save = createDefaultSaveData();
-        save.playerStats = {
-            ...save.playerStats!,
-            sharpFloors: 7,
-            relicShrineExtraPickUnlocked: false
-        };
-
-        expect(buildPermanentUpgradeRows(save).find((row) => row.id === 'relic_shrine_extra_pick')).toMatchObject({
-            status: 'in_progress',
-            progress: { current: 7, target: 7 }
-        });
-        expect(buildPermanentUpgradeRows(save).filter((row) => row.status === 'unlocked').map((row) => row.id)).toEqual([
-            'sharp_cosmetic_track'
-        ]);
-        expect(metaProgressionSummary(save).upgradesUnlocked).toBe(1);
-    });
 
     it('projects cosmetic track rows from local unlock tags and progress gates', () => {
         const save = createDefaultSaveData();
@@ -89,9 +67,8 @@ describe('REG-080 permanent upgrade tree and cosmetic track', () => {
         const board = getMetaProgressionBoard(save);
         expect(board.level).toBeGreaterThan(1);
         expect(board.levelProgress.target).toBe(5);
-        expect(board.nextReward?.id).toBe('upgrade_relic_shrine_extra_pick');
-        expect(board.nextReward?.source).toBe('Sharp floor clears');
-        expect(board.nextReward?.modeRule).toBe('visible_in_classic');
+        // The relic shrine's extra pick used to sit here; the draft went in Gen 175.
+        expect(board.nextReward?.id).not.toBe('upgrade_relic_shrine_extra_pick');
         expect(board.longTermGoal?.id).toBe('upgrade_scholar_prep_slot');
         expect(board.longTermGoal?.status).toBe('locked');
         expect(board.rows.every((row) => row.localOnly)).toBe(true);
@@ -122,11 +99,7 @@ describe('REG-080 permanent upgrade tree and cosmetic track', () => {
 
         const board = getMetaProgressionBoard(save);
 
-        expect(board.nextReward).toMatchObject({
-            id: 'upgrade_relic_shrine_extra_pick',
-            status: 'locked',
-            progress: { current: 0, target: 7 }
-        });
+        expect(board.nextReward?.id).not.toBe('upgrade_scholar_prep_slot');
         expect(board.longTermGoal).toMatchObject({
             id: 'upgrade_scholar_prep_slot',
             status: 'locked'
@@ -142,12 +115,6 @@ describe('REG-080 permanent upgrade tree and cosmetic track', () => {
         };
 
         const rows = getMetaProgressionRows(save);
-        const week = rows.find((row) => row.id === 'upgrade_relic_shrine_extra_pick');
-        expect(week).toMatchObject({
-            gameplayAffecting: true,
-            modeRule: 'visible_in_classic',
-            status: 'owned'
-        });
         expect(rows.filter((row) => row.track === 'cosmetic').every((row) => row.gameplayAffecting === false)).toBe(true);
     });
 
@@ -175,11 +142,9 @@ describe('REG-080 permanent upgrade tree and cosmetic track', () => {
         expect(sources.map((row) => [row.id, row.marks, row.progress])).toEqual([
             ['achievements', 2, { current: 1, target: ACHIEVEMENT_IDS.length }],
             ['sharp_floors', 7, { current: 7, target: 7 }],
-            ['no_powers_mastery', 2, { current: 2, target: 5 }],
-            ['relic_mastery', 1, { current: 3, target: 10 }]
+            ['no_powers_mastery', 2, { current: 2, target: 5 }]
         ]);
         expect(sources.find((row) => row.id === 'sharp_floors')?.nextMarkCopy).toBeNull();
-        expect(sources.find((row) => row.id === 'relic_mastery')?.nextMarkCopy).toBe('Pick 1 more relic for 1 honor mark.');
     });
 
     it('normalizes malformed persisted counters before projecting meta progression rows', () => {
@@ -198,25 +163,18 @@ describe('REG-080 permanent upgrade tree and cosmetic track', () => {
         expect(sources.map((row) => [row.id, row.marks, row.progress])).toEqual([
             ['achievements', 0, { current: 0, target: ACHIEVEMENT_IDS.length }],
             ['sharp_floors', 0, { current: 0, target: 7 }],
-            ['no_powers_mastery', 0, { current: 0, target: 5 }],
-            ['relic_mastery', 0, { current: 1, target: 10 }]
+            ['no_powers_mastery', 0, { current: 0, target: 5 }]
         ]);
 
         const board = getMetaProgressionBoard(save);
         expect(board.level).toBe(1);
         expect(board.levelProgress).toEqual({ current: 0, target: 5 });
-        expect(board.nextReward).toMatchObject({
-            id: 'upgrade_relic_shrine_extra_pick',
-            status: 'locked',
-            progress: { current: 0, target: 7 }
-        });
+        expect(board.nextReward?.id).not.toBe('upgrade_relic_shrine_extra_pick');
 
         expect(getPermanentUpgradeRows(save).map((row) => [row.id, row.status, row.progress])).toEqual([
-            ['upgrade_relic_shrine_extra_pick', 'locked', { current: 0, target: 7 }],
             ['upgrade_scholar_prep_slot', 'locked', { current: 0, target: 8 }]
         ]);
         expect(buildPermanentUpgradeRows(save).map((row) => [row.id, row.status, row.progress])).toEqual([
-            ['relic_shrine_extra_pick', 'locked', { current: 0, target: 7 }],
             ['ascendant_title_track', 'locked', { current: 0, target: 5 }],
             ['sharp_cosmetic_track', 'locked', { current: 0, target: 3 }]
         ]);
@@ -239,15 +197,17 @@ describe('REG-080 permanent upgrade tree and cosmetic track', () => {
         const nextSource = getNextMetaHonorMarkSource(save);
         const feedback = getMetaProgressionFeedback(save);
 
+        // Relic mastery was the nearest source until relic picks went (Gen 175); every source
+        // left is one unit away, and the first in order wins the tie.
         expect(nextSource).toMatchObject({
-            id: 'relic_mastery',
-            nextMarkCopy: 'Pick 1 more relic for 1 honor mark.'
+            id: 'achievements',
+            nextMarkCopy: 'Earn one more achievement for 2 honor marks.'
         });
         expect(feedback.nextHonorMarkSource).toMatchObject({
-            id: 'relic_mastery',
+            id: 'achievements',
             nextMarkUnitsRemaining: 1
         });
-        expect(feedback.honorMarkSources).toHaveLength(4);
+        expect(feedback.honorMarkSources).toHaveLength(3);
     });
 
     it('maps profile level milestones into reached, current, and upcoming tier rows', () => {
@@ -276,8 +236,8 @@ describe('REG-080 permanent upgrade tree and cosmetic track', () => {
         expect(milestones.find((row) => row.tier === 'legend')).toMatchObject({
             level: 8,
             marksRequired: 35,
-            marksRemaining: 11,
-            progress: { current: 24, target: 35 }
+            marksRemaining: 15,
+            progress: { current: 20, target: 35 }
         });
     });
 
@@ -298,12 +258,6 @@ describe('REG-080 permanent upgrade tree and cosmetic track', () => {
             difficultyTierLabel: 'Initiate tier',
             honorMarks: 8,
             honorMarksToNextLevel: 2,
-            nextReward: {
-                id: 'upgrade_relic_shrine_extra_pick',
-                status: 'locked',
-                progressCopy: '4/7 from Sharp floor clears',
-                modeRule: 'visible_in_classic'
-            },
             longTermGoal: {
                 id: 'upgrade_scholar_prep_slot',
                 progressCopy: '2/8 from No-powers mastery'
@@ -313,74 +267,16 @@ describe('REG-080 permanent upgrade tree and cosmetic track', () => {
                 label: 'Adept tier',
                 marksRemaining: 2
             },
-            nextMilestoneCopy: 'Adept tier at profile level 3 (2 honor marks).',
-            motivationCopy: 'Next: Week of Archives (4/7 from Sharp floor clears).'
+            nextMilestoneCopy: 'Adept tier at profile level 3 (2 honor marks).'
         });
+        expect(feedback.nextReward?.id).not.toBe('upgrade_relic_shrine_extra_pick');
+        expect(feedback.motivationCopy).toMatch(/^Next: /);
     });
 
-    it('calls out ready rewards without changing ownership or spending marks', () => {
-        const save = createDefaultSaveData();
-        save.playerStats = {
-            ...save.playerStats!,
-            sharpFloors: 7
-        };
 
-        const feedback = getMetaProgressionFeedback(save);
-        const row = getMetaProgressionRows(save).find((entry) => entry.id === feedback.nextReward?.id);
-
-        expect(feedback.nextReward).toMatchObject({
-            id: 'upgrade_relic_shrine_extra_pick',
-            status: 'available',
-            progressCopy: 'Ready to unlock'
-        });
-        expect(feedback.motivationCopy).toBe('Week of Archives is ready.');
-        expect(row?.status).toBe('available');
-    });
-
-    it('applies the ready Week of Archives upgrade into persistent run-to-run growth', () => {
-        const save = createDefaultSaveData();
-        save.playerStats = {
-            ...save.playerStats!,
-            sharpFloors: 7,
-            relicShrineExtraPickUnlocked: false
-        };
-
-        const result = applyMetaProgressionUnlock(save, 'upgrade_relic_shrine_extra_pick');
-
-        expect(result).toMatchObject({
-            applied: true,
-            reason: 'applied',
-            feedbackCopy: 'Week of Archives unlocked: +1 relic pick per milestone.'
-        });
-        expect(result.save.playerStats?.relicShrineExtraPickUnlocked).toBe(true);
-        expect(metaRelicDraftExtraPerMilestoneFromSave(result.save)).toBe(1);
-        expect(getMetaProgressionRows(result.save).find((row) => row.id === 'upgrade_relic_shrine_extra_pick')).toMatchObject({
-            status: 'owned',
-            reward: '+1 relic pick per milestone'
-        });
-    });
 
     it('does not mutate locked, owned, deferred, or unknown progression unlock requests', () => {
         const locked = createDefaultSaveData();
-        const lockedResult = applyMetaProgressionUnlock(locked, 'upgrade_relic_shrine_extra_pick');
-        expect(lockedResult).toMatchObject({
-            applied: false,
-            reason: 'locked',
-            feedbackCopy: 'Week of Archives needs 7 more from Sharp floor clears.'
-        });
-        expect(lockedResult.save).toBe(locked);
-
-        const owned = createDefaultSaveData();
-        owned.playerStats = {
-            ...owned.playerStats!,
-            sharpFloors: 7,
-            relicShrineExtraPickUnlocked: true
-        };
-        expect(applyMetaProgressionUnlock(owned, 'upgrade_relic_shrine_extra_pick')).toMatchObject({
-            applied: false,
-            reason: 'already_owned'
-        });
-
         const deferred = createDefaultSaveData();
         deferred.playerStats = {
             ...deferred.playerStats!,

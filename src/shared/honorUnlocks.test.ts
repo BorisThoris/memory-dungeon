@@ -45,7 +45,7 @@ describe('honorUnlocks', () => {
         expect(Object.keys(HONOR_UNLOCK_CATALOG)).toEqual(HONOR_UNLOCK_IDS);
         expect(HONOR_UNLOCK_ORDER).toBe(HONOR_UNLOCK_IDS);
         expect(HONOR_UNLOCK_ORDER).toHaveLength(totalHonorUnlocks);
-        expect(totalHonorUnlocks).toBe(5);
+        expect(totalHonorUnlocks).toBe(4);
     });
 
     it.each(['__proto__', 'constructor', 'toString'])('rejects prototype honor id %s', (honorId) => {
@@ -76,7 +76,6 @@ describe('honorUnlocks', () => {
         const ids = eligibleHonorUnlockIds(save);
         expect(ids).toContain('honor_ascendant_10');
         expect(ids).toContain('honor_score_maestro');
-        expect(ids).toContain('honor_relic_habit');
     });
 
     it('normalizes malformed counters before granting eligible honors', () => {

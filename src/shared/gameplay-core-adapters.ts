@@ -44,7 +44,6 @@ export interface GameplayMatchRewardAdapterResult {
 
 export interface GameplaySlayerFloorClearInput {
     bossTrophyClaimed: boolean;
-    riskWagerOutcome: 'won' | 'lost' | undefined;
     featuredObjectiveCompleted: boolean;
     scoreParasiteActive: boolean;
 }
@@ -53,8 +52,6 @@ export interface GameplaySlayerFloorClearAdapterResult {
     commands: GameplayCommand[];
     events: GameplayEvent[];
     bossTrophyScoreGain: number;
-    riskWagerFavorGain: number;
-    riskWagerStreakFloor: number;
     parasiteRelief: number;
 }
 
@@ -230,7 +227,7 @@ export const resolveSlayerFloorClearThroughGameplayCore = (
             definitionRef.id,
             {
                 bossTrophyClaimed: input.bossTrophyClaimed,
-                riskWagerOutcome: input.riskWagerOutcome ?? 'none',
+                riskWagerOutcome: 'none',
                 featuredObjectiveCompleted: input.featuredObjectiveCompleted,
                 scoreParasiteActive: input.scoreParasiteActive
             }
@@ -248,14 +245,6 @@ export const resolveSlayerFloorClearThroughGameplayCore = (
         events,
         bossTrophyScoreGain: events.reduce(
             (sum, event) => sum + (event.type === 'score.requested' && event.reason === 'boss_trophy' ? event.amount : 0),
-            0
-        ),
-        riskWagerFavorGain: events.reduce(
-            (sum, event) => sum + (event.type === 'relic_favor.requested' ? event.amount : 0),
-            0
-        ),
-        riskWagerStreakFloor: events.reduce(
-            (floor, event) => event.type === 'featured_streak_floor.requested' ? Math.max(floor, event.amount) : floor,
             0
         ),
         parasiteRelief: events.reduce(

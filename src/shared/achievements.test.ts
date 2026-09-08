@@ -221,24 +221,6 @@ describe('achievements that point at the rest of the game', () => {
         ).toContain('ACH_TRAIT_SCHOLAR');
     });
 
-    it('counts relics held, and standing-rule relics separately', () => {
-        const sixCharges = baseRun({
-            relicIds: [
-                'extra_shuffle_charge',
-                'peek_charge_plus_one',
-                'guard_token_plus_one',
-                'memorize_bonus_ms',
-                'shrine_echo',
-                'pin_cap_plus_one'
-            ]
-        });
-        expect(unlocksFor(sixCharges)).toContain('ACH_RELIC_HOARD');
-        expect(unlocksFor(sixCharges)).not.toContain('ACH_STANDING_ORDERS');
-
-        const threeRules = baseRun({ relicIds: ['opening_ledger', 'tithe_conduit', 'bulwark_plate'] });
-        expect(unlocksFor(threeRules)).toContain('ACH_STANDING_ORDERS');
-        expect(unlocksFor(threeRules)).not.toContain('ACH_RELIC_HOARD');
-    });
 
 
 

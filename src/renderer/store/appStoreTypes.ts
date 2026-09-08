@@ -108,7 +108,6 @@ export interface AppState {
     toggleDestroyPairArmed: () => void;
     pause: () => void;
     resume: () => void;
-    acceptEndlessRiskWager: () => void;
     continueToNextLevel: () => void;
     restartRun: () => void;
     endRun: () => void;

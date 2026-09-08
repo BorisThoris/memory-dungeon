@@ -11,9 +11,6 @@ import {
 import { togglePinnedTile } from './board-power-state';
 import { BONUS_REWARD_CATALOG, previewBonusRewardClaim } from './bonus-rewards';
 import {
-    ENDLESS_RISK_WAGER_BONUS_FAVOR,
-    ENDLESS_RISK_WAGER_MIN_STREAK,
-    GAME_RULES_VERSION,
     type BoardState,
     type RunState,
     type Tile
@@ -30,7 +27,6 @@ import {
     MEMORY_SCOUT_DEFINITIONS,
     SABOTEUR_DEFINITIONS,
     SEER_DEFINITIONS,
-    SLAYER_DEFINITIONS,
     SUPPLY_CACHE_DEFINITIONS,
     VAULTBREAKER_DEFINITIONS,
     WARDEN_DEFINITIONS,
@@ -45,7 +41,6 @@ import {
     createGameplayPeekCommand,
     createGameplayPinToggleCommand,
     createGameplayRegionShuffleCommand,
-    createGameplayRiskWagerAcceptCommand,
     createGameplayRelicPickCommand,
     createGameplayRelicOfferOpenCommand,
     createGameplayRelicOfferServiceCommand,
@@ -56,14 +51,12 @@ import {
     createGameplayWildMatchConsumeCommand,
     gameplayCommandSchema,
     gameplayContentDefinitionSchema,
-    gameplayEventSchema,
-    type GameplayEvent
+    gameplayEventSchema
 } from './gameplay-core-contracts';
 import { reduceGameplayCommand, replayGameplayCommands } from './gameplay-core';
 import {
     applyRelicImmediateThroughGameplayCore,
-    resolveFindableMatchRewardThroughGameplayCore,
-    resolveSlayerFloorClearThroughGameplayCore
+    resolveFindableMatchRewardThroughGameplayCore
 } from './gameplay-core-adapters';
 import { applyRelicImmediate } from './relic-immediate-rules';
 import { resolveTileTraitEffects } from './tile-trait-rules';
@@ -72,7 +65,6 @@ import { WILD_PAIR_KEY } from './tile-identity';
 import { createPlayablePathFixture } from './playable-path-fixtures';
 import { RELIC_OFFER_SERVICE_IDS, RELIC_POOL } from './relics';
 import { advanceToNextLevel } from './next-floor-transition-rules';
-import { resolveSlayerFloorClearEffects } from './slayer-floor-clear-transition';
 
 const tile = (id: string, pairKey: string, tileTraitKind?: Tile['tileTraitKind']): Tile => ({
     id,
@@ -832,83 +824,6 @@ describe('deterministic gameplay core', () => {
         ]);
     });
 
-    it('models Slayer preparation and typed floor-clear extraction across boss, wager, and parasite hooks', () => {
-        expect(SLAYER_DEFINITIONS.map((definition) => definition.id)).toEqual([
-            'relic.chapter_compass',
-            'relic.wager_surety',
-            'relic.parasite_ledger',
-            'relic.chapter_compass.boss_trophy',
-            'relic.wager_surety.wager_won',
-            'relic.wager_surety.wager_lost',
-            'relic.parasite_ledger.featured_objective'
-        ]);
-        const initial = run({
-            relicIds: ['chapter_compass', 'wager_surety', 'parasite_ledger'],
-            peekCharges: 0,
-            parasiteWardRemaining: 0
-        });
-        const compass = applyRelicImmediateThroughGameplayCore(initial, 'chapter_compass', 'slayer-compass');
-        const surety = applyRelicImmediateThroughGameplayCore(compass.run, 'wager_surety', 'slayer-surety');
-        const ledger = applyRelicImmediateThroughGameplayCore(surety.run, 'parasite_ledger', 'slayer-ledger');
-        const won = resolveSlayerFloorClearThroughGameplayCore(
-            ledger.run,
-            {
-                bossTrophyClaimed: true,
-                riskWagerOutcome: 'won',
-                featuredObjectiveCompleted: true,
-                scoreParasiteActive: true
-            },
-            'slayer-clear-won'
-        );
-        const lost = resolveSlayerFloorClearThroughGameplayCore(
-            ledger.run,
-            {
-                bossTrophyClaimed: false,
-                riskWagerOutcome: 'lost',
-                featuredObjectiveCompleted: false,
-                scoreParasiteActive: true
-            },
-            'slayer-clear-lost'
-        );
-        const outerEvents: GameplayEvent[] = [];
-        const flatWon = resolveSlayerFloorClearEffects(
-            ledger.run,
-            {
-                bossTrophyClaimed: true,
-                riskWagerOutcome: 'won',
-                featuredObjectiveCompleted: true,
-                scoreParasiteActive: true
-            },
-            'slayer-flat-clear',
-            outerEvents
-        );
-
-        expect(compass).toMatchObject({ migrated: true, run: { peekCharges: 1 } });
-        expect(surety).toMatchObject({ migrated: true, run: { stats: { guardTokens: 1 } } });
-        expect(ledger).toMatchObject({ migrated: true, run: { parasiteWardRemaining: 1 } });
-        expect(won).toMatchObject({ bossTrophyScoreGain: 30, riskWagerFavorGain: 1, parasiteRelief: 1 });
-        expect(flatWon).toMatchObject({
-            commands: [],
-            bossTrophyScoreGain: 30,
-            riskWagerFavorGain: 1,
-            parasiteRelief: 1
-        });
-        expect(flatWon.events).toEqual(outerEvents);
-        expect(flatWon.events.every((event, sequence) =>
-            event.commandId === 'slayer-flat-clear'
-            && event.sequence === sequence
-            && event.eventId === `slayer-flat-clear:${sequence}`
-        )).toBe(true);
-        expect(won.events).toEqual(expect.arrayContaining([
-            expect.objectContaining({ type: 'score.requested', reason: 'boss_trophy', amount: 30 }),
-            expect.objectContaining({ type: 'relic_favor.requested', reason: 'risk_wager_win', amount: 1 }),
-            expect.objectContaining({ type: 'parasite_relief.requested', reason: 'featured_objective_clear', amount: 1 })
-        ]));
-        expect(lost).toMatchObject({ riskWagerFavorGain: 0, riskWagerStreakFloor: 1, parasiteRelief: 0 });
-        expect(lost.events).toEqual(expect.arrayContaining([
-            expect.objectContaining({ type: 'featured_streak_floor.requested', reason: 'risk_wager_loss', amount: 1 })
-        ]));
-    });
 
     it('models the Seer reward, relic tools, Scout Glint, and board decisions as one information-control build', () => {
         expect(SEER_DEFINITIONS.map((definition) => definition.id)).toEqual([
@@ -946,14 +861,9 @@ describe('deterministic gameplay core', () => {
             'seer-scout-glint'
         );
 
-        expect(reward.run).toMatchObject({
-            peekCharges: 1,
-            relicFavorProgress: 0,
-            bonusRelicPicksNextOffer: 1,
-            favorBonusRelicPicksNextOffer: 1
-        });
+        // Secret Favor pays a peek charge; its Favor went with the draft (Gen 175).
+        expect(reward.run).toMatchObject({ peekCharges: 1 });
         expect(reward.events).toEqual(expect.arrayContaining([
-            expect.objectContaining({ type: 'relic_favor.changed', progressBefore: 2, progressAfter: 0 }),
             expect.objectContaining({ type: 'inventory.changed', itemId: 'peek_charge', applied: 1 })
         ]));
         expect(strayRelic).toMatchObject({ migrated: true, run: { strayRemoveCharges: 1 } });
@@ -1090,52 +1000,6 @@ describe('deterministic gameplay core', () => {
         expect(result.events.every((event) => gameplayEventSchema.safeParse(event).success)).toBe(true);
     });
 
-    it('accepts an eligible Route Gambler wager and emits its complete risk contract', () => {
-        const initial = run({
-            status: 'levelComplete',
-            gameMode: 'endless',
-            runRulesVersion: GAME_RULES_VERSION,
-            relicOffer: null,
-            endlessRiskWager: null,
-            featuredObjectiveStreak: ENDLESS_RISK_WAGER_MIN_STREAK,
-            lastLevelResult: {
-                level: 4,
-                scoreGained: 100,
-                rating: 'S',
-                livesRemaining: 3,
-                perfect: true,
-                mistakes: 0,
-                clearLifeReason: 'perfect',
-                clearLifeGained: 1,
-                featuredObjectiveId: 'flip_par',
-                featuredObjectiveCompleted: true
-            }
-        });
-        const result = reduceGameplayCommand(
-            initial,
-            createGameplayRiskWagerAcceptCommand('accept-wager')
-        );
-
-        expect(result.accepted).toBe(true);
-        expect(result.run.endlessRiskWager).toEqual({
-            acceptedOnLevel: 4,
-            targetLevel: 5,
-            streakAtRisk: ENDLESS_RISK_WAGER_MIN_STREAK,
-            bonusFavorOnSuccess: ENDLESS_RISK_WAGER_BONUS_FAVOR
-        });
-        expect(result.events).toEqual([
-            expect.objectContaining({
-                type: 'risk_wager.accepted',
-                targetLevel: 5,
-                streakAtRisk: ENDLESS_RISK_WAGER_MIN_STREAK
-            }),
-            expect.objectContaining({
-                type: 'feedback.requested',
-                cue: 'build.route_gambler.wager_accepted',
-                tone: 'warning'
-            })
-        ]);
-    });
 
     it('validates and records a Gambit third-flip commitment without preempting board resolution', () => {
         const gambitBoard = board();

@@ -262,8 +262,6 @@ const hasResolvedResourceReward = (before: RunState, after: RunState): boolean =
         runFiniteNumber(afterStats.comboShards) > runFiniteNumber(beforeStats.comboShards) ||
         runFiniteNumber(afterStats.guardTokens) > runFiniteNumber(beforeStats.guardTokens) ||
         runFiniteNumber(after.shopGold) > runFiniteNumber(before.shopGold) ||
-        runFiniteNumber(after.relicFavorProgress) > runFiniteNumber(before.relicFavorProgress) ||
-        runFiniteNumber(after.favorBonusRelicPicksNextOffer) > runFiniteNumber(before.favorBonusRelicPicksNextOffer) ||
         runFiniteNumber(after.safeHazardWardChargesThisFloor) > runFiniteNumber(before.safeHazardWardChargesThisFloor) ||
         runFiniteNumber(after.flashPairCharges) > runFiniteNumber(before.flashPairCharges)
     );

@@ -145,31 +145,11 @@ describe('save preference executor', () => {
         expect(deps.persistSaveData).toHaveBeenCalledWith(expect.objectContaining({ firstRunHelpDismissed: true }));
     });
 
-    it('claims applied meta rewards and persists the updated save in the background', () => {
-        const saveData = createDefaultSaveData();
-        saveData.playerStats = {
-            ...saveData.playerStats!,
-            sharpFloors: 7,
-            relicShrineExtraPickUnlocked: false
-        };
-        const deps = createDeps(saveData);
-
-        const result = executeMetaProgressionRewardClaim('upgrade_relic_shrine_extra_pick', deps);
-
-        expect(result.applied).toBe(true);
-        expect(deps.setState).toHaveBeenCalledWith({
-            saveData: expect.objectContaining({
-                playerStats: expect.objectContaining({ relicShrineExtraPickUnlocked: true })
-            }),
-            settings: result.save.settings
-        });
-        expect(deps.persistSaveData).toHaveBeenCalledWith(result.save);
-    });
 
     it('returns locked meta reward results without mutating state', () => {
         const deps = createDeps();
 
-        const result = executeMetaProgressionRewardClaim('upgrade_relic_shrine_extra_pick', deps);
+        const result = executeMetaProgressionRewardClaim('upgrade_scholar_prep_slot', deps);
 
         expect(result.applied).toBe(false);
         expect(deps.setState).not.toHaveBeenCalled();

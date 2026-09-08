@@ -92,38 +92,6 @@ describe('REG-075 treasure, secret room, and bonus rewards', () => {
         expect(claimBonusReward(result.run, result.ledger, room).claimed).toBe(false);
     });
 
-    it('lets Shrine Echo convert the first treasure chest into bounded Favor progress', () => {
-        const room = {
-            ...rollBonusRewardRoom({
-                runSeed: 75_014,
-                rulesVersion: GAME_RULES_VERSION,
-                floor: 9,
-                routeKind: 'treasure'
-            }),
-            ...BONUS_REWARD_CATALOG.chest_gold,
-            eligible: true,
-            unavailableReason: null
-        };
-        const run: RunState = {
-            ...makeRun(room.runSeed, room.rulesVersion),
-            relicFavorProgress: 0,
-            relicIds: ['shrine_echo']
-        };
-        const firstClaim = claimBonusReward(run, createBonusRewardLedger(), room);
-        const laterLedger = { ...createBonusRewardLedger(), openedTreasureRooms: 1 };
-        const laterClaim = claimBonusReward(run, laterLedger, {
-            ...room,
-            instanceId: `${room.rulesVersion}:${room.runSeed}:10:chest_gold`,
-            floor: 10
-        });
-
-        expect(firstClaim.claimed).toBe(true);
-        expect(firstClaim.run.relicFavorProgress).toBe(1);
-        expect(firstClaim.feedback.gained).toContain('Shrine Echo: +1 relic Favor progress');
-        expect(laterClaim.claimed).toBe(true);
-        expect(laterClaim.run.relicFavorProgress).toBe(0);
-        expect(laterClaim.feedback.gained).not.toContain('Shrine Echo: +1 relic Favor progress');
-    });
 
     it('rechecks reward limits at claim time for stale saved reward instances', () => {
         const room = {
@@ -590,18 +558,10 @@ describe('REG-075 treasure, secret room, and bonus rewards', () => {
         const result = claimBonusReward(initial, createBonusRewardLedger(), room);
 
         expect(result.claimed).toBe(true);
-        expect(result.run).toMatchObject({
-            peekCharges: 1,
-            relicFavorProgress: 0,
-            bonusRelicPicksNextOffer: 1,
-            favorBonusRelicPicksNextOffer: 1
-        });
-        expect(result.feedback.gained).toEqual(expect.arrayContaining([
-            '+1 relic Favor progress',
-            '+1 peek charge'
-        ]));
+        // Secret Favor pays a peek charge; its Favor went with the draft (Gen 175).
+        expect(result.run).toMatchObject({ peekCharges: 1 });
+        expect(result.feedback.gained).toEqual(['+1 peek charge']);
         expect(result.run.gameplayEventJournal).toEqual(expect.arrayContaining([
-            expect.objectContaining({ type: 'relic_favor.changed', progressBefore: 2, progressAfter: 0 }),
             expect.objectContaining({ type: 'inventory.changed', itemId: 'peek_charge', applied: 1 }),
             expect.objectContaining({ type: 'feedback.requested', cue: 'build.secret_favor.claimed' })
         ]));
@@ -1103,31 +1063,4 @@ describe('REG-075 treasure, secret room, and bonus rewards', () => {
         expect(mixedPerks.feedback.gained).toEqual(expect.arrayContaining(['Unlock Trait Streak Flash']));
     });
 
-    it('normalizes malformed saved relic Favor counters before carrying bonus picks', () => {
-        const room = {
-            ...rollBonusRewardRoom({
-                runSeed: 75_012,
-                rulesVersion: GAME_RULES_VERSION,
-                floor: 7,
-                routeKind: 'event'
-            }),
-            ...BONUS_REWARD_CATALOG.secret_favor,
-            payout: { relicFavorProgress: 4.9 },
-            eligible: true,
-            unavailableReason: null
-        };
-        const run = {
-            ...makeRun(room.runSeed, room.rulesVersion),
-            relicFavorProgress: Number.NaN,
-            bonusRelicPicksNextOffer: Number.POSITIVE_INFINITY,
-            favorBonusRelicPicksNextOffer: Number.NaN
-        };
-        const result = claimBonusReward(run, createBonusRewardLedger(), room);
-
-        expect(result.claimed).toBe(true);
-        expect(result.run.relicFavorProgress).toBe(1);
-        expect(result.run.bonusRelicPicksNextOffer).toBe(1);
-        expect(result.run.favorBonusRelicPicksNextOffer).toBe(1);
-        expect(result.feedback.gained).toContain('+4 relic Favor progress');
-    });
 });

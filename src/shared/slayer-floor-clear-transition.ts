@@ -21,12 +21,6 @@ export const collectSlayerFloorClearDefinitions = (
     if (input.bossTrophyClaimed && relicIds.has('chapter_compass')) {
         definitions.push({ id: 'relic.chapter_compass.boss_trophy', suffix: 'boss-trophy' });
     }
-    if (input.riskWagerOutcome === 'won' && relicIds.has('wager_surety')) {
-        definitions.push({ id: 'relic.wager_surety.wager_won', suffix: 'wager-won' });
-    }
-    if (input.riskWagerOutcome === 'lost' && relicIds.has('wager_surety')) {
-        definitions.push({ id: 'relic.wager_surety.wager_lost', suffix: 'wager-lost' });
-    }
     if (input.featuredObjectiveCompleted && input.scoreParasiteActive && relicIds.has('parasite_ledger')) {
         definitions.push({ id: 'relic.parasite_ledger.featured_objective', suffix: 'parasite-relief' });
     }
@@ -36,14 +30,6 @@ export const collectSlayerFloorClearDefinitions = (
 const extractSlayerRequests = (events: readonly GameplayEvent[]): Omit<FloorClearSlayerResult, 'commands' | 'events'> => ({
     bossTrophyScoreGain: events.reduce(
         (sum, event) => sum + (event.type === 'score.requested' && event.reason === 'boss_trophy' ? event.amount : 0),
-        0
-    ),
-    riskWagerFavorGain: events.reduce(
-        (sum, event) => sum + (event.type === 'relic_favor.requested' ? event.amount : 0),
-        0
-    ),
-    riskWagerStreakFloor: events.reduce(
-        (floor, event) => event.type === 'featured_streak_floor.requested' ? Math.max(floor, event.amount) : floor,
         0
     ),
     parasiteRelief: events.reduce(
@@ -64,7 +50,7 @@ export const resolveSlayerFloorClearEffects = (
         adjacentTraits: [],
         matchedFindables: [],
         bossTrophyClaimed: input.bossTrophyClaimed,
-        riskWagerOutcome: input.riskWagerOutcome ?? 'none',
+        riskWagerOutcome: 'none',
         featuredObjectiveCompleted: input.featuredObjectiveCompleted,
         scoreParasiteActive: input.scoreParasiteActive
     };

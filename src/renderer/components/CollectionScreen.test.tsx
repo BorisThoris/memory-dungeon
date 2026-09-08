@@ -41,7 +41,7 @@ describe('CollectionScreen', () => {
         render(<CollectionScreen />);
 
         const rail = screen.getByRole('tablist', { name: /collection sections/i });
-        expect(within(rail).getAllByRole('tab')).toHaveLength(5);
+        expect(within(rail).getAllByRole('tab')).toHaveLength(4);
         expect(screen.getByTestId('collection-tab-achievements')).toHaveAttribute('aria-selected', 'true');
         expect(screen.getByTestId('collection-tab-achievements')).toHaveTextContent(/\d+\/\d+/);
 
@@ -68,7 +68,6 @@ describe('CollectionScreen', () => {
         render(<CollectionScreen />);
 
         for (const [id, kicker] of [
-            ['relics', 'Relic'],
             ['cosmetics', 'Cosmetic'],
             ['upgrades', 'Permanent upgrade'],
             ['honors', 'Honor']
@@ -83,29 +82,5 @@ describe('CollectionScreen', () => {
         }
     });
 
-    it('marks never-drafted relics honestly rather than inventing progress', () => {
-        render(<CollectionScreen />);
-        act(() => {
-            screen.getByTestId('collection-tab-relics').click();
-        });
-        const entries = screen.getByTestId('collection-entries');
-        expect(entries).toHaveTextContent('Never drafted');
-        expect(entries).not.toHaveTextContent(/NaN|undefined|Infinity/);
-    });
 
-    it('normalizes malformed relic pick counts', () => {
-        const saveData = createDefaultSaveData();
-        collectionStoreMocks.saveData = {
-            ...saveData,
-            playerStats: {
-                ...saveData.playerStats,
-                relicPickCounts: { peek_charge_plus_one: Number.NaN, guard_token_plus_one: -4 }
-            } as SaveData['playerStats']
-        };
-        render(<CollectionScreen />);
-        act(() => {
-            screen.getByTestId('collection-tab-relics').click();
-        });
-        expect(screen.getByTestId('collection-entries')).not.toHaveTextContent(/NaN|-\d/);
-    });
 });

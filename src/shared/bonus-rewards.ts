@@ -11,8 +11,6 @@ import { createGameplayDefinitionCommand } from './gameplay-core-contracts';
 import { reduceGameplayCommand } from './gameplay-core';
 import { appendGameplayJournal } from './gameplay-journal';
 import { hashStringToSeed } from './rng';
-import { gainRelicFavor } from './relic-favor-rules';
-import { hasRunRelic } from './relics';
 import type { RunMapNodeKind } from './run-map';
 import {
     gainRunInventoryItem,
@@ -30,7 +28,6 @@ export type BonusRewardRoomKind = 'treasure_chest' | 'secret_room' | 'bonus_cach
 export interface BonusRewardPayout {
     shopGold?: number;
     comboShards?: number;
-    relicFavorProgress?: number;
     score?: number;
     inventoryItems?: Partial<Record<RunInventoryItemId, number>>;
     rewardPerks?: RewardPerkId[];
@@ -100,8 +97,8 @@ export const BONUS_REWARD_CATALOG: Record<BonusRewardId, BonusRewardDefinition> 
         discoverability: 'Foreshadowed as a cracked wall note in node copy; one secret per run.',
         eligibility: 'Floor 3+ and no secret room already discovered this run.',
         antiGrindLimit: { scope: 'per_run', maxClaims: 1 },
-        payout: { relicFavorProgress: 1, inventoryItems: { peek_charge: 1 } },
-        summaryText: '+1 relic Favor progress and +1 peek charge.'
+        payout: { inventoryItems: { peek_charge: 1 } },
+        summaryText: '+1 peek charge.'
     },
     bonus_shards: {
         id: 'bonus_shards',
@@ -489,15 +486,6 @@ export const resolveBonusRewardRoomByInstanceId = ({
     return bonusRewardInstanceForDefinition(BONUS_REWARD_CATALOG[rewardId], runSeed, rulesVersion, floor, safeLedger);
 };
 
-const shouldApplyShrineEchoTreasurePayout = (
-    run: RunState,
-    ledger: BonusRewardLedger,
-    reward: BonusRewardInstance
-): boolean =>
-    hasRunRelic(run, 'shrine_echo') &&
-    reward.roomKind === 'treasure_chest' &&
-    ledger.openedTreasureRooms === 0;
-
 export interface BonusRewardClaimResult {
     run: RunState;
     ledger: BonusRewardLedger;
@@ -760,10 +748,7 @@ const MIGRATED_BONUS_REWARD_DEFINITION_IDS: Partial<Record<BonusRewardId, string
 
 const bonusRewardMatchesMigratedDefinition = (reward: BonusRewardInstance): boolean => {
     if (reward.id === 'secret_favor') {
-        return (
-            runNonNegativeInteger(reward.payout.relicFavorProgress) === 1 &&
-            runNonNegativeInteger(reward.payout.inventoryItems?.peek_charge) === 1
-        );
+        return runNonNegativeInteger(reward.payout.inventoryItems?.peek_charge) === 1;
     }
     if (reward.id === 'supply_cache') {
         return (
@@ -791,7 +776,6 @@ const applyBonusRewardPayout = (
     let cappedPickupParts = 0;
     const shopGoldGain = runNonNegativeInteger(payout.shopGold);
     const scoreGain = runNonNegativeInteger(payout.score);
-    const favorProgressGain = runNonNegativeInteger(payout.relicFavorProgress);
     const comboShardGain = runNonNegativeInteger(payout.comboShards);
     const stats = normalizeSessionStats(run.stats);
     const currentComboShards = stats.comboShards;
@@ -824,10 +808,6 @@ const applyBonusRewardPayout = (
     }
     if (scoreGain > 0) {
         gained.push(`+${scoreGain} score`);
-    }
-    if (favorProgressGain > 0) {
-        nextRun = { ...nextRun, ...gainRelicFavor(nextRun, favorProgressGain) };
-        gained.push(`+${favorProgressGain} relic Favor progress`);
     }
     for (const perkId of normalizeRewardPerkIds(payout.rewardPerks)) {
         if (nextRewardPerkIds.includes(perkId)) {
@@ -920,10 +900,7 @@ export const previewBonusRewardClaim = (
                             }
                           : reward.id === 'secret_favor'
                             ? {
-                                  peekCharges: journaledRun.peekCharges,
-                                  relicFavorProgress: journaledRun.relicFavorProgress,
-                                  bonusRelicPicksNextOffer: journaledRun.bonusRelicPicksNextOffer,
-                                  favorBonusRelicPicksNextOffer: journaledRun.favorBonusRelicPicksNextOffer
+                                  peekCharges: journaledRun.peekCharges
                               }
                           : reward.id === 'trait_toolkit'
                             ? {
@@ -1029,14 +1006,7 @@ export const claimBonusReward = (
         };
     }
 
-    let { run: nextRun, feedback } = previewBonusRewardClaim(run, reward);
-    if (shouldApplyShrineEchoTreasurePayout(run, safeLedger, reward)) {
-        nextRun = { ...nextRun, ...gainRelicFavor(nextRun, 1) };
-        feedback = {
-            ...feedback,
-            gained: [...feedback.gained, 'Shrine Echo: +1 relic Favor progress']
-        };
-    }
+    const { run: nextRun, feedback } = previewBonusRewardClaim(run, reward);
 
     return {
         run: nextRun,

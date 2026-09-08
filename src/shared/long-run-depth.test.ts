@@ -3,7 +3,6 @@ import { GAME_RULES_VERSION } from './contracts';
 import {
     getLongRunActBossRows,
     getLongRunFatigueRows,
-    getLongRunRelicDecisionRows,
     getLongRunRoutePreviewRows,
     runLongRunSoak
 } from './long-run-depth';
@@ -60,21 +59,13 @@ describe('GLD long-run depth contracts', () => {
     });
 
 
-    it('requires every relic to expose a changed decision and UI surface', () => {
-        const rows = getLongRunRelicDecisionRows();
-
-        expect(rows.length).toBeGreaterThan(10);
-        expect(rows.every((row) => row.changedDecision.length > 0)).toBe(true);
-        expect(rows.every((row) => row.uiSurface.length > 0 && row.regression.startsWith('relic-decision:'))).toBe(true);
-    });
 
     it('adds fatigue guardrails for long-run balance samples', () => {
         const report = runBalanceSimulation({ seeds: [42_001, 42_077], floors: 48, rulesVersion: GAME_RULES_VERSION });
         const rows = getLongRunFatigueRows(report);
 
         expect(rows.map((row) => row.key)).toEqual([
-            'breather_spacing',
-            'relic_offer_spacing'
+            'breather_spacing'
         ]);
         expect(rows.every((row) => row.status === 'within_range')).toBe(true);
     }, LONG_SIMULATION_TIMEOUT_MS);

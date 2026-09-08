@@ -3,7 +3,6 @@ import { ACHIEVEMENT_CATALOG, type AchievementCodexEntry } from './mechanics-enc
 import { runRecord } from './run-record-guards';
 import { runNonNegativeInteger } from './run-number-guards';
 import { ENDLESS_CYCLE_FLOOR_COUNT } from './floor-mutator-schedule';
-import { STANDING_RULE_RELIC_IDS } from './relics';
 import { ACHIEVEMENT_IDS } from './save-data';
 import { normalizeSessionStats } from './session-stats-rules';
 
@@ -93,7 +92,6 @@ export const evaluateAchievementUnlocks = (run: RunState, saveData: SaveData): A
             unlocked.push(id);
         }
     };
-    const relicIds = Array.isArray(run.relicIds) ? run.relicIds : [];
 
     award('ACH_WARDEN_FELLED', run.lastLevelResult?.bossTrophyCacheOutcome === 'claimed');
     award('ACH_ENDLESS_CYCLE', run.gameMode === 'endless' && stats.highestLevel >= ENDLESS_CYCLE_FLOOR_COUNT);
@@ -103,13 +101,6 @@ export const evaluateAchievementUnlocks = (run: RunState, saveData: SaveData): A
     award(
         'ACH_TRAIT_SCHOLAR',
         Object.values(stats.tileTraitMatches ?? {}).filter((count) => runNonNegativeInteger(count) > 0).length >= 5
-    );
-    award('ACH_RELIC_HOARD', relicIds.length >= 6);
-    award('ACH_STANDING_ORDERS', relicIds.filter((id) => STANDING_RULE_RELIC_IDS.has(id)).length >= 3);
-    award(
-        'ACH_RELIC_LIBRARY',
-        Object.values(saveData.playerStats?.relicPickCounts ?? {}).filter((count) => runNonNegativeInteger(count) > 0)
-            .length >= 12
     );
     award('ACH_NO_POWERS_TEN', runNonNegativeInteger(saveData.playerStats?.bestFloorNoPowers) >= 10);
     // The chain loop's own four: reached through play a fixture proves (achievement-reachability.test.ts).

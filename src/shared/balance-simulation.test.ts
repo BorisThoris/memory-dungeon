@@ -79,10 +79,8 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
         expect(result.aggregate.bossMovingEnemyHazards).toBe(0);
         expect(result.aggregate.hazardTileCount).toBe(0);
         expect(result.aggregate.contactRisk).toBe(result.aggregate.movingEnemyHazards);
-        expect(result.aggregate.relicFavorPotential).toBeGreaterThan(0);
         expect(result.aggregate.comboShardPotential).toBeGreaterThan(0);
         expect(result.aggregate.guardRewardPotential).toBeGreaterThan(0);
-        expect(result.aggregate.relicOfferAvailable).toBe(4);
         // Consumables came from key cards and the vendor's stock; both are gone (Gen 172, 174).
         expect(result.aggregate.consumableRewardPotential).toBe(0);
         // Treasure pairs and key inflow were dungeon cards; the reward band now comes from
@@ -104,10 +102,8 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
                 'max_pressure_step_up',
                 'max_recovery_debt_streak',
                 'elite_route_node_share',
-                'avg_relic_favor_potential_per_floor',
                 'avg_combo_shard_potential_per_floor',
                 'avg_guard_reward_potential_per_floor',
-                'relic_offer_cadence',
                 'reward_band_spread',
                 'board_fairness_issue_floor_share',
                 'avg_route_reward_pairs_per_floor',
@@ -141,10 +137,8 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
         const newRewardRows = new Set([
             'max_pressure_step_up',
             'max_recovery_debt_streak',
-            'avg_relic_favor_potential_per_floor',
             'avg_combo_shard_potential_per_floor',
             'avg_guard_reward_potential_per_floor',
-            'relic_offer_cadence',
             'reward_band_spread',
             'board_fairness_issue_floor_share',
             'avg_route_reward_pairs_per_floor',

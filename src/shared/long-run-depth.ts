@@ -27,7 +27,6 @@ import {
     type BalanceSimulationReport,
     type BalanceSimulationRow
 } from './balance-simulation';
-import { getRelicRoleAuditRows, type RelicRoleAuditRow } from './relics';
 
 export interface LongRunStatusRow {
     key: string;
@@ -61,12 +60,6 @@ export interface LongRunRoutePreviewRow extends DungeonRouteDecisionRow {
     likelyReward: string;
     riskBand: 'safe' | 'reward' | 'danger' | 'boss' | 'mystery';
     actualNextBoardInput: string;
-}
-
-export interface LongRunRelicDecisionRow extends RelicRoleAuditRow {
-    changedDecision: string;
-    uiSurface: string;
-    regression: string;
 }
 
 export interface LongRunSoakReport {
@@ -200,28 +193,10 @@ export const getLongRunRoutePreviewRows = (
         };
     });
 
-export const getLongRunRelicDecisionRows = (): LongRunRelicDecisionRow[] =>
-    getRelicRoleAuditRows().map((row) => ({
-        ...row,
-        changedDecision: row.impactCopy,
-        uiSurface: row.decisionImpact.includes('draft_shaping')
-            ? 'relic draft context'
-            : row.decisionImpact.includes('route_risk')
-              ? 'route choice and floor preview'
-              : row.decisionImpact.includes('information_scope')
-                ? 'action dock and board HUD'
-                : 'run inventory and level result',
-        regression: `relic-decision:${row.relicId}`
-    }));
-
 export const getLongRunFatigueRows = (report: BalanceSimulationReport): LongRunStatusRow[] => {
     const samples = report.samples;
     const breatherSpacing =
         report.aggregate.breatherFloors > 0 ? Number((samples.length / report.aggregate.breatherFloors).toFixed(2)) : samples.length;
-    const relicCadence =
-        report.aggregate.relicOfferAvailable > 0
-            ? Number((samples.length / report.aggregate.relicOfferAvailable).toFixed(2))
-            : samples.length;
     /*
      * Fatigue used to be measured two ways here that it no longer can be: hazard-and-patrol
      * pressure, and contact-and-enemy pressure. Both summed counters the dungeon layer wrote, and
@@ -229,12 +204,12 @@ export const getLongRunFatigueRows = (report: BalanceSimulationReport): LongRunS
      *
      * Their question is still the right one - does a long run get monotonous - and Phase 2 answers
      * it with par and the pair curve rather than with things that bite. Until then, what is left
-     * measures the cadence a long run has: breathers and relic offers. The currency-inflow row went
-     * in Gen 174 with the gold it was watching; keys had already gone with the dungeon cards.
+     * measures the one cadence a long run still has: breathers. The currency-inflow row went in
+     * Gen 174 with the gold it was watching, the relic-offer row in Gen 175 with the draft, and
+     * keys had already gone with the dungeon cards.
      */
     return [
-        longRunRow('breather_spacing', 'Average floors between breather floors', breatherSpacing, 3, 5, 'scheduled breather count'),
-        longRunRow('relic_offer_spacing', 'Average floors between relic offers', relicCadence, 2.5, 4.5, 'relic milestone cadence')
+        longRunRow('breather_spacing', 'Average floors between breather floors', breatherSpacing, 3, 5, 'scheduled breather count')
     ];
 };
 

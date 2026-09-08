@@ -10,7 +10,6 @@ import {
     type ClassicRunSetup
 } from '../../shared/classic-run-setup';
 import type { RunShareKey } from '../../shared/run-share-key';
-import { metaRelicDraftExtraPerMilestoneFromSave } from '../../shared/save-data';
 import { applyRunSettings } from '../../shared/run-settings-rules';
 import { createRunSurfaceReset, type RunSurfaceState } from './runSurfaceState';
 
@@ -42,9 +41,11 @@ export const createRunStartTelemetryPayload = (
     };
 };
 
-const metaRelicOptionsForSave = (saveData: SaveData) => ({
-    metaRelicDraftExtraPerMilestone: metaRelicDraftExtraPerMilestoneFromSave(saveData)
-});
+/*
+ * The one meta option a save used to carry into a run was the relic shrine's extra pick; the
+ * draft went in Gen 175, so a save carries nothing into run creation now.
+ */
+const metaRelicOptionsForSave = (_saveData: SaveData): Record<string, never> => ({});
 
 export type RunStartRequest =
     | { kind: 'endless'; setup?: ClassicRunSetup }

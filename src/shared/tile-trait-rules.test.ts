@@ -260,7 +260,6 @@ describe('tile trait rules', () => {
             comboShardGain: 0,
             guardTokenGain: 0,
             peekChargeGain: 1,
-            relicFavorGain: 0,
             scoreBonus: 0,
             shopGoldGain: 0
         });
@@ -268,7 +267,6 @@ describe('tile trait rules', () => {
             comboShardGain: 0,
             guardTokenGain: 1,
             peekChargeGain: 0,
-            relicFavorGain: 0,
             scoreBonus: 0,
             shopGoldGain: 0
         });
@@ -281,7 +279,6 @@ describe('tile trait rules', () => {
         const [heavyA, heavyB] = makePair('heavy', 'H');
 
         expect(calculateTileTraitMatchRewards(run, [{ ...cursedA, tileTraitKind: 'cursed' }, cursedB])).toMatchObject({
-            relicFavorGain: 1,
             scoreBonus: 15,
             shopGoldGain: 1
         });
@@ -335,7 +332,6 @@ describe('tile trait rules', () => {
         const [mirrorA, mirrorB] = makePair('mirror', 'M');
 
         expect(calculateTileTraitMatchRewards(run, [{ ...cursedA, tileTraitKind: 'cursed' }, cursedB])).toMatchObject({
-            relicFavorGain: 1,
             shopGoldGain: 0
         });
         expect(calculateTileTraitMatchRewards(run, [{ ...mirrorA, tileTraitKind: 'mirror' }, mirrorB]).guardTokenGain).toBe(1);
@@ -737,30 +733,6 @@ describe('tile trait rules', () => {
         expect(missPenalty).toMatchObject({ triesDelta: 1, recallMistakesDelta: 1 });
     });
 
-    it('lets wager surety buffer cursed plus volatile miss pressure without removing recall pressure', () => {
-        const board = makeBoard(
-            [
-                makeTile('c1', 'c', 'C', { tileTraitKind: 'cursed', state: 'flipped' }),
-                makeTile('v1', 'v', 'V', { tileTraitKind: 'volatile' }),
-                makeTile('x1', 'x', 'X', { state: 'flipped' }),
-                makeTile('y1', 'y', 'Y')
-            ],
-            { columns: 2, rows: 2 }
-        );
-        const run = makeRun(board.tiles, { board, relicIds: ['wager_surety'] });
-        const effect = resolveTileTraitEffects({
-            run,
-            board,
-            sourceTiles: [board.tiles[0]!, board.tiles[2]!],
-            source: 'mismatch'
-        });
-
-        expect(effect.triesDelta).toBe(0);
-        expect(effect.recallMistakesDelta).toBe(1);
-        expect(effect.interactionTags).toEqual(
-            expect.arrayContaining(['cursed:volatile-danger', 'wager-surety:cursed-buffer'])
-        );
-    });
 
     it('lets stasis buffer sealed mismatch drain and recall pressure', () => {
         const board = makeBoard(

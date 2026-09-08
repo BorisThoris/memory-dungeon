@@ -14,13 +14,11 @@ describe('REG-024 run economy taxonomy', () => {
             'score',
             'combo_shards',
             'guard_tokens',
-            'relic_favor',
             'findable_pickups',
             'assist_charges'
         ]);
         expect(runEconomyDefinitionById.score.persistence).toBe('run_summary');
         expect(runEconomyDefinitionById.combo_shards.persistence).toBe('temporary_run');
-        expect(runEconomyDefinitionById.relic_favor.sink).toContain('extra relic pick');
         for (const entry of RUN_ECONOMY_DEFINITIONS) {
             expect(entry.source.length).toBeGreaterThan(0);
             expect(entry.sink.length).toBeGreaterThan(0);
@@ -49,7 +47,6 @@ describe('REG-024 run economy taxonomy', () => {
         expect(snapshot.temporaryRunCurrencies.map((entry) => entry.id)).toEqual([
             'combo_shards',
             'guard_tokens',
-            'relic_favor',
             'findable_pickups',
             'assist_charges'
         ]);
@@ -57,7 +54,6 @@ describe('REG-024 run economy taxonomy', () => {
             'score:120',
             'combo_shards:1/2',
             'guard_tokens:1/2',
-            'relic_favor:2/3',
             'findable_pickups:1/2',
             'assist_charges:Shuffle 1 · Row 1 · Destroy 0 · Peek 1 · Stray 0'
         ]);
@@ -90,7 +86,6 @@ describe('REG-024 run economy taxonomy', () => {
             'score:0',
             'combo_shards:0/2',
             'guard_tokens:1/2',
-            'relic_favor:0/3',
             'findable_pickups:0/0',
             'assist_charges:Shuffle 0 · Row 1 · Destroy 0 · Peek 0 · Stray 2'
         ]);
@@ -107,7 +102,6 @@ describe('REG-024 run economy taxonomy', () => {
             'score:0',
             'combo_shards:0/2',
             'guard_tokens:0/2',
-            'relic_favor:0/3',
             'findable_pickups:0/1',
             'assist_charges:Shuffle 1 · Row 1 · Destroy 0 · Peek 1 · Stray 0'
         ]);

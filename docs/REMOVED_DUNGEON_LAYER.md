@@ -44,8 +44,11 @@ but "does the game still end":
 5. **Gen 175 — no draft, no loadout.** The milestone relic draft never opens, the four starting loadouts
    are gone from run creation, and the build-strategy simulations that drafted against them are deleted
    with the draft surface, its store slice and its copy. A `relic.offer_open`, `relic.pick` or
-   `relic.offer_service_use` command in an old journal is rejected with a reason. The relic definitions
-   and their in-play effects come out in the second half of the same generation.
+   `relic.offer_service_use` command in an old journal is rejected with a reason. The second half of the
+   same generation cuts what fed the draft: Favor is no longer earned anywhere, the Endless risk wager that
+   staked a streak for Favor is gone, and the Collection, achievements, honors, quests and Profile upgrade
+   that counted relic picks are gone with it. The relic definitions and their in-play effects go with the
+   dungeon modules.
 6. **Gen 176 — the dungeon modules go.** The `dungeon-*` files listed last at the end are deleted, with the
    run-state fields and save shape that carried them.
 
@@ -295,6 +298,9 @@ whole history.
 - `src/renderer/components/RelicDraftOfferPanel.tsx`
 - `src/renderer/store/relicOfferSurfaceState.ts`
 - `src/renderer/copy/relicDraftOffer.ts`
+- `src/shared/relic-favor-rules.ts`
+- `src/shared/risk-wager-rules.ts`
+- `src/renderer/store/riskWagerSurfaceState.ts`
 
 ## The dungeon modules that go with it
 
