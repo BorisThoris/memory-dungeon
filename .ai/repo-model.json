@@ -3,7 +3,7 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2623,
+    "trackedFileCount": 2624,
     "codeFileCount": 1040,
     "exportedSymbolCount": 3787,
     "contentItemCount": 66,
@@ -2357,6 +2357,12 @@
       "category": "documentation",
       "bytes": 36715,
       "sha256": "49699e2763e643a4dc17aff0f667048ab421b189acef884aa85c3f8c83b5b3ef"
+    },
+    {
+      "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
+      "category": "documentation",
+      "bytes": 484476,
+      "sha256": "385c245d7be98ff9c590212a0d018206d5f810e5ca06803d353bd9ab48ba47c9"
     },
     {
       "path": "docs/UI_RETHINK_PLAN.md",
